@@ -85,13 +85,13 @@ public:
   }
 
   bool IsDefined() const {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     return resolver || socket_event.IsDefined();
   }
 
   [[gnu::pure]]
   bool IsConnected() const {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     return socket_event.IsDefined();
   }
 
@@ -109,7 +109,7 @@ public:
 
   template<typename P>
   bool SendPacket(const P &packet) {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     return GetSocket().Write(&packet, sizeof(packet), address) == sizeof(packet);
   }
 

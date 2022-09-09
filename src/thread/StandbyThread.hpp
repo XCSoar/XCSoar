@@ -105,7 +105,7 @@ protected:
    * Throws on error.
    */
   void LockTrigger() {
-    std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     Trigger();
   }
 
@@ -150,7 +150,7 @@ protected:
    * Caller must not lock the mutex.
    */
   void LockWaitDone() {
-    std::unique_lock<Mutex> lock(mutex);
+    std::unique_lock lock{mutex};
     WaitDone(lock);
   }
 
@@ -172,7 +172,7 @@ protected:
   }
 
   void LockStop() {
-    std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     Stop();
   }
 

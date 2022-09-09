@@ -33,7 +33,7 @@ static Mutex udev_context_mutex;
 
 UdevContext::UdevContext(const UdevContext &other) noexcept
 {
-  std::lock_guard<Mutex> lock(udev_context_mutex);
+  const std::lock_guard lock{udev_context_mutex};
   if (other.ud) {
     ud = udev_ref(other.ud);
     assert(ud);
@@ -44,7 +44,7 @@ UdevContext::UdevContext(const UdevContext &other) noexcept
 
 UdevContext::~UdevContext() noexcept
 {
-  std::lock_guard<Mutex> lock(udev_context_mutex);
+  const std::lock_guard lock{udev_context_mutex};
   if (nullptr != ud)
     udev_unref(ud);
 }
@@ -53,7 +53,7 @@ UdevContext &
 UdevContext::operator=(const UdevContext &other) noexcept
 {
   if (this != &other) {
-    std::lock_guard<Mutex> lock(udev_context_mutex);
+    const std::lock_guard lock{udev_context_mutex};
     struct udev *new_ud = (nullptr == other.ud) ? udev_ref(other.ud) : nullptr;
     assert(nullptr == other.ud || nullptr != new_ud);
     if (ud != nullptr)
@@ -68,7 +68,7 @@ UdevContext
 UdevContext::NewRef() noexcept
 {
   {
-    std::lock_guard<Mutex> lock(udev_context_mutex);
+    const std::lock_guard lock{udev_context_mutex};
     if (nullptr == udev_root_context) {
       udev_root_context = new UdevContext(udev_new());
       assert(udev_root_context);

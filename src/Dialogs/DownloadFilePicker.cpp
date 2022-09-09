@@ -266,7 +266,7 @@ void
 DownloadFilePickerWidget::RefreshList()
 try {
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     repository_modified = false;
     repository_failed = false;
   }
@@ -343,7 +343,7 @@ DownloadFilePickerWidget::OnDownloadComplete(Path path_relative) noexcept
     return;
 
   if (name == Path(_T("repository"))) {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     repository_failed = false;
     repository_modified = true;
   }
@@ -360,7 +360,7 @@ DownloadFilePickerWidget::OnDownloadError(Path path_relative,
     return;
 
   if (name == Path(_T("repository"))) {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     repository_failed = true;
     repository_error = std::move(error);
   }
@@ -375,7 +375,7 @@ DownloadFilePickerWidget::OnDownloadCompleteNotification() noexcept
   std::exception_ptr repository_error2;
 
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     repository_modified2 = std::exchange(repository_modified, false);
     repository_failed2 = std::exchange(repository_failed, false);
     repository_error2 = std::move(repository_error);

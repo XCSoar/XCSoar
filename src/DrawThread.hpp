@@ -53,7 +53,7 @@ public:
    * Triggers a redraw.
    */
   void TriggerRedraw() noexcept {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     pending = true;
     command_trigger.notify_one();
   }

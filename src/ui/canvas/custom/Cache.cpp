@@ -182,7 +182,7 @@ PixelSize
 TextCache::GetSize(const Font &font, std::string_view text) noexcept
 {
 #ifndef ENABLE_OPENGL
-  const std::lock_guard<Mutex> lock(text_cache_mutex);
+  const std::lock_guard lock{text_cache_mutex};
 #endif
 
   TextCacheKey key(font, text);
@@ -204,7 +204,7 @@ PixelSize
 TextCache::LookupSize(const Font &font, std::string_view text) noexcept
 {
 #ifndef ENABLE_OPENGL
-  const std::lock_guard<Mutex> lock(text_cache_mutex);
+  const std::lock_guard lock{text_cache_mutex};
 #endif
 
   if (text.empty())
@@ -234,7 +234,7 @@ TextCache::Get(const Font &font, std::string_view text) noexcept
   /* look it up */
 
 #ifndef ENABLE_OPENGL
-  const std::lock_guard<Mutex> lock(text_cache_mutex);
+  const std::lock_guard lock{text_cache_mutex};
 #endif
 
   if (const RenderedText *cached = text_cache.Get(key))
@@ -292,7 +292,7 @@ TextCache::Flush() noexcept
 #endif
 
 #ifndef ENABLE_OPENGL
-  const std::lock_guard<Mutex> lock(text_cache_mutex);
+  const std::lock_guard lock{text_cache_mutex};
 #endif
 
   size_cache.Clear();

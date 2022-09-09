@@ -312,7 +312,7 @@ public:
   PortState GetState() const noexcept;
 
   tstring GetErrorMessage() const noexcept {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     return error_message;
   }
 

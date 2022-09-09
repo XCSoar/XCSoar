@@ -44,7 +44,7 @@ Copyright_License {
 static const uint16_t *
 TriangulateAll(const TopographyFile &file)
 {
-  const std::lock_guard<Mutex> lock(file.mutex);
+  const std::lock_guard lock{file.mutex};
 
   const uint16_t *dummy = nullptr;
   for (const XShape &shape : file)

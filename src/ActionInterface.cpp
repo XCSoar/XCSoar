@@ -48,7 +48,7 @@ void
 XCSoarInterface::ReceiveGPS() noexcept
 {
   {
-    std::lock_guard<Mutex> lock(device_blackboard->mutex);
+    const std::lock_guard lock{device_blackboard->mutex};
 
     ReadBlackboardBasic(device_blackboard->Basic());
 
@@ -68,7 +68,7 @@ void
 XCSoarInterface::ReceiveCalculated() noexcept
 {
   {
-    std::lock_guard<Mutex> lock(device_blackboard->mutex);
+    const std::lock_guard lock{device_blackboard->mutex};
 
     ReadBlackboardCalculated(device_blackboard->Calculated());
     device_blackboard->ReadComputerSettings(GetComputerSettings());
@@ -88,7 +88,7 @@ XCSoarInterface::ExchangeBlackboard() noexcept
 void
 XCSoarInterface::ExchangeDeviceBlackboard() noexcept
 {
-  std::lock_guard<Mutex> lock(device_blackboard->mutex);
+  const std::lock_guard lock{device_blackboard->mutex};
 
   device_blackboard->ReadComputerSettings(GetComputerSettings());
 }

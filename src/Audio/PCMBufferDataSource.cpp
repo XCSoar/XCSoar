@@ -28,7 +28,7 @@ Copyright_License {
 unsigned
 PCMBufferDataSource::Add(PCMData &&data)
 {
-  const std::lock_guard<Mutex> protect(lock);
+  const std::lock_guard protect{lock};
 
   queued_data.emplace_back(data);
   unsigned size = queued_data.size();
@@ -41,7 +41,7 @@ PCMBufferDataSource::Add(PCMData &&data)
 void
 PCMBufferDataSource::Clear()
 {
-  const std::lock_guard<Mutex> protect(lock);
+  const std::lock_guard protect{lock};
   queued_data.clear();
 }
 
@@ -50,7 +50,7 @@ PCMBufferDataSource::GetData(int16_t *buffer, size_t n)
 {
   size_t copied = 0;
 
-  const std::lock_guard<Mutex> protect(lock);
+  const std::lock_guard protect{lock};
 
   while ((copied < n) && !queued_data.empty()) {
     PCMData &current_pcm_data = queued_data.front();

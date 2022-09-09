@@ -52,7 +52,7 @@ EventQueue::Push(const Event &event) noexcept
 {
   event_loop.Finish();
 
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   events.push(event);
 }
 
@@ -60,7 +60,7 @@ void
 EventQueue::Interrupt() noexcept
 {
   {
-    std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     if (!events.empty())
       return;
 
@@ -73,7 +73,7 @@ EventQueue::Interrupt() noexcept
 void
 EventQueue::Inject(const Event &event) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   events.push(event);
   WakeUp();
 }
@@ -109,7 +109,7 @@ EventQueue::Pop(Event &event) noexcept
   if (quit)
     return false;
 
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   if (events.empty()) {
     return Generate(event);
   }
@@ -126,7 +126,7 @@ EventQueue::Wait(Event &event) noexcept
   if (quit)
     return false;
 
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   if (events.empty()) {
     if (Generate(event))
@@ -156,7 +156,7 @@ void
 EventQueue::Purge(bool (*match)(const Event &event, void *ctx) noexcept,
                   void *ctx) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   size_t n = events.size();
   while (n-- > 0) {
     if (!match(events.front(), ctx))

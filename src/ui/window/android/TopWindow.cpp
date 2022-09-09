@@ -43,7 +43,7 @@ TopWindow::TopWindow(UI::Display &_display) noexcept
 void
 TopWindow::AnnounceResize(PixelSize _new_size) noexcept
 {
-  std::lock_guard<Mutex> lock(paused_mutex);
+  const std::lock_guard lock{paused_mutex};
   resized = true;
   new_size = _new_size;
 }
@@ -88,7 +88,7 @@ TopWindow::RefreshSize() noexcept
   PixelSize new_size_copy;
 
   {
-    std::lock_guard<Mutex> lock(paused_mutex);
+    const std::lock_guard lock{paused_mutex};
     if (!resized)
       return;
 
@@ -121,7 +121,7 @@ TopWindow::OnPause() noexcept
 
   assert(!screen->IsReady());
 
-  const std::lock_guard<Mutex> lock(paused_mutex);
+  const std::lock_guard lock{paused_mutex};
   paused = true;
   resumed = false;
   paused_cond.notify_one();
@@ -152,7 +152,7 @@ TopWindow::Pause() noexcept
   event_queue->Purge(match_pause_and_resume, nullptr);
   event_queue->Inject(Event::PAUSE);
 
-  std::unique_lock<Mutex> lock(paused_mutex);
+  std::unique_lock lock{paused_mutex};
   paused_cond.wait(lock, [this]{ return !running || paused; });
 }
 
@@ -243,7 +243,7 @@ TopWindow::OnEvent(const Event &event)
 void
 TopWindow::BeginRunning() noexcept
 {
-  std::lock_guard<Mutex> lock(paused_mutex);
+  const std::lock_guard lock{paused_mutex};
   assert(!running);
   running = true;
 }
@@ -251,7 +251,7 @@ TopWindow::BeginRunning() noexcept
 void
 TopWindow::EndRunning() noexcept
 {
-  std::lock_guard<Mutex> lock(paused_mutex);
+  const std::lock_guard lock{paused_mutex};
   assert(running);
   running = false;
   /* wake up the Android Activity thread, just in case it's waiting

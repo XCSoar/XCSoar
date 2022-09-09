@@ -86,7 +86,7 @@ GlueMapWindow::SetMapSettings(const MapSettings &new_value)
 #ifdef ENABLE_OPENGL
   ReadMapSettings(new_value);
 #else
-  std::lock_guard<Mutex> lock(next_mutex);
+  const std::lock_guard lock{next_mutex};
   next_settings_map = new_value;
 #endif
 }
@@ -99,7 +99,7 @@ GlueMapWindow::SetComputerSettings(const ComputerSettings &new_value)
 #ifdef ENABLE_OPENGL
   ReadComputerSettings(new_value);
 #else
-  std::lock_guard<Mutex> lock(next_mutex);
+  const std::lock_guard lock{next_mutex};
   next_settings_computer = new_value;
 #endif
 }
@@ -112,7 +112,7 @@ GlueMapWindow::SetUIState(const UIState &new_value)
 #ifdef ENABLE_OPENGL
   ReadUIState(new_value);
 #else
-  std::lock_guard<Mutex> lock(next_mutex);
+  const std::lock_guard lock{next_mutex};
   next_ui_state = new_value;
 #endif
 }
@@ -123,14 +123,14 @@ GlueMapWindow::ExchangeBlackboard()
   /* copy device_blackboard to MapWindow */
 
   {
-    const std::lock_guard<Mutex> lock(device_blackboard->mutex);
+    const std::lock_guard lock{device_blackboard->mutex};
     ReadBlackboard(device_blackboard->Basic(),
                    device_blackboard->Calculated());
   }
 
 #ifndef ENABLE_OPENGL
   {
-    const std::lock_guard<Mutex> lock(next_mutex);
+    const std::lock_guard lock{next_mutex};
     ReadMapSettings(next_settings_map);
     ReadComputerSettings(next_settings_computer);
     ReadUIState(next_ui_state);

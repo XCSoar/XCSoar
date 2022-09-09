@@ -67,7 +67,7 @@ Font::Load(const FontDescription &d)
   NativeFontT *native_font;
 
 #ifndef ENABLE_OPENGL
-  const std::lock_guard<Mutex> lock(apple_font_mutex);
+  const std::lock_guard lock{apple_font_mutex};
 #endif
 
   if (d.IsMonospace())
@@ -117,7 +117,7 @@ Font::TextSize(const tstring_view text) const noexcept
   assert(nil != ns_str);
 
 #ifndef ENABLE_OPENGL
-  const std::lock_guard<Mutex> lock(apple_font_mutex);
+  const std::lock_guard lock{apple_font_mutex};
 #endif
 
   CGSize size = [ns_str sizeWithAttributes: draw_attributes];
@@ -146,7 +146,7 @@ Font::Render(tstring_view text, const PixelSize size,
   AtScopeExit(ctx) { CFRelease(ctx); };
 
 #ifndef ENABLE_OPENGL
-  const std::lock_guard<Mutex> lock(apple_font_mutex);
+  const std::lock_guard lock{apple_font_mutex};
 #endif
 
 #ifdef USE_APPKIT

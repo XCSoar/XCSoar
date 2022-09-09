@@ -59,7 +59,7 @@ TrackingGlue::OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
   bool user_known;
 
   {
-    const std::lock_guard<Mutex> lock(skylines_data.mutex);
+    const std::lock_guard lock{skylines_data.mutex};
     const SkyLinesTracking::Data::Traffic traffic(SkyLinesTracking::Data::Time{time_of_day_ms},
                                                   location, altitude);
     skylines_data.traffic[pilot_id] = traffic;
@@ -76,7 +76,7 @@ TrackingGlue::OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
 void
 TrackingGlue::OnUserName(uint32_t user_id, const TCHAR *name)
 {
-  const std::lock_guard<Mutex> lock(skylines_data.mutex);
+  const std::lock_guard lock{skylines_data.mutex};
   skylines_data.user_names[user_id] = name;
 }
 
@@ -84,7 +84,7 @@ void
 TrackingGlue::OnWave(unsigned time_of_day_ms,
                      const GeoPoint &a, const GeoPoint &b)
 {
-  const std::lock_guard<Mutex> lock(skylines_data.mutex);
+  const std::lock_guard lock{skylines_data.mutex};
 
   /* garbage collection - hard-coded upper limit */
   auto n = skylines_data.waves.size();
@@ -101,7 +101,7 @@ TrackingGlue::OnThermal([[maybe_unused]] unsigned time_of_day_ms,
                         const AGeoPoint &bottom, const AGeoPoint &top,
                         double lift)
 {
-  const std::lock_guard<Mutex> lock(skylines_data.mutex);
+  const std::lock_guard lock{skylines_data.mutex};
 
   /* garbage collection - hard-coded upper limit */
   auto n = skylines_data.thermals.size();

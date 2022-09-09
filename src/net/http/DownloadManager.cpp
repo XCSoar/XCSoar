@@ -231,12 +231,12 @@ private:
 
   /* methods from class ProgressListener */
   void SetProgressRange(unsigned range) noexcept override {
-    std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     current_size = range;
   }
 
   void SetProgressPosition(unsigned position) noexcept override {
-    std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     current_position = position;
   }
 };

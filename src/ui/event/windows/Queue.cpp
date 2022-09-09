@@ -100,7 +100,7 @@ EventQueue::HandlePaintMessages()
 void
 EventQueue::AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   const auto due = SteadyNow() + d;
   timers.Add(timer, due);
@@ -112,7 +112,7 @@ EventQueue::AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexce
 void
 EventQueue::CancelTimer(Timer &timer)
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   timers.Cancel(timer);
 }

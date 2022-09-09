@@ -217,7 +217,7 @@ protected:
   gcc_pure
   bool IsDownloading(const char *name) const noexcept {
 #ifdef HAVE_DOWNLOAD_MANAGER
-    std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     return downloads.find(name) != downloads.end();
 #else
     return false;
@@ -232,7 +232,7 @@ protected:
   bool IsDownloading(const char *name,
                      DownloadStatus &status_r) const noexcept {
 #ifdef HAVE_DOWNLOAD_MANAGER
-    std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     auto i = downloads.find(name);
     if (i == downloads.end())
       return false;
@@ -252,7 +252,7 @@ protected:
   gcc_pure
   bool HasFailed(const char *name) const noexcept {
 #ifdef HAVE_DOWNLOAD_MANAGER
-    std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     return failures.find(name) != failures.end();
 #else
     return false;
@@ -348,7 +348,7 @@ ManagedFileListWidget::LoadRepositoryFile()
 try {
 #ifdef HAVE_DOWNLOAD_MANAGER
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     repository_modified = false;
     repository_failed = false;
   }
@@ -631,7 +631,7 @@ ManagedFileListWidget::OnTimer()
   bool download_active;
 
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     download_active = !downloads.empty();
   }
 
@@ -658,7 +658,7 @@ ManagedFileListWidget::OnDownloadAdded(Path path_relative,
   const std::string name3(name2);
 
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     downloads[name3] = DownloadStatus{size, position};
     failures.erase(name3);
   }
@@ -680,7 +680,7 @@ ManagedFileListWidget::OnDownloadComplete(Path path_relative) noexcept
   const std::string name3(name2);
 
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
 
     downloads.erase(name3);
 
@@ -708,7 +708,7 @@ ManagedFileListWidget::OnDownloadError(Path path_relative,
   const std::string name3(name2);
 
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
 
     downloads.erase(name3);
 
@@ -728,7 +728,7 @@ ManagedFileListWidget::OnDownloadNotification() noexcept
   bool repository_modified2, repository_failed2;
 
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     repository_modified2 = std::exchange(repository_modified, false);
     repository_failed2 = std::exchange(repository_failed, false);
   }

@@ -63,7 +63,7 @@ DeviceBlackboard::DeviceBlackboard()
 void
 DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const double alt)
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   if (Calculated().flight.flying)
     return;
@@ -87,7 +87,7 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const double alt)
  * Stops the replay
  */
 void DeviceBlackboard::StopReplay() {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   replay_data.Reset();
 
@@ -100,7 +100,7 @@ DeviceBlackboard::ProcessSimulation()
   if (!is_simulator())
     return;
 
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   simulator.Process(simulator_data);
   ScheduleMerge();
@@ -109,7 +109,7 @@ DeviceBlackboard::ProcessSimulation()
 void
 DeviceBlackboard::SetSimulatorLocation(const GeoPoint &location)
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   NMEAInfo &basic = simulator_data;
 
   simulator.Touch(basic);
@@ -128,7 +128,7 @@ DeviceBlackboard::SetSimulatorLocation(const GeoPoint &location)
 void
 DeviceBlackboard::SetSpeed(double val)
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   NMEAInfo &basic = simulator_data;
 
   simulator.Touch(basic);
@@ -146,7 +146,7 @@ DeviceBlackboard::SetSpeed(double val)
 void
 DeviceBlackboard::SetTrack(Angle val)
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   simulator.Touch(simulator_data);
   simulator_data.track = val.AsBearing();
 
@@ -162,7 +162,7 @@ DeviceBlackboard::SetTrack(Angle val)
 void
 DeviceBlackboard::SetAltitude(double val)
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   NMEAInfo &basic = simulator_data;
 
   simulator.Touch(basic);
@@ -198,7 +198,7 @@ DeviceBlackboard::ReadComputerSettings(const ComputerSettings &settings)
 void
 DeviceBlackboard::ExpireWallClock()
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   if (!Basic().alive)
     return;
 

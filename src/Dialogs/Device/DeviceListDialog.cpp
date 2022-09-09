@@ -656,7 +656,7 @@ DeviceListWidget::ManageCurrent()
     FlarmVersion version;
 
     {
-      const std::lock_guard<Mutex> lock(device_blackboard->mutex);
+      const std::lock_guard lock{device_blackboard->mutex};
       const NMEAInfo &basic = device_blackboard->RealState(current);
       version = basic.flarm.version;
     }
@@ -666,7 +666,7 @@ DeviceListWidget::ManageCurrent()
     DeviceInfo info, secondary_info;
 
     {
-      const std::lock_guard<Mutex> lock(device_blackboard->mutex);
+      const std::lock_guard lock{device_blackboard->mutex};
       const NMEAInfo &basic = device_blackboard->RealState(current);
       info = basic.device;
       secondary_info = basic.secondary_device;

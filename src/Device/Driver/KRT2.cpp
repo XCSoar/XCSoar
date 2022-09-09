@@ -184,7 +184,7 @@ KRT2Device::Send(const uint8_t *msg, unsigned msg_size,
 
   do {
     {
-      const std::lock_guard<Mutex> lock(response_mutex);
+      const std::lock_guard lock{response_mutex};
       response = NO_RSP;
     }
 
@@ -194,7 +194,7 @@ KRT2Device::Send(const uint8_t *msg, unsigned msg_size,
     // Wait for the response
     std::byte _response;
     {
-      std::unique_lock<Mutex> lock(response_mutex);
+      std::unique_lock lock{response_mutex};
       rx_cond.wait_for(lock, std::chrono::milliseconds(CMD_TIMEOUT));
       _response = response;
     }
@@ -254,7 +254,7 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
           case NAK:
             // Received a response to a normal command (STX)
             {
-              const std::lock_guard<Mutex> lock(response_mutex);
+              const std::lock_guard lock{response_mutex};
               response = *(const std::byte *) range.data();
               // Signal the response to the TX thread
               rx_cond.notify_one();
@@ -263,7 +263,7 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
           case STX:
             // Received a command from the radio (STX). Handle what we know.
             {
-              const std::lock_guard<Mutex> lock(response_mutex);
+              const std::lock_guard lock{response_mutex};
               const struct stx_msg * msg = (const struct stx_msg *) range.data();
               HandleSTXCommand(msg, info);
             }

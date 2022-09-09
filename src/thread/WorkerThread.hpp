@@ -55,7 +55,7 @@ public:
    * Wakes up the thread to do work, calls tick().
    */
   void Trigger() noexcept {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     if (!trigger_flag) {
       trigger_flag = true;
       trigger_cond.notify_one();
@@ -66,7 +66,7 @@ public:
    * Suspend execution until Resume() is called.
    */
   void BeginSuspend() noexcept {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     _BeginSuspend();
   }
 
@@ -79,7 +79,7 @@ public:
   }
 
   void Suspend() noexcept {
-    std::unique_lock<Mutex> lock(mutex);
+    std::unique_lock lock{mutex};
     _BeginSuspend();
     _WaitUntilSuspended(lock);
   }
@@ -89,7 +89,7 @@ public:
    * synchronously for the thread to exit.
    */
   void BeginStop() noexcept {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     SuspensibleThread::_BeginStop();
     trigger_cond.notify_one();
   }

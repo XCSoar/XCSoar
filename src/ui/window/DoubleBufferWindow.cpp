@@ -63,7 +63,7 @@ void
 DoubleBufferWindow::Repaint() noexcept
 {
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     auto &canvas = GetPaintCanvas();
 
     /* grow the current buffer, just in case the window has been
@@ -82,7 +82,7 @@ DoubleBufferWindow::Repaint() noexcept
 void
 DoubleBufferWindow::OnPaint(Canvas &canvas) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   canvas.Copy(GetVisibleCanvas());
 }
 

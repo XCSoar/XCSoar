@@ -230,7 +230,7 @@ AndroidPCMPlayer::Enqueue()
 {
   assert(source != nullptr);
 
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   if (!filled) {
     filled = true;

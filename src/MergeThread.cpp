@@ -77,7 +77,7 @@ MergeThread::Tick() noexcept
 #endif
 
   {
-    std::lock_guard<Mutex> lock(device_blackboard.mutex);
+    const std::lock_guard lock{device_blackboard.mutex};
 
     Process();
 

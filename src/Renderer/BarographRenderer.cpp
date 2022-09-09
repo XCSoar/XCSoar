@@ -39,7 +39,7 @@ Copyright_License {
 void
 BarographCaption(TCHAR *sTmp, const FlightStatistics &fs)
 {
-  std::lock_guard<Mutex> lock(fs.mutex);
+  const std::lock_guard lock{fs.mutex};
   if (!fs.altitude_ceiling.HasResult() || fs.altitude_base.IsEmpty()) {
     sTmp[0] = _T('\0');
   } else if (fs.altitude_ceiling.GetCount() < 4) {
@@ -70,7 +70,7 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
                      const DerivedInfo &derived_info,
                      const ProtectedTaskManager *_task)
 {
-  std::lock_guard<Mutex> lock(fs.mutex);
+  const std::lock_guard lock{fs.mutex};
   ChartRenderer chart(chart_look, canvas, rc, false);
   chart.Begin();
 

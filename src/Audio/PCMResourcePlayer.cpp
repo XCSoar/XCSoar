@@ -47,7 +47,7 @@ PCMResourcePlayer::PlayResource(const TCHAR *resource_name)
     return false;
   }
 
-  const std::lock_guard<Mutex> protect(lock);
+  const std::lock_guard protect{lock};
 
   if (1 == buffer_data_source.Add(std::move(pcm_data))) {
     if (!player->Start(buffer_data_source)) {

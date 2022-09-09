@@ -113,17 +113,17 @@ public:
 
 private:
   bool LockSetProgressRange(unsigned range) noexcept {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     return data.SetProgressRange(range);
   }
 
   bool LockSetProgressPosition(unsigned position) noexcept {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     return data.SetProgressPosition(position);
   }
 
   Data LockReceiveData() noexcept {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     Data new_data = data;
     data.ClearUpdate();
     return new_data;

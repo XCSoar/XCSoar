@@ -71,7 +71,7 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
 
   const auto &cloud_settings = GetComputerSettings().tracking.skylines.cloud;
   if (cloud_settings.show_thermals && skylines_data != nullptr) {
-    std::lock_guard<Mutex> lock(skylines_data->mutex);
+    const std::lock_guard lock{skylines_data->mutex};
     for (auto &i : skylines_data->thermals) {
       // TODO: apply wind drift
       if (auto p = render_projection.GeoToScreenIfVisible(i.bottom_location))

@@ -236,7 +236,7 @@ MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const
 
   canvas.Select(*traffic_look.font);
 
-  std::lock_guard<Mutex> lock(skylines_data->mutex);
+  const std::lock_guard lock{skylines_data->mutex};
   for (auto &i : skylines_data->traffic) {
     if (auto p = render_projection.GeoToScreenIfVisible(i.second.location)) {
       traffic_look.teammate_icon.Draw(canvas, *p);

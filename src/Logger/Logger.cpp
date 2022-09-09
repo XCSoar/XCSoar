@@ -111,7 +111,7 @@ Logger::GUIStartLogger(const NMEAInfo& gps_info,
     }
   }
 
-  const std::lock_guard<SharedMutex> protect(lock);
+  const std::lock_guard protect{lock};
   logger.StartLogger(gps_info, settings.logger, _T(""), decl);
 }
 
@@ -136,7 +136,7 @@ Logger::GUIStopLogger(const NMEAInfo &gps_info,
 
   if (noAsk || (ShowMessageBox(_("Stop Logger"), _("Stop Logger"),
                             MB_YESNO | MB_ICONQUESTION) == IDYES)) {
-    const std::lock_guard<SharedMutex> protect(lock);
+    const std::lock_guard protect{lock};
     logger.StopLogger(gps_info);
   }
 }
@@ -144,13 +144,13 @@ Logger::GUIStopLogger(const NMEAInfo &gps_info,
 void
 Logger::LoggerNote(const TCHAR *text)
 {
-  const std::lock_guard<SharedMutex> protect(lock);
+  const std::lock_guard protect{lock};
   logger.LoggerNote(text);
 }
 
 void
 Logger::ClearBuffer() noexcept
 {
-  const std::lock_guard<SharedMutex> protect(lock);
+  const std::lock_guard protect{lock};
   logger.ClearBuffer();
 }

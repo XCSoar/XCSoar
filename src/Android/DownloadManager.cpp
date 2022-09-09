@@ -99,7 +99,7 @@ AndroidDownloadManager::IsAvailable() noexcept
 void
 AndroidDownloadManager::AddListener(Net::DownloadListener &listener) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   assert(std::find(listeners.begin(), listeners.end(),
                    &listener) == listeners.end());
@@ -110,7 +110,7 @@ AndroidDownloadManager::AddListener(Net::DownloadListener &listener) noexcept
 void
 AndroidDownloadManager::RemoveListener(Net::DownloadListener &listener) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   auto i = std::find(listeners.begin(), listeners.end(), &listener);
   assert(i != listeners.end());
@@ -121,7 +121,7 @@ void
 AndroidDownloadManager::OnDownloadComplete(Path path_relative,
                                            bool success) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   if (success)
     for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
@@ -200,13 +200,13 @@ AndroidDownloadManager::Enqueue(JNIEnv *env, const char *uri,
   } catch (...) {
     const auto error = std::current_exception();
 
-    std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     for (auto *i : listeners)
       i->OnDownloadError(path_relative, error);
     return;
   }
 
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
     (*i)->OnDownloadAdded(path_relative, -1, -1);
 }

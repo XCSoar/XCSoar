@@ -81,7 +81,7 @@ SkyLinesTracking::Client::Open(SocketAddress _address)
 void
 SkyLinesTracking::Client::InternalClose() noexcept
 {
-  const std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   socket_event.Close();
   resolver.reset();
 }
@@ -298,7 +298,7 @@ void
 SkyLinesTracking::Client::OnResolverSuccess(std::forward_list<AllocatedSocketAddress> addresses) noexcept
 {
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     resolver.reset();
   }
 
@@ -315,7 +315,7 @@ void
 SkyLinesTracking::Client::OnResolverError(std::exception_ptr error) noexcept
 {
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     resolver.reset();
   }
 

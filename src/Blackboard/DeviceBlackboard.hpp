@@ -116,7 +116,7 @@ public:
   NMEAInfo LockGetDeviceDataUpdateClock(unsigned i) noexcept {
     assert(i < NUMDEV);
 
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     per_device_data[i].UpdateClock();
     return per_device_data[i];
   }
@@ -129,7 +129,7 @@ public:
     assert(i < NUMDEV);
 
     {
-      const std::lock_guard<Mutex> lock(mutex);
+      const std::lock_guard lock{mutex};
       per_device_data[i] = src;
     }
 

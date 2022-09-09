@@ -36,7 +36,7 @@ DrawThread::Run() noexcept
 {
   SetLowPriority();
 
-  std::unique_lock<Mutex> lock(mutex);
+  std::unique_lock lock{mutex};
 
   // circle until application is closed
   while (!_CheckStoppedOrSuspended(lock)) {

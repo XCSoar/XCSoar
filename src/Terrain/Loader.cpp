@@ -181,7 +181,7 @@ TerrainLoader::PutTileData(unsigned index,
     raster_tile_cache.PutOverviewTile(index, start, end, m);
 
   if (scan_tiles) {
-    const std::lock_guard<SharedMutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     raster_tile_cache.PutTileData(index, m);
   }
 }
@@ -318,7 +318,7 @@ TerrainLoader::UpdateTiles(struct zzip_dir *dir, const char *path,
   {
     /* this write lock is necessary because
        RasterTileCache::PollTiles() calls RasterTile::Unload() */
-    const std::lock_guard<SharedMutex> lock(mutex);
+    const std::lock_guard lock{mutex};
 
     if (!raster_tile_cache.PollTiles(p, radius))
       /* nothing to do */

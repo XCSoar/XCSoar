@@ -140,7 +140,7 @@ static unsigned
 GetCapitalHeight(FT_Face face) noexcept
 {
 #ifndef ENABLE_OPENGL
-  const std::lock_guard<Mutex> lock(freetype_mutex);
+  const std::lock_guard lock{freetype_mutex};
 #endif
 
   FT_UInt i = FT_Get_Char_Index(face, 'M');
@@ -254,7 +254,7 @@ ForEachGlyph(const FT_Face face, unsigned ascent_height, T &&text,
   unsigned prev_index = 0;
 
 #ifndef ENABLE_OPENGL
-  const std::lock_guard<Mutex> lock(freetype_mutex);
+  const std::lock_guard lock{freetype_mutex};
 #endif
 
   ForEachChar(std::forward<T>(text),

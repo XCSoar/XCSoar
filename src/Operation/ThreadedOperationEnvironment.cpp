@@ -31,7 +31,7 @@ ThreadedOperationEnvironment::ThreadedOperationEnvironment(OperationEnvironment 
 void
 ThreadedOperationEnvironment::Cancel() noexcept
 {
-  const std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   if (cancel_flag)
     return;
 
@@ -45,14 +45,14 @@ ThreadedOperationEnvironment::Cancel() noexcept
 bool
 ThreadedOperationEnvironment::IsCancelled() const noexcept
 {
-  const std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   return cancel_flag;
 }
 
 void
 ThreadedOperationEnvironment::SetCancelHandler(std::function<void()> handler) noexcept
 {
-  const std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   cancel_handler = std::move(handler);
 
   if (cancel_handler && cancel_flag)
@@ -62,7 +62,7 @@ ThreadedOperationEnvironment::SetCancelHandler(std::function<void()> handler) no
 void
 ThreadedOperationEnvironment::Sleep(std::chrono::steady_clock::duration duration) noexcept
 {
-  std::unique_lock<Mutex> lock(mutex);
+  std::unique_lock lock{mutex};
   if (!cancel_flag)
     cancel_cond.wait_for(lock, duration);
 }
@@ -71,7 +71,7 @@ void
 ThreadedOperationEnvironment::SetErrorMessage(const TCHAR *_error) noexcept
 {
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     data.SetErrorMessage(_error);
   }
 
@@ -82,7 +82,7 @@ void
 ThreadedOperationEnvironment::SetText(const TCHAR *_text) noexcept
 {
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     data.SetText(_text);
   }
 
