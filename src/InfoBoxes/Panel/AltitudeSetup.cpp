@@ -24,7 +24,7 @@ Copyright_License {
 #include "AltitudeSetup.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
-#include "Blackboard/DeviceBlackboard.hpp"
+#include "Device/MultipleDevices.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Form/DataField/Float.hpp"
@@ -59,7 +59,7 @@ AltitudeSetupPanel::OnModified(DataField &_df) noexcept
 
   {
     MessageOperationEnvironment env;
-    device_blackboard->SetQNH(settings.pressure, env);
+    devices->PutQNH(settings.pressure, env);
   }
 }
 

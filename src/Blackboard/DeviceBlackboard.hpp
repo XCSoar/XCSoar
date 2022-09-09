@@ -32,7 +32,6 @@ Copyright_License {
 
 #include <cassert>
 
-class MultipleDevices;
 class AtmosphericPressure;
 class OperationEnvironment;
 class RadioFrequency;
@@ -50,8 +49,6 @@ class DeviceBlackboard
   friend class MergeThread;
 
   Simulator simulator;
-
-  MultipleDevices *devices = nullptr;
 
   /**
    * Data from each physical device.
@@ -83,12 +80,6 @@ public:
 
 public:
   DeviceBlackboard() noexcept;
-
-  void SetDevices(MultipleDevices &_devices) noexcept {
-    assert(devices == nullptr);
-
-    devices = &_devices;
-  }
 
   /**
    * Reads the given derived_info usually provided by the
@@ -179,19 +170,6 @@ public:
   void SetTrack(Angle val) noexcept;
   void SetSpeed(double val) noexcept;
   void SetAltitude(double alt) noexcept;
-
-  void SetBallast(double fraction, double overload,
-                  OperationEnvironment &env) noexcept;
-  void SetBugs(double bugs, OperationEnvironment &env) noexcept;
-  void SetQNH(AtmosphericPressure qnh, OperationEnvironment &env) noexcept;
-  void SetMC(double mc, OperationEnvironment &env) noexcept;
-
-  void SetActiveFrequency(RadioFrequency frequency,
-                          const TCHAR *name,
-                          OperationEnvironment &env) noexcept;
-  void SetStandbyFrequency(RadioFrequency frequency,
-                           const TCHAR *name,
-                           OperationEnvironment &env) noexcept;
 
   /**
    * Check the expiry time of the device connection with the wall

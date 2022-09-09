@@ -30,6 +30,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Components.hpp"
 #include "FLARM/Glue.hpp"
+#include "Device/MultipleDevices.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "CalculationThread.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -129,7 +130,7 @@ ActionInterface::SetBallast(double ballast, bool to_devices) noexcept
         dry_mass;
 
       MessageOperationEnvironment env;
-      device_blackboard->SetBallast(ballast, overload, env);
+      devices->PutBallast(ballast, overload, env);
     }
   }
 }
@@ -153,7 +154,7 @@ ActionInterface::SetBugs(double bugs, bool to_devices) noexcept
   // send to external devices
   if (to_devices) {
     MessageOperationEnvironment env;
-    device_blackboard->SetBugs(bugs, env);
+    devices->PutBugs(bugs, env);
   }
 }
 
@@ -190,7 +191,7 @@ ActionInterface::SetMacCready(double mc, bool to_devices) noexcept
 
   if (to_devices) {
     MessageOperationEnvironment env;
-    device_blackboard->SetMC(mc, env);
+    devices->PutMacCready(mc, env);
   }
 }
 
@@ -317,7 +318,7 @@ ActionInterface::SetActiveFrequency(const RadioFrequency freq,
 
   if (to_devices) {
     MessageOperationEnvironment env;
-    device_blackboard->SetActiveFrequency(freq, freq_name, env);
+    devices->PutActiveFrequency(freq, freq_name, env);
   }
 }
 
@@ -344,7 +345,7 @@ ActionInterface::SetStandbyFrequency(const RadioFrequency freq,
 
   if (to_devices) {
     MessageOperationEnvironment env;
-    device_blackboard->SetStandbyFrequency(freq, freq_name, env);
+    devices->PutStandbyFrequency(freq, freq_name, env);
   }
 }
 

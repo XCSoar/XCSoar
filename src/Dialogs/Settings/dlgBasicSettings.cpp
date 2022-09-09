@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Blackboard/DeviceBlackboard.hpp"
+#include "Device/MultipleDevices.hpp"
 #include "Computer/Settings.hpp"
 #include "Units/Units.hpp"
 #include "Units/Group.hpp"
@@ -153,7 +153,7 @@ FlightSetupPanel::SetBallast()
   if (wl > 0)
     LoadValue(WingLoading, wl, UnitGroup::WING_LOADING);
 
-  if (device_blackboard != NULL) {
+  if (devices != nullptr) {
     const Plane &plane = CommonInterface::GetComputerSettings().plane;
     if (plane.empty_mass > 0) {
       auto dry_mass = plane.empty_mass + polar_settings.glide_polar_task.GetCrewMass();
@@ -162,7 +162,7 @@ FlightSetupPanel::SetBallast()
         dry_mass;
 
       MessageOperationEnvironment env;
-      device_blackboard->SetBallast(fraction, overload, env);
+      devices->PutBallast(fraction, overload, env);
     }
   }
 }
@@ -219,9 +219,9 @@ FlightSetupPanel::SetBugs(double bugs) {
   polar_settings.SetBugs(bugs);
   PublishPolarSettings();
 
-  if (device_blackboard != NULL) {
+  if (devices != nullptr) {
     MessageOperationEnvironment env;
-    device_blackboard->SetBugs(bugs, env);
+    devices->PutBugs(bugs, env);
   }
 }
 
@@ -234,9 +234,9 @@ FlightSetupPanel::SetQNH(AtmosphericPressure qnh)
   settings_computer.pressure = qnh;
   settings_computer.pressure_available.Update(basic.clock);
 
-  if (device_blackboard != NULL) {
+  if (devices != nullptr) {
     MessageOperationEnvironment env;
-    device_blackboard->SetQNH(qnh, env);
+    devices->PutQNH(qnh, env);
   }
 
   RefreshAltitudeControl();

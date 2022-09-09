@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Protection.hpp"
-#include "Device/MultipleDevices.hpp"
 #include "Simulator.hpp"
 #include "RadioFrequency.hpp"
 
@@ -234,52 +233,4 @@ DeviceBlackboard::Merge() noexcept
   } else {
     basic = real_data;
   }
-}
-
-void
-DeviceBlackboard::SetBallast(double fraction, double overload,
-                             OperationEnvironment &env) noexcept
-{
-  if (devices != nullptr)
-    devices->PutBallast(fraction, overload, env);
-}
-
-void
-DeviceBlackboard::SetBugs(double bugs, OperationEnvironment &env) noexcept
-{
-  if (devices != nullptr)
-    devices->PutBugs(bugs, env);
-}
-
-void
-DeviceBlackboard::SetQNH(AtmosphericPressure qnh,
-                         OperationEnvironment &env) noexcept
-{
-  if (devices != nullptr)
-    devices->PutQNH(qnh, env);
-}
-
-void
-DeviceBlackboard::SetMC(double mc, OperationEnvironment &env) noexcept
-{
-  if (devices != nullptr)
-    devices->PutMacCready(mc, env);
-}
-
-void
-DeviceBlackboard::SetActiveFrequency(RadioFrequency frequency,
-                                     const TCHAR *name,
-                                     OperationEnvironment &env) noexcept
-{
-  if (devices != nullptr)
-    devices->PutActiveFrequency(frequency, name, env);
-}
-
-void
-DeviceBlackboard::SetStandbyFrequency(RadioFrequency frequency,
-                                      const TCHAR *name,
-                                      OperationEnvironment &env) noexcept
-{
-  if (devices != nullptr)
-    devices->PutStandbyFrequency(frequency, name, env);
 }
