@@ -174,30 +174,6 @@ DeviceBlackboard::SetAltitude(double val) noexcept
   ScheduleMerge();
 }
 
-/**
- * Reads the given derived_info usually provided by the
- * GlideComputerBlackboard and saves it to the own Blackboard
- * @param derived_info Calculated information usually provided
- * by the GlideComputerBlackboard
- */
-void
-DeviceBlackboard::ReadBlackboard(const DerivedInfo &derived_info) noexcept
-{
-  calculated_info = derived_info;
-}
-
-/**
- * Reads the given settings usually provided by the InterfaceBlackboard
- * and saves it to the own Blackboard
- * @param settings ComputerSettings usually provided by the
- * InterfaceBlackboard
- */
-void
-DeviceBlackboard::ReadComputerSettings(const ComputerSettings &settings) noexcept
-{
-  computer_settings = settings;
-}
-
 void
 DeviceBlackboard::ExpireWallClock() noexcept
 {

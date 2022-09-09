@@ -90,8 +90,25 @@ public:
     devices = &_devices;
   }
 
-  void ReadBlackboard(const DerivedInfo &derived_info) noexcept;
-  void ReadComputerSettings(const ComputerSettings &settings) noexcept;
+  /**
+   * Reads the given derived_info usually provided by the
+   * GlideComputerBlackboard and saves it to the own Blackboard
+   * @param derived_info Calculated information usually provided
+   * by the GlideComputerBlackboard
+   */
+  void ReadBlackboard(const DerivedInfo &derived_info) noexcept {
+    calculated_info = derived_info;
+  }
+
+  /**
+   * Reads the given settings usually provided by the InterfaceBlackboard
+   * and saves it to the own Blackboard
+   * @param settings ComputerSettings usually provided by the
+   * InterfaceBlackboard
+   */
+  void ReadComputerSettings(const ComputerSettings &settings) noexcept {
+    computer_settings = settings;
+  }
 
 protected:
   NMEAInfo &SetBasic() noexcept { return gps_info; }
