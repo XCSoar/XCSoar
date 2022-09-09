@@ -28,7 +28,7 @@ Copyright_License {
 #include "Device/MultipleDevices.hpp"
 
 static bool
-BallastProcessTimer()
+BallastProcessTimer() noexcept
 {
   bool modified = false;
 
@@ -59,7 +59,7 @@ BallastProcessTimer()
 }
 
 static bool
-BugsProcessTimer()
+BugsProcessTimer() noexcept
 {
   bool modified = false;
 
@@ -106,7 +106,7 @@ QNHProcessTimer(OperationEnvironment &env)
 }
 
 static bool
-MacCreadyProcessTimer()
+MacCreadyProcessTimer() noexcept
 {
   bool modified = false;
 
@@ -137,7 +137,7 @@ MacCreadyProcessTimer()
 }
 
 static bool
-RadioProcess()
+RadioProcess() noexcept
 {
   bool modified = false;
 
