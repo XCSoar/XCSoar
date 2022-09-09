@@ -42,7 +42,7 @@ DeviceBlackboard::DeviceBlackboard() noexcept
   gps_info.date_time_utc = BrokenDateTime::NowUTC();
   gps_info.time = TimeStamp{gps_info.date_time_utc.DurationSinceMidnight()};
 
-  std::fill_n(per_device_data, unsigned(NUMDEV), gps_info);
+  std::fill(per_device_data.begin(), per_device_data.end(), gps_info);
 
   real_data = simulator_data = replay_data = gps_info;
 
@@ -68,9 +68,9 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc,
   if (Calculated().flight.flying)
     return;
 
-  for (unsigned i = 0; i < unsigned(NUMDEV); ++i)
-    if (!per_device_data[i].location_available)
-      per_device_data[i].SetFakeLocation(loc, alt);
+  for (auto &i : per_device_data)
+    if (!i.location_available)
+      i.SetFakeLocation(loc, alt);
 
   if (!real_data.location_available)
     real_data.SetFakeLocation(loc, alt);
@@ -181,8 +181,7 @@ DeviceBlackboard::ExpireWallClock() noexcept
     return;
 
   bool modified = false;
-  for (unsigned i = 0; i < unsigned(NUMDEV); ++i) {
-    NMEAInfo &basic = per_device_data[i];
+  for (auto &basic : per_device_data) {
     if (!basic.alive)
       continue;
 
@@ -207,13 +206,13 @@ DeviceBlackboard::Merge() noexcept
   NMEAInfo &basic = SetBasic();
 
   real_data.Reset();
-  for (unsigned i = 0; i < unsigned(NUMDEV); ++i) {
-    if (!per_device_data[i].alive)
+  for (auto &basic : per_device_data) {
+    if (!basic.alive)
       continue;
 
-    per_device_data[i].UpdateClock();
-    per_device_data[i].Expire();
-    real_data.Complement(per_device_data[i]);
+    basic.UpdateClock();
+    basic.Expire();
+    real_data.Complement(basic);
   }
 
   real_clock.Normalise(real_data);

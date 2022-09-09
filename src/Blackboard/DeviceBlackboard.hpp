@@ -30,7 +30,7 @@ Copyright_License {
 #include "thread/Mutex.hxx"
 #include "time/WrapClock.hpp"
 
-#include <cassert>
+#include <array>
 
 class AtmosphericPressure;
 class OperationEnvironment;
@@ -53,7 +53,7 @@ class DeviceBlackboard
   /**
    * Data from each physical device.
    */
-  NMEAInfo per_device_data[NUMDEV];
+  std::array<NMEAInfo, NUMDEV> per_device_data;
 
   /**
    * Merged data from the physical devices.
@@ -107,12 +107,10 @@ protected:
 
 public:
   const NMEAInfo &RealState(unsigned i) const noexcept {
-    assert(i < NUMDEV);
     return per_device_data[i];
   }
 
   NMEAInfo &SetRealState(unsigned i) noexcept {
-    assert(i < NUMDEV);
     return per_device_data[i];
   }
 
@@ -122,8 +120,6 @@ public:
    * unlocking the mutex.
    */
   NMEAInfo LockGetDeviceDataUpdateClock(unsigned i) noexcept {
-    assert(i < NUMDEV);
-
     const std::lock_guard lock{mutex};
     per_device_data[i].UpdateClock();
     return per_device_data[i];
@@ -134,8 +130,6 @@ public:
    * method takes care for locking and unlocking the mutex.
    */
   void LockSetDeviceDataScheuduleMerge(unsigned i, const NMEAInfo &src) noexcept {
-    assert(i < NUMDEV);
-
     {
       const std::lock_guard lock{mutex};
       per_device_data[i] = src;
