@@ -11,7 +11,7 @@
 
 static void
 LoadColor(const ProfileMap &map,FlarmColorDatabase &db,
-          const char *key, FlarmColor color)
+          std::string_view key, FlarmColor color)
 {
   const char *ids = map.Get(key);
   if (ids == nullptr)

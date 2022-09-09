@@ -13,7 +13,8 @@
 #endif
 
 bool
-ProfileMap::Get(const char *key, TCHAR *value, size_t max_size) const noexcept
+ProfileMap::Get(std::string_view key,
+                TCHAR *value, std::size_t max_size) const noexcept
 {
   const char *src = Get(key);
   if (src == nullptr) {
@@ -37,7 +38,7 @@ ProfileMap::Get(const char *key, TCHAR *value, size_t max_size) const noexcept
 #ifdef _UNICODE
 
 void
-ProfileMap::Set(const char *key, const TCHAR *value) noexcept
+ProfileMap::Set(std::string_view key, const TCHAR *value) noexcept
 {
   char buffer[MAX_PATH];
   int length = WideCharToMultiByte(CP_UTF8, 0, value, -1,

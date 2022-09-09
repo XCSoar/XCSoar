@@ -4,7 +4,7 @@
 #include "Map.hpp"
 
 void
-ProfileMap::Set(const char *key, const char *value) noexcept
+ProfileMap::Set(std::string_view key, const char *value) noexcept
 {
   const auto i = map.lower_bound(key);
   if (i != map.end() && i->first == key) {

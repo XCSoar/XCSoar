@@ -358,7 +358,7 @@ CreateDirectionDataField(DataFieldListener *listener, Angle last_heading)
 
 static void
 ReplaceProfilePathBase(DataFieldEnum &df, unsigned i,
-                       const char *profile_key)
+                       std::string_view profile_key)
 {
   const auto p = Profile::map.GetPathBase(profile_key);
   if (p != nullptr)

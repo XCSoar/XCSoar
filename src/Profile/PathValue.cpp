@@ -17,7 +17,7 @@
 #include <windef.h> /* for MAX_PATH */
 
 AllocatedPath
-ProfileMap::GetPath(const char *key) const noexcept
+ProfileMap::GetPath(std::string_view key) const noexcept
 {
   TCHAR buffer[MAX_PATH];
   if (!Get(key, buffer, ARRAY_SIZE(buffer)))
@@ -30,7 +30,7 @@ ProfileMap::GetPath(const char *key) const noexcept
 }
 
 bool
-ProfileMap::GetPathIsEqual(const char *key, Path value) const noexcept
+ProfileMap::GetPathIsEqual(std::string_view key, Path value) const noexcept
 {
   const auto saved_value = GetPath(key);
   if (saved_value == nullptr)
@@ -55,7 +55,7 @@ BackslashBaseName(const TCHAR *p) noexcept
 #ifdef _UNICODE
 
 BasicAllocatedString<TCHAR>
-ProfileMap::GetPathBase(const char *key) const noexcept
+ProfileMap::GetPathBase(std::string_view key) const noexcept
 {
   TCHAR buffer[MAX_PATH];
   if (!Get(key, buffer, ARRAY_SIZE(buffer)))
@@ -71,7 +71,7 @@ ProfileMap::GetPathBase(const char *key) const noexcept
 #else
 
 StringPointer<TCHAR>
-ProfileMap::GetPathBase(const char *key) const noexcept
+ProfileMap::GetPathBase(std::string_view key) const noexcept
 {
   const auto *path = Get(key);
   if (path != nullptr)
@@ -83,7 +83,7 @@ ProfileMap::GetPathBase(const char *key) const noexcept
 #endif
 
 void
-ProfileMap::SetPath(const char *key, Path value) noexcept
+ProfileMap::SetPath(std::string_view key, Path value) noexcept
 {
   if (value == nullptr || StringIsEmpty(value.c_str()))
     Set(key, _T(""));
