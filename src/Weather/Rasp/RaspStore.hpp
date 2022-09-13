@@ -46,7 +46,7 @@ struct GeoPoint;
  */
 class RaspStore {
 public:
-  static constexpr unsigned MAX_WEATHER_MAP = 16; /**< Max number of items stored */
+  static constexpr unsigned MAX_WEATHER_MAP = 50; /**< Max number of items stored */
   static constexpr unsigned MAX_WEATHER_TIMES = 48; /**< Max time segments of each item */
 
   struct MapInfo {
