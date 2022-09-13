@@ -49,7 +49,9 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <sys/param.h>
+#ifndef __MSVC__
+# include <sys/param.h>
+#endif
 #include <stdbool.h>
 
 /* -------------------------------------------------------------------- */
