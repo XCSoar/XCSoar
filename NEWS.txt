@@ -4,6 +4,8 @@ Version 7.27 - not yet released
 * weather
   - New Rasp Color schemes for Thermalmap
   - Support 15 minute intervals in RASP files
+* Android
+  - allow file explorer to access the XCSoar data files
 
 Version 7.26 - 2022/09/03
 * user interface

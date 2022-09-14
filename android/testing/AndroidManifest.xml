@@ -48,6 +48,17 @@
               android:authorities="org.xcsoar"
               android:exported="false"
               android:grantUriPermissions="true"/>
+
+    <provider
+        android:name="org.xcsoar.AllFilesDocumentsProvider"
+        android:authorities="org.xcsoar.allfiles"
+        android:exported="true"
+        android:grantUriPermissions="true"
+        android:permission="android.permission.MANAGE_DOCUMENTS">
+      <intent-filter>
+        <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
+      </intent-filter>
+    </provider>
   </application>
 
   <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30"/>
