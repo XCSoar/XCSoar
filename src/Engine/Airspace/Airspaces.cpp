@@ -24,8 +24,8 @@
 #include "AbstractAirspace.hpp"
 #include "AirspaceIntersectionVisitor.hpp"
 #include "Navigation/Aircraft.hpp"
+#include "Geo/Flat/BoostFlatLine.hpp"
 
-#include <boost/geometry/geometries/linestring.hpp>
 #include <boost/geometry/algorithms/distance.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
 #include <boost/geometry/strategies/strategies.hpp>
@@ -52,10 +52,10 @@ Airspaces::QueryIntersecting(const GeoPoint &a, const GeoPoint &b) const noexcep
     // nothing to do
     return {airspace_tree.qend(), airspace_tree.qend()};
 
-  // TODO: use StaticArray instead of std::vector
-  boost::geometry::model::linestring<FlatGeoPoint> line;
-  line.push_back(task_projection.ProjectInteger(a));
-  line.push_back(task_projection.ProjectInteger(b));
+  const std::array line{
+    task_projection.ProjectInteger(a),
+    task_projection.ProjectInteger(b),
+  };
 
   return {airspace_tree.qbegin(bgi::intersects(line)), airspace_tree.qend()};
 }
