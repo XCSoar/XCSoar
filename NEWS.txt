@@ -1,5 +1,6 @@
 Version 7.27 - not yet released
 * user interface
+  - vertical scroll bar in some modal dialogs
   - rasp sources from repository
 * weather
   - New Rasp Color schemes for Thermalmap
