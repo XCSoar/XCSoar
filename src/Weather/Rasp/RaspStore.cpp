@@ -104,7 +104,7 @@ RaspStore::MapItem::MapItem(const TCHAR *_name)
 BrokenTime
 RaspStore::IndexToTime(unsigned index)
 {
-  return BrokenTime(index / 2, index % 2 == 0 ? 0 : 30);
+  return BrokenTime(index / 4, (index % 4) * 15);
 }
 
 unsigned
