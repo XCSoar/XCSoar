@@ -10,6 +10,7 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/ContainerWidget.cpp \
 	$(SRC)/Widget/SolidWidget.cpp \
 	$(SRC)/Widget/PanelWidget.cpp \
+	$(SRC)/Widget/VScrollWidget.cpp \
 	$(SRC)/Widget/TabWidget.cpp \
 	$(SRC)/Widget/TextWidget.cpp \
 	$(SRC)/Widget/LargeTextWidget.cpp \

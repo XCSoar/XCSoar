@@ -14,6 +14,7 @@ FORM_SOURCES = \
 	$(SRC)/Renderer/ColorButtonRenderer.cpp \
 	$(FORM_SRC_DIR)/Control.cpp \
 	$(FORM_SRC_DIR)/Panel.cpp \
+	$(FORM_SRC_DIR)/VScrollPanel.cpp \
 	$(FORM_SRC_DIR)/Form.cpp \
 	$(FORM_SRC_DIR)/Button.cpp \
 	$(FORM_SRC_DIR)/ButtonPanel.cpp \
