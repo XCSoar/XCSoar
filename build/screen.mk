@@ -19,6 +19,7 @@ SCREEN_SOURCES = \
 	$(CANVAS_SRC_DIR)/Color.cpp \
 	$(CANVAS_SRC_DIR)/BufferCanvas.cpp \
 	$(WINDOW_SRC_DIR)/Window.cpp \
+	$(WINDOW_SRC_DIR)/ContainerWindow.cpp \
 	$(WINDOW_SRC_DIR)/SolidContainerWindow.cpp \
 	$(WINDOW_SRC_DIR)/BufferWindow.cpp \
 	$(WINDOW_SRC_DIR)/DoubleBufferWindow.cpp \

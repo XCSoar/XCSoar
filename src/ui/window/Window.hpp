@@ -487,6 +487,12 @@ public:
       Hide();
   }
 
+  /**
+   * Attempt to make this window visible by scrolling the parent (via
+   * ContainerWindow::ScrollTo()).
+   */
+  void ScrollParentTo() noexcept;
+
 #ifndef USE_WINUSER
   bool IsTransparent() const noexcept {
     return transparent;

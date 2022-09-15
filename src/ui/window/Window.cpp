@@ -117,6 +117,13 @@ Window::GetRootOwner() noexcept
 }
 
 void
+Window::ScrollParentTo() noexcept
+{
+  if (auto *parent = GetParent())
+    parent->ScrollTo(GetPosition());
+}
+
+void
 Window::OnCreate()
 {
 }
