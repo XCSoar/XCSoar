@@ -24,11 +24,11 @@
 #include "AbstractAirspace.hpp"
 #include "AirspaceIntersectionVisitor.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "Geo/Flat/BoostFlatLine.hpp"
 
 #include <boost/geometry/algorithms/distance.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
 #include <boost/geometry/strategies/strategies.hpp>
+#include <boost/geometry/geometries/segment.hpp>
 
 namespace bgi = boost::geometry::index;
 
@@ -52,7 +52,7 @@ Airspaces::QueryIntersecting(const GeoPoint &a, const GeoPoint &b) const noexcep
     // nothing to do
     return {airspace_tree.qend(), airspace_tree.qend()};
 
-  const std::array line{
+  const boost::geometry::model::segment line{
     task_projection.ProjectInteger(a),
     task_projection.ProjectInteger(b),
   };
