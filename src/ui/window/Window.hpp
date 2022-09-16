@@ -670,6 +670,20 @@ public:
   const PixelRect GetPosition() const noexcept;
 #endif
 
+  /**
+   * Translate coordinates relative to this window to coordinates
+   * relative to the parent window.
+   */
+  [[gnu::pure]]
+  PixelPoint ToParentCoordinates(const PixelPoint p) const noexcept {
+    return GetPosition().GetTopLeft() + p;
+  }
+
+  [[gnu::pure]]
+  PixelRect ToParentCoordinates(const PixelRect &r) const noexcept {
+    return {ToParentCoordinates(r.GetTopLeft()), r.GetSize()};
+  }
+
   [[gnu::pure]]
   const PixelRect GetClientRect() const noexcept
   {
