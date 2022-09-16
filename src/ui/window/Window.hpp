@@ -639,10 +639,7 @@ public:
   }
 #endif /* USE_WINUSER */
 
-#ifndef USE_WINUSER
-  void ToScreen(PixelRect &rc) const noexcept;
-#endif
-
+#ifdef USE_WINUSER
   /**
    * Returns the position on the screen.
    */
@@ -651,15 +648,11 @@ public:
   {
     assert(IsDefined());
 
-#ifndef USE_WINUSER
-    PixelRect rc = GetPosition();
-    ToScreen(rc);
-#else
     RECT rc;
     ::GetWindowRect(hWnd, &rc);
-#endif
     return rc;
   }
+#endif
 
   /**
    * Returns the position within the parent window.
