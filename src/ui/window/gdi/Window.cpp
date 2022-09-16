@@ -74,6 +74,25 @@ Window::IsMaximised() const noexcept
     this_rc.GetHeight() >= parent_rc.GetHeight();
 }
 
+[[gnu::pure]]
+static PixelPoint
+ScreenToClient(HWND h, PixelPoint p) noexcept
+{
+  POINT q{p.x, p.y};
+  ScreenToClient(h, &q);
+  return {q.x, q.y};
+}
+
+[[gnu::pure]]
+static PixelRect
+ScreenToClient(HWND h, PixelRect r) noexcept
+{
+  return {
+    ScreenToClient(h, r.GetTopLeft()),
+    ScreenToClient(h, r.GetBottomRight()),
+  };
+}
+
 const PixelRect
 Window::GetPosition() const noexcept
 {
@@ -82,21 +101,8 @@ Window::GetPosition() const noexcept
   PixelRect rc = GetScreenPosition();
 
   HWND parent = ::GetParent(hWnd);
-  if (parent != nullptr) {
-    POINT pt;
-
-    pt.x = rc.left;
-    pt.y = rc.top;
-    ::ScreenToClient(parent, &pt);
-    rc.left = pt.x;
-    rc.top = pt.y;
-
-    pt.x = rc.right;
-    pt.y = rc.bottom;
-    ::ScreenToClient(parent, &pt);
-    rc.right = pt.x;
-    rc.bottom = pt.y;
-  }
+  if (parent != nullptr)
+    return ::ScreenToClient(parent, rc);
 
   return rc;
 }
