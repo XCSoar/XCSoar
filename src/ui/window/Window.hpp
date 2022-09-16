@@ -249,46 +249,6 @@ public:
 
     return position;
   }
-
-  int GetTop() const noexcept {
-    assert(IsDefined());
-
-    return position.y;
-  }
-
-  int GetLeft() const noexcept {
-    assert(IsDefined());
-
-    return position.x;
-  }
-
-  unsigned GetWidth() const noexcept {
-    assert(IsDefined());
-
-    return size.width;
-  }
-
-  unsigned GetHeight() const noexcept {
-    assert(IsDefined());
-
-    return size.height;
-  }
-
-  int GetRight() const {
-    return GetLeft() + GetWidth();
-  }
-
-  int GetBottom() const noexcept {
-    return GetTop() + GetHeight();
-  }
-#else /* USE_WINUSER */
-  unsigned GetWidth() const noexcept {
-    return GetSize().width;
-  }
-
-  unsigned GetHeight() const noexcept {
-    return GetSize().height;
-  }
 #endif
 
 #ifndef USE_WINUSER

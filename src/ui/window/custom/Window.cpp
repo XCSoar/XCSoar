@@ -81,7 +81,8 @@ Window::IsMaximised() const noexcept
   assert(IsDefined());
 
   return parent != nullptr &&
-    GetWidth() >= parent->GetWidth() && GetHeight() >= parent->GetHeight();
+    GetSize().width >= parent->GetSize().width &&
+    GetSize().height >= parent->GetSize().height;
 }
 
 void

@@ -216,7 +216,7 @@ TopWindow::OnEvent(const SDL_Event &event)
       if (screen->CheckResize(PixelSize(event.window.data1, event.window.data2)))
         Resize(screen->GetSize());
 #else
-      Resize(event.window.data1, event.window.data2);
+      Resize({event.window.data1, event.window.data2});
 #endif
       return true;
 #endif
@@ -242,7 +242,7 @@ TopWindow::OnEvent(const SDL_Event &event)
           if (screen->CheckResize(PixelSize(w, h)))
             Resize(screen->GetSize());
 #else
-          Resize(w, h);
+          Resize({w, h});
 #endif
         }
 

@@ -36,8 +36,9 @@ class WindowCanvas : public Canvas {
 #ifdef USE_MEMORY_CANVAS
 public:
   explicit WindowCanvas(Window &window) {
-    buffer.width = window.GetWidth();
-    buffer.height = window.GetHeight();
+    const auto window_size = window.GetSize();
+    buffer.width = window_size.width;
+    buffer.height = window_size.height;
   }
 
 #else /* !USE_MEMORY_CANVAS */
