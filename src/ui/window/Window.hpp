@@ -714,7 +714,7 @@ public:
     assert(IsDefined());
 
 #ifndef USE_WINUSER
-    return { GetLeft(), GetTop(), GetRight(), GetBottom() };
+    return { position, size };
 #else
     PixelRect rc = GetScreenPosition();
 
