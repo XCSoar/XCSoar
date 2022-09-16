@@ -326,28 +326,28 @@ public:
   [[gnu::pure]]
   bool IsMaximised() const noexcept;
 
-  void Move(int left, int top) noexcept {
+  void Move(PixelPoint _position) noexcept {
     AssertThread();
 
 #ifndef USE_WINUSER
-    position = { left, top };
+    position = _position;
     Invalidate();
 #else
-    ::SetWindowPos(hWnd, nullptr, left, top, 0, 0,
+    ::SetWindowPos(hWnd, nullptr, _position.x, _position.y, 0, 0,
                    SWP_NOSIZE | SWP_NOZORDER |
                    SWP_NOACTIVATE | SWP_NOOWNERZORDER);
 #endif
   }
 
-  void Move(int left, int top,
-            unsigned width, unsigned height) noexcept {
+  void Move(PixelPoint _position, PixelSize _size) noexcept {
     AssertThread();
 
 #ifndef USE_WINUSER
-    Move(left, top);
-    Resize(width, height);
+    Move(_position);
+    Resize(_size);
 #else /* USE_WINUSER */
-    ::SetWindowPos(hWnd, nullptr, left, top, width, height,
+    ::SetWindowPos(hWnd, nullptr, _position.x, _position.y,
+                   _size.width, _size.height,
                    SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
     // XXX store new size?
 #endif
@@ -357,7 +357,7 @@ public:
     assert(rc.left < rc.right);
     assert(rc.top < rc.bottom);
 
-    Move(rc.left, rc.top, rc.GetWidth(), rc.GetHeight());
+    Move(rc.GetTopLeft(), rc.GetSize());
   }
 
   void MoveToCenter() noexcept {
@@ -365,28 +365,28 @@ public:
     const PixelSize parent_size = GetParentClientRect().GetSize();
     int dialog_x = (int(parent_size.width) - int(window_size.width)) / 2;
     int dialog_y = (int(parent_size.height) - int(window_size.height)) / 2;
-    Move(dialog_x, dialog_y);
+    Move({dialog_x, dialog_y});
   }
 
   /**
-   * Like move(), but does not trigger a synchronous redraw.  The
+   * Like Move(), but does not trigger a synchronous redraw.  The
    * caller is responsible for redrawing.
    */
-  void FastMove(int left, int top,
-                unsigned width, unsigned height) noexcept {
+  void FastMove(PixelPoint _position, PixelSize _size) noexcept {
     AssertThread();
 
 #ifndef USE_WINUSER
-    Move(left, top, width, height);
+    Move(_position, _size);
 #else /* USE_WINUSER */
-    ::SetWindowPos(hWnd, nullptr, left, top, width, height,
+    ::SetWindowPos(hWnd, nullptr, _position.x, _position.y,
+                   _size.width, _size.height,
                    SWP_NOCOPYBITS | SWP_NOREDRAW | SWP_DEFERERASE |
                    SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
 #endif
   }
 
   void FastMove(const PixelRect rc) noexcept {
-    FastMove(rc.left, rc.top, rc.GetWidth(), rc.GetHeight());
+    FastMove(rc.GetTopLeft(), rc.GetSize());
   }
 
   /**
@@ -407,27 +407,23 @@ public:
 #endif
   }
 
-  void Resize(unsigned width, unsigned height) noexcept {
+  void Resize(PixelSize _size) noexcept {
     AssertThread();
 
 #ifndef USE_WINUSER
-    if (width == GetWidth() && height == GetHeight())
+    if (_size == size)
       return;
 
-    size = { width, height };
+    size = _size;
 
     Invalidate();
     OnResize(size);
 #else /* USE_WINUSER */
-    ::SetWindowPos(hWnd, nullptr, 0, 0, width, height,
+    ::SetWindowPos(hWnd, nullptr, 0, 0, _size.width, _size.height,
                    SWP_NOMOVE | SWP_NOZORDER |
                    SWP_NOACTIVATE | SWP_NOOWNERZORDER);
     // XXX store new size?
 #endif
-  }
-
-  void Resize(PixelSize size) noexcept {
-    Resize(size.width, size.height);
   }
 
 #ifndef USE_WINUSER

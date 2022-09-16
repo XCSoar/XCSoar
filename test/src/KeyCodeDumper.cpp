@@ -146,10 +146,10 @@ protected:
     SingleWindow::OnResize(new_size);
 
     if (key_code_dumper.IsDefined())
-      key_code_dumper.Move(0, 0, new_size.width, (new_size.height + 1) / 2);
+      key_code_dumper.Move(PixelRect{PixelSize{new_size.width, (new_size.height + 1) / 2}});
 
     if (close_button.IsDefined())
-      close_button.Move(0, (new_size.height + 1) / 2, new_size.width, new_size.height / 2);
+      close_button.Move({0, int(new_size.height + 1) / 2, int(new_size.width), int(new_size.height / 2)});
   }
 };
 

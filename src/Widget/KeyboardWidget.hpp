@@ -43,8 +43,7 @@ protected:
 
   OnCharacterCallback_t on_character;
 
-  unsigned button_width;
-  unsigned button_height;
+  PixelSize button_size;
 
   unsigned num_buttons;
   CharacterButton buttons[MAX_BUTTONS];
@@ -75,8 +74,8 @@ private:
   [[gnu::pure]]
   Button *FindButton(unsigned ch);
 
-  void MoveButton(unsigned ch, int left, int top);
-  void ResizeButton(unsigned ch, unsigned width, unsigned height);
+  void MoveButton(unsigned ch, PixelPoint position) noexcept;
+  void ResizeButton(unsigned ch, PixelSize size) noexcept;
   void ResizeButtons();
   void SetButtonsSize();
   void MoveButtonsToRow(const PixelRect &rc,

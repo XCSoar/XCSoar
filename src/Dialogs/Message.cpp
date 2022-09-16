@@ -68,8 +68,10 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption,
   text_frame.SetAlignCenter();
 
   const unsigned text_height = text_frame.GetTextHeight();
-  text_frame.Resize(client_area_size.width,
-                    text_height + Layout::GetTextPadding());
+  text_frame.Resize({
+      client_area_size.width,
+      text_height + Layout::GetTextPadding(),
+    });
 
   client_area_size.height = Layout::Scale(10) + text_height + button_size.height;
 
@@ -127,7 +129,7 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption,
 
   // Move buttons to the right positions
   for (unsigned i = 0; i < buttons.size(); i++) {
-    buttons[i].Move(button_x, button_rc.top);
+    buttons[i].Move({button_x, button_rc.top});
     button_x += max_button_width;
   }
 

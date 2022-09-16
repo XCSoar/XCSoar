@@ -204,7 +204,7 @@ WndForm::OnMouseMove(PixelPoint p, unsigned keys) noexcept
       new_position.top = 0;
 #endif
 
-    Move(new_position.left, new_position.top);
+    Move(new_position.GetTopLeft());
 
     return true;
   }
@@ -583,7 +583,7 @@ WndForm::ReinitialiseLayout(const PixelRect &parent_rc) noexcept
       rc.top = 0;
 #endif
 
-    Move(rc.left, rc.top);
+    Move(rc.GetTopLeft());
   }
 }
 
