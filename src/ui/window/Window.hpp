@@ -664,35 +664,18 @@ public:
   /**
    * Returns the position within the parent window.
    */
+#ifndef USE_WINUSER
   [[gnu::pure]]
   const PixelRect GetPosition() const noexcept
   {
     assert(IsDefined());
 
-#ifndef USE_WINUSER
     return { position, size };
-#else
-    PixelRect rc = GetScreenPosition();
-
-    HWND parent = ::GetParent(hWnd);
-    if (parent != nullptr) {
-      POINT pt;
-
-      pt.x = rc.left;
-      pt.y = rc.top;
-      ::ScreenToClient(parent, &pt);
-      rc.left = pt.x;
-      rc.top = pt.y;
-
-      pt.x = rc.right;
-      pt.y = rc.bottom;
-      ::ScreenToClient(parent, &pt);
-      rc.right = pt.x;
-      rc.bottom = pt.y;
-    }
-    return rc;
-#endif
   }
+#else
+  [[gnu::pure]]
+  const PixelRect GetPosition() const noexcept;
+#endif
 
   [[gnu::pure]]
   const PixelRect GetClientRect() const noexcept

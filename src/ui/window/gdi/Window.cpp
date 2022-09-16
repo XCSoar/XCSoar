@@ -74,6 +74,33 @@ Window::IsMaximised() const noexcept
     this_rc.GetHeight() >= parent_rc.GetHeight();
 }
 
+const PixelRect
+Window::GetPosition() const noexcept
+{
+  assert(IsDefined());
+
+  PixelRect rc = GetScreenPosition();
+
+  HWND parent = ::GetParent(hWnd);
+  if (parent != nullptr) {
+    POINT pt;
+
+    pt.x = rc.left;
+    pt.y = rc.top;
+    ::ScreenToClient(parent, &pt);
+    rc.left = pt.x;
+    rc.top = pt.y;
+
+    pt.x = rc.right;
+    pt.y = rc.bottom;
+    ::ScreenToClient(parent, &pt);
+    rc.right = pt.x;
+    rc.bottom = pt.y;
+  }
+
+  return rc;
+}
+
 void
 Window::SetEnabled(bool enabled) noexcept
 {
