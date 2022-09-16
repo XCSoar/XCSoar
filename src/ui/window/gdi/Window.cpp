@@ -64,6 +64,18 @@ Window::CreateMessageWindow() noexcept
   assert(hWnd != nullptr);
 }
 
+ContainerWindow *
+Window::GetParent() const noexcept
+{
+  assert(IsDefined());
+
+  HWND h = ::GetParent(hWnd);
+  if (h == nullptr)
+    return nullptr;
+
+  return dynamic_cast<ContainerWindow *>(GetChecked(h));
+}
+
 bool
 Window::IsMaximised() const noexcept
 {

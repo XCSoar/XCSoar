@@ -213,6 +213,9 @@ public:
 
     return h == hWnd || ::IsChild(hWnd, h);
   }
+
+  [[gnu::pure]]
+  ContainerWindow *GetParent() const noexcept;
 #endif
 
 protected:
