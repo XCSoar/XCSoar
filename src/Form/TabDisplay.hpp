@@ -87,7 +87,7 @@ class TabDisplay final : public PaintWindow
 
   bool vertical;
 
-  bool dragging; // tracks that mouse is down and captured
+  bool dragging = false; // tracks that mouse is down and captured
   bool drag_off_button; // set by mouse_move
   unsigned down_index; // index of tab where mouse down occurred
 

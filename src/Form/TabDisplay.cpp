@@ -37,7 +37,6 @@ TabDisplay::TabDisplay(TabWidget &_pager, const DialogLook &_look,
   :pager(_pager),
    look(_look),
    vertical(_vertical),
-   dragging(false),
    tab_line_height(Layout::VptScale(5))
 {
   style.TabStop();

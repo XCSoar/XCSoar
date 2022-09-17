@@ -36,12 +36,7 @@ Copyright_License {
 
 TabMenuDisplay::TabMenuDisplay(PagerWidget &_pager,
                                const DialogLook &_look) noexcept
-  :pager(_pager),
-   look(_look),
-   dragging(false),
-   drag_off_button(false),
-   down_index(MenuTabIndex::None()),
-   cursor(0)
+  :pager(_pager), look(_look)
 {
 }
 
