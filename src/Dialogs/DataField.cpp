@@ -101,16 +101,18 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
       dfi.ModifyValue(value);  // SetAsInteger with signed!
       return true;
     }
-  } else {
-    const TCHAR *value = df.GetAsString();
-    if (value == NULL)
-      return false;
+  } else if (type == DataField::Type::STRING ||
+             type == DataField::Type::PREFIX) {
+    auto &sdf = static_cast<DataFieldString &>(df);
+
+    const TCHAR *value = sdf.GetValue();
+    assert(value != nullptr);
 
     StaticString<EDITSTRINGSIZE> buffer(value);
 
     PrefixDataField::AllowedCharactersFunction acf;
     if (type == DataField::Type::PREFIX)
-      acf = ((PrefixDataField &)df).GetAllowedCharactersFunction();
+      acf = static_cast<PrefixDataField &>(sdf).GetAllowedCharactersFunction();
 
 #ifdef ANDROID
     if (!acf) {
@@ -125,7 +127,7 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
       if (!new_value)
         return false;
 
-      df.SetAsString(new_value->c_str());
+      sdf.ModifyValue(new_value->c_str());
       return true;
     }
 #endif
@@ -133,7 +135,9 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
     if (!TextEntryDialog(buffer, caption, acf))
       return false;
 
-    df.SetAsString(buffer);
+    sdf.ModifyValue(buffer);
     return true;
-  }
+  } else
+    // don't know how to edit this
+    return false;
 }
