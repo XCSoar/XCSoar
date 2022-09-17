@@ -182,7 +182,7 @@ public:
   Window &operator=(const Window &other) = delete;
 
 #ifndef USE_WINUSER
-  const ContainerWindow *GetParent() const noexcept {
+  ContainerWindow *GetParent() const noexcept {
     assert(IsDefined());
 
     return parent;
