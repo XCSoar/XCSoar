@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-18 08:01+0200\n"
+"POT-Creation-Date: 2022-09-18 08:04+0200\n"
 "PO-Revision-Date: 2021-07-20 10:35+0000\n"
 "Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -864,9 +864,7 @@ msgstr "終止"
 
 #: src/Menu/ExpandMacros.cpp:227 src/Menu/ExpandMacros.cpp:359
 #: src/Menu/ExpandMacros.cpp:380 src/Menu/ExpandMacros.cpp:430
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:61
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:202
-#, no-c-format
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:196
 msgid "Manual"
 msgstr "手冊"
 
@@ -1000,7 +998,7 @@ msgid "Task & Landables"
 msgstr "任務和可著陸區"
 
 #: src/Menu/ExpandMacros.cpp:372 src/Input/InputEventsSettings.cpp:316
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:198
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:192
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:83
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:207
@@ -1150,7 +1148,7 @@ msgstr "高度"
 #: src/Renderer/FlightStatisticsRenderer.cpp:233
 #: src/Renderer/FlightStatisticsRenderer.cpp:259
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:80
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:95
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:87
 msgid "Speed"
 msgstr "速度"
 
@@ -1292,7 +1290,7 @@ msgstr "無數據"
 #: src/Renderer/MapItemListRenderer.cpp:81
 #: src/Renderer/MapItemListRenderer.cpp:85
 #: src/Dialogs/Airspace/AirspaceList.cpp:423
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:107
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:99
 #: src/Dialogs/Waypoint/WaypointList.cpp:411
 msgid "Direction"
 msgstr "方向"
@@ -2156,7 +2154,7 @@ msgid "Devices"
 msgstr "設備"
 
 #: src/Dialogs/Device/PortMonitor.cpp:139
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:115
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:107
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:37
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:124
 #: src/Dialogs/TouchTextEntry.cpp:212 src/Dialogs/TimeEntry.cpp:75
@@ -2373,8 +2371,7 @@ msgid ""
 msgstr "這會產生偽造的空速。不在迴圈模式下能被使用演示速度命令音調。"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:111
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:63
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:206
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:200
 #: src/InfoBoxes/InfoBoxSettings.cpp:79
 #, no-c-format
 msgid "Circling"
@@ -2767,63 +2764,38 @@ msgstr "無告警"
 msgid "Airspace Warnings"
 msgstr "空域告警"
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:62
-#, no-c-format
-msgid ""
-"When the algorithm is switched off, the pilot is responsible for setting the "
-"wind estimate."
-msgstr "當演算法被關閉時，飛行員負責設置風況估算。"
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:60
+#, fuzzy
+msgid "Circling wind"
+msgstr "盤轉"
+
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:61
+msgid "Estimate the wind vector while circling.  Requires only a GPS."
+msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
-#, no-c-format
-msgid "Requires only a GPS source."
-msgstr "僅需要GPS來源資料。"
-
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:65
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:210
-#, no-c-format
-msgid "ZigZag"
+#, fuzzy
+msgid "ZigZag wind"
 msgstr "之字"
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:66
-#, no-c-format
-msgid "Requires GPS and an intelligent vario with airspeed output."
-msgstr "需要GPS和智慧高度表的空速輸出。"
-
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:67
-#: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:72
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:109
-#, no-c-format
-msgid "Both"
-msgstr "兩個都"
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:65
+msgid "Estimate the wind vector during glides.  Requires an airspeed sensor."
+msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
-#, no-c-format
-msgid "Use ZigZag and circling."
-msgstr "使用之字和盤旋演算法。"
-
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:72
-msgid "Auto wind"
-msgstr "風況自動演算法"
-
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:73
-msgid "This allows switching on or off the automatic wind algorithm."
-msgstr "允許打開或關閉自動風況演算法。"
-
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:76
 msgid "External wind"
 msgstr "外面的風"
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:77
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:69
 msgid "Should XCSoar accept wind estimates from other instruments?"
 msgstr "XCSOAR是否接受其他儀器對風的估算？"
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:81
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:73
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:165
 msgid "Trail drift"
 msgstr "尾跡漂移"
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:82
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:74
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:166
 msgid ""
 "Determines whether the snail trail is drifted with the wind when displayed "
@@ -2831,19 +2803,23 @@ msgid ""
 "drift."
 msgstr "確定蹤跡顯示時是否隨風漂移在盤旋模式下。關閉，蹤跡不被補償風漂移。"
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:92
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:84
 msgid "Source"
 msgstr "來源"
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:95
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:87
 msgid "Manual adjustment of wind speed."
 msgstr "手動調節風速。"
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:107
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:99
 msgid "Manual adjustment of wind direction."
 msgstr "手動調節風向。"
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:214
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:204
+msgid "ZigZag"
+msgstr "之字"
+
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:208
 msgid "External"
 msgstr "外部的"
 
@@ -4417,6 +4393,12 @@ msgstr "平均爬升趨勢"
 #, no-c-format
 msgid "Sets MC to the trending average climb rate based on all climbs."
 msgstr "基於所有爬升設置MC的平均爬升率趨勢。"
+
+#: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:72
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:109
+#, no-c-format
+msgid "Both"
+msgstr "兩個都"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:73
 #, no-c-format
@@ -10296,6 +10278,30 @@ msgid ""
 "Info\n"
 "Page 3/3"
 msgstr ""
+
+#, no-c-format
+#~ msgid ""
+#~ "When the algorithm is switched off, the pilot is responsible for setting "
+#~ "the wind estimate."
+#~ msgstr "當演算法被關閉時，飛行員負責設置風況估算。"
+
+#, no-c-format
+#~ msgid "Requires only a GPS source."
+#~ msgstr "僅需要GPS來源資料。"
+
+#, no-c-format
+#~ msgid "Requires GPS and an intelligent vario with airspeed output."
+#~ msgstr "需要GPS和智慧高度表的空速輸出。"
+
+#, no-c-format
+#~ msgid "Use ZigZag and circling."
+#~ msgstr "使用之字和盤旋演算法。"
+
+#~ msgid "Auto wind"
+#~ msgstr "風況自動演算法"
+
+#~ msgid "This allows switching on or off the automatic wind algorithm."
+#~ msgstr "允許打開或關閉自動風況演算法。"
 
 #~ msgid "Loading Topography File..."
 #~ msgstr "載入地貌檔..."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-18 08:01+0200\n"
+"POT-Creation-Date: 2022-09-18 08:04+0200\n"
 "PO-Revision-Date: 2021-10-31 00:33+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
@@ -890,9 +890,7 @@ msgstr "중지"
 
 #: src/Menu/ExpandMacros.cpp:227 src/Menu/ExpandMacros.cpp:359
 #: src/Menu/ExpandMacros.cpp:380 src/Menu/ExpandMacros.cpp:430
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:61
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:202
-#, no-c-format
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:196
 msgid "Manual"
 msgstr "수동"
 
@@ -1026,7 +1024,7 @@ msgid "Task & Landables"
 msgstr "타스크 & 지명"
 
 #: src/Menu/ExpandMacros.cpp:372 src/Input/InputEventsSettings.cpp:316
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:198
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:192
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:83
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:207
@@ -1176,7 +1174,7 @@ msgstr "고도"
 #: src/Renderer/FlightStatisticsRenderer.cpp:233
 #: src/Renderer/FlightStatisticsRenderer.cpp:259
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:80
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:95
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:87
 msgid "Speed"
 msgstr "속도"
 
@@ -1318,7 +1316,7 @@ msgstr "데이터 없음"
 #: src/Renderer/MapItemListRenderer.cpp:81
 #: src/Renderer/MapItemListRenderer.cpp:85
 #: src/Dialogs/Airspace/AirspaceList.cpp:423
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:107
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:99
 #: src/Dialogs/Waypoint/WaypointList.cpp:411
 msgid "Direction"
 msgstr "방향"
@@ -2158,7 +2156,7 @@ msgid "Devices"
 msgstr "외부기기"
 
 #: src/Dialogs/Device/PortMonitor.cpp:139
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:115
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:107
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:37
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:124
 #: src/Dialogs/TouchTextEntry.cpp:212 src/Dialogs/TimeEntry.cpp:75
@@ -2370,8 +2368,7 @@ msgid ""
 msgstr "가상의 대기속도: 속도 시뮬레이션을 할 수 있다."
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:111
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:63
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:206
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:200
 #: src/InfoBoxes/InfoBoxSettings.cpp:79
 #, no-c-format
 msgid "Circling"
@@ -2768,63 +2765,38 @@ msgstr "경고 없음"
 msgid "Airspace Warnings"
 msgstr "공역경고"
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:62
-#, no-c-format
-msgid ""
-"When the algorithm is switched off, the pilot is responsible for setting the "
-"wind estimate."
-msgstr "XCSoar에서 계산하지 않고, 수동으로 바람에 대해 입력한다."
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:60
+#, fuzzy
+msgid "Circling wind"
+msgstr "써클링"
+
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:61
+msgid "Estimate the wind vector while circling.  Requires only a GPS."
+msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
-#, no-c-format
-msgid "Requires only a GPS source."
-msgstr "GPS신호만 있으면 사용가능하다."
-
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:65
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:210
-#, no-c-format
-msgid "ZigZag"
+#, fuzzy
+msgid "ZigZag wind"
 msgstr "지그재그"
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:66
-#, no-c-format
-msgid "Requires GPS and an intelligent vario with airspeed output."
-msgstr "GPS정보와 에어스피드센서(피토센서)가 모두 필요하다."
-
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:67
-#: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:72
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:109
-#, no-c-format
-msgid "Both"
-msgstr "모두 사용"
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:65
+msgid "Estimate the wind vector during glides.  Requires an airspeed sensor."
+msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
-#, no-c-format
-msgid "Use ZigZag and circling."
-msgstr "지그재그와 써클링을 모두 사용한다."
-
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:72
-msgid "Auto wind"
-msgstr "바람측정방식"
-
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:73
-msgid "This allows switching on or off the automatic wind algorithm."
-msgstr "풍향과 풍속에 대해 계산하는 알고리즘을 선택 할 수 있다."
-
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:76
 msgid "External wind"
 msgstr "외부풍속계"
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:77
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:69
 msgid "Should XCSoar accept wind estimates from other instruments?"
 msgstr "외부의 피토관(풍속측정)계기를 XCSoar에 연결할 것인지 선택하시오."
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:81
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:73
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:165
 msgid "Trail drift"
 msgstr "항적보정"
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:82
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:74
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:166
 msgid ""
 "Determines whether the snail trail is drifted with the wind when displayed "
@@ -2834,19 +2806,23 @@ msgstr ""
 "써클링할때, 바람의 영향으로 드리프트되는 것을 보정한다. 선택하지 않으면, 보정"
 "하지 않은 써클링으로 보여준다."
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:92
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:84
 msgid "Source"
 msgstr "소스"
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:95
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:87
 msgid "Manual adjustment of wind speed."
 msgstr "풍속을 수동으로 설정."
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:107
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:99
 msgid "Manual adjustment of wind direction."
 msgstr "풍향을 수동으로 설정."
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:214
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:204
+msgid "ZigZag"
+msgstr "지그재그"
+
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:208
 msgid "External"
 msgstr "외부"
 
@@ -4434,6 +4410,12 @@ msgid "Sets MC to the trending average climb rate based on all climbs."
 msgstr ""
 "써클링 모드에서 현재 비행의 평균 상승량에 따라 이후 상승에 대한 예측치를 설"
 "정."
+
+#: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:72
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:109
+#, no-c-format
+msgid "Both"
+msgstr "모두 사용"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:73
 #, no-c-format
@@ -10415,6 +10397,30 @@ msgid ""
 "Info\n"
 "Page 3/3"
 msgstr "인포박스 페이지"
+
+#, no-c-format
+#~ msgid ""
+#~ "When the algorithm is switched off, the pilot is responsible for setting "
+#~ "the wind estimate."
+#~ msgstr "XCSoar에서 계산하지 않고, 수동으로 바람에 대해 입력한다."
+
+#, no-c-format
+#~ msgid "Requires only a GPS source."
+#~ msgstr "GPS신호만 있으면 사용가능하다."
+
+#, no-c-format
+#~ msgid "Requires GPS and an intelligent vario with airspeed output."
+#~ msgstr "GPS정보와 에어스피드센서(피토센서)가 모두 필요하다."
+
+#, no-c-format
+#~ msgid "Use ZigZag and circling."
+#~ msgstr "지그재그와 써클링을 모두 사용한다."
+
+#~ msgid "Auto wind"
+#~ msgstr "바람측정방식"
+
+#~ msgid "This allows switching on or off the automatic wind algorithm."
+#~ msgstr "풍향과 풍속에 대해 계산하는 알고리즘을 선택 할 수 있다."
 
 #~ msgid "Loading Topography File..."
 #~ msgstr "장소 파일 불러오는 중..."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-18 08:01+0200\n"
+"POT-Creation-Date: 2022-09-18 08:04+0200\n"
 "PO-Revision-Date: 2021-03-01 14:50+0000\n"
 "Last-Translator: Tayfur Yünlü <dandikunited@yandex.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/xcsoar/"
@@ -875,9 +875,7 @@ msgstr "Vazgeç"
 
 #: src/Menu/ExpandMacros.cpp:227 src/Menu/ExpandMacros.cpp:359
 #: src/Menu/ExpandMacros.cpp:380 src/Menu/ExpandMacros.cpp:430
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:61
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:202
-#, no-c-format
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:196
 msgid "Manual"
 msgstr "El ile"
 
@@ -1009,7 +1007,7 @@ msgid "Task & Landables"
 msgstr "Görev ve İnilebilir yerler"
 
 #: src/Menu/ExpandMacros.cpp:372 src/Input/InputEventsSettings.cpp:316
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:198
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:192
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:83
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:207
@@ -1160,7 +1158,7 @@ msgstr ""
 #: src/Renderer/FlightStatisticsRenderer.cpp:233
 #: src/Renderer/FlightStatisticsRenderer.cpp:259
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:80
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:95
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:87
 msgid "Speed"
 msgstr ""
 
@@ -1303,7 +1301,7 @@ msgstr ""
 #: src/Renderer/MapItemListRenderer.cpp:81
 #: src/Renderer/MapItemListRenderer.cpp:85
 #: src/Dialogs/Airspace/AirspaceList.cpp:423
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:107
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:99
 #: src/Dialogs/Waypoint/WaypointList.cpp:411
 msgid "Direction"
 msgstr ""
@@ -2121,7 +2119,7 @@ msgid "Devices"
 msgstr ""
 
 #: src/Dialogs/Device/PortMonitor.cpp:139
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:115
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:107
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:37
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:124
 #: src/Dialogs/TouchTextEntry.cpp:212 src/Dialogs/TimeEntry.cpp:75
@@ -2333,8 +2331,7 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:111
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:63
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:206
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:200
 #: src/InfoBoxes/InfoBoxSettings.cpp:79
 #, no-c-format
 msgid "Circling"
@@ -2727,63 +2724,36 @@ msgstr ""
 msgid "Airspace Warnings"
 msgstr ""
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:62
-#, no-c-format
-msgid ""
-"When the algorithm is switched off, the pilot is responsible for setting the "
-"wind estimate."
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:60
+msgid "Circling wind"
+msgstr ""
+
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:61
+msgid "Estimate the wind vector while circling.  Requires only a GPS."
 msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
-#, no-c-format
-msgid "Requires only a GPS source."
+msgid "ZigZag wind"
 msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:65
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:210
-#, no-c-format
-msgid "ZigZag"
-msgstr ""
-
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:66
-#, no-c-format
-msgid "Requires GPS and an intelligent vario with airspeed output."
-msgstr ""
-
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:67
-#: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:72
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:109
-#, no-c-format
-msgid "Both"
+msgid "Estimate the wind vector during glides.  Requires an airspeed sensor."
 msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
-#, no-c-format
-msgid "Use ZigZag and circling."
-msgstr ""
-
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:72
-msgid "Auto wind"
-msgstr ""
-
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:73
-msgid "This allows switching on or off the automatic wind algorithm."
-msgstr ""
-
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:76
 msgid "External wind"
 msgstr ""
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:77
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:69
 msgid "Should XCSoar accept wind estimates from other instruments?"
 msgstr ""
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:81
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:73
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:165
 msgid "Trail drift"
 msgstr ""
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:82
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:74
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:166
 msgid ""
 "Determines whether the snail trail is drifted with the wind when displayed "
@@ -2791,19 +2761,23 @@ msgid ""
 "drift."
 msgstr ""
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:92
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:84
 msgid "Source"
 msgstr ""
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:95
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:87
 msgid "Manual adjustment of wind speed."
 msgstr ""
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:107
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:99
 msgid "Manual adjustment of wind direction."
 msgstr ""
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:214
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:204
+msgid "ZigZag"
+msgstr ""
+
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:208
 msgid "External"
 msgstr ""
 
@@ -4337,6 +4311,12 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:71
 #, no-c-format
 msgid "Sets MC to the trending average climb rate based on all climbs."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:72
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:109
+#, no-c-format
+msgid "Both"
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:73
