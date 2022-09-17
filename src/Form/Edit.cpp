@@ -82,6 +82,8 @@ WndProperty::OnSetFocus() noexcept
   WindowControl::OnSetFocus();
 
   Invalidate();
+
+  ScrollParentTo();
 }
 
 void
