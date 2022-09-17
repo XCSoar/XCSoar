@@ -172,7 +172,7 @@ RASPSettingsPanel::Save([[maybe_unused]] bool &_changed) noexcept
 {
   WeatherUIState &state = CommonInterface::SetUIState().weather;
 
-  state.map = GetValueInteger(ITEM);
+  state.map = GetValueEnum(ITEM);
   state.time = time;
 
   ActionInterface::SendUIState(true);

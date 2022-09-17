@@ -395,6 +395,14 @@ RowFormWidget::GetValueIntegerAngle(unsigned i) const noexcept
   return df.GetIntegerValue();
 }
 
+unsigned
+RowFormWidget::GetValueEnum(unsigned i) const noexcept
+{
+  auto &df = static_cast<const DataFieldEnum &>(GetDataField(i));
+  assert(df.GetType() == DataField::Type::ENUM);
+  return df.GetValue();
+}
+
 std::chrono::seconds
 RowFormWidget::GetValueTime(unsigned i) const noexcept
 {

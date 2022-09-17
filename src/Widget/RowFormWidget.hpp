@@ -626,6 +626,9 @@ public:
   unsigned GetValueIntegerAngle(unsigned i) const noexcept;
 
   [[gnu::pure]]
+  unsigned GetValueEnum(unsigned i) const noexcept;
+
+  [[gnu::pure]]
   std::chrono::seconds GetValueTime(unsigned i) const noexcept;
 
   [[gnu::pure]]

@@ -83,7 +83,7 @@ private:
 void
 MapDisplayConfigPanel::UpdateVisibilities()
 {
-  auto orientation = (MapOrientation)GetValueInteger(OrientationCruise);
+  auto orientation = (MapOrientation)GetValueEnum(OrientationCruise);
 
   SetRowVisible(MAP_SHIFT_BIAS,
                 orientation == MapOrientation::NORTH_UP ||

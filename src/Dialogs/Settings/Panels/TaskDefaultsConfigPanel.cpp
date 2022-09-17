@@ -86,7 +86,7 @@ TaskDefaultsConfigPanel::SetStartLabel()
 {
   WndProperty &wp = GetControl(StartRadius);
 
-  if (GetValueInteger(StartType) == (int)TaskPointFactoryType::START_LINE)
+  if ((TaskPointFactoryType)GetValueEnum(StartType) == TaskPointFactoryType::START_LINE)
     wp.SetCaption(gettext(Caption_GateWidth));
   else
     wp.SetCaption(gettext(Caption_Radius));
@@ -97,7 +97,7 @@ TaskDefaultsConfigPanel::SetFinishLabel()
 {
   WndProperty &wp = GetControl(FinishRadius);
 
-  if (GetValueInteger(FinishType) == (int)TaskPointFactoryType::FINISH_LINE)
+  if ((TaskPointFactoryType)GetValueEnum(FinishType) == TaskPointFactoryType::FINISH_LINE)
     wp.SetCaption(gettext(Caption_GateWidth));
   else
     wp.SetCaption(gettext(Caption_Radius));
