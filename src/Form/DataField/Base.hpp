@@ -122,7 +122,7 @@ public:
     SetAsInteger(iDataFieldIndex);
   }
 
-  bool GetItemHelpEnabled() noexcept {
+  bool GetItemHelpEnabled() const noexcept {
     return item_help_enabled;
   }
 
