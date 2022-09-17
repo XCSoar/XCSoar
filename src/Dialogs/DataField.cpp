@@ -47,11 +47,12 @@ bool
 EditDataFieldDialog(const TCHAR *caption, DataField &df,
                     const TCHAR *help_text)
 {
-  if (df.GetType() == DataField::Type::FILE) {
+  const auto type = df.GetType();
+  if (type == DataField::Type::FILE) {
     return FilePicker(caption, (FileDataField &)df, help_text);
   } else if (df.SupportsCombolist()) {
     return ComboPicker(caption, df, help_text);
-  } else if (df.GetType() == DataField::Type::ROUGH_TIME) {
+  } else if (type == DataField::Type::ROUGH_TIME) {
     RoughTimeDataField &tdf = (RoughTimeDataField &)df;
     RoughTime value = tdf.GetValue();
     if (!TimeEntryDialog(caption, value, tdf.GetTimeZone(), true))
@@ -59,7 +60,7 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
 
     tdf.ModifyValue(value);
     return true;
-  } else if (df.GetType() == DataField::Type::GEOPOINT) {
+  } else if (type == DataField::Type::GEOPOINT) {
     GeoPointDataField &gdf = (GeoPointDataField &)df;
     GeoPoint value = gdf.GetValue();
     if (!GeoPointEntryDialog(caption, value,
@@ -69,7 +70,7 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
 
     gdf.ModifyValue(value);
     return true;
-  } else if (df.GetType() == DataField::Type::DATE) {
+  } else if (type == DataField::Type::DATE) {
     auto &dfd = static_cast<DataFieldDate &>(df);
     BrokenDate date = dfd.GetValue();
     if (!DateEntryDialog(caption, date, true))
@@ -77,7 +78,7 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
 
     dfd.SetValue(date);
     return true;
-  } else if (df.GetType() == DataField::Type::INTEGER) {
+  } else if (type == DataField::Type::INTEGER) {
     auto &dfi = static_cast<DataFieldInteger &>(df);
 
     // signed or unsigned depends on min if value >= 0 or < 0...
@@ -108,7 +109,7 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
     StaticString<EDITSTRINGSIZE> buffer(value);
 
     PrefixDataField::AllowedCharactersFunction acf;
-    if (df.GetType() == DataField::Type::PREFIX)
+    if (type == DataField::Type::PREFIX)
       acf = ((PrefixDataField &)df).GetAllowedCharactersFunction();
 
 #ifdef ANDROID
