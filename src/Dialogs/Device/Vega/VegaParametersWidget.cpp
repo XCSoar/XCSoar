@@ -172,8 +172,24 @@ VegaParametersWidget::UpdateUI()
 
     if (const auto x = device.GetSetting(parameter.name)) {
       parameter.value = *x;
-      GetDataField(i).SetAsInteger(*x);
-      GetControl(i).RefreshDisplay();
+
+      switch (GetDataField(i).GetType()) {
+      case DataField::Type::BOOLEAN:
+        LoadValue(i, (bool)parameter.value);
+        break;
+
+      case DataField::Type::INTEGER:
+        LoadValue(i, parameter.value);
+        break;
+
+      case DataField::Type::ENUM:
+        LoadValueEnum(i, parameter.value);
+        break;
+
+      default:
+        gcc_unreachable();
+        assert(false);
+      }
     }
   }
 
