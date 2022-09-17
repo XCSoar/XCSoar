@@ -51,12 +51,6 @@ DataFieldFloat::GetAsDisplayString() const noexcept
 }
 
 void
-DataFieldFloat::SetAsInteger(int Value) noexcept
-{
-  ModifyValue(Value);
-}
-
-void
 DataFieldFloat::ModifyValue(double Value) noexcept
 {
   if (Value < mMin)

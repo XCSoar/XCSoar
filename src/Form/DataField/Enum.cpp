@@ -237,12 +237,6 @@ DataFieldEnum::SetStringAutoAdd(const TCHAR *text) noexcept
 }
 
 void
-DataFieldEnum::SetAsInteger(int Value) noexcept
-{
-  ModifyValue(Value);
-}
-
-void
 DataFieldEnum::SetAsString(const TCHAR *Value) noexcept
 {
   ModifyValue(Value);
@@ -301,6 +295,12 @@ DataFieldEnum::CreateComboList([[maybe_unused]] const TCHAR *reference_string) c
 
   combo_list.current_index = value;
   return combo_list;
+}
+
+void
+DataFieldEnum::SetFromCombo(int i, const TCHAR *) noexcept
+{
+  ModifyValue(i);
 }
 
 int

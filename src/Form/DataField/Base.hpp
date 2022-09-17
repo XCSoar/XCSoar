@@ -101,7 +101,6 @@ public:
   [[gnu::pure]]
   virtual const TCHAR *GetAsDisplayString() const noexcept;
 
-  virtual void SetAsInteger(int value) noexcept;
   virtual void SetAsString(const TCHAR *value) noexcept;
 
   virtual void EnableItemHelp([[maybe_unused]] bool value) noexcept {};
@@ -116,10 +115,11 @@ public:
   [[gnu::pure]]
   virtual ComboList CreateComboList(const TCHAR *reference) const noexcept;
 
-  virtual void SetFromCombo(int iDataFieldIndex,
+  virtual void SetFromCombo([[maybe_unused]] int iDataFieldIndex,
                             [[maybe_unused]] const TCHAR *sValue) noexcept
   {
-    SetAsInteger(iDataFieldIndex);
+    /* this method must be implemented by all classes which also
+       implement CreateComboList() */
   }
 
   bool GetItemHelpEnabled() const noexcept {

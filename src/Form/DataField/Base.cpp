@@ -71,11 +71,6 @@ DataField::GetAsDisplayString() const noexcept
 }
 
 void
-DataField::SetAsInteger([[maybe_unused]] int value) noexcept
-{
-}
-
-void
 DataField::SetAsString([[maybe_unused]] const TCHAR *value) noexcept
 {
 }

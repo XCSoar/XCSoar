@@ -102,12 +102,6 @@ FileDataField::GetAsInteger() const noexcept
 }
 
 void
-FileDataField::SetAsInteger(int new_value) noexcept
-{
-  ModifyIndex(new_value);
-}
-
-void
 FileDataField::ScanDirectoryTop(const TCHAR *filter) noexcept
 {
   if (!loaded) {

@@ -41,6 +41,12 @@ DataFieldBoolean::CreateComboList([[maybe_unused]] const TCHAR *reference) const
   return combo_list;
 }
 
+void
+DataFieldBoolean::SetFromCombo(int i, const TCHAR *) noexcept
+{
+  ModifyValue(i != 0);
+}
+
 int
 DataFieldBoolean::GetAsInteger() const noexcept
 {
@@ -54,12 +60,6 @@ const TCHAR *
 DataFieldBoolean::GetAsString() const noexcept
 {
   return mValue ? true_text : false_text;
-}
-
-void
-DataFieldBoolean::SetAsInteger(int Value) noexcept
-{
-  ModifyValue(Value != 0);
 }
 
 void

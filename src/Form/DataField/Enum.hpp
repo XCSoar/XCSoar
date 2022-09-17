@@ -212,9 +212,9 @@ public:
   int GetAsInteger() const noexcept override;
   const TCHAR *GetAsString() const noexcept override;
   const TCHAR *GetAsDisplayString() const noexcept override;
-  void SetAsInteger(int value) noexcept override;
   void SetAsString(const TCHAR *value) noexcept override;
   ComboList CreateComboList(const TCHAR *reference) const noexcept override;
+  void SetFromCombo(int iDataFieldIndex, const TCHAR *sValue) noexcept override;
 
 protected:
   /**

@@ -92,12 +92,6 @@ AngleDataField::GetAsDisplayString() const noexcept
 }
 
 void
-AngleDataField::SetAsInteger(int _value) noexcept
-{
-  ModifyValue(_value);
-}
-
-void
 AngleDataField::SetAsString(const TCHAR *_value) noexcept
 {
   ModifyValue(Angle::Degrees(ParseDouble(_value)));
