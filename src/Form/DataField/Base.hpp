@@ -101,8 +101,6 @@ public:
   [[gnu::pure]]
   virtual const TCHAR *GetAsDisplayString() const noexcept;
 
-  virtual void SetAsString(const TCHAR *value) noexcept;
-
   virtual void EnableItemHelp([[maybe_unused]] bool value) noexcept {};
 
   /**

@@ -51,5 +51,4 @@ public:
 
   /* virtual methods from class DataField */
   const TCHAR *GetAsString() const noexcept override;
-  void SetAsString(const TCHAR *Value) noexcept override;
 };

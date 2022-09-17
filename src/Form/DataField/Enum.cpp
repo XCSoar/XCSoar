@@ -237,12 +237,6 @@ DataFieldEnum::SetStringAutoAdd(const TCHAR *text) noexcept
 }
 
 void
-DataFieldEnum::SetAsString(const TCHAR *Value) noexcept
-{
-  ModifyValue(Value);
-}
-
-void
 DataFieldEnum::Inc() noexcept
 {
   if (entries.empty()) {

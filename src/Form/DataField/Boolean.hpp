@@ -61,11 +61,6 @@ public:
   void Dec() noexcept override;
   int GetAsInteger() const noexcept override;
   const TCHAR *GetAsString() const noexcept override;
-  void SetAsString(const TCHAR *Value) noexcept override;
   ComboList CreateComboList(const TCHAR *reference) const noexcept override;
   void SetFromCombo(int i, const TCHAR *s) noexcept override;
-
-private:
-  [[gnu::pure]]
-  bool ParseString(const TCHAR *s) const noexcept;
 };

@@ -24,12 +24,6 @@ Copyright_License {
 #include "Boolean.hpp"
 #include "ComboList.hpp"
 
-bool
-DataFieldBoolean::ParseString(const TCHAR *s) const noexcept
-{
-  return true_text.equals(s);
-}
-
 ComboList
 DataFieldBoolean::CreateComboList([[maybe_unused]] const TCHAR *reference) const noexcept
 {
@@ -60,12 +54,6 @@ const TCHAR *
 DataFieldBoolean::GetAsString() const noexcept
 {
   return mValue ? true_text : false_text;
-}
-
-void
-DataFieldBoolean::SetAsString(const TCHAR *Value) noexcept
-{
-  ModifyValue(ParseString(Value));
 }
 
 void

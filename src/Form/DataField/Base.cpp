@@ -70,11 +70,6 @@ DataField::GetAsDisplayString() const noexcept
   return GetAsString();
 }
 
-void
-DataField::SetAsString([[maybe_unused]] const TCHAR *value) noexcept
-{
-}
-
 ComboList
 DataField::CreateComboList([[maybe_unused]] const TCHAR *reference) const noexcept
 {

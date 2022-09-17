@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Angle.hpp"
 #include "ComboList.hpp"
-#include "util/NumberParser.hpp"
 #include "util/Macros.hpp"
 
 #include <stdio.h>
@@ -89,12 +88,6 @@ AngleDataField::GetAsDisplayString() const noexcept
 {
   _stprintf(string_buffer, _T("%u°"), GetIntegerValue());
   return string_buffer;
-}
-
-void
-AngleDataField::SetAsString(const TCHAR *_value) noexcept
-{
-  ModifyValue(Angle::Degrees(ParseDouble(_value)));
 }
 
 void

@@ -67,12 +67,6 @@ DataFieldInteger::SetAsInteger(int _value) noexcept
 }
 
 void
-DataFieldInteger::SetAsString(const TCHAR *_value) noexcept
-{
-  SetAsInteger(ParseString(_value));
-}
-
-void
 DataFieldInteger::Inc() noexcept
 {
   SetAsInteger(value + step * SpeedUp(true));
@@ -178,5 +172,5 @@ void
 DataFieldInteger::SetFromCombo([[maybe_unused]] int index,
                                const TCHAR *value) noexcept
 {
-  SetAsString(value);
+  SetAsInteger(ParseString(value));
 }

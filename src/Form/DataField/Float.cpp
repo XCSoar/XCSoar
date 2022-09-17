@@ -64,12 +64,6 @@ DataFieldFloat::ModifyValue(double Value) noexcept
 }
 
 void
-DataFieldFloat::SetAsString(const TCHAR *Value) noexcept
-{
-  ModifyValue(ParseDouble(Value));
-}
-
-void
 DataFieldFloat::Inc() noexcept
 {
   // no keypad, allow user to scroll small values
@@ -118,7 +112,7 @@ DataFieldFloat::SpeedUp(bool keyup) noexcept
 void
 DataFieldFloat::SetFromCombo([[maybe_unused]] int iDataFieldIndex, const TCHAR *sValue) noexcept
 {
-  SetAsString(sValue);
+  ModifyValue(ParseDouble(sValue));
 }
 
 void
