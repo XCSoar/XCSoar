@@ -108,11 +108,11 @@ UploadSuccessDialog(const FlightData &flight_data, const TCHAR *msg)
   // f.e. copilot in double seater, scoring class, short comment and so on
   display_string.Format(_T("%s\n\n%s: %u\n%s: %s\n%s: %s (%d)\n"
     "%s: %s (%u)\n%s: %s, %s: %s"), msg,
-    _("Flight ID"), flight_data.flight_id,
-    _("Scoring Date"), flight_data.scoring_date.c_str(),
-    _("User"), flight_data.user.name.c_str(), flight_data.user.id,
-    _("Aircraft"), flight_data.aircraft.name.c_str(), flight_data.aircraft.id,
-    _("Reg."), flight_data.registration.c_str(),
+    _T("Flight ID"), flight_data.flight_id,
+    _("Date"), flight_data.scoring_date.c_str(),
+    _("Username"), flight_data.user.name.c_str(), flight_data.user.id,
+    _("Plane"), flight_data.aircraft.name.c_str(), flight_data.aircraft.id,
+    _("Registration"), flight_data.registration.c_str(),
     _("Comp. ID"), flight_data.competition_id.c_str());
 
   ShowMessageBox(display_string.c_str(), _("WeGlide Upload"), MB_OK);
@@ -139,7 +139,7 @@ UploadFile(Path igc_path, StaticString<0x1000> &msg) noexcept
       .weglide_glider_type;
 
     if (!File::Exists(igc_path)) {
-      msg.Format(_("'%s' - %s"), igc_path.c_str(), _("File doesn't exist"));
+      msg.Format(_T("'%s' - %s"), igc_path.c_str(), _("Not found"));
       return flight_data;  // with flight_id = 0!
     }
 
@@ -148,19 +148,18 @@ UploadFile(Path igc_path, StaticString<0x1000> &msg) noexcept
     if (ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
       _("Upload Flight"), instance.UpdateTask(igc_path, settings,
         glider_id, env), &env) == false) {
-      msg.Format(_("'%s' - %s"), igc_path.c_str(),
-        _("ShowCoDialog with failure"));
+      msg.Format(_T("'%s' - %s"), igc_path.c_str(), _("Error"));
       return flight_data;  // with flight_id = 0!
     }
 
     // read the important data from json in a structure
     flight_data = UploadJsonInterpreter(instance.value);
 
-    msg.Format(_("File upload '%s' was successful"), igc_path.c_str());
+    msg = _("Success");
     return flight_data;  // upload successful!
   }
   catch (const std::exception &e) {
-    msg.Format(_("'%s' - %s"), igc_path.c_str(),
+    msg.Format(_T("'%s' - %s"), igc_path.c_str(),
       UTF8ToWideConverter(e.what()).c_str());
     return flight_data;  // with flight_id = 0!
   }
@@ -174,14 +173,13 @@ UploadIGCFile(Path igc_path) noexcept
     auto flight_data = UploadFile(igc_path, msg);
     if (flight_data.flight_id > 0) {
       // upload successful!
-      LogFormat(_("%s: %s"), _("WeGlide Upload"), msg.c_str());
+      LogFormat(_T("%s: %s"), _("WeGlide Upload"), msg.c_str());
       UploadSuccessDialog(flight_data, msg.c_str());
       return true;
     } else {
       // upload failed!
-      LogFormat(_T("%s: %s!"), _("WeGlide Upload Error"), msg.c_str());
-      ShowMessageBox(msg.c_str(), _("WeGlide Upload Error"),
-        MB_ICONEXCLAMATION);
+      LogFormat(_T("%s: %s"), _("Error"), msg.c_str());
+      ShowMessageBox(msg.c_str(), _("Error"), MB_ICONEXCLAMATION);
     }
   } catch (...) {
     LogError(std::current_exception());
