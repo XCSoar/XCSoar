@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 08:04+0200\n"
-"PO-Revision-Date: 2022-08-23 03:07+0000\n"
+"PO-Revision-Date: 2022-09-20 11:34+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -179,9 +179,9 @@ msgstr ""
 "rohový bod."
 
 #: src/Task/TypeStrings.cpp:81
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A keyhole.  Scored from center."
-msgstr "Kruh+výseč, bodováno dle nejzazšího dosaženého hodu v oblasti."
+msgstr "Kruh+výseč, bodováno ze středu."
 
 #: src/Task/TypeStrings.cpp:82
 #, no-c-format
@@ -296,9 +296,9 @@ msgid "FAI quadrant"
 msgstr "FAI sektor"
 
 #: src/Task/TypeStrings.cpp:117
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Keyhole sector"
-msgstr "Sektor kruh+výseč (DAeC)"
+msgstr "Sektor kruh+výseč"
 
 #: src/Task/TypeStrings.cpp:118
 #, no-c-format
@@ -440,7 +440,7 @@ msgstr "Neznámý typ souboru s prostory"
 
 #: src/contest/weglide/UploadIGCFile.cpp:112
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: src/contest/weglide/UploadIGCFile.cpp:113
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
@@ -465,18 +465,16 @@ msgstr "Soutěžní znak"
 #. upload successful!
 #: src/contest/weglide/UploadIGCFile.cpp:118
 #: src/contest/weglide/UploadIGCFile.cpp:176
-#, fuzzy
 msgid "WeGlide Upload"
-msgstr "WeGlide typ"
+msgstr "Nahraj na WeGlide"
 
 #: src/contest/weglide/UploadIGCFile.cpp:142 src/Input/InputEventsLua.cpp:60
 msgid "Not found"
 msgstr "Nenalezeno"
 
 #: src/contest/weglide/UploadIGCFile.cpp:149
-#, fuzzy
 msgid "Upload Flight"
-msgstr "Stáhni let"
+msgstr "Nahraj let"
 
 #. upload failed!
 #: src/contest/weglide/UploadIGCFile.cpp:151
@@ -658,14 +656,12 @@ msgstr "Nepodařilo se stáhnout let."
 
 #. ask whether this IGC should be uploaded to WeGlide
 #: src/Logger/ExternalLogger.cpp:356
-#, fuzzy
 msgid "Do you want to upload this flight to WeGlide?"
-msgstr "Chcete stáhnout jiný let?"
+msgstr "Chcete nahrát tento let na WeGlide?"
 
 #: src/Logger/ExternalLogger.cpp:357
-#, fuzzy
 msgid "Upload flight"
-msgstr "Stáhni let"
+msgstr "Nahraj let"
 
 #: src/Logger/ExternalLogger.cpp:362
 msgid "Do you want to download another flight?"
@@ -1006,15 +1002,13 @@ msgstr "Terén Vyp"
 
 #: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:364
 #: src/Menu/ExpandMacros.cpp:366
-#, fuzzy
 msgid "Hide"
-msgstr "Info skrýt"
+msgstr "Skryj"
 
 #: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:364
 #: src/Menu/ExpandMacros.cpp:366
-#, fuzzy
 msgid "Show"
-msgstr "Zamoušení"
+msgstr "Zobraz"
 
 #: src/Menu/ExpandMacros.cpp:369 src/Input/InputEventsSettings.cpp:313
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:85
@@ -1307,7 +1301,7 @@ msgstr "Mapa a InfoBoxy"
 
 #: src/PageSettings.cpp:80
 msgid "Info Hide"
-msgstr "Info skrýt"
+msgstr "Info skryj"
 
 #: src/PageSettings.cpp:82
 msgid "Map (Full screen)"
@@ -2823,22 +2817,20 @@ msgid "Airspace Warnings"
 msgstr "Varování před prostory"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:60
-#, fuzzy
 msgid "Circling wind"
 msgstr "Kroužení"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:61
 msgid "Estimate the wind vector while circling.  Requires only a GPS."
-msgstr ""
+msgstr "Odhaduje vektor větru v kroužení. Vyžaduje pouze GPS."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
-#, fuzzy
 msgid "ZigZag wind"
 msgstr "Cik-cak"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:65
 msgid "Estimate the wind vector during glides.  Requires an airspeed sensor."
-msgstr ""
+msgstr "Odhaduje vektor větru na přeskoku. Vyžaduje snímač vzdušné rychlosti."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
 msgid "External wind"
@@ -2894,29 +2886,28 @@ msgstr "Vypusť"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:285
 msgid "Crew"
-msgstr ""
+msgstr "Posádka"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:286
 msgid ""
 "All masses loaded to the glider beyond the empty weight including pilot and "
 "copilot, but not water ballast."
 msgstr ""
+"Všechna zátěž, přidaná k prázdné hmotnosti kluzáku, včetně pilota a "
+"kopilota, avšak bez vodní zátěže."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:293
 msgid "Ballast"
 msgstr "Zátěž"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:294
-#, fuzzy
 msgid ""
 "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the "
 "ballast volume according to the dump rate specified in the configuration "
 "settings."
 msgstr ""
-"Zátěž kluzáku. Zvyšte toto číslo pokud je zátěž v kabině/pilot těžší než "
-"referenční hmotnost pro poláru (typicky 75kg). Stiskněte tlačítko Vypusť/"
-"Zastav pro spuštění/zastavení odpočtu vypouštění vodní zátěže, rychlostí "
-"zadanou v nastavení letadla."
+"Zátěž kluzáku. Stiskněte tlačítko Vypusť/Zastav pro spuštění/zastavení "
+"odpočtu vypouštění vodní zátěže, rychlostí zadanou v nastavení letadla."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:306
 msgid "Bugs"
@@ -3442,14 +3433,12 @@ msgid "Wing Area"
 msgstr "Plocha křídla"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:124
-#, fuzzy
 msgid "Empty Mass"
-msgstr "Prázdná úloha"
+msgstr "Prázdná váha"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:124
-#, fuzzy
 msgid "Net mass of the rigged plane."
-msgstr "Referenční hmotnost poláry"
+msgstr "Hmotnost prázdného kluzáku."
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:128
 msgid "Max. Ballast"
@@ -3481,9 +3470,8 @@ msgid "Reference Mass"
 msgstr "Referenční hmotnost"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:134
-#, fuzzy
 msgid "Reference mass of the polar."
-msgstr "Referenční hmotnost poláry"
+msgstr "Referenční váha pro poláru."
 
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:174
@@ -3611,7 +3599,7 @@ msgstr "Co je poblíž"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:98
 msgid "Share"
-msgstr ""
+msgstr "Sdílej"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:51
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:62
@@ -4771,9 +4759,9 @@ msgid "15 Split in 3 rows"
 msgstr "15 rozděleno / 3 řady"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:96
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "18 Split in 3 rows"
-msgstr "12 rozděleno / 3 řady"
+msgstr "18 rozděleno / 3 řady"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:98
 #, no-c-format
@@ -5069,13 +5057,14 @@ msgstr "Jméno kopilota"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:79
 msgid "Crew weight default"
-msgstr ""
+msgstr "Výchozí váha posádky"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:80
 msgid ""
 "Default for all weight loaded to the glider beyond the empty weight and "
 "besides the water ballast."
 msgstr ""
+"Výchozí zátěž, přidaná k prázdné hmotnosti kluzáku, avšak bez vodní zátěže."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:86
 msgid "Time step cruise"
@@ -6306,6 +6295,8 @@ msgid ""
 "LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance "
 "is 20km, 5 points per km."
 msgstr ""
+"LVZC Charron.online, 5 ramen kratších než 200km, 6 ramen delších. Minimální "
+"vzdálenost ramene je 20km, 5 bodů za km."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:129
 msgid "Contest"
@@ -6960,6 +6951,8 @@ msgid ""
 "Show thermal locations downloaded from Thermal Information Map (thermalmap."
 "info)."
 msgstr ""
+"Zobrazí pozice stoupavých proudů, stažených z Thermal Information Map "
+"(thermalmap.info)."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:91
 msgid "Automatic Upload"
@@ -10367,20 +10360,20 @@ msgstr ""
 "Demo"
 
 #: Data/Input/default.xci:481
-#, fuzzy
 msgid "Page Show"
-msgstr "Stránka"
+msgstr "Zobraz stránku"
 
 #: Data/Input/default.xci:59
 msgid "Above final glide"
 msgstr "Výška stačí na dokluz"
 
 #: Data/Input/default.xci:440 Data/Input/default.xci:1046
-#, fuzzy
 msgid ""
 "Target\n"
 "Show"
-msgstr "Cíl"
+msgstr ""
+"Zobraz\n"
+"Cíl"
 
 #: Data/Input/default.xci:701
 msgid ""
@@ -10421,11 +10414,12 @@ msgstr ""
 "Letadlo"
 
 #: Data/Input/default.xci:766
-#, fuzzy
 msgid ""
 "Info\n"
 "Page 2/3"
-msgstr "InfoBox stránky"
+msgstr ""
+"Info\n"
+"Strana 2/3"
 
 #: Data/Input/default.xci:1127
 msgid ""
@@ -10456,6 +10450,8 @@ msgid ""
 "Config\n"
 "Page 3/3"
 msgstr ""
+"Nastav\n"
+"Strana 3/3"
 
 #: Data/Input/default.xci:741
 msgid "Stored to EEPROM"
@@ -10466,6 +10462,8 @@ msgid ""
 "Config\n"
 "Page 2/3"
 msgstr ""
+"Nastav\n"
+"Strana 2/3"
 
 #: Data/Input/default.xci:64
 msgid "Below final glide"
@@ -10484,7 +10482,6 @@ msgid "Config"
 msgstr "Nastav"
 
 #: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
 msgid ""
 "Marker\n"
 "Drop"
@@ -10523,11 +10520,12 @@ msgid "Accelerometer leveled"
 msgstr "Akcelerometr vyrovnán"
 
 #: Data/Input/default.xci:432
-#, fuzzy
 msgid ""
 "Pilot Event\n"
 "Announce"
-msgstr "Událost označena pilotem (Pilot EVent)"
+msgstr ""
+"Pilot EVent\n"
+"Označ"
 
 #: Data/Input/default.xci:69
 msgid "Final glide through terrain"
@@ -10554,6 +10552,8 @@ msgid ""
 "Vega\n"
 "Page 2/2"
 msgstr ""
+"Vega\n"
+"Strana 2/2"
 
 #: Data/Input/default.xci:142 Data/Input/default.xci:790
 msgid ""
@@ -10596,11 +10596,12 @@ msgstr ""
 "zprávu"
 
 #: Data/Input/default.xci:451
-#, fuzzy
 msgid ""
 "Display\n"
 "Page 2/2"
-msgstr "Zobraz"
+msgstr ""
+"Zobraz\n"
+"Strana 2/2"
 
 #: Data/Input/default.xci:653 Data/Input/default.xci:1158
 msgid "Raw Logger"
@@ -10623,6 +10624,8 @@ msgid ""
 "Pan\n"
 "Mode"
 msgstr ""
+"Posun\n"
+"mapy"
 
 #: Data/Input/default.xci:893
 msgid "Nav"
@@ -10637,6 +10640,8 @@ msgid ""
 "Nav\n"
 "Page 2/2"
 msgstr ""
+"Nav\n"
+"Strana 2/2"
 
 #: Data/Input/default.xci:848 Data/Input/default.xci:1229
 msgid "Thermal Assistant"
@@ -10671,11 +10676,12 @@ msgstr ""
 "Nula"
 
 #: Data/Input/default.xci:816
-#, fuzzy
 msgid ""
 "Info\n"
 "Page 3/3"
-msgstr "InfoBox stránky"
+msgstr ""
+"Info\n"
+"Strana 3/3"
 
 #, no-c-format
 #~ msgid ""
