@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2021-12-06 22:09+0000\n"
-"Last-Translator: Helmut Rohs <helmut.rohs@gmail.com>\n"
+"PO-Revision-Date: 2022-09-03 19:15+0000\n"
+"Last-Translator: Philipp Wollschlegel <folken@kabelsalat.ch>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/xcsoar/"
 "translations/de/>\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -111,8 +111,9 @@ msgid ""
 "Racing task around turn points.  Can also be used for FAI badge and record "
 "tasks.  Allows all shapes of observation zones."
 msgstr ""
-"Geschwindigkeitsaufgabe um Wendepunkte. Kann auch für FAI-Abzeichen und "
-"Rekordaufgaben verwendet werden. Erlaubt alle OZ Typen (Beobachtungsgebiete)."
+"Geschwindigkeitsaufgabe um Wendepunkte. Kann für FAI Abzeichen oder auch für "
+"Rekordversuche verwendet werden. Alle OZ Typen (Sektor Gebiets Typen) sind "
+"möglich."
 
 #: src/Task/TypeStrings.cpp:59
 #, no-c-format
@@ -120,8 +121,8 @@ msgid ""
 "Task through assigned areas, minimum task time applies.  Restricted to "
 "cylinder and sector observation zones."
 msgstr ""
-"Geschwindigkeitsaufgabe über zugewiesene Gebiete, min. Flugzeit wird "
-"angewandt. Beschränkt auf Zylinder und Sektor Gebiete (OZ)."
+"Geschwindigkeitsaufgabe über zugewiesene Gebiete. Mindest Flugzeit wird "
+"vorgeschrieben. Beschränkt auf Zylinder und Sektor Gebiete (OZ)."
 
 #: src/Task/TypeStrings.cpp:61
 #, no-c-format
@@ -131,8 +132,8 @@ msgid ""
 "time applies."
 msgstr ""
 "Modifizierte Area-Task. Aufgabe mit Start, Ziel und einem vordefiniertem 1-"
-"mile Zylinder. Der Pilot kann wenn nötig zusätzliche Punkte hinzufügen.  Die "
-"minimale Aufgabenzeit wird angewendet."
+"mile Zylinder. Der Pilot kann, wenn nötig, zusätzliche Punkte hinzufügen.  "
+"Mindest-Aufgaben-Flugzeit wird vorgeschrieben."
 
 #: src/Task/TypeStrings.cpp:62
 #, no-c-format
@@ -141,14 +142,14 @@ msgid ""
 "applies."
 msgstr ""
 "Geschwindigkeitsaufgabe mit einer Mischung aus zugewiesenen Gebieten und "
-"Wendepunkten, minimale Aufgabenzeit wird angewendet."
+"Wendepunkten. Mindest-Aufgabenzeit wird vorgeschrieben."
 
 #: src/Task/TypeStrings.cpp:63
 #, no-c-format
 msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
-msgstr "Gelegenheitsaufgabe mit Abflug-, Zielzylinder und FAI Sektorwenden."
+msgstr "Freier Flug mit Abflug- und Zielzylindern sowie FAI- Sektorwenden."
 
 #: src/Task/TypeStrings.cpp:76
 #, no-c-format
@@ -164,13 +165,15 @@ msgstr ""
 msgid ""
 "A straight line start gate.  Cross start gate from inside area to start."
 msgstr ""
-"Ein geradliniges Tor. Überquere die Torlinie von innerhalb nach außen zum "
-"Starten des Abflugs."
+"Gradlinige Startlinie. Überfliege die Startlinie von innen nach außen in "
+"Richtung erster Wende oder Abflugpunkt zum Starten des Abflugs."
 
 #: src/Task/TypeStrings.cpp:78
 #, no-c-format
 msgid "A cylinder.  Exit area to start."
-msgstr "Ein Zylinder. Verlasse ihn für einen Abflug."
+msgstr ""
+"Ein Zylinder. Für einen Abflug und Start der Aufgabe aus dem Zylinder "
+"herausfliegen."
 
 #: src/Task/TypeStrings.cpp:79
 #, no-c-format
@@ -178,8 +181,8 @@ msgid ""
 "A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
 "from corner point."
 msgstr ""
-"Ein 90° Sektor mit \"unendlichen\" Seitenlängen. Überfliege eine Flanke, "
-"gewertet wird vom Eckpunkt aus."
+"Ein 90° Sektor mit \"unendlichen\" Seitenlängen. Überfliege eine der "
+"Flanken, gewertet wird vom Eckpunkt aus."
 
 #: src/Task/TypeStrings.cpp:81
 #, no-c-format
@@ -187,8 +190,9 @@ msgid ""
 "(German rules) Any point within 1/2 km of center or 10km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
-"(Deutsche Regeln) Jeder Punkt innerhalb 0,5km vom Zentrum, oder 10km in "
-"einem 90° Sektor. Gewertet wird das Zentrum."
+"(Deutsche Regeln) Jeder Punkt innerhalb 0,5 km Radius um das Zentrum, oder "
+"10 km innerhalb eines 90° Sektors ist ein gültiger Wendepunkt. Gewertet wird "
+"das Zentrum."
 
 #: src/Task/TypeStrings.cpp:83
 #, no-c-format
@@ -196,8 +200,9 @@ msgid ""
 "(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
-"(Britische Regeln) Jeder Punkt innerhalb 0,5km vom Zentrum, oder 20km in "
-"einem 90° Sektor. Gewertet wird das Zentrum."
+"(Britische Regeln) Jeder Punkt innerhalb 0,5 km Radius um das Zentrum, oder "
+"20 km in einem 90° Sektor ist ein gültiger Wendepunkt. Gewertet wird das "
+"Zentrum."
 
 #: src/Task/TypeStrings.cpp:85
 #, no-c-format
@@ -205,21 +210,23 @@ msgid ""
 "(British rules) Any point within 1/2 km of center or 10km of a 180 degree "
 "sector.  Scored from center."
 msgstr ""
-"(Britische Regeln) Jeder Punkt innerhalb 0,5km vom Zentrum, oder 10km in "
-"einem 180° Sektor. Gewertet wird das Zentrum."
+"(Britische Regeln) Jeder Punkt innerhalb eines Radius 0,5 km vom Zentrum, "
+"oder 10 km innerhalb eines 180° Sektors ist ein gültiger Wendepunkt. "
+"Gewertet wird das Zentrum."
 
 #: src/Task/TypeStrings.cpp:87
 #, no-c-format
 msgid "A cylinder.  Any point within area scored from center."
 msgstr ""
-"Ein Zylinder. Erreicht gilt schon mit einem Punkt im Zylinder, gewertet wird "
-"der Mittelpunkt."
+"Ein Zylinder mit vorgegebenem Radius. Gültiger Wendepunkt ist ein beliebiger "
+"Punkt innerhalb des angegebenen Zylinders.  Gewertet wird der Mittelpunkt."
 
 #: src/Task/TypeStrings.cpp:88
 #, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
 msgstr ""
-"Ein 1 Meile Zylinder. Gewertet wird der entfernteste erreichte Punkt darin."
+"Ein 1 Meilen Zylinder. Gewertet wird der am weitesten entfernte erreichte "
+"Punkt darin."
 
 #: src/Task/TypeStrings.cpp:89
 #, no-c-format
@@ -1685,12 +1692,11 @@ msgstr "Deaktiviert"
 
 #: src/Device/Config.cpp:233 src/Dialogs/Device/PortPicker.cpp:77
 msgid "BLE sensor"
-msgstr ""
+msgstr "BLE Sensor"
 
 #: src/Device/Config.cpp:249 src/Dialogs/Device/PortPicker.cpp:74
-#, fuzzy
 msgid "BLE port"
-msgstr "Total Energie Düse"
+msgstr "BLE Anschluss"
 
 #: src/Device/Config.cpp:269 src/Dialogs/Device/PortDataField.cpp:52
 #, no-c-format
@@ -1711,9 +1717,8 @@ msgid "GliderLink traffic receiver"
 msgstr "GliderLink Verkehrsempfänger"
 
 #: src/Device/Config.cpp:315 src/Dialogs/Device/PortPicker.cpp:80
-#, fuzzy
 msgid "USB serial"
-msgstr "Seriell"
+msgstr "USB Seriell"
 
 #. create buttons
 #: src/Dialogs/Message.cpp:94 src/Dialogs/WidgetDialog.cpp:264
@@ -1973,8 +1978,8 @@ msgid ""
 "Tells XCSoar to use settings like the MacCready value, bugs and ballast from "
 "the device."
 msgstr ""
-"Dies Option veranlasst XCSoar Einstellungen wie z.B. den MacCready Wert, "
-"Verschmutzung und Ballast vom externen Gerät zu übernehmen."
+"Weist XCSoar an, Einstellungen wie den MacCready Wert, Verschmutzung und "
+"Ballast vom Gerät zu verwenden."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:326
 msgid "Sync. to device"
@@ -2274,7 +2279,6 @@ msgid "Calibrate"
 msgstr "Kalibriere"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:130
-#, fuzzy
 msgid "Offset"
 msgstr "Zeitzonenverschiebung"
 
@@ -4422,9 +4426,8 @@ msgstr ""
 "mittlere Bruttovario angezeigt."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:92
-#, fuzzy
 msgid "Thermal Averager needle"
-msgstr "Mittelwert Zeiger"
+msgstr "Thermik Mittelwert Zeiger"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:93
 msgid ""
@@ -4915,7 +4918,7 @@ msgstr "Zeichnet einen Reiter über den Titel der InfoBox."
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:169
 #, no-c-format
 msgid "Shaded"
-msgstr "shattiert"
+msgstr "Schattiert"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:171
 #, no-c-format
@@ -6066,7 +6069,7 @@ msgstr "Bezug für die Regel über die min. Ankunftshöhe."
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:128
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:280
 msgid "PEV start wait time"
-msgstr ""
+msgstr "PEV Start wartezeit"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:129
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:281
@@ -6074,13 +6077,13 @@ msgid ""
 "Wait time in minutes after Pilot Event and before start gate opens. 0 means "
 "start opens immediately."
 msgstr ""
-"Wartezeit in Minuten bevor das Start-Tor nach dem Piloten Event öffnet. 0 "
-"bedeutet der Start öffnet sofort."
+"Wartezeit in Minuten nach Pilotenevent und bevor das Starttor öffnet. 0 "
+"bedeutet, das Starttor öffnet sofort."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:135
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:284
 msgid "PEV start window"
-msgstr ""
+msgstr "Aufgaben Startfenster"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:136
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:285
@@ -6252,6 +6255,11 @@ msgid ""
 "and the largest Out & Return distance that can be fitted into the flight "
 "route."
 msgstr ""
+"WeGlide kombiniert mehrere Scoring-Systeme im WeGlide Free Wettbewerb. Die "
+"freie Punktzahl ist eine Kombination aus der freien Distanz Punktzahl und "
+"dem Flächenbonus. Für den Flächenbonus ermittelt das Scoring-Programm das "
+"grösste FAI-Dreieck und die grösste Out & Return-Distanz, die in die "
+"Flugroute eingebaut werden kann."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:123
 #, no-c-format
@@ -6260,6 +6268,8 @@ msgid ""
 "path such that the distance between the start point and the turn point is "
 "maximized"
 msgstr ""
+"Aus der Flugbahn werden ein Startpunkt, ein Wendepunkt und ein Zielpunkt "
+"gewählt so dass der Abstand zwischen Startpunkt und Wendepunkt maximiert wird"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:127
 msgid "Contest"
@@ -6632,6 +6642,8 @@ msgid ""
 "The short name of each waypoint is displayed. If unavailable, the first five "
 "letters of the full name are displayed."
 msgstr ""
+"Der Kurzname jedes Wegpunktes wird angezeigt. Falls nicht verfügbar, werden "
+"die ersten 5 Buchstaben des Langnamens angezeigt."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:105
 msgid "Label format"
@@ -6921,21 +6933,23 @@ msgid "Obtain and show thermal locations reported by others."
 msgstr "Thermikstandorte von anderen Nutzern beziehen und anzeigen."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:91
-#, fuzzy
 msgid "Automatic Upload"
-msgstr "Automatisch"
+msgstr "Automatisch Hochladen"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:92
 msgid "Uploads flights automatically after download from logger?"
-msgstr ""
+msgstr "Lade Flüge automatisch nach download vom Logger hoch?"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:96
+#, fuzzy
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
 msgstr ""
+"Die Zahl findest du in deinem WeGlide Profile. Oder setze 0 falls nicht "
+"benutzt."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:99
 msgid "Pilot date of birth"
-msgstr ""
+msgstr "Pilot Geburtsdatum"
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:43
 msgid "Radius of the OZ cylinder."
@@ -8892,13 +8906,13 @@ msgid "Cont Dist"
 msgstr "Cont Dist"
 
 #: src/InfoBoxes/Content/Factory.cpp:734
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown distance according to the configured "
 "Contest rule set."
 msgstr ""
-"Aktuelle Auswertung der geflogenen Strecke an Hand der eingestellten On-Line "
-"Contest Regel."
+"Augenblickliche Auswertung der geflogenen Strecke an Hand der eingestellten "
+"On-Line Contest Regel."
 
 #: src/InfoBoxes/Content/Factory.cpp:740
 #, no-c-format
@@ -8972,6 +8986,10 @@ msgid ""
 "set. In case the FL is calculated from the GPS altitude, the FL label is "
 "coloured red."
 msgstr ""
+"Druckhöhe, angegeben als Flugfläche. Wenn keine barometrische Höhe verfügbar "
+"ist, wird die Flugfläche aus der GPS-Höhe berechnet, vorausgesetzt, das "
+"korrekte QNH ist eingestellt. Wird die Flugfläche aus der GPS-Höhe "
+"berechnet, erscheint das Flugflächensymbol rot."
 
 #: src/InfoBoxes/Content/Factory.cpp:782 src/InfoBoxes/Content/Factory.cpp:783
 #, no-c-format
@@ -9202,7 +9220,7 @@ msgstr ""
 "Bei AAT-Aufgaben wird das Ziel im Sektor benutzt."
 
 #: src/InfoBoxes/Content/Factory.cpp:888
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind, head component"
 msgstr "Wind - Gegenwindkomponente"
 
@@ -9284,7 +9302,7 @@ msgstr ""
 "des aktuellen Schenkels passt."
 
 #: src/InfoBoxes/Content/Factory.cpp:921
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind, head component (simplified)"
 msgstr "Wind - Komponente (vereinfacht)"
 
@@ -9635,7 +9653,7 @@ msgid "Thermal time"
 msgstr "Thermikdauer"
 
 #: src/InfoBoxes/Content/Factory.cpp:1089
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TC Time"
 msgstr "LSteig Zeit"
 
@@ -9650,12 +9668,12 @@ msgid "Alternate 2 GR"
 msgstr "Alternative 2 - Gleitzahl"
 
 #: src/InfoBoxes/Content/Factory.cpp:1097
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Altn2 GR"
 msgstr "Altn1 benö GZ"
 
 #: src/InfoBoxes/Content/Factory.cpp:1098
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Geometric gradient to the arrival height above the second alternate. This is "
 "not adjusted for total energy."
@@ -9664,19 +9682,19 @@ msgstr ""
 "Korrektur)."
 
 #: src/InfoBoxes/Content/Factory.cpp:1104
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Heart Rate"
-msgstr "Startzeit"
+msgstr "Herzfrequenz"
 
 #: src/InfoBoxes/Content/Factory.cpp:1105
 #, no-c-format
 msgid "Heart"
-msgstr ""
+msgstr "Herz"
 
 #: src/InfoBoxes/Content/Factory.cpp:1106
 #, no-c-format
 msgid "Heart rate in beats per minute."
-msgstr ""
+msgstr "Herzschläge in der Minute."
 
 #: src/InfoBoxes/Content/Alternate.cpp:74
 #, c-format
@@ -9695,9 +9713,8 @@ msgid "no QNH"
 msgstr "kein QNH"
 
 #: src/InfoBoxes/Content/Altitude.cpp:148
-#, fuzzy
 msgid "Not flying"
-msgstr "Kein Kreisflug"
+msgstr "Nicht fliegend"
 
 #: src/InfoBoxes/Content/MacCready.cpp:71
 msgid "MC AUTO"
@@ -10539,14 +10556,15 @@ msgstr "Speichern"
 
 #: Data/Input/default.xci:430
 msgid "Pilot event announced"
-msgstr ""
+msgstr "Pilotenevent angekündigt"
 
 #: Data/Input/default.xci:433
-#, fuzzy
 msgid ""
 "Pilot\n"
 "Event"
-msgstr "Pilot"
+msgstr ""
+"Piloten-\n"
+"event"
 
 #: Data/Input/default.xci:530 Data/Input/default.xci:1103
 msgid "Topo."

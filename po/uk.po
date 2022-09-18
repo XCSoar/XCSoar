@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2021-08-19 19:15+0000\n"
-"Last-Translator: Tymofii Lytvynenko <till.svit@gmail.com>\n"
+"PO-Revision-Date: 2022-06-24 07:20+0000\n"
+"Last-Translator: Artem <artem@molotov.work>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/uk/>\n"
 "Language: uk\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 "X-Launchpad-Export-Date: 2014-03-11 22:21+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -58,7 +58,7 @@ msgstr "Ціль ФАІ"
 #: src/Task/TypeStrings.cpp:35
 #, no-c-format
 msgid "Racing"
-msgstr "Гонка"
+msgstr "Перегони"
 
 #: src/Task/TypeStrings.cpp:36
 #, no-c-format
@@ -150,8 +150,8 @@ msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
 msgstr ""
-"Завдання на вільний порядок проходження маршруту.  Використовуються "
-"стартовий і фінішний циліндри та сектори ФАІ в якості ППМ."
+"Завдання на вільний порядок проходження маршруту. Використовуються стартовий "
+"і фінішний циліндри та сектори ФАІ в якості ППМ."
 
 #: src/Task/TypeStrings.cpp:76
 #, no-c-format
@@ -159,7 +159,7 @@ msgid ""
 "A 90 degree sector with 1km radius. Cross corner edge from inside area to "
 "start."
 msgstr ""
-"90-градусний сектор радіусом 1 км.  Для старту - перетнути край кута "
+"90-градусний сектор радіусом 1 км. Для старту - перетнути край кута "
 "зсередини назовні."
 
 #: src/Task/TypeStrings.cpp:77
@@ -513,7 +513,7 @@ msgstr "Флеш-пам'ять"
 #: src/FLARM/Error.cpp:55
 #, no-c-format
 msgid "Pressure sensor"
-msgstr "Датчик тиску"
+msgstr "Датник тиску"
 
 #: src/FLARM/Error.cpp:56 src/Dialogs/Device/ManageFlarmDialog.cpp:75
 #, no-c-format
@@ -919,7 +919,7 @@ msgstr "Ландшафт + топографія"
 
 #: src/Menu/ExpandMacros.cpp:352
 msgid "Terrain Off"
-msgstr "Ландшафт  вимкн"
+msgstr "Ландшафт вимкн"
 
 #: src/Menu/ExpandMacros.cpp:369 src/Input/InputEventsSettings.cpp:313
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:85
@@ -976,11 +976,11 @@ msgstr "Нема активних маршрутних точок!"
 
 #: src/Input/InputEventsActions.cpp:481
 msgid "NMEA log on"
-msgstr "NMEA  лог вкл"
+msgstr "NMEA лог вкл"
 
 #: src/Input/InputEventsActions.cpp:483
 msgid "NMEA log off"
-msgstr "NMEA  лог вимкн"
+msgstr "NMEA лог вимкн"
 
 #: src/Input/InputEventsActions.cpp:487
 msgid "Logger on"
@@ -1036,7 +1036,7 @@ msgstr "До повороту готово"
 
 #: src/Input/InputEventsTask.cpp:95
 msgid "Hold turn"
-msgstr "Затримати  поворот"
+msgstr "Затримати поворот"
 
 #: src/Input/InputEventsTask.cpp:161
 msgid "Auto. MacCready on"
@@ -1156,9 +1156,8 @@ msgstr "Баласт %"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:131
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:171
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:211
-#, fuzzy
 msgid "Failed to save file."
-msgstr "Помилка при завантаженні файлу"
+msgstr "Не вдалося зберегти файл."
 
 #: src/Input/InputEventsSettings.cpp:305 src/InfoBoxes/Content/Factory.cpp:547
 #, no-c-format
@@ -1302,7 +1301,7 @@ msgstr "Вис прибуття"
 
 #: src/Renderer/WaypointListRenderer.cpp:165
 msgid " ("
-msgstr ""
+msgstr " ("
 
 #: src/Weather/Rasp/RaspStore.cpp:48 src/Weather/Rasp/RaspStore.cpp:53
 #, no-c-format
@@ -1478,7 +1477,7 @@ msgstr "Відстань до фінішу"
 #: src/Renderer/FlightStatisticsRenderer.cpp:332
 #: src/Renderer/FlightStatisticsRenderer.cpp:343
 msgid "Target speed"
-msgstr ""
+msgstr "Цільова швидкість"
 
 #: src/Renderer/BarographRenderer.cpp:47 src/Renderer/BarographRenderer.cpp:53
 msgid "Working band"
@@ -1599,7 +1598,7 @@ msgstr "Пристрої стартують"
 #.
 #: src/Startup.cpp:459
 msgid "Initialising display"
-msgstr ""
+msgstr "Ініціалізація дисплея"
 
 #. Show progress dialog
 #: src/Startup.cpp:555 src/Startup.cpp:590 src/Startup.cpp:655
@@ -1627,11 +1626,11 @@ msgstr "Неможливо відкрити порт"
 
 #: src/Device/Descriptor.cpp:1116 src/Device/Descriptor.cpp:1122
 msgid "Sending declaration"
-msgstr ""
+msgstr "Надсилання декларації"
 
 #: src/Device/Descriptor.cpp:1169 src/Device/Descriptor.cpp:1176
 msgid "Reading flight list"
-msgstr ""
+msgstr "Читання списку рейсів"
 
 #: src/Device/Descriptor.cpp:1200 src/Device/Descriptor.cpp:1207
 msgid "Downloading flight log"
@@ -1646,12 +1645,11 @@ msgstr "Вимкнено"
 
 #: src/Device/Config.cpp:233 src/Dialogs/Device/PortPicker.cpp:77
 msgid "BLE sensor"
-msgstr ""
+msgstr "Датник BLE"
 
 #: src/Device/Config.cpp:249 src/Dialogs/Device/PortPicker.cpp:74
-#, fuzzy
 msgid "BLE port"
-msgstr "Порт ТЕ"
+msgstr "Порт BLE"
 
 #: src/Device/Config.cpp:269 src/Dialogs/Device/PortDataField.cpp:52
 #, no-c-format
@@ -1665,16 +1663,15 @@ msgstr "Драйвер GPS"
 #: src/Device/Config.cpp:291 src/Dialogs/Device/PortDataField.cpp:49
 #, no-c-format
 msgid "Built-in GPS & sensors"
-msgstr "Вбудований GPS і датчики"
+msgstr "Вбудований GPS і датники"
 
 #: src/Device/Config.cpp:294
 msgid "GliderLink traffic receiver"
 msgstr ""
 
 #: src/Device/Config.cpp:315 src/Dialogs/Device/PortPicker.cpp:80
-#, fuzzy
 msgid "USB serial"
-msgstr "Серійний"
+msgstr "Послідовний USB"
 
 #. create buttons
 #: src/Dialogs/Message.cpp:94 src/Dialogs/WidgetDialog.cpp:264
@@ -1761,9 +1758,8 @@ msgid "Add"
 msgstr "Додати"
 
 #: src/Dialogs/FileManager.cpp:423
-#, fuzzy
 msgid "Update all"
-msgstr "Оновити"
+msgstr "Оновити все"
 
 #: src/Dialogs/FileManager.cpp:456
 msgid "Queued"
@@ -1795,9 +1791,8 @@ msgid "Error"
 msgstr "Помилка"
 
 #: src/Dialogs/FileManager.cpp:476
-#, fuzzy
 msgid "Update available"
-msgstr "Дані TAF не доступні!"
+msgstr "Доступне оновлення"
 
 #: src/Dialogs/FileManager.cpp:744 src/Dialogs/DownloadFilePicker.cpp:386
 #: src/Dialogs/DownloadFilePicker.cpp:388
@@ -1819,14 +1814,14 @@ msgid "IOIO switches and Nunchuk"
 msgstr "Ключі IOIO і Nunchuk"
 
 #: src/Dialogs/Device/PortDataField.cpp:58
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO I²C pressure sensor"
-msgstr "Датчик тиску з i2c до IOIO"
+msgstr "Датник тиску з i2c до IOIO"
 
 #: src/Dialogs/Device/PortDataField.cpp:59
 #, no-c-format
 msgid "IOIO voltage sensor"
-msgstr "Датчик напруги IOIO"
+msgstr "Датник напруги IOIO"
 
 #: src/Dialogs/Device/PortDataField.cpp:62
 #, no-c-format
@@ -1869,9 +1864,8 @@ msgstr ""
 "таких як декларація завдання чи завантаження польоту."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:265
-#, fuzzy
 msgid "IP address"
-msgstr "Адреса ІР"
+msgstr "IP-адреса"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:275
 msgid "I²C bus"
@@ -1898,18 +1892,16 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:289
 msgid "Pressure use"
-msgstr "Використання датчика тиску"
+msgstr "Використання датника тиску"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:289
-#, fuzzy
 msgid ""
 "Select the purpose of this pressure sensor. This sensor measures some "
 "pressure. Here you tell the system what pressure this is and what it should "
 "be used for."
 msgstr ""
-"Вибір призначення для цього датчика тиску. Цей датчик вимірює якийсь тиск. "
-"Тут ви повідомляєте системі, що це за тиск і для чого його слід "
-"використовувати."
+"Оберіть призначення для цього датника тиску. Він вимірює певний тиск. Тут ви "
+"повідомляєте системі, що це за тиск і для чого його слід використовувати."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:303
 msgid "Driver"
@@ -1952,13 +1944,13 @@ msgid ""
 "Tells XCSoar to send settings like the MacCready value, bugs and ballast to "
 "the device."
 msgstr ""
-"Ця опція дозволяє здійснити конфігурацію, якщо XCSoar повинна надіслатитакі "
+"Ця опція дозволяє здійснити конфігурацію, якщо XCSoar повинна надіслати такі "
 "налаштування, як значення MacCready, вплив жучків і баласту до пристрою."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:333
 #, fuzzy
 msgid "Whether you use a K6Bt to connect the device."
-msgstr "Увімкніть, якщо ви  використовуєте K6Bt, щоб підключитись до пристрою."
+msgstr "Увімкніть, якщо ви використовуєте K6Bt, щоб підключитись до пристрою."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:287
 #: src/Dialogs/Plane/PlaneListDialog.cpp:147
@@ -2227,9 +2219,9 @@ msgid "Volume"
 msgstr "Гучність"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:68
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Output mode"
-msgstr "Режим маршруту"
+msgstr "Режим виводу"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:70
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:122
@@ -2239,14 +2231,12 @@ msgid "Save"
 msgstr "Зберегти"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:58
-#, fuzzy
 msgid "Calibrate"
-msgstr "Швидкість набору висоти"
+msgstr "Калібрувати"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:130
-#, fuzzy
 msgid "Offset"
-msgstr "Поправка UTC"
+msgstr "Зсув"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:144
 msgid "Pitot sensor calibration"
@@ -2256,7 +2246,7 @@ msgstr ""
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:59
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:54
 msgid "Product"
-msgstr ""
+msgstr "Продукт"
 
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:66
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:65
@@ -2278,7 +2268,7 @@ msgstr "Авто вимкнено"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:103
 msgid "Auto finish flight"
-msgstr ""
+msgstr "Автоматичне завершення польоту"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:106
 msgid "Always run"
@@ -2391,7 +2381,7 @@ msgstr "Не заблоковано"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:72
 msgid "Airbrake locked"
-msgstr ""
+msgstr "Повітряне гальмо заблоковано"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:73
 msgid "Flaps"
@@ -2467,7 +2457,7 @@ msgstr "Парашут"
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:136
 #, no-c-format
 msgid "Drop plane"
-msgstr ""
+msgstr "Покиньте літак"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:137
 #, no-c-format
@@ -2494,7 +2484,7 @@ msgstr "Реактивне ПС"
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:143
 #, no-c-format
 msgid "Flying saucer"
-msgstr ""
+msgstr "Летюча тарілка"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:144
 #, no-c-format
@@ -2533,7 +2523,7 @@ msgstr "Інтервал запису в логгер"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:156
 msgid "No tracking mode"
-msgstr ""
+msgstr "Немає режиму відстеження"
 
 #: src/Dialogs/MapItemListDialog.cpp:163 src/Dialogs/dlgAnalysis.cpp:466
 #: src/Dialogs/dlgAnalysis.cpp:510 src/Dialogs/dlgAnalysis.cpp:519
@@ -2610,7 +2600,7 @@ msgstr "Повітряний простір"
 
 #: src/Dialogs/Airspace/dlgAirspacePatterns.cpp:64
 msgid "Select Pattern"
-msgstr ""
+msgstr "Виберіть зразок"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:70
 msgid "Radio"
@@ -2643,7 +2633,7 @@ msgstr "Орієнтація крила"
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:87
 #: src/Dialogs/Waypoint/WaypointList.cpp:405
 msgid "Name"
-msgstr ""
+msgstr "Назва"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:438
 msgid "Select Airspace"
@@ -2686,7 +2676,7 @@ msgstr "Заповнення кольором"
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:92
 #, no-c-format
 msgid "Only padding"
-msgstr ""
+msgstr "Тільки рамка"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:93
 #, no-c-format
@@ -2746,7 +2736,7 @@ msgstr "ЗигЗаг"
 #, no-c-format
 msgid "Requires GPS and an intelligent vario with airspeed output."
 msgstr ""
-"Потребує даних GPS  і інтелектуального варіометра з вихідними даними "
+"Потребує даних GPS і інтелектуального варіометра з вихідними даними "
 "повітряної швидкості."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:67
@@ -2789,7 +2779,7 @@ msgid ""
 "in circling mode. Switched Off, the snail trail stays uncompensated for wind "
 "drift."
 msgstr ""
-"Визначає, чи буде  показано на екрані в режимі набору висоти дрейф спіралі "
+"Визначає, чи буде показано на екрані в режимі набору висоти дрейф спіралі "
 "через вплив вітру. Коли вимкнено, траєкторія спіралі залишається без "
 "компенсації через вплив вітру."
 
@@ -2995,9 +2985,9 @@ msgid "Weather"
 msgstr "Погода"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:156
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Audio"
-msgstr "Аудіо варіо"
+msgstr "Аудіо"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:163
 #, no-c-format
@@ -3017,7 +3007,7 @@ msgstr "Завдання за замовчуванням"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:167
 #, no-c-format
 msgid "Look"
-msgstr ""
+msgstr "Огляд"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:226
 #: src/Dialogs/Settings/dlgConfiguration.cpp:239
@@ -3181,7 +3171,7 @@ msgstr "Встановит нового партнера по команді"
 #: src/InfoBoxes/Content/Factory.cpp:588 src/InfoBoxes/Content/Team.cpp:50
 #, no-c-format
 msgid "Team Code"
-msgstr ""
+msgstr "Код команди"
 
 #: src/Dialogs/dlgAnalysis.cpp:237 src/Dialogs/dlgAnalysis.cpp:475
 #: src/Dialogs/dlgAnalysis.cpp:538 src/Dialogs/dlgAnalysis.cpp:547
@@ -3232,7 +3222,7 @@ msgstr "Поляра"
 
 #: src/Dialogs/dlgAnalysis.cpp:515
 msgid "MacCready Speeds"
-msgstr "MacCready  швидкості"
+msgstr "MacCready швидкості"
 
 #: src/Dialogs/dlgAnalysis.cpp:524
 msgid "Temperature Trace"
@@ -3281,13 +3271,12 @@ msgid "Delete"
 msgstr "Вилучити"
 
 #: src/Dialogs/ProfileListDialog.cpp:192 src/Dialogs/ProfileListDialog.cpp:259
-#, fuzzy
 msgid "Profile name"
-msgstr "Профіль"
+msgstr "Назва профілю"
 
 #: src/Dialogs/ProfileListDialog.cpp:201 src/Dialogs/ProfileListDialog.cpp:269
 msgid "File exists already."
-msgstr ""
+msgstr "Файл уже існує."
 
 #: src/Dialogs/ProfileListDialog.cpp:293
 #, c-format
@@ -3311,9 +3300,9 @@ msgid "Active"
 msgstr "Активовано"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "Activating plane \"%s\" failed."
-msgstr "Помилка активації профілю ПС  \"%s\" !"
+msgstr "Не вдалося активувати літак \"%s\"."
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:232
 #: src/Dialogs/Plane/PlaneListDialog.cpp:277
@@ -3322,9 +3311,9 @@ msgstr "Прохання ввести реєстраційний номер ПС
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:244
 #: src/Dialogs/Plane/PlaneListDialog.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid "Plane \"%s\" already exists. Overwrite it?"
-msgstr "Профіль ПС \"%s\" вже існує.  Перезаписати?"
+msgstr "Літак \"%s\" вже існує. Перезаписати його?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:247
 #: src/Dialogs/Plane/PlaneListDialog.cpp:294
@@ -3334,12 +3323,12 @@ msgstr "Перезаписати"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:339
 #, c-format
 msgid "Delete plane \"%s\"?"
-msgstr ""
+msgstr "Видалити літак \"%s\"?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "Activate plane \"%s\"?"
-msgstr "Помилка активації профілю ПС  \"%s\" !"
+msgstr "Активувати літак %s?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:367
 msgid "Planes"
@@ -3361,7 +3350,7 @@ msgstr "Реєстрація"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:112
 msgid "Comp. ID"
-msgstr ""
+msgstr "Комп. ID"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:115
 msgid "Handicap"
@@ -3488,7 +3477,7 @@ msgstr "Продовжити"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:63
 msgid "Enter your password"
-msgstr ""
+msgstr "Уведіть ваш пароль"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:88
 msgid "Wrong password."
@@ -3496,7 +3485,7 @@ msgstr "Невірний пароль."
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:103
 msgid "Enter a new password"
-msgstr ""
+msgstr "Уведіть новий пароль"
 
 #: src/Dialogs/dlgStatus.cpp:47 src/Dialogs/dlgStatus.cpp:58
 #: src/Dialogs/Weather/WeatherDialog.cpp:58 Data/Input/default.xci:825
@@ -3570,7 +3559,7 @@ msgstr ""
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:136
 msgid "GPS lock"
-msgstr ""
+msgstr "GPS блокування"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:137
 msgid "Satellites in view"
@@ -3586,7 +3575,7 @@ msgstr "Напруга живлення"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:142
 msgid "Network"
-msgstr ""
+msgstr "Мережа"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:140
 msgid "Assigned task time"
@@ -3634,7 +3623,7 @@ msgstr ""
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:159
 msgid "AAT range"
-msgstr ""
+msgstr "Діапазон AAT"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:161
 #, no-c-format
@@ -3752,9 +3741,9 @@ msgstr "Злітно-посадкова смуга"
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:136
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:88
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Short Name"
-msgstr "Короткий"
+msgstr "Коротка назва"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:167
 msgid "Bearing and Distance"
@@ -3859,7 +3848,7 @@ msgstr "Standby частота"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:428 Data/Input/default.xci:1039
 msgid "GoTo"
-msgstr ""
+msgstr "Летіти до"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:639
 #: src/Dialogs/Task/TaskPointDialog.cpp:548
@@ -3896,12 +3885,12 @@ msgstr "Придатно для посадки"
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:73
 #, fuzzy, no-c-format
 msgid "Mountain Pass"
-msgstr "Гори"
+msgstr "Гірський перевал"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:74
 #, fuzzy, no-c-format
 msgid "Mountain Top"
-msgstr "Гори"
+msgstr "Вершина гори"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
 #, no-c-format
@@ -3909,24 +3898,24 @@ msgid "Transmitter Mast"
 msgstr ""
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:76
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Tower"
-msgstr "Живлення"
+msgstr "Вежа"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:77
 #, no-c-format
 msgid "Tunnel"
-msgstr ""
+msgstr "Тунель"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:78
 #, no-c-format
 msgid "Bridge"
-msgstr ""
+msgstr "Міст"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:79
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Power Plant"
-msgstr "Живлення"
+msgstr "Електростанція"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:89
 msgid "Comment"
@@ -4126,7 +4115,7 @@ msgid ""
 "This is the time before an airspace incursion is estimated at which the "
 "system will warn the pilot."
 msgstr ""
-"Це розрахунковий  час до порушення повітряного простору, коли система "
+"Це розрахунковий час до порушення повітряного простору, коли система "
 "попередить про це пілота."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:211
@@ -4138,7 +4127,7 @@ msgid ""
 "Enable/disable repetitive warning sound when airspaces warnings dialog is "
 "displayed."
 msgstr ""
-"Вмикає/вимикає повтор звукових попереджень, коли на екрані  з'являється "
+"Вмикає/вимикає повтор звукових попереджень, коли на екрані з'являється "
 "діалог застереження щодо повітряного простору."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:216
@@ -4151,7 +4140,7 @@ msgid ""
 "be repeated."
 msgstr ""
 "Це відтинок часу, протягом якого потрібно підтвердити попередження щоб "
-"уникнути його  повтору."
+"уникнути його повтору."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:222
 msgid "Use black outline"
@@ -4195,9 +4184,9 @@ msgid "Show final glide bar if approaching final glide range."
 msgstr "Зображує шкалу дольоту, якщо знаходимося в межах дольоту."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:57
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable thermal assistant."
-msgstr "Термік-асистент"
+msgstr "Вимкнути помічник терміка."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:59
 #, fuzzy, no-c-format
@@ -4207,7 +4196,7 @@ msgstr "Внизу ліворуч"
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:60
 #, no-c-format
 msgid "Show thermal assistant in bottom left."
-msgstr ""
+msgstr "Показати теплового помічника внизу ліворуч."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:62
 #, fuzzy, no-c-format
@@ -4229,7 +4218,7 @@ msgstr "Внизу праворуч"
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:66
 #, no-c-format
 msgid "Show thermal assistant in bottom right."
-msgstr ""
+msgstr "Показати теплового помічника внизу праворуч."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
 #, fuzzy, no-c-format
@@ -4263,8 +4252,8 @@ msgid ""
 "Setting this to \"On\" will automatically close the FLARM dialog if there is "
 "no traffic. \"Off\" will keep the dialog open even without current traffic."
 msgstr ""
-"Вибір \"Вкл.\" автоматично закриє діалог FLARM при відсутності інших ПС.  "
-"При \"Викл.\" діалог залишиться відкритим навіть за відсутності інших ПС."
+"Вибір \"Вкл.\" автоматично закриє діалог FLARM при відсутності інших ПС. При "
+"\"Викл.\" діалог залишиться відкритим навіть за відсутності інших ПС."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:116
 msgid ""
@@ -4354,7 +4343,7 @@ msgstr "Показати комахи"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:76
 msgid "Whether to show the bugs percentage."
-msgstr "Для зображення  проценту втрати ЛХ через комах."
+msgstr "Для зображення проценту втрати ЛХ через комах."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:79
 msgid "Show ballast"
@@ -4362,7 +4351,7 @@ msgstr "Показати баласт"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:79
 msgid "Whether to show the ballast percentage."
-msgstr "Для зображення  проценту баласту."
+msgstr "Для зображення проценту баласту."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:82
 msgid "Show gross"
@@ -4460,7 +4449,7 @@ msgid ""
 "vertical air-mass movement."
 msgstr ""
 "Якщо застосовано, команда швидкості на переході встановлюється як швидкість "
-"MacCready  за відсутності вертикального переміщення повітряних мас. Якщо ні, "
+"MacCready за відсутності вертикального переміщення повітряних мас. Якщо ні, "
 "команда швидкості на переході встановлюється відповідно до польоту \"в "
 "режимі дельфіна\", з урахуванням вертикального переміщення повітряних мас."
 
@@ -4529,12 +4518,13 @@ msgstr "Асистент хвилі"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:125
 msgid "Cruise/Circling period"
-msgstr ""
+msgstr "Період круїзу/кружляння"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:126
 msgid ""
 "How many seconds of turning before changing from cruise to circling mode."
 msgstr ""
+"Скільки секунд обертання, перш ніж перейти від режиму круїзу до кружляння."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:131
 #, fuzzy
@@ -4546,6 +4536,8 @@ msgid ""
 "How many seconds of flying straight before changing from circling to cruise "
 "mode."
 msgstr ""
+"Скільки секунд польоту прямо перед переходом від режиму кружляння до "
+"круїзного."
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:88
 msgid "Use final glide mode"
@@ -4560,9 +4552,8 @@ msgstr ""
 "сторінках."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:91
-#, fuzzy
 msgid "Text size"
-msgstr "Текст"
+msgstr "Розмір тексту"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:96
 msgid "Display Resolution"
@@ -4573,6 +4564,8 @@ msgid ""
 "The display resolution is used to adapt line widths, font size, landable "
 "size and more."
 msgstr ""
+"Роздільна здатність дисплея використовується для адаптації ширини лінії, "
+"розміру шрифту, розміру приземлення тощо."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:132
@@ -4582,7 +4575,7 @@ msgstr "Автоматично"
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:110
 #, c-format
 msgid "%d dpi"
-msgstr ""
+msgstr "%d dpi"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:118
 msgid "Events"
@@ -4640,8 +4633,8 @@ msgstr "Стиль вводу тексту"
 msgid ""
 "Determines how the user is prompted for text input (filename, teamcode etc.)"
 msgstr ""
-"Визначає, який стиль буде запропоновано  користувачеві для вводу тексту "
-"(назва файлу, код команди тощо)"
+"Визначає, який стиль буде запропоновано користувачеві для вводу тексту ("
+"назва файлу, код команди тощо)"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:191
 #, no-c-format
@@ -4884,13 +4877,12 @@ msgid "Glass"
 msgstr "Скло"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:194
-#, fuzzy
 msgid "Full screen"
-msgstr "Карта (на увесь екран)"
+msgstr "Повноекранно"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:194
 msgid "Run XCSoar in full screen mode"
-msgstr ""
+msgstr "Запустити XCSoar у повноекранному режимі"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:199
 msgid "Display orientation"
@@ -4956,28 +4948,27 @@ msgstr "Рамка ІнфоБоксу"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:239
 msgid "Show Menubutton"
-msgstr ""
+msgstr "Показати кнопку меню"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:239
 msgid "Show the Menubutton"
-msgstr ""
+msgstr "Показати кнопку меню"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:245
-#, fuzzy
 msgid "Cursor zoom"
-msgstr "Авто зум"
+msgstr "Масштаб курсора"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:245
 msgid "Cursor zoom factor"
-msgstr ""
+msgstr "Коефіцієнт масштабування курсора"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:247
 msgid "Invert cursor color"
-msgstr ""
+msgstr "Інвертувати колір курсора"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:247
 msgid "Enable black cursor"
-msgstr ""
+msgstr "Увімкнути чорний курсор"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:59
 #, no-c-format
@@ -5355,7 +5346,7 @@ msgstr "Режим досяжності"
 msgid ""
 "How calculations are performed of the reach of the glider with respect to "
 "terrain."
-msgstr "Як впливає ландшафт на розрахунки досяжності  планера."
+msgstr "Як впливає ландшафт на розрахунки досяжності планера."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:149
 #, no-c-format
@@ -5556,7 +5547,7 @@ msgid ""
 "no compensation, 1.0 scales MC linearly with current height (with reference "
 "to height of the maximum climb). If considered, 0.3 is recommended."
 msgstr ""
-"Фактор ризику STF  зменшує налаштування MacCready , що використовуються для "
+"Фактор ризику STF зменшує налаштування MacCready , що використовуються для "
 "розрахунку speed to fly, з метою компенсувати ризик, як тільки планер "
 "опиниться низько. Налаштування 0.0 означає відсутність компенсації, 1.0 - "
 "лінійно масштабує МС відповідно до поточної висоти (з прив'язкою до "
@@ -5606,7 +5597,7 @@ msgid ""
 "mountain passes."
 msgstr ""
 "Файл з шляховими точками, що містить спеціальні шляхові точки, для яких "
-"завжди будуть виконуватися  додаткові розрахунки, такі як розрахунок висоти "
+"завжди будуть виконуватися додаткові розрахунки, такі як розрахунок висоти "
 "прибуття з показом на мапі. Корисно для шляхових точок, відомих як надійні "
 "джерела терміків чи перевали в горах."
 
@@ -5681,7 +5672,7 @@ msgid ""
 "are shown brown and thin. Zero lift is presented as a grey line."
 msgstr ""
 "В зонах набору висоти лінії будуть зеленими і товстими, тоді як в зонах "
-"зниження - коричневими і тонкими. Нульові  швидкості набору позначені сірими "
+"зниження - коричневими і тонкими. Нульові швидкості набору позначені сірими "
 "лініями."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:102
@@ -5815,22 +5806,22 @@ msgstr "Стрілка вітру не намальована."
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 #, no-c-format
 msgid "Symbol"
-msgstr ""
+msgstr "Символ"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 #, no-c-format
 msgid "Draws the SkyLines symbol only."
-msgstr ""
+msgstr "Малює лише символ SkyLines."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
 #, no-c-format
 msgid "Symbol and Name"
-msgstr ""
+msgstr "Символ і назва"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
 #, no-c-format
 msgid "Draws the SkyLines symbol with name."
-msgstr ""
+msgstr "Малює символ SkyLines з назвою."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:152
 msgid "Ground track"
@@ -5846,7 +5837,7 @@ msgstr "Рух FLARM"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
 msgid "This enables the display of FLARM traffic on the map window."
-msgstr "Вмикає зображення руху FLARM  на мапі."
+msgstr "Вмикає зображення руху FLARM на мапі."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:159
 msgid "Trail length"
@@ -5864,7 +5855,7 @@ msgstr "Тип сліду"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:173
 msgid "Sets the type of the snail trail display."
-msgstr "Налаштування типу зображення сліду"
+msgstr "Налаштування типу зображення сліду."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:176
 msgid "Trail scaled"
@@ -5908,7 +5899,7 @@ msgstr "Визначає яка стрілка вітру буде намаль�
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:196
 msgid "SkyLines traffic mode"
-msgstr ""
+msgstr "Режим руху SkyLines"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:197
 msgid ""
@@ -6029,7 +6020,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:135
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:284
 msgid "PEV start window"
-msgstr ""
+msgstr "Початкове вікно PEV"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:136
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:285
@@ -6175,7 +6166,7 @@ msgid ""
 "the XContest rules, but with different track values: 1 km = 1.5 points, 1.75 "
 "p and 2.0 p for FAI triangles respectively."
 msgstr ""
-"Європейські парапланерні онлайн-змагання, що організовує DHV.  Добре "
+"Європейські парапланерні онлайн-змагання, що організовує DHV. Добре "
 "співпадає з правилами XContest, але з іншою ціною за пройдену відстань: 1 км "
 "= 1.5 очка, 1.75 очка і 2.0 очка за трикутник ФАІ відповідно."
 
@@ -6186,8 +6177,8 @@ msgid ""
 "The bounding box part with 1 km = 1.0 point and the additional zick-zack "
 "part with 1 km = 0.5 p."
 msgstr ""
-"Австрійські планерні онлайн-змагання. Рахують очки за трек з максимум  6 "
-"ППМ. За обліт 1 км = 1.0 очко і додатково за зиг-заги 1 км = 0.5 очка."
+"Австрійські планерні онлайн-змагання. Рахують очки за трек з максимум 6 ППМ. "
+"За обліт 1 км = 1.0 очко і додатково за зиг-заги 1 км = 0.5 очка."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:117
 #, no-c-format
@@ -6215,7 +6206,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:127
 #, fuzzy
 msgid "Contest"
-msgstr "Вміст"
+msgstr "Конкурс"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:128
 msgid "Select the rules used for calculating optimal points for a contest."
@@ -6231,7 +6222,7 @@ msgid ""
 "assuming that you will reach it."
 msgstr ""
 "Якщо застосовано, наступний ППМ буде включено для підрахунку очок, виходячи "
-"з того, що ви його  досягнете."
+"з того, що ви його досягнете."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:139
 msgid "FAI triangle areas"
@@ -6329,12 +6320,12 @@ msgstr "Пастельний"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:222
 #, no-c-format
 msgid "Italian Avioportolano VFR Chart"
-msgstr "Італія, мапа  Avioportolano VFR"
+msgstr "Італія, мапа Avioportolano VFR"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:223
 #, no-c-format
 msgid "German DFS VFR Chart"
-msgstr "Німеччина, мапа  DFS VFR"
+msgstr "Німеччина, мапа DFS VFR"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:224
 #, no-c-format
@@ -6402,7 +6393,7 @@ msgstr "Контури"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:270
 msgid "If enabled, draws contour lines on the terrain."
-msgstr "Якщо увімкнено, малює ізолінії  ландшафту (ізогіпси)."
+msgstr "Якщо увімкнено, малює ізолінії ландшафту (ізогіпси)."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:128
 msgid "Preset"
@@ -6458,12 +6449,12 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:181
 #, no-c-format
 msgid "feet"
-msgstr ""
+msgstr "футів"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:182
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "meters"
-msgstr "метр"
+msgstr "метрів"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:185
 msgid "Units used for altitude and heights."
@@ -6528,8 +6519,8 @@ msgid ""
 "battery backup or your computer frequently runs out of battery power or "
 "otherwise loses time."
 msgstr ""
-"При виборі опції  для налаштувань годинника комп'ютера буде застосовано час "
-"від GPS, як тільки GPS  визначить координати. Це необхідно лише в разі, якщо "
+"При виборі опції для налаштувань годинника комп'ютера буде застосовано час "
+"від GPS, як тільки GPS визначить координати. Це необхідно лише в разі, якщо "
 "ваш комп'ютер не має годинника реального часу з резервною батареєю або ваш "
 "комп'ютер часто втрачає час через слабкість батареї, чи з інших причин."
 
@@ -6746,7 +6737,7 @@ msgid ""
 "light. Green if reachable, Orange if blocked by mountain and red if not "
 "reachable at all."
 msgstr ""
-"Аеродроми і майданчики позначаються кольорами посадочних вогнів.  Зелений - "
+"Аеродроми і майданчики позначаються кольорами посадочних вогнів. Зелений - "
 "значить посадка досяжна, помаранчевий - заблокована горами, червоний - поза "
 "досяжністю."
 
@@ -6796,7 +6787,7 @@ msgid ""
 "[On] Scale displayed runway length based on real length."
 msgstr ""
 "[Вимкн.] Показана фіксована довжина посадочної смуги.\n"
-"[Вкл.] Довжина смуги  в масштабі до реальної довжини."
+"[Вкл.] Довжина смуги в масштабі до реальної довжини."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:191
 #, no-c-format
@@ -6866,13 +6857,12 @@ msgid "Obtain and show thermal locations reported by others."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:91
-#, fuzzy
 msgid "Automatic Upload"
-msgstr "Автоматично"
+msgstr "Автоматичне відвантаження"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:92
 msgid "Uploads flights automatically after download from logger?"
-msgstr ""
+msgstr "Автоматично відвантажувати рейси після завантаження з реєстратора?"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:96
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
@@ -6938,7 +6928,7 @@ msgstr "Менеджер завдань"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:220
 msgid "Validation Errors"
-msgstr "Помилка  перевірки коректності"
+msgstr "Помилка перевірки коректності"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:222
 msgid ""
@@ -7033,7 +7023,7 @@ msgid ""
 msgstr ""
 "Якщо включено, нема встановлених максимальної висоти старту чи максимальної "
 "стартової швидкості і потрібно, щоб мінімальна висота на фініші відносно "
-"землі була більшою за висоту  старту мінус 1000 метрів."
+"землі була більшою за висоту старту мінус 1000 метрів."
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:66
 msgid "Task not saved"
@@ -7136,7 +7126,7 @@ msgstr "Дозволити запасні старти"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:284
 msgid "Score exit"
-msgstr ""
+msgstr "Оцінка виходу"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:357
 msgid "Edit Alternates"
@@ -7187,7 +7177,7 @@ msgstr "%d відрізки"
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:116
 #, c-format
 msgid "Task is empty (%s)"
-msgstr "Завдання порожнє  (%s)"
+msgstr "Завдання порожнє (%s)"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:128
 msgid "max."
@@ -7300,7 +7290,7 @@ msgid ""
 "AA Speed - Assigned Area Task average speed achievable around target points "
 "remaining in minimum AAT time."
 msgstr ""
-"AA Speed - Середня швидкість, досяжна  за залишок цілей за мінімальний час "
+"AA Speed - Середня швидкість, досяжна за залишок цілей за мінімальний час "
 "ААТ."
 
 #: src/Dialogs/Task/TargetDialog.cpp:442
@@ -7344,7 +7334,7 @@ msgstr "Поле"
 
 #: src/Dialogs/dlgCredits.cpp:129 Data/Input/default.xci:868
 msgid "Credits"
-msgstr ""
+msgstr "Подяки"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:71
 msgid "Audio vario"
@@ -7459,7 +7449,7 @@ msgstr "Поблизу повітряний простір"
 
 #: src/Monitor/TaskConstraintsMonitor.cpp:57
 msgid "Maximum start speed exceeded"
-msgstr ""
+msgstr "Перевищено макс. стартову швидкість"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:41
 msgid "In sector, arm advance when ready"
@@ -7467,7 +7457,7 @@ msgstr ""
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:43
 msgid "Arm"
-msgstr ""
+msgstr "Рука"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:53 src/Monitor/MatTaskMonitor.cpp:62
 msgid "Dismiss"
@@ -7479,11 +7469,11 @@ msgstr "Додати цей ППМ?"
 
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:227
 msgid "Use"
-msgstr ""
+msgstr "Використання"
 
 #: src/Renderer/NOAAListRenderer.cpp:46
 msgid "No METAR available"
-msgstr "Дані METAR  не доступні"
+msgstr "Дані METAR не доступні"
 
 #: src/Weather/NOAAFormatter.cpp:135 src/Weather/NOAAFormatter.cpp:142
 msgid "Dew Point"
@@ -7658,7 +7648,7 @@ msgid ""
 "turn the glider."
 msgstr ""
 "Швидкість відносно землі за даними GPS. Якщо інфобокс в режимі імітації "
-"активний, швидкість можна змінити, натиснувши  клавіші зі стрілками вгору/"
+"активний, швидкість можна змінити, натиснувши клавіші зі стрілками вгору/"
 "вниз. Натиснувши клавіші зі стрілками ліворуч/праворуч, спричинимо поворот "
 "планера."
 
@@ -7689,7 +7679,7 @@ msgstr "Виграш висоти в останньому терміку"
 #: src/InfoBoxes/Content/Factory.cpp:203
 #, no-c-format
 msgid "TL Gain"
-msgstr "TL  виграш"
+msgstr "TL виграш"
 
 #: src/InfoBoxes/Content/Factory.cpp:204
 #, no-c-format
@@ -7709,7 +7699,7 @@ msgstr "Значення осі часу"
 #: src/InfoBoxes/Content/Factory.cpp:212
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr "Час, витрачений на обробку потоків в останньому терміку."
+msgstr "Час, витрачений на спіралі в останньому терміку."
 
 #: src/InfoBoxes/Content/Factory.cpp:218
 #, no-c-format
@@ -7728,7 +7718,7 @@ msgid ""
 "auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
 "the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
-"Діючі налаштування і діючий режим MacCready (ручний чи авто).  (Тільки для "
+"Діючі налаштування і діючий режим MacCready (ручний чи авто). (Тільки для "
 "пристроїв з сенсорним екраном/ПК) Також, якщо інфобокс активний, "
 "використовується для корекції налаштувань MacCready з використанням кнопок "
 "курсору вгору/вниз."
@@ -7787,8 +7777,8 @@ msgid ""
 "Additional altitude required to reach the next turn point. For AAT tasks, "
 "the target within the AAT sector is used."
 msgstr ""
-"Потрібно додатково висоти для взяття наступного ППМ.  Для завдань ААТ "
-"застосовується ціль в межах  сектору ААТ."
+"Потрібно додатково висоти для взяття наступного ППМ. Для завдань ААТ "
+"застосовується ціль в межах сектору ААТ."
 
 #: src/InfoBoxes/Content/Factory.cpp:253
 #, no-c-format
@@ -7965,7 +7955,7 @@ msgid ""
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
-"Швидкість вітру за оцінкою XCSoar.  Ручні налаштування можливі через "
+"Швидкість вітру за оцінкою XCSoar. Ручні налаштування можливі через "
 "підключення діалогу з інфобокс. Натисніть клавіші курсора вгору/вниз, щоб "
 "циклічно пройтись по пунктам налаштувань. Для зміни параметрів, натисніть "
 "клавіші курсора ліворуч/праворуч."
@@ -8100,7 +8090,7 @@ msgstr "Вис Баро"
 msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor."
-msgstr "Це барометрична висота від пристроїв, що обладнані датчиком тиску."
+msgstr "Це барометрична висота від пристроїв, що обладнані датником тиску."
 
 #: src/InfoBoxes/Content/Factory.cpp:416
 #, no-c-format
@@ -8266,7 +8256,7 @@ msgid "Speed dolphin"
 msgstr "Швидкість при польоті \"дельфіном\""
 
 #: src/InfoBoxes/Content/Factory.cpp:492
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "The instantaneous MacCready speed-to-fly, making use of netto vario "
 "calculations to determine dolphin cruise speed in the glider's current "
@@ -8276,13 +8266,13 @@ msgid ""
 "the current load factor (if an accelerometer is connected). When Block mode "
 "speed to fly is selected, this InfoBox displays the MacCready speed."
 msgstr ""
-"Поточна MacCready STF, для використання розрахунків нетто-варіо  з метою "
+"Поточна MacCready STF, для використання розрахунків нетто-варіо з метою "
 "визначення швидкості при польоті \"дельфіном\" на переході при поточному "
 "напрямку польоту на ППМ. Для переходу ця швидкість розраховується для сталої "
 "висоти. Для дольоту - з урахуванням зниження. При наборі висоти цей параметр "
 "переключається на швидкість при мінімальному зниженні при поточному "
 "коефіцієнті навантаження на крило (якщо підключено акселерометр). При виборі "
-"режиму блокування в цьому інфобоксі відображається швидкість  MacCready."
+"режиму блокування в цьому інфобоксі відображається швидкість MacCready."
 
 #: src/InfoBoxes/Content/Factory.cpp:498
 #, no-c-format
@@ -8304,7 +8294,7 @@ msgid ""
 msgstr ""
 "Поточна вертикальна швидкість повітряної маси, дорівнює показанням "
 "варіометра з урахуванням розрахункової швидкості зниження планера. Найкраще "
-"використовувати при підключених датчиках повітряної швидкості, акселерометрі "
+"використовувати при підключених датниках повітряної швидкості, акселерометрі "
 "і варіометрі, в іншому випадку розрахунки базуватимуться на даних GPS і "
 "розрахунку вітру."
 
@@ -8392,7 +8382,7 @@ msgid ""
 "Outside air temperature measured by a probe if supported by a connected "
 "intelligent variometer."
 msgstr ""
-"Температура повітря за бортом, виміряна датчиком підключеного "
+"Температура повітря за бортом, виміряна датником підключеного "
 "інтелектуального варіометра."
 
 #: src/InfoBoxes/Content/Factory.cpp:539
@@ -8411,7 +8401,7 @@ msgid ""
 "Relative humidity of the air in percent as measured by a probe if supported "
 "by a connected intelligent variometer."
 msgstr ""
-"Відносна вологість повітря в процентах, виміряна датчиком підключеного "
+"Відносна вологість повітря в процентах, виміряна датником підключеного "
 "інтелектуального варіометра."
 
 #: src/InfoBoxes/Content/Factory.cpp:548
@@ -8431,7 +8421,7 @@ msgstr ""
 "розрахункової висоти конвекції і висоти кромки хмар разом з температурою "
 "повітря за бортом і відносною вологістю. (Тільки для пристроїв з сенсорним "
 "екраном,ПК) Налаштувати цей прогноз температури можна натиснувши кнопки "
-"курсора  вгору/вниз."
+"курсора вгору/вниз."
 
 #: src/InfoBoxes/Content/Factory.cpp:555
 #, no-c-format
@@ -8463,7 +8453,7 @@ msgstr "AAT Vtgt"
 msgid ""
 "Assigned Area Task average speed achievable around target points remaining "
 "in minimum AAT time."
-msgstr "Середня швидкість, досяжна  за залишок цілей за мінімальний час ААТ."
+msgstr "Середня швидкість, досяжна за залишок цілей за мінімальний час ААТ."
 
 #: src/InfoBoxes/Content/Factory.cpp:571
 #, no-c-format
@@ -8554,7 +8544,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:611
 #, no-c-format
 msgid "Team range"
-msgstr ""
+msgstr "Відстань до команди"
 
 #: src/InfoBoxes/Content/Factory.cpp:612
 #, no-c-format
@@ -8645,7 +8635,7 @@ msgstr "Середня швидкість набору в усіх термік�
 #: src/InfoBoxes/Content/Factory.cpp:652
 #, no-c-format
 msgid "T Avg"
-msgstr ""
+msgstr "Середня термічність"
 
 #: src/InfoBoxes/Content/Factory.cpp:653
 #, no-c-format
@@ -8840,7 +8830,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:740
 #, no-c-format
 msgid "Experimental 2"
-msgstr "Експеримент  2"
+msgstr "Експеримент 2"
 
 #: src/InfoBoxes/Content/Factory.cpp:741
 #, no-c-format
@@ -9018,7 +9008,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:830
 #, no-c-format
 msgid "Time under max. start height"
-msgstr ""
+msgstr "Час максимальної висоти старту"
 
 #: src/InfoBoxes/Content/Factory.cpp:831
 #, no-c-format
@@ -9081,7 +9071,7 @@ msgid ""
 "supplemented with acceleration and variometer data if available."
 msgstr ""
 "Дисплей індикатора положення ПС в просторі (штучний авіагоризонт) за даними "
-"розрахунків, що базуються  на траєкторії польоту, які доповнені даними від "
+"розрахунків, що базуються на траєкторії польоту, які доповнені даними від "
 "акселерометра та варіометра за їх доступності."
 
 #: src/InfoBoxes/Content/Factory.cpp:863
@@ -9158,8 +9148,8 @@ msgid ""
 "estimated wind is used for the calculation."
 msgstr ""
 "Поточна компонента зустрічного вітру. Зустрічний вітер розраховується на "
-"основі даних  істинної повітряної швидкості TAS і наземної швидкості GPS, "
-"якщо повітряна швидкість доступна від зовнішніх пристроїв. Якшо ні, - для "
+"основі даних істинної повітряної швидкості TAS і наземної швидкості GPS, "
+"якщо повітряна швидкість доступна від зовнішніх пристроїв. Якщо ні, - для "
 "розрахунків використовується розрахунковий вітер."
 
 #: src/InfoBoxes/Content/Factory.cpp:897
@@ -9200,7 +9190,7 @@ msgid ""
 "pressure sensor or the GPS altitude if the barometric altitude is not "
 "available."
 msgstr ""
-"Це барометрична висота, отримана від пристрою, оснащеного датчиком "
+"Це барометрична висота, отримана від пристрою, оснащеного датником "
 "барометричної висоти або висоти GPS, якщо барометрична висота не доступна."
 
 #: src/InfoBoxes/Content/Factory.cpp:913
@@ -9296,7 +9286,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:960
 #, no-c-format
 msgid "Start reach"
-msgstr ""
+msgstr "Старт узято"
 
 #: src/InfoBoxes/Content/Factory.cpp:961
 #, no-c-format
@@ -9513,12 +9503,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1065
 #, no-c-format
 msgid "Number of used satellites"
-msgstr ""
+msgstr "Кількість використаних супутників"
 
 #: src/InfoBoxes/Content/Factory.cpp:1066
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Satellites"
-msgstr "Супутників у полі зору"
+msgstr "Супутники"
 
 #: src/InfoBoxes/Content/Factory.cpp:1067
 #, no-c-format
@@ -9526,36 +9516,38 @@ msgid ""
 "The number of actually used (seen) satellites by GPS module. If this "
 "information is unavailable, the displayed value is '---'."
 msgstr ""
+"Кількість фактично використаних (побачених) супутників GPS-модулем. Якщо ці "
+"відомості недоступні, відображається значення «---»."
 
 #: src/InfoBoxes/Content/Factory.cpp:1073
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Active Radio Frequency"
-msgstr "Активна частота"
+msgstr "Активна частота радіо"
 
 #: src/InfoBoxes/Content/Factory.cpp:1074
 #, no-c-format
 msgid "Act Freq"
-msgstr ""
+msgstr "Акт Част"
 
 #: src/InfoBoxes/Content/Factory.cpp:1075
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The currently active Radio Frequency"
-msgstr "Активна частота"
+msgstr "Активна на даний момент Частота Радіо"
 
 #: src/InfoBoxes/Content/Factory.cpp:1080
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Standby Radio Frequency"
-msgstr "Standby частота"
+msgstr "Частота Радіо в режимі очікування"
 
 #: src/InfoBoxes/Content/Factory.cpp:1081
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Stby Freq"
-msgstr "Standby частота"
+msgstr "Очік Част"
 
 #: src/InfoBoxes/Content/Factory.cpp:1082
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The currently standby Radio Frequency"
-msgstr "Standby частота"
+msgstr "Поточна Частота Радіо в режимі очікування"
 
 #: src/InfoBoxes/Content/Factory.cpp:1088
 #, fuzzy, no-c-format
@@ -9565,7 +9557,7 @@ msgstr "Час в останньому терміку"
 #: src/InfoBoxes/Content/Factory.cpp:1089
 #, fuzzy, no-c-format
 msgid "TC Time"
-msgstr "TL  час"
+msgstr "TL час"
 
 #: src/InfoBoxes/Content/Factory.cpp:1090
 #, fuzzy, no-c-format
@@ -9592,19 +9584,19 @@ msgstr ""
 "посадки. Не враховано повну енергію."
 
 #: src/InfoBoxes/Content/Factory.cpp:1104
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Heart Rate"
-msgstr "Час старту"
+msgstr "Пульс"
 
 #: src/InfoBoxes/Content/Factory.cpp:1105
 #, no-c-format
 msgid "Heart"
-msgstr ""
+msgstr "Серце"
 
 #: src/InfoBoxes/Content/Factory.cpp:1106
 #, no-c-format
 msgid "Heart rate in beats per minute."
-msgstr ""
+msgstr "Пульс в ударах за хвилину."
 
 #: src/InfoBoxes/Content/Alternate.cpp:74
 #, c-format
@@ -9623,9 +9615,8 @@ msgid "no QNH"
 msgstr "Нема QNH"
 
 #: src/InfoBoxes/Content/Altitude.cpp:148
-#, fuzzy
 msgid "Not flying"
-msgstr "Немає спіралі"
+msgstr "Не літає"
 
 #: src/InfoBoxes/Content/MacCready.cpp:71
 msgid "MC AUTO"
@@ -9637,11 +9628,11 @@ msgstr "МС ВРУЧНУ"
 
 #: src/InfoBoxes/Content/Other.cpp:78 src/InfoBoxes/Content/Other.cpp:81
 msgid "AC Off"
-msgstr ""
+msgstr "AC вимк"
 
 #: src/InfoBoxes/Content/Other.cpp:86
 msgid "AC ON"
-msgstr ""
+msgstr "AC увімк"
 
 #: src/InfoBoxes/Content/Other.cpp:211
 msgid "No GPS"
@@ -9708,7 +9699,7 @@ msgstr "GPS чекає на сигнал"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorAATTime.cpp:51
 msgid "Expect early task arrival"
-msgstr ""
+msgstr "Очікувати раннього прибуття"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorSunset.cpp:69
 msgid "Expect arrival past sunset"
@@ -9837,12 +9828,12 @@ msgid ""
 "[AVERAGE]: State HIGH if gross vario value is greater than average gross "
 "vario value."
 msgstr ""
-"Порівняння методів, що застосовуються для визначення стану набору висоти "
-"(HIGH/LOW).\n"
-"[NONE]: Стан LOW  відключено\n"
+"Порівняння методів, що застосовуються для визначення стану набору висоти ("
+"HIGH/LOW).\n"
+"[NONE]: Стан LOW відключено\n"
 "[MACCREADY]: Стан HIGH, якщо брутто-варіо більше за налаштування MacCready.\n"
-"[AVERAGE]:Стан HIGH, якщо брутто-варіо більше за середню величину брутто-"
-"варіо."
+"[AVERAGE]:Стан HIGH, якщо брутто-варіо більше за середню величину "
+"брутто-варіо."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:77
 #, no-c-format
@@ -9862,7 +9853,7 @@ msgid ""
 msgstr ""
 "Порівняння методів, що застосовуються для визначення стану переходу для "
 "перемикання на тони набору висоти при переході.\n"
-"[NONE]:  відключено на переході.\n"
+"[NONE]: відключено на переході.\n"
 "[RELATIVE ZERO] Тон набору, якщо відносне варіо більше нуля.\n"
 "[GROSS ZERO] Тон набору, якщо планер набирає висоту.\n"
 "[RELATIVE MC/2] Тон набору, якщо відносне варіо більше половини МС.\n"
@@ -9899,7 +9890,7 @@ msgstr "Гучність при наборі"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:92
 #, no-c-format
 msgid "Mean volume level in circling modes."
-msgstr "Середній рівень гучності в режимі спіралі"
+msgstr "Середній рівень гучності в режимі спіралі."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:96
 #, no-c-format
@@ -9971,11 +9962,11 @@ msgstr "Пропорційність тангажа"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:115
 msgid "Period scheme"
-msgstr ""
+msgstr "Схема періоду"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:118
 msgid "Period scale"
-msgstr ""
+msgstr "Шкала періоду"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:33
 #, no-c-format
@@ -9988,7 +9979,7 @@ msgid ""
 "Proportion of TE probe value used in total energy mixing with pitot/static "
 "total energy."
 msgstr ""
-"Пропорційність показників датчика повної енергії показникам повної енергії "
+"Пропорційність показників датника повної енергії показникам повної енергії "
 "Піто/статичного тиску в режимі змішаної повної енергії."
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:38
@@ -10045,12 +10036,12 @@ msgstr "Яскравість світлодіода"
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:42
 #, no-c-format
 msgid "Max. objects reported"
-msgstr ""
+msgstr "Макс. повідомлені об’єкти"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:44
 #, no-c-format
 msgid "Max. reported"
-msgstr ""
+msgstr "Макс. повідомлені"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:46
 #, no-c-format
@@ -10160,7 +10151,7 @@ msgid ""
 "disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be "
 "specified."
 msgstr ""
-"Чи встановлено датчики температури і вологості. Встановіть 0, щоб вимкнути; "
+"Чи встановлено датники температури і вологості. Встановіть 0, щоб вимкнути; "
 "255, щоб увімкнути автовизначення; в інших випадках може бути позначено як "
 "ідентифікатор пристрою з інтерфейсом 1Wire."
 
@@ -10225,7 +10216,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:36
 #, no-c-format
 msgid "Height terrain"
-msgstr ""
+msgstr "Висота місцевості"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:38
 #, no-c-format
@@ -10280,7 +10271,7 @@ msgstr "Поріг гарнітури"
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:42
 #, no-c-format
 msgid "Urgent min. volume"
-msgstr ""
+msgstr "Термінова мін. гучність"
 
 #: Data/Input/default.xci:688
 msgid ""
@@ -10378,7 +10369,7 @@ msgstr ""
 
 #: Data/Input/default.xci:654 Data/Input/default.xci:1159
 msgid "Raw Logger"
-msgstr "Raw  Логер"
+msgstr "Raw Логер"
 
 #: Data/Input/default.xci:775 Data/Input/default.xci:1182
 msgid "FLARM Radar"
@@ -10394,7 +10385,7 @@ msgstr ""
 
 #: Data/Input/default.xci:420 Data/Input/default.xci:1063
 msgid "Dropped marker"
-msgstr ""
+msgstr "Пропущений маркер"
 
 #: Data/Input/default.xci:757
 msgid ""
@@ -10467,18 +10458,19 @@ msgstr "Аксел"
 
 #: Data/Input/default.xci:743
 msgid "Store"
-msgstr ""
+msgstr "Зберегти"
 
 #: Data/Input/default.xci:430
 msgid "Pilot event announced"
 msgstr ""
 
 #: Data/Input/default.xci:433
-#, fuzzy
 msgid ""
 "Pilot\n"
 "Event"
-msgstr "Пілот"
+msgstr ""
+"Пілот\n"
+"Подія"
 
 #: Data/Input/default.xci:530 Data/Input/default.xci:1103
 msgid "Topo."
@@ -10503,6 +10495,8 @@ msgid ""
 "Lock\n"
 "Screen"
 msgstr ""
+"Замок\n"
+"Екран"
 
 #: Data/Input/default.xci:547 Data/Input/default.xci:597
 #: Data/Input/default.xci:639 Data/Input/default.xci:908
@@ -10522,6 +10516,8 @@ msgid ""
 "Accel\n"
 "Zero"
 msgstr ""
+"Приск\n"
+"Нуль"
 
 #: Data/Input/default.xci:59
 msgid "Above final glide"

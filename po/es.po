@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-12-03 15:34+0100\n"
-"PO-Revision-Date: 2021-12-21 14:50+0000\n"
+"PO-Revision-Date: 2022-09-03 19:15+0000\n"
 "Last-Translator: l diaz <ldiazz@yahoo.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -905,11 +905,11 @@ msgstr "Activado"
 
 #: src/Menu/ExpandMacros.cpp:343
 msgid "Topography On"
-msgstr "Topografía Encendida"
+msgstr "Topografía Visible"
 
 #: src/Menu/ExpandMacros.cpp:346
 msgid "Terrain On"
-msgstr "Terreno Encendido"
+msgstr "Terreno Visible"
 
 #: src/Menu/ExpandMacros.cpp:349
 msgid "Terrain + Topography"
@@ -2368,7 +2368,7 @@ msgstr ""
 #: src/InfoBoxes/InfoBoxSettings.cpp:79
 #, no-c-format
 msgid "Circling"
-msgstr "Virando"
+msgstr "Vuelo circular"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:112
 msgid "This forces the variometer into circling or cruise mode"
@@ -2583,7 +2583,7 @@ msgstr "Ir a"
 #: src/Dialogs/MapItemListDialog.cpp:171
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:115
 msgid "Ack Day"
-msgstr "Aceptar día"
+msgstr "Silenciar hoy"
 
 #: src/Dialogs/MapItemListDialog.cpp:255
 #: src/MapWindow/GlueMapWindowItems.cpp:116
@@ -2694,15 +2694,15 @@ msgstr "Cambiar el color del borde"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:59
 msgid "Change Fill Color"
-msgstr "Cambiar el color del relleno"
+msgstr "Cambiar el color de relleno"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:68
 msgid "Change Fill Brush"
-msgstr "Cambiar la paleta del relleno"
+msgstr "Cambiar la trama de relleno"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:85
 msgid "Border Width"
-msgstr "Ancho del borde"
+msgstr "Ancho de la línea"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:86
 msgid ""
@@ -2718,7 +2718,7 @@ msgstr "Relleno"
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:92
 #, no-c-format
 msgid "Only padding"
-msgstr "Solo relleno"
+msgstr "Solo el borde del relleno"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:93
 #, no-c-format
@@ -2736,12 +2736,12 @@ msgstr "Define cómo se rellena el espacio aéreo con el color elegido."
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:103
 #: src/Monitor/AirspaceWarningMonitor.cpp:81
 msgid "ACK"
-msgstr "Aceptar"
+msgstr "Silenciar"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:104
 #: src/Monitor/AirspaceWarningMonitor.cpp:90
 msgid "ACK Day"
-msgstr "Aceptar día"
+msgstr "Silenciar hoy"
 
 #. the warnings were emptied between the opening of the dialog and
 #. this refresh, so only need to display "No Warnings" for top
@@ -2766,7 +2766,7 @@ msgstr ""
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
 #, no-c-format
 msgid "Requires only a GPS source."
-msgstr "Sólo necesita unos datos GPS de entrada."
+msgstr "Sólo necesita datos GPS."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:65
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:210
@@ -3491,7 +3491,7 @@ msgstr ""
 #: src/Dialogs/ReplayDialog.cpp:102 src/Dialogs/ReplayDialog.cpp:126
 #: Data/Input/default.xci:629
 msgid "Replay"
-msgstr "Repetir"
+msgstr "Repetir vuelo"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:60 src/Dialogs/StartupDialog.cpp:93
 #: Data/Input/default.xci:938
@@ -5399,14 +5399,12 @@ msgstr "El alcance es rectilineo desde el planeador."
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:135
 #, no-c-format
 msgid "Turning"
-msgstr "Virando"
+msgstr "Rodeando"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:136
 #, no-c-format
 msgid "The reach is calculated allowing turns around terrain obstacles."
-msgstr ""
-"El alcance se calcula permitiendo girar alrededor de los obstáculos del "
-"terreno."
+msgstr "El alcance se calcula permitiendo rodear los obstáculos del terreno."
 
 #. Spacer
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:142
@@ -5973,7 +5971,7 @@ msgstr "Símbolo del avión"
 #: src/InfoBoxes/Content/Factory.cpp:938
 #, no-c-format
 msgid "Wind arrow"
-msgstr "Flecha del Viento"
+msgstr "Flecha de viento"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:192
 msgid "Determines the way the wind arrow is drawn on the map."
@@ -6448,7 +6446,7 @@ msgstr "Sol"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:241
 msgid "Slope shading"
-msgstr "Terreno sombreado"
+msgstr "Sombreado del terreno"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:242
 msgid ""
@@ -6460,7 +6458,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:247
 msgid "Terrain contrast"
-msgstr "Contraste del terreno"
+msgstr "Contraste del sombreado"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:248
 msgid ""
@@ -6474,7 +6472,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:254
 msgid "Terrain brightness"
-msgstr "Brillo del terreno"
+msgstr "Brillo del sombreado"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:255
 msgid ""
@@ -6486,7 +6484,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:269
 msgid "Contours"
-msgstr "Líneas de nivel"
+msgstr "Curvas de nivel"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:270
 msgid "If enabled, draws contour lines on the terrain."
