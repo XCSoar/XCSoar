@@ -130,8 +130,8 @@ struct TempAirspaceType
   tstring name;
   RadioFrequency radio_frequency;
   AirspaceClass type;
-  AirspaceAltitude base;
-  AirspaceAltitude top;
+  std::optional<AirspaceAltitude> base;
+  std::optional<AirspaceAltitude> top;
   AirspaceActivity days_of_operation;
 
   // Polygon
@@ -151,7 +151,8 @@ struct TempAirspaceType
     name.clear();
     radio_frequency = RadioFrequency::Null();
     type = OTHER;
-    base = top = AirspaceAltitude::Invalid();
+    base.reset();
+    top.reset();
     points.clear();
     center = GeoPoint::Invalid();
     radius = -1;
@@ -199,8 +200,14 @@ struct TempAirspaceType
     if (points.size() < 3)
       throw std::runtime_error{"Not enough polygon points"};
 
+    if (!base)
+      throw std::runtime_error{"No base altitude"};
+
+    if (!top)
+      throw std::runtime_error{"No top altitude"};
+
     auto as = std::make_shared<AirspacePolygon>(points);
-    as->SetProperties(std::move(name), type, base, top);
+    as->SetProperties(std::move(name), type, *base, *top);
     as->SetRadioFrequency(radio_frequency);
     as->SetDays(days_of_operation);
     airspace_database.Add(std::move(as));
@@ -226,9 +233,15 @@ struct TempAirspaceType
     if (!points.empty())
       throw std::runtime_error{"Airspace is a mix of polygon and circle"};
 
+    if (!base)
+      throw std::runtime_error{"No base altitude"};
+
+    if (!top)
+      throw std::runtime_error{"No top altitude"};
+
     auto as = std::make_shared<AirspaceCircle>(RequireCenter(),
                                                RequireRadius());
-    as->SetProperties(std::move(name), type, base, top);
+    as->SetProperties(std::move(name), type, *base, *top);
     as->SetRadioFrequency(radio_frequency);
     as->SetDays(days_of_operation);
     airspace_database.Add(std::move(as));

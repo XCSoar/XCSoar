@@ -58,12 +58,6 @@ struct AirspaceAltitude
   /** Type of airspace boundary */
   AltitudeReference reference;
 
-  static constexpr AirspaceAltitude Invalid() noexcept {
-    AirspaceAltitude a;
-    a.reference = AltitudeReference::NONE;
-    return a;
-  }
-
   /**
    * Get Altitude AMSL (m) resolved from type.
    * For AGL types, this assumes the terrain height
