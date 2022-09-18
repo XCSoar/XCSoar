@@ -57,6 +57,12 @@ RowFormWidget::AddFile(const TCHAR *label, const TCHAR *help,
   return edit;
 }
 
+void
+RowFormWidget::SetProfile(const char *registry_key, unsigned value) noexcept
+{
+  Profile::Set(registry_key, value);
+}
+
 bool
 RowFormWidget::SaveValue(unsigned i, const char *registry_key,
                          TCHAR *string, size_t max_size) const noexcept
