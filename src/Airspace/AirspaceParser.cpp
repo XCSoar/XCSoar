@@ -328,8 +328,9 @@ ShowParseWarning(const TCHAR *msg, int line, const TCHAR *str,
   operation.SetErrorMessage(buffer.c_str());
 }
 
-static void
-ReadAltitude(StringParser<TCHAR> &input, AirspaceAltitude &altitude)
+[[nodiscard]]
+static AirspaceAltitude
+ReadAltitude(StringParser<TCHAR> &input)
 {
   auto unit = Unit::FEET;
   enum { MSL, AGL, SFC, FL, STD, UNLIMITED } type = MSL;
@@ -365,6 +366,8 @@ ReadAltitude(StringParser<TCHAR> &input, AirspaceAltitude &altitude)
       input.Skip();
   }
 
+  AirspaceAltitude altitude;
+
   switch (type) {
   case FL:
     altitude.reference = AltitudeReference::STD;
@@ -372,12 +375,12 @@ ReadAltitude(StringParser<TCHAR> &input, AirspaceAltitude &altitude)
 
     /* prepare fallback, just in case we have no terrain */
     altitude.altitude = Units::ToSysUnit(value, Unit::FLIGHT_LEVEL);
-    return;
+    return altitude;
 
   case UNLIMITED:
     altitude.reference = AltitudeReference::MSL;
     altitude.altitude = 50000;
-    return;
+    return altitude;
 
   case SFC:
     altitude.reference = AltitudeReference::AGL;
@@ -385,7 +388,7 @@ ReadAltitude(StringParser<TCHAR> &input, AirspaceAltitude &altitude)
 
     /* prepare fallback, just in case we have no terrain */
     altitude.altitude = 0;
-    return;
+    return altitude;
 
   default:
     break;
@@ -397,7 +400,7 @@ ReadAltitude(StringParser<TCHAR> &input, AirspaceAltitude &altitude)
   case MSL:
     altitude.reference = AltitudeReference::MSL;
     altitude.altitude = value;
-    return;
+    return altitude;
 
   case AGL:
     altitude.reference = AltitudeReference::AGL;
@@ -405,7 +408,7 @@ ReadAltitude(StringParser<TCHAR> &input, AirspaceAltitude &altitude)
 
     /* prepare fallback, just in case we have no terrain */
     altitude.altitude = value;
-    return;
+    return altitude;
 
   case STD:
     altitude.reference = AltitudeReference::STD;
@@ -413,11 +416,13 @@ ReadAltitude(StringParser<TCHAR> &input, AirspaceAltitude &altitude)
 
     /* prepare fallback, just in case we have no QNH */
     altitude.altitude = value;
-    return;
+    return altitude;
 
   default:
     break;
   }
+
+  return altitude;
 }
 
 /**
@@ -634,13 +639,13 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
     case _T('L'):
     case _T('l'):
       if (input.SkipWhitespace())
-        ReadAltitude(input, temp_area.base);
+        temp_area.base = ReadAltitude(input);
       break;
 
     case _T('H'):
     case _T('h'):
       if (input.SkipWhitespace())
-        ReadAltitude(input, temp_area.top);
+        temp_area.top = ReadAltitude(input);
       break;
 
     /** 'AR 999.999 or 'AF 999.999' in accordance with the Naviter change proposed in 2018 - (Find 'Additional OpenAir fields' here) http://www.winpilot.com/UsersGuide/UserAirspace.asp **/
@@ -862,9 +867,9 @@ ParseLineTNP(Airspaces &airspace_database, StringParser<TCHAR> &input,
   } else if (input.SkipMatchIgnoreCase(_T("CLASS="), 6)) {
     temp_area.type = ParseClassTNP(input.c_str());
   } else if (input.SkipMatchIgnoreCase(_T("TOPS="), 5)) {
-    ReadAltitude(input, temp_area.top);
+    temp_area.top = ReadAltitude(input);
   } else if (input.SkipMatchIgnoreCase(_T("BASE="), 5)) {
-    ReadAltitude(input, temp_area.base);
+    temp_area.base = ReadAltitude(input);
   } else if (input.SkipMatchIgnoreCase(_T("RADIO="), 6)) {
     temp_area.radio_frequency = RadioFrequency::Parse(input.c_str());
   } else if (input.SkipMatchIgnoreCase(_T("ACTIVE="), 7)) {
