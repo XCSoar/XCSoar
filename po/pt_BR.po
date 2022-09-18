@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 08:04+0200\n"
-"PO-Revision-Date: 2021-07-20 10:35+0000\n"
-"Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
+"PO-Revision-Date: 2022-09-20 11:34+0000\n"
+"Last-Translator: Fernando Fuganti <ffuganti@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "xcsoar/translations/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 "X-Launchpad-Export-Date: 2016-06-10 13:16+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -67,7 +67,7 @@ msgstr "AAT"
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr ""
+msgstr "Prova de área modificada (MAT)"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
@@ -414,7 +414,7 @@ msgstr "Número de pilões insuficiente"
 #: src/Task/ValidationErrorStrings.cpp:39
 #, no-c-format
 msgid "Turnpoints not unique"
-msgstr ""
+msgstr "Pontos não são únicos"
 
 #: src/Task/ValidationErrorStrings.cpp:40
 #, no-c-format
@@ -429,12 +429,12 @@ msgstr "Pilões não-FAI"
 #: src/Task/ValidationErrorStrings.cpp:42
 #, no-c-format
 msgid "non-MAT turn points"
-msgstr ""
+msgstr "Pontos não são de MAT"
 
 #: src/Task/ValidationErrorStrings.cpp:43
 #, no-c-format
 msgid "Wrong shape"
-msgstr ""
+msgstr "Forma inválida"
 
 #: src/Airspace/AirspaceGlue.cpp:81
 msgid "Loading Airspace File..."
@@ -1905,9 +1905,8 @@ msgid "Downloading"
 msgstr "Baixando"
 
 #: src/Dialogs/FileManager.cpp:475
-#, fuzzy
 msgid "Update available"
-msgstr "TAF Indisponível!"
+msgstr "Atualização disponível"
 
 #: src/Dialogs/FileManager.cpp:743 src/Dialogs/DownloadFilePicker.cpp:386
 #: src/Dialogs/DownloadFilePicker.cpp:388
@@ -3052,7 +3051,7 @@ msgstr "Páginas"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:137
 #, no-c-format
 msgid "InfoBox Sets"
-msgstr "Configuração de InfoBox"
+msgstr "Conjuntos de InfoBox"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:142
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:140
@@ -3138,7 +3137,7 @@ msgstr "Sobrescrever?"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:337
 msgid "InfoBox paste"
-msgstr "Colar InfoBox"
+msgstr "Colar na InfoBox"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:406
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:108
@@ -3306,9 +3305,8 @@ msgid "Glide Polar"
 msgstr "Polar Planeio"
 
 #: src/Dialogs/dlgAnalysis.cpp:524
-#, fuzzy
 msgid "MacCready Speeds"
-msgstr "MacCready "
+msgstr "MacCready Speeds"
 
 #: src/Dialogs/dlgAnalysis.cpp:533
 msgid "Temperature Trace"
@@ -3504,7 +3502,7 @@ msgstr "V Polar"
 
 #: src/Dialogs/Plane/PolarShapeEditWidget.cpp:131
 msgid "Polar W"
-msgstr "Polar W"
+msgstr "W Polar"
 
 #: src/Dialogs/dlgInfoBoxAccess.cpp:95 src/Dialogs/dlgInfoBoxAccess.cpp:111
 msgid "Switch InfoBox"
@@ -4977,7 +4975,7 @@ msgstr "Rotacionar o display em dispositivos que suportam isso."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:207
 msgid "InfoBox geometry"
-msgstr "Dispos Caixas Info"
+msgstr "Geometria da InfoBox"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:208
 msgid ""
@@ -5278,7 +5276,7 @@ msgstr "Páginas com zoom distintos"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:148
 msgid "Maintain one map zoom level on each page."
-msgstr "Manter um  zoom mapa em cada página."
+msgstr "Manter o mesmo zoom de mapa em cada página."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:200
 msgid "Main area"
@@ -5296,7 +5294,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:207
 #, no-c-format
 msgid "Show fullscreen (no InfoBoxes)"
-msgstr "Exibir tela cheia  (sem InfoBoxes)"
+msgstr "Exibir tela cheia (sem InfoBoxes)"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:211
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:388
@@ -5930,7 +5928,7 @@ msgstr "Comprimento trilha"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:160
 msgid ""
 "Determines whether and how long a snail trail is drawn behind the glider."
-msgstr "Determina se e quão longo será o desenho do rastro  atrás do planador."
+msgstr "Determina qual o tamanho do desenho do rastro atrás do planador."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:172
 msgid "Trail type"
@@ -7646,7 +7644,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:161
 #, no-c-format
 msgid "Next bearing"
-msgstr ""
+msgstr "Próxima Proa"
 
 #: src/InfoBoxes/Content/Factory.cpp:163
 #, no-c-format
@@ -7788,6 +7786,10 @@ msgid ""
 "auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
 "the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
+"A atual configuração de MacCready e o atual modo MacCready (manual ou "
+"automático). (Touch-screen/apenas no PC) também usado para ajustar as "
+"configurações de MacCready se a caixa de informações estiver ativada, usando "
+"as teclas de cursor para cima e para baixo."
 
 #: src/InfoBoxes/Content/Factory.cpp:226
 #, no-c-format
@@ -10261,11 +10263,12 @@ msgid "Above final glide"
 msgstr "Acima do Planeio Final"
 
 #: Data/Input/default.xci:440 Data/Input/default.xci:1046
-#, fuzzy
 msgid ""
 "Target\n"
 "Show"
-msgstr "Alvo"
+msgstr ""
+"Mostrar\n"
+"Alvo"
 
 #: Data/Input/default.xci:701
 msgid ""
@@ -10304,11 +10307,12 @@ msgid "Setup Plane"
 msgstr "Conf. Planador"
 
 #: Data/Input/default.xci:766
-#, fuzzy
 msgid ""
 "Info\n"
 "Page 2/3"
-msgstr "Páginas de InfoBox"
+msgstr ""
+"Info\n"
+"Pág. 2/3"
 
 #: Data/Input/default.xci:1127
 msgid ""
@@ -10330,7 +10334,9 @@ msgstr ""
 msgid ""
 "Settings\n"
 "Airspace"
-msgstr "Configurações de Espaço Aéreo"
+msgstr ""
+"Config.\n"
+"Espaço Aéreo"
 
 #: Data/Input/default.xci:596
 msgid ""
@@ -10402,11 +10408,12 @@ msgid "Accelerometer leveled"
 msgstr "Acelerômetro nivelado"
 
 #: Data/Input/default.xci:432
-#, fuzzy
 msgid ""
 "Pilot Event\n"
 "Announce"
-msgstr "Piloto"
+msgstr ""
+"Evento do Piloto\n"
+"- Anúncio"
 
 #: Data/Input/default.xci:69
 msgid "Final glide through terrain"
@@ -10469,11 +10476,12 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:451
-#, fuzzy
 msgid ""
 "Display\n"
 "Page 2/2"
-msgstr "Mostrar"
+msgstr ""
+"Visual\n"
+"Pág. 2/2"
 
 #: Data/Input/default.xci:653 Data/Input/default.xci:1158
 msgid "Raw Logger"
@@ -10538,11 +10546,12 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:816
-#, fuzzy
 msgid ""
 "Info\n"
 "Page 3/3"
-msgstr "Páginas de InfoBox"
+msgstr ""
+"Info\n"
+"Pág. 3/3"
 
 #, no-c-format
 #~ msgid ""
