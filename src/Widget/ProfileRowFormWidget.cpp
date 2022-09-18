@@ -86,39 +86,6 @@ RowFormWidget::SaveValue(unsigned i, const char *registry_key,
 }
 
 bool
-RowFormWidget::SaveValueInteger(unsigned i, const char *registry_key,
-                                int &value) const noexcept
-{
-  if (!SaveValueInteger(i, value))
-    return false;
-
-  Profile::Set(registry_key, value);
-  return true;
-}
-
-bool
-RowFormWidget::SaveValueInteger(unsigned i, const char *registry_key,
-                                uint8_t &value) const noexcept
-{
-  if (!SaveValueInteger(i, value))
-    return false;
-
-  Profile::Set(registry_key, value);
-  return true;
-}
-
-bool
-RowFormWidget::SaveValueInteger(unsigned i, const char *registry_key,
-                                uint16_t &value) const noexcept
-{
-  if (!SaveValueInteger(i, value))
-    return false;
-
-  Profile::Set(registry_key, value);
-  return true;
-}
-
-bool
 RowFormWidget::SaveValue(unsigned i, const char *registry_key,
                          double &value) const noexcept
 {

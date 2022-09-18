@@ -640,9 +640,29 @@ public:
   }
 
   bool SaveValue(unsigned i, bool &value, bool negated = false) const noexcept;
-  bool SaveValueInteger(unsigned i, int &value) const noexcept;
-  bool SaveValueInteger(unsigned i, uint8_t &value) const noexcept;
-  bool SaveValueInteger(unsigned i, uint16_t &value) const noexcept;
+
+#if defined(__clang__) && __clang_major__ < 15
+  // C++20 concepts not implemented in libc++ 14 (Android NDK r25)
+  template<typename T>
+  requires std::is_integral_v<T>
+#else
+  template<std::integral T>
+#endif
+  bool SaveValueInteger(unsigned i, T &value) const noexcept {
+    int new_value = GetValueInteger(i);
+
+    if constexpr (std::is_unsigned_v<T>)
+      if (new_value < 0)
+        return false;
+
+    const T new_t = static_cast<T>(new_value);
+    if (new_t == value)
+      return false;
+
+    value = new_t;
+    return true;
+  }
+
   bool SaveValue(unsigned i, double &value) const noexcept;
   bool SaveValue(unsigned i, Angle &value_r) const noexcept;
   bool SaveValue(unsigned i, std::chrono::seconds &value) const noexcept;
@@ -675,15 +695,19 @@ public:
     return SaveValue(i, profile_key, value.data(), value.capacity());
   }
 
-  bool SaveValueInteger(unsigned i, unsigned &value) const noexcept {
-    return SaveValueInteger(i, (int &)value);
-  }
-
   bool SaveValue(unsigned i, const char *profile_key, bool &value,
                  bool negated = false) const noexcept;
-  bool SaveValueInteger(unsigned i, const char *profile_key, int &value) const noexcept;
-  bool SaveValueInteger(unsigned i, const char *profile_key, uint8_t &value) const noexcept;
-  bool SaveValueInteger(unsigned i, const char *profile_key, uint16_t &value) const noexcept;
+
+  template<typename T>
+  bool SaveValueInteger(unsigned i, const char *registry_key,
+                        T &value) const noexcept {
+    bool result = SaveValueInteger(i, value);
+    if (result)
+      SetProfile(registry_key, value);
+
+    return result;
+  }
+
   bool SaveValue(unsigned i, const char *profile_key, double &value) const noexcept;
   bool SaveValue(unsigned i, const char *profile_key, BrokenDate &value) const noexcept;
   bool SaveValue(unsigned i, const char *profile_key,
@@ -698,11 +722,6 @@ public:
 
     value_r = std::chrono::duration_cast<std::chrono::duration<Rep,Period>>(value);
     return true;
-  }
-
-  bool SaveValueInteger(unsigned i, const char *registry_key,
-                 unsigned &value) const noexcept {
-    return SaveValueInteger(i, registry_key, (int &)value);
   }
 
   bool SaveValue(unsigned i, UnitGroup unit_group, double &value) const noexcept;
