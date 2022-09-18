@@ -27,12 +27,7 @@
 /**
  * This enum specifies the reference for altitude specifications.
  */
-enum class AltitudeReference : int8_t {
-  /**
-   * No reference set, the altitude value is invalid.
-   */
-  NONE = -1,
-
+enum class AltitudeReference : uint8_t {
   /**
    * Altitude is measured above ground level (AGL).
    *
