@@ -163,8 +163,8 @@ ScoringConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValueEnum(Contests, ProfileKeys::OLCRules,
                            contest_settings.contest);
-  changed |= SaveValueEnum(PREDICT_CONTEST, ProfileKeys::PredictContest,
-                           contest_settings.predict);
+  changed |= SaveValue(PREDICT_CONTEST, ProfileKeys::PredictContest,
+                       contest_settings.predict);
 
   changed |= SaveValue(SHOW_FAI_TRIANGLE_AREAS,
                        ProfileKeys::ShowFAITriangleAreas,
