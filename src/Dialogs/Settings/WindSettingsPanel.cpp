@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "WindSettingsPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
+#include "Profile/ProfileMap.hpp"
 #include "Form/Button.hpp"
-#include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Float.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -57,21 +57,13 @@ WindSettingsPanel::Prepare(ContainerWindow &parent,
   const WindSettings &settings = CommonInterface::GetComputerSettings().wind;
   const MapSettings &map_settings = CommonInterface::GetMapSettings();
 
-  static constexpr StaticEnumChoice auto_wind_list[] = {
-    { AUTOWIND_NONE, N_("Manual"),
-      N_("When the algorithm is switched off, the pilot is responsible for setting the wind estimate.") },
-    { AUTOWIND_CIRCLING, N_("Circling"),
-      N_("Requires only a GPS source.") },
-    { AUTOWIND_ZIGZAG, N_("ZigZag"),
-      N_("Requires GPS and an intelligent vario with airspeed output.") },
-    { AUTOWIND_CIRCLING | AUTOWIND_ZIGZAG, N_("Both"),
-      N_("Use ZigZag and circling.") },
-    { 0 }
-  };
+  AddBoolean(_("Circling wind"),
+             _("Estimate the wind vector while circling.  Requires only a GPS."),
+             settings.circling_wind);
 
-  AddEnum(_("Auto wind"),
-          _("This allows switching on or off the automatic wind algorithm."),
-          auto_wind_list, settings.GetLegacyAutoWindMode());
+  AddBoolean(_("ZigZag wind"),
+             _("Estimate the wind vector during glides.  Requires an airspeed sensor."),
+             settings.zig_zag_wind);
 
   AddBoolean(_("External wind"),
              _("Should XCSoar accept wind estimates from other instruments?"),
@@ -145,10 +137,12 @@ WindSettingsPanel::Save(bool &_changed) noexcept
 
   bool changed = false;
 
-  unsigned auto_wind_mode = settings.GetLegacyAutoWindMode();
-  if (SaveValueEnum(AutoWind, ProfileKeys::AutoWind, auto_wind_mode)) {
-    settings.SetLegacyAutoWindMode(auto_wind_mode);
+  bool auto_wind_changed = SaveValue(CIRCLING_WIND, settings.circling_wind);
+  auto_wind_changed |= SaveValue(ZIG_ZAG_WIND, settings.zig_zag_wind);
+
+  if (auto_wind_changed) {
     changed = true;
+    Profile::Set(ProfileKeys::AutoWind, settings.GetLegacyAutoWindMode());
   }
 
   changed |= SaveValue(EXTERNAL_WIND, ProfileKeys::ExternalWind,

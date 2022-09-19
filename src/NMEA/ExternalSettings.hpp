@@ -55,6 +55,14 @@ struct ExternalSettings {
 
   Validity wing_loading_available;
 
+  /**
+   * amount of water ballast in kg (or litres) when altered in external device
+   * from external device (if available)
+   */
+  double ballast_litres;
+
+  Validity ballast_litres_available;
+
   /** Wing loading information (kg/m^2) of external device (if available) */
   double wing_loading;
 
@@ -133,6 +141,17 @@ struct ExternalSettings {
   }
 
   /**
+   * Compare the absolure ballast in kg (litres) setting with the specified value.
+   *
+   * @return true if the current setting is the same, false if the
+   * value is different or if there is no value
+   */
+  bool CompareBallastLitres(double value) const {
+    return ballast_litres_available &&
+      fabs(ballast_litres - value) <= 0.05;
+  }
+
+  /**
    * Compare the wing loading setting with the specified value.
    *
    * @return true if the current setting is the same, false if the
@@ -183,6 +202,7 @@ struct ExternalSettings {
   bool ProvideMacCready(double value, TimeStamp time) noexcept;
   bool ProvideBallastFraction(double value, TimeStamp time) noexcept;
   bool ProvideBallastOverload(double value, TimeStamp time) noexcept;
+  bool ProvideBallastLitres(double value, TimeStamp time) noexcept;
   bool ProvideWingLoading(double value, TimeStamp time) noexcept;
   bool ProvideBugs(double value, TimeStamp time) noexcept;
   bool ProvideQNH(AtmosphericPressure value, TimeStamp time) noexcept;

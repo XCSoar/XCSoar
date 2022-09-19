@@ -86,7 +86,7 @@ public:
     PopupOperationEnvironment env;
 
     changed |= SaveValue(VOLUME, params.volume);
-    changed |= SaveValue(OUTPUT_MODE, params.output_mode);
+    changed |= SaveValueEnum(OUTPUT_MODE, params.output_mode);
 
     try {
       device.WriteDeviceSettings(params, env);

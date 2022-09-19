@@ -92,7 +92,7 @@ RowFormWidget::Row::GetMinimumHeight(const DialogLook &look,
     return Layout::GetMinimumControlHeight();
   }
 
-  return window->GetHeight();
+  return window->GetSize().height;
 }
 
 unsigned
@@ -122,7 +122,7 @@ RowFormWidget::Row::GetMaximumHeight(const DialogLook &look,
     return 4096;
   }
 
-  return window->GetHeight();
+  return window->GetSize().height;
 }
 
 inline void

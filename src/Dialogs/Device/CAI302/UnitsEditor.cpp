@@ -95,43 +95,43 @@ CAI302UnitsEditor::Save(bool &_changed) noexcept
   bool changed = false;
 
   unsigned vario = data.GetVarioUnit();
-  if (SaveValue(VarioUnit, vario)) {
+  if (SaveValueEnum(VarioUnit, vario)) {
     data.SetVarioUnit(vario);
     changed = true;
   }
 
   unsigned altitude = data.GetAltitudeUnit();
-  if (SaveValue(AltitudeUnit, altitude)) {
+  if (SaveValueEnum(AltitudeUnit, altitude)) {
     data.SetAltitudeUnit(altitude);
     changed = true;
   }
 
   unsigned temperature = data.GetTemperatureUnit();
-  if (SaveValue(TemperatureUnit, temperature)) {
+  if (SaveValueEnum(TemperatureUnit, temperature)) {
     data.SetTemperatureUnit(temperature);
     changed = true;
   }
 
   unsigned pressure = data.GetPressureUnit();
-  if (SaveValue(PressureUnit, pressure)) {
+  if (SaveValueEnum(PressureUnit, pressure)) {
     data.SetPressureUnit(pressure);
     changed = true;
   }
 
   unsigned distance = data.GetDistanceUnit();
-  if (SaveValue(DistanceUnit, distance)) {
+  if (SaveValueEnum(DistanceUnit, distance)) {
     data.SetDistanceUnit(distance);
     changed = true;
   }
 
   unsigned speed = data.GetSpeedUnit();
-  if (SaveValue(SpeedUnit, speed)) {
+  if (SaveValueEnum(SpeedUnit, speed)) {
     data.SetSpeedUnit(speed);
     changed = true;
   }
 
   unsigned sink_tone = data.GetSinkTone();
-  if (SaveValue(SinkTone, sink_tone)) {
+  if (SaveValueEnum(SinkTone, sink_tone)) {
     data.SetSinkTone(sink_tone);
     changed = true;
   }

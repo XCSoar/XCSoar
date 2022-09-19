@@ -39,9 +39,9 @@ RaspCache::RaspCache(const RaspStore &_store, unsigned _parameter) noexcept
 RaspCache::~RaspCache() noexcept = default;
 
 static constexpr unsigned
-ToHalfHours(BrokenTime t)
+ToQuarterHours(BrokenTime t)
 {
-  return t.hour * 2u + t.minute / 30;
+  return t.hour * 4u + t.minute / 15;
 }
 
 const TCHAR *
@@ -62,7 +62,7 @@ RaspCache::GetMapLabel() const
 void
 RaspCache::SetTime(BrokenTime t)
 {
-  unsigned i = t.IsPlausible() ? ToHalfHours(t) : 0;
+  unsigned i = t.IsPlausible() ? ToQuarterHours(t) : 0;
   time = i;
 }
 
@@ -91,7 +91,7 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
          time */
       return;
 
-    effective_time = ToHalfHours(time_local);
+    effective_time = ToQuarterHours(time_local);
     assert(effective_time < RaspStore::MAX_WEATHER_TIMES);
   }
 

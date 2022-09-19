@@ -66,11 +66,8 @@ AudioConfigPanel::Save(bool &changed) noexcept
 {
   auto &settings = CommonInterface::SetUISettings().sound;
 
-  unsigned volume = settings.master_volume;
-  if (SaveValue(MasterVolume, ProfileKeys::MasterAudioVolume, volume)) {
-    settings.master_volume = volume;
-    changed = true;
-  }
+  changed |= SaveValueInteger(MasterVolume, ProfileKeys::MasterAudioVolume,
+                              settings.master_volume);
 
   return true;
 }

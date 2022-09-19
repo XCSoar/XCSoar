@@ -34,12 +34,6 @@ DataFieldString::ModifyValue(const TCHAR *new_value) noexcept
 }
 
 void
-DataFieldString::SetAsString(const TCHAR *Value) noexcept
-{
-  ModifyValue(Value);
-}
-
-void
 DataFieldString::SetValue(const TCHAR *Value) noexcept
 {
   mValue = Value;

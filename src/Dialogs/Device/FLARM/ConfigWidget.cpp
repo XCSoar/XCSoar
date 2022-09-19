@@ -106,12 +106,12 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   RequestAllSettings(device);
 
   baud = GetUnsignedValue(device, "BAUD", 2);
-  priv = GetUnsignedValue(device, "PRIV", 0);
+  priv = GetUnsignedValue(device, "PRIV", 0) == 1;
   thre = GetUnsignedValue(device, "THRE", 2);
   range = GetUnsignedValue(device, "RANGE", 3000);
   acft = GetUnsignedValue(device, "ACFT", 0);
   log_int = GetUnsignedValue(device, "LOGINT", 2);
-  notrack = GetUnsignedValue(device, "NOTRACK", 0);
+  notrack = GetUnsignedValue(device, "NOTRACK", 0) == 1;
 
   static constexpr StaticEnumChoice baud_list[] = {
     { 0, _T("4800"), NULL },
@@ -123,7 +123,7 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   };
 
   AddEnum(_("Baud rate"), NULL, baud_list, baud);
-  AddBoolean(_("Stealth mode"), NULL, priv == 1);
+  AddBoolean(_("Stealth mode"), NULL, priv);
   AddInteger(_("Threshold"), NULL, _T("%d m/s"), _T("%d"), 1, 10, 1, thre);
   AddInteger(_("Range"), NULL, _T("%d m"), _T("%d"), 2000, 25500, 250, range);
 
@@ -153,7 +153,7 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddEnum(_("Type"), NULL, acft_list, acft);
   AddInteger(_("Logger interval"), NULL, _T("%d s"), _T("%d"),
              1, 8, 1, log_int);
-  AddBoolean(_("No tracking mode"), NULL, notrack == 1);
+  AddBoolean(_("No tracking mode"), NULL, notrack);
 
 }
 
@@ -164,7 +164,7 @@ try {
   bool changed = false;
   NarrowString<32> buffer;
 
-  if (SaveValue(Baud, baud)) {
+  if (SaveValueEnum(Baud, baud)) {
     buffer.UnsafeFormat("%u", baud);
     device.SendSetting("BAUD", buffer, env);
     changed = true;
@@ -176,25 +176,25 @@ try {
     changed = true;
   }
 
-  if (SaveValue(Thre, thre)) {
+  if (SaveValueInteger(Thre, thre)) {
     buffer.UnsafeFormat("%u", thre);
     device.SendSetting("THRE", buffer, env);
     changed = true;
   }
 
-  if (SaveValue(Range, range)) {
+  if (SaveValueInteger(Range, range)) {
     buffer.UnsafeFormat("%u", range);
     device.SendSetting("RANGE", buffer, env);
     changed = true;
   }
 
-  if (SaveValue(Acft, acft)) {
+  if (SaveValueEnum(Acft, acft)) {
     buffer.UnsafeFormat("%u", acft);
     device.SendSetting("ACFT", buffer, env);
     changed = true;
   }
 
-  if (SaveValue(LogInt, log_int)) {
+  if (SaveValueInteger(LogInt, log_int)) {
     buffer.UnsafeFormat("%u", log_int);
     device.SendSetting("LOGINT", buffer, env);
     changed = true;

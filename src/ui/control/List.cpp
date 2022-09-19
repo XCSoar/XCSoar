@@ -215,7 +215,7 @@ ListControl::DrawScrollBar(Canvas &canvas) noexcept
     return;
 
   if (UsePixelPan())
-    scroll_bar.SetSlider(length * item_height, GetHeight(), GetPixelOrigin());
+    scroll_bar.SetSlider(length * item_height, GetSize().height, GetPixelOrigin());
   else
     scroll_bar.SetSlider(length, items_visible, origin);
 
@@ -226,7 +226,7 @@ void
 ListControl::SetItemHeight(unsigned _item_height) noexcept
 {
   item_height = _item_height;
-  items_visible = GetHeight() / item_height;
+  items_visible = GetSize().height / item_height;
 
   show_or_hide_scroll_bar();
   Invalidate();
@@ -247,7 +247,7 @@ ListControl::SetLength(unsigned n) noexcept
   else if (cursor >= n)
     cursor = n - 1;
 
-  items_visible = GetHeight() / item_height;
+  items_visible = GetSize().height / item_height;
 
   if (n <= items_visible)
     origin = 0;
@@ -275,7 +275,7 @@ ListControl::EnsureVisible(unsigned i) noexcept
       SetOrigin(i - items_visible);
 
       if (origin > 0 || i >= items_visible)
-        SetPixelPan(((items_visible + 1) * item_height - GetHeight()) % item_height);
+        SetPixelPan(((items_visible + 1) * item_height - GetSize().height) % item_height);
     } else {
       /* no pixel panning on e-paper screens to avoid tearing */
       SetOrigin(i + 1 - items_visible);
@@ -369,7 +369,7 @@ ListControl::SetOrigin(int i) noexcept
 void
 ListControl::SetPixelOrigin(int pixel_origin) noexcept
 {
-  int max = length * item_height - GetHeight();
+  int max = length * item_height - GetSize().height;
   if (pixel_origin > max)
     pixel_origin = max;
 
@@ -479,7 +479,7 @@ ListControl::OnMouseUp(PixelPoint p) noexcept
   }
 
   if (drag_mode == DragMode::CURSOR &&
-      p.x >= 0 && p.x <= ((int)GetWidth() - scroll_bar.GetWidth())) {
+      p.x >= 0 && p.x <= ((int)GetSize().width - scroll_bar.GetWidth())) {
     drag_end();
     ActivateItem();
     return true;
@@ -519,7 +519,8 @@ ListControl::OnMouseMove(PixelPoint p, unsigned keys) noexcept
   if (scroll_bar.IsDragging()) {
     // -> Update ListBox origin
     if (UsePixelPan())
-      SetPixelOrigin(scroll_bar.DragMove(length * item_height, GetHeight(),
+      SetPixelOrigin(scroll_bar.DragMove(length * item_height,
+                                         GetSize().height,
                                          p.y));
     else
       SetOrigin(scroll_bar.DragMove(length, items_visible, p.y));

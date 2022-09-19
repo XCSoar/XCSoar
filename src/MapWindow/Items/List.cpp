@@ -57,72 +57,49 @@ CompareWaypointItems(const WaypointMapItem *a, const WaypointMapItem *b)
 static bool
 CompareMapItems(const MapItem *a, const MapItem *b)
 {
-  if (a->type == MapItem::Type::LOCATION)
-    return true;
+  if (a->type != b->type)
+    return a->type < b->type;
 
-  if (b->type == MapItem::Type::LOCATION)
-    return false;
+  switch (a->type) {
+  case MapItem::Type::LOCATION:
+  case MapItem::Type::ARRIVAL_ALTITUDE:
+  case MapItem::Type::SELF:
+    break;
 
-  if (a->type == MapItem::Type::ARRIVAL_ALTITUDE)
-    return true;
-
-  if (b->type == MapItem::Type::ARRIVAL_ALTITUDE)
-    return false;
-
-  if (a->type == MapItem::Type::SELF)
-    return true;
-
-  if (b->type == MapItem::Type::SELF)
-    return false;
-
-  if (a->type == MapItem::Type::WAYPOINT &&
-      b->type != MapItem::Type::WAYPOINT &&
-      ((const WaypointMapItem *)a)->waypoint->IsAirport())
-    return true;
-
-  if (a->type != MapItem::Type::WAYPOINT &&
-      b->type == MapItem::Type::WAYPOINT &&
-      ((const WaypointMapItem *)b)->waypoint->IsAirport())
-    return false;
-
-  if (a->type == MapItem::Type::WAYPOINT &&
-      b->type != MapItem::Type::WAYPOINT &&
-      ((const WaypointMapItem *)a)->waypoint->IsLandable())
-    return true;
-
-  if (a->type != MapItem::Type::WAYPOINT &&
-      b->type == MapItem::Type::WAYPOINT &&
-      ((const WaypointMapItem *)b)->waypoint->IsLandable())
-    return false;
-
-  if (a->type == MapItem::Type::WAYPOINT && b->type == MapItem::Type::WAYPOINT)
+  case MapItem::Type::WAYPOINT:
     return CompareWaypointItems((const WaypointMapItem *)a,
                                 (const WaypointMapItem *)b);
 
-  if (a->type == MapItem::Type::TASK_OZ && b->type == MapItem::Type::TASK_OZ)
+  case MapItem::Type::TASK_OZ:
     return ((const TaskOZMapItem *)a)->index <
            ((const TaskOZMapItem *)b)->index;
 
-  if (a->type == MapItem::Type::TRAFFIC && b->type == MapItem::Type::TRAFFIC)
+  case MapItem::Type::TRAFFIC:
     return ((const TrafficMapItem *)a)->id <
            ((const TrafficMapItem *)b)->id;
 
-  if (a->type == MapItem::Type::THERMAL && b->type == MapItem::Type::THERMAL)
+  case MapItem::Type::THERMAL:
     return ((const ThermalMapItem *)a)->thermal.time >
            ((const ThermalMapItem *)b)->thermal.time;
 
-  if (a->type == MapItem::Type::AIRSPACE && b->type == MapItem::Type::AIRSPACE)
+  case MapItem::Type::AIRSPACE:
     return AirspaceAltitude::SortHighest(
         ((const AirspaceMapItem *)a)->airspace->GetBase(),
         ((const AirspaceMapItem *)b)->airspace->GetBase());
 
 #ifdef HAVE_NOAA
-  if (a->type == MapItem::Type::WEATHER && b->type == MapItem::Type::WEATHER)
+  case MapItem::Type::WEATHER:
     return strcmp(((const WeatherStationMapItem *)a)->station->code,
                   ((const WeatherStationMapItem *)b)->station->code) < 0;
 #endif
 
-  return a->type < b->type;
+  case MapItem::Type::SKYLINES_TRAFFIC:
+  case MapItem::Type::OVERLAY:
+  case MapItem::Type::RASP:
+    break;
+  }
+
+  return false;
 }
 
 MapItemList::~MapItemList()

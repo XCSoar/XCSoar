@@ -92,21 +92,6 @@ FileDataField::FileDataField(DataFieldListener *listener) noexcept
    loaded(false), postponed_sort(false),
    postponed_value(nullptr) {}
 
-int
-FileDataField::GetAsInteger() const noexcept
-{
-  if (postponed_value != nullptr)
-    EnsureLoadedDeconst();
-
-  return current_index;
-}
-
-void
-FileDataField::SetAsInteger(int new_value) noexcept
-{
-  ModifyIndex(new_value);
-}
-
 void
 FileDataField::ScanDirectoryTop(const TCHAR *filter) noexcept
 {
@@ -383,6 +368,12 @@ FileDataField::CreateComboList([[maybe_unused]] const TCHAR *reference) const no
   combo_list.current_index = current_index;
 
   return combo_list;
+}
+
+void
+FileDataField::SetFromCombo(int i, const TCHAR *) noexcept
+{
+  ModifyIndex(i);
 }
 
 unsigned

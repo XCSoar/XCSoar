@@ -33,7 +33,8 @@ class WindSettingsPanel final
   : public RowFormWidget,
     private DataFieldListener, private NullBlackboardListener {
   enum ControlIndex {
-    AutoWind,
+    CIRCLING_WIND,
+    ZIG_ZAG_WIND,
     EXTERNAL_WIND,
     TrailDrift,
     SOURCE,

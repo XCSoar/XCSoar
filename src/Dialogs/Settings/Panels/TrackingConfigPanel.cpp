@@ -285,7 +285,7 @@ TrackingConfigPanel::Save(bool &_changed) noexcept
     CommonInterface::SetComputerSettings().tracking;
 
 #ifdef HAVE_LIVETRACK24
-  changed |= SaveValue(LT24_INVERVAL, ProfileKeys::LiveTrack24TrackingInterval, settings.livetrack24.interval);
+  changed |= SaveValueEnum(LT24_INVERVAL, ProfileKeys::LiveTrack24TrackingInterval, settings.livetrack24.interval);
 
   changed |= SaveValueEnum(LT24_VEHICLE_TYPE, ProfileKeys::LiveTrack24TrackingVehicleType,
                            settings.livetrack24.vehicleType);
@@ -303,8 +303,8 @@ TrackingConfigPanel::Save(bool &_changed) noexcept
                        settings.skylines.roaming);
 #endif
 
-  changed |= SaveValue(SL_INTERVAL, ProfileKeys::SkyLinesTrackingInterval,
-                       settings.skylines.interval);
+  changed |= SaveValueEnum(SL_INTERVAL, ProfileKeys::SkyLinesTrackingInterval,
+                           settings.skylines.interval);
 
   changed |= SaveValue(SL_TRAFFIC_ENABLED, ProfileKeys::SkyLinesTrafficEnabled,
                        settings.skylines.traffic_enabled);

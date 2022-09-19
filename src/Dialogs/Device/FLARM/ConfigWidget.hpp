@@ -40,7 +40,9 @@ class FLARMConfigWidget final : public RowFormWidget {
 
   FlarmDevice &device;
 
-  unsigned baud, priv, thre, range, acft, log_int, notrack;
+  unsigned baud, thre, range, acft, log_int;
+
+  bool priv, notrack;
 
 public:
   FLARMConfigWidget(const DialogLook &look, FlarmDevice &_device)

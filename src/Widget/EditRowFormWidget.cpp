@@ -365,7 +365,9 @@ RowFormWidget::GetValueBoolean(unsigned i) const noexcept
 int
 RowFormWidget::GetValueInteger(unsigned i) const noexcept
 {
-  return GetDataField(i).GetAsInteger();
+  auto &df = static_cast<const DataFieldInteger &>(GetDataField(i));
+  assert(df.GetType() == DataField::Type::INTEGER);
+  return df.GetValue();
 }
 
 double
@@ -395,6 +397,14 @@ RowFormWidget::GetValueIntegerAngle(unsigned i) const noexcept
   return df.GetIntegerValue();
 }
 
+unsigned
+RowFormWidget::GetValueEnum(unsigned i) const noexcept
+{
+  auto &df = static_cast<const DataFieldEnum &>(GetDataField(i));
+  assert(df.GetType() == DataField::Type::ENUM);
+  return df.GetValue();
+}
+
 std::chrono::seconds
 RowFormWidget::GetValueTime(unsigned i) const noexcept
 {
@@ -422,39 +432,6 @@ RowFormWidget::SaveValue(unsigned i, bool &value, bool negated) const noexcept
     return false;
 
   value = new_value;
-  return true;
-}
-
-bool
-RowFormWidget::SaveValue(unsigned i, int &value) const noexcept
-{
-  int new_value = GetValueInteger(i);
-  if (new_value == value)
-    return false;
-
-  value = new_value;
-  return true;
-}
-
-bool
-RowFormWidget::SaveValue(unsigned i, uint8_t &value) const noexcept
-{
-  int new_value = GetValueInteger(i);
-  if (new_value == value || new_value < 0)
-    return false;
-
-  value = (uint8_t)new_value;
-  return true;
-}
-
-bool
-RowFormWidget::SaveValue(unsigned i, uint16_t &value) const noexcept
-{
-  int new_value = GetValueInteger(i);
-  if (new_value == value || new_value < 0)
-    return false;
-
-  value = (uint16_t)new_value;
   return true;
 }
 

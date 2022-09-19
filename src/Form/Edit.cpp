@@ -82,6 +82,8 @@ WndProperty::OnSetFocus() noexcept
   WindowControl::OnSetFocus();
 
   Invalidate();
+
+  ScrollParentTo();
 }
 
 void
@@ -308,7 +310,7 @@ WndProperty::OnPaint(Canvas &canvas) noexcept
       clip_width = canvas.GetWidth();
     } else {
       org.x = caption_width - tsize.width - Layout::GetTextPadding();
-      org.y = (GetHeight() - tsize.height) / 2;
+      org.y = (canvas.GetHeight() - tsize.height) / 2;
       clip_width = caption_width;
     }
 

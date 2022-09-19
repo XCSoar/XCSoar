@@ -25,12 +25,14 @@ Copyright_License {
 
 #include "util/StaticString.hxx"
 
+#include <cstdint>
+
 #include <tchar.h>
 
 namespace LiveTrack24 {
 
 struct Settings {
-  enum class VehicleType {
+  enum class VehicleType : uint8_t {
     GLIDER = 0,
     PARAGLIDER = 1,
     POWERED_AIRCRAFT = 2,

@@ -174,4 +174,10 @@ public:
    * @return true if the focus has been moved
    */
   bool FocusPreviousControl() noexcept;
+
+  /**
+   * If this is a scrollable window, then attempt to make the given
+   * rectangle visible in the view port.
+   */
+  virtual void ScrollTo(const PixelRect &rc) noexcept;
 };

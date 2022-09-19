@@ -127,13 +127,13 @@ void
 TerrainDisplayConfigPanel::UpdateTerrainPreview()
 {
   terrain_settings.slope_shading = (SlopeShading)
-    GetValueInteger(TerrainSlopeShading);
+    GetValueEnum(TerrainSlopeShading);
   terrain_settings.contrast = PercentToByte(GetValueInteger(TerrainContrast));
   terrain_settings.brightness =
     PercentToByte(GetValueInteger(TerrainBrightness));
-  terrain_settings.ramp = GetValueInteger(TerrainColors);
+  terrain_settings.ramp = GetValueEnum(TerrainColors);
   terrain_settings.contours = (Contours)
-    GetValueInteger(TerrainContours);
+    GetValueEnum(TerrainContours);
 
   // Invalidate terrain preview
   if (have_terrain_preview)

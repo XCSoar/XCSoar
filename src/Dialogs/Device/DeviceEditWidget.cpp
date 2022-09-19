@@ -420,19 +420,19 @@ DeviceEditWidget::Save(bool &_changed) noexcept
     changed |= SaveValue(K6Bt, config.k6bt);
 
   if (config.UsesSpeed()) {
-    changed |= SaveValue(BaudRate, config.baud_rate);
-    changed |= SaveValue(BulkBaudRate, config.bulk_baud_rate);
+    changed |= SaveValueEnum(BaudRate, config.baud_rate);
+    changed |= SaveValueEnum(BulkBaudRate, config.bulk_baud_rate);
   }
 
   if (config.UsesIPAddress())
     changed |= SaveValue(IP_ADDRESS, config.ip_address);
 
   if (config.UsesTCPPort())
-    changed |= SaveValue(TCPPort, config.tcp_port);
+    changed |= SaveValueEnum(TCPPort, config.tcp_port);
 
   if (config.UsesI2C()) {
-    changed |= SaveValue(I2CBus, config.i2c_bus);
-    changed |= SaveValue(I2CAddr, config.i2c_addr);
+    changed |= SaveValueEnum(I2CBus, config.i2c_bus);
+    changed |= SaveValueEnum(I2CAddr, config.i2c_addr);
     changed |= SaveValueEnum(PressureUsage, config.press_use);
   }
 

@@ -135,23 +135,20 @@ AudioVarioConfigPanel::Save(bool &changed) noexcept
   changed |= SaveValue(Enabled, ProfileKeys::SoundAudioVario,
                        settings.enabled);
 
-  unsigned volume = settings.volume;
-  if (SaveValue(Volume, ProfileKeys::SoundVolume, volume)) {
-    settings.volume = volume;
-    changed = true;
-  }
+  changed |= SaveValueInteger(Volume, ProfileKeys::SoundVolume,
+                              settings.volume);
 
   changed |= SaveValue(DEAD_BAND_ENABLED, ProfileKeys::VarioDeadBandEnabled,
                        settings.dead_band_enabled);
 
-  changed |= SaveValue(MIN_FREQUENCY, ProfileKeys::VarioMinFrequency,
-                       settings.min_frequency);
+  changed |= SaveValueInteger(MIN_FREQUENCY, ProfileKeys::VarioMinFrequency,
+                              settings.min_frequency);
 
-  changed |= SaveValue(ZERO_FREQUENCY, ProfileKeys::VarioZeroFrequency,
-                       settings.zero_frequency);
+  changed |= SaveValueInteger(ZERO_FREQUENCY, ProfileKeys::VarioZeroFrequency,
+                              settings.zero_frequency);
 
-  changed |= SaveValue(MAX_FREQUENCY, ProfileKeys::VarioMaxFrequency,
-                       settings.max_frequency);
+  changed |= SaveValueInteger(MAX_FREQUENCY, ProfileKeys::VarioMaxFrequency,
+                              settings.max_frequency);
 
   changed |= SaveValue(DEAD_BAND_MIN, UnitGroup::VERTICAL_SPEED,
                        ProfileKeys::VarioDeadBandMin, settings.min_dead);

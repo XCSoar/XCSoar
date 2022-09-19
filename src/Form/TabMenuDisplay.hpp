@@ -141,16 +141,16 @@ class TabMenuDisplay final : public PaintWindow
   /* holds info and buttons for the main menu.  not on child menus */
   StaticArray<MainMenuButton, MAX_MAIN_MENU_ITEMS> main_menu_buttons;
 
-  bool dragging; // tracks that mouse is down and captured
-  bool drag_off_button; // set by mouse_move
+  bool dragging = false; // tracks that mouse is down and captured
+  bool drag_off_button = false; // set by mouse_move
 
   /* used to track mouse down/up clicks */
-  MenuTabIndex down_index;
+  MenuTabIndex down_index = MenuTabIndex::None();
 
   /**
    * Which page is currently selected by the cursor?
    */
-  unsigned cursor;
+  unsigned cursor = 0;
 
   /* used to render which submenu is drawn and which item is highlighted */
 

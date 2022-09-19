@@ -231,8 +231,8 @@ WaypointDisplayConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValue(AppUseSWLandablesRendering, ProfileKeys::AppUseSWLandablesRendering,
                        settings.vector_landable_rendering);
 
-  changed |= SaveValue(AppLandableRenderingScale, ProfileKeys::AppLandableRenderingScale,
-                       settings.landable_rendering_scale);
+  changed |= SaveValueInteger(AppLandableRenderingScale, ProfileKeys::AppLandableRenderingScale,
+                              settings.landable_rendering_scale);
 
   changed |= SaveValue(AppScaleRunwayLength, ProfileKeys::AppScaleRunwayLength,
                        settings.scale_runway_length);

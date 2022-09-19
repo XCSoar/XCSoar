@@ -22,21 +22,23 @@
 
 #pragma once
 
+#include <cstdint>
+
 struct RoutePlannerConfig
 {
-  enum class Mode {
+  enum class Mode : uint8_t {
     NONE,
     TERRAIN,
     AIRSPACE,
     BOTH,
   };
 
-  enum class Polar {
+  enum class Polar : uint8_t {
     TASK,
     SAFETY,
   };
 
-  enum class ReachMode {
+  enum class ReachMode : uint8_t {
     OFF,
     STRAIGHT,
     TURNING,

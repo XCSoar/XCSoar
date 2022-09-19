@@ -204,7 +204,7 @@ WndForm::OnMouseMove(PixelPoint p, unsigned keys) noexcept
       new_position.top = 0;
 #endif
 
-    Move(new_position.left, new_position.top);
+    Move(new_position.GetTopLeft());
 
     return true;
   }
@@ -564,7 +564,7 @@ WndForm::ReinitialiseLayout(const PixelRect &parent_rc) noexcept
   const unsigned parent_width = parent_rc.GetWidth();
   const unsigned parent_height = parent_rc.GetHeight();
 
-  if (parent_width < GetWidth() || parent_height < GetHeight()) {
+  if (parent_width < GetSize().width || parent_height < GetSize().height) {
   } else {
     // reposition dialog to fit into TopWindow
     PixelRect rc = GetPosition();
@@ -583,7 +583,7 @@ WndForm::ReinitialiseLayout(const PixelRect &parent_rc) noexcept
       rc.top = 0;
 #endif
 
-    Move(rc.left, rc.top);
+    Move(rc.GetTopLeft());
   }
 }
 

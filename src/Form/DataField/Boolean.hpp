@@ -59,13 +59,7 @@ public:
   /* virtual methods from class DataField */
   void Inc() noexcept override;
   void Dec() noexcept override;
-  int GetAsInteger() const noexcept override;
   const TCHAR *GetAsString() const noexcept override;
-  void SetAsInteger(int Value) noexcept override;
-  void SetAsString(const TCHAR *Value) noexcept override;
   ComboList CreateComboList(const TCHAR *reference) const noexcept override;
-
-private:
-  [[gnu::pure]]
-  bool ParseString(const TCHAR *s) const noexcept;
+  void SetFromCombo(int i, const TCHAR *s) noexcept override;
 };

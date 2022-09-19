@@ -52,12 +52,6 @@ DataField::Dec() noexcept
 {
 }
 
-int
-DataField::GetAsInteger() const noexcept
-{
-  return 0;
-}
-
 const TCHAR *
 DataField::GetAsString() const noexcept
 {
@@ -68,16 +62,6 @@ const TCHAR *
 DataField::GetAsDisplayString() const noexcept
 {
   return GetAsString();
-}
-
-void
-DataField::SetAsInteger([[maybe_unused]] int value) noexcept
-{
-}
-
-void
-DataField::SetAsString([[maybe_unused]] const TCHAR *value) noexcept
-{
 }
 
 ComboList

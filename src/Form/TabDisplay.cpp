@@ -37,7 +37,6 @@ TabDisplay::TabDisplay(TabWidget &_pager, const DialogLook &_look,
   :pager(_pager),
    look(_look),
    vertical(_vertical),
-   dragging(false),
    tab_line_height(Layout::VptScale(5))
 {
   style.TabStop();
@@ -120,10 +119,12 @@ TabDisplay::CalculateLayout() noexcept
   // Todo make the final margin display on either beginning or end of tab bar
   // depending on position of tab bar
 
+  const auto window_size = Window::GetSize();
+
   if (vertical) {
     const unsigned n = buttons.size();
     const unsigned but_height =
-       (GetHeight() - finalmargin) / n - margin;
+       (window_size.height - finalmargin) / n - margin;
 
     PixelRect rc = GetClientRect();
     rc.left = 0;
@@ -137,14 +138,14 @@ TabDisplay::CalculateLayout() noexcept
   } else {
     const unsigned n = buttons.size();
     const unsigned portraitRows = n > 4 ? 2 : 1;
-    const unsigned rowheight = (GetHeight() - tab_line_height)
+    const unsigned rowheight = (window_size.height - tab_line_height)
       / portraitRows - margin;
 
     const unsigned portraitColumnsRow0 = portraitRows == 1 ? n : n / 2;
     const unsigned portraitColumnsRow1 = portraitRows == 1 ? 0 : n - n / 2;
 
     const unsigned but_width1 =
-        (GetWidth() - finalmargin) / portraitColumnsRow0 - margin;
+        (window_size.width - finalmargin) / portraitColumnsRow0 - margin;
 
     for (unsigned i = 0; i < portraitColumnsRow0; ++i) {
       PixelRect &rc = buttons[i]->rc;
@@ -156,7 +157,7 @@ TabDisplay::CalculateLayout() noexcept
 
     if (portraitColumnsRow1 > 0) {
       const unsigned but_width2 =
-        (GetWidth() - finalmargin) / portraitColumnsRow1 - margin;
+        (window_size.width - finalmargin) / portraitColumnsRow1 - margin;
 
       for (unsigned i = portraitColumnsRow0; i < n; ++i) {
         PixelRect &rc = buttons[i]->rc;

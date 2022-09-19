@@ -83,7 +83,7 @@ private:
 void
 MapDisplayConfigPanel::UpdateVisibilities()
 {
-  auto orientation = (MapOrientation)GetValueInteger(OrientationCruise);
+  auto orientation = (MapOrientation)GetValueEnum(OrientationCruise);
 
   SetRowVisible(MAP_SHIFT_BIAS,
                 orientation == MapOrientation::NORTH_UP ||
@@ -169,8 +169,9 @@ MapDisplayConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValueEnum(MAP_SHIFT_BIAS, ProfileKeys::MapShiftBias,
                            settings_map.map_shift_bias);
 
-  changed |= SaveValue(GliderScreenPosition, ProfileKeys::GliderScreenPosition,
-                       settings_map.glider_screen_position);
+  changed |= SaveValueInteger(GliderScreenPosition,
+                              ProfileKeys::GliderScreenPosition,
+                              settings_map.glider_screen_position);
 
   changed |= SaveValue(CirclingZoom, ProfileKeys::CircleZoom,
                        settings_map.circle_zoom_enabled);

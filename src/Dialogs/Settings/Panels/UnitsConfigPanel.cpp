@@ -86,16 +86,16 @@ void
 UnitsConfigPanel::PresetCheck()
 {
   UnitSetting current_dlg_set;
-  current_dlg_set.speed_unit = (Unit)GetValueInteger((unsigned)UnitsSpeed);
+  current_dlg_set.speed_unit = (Unit)GetValueEnum(UnitsSpeed);
   current_dlg_set.wind_speed_unit = current_dlg_set.speed_unit;
-  current_dlg_set.distance_unit = (Unit)GetValueInteger((unsigned)UnitsDistance);
-  current_dlg_set.vertical_speed_unit = (Unit)GetValueInteger((unsigned)UnitsLift);
-  current_dlg_set.altitude_unit = (Unit)GetValueInteger((unsigned)UnitsAltitude);
-  current_dlg_set.temperature_unit = (Unit)GetValueInteger((unsigned)UnitsTemperature);
-  current_dlg_set.task_speed_unit = (Unit)GetValueInteger((unsigned)UnitsTaskSpeed);
-  current_dlg_set.pressure_unit = (Unit)GetValueInteger((unsigned)UnitsPressure);
-  current_dlg_set.mass_unit = (Unit)GetValueInteger((unsigned)UnitsMass);
-  current_dlg_set.wing_loading_unit = (Unit)GetValueInteger((unsigned)UnitsWingLoading);
+  current_dlg_set.distance_unit = (Unit)GetValueEnum(UnitsDistance);
+  current_dlg_set.vertical_speed_unit = (Unit)GetValueEnum(UnitsLift);
+  current_dlg_set.altitude_unit = (Unit)GetValueEnum(UnitsAltitude);
+  current_dlg_set.temperature_unit = (Unit)GetValueEnum(UnitsTemperature);
+  current_dlg_set.task_speed_unit = (Unit)GetValueEnum(UnitsTaskSpeed);
+  current_dlg_set.pressure_unit = (Unit)GetValueEnum(UnitsPressure);
+  current_dlg_set.mass_unit = (Unit)GetValueEnum(UnitsMass);
+  current_dlg_set.wing_loading_unit = (Unit)GetValueEnum(UnitsWingLoading);
 
   LoadValueEnum(UnitsPreset, Units::Store::EqualsPresetUnits(current_dlg_set));
 }

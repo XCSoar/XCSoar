@@ -29,13 +29,13 @@ Copyright_License {
 #include "time/BrokenDate.hpp"
 #include "time/FloatDuration.hxx"
 #include "Repository/FileType.hpp"
-#include "util/EnumCast.hpp"
 #include "Units/Group.hpp"
 
 #include <boost/container/static_vector.hpp>
 
 #include <cassert>
 #include <chrono>
+#include <concepts>
 #include <cstdint>
 #include <functional>
 #include <memory>
@@ -626,6 +626,9 @@ public:
   unsigned GetValueIntegerAngle(unsigned i) const noexcept;
 
   [[gnu::pure]]
+  unsigned GetValueEnum(unsigned i) const noexcept;
+
+  [[gnu::pure]]
   std::chrono::seconds GetValueTime(unsigned i) const noexcept;
 
   [[gnu::pure]]
@@ -637,9 +640,29 @@ public:
   }
 
   bool SaveValue(unsigned i, bool &value, bool negated = false) const noexcept;
-  bool SaveValue(unsigned i, int &value) const noexcept;
-  bool SaveValue(unsigned i, uint8_t &value) const noexcept;
-  bool SaveValue(unsigned i, uint16_t &value) const noexcept;
+
+#if defined(__clang__) && __clang_major__ < 15
+  // C++20 concepts not implemented in libc++ 14 (Android NDK r25)
+  template<typename T>
+  requires std::is_integral_v<T>
+#else
+  template<std::integral T>
+#endif
+  bool SaveValueInteger(unsigned i, T &value) const noexcept {
+    int new_value = GetValueInteger(i);
+
+    if constexpr (std::is_unsigned_v<T>)
+      if (new_value < 0)
+        return false;
+
+    const T new_t = static_cast<T>(new_value);
+    if (new_t == value)
+      return false;
+
+    value = new_t;
+    return true;
+  }
+
   bool SaveValue(unsigned i, double &value) const noexcept;
   bool SaveValue(unsigned i, Angle &value_r) const noexcept;
   bool SaveValue(unsigned i, std::chrono::seconds &value) const noexcept;
@@ -672,15 +695,19 @@ public:
     return SaveValue(i, profile_key, value.data(), value.capacity());
   }
 
-  bool SaveValue(unsigned i, unsigned &value) const noexcept {
-    return SaveValue(i, (int &)value);
-  }
-
   bool SaveValue(unsigned i, const char *profile_key, bool &value,
                  bool negated = false) const noexcept;
-  bool SaveValue(unsigned i, const char *profile_key, int &value) const noexcept;
-  bool SaveValue(unsigned i, const char *profile_key, uint8_t &value) const noexcept;
-  bool SaveValue(unsigned i, const char *profile_key, uint16_t &value) const noexcept;
+
+  template<typename T>
+  bool SaveValueInteger(unsigned i, const char *registry_key,
+                        T &value) const noexcept {
+    bool result = SaveValueInteger(i, value);
+    if (result)
+      SetProfile(registry_key, value);
+
+    return result;
+  }
+
   bool SaveValue(unsigned i, const char *profile_key, double &value) const noexcept;
   bool SaveValue(unsigned i, const char *profile_key, BrokenDate &value) const noexcept;
   bool SaveValue(unsigned i, const char *profile_key,
@@ -697,11 +724,6 @@ public:
     return true;
   }
 
-  bool SaveValue(unsigned i, const char *registry_key,
-                 unsigned &value) const noexcept {
-    return SaveValue(i, registry_key, (int &)value);
-  }
-
   bool SaveValue(unsigned i, UnitGroup unit_group, double &value) const noexcept;
 
   bool SaveValue(unsigned i, UnitGroup unit_group,
@@ -710,18 +732,42 @@ public:
   bool SaveValue(unsigned i, UnitGroup unit_group,
                  const char *profile_key, unsigned int &value) const noexcept;
 
+#if defined(__clang__) && __clang_major__ < 15
+  // C++20 concepts not implemented in libc++ 14 (Android NDK r25)
   template<typename T>
+  requires std::is_integral_v<T> && std::is_unsigned_v<T>
+#else
+  template<std::unsigned_integral T>
+#endif
   bool SaveValueEnum(unsigned i, T &value) const noexcept {
-    return SaveValue(i, EnumCast<T>()(value));
+    const auto new_value = static_cast<T>(GetValueEnum(i));
+    if (new_value == value)
+      return false;
+
+    value = new_value;
+    return true;
+  }
+
+  template<typename T>
+  requires std::is_enum_v<T>
+  bool SaveValueEnum(unsigned i, T &value) const noexcept {
+    return SaveValueEnum(i, reinterpret_cast<std::underlying_type_t<T> &>(value));
   }
 
   template<typename T>
   bool SaveValueEnum(unsigned i, const char *registry_key,
                      T &value) const noexcept {
-    return SaveValue(i, registry_key, EnumCast<T>()(value));
+    bool result = SaveValueEnum(i, value);
+    if (result)
+      SetProfile(registry_key, static_cast<unsigned>(value));
+
+    return result;
   }
 
   bool SaveValueFileReader(unsigned i, const char *profile_key) noexcept;
+
+private:
+  static void SetProfile(const char *registry_key, unsigned value) noexcept;
 
 protected:
   [[gnu::pure]]

@@ -36,12 +36,7 @@ Copyright_License {
 
 TabMenuDisplay::TabMenuDisplay(PagerWidget &_pager,
                                const DialogLook &_look) noexcept
-  :pager(_pager),
-   look(_look),
-   dragging(false),
-   drag_off_button(false),
-   down_index(MenuTabIndex::None()),
-   cursor(0)
+  :pager(_pager), look(_look)
 {
 }
 
@@ -107,12 +102,11 @@ GetTabLineHeight() noexcept
 void
 TabMenuDisplay::UpdateLayout() noexcept
 {
-  const unsigned window_width = GetWidth();
-  const unsigned window_height = GetHeight();
+  const auto window_size = GetSize();
   const unsigned border_width = GetTabLineHeight();
   const unsigned menu_button_height =
-    std::min(Layout::GetMaximumControlHeight(), window_height / 7u);
-  const unsigned menu_button_width = (window_width - 2 * border_width) / 2;
+    std::min(Layout::GetMaximumControlHeight(), window_size.height / 7u);
+  const unsigned menu_button_width = (window_size.width - 2 * border_width) / 2;
 
   const unsigned offset = Layout::Scale(2);
   const unsigned item_height = menu_button_height + border_width;
@@ -132,8 +126,8 @@ TabMenuDisplay::UpdateLayout() noexcept
       item_height * main.NumSubMenus() + border_width;
 
     unsigned page_y = main.rc.top + offset;
-    if (page_y + group_height > window_height)
-      page_y = window_height - group_height - offset;
+    if (page_y + group_height > window_size.height)
+      page_y = window_size.height - group_height - offset;
 
     for (unsigned page_i = main.first_page_index;
          page_i <= main.last_page_index; ++page_i) {

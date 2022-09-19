@@ -84,18 +84,8 @@ public:
   /* virtual methods from class DataField */
   void Inc() noexcept override;
   void Dec() noexcept override;
-
-  int GetAsInteger() const noexcept override {
-    return value.count();
-  }
-
   const TCHAR *GetAsString() const noexcept override;
   const TCHAR *GetAsDisplayString() const noexcept override;
-
-  void SetAsInteger(int _value) noexcept override {
-    ModifyValue(std::chrono::seconds{_value});
-  }
-
   ComboList CreateComboList(const TCHAR *reference) const noexcept override;
   void SetFromCombo(int data_field_index, const TCHAR *value_string) noexcept override;
 

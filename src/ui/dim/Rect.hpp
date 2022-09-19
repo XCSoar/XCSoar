@@ -48,6 +48,10 @@ struct PixelRect {
   constexpr PixelRect(int _left, int _top, int _right, int _bottom) noexcept
     :left(_left), top(_top), right(_right), bottom(_bottom) {}
 
+  constexpr PixelRect(PixelPoint top_left, PixelPoint bottom_right) noexcept
+    :left(top_left.x), top(top_left.y),
+     right(bottom_right.x), bottom(bottom_right.y) {}
+
   constexpr PixelRect(PixelPoint origin, PixelSize size) noexcept
     :left(origin.x), top(origin.y),
      right(origin.x + size.width), bottom(origin.y + size.height) {}

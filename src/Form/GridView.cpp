@@ -59,8 +59,7 @@ GridView::RefreshLayout()
     - num_columns * (column_width + horizontal_spacing);
   unsigned reminderV = height + vertical_spacing
     - num_rows * (row_height + vertical_spacing);
-  unsigned leftOrigin = rc.left + reminderH / 2;
-  unsigned topOrigin= rc.top + reminderV / 2;
+  PixelPoint top_left = rc.GetTopLeft() + PixelSize{reminderH, reminderV} / 2U;
 
   // Determine current page from item that has focus
   // If there is no item with focus or the item with focus is on current page,
@@ -75,9 +74,9 @@ GridView::RefreshLayout()
     unsigned colNum = pagePos % num_columns;
     unsigned rowNum = pagePos / num_columns;
 
-    items[i]->Move(leftOrigin + colNum * (column_width + horizontal_spacing),
-                   topOrigin + rowNum * (row_height + vertical_spacing),
-                   column_width, row_height);
+    items[i]->Move(top_left + PixelSize(colNum * (column_width + horizontal_spacing),
+                                        rowNum * (row_height + vertical_spacing)),
+                   {column_width, row_height});
     items[i]->SetVisible(itemPage == current_page);
   }
 }

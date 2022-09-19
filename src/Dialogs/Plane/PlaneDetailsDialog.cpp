@@ -157,16 +157,16 @@ PlaneEditWidget::Save(bool &_changed) noexcept
   changed |= SaveValue(REGISTRATION, plane.registration);
   changed |= SaveValue(COMPETITION_ID, plane.competition_id);
   changed |= SaveValue(TYPE, plane.type);
-  changed |= SaveValue(HANDICAP, plane.handicap);
+  changed |= SaveValueInteger(HANDICAP, plane.handicap);
   changed |= SaveValue(WING_AREA, plane.wing_area);
   changed |= SaveValue(EMPTY_MASS, UnitGroup::MASS, plane.empty_mass);
   changed |= SaveValue(MAX_BALLAST, plane.max_ballast);
-  changed |= SaveValue(DUMP_TIME, plane.dump_time);
+  changed |= SaveValueInteger(DUMP_TIME, plane.dump_time);
   changed |= SaveValue(MAX_SPEED, UnitGroup::HORIZONTAL_SPEED,
                        plane.max_speed);
 
   if (CommonInterface::GetComputerSettings().weglide.enabled)
-    changed |= SaveValue(WEGLIDE_ID, plane.weglide_glider_type);
+    changed |= SaveValueInteger(WEGLIDE_ID, plane.weglide_glider_type);
 
   _changed |= changed;
   return true;

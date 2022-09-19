@@ -110,7 +110,7 @@ WaypointEditWidget::Save(bool &_changed) noexcept
   changed |= SaveValue(ELEVATION, UnitGroup::ALTITUDE, value.elevation);
   _changed |= changed;
 
-  switch (GetValueInteger(TYPE)) {
+  switch (GetValueEnum(TYPE)) {
   case 1:
     value.flags.turn_point = true;
     value.type = Waypoint::Type::AIRFIELD;

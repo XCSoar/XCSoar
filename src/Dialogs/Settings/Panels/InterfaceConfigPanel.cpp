@@ -207,8 +207,8 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
   UISettings &settings = CommonInterface::SetUISettings();
   bool changed = false;
 
-  if (SaveValueEnum(UIScale, ProfileKeys::UIScale,
-                    settings.scale))
+  if (SaveValueInteger(UIScale, ProfileKeys::UIScale,
+                       settings.scale))
     require_restart = changed = true;
 
   if (SaveValueEnum(CustomDPI, ProfileKeys::CustomDPI,
@@ -263,7 +263,7 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
   }
 #endif // HAVE_NLS
 
-  duration<unsigned> menu_timeout{GetValueInteger(MenuTimeout) * 2};
+  duration<unsigned> menu_timeout = GetValueTime(MenuTimeout) * 2;
   if (settings.menu_timeout != menu_timeout) {
     settings.menu_timeout = menu_timeout;
     Profile::Set(ProfileKeys::MenuTimeout, menu_timeout);

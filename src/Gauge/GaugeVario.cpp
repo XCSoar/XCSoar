@@ -611,14 +611,14 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
     if (IsPersistent()) {
       const unsigned height = nary + arrow_y_size + Layout::FastScale(2);
 
+      const PixelSize size{arrow_x_size * 2 + 1, height};
+
       // bottom (too slow)
-      canvas.DrawFilledRectangle({{x, ybottom + YOFFSET},
-                                  {arrow_x_size * 2 + 1, height}},
+      canvas.DrawFilledRectangle({{x, ybottom + YOFFSET}, size},
                                  look.background_color);
 
       // top (too fast)
-      canvas.DrawFilledRectangle({{x, ytop - YOFFSET + 1 - (int)height},
-                                  {arrow_x_size * 2 + 1, height}},
+      canvas.DrawFilledRectangle({{x, ytop - YOFFSET + 1 - (int)height}, size},
                                  look.background_color);
     }
 
@@ -645,9 +645,10 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
       y = ybottom;
       y += YOFFSET;
 
+      const PixelSize size{arrow_x_size * 2 + 1, arrow_y_size - 1};
       while (v_diff > 0) {
         if (v_diff > DELTA_V_STEP) {
-          canvas.DrawRectangle({{x, y}, {arrow_x_size * 2 + 1, arrow_y_size - 1}});
+          canvas.DrawRectangle({{x, y}, size});
         } else {
           BulkPixelPoint arrow[3];
           arrow[0].x = x;
@@ -666,10 +667,10 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
       y = ytop;
       y -= YOFFSET;
 
+      const PixelSize size{arrow_x_size * 2 + 1, y - arrow_y_size + 1};
       while (v_diff < 0) {
         if (v_diff < -DELTA_V_STEP) {
-          canvas.DrawRectangle({{x, y + 1},
-                                {arrow_x_size * 2 + 1, y - arrow_y_size + 1}});
+          canvas.DrawRectangle({{x, y + 1}, size});
         } else {
           BulkPixelPoint arrow[3];
           arrow[0].x = x;

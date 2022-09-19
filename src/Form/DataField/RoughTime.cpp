@@ -38,14 +38,6 @@ RoughTimeDataField::ModifyValue(RoughTime _value) noexcept
   Modified();
 }
 
-int
-RoughTimeDataField::GetAsInteger() const noexcept
-{
-  return value.IsValid()
-    ? value.GetMinuteOfDay()
-    : -1;
-}
-
 const TCHAR *
 RoughTimeDataField::GetAsString() const noexcept
 {
