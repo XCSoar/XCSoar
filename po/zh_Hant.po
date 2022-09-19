@@ -2891,7 +2891,7 @@ msgid ""
 "(temperature trace page of Analysis dialog)"
 msgstr "設定為預報地溫。對流估算器使用(溫度跟蹤頁的分析對話方塊）"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:365
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:365 Data/Input/default.xci:1119
 msgid "Flight Setup"
 msgstr "飛行設置"
 
@@ -3187,6 +3187,7 @@ msgstr "設置新隊友"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:224
 #: src/InfoBoxes/Content/Factory.cpp:588 src/InfoBoxes/Content/Team.cpp:50
+#: Data/Input/default.xci:832
 #, no-c-format
 msgid "Team Code"
 msgstr "團隊代碼"
@@ -9965,126 +9966,16 @@ msgstr "耳機閾值"
 msgid "Urgent min. volume"
 msgstr "緊急最小音量"
 
-#: Data/Input/default.xci:596
-msgid ""
-"Config\n"
-"Page 3/3"
-msgstr ""
-
 #: Data/Input/default.xci:733
 msgid "Accelerometer leveled"
 msgstr "加速度計水平儀"
 
-#: Data/Input/default.xci:1174
-msgid "Setup Plane"
-msgstr "設置飛機"
-
-#: Data/Input/default.xci:708
-msgid "Accel"
-msgstr "加速"
-
-#: Data/Input/default.xci:848 Data/Input/default.xci:1229
-msgid "Thermal Assistant"
-msgstr "熱氣流輔助"
-
-#: Data/Input/default.xci:756
-msgid ""
-"Climb\n"
-"Demo"
-msgstr ""
-"爬升\n"
-"演示"
-
-#: Data/Input/default.xci:142 Data/Input/default.xci:790
-msgid ""
-"What's\n"
-"here?"
-msgstr ""
-"這是\n"
-"什麼?"
-
-#: Data/Input/default.xci:832
-msgid ""
-"Team\n"
-"Code"
-msgstr ""
-"團隊\n"
-"代碼"
-
-#: Data/Input/default.xci:679
-msgid ""
-"Vega\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:882
-msgid ""
-"Message\n"
-"Repeat"
-msgstr ""
-"資訊\n"
-"重複"
-
-#: Data/Input/default.xci:429
-msgid "Pilot event announced"
-msgstr ""
-
 #: Data/Input/default.xci:694
-msgid ""
-"Manual\n"
-"Demo"
+#, fuzzy
+msgid "Manual Demo"
 msgstr ""
 "演示\n"
 "手冊"
-
-#: Data/Input/default.xci:907
-msgid "Config"
-msgstr "配置"
-
-#: Data/Input/default.xci:355
-msgid ""
-"Nav\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:1127
-msgid ""
-"Setup\n"
-"Wind"
-msgstr ""
-"設置\n"
-"風"
-
-#: Data/Input/default.xci:726
-msgid "Vario ASI zeroed"
-msgstr "高度表ASI零位"
-
-#: Data/Input/default.xci:507 Data/Input/default.xci:1080
-msgid "Labels"
-msgstr "標籤"
-
-#: Data/Input/default.xci:687
-msgid ""
-"Airframe\n"
-"Switches"
-msgstr ""
-"機身\n"
-"開關"
-
-#: Data/Input/default.xci:766
-msgid ""
-"Info\n"
-"Page 2/3"
-msgstr ""
-
-#: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
-msgid ""
-"Marker\n"
-"Drop"
-msgstr ""
-"標記\n"
-"落下"
 
 #: Data/Input/default.xci:128 Data/Input/default.xci:135
 #: Data/Input/default.xci:459 Data/Input/default.xci:466
@@ -10094,87 +9985,177 @@ msgstr ""
 msgid "Zoom"
 msgstr "縮放"
 
-#: Data/Input/default.xci:69
-msgid "Final glide through terrain"
-msgstr "通過地形最後的滑翔"
-
-#: Data/Input/default.xci:749
-msgid ""
-"Cruise\n"
-"Demo"
+#: Data/Input/default.xci:687
+#, fuzzy
+msgid "Airframe Switches"
 msgstr ""
-"巡航\n"
-"模擬"
+"機身\n"
+"開關"
+
+#: Data/Input/default.xci:596
+msgid ""
+"Config\n"
+"Page 3/3"
+msgstr ""
+
+#: Data/Input/default.xci:668 Data/Input/default.xci:719
+msgid "Vega"
+msgstr "Vega"
+
+#: Data/Input/default.xci:701
+#, fuzzy
+msgid "Setup Stall"
+msgstr ""
+"設置\n"
+"失速"
+
+#: Data/Input/default.xci:756
+#, fuzzy
+msgid "Climb Demo"
+msgstr ""
+"爬升\n"
+"演示"
+
+#: Data/Input/default.xci:922
+msgid "Lock Screen"
+msgstr ""
+
+#: Data/Input/default.xci:980
+msgid "AVG/ALT"
+msgstr "平均/高度"
+
+#: Data/Input/default.xci:488 Data/Input/default.xci:1072
+msgid "Pan Mode"
+msgstr ""
+
+#: Data/Input/default.xci:1174
+msgid "Setup Plane"
+msgstr "設置飛機"
+
+#: Data/Input/default.xci:59
+msgid "Above final glide"
+msgstr "最終滑翔高度之上"
+
+#: Data/Input/default.xci:679
+msgid ""
+"Vega\n"
+"Page 2/2"
+msgstr ""
+
+#: Data/Input/default.xci:1135
+#, fuzzy
+msgid "Setup System"
+msgstr ""
+"設置\n"
+"系統"
+
+#: Data/Input/default.xci:515 Data/Input/default.xci:1088
+msgid "Trail"
+msgstr "軌跡"
+
+#: Data/Input/default.xci:440 Data/Input/default.xci:1046
+#, fuzzy
+msgid "Target Show"
+msgstr "目標"
+
+#: Data/Input/default.xci:64
+msgid "Below final glide"
+msgstr "低於最終滑翔高度"
+
+#: Data/Input/default.xci:432
+#, fuzzy
+msgid "Pilot Event Announce"
+msgstr "飛行員"
+
+#: Data/Input/default.xci:481
+msgid "Page Show"
+msgstr ""
+
+#: Data/Input/default.xci:726
+msgid "Vario ASI zeroed"
+msgstr "高度表ASI零位"
+
+#: Data/Input/default.xci:355
+msgid ""
+"Nav\n"
+"Page 2/2"
+msgstr ""
 
 #: Data/Input/default.xci:893
 msgid "Nav"
 msgstr "導航"
 
-#: Data/Input/default.xci:1135
-msgid ""
-"Setup\n"
-"System"
+#: Data/Input/default.xci:708
+msgid "Accel"
+msgstr "加速"
+
+#: Data/Input/default.xci:142 Data/Input/default.xci:790
+#, fuzzy
+msgid "What's here?"
 msgstr ""
-"設置\n"
-"系統"
-
-#: Data/Input/default.xci:727
-msgid ""
-"ASI\n"
-"Zero"
-msgstr ""
-"ASI\n"
-"零"
-
-#: Data/Input/default.xci:653 Data/Input/default.xci:1158
-msgid "Raw Logger"
-msgstr "原始記錄器"
-
-#: Data/Input/default.xci:922
-msgid ""
-"Lock\n"
-"Screen"
-msgstr ""
-
-#: Data/Input/default.xci:1197
-msgid ""
-"Nearest\n"
-"Airspace"
-msgstr ""
-"最近的\n"
-"空域"
-
-#: Data/Input/default.xci:840
-msgid "Traffic List"
-msgstr "交通列表"
-
-#: Data/Input/default.xci:661
-msgid "Lua"
-msgstr "Lua"
-
-#: Data/Input/default.xci:1143
-msgid ""
-"Settings\n"
-"Airspace"
-msgstr ""
-"設置\n"
-"空域"
-
-#: Data/Input/default.xci:419 Data/Input/default.xci:1062
-msgid "Dropped marker"
-msgstr "下降標記"
+"這是\n"
+"什麼?"
 
 #: Data/Input/default.xci:741
 msgid "Stored to EEPROM"
 msgstr "存儲到EEPROM中"
 
+#: Data/Input/default.xci:1127
+#, fuzzy
+msgid "Setup Wind"
+msgstr ""
+"設置\n"
+"風"
+
+#: Data/Input/default.xci:840
+msgid "Traffic List"
+msgstr "交通列表"
+
 #: Data/Input/default.xci:734
-msgid ""
-"Accel\n"
-"Zero"
+#, fuzzy
+msgid "Accel Zero"
 msgstr ""
 "加速\n"
 "零"
+
+#: Data/Input/default.xci:69
+msgid "Final glide through terrain"
+msgstr "通過地形最後的滑翔"
+
+#: Data/Input/default.xci:422 Data/Input/default.xci:1065
+#, fuzzy
+msgid "Marker Drop"
+msgstr ""
+"標記\n"
+"落下"
+
+#: Data/Input/default.xci:882
+#, fuzzy
+msgid "Message Repeat"
+msgstr ""
+"資訊\n"
+"重複"
+
+#: Data/Input/default.xci:848 Data/Input/default.xci:1229
+msgid "Thermal Assistant"
+msgstr "熱氣流輔助"
+
+#: Data/Input/default.xci:48
+msgid "Takeoff"
+msgstr "起飛"
+
+#: Data/Input/default.xci:546
+msgid ""
+"Config\n"
+"Page 2/3"
+msgstr ""
+
+#: Data/Input/default.xci:1197
+#, fuzzy
+msgid "Nearest Airspace"
+msgstr ""
+"最近的\n"
+"空域"
 
 #: Data/Input/default.xci:451
 #, fuzzy
@@ -10183,64 +10164,57 @@ msgid ""
 "Page 2/2"
 msgstr "顯示"
 
+#: Data/Input/default.xci:727
+#, fuzzy
+msgid "ASI Zero"
+msgstr ""
+"ASI\n"
+"零"
+
+#: Data/Input/default.xci:507 Data/Input/default.xci:1080
+msgid "Labels"
+msgstr "標籤"
+
+#: Data/Input/default.xci:385 Data/Input/default.xci:1014
+#, fuzzy
+msgid "Waypoint List"
+msgstr ""
+"航點\n"
+"表"
+
+#: Data/Input/default.xci:661
+msgid "Lua"
+msgstr "Lua"
+
+#: Data/Input/default.xci:653 Data/Input/default.xci:1158
+msgid "Raw Logger"
+msgstr "原始記錄器"
+
 #: Data/Input/default.xci:774 Data/Input/default.xci:1181
 msgid "FLARM Radar"
 msgstr "FLARM雷達"
 
-#: Data/Input/default.xci:481
-msgid "Page Show"
-msgstr ""
+#: Data/Input/default.xci:529 Data/Input/default.xci:1102
+msgid "Topo."
+msgstr "地貌。"
 
-#: Data/Input/default.xci:668 Data/Input/default.xci:719
-msgid "Vega"
-msgstr "Vega"
+#: Data/Input/default.xci:419 Data/Input/default.xci:1062
+msgid "Dropped marker"
+msgstr "下降標記"
 
-#: Data/Input/default.xci:546
-msgid ""
-"Config\n"
-"Page 2/3"
-msgstr ""
-
-#: Data/Input/default.xci:1119
-msgid ""
-"Flight\n"
-"Setup"
-msgstr ""
-"飛行\n"
-"設置"
-
-#: Data/Input/default.xci:488 Data/Input/default.xci:1072
-msgid ""
-"Pan\n"
-"Mode"
-msgstr ""
-
-#: Data/Input/default.xci:59
-msgid "Above final glide"
-msgstr "最終滑翔高度之上"
-
-#: Data/Input/default.xci:980
-msgid "AVG/ALT"
-msgstr "平均/高度"
-
-#: Data/Input/default.xci:742
-msgid "Store"
-msgstr "存儲"
-
-#: Data/Input/default.xci:432
+#: Data/Input/default.xci:1143
 #, fuzzy
-msgid ""
-"Pilot Event\n"
-"Announce"
-msgstr "飛行員"
-
-#: Data/Input/default.xci:701
-msgid ""
-"Setup\n"
-"Stall"
+msgid "Settings Airspace"
 msgstr ""
 "設置\n"
-"失速"
+"空域"
+
+#: Data/Input/default.xci:749
+#, fuzzy
+msgid "Cruise Demo"
+msgstr ""
+"巡航\n"
+"模擬"
 
 #: Data/Input/default.xci:816
 msgid ""
@@ -10248,36 +10222,37 @@ msgid ""
 "Page 3/3"
 msgstr ""
 
-#: Data/Input/default.xci:48
-msgid "Takeoff"
-msgstr "起飛"
+#: Data/Input/default.xci:907
+msgid "Config"
+msgstr "配置"
 
-#: Data/Input/default.xci:64
-msgid "Below final glide"
-msgstr "低於最終滑翔高度"
-
-#: Data/Input/default.xci:515 Data/Input/default.xci:1088
-msgid "Trail"
-msgstr "軌跡"
-
-#: Data/Input/default.xci:385 Data/Input/default.xci:1014
-msgid ""
-"Waypoint\n"
-"List"
+#: Data/Input/default.xci:429
+msgid "Pilot event announced"
 msgstr ""
-"航點\n"
-"表"
 
-#: Data/Input/default.xci:529 Data/Input/default.xci:1102
-msgid "Topo."
-msgstr "地貌。"
+#: Data/Input/default.xci:742
+msgid "Store"
+msgstr "存儲"
 
-#: Data/Input/default.xci:440 Data/Input/default.xci:1046
-#, fuzzy
+#: Data/Input/default.xci:766
 msgid ""
-"Target\n"
-"Show"
-msgstr "目標"
+"Info\n"
+"Page 2/3"
+msgstr ""
+
+#~ msgid ""
+#~ "Team\n"
+#~ "Code"
+#~ msgstr ""
+#~ "團隊\n"
+#~ "代碼"
+
+#~ msgid ""
+#~ "Flight\n"
+#~ "Setup"
+#~ msgstr ""
+#~ "飛行\n"
+#~ "設置"
 
 #, no-c-format
 #~ msgid ""

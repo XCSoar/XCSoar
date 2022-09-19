@@ -2896,7 +2896,7 @@ msgstr ""
 "지상예보기온: 입력하면, 고도에 따른 온도변화를 계산해서 보여준다. (정보창-예"
 "상온도)"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:365
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:365 Data/Input/default.xci:1119
 msgid "Flight Setup"
 msgstr "비행(Flight)설정"
 
@@ -3192,6 +3192,7 @@ msgstr "새로운 팀동료 설정"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:224
 #: src/InfoBoxes/Content/Factory.cpp:588 src/InfoBoxes/Content/Team.cpp:50
+#: Data/Input/default.xci:832
 #, no-c-format
 msgid "Team Code"
 msgstr "팀코드"
@@ -10078,125 +10079,16 @@ msgstr "헤드폰최대음량"
 msgid "Urgent min. volume"
 msgstr "긴급최소음량"
 
-#: Data/Input/default.xci:596
-msgid ""
-"Config\n"
-"Page 3/3"
-msgstr ""
-
 #: Data/Input/default.xci:733
 msgid "Accelerometer leveled"
 msgstr "엑셀레이터 레벨"
 
-#: Data/Input/default.xci:1174
-msgid "Setup Plane"
-msgstr "기체설정"
-
-#: Data/Input/default.xci:708
-msgid "Accel"
-msgstr "엑셀"
-
-#: Data/Input/default.xci:848 Data/Input/default.xci:1229
-msgid "Thermal Assistant"
-msgstr "써멀레이더"
-
-#: Data/Input/default.xci:756
-msgid ""
-"Climb\n"
-"Demo"
-msgstr ""
-"상승\n"
-"데모"
-
-#: Data/Input/default.xci:142 Data/Input/default.xci:790
-msgid ""
-"What's\n"
-"here?"
-msgstr ""
-"여기는\n"
-"어디?"
-
-#: Data/Input/default.xci:832
-msgid ""
-"Team\n"
-"Code"
-msgstr ""
-"팀\n"
-"코드"
-
-#: Data/Input/default.xci:679
-msgid ""
-"Vega\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:882
-msgid ""
-"Message\n"
-"Repeat"
-msgstr "메시지 반복"
-
-#: Data/Input/default.xci:429
-msgid "Pilot event announced"
-msgstr "파일럿 이벤트 공지"
-
 #: Data/Input/default.xci:694
-msgid ""
-"Manual\n"
-"Demo"
+#, fuzzy
+msgid "Manual Demo"
 msgstr ""
 "수동\n"
 "데모"
-
-#: Data/Input/default.xci:907
-msgid "Config"
-msgstr "환경설정"
-
-#: Data/Input/default.xci:355
-msgid ""
-"Nav\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:1127
-msgid ""
-"Setup\n"
-"Wind"
-msgstr ""
-"바람\n"
-"설정"
-
-#: Data/Input/default.xci:726
-msgid "Vario ASI zeroed"
-msgstr "바리오영점조정"
-
-#: Data/Input/default.xci:507 Data/Input/default.xci:1080
-msgid "Labels"
-msgstr "이름"
-
-#: Data/Input/default.xci:687
-msgid ""
-"Airframe\n"
-"Switches"
-msgstr ""
-"Airframe\n"
-"스위치"
-
-#: Data/Input/default.xci:766
-#, fuzzy
-msgid ""
-"Info\n"
-"Page 2/3"
-msgstr "인포박스 페이지"
-
-#: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
-msgid ""
-"Marker\n"
-"Drop"
-msgstr ""
-"위치\n"
-"마크"
 
 #: Data/Input/default.xci:128 Data/Input/default.xci:135
 #: Data/Input/default.xci:459 Data/Input/default.xci:466
@@ -10206,59 +10098,130 @@ msgstr ""
 msgid "Zoom"
 msgstr "줌"
 
-#: Data/Input/default.xci:69
-msgid "Final glide through terrain"
-msgstr "현재 L/D가 지형을 통과함"
-
-#: Data/Input/default.xci:749
-msgid ""
-"Cruise\n"
-"Demo"
+#: Data/Input/default.xci:687
+#, fuzzy
+msgid "Airframe Switches"
 msgstr ""
-"순항\n"
+"Airframe\n"
+"스위치"
+
+#: Data/Input/default.xci:596
+msgid ""
+"Config\n"
+"Page 3/3"
+msgstr ""
+
+#: Data/Input/default.xci:668 Data/Input/default.xci:719
+msgid "Vega"
+msgstr "Vega"
+
+#: Data/Input/default.xci:701
+#, fuzzy
+msgid "Setup Stall"
+msgstr ""
+"스톨\n"
+"설정"
+
+#: Data/Input/default.xci:756
+#, fuzzy
+msgid "Climb Demo"
+msgstr ""
+"상승\n"
 "데모"
+
+#: Data/Input/default.xci:922
+#, fuzzy
+msgid "Lock Screen"
+msgstr ""
+"화면\n"
+"잠금"
+
+#: Data/Input/default.xci:980
+msgid "AVG/ALT"
+msgstr "AVG/ALT"
+
+#: Data/Input/default.xci:488 Data/Input/default.xci:1072
+msgid "Pan Mode"
+msgstr ""
+
+#: Data/Input/default.xci:1174
+msgid "Setup Plane"
+msgstr "기체설정"
+
+#: Data/Input/default.xci:59
+msgid "Above final glide"
+msgstr "현재 활공비를 유지하시오"
+
+#: Data/Input/default.xci:679
+msgid ""
+"Vega\n"
+"Page 2/2"
+msgstr ""
+
+#: Data/Input/default.xci:1135
+#, fuzzy
+msgid "Setup System"
+msgstr ""
+"셋업\n"
+"시스템"
+
+#: Data/Input/default.xci:515 Data/Input/default.xci:1088
+msgid "Trail"
+msgstr "항적"
+
+#: Data/Input/default.xci:440 Data/Input/default.xci:1046
+#, fuzzy
+msgid "Target Show"
+msgstr "웨이포인트"
+
+#: Data/Input/default.xci:64
+msgid "Below final glide"
+msgstr "현재 L/D보다 목표가 아래에 있음"
+
+#: Data/Input/default.xci:432
+#, fuzzy
+msgid "Pilot Event Announce"
+msgstr "파일럿 이벤트 공지"
+
+#: Data/Input/default.xci:481
+msgid "Page Show"
+msgstr ""
+
+#: Data/Input/default.xci:726
+msgid "Vario ASI zeroed"
+msgstr "바리오영점조정"
+
+#: Data/Input/default.xci:355
+msgid ""
+"Nav\n"
+"Page 2/2"
+msgstr ""
 
 #: Data/Input/default.xci:893
 msgid "Nav"
 msgstr "내비게이션"
 
-#: Data/Input/default.xci:1135
-msgid ""
-"Setup\n"
-"System"
-msgstr ""
-"셋업\n"
-"시스템"
+#: Data/Input/default.xci:708
+msgid "Accel"
+msgstr "엑셀"
 
-#: Data/Input/default.xci:727
-msgid ""
-"ASI\n"
-"Zero"
+#: Data/Input/default.xci:142 Data/Input/default.xci:790
+#, fuzzy
+msgid "What's here?"
 msgstr ""
-"ASI\n"
-"제로"
+"여기는\n"
+"어디?"
 
-#: Data/Input/default.xci:653 Data/Input/default.xci:1158
-msgid "Raw Logger"
-msgstr ""
-"비가공(Raw)\n"
-"로거"
+#: Data/Input/default.xci:741
+msgid "Stored to EEPROM"
+msgstr "EEPROM에 저장"
 
-#: Data/Input/default.xci:922
-msgid ""
-"Lock\n"
-"Screen"
+#: Data/Input/default.xci:1127
+#, fuzzy
+msgid "Setup Wind"
 msgstr ""
-"화면\n"
-"잠금"
-
-#: Data/Input/default.xci:1197
-msgid ""
-"Nearest\n"
-"Airspace"
-msgstr ""
-"근처의\n"
-"공역"
+"바람\n"
+"설정"
 
 #: Data/Input/default.xci:840
 msgid "Traffic List"
@@ -10266,31 +10229,49 @@ msgstr ""
 "트래픽\n"
 "리스트"
 
-#: Data/Input/default.xci:661
-msgid "Lua"
-msgstr "Lua"
-
-#: Data/Input/default.xci:1143
-msgid ""
-"Settings\n"
-"Airspace"
-msgstr "공역 설정"
-
-#: Data/Input/default.xci:419 Data/Input/default.xci:1062
-msgid "Dropped marker"
-msgstr "마커 표시"
-
-#: Data/Input/default.xci:741
-msgid "Stored to EEPROM"
-msgstr "EEPROM에 저장"
-
 #: Data/Input/default.xci:734
-msgid ""
-"Accel\n"
-"Zero"
+#, fuzzy
+msgid "Accel Zero"
 msgstr ""
 "엑셀\n"
 "제로"
+
+#: Data/Input/default.xci:69
+msgid "Final glide through terrain"
+msgstr "현재 L/D가 지형을 통과함"
+
+#: Data/Input/default.xci:422 Data/Input/default.xci:1065
+#, fuzzy
+msgid "Marker Drop"
+msgstr ""
+"위치\n"
+"마크"
+
+#: Data/Input/default.xci:882
+#, fuzzy
+msgid "Message Repeat"
+msgstr "메시지 반복"
+
+#: Data/Input/default.xci:848 Data/Input/default.xci:1229
+msgid "Thermal Assistant"
+msgstr "써멀레이더"
+
+#: Data/Input/default.xci:48
+msgid "Takeoff"
+msgstr "이륙"
+
+#: Data/Input/default.xci:546
+msgid ""
+"Config\n"
+"Page 2/3"
+msgstr ""
+
+#: Data/Input/default.xci:1197
+#, fuzzy
+msgid "Nearest Airspace"
+msgstr ""
+"근처의\n"
+"공역"
 
 #: Data/Input/default.xci:451
 #, fuzzy
@@ -10299,66 +10280,59 @@ msgid ""
 "Page 2/2"
 msgstr "화면"
 
+#: Data/Input/default.xci:727
+#, fuzzy
+msgid "ASI Zero"
+msgstr ""
+"ASI\n"
+"제로"
+
+#: Data/Input/default.xci:507 Data/Input/default.xci:1080
+msgid "Labels"
+msgstr "이름"
+
+#: Data/Input/default.xci:385 Data/Input/default.xci:1014
+#, fuzzy
+msgid "Waypoint List"
+msgstr ""
+"웨이포인트\n"
+"목록"
+
+#: Data/Input/default.xci:661
+msgid "Lua"
+msgstr "Lua"
+
+#: Data/Input/default.xci:653 Data/Input/default.xci:1158
+msgid "Raw Logger"
+msgstr ""
+"비가공(Raw)\n"
+"로거"
+
 #: Data/Input/default.xci:774 Data/Input/default.xci:1181
 msgid "FLARM Radar"
 msgstr ""
 "FLARM\n"
 "레이더"
 
-#: Data/Input/default.xci:481
-msgid "Page Show"
-msgstr ""
+#: Data/Input/default.xci:529 Data/Input/default.xci:1102
+msgid "Topo."
+msgstr "장소"
 
-#: Data/Input/default.xci:668 Data/Input/default.xci:719
-msgid "Vega"
-msgstr "Vega"
+#: Data/Input/default.xci:419 Data/Input/default.xci:1062
+msgid "Dropped marker"
+msgstr "마커 표시"
 
-#: Data/Input/default.xci:546
-msgid ""
-"Config\n"
-"Page 2/3"
-msgstr ""
-
-#: Data/Input/default.xci:1119
-msgid ""
-"Flight\n"
-"Setup"
-msgstr ""
-"기체\n"
-"설정"
-
-#: Data/Input/default.xci:488 Data/Input/default.xci:1072
-msgid ""
-"Pan\n"
-"Mode"
-msgstr ""
-
-#: Data/Input/default.xci:59
-msgid "Above final glide"
-msgstr "현재 활공비를 유지하시오"
-
-#: Data/Input/default.xci:980
-msgid "AVG/ALT"
-msgstr "AVG/ALT"
-
-#: Data/Input/default.xci:742
-msgid "Store"
-msgstr "저장"
-
-#: Data/Input/default.xci:432
+#: Data/Input/default.xci:1143
 #, fuzzy
-msgid ""
-"Pilot Event\n"
-"Announce"
-msgstr "파일럿 이벤트 공지"
+msgid "Settings Airspace"
+msgstr "공역 설정"
 
-#: Data/Input/default.xci:701
-msgid ""
-"Setup\n"
-"Stall"
+#: Data/Input/default.xci:749
+#, fuzzy
+msgid "Cruise Demo"
 msgstr ""
-"스톨\n"
-"설정"
+"순항\n"
+"데모"
 
 #: Data/Input/default.xci:816
 #, fuzzy
@@ -10367,36 +10341,38 @@ msgid ""
 "Page 3/3"
 msgstr "인포박스 페이지"
 
-#: Data/Input/default.xci:48
-msgid "Takeoff"
-msgstr "이륙"
+#: Data/Input/default.xci:907
+msgid "Config"
+msgstr "환경설정"
 
-#: Data/Input/default.xci:64
-msgid "Below final glide"
-msgstr "현재 L/D보다 목표가 아래에 있음"
+#: Data/Input/default.xci:429
+msgid "Pilot event announced"
+msgstr "파일럿 이벤트 공지"
 
-#: Data/Input/default.xci:515 Data/Input/default.xci:1088
-msgid "Trail"
-msgstr "항적"
+#: Data/Input/default.xci:742
+msgid "Store"
+msgstr "저장"
 
-#: Data/Input/default.xci:385 Data/Input/default.xci:1014
-msgid ""
-"Waypoint\n"
-"List"
-msgstr ""
-"웨이포인트\n"
-"목록"
-
-#: Data/Input/default.xci:529 Data/Input/default.xci:1102
-msgid "Topo."
-msgstr "장소"
-
-#: Data/Input/default.xci:440 Data/Input/default.xci:1046
+#: Data/Input/default.xci:766
 #, fuzzy
 msgid ""
-"Target\n"
-"Show"
-msgstr "웨이포인트"
+"Info\n"
+"Page 2/3"
+msgstr "인포박스 페이지"
+
+#~ msgid ""
+#~ "Team\n"
+#~ "Code"
+#~ msgstr ""
+#~ "팀\n"
+#~ "코드"
+
+#~ msgid ""
+#~ "Flight\n"
+#~ "Setup"
+#~ msgstr ""
+#~ "기체\n"
+#~ "설정"
 
 #, no-c-format
 #~ msgid ""

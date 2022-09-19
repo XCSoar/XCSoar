@@ -2953,7 +2953,7 @@ msgstr ""
 "Sett til værmeldingstemperatur (bakketemp.). Brukes til termikkprognoser "
 "(temperaturkurve i Analysedialog)"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:365
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:365 Data/Input/default.xci:1119
 msgid "Flight Setup"
 msgstr "Flytur Oppsett"
 
@@ -3251,6 +3251,7 @@ msgstr ""
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:224
 #: src/InfoBoxes/Content/Factory.cpp:588 src/InfoBoxes/Content/Team.cpp:50
+#: Data/Input/default.xci:832
 #, no-c-format
 msgid "Team Code"
 msgstr "Lag ID"
@@ -10145,125 +10146,16 @@ msgstr ""
 msgid "Urgent min. volume"
 msgstr ""
 
-#: Data/Input/default.xci:596
-msgid ""
-"Config\n"
-"Page 3/3"
-msgstr ""
-
 #: Data/Input/default.xci:733
 msgid "Accelerometer leveled"
 msgstr "G-måler nullstillt"
 
-#: Data/Input/default.xci:1174
-msgid "Setup Plane"
-msgstr "Farkost Oppsett"
-
-#: Data/Input/default.xci:708
-msgid "Accel"
-msgstr "Aksell."
-
-#: Data/Input/default.xci:848 Data/Input/default.xci:1229
-msgid "Thermal Assistant"
-msgstr "Termikk Hjelp"
-
-#: Data/Input/default.xci:756
-msgid ""
-"Climb\n"
-"Demo"
-msgstr ""
-"Stig\n"
-"Demo"
-
-#: Data/Input/default.xci:142 Data/Input/default.xci:790
-msgid ""
-"What's\n"
-"here?"
-msgstr ""
-"Hva finns\n"
-"her?"
-
-#: Data/Input/default.xci:832
-msgid ""
-"Team\n"
-"Code"
-msgstr ""
-"Lag\n"
-"ID"
-
-#: Data/Input/default.xci:679
-msgid ""
-"Vega\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:882
-msgid ""
-"Message\n"
-"Repeat"
-msgstr ""
-"Siste\n"
-"Beskjed"
-
-#: Data/Input/default.xci:429
-msgid "Pilot event announced"
-msgstr ""
-
 #: Data/Input/default.xci:694
-msgid ""
-"Manual\n"
-"Demo"
+#, fuzzy
+msgid "Manual Demo"
 msgstr ""
 "Man\n"
 "Demo"
-
-#: Data/Input/default.xci:907
-msgid "Config"
-msgstr "Innstilling"
-
-#: Data/Input/default.xci:355
-msgid ""
-"Nav\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:1127
-msgid ""
-"Setup\n"
-"Wind"
-msgstr ""
-"Oppsett\n"
-"Vind"
-
-#: Data/Input/default.xci:726
-msgid "Vario ASI zeroed"
-msgstr "Vario ASI nullstillt"
-
-#: Data/Input/default.xci:507 Data/Input/default.xci:1080
-msgid "Labels"
-msgstr "Etiketter"
-
-#: Data/Input/default.xci:687
-msgid ""
-"Airframe\n"
-"Switches"
-msgstr ""
-"Farkost\n"
-"Brytere"
-
-#: Data/Input/default.xci:766
-#, fuzzy
-msgid ""
-"Info\n"
-"Page 2/3"
-msgstr "InfoBoks Sider"
-
-#: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
-msgid ""
-"Marker\n"
-"Drop"
-msgstr "Marker"
 
 #: Data/Input/default.xci:128 Data/Input/default.xci:135
 #: Data/Input/default.xci:459 Data/Input/default.xci:466
@@ -10273,87 +10165,176 @@ msgstr "Marker"
 msgid "Zoom"
 msgstr "Zoom"
 
-#: Data/Input/default.xci:69
-msgid "Final glide through terrain"
-msgstr "Målglidestrekk gjennom terrenget"
-
-#: Data/Input/default.xci:749
-msgid ""
-"Cruise\n"
-"Demo"
+#: Data/Input/default.xci:687
+#, fuzzy
+msgid "Airframe Switches"
 msgstr ""
-"Strekkfl.\n"
+"Farkost\n"
+"Brytere"
+
+#: Data/Input/default.xci:596
+msgid ""
+"Config\n"
+"Page 3/3"
+msgstr ""
+
+#: Data/Input/default.xci:668 Data/Input/default.xci:719
+msgid "Vega"
+msgstr "Vega"
+
+#: Data/Input/default.xci:701
+#, fuzzy
+msgid "Setup Stall"
+msgstr ""
+"Oppsett\n"
+"Steil"
+
+#: Data/Input/default.xci:756
+#, fuzzy
+msgid "Climb Demo"
+msgstr ""
+"Stig\n"
 "Demo"
+
+#: Data/Input/default.xci:922
+msgid "Lock Screen"
+msgstr ""
+
+#: Data/Input/default.xci:980
+msgid "AVG/ALT"
+msgstr "AVG/ALT"
+
+#: Data/Input/default.xci:488 Data/Input/default.xci:1072
+msgid "Pan Mode"
+msgstr ""
+
+#: Data/Input/default.xci:1174
+msgid "Setup Plane"
+msgstr "Farkost Oppsett"
+
+#: Data/Input/default.xci:59
+msgid "Above final glide"
+msgstr "Høyere enn Målglidestrekkshøyde"
+
+#: Data/Input/default.xci:679
+msgid ""
+"Vega\n"
+"Page 2/2"
+msgstr ""
+
+#: Data/Input/default.xci:1135
+#, fuzzy
+msgid "Setup System"
+msgstr ""
+"Oppsett\n"
+"System"
+
+#: Data/Input/default.xci:515 Data/Input/default.xci:1088
+msgid "Trail"
+msgstr "Spor"
+
+#: Data/Input/default.xci:440 Data/Input/default.xci:1046
+#, fuzzy
+msgid "Target Show"
+msgstr "Mål"
+
+#: Data/Input/default.xci:64
+msgid "Below final glide"
+msgstr "Lavere enn målstrekkgl."
+
+#: Data/Input/default.xci:432
+#, fuzzy
+msgid "Pilot Event Announce"
+msgstr "Pilot"
+
+#: Data/Input/default.xci:481
+#, fuzzy
+msgid "Page Show"
+msgstr "Side"
+
+#: Data/Input/default.xci:726
+msgid "Vario ASI zeroed"
+msgstr "Vario ASI nullstillt"
+
+#: Data/Input/default.xci:355
+msgid ""
+"Nav\n"
+"Page 2/2"
+msgstr ""
 
 #: Data/Input/default.xci:893
 msgid "Nav"
 msgstr "Nav"
 
-#: Data/Input/default.xci:1135
-msgid ""
-"Setup\n"
-"System"
+#: Data/Input/default.xci:708
+msgid "Accel"
+msgstr "Aksell."
+
+#: Data/Input/default.xci:142 Data/Input/default.xci:790
+#, fuzzy
+msgid "What's here?"
 msgstr ""
-"Oppsett\n"
-"System"
-
-#: Data/Input/default.xci:727
-msgid ""
-"ASI\n"
-"Zero"
-msgstr ""
-"ASI\n"
-"Nullstill"
-
-#: Data/Input/default.xci:653 Data/Input/default.xci:1158
-msgid "Raw Logger"
-msgstr "Rå Logger"
-
-#: Data/Input/default.xci:922
-msgid ""
-"Lock\n"
-"Screen"
-msgstr ""
-
-#: Data/Input/default.xci:1197
-msgid ""
-"Nearest\n"
-"Airspace"
-msgstr ""
-"Luftrom\n"
-"Nærmest"
-
-#: Data/Input/default.xci:840
-msgid "Traffic List"
-msgstr ""
-
-#: Data/Input/default.xci:661
-msgid "Lua"
-msgstr ""
-
-#: Data/Input/default.xci:1143
-msgid ""
-"Settings\n"
-"Airspace"
-msgstr ""
-"Innstillinger\n"
-"Luftrom"
-
-#: Data/Input/default.xci:419 Data/Input/default.xci:1062
-msgid "Dropped marker"
-msgstr "Markert"
+"Hva finns\n"
+"her?"
 
 #: Data/Input/default.xci:741
 msgid "Stored to EEPROM"
 msgstr "Lagret i EEPROM"
 
+#: Data/Input/default.xci:1127
+#, fuzzy
+msgid "Setup Wind"
+msgstr ""
+"Oppsett\n"
+"Vind"
+
+#: Data/Input/default.xci:840
+msgid "Traffic List"
+msgstr ""
+
 #: Data/Input/default.xci:734
-msgid ""
-"Accel\n"
-"Zero"
+#, fuzzy
+msgid "Accel Zero"
 msgstr ""
 "G-måler\n"
 "Nullst."
+
+#: Data/Input/default.xci:69
+msgid "Final glide through terrain"
+msgstr "Målglidestrekk gjennom terrenget"
+
+#: Data/Input/default.xci:422 Data/Input/default.xci:1065
+#, fuzzy
+msgid "Marker Drop"
+msgstr "Marker"
+
+#: Data/Input/default.xci:882
+#, fuzzy
+msgid "Message Repeat"
+msgstr ""
+"Siste\n"
+"Beskjed"
+
+#: Data/Input/default.xci:848 Data/Input/default.xci:1229
+msgid "Thermal Assistant"
+msgstr "Termikk Hjelp"
+
+#: Data/Input/default.xci:48
+msgid "Takeoff"
+msgstr "Start flytur"
+
+#: Data/Input/default.xci:546
+msgid ""
+"Config\n"
+"Page 2/3"
+msgstr ""
+
+#: Data/Input/default.xci:1197
+#, fuzzy
+msgid "Nearest Airspace"
+msgstr ""
+"Luftrom\n"
+"Nærmest"
 
 #: Data/Input/default.xci:451
 #, fuzzy
@@ -10362,65 +10343,57 @@ msgid ""
 "Page 2/2"
 msgstr "Vis"
 
+#: Data/Input/default.xci:727
+#, fuzzy
+msgid "ASI Zero"
+msgstr ""
+"ASI\n"
+"Nullstill"
+
+#: Data/Input/default.xci:507 Data/Input/default.xci:1080
+msgid "Labels"
+msgstr "Etiketter"
+
+#: Data/Input/default.xci:385 Data/Input/default.xci:1014
+#, fuzzy
+msgid "Waypoint List"
+msgstr ""
+"Vendep.\n"
+"Liste"
+
+#: Data/Input/default.xci:661
+msgid "Lua"
+msgstr ""
+
+#: Data/Input/default.xci:653 Data/Input/default.xci:1158
+msgid "Raw Logger"
+msgstr "Rå Logger"
+
 #: Data/Input/default.xci:774 Data/Input/default.xci:1181
 msgid "FLARM Radar"
 msgstr "FLARM Radar"
 
-#: Data/Input/default.xci:481
+#: Data/Input/default.xci:529 Data/Input/default.xci:1102
+msgid "Topo."
+msgstr "Topo."
+
+#: Data/Input/default.xci:419 Data/Input/default.xci:1062
+msgid "Dropped marker"
+msgstr "Markert"
+
+#: Data/Input/default.xci:1143
 #, fuzzy
-msgid "Page Show"
-msgstr "Side"
-
-#: Data/Input/default.xci:668 Data/Input/default.xci:719
-msgid "Vega"
-msgstr "Vega"
-
-#: Data/Input/default.xci:546
-msgid ""
-"Config\n"
-"Page 2/3"
+msgid "Settings Airspace"
 msgstr ""
+"Innstillinger\n"
+"Luftrom"
 
-#: Data/Input/default.xci:1119
-msgid ""
-"Flight\n"
-"Setup"
-msgstr ""
-"Flytur\n"
-"Oppsett"
-
-#: Data/Input/default.xci:488 Data/Input/default.xci:1072
-msgid ""
-"Pan\n"
-"Mode"
-msgstr ""
-
-#: Data/Input/default.xci:59
-msgid "Above final glide"
-msgstr "Høyere enn Målglidestrekkshøyde"
-
-#: Data/Input/default.xci:980
-msgid "AVG/ALT"
-msgstr "AVG/ALT"
-
-#: Data/Input/default.xci:742
-msgid "Store"
-msgstr "Lagre"
-
-#: Data/Input/default.xci:432
+#: Data/Input/default.xci:749
 #, fuzzy
-msgid ""
-"Pilot Event\n"
-"Announce"
-msgstr "Pilot"
-
-#: Data/Input/default.xci:701
-msgid ""
-"Setup\n"
-"Stall"
+msgid "Cruise Demo"
 msgstr ""
-"Oppsett\n"
-"Steil"
+"Strekkfl.\n"
+"Demo"
 
 #: Data/Input/default.xci:816
 #, fuzzy
@@ -10429,36 +10402,38 @@ msgid ""
 "Page 3/3"
 msgstr "InfoBoks Sider"
 
-#: Data/Input/default.xci:48
-msgid "Takeoff"
-msgstr "Start flytur"
+#: Data/Input/default.xci:907
+msgid "Config"
+msgstr "Innstilling"
 
-#: Data/Input/default.xci:64
-msgid "Below final glide"
-msgstr "Lavere enn målstrekkgl."
-
-#: Data/Input/default.xci:515 Data/Input/default.xci:1088
-msgid "Trail"
-msgstr "Spor"
-
-#: Data/Input/default.xci:385 Data/Input/default.xci:1014
-msgid ""
-"Waypoint\n"
-"List"
+#: Data/Input/default.xci:429
+msgid "Pilot event announced"
 msgstr ""
-"Vendep.\n"
-"Liste"
 
-#: Data/Input/default.xci:529 Data/Input/default.xci:1102
-msgid "Topo."
-msgstr "Topo."
+#: Data/Input/default.xci:742
+msgid "Store"
+msgstr "Lagre"
 
-#: Data/Input/default.xci:440 Data/Input/default.xci:1046
+#: Data/Input/default.xci:766
 #, fuzzy
 msgid ""
-"Target\n"
-"Show"
-msgstr "Mål"
+"Info\n"
+"Page 2/3"
+msgstr "InfoBoks Sider"
+
+#~ msgid ""
+#~ "Team\n"
+#~ "Code"
+#~ msgstr ""
+#~ "Lag\n"
+#~ "ID"
+
+#~ msgid ""
+#~ "Flight\n"
+#~ "Setup"
+#~ msgstr ""
+#~ "Flytur\n"
+#~ "Oppsett"
 
 #, no-c-format
 #~ msgid ""

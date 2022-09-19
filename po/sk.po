@@ -2969,7 +2969,7 @@ msgstr ""
 "Nastaviť na predpovedanú prízemnú teplotu. Použité pri odhade konvekcie "
 "(stránka sledovania teplôt v dialógu analýza)"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:365
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:365 Data/Input/default.xci:1119
 msgid "Flight Setup"
 msgstr "Základné letové nastavenia"
 
@@ -3265,6 +3265,7 @@ msgstr "Nastav nového parťáka"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:224
 #: src/InfoBoxes/Content/Factory.cpp:588 src/InfoBoxes/Content/Team.cpp:50
+#: Data/Input/default.xci:832
 #, no-c-format
 msgid "Team Code"
 msgstr "Tímový kód"
@@ -10355,126 +10356,16 @@ msgstr "Sluchátka prah. hodnota"
 msgid "Urgent min. volume"
 msgstr "Súrna hlasitosť - minimum"
 
-#: Data/Input/default.xci:596
-msgid ""
-"Config\n"
-"Page 3/3"
-msgstr ""
-
 #: Data/Input/default.xci:733
 msgid "Accelerometer leveled"
 msgstr "Akcelerometer vynulovaný"
 
-#: Data/Input/default.xci:1174
-msgid "Setup Plane"
-msgstr "Nastavenie lietadla"
-
-#: Data/Input/default.xci:708
-msgid "Accel"
-msgstr "Akcel"
-
-#: Data/Input/default.xci:848 Data/Input/default.xci:1229
-msgid "Thermal Assistant"
-msgstr "Pomocník ustreďovania"
-
-#: Data/Input/default.xci:756
-msgid ""
-"Climb\n"
-"Demo"
-msgstr ""
-"Stúpanie\n"
-"Demo"
-
-#: Data/Input/default.xci:142 Data/Input/default.xci:790
-msgid ""
-"What's\n"
-"here?"
-msgstr ""
-"Čo je \n"
-"tu?"
-
-#: Data/Input/default.xci:832
-msgid ""
-"Team\n"
-"Code"
-msgstr ""
-"Tímový\n"
-"kód"
-
-#: Data/Input/default.xci:679
-msgid ""
-"Vega\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:882
-msgid ""
-"Message\n"
-"Repeat"
-msgstr ""
-"Opakuj\n"
-"správu"
-
-#: Data/Input/default.xci:429
-msgid "Pilot event announced"
-msgstr ""
-
 #: Data/Input/default.xci:694
-msgid ""
-"Manual\n"
-"Demo"
+#, fuzzy
+msgid "Manual Demo"
 msgstr ""
 "Manuál\n"
 "Demo"
-
-#: Data/Input/default.xci:907
-msgid "Config"
-msgstr "Nastavenia"
-
-#: Data/Input/default.xci:355
-msgid ""
-"Nav\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:1127
-msgid ""
-"Setup\n"
-"Wind"
-msgstr ""
-"Nastavenie\n"
-"vetra"
-
-#: Data/Input/default.xci:726
-msgid "Vario ASI zeroed"
-msgstr "Vário IAS vynulované"
-
-#: Data/Input/default.xci:507 Data/Input/default.xci:1080
-msgid "Labels"
-msgstr "Popisky"
-
-#: Data/Input/default.xci:687
-msgid ""
-"Airframe\n"
-"Switches"
-msgstr ""
-"Palubné\n"
-"Prepínače"
-
-#: Data/Input/default.xci:766
-msgid ""
-"Info\n"
-"Page 2/3"
-msgstr ""
-
-#: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
-msgid ""
-"Marker\n"
-"Drop"
-msgstr ""
-"Vytvor\n"
-"Značku"
 
 #: Data/Input/default.xci:128 Data/Input/default.xci:135
 #: Data/Input/default.xci:459 Data/Input/default.xci:466
@@ -10484,87 +10375,179 @@ msgstr ""
 msgid "Zoom"
 msgstr "Priblíženie"
 
-#: Data/Input/default.xci:69
-msgid "Final glide through terrain"
-msgstr "Doklz cez terén"
-
-#: Data/Input/default.xci:749
-msgid ""
-"Cruise\n"
-"Demo"
+#: Data/Input/default.xci:687
+#, fuzzy
+msgid "Airframe Switches"
 msgstr ""
-"Preskok\n"
+"Palubné\n"
+"Prepínače"
+
+#: Data/Input/default.xci:596
+msgid ""
+"Config\n"
+"Page 3/3"
+msgstr ""
+
+#: Data/Input/default.xci:668 Data/Input/default.xci:719
+msgid "Vega"
+msgstr "Vega"
+
+#: Data/Input/default.xci:701
+#, fuzzy
+msgid "Setup Stall"
+msgstr ""
+"Nastavenie\n"
+"Pád"
+
+#: Data/Input/default.xci:756
+#, fuzzy
+msgid "Climb Demo"
+msgstr ""
+"Stúpanie\n"
 "Demo"
+
+#: Data/Input/default.xci:922
+msgid "Lock Screen"
+msgstr ""
+
+#: Data/Input/default.xci:980
+msgid "AVG/ALT"
+msgstr "AVG/ALT"
+
+#: Data/Input/default.xci:488 Data/Input/default.xci:1072
+#, fuzzy
+msgid "Pan Mode"
+msgstr "Posun mapy ZAP"
+
+#: Data/Input/default.xci:1174
+msgid "Setup Plane"
+msgstr "Nastavenie lietadla"
+
+#: Data/Input/default.xci:59
+msgid "Above final glide"
+msgstr "Ste nad doklzovou výškou"
+
+#: Data/Input/default.xci:679
+msgid ""
+"Vega\n"
+"Page 2/2"
+msgstr ""
+
+#: Data/Input/default.xci:1135
+#, fuzzy
+msgid "Setup System"
+msgstr ""
+"Systémové\n"
+"nastavenia"
+
+#: Data/Input/default.xci:515 Data/Input/default.xci:1088
+msgid "Trail"
+msgstr "Stopa"
+
+#: Data/Input/default.xci:440 Data/Input/default.xci:1046
+#, fuzzy
+msgid "Target Show"
+msgstr "Cieľ"
+
+#: Data/Input/default.xci:64
+msgid "Below final glide"
+msgstr "Ste pod doklzovou výškou"
+
+#: Data/Input/default.xci:432
+#, fuzzy
+msgid "Pilot Event Announce"
+msgstr "Pilot"
+
+#: Data/Input/default.xci:481
+#, fuzzy
+msgid "Page Show"
+msgstr "Strany"
+
+#: Data/Input/default.xci:726
+msgid "Vario ASI zeroed"
+msgstr "Vário IAS vynulované"
+
+#: Data/Input/default.xci:355
+msgid ""
+"Nav\n"
+"Page 2/2"
+msgstr ""
 
 #: Data/Input/default.xci:893
 msgid "Nav"
 msgstr "Nav"
 
-#: Data/Input/default.xci:1135
-msgid ""
-"Setup\n"
-"System"
+#: Data/Input/default.xci:708
+msgid "Accel"
+msgstr "Akcel"
+
+#: Data/Input/default.xci:142 Data/Input/default.xci:790
+#, fuzzy
+msgid "What's here?"
 msgstr ""
-"Systémové\n"
-"nastavenia"
-
-#: Data/Input/default.xci:727
-msgid ""
-"ASI\n"
-"Zero"
-msgstr ""
-"IAS\n"
-"Nula"
-
-#: Data/Input/default.xci:653 Data/Input/default.xci:1158
-msgid "Raw Logger"
-msgstr "Surový logger"
-
-#: Data/Input/default.xci:922
-msgid ""
-"Lock\n"
-"Screen"
-msgstr ""
-
-#: Data/Input/default.xci:1197
-msgid ""
-"Nearest\n"
-"Airspace"
-msgstr ""
-"Najbližší vzduš. \n"
-"priestor"
-
-#: Data/Input/default.xci:840
-msgid "Traffic List"
-msgstr "Zoznam prevádzky"
-
-#: Data/Input/default.xci:661
-msgid "Lua"
-msgstr "Lua"
-
-#: Data/Input/default.xci:1143
-msgid ""
-"Settings\n"
-"Airspace"
-msgstr ""
-"Nastavenie  \n"
-"Priestory"
-
-#: Data/Input/default.xci:419 Data/Input/default.xci:1062
-msgid "Dropped marker"
-msgstr "Značka vytvorená"
+"Čo je \n"
+"tu?"
 
 #: Data/Input/default.xci:741
 msgid "Stored to EEPROM"
 msgstr "Uložiť do EEPROM"
 
+#: Data/Input/default.xci:1127
+#, fuzzy
+msgid "Setup Wind"
+msgstr ""
+"Nastavenie\n"
+"vetra"
+
+#: Data/Input/default.xci:840
+msgid "Traffic List"
+msgstr "Zoznam prevádzky"
+
 #: Data/Input/default.xci:734
-msgid ""
-"Accel\n"
-"Zero"
+#, fuzzy
+msgid "Accel Zero"
 msgstr ""
 "Akcel\n"
 "Nula"
+
+#: Data/Input/default.xci:69
+msgid "Final glide through terrain"
+msgstr "Doklz cez terén"
+
+#: Data/Input/default.xci:422 Data/Input/default.xci:1065
+#, fuzzy
+msgid "Marker Drop"
+msgstr ""
+"Vytvor\n"
+"Značku"
+
+#: Data/Input/default.xci:882
+#, fuzzy
+msgid "Message Repeat"
+msgstr ""
+"Opakuj\n"
+"správu"
+
+#: Data/Input/default.xci:848 Data/Input/default.xci:1229
+msgid "Thermal Assistant"
+msgstr "Pomocník ustreďovania"
+
+#: Data/Input/default.xci:48
+msgid "Takeoff"
+msgstr "Vzlet"
+
+#: Data/Input/default.xci:546
+msgid ""
+"Config\n"
+"Page 2/3"
+msgstr ""
+
+#: Data/Input/default.xci:1197
+#, fuzzy
+msgid "Nearest Airspace"
+msgstr ""
+"Najbližší vzduš. \n"
+"priestor"
 
 #: Data/Input/default.xci:451
 #, fuzzy
@@ -10573,65 +10556,57 @@ msgid ""
 "Page 2/2"
 msgstr "Zobrazenie"
 
+#: Data/Input/default.xci:727
+#, fuzzy
+msgid "ASI Zero"
+msgstr ""
+"IAS\n"
+"Nula"
+
+#: Data/Input/default.xci:507 Data/Input/default.xci:1080
+msgid "Labels"
+msgstr "Popisky"
+
+#: Data/Input/default.xci:385 Data/Input/default.xci:1014
+#, fuzzy
+msgid "Waypoint List"
+msgstr ""
+"Zoznam\n"
+"ot. bodov"
+
+#: Data/Input/default.xci:661
+msgid "Lua"
+msgstr "Lua"
+
+#: Data/Input/default.xci:653 Data/Input/default.xci:1158
+msgid "Raw Logger"
+msgstr "Surový logger"
+
 #: Data/Input/default.xci:774 Data/Input/default.xci:1181
 msgid "FLARM Radar"
 msgstr "FLARM Radar"
 
-#: Data/Input/default.xci:481
+#: Data/Input/default.xci:529 Data/Input/default.xci:1102
+msgid "Topo."
+msgstr "Topo."
+
+#: Data/Input/default.xci:419 Data/Input/default.xci:1062
+msgid "Dropped marker"
+msgstr "Značka vytvorená"
+
+#: Data/Input/default.xci:1143
 #, fuzzy
-msgid "Page Show"
-msgstr "Strany"
-
-#: Data/Input/default.xci:668 Data/Input/default.xci:719
-msgid "Vega"
-msgstr "Vega"
-
-#: Data/Input/default.xci:546
-msgid ""
-"Config\n"
-"Page 2/3"
+msgid "Settings Airspace"
 msgstr ""
+"Nastavenie  \n"
+"Priestory"
 
-#: Data/Input/default.xci:1119
-msgid ""
-"Flight\n"
-"Setup"
-msgstr ""
-"Zákl. letové\n"
-"nastavenia"
-
-#: Data/Input/default.xci:488 Data/Input/default.xci:1072
-msgid ""
-"Pan\n"
-"Mode"
-msgstr ""
-
-#: Data/Input/default.xci:59
-msgid "Above final glide"
-msgstr "Ste nad doklzovou výškou"
-
-#: Data/Input/default.xci:980
-msgid "AVG/ALT"
-msgstr "AVG/ALT"
-
-#: Data/Input/default.xci:742
-msgid "Store"
-msgstr "Uložiť"
-
-#: Data/Input/default.xci:432
+#: Data/Input/default.xci:749
 #, fuzzy
-msgid ""
-"Pilot Event\n"
-"Announce"
-msgstr "Pilot"
-
-#: Data/Input/default.xci:701
-msgid ""
-"Setup\n"
-"Stall"
+msgid "Cruise Demo"
 msgstr ""
-"Nastavenie\n"
-"Pád"
+"Preskok\n"
+"Demo"
 
 #: Data/Input/default.xci:816
 msgid ""
@@ -10639,36 +10614,37 @@ msgid ""
 "Page 3/3"
 msgstr ""
 
-#: Data/Input/default.xci:48
-msgid "Takeoff"
-msgstr "Vzlet"
+#: Data/Input/default.xci:907
+msgid "Config"
+msgstr "Nastavenia"
 
-#: Data/Input/default.xci:64
-msgid "Below final glide"
-msgstr "Ste pod doklzovou výškou"
-
-#: Data/Input/default.xci:515 Data/Input/default.xci:1088
-msgid "Trail"
-msgstr "Stopa"
-
-#: Data/Input/default.xci:385 Data/Input/default.xci:1014
-msgid ""
-"Waypoint\n"
-"List"
+#: Data/Input/default.xci:429
+msgid "Pilot event announced"
 msgstr ""
-"Zoznam\n"
-"ot. bodov"
 
-#: Data/Input/default.xci:529 Data/Input/default.xci:1102
-msgid "Topo."
-msgstr "Topo."
+#: Data/Input/default.xci:742
+msgid "Store"
+msgstr "Uložiť"
 
-#: Data/Input/default.xci:440 Data/Input/default.xci:1046
-#, fuzzy
+#: Data/Input/default.xci:766
 msgid ""
-"Target\n"
-"Show"
-msgstr "Cieľ"
+"Info\n"
+"Page 2/3"
+msgstr ""
+
+#~ msgid ""
+#~ "Team\n"
+#~ "Code"
+#~ msgstr ""
+#~ "Tímový\n"
+#~ "kód"
+
+#~ msgid ""
+#~ "Flight\n"
+#~ "Setup"
+#~ msgstr ""
+#~ "Zákl. letové\n"
+#~ "nastavenia"
 
 #, no-c-format
 #~ msgid ""
@@ -12099,9 +12075,6 @@ msgstr "Cieľ"
 
 #~ msgid "Pan mode OFF"
 #~ msgstr "Posun mapy VYP"
-
-#~ msgid "Pan mode ON"
-#~ msgstr "Posun mapy ZAP"
 
 #~ msgid "Auto MacCready ON"
 #~ msgstr "Auto MacCready ZAP"
