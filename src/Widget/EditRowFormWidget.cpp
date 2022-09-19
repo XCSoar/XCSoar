@@ -365,7 +365,9 @@ RowFormWidget::GetValueBoolean(unsigned i) const noexcept
 int
 RowFormWidget::GetValueInteger(unsigned i) const noexcept
 {
-  return GetDataField(i).GetAsInteger();
+  auto &df = static_cast<const DataFieldInteger &>(GetDataField(i));
+  assert(df.GetType() == DataField::Type::INTEGER);
+  return df.GetValue();
 }
 
 double
