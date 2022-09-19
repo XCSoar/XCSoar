@@ -144,7 +144,7 @@ public:
     if (combo_list.empty())
       return true;
 
-    const int old_value = df.GetAsInteger();
+    const int old_value = df.GetValue();
     const auto &item = GetSelectedItem();
     if (item.int_value == old_value)
       /* no change */
