@@ -97,13 +97,13 @@ try {
   bool changed = false;
   NarrowString<32> buffer;
 
-  if (SaveValue(BRGPS, brgps)) {
+  if (SaveValueEnum(BRGPS, brgps)) {
     buffer.UnsafeFormat("%u", brgps);
     device.SendLXNAVVarioSetting("BRGPS", buffer, env);
     changed = true;
   }
 
-  if (SaveValue(BRPDA, brpda)) {
+  if (SaveValueEnum(BRPDA, brpda)) {
     buffer.UnsafeFormat("%u", brpda);
     device.SendLXNAVVarioSetting("BRPDA", buffer, env);
     changed = true;

@@ -164,7 +164,7 @@ try {
   bool changed = false;
   NarrowString<32> buffer;
 
-  if (SaveValue(Baud, baud)) {
+  if (SaveValueEnum(Baud, baud)) {
     buffer.UnsafeFormat("%u", baud);
     device.SendSetting("BAUD", buffer, env);
     changed = true;
