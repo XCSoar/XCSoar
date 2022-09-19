@@ -52,12 +52,6 @@ DataField::Dec() noexcept
 {
 }
 
-int
-DataField::GetAsInteger() const noexcept
-{
-  return 0;
-}
-
 const TCHAR *
 DataField::GetAsString() const noexcept
 {

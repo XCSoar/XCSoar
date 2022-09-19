@@ -98,7 +98,6 @@ public:
   void ModifyValue(Angle _value) noexcept;
 
   /* virtual methods from class DataField */
-  int GetAsInteger() const noexcept override;
   const TCHAR *GetAsString() const noexcept override;
   const TCHAR *GetAsDisplayString() const noexcept override;
 

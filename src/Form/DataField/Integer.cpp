@@ -36,12 +36,6 @@ ParseString(const TCHAR *s) noexcept
   return ParseInt(s);
 }
 
-int
-DataFieldInteger::GetAsInteger() const noexcept
-{
-  return GetValue();
-}
-
 const TCHAR *
 DataFieldInteger::GetAsString() const noexcept
 {

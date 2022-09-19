@@ -93,9 +93,6 @@ public:
   virtual void Dec() noexcept;
 
   [[gnu::pure]]
-  virtual int GetAsInteger() const noexcept;
-
-  [[gnu::pure]]
   virtual const TCHAR *GetAsString() const noexcept;
 
   [[gnu::pure]]

@@ -70,12 +70,6 @@ AngleDataField::ModifyValue(Angle _value) noexcept
   Modified();
 }
 
-int
-AngleDataField::GetAsInteger() const noexcept
-{
-  return GetIntegerValue();
-}
-
 const TCHAR *
 AngleDataField::GetAsString() const noexcept
 {

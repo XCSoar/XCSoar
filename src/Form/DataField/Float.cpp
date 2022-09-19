@@ -30,12 +30,6 @@ Copyright_License {
 
 static bool DataFieldKeyUp = false;
 
-int
-DataFieldFloat::GetAsInteger() const noexcept
-{
-  return iround(mValue);
-}
-
 const TCHAR *
 DataFieldFloat::GetAsString() const noexcept
 {

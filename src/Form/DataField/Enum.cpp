@@ -80,18 +80,6 @@ DataFieldEnum::GetValue() const noexcept
   return entries[value].GetId();
 }
 
-int
-DataFieldEnum::GetAsInteger() const noexcept
-{
-  if (entries.empty()) {
-    assert(value == 0);
-    return 0;
-  } else {
-    assert(value < entries.size());
-    return entries[value].GetId();
-  }
-}
-
 void
 DataFieldEnum::replaceEnumText(std::size_t i, const TCHAR *Text) noexcept
 {

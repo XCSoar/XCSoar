@@ -209,7 +209,6 @@ public:
   /* virtual methods from class DataField */
   void Inc() noexcept override;
   void Dec() noexcept override;
-  int GetAsInteger() const noexcept override;
   const TCHAR *GetAsString() const noexcept override;
   const TCHAR *GetAsDisplayString() const noexcept override;
   ComboList CreateComboList(const TCHAR *reference) const noexcept override;

@@ -31,7 +31,7 @@ DataFieldBoolean::CreateComboList([[maybe_unused]] const TCHAR *reference) const
   combo_list.Append(false, false_text);
   combo_list.Append(true, true_text);
 
-  combo_list.current_index = GetAsInteger();
+  combo_list.current_index = GetValue();
   return combo_list;
 }
 
@@ -39,15 +39,6 @@ void
 DataFieldBoolean::SetFromCombo(int i, const TCHAR *) noexcept
 {
   ModifyValue(i != 0);
-}
-
-int
-DataFieldBoolean::GetAsInteger() const noexcept
-{
-  if (mValue)
-    return 1;
-  else
-    return 0;
 }
 
 const TCHAR *

@@ -92,15 +92,6 @@ FileDataField::FileDataField(DataFieldListener *listener) noexcept
    loaded(false), postponed_sort(false),
    postponed_value(nullptr) {}
 
-int
-FileDataField::GetAsInteger() const noexcept
-{
-  if (postponed_value != nullptr)
-    EnsureLoadedDeconst();
-
-  return current_index;
-}
-
 void
 FileDataField::ScanDirectoryTop(const TCHAR *filter) noexcept
 {
