@@ -52,5 +52,10 @@ public:
   bool Save(bool &changed) noexcept override;
 
 protected:
-  bool SaveSetting(const char *name, unsigned idx, OperationEnvironment &env);
+  bool SaveSettingBoolean(const char *name, unsigned idx,
+                          OperationEnvironment &env);
+  bool SaveSettingInteger(const char *name, unsigned idx,
+                          OperationEnvironment &env);
+  bool SaveSettingEnum(const char *name, unsigned idx,
+                          OperationEnvironment &env);
 };

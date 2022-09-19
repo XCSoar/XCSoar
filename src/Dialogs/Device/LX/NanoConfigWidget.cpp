@@ -115,11 +115,29 @@ NanoConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 }
 
 bool
-NanoConfigWidget::SaveSetting(const char *name, unsigned idx,
-                              OperationEnvironment &env)
+NanoConfigWidget::SaveSettingBoolean(const char *name, unsigned idx,
+                                     OperationEnvironment &env)
+{
+  bool value = device.GetNanoSettingInteger(name);
+  return SaveValue(idx, value) &&
+    device.SendNanoSetting(name, value, env);
+}
+
+bool
+NanoConfigWidget::SaveSettingInteger(const char *name, unsigned idx,
+                                     OperationEnvironment &env)
 {
   unsigned value = device.GetNanoSettingInteger(name);
   return SaveValue(idx, value) &&
+    device.SendNanoSetting(name, value, env);
+}
+
+bool
+NanoConfigWidget::SaveSettingEnum(const char *name, unsigned idx,
+                                  OperationEnvironment &env)
+{
+  unsigned value = device.GetNanoSettingInteger(name);
+  return SaveValueEnum(idx, value) &&
     device.SendNanoSetting(name, value, env);
 }
 
@@ -129,12 +147,12 @@ try {
   PopupOperationEnvironment env;
   bool changed = false;
 
-  changed |= SaveSetting("BAUDRATE", BAUDRATE, env);
-  changed |= SaveSetting("AUTOOFF", AUTOOFF, env);
-  changed |= SaveSetting("OFFFIN", OFFFIN, env);
-  changed |= SaveSetting("ALWRUN", ALWRUN, env);
-  changed |= SaveSetting("NMEA", NMEA, env);
-  changed |= SaveSetting("RECINT", RECINT, env);
+  changed |= SaveSettingEnum("BAUDRATE", BAUDRATE, env);
+  changed |= SaveSettingBoolean("AUTOOFF", AUTOOFF, env);
+  changed |= SaveSettingBoolean("OFFFIN", OFFFIN, env);
+  changed |= SaveSettingBoolean("ALWRUN", ALWRUN, env);
+  changed |= SaveSettingBoolean("NMEA", NMEA, env);
+  changed |= SaveSettingInteger("RECINT", RECINT, env);
 
   _changed |= changed;
   return true;
