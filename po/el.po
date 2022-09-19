@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-18 08:04+0200\n"
+"POT-Creation-Date: 2022-09-19 20:45+0200\n"
 "PO-Revision-Date: 2021-02-09 02:25+0000\n"
 "Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/xcsoar/"
@@ -407,7 +407,7 @@ msgstr ""
 msgid "Loading Airspace File..."
 msgstr "Το αρχείο Εναέριου Χώρου φορτώνεται ..."
 
-#: src/Airspace/AirspaceParser.cpp:947
+#: src/Airspace/AirspaceParser.cpp:965
 msgid "Unknown airspace filetype"
 msgstr "Άγνωστος τύπος αρχείου Εναέριου Χώρου"
 
@@ -3649,7 +3649,7 @@ msgid "Valid finish"
 msgstr "Έγκυρο τελείωμα"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:109
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:92
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:95
 msgid "Local time"
 msgstr "Τοπική Ώρα"
 
@@ -6246,24 +6246,24 @@ msgstr ""
 msgid "Units used for latitude and longitude."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:82
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:85
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:32
 #, no-c-format
 msgid "UTC offset"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:83
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:86
 msgid ""
 "The UTC offset field allows the UTC local time offset to be specified.  The "
 "local time is displayed below in order to make it easier to verify the "
 "correct offset has been entered."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:95
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:98
 msgid "Use GPS time"
 msgstr "Χρήση χρόνου GPS"
 
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:96
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:99
 msgid ""
 "If enabled sets the clock of the computer to the GPS time once a fix is set. "
 "This is only necessary if your computer does not have a real-time clock with "
@@ -9767,10 +9767,26 @@ msgstr ""
 msgid "Urgent min. volume"
 msgstr ""
 
-#: Data/Input/default.xci:727
+#: Data/Input/default.xci:596
 msgid ""
-"ASI\n"
-"Zero"
+"Config\n"
+"Page 3/3"
+msgstr ""
+
+#: Data/Input/default.xci:733
+msgid "Accelerometer leveled"
+msgstr ""
+
+#: Data/Input/default.xci:1174
+msgid "Setup Plane"
+msgstr ""
+
+#: Data/Input/default.xci:708
+msgid "Accel"
+msgstr ""
+
+#: Data/Input/default.xci:848 Data/Input/default.xci:1229
+msgid "Thermal Assistant"
 msgstr ""
 
 #: Data/Input/default.xci:756
@@ -9779,25 +9795,80 @@ msgid ""
 "Demo"
 msgstr ""
 
-#: Data/Input/default.xci:481
-msgid "Page Show"
+#: Data/Input/default.xci:142 Data/Input/default.xci:790
+msgid ""
+"What's\n"
+"here?"
 msgstr ""
 
-#: Data/Input/default.xci:59
-msgid "Above final glide"
-msgstr "Ανωθεν Final Glide"
-
-#: Data/Input/default.xci:440 Data/Input/default.xci:1046
-#, fuzzy
+#: Data/Input/default.xci:832
 msgid ""
-"Target\n"
-"Show"
-msgstr "Προορισμός (Goal)"
+"Team\n"
+"Code"
+msgstr ""
 
-#: Data/Input/default.xci:701
+#: Data/Input/default.xci:679
+msgid ""
+"Vega\n"
+"Page 2/2"
+msgstr ""
+
+#: Data/Input/default.xci:882
+msgid ""
+"Message\n"
+"Repeat"
+msgstr ""
+
+#: Data/Input/default.xci:429
+msgid "Pilot event announced"
+msgstr ""
+
+#: Data/Input/default.xci:694
+msgid ""
+"Manual\n"
+"Demo"
+msgstr ""
+
+#: Data/Input/default.xci:907
+msgid "Config"
+msgstr "Εγκατ/ση"
+
+#: Data/Input/default.xci:355
+msgid ""
+"Nav\n"
+"Page 2/2"
+msgstr ""
+
+#: Data/Input/default.xci:1127
 msgid ""
 "Setup\n"
-"Stall"
+"Wind"
+msgstr ""
+
+#: Data/Input/default.xci:726
+msgid "Vario ASI zeroed"
+msgstr ""
+
+#: Data/Input/default.xci:507 Data/Input/default.xci:1080
+msgid "Labels"
+msgstr "Στοιχεία Χάρτη"
+
+#: Data/Input/default.xci:687
+msgid ""
+"Airframe\n"
+"Switches"
+msgstr ""
+
+#: Data/Input/default.xci:766
+msgid ""
+"Info\n"
+"Page 2/3"
+msgstr ""
+
+#: Data/Input/default.xci:422 Data/Input/default.xci:1065
+msgid ""
+"Marker\n"
+"Drop"
 msgstr ""
 
 #: Data/Input/default.xci:128 Data/Input/default.xci:135
@@ -9808,11 +9879,19 @@ msgstr ""
 msgid "Zoom"
 msgstr "Μεγέθυνση"
 
+#: Data/Input/default.xci:69
+msgid "Final glide through terrain"
+msgstr "Τελική Πορεία Μέσω Εδάφους"
+
 #: Data/Input/default.xci:749
 msgid ""
 "Cruise\n"
 "Demo"
 msgstr ""
+
+#: Data/Input/default.xci:893
+msgid "Nav"
+msgstr "Πλοήγηση"
 
 #: Data/Input/default.xci:1135
 msgid ""
@@ -9820,24 +9899,30 @@ msgid ""
 "System"
 msgstr ""
 
-#: Data/Input/default.xci:1174
-msgid "Setup Plane"
-msgstr ""
-
-#: Data/Input/default.xci:766
+#: Data/Input/default.xci:727
 msgid ""
-"Info\n"
-"Page 2/3"
+"ASI\n"
+"Zero"
 msgstr ""
 
-#: Data/Input/default.xci:1127
+#: Data/Input/default.xci:653 Data/Input/default.xci:1158
+msgid "Raw Logger"
+msgstr ""
+
+#: Data/Input/default.xci:922
 msgid ""
-"Setup\n"
-"Wind"
+"Lock\n"
+"Screen"
 msgstr ""
 
-#: Data/Input/default.xci:429
-msgid "Pilot event announced"
+#: Data/Input/default.xci:1197
+msgid ""
+"Nearest\n"
+"Airspace"
+msgstr ""
+
+#: Data/Input/default.xci:840
+msgid "Traffic List"
 msgstr ""
 
 #: Data/Input/default.xci:661
@@ -9850,125 +9935,18 @@ msgid ""
 "Airspace"
 msgstr ""
 
-#: Data/Input/default.xci:596
-msgid ""
-"Config\n"
-"Page 3/3"
+#: Data/Input/default.xci:419 Data/Input/default.xci:1062
+msgid "Dropped marker"
 msgstr ""
 
 #: Data/Input/default.xci:741
 msgid "Stored to EEPROM"
 msgstr ""
 
-#: Data/Input/default.xci:546
+#: Data/Input/default.xci:734
 msgid ""
-"Config\n"
-"Page 2/3"
-msgstr ""
-
-#: Data/Input/default.xci:64
-msgid "Below final glide"
-msgstr "Κάτωθεν Final Glide"
-
-#: Data/Input/default.xci:1197
-msgid ""
-"Nearest\n"
-"Airspace"
-msgstr ""
-
-#: Data/Input/default.xci:907
-msgid "Config"
-msgstr "Εγκατ/ση"
-
-#: Data/Input/default.xci:422 Data/Input/default.xci:1065
-msgid ""
-"Marker\n"
-"Drop"
-msgstr ""
-
-#: Data/Input/default.xci:774 Data/Input/default.xci:1181
-msgid "FLARM Radar"
-msgstr ""
-
-#: Data/Input/default.xci:1119
-msgid ""
-"Flight\n"
-"Setup"
-msgstr ""
-
-#: Data/Input/default.xci:726
-msgid "Vario ASI zeroed"
-msgstr ""
-
-#: Data/Input/default.xci:385 Data/Input/default.xci:1014
-msgid ""
-"Waypoint\n"
-"List"
-msgstr ""
-
-#: Data/Input/default.xci:733
-msgid "Accelerometer leveled"
-msgstr ""
-
-#: Data/Input/default.xci:432
-#, fuzzy
-msgid ""
-"Pilot Event\n"
-"Announce"
-msgstr "ΠΙΛΟΤΟΣ"
-
-#: Data/Input/default.xci:69
-msgid "Final glide through terrain"
-msgstr "Τελική Πορεία Μέσω Εδάφους"
-
-#: Data/Input/default.xci:922
-msgid ""
-"Lock\n"
-"Screen"
-msgstr ""
-
-#: Data/Input/default.xci:694
-msgid ""
-"Manual\n"
-"Demo"
-msgstr ""
-
-#: Data/Input/default.xci:679
-msgid ""
-"Vega\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:142 Data/Input/default.xci:790
-msgid ""
-"What's\n"
-"here?"
-msgstr ""
-
-#: Data/Input/default.xci:687
-msgid ""
-"Airframe\n"
-"Switches"
-msgstr ""
-
-#: Data/Input/default.xci:48
-msgid "Takeoff"
-msgstr "Απογείωση"
-
-#: Data/Input/default.xci:832
-msgid ""
-"Team\n"
-"Code"
-msgstr ""
-
-#: Data/Input/default.xci:742
-msgid "Store"
-msgstr ""
-
-#: Data/Input/default.xci:882
-msgid ""
-"Message\n"
-"Repeat"
+"Accel\n"
+"Zero"
 msgstr ""
 
 #: Data/Input/default.xci:451
@@ -9978,16 +9956,28 @@ msgid ""
 "Page 2/2"
 msgstr "Οθόνη"
 
-#: Data/Input/default.xci:653 Data/Input/default.xci:1158
-msgid "Raw Logger"
+#: Data/Input/default.xci:774 Data/Input/default.xci:1181
+msgid "FLARM Radar"
 msgstr ""
 
-#: Data/Input/default.xci:515 Data/Input/default.xci:1088
-msgid "Trail"
-msgstr "Ίχνος"
+#: Data/Input/default.xci:481
+msgid "Page Show"
+msgstr ""
 
-#: Data/Input/default.xci:840
-msgid "Traffic List"
+#: Data/Input/default.xci:668 Data/Input/default.xci:719
+msgid "Vega"
+msgstr ""
+
+#: Data/Input/default.xci:546
+msgid ""
+"Config\n"
+"Page 2/3"
+msgstr ""
+
+#: Data/Input/default.xci:1119
+msgid ""
+"Flight\n"
+"Setup"
 msgstr ""
 
 #: Data/Input/default.xci:488 Data/Input/default.xci:1072
@@ -9996,48 +9986,29 @@ msgid ""
 "Mode"
 msgstr ""
 
-#: Data/Input/default.xci:893
-msgid "Nav"
-msgstr "Πλοήγηση"
-
-#: Data/Input/default.xci:507 Data/Input/default.xci:1080
-msgid "Labels"
-msgstr "Στοιχεία Χάρτη"
-
-#: Data/Input/default.xci:355
-msgid ""
-"Nav\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:848 Data/Input/default.xci:1229
-msgid "Thermal Assistant"
-msgstr ""
-
-#: Data/Input/default.xci:708
-msgid "Accel"
-msgstr ""
-
-#: Data/Input/default.xci:668 Data/Input/default.xci:719
-msgid "Vega"
-msgstr ""
+#: Data/Input/default.xci:59
+msgid "Above final glide"
+msgstr "Ανωθεν Final Glide"
 
 #: Data/Input/default.xci:980
 msgid "AVG/ALT"
 msgstr ""
 
-#: Data/Input/default.xci:419 Data/Input/default.xci:1062
-msgid "Dropped marker"
+#: Data/Input/default.xci:742
+msgid "Store"
 msgstr ""
 
-#: Data/Input/default.xci:529 Data/Input/default.xci:1102
-msgid "Topo."
-msgstr ""
-
-#: Data/Input/default.xci:734
+#: Data/Input/default.xci:432
+#, fuzzy
 msgid ""
-"Accel\n"
-"Zero"
+"Pilot Event\n"
+"Announce"
+msgstr "ΠΙΛΟΤΟΣ"
+
+#: Data/Input/default.xci:701
+msgid ""
+"Setup\n"
+"Stall"
 msgstr ""
 
 #: Data/Input/default.xci:816
@@ -10045,6 +10016,35 @@ msgid ""
 "Info\n"
 "Page 3/3"
 msgstr ""
+
+#: Data/Input/default.xci:48
+msgid "Takeoff"
+msgstr "Απογείωση"
+
+#: Data/Input/default.xci:64
+msgid "Below final glide"
+msgstr "Κάτωθεν Final Glide"
+
+#: Data/Input/default.xci:515 Data/Input/default.xci:1088
+msgid "Trail"
+msgstr "Ίχνος"
+
+#: Data/Input/default.xci:385 Data/Input/default.xci:1014
+msgid ""
+"Waypoint\n"
+"List"
+msgstr ""
+
+#: Data/Input/default.xci:529 Data/Input/default.xci:1102
+msgid "Topo."
+msgstr ""
+
+#: Data/Input/default.xci:440 Data/Input/default.xci:1046
+#, fuzzy
+msgid ""
+"Target\n"
+"Show"
+msgstr "Προορισμός (Goal)"
 
 #~ msgid "Parse Error at Line"
 #~ msgstr "Σφάλμα ανάλυσης στη γραμμή"

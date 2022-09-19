@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-18 08:04+0200\n"
+"POT-Creation-Date: 2022-09-19 20:45+0200\n"
 "PO-Revision-Date: 2022-05-19 00:18+0000\n"
 "Last-Translator: 山岭野兔 <bd8bin@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -411,7 +411,7 @@ msgstr "错误形状"
 msgid "Loading Airspace File..."
 msgstr "加载空域文件。。。"
 
-#: src/Airspace/AirspaceParser.cpp:947
+#: src/Airspace/AirspaceParser.cpp:965
 msgid "Unknown airspace filetype"
 msgstr "未知空域文件类型"
 
@@ -3695,7 +3695,7 @@ msgid "Valid finish"
 msgstr "完成有效"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:109
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:92
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:95
 msgid "Local time"
 msgstr "本地时间"
 
@@ -6356,13 +6356,13 @@ msgstr "维度/经度。"
 msgid "Units used for latitude and longitude."
 msgstr "用于经度和经度的单位。"
 
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:82
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:85
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:32
 #, no-c-format
 msgid "UTC offset"
 msgstr "UTC偏移量"
 
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:83
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:86
 msgid ""
 "The UTC offset field allows the UTC local time offset to be specified.  The "
 "local time is displayed below in order to make it easier to verify the "
@@ -6371,11 +6371,11 @@ msgstr ""
 "UTC偏移字段允许指定UTC本地时间偏移。本地时间显示在下面，以便更容易验证输入的"
 "正确偏移量。"
 
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:95
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:98
 msgid "Use GPS time"
 msgstr "使用GPS时间"
 
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:96
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:99
 msgid ""
 "If enabled sets the clock of the computer to the GPS time once a fix is set. "
 "This is only necessary if your computer does not have a real-time clock with "
@@ -9950,13 +9950,27 @@ msgstr "耳机阈值"
 msgid "Urgent min. volume"
 msgstr "紧急最小音量"
 
-#: Data/Input/default.xci:727
+#: Data/Input/default.xci:596
 msgid ""
-"ASI\n"
-"Zero"
+"Config\n"
+"Page 3/3"
 msgstr ""
-"ASI\n"
-"零"
+
+#: Data/Input/default.xci:733
+msgid "Accelerometer leveled"
+msgstr "加速度计水平仪"
+
+#: Data/Input/default.xci:1174
+msgid "Setup Plane"
+msgstr "设置飞机"
+
+#: Data/Input/default.xci:708
+msgid "Accel"
+msgstr "加速"
+
+#: Data/Input/default.xci:848 Data/Input/default.xci:1229
+msgid "Thermal Assistant"
+msgstr "热气流助手"
 
 #: Data/Input/default.xci:756
 msgid ""
@@ -9966,61 +9980,56 @@ msgstr ""
 "爬升\n"
 "演示"
 
-#: Data/Input/default.xci:481
-msgid "Page Show"
+#: Data/Input/default.xci:142 Data/Input/default.xci:790
+msgid ""
+"What's\n"
+"here?"
+msgstr ""
+"这是\n"
+"什么?"
+
+#: Data/Input/default.xci:832
+msgid ""
+"Team\n"
+"Code"
+msgstr ""
+"团队\n"
+"代码"
+
+#: Data/Input/default.xci:679
+msgid ""
+"Vega\n"
+"Page 2/2"
 msgstr ""
 
-#: Data/Input/default.xci:59
-msgid "Above final glide"
-msgstr "最终滑翔高度之上"
-
-#: Data/Input/default.xci:440 Data/Input/default.xci:1046
-#, fuzzy
+#: Data/Input/default.xci:882
 msgid ""
-"Target\n"
-"Show"
-msgstr "目标"
-
-#: Data/Input/default.xci:701
-msgid ""
-"Setup\n"
-"Stall"
+"Message\n"
+"Repeat"
 msgstr ""
-"设置\n"
-"失速"
+"信息\n"
+"重复"
 
-#: Data/Input/default.xci:128 Data/Input/default.xci:135
-#: Data/Input/default.xci:459 Data/Input/default.xci:466
-#: Data/Input/default.xci:474 Data/Input/default.xci:952
-#: Data/Input/default.xci:959 Data/Input/default.xci:966
-#: Data/Input/default.xci:1055
-msgid "Zoom"
-msgstr "缩放"
+#: Data/Input/default.xci:429
+msgid "Pilot event announced"
+msgstr "飞行员任务点公布"
 
-#: Data/Input/default.xci:749
+#: Data/Input/default.xci:694
 msgid ""
-"Cruise\n"
+"Manual\n"
 "Demo"
 msgstr ""
-"巡航\n"
-"模拟"
+"演示\n"
+"手册"
 
-#: Data/Input/default.xci:1135
+#: Data/Input/default.xci:907
+msgid "Config"
+msgstr "配置"
+
+#: Data/Input/default.xci:355
 msgid ""
-"Setup\n"
-"System"
-msgstr ""
-"设置\n"
-"系统"
-
-#: Data/Input/default.xci:1174
-msgid "Setup Plane"
-msgstr "设置飞机"
-
-#: Data/Input/default.xci:766
-msgid ""
-"Info\n"
-"Page 2/3"
+"Nav\n"
+"Page 2/2"
 msgstr ""
 
 #: Data/Input/default.xci:1127
@@ -10031,9 +10040,100 @@ msgstr ""
 "设置\n"
 "风"
 
-#: Data/Input/default.xci:429
-msgid "Pilot event announced"
-msgstr "飞行员任务点公布"
+#: Data/Input/default.xci:726
+msgid "Vario ASI zeroed"
+msgstr "高度表ASI零位"
+
+#: Data/Input/default.xci:507 Data/Input/default.xci:1080
+msgid "Labels"
+msgstr "标签"
+
+#: Data/Input/default.xci:687
+msgid ""
+"Airframe\n"
+"Switches"
+msgstr ""
+"机身\n"
+"开关"
+
+#: Data/Input/default.xci:766
+msgid ""
+"Info\n"
+"Page 2/3"
+msgstr ""
+
+#: Data/Input/default.xci:422 Data/Input/default.xci:1065
+#, fuzzy
+msgid ""
+"Marker\n"
+"Drop"
+msgstr ""
+"标记\n"
+"落下"
+
+#: Data/Input/default.xci:128 Data/Input/default.xci:135
+#: Data/Input/default.xci:459 Data/Input/default.xci:466
+#: Data/Input/default.xci:474 Data/Input/default.xci:952
+#: Data/Input/default.xci:959 Data/Input/default.xci:966
+#: Data/Input/default.xci:1055
+msgid "Zoom"
+msgstr "缩放"
+
+#: Data/Input/default.xci:69
+msgid "Final glide through terrain"
+msgstr "通过地形最后的滑翔"
+
+#: Data/Input/default.xci:749
+msgid ""
+"Cruise\n"
+"Demo"
+msgstr ""
+"巡航\n"
+"模拟"
+
+#: Data/Input/default.xci:893
+msgid "Nav"
+msgstr "导航"
+
+#: Data/Input/default.xci:1135
+msgid ""
+"Setup\n"
+"System"
+msgstr ""
+"设置\n"
+"系统"
+
+#: Data/Input/default.xci:727
+msgid ""
+"ASI\n"
+"Zero"
+msgstr ""
+"ASI\n"
+"零"
+
+#: Data/Input/default.xci:653 Data/Input/default.xci:1158
+msgid "Raw Logger"
+msgstr "原始记录器"
+
+#: Data/Input/default.xci:922
+msgid ""
+"Lock\n"
+"Screen"
+msgstr ""
+"屏幕\n"
+"锁定"
+
+#: Data/Input/default.xci:1197
+msgid ""
+"Nearest\n"
+"Airspace"
+msgstr ""
+"最近的\n"
+"空域"
+
+#: Data/Input/default.xci:840
+msgid "Traffic List"
+msgstr "交通列表"
 
 #: Data/Input/default.xci:661
 msgid "Lua"
@@ -10047,210 +10147,13 @@ msgstr ""
 "设置\n"
 "空域"
 
-#: Data/Input/default.xci:596
-msgid ""
-"Config\n"
-"Page 3/3"
-msgstr ""
-
-#: Data/Input/default.xci:741
-msgid "Stored to EEPROM"
-msgstr "存储到EEPROM中"
-
-#: Data/Input/default.xci:546
-msgid ""
-"Config\n"
-"Page 2/3"
-msgstr ""
-
-#: Data/Input/default.xci:64
-msgid "Below final glide"
-msgstr "低于最终滑翔高度"
-
-#: Data/Input/default.xci:1197
-msgid ""
-"Nearest\n"
-"Airspace"
-msgstr ""
-"最近的\n"
-"空域"
-
-#: Data/Input/default.xci:907
-msgid "Config"
-msgstr "配置"
-
-#: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
-msgid ""
-"Marker\n"
-"Drop"
-msgstr ""
-"标记\n"
-"落下"
-
-#: Data/Input/default.xci:774 Data/Input/default.xci:1181
-msgid "FLARM Radar"
-msgstr "FLARM雷达"
-
-#: Data/Input/default.xci:1119
-msgid ""
-"Flight\n"
-"Setup"
-msgstr ""
-"飞行\n"
-"设置"
-
-#: Data/Input/default.xci:726
-msgid "Vario ASI zeroed"
-msgstr "高度表ASI零位"
-
-#: Data/Input/default.xci:385 Data/Input/default.xci:1014
-msgid ""
-"Waypoint\n"
-"List"
-msgstr ""
-"航点\n"
-"表"
-
-#: Data/Input/default.xci:733
-msgid "Accelerometer leveled"
-msgstr "加速度计水平仪"
-
-#: Data/Input/default.xci:432
-#, fuzzy
-msgid ""
-"Pilot Event\n"
-"Announce"
-msgstr "飞行员任务点公布"
-
-#: Data/Input/default.xci:69
-msgid "Final glide through terrain"
-msgstr "通过地形最后的滑翔"
-
-#: Data/Input/default.xci:922
-msgid ""
-"Lock\n"
-"Screen"
-msgstr ""
-"屏幕\n"
-"锁定"
-
-#: Data/Input/default.xci:694
-msgid ""
-"Manual\n"
-"Demo"
-msgstr ""
-"演示\n"
-"手册"
-
-#: Data/Input/default.xci:679
-msgid ""
-"Vega\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:142 Data/Input/default.xci:790
-msgid ""
-"What's\n"
-"here?"
-msgstr ""
-"这是\n"
-"什么?"
-
-#: Data/Input/default.xci:687
-msgid ""
-"Airframe\n"
-"Switches"
-msgstr ""
-"机身\n"
-"开关"
-
-#: Data/Input/default.xci:48
-msgid "Takeoff"
-msgstr "起飞"
-
-#: Data/Input/default.xci:832
-msgid ""
-"Team\n"
-"Code"
-msgstr ""
-"团队\n"
-"代码"
-
-#: Data/Input/default.xci:742
-msgid "Store"
-msgstr "存储"
-
-#: Data/Input/default.xci:882
-msgid ""
-"Message\n"
-"Repeat"
-msgstr ""
-"信息\n"
-"重复"
-
-#: Data/Input/default.xci:451
-#, fuzzy
-msgid ""
-"Display\n"
-"Page 2/2"
-msgstr "显示"
-
-#: Data/Input/default.xci:653 Data/Input/default.xci:1158
-msgid "Raw Logger"
-msgstr "原始记录器"
-
-#: Data/Input/default.xci:515 Data/Input/default.xci:1088
-msgid "Trail"
-msgstr "轨迹"
-
-#: Data/Input/default.xci:840
-msgid "Traffic List"
-msgstr "交通列表"
-
-#: Data/Input/default.xci:488 Data/Input/default.xci:1072
-msgid ""
-"Pan\n"
-"Mode"
-msgstr ""
-
-#: Data/Input/default.xci:893
-msgid "Nav"
-msgstr "导航"
-
-#: Data/Input/default.xci:507 Data/Input/default.xci:1080
-msgid "Labels"
-msgstr "标签"
-
-#: Data/Input/default.xci:355
-msgid ""
-"Nav\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:848 Data/Input/default.xci:1229
-msgid "Thermal Assistant"
-msgstr "热气流助手"
-
-#: Data/Input/default.xci:708
-msgid "Accel"
-msgstr "加速"
-
-#: Data/Input/default.xci:668 Data/Input/default.xci:719
-msgid "Vega"
-msgstr "Vega"
-
-#: Data/Input/default.xci:980
-msgid "AVG/ALT"
-msgstr "平均/高度"
-
 #: Data/Input/default.xci:419 Data/Input/default.xci:1062
 msgid "Dropped marker"
 msgstr "下降标记"
 
-#: Data/Input/default.xci:529 Data/Input/default.xci:1102
-msgid "Topo."
-msgstr "地貌。"
+#: Data/Input/default.xci:741
+msgid "Stored to EEPROM"
+msgstr "存储到EEPROM中"
 
 #: Data/Input/default.xci:734
 msgid ""
@@ -10260,11 +10163,108 @@ msgstr ""
 "加速\n"
 "零"
 
+#: Data/Input/default.xci:451
+#, fuzzy
+msgid ""
+"Display\n"
+"Page 2/2"
+msgstr "显示"
+
+#: Data/Input/default.xci:774 Data/Input/default.xci:1181
+msgid "FLARM Radar"
+msgstr "FLARM雷达"
+
+#: Data/Input/default.xci:481
+msgid "Page Show"
+msgstr ""
+
+#: Data/Input/default.xci:668 Data/Input/default.xci:719
+msgid "Vega"
+msgstr "Vega"
+
+#: Data/Input/default.xci:546
+msgid ""
+"Config\n"
+"Page 2/3"
+msgstr ""
+
+#: Data/Input/default.xci:1119
+msgid ""
+"Flight\n"
+"Setup"
+msgstr ""
+"飞行\n"
+"设置"
+
+#: Data/Input/default.xci:488 Data/Input/default.xci:1072
+msgid ""
+"Pan\n"
+"Mode"
+msgstr ""
+
+#: Data/Input/default.xci:59
+msgid "Above final glide"
+msgstr "最终滑翔高度之上"
+
+#: Data/Input/default.xci:980
+msgid "AVG/ALT"
+msgstr "平均/高度"
+
+#: Data/Input/default.xci:742
+msgid "Store"
+msgstr "存储"
+
+#: Data/Input/default.xci:432
+#, fuzzy
+msgid ""
+"Pilot Event\n"
+"Announce"
+msgstr "飞行员任务点公布"
+
+#: Data/Input/default.xci:701
+msgid ""
+"Setup\n"
+"Stall"
+msgstr ""
+"设置\n"
+"失速"
+
 #: Data/Input/default.xci:816
 msgid ""
 "Info\n"
 "Page 3/3"
 msgstr ""
+
+#: Data/Input/default.xci:48
+msgid "Takeoff"
+msgstr "起飞"
+
+#: Data/Input/default.xci:64
+msgid "Below final glide"
+msgstr "低于最终滑翔高度"
+
+#: Data/Input/default.xci:515 Data/Input/default.xci:1088
+msgid "Trail"
+msgstr "轨迹"
+
+#: Data/Input/default.xci:385 Data/Input/default.xci:1014
+msgid ""
+"Waypoint\n"
+"List"
+msgstr ""
+"航点\n"
+"表"
+
+#: Data/Input/default.xci:529 Data/Input/default.xci:1102
+msgid "Topo."
+msgstr "地貌。"
+
+#: Data/Input/default.xci:440 Data/Input/default.xci:1046
+#, fuzzy
+msgid ""
+"Target\n"
+"Show"
+msgstr "目标"
 
 #, no-c-format
 #~ msgid ""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-18 08:04+0200\n"
+"POT-Creation-Date: 2022-09-19 20:45+0200\n"
 "PO-Revision-Date: 2022-09-03 19:15+0000\n"
 "Last-Translator: Philipp Wollschlegel <folken@kabelsalat.ch>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/xcsoar/"
@@ -450,7 +450,7 @@ msgstr "Falsche Form"
 msgid "Loading Airspace File..."
 msgstr "Lade Luftraumdatei..."
 
-#: src/Airspace/AirspaceParser.cpp:947
+#: src/Airspace/AirspaceParser.cpp:965
 msgid "Unknown airspace filetype"
 msgstr "Unbekannter Luftraumdateityp"
 
@@ -3799,7 +3799,7 @@ msgid "Valid finish"
 msgstr "Gültige Ankunft"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:109
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:92
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:95
 msgid "Local time"
 msgstr "Lokalzeit"
 
@@ -6632,13 +6632,13 @@ msgstr "Breite/Länge"
 msgid "Units used for latitude and longitude."
 msgstr "Einheiten für Breitengrad und Längengrad."
 
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:82
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:85
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:32
 #, no-c-format
 msgid "UTC offset"
 msgstr "Zeitzonenverschiebung"
 
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:83
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:86
 msgid ""
 "The UTC offset field allows the UTC local time offset to be specified.  The "
 "local time is displayed below in order to make it easier to verify the "
@@ -6648,11 +6648,11 @@ msgstr ""
 "zwischen Lokalzeit und UTC. Die errechnete Lokalzeit wird darunter angezeigt "
 "um die Richtigkeit der Angabe sehr einfach zu überprüfen."
 
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:95
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:98
 msgid "Use GPS time"
 msgstr "Benutze GPS-Zeit"
 
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:96
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:99
 msgid ""
 "If enabled sets the clock of the computer to the GPS time once a fix is set. "
 "This is only necessary if your computer does not have a real-time clock with "
@@ -10438,13 +10438,27 @@ msgstr "Kopfhörer Lautstärke Schwelle"
 msgid "Urgent min. volume"
 msgstr "Min. Dringendlautstärke"
 
-#: Data/Input/default.xci:727
+#: Data/Input/default.xci:596
 msgid ""
-"ASI\n"
-"Zero"
+"Config\n"
+"Page 3/3"
 msgstr ""
-"IAS\n"
-"auf Null"
+
+#: Data/Input/default.xci:733
+msgid "Accelerometer leveled"
+msgstr "Beschleunigungsmesser zurückgesetzt"
+
+#: Data/Input/default.xci:1174
+msgid "Setup Plane"
+msgstr "Flugzeug"
+
+#: Data/Input/default.xci:708
+msgid "Accel"
+msgstr "Beschleunigen"
+
+#: Data/Input/default.xci:848 Data/Input/default.xci:1229
+msgid "Thermal Assistant"
+msgstr "Zentrierhilfe"
 
 #: Data/Input/default.xci:756
 msgid ""
@@ -10454,64 +10468,57 @@ msgstr ""
 "Steigen\n"
 "Demo"
 
-#: Data/Input/default.xci:481
-#, fuzzy
-msgid "Page Show"
-msgstr "Seite"
-
-#: Data/Input/default.xci:59
-msgid "Above final glide"
-msgstr "Über dem Gleitpfad"
-
-#: Data/Input/default.xci:440 Data/Input/default.xci:1046
-#, fuzzy
+#: Data/Input/default.xci:142 Data/Input/default.xci:790
 msgid ""
-"Target\n"
-"Show"
-msgstr "Zielpunkt"
-
-#: Data/Input/default.xci:701
-msgid ""
-"Setup\n"
-"Stall"
+"What's\n"
+"here?"
 msgstr ""
-"Einrichten\n"
-"Stall"
+"Was ist\n"
+"hier?"
 
-#: Data/Input/default.xci:128 Data/Input/default.xci:135
-#: Data/Input/default.xci:459 Data/Input/default.xci:466
-#: Data/Input/default.xci:474 Data/Input/default.xci:952
-#: Data/Input/default.xci:959 Data/Input/default.xci:966
-#: Data/Input/default.xci:1055
-msgid "Zoom"
-msgstr "Zoom"
-
-#: Data/Input/default.xci:749
+#: Data/Input/default.xci:832
 msgid ""
-"Cruise\n"
+"Team\n"
+"Code"
+msgstr ""
+"Team\n"
+"Code"
+
+#: Data/Input/default.xci:679
+msgid ""
+"Vega\n"
+"Page 2/2"
+msgstr ""
+
+#: Data/Input/default.xci:882
+msgid ""
+"Message\n"
+"Repeat"
+msgstr ""
+"Wiederhole\n"
+"Meldung"
+
+#: Data/Input/default.xci:429
+msgid "Pilot event announced"
+msgstr "Pilotenevent angekündigt"
+
+#: Data/Input/default.xci:694
+msgid ""
+"Manual\n"
 "Demo"
 msgstr ""
-"Überland\n"
+"Manuell\n"
 "Demo"
 
-#: Data/Input/default.xci:1135
+#: Data/Input/default.xci:907
+msgid "Config"
+msgstr "Konfig."
+
+#: Data/Input/default.xci:355
 msgid ""
-"Setup\n"
-"System"
+"Nav\n"
+"Page 2/2"
 msgstr ""
-"System\n"
-"Einstellung"
-
-#: Data/Input/default.xci:1174
-msgid "Setup Plane"
-msgstr "Flugzeug"
-
-#: Data/Input/default.xci:766
-#, fuzzy
-msgid ""
-"Info\n"
-"Page 2/3"
-msgstr "InfoBox Seiten"
 
 #: Data/Input/default.xci:1127
 msgid ""
@@ -10521,9 +10528,101 @@ msgstr ""
 "Wind\n"
 "Einstellung"
 
-#: Data/Input/default.xci:429
-msgid "Pilot event announced"
-msgstr "Pilotenevent angekündigt"
+#: Data/Input/default.xci:726
+msgid "Vario ASI zeroed"
+msgstr "Vario IAS zurückgesetzt"
+
+#: Data/Input/default.xci:507 Data/Input/default.xci:1080
+msgid "Labels"
+msgstr "Beschriftung"
+
+#: Data/Input/default.xci:687
+msgid ""
+"Airframe\n"
+"Switches"
+msgstr ""
+"Bord-\n"
+"Schalter"
+
+#: Data/Input/default.xci:766
+#, fuzzy
+msgid ""
+"Info\n"
+"Page 2/3"
+msgstr "InfoBox Seiten"
+
+#: Data/Input/default.xci:422 Data/Input/default.xci:1065
+#, fuzzy
+msgid ""
+"Marker\n"
+"Drop"
+msgstr ""
+"Marke\n"
+"Setzen"
+
+#: Data/Input/default.xci:128 Data/Input/default.xci:135
+#: Data/Input/default.xci:459 Data/Input/default.xci:466
+#: Data/Input/default.xci:474 Data/Input/default.xci:952
+#: Data/Input/default.xci:959 Data/Input/default.xci:966
+#: Data/Input/default.xci:1055
+msgid "Zoom"
+msgstr "Zoom"
+
+#: Data/Input/default.xci:69
+msgid "Final glide through terrain"
+msgstr "Endanflug würde durchs Gelände führen"
+
+#: Data/Input/default.xci:749
+msgid ""
+"Cruise\n"
+"Demo"
+msgstr ""
+"Überland\n"
+"Demo"
+
+#: Data/Input/default.xci:893
+msgid "Nav"
+msgstr "Nav"
+
+#: Data/Input/default.xci:1135
+msgid ""
+"Setup\n"
+"System"
+msgstr ""
+"System\n"
+"Einstellung"
+
+#: Data/Input/default.xci:727
+msgid ""
+"ASI\n"
+"Zero"
+msgstr ""
+"IAS\n"
+"auf Null"
+
+#: Data/Input/default.xci:653 Data/Input/default.xci:1158
+msgid "Raw Logger"
+msgstr "Rohlogger"
+
+#: Data/Input/default.xci:922
+msgid ""
+"Lock\n"
+"Screen"
+msgstr ""
+"Bildschirm\n"
+"Sperre"
+
+#: Data/Input/default.xci:1197
+msgid ""
+"Nearest\n"
+"Airspace"
+msgstr ""
+"Naher\n"
+"Luftraum"
+
+#: Data/Input/default.xci:840
+msgid "Traffic List"
+msgstr "Verkehrsliste"
 
 #: Data/Input/default.xci:661
 msgid "Lua"
@@ -10537,210 +10636,13 @@ msgstr ""
 "Luftraum\n"
 "Einstellung"
 
-#: Data/Input/default.xci:596
-msgid ""
-"Config\n"
-"Page 3/3"
-msgstr ""
-
-#: Data/Input/default.xci:741
-msgid "Stored to EEPROM"
-msgstr "Ins EEPROM gespeichert"
-
-#: Data/Input/default.xci:546
-msgid ""
-"Config\n"
-"Page 2/3"
-msgstr ""
-
-#: Data/Input/default.xci:64
-msgid "Below final glide"
-msgstr "Unter dem Gleitpfad"
-
-#: Data/Input/default.xci:1197
-msgid ""
-"Nearest\n"
-"Airspace"
-msgstr ""
-"Naher\n"
-"Luftraum"
-
-#: Data/Input/default.xci:907
-msgid "Config"
-msgstr "Konfig."
-
-#: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
-msgid ""
-"Marker\n"
-"Drop"
-msgstr ""
-"Marke\n"
-"Setzen"
-
-#: Data/Input/default.xci:774 Data/Input/default.xci:1181
-msgid "FLARM Radar"
-msgstr "FLARM Radar"
-
-#: Data/Input/default.xci:1119
-msgid ""
-"Flight\n"
-"Setup"
-msgstr ""
-"Flug\n"
-"Einstellung"
-
-#: Data/Input/default.xci:726
-msgid "Vario ASI zeroed"
-msgstr "Vario IAS zurückgesetzt"
-
-#: Data/Input/default.xci:385 Data/Input/default.xci:1014
-msgid ""
-"Waypoint\n"
-"List"
-msgstr ""
-"Wegpunkt\n"
-"Liste"
-
-#: Data/Input/default.xci:733
-msgid "Accelerometer leveled"
-msgstr "Beschleunigungsmesser zurückgesetzt"
-
-#: Data/Input/default.xci:432
-#, fuzzy
-msgid ""
-"Pilot Event\n"
-"Announce"
-msgstr "Pilotenevent angekündigt"
-
-#: Data/Input/default.xci:69
-msgid "Final glide through terrain"
-msgstr "Endanflug würde durchs Gelände führen"
-
-#: Data/Input/default.xci:922
-msgid ""
-"Lock\n"
-"Screen"
-msgstr ""
-"Bildschirm\n"
-"Sperre"
-
-#: Data/Input/default.xci:694
-msgid ""
-"Manual\n"
-"Demo"
-msgstr ""
-"Manuell\n"
-"Demo"
-
-#: Data/Input/default.xci:679
-msgid ""
-"Vega\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:142 Data/Input/default.xci:790
-msgid ""
-"What's\n"
-"here?"
-msgstr ""
-"Was ist\n"
-"hier?"
-
-#: Data/Input/default.xci:687
-msgid ""
-"Airframe\n"
-"Switches"
-msgstr ""
-"Bord-\n"
-"Schalter"
-
-#: Data/Input/default.xci:48
-msgid "Takeoff"
-msgstr "Abgehoben"
-
-#: Data/Input/default.xci:832
-msgid ""
-"Team\n"
-"Code"
-msgstr ""
-"Team\n"
-"Code"
-
-#: Data/Input/default.xci:742
-msgid "Store"
-msgstr "Speichern"
-
-#: Data/Input/default.xci:882
-msgid ""
-"Message\n"
-"Repeat"
-msgstr ""
-"Wiederhole\n"
-"Meldung"
-
-#: Data/Input/default.xci:451
-#, fuzzy
-msgid ""
-"Display\n"
-"Page 2/2"
-msgstr "Anzeige"
-
-#: Data/Input/default.xci:653 Data/Input/default.xci:1158
-msgid "Raw Logger"
-msgstr "Rohlogger"
-
-#: Data/Input/default.xci:515 Data/Input/default.xci:1088
-msgid "Trail"
-msgstr "Spur"
-
-#: Data/Input/default.xci:840
-msgid "Traffic List"
-msgstr "Verkehrsliste"
-
-#: Data/Input/default.xci:488 Data/Input/default.xci:1072
-msgid ""
-"Pan\n"
-"Mode"
-msgstr ""
-
-#: Data/Input/default.xci:893
-msgid "Nav"
-msgstr "Nav"
-
-#: Data/Input/default.xci:507 Data/Input/default.xci:1080
-msgid "Labels"
-msgstr "Beschriftung"
-
-#: Data/Input/default.xci:355
-msgid ""
-"Nav\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:848 Data/Input/default.xci:1229
-msgid "Thermal Assistant"
-msgstr "Zentrierhilfe"
-
-#: Data/Input/default.xci:708
-msgid "Accel"
-msgstr "Beschleunigen"
-
-#: Data/Input/default.xci:668 Data/Input/default.xci:719
-msgid "Vega"
-msgstr "Vega"
-
-#: Data/Input/default.xci:980
-msgid "AVG/ALT"
-msgstr "AVG/ALT"
-
 #: Data/Input/default.xci:419 Data/Input/default.xci:1062
 msgid "Dropped marker"
 msgstr "Marke gesetzt"
 
-#: Data/Input/default.xci:529 Data/Input/default.xci:1102
-msgid "Topo."
-msgstr "Topo."
+#: Data/Input/default.xci:741
+msgid "Stored to EEPROM"
+msgstr "Ins EEPROM gespeichert"
 
 #: Data/Input/default.xci:734
 msgid ""
@@ -10750,12 +10652,110 @@ msgstr ""
 "Accel.\n"
 "auf Null"
 
+#: Data/Input/default.xci:451
+#, fuzzy
+msgid ""
+"Display\n"
+"Page 2/2"
+msgstr "Anzeige"
+
+#: Data/Input/default.xci:774 Data/Input/default.xci:1181
+msgid "FLARM Radar"
+msgstr "FLARM Radar"
+
+#: Data/Input/default.xci:481
+#, fuzzy
+msgid "Page Show"
+msgstr "Seite"
+
+#: Data/Input/default.xci:668 Data/Input/default.xci:719
+msgid "Vega"
+msgstr "Vega"
+
+#: Data/Input/default.xci:546
+msgid ""
+"Config\n"
+"Page 2/3"
+msgstr ""
+
+#: Data/Input/default.xci:1119
+msgid ""
+"Flight\n"
+"Setup"
+msgstr ""
+"Flug\n"
+"Einstellung"
+
+#: Data/Input/default.xci:488 Data/Input/default.xci:1072
+msgid ""
+"Pan\n"
+"Mode"
+msgstr ""
+
+#: Data/Input/default.xci:59
+msgid "Above final glide"
+msgstr "Über dem Gleitpfad"
+
+#: Data/Input/default.xci:980
+msgid "AVG/ALT"
+msgstr "AVG/ALT"
+
+#: Data/Input/default.xci:742
+msgid "Store"
+msgstr "Speichern"
+
+#: Data/Input/default.xci:432
+#, fuzzy
+msgid ""
+"Pilot Event\n"
+"Announce"
+msgstr "Pilotenevent angekündigt"
+
+#: Data/Input/default.xci:701
+msgid ""
+"Setup\n"
+"Stall"
+msgstr ""
+"Einrichten\n"
+"Stall"
+
 #: Data/Input/default.xci:816
 #, fuzzy
 msgid ""
 "Info\n"
 "Page 3/3"
 msgstr "InfoBox Seiten"
+
+#: Data/Input/default.xci:48
+msgid "Takeoff"
+msgstr "Abgehoben"
+
+#: Data/Input/default.xci:64
+msgid "Below final glide"
+msgstr "Unter dem Gleitpfad"
+
+#: Data/Input/default.xci:515 Data/Input/default.xci:1088
+msgid "Trail"
+msgstr "Spur"
+
+#: Data/Input/default.xci:385 Data/Input/default.xci:1014
+msgid ""
+"Waypoint\n"
+"List"
+msgstr ""
+"Wegpunkt\n"
+"Liste"
+
+#: Data/Input/default.xci:529 Data/Input/default.xci:1102
+msgid "Topo."
+msgstr "Topo."
+
+#: Data/Input/default.xci:440 Data/Input/default.xci:1046
+#, fuzzy
+msgid ""
+"Target\n"
+"Show"
+msgstr "Zielpunkt"
 
 #, no-c-format
 #~ msgid ""

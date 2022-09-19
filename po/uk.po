@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-18 08:04+0200\n"
+"POT-Creation-Date: 2022-09-19 20:45+0200\n"
 "PO-Revision-Date: 2022-06-24 07:20+0000\n"
 "Last-Translator: Artem <artem@molotov.work>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/xcsoar/"
@@ -450,7 +450,7 @@ msgstr ""
 msgid "Loading Airspace File..."
 msgstr "Завантаження файлу повітряного простору..."
 
-#: src/Airspace/AirspaceParser.cpp:947
+#: src/Airspace/AirspaceParser.cpp:965
 msgid "Unknown airspace filetype"
 msgstr "Невідомий тип файлу повітряного простору"
 
@@ -3757,7 +3757,7 @@ msgid "Valid finish"
 msgstr "Фініш зараховано"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:109
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:92
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:95
 msgid "Local time"
 msgstr "Місцевий час"
 
@@ -6564,13 +6564,13 @@ msgstr "Шир./Довг."
 msgid "Units used for latitude and longitude."
 msgstr "Одиниці, що застосовуються до індикації широти та довготи."
 
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:82
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:85
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:32
 #, no-c-format
 msgid "UTC offset"
 msgstr "Поправка UTC"
 
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:83
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:86
 msgid ""
 "The UTC offset field allows the UTC local time offset to be specified.  The "
 "local time is displayed below in order to make it easier to verify the "
@@ -6580,11 +6580,11 @@ msgstr ""
 "Місцевий час виводиться на екран нижче для перевірки правильності введеної "
 "поправки."
 
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:95
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:98
 msgid "Use GPS time"
 msgstr "Застосувати час по GPS"
 
-#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:96
+#: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:99
 msgid ""
 "If enabled sets the clock of the computer to the GPS time once a fix is set. "
 "This is only necessary if your computer does not have a real-time clock with "
@@ -10348,13 +10348,27 @@ msgstr "Поріг гарнітури"
 msgid "Urgent min. volume"
 msgstr "Термінова мін. гучність"
 
-#: Data/Input/default.xci:727
+#: Data/Input/default.xci:596
 msgid ""
-"ASI\n"
-"Zero"
+"Config\n"
+"Page 3/3"
 msgstr ""
-"ASI\n"
-"нуль"
+
+#: Data/Input/default.xci:733
+msgid "Accelerometer leveled"
+msgstr "Акселерометр вирівняно"
+
+#: Data/Input/default.xci:1174
+msgid "Setup Plane"
+msgstr "Налаштування планера"
+
+#: Data/Input/default.xci:708
+msgid "Accel"
+msgstr "Аксел"
+
+#: Data/Input/default.xci:848 Data/Input/default.xci:1229
+msgid "Thermal Assistant"
+msgstr "Термік-асистент"
 
 #: Data/Input/default.xci:756
 msgid ""
@@ -10364,61 +10378,54 @@ msgstr ""
 "Набір \n"
 "Демо"
 
-#: Data/Input/default.xci:481
-msgid "Page Show"
+#: Data/Input/default.xci:142 Data/Input/default.xci:790
+msgid ""
+"What's\n"
+"here?"
+msgstr ""
+"Що \n"
+"тут?"
+
+#: Data/Input/default.xci:832
+msgid ""
+"Team\n"
+"Code"
 msgstr ""
 
-#: Data/Input/default.xci:59
-msgid "Above final glide"
-msgstr "Вище глісади дольоту"
-
-#: Data/Input/default.xci:440 Data/Input/default.xci:1046
-#, fuzzy
+#: Data/Input/default.xci:679
 msgid ""
-"Target\n"
-"Show"
-msgstr "Ціль"
-
-#: Data/Input/default.xci:701
-msgid ""
-"Setup\n"
-"Stall"
+"Vega\n"
+"Page 2/2"
 msgstr ""
-"Налаштувати\n"
-"Зрив потоку"
 
-#: Data/Input/default.xci:128 Data/Input/default.xci:135
-#: Data/Input/default.xci:459 Data/Input/default.xci:466
-#: Data/Input/default.xci:474 Data/Input/default.xci:952
-#: Data/Input/default.xci:959 Data/Input/default.xci:966
-#: Data/Input/default.xci:1055
-msgid "Zoom"
-msgstr "Масштаб"
-
-#: Data/Input/default.xci:749
+#: Data/Input/default.xci:882
 msgid ""
-"Cruise\n"
+"Message\n"
+"Repeat"
+msgstr ""
+"Повідом\n"
+"Повтор"
+
+#: Data/Input/default.xci:429
+msgid "Pilot event announced"
+msgstr ""
+
+#: Data/Input/default.xci:694
+msgid ""
+"Manual\n"
 "Demo"
 msgstr ""
-"Перехід\n"
+"Вручну\n"
 "Демо"
 
-#: Data/Input/default.xci:1135
-msgid ""
-"Setup\n"
-"System"
-msgstr ""
-"Налашт \n"
-"Системи"
+#: Data/Input/default.xci:907
+msgid "Config"
+msgstr "Конфіг"
 
-#: Data/Input/default.xci:1174
-msgid "Setup Plane"
-msgstr "Налаштування планера"
-
-#: Data/Input/default.xci:766
+#: Data/Input/default.xci:355
 msgid ""
-"Info\n"
-"Page 2/3"
+"Nav\n"
+"Page 2/2"
 msgstr ""
 
 #: Data/Input/default.xci:1127
@@ -10429,9 +10436,98 @@ msgstr ""
 "Встановити \n"
 "Вітер"
 
-#: Data/Input/default.xci:429
-msgid "Pilot event announced"
+#: Data/Input/default.xci:726
+msgid "Vario ASI zeroed"
 msgstr ""
+
+#: Data/Input/default.xci:507 Data/Input/default.xci:1080
+msgid "Labels"
+msgstr "Мітки"
+
+#: Data/Input/default.xci:687
+msgid ""
+"Airframe\n"
+"Switches"
+msgstr ""
+
+#: Data/Input/default.xci:766
+msgid ""
+"Info\n"
+"Page 2/3"
+msgstr ""
+
+#: Data/Input/default.xci:422 Data/Input/default.xci:1065
+#, fuzzy
+msgid ""
+"Marker\n"
+"Drop"
+msgstr ""
+"Мітка\n"
+"постав."
+
+#: Data/Input/default.xci:128 Data/Input/default.xci:135
+#: Data/Input/default.xci:459 Data/Input/default.xci:466
+#: Data/Input/default.xci:474 Data/Input/default.xci:952
+#: Data/Input/default.xci:959 Data/Input/default.xci:966
+#: Data/Input/default.xci:1055
+msgid "Zoom"
+msgstr "Масштаб"
+
+#: Data/Input/default.xci:69
+msgid "Final glide through terrain"
+msgstr "Доліт над ландшафтом"
+
+#: Data/Input/default.xci:749
+msgid ""
+"Cruise\n"
+"Demo"
+msgstr ""
+"Перехід\n"
+"Демо"
+
+#: Data/Input/default.xci:893
+msgid "Nav"
+msgstr "Навігація"
+
+#: Data/Input/default.xci:1135
+msgid ""
+"Setup\n"
+"System"
+msgstr ""
+"Налашт \n"
+"Системи"
+
+#: Data/Input/default.xci:727
+msgid ""
+"ASI\n"
+"Zero"
+msgstr ""
+"ASI\n"
+"нуль"
+
+#: Data/Input/default.xci:653 Data/Input/default.xci:1158
+msgid "Raw Logger"
+msgstr "Raw Логер"
+
+#: Data/Input/default.xci:922
+msgid ""
+"Lock\n"
+"Screen"
+msgstr ""
+"Замок\n"
+"Екран"
+
+#: Data/Input/default.xci:1197
+msgid ""
+"Nearest\n"
+"Airspace"
+msgstr ""
+"Найближчий \n"
+"Повітряний простір"
+
+#: Data/Input/default.xci:840
+msgid "Traffic List"
+msgstr "Список трафіку"
 
 #: Data/Input/default.xci:661
 msgid "Lua"
@@ -10445,50 +10541,46 @@ msgstr ""
 "Налашт\n"
 "Пов. прост"
 
-#: Data/Input/default.xci:596
-msgid ""
-"Config\n"
-"Page 3/3"
-msgstr ""
+#: Data/Input/default.xci:419 Data/Input/default.xci:1062
+msgid "Dropped marker"
+msgstr "Пропущений маркер"
 
 #: Data/Input/default.xci:741
 msgid "Stored to EEPROM"
 msgstr "Збережено до EEPROM"
+
+#: Data/Input/default.xci:734
+msgid ""
+"Accel\n"
+"Zero"
+msgstr ""
+"Приск\n"
+"Нуль"
+
+#: Data/Input/default.xci:451
+#, fuzzy
+msgid ""
+"Display\n"
+"Page 2/2"
+msgstr "Показати"
+
+#: Data/Input/default.xci:774 Data/Input/default.xci:1181
+msgid "FLARM Radar"
+msgstr "Радар FLARM"
+
+#: Data/Input/default.xci:481
+msgid "Page Show"
+msgstr ""
+
+#: Data/Input/default.xci:668 Data/Input/default.xci:719
+msgid "Vega"
+msgstr "Вега"
 
 #: Data/Input/default.xci:546
 msgid ""
 "Config\n"
 "Page 2/3"
 msgstr ""
-
-#: Data/Input/default.xci:64
-msgid "Below final glide"
-msgstr "Нижче глісади дольоту"
-
-#: Data/Input/default.xci:1197
-msgid ""
-"Nearest\n"
-"Airspace"
-msgstr ""
-"Найближчий \n"
-"Повітряний простір"
-
-#: Data/Input/default.xci:907
-msgid "Config"
-msgstr "Конфіг"
-
-#: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
-msgid ""
-"Marker\n"
-"Drop"
-msgstr ""
-"Мітка\n"
-"постав."
-
-#: Data/Input/default.xci:774 Data/Input/default.xci:1181
-msgid "FLARM Radar"
-msgstr "Радар FLARM"
 
 #: Data/Input/default.xci:1119
 msgid ""
@@ -10498,21 +10590,23 @@ msgstr ""
 "Політ\n"
 "Налашт"
 
-#: Data/Input/default.xci:726
-msgid "Vario ASI zeroed"
-msgstr ""
-
-#: Data/Input/default.xci:385 Data/Input/default.xci:1014
+#: Data/Input/default.xci:488 Data/Input/default.xci:1072
 msgid ""
-"Waypoint\n"
-"List"
+"Pan\n"
+"Mode"
 msgstr ""
-"Шл. точки\n"
-"Перелік"
 
-#: Data/Input/default.xci:733
-msgid "Accelerometer leveled"
-msgstr "Акселерометр вирівняно"
+#: Data/Input/default.xci:59
+msgid "Above final glide"
+msgstr "Вище глісади дольоту"
+
+#: Data/Input/default.xci:980
+msgid "AVG/ALT"
+msgstr ""
+
+#: Data/Input/default.xci:742
+msgid "Store"
+msgstr "Зберегти"
 
 #: Data/Input/default.xci:432
 #, fuzzy
@@ -10523,144 +10617,50 @@ msgstr ""
 "Пілот\n"
 "Подія"
 
-#: Data/Input/default.xci:69
-msgid "Final glide through terrain"
-msgstr "Доліт над ландшафтом"
-
-#: Data/Input/default.xci:922
+#: Data/Input/default.xci:701
 msgid ""
-"Lock\n"
-"Screen"
+"Setup\n"
+"Stall"
 msgstr ""
-"Замок\n"
-"Екран"
-
-#: Data/Input/default.xci:694
-msgid ""
-"Manual\n"
-"Demo"
-msgstr ""
-"Вручну\n"
-"Демо"
-
-#: Data/Input/default.xci:679
-msgid ""
-"Vega\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:142 Data/Input/default.xci:790
-msgid ""
-"What's\n"
-"here?"
-msgstr ""
-"Що \n"
-"тут?"
-
-#: Data/Input/default.xci:687
-msgid ""
-"Airframe\n"
-"Switches"
-msgstr ""
-
-#: Data/Input/default.xci:48
-msgid "Takeoff"
-msgstr "Злет"
-
-#: Data/Input/default.xci:832
-msgid ""
-"Team\n"
-"Code"
-msgstr ""
-
-#: Data/Input/default.xci:742
-msgid "Store"
-msgstr "Зберегти"
-
-#: Data/Input/default.xci:882
-msgid ""
-"Message\n"
-"Repeat"
-msgstr ""
-"Повідом\n"
-"Повтор"
-
-#: Data/Input/default.xci:451
-#, fuzzy
-msgid ""
-"Display\n"
-"Page 2/2"
-msgstr "Показати"
-
-#: Data/Input/default.xci:653 Data/Input/default.xci:1158
-msgid "Raw Logger"
-msgstr "Raw Логер"
-
-#: Data/Input/default.xci:515 Data/Input/default.xci:1088
-msgid "Trail"
-msgstr "Слід"
-
-#: Data/Input/default.xci:840
-msgid "Traffic List"
-msgstr "Список трафіку"
-
-#: Data/Input/default.xci:488 Data/Input/default.xci:1072
-msgid ""
-"Pan\n"
-"Mode"
-msgstr ""
-
-#: Data/Input/default.xci:893
-msgid "Nav"
-msgstr "Навігація"
-
-#: Data/Input/default.xci:507 Data/Input/default.xci:1080
-msgid "Labels"
-msgstr "Мітки"
-
-#: Data/Input/default.xci:355
-msgid ""
-"Nav\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:848 Data/Input/default.xci:1229
-msgid "Thermal Assistant"
-msgstr "Термік-асистент"
-
-#: Data/Input/default.xci:708
-msgid "Accel"
-msgstr "Аксел"
-
-#: Data/Input/default.xci:668 Data/Input/default.xci:719
-msgid "Vega"
-msgstr "Вега"
-
-#: Data/Input/default.xci:980
-msgid "AVG/ALT"
-msgstr ""
-
-#: Data/Input/default.xci:419 Data/Input/default.xci:1062
-msgid "Dropped marker"
-msgstr "Пропущений маркер"
-
-#: Data/Input/default.xci:529 Data/Input/default.xci:1102
-msgid "Topo."
-msgstr "Топо."
-
-#: Data/Input/default.xci:734
-msgid ""
-"Accel\n"
-"Zero"
-msgstr ""
-"Приск\n"
-"Нуль"
+"Налаштувати\n"
+"Зрив потоку"
 
 #: Data/Input/default.xci:816
 msgid ""
 "Info\n"
 "Page 3/3"
 msgstr ""
+
+#: Data/Input/default.xci:48
+msgid "Takeoff"
+msgstr "Злет"
+
+#: Data/Input/default.xci:64
+msgid "Below final glide"
+msgstr "Нижче глісади дольоту"
+
+#: Data/Input/default.xci:515 Data/Input/default.xci:1088
+msgid "Trail"
+msgstr "Слід"
+
+#: Data/Input/default.xci:385 Data/Input/default.xci:1014
+msgid ""
+"Waypoint\n"
+"List"
+msgstr ""
+"Шл. точки\n"
+"Перелік"
+
+#: Data/Input/default.xci:529 Data/Input/default.xci:1102
+msgid "Topo."
+msgstr "Топо."
+
+#: Data/Input/default.xci:440 Data/Input/default.xci:1046
+#, fuzzy
+msgid ""
+"Target\n"
+"Show"
+msgstr "Ціль"
 
 #, no-c-format
 #~ msgid ""
