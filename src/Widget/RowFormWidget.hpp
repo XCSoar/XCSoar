@@ -640,9 +640,9 @@ public:
   }
 
   bool SaveValue(unsigned i, bool &value, bool negated = false) const noexcept;
-  bool SaveValue(unsigned i, int &value) const noexcept;
-  bool SaveValue(unsigned i, uint8_t &value) const noexcept;
-  bool SaveValue(unsigned i, uint16_t &value) const noexcept;
+  bool SaveValueInteger(unsigned i, int &value) const noexcept;
+  bool SaveValueInteger(unsigned i, uint8_t &value) const noexcept;
+  bool SaveValueInteger(unsigned i, uint16_t &value) const noexcept;
   bool SaveValue(unsigned i, double &value) const noexcept;
   bool SaveValue(unsigned i, Angle &value_r) const noexcept;
   bool SaveValue(unsigned i, std::chrono::seconds &value) const noexcept;
@@ -675,15 +675,15 @@ public:
     return SaveValue(i, profile_key, value.data(), value.capacity());
   }
 
-  bool SaveValue(unsigned i, unsigned &value) const noexcept {
-    return SaveValue(i, (int &)value);
+  bool SaveValueInteger(unsigned i, unsigned &value) const noexcept {
+    return SaveValueInteger(i, (int &)value);
   }
 
   bool SaveValue(unsigned i, const char *profile_key, bool &value,
                  bool negated = false) const noexcept;
-  bool SaveValue(unsigned i, const char *profile_key, int &value) const noexcept;
-  bool SaveValue(unsigned i, const char *profile_key, uint8_t &value) const noexcept;
-  bool SaveValue(unsigned i, const char *profile_key, uint16_t &value) const noexcept;
+  bool SaveValueInteger(unsigned i, const char *profile_key, int &value) const noexcept;
+  bool SaveValueInteger(unsigned i, const char *profile_key, uint8_t &value) const noexcept;
+  bool SaveValueInteger(unsigned i, const char *profile_key, uint16_t &value) const noexcept;
   bool SaveValue(unsigned i, const char *profile_key, double &value) const noexcept;
   bool SaveValue(unsigned i, const char *profile_key, BrokenDate &value) const noexcept;
   bool SaveValue(unsigned i, const char *profile_key,
@@ -700,9 +700,9 @@ public:
     return true;
   }
 
-  bool SaveValue(unsigned i, const char *registry_key,
+  bool SaveValueInteger(unsigned i, const char *registry_key,
                  unsigned &value) const noexcept {
-    return SaveValue(i, registry_key, (int &)value);
+    return SaveValueInteger(i, registry_key, (int &)value);
   }
 
   bool SaveValue(unsigned i, UnitGroup unit_group, double &value) const noexcept;

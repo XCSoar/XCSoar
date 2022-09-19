@@ -176,25 +176,25 @@ try {
     changed = true;
   }
 
-  if (SaveValue(Thre, thre)) {
+  if (SaveValueInteger(Thre, thre)) {
     buffer.UnsafeFormat("%u", thre);
     device.SendSetting("THRE", buffer, env);
     changed = true;
   }
 
-  if (SaveValue(Range, range)) {
+  if (SaveValueInteger(Range, range)) {
     buffer.UnsafeFormat("%u", range);
     device.SendSetting("RANGE", buffer, env);
     changed = true;
   }
 
-  if (SaveValue(Acft, acft)) {
+  if (SaveValueEnum(Acft, acft)) {
     buffer.UnsafeFormat("%u", acft);
     device.SendSetting("ACFT", buffer, env);
     changed = true;
   }
 
-  if (SaveValue(LogInt, log_int)) {
+  if (SaveValueInteger(LogInt, log_int)) {
     buffer.UnsafeFormat("%u", log_int);
     device.SendSetting("LOGINT", buffer, env);
     changed = true;

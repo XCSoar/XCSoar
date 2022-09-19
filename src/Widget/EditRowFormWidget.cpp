@@ -434,7 +434,7 @@ RowFormWidget::SaveValue(unsigned i, bool &value, bool negated) const noexcept
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, int &value) const noexcept
+RowFormWidget::SaveValueInteger(unsigned i, int &value) const noexcept
 {
   int new_value = GetValueInteger(i);
   if (new_value == value)
@@ -445,7 +445,7 @@ RowFormWidget::SaveValue(unsigned i, int &value) const noexcept
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, uint8_t &value) const noexcept
+RowFormWidget::SaveValueInteger(unsigned i, uint8_t &value) const noexcept
 {
   int new_value = GetValueInteger(i);
   if (new_value == value || new_value < 0)
@@ -456,7 +456,7 @@ RowFormWidget::SaveValue(unsigned i, uint8_t &value) const noexcept
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, uint16_t &value) const noexcept
+RowFormWidget::SaveValueInteger(unsigned i, uint16_t &value) const noexcept
 {
   int new_value = GetValueInteger(i);
   if (new_value == value || new_value < 0)

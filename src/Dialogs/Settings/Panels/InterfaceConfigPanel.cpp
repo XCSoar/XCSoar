@@ -207,8 +207,8 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
   UISettings &settings = CommonInterface::SetUISettings();
   bool changed = false;
 
-  if (SaveValueEnum(UIScale, ProfileKeys::UIScale,
-                    settings.scale))
+  if (SaveValueInteger(UIScale, ProfileKeys::UIScale,
+                       settings.scale))
     require_restart = changed = true;
 
   if (SaveValueEnum(CustomDPI, ProfileKeys::CustomDPI,

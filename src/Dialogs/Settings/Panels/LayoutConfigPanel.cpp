@@ -310,7 +310,8 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValueEnum(TabDialogStyle, ProfileKeys::AppDialogTabStyle, dialog_settings.tab_style);
 
 #ifdef DRAW_MOUSE_CURSOR
-  changed |= SaveValue(CursorSize, ProfileKeys::CursorSize, ui_settings.display.cursor_size);
+  changed |= SaveValueInteger(CursorSize, ProfileKeys::CursorSize,
+                              ui_settings.display.cursor_size);
   CommonInterface::main_window->SetCursorSize(ui_settings.display.cursor_size);
 
   changed |= SaveValue(CursorInverted, ProfileKeys::CursorColorsInverted, ui_settings.display.invert_cursor_colors);

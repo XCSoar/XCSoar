@@ -113,8 +113,8 @@ WeGlideConfigPanel::Save(bool &_changed) noexcept
                        ProfileKeys::WeGlideAutomaticUpload,
                        weglide.automatic_upload);
 
-  changed |= SaveValue(WeGlidePilotID, ProfileKeys::WeGlidePilotID,
-                       weglide.pilot_id);
+  changed |= SaveValueInteger(WeGlidePilotID, ProfileKeys::WeGlidePilotID,
+                              weglide.pilot_id);
 
   changed |= SaveValue(WeGlidePilotBirthDate,
                        ProfileKeys::WeGlidePilotBirthDate,

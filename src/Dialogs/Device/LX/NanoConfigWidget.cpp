@@ -128,7 +128,7 @@ NanoConfigWidget::SaveSettingInteger(const char *name, unsigned idx,
                                      OperationEnvironment &env)
 {
   unsigned value = device.GetNanoSettingInteger(name);
-  return SaveValue(idx, value) &&
+  return SaveValueInteger(idx, value) &&
     device.SendNanoSetting(name, value, env);
 }
 
