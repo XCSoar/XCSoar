@@ -370,6 +370,12 @@ FileDataField::CreateComboList([[maybe_unused]] const TCHAR *reference) const no
   return combo_list;
 }
 
+void
+FileDataField::SetFromCombo(int i, const TCHAR *) noexcept
+{
+  ModifyIndex(i);
+}
+
 unsigned
 FileDataField::size() const noexcept
 {
