@@ -118,14 +118,9 @@ bool
 NanoConfigWidget::SaveSetting(const char *name, unsigned idx,
                               OperationEnvironment &env)
 {
-  const std::string old_value = device.GetNanoSetting(name);
-  unsigned value = strtoul(old_value.c_str(), NULL, 10);
-  if (!SaveValue(idx, value))
-    return false;
-
-  NarrowString<32> buffer;
-  buffer.UnsafeFormat("%u", value);
-  return device.SendNanoSetting(name, buffer, env);
+  unsigned value = device.GetNanoSettingInteger(name);
+  return SaveValue(idx, value) &&
+    device.SendNanoSetting(name, value, env);
 }
 
 bool

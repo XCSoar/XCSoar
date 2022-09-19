@@ -106,6 +106,15 @@ LXDevice::SendNanoSetting(const char *name, const char *value,
 }
 
 bool
+LXDevice::SendNanoSetting(const char *name, unsigned value,
+                          OperationEnvironment &env)
+{
+  char buffer[32];
+  sprintf(buffer, "%u", value);
+  return SendNanoSetting(name, buffer, env);
+}
+
+bool
 LXDevice::RequestNanoSetting(const char *name, OperationEnvironment &env)
 {
   if (!EnableLoggerNMEA(env))
@@ -144,6 +153,17 @@ LXDevice::GetNanoSetting(const char *name) const noexcept
     return std::string();
 
   return *i;
+}
+
+unsigned
+LXDevice::GetNanoSettingInteger(const char *name) const noexcept
+{
+  const std::lock_guard<Mutex> lock{nano_settings};
+  auto i = nano_settings.find(name);
+  if (i == nano_settings.end())
+    return {};
+
+  return strtoul(i->c_str(), nullptr, 10);
 }
 
 bool

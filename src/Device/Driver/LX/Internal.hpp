@@ -219,6 +219,9 @@ public:
   bool SendNanoSetting(const char *name, const char *value,
                        OperationEnvironment &env);
 
+  bool SendNanoSetting(const char *name, unsigned value,
+                       OperationEnvironment &env);
+
   /**
    * Request a setting from a LXNAV Nano.  The Nano will send the
    * value, but this method will not wait for that.
@@ -242,6 +245,9 @@ public:
    */
   [[gnu::pure]]
   std::string GetNanoSetting(const char *name) const noexcept;
+
+  [[gnu::pure]]
+  unsigned GetNanoSettingInteger(const char *name) const noexcept;
 
 protected:
   /**
