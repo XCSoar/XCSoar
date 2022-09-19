@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "TimeConfigPanel.hpp"
 #include "Form/DataField/Listener.hpp"
+#include "Form/DataField/Time.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
@@ -66,8 +67,10 @@ TimeConfigPanel::SetLocalTime(RoughTimeDelta utc_offset)
 void
 TimeConfigPanel::OnModified(DataField &df) noexcept
 {
-  if (IsDataField(UTCOffset, df))
-    SetLocalTime(RoughTimeDelta::FromSeconds(df.GetAsInteger()));
+  if (IsDataField(UTCOffset, df)) {
+    const auto &tdf = static_cast<const DataFieldTime &>(df);
+    SetLocalTime(RoughTimeDelta::FromDuration(tdf.GetValue()));
+  }
 }
 
 void
