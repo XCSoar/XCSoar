@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-19 20:45+0200\n"
-"PO-Revision-Date: 2022-08-20 10:17+0000\n"
+"PO-Revision-Date: 2022-09-20 13:59+0200\n"
 "Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -185,9 +185,9 @@ msgstr ""
 "calcul des points est fait à partir du point sommet du secteur."
 
 #: src/Task/TypeStrings.cpp:81
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A keyhole.  Scored from center."
-msgstr "Un trou de serrure. Compté au point le plus loin atteint dans la zone."
+msgstr "Un secteur DAeC. Compté depuis le centre."
 
 #: src/Task/TypeStrings.cpp:82
 #, no-c-format
@@ -313,7 +313,7 @@ msgid "FAI quadrant"
 msgstr "Quadrant FAI"
 
 #: src/Task/TypeStrings.cpp:117
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Keyhole sector"
 msgstr "Secteur DAeC"
 
@@ -457,7 +457,7 @@ msgstr "Type de fichier d'espace aérien inconnu"
 
 #: src/contest/weglide/UploadIGCFile.cpp:112
 msgid "Date"
-msgstr ""
+msgstr "Date"
 
 #: src/contest/weglide/UploadIGCFile.cpp:113
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
@@ -482,18 +482,16 @@ msgstr "n° concours"
 #. upload successful!
 #: src/contest/weglide/UploadIGCFile.cpp:118
 #: src/contest/weglide/UploadIGCFile.cpp:176
-#, fuzzy
 msgid "WeGlide Upload"
-msgstr "Type WeGlide"
+msgstr "Téléversement sur WeGlide"
 
 #: src/contest/weglide/UploadIGCFile.cpp:142 src/Input/InputEventsLua.cpp:60
 msgid "Not found"
 msgstr "Introuvable"
 
 #: src/contest/weglide/UploadIGCFile.cpp:149
-#, fuzzy
 msgid "Upload Flight"
-msgstr "Téléchargement du vol"
+msgstr "Téléversement du vol"
 
 #. upload failed!
 #: src/contest/weglide/UploadIGCFile.cpp:151
@@ -675,14 +673,12 @@ msgstr "Impossible de télécharger le vol."
 
 #. ask whether this IGC should be uploaded to WeGlide
 #: src/Logger/ExternalLogger.cpp:356
-#, fuzzy
 msgid "Do you want to upload this flight to WeGlide?"
-msgstr "Télécharger un autre vol ?"
+msgstr "Voulez-vous téléverser ce vol sur WeGlide ?"
 
 #: src/Logger/ExternalLogger.cpp:357
-#, fuzzy
 msgid "Upload flight"
-msgstr "Téléchargement du vol"
+msgstr "Téléversement du vol"
 
 #: src/Logger/ExternalLogger.cpp:362
 msgid "Do you want to download another flight?"
@@ -1015,15 +1011,13 @@ msgstr "Relief désactivé"
 
 #: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:364
 #: src/Menu/ExpandMacros.cpp:366
-#, fuzzy
 msgid "Hide"
-msgstr "Cacher Infos"
+msgstr "Masquer"
 
 #: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:364
 #: src/Menu/ExpandMacros.cpp:366
-#, fuzzy
 msgid "Show"
-msgstr "Montrer les moucherons"
+msgstr "Afficher"
 
 #: src/Menu/ExpandMacros.cpp:369 src/Input/InputEventsSettings.cpp:313
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:85
@@ -2839,22 +2833,21 @@ msgid "Airspace Warnings"
 msgstr "Alertes Espace Aérien"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:60
-#, fuzzy
 msgid "Circling wind"
-msgstr "Thermique"
+msgstr "Vent en spirale"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:61
 msgid "Estimate the wind vector while circling.  Requires only a GPS."
-msgstr ""
+msgstr "Estime le vent pendant les spirales. Ne nécessite que le GPS."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
-#, fuzzy
 msgid "ZigZag wind"
-msgstr "Zigzag"
+msgstr "Vent en zigzag"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:65
 msgid "Estimate the wind vector during glides.  Requires an airspeed sensor."
 msgstr ""
+"Estime le vent pendant les transitions. Nécessite un capteur de vitesse air."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
 msgid "External wind"
@@ -2912,29 +2905,29 @@ msgstr "Exporter"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:285
 msgid "Crew"
-msgstr ""
+msgstr "Équipage"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:286
 msgid ""
 "All masses loaded to the glider beyond the empty weight including pilot and "
 "copilot, but not water ballast."
 msgstr ""
+"Toutes les masses chargées dans le planeur au-delà du poids à vide, y "
+"compris le pilote et le copilote, mais pas les ballasts."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:293
 msgid "Ballast"
 msgstr "Ballast"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:294
-#, fuzzy
 msgid ""
 "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the "
 "ballast volume according to the dump rate specified in the configuration "
 "settings."
 msgstr ""
-"Ballast du planeur. Augmenter cette valeur si le poids du pilote est "
-"supérieur au poids de référence (typiquement 75 kg). Appuyez sur ENTRÉE sur "
-"ce champ pour déclencher le décompte du volume de ballast selon le débit "
-"spécifié dans les préférences."
+"Ballasts du planeur. Appuyez sur \"Larguez/Arrêtez\" pour lancer le décompte "
+"du volume des ballasts selon le taux de vidage spécifié dans les paramètres "
+"de configuration."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:306
 msgid "Bugs"
@@ -3457,14 +3450,12 @@ msgid "Wing Area"
 msgstr "Surface alaire"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:124
-#, fuzzy
 msgid "Empty Mass"
-msgstr "Circuit vide"
+msgstr "Masse à vide"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:124
-#, fuzzy
 msgid "Net mass of the rigged plane."
-msgstr "Masse de référence de la polaire"
+msgstr "Masse du planeur équipé."
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:128
 msgid "Max. Ballast"
@@ -3496,9 +3487,8 @@ msgid "Reference Mass"
 msgstr "Masse de référence"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:134
-#, fuzzy
 msgid "Reference mass of the polar."
-msgstr "Masse de référence de la polaire"
+msgstr "Masse de référence de la polaire."
 
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:174
@@ -3624,7 +3614,7 @@ msgstr "A proximité de"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:98
 msgid "Share"
-msgstr ""
+msgstr "Partager"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:51
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:62
@@ -4084,7 +4074,7 @@ msgid ""
 "This selects the best performing option for your hardware. In fact it "
 "favours 'fill padding' except for PPC 2000 system."
 msgstr ""
-"Option de meilleure performance pour votre matériel.  Favorise le "
+"Option de meilleure performance pour votre matériel. Favorise le "
 "'remplissage de champ' à l'exception du PPC 2000."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:73
@@ -4340,7 +4330,7 @@ msgid ""
 "indicates the threat level."
 msgstr ""
 "Permet l'affichage des informations radar FLARM. Le cap de la route vers "
-"l'objectif par rapport au cap de la route du planeur  est représenté par une "
+"l'objectif par rapport au cap de la route du planeur est représenté par une "
 "flèche. Un triangle pointant vers le haut ou vers le bas indique l'altitude "
 "relative de la cible par rapport à vous. Dans tous les modes, la couleur de "
 "l'objectif indique le niveau de danger de collision."
@@ -4799,9 +4789,9 @@ msgid "15 Split in 3 rows"
 msgstr "15 sur 3 lignes"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:96
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "18 Split in 3 rows"
-msgstr "12 sur 3 lignes"
+msgstr "18 sur 3 lignes"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:98
 #, no-c-format
@@ -5098,13 +5088,15 @@ msgstr "Nom du Copilote"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:79
 msgid "Crew weight default"
-msgstr ""
+msgstr "Masse de l'équipage par défaut"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:80
 msgid ""
 "Default for all weight loaded to the glider beyond the empty weight and "
 "besides the water ballast."
 msgstr ""
+"Masse par défaut de ce qui est rajouté au planeur au-delà du poids à vide et "
+"hors ballasts."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:86
 msgid "Time step cruise"
@@ -5828,8 +5820,8 @@ msgid ""
 "The climb colour for this scheme is orange to red, sinking is displayed as "
 "light blue to dark blue. Zero lift is presented as a yellow line."
 msgstr ""
-"La couleur en montée varie de l'orange au rouge. En descente, entre bleu "
-"clair et bleu foncé.  Un Vz nulle est représentée par un ligne jaune."
+"La couleur en montée varie de l'orange au rouge. En descente, du bleu clair "
+"au bleu foncé. Une Vz nulle est représentée par une ligne jaune."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:107
 #, no-c-format
@@ -5847,8 +5839,8 @@ msgid ""
 "Vario-scaled dots with lines. Orange to red = climb. Light blue to dark blue "
 "= sink. Zero lift is presented as a yellow line."
 msgstr ""
-"Points et lignes selon le vario. Orange à rouge: montée. Bleu clair à "
-"foncé : descente. Vario nul représenté par une ligne jaune."
+"Points et lignes selon le vario. Orange à rouge : montée. Bleu clair à foncé "
+": descente. Vario nul : ligne jaune."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:114
 #, no-c-format
@@ -6294,8 +6286,8 @@ msgid ""
 "PG online contest with different track values: Free flight - 1 km = 1.0 "
 "point; flat trianlge - 1 km = 1.2 p; FAI triangle - 1 km = 1.4 p."
 msgstr ""
-"Scoring parapente avec différentes calculs: vol libre - 1 km = 1.0 point; "
-"triangle plat - 1 km = 1.2 p; triangle FAI - 1 km = 1.4 p."
+"Compétition en ligne PG avec différentes valeurs : vol libre - 1 km = 1.0 "
+"point ; triangle plat - 1 km = 1.2 pt ; triangle FAI - 1 km = 1.4 pt."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:111
 #, no-c-format
@@ -6357,6 +6349,8 @@ msgid ""
 "LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance "
 "is 20km, 5 points per km."
 msgstr ""
+"LVZC Charron.online, 5 branches de moins de 200 km 6 branches au-dessus. La "
+"distance minimale d'une branche est de 20 km, 5 points par km."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:129
 msgid "Contest"
@@ -7031,6 +7025,8 @@ msgid ""
 "Show thermal locations downloaded from Thermal Information Map (thermalmap."
 "info)."
 msgstr ""
+"Afficher les emplacements des ascendances téléchargés depuis la Carte "
+"d'Information Thermique (thermalmap.info)."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:91
 msgid "Automatic Upload"
@@ -7908,10 +7904,10 @@ msgid ""
 "auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
 "the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
-"Le réglage MacReady actuel et le mode MacReady actuel (manuel/auto).\n"
-"Pour les terminaux à écran tactile et pour PC seulement: utilisé aussi pour "
-"le réglage du MacReady si l'InfoBox est active, en utilisant les boutons "
-"Haut/Bas."
+"Le réglage MacReady actuel et le mode MacReady actuel (manuel/auto). Pour "
+"les terminaux à écran tactile et pour PC seulement : utilisé aussi pour le "
+"réglage du MacReady si l'InfoBox est active, en utilisant les touches Haut/"
+"Bas."
 
 #: src/InfoBoxes/Content/Factory.cpp:226
 #, no-c-format
@@ -7992,9 +7988,9 @@ msgid ""
 msgstr ""
 "Nom du point de virage actuellement sélectionné. Quand cette InfoBox est "
 "active, les touches Haut/Bas permettent de sélectionner les autres points de "
-"virages du circuit en cours. \r\n"
-"Pour les terminaux à écran tactile et pour PC seulement: en cliquant sur le "
-"bouton Enter les détails du point de virage s'affichent."
+"virages du circuit en cours. Pour les terminaux à écran tactile et pour PC "
+"seulement : en cliquant sur le bouton Entrée, les détails du point de virage "
+"s'affichent."
 
 #: src/InfoBoxes/Content/Factory.cpp:261
 #, no-c-format
@@ -8125,10 +8121,9 @@ msgid ""
 "is active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
-"Route magnétique du GPS. \r\n"
-"Pour les terminaux à écran tactile et pour PC seulement: en mode simulation, "
-"si l'InfoBox est active, cette valeur est ajustable à l'aide des boutons "
-"haut/bas."
+"Route magnétique du GPS. Pour les terminaux à écran tactile et pour PC "
+"seulement : en mode simulation, si l'InfoBox est active, cette valeur est "
+"ajustable à l'aide des touches haut/bas."
 
 #: src/InfoBoxes/Content/Factory.cpp:335
 #, no-c-format
@@ -8513,7 +8508,7 @@ msgid ""
 "Estimated arrival local time at task completion, assuming performance of "
 "ideal MacCready cruise/climb cycle."
 msgstr ""
-"Heure d'arrivée prévue  en tenant compte des meilleurs performance du "
+"Heure d'arrivée prévue en tenant compte des meilleures performances du "
 "MacCready en transition/ascendance."
 
 #: src/InfoBoxes/Content/Factory.cpp:514
@@ -8617,10 +8612,10 @@ msgid ""
 "and relative humidity probe. (Touch-screen/PC only) Pressing the up/down "
 "cursor keys adjusts this forecast temperature."
 msgstr ""
-"Température  prévue au sol à l'aérodrome de départ, utilisé dans "
-"l'estimation de la hauteur de convection et la base des nuages, en utilisant "
-"la température extérieure et une sonde d'humidité. Pour écrans tactiles et "
-"PC : les flèches haut/bas ajustent cette température prévue."
+"Température prévue au sol à l'aérodrome de départ. Utilisé dans l'estimation "
+"de la hauteur de convection et de la base des nuages, se basant la "
+"température extérieure et une sonde d'humidité. Pour écrans tactiles et PC : "
+"les flèches haut/bas ajustent cette température prévue."
 
 #: src/InfoBoxes/Content/Factory.cpp:555
 #, no-c-format
@@ -10050,11 +10045,11 @@ msgid ""
 "[AVERAGE]: State HIGH if gross vario value is greater than average gross "
 "vario value."
 msgstr ""
-"Méthode de comparaison utilisée pour détecter les états de montée (HAUT/"
-"BAS).\n"
-"[AUCUNE]: État BAS désactivé\n"
-"[MACCREADY]: État HAUT si vario brut supérieur au calage MacCready.\n"
-"[MOYENNE]: État HAUT, si la valeur vario brut supérieur à la valeur moyenne "
+"Méthode de comparaison utilisée pour détecter les états de montée (HAUT/BAS)."
+"\n"
+"[AUCUNE] : État BAS désactivé\n"
+"[MACCREADY] : État HAUT si vario brut supérieur au calage MacCready.\n"
+"[MOYENNE] : État HAUT, si la valeur vario brut supérieur à la valeur moyenne "
 "du vario brut."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:76
@@ -10075,13 +10070,13 @@ msgid ""
 msgstr ""
 "Méthode de comparaison utilisée pour détecter les états de croisière et "
 "commuter la tonalité LIFT pendant la croisière.\n"
-"[NEANT]: LIFT tonalité désactivé sur croisière.\n"
-"[RELATIVE ZERO] LIFT tonalité lorsque le vario relatif supérieur à zéro.\n"
-"[BRUT ZERO] LIFT tonalité lorsque le planeur monte.\n"
-"[RELATIVE MC / 2] LIFT tonalité lorsque le vario relatif est supérieur à la "
-"moitié de MC.\n"
-"[NET MC / 2] LIFT tonalité lorsque la vitesse de la masse d'air supérieure à "
-"la moitié MC."
+"[NEANT] : LIFT tonalité désactivé sur croisière.\n"
+"[RELATIVE ZERO] : LIFT tonalité lorsque le vario relatif supérieur à zéro.\n"
+"[BRUT ZERO] : LIFT tonalité lorsque le planeur monte.\n"
+"[RELATIVE MC / 2] : LIFT tonalité lorsque le vario relatif est supérieur à "
+"la moitié de MC.\n"
+"[NET MC / 2] : LIFT tonalité lorsque la vitesse de la masse d'air supérieure "
+"à la moitié MC."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:81
 #, no-c-format
@@ -10186,7 +10181,7 @@ msgstr "Période son"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:117
 msgid "Period scale"
-msgstr "Echelle  Période"
+msgstr "Échelle de période"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:33
 #, no-c-format
@@ -10522,6 +10517,8 @@ msgid ""
 "Config\n"
 "Page 3/3"
 msgstr ""
+"Config\n"
+"Page 3/3"
 
 #: Data/Input/default.xci:668 Data/Input/default.xci:719
 msgid "Vega"
@@ -10554,7 +10551,7 @@ msgstr "Vzm/ALT"
 
 #: Data/Input/default.xci:488 Data/Input/default.xci:1072
 msgid "Pan Mode"
-msgstr ""
+msgstr "Mode Panorama"
 
 #: Data/Input/default.xci:1174
 msgid "Setup Plane"
@@ -10569,6 +10566,8 @@ msgid ""
 "Vega\n"
 "Page 2/2"
 msgstr ""
+"Vega\n"
+"Page 2/2"
 
 #: Data/Input/default.xci:1135
 #, fuzzy
@@ -10582,9 +10581,8 @@ msgid "Trail"
 msgstr "Trace de cheminement"
 
 #: Data/Input/default.xci:440 Data/Input/default.xci:1046
-#, fuzzy
 msgid "Target Show"
-msgstr "Objectif"
+msgstr "Afficher Objectif"
 
 #: Data/Input/default.xci:64
 msgid "Below final glide"
@@ -10593,12 +10591,11 @@ msgstr "Sous le plan d'arrivée"
 #: Data/Input/default.xci:432
 #, fuzzy
 msgid "Pilot Event Announce"
-msgstr "Événement pilote (PEV) annoncé"
+msgstr "Événement pilote (PEV) Annonce"
 
 #: Data/Input/default.xci:481
-#, fuzzy
 msgid "Page Show"
-msgstr "Page"
+msgstr "Afficher la page"
 
 #: Data/Input/default.xci:726
 msgid "Vario ASI zeroed"
@@ -10609,6 +10606,8 @@ msgid ""
 "Nav\n"
 "Page 2/2"
 msgstr ""
+"Nav\n"
+"Page 2/2"
 
 #: Data/Input/default.xci:893
 msgid "Nav"
@@ -10676,6 +10675,8 @@ msgid ""
 "Config\n"
 "Page 2/3"
 msgstr ""
+"Config\n"
+"Page 2/3"
 
 #: Data/Input/default.xci:1197
 #, fuzzy
@@ -10685,11 +10686,12 @@ msgstr ""
 "+ proche"
 
 #: Data/Input/default.xci:451
-#, fuzzy
 msgid ""
 "Display\n"
 "Page 2/2"
-msgstr "Affich."
+msgstr ""
+"Affichage\n"
+"Page 2/2"
 
 #: Data/Input/default.xci:727
 #, fuzzy
@@ -10744,11 +10746,12 @@ msgstr ""
 "Transition"
 
 #: Data/Input/default.xci:816
-#, fuzzy
 msgid ""
 "Info\n"
 "Page 3/3"
-msgstr "Pages InfoBoxes"
+msgstr ""
+"Info\n"
+"Page 3/3"
 
 #: Data/Input/default.xci:907
 msgid "Config"
@@ -10763,11 +10766,12 @@ msgid "Store"
 msgstr "Enregistrer"
 
 #: Data/Input/default.xci:766
-#, fuzzy
 msgid ""
 "Info\n"
 "Page 2/3"
-msgstr "Pages InfoBoxes"
+msgstr ""
+"Info\n"
+"Page 2/3"
 
 #~ msgid ""
 #~ "Team\n"

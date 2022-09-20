@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-19 20:45+0200\n"
-"PO-Revision-Date: 2022-09-03 19:15+0000\n"
+"PO-Revision-Date: 2022-09-20 13:58+0200\n"
 "Last-Translator: l diaz <ldiazz@yahoo.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -181,14 +181,13 @@ msgid ""
 "A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
 "from corner point."
 msgstr ""
-"Un sector de 90 grados con lados ‘infinitos’. Cruce cualquier borde, se "
-"computa desde el punto de la esquina."
+"Un sector de 90 grados con lados ‘infinitos’. Cruzar cualquier borde, se "
+"puntúa desde la esquina."
 
 #: src/Task/TypeStrings.cpp:81
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A keyhole.  Scored from center."
-msgstr ""
-"Un ojo de cerradura. Se computa el punto más alejado alcanzado en el área."
+msgstr "Un ojo de cerradura. Se puntúa desde el centro."
 
 #: src/Task/TypeStrings.cpp:82
 #, no-c-format
@@ -197,7 +196,7 @@ msgid ""
 "sector.  Scored from center."
 msgstr ""
 "(Reglas alemanas) Cualquier punto dentro de 1/2 km del centro o 10 km de un "
-"sector de 90 grados. Se computa desde el centro."
+"sector de 90 grados. Se puntúa desde el centro."
 
 #: src/Task/TypeStrings.cpp:84
 #, no-c-format
@@ -206,7 +205,7 @@ msgid ""
 "sector.  Scored from center."
 msgstr ""
 "(Reglas británicas) Cualquier punto dentro de 1/2 km del centro o 20 km de "
-"un sector de 90 grados. Se computa desde el centro."
+"un sector de 90 grados. Se puntúa desde el centro."
 
 #: src/Task/TypeStrings.cpp:86
 #, no-c-format
@@ -215,24 +214,24 @@ msgid ""
 "sector.  Scored from center."
 msgstr ""
 "(Reglas británicas) Cualquier punto dentro de 1/2 km del centro o 10 km de "
-"un sector de 180 grados. Se computa desde el centro."
+"un sector de 180 grados. Se puntúa desde el centro."
 
 #: src/Task/TypeStrings.cpp:88
 #, no-c-format
 msgid "A cylinder.  Any point within area scored from center."
 msgstr ""
-"Un cilindro. Cualquier punto dentro del área, se computa desde el centro."
+"Un cilindro. Cualquier punto dentro del área, se puntúa desde el centro."
 
 #: src/Task/TypeStrings.cpp:89
 #, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
 msgstr ""
-"Un cilindro de 1 milla. Se computa el punto más alejado alcanzado en el área."
+"Un cilindro de 1 milla. Puntúa el lugar más alejado alcanzado en el área."
 
 #: src/Task/TypeStrings.cpp:90
 #, no-c-format
 msgid "A cylinder.  Scored by farthest point reached in area."
-msgstr "Un cilindro. Se computa el punto más alejado alcanzado en el área."
+msgstr "Un cilindro. Puntúa el lugar más alejado alcanzado en el área."
 
 #: src/Task/TypeStrings.cpp:91
 #, no-c-format
@@ -240,8 +239,8 @@ msgid ""
 "A sector that can vary in angle and radius.  Scored by farthest point "
 "reached inside area."
 msgstr ""
-"Un sector que puede variar en ángulo y radio. Se computa el punto más "
-"alejado alcanzado dentro del área."
+"Un sector que puede variar en ángulo y radio. Puntúa el lugar más alejado "
+"alcanzado dentro del área."
 
 #: src/Task/TypeStrings.cpp:93
 #, no-c-format
@@ -274,8 +273,8 @@ msgid ""
 "A sector that can vary in angle, inner and outer radius.  Scored by farthest "
 "point reached inside area."
 msgstr ""
-"Un sector que puede variar en ángulo, radio interno y externo. Se computa el "
-"punto más alejado alcanzado dentro del área."
+"Un sector que puede variar en ángulo, radio interno y externo. Puntúa el "
+"lugar más alejado alcanzado dentro del área."
 
 #: src/Task/TypeStrings.cpp:99
 #, no-c-format
@@ -285,8 +284,7 @@ msgstr "Un cuadrante simétrico con un radio personalizado."
 #: src/Task/TypeStrings.cpp:100
 #, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
-msgstr ""
-"Un ojo de cerradura. Se computa el punto más alejado alcanzado en el área."
+msgstr "Un ojo de cerradura. Puntúa el lugar más alejado alcanzado en el área."
 
 #: src/Task/TypeStrings.cpp:113
 #, no-c-format
@@ -309,7 +307,7 @@ msgid "FAI quadrant"
 msgstr "Cuadrante FAI"
 
 #: src/Task/TypeStrings.cpp:117
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Keyhole sector"
 msgstr "Sector de ojo de cerradura (DAeC)"
 
@@ -453,7 +451,7 @@ msgstr "Tipo de archivo de espacio aéreo desconocido"
 
 #: src/contest/weglide/UploadIGCFile.cpp:112
 msgid "Date"
-msgstr ""
+msgstr "Fecha"
 
 #: src/contest/weglide/UploadIGCFile.cpp:113
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
@@ -478,18 +476,16 @@ msgstr "ID Comp."
 #. upload successful!
 #: src/contest/weglide/UploadIGCFile.cpp:118
 #: src/contest/weglide/UploadIGCFile.cpp:176
-#, fuzzy
 msgid "WeGlide Upload"
-msgstr "Tipo WeGlide"
+msgstr "Subir a WeGlide"
 
 #: src/contest/weglide/UploadIGCFile.cpp:142 src/Input/InputEventsLua.cpp:60
 msgid "Not found"
 msgstr "No encontrado"
 
 #: src/contest/weglide/UploadIGCFile.cpp:149
-#, fuzzy
 msgid "Upload Flight"
-msgstr "Descargar vuelo"
+msgstr "Subir vuelo"
 
 #. upload failed!
 #: src/contest/weglide/UploadIGCFile.cpp:151
@@ -671,14 +667,12 @@ msgstr "No se pudo descargar el vuelo."
 
 #. ask whether this IGC should be uploaded to WeGlide
 #: src/Logger/ExternalLogger.cpp:356
-#, fuzzy
 msgid "Do you want to upload this flight to WeGlide?"
-msgstr "¿Quieres descargar otro vuelo?"
+msgstr "¿Quiere subir este vuelo a WeGlide?"
 
 #: src/Logger/ExternalLogger.cpp:357
-#, fuzzy
 msgid "Upload flight"
-msgstr "Descargar vuelo"
+msgstr "Subir vuelo"
 
 #: src/Logger/ExternalLogger.cpp:362
 msgid "Do you want to download another flight?"
@@ -1011,15 +1005,13 @@ msgstr "Terreno Apagado"
 
 #: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:364
 #: src/Menu/ExpandMacros.cpp:366
-#, fuzzy
 msgid "Hide"
-msgstr "Ocultar Info"
+msgstr "Ocultar"
 
 #: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:364
 #: src/Menu/ExpandMacros.cpp:366
-#, fuzzy
 msgid "Show"
-msgstr "Mostrar bichos"
+msgstr "Mostrar"
 
 #: src/Menu/ExpandMacros.cpp:369 src/Input/InputEventsSettings.cpp:313
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:85
@@ -2833,22 +2825,24 @@ msgid "Airspace Warnings"
 msgstr "Advertencias del Espacio Aéreo"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:60
-#, fuzzy
 msgid "Circling wind"
-msgstr "Vuelo circular"
+msgstr "Viento girando"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:61
 msgid "Estimate the wind vector while circling.  Requires only a GPS."
 msgstr ""
+"Calcula la dirección del viento durante el vuelo circular.  Solo necesita un "
+"GPS."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
-#, fuzzy
 msgid "ZigZag wind"
-msgstr "ZigZag"
+msgstr "Viento en ZigZag"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:65
 msgid "Estimate the wind vector during glides.  Requires an airspeed sensor."
 msgstr ""
+"Calcula la velocidad del viento durante los planeos. Necesita un sensor de "
+"velocidad."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
 msgid "External wind"
@@ -2904,28 +2898,27 @@ msgstr "Vaciado"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:285
 msgid "Crew"
-msgstr ""
+msgstr "Carga"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:286
 msgid ""
 "All masses loaded to the glider beyond the empty weight including pilot and "
 "copilot, but not water ballast."
 msgstr ""
+"Todas las masas cargadas en el planeador sobre el peso en vacío incluyendo "
+"piloto y copiloto, pero no el lastre."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:293
 msgid "Ballast"
 msgstr "Lastre"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:294
-#, fuzzy
 msgid ""
 "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the "
 "ballast volume according to the dump rate specified in the configuration "
 "settings."
 msgstr ""
-"Lastre del planeador. Aumente este valor si el peso del piloto y objetos en "
-"la cabina es mayor que el peso del piloto de referencia de la polar "
-"(generalmente 75 kg). Presione ENTRAR en este campo para comenzar la cuenta "
+"Lastre del planeador. Pulse \"Descargar/Parar\" para ajustar la cuenta "
 "regresiva del volumen de lastre de acuerdo con la velocidad de descarga "
 "especificada en la configuración."
 
@@ -3453,14 +3446,12 @@ msgid "Wing Area"
 msgstr "Superficie alar"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:124
-#, fuzzy
 msgid "Empty Mass"
-msgstr "Tarea vacía"
+msgstr "Peso en vacío"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:124
-#, fuzzy
 msgid "Net mass of the rigged plane."
-msgstr "Masa de referencia de la polar"
+msgstr "Masa neta del planeador."
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:128
 msgid "Max. Ballast"
@@ -3492,9 +3483,8 @@ msgid "Reference Mass"
 msgstr "Masa de referencia"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:134
-#, fuzzy
 msgid "Reference mass of the polar."
-msgstr "Masa de referencia de la polar"
+msgstr "Masa de referencia de la polar."
 
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:174
@@ -3620,7 +3610,7 @@ msgstr "Cercano"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:98
 msgid "Share"
-msgstr ""
+msgstr "Compartir"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:51
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:62
@@ -3635,19 +3625,19 @@ msgstr "Desconectado"
 #: src/InfoBoxes/Content/Other.cpp:191
 #, no-c-format
 msgid "Fix invalid"
-msgstr "Posición inválida"
+msgstr "Fijo inválido"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:55
 #: src/InfoBoxes/Content/Other.cpp:193
 #, no-c-format
 msgid "2D fix"
-msgstr "Posición 2D"
+msgstr "Fijo 2D"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:57
 #: src/InfoBoxes/Content/Other.cpp:195
 #, no-c-format
 msgid "3D fix"
-msgstr "Posición 3D"
+msgstr "Fijo 3D"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:64
 #, no-c-format
@@ -3777,7 +3767,7 @@ msgstr "Hora de salida"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:104
 msgid "Start alt."
-msgstr "Alt. salida"
+msgstr "Salida Alt."
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:105
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:146
@@ -4567,7 +4557,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:89
 msgid "Nav. by baro altitude"
-msgstr "Nav. con altitud baro."
+msgstr "Navegación con altitud baro"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:90
 msgid ""
@@ -4602,7 +4592,7 @@ msgstr "Período preferido para planeadores."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:111
 msgid "GR average period"
-msgstr "Periodo de RP promedio"
+msgstr "Periodo promedio de RP"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:112
 msgid ""
@@ -4804,9 +4794,9 @@ msgid "15 Split in 3 rows"
 msgstr "12 en 3 líneas"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:96
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "18 Split in 3 rows"
-msgstr "12 dividido en 3 líneas"
+msgstr "18 dividido en 3 líneas"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:98
 #, no-c-format
@@ -5105,13 +5095,15 @@ msgstr "Nombre del Copiloto"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:79
 msgid "Crew weight default"
-msgstr ""
+msgstr "Carga por defecto"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:80
 msgid ""
 "Default for all weight loaded to the glider beyond the empty weight and "
 "besides the water ballast."
 msgstr ""
+"Peso por defecto de toda la carga del planeador por encima del peso en "
+"vacío, sin el lastre."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:86
 msgid "Time step cruise"
@@ -5304,7 +5296,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:141
 msgid "Max. auto zoom distance"
-msgstr "Máx. distancia zoom auto."
+msgstr "Máx. distancia zoom auto"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:142
 msgid "The upper limit for auto zoom distance."
@@ -5329,7 +5321,7 @@ msgstr "Especifica lo que debe mostrarse en el área principal."
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:206
 #, no-c-format
 msgid "Displays either the Circling, Cruise or Final glide infoxboxes"
-msgstr "Muestra las infoxboxes de Vuelo Circular, Crucero o Planeo final."
+msgstr "Muestra las infoxboxes de Vuelo Circular, Crucero o Planeo final"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:207
 #, no-c-format
@@ -6145,7 +6137,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:119
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:276
 msgid "Finish height ref."
-msgstr "Ref. de alt. de llegada"
+msgstr "Ref. de alt. de Meta"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:120
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:277
@@ -6155,7 +6147,7 @@ msgstr "Referencia utilizada para la regla de altura mínima de llegada."
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:128
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:280
 msgid "PEV start wait time"
-msgstr "Tiempo de espera de salida PEV"
+msgstr "Tiempo de espera de Salida PEV"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:129
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:281
@@ -6169,7 +6161,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:135
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:284
 msgid "PEV start window"
-msgstr "Ventana de salida PEV"
+msgstr "Ventana de Salida PEV"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:136
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:285
@@ -6369,6 +6361,8 @@ msgid ""
 "LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance "
 "is 20km, 5 points per km."
 msgstr ""
+"LVZC Charron.online, 5 tramos por debajo de 200 km, 6 tramos por encima. "
+"Distancia mínima de tramo 20 km, 5 puntos por km."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:129
 msgid "Contest"
@@ -7029,7 +7023,7 @@ msgid ""
 "thermal/wave locations and other weather data to our test server."
 msgstr ""
 "¿Participa en la prueba de campo de XCSoar Cloud? Se transmitirá su "
-"posición, posición de térmicas/ondas y otros datos climaticos a nuestro "
+"posición, posiciones de térmica/onda y otros datos climaticos a nuestro "
 "servidor de prueba."
 
 #: src/Dialogs/Settings/Panels/CloudConfigPanel.cpp:89
@@ -7042,6 +7036,8 @@ msgid ""
 "Show thermal locations downloaded from Thermal Information Map (thermalmap."
 "info)."
 msgstr ""
+"Muestra posiciones de térmicas descargadas del Thermal Information Map "
+"(thermalmap.info)."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:91
 msgid "Automatic Upload"
@@ -7558,7 +7554,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:85
 msgid "Min. Frequency"
-msgstr "Frecuencia Mín."
+msgstr "Frecuencia Min."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:86
 msgid "The tone frequency that is played at maximum sink rate."
@@ -7574,7 +7570,7 @@ msgstr "La frecuencia del tono que suena a velocidad de ascenso cero."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:97
 msgid "Max. Frequency"
-msgstr "Frecuencia Máx."
+msgstr "Frecuencia Max."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:98
 msgid "The tone frequency that is played at maximum climb rate."
@@ -9247,7 +9243,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:838
 #, no-c-format
 msgid "Task time to go (ground speed)"
-msgstr "Tiempo de tarea restante (velocidad de avance)"
+msgstr "Tiempo de tarea para comenzar (velocidad sobre el terreno)"
 
 #: src/InfoBoxes/Content/Factory.cpp:839
 #, no-c-format
@@ -9860,11 +9856,11 @@ msgstr "MC MANUAL"
 
 #: src/InfoBoxes/Content/Other.cpp:78 src/InfoBoxes/Content/Other.cpp:81
 msgid "AC Off"
-msgstr "AC Off"
+msgstr "CA Desc."
 
 #: src/InfoBoxes/Content/Other.cpp:86
 msgid "AC ON"
-msgstr "AC ON"
+msgstr "CA Con."
 
 #: src/InfoBoxes/Content/Other.cpp:207
 msgid "No GPS"
@@ -9919,7 +9915,7 @@ msgstr "No hay nada interesante cerca de esta posición."
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:134
 msgid "Elevation: "
-msgstr "Elevacion: "
+msgstr "Elevación: "
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:173
 msgid "GPS not connected"
@@ -10536,17 +10532,16 @@ msgid ""
 "Config\n"
 "Page 3/3"
 msgstr ""
+"Config.\n"
+"Pag. 3/3"
 
 #: Data/Input/default.xci:668 Data/Input/default.xci:719
 msgid "Vega"
 msgstr "Vega"
 
 #: Data/Input/default.xci:701
-#, fuzzy
 msgid "Setup Stall"
-msgstr ""
-"Ajustes de\n"
-"Pérdida"
+msgstr "Ajustes de Pérdida"
 
 #: Data/Input/default.xci:756
 #, fuzzy
@@ -10568,7 +10563,7 @@ msgstr "PROM/ALT"
 
 #: Data/Input/default.xci:488 Data/Input/default.xci:1072
 msgid "Pan Mode"
-msgstr ""
+msgstr "Modo Despl."
 
 #: Data/Input/default.xci:1174
 msgid "Setup Plane"
@@ -10583,13 +10578,12 @@ msgid ""
 "Vega\n"
 "Page 2/2"
 msgstr ""
+"Vega\n"
+"Pag. 2/2"
 
 #: Data/Input/default.xci:1135
-#, fuzzy
 msgid "Setup System"
-msgstr ""
-"Configuración\n"
-"del Sistema"
+msgstr "Config. Sistema"
 
 #: Data/Input/default.xci:515 Data/Input/default.xci:1088
 msgid "Trail"
@@ -10598,7 +10592,7 @@ msgstr "Rastro"
 #: Data/Input/default.xci:440 Data/Input/default.xci:1046
 #, fuzzy
 msgid "Target Show"
-msgstr "Destino"
+msgstr "Mostrar Destino"
 
 #: Data/Input/default.xci:64
 msgid "Below final glide"
@@ -10611,7 +10605,7 @@ msgstr "Anuncio de evento del piloto"
 
 #: Data/Input/default.xci:481
 msgid "Page Show"
-msgstr ""
+msgstr "Mostrar Página"
 
 #: Data/Input/default.xci:726
 msgid "Vario ASI zeroed"
@@ -10622,6 +10616,8 @@ msgid ""
 "Nav\n"
 "Page 2/2"
 msgstr ""
+"Nav.\n"
+"Pag. 2/2"
 
 #: Data/Input/default.xci:893
 msgid "Nav"
@@ -10643,11 +10639,8 @@ msgid "Stored to EEPROM"
 msgstr "Grabado en la EEPROM"
 
 #: Data/Input/default.xci:1127
-#, fuzzy
 msgid "Setup Wind"
-msgstr ""
-"Ajustes\n"
-"de Viento"
+msgstr "Config. Viento"
 
 #: Data/Input/default.xci:840
 msgid "Traffic List"
@@ -10700,11 +10693,12 @@ msgstr ""
 "más cercano"
 
 #: Data/Input/default.xci:451
-#, fuzzy
 msgid ""
 "Display\n"
 "Page 2/2"
-msgstr "Pantalla"
+msgstr ""
+"Pantalla\n"
+"Pag. 2/2"
 
 #: Data/Input/default.xci:727
 #, fuzzy
@@ -10738,7 +10732,7 @@ msgstr "Radar FLARM"
 
 #: Data/Input/default.xci:529 Data/Input/default.xci:1102
 msgid "Topo."
-msgstr "Topo."
+msgstr "Topo"
 
 #: Data/Input/default.xci:419 Data/Input/default.xci:1062
 msgid "Dropped marker"
@@ -10763,6 +10757,8 @@ msgid ""
 "Info\n"
 "Page 3/3"
 msgstr ""
+"Info\n"
+"Pag. 3/3"
 
 #: Data/Input/default.xci:907
 msgid "Config"
@@ -10770,7 +10766,7 @@ msgstr "Configuración"
 
 #: Data/Input/default.xci:429
 msgid "Pilot event announced"
-msgstr "Anuncio de evento del piloto"
+msgstr "Evento del piloto Anuncio"
 
 #: Data/Input/default.xci:742
 msgid "Store"
@@ -10781,6 +10777,8 @@ msgid ""
 "Info\n"
 "Page 2/3"
 msgstr ""
+"Info\n"
+"Pag. 2/3"
 
 #~ msgid ""
 #~ "Team\n"
