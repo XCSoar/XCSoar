@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-19 20:45+0200\n"
-"PO-Revision-Date: 2022-09-20 13:58+0200\n"
+"PO-Revision-Date: 2022-09-20 19:32+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -772,16 +772,12 @@ msgstr "Nahrávám databázi letišť..."
 #: src/Menu/ExpandMacros.cpp:83 src/Menu/ExpandMacros.cpp:116
 #: src/Menu/ExpandMacros.cpp:138
 msgid "Next Turnpoint"
-msgstr ""
-"Další\n"
-"otočný bod"
+msgstr "Další OB"
 
 #: src/Menu/ExpandMacros.cpp:87 src/Menu/ExpandMacros.cpp:124
 #: src/Menu/ExpandMacros.cpp:161
 msgid "Previous Turnpoint"
-msgstr ""
-"Předchozí\n"
-"otočný bod"
+msgstr "Předchozí OB"
 
 #: src/Menu/ExpandMacros.cpp:94
 msgid "Furthest Landpoint"
@@ -801,9 +797,7 @@ msgstr "Předchozí místo přistání"
 
 #: src/Menu/ExpandMacros.cpp:115 src/Menu/ExpandMacros.cpp:137
 msgid "Finish Turnpoint"
-msgstr ""
-"Cílový bod\n"
-"trati"
+msgstr "Cílový bod trati"
 
 #: src/Menu/ExpandMacros.cpp:119 src/Menu/ExpandMacros.cpp:156
 msgid "Next Startpoint"
@@ -811,9 +805,7 @@ msgstr "Další bod startu"
 
 #: src/Menu/ExpandMacros.cpp:123 src/Menu/ExpandMacros.cpp:160
 msgid "Start Turnpoint"
-msgstr ""
-"Startovní\n"
-"bod trati"
+msgstr "Startovní bod trati"
 
 #: src/Menu/ExpandMacros.cpp:141
 msgid "Arm start"
@@ -1907,9 +1899,7 @@ msgstr "Nelze stáhnout index úložiště."
 #: src/Dialogs/FileManager.cpp:753 src/Dialogs/FileManager.cpp:778
 #: src/Dialogs/DownloadFilePicker.cpp:400 Data/Input/default.xci:620
 msgid "File Manager"
-msgstr ""
-"Správce\n"
-"souborů"
+msgstr "Správa souborů"
 
 #: src/Dialogs/FileManager.cpp:776 src/Dialogs/DownloadFilePicker.cpp:399
 msgid "The file manager is not available on this device."
@@ -3248,7 +3238,7 @@ msgstr "Nastav nového partnera"
 #: Data/Input/default.xci:832
 #, no-c-format
 msgid "Team Code"
-msgstr "Tým kód"
+msgstr "Kód týmu"
 
 #: src/Dialogs/dlgAnalysis.cpp:246 src/Dialogs/dlgAnalysis.cpp:484
 #: src/Dialogs/dlgAnalysis.cpp:547 src/Dialogs/dlgAnalysis.cpp:556
@@ -3292,9 +3282,7 @@ msgstr "Výškový profil větru"
 
 #: src/Dialogs/dlgAnalysis.cpp:509
 msgid "Set Wind"
-msgstr ""
-"Nastav\n"
-"vítr"
+msgstr "Nastav vítr"
 
 #: src/Dialogs/dlgAnalysis.cpp:514
 msgid "Glide Polar"
@@ -3527,9 +3515,7 @@ msgstr ""
 #: src/Dialogs/ReplayDialog.cpp:102 src/Dialogs/ReplayDialog.cpp:126
 #: Data/Input/default.xci:628
 msgid "Replay"
-msgstr ""
-"Přehraj\n"
-"záznam"
+msgstr "Přehraj záznam"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:60 src/Dialogs/StartupDialog.cpp:93
 #: Data/Input/default.xci:937
@@ -3928,10 +3914,7 @@ msgstr "Smazat otočný bod?"
 
 #: src/Dialogs/Waypoint/Manager.cpp:299
 msgid "Waypoints Editor"
-msgstr ""
-"Editor\n"
-"otočných\n"
-"bodů"
+msgstr "Editor OB"
 
 #: src/Dialogs/Waypoint/Manager.cpp:308
 msgid "Save changes to waypoint file?"
@@ -3999,7 +3982,7 @@ msgstr "Editor otočných bodů ještě neumí souřadnice v UTM formátu."
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:167
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:174 Data/Input/default.xci:612
 msgid "Waypoint Editor"
-msgstr "Editor otočných bodů"
+msgstr "Editor OB"
 
 #: src/Dialogs/Waypoint/WaypointList.cpp:453
 msgid "Choose a filter or click here"
@@ -8587,7 +8570,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:587
 #, no-c-format
 msgid "Team code"
-msgstr "Týmový kód"
+msgstr "Kód týmu"
 
 #: src/InfoBoxes/Content/Factory.cpp:589
 #, no-c-format
@@ -10349,11 +10332,8 @@ msgid "Accelerometer leveled"
 msgstr "Akcelerometr vyrovnán"
 
 #: Data/Input/default.xci:694
-#, fuzzy
 msgid "Manual Demo"
-msgstr ""
-"Manuál\n"
-"Demo"
+msgstr "Manuál Demo"
 
 #: Data/Input/default.xci:128 Data/Input/default.xci:135
 #: Data/Input/default.xci:459 Data/Input/default.xci:466
@@ -10364,11 +10344,8 @@ msgid "Zoom"
 msgstr "Zvětšení"
 
 #: Data/Input/default.xci:687
-#, fuzzy
 msgid "Airframe Switches"
-msgstr ""
-"Palubní\n"
-"spínače"
+msgstr "Palubní Spínače"
 
 #: Data/Input/default.xci:596
 msgid ""
@@ -10383,25 +10360,16 @@ msgid "Vega"
 msgstr "Vega"
 
 #: Data/Input/default.xci:701
-#, fuzzy
 msgid "Setup Stall"
-msgstr ""
-"Nastavení\n"
-"Pád"
+msgstr "Nastav pád"
 
 #: Data/Input/default.xci:756
-#, fuzzy
 msgid "Climb Demo"
-msgstr ""
-"Stoupání\n"
-"Demo"
+msgstr "Demo stoupání"
 
 #: Data/Input/default.xci:922
-#, fuzzy
 msgid "Lock Screen"
-msgstr ""
-"Zamkni\n"
-"obrazovku"
+msgstr "Zamkni obrazovku"
 
 #: Data/Input/default.xci:980
 msgid "AVG/ALT"
@@ -10430,11 +10398,8 @@ msgstr ""
 "Strana 2/2"
 
 #: Data/Input/default.xci:1135
-#, fuzzy
 msgid "Setup System"
-msgstr ""
-"Nastavení\n"
-"Systém"
+msgstr "Nastav systém"
 
 #: Data/Input/default.xci:515 Data/Input/default.xci:1088
 msgid "Trail"
@@ -10449,14 +10414,12 @@ msgid "Below final glide"
 msgstr "Výška nestačí na dokluz"
 
 #: Data/Input/default.xci:432
-#, fuzzy
 msgid "Pilot Event Announce"
-msgstr "Událost označena pilotem (Pilot EVent)"
+msgstr "Označ Pilot EVent"
 
 #: Data/Input/default.xci:481
-#, fuzzy
 msgid "Page Show"
-msgstr "Zobraz stránku"
+msgstr "Zobraz stranu"
 
 #: Data/Input/default.xci:726
 msgid "Vario ASI zeroed"
@@ -10479,53 +10442,36 @@ msgid "Accel"
 msgstr "Akcel"
 
 #: Data/Input/default.xci:142 Data/Input/default.xci:790
-#, fuzzy
 msgid "What's here?"
-msgstr ""
-"Co je \n"
-"zde?"
+msgstr "Co je zde?"
 
 #: Data/Input/default.xci:741
 msgid "Stored to EEPROM"
 msgstr "Uloženo do EEPROM"
 
 #: Data/Input/default.xci:1127
-#, fuzzy
 msgid "Setup Wind"
-msgstr ""
-"Nastavení\n"
-"Vítr"
+msgstr "Nastav Vítr"
 
 #: Data/Input/default.xci:840
 msgid "Traffic List"
-msgstr ""
-"Provoz\n"
-"Seznam"
+msgstr "Seznam provozu"
 
 #: Data/Input/default.xci:734
-#, fuzzy
 msgid "Accel Zero"
-msgstr ""
-"Akcel\n"
-"Nula"
+msgstr "Akcel Nuluj"
 
 #: Data/Input/default.xci:69
 msgid "Final glide through terrain"
 msgstr "Dráha dokluzu koliduje s terénem"
 
 #: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
 msgid "Marker Drop"
-msgstr ""
-"Vytvoř\n"
-"marker"
+msgstr "Vytvoř marker"
 
 #: Data/Input/default.xci:882
-#, fuzzy
 msgid "Message Repeat"
-msgstr ""
-"Opakuj\n"
-"zprávu"
+msgstr "Opakuj zprávu"
 
 #: Data/Input/default.xci:848 Data/Input/default.xci:1229
 msgid "Thermal Assistant"
@@ -10544,11 +10490,8 @@ msgstr ""
 "Strana 2/3"
 
 #: Data/Input/default.xci:1197
-#, fuzzy
 msgid "Nearest Airspace"
-msgstr ""
-"Nejbližší\n"
-"prostor"
+msgstr "Nejbližší prostor"
 
 #: Data/Input/default.xci:451
 msgid ""
@@ -10559,22 +10502,16 @@ msgstr ""
 "Strana 2/2"
 
 #: Data/Input/default.xci:727
-#, fuzzy
 msgid "ASI Zero"
-msgstr ""
-"ASI\n"
-"Nula"
+msgstr "ASI Nuluj"
 
 #: Data/Input/default.xci:507 Data/Input/default.xci:1080
 msgid "Labels"
 msgstr "Popisy"
 
 #: Data/Input/default.xci:385 Data/Input/default.xci:1014
-#, fuzzy
 msgid "Waypoint List"
-msgstr ""
-"Otočný bod\n"
-"Seznam"
+msgstr "Seznam OB"
 
 #: Data/Input/default.xci:661
 msgid "Lua"
@@ -10582,15 +10519,11 @@ msgstr "Lua"
 
 #: Data/Input/default.xci:653 Data/Input/default.xci:1158
 msgid "Raw Logger"
-msgstr ""
-"NMEA\n"
-"Logger"
+msgstr "NMEA Logger"
 
 #: Data/Input/default.xci:774 Data/Input/default.xci:1181
 msgid "FLARM Radar"
-msgstr ""
-"FLARM\n"
-"Radar"
+msgstr "FLARM Radar"
 
 #: Data/Input/default.xci:529 Data/Input/default.xci:1102
 msgid "Topo."
@@ -10601,18 +10534,12 @@ msgid "Dropped marker"
 msgstr "Marker vytvořen"
 
 #: Data/Input/default.xci:1143
-#, fuzzy
 msgid "Settings Airspace"
-msgstr ""
-"Nastavení\n"
-"Prostory"
+msgstr "Nastavení prostorů"
 
 #: Data/Input/default.xci:749
-#, fuzzy
 msgid "Cruise Demo"
-msgstr ""
-"Přeskok\n"
-"Demo"
+msgstr "Demo přeskok"
 
 #: Data/Input/default.xci:816
 msgid ""
@@ -10628,7 +10555,7 @@ msgstr "Nastav"
 
 #: Data/Input/default.xci:429
 msgid "Pilot event announced"
-msgstr "Pilot Event Označ"
+msgstr "Pilot Event označen"
 
 #: Data/Input/default.xci:742
 msgid "Store"
