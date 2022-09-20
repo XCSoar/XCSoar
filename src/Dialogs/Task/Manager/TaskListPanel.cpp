@@ -223,7 +223,7 @@ TaskListPanel::LoadTask()
   active_task = orig->Clone(CommonInterface::GetComputerSettings().task);
 
   const unsigned cursor_index = GetList().GetCursorIndex();
-  active_task->SetName(StaticString<64>(task_store.GetName(cursor_index)));
+  active_task->SetName(task_store.GetName(cursor_index));
 
   RefreshView();
   *task_modified = true;

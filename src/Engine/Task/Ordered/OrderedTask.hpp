@@ -670,8 +670,9 @@ public:
     return name;
   }
 
-  void SetName(const StaticString<64> &name_) {
-    name = name_;
+  template<typename T>
+  void SetName(T &&_name) noexcept {
+    name = std::forward<T>(_name);
   }
 
   void ClearName() {
