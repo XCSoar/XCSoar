@@ -95,7 +95,7 @@ ListControl::ActivateItem() noexcept
 }
 
 void
-ListControl::show_or_hide_scroll_bar() noexcept
+ListControl::ShowOrHideScrollBar() noexcept
 {
   const PixelSize size = GetSize();
 
@@ -125,28 +125,28 @@ ListControl::OnResize(PixelSize new_size) noexcept
     /* make sure the cursor is still visible */
     EnsureVisible(GetCursorIndex());
 
-  show_or_hide_scroll_bar();
+  ShowOrHideScrollBar();
 }
 
 void
 ListControl::OnSetFocus() noexcept
 {
   PaintWindow::OnSetFocus();
-  Invalidate_item(cursor);
+  InvalidateItem(cursor);
 }
 
 void
 ListControl::OnKillFocus() noexcept
 {
   PaintWindow::OnKillFocus();
-  Invalidate_item(cursor);
+  InvalidateItem(cursor);
 }
 
 void
 ListControl::DrawItems(Canvas &canvas,
                        unsigned start, unsigned end) const noexcept
 {
-  PixelRect rc = item_rect(start);
+  PixelRect rc = GetItemRect(start);
 
   canvas.SetBackgroundColor(look.list.background_color);
   canvas.SetBackgroundTransparent();
@@ -228,7 +228,7 @@ ListControl::SetItemHeight(unsigned _item_height) noexcept
   item_height = _item_height;
   items_visible = GetSize().height / item_height;
 
-  show_or_hide_scroll_bar();
+  ShowOrHideScrollBar();
   Invalidate();
 }
 
@@ -256,7 +256,7 @@ ListControl::SetLength(unsigned n) noexcept
   else if (cursor < origin)
     origin = cursor;
 
-  show_or_hide_scroll_bar();
+  ShowOrHideScrollBar();
   Invalidate();
 
   SetCursorIndex(cursor);
@@ -294,9 +294,9 @@ ListControl::SetCursorIndex(unsigned i) noexcept
 
   EnsureVisible(i);
 
-  Invalidate_item(cursor);
+  InvalidateItem(cursor);
   cursor = i;
-  Invalidate_item(cursor);
+  InvalidateItem(cursor);
 
   if (cursor_handler != nullptr)
     cursor_handler->OnCursorMoved(i);
@@ -505,7 +505,7 @@ ListControl::drag_end() noexcept
 {
   if (drag_mode != DragMode::NONE) {
     if (drag_mode == DragMode::CURSOR)
-      Invalidate_item(cursor);
+      InvalidateItem(cursor);
 
     drag_mode = DragMode::NONE;
     ReleaseCapture();
@@ -529,7 +529,7 @@ ListControl::OnMouseMove(PixelPoint p, unsigned keys) noexcept
   } else if (drag_mode == DragMode::CURSOR) {
     if (abs(p.y - drag_y_window) > ((int)item_height / 5)) {
       drag_mode = DragMode::SCROLL;
-      Invalidate_item(cursor);
+      InvalidateItem(cursor);
     } else
       return true;
   }
@@ -592,7 +592,7 @@ ListControl::OnMouseDown(PixelPoint Pos) noexcept
     if (had_focus && (unsigned)index == GetCursorIndex() &&
         CanActivateItem()) {
       drag_mode = DragMode::CURSOR;
-      Invalidate_item(cursor);
+      InvalidateItem(cursor);
     } else {
       // If item was not selected before
       // -> select it

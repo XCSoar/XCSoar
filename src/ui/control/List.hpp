@@ -272,7 +272,7 @@ private:
   void ActivateItem() noexcept;
 
   /** Checks whether a ScrollBar is needed and shows/hides it */
-  void show_or_hide_scroll_bar() noexcept;
+  void ShowOrHideScrollBar() noexcept;
 
   /**
    * Scroll to the ListItem defined by i
@@ -291,7 +291,7 @@ private:
   }
 
   [[gnu::pure]]
-  PixelRect item_rect(unsigned i) const noexcept {
+  PixelRect GetItemRect(unsigned i) const noexcept {
     PixelRect rc;
     rc.left = 0;
     rc.top = (int)(i - origin) * item_height - pixel_pan;
@@ -300,8 +300,8 @@ private:
     return rc;
   }
 
-  void Invalidate_item(unsigned i) noexcept {
-    Invalidate(item_rect(i));
+  void InvalidateItem(unsigned i) noexcept {
+    Invalidate(GetItemRect(i));
   }
 
   void drag_end() noexcept;
