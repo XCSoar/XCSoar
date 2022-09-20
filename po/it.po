@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-19 20:45+0200\n"
-"PO-Revision-Date: 2022-07-26 22:14+0000\n"
+"PO-Revision-Date: 2022-09-20 19:32+0000\n"
 "Last-Translator: ulipo <uli.peru@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/it/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 "X-Launchpad-Export-Date: 2015-09-08 16:12+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -179,11 +179,9 @@ msgstr ""
 "lato, punteggio conteggiato dall'angolo centrale."
 
 #: src/Task/TypeStrings.cpp:81
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A keyhole.  Scored from center."
-msgstr ""
-"Un buco di chiave. Si calcola il punteggio da punto più lontano raggiunto in "
-"zona."
+msgstr "Un buco di chiave. Punteggio calcolato dal centro."
 
 #: src/Task/TypeStrings.cpp:82
 #, no-c-format
@@ -447,7 +445,7 @@ msgstr "Tipo file Spazi Aerei sconosciuto"
 
 #: src/contest/weglide/UploadIGCFile.cpp:112
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #: src/contest/weglide/UploadIGCFile.cpp:113
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
@@ -472,18 +470,16 @@ msgstr "ID Comp."
 #. upload successful!
 #: src/contest/weglide/UploadIGCFile.cpp:118
 #: src/contest/weglide/UploadIGCFile.cpp:176
-#, fuzzy
 msgid "WeGlide Upload"
-msgstr "Tipo WeGlide"
+msgstr "Caricamento WeGlide"
 
 #: src/contest/weglide/UploadIGCFile.cpp:142 src/Input/InputEventsLua.cpp:60
 msgid "Not found"
 msgstr "Non trovato"
 
 #: src/contest/weglide/UploadIGCFile.cpp:149
-#, fuzzy
 msgid "Upload Flight"
-msgstr "Scarica volo"
+msgstr "Carica Volo"
 
 #. upload failed!
 #: src/contest/weglide/UploadIGCFile.cpp:151
@@ -665,14 +661,12 @@ msgstr "Download del volo non riuscito."
 
 #. ask whether this IGC should be uploaded to WeGlide
 #: src/Logger/ExternalLogger.cpp:356
-#, fuzzy
 msgid "Do you want to upload this flight to WeGlide?"
-msgstr "Vuoi scaricare un'altro volo?"
+msgstr "Vuoi caricare questo volo su WeGlide?"
 
 #: src/Logger/ExternalLogger.cpp:357
-#, fuzzy
 msgid "Upload flight"
-msgstr "Scarica volo"
+msgstr "Carica volo"
 
 #: src/Logger/ExternalLogger.cpp:362
 msgid "Do you want to download another flight?"
@@ -1005,15 +999,13 @@ msgstr "Terreno disattivato"
 
 #: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:364
 #: src/Menu/ExpandMacros.cpp:366
-#, fuzzy
 msgid "Hide"
-msgstr "Nascondi info"
+msgstr "Nascondi"
 
 #: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:364
 #: src/Menu/ExpandMacros.cpp:366
-#, fuzzy
 msgid "Show"
-msgstr "Mostra sporco"
+msgstr "Mostra"
 
 #: src/Menu/ExpandMacros.cpp:369 src/Input/InputEventsSettings.cpp:313
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:85
@@ -2834,22 +2826,24 @@ msgid "Airspace Warnings"
 msgstr "Avvisi SpazioAer"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:60
-#, fuzzy
 msgid "Circling wind"
-msgstr "Termica"
+msgstr "Vento circuitazione"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:61
 msgid "Estimate the wind vector while circling.  Requires only a GPS."
 msgstr ""
+"Stima del vettore del vento in base alla circuitazione.  Richiede solo il "
+"GPS."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
-#, fuzzy
 msgid "ZigZag wind"
-msgstr "ZigZag"
+msgstr "Vento ZigZag"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:65
 msgid "Estimate the wind vector during glides.  Requires an airspeed sensor."
 msgstr ""
+"Stima del vettore del vento durante la planata.  Richiede un sensore "
+"anemometrico."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
 msgid "External wind"
@@ -2906,29 +2900,29 @@ msgstr "Scarica"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:285
 msgid "Crew"
-msgstr ""
+msgstr "Equipaggio"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:286
 msgid ""
 "All masses loaded to the glider beyond the empty weight including pilot and "
 "copilot, but not water ballast."
 msgstr ""
+"Tutte le masse caricate sul velivolo oltre il peso a vuoto, inclusi pilota e "
+"copilota ma esclusa la zavorra."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:293
 msgid "Ballast"
 msgstr "Zavorra"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:294
-#, fuzzy
 msgid ""
 "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the "
 "ballast volume according to the dump rate specified in the configuration "
 "settings."
 msgstr ""
-"Zavorra dell'aliante.  Incrementa questo valore se il carico è maggiore del "
-"peso di riferimento pilota della polare (tipicamente 75kg).  Premi ENTER in "
-"questo campo per abilitare il decremento del volume della zavorra secondo il "
-"rateo specificato nella configurazione."
+"Zavorra del velivolo. Premi \"Scarica/Stop\" per avviare il conto alla "
+"rovescia del volume della zavorra secondo il rateo di scaricamento "
+"specificato nella configurazione."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:306
 msgid "Bugs"
@@ -3451,14 +3445,12 @@ msgid "Wing Area"
 msgstr "Superficie alare"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:124
-#, fuzzy
 msgid "Empty Mass"
-msgstr "Tema vuoto"
+msgstr "Massa a Vuoto"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:124
-#, fuzzy
 msgid "Net mass of the rigged plane."
-msgstr "Massa di riferimento della polare"
+msgstr "Massa netta del velivolo attrezzato."
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:128
 msgid "Max. Ballast"
@@ -3490,9 +3482,8 @@ msgid "Reference Mass"
 msgstr "Massa di Riferimento"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:134
-#, fuzzy
 msgid "Reference mass of the polar."
-msgstr "Massa di riferimento della polare"
+msgstr "Massa di riferimento della polare."
 
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:174
@@ -3618,7 +3609,7 @@ msgstr "Vicino"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:98
 msgid "Share"
-msgstr ""
+msgstr "Condividi"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:51
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:62
@@ -4800,9 +4791,9 @@ msgid "15 Split in 3 rows"
 msgstr "15 Divisi in 3 righe"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:96
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "18 Split in 3 rows"
-msgstr "12 Divisi in 3 righe"
+msgstr "18 Divisi in 3 righe"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:98
 #, no-c-format
@@ -5100,13 +5091,14 @@ msgstr "Nome CoPilota"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:79
 msgid "Crew weight default"
-msgstr ""
+msgstr "Peso predefinito dell'equipaggio"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:80
 msgid ""
 "Default for all weight loaded to the glider beyond the empty weight and "
 "besides the water ballast."
 msgstr ""
+"Peso predefinito caricato sul velivolo oltre al peso a vuoto e la zavorra."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:86
 msgid "Time step cruise"
@@ -6364,6 +6356,8 @@ msgid ""
 "LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance "
 "is 20km, 5 points per km."
 msgstr ""
+"LVZC Charron.online, 5 tappe sotto i 200km 6 tappe sopra. La distanza minima "
+"della tappa è 20km, 5 punti per km."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:129
 msgid "Contest"
@@ -7035,6 +7029,8 @@ msgid ""
 "Show thermal locations downloaded from Thermal Information Map (thermalmap."
 "info)."
 msgstr ""
+"Mostra le posizioni delle termiche scaricate da Thermal Information Map "
+"(thermalmap.info)."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:91
 msgid "Automatic Upload"
@@ -10513,11 +10509,8 @@ msgid "Accelerometer leveled"
 msgstr "Accelerometro livellato"
 
 #: Data/Input/default.xci:694
-#, fuzzy
 msgid "Manual Demo"
-msgstr ""
-"Demo\n"
-"Manuale"
+msgstr "Demo Manuale"
 
 #: Data/Input/default.xci:128 Data/Input/default.xci:135
 #: Data/Input/default.xci:459 Data/Input/default.xci:466
@@ -10528,38 +10521,30 @@ msgid "Zoom"
 msgstr "Zoom"
 
 #: Data/Input/default.xci:687
-#, fuzzy
 msgid "Airframe Switches"
-msgstr ""
-"Interruttori\n"
-"Velivolo"
+msgstr "Interruttori Velivolo"
 
 #: Data/Input/default.xci:596
 msgid ""
 "Config\n"
 "Page 3/3"
 msgstr ""
+"Config\n"
+"Pag. 3/3"
 
 #: Data/Input/default.xci:668 Data/Input/default.xci:719
 msgid "Vega"
 msgstr "Vega"
 
 #: Data/Input/default.xci:701
-#, fuzzy
 msgid "Setup Stall"
-msgstr ""
-"Impostazioni \n"
-"di Stallo"
+msgstr "Impostazioni di Stallo"
 
 #: Data/Input/default.xci:756
-#, fuzzy
 msgid "Climb Demo"
-msgstr ""
-"Demo\n"
-"Risalita"
+msgstr "Demo Risalita"
 
 #: Data/Input/default.xci:922
-#, fuzzy
 msgid "Lock Screen"
 msgstr ""
 "Blocco\n"
@@ -10570,9 +10555,8 @@ msgid "AVG/ALT"
 msgstr "AVG/ALT"
 
 #: Data/Input/default.xci:488 Data/Input/default.xci:1072
-#, fuzzy
 msgid "Pan Mode"
-msgstr "Modo sposta ON"
+msgstr "Modo Sposta"
 
 #: Data/Input/default.xci:1174
 msgid "Setup Plane"
@@ -10587,12 +10571,13 @@ msgid ""
 "Vega\n"
 "Page 2/2"
 msgstr ""
+"Vega\n"
+"Pag. 2/2"
 
 #: Data/Input/default.xci:1135
-#, fuzzy
 msgid "Setup System"
 msgstr ""
-"Impostaz.\n"
+"Imposta\n"
 "Sistema"
 
 #: Data/Input/default.xci:515 Data/Input/default.xci:1088
@@ -10600,22 +10585,20 @@ msgid "Trail"
 msgstr "Scia"
 
 #: Data/Input/default.xci:440 Data/Input/default.xci:1046
-#, fuzzy
 msgid "Target Show"
-msgstr "Obiettivo"
+msgstr "Mostra Obiettivo"
 
 #: Data/Input/default.xci:64
 msgid "Below final glide"
 msgstr "Sotto Planata Finale"
 
 #: Data/Input/default.xci:432
-#, fuzzy
 msgid "Pilot Event Announce"
-msgstr "Pilot event annunciato"
+msgstr "Annuncio Pilot Event"
 
 #: Data/Input/default.xci:481
 msgid "Page Show"
-msgstr ""
+msgstr "Mostra Pagina"
 
 #: Data/Input/default.xci:726
 msgid "Vario ASI zeroed"
@@ -10626,6 +10609,8 @@ msgid ""
 "Nav\n"
 "Page 2/2"
 msgstr ""
+"Nav\n"
+"Pag. 2/2"
 
 #: Data/Input/default.xci:893
 msgid "Nav"
@@ -10636,7 +10621,6 @@ msgid "Accel"
 msgstr "Scorciatoia"
 
 #: Data/Input/default.xci:142 Data/Input/default.xci:790
-#, fuzzy
 msgid "What's here?"
 msgstr ""
 "Cosa c'è\n"
@@ -10647,10 +10631,9 @@ msgid "Stored to EEPROM"
 msgstr "Salvato in EEPROM"
 
 #: Data/Input/default.xci:1127
-#, fuzzy
 msgid "Setup Wind"
 msgstr ""
-"Impost.\n"
+"Imposta\n"
 "Vento"
 
 #: Data/Input/default.xci:840
@@ -10669,18 +10652,14 @@ msgid "Final glide through terrain"
 msgstr "Planata Finale Attraverso Terreno"
 
 #: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
 msgid "Marker Drop"
 msgstr ""
 "Aggiungi\n"
 "Segnaposto"
 
 #: Data/Input/default.xci:882
-#, fuzzy
 msgid "Message Repeat"
-msgstr ""
-"Ripeti\n"
-"Messaggio"
+msgstr "Ripeti Messaggio"
 
 #: Data/Input/default.xci:848 Data/Input/default.xci:1229
 msgid "Thermal Assistant"
@@ -10695,34 +10674,32 @@ msgid ""
 "Config\n"
 "Page 2/3"
 msgstr ""
+"Config\n"
+"Pag. 2/3"
 
 #: Data/Input/default.xci:1197
-#, fuzzy
 msgid "Nearest Airspace"
 msgstr ""
 "Spazio Aereo\n"
 "più Vicino"
 
 #: Data/Input/default.xci:451
-#, fuzzy
 msgid ""
 "Display\n"
 "Page 2/2"
-msgstr "Mostra"
+msgstr ""
+"Mostra\n"
+"Pag. 2/2"
 
 #: Data/Input/default.xci:727
-#, fuzzy
 msgid "ASI Zero"
-msgstr ""
-"ASI\n"
-"Zero"
+msgstr "ASI Zero"
 
 #: Data/Input/default.xci:507 Data/Input/default.xci:1080
 msgid "Labels"
 msgstr "Etichette"
 
 #: Data/Input/default.xci:385 Data/Input/default.xci:1014
-#, fuzzy
 msgid "Waypoint List"
 msgstr "Lista Boe"
 
@@ -10747,25 +10724,24 @@ msgid "Dropped marker"
 msgstr "Segnaposto Rilasciato"
 
 #: Data/Input/default.xci:1143
-#, fuzzy
 msgid "Settings Airspace"
 msgstr ""
 "Impostazioni\n"
 "Spazio Aereo"
 
 #: Data/Input/default.xci:749
-#, fuzzy
 msgid "Cruise Demo"
 msgstr ""
 "Demo\n"
 "Crociera"
 
 #: Data/Input/default.xci:816
-#, fuzzy
 msgid ""
 "Info\n"
 "Page 3/3"
-msgstr "Pagine InfoBoxes"
+msgstr ""
+"Info\n"
+"Pag. 3/3"
 
 #: Data/Input/default.xci:907
 msgid "Config"
@@ -10780,11 +10756,12 @@ msgid "Store"
 msgstr "Salva"
 
 #: Data/Input/default.xci:766
-#, fuzzy
 msgid ""
 "Info\n"
 "Page 2/3"
-msgstr "Pagine InfoBoxes"
+msgstr ""
+"Info\n"
+"Pag. 2/3"
 
 #~ msgid ""
 #~ "Team\n"
