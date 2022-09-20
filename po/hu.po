@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-19 20:45+0200\n"
+"POT-Creation-Date: 2022-09-20 21:13+0200\n"
 "PO-Revision-Date: 2021-07-20 10:35+0000\n"
 "Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/xcsoar/"
@@ -438,50 +438,50 @@ msgstr "Légtér fájl betöltése"
 msgid "Unknown airspace filetype"
 msgstr "Ismeretlen légtér fájl típus"
 
-#: src/contest/weglide/UploadIGCFile.cpp:112
+#: src/net/client/WeGlide/UploadIGCFile.cpp:112
 msgid "Date"
 msgstr ""
 
-#: src/contest/weglide/UploadIGCFile.cpp:113
+#: src/net/client/WeGlide/UploadIGCFile.cpp:113
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
 msgid "Username"
 msgstr "Felhasználónév"
 
-#: src/contest/weglide/UploadIGCFile.cpp:114
+#: src/net/client/WeGlide/UploadIGCFile.cpp:114
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:142 Data/Input/default.xci:562
 msgid "Plane"
 msgstr "Repülőgép"
 
-#: src/contest/weglide/UploadIGCFile.cpp:115
+#: src/net/client/WeGlide/UploadIGCFile.cpp:115
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:112
 msgid "Registration"
 msgstr "Regisztráció"
 
-#: src/contest/weglide/UploadIGCFile.cpp:116
+#: src/net/client/WeGlide/UploadIGCFile.cpp:116
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:113
 msgid "Comp. ID"
 msgstr "Verseny azns"
 
 #. upload successful!
-#: src/contest/weglide/UploadIGCFile.cpp:118
-#: src/contest/weglide/UploadIGCFile.cpp:176
+#: src/net/client/WeGlide/UploadIGCFile.cpp:118
+#: src/net/client/WeGlide/UploadIGCFile.cpp:176
 #, fuzzy
 msgid "WeGlide Upload"
 msgstr "Jármű típusa"
 
-#: src/contest/weglide/UploadIGCFile.cpp:142 src/Input/InputEventsLua.cpp:60
+#: src/net/client/WeGlide/UploadIGCFile.cpp:142 src/Input/InputEventsLua.cpp:60
 msgid "Not found"
 msgstr "Nem található"
 
-#: src/contest/weglide/UploadIGCFile.cpp:149
+#: src/net/client/WeGlide/UploadIGCFile.cpp:149
 #, fuzzy
 msgid "Upload Flight"
 msgstr "Repülés letöltése"
 
 #. upload failed!
-#: src/contest/weglide/UploadIGCFile.cpp:151
-#: src/contest/weglide/UploadIGCFile.cpp:181
-#: src/contest/weglide/UploadIGCFile.cpp:182 src/Dialogs/FileManager.cpp:468
+#: src/net/client/WeGlide/UploadIGCFile.cpp:151
+#: src/net/client/WeGlide/UploadIGCFile.cpp:181
+#: src/net/client/WeGlide/UploadIGCFile.cpp:182 src/Dialogs/FileManager.cpp:468
 #: src/Dialogs/FileManager.cpp:744 src/Dialogs/Device/DeviceListDialog.cpp:466
 #: src/Dialogs/Plane/PlaneListDialog.cpp:208
 #: src/Dialogs/Plane/PlaneListDialog.cpp:233
@@ -494,6 +494,7 @@ msgstr "Repülés letöltése"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:144
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:178
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:188
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:139
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:243
 #: src/Dialogs/Weather/NOAAList.cpp:187 src/Dialogs/Weather/NOAAList.cpp:193
 #: src/Dialogs/Weather/NOAADetails.cpp:157
@@ -502,7 +503,7 @@ msgstr "Repülés letöltése"
 msgid "Error"
 msgstr "Hiba"
 
-#: src/contest/weglide/UploadIGCFile.cpp:158
+#: src/net/client/WeGlide/UploadIGCFile.cpp:158
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:109
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:114
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:149
@@ -617,7 +618,7 @@ msgid "Declare task?"
 msgstr "Deklarálja a feladatot?"
 
 #: src/Logger/ExternalLogger.cpp:97 src/Logger/ExternalLogger.cpp:142
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:95
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:101
 msgid "Declare task"
 msgstr "Feladat deklarálása"
 
@@ -1153,6 +1154,7 @@ msgstr "Kiadott feladat"
 
 #: src/Input/InputEventsTask.cpp:238
 #: src/Renderer/FlightStatisticsRenderer.cpp:322
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:139
 msgid "No task"
 msgstr "Nincs feladat"
 
@@ -1862,6 +1864,8 @@ msgid "Help"
 msgstr "Súgó"
 
 #: src/Dialogs/FileManager.cpp:419 src/Dialogs/FilePicker.cpp:50
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:131
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:147
 #: src/Dialogs/Weather/RASPDialog.cpp:167
 #: src/Dialogs/Weather/PCMetDialog.cpp:79 src/Dialogs/Weather/NOAAList.cpp:202
 #: src/Dialogs/Weather/NOAAList.cpp:218 src/Dialogs/Weather/NOAADetails.cpp:108
@@ -2332,7 +2336,7 @@ msgstr "Útvonaltervezés módja"
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:70
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:122
 #: src/Dialogs/Waypoint/Manager.cpp:123
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:118
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:165
 msgid "Save"
 msgstr "Mentés"
 
@@ -7109,29 +7113,34 @@ msgstr ""
 "Ezt engedélyezve a starton nincs magassági vagy sebességkorlát és a befutó "
 "magasság legfeljebb 1000m-el lehet a startmagasság alatt."
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:66
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:72
 msgid "Task not saved"
 msgstr "Feladat nincs mentve."
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:87
 msgid "Create new task?"
 msgstr "Új feladatot hoz létre?"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:87
 msgid "Task New"
 msgstr "Új feladat"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:115
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:162
 msgid "New Task"
 msgstr "Új feladat"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:116
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:163
 msgid "Declare"
 msgstr "Deklarál"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:117
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:164
 msgid "Browse"
 msgstr "Tallóz"
+
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:168
+#, fuzzy
+msgid "Download WeGlide task"
+msgstr "Repülés letöltése"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:97
 msgid "Load"
@@ -10321,16 +10330,21 @@ msgstr "Fülhallgató hiszterézis"
 msgid "Urgent min. volume"
 msgstr "Sürgős min. hangerő"
 
-#: Data/Input/default.xci:733
-msgid "Accelerometer leveled"
-msgstr "Gyorsulásmérő szintben"
+#: Data/Input/default.xci:48
+msgid "Takeoff"
+msgstr "Felszállás"
 
-#: Data/Input/default.xci:694
-#, fuzzy
-msgid "Manual Demo"
-msgstr ""
-"Kézi\n"
-"demó"
+#: Data/Input/default.xci:59
+msgid "Above final glide"
+msgstr "Végsiklás pálya felett"
+
+#: Data/Input/default.xci:64
+msgid "Below final glide"
+msgstr "Végsiklás pálya alatt"
+
+#: Data/Input/default.xci:69
+msgid "Final glide through terrain"
+msgstr "Végsiklás terepen át"
 
 #: Data/Input/default.xci:128 Data/Input/default.xci:135
 #: Data/Input/default.xci:459 Data/Input/default.xci:466
@@ -10340,12 +10354,83 @@ msgstr ""
 msgid "Zoom"
 msgstr "Nagyítás"
 
-#: Data/Input/default.xci:687
+#: Data/Input/default.xci:142 Data/Input/default.xci:790
 #, fuzzy
-msgid "Airframe Switches"
+msgid "What's here?"
+msgstr "Mi van itt?"
+
+#: Data/Input/default.xci:355
+msgid ""
+"Nav\n"
+"Page 2/2"
 msgstr ""
-"Kabin\n"
-"kapcsolók"
+
+#: Data/Input/default.xci:385 Data/Input/default.xci:1014
+#, fuzzy
+msgid "Waypoint List"
+msgstr ""
+"FP\n"
+"Lista"
+
+#: Data/Input/default.xci:419 Data/Input/default.xci:1062
+msgid "Dropped marker"
+msgstr "Jelzőt letettem"
+
+#: Data/Input/default.xci:422 Data/Input/default.xci:1065
+#, fuzzy
+msgid "Marker Drop"
+msgstr ""
+"Jelet\n"
+"tesz"
+
+#: Data/Input/default.xci:429
+msgid "Pilot event announced"
+msgstr ""
+
+#: Data/Input/default.xci:432
+#, fuzzy
+msgid "Pilot Event Announce"
+msgstr "Pilóta"
+
+#: Data/Input/default.xci:440 Data/Input/default.xci:1046
+#, fuzzy
+msgid "Target Show"
+msgstr "Útirány"
+
+#: Data/Input/default.xci:451
+#, fuzzy
+msgid ""
+"Display\n"
+"Page 2/2"
+msgstr "Kijelző"
+
+#: Data/Input/default.xci:481
+#, fuzzy
+msgid "Page Show"
+msgstr "Oldal"
+
+#: Data/Input/default.xci:488 Data/Input/default.xci:1072
+#, fuzzy
+msgid "Pan Mode"
+msgstr "Mozgatás mód BE"
+
+#: Data/Input/default.xci:507 Data/Input/default.xci:1080
+msgid "Labels"
+msgstr "Címke"
+
+#: Data/Input/default.xci:515 Data/Input/default.xci:1088
+msgid "Trail"
+msgstr "Nyom"
+
+#: Data/Input/default.xci:529 Data/Input/default.xci:1102
+msgid "Topo."
+msgstr "Topo."
+
+#: Data/Input/default.xci:546
+msgid ""
+"Config\n"
+"Page 2/3"
+msgstr ""
 
 #: Data/Input/default.xci:596
 msgid ""
@@ -10353,9 +10438,37 @@ msgid ""
 "Page 3/3"
 msgstr ""
 
+#: Data/Input/default.xci:653 Data/Input/default.xci:1158
+msgid "Raw Logger"
+msgstr "NMEA logger"
+
+#: Data/Input/default.xci:661
+msgid "Lua"
+msgstr ""
+
 #: Data/Input/default.xci:668 Data/Input/default.xci:719
 msgid "Vega"
 msgstr "Vega"
+
+#: Data/Input/default.xci:679
+msgid ""
+"Vega\n"
+"Page 2/2"
+msgstr ""
+
+#: Data/Input/default.xci:687
+#, fuzzy
+msgid "Airframe Switches"
+msgstr ""
+"Kabin\n"
+"kapcsolók"
+
+#: Data/Input/default.xci:694
+#, fuzzy
+msgid "Manual Demo"
+msgstr ""
+"Kézi\n"
+"demó"
 
 #: Data/Input/default.xci:701
 #, fuzzy
@@ -10364,12 +10477,94 @@ msgstr ""
 "Átesés\n"
 "konfig"
 
+#: Data/Input/default.xci:708
+msgid "Accel"
+msgstr "Gyorsít"
+
+#: Data/Input/default.xci:726
+msgid "Vario ASI zeroed"
+msgstr "Varió ASI nullázva"
+
+#: Data/Input/default.xci:727
+#, fuzzy
+msgid "ASI Zero"
+msgstr ""
+"ASI\n"
+"Zero"
+
+#: Data/Input/default.xci:733
+msgid "Accelerometer leveled"
+msgstr "Gyorsulásmérő szintben"
+
+#: Data/Input/default.xci:734
+#, fuzzy
+msgid "Accel Zero"
+msgstr ""
+"Gyorsít\n"
+"Zero"
+
+#: Data/Input/default.xci:741
+msgid "Stored to EEPROM"
+msgstr "EEPROMban tárolva"
+
+#: Data/Input/default.xci:742
+msgid "Store"
+msgstr "Tárol"
+
+#: Data/Input/default.xci:749
+#, fuzzy
+msgid "Cruise Demo"
+msgstr ""
+"Utazás\n"
+"Demó"
+
 #: Data/Input/default.xci:756
 #, fuzzy
 msgid "Climb Demo"
 msgstr ""
 "Emelkedés\n"
 "Demó"
+
+#: Data/Input/default.xci:766
+#, fuzzy
+msgid ""
+"Info\n"
+"Page 2/3"
+msgstr "Kijelző oldalak"
+
+#: Data/Input/default.xci:774 Data/Input/default.xci:1181
+msgid "FLARM Radar"
+msgstr "FLARM Radar"
+
+#: Data/Input/default.xci:816
+#, fuzzy
+msgid ""
+"Info\n"
+"Page 3/3"
+msgstr "Kijelző oldalak"
+
+#: Data/Input/default.xci:840
+msgid "Traffic List"
+msgstr ""
+
+#: Data/Input/default.xci:848 Data/Input/default.xci:1229
+msgid "Thermal Assistant"
+msgstr "Termik segéd"
+
+#: Data/Input/default.xci:882
+#, fuzzy
+msgid "Message Repeat"
+msgstr ""
+"Üzenet\n"
+"ismét"
+
+#: Data/Input/default.xci:893
+msgid "Nav"
+msgstr "Navigáció"
+
+#: Data/Input/default.xci:907
+msgid "Config"
+msgstr "Konfig"
 
 #: Data/Input/default.xci:922
 msgid "Lock Screen"
@@ -10379,24 +10574,12 @@ msgstr ""
 msgid "AVG/ALT"
 msgstr "ÁTL/MAG"
 
-#: Data/Input/default.xci:488 Data/Input/default.xci:1072
+#: Data/Input/default.xci:1127
 #, fuzzy
-msgid "Pan Mode"
-msgstr "Mozgatás mód BE"
-
-#: Data/Input/default.xci:1174
-msgid "Setup Plane"
-msgstr "Repülőgép beállítás"
-
-#: Data/Input/default.xci:59
-msgid "Above final glide"
-msgstr "Végsiklás pálya felett"
-
-#: Data/Input/default.xci:679
-msgid ""
-"Vega\n"
-"Page 2/2"
+msgid "Setup Wind"
 msgstr ""
+"Szél\n"
+"konfig"
 
 #: Data/Input/default.xci:1135
 #, fuzzy
@@ -10405,158 +10588,6 @@ msgstr ""
 "Rendszer\n"
 "konfig"
 
-#: Data/Input/default.xci:515 Data/Input/default.xci:1088
-msgid "Trail"
-msgstr "Nyom"
-
-#: Data/Input/default.xci:440 Data/Input/default.xci:1046
-#, fuzzy
-msgid "Target Show"
-msgstr "Útirány"
-
-#: Data/Input/default.xci:64
-msgid "Below final glide"
-msgstr "Végsiklás pálya alatt"
-
-#: Data/Input/default.xci:432
-#, fuzzy
-msgid "Pilot Event Announce"
-msgstr "Pilóta"
-
-#: Data/Input/default.xci:481
-#, fuzzy
-msgid "Page Show"
-msgstr "Oldal"
-
-#: Data/Input/default.xci:726
-msgid "Vario ASI zeroed"
-msgstr "Varió ASI nullázva"
-
-#: Data/Input/default.xci:355
-msgid ""
-"Nav\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:893
-msgid "Nav"
-msgstr "Navigáció"
-
-#: Data/Input/default.xci:708
-msgid "Accel"
-msgstr "Gyorsít"
-
-#: Data/Input/default.xci:142 Data/Input/default.xci:790
-#, fuzzy
-msgid "What's here?"
-msgstr "Mi van itt?"
-
-#: Data/Input/default.xci:741
-msgid "Stored to EEPROM"
-msgstr "EEPROMban tárolva"
-
-#: Data/Input/default.xci:1127
-#, fuzzy
-msgid "Setup Wind"
-msgstr ""
-"Szél\n"
-"konfig"
-
-#: Data/Input/default.xci:840
-msgid "Traffic List"
-msgstr ""
-
-#: Data/Input/default.xci:734
-#, fuzzy
-msgid "Accel Zero"
-msgstr ""
-"Gyorsít\n"
-"Zero"
-
-#: Data/Input/default.xci:69
-msgid "Final glide through terrain"
-msgstr "Végsiklás terepen át"
-
-#: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
-msgid "Marker Drop"
-msgstr ""
-"Jelet\n"
-"tesz"
-
-#: Data/Input/default.xci:882
-#, fuzzy
-msgid "Message Repeat"
-msgstr ""
-"Üzenet\n"
-"ismét"
-
-#: Data/Input/default.xci:848 Data/Input/default.xci:1229
-msgid "Thermal Assistant"
-msgstr "Termik segéd"
-
-#: Data/Input/default.xci:48
-msgid "Takeoff"
-msgstr "Felszállás"
-
-#: Data/Input/default.xci:546
-msgid ""
-"Config\n"
-"Page 2/3"
-msgstr ""
-
-#: Data/Input/default.xci:1197
-#, fuzzy
-msgid "Nearest Airspace"
-msgstr ""
-"Közeli\n"
-"légtér"
-
-#: Data/Input/default.xci:451
-#, fuzzy
-msgid ""
-"Display\n"
-"Page 2/2"
-msgstr "Kijelző"
-
-#: Data/Input/default.xci:727
-#, fuzzy
-msgid "ASI Zero"
-msgstr ""
-"ASI\n"
-"Zero"
-
-#: Data/Input/default.xci:507 Data/Input/default.xci:1080
-msgid "Labels"
-msgstr "Címke"
-
-#: Data/Input/default.xci:385 Data/Input/default.xci:1014
-#, fuzzy
-msgid "Waypoint List"
-msgstr ""
-"FP\n"
-"Lista"
-
-#: Data/Input/default.xci:661
-msgid "Lua"
-msgstr ""
-
-#: Data/Input/default.xci:653 Data/Input/default.xci:1158
-msgid "Raw Logger"
-msgstr "NMEA logger"
-
-#: Data/Input/default.xci:774 Data/Input/default.xci:1181
-msgid "FLARM Radar"
-msgstr "FLARM Radar"
-
-#: Data/Input/default.xci:529 Data/Input/default.xci:1102
-msgid "Topo."
-msgstr "Topo."
-
-#: Data/Input/default.xci:419 Data/Input/default.xci:1062
-msgid "Dropped marker"
-msgstr "Jelzőt letettem"
-
 #: Data/Input/default.xci:1143
 #, fuzzy
 msgid "Settings Airspace"
@@ -10564,38 +10595,16 @@ msgstr ""
 "Légtér\n"
 "konfig"
 
-#: Data/Input/default.xci:749
+#: Data/Input/default.xci:1174
+msgid "Setup Plane"
+msgstr "Repülőgép beállítás"
+
+#: Data/Input/default.xci:1197
 #, fuzzy
-msgid "Cruise Demo"
+msgid "Nearest Airspace"
 msgstr ""
-"Utazás\n"
-"Demó"
-
-#: Data/Input/default.xci:816
-#, fuzzy
-msgid ""
-"Info\n"
-"Page 3/3"
-msgstr "Kijelző oldalak"
-
-#: Data/Input/default.xci:907
-msgid "Config"
-msgstr "Konfig"
-
-#: Data/Input/default.xci:429
-msgid "Pilot event announced"
-msgstr ""
-
-#: Data/Input/default.xci:742
-msgid "Store"
-msgstr "Tárol"
-
-#: Data/Input/default.xci:766
-#, fuzzy
-msgid ""
-"Info\n"
-"Page 2/3"
-msgstr "Kijelző oldalak"
+"Közeli\n"
+"légtér"
 
 #~ msgid ""
 #~ "Team\n"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-19 20:45+0200\n"
+"POT-Creation-Date: 2022-09-20 21:13+0200\n"
 "PO-Revision-Date: 2021-07-20 10:35+0000\n"
 "Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/xcsoar/"
@@ -440,50 +440,50 @@ msgstr "空域ファイルをロード中..."
 msgid "Unknown airspace filetype"
 msgstr "空域ファイル形式が不適当です"
 
-#: src/contest/weglide/UploadIGCFile.cpp:112
+#: src/net/client/WeGlide/UploadIGCFile.cpp:112
 msgid "Date"
 msgstr ""
 
-#: src/contest/weglide/UploadIGCFile.cpp:113
+#: src/net/client/WeGlide/UploadIGCFile.cpp:113
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
 msgid "Username"
 msgstr "ユーザー名"
 
-#: src/contest/weglide/UploadIGCFile.cpp:114
+#: src/net/client/WeGlide/UploadIGCFile.cpp:114
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:142 Data/Input/default.xci:562
 msgid "Plane"
 msgstr "機体"
 
-#: src/contest/weglide/UploadIGCFile.cpp:115
+#: src/net/client/WeGlide/UploadIGCFile.cpp:115
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:112
 msgid "Registration"
 msgstr "登録"
 
-#: src/contest/weglide/UploadIGCFile.cpp:116
+#: src/net/client/WeGlide/UploadIGCFile.cpp:116
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:113
 msgid "Comp. ID"
 msgstr "コンペ　ID"
 
 #. upload successful!
-#: src/contest/weglide/UploadIGCFile.cpp:118
-#: src/contest/weglide/UploadIGCFile.cpp:176
+#: src/net/client/WeGlide/UploadIGCFile.cpp:118
+#: src/net/client/WeGlide/UploadIGCFile.cpp:176
 #, fuzzy
 msgid "WeGlide Upload"
 msgstr "飛行体タイプ"
 
-#: src/contest/weglide/UploadIGCFile.cpp:142 src/Input/InputEventsLua.cpp:60
+#: src/net/client/WeGlide/UploadIGCFile.cpp:142 src/Input/InputEventsLua.cpp:60
 msgid "Not found"
 msgstr "見つかりませんでした"
 
-#: src/contest/weglide/UploadIGCFile.cpp:149
+#: src/net/client/WeGlide/UploadIGCFile.cpp:149
 #, fuzzy
 msgid "Upload Flight"
 msgstr "ファイルをダウンロード"
 
 #. upload failed!
-#: src/contest/weglide/UploadIGCFile.cpp:151
-#: src/contest/weglide/UploadIGCFile.cpp:181
-#: src/contest/weglide/UploadIGCFile.cpp:182 src/Dialogs/FileManager.cpp:468
+#: src/net/client/WeGlide/UploadIGCFile.cpp:151
+#: src/net/client/WeGlide/UploadIGCFile.cpp:181
+#: src/net/client/WeGlide/UploadIGCFile.cpp:182 src/Dialogs/FileManager.cpp:468
 #: src/Dialogs/FileManager.cpp:744 src/Dialogs/Device/DeviceListDialog.cpp:466
 #: src/Dialogs/Plane/PlaneListDialog.cpp:208
 #: src/Dialogs/Plane/PlaneListDialog.cpp:233
@@ -496,6 +496,7 @@ msgstr "ファイルをダウンロード"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:144
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:178
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:188
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:139
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:243
 #: src/Dialogs/Weather/NOAAList.cpp:187 src/Dialogs/Weather/NOAAList.cpp:193
 #: src/Dialogs/Weather/NOAADetails.cpp:157
@@ -504,7 +505,7 @@ msgstr "ファイルをダウンロード"
 msgid "Error"
 msgstr "エラー"
 
-#: src/contest/weglide/UploadIGCFile.cpp:158
+#: src/net/client/WeGlide/UploadIGCFile.cpp:158
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:109
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:114
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:149
@@ -619,7 +620,7 @@ msgid "Declare task?"
 msgstr "タスクを宣言しますか？"
 
 #: src/Logger/ExternalLogger.cpp:97 src/Logger/ExternalLogger.cpp:142
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:95
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:101
 msgid "Declare task"
 msgstr "タスクを宣言してください"
 
@@ -1149,6 +1150,7 @@ msgstr "指示タスク"
 
 #: src/Input/InputEventsTask.cpp:238
 #: src/Renderer/FlightStatisticsRenderer.cpp:322
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:139
 msgid "No task"
 msgstr "タスクなし"
 
@@ -1847,6 +1849,8 @@ msgid "Help"
 msgstr "ヘルプ"
 
 #: src/Dialogs/FileManager.cpp:419 src/Dialogs/FilePicker.cpp:50
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:131
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:147
 #: src/Dialogs/Weather/RASPDialog.cpp:167
 #: src/Dialogs/Weather/PCMetDialog.cpp:79 src/Dialogs/Weather/NOAAList.cpp:202
 #: src/Dialogs/Weather/NOAAList.cpp:218 src/Dialogs/Weather/NOAADetails.cpp:108
@@ -2308,7 +2312,7 @@ msgstr "出力形式"
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:70
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:122
 #: src/Dialogs/Waypoint/Manager.cpp:123
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:118
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:165
 msgid "Save"
 msgstr "保存"
 
@@ -7057,29 +7061,34 @@ msgstr ""
 "設定した場合　スタート地点より1000ｍ高い場合を除いて　\r\n"
 "最高スタート高度、最大スタート速度、最小フィニッシュ高度は設定しない"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:66
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:72
 msgid "Task not saved"
 msgstr "タスクは保存されませんでした"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:87
 msgid "Create new task?"
 msgstr "新しいタスクを作りますか？"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:87
 msgid "Task New"
 msgstr "新しいタスク"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:115
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:162
 msgid "New Task"
 msgstr "新規タスク"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:116
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:163
 msgid "Declare"
 msgstr "宣言"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:117
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:164
 msgid "Browse"
 msgstr "表示"
+
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:168
+#, fuzzy
+msgid "Download WeGlide task"
+msgstr "ファイルをダウンロード"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:97
 msgid "Load"
@@ -10280,16 +10289,21 @@ msgstr "ヘッドセット　音量"
 msgid "Urgent min. volume"
 msgstr "緊急　最小ボリューム"
 
-#: Data/Input/default.xci:733
-msgid "Accelerometer leveled"
-msgstr "アクセラレーター　レベル"
+#: Data/Input/default.xci:48
+msgid "Takeoff"
+msgstr "離陸"
 
-#: Data/Input/default.xci:694
-#, fuzzy
-msgid "Manual Demo"
-msgstr ""
-"マニュアル\n"
-"デモ"
+#: Data/Input/default.xci:59
+msgid "Above final glide"
+msgstr "ファイナル　グライド　ライン上"
+
+#: Data/Input/default.xci:64
+msgid "Below final glide"
+msgstr "ファイナルグライド　ライン下"
+
+#: Data/Input/default.xci:69
+msgid "Final glide through terrain"
+msgstr "地形ごしのファイナルグライド"
 
 #: Data/Input/default.xci:128 Data/Input/default.xci:135
 #: Data/Input/default.xci:459 Data/Input/default.xci:466
@@ -10299,12 +10313,82 @@ msgstr ""
 msgid "Zoom"
 msgstr "ズーム"
 
-#: Data/Input/default.xci:687
+#: Data/Input/default.xci:142 Data/Input/default.xci:790
 #, fuzzy
-msgid "Airframe Switches"
+msgid "What's here?"
+msgstr "現在位置は何処？"
+
+#: Data/Input/default.xci:355
+msgid ""
+"Nav\n"
+"Page 2/2"
 msgstr ""
-"エアフレーム\n"
-"スイッチ"
+
+#: Data/Input/default.xci:385 Data/Input/default.xci:1014
+#, fuzzy
+msgid "Waypoint List"
+msgstr ""
+"ウエイポイント\n"
+"リスト"
+
+#: Data/Input/default.xci:419 Data/Input/default.xci:1062
+msgid "Dropped marker"
+msgstr "マーカーを設置"
+
+#: Data/Input/default.xci:422 Data/Input/default.xci:1065
+#, fuzzy
+msgid "Marker Drop"
+msgstr ""
+"マーク\n"
+"設置"
+
+#: Data/Input/default.xci:429
+msgid "Pilot event announced"
+msgstr ""
+
+#: Data/Input/default.xci:432
+#, fuzzy
+msgid "Pilot Event Announce"
+msgstr "パイロット"
+
+#: Data/Input/default.xci:440 Data/Input/default.xci:1046
+#, fuzzy
+msgid "Target Show"
+msgstr "ターゲット"
+
+#: Data/Input/default.xci:451
+#, fuzzy
+msgid ""
+"Display\n"
+"Page 2/2"
+msgstr "表示"
+
+#: Data/Input/default.xci:481
+#, fuzzy
+msgid "Page Show"
+msgstr "ページ"
+
+#: Data/Input/default.xci:488 Data/Input/default.xci:1072
+msgid "Pan Mode"
+msgstr ""
+
+#: Data/Input/default.xci:507 Data/Input/default.xci:1080
+msgid "Labels"
+msgstr "ラベル"
+
+#: Data/Input/default.xci:515 Data/Input/default.xci:1088
+msgid "Trail"
+msgstr "航跡"
+
+#: Data/Input/default.xci:529 Data/Input/default.xci:1102
+msgid "Topo."
+msgstr "地勢"
+
+#: Data/Input/default.xci:546
+msgid ""
+"Config\n"
+"Page 2/3"
+msgstr ""
 
 #: Data/Input/default.xci:596
 msgid ""
@@ -10312,9 +10396,37 @@ msgid ""
 "Page 3/3"
 msgstr ""
 
+#: Data/Input/default.xci:653 Data/Input/default.xci:1158
+msgid "Raw Logger"
+msgstr "ロガー"
+
+#: Data/Input/default.xci:661
+msgid "Lua"
+msgstr "ルア"
+
 #: Data/Input/default.xci:668 Data/Input/default.xci:719
 msgid "Vega"
 msgstr "ベガ (Vega)"
+
+#: Data/Input/default.xci:679
+msgid ""
+"Vega\n"
+"Page 2/2"
+msgstr ""
+
+#: Data/Input/default.xci:687
+#, fuzzy
+msgid "Airframe Switches"
+msgstr ""
+"エアフレーム\n"
+"スイッチ"
+
+#: Data/Input/default.xci:694
+#, fuzzy
+msgid "Manual Demo"
+msgstr ""
+"マニュアル\n"
+"デモ"
 
 #: Data/Input/default.xci:701
 #, fuzzy
@@ -10323,12 +10435,94 @@ msgstr ""
 "セットアップ\n"
 "ストール"
 
+#: Data/Input/default.xci:708
+msgid "Accel"
+msgstr "アクセラレータ"
+
+#: Data/Input/default.xci:726
+msgid "Vario ASI zeroed"
+msgstr "バリオ　速度0設定"
+
+#: Data/Input/default.xci:727
+#, fuzzy
+msgid "ASI Zero"
+msgstr ""
+"ASI\n"
+"ゼロ"
+
+#: Data/Input/default.xci:733
+msgid "Accelerometer leveled"
+msgstr "アクセラレーター　レベル"
+
+#: Data/Input/default.xci:734
+#, fuzzy
+msgid "Accel Zero"
+msgstr ""
+"アクセル\n"
+"ゼロ"
+
+#: Data/Input/default.xci:741
+msgid "Stored to EEPROM"
+msgstr "EEPROM　に記録"
+
+#: Data/Input/default.xci:742
+msgid "Store"
+msgstr "保存"
+
+#: Data/Input/default.xci:749
+#, fuzzy
+msgid "Cruise Demo"
+msgstr ""
+"巡航\n"
+"デモ"
+
 #: Data/Input/default.xci:756
 #, fuzzy
 msgid "Climb Demo"
 msgstr ""
 "クライム\n"
 "デモ"
+
+#: Data/Input/default.xci:766
+#, fuzzy
+msgid ""
+"Info\n"
+"Page 2/3"
+msgstr "インフォボックスのページ"
+
+#: Data/Input/default.xci:774 Data/Input/default.xci:1181
+msgid "FLARM Radar"
+msgstr "FLARM　レーダー"
+
+#: Data/Input/default.xci:816
+#, fuzzy
+msgid ""
+"Info\n"
+"Page 3/3"
+msgstr "インフォボックスのページ"
+
+#: Data/Input/default.xci:840
+msgid "Traffic List"
+msgstr "他機一覧"
+
+#: Data/Input/default.xci:848 Data/Input/default.xci:1229
+msgid "Thermal Assistant"
+msgstr "サーマルアシスト"
+
+#: Data/Input/default.xci:882
+#, fuzzy
+msgid "Message Repeat"
+msgstr ""
+"メッセージ\n"
+"繰り返し"
+
+#: Data/Input/default.xci:893
+msgid "Nav"
+msgstr "ナビゲーション"
+
+#: Data/Input/default.xci:907
+msgid "Config"
+msgstr "設定"
 
 #: Data/Input/default.xci:922
 msgid "Lock Screen"
@@ -10338,23 +10532,12 @@ msgstr ""
 msgid "AVG/ALT"
 msgstr "平均高度"
 
-#: Data/Input/default.xci:488 Data/Input/default.xci:1072
-msgid "Pan Mode"
+#: Data/Input/default.xci:1127
+#, fuzzy
+msgid "Setup Wind"
 msgstr ""
-
-#: Data/Input/default.xci:1174
-msgid "Setup Plane"
-msgstr "機体設定"
-
-#: Data/Input/default.xci:59
-msgid "Above final glide"
-msgstr "ファイナル　グライド　ライン上"
-
-#: Data/Input/default.xci:679
-msgid ""
-"Vega\n"
-"Page 2/2"
-msgstr ""
+"セットアップ\n"
+"風"
 
 #: Data/Input/default.xci:1135
 #, fuzzy
@@ -10363,158 +10546,6 @@ msgstr ""
 "セットアップ\n"
 "システム"
 
-#: Data/Input/default.xci:515 Data/Input/default.xci:1088
-msgid "Trail"
-msgstr "航跡"
-
-#: Data/Input/default.xci:440 Data/Input/default.xci:1046
-#, fuzzy
-msgid "Target Show"
-msgstr "ターゲット"
-
-#: Data/Input/default.xci:64
-msgid "Below final glide"
-msgstr "ファイナルグライド　ライン下"
-
-#: Data/Input/default.xci:432
-#, fuzzy
-msgid "Pilot Event Announce"
-msgstr "パイロット"
-
-#: Data/Input/default.xci:481
-#, fuzzy
-msgid "Page Show"
-msgstr "ページ"
-
-#: Data/Input/default.xci:726
-msgid "Vario ASI zeroed"
-msgstr "バリオ　速度0設定"
-
-#: Data/Input/default.xci:355
-msgid ""
-"Nav\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:893
-msgid "Nav"
-msgstr "ナビゲーション"
-
-#: Data/Input/default.xci:708
-msgid "Accel"
-msgstr "アクセラレータ"
-
-#: Data/Input/default.xci:142 Data/Input/default.xci:790
-#, fuzzy
-msgid "What's here?"
-msgstr "現在位置は何処？"
-
-#: Data/Input/default.xci:741
-msgid "Stored to EEPROM"
-msgstr "EEPROM　に記録"
-
-#: Data/Input/default.xci:1127
-#, fuzzy
-msgid "Setup Wind"
-msgstr ""
-"セットアップ\n"
-"風"
-
-#: Data/Input/default.xci:840
-msgid "Traffic List"
-msgstr "他機一覧"
-
-#: Data/Input/default.xci:734
-#, fuzzy
-msgid "Accel Zero"
-msgstr ""
-"アクセル\n"
-"ゼロ"
-
-#: Data/Input/default.xci:69
-msgid "Final glide through terrain"
-msgstr "地形ごしのファイナルグライド"
-
-#: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
-msgid "Marker Drop"
-msgstr ""
-"マーク\n"
-"設置"
-
-#: Data/Input/default.xci:882
-#, fuzzy
-msgid "Message Repeat"
-msgstr ""
-"メッセージ\n"
-"繰り返し"
-
-#: Data/Input/default.xci:848 Data/Input/default.xci:1229
-msgid "Thermal Assistant"
-msgstr "サーマルアシスト"
-
-#: Data/Input/default.xci:48
-msgid "Takeoff"
-msgstr "離陸"
-
-#: Data/Input/default.xci:546
-msgid ""
-"Config\n"
-"Page 2/3"
-msgstr ""
-
-#: Data/Input/default.xci:1197
-#, fuzzy
-msgid "Nearest Airspace"
-msgstr ""
-"一番近い\n"
-"空域"
-
-#: Data/Input/default.xci:451
-#, fuzzy
-msgid ""
-"Display\n"
-"Page 2/2"
-msgstr "表示"
-
-#: Data/Input/default.xci:727
-#, fuzzy
-msgid "ASI Zero"
-msgstr ""
-"ASI\n"
-"ゼロ"
-
-#: Data/Input/default.xci:507 Data/Input/default.xci:1080
-msgid "Labels"
-msgstr "ラベル"
-
-#: Data/Input/default.xci:385 Data/Input/default.xci:1014
-#, fuzzy
-msgid "Waypoint List"
-msgstr ""
-"ウエイポイント\n"
-"リスト"
-
-#: Data/Input/default.xci:661
-msgid "Lua"
-msgstr "ルア"
-
-#: Data/Input/default.xci:653 Data/Input/default.xci:1158
-msgid "Raw Logger"
-msgstr "ロガー"
-
-#: Data/Input/default.xci:774 Data/Input/default.xci:1181
-msgid "FLARM Radar"
-msgstr "FLARM　レーダー"
-
-#: Data/Input/default.xci:529 Data/Input/default.xci:1102
-msgid "Topo."
-msgstr "地勢"
-
-#: Data/Input/default.xci:419 Data/Input/default.xci:1062
-msgid "Dropped marker"
-msgstr "マーカーを設置"
-
 #: Data/Input/default.xci:1143
 #, fuzzy
 msgid "Settings Airspace"
@@ -10522,38 +10553,16 @@ msgstr ""
 "設定\n"
 "空域"
 
-#: Data/Input/default.xci:749
+#: Data/Input/default.xci:1174
+msgid "Setup Plane"
+msgstr "機体設定"
+
+#: Data/Input/default.xci:1197
 #, fuzzy
-msgid "Cruise Demo"
+msgid "Nearest Airspace"
 msgstr ""
-"巡航\n"
-"デモ"
-
-#: Data/Input/default.xci:816
-#, fuzzy
-msgid ""
-"Info\n"
-"Page 3/3"
-msgstr "インフォボックスのページ"
-
-#: Data/Input/default.xci:907
-msgid "Config"
-msgstr "設定"
-
-#: Data/Input/default.xci:429
-msgid "Pilot event announced"
-msgstr ""
-
-#: Data/Input/default.xci:742
-msgid "Store"
-msgstr "保存"
-
-#: Data/Input/default.xci:766
-#, fuzzy
-msgid ""
-"Info\n"
-"Page 2/3"
-msgstr "インフォボックスのページ"
+"一番近い\n"
+"空域"
 
 #~ msgid ""
 #~ "Team\n"

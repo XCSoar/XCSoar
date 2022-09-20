@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-19 20:45+0200\n"
+"POT-Creation-Date: 2022-09-20 21:13+0200\n"
 "PO-Revision-Date: 2021-10-31 00:33+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
@@ -433,52 +433,52 @@ msgstr "공역 파일을 불러오는 중..."
 msgid "Unknown airspace filetype"
 msgstr "공역파일 형식이 잘못되었음"
 
-#: src/contest/weglide/UploadIGCFile.cpp:112
+#: src/net/client/WeGlide/UploadIGCFile.cpp:112
 msgid "Date"
 msgstr ""
 
-#: src/contest/weglide/UploadIGCFile.cpp:113
+#: src/net/client/WeGlide/UploadIGCFile.cpp:113
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
 msgid "Username"
 msgstr "ID(유저이름)"
 
-#: src/contest/weglide/UploadIGCFile.cpp:114
+#: src/net/client/WeGlide/UploadIGCFile.cpp:114
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:142 Data/Input/default.xci:562
 msgid "Plane"
 msgstr ""
 "기체\n"
 "(Plane)"
 
-#: src/contest/weglide/UploadIGCFile.cpp:115
+#: src/net/client/WeGlide/UploadIGCFile.cpp:115
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:112
 msgid "Registration"
 msgstr "등록명"
 
-#: src/contest/weglide/UploadIGCFile.cpp:116
+#: src/net/client/WeGlide/UploadIGCFile.cpp:116
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:113
 msgid "Comp. ID"
 msgstr "선수번호"
 
 #. upload successful!
-#: src/contest/weglide/UploadIGCFile.cpp:118
-#: src/contest/weglide/UploadIGCFile.cpp:176
+#: src/net/client/WeGlide/UploadIGCFile.cpp:118
+#: src/net/client/WeGlide/UploadIGCFile.cpp:176
 #, fuzzy
 msgid "WeGlide Upload"
 msgstr "기체종류"
 
-#: src/contest/weglide/UploadIGCFile.cpp:142 src/Input/InputEventsLua.cpp:60
+#: src/net/client/WeGlide/UploadIGCFile.cpp:142 src/Input/InputEventsLua.cpp:60
 msgid "Not found"
 msgstr "찾을 수 없음"
 
-#: src/contest/weglide/UploadIGCFile.cpp:149
+#: src/net/client/WeGlide/UploadIGCFile.cpp:149
 #, fuzzy
 msgid "Upload Flight"
 msgstr "비행 파일 다운로드"
 
 #. upload failed!
-#: src/contest/weglide/UploadIGCFile.cpp:151
-#: src/contest/weglide/UploadIGCFile.cpp:181
-#: src/contest/weglide/UploadIGCFile.cpp:182 src/Dialogs/FileManager.cpp:468
+#: src/net/client/WeGlide/UploadIGCFile.cpp:151
+#: src/net/client/WeGlide/UploadIGCFile.cpp:181
+#: src/net/client/WeGlide/UploadIGCFile.cpp:182 src/Dialogs/FileManager.cpp:468
 #: src/Dialogs/FileManager.cpp:744 src/Dialogs/Device/DeviceListDialog.cpp:466
 #: src/Dialogs/Plane/PlaneListDialog.cpp:208
 #: src/Dialogs/Plane/PlaneListDialog.cpp:233
@@ -491,6 +491,7 @@ msgstr "비행 파일 다운로드"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:144
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:178
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:188
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:139
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:243
 #: src/Dialogs/Weather/NOAAList.cpp:187 src/Dialogs/Weather/NOAAList.cpp:193
 #: src/Dialogs/Weather/NOAADetails.cpp:157
@@ -499,7 +500,7 @@ msgstr "비행 파일 다운로드"
 msgid "Error"
 msgstr "오류"
 
-#: src/contest/weglide/UploadIGCFile.cpp:158
+#: src/net/client/WeGlide/UploadIGCFile.cpp:158
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:109
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:114
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:149
@@ -614,7 +615,7 @@ msgid "Declare task?"
 msgstr "타스크를 선언합니까?"
 
 #: src/Logger/ExternalLogger.cpp:97 src/Logger/ExternalLogger.cpp:142
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:95
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:101
 msgid "Declare task"
 msgstr "타스크 선언"
 
@@ -1154,6 +1155,7 @@ msgstr "타스크 지시"
 
 #: src/Input/InputEventsTask.cpp:238
 #: src/Renderer/FlightStatisticsRenderer.cpp:322
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:139
 msgid "No task"
 msgstr "타스크 없음"
 
@@ -1832,6 +1834,8 @@ msgid "Help"
 msgstr "도움말"
 
 #: src/Dialogs/FileManager.cpp:419 src/Dialogs/FilePicker.cpp:50
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:131
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:147
 #: src/Dialogs/Weather/RASPDialog.cpp:167
 #: src/Dialogs/Weather/PCMetDialog.cpp:79 src/Dialogs/Weather/NOAAList.cpp:202
 #: src/Dialogs/Weather/NOAAList.cpp:218 src/Dialogs/Weather/NOAADetails.cpp:108
@@ -2282,7 +2286,7 @@ msgstr "출력모드"
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:70
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:122
 #: src/Dialogs/Waypoint/Manager.cpp:123
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:118
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:165
 msgid "Save"
 msgstr "저장"
 
@@ -6964,29 +6968,34 @@ msgstr ""
 "FAI 규칙으로 설정하면, 출발과 도착의 고도차이가 1000m를 넘어설때 이외에는, 최"
 "고 출발 고도, 혹은 최고 출발 속도, 최종골 포인트 최소고도를 설정하지 않음."
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:66
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:72
 msgid "Task not saved"
 msgstr "타스크 저장안됨"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:87
 msgid "Create new task?"
 msgstr "새 타스크를 시작합니까?"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:87
 msgid "Task New"
 msgstr "새 타스크"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:115
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:162
 msgid "New Task"
 msgstr "새 타스크"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:116
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:163
 msgid "Declare"
 msgstr "타스크 선언"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:117
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:164
 msgid "Browse"
 msgstr "타스크 찾아보기"
+
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:168
+#, fuzzy
+msgid "Download WeGlide task"
+msgstr "비행 파일 다운로드"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:97
 msgid "Load"
@@ -10079,16 +10088,21 @@ msgstr "헤드폰최대음량"
 msgid "Urgent min. volume"
 msgstr "긴급최소음량"
 
-#: Data/Input/default.xci:733
-msgid "Accelerometer leveled"
-msgstr "엑셀레이터 레벨"
+#: Data/Input/default.xci:48
+msgid "Takeoff"
+msgstr "이륙"
 
-#: Data/Input/default.xci:694
-#, fuzzy
-msgid "Manual Demo"
-msgstr ""
-"수동\n"
-"데모"
+#: Data/Input/default.xci:59
+msgid "Above final glide"
+msgstr "현재 활공비를 유지하시오"
+
+#: Data/Input/default.xci:64
+msgid "Below final glide"
+msgstr "현재 L/D보다 목표가 아래에 있음"
+
+#: Data/Input/default.xci:69
+msgid "Final glide through terrain"
+msgstr "현재 L/D가 지형을 통과함"
 
 #: Data/Input/default.xci:128 Data/Input/default.xci:135
 #: Data/Input/default.xci:459 Data/Input/default.xci:466
@@ -10098,12 +10112,83 @@ msgstr ""
 msgid "Zoom"
 msgstr "줌"
 
-#: Data/Input/default.xci:687
+#: Data/Input/default.xci:142 Data/Input/default.xci:790
 #, fuzzy
-msgid "Airframe Switches"
+msgid "What's here?"
 msgstr ""
-"Airframe\n"
-"스위치"
+"여기는\n"
+"어디?"
+
+#: Data/Input/default.xci:355
+msgid ""
+"Nav\n"
+"Page 2/2"
+msgstr ""
+
+#: Data/Input/default.xci:385 Data/Input/default.xci:1014
+#, fuzzy
+msgid "Waypoint List"
+msgstr ""
+"웨이포인트\n"
+"목록"
+
+#: Data/Input/default.xci:419 Data/Input/default.xci:1062
+msgid "Dropped marker"
+msgstr "마커 표시"
+
+#: Data/Input/default.xci:422 Data/Input/default.xci:1065
+#, fuzzy
+msgid "Marker Drop"
+msgstr ""
+"위치\n"
+"마크"
+
+#: Data/Input/default.xci:429
+msgid "Pilot event announced"
+msgstr "파일럿 이벤트 공지"
+
+#: Data/Input/default.xci:432
+#, fuzzy
+msgid "Pilot Event Announce"
+msgstr "파일럿 이벤트 공지"
+
+#: Data/Input/default.xci:440 Data/Input/default.xci:1046
+#, fuzzy
+msgid "Target Show"
+msgstr "웨이포인트"
+
+#: Data/Input/default.xci:451
+#, fuzzy
+msgid ""
+"Display\n"
+"Page 2/2"
+msgstr "화면"
+
+#: Data/Input/default.xci:481
+msgid "Page Show"
+msgstr ""
+
+#: Data/Input/default.xci:488 Data/Input/default.xci:1072
+msgid "Pan Mode"
+msgstr ""
+
+#: Data/Input/default.xci:507 Data/Input/default.xci:1080
+msgid "Labels"
+msgstr "이름"
+
+#: Data/Input/default.xci:515 Data/Input/default.xci:1088
+msgid "Trail"
+msgstr "항적"
+
+#: Data/Input/default.xci:529 Data/Input/default.xci:1102
+msgid "Topo."
+msgstr "장소"
+
+#: Data/Input/default.xci:546
+msgid ""
+"Config\n"
+"Page 2/3"
+msgstr ""
 
 #: Data/Input/default.xci:596
 msgid ""
@@ -10111,9 +10196,39 @@ msgid ""
 "Page 3/3"
 msgstr ""
 
+#: Data/Input/default.xci:653 Data/Input/default.xci:1158
+msgid "Raw Logger"
+msgstr ""
+"비가공(Raw)\n"
+"로거"
+
+#: Data/Input/default.xci:661
+msgid "Lua"
+msgstr "Lua"
+
 #: Data/Input/default.xci:668 Data/Input/default.xci:719
 msgid "Vega"
 msgstr "Vega"
+
+#: Data/Input/default.xci:679
+msgid ""
+"Vega\n"
+"Page 2/2"
+msgstr ""
+
+#: Data/Input/default.xci:687
+#, fuzzy
+msgid "Airframe Switches"
+msgstr ""
+"Airframe\n"
+"스위치"
+
+#: Data/Input/default.xci:694
+#, fuzzy
+msgid "Manual Demo"
+msgstr ""
+"수동\n"
+"데모"
 
 #: Data/Input/default.xci:701
 #, fuzzy
@@ -10122,12 +10237,96 @@ msgstr ""
 "스톨\n"
 "설정"
 
+#: Data/Input/default.xci:708
+msgid "Accel"
+msgstr "엑셀"
+
+#: Data/Input/default.xci:726
+msgid "Vario ASI zeroed"
+msgstr "바리오영점조정"
+
+#: Data/Input/default.xci:727
+#, fuzzy
+msgid "ASI Zero"
+msgstr ""
+"ASI\n"
+"제로"
+
+#: Data/Input/default.xci:733
+msgid "Accelerometer leveled"
+msgstr "엑셀레이터 레벨"
+
+#: Data/Input/default.xci:734
+#, fuzzy
+msgid "Accel Zero"
+msgstr ""
+"엑셀\n"
+"제로"
+
+#: Data/Input/default.xci:741
+msgid "Stored to EEPROM"
+msgstr "EEPROM에 저장"
+
+#: Data/Input/default.xci:742
+msgid "Store"
+msgstr "저장"
+
+#: Data/Input/default.xci:749
+#, fuzzy
+msgid "Cruise Demo"
+msgstr ""
+"순항\n"
+"데모"
+
 #: Data/Input/default.xci:756
 #, fuzzy
 msgid "Climb Demo"
 msgstr ""
 "상승\n"
 "데모"
+
+#: Data/Input/default.xci:766
+#, fuzzy
+msgid ""
+"Info\n"
+"Page 2/3"
+msgstr "인포박스 페이지"
+
+#: Data/Input/default.xci:774 Data/Input/default.xci:1181
+msgid "FLARM Radar"
+msgstr ""
+"FLARM\n"
+"레이더"
+
+#: Data/Input/default.xci:816
+#, fuzzy
+msgid ""
+"Info\n"
+"Page 3/3"
+msgstr "인포박스 페이지"
+
+#: Data/Input/default.xci:840
+msgid "Traffic List"
+msgstr ""
+"트래픽\n"
+"리스트"
+
+#: Data/Input/default.xci:848 Data/Input/default.xci:1229
+msgid "Thermal Assistant"
+msgstr "써멀레이더"
+
+#: Data/Input/default.xci:882
+#, fuzzy
+msgid "Message Repeat"
+msgstr "메시지 반복"
+
+#: Data/Input/default.xci:893
+msgid "Nav"
+msgstr "내비게이션"
+
+#: Data/Input/default.xci:907
+msgid "Config"
+msgstr "환경설정"
 
 #: Data/Input/default.xci:922
 #, fuzzy
@@ -10140,23 +10339,12 @@ msgstr ""
 msgid "AVG/ALT"
 msgstr "AVG/ALT"
 
-#: Data/Input/default.xci:488 Data/Input/default.xci:1072
-msgid "Pan Mode"
+#: Data/Input/default.xci:1127
+#, fuzzy
+msgid "Setup Wind"
 msgstr ""
-
-#: Data/Input/default.xci:1174
-msgid "Setup Plane"
-msgstr "기체설정"
-
-#: Data/Input/default.xci:59
-msgid "Above final glide"
-msgstr "현재 활공비를 유지하시오"
-
-#: Data/Input/default.xci:679
-msgid ""
-"Vega\n"
-"Page 2/2"
-msgstr ""
+"바람\n"
+"설정"
 
 #: Data/Input/default.xci:1135
 #, fuzzy
@@ -10165,106 +10353,14 @@ msgstr ""
 "셋업\n"
 "시스템"
 
-#: Data/Input/default.xci:515 Data/Input/default.xci:1088
-msgid "Trail"
-msgstr "항적"
-
-#: Data/Input/default.xci:440 Data/Input/default.xci:1046
+#: Data/Input/default.xci:1143
 #, fuzzy
-msgid "Target Show"
-msgstr "웨이포인트"
+msgid "Settings Airspace"
+msgstr "공역 설정"
 
-#: Data/Input/default.xci:64
-msgid "Below final glide"
-msgstr "현재 L/D보다 목표가 아래에 있음"
-
-#: Data/Input/default.xci:432
-#, fuzzy
-msgid "Pilot Event Announce"
-msgstr "파일럿 이벤트 공지"
-
-#: Data/Input/default.xci:481
-msgid "Page Show"
-msgstr ""
-
-#: Data/Input/default.xci:726
-msgid "Vario ASI zeroed"
-msgstr "바리오영점조정"
-
-#: Data/Input/default.xci:355
-msgid ""
-"Nav\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:893
-msgid "Nav"
-msgstr "내비게이션"
-
-#: Data/Input/default.xci:708
-msgid "Accel"
-msgstr "엑셀"
-
-#: Data/Input/default.xci:142 Data/Input/default.xci:790
-#, fuzzy
-msgid "What's here?"
-msgstr ""
-"여기는\n"
-"어디?"
-
-#: Data/Input/default.xci:741
-msgid "Stored to EEPROM"
-msgstr "EEPROM에 저장"
-
-#: Data/Input/default.xci:1127
-#, fuzzy
-msgid "Setup Wind"
-msgstr ""
-"바람\n"
-"설정"
-
-#: Data/Input/default.xci:840
-msgid "Traffic List"
-msgstr ""
-"트래픽\n"
-"리스트"
-
-#: Data/Input/default.xci:734
-#, fuzzy
-msgid "Accel Zero"
-msgstr ""
-"엑셀\n"
-"제로"
-
-#: Data/Input/default.xci:69
-msgid "Final glide through terrain"
-msgstr "현재 L/D가 지형을 통과함"
-
-#: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
-msgid "Marker Drop"
-msgstr ""
-"위치\n"
-"마크"
-
-#: Data/Input/default.xci:882
-#, fuzzy
-msgid "Message Repeat"
-msgstr "메시지 반복"
-
-#: Data/Input/default.xci:848 Data/Input/default.xci:1229
-msgid "Thermal Assistant"
-msgstr "써멀레이더"
-
-#: Data/Input/default.xci:48
-msgid "Takeoff"
-msgstr "이륙"
-
-#: Data/Input/default.xci:546
-msgid ""
-"Config\n"
-"Page 2/3"
-msgstr ""
+#: Data/Input/default.xci:1174
+msgid "Setup Plane"
+msgstr "기체설정"
 
 #: Data/Input/default.xci:1197
 #, fuzzy
@@ -10272,93 +10368,6 @@ msgid "Nearest Airspace"
 msgstr ""
 "근처의\n"
 "공역"
-
-#: Data/Input/default.xci:451
-#, fuzzy
-msgid ""
-"Display\n"
-"Page 2/2"
-msgstr "화면"
-
-#: Data/Input/default.xci:727
-#, fuzzy
-msgid "ASI Zero"
-msgstr ""
-"ASI\n"
-"제로"
-
-#: Data/Input/default.xci:507 Data/Input/default.xci:1080
-msgid "Labels"
-msgstr "이름"
-
-#: Data/Input/default.xci:385 Data/Input/default.xci:1014
-#, fuzzy
-msgid "Waypoint List"
-msgstr ""
-"웨이포인트\n"
-"목록"
-
-#: Data/Input/default.xci:661
-msgid "Lua"
-msgstr "Lua"
-
-#: Data/Input/default.xci:653 Data/Input/default.xci:1158
-msgid "Raw Logger"
-msgstr ""
-"비가공(Raw)\n"
-"로거"
-
-#: Data/Input/default.xci:774 Data/Input/default.xci:1181
-msgid "FLARM Radar"
-msgstr ""
-"FLARM\n"
-"레이더"
-
-#: Data/Input/default.xci:529 Data/Input/default.xci:1102
-msgid "Topo."
-msgstr "장소"
-
-#: Data/Input/default.xci:419 Data/Input/default.xci:1062
-msgid "Dropped marker"
-msgstr "마커 표시"
-
-#: Data/Input/default.xci:1143
-#, fuzzy
-msgid "Settings Airspace"
-msgstr "공역 설정"
-
-#: Data/Input/default.xci:749
-#, fuzzy
-msgid "Cruise Demo"
-msgstr ""
-"순항\n"
-"데모"
-
-#: Data/Input/default.xci:816
-#, fuzzy
-msgid ""
-"Info\n"
-"Page 3/3"
-msgstr "인포박스 페이지"
-
-#: Data/Input/default.xci:907
-msgid "Config"
-msgstr "환경설정"
-
-#: Data/Input/default.xci:429
-msgid "Pilot event announced"
-msgstr "파일럿 이벤트 공지"
-
-#: Data/Input/default.xci:742
-msgid "Store"
-msgstr "저장"
-
-#: Data/Input/default.xci:766
-#, fuzzy
-msgid ""
-"Info\n"
-"Page 2/3"
-msgstr "인포박스 페이지"
 
 #~ msgid ""
 #~ "Team\n"

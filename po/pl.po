@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-19 20:45+0200\n"
+"POT-Creation-Date: 2022-09-20 21:13+0200\n"
 "PO-Revision-Date: 2021-07-20 10:35+0000\n"
 "Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/xcsoar/"
@@ -448,50 +448,50 @@ msgstr "Wczytywanie pliku stref przestrzeni..."
 msgid "Unknown airspace filetype"
 msgstr "Nieznany typ pliku stref"
 
-#: src/contest/weglide/UploadIGCFile.cpp:112
+#: src/net/client/WeGlide/UploadIGCFile.cpp:112
 msgid "Date"
 msgstr ""
 
-#: src/contest/weglide/UploadIGCFile.cpp:113
+#: src/net/client/WeGlide/UploadIGCFile.cpp:113
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
 msgid "Username"
 msgstr "Nazwa użytkownika"
 
-#: src/contest/weglide/UploadIGCFile.cpp:114
+#: src/net/client/WeGlide/UploadIGCFile.cpp:114
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:142 Data/Input/default.xci:562
 msgid "Plane"
 msgstr "Szybow."
 
-#: src/contest/weglide/UploadIGCFile.cpp:115
+#: src/net/client/WeGlide/UploadIGCFile.cpp:115
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:112
 msgid "Registration"
 msgstr "Znaki rejestr."
 
-#: src/contest/weglide/UploadIGCFile.cpp:116
+#: src/net/client/WeGlide/UploadIGCFile.cpp:116
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:113
 msgid "Comp. ID"
 msgstr "Znaki konk."
 
 #. upload successful!
-#: src/contest/weglide/UploadIGCFile.cpp:118
-#: src/contest/weglide/UploadIGCFile.cpp:176
+#: src/net/client/WeGlide/UploadIGCFile.cpp:118
+#: src/net/client/WeGlide/UploadIGCFile.cpp:176
 #, fuzzy
 msgid "WeGlide Upload"
 msgstr "Typ statku pow."
 
-#: src/contest/weglide/UploadIGCFile.cpp:142 src/Input/InputEventsLua.cpp:60
+#: src/net/client/WeGlide/UploadIGCFile.cpp:142 src/Input/InputEventsLua.cpp:60
 msgid "Not found"
 msgstr "Nie znaleziono"
 
-#: src/contest/weglide/UploadIGCFile.cpp:149
+#: src/net/client/WeGlide/UploadIGCFile.cpp:149
 #, fuzzy
 msgid "Upload Flight"
 msgstr "Pobierz lot"
 
 #. upload failed!
-#: src/contest/weglide/UploadIGCFile.cpp:151
-#: src/contest/weglide/UploadIGCFile.cpp:181
-#: src/contest/weglide/UploadIGCFile.cpp:182 src/Dialogs/FileManager.cpp:468
+#: src/net/client/WeGlide/UploadIGCFile.cpp:151
+#: src/net/client/WeGlide/UploadIGCFile.cpp:181
+#: src/net/client/WeGlide/UploadIGCFile.cpp:182 src/Dialogs/FileManager.cpp:468
 #: src/Dialogs/FileManager.cpp:744 src/Dialogs/Device/DeviceListDialog.cpp:466
 #: src/Dialogs/Plane/PlaneListDialog.cpp:208
 #: src/Dialogs/Plane/PlaneListDialog.cpp:233
@@ -504,6 +504,7 @@ msgstr "Pobierz lot"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:144
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:178
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:188
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:139
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:243
 #: src/Dialogs/Weather/NOAAList.cpp:187 src/Dialogs/Weather/NOAAList.cpp:193
 #: src/Dialogs/Weather/NOAADetails.cpp:157
@@ -512,7 +513,7 @@ msgstr "Pobierz lot"
 msgid "Error"
 msgstr "Błąd"
 
-#: src/contest/weglide/UploadIGCFile.cpp:158
+#: src/net/client/WeGlide/UploadIGCFile.cpp:158
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:109
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:114
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:149
@@ -627,7 +628,7 @@ msgid "Declare task?"
 msgstr "Zadeklarować Zadanie?"
 
 #: src/Logger/ExternalLogger.cpp:97 src/Logger/ExternalLogger.cpp:142
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:95
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:101
 msgid "Declare task"
 msgstr "Zadeklaruj Zadanie"
 
@@ -1165,6 +1166,7 @@ msgstr "Zgłoszone zadanie"
 
 #: src/Input/InputEventsTask.cpp:238
 #: src/Renderer/FlightStatisticsRenderer.cpp:322
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:139
 msgid "No task"
 msgstr "Brak trasy"
 
@@ -1877,6 +1879,8 @@ msgid "Help"
 msgstr "Pomoc"
 
 #: src/Dialogs/FileManager.cpp:419 src/Dialogs/FilePicker.cpp:50
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:131
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:147
 #: src/Dialogs/Weather/RASPDialog.cpp:167
 #: src/Dialogs/Weather/PCMetDialog.cpp:79 src/Dialogs/Weather/NOAAList.cpp:202
 #: src/Dialogs/Weather/NOAAList.cpp:218 src/Dialogs/Weather/NOAADetails.cpp:108
@@ -2351,7 +2355,7 @@ msgstr "Tryb wyjścia"
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:70
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:122
 #: src/Dialogs/Waypoint/Manager.cpp:123
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:118
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:165
 msgid "Save"
 msgstr "Zapisz"
 
@@ -7156,29 +7160,34 @@ msgstr ""
 "prędkości startu i wymaga aby minimalna wysokość nad ziemią na mecie była "
 "większa niż 1000m poniżej wysokości startu."
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:66
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:72
 msgid "Task not saved"
 msgstr "Nie zapisano zadania"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:87
 msgid "Create new task?"
 msgstr "Utworzyć nowe zadanie?"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:87
 msgid "Task New"
 msgstr "Nowe Zadanie"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:115
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:162
 msgid "New Task"
 msgstr "Nowe zadanie"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:116
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:163
 msgid "Declare"
 msgstr "Zadeklaruj"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:117
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:164
 msgid "Browse"
 msgstr "Wybierz..."
+
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:168
+#, fuzzy
+msgid "Download WeGlide task"
+msgstr "Pobierz lot"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:97
 msgid "Load"
@@ -10456,16 +10465,21 @@ msgstr "Próg słuchawek"
 msgid "Urgent min. volume"
 msgstr "Szybko wycisz do"
 
-#: Data/Input/default.xci:733
-msgid "Accelerometer leveled"
-msgstr "Akcelerometr ustawiony"
+#: Data/Input/default.xci:48
+msgid "Takeoff"
+msgstr "Start ziemny"
 
-#: Data/Input/default.xci:694
-#, fuzzy
-msgid "Manual Demo"
-msgstr ""
-"Demo\n"
-"Ręcznie"
+#: Data/Input/default.xci:59
+msgid "Above final glide"
+msgstr "Powyżej linii dolotu"
+
+#: Data/Input/default.xci:64
+msgid "Below final glide"
+msgstr "Poniżej linii dolotu"
+
+#: Data/Input/default.xci:69
+msgid "Final glide through terrain"
+msgstr "Linia dolotu przecina teren!"
 
 #: Data/Input/default.xci:128 Data/Input/default.xci:135
 #: Data/Input/default.xci:459 Data/Input/default.xci:466
@@ -10475,12 +10489,85 @@ msgstr ""
 msgid "Zoom"
 msgstr "Zoom"
 
-#: Data/Input/default.xci:687
+#: Data/Input/default.xci:142 Data/Input/default.xci:790
 #, fuzzy
-msgid "Airframe Switches"
+msgid "What's here?"
 msgstr ""
-"Przełączn.\n"
-"szybowca"
+"Co tu\n"
+"jest?"
+
+#: Data/Input/default.xci:355
+msgid ""
+"Nav\n"
+"Page 2/2"
+msgstr ""
+
+#: Data/Input/default.xci:385 Data/Input/default.xci:1014
+#, fuzzy
+msgid "Waypoint List"
+msgstr ""
+"Punkty\n"
+"Trasy"
+
+#: Data/Input/default.xci:419 Data/Input/default.xci:1062
+msgid "Dropped marker"
+msgstr "Wstawiono znacznik"
+
+#: Data/Input/default.xci:422 Data/Input/default.xci:1065
+#, fuzzy
+msgid "Marker Drop"
+msgstr ""
+"Postaw\n"
+"Znacznik"
+
+#: Data/Input/default.xci:429
+msgid "Pilot event announced"
+msgstr ""
+
+#: Data/Input/default.xci:432
+#, fuzzy
+msgid "Pilot Event Announce"
+msgstr "Pilot"
+
+#: Data/Input/default.xci:440 Data/Input/default.xci:1046
+#, fuzzy
+msgid "Target Show"
+msgstr "Punkty Trasy"
+
+#: Data/Input/default.xci:451
+#, fuzzy
+msgid ""
+"Display\n"
+"Page 2/2"
+msgstr "Pokazuj"
+
+#: Data/Input/default.xci:481
+#, fuzzy
+msgid "Page Show"
+msgstr "Strona"
+
+#: Data/Input/default.xci:488 Data/Input/default.xci:1072
+#, fuzzy
+msgid "Pan Mode"
+msgstr "Włącz tryb ręcznego przesuwania"
+
+#: Data/Input/default.xci:507 Data/Input/default.xci:1080
+msgid "Labels"
+msgstr "Opisy:"
+
+#: Data/Input/default.xci:515 Data/Input/default.xci:1088
+msgid "Trail"
+msgstr "Ślad"
+
+#: Data/Input/default.xci:529 Data/Input/default.xci:1102
+msgid "Topo."
+msgstr "Topo."
+
+#: Data/Input/default.xci:546
+msgid ""
+"Config\n"
+"Page 2/3"
+msgstr ""
 
 #: Data/Input/default.xci:596
 msgid ""
@@ -10488,9 +10575,37 @@ msgid ""
 "Page 3/3"
 msgstr ""
 
+#: Data/Input/default.xci:653 Data/Input/default.xci:1158
+msgid "Raw Logger"
+msgstr "Dane z Rejestr."
+
+#: Data/Input/default.xci:661
+msgid "Lua"
+msgstr "Lua"
+
 #: Data/Input/default.xci:668 Data/Input/default.xci:719
 msgid "Vega"
 msgstr "Vega"
+
+#: Data/Input/default.xci:679
+msgid ""
+"Vega\n"
+"Page 2/2"
+msgstr ""
+
+#: Data/Input/default.xci:687
+#, fuzzy
+msgid "Airframe Switches"
+msgstr ""
+"Przełączn.\n"
+"szybowca"
+
+#: Data/Input/default.xci:694
+#, fuzzy
+msgid "Manual Demo"
+msgstr ""
+"Demo\n"
+"Ręcznie"
 
 #: Data/Input/default.xci:701
 #, fuzzy
@@ -10499,12 +10614,94 @@ msgstr ""
 "Ustaw\n"
 "Przec."
 
+#: Data/Input/default.xci:708
+msgid "Accel"
+msgstr "Przec"
+
+#: Data/Input/default.xci:726
+msgid "Vario ASI zeroed"
+msgstr "Wyzerowano wario ASI"
+
+#: Data/Input/default.xci:727
+#, fuzzy
+msgid "ASI Zero"
+msgstr ""
+"ASI\n"
+"Zero"
+
+#: Data/Input/default.xci:733
+msgid "Accelerometer leveled"
+msgstr "Akcelerometr ustawiony"
+
+#: Data/Input/default.xci:734
+#, fuzzy
+msgid "Accel Zero"
+msgstr ""
+"Przysp\n"
+"Zero"
+
+#: Data/Input/default.xci:741
+msgid "Stored to EEPROM"
+msgstr "Zapisane w EEPROM."
+
+#: Data/Input/default.xci:742
+msgid "Store"
+msgstr "Zapisz"
+
+#: Data/Input/default.xci:749
+#, fuzzy
+msgid "Cruise Demo"
+msgstr ""
+"Przeskok\n"
+"demo"
+
 #: Data/Input/default.xci:756
 #, fuzzy
 msgid "Climb Demo"
 msgstr ""
 "Krąż\n"
 "Demo"
+
+#: Data/Input/default.xci:766
+#, fuzzy
+msgid ""
+"Info\n"
+"Page 2/3"
+msgstr "Strony Infobox"
+
+#: Data/Input/default.xci:774 Data/Input/default.xci:1181
+msgid "FLARM Radar"
+msgstr "FLARM Radar"
+
+#: Data/Input/default.xci:816
+#, fuzzy
+msgid ""
+"Info\n"
+"Page 3/3"
+msgstr "Strony Infobox"
+
+#: Data/Input/default.xci:840
+msgid "Traffic List"
+msgstr "Lista FLARM"
+
+#: Data/Input/default.xci:848 Data/Input/default.xci:1229
+msgid "Thermal Assistant"
+msgstr "Asystent krążenia"
+
+#: Data/Input/default.xci:882
+#, fuzzy
+msgid "Message Repeat"
+msgstr ""
+"Pokaż\n"
+"ponownie"
+
+#: Data/Input/default.xci:893
+msgid "Nav"
+msgstr "Nawig"
+
+#: Data/Input/default.xci:907
+msgid "Config"
+msgstr "Konfig"
 
 #: Data/Input/default.xci:922
 msgid "Lock Screen"
@@ -10514,24 +10711,12 @@ msgstr ""
 msgid "AVG/ALT"
 msgstr "ŚRED/WYS"
 
-#: Data/Input/default.xci:488 Data/Input/default.xci:1072
+#: Data/Input/default.xci:1127
 #, fuzzy
-msgid "Pan Mode"
-msgstr "Włącz tryb ręcznego przesuwania"
-
-#: Data/Input/default.xci:1174
-msgid "Setup Plane"
-msgstr "Ustawienia szybowca"
-
-#: Data/Input/default.xci:59
-msgid "Above final glide"
-msgstr "Powyżej linii dolotu"
-
-#: Data/Input/default.xci:679
-msgid ""
-"Vega\n"
-"Page 2/2"
+msgid "Setup Wind"
 msgstr ""
+"Ustawienia\n"
+"Wiatru"
 
 #: Data/Input/default.xci:1135
 #, fuzzy
@@ -10540,160 +10725,6 @@ msgstr ""
 "Ustawienia\n"
 "System"
 
-#: Data/Input/default.xci:515 Data/Input/default.xci:1088
-msgid "Trail"
-msgstr "Ślad"
-
-#: Data/Input/default.xci:440 Data/Input/default.xci:1046
-#, fuzzy
-msgid "Target Show"
-msgstr "Punkty Trasy"
-
-#: Data/Input/default.xci:64
-msgid "Below final glide"
-msgstr "Poniżej linii dolotu"
-
-#: Data/Input/default.xci:432
-#, fuzzy
-msgid "Pilot Event Announce"
-msgstr "Pilot"
-
-#: Data/Input/default.xci:481
-#, fuzzy
-msgid "Page Show"
-msgstr "Strona"
-
-#: Data/Input/default.xci:726
-msgid "Vario ASI zeroed"
-msgstr "Wyzerowano wario ASI"
-
-#: Data/Input/default.xci:355
-msgid ""
-"Nav\n"
-"Page 2/2"
-msgstr ""
-
-#: Data/Input/default.xci:893
-msgid "Nav"
-msgstr "Nawig"
-
-#: Data/Input/default.xci:708
-msgid "Accel"
-msgstr "Przec"
-
-#: Data/Input/default.xci:142 Data/Input/default.xci:790
-#, fuzzy
-msgid "What's here?"
-msgstr ""
-"Co tu\n"
-"jest?"
-
-#: Data/Input/default.xci:741
-msgid "Stored to EEPROM"
-msgstr "Zapisane w EEPROM."
-
-#: Data/Input/default.xci:1127
-#, fuzzy
-msgid "Setup Wind"
-msgstr ""
-"Ustawienia\n"
-"Wiatru"
-
-#: Data/Input/default.xci:840
-msgid "Traffic List"
-msgstr "Lista FLARM"
-
-#: Data/Input/default.xci:734
-#, fuzzy
-msgid "Accel Zero"
-msgstr ""
-"Przysp\n"
-"Zero"
-
-#: Data/Input/default.xci:69
-msgid "Final glide through terrain"
-msgstr "Linia dolotu przecina teren!"
-
-#: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
-msgid "Marker Drop"
-msgstr ""
-"Postaw\n"
-"Znacznik"
-
-#: Data/Input/default.xci:882
-#, fuzzy
-msgid "Message Repeat"
-msgstr ""
-"Pokaż\n"
-"ponownie"
-
-#: Data/Input/default.xci:848 Data/Input/default.xci:1229
-msgid "Thermal Assistant"
-msgstr "Asystent krążenia"
-
-#: Data/Input/default.xci:48
-msgid "Takeoff"
-msgstr "Start ziemny"
-
-#: Data/Input/default.xci:546
-msgid ""
-"Config\n"
-"Page 2/3"
-msgstr ""
-
-#: Data/Input/default.xci:1197
-#, fuzzy
-msgid "Nearest Airspace"
-msgstr ""
-"Najbliższa\n"
-"Strefa"
-
-#: Data/Input/default.xci:451
-#, fuzzy
-msgid ""
-"Display\n"
-"Page 2/2"
-msgstr "Pokazuj"
-
-#: Data/Input/default.xci:727
-#, fuzzy
-msgid "ASI Zero"
-msgstr ""
-"ASI\n"
-"Zero"
-
-#: Data/Input/default.xci:507 Data/Input/default.xci:1080
-msgid "Labels"
-msgstr "Opisy:"
-
-#: Data/Input/default.xci:385 Data/Input/default.xci:1014
-#, fuzzy
-msgid "Waypoint List"
-msgstr ""
-"Punkty\n"
-"Trasy"
-
-#: Data/Input/default.xci:661
-msgid "Lua"
-msgstr "Lua"
-
-#: Data/Input/default.xci:653 Data/Input/default.xci:1158
-msgid "Raw Logger"
-msgstr "Dane z Rejestr."
-
-#: Data/Input/default.xci:774 Data/Input/default.xci:1181
-msgid "FLARM Radar"
-msgstr "FLARM Radar"
-
-#: Data/Input/default.xci:529 Data/Input/default.xci:1102
-msgid "Topo."
-msgstr "Topo."
-
-#: Data/Input/default.xci:419 Data/Input/default.xci:1062
-msgid "Dropped marker"
-msgstr "Wstawiono znacznik"
-
 #: Data/Input/default.xci:1143
 #, fuzzy
 msgid "Settings Airspace"
@@ -10701,38 +10732,16 @@ msgstr ""
 "Ustawienia\n"
 "Strefa"
 
-#: Data/Input/default.xci:749
+#: Data/Input/default.xci:1174
+msgid "Setup Plane"
+msgstr "Ustawienia szybowca"
+
+#: Data/Input/default.xci:1197
 #, fuzzy
-msgid "Cruise Demo"
+msgid "Nearest Airspace"
 msgstr ""
-"Przeskok\n"
-"demo"
-
-#: Data/Input/default.xci:816
-#, fuzzy
-msgid ""
-"Info\n"
-"Page 3/3"
-msgstr "Strony Infobox"
-
-#: Data/Input/default.xci:907
-msgid "Config"
-msgstr "Konfig"
-
-#: Data/Input/default.xci:429
-msgid "Pilot event announced"
-msgstr ""
-
-#: Data/Input/default.xci:742
-msgid "Store"
-msgstr "Zapisz"
-
-#: Data/Input/default.xci:766
-#, fuzzy
-msgid ""
-"Info\n"
-"Page 2/3"
-msgstr "Strony Infobox"
+"Najbliższa\n"
+"Strefa"
 
 #~ msgid ""
 #~ "Team\n"
