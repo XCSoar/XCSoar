@@ -87,7 +87,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Device/MultipleDevices.hpp"
 #include "Form/DataField/File.hpp"
 #include "Dialogs/FilePicker.hpp"
-#include "contest/weglide/UploadIGCFile.hpp"
+#include "net/client/WeGlide/UploadIGCFile.hpp"
 
 #include <cassert>
 #include <tchar.h>

@@ -3,7 +3,7 @@
 
 LIBCLIENT_SOURCES = \
 	$(SRC)/net/client/tim/Client.cpp \
-	$(SRC)/Cloud/weglide/UploadFlight.cpp
+	$(SRC)/net/client/WeGlide/UploadFlight.cpp
 
 LIBCLIENT_CPPFLAGS_INTERNAL = $(LIBHTTP_CPPFLAGS)
 LIBCLIENT_LDLIBS = $(LIBHTTP_LDLIBS)

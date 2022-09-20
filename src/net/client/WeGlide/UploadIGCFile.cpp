@@ -22,11 +22,11 @@
 */
 
 #include "UploadIGCFile.hpp"
+#include "UploadFlight.hpp"
+#include "Settings.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "LogFile.hpp"
-#include "Cloud/weglide/UploadFlight.hpp"
-#include "Cloud/weglide/WeGlideSettings.hpp"
 #include "co/InvokeTask.hxx"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/CoDialog.hpp"

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "WeGlideConfigPanel.hpp"
-#include "Cloud/weglide/WeGlideSettings.hpp"
+#include "net/client/WeGlide/Settings.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
