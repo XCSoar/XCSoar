@@ -4,6 +4,11 @@ use strict;
 
 my %msges;
 
+sub add_message($$$) {
+    my ($msg, $filename, $line) = @_;
+    $msges{$msg} .= "#: $filename:$line\n";
+}
+
 while ( <@ARGV> ) {
 
     open (IN, "< " . $_) or die $!;
@@ -30,9 +35,9 @@ while ( <@ARGV> ) {
         if (/^label=([^\$]*?[^\$\s])\s*(?:\\n[^[:alpha:]]*)?(?:\$.*)?$/) {
             my $msg = $1;
             $msg =~ s,\s*\\[nr]$,,g;
-            $msges{$msg} .= "#: $filename:$line\n";
+            add_message($msg, $filename, $line);
         } elsif (/^event=StatusMessage\s+(\S.*\S)\s*$/) {
-            $msges{ $1 } .= "#: $filename:$line\n";
+            add_message($1, $filename, $line);
         }
     }
 
