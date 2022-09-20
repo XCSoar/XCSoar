@@ -2,11 +2,18 @@
 
 use strict;
 
+my @list;
 my %msges;
 
 sub add_message($$$) {
     my ($msg, $filename, $line) = @_;
-    $msges{$msg} .= "#: $filename:$line\n";
+    my $i = $msges{$msg};
+    unless (defined $i) {
+        $i = [$msg, ''];
+        push @list, $i;
+        $msges{$msg} = $i;
+    }
+    $i->[1] .= "#: $filename:$line\n";
 }
 
 while ( <@ARGV> ) {
@@ -44,6 +51,7 @@ while ( <@ARGV> ) {
     close IN;
 }
 
-while (my ($k, $v) = each %msges) {
+foreach my $i (@list) {
+    my ($k, $v) = @$i;
     print $v . "msgid \"$k\"\nmsgstr \"\"\n\n";
 }
