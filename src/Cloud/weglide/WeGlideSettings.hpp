@@ -57,5 +57,11 @@ struct WeGlideSettings {
   uint32_t pilot_id;
   BrokenDate pilot_birthdate;
 
-  void SetDefaults() noexcept;
+  void SetDefaults() noexcept {
+    pilot_id = 0;
+    pilot_birthdate.Clear();
+
+    enabled = false;
+    automatic_upload = true; // after enabling WeGlide!
+  }
 };
