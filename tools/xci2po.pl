@@ -2,14 +2,12 @@
 
 use strict;
 
-my $line = 0;
-my $filename = "";
-my %msges = ();
+my %msges;
 
 while ( <@ARGV> ) {
 
     open (IN, "< " . $_) or die $!;
-    $filename = $_;
+    my $filename = $_;
 
     ## Process one event file like that:
     # mode=pan
@@ -22,7 +20,7 @@ while ( <@ARGV> ) {
     # event=StatusMessage Simulation\r\nNothing is real!
     #                         -> Also pick those messages and dump them into pot format
 
-    $line = 0;
+    my $line = 0;
     while (<>) {
         chomp;
         $line++;
@@ -35,15 +33,12 @@ while ( <@ARGV> ) {
             $msges{$msg} .= "#: $filename:$line\n";
         } elsif (/^event=StatusMessage\s+(\S.*\S)\s*$/) {
             $msges{ $1 } .= "#: $filename:$line\n";
-        } 
+        }
     }
 
     close IN;
 }
 
-my $k = "";
-my $v = "";
-
-while (($k, $v) = each %msges) {
+while (my ($k, $v) = each %msges) {
     print $v . "msgid \"$k\"\nmsgstr \"\"\n\n";
 }
