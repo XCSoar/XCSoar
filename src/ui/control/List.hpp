@@ -90,8 +90,7 @@ public:
  * A ListControl implements a scrollable list control based on the
  * WindowControl class.
  */
-class ListControl : public PaintWindow {
-protected:
+class ListControl final : public PaintWindow {
   const DialogLook &look;
 
   /** The ScrollBar object */
@@ -263,7 +262,7 @@ public:
    */
   void MoveOrigin(int delta) noexcept;
 
-protected:
+private:
   [[gnu::pure]]
   bool CanActivateItem() const noexcept;
   void ActivateItem() noexcept;
