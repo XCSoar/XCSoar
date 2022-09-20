@@ -962,20 +962,18 @@ $(eval $(call link-program,UploadFile,UPLOAD_FILE))
 
 RUN_TIM_CLIENT_SOURCES = \
 	$(SRC)/Version.cpp \
-	$(SRC)/net/client/tim/Client.cpp \
 	$(TEST_SRC_DIR)/RunTimClient.cpp
-RUN_TIM_CLIENT_DEPENDS = JSON LIBHTTP ASYNC OS LIBNET IO UTIL
+RUN_TIM_CLIENT_DEPENDS = LIBCLIENT JSON LIBHTTP ASYNC OS LIBNET IO UTIL
 $(eval $(call link-program,RunTimClient,RUN_TIM_CLIENT))
 
 RUN_WEGLIDE_UPLOAD_FLIGHT_SOURCES = \
 	$(SRC)/Version.cpp \
-	$(SRC)/Cloud/weglide/UploadFlight.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/net/SocketError.cxx \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/RunWeGlideUploadFlight.cpp
-RUN_WEGLIDE_UPLOAD_FLIGHT_DEPENDS = JSON LIBHTTP ASYNC LIBNET OPERATION OS IO UTIL TIME
+RUN_WEGLIDE_UPLOAD_FLIGHT_DEPENDS = LIBCLIENT JSON LIBHTTP ASYNC LIBNET OPERATION OS IO UTIL TIME
 $(eval $(call link-program,RunWeGlideUploadFlight,RUN_WEGLIDE_UPLOAD_FLIGHT))
 
 RUN_NOAA_DOWNLOADER_SOURCES = \

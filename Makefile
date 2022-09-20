@@ -141,6 +141,7 @@ include $(topdir)/build/liboperation.mk
 include $(topdir)/build/libnet.mk
 include $(topdir)/build/libhttp.mk
 include $(topdir)/build/libcoroutines.mk
+include $(topdir)/build/libclient.mk
 include $(topdir)/build/sdl.mk
 include $(topdir)/build/alsa.mk
 include $(topdir)/build/zlib.mk

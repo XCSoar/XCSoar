@@ -227,7 +227,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(SRC)/Atmosphere/CuSonde.cpp \
-	$(SRC)/Cloud/weglide/WeGlideSettings.cpp \
 	$(SRC)/contest/weglide/UploadIGCFile.cpp \
 	$(SRC)/Plane/PlaneGlue.cpp \
 	$(SRC)/Plane/PlaneFileGlue.cpp \
@@ -649,9 +648,7 @@ XCSOAR_SOURCES += \
 endif
 
 XCSOAR_SOURCES += \
-	$(SRC)/net/client/tim/Client.cpp \
 	$(SRC)/net/client/tim/Glue.cpp \
-	$(SRC)/Cloud/weglide/UploadFlight.cpp \
 	$(SRC)/Tracking/SkyLines/Client.cpp \
 	$(SRC)/Tracking/SkyLines/Assemble.cpp \
 	$(SRC)/Tracking/SkyLines/Key.cpp \
@@ -680,6 +677,7 @@ XCSOAR_DEPENDS = \
 	LUA \
 	ZZIP \
 	OPERATION \
+	LIBCLIENT \
 	JSON \
 	LIBNET TIME OS THREAD \
 	UTIL GEO MATH
