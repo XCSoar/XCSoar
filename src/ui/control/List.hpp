@@ -170,6 +170,10 @@ public:
               PixelRect rc, const WindowStyle style,
               unsigned _item_height) noexcept;
 
+  const auto &GetLook() const noexcept {
+    return look;
+  }
+
   void SetItemRenderer(ListItemRenderer *_item_renderer) noexcept {
     assert(_item_renderer != nullptr);
     assert(item_renderer == nullptr);
