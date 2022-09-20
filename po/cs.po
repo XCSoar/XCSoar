@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2022-09-20 21:36+0200\n"
+"PO-Revision-Date: 2022-09-21 08:21+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -7136,9 +7136,8 @@ msgid "Browse"
 msgstr "Procházej"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:168
-#, fuzzy
 msgid "Download WeGlide task"
-msgstr "Stáhni let"
+msgstr "Stáhni úlohu z WeGlide"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:97
 msgid "Load"
@@ -10361,11 +10360,8 @@ msgid "Zoom"
 msgstr "Zvětšení"
 
 #: Data/Input/default.xci:142 Data/Input/default.xci:790
-#, fuzzy
 msgid "What's here?"
-msgstr ""
-"Co je \n"
-"zde?"
+msgstr "Co je zde?"
 
 #: Data/Input/default.xci:355
 msgid ""
@@ -10376,31 +10372,24 @@ msgstr ""
 "Strana 2/2"
 
 #: Data/Input/default.xci:385 Data/Input/default.xci:1014
-#, fuzzy
 msgid "Waypoint List"
-msgstr ""
-"Otočný bod\n"
-"Seznam"
+msgstr "Seznam OB"
 
 #: Data/Input/default.xci:419 Data/Input/default.xci:1062
 msgid "Dropped marker"
 msgstr "Marker vytvořen"
 
 #: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
 msgid "Marker Drop"
-msgstr ""
-"Vytvoř\n"
-"marker"
+msgstr "Vytvoř marker"
 
 #: Data/Input/default.xci:429
 msgid "Pilot event announced"
-msgstr "Pilot Event Označ"
+msgstr "Pilot Event označen"
 
 #: Data/Input/default.xci:432
-#, fuzzy
 msgid "Pilot Event Announce"
-msgstr "Událost označena pilotem (Pilot EVent)"
+msgstr "Označ Pilot EVent"
 
 #: Data/Input/default.xci:440 Data/Input/default.xci:1046
 msgid "Target Show"
@@ -10415,9 +10404,8 @@ msgstr ""
 "Strana 2/2"
 
 #: Data/Input/default.xci:481
-#, fuzzy
 msgid "Page Show"
-msgstr "Zobraz stránku"
+msgstr "Zobraz stranu"
 
 #: Data/Input/default.xci:488 Data/Input/default.xci:1072
 msgid "Pan Mode"
@@ -10453,9 +10441,7 @@ msgstr ""
 
 #: Data/Input/default.xci:653 Data/Input/default.xci:1158
 msgid "Raw Logger"
-msgstr ""
-"NMEA\n"
-"Logger"
+msgstr "NMEA Logger"
 
 #: Data/Input/default.xci:661
 msgid "Lua"
@@ -10495,22 +10481,16 @@ msgid "Vario ASI zeroed"
 msgstr "Vário ASI vynulováno"
 
 #: Data/Input/default.xci:727
-#, fuzzy
 msgid "ASI Zero"
-msgstr ""
-"ASI\n"
-"Nula"
+msgstr "ASI nuluj"
 
 #: Data/Input/default.xci:733
 msgid "Accelerometer leveled"
 msgstr "Akcelerometr vyrovnán"
 
 #: Data/Input/default.xci:734
-#, fuzzy
 msgid "Accel Zero"
-msgstr ""
-"Akcel\n"
-"Nula"
+msgstr "Akcel nuluj"
 
 #: Data/Input/default.xci:741
 msgid "Stored to EEPROM"
@@ -10539,9 +10519,7 @@ msgstr ""
 
 #: Data/Input/default.xci:774 Data/Input/default.xci:1181
 msgid "FLARM Radar"
-msgstr ""
-"FLARM\n"
-"Radar"
+msgstr "FLARM Radar"
 
 #: Data/Input/default.xci:816
 msgid ""
@@ -10553,20 +10531,15 @@ msgstr ""
 
 #: Data/Input/default.xci:840
 msgid "Traffic List"
-msgstr ""
-"Provoz\n"
-"Seznam"
+msgstr "Seznam provozu"
 
 #: Data/Input/default.xci:848 Data/Input/default.xci:1229
 msgid "Thermal Assistant"
 msgstr "Termický asistent"
 
 #: Data/Input/default.xci:882
-#, fuzzy
 msgid "Message Repeat"
-msgstr ""
-"Opakuj\n"
-"zprávu"
+msgstr "Opakuj zprávu"
 
 #: Data/Input/default.xci:893
 msgid "Nav"
@@ -10585,11 +10558,8 @@ msgid "AVG/ALT"
 msgstr "AVG/ALT"
 
 #: Data/Input/default.xci:1127
-#, fuzzy
 msgid "Setup Wind"
-msgstr ""
-"Nastavení\n"
-"Vítr"
+msgstr "Nastav vítr"
 
 #: Data/Input/default.xci:1135
 msgid "Setup System"
@@ -10601,16 +10571,11 @@ msgstr "Nastavení prostorů"
 
 #: Data/Input/default.xci:1174
 msgid "Setup Plane"
-msgstr ""
-"Nastavení\n"
-"Letadlo"
+msgstr "Nastav letadlo"
 
 #: Data/Input/default.xci:1197
-#, fuzzy
 msgid "Nearest Airspace"
-msgstr ""
-"Nejbližší\n"
-"prostor"
+msgstr "Nejbližší prostor"
 
 #~ msgid ""
 #~ "Team\n"
