@@ -808,6 +808,7 @@ DEBUG_PROGRAM_NAMES += DownloadFile \
 	RunDownloadToFile \
 	UploadFile \
 	RunWeGlideUploadFlight \
+	RunWeGlideDownloadTask \
 	RunTimClient \
 	RunNOAADownloader RunSkyLinesTracking RunLiveTrack24
 endif
@@ -975,6 +976,22 @@ RUN_WEGLIDE_UPLOAD_FLIGHT_SOURCES = \
 	$(TEST_SRC_DIR)/RunWeGlideUploadFlight.cpp
 RUN_WEGLIDE_UPLOAD_FLIGHT_DEPENDS = LIBCLIENT JSON LIBHTTP ASYNC LIBNET OPERATION OS IO UTIL TIME
 $(eval $(call link-program,RunWeGlideUploadFlight,RUN_WEGLIDE_UPLOAD_FLIGHT))
+
+RUN_WEGLIDE_DOWNLOAD_TASK_SOURCES = \
+	$(SRC)/Version.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(SRC)/XML/Node.cpp \
+	$(SRC)/XML/Parser.cpp \
+	$(SRC)/XML/Writer.cpp \
+	$(SRC)/XML/DataNode.cpp \
+	$(SRC)/XML/DataNodeXML.cpp \
+	$(SRC)/Task/Serialiser.cpp \
+	$(SRC)/Task/Deserialiser.cpp \
+	$(SRC)/Engine/Util/Gradient.cpp \
+	$(SRC)/net/SocketError.cxx \
+	$(TEST_SRC_DIR)/RunWeGlideDownloadTask.cpp
+RUN_WEGLIDE_DOWNLOAD_TASK_DEPENDS = LIBCLIENT TASK ROUTE GLIDE WAYPOINT GEO TIME MATH LIBHTTP ASYNC LIBNET OPERATION IO OS UTIL
+$(eval $(call link-program,RunWeGlideDownloadTask,RUN_WEGLIDE_DOWNLOAD_TASK))
 
 RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/net/SocketError.cxx \

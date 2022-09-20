@@ -3,6 +3,7 @@
 
 LIBCLIENT_SOURCES = \
 	$(SRC)/net/client/tim/Client.cpp \
+	$(SRC)/net/client/WeGlide/DownloadTask.cpp \
 	$(SRC)/net/client/WeGlide/UploadFlight.cpp
 
 LIBCLIENT_CPPFLAGS_INTERNAL = $(LIBHTTP_CPPFLAGS)
