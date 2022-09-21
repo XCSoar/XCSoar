@@ -9,6 +9,8 @@ Version 7.27 - not yet released
   - add WeGlide declared task download
 * Android
   - allow file explorer to access the XCSoar data files
+* Polars
+  - add JS-1B (18m) polar
 
 Version 7.26 - 2022/09/03
 * user interface
