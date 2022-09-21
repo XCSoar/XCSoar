@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2022-09-20 13:58+0200\n"
+"PO-Revision-Date: 2022-09-21 08:21+0000\n"
 "Last-Translator: l diaz <ldiazz@yahoo.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
@@ -7237,9 +7237,8 @@ msgid "Browse"
 msgstr "Buscar"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:168
-#, fuzzy
 msgid "Download WeGlide task"
-msgstr "Descargar vuelo"
+msgstr "Descargar tarea de WeGlide"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:97
 msgid "Load"
@@ -10535,11 +10534,8 @@ msgid "Zoom"
 msgstr "Zoom"
 
 #: Data/Input/default.xci:142 Data/Input/default.xci:790
-#, fuzzy
 msgid "What's here?"
-msgstr ""
-"¿Qué hay\n"
-"aquí?"
+msgstr "¿Qué hay aquí?"
 
 #: Data/Input/default.xci:355
 msgid ""
@@ -10550,34 +10546,26 @@ msgstr ""
 "Pag. 2/2"
 
 #: Data/Input/default.xci:385 Data/Input/default.xci:1014
-#, fuzzy
 msgid "Waypoint List"
-msgstr ""
-"Lista de\n"
-"Waypoints"
+msgstr "Lista de Waypoints"
 
 #: Data/Input/default.xci:419 Data/Input/default.xci:1062
 msgid "Dropped marker"
 msgstr "Marca creada"
 
 #: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
 msgid "Marker Drop"
-msgstr ""
-"Crear\n"
-"Marca"
+msgstr "Crear Marca"
 
 #: Data/Input/default.xci:429
 msgid "Pilot event announced"
 msgstr "Evento del piloto Anuncio"
 
 #: Data/Input/default.xci:432
-#, fuzzy
 msgid "Pilot Event Announce"
 msgstr "Anuncio de evento del piloto"
 
 #: Data/Input/default.xci:440 Data/Input/default.xci:1046
-#, fuzzy
 msgid "Target Show"
 msgstr "Mostrar Destino"
 
@@ -10595,7 +10583,7 @@ msgstr "Mostrar Página"
 
 #: Data/Input/default.xci:488 Data/Input/default.xci:1072
 msgid "Pan Mode"
-msgstr "Modo Despl."
+msgstr "Modo Desplazamiento"
 
 #: Data/Input/default.xci:507 Data/Input/default.xci:1080
 msgid "Labels"
@@ -10614,6 +10602,8 @@ msgid ""
 "Config\n"
 "Page 2/3"
 msgstr ""
+"Config\n"
+"Pag. 2/3"
 
 #: Data/Input/default.xci:596
 msgid ""
@@ -10644,18 +10634,12 @@ msgstr ""
 "Pag. 2/2"
 
 #: Data/Input/default.xci:687
-#, fuzzy
 msgid "Airframe Switches"
-msgstr ""
-"Estructura de avión\n"
-"Interruptores"
+msgstr "Interruptores del avión"
 
 #: Data/Input/default.xci:694
-#, fuzzy
 msgid "Manual Demo"
-msgstr ""
-"Demo\n"
-"Manual"
+msgstr "Demo Manual"
 
 #: Data/Input/default.xci:701
 msgid "Setup Stall"
@@ -10670,22 +10654,16 @@ msgid "Vario ASI zeroed"
 msgstr "Vario ASI puesto a cero"
 
 #: Data/Input/default.xci:727
-#, fuzzy
 msgid "ASI Zero"
-msgstr ""
-"ASI\n"
-"Cero"
+msgstr "ASI Cero"
 
 #: Data/Input/default.xci:733
 msgid "Accelerometer leveled"
 msgstr "Acelerometro nivelado"
 
 #: Data/Input/default.xci:734
-#, fuzzy
 msgid "Accel Zero"
-msgstr ""
-"Acel\n"
-"Cero"
+msgstr "Acel Cero"
 
 #: Data/Input/default.xci:741
 msgid "Stored to EEPROM"
@@ -10696,18 +10674,12 @@ msgid "Store"
 msgstr "Almacenar"
 
 #: Data/Input/default.xci:749
-#, fuzzy
 msgid "Cruise Demo"
-msgstr ""
-"Demo de\n"
-"Planeo"
+msgstr "Demo de Planeo"
 
 #: Data/Input/default.xci:756
-#, fuzzy
 msgid "Climb Demo"
-msgstr ""
-"Demo\n"
-"Ascenso"
+msgstr "Demo de Ascenso"
 
 #: Data/Input/default.xci:766
 msgid ""
@@ -10738,11 +10710,8 @@ msgid "Thermal Assistant"
 msgstr "Asistente de Térmica"
 
 #: Data/Input/default.xci:882
-#, fuzzy
 msgid "Message Repeat"
-msgstr ""
-"Repetir\n"
-"Mensaje"
+msgstr "Repetir Mensaje"
 
 #: Data/Input/default.xci:893
 msgid "Nav"
@@ -10753,11 +10722,8 @@ msgid "Config"
 msgstr "Configuración"
 
 #: Data/Input/default.xci:922
-#, fuzzy
 msgid "Lock Screen"
-msgstr ""
-"Bloquear\n"
-"Pantalla"
+msgstr "Bloquear Pantalla"
 
 #: Data/Input/default.xci:980
 msgid "AVG/ALT"
@@ -10772,22 +10738,16 @@ msgid "Setup System"
 msgstr "Config. Sistema"
 
 #: Data/Input/default.xci:1143
-#, fuzzy
 msgid "Settings Airspace"
-msgstr ""
-"Configuración\n"
-"Espacio Aéreo"
+msgstr "Configuración del Espacio Aéreo"
 
 #: Data/Input/default.xci:1174
 msgid "Setup Plane"
 msgstr "Ajustes de Aeronave"
 
 #: Data/Input/default.xci:1197
-#, fuzzy
 msgid "Nearest Airspace"
-msgstr ""
-"Espacio Aéreo\n"
-"más cercano"
+msgstr "Espacio Aéreo más cercano"
 
 #~ msgid ""
 #~ "Team\n"
