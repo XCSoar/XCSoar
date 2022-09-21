@@ -28,57 +28,66 @@ Copyright_License {
 struct PolarShape;
 struct PolarInfo;
 
-namespace PolarStore
-{
-  struct Item
-  {
-    const TCHAR* name;   /**< Name of the glider type */
+namespace PolarStore {
 
-    // Using doubles here to simplify the code in PolarStore.cpp
+struct Item {
+  /**< Name of the glider type */
+  const TCHAR *name;
 
-    /** Reference mass of the polar (kg) */
-    double reference_mass;
+  // Using doubles here to simplify the code in PolarStore.cpp
 
-    /** Max water ballast (l) */
-    double max_ballast;
+  /** Reference mass of the polar (kg) */
+  double reference_mass;
 
-    /** Speed (kph) of point 1 */
-    double v1;
-    /** Sink rate (negative, m/s) of point 1  */
-    double w1;
-    /** Speed (kph) of point 2 */
-    double v2;
-    /** Sink rate (negative, m/s) of point 2  */
-    double w2;
-    /** Speed (kph) of point 3 */
-    double v3;
-    /** Sink rate (negative, m/s) of point 3  */
-    double w3;
+  /** Max water ballast (l) */
+  double max_ballast;
 
-    /** Reference wing area (m^2), 0.0 if unknown */
-    double wing_area;
+  /** Speed (kph) of point 1 */
+  double v1;
+  /** Sink rate (negative, m/s) of point 1  */
+  double w1;
+  /** Speed (kph) of point 2 */
+  double v2;
+  /** Sink rate (negative, m/s) of point 2  */
+  double w2;
+  /** Speed (kph) of point 3 */
+  double v3;
+  /** Sink rate (negative, m/s) of point 3  */
+  double w3;
 
-    /** Maximum speed for normal operations (m/s), 0.0 if unknown */
-    double v_no;
+  /** Reference wing area (m^2), 0.0 if unknown */
+  double wing_area;
 
-    /** Contest handicap, 0 if unknown */
-    unsigned contest_handicap;
+  /** Maximum speed for normal operations (m/s), 0.0 if unknown */
+  double v_no;
 
-    /** empty rigged glider mass (kg), make the polar reference mass independent of the lift of weight sum */
-    unsigned empty_mass;
+  /** Contest handicap, 0 if unknown */
+  unsigned contest_handicap;
 
-    PolarShape ToPolarShape() const;
-    PolarInfo ToPolarInfo() const;
-  };
+  /** empty rigged glider mass (kg), make the polar reference mass independent of the lift of weight sum */
+  unsigned empty_mass;
 
-  typedef struct Item PolarList[];
-  typedef struct Item * iterator;
-  typedef const struct Item * const_iterator;
-
-  const Item &GetItem(const char *name);
-  const Item &GetDefault();
-  unsigned Count();
-
-  const_iterator cbegin();
-  const_iterator cend();
+  PolarShape ToPolarShape() const;
+  PolarInfo ToPolarInfo() const;
 };
+
+typedef struct Item PolarList[];
+typedef struct Item *iterator;
+typedef const struct Item *const_iterator;
+
+const Item &
+GetItem(const char *name);
+
+const Item &
+GetDefault();
+
+unsigned
+Count();
+
+const_iterator
+cbegin();
+
+const_iterator
+cend();
+
+} // namespace PolarStore
