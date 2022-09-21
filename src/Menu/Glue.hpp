@@ -23,35 +23,16 @@ Copyright_License {
 
 #pragma once
 
-#include "util/Compiler.h"
-
 #include <tchar.h>
-#include <cstddef>
 
-struct PixelRect;
-struct ButtonLook;
-class Font;
-class ContainerWindow;
 class Menu;
+class MenuBar;
 
-namespace ButtonLabel {
-  struct Expanded {
-    bool visible, enabled;
-    const TCHAR *text;
-  };
+namespace MenuGlue {
 
-  void CreateButtonLabels(ContainerWindow &parent, ButtonLook &look);
-  void Destroy();
-
-  [[gnu::pure]]
-  Expanded Expand(const TCHAR *text, TCHAR *buffer, size_t size);
-
-  [[gnu::pure]]
-  bool IsEnabled(unsigned i);
-
-  bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
-
-  void OnResize(const PixelRect &rc);
+void
+SetLabelText(MenuBar &bar, unsigned i,
+             const TCHAR *text, unsigned event) noexcept;
 
   /**
    * Show the specified menu.
@@ -59,5 +40,8 @@ namespace ButtonLabel {
    * @param full do a full update; if false, then only dynamic buttons
    * are updated (to reduce flickering)
    */
-  void Set(const Menu &menu, const Menu *overlay=nullptr, bool full=true);
-};
+void
+Set(MenuBar &bar, const Menu &menu,
+    const Menu *overlay=nullptr, bool full=true) noexcept;
+
+} // namespace MenuGlue

@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "ButtonLabel.hpp"
+#include "Glue.hpp"
 #include "MenuBar.hpp"
-#include "MenuData.hpp"
 #include "Language/Language.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StringBuilder.hxx"
@@ -161,27 +161,9 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
 }
 
 void
-ButtonLabel::SetLabelText(unsigned index, const TCHAR *text, unsigned event)
-{
-  TCHAR buffer[100];
-  Expanded expanded = Expand(text, buffer, ARRAY_SIZE(buffer));
-  if (expanded.visible)
-    bar->ShowButton(index, expanded.enabled, expanded.text, event);
-  else
-    bar->HideButton(index);
-}
-
-void
 ButtonLabel::Set(const Menu &menu, const Menu *overlay, bool full)
 {
-  for (unsigned i = 0; i < menu.MAX_ITEMS; ++i) {
-    const MenuItem &item = overlay != nullptr && (*overlay)[i].IsDefined()
-      ? (*overlay)[i]
-      : menu[i];
-
-    if (full || item.IsDynamic())
-      SetLabelText(i, item.label, item.event);
-  }
+  MenuGlue::Set(*bar, menu, overlay, full);
 }
 
 bool

@@ -21,43 +21,37 @@ Copyright_License {
 }
 */
 
-#pragma once
+#include "Glue.hpp"
+#include "ButtonLabel.hpp"
+#include "MenuBar.hpp"
+#include "MenuData.hpp"
+#include "util/Macros.hpp"
 
-#include "util/Compiler.h"
+namespace MenuGlue {
 
-#include <tchar.h>
-#include <cstddef>
+void
+SetLabelText(MenuBar &bar, unsigned index,
+             const TCHAR *text, unsigned event) noexcept
+{
+  TCHAR buffer[100];
+  const auto expanded = ButtonLabel::Expand(text, buffer, ARRAY_SIZE(buffer));
+  if (expanded.visible)
+    bar.ShowButton(index, expanded.enabled, expanded.text, event);
+  else
+    bar.HideButton(index);
+}
 
-struct PixelRect;
-struct ButtonLook;
-class Font;
-class ContainerWindow;
-class Menu;
+void
+Set(MenuBar &bar, const Menu &menu, const Menu *overlay, bool full) noexcept
+{
+  for (unsigned i = 0; i < menu.MAX_ITEMS; ++i) {
+    const MenuItem &item = overlay != nullptr && (*overlay)[i].IsDefined()
+      ? (*overlay)[i]
+      : menu[i];
 
-namespace ButtonLabel {
-  struct Expanded {
-    bool visible, enabled;
-    const TCHAR *text;
-  };
+    if (full || item.IsDynamic())
+      SetLabelText(bar, i, item.label, item.event);
+  }
+}
 
-  void CreateButtonLabels(ContainerWindow &parent, ButtonLook &look);
-  void Destroy();
-
-  [[gnu::pure]]
-  Expanded Expand(const TCHAR *text, TCHAR *buffer, size_t size);
-
-  [[gnu::pure]]
-  bool IsEnabled(unsigned i);
-
-  bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
-
-  void OnResize(const PixelRect &rc);
-
-  /**
-   * Show the specified menu.
-   *
-   * @param full do a full update; if false, then only dynamic buttons
-   * are updated (to reduce flickering)
-   */
-  void Set(const Menu &menu, const Menu *overlay=nullptr, bool full=true);
-};
+} // namespace MenuGlue
