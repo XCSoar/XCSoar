@@ -70,7 +70,7 @@ static constexpr Item default_polar = {
  *        as initial values only, because the table will be target of further refinement
  *        for ever.
  */
-static constexpr PolarList internal_polars = {
+static constexpr Item internal_polars[] = {
   { _T("206 Hornet"), 318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8, 41.666, 100, 227 },
   { _T("303 Mosquito"), 450, 0, 100.0, -0.68, 120.0, -0.92, 150.0, -1.45, 9.85, 0.0, 107, 242 },
   { _T("304CZ"), 310, 115, 115.03, -0.86, 174.04, -1.76, 212.72, -3.4, 0, 0.0, 110, 235 },
