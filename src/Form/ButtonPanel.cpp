@@ -174,7 +174,8 @@ ButtonPanel::HorizontalRange(PixelRect rc,
 PixelRect
 ButtonPanel::LeftLayout(PixelRect rc) noexcept
 {
-  assert(!buttons.empty());
+  if (buttons.empty())
+    return rc;
 
   return VerticalRange(rc, 0, buttons.size());
 }
@@ -209,7 +210,8 @@ ButtonPanel::FitButtonRow(unsigned start, unsigned total_width) const noexcept
 PixelRect
 ButtonPanel::BottomLayout(PixelRect rc) noexcept
 {
-  assert(!buttons.empty());
+  if (buttons.empty())
+    return rc;
 
   const unsigned n_buttons = buttons.size();
   const unsigned total_width = rc.GetWidth();
