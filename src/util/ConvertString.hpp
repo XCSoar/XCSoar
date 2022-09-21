@@ -98,7 +98,7 @@ public:
   UTF8ToWideConverter(const UTF8ToWideConverter &other) = delete;
   UTF8ToWideConverter &operator=(const UTF8ToWideConverter &other) = delete;
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsValid() const noexcept {
 #ifdef _UNICODE
     return value != nullptr;
@@ -151,7 +151,7 @@ public:
   WideToUTF8Converter(const WideToUTF8Converter &other) = delete;
   WideToUTF8Converter &operator=(const WideToUTF8Converter &other) = delete;
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsValid() const noexcept {
 #ifdef _UNICODE
     return value != nullptr;
@@ -205,7 +205,7 @@ public:
   WideToACPConverter(const WideToACPConverter &other) = delete;
   WideToACPConverter &operator=(const WideToACPConverter &other) = delete;
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsValid() const noexcept {
 #ifdef _UNICODE
     return value != nullptr;
