@@ -23,6 +23,8 @@ Copyright_License {
 
 #pragma once
 
+#include <span>
+
 #include <tchar.h>
 
 struct PolarShape;
@@ -85,15 +87,7 @@ const Item &
 GetDefault() noexcept;
 
 [[gnu::const]]
-unsigned
-Count() noexcept;
-
-[[gnu::const]]
-const_iterator
-cbegin() noexcept;
-
-[[gnu::const]]
-const_iterator
-cend() noexcept;
+std::span<const Item>
+GetAll() noexcept;
 
 } // namespace PolarStore

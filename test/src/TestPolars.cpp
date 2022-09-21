@@ -92,11 +92,10 @@ TestFileImport()
 static void
 TestBuiltInPolars()
 {
-  for (auto item = PolarStore::cbegin(); item != PolarStore::cend(); item++ )
-  {
-    PolarInfo polar = item->ToPolarInfo();
+  for (const auto &i : PolarStore::GetAll()) {
+    PolarInfo polar = i.ToPolarInfo();
 
-    WideToUTF8Converter narrow(item->name);
+    WideToUTF8Converter narrow(i.name);
     ok(polar.IsValid(), narrow);
   }
 }
@@ -185,7 +184,7 @@ TestBuiltInPolarsPlausibility()
 
 int main()
 try {
-  unsigned num_tests = 19 + 9 + PolarStore::Count();
+  unsigned num_tests = 19 + 9 + PolarStore::GetAll().size();
 
   // NOTE: Plausibility tests disabled for now since many fail
   if (0)

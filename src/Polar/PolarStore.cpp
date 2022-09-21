@@ -278,7 +278,7 @@ const Item &
 GetItem(const char *name) noexcept
 {
   unsigned i;
-  for ( i = 0; i < Count(); i++)
+  for ( i = 0; i < ARRAY_SIZE(internal_polars); i++)
   {
     if ( StringIsEqual((const char *)(internal_polars[i].name), name) )
       break;
@@ -286,22 +286,10 @@ GetItem(const char *name) noexcept
   return internal_polars[i];
 }
 
-unsigned
-Count() noexcept
+std::span<const Item>
+GetAll() noexcept
 {
-  return ARRAY_SIZE(internal_polars);
-}
-
-const_iterator
-cbegin() noexcept
-{
-  return &internal_polars[0];
-}
-
-const_iterator
-cend() noexcept
-{
-  return &internal_polars[Count()];
+  return internal_polars;
 }
 
 } // namespace PolarStore

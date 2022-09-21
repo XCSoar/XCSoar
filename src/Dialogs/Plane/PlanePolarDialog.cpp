@@ -165,8 +165,8 @@ inline void
 PlanePolarWidget::ListClicked()
 {
   ComboList list;
-  for (auto item = PolarStore::cbegin(); item != PolarStore::cend(); item++ )
-    list.Append(item->name);
+  for (const auto &i : PolarStore::GetAll())
+    list.Append(i.name);
 
   list.Sort();
 
