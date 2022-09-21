@@ -30,14 +30,14 @@ Copyright_License {
 
 extern const uint16_t crc16ccitt_table[256];
 
-gcc_const
+[[gnu::const]]
 static inline uint16_t
 UpdateCRC16CCITT(uint8_t octet, uint16_t crc)
 {
   return (crc << 8) ^ crc16ccitt_table[(crc >> 8) ^ octet];
 }
 
-gcc_pure
+[[gnu::pure]]
 static inline uint16_t
 UpdateCRC16CCITT(const uint8_t *data, const uint8_t *end, uint16_t crc)
 {
@@ -46,7 +46,7 @@ UpdateCRC16CCITT(const uint8_t *data, const uint8_t *end, uint16_t crc)
   return crc;
 }
 
-gcc_pure
+[[gnu::pure]]
 static inline uint16_t
 UpdateCRC16CCITT(const void *data, size_t length, uint16_t crc)
 {
