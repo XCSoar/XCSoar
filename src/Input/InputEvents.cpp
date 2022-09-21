@@ -221,7 +221,7 @@ InputEvents::drawButtons(Mode mode, bool full) noexcept
     ? &input_config.menus[overlay_mode]
     : NULL;
 
-  ButtonLabel::Set(menu, overlay_menu, full);
+  CommonInterface::main_window->ShowMenu(menu, overlay_menu, full);
 
   GlueMapWindow *map = CommonInterface::main_window->GetMapIfActive();
   if (map != nullptr){
@@ -301,7 +301,8 @@ InputEvents::ProcessEvent(unsigned event_id) noexcept
   InputEvents::Mode lastMode = getModeID();
 
   int bindex = FindMenuItemByEvent(lastMode, overlay_mode, event_id);
-  if (bindex < 0 || ButtonLabel::IsEnabled(bindex))
+  if (bindex < 0 ||
+      CommonInterface::main_window->IsMenuButtonEnabled(bindex))
     InputEvents::processGo(event_id);
 
   // experimental: update button text, macro may change the value

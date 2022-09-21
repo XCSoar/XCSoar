@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "ButtonLabel.hpp"
-#include "Glue.hpp"
 #include "MenuBar.hpp"
 #include "Language/Language.hpp"
 #include "util/StringAPI.hxx"
@@ -32,21 +31,6 @@ Copyright_License {
 #include "util/Macros.hpp"
 
 #include <algorithm>
-
-static MenuBar *bar;
-
-void
-ButtonLabel::CreateButtonLabels(ContainerWindow &parent, ButtonLook &look)
-{
-  bar = new MenuBar(parent, look);
-}
-
-void
-ButtonLabel::Destroy()
-{
-  delete bar;
-  bar = nullptr;
-}
 
 /**
  * @return false if there is at least one ASCII letter in the string
@@ -158,23 +142,4 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
     expanded.text = BuildString(buffer, size, translated, s + (macros - text));
     return expanded;
   }
-}
-
-void
-ButtonLabel::Set(const Menu &menu, const Menu *overlay, bool full)
-{
-  MenuGlue::Set(*bar, menu, overlay, full);
-}
-
-bool
-ButtonLabel::IsEnabled(unsigned i)
-{
-  return bar->IsButtonEnabled(i);
-}
-
-void
-ButtonLabel::OnResize(const PixelRect &rc)
-{
-  if (bar != nullptr)
-    bar->OnResize(rc);
 }

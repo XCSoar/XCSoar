@@ -42,6 +42,8 @@ struct ComputerSettings;
 struct MapSettings;
 struct UIState;
 struct Look;
+class Menu;
+class MenuBar;
 class GlueMapWindow;
 class Widget;
 class RasterTerrain;
@@ -58,6 +60,8 @@ class MainWindow : public UI::SingleWindow {
   static constexpr const TCHAR *title = _T("XCSoar");
 
   Look *look = nullptr;
+
+  MenuBar *menu_bar = nullptr;
 
 #ifdef HAVE_SHOW_MENU_BUTTON
   ShowMenuButton *show_menu_button = nullptr;
@@ -368,6 +372,12 @@ public:
    */
   [[gnu::pure]]
   Widget *GetFlavourWidget(const TCHAR *flavour) noexcept;
+
+  void ShowMenu(const Menu &menu, const Menu *overlay=nullptr,
+                bool full=true) noexcept;
+
+  [[gnu::pure]]
+  bool IsMenuButtonEnabled(unsigned idx) noexcept;
 
   void UpdateGaugeVisibility() noexcept;
 

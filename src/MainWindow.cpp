@@ -29,7 +29,8 @@ Copyright_License {
 #include "UIActions.hpp"
 #include "PageActions.hpp"
 #include "Input/InputEvents.hpp"
-#include "Menu/ButtonLabel.hpp"
+#include "Menu/MenuBar.hpp"
+#include "Menu/Glue.hpp"
 #include "ui/canvas/Features.hpp" // for DRAW_MOUSE_CURSOR
 #include "Screen/Layout.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
@@ -205,7 +206,7 @@ MainWindow::InitialiseConfigured()
   InfoBoxManager::Create(*this, ib_layout, look->info_box);
   map_rect = ib_layout.remaining;
 
-  ButtonLabel::CreateButtonLabels(*this, look->dialog.button);
+  menu_bar = new MenuBar(*this, look->dialog.button);
 
   ReinitialiseLayout_vario(ib_layout);
 
@@ -239,7 +240,9 @@ void
 MainWindow::Deinitialise() noexcept
 {
   InfoBoxManager::Destroy();
-  ButtonLabel::Destroy();
+
+  delete menu_bar;
+  menu_bar = nullptr;
 
   delete popup;
   popup = nullptr;
@@ -529,7 +532,10 @@ MainWindow::OnResize(PixelSize new_size) noexcept
   ReinitialiseLayout();
 
   const PixelRect rc = GetClientRect();
-  ButtonLabel::OnResize(rc);
+
+  if (menu_bar != nullptr)
+    menu_bar->OnResize(rc);
+
   ProgressGlue::Move(rc);
 }
 
@@ -1013,6 +1019,22 @@ MainWindow::GetFlavourWidget(const TCHAR *flavour) noexcept
   return InputEvents::IsFlavour(flavour)
     ? widget
     : nullptr;
+}
+
+void
+MainWindow::ShowMenu(const Menu &menu, const Menu *overlay, bool full) noexcept
+{
+  assert(menu_bar != nullptr);
+
+  MenuGlue::Set(*menu_bar, menu, overlay, full);
+}
+
+bool
+MainWindow::IsMenuButtonEnabled(unsigned idx) noexcept
+{
+  assert(menu_bar != nullptr);
+
+  return menu_bar->IsButtonEnabled(idx);
 }
 
 void

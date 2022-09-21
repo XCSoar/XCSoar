@@ -29,9 +29,6 @@ Copyright_License {
 #include <cstddef>
 
 struct PixelRect;
-struct ButtonLook;
-class Font;
-class ContainerWindow;
 class Menu;
 
 namespace ButtonLabel {
@@ -40,24 +37,8 @@ namespace ButtonLabel {
     const TCHAR *text;
   };
 
-  void CreateButtonLabels(ContainerWindow &parent, ButtonLook &look);
-  void Destroy();
-
   [[gnu::pure]]
   Expanded Expand(const TCHAR *text, TCHAR *buffer, size_t size);
 
-  [[gnu::pure]]
-  bool IsEnabled(unsigned i);
-
   bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
-
-  void OnResize(const PixelRect &rc);
-
-  /**
-   * Show the specified menu.
-   *
-   * @param full do a full update; if false, then only dynamic buttons
-   * are updated (to reduce flickering)
-   */
-  void Set(const Menu &menu, const Menu *overlay=nullptr, bool full=true);
 };
