@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2022-09-20 13:59+0200\n"
+"PO-Revision-Date: 2022-09-21 08:21+0000\n"
 "Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
@@ -5614,7 +5614,8 @@ msgid ""
 "The sorting will try to find landing options in the current direction to the "
 "configured home waypoint."
 msgstr ""
-"L'ordre favorisera les zones posables dans la direction du point de départ."
+"L'ordre favorisera les zones posables dans la direction du point de départ "
+"sélectionné."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:88
 msgid "Alternates mode"
@@ -5782,8 +5783,8 @@ msgid ""
 "Display ground track line if there is a significant difference to plane "
 "heading."
 msgstr ""
-"Affiche la trace au sol de la route instantanée si il y a une différence "
-"significative entre entre la route et le cap du planeur."
+"Affiche la trace au sol de la route instantanée s'il y a une différence "
+"significative entre la route et le cap du planeur."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:99
 #, no-c-format
@@ -7798,9 +7799,9 @@ msgid ""
 "displayed value is '---'."
 msgstr ""
 "Finesse sol instantanée calculée à partir de la vitesse sol et de la VZ du "
-"GPS sur les 20 dernières secondes. \r\n"
-"Des valeurs négatives indiquent une montée. Si la vitesse verticale est "
-"proche de zéro, la valeur affichée est '---'."
+"GPS sur les 20 dernières secondes. Des valeurs négatives indiquent une "
+"montée. Si la vitesse verticale est proche de zéro, la valeur affichée est "
+"'---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:178
 #, no-c-format
@@ -9000,14 +9001,14 @@ msgid ""
 msgstr ""
 "Distance parcourue pendant la durée choisie, divisée par l'altitude perdue "
 "pendant cette durée. Les valeurs négatives sont représentées par ^^^ et "
-"indiquent une montée (gain d'altitude). Au-delà de 200 de finesse la valeur "
+"indiquent une montée (gain d'altitude). Au-delà de 200 de finesse, la valeur "
 "est représentée par +++. Vous pouvez configurer la durée sur laquelle la "
 "moyenne est faite. Les valeurs conseillées sont 60, 90, 120. Les faibles "
 "valeurs donneront des finesses plus proches de la finesse instantanée, et "
 "les plus grandes plus proches de la finesse de transition. Attention, la "
 "distance prise en compte n'est pas la distance directe sur la durée choisie, "
-"mais la distance effectivement parcourue pendant cette durée (zig-zag "
-"inclus). Valeur non calculée en spirale."
+"mais la distance effectivement parcourue pendant cette durée (zig-zag inclus)"
+". Valeur non calculée en spirale."
 
 #: src/InfoBoxes/Content/Factory.cpp:724
 #, no-c-format
@@ -9342,8 +9343,8 @@ msgid ""
 "used."
 msgstr ""
 "Altitude d'arrivée au prochain point de virage avec MacReady calé à 0 tout "
-"en tenant compte de l'altitude de sécurité en arrivée. \n"
-"Pour les AAT, le point cible du secteur est utilisé pour le calcul."
+"en tenant compte de l'altitude de sécurité en arrivée. Pour les AAT, le "
+"point cible du secteur est utilisé pour le calcul."
 
 #: src/InfoBoxes/Content/Factory.cpp:888
 #, no-c-format
@@ -10520,11 +10521,8 @@ msgid "Zoom"
 msgstr "Zoom"
 
 #: Data/Input/default.xci:142 Data/Input/default.xci:790
-#, fuzzy
 msgid "What's here?"
-msgstr ""
-"Qu'y a-\n"
-"t-il ici ?"
+msgstr "Qu'y a-t-il ici ?"
 
 #: Data/Input/default.xci:355
 msgid ""
@@ -10535,11 +10533,8 @@ msgstr ""
 "Page 2/2"
 
 #: Data/Input/default.xci:385 Data/Input/default.xci:1014
-#, fuzzy
 msgid "Waypoint List"
-msgstr ""
-"Liste des\n"
-"waypoints"
+msgstr "Liste des waypoints"
 
 #: Data/Input/default.xci:419 Data/Input/default.xci:1062
 msgid "Dropped marker"
@@ -10628,25 +10623,16 @@ msgstr ""
 "Page 2/2"
 
 #: Data/Input/default.xci:687
-#, fuzzy
 msgid "Airframe Switches"
-msgstr ""
-"Interrupteurs\n"
-"aéronef"
+msgstr "Interrupteurs aéronef"
 
 #: Data/Input/default.xci:694
-#, fuzzy
 msgid "Manual Demo"
-msgstr ""
-"Démo\n"
-"manuel"
+msgstr "Démo manuelle"
 
 #: Data/Input/default.xci:701
-#, fuzzy
 msgid "Setup Stall"
-msgstr ""
-"Configuration\n"
-"Décrochage"
+msgstr "Configuration Décrochage"
 
 #: Data/Input/default.xci:708
 msgid "Accel"
@@ -10657,22 +10643,16 @@ msgid "Vario ASI zeroed"
 msgstr "Vario ASI nul"
 
 #: Data/Input/default.xci:727
-#, fuzzy
 msgid "ASI Zero"
-msgstr ""
-"ASI\n"
-"zéro"
+msgstr "ASI Zéro"
 
 #: Data/Input/default.xci:733
 msgid "Accelerometer leveled"
 msgstr "Accéléromètre lissé"
 
 #: Data/Input/default.xci:734
-#, fuzzy
 msgid "Accel Zero"
-msgstr ""
-"Accel\n"
-"Nulle"
+msgstr "Accel Nulle"
 
 #: Data/Input/default.xci:741
 msgid "Stored to EEPROM"
@@ -10683,18 +10663,12 @@ msgid "Store"
 msgstr "Enregistrer"
 
 #: Data/Input/default.xci:749
-#, fuzzy
 msgid "Cruise Demo"
-msgstr ""
-"Démo\n"
-"Transition"
+msgstr "Démo Transition"
 
 #: Data/Input/default.xci:756
-#, fuzzy
 msgid "Climb Demo"
-msgstr ""
-"Démo\n"
-"montée"
+msgstr "Démo Montée"
 
 #: Data/Input/default.xci:766
 msgid ""
@@ -10725,11 +10699,8 @@ msgid "Thermal Assistant"
 msgstr "Assistant Thermique"
 
 #: Data/Input/default.xci:882
-#, fuzzy
 msgid "Message Repeat"
-msgstr ""
-"Répéter\n"
-"Message"
+msgstr "Répéter Message"
 
 #: Data/Input/default.xci:893
 msgid "Nav"
@@ -10740,47 +10711,32 @@ msgid "Config"
 msgstr "Config."
 
 #: Data/Input/default.xci:922
-#, fuzzy
 msgid "Lock Screen"
-msgstr ""
-"Verr.\n"
-"Ecran"
+msgstr "Verr. Écran"
 
 #: Data/Input/default.xci:980
 msgid "AVG/ALT"
 msgstr "Vzm/ALT"
 
 #: Data/Input/default.xci:1127
-#, fuzzy
 msgid "Setup Wind"
-msgstr ""
-"Options\n"
-"Vent"
+msgstr "Options Vent"
 
 #: Data/Input/default.xci:1135
-#, fuzzy
 msgid "Setup System"
-msgstr ""
-"Options\n"
-"Système"
+msgstr "Options Système"
 
 #: Data/Input/default.xci:1143
-#, fuzzy
 msgid "Settings Airspace"
-msgstr ""
-"Régl.Esp.\n"
-"Aériens"
+msgstr "Régl. Esp. Aériens"
 
 #: Data/Input/default.xci:1174
 msgid "Setup Plane"
 msgstr "Config. planeur"
 
 #: Data/Input/default.xci:1197
-#, fuzzy
 msgid "Nearest Airspace"
-msgstr ""
-"Esp.Aér.le\n"
-"+ proche"
+msgstr "Esp. Aér. le + proche"
 
 #~ msgid ""
 #~ "Team\n"
