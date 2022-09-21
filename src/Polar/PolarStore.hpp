@@ -71,7 +71,6 @@ struct Item {
   PolarInfo ToPolarInfo() const;
 };
 
-typedef struct Item *iterator;
 typedef const struct Item *const_iterator;
 
 const Item &
