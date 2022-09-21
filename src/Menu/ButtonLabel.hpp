@@ -43,12 +43,12 @@ namespace ButtonLabel {
   void CreateButtonLabels(ContainerWindow &parent, ButtonLook &look);
   void Destroy();
 
-  gcc_pure
+  [[gnu::pure]]
   Expanded Expand(const TCHAR *text, TCHAR *buffer, size_t size);
 
   void SetLabelText(unsigned i, const TCHAR *text, unsigned event);
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsEnabled(unsigned i);
 
   bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
