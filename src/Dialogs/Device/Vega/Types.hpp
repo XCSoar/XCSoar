@@ -24,54 +24,54 @@ Copyright_License {
 #pragma once
 
 // Value used for comparison in climb tone
-#define  X_NONE 0
-#define  X_MACCREADY 1
-#define  X_AVERAGE 2
+static constexpr unsigned X_NONE = 0;
+static constexpr unsigned X_MACCREADY = 1;
+static constexpr unsigned X_AVERAGE = 2;
 
 // Condition for detecting lift in cruise mode
-#define  Y_NONE 0
-#define  Y_RELATIVE_ZERO 1
-#define  Y_RELATIVE_MACCREADY_HALF 2
-#define  Y_GROSS_ZERO 3
-#define  Y_NET_MACCREADY_HALF 4
-#define  Y_RELATIVE_MACCREADY 5
-#define  Y_NET_MACCREADY 6
+static constexpr unsigned Y_NONE = 0;
+static constexpr unsigned Y_RELATIVE_ZERO = 1;
+static constexpr unsigned Y_RELATIVE_MACCREADY_HALF = 2;
+static constexpr unsigned Y_GROSS_ZERO = 3;
+static constexpr unsigned Y_NET_MACCREADY_HALF = 4;
+static constexpr unsigned Y_RELATIVE_MACCREADY = 5;
+static constexpr unsigned Y_NET_MACCREADY = 6;
 
 // Beep types
-#define  BEEPTYPE_SILENCE 0
-#define  BEEPTYPE_SHORT 1
-#define  BEEPTYPE_MEDIUM 2
-#define  BEEPTYPE_LONG 3
-#define  BEEPTYPE_CONTINUOUS 4
-#define  BEEPTYPE_SHORTDOUBLE 5
+static constexpr unsigned BEEPTYPE_SILENCE = 0;
+static constexpr unsigned BEEPTYPE_SHORT = 1;
+static constexpr unsigned BEEPTYPE_MEDIUM = 2;
+static constexpr unsigned BEEPTYPE_LONG = 3;
+static constexpr unsigned BEEPTYPE_CONTINUOUS = 4;
+static constexpr unsigned BEEPTYPE_SHORTDOUBLE = 5;
 
 // Pitch value schemes
-#define  PITCH_CONST_HI 0
-#define  PITCH_CONST_MEDIUM 1
-#define  PITCH_CONST_LO 2
-#define  PITCH_SPEED_PERCENT 3
-#define  PITCH_SPEED_ERROR 4
-#define  PITCH_VARIO_GROSS 5
-#define  PITCH_VARIO_NET 6
-#define  PITCH_VARIO_RELATIVE 7
-#define  PITCH_VARIO_GROSSRELATIVE 8
+static constexpr unsigned PITCH_CONST_HI = 0;
+static constexpr unsigned PITCH_CONST_MEDIUM = 1;
+static constexpr unsigned PITCH_CONST_LO = 2;
+static constexpr unsigned PITCH_SPEED_PERCENT = 3;
+static constexpr unsigned PITCH_SPEED_ERROR = 4;
+static constexpr unsigned PITCH_VARIO_GROSS = 5;
+static constexpr unsigned PITCH_VARIO_NET = 6;
+static constexpr unsigned PITCH_VARIO_RELATIVE = 7;
+static constexpr unsigned PITCH_VARIO_GROSSRELATIVE = 8;
 
 // Beep period value schemes
-#define  PERIOD_CONST_HI 0
-#define  PERIOD_CONST_MEDIUM 1
-#define  PERIOD_CONST_LO 2
-#define  PERIOD_SPEED_PERCENT 3
-#define  PERIOD_SPEED_ERROR 4
-#define  PERIOD_VARIO_GROSS 5
-#define  PERIOD_VARIO_NET 6
-#define  PERIOD_VARIO_RELATIVE 7
-#define  PERIOD_VARIO_GROSSRELATIVE 8
-#define  PERIOD_CONST_INTERMITTENT 9
+static constexpr unsigned PERIOD_CONST_HI = 0;
+static constexpr unsigned PERIOD_CONST_MEDIUM = 1;
+static constexpr unsigned PERIOD_CONST_LO = 2;
+static constexpr unsigned PERIOD_SPEED_PERCENT = 3;
+static constexpr unsigned PERIOD_SPEED_ERROR = 4;
+static constexpr unsigned PERIOD_VARIO_GROSS = 5;
+static constexpr unsigned PERIOD_VARIO_NET = 6;
+static constexpr unsigned PERIOD_VARIO_RELATIVE = 7;
+static constexpr unsigned PERIOD_VARIO_GROSSRELATIVE = 8;
+static constexpr unsigned PERIOD_CONST_INTERMITTENT = 9;
 
 // Scaling schemes applied to pitch and period
-#define  SCALE_LINEAR 0
-#define  SCALE_LOWEND 1
-#define  SCALE_HIGHEND 2
-#define  SCALE_LINEAR_NEG 3
-#define  SCALE_LOWEND_NEG 4
-#define  SCALE_HIGHEND_NEG 5
+static constexpr unsigned SCALE_LINEAR = 0;
+static constexpr unsigned SCALE_LOWEND = 1;
+static constexpr unsigned SCALE_HIGHEND = 2;
+static constexpr unsigned SCALE_LINEAR_NEG = 3;
+static constexpr unsigned SCALE_LOWEND_NEG = 4;
+static constexpr unsigned SCALE_HIGHEND_NEG = 5;
