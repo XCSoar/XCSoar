@@ -71,7 +71,7 @@ LocalPath(const AvailableFile &file)
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 
-gcc_pure
+[[gnu::pure]]
 static const AvailableFile *
 FindRemoteFile(const FileRepository &repository, const char *name)
 {
@@ -79,7 +79,7 @@ FindRemoteFile(const FileRepository &repository, const char *name)
 }
 
 #ifdef _UNICODE
-gcc_pure
+[[gnu::pure]]
 static const AvailableFile *
 FindRemoteFile(const FileRepository &repository, const TCHAR *name)
 {
@@ -91,7 +91,7 @@ FindRemoteFile(const FileRepository &repository, const TCHAR *name)
 }
 #endif
 
-gcc_pure
+[[gnu::pure]]
 static bool
 CanDownload(const FileRepository &repository, const TCHAR *name)
 {
@@ -214,7 +214,7 @@ public:
   void CreateButtons(WidgetDialog &dialog) noexcept;
 
 protected:
-  gcc_pure
+  [[gnu::pure]]
   bool IsDownloading(const char *name) const noexcept {
 #ifdef HAVE_DOWNLOAD_MANAGER
     const std::lock_guard lock{mutex};
@@ -224,7 +224,7 @@ protected:
 #endif
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsDownloading(const AvailableFile &file) const noexcept {
     return IsDownloading(file.GetName());
   }
@@ -249,7 +249,7 @@ protected:
     return IsDownloading(file.GetName(), status_r);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool HasFailed(const char *name) const noexcept {
 #ifdef HAVE_DOWNLOAD_MANAGER
     const std::lock_guard lock{mutex};
@@ -259,12 +259,12 @@ protected:
 #endif
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool HasFailed(const AvailableFile &file) const noexcept {
     return HasFailed(file.GetName());
   }
 
-  gcc_pure
+  [[gnu::pure]]
   int FindItem(const TCHAR *name) const noexcept;
 
   void LoadRepositoryFile();
