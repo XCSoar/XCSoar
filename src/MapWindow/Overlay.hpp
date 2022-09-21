@@ -43,13 +43,13 @@ public:
   /**
    * Returns a human-readable name for this overlay.
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual const TCHAR *GetLabel() const noexcept = 0;
 
   /**
    * Check whether the given location is inside the overlay.
    */
-  gcc_pure
+  [[gnu::pure]]
   virtual bool IsInside(GeoPoint p) const noexcept = 0;
 
   /**
