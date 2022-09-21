@@ -22,4 +22,4 @@
  
 #pragma once
 
-#define TOLERANCE_ISOLINE_CROSSING 0.001
+static constexpr double TOLERANCE_ISOLINE_CROSSING = 0.001;
