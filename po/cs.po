@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2022-09-21 08:21+0000\n"
+"PO-Revision-Date: 2022-09-22 16:13+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -2871,7 +2871,7 @@ msgstr "Externí"
 
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:36
 msgid "Wind Settings"
-msgstr "Nastavení větru"
+msgstr "Výpočet větru"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:140
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:372
@@ -3286,7 +3286,7 @@ msgstr "Výškový profil větru"
 
 #: src/Dialogs/dlgAnalysis.cpp:509
 msgid "Set Wind"
-msgstr "Nastav vítr"
+msgstr "Vítr"
 
 #: src/Dialogs/dlgAnalysis.cpp:514
 msgid "Glide Polar"
@@ -10531,7 +10531,7 @@ msgstr ""
 
 #: Data/Input/default.xci:840
 msgid "Traffic List"
-msgstr "Seznam provozu"
+msgstr "Provoz"
 
 #: Data/Input/default.xci:848 Data/Input/default.xci:1229
 msgid "Thermal Assistant"
