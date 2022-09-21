@@ -29,8 +29,10 @@ Copyright_License {
 
 #include <cassert>
 
+namespace PolarStore {
+
 PolarShape
-PolarStore::Item::ToPolarShape() const
+Item::ToPolarShape() const
 {
   PolarShape shape;
 
@@ -46,7 +48,7 @@ PolarStore::Item::ToPolarShape() const
 }
 
 PolarInfo
-PolarStore::Item::ToPolarInfo() const
+Item::ToPolarInfo() const
 {
   PolarInfo polar;
 
@@ -58,9 +60,9 @@ PolarStore::Item::ToPolarInfo() const
   return polar;
 }
 
-static constexpr PolarStore::Item default_polar =
-  { _T("LS-8 (15m)"), 325, 185, 70, -0.51, 115, -0.85, 173, -2.00, 10.5, 0.0, 108, 240 };
-
+static constexpr Item default_polar = {
+  _T("LS-8 (15m)"), 325, 185, 70, -0.51, 115, -0.85, 173, -2.00, 10.5, 0.0, 108, 240,
+};
 
 /**
  *  Note: Please keep in alphabetic order to ease finding and updateing.
@@ -68,8 +70,7 @@ static constexpr PolarStore::Item default_polar =
  *        as initial values only, because the table will be target of further refinement
  *        for ever.
  */
-static constexpr PolarStore::PolarList internal_polars =
-{
+static constexpr PolarList internal_polars = {
   { _T("206 Hornet"), 318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8, 41.666, 100, 227 },
   { _T("303 Mosquito"), 450, 0, 100.0, -0.68, 120.0, -0.92, 150.0, -1.45, 9.85, 0.0, 107, 242 },
   { _T("304CZ"), 310, 115, 115.03, -0.86, 174.04, -1.76, 212.72, -3.4, 0, 0.0, 110, 235 },
@@ -258,7 +259,7 @@ static constexpr PolarStore::PolarList internal_polars =
   // from LK8000
   { _T("VSO-10 Gradient"), 347, 0, 90, -0.78, 130, -1.41, 160, -2.44, 12.0, 44.444, 96, 250 },
   { _T("VT-116 Orlik II"), 335, 0, 80, -0.7, 100, -1.05, 120, -1.65, 12.8, 33.333, 86, 215 },
-  
+
   // from factory polar.
   // flight manual http://www.issoire-aviation.fr/doc_avia_gen/MdV_WA26P_R2.pdf
   // Contest handicap reference: http://docplayer.fr/79733029-Handicaps-planeurs-ffvv.html
@@ -267,14 +268,14 @@ static constexpr PolarStore::PolarList internal_polars =
   { _T("Zuni II"), 358, 182, 110, -0.88, 167, -2.21, 203.72, -3.6, 10.13, 0.0, 0, 238 },
 };
 
-const PolarStore::Item &
-PolarStore::GetDefault()
+const Item &
+GetDefault()
 {
   return default_polar;
 }
 
-const PolarStore::Item &
-PolarStore::GetItem(const char *name)
+const Item &
+GetItem(const char *name)
 {
   unsigned i;
   for ( i = 0; i < Count(); i++)
@@ -286,11 +287,21 @@ PolarStore::GetItem(const char *name)
 }
 
 unsigned
-PolarStore::Count()
+Count()
 {
   return ARRAY_SIZE(internal_polars);
 }
 
-PolarStore::const_iterator PolarStore::cbegin() { return &internal_polars[0]; }
-PolarStore::const_iterator PolarStore::cend() { return &internal_polars[PolarStore::Count()]; }
+const_iterator
+cbegin()
+{
+  return &internal_polars[0];
+}
 
+const_iterator
+cend()
+{
+  return &internal_polars[Count()];
+}
+
+} // namespace PolarStore
