@@ -67,25 +67,33 @@ struct Item {
   /** empty rigged glider mass (kg), make the polar reference mass independent of the lift of weight sum */
   unsigned empty_mass;
 
-  PolarShape ToPolarShape() const;
-  PolarInfo ToPolarInfo() const;
+  [[gnu::pure]]
+  PolarShape ToPolarShape() const noexcept;
+
+  [[gnu::pure]]
+  PolarInfo ToPolarInfo() const noexcept;
 };
 
 using const_iterator = const struct Item *;
 
+[[gnu::pure]]
 const Item &
-GetItem(const char *name);
+GetItem(const char *name) noexcept;
 
+[[gnu::const]]
 const Item &
-GetDefault();
+GetDefault() noexcept;
 
+[[gnu::const]]
 unsigned
-Count();
+Count() noexcept;
 
+[[gnu::const]]
 const_iterator
-cbegin();
+cbegin() noexcept;
 
+[[gnu::const]]
 const_iterator
-cend();
+cend() noexcept;
 
 } // namespace PolarStore

@@ -32,7 +32,7 @@ Copyright_License {
 namespace PolarStore {
 
 PolarShape
-Item::ToPolarShape() const
+Item::ToPolarShape() const noexcept
 {
   PolarShape shape;
 
@@ -48,7 +48,7 @@ Item::ToPolarShape() const
 }
 
 PolarInfo
-Item::ToPolarInfo() const
+Item::ToPolarInfo() const noexcept
 {
   PolarInfo polar;
 
@@ -269,13 +269,13 @@ static constexpr Item internal_polars[] = {
 };
 
 const Item &
-GetDefault()
+GetDefault() noexcept
 {
   return default_polar;
 }
 
 const Item &
-GetItem(const char *name)
+GetItem(const char *name) noexcept
 {
   unsigned i;
   for ( i = 0; i < Count(); i++)
@@ -287,19 +287,19 @@ GetItem(const char *name)
 }
 
 unsigned
-Count()
+Count() noexcept
 {
   return ARRAY_SIZE(internal_polars);
 }
 
 const_iterator
-cbegin()
+cbegin() noexcept
 {
   return &internal_polars[0];
 }
 
 const_iterator
-cend()
+cend() noexcept
 {
   return &internal_polars[Count()];
 }
