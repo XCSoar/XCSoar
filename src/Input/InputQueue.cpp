@@ -33,9 +33,9 @@ Copyright_License {
 
 static Mutex mutexEventQueue;
 
-#define MAX_GCE_QUEUE 10
+static constexpr std::size_t MAX_GCE_QUEUE = 10;
 static int GCE_Queue[MAX_GCE_QUEUE];
-#define MAX_NMEA_QUEUE 10
+static constexpr std::size_t MAX_NMEA_QUEUE = 10;
 static int NMEA_Queue[MAX_NMEA_QUEUE];
 
 void
@@ -53,7 +53,7 @@ InputEvents::processNmea(unsigned ne_id)
   assert(InMainThread());
 
   // add an event to the bottom of the queue
-  for (int i = 0; i < MAX_NMEA_QUEUE; i++) {
+  for (unsigned i = 0; i < MAX_NMEA_QUEUE; i++) {
     if (NMEA_Queue[i] == -1) {
       NMEA_Queue[i] = ne_id;
       break;
@@ -70,7 +70,7 @@ InputEvents::DoQueuedEvents()
   assert(InMainThread());
 
   int GCE_Queue_copy[MAX_GCE_QUEUE];
-  int i;
+  unsigned i;
 
   // copy the queue first, blocking
   {
@@ -97,7 +97,7 @@ InputEvents::processGlideComputer(unsigned gce_id)
   // add an event to the bottom of the queue
   const std::lock_guard lock{mutexEventQueue};
 
-  for (int i = 0; i < MAX_GCE_QUEUE; i++) {
+  for (unsigned i = 0; i < MAX_GCE_QUEUE; i++) {
     if (GCE_Queue[i] == -1) {
       GCE_Queue[i] = gce_id;
       break;
