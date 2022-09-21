@@ -92,7 +92,7 @@ public:
   void SaveCache(BufferedOutputStream &os) const;
   void LoadCache(BufferedReader &r);
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned CalcDistanceTo(IntPoint2D p) const noexcept;
 
   bool CheckTileVisibility(IntPoint2D view, unsigned view_radius) noexcept;
@@ -114,7 +114,7 @@ public:
    * @param x the pixel column within the tile; may be out of range
    * @param y the pixel row within the tile; may be out of range
    */
-  gcc_pure
+  [[gnu::pure]]
   TerrainHeight GetHeight(RasterLocation p) const noexcept;
 
   /**
@@ -126,7 +126,7 @@ public:
    * @param ix the sub-pixel column for interpolation (0..255)
    * @param iy the sub-pixel row for interpolation (0..255)
    */
-  gcc_pure
+  [[gnu::pure]]
   TerrainHeight GetInterpolatedHeight(unsigned x, unsigned y,
                                       unsigned ix, unsigned iy) const noexcept;
 
