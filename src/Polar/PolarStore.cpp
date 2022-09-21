@@ -24,8 +24,6 @@ Copyright_License {
 #include "Polar/PolarStore.hpp"
 #include "Polar/Polar.hpp"
 #include "Units/System.hpp"
-#include "util/Macros.hpp"
-#include "util/StringAPI.hxx"
 
 #include <cassert>
 
@@ -272,18 +270,6 @@ const Item &
 GetDefault() noexcept
 {
   return default_polar;
-}
-
-const Item &
-GetItem(const char *name) noexcept
-{
-  unsigned i;
-  for ( i = 0; i < ARRAY_SIZE(internal_polars); i++)
-  {
-    if ( StringIsEqual((const char *)(internal_polars[i].name), name) )
-      break;
-  }
-  return internal_polars[i];
 }
 
 std::span<const Item>

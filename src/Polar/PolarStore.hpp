@@ -78,10 +78,6 @@ struct Item {
 
 using const_iterator = const struct Item *;
 
-[[gnu::pure]]
-const Item &
-GetItem(const char *name) noexcept;
-
 [[gnu::const]]
 const Item &
 GetDefault() noexcept;

@@ -33,6 +33,7 @@
 #include "util/ConvertString.hpp"
 #include "util/Macros.hpp"
 #include "util/PrintException.hxx"
+#include "util/StringAPI.hxx"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -141,15 +142,25 @@ ValuePlausible(double ref, double used, double threshold = 0.05)
   return fabs(ref - used) < ref * threshold;
 }
 
+[[gnu::pure]]
+static auto
+GetPolarByName(const TCHAR *name) noexcept
+{
+  for (const auto &i : PolarStore::GetAll())
+    if (StringIsEqual(i.name, name))
+      return i.ToPolarInfo();
+
+  abort();
+}
+
 static void
 TestBuiltInPolarsPlausibility()
 {
   for(unsigned i = 0; i < ARRAY_SIZE(performanceData); i++) {
     const TCHAR *si = performanceData[i].name;
     WideToUTF8Converter polarName(si);
-    PolarInfo polar = PolarStore::GetItem(polarName.c_str()).ToPolarInfo();
+    const auto polar = GetPolarByName(si);
     PolarCoefficients pc = polar.CalculateCoefficients();
-
 
     ok(pc.IsValid(), polarName);
 

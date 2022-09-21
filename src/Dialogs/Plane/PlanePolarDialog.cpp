@@ -164,8 +164,9 @@ PlanePolarWidget::Save(bool &_changed) noexcept
 inline void
 PlanePolarWidget::ListClicked()
 {
+  const auto internal_polars = PolarStore::GetAll();
   ComboList list;
-  for (const auto &i : PolarStore::GetAll())
+  for (const auto &i : internal_polars)
     list.Append(i.name);
 
   list.Sort();
@@ -175,10 +176,7 @@ PlanePolarWidget::ListClicked()
   if (result < 0)
     return;
 
-  assert((unsigned)result < PolarStore::Count());
-
-  WideToUTF8Converter polar_name(list[result].string_value.c_str());
-  const PolarStore::Item &item = PolarStore::GetItem(polar_name);
+  const PolarStore::Item &item = internal_polars[result];
 
   plane.polar_shape.reference_mass = item.reference_mass;
   plane.empty_mass = item.empty_mass;
