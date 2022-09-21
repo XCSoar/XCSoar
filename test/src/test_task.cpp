@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -35,8 +35,8 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  #define NUM_RANDOM 50
-  #define NUM_TYPE_MANIPS 50
+  static constexpr unsigned NUM_RANDOM = 50;
+  static constexpr unsigned NUM_TYPE_MANIPS = 50;
   plan_tests(NUM_TASKS+2+NUM_RANDOM+8+NUM_TYPE_MANIPS);
 
   GlidePolar glide_polar(2);
@@ -60,13 +60,13 @@ int main(int argc, char** argv)
     }
   }
 
-  for (int i=0; i<NUM_TASKS+2; i++) {
+  for (unsigned i=0; i<NUM_TASKS+2; i++) {
     TaskManager task_manager(task_behaviour, waypoints);
     task_manager.SetGlidePolar(glide_polar);
     ok(test_task(task_manager, waypoints, i),GetTestName("construction",i,0),0);
   }
 
-  for (int i=0; i<NUM_RANDOM; i++) {
+  for (unsigned i=0; i<NUM_RANDOM; i++) {
     TaskManager task_manager(task_behaviour, waypoints);
     task_manager.SetGlidePolar(glide_polar);
     ok(test_task(task_manager, waypoints, 7),GetTestName("construction",7,0),0);

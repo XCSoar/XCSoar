@@ -26,7 +26,7 @@
 
 #include <stdio.h>
 
-#define NUM_WIND 9
+static constexpr unsigned NUM_WIND = 9;
 
 static inline double
 wind_to_mag(int n_wind)

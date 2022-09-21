@@ -40,7 +40,7 @@ main(int argc, char** argv)
 
   plan_tests(NUM_TASKS);
 
-  for (int j=0; j<NUM_TASKS; j++) {
+  for (unsigned j=0; j<NUM_TASKS; j++) {
     unsigned k = rand()%NUM_WIND;
     ok (test_flight_times(j,k), GetTestName("flight times",j,k),0);
   }

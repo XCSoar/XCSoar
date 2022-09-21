@@ -24,7 +24,7 @@
 
 #include "Task/TaskManager.hpp"
 
-#define NUM_TASKS 5
+static constexpr std::size_t NUM_TASKS = 5;
 
 bool test_task_mixed(TaskManager& task_manager,
                      const Waypoints &waypoints);

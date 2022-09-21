@@ -61,7 +61,7 @@ main(int argc, char** argv)
 
   plan_tests(NUM_WIND);
 
-  for (int i=0; i<NUM_WIND; i++) {
+  for (unsigned i=0; i<NUM_WIND; i++) {
     test_automc(5,i);
   }
   return exit_status();
