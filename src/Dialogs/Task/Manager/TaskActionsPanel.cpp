@@ -135,8 +135,10 @@ try {
                     &env))
     return;
 
-  if (!task)
+  if (!task) {
     ShowMessageBox(_("No task"), _("Error"), MB_OK|MB_ICONEXCLAMATION);
+    return;
+  }
 
   active_task = task->Clone(settings.task);
   *task_modified = true;
