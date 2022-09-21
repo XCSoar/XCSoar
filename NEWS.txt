@@ -11,6 +11,7 @@ Version 7.27 - not yet released
   - allow file explorer to access the XCSoar data files
 * Polars
   - add JS-1B (18m) polar
+  - add JS-1C (21m) polar
 
 Version 7.26 - 2022/09/03
 * user interface
