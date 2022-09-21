@@ -146,7 +146,6 @@ static void
 TestBuiltInPolarsPlausibility()
 {
   for(unsigned i = 0; i < ARRAY_SIZE(performanceData); i++) {
-    assert(i < PolarStore::Count());
     const TCHAR *si = performanceData[i].name;
     WideToUTF8Converter polarName(si);
     PolarInfo polar = PolarStore::GetItem(polarName.c_str()).ToPolarInfo();
