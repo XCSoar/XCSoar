@@ -29,8 +29,8 @@ Copyright_License {
 #include "ui/canvas/Features.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
 
-#define NUMAIRSPACECOLORS 16
-#define NUMAIRSPACEBRUSHES 8
+static constexpr unsigned NUMAIRSPACECOLORS = 16;
+static constexpr unsigned NUMAIRSPACEBRUSHES = 8;
 
 struct AirspaceRendererSettings;
 struct AirspaceClassRendererSettings;
