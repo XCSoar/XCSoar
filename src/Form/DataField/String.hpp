@@ -26,7 +26,7 @@ Copyright_License {
 #include "Base.hpp"
 #include "util/StaticString.hxx"
 
-#define EDITSTRINGSIZE 32
+static constexpr unsigned EDITSTRINGSIZE = 32;
 
 class DataFieldString: public DataField
 {
