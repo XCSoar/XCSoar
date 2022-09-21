@@ -32,13 +32,17 @@ struct PixelRect;
 class Menu;
 
 namespace ButtonLabel {
-  struct Expanded {
-    bool visible, enabled;
-    const TCHAR *text;
-  };
 
-  [[gnu::pure]]
-  Expanded Expand(const TCHAR *text, TCHAR *buffer, size_t size);
-
-  bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
+struct Expanded {
+  bool visible, enabled;
+  const TCHAR *text;
 };
+
+[[gnu::pure]]
+Expanded
+Expand(const TCHAR *text, TCHAR *buffer, size_t size);
+
+bool
+ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
+
+} // namespace ButtonLabel
