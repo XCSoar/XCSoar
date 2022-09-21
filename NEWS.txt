@@ -13,6 +13,7 @@ Version 7.27 - not yet released
   - add JS-1B (18m) polar
   - add JS-1C (21m) polar
   - add JS-3 (15m) polar
+  - add JS-3 (18m) polar
 
 Version 7.26 - 2022/09/03
 * user interface
