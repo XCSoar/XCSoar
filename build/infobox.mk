@@ -33,6 +33,7 @@ LIBINFOBOX_SOURCES = \
 	$(SRC)/InfoBoxes/Panel/MacCreadySetup.cpp \
 	$(SRC)/InfoBoxes/Panel/WindEdit.cpp \
 	$(SRC)/InfoBoxes/Panel/ATCReference.cpp \
+	$(SRC)/InfoBoxes/Panel/ATCSetup.cpp \
 	$(SRC)/InfoBoxes/Panel/RadioEdit.cpp
 
 LIBINFOBOX_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)

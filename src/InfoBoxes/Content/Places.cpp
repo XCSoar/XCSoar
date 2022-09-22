@@ -25,6 +25,7 @@ Copyright_License {
 #include "InfoBoxes/Data.hpp"
 #include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Panel/ATCReference.hpp"
+#include "InfoBoxes/Panel/ATCSetup.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Formatter/Units.hpp"
@@ -77,6 +78,7 @@ constexpr
 #endif
 const InfoBoxPanel atc_infobox_panels[] = {
   { N_("Reference"), LoadATCReferencePanel },
+  { N_("Setup"), LoadATCSetupPanel },
   { nullptr, nullptr }
 };
 
