@@ -23,6 +23,7 @@
 #pragma once
 
 #include "RoutePlanner.hpp"
+#include "ReachFan.hpp"
 
 /**
  * Specialization of #RoutePlanner which implements terrain avoidance.

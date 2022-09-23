@@ -28,7 +28,6 @@
 #include "AStar.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
 #include "Geo/SearchPointVector.hpp"
-#include "ReachFan.hpp"
 
 #include <utility>
 #include <unordered_set>
