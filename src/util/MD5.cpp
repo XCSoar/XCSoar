@@ -107,20 +107,20 @@ static constexpr MD5::State md5_start = {
   0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476
 };
 
-static inline uint32_t
-leftrotate(uint32_t x, uint32_t c)
+static constexpr uint32_t
+leftrotate(uint32_t x, uint32_t c) noexcept
 {
     return (x << c) | (x >> (32 - c));
 }
 
 void
-MD5::Initialise()
+MD5::Initialise() noexcept
 {
   Initialise(md5_start);
 }
 
 void
-MD5::Append(uint8_t ch)
+MD5::Append(uint8_t ch) noexcept
 {
   unsigned position = unsigned(message_length++) % ARRAY_SIZE(buff512bits);
   buff512bits[position++] = ch;
@@ -129,7 +129,7 @@ MD5::Append(uint8_t ch)
 }
 
 void
-MD5::Append(const void *data, size_t length)
+MD5::Append(const void *data, size_t length) noexcept
 {
   const uint8_t *i = (const uint8_t *)data, *const end = i + length;
 
@@ -141,13 +141,13 @@ MD5::Append(const void *data, size_t length)
  * Workaround for gcc's strict-aliasing warning.
  */
 static void
-WriteLE64(void *p, uint64_t value)
+WriteLE64(void *p, uint64_t value) noexcept
 {
   *(uint64_t *)p = ToLE64(value);
 }
 
 void
-MD5::Finalize()
+MD5::Finalize() noexcept
 {
   // append "0" bits until message length in bits ? 448 (mod 512)
   int buffer_left_over = message_length % 64;
@@ -190,7 +190,7 @@ MD5::Finalize()
 }
 
 void
-MD5::Process512(const uint8_t *s512in)
+MD5::Process512(const uint8_t *s512in) noexcept
 {
   // assume exactly 512 bits
 
@@ -235,7 +235,7 @@ MD5::Process512(const uint8_t *s512in)
 }
 
 char *
-MD5::GetDigest(char *buffer) const
+MD5::GetDigest(char *buffer) const noexcept
 {
   sprintf(buffer, "%08x%08x%08x%08x",
           ByteSwap32(state.a), ByteSwap32(state.b), ByteSwap32(state.c), ByteSwap32(state.d));
