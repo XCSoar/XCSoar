@@ -248,6 +248,10 @@ public:
 	constexpr
 	GlobalSliceAllocator(const GlobalSliceAllocator<U, size> &) {}
 
+	constexpr bool operator==(const GlobalSliceAllocator<T, size> &) const noexcept {
+		return true;
+	}
+
 	T *allocate(const size_type n) {
 		return allocator.allocate(n);
 	}
