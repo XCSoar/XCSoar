@@ -27,8 +27,8 @@ Copyright_License {
 void
 ProtectedRoutePlanner::SetTerrain(const RasterTerrain *terrain) noexcept
 {
-  ExclusiveLease lease(*this);
-  lease->SetTerrain(terrain);
+  const std::scoped_lock lock{route_mutex};
+  route_planner.SetTerrain(terrain);
 }
 
 void
@@ -39,9 +39,9 @@ ProtectedRoutePlanner::SetPolars(const GlideSettings &settings,
                                  const SpeedVector &wind,
                                  const int height_min_working) noexcept
 {
-  ExclusiveLease lease(*this);
-  lease->UpdatePolar(settings, config, glide_polar, safety_polar,
-                     wind, height_min_working);
+  const std::scoped_lock lock{route_mutex};
+  route_planner.UpdatePolar(settings, config, glide_polar, safety_polar,
+                            wind, height_min_working);
 }
 
 void
@@ -50,9 +50,9 @@ ProtectedRoutePlanner::SolveRoute(const AGeoPoint &dest,
                                   const RoutePlannerConfig &config,
                                   const int h_ceiling) noexcept
 {
-  ExclusiveLease lease(*this);
-  lease->Synchronise(airspaces, warnings, dest, start);
-  lease->Solve(dest, start, config, h_ceiling);
+  const std::scoped_lock lock{route_mutex};
+  route_planner.Synchronise(airspaces, warnings, dest, start);
+  route_planner.Solve(dest, start, config, h_ceiling);
 }
 
 void
@@ -66,10 +66,10 @@ ProtectedRoutePlanner::SolveReach(const AGeoPoint &origin,
   ReachFan rt, rw;
 
   {
-    ExclusiveLease lease(*this);
-    rt = lease->SolveReach(origin, config, h_ceiling, do_solve, false);
-    rw = lease->SolveReach(origin, config, h_ceiling, do_solve, true);
-    rpolars_reach = lease->GetReachPolar();
+    const std::scoped_lock lock{route_mutex};
+    rt = route_planner.SolveReach(origin, config, h_ceiling, do_solve, false);
+    rw = route_planner.SolveReach(origin, config, h_ceiling, do_solve, true);
+    rpolars_reach = route_planner.GetReachPolar();
   }
 
   /* we lock this mutex not during the expensive reach calculation,

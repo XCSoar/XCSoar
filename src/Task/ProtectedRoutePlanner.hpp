@@ -25,7 +25,6 @@
 #include "RoutePlannerGlue.hpp"
 #include "Engine/Route/ReachFan.hpp"
 #include "Engine/Route/RoutePolars.hpp"
-#include "thread/Guard.hpp"
 #include "thread/Mutex.hxx"
 
 struct GlideSettings;
@@ -38,10 +37,13 @@ class Airspaces;
  * Facade to task/airspace/waypoints as used by threads,
  * to manage locking
  */
-class ProtectedRoutePlanner: public Guard<RoutePlannerGlue>
+class ProtectedRoutePlanner
 {
   const Airspaces &airspaces;
   const ProtectedAirspaceWarningManager *warnings;
+
+  mutable Mutex route_mutex;
+  RoutePlannerGlue &route_planner;
 
   /**
    * This mutex protects the "reach" fields.  It is a separate mutex
@@ -57,14 +59,14 @@ class ProtectedRoutePlanner: public Guard<RoutePlannerGlue>
 public:
   ProtectedRoutePlanner(RoutePlannerGlue &route, const Airspaces &_airspaces,
                         const ProtectedAirspaceWarningManager *_warnings) noexcept
-    :Guard<RoutePlannerGlue>(route),
-     airspaces(_airspaces), warnings(_warnings) {}
+    :airspaces(_airspaces), warnings(_warnings),
+     route_planner(route) {}
 
   void Reset() noexcept {
     ClearReach();
 
-    ExclusiveLease lease(*this);
-    lease->Reset();
+    const std::scoped_lock lock{route_mutex};
+    route_planner.Reset();
   }
 
   void ClearReach() noexcept {
