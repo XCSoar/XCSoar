@@ -24,6 +24,8 @@
 
 #include "util/MD5.hpp"
 
+#include <string_view>
+
 #define XCSOAR_IGC_CODE "XCS"
 
 class Path;
@@ -63,7 +65,7 @@ public:
   /**
    * @return returns true if record is appended, false if skipped
    */
-  bool AppendRecordToBuffer(const char *szIn) noexcept;
+  bool AppendRecordToBuffer(std::string_view src) noexcept;
   void FinalizeBuffer() noexcept;
 
   /**
@@ -99,12 +101,12 @@ public:
   void VerifyGRecordInFile(Path path);
 
 private:
-  void AppendStringToBuffer(const char *szIn) noexcept;
+  void AppendStringToBuffer(std::string_view src) noexcept;
 
   /**
    * returns false if record is not to be included in
    * G record calc (see IGC specs)
    */
   [[gnu::pure]]
-  static bool IncludeRecordInGCalc(const char *szIn) noexcept;
+  static bool IncludeRecordInGCalc(std::string_view src) noexcept;
 };

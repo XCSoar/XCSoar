@@ -33,6 +33,8 @@
 
 #include <string.h>
 
+using std::string_view_literals::operator""sv;
+
 /**
  * Security theater.
  */
@@ -53,13 +55,13 @@ GRecord::Initialize() noexcept
 }
 
 bool
-GRecord::AppendRecordToBuffer(const char *in) noexcept
+GRecord::AppendRecordToBuffer(std::string_view in) noexcept
 {
   if (!IncludeRecordInGCalc(in))
     return false;
 
-  if (memcmp(in, "HFFTYFRTYPE:XCSOAR,XCSOAR ", 26) == 0 &&
-      strstr(in + 25, " 6.5 ") != nullptr)
+  if (in.starts_with("HFFTYFRTYPE:XCSOAR,XCSOAR "sv) &&
+      in.find(" 6.5 ", 25) != in.npos)
     /* this is XCSoar 6.5: enable the G record workaround */
     ignore_comma = false;
 
@@ -72,10 +74,9 @@ GRecord::AppendRecordToBuffer(const char *in) noexcept
  * it's a valid IGC character
  */
 static void
-AppendIGCString(MD5 &md5, const char *s, bool ignore_comma) noexcept
+AppendIGCString(MD5 &md5, std::string_view s, bool ignore_comma) noexcept
 {
-  while (*s != '\0') {
-    const char ch = *s++;
+  for (const char ch : s) {
     if (ignore_comma && ch == ',')
       continue;
 
@@ -85,7 +86,7 @@ AppendIGCString(MD5 &md5, const char *s, bool ignore_comma) noexcept
 }
 
 void
-GRecord::AppendStringToBuffer(const char *in) noexcept
+GRecord::AppendStringToBuffer(std::string_view in) noexcept
 {
   for (auto &i : md5)
     AppendIGCString(i, in, ignore_comma);
@@ -106,18 +107,21 @@ GRecord::GetDigest(char *output) const noexcept
 }
 
 bool
-GRecord::IncludeRecordInGCalc(const char *in) noexcept
+GRecord::IncludeRecordInGCalc(std::string_view in) noexcept
 {
-  switch (in[0]) {
+  if (in.empty())
+    return false;
+
+  switch (in.front()) {
   case 'L':
     // only include L records made by XCS
-    return memcmp(in + 1, XCSOAR_IGC_CODE, 3) == 0;
+    return in.substr(1).starts_with(XCSOAR_IGC_CODE);
 
   case 'G':
     return false;
 
   case 'H':
-    return in[1] != 'O' && in[1] != 'P';
+    return !in.substr(1).starts_with("OP"sv);
 
   default:
     return true;
