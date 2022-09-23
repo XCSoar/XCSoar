@@ -27,6 +27,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Version.hpp"
 #include "system/Path.hpp"
+#include "util/SpanCast.hxx"
 
 #include <cassert>
 
@@ -43,9 +44,9 @@ IGCWriter::IGCWriter(Path path)
 }
 
 void
-IGCWriter::CommitLine(const char *line)
+IGCWriter::CommitLine(std::string_view line)
 {
-  buffered.Write(line);
+  buffered.Write(AsBytes(line));
   buffered.Write('\n');
 
   grecord.AppendRecordToBuffer(line);
@@ -58,12 +59,11 @@ IGCWriter::WriteLine(const char *line)
   assert(strchr(line, '\n') == NULL);
 
   char *const dest = BeginLine();
-  char *const end = dest + MAX_IGC_BUFF - 1;
+  char *const end = dest + MAX_IGC_BUFF;
 
   char *p = CopyIGCString(dest, end, line);
-  *p = '\0';
 
-  CommitLine(dest);
+  CommitLine(std::string_view(dest, p - dest));
 }
 
 void
@@ -73,13 +73,12 @@ IGCWriter::WriteLine(const char *a, const TCHAR *b)
   assert(a_length < MAX_IGC_BUFF);
 
   char *const dest = BeginLine();
-  char *const end = dest + MAX_IGC_BUFF - 1, *p = dest;
+  char *const end = dest + MAX_IGC_BUFF, *p = dest;
 
   p = std::copy_n(a, a_length, p);
   p = CopyIGCString(p, end, b);
-  *p = '\0';
 
-  CommitLine(dest);
+  CommitLine(std::string_view(dest, p - dest));
 }
 
 void

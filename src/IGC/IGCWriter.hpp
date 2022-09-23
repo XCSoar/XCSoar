@@ -28,6 +28,8 @@ Copyright_License {
 #include "io/FileOutputStream.hxx"
 #include "io/BufferedOutputStream.hxx"
 
+#include <string_view>
+
 #include <tchar.h>
 
 class Path;
@@ -76,7 +78,7 @@ private:
   /**
    * Finish writing the line.
    */
-  void CommitLine(const char *line);
+  void CommitLine(std::string_view line);
 
   void WriteLine(const char *line);
   void WriteLine(const char *a, const TCHAR *b);
