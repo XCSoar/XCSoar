@@ -33,11 +33,11 @@ import android.graphics.Canvas;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
-public class TextUtil {
-  private Paint paint;
-  private Paint.FontMetricsInt metrics;
-  private int[] extent = new int[2];
-  private int[] id = new int[5];
+public final class TextUtil {
+  private final Paint paint;
+  private final Paint.FontMetricsInt metrics;
+  private final int[] extent = new int[2];
+  private final int[] id = new int[5];
 
   public TextUtil(int style, int textSize,
                   int paint_flags, boolean monospace) {
