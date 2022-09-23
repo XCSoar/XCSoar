@@ -108,28 +108,20 @@ GRecord::GetDigest(char *output) const noexcept
 bool
 GRecord::IncludeRecordInGCalc(const char *in) noexcept
 {
-  bool valid = false;
-
   switch (in[0]) {
   case 'L':
-    if (memcmp(in + 1, XCSOAR_IGC_CODE, 3) == 0)
-      // only include L records made by XCS
-      valid = true;
-    break;
+    // only include L records made by XCS
+    return memcmp(in + 1, XCSOAR_IGC_CODE, 3) == 0;
 
   case 'G':
-    break;
+    return false;
 
   case 'H':
-    if ((in[1] != 'O') && (in[1] != 'P'))
-      valid = true;
-    break;
+    return in[1] != 'O' && in[1] != 'P';
 
   default:
-    valid = true;
+    return true;
   }
-
-  return valid;
 }
 
 void
