@@ -24,7 +24,7 @@ Copyright_License {
 #pragma once
 
 #include "LoggerImpl.hpp"
-#include "thread/SharedMutex.hpp"
+#include "thread/Mutex.hxx"
 
 #include <tchar.h>
 
@@ -35,7 +35,7 @@ class ProtectedTaskManager;
 
 class Logger {
   LoggerImpl logger;
-  mutable SharedMutex lock;
+  mutable Mutex lock;
 
   void LogEvent(const NMEAInfo &gps_info, const char*);
 

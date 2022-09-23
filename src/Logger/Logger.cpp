@@ -73,7 +73,7 @@ Logger::LogPilotEvent(const NMEAInfo &gps_info)
 bool
 Logger::IsLoggerActive() const noexcept
 {
-  const std::shared_lock<SharedMutex> protect(lock);
+  const std::lock_guard protect{lock};
   return logger.IsActive();
 }
 
