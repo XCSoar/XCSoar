@@ -28,9 +28,6 @@ Copyright_License {
 #include "Logger/Settings.hpp"
 #include "Logger/Logger.hpp"
 
-LogComputer::LogComputer()
-  :logger(NULL) {}
-
 void
 LogComputer::Reset()
 {

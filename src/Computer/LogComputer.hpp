@@ -42,11 +42,9 @@ class LogComputer {
   /** number of points to log at high rate */
   unsigned fast_log_num;
 
-  Logger *logger;
+  Logger *logger = nullptr;
 
 public:
-  LogComputer();
-
   void SetLogger(Logger *_logger) {
     assert(logger == nullptr);
     assert(_logger != nullptr);
