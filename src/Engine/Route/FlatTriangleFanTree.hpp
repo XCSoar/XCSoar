@@ -56,7 +56,7 @@ private:
 
   FlatBoundingBox bb_children;
   LeafVector children;
-  const uint_least8_t depth;
+  uint_least8_t depth;
   bool gaps_filled = false;
 
 public:
