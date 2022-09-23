@@ -27,6 +27,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Logger/Settings.hpp"
 #include "Logger/Logger.hpp"
+#include "LogFile.hpp"
 
 void
 LogComputer::Reset()
@@ -37,15 +38,17 @@ LogComputer::Reset()
 
 void
 LogComputer::StartTask(const NMEAInfo &basic)
-{
+try {
   if (logger != NULL)
     logger->LogStartEvent(basic);
+} catch (...) {
+  LogError(std::current_exception(), "Logger I/O error");
 }
 
 bool
 LogComputer::Run(const MoreData &basic, const DerivedInfo &calculated,
                  const LoggerSettings &settings_logger)
-{
+try {
   const bool location_jump = basic.location_available &&
     last_location.IsValid() &&
     basic.location.DistanceS(last_location) > 200;
@@ -71,4 +74,7 @@ LogComputer::Run(const MoreData &basic, const DerivedInfo &calculated,
       logger->LogPoint(basic);
 
   return true;
+} catch (...) {
+  LogError(std::current_exception(), "Logger I/O error");
+  return false;
 }
