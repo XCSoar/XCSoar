@@ -66,16 +66,6 @@ public:
 
 private:
   /**
-   * Begin writing a new line.  The returned buffer has #MAX_IGC_BUFF
-   * bytes.  Call CommitLine() when you are done writing to the buffer.
-   *
-   * @return nullptr on error
-   */
-  char *BeginLine() {
-    return buffer;
-  }
-
-  /**
    * Finish writing the line.
    */
   void CommitLine(std::string_view line);
