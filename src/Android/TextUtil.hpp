@@ -37,7 +37,7 @@ class TextUtil : protected Java::GlobalObject {
   static jmethodID midGetTextTextureGL;
 
   unsigned height, ascent_height, capital_height;
-  unsigned line_spacing, style;
+  unsigned line_spacing;
 
   TextUtil(const Java::LocalObject &_obj) noexcept;
 
@@ -78,9 +78,5 @@ public:
 
   unsigned GetLineSpacing() const noexcept {
     return line_spacing;
-  }
-
-  unsigned get_style() const noexcept {
-    return style;
   }
 };

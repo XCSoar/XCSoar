@@ -62,10 +62,9 @@ public final class TextUtil {
     paint.getTextBounds(m, 0, 1, bounds);
 
     metrics[0] = Math.round(paint.descent() - paint.ascent());
-    metrics[1] = paint.getTypeface().getStyle();
-    metrics[2] = Math.round(-paint.ascent());
-    metrics[3] = bounds.height();
-    metrics[4] = Math.round(paint.getFontSpacing());
+    metrics[1] = Math.round(-paint.ascent());
+    metrics[2] = bounds.height();
+    metrics[3] = Math.round(paint.getFontSpacing());
   }
 
   public int[] getTextBounds(String text) {

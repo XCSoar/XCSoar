@@ -72,10 +72,9 @@ TextUtil::TextUtil(const Java::LocalObject &_obj) noexcept
   std::array<jint, 5> metrics;
   e.GetIntArrayRegion(metricsArray, 0, metrics.size(), metrics.data());
   height = metrics[0];
-  style = metrics[1];
-  ascent_height = metrics[2];
-  capital_height = metrics[3];
-  line_spacing = metrics[4];
+  ascent_height = metrics[1];
+  capital_height = metrics[2];
+  line_spacing = metrics[3];
 }
 
 TextUtil *
