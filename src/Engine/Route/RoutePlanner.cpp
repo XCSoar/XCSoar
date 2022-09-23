@@ -356,6 +356,7 @@ RoutePlanner::UpdatePolar(const GlideSettings &settings,
     // make copy to avoid waste
     break;
   case RoutePlannerConfig::Polar::SAFETY:
+    rpolars_reach.SetConfig(config);
     rpolars_reach.Initialise(settings, safety_polar, wind);
     break;
   }
