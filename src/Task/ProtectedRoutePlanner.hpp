@@ -37,7 +37,6 @@ class Airspaces;
  */
 class ProtectedRoutePlanner: public Guard<RoutePlannerGlue>
 {
-protected:
   const Airspaces &airspaces;
   const ProtectedAirspaceWarningManager *warnings;
 
