@@ -85,7 +85,7 @@ public final class TextUtil {
     bmp.eraseColor(Color.TRANSPARENT);
     paint.setColor(Color.WHITE);
     Canvas canvas = new Canvas(bmp);
-    canvas.drawText(text, 0, -paint.getFontMetricsInt().ascent, paint);
+    canvas.drawText(text, 0, -metrics.ascent, paint);
 
     // create OpenGL texture
     if (!BitmapUtil.bitmapToOpenGL(bmp, true, false, id))
