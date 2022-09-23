@@ -30,14 +30,14 @@ Copyright_License {
 #include "LogFile.hpp"
 
 void
-LogComputer::Reset()
+LogComputer::Reset() noexcept
 {
   last_location = GeoPoint::Invalid();
   fast_log_num = 0;
 }
 
 void
-LogComputer::StartTask(const NMEAInfo &basic)
+LogComputer::StartTask(const NMEAInfo &basic) noexcept
 try {
   if (logger != NULL)
     logger->LogStartEvent(basic);
@@ -47,7 +47,7 @@ try {
 
 bool
 LogComputer::Run(const MoreData &basic, const DerivedInfo &calculated,
-                 const LoggerSettings &settings_logger)
+                 const LoggerSettings &settings_logger) noexcept
 try {
   const bool location_jump = basic.location_available &&
     last_location.IsValid() &&

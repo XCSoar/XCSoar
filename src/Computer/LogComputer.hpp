@@ -45,19 +45,19 @@ class LogComputer {
   Logger *logger = nullptr;
 
 public:
-  void SetLogger(Logger *_logger) {
+  void SetLogger(Logger *_logger) noexcept {
     assert(logger == nullptr);
     assert(_logger != nullptr);
 
     logger = _logger;
   }
 
-  void Reset();
-  void StartTask(const NMEAInfo &basic);
+  void Reset() noexcept;
+  void StartTask(const NMEAInfo &basic) noexcept;
   bool Run(const MoreData &basic, const DerivedInfo &calculated,
-           const LoggerSettings &settings_logger);
+           const LoggerSettings &settings_logger) noexcept;
 
-  void SetFastLogging() {
+  void SetFastLogging() noexcept {
     fast_log_num = 5;
   }
 };
