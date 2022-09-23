@@ -42,45 +42,45 @@ class ProtectedRoutePlanner: public Guard<RoutePlannerGlue>
 
 public:
   ProtectedRoutePlanner(RoutePlannerGlue &route, const Airspaces &_airspaces,
-                        const ProtectedAirspaceWarningManager *_warnings)
+                        const ProtectedAirspaceWarningManager *_warnings) noexcept
     :Guard<RoutePlannerGlue>(route),
      airspaces(_airspaces), warnings(_warnings) {}
 
-  void Reset() {
+  void Reset() noexcept {
     ExclusiveLease lease(*this);
     lease->Reset();
   }
 
-  void ClearReach() {
+  void ClearReach() noexcept {
     ExclusiveLease lease(*this);
     lease->ClearReach();
   }
 
   [[gnu::pure]]
-  bool IsTerrainReachEmpty() const {
+  bool IsTerrainReachEmpty() const noexcept {
     Lease lease(*this);
     return lease->IsTerrainReachEmpty();
   }
 
-  void SetTerrain(const RasterTerrain *terrain);
+  void SetTerrain(const RasterTerrain *terrain) noexcept;
 
   void SetPolars(const GlideSettings &settings,
                  const RoutePlannerConfig &config,
                  const GlidePolar &glide_polar, const GlidePolar &safety_polar,
                  const SpeedVector &wind,
-                 const int height_min_working);
+                 int height_min_working) noexcept;
 
   void SolveRoute(const AGeoPoint &dest, const AGeoPoint &start,
                   const RoutePlannerConfig &config,
-                  const int h_ceiling);
+                  int h_ceiling) noexcept;
 
   [[gnu::pure]]
   GeoPoint Intersection(const AGeoPoint &origin,
-                        const AGeoPoint &destination) const;
+                        const AGeoPoint &destination) const noexcept;
 
   void SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
-                  int h_ceiling, bool do_solve);
+                  int h_ceiling, bool do_solve) noexcept;
 
   [[gnu::pure]]
-  const FlatProjection GetTerrainReachProjection() const;
+  const FlatProjection GetTerrainReachProjection() const noexcept;
 };

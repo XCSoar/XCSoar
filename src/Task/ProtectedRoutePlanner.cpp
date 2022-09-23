@@ -24,7 +24,7 @@ Copyright_License {
 #include "ProtectedRoutePlanner.hpp"
 
 void
-ProtectedRoutePlanner::SetTerrain(const RasterTerrain *terrain)
+ProtectedRoutePlanner::SetTerrain(const RasterTerrain *terrain) noexcept
 {
   ExclusiveLease lease(*this);
   lease->SetTerrain(terrain);
@@ -36,7 +36,7 @@ ProtectedRoutePlanner::SetPolars(const GlideSettings &settings,
                                  const GlidePolar &glide_polar,
                                  const GlidePolar &safety_polar,
                                  const SpeedVector &wind,
-                                 const int height_min_working)
+                                 const int height_min_working) noexcept
 {
   ExclusiveLease lease(*this);
   lease->UpdatePolar(settings, config, glide_polar, safety_polar,
@@ -47,7 +47,7 @@ void
 ProtectedRoutePlanner::SolveRoute(const AGeoPoint &dest,
                                   const AGeoPoint &start,
                                   const RoutePlannerConfig &config,
-                                  const int h_ceiling)
+                                  const int h_ceiling) noexcept
 {
   ExclusiveLease lease(*this);
   lease->Synchronise(airspaces, warnings, dest, start);
@@ -56,7 +56,7 @@ ProtectedRoutePlanner::SolveRoute(const AGeoPoint &dest,
 
 GeoPoint
 ProtectedRoutePlanner::Intersection(const AGeoPoint &origin,
-                                    const AGeoPoint &destination) const
+                                    const AGeoPoint &destination) const noexcept
 {
   Lease lease(*this);
   return lease->Intersection(origin, destination);
@@ -66,14 +66,14 @@ void
 ProtectedRoutePlanner::SolveReach(const AGeoPoint &origin,
                                   const RoutePlannerConfig &config,
                                   const int h_ceiling,
-                                  const bool do_solve)
+                                  const bool do_solve) noexcept
 {
   ExclusiveLease lease(*this);
   lease->SolveReach(origin, config, h_ceiling, do_solve);
 }
 
 const FlatProjection
-ProtectedRoutePlanner::GetTerrainReachProjection() const
+ProtectedRoutePlanner::GetTerrainReachProjection() const noexcept
 {
   Lease lease(*this);
   return lease->GetTerrainReachProjection();
