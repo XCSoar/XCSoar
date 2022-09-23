@@ -26,7 +26,6 @@
 #include "NMEA/Info.hpp"
 #include "Language/Language.hpp"
 #include "Dialogs/Message.hpp"
-#include "LogFile.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Computer/Settings.hpp"
