@@ -24,6 +24,7 @@ Copyright_License {
 #include "ManageFlarmDialog.hpp"
 #include "FLARM/ConfigWidget.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/Error.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
@@ -83,8 +84,13 @@ ManageFLARMWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   });
 
   AddButton(_("Reboot"), [this](){
-    MessageOperationEnvironment env;
-    device.Restart(env);
+    try {
+      MessageOperationEnvironment env;
+      device.Restart(env);
+    } catch (OperationCancelled) {
+    } catch (...) {
+      ShowError(std::current_exception(), _("Error"));
+    }
   });
 }
 
