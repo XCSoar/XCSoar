@@ -23,7 +23,8 @@
 #pragma once
 
 #include "RoutePlanner.hpp"
-#include "ReachFan.hpp"
+
+class ReachFan;
 
 /**
  * Specialization of #RoutePlanner which implements terrain avoidance.
@@ -43,9 +44,6 @@ class TerrainRoute: public RoutePlanner
   /** Aircraft performance model for reach to working floor */
   RoutePolars rpolars_reach_working;
 
-  ReachFan reach_terrain;
-  ReachFan reach_working;
-
   mutable RoutePoint m_inx_terrain;
 
 public:
@@ -59,24 +57,9 @@ public:
     terrain = _terrain;
   }
 
-  bool IsTerrainReachEmpty() const noexcept {
-    return reach_terrain.IsEmpty();
+  const auto &GetReachPolar() const noexcept {
+    return rpolars_reach;
   }
-
-  const FlatProjection &GetTerrainReachProjection() const noexcept {
-    return reach_terrain.GetProjection();
-  }
-
-  int GetTerrainBase() const noexcept {
-    return reach_terrain.GetTerrainBase();
-  }
-
-  /**
-   * Delete all reach fans.
-   */
-  void ClearReach() noexcept;
-
-  void Reset() noexcept override;
 
   void UpdatePolar(const GlideSettings &settings,
                    const RoutePlannerConfig &config,
@@ -86,45 +69,16 @@ public:
                    int height_min_working=0) noexcept;
 
   /**
-   * Solve reach footprint to terrain
+   * Solve reach footprint to terrain or working height.
    *
    * @param origin The start of the search (current aircraft location)
    * @param do_solve actually solve or just perform minimal calculations
-   *
-   * @return True if reach was scanned
-   */
-  bool SolveReachTerrain(const AGeoPoint &origin, const RoutePlannerConfig &config,
-                         int h_ceiling, bool do_solve=true) noexcept;
-
-  /**
-   * Solve reach footprint to working height
-   *
-   * @param origin The start of the search (current aircraft location)
-   * @param do_solve actually solve or just perform minimal calculations
-   *
-   * @return True if reach was scanned
-   */
-  bool SolveReachWorking(const AGeoPoint &origin, const RoutePlannerConfig &config,
-                         int h_ceiling, bool do_solve=true) noexcept;
-
-  /**
-   * Find arrival height at destination.
-   *
-   * Requires solve_reach() to have been called for positive results.
-   *
-   * @param dest Destination location
-   * @param arrival_height_reach height at arrival (terrain reach) or -1 if out of reach
-   * @param arrival_height_direct height at arrival (pure glide reach) or -1 if out of reach
-   *
-   * @return true if check was successful
    */
   [[gnu::pure]]
-  std::optional<ReachResult> FindPositiveArrival(const AGeoPoint &dest) const noexcept;
-
-  /** Visit reach (working or terrain reach) */
-  void AcceptInRange(const GeoBounds &bounds,
-                     FlatTriangleFanVisitor &visitor,
-                     bool working) const noexcept;
+  ReachFan SolveReach(const AGeoPoint &origin,
+                      const RoutePlannerConfig &config,
+                      int h_ceiling, bool do_solve,
+                      bool working) noexcept;
 
   /**
    * Determine if intersection with terrain occurs in forwards direction from

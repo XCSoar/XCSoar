@@ -146,18 +146,6 @@ void PrintHelper::print_route(RoutePlanner& r)
 #include "Route/ReachFan.hpp"
 
 void
-PrintHelper::print_reach_terrain_tree(const TerrainRoute &r)
-{
-  print(r.reach_terrain);
-}
-
-void
-PrintHelper::print_reach_working_tree(const TerrainRoute &r)
-{
-  print(r.reach_working);
-}
-
-void
 PrintHelper::print(const ReachFan& r)
 {
   print(r.root);

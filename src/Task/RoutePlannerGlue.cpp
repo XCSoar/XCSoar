@@ -25,6 +25,7 @@
 #include "Airspace/ActivePredicate.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "Engine/Route/ReachResult.hpp"
+#include "Route/ReachFan.hpp"
 
 void
 RoutePlannerGlue::SetTerrain(const RasterTerrain *_terrain)
@@ -63,25 +64,18 @@ RoutePlannerGlue::Solve(const AGeoPoint &origin,
   return planner.Solve(origin, destination, config, h_ceiling);
 }
 
-void
+ReachFan
 RoutePlannerGlue::SolveReach(const AGeoPoint &origin,
-                              const RoutePlannerConfig &config,
-                              const int h_ceiling, const bool do_solve)
+                             const RoutePlannerConfig &config,
+                             const int h_ceiling, const bool do_solve,
+                             const bool working) noexcept
 {
   if (terrain) {
     RasterTerrain::Lease lease(*terrain);
-    planner.SolveReachTerrain(origin, config, h_ceiling, do_solve);
-    planner.SolveReachWorking(origin, config, h_ceiling, do_solve);
+    return planner.SolveReach(origin, config, h_ceiling, do_solve, working);
   } else {
-    planner.SolveReachTerrain(origin, config, h_ceiling, do_solve);
-    planner.SolveReachWorking(origin, config, h_ceiling, do_solve);
+    return planner.SolveReach(origin, config, h_ceiling, do_solve, working);
   }
-}
-
-std::optional<ReachResult>
-RoutePlannerGlue::FindPositiveArrival(const AGeoPoint &dest) const noexcept
-{
-  return planner.FindPositiveArrival(dest);
 }
 
 GeoPoint
@@ -90,10 +84,4 @@ RoutePlannerGlue::Intersection(const AGeoPoint &origin,
 {
   RasterTerrain::Lease lease(*terrain);
   return planner.Intersection(origin, destination);
-}
-
-int
-RoutePlannerGlue::GetTerrainBase() const
-{
-  return planner.GetTerrainBase();
 }

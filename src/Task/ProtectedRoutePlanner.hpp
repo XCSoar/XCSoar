@@ -22,8 +22,11 @@
 
 #pragma once
 
+#include "RoutePlannerGlue.hpp"
+#include "Engine/Route/ReachFan.hpp"
+#include "Engine/Route/RoutePolars.hpp"
 #include "thread/Guard.hpp"
-#include "Task/RoutePlannerGlue.hpp"
+#include "thread/Mutex.hxx"
 
 struct GlideSettings;
 struct RoutePlannerConfig;
@@ -40,6 +43,17 @@ class ProtectedRoutePlanner: public Guard<RoutePlannerGlue>
   const Airspaces &airspaces;
   const ProtectedAirspaceWarningManager *warnings;
 
+  /**
+   * This mutex protects the "reach" fields.  It is a separate mutex
+   * to reduce lock contention between #CalculationThread and
+   * #DrawThread.
+   */
+  mutable Mutex reach_mutex;
+
+  RoutePolars rpolars_reach;
+  ReachFan reach_terrain;
+  ReachFan reach_working;
+
 public:
   ProtectedRoutePlanner(RoutePlannerGlue &route, const Airspaces &_airspaces,
                         const ProtectedAirspaceWarningManager *_warnings) noexcept
@@ -47,19 +61,22 @@ public:
      airspaces(_airspaces), warnings(_warnings) {}
 
   void Reset() noexcept {
+    ClearReach();
+
     ExclusiveLease lease(*this);
     lease->Reset();
   }
 
   void ClearReach() noexcept {
-    ExclusiveLease lease(*this);
-    lease->ClearReach();
+    const std::scoped_lock lock{reach_mutex};
+    reach_terrain.Reset();
+    reach_working.Reset();
   }
 
   [[gnu::pure]]
   bool IsTerrainReachEmpty() const noexcept {
-    Lease lease(*this);
-    return lease->IsTerrainReachEmpty();
+    const std::scoped_lock lock{reach_mutex};
+    return reach_terrain.IsEmpty();
   }
 
   void SetTerrain(const RasterTerrain *terrain) noexcept;
@@ -83,4 +100,14 @@ public:
 
   [[gnu::pure]]
   const FlatProjection GetTerrainReachProjection() const noexcept;
+
+  [[gnu::pure]]
+  std::optional<ReachResult> FindPositiveArrival(const AGeoPoint &dest) const noexcept;
+
+  void AcceptInRange(const GeoBounds &bounds,
+                     FlatTriangleFanVisitor &visitor,
+                     bool working) const noexcept;
+
+  [[gnu::pure]]
+  int GetTerrainBase() const noexcept;
 };

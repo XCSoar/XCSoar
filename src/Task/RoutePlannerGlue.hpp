@@ -50,14 +50,6 @@ public:
                    const AGeoPoint &origin,
                    const AGeoPoint &destination);
 
-  bool IsTerrainReachEmpty() const {
-    return planner.IsTerrainReachEmpty();
-  }
-
-  void ClearReach() {
-    planner.ClearReach();
-  }
-
   void Reset() {
     planner.Reset();
   }
@@ -70,25 +62,15 @@ public:
     return planner.GetSolution();
   }
 
-  void SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
-                  int h_ceiling, bool do_solve);
-
   [[gnu::pure]]
-  std::optional<ReachResult> FindPositiveArrival(const AGeoPoint &dest) const noexcept;
+  ReachFan SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
+                      int h_ceiling, bool do_solve, bool working) noexcept;
 
-  const FlatProjection &GetTerrainReachProjection() const {
-    return planner.GetTerrainReachProjection();
-  }
-
-  void AcceptInRange(const GeoBounds &bounds,
-                     FlatTriangleFanVisitor &visitor,
-                     bool working) const {
-    planner.AcceptInRange(bounds, visitor, working);
+  const auto &GetReachPolar() const noexcept {
+    return planner.GetReachPolar();
   }
 
   [[gnu::pure]]
   GeoPoint Intersection(const AGeoPoint &origin,
                         const AGeoPoint &destination) const;
-
-  int GetTerrainBase() const;
 };

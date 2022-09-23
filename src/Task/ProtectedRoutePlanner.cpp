@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "ProtectedRoutePlanner.hpp"
+#include "Engine/Route/ReachResult.hpp"
 
 void
 ProtectedRoutePlanner::SetTerrain(const RasterTerrain *terrain) noexcept
@@ -68,13 +69,51 @@ ProtectedRoutePlanner::SolveReach(const AGeoPoint &origin,
                                   const int h_ceiling,
                                   const bool do_solve) noexcept
 {
-  ExclusiveLease lease(*this);
-  lease->SolveReach(origin, config, h_ceiling, do_solve);
+  /* these local variables help avoid locking both mutexes at the same
+     time */
+  ReachFan rt, rw;
+
+  {
+    ExclusiveLease lease(*this);
+    rt = lease->SolveReach(origin, config, h_ceiling, do_solve, false);
+    rw = lease->SolveReach(origin, config, h_ceiling, do_solve, true);
+    rpolars_reach = lease->GetReachPolar();
+  }
+
+  /* we lock this mutex not during the expensive reach calculation,
+     but only for moving the result to the mutex-protected fields */
+  const std::scoped_lock lock{reach_mutex};
+  reach_terrain = std::move(rt);
+  reach_working = std::move(rw);
 }
 
 const FlatProjection
 ProtectedRoutePlanner::GetTerrainReachProjection() const noexcept
 {
-  Lease lease(*this);
-  return lease->GetTerrainReachProjection();
+  const std::scoped_lock lock{reach_mutex};
+  return reach_terrain.GetProjection();
+}
+
+std::optional<ReachResult>
+ProtectedRoutePlanner::FindPositiveArrival(const AGeoPoint &dest) const noexcept
+{
+  const std::scoped_lock lock{reach_mutex};
+  return reach_terrain.FindPositiveArrival(dest, rpolars_reach);
+}
+
+void
+ProtectedRoutePlanner::AcceptInRange(const GeoBounds &bounds,
+                                     FlatTriangleFanVisitor &visitor,
+                                     bool working) const noexcept
+{
+  const std::scoped_lock lock{reach_mutex};
+  const auto &reach = working ? reach_terrain : reach_working;
+  reach.AcceptInRange(bounds, visitor);
+}
+
+int
+ProtectedRoutePlanner::GetTerrainBase() const noexcept
+{
+  const std::scoped_lock lock{reach_mutex};
+  return reach_terrain.GetTerrainBase();
 }

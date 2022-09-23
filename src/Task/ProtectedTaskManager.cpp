@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "ProtectedTaskManager.hpp"
-#include "Task/RoutePlannerGlue.hpp"
+#include "ProtectedRoutePlanner.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
@@ -155,7 +155,8 @@ ProtectedTaskManager::Reset()
 }
 
 void
-ProtectedTaskManager::SetRoutePlanner(const RoutePlannerGlue *_route) {
+ProtectedTaskManager::SetRoutePlanner(const ProtectedRoutePlanner *_route) noexcept
+{
   intersection_test.SetRoute(_route);
 
   ExclusiveLease lease(*this);

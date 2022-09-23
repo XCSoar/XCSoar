@@ -46,7 +46,7 @@ TaskComputer::TaskComputer(ProtectedTaskManager &_task,
    route(airspace_database, warnings),
    contest(trace.GetFull(), trace.GetContest(), trace.GetSprint())
 {
-  task.SetRoutePlanner(&route.GetRoutePlanner());
+  task.SetRoutePlanner(&route.GetProtectedRoutePlanner());
 }
 
 void

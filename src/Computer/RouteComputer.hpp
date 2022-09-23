@@ -54,14 +54,6 @@ public:
   RouteComputer(const Airspaces &airspace_database,
                 const ProtectedAirspaceWarningManager *warnings);
 
-  /**
-   * Returns a reference to the unprotected route planner object,
-   * which must not be used outside of the calculation thread.
-   */
-  const RoutePlannerGlue &GetRoutePlanner() const {
-    return route_planner;
-  }
-
   const ProtectedRoutePlanner &GetProtectedRoutePlanner() const {
     return protected_route_planner;
   }

@@ -34,17 +34,15 @@ struct TaskBehaviour;
 struct OrderedTaskSettings;
 class Path;
 class GlidePolar;
-class RoutePlannerGlue;
+class ProtectedRoutePlanner;
 class OrderedTask;
 class TaskManager;
 
 class ReachIntersectionTest: public AbortIntersectionTest {
-  const RoutePlannerGlue *route;
+  const ProtectedRoutePlanner *route = nullptr;
 
 public:
-  ReachIntersectionTest():route(nullptr) {};
-
-  void SetRoute(const RoutePlannerGlue *_route) {
+  void SetRoute(const ProtectedRoutePlanner *_route) noexcept {
     route = _route;
   }
 
@@ -117,7 +115,7 @@ public:
    */
   bool TargetLock(const unsigned index, bool do_lock);
 
-  void SetRoutePlanner(const RoutePlannerGlue *_route);
+  void SetRoutePlanner(const ProtectedRoutePlanner *_route) noexcept;
 
   short GetTerrainBase() const;
 

@@ -270,10 +270,8 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working)
                            render_projection);
 
   // Fill the TriangleCompound with all TriangleFans in range
-  {
-    const ProtectedRoutePlanner::Lease lease(*route_planner);
-    lease->AcceptInRange(render_projection.GetScreenBounds(), visitor, working);
-  }
+  route_planner->AcceptInRange(render_projection.GetScreenBounds(),
+                               visitor, working);
 
   // Exit early if not fans found
   if (visitor.fans.empty())

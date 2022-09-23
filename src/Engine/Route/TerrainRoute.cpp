@@ -22,21 +22,8 @@
 
 #include "TerrainRoute.hpp"
 #include "ReachResult.hpp"
+#include "ReachFan.hpp"
 #include "Terrain/RasterMap.hpp"
-
-void
-TerrainRoute::ClearReach() noexcept
-{
-  reach_terrain.Reset();
-  reach_working.Reset();
-}
-
-void
-TerrainRoute::Reset() noexcept
-{
-  RoutePlanner::Reset();
-  ClearReach();
-}
 
 void
 TerrainRoute::UpdatePolar(const GlideSettings &settings,
@@ -64,32 +51,19 @@ TerrainRoute::UpdatePolar(const GlideSettings &settings,
                                    height_min_working);
 }
 
-bool
-TerrainRoute::SolveReachTerrain(const AGeoPoint &origin,
-                                const RoutePlannerConfig &config,
-                                const int h_ceiling,
-                                const bool do_solve) noexcept
+ReachFan
+TerrainRoute::SolveReach(const AGeoPoint &origin,
+                         const RoutePlannerConfig &config,
+                         const int h_ceiling,
+                         const bool do_solve,
+                         const bool working) noexcept
 {
-  rpolars_reach.SetConfig(config, origin.altitude, h_ceiling);
+  auto &rpolars = working ? rpolars_reach_working : rpolars_reach;
+  rpolars.SetConfig(config, origin.altitude, h_ceiling);
 
-  return reach_terrain.Solve(origin, rpolars_reach, terrain, do_solve);
-}
-
-bool
-TerrainRoute::SolveReachWorking(const AGeoPoint &origin,
-                                const RoutePlannerConfig &config,
-                                const int h_ceiling,
-                                const bool do_solve) noexcept
-{
-  rpolars_reach_working.SetConfig(config, origin.altitude, h_ceiling);
-
-  return reach_working.Solve(origin, rpolars_reach_working, terrain, do_solve);
-}
-
-std::optional<ReachResult>
-TerrainRoute::FindPositiveArrival(const AGeoPoint &dest) const noexcept
-{
-  return reach_terrain.FindPositiveArrival(dest, rpolars_reach);
+  ReachFan reach;
+  reach.Solve(origin, rpolars, terrain, do_solve);
+  return reach;
 }
 
 /*
@@ -105,17 +79,6 @@ TerrainRoute::FindPositiveArrival(const AGeoPoint &dest) const noexcept
     acknowledged in the airspace warning manager.
   - more documentation
  */
-
-void
-TerrainRoute::AcceptInRange(const GeoBounds &bounds,
-                            FlatTriangleFanVisitor &visitor,
-                            bool working) const noexcept
-{
-  if (working)
-    reach_working.AcceptInRange(bounds, visitor);
-  else
-    reach_terrain.AcceptInRange(bounds, visitor);
-}
 
 GeoPoint
 TerrainRoute::Intersection(const AGeoPoint &origin,
