@@ -210,6 +210,7 @@ public:
          files */
 
       task.Cancel();
+      current_size = current_position = -1;
 
       if (!queue.empty())
         Start();
