@@ -69,7 +69,7 @@ public:
 
 	/**
 	 * Cancel coroutine execution.  After returning, the coroutine
-	 * is guaranteed to be destroyed and no code (including the
+	 * is guaranteed to be destroyed and its code (including the
 	 * completion callback) is not running anymore.  This method
 	 * is thread-safe.
 	 */
