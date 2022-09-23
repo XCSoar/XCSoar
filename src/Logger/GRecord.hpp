@@ -58,19 +58,18 @@ private:
   bool ignore_comma;
 
 public:
-
-  void Initialize();
+  void Initialize() noexcept;
 
   /**
    * @return returns true if record is appended, false if skipped
    */
-  bool AppendRecordToBuffer(const char *szIn);
-  void FinalizeBuffer();
+  bool AppendRecordToBuffer(const char *szIn) noexcept;
+  void FinalizeBuffer() noexcept;
 
   /**
    * @param buffer a buffer of at least #DIGEST_LENGTH+1 bytes
    */
-  void GetDigest(char *buffer) const;
+  void GetDigest(char *buffer) const noexcept;
 
   /**
    * Loads a file into the data buffer.
@@ -100,10 +99,12 @@ public:
   void VerifyGRecordInFile(Path path);
 
 private:
-  void AppendStringToBuffer(const char *szIn);
+  void AppendStringToBuffer(const char *szIn) noexcept;
+
   /**
    * returns false if record is not to be included in
    * G record calc (see IGC specs)
    */
-  bool IncludeRecordInGCalc(const char *szIn);
+  [[gnu::pure]]
+  static bool IncludeRecordInGCalc(const char *szIn) noexcept;
 };

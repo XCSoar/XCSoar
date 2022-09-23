@@ -44,7 +44,7 @@ static constexpr MD5::State g_key[GRecord::N_MD5] = {
 };
 
 void
-GRecord::Initialize()
+GRecord::Initialize() noexcept
 {
   ignore_comma = true;
 
@@ -53,7 +53,7 @@ GRecord::Initialize()
 }
 
 bool
-GRecord::AppendRecordToBuffer(const char *in)
+GRecord::AppendRecordToBuffer(const char *in) noexcept
 {
   if (!IncludeRecordInGCalc(in))
     return false;
@@ -72,7 +72,7 @@ GRecord::AppendRecordToBuffer(const char *in)
  * it's a valid IGC character
  */
 static void
-AppendIGCString(MD5 &md5, const char *s, bool ignore_comma)
+AppendIGCString(MD5 &md5, const char *s, bool ignore_comma) noexcept
 {
   while (*s != '\0') {
     const char ch = *s++;
@@ -85,28 +85,28 @@ AppendIGCString(MD5 &md5, const char *s, bool ignore_comma)
 }
 
 void
-GRecord::AppendStringToBuffer(const char *in)
+GRecord::AppendStringToBuffer(const char *in) noexcept
 {
   for (auto &i : md5)
     AppendIGCString(i, in, ignore_comma);
 }
 
 void
-GRecord::FinalizeBuffer()
+GRecord::FinalizeBuffer() noexcept
 {
   for (auto &i : md5)
     i.Finalize();
 }
 
 void
-GRecord::GetDigest(char *output) const
+GRecord::GetDigest(char *output) const noexcept
 {
   for (auto &i : md5)
     output = i.GetDigest(output);
 }
 
 bool
-GRecord::IncludeRecordInGCalc(const char *in)
+GRecord::IncludeRecordInGCalc(const char *in) noexcept
 {
   bool valid = false;
 
