@@ -75,10 +75,8 @@ private:
 
   /**
    * Finish writing the line.
-   *
-   * @param line the buffer obtained with BeginLine()
    */
-  void CommitLine(char *line);
+  void CommitLine(const char *line);
 
   void WriteLine(const char *line);
   void WriteLine(const char *a, const TCHAR *b);

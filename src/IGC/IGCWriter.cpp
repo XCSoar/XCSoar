@@ -43,7 +43,7 @@ IGCWriter::IGCWriter(Path path)
 }
 
 void
-IGCWriter::CommitLine(char *line)
+IGCWriter::CommitLine(const char *line)
 {
   buffered.Write(line);
   buffered.Write('\n');
