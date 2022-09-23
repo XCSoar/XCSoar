@@ -204,7 +204,7 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
 
 void
 InputEvents::eventPilotEvent([[maybe_unused]] const TCHAR *misc)
-{
+try {
   // Configure start window
   const OrderedTaskSettings &ots =
   	protected_task_manager->GetOrderedTaskSettings();
@@ -236,6 +236,8 @@ InputEvents::eventPilotEvent([[maybe_unused]] const TCHAR *misc)
   // Let devices know the pilot event was pressed
   MessageOperationEnvironment env;
   devices->PutPilotEvent(env);
+} catch (...) {
+  ShowError(std::current_exception(), _("Logger Error"));
 }
 
 void
@@ -449,7 +451,7 @@ InputEvents::eventAutoLogger(const TCHAR *misc)
 // note: the text following the 'note' characters is added to the log file
 void
 InputEvents::eventLogger(const TCHAR *misc)
-{
+try {
   if (logger == nullptr)
     return;
 
@@ -492,6 +494,8 @@ InputEvents::eventLogger(const TCHAR *misc)
   else if (StringIsEqual(misc, _T("note"), 4))
     // add note to logger file if available..
     logger->LoggerNote(misc + 4);
+} catch (...) {
+  ShowError(std::current_exception(), _("Logger Error"));
 }
 
 // RepeatStatusMessage
