@@ -55,14 +55,6 @@ ProtectedRoutePlanner::SolveRoute(const AGeoPoint &dest,
   lease->Solve(dest, start, config, h_ceiling);
 }
 
-GeoPoint
-ProtectedRoutePlanner::Intersection(const AGeoPoint &origin,
-                                    const AGeoPoint &destination) const noexcept
-{
-  Lease lease(*this);
-  return lease->Intersection(origin, destination);
-}
-
 void
 ProtectedRoutePlanner::SolveReach(const AGeoPoint &origin,
                                   const RoutePlannerConfig &config,

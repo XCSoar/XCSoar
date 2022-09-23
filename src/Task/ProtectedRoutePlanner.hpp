@@ -91,10 +91,6 @@ public:
                   const RoutePlannerConfig &config,
                   int h_ceiling) noexcept;
 
-  [[gnu::pure]]
-  GeoPoint Intersection(const AGeoPoint &origin,
-                        const AGeoPoint &destination) const noexcept;
-
   void SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
                   int h_ceiling, bool do_solve) noexcept;
 
