@@ -41,9 +41,10 @@ public final class TextUtil {
 
   public TextUtil(int style, int textSize,
                   int paint_flags, boolean monospace) {
-    Typeface tf = monospace
-      ? Typeface.MONOSPACE
-      : Typeface.create((Typeface)null, style);
+    Typeface tf = Typeface.create(monospace
+                                  ? Typeface.MONOSPACE
+                                  : Typeface.DEFAULT,
+                                  style);
 
     paint = new Paint(paint_flags);
     paint.setTypeface(tf);
