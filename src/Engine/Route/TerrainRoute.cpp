@@ -38,6 +38,32 @@ TerrainRoute::Reset() noexcept
   ClearReach();
 }
 
+void
+TerrainRoute::UpdatePolar(const GlideSettings &settings,
+                          const RoutePlannerConfig &config,
+                          const GlidePolar &task_polar,
+                          const GlidePolar &safety_polar,
+                          const SpeedVector &wind,
+                          const int height_min_working) noexcept
+{
+  RoutePlanner::UpdatePolar(settings, config, task_polar, wind);
+
+  switch (config.reach_polar_mode) {
+  case RoutePlannerConfig::Polar::TASK:
+    rpolars_reach = rpolars_route;
+    // make copy to avoid waste
+    break;
+  case RoutePlannerConfig::Polar::SAFETY:
+    rpolars_reach.SetConfig(config);
+    rpolars_reach.Initialise(settings, safety_polar, wind);
+    break;
+  }
+
+  rpolars_reach_working.SetConfig(config);
+  rpolars_reach_working.Initialise(settings, task_polar, wind,
+                                   height_min_working);
+}
+
 bool
 TerrainRoute::SolveReachTerrain(const AGeoPoint &origin,
                                 const RoutePlannerConfig &config,

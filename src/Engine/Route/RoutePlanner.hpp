@@ -96,10 +96,6 @@ protected:
   FlatProjection projection;
   /** Aircraft performance model for route calculations */
   RoutePolars rpolars_route;
-  /** Aircraft performance model for reach to terrain */
-  RoutePolars rpolars_reach;
-  /** Aircraft performance model for reach to working floor */
-  RoutePolars rpolars_reach_working;
   /** Minimum height scanned during solution (m) */
   int h_min;
   /** Maxmimum height scanned during solution (m) */
@@ -178,15 +174,13 @@ public:
    * Update aircraft performance model used for path planning.
    *
    * @param polar Glide performance model used for route planning
-   * @param polar Glide performance model used for reach planning
    * @param wind Wind estimate
    * @param height_min_working Minimum working height (m)
    */
   void UpdatePolar(const GlideSettings &settings,
                    const RoutePlannerConfig &config,
-                   const GlidePolar &polar, const GlidePolar &safety_polar,
-                   const SpeedVector &wind,
-                   const int height_min_working=0) noexcept;
+                   const GlidePolar &polar,
+                   const SpeedVector &wind) noexcept;
 
   /** Reset the optimiser as if never flown and clear temporary buffers. */
   virtual void Reset() noexcept;

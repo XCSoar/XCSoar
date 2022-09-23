@@ -38,6 +38,11 @@ class TerrainRoute: public RoutePlanner
   /** Terrain raster */
   const RasterMap *terrain = nullptr;
 
+  /** Aircraft performance model for reach to terrain */
+  RoutePolars rpolars_reach;
+  /** Aircraft performance model for reach to working floor */
+  RoutePolars rpolars_reach_working;
+
   ReachFan reach_terrain;
   ReachFan reach_working;
 
@@ -72,6 +77,13 @@ public:
   void ClearReach() noexcept;
 
   void Reset() noexcept override;
+
+  void UpdatePolar(const GlideSettings &settings,
+                   const RoutePlannerConfig &config,
+                   const GlidePolar &task_polar,
+                   const GlidePolar &safety_polar,
+                   const SpeedVector &wind,
+                   int height_min_working=0) noexcept;
 
   /**
    * Solve reach footprint to terrain
