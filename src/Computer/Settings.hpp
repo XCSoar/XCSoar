@@ -109,13 +109,15 @@ struct PlacesOfInterestSettings {
   GeoPoint home_location;
 
   /**
-   * The reference location for the "ATC radial" InfoBox.
+   * The reference location & declination for the "ATC radial" InfoBox.
    */
   GeoPoint atc_reference;
+  Angle magnetic_declination;
 
   void SetDefaults() {
     ClearHome();
     atc_reference.SetInvalid();
+    magnetic_declination = Angle::Zero();
   }
 
   void ClearHome();
