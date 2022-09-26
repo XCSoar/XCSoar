@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2022-09-20 21:39+0200\n"
+"PO-Revision-Date: 2022-09-25 17:58+0000\n"
 "Last-Translator: ulipo <uli.peru@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/it/>\n"
@@ -7231,9 +7231,8 @@ msgid "Browse"
 msgstr "Sfoglia"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:168
-#, fuzzy
 msgid "Download WeGlide task"
-msgstr "Scarica volo"
+msgstr "Scarica Tema WeGlide"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:97
 msgid "Load"
@@ -10538,7 +10537,6 @@ msgid "Zoom"
 msgstr "Zoom"
 
 #: Data/Input/default.xci:142 Data/Input/default.xci:790
-#, fuzzy
 msgid "What's here?"
 msgstr ""
 "Cosa c'è\n"
@@ -10549,9 +10547,10 @@ msgid ""
 "Nav\n"
 "Page 2/2"
 msgstr ""
+"Naviga\n"
+"Pag. 2/2"
 
 #: Data/Input/default.xci:385 Data/Input/default.xci:1014
-#, fuzzy
 msgid "Waypoint List"
 msgstr "Lista Boe"
 
@@ -10560,7 +10559,6 @@ msgid "Dropped marker"
 msgstr "Segnaposto Rilasciato"
 
 #: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
 msgid "Marker Drop"
 msgstr ""
 "Aggiungi\n"
@@ -10576,20 +10574,20 @@ msgid "Pilot Event Announce"
 msgstr "Pilot event annunciato"
 
 #: Data/Input/default.xci:440 Data/Input/default.xci:1046
-#, fuzzy
 msgid "Target Show"
-msgstr "Obiettivo"
+msgstr "Mostra Obiettivo"
 
 #: Data/Input/default.xci:451
-#, fuzzy
 msgid ""
 "Display\n"
 "Page 2/2"
-msgstr "Mostra"
+msgstr ""
+"Mostra\n"
+"Pag. 2/2"
 
 #: Data/Input/default.xci:481
 msgid "Page Show"
-msgstr ""
+msgstr "Mostra Pagina"
 
 #: Data/Input/default.xci:488 Data/Input/default.xci:1072
 msgid "Pan Mode"
@@ -10612,6 +10610,8 @@ msgid ""
 "Config\n"
 "Page 2/3"
 msgstr ""
+"Config\n"
+"Pag. 2/3"
 
 #: Data/Input/default.xci:596
 msgid ""
@@ -10662,7 +10662,6 @@ msgid "Vario ASI zeroed"
 msgstr "Vario ASI azzerato"
 
 #: Data/Input/default.xci:727
-#, fuzzy
 msgid "ASI Zero"
 msgstr ""
 "ASI\n"
@@ -10673,7 +10672,6 @@ msgid "Accelerometer leveled"
 msgstr "Accelerometro livellato"
 
 #: Data/Input/default.xci:734
-#, fuzzy
 msgid "Accel Zero"
 msgstr ""
 "Scorciatoia\n"
@@ -10688,7 +10686,6 @@ msgid "Store"
 msgstr "Salva"
 
 #: Data/Input/default.xci:749
-#, fuzzy
 msgid "Cruise Demo"
 msgstr ""
 "Demo\n"
@@ -10711,11 +10708,12 @@ msgid "FLARM Radar"
 msgstr "Radar FLARM"
 
 #: Data/Input/default.xci:816
-#, fuzzy
 msgid ""
 "Info\n"
 "Page 3/3"
-msgstr "Pagine InfoBoxes"
+msgstr ""
+"Info\n"
+"Pag. 3/3"
 
 #: Data/Input/default.xci:840
 msgid "Traffic List"
@@ -10726,7 +10724,6 @@ msgid "Thermal Assistant"
 msgstr "Assistente Termica"
 
 #: Data/Input/default.xci:882
-#, fuzzy
 msgid "Message Repeat"
 msgstr ""
 "Ripeti\n"
@@ -10773,7 +10770,6 @@ msgid "Setup Plane"
 msgstr "Impostazioni Velivolo"
 
 #: Data/Input/default.xci:1197
-#, fuzzy
 msgid "Nearest Airspace"
 msgstr ""
 "Spazio Aereo\n"

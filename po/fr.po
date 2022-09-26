@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2022-09-21 08:21+0000\n"
+"PO-Revision-Date: 2022-09-23 18:21+0000\n"
 "Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
@@ -7231,9 +7231,8 @@ msgid "Browse"
 msgstr "Circuits enregistrés"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:168
-#, fuzzy
 msgid "Download WeGlide task"
-msgstr "Téléchargement du vol"
+msgstr "Télécharger le circuit WeGlide"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:97
 msgid "Load"
