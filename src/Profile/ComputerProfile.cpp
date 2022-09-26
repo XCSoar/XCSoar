@@ -91,6 +91,7 @@ void
 Profile::Load(const ProfileMap &map, WeGlideSettings &settings)
 {
   map.Get(ProfileKeys::WeGlideEnabled, settings.enabled);
+  map.Get(ProfileKeys::WeGlideAutomaticUpload, settings.automatic_upload);
   map.Get(ProfileKeys::WeGlidePilotID, settings.pilot_id);
 
   const char *date = map.Get(ProfileKeys::WeGlidePilotBirthDate);
