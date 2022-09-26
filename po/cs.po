@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2022-09-22 16:13+0000\n"
+"PO-Revision-Date: 2022-09-27 11:19+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -2932,7 +2932,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:331
 msgid "Max. temp."
-msgstr "Max. tepl."
+msgstr "Max. teplota"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:332
 msgid ""
