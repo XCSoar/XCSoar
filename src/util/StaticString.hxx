@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2010-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -157,14 +157,14 @@ public:
 	/**
 	 * Returns a writable buffer.
 	 */
-	pointer buffer() noexcept {
+	constexpr pointer buffer() noexcept {
 		return data();
 	}
 
 	/**
 	 * Returns one character.  No bounds checking.
 	 */
-	value_type operator[](size_type i) const noexcept {
+	constexpr value_type operator[](size_type i) const noexcept {
 		assert(i <= length());
 
 		return Base::operator[](i);
@@ -221,7 +221,7 @@ public:
 
 	using Base::c_str;
 
-	operator const_pointer() const noexcept {
+	constexpr operator const_pointer() const noexcept {
 		return c_str();
 	}
 
