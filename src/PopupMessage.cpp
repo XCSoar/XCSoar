@@ -94,7 +94,7 @@ PopupMessage::Message::AppendTo(StaticString<2000> &buffer,
 }
 
 PopupMessage::PopupMessage(UI::SingleWindow &_parent, const DialogLook &_look,
-                           const UISettings &_settings)
+                           const UISettings &_settings) noexcept
   :parent(_parent), look(_look),
    settings(_settings)
 {
@@ -103,7 +103,7 @@ PopupMessage::PopupMessage(UI::SingleWindow &_parent, const DialogLook &_look,
 }
 
 void
-PopupMessage::Create(const PixelRect _rc)
+PopupMessage::Create(const PixelRect _rc) noexcept
 {
   rc = _rc;
 
@@ -146,7 +146,7 @@ PopupMessage::OnPaint(Canvas &canvas) noexcept
 }
 
 inline unsigned
-PopupMessage::CalculateWidth() const
+PopupMessage::CalculateWidth() const noexcept
 {
   if (settings.popup_message_position == UISettings::PopupMessagePosition::TOP_LEFT)
     // TODO code: this shouldn't be hard-coded
@@ -156,7 +156,7 @@ PopupMessage::CalculateWidth() const
 }
 
 PixelRect
-PopupMessage::GetRect(unsigned width, unsigned height) const
+PopupMessage::GetRect(unsigned width, unsigned height) const noexcept
 {
   PixelRect rthis;
 
@@ -180,7 +180,7 @@ PopupMessage::GetRect(unsigned width, unsigned height) const
 }
 
 PixelRect
-PopupMessage::GetRect() const
+PopupMessage::GetRect() const noexcept
 {
   const unsigned width = CalculateWidth();
   const unsigned height = renderer.GetHeight(look.text_font, width, text)
@@ -190,7 +190,7 @@ PopupMessage::GetRect() const
 }
 
 void
-PopupMessage::UpdateLayout(PixelRect _rc)
+PopupMessage::UpdateLayout(PixelRect _rc) noexcept
 {
   rc = _rc;
 
@@ -202,7 +202,7 @@ PopupMessage::UpdateLayout(PixelRect _rc)
 }
 
 void
-PopupMessage::UpdateTextAndLayout()
+PopupMessage::UpdateTextAndLayout() noexcept
 {
   if (text.empty()) {
     Hide();
@@ -216,7 +216,7 @@ PopupMessage::UpdateTextAndLayout()
 }
 
 bool
-PopupMessage::Render()
+PopupMessage::Render() noexcept
 {
   if (parent.HasDialog())
     return false;
@@ -257,7 +257,7 @@ PopupMessage::Render()
 }
 
 int
-PopupMessage::GetEmptySlot()
+PopupMessage::GetEmptySlot() noexcept
 {
   // find oldest message that is no longer visible
 
@@ -285,7 +285,7 @@ PopupMessage::AddMessage(std::chrono::steady_clock::duration tshow, Type type,
 }
 
 void
-PopupMessage::Repeat(Type type)
+PopupMessage::Repeat(Type type) noexcept
 {
   int imax = -1;
 
@@ -312,7 +312,7 @@ PopupMessage::Repeat(Type type)
 }
 
 bool
-PopupMessage::Acknowledge(Type type)
+PopupMessage::Acknowledge(Type type) noexcept
 {
   const std::lock_guard lock{mutex};
   const auto now = std::chrono::steady_clock::now();
@@ -342,7 +342,7 @@ PopupMessage::Acknowledge(Type type)
 // TODO code: (need to discuss) Consider moving almost all this functionality into AddMessage ?
 
 void
-PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data)
+PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data) noexcept
 {
   const std::lock_guard lock{mutex};
 
