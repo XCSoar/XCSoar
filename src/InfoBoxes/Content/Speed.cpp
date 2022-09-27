@@ -24,8 +24,6 @@ Copyright_License {
 #include "InfoBoxes/Content/Speed.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
-
-#include "Simulator.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Language/Language.hpp"
@@ -46,8 +44,6 @@ InfoBoxContentSpeedGround::Update(InfoBoxData &data) noexcept
 bool
 InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode) noexcept
 {
-  if (!is_simulator())
-    return false;
   if (!CommonInterface::Basic().gps.simulator)
     return false;
 

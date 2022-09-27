@@ -29,7 +29,6 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
-#include "Simulator.hpp"
 
 class AltitudeSimulatorOffsetButtons final : public OffsetButtonsWidget {
 public:
@@ -43,10 +42,9 @@ protected:
 void
 AltitudeSimulatorOffsetButtons::OnOffset(const double step) noexcept
 {
-  if (!is_simulator())
-    return;
-
   const NMEAInfo &basic = CommonInterface::Basic();
+  if (!basic.gps.simulator)
+    return;
 
   device_blackboard->SetAltitude(basic.gps_altitude +
                                  Units::ToSysAltitude(step));
