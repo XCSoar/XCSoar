@@ -91,6 +91,8 @@ ParseFileRepository(FileRepository &repository, NLineReader &reader)
       /* ignore */
     } else if (StringIsEqual(name, "uri")) {
       file.uri.assign(value);
+    } else if (StringIsEqual(name, "description")) {
+      file.description.assign(value);
     } else if (StringIsEqual(name, "area")) {
       file.area = value;
     } else if (StringIsEqual(name, "type")) {
