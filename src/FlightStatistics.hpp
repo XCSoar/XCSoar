@@ -41,13 +41,22 @@ public:
   Histogram vario_cruise_histogram;
   mutable Mutex mutex;
 
-  void StartTask();
+  void StartTask() noexcept;
 
-  double AverageThermalAdjusted(double wthis, const bool circling);
-  double GetMinWorkingHeight() const;
-  double GetMaxWorkingHeight() const;
-  double GetVarioScalePositive() const;
-  double GetVarioScaleNegative() const;
+  [[gnu::pure]]
+  double AverageThermalAdjusted(double wthis, bool circling) noexcept;
+
+  [[gnu::pure]]
+  double GetMinWorkingHeight() const noexcept;
+
+  [[gnu::pure]]
+  double GetMaxWorkingHeight() const noexcept;
+
+  [[gnu::pure]]
+  double GetVarioScalePositive() const noexcept;
+
+  [[gnu::pure]]
+  double GetVarioScaleNegative() const noexcept;
 
   void AddAltitude(FloatDuration tflight,
                    double alt, bool final_glide) noexcept;
@@ -60,5 +69,5 @@ public:
   void AddClimbRate(FloatDuration tflight,
                     double vario, bool circling) noexcept;
 
-  void Reset();
+  void Reset() noexcept;
 };

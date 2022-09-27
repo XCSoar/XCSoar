@@ -39,7 +39,9 @@ ToNormalisedHours(FloatDuration t) noexcept
     : 0.;
 }
 
-void FlightStatistics::Reset() {
+void
+FlightStatistics::Reset() noexcept
+{
   const std::lock_guard lock{mutex};
 
   thermal_average.Reset();
@@ -53,7 +55,7 @@ void FlightStatistics::Reset() {
 }
 
 void
-FlightStatistics::StartTask()
+FlightStatistics::StartTask() noexcept
 {
   const std::lock_guard lock{mutex};
   // JMW clear thermal climb average on task start
@@ -91,7 +93,7 @@ FlightStatistics::AddAltitude(const FloatDuration tflight,
 
 double
 FlightStatistics::AverageThermalAdjusted(const double mc_current,
-                                         const bool circling)
+                                         const bool circling) noexcept
 {
   const std::lock_guard lock{mutex};
 
@@ -165,7 +167,7 @@ FlightStatistics::AddClimbRate([[maybe_unused]] const FloatDuration tflight,
 }
 
 double
-FlightStatistics::GetMinWorkingHeight() const
+FlightStatistics::GetMinWorkingHeight() const noexcept
 {
   if (altitude_base.IsEmpty())
     return 0;
@@ -176,7 +178,7 @@ FlightStatistics::GetMinWorkingHeight() const
 }
 
 double
-FlightStatistics::GetMaxWorkingHeight() const
+FlightStatistics::GetMaxWorkingHeight() const noexcept
 {
   if (altitude_ceiling.IsEmpty())
     return 0;
@@ -195,14 +197,14 @@ FlightStatistics::GetMaxWorkingHeight() const
 static constexpr double PERCENTILE_VARIO = 0.1;
 
 double
-FlightStatistics::GetVarioScalePositive() const
+FlightStatistics::GetVarioScalePositive() const noexcept
 {
   return std::max(vario_circling_histogram.GetPercentile(1-PERCENTILE_VARIO),
                   vario_cruise_histogram.GetPercentile(1-PERCENTILE_VARIO));
 }
 
 double
-FlightStatistics::GetVarioScaleNegative() const
+FlightStatistics::GetVarioScaleNegative() const noexcept
 {
   return std::min(vario_circling_histogram.GetPercentile(PERCENTILE_VARIO),
                   vario_cruise_histogram.GetPercentile(PERCENTILE_VARIO));
