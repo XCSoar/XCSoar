@@ -515,14 +515,15 @@ ManagedFileListWidget::Download()
 class AddFileListItemRenderer final : public ListItemRenderer {
   const std::vector<AvailableFile> &list;
 
-  TextRowRenderer row_renderer;
+  TwoTextRowsRenderer row_renderer;
 
 public:
   explicit AddFileListItemRenderer(const std::vector<AvailableFile> &_list)
     :list(_list) {}
 
   unsigned CalculateLayout(const DialogLook &look) {
-    return row_renderer.CalculateLayout(*look.list.font);
+    return row_renderer.CalculateLayout(*look.list.font_bold,
+                                          look.small_font);
   }
 
   void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i) noexcept override;
@@ -538,7 +539,17 @@ AddFileListItemRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   const UTF8ToWideConverter name(file.GetName());
   if (name.IsValid())
-    row_renderer.DrawTextRow(canvas, rc, name);
+    row_renderer.DrawFirstRow(canvas, rc, name);
+
+  const UTF8ToWideConverter description(file.GetDescription());
+  if (description.IsValid())
+    row_renderer.DrawSecondRow(canvas, rc, description);
+
+  if (file.update_date.IsPlausible()) {
+    TCHAR string_buffer[21];
+    FormatISO8601(string_buffer, file.update_date);
+    row_renderer.DrawRightSecondRow(canvas, rc, string_buffer);
+  }
 }
 
 #endif
