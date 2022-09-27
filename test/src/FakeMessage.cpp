@@ -26,7 +26,8 @@ Copyright_License {
 #include <stdio.h>
 
 void
-Message::AddMessage(const TCHAR* text, [[maybe_unused]] const TCHAR *data)
+Message::AddMessage(const TCHAR *text,
+                    [[maybe_unused]] const TCHAR *data) noexcept
 {
   _ftprintf(stderr, _T("%s\n"), text);
 }
