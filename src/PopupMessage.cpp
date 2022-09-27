@@ -96,9 +96,7 @@ PopupMessage::Message::AppendTo(StaticString<2000> &buffer,
 PopupMessage::PopupMessage(UI::SingleWindow &_parent, const DialogLook &_look,
                            const UISettings &_settings)
   :parent(_parent), look(_look),
-   settings(_settings),
-   n_visible(0),
-   enable_sound(true)
+   settings(_settings)
 {
   renderer.SetCenter();
   text.clear();

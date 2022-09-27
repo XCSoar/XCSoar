@@ -63,7 +63,7 @@ private:
   static constexpr unsigned MAXMESSAGES = 20;
 
   struct Message {
-    Type type;
+    Type type = MSG_UNKNOWN;
     std::chrono::steady_clock::time_point tstart{}; // time message was created
     std::chrono::steady_clock::time_point texpiry{}; // time message will expire
     std::chrono::steady_clock::duration tshow; // time message is visible for
@@ -71,7 +71,6 @@ private:
     StaticString<256u> text;
 
     Message()
-      :type(MSG_UNKNOWN)
     {
       text.clear();
     }
@@ -120,9 +119,9 @@ private:
   struct Message messages[MAXMESSAGES];
   StaticString<2000> text;
 
-  unsigned n_visible;
+  unsigned n_visible = 0;
 
-  bool enable_sound;
+  bool enable_sound = true;
 
 public:
   PopupMessage(UI::SingleWindow &_parent, const DialogLook &_look,
