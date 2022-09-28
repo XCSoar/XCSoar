@@ -174,6 +174,10 @@ public:
 		return steady_clock_cache.now();
 	}
 
+	void FlushClockCaches() noexcept {
+		steady_clock_cache.flush();
+	}
+
 #ifdef HAVE_URING
 	[[gnu::pure]]
 	Uring::Queue *GetUring() noexcept;
