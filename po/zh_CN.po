@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2022-05-19 00:18+0000\n"
+"PO-Revision-Date: 2022-10-02 06:15+0000\n"
 "Last-Translator: 山岭野兔 <bd8bin@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "xcsoar/translations/zh_Hans/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 "X-Launchpad-Export-Date: 2016-03-01 23:01+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -167,9 +167,9 @@ msgid ""
 msgstr "90度扇区，长度无限。跨越任何边缘拐角点得分。"
 
 #: src/Task/TypeStrings.cpp:81
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A keyhole.  Scored from center."
-msgstr "锁眼，到达到该区域最远点得分。"
+msgstr "关键眼，到达到该区域最远点得分。"
 
 #: src/Task/TypeStrings.cpp:82
 #, no-c-format
@@ -273,9 +273,9 @@ msgid "FAI quadrant"
 msgstr "FAI象限"
 
 #: src/Task/TypeStrings.cpp:117
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Keyhole sector"
-msgstr "锁眼扇区（DAeC）"
+msgstr "关键眼扇区（DAeC）"
 
 #: src/Task/TypeStrings.cpp:118
 #, no-c-format
@@ -417,7 +417,7 @@ msgstr "未知空域文件类型"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:112
 msgid "Date"
-msgstr ""
+msgstr "日期"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:113
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
@@ -442,18 +442,16 @@ msgstr "竞赛ID"
 #. upload successful!
 #: src/net/client/WeGlide/UploadIGCFile.cpp:118
 #: src/net/client/WeGlide/UploadIGCFile.cpp:176
-#, fuzzy
 msgid "WeGlide Upload"
-msgstr "WeGlide 类型"
+msgstr "WeGlide 上传"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:142 src/Input/InputEventsLua.cpp:60
 msgid "Not found"
 msgstr "未发现"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:149
-#, fuzzy
 msgid "Upload Flight"
-msgstr "下载飞行"
+msgstr "上传飞行"
 
 #. upload failed!
 #: src/net/client/WeGlide/UploadIGCFile.cpp:151
@@ -636,14 +634,12 @@ msgstr "下载飞行失败。"
 
 #. ask whether this IGC should be uploaded to WeGlide
 #: src/Logger/ExternalLogger.cpp:356
-#, fuzzy
 msgid "Do you want to upload this flight to WeGlide?"
-msgstr "您想下载另一个飞行？"
+msgstr "您想上传本次飞行到WeGlide？"
 
 #: src/Logger/ExternalLogger.cpp:357
-#, fuzzy
 msgid "Upload flight"
-msgstr "下载飞行"
+msgstr "上传飞行"
 
 #: src/Logger/ExternalLogger.cpp:362
 msgid "Do you want to download another flight?"
@@ -976,15 +972,13 @@ msgstr "关闭地形"
 
 #: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:364
 #: src/Menu/ExpandMacros.cpp:366
-#, fuzzy
 msgid "Hide"
-msgstr "隐藏信息"
+msgstr "隐藏"
 
 #: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:364
 #: src/Menu/ExpandMacros.cpp:366
-#, fuzzy
 msgid "Show"
-msgstr "显示错误"
+msgstr "显示"
 
 #: src/Menu/ExpandMacros.cpp:369 src/Input/InputEventsSettings.cpp:313
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:85
@@ -2755,22 +2749,20 @@ msgid "Airspace Warnings"
 msgstr "空域告警"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:60
-#, fuzzy
 msgid "Circling wind"
-msgstr "盘转"
+msgstr "盘转测风"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:61
 msgid "Estimate the wind vector while circling.  Requires only a GPS."
-msgstr ""
+msgstr "估算盘旋时的风向矢量。仅使用GNSS。"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
-#, fuzzy
 msgid "ZigZag wind"
-msgstr "之字"
+msgstr "之字测风"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:65
 msgid "Estimate the wind vector during glides.  Requires an airspeed sensor."
-msgstr ""
+msgstr "估计滑翔期间的风向矢量。使用空速传感器。"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
 msgid "External wind"
@@ -2824,27 +2816,26 @@ msgstr "转储"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:285
 msgid "Crew"
-msgstr ""
+msgstr "机组"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:286
 msgid ""
 "All masses loaded to the glider beyond the empty weight including pilot and "
 "copilot, but not water ballast."
-msgstr ""
+msgstr "装载到滑翔机上的所有重量超过空重，包括飞行员和副驾驶员，但不包括水压舱物。"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:293
 msgid "Ballast"
 msgstr "配重"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:294
-#, fuzzy
 msgid ""
 "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the "
 "ballast volume according to the dump rate specified in the configuration "
 "settings."
 msgstr ""
-"滑翔机的配重。如果飞行员/驾驶舱负荷大于滑翔机极曲线参考重量，则增加这个值。"
-"（通常为75公斤）。滑翔机的镇流器。如果飞行员/驾驶舱负荷增加，则增加这个值。"
+"滑翔机的配重。如果飞行员/驾驶舱负荷大于滑翔机极曲线参考重量，则增加这个值。（"
+"通常为75公斤）。滑翔机的镇流器。如果飞行员/驾驶舱负荷增加，则增加这个值。"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:306
 msgid "Bugs"
@@ -3362,14 +3353,12 @@ msgid "Wing Area"
 msgstr "翼面积"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:124
-#, fuzzy
 msgid "Empty Mass"
-msgstr "空任务"
+msgstr "空载质量"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:124
-#, fuzzy
 msgid "Net mass of the rigged plane."
-msgstr "极曲线参考重量"
+msgstr "装配平面的净质量。"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:128
 msgid "Max. Ballast"
@@ -3401,9 +3390,8 @@ msgid "Reference Mass"
 msgstr "参考重量"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:134
-#, fuzzy
 msgid "Reference mass of the polar."
-msgstr "极曲线参考重量"
+msgstr "极坐标的参考质量。"
 
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:174
@@ -3527,7 +3515,7 @@ msgstr "靠近"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:98
 msgid "Share"
-msgstr ""
+msgstr "共享"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:51
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:62
@@ -4640,9 +4628,9 @@ msgid "15 Split in 3 rows"
 msgstr "3行包含15个"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:96
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "18 Split in 3 rows"
-msgstr "3列12格"
+msgstr "3列18行"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:98
 #, no-c-format
@@ -4934,13 +4922,13 @@ msgstr "Co飞行员姓名"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:79
 msgid "Crew weight default"
-msgstr ""
+msgstr "机组重量默认值"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:80
 msgid ""
 "Default for all weight loaded to the glider beyond the empty weight and "
 "besides the water ballast."
-msgstr ""
+msgstr "默认情况下，除空载重量和水压舱物外，所有装载到滑翔机上的重量。"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:86
 msgid "Time step cruise"
@@ -6083,7 +6071,8 @@ msgstr ""
 msgid ""
 "LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance "
 "is 20km, 5 points per km."
-msgstr ""
+msgstr "LVZC查伦。在线，200公里以下5航段，以上6航段。最小航段距离为20公里，每公里5点"
+"。"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:129
 msgid "Contest"
@@ -6711,7 +6700,7 @@ msgstr "获取并显示其他人报告的热气流位置。"
 msgid ""
 "Show thermal locations downloaded from Thermal Information Map (thermalmap."
 "info)."
-msgstr ""
+msgstr "显示从热气流网站（thermalmap.info）下载的热气流位置。"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:91
 msgid "Automatic Upload"
@@ -6906,9 +6895,8 @@ msgid "Browse"
 msgstr "浏览"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:168
-#, fuzzy
 msgid "Download WeGlide task"
-msgstr "下载飞行"
+msgstr "从WeGlide下载飞行任务"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:97
 msgid "Load"
@@ -7390,7 +7378,7 @@ msgstr "离地高度"
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:87
 #, no-c-format
 msgid "H AGL"
-msgstr "海拔高度"
+msgstr "离地高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:146
 #, no-c-format
@@ -9985,64 +9973,56 @@ msgid "Zoom"
 msgstr "缩放"
 
 #: Data/Input/default.xci:142 Data/Input/default.xci:790
-#, fuzzy
 msgid "What's here?"
-msgstr ""
-"这是\n"
-"什么?"
+msgstr "这是什么?"
 
 #: Data/Input/default.xci:355
 msgid ""
 "Nav\n"
 "Page 2/2"
 msgstr ""
+"导航\n"
+"页2/2"
 
 #: Data/Input/default.xci:385 Data/Input/default.xci:1014
-#, fuzzy
 msgid "Waypoint List"
-msgstr ""
-"航点\n"
-"表"
+msgstr "航点清单"
 
 #: Data/Input/default.xci:419 Data/Input/default.xci:1062
 msgid "Dropped marker"
 msgstr "下降标记"
 
 #: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
 msgid "Marker Drop"
-msgstr ""
-"标记\n"
-"落下"
+msgstr "拖放标记"
 
 #: Data/Input/default.xci:429
 msgid "Pilot event announced"
 msgstr "飞行员任务点公布"
 
 #: Data/Input/default.xci:432
-#, fuzzy
 msgid "Pilot Event Announce"
-msgstr "飞行员任务点公布"
+msgstr "飞行员比赛项目公告"
 
 #: Data/Input/default.xci:440 Data/Input/default.xci:1046
-#, fuzzy
 msgid "Target Show"
-msgstr "目标"
+msgstr "显示目标"
 
 #: Data/Input/default.xci:451
-#, fuzzy
 msgid ""
 "Display\n"
 "Page 2/2"
-msgstr "显示"
+msgstr ""
+"显示\n"
+"页2/2"
 
 #: Data/Input/default.xci:481
 msgid "Page Show"
-msgstr ""
+msgstr "显示页"
 
 #: Data/Input/default.xci:488 Data/Input/default.xci:1072
 msgid "Pan Mode"
-msgstr ""
+msgstr "平移模式"
 
 #: Data/Input/default.xci:507 Data/Input/default.xci:1080
 msgid "Labels"
@@ -10061,12 +10041,16 @@ msgid ""
 "Config\n"
 "Page 2/3"
 msgstr ""
+"配置\n"
+"页2/3"
 
 #: Data/Input/default.xci:596
 msgid ""
 "Config\n"
 "Page 3/3"
 msgstr ""
+"配置\n"
+"页3/3"
 
 #: Data/Input/default.xci:653 Data/Input/default.xci:1158
 msgid "Raw Logger"
@@ -10085,27 +10069,20 @@ msgid ""
 "Vega\n"
 "Page 2/2"
 msgstr ""
+"视觉\n"
+"页2/2"
 
 #: Data/Input/default.xci:687
-#, fuzzy
 msgid "Airframe Switches"
-msgstr ""
-"机身\n"
-"开关"
+msgstr "机身开关"
 
 #: Data/Input/default.xci:694
-#, fuzzy
 msgid "Manual Demo"
-msgstr ""
-"演示\n"
-"手册"
+msgstr "示范说明"
 
 #: Data/Input/default.xci:701
-#, fuzzy
 msgid "Setup Stall"
-msgstr ""
-"设置\n"
-"失速"
+msgstr "失速设置"
 
 #: Data/Input/default.xci:708
 msgid "Accel"
@@ -10116,22 +10093,16 @@ msgid "Vario ASI zeroed"
 msgstr "高度表ASI零位"
 
 #: Data/Input/default.xci:727
-#, fuzzy
 msgid "ASI Zero"
-msgstr ""
-"ASI\n"
-"零"
+msgstr "ASI置零"
 
 #: Data/Input/default.xci:733
 msgid "Accelerometer leveled"
 msgstr "加速度计水平仪"
 
 #: Data/Input/default.xci:734
-#, fuzzy
 msgid "Accel Zero"
-msgstr ""
-"加速\n"
-"零"
+msgstr "加速置零"
 
 #: Data/Input/default.xci:741
 msgid "Stored to EEPROM"
@@ -10142,24 +10113,20 @@ msgid "Store"
 msgstr "存储"
 
 #: Data/Input/default.xci:749
-#, fuzzy
 msgid "Cruise Demo"
-msgstr ""
-"巡航\n"
-"模拟"
+msgstr "巡航演示"
 
 #: Data/Input/default.xci:756
-#, fuzzy
 msgid "Climb Demo"
-msgstr ""
-"爬升\n"
-"演示"
+msgstr "爬升演示"
 
 #: Data/Input/default.xci:766
 msgid ""
 "Info\n"
 "Page 2/3"
 msgstr ""
+"信息\n"
+"页2/3"
 
 #: Data/Input/default.xci:774 Data/Input/default.xci:1181
 msgid "FLARM Radar"
@@ -10170,6 +10137,8 @@ msgid ""
 "Info\n"
 "Page 3/3"
 msgstr ""
+"信息\n"
+"页3/3"
 
 #: Data/Input/default.xci:840
 msgid "Traffic List"
@@ -10180,11 +10149,8 @@ msgid "Thermal Assistant"
 msgstr "热气流助手"
 
 #: Data/Input/default.xci:882
-#, fuzzy
 msgid "Message Repeat"
-msgstr ""
-"信息\n"
-"重复"
+msgstr "信息转发"
 
 #: Data/Input/default.xci:893
 msgid "Nav"
@@ -10195,47 +10161,32 @@ msgid "Config"
 msgstr "配置"
 
 #: Data/Input/default.xci:922
-#, fuzzy
 msgid "Lock Screen"
-msgstr ""
-"屏幕\n"
-"锁定"
+msgstr "屏幕锁定"
 
 #: Data/Input/default.xci:980
 msgid "AVG/ALT"
 msgstr "平均/高度"
 
 #: Data/Input/default.xci:1127
-#, fuzzy
 msgid "Setup Wind"
-msgstr ""
-"设置\n"
-"风"
+msgstr "设置风况"
 
 #: Data/Input/default.xci:1135
-#, fuzzy
 msgid "Setup System"
-msgstr ""
-"设置\n"
-"系统"
+msgstr "系统设置"
 
 #: Data/Input/default.xci:1143
-#, fuzzy
 msgid "Settings Airspace"
-msgstr ""
-"设置\n"
-"空域"
+msgstr "空域设置"
 
 #: Data/Input/default.xci:1174
 msgid "Setup Plane"
 msgstr "设置飞机"
 
 #: Data/Input/default.xci:1197
-#, fuzzy
 msgid "Nearest Airspace"
-msgstr ""
-"最近的\n"
-"空域"
+msgstr "阾近空域"
 
 #~ msgid ""
 #~ "Team\n"
