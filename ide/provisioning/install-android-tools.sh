@@ -11,9 +11,9 @@ ANDROID_REPO_URL=https://dl.google.com/android/repository
 ANDROID_SDK_DIR=~/opt/android-sdk-linux
 ANDROID_NDK_DIR=~/opt/android-ndk-${ANDROID_NDK_VERSION}
 
-if [ -d "${ANDROID_SDK_DIR}"\\build-tools\\"${ANDROID_BUILD_TOOLS_VERSION}" ]
+if [ -d "${ANDROID_SDK_DIR}"/build-tools/"${ANDROID_BUILD_TOOLS_VERSION}" ]
 then
-  echo "Not installing Android SDK, because ${ANDROID_SDK_DIR}\\build-tools\${ANDROID_BUILD_TOOLS_VERSION} exists already"
+  echo "Not installing Android SDK, because ${ANDROID_SDK_DIR}/build-tools/${ANDROID_BUILD_TOOLS_VERSION} exists already"
 else
   echo "Installing Android SDK to ${ANDROID_SDK_DIR}..."
 
