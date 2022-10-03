@@ -25,6 +25,7 @@ Version 7.29 - not yet released
   - show FLARMGauge only when traffic is within 4Km
   - redesigned waypoint type icons
   - fix font resizing in Infobx titles and small values
+  - align labels in forms on the left side
 
 Version 7.28 - 2022/10/29
 * data files

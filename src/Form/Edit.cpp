@@ -289,7 +289,7 @@ WndProperty::OnPaint(Canvas &canvas) noexcept
       org.y = edit_rc.top - tsize.height;
       clip_width = canvas.GetWidth();
     } else {
-      org.x = caption_width - tsize.width - Layout::GetTextPadding();
+      org.x = Layout::GetTextPadding();
       org.y = (canvas.GetHeight() - tsize.height) / 2;
       clip_width = caption_width;
     }
