@@ -1,6 +1,8 @@
 Version 7.28 - not yet released
 * user interface
   - fix WeGlide 'Automatic Upload' not persistent
+* Android
+  - add SoftRF Balkan and Prime Mk3 into 'white list' of USB devices
 
 Version 7.27 - 2022/09/23
 * user interface

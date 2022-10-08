@@ -67,6 +67,8 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     createDevice(0x1d50, 0x6089), // SoftRF ES
     createDevice(0x2e8a, 0x000a), // SoftRF Lego
     createDevice(0x2e8a, 0xf00a), // SoftRF Lego
+    createDevice(0x15ba, 0x0044), // SoftRF Balkan
+    createDevice(0x303a, 0x8133), // SoftRF Prime Mk3
 
     createDevice(0x0403, 0x6001), // FT232AM, FT232BM, FT232R FT245R,
     createDevice(0x0403, 0x6010), // FT2232D, FT2232H
