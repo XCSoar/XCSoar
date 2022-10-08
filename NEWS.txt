@@ -1,6 +1,8 @@
 Version 7.28 - not yet released
 * user interface
   - fix WeGlide 'Automatic Upload' not persistent
+* waypoint editor
+  - add more SeeYou waypoint types
 * Android
   - add SoftRF Balkan and Prime Mk3 into 'white list' of USB devices
 
