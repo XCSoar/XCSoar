@@ -77,6 +77,15 @@ static constexpr StaticEnumChoice waypoint_types[] = {
   { 7, N_("Tunnel"), nullptr },
   { 8, N_("Bridge"), nullptr },
   { 9, N_("Power Plant"), nullptr },
+  { 10, N_("VOR"), nullptr},
+  { 11, N_("NDB"), nullptr},
+  { 12, N_("Dam"), nullptr},
+  { 13, N_("Castle"), nullptr},
+  { 14, N_("Intersection"), nullptr},
+  { 15, N_("Marker"), nullptr},
+  { 16, N_("Control Point"), nullptr},
+  { 17, N_("PG Take Off"), nullptr},
+  { 18, N_("PG Landing Zone"), nullptr},
   { 0 }
 };
 
@@ -146,6 +155,42 @@ WaypointEditWidget::Save(bool &_changed) noexcept
 
   case 9:
     value.type = Waypoint::Type::POWERPLANT;
+    break;
+
+  case 10:
+    value.type = Waypoint::Type::VOR;
+    break;
+
+  case 11:
+    value.type = Waypoint::Type::NDB;
+    break;
+
+  case 12:
+    value.type = Waypoint::Type::DAM;
+    break;
+
+  case 13:
+    value.type = Waypoint::Type::CASTLE;
+    break;
+
+  case 14:
+    value.type = Waypoint::Type::INTERSECTION;
+    break;
+
+  case 15:
+    value.type = Waypoint::Type::MARKER;
+    break;
+
+  case 16:
+    value.type = Waypoint::Type::REPORTING_POINT;
+    break;
+
+  case 17:
+    value.type = Waypoint::Type::PGTAKEOFF;
+    break;
+
+  case 18:
+    value.type = Waypoint::Type::PGLANDING;
     break;
 
   default:
