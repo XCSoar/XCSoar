@@ -104,7 +104,7 @@ WaypointEditWidget::Prepare(ContainerWindow &, const PixelRect &) noexcept
            0, 30000, 5, false,
            UnitGroup::ALTITUDE, value.elevation);
   AddEnum(_("Type"), nullptr, waypoint_types,
-          value.IsAirport() ? 1u : (value.IsLandable() ? 2u : 0u),
+          (unsigned)value.type,
           this);
 }
 
