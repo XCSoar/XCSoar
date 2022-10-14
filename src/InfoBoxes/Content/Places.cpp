@@ -25,6 +25,7 @@ Copyright_License {
 #include "InfoBoxes/Data.hpp"
 #include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Panel/ATCReference.hpp"
+#include "InfoBoxes/Panel/ATCSetup.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Formatter/Units.hpp"
@@ -77,6 +78,7 @@ constexpr
 #endif
 const InfoBoxPanel atc_infobox_panels[] = {
   { N_("Reference"), LoadATCReferencePanel },
+  { N_("Setup"), LoadATCSetupPanel },
   { nullptr, nullptr }
 };
 
@@ -86,6 +88,9 @@ UpdateInfoBoxATCRadial(InfoBoxData &data) noexcept
   const NMEAInfo &basic = CommonInterface::Basic();
   const GeoPoint &reference =
     CommonInterface::GetComputerSettings().poi.atc_reference;
+  const Angle &declination =
+    CommonInterface::GetComputerSettings().poi.magnetic_declination;
+
   if (!basic.location_available || !reference.IsValid()) {
     data.SetInvalid();
     return;
@@ -93,7 +98,9 @@ UpdateInfoBoxATCRadial(InfoBoxData &data) noexcept
 
   const GeoVector vector(reference, basic.location);
 
-  data.SetValue(vector.bearing);
+  const Angle mag_bearing = vector.bearing - declination;
+  data.SetValue(mag_bearing);
+
   FormatDistance(data.comment.buffer(), vector.distance,
                  Unit::NAUTICAL_MILES, true, 1);
 }
