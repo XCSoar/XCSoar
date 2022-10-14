@@ -142,9 +142,9 @@ libsodium = AutotoolsProject(
 )
 
 zlib = ZlibProject(
-    'http://zlib.net/zlib-1.2.12.tar.xz',
-    'http://downloads.sourceforge.net/project/libpng/zlib/1.2.11/zlib-1.2.12.tar.xz',
-    '7db46b8d7726232a621befaab4a1c870f00a90805511c0e0090441dac57def18',
+    'http://zlib.net/zlib-1.2.13.tar.xz',
+    'http://downloads.sourceforge.net/project/libpng/zlib/1.2.13/zlib-1.2.13.tar.xz',
+    'd14c38e313afc35a9a8760dadf26042f51ea0f5d154b0630a31da0540107fb98',
     'lib/libz.a',
 )
 
