@@ -39,6 +39,11 @@ struct AvailableFile {
   std::string name;
 
   /**
+   * Description of the file.
+   */
+  std::string description;
+
+  /**
    * Absolute HTTP URI.
    */
   std::string uri;
@@ -87,6 +92,10 @@ struct AvailableFile {
 
   const char *GetName() const {
     return name.c_str();
+  }
+
+  const char *GetDescription() const {
+    return description.c_str();
   }
 
   const char *GetURI() const {

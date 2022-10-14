@@ -1,6 +1,7 @@
 Version 7.28 - not yet released
 * user interface
   - fix WeGlide 'Automatic Upload' not persistent
+  - file manager, show description and update date
 * waypoint editor
   - add more SeeYou waypoint types
 * Android
