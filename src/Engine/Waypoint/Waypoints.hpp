@@ -57,7 +57,7 @@ class Waypoints {
   /**
    * Type of KD-tree data structure for waypoint container
    */
-  typedef QuadTree<WaypointPtr, WaypointAccessor> WaypointTree;
+  using WaypointTree = QuadTree<WaypointPtr, WaypointAccessor>;
 
   class WaypointNameTree : public RadixTree<WaypointPtr> {
   public:
@@ -85,7 +85,7 @@ class Waypoints {
   WaypointPtr home;
 
 public:
-  typedef WaypointTree::const_iterator const_iterator;
+  using const_iterator = WaypointTree::const_iterator;
 
   /**
    * Constructor.  Task projection is updated after call to Optimise().
