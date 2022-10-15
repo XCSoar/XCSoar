@@ -43,13 +43,13 @@ CopyString(wchar_t *gcc_restrict dest, size_t dest_size,
 
 wchar_t *
 NormalizeSearchString(wchar_t *gcc_restrict dest,
-                      const wchar_t *gcc_restrict src) noexcept
+                      std::wstring_view src) noexcept
 {
   wchar_t *retval = dest;
 
-  for (; !StringIsEmpty(src); ++src)
-    if (IsAlphaNumericASCII(*src))
-      *dest++ = ToUpperASCII(*src);
+  for (const auto ch : src)
+    if (IsAlphaNumericASCII(ch))
+      *dest++ = ToUpperASCII(ch);
 
   *dest = L'\0';
 

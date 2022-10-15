@@ -41,4 +41,4 @@ CopyString(wchar_t *dest, size_t dest_size, std::wstring_view src) noexcept;
 
 [[gnu::nonnull]]
 wchar_t *
-NormalizeSearchString(wchar_t *dest, const wchar_t *src) noexcept;
+NormalizeSearchString(wchar_t *dest, std::wstring_view src) noexcept;

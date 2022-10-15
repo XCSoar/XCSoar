@@ -54,4 +54,4 @@ CopyString(char *dest, size_t dest_size, std::string_view src) noexcept;
  */
 [[gnu::nonnull]]
 char *
-NormalizeSearchString(char *dest, const char *src) noexcept;
+NormalizeSearchString(char *dest, std::string_view src) noexcept;

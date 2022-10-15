@@ -44,13 +44,13 @@ CopyString(char *gcc_restrict dest, size_t dest_size,
 
 char *
 NormalizeSearchString(char *gcc_restrict dest,
-                      const char *gcc_restrict src) noexcept
+                      std::string_view src) noexcept
 {
   char *retval = dest;
 
-  for (; !StringIsEmpty(src); ++src)
-    if (IsAlphaNumericASCII(*src))
-      *dest++ = ToUpperASCII(*src);
+  for (const auto ch : src)
+    if (IsAlphaNumericASCII(ch))
+      *dest++ = ToUpperASCII(ch);
 
   *dest = '\0';
 
