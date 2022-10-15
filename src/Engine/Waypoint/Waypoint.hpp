@@ -147,16 +147,14 @@ struct Waypoint {
    *
    * @return Uninitialised object
    */
-  Waypoint(const GeoPoint &_location);
+  Waypoint(const GeoPoint &_location) noexcept;
 
   /** 
    * Determine if waypoint is marked as able to be landed at
    * 
    * @return True if waypoint is landable
    */
-  bool
-  IsLandable() const
-  {
+  constexpr bool IsLandable() const noexcept {
     return (type == Type::AIRFIELD || type == Type::OUTLANDING);
   }
 
@@ -165,9 +163,7 @@ struct Waypoint {
    *
    * @return True if waypoint is landable
    */
-  bool
-  IsAirport() const
-  {
+  constexpr bool IsAirport() const noexcept {
     return type == Type::AIRFIELD;
   }
 
@@ -176,9 +172,7 @@ struct Waypoint {
    *
    * @return True if waypoint is landable
    */
-  bool
-  IsTurnpoint() const
-  {
+  constexpr bool IsTurnpoint() const noexcept {
     return flags.turn_point;
   }
 
@@ -187,9 +181,7 @@ struct Waypoint {
    *
    * @return True if waypoint is start
    */
-  bool
-  IsStartpoint() const
-  {
+  constexpr bool IsStartpoint() const noexcept {
     return flags.start_point;
   }
 
@@ -198,9 +190,7 @@ struct Waypoint {
    *
    * @return True if waypoint is finish
    */
-  bool
-  IsFinishpoint() const
-  {
+  constexpr bool IsFinishpoint() const noexcept {
     return flags.finish_point;
   }
 
@@ -211,18 +201,16 @@ struct Waypoint {
    *
    * @return true if ids match
    */
-  bool
-  operator==(const Waypoint&wp) const
-  {
-    return id == wp.id;
-  }
+   constexpr bool operator==(const Waypoint &wp) const noexcept {
+     return id == wp.id;
+   }
 
   /**
    * Project geolocation to flat location
    *
    * @param projection the projection to apply
    */
-  void Project(const FlatProjection &projection);
+  void Project(const FlatProjection &projection) noexcept;
 
   /**
    * Get distance in internal flat projected units (fast)
@@ -231,7 +219,8 @@ struct Waypoint {
    *
    * @return Distance in flat units
    */
-  unsigned FlatDistanceTo(const FlatGeoPoint &f) const {
+  [[gnu::pure]]
+  unsigned FlatDistanceTo(const FlatGeoPoint &f) const noexcept {
     assert(flat_location_initialised);
 
     return flat_location.Distance(f);
@@ -246,6 +235,6 @@ struct Waypoint {
    *
    * @return True if close to reference location
    */
-  bool
-  IsCloseTo(const GeoPoint &_location, double range) const;
+  [[gnu::pure]]
+  bool IsCloseTo(const GeoPoint &_location, double range) const noexcept;
 };
