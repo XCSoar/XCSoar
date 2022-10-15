@@ -24,5 +24,6 @@ Copyright_License {
 
 struct PixelSize;
 
+[[gnu::pure]]
 PixelSize
-SystemWindowSize();
+SystemWindowSize() noexcept;

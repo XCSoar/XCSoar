@@ -60,7 +60,7 @@ GetWindowDecorationOverhead() noexcept
  * @return The screen dimension rect to be used
  */
 PixelSize
-SystemWindowSize()
+SystemWindowSize() noexcept
 {
 #ifdef ANDROID
   return native_view->GetSize();
