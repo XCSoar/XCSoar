@@ -49,7 +49,7 @@ namespace WaypointGlue {
  */
 WaypointPtr
 FindHomeId(Waypoints &waypoints,
-           PlacesOfInterestSettings &settings);
+           PlacesOfInterestSettings &settings) noexcept;
 
 /**
  * Find the configured home by id (in #PlacesOfInterestSettings) in
@@ -61,7 +61,7 @@ FindHomeId(Waypoints &waypoints,
  */
 WaypointPtr
 FindHomeLocation(Waypoints &waypoints,
-                 PlacesOfInterestSettings &settings);
+                 PlacesOfInterestSettings &settings) noexcept;
 
 /**
  * Find the waypoint flagged as "home" in the #Waypoints database,
@@ -72,7 +72,7 @@ FindHomeLocation(Waypoints &waypoints,
  */
 WaypointPtr
 FindFlaggedHome(Waypoints &waypoints,
-                PlacesOfInterestSettings &settings);
+                PlacesOfInterestSettings &settings) noexcept;
 
 /**
  * This functions checks if the home and teamcode waypoint
@@ -90,7 +90,7 @@ SetHome(Waypoints &way_points, const RasterTerrain *terrain,
         PlacesOfInterestSettings &poi_settings,
         TeamCodeSettings &team_code_settings,
         DeviceBlackboard *device_blackboard,
-        const bool reset);
+        const bool reset) noexcept;
 
 /**
  * Save the home waypoint and the teamcode reference location to the
@@ -99,7 +99,7 @@ SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 void
 SaveHome(ProfileMap &profile,
          const PlacesOfInterestSettings &poi_settings,
-         const TeamCodeSettings &team_code_settings);
+         const TeamCodeSettings &team_code_settings) noexcept;
 
 /**
  * Reads the waypoints out of the two waypoint files and appends them to the

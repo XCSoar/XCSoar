@@ -34,7 +34,7 @@ namespace WaypointGlue {
 
 WaypointPtr
 FindHomeId(Waypoints &waypoints,
-           PlacesOfInterestSettings &settings)
+           PlacesOfInterestSettings &settings) noexcept
 {
   if (settings.home_waypoint < 0)
     return nullptr;
@@ -53,7 +53,7 @@ FindHomeId(Waypoints &waypoints,
 
 WaypointPtr
 FindHomeLocation(Waypoints &waypoints,
-                 PlacesOfInterestSettings &settings)
+                 PlacesOfInterestSettings &settings) noexcept
 {
   if (!settings.home_location_available)
     return nullptr;
@@ -71,7 +71,7 @@ FindHomeLocation(Waypoints &waypoints,
 
 WaypointPtr
 FindFlaggedHome(Waypoints &waypoints,
-                PlacesOfInterestSettings &settings)
+                PlacesOfInterestSettings &settings) noexcept
 {
   auto wp = waypoints.FindHome();
   if (wp == nullptr)
@@ -86,7 +86,7 @@ SetHome(Waypoints &way_points, const RasterTerrain *terrain,
         PlacesOfInterestSettings &poi_settings,
         TeamCodeSettings &team_code_settings,
         DeviceBlackboard *device_blackboard,
-        const bool reset)
+        const bool reset) noexcept
 {
   if (reset)
     poi_settings.home_waypoint = -1;
@@ -129,7 +129,7 @@ SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 void
 SaveHome(ProfileMap &profile,
          const PlacesOfInterestSettings &poi_settings,
-         const TeamCodeSettings &team_code_settings)
+         const TeamCodeSettings &team_code_settings) noexcept
 {
   profile.Set(ProfileKeys::HomeWaypoint, poi_settings.home_waypoint);
   if (poi_settings.home_location_available)
