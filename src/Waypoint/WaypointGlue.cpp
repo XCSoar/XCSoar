@@ -35,6 +35,8 @@ Copyright_License {
 #include "io/MapFile.hpp"
 #include "io/ZipArchive.hpp"
 
+namespace WaypointGlue {
+
 static bool
 LoadWaypointFile(Waypoints &waypoints, Path path,
                  WaypointFileType file_type,
@@ -83,9 +85,8 @@ LoadWaypointFile(Waypoints &waypoints, struct zzip_dir *dir, const char *path,
 }
 
 bool
-WaypointGlue::LoadWaypoints(Waypoints &way_points,
-                            const RasterTerrain *terrain,
-                            OperationEnvironment &operation)
+LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
+              OperationEnvironment &operation)
 {
   LogFormat("ReadWaypoints");
   operation.SetText(_("Loading Waypoints..."));
@@ -145,3 +146,5 @@ WaypointGlue::LoadWaypoints(Waypoints &way_points,
   // Return whether waypoints have been loaded into the waypoint list
   return found;
 }
+
+} // namespace WaypointGlue
