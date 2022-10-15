@@ -33,6 +33,9 @@ class OperationEnvironment;
  */
 void
 ReadAirspace(Airspaces &airspaces,
-             RasterTerrain *terrain,
              AtmosphericPressure press,
              OperationEnvironment &operation);
+
+void
+SetAirspaceGroundLevels(Airspaces &airspaces,
+                        const RasterTerrain &terrain) noexcept;

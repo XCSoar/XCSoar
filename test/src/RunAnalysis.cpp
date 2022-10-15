@@ -111,7 +111,10 @@ LoadFiles(Airspaces &airspace_database)
   terrain = RasterTerrain::OpenTerrain(nullptr, operation).release();
 
   const AtmosphericPressure pressure = AtmosphericPressure::Standard();
-  ReadAirspace(airspace_database, terrain, pressure, operation);
+  ReadAirspace(airspace_database, pressure, operation);
+
+  if (terrain != nullptr)
+    SetAirspaceGroundLevels(airspace_database, *terrain);
 }
 
 static void

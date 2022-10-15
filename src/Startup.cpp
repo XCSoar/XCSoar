@@ -427,9 +427,12 @@ Startup(UI::Display &display)
   // Reads the airspace files
   {
     SubOperationEnvironment sub_env(operation, 768, 1024);
-    ReadAirspace(airspace_database, terrain, computer_settings.pressure,
+    ReadAirspace(airspace_database, computer_settings.pressure,
                  sub_env);
   }
+
+  if (terrain != nullptr)
+    SetAirspaceGroundLevels(airspace_database, *terrain);
 
   {
     const AircraftState aircraft_state =

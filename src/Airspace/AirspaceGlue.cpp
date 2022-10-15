@@ -73,7 +73,6 @@ ParseAirspaceFile(Airspaces &airspaces,
 
 void
 ReadAirspace(Airspaces &airspaces,
-             RasterTerrain *terrain,
              AtmosphericPressure press,
              OperationEnvironment &operation)
 {
@@ -103,10 +102,14 @@ ReadAirspace(Airspaces &airspaces,
   if (airspace_ok) {
     airspaces.Optimise();
     airspaces.SetFlightLevels(press);
-
-    if (terrain != NULL)
-      airspaces.SetGroundLevels(*terrain);
   } else
     // there was a problem
     airspaces.Clear();
+}
+
+void
+SetAirspaceGroundLevels(Airspaces &airspaces,
+                        const RasterTerrain &terrain) noexcept
+{
+  airspaces.SetGroundLevels(terrain);
 }
