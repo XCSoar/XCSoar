@@ -27,9 +27,9 @@
 static constexpr std::size_t NORMALIZE_BUFFER_SIZE = 4096;
 
 inline WaypointPtr
-Waypoints::WaypointNameTree::Get(const TCHAR *name) const noexcept
+Waypoints::WaypointNameTree::Get(tstring_view name) const noexcept
 {
-  if (StringLength(name) >= NORMALIZE_BUFFER_SIZE)
+  if (name.size() >= NORMALIZE_BUFFER_SIZE)
     return {};
 
   TCHAR normalized_name[NORMALIZE_BUFFER_SIZE];
@@ -38,10 +38,10 @@ Waypoints::WaypointNameTree::Get(const TCHAR *name) const noexcept
 }
 
 inline void
-Waypoints::WaypointNameTree::VisitNormalisedPrefix(const TCHAR *prefix,
+Waypoints::WaypointNameTree::VisitNormalisedPrefix(tstring_view prefix,
                                                    const WaypointVisitor &visitor) const
 {
-  if (StringLength(prefix) >= NORMALIZE_BUFFER_SIZE)
+  if (prefix.size() >= NORMALIZE_BUFFER_SIZE)
     return;
 
   TCHAR normalized[NORMALIZE_BUFFER_SIZE];
@@ -50,11 +50,11 @@ Waypoints::WaypointNameTree::VisitNormalisedPrefix(const TCHAR *prefix,
 }
 
 TCHAR *
-Waypoints::WaypointNameTree::SuggestNormalisedPrefix(const TCHAR *prefix,
+Waypoints::WaypointNameTree::SuggestNormalisedPrefix(tstring_view prefix,
                                                      TCHAR *dest,
                                                      size_t max_length) const noexcept
 {
-  if (StringLength(prefix) >= NORMALIZE_BUFFER_SIZE)
+  if (prefix.size() >= NORMALIZE_BUFFER_SIZE)
     return nullptr;
 
   TCHAR normalized[NORMALIZE_BUFFER_SIZE];
@@ -66,12 +66,12 @@ inline void
 Waypoints::WaypointNameTree::Add(WaypointPtr wp) noexcept
 {
   AllocatedArray<TCHAR> buffer(wp->name.length() + 1);
-  NormalizeSearchString(buffer.data(), wp->name.c_str());
+  NormalizeSearchString(buffer.data(), wp->name);
   RadixTree<WaypointPtr>::Add(buffer.data(), wp);
 
   if (!wp->shortname.empty()) {
     buffer.GrowDiscard(wp->shortname.length() + 1);
-    NormalizeSearchString(buffer.data(), wp->shortname.c_str());
+    NormalizeSearchString(buffer.data(), wp->shortname);
     RadixTree<WaypointPtr>::Add(buffer.data(), std::move(wp));
   }
 }
@@ -80,12 +80,12 @@ inline void
 Waypoints::WaypointNameTree::Remove(const WaypointPtr &wp) noexcept
 {
   AllocatedArray<TCHAR> buffer(wp->name.length() + 1);
-  NormalizeSearchString(buffer.data(), wp->name.c_str());
+  NormalizeSearchString(buffer.data(), wp->name);
   RadixTree<WaypointPtr>::Remove(buffer.data(), wp);
 
   if (!wp->shortname.empty()) {
     buffer.GrowDiscard(wp->shortname.length() + 1);
-    NormalizeSearchString(buffer.data(), wp->shortname.c_str());
+    NormalizeSearchString(buffer.data(), wp->shortname);
     RadixTree<WaypointPtr>::Remove(buffer.data(), wp);
   }
 }
@@ -185,7 +185,7 @@ Waypoints::GetNearestIf(const GeoPoint &loc, double range,
 }
 
 WaypointPtr
-Waypoints::LookupName(const TCHAR *name) const noexcept
+Waypoints::LookupName(tstring_view name) const noexcept
 {
   return name_tree.Get(name);
 }
@@ -256,7 +256,7 @@ Waypoints::VisitWithinRange(const GeoPoint &loc, const double range,
 }
 
 void
-Waypoints::VisitNamePrefix(const TCHAR *prefix,
+Waypoints::VisitNamePrefix(tstring_view prefix,
                            WaypointVisitor visitor) const
 {
   name_tree.VisitNormalisedPrefix(prefix, visitor);

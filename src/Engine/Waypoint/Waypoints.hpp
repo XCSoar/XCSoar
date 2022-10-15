@@ -22,12 +22,13 @@
  
 #pragma once
 
-#include "util/RadixTree.hpp"
-#include "util/QuadTree.hxx"
-#include "util/Serial.hpp"
 #include "Ptr.hpp"
 #include "Waypoint.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
+#include "util/RadixTree.hpp"
+#include "util/QuadTree.hxx"
+#include "util/Serial.hpp"
+#include "util/tstring_view.hxx"
 
 #include <functional>
 
@@ -62,10 +63,10 @@ class Waypoints {
   class WaypointNameTree : public RadixTree<WaypointPtr> {
   public:
     [[gnu::pure]]
-    WaypointPtr Get(const TCHAR *name) const noexcept;
+    WaypointPtr Get(tstring_view name) const noexcept;
 
-    void VisitNormalisedPrefix(const TCHAR *prefix, const WaypointVisitor &visitor) const;
-    TCHAR *SuggestNormalisedPrefix(const TCHAR *prefix,
+    void VisitNormalisedPrefix(tstring_view prefix, const WaypointVisitor &visitor) const;
+    TCHAR *SuggestNormalisedPrefix(tstring_view prefix,
                                    TCHAR *dest, size_t max_length) const noexcept;
     void Add(WaypointPtr wp) noexcept;
     void Remove(const WaypointPtr &wp) noexcept;
@@ -272,12 +273,7 @@ public:
    * @return Pointer to waypoint if found (or nullptr if not)
    */
   [[gnu::pure]]
-  WaypointPtr LookupName(const TCHAR *name) const noexcept;
-
-  [[gnu::pure]]
-  WaypointPtr LookupName(const tstring &name) const noexcept {
-    return LookupName(name.c_str());
-  }
+  WaypointPtr LookupName(tstring_view name) const noexcept;
 
   /**
    * Check if a waypoint with same name and approximate location
@@ -305,14 +301,14 @@ public:
    * Call visitor function on waypoints with the specified name
    * prefix.
    */
-  void VisitNamePrefix(const TCHAR *prefix, WaypointVisitor visitor) const;
+  void VisitNamePrefix(tstring_view prefix, WaypointVisitor visitor) const;
 
   /**
    * Returns a set of possible characters following the specified
    * prefix.
    */
   [[gnu::pure]]
-  TCHAR *SuggestNamePrefix(const TCHAR *prefix,
+  TCHAR *SuggestNamePrefix(tstring_view prefix,
                            TCHAR *dest, size_t max_length) const noexcept {
     return name_tree.SuggestNormalisedPrefix(prefix, dest, max_length);
   }
