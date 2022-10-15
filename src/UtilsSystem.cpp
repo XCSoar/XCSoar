@@ -37,6 +37,24 @@ Copyright_License {
 #include <winuser.h>
 #endif
 
+#ifndef ANDROID
+
+[[gnu::const]]
+static PixelSize
+GetWindowDecorationOverhead() noexcept
+{
+#ifdef _WIN32
+  return {
+    2 * GetSystemMetrics(SM_CXFIXEDFRAME),
+    2 * GetSystemMetrics(SM_CYFIXEDFRAME) + GetSystemMetrics(SM_CYCAPTION),
+  };
+#else
+  return {};
+#endif
+}
+
+#endif
+
 /**
  * Returns the screen dimension rect to be used
  * @return The screen dimension rect to be used
@@ -44,16 +62,10 @@ Copyright_License {
 PixelSize
 SystemWindowSize()
 {
-#if defined(_WIN32)
-  unsigned width = CommandLine::width + 2 * GetSystemMetrics(SM_CXFIXEDFRAME);
-  unsigned height = CommandLine::height + 2 * GetSystemMetrics(SM_CYFIXEDFRAME)
-    + GetSystemMetrics(SM_CYCAPTION);
-
-  return { width, height };
-#elif defined(ANDROID)
+#ifdef ANDROID
   return native_view->GetSize();
 #else
   /// @todo implement this properly for SDL/UNIX
-  return { CommandLine::width, CommandLine::height };
+  return PixelSize{ CommandLine::width, CommandLine::height } + GetWindowDecorationOverhead();
 #endif
 }
