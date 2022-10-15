@@ -63,44 +63,38 @@ CreateWaypointReader(WaypointFileType type, WaypointFactory factory)
   return nullptr;
 }
 
-bool
+void
 ReadWaypointFile(Path path, WaypointFileType file_type,
                  Waypoints &way_points,
                  WaypointFactory factory, OperationEnvironment &operation)
-try {
+{
   std::unique_ptr<WaypointReaderBase> reader(CreateWaypointReader(file_type,
                                                                   factory));
   if (!reader)
-    return false;
+    throw std::runtime_error{"Unrecognised waypoint file"};
 
   FileLineReader line_reader(path, Charset::AUTO);
   reader->Parse(way_points, line_reader, operation);
-  return true;
-} catch (...) {
-  return false;
 }
 
-bool
+void
 ReadWaypointFile(Path path, Waypoints &way_points,
                  WaypointFactory factory, OperationEnvironment &operation)
 {
-  return ReadWaypointFile(path, DetermineWaypointFileType(path),
-                          way_points, factory, operation);
+  ReadWaypointFile(path, DetermineWaypointFileType(path),
+                   way_points, factory, operation);
 }
 
-bool
+void
 ReadWaypointFile(struct zzip_dir *dir, const char *path,
                  WaypointFileType file_type, Waypoints &way_points,
                  WaypointFactory factory, OperationEnvironment &operation)
-try {
+{
   std::unique_ptr<WaypointReaderBase> reader(CreateWaypointReader(file_type,
                                                                   factory));
   if (!reader)
-    return false;
+    throw std::runtime_error{"Unrecognised waypoint file"};
 
   ZipLineReader line_reader(dir, path, Charset::AUTO);
   reader->Parse(way_points, line_reader, operation);
-  return true;
-} catch (...) {
-  return false;
 }

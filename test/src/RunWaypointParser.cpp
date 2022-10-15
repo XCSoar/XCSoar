@@ -26,12 +26,13 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "system/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
+#include "util/PrintException.hxx"
 
 #include <stdio.h>
 #include <tchar.h>
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PATH\n");
   const auto path = args.ExpectNextPath();
   args.ExpectEnd();
@@ -39,12 +40,9 @@ int main(int argc, char **argv)
   Waypoints way_points;
 
   ConsoleOperationEnvironment operation;
-  if (!ReadWaypointFile(path, way_points,
-                        WaypointFactory(WaypointOrigin::NONE),
-                        operation)) {
-    fprintf(stderr, "ReadWaypointFile() has failed\n");
-    return EXIT_FAILURE;
-  }
+  ReadWaypointFile(path, way_points,
+                   WaypointFactory(WaypointOrigin::NONE),
+                   operation);
 
   way_points.Optimise();
   printf("Size %d\n", way_points.size());
@@ -58,4 +56,7 @@ int main(int argc, char **argv)
   });
 
   return EXIT_SUCCESS;
+} catch (...) {
+  PrintException(std::current_exception());
+  return EXIT_FAILURE;
 }

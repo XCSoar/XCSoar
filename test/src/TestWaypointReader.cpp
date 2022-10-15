@@ -179,9 +179,14 @@ static bool
 TestWaypointFile(Path filename, Waypoints &way_points, unsigned num_wps)
 {
   NullOperationEnvironment operation;
-  if (!ok1(ReadWaypointFile(filename, way_points,
-                            WaypointFactory(WaypointOrigin::NONE),
-                            operation))) {
+
+  try {
+    ReadWaypointFile(filename, way_points,
+                     WaypointFactory(WaypointOrigin::NONE),
+                     operation);
+    ok1(true);
+  } catch (...) {
+    ok1(false);
     skip(2, 0, "parsing waypoint file failed");
     return false;
   }

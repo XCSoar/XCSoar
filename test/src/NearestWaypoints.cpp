@@ -27,24 +27,19 @@ Copyright_License {
 #include "system/ConvertPathName.hpp"
 #include "system/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
+#include "util/PrintException.hxx"
 
 #include <cstdint>
 #include <stdio.h>
 #include <tchar.h>
 
-static bool
+static void
 LoadWaypoints(Path path, Waypoints &waypoints)
 {
   ConsoleOperationEnvironment operation;
-  if (!ReadWaypointFile(path, waypoints,
-                        WaypointFactory(WaypointOrigin::NONE),
-                        operation)) {
-    fprintf(stderr, "ReadWaypointFile() failed\n");
-    return false;
-  }
-
-  waypoints.Optimise();
-  return true;
+  ReadWaypointFile(path, waypoints,
+                   WaypointFactory(WaypointOrigin::NONE),
+                   operation);
 }
 
 static bool
@@ -127,7 +122,7 @@ PrintWaypoint(const Waypoint *waypoint)
 }
 
 int main(int argc, char **argv)
-{
+try {
   WaypointType type = WaypointType::ALL;
   double range = 100000;
 
@@ -163,8 +158,7 @@ int main(int argc, char **argv)
   args.ExpectEnd();
 
   Waypoints waypoints;
-  if (!LoadWaypoints(path, waypoints))
-    return EXIT_FAILURE;
+  LoadWaypoints(path, waypoints);
 
   char buffer[1024];
   const char *line;
@@ -179,4 +173,7 @@ int main(int argc, char **argv)
   }
 
   return EXIT_SUCCESS;
+} catch (...) {
+  PrintException(std::current_exception());
+  return EXIT_FAILURE;
 }

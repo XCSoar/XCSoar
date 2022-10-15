@@ -32,16 +32,25 @@ class Waypoints;
 class WaypointFactory;
 class OperationEnvironment;
 
-bool
+/**
+ * Throws on error.
+ */
+void
 ReadWaypointFile(Path path, WaypointFileType file_type,
                  Waypoints &way_points,
                  WaypointFactory factory, OperationEnvironment &operation);
 
-bool
+/**
+ * Throws on error.
+ */
+void
 ReadWaypointFile(Path path, Waypoints &way_points,
                  WaypointFactory factory, OperationEnvironment &operation);
 
-bool
+/**
+ * Throws on error.
+ */
+void
 ReadWaypointFile(struct zzip_dir *dir, const char *path,
                  WaypointFileType file_type, Waypoints &way_points,
                  WaypointFactory factory, OperationEnvironment &operation);

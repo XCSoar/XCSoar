@@ -36,11 +36,8 @@ CAI302WaypointUploader::Run(OperationEnvironment &env)
 
   env.SetText(_("Loading Waypoints..."));
 
-  if (!ReadWaypointFile(path, waypoints, WaypointFactory(WaypointOrigin::NONE),
-                        env)) {
-    env.SetErrorMessage(_("Failed to load file."));
-    return;
-  }
+  ReadWaypointFile(path, waypoints, WaypointFactory(WaypointOrigin::NONE),
+                   env);
 
   if (waypoints.size() > 9999) {
     env.SetErrorMessage(_("Too many waypoints."));

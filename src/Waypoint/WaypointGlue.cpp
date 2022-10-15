@@ -41,47 +41,50 @@ static bool
 LoadWaypointFile(Waypoints &waypoints, Path path,
                  WaypointFileType file_type,
                  WaypointOrigin origin,
-                 const RasterTerrain *terrain, OperationEnvironment &operation)
-{
-  if (!ReadWaypointFile(path, file_type, waypoints,
-                        WaypointFactory(origin, terrain),
-                        operation)) {
-    LogFormat(_T("Failed to read waypoint file: %s"), path.c_str());
-    return false;
-  }
-
+                 const RasterTerrain *terrain,
+                 OperationEnvironment &operation) noexcept
+try {
+  ReadWaypointFile(path, file_type, waypoints,
+                   WaypointFactory(origin, terrain),
+                   operation);
   return true;
+} catch (...) {
+  LogFormat(_T("Failed to read waypoint file: %s"), path.c_str());
+  LogError(std::current_exception());
+  return false;
 }
 
 static bool
 LoadWaypointFile(Waypoints &waypoints, Path path,
                  WaypointOrigin origin,
-                 const RasterTerrain *terrain, OperationEnvironment &operation)
-{
-  if (!ReadWaypointFile(path, waypoints,
-                        WaypointFactory(origin, terrain),
-                        operation)) {
-    LogFormat(_T("Failed to read waypoint file: %s"), path.c_str());
-    return false;
-  }
-
+                 const RasterTerrain *terrain,
+                 OperationEnvironment &operation) noexcept
+try {
+  ReadWaypointFile(path, waypoints,
+                   WaypointFactory(origin, terrain),
+                   operation);
   return true;
+} catch (...) {
+  LogFormat(_T("Failed to read waypoint file: %s"), path.c_str());
+  LogError(std::current_exception());
+  return false;
 }
 
 static bool
 LoadWaypointFile(Waypoints &waypoints, struct zzip_dir *dir, const char *path,
                  WaypointFileType file_type,
                  WaypointOrigin origin,
-                 const RasterTerrain *terrain, OperationEnvironment &operation)
-{
-  if (!ReadWaypointFile(dir, path, file_type, waypoints,
-                        WaypointFactory(origin, terrain),
-                        operation)) {
-    LogFormat("Failed to read waypoint file: %s", path);
-    return false;
-  }
-
+                 const RasterTerrain *terrain,
+                 OperationEnvironment &operation) noexcept
+try {
+  ReadWaypointFile(dir, path, file_type, waypoints,
+                   WaypointFactory(origin, terrain),
+                   operation);
   return true;
+} catch (...) {
+  LogFormat(_T("Failed to read waypoint file: %s"), path);
+  LogError(std::current_exception());
+  return false;
 }
 
 bool
