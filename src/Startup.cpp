@@ -219,6 +219,8 @@ try {
   DataGlobals::UnsetTerrain();
   DataGlobals::SetTerrain(std::move(new_terrain));
   DataGlobals::UpdateHome(false);
+
+  SetAirspaceGroundLevels(airspace_database, *terrain);
 } catch (...) {
   LogError(std::current_exception(), "LoadTerrain failed");
 }
