@@ -22,13 +22,10 @@ Copyright_License {
 */
 
 #include "StringUtil.hpp"
-#include "StringCompare.hxx"
 #include "CharUtil.hxx"
 #include "Compiler.h"
 
 #include <algorithm>
-
-#include <string.h>
 
 char *
 CopyString(char *gcc_restrict dest, size_t dest_size,

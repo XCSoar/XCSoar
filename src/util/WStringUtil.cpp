@@ -22,8 +22,6 @@ Copyright_License {
 */
 
 #include "WStringUtil.hpp"
-#include "WStringAPI.hxx"
-#include "WStringCompare.hxx"
 #include "WCharUtil.hxx"
 #include "Compiler.h"
 
