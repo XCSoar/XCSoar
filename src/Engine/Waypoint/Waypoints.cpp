@@ -26,9 +26,6 @@
 
 static constexpr std::size_t NORMALIZE_BUFFER_SIZE = 4096;
 
-// global, used for test harness
-unsigned n_queries = 0;
-
 inline WaypointPtr
 Waypoints::WaypointNameTree::Get(const TCHAR *name) const noexcept
 {
