@@ -137,10 +137,8 @@ struct Waypoint {
 
   /**
    * Constructor for real waypoints
-   *
-   * @return Uninitialised object
    */
-  Waypoint(const GeoPoint &_location) noexcept;
+  explicit Waypoint(const GeoPoint &_location) noexcept;
 
   /** 
    * Determine if waypoint is marked as able to be landed at
