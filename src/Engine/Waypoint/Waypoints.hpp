@@ -74,7 +74,7 @@ class Waypoints {
    */
   Serial serial;
 
-  unsigned next_id;
+  unsigned next_id = 1;
 
   WaypointTree waypoint_tree;
   WaypointNameTree name_tree;

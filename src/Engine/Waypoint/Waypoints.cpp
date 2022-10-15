@@ -94,8 +94,6 @@ Waypoints::WaypointNameTree::Remove(const WaypointPtr &wp)
 }
 
 Waypoints::Waypoints()
-  :next_id(1),
-   home(nullptr)
 {
 }
 
