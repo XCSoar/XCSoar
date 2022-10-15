@@ -54,12 +54,12 @@ public:
   PixelSize GetMaximumSize() const noexcept override;
   void Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
-  void Unprepare() noexcept override;
   bool Save(bool &changed) noexcept override;
   bool Click() noexcept override;
   void ReClick() noexcept override;
   void Show(const PixelRect &rc) noexcept override;
   bool Leave() noexcept override;
+  void Hide() noexcept override;
   bool SetFocus() noexcept override;
   bool HasFocus() const noexcept override;
   bool KeyPress(unsigned key_code) noexcept override;

@@ -2,6 +2,7 @@ Version 7.28 - not yet released
 * data files
   - fix crash after loading new map file
 * user interface
+  - fix task manager crash bug
   - fix WeGlide 'Automatic Upload' not persistent
   - file manager, show description and update date
   - ATC Radial infobox can display magnetic radial with configurable declination

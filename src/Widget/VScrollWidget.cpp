@@ -82,17 +82,6 @@ VScrollWidget::Prepare(ContainerWindow &, const PixelRect &rc) noexcept
   widget->Prepare(GetWindow(), rc);
 }
 
-void
-VScrollWidget::Unprepare() noexcept
-{
-  if (visible) {
-    visible = false;
-    widget->Hide();
-  }
-
-  widget->Unprepare();
-}
-
 bool
 VScrollWidget::Save(bool &changed) noexcept
 {
@@ -118,16 +107,23 @@ VScrollWidget::Show(const PixelRect &rc) noexcept
 
   UpdateVirtualHeight(rc);
 
-  if (!visible) {
-    visible = true;
-    widget->Show(GetWindow().GetVirtualRect());
-  }
+  visible = true;
+  widget->Show(GetWindow().GetVirtualRect());
 }
 
 bool
 VScrollWidget::Leave() noexcept
 {
   return widget->Leave();
+}
+
+void
+VScrollWidget::Hide() noexcept
+{
+  WindowWidget::Hide();
+
+  visible = false;
+  widget->Hide();
 }
 
 bool
