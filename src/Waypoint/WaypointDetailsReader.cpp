@@ -69,7 +69,7 @@ WaypointDetailsBuilder::Commit(Waypoints &way_points) noexcept
 
   // TODO: eliminate this const_cast hack
   Waypoint &new_wp = const_cast<Waypoint &>(*wp);
-  new_wp.details = details.c_str();
+  new_wp.details = std::move(details);
   new_wp.files_embed.assign(files_embed.begin(), files_embed.end());
 #ifdef HAVE_RUN_FILE
   new_wp.files_external.assign(files_external.begin(), files_external.end());
