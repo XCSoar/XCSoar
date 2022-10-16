@@ -38,7 +38,7 @@ Copyright_License {
 #include "Geo/GeoVector.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
 #include "util/ConvertString.hpp"
-#include "util/Exception.hxx"
+#include "util/RuntimeError.hxx"
 #include "util/StaticString.hxx"
 #include "util/StringCompare.hxx"
 
@@ -330,16 +330,6 @@ struct TempAirspaceType
     points.push_back(FindLatitudeLongitude(center, end, radius));
   }
 };
-
-static void
-ShowParseWarning(const TCHAR *msg, int line, const TCHAR *str,
-                 OperationEnvironment &operation) noexcept
-{
-  StaticString<256> buffer;
-  buffer.Format(_T("%s [%d]\r\n\"%s\""),
-                msg, line, str);
-  operation.SetErrorMessage(buffer.c_str());
-}
 
 [[nodiscard]]
 static AirspaceAltitude
@@ -910,10 +900,10 @@ DetectFileType(const TCHAR *line)
   return AirspaceFileType::UNKNOWN;
 }
 
-bool
+void
 ParseAirspaceFile(Airspaces &airspaces,
                   TLineReader &reader,
-                  OperationEnvironment &operation) noexcept
+                  OperationEnvironment &operation)
 {
   bool ignore = false;
 
@@ -950,10 +940,9 @@ ParseAirspaceFile(Airspaces &airspaces,
         ParseLineTNP(airspaces, input, temp_area, ignore);
       }
     } catch (...) {
-      const auto msg = GetFullMessage(std::current_exception());
-      ShowParseWarning(UTF8ToWideConverter(msg.c_str()), line_num, line,
-                       operation);
-      return false;
+      // TODO translate this?
+      std::throw_with_nested(FormatRuntimeError("Error in line %u ('%s')",
+                                                line_num, line));
     }
 
     // Update the ProgressDialog
@@ -961,19 +950,9 @@ ParseAirspaceFile(Airspaces &airspaces,
       operation.SetProgressPosition(reader.Tell() * 1024 / file_size);
   }
 
-  if (filetype == AirspaceFileType::UNKNOWN) {
-    operation.SetErrorMessage(_("Unknown airspace filetype"));
-    return false;
-  }
+  if (filetype == AirspaceFileType::UNKNOWN)
+    throw std::runtime_error(WideToUTF8Converter(_("Unknown airspace filetype")));
 
   // Process final area (if any)
-  try {
-    temp_area.Commit(airspaces);
-  } catch (...) {
-    const auto msg = GetFullMessage(std::current_exception());
-    operation.SetErrorMessage(UTF8ToWideConverter(msg.c_str()));
-    return false;
-  }
-
-  return true;
+  temp_area.Commit(airspaces);
 }

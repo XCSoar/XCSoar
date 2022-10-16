@@ -27,7 +27,10 @@ class Airspaces;
 class TLineReader;
 class OperationEnvironment;
 
-bool
+/**
+ * Throws on error.
+ */
+void
 ParseAirspaceFile(Airspaces &airspaces,
                   TLineReader &reader,
-                  OperationEnvironment &operation) noexcept;
+                  OperationEnvironment &operation);

@@ -42,10 +42,7 @@ try {
   Airspaces airspaces;
 
   ConsoleOperationEnvironment operation;
-  if (!ParseAirspaceFile(airspaces, reader, operation)) {
-    fprintf(stderr, "Failed to parse input file\n");
-    return 1;
-  }
+  ParseAirspaceFile(airspaces, reader, operation);
 
   airspaces.Optimise();
 

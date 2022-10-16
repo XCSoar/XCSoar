@@ -34,6 +34,7 @@ Copyright_License {
 #include "io/ZipArchive.hpp"
 #include "io/ZipLineReader.hpp"
 #include "io/MapFile.hpp"
+#include "util/RuntimeError.hxx"
 #include "Profile/Profile.hpp"
 
 #include <string.h>
@@ -44,15 +45,18 @@ ParseAirspaceFile(Airspaces &airspaces, Path path,
 try {
   FileLineReader reader(path, Charset::AUTO);
 
-  if (!ParseAirspaceFile(airspaces, reader, operation)) {
-    LogFormat(_T("Failed to parse airspace file: %s"), path.c_str());
-    return false;
+  try {
+    ParseAirspaceFile(airspaces, reader, operation);
+  } catch (...) {
+    // TODO translate this?
+    std::throw_with_nested(FormatRuntimeError("Error in file %s",
+                                              path.ToUTF8().c_str()));
   }
 
   return true;
 } catch (...) {
-  LogFormat(_T("Failed to parse airspace file: %s"), path.c_str());
   LogError(std::current_exception());
+  operation.SetError(std::current_exception());
   return false;
 }
 
@@ -60,15 +64,22 @@ static bool
 ParseAirspaceFile(Airspaces &airspaces,
                   struct zzip_dir *dir, const char *path,
                   OperationEnvironment &operation)
-{
+try {
   ZipLineReader reader(dir, path, Charset::AUTO);
 
-  if (!ParseAirspaceFile(airspaces, reader, operation)) {
-    LogFormat("Failed to parse airspace file: %s", path);
-    return false;
+  try {
+    ParseAirspaceFile(airspaces, reader, operation);
+  } catch (...) {
+    // TODO translate this?
+    std::throw_with_nested(FormatRuntimeError("Error in file %s",
+                                              path));
   }
 
   return true;
+} catch (...) {
+  LogError(std::current_exception());
+  operation.SetError(std::current_exception());
+  return false;
 }
 
 void
@@ -91,7 +102,8 @@ ReadAirspace(Airspaces &airspaces,
     airspace_ok |= ParseAirspaceFile(airspaces, path, operation);
 
   try {
-    if (auto archive = OpenMapFile())
+    if (auto archive = OpenMapFile();
+        archive && archive->Exists("airspace.txt"))
       airspace_ok |= ParseAirspaceFile(airspaces, archive->get(),
                                        "airspace.txt", operation);
   } catch (...) {

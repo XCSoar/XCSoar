@@ -49,8 +49,13 @@ ParseFile(Path path, Airspaces &airspaces)
 
   NullOperationEnvironment operation;
 
-  if (!ok1(ParseAirspaceFile(airspaces, reader, operation)))
+  try {
+    ParseAirspaceFile(airspaces, reader, operation);
+    ok1(true);
+  } catch (...) {
+    ok1(false);
     return false;
+  }
 
   airspaces.Optimise();
   return true;
