@@ -29,7 +29,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "io/ConfiguredFile.hpp"
 #include "io/LineReader.hpp"
-#include "Operation/Operation.hpp"
+#include "Operation/ProgressListener.hpp"
 
 #include <vector>
 
@@ -65,7 +65,7 @@ SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
  */
 static void
 ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
-                     OperationEnvironment &operation)
+                     ProgressListener &progress)
 {
   tstring details;
   std::vector<tstring> files_external, files_embed;
@@ -78,7 +78,7 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
   int i;
 
   const long filesize = std::max(reader.GetSize(), 1l);
-  operation.SetProgressRange(100);
+  progress.SetProgressRange(100);
 
   TCHAR *line;
   while ((line = reader.ReadLine()) != nullptr) {
@@ -102,7 +102,7 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
 
       in_details = true;
 
-      operation.SetProgressPosition(reader.Tell() * 100 / filesize);
+      progress.SetProgressPosition(reader.Tell() * 100 / filesize);
     } else if ((filename =
                 StringAfterPrefixIgnoreCase(line, _T("image="))) != nullptr) {
       files_embed.emplace_back(filename);
@@ -129,21 +129,20 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
  */
 void
 ReadFile(TLineReader &reader, Waypoints &way_points,
-         OperationEnvironment &operation)
+         ProgressListener &progress)
 {
-  operation.SetText(_("Loading Airfield Details File..."));
-  ParseAirfieldDetails(way_points, reader, operation);
+  ParseAirfieldDetails(way_points, reader, progress);
 }
 
 void
 ReadFileFromProfile(Waypoints &way_points,
-                    OperationEnvironment &operation)
+                    ProgressListener &progress)
 {
   auto reader = OpenConfiguredTextFile(ProfileKeys::AirfieldFile,
                                        "airfields.txt",
                                        Charset::AUTO);
   if (reader)
-    ReadFile(*reader, way_points, operation);
+    ReadFile(*reader, way_points, progress);
 }
 
 } // namespace WaypointDetails

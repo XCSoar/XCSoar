@@ -24,17 +24,17 @@ Copyright_License {
 #pragma once
 
 class Waypoints;
-class OperationEnvironment;
+class ProgressListener;
 class TLineReader;
 
 namespace WaypointDetails {
 
 void
 ReadFile(TLineReader &reader, Waypoints &way_points,
-         OperationEnvironment &operation);
+         ProgressListener &progress);
 
 void
 ReadFileFromProfile(Waypoints &way_points,
-                    OperationEnvironment &operation);
+                    ProgressListener &progress);
 
 } // namespace WaypointDetails

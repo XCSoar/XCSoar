@@ -410,6 +410,7 @@ Startup(UI::Display &display)
   // Read and parse the airfield info file
   {
     SubOperationEnvironment sub_env(operation, 512, 768);
+    sub_env.SetText(_("Loading Airfield Details File..."));
     WaypointDetails::ReadFileFromProfile(way_points, sub_env);
   }
 
