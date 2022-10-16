@@ -77,8 +77,6 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
   TCHAR name[201];
   const TCHAR *filename;
 
-  name[0] = 0;
-
   bool in_details = false;
   int i;
 
