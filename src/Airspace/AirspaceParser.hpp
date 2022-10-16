@@ -25,7 +25,7 @@ Copyright_License {
 
 class Airspaces;
 class TLineReader;
-class OperationEnvironment;
+class ProgressListener;
 
 /**
  * Throws on error.
@@ -33,4 +33,4 @@ class OperationEnvironment;
 void
 ParseAirspaceFile(Airspaces &airspaces,
                   TLineReader &reader,
-                  OperationEnvironment &operation);
+                  ProgressListener &progress);

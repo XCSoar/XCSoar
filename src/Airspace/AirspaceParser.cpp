@@ -24,7 +24,7 @@ Copyright_License {
 
 #include "AirspaceParser.hpp"
 #include "Airspace/Airspaces.hpp"
-#include "Operation/Operation.hpp"
+#include "Operation/ProgressListener.hpp"
 #include "Units/System.hpp"
 #include "Language/Language.hpp"
 #include "util/CharUtil.hxx"
@@ -903,12 +903,12 @@ DetectFileType(const TCHAR *line)
 void
 ParseAirspaceFile(Airspaces &airspaces,
                   TLineReader &reader,
-                  OperationEnvironment &operation)
+                  ProgressListener &progress)
 {
   bool ignore = false;
 
   // Create and init ProgressDialog
-  operation.SetProgressRange(1024);
+  progress.SetProgressRange(1024);
 
   const long file_size = reader.GetSize();
 
@@ -947,7 +947,7 @@ ParseAirspaceFile(Airspaces &airspaces,
 
     // Update the ProgressDialog
     if ((line_num & 0xff) == 0)
-      operation.SetProgressPosition(reader.Tell() * 1024 / file_size);
+      progress.SetProgressPosition(reader.Tell() * 1024 / file_size);
   }
 
   if (filetype == AirspaceFileType::UNKNOWN)
