@@ -27,7 +27,7 @@ Copyright_License {
 
 class Waypoints;
 class RasterTerrain;
-class OperationEnvironment;
+class ProgressListener;
 struct PlacesOfInterestSettings;
 struct TeamCodeSettings;
 class DeviceBlackboard;
@@ -110,7 +110,7 @@ SaveHome(ProfileMap &profile,
 bool
 LoadWaypoints(Waypoints &way_points,
               const RasterTerrain *terrain,
-              OperationEnvironment &operation);
+              ProgressListener &progress);
 
 /**
  * Append one waypoint to the file "user.cup".

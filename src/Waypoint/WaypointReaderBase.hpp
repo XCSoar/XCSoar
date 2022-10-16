@@ -29,9 +29,9 @@ Copyright_License {
 
 class Waypoints;
 class TLineReader;
-class OperationEnvironment;
+class ProgressListener;
 
-class WaypointReaderBase 
+class WaypointReaderBase
 {
 protected:
   const WaypointFactory factory;
@@ -49,7 +49,7 @@ public:
    * @return True if the waypoint file parsing was okay, False otherwise
    */
   void Parse(Waypoints &way_points, TLineReader &reader,
-             OperationEnvironment &operation);
+             ProgressListener &progress);
 
 protected:
   /**

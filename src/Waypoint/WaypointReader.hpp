@@ -30,7 +30,7 @@ struct zzip_dir;
 class Path;
 class Waypoints;
 class WaypointFactory;
-class OperationEnvironment;
+class ProgressListener;
 
 /**
  * Throws on error.
@@ -38,14 +38,14 @@ class OperationEnvironment;
 void
 ReadWaypointFile(Path path, WaypointFileType file_type,
                  Waypoints &way_points,
-                 WaypointFactory factory, OperationEnvironment &operation);
+                 WaypointFactory factory, ProgressListener &progress);
 
 /**
  * Throws on error.
  */
 void
 ReadWaypointFile(Path path, Waypoints &way_points,
-                 WaypointFactory factory, OperationEnvironment &operation);
+                 WaypointFactory factory, ProgressListener &progress);
 
 /**
  * Throws on error.
@@ -53,4 +53,4 @@ ReadWaypointFile(Path path, Waypoints &way_points,
 void
 ReadWaypointFile(struct zzip_dir *dir, const char *path,
                  WaypointFileType file_type, Waypoints &way_points,
-                 WaypointFactory factory, OperationEnvironment &operation);
+                 WaypointFactory factory, ProgressListener &progress);

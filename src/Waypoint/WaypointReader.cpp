@@ -66,7 +66,7 @@ CreateWaypointReader(WaypointFileType type, WaypointFactory factory)
 void
 ReadWaypointFile(Path path, WaypointFileType file_type,
                  Waypoints &way_points,
-                 WaypointFactory factory, OperationEnvironment &operation)
+                 WaypointFactory factory, ProgressListener &progress)
 {
   std::unique_ptr<WaypointReaderBase> reader(CreateWaypointReader(file_type,
                                                                   factory));
@@ -74,21 +74,21 @@ ReadWaypointFile(Path path, WaypointFileType file_type,
     throw std::runtime_error{"Unrecognised waypoint file"};
 
   FileLineReader line_reader(path, Charset::AUTO);
-  reader->Parse(way_points, line_reader, operation);
+  reader->Parse(way_points, line_reader, progress);
 }
 
 void
 ReadWaypointFile(Path path, Waypoints &way_points,
-                 WaypointFactory factory, OperationEnvironment &operation)
+                 WaypointFactory factory, ProgressListener &progress)
 {
   ReadWaypointFile(path, DetermineWaypointFileType(path),
-                   way_points, factory, operation);
+                   way_points, factory, progress);
 }
 
 void
 ReadWaypointFile(struct zzip_dir *dir, const char *path,
                  WaypointFileType file_type, Waypoints &way_points,
-                 WaypointFactory factory, OperationEnvironment &operation)
+                 WaypointFactory factory, ProgressListener &progress)
 {
   std::unique_ptr<WaypointReaderBase> reader(CreateWaypointReader(file_type,
                                                                   factory));
@@ -96,5 +96,5 @@ ReadWaypointFile(struct zzip_dir *dir, const char *path,
     throw std::runtime_error{"Unrecognised waypoint file"};
 
   ZipLineReader line_reader(dir, path, Charset::AUTO);
-  reader->Parse(way_points, line_reader, operation);
+  reader->Parse(way_points, line_reader, progress);
 }

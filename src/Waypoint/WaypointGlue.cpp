@@ -42,11 +42,11 @@ LoadWaypointFile(Waypoints &waypoints, Path path,
                  WaypointFileType file_type,
                  WaypointOrigin origin,
                  const RasterTerrain *terrain,
-                 OperationEnvironment &operation) noexcept
+                 ProgressListener &progress) noexcept
 try {
   ReadWaypointFile(path, file_type, waypoints,
                    WaypointFactory(origin, terrain),
-                   operation);
+                   progress);
   return true;
 } catch (...) {
   LogFormat(_T("Failed to read waypoint file: %s"), path.c_str());
@@ -58,11 +58,11 @@ static bool
 LoadWaypointFile(Waypoints &waypoints, Path path,
                  WaypointOrigin origin,
                  const RasterTerrain *terrain,
-                 OperationEnvironment &operation) noexcept
+                 ProgressListener &progress) noexcept
 try {
   ReadWaypointFile(path, waypoints,
                    WaypointFactory(origin, terrain),
-                   operation);
+                   progress);
   return true;
 } catch (...) {
   LogFormat(_T("Failed to read waypoint file: %s"), path.c_str());
@@ -75,11 +75,11 @@ LoadWaypointFile(Waypoints &waypoints, struct zzip_dir *dir, const char *path,
                  WaypointFileType file_type,
                  WaypointOrigin origin,
                  const RasterTerrain *terrain,
-                 OperationEnvironment &operation) noexcept
+                 ProgressListener &progressg) noexcept
 try {
   ReadWaypointFile(dir, path, file_type, waypoints,
                    WaypointFactory(origin, terrain),
-                   operation);
+                   progressg);
   return true;
 } catch (...) {
   LogFormat(_T("Failed to read waypoint file: %s"), path);
@@ -89,11 +89,8 @@ try {
 
 bool
 LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
-              OperationEnvironment &operation)
+              ProgressListener &progress)
 {
-  LogFormat("ReadWaypoints");
-  operation.SetText(_("Loading Waypoints..."));
-
   bool found = false;
 
   // Delete old waypoints
@@ -101,25 +98,25 @@ LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
 
   LoadWaypointFile(way_points, LocalPath(_T("user.cup")),
                    WaypointFileType::SEEYOU,
-                   WaypointOrigin::USER, terrain, operation);
+                   WaypointOrigin::USER, terrain, progress);
 
   // ### FIRST FILE ###
   auto path = Profile::GetPath(ProfileKeys::WaypointFile);
   if (path != nullptr)
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::PRIMARY,
-                              terrain, operation);
+                              terrain, progress);
 
   // ### SECOND FILE ###
   path = Profile::GetPath(ProfileKeys::AdditionalWaypointFile);
   if (path != nullptr)
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::ADDITIONAL,
-                              terrain, operation);
+                              terrain, progress);
 
   // ### WATCHED WAYPOINT/THIRD FILE ###
   path = Profile::GetPath(ProfileKeys::WatchedWaypointFile);
   if (path != nullptr)
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::WATCHED,
-                              terrain, operation);
+                              terrain, progress);
 
   // ### MAP/FOURTH FILE ###
 
@@ -130,12 +127,12 @@ LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
         found |= LoadWaypointFile(way_points, archive->get(), "waypoints.xcw",
                                   WaypointFileType::WINPILOT,
                                   WaypointOrigin::MAP,
-                                  terrain, operation);
+                                  terrain, progress);
 
         found |= LoadWaypointFile(way_points, archive->get(), "waypoints.cup",
                                   WaypointFileType::SEEYOU,
                                   WaypointOrigin::MAP,
-                                  terrain, operation);
+                                  terrain, progress);
       }
     } catch (...) {
       LogError(std::current_exception(),

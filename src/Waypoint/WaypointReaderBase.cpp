@@ -22,15 +22,15 @@ Copyright_License {
 */
 
 #include "WaypointReaderBase.hpp"
-#include "Operation/Operation.hpp"
+#include "Operation/ProgressListener.hpp"
 #include "io/LineReader.hpp"
 
 void
 WaypointReaderBase::Parse(Waypoints &way_points, TLineReader &reader,
-                          OperationEnvironment &operation)
+                          ProgressListener &progress)
 {
   const long filesize = std::max(reader.GetSize(), 1l);
-  operation.SetProgressRange(100);
+  progress.SetProgressRange(100);
 
   // Read through the lines of the file
   TCHAR *line;
@@ -39,6 +39,6 @@ WaypointReaderBase::Parse(Waypoints &way_points, TLineReader &reader,
     ParseLine(line, way_points);
 
     if ((i & 0x3f) == 0)
-      operation.SetProgressPosition(reader.Tell() * 100 / filesize);
+      progress.SetProgressPosition(reader.Tell() * 100 / filesize);
   }
 }

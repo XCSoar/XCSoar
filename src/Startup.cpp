@@ -400,8 +400,10 @@ Startup(UI::Display &display)
   }
 
   // Read the waypoint files
+  LogFormat("ReadWaypoints");
   {
     SubOperationEnvironment sub_env(operation, 256, 512);
+    sub_env.SetText(_("Loading Waypoints..."));
     WaypointGlue::LoadWaypoints(way_points, terrain, sub_env);
   }
 
