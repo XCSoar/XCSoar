@@ -44,7 +44,9 @@ FindWaypoint(Waypoints &way_points, const TCHAR *name)
 static void
 SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
                    const tstring &Details,
-                   [[maybe_unused]] const std::vector<tstring> &files_external,
+#ifdef HAVE_RUN_FILE
+                   const std::vector<tstring> &files_external,
+#endif
                    const std::vector<tstring> &files_embed)
 {
   auto wp = FindWaypoint(way_points, name);
@@ -68,7 +70,10 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
                      ProgressListener &progress)
 {
   tstring details;
-  std::vector<tstring> files_external, files_embed;
+#ifdef HAVE_RUN_FILE
+  std::vector<tstring> files_external;
+#endif
+  std::vector<tstring> files_embed;
   TCHAR name[201];
   const TCHAR *filename;
 
@@ -84,11 +89,16 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
   while ((line = reader.ReadLine()) != nullptr) {
     if (line[0] == _T('[')) { // Look for start
       if (in_details)
-        SetAirfieldDetails(way_points, name, details, files_external,
+        SetAirfieldDetails(way_points, name, details,
+#ifdef HAVE_RUN_FILE
+                           files_external,
+#endif
                            files_embed);
 
       details.clear();
+#ifdef HAVE_RUN_FILE
       files_external.clear();
+#endif
       files_embed.clear();
 
       // extract name
@@ -121,7 +131,11 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
   }
 
   if (in_details)
-    SetAirfieldDetails(way_points, name, details, files_external, files_embed);
+    SetAirfieldDetails(way_points, name, details,
+#ifdef HAVE_RUN_FILE
+                       files_external,
+#endif
+                       files_embed);
 }
 
 /**
