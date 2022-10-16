@@ -31,8 +31,6 @@ Copyright_License {
 #include "io/LineReader.hpp"
 #include "Operation/ProgressListener.hpp"
 
-#include <vector>
-
 namespace WaypointDetails {
 
 static WaypointPtr
@@ -45,9 +43,9 @@ struct WaypointDetailsBuilder {
   TCHAR name[201];
   tstring details;
 #ifdef HAVE_RUN_FILE
-  std::vector<tstring> files_external;
+  std::forward_list<tstring> files_external;
 #endif
-  std::vector<tstring> files_embed;
+  std::forward_list<tstring> files_embed;
 
   void Reset() noexcept {
     details.clear();
@@ -70,9 +68,13 @@ WaypointDetailsBuilder::Commit(Waypoints &way_points) noexcept
   // TODO: eliminate this const_cast hack
   Waypoint &new_wp = const_cast<Waypoint &>(*wp);
   new_wp.details = std::move(details);
-  new_wp.files_embed.assign(files_embed.begin(), files_embed.end());
+
+  files_embed.reverse();
+  new_wp.files_embed = std::move(files_embed);
+
 #ifdef HAVE_RUN_FILE
-  new_wp.files_external.assign(files_external.begin(), files_external.end());
+  files_external.reverse();
+  new_wp.files_external = std::move(files_external);
 #endif
 }
 
@@ -114,11 +116,11 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
       progress.SetProgressPosition(reader.Tell() * 100 / filesize);
     } else if ((filename =
                 StringAfterPrefixIgnoreCase(line, _T("image="))) != nullptr) {
-      builder.files_embed.emplace_back(filename);
+      builder.files_embed.emplace_front(filename);
     } else if ((filename =
                 StringAfterPrefixIgnoreCase(line, _T("file="))) != nullptr) {
 #ifdef HAVE_RUN_FILE
-      builder.files_external.emplace_back(filename);
+      builder.files_external.emplace_front(filename);
 #endif
     } else {
       // append text to details string
