@@ -33,6 +33,8 @@ Copyright_License {
 
 #include <vector>
 
+namespace WaypointDetails {
+
 static WaypointPtr
 FindWaypoint(Waypoints &way_points, const TCHAR *name)
 {
@@ -126,16 +128,16 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
  * Opens the airfield details file and parses it
  */
 void
-WaypointDetails::ReadFile(TLineReader &reader, Waypoints &way_points,
-                          OperationEnvironment &operation)
+ReadFile(TLineReader &reader, Waypoints &way_points,
+         OperationEnvironment &operation)
 {
   operation.SetText(_("Loading Airfield Details File..."));
   ParseAirfieldDetails(way_points, reader, operation);
 }
 
 void
-WaypointDetails::ReadFileFromProfile(Waypoints &way_points,
-                                     OperationEnvironment &operation)
+ReadFileFromProfile(Waypoints &way_points,
+                    OperationEnvironment &operation)
 {
   auto reader = OpenConfiguredTextFile(ProfileKeys::AirfieldFile,
                                        "airfields.txt",
@@ -143,3 +145,5 @@ WaypointDetails::ReadFileFromProfile(Waypoints &way_points,
   if (reader)
     ReadFile(*reader, way_points, operation);
 }
+
+} // namespace WaypointDetails
