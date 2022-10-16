@@ -41,13 +41,27 @@ FindWaypoint(Waypoints &way_points, const TCHAR *name)
   return way_points.LookupName(name);
 }
 
-static void
-SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
-                   const tstring &Details,
+struct WaypointDetailsBuilder {
+  TCHAR name[201];
+  tstring details;
 #ifdef HAVE_RUN_FILE
-                   const std::vector<tstring> &files_external,
+  std::vector<tstring> files_external;
 #endif
-                   const std::vector<tstring> &files_embed)
+  std::vector<tstring> files_embed;
+
+  void Reset() noexcept {
+    details.clear();
+#ifdef HAVE_RUN_FILE
+    files_external.clear();
+#endif
+    files_embed.clear();
+  }
+
+  void Commit(Waypoints &way_points) noexcept;
+};
+
+inline void
+WaypointDetailsBuilder::Commit(Waypoints &way_points) noexcept
 {
   auto wp = FindWaypoint(way_points, name);
   if (wp == nullptr)
@@ -55,7 +69,7 @@ SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
 
   // TODO: eliminate this const_cast hack
   Waypoint &new_wp = const_cast<Waypoint &>(*wp);
-  new_wp.details = Details.c_str();
+  new_wp.details = details.c_str();
   new_wp.files_embed.assign(files_embed.begin(), files_embed.end());
 #ifdef HAVE_RUN_FILE
   new_wp.files_external.assign(files_external.begin(), files_external.end());
@@ -69,12 +83,7 @@ static void
 ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
                      ProgressListener &progress)
 {
-  tstring details;
-#ifdef HAVE_RUN_FILE
-  std::vector<tstring> files_external;
-#endif
-  std::vector<tstring> files_embed;
-  TCHAR name[201];
+  WaypointDetailsBuilder builder;
   const TCHAR *filename;
 
   bool in_details = false;
@@ -87,53 +96,41 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
   while ((line = reader.ReadLine()) != nullptr) {
     if (line[0] == _T('[')) { // Look for start
       if (in_details)
-        SetAirfieldDetails(way_points, name, details,
-#ifdef HAVE_RUN_FILE
-                           files_external,
-#endif
-                           files_embed);
+        builder.Commit(way_points);
 
-      details.clear();
-#ifdef HAVE_RUN_FILE
-      files_external.clear();
-#endif
-      files_embed.clear();
+      builder.Reset();
 
       // extract name
       for (i = 1; i < 201; i++) {
         if (line[i] == _T(']'))
           break;
 
-        name[i - 1] = line[i];
+        builder.name[i - 1] = line[i];
       }
-      name[i - 1] = 0;
+      builder.name[i - 1] = 0;
 
       in_details = true;
 
       progress.SetProgressPosition(reader.Tell() * 100 / filesize);
     } else if ((filename =
                 StringAfterPrefixIgnoreCase(line, _T("image="))) != nullptr) {
-      files_embed.emplace_back(filename);
+      builder.files_embed.emplace_back(filename);
     } else if ((filename =
                 StringAfterPrefixIgnoreCase(line, _T("file="))) != nullptr) {
 #ifdef HAVE_RUN_FILE
-      files_external.emplace_back(filename);
+      builder.files_external.emplace_back(filename);
 #endif
     } else {
       // append text to details string
       if (!StringIsEmpty(line)) {
-        details += line;
-        details += _T('\n');
+        builder.details += line;
+        builder.details += _T('\n');
       }
     }
   }
 
   if (in_details)
-    SetAirfieldDetails(way_points, name, details,
-#ifdef HAVE_RUN_FILE
-                       files_external,
-#endif
-                       files_embed);
+    builder.Commit(way_points);
 }
 
 /**
