@@ -38,6 +38,18 @@ Copyright_License {
 #include "ui/event/PeriodicTimer.hpp"
 #include "util/HexFormat.hxx"
 
+#ifdef KOBO
+#include "Model.hpp"
+#else
+static const char *
+GetKoboWifiInterface() noexcept
+{
+  /* dummy implementation for builds on (regular) Linux so KoboMenu
+     can be debugged there */
+  return "dummy";
+}
+#endif
+
 /* workaround because OpenSSL has a typedef called "UI", which clashes
    with our "UI" namespace */
 #define UI OPENSSL_UI
@@ -187,8 +199,8 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   if (StringIsEqual(info.bssid, status.bssid)) {
     state = _("Connected");
 
-    /* look up ip address for eth0 */
-    const auto addr = IPv4Address::GetDeviceAddress("eth0");
+    /* look up ip address for wlan0 or eth0 */
+    const auto addr = IPv4Address::GetDeviceAddress(GetKoboWifiInterface());
     if (addr.IsDefined()) { /* valid address? */
       StaticString<40> addr_str;
       if (addr.ToString(addr_str.buffer(), addr_str.capacity()) != nullptr) {
@@ -295,7 +307,9 @@ WifiListWidget::Connect()
 void
 WifiListWidget::EnsureConnected()
 {
-  wpa_supplicant.EnsureConnected("/var/run/wpa_supplicant/eth0");
+  char path[64];
+  sprintf(path, "/var/run/wpa_supplicant/%s", GetKoboWifiInterface());
+  wpa_supplicant.EnsureConnected(path);
 }
 
 inline WifiListWidget::NetworkInfo *

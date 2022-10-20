@@ -38,8 +38,13 @@ enum class KoboModel {
   GLO_HD,
   CLARA_HD,
   NIA,
+  LIBRA2,
 };
 
 [[gnu::const]]
 KoboModel
 DetectKoboModel() noexcept;
+
+[[gnu::const]]
+const char *
+GetKoboWifiInterface() noexcept;
