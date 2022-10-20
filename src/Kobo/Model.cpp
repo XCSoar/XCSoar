@@ -67,6 +67,7 @@ static constexpr struct {
   { "SN-RN437", KoboModel::GLO_HD },
   { "SN-N249", KoboModel::CLARA_HD },
   { "SN-N306", KoboModel::NIA },
+  { "SN-N418", KoboModel::LIBRA2 },
 };
 
 static KoboModel
@@ -87,4 +88,10 @@ DetectKoboModel() noexcept
     return KoboModel::UNKNOWN;
 
   return DetectKoboModel(buffer);
+}
+
+const char *
+GetNetInterface() noexcept
+{
+  return DetectKoboModel() == KoboModel::LIBRA2 ? "wlan0" : "eth0";
 }

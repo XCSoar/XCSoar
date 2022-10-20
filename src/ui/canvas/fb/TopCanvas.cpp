@@ -179,6 +179,7 @@ TopCanvas::TopCanvas(UI::Display &_display)
   case KoboModel::GLO_HD:
   case KoboModel::AURA2:
   case KoboModel::CLARA_HD:
+  case KoboModel::LIBRA2:
     frame_sync = true;
     break;
 
@@ -292,7 +293,8 @@ TopCanvas::Flip()
               DetectKoboModel() == KoboModel::TOUCH2 ||
               DetectKoboModel() == KoboModel::GLO_HD ||
               DetectKoboModel() == KoboModel::AURA2 ||
-              DetectKoboModel() == KoboModel::CLARA_HD)
+              DetectKoboModel() == KoboModel::CLARA_HD ||
+              DetectKoboModel() == KoboModel::LIBRA2)
              ? WAVEFORM_MODE_A2
              : WAVEFORM_MODE_AUTO),
     UPDATE_MODE_FULL, // PARTIAL

@@ -37,6 +37,7 @@ Copyright_License {
 #include "net/IPv4Address.hxx"
 #include "ui/event/PeriodicTimer.hpp"
 #include "util/HexFormat.hxx"
+#include "Model.hpp"
 
 /* workaround because OpenSSL has a typedef called "UI", which clashes
    with our "UI" namespace */
@@ -187,8 +188,8 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   if (StringIsEqual(info.bssid, status.bssid)) {
     state = _("Connected");
 
-    /* look up ip address for eth0 */
-    const auto addr = IPv4Address::GetDeviceAddress("eth0");
+    /* look up ip address for wlan0 or eth0 */
+    const auto addr = IPv4Address::GetDeviceAddress(GetNetInterface());
     if (addr.IsDefined()) { /* valid address? */
       StaticString<40> addr_str;
       if (addr.ToString(addr_str.buffer(), addr_str.capacity()) != nullptr) {
@@ -295,7 +296,10 @@ WifiListWidget::Connect()
 void
 WifiListWidget::EnsureConnected()
 {
-  wpa_supplicant.EnsureConnected("/var/run/wpa_supplicant/eth0");
+  if (DetectKoboModel() == KoboModel::LIBRA2)
+    wpa_supplicant.EnsureConnected("/var/run/wpa_supplicant/wlan0");
+  else
+    wpa_supplicant.EnsureConnected("/var/run/wpa_supplicant/eth0");
 }
 
 inline WifiListWidget::NetworkInfo *

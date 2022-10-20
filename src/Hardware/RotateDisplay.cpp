@@ -31,6 +31,7 @@ Copyright_License {
 
 #ifdef KOBO
 #include "system/FileUtil.hpp"
+#include "Kobo/Model.hpp"
 #endif
 
 #ifdef ENABLE_OPENGL
@@ -105,18 +106,19 @@ Display::Rotate(DisplayOrientation orientation)
   switch (orientation) {
   case DisplayOrientation::DEFAULT:
   case DisplayOrientation::PORTRAIT:
+    rotate = DetectKoboModel() == KoboModel::LIBRA2 ? "1" : "3";
     break;
 
   case DisplayOrientation::REVERSE_PORTRAIT:
-    rotate = "1";
+    rotate = DetectKoboModel() == KoboModel::LIBRA2 ? "3" : "1";
     break;
 
   case DisplayOrientation::LANDSCAPE:
-    rotate = "0";
+    rotate = DetectKoboModel() == KoboModel::LIBRA2 ? "2" : "0";
     break;
 
   case DisplayOrientation::REVERSE_LANDSCAPE:
-    rotate = "2";
+    rotate = DetectKoboModel() == KoboModel::LIBRA2 ? "0" : "2";
     break;
   };
 

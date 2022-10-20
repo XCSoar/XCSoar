@@ -61,6 +61,23 @@ GetInfo() noexcept
       int rem = atoi(line);
       battery.remaining_percent = rem;
     }
+  } else if (DetectKoboModel() == KoboModel::LIBRA2) {
+    if (File::ReadString(Path("/sys/class/power_supply/battery/status"),
+                         line, sizeof(line))) {
+      if (StringIsEqual(line,"Not charging\n") ||
+          StringIsEqual(line,"Charging\n") ||
+          StringIsEqual(line,"Full\n"))
+        external.status = Power::ExternalInfo::Status::ON;
+      else if (StringIsEqual(line,"Discharging\n"))
+        external.status = Power::ExternalInfo::Status::OFF;
+    }
+
+    if (File::ReadString(Path("/sys/class/power_supply/battery/capacity"),
+                         line, sizeof(line))) {
+      int rem = atoi(line);
+      battery.remaining_percent = rem;
+    }
+
   } else {
     // code shamelessly copied from OS/SystemLoad.cpp
     if (!File::ReadString(Path("/sys/class/power_supply/mc13892_bat/uevent"),

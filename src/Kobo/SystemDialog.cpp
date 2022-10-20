@@ -94,7 +94,7 @@ inline void
 SystemWidget::SwitchOTGMode()
 {
 #ifdef KOBO
-  if (DetectKoboModel() == KoboModel::CLARA_HD) {
+  if (DetectKoboModel() == KoboModel::CLARA_HD || DetectKoboModel() == KoboModel::LIBRA2) {
     bool success;
     if (IsKoboOTGHostMode()) {
       success = File::WriteExisting(Path("/sys/kernel/debug/ci_hdrc.0/role"),
