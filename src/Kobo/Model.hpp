@@ -38,4 +38,4 @@ enum class KoboModel {
 
 [[gnu::const]]
 KoboModel
-DetectKoboModel();
+DetectKoboModel() noexcept;
