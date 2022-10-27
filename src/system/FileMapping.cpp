@@ -58,7 +58,7 @@ FileMapping::FileMapping(Path path)
   m_size = (size_t)st.st_size;
 
   m_data = mmap(nullptr, m_size, PROT_READ, MAP_SHARED, fd.Get(), 0);
-  if (m_data == nullptr)
+  if (m_data == (void *)-1)
     throw FormatErrno("Failed to map %s", path.c_str());
 
   madvise(m_data, m_size, MADV_WILLNEED);
