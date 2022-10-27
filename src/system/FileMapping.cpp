@@ -111,16 +111,10 @@ FileMapping::FileMapping(Path path)
 FileMapping::~FileMapping() noexcept
 {
 #ifdef HAVE_POSIX
-  if (span.data() != nullptr)
-    munmap(span.data(), span.size());
+  munmap(span.data(), span.size());
 #else /* !HAVE_POSIX */
-  if (span.data() != nullptr)
-    ::UnmapViewOfFile(span.data());
-
-  if (hMapping != nullptr)
-    ::CloseHandle(hMapping);
-
-  if (hFile != INVALID_HANDLE_VALUE)
-    ::CloseHandle(hFile);
+  ::UnmapViewOfFile(span.data());
+  ::CloseHandle(hMapping);
+  ::CloseHandle(hFile);
 #endif /* !HAVE_POSIX */
 }

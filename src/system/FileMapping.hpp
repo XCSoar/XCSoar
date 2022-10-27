@@ -39,7 +39,7 @@ class FileMapping {
   std::span<std::byte> span;
 
 #ifndef HAVE_POSIX
-  HANDLE hFile, hMapping = nullptr;
+  HANDLE hFile, hMapping;
 #endif
 
 public:
