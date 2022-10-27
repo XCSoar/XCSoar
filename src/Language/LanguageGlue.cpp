@@ -218,7 +218,7 @@ ReadBuiltinLanguage(const BuiltinLanguage &language) noexcept
 #ifdef HAVE_BUILTIN_LANGUAGES
   // Load MO file from resource
   delete mo_loader;
-  mo_loader = new MOLoader(language.begin, (size_t)language.size);
+  mo_loader = new MOLoader({language.begin, (size_t)language.size});
   if (mo_loader->error()) {
     LogFormat(_T("Language: could not load resource '%s'"), language.resource);
     delete mo_loader;

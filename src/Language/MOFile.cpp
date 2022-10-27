@@ -26,10 +26,10 @@ Copyright_License {
 #include <cassert>
 #include <string.h>
 
-MOFile::MOFile(const void *_data, size_t _size)
-  :data((const uint8_t *)_data), size(_size), count(0) {
-  const struct mo_header *header = (const struct mo_header *)_data;
-  if (size < sizeof(*header))
+MOFile::MOFile(std::span<const std::byte> _raw)
+  :raw(_raw), count(0) {
+  const struct mo_header *header = (const struct mo_header *)(const void *)raw.data();
+  if (raw.size() < sizeof(*header))
     return;
 
   if (header->magic == 0x950412de)
@@ -47,7 +47,7 @@ MOFile::MOFile(const void *_data, size_t _size)
   strings.ResizeDiscard(n);
 
   const struct mo_table_entry *entry = (const struct mo_table_entry *)
-    (const void *)(data + import_uint32(header->original_table_offset));
+    (const void *)(raw.data() + import_uint32(header->original_table_offset));
   for (unsigned i = 0; i < n; ++i) {
     strings[i].original = get_string(entry++);
     if (strings[i].original == NULL)
@@ -55,7 +55,7 @@ MOFile::MOFile(const void *_data, size_t _size)
   }
 
   entry = (const struct mo_table_entry *)(const void *)
-    (data + import_uint32(header->translation_table_offset));
+    (raw.data() + import_uint32(header->translation_table_offset));
   for (unsigned i = 0; i < n; ++i) {
     strings[i].translation = get_string(entry++);
     if (strings[i].translation == NULL)
@@ -83,11 +83,12 @@ MOFile::get_string(const struct mo_table_entry *entry) const
   unsigned length = import_uint32(entry->length);
   unsigned offset = import_uint32(entry->offset);
 
-  if (offset >= size || length >= size || (offset + length) >= size)
+  if (offset >= raw.size() || length >= raw.size() ||
+      (offset + length) >= raw.size())
     /* overflow */
     return NULL;
 
-  const char *p = (const char *)(data + offset);
+  const char *p = (const char *)(raw.data() + offset);
   if (p[length] != 0 || strlen(p) != length)
     /* invalid string */
     return NULL;

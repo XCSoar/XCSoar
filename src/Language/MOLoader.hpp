@@ -37,12 +37,12 @@ class MOLoader {
   std::unique_ptr<MOFile> file;
 
 public:
-  MOLoader(const void *data, size_t size)
-    :file(new MOFile(data, size)) {}
+  explicit MOLoader(std::span<const std::byte> raw)
+    :file(new MOFile(raw)) {}
 
   explicit MOLoader(Path path)
     :mapping(new FileMapping(path)),
-     file(new MOFile(mapping->data(), mapping->size())) {
+     file(new MOFile({(const std::byte *)mapping->data(), mapping->size()})) {
   }
 
   bool error() const {

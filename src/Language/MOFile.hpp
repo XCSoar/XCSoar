@@ -48,8 +48,7 @@ class MOFile {
     const char *original, *translation;
   };
 
-  const uint8_t *data;
-  size_t size;
+  std::span<const std::byte> raw;
 
   bool native_byte_order;
 
@@ -57,7 +56,7 @@ class MOFile {
   AllocatedArray<string_pair> strings;
 
 public:
-  MOFile(const void *data, size_t size);
+  explicit MOFile(std::span<const std::byte> _raw);
 
   bool error() const {
     return count == 0;
