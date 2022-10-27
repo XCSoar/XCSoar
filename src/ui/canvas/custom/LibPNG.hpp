@@ -24,6 +24,7 @@ Copyright_License {
 #pragma once
 
 #include <cstddef>
+#include <span>
 
 class UncompressedImage;
 class Path;
@@ -32,7 +33,7 @@ class Path;
  * Throws on error.
  */
 UncompressedImage
-LoadPNG(const void *data, size_t size);
+LoadPNG(std::span<const std::byte> raw);
 
 /**
  * Throws on error.

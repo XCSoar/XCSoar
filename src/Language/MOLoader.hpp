@@ -42,7 +42,7 @@ public:
 
   explicit MOLoader(Path path)
     :mapping(new FileMapping(path)),
-     file(new MOFile({(const std::byte *)mapping->data(), mapping->size()})) {
+     file(new MOFile(*mapping)) {
   }
 
   bool error() const {

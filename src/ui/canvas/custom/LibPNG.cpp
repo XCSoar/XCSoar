@@ -34,7 +34,7 @@ Copyright_License {
 #include <string.h>
 
 struct PNGCallbackContext {
-  const uint8_t *data;
+  const std::byte *data;
 };
 
 static void
@@ -79,11 +79,11 @@ ConvertColorType(int color_type) noexcept
 
 static UncompressedImage
 LoadPNG(png_structp png_ptr, png_infop info_ptr,
-        const void *data, [[maybe_unused]] size_t size)
+        std::span<const std::byte> raw)
 {
-  assert(data != nullptr);
+  assert(raw.data() != nullptr);
 
-  PNGCallbackContext ctx{(const uint8_t *)data};
+  PNGCallbackContext ctx{raw.data()};
 
   png_set_read_fn(png_ptr, &ctx, PNGReadCallback);
   png_set_error_fn(png_ptr, png_get_error_ptr(png_ptr),
@@ -138,7 +138,7 @@ LoadPNG(png_structp png_ptr, png_infop info_ptr,
 }
 
 UncompressedImage
-LoadPNG(const void *data, size_t size)
+LoadPNG(std::span<const std::byte> raw)
 {
   png_structp png_ptr =
     png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
@@ -151,7 +151,7 @@ LoadPNG(const void *data, size_t size)
     throw std::runtime_error("png_create_info_struct() failed");
   }
 
-  UncompressedImage result = LoadPNG(png_ptr, info_ptr, data, size);
+  UncompressedImage result = LoadPNG(png_ptr, info_ptr, raw);
   png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 
   return result;
@@ -161,5 +161,5 @@ UncompressedImage
 LoadPNG(Path path)
 {
   FileMapping map(path);
-  return LoadPNG(map.data(), map.size());
+  return LoadPNG(map);
 }

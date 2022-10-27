@@ -48,7 +48,7 @@ Bitmap::Bitmap(std::span<const std::byte> _buffer)
 bool
 Bitmap::Load(std::span<const std::byte> buffer, Type type)
 {
-  auto uncompressed = LoadPNG(buffer.data(), buffer.size());
+  auto uncompressed = LoadPNG(buffer);
   return uncompressed.IsDefined() && Load(std::move(uncompressed), type);
 }
 
