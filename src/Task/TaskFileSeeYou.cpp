@@ -172,7 +172,7 @@ ParseOZs(SeeYouTurnpointInformation &tp_info, const TCHAR *params[],
 {
   tp_info.valid = true;
   // Iterate through available OZ options
-  for (unsigned i = 1; i < n_params; i++) {
+  for (unsigned i = 0; i < n_params; i++) {
     const TCHAR *pair = params[i];
 
     if (auto style = StringAfterPrefix(pair, _T("Style="))) {
