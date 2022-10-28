@@ -527,26 +527,28 @@ try {
     if (file_wp == nullptr)
       return nullptr;
 
-    // Try to find waypoint by name
-    auto wp = waypoints->LookupName(file_wp->name);
+    if (waypoints != nullptr) {
+      // Try to find waypoint by name
+      auto wp = waypoints->LookupName(file_wp->name);
 
-    // If waypoint by name found and closer than 10m to the original
-    if (wp != nullptr &&
-        wp->location.DistanceS(file_wp->location) <= 10) {
-      // Use this waypoint for the task
-      waypoints_in_task[i] = wp;
-      continue;
-    }
+      // If waypoint by name found and closer than 10m to the original
+      if (wp != nullptr &&
+          wp->location.DistanceS(file_wp->location) <= 10) {
+        // Use this waypoint for the task
+        waypoints_in_task[i] = wp;
+        continue;
+      }
 
-    // Try finding the closest waypoint to the original one
-    wp = waypoints->GetNearest(file_wp->location, 10);
+      // Try finding the closest waypoint to the original one
+      wp = waypoints->GetNearest(file_wp->location, 10);
 
-    // If closest waypoint found and closer than 10m to the original
-    if (wp != nullptr &&
-        wp->location.DistanceS(file_wp->location) <= 10) {
-      // Use this waypoint for the task
-      waypoints_in_task[i] = wp;
-      continue;
+      // If closest waypoint found and closer than 10m to the original
+      if (wp != nullptr &&
+          wp->location.DistanceS(file_wp->location) <= 10) {
+        // Use this waypoint for the task
+        waypoints_in_task[i] = wp;
+        continue;
+      }
     }
 
     // Use the original waypoint
