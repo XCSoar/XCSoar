@@ -22,16 +22,15 @@ Copyright_License {
 */
 
 #include "Kernel.hpp"
-#include "Model.hpp"
-
-#include "system/FileUtil.hpp"
 
 #include <stdexcept>
 
 #ifdef KOBO
 
+#include "Model.hpp"
 #include "io/FileReader.hxx"
 #include "io/BufferedReader.hxx"
+#include "system/FileUtil.hpp"
 #include "lib/zlib/GunzipReader.hxx"
 
 #include <fcntl.h>

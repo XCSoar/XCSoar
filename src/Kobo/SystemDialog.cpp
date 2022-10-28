@@ -29,7 +29,10 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "System.hpp"
+
+#ifdef KOBO
 #include "Model.hpp"
+#endif
 
 #include "system/FileUtil.hpp"
 

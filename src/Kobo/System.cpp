@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "System.hpp"
-#include "Model.hpp"
 #include "system/FileUtil.hpp"
 #include "system/PathName.hpp"
 #include "system/Process.hpp"
@@ -33,6 +32,8 @@ Copyright_License {
 #include <sys/stat.h>
 
 #ifdef KOBO
+
+#include "Model.hpp"
 
 #include <sys/mount.h>
 #include <errno.h>

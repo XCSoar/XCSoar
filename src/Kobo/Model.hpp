@@ -23,6 +23,10 @@ Copyright_License {
 
 #pragma once
 
+#ifndef KOBO
+#error This header is only for Kobo builds
+#endif
+
 enum class KoboModel {
   UNKNOWN,
   MINI,
