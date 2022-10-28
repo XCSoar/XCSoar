@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2015-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,7 +31,6 @@
 
 #include "Assert.hxx"
 #include "StackIndex.hxx"
-#include "util/Compiler.h"
 
 extern "C" {
 #include <lua.h>
@@ -61,35 +60,35 @@ Push(lua_State *L, StackIndex i) noexcept
 	lua_pushvalue(L, i.idx);
 }
 
-gcc_nonnull_all
+[[gnu::nonnull]]
 static inline void
 Push(lua_State *L, bool value) noexcept
 {
 	lua_pushboolean(L, value);
 }
 
-gcc_nonnull_all
+[[gnu::nonnull]]
 static inline void
 Push(lua_State *L, const char *value) noexcept
 {
 	lua_pushstring(L, value);
 }
 
-gcc_nonnull_all
+[[gnu::nonnull]]
 static inline void
 Push(lua_State *L, std::string_view value) noexcept
 {
 	lua_pushlstring(L, value.data(), value.size());
 }
 
-gcc_nonnull_all
+[[gnu::nonnull]]
 static inline void
 Push(lua_State *L, lua_Integer value) noexcept
 {
 	lua_pushinteger(L, value);
 }
 
-gcc_nonnull_all
+[[gnu::nonnull]]
 static inline void
 Push(lua_State *L, double value) noexcept
 {
@@ -104,14 +103,14 @@ Push(lua_State *L, CurrentThread) noexcept
 	lua_pushthread(L);
 }
 
-gcc_nonnull_all
+[[gnu::nonnull]]
 static inline void
 Push(lua_State *L, lua_CFunction value) noexcept
 {
 	lua_pushcfunction(L, value);
 }
 
-gcc_nonnull_all
+[[gnu::nonnull]]
 static inline void
 Push(lua_State *L, LightUserData value) noexcept
 {
@@ -196,7 +195,7 @@ SetField(lua_State *L, const char *package,
  * Sets the variable "package.path", which controls the package
  * search path for the "require" command.
  */
-gcc_nonnull_all
+[[gnu::nonnull]]
 static inline void
 SetPackagePath(lua_State *L, const char *path) noexcept
 {
