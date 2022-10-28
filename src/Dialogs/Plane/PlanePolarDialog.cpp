@@ -169,8 +169,6 @@ PlanePolarWidget::ListClicked()
   for (const auto &i : internal_polars)
     list.Append(i.name);
 
-  list.Sort();
-
   // let the user select
   int result = ComboPicker(_("Load Polar"), list, NULL);
   if (result < 0)
