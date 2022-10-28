@@ -2,6 +2,8 @@ Version 7.28 - not yet released
 * data files
   - fix crash after loading new map file
   - fix AAT OZ angles in tasks loaded from CUP files
+* map display
+  - fix terrain reach display
 * user interface
   - fix task manager crash bug
   - fix WeGlide 'Automatic Upload' not persistent

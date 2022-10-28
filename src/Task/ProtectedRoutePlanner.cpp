@@ -99,7 +99,7 @@ ProtectedRoutePlanner::AcceptInRange(const GeoBounds &bounds,
                                      bool working) const noexcept
 {
   const std::scoped_lock lock{reach_mutex};
-  const auto &reach = working ? reach_terrain : reach_working;
+  const auto &reach = working ? reach_working : reach_terrain;
   reach.AcceptInRange(bounds, visitor);
 }
 
