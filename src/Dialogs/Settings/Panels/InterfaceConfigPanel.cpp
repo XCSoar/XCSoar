@@ -170,11 +170,11 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(MenuTimeout);
 
   static constexpr StaticEnumChoice text_input_list[] = {
-    { (unsigned)DialogSettings::TextInputStyle::Default, N_("Default") },
-    { (unsigned)DialogSettings::TextInputStyle::Keyboard, N_("Keyboard") },
-    { (unsigned)DialogSettings::TextInputStyle::HighScore,
+    { DialogSettings::TextInputStyle::Default, N_("Default") },
+    { DialogSettings::TextInputStyle::Keyboard, N_("Keyboard") },
+    { DialogSettings::TextInputStyle::HighScore,
       N_("HighScore Style") },
-    { 0 }
+    nullptr
   };
 
   AddEnum(_("Text input style"),
@@ -188,10 +188,10 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
 
 #ifdef HAVE_VIBRATOR
   static constexpr StaticEnumChoice haptic_feedback_list[] = {
-    { (unsigned)UISettings::HapticFeedback::DEFAULT, N_("OS settings") },
-    { (unsigned)UISettings::HapticFeedback::OFF, N_("Off") },
-    { (unsigned)UISettings::HapticFeedback::ON, N_("On") },
-    { 0 }
+    { UISettings::HapticFeedback::DEFAULT, N_("OS settings") },
+    { UISettings::HapticFeedback::OFF, N_("Off") },
+    { UISettings::HapticFeedback::ON, N_("On") },
+    nullptr
   };
 
   wp = AddEnum(_("Haptic feedback"),

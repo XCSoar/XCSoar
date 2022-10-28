@@ -170,7 +170,7 @@ static constexpr StaticEnumChoice tracking_intervals[] = {
   { 2400, _T("40 min") },
   { 3000, _T("50 min") },
   { 3600, _T("60 min") },
-  { 0 },
+  nullptr,
 };
 
 #endif
@@ -181,17 +181,17 @@ static constexpr StaticEnumChoice server_list[] = {
   { 0, _T("www.livetrack24.com") },
   { 1, _T("test.livetrack24.com") },
   { 2, _T("livexc.dhv.de") },
-  { 0 },
+  nullptr,
 };
 
 static constexpr StaticEnumChoice vehicle_type_list[] = {
-  { (unsigned) LiveTrack24::Settings::VehicleType::GLIDER, N_("Glider") },
-  { (unsigned) LiveTrack24::Settings::VehicleType::PARAGLIDER, N_("Paraglider") },
-  { (unsigned) LiveTrack24::Settings::VehicleType::POWERED_AIRCRAFT, N_("Powered aircraft") },
-  { (unsigned) LiveTrack24::Settings::VehicleType::HOT_AIR_BALLOON, N_("Hot-air balloon") },
-  { (unsigned) LiveTrack24::Settings::VehicleType::HANGGLIDER_FLEX, N_("Hangglider (Flex/FAI1)") },
-  { (unsigned) LiveTrack24::Settings::VehicleType::HANGGLIDER_RIGID, N_("Hangglider (Rigid/FAI5)") },
-  { 0 },
+  { LiveTrack24::Settings::VehicleType::GLIDER, N_("Glider") },
+  { LiveTrack24::Settings::VehicleType::PARAGLIDER, N_("Paraglider") },
+  { LiveTrack24::Settings::VehicleType::POWERED_AIRCRAFT, N_("Powered aircraft") },
+  { LiveTrack24::Settings::VehicleType::HOT_AIR_BALLOON, N_("Hot-air balloon") },
+  { LiveTrack24::Settings::VehicleType::HANGGLIDER_FLEX, N_("Hangglider (Flex/FAI1)") },
+  { LiveTrack24::Settings::VehicleType::HANGGLIDER_RIGID, N_("Hangglider (Rigid/FAI5)") },
+  nullptr,
 };
 
 #endif

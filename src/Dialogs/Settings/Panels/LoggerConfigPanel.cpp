@@ -58,10 +58,10 @@ public:
 };
 
 static constexpr StaticEnumChoice auto_logger_list[] = {
-  { (unsigned)LoggerSettings::AutoLogger::ON, N_("On") },
-  { (unsigned)LoggerSettings::AutoLogger::START_ONLY, N_("Start only") },
-  { (unsigned)LoggerSettings::AutoLogger::OFF, N_("Off") },
-  { 0 }
+  { LoggerSettings::AutoLogger::ON, N_("On") },
+  { LoggerSettings::AutoLogger::START_ONLY, N_("Start only") },
+  { LoggerSettings::AutoLogger::OFF, N_("Off") },
+  nullptr
 };
 
 void

@@ -119,7 +119,7 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     { 2, _T("19200") },
     { 4, _T("38400") },
     { 5, _T("57600") },
-    { 0 }
+    nullptr
   };
 
   AddEnum(_("Baud rate"), NULL, baud_list, baud);
@@ -128,26 +128,22 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddInteger(_("Range"), NULL, _T("%d m"), _T("%d"), 2000, 25500, 250, range);
 
   static constexpr StaticEnumChoice acft_list[] = {
-    { (unsigned)FlarmTraffic::AircraftType::UNKNOWN, N_("Unknown") },
-    { (unsigned)FlarmTraffic::AircraftType::GLIDER, N_("Glider") },
-    { (unsigned)FlarmTraffic::AircraftType::TOW_PLANE, N_("Tow plane") },
-    { (unsigned)FlarmTraffic::AircraftType::HELICOPTER, N_("Helicopter") },
-    { (unsigned)FlarmTraffic::AircraftType::PARACHUTE, N_("Parachute") },
-    { (unsigned)FlarmTraffic::AircraftType::DROP_PLANE, N_("Drop plane") },
-    { (unsigned)FlarmTraffic::AircraftType::HANG_GLIDER, N_("Hang glider") },
-    { (unsigned)FlarmTraffic::AircraftType::PARA_GLIDER, N_("Paraglider") },
-    { (unsigned)FlarmTraffic::AircraftType::POWERED_AIRCRAFT,
-      N_("Powered aircraft") },
-    { (unsigned)FlarmTraffic::AircraftType::JET_AIRCRAFT, N_("Jet aircraft") },
-    { (unsigned)FlarmTraffic::AircraftType::FLYING_SAUCER,
-      N_("Flying saucer") },
-    { (unsigned)FlarmTraffic::AircraftType::BALLOON, N_("Balloon") },
-    { (unsigned)FlarmTraffic::AircraftType::AIRSHIP, N_("Airship") },
-    { (unsigned)FlarmTraffic::AircraftType::UAV,
-      N_("Unmanned aerial vehicle") },
-    { (unsigned)FlarmTraffic::AircraftType::STATIC_OBJECT,
-      N_("Static object") },
-    { 0 }
+    { FlarmTraffic::AircraftType::UNKNOWN, N_("Unknown") },
+    { FlarmTraffic::AircraftType::GLIDER, N_("Glider") },
+    { FlarmTraffic::AircraftType::TOW_PLANE, N_("Tow plane") },
+    { FlarmTraffic::AircraftType::HELICOPTER, N_("Helicopter") },
+    { FlarmTraffic::AircraftType::PARACHUTE, N_("Parachute") },
+    { FlarmTraffic::AircraftType::DROP_PLANE, N_("Drop plane") },
+    { FlarmTraffic::AircraftType::HANG_GLIDER, N_("Hang glider") },
+    { FlarmTraffic::AircraftType::PARA_GLIDER, N_("Paraglider") },
+    { FlarmTraffic::AircraftType::POWERED_AIRCRAFT, N_("Powered aircraft") },
+    { FlarmTraffic::AircraftType::JET_AIRCRAFT, N_("Jet aircraft") },
+    { FlarmTraffic::AircraftType::FLYING_SAUCER, N_("Flying saucer") },
+    { FlarmTraffic::AircraftType::BALLOON, N_("Balloon") },
+    { FlarmTraffic::AircraftType::AIRSHIP, N_("Airship") },
+    { FlarmTraffic::AircraftType::UAV, N_("Unmanned aerial vehicle") },
+    { FlarmTraffic::AircraftType::STATIC_OBJECT, N_("Static object") },
+    nullptr
   };
 
   AddEnum(_("Type"), NULL, acft_list, acft);

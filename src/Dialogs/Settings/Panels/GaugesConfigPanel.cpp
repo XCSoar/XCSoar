@@ -42,32 +42,32 @@ enum ControlIndex {
 };
 
 static constexpr StaticEnumChoice final_glide_bar_display_mode_list[] = {
-  { (unsigned)FinalGlideBarDisplayMode::OFF, N_("Off"),
+  { FinalGlideBarDisplayMode::OFF, N_("Off"),
     N_("Disable final glide bar.") },
-  { (unsigned)FinalGlideBarDisplayMode::ON, N_("On"),
+  { FinalGlideBarDisplayMode::ON, N_("On"),
     N_("Always show final glide bar.") },
-  { (unsigned)FinalGlideBarDisplayMode::AUTO, N_("Auto"),
+  { FinalGlideBarDisplayMode::AUTO, N_("Auto"),
     N_("Show final glide bar if approaching final glide range.") },
-  { 0 }
+  nullptr
 };
 
 static constexpr StaticEnumChoice thermal_assistant_position_list[] = {
-  { (unsigned)UISettings::ThermalAssistantPosition::OFF,
+  { UISettings::ThermalAssistantPosition::OFF,
     N_("Off"),
     N_("Disable thermal assistant.") },
-  { (unsigned)UISettings::ThermalAssistantPosition::BOTTOM_LEFT,
+  { UISettings::ThermalAssistantPosition::BOTTOM_LEFT,
     N_("Bottom left"),
     N_("Show thermal assistant in bottom left.") },
-  { (unsigned)UISettings::ThermalAssistantPosition::BOTTOM_LEFT_AVOID_IB,
+  { UISettings::ThermalAssistantPosition::BOTTOM_LEFT_AVOID_IB,
     N_("Bottom left (avoid infoboxes)"),
     N_("Show thermal assistant in bottom left, above/to right of infoboxes (if there).") },
-  { (unsigned)UISettings::ThermalAssistantPosition::BOTTOM_RIGHT,
+  { UISettings::ThermalAssistantPosition::BOTTOM_RIGHT,
     N_("Bottom right"),
     N_("Show thermal assistant in bottom right.") },
-  { (unsigned)UISettings::ThermalAssistantPosition::BOTTOM_RIGHT_AVOID_IB,
+  { UISettings::ThermalAssistantPosition::BOTTOM_RIGHT_AVOID_IB,
     N_("Bottom right (avoid infoboxes)"),
     N_("Show thermal assistant in bottom right above/to left of infoboxes (if there).") },
-  { 0 }
+  nullptr
 };
 
 

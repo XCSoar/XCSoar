@@ -70,109 +70,109 @@ enum ControlIndex {
 };
 
 static constexpr StaticEnumChoice display_orientation_list[] = {
-  { (unsigned)DisplayOrientation::DEFAULT,
+  { DisplayOrientation::DEFAULT,
     N_("Default") },
-  { (unsigned)DisplayOrientation::PORTRAIT,
+  { DisplayOrientation::PORTRAIT,
     N_("Portrait") },
-  { (unsigned)DisplayOrientation::LANDSCAPE,
+  { DisplayOrientation::LANDSCAPE,
     N_("Landscape") },
-  { (unsigned)DisplayOrientation::REVERSE_PORTRAIT,
+  { DisplayOrientation::REVERSE_PORTRAIT,
     N_("Reverse Portrait") },
-  { (unsigned)DisplayOrientation::REVERSE_LANDSCAPE,
+  { DisplayOrientation::REVERSE_LANDSCAPE,
     N_("Reverse Landscape") },
-  { 0 }
+  nullptr
 };
 
 static constexpr StaticEnumChoice info_box_geometry_list[] = {
-  { (unsigned)InfoBoxSettings::Geometry::SPLIT_8,
+  { InfoBoxSettings::Geometry::SPLIT_8,
     N_("8 Split") },
-  { (unsigned)InfoBoxSettings::Geometry::SPLIT_10,
+  { InfoBoxSettings::Geometry::SPLIT_10,
     N_("10 Split") },
-  { (unsigned)InfoBoxSettings::Geometry::SPLIT_3X4,
+  { InfoBoxSettings::Geometry::SPLIT_3X4,
     N_("12 Split in 3 rows") },
-  { (unsigned)InfoBoxSettings::Geometry::SPLIT_3X5,
+  { InfoBoxSettings::Geometry::SPLIT_3X5,
     N_("15 Split in 3 rows") },
-  { (unsigned)InfoBoxSettings::Geometry::SPLIT_3X6,
+  { InfoBoxSettings::Geometry::SPLIT_3X6,
     N_("18 Split in 3 rows") },
-  { (unsigned)InfoBoxSettings::Geometry::BOTTOM_RIGHT_8,
+  { InfoBoxSettings::Geometry::BOTTOM_RIGHT_8,
     N_("8 Bottom or Right") },
-  { (unsigned)InfoBoxSettings::Geometry::BOTTOM_8_VARIO,
+  { InfoBoxSettings::Geometry::BOTTOM_8_VARIO,
     N_("8 Bottom + Vario (Portrait)") },
-  { (unsigned)InfoBoxSettings::Geometry::TOP_LEFT_8,
+  { InfoBoxSettings::Geometry::TOP_LEFT_8,
     N_("8 Top or Left") },
-  { (unsigned)InfoBoxSettings::Geometry::TOP_8_VARIO,
+  { InfoBoxSettings::Geometry::TOP_8_VARIO,
     N_("8 Top + Vario (Portrait)") },
-  { (unsigned)InfoBoxSettings::Geometry::RIGHT_9_VARIO,
+  { InfoBoxSettings::Geometry::RIGHT_9_VARIO,
     N_("9 Right + Vario (Landscape)") },
-  { (unsigned)InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO,
+  { InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO,
     N_("9 Left + Right + Vario (Landscape)") },
-  { (unsigned)InfoBoxSettings::Geometry::LEFT_12_RIGHT_3_VARIO,
+  { InfoBoxSettings::Geometry::LEFT_12_RIGHT_3_VARIO,
     N_("12 Left + 3 Right Vario (Landscape)") },
-  { (unsigned)InfoBoxSettings::Geometry::RIGHT_5,
+  { InfoBoxSettings::Geometry::RIGHT_5,
     N_("5 Right (Square)") },
-  { (unsigned)InfoBoxSettings::Geometry::BOTTOM_RIGHT_10,
+  { InfoBoxSettings::Geometry::BOTTOM_RIGHT_10,
     N_("10 Bottom or Right") },
-  { (unsigned)InfoBoxSettings::Geometry::BOTTOM_RIGHT_12,
+  { InfoBoxSettings::Geometry::BOTTOM_RIGHT_12,
     N_("12 Bottom or Right") },
-  { (unsigned)InfoBoxSettings::Geometry::TOP_LEFT_10,
+  { InfoBoxSettings::Geometry::TOP_LEFT_10,
     N_("10 Top or Left") },
-  { (unsigned)InfoBoxSettings::Geometry::TOP_LEFT_12,
+  { InfoBoxSettings::Geometry::TOP_LEFT_12,
     N_("12 Top or Left") },
-  { (unsigned)InfoBoxSettings::Geometry::RIGHT_16,
+  { InfoBoxSettings::Geometry::RIGHT_16,
     N_("16 Right (Landscape)") },
-  { (unsigned)InfoBoxSettings::Geometry::RIGHT_24,
+  { InfoBoxSettings::Geometry::RIGHT_24,
     N_("24 Bottom or Right") },
-  { (unsigned)InfoBoxSettings::Geometry::TOP_LEFT_4,
+  { InfoBoxSettings::Geometry::TOP_LEFT_4,
     N_("4 Top or Left") },
-  { (unsigned)InfoBoxSettings::Geometry::BOTTOM_RIGHT_4,
+  { InfoBoxSettings::Geometry::BOTTOM_RIGHT_4,
     N_("4 Bottom or Right") },
-  { 0 }
+  nullptr
 };
 
 static constexpr StaticEnumChoice flarm_display_location_list[] = {
-  { (unsigned)TrafficSettings::GaugeLocation::Auto,
+  { TrafficSettings::GaugeLocation::Auto,
     N_("Auto (follow infoboxes)") },
-  { (unsigned)TrafficSettings::GaugeLocation::TopLeft,
+  { TrafficSettings::GaugeLocation::TopLeft,
     N_("Top Left") },
-  { (unsigned)TrafficSettings::GaugeLocation::TopRight,
+  { TrafficSettings::GaugeLocation::TopRight,
     N_("Top Right") },
-  { (unsigned)TrafficSettings::GaugeLocation::BottomLeft,
+  { TrafficSettings::GaugeLocation::BottomLeft,
     N_("Bottom Left") },
-  { (unsigned)TrafficSettings::GaugeLocation::BottomRight,
+  { TrafficSettings::GaugeLocation::BottomRight,
     N_("Bottom Right") },
-  { (unsigned)TrafficSettings::GaugeLocation::CentreTop,
+  { TrafficSettings::GaugeLocation::CentreTop,
     N_("Centre Top") },
-  { (unsigned)TrafficSettings::GaugeLocation::CentreBottom,
+  { TrafficSettings::GaugeLocation::CentreBottom,
     N_("Centre Bottom") },
-  { 0 }
+  nullptr
 };
 
 static constexpr StaticEnumChoice tabdialog_style_list[] = {
-  { (unsigned)DialogSettings::TabStyle::Text, N_("Text"),
+  { DialogSettings::TabStyle::Text, N_("Text"),
     N_("Show text on tabbed dialogs.") },
-  { (unsigned)DialogSettings::TabStyle::Icon, N_("Icons"),
+  { DialogSettings::TabStyle::Icon, N_("Icons"),
     N_("Show icons on tabbed dialogs.")},
-  { 0 }
+  nullptr
 };
 
 static constexpr StaticEnumChoice popup_msg_position_list[] = {
-  { (unsigned)UISettings::PopupMessagePosition::CENTER, N_("Center"),
+  { UISettings::PopupMessagePosition::CENTER, N_("Center"),
     N_("Center the status message boxes.") },
-  { (unsigned)UISettings::PopupMessagePosition::TOP_LEFT, N_("Topleft"),
+  { UISettings::PopupMessagePosition::TOP_LEFT, N_("Topleft"),
     N_("Show status message boxes ina the top left corner.") },
-  { 0 }
+  nullptr
 };
 
 static constexpr StaticEnumChoice infobox_border_list[] = {
-  { unsigned(InfoBoxSettings::BorderStyle::BOX),
+  { InfoBoxSettings::BorderStyle::BOX,
     N_("Box"), N_("Draws boxes around each InfoBox.") },
-  { unsigned(InfoBoxSettings::BorderStyle::TAB),
+  { InfoBoxSettings::BorderStyle::TAB,
     N_("Tab"), N_("Draws a tab at the top of the InfoBox across the title.") },
-  { unsigned(InfoBoxSettings::BorderStyle::SHADED),
+  { InfoBoxSettings::BorderStyle::SHADED,
     N_("Shaded"), nullptr /* TODO: help text */ },
-  { unsigned(InfoBoxSettings::BorderStyle::GLASS),
+  { InfoBoxSettings::BorderStyle::GLASS,
     N_("Glass"), nullptr /* TODO: help text */ },
-  { 0 }
+  nullptr
 };
 
 class LayoutConfigPanel final : public RowFormWidget {

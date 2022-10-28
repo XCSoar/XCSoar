@@ -88,10 +88,10 @@ AirspaceClassRendererSettingsPanel::Prepare(ContainerWindow &parent,
              _T("%d"), _T("%d"), 0, 5, 1, settings.border_width);
 
   static constexpr StaticEnumChoice fill_mode_list[] = {
-    { (unsigned)AirspaceClassRendererSettings::FillMode::ALL, N_("Filled"), },
-    { (unsigned)AirspaceClassRendererSettings::FillMode::PADDING, N_("Only padding"), },
-    { (unsigned)AirspaceClassRendererSettings::FillMode::NONE, N_("Not filled"), },
-    { 0 }
+    { AirspaceClassRendererSettings::FillMode::ALL, N_("Filled"), },
+    { AirspaceClassRendererSettings::FillMode::PADDING, N_("Only padding"), },
+    { AirspaceClassRendererSettings::FillMode::NONE, N_("Not filled"), },
+    nullptr
   };
 
   AddEnum(_("Fill Mode"),

@@ -184,7 +184,7 @@ static constexpr StaticEnumChoice type_filter_list[] = {
   { CLASSF, _T("Class F") },
   { TMZ, _T("TMZ") },
   { MATZ, _T("MATZ") },
-  { 0 }
+  nullptr
 };
 
 struct AirspaceListWidgetState

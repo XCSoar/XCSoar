@@ -81,66 +81,66 @@ SymbolsConfigPanel::OnModified(DataField &df) noexcept
 }
 
 static constexpr StaticEnumChoice ground_track_mode_list[] = {
-  { (unsigned)DisplayGroundTrack::OFF, N_("Off"), N_("Disable display of ground track line.") },
-  { (unsigned)DisplayGroundTrack::ON, N_("On"), N_("Always display ground track line.") },
-  { (unsigned)DisplayGroundTrack::AUTO, N_("Auto"), N_("Display ground track line if there is a significant difference to plane heading.") },
-  { 0 }
+  { DisplayGroundTrack::OFF, N_("Off"), N_("Disable display of ground track line.") },
+  { DisplayGroundTrack::ON, N_("On"), N_("Always display ground track line.") },
+  { DisplayGroundTrack::AUTO, N_("Auto"), N_("Display ground track line if there is a significant difference to plane heading.") },
+  nullptr
 };
 
 static constexpr StaticEnumChoice trail_length_list[] = {
-  { (unsigned)TrailSettings::Length::OFF, N_("Off") },
-  { (unsigned)TrailSettings::Length::LONG, N_("Long") },
-  { (unsigned)TrailSettings::Length::SHORT, N_("Short") },
-  { (unsigned)TrailSettings::Length::FULL, N_("Full") },
-  { 0 }
+  { TrailSettings::Length::OFF, N_("Off") },
+  { TrailSettings::Length::LONG, N_("Long") },
+  { TrailSettings::Length::SHORT, N_("Short") },
+  { TrailSettings::Length::FULL, N_("Full") },
+  nullptr
 };
 
 static constexpr StaticEnumChoice trail_type_list[] = {
-  { (unsigned)TrailSettings::Type::VARIO_1, N_("Vario #1"), N_("Within lift areas "
+  { TrailSettings::Type::VARIO_1, N_("Vario #1"), N_("Within lift areas "
     "lines get displayed green and thicker, while sinking lines are shown brown and thin. "
     "Zero lift is presented as a grey line.") },
-  { (unsigned)TrailSettings::Type::VARIO_1_DOTS, N_("Vario #1 (with dots)"), N_("The same "
+  { TrailSettings::Type::VARIO_1_DOTS, N_("Vario #1 (with dots)"), N_("The same "
     "colour scheme as the previous, but with dotted lines while sinking.") },
-  { (unsigned)TrailSettings::Type::VARIO_2, N_("Vario #2"), N_("The climb colour "
+  { TrailSettings::Type::VARIO_2, N_("Vario #2"), N_("The climb colour "
     "for this scheme is orange to red, sinking is displayed as light blue to dark blue. "
     "Zero lift is presented as a yellow line.") },
-  { (unsigned)TrailSettings::Type::VARIO_2_DOTS, N_("Vario #2 (with dots)"), N_("The same "
+  { TrailSettings::Type::VARIO_2_DOTS, N_("Vario #2 (with dots)"), N_("The same "
     "colour scheme as the previous, but with dotted lines while sinking.") },
-  { (unsigned)TrailSettings::Type::VARIO_DOTS_AND_LINES,
+  { TrailSettings::Type::VARIO_DOTS_AND_LINES,
     N_("Vario-scaled dots and lines"),
     N_("Vario-scaled dots with lines. "
        "Orange to red = climb. Light blue to dark blue = sink. "
        "Zero lift is presented as a yellow line.") },
-  { (unsigned)TrailSettings::Type::ALTITUDE, N_("Altitude"), N_("The colour scheme corresponds to the height.") },
-  { 0 }
+  { TrailSettings::Type::ALTITUDE, N_("Altitude"), N_("The colour scheme corresponds to the height.") },
+  nullptr
 };
 
 static constexpr StaticEnumChoice  aircraft_symbol_list[] = {
-  { (unsigned)AircraftSymbol::SIMPLE, N_("Simple"),
+  { AircraftSymbol::SIMPLE, N_("Simple"),
     N_("Simplified line graphics, black with white contours.") },
-  { (unsigned)AircraftSymbol::SIMPLE_LARGE, N_("Simple (large)"),
+  { AircraftSymbol::SIMPLE_LARGE, N_("Simple (large)"),
     N_("Enlarged simple graphics.") },
-  { (unsigned)AircraftSymbol::DETAILED, N_("Detailed"),
+  { AircraftSymbol::DETAILED, N_("Detailed"),
     N_("Detailed rendered aircraft graphics.") },
-  { (unsigned)AircraftSymbol::HANGGLIDER, N_("HangGlider"),
+  { AircraftSymbol::HANGGLIDER, N_("HangGlider"),
     N_("Simplified hang glider as line graphics, white with black contours.") },
-  { (unsigned)AircraftSymbol::PARAGLIDER, N_("ParaGlider"),
+  { AircraftSymbol::PARAGLIDER, N_("ParaGlider"),
     N_("Simplified para glider as line graphics, white with black contours.") },
-  { 0 }
+  nullptr
 };
 
 static constexpr StaticEnumChoice wind_arrow_list[] = {
-  { (unsigned)WindArrowStyle::NO_ARROW, N_("Off"), N_("No wind arrow is drawn.") },
-  { (unsigned)WindArrowStyle::ARROW_HEAD, N_("Arrow head"), N_("Draws an arrow head only.") },
-  { (unsigned)WindArrowStyle::FULL_ARROW, N_("Full arrow"), N_("Draws an arrow head with a dashed arrow line.") },
-  { 0 }
+  { WindArrowStyle::NO_ARROW, N_("Off"), N_("No wind arrow is drawn.") },
+  { WindArrowStyle::ARROW_HEAD, N_("Arrow head"), N_("Draws an arrow head only.") },
+  { WindArrowStyle::FULL_ARROW, N_("Full arrow"), N_("Draws an arrow head with a dashed arrow line.") },
+  nullptr
 };
 
 static constexpr StaticEnumChoice skylines_map_mode_list[] = {
-  { (unsigned)DisplaySkyLinesTrafficMapMode::OFF, N_("Off"), N_("No SkyLines traffic is drawn.") },
-  { (unsigned)DisplaySkyLinesTrafficMapMode::SYMBOL, N_("Symbol"), N_("Draws the SkyLines symbol only.") },
-  { (unsigned)DisplaySkyLinesTrafficMapMode::SYMBOL_NAME, N_("Symbol and Name"), N_("Draws the SkyLines symbol with name.") },
-  { 0 }
+  { DisplaySkyLinesTrafficMapMode::OFF, N_("Off"), N_("No SkyLines traffic is drawn.") },
+  { DisplaySkyLinesTrafficMapMode::SYMBOL, N_("Symbol"), N_("Draws the SkyLines symbol only.") },
+  { DisplaySkyLinesTrafficMapMode::SYMBOL_NAME, N_("Symbol and Name"), N_("Draws the SkyLines symbol with name.") },
+  nullptr
 };
 
 void

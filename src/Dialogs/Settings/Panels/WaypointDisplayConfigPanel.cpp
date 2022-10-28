@@ -83,50 +83,50 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent,
   RowFormWidget::Prepare(parent, rc);
 
   static constexpr StaticEnumChoice wp_labels_list[] = {
-    { (unsigned)WaypointRendererSettings::DisplayTextType::NAME,
+    { WaypointRendererSettings::DisplayTextType::NAME,
       N_("Full name"),
       N_("The full name of each waypoint is displayed.") },
-    { (unsigned)WaypointRendererSettings::DisplayTextType::FIRST_WORD,
+    { WaypointRendererSettings::DisplayTextType::FIRST_WORD,
       N_("First word of name"),
       N_("The first word of the waypoint name is displayed.") },
-    { (unsigned)WaypointRendererSettings::DisplayTextType::FIRST_THREE,
+    { WaypointRendererSettings::DisplayTextType::FIRST_THREE,
       N_("First 3 letters"),
       N_("The first 3 letters of the waypoint name are displayed.") },
-    { (unsigned)WaypointRendererSettings::DisplayTextType::FIRST_FIVE,
+    { WaypointRendererSettings::DisplayTextType::FIRST_FIVE,
       N_("First 5 letters"),
       N_("The first 5 letters of the waypoint name are displayed.") },
-    { (unsigned)WaypointRendererSettings::DisplayTextType::NONE,
+    { WaypointRendererSettings::DisplayTextType::NONE,
       N_("None"), N_("No waypoint name is displayed.") },
-    { (unsigned)WaypointRendererSettings::DisplayTextType::SHORT_NAME,
+    { WaypointRendererSettings::DisplayTextType::SHORT_NAME,
       N_("Short Name"),
       N_("The short name of each waypoint is displayed. If unavailable, the first five letters of the full name are displayed.") },
-    { 0 }
+    nullptr
   };
   AddEnum(_("Label format"), _("Determines how labels are displayed with each waypoint"),
           wp_labels_list, (unsigned)settings.display_text_type);
 
   static constexpr StaticEnumChoice wp_arrival_list[] = {
-    { (unsigned)WaypointRendererSettings::ArrivalHeightDisplay::NONE,
+    { WaypointRendererSettings::ArrivalHeightDisplay::NONE,
       N_("None"),
       N_("No arrival height is displayed.") },
-    { (unsigned)WaypointRendererSettings::ArrivalHeightDisplay::GLIDE,
+    { WaypointRendererSettings::ArrivalHeightDisplay::GLIDE,
       N_("Straight glide"),
       N_("Straight glide arrival height (no terrain is considered).") },
-    { (unsigned)WaypointRendererSettings::ArrivalHeightDisplay::TERRAIN,
+    { WaypointRendererSettings::ArrivalHeightDisplay::TERRAIN,
       N_("Terrain avoidance glide"),
       N_("Arrival height considering terrain avoidance. "
          "Requires \"Reach mode: Turning\" in \"Glide Computer > Route\" settings.") },
-    { (unsigned)WaypointRendererSettings::ArrivalHeightDisplay::GLIDE_AND_TERRAIN,
+    { WaypointRendererSettings::ArrivalHeightDisplay::GLIDE_AND_TERRAIN,
       N_("Straight & terrain glide"),
       N_("Both arrival heights are displayed. "
          "Requires \"Reach mode: Turning\" in \"Glide Computer > Route\" settings.") },
-    { (unsigned)WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR,
+    { WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR,
       N_("Required glide ratio") },
-    { (unsigned)WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR_AND_TERRAIN,
+    { WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR_AND_TERRAIN,
       N_("Required GR & terrain glide"),
       N_("Both Required glide ratio and terrain avoidance height are displayed. "
          "Requires \"Reach mode: Turning\" in \"Glide Computer > Route\" settings.") },
-    { 0 }
+    nullptr
   };
 
   AddEnum(_("Arrival height"), _("Determines how arrival height is displayed in waypoint labels"),
@@ -134,9 +134,9 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(WaypointArrivalHeightDisplay);
 
   static constexpr StaticEnumChoice wp_label_list[] = {
-    { (unsigned)LabelShape::ROUNDED_BLACK, N_("Rounded rectangle") },
-    { (unsigned)LabelShape::OUTLINED_INVERTED, N_("Outlined") },
-    { 0 }
+    { LabelShape::ROUNDED_BLACK, N_("Rounded rectangle") },
+    { LabelShape::OUTLINED_INVERTED, N_("Outlined") },
+    nullptr
   };
 
   AddEnum(_("Label style"), nullptr, wp_label_list,
@@ -144,20 +144,20 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(WaypointLabelStyle);
 
   static constexpr StaticEnumChoice wp_selection_list[] = {
-    { (unsigned)WaypointRendererSettings::LabelSelection::ALL,
+    { WaypointRendererSettings::LabelSelection::ALL,
       N_("All"), N_("All labels will be displayed.") },
-    { (unsigned)WaypointRendererSettings::LabelSelection::TASK_AND_AIRFIELD,
+    { WaypointRendererSettings::LabelSelection::TASK_AND_AIRFIELD,
       N_("Task waypoints & airfields"),
       N_("All waypoints part of a task and all airfields will be displayed.") },
-    { (unsigned)WaypointRendererSettings::LabelSelection::TASK_AND_LANDABLE,
+    { WaypointRendererSettings::LabelSelection::TASK_AND_LANDABLE,
       N_("Task waypoints & landables"),
       N_("All waypoints part of a task and all landables will be displayed.") },
-    { (unsigned)WaypointRendererSettings::LabelSelection::TASK,
+    { WaypointRendererSettings::LabelSelection::TASK,
       N_("Task waypoints"),
       N_("All waypoints part of a task will be displayed.") },
-    { (unsigned)WaypointRendererSettings::LabelSelection::NONE,
+    { WaypointRendererSettings::LabelSelection::NONE,
       N_("None"), N_("No labels will be displayed.") },
-    { 0 }
+    nullptr
   };
 
   AddEnum(_("Label visibility"),
@@ -166,21 +166,21 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(WaypointLabelSelection);
 
   static constexpr StaticEnumChoice wp_style_list[] = {
-    { (unsigned)WaypointRendererSettings::LandableStyle::PURPLE_CIRCLE,
+    { WaypointRendererSettings::LandableStyle::PURPLE_CIRCLE,
       N_("Purple circle"),
       N_("Airports and outlanding fields are displayed as purple circles. If the waypoint is "
           "reachable a bigger green circle is added behind the purple one. If the waypoint is "
           "blocked by a mountain the green circle will be red instead.") },
-    { (unsigned)WaypointRendererSettings::LandableStyle::BW,
+    { WaypointRendererSettings::LandableStyle::BW,
       N_("B/W"),
       N_("Airports and outlanding fields are displayed in white/grey. If the waypoint is "
           "reachable the color is changed to green. If the waypoint is blocked by a mountain "
           "the color is changed to red instead.") },
-    { (unsigned)WaypointRendererSettings::LandableStyle::TRAFFIC_LIGHTS,
+    { WaypointRendererSettings::LandableStyle::TRAFFIC_LIGHTS,
       N_("Traffic lights"),
       N_("Airports and outlanding fields are displayed in the colors of a traffic light. "
           "Green if reachable, Orange if blocked by mountain and red if not reachable at all.") },
-    { 0 }
+    nullptr
   };
   AddEnum(_("Landable symbols"),
           _("Three styles are available: Purple circles (WinPilot style), a high "

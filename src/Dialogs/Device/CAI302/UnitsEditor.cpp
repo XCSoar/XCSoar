@@ -33,7 +33,7 @@ CAI302UnitsEditor::Prepare([[maybe_unused]] ContainerWindow &parent,
   static constexpr StaticEnumChoice vario_list[] = {
     { 0, _T("m/s"), },
     { 1, _T("kt"), },
-    { 0 }
+    nullptr
   };
   AddEnum(_("Vario"), NULL, vario_list,
           data.GetVarioUnit());
@@ -41,7 +41,7 @@ CAI302UnitsEditor::Prepare([[maybe_unused]] ContainerWindow &parent,
   static constexpr StaticEnumChoice altitude_list[] = {
     { 0, _T("m"), },
     { 1, _T("ft"), },
-    { 0 }
+    nullptr
   };
   AddEnum(_("Altitude"), NULL, altitude_list,
           data.GetAltitudeUnit());
@@ -49,7 +49,7 @@ CAI302UnitsEditor::Prepare([[maybe_unused]] ContainerWindow &parent,
   static constexpr StaticEnumChoice temperature_list[] = {
     { 0, _T(DEG "C"), },
     { 1, _T(DEG "F"), },
-    { 0 }
+    nullptr
   };
   AddEnum(_("Temperature"), NULL, temperature_list,
           data.GetTemperatureUnit());
@@ -57,7 +57,7 @@ CAI302UnitsEditor::Prepare([[maybe_unused]] ContainerWindow &parent,
   static constexpr StaticEnumChoice pressure_list[] = {
     { 0, _T("hPa"), },
     { 1, _T("inHg"), },
-    { 0 }
+    nullptr
   };
   AddEnum(_("Pressure"), NULL, pressure_list,
           data.GetPressureUnit());
@@ -66,7 +66,7 @@ CAI302UnitsEditor::Prepare([[maybe_unused]] ContainerWindow &parent,
     { 0, _T("km"), },
     { 1, _T("NM"), },
     { 2, _T("mi"), },
-    { 0 }
+    nullptr
   };
   AddEnum(_("Distance"), NULL, distance_list,
           data.GetDistanceUnit());
@@ -75,7 +75,7 @@ CAI302UnitsEditor::Prepare([[maybe_unused]] ContainerWindow &parent,
     { 0, _T("m/s"), },
     { 1, _T("kt"), },
     { 2, _T("mph"), },
-    { 0 }
+    nullptr
   };
   AddEnum(_("Speed"), NULL, speed_list,
           data.GetSpeedUnit());
@@ -83,7 +83,7 @@ CAI302UnitsEditor::Prepare([[maybe_unused]] ContainerWindow &parent,
   static constexpr StaticEnumChoice sink_tone_list[] = {
     { 0, _T("off"), },
     { 1, _T("on"), },
-    { 0 }
+    nullptr
   };
   AddEnum(_("Sink tone"), NULL, sink_tone_list,
           data.GetSinkTone());

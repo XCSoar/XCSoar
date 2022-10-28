@@ -41,26 +41,26 @@ enum ControlIndex {
 };
 
 static constexpr StaticEnumChoice orientation_list[] = {
-  { (unsigned)MapOrientation::TRACK_UP, N_("Track up"),
+  { MapOrientation::TRACK_UP, N_("Track up"),
     N_("The moving map display will be rotated so the glider's track is oriented up.") },
-  { (unsigned)MapOrientation::HEADING_UP, N_("Heading up"),
+  { MapOrientation::HEADING_UP, N_("Heading up"),
     N_("The moving map display will be rotated so the glider's heading is oriented up.") },
-  { (unsigned)MapOrientation::NORTH_UP, N_("North up"),
+  { MapOrientation::NORTH_UP, N_("North up"),
     N_("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course.") },
-  { (unsigned)MapOrientation::TARGET_UP, N_("Target up"),
+  { MapOrientation::TARGET_UP, N_("Target up"),
     N_("The moving map display will be rotated so the navigation target is oriented up.") },
-  { (unsigned)MapOrientation::WIND_UP, N_("Wind up"),
+  { MapOrientation::WIND_UP, N_("Wind up"),
     N_("The moving map display will be rotated so the wind is always oriented up to down. (can be useful for wave flying)") },
-  { 0 }
+  nullptr
 };
 
 static constexpr StaticEnumChoice shift_bias_list[] = {
-  { (unsigned)MapShiftBias::NONE, N_("None"), N_("Disable adjustments.") },
-  { (unsigned)MapShiftBias::TRACK, N_("Track"),
+  { MapShiftBias::NONE, N_("None"), N_("Disable adjustments.") },
+  { MapShiftBias::TRACK, N_("Track"),
     N_("Use a recent average of the ground track as basis.") },
-  { (unsigned)MapShiftBias::TARGET, N_("Target"),
+  { MapShiftBias::TARGET, N_("Target"),
     N_("Use the current target waypoint as basis.") },
-  { 0 }
+  nullptr
 };
 
 class MapDisplayConfigPanel final

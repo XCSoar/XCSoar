@@ -100,15 +100,15 @@ RouteConfigPanel::Prepare(ContainerWindow &parent,
   RowFormWidget::Prepare(parent, rc);
 
   static constexpr StaticEnumChoice route_mode_list[] = {
-    { (unsigned)RoutePlannerConfig::Mode::NONE, N_("None"),
+    { RoutePlannerConfig::Mode::NONE, N_("None"),
       N_("Neither airspace nor terrain is used for route planning.") },
-    { (unsigned)RoutePlannerConfig::Mode::TERRAIN, N_("Terrain"),
+    { RoutePlannerConfig::Mode::TERRAIN, N_("Terrain"),
       N_("Routes will avoid terrain.") },
-    { (unsigned)RoutePlannerConfig::Mode::AIRSPACE, N_("Airspace"),
+    { RoutePlannerConfig::Mode::AIRSPACE, N_("Airspace"),
       N_("Routes will avoid airspace.") },
-    { (unsigned)RoutePlannerConfig::Mode::BOTH, N_("Both"),
+    { RoutePlannerConfig::Mode::BOTH, N_("Both"),
       N_("Routes will avoid airspace and terrain.") },
-    { 0 }
+    nullptr
   };
 
   AddEnum(_("Route mode"), nullptr, route_mode_list,
@@ -128,13 +128,13 @@ RouteConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(RoutePlannerUseCeiling);
 
   static constexpr StaticEnumChoice turning_reach_list[] = {
-    { (unsigned)RoutePlannerConfig::ReachMode::OFF, N_("Off"),
+    { RoutePlannerConfig::ReachMode::OFF, N_("Off"),
       N_("Reach calculations disabled.") },
-    { (unsigned)RoutePlannerConfig::ReachMode::STRAIGHT, N_("Straight"),
+    { RoutePlannerConfig::ReachMode::STRAIGHT, N_("Straight"),
       N_("The reach is from straight line paths from the glider.") },
-    { (unsigned)RoutePlannerConfig::ReachMode::TURNING, N_("Turning"),
+    { RoutePlannerConfig::ReachMode::TURNING, N_("Turning"),
       N_("The reach is calculated allowing turns around terrain obstacles.") },
-    { 0 }
+    nullptr
   };
 
   AddSpacer(); // Spacer
@@ -145,11 +145,11 @@ RouteConfigPanel::Prepare(ContainerWindow &parent,
           this);
 
   static constexpr StaticEnumChoice reach_polar_list[] = {
-    { (unsigned)RoutePlannerConfig::Polar::TASK, N_("Task"),
+    { RoutePlannerConfig::Polar::TASK, N_("Task"),
       N_("Uses task glide polar.") },
-    { (unsigned)RoutePlannerConfig::Polar::SAFETY, N_("Safety MC"),
+    { RoutePlannerConfig::Polar::SAFETY, N_("Safety MC"),
       N_("Uses safety MacCready value") },
-    { 0 }
+    nullptr
   };
 
   AddEnum(_("Reach polar"),
@@ -158,19 +158,19 @@ RouteConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(ReachPolarMode);
 
   static constexpr StaticEnumChoice final_glide_terrain_list[] = {
-    { (unsigned)FeaturesSettings::FinalGlideTerrain::OFF, N_("Off"),
+    { FeaturesSettings::FinalGlideTerrain::OFF, N_("Off"),
       N_("Disables the reach display.") },
-    { (unsigned)FeaturesSettings::FinalGlideTerrain::TERRAIN_LINE, N_("Terrain line"),
+    { FeaturesSettings::FinalGlideTerrain::TERRAIN_LINE, N_("Terrain line"),
       N_("Draws a dashed line at the terrain glide reach.") },
-    { (unsigned)FeaturesSettings::FinalGlideTerrain::TERRAIN_SHADE, N_("Terrain shade"),
+    { FeaturesSettings::FinalGlideTerrain::TERRAIN_SHADE, N_("Terrain shade"),
       N_("Shades terrain outside glide reach.") },
-    { (unsigned)FeaturesSettings::FinalGlideTerrain::WORKING, N_("Working line"),
+    { FeaturesSettings::FinalGlideTerrain::WORKING, N_("Working line"),
       N_("Draws a dashed line at the working glide reach.") },
-    { (unsigned)FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_LINE, N_("Working line, terrain line"),
+    { FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_LINE, N_("Working line, terrain line"),
       N_("Draws a dashed line at the working and terrain glide reaches.") },
-    { (unsigned)FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_SHADE, N_("Working line, terrain shade"),
+    { FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_SHADE, N_("Working line, terrain shade"),
       N_("Draws a dashed line at working, and shade terrain, glide reaches.") },
-    { 0 }
+    nullptr
   };
 
   AddEnum(_("Reach display"), nullptr, final_glide_terrain_list,

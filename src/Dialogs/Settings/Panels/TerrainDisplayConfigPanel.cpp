@@ -222,7 +222,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
     {12, N_("Italian Avioportolano VFR Chart"), },
     {13, N_("German DFS VFR Chart"), },
     {14, N_("French SIA VFR Chart"), },
-    { 0 }
+    nullptr
   };
 
   AddEnum(_("Terrain colors"),
@@ -231,11 +231,11 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
   GetDataField(TerrainColors).SetListener(this);
 
   static constexpr StaticEnumChoice slope_shading_list[] = {
-    { (unsigned)SlopeShading::OFF, N_("Off"), },
-    { (unsigned)SlopeShading::FIXED, N_("Fixed"), },
-    { (unsigned)SlopeShading::SUN, N_("Sun"), },
-    { (unsigned)SlopeShading::WIND, N_("Wind"), },
-    { 0 }
+    { SlopeShading::OFF, N_("Off"), },
+    { SlopeShading::FIXED, N_("Fixed"), },
+    { SlopeShading::SUN, N_("Sun"), },
+    { SlopeShading::WIND, N_("Wind"), },
+    nullptr
   };
 
   AddEnum(_("Slope shading"),
@@ -261,9 +261,9 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
   // JMW using enum here instead of bool so can provide more contour rendering
   // options later
   static constexpr StaticEnumChoice contours_list[] = {
-    { (unsigned)Contours::OFF, N_("Off"), },
-    { (unsigned)Contours::ON, N_("On"), },
-    { 0 }
+    { Contours::OFF, N_("Off"), },
+    { Contours::ON, N_("On"), },
+    nullptr
   };
 
   AddEnum(_("Contours"),

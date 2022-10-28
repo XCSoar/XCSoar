@@ -36,6 +36,16 @@ struct StaticEnumChoice {
   unsigned id;
   const TCHAR *display_string;
   const TCHAR *help;
+
+  constexpr StaticEnumChoice(std::nullptr_t n) noexcept
+    :id(0), display_string(n), help(n) {}
+
+  template<typename T>
+  requires(std::is_same_v<T, unsigned> || std::is_same_v<T, int> ||
+           std::is_enum_v<T>)
+  constexpr StaticEnumChoice(T _id, const TCHAR *_display_string,
+                             const TCHAR *_help=nullptr) noexcept
+    :id(static_cast<unsigned>(_id)), display_string(_display_string), help(_help) {}
 };
 
 class DataFieldEnum final : public DataField {

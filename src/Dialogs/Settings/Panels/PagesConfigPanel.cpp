@@ -191,11 +191,11 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
     CommonInterface::GetUISettings().info_boxes;
 
   static constexpr StaticEnumChoice main_list[] = {
-    { (unsigned)PageLayout::Main::MAP, N_("Map") },
-    { (unsigned)PageLayout::Main::FLARM_RADAR, N_("FLARM radar") },
-    { (unsigned)PageLayout::Main::THERMAL_ASSISTANT, N_("Thermal assistant") },
-    { (unsigned)PageLayout::Main::HORIZON, N_("Horizon") },
-    { 0 }
+    { PageLayout::Main::MAP, N_("Map") },
+    { PageLayout::Main::FLARM_RADAR, N_("FLARM radar") },
+    { PageLayout::Main::THERMAL_ASSISTANT, N_("Thermal assistant") },
+    { PageLayout::Main::HORIZON, N_("Horizon") },
+    nullptr
   };
   AddEnum(_("Main area"),
           _("Specifies what should be displayed in the main area."),
@@ -205,7 +205,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
   static constexpr StaticEnumChoice ib_list[] = {
     { IBP_AUTO, N_("Auto"), N_("Displays either the Circling, Cruise or Final glide infoxboxes") },
     { IBP_NONE, N_("None"), N_("Show fullscreen (no InfoBoxes)") },
-    { 0 }
+    nullptr
   };
 
   WndProperty *wp = AddEnum(_("InfoBoxes"),
@@ -235,10 +235,9 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
   }
 
   static constexpr StaticEnumChoice bottom_list[] = {
-    { (unsigned)PageLayout::Bottom::NOTHING, N_("Nothing") },
-    { (unsigned)PageLayout::Bottom::CROSS_SECTION,
-                N_("Cross section") },
-    { 0 }
+    { PageLayout::Bottom::NOTHING, N_("Nothing") },
+    { PageLayout::Bottom::CROSS_SECTION, N_("Cross section") },
+    nullptr
   };
   AddEnum(_("Bottom area"),
           _("Specifies what should be displayed below the main area."),
