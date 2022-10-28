@@ -9,6 +9,7 @@ Version 7.28 - not yet released
   - fix WeGlide 'Automatic Upload' not persistent
   - file manager, show description and update date
   - ATC Radial infobox can display magnetic radial with configurable declination
+  - fix wrong type in waypoint editor
 * waypoint editor
   - add more SeeYou waypoint types
 * Android

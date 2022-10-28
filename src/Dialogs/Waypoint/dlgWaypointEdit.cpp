@@ -67,26 +67,26 @@ private:
 };
 
 static constexpr StaticEnumChoice waypoint_types[] = {
-  { 0, N_("Turnpoint") },
-  { 1, N_("Airport") },
-  { 2, N_("Landable") },
-  { 3, N_("Mountain Pass") },
-  { 4, N_("Mountain Top") },
-  { 5, N_("Transmitter Mast") },
-  { 6, N_("Tower") },
-  { 7, N_("Tunnel") },
-  { 8, N_("Bridge") },
-  { 9, N_("Power Plant") },
-  { 10, N_("VOR") },
-  { 11, N_("NDB") },
-  { 12, N_("Dam") },
-  { 13, N_("Castle") },
-  { 14, N_("Intersection") },
-  { 15, N_("Marker") },
-  { 16, N_("Control Point") },
-  { 17, N_("PG Take Off") },
-  { 18, N_("PG Landing Zone") },
-  { 0 }
+  { Waypoint::Type::NORMAL, N_("Turnpoint") },
+  { Waypoint::Type::AIRFIELD, N_("Airport") },
+  { Waypoint::Type::OUTLANDING, N_("Landable") },
+  { Waypoint::Type::MOUNTAIN_PASS, N_("Mountain Pass") },
+  { Waypoint::Type::MOUNTAIN_TOP, N_("Mountain Top") },
+  { Waypoint::Type::OBSTACLE, N_("Transmitter Mast") },
+  { Waypoint::Type::TOWER, N_("Tower") },
+  { Waypoint::Type::TUNNEL, N_("Tunnel") },
+  { Waypoint::Type::BRIDGE, N_("Bridge") },
+  { Waypoint::Type::POWERPLANT, N_("Power Plant") },
+  { Waypoint::Type::VOR, N_("VOR") },
+  { Waypoint::Type::NDB, N_("NDB") },
+  { Waypoint::Type::DAM, N_("Dam") },
+  { Waypoint::Type::CASTLE, N_("Castle") },
+  { Waypoint::Type::INTERSECTION, N_("Intersection") },
+  { Waypoint::Type::MARKER, N_("Marker") },
+  { Waypoint::Type::REPORTING_POINT, N_("Control Point") },
+  { Waypoint::Type::PGTAKEOFF, N_("PG Take Off") },
+  { Waypoint::Type::PGLANDING, N_("PG Landing Zone") },
+  nullptr
 };
 
 void
@@ -103,9 +103,7 @@ WaypointEditWidget::Prepare(ContainerWindow &, const PixelRect &) noexcept
            _T("%.0f %s"), _T("%.0f"),
            0, 30000, 5, false,
            UnitGroup::ALTITUDE, value.elevation);
-  AddEnum(_("Type"), nullptr, waypoint_types,
-          value.IsAirport() ? 1u : (value.IsLandable() ? 2u : 0u),
-          this);
+  AddEnum(_("Type"), nullptr, waypoint_types, (unsigned)value.type);
 }
 
 bool
@@ -117,88 +115,15 @@ WaypointEditWidget::Save(bool &_changed) noexcept
   value.comment = GetValueString(COMMENT);
   value.location = ((GeoPointDataField &)GetDataField(LOCATION)).GetValue();
   changed |= SaveValue(ELEVATION, UnitGroup::ALTITUDE, value.elevation);
+
+  if (SaveValueEnum(TYPE, value.type)) {
+    changed = true;
+
+    value.flags.turn_point = value.type == Waypoint::Type::AIRFIELD ||
+      value.type == Waypoint::Type::NORMAL;
+  }
+
   _changed |= changed;
-
-  switch (GetValueEnum(TYPE)) {
-  case 1:
-    value.flags.turn_point = true;
-    value.type = Waypoint::Type::AIRFIELD;
-    break;
-
-  case 2:
-    value.type = Waypoint::Type::OUTLANDING;
-    break;
-
-  case 3:
-    value.type = Waypoint::Type::MOUNTAIN_PASS;
-    break;
-
-  case 4:
-    value.type = Waypoint::Type::MOUNTAIN_TOP;
-    break;
-
-  case 5:
-    value.type = Waypoint::Type::OBSTACLE;
-    break;
-
-  case 6:
-    value.type = Waypoint::Type::TOWER;
-    break;
-
-  case 7:
-    value.type = Waypoint::Type::TUNNEL;
-    break;
-
-  case 8:
-    value.type = Waypoint::Type::BRIDGE;
-    break;
-
-  case 9:
-    value.type = Waypoint::Type::POWERPLANT;
-    break;
-
-  case 10:
-    value.type = Waypoint::Type::VOR;
-    break;
-
-  case 11:
-    value.type = Waypoint::Type::NDB;
-    break;
-
-  case 12:
-    value.type = Waypoint::Type::DAM;
-    break;
-
-  case 13:
-    value.type = Waypoint::Type::CASTLE;
-    break;
-
-  case 14:
-    value.type = Waypoint::Type::INTERSECTION;
-    break;
-
-  case 15:
-    value.type = Waypoint::Type::MARKER;
-    break;
-
-  case 16:
-    value.type = Waypoint::Type::REPORTING_POINT;
-    break;
-
-  case 17:
-    value.type = Waypoint::Type::PGTAKEOFF;
-    break;
-
-  case 18:
-    value.type = Waypoint::Type::PGLANDING;
-    break;
-
-  default:
-    value.type = Waypoint::Type::NORMAL;
-    value.flags.turn_point = true;
-    break;
-  };
-
   return true;
 }
 
