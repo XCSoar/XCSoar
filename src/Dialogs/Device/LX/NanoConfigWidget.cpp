@@ -84,13 +84,13 @@ NanoConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   RequestAllSettings(device);
 
   static constexpr StaticEnumChoice baud_list[] = {
-    { 2400, _T("2400"), NULL },
-    { 4800, _T("4800"), NULL },
-    { 9600, _T("9600"), NULL },
-    { 19200, _T("19200"), NULL },
-    { 38400, _T("38400"), NULL },
-    { 57600, _T("57600"), NULL },
-    { 115200, _T("115200"), NULL },
+    { 2400, _T("2400") },
+    { 4800, _T("4800") },
+    { 9600, _T("9600") },
+    { 19200, _T("19200") },
+    { 38400, _T("38400") },
+    { 57600, _T("57600") },
+    { 115200, _T("115200") },
     { 0 }
   };
 

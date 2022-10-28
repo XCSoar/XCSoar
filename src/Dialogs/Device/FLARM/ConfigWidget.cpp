@@ -114,11 +114,11 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   notrack = GetUnsignedValue(device, "NOTRACK", 0) == 1;
 
   static constexpr StaticEnumChoice baud_list[] = {
-    { 0, _T("4800"), NULL },
-    { 1, _T("9600"), NULL },
-    { 2, _T("19200"), NULL },
-    { 4, _T("38400"), NULL },
-    { 5, _T("57600"), NULL },
+    { 0, _T("4800") },
+    { 1, _T("9600") },
+    { 2, _T("19200") },
+    { 4, _T("38400") },
+    { 5, _T("57600") },
     { 0 }
   };
 
