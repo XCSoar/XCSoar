@@ -1,4 +1,4 @@
-Version 7.28 - not yet released
+Version 7.28 - 2022/10/29
 * data files
   - fix crash after loading new map file
   - fix AAT OZ angles in tasks loaded from CUP files
