@@ -300,7 +300,7 @@ struct TempAirspaceType
   }
 
   void
-  AppendArc(Angle start, Angle end) noexcept
+  AppendArc(Angle start, Angle end)
   {
     const auto center = RequireCenter();
 

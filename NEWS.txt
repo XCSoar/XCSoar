@@ -1,4 +1,6 @@
 Version 7.29 - not yet released
+* data files
+  - fix crash when arc airspace has no center
 
 Version 7.28 - 2022/10/29
 * data files
