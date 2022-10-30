@@ -86,6 +86,8 @@ endif
 
 ifeq ($(SANITIZE),y)
   SANITIZE_FLAGS := -fsanitize=address
-else
+else ifeq ($(SANITIZE),n)
   SANITIZE_FLAGS :=
+else
+  SANITIZE_FLAGS := -fsanitize=$(SANITIZE)
 endif

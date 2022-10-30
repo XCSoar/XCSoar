@@ -21,7 +21,9 @@ else
   ICF ?= n
 endif
 
-# enable gcc/clang sanitizers?
+# Enable gcc/clang sanitizers?  Either "n" to disable, "y" to enable
+# default sanitizers or a comma-separated list of sanitizers
+# (e.g. "address,undefined").
 SANITIZE ?= n
 
 # show map renderer times?
