@@ -142,6 +142,7 @@ ifeq ($(TARGET),FUZZER)
   override TARGET = UNIX
 
   FUZZER = y
+  LIBFUZZER = y
   CLANG = y
   VFB = y
 
@@ -398,7 +399,9 @@ TARGET_CXXFLAGS =
 TARGET_CPPFLAGS = -I$(TARGET_OUTPUT_DIR)/include
 
 ifeq ($(FUZZER),y)
-  SANITIZE = fuzzer,address
+  ifeq ($(LIBFUZZER),y)
+    SANITIZE = fuzzer,address
+  endif
   TARGET_CPPFLAGS += -DFUZZER
 endif
 

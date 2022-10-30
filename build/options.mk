@@ -5,6 +5,10 @@ LTO ?= $(THIN_LTO)
 IWYU ?= n
 FUZZER ?= n
 
+# Build the fuzzers with libFuzzer? (i.e. -fsanitize=fuzzer) - (for
+# Honggfuzz, this should be disabled)
+LIBFUZZER ?= n
+
 # Prefer packages from Homebrew?
 USE_HOMEBREW ?= n
 
