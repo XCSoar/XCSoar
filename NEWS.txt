@@ -1,5 +1,6 @@
 Version 7.29 - not yet released
 * data files
+  - reject implausible runway lengths in CUP files
   - fix crash when arc airspace has no center
 
 Version 7.28 - 2022/10/29
