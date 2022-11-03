@@ -299,7 +299,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
     // Runway length (e.g. 546.0m)
     double rwlen = -1;
     if (iRWLen < n_params && ParseDistance(params[iRWLen], rwlen) &&
-        rwlen > 0)
+        rwlen > 0 && rwlen <= 30000)
       new_waypoint.runway.SetLength(uround(rwlen));
 
     if (iRWDir < n_params && *params[iRWDir]) {
