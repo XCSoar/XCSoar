@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -72,7 +72,7 @@ IsCursorKey(unsigned key_code)
 
 gcc_visibility_default
 void
-Java_org_xcsoar_EventBridge_onKeyDown(JNIEnv *env, jclass cls, jint key_code)
+Java_org_xcsoar_EventBridge_onKeyDown([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jclass cls, jint key_code)
 {
   if (event_queue == nullptr)
     /* XCSoar not yet initialised */
@@ -89,7 +89,7 @@ Java_org_xcsoar_EventBridge_onKeyDown(JNIEnv *env, jclass cls, jint key_code)
 
 gcc_visibility_default
 void
-Java_org_xcsoar_EventBridge_onKeyUp(JNIEnv *env, jclass cls, jint key_code)
+Java_org_xcsoar_EventBridge_onKeyUp([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jclass cls, jint key_code)
 {
   if (event_queue == nullptr)
     /* XCSoar not yet initialised */
@@ -101,7 +101,7 @@ Java_org_xcsoar_EventBridge_onKeyUp(JNIEnv *env, jclass cls, jint key_code)
 
 gcc_visibility_default
 void
-Java_org_xcsoar_EventBridge_onMouseDown(JNIEnv *env, jclass cls,
+Java_org_xcsoar_EventBridge_onMouseDown([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jclass cls,
                                         jint x, jint y)
 {
   if (event_queue == nullptr)
@@ -114,7 +114,7 @@ Java_org_xcsoar_EventBridge_onMouseDown(JNIEnv *env, jclass cls,
 
 gcc_visibility_default
 void
-Java_org_xcsoar_EventBridge_onMouseUp(JNIEnv *env, jclass cls,
+Java_org_xcsoar_EventBridge_onMouseUp([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jclass cls,
                                       jint x, jint y)
 {
   if (event_queue == nullptr)
@@ -127,7 +127,7 @@ Java_org_xcsoar_EventBridge_onMouseUp(JNIEnv *env, jclass cls,
 
 gcc_visibility_default
 void
-Java_org_xcsoar_EventBridge_onMouseMove(JNIEnv *env, jclass cls,
+Java_org_xcsoar_EventBridge_onMouseMove([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jclass cls,
                                         jint x, jint y)
 {
   if (event_queue == nullptr)
@@ -141,7 +141,7 @@ Java_org_xcsoar_EventBridge_onMouseMove(JNIEnv *env, jclass cls,
 
 gcc_visibility_default
 void
-Java_org_xcsoar_EventBridge_onPointerDown(JNIEnv *env, jclass cls)
+Java_org_xcsoar_EventBridge_onPointerDown([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jclass cls)
 {
   if (event_queue == nullptr)
     /* XCSoar not yet initialised */
@@ -153,7 +153,7 @@ Java_org_xcsoar_EventBridge_onPointerDown(JNIEnv *env, jclass cls)
 
 gcc_visibility_default
 void
-Java_org_xcsoar_EventBridge_onPointerUp(JNIEnv *env, jclass cls)
+Java_org_xcsoar_EventBridge_onPointerUp([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jclass cls)
 {
   if (event_queue == nullptr)
     /* XCSoar not yet initialised */

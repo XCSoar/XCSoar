@@ -973,7 +973,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("ATC radial"),
     N_("ATC radial"),
-    N_("True bearing from the selected reference location to your position.  The distance is displayed in nautical miles for communication with ATC."),
+    N_("Bearing from the selected reference location to your position. The distance is displayed in nautical miles for communication with ATC. If declination is entered, magnetic bearing is given to match VOR radials."),
     UpdateInfoBoxATCRadial,
     atc_infobox_panels,
   },

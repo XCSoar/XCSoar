@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SLES_ENGINE_HPP
-#define SLES_ENGINE_HPP
+#pragma once
 
 #include <SLES/OpenSLES.h>
 
@@ -64,5 +63,3 @@ namespace SLES {
     }
   };
 }
-
-#endif

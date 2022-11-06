@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2020 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2011-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CHAR_UTIL_HXX
-#define CHAR_UTIL_HXX
+#pragma once
 
 #ifdef _UNICODE
 #include "WCharUtil.hxx"
@@ -123,6 +122,12 @@ IsAlphaNumericASCII(char ch) noexcept
 	return IsAlphaASCII(ch) || IsDigitASCII(ch);
 }
 
+constexpr bool
+IsLowerAlphaNumericASCII(char ch) noexcept
+{
+	return IsLowerAlphaASCII(ch) || IsDigitASCII(ch);
+}
+
 /**
  * Convert the specified ASCII character (0x00..0x7f) to upper case.
  * Unlike toupper(), it ignores the system locale.
@@ -154,5 +159,3 @@ IsHexDigit(char ch) noexcept
 		(ch >= 'a' && ch <= 'f') ||
 		(ch >= 'A' && ch <= 'F');
 }
-
-#endif

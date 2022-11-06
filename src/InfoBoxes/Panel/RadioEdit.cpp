@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ Copyright_License {
 class RadioOffsetButtons final : public OffsetButtonsWidget {
 public:
   RadioOffsetButtons(bool active_freq) noexcept
-    :OffsetButtonsWidget(UIGlobals::GetDialogLook().button, _T("%.0f KHz"), 5, 1000),set_active_freq(active_freq) {}
+    :OffsetButtonsWidget(UIGlobals::GetDialogLook().button, _T("%.0f kHz"), 5, 1000),set_active_freq(active_freq) {}
 
 protected:
   /* virtual methods from OffsetButtonsWidget */
@@ -53,13 +53,13 @@ RadioOffsetButtons::OnOffset(double offset) noexcept
 }
 
 std::unique_ptr<Widget>
-LoadActiveRadioFrequencyEditPanel(unsigned id)
+LoadActiveRadioFrequencyEditPanel([[maybe_unused]] unsigned id)
 {
   return std::make_unique<RadioOffsetButtons>(true);
 }
 
 std::unique_ptr<Widget>
-LoadStandbyRadioFrequencyEditPanel(unsigned id)
+LoadStandbyRadioFrequencyEditPanel([[maybe_unused]] unsigned id)
 {
   return std::make_unique<RadioOffsetButtons>(false);
 }

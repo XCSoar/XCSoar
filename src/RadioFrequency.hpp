@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,12 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_RADIO_FREQUENCY_HPP
-#define XCSOAR_RADIO_FREQUENCY_HPP
+#pragma once
 
 #include <cassert>
 #include <cstdint>
+#include <compare>
 #include <cstddef>
+
 #include <tchar.h>
 
 /**
@@ -42,7 +43,7 @@ class RadioFrequency {
    */
   uint16_t value;
 
-  constexpr RadioFrequency(unsigned _value):value(_value) {}
+  constexpr RadioFrequency(unsigned _value) noexcept:value(_value) {}
 
 public:
   /**
@@ -54,28 +55,39 @@ public:
    * Construct an empty instance.  Its IsDefined() method will return
    * false.
    */
-  static constexpr RadioFrequency Null() {
+  static constexpr RadioFrequency Null() noexcept {
     return { 0 };
   }
 
-  constexpr bool IsDefined() const {
+  static constexpr RadioFrequency FromKiloHertz(unsigned khz) noexcept {
+    RadioFrequency f;
+    f.SetKiloHertz(khz);
+    return f;
+  }
+
+  static constexpr RadioFrequency FromMegaKiloHertz(unsigned mhz,
+                                                    unsigned khz) noexcept {
+    RadioFrequency f;
+    f.SetKiloHertz(mhz * 1000 + khz);
+    return f;
+  }
+
+  friend constexpr auto operator<=>(RadioFrequency,
+                                    RadioFrequency) noexcept = default;
+
+  constexpr bool IsDefined() const noexcept {
     return value != 0;
   }
 
   /**
    * Set this object to "undefined".
    */
-  void Clear() {
+  constexpr void Clear() noexcept {
     value = 0;
   }
 
-#ifdef NDEBUG
-  constexpr
-#endif
-  unsigned GetKiloHertz() const {
-#ifndef NDEBUG
+  constexpr unsigned GetKiloHertz() const noexcept {
     assert(IsDefined());
-#endif
 
     return BASE_KHZ + value;
   }
@@ -86,7 +98,7 @@ public:
    * Due to rounding from 8.33 kHz to multiples of 5 (for displaying), some
    * channels are invalid. These are matched by (value % 25) == 20.
    */
-  void SetKiloHertz(unsigned khz) {
+  constexpr void SetKiloHertz(unsigned khz) noexcept {
     value = (khz >= MIN_KHZ && khz < MAX_KHZ) &&
             (khz % 5 == 0) &&
             (khz % 25 != 20)
@@ -94,7 +106,7 @@ public:
       : 0;
   }
 
-  void OffsetKiloHertz(int khz_offset) {
+  constexpr void OffsetKiloHertz(int khz_offset) noexcept {
     auto new_khz = GetKiloHertz() + khz_offset;
     if ((new_khz % 25) == 20) {
       new_khz += khz_offset > 0 ? 5 : -5;
@@ -102,10 +114,8 @@ public:
     SetKiloHertz(new_khz);
   }
 
-  TCHAR *Format(TCHAR *buffer, size_t max_size) const;
+  TCHAR *Format(TCHAR *buffer, size_t max_size) const noexcept;
 
   [[gnu::pure]]
-  static RadioFrequency Parse(const TCHAR *p);
+  static RadioFrequency Parse(const TCHAR *p) noexcept;
 };
-
-#endif

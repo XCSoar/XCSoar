@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -56,15 +56,15 @@ private:
   }
 
 protected:
-  virtual void OnCancelMode() override;
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnMouseUp(PixelPoint p) override;
-  bool OnMouseMove(PixelPoint p, unsigned keys) override;
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnCancelMode() noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };
 
 void
-GaugeThermalAssistantWindow::OnCancelMode()
+GaugeThermalAssistantWindow::OnCancelMode() noexcept
 {
   if (dragging) {
     dragging = false;
@@ -77,7 +77,7 @@ GaugeThermalAssistantWindow::OnCancelMode()
 }
 
 bool
-GaugeThermalAssistantWindow::OnMouseDown(PixelPoint p)
+GaugeThermalAssistantWindow::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
 {
   if (!dragging) {
     dragging = true;
@@ -91,7 +91,7 @@ GaugeThermalAssistantWindow::OnMouseDown(PixelPoint p)
 }
 
 bool
-GaugeThermalAssistantWindow::OnMouseUp(PixelPoint p)
+GaugeThermalAssistantWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 {
   if (dragging) {
     const bool was_pressed = pressed;
@@ -112,7 +112,8 @@ GaugeThermalAssistantWindow::OnMouseUp(PixelPoint p)
 }
 
 bool
-GaugeThermalAssistantWindow::OnMouseMove(PixelPoint p, unsigned keys)
+GaugeThermalAssistantWindow::OnMouseMove(PixelPoint p,
+                                         [[maybe_unused]] unsigned keys) noexcept
 {
   if (dragging) {
     SetPressed(IsInside(p));
@@ -123,7 +124,7 @@ GaugeThermalAssistantWindow::OnMouseMove(PixelPoint p, unsigned keys)
 }
 
 void
-GaugeThermalAssistantWindow::OnPaint(Canvas &canvas)
+GaugeThermalAssistantWindow::OnPaint(Canvas &canvas) noexcept
 {
   ThermalAssistantWindow::OnPaint(canvas);
 

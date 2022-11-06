@@ -74,6 +74,13 @@ static constexpr LOOKUP_ICON icon_list[] = {
   { "mountain_pass", IDB_MOUNTAIN_PASS, IDB_MOUNTAIN_PASS_HD },
   { "weather_station", IDB_WEATHER_STATION, IDB_WEATHER_STATION_HD },
   { "thermal_hotspot", IDB_THERMAL_HOTSPOT, IDB_THERMAL_HOTSPOT_HD },
+  { "vor", IDB_VOR, IDB_VOR_HD },
+  { "ndb", IDB_NDB, IDB_NDB_HD },
+  { "castle", IDB_CASTLE, IDB_CASTLE_HD },
+  { "intersection", IDB_INTERSECTION, IDB_INTERSECTION_HD },
+  { "reporting_point", IDB_REPORTING_POINT, IDB_REPORTING_POINT_HD },
+  { "pgtakeoff", IDB_PGTAKEOFF, IDB_PGTAKEOFF_HD },
+  { "pglanding", IDB_PGLANDING, IDB_PGLANDING_HD },
   { nullptr, ResourceId::Null(), ResourceId::Null() }
 };
 

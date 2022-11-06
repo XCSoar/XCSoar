@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,13 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_POLL_KEY_CODE_HPP
-#define XCSOAR_EVENT_POLL_KEY_CODE_HPP
+#pragma once
 
 #ifdef USE_X11
 #include "X11KeyCode.hpp"
 #else
 #include "linux/KeyCode.hpp"
-#endif
-
 #endif

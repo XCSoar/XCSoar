@@ -17,8 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef EVENT_POLL_EVENTS_HXX
-#define EVENT_POLL_EVENTS_HXX
+#pragma once
 
 #include <sys/poll.h>
 
@@ -28,5 +27,3 @@ struct PollEvents {
 	static constexpr unsigned ERROR = POLLERR;
 	static constexpr unsigned HANGUP = POLLHUP;
 };
-
-#endif

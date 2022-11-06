@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,10 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_ID_HPP
-#define XCSOAR_FLARM_ID_HPP
+#pragma once
 
 #include <cstdint>
+#include <compare> // for the defaulted spaceship operator
 
 #ifdef _UNICODE
 #include <tchar.h>
@@ -44,36 +44,28 @@ class FlarmId {
 public:
   FlarmId() = default;
 
-  constexpr
-  static FlarmId Undefined() {
+  static constexpr FlarmId Undefined() noexcept {
     return FlarmId(UNDEFINED_VALUE);
   }
 
-  bool IsDefined() const {
+  constexpr bool IsDefined() const noexcept {
     return value != UNDEFINED_VALUE;
   }
 
-  void Clear() {
+  constexpr void Clear() noexcept {
     value = UNDEFINED_VALUE;
   }
 
-  bool operator==(FlarmId other) const {
-    return value == other.value;
-  }
+  friend constexpr auto operator<=>(const FlarmId &,
+                                    const FlarmId &) noexcept = default;
 
-  bool operator<(FlarmId other) const {
-    return value < other.value;
-  }
-
-  static FlarmId Parse(const char *input, char **endptr_r);
+  static FlarmId Parse(const char *input, char **endptr_r) noexcept;
 #ifdef _UNICODE
-  static FlarmId Parse(const TCHAR *input, TCHAR **endptr_r);
+  static FlarmId Parse(const TCHAR *input, TCHAR **endptr_r) noexcept;
 #endif
 
-  const char *Format(char *buffer) const;
+  const char *Format(char *buffer) const noexcept;
 #ifdef _UNICODE
-  const TCHAR *Format(TCHAR *buffer) const;
+  const TCHAR *Format(TCHAR *buffer) const noexcept;
 #endif
 };
-
-#endif

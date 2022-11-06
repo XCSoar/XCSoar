@@ -25,6 +25,7 @@
 #define DO_PRINT
 #include "TestUtil.hpp"
 #include "Route/TerrainRoute.hpp"
+#include "Route/ReachFan.hpp"
 #include "Engine/Route/ReachResult.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Terrain/Loader.hpp"
@@ -57,18 +58,16 @@ test_reach(const RasterMap &map, double mwind, double mc, double height_min_work
 
   GeoPoint origin(map.GetMapCenter());
 
-  bool retval= true;
-
   int horigin = map.GetHeight(origin).GetValueOr0() + 1000;
   AGeoPoint aorigin(origin, horigin);
 
-  retval = route.SolveReachTerrain(aorigin, config, INT_MAX);
-  ok(retval, "reach terrain", 0);
-  PrintHelper::print_reach_terrain_tree(route);
+  const auto reach_terrain = route.SolveReach(aorigin, config, INT_MAX,
+                                              true, false);
+  PrintHelper::print(reach_terrain);
 
-  retval = route.SolveReachWorking(aorigin, config, INT_MAX);
-  ok(retval, "reach working", 0);
-  PrintHelper::print_reach_working_tree(route);
+  const auto reach_working = route.SolveReach(aorigin, config, INT_MAX,
+                                              true, true);
+  PrintHelper::print(reach_working);
 
   {
     Directory::Create(Path(_T("output/results")));
@@ -83,10 +82,13 @@ test_reach(const RasterMap &map, double mwind, double mc, double height_min_work
                    origin.latitude + Angle::Degrees(0.6 * fy));
         int h = map.GetInterpolatedHeight(x).GetValueOr0();
         AGeoPoint adest(x, h);
-        const auto reach = route.FindPositiveArrival(adest);
+        const auto reach = reach_terrain.FindPositiveArrival(adest,
+                                                             route.GetReachPolar());
         if ((i % 5 == 0) && (j % 5 == 0)) {
           AGeoPoint ao2(x, h + 1000);
-          route.SolveReachTerrain(ao2, config, INT_MAX);
+          [[maybe_unused]] auto reach2 =
+                             route.SolveReach(ao2, config, INT_MAX,
+                                              true, false);
         }
         fout << x.longitude.Degrees() << " "
              << x.latitude.Degrees() << " "
@@ -135,7 +137,7 @@ try {
   } while (map.IsDirty());
   zzip_dir_close(dir);
 
-  plan_tests(8);
+  plan_tests(6);
   test_reach(map, 0, 0.1, 0);
   test_reach(map, 0, 0.1, 750);
   test_reach(map, 0, 0.1, 500);

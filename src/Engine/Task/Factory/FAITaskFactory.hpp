@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -19,8 +19,8 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef FAI_TASK_FACTORY_HPP
-#define FAI_TASK_FACTORY_HPP
+ 
+#pragma once
 
 #include "AbstractTaskFactory.hpp"
 
@@ -34,8 +34,8 @@ class FAITaskFactory:
 {
 protected:
   FAITaskFactory(const TaskFactoryConstraints &_constraints,
-                 OrderedTask& _task,
-                 const TaskBehaviour &tb);
+                 OrderedTask &_task,
+                 const TaskBehaviour &tb) noexcept;
 
 public:
 /** 
@@ -44,12 +44,10 @@ public:
  * @param _task Ordered task to be managed by this factory
  * @param tb Behaviour (options)
  */  
-  FAITaskFactory(OrderedTask& _task,
-                 const TaskBehaviour &tb);
+  FAITaskFactory(OrderedTask &_task,
+                 const TaskBehaviour &tb) noexcept;
 
-  virtual ~FAITaskFactory() {};
-
-  void UpdateOrderedTaskSettings(OrderedTaskSettings& to) override;
+  void UpdateOrderedTaskSettings(OrderedTaskSettings &to) noexcept override;
 
   TaskValidationErrorSet Validate() const noexcept override;
 
@@ -60,7 +58,7 @@ public:
    * @return: point type compatible with current factory, most
    * similar to type of tp
    */
-  TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const override;
+  TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const noexcept override;
 
   /**
    * @param start_radius: either -1 or a valid value
@@ -76,7 +74,5 @@ public:
   void GetPointDefaultSizes(const TaskPointFactoryType type,
                             double &start_radius,
                             double &turnpoint_radius,
-                            double &finish_radius) const override;
+                            double &finish_radius) const noexcept override;
 };
-
-#endif

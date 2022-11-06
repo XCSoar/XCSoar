@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,7 +29,10 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "System.hpp"
+
+#ifdef KOBO
 #include "Model.hpp"
+#endif
 
 #include "system/FileUtil.hpp"
 
@@ -68,7 +71,7 @@ private:
 };
 
 void
-SystemWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
+SystemWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept
 {
   AddButton("Reboot", [](){ KoboReboot(); });
   switch_otg_mode = AddButton(IsKoboOTGHostMode() ? "Disable USB-OTG" : "Enable USB-OTG",
@@ -91,7 +94,7 @@ inline void
 SystemWidget::SwitchOTGMode()
 {
 #ifdef KOBO
-  if (DetectKoboModel() == KoboModel::CLARA_HD) {
+  if (DetectKoboModel() == KoboModel::CLARA_HD || DetectKoboModel() == KoboModel::LIBRA2) {
     bool success;
     if (IsKoboOTGHostMode()) {
       success = File::WriteExisting(Path("/sys/kernel/debug/ci_hdrc.0/role"),

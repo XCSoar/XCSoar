@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MAP_OVERLAY_BITMAP_HPP
-#define XCSOAR_MAP_OVERLAY_BITMAP_HPP
+#pragma once
 
 #include "Overlay.hpp"
 #include "ui/canvas/Bitmap.hpp"
@@ -104,5 +103,3 @@ public:
   void Draw(Canvas &canvas,
             const WindowProjection &projection) noexcept override;
 };
-
-#endif

@@ -27,24 +27,22 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef MEMORY_READER_HXX
-#define MEMORY_READER_HXX
+#pragma once
 
 #include "Reader.hxx"
-#include "util/ConstBuffer.hxx"
+
+#include <span>
 
 /**
  * A #Reader implementation which reads from a memory buffer.
  */
 class MemoryReader : public Reader {
-	ConstBuffer<std::byte> buffer;
+	std::span<const std::byte> buffer;
 
 public:
-	explicit MemoryReader(ConstBuffer<std::byte> _buffer) noexcept
+	explicit MemoryReader(std::span<const std::byte> _buffer) noexcept
 		:buffer(_buffer) {}
 
 	/* virtual methods from class Reader */
 	std::size_t Read(void *data, std::size_t size) override;
 };
-
-#endif

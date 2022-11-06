@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,12 +30,6 @@ Copyright_License {
 
 static bool DataFieldKeyUp = false;
 
-int
-DataFieldFloat::GetAsInteger() const noexcept
-{
-  return iround(mValue);
-}
-
 const TCHAR *
 DataFieldFloat::GetAsString() const noexcept
 {
@@ -51,12 +45,6 @@ DataFieldFloat::GetAsDisplayString() const noexcept
 }
 
 void
-DataFieldFloat::SetAsInteger(int Value) noexcept
-{
-  ModifyValue(Value);
-}
-
-void
 DataFieldFloat::ModifyValue(double Value) noexcept
 {
   if (Value < mMin)
@@ -67,12 +55,6 @@ DataFieldFloat::ModifyValue(double Value) noexcept
     SetValue(Value);
     Modified();
   }
-}
-
-void
-DataFieldFloat::SetAsString(const TCHAR *Value) noexcept
-{
-  ModifyValue(ParseDouble(Value));
 }
 
 void
@@ -122,9 +104,9 @@ DataFieldFloat::SpeedUp(bool keyup) noexcept
 }
 
 void
-DataFieldFloat::SetFromCombo(int iDataFieldIndex, const TCHAR *sValue) noexcept
+DataFieldFloat::SetFromCombo([[maybe_unused]] int iDataFieldIndex, const TCHAR *sValue) noexcept
 {
-  SetAsString(sValue);
+  ModifyValue(ParseDouble(sValue));
 }
 
 void

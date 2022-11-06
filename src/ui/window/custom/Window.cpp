@@ -53,19 +53,6 @@ Window::Create(ContainerWindow *parent, PixelRect rc,
   OnResize(size);
 }
 
-void
-Window::ToScreen(PixelRect &rc) const noexcept
-{
-  assert(IsDefined());
-
-  for (const Window *p = parent; p != nullptr; p = p->parent) {
-    rc.left += p->position.x;
-    rc.top += p->position.y;
-    rc.right += p->position.x;
-    rc.bottom += p->position.y;
-  }
-}
-
 PixelRect
 Window::GetParentClientRect() const noexcept
 {
@@ -81,7 +68,8 @@ Window::IsMaximised() const noexcept
   assert(IsDefined());
 
   return parent != nullptr &&
-    GetWidth() >= parent->GetWidth() && GetHeight() >= parent->GetHeight();
+    GetSize().width >= parent->GetSize().width &&
+    GetSize().height >= parent->GetSize().height;
 }
 
 void

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,20 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_SYSTEM_HPP
-#define XCSOAR_SCREEN_OPENGL_SYSTEM_HPP
+#pragma once
 
 #include "Features.hpp"
-
-// IWYU pragma: begin_exports
 
 #ifdef ENABLE_SDL
 #include <SDL_platform.h>
 #include <SDL_opengles2.h>
 #else
 #include <GLES2/gl2.h>
-#endif
-
-// IWYU pragma: end_exports
-
 #endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -177,18 +177,18 @@ public:
                    unsigned idx) noexcept override;
 
   /* virtual methods from ListCursorHandler */
-  bool CanActivateItem(unsigned index) const noexcept override {
+  bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
     return true;
   }
 
-  void OnActivateItem(unsigned index) noexcept override;
+  void OnActivateItem([[maybe_unused]] unsigned index) noexcept override;
 
   /* virtual methods from DataFieldListener */
   void OnModified(DataField &df) noexcept override;
 
 private:
   /* virtual methods from BlackboardListener */
-  void OnGPSUpdate(const MoreData &basic) override;
+  void OnGPSUpdate([[maybe_unused]] const MoreData &basic) override;
 };
 
 class WaypointFilterWidget : public RowFormWidget {
@@ -224,7 +224,7 @@ public:
   }
 
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
+  void Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept override {
     AddButton(_("Select"), [this](){
       list->OnWaypointListEnter();
     });
@@ -282,6 +282,10 @@ FillList(WaypointList &list, const Waypoints &src,
 
   if (filter.distance > 0 || !filter.direction.IsNegative())
     list.SortByDistance(location);
+  else
+    list.SortByName();
+
+  list.MakeUnique();
 }
 
 static void
@@ -399,8 +403,8 @@ CreateTypeDataField(DataFieldListener *listener)
 }
 
 void
-WaypointFilterWidget::Prepare(ContainerWindow &parent,
-                              const PixelRect &rc) noexcept
+WaypointFilterWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                              [[maybe_unused]] const PixelRect &rc) noexcept
 {
   Add(_("Name"), nullptr, CreateNameDataField(listener));
   Add(_("Distance"), nullptr, CreateDistanceDataField(listener));
@@ -472,13 +476,13 @@ WaypointListWidget::OnWaypointListEnter()
 }
 
 void
-WaypointListWidget::OnActivateItem(unsigned index) noexcept
+WaypointListWidget::OnActivateItem([[maybe_unused]] unsigned index) noexcept
 {
   OnWaypointListEnter();
 }
 
 void
-WaypointListWidget::OnGPSUpdate(const MoreData &basic)
+WaypointListWidget::OnGPSUpdate([[maybe_unused]] const MoreData &basic)
 {
   if (dialog_state.direction_index == 1 &&
       !CommonInterface::Calculated().circling) {

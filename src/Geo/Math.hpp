@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,8 +28,7 @@ Copyright_License {
  * on the Earth with GPS coordinates.
  */
 
-#ifndef XCSOAR_GEO_MATH_HPP
-#define XCSOAR_GEO_MATH_HPP
+#pragma once
 
 struct GeoPoint;
 class Angle;
@@ -113,5 +112,3 @@ DoubleDistance(const GeoPoint &loc1, const GeoPoint &loc2,
 [[gnu::pure]]
 GeoPoint FindLatitudeLongitude(const GeoPoint &loc,
                                Angle bearing, double distance) noexcept;
-
-#endif

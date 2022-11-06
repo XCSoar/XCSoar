@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef FILE_READER_HXX
-#define FILE_READER_HXX
+#pragma once
 
 #include "Reader.hxx"
 #include "system/Path.hpp"
@@ -126,5 +125,3 @@ public:
 	/* virtual methods from class Reader */
 	std::size_t Read(void *data, std::size_t size) override;
 };
-
-#endif

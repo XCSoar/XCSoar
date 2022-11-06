@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,11 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_AUDIO_TONE_SYNTHESISER_HPP
-#define XCSOAR_AUDIO_TONE_SYNTHESISER_HPP
+#pragma once
 
 #include "PCMSynthesiser.hpp"
-#include "util/Compiler.h"
 
 /**
  * This class generates tones with a sine wave.
@@ -63,7 +61,7 @@ protected:
    * Returns the number of samples until the sample value gets close
    * to zero.
    */
-  gcc_pure
+  [[gnu::pure]]
   unsigned ToZero() const;
 
   /**
@@ -73,5 +71,3 @@ protected:
     angle = 0;
   }
 };
-
-#endif

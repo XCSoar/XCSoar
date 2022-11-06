@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@ Copyright_License {
 #include "io/UniqueFileDescriptor.hxx"
 #include "system/Error.hxx"
 #include "system/TTYDescriptor.hxx"
+#include "system/FileUtil.hpp"
 #include "event/Call.hxx"
 #include "util/StringFormat.hpp"
 
@@ -181,21 +182,11 @@ TTYPort::Drain()
   return tty.Drain();
 }
 
-#ifndef __APPLE__
-gcc_pure
-static bool
-IsCharDev(const char *path) noexcept
-{
-  struct stat st;
-  return stat(path, &st) == 0 && S_ISCHR(st.st_mode);
-}
-#endif
-
 void
 TTYPort::Open(const TCHAR *path, unsigned baud_rate)
 {
 #ifndef __APPLE__
-  if (IsAndroid() && IsCharDev(path)) {
+  if (IsAndroid() && File::IsCharDev(Path(path))) {
     /* attempt to give the XCSoar process permissions to access the
        USB serial adapter; this is mostly relevant to the Nook */
     TCHAR command[MAX_PATH];

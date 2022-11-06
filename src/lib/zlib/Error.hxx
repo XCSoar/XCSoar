@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef ZLIB_ERROR_HXX
-#define ZLIB_ERROR_HXX
+#pragma once
 
 #include <exception>
 
@@ -44,5 +43,3 @@ public:
 
 	const char *what() const noexcept override;
 };
-
-#endif

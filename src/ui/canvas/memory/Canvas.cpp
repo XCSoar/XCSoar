@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -89,7 +89,7 @@ Canvas::InvertRectangle(PixelRect r)
 
 template<typename Canvas, typename PixelOperations>
 static void
-DrawPolyline(Canvas &canvas, PixelOperations operations, const Pen &pen,
+DrawPolyline(Canvas &canvas, [[maybe_unused]] PixelOperations operations, const Pen &pen,
              const BulkPixelPoint *lppt, unsigned n_points,
              bool loop)
 {
@@ -220,13 +220,12 @@ Canvas::DrawArc(PixelPoint center, unsigned radius,
 }
 
 const PixelSize
-Canvas::CalcTextSize(BasicStringView<TCHAR> text) const noexcept
+Canvas::CalcTextSize(tstring_view text) const noexcept
 {
-  assert(text != nullptr);
 #ifdef UNICODE
   const WideToUTF8Converter text2(text);
 #else
-  const StringView text2 = text;
+  const std::string_view text2 = text;
   assert(ValidateUTF8(text));
 #endif
 
@@ -244,19 +243,17 @@ Canvas::CalcTextSize(BasicStringView<TCHAR> text) const noexcept
 }
 
 static TextCache::Result
-RenderText(const Font *font, BasicStringView<TCHAR> text) noexcept
+RenderText(const Font *font, tstring_view text) noexcept
 {
   if (font == nullptr)
     return nullptr;
 
   assert(font->IsDefined());
 
-#ifdef USE_FREETYPE
 #ifdef UNICODE
   return TextCache::Get(*font, WideToUTF8Converter(text));
 #else
   return TextCache::Get(*font, text);
-#endif
 #endif
 }
 
@@ -291,9 +288,8 @@ CopyTextRectangle(SDLRasterCanvas &canvas, int x, int y,
 }
 
 void
-Canvas::DrawText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
+Canvas::DrawText(PixelPoint p, tstring_view text) noexcept
 {
-  assert(text != nullptr);
 #ifndef UNICODE
   assert(ValidateUTF8(text));
 #endif
@@ -309,9 +305,8 @@ Canvas::DrawText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
 }
 
 void
-Canvas::DrawTransparentText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
+Canvas::DrawTransparentText(PixelPoint p, tstring_view text) noexcept
 {
-  assert(text != nullptr);
 #ifndef UNICODE
   assert(ValidateUTF8(text));
 #endif
@@ -328,7 +323,7 @@ Canvas::DrawTransparentText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
 
 void
 Canvas::DrawClippedText(PixelPoint p, const PixelRect &rc,
-                        BasicStringView<TCHAR> text) noexcept
+                        tstring_view text) noexcept
 {
   // TODO: implement full clipping
   if (rc.right > p.x)
@@ -337,9 +332,8 @@ Canvas::DrawClippedText(PixelPoint p, const PixelRect &rc,
 
 void
 Canvas::DrawClippedText(PixelPoint p, unsigned width,
-                        BasicStringView<TCHAR> text) noexcept
+                        tstring_view text) noexcept
 {
-  assert(text != nullptr);
 #ifndef UNICODE
   assert(ValidateUTF8(text));
 #endif
@@ -652,7 +646,7 @@ Canvas::DrawRoundRectangle(PixelRect r, PixelSize ellipse_size) noexcept
 void
 Canvas::AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
                    ConstImageBuffer src,
-                   PixelPoint src_position, PixelSize src_size,
+                   PixelPoint src_position, [[maybe_unused]] PixelSize src_size,
                    uint8_t alpha)
 {
   // TODO: support scaling
@@ -681,7 +675,7 @@ Canvas::AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
 void
 Canvas::AlphaBlendNotWhite(PixelPoint dest_position, PixelSize dest_size,
                            ConstImageBuffer src,
-                           PixelPoint src_position, PixelSize src_size,
+                           PixelPoint src_position, [[maybe_unused]] PixelSize src_size,
                            uint8_t alpha)
 {
   // TODO: support scaling

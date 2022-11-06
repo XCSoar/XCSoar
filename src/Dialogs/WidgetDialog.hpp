@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_WIDGET_DIALOG_HPP
-#define XCSOAR_WIDGET_DIALOG_HPP
+#pragma once
 
 #include "Form/Form.hpp"
 #include "Form/ButtonPanel.hpp"
@@ -30,7 +29,6 @@ Copyright_License {
 
 #include <memory>
 #include <type_traits>
-
 #include <tchar.h>
 
 class Widget;
@@ -155,13 +153,13 @@ private:
 
 protected:
   /* virtual methods from class Window */
-  virtual void OnDestroy() override;
-  virtual void OnResize(PixelSize new_size) override;
+  void OnDestroy() noexcept override;
+  void OnResize(PixelSize new_size) noexcept override;
 
   /* virtual methods from class WndForm */
-  virtual void ReinitialiseLayout(const PixelRect &parent_rc) override;
-  virtual void SetDefaultFocus() override;
-  virtual bool OnAnyKeyDown(unsigned key_code) override;
+  void ReinitialiseLayout(const PixelRect &parent_rc) noexcept override;
+  void SetDefaultFocus() noexcept override;
+  bool OnAnyKeyDown(unsigned key_code) noexcept override;
 };
 
 /**
@@ -200,5 +198,3 @@ DefaultWidgetDialog(UI::SingleWindow &parent, const DialogLook &look,
 bool
 DefaultWidgetDialog(UI::SingleWindow &parent, const DialogLook &look,
                     const TCHAR *caption, Widget &widget);
-
-#endif

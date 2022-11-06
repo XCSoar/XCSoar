@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_WINDOW_CANVAS_HXX
-#define XCSOAR_SCREEN_WINDOW_CANVAS_HXX
+#pragma once
 
 #include "ui/window/Window.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -37,8 +36,9 @@ class WindowCanvas : public Canvas {
 #ifdef USE_MEMORY_CANVAS
 public:
   explicit WindowCanvas(Window &window) {
-    buffer.width = window.GetWidth();
-    buffer.height = window.GetHeight();
+    const auto window_size = window.GetSize();
+    buffer.width = window_size.width;
+    buffer.height = window_size.height;
   }
 
 #else /* !USE_MEMORY_CANVAS */
@@ -54,5 +54,3 @@ public:
   }
 #endif /* !USE_MEMORY_CANVAS */
 };
-
-#endif

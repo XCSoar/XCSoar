@@ -13,6 +13,8 @@ ifeq ($(LIBCXX),y)
 else
   # using GNU libstdc++
 
+  LIBSTDCXX_CPPFLAGS += -D_GLIBCXX_ASSERTIONS
+
   ifeq ($(DEBUG_GLIBCXX),y)
     LIBSTDCXX_CPPFLAGS += -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC
   endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MAP_WINDOW_HPP
-#define XCSOAR_MAP_WINDOW_HPP
+#pragma once
 
 #include "Projection/MapWindowProjection.hpp"
 #include "Renderer/AirspaceRenderer.hpp"
@@ -37,7 +36,6 @@ Copyright_License {
 #include "Renderer/BackgroundRenderer.hpp"
 #include "Renderer/WaypointRenderer.hpp"
 #include "Renderer/TrailRenderer.hpp"
-#include "util/Compiler.h"
 #include "Weather/Features.hpp"
 #include "Tracking/SkyLines/Features.hpp"
 
@@ -274,7 +272,7 @@ public:
     return visible_projection;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint GetLocation() const {
     return visible_projection.IsValid()
       ? visible_projection.GetGeoLocation()
@@ -342,13 +340,16 @@ protected:
 
 protected:
   /* virtual methods from class Window */
-  virtual void OnCreate() override;
-  virtual void OnDestroy() override;
-  virtual void OnResize(PixelSize new_size) override;
-  virtual void OnPaint(Canvas& canvas) override;
+  void OnCreate() override;
+  void OnDestroy() noexcept override;
+  void OnResize(PixelSize new_size) noexcept override;
 
-  /* virtual methods from class DoubleBufferWindow */
-  virtual void OnPaintBuffer(Canvas& canvas) noexcept override;
+#ifndef ENABLE_OPENGL
+  void OnPaint(Canvas& canvas) noexcept override;
+#endif
+
+  /* methods from class DoubleBufferWindow */
+  void OnPaintBuffer(Canvas& canvas) noexcept override;
 
 private:
   /**
@@ -401,5 +402,3 @@ public:
     visible_projection.SetMapScale(x);
   }
 };
-
-#endif

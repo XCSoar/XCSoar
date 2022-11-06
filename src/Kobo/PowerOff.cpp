@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,13 +32,17 @@ Copyright_License {
 #include "ui/window/Init.hpp"
 #include "Screen/Layout.hpp"
 #include "Renderer/FlightListRenderer.hpp"
+#include "Renderer/TextRenderer.hpp"
 #include "FlightInfo.hpp"
 #include "Logger/FlightParser.hpp"
 #include "io/FileLineReader.hpp"
+#include "io/UniqueFileDescriptor.hxx"
 #include "Resources.hpp"
 #include "Model.hpp"
 #include "Hardware/Battery.hpp"
 #include "Hardware/PowerInfo.hpp"
+#include "util/StringStrip.hxx"
+#include "util/UTF8.hpp"
 
 #include <algorithm>
 #include <stdexcept>
@@ -97,6 +101,55 @@ DrawBanner(Canvas &canvas, PixelRect &rc)
   rc.top += banner_height + 8;
 }
 
+/**
+ * Show the contents of XCSoarData/kobo/poweroff.txt at the bottom of
+ * the screen.
+ */
+static void
+DrawUserText(Canvas &canvas, PixelRect &rc) noexcept
+{
+  std::array<char, 2048> buffer;
+
+  std::string_view text;
+
+  if (UniqueFileDescriptor fd; fd.OpenReadOnly("/mnt/onboard/XCSoarData/kobo/poweroff.txt")) {
+    ssize_t nbytes = fd.Read(buffer.data(), buffer.size());
+    if (nbytes <= 0)
+      return;
+
+    text = {buffer.data(), std::size_t(nbytes)};
+  } else
+    return;
+
+  if (!ValidateUTF8(text))
+    return;
+
+  text = Strip(text);
+  if (text.empty())
+    return;
+
+  const int padding = 2;
+
+  canvas.Select(normal_font);
+
+  auto text_rc = rc;
+  rc.Grow(-padding);
+
+  TextRenderer r;
+
+  const unsigned text_height = std::min(r.GetHeight(canvas, text_rc, text),
+                                        text_rc.GetHeight() / 2);
+  text_rc.top = text_rc.bottom - text_height;
+
+  const int line_y = text_rc.top - padding;
+
+  rc.bottom = line_y - padding;
+
+  r.Draw(canvas, text_rc, text);
+
+  canvas.DrawHLine(text_rc.left, text_rc.right, line_y, COLOR_BLACK);
+}
+
 static void
 DrawFlights(Canvas &canvas, const PixelRect &rc)
 try {
@@ -120,10 +173,11 @@ Draw(Canvas &canvas)
   rc.Grow(-16);
 
   DrawBanner(canvas, rc);
+  DrawUserText(canvas, rc);
   DrawFlights(canvas, rc);
 }
 
-int main(int argc, char **argv)
+int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   /* enable FreeType anti-aliasing, because we don't use dithering in
      this program */

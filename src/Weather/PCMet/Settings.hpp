@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_WEATHER_PCMET_SETTINGS_HPP
-#define XCSOAR_WEATHER_PCMET_SETTINGS_HPP
+#pragma once
 
 #include "util/StaticString.hxx"
 
@@ -56,5 +55,3 @@ struct PCMetSettings {
     ftp_credentials.SetDefaults();
   }
 };
-
-#endif

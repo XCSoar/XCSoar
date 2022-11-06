@@ -96,7 +96,7 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
 
     if (!parsed.wind_available) {
       buffer.Format(_T("%s: "), _("Wind"));
-      buffer.append(value, value_length);
+      buffer.append({value, value_length});
     } else {
       TCHAR wind_speed_buffer[16];
       FormatUserWindSpeed(parsed.wind.norm, wind_speed_buffer,
@@ -115,7 +115,7 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
 
     if (!parsed.temperatures_available) {
       buffer.Format(_T("%s: "), _("Temperature"));
-      buffer.append(value, value_length);
+      buffer.append({value, value_length});
     } else {
       TCHAR temperature_buffer[16];
       FormatUserTemperature(parsed.temperature, temperature_buffer,
@@ -133,7 +133,7 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
 
     if (!parsed.temperatures_available) {
       buffer.Format(_T("%s: "), _("Dew Point"));
-      buffer.append(value, value_length);
+      buffer.append({value, value_length});
     } else {
       TCHAR temperature_buffer[16];
       FormatUserTemperature(parsed.dew_point, temperature_buffer,
@@ -151,7 +151,7 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
 
     if (!parsed.qnh_available) {
       buffer.Format(_T("%s: "), _("Pressure"));
-      buffer.append(value, value_length);
+      buffer.append({value, value_length});
     } else {
       TCHAR qnh_buffer[16];
       FormatUserPressure(parsed.qnh, qnh_buffer, ARRAY_SIZE(qnh_buffer));
@@ -168,13 +168,13 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
 
     buffer.Format(_T("%s: "), _("Visibility"));
     if (!parsed.visibility_available) {
-      buffer.append(value, value_length);
+      buffer.append({value, value_length});
     } else {
       if (parsed.visibility >= 9999)
         buffer.AppendFormat(_("more than %s"),
                             FormatUserDistanceSmart(10000).c_str());
       else
-        buffer += FormatUserDistanceSmart(parsed.visibility);
+        buffer += FormatUserDistanceSmart(parsed.visibility).c_str();
     }
     output += buffer;
     output += '\n';
@@ -186,7 +186,7 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
     buffer.Format(_T("%s: "), _("Sky Conditions"));
 
     StaticString<64> _value;
-    _value.assign(value, value_length);
+    _value.assign({value, value_length});
 
     buffer += gettext(_value);
 
@@ -200,7 +200,7 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
     buffer.Format(_T("%s: "), _("Weather"));
 
     StaticString<64> _value;
-    _value.assign(value, value_length);
+    _value.assign({value, value_length});
 
     buffer += gettext(_value);
 
@@ -210,11 +210,11 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
   }
 
   StaticString<64> title;
-  title.assign(line, title_length);
+  title.assign({line, title_length});
 
   StaticString<256> buffer;
   buffer.Format(_T("%s: "), gettext(title.c_str()));
-  buffer.append(value, value_length);
+  buffer.append({value, value_length});
 
   output += buffer;
   output += '\n';

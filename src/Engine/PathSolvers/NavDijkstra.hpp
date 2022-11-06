@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef NAV_DIJKSTRA_HPP
-#define NAV_DIJKSTRA_HPP
+#pragma once
 
 #include "Dijkstra.hpp"
 #include "ScanTaskPoint.hpp"
@@ -39,6 +38,7 @@ Copyright_License {
  *
  * NavDijkstra<SearchPoint>
  */
+template<typename ValueType=unsigned>
 class NavDijkstra {
 protected:
   static constexpr unsigned MAX_STAGES = 32;
@@ -51,8 +51,8 @@ protected:
     };
 
     struct Equal {
-      constexpr std::size_t operator()(ScanTaskPoint a,
-                                       ScanTaskPoint b) const noexcept {
+      constexpr bool operator()(ScanTaskPoint a,
+                                ScanTaskPoint b) const noexcept {
         return a.Key() == b.Key();
       }
     };
@@ -63,7 +63,8 @@ protected:
     };
   };
 
-  typedef ::Dijkstra<ScanTaskPoint, DijkstraMap> Dijkstra;
+  using Dijkstra = ::Dijkstra<ScanTaskPoint, DijkstraMap, ValueType>;
+  using value_type = typename Dijkstra::value_type;
 
   Dijkstra dijkstra;
 
@@ -140,11 +141,11 @@ protected:
   }
 
   bool Link(const ScanTaskPoint node, const ScanTaskPoint parent,
-            unsigned value) noexcept {
+            value_type value) noexcept {
     return dijkstra.Link(node, parent, value);
   }
 
-  void LinkStart(const ScanTaskPoint node, unsigned value=0) noexcept {
+  void LinkStart(const ScanTaskPoint node, value_type value={}) noexcept {
     Link(node, node, value);
   }
 
@@ -227,5 +228,3 @@ protected:
     } while (p.GetStageNumber() != last_stage_number);
   }
 };
-
-#endif

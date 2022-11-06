@@ -88,10 +88,10 @@ AirspaceClassRendererSettingsPanel::Prepare(ContainerWindow &parent,
              _T("%d"), _T("%d"), 0, 5, 1, settings.border_width);
 
   static constexpr StaticEnumChoice fill_mode_list[] = {
-    { (unsigned)AirspaceClassRendererSettings::FillMode::ALL, N_("Filled"), },
-    { (unsigned)AirspaceClassRendererSettings::FillMode::PADDING, N_("Only padding"), },
-    { (unsigned)AirspaceClassRendererSettings::FillMode::NONE, N_("Not filled"), },
-    { 0 }
+    { AirspaceClassRendererSettings::FillMode::ALL, N_("Filled"), },
+    { AirspaceClassRendererSettings::FillMode::PADDING, N_("Only padding"), },
+    { AirspaceClassRendererSettings::FillMode::NONE, N_("Not filled"), },
+    nullptr
   };
 
   AddEnum(_("Fill Mode"),
@@ -119,19 +119,14 @@ AirspaceClassRendererSettingsPanel::Save(bool &changed) noexcept
   }
 #endif
 
-  const auto &border_width_df = GetDataField(BorderWidth);
-  unsigned border_width = border_width_df.GetAsInteger();
-  if (border_width != settings.border_width) {
-    settings.border_width = border_width;
-    Profile::SetAirspaceBorderWidth(Profile::map, type, border_width);
+  if (SaveValueInteger(BorderWidth, settings.border_width)) {
+    Profile::SetAirspaceBorderWidth(Profile::map, type, settings.border_width);
     changed = true;
   }
 
-  const auto &fill_mode_df = GetDataField(FillMode);
-  auto fill_mode = (AirspaceClassRendererSettings::FillMode)fill_mode_df.GetAsInteger();
-  if (fill_mode != settings.fill_mode) {
-    settings.fill_mode = fill_mode;
-    Profile::SetAirspaceFillMode(Profile::map, type, (unsigned)fill_mode);
+  if (SaveValueEnum(FillMode, settings.fill_mode)) {
+    Profile::SetAirspaceFillMode(Profile::map, type,
+                                 (unsigned)settings.fill_mode);
     changed = true;
   }
 

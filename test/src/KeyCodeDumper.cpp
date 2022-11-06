@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -66,32 +66,32 @@ protected:
   }
 
 protected:
-  bool OnMouseDown(PixelPoint p) override {
+  bool OnMouseDown([[maybe_unused]] PixelPoint p) noexcept override {
     SetFocus();
     return true;
   }
 
-  virtual bool OnKeyDown(unsigned key_code) override {
+  bool OnKeyDown(unsigned key_code) noexcept override {
     add_event(key_code, true);
     return true;
   }
 
-  virtual bool OnKeyUp(unsigned key_code) override {
+  bool OnKeyUp(unsigned key_code) noexcept override {
     add_event(key_code, false);
     return true;
   }
 
-  virtual void OnSetFocus() override {
+  void OnSetFocus() noexcept override {
     PaintWindow::OnSetFocus();
     Invalidate();
   }
 
-  virtual void OnKillFocus() override {
+  void OnKillFocus() noexcept override {
     PaintWindow::OnKillFocus();
     Invalidate();
   }
 
-  virtual void OnPaint(Canvas &canvas) override {
+  void OnPaint(Canvas &canvas) noexcept override {
     canvas.SelectWhiteBrush();
     if (HasFocus())
       canvas.SelectBlackPen();
@@ -142,14 +142,14 @@ public:
   }
 
 protected:
-  virtual void OnResize(PixelSize new_size) override {
+  void OnResize(PixelSize new_size) noexcept override {
     SingleWindow::OnResize(new_size);
 
     if (key_code_dumper.IsDefined())
-      key_code_dumper.Move(0, 0, new_size.width, (new_size.height + 1) / 2);
+      key_code_dumper.Move(PixelRect{PixelSize{new_size.width, (new_size.height + 1) / 2}});
 
     if (close_button.IsDefined())
-      close_button.Move(0, (new_size.height + 1) / 2, new_size.width, new_size.height / 2);
+      close_button.Move({0, int(new_size.height + 1) / 2, int(new_size.width), int(new_size.height / 2)});
   }
 };
 

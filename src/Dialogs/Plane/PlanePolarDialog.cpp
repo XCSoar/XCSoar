@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -120,8 +120,8 @@ PlanePolarWidget::Update()
 }
 
 void
-PlanePolarWidget::Prepare(ContainerWindow &parent,
-                          const PixelRect &rc) noexcept
+PlanePolarWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                          [[maybe_unused]] const PixelRect &rc) noexcept
 {
   AddReadOnly(_("Name"), nullptr, plane.polar_name);
 
@@ -164,21 +164,17 @@ PlanePolarWidget::Save(bool &_changed) noexcept
 inline void
 PlanePolarWidget::ListClicked()
 {
+  const auto internal_polars = PolarStore::GetAll();
   ComboList list;
-  for (auto item = PolarStore::cbegin(); item != PolarStore::cend(); item++ )
-    list.Append(item->name);
-
-  list.Sort();
+  for (const auto &i : internal_polars)
+    list.Append(i.name);
 
   // let the user select
   int result = ComboPicker(_("Load Polar"), list, NULL);
   if (result < 0)
     return;
 
-  assert((unsigned)result < PolarStore::Count());
-
-  WideToUTF8Converter polar_name(list[result].string_value.c_str());
-  const PolarStore::Item &item = PolarStore::GetItem(polar_name);
+  const PolarStore::Item &item = internal_polars[list[result].int_value];
 
   plane.polar_shape.reference_mass = item.reference_mass;
   plane.empty_mass = item.empty_mass;
@@ -192,7 +188,7 @@ PlanePolarWidget::ListClicked()
 
   plane.polar_shape = item.ToPolarShape();
 
-  plane.polar_name = list[result].string_value.c_str();
+  plane.polar_name = item.name;
 
   if (item.contest_handicap > 0)
     plane.handicap = item.contest_handicap;
@@ -232,7 +228,7 @@ PlanePolarWidget::ImportClicked()
 }
 
 void
-PlanePolarWidget::OnModified(DataField &df) noexcept
+PlanePolarWidget::OnModified([[maybe_unused]] DataField &df) noexcept
 {
   plane.polar_name = _T("Custom");
   UpdatePolarLabel();

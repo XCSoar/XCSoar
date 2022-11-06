@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,24 +27,19 @@ Copyright_License {
 #include "system/ConvertPathName.hpp"
 #include "system/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
+#include "util/PrintException.hxx"
 
 #include <cstdint>
 #include <stdio.h>
 #include <tchar.h>
 
-static bool
+static void
 LoadWaypoints(Path path, Waypoints &waypoints)
 {
   ConsoleOperationEnvironment operation;
-  if (!ReadWaypointFile(path, waypoints,
-                        WaypointFactory(WaypointOrigin::NONE),
-                        operation)) {
-    fprintf(stderr, "ReadWaypointFile() failed\n");
-    return false;
-  }
-
-  waypoints.Optimise();
-  return true;
+  ReadWaypointFile(path, waypoints,
+                   WaypointFactory(WaypointOrigin::NONE),
+                   operation);
 }
 
 static bool
@@ -76,7 +71,7 @@ enum class WaypointType: uint8_t {
 };
 
 static bool
-AlwaysTrue(const Waypoint &waypoint)
+AlwaysTrue([[maybe_unused]] const Waypoint &waypoint)
 {
   return true;
 }
@@ -127,7 +122,7 @@ PrintWaypoint(const Waypoint *waypoint)
 }
 
 int main(int argc, char **argv)
-{
+try {
   WaypointType type = WaypointType::ALL;
   double range = 100000;
 
@@ -163,8 +158,7 @@ int main(int argc, char **argv)
   args.ExpectEnd();
 
   Waypoints waypoints;
-  if (!LoadWaypoints(path, waypoints))
-    return EXIT_FAILURE;
+  LoadWaypoints(path, waypoints);
 
   char buffer[1024];
   const char *line;
@@ -179,4 +173,7 @@ int main(int argc, char **argv)
   }
 
   return EXIT_SUCCESS;
+} catch (...) {
+  PrintException(std::current_exception());
+  return EXIT_FAILURE;
 }

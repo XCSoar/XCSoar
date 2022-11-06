@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef TRI_STATE_HPP
-#define TRI_STATE_HPP
+#pragma once
 
 #include <cstdint>
 
@@ -55,5 +54,3 @@ static constexpr bool FALSE = false;
 enum class TriState : uint8_t {
   FALSE, TRUE, UNKNOWN
 };
-
-#endif

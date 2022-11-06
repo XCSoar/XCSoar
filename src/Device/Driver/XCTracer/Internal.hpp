@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_XCTRACERVARIO_INTERNAL_HPP
-#define XCSOAR_XCTRACERVARIO_INTERNAL_HPP
+#pragma once
 
 #include "Device/Driver.hpp"
 #include "time/BrokenDate.hpp"
@@ -55,5 +54,3 @@ public:
    */
   bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 };
-
-#endif

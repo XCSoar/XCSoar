@@ -49,7 +49,7 @@ MapItemListBuilder::AddSkyLinesTraffic()
 {
 #ifdef HAVE_SKYLINES_TRACKING
   const auto &data = tracking->GetSkyLinesData();
-  const std::lock_guard<Mutex> lock(data.mutex);
+  const std::lock_guard lock{data.mutex};
 
   StaticString<32> buffer;
 

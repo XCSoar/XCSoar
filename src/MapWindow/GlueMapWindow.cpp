@@ -59,10 +59,7 @@ GlueMapWindow::SetTopography(TopographyStore *_topography)
 
   if (_topography != nullptr)
     topography_thread =
-      new TopographyThread(*_topography,
-                           [this](){
-                             redraw_notify.SendNotification();
-                           });
+      new TopographyThread(*_topography, [this](){ InjectRedraw(); });
 }
 
 void
@@ -78,10 +75,7 @@ GlueMapWindow::SetTerrain(RasterTerrain *_terrain)
 
   if (_terrain != nullptr)
     terrain_thread =
-      new TerrainThread(*_terrain,
-                        [this](){
-                          redraw_notify.SendNotification();
-                        });
+      new TerrainThread(*_terrain, [this](){ InjectRedraw(); });
 }
 
 void
@@ -92,7 +86,7 @@ GlueMapWindow::SetMapSettings(const MapSettings &new_value)
 #ifdef ENABLE_OPENGL
   ReadMapSettings(new_value);
 #else
-  std::lock_guard<Mutex> lock(next_mutex);
+  const std::lock_guard lock{next_mutex};
   next_settings_map = new_value;
 #endif
 }
@@ -105,7 +99,7 @@ GlueMapWindow::SetComputerSettings(const ComputerSettings &new_value)
 #ifdef ENABLE_OPENGL
   ReadComputerSettings(new_value);
 #else
-  std::lock_guard<Mutex> lock(next_mutex);
+  const std::lock_guard lock{next_mutex};
   next_settings_computer = new_value;
 #endif
 }
@@ -118,7 +112,7 @@ GlueMapWindow::SetUIState(const UIState &new_value)
 #ifdef ENABLE_OPENGL
   ReadUIState(new_value);
 #else
-  std::lock_guard<Mutex> lock(next_mutex);
+  const std::lock_guard lock{next_mutex};
   next_ui_state = new_value;
 #endif
 }
@@ -129,14 +123,14 @@ GlueMapWindow::ExchangeBlackboard()
   /* copy device_blackboard to MapWindow */
 
   {
-    const std::lock_guard<Mutex> lock(device_blackboard->mutex);
+    const std::lock_guard lock{device_blackboard->mutex};
     ReadBlackboard(device_blackboard->Basic(),
                    device_blackboard->Calculated());
   }
 
 #ifndef ENABLE_OPENGL
   {
-    const std::lock_guard<Mutex> lock(next_mutex);
+    const std::lock_guard lock{next_mutex};
     ReadMapSettings(next_settings_map);
     ReadComputerSettings(next_settings_computer);
     ReadUIState(next_ui_state);
@@ -171,7 +165,7 @@ GlueMapWindow::FullRedraw()
   UpdateMapScale();
   UpdateScreenBounds();
 
-  PartialRedraw();
+  DeferRedraw();
 }
 
 void
@@ -209,7 +203,6 @@ GlueMapWindow::QuickRedraw()
 #ifndef ENABLE_OPENGL
   /* we suppose that the operation will need a full redraw later, so
      trigger that now */
-  if (draw_thread != nullptr)
-    draw_thread->TriggerRedraw();
+  DeferRedraw();
 #endif
 }

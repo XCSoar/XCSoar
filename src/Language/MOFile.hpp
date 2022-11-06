@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MO_FILE_HPP
-#define XCSOAR_MO_FILE_HPP
+#pragma once
 
 #include "util/AllocatedArray.hxx"
 
@@ -49,8 +48,7 @@ class MOFile {
     const char *original, *translation;
   };
 
-  const uint8_t *data;
-  size_t size;
+  std::span<const std::byte> raw;
 
   bool native_byte_order;
 
@@ -58,7 +56,7 @@ class MOFile {
   AllocatedArray<string_pair> strings;
 
 public:
-  MOFile(const void *data, size_t size);
+  explicit MOFile(std::span<const std::byte> _raw);
 
   bool error() const {
     return count == 0;
@@ -76,5 +74,3 @@ private:
 
   const char *get_string(const struct mo_table_entry *entry) const;
 };
-
-#endif

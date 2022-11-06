@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -88,6 +88,36 @@ GetMinPointsForShapeType(int shapelib_type) noexcept
   }
 }
 
+static constexpr GeoPoint
+ToGeoPoint(const pointObj &src) noexcept
+{
+  return {
+    Angle::Degrees(src.x),
+    Angle::Degrees(src.y),
+  };
+}
+
+[[gnu::pure]]
+static auto
+ImportShapePoint(const pointObj &src, [[maybe_unused]] const GeoPoint &file_center) noexcept
+{
+#ifdef ENABLE_OPENGL
+  /* OpenGL: convert GeoPoints to ShapePoints, make them relative to
+     the map's boundary center */
+
+  const GeoPoint vertex = ToGeoPoint(src);
+  const GeoPoint relative = vertex - file_center;
+
+  return ShapePoint{
+    ShapeScalar(relative.longitude.Native()),
+    ShapeScalar(relative.latitude.Native()),
+  };
+#else
+  /* convert all points of all lines to GeoPoints */
+  return ToGeoPoint(src);
+#endif
+}
+
 XShape::XShape(const shapeObj &shape, const GeoPoint &file_center,
                const char *_label)
   :label(ImportLabel(_label))
@@ -119,32 +149,14 @@ XShape::XShape(const shapeObj &shape, const GeoPoint &file_center,
     ++num_lines;
   }
 
-#ifdef ENABLE_OPENGL
-  /* OpenGL: convert GeoPoints to ShapePoints, make them relative to
-     the map's boundary center */
-
-  points = std::make_unique<ShapePoint[]>(num_points);
-#else // !ENABLE_OPENGL
-  /* convert all points of all lines to GeoPoints */
-
-  points = std::make_unique<GeoPoint[]>(num_points);
-#endif
+  points = std::make_unique<Point[]>(num_points);
   auto *p = points.get();
   for (std::size_t l = 0; l < num_lines; ++l) {
     const pointObj *src = shape.line[l].point;
-    num_points = lines[l];
-    for (std::size_t j = 0; j < num_points; ++j, ++src) {
-#ifdef ENABLE_OPENGL
-      const GeoPoint vertex(Angle::Degrees(src->x), Angle::Degrees(src->y));
-      const GeoPoint relative = vertex - file_center;
-
-      *p++ = ShapePoint(ShapeScalar(relative.longitude.Native()),
-                        ShapeScalar(relative.latitude.Native()));
-#else
-      *p++ = GeoPoint(Angle::Degrees(src->x),
-                      Angle::Degrees(src->y));
-#endif
-    }
+    p = std::transform(src, src + lines[l], p,
+                       [&](const auto &src){
+                         return ImportShapePoint(src, file_center);
+                       });
   }
 }
 
@@ -152,7 +164,7 @@ XShape::~XShape() noexcept = default;
 
 #ifdef ENABLE_OPENGL
 
-bool
+inline bool
 XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance) noexcept
 {
   assert(indices[thinning_level] == nullptr);

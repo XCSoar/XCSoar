@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef JAVA_CLASS_HXX
-#define JAVA_CLASS_HXX
+#pragma once
 
 #include "Ref.hxx"
 #include "Exception.hxx"
@@ -78,5 +77,3 @@ public:
 };
 
 } // namespace Java
-
-#endif

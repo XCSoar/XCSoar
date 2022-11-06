@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ Copyright_License {
 #include "ManageFlarmDialog.hpp"
 #include "FLARM/ConfigWidget.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/Error.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
@@ -51,8 +52,8 @@ public:
 };
 
 void
-ManageFLARMWidget::Prepare(ContainerWindow &parent,
-                           const PixelRect &rc) noexcept
+ManageFLARMWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                           [[maybe_unused]] const PixelRect &rc) noexcept
 {
   if (version.available) {
     StaticString<64> buffer;
@@ -83,8 +84,13 @@ ManageFLARMWidget::Prepare(ContainerWindow &parent,
   });
 
   AddButton(_("Reboot"), [this](){
-    MessageOperationEnvironment env;
-    device.Restart(env);
+    try {
+      MessageOperationEnvironment env;
+      device.Restart(env);
+    } catch (OperationCancelled) {
+    } catch (...) {
+      ShowError(std::current_exception(), _("Error"));
+    }
   });
 }
 

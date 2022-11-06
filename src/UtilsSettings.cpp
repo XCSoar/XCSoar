@@ -159,9 +159,12 @@ SettingsLeave(const UISettings &old_ui_settings)
       glide_computer->ClearAirspaces();
 
     airspace_database.Clear();
-    ReadAirspace(airspace_database, terrain,
+    ReadAirspace(airspace_database,
                  CommonInterface::GetComputerSettings().pressure,
                  operation);
+
+    if (terrain != nullptr)
+      SetAirspaceGroundLevels(airspace_database, *terrain);
   }
 
   if (DevicePortChanged)

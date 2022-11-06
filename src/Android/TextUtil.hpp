@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,14 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_TEXT_UTIL_HPP
-#define XCSOAR_ANDROID_TEXT_UTIL_HPP
+#pragma once
 
 #include "java/Object.hxx"
 
+#include <string_view>
 #include <utility>
 
-struct StringView;
 struct PixelSize;
 class FontDescription;
 
@@ -38,7 +37,7 @@ class TextUtil : protected Java::GlobalObject {
   static jmethodID midGetTextTextureGL;
 
   unsigned height, ascent_height, capital_height;
-  unsigned line_spacing, style;
+  unsigned line_spacing;
 
   TextUtil(const Java::LocalObject &_obj) noexcept;
 
@@ -49,7 +48,7 @@ public:
   static TextUtil *create(const FontDescription &d) noexcept;
 
   [[gnu::pure]]
-  PixelSize getTextBounds(StringView text) const noexcept;
+  PixelSize getTextBounds(std::string_view text) const noexcept;
 
   struct Texture {
     unsigned id;
@@ -63,7 +62,7 @@ public:
        allocated_height(_allocated_height) {}
   };
 
-  Texture getTextTextureGL(StringView text) const noexcept;
+  Texture getTextTextureGL(std::string_view text) const noexcept;
 
   unsigned get_height() const noexcept {
     return height;
@@ -80,10 +79,4 @@ public:
   unsigned GetLineSpacing() const noexcept {
     return line_spacing;
   }
-
-  unsigned get_style() const noexcept {
-    return style;
-  }
 };
-
-#endif

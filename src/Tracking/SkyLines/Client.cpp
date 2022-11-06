@@ -30,12 +30,13 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "util/CRC.hpp"
-#include "util/ConstBuffer.hxx"
 #include "event/Call.hxx"
 #include "net/StaticSocketAddress.hxx"
+#include "net/UniqueSocketDescriptor.hxx"
 #include "util/UTF8.hpp"
 #include "util/ConvertString.hpp"
 
+#include <span>
 #include <string>
 
 void
@@ -59,17 +60,15 @@ SkyLinesTracking::Client::Open(SocketAddress _address)
 
   address = _address;
 
-  {
-    const std::lock_guard<Mutex> lock(mutex);
-    if (!socket.Create(address.GetFamily(), SOCK_DGRAM, 0))
-      return false;
+  UniqueSocketDescriptor socket;
+  if (!socket.Create(address.GetFamily(), SOCK_DGRAM, 0))
+    return false;
 
-    // TODO: bind?
-  }
+  // TODO: bind?
 
   if (handler != nullptr) {
-    BlockingCall(GetEventLoop(), [this](){
-      socket_event.Open(socket);
+    BlockingCall(GetEventLoop(), [&socket, this](){
+      socket_event.Open(socket.Release());
       socket_event.ScheduleRead();
     });
 
@@ -82,10 +81,8 @@ SkyLinesTracking::Client::Open(SocketAddress _address)
 void
 SkyLinesTracking::Client::InternalClose() noexcept
 {
-  socket.Close();
-  socket_event.Abandon();
-
-  const std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
+  socket_event.Close();
   resolver.reset();
 }
 
@@ -160,7 +157,7 @@ SkyLinesTracking::Client::OnTrafficReceived(const TrafficResponsePacket &packet,
     return;
 
   const unsigned n = packet.traffic_count;
-  const ConstBuffer<TrafficResponsePacket::Traffic>
+  const std::span<const TrafficResponsePacket::Traffic>
     list((const TrafficResponsePacket::Traffic *)(&packet + 1), n);
 
   if (length != sizeof(packet) + n * sizeof(list.front()))
@@ -198,8 +195,8 @@ SkyLinesTracking::Client::OnWaveReceived(const WaveResponsePacket &packet,
     return;
 
   const unsigned n = packet.wave_count;
-  ConstBuffer<Wave> waves((const Wave *)(&packet + 1), n);
-  if (length != sizeof(packet) + waves.size * sizeof(waves.front()))
+  std::span<const Wave> waves((const Wave *)(&packet + 1), n);
+  if (length != sizeof(packet) + waves.size() * sizeof(waves.front()))
     return;
 
   for (const auto &wave : waves)
@@ -215,8 +212,8 @@ SkyLinesTracking::Client::OnThermalReceived(const ThermalResponsePacket &packet,
     return;
 
   const unsigned n = packet.thermal_count;
-  ConstBuffer<Thermal> thermals((const Thermal *)(&packet + 1), n);
-  if (length != sizeof(packet) + thermals.size * sizeof(thermals.front()))
+  std::span<const Thermal> thermals((const Thermal *)(&packet + 1), n);
+  if (length != sizeof(packet) + thermals.size() * sizeof(thermals.front()))
     return;
 
   for (const auto &thermal : thermals)
@@ -290,7 +287,7 @@ SkyLinesTracking::Client::OnSocketReady(unsigned) noexcept
   ssize_t nbytes;
   StaticSocketAddress source_address;
 
-  while ((nbytes = socket.Read(buffer, sizeof(buffer), source_address)) > 0)
+  while ((nbytes = GetSocket().Read(buffer, sizeof(buffer), source_address)) > 0)
     if (source_address == address)
       OnDatagramReceived(buffer, nbytes);
 
@@ -301,7 +298,7 @@ void
 SkyLinesTracking::Client::OnResolverSuccess(std::forward_list<AllocatedSocketAddress> addresses) noexcept
 {
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     resolver.reset();
   }
 
@@ -318,7 +315,7 @@ void
 SkyLinesTracking::Client::OnResolverError(std::exception_ptr error) noexcept
 {
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     resolver.reset();
   }
 

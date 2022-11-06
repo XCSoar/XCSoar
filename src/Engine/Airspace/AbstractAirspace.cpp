@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -217,7 +217,7 @@ AbstractAirspace::GetGeoBounds() const noexcept
 const SearchPointVector&
 AbstractAirspace::GetClearance(const FlatProjection &projection) const noexcept
 {
-  #define RADIUS 5
+  static constexpr unsigned RADIUS = 5;
 
   if (!m_clearance.empty())
     return m_clearance;

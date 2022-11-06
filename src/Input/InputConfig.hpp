@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,19 +21,17 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_INPUT_CONFIG_HPP
-#define XCSOAR_INPUT_CONFIG_HPP
+#pragma once
 
 #include "InputQueue.hpp"
 #include "Menu/MenuData.hpp"
 #include "util/RadixTree.hpp"
 #include "util/StaticString.hxx"
 #include "util/TrivialArray.hxx"
-#include "util/TStringView.hxx"
+#include "util/tstring_view.hxx"
 
 #include <array>
 #include <cassert>
-
 #include <tchar.h>
 
 struct InputConfig {
@@ -99,24 +97,24 @@ struct InputConfig {
   void SetDefaults() noexcept;
 
   [[gnu::pure]]
-  int LookupMode(TStringView name) const noexcept {
+  int LookupMode(tstring_view name) const noexcept {
     for (std::size_t i = 0, size = modes.size(); i < size; ++i)
-      if (name.Equals(modes[i].c_str()))
+      if (name == modes[i].c_str())
         return i;
 
     return -1;
   }
 
-  int AppendMode(TStringView name) noexcept {
+  int AppendMode(tstring_view name) noexcept {
     if (modes.full())
       return -1;
 
-    modes.append().assign(name.data, name.size);
+    modes.append() = name;
     return modes.size() - 1;
   }
 
   [[gnu::pure]]
-  int MakeMode(TStringView name) noexcept {
+  int MakeMode(tstring_view name) noexcept {
     int mode = LookupMode(name);
     if (mode < 0)
       mode = AppendMode(name);
@@ -159,5 +157,3 @@ struct InputConfig {
     return menus[mode][location];
   }
 };
-
-#endif

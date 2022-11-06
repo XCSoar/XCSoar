@@ -20,8 +20,7 @@
 }
  */
 
-#ifndef AIRSPACE_WARNING_HPP
-#define AIRSPACE_WARNING_HPP
+#pragma once
 
 #include "AirspaceInterceptSolution.hpp"
 #include "Ptr.hpp"
@@ -247,5 +246,3 @@ public:
                                   const AirspaceWarning &aw);
 #endif
 };
-
-#endif

@@ -118,11 +118,11 @@ KeyboardWidget::FindButton(unsigned ch)
  * @param top     Number of pixels from the top (in screen pixels)
  */
 void
-KeyboardWidget::MoveButton(unsigned ch, int left, int top)
+KeyboardWidget::MoveButton(unsigned ch, PixelPoint position) noexcept
 {
   auto *kb = FindButton(ch);
   if (kb)
-    kb->Move(left, top);
+    kb->Move(position);
 }
 
 /**
@@ -134,22 +134,21 @@ KeyboardWidget::MoveButton(unsigned ch, int left, int top)
  * @param height  Height measured in display pixels!
  */
 void
-KeyboardWidget::ResizeButton(unsigned ch,
-                             unsigned width, unsigned height)
+KeyboardWidget::ResizeButton(unsigned ch, PixelSize size) noexcept
 {
   auto *kb = FindButton(ch);
   if (kb)
-    kb->Resize(width, height);
+    kb->Resize(size);
 }
 
 void
 KeyboardWidget::ResizeButtons()
 {
   for (unsigned i = 0; i < num_buttons; ++i)
-    buttons[i].Resize(button_width, button_height);
+    buttons[i].Resize(button_size);
 
   if (show_shift_button)
-    shift_button.Resize(button_width, button_height);
+    shift_button.Resize(button_size);
 }
 
 void
@@ -162,8 +161,8 @@ KeyboardWidget::MoveButtonsToRow(const PixelRect &rc,
 
   for (unsigned i = 0; buttons[i] != _T('\0'); i++) {
     MoveButton(buttons[i],
-               rc.left + i * button_width + offset,
-               rc.top + row * button_height);
+               rc.GetTopLeft() + PixelSize(i * button_size.width + offset,
+                                           rc.top + row * button_size.height));
   }
 }
 
@@ -172,39 +171,34 @@ KeyboardWidget::MoveButtons(const PixelRect &rc)
 {
   MoveButtonsToRow(rc, _T("1234567890"), 0);
   MoveButtonsToRow(rc, _T("QWERTYUIOP"), 1);
-  MoveButtonsToRow(rc, _T("ASDFGHJKL"), 2, button_width / 3);
-  MoveButtonsToRow(rc, _T("ZXCVBNM@."), 3, button_width);
+  MoveButtonsToRow(rc, _T("ASDFGHJKL"), 2, button_size.width / 3);
+  MoveButtonsToRow(rc, _T("ZXCVBNM@."), 3, button_size.width);
 
   if (IsLandscape(rc)) {
     MoveButton(_T('-'),
-               rc.left + button_width * 9,
-               rc.top + Layout::Scale(160));
+               rc.GetTopLeft() + PixelSize{button_size.width * 9, Layout::Scale(160U)});
 
     MoveButton(_T(' '),
-               rc.left + Layout::Scale(80),
-               rc.top + Layout::Scale(160));
-    ResizeButton(_T(' '), Layout::Scale(93), Layout::Scale(40));
+               rc.GetTopLeft() + PixelSize{Layout::Scale(80U), Layout::Scale(160U)});
+    ResizeButton(_T(' '), {Layout::Scale(93U), Layout::Scale(40U)});
   } else {
     MoveButton(_T('-'),
-               rc.left + button_width * 8,
-               rc.top + button_height * 4);
+               rc.GetTopLeft() + PixelSize{button_size.width * 8, button_size.height * 4});
 
     MoveButton(_T(' '),
-               rc.left + button_width * 2,
-               rc.top + button_height * 4);
-    ResizeButton(_T(' '), button_width * 11 / 2, button_height);
+               rc.GetTopLeft() + PixelSize{button_size.width * 2, button_size.height * 4});
+    ResizeButton(_T(' '), {button_size.width * 11 / 2, button_size.height});
   }
 
   if (show_shift_button)
-    shift_button.Move(rc.left, rc.top + 3 * button_height);
+    shift_button.Move(rc.GetTopLeft() + PixelSize{0U, 3 * button_size.height});
 }
 
 void
 KeyboardWidget::PrepareSize(const PixelRect &rc)
 {
   const PixelSize new_size = rc.GetSize();
-  button_width = new_size.width / 10;
-  button_height = new_size.height / 5;
+  button_size = {new_size.width / 10, new_size.height / 5};
 }
 
 void
@@ -224,14 +218,9 @@ KeyboardWidget::AddButton(ContainerWindow &parent,
   WindowStyle style;
   style.Hide();
 
-  PixelRect rc;
-  rc.left = 0;
-  rc.top = 0;
-  rc.right = button_width;
-  rc.bottom = button_height;
-
   CharacterButton &button = buttons[num_buttons++];
-  button.Create(parent, look, caption, rc, on_character, ch, style);
+  button.Create(parent, look, caption, PixelRect{button_size},
+                on_character, ch, style);
 }
 
 void

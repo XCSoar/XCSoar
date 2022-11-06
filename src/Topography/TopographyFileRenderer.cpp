@@ -162,7 +162,7 @@ void
 TopographyFileRenderer::Paint(Canvas &canvas,
                               const WindowProjection &projection) noexcept
 {
-  const std::lock_guard<Mutex> lock(file.mutex);
+  const std::lock_guard lock{file.mutex};
 
   const auto map_scale = projection.GetMapScale();
   if (!file.IsVisible(map_scale))
@@ -205,7 +205,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   const GeoClip clip(projection.GetScreenBounds().Scale(1.1));
   AllocatedArray<GeoPoint> geo_points;
 
-  int iskip = file.GetSkipSteps(map_scale);
+  const unsigned iskip = file.GetSkipSteps(map_scale);
 #endif
 
 #ifdef ENABLE_OPENGL
@@ -213,7 +213,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
 #ifdef GL_EXT_multi_draw_arrays
   std::vector<GLsizei> polygon_counts;
-  std::vector<GLshort> polygon_indices;
+  std::vector<GLushort> polygon_indices;
 #endif
 #endif
 
@@ -246,7 +246,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
             offset += n;
           }
         } else {
-          for (unsigned n : ConstBuffer<GLushort>(indices.count, lines.size)) {
+          for (unsigned n : std::span<const GLushort>{indices.count, lines.size()}) {
             glDrawElements(GL_LINE_STRIP, n, GL_UNSIGNED_SHORT,
                            indices.indices);
             indices.indices += n;
@@ -334,14 +334,14 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   if (!polygon_indices.empty()) {
     assert(GLExt::HaveMultiDrawElements());
 
-    std::vector<const GLshort *> polygon_pointers;
+    std::vector<const GLushort *> polygon_pointers;
     unsigned i = 0;
     for (auto count : polygon_counts) {
       polygon_pointers.push_back(polygon_indices.data() + i);
       i += count;
     }
 
-    vp.Update(GL_FLOAT, nullptr);
+    vp.Update(GL_FLOAT, buffer);
 
     GLExt::MultiDrawElements(GL_TRIANGLE_STRIP, polygon_counts.data(),
                              GL_UNSIGNED_SHORT,
@@ -368,7 +368,7 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
                                     const WindowProjection &projection,
                                     LabelBlock &label_block) noexcept
 {
-  const std::lock_guard<Mutex> lock(file.mutex);
+  const std::lock_guard lock{file.mutex};
 
   const auto map_scale = projection.GetMapScale();
   if (!file.IsVisible(map_scale) || !file.IsLabelVisible(map_scale))

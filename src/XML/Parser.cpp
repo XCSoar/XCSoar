@@ -44,7 +44,7 @@ namespace XML {
 struct Parser {
   const TCHAR *lpXML;
   unsigned nIndex = 0;
-  std::basic_string_view<TCHAR> end_tag{};
+  tstring_view end_tag{};
   bool nFirst = true;
 
   explicit constexpr Parser(const TCHAR *_xml) noexcept
@@ -65,7 +65,7 @@ enum class TokenType {
 };
 
 struct NextToken {
-  std::basic_string_view<TCHAR> text;
+  tstring_view text;
 
   TokenType type;
 };
@@ -104,7 +104,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML);
  * @return new allocated string converted from xml
  */
 static TCHAR *
-FromXMLString(std::basic_string_view<TCHAR> src) noexcept
+FromXMLString(tstring_view src) noexcept
 {
   const TCHAR *ss = src.data();
   const TCHAR *end = ss + src.size();
@@ -172,7 +172,7 @@ FromXMLString(std::basic_string_view<TCHAR> src) noexcept
   return result;
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 CompareTagName(const TCHAR *cclose, const TCHAR *copen)
 {
@@ -614,8 +614,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
           // Eg.  'Attribute AnotherAttribute'
         case TokenType::TEXT:
           // Add the unvalued attribute to the list
-          node.AddAttribute(std::move(attribute_name),
-                            std::basic_string_view<TCHAR>{});
+          node.AddAttribute(std::move(attribute_name), tstring_view{});
           // Cache the token then indicate.  We are next to
           // look for the equals attribute
           attribute_name = token.text;
@@ -635,8 +634,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
 
           if (!attribute_name.empty())
             // Add the unvalued attribute to the list
-            node.AddAttribute(std::move(attribute_name),
-                              std::basic_string_view<TCHAR>{});
+            node.AddAttribute(std::move(attribute_name), tstring_view{});
 
           // If this is the end of the tag then return to the caller
           if (token.type == TokenType::SHORT_HAND_CLOSE)

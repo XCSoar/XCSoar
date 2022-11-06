@@ -134,7 +134,7 @@ ProgressWindow::Step() noexcept
 }
 
 void
-ProgressWindow::OnResize(PixelSize new_size)
+ProgressWindow::OnResize(PixelSize new_size) noexcept
 {
   ContainerWindow::OnResize(new_size);
 
@@ -147,7 +147,7 @@ ProgressWindow::OnResize(PixelSize new_size)
 }
 
 void
-ProgressWindow::OnPaint(Canvas &canvas)
+ProgressWindow::OnPaint(Canvas &canvas) noexcept
 {
   canvas.Clear(background_color);
 

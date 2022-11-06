@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,8 +20,7 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef ANGLE_HPP
-#define ANGLE_HPP
+#pragma once
 
 #include "Trig.hpp"
 #include "FastTrig.hpp"
@@ -36,6 +35,9 @@ Copyright_License {
 #include <cmath>
 #include <compare>
 
+/**
+ * Container class for angular variables.
+ */
 class Angle
 {
   double value;
@@ -331,17 +333,17 @@ public:
     return Angle(-value);
   }
 
-  const Angle &operator*=(const double x) noexcept {
+  constexpr const Angle &operator*=(const double x) noexcept {
     value *= x;
     return *this;
   }
 
-  const Angle &operator+=(Angle x) noexcept {
+  constexpr const Angle &operator+=(Angle x) noexcept {
     value += x.value;
     return *this;
   }
 
-  const Angle &operator-=(Angle x) noexcept {
+  constexpr const Angle &operator-=(Angle x) noexcept {
     value -= x.value;
     return *this;
   }
@@ -399,5 +401,3 @@ public:
 };
 
 static_assert(std::is_trivial<Angle>::value, "type is not trivial");
-
-#endif

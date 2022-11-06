@@ -8,8 +8,7 @@
  * @version 2.0
  */
 
-#ifndef XCSOAR_SCREEN_RAW_BITMAP_HPP
-#define XCSOAR_SCREEN_RAW_BITMAP_HPP
+#pragma once
 
 #include "PortableColor.hpp"
 #include "ui/dim/Size.hpp"
@@ -188,5 +187,3 @@ public:
                  Canvas &dest_canvas, PixelSize dest_size,
                  bool transparent_white=false) const noexcept;
 };
-
-#endif // !defined(AFX_STSCREENBUFFER_H__22D62F5D_32E2_4785_B3D9_2341C11F84A3__INCLUDED_)

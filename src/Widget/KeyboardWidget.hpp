@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_KEYBOARD_CONTROL_HPP
-#define XCSOAR_KEYBOARD_CONTROL_HPP
+#pragma once
 
 #include "Widget.hpp"
 #include "Form/CharacterButton.hpp"
@@ -44,8 +43,7 @@ protected:
 
   OnCharacterCallback_t on_character;
 
-  unsigned button_width;
-  unsigned button_height;
+  PixelSize button_size;
 
   unsigned num_buttons;
   CharacterButton buttons[MAX_BUTTONS];
@@ -76,8 +74,8 @@ private:
   [[gnu::pure]]
   Button *FindButton(unsigned ch);
 
-  void MoveButton(unsigned ch, int left, int top);
-  void ResizeButton(unsigned ch, unsigned width, unsigned height);
+  void MoveButton(unsigned ch, PixelPoint position) noexcept;
+  void ResizeButton(unsigned ch, PixelSize size) noexcept;
   void ResizeButtons();
   void SetButtonsSize();
   void MoveButtonsToRow(const PixelRect &rc,
@@ -105,5 +103,3 @@ public:
 private:
   void OnShiftClicked();
 };
-
-#endif

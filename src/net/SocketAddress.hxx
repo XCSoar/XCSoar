@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SOCKET_ADDRESS_HXX
-#define SOCKET_ADDRESS_HXX
+#pragma once
 
 #include "Features.hxx"
 
@@ -40,6 +39,14 @@
 
 #include <cstddef>
 #include <span>
+
+#if __cplusplus >= 202002 || (defined(__GNUC__) && __GNUC__ >= 10)
+#include <version>
+#endif
+
+#ifdef __cpp_lib_span
+#include <span>
+#endif
 
 #ifdef HAVE_UN
 #include <string_view>
@@ -154,13 +161,6 @@ public:
 	[[gnu::pure]]
 	IPv4Address UnmapV4() const noexcept;
 
-	/**
-	 * Extract the port number.  Returns 0 if not applicable.
-	 */
-	[[gnu::pure]]
-	unsigned GetPort() const noexcept;
-#endif
-
 	operator std::span<const std::byte>() const noexcept {
 		const void *q = reinterpret_cast<const void *>(address);
 		return {
@@ -170,6 +170,14 @@ public:
 	}
 
 	/**
+	 * Extract the port number.  Returns 0 if not applicable.
+	 */
+	[[gnu::pure]]
+	unsigned GetPort() const noexcept;
+#endif
+
+#ifdef __cpp_lib_span
+	/**
 	 * Return a buffer pointing to the "steady" portion of the
 	 * address, i.e. without volatile parts like the port number.
 	 * This buffer is useful for hashing the address, but not so
@@ -178,6 +186,7 @@ public:
 	 */
 	[[gnu::pure]]
 	std::span<const std::byte> GetSteadyPart() const noexcept;
+#endif
 
 	[[gnu::pure]]
 	bool operator==(const SocketAddress other) const noexcept;
@@ -186,5 +195,3 @@ public:
 		return !(*this == other);
 	}
 };
-
-#endif

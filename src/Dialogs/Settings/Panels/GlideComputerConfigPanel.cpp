@@ -64,14 +64,14 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent,
   RowFormWidget::Prepare(parent, rc);
 
   static constexpr StaticEnumChoice auto_mc_list[] = {
-    { (unsigned)TaskBehaviour::AutoMCMode::FINALGLIDE, N_("Final glide"),
+    { TaskBehaviour::AutoMCMode::FINALGLIDE, N_("Final glide"),
       N_("Adjusts MC for fastest arrival.  For contest sprint tasks, the MacCready is adjusted in "
           "order to cover the greatest distance in the remaining time and reach the finish height.") },
-    { (unsigned)TaskBehaviour::AutoMCMode::CLIMBAVERAGE, N_("Trending average climb"),
+    { TaskBehaviour::AutoMCMode::CLIMBAVERAGE, N_("Trending average climb"),
       N_("Sets MC to the trending average climb rate based on all climbs.") },
-    { (unsigned)TaskBehaviour::AutoMCMode::BOTH, N_("Both"),
+    { TaskBehaviour::AutoMCMode::BOTH, N_("Both"),
       N_("Uses trending average during task, then fastest arrival when in final glide mode.") },
-    { 0 }
+    nullptr
   };
 
   AddEnum(_("Auto MC mode"),
@@ -105,7 +105,7 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent,
     { ae90seconds, _T("90 s"), N_("Preferred period for gliders.") },
     { ae2minutes, _T("2 min") },
     { ae3minutes, _T("3 min") },
-    { 0 }
+    nullptr
   };
 
   AddEnum(_("GR average period"),

@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef THREAD_UTIL_HXX
-#define THREAD_UTIL_HXX
+#pragma once
 
 #if defined(__linux__) && !defined(ANDROID)
 #include <sched.h>
@@ -102,5 +101,3 @@ SetThreadRealtime()
   sched_setscheduler(0, policy, &sched_param);
 #endif
 };
-
-#endif

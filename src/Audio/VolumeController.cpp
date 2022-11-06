@@ -109,7 +109,7 @@ VolumeController::SetExternalVolumeNoLock(unsigned vol_percent)
 bool
 VolumeController::SetExternalVolume(unsigned vol_percent)
 {
-  const std::lock_guard<Mutex> lock(alsa_lock);
+  const std::lock_guard lock{alsa_lock};
   if (alsa_mixer_initialised)
     return SetExternalVolumeNoLock(vol_percent);
   else

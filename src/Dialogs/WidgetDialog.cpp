@@ -32,9 +32,9 @@ Copyright_License {
 
 using namespace UI;
 
-gcc_const
+[[gnu::const]]
 static WindowStyle
-GetDialogStyle()
+GetDialogStyle() noexcept
 {
   WindowStyle style;
   style.Hide();
@@ -213,7 +213,7 @@ WidgetDialog::SetModalResult(int id) noexcept
 }
 
 void
-WidgetDialog::OnDestroy()
+WidgetDialog::OnDestroy() noexcept
 {
   widget.Unprepare();
 
@@ -221,7 +221,7 @@ WidgetDialog::OnDestroy()
 }
 
 void
-WidgetDialog::OnResize(PixelSize new_size)
+WidgetDialog::OnResize(PixelSize new_size) noexcept
 {
   WndForm::OnResize(new_size);
 
@@ -232,7 +232,7 @@ WidgetDialog::OnResize(PixelSize new_size)
 }
 
 void
-WidgetDialog::ReinitialiseLayout(const PixelRect &parent_rc)
+WidgetDialog::ReinitialiseLayout(const PixelRect &parent_rc) noexcept
 {
   if (full)
     /* make it full-screen again on the resized main window */
@@ -242,14 +242,14 @@ WidgetDialog::ReinitialiseLayout(const PixelRect &parent_rc)
 }
 
 void
-WidgetDialog::SetDefaultFocus()
+WidgetDialog::SetDefaultFocus() noexcept
 {
   if (!widget.SetFocus())
     WndForm::SetDefaultFocus();
 }
 
 bool
-WidgetDialog::OnAnyKeyDown(unsigned key_code)
+WidgetDialog::OnAnyKeyDown(unsigned key_code) noexcept
 {
   return widget.KeyPress(key_code) ||
     buttons.KeyPress(key_code) ||

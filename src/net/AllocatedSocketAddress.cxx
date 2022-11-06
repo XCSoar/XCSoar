@@ -30,7 +30,6 @@
 #include "AllocatedSocketAddress.hxx"
 #include "IPv4Address.hxx"
 #include "IPv6Address.hxx"
-#include "util/StringView.hxx"
 
 #include <string.h>
 
@@ -64,7 +63,7 @@ AllocatedSocketAddress::SetSize(size_type new_size) noexcept
 
 #ifdef HAVE_UN
 
-StringView
+std::string_view
 AllocatedSocketAddress::GetLocalRaw() const noexcept
 {
 	return SocketAddress(*this).GetLocalRaw();

@@ -28,7 +28,7 @@ Copyright_License {
 #endif
 
 void
-BufferWindow::OnResize(PixelSize new_size)
+BufferWindow::OnResize(PixelSize new_size) noexcept
 {
   if (buffer.IsDefined()) {
 #ifdef ENABLE_OPENGL
@@ -43,7 +43,7 @@ BufferWindow::OnResize(PixelSize new_size)
 }
 
 void
-BufferWindow::OnPaint(Canvas &canvas)
+BufferWindow::OnPaint(Canvas &canvas) noexcept
 {
   if (!buffer.IsDefined()) {
     buffer.Create(canvas);

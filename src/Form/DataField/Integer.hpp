@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DATA_FIELD_INTEGER_HPP
-#define XCSOAR_DATA_FIELD_INTEGER_HPP
+#pragma once
 
 #include "Number.hpp"
 #include "time/PeriodClock.hpp"
@@ -82,19 +81,16 @@ public:
     }
   }
 
+  void SetAsInteger(int value) noexcept;
+
   /* virtual methods from class DataField */
   void Inc() noexcept override;
   void Dec() noexcept override;
-  int GetAsInteger() const noexcept override;
   const TCHAR *GetAsString() const noexcept override;
   const TCHAR *GetAsDisplayString() const noexcept override;
-  void SetAsInteger(int value) noexcept override;
-  void SetAsString(const TCHAR *value) noexcept override;
   ComboList CreateComboList(const TCHAR *reference) const noexcept override;
   void SetFromCombo(int iDataFieldIndex, const TCHAR *sValue) noexcept override;
 
 protected:
   void AppendComboValue(ComboList &combo_list, int value) const noexcept;
 };
-
-#endif

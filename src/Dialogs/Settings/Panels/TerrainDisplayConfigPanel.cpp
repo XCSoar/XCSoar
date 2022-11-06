@@ -65,7 +65,7 @@ public:
     Invalidate();
   }
 
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };
 
 class TerrainDisplayConfigPanel final
@@ -127,13 +127,13 @@ void
 TerrainDisplayConfigPanel::UpdateTerrainPreview()
 {
   terrain_settings.slope_shading = (SlopeShading)
-    GetValueInteger(TerrainSlopeShading);
+    GetValueEnum(TerrainSlopeShading);
   terrain_settings.contrast = PercentToByte(GetValueInteger(TerrainContrast));
   terrain_settings.brightness =
     PercentToByte(GetValueInteger(TerrainBrightness));
-  terrain_settings.ramp = GetValueInteger(TerrainColors);
+  terrain_settings.ramp = GetValueEnum(TerrainColors);
   terrain_settings.contours = (Contours)
-    GetValueInteger(TerrainContours);
+    GetValueEnum(TerrainContours);
 
   // Invalidate terrain preview
   if (have_terrain_preview)
@@ -153,7 +153,7 @@ TerrainDisplayConfigPanel::OnModified(DataField &df) noexcept
 }
 
 void
-TerrainPreviewWindow::OnPaint(Canvas &canvas)
+TerrainPreviewWindow::OnPaint(Canvas &canvas) noexcept
 {
   const GlueMapWindow *map = UIGlobals::GetMap();
   if (map == nullptr)
@@ -222,7 +222,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
     {12, N_("Italian Avioportolano VFR Chart"), },
     {13, N_("German DFS VFR Chart"), },
     {14, N_("French SIA VFR Chart"), },
-    { 0 }
+    nullptr
   };
 
   AddEnum(_("Terrain colors"),
@@ -231,11 +231,11 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
   GetDataField(TerrainColors).SetListener(this);
 
   static constexpr StaticEnumChoice slope_shading_list[] = {
-    { (unsigned)SlopeShading::OFF, N_("Off"), },
-    { (unsigned)SlopeShading::FIXED, N_("Fixed"), },
-    { (unsigned)SlopeShading::SUN, N_("Sun"), },
-    { (unsigned)SlopeShading::WIND, N_("Wind"), },
-    { 0 }
+    { SlopeShading::OFF, N_("Off"), },
+    { SlopeShading::FIXED, N_("Fixed"), },
+    { SlopeShading::SUN, N_("Sun"), },
+    { SlopeShading::WIND, N_("Wind"), },
+    nullptr
   };
 
   AddEnum(_("Slope shading"),
@@ -261,9 +261,9 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
   // JMW using enum here instead of bool so can provide more contour rendering
   // options later
   static constexpr StaticEnumChoice contours_list[] = {
-    { (unsigned)Contours::OFF, N_("Off"), },
-    { (unsigned)Contours::ON, N_("On"), },
-    { 0 }
+    { Contours::OFF, N_("Off"), },
+    { Contours::ON, N_("On"), },
+    nullptr
   };
 
   AddEnum(_("Contours"),

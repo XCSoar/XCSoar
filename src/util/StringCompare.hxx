@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2013-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,10 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STRING_COMPARE_HXX
-#define STRING_COMPARE_HXX
+#pragma once
 
-#include "StringView.hxx"
 #include "StringAPI.hxx"
 
 #ifdef _UNICODE
@@ -64,9 +62,9 @@ StringIsEqualIgnoreCase(std::string_view a, std::string_view b) noexcept
 
 [[gnu::pure]] [[gnu::nonnull]]
 static inline bool
-StringStartsWith(const char *haystack, StringView needle) noexcept
+StringStartsWith(const char *haystack, std::string_view needle) noexcept
 {
-	return StringIsEqual(haystack, needle.data, needle.size);
+	return StringIsEqual(haystack, needle.data(), needle.size());
 }
 
 [[gnu::pure]] [[gnu::nonnull]]
@@ -84,26 +82,27 @@ StringEndsWithIgnoreCase(const char *haystack, const char *needle) noexcept;
  */
 [[gnu::pure]] [[gnu::nonnull]]
 static inline const char *
-StringAfterPrefix(const char *haystack, StringView needle) noexcept
+StringAfterPrefix(const char *haystack, std::string_view needle) noexcept
 {
 	return StringStartsWith(haystack, needle)
-		? haystack + needle.size
+		? haystack + needle.size()
 		: nullptr;
 }
 
 [[gnu::pure]] [[gnu::nonnull]]
 static inline bool
-StringStartsWithIgnoreCase(const char *haystack, StringView needle) noexcept
+StringStartsWithIgnoreCase(const char *haystack, std::string_view needle) noexcept
 {
-	return StringIsEqualIgnoreCase(haystack, needle.data, needle.size);
+	return StringIsEqualIgnoreCase(haystack, needle.data(), needle.size());
 }
 
 [[gnu::pure]]
 static inline bool
-StringStartsWithIgnoreCase(StringView haystack, StringView needle) noexcept
+StringStartsWithIgnoreCase(std::string_view haystack, std::string_view needle) noexcept
 {
-	return haystack.size >= needle.size &&
-		StringIsEqualIgnoreCase(haystack.data, needle.data, needle.size);
+	return haystack.size() >= needle.size() &&
+		StringIsEqualIgnoreCase(haystack.data(),
+					needle.data(), needle.size());
 }
 
 /**
@@ -114,21 +113,21 @@ StringStartsWithIgnoreCase(StringView haystack, StringView needle) noexcept
  */
 [[gnu::pure]] [[gnu::nonnull]]
 static inline const char *
-StringAfterPrefixIgnoreCase(const char *haystack, StringView needle) noexcept
+StringAfterPrefixIgnoreCase(const char *haystack, std::string_view needle) noexcept
 {
 	return StringStartsWithIgnoreCase(haystack, needle)
-		? haystack + needle.size
+		? haystack + needle.size()
 		: nullptr;
 }
 
 [[gnu::pure]]
-static inline StringView
-StringAfterPrefixIgnoreCase(StringView haystack,
-			    StringView needle) noexcept
+static inline std::string_view
+StringAfterPrefixIgnoreCase(std::string_view haystack,
+			    std::string_view needle) noexcept
 {
 	return StringStartsWithIgnoreCase(haystack, needle)
-		? haystack.substr(needle.size)
-		: nullptr;
+		? haystack.substr(needle.size())
+		: std::string_view{};
 }
 
 /**
@@ -139,4 +138,24 @@ StringAfterPrefixIgnoreCase(StringView haystack,
 const char *
 FindStringSuffix(const char *p, const char *suffix) noexcept;
 
-#endif
+template<typename T>
+bool
+SkipPrefix(std::basic_string_view<T> &haystack,
+	   std::basic_string_view<T> needle) noexcept
+{
+	bool match = haystack.starts_with(needle);
+	if (match)
+		haystack.remove_prefix(needle.size());
+	return match;
+}
+
+template<typename T>
+bool
+RemoveSuffix(std::basic_string_view<T> &haystack,
+	     std::basic_string_view<T> needle) noexcept
+{
+	bool match = haystack.ends_with(needle);
+	if (match)
+		haystack.remove_suffix(needle.size());
+	return match;
+}

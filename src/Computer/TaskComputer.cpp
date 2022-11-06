@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -46,11 +46,11 @@ TaskComputer::TaskComputer(ProtectedTaskManager &_task,
    route(airspace_database, warnings),
    contest(trace.GetFull(), trace.GetContest(), trace.GetSprint())
 {
-  task.SetRoutePlanner(&route.GetRoutePlanner());
+  task.SetRoutePlanner(&route.GetProtectedRoutePlanner());
 }
 
 void
-TaskComputer::ResetFlight(const bool full)
+TaskComputer::ResetFlight([[maybe_unused]] const bool full)
 {
   task.Reset();
   route.ResetFlight();
@@ -126,7 +126,7 @@ TaskComputer::ProcessMoreTask(const MoreData &basic,
   }
 }
 
-gcc_pure
+[[gnu::pure]]
 static TracePoint
 Predicted(const ContestSettings &settings,
           const MoreData &basic,
@@ -167,7 +167,7 @@ TaskComputer::ProcessIdle(const MoreData &basic, DerivedInfo &calculated,
 }
 
 void 
-TaskComputer::ProcessAutoTask(const NMEAInfo &basic,
+TaskComputer::ProcessAutoTask([[maybe_unused]] const NMEAInfo &basic,
                               const DerivedInfo &calculated)
 {
   if (!calculated.flight.flying) {

@@ -63,7 +63,7 @@ IPv4Address::IPv4Address(SocketAddress src) noexcept
  * @param ipaddress_size is the size of the ipaddress buffer
  * @return true on success
  */
-gcc_pure
+[[gnu::pure]]
 static const struct sockaddr_in *
 GetIpAddressInner(const ifaddrs *ifaddr, const char *device) noexcept
 {

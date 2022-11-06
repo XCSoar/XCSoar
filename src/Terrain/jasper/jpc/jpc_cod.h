@@ -65,8 +65,7 @@
  * $Id$
  */
 
-#ifndef JPC_COD_H
-#define JPC_COD_H
+#pragma once
 
 /******************************************************************************\
 * Constants.
@@ -74,5 +73,3 @@
 
 /* The nominal word size used by this implementation. */
 #define	JPC_PREC	32
-
-#endif

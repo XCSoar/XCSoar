@@ -28,7 +28,7 @@ Copyright_License {
 
 unsigned
 TextButtonRenderer::GetMinimumButtonWidth(const ButtonLook &look,
-                                          const TCHAR *caption) noexcept
+                                          tstring_view caption) noexcept
 {
   return 2 * (ButtonFrameRenderer::GetMargin() + Layout::GetTextPadding())
     + look.font->TextSize(caption).width;

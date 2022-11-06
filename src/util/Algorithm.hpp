@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef ALGORITHM_HPP
-#define ALGORITHM_HPP
+#pragma once
 
 /**
  * @return true if predicate() returns true for at least one item in
@@ -44,5 +43,3 @@ ExistsIf(I first, I last, P predicate)
 
   return false;
 }
-
-#endif

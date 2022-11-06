@@ -142,8 +142,12 @@ ifeq ($(TARGET),FUZZER)
   override TARGET = UNIX
 
   FUZZER = y
+  LIBFUZZER = y
   CLANG = y
   VFB = y
+
+  # Debian builds libfuzzer with GCC's libstdc++ instead of LLVM's libc++
+  LIBCXX = n
 endif
 
 ifeq ($(TARGET),UNIX)
@@ -241,7 +245,7 @@ ifeq ($(TARGET),IOS32)
   override TARGET = UNIX
   TARGET_IS_DARWIN = y
   TARGET_IS_IOS = y
-  IOS_MIN_SUPPORTED_VERSION = 9.0
+  IOS_MIN_SUPPORTED_VERSION = 10.0
   HOST_TRIPLET = armv7-apple-darwin
   LLVM_TARGET = $(HOST_TRIPLET)
   ifeq ($(HOST_IS_DARWIN),y)
@@ -255,7 +259,7 @@ ifeq ($(TARGET),IOS64)
   override TARGET = UNIX
   TARGET_IS_DARWIN = y
   TARGET_IS_IOS = y
-  IOS_MIN_SUPPORTED_VERSION = 9.0
+  IOS_MIN_SUPPORTED_VERSION = 10.0
   HOST_TRIPLET = aarch64-apple-darwin
   LLVM_TARGET = $(HOST_TRIPLET)
   ifeq ($(HOST_IS_DARWIN),y)
@@ -313,7 +317,7 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r24
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r25b
 
   ANDROID_SDK_PLATFORM = android-30
   ANDROID_NDK_API = 21
@@ -395,8 +399,9 @@ TARGET_CXXFLAGS =
 TARGET_CPPFLAGS = -I$(TARGET_OUTPUT_DIR)/include
 
 ifeq ($(FUZZER),y)
-  FUZZER_FLAGS = -fsanitize=fuzzer,address
-  TARGET_CXXFLAGS += $(FUZZER_FLAGS)
+  ifeq ($(LIBFUZZER),y)
+    SANITIZE = fuzzer,address
+  endif
   TARGET_CPPFLAGS += -DFUZZER
 endif
 
@@ -513,10 +518,6 @@ endif
 TARGET_LDFLAGS =
 TARGET_LDLIBS =
 TARGET_LDADD =
-
-ifeq ($(FUZZER),y)
-  TARGET_LDFLAGS += $(FUZZER_FLAGS)
-endif
 
 ifeq ($(TARGET),PC)
   TARGET_LDFLAGS += -Wl,--major-subsystem-version=5

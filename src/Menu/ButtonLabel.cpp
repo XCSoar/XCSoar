@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "ButtonLabel.hpp"
 #include "MenuBar.hpp"
-#include "MenuData.hpp"
 #include "Language/Language.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StringBuilder.hxx"
@@ -33,25 +32,10 @@ Copyright_License {
 
 #include <algorithm>
 
-static MenuBar *bar;
-
-void
-ButtonLabel::CreateButtonLabels(ContainerWindow &parent, ButtonLook &look)
-{
-  bar = new MenuBar(parent, look);
-}
-
-void
-ButtonLabel::Destroy()
-{
-  delete bar;
-  bar = nullptr;
-}
-
 /**
  * @return false if there is at least one ASCII letter in the string
  */
-gcc_pure
+[[gnu::pure]]
 static bool
 LacksAlphaASCII(const TCHAR *s)
 {
@@ -67,7 +51,7 @@ LacksAlphaASCII(const TCHAR *s)
  *
  * @return the translated string or nullptr if the buffer is too small
  */
-gcc_pure
+[[gnu::pure]]
 static const TCHAR *
 GetTextN(const TCHAR *src, const TCHAR *src_end,
          TCHAR *buffer, size_t buffer_size)
@@ -158,41 +142,4 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
     expanded.text = BuildString(buffer, size, translated, s + (macros - text));
     return expanded;
   }
-}
-
-void
-ButtonLabel::SetLabelText(unsigned index, const TCHAR *text, unsigned event)
-{
-  TCHAR buffer[100];
-  Expanded expanded = Expand(text, buffer, ARRAY_SIZE(buffer));
-  if (expanded.visible)
-    bar->ShowButton(index, expanded.enabled, expanded.text, event);
-  else
-    bar->HideButton(index);
-}
-
-void
-ButtonLabel::Set(const Menu &menu, const Menu *overlay, bool full)
-{
-  for (unsigned i = 0; i < menu.MAX_ITEMS; ++i) {
-    const MenuItem &item = overlay != nullptr && (*overlay)[i].IsDefined()
-      ? (*overlay)[i]
-      : menu[i];
-
-    if (full || item.IsDynamic())
-      SetLabelText(i, item.label, item.event);
-  }
-}
-
-bool
-ButtonLabel::IsEnabled(unsigned i)
-{
-  return bar->IsButtonEnabled(i);
-}
-
-void
-ButtonLabel::OnResize(const PixelRect &rc)
-{
-  if (bar != nullptr)
-    bar->OnResize(rc);
 }

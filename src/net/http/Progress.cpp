@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Progress.hpp"
-#include "Easy.hxx"
+#include "lib/curl/Easy.hxx"
 #include "Operation/ProgressListener.hpp"
 
 #include <limits.h>

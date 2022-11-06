@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -107,7 +107,7 @@ PlaneEditWidget::OnModified(DataField &df) noexcept
 }
 
 void
-PlaneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
+PlaneEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept
 {
   AddText(_("Registration"), nullptr, plane.registration, this);
   AddText(_("Comp. ID"), nullptr, plane.competition_id);
@@ -157,16 +157,16 @@ PlaneEditWidget::Save(bool &_changed) noexcept
   changed |= SaveValue(REGISTRATION, plane.registration);
   changed |= SaveValue(COMPETITION_ID, plane.competition_id);
   changed |= SaveValue(TYPE, plane.type);
-  changed |= SaveValue(HANDICAP, plane.handicap);
+  changed |= SaveValueInteger(HANDICAP, plane.handicap);
   changed |= SaveValue(WING_AREA, plane.wing_area);
   changed |= SaveValue(EMPTY_MASS, UnitGroup::MASS, plane.empty_mass);
   changed |= SaveValue(MAX_BALLAST, plane.max_ballast);
-  changed |= SaveValue(DUMP_TIME, plane.dump_time);
+  changed |= SaveValueInteger(DUMP_TIME, plane.dump_time);
   changed |= SaveValue(MAX_SPEED, UnitGroup::HORIZONTAL_SPEED,
                        plane.max_speed);
 
   if (CommonInterface::GetComputerSettings().weglide.enabled)
-    changed |= SaveValue(WEGLIDE_ID, plane.weglide_glider_type);
+    changed |= SaveValueInteger(WEGLIDE_ID, plane.weglide_glider_type);
 
   _changed |= changed;
   return true;

@@ -40,12 +40,12 @@ Copyright_License {
 #endif
 
 #include <cassert>
+#include <span>
 
 class Path;
 class ResourceId;
 class UncompressedImage;
 struct GeoQuadrilateral;
-template<typename T> struct ConstBuffer;
 
 #ifdef ENABLE_OPENGL
 class GLTexture;
@@ -99,7 +99,7 @@ public:
   explicit Bitmap(ResourceId id);
 
 #if !defined(USE_GDI) && !defined(ANDROID)
-  Bitmap(ConstBuffer<void> buffer);
+  Bitmap(std::span<const std::byte> buffer);
 #endif
 
   Bitmap(Bitmap &&src) noexcept;
@@ -171,7 +171,7 @@ public:
 #ifndef USE_GDI
   bool Load(UncompressedImage &&uncompressed, Type type=Type::STANDARD);
 #ifndef ANDROID
-  bool Load(ConstBuffer<void> buffer, Type type=Type::STANDARD);
+  bool Load(std::span<const std::byte> buffer, Type type=Type::STANDARD);
 #endif
 #endif
 

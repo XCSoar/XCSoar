@@ -66,7 +66,7 @@ FlarmTrafficWindow::WarningMode() const noexcept
 }
 
 void
-FlarmTrafficWindow::OnResize(PixelSize new_size)
+FlarmTrafficWindow::OnResize(PixelSize new_size) noexcept
 {
   PaintWindow::OnResize(new_size);
 
@@ -642,7 +642,7 @@ FlarmTrafficWindow::PaintNorth(Canvas &canvas) const noexcept
 
 static void
 DrawCircleLabel(Canvas &canvas, PixelPoint p,
-                BasicStringView<TCHAR> text) noexcept
+                tstring_view text) noexcept
 {
   const auto size = canvas.CalcTextSize(text);
   p.x -= size.width / 2;
@@ -713,7 +713,7 @@ FlarmTrafficWindow::Paint(Canvas &canvas) noexcept
  * @param canvas The canvas to paint on
  */
 void
-FlarmTrafficWindow::OnPaint(Canvas &canvas)
+FlarmTrafficWindow::OnPaint(Canvas &canvas) noexcept
 {
 #ifdef ENABLE_OPENGL
   if (small) {

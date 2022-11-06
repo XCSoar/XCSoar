@@ -54,7 +54,6 @@ WriteSeeYouFlags(BufferedOutputStream &writer, const Waypoint &wp)
 {
   switch (wp.type) {
   case Waypoint::Type::NORMAL:
-  case Waypoint::Type::MARKER:
     writer.Write('1');
     break;
 
@@ -81,9 +80,20 @@ WriteSeeYouFlags(BufferedOutputStream &writer, const Waypoint &wp)
     writer.Write('8');
     break;
 
+  case Waypoint::Type::VOR:
+    writer.Write('9');
+    break;
+
+  case Waypoint::Type::NDB:
+    writer.Write("10");
+    break;
+
   case Waypoint::Type::TOWER:
-    // 11 or 16 no rule for this!
     writer.Write("11");
+    break;
+
+  case Waypoint::Type::DAM:
+    writer.Write("12");
     break;
 
   case Waypoint::Type::TUNNEL:
@@ -96,6 +106,30 @@ WriteSeeYouFlags(BufferedOutputStream &writer, const Waypoint &wp)
 
   case Waypoint::Type::POWERPLANT:
     writer.Write("15");
+    break;
+
+  case Waypoint::Type::CASTLE:
+    writer.Write("16");
+    break;
+
+  case Waypoint::Type::INTERSECTION:
+    writer.Write("17");
+    break;
+
+  case Waypoint::Type::MARKER:
+    writer.Write("18");
+    break;
+
+  case Waypoint::Type::REPORTING_POINT:
+    writer.Write("19");
+    break;
+
+  case Waypoint::Type::PGTAKEOFF:
+    writer.Write("20");
+    break;
+
+  case Waypoint::Type::PGLANDING:
+    writer.Write("21");
     break;
 
   case Waypoint::Type::THERMAL_HOTSPOT:

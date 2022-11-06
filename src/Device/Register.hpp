@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,20 +26,17 @@ Copyright_License {
  * This library manages the list of device drivers.
  */
 
-#ifndef XCSOAR_DEVICE_REGISTRY_HPP
-#define XCSOAR_DEVICE_REGISTRY_HPP
-
-#include "util/Compiler.h"
+#pragma once
 
 #include <tchar.h>
 
 struct DeviceRegister;
 
-gcc_const
+[[gnu::const]]
 const DeviceRegister *
 GetDriverByIndex(unsigned i);
 
-gcc_pure
+[[gnu::pure]]
 const DeviceRegister *
 FindDriverByName(const TCHAR *name);
 
@@ -47,8 +44,6 @@ FindDriverByName(const TCHAR *name);
  * Find the driver with the specified name, and return its display
  * name.  If no such driver was found, the specified name is returned.
  */
-gcc_pure
+[[gnu::pure]]
 const TCHAR *
 FindDriverDisplayName(const TCHAR *name);
-
-#endif

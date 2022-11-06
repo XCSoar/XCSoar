@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@
 }
 */
 
-#ifndef CROSS_SECTION_RENDERER_HPP
-#define CROSS_SECTION_RENDERER_HPP
+#pragma once
 
 #include "Blackboard/BaseBlackboard.hpp"
 #include "TerrainXSRenderer.hpp"
@@ -148,5 +147,3 @@ protected:
   void PaintGrid(Canvas &canvas, ChartRenderer &chart) const;
   void PaintWorking(ChartRenderer &chart) const;
 };
-
-#endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,29 +22,18 @@ Copyright_License {
 */
 
 #include "RASPDialog.hpp"
-#include "Dialogs/ListPicker.hpp"
-#include "Dialogs/CoDialog.hpp"
-#include "Dialogs/Error.hpp"
-#include "Renderer/TextRowRenderer.hpp"
+#include "Dialogs/DownloadFilePicker.hpp"
 #include "Widget/RowFormWidget.hpp"
-#include "Look/DialogLook.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
-#include "Weather/Rasp/Providers.hpp"
 #include "ui/control/List.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
-#include "Protection.hpp"
 #include "DataGlobals.hpp"
 #include "UIGlobals.hpp"
 #include "UIState.hpp"
 #include "ActionInterface.hpp"
 #include "Language/Language.hpp"
-#include "LocalPath.hpp"
-#include "Operation/PluggableOperationEnvironment.hpp"
-#include "co/InvokeTask.hxx"
-#include "net/http/Init.hpp"
-#include "net/http/CoDownloadToFile.hpp"
 
 #include <stdio.h>
 
@@ -143,59 +132,12 @@ RASPSettingsPanel::OnTimeModified(const DataFieldEnum &df) noexcept
     : BrokenTime::Invalid();
 }
 
-class RaspProviderRenderer : public ListItemRenderer {
-  TextRowRenderer row_renderer;
-
-public:
-  unsigned CalculateLayout(const DialogLook &look) noexcept {
-    return row_renderer.CalculateLayout(*look.list.font);
-  }
-
-  void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                   unsigned i) noexcept override {
-    row_renderer.DrawTextRow(canvas, rc, rasp_providers[i].name);
-  }
-};
-
-static Co::InvokeTask
-DownloadRASP(const char *url, Path path, ProgressListener &progress)
-{
-  const auto ignored_response = co_await
-    Net::CoDownloadToFile(*Net::curl, url,
-                          nullptr, nullptr,
-                          path, nullptr, progress);
-}
-
 void
 RASPSettingsPanel::Download() noexcept
 {
-  unsigned n = 0;
-  for (auto i = rasp_providers; i->url != nullptr; ++i)
-    ++n;
-
-  assert(n > 0);
-
-  RaspProviderRenderer renderer;
-  int i = ListPicker(_("Download"), n, 0, renderer.CalculateLayout(GetLook()),
-                     renderer);
-  if (i < 0)
+  auto path = DownloadFilePicker(FileType::RASP);
+  if (path == nullptr)
     return;
-
-  const char *url = rasp_providers[i].url;
-  auto path = LocalPath(_T(RASP_FILENAME));
-
-  try {
-    PluggableOperationEnvironment env;
-
-    if (!ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-                      _("Download"),
-                      DownloadRASP(url, path, env),
-                      &env))
-      return;
-  } catch (...) {
-    ShowError(std::current_exception(), _("Download"));
-    return;
-  }
 
   rasp = std::make_shared<RaspStore>(std::move(path));
   rasp->ScanAll();
@@ -205,8 +147,8 @@ RASPSettingsPanel::Download() noexcept
 }
 
 void
-RASPSettingsPanel::Prepare(ContainerWindow &parent,
-                           const PixelRect &rc) noexcept
+RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
+                           [[maybe_unused]] const PixelRect &rc) noexcept
 {
   const WeatherUIState &state = CommonInterface::GetUIState().weather;
   time = state.time;
@@ -226,11 +168,11 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent,
 }
 
 bool
-RASPSettingsPanel::Save(bool &_changed) noexcept
+RASPSettingsPanel::Save([[maybe_unused]] bool &_changed) noexcept
 {
   WeatherUIState &state = CommonInterface::SetUIState().weather;
 
-  state.map = GetValueInteger(ITEM);
+  state.map = GetValueEnum(ITEM);
   state.time = time;
 
   ActionInterface::SendUIState(true);

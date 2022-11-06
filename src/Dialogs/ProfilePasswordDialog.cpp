@@ -104,7 +104,7 @@ SetProfilePasswordDialog(ProfileMap &map)
     return false;
 
   if (new_password.empty())
-    map.erase(ProfileKeys::Password);
+    map.Remove(ProfileKeys::Password);
   else
     map.Set(ProfileKeys::Password, new_password);
 

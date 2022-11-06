@@ -899,7 +899,7 @@ DigitEntry::GetAngleValue() const
 }
 
 bool
-DigitEntry::OnMouseDown(PixelPoint p)
+DigitEntry::OnMouseDown(PixelPoint p) noexcept
 {
   int i = FindColumnAt(p.x);
   if (i >= 0 && columns[i].IsEditable()) {
@@ -918,7 +918,7 @@ DigitEntry::OnMouseDown(PixelPoint p)
 }
 
 bool
-DigitEntry::OnKeyCheck(unsigned key_code) const
+DigitEntry::OnKeyCheck(unsigned key_code) const noexcept
 {
   switch (key_code) {
   case KEY_UP:
@@ -937,7 +937,7 @@ DigitEntry::OnKeyCheck(unsigned key_code) const
 }
 
 bool
-DigitEntry::OnKeyDown(unsigned key_code)
+DigitEntry::OnKeyDown(unsigned key_code) noexcept
 {
   assert(cursor < length);
 
@@ -977,21 +977,21 @@ DigitEntry::OnKeyDown(unsigned key_code)
 }
 
 void
-DigitEntry::OnSetFocus()
+DigitEntry::OnSetFocus() noexcept
 {
   PaintWindow::OnSetFocus();
   Invalidate();
 }
 
 void
-DigitEntry::OnKillFocus()
+DigitEntry::OnKillFocus() noexcept
 {
   PaintWindow::OnKillFocus();
   Invalidate();
 }
 
 void
-DigitEntry::OnPaint(Canvas &canvas)
+DigitEntry::OnPaint(Canvas &canvas) noexcept
 {
   assert(cursor < length);
 

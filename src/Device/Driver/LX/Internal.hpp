@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_DRIVER_LX_INTERNAL_HPP
-#define XCSOAR_DEVICE_DRIVER_LX_INTERNAL_HPP
+#pragma once
 
 #include "Protocol.hpp"
 #include "Device/Driver.hpp"
@@ -208,7 +207,7 @@ public:
    * values.  If the value does not exist, an empty string is
    * returned.
    */
-  gcc_pure
+  [[gnu::pure]]
   std::string GetLXNAVVarioSetting(const char *name) const noexcept;
 
   /**
@@ -218,6 +217,9 @@ public:
    * indicate whether the Nano has understood and processed it)
    */
   bool SendNanoSetting(const char *name, const char *value,
+                       OperationEnvironment &env);
+
+  bool SendNanoSetting(const char *name, unsigned value,
                        OperationEnvironment &env);
 
   /**
@@ -241,8 +243,11 @@ public:
    * values.  If the value does not exist, an empty string is
    * returned.
    */
-  gcc_pure
+  [[gnu::pure]]
   std::string GetNanoSetting(const char *name) const noexcept;
+
+  [[gnu::pure]]
+  unsigned GetNanoSettingInteger(const char *name) const noexcept;
 
 protected:
   /**
@@ -284,5 +289,3 @@ public:
                       Path path,
                       OperationEnvironment &env) override;
 };
-
-#endif

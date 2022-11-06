@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -80,16 +80,14 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Task/ProtectedTaskManager.hpp"
 #include "UtilsSettings.hpp"
 #include "PageActions.hpp"
-#include "util/Compiler.h"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Simulator.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Device/MultipleDevices.hpp"
-
 #include "Form/DataField/File.hpp"
 #include "Dialogs/FilePicker.hpp"
-#include "contest/weglide/UploadIGCFile.hpp"
+#include "net/client/WeGlide/UploadIGCFile.hpp"
 
 #include <cassert>
 #include <tchar.h>
@@ -107,7 +105,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 /**
  * Determine the reference location of the current map display.
  */
-gcc_pure
+[[gnu::pure]]
 static GeoPoint
 GetVisibleLocation()
 {
@@ -205,8 +203,8 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
 }
 
 void
-InputEvents::eventPilotEvent(const TCHAR *misc)
-{
+InputEvents::eventPilotEvent([[maybe_unused]] const TCHAR *misc)
+try {
   // Configure start window
   const OrderedTaskSettings &ots =
   	protected_task_manager->GetOrderedTaskSettings();
@@ -238,6 +236,8 @@ InputEvents::eventPilotEvent(const TCHAR *misc)
   // Let devices know the pilot event was pressed
   MessageOperationEnvironment env;
   devices->PutPilotEvent(env);
+} catch (...) {
+  ShowError(std::current_exception(), _("Logger Error"));
 }
 
 void
@@ -276,14 +276,13 @@ InputEvents::eventScreenModes(const TCHAR *misc)
   else
     PageActions::Next();
 
-
-  trigger_redraw();
+  TriggerMapUpdate();
 }
 
 // ClearStatusMessages
 // Do Clear Event Warnings
 void
-InputEvents::eventClearStatusMessages(gcc_unused const TCHAR *misc)
+InputEvents::eventClearStatusMessages([[maybe_unused]] const TCHAR *misc)
 {
   // TODO enhancement: allow selection of specific messages (here we are acknowledging all)
   if (CommonInterface::main_window->popup != nullptr)
@@ -306,7 +305,7 @@ InputEvents::eventMode(const TCHAR *misc)
 
 // Don't think we need this.
 void
-InputEvents::eventMainMenu(gcc_unused const TCHAR *misc)
+InputEvents::eventMainMenu([[maybe_unused]] const TCHAR *misc)
 {
   // todo: popup main menu
 }
@@ -315,7 +314,7 @@ InputEvents::eventMainMenu(gcc_unused const TCHAR *misc)
 // Displays the checklist dialog
 //  See the checklist dialog section of the reference manual for more info.
 void
-InputEvents::eventChecklist(gcc_unused const TCHAR *misc)
+InputEvents::eventChecklist([[maybe_unused]] const TCHAR *misc)
 {
   dlgChecklistShowModal();
 }
@@ -346,7 +345,7 @@ InputEvents::eventStatus(const TCHAR *misc)
 //  See the analysis dialog section of the reference manual
 // for more info.
 void
-InputEvents::eventAnalysis(gcc_unused const TCHAR *misc)
+InputEvents::eventAnalysis([[maybe_unused]] const TCHAR *misc)
 {
   dlgAnalysisShowModal(*CommonInterface::main_window,
                        CommonInterface::main_window->GetLook(),
@@ -397,7 +396,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
 }
 
 void
-InputEvents::eventWaypointEditor(const TCHAR *misc)
+InputEvents::eventWaypointEditor([[maybe_unused]] const TCHAR *misc)
 {
   dlgConfigWaypointsShowModal();
 }
@@ -452,7 +451,7 @@ InputEvents::eventAutoLogger(const TCHAR *misc)
 // note: the text following the 'note' characters is added to the log file
 void
 InputEvents::eventLogger(const TCHAR *misc)
-{
+try {
   if (logger == nullptr)
     return;
 
@@ -495,13 +494,15 @@ InputEvents::eventLogger(const TCHAR *misc)
   else if (StringIsEqual(misc, _T("note"), 4))
     // add note to logger file if available..
     logger->LoggerNote(misc + 4);
+} catch (...) {
+  ShowError(std::current_exception(), _("Logger Error"));
 }
 
 // RepeatStatusMessage
 // Repeats the last status message.  If pressed repeatedly, will
 // repeat previous status messages
 void
-InputEvents::eventRepeatStatusMessage(gcc_unused const TCHAR *misc)
+InputEvents::eventRepeatStatusMessage([[maybe_unused]] const TCHAR *misc)
 {
   // new interface
   // TODO enhancement: display only by type specified in misc field
@@ -512,7 +513,7 @@ InputEvents::eventRepeatStatusMessage(gcc_unused const TCHAR *misc)
 // NearestWaypointDetails
 // Displays the waypoint details dialog
 void
-InputEvents::eventNearestWaypointDetails(gcc_unused const TCHAR *misc)
+InputEvents::eventNearestWaypointDetails([[maybe_unused]] const TCHAR *misc)
 {
   const auto location = GetVisibleLocation();
   if (!location.IsValid())
@@ -525,7 +526,7 @@ InputEvents::eventNearestWaypointDetails(gcc_unused const TCHAR *misc)
 // NearestMapItems
 // Displays the map item list dialog
 void
-InputEvents::eventNearestMapItems(gcc_unused const TCHAR *misc)
+InputEvents::eventNearestMapItems([[maybe_unused]] const TCHAR *misc)
 {
   const auto location = GetVisibleLocation();
   if (!location.IsValid())
@@ -538,13 +539,13 @@ InputEvents::eventNearestMapItems(gcc_unused const TCHAR *misc)
 // The null event does nothing.  This can be used to override
 // default functionality
 void
-InputEvents::eventNull(gcc_unused const TCHAR *misc)
+InputEvents::eventNull([[maybe_unused]] const TCHAR *misc)
 {
   // do nothing
 }
 
 void
-InputEvents::eventBeep(gcc_unused const TCHAR *misc)
+InputEvents::eventBeep([[maybe_unused]] const TCHAR *misc)
 {
 #ifdef _WIN32
   MessageBeep(MB_ICONEXCLAMATION);
@@ -595,7 +596,7 @@ InputEvents::eventSetup(const TCHAR *misc)
 }
 
 void
-InputEvents::eventCredits(gcc_unused const TCHAR *misc)
+InputEvents::eventCredits([[maybe_unused]] const TCHAR *misc)
 {
   dlgCreditsShowModal(*CommonInterface::main_window);
 }
@@ -622,13 +623,13 @@ InputEvents::eventRun(const TCHAR *misc)
 }
 
 void
-InputEvents::eventBrightness(gcc_unused const TCHAR *misc)
+InputEvents::eventBrightness([[maybe_unused]] const TCHAR *misc)
 {
   // not implemented (was only implemented on Altair)
 }
 
 void
-InputEvents::eventExit(gcc_unused const TCHAR *misc)
+InputEvents::eventExit([[maybe_unused]] const TCHAR *misc)
 {
   UIActions::SignalShutdown(false);
 }
@@ -726,27 +727,27 @@ InputEvents::eventWeather(const TCHAR *misc)
 }
 
 void
-InputEvents::eventQuickMenu(gcc_unused const TCHAR *misc)
+InputEvents::eventQuickMenu([[maybe_unused]] const TCHAR *misc)
 {
  dlgQuickMenuShowModal(*CommonInterface::main_window);
 }
 
 void
-InputEvents::eventFileManager(const TCHAR *misc)
+InputEvents::eventFileManager([[maybe_unused]] const TCHAR *misc)
 {
   ShowFileManager();
 }
 
 void
-InputEvents::eventExchangeFrequencies(const TCHAR *misc)
+InputEvents::eventExchangeFrequencies([[maybe_unused]] const TCHAR *misc)
 {
   XCSoarInterface::ExchangeRadioFrequencies(true);
 }
 
 void
-InputEvents::eventUploadIGCFile(const TCHAR *misc) {
+InputEvents::eventUploadIGCFile([[maybe_unused]] const TCHAR *misc) {
   FileDataField df;
-  df.ScanMultiplePatterns(_T("*.igc"));
+  df.ScanMultiplePatterns(_T("*.igc\0"));
   df.SetFileType(FileType::IGC);
   if (FilePicker(_T("IGC-FilePicker"), df)) {
     auto path = df.GetValue();

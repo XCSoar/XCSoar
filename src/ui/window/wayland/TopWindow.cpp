@@ -31,20 +31,25 @@ Copyright_License {
 namespace UI {
 
 static void
-handle_ping(void *data, struct wl_shell_surface *shell_surface,
+handle_ping([[maybe_unused]] void *data,
+            struct wl_shell_surface *shell_surface,
             uint32_t serial) noexcept
 {
   wl_shell_surface_pong(shell_surface, serial);
 }
 
 static void
-handle_configure(void *data, struct wl_shell_surface *shell_surface,
-                 uint32_t edges, int32_t width, int32_t height) noexcept
+handle_configure([[maybe_unused]] void *data,
+                 [[maybe_unused]] struct wl_shell_surface *shell_surface,
+                 [[maybe_unused]] uint32_t edges,
+                 [[maybe_unused]] int32_t width,
+                 [[maybe_unused]] int32_t height) noexcept
 {
 }
 
 static void
-handle_popup_done(void *data, struct wl_shell_surface *shell_surface) noexcept
+handle_popup_done([[maybe_unused]] void *data,
+                  [[maybe_unused]] struct wl_shell_surface *shell_surface) noexcept
 {
 }
 
@@ -56,7 +61,7 @@ static constexpr struct wl_shell_surface_listener shell_surface_listener = {
 
 void
 TopWindow::CreateNative(const TCHAR *text, PixelSize size,
-                        TopWindowStyle style)
+                        TopWindowStyle)
 {
   auto compositor = event_queue->GetCompositor();
   auto shell = event_queue->GetShell();

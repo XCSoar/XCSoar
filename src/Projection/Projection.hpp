@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_PROJECTION_HPP
-#define XCSOAR_PROJECTION_HPP
+#pragma once
 
 #include "Geo/GeoPoint.hpp"
 #include "Math/FastRotation.hpp"
@@ -218,5 +217,3 @@ public:
     return FastRowRotation(screen_rotation, y);
   }
 };
-
-#endif

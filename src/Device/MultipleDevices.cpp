@@ -26,7 +26,8 @@ Copyright_License {
 #include "Descriptor.hpp"
 #include "Dispatcher.hpp"
 
-MultipleDevices::MultipleDevices(EventLoop &event_loop, Cares::Channel &cares)
+MultipleDevices::MultipleDevices(EventLoop &event_loop,
+                                 Cares::Channel &cares) noexcept
 {
   for (unsigned i = 0; i < NUMDEV; ++i) {
     DeviceDispatcher *dispatcher = dispatchers[i] =
@@ -37,7 +38,7 @@ MultipleDevices::MultipleDevices(EventLoop &event_loop, Cares::Channel &cares)
   }
 }
 
-MultipleDevices::~MultipleDevices()
+MultipleDevices::~MultipleDevices() noexcept
 {
   for (DeviceDescriptor *i : devices)
     delete i;
@@ -47,7 +48,7 @@ MultipleDevices::~MultipleDevices()
 }
 
 void
-MultipleDevices::Tick()
+MultipleDevices::Tick() noexcept
 {
   for (DeviceDescriptor *i : devices)
     i->OnSysTicker();
@@ -61,21 +62,29 @@ MultipleDevices::Open(OperationEnvironment &env) noexcept
 }
 
 void
-MultipleDevices::AutoReopen(OperationEnvironment &env)
+MultipleDevices::Close() noexcept
+{
+  for (DeviceDescriptor *i : devices)
+    i->Close();
+}
+
+void
+MultipleDevices::AutoReopen(OperationEnvironment &env) noexcept
 {
   for (DeviceDescriptor *i : devices)
     i->AutoReopen(env);
 }
 
 void
-MultipleDevices::PutMacCready(double mac_cready, OperationEnvironment &env)
+MultipleDevices::PutMacCready(double mac_cready,
+                              OperationEnvironment &env) noexcept
 {
   for (DeviceDescriptor *i : devices)
     i->PutMacCready(mac_cready, env);
 }
 
 void
-MultipleDevices::PutBugs(double bugs, OperationEnvironment &env)
+MultipleDevices::PutBugs(double bugs, OperationEnvironment &env) noexcept
 {
   for (DeviceDescriptor *i : devices)
     i->PutBugs(bugs, env);
@@ -83,21 +92,21 @@ MultipleDevices::PutBugs(double bugs, OperationEnvironment &env)
 
 void
 MultipleDevices::PutBallast(double fraction, double overload,
-                            OperationEnvironment &env)
+                            OperationEnvironment &env) noexcept
 {
   for (DeviceDescriptor *i : devices)
     i->PutBallast(fraction, overload, env);
 }
 
 void
-MultipleDevices::PutVolume(unsigned volume, OperationEnvironment &env)
+MultipleDevices::PutVolume(unsigned volume, OperationEnvironment &env) noexcept
 {
   for (DeviceDescriptor *i : devices)
     i->PutVolume(volume, env);
 }
 
 void
-MultipleDevices::PutPilotEvent(OperationEnvironment &env)
+MultipleDevices::PutPilotEvent(OperationEnvironment &env) noexcept
 {
   for (DeviceDescriptor *i : devices)
     i->PutPilotEvent(env);
@@ -106,7 +115,7 @@ MultipleDevices::PutPilotEvent(OperationEnvironment &env)
 void
 MultipleDevices::PutActiveFrequency(RadioFrequency frequency,
                                     const TCHAR *name,
-                                    OperationEnvironment &env)
+                                    OperationEnvironment &env) noexcept
 {
   for (DeviceDescriptor *i : devices)
     i->PutActiveFrequency(frequency, name, env);
@@ -115,7 +124,7 @@ MultipleDevices::PutActiveFrequency(RadioFrequency frequency,
 void
 MultipleDevices::PutStandbyFrequency(RadioFrequency frequency,
                                      const TCHAR *name,
-                                     OperationEnvironment &env)
+                                     OperationEnvironment &env) noexcept
 {
   for (DeviceDescriptor *i : devices)
     i->PutStandbyFrequency(frequency, name, env);
@@ -123,14 +132,14 @@ MultipleDevices::PutStandbyFrequency(RadioFrequency frequency,
 
 void
 MultipleDevices::PutQNH(AtmosphericPressure pres,
-                        OperationEnvironment &env)
+                        OperationEnvironment &env) noexcept
 {
   for (DeviceDescriptor *i : devices)
     i->PutQNH(pres, env);
 }
 
 void
-MultipleDevices::NotifySensorUpdate(const MoreData &basic)
+MultipleDevices::NotifySensorUpdate(const MoreData &basic) noexcept
 {
   for (DeviceDescriptor *i : devices)
     i->OnSensorUpdate(basic);
@@ -138,25 +147,25 @@ MultipleDevices::NotifySensorUpdate(const MoreData &basic)
 
 void
 MultipleDevices::NotifyCalculatedUpdate(const MoreData &basic,
-                                        const DerivedInfo &calculated)
+                                        const DerivedInfo &calculated) noexcept
 {
   for (DeviceDescriptor *i : devices)
     i->OnCalculatedUpdate(basic, calculated);
 }
 
 void
-MultipleDevices::AddPortListener(PortListener &listener)
+MultipleDevices::AddPortListener(PortListener &listener) noexcept
 {
-  const std::lock_guard<Mutex> lock(listeners_mutex);
+  const std::lock_guard lock{listeners_mutex};
   assert(std::find(listeners.begin(), listeners.end(),
                    &listener) == listeners.end());
   listeners.push_back(&listener);
 }
 
 void
-MultipleDevices::RemovePortListener(PortListener &listener)
+MultipleDevices::RemovePortListener(PortListener &listener) noexcept
 {
-  const std::lock_guard<Mutex> lock(listeners_mutex);
+  const std::lock_guard lock{listeners_mutex};
   assert(std::find(listeners.begin(), listeners.end(),
                    &listener) != listeners.end());
   listeners.remove(&listener);
@@ -165,7 +174,7 @@ MultipleDevices::RemovePortListener(PortListener &listener)
 void
 MultipleDevices::PortStateChanged() noexcept
 {
-  const std::lock_guard<Mutex> lock(listeners_mutex);
+  const std::lock_guard lock{listeners_mutex};
 
   for (auto *listener : listeners)
     listener->PortStateChanged();
@@ -174,7 +183,7 @@ MultipleDevices::PortStateChanged() noexcept
 void
 MultipleDevices::PortError(const char *msg) noexcept
 {
-  const std::lock_guard<Mutex> lock(listeners_mutex);
+  const std::lock_guard lock{listeners_mutex};
 
   for (auto *listener : listeners)
     listener->PortError(msg);

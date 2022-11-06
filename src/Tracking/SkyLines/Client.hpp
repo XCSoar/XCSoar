@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,12 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
-#define XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
+#pragma once
 
 #include "event/SocketEvent.hxx"
 #include "net/AllocatedSocketAddress.hxx"
-#include "net/UniqueSocketDescriptor.hxx"
 #include "event/net/cares/SimpleResolver.hxx"
 #include "thread/Mutex.hxx"
 #include "util/Cancellable.hxx"
@@ -61,7 +59,6 @@ class Client final : Cares::SimpleHandler {
   std::optional<Cares::SimpleResolver> resolver;
 
   AllocatedSocketAddress address;
-  UniqueSocketDescriptor socket;
   SocketEvent socket_event;
 
 public:
@@ -88,14 +85,14 @@ public:
   }
 
   bool IsDefined() const {
-    const std::lock_guard<Mutex> lock(mutex);
-    return resolver || socket.IsDefined();
+    const std::lock_guard lock{mutex};
+    return resolver || socket_event.IsDefined();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsConnected() const {
-    const std::lock_guard<Mutex> lock(mutex);
-    return socket.IsDefined();
+    const std::lock_guard lock{mutex};
+    return socket_event.IsDefined();
   }
 
   uint64_t GetKey() const {
@@ -112,8 +109,8 @@ public:
 
   template<typename P>
   bool SendPacket(const P &packet) {
-    const std::lock_guard<Mutex> lock(mutex);
-    return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
+    const std::lock_guard lock{mutex};
+    return GetSocket().Write(&packet, sizeof(packet), address) == sizeof(packet);
   }
 
   void SendFix(const NMEAInfo &basic);
@@ -129,6 +126,10 @@ public:
   void SendUserNameRequest(uint32_t user_id);
 
 private:
+  SocketDescriptor GetSocket() noexcept {
+    return socket_event.GetSocket();
+  }
+
   void InternalClose() noexcept;
 
   void OnTrafficReceived(const TrafficResponsePacket &packet, size_t length);
@@ -146,5 +147,3 @@ private:
 };
 
 } /* namespace SkyLinesTracking */
-
-#endif

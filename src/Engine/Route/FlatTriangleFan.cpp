@@ -21,16 +21,17 @@
  */
 
 #include "FlatTriangleFan.hpp"
+#include "FlatTriangleFanVisitor.hpp"
 #include "Math/Line2D.hpp"
 
 #include <cassert>
 
-void
+const FlatBoundingBox &
 FlatTriangleFan::CalcBoundingBox() noexcept
 {
   assert(!vs.empty());
 
-  bounding_box = {vs.begin(), vs.end()};
+  return bounding_box = {vs.begin(), vs.end()};
 }
 
 static constexpr bool
@@ -73,12 +74,12 @@ FlatTriangleFan::AddPoint(FlatGeoPoint p) noexcept
  */
 [[gnu::pure]]
 static bool
-IsWrappedSpike(ConstBuffer<FlatGeoPoint> hull) noexcept
+IsWrappedSpike(std::span<const FlatGeoPoint> hull) noexcept
 {
-  assert(hull.size > 3);
+  assert(hull.size() > 3);
 
-  return IsSpike(hull[hull.size - 2], hull[hull.size - 1], hull[0]) ||
-    IsSpike(hull[hull.size - 1], hull[0], hull[1]);
+  return IsSpike(hull[hull.size() - 2], hull[hull.size() - 1], hull[0]) ||
+    IsSpike(hull[hull.size() - 1], hull[0], hull[1]);
 }
 
 bool
@@ -86,14 +87,14 @@ FlatTriangleFan::CommitPoints(bool closed) noexcept
 {
   auto hull = GetHull(closed);
 
-  while (hull.size > 3) {
+  while (hull.size() > 3) {
     if (!IsWrappedSpike(hull))
       /* no spikes left: success! */
       return true;
 
     /* erase this spike */
     vs.pop_back();
-    hull.pop_back();
+    hull = hull.first(hull.size() - 1);
 
     /* .. and continue searching */
   }
@@ -123,4 +124,13 @@ FlatTriangleFan::IsInside(FlatGeoPoint p, bool closed) const noexcept
   }
 
   return inside;
+}
+
+void
+FlatTriangleFan::AcceptInRange(const FlatBoundingBox &bb,
+                               FlatTriangleFanVisitor &visitor,
+                               const bool closed) const noexcept
+{
+  if (bb.Overlaps(bounding_box))
+    visitor.VisitFan(GetOrigin(), GetHull(closed));
 }

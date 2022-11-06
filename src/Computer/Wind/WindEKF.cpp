@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,8 +27,8 @@ Copyright_License {
 #include <cassert>
 #include <cmath>
 
-#define WIND_K0 1.0e-2f
-#define WIND_K1 1.0e-5f
+static constexpr float WIND_K0 = 1.0e-2f;
+static constexpr float WIND_K1 = 1.0e-5f;
 
 void
 WindEKF::Update(const double airspeed, const float gps_vel[2])

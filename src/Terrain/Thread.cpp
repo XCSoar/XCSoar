@@ -36,7 +36,7 @@ TerrainThread::Trigger(const WindowProjection &projection)
 {
   assert(projection.IsValid());
 
-  const std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   GeoPoint center = projection.GetGeoScreenCenter();
   auto radius = projection.GetScreenWidthMeters() / 2;

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,10 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_CRC16_HPP
-#define XCSOAR_FLARM_CRC16_HPP
-
-#include "util/Compiler.h"
+#pragma once
 
 #include <cstdint>
 #include <cstddef>
@@ -39,9 +36,7 @@ namespace FLARM {
    * @param length Optional length of the payload
    * @return CRC value
    */
-  gcc_pure
+  [[gnu::pure]]
   uint16_t CalculateCRC(const FrameHeader &header, const void *data = nullptr,
                         size_t length = 0);
 };
-
-#endif

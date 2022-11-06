@@ -12,8 +12,7 @@
  * to be before off_t was defined as an alias for it.
  */
 
-#ifndef _ZZIP_ZZIP32_H
-#define _ZZIP_ZZIP32_H
+#pragma once
 
 #include <zzip/lib.h>
 
@@ -41,6 +40,4 @@ long      zzip_tell32(ZZIP_FILE * fp);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "Device/Util/NMEAWriter.hpp"
-#include "util/StringView.hxx"
 
 #include <stdio.h>
+#include <string.h>
 #include <limits.h>
 
 const char BlueFlyDevice::BlueFlySettings::VOLUME_NAME[] = "BVL";
@@ -35,13 +35,13 @@ const char BlueFlyDevice::BlueFlySettings::OUTPUT_MODE_NAME[] = "BOM";
  * Parse the given BlueFly Vario setting identified by its name.
  */
 void
-BlueFlyDevice::BlueFlySettings::Parse(StringView name, unsigned long value)
+BlueFlyDevice::BlueFlySettings::Parse(std::string_view name, unsigned long value)
 {
   assert(value <= UINT_MAX);
 
-  if (name.Equals(VOLUME_NAME))
+  if (name == VOLUME_NAME)
     volume = double(value) / VOLUME_MULTIPLIER;
-  else if (name.Equals(OUTPUT_MODE_NAME))
+  else if (name == OUTPUT_MODE_NAME)
     output_mode = value;
 }
 
@@ -61,7 +61,7 @@ void
 BlueFlyDevice::RequestSettings(OperationEnvironment &env)
 {
   {
-    const std::lock_guard<Mutex> lock(mutex_settings);
+    const std::lock_guard lock{mutex_settings};
     settings_ready = false;
   }
 
@@ -71,7 +71,7 @@ BlueFlyDevice::RequestSettings(OperationEnvironment &env)
 bool
 BlueFlyDevice::WaitForSettings(unsigned int timeout)
 {
-  std::unique_lock<Mutex> lock(mutex_settings);
+  std::unique_lock lock{mutex_settings};
   if (!settings_ready)
     settings_cond.wait_for(lock, std::chrono::milliseconds(timeout));
   return settings_ready;
@@ -80,7 +80,7 @@ BlueFlyDevice::WaitForSettings(unsigned int timeout)
 BlueFlyDevice::BlueFlySettings
 BlueFlyDevice::GetSettings() noexcept
 {
-  const std::lock_guard<Mutex> lock(mutex_settings);
+  const std::lock_guard lock{mutex_settings};
   return settings;
 }
 
@@ -97,6 +97,6 @@ BlueFlyDevice::WriteDeviceSettings(const BlueFlySettings &new_settings,
 
   /* update the old values from the new settings.
    * The BlueFly Vario does not send back any ACK. */
-  const std::lock_guard<Mutex> lock(mutex_settings);
+  const std::lock_guard lock{mutex_settings};
   settings = new_settings;
 }

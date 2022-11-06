@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,11 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_RESOURCE_ID_HPP
-#define XCSOAR_RESOURCE_ID_HPP
+#pragma once
 
-#include "util/Compiler.h"
-#include "util/ConstBuffer.hxx"
+#include <span>
 
 /**
  * The identifier for a resource to be passed to
@@ -35,7 +33,7 @@ class ResourceId {
 #if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
   unsigned id;
 #else
-  const void *begin;
+  const std::byte *begin;
   const size_t *size_ptr;
 #endif
 
@@ -43,14 +41,15 @@ public:
   ResourceId() = default;
 
 #if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
-  constexpr explicit ResourceId(unsigned _id)
+  constexpr explicit ResourceId(unsigned _id) noexcept
     :id(_id) {}
 #else
-  constexpr explicit ResourceId(const void *_begin, const size_t *_size_ptr)
+  constexpr explicit ResourceId(const std::byte *_begin,
+                                const size_t *_size_ptr) noexcept
     :begin(_begin), size_ptr(_size_ptr) {}
 #endif
 
-  static constexpr ResourceId Null() {
+  static constexpr ResourceId Null() noexcept {
 #if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
     return ResourceId(0);
 #else
@@ -58,7 +57,7 @@ public:
 #endif
   }
 
-  constexpr bool IsDefined() const {
+  constexpr bool IsDefined() const noexcept {
 #if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
     return id != 0;
 #else
@@ -67,17 +66,17 @@ public:
   }
 
 #if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
-  constexpr explicit operator unsigned() const {
+  constexpr explicit operator unsigned() const noexcept {
     return id;
   }
 #else
-  gcc_pure
-  operator ConstBuffer<void>() const {
-    return ConstBuffer<void>(begin, *size_ptr);
+  [[gnu::pure]]
+  operator std::span<const std::byte>() const noexcept {
+    return {begin, *size_ptr};
   }
 #endif
 
-  constexpr bool operator==(ResourceId other) const {
+  constexpr bool operator==(ResourceId other) const noexcept {
 #if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
     return id == other.id;
 #else
@@ -85,7 +84,7 @@ public:
 #endif
   }
 
-  constexpr bool operator!=(ResourceId other) const {
+  constexpr bool operator!=(ResourceId other) const noexcept {
 #if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
     return id != other.id;
 #else
@@ -93,5 +92,3 @@ public:
 #endif
   }
 };
-
-#endif

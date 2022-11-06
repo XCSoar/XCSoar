@@ -71,7 +71,7 @@ Replay::Start(Path _path)
 
   if (path == nullptr || path.empty()) {
     replay = new DemoReplayGlue(task_manager);
-  } else if (path.MatchesExtension(_T(".igc"))) {
+  } else if (path.EndsWithIgnoreCase(_T(".igc"))) {
     replay = new IgcReplay(std::make_unique<FileLineReaderA>(path));
 
     cli = new CatmullRomInterpolator(FloatDuration{0.98});
@@ -133,7 +133,7 @@ Replay::Update()
       return true;
 
     {
-      std::lock_guard<Mutex> lock(device_blackboard->mutex);
+      const std::lock_guard lock{device_blackboard->mutex};
       device_blackboard->SetReplayState() = next_data;
       device_blackboard->ScheduleMerge();
     }
@@ -207,7 +207,7 @@ Replay::Update()
     data.ProvideBaroAltitudeTrue(r.baro_altitude);
 
     {
-      std::lock_guard<Mutex> lock(device_blackboard->mutex);
+      const std::lock_guard lock{device_blackboard->mutex};
       device_blackboard->SetReplayState() = data;
       device_blackboard->ScheduleMerge();
     }

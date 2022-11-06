@@ -24,7 +24,6 @@ Copyright_License {
 #include "Topography/TopographyFile.hpp"
 #include "io/Open.hxx"
 #include "io/UniqueFileDescriptor.hxx"
-#include "util/ConstBuffer.hxx"
 
 #include <string>
 #include <forward_list>
@@ -41,7 +40,7 @@ struct TopoInput {
 
   std::forward_list<std::string> paths;
 
-  TopoInput(ConstBuffer<uint8_t> input) {
+  TopoInput(std::span<const uint8_t> input) {
     char buffer[1024];
     sprintf(buffer, "/tmp/FuzzTopographyFile-%d", gettid());
     name = buffer;
@@ -61,13 +60,13 @@ struct TopoInput {
   TopoInput(const TopoInput &) = delete;
   TopoInput &operator=(const TopoInput &) = delete;
 
-  void SplitWrite(ConstBuffer<uint8_t> &input, const char *suffix) {
+  void SplitWrite(std::span<const uint8_t> &input, const char *suffix) {
     const uint8_t *p = (const uint8_t *)
-      memmem(input.data, input.size, "deadbeef", 8);
-    ConstBuffer<uint8_t> segment = input;
+      memmem(input.data(), input.size(), "deadbeef", 8);
+    auto segment = input;
     if (p != nullptr) {
-      segment.SetEnd(p);
-      input.MoveFront(p + 8);
+      segment = segment.first(p - segment.data());
+      input = input.subspan(p + 8 - input.data());
     }
 
     paths.emplace_front(name);
@@ -75,7 +74,7 @@ struct TopoInput {
 
     auto fd = OpenWriteOnly(paths.front().c_str(), O_CREAT|O_EXCL);
     if (!segment.empty())
-      fd.Write(segment.data, segment.size);
+      fd.Write(segment.data(), segment.size());
   }
 };
 

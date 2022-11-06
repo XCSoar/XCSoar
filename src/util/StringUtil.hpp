@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,10 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_STRING_UTIL_HPP
-#define XCSOAR_STRING_UTIL_HPP
+#pragma once
 
 #include <cstddef>
+#include <string_view>
 
 #ifdef _UNICODE
 #include "WStringUtil.hpp"
@@ -34,13 +34,13 @@ Copyright_License {
  * Copy a string.  If the buffer is too small, then the string is
  * truncated.  This is a safer version of strncpy().
  *
- * @param size the size of the destination buffer (including the null
- * terminator)
+ * @param dest_size the size of the destination buffer (including the
+ * null terminator)
  * @return a pointer to the null terminator
  */
 [[gnu::nonnull]]
 char *
-CopyString(char *dest, const char *src, size_t size);
+CopyString(char *dest, size_t dest_size, std::string_view src) noexcept;
 
 /**
  * Normalize a string for searching.  This strips all characters
@@ -54,6 +54,4 @@ CopyString(char *dest, const char *src, size_t size);
  */
 [[gnu::nonnull]]
 char *
-NormalizeSearchString(char *dest, const char *src);
-
-#endif
+NormalizeSearchString(char *dest, std::string_view src) noexcept;

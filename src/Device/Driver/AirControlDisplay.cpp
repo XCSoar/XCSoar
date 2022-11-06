@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -73,18 +73,15 @@ ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
      <RX2> Secondary channel rx state (0 = no signal rec; 1 = signal rec)
      <TX1> Transmit active (0 = no transmission; 1 = transmitting signal)
      */
-    RadioFrequency freq;
 
     if (line.ReadChecked(value)) {
-      freq.SetKiloHertz(value);
       info.settings.has_active_frequency.Update(info.clock);
-      info.settings.active_frequency = freq;
+      info.settings.active_frequency = RadioFrequency::FromKiloHertz(value);
     }
 
     if (line.ReadChecked(value)) {
-      freq.SetKiloHertz(value);
       info.settings.has_standby_frequency.Update(info.clock);
-      info.settings.standby_frequency = freq;
+      info.settings.standby_frequency = RadioFrequency::FromKiloHertz(value);
     }
 
     unsigned volume;
@@ -135,7 +132,7 @@ ACDDevice::PutVolume(unsigned volume, OperationEnvironment &env)
 
 bool
 ACDDevice::PutStandbyFrequency(RadioFrequency frequency,
-                                   const TCHAR *name,
+                                   [[maybe_unused]] const TCHAR *name,
                                    OperationEnvironment &env)
 {
   char buffer[100];
@@ -160,7 +157,7 @@ ACDDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 }
 
 static Device *
-AirControlDisplayCreateOnPort(const DeviceConfig &config, Port &com_port)
+AirControlDisplayCreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 {
   return new ACDDevice(com_port);
 }

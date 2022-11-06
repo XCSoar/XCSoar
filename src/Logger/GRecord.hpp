@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,10 +20,11 @@
 }
  */
 
-#ifndef GRECORD_HPP
-#define GRECORD_HPP
+#pragma once
 
 #include "util/MD5.hpp"
+
+#include <string_view>
 
 #define XCSOAR_IGC_CODE "XCS"
 
@@ -59,19 +60,18 @@ private:
   bool ignore_comma;
 
 public:
-
-  void Initialize();
+  void Initialize() noexcept;
 
   /**
    * @return returns true if record is appended, false if skipped
    */
-  bool AppendRecordToBuffer(const char *szIn);
-  void FinalizeBuffer();
+  bool AppendRecordToBuffer(std::string_view src) noexcept;
+  void FinalizeBuffer() noexcept;
 
   /**
    * @param buffer a buffer of at least #DIGEST_LENGTH+1 bytes
    */
-  void GetDigest(char *buffer) const;
+  void GetDigest(char *buffer) const noexcept;
 
   /**
    * Loads a file into the data buffer.
@@ -101,11 +101,12 @@ public:
   void VerifyGRecordInFile(Path path);
 
 private:
-  void AppendStringToBuffer(const char *szIn);
+  void AppendStringToBuffer(std::string_view src) noexcept;
+
   /**
    * returns false if record is not to be included in
    * G record calc (see IGC specs)
    */
-  bool IncludeRecordInGCalc(const char *szIn);
+  [[gnu::pure]]
+  static bool IncludeRecordInGCalc(std::string_view src) noexcept;
 };
-#endif

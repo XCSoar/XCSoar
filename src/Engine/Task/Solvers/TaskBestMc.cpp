@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@ TaskBestMc::TaskBestMc(TaskPoint &tp,
 {
 }
 
-#define TINY 0.001
+static constexpr double TINY = 0.001;
 
 double
 TaskBestMc::f(const double mc) noexcept
@@ -48,7 +48,7 @@ TaskBestMc::f(const double mc) noexcept
 }
 
 bool
-TaskBestMc::valid(const double mc) const
+TaskBestMc::valid([[maybe_unused]] const double mc) const
 {
   return res.IsOk() &&
     res.altitude_difference >= -2 * tolerance * res.vector.distance;

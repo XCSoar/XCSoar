@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,12 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_NET_DATABASE_HPP
-#define XCSOAR_FLARM_NET_DATABASE_HPP
+#pragma once
 
 #include "FlarmId.hpp"
 #include "FlarmNetRecord.hpp"
-#include "util/Compiler.h"
 
 #include <map>
 #include <tchar.h>
@@ -54,7 +52,7 @@ public:
    * @param id FLARM id
    * @return FLARMNetRecord object
    */
-  gcc_pure
+  [[gnu::pure]]
   const FlarmNetRecord *FindRecordById(FlarmId id) const {
     auto i = map.find(id);
     return i != map.end()
@@ -67,7 +65,7 @@ public:
    * @param cn Callsign
    * @return FLARMNetRecord object
    */
-  gcc_pure
+  [[gnu::pure]]
   const FlarmNetRecord *FindFirstRecordByCallSign(const TCHAR *cn) const;
 
   unsigned FindRecordsByCallSign(const TCHAR *cn,
@@ -84,5 +82,3 @@ public:
     return map.end();
   }
 };
-
-#endif

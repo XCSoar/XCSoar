@@ -111,12 +111,13 @@ Net::DownloadManager::Cancel(Path relative_path) noexcept
 
 #else /* !ANDROID */
 
-#include "Global.hxx"
 #include "Init.hpp"
 #include "CoDownloadToFile.hpp"
+#include "lib/curl/Global.hxx"
 #include "Operation/ProgressListener.hpp"
 #include "LocalPath.hpp"
 #include "thread/Mutex.hxx"
+#include "thread/SafeList.hxx"
 #include "co/InjectTask.hxx"
 
 #include <string>
@@ -161,20 +162,15 @@ class DownloadManagerThread final
 
   std::list<Item> queue;
 
-  std::list<Net::DownloadListener *> listeners;
+  ThreadSafeList<Net::DownloadListener *> listeners;
 
 public:
   void AddListener(Net::DownloadListener &listener) noexcept {
-    assert(std::find(listeners.begin(), listeners.end(),
-                     &listener) == listeners.end());
-
-    listeners.push_back(&listener);
+    listeners.Add(&listener);
   }
 
   void RemoveListener(Net::DownloadListener &listener) noexcept {
-    auto i = std::find(listeners.begin(), listeners.end(), &listener);
-    assert(i != listeners.end());
-    listeners.erase(i);
+    listeners.Remove(&listener);
   }
 
   void Enumerate(Net::DownloadListener &listener) noexcept {
@@ -195,8 +191,9 @@ public:
   void Enqueue(const char *uri, Path path_relative) noexcept {
     queue.emplace_back(uri, path_relative);
 
-    for (auto *listener : listeners)
+    listeners.ForEach([path_relative](auto *listener){
       listener->OnDownloadAdded(path_relative, -1, -1);
+    });
 
     if (!task)
       Start();
@@ -213,6 +210,7 @@ public:
          files */
 
       task.Cancel();
+      current_size = current_position = -1;
 
       if (!queue.empty())
         Start();
@@ -221,8 +219,9 @@ public:
       queue.erase(i);
     }
 
-    for (auto *listener : listeners)
+    listeners.ForEach([relative_path](auto *listener){
       listener->OnDownloadError(relative_path, {});
+    });
   }
 
 private:
@@ -231,19 +230,19 @@ private:
 
   /* methods from class ProgressListener */
   void SetProgressRange(unsigned range) noexcept override {
-    std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     current_size = range;
   }
 
   void SetProgressPosition(unsigned position) noexcept override {
-    std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     current_position = position;
   }
 };
 
 static Co::InvokeTask
 DownloadToFile(CurlGlobal &curl,
-               const char *url, const Path path,
+               const char *url, AllocatedPath path,
                std::array<std::byte, 32> *sha256,
                ProgressListener &progress)
 {
@@ -281,11 +280,13 @@ DownloadManagerThread::OnCompletion(std::exception_ptr error) noexcept
 
   if (error) {
     LogError(error);
-    for (auto *listener : listeners)
-      listener->OnDownloadError(path_relative, error);
+    listeners.ForEach([path=Path{path_relative}, &error](auto *listener){
+      listener->OnDownloadError(path, error);
+    });
   } else {
-    for (auto *listener : listeners)
-      listener->OnDownloadComplete(path_relative);
+    listeners.ForEach([path=Path{path_relative}](auto *listener){
+      listener->OnDownloadComplete(path);
+    });
   }
 
   // start the next download

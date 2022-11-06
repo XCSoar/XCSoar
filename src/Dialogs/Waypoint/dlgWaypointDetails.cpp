@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -46,7 +46,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "util/Compiler.h"
 #include "Language/Language.hpp"
 #include "Waypoint/LastUsed.hpp"
 #include "Profile/Current.hpp"
@@ -84,7 +83,7 @@ public:
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
                    unsigned idx) noexcept override;
 
-  bool CanActivateItem(gcc_unused unsigned index) const noexcept override {
+  bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
     return true;
   }
 
@@ -324,7 +323,7 @@ WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
 #ifdef HAVE_RUN_FILE
                                       TextRowRenderer &row_renderer,
 #endif
-                                      const Waypoint &waypoint) noexcept
+                                      [[maybe_unused]] const Waypoint &waypoint) noexcept
 {
   const unsigned width = rc.GetWidth(), height = rc.GetHeight();
   const unsigned button_height = ::Layout::GetMaximumControlHeight();
@@ -585,8 +584,8 @@ WaypointDetailsWidget::OnGotoClicked()
 }
 
 void
-WaypointDetailsWidget::OnImagePaint(gcc_unused Canvas &canvas,
-                                    gcc_unused const PixelRect &rc)
+WaypointDetailsWidget::OnImagePaint([[maybe_unused]] Canvas &canvas,
+                                    [[maybe_unused]] const PixelRect &rc)
 {
   canvas.ClearWhite();
   if (page >= 3 && page < 3 + (int)images.size()) {

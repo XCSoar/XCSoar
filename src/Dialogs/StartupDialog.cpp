@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -46,7 +46,7 @@ class LogoWindow final : public PaintWindow {
   LogoView logo;
 
 protected:
-  virtual void OnPaint(Canvas &canvas) override {
+  void OnPaint(Canvas &canvas) noexcept override {
     canvas.ClearWhite();
     logo.draw(canvas, GetClientRect());
   }
@@ -138,8 +138,8 @@ public:
 };
 
 static bool
-SelectProfileCallback(const TCHAR *caption, DataField &_df,
-                      const TCHAR *help_text)
+SelectProfileCallback([[maybe_unused]] const TCHAR *caption, [[maybe_unused]] DataField &_df,
+                      [[maybe_unused]] const TCHAR *help_text)
 {
   FileDataField &df = (FileDataField &)_df;
 
@@ -152,8 +152,8 @@ SelectProfileCallback(const TCHAR *caption, DataField &_df,
 }
 
 void
-StartupWidget::Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) noexcept
+StartupWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                       [[maybe_unused]] const PixelRect &rc) noexcept
 {
   auto *pe = Add(_("Profile"), nullptr, df);
   pe->SetEditCallback(SelectProfileCallback);

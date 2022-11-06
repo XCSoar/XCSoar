@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,6 +33,7 @@
 #include "util/ConvertString.hpp"
 #include "util/Macros.hpp"
 #include "util/PrintException.hxx"
+#include "util/StringAPI.hxx"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -92,11 +93,10 @@ TestFileImport()
 static void
 TestBuiltInPolars()
 {
-  for (auto item = PolarStore::cbegin(); item != PolarStore::cend(); item++ )
-  {
-    PolarInfo polar = item->ToPolarInfo();
+  for (const auto &i : PolarStore::GetAll()) {
+    PolarInfo polar = i.ToPolarInfo();
 
-    WideToUTF8Converter narrow(item->name);
+    WideToUTF8Converter narrow(i.name);
     ok(polar.IsValid(), narrow);
   }
 }
@@ -142,16 +142,25 @@ ValuePlausible(double ref, double used, double threshold = 0.05)
   return fabs(ref - used) < ref * threshold;
 }
 
+[[gnu::pure]]
+static auto
+GetPolarByName(const TCHAR *name) noexcept
+{
+  for (const auto &i : PolarStore::GetAll())
+    if (StringIsEqual(i.name, name))
+      return i.ToPolarInfo();
+
+  abort();
+}
+
 static void
 TestBuiltInPolarsPlausibility()
 {
   for(unsigned i = 0; i < ARRAY_SIZE(performanceData); i++) {
-    assert(i < PolarStore::Count());
     const TCHAR *si = performanceData[i].name;
     WideToUTF8Converter polarName(si);
-    PolarInfo polar = PolarStore::GetItem(polarName.c_str()).ToPolarInfo();
+    const auto polar = GetPolarByName(si);
     PolarCoefficients pc = polar.CalculateCoefficients();
-
 
     ok(pc.IsValid(), polarName);
 
@@ -184,9 +193,9 @@ TestBuiltInPolarsPlausibility()
   }
 }
 
-int main(int argc, char **argv)
+int main()
 try {
-  unsigned num_tests = 19 + 9 + PolarStore::Count();
+  unsigned num_tests = 19 + 9 + PolarStore::GetAll().size();
 
   // NOTE: Plausibility tests disabled for now since many fail
   if (0)

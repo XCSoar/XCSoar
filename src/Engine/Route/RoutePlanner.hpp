@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,8 +20,7 @@
 }
  */
 
-#ifndef ROUTE_PLANNER_HPP
-#define ROUTE_PLANNER_HPP
+#pragma once
 
 #include "RoutePolars.hpp"
 #include "Route.hpp"
@@ -29,7 +28,6 @@
 #include "AStar.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
 #include "Geo/SearchPointVector.hpp"
-#include "ReachFan.hpp"
 
 #include <utility>
 #include <unordered_set>
@@ -70,16 +68,8 @@ class GlidePolar;
  * Failures of the solver result in the route reverting to direct flight from
  * origin to destination.
  *
- * This class has built-in support for terrain avoidance.  TerrainRoute
- * implements the pure abstract methods required for a minimal terrain avoidance
- * path planner.
- *
  * See AirspaceRoute for an extension of RoutePlanner which avoids terrain as
  * well as airspace.
- *
- * Since this class calls RasterMap functions repeatedly, rather than acquiring
- * and releasing locks each time, we assume the hookup to the main program
- * (RoutePlannerGlue) is responsible for locking the RasterMap on solve() calls.
  */
 class RoutePlanner {
   struct RoutePointHasher {
@@ -106,12 +96,6 @@ protected:
   FlatProjection projection;
   /** Aircraft performance model for route calculations */
   RoutePolars rpolars_route;
-  /** Aircraft performance model for reach to terrain */
-  RoutePolars rpolars_reach;
-  /** Aircraft performance model for reach to working floor */
-  RoutePolars rpolars_reach_working;
-  /** Terrain raster */
-  const RasterMap *terrain = nullptr;
   /** Minimum height scanned during solution (m) */
   int h_min;
   /** Maxmimum height scanned during solution (m) */
@@ -143,11 +127,6 @@ private:
   /** Destination at last call to solve() */
   AFlatGeoPoint destination_last;
 
-  ReachFan reach_terrain;
-  ReachFan reach_working;
-
-  RoutePlannerConfig::Polar reach_polar_mode = RoutePlannerConfig::Polar::TASK;
-
   mutable unsigned long count_dij;
   mutable unsigned long count_unique;
   mutable unsigned long count_supressed;
@@ -168,23 +147,6 @@ public:
   RoutePlanner() noexcept;
 
   /**
-   * Set terrain database
-   * @param terrain RasterMap to be used for terrain intersection tests
-   */
-  void SetTerrain(const RasterMap *_terrain) noexcept {
-    terrain = _terrain;
-  }
-
-  bool IsTerrainReachEmpty() const noexcept {
-    return reach_terrain.IsEmpty();
-  }
-
-  /**
-   * Delete all reach fans.
-   */
-  void ClearReach() noexcept;
-
-  /**
    * Find the optimal path.  Works in reverse time order, from the
    * origin (where you want to fly to) back to the destination (where you
    * are now).
@@ -201,37 +163,6 @@ public:
              int h_ceiling = INT_MAX) noexcept;
 
   /**
-   * Solve reach footprint to terrain
-   *
-   * @param origin The start of the search (current aircraft location)
-   * @param do_solve actually solve or just perform minimal calculations
-   *
-   * @return True if reach was scanned
-   */
-  bool SolveReachTerrain(const AGeoPoint &origin, const RoutePlannerConfig &config,
-                         int h_ceiling, bool do_solve=true) noexcept;
-
-  /**
-   * Solve reach footprint to working height
-   *
-   * @param origin The start of the search (current aircraft location)
-   * @param do_solve actually solve or just perform minimal calculations
-   *
-   * @return True if reach was scanned
-   */
-  bool SolveReachWorking(const AGeoPoint &origin, const RoutePlannerConfig &config,
-                         int h_ceiling, bool do_solve=true) noexcept;
-
-  const FlatProjection &GetTerrainReachProjection() const noexcept {
-    return reach_terrain.GetProjection();
-  }
-
-  /** Visit reach (working or terrain reach) */
-  void AcceptInRange(const GeoBounds &bounds,
-                     FlatTriangleFanVisitor &visitor,
-                     bool working) const noexcept;
-
-  /**
    * Retrieve current solution.  If solver failed previously,
    * direct flight from origin to destination is produced.
    */
@@ -243,51 +174,16 @@ public:
    * Update aircraft performance model used for path planning.
    *
    * @param polar Glide performance model used for route planning
-   * @param polar Glide performance model used for reach planning
    * @param wind Wind estimate
    * @param height_min_working Minimum working height (m)
    */
   void UpdatePolar(const GlideSettings &settings,
                    const RoutePlannerConfig &config,
-                   const GlidePolar &polar, const GlidePolar &safety_polar,
-                   const SpeedVector &wind,
-                   const int height_min_working=0) noexcept;
+                   const GlidePolar &polar,
+                   const SpeedVector &wind) noexcept;
 
   /** Reset the optimiser as if never flown and clear temporary buffers. */
   virtual void Reset() noexcept;
-
-  /**
-   * Determine if intersection with terrain occurs in forwards direction from
-   * origin to destination, with cruise-climb and glide segments.
-   *
-   * @param origin Aircraft location
-   * @param destination Target
-   * @param intx First intercept point
-   *
-   * @return location of intersection, or GeoPoint::Invalid() if none
-   * was found
-   */
-  [[gnu::pure]]
-  GeoPoint Intersection(const AGeoPoint &origin,
-                        const AGeoPoint &destination) const noexcept;
-
-  /**
-   * Find arrival height at destination.
-   *
-   * Requires solve_reach() to have been called for positive results.
-   *
-   * @param dest Destination location
-   * @param arrival_height_reach height at arrival (terrain reach) or -1 if out of reach
-   * @param arrival_height_direct height at arrival (pure glide reach) or -1 if out of reach
-   *
-   * @return true if check was successful
-   */
-  [[gnu::pure]]
-  std::optional<ReachResult> FindPositiveArrival(const AGeoPoint &dest) const noexcept;
-
-  int GetTerrainBase() const noexcept {
-    return reach_terrain.GetTerrainBase();
-  }
 
 protected:
   /**
@@ -347,31 +243,7 @@ protected:
    */
   bool IsSetUnique(const RouteLinkBase &e) noexcept;
 
-  /**
-   * Given a desired path e, and a clearance point, generate candidates directly
-   * to the clearance point and to either side.  This method excludes points
-   * inside the convex hull of points already visited, so it eliminates
-   * backtracking and redundancy.
-   *
-   * @param inx Clearance point from last check
-   * @param e Link that was attempted
-   */
-  void AddNearbyTerrain(const RoutePoint &inx, const RouteLink &e) noexcept;
-
-  /**
-   * Check whether a desired link may be flown without intersecting with
-   * terrain.  If it does, find also the first location that is clear to
-   * the destination.
-   *
-   * @param e Link to attempt
-   *
-   * @return std::nullopt if path is clear or clearance point if
-   * intersection occurs
-   */
-  [[gnu::pure]]
-  std::optional<RoutePoint> CheckClearanceTerrain(const RouteLink &e) const noexcept;
-
-private:
+protected:
   /**
    * Check a second category of obstacle clearance.  This allows compound
    * obstacle categories by subclasses.
@@ -381,7 +253,7 @@ private:
    * @return True if path is clear
    */
   [[gnu::pure]]
-  virtual bool CheckSecondary(const RouteLink &e) noexcept {
+  virtual bool CheckSecondary([[maybe_unused]] const RouteLink &e) noexcept {
     return true;
   }
 
@@ -416,19 +288,7 @@ private:
   virtual void OnSolve(const AGeoPoint &origin,
                        const AGeoPoint &destination) noexcept;
 
-  /**
-   * Generate a candidate to left or right of the clearance point, unless:
-   * - it is too short
-   * - the candidate is more than 90 degrees from the target
-   * - the candidate is inside the search area so far
-   *
-   * @param p Clearance point
-   * @param c_link Attempted path
-   * @param sign +1 for left, -1 for right
-   */
-  void AddNearbyTerrainSweep(const RoutePoint& p, const RouteLink &c_link,
-                             int sign) noexcept;
-
+private:
   /**
    * For a link known to not clear obstacles, generate whatever candidate edges
    * are required to attempt to avoid the obstacles or at least to continue searching.
@@ -437,6 +297,7 @@ private:
    */
   void AddEdges(const RouteLink &e) noexcept;
 
+protected:
   /**
    * Test whether a candidate destination is inside the area already searched
    * or if it would extend the search area.
@@ -448,6 +309,7 @@ private:
   [[gnu::pure]]
   bool IsHullExtended(const RoutePoint &p) noexcept;
 
+private:
   /**
    * Backtrack solution from A* internal structure to construct a
    * Route.
@@ -460,5 +322,3 @@ private:
   unsigned FindSolution(const RoutePoint &final_point,
                         Route &this_route) const noexcept;
 };
-
-#endif

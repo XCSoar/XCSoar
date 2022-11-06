@@ -36,7 +36,7 @@ MakeTemporaryPath(Path path) noexcept
 #ifdef HAVE_POSIX
   return path + _T(".tmp");
 #else
-  return path.WithExtension(_T(".tmp"));
+  return path.WithSuffix(_T(".tmp"));
 #endif
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009-2016 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2009-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef THREAD_MUTEX_HXX
-#define THREAD_MUTEX_HXX
+#pragma once
 
 #include <mutex>
 
@@ -36,10 +35,12 @@
 
 #include "CriticalSection.hxx"
 using Mutex = CriticalSection;
+using RecursiveMutex = CriticalSection;
 
 #else
 
 using Mutex = std::mutex;
+using RecursiveMutex = std::recursive_mutex;
 
 #endif
 
@@ -62,5 +63,3 @@ public:
 	ScopeUnlock(const ScopeUnlock &other) = delete;
 	ScopeUnlock &operator=(const ScopeUnlock &other) = delete;
 };
-
-#endif

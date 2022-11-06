@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -222,11 +222,11 @@ public:
                    unsigned idx) noexcept override;
 
   /* virtual methods from class ListCursorHandler */
-  bool CanActivateItem(unsigned index) const noexcept override {
+  bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
     return true;
   }
 
-  void OnActivateItem(unsigned index) noexcept override {
+  void OnActivateItem([[maybe_unused]] unsigned index) noexcept override {
     Download();
   }
 
@@ -266,7 +266,7 @@ void
 DownloadFilePickerWidget::RefreshList()
 try {
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     repository_modified = false;
     repository_failed = false;
   }
@@ -329,9 +329,9 @@ DownloadFilePickerWidget::Download()
 }
 
 void
-DownloadFilePickerWidget::OnDownloadAdded(Path path_relative,
-                                          int64_t size,
-                                          int64_t position) noexcept
+DownloadFilePickerWidget::OnDownloadAdded([[maybe_unused]] Path path_relative,
+                                          [[maybe_unused]] int64_t size,
+                                          [[maybe_unused]] int64_t position) noexcept
 {
 }
 
@@ -343,7 +343,7 @@ DownloadFilePickerWidget::OnDownloadComplete(Path path_relative) noexcept
     return;
 
   if (name == Path(_T("repository"))) {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     repository_failed = false;
     repository_modified = true;
   }
@@ -360,7 +360,7 @@ DownloadFilePickerWidget::OnDownloadError(Path path_relative,
     return;
 
   if (name == Path(_T("repository"))) {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     repository_failed = true;
     repository_error = std::move(error);
   }
@@ -375,7 +375,7 @@ DownloadFilePickerWidget::OnDownloadCompleteNotification() noexcept
   std::exception_ptr repository_error2;
 
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     repository_modified2 = std::exchange(repository_modified, false);
     repository_failed2 = std::exchange(repository_failed, false);
     repository_error2 = std::move(repository_error);

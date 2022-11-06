@@ -1,4 +1,82 @@
-Version 7.24 - not yet released
+Version 7.29 - not yet released
+* data files
+  - reject implausible runway lengths in CUP files
+  - fix crash when arc airspace has no center
+
+Version 7.28 - 2022/10/29
+* data files
+  - fix crash after loading new map file
+  - fix AAT OZ angles in tasks loaded from CUP files
+* map display
+  - fix terrain reach display
+* user interface
+  - fix task manager crash bug
+  - fix WeGlide 'Automatic Upload' not persistent
+  - file manager, show description and update date
+  - ATC Radial infobox can display magnetic radial with configurable declination
+  - fix wrong type in waypoint editor
+* waypoint editor
+  - add more SeeYou waypoint types
+* Android
+  - add SoftRF Balkan and Prime Mk3 into 'white list' of USB devices
+* Kobo
+  - Add support for Libra 2
+
+Version 7.27 - 2022/09/23
+* user interface
+  - vertical scroll bar in some modal dialogs
+  - rasp sources from repository
+  - fix file manager crash
+* devices
+  - FLARM: fix crash bug
+* weather
+  - New Rasp Color schemes for Thermalmap
+  - Support 15 minute intervals in RASP files
+* task
+  - add WeGlide declared task download
+* Android
+  - allow file explorer to access the XCSoar data files
+* Polars
+  - add JS-1B (18m) polar
+  - add JS-1C (21m) polar
+  - add JS-3 (15m) polar
+  - add JS-3 (18m) polar
+* fix IGC logger crash on I/O errors
+
+Version 7.26 - 2022/09/03
+* user interface
+  - fix pressed InfoBox colors in inverted mode
+* task
+  - add custom keyhole support
+* Android
+  - improve native serial port enumeration
+  - fix UsbSerial/FTDI crash bug
+  - fix UsbSerial/FT4232 data corruption
+* Kobo
+  - fix crash bug
+
+Version 7.25 - 2022/08/24
+* stricter airspace parser
+* user interface
+  - add radio frequency buttons to airspace dialogs
+  - fix the airspace warning "Enable" button
+  - fix thermalmap.info icon display
+  - show thermalmap.info thermals in the map item list dialog
+* devices
+  - IMI: fix task declaration bug
+* Android
+  - prompt before deleting data when uninstalling XCSoar
+  - support USB serial adapters with more than one port
+  - support multiple USB serial adapters of the same kind
+  - auto-start XCSoar when USB serial adapter gets connected
+  - fix crash when GPS access was rejected by user
+  - fix deadlock while quitting XCSoar
+  - add U-BLOX 7 USB GPS into 'white list' of USB devices
+* Kobo
+  - display XCSoarData/kobo/poweroff.txt at the bottom
+  - fix crash in waypoint dialog
+
+Version 7.24 - 2022/07/22
 * user interface
   - padding in fields
   - rework menu labels
@@ -15,6 +93,7 @@ Version 7.24 - not yet released
   - menu: fix bogus clicks after returning from XCSoar
 * Android
   - add SoftRF Lego into 'white list' of USB devices
+  - disable background location again to go back to Google Play
 * calculations
   - support for LVZC Charron contest
   - new asw27 polar from idaflieg

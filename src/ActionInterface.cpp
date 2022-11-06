@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,6 +30,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Components.hpp"
 #include "FLARM/Glue.hpp"
+#include "Device/MultipleDevices.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "CalculationThread.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -40,14 +41,15 @@ Copyright_License {
 using namespace CommonInterface;
 
 namespace ActionInterface {
-  static void SendGetComputerSettings();
+static void
+SendGetComputerSettings() noexcept;
 }
 
 void
-XCSoarInterface::ReceiveGPS()
+XCSoarInterface::ReceiveGPS() noexcept
 {
   {
-    std::lock_guard<Mutex> lock(device_blackboard->mutex);
+    const std::lock_guard lock{device_blackboard->mutex};
 
     ReadBlackboardBasic(device_blackboard->Basic());
 
@@ -64,10 +66,10 @@ XCSoarInterface::ReceiveGPS()
 }
 
 void
-XCSoarInterface::ReceiveCalculated()
+XCSoarInterface::ReceiveCalculated() noexcept
 {
   {
-    std::lock_guard<Mutex> lock(device_blackboard->mutex);
+    const std::lock_guard lock{device_blackboard->mutex};
 
     ReadBlackboardCalculated(device_blackboard->Calculated());
     device_blackboard->ReadComputerSettings(GetComputerSettings());
@@ -77,7 +79,7 @@ XCSoarInterface::ReceiveCalculated()
 }
 
 void
-XCSoarInterface::ExchangeBlackboard()
+XCSoarInterface::ExchangeBlackboard() noexcept
 {
   ExchangeDeviceBlackboard();
   ActionInterface::SendGetComputerSettings();
@@ -85,15 +87,15 @@ XCSoarInterface::ExchangeBlackboard()
 }
 
 void
-XCSoarInterface::ExchangeDeviceBlackboard()
+XCSoarInterface::ExchangeDeviceBlackboard() noexcept
 {
-  std::lock_guard<Mutex> lock(device_blackboard->mutex);
+  const std::lock_guard lock{device_blackboard->mutex};
 
   device_blackboard->ReadComputerSettings(GetComputerSettings());
 }
 
 void
-ActionInterface::SendGetComputerSettings()
+ActionInterface::SendGetComputerSettings() noexcept
 {
   assert(calculation_thread != nullptr);
 
@@ -104,7 +106,7 @@ ActionInterface::SendGetComputerSettings()
 }
 
 void
-ActionInterface::SetBallast(double ballast, bool to_devices)
+ActionInterface::SetBallast(double ballast, bool to_devices) noexcept
 {
   // write ballast into settings
   GlidePolar &polar = SetComputerSettings().polar.glide_polar_task;
@@ -128,13 +130,13 @@ ActionInterface::SetBallast(double ballast, bool to_devices)
         dry_mass;
 
       MessageOperationEnvironment env;
-      device_blackboard->SetBallast(ballast, overload, env);
+      devices->PutBallast(ballast, overload, env);
     }
   }
 }
 
 void
-ActionInterface::SetBugs(double bugs, bool to_devices)
+ActionInterface::SetBugs(double bugs, bool to_devices) noexcept
 {
   // Write Bugs into settings
   CommonInterface::SetComputerSettings().polar.SetBugs(bugs);
@@ -152,12 +154,12 @@ ActionInterface::SetBugs(double bugs, bool to_devices)
   // send to external devices
   if (to_devices) {
     MessageOperationEnvironment env;
-    device_blackboard->SetBugs(bugs, env);
+    devices->PutBugs(bugs, env);
   }
 }
 
 void
-ActionInterface::SetMacCready(double mc, bool to_devices)
+ActionInterface::SetMacCready(double mc, bool to_devices) noexcept
 {
   // Repeated adjustment of MC with the +/- UI elements could result in
   // an MC which is slightly larger than 0. Since the calculations
@@ -189,11 +191,11 @@ ActionInterface::SetMacCready(double mc, bool to_devices)
 
   if (to_devices) {
     MessageOperationEnvironment env;
-    device_blackboard->SetMC(mc, env);
+    devices->PutMacCready(mc, env);
   }
 }
 
-void ActionInterface::SetManualMacCready(double mc, bool to_devices)
+void ActionInterface::SetManualMacCready(double mc, bool to_devices) noexcept
 {
   TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
   if (task_behaviour.auto_mc) {
@@ -205,7 +207,7 @@ void ActionInterface::SetManualMacCready(double mc, bool to_devices)
 }
 
 void
-ActionInterface::OffsetManualMacCready(double offset, bool to_devices)
+ActionInterface::OffsetManualMacCready(double offset, bool to_devices) noexcept
 {
   const GlidePolar &polar = GetComputerSettings().polar.glide_polar_task;
   const auto old_mc = polar.GetMC();
@@ -220,7 +222,7 @@ ActionInterface::OffsetManualMacCready(double offset, bool to_devices)
 }
 
 void
-ActionInterface::SendMapSettings(const bool trigger_draw)
+ActionInterface::SendMapSettings(const bool trigger_draw) noexcept
 {
   if (trigger_draw) {
     main_window->UpdateGaugeVisibility();
@@ -242,7 +244,7 @@ ActionInterface::SendMapSettings(const bool trigger_draw)
 }
 
 void
-ActionInterface::SendUIState(const bool trigger_draw)
+ActionInterface::SendUIState(const bool trigger_draw) noexcept
 {
   main_window->SetUIState(GetUIState());
 
@@ -250,7 +252,7 @@ ActionInterface::SendUIState(const bool trigger_draw)
     main_window->FullRedraw();
 }
 
-gcc_pure
+[[gnu::pure]]
 static unsigned
 GetPanelIndex(const UIState &ui_state)
 {
@@ -269,7 +271,7 @@ GetPanelIndex(const UIState &ui_state)
 }
 
 void
-ActionInterface::UpdateDisplayMode()
+ActionInterface::UpdateDisplayMode() noexcept
 {
   UIState &state = SetUIState();
   const UISettings &settings = GetUISettings();
@@ -283,7 +285,7 @@ ActionInterface::UpdateDisplayMode()
 }
 
 void
-ActionInterface::SendUIState()
+ActionInterface::SendUIState() noexcept
 {
   /* force-update all InfoBoxes just in case the display mode has
      changed */
@@ -294,7 +296,9 @@ ActionInterface::SendUIState()
 }
 
 void
-ActionInterface::SetActiveFrequency(const RadioFrequency & freq, const TCHAR * freq_name, bool to_devices)
+ActionInterface::SetActiveFrequency(const RadioFrequency freq,
+                                    const TCHAR *freq_name,
+                                    bool to_devices) noexcept
 {
   /* update interface settings */
 
@@ -314,12 +318,14 @@ ActionInterface::SetActiveFrequency(const RadioFrequency & freq, const TCHAR * f
 
   if (to_devices) {
     MessageOperationEnvironment env;
-    device_blackboard->SetActiveFrequency(freq, freq_name, env);
+    devices->PutActiveFrequency(freq, freq_name, env);
   }
 }
 
 void
-ActionInterface::SetStandbyFrequency(const RadioFrequency & freq, const TCHAR * freq_name, bool to_devices)
+ActionInterface::SetStandbyFrequency(const RadioFrequency freq,
+                                     const TCHAR *freq_name,
+                                     bool to_devices) noexcept
 {
   /* update interface settings */
 
@@ -339,11 +345,13 @@ ActionInterface::SetStandbyFrequency(const RadioFrequency & freq, const TCHAR * 
 
   if (to_devices) {
     MessageOperationEnvironment env;
-    device_blackboard->SetStandbyFrequency(freq, freq_name, env);
+    devices->PutStandbyFrequency(freq, freq_name, env);
   }
 }
 
-void ActionInterface::OffsetActiveFrequency(double offset_khz, bool to_devices)
+void
+ActionInterface::OffsetActiveFrequency(double offset_khz,
+                                       bool to_devices) noexcept
 {
   RadioFrequency new_active_freq = SetComputerSettings().radio.active_frequency;
   if(new_active_freq.IsDefined()) {
@@ -354,7 +362,9 @@ void ActionInterface::OffsetActiveFrequency(double offset_khz, bool to_devices)
   }
 }
 
-void ActionInterface::OffsetStandbyFrequency(double offset_khz, bool to_devices)
+void
+ActionInterface::OffsetStandbyFrequency(double offset_khz,
+                                        bool to_devices) noexcept
 {
   RadioFrequency new_standby_freq = SetComputerSettings().radio.standby_frequency;
   if(new_standby_freq.IsDefined()) {
@@ -365,7 +375,8 @@ void ActionInterface::OffsetStandbyFrequency(double offset_khz, bool to_devices)
   }
 }
 
-void ActionInterface::ExchangeRadioFrequencies(bool to_devices)
+void
+ActionInterface::ExchangeRadioFrequencies(bool to_devices) noexcept
 {
   const auto radio_settings = SetComputerSettings().radio;
 

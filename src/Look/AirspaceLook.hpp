@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_AIRSPACE_LOOK_HPP
-#define XCSOAR_AIRSPACE_LOOK_HPP
+#pragma once
 
 #include "ui/canvas/Pen.hpp"
 #include "ui/canvas/Brush.hpp"
@@ -30,8 +29,8 @@ Copyright_License {
 #include "ui/canvas/Features.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
 
-#define NUMAIRSPACECOLORS 16
-#define NUMAIRSPACEBRUSHES 8
+static constexpr unsigned NUMAIRSPACECOLORS = 16;
+static constexpr unsigned NUMAIRSPACEBRUSHES = 8;
 
 struct AirspaceRendererSettings;
 struct AirspaceClassRendererSettings;
@@ -83,5 +82,3 @@ struct AirspaceLook {
 
   void Reinitialise(const AirspaceRendererSettings &settings);
 };
-
-#endif

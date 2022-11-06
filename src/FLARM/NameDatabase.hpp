@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,13 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_NAME_DATABASE_HPP
-#define XCSOAR_FLARM_NAME_DATABASE_HPP
+#pragma once
 
 #include "util/StaticString.hxx"
 #include "util/StaticArray.hxx"
 #include "FlarmId.hpp"
-#include "util/Compiler.h"
 
 #include <cassert>
 #include <tchar.h>
@@ -39,34 +37,34 @@ public:
     StaticString<21> name;
 
     Record() = default;
-    Record(FlarmId _id, const TCHAR *_name)
+    Record(FlarmId _id, const TCHAR *_name) noexcept
       :id(_id), name(_name) {}
   };
 
 private:
-  typedef StaticArray<Record, 200> Array;
-  typedef Array::iterator iterator;
+  using Array = StaticArray<Record, 200>;
+  using iterator = Array::iterator;
 
   Array data;
 
 public:
-  typedef Array::const_iterator const_iterator;
+  using const_iterator = Array::const_iterator;
 
-  gcc_pure
-  const_iterator begin() const {
+  [[gnu::pure]]
+  const_iterator begin() const noexcept {
     return data.begin();
   }
 
-  gcc_pure
-  const_iterator end() const {
+  [[gnu::pure]]
+  const_iterator end() const noexcept {
     return data.end();
   }
 
-  gcc_pure
-  const TCHAR *Get(FlarmId id) const;
+  [[gnu::pure]]
+  const TCHAR *Get(FlarmId id) const noexcept;
 
-  gcc_pure
-  FlarmId Get(const TCHAR *name) const;
+  [[gnu::pure]]
+  FlarmId Get(const TCHAR *name) const noexcept;
 
   /**
    * Look up all records with the specified name.
@@ -74,16 +72,15 @@ public:
    * @param max the maximum size of the given buffer
    * @return the number of items copied to the given buffer
    */
-  unsigned Get(const TCHAR *name, FlarmId *buffer, unsigned max) const;
+  unsigned Get(const TCHAR *name,
+               FlarmId *buffer, unsigned max) const noexcept;
 
-  bool Set(FlarmId id, const TCHAR *name);
+  bool Set(FlarmId id, const TCHAR *name) noexcept;
 
 protected:
-  gcc_pure
-  int Find(FlarmId id) const;
+  [[gnu::pure]]
+  int Find(FlarmId id) const noexcept;
 
-  gcc_pure
-  int Find(const TCHAR *name) const;
+  [[gnu::pure]]
+  int Find(const TCHAR *name) const noexcept;
 };
-
-#endif

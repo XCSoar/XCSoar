@@ -26,10 +26,8 @@
 #include "NMEA/Info.hpp"
 #include "Language/Language.hpp"
 #include "Dialogs/Message.hpp"
-#include "LogFile.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Asset.hpp"
 #include "Computer/Settings.hpp"
 
 void
@@ -38,19 +36,15 @@ Logger::LogPoint(const NMEAInfo &gps_info)
   // don't hold up the calculation thread if it's locked
   // by another process (most likely the logger gui message)
 
-  if (lock.try_lock()) {
-    logger.LogPoint(gps_info);
-    lock.unlock();
-  }
+  const std::lock_guard protect{lock};
+  logger.LogPoint(gps_info);
 }
 
 void
 Logger::LogEvent(const NMEAInfo &gps_info, const char* event)
 {
-  if (lock.try_lock()) {
-    logger.LogEvent(gps_info, event);
-    lock.unlock();
-  }
+  const std::lock_guard protect{lock};
+  logger.LogEvent(gps_info, event);
 }
 
 void
@@ -74,7 +68,7 @@ Logger::LogPilotEvent(const NMEAInfo &gps_info)
 bool
 Logger::IsLoggerActive() const noexcept
 {
-  const std::shared_lock<SharedMutex> protect(lock);
+  const std::lock_guard protect{lock};
   return logger.IsActive();
 }
 
@@ -112,8 +106,8 @@ Logger::GUIStartLogger(const NMEAInfo& gps_info,
     }
   }
 
-  const std::lock_guard<SharedMutex> protect(lock);
-  logger.StartLogger(gps_info, settings.logger, asset_number, decl);
+  const std::lock_guard protect{lock};
+  logger.StartLogger(gps_info, settings.logger, _T(""), decl);
 }
 
 void
@@ -137,7 +131,7 @@ Logger::GUIStopLogger(const NMEAInfo &gps_info,
 
   if (noAsk || (ShowMessageBox(_("Stop Logger"), _("Stop Logger"),
                             MB_YESNO | MB_ICONQUESTION) == IDYES)) {
-    const std::lock_guard<SharedMutex> protect(lock);
+    const std::lock_guard protect{lock};
     logger.StopLogger(gps_info);
   }
 }
@@ -145,13 +139,13 @@ Logger::GUIStopLogger(const NMEAInfo &gps_info,
 void
 Logger::LoggerNote(const TCHAR *text)
 {
-  const std::lock_guard<SharedMutex> protect(lock);
+  const std::lock_guard protect{lock};
   logger.LoggerNote(text);
 }
 
 void
 Logger::ClearBuffer() noexcept
 {
-  const std::lock_guard<SharedMutex> protect(lock);
+  const std::lock_guard protect{lock};
   logger.ClearBuffer();
 }

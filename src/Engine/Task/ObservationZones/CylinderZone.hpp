@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@
 }
 */
 
-#ifndef CYLINDERZONE_HPP
-#define CYLINDERZONE_HPP
+#pragma once
 
 #include "ObservationZonePoint.hpp"
 
@@ -40,22 +39,21 @@ class CylinderZone : public ObservationZonePoint
 public:
   static constexpr double MAT_RADIUS = 1609.344;
 
-protected:
-  CylinderZone(Shape _shape, bool _can_start_through_top,
-               const GeoPoint &loc,
-               const double _radius = 10000.0)
+  constexpr CylinderZone(Shape _shape, bool _can_start_through_top,
+                         const GeoPoint &loc,
+                         const double _radius = 10000.0) noexcept
     :ObservationZonePoint(_shape, _can_start_through_top, loc),
      radius(_radius) {
     assert(radius > 0);
   }
 
-  CylinderZone(const CylinderZone &other, const GeoPoint &reference)
+  constexpr CylinderZone(const CylinderZone &other,
+                         const GeoPoint &reference) noexcept
     :ObservationZonePoint((const ObservationZonePoint &)other, reference),
      radius(other.radius) {
     assert(radius > 0);
   }
 
-public:
   /**
    * Constructor.
    *
@@ -64,15 +62,15 @@ public:
    *
    * @return Initialised object
    */
-  CylinderZone(const GeoPoint &loc, const double _radius = 10000.0)
+  constexpr CylinderZone(const GeoPoint &loc, const double _radius = 10000.0) noexcept
     :ObservationZonePoint(Shape::CYLINDER, true, loc), radius(_radius) {
     assert(radius > 0);
   }
 
   static auto CreateMatCylinderZone(const GeoPoint &loc) noexcept {
-    return std::unique_ptr<CylinderZone>{new CylinderZone(Shape::MAT_CYLINDER,
-                                                          true, loc,
-                                                          MAT_RADIUS)};
+    return std::make_unique<CylinderZone>(Shape::MAT_CYLINDER,
+                                          true, loc,
+                                          MAT_RADIUS);
   }
 
   /**
@@ -80,7 +78,7 @@ public:
    *
    * @param new_radius Radius (m) of cylinder
    */
-  virtual void SetRadius(double new_radius) {
+  virtual void SetRadius(double new_radius) noexcept {
     assert(new_radius > 0);
     radius = new_radius;
   }
@@ -90,30 +88,28 @@ public:
    *
    * @return Radius (m) of cylinder
    */
-  double GetRadius() const {
+  double GetRadius() const noexcept {
     return radius;
   }
 
   /* virtual methods from class ObservationZone */
-  bool IsInSector(const GeoPoint &location) const override {
+  bool IsInSector(const GeoPoint &location) const noexcept override {
     return DistanceTo(location) <= radius;
   }
 
   bool TransitionConstraint([[maybe_unused]] const GeoPoint &location,
-                            [[maybe_unused]] const GeoPoint &last_location) const override {
+                            [[maybe_unused]] const GeoPoint &last_location) const noexcept override {
     return true;
   }
 
-  OZBoundary GetBoundary() const override;
-  double ScoreAdjustment() const override;
+  OZBoundary GetBoundary() const noexcept override;
+  double ScoreAdjustment() const noexcept override;
 
   /* virtual methods from class ObservationZonePoint */
-  bool Equals(const ObservationZonePoint &other) const override;
-  GeoPoint GetRandomPointInSector(const double mag) const override;
+  bool Equals(const ObservationZonePoint &other) const noexcept override;
+  GeoPoint GetRandomPointInSector(const double mag) const noexcept override;
 
   std::unique_ptr<ObservationZonePoint> Clone(const GeoPoint &_reference) const noexcept override {
-    return std::unique_ptr<ObservationZonePoint>{new CylinderZone(*this, _reference)};
+    return std::make_unique<CylinderZone>(*this, _reference);
   }
 };
-
-#endif

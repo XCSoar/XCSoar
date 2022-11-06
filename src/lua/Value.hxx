@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2017-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LUA_VALUE_HXX
-#define LUA_VALUE_HXX
+#pragma once
 
 #include "Util.hxx"
 
@@ -93,7 +92,7 @@ public:
 		Push(L);
 	}
 
-	lua_State *GetState() const {
+	lua_State *GetState() const noexcept {
 		return L;
 	}
 };
@@ -109,5 +108,3 @@ Value::Value(const Value &src)
 	:Value(src.L, src) {}
 
 }
-
-#endif

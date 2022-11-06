@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FORM_CHECK_BOX_HPP
-#define XCSOAR_FORM_CHECK_BOX_HPP
+#pragma once
 
 #include "ui/window/PaintWindow.hpp"
 #include "util/tstring.hpp"
@@ -74,18 +73,16 @@ public:
 protected:
   void SetPressed(bool value);
 
-  virtual bool OnClicked();
+  virtual bool OnClicked() noexcept;
 
   /* virtual methods from class Window */
-  bool OnKeyCheck(unsigned key_code) const override;
-  bool OnKeyDown(unsigned key_code) override;
-  bool OnMouseMove(PixelPoint p, unsigned keys) override;
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnMouseUp(PixelPoint p) override;
-  void OnSetFocus() override;
-  void OnKillFocus() override;
-  void OnCancelMode() override;
-  void OnPaint(Canvas &canvas) override;
+  bool OnKeyCheck(unsigned key_code) const noexcept override;
+  bool OnKeyDown(unsigned key_code) noexcept override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  void OnSetFocus() noexcept override;
+  void OnKillFocus() noexcept override;
+  void OnCancelMode() noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };
-
-#endif

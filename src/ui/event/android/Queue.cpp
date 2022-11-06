@@ -28,7 +28,7 @@ namespace UI {
 void
 EventQueue::Inject(const Event &event) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   if (quit)
     return;
 
@@ -39,7 +39,7 @@ EventQueue::Inject(const Event &event) noexcept
 bool
 EventQueue::Pop(Event &event) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   if (quit || events.empty())
     return false;
 
@@ -64,7 +64,7 @@ EventQueue::Generate(Event &event) noexcept
 bool
 EventQueue::Wait(Event &event) noexcept
 {
-  std::unique_lock<Mutex> lock(mutex);
+  std::unique_lock lock{mutex};
   if (quit)
     return false;
 
@@ -93,7 +93,7 @@ void
 EventQueue::Purge(bool (*match)(const Event &event, void *ctx) noexcept,
                   void *ctx) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   size_t n = events.size();
   while (n-- > 0) {
     if (!match(events.front(), ctx))
@@ -133,7 +133,7 @@ EventQueue::Purge(Event::Callback callback, void *ctx) noexcept
 void
 EventQueue::AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   timers.Add(timer, SteadyNow() + d);
 
@@ -143,7 +143,7 @@ EventQueue::AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexce
 void
 EventQueue::CancelTimer(Timer &timer) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   timers.Cancel(timer);
 }

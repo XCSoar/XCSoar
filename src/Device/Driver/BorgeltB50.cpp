@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -154,7 +154,7 @@ B50Device::PutBugs(double bugs, OperationEnvironment &env)
 }
 
 bool
-B50Device::PutBallast(double fraction, gcc_unused double overload,
+B50Device::PutBallast(double fraction, [[maybe_unused]] double overload,
                       OperationEnvironment &env)
 {
   /* the Borgelt B800 understands the CAI302 "!g" command for
@@ -164,7 +164,7 @@ B50Device::PutBallast(double fraction, gcc_unused double overload,
 }
 
 static Device *
-B50CreateOnPort(const DeviceConfig &config, Port &com_port)
+B50CreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 {
   return new B50Device(com_port);
 }

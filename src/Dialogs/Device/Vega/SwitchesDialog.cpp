@@ -32,27 +32,27 @@ Copyright_License {
 #include "Form/DataField/Enum.hpp"
 
 static constexpr StaticEnumChoice flap_position_list[] = {
-  { (unsigned)SwitchState::FlapPosition::UNKNOWN, N_("Unknown") },
-  { (unsigned)SwitchState::FlapPosition::POSITIVE, N_("Positive") },
-  { (unsigned)SwitchState::FlapPosition::NEUTRAL, N_("Neutral") },
-  { (unsigned)SwitchState::FlapPosition::NEGATIVE, N_("Negative") },
-  { (unsigned)SwitchState::FlapPosition::LANDING, N_("Landing") },
-  { 0 }
+  { SwitchState::FlapPosition::UNKNOWN, N_("Unknown") },
+  { SwitchState::FlapPosition::POSITIVE, N_("Positive") },
+  { SwitchState::FlapPosition::NEUTRAL, N_("Neutral") },
+  { SwitchState::FlapPosition::NEGATIVE, N_("Negative") },
+  { SwitchState::FlapPosition::LANDING, N_("Landing") },
+  nullptr
 };
 
 static constexpr StaticEnumChoice user_switch_list[] = {
-  { (unsigned)SwitchState::UserSwitch::UNKNOWN, N_("Unknown") },
-  { (unsigned)SwitchState::UserSwitch::UP, N_("Up") },
-  { (unsigned)SwitchState::UserSwitch::MIDDLE, N_("Middle") },
-  { (unsigned)SwitchState::UserSwitch::DOWN, N_("Down") },
-  { 0 }
+  { SwitchState::UserSwitch::UNKNOWN, N_("Unknown") },
+  { SwitchState::UserSwitch::UP, N_("Up") },
+  { SwitchState::UserSwitch::MIDDLE, N_("Middle") },
+  { SwitchState::UserSwitch::DOWN, N_("Down") },
+  nullptr
 };
 
 static constexpr StaticEnumChoice airbrake_state_list[] = {
-  { (unsigned)SwitchState::AirbrakeState::UNKNOWN, N_("Unknown") },
-  { (unsigned)SwitchState::AirbrakeState::LOCKED, N_("Locked") },
-  { (unsigned)SwitchState::AirbrakeState::NOT_LOCKED, N_("Not locked") },
-  { 0 }
+  { SwitchState::AirbrakeState::UNKNOWN, N_("Unknown") },
+  { SwitchState::AirbrakeState::LOCKED, N_("Locked") },
+  { SwitchState::AirbrakeState::NOT_LOCKED, N_("Not locked") },
+  nullptr
 };
 
 class SwitchesLeft : public RowFormWidget {

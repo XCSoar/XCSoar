@@ -33,17 +33,18 @@ import android.graphics.Canvas;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
-public class TextUtil {
-  private Paint paint;
-  private Paint.FontMetricsInt metrics;
-  private int[] extent = new int[2];
-  private int[] id = new int[5];
+public final class TextUtil {
+  private final Paint paint;
+  private final Paint.FontMetricsInt metrics;
+  private final int[] extent = new int[2];
+  private final int[] id = new int[5];
 
   public TextUtil(int style, int textSize,
                   int paint_flags, boolean monospace) {
-    Typeface tf = monospace
-      ? Typeface.MONOSPACE
-      : Typeface.create((Typeface)null, style);
+    Typeface tf = Typeface.create(monospace
+                                  ? Typeface.MONOSPACE
+                                  : Typeface.DEFAULT,
+                                  style);
 
     paint = new Paint(paint_flags);
     paint.setTypeface(tf);
@@ -61,10 +62,9 @@ public class TextUtil {
     paint.getTextBounds(m, 0, 1, bounds);
 
     metrics[0] = Math.round(paint.descent() - paint.ascent());
-    metrics[1] = paint.getTypeface().getStyle();
-    metrics[2] = Math.round(-paint.ascent());
-    metrics[3] = bounds.height();
-    metrics[4] = Math.round(paint.getFontSpacing());
+    metrics[1] = Math.round(-paint.ascent());
+    metrics[2] = bounds.height();
+    metrics[3] = Math.round(paint.getFontSpacing());
   }
 
   public int[] getTextBounds(String text) {
@@ -85,7 +85,7 @@ public class TextUtil {
     bmp.eraseColor(Color.TRANSPARENT);
     paint.setColor(Color.WHITE);
     Canvas canvas = new Canvas(bmp);
-    canvas.drawText(text, 0, -paint.getFontMetricsInt().ascent, paint);
+    canvas.drawText(text, 0, -metrics.ascent, paint);
 
     // create OpenGL texture
     if (!BitmapUtil.bitmapToOpenGL(bmp, true, false, id))

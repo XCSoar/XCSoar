@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,8 +20,7 @@
 }
 */
 
-#ifndef AIRSPACE_PRINTING_HPP
-#define AIRSPACE_PRINTING_HPP
+#pragma once
 
 #define DO_PRINT
 
@@ -31,5 +30,3 @@ struct AirspaceAltitude;
 
 std::ostream &
 operator<<(std::ostream &os, const AirspaceAltitude &aa);
-
-#endif

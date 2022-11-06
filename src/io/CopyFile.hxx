@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef COPY_FILE_HXX
-#define COPY_FILE_HXX
+#pragma once
 
 class Path;
 
@@ -48,5 +47,3 @@ CopyFile(Path src, Path dest);
  */
 void
 MoveOrCopyFile(Path src, Path dest);
-
-#endif

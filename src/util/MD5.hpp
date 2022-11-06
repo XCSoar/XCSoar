@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,8 +20,7 @@
 }
 */
 
-#ifndef MD5_HPP
-#define MD5_HPP
+#pragma once
 
 #include <cstdint>
 #include <cstddef>
@@ -40,13 +39,13 @@ private:
   State state;
   uint64_t message_length;
 
-  void Process512(const uint8_t *in);
+  void Process512(const uint8_t *in) noexcept;
 
 public:
   /**
    * Initialise with a custom key.
    */
-  void Initialise(const State &_state) {
+  void Initialise(const State &_state) noexcept {
     state = _state;
     message_length = 0;
   }
@@ -54,18 +53,16 @@ public:
   /**
    * Initialise with the default key.
    */
-  void Initialise();
+  void Initialise() noexcept;
 
-  void Append(uint8_t ch);
-  void Append(const void *data, size_t length);
+  void Append(uint8_t ch) noexcept;
+  void Append(const void *data, size_t length) noexcept;
 
-  void Finalize();
+  void Finalize() noexcept;
 
   /**
    * @param buffer a buffer of at least #DIGEST_LENGTH+1 bytes
    * @return a pointer to the null terminator
    */
-  char *GetDigest(char *buffer) const;
+  char *GetDigest(char *buffer) const noexcept;
 };
-
-#endif

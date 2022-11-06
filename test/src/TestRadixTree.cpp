@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -58,7 +58,7 @@ template<typename T>
 struct AscendingKeyVisitor {
   tstring last;
 
-  void operator()(const TCHAR *key, const T &value) {
+  void operator()(const TCHAR *key, [[maybe_unused]] const T &value) {
     ok1(last.compare(key) <= 0);
     last = key;
   }
@@ -72,7 +72,7 @@ check_ascending_keys(const RadixTree<T> &tree)
   tree.VisitAllPairs(visitor);
 }
 
-int main(int argc, char **argv)
+int main()
 {
   plan_tests(86);
 

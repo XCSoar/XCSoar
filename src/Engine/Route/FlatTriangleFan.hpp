@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,19 +20,19 @@
 }
 */
 
-#ifndef FLAT_TRIANGLE_FAN_HPP
-#define FLAT_TRIANGLE_FAN_HPP
+#pragma once
 
 #include "Geo/Flat/FlatGeoPoint.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
-#include "util/ConstBuffer.hxx"
 
 #include <vector>
+#include <span>
+
+class FlatTriangleFanVisitor;
 
 class FlatTriangleFan {
-  typedef std::vector<FlatGeoPoint> VertexVector;
+  using VertexVector = std::vector<FlatGeoPoint>;
 
-protected:
   VertexVector vs;
   FlatBoundingBox bounding_box;
   int height;
@@ -40,7 +40,7 @@ protected:
 public:
   friend class PrintHelper;
 
-  void CalcBoundingBox() noexcept;
+  const FlatBoundingBox &CalcBoundingBox() noexcept;
 
   /**
    * Add the origin to an empty
@@ -69,9 +69,18 @@ public:
     vs.clear();
   }
 
+  std::span<const FlatGeoPoint> GetVertices() const noexcept {
+    return vs;
+  }
+
   [[gnu::pure]]
   bool IsEmpty() const noexcept {
     return vs.empty();
+  }
+
+  [[gnu::pure]]
+  bool IsOnlyOrigin() const noexcept {
+    return vs.size() == 1;
   }
 
   AFlatGeoPoint GetOrigin() const noexcept {
@@ -85,18 +94,24 @@ public:
    * not part of the hull
    */
   [[gnu::pure]]
-  ConstBuffer<FlatGeoPoint> GetHull(bool closed) const noexcept {
-    ConstBuffer<FlatGeoPoint> hull(&vs.front(), vs.size());
+  std::span<const FlatGeoPoint> GetHull(bool closed) const noexcept {
+    std::span<const FlatGeoPoint> hull{vs};
     if (closed)
       /* omit the origin, because it's not part of the hull in a
          closed shape */
-      hull.pop_front();
+      hull = hull.subspan(1);
     return hull;
   }
 
   int GetHeight() const noexcept {
     return height;
   }
-};
 
-#endif
+  void SetHeight(int _height) noexcept {
+    height = _height;
+  }
+
+  void AcceptInRange(const FlatBoundingBox &bb,
+                     FlatTriangleFanVisitor &visitor,
+                     bool closed) const noexcept;
+};

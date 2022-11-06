@@ -29,7 +29,8 @@ Copyright_License {
 #include "UIActions.hpp"
 #include "PageActions.hpp"
 #include "Input/InputEvents.hpp"
-#include "Menu/ButtonLabel.hpp"
+#include "Menu/MenuBar.hpp"
+#include "Menu/Glue.hpp"
 #include "ui/canvas/Features.hpp" // for DRAW_MOUSE_CURSOR
 #include "Screen/Layout.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
@@ -205,7 +206,7 @@ MainWindow::InitialiseConfigured()
   InfoBoxManager::Create(*this, ib_layout, look->info_box);
   map_rect = ib_layout.remaining;
 
-  ButtonLabel::CreateButtonLabels(*this, look->dialog.button);
+  menu_bar = new MenuBar(*this, look->dialog.button);
 
   ReinitialiseLayout_vario(ib_layout);
 
@@ -239,7 +240,9 @@ void
 MainWindow::Deinitialise() noexcept
 {
   InfoBoxManager::Destroy();
-  ButtonLabel::Destroy();
+
+  delete menu_bar;
+  menu_bar = nullptr;
 
   delete popup;
   popup = nullptr;
@@ -518,7 +521,7 @@ MainWindow::FullRedraw() noexcept
 // Windows event handlers
 
 void
-MainWindow::OnResize(PixelSize new_size)
+MainWindow::OnResize(PixelSize new_size) noexcept
 {
   Layout::Initialise(GetDisplay(), new_size,
                      CommonInterface::GetUISettings().GetPercentScale(),
@@ -529,12 +532,15 @@ MainWindow::OnResize(PixelSize new_size)
   ReinitialiseLayout();
 
   const PixelRect rc = GetClientRect();
-  ButtonLabel::OnResize(rc);
+
+  if (menu_bar != nullptr)
+    menu_bar->OnResize(rc);
+
   ProgressGlue::Move(rc);
 }
 
 void
-MainWindow::OnSetFocus()
+MainWindow::OnSetFocus() noexcept
 {
   SingleWindow::OnSetFocus();
 
@@ -562,14 +568,14 @@ MainWindow::StopDragging() noexcept
 }
 
 void
-MainWindow::OnCancelMode()
+MainWindow::OnCancelMode() noexcept
 {
   SingleWindow::OnCancelMode();
   StopDragging();
 }
 
 bool
-MainWindow::OnMouseDown(PixelPoint p)
+MainWindow::OnMouseDown(PixelPoint p) noexcept
 {
   if (SingleWindow::OnMouseDown(p))
     return true;
@@ -584,7 +590,7 @@ MainWindow::OnMouseDown(PixelPoint p)
 }
 
 bool
-MainWindow::OnMouseUp(PixelPoint p)
+MainWindow::OnMouseUp(PixelPoint p) noexcept
 {
   if (SingleWindow::OnMouseUp(p))
     return true;
@@ -601,7 +607,7 @@ MainWindow::OnMouseUp(PixelPoint p)
 }
 
 bool
-MainWindow::OnMouseDouble(PixelPoint p)
+MainWindow::OnMouseDouble(PixelPoint p) noexcept
 {
   if (SingleWindow::OnMouseDouble(p))
     return true;
@@ -614,7 +620,7 @@ MainWindow::OnMouseDouble(PixelPoint p)
 }
 
 bool
-MainWindow::OnMouseMove(PixelPoint p, unsigned keys)
+MainWindow::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
   if (SingleWindow::OnMouseMove(p, keys))
     return true;
@@ -626,7 +632,7 @@ MainWindow::OnMouseMove(PixelPoint p, unsigned keys)
 }
 
 bool
-MainWindow::OnKeyDown(unsigned key_code)
+MainWindow::OnKeyDown(unsigned key_code) noexcept
 {
   return (widget != nullptr && widget->KeyPress(key_code)) ||
     (HaveTopWidget() && top_widget->KeyPress(key_code)) ||
@@ -691,7 +697,8 @@ MainWindow::RunTimer() noexcept
 void
 MainWindow::OnGpsNotify() noexcept
 {
-  UIReceiveSensorData();
+  PopupOperationEnvironment env;
+  UIReceiveSensorData(env);
 }
 
 void
@@ -708,7 +715,7 @@ MainWindow::OnRestorePageNotify() noexcept
 }
 
 void
-MainWindow::OnDestroy()
+MainWindow::OnDestroy() noexcept
 {
   timer.Cancel();
 
@@ -734,7 +741,7 @@ MainWindow::OnClose() noexcept
 }
 
 void
-MainWindow::OnPaint(Canvas &canvas)
+MainWindow::OnPaint(Canvas &canvas) noexcept
 {
   if (HaveBottomWidget() && map != nullptr) {
     /* draw a separator between main area and bottom area */
@@ -1012,6 +1019,22 @@ MainWindow::GetFlavourWidget(const TCHAR *flavour) noexcept
   return InputEvents::IsFlavour(flavour)
     ? widget
     : nullptr;
+}
+
+void
+MainWindow::ShowMenu(const Menu &menu, const Menu *overlay, bool full) noexcept
+{
+  assert(menu_bar != nullptr);
+
+  MenuGlue::Set(*menu_bar, menu, overlay, full);
+}
+
+bool
+MainWindow::IsMenuButtonEnabled(unsigned idx) noexcept
+{
+  assert(menu_bar != nullptr);
+
+  return menu_bar->IsButtonEnabled(idx);
 }
 
 void

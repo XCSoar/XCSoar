@@ -30,8 +30,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef NET_RESOLVER_HXX
-#define NET_RESOLVER_HXX
+#pragma once
 
 class AddressInfoList;
 
@@ -58,5 +57,3 @@ Resolve(const char *host_and_port, int default_port,
 
 AddressInfoList
 Resolve(const char *host_port, unsigned default_port, int flags, int socktype);
-
-#endif

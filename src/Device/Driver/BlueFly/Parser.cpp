@@ -62,7 +62,7 @@ BlueFlyDevice::ParseBAT(const char *content, NMEAInfo &info)
   return true;
 }
 
-gcc_pure
+[[gnu::pure]]
 static inline double
 ComputeNoncompVario(const double pressure, const double d_pressure)
 {
@@ -110,7 +110,7 @@ ParseUlong(const char **line, unsigned long &value)
  * Sent Upon a BST request.
  */
 bool
-BlueFlyDevice::ParseBFV(const char *content, NMEAInfo &info)
+BlueFlyDevice::ParseBFV(const char *content, [[maybe_unused]] NMEAInfo &info)
 {
   // e.g. BFV 9
 
@@ -129,7 +129,7 @@ BlueFlyDevice::ParseBFV(const char *content, NMEAInfo &info)
  * Sent Upon a BST request.
  */
 bool
-BlueFlyDevice::ParseBST(const char *content, NMEAInfo &info)
+BlueFlyDevice::ParseBST(const char *content, [[maybe_unused]] NMEAInfo &info)
 {
   // e.g. BST BFK BFL BFP BAC BAD BTH BFQ BFI BSQ BSI BFS BOL BOS BRM BVL BOM BOF BQH BRB BPT BUR BLD BR2
 
@@ -145,7 +145,7 @@ BlueFlyDevice::ParseBST(const char *content, NMEAInfo &info)
  * Sent Upon a BST request.
  */
 bool
-BlueFlyDevice::ParseSET(const char *content, NMEAInfo &info)
+BlueFlyDevice::ParseSET(const char *content, [[maybe_unused]] NMEAInfo &info)
 {
   // e.g. SET 0 100 20 1 1 1 180 1000 100 400 100 20 5 5 100 50 0 10 21325 207 1 0 1 34
 
@@ -163,7 +163,7 @@ BlueFlyDevice::ParseSET(const char *content, NMEAInfo &info)
     return true;
 
   {
-    std::lock_guard<Mutex> lock(mutex_settings);
+    const std::lock_guard lock{mutex_settings};
 
     for (const auto token : IterableSplitString(settings_keys, ' ')) {
       if (!ParseUlong(&values, value))

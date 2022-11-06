@@ -1,0 +1,18 @@
+commit 65708880af2830230992f453b8dc5e9ca999bee8
+Author: Max Kellermann <max.kellermann@gmail.com>
+Date:   Thu Aug 11 09:10:26 2022 +0200
+
+    CMakeLists.txt: don't generate and install data
+
+Index: proj-9.1.0/CMakeLists.txt
+===================================================================
+--- proj-9.1.0.orig/CMakeLists.txt
++++ proj-9.1.0/CMakeLists.txt
+@@ -323,7 +323,6 @@ endif()
+ ################################################################################
+ include_directories(${PROJ_SOURCE_DIR}/src)
+ 
+-add_subdirectory(data)
+ add_subdirectory(include)
+ add_subdirectory(src)
+ add_subdirectory(man)

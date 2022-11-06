@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@
 }
 */
 
-#ifndef KEYHOLEZONE_HPP
-#define KEYHOLEZONE_HPP
+#pragma once
 
 #include "SymmetricSectorZone.hpp"
 
@@ -34,7 +33,7 @@ class KeyholeZone final : public SymmetricSectorZone
 {
   double inner_radius;
 
-protected:
+public:
   /**
    * Constructor.
    *
@@ -43,27 +42,24 @@ protected:
    *
    * @return Initialised object
    */
-  KeyholeZone(Shape _shape, bool _can_start_through_top,
-              bool _arc_boundary,
-              const GeoPoint &loc,
-              const double radius = 10000.0,
-              const Angle angle = Angle::QuarterCircle())
+  constexpr KeyholeZone(Shape _shape, bool _can_start_through_top,
+                        bool _arc_boundary,
+                        const GeoPoint &loc,
+                        const double radius = 10000.0,
+                        const Angle angle = Angle::QuarterCircle()) noexcept
     :SymmetricSectorZone(_shape, _can_start_through_top, _arc_boundary,
                          loc, radius, angle),
      inner_radius(500) {}
 
-  KeyholeZone(const KeyholeZone &other, const GeoPoint &reference)
+  constexpr KeyholeZone(const KeyholeZone &other, const GeoPoint &reference) noexcept
     :SymmetricSectorZone((const SymmetricSectorZone &)other, reference),
      inner_radius(other.inner_radius) {}
 
-public:
   static auto CreateCustomKeyholeZone(const GeoPoint &reference,
                                       double radius,
                                       Angle angle) noexcept {
-    return std::unique_ptr<KeyholeZone>{
-      new KeyholeZone(Shape::CUSTOM_KEYHOLE, true, true, reference,
-                      radius, angle)
-    };
+    return std::make_unique<KeyholeZone>(Shape::CUSTOM_KEYHOLE, true, true,
+                                         reference, radius, angle);
   }
 
   /**
@@ -72,12 +68,10 @@ public:
    * rules.
    */
   static auto CreateDAeCKeyholeZone(const GeoPoint &reference) noexcept {
-    return std::unique_ptr<KeyholeZone>{
-      new KeyholeZone(Shape::DAEC_KEYHOLE,
-                      true, true, reference,
-                      10000,
-                      Angle::QuarterCircle())
-    };
+    return std::make_unique<KeyholeZone>(Shape::DAEC_KEYHOLE,
+                                         true, true, reference,
+                                         10000,
+                                         Angle::QuarterCircle());
   }
 
   /**
@@ -85,12 +79,10 @@ public:
    * incoming/outgoing legs, with 500m cylinder.
    */
   static auto CreateBGAFixedCourseZone(const GeoPoint &reference) noexcept {
-    return std::unique_ptr<KeyholeZone>{
-      new KeyholeZone(Shape::BGAFIXEDCOURSE,
-                      true, true, reference,
-                      20000,
-                      Angle::QuarterCircle())
-    };
+    return std::make_unique<KeyholeZone>(Shape::BGAFIXEDCOURSE,
+                                         true, true, reference,
+                                         20000,
+                                         Angle::QuarterCircle());
   }
 
   /**
@@ -98,33 +90,29 @@ public:
    * incoming/outgoing legs, with 500m cylinder
    */
   static auto CreateBGAEnhancedOptionZone(const GeoPoint &reference) noexcept {
-    return std::unique_ptr<KeyholeZone>{
-      new KeyholeZone(Shape::BGAENHANCEDOPTION, true, true, reference,
-                      10000,
-                      Angle::HalfCircle())
-    };
+    return std::make_unique<KeyholeZone>(Shape::BGAENHANCEDOPTION, true, true, reference,
+                                         10000,
+                                         Angle::HalfCircle());
   }
 
   /**
    * Returns the radius of the small cylinder [m].
    */
-  double GetInnerRadius() const {
+  constexpr double GetInnerRadius() const noexcept {
     return inner_radius;
   }
 
-  void SetInnerRadius(double _radius) {
+  constexpr void SetInnerRadius(double _radius) noexcept {
     inner_radius = _radius;
   }
 
   /* virtual methods from class ObservationZone */
-  bool IsInSector(const GeoPoint &location) const override;
-  OZBoundary GetBoundary() const override;
-  double ScoreAdjustment() const override;
+  bool IsInSector(const GeoPoint &location) const noexcept override;
+  OZBoundary GetBoundary() const noexcept override;
+  double ScoreAdjustment() const noexcept override;
 
   /* virtual methods from class ObservationZonePoint */
   std::unique_ptr<ObservationZonePoint> Clone(const GeoPoint &_reference) const noexcept override {
-    return std::unique_ptr<ObservationZonePoint>{new KeyholeZone(*this, _reference)};
+    return std::make_unique<KeyholeZone>(*this, _reference);
   }
 };
-
-#endif

@@ -32,36 +32,36 @@ Copyright_License {
 #import <CoreGraphics/CoreGraphics.h>
 
 static UncompressedImage
-CGImageToUncompressedImage(CGImageRef image)
+CGImageToUncompressedImage(CGImageRef image) noexcept
 {
   if (image == nullptr)
-    return UncompressedImage();
-  
+    return {};
+
   size_t width = CGImageGetWidth(image);
   size_t height = CGImageGetHeight(image);
-  
+
   if ((0 == width) || (0 == height))
-    return UncompressedImage();
-  
+    return {};
+
   size_t bits_per_pixel = CGImageGetBitsPerPixel(image);
   size_t bits_per_component = CGImageGetBitsPerComponent(image);
   CGColorSpaceRef colorspace = CGImageGetColorSpace(image);
-  
+
   size_t row_size;
   UncompressedImage::Format format;
   CGColorSpaceRef bitmap_colorspace;
-  CGBitmapInfo bitmap_info;
-  
+  uint32_t bitmap_info;
+
   if ((8 == bits_per_pixel) &&
       (8 == bits_per_component) &&
       (CGColorSpaceGetModel(colorspace) == kCGColorSpaceModelMonochrome)) {
     row_size = width;
     format = UncompressedImage::Format::GRAY;
-    static CGColorSpaceRef grey_colorspace = CGColorSpaceCreateDeviceGray();
+    static const CGColorSpaceRef grey_colorspace = CGColorSpaceCreateDeviceGray();
     bitmap_colorspace = grey_colorspace;
     bitmap_info = 0;
   } else {
-    static CGColorSpaceRef rgb_colorspace = CGColorSpaceCreateDeviceRGB();
+    static const CGColorSpaceRef rgb_colorspace = CGColorSpaceCreateDeviceRGB();
     bitmap_colorspace = rgb_colorspace;
     if ((24 == bits_per_pixel) && (8 == bits_per_component)) {
       row_size = width * 3;
@@ -70,73 +70,73 @@ CGImageToUncompressedImage(CGImageRef image)
     } else {
       row_size = width * 4;
       format = UncompressedImage::Format::RGBA;
-      bitmap_info = kCGImageAlphaPremultipliedLast |
-                    kCGBitmapByteOrder32Big;
+      bitmap_info = static_cast<uint32_t>(kCGImageAlphaPremultipliedLast) |
+        static_cast<uint32_t>(kCGBitmapByteOrder32Big);
     }
   }
-  
+
   std::unique_ptr<uint8_t[]> uncompressed(new uint8_t[height * row_size]);
-  
+
   CGContextRef bitmap = CGBitmapContextCreate(uncompressed.get(), width, height,
                                               8, row_size, bitmap_colorspace,
                                               bitmap_info);
   if (nullptr == bitmap) {
-    return UncompressedImage();
+    return {};
   }
 
   AtScopeExit(bitmap) { CFRelease(bitmap); };
 
   CGContextDrawImage(bitmap, CGRectMake(0, 0, width, height), image);
-  
+
   return UncompressedImage(format, row_size, width, height,
                            std::move(uncompressed));
 }
 
 UncompressedImage
-LoadJPEGFile(Path path)
+LoadJPEGFile(Path path) noexcept
 {
   CGDataProviderRef data_provider = CGDataProviderCreateWithFilename(path.c_str());
   if (nullptr == data_provider)
-    return UncompressedImage();
-  
+    return {};
+
   CGImageRef image =  CGImageCreateWithJPEGDataProvider(
       data_provider, nullptr, false, kCGRenderingIntentDefault);
-  
+
   UncompressedImage result = CGImageToUncompressedImage(image);
-  
+
   if (nullptr != image)
     CFRelease(image);
   CFRelease(data_provider);
-  
+
   return result;
 }
 
 UncompressedImage
-LoadPNG(const void *data, size_t size)
+LoadPNG(const void *data, size_t size) noexcept
 {
   CGDataProviderRef data_provider = CGDataProviderCreateWithData(
       nullptr, data, size, nullptr);
   if (nullptr == data_provider)
-    return UncompressedImage();
-  
+    return {};
+
   CGImageRef image = CGImageCreateWithPNGDataProvider(
       data_provider, nullptr, false, kCGRenderingIntentDefault);
-  
+
   UncompressedImage result = CGImageToUncompressedImage(image);
-  
+
   if (nullptr != image)
     CFRelease(image);
   CFRelease(data_provider);
-  
+
   return result;
 }
 
 UncompressedImage
-LoadPNG(Path path)
+LoadPNG(Path path) noexcept
 {
   CGDataProviderRef data_provider = CGDataProviderCreateWithFilename(path.c_str());
   if (nullptr == data_provider)
-    return UncompressedImage();
+    return {};
 
   CGImageRef image =  CGImageCreateWithPNGDataProvider(
       data_provider, nullptr, false, kCGRenderingIntentDefault);

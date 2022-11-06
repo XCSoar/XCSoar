@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef TTY_DESCRIPTOR_HXX
-#define TTY_DESCRIPTOR_HXX
+#pragma once
 
 #include "io/FileDescriptor.hxx"
 
@@ -62,7 +61,7 @@ public:
 	/**
 	 * Returns the name of the slave pseudo-terminal.  Not thread-safe!
 	 */
-	gcc_pure
+	[[gnu::pure]]
 	const char *GetSlaveName() const noexcept {
 		return ptsname(Get());
 	}
@@ -97,5 +96,3 @@ public:
 		return tcsetattr(Get(), optional_actions, &attr) >= 0;
 	}
 };
-
-#endif

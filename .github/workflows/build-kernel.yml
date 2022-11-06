@@ -1,0 +1,123 @@
+---
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'kobo/kernel/**'
+      - '.github/workflows/build-kernel.yml'
+    branches:
+      - master
+  pull_request:
+    paths:
+      - 'kobo/kernel/**'
+      - '.github/workflows/build-kernel.yml'
+
+jobs:
+  build-kobo-kernel:
+    strategy:
+      matrix:
+        model: [mini, glohd, aura2]
+        include:
+          - model: mini
+            toolchain: arm-2010q1
+            config: kobo.config
+            uimage: uImage.kobo
+            otg_config: otg.config
+            otg_uimage: uImage.otg
+          - model: glohd
+            toolchain: arm-2012-q4
+            config: glohd.config
+            uimage: uImage.glohd
+            otg_config: glohd.otg.config
+            otg_uimage: uImage.glohd.otg
+          - model: aura2
+            toolchain: arm-2012-q4
+            config: aura2.config
+            uimage: uImage.aura2
+            otg_config: aura2.otg.config
+            otg_uimage: uImage.aura2.otg
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - id: checkout
+        uses: actions/checkout@v2
+
+      - id: checkout-kernel
+        uses: actions/checkout@v2
+        with:
+          repository: XCSoar/linux
+          path: output/src/linux
+          ref: kobo-${{matrix.model}}
+
+      - id: cache-ccache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: kobo-${{matrix.model}}-kernel
+
+      - name: "Cache downloads"
+        uses: actions/cache@v2
+        with:
+          key: kobo-kernel-${{matrix.toolchain}}-downloads
+          path: ${{github.workspace}}/output/download
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            u-boot-tools
+
+      - name: "Install old ARM toolchain (2010q1)"
+        if: matrix.toolchain == 'arm-2010q1'
+        run: |
+          ./build/download.py \
+            https://master.dl.sourceforge.net/project/iadfilehost/devtools/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2 \
+            https://sourcery.sw.siemens.com/public/gnu_toolchain/arm-none-linux-gnueabi/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2 \
+            60791a1fea52f6cf229fd71147abf44fe9f8d776edabb1095883a6577842a1d8 \
+            output/download
+          cd output && tar xf download/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+          echo "TOOLCHAIN_PREFIX=${{github.workspace}}/output/arm-2010q1/bin/arm-none-linux-gnueabi-" >> $GITHUB_ENV
+
+      - name: "Install old ARM toolchain (2012-q4)"
+        if: matrix.toolchain == 'arm-2012-q4'
+        run: |
+          ./build/download.py \
+            https://launchpad.net/gcc-arm-embedded/4.6/4.6-2012-q4-update/+download/gcc-arm-none-eabi-4_6-2012q4-20121016.tar.bz2 \
+            https://launchpad.net/gcc-arm-embedded/4.6/4.6-2012-q4-update/+download/gcc-arm-none-eabi-4_6-2012q4-20121016.tar.bz2 \
+            01ed7460c1b671545d8c7c68af3a6b3b489f229481d99dc5815df93a59144d6d \
+            output/download
+          cd output && tar xf download/gcc-arm-none-eabi-4_6-2012q4-20121016.tar.bz2
+          echo "TOOLCHAIN_PREFIX=${{github.workspace}}/output/gcc-arm-none-eabi-4_6-2012q4/bin/arm-none-eabi-" >> $GITHUB_ENV
+
+      - name: "Build kernel"
+        working-directory: output/src/linux
+        run: |
+          cp ${{github.workspace}}/kobo/kernel/${{matrix.config}} .config
+          make \
+            -j$(nproc) \
+            KBUILD_BUILD_TIMESTAMP="" \
+            CROSS_COMPILE="/usr/bin/ccache $TOOLCHAIN_PREFIX" \
+            ARCH=arm uImage
+
+      - name: "upload uImage"
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{matrix.uimage}}
+          path: output/src/linux/arch/arm/boot/uImage
+
+      - name: "Build OTG kernel"
+        working-directory: output/src/linux
+        run: |
+          cp ${{github.workspace}}/kobo/kernel/${{matrix.otg_config}} .config
+          make \
+            -j$(nproc) \
+            V=1 \
+            KBUILD_BUILD_TIMESTAMP="" \
+            CROSS_COMPILE="/usr/bin/ccache $TOOLCHAIN_PREFIX" \
+            ARCH=arm uImage
+
+      - name: "upload OTG uImage"
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{matrix.otg_uimage}}
+          path: output/src/linux/arch/arm/boot/uImage

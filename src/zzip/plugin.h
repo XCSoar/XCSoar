@@ -24,8 +24,8 @@
  * all functions receiving ext_io are able to cope with both arguments
  * set to zero which will let them default to a ZIP ext and posix io.
  */
-#ifndef _ZZIP_PLUGIN_H /* zzip-io.h */
-#define _ZZIP_PLUGIN_H 1
+ 
+#pragma once
 
 #include <zzip/zzip.h>
 
@@ -89,6 +89,4 @@ int zzip_init_io(zzip_plugin_io_handlers_t io, int flags);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

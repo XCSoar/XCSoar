@@ -25,5 +25,5 @@ Copyright_License {
 #include "MapWindow/Overlay.hpp"
 
 OverlayMapItem::OverlayMapItem(const MapOverlay &_overlay)
-  :MapItem(OVERLAY),
+  :MapItem(Type::OVERLAY),
    label(_overlay.GetLabel()) {}

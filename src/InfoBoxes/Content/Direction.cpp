@@ -24,8 +24,6 @@ Copyright_License {
 #include "InfoBoxes/Content/Direction.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
-
-#include "Simulator.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 
@@ -42,8 +40,6 @@ InfoBoxContentTrack::Update(InfoBoxData &data) noexcept
 bool
 InfoBoxContentTrack::HandleKey(const InfoBoxKeyCodes keycode) noexcept
 {
-  if (!is_simulator())
-    return false;
   if (!CommonInterface::Basic().gps.simulator)
     return false;
 

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_APPLY_VEGA_SWITCHES_HPP
-#define XCSOAR_APPLY_VEGA_SWITCHES_HPP
+#pragma once
 
 /**
  * Check if the Vega switches have changed, and invoke the according
@@ -30,5 +29,3 @@ Copyright_License {
  */
 void
 ApplyVegaSwitches();
-
-#endif

@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef ALLOCATED_STRING_HXX
-#define ALLOCATED_STRING_HXX
+#pragma once
 
 #include "StringPointer.hxx"
 
@@ -190,5 +189,3 @@ public:
 
 	using BasicAllocatedString::operator=;
 };
-
-#endif

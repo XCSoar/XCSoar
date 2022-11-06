@@ -33,6 +33,8 @@
 
 #include <string.h>
 
+using std::string_view_literals::operator""sv;
+
 /**
  * Security theater.
  */
@@ -44,7 +46,7 @@ static constexpr MD5::State g_key[GRecord::N_MD5] = {
 };
 
 void
-GRecord::Initialize()
+GRecord::Initialize() noexcept
 {
   ignore_comma = true;
 
@@ -53,13 +55,13 @@ GRecord::Initialize()
 }
 
 bool
-GRecord::AppendRecordToBuffer(const char *in)
+GRecord::AppendRecordToBuffer(std::string_view in) noexcept
 {
   if (!IncludeRecordInGCalc(in))
     return false;
 
-  if (memcmp(in, "HFFTYFRTYPE:XCSOAR,XCSOAR ", 26) == 0 &&
-      strstr(in + 25, " 6.5 ") != nullptr)
+  if (in.starts_with("HFFTYFRTYPE:XCSOAR,XCSOAR "sv) &&
+      in.find(" 6.5 ", 25) != in.npos)
     /* this is XCSoar 6.5: enable the G record workaround */
     ignore_comma = false;
 
@@ -72,10 +74,9 @@ GRecord::AppendRecordToBuffer(const char *in)
  * it's a valid IGC character
  */
 static void
-AppendIGCString(MD5 &md5, const char *s, bool ignore_comma)
+AppendIGCString(MD5 &md5, std::string_view s, bool ignore_comma) noexcept
 {
-  while (*s != '\0') {
-    const char ch = *s++;
+  for (const char ch : s) {
     if (ignore_comma && ch == ',')
       continue;
 
@@ -85,51 +86,46 @@ AppendIGCString(MD5 &md5, const char *s, bool ignore_comma)
 }
 
 void
-GRecord::AppendStringToBuffer(const char *in)
+GRecord::AppendStringToBuffer(std::string_view in) noexcept
 {
   for (auto &i : md5)
     AppendIGCString(i, in, ignore_comma);
 }
 
 void
-GRecord::FinalizeBuffer()
+GRecord::FinalizeBuffer() noexcept
 {
   for (auto &i : md5)
     i.Finalize();
 }
 
 void
-GRecord::GetDigest(char *output) const
+GRecord::GetDigest(char *output) const noexcept
 {
   for (auto &i : md5)
     output = i.GetDigest(output);
 }
 
 bool
-GRecord::IncludeRecordInGCalc(const char *in)
+GRecord::IncludeRecordInGCalc(std::string_view in) noexcept
 {
-  bool valid = false;
+  if (in.empty())
+    return false;
 
-  switch (in[0]) {
+  switch (in.front()) {
   case 'L':
-    if (memcmp(in + 1, XCSOAR_IGC_CODE, 3) == 0)
-      // only include L records made by XCS
-      valid = true;
-    break;
+    // only include L records made by XCS
+    return in.substr(1).starts_with(XCSOAR_IGC_CODE);
 
   case 'G':
-    break;
+    return false;
 
   case 'H':
-    if ((in[1] != 'O') && (in[1] != 'P'))
-      valid = true;
-    break;
+    return !in.substr(1).starts_with("OP"sv);
 
   default:
-    valid = true;
+    return true;
   }
-
-  return valid;
 }
 
 void

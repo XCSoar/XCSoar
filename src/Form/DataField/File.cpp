@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -91,21 +91,6 @@ FileDataField::FileDataField(DataFieldListener *listener) noexcept
    current_index(0),
    loaded(false), postponed_sort(false),
    postponed_value(nullptr) {}
-
-int
-FileDataField::GetAsInteger() const noexcept
-{
-  if (postponed_value != nullptr)
-    EnsureLoadedDeconst();
-
-  return current_index;
-}
-
-void
-FileDataField::SetAsInteger(int new_value) noexcept
-{
-  ModifyIndex(new_value);
-}
 
 void
 FileDataField::ScanDirectoryTop(const TCHAR *filter) noexcept
@@ -340,7 +325,7 @@ FileDataField::Sort() noexcept
 }
 
 ComboList
-FileDataField::CreateComboList(const TCHAR *reference) const noexcept
+FileDataField::CreateComboList([[maybe_unused]] const TCHAR *reference) const noexcept
 {
   /* sorry for the const_cast .. this method keeps the promise of not
      modifying the object, given that one does not count filling the
@@ -383,6 +368,12 @@ FileDataField::CreateComboList(const TCHAR *reference) const noexcept
   combo_list.current_index = current_index;
 
   return combo_list;
+}
+
+void
+FileDataField::SetFromCombo(int i, const TCHAR *) noexcept
+{
+  ModifyIndex(i);
 }
 
 unsigned

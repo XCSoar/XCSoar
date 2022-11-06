@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@ Copyright_License {
 #include "Look/MapLook.hpp"
 #include "Geo/GeoClip.hpp"
 #include "Task/ProtectedRoutePlanner.hpp"
+#include "Route/FlatTriangleFanVisitor.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
@@ -83,7 +84,7 @@ struct ProjectedFan {
 };
 
 struct ProjectedFans {
-  typedef StaticArray<ProjectedFan, FlatTriangleFanTree::REACH_MAX_FANS> ProjectedFanVector;
+  typedef StaticArray<ProjectedFan, FlatTriangleFanTree::MAX_FANS> ProjectedFanVector;
 
   ProjectedFanVector fans;
 
@@ -104,7 +105,7 @@ struct ProjectedFans {
 #endif
   {
     /* try to guess the total number of vertices */
-    points.reserve(FlatTriangleFanTree::REACH_MAX_FANS * ROUTEPOLAR_POINTS / 10);
+    points.reserve(FlatTriangleFanTree::MAX_FANS * ROUTEPOLAR_POINTS / 10);
   }
 
   bool empty() const {
@@ -140,7 +141,7 @@ struct ProjectedFans {
     points.push_back(pt);
   }
 
-  void DrawFill(Canvas &canvas) const {
+  void DrawFill([[maybe_unused]] Canvas &canvas) const {
     assert(remaining == 0);
 
 #ifdef ENABLE_OPENGL
@@ -159,7 +160,7 @@ struct ProjectedFans {
 #endif
   }
 
-  void DrawOutline(Canvas &canvas) const {
+  void DrawOutline([[maybe_unused]] Canvas &canvas) const {
     assert(remaining == 0);
 
 #ifdef ENABLE_OPENGL
@@ -178,7 +179,7 @@ struct ProjectedFans {
   }
 };
 
-typedef StaticArray<ProjectedFan, FlatTriangleFanTree::REACH_MAX_FANS> ProjectedFanVector;
+typedef StaticArray<ProjectedFan, FlatTriangleFanTree::MAX_FANS> ProjectedFanVector;
 
 class TriangleCompound final : public FlatTriangleFanVisitor {
   /**
@@ -204,18 +205,18 @@ public:
 
   /* virtual methods from class FlatTriangleFanVisitor */
 
-  void VisitFan(FlatGeoPoint origin, ConstBuffer<FlatGeoPoint> fan) override {
+  void VisitFan([[maybe_unused]] FlatGeoPoint origin, std::span<const FlatGeoPoint> fan) noexcept override {
 
-    if (fan.size < 3 || fans.full())
+    if (fan.size() < 3 || fans.full())
       return;
 
     GeoPoint g[ROUTEPOLAR_POINTS + 2];
-    for (size_t i = 0; i < fan.size; ++i)
+    for (size_t i = 0; i < fan.size(); ++i)
       g[i] = flat_projection.Unproject(fan[i]);
 
     // Perform clipping on the GeoPointVector
     GeoPoint clipped[(ROUTEPOLAR_POINTS + 2) * 3];
-    unsigned size = clip.ClipPolygon(clipped, g, fan.size);
+    unsigned size = clip.ClipPolygon(clipped, g, fan.size());
     // With less than three points we can't draw a polygon
     if (size < 3)
       return;
@@ -269,10 +270,8 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working)
                            render_projection);
 
   // Fill the TriangleCompound with all TriangleFans in range
-  {
-    const ProtectedRoutePlanner::Lease lease(*route_planner);
-    lease->AcceptInRange(render_projection.GetScreenBounds(), visitor, working);
-  }
+  route_planner->AcceptInRange(render_projection.GetScreenBounds(),
+                               visitor, working);
 
   // Exit early if not fans found
   if (visitor.fans.empty())

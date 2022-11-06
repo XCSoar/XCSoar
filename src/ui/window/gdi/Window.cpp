@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -64,6 +64,18 @@ Window::CreateMessageWindow() noexcept
   assert(hWnd != nullptr);
 }
 
+ContainerWindow *
+Window::GetParent() const noexcept
+{
+  assert(IsDefined());
+
+  HWND h = ::GetParent(hWnd);
+  if (h == nullptr)
+    return nullptr;
+
+  return dynamic_cast<ContainerWindow *>(GetChecked(h));
+}
+
 bool
 Window::IsMaximised() const noexcept
 {
@@ -72,6 +84,39 @@ Window::IsMaximised() const noexcept
 
   return this_rc.GetWidth() >= parent_rc.GetWidth() &&
     this_rc.GetHeight() >= parent_rc.GetHeight();
+}
+
+[[gnu::pure]]
+static PixelPoint
+ScreenToClient(HWND h, PixelPoint p) noexcept
+{
+  POINT q{p.x, p.y};
+  ScreenToClient(h, &q);
+  return {q.x, q.y};
+}
+
+[[gnu::pure]]
+static PixelRect
+ScreenToClient(HWND h, PixelRect r) noexcept
+{
+  return {
+    ScreenToClient(h, r.GetTopLeft()),
+    ScreenToClient(h, r.GetBottomRight()),
+  };
+}
+
+const PixelRect
+Window::GetPosition() const noexcept
+{
+  assert(IsDefined());
+
+  PixelRect rc = GetScreenPosition();
+
+  HWND parent = ::GetParent(hWnd);
+  if (parent != nullptr)
+    return ::ScreenToClient(parent, rc);
+
+  return rc;
 }
 
 void
@@ -120,19 +165,20 @@ Window::SetFont(const Font &_font) noexcept
 }
 
 bool
-Window::OnCommand(unsigned id, unsigned code)
+Window::OnCommand([[maybe_unused]] unsigned id,
+                  [[maybe_unused]] unsigned code) noexcept
 {
   return false;
 }
 
 bool
-Window::OnUser(unsigned id)
+Window::OnUser([[maybe_unused]] unsigned id) noexcept
 {
   return false;
 }
 
 LRESULT
-Window::OnMessage(HWND _hWnd, UINT message,
+Window::OnMessage([[maybe_unused]] HWND _hWnd, UINT message,
                   WPARAM wParam, LPARAM lParam) noexcept
 {
   switch (message) {

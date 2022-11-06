@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,8 +20,7 @@
 }
  */
 
-#ifndef ROUTE_PLANNER_GLUE_HPP
-#define ROUTE_PLANNER_GLUE_HPP
+#pragma once
 
 #include "Route/AirspaceRoute.hpp"
 
@@ -30,12 +29,10 @@ class RasterTerrain;
 class ProtectedAirspaceWarningManager;
 
 class RoutePlannerGlue {
-  const RasterTerrain *terrain;
+  const RasterTerrain *terrain = nullptr;
   AirspaceRoute planner;
 
 public:
-  RoutePlannerGlue():terrain(nullptr) {}
-
   void SetTerrain(const RasterTerrain *terrain);
 
   void UpdatePolar(const GlideSettings &settings,
@@ -53,14 +50,6 @@ public:
                    const AGeoPoint &origin,
                    const AGeoPoint &destination);
 
-  bool IsTerrainReachEmpty() const {
-    return planner.IsTerrainReachEmpty();
-  }
-
-  void ClearReach() {
-    planner.ClearReach();
-  }
-
   void Reset() {
     planner.Reset();
   }
@@ -73,27 +62,15 @@ public:
     return planner.GetSolution();
   }
 
-  void SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
-                  int h_ceiling, bool do_solve);
-
   [[gnu::pure]]
-  std::optional<ReachResult> FindPositiveArrival(const AGeoPoint &dest) const noexcept;
+  ReachFan SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
+                      int h_ceiling, bool do_solve, bool working) noexcept;
 
-  const FlatProjection &GetTerrainReachProjection() const {
-    return planner.GetTerrainReachProjection();
-  }
-
-  void AcceptInRange(const GeoBounds &bounds,
-                     FlatTriangleFanVisitor &visitor,
-                     bool working) const {
-    planner.AcceptInRange(bounds, visitor, working);
+  const auto &GetReachPolar() const noexcept {
+    return planner.GetReachPolar();
   }
 
   [[gnu::pure]]
   GeoPoint Intersection(const AGeoPoint &origin,
                         const AGeoPoint &destination) const;
-
-  int GetTerrainBase() const;
 };
-
-#endif

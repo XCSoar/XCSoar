@@ -26,11 +26,11 @@
  ****************************************************************************
  */
 
-#ifndef XCSOAR_XML_NODE_HPP
-#define XCSOAR_XML_NODE_HPP
+#pragma once
 
 #include "util/NonCopyable.hpp"
 #include "util/tstring.hpp"
+#include "util/tstring_view.hxx"
 #include "util/Compiler.h"
 
 #include <list>
@@ -72,7 +72,7 @@ class XMLNode {
     /** Array of attributes */
     std::forward_list<Attribute> attributes;
 
-    Data(std::basic_string_view<TCHAR> _name, bool _is_declaration) noexcept
+    Data(tstring_view _name, bool _is_declaration) noexcept
       :name(_name),
        is_declaration(_is_declaration) {}
 
@@ -102,7 +102,7 @@ class XMLNode {
    * Protected constructor: use "parse" functions to get your first
    * instance of XMLNode.
    */
-  XMLNode(std::basic_string_view<TCHAR> name,
+  XMLNode(tstring_view name,
           bool is_declaration) noexcept;
 
 public:
@@ -134,7 +134,7 @@ public:
   /**
    * @return the first child node, or nullptr if there is none
    */
-  gcc_pure
+  [[gnu::pure]]
   const XMLNode *GetFirstChild() const {
     return d != nullptr && !d->children.empty()
       ? &d->children.front()
@@ -144,7 +144,7 @@ public:
   /**
    * @return the first child node, or nullptr if there is none
    */
-  gcc_pure
+  [[gnu::pure]]
   XMLNode *GetFirstChild() {
     return d != nullptr && !d->children.empty()
       ? &d->children.front()
@@ -156,14 +156,14 @@ public:
    * @return ith child node with specific name (return an empty node
    * if failing)
    */
-  gcc_pure
+  [[gnu::pure]]
   const XMLNode *GetChildNode(const TCHAR *name) const;
 
   /**
    * @return ith attribute content with specific name (return a nullptr
    * if failing)
    */
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetAttribute(const TCHAR *name) const;
 
   /**
@@ -176,7 +176,7 @@ public:
    */
   void Serialise(BufferedOutputStream &os, bool format) const;
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsDeclaration() const {
     assert(d != nullptr);
 
@@ -218,7 +218,7 @@ public:
   /**
    * Add a child node to the given element.
    */
-  XMLNode &AddChild(const std::basic_string_view<TCHAR> name,
+  XMLNode &AddChild(const tstring_view name,
                     bool is_declaration=false) noexcept;
 
   /**
@@ -232,7 +232,7 @@ public:
   /**
    * Add text to the element.
    */
-  void AddText(std::basic_string_view<TCHAR> value) noexcept;
+  void AddText(tstring_view value) noexcept;
 
 private:
   /**
@@ -245,5 +245,3 @@ private:
   static void Serialise(const Data &data, BufferedOutputStream &os,
                         int format);
 };
-
-#endif

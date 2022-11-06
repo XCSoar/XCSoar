@@ -27,18 +27,20 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef ALLOCATED_SOCKET_ADDRESS_HXX
-#define ALLOCATED_SOCKET_ADDRESS_HXX
+#pragma once
 
 #include "SocketAddress.hxx" // IWYU pragma: export
 #include "Features.hxx"
 
 #include <utility>
 
+#ifdef HAVE_UN
+#include <string_view>
+#endif
+
 #include <stdlib.h>
 
 struct sockaddr;
-struct StringView;
 
 class AllocatedSocketAddress {
 public:
@@ -145,7 +147,7 @@ public:
 	 * @see SocketAddress::GetLocalRaw()
 	 */
 	[[gnu::pure]]
-	StringView GetLocalRaw() const noexcept;
+	std::string_view GetLocalRaw() const noexcept;
 
 	/**
 	 * @see SocketAddress::GetLocalPath()
@@ -201,5 +203,3 @@ public:
 private:
 	void SetSize(size_type new_size) noexcept;
 };
-
-#endif

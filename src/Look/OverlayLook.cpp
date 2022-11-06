@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,10 +26,11 @@ Copyright_License {
 #include "Resources.hpp"
 
 void
-OverlayLook::Initialise(const Font &font, const Font &bold_font)
+OverlayLook::Initialise([[maybe_unused]] const Font &font, const Font &bold_font)
 {
   map_scale_left_icon.LoadResource(IDB_MAPSCALE_LEFT, IDB_MAPSCALE_LEFT_HD, false);
   map_scale_right_icon.LoadResource(IDB_MAPSCALE_RIGHT, IDB_MAPSCALE_RIGHT_HD, false);
   overlay_font = &bold_font;
-  crosshair_pen.Create(Pen::DASH2, 1, COLOR_DARK_GRAY);
+  crosshair_pen.Create(Pen::SOLID, Layout::ScalePenWidth(2), COLOR_DARK_GRAY);
+  crosshair_pen_alias.Create(Pen::SOLID, Layout::ScalePenWidth(2), COLOR_WHITE);
 }

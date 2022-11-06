@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,17 +21,14 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_IO_FILE_HANDLE_HPP
-#define XCSOAR_IO_FILE_HANDLE_HPP
+#pragma once
 
 #include "system/Path.hpp"
 
 #include <algorithm>
-
 #include <cassert>
 #include <cstddef>
 #include <stdio.h>
-
 #include <tchar.h>
 
 class FileHandle {
@@ -123,5 +120,3 @@ public:
     ::fprintf(file, format, args...);
   }
 };
-
-#endif

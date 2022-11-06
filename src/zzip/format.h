@@ -9,8 +9,8 @@
  *  which in turn is based on PKWARE's appnote.txt
  *  (newer link: ftp://ftp.info-zip.org/pub/infozip/doc/)
  */
-#ifndef _ZZIP_FORMAT_H /* zzipformat.h */
-#define _ZZIP_FORMAT_H
+ 
+#pragma once
 
 #include <zzip/types.h>
 #include <zzip/__hints.h>
@@ -249,9 +249,3 @@ struct zzip_disk64_trailer
 # ifdef _MSC_VER
 # pragma pack(pop)
 # endif
-
-#endif /* _ZZIPFORMAT_H */
-
-
-
-

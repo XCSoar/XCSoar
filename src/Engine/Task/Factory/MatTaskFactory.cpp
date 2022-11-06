@@ -47,14 +47,15 @@ static constexpr LegalPointSet mat_finish_types{
   TaskPointFactoryType::FINISH_CYLINDER,
 };
 
-MatTaskFactory::MatTaskFactory(OrderedTask& _task, const TaskBehaviour &tb)
+MatTaskFactory::MatTaskFactory(OrderedTask &_task,
+                               const TaskBehaviour &tb) noexcept
 :AbstractTaskFactory(mat_constraints, _task, tb,
                      mat_start_types, mat_im_types, mat_finish_types)
 {
 }
 
 TaskPointFactoryType
-MatTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
+MatTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const noexcept
 {
   const TaskPointFactoryType oldtype = GetType(tp);
   TaskPointFactoryType newtype = oldtype;
@@ -77,7 +78,8 @@ MatTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
     newtype = TaskPointFactoryType::FINISH_CYLINDER;
     break;
 
-  case TaskPointFactoryType::KEYHOLE_SECTOR:
+  case TaskPointFactoryType::CUSTOM_KEYHOLE:
+  case TaskPointFactoryType::DAEC_KEYHOLE:
   case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
   case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
   case TaskPointFactoryType::FAI_SECTOR:

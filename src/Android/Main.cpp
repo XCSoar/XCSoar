@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -96,6 +96,13 @@ BluetoothHelper *bluetooth_helper;
 UsbSerialHelper *usb_serial_helper;
 IOIOHelper *ioio_helper;
 
+/**
+ * This mutex protects shutdown against other JNI calls, to avoid
+ * races between shutdown (destruction of MainWindow and NativeView)
+ * and new events being received on the Android main thread.
+ */
+static Mutex shutdown_mutex;
+
 gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj,
@@ -104,6 +111,8 @@ Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj,
                                      jint xdpi, jint ydpi,
                                      jint sdk_version, jstring product)
 try {
+  const std::scoped_lock shutdown_lock{shutdown_mutex};
+
   Java::Init(env);
 
   android_api_level = sdk_version;
@@ -198,8 +207,12 @@ try {
   AllowLanguage();
   InitLanguage();
 
-  if (Startup(screen_init.GetDisplay()))
-    CommonInterface::main_window->RunEventLoop();
+  {
+    const ScopeUnlock shutdown_unlock{shutdown_mutex};
+
+    if (Startup(screen_init.GetDisplay()))
+      CommonInterface::main_window->RunEventLoop();
+  }
 
   Shutdown();
 
@@ -271,6 +284,8 @@ JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
                                          jint width, jint height)
 {
+  const std::scoped_lock shutdown_lock{shutdown_mutex};
+
   if (event_queue == nullptr)
     return;
 
@@ -287,10 +302,15 @@ gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
 {
-  auto *main_window = NativeView::GetPointer(env, obj);
-  if (event_queue == nullptr || main_window == nullptr)
-    return;
+  const std::scoped_lock shutdown_lock{shutdown_mutex};
+
+  if (event_queue == nullptr)
     /* event subsystem is not initialized, there is nothing to pause */
+    return;
+
+  auto *main_window = NativeView::GetPointer(env, obj);
+  if (main_window == nullptr)
+    return;
 
   main_window->Pause();
 }
@@ -299,17 +319,22 @@ gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
 {
-  auto *main_window = NativeView::GetPointer(env, obj);
-  if (event_queue == nullptr || main_window == nullptr)
+  const std::scoped_lock shutdown_lock{shutdown_mutex};
+
+  if (event_queue == nullptr)
+    /* event subsystem is not initialized, there is nothing to pause */
     return;
-    /* event subsystem is not initialized, there is nothing to resume */
+
+  auto *main_window = NativeView::GetPointer(env, obj);
+  if (main_window == nullptr)
+    return;
 
   main_window->Resume();
 }
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeView_setHapticFeedback(JNIEnv *env, jobject obj,
+Java_org_xcsoar_NativeView_setHapticFeedback([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jobject obj,
                                              jboolean on)
 {
   os_haptic_feedback_enabled = on;

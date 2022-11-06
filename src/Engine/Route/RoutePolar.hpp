@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,8 +20,7 @@
 }
  */
 
-#ifndef ROUTEPOLAR_HPP
-#define ROUTEPOLAR_HPP
+#pragma once
 
 class Angle;
 class GlidePolar;
@@ -30,11 +29,11 @@ struct GlideResult;
 struct SpeedVector;
 struct FlatGeoPoint;
 
-#define ROUTEPOLAR_Q0 (6)
-#define ROUTEPOLAR_Q1 (2*ROUTEPOLAR_Q0-1)
-#define ROUTEPOLAR_Q2 (4*ROUTEPOLAR_Q0)
-#define ROUTEPOLAR_Q3 (8*ROUTEPOLAR_Q0)
-#define ROUTEPOLAR_POINTS (ROUTEPOLAR_Q3+1)
+static constexpr unsigned ROUTEPOLAR_Q0 = 6;
+static constexpr unsigned  ROUTEPOLAR_Q1 = (2*ROUTEPOLAR_Q0-1);
+static constexpr unsigned  ROUTEPOLAR_Q2 = (4*ROUTEPOLAR_Q0);
+static constexpr unsigned  ROUTEPOLAR_Q3 = (8*ROUTEPOLAR_Q0);
+static constexpr unsigned  ROUTEPOLAR_POINTS = (ROUTEPOLAR_Q3+1);
 
 /**
  * Class to store fast lookup aircraft performance (glide slope and speed) as a
@@ -111,5 +110,3 @@ private:
                         const SpeedVector &wind,
                         const Angle theta, const bool glide) const;
 };
-
-#endif

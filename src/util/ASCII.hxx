@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef ASCII_HXX
-#define ASCII_HXX
+#pragma once
 
 #include <cstddef>
 
@@ -66,5 +65,3 @@ CopyASCII(char *dest, std::size_t dest_size,
 [[gnu::nonnull]]
 void
 CopyASCIIUpper(char *dest, const char *src) noexcept;
-
-#endif

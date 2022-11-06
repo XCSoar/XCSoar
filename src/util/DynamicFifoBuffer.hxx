@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DYNAMIC_FIFO_BUFFER_HXX
-#define DYNAMIC_FIFO_BUFFER_HXX
+#pragma once
 
 #include "ForeignFifoBuffer.hxx"
 
@@ -109,13 +108,11 @@ public:
 	/**
 	 * Append data to the buffer, growing it as needed.
 	 */
-	void Append(const_pointer p, size_type n) noexcept {
-		std::copy_n(p, n, Write(n));
-		Append(n);
+	void Append(std::span<const std::byte> src) noexcept {
+		std::copy(src.begin(), src.end(), Write(src.size()));
+		Append(src.size());
 	}
 
 protected:
 	using ForeignFifoBuffer<T>::GetBuffer;
 };
-
-#endif

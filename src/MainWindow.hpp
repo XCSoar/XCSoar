@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MAIN_WINDOW_HXX
-#define XCSOAR_MAIN_WINDOW_HXX
+#pragma once
 
 #include "ui/window/SingleWindow.hpp"
 #include "ui/event/PeriodicTimer.hpp"
@@ -43,6 +42,8 @@ struct ComputerSettings;
 struct MapSettings;
 struct UIState;
 struct Look;
+class Menu;
+class MenuBar;
 class GlueMapWindow;
 class Widget;
 class RasterTerrain;
@@ -59,6 +60,8 @@ class MainWindow : public UI::SingleWindow {
   static constexpr const TCHAR *title = _T("XCSoar");
 
   Look *look = nullptr;
+
+  MenuBar *menu_bar = nullptr;
 
 #ifdef HAVE_SHOW_MENU_BUTTON
   ShowMenuButton *show_menu_button = nullptr;
@@ -370,6 +373,12 @@ public:
   [[gnu::pure]]
   Widget *GetFlavourWidget(const TCHAR *flavour) noexcept;
 
+  void ShowMenu(const Menu &menu, const Menu *overlay=nullptr,
+                bool full=true) noexcept;
+
+  [[gnu::pure]]
+  bool IsMenuButtonEnabled(unsigned idx) noexcept;
+
   void UpdateGaugeVisibility() noexcept;
 
   [[gnu::pure]]
@@ -396,19 +405,17 @@ private:
 
 protected:
   /* virtual methods from class Window */
-  virtual void OnDestroy() override;
-  virtual void OnResize(PixelSize new_size) override;
-  virtual void OnSetFocus() override;
-  virtual void OnCancelMode() override;
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnMouseUp(PixelPoint p) override;
-  bool OnMouseMove(PixelPoint p, unsigned keys) override;
-  bool OnMouseDouble(PixelPoint p) override;
-  virtual bool OnKeyDown(unsigned key_code) override;
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnDestroy() noexcept override;
+  void OnResize(PixelSize new_size) noexcept override;
+  void OnSetFocus() noexcept override;
+  void OnCancelMode() noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
+  bool OnMouseDouble(PixelPoint p) noexcept override;
+  bool OnKeyDown(unsigned key_code) noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
 
   /* virtual methods from class TopWindow */
   virtual bool OnClose() noexcept override;
 };
-
-#endif

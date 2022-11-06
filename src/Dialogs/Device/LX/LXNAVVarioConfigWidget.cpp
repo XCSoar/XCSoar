@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -64,7 +64,7 @@ WaitUnsignedValue(LXDevice &device, const char *name,
 }
 
 void
-LXNAVVarioConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
+LXNAVVarioConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept
 {
   RequestAllSettings(device);
 
@@ -72,17 +72,17 @@ LXNAVVarioConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) no
   brpda = WaitUnsignedValue(device, "BRPDA", 5);
 
   static constexpr StaticEnumChoice baud_list[] = {
-    { 0, _T("4800"), NULL },
-    { 1, _T("9600"), NULL },
-    { 2, _T("19200"), NULL },
-    { 3, _T("38400"), NULL },
-    { 4, _T("57600"), NULL },
-    { 5, _T("115200"), NULL },
-    { 6, _T("230400"), NULL },
-    { 7, _T("256000"), NULL },
-    { 8, _T("460800"), NULL },
-    { 9, _T("500k"), NULL },
-    { 10, _T("1M"), NULL },
+    { 0, _T("4800") },
+    { 1, _T("9600") },
+    { 2, _T("19200") },
+    { 3, _T("38400") },
+    { 4, _T("57600") },
+    { 5, _T("115200") },
+    { 6, _T("230400") },
+    { 7, _T("256000") },
+    { 8, _T("460800") },
+    { 9, _T("500k") },
+    { 10, _T("1M") },
     { 0 }
   };
 
@@ -97,13 +97,13 @@ try {
   bool changed = false;
   NarrowString<32> buffer;
 
-  if (SaveValue(BRGPS, brgps)) {
+  if (SaveValueEnum(BRGPS, brgps)) {
     buffer.UnsafeFormat("%u", brgps);
     device.SendLXNAVVarioSetting("BRGPS", buffer, env);
     changed = true;
   }
 
-  if (SaveValue(BRPDA, brpda)) {
+  if (SaveValueEnum(BRPDA, brpda)) {
     buffer.UnsafeFormat("%u", brpda);
     device.SendLXNAVVarioSetting("BRPDA", buffer, env);
     changed = true;

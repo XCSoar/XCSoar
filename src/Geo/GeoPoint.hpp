@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,8 +22,7 @@ Copyright_License {
 
 */
 
-#ifndef XCSOAR_GeoPoint_HPP
-#define XCSOAR_GeoPoint_HPP
+#pragma once
 
 #include "Math/Angle.hpp"
 #include "Math/Classify.hpp"
@@ -82,7 +81,7 @@ struct GeoPoint {
    * calculation.  This method may be used to explicitly declare a
    * GeoPoint attribute as "invalid".
    */
-  void SetInvalid() noexcept {
+  constexpr void SetInvalid() noexcept {
     longitude = Angle::Zero();
     latitude = Angle::FullCircle();
   }
@@ -155,7 +154,7 @@ struct GeoPoint {
    * @return Modified point
    */
   [[gnu::pure]]
-  GeoPoint operator* (const double x) const noexcept {
+  constexpr GeoPoint operator*(const double x) const noexcept {
     GeoPoint res = *this;
     res.longitude *= x;
     res.latitude *= x;
@@ -170,7 +169,7 @@ struct GeoPoint {
    * @return Modified point
    */
   [[gnu::pure]]
-  GeoPoint operator+ (const GeoPoint &delta) const noexcept {
+  constexpr GeoPoint operator+(const GeoPoint &delta) const noexcept {
     GeoPoint res = *this;
     res.longitude += delta.longitude;
     res.latitude += delta.latitude;
@@ -184,7 +183,7 @@ struct GeoPoint {
    *
    * @return Modified point
    */
-  const GeoPoint &operator+= (const GeoPoint &delta) noexcept {
+  constexpr const GeoPoint &operator+=(const GeoPoint &delta) noexcept {
     longitude += delta.longitude;
     latitude += delta.latitude;
     return *this;
@@ -336,5 +335,3 @@ struct AGeoPoint: public GeoPoint {
 };
 
 static_assert(std::is_trivial<AGeoPoint>::value, "type is not trivial");
-
-#endif

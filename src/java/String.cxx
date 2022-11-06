@@ -30,13 +30,10 @@
 #include "String.hxx"
 #include "util/TruncateString.hpp"
 #include "util/ScopeExit.hxx"
-#include "util/StringView.hxx"
 
-#include <string>
-
-Java::String::String(JNIEnv *_env, StringView _value) noexcept
+Java::String::String(JNIEnv *_env, std::string_view _value) noexcept
 	// TODO: is there no way to do this without duplicating the string?
-	:String(_env, std::string(_value.data, _value.size).c_str())
+	:String(_env, std::string{_value}.c_str())
 {
 }
 

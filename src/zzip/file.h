@@ -15,8 +15,7 @@
  * Copyright (c) Guido Draheim, use under copyleft (LGPL,MPL)
  */
 
-#ifndef _ZZIP_FILE_H /* zzip-file.h */
-#define _ZZIP_FILE_H 1
+#pragma once
 
 #ifndef ZZIP_32K
 #ifdef __GNUC__
@@ -71,6 +70,3 @@ struct zzip_file
     z_stream d_stream;
     zzip_plugin_io_t io;
 };
-
-#endif /* _ZZIP_FILE_H */
-

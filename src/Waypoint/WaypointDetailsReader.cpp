@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,9 +29,9 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "io/ConfiguredFile.hpp"
 #include "io/LineReader.hpp"
-#include "Operation/Operation.hpp"
+#include "Operation/ProgressListener.hpp"
 
-#include <vector>
+namespace WaypointDetails {
 
 static WaypointPtr
 FindWaypoint(Waypoints &way_points, const TCHAR *name)
@@ -39,11 +39,27 @@ FindWaypoint(Waypoints &way_points, const TCHAR *name)
   return way_points.LookupName(name);
 }
 
-static void
-SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
-                   const tstring &Details,
-                   const std::vector<tstring> &files_external,
-                   const std::vector<tstring> &files_embed)
+struct WaypointDetailsBuilder {
+  TCHAR name[201];
+  tstring details;
+#ifdef HAVE_RUN_FILE
+  std::forward_list<tstring> files_external;
+#endif
+  std::forward_list<tstring> files_embed;
+
+  void Reset() noexcept {
+    details.clear();
+#ifdef HAVE_RUN_FILE
+    files_external.clear();
+#endif
+    files_embed.clear();
+  }
+
+  void Commit(Waypoints &way_points) noexcept;
+};
+
+inline void
+WaypointDetailsBuilder::Commit(Waypoints &way_points) noexcept
 {
   auto wp = FindWaypoint(way_points, name);
   if (wp == nullptr)
@@ -51,10 +67,14 @@ SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
 
   // TODO: eliminate this const_cast hack
   Waypoint &new_wp = const_cast<Waypoint &>(*wp);
-  new_wp.details = Details.c_str();
-  new_wp.files_embed.assign(files_embed.begin(), files_embed.end());
+  new_wp.details = std::move(details);
+
+  files_embed.reverse();
+  new_wp.files_embed = std::move(files_embed);
+
 #ifdef HAVE_RUN_FILE
-  new_wp.files_external.assign(files_external.begin(), files_external.end());
+  files_external.reverse();
+  new_wp.files_external = std::move(files_external);
 #endif
 }
 
@@ -63,83 +83,77 @@ SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
  */
 static void
 ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
-                     OperationEnvironment &operation)
+                     ProgressListener &progress)
 {
-  tstring details;
-  std::vector<tstring> files_external, files_embed;
-  TCHAR name[201];
+  WaypointDetailsBuilder builder;
   const TCHAR *filename;
-
-  name[0] = 0;
 
   bool in_details = false;
   int i;
 
   const long filesize = std::max(reader.GetSize(), 1l);
-  operation.SetProgressRange(100);
+  progress.SetProgressRange(100);
 
   TCHAR *line;
   while ((line = reader.ReadLine()) != nullptr) {
     if (line[0] == _T('[')) { // Look for start
       if (in_details)
-        SetAirfieldDetails(way_points, name, details, files_external,
-                           files_embed);
+        builder.Commit(way_points);
 
-      details.clear();
-      files_external.clear();
-      files_embed.clear();
+      builder.Reset();
 
       // extract name
       for (i = 1; i < 201; i++) {
         if (line[i] == _T(']'))
           break;
 
-        name[i - 1] = line[i];
+        builder.name[i - 1] = line[i];
       }
-      name[i - 1] = 0;
+      builder.name[i - 1] = 0;
 
       in_details = true;
 
-      operation.SetProgressPosition(reader.Tell() * 100 / filesize);
+      progress.SetProgressPosition(reader.Tell() * 100 / filesize);
     } else if ((filename =
                 StringAfterPrefixIgnoreCase(line, _T("image="))) != nullptr) {
-      files_embed.emplace_back(filename);
+      builder.files_embed.emplace_front(filename);
     } else if ((filename =
                 StringAfterPrefixIgnoreCase(line, _T("file="))) != nullptr) {
 #ifdef HAVE_RUN_FILE
-      files_external.emplace_back(filename);
+      builder.files_external.emplace_front(filename);
 #endif
     } else {
       // append text to details string
       if (!StringIsEmpty(line)) {
-        details += line;
-        details += _T('\n');
+        builder.details += line;
+        builder.details += _T('\n');
       }
     }
   }
 
   if (in_details)
-    SetAirfieldDetails(way_points, name, details, files_external, files_embed);
+    builder.Commit(way_points);
 }
 
 /**
  * Opens the airfield details file and parses it
  */
 void
-WaypointDetails::ReadFile(TLineReader &reader, Waypoints &way_points,
-                          OperationEnvironment &operation)
+ReadFile(TLineReader &reader, Waypoints &way_points,
+         ProgressListener &progress)
 {
-  operation.SetText(_("Loading Airfield Details File..."));
-  ParseAirfieldDetails(way_points, reader, operation);
+  ParseAirfieldDetails(way_points, reader, progress);
 }
 
 void
-WaypointDetails::ReadFileFromProfile(Waypoints &way_points,
-                                     OperationEnvironment &operation)
+ReadFileFromProfile(Waypoints &way_points,
+                    ProgressListener &progress)
 {
   auto reader = OpenConfiguredTextFile(ProfileKeys::AirfieldFile,
                                        "airfields.txt",
                                        Charset::AUTO);
   if (reader)
-    ReadFile(*reader, way_points, operation);
+    ReadFile(*reader, way_points, progress);
 }
+
+} // namespace WaypointDetails

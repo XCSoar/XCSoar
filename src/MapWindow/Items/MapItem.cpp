@@ -26,7 +26,7 @@ Copyright_License {
 
 TaskOZMapItem::TaskOZMapItem(int _index, const ObservationZonePoint &_oz,
                              TaskPointType _tp_type, WaypointPtr &&_waypoint)
-  :MapItem(TASK_OZ), index(_index), oz(_oz.Clone()),
+  :MapItem(Type::TASK_OZ), index(_index), oz(_oz.Clone()),
    tp_type(_tp_type), waypoint(std::move(_waypoint)) {}
 
 TaskOZMapItem::~TaskOZMapItem() noexcept = default;

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TRACKING_SKYLINES_HANDLER_HPP
-#define XCSOAR_TRACKING_SKYLINES_HANDLER_HPP
+#pragma once
 
 #include "Features.hpp"
 
@@ -45,15 +44,15 @@ public:
    */
   virtual void OnSkyLinesReady() {}
 
-  virtual void OnAck(unsigned id) {}
-  virtual void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
-                         const ::GeoPoint &location, int altitude) {}
-  virtual void OnUserName(uint32_t user_id, const TCHAR *name) {}
-  virtual void OnWave(unsigned time_of_day_ms,
-                      const ::GeoPoint &a, const ::GeoPoint &b) {}
-  virtual void OnThermal(unsigned time_of_day_ms,
-                         const AGeoPoint &bottom, const AGeoPoint &top,
-                         double lift) {}
+  virtual void OnAck([[maybe_unused]] unsigned id) {}
+  virtual void OnTraffic([[maybe_unused]] uint32_t pilot_id, [[maybe_unused]] unsigned time_of_day_ms,
+                         [[maybe_unused]] const ::GeoPoint &location, [[maybe_unused]] int altitude) {}
+  virtual void OnUserName([[maybe_unused]] uint32_t user_id, [[maybe_unused]] const TCHAR *name) {}
+  virtual void OnWave([[maybe_unused]] unsigned time_of_day_ms,
+                      [[maybe_unused]] const ::GeoPoint &a, [[maybe_unused]] const ::GeoPoint &b) {}
+  virtual void OnThermal([[maybe_unused]] unsigned time_of_day_ms,
+                         [[maybe_unused]] const AGeoPoint &bottom, [[maybe_unused]] const AGeoPoint &top,
+                         [[maybe_unused]] double lift) {}
 
   /**
    * An error has occurred, and the SkyLines tracking client is
@@ -64,5 +63,3 @@ public:
 };
 
 } /* namespace SkyLinesTracking */
-
-#endif

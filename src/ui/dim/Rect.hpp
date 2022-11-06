@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_UI_RECT_HPP
-#define XCSOAR_UI_RECT_HPP
+#pragma once
 
 #include "Point.hpp"
 #include "Size.hpp"
@@ -48,6 +47,10 @@ struct PixelRect {
 
   constexpr PixelRect(int _left, int _top, int _right, int _bottom) noexcept
     :left(_left), top(_top), right(_right), bottom(_bottom) {}
+
+  constexpr PixelRect(PixelPoint top_left, PixelPoint bottom_right) noexcept
+    :left(top_left.x), top(top_left.y),
+     right(bottom_right.x), bottom(bottom_right.y) {}
 
   constexpr PixelRect(PixelPoint origin, PixelSize size) noexcept
     :left(origin.x), top(origin.y),
@@ -448,5 +451,3 @@ struct PixelRect {
   }
 #endif
 };
-
-#endif

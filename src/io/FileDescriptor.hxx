@@ -43,6 +43,8 @@
 #include <wchar.h>
 #endif
 
+class UniqueFileDescriptor;
+
 /**
  * An OO wrapper for a UNIX file descriptor.
  *
@@ -149,36 +151,44 @@ public:
 	static bool CreatePipe(FileDescriptor &r, FileDescriptor &w) noexcept;
 
 #ifdef _WIN32
-	void EnableCloseOnExec() noexcept {}
-	void DisableCloseOnExec() noexcept {}
-	void SetBinaryMode() noexcept;
+	void EnableCloseOnExec() const noexcept {}
+	void DisableCloseOnExec() const noexcept {}
+	void SetBinaryMode() const noexcept;
 #else
 	static bool CreatePipeNonBlock(FileDescriptor &r,
 				       FileDescriptor &w) noexcept;
 
-	void SetBinaryMode() noexcept {}
+	void SetBinaryMode() const noexcept {}
 
 	/**
 	 * Enable non-blocking mode on this file descriptor.
 	 */
-	void SetNonBlocking() noexcept;
+	void SetNonBlocking() const noexcept;
 
 	/**
 	 * Enable blocking mode on this file descriptor.
 	 */
-	void SetBlocking() noexcept;
+	void SetBlocking() const noexcept;
 
 	/**
 	 * Auto-close this file descriptor when a new program is
 	 * executed.
 	 */
-	void EnableCloseOnExec() noexcept;
+	void EnableCloseOnExec() const noexcept;
 
 	/**
 	 * Do not auto-close this file descriptor when a new program
 	 * is executed.
 	 */
-	void DisableCloseOnExec() noexcept;
+	void DisableCloseOnExec() const noexcept;
+
+	/**
+	 * Duplicate this file descriptor.
+	 *
+	 * @return the new file descriptor or UniqueFileDescriptor{}
+	 * on error
+	 */
+	UniqueFileDescriptor Duplicate() const noexcept;
 
 	/**
 	 * Duplicate the file descriptor onto the given file descriptor.
@@ -193,13 +203,12 @@ public:
 	 * this method to inject file descriptors into a new child
 	 * process, to be used by a newly executed program.
 	 */
-	bool CheckDuplicate(FileDescriptor new_fd) noexcept;
+	bool CheckDuplicate(FileDescriptor new_fd) const noexcept;
 #endif
 
 #ifdef __linux__
 	bool CreateEventFD(unsigned initval=0) noexcept;
 	bool CreateSignalFD(const sigset_t *mask) noexcept;
-	bool CreateInotify() noexcept;
 #endif
 
 	/**
@@ -214,13 +223,13 @@ public:
 	/**
 	 * Rewind the pointer to the beginning of the file.
 	 */
-	bool Rewind() noexcept;
+	bool Rewind() const noexcept;
 
-	off_t Seek(off_t offset) noexcept {
+	off_t Seek(off_t offset) const noexcept {
 		return lseek(Get(), offset, SEEK_SET);
 	}
 
-	off_t Skip(off_t offset) noexcept {
+	off_t Skip(off_t offset) const noexcept {
 		return lseek(Get(), offset, SEEK_CUR);
 	}
 
@@ -235,7 +244,14 @@ public:
 	[[gnu::pure]]
 	off_t GetSize() const noexcept;
 
-	ssize_t Read(void *buffer, std::size_t length) noexcept {
+#ifndef _WIN32
+	ssize_t ReadAt(off_t offset,
+		       void *buffer, std::size_t length) const noexcept {
+		return ::pread(fd, buffer, length, offset);
+	}
+#endif
+
+	ssize_t Read(void *buffer, std::size_t length) const noexcept {
 		return ::read(fd, buffer, length);
 	}
 
@@ -243,9 +259,9 @@ public:
 	 * Read until all of the given buffer has been filled.  Throws
 	 * on error.
 	 */
-	void FullRead(void *buffer, std::size_t length);
+	void FullRead(void *buffer, std::size_t length) const;
 
-	ssize_t Write(const void *buffer, std::size_t length) noexcept {
+	ssize_t Write(const void *buffer, std::size_t length) const noexcept {
 		return ::write(fd, buffer, length);
 	}
 
@@ -253,7 +269,7 @@ public:
 	 * Write until all of the given buffer has been written.
 	 * Throws on error.
 	 */
-	void FullWrite(const void *buffer, std::size_t length);
+	void FullWrite(const void *buffer, std::size_t length) const;
 
 #ifndef _WIN32
 	int Poll(short events, int timeout) const noexcept;

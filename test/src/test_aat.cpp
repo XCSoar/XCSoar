@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -58,15 +58,15 @@ int main(int argc, char** argv)
     return 0;
   }
 
-#define NUM_FLIGHT 2
+  static constexpr unsigned NUM_FLIGHT = 2;
 
   plan_tests(NUM_FLIGHT*2);
 
-  for (int i=0; i<NUM_FLIGHT; i++) {
+  for (unsigned i=0; i<NUM_FLIGHT; i++) {
     unsigned k = rand()%NUM_WIND;
     ok (test_aat(2,k), GetTestName("target ",2,k),0);
   }
-  for (int i=0; i<NUM_FLIGHT; i++) {
+  for (unsigned i=0; i<NUM_FLIGHT; i++) {
     unsigned k = rand()%NUM_WIND;
     ok (test_aat(0,k), GetTestName("target ",0,k),0);
   }

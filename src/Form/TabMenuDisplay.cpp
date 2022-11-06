@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -36,12 +36,7 @@ Copyright_License {
 
 TabMenuDisplay::TabMenuDisplay(PagerWidget &_pager,
                                const DialogLook &_look) noexcept
-  :pager(_pager),
-   look(_look),
-   dragging(false),
-   drag_off_button(false),
-   down_index(MenuTabIndex::None()),
-   cursor(0)
+  :pager(_pager), look(_look)
 {
 }
 
@@ -107,12 +102,11 @@ GetTabLineHeight() noexcept
 void
 TabMenuDisplay::UpdateLayout() noexcept
 {
-  const unsigned window_width = GetWidth();
-  const unsigned window_height = GetHeight();
+  const auto window_size = GetSize();
   const unsigned border_width = GetTabLineHeight();
   const unsigned menu_button_height =
-    std::min(Layout::GetMaximumControlHeight(), window_height / 7u);
-  const unsigned menu_button_width = (window_width - 2 * border_width) / 2;
+    std::min(Layout::GetMaximumControlHeight(), window_size.height / 7u);
+  const unsigned menu_button_width = (window_size.width - 2 * border_width) / 2;
 
   const unsigned offset = Layout::Scale(2);
   const unsigned item_height = menu_button_height + border_width;
@@ -132,8 +126,8 @@ TabMenuDisplay::UpdateLayout() noexcept
       item_height * main.NumSubMenus() + border_width;
 
     unsigned page_y = main.rc.top + offset;
-    if (page_y + group_height > window_height)
-      page_y = window_height - group_height - offset;
+    if (page_y + group_height > window_size.height)
+      page_y = window_size.height - group_height - offset;
 
     for (unsigned page_i = main.first_page_index;
          page_i <= main.last_page_index; ++page_i) {
@@ -235,14 +229,14 @@ TabMenuDisplay::HighlightPrevious() noexcept
 }
 
 void
-TabMenuDisplay::OnResize(PixelSize new_size)
+TabMenuDisplay::OnResize(PixelSize new_size) noexcept
 {
   PaintWindow::OnResize(new_size);
   UpdateLayout();
 }
 
 bool
-TabMenuDisplay::OnKeyCheck(unsigned key_code) const
+TabMenuDisplay::OnKeyCheck(unsigned key_code) const noexcept
 {
  switch (key_code) {
 
@@ -257,7 +251,7 @@ TabMenuDisplay::OnKeyCheck(unsigned key_code) const
 }
 
 bool
-TabMenuDisplay::OnKeyDown(unsigned key_code)
+TabMenuDisplay::OnKeyDown(unsigned key_code) noexcept
 {
   switch (key_code) {
   case KEY_RETURN:
@@ -278,7 +272,7 @@ TabMenuDisplay::OnKeyDown(unsigned key_code)
 }
 
 bool
-TabMenuDisplay::OnMouseDown(PixelPoint Pos)
+TabMenuDisplay::OnMouseDown(PixelPoint Pos) noexcept
 {
   DragEnd();
 
@@ -298,7 +292,7 @@ TabMenuDisplay::OnMouseDown(PixelPoint Pos)
 }
 
 bool
-TabMenuDisplay::OnMouseUp(PixelPoint Pos)
+TabMenuDisplay::OnMouseUp(PixelPoint Pos) noexcept
 {
   if (dragging) {
     DragEnd();
@@ -330,7 +324,8 @@ TabMenuDisplay::OnMouseUp(PixelPoint Pos)
 }
 
 bool
-TabMenuDisplay::OnMouseMove(PixelPoint p, unsigned keys)
+TabMenuDisplay::OnMouseMove(PixelPoint p,
+                            [[maybe_unused]] unsigned keys) noexcept
 {
   if (down_index.IsNone())
     return false;
@@ -418,7 +413,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas) const noexcept
 }
 
 void
-TabMenuDisplay::OnPaint(Canvas &canvas)
+TabMenuDisplay::OnPaint(Canvas &canvas) noexcept
 {
   canvas.Clear(look.background_color);
 
@@ -427,14 +422,14 @@ TabMenuDisplay::OnPaint(Canvas &canvas)
 }
 
 void
-TabMenuDisplay::OnKillFocus()
+TabMenuDisplay::OnKillFocus() noexcept
 {
   Invalidate();
   PaintWindow::OnKillFocus();
 }
 
 void
-TabMenuDisplay::OnSetFocus()
+TabMenuDisplay::OnSetFocus() noexcept
 {
   Invalidate();
   PaintWindow::OnSetFocus();

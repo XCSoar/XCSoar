@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -40,11 +40,11 @@ Copyright_License {
 #endif
 
 GeoQuadrilateral
-Bitmap::LoadGeoFile(Path path)
+Bitmap::LoadGeoFile([[maybe_unused]] Path path)
 {
 #ifdef USE_GEOTIFF
-  if (path.MatchesExtension(_T(".tif")) ||
-      path.MatchesExtension(_T(".tiff"))) {
+  if (path.EndsWithIgnoreCase(_T(".tif")) ||
+      path.EndsWithIgnoreCase(_T(".tiff"))) {
     auto result = LoadGeoTiff(path);
     if (!Load(std::move(result.first)))
       throw std::runtime_error("Failed to use geo image file");

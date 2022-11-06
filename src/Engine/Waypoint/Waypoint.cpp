@@ -23,19 +23,20 @@
 #include "Waypoint.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
 
-Waypoint::Waypoint(const GeoPoint &_location)
+Waypoint::Waypoint(const GeoPoint &_location) noexcept
   :location(_location)
 {
 }
 
 bool
-Waypoint::IsCloseTo(const GeoPoint &_location, const double range) const
+Waypoint::IsCloseTo(const GeoPoint &_location,
+                    const double range) const noexcept
 {
   return location.Distance(_location) <= range;
 }
 
 void
-Waypoint::Project(const FlatProjection &projection)
+Waypoint::Project(const FlatProjection &projection) noexcept
 {
   flat_location = projection.ProjectInteger(location);
 

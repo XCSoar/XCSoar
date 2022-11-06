@@ -31,7 +31,7 @@
 #include "Math/FastMath.hpp"
 #include "util/Compiler.h"
 
-static gcc_const TCHAR
+[[gnu::const]] static TCHAR
 getDirection(int dx, int dy)
 {
   if (dy < 0 && -dy >= abs(dx) * 2)

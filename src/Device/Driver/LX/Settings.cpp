@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -106,6 +106,15 @@ LXDevice::SendNanoSetting(const char *name, const char *value,
 }
 
 bool
+LXDevice::SendNanoSetting(const char *name, unsigned value,
+                          OperationEnvironment &env)
+{
+  char buffer[32];
+  sprintf(buffer, "%u", value);
+  return SendNanoSetting(name, buffer, env);
+}
+
+bool
 LXDevice::RequestNanoSetting(const char *name, OperationEnvironment &env)
 {
   if (!EnableLoggerNMEA(env))
@@ -146,8 +155,19 @@ LXDevice::GetNanoSetting(const char *name) const noexcept
   return *i;
 }
 
+unsigned
+LXDevice::GetNanoSettingInteger(const char *name) const noexcept
+{
+  const std::lock_guard<Mutex> lock{nano_settings};
+  auto i = nano_settings.find(name);
+  if (i == nano_settings.end())
+    return {};
+
+  return strtoul(i->c_str(), nullptr, 10);
+}
+
 bool
-LXDevice::PutBallast(gcc_unused double fraction, double overload,
+LXDevice::PutBallast([[maybe_unused]] double fraction, double overload,
                      OperationEnvironment &env)
 {
   if (!EnableNMEA(env))

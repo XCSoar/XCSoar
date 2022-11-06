@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -50,7 +50,7 @@ public:
   }
 
 protected:
-  virtual void OnPaint(Canvas &canvas) override {
+  void OnPaint(Canvas &canvas) noexcept override {
     canvas.ClearWhite();
     renderer.Draw(canvas, GetClientRect());
   }
@@ -85,7 +85,7 @@ private:
   }
 
 protected:
-  void OnResize(PixelSize size) override {
+  void OnResize(PixelSize size) noexcept override {
     SingleWindow::OnResize(size);
 
     const PixelRect rc = GetClientRect();
@@ -96,12 +96,12 @@ protected:
       close_button.Move(GetButtonRect(rc));
   }
 
-  bool OnKeyUp(unsigned key_code) override {
+  bool OnKeyUp([[maybe_unused]] unsigned key_code) noexcept override {
     Close();
     return true;
   }
 
-  bool OnMouseUp(PixelPoint p) override {
+  bool OnMouseUp([[maybe_unused]] PixelPoint p) noexcept override {
     Close();
     return true;
   }

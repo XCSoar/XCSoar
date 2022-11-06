@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S python3 -u
 
 import os, os.path
 import re
@@ -133,6 +133,7 @@ elif re.match('(arm.*|aarch64)-apple-darwin', actual_host_triplet) is not None:
         cares,
         curl,
         lua,
+        sqlite3,
         proj,
         libtiff,
         libgeotiff,
@@ -145,6 +146,7 @@ elif 'apple-darwin' in actual_host_triplet:
         cares,
         curl,
         lua,
+        sqlite3,
         proj,
         libtiff,
         libgeotiff,
@@ -157,6 +159,7 @@ elif 'android' in actual_host_triplet:
         cares,
         curl,
         lua,
+        sqlite3,
         proj,
         libtiff,
         libgeotiff,

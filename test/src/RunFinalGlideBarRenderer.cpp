@@ -92,7 +92,7 @@ public:
   }
 
 protected:
-  virtual void OnPaint(Canvas &canvas) override {
+  void OnPaint(Canvas &canvas) noexcept override {
     canvas.ClearWhite();
     renderer.Draw(canvas, canvas.GetRect(), calculated, glide_settings, true);
   }

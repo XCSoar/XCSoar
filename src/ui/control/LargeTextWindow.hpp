@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_LARGE_TEXT_WINDOW_HPP
-#define XCSOAR_SCREEN_LARGE_TEXT_WINDOW_HPP
+#pragma once
 
 #include "ui/window/NativeWindow.hpp"
 
@@ -110,14 +109,12 @@ public:
   void ScrollTo(unsigned new_origin) noexcept;
 
 protected:
-  void OnResize(PixelSize new_size) override;
-  void OnSetFocus() override;
-  void OnKillFocus() override;
-  void OnPaint(Canvas &canvas) override;
-  bool OnKeyCheck(unsigned key_code) const override;
-  bool OnKeyDown(unsigned key_code) override;
-  bool OnMouseDown(PixelPoint p) override;
+  void OnResize(PixelSize new_size) noexcept override;
+  void OnSetFocus() noexcept override;
+  void OnKillFocus() noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
+  bool OnKeyCheck(unsigned key_code) const noexcept override;
+  bool OnKeyDown(unsigned key_code) noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
 #endif /* !USE_WINUSER */
 };
-
-#endif

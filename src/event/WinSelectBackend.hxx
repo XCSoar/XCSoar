@@ -17,15 +17,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef EVENT_WINSELECT_BACKEND_HXX
-#define EVENT_WINSELECT_BACKEND_HXX
+#pragma once
 
 #include "PollResultGeneric.hxx"
 
 #include <algorithm>
 #include <cassert>
 #include <unordered_map>
-
 #include <winsock2.h>
 
 class SocketSet
@@ -128,5 +126,3 @@ private:
 
 	void ApplyReady(const SocketSet &src, unsigned events) noexcept;
 };
-
-#endif

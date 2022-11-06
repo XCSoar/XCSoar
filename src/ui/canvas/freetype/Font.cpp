@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,6 @@ Copyright_License {
 #include "ui/canvas/custom/Files.hpp"
 #include "Look/FontDescription.hpp"
 #include "util/RuntimeError.hxx"
-#include "util/TStringView.hxx"
 #include "Init.hpp"
 #include "Asset.hpp"
 #include "system/Path.hpp"
@@ -97,15 +96,17 @@ FT_CEIL(FT_Long x) noexcept
 
 [[gnu::pure]]
 static unsigned
-NextChar(TStringView &s) noexcept
+NextChar(tstring_view &s) noexcept
 {
   assert(!s.empty());
 
 #ifdef _UNICODE
-  return unsigned(s.shift());
+  const unsigned ch = s.front();
+  s.remove_prefix(1);
+  return ch;
 #else
-  auto n = NextUTF8(s.data);
-  s.MoveFront(n.second);
+  auto n = NextUTF8(s.data());
+  s.remove_prefix(n.second - s.data());
   return n.first;
 #endif
 }
@@ -139,7 +140,7 @@ static unsigned
 GetCapitalHeight(FT_Face face) noexcept
 {
 #ifndef ENABLE_OPENGL
-  const std::lock_guard<Mutex> lock(freetype_mutex);
+  const std::lock_guard lock{freetype_mutex};
 #endif
 
   FT_UInt i = FT_Get_Char_Index(face, 'M');
@@ -154,7 +155,7 @@ GetCapitalHeight(FT_Face face) noexcept
 }
 
 void
-Font::LoadFile(const char *file, unsigned ptsize, bool bold, bool italic)
+Font::LoadFile(const char *file, unsigned ptsize, [[maybe_unused]] bool bold, [[maybe_unused]] bool italic)
 {
   assert(IsScreenInitialized());
 
@@ -230,9 +231,8 @@ Font::Destroy() noexcept
 
 template<typename F>
 static void
-ForEachChar(TStringView text, F &&f)
+ForEachChar(tstring_view text, F &&f)
 {
-  assert(text != nullptr);
 #ifndef _UNICODE
   assert(ValidateUTF8(text));
 #endif
@@ -254,7 +254,7 @@ ForEachGlyph(const FT_Face face, unsigned ascent_height, T &&text,
   unsigned prev_index = 0;
 
 #ifndef ENABLE_OPENGL
-  const std::lock_guard<Mutex> lock(freetype_mutex);
+  const std::lock_guard lock{freetype_mutex};
 #endif
 
   ForEachChar(std::forward<T>(text),
@@ -291,12 +291,12 @@ ForEachGlyph(const FT_Face face, unsigned ascent_height, T &&text,
 }
 
 PixelSize
-Font::TextSize(TStringView text) const noexcept
+Font::TextSize(tstring_view text) const noexcept
 {
   int maxx = 0;
 
   ForEachGlyph(face, ascent_height, text,
-               [&maxx](int x, int y, const FT_GlyphSlot glyph){
+               [&maxx](int x, [[maybe_unused]] int y, const FT_GlyphSlot glyph){
       const FT_Glyph_Metrics &metrics = glyph->metrics;
       const int glyph_minx = FT_FLOOR(metrics.horiBearingX);
       const int glyph_maxx = glyph_minx + FT_CEIL(metrics.width);
@@ -400,7 +400,7 @@ RenderGlyph(uint8_t *buffer, size_t width, size_t height,
 }
 
 void
-Font::Render(TStringView text, const PixelSize size,
+Font::Render(tstring_view text, const PixelSize size,
              void *_buffer) const noexcept
 {
   uint8_t *buffer = (uint8_t *)_buffer;

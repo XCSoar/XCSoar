@@ -5,18 +5,18 @@ HAVE_HTTP := y
 LIBHTTP_SOURCES = \
 	$(SRC)/net/http/DownloadManager.cpp \
 	$(SRC)/net/http/Progress.cpp \
-	$(SRC)/net/http/OutputStreamHandler.cxx \
+	$(SRC)/lib/curl/OutputStreamHandler.cxx \
 	$(SRC)/net/http/FormData.cpp \
-	$(SRC)/net/http/Adapter.cxx \
-	$(SRC)/net/http/Setup.cxx \
-	$(SRC)/net/http/Request.cxx \
-	$(SRC)/net/http/CoRequest.cxx \
-	$(SRC)/net/http/CoStreamRequest.cxx \
+	$(SRC)/lib/curl/Adapter.cxx \
+	$(SRC)/lib/curl/Setup.cxx \
+	$(SRC)/lib/curl/Request.cxx \
+	$(SRC)/lib/curl/CoRequest.cxx \
+	$(SRC)/lib/curl/CoStreamRequest.cxx \
 	$(SRC)/net/http/CoDownloadToFile.cpp \
-	$(SRC)/net/http/Global.cxx \
+	$(SRC)/lib/curl/Global.cxx \
 	$(SRC)/net/http/Init.cpp
 
-ifeq ($(TARGET_IS_OSX),y)
+ifeq ($(TARGET_IS_OSX)$(USE_HOMEBREW),yn)
 # We use the libcurl which is included in Mac OS X.
 # Mac OS X SDKs contain the required headers / library stubs,
 # but no pkg-config file.

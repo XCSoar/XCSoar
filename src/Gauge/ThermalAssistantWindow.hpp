@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@
 }
 */
 
-#ifndef THERMAL_ASSISTENT_WINDOW_HPP
-#define THERMAL_ASSISTENT_WINDOW_HPP
+#pragma once
 
 #include "ui/window/AntiFlickerWindow.hpp"
 #include "ThermalAssistantRenderer.hpp"
@@ -51,8 +50,6 @@ public:
 protected:
   void DrawCircle(Canvas &canvas);
 
-  virtual void OnResize(PixelSize new_size) override;
+  virtual void OnResize(PixelSize new_size) noexcept override;
   virtual void OnPaintBuffer(Canvas &canvas) noexcept override;
 };
-
-#endif

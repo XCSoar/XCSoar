@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_CACHED_RENDERER_HPP
-#define XCSOAR_CACHED_RENDERER_HPP
+#pragma once
 
 #ifndef ENABLE_OPENGL
 #include "Projection/CompareProjection.hpp"
@@ -48,26 +47,26 @@ public:
   void Invalidate() {
   }
 
-  constexpr bool Check(const WindowProjection &projection) const {
+  constexpr bool Check([[maybe_unused]] const WindowProjection &projection) const {
     return false;
   }
 
   constexpr Canvas &Begin(Canvas &canvas,
-                          const WindowProjection &projection) const {
+                          [[maybe_unused]] const WindowProjection &projection) const {
     return canvas;
   }
 
-  void Commit(Canvas &canvas, const WindowProjection &projection) {
+  void Commit([[maybe_unused]] Canvas &canvas, [[maybe_unused]] const WindowProjection &projection) {
   }
 
-  void CopyAndTo(Canvas &canvas) const {
+  void CopyAndTo([[maybe_unused]] Canvas &canvas) const {
   }
 
-  void CopyTransparentWhiteTo(Canvas &canvas) const {
+  void CopyTransparentWhiteTo([[maybe_unused]] Canvas &canvas) const {
   }
 
-  void AlphaBlendTo(Canvas &canvas, const WindowProjection &projection,
-                    uint8_t alpha) const {
+  void AlphaBlendTo([[maybe_unused]] Canvas &canvas, [[maybe_unused]] const WindowProjection &projection,
+                    [[maybe_unused]] uint8_t alpha) const {
   }
 #else
   CompareProjection compare_projection;
@@ -124,5 +123,3 @@ public:
 #endif
 #endif
 };
-
-#endif

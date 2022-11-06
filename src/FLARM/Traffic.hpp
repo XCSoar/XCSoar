@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_TRAFFIC_HPP
-#define XCSOAR_FLARM_TRAFFIC_HPP
+#pragma once
 
 #include "FlarmId.hpp"
 #include "Geo/GeoPoint.hpp"
@@ -34,7 +33,6 @@ Copyright_License {
 #include "Rough/RoughAngle.hpp"
 
 #include <type_traits>
-
 #include <tchar.h>
 
 struct FlarmTraffic {
@@ -191,5 +189,3 @@ struct FlarmTraffic {
 };
 
 static_assert(std::is_trivial<FlarmTraffic>::value, "type is not trivial");
-
-#endif

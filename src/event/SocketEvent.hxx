@@ -17,8 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef MPD_SOCKET_EVENT_HXX
-#define MPD_SOCKET_EVENT_HXX
+#pragma once
 
 #include "BackendEvents.hxx"
 #include "net/SocketDescriptor.hxx"
@@ -43,7 +42,7 @@ class EventLoop;
 class SocketEvent final : IntrusiveListHook, public EventPollBackendEvents
 {
 	friend class EventLoop;
-	friend class IntrusiveList<SocketEvent>;
+	friend struct IntrusiveListBaseHookTraits<SocketEvent>;
 
 	EventLoop &loop;
 
@@ -176,5 +175,3 @@ private:
 	 */
 	void Dispatch() noexcept;
 };
-
-#endif

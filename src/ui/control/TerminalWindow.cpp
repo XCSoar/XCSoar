@@ -103,7 +103,7 @@ TerminalWindow::OnCreate()
 }
 
 void
-TerminalWindow::OnResize(PixelSize new_size)
+TerminalWindow::OnResize(PixelSize new_size) noexcept
 {
   PaintWindow::OnResize(new_size);
 
@@ -119,13 +119,13 @@ TerminalWindow::OnResize(PixelSize new_size)
 }
 
 void
-TerminalWindow::OnPaint(Canvas &canvas)
+TerminalWindow::OnPaint(Canvas &canvas) noexcept
 {
   OnPaint(canvas, GetClientRect());
 }
 
 void
-TerminalWindow::OnPaint(Canvas &canvas, const PixelRect &p_dirty)
+TerminalWindow::OnPaint(Canvas &canvas, const PixelRect &p_dirty) noexcept
 {
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(look.text_color);

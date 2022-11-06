@@ -61,9 +61,17 @@ TaskDijkstra::AddZeroStartEdges() noexcept
   ScanTaskPoint destination(stage, 0);
   const unsigned dsize = GetStageSize(stage);
 
+  /* only the first start edge is really going to be zero; all
+     following edges will be incremented, to add some bias preferring
+     the first point which is usually the reference point of the
+     observation zone; this prevents very rare miscalculations, which
+     should never occur in real flights, but can fail our unit tests
+     with synthetic input values */
+  value_type value = 0;
+
   for (const ScanTaskPoint end(stage, dsize);
        destination != end; destination.IncrementPointIndex())
-    LinkStart(destination, 0);
+    LinkStart(destination, value++);
 }
 
 void

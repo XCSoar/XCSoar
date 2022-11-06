@@ -22,16 +22,15 @@ Copyright_License {
 */
 
 #include "Kernel.hpp"
-#include "Model.hpp"
-
-#include "system/FileUtil.hpp"
 
 #include <stdexcept>
 
 #ifdef KOBO
 
+#include "Model.hpp"
 #include "io/FileReader.hxx"
 #include "io/BufferedReader.hxx"
+#include "system/FileUtil.hpp"
 #include "lib/zlib/GunzipReader.hxx"
 
 #include <fcntl.h>
@@ -112,9 +111,9 @@ bool
 IsKoboCustomKernel()
 try {
 #ifdef KOBO
-  /* All Kobo except Clara HD have a factory kernel without OTG mode so
+  /* All Kobo except Clara HD and Libra 2 have a factory kernel without OTG mode so
      a custom kernel is installed for OTG. */
-  if (DetectKoboModel() == KoboModel::CLARA_HD) return false; 
+  if (DetectKoboModel() == KoboModel::CLARA_HD || DetectKoboModel() == KoboModel::LIBRA2) return false;
 
   FileReader file(Path("/proc/config.gz"));
   GunzipReader gunzip(file);
@@ -135,8 +134,8 @@ bool
 IsKoboOTGHostMode()
 {
 #ifdef KOBO
-  if (DetectKoboModel() != KoboModel::CLARA_HD) return IsKoboCustomKernel();
-  /* for Clara HD, read the mode from the debugfs */
+  if (DetectKoboModel() != KoboModel::CLARA_HD && DetectKoboModel() != KoboModel::LIBRA2) return IsKoboCustomKernel();
+  /* for Clara HD and Libra 2, read the mode from the debugfs */
   char buffer[5];
   bool success = File::ReadString(Path("/sys/kernel/debug/ci_hdrc.0/role"),
                    buffer, 5);

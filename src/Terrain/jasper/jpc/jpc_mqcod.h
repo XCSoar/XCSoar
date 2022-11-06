@@ -67,8 +67,7 @@
  * $Id$
  */
 
-#ifndef JPC_MQCOD_H
-#define JPC_MQCOD_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -120,5 +119,3 @@ typedef struct jpc_mqstate_s {
 
 /* The state table for the MQ coder. */
 extern const jpc_mqstate_t jpc_mqstates[];
-
-#endif

@@ -27,8 +27,9 @@ Copyright_License {
 #include "java/Exception.hxx"
 #include "ui/dim/Size.hpp"
 #include "Look/FontDescription.hpp"
-#include "util/StringView.hxx"
 #include "Asset.hpp"
+
+#include <array>
 
 JNIEnv *TextUtil::env;
 static Java::TrivialClass cls;
@@ -68,13 +69,12 @@ TextUtil::TextUtil(const Java::LocalObject &_obj) noexcept
   Java::LocalRef<jintArray> metricsArray{&e, e.NewIntArray(5)};
   e.CallVoidMethod(Get(), midGetFontMetrics, metricsArray.Get());
 
-  jint metrics[5];
-  e.GetIntArrayRegion(metricsArray, 0, 5, metrics);
+  std::array<jint, 5> metrics;
+  e.GetIntArrayRegion(metricsArray, 0, metrics.size(), metrics.data());
   height = metrics[0];
-  style = metrics[1];
-  ascent_height = metrics[2];
-  capital_height = metrics[3];
-  line_spacing = metrics[4];
+  ascent_height = metrics[1];
+  capital_height = metrics[2];
+  line_spacing = metrics[3];
 }
 
 TextUtil *
@@ -108,7 +108,7 @@ TextUtil::create(const FontDescription &d) noexcept
 }
 
 PixelSize
-TextUtil::getTextBounds(StringView text) const noexcept
+TextUtil::getTextBounds(std::string_view text) const noexcept
 {
   jint extent[2];
 
@@ -128,7 +128,7 @@ TextUtil::getTextBounds(StringView text) const noexcept
 }
 
 TextUtil::Texture
-TextUtil::getTextTextureGL(StringView text) const noexcept
+TextUtil::getTextTextureGL(std::string_view text) const noexcept
 {
   auto &e = *env;
   Java::String text2(&e, text);

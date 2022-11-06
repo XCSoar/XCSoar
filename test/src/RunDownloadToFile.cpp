@@ -26,7 +26,6 @@ Copyright_License {
 #include "net/http/Init.hpp"
 #include "system/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "util/ConstBuffer.hxx"
 #include "util/PrintException.hxx"
 
 #include <stdio.h>
@@ -37,11 +36,10 @@ struct Instance : CoInstance {
 };
 
 static void
-HexPrint(ConstBuffer<void> _b) noexcept
+HexPrint(std::span<const std::byte> b) noexcept
 {
-  const auto b = ConstBuffer<uint8_t>::FromVoid(_b);
-  for (uint8_t i : b)
-    printf("%02x", i);
+  for (auto i : b)
+    printf("%02x", (uint8_t)i);
 }
 
 static Co::InvokeTask
@@ -53,7 +51,7 @@ Run(CurlGlobal &curl, const char *url, Path path,
   const auto response =
     co_await Net::CoDownloadToFile(curl, url, nullptr, nullptr,
                                    path, &hash, progress);
-  HexPrint({&hash, sizeof(hash)});
+  HexPrint(hash);
   printf("\n");
 }
 

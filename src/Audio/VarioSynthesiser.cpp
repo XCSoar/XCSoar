@@ -46,7 +46,7 @@ VarioSynthesiser::VarioToFrequency(int ivario)
 void
 VarioSynthesiser::SetVario(double vario)
 {
-  const std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   const int ivario = Clamp((int)(vario * 100), min_vario, max_vario);
 
@@ -89,7 +89,7 @@ VarioSynthesiser::SetVario(double vario)
 void
 VarioSynthesiser::SetSilence()
 {
-  const std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   UnsafeSetSilence();
 }
 
@@ -112,7 +112,7 @@ VarioSynthesiser::UnsafeSetSilence()
 void
 VarioSynthesiser::Synthesise(int16_t *buffer, size_t n)
 {
-  const std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   assert(audible_count > 0 || silence_count > 0);
 

@@ -21,10 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_PRODUCT_HPP
-#define XCSOAR_ANDROID_PRODUCT_HPP
-
-#include "util/Compiler.h"
+#pragma once
 
 extern bool has_cursor_keys;
 
@@ -49,5 +46,3 @@ IsNookSimpleTouch()
   return false;
 #endif
 }
-
-#endif

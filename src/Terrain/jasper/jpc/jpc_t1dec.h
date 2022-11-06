@@ -67,8 +67,7 @@
  * $Id$
  */
 
-#ifndef JPC_T1DEC_H
-#define JPC_T1DEC_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -82,5 +81,3 @@
 
 /* Decode all of the code blocks for a particular tile. */
 int jpc_dec_decodecblks(jpc_dec_t *dec, jpc_dec_tile_t *tile);
-
-#endif

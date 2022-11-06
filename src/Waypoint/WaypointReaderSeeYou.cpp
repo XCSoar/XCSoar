@@ -26,6 +26,7 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "util/ExtractParameters.hpp"
 #include "util/Macros.hpp"
+#include "util/IterableSplitString.hxx"
 
 #include <stdlib.h>
 
@@ -141,9 +142,17 @@ ParseStyle(const TCHAR* src, Waypoint::Type &type)
   case 8:
     type = Waypoint::Type::OBSTACLE;
     break;
+  case 9:
+    type = Waypoint::Type::VOR;
+    break;
+  case 10:
+    type = Waypoint::Type::NDB;
+   break;
   case 11:
-  case 16:
     type = Waypoint::Type::TOWER;
+    break;
+  case 12:
+    type = Waypoint::Type::DAM;
     break;
   case 13:
     type = Waypoint::Type::TUNNEL;
@@ -154,8 +163,25 @@ ParseStyle(const TCHAR* src, Waypoint::Type &type)
   case 15:
     type = Waypoint::Type::POWERPLANT;
     break;
+  case 16:
+    type = Waypoint::Type::CASTLE;
+    break;
+  case 17:
+    type = Waypoint::Type::INTERSECTION;
+    break;
+  case 18:
+    type = Waypoint::Type::MARKER;
+    break;
+  case 19:
+    type = Waypoint::Type::REPORTING_POINT;
+    break;
+  case 20:
+    type = Waypoint::Type::PGTAKEOFF;
+    break;
+  case 22:
+    type = Waypoint::Type::PGLANDING;
+    break;
   }
-
   return true;
 }
 
@@ -172,6 +198,8 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
     iRWDir = 7,
     iRWLen = 8,
     iRWWidth = 9,
+    iUserData = 12,
+    iPics = 13
   };
 
   // If (end-of-file or comment)
@@ -214,6 +242,9 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
          */
         iFrequency = 10;
         iDescription = 11;
+      } else {
+        iFrequency = 9;
+        iDescription = 10;
       }
       return true;
     }
@@ -268,7 +299,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
     // Runway length (e.g. 546.0m)
     double rwlen = -1;
     if (iRWLen < n_params && ParseDistance(params[iRWLen], rwlen) &&
-        rwlen > 0)
+        rwlen > 0 && rwlen <= 30000)
       new_waypoint.runway.SetLength(uround(rwlen));
 
     if (iRWDir < n_params && *params[iRWDir]) {
@@ -296,6 +327,15 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
     new_waypoint.comment = params[iDescription];
   }
 
+  if (iUserData < n_params) {
+    new_waypoint.details = params[iUserData];
+  }
+
+  if (iPics < n_params) {
+    for (const auto i : TIterableSplitString(params[iPics], _T(';'))) {
+      new_waypoint.files_embed.emplace_front(i);
+    }
+  }
   waypoints.Append(std::move(new_waypoint));
   return true;
 }

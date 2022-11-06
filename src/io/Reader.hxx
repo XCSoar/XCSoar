@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef READER_HXX
-#define READER_HXX
+#pragma once
 
 #include <cstddef>
 
@@ -55,5 +54,3 @@ public:
 	[[gnu::nonnull]]
 	virtual std::size_t Read(void *data, std::size_t size) = 0;
 };
-
-#endif

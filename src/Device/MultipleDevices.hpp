@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,8 +26,7 @@ Copyright_License {
  * This library manages the list of configured devices.
  */
 
-#ifndef XCSOAR_DEVICE_LIST_HPP
-#define XCSOAR_DEVICE_LIST_HPP
+#pragma once
 
 #include "Features.hpp"
 #include "Device/Port/Listener.hpp"
@@ -35,7 +34,6 @@ Copyright_License {
 
 #include <array>
 #include <list>
-
 #include <tchar.h>
 
 namespace Cares { class Channel; }
@@ -59,51 +57,51 @@ class MultipleDevices final : PortListener {
   std::list<PortListener *> listeners;
 
 public:
-  MultipleDevices(EventLoop &event_loop, Cares::Channel &cares);
-  ~MultipleDevices();
+  MultipleDevices(EventLoop &event_loop, Cares::Channel &cares) noexcept;
+  ~MultipleDevices() noexcept;
 
-  DeviceDescriptor &operator[](unsigned i) const {
+  DeviceDescriptor &operator[](unsigned i) const noexcept {
     return *devices[i];
   }
 
   typedef typename std::array<DeviceDescriptor *, NUMDEV>::const_iterator const_iterator;
 
-  const_iterator begin() {
+  const_iterator begin() noexcept {
     return devices.begin();
   }
 
-  const_iterator end() {
+  const_iterator end() noexcept {
     return devices.end();
   }
 
   /**
    * Invoke Device::OnSysTicker() on all devices.
    */
-  void Tick();
+  void Tick() noexcept;
 
   void Open(OperationEnvironment &env) noexcept;
-  void AutoReopen(OperationEnvironment &env);
-  void PutMacCready(double mac_cready, OperationEnvironment &env);
-  void PutBugs(double bugs, OperationEnvironment &env);
-  void PutBallast(double fraction, double overload, OperationEnvironment &env);
-  void PutVolume(unsigned volume, OperationEnvironment &env);
-  void PutPilotEvent(OperationEnvironment &env);
+  void Close() noexcept;
+  void AutoReopen(OperationEnvironment &env) noexcept;
+  void PutMacCready(double mac_cready, OperationEnvironment &env) noexcept;
+  void PutBugs(double bugs, OperationEnvironment &env) noexcept;
+  void PutBallast(double fraction, double overload,
+                  OperationEnvironment &env) noexcept;
+  void PutVolume(unsigned volume, OperationEnvironment &env) noexcept;
+  void PutPilotEvent(OperationEnvironment &env) noexcept;
   void PutActiveFrequency(RadioFrequency frequency, const TCHAR *name,
-                          OperationEnvironment &env);
+                          OperationEnvironment &env) noexcept;
   void PutStandbyFrequency(RadioFrequency frequency, const TCHAR *name,
-                           OperationEnvironment &env);
-  void PutQNH(AtmosphericPressure pres, OperationEnvironment &env);
-  void NotifySensorUpdate(const MoreData &basic);
+                           OperationEnvironment &env) noexcept;
+  void PutQNH(AtmosphericPressure pres, OperationEnvironment &env) noexcept;
+  void NotifySensorUpdate(const MoreData &basic) noexcept;
   void NotifyCalculatedUpdate(const MoreData &basic,
-                              const DerivedInfo &calculated);
+                              const DerivedInfo &calculated) noexcept;
 
-  void AddPortListener(PortListener &listener);
-  void RemovePortListener(PortListener &listener);
+  void AddPortListener(PortListener &listener) noexcept;
+  void RemovePortListener(PortListener &listener) noexcept;
 
 private:
   /* virtual methods from class PortListener */
   void PortStateChanged() noexcept override;
   void PortError(const char *msg) noexcept override;
 };
-
-#endif

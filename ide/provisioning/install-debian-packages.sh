@@ -13,10 +13,9 @@ apt-get update
 echo Installing base dependencies...
 apt-get install ${APTOPTS[*]} make \
   librsvg2-bin xsltproc \
-  imagemagick gettext ffmpeg \
+  imagemagick gettext sox \
   git quilt zip \
   m4 automake wget \
-  ttf-bitstream-vera fakeroot \
   pkg-config cmake ninja-build ccache
 echo
 
@@ -53,11 +52,11 @@ apt-get install ${APTOPTS[*]} make g++ \
 echo
 
 echo Installing dependencies for creating Debian package
-  apt-get install ${APTOPTS[*]} dpkg-dev \
-    debhelper \
-    texlive-lang-english \
-    libio-captureoutput-perl \
-    build-essential 
+apt-get install ${APTOPTS[*]} dpkg-dev \
+  debhelper \
+  texlive-lang-english \
+  libio-captureoutput-perl \
+  build-essential
 echo
 
 echo Installing dependencies for compiling with LLVM / Clang...
@@ -71,12 +70,19 @@ echo
 echo Installing dependencies for ARM Linux targets...
 apt-get install ${APTOPTS[*]} g++-arm-linux-gnueabihf \
   libmpc-dev \
-  gmpc-dev \
   meson
 echo
 
 echo Installing PC/WIN64 dependencies...
 apt-get install ${APTOPTS[*]} g++-mingw-w64
+echo
+
+echo Installing Kobo dependencies...
+apt-get install ${APTOPTS[*]} \
+    texinfo \
+    fakeroot \
+    python3-setuptools \
+    ttf-bitstream-vera
 echo
 
 echo Installing dependencies for the Android target, not including SDK / NDK...

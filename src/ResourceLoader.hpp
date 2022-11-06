@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,10 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_RESOURCE_LOADER_HPP
-#define XCSOAR_RESOURCE_LOADER_HPP
+#pragma once
 
-#include "util/ConstBuffer.hxx"
+#include <span>
 
 #ifdef _WIN32
 #include <windef.h>
@@ -35,25 +34,25 @@ Copyright_License {
 class ResourceId;
 
 namespace ResourceLoader {
+
 #ifdef _WIN32
-  void
-  Init(HINSTANCE hInstance);
+void
+Init(HINSTANCE hInstance);
 #endif
 
-  typedef ConstBuffer<void> Data;
+using Data = std::span<const std::byte>;
 
-  Data
-  Load(const TCHAR *name, const TCHAR *type);
+Data
+Load(const TCHAR *name, const TCHAR *type);
 
 #ifndef ANDROID
-  Data
-  Load(ResourceId id);
+Data
+Load(ResourceId id);
 #endif
 
 #ifdef _WIN32
-  HBITMAP
-  LoadBitmap2(ResourceId id);
+HBITMAP
+LoadBitmap2(ResourceId id);
 #endif
-}
 
-#endif
+} // namespace ResourceLoader

@@ -32,8 +32,8 @@ Copyright_License {
 #endif
 
 void
-DrawVerticalGradient(Canvas &canvas, const PixelRect &rc,
-                     Color top_color, Color bottom_color, Color fallback_color)
+DrawVerticalGradient([[maybe_unused]] Canvas &canvas, const PixelRect &rc,
+                     [[maybe_unused]] Color top_color, [[maybe_unused]] Color bottom_color, [[maybe_unused]] Color fallback_color)
 {
 #if defined(EYE_CANDY) && defined(ENABLE_OPENGL)
   const BulkPixelPoint vertices[] = {

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,10 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_FONT_HPP
-#define XCSOAR_SCREEN_FONT_HPP
+#pragma once
 
 #include "ui/dim/Size.hpp"
+#include "util/tstring_view.hxx"
 
 #if defined(USE_APPKIT) || defined(USE_UIKIT)
 #import <Foundation/Foundation.h>
@@ -44,7 +44,6 @@ typedef struct FT_FaceRec_ *FT_Face;
 
 class FontDescription;
 class TextUtil;
-struct TStringView;
 
 /**
  * A font loaded from storage.  It is used by #Canvas to draw text.
@@ -120,20 +119,17 @@ public:
 #endif
 
   [[gnu::pure]]
-  PixelSize TextSize(TStringView text) const noexcept;
-
-  [[gnu::pure]]
-  PixelSize TextSize(const TCHAR *text) const noexcept;
+  PixelSize TextSize(tstring_view text) const noexcept;
 
 #if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
   static constexpr std::size_t BufferSize(const PixelSize size) noexcept {
     return std::size_t(size.width) * std::size_t(size.height);
   }
 
-  void Render(TStringView text, const PixelSize size,
+  void Render(tstring_view text, const PixelSize size,
               void *buffer) const noexcept;
 #elif defined(ANDROID)
-  int TextTextureGL(TStringView text, PixelSize &size,
+  int TextTextureGL(tstring_view text, PixelSize &size,
                     PixelSize &allocated_size) const noexcept;
 #elif defined(USE_GDI)
   HFONT Native() const noexcept {
@@ -161,5 +157,3 @@ public:
 #endif
   }
 };
-
-#endif

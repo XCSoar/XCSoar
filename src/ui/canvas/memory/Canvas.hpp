@@ -32,7 +32,7 @@ Copyright_License {
 #include "PixelTraits.hpp"
 #include "Buffer.hpp"
 #include "ActivePixelTraits.hpp"
-#include "util/StringView.hxx"
+#include "util/tstring_view.hxx"
 
 #include <tchar.h>
 
@@ -270,10 +270,10 @@ public:
   }
 
   [[gnu::pure]]
-  const PixelSize CalcTextSize(BasicStringView<TCHAR> text) const noexcept;
+  const PixelSize CalcTextSize(tstring_view text) const noexcept;
 
   [[gnu::pure]]
-  unsigned CalcTextWidth(BasicStringView<TCHAR> text) const noexcept {
+  unsigned CalcTextWidth(tstring_view text) const noexcept {
     return CalcTextSize(text).width;
   }
 
@@ -282,22 +282,22 @@ public:
     return font != nullptr ? font->GetHeight() : 0;
   }
 
-  void DrawText(PixelPoint p, BasicStringView<TCHAR> text) noexcept;
+  void DrawText(PixelPoint p, tstring_view text) noexcept;
 
-  void DrawTransparentText(PixelPoint p, BasicStringView<TCHAR> text) noexcept;
+  void DrawTransparentText(PixelPoint p, tstring_view text) noexcept;
 
   void DrawOpaqueText(PixelPoint p, const PixelRect &rc,
-                      BasicStringView<TCHAR> text) noexcept;
+                      tstring_view text) noexcept;
 
   void DrawClippedText(PixelPoint p, const PixelRect &rc,
-                       BasicStringView<TCHAR> text) noexcept;
+                       tstring_view text) noexcept;
   void DrawClippedText(PixelPoint p, unsigned width,
-                       BasicStringView<TCHAR> text) noexcept;
+                       tstring_view text) noexcept;
 
   /**
    * Render text, clip it within the bounds of this Canvas.
    */
-  void TextAutoClipped(PixelPoint p, BasicStringView<TCHAR> t) noexcept {
+  void TextAutoClipped(PixelPoint p, tstring_view t) noexcept {
     DrawText(p, t);
   }
 
@@ -306,7 +306,7 @@ public:
    *
    * @return the resulting text height
    */
-  unsigned DrawFormattedText(PixelRect r, BasicStringView<TCHAR> text,
+  unsigned DrawFormattedText(PixelRect r, tstring_view text,
                              unsigned format) noexcept;
 
   void Copy(PixelPoint dest_position, PixelSize dest_size,

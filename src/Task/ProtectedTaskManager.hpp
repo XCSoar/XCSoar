@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,8 +20,7 @@
 }
  */
 
-#ifndef XCSOAR_PROTECTED_TASK_MANAGER_HPP
-#define XCSOAR_PROTECTED_TASK_MANAGER_HPP
+#pragma once
 
 #include "thread/Guard.hpp"
 #include "time/RoughTime.hpp"
@@ -35,17 +34,15 @@ struct TaskBehaviour;
 struct OrderedTaskSettings;
 class Path;
 class GlidePolar;
-class RoutePlannerGlue;
+class ProtectedRoutePlanner;
 class OrderedTask;
 class TaskManager;
 
 class ReachIntersectionTest: public AbortIntersectionTest {
-  const RoutePlannerGlue *route;
+  const ProtectedRoutePlanner *route = nullptr;
 
 public:
-  ReachIntersectionTest():route(nullptr) {};
-
-  void SetRoute(const RoutePlannerGlue *_route) {
+  void SetRoute(const ProtectedRoutePlanner *_route) noexcept {
     route = _route;
   }
 
@@ -118,11 +115,9 @@ public:
    */
   bool TargetLock(const unsigned index, bool do_lock);
 
-  void SetRoutePlanner(const RoutePlannerGlue *_route);
+  void SetRoutePlanner(const ProtectedRoutePlanner *_route) noexcept;
 
   short GetTerrainBase() const;
 
   void ResetTask();
 };
-
-#endif

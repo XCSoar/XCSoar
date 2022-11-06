@@ -79,16 +79,15 @@ The following is needed for all targets:
 
 -  Perl
 
--  FFmpeg
+-  `SoX <http://sox.sourceforge.net/>`__
 
 The following command installs these on Debian::
 
-  sudo apt install make \
+  sudo apt-get install make \
       librsvg2-bin xsltproc \
-      imagemagick gettext ffmpeg \
+      imagemagick gettext sox \
       git quilt zip \
-      m4 automake \
-      ttf-bitstream-vera fakeroot
+      m4 automake
 
 Target-specific Build Instructions
 ----------------------------------
@@ -126,7 +125,7 @@ similar operating systems:
 
 The following command installs these on Debian::
 
-  sudo apt install make g++  zlib1g-dev \
+  sudo apt-get install make g++  zlib1g-dev \
       libsodium-dev \
       libfreetype6-dev \
       libpng-dev libjpeg-dev \
@@ -164,7 +163,7 @@ For Android, you need:
 
 - `Android SDK level 26 <http://developer.android.com/sdk/>`__
 
-- `Android NDK r24 <http://developer.android.com/sdk/ndk/>`__
+- `Android NDK r25b <http://developer.android.com/sdk/ndk/>`__
 
 - `Ogg Vorbis <http://www.vorbis.com/>`__
 
@@ -172,7 +171,7 @@ For Android, you need:
 
 On Debian::
   
-  sudo apt install default-jdk-headless vorbis-tools adb
+  sudo apt-get install default-jdk-headless vorbis-tools adb
 
 The required Android SDK components are:
 
@@ -187,7 +186,7 @@ tools/bin/sdkmanager  "build-tools;28.0.3"  "platforms;android-26"
 
 The ``Makefile`` assumes that the Android SDK is installed in
 ``~/opt/android-sdk-linux`` and the NDK is installed in
-``~/opt/android-ndk-r24``. You can use the options ``ANDROID_SDK`` and
+``~/opt/android-ndk-r25b``. You can use the options ``ANDROID_SDK`` and
 ``ANDROID_NDK`` to override these paths.
 
 Load/update the IOIO source code::
@@ -227,7 +226,7 @@ To cross-compile to (desktop) Windows, you need
 
 The following command installs it on Debian::
 
-  sudo apt install g++-mingw-w64
+  sudo apt-get install g++-mingw-w64
 
 To compile for 32 bit Windows, run::
 
@@ -271,7 +270,7 @@ Compiling for macOS (with Homebrew)
 
 Install the required Homebrew packages::
 
-  brew install automake autoconf libtool imagemagick ffmpeg \
+  brew install automake autoconf libtool imagemagick sox \
       librsvg quilt pkg-config
 
 Then compile::
@@ -283,7 +282,7 @@ Compiling on the Raspberry Pi 4
 
 Install additional dependencies::
 
-  sudo apt install libdrm-dev libgbm-dev \
+  sudo apt-get install libdrm-dev libgbm-dev \
       libgles2-mesa-dev \
       libinput-dev
 
@@ -331,7 +330,10 @@ To compile XCSoar, run::
 To build the kobo install file ``KoboRoot.tgz``, you need the following
 Debian packages::
 
-  sudo apt install fakeroot ttf-bitstream-vera python3-setuptools
+  sudo apt-get install \
+      fakeroot \
+      python3-setuptools \
+      ttf-bitstream-vera
 
 Then compile using this command::
 
@@ -343,18 +345,19 @@ Building USB-OTG Kobo Kernel
 To build a USB-OTG capable kernel for the Kobo, clone the git
 repository::
 
-  git clone git://git.xcsoar.org/xcsoar/max/linux.git
+  git clone https://github.com/XCSoar/linux.git
 
-Check out the correct branch. For the Kobo Mini, this is the “kobo”
-branch, for the Kobo Glo HD, the branch is called “kobo-glohd”, and for
-the Kobo Aura 2, use the branch “kobo-aura2”::
+Check out the correct branch. For the Kobo Mini, this is the branch
+``kobo-mini``, for the Kobo Glo HD, the branch is called
+``kobo-glohd``, and for the Kobo Aura 2, use the branch
+``kobo-aura2``::
 
-  git checkout kobo
+  git checkout kobo-mini
 
 Configure the kernel using the configuration files from the
 ``kobo/kernel`` directory in XCSoar’s ``git`` repository. For the Kobo
 Mini, install a `gcc 4.4 cross
-compiler <http://openlinux.amlogic.com:8000/download/ARM/gnutools/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2>`__,
+compiler <https://master.dl.sourceforge.net/project/iadfilehost/devtools/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2>`__,
 for example in ``/opt``. For the Kobo Glo HD and Aura 2, install a `gcc
 4.6 cross
 compiler <https://launchpad.net/gcc-arm-embedded/4.6/4.6-2012-q4-update/+download/gcc-arm-none-eabi-4_6-2012q4-20121016.tar.bz2>`__
@@ -403,7 +406,7 @@ European languages.
 
 The following command installs these on Debian::
 
-  sudo apt install texlive \
+  sudo apt-get install texlive \
       texlive-latex-extra \
       texlive-luatex \
       texlive-lang-french \
@@ -466,7 +469,7 @@ To speed up the compilation of XCSoar we can use ``ccache`` to cache the
 object files for us. All we have to do is install ccache and add
 ``USE_CCACHE=y`` to the make command line::
 
-  sudo apt install ccache
+  sudo apt-get install ccache
   make TARGET=UNIX USE_CCACHE=y
 
 Using a build VM with Vagrant

@@ -80,6 +80,11 @@ double
 TaskMacCreadyTotal::effective_leg_distance(const FloatDuration time_remaining) const noexcept
 {
   const GlideResult &result = get_active_solution();
+  if (result.time_elapsed.count() <= 0)
+    /* this can happen if the distance is zero; prevent division by
+       zero by checking for this special case */
+    return 0;
+
   auto p = time_remaining / result.time_elapsed;
   return p * result.vector.distance;
 }

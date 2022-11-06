@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef THREAD_CRITICAL_SECTION_HXX
-#define THREAD_CRITICAL_SECTION_HXX
+#pragma once
 
 #include <synchapi.h>
 
@@ -64,5 +63,3 @@ public:
 		::LeaveCriticalSection(&critical_section);
 	}
 };
-
-#endif

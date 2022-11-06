@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2016 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2013-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,12 +27,12 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef ITERABLE_SPLIT_STRING_HXX
-#define ITERABLE_SPLIT_STRING_HXX
+#pragma once
 
-#include "StringView.hxx"
+#include "StringSplit.hxx"
 
 #include <iterator>
+#include <string_view>
 
 /**
  * Split a string at a certain separator character into sub strings
@@ -44,71 +44,65 @@
  */
 template<typename T>
 class BasicIterableSplitString {
-	typedef BasicStringView<T> StringView;
+	using string_view = std::basic_string_view<T>;
+	using value_type = typename string_view::value_type;
 
-	using value_type = typename StringView::value_type;
-
-	StringView s;
+	string_view s;
 	value_type separator;
 
 public:
-	constexpr BasicIterableSplitString(StringView _s,
-					   value_type _separator)
+	constexpr BasicIterableSplitString(string_view _s,
+					   value_type _separator) noexcept
 		:s(_s), separator(_separator) {}
 
 	class Iterator final {
 		friend class BasicIterableSplitString;
 
-		StringView current, rest;
+		string_view current, rest;
 
 		value_type separator;
 
-		Iterator(StringView _s, value_type _separator)
-			:rest(_s), separator(_separator) {
+		constexpr Iterator(string_view _s,
+				   value_type _separator) noexcept
+			:rest(_s), separator(_separator)
+		{
 			Next();
 		}
 
-		constexpr Iterator(std::nullptr_t n)
-			:current(n), rest(n), separator(0) {}
+		constexpr Iterator(std::nullptr_t) noexcept
+			:current(), rest(), separator() {}
 
-		void Next() {
-			if (rest == nullptr)
-				current = nullptr;
+		constexpr void Next() noexcept {
+			if (rest.data() == nullptr)
+				current = {};
 			else {
-				const auto *i = rest.Find(separator);
-				if (i == nullptr) {
-					current = rest;
-					rest.data = nullptr;
-				} else {
-					current.data = rest.data;
-					current.size = i - current.data;
-					rest.size -= current.size + 1;
-					rest.data = i + 1;
-				}
+				const auto [a, b] = Split(rest, separator);
+				current = a;
+				rest = b;
 			}
 		}
 
 	public:
 		using iterator_category = std::forward_iterator_tag;
 
-		Iterator &operator++() {
+		constexpr Iterator &operator++() noexcept{
 			Next();
 			return *this;
 		}
 
-		constexpr bool operator==(Iterator other) const {
-			return current.data == other.current.data;
+		constexpr bool operator==(Iterator other) const noexcept {
+			return current.data() == other.current.data();
 		}
 
-		constexpr bool operator!=(Iterator other) const {
+		constexpr bool operator!=(Iterator other) const noexcept {
 			return !(*this == other);
 		}
 
-		constexpr StringView operator*() const {
+		constexpr string_view operator*() const noexcept {
 			return current;
 		}
 
-		constexpr const StringView *operator->() const {
+		constexpr const string_view *operator->() const noexcept {
 			return &current;
 		}
 	};
@@ -116,12 +110,12 @@ public:
 	using iterator = Iterator;
 	using const_iterator = Iterator;
 
-	const_iterator begin() const {
+	constexpr const_iterator begin() const noexcept {
 		return {s, separator};
 	}
 
-	constexpr const_iterator end() const {
-		return {nullptr};
+	constexpr const_iterator end() const noexcept {
+		return nullptr;
 	}
 };
 
@@ -132,6 +126,4 @@ using WIterableSplitString = BasicIterableSplitString<wchar_t>;
 using TIterableSplitString = WIterableSplitString;
 #else
 using TIterableSplitString = IterableSplitString;
-#endif
-
 #endif

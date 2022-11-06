@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -43,7 +43,7 @@ Copyright_License {
 namespace UI {
 
 static constexpr Uint32
-MakeSDLFlags(bool full_screen, bool resizable) noexcept
+MakeSDLFlags([[maybe_unused]] bool full_screen, bool resizable) noexcept
 {
   Uint32 flags = 0;
 
@@ -216,7 +216,7 @@ TopWindow::OnEvent(const SDL_Event &event)
       if (screen->CheckResize(PixelSize(event.window.data1, event.window.data2)))
         Resize(screen->GetSize());
 #else
-      Resize(event.window.data1, event.window.data2);
+      Resize({event.window.data1, event.window.data2});
 #endif
       return true;
 #endif
@@ -242,7 +242,7 @@ TopWindow::OnEvent(const SDL_Event &event)
           if (screen->CheckResize(PixelSize(w, h)))
             Resize(screen->GetSize());
 #else
-          Resize(w, h);
+          Resize({w, h});
 #endif
         }
 
@@ -272,7 +272,7 @@ TopWindow::OnEvent(const SDL_Event &event)
 }
 
 void
-TopWindow::OnResize(PixelSize new_size)
+TopWindow::OnResize(PixelSize new_size) noexcept
 {
   ContainerWindow::OnResize(new_size);
 

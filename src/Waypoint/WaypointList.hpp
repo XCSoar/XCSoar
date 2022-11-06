@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_WAYPOINT_LIST_HPP
-#define XCSOAR_WAYPOINT_LIST_HPP
+#pragma once
 
 #include "Geo/GeoVector.hpp"
 #include "Engine/Waypoint/Ptr.hpp"
@@ -54,7 +53,7 @@ public:
 class WaypointList: public std::vector<WaypointListItem>
 {
 public:
+  void SortByName() noexcept;
   void SortByDistance(const GeoPoint &location) noexcept;
+  void MakeUnique() noexcept;
 };
-
-#endif

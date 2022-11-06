@@ -32,10 +32,6 @@ std::ostream &
 operator<<(std::ostream &os, const AirspaceAltitude &aa)
 {
   switch (aa.reference) {
-  case AltitudeReference::NONE:
-    os << "unknown";
-    break;
-
   case AltitudeReference::AGL:
     if (aa.altitude_above_terrain <= 0)
       os << "GND";

@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef UNIQUE_FILE_DESCRIPTOR_HXX
-#define UNIQUE_FILE_DESCRIPTOR_HXX
+#pragma once
 
 #include "FileDescriptor.hxx" // IWYU pragma: export
 
@@ -98,5 +97,3 @@ public:
 		return IsDefined() && FileDescriptor::Close();
 	}
 };
-
-#endif

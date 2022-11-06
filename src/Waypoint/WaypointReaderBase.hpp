@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,9 +21,7 @@ Copyright_License {
 }
 */
 
-
-#ifndef WAYPOINTFILE_HPP
-#define WAYPOINTFILE_HPP
+#pragma once
 
 #include "Factory.hpp"
 
@@ -31,9 +29,9 @@ Copyright_License {
 
 class Waypoints;
 class TLineReader;
-class OperationEnvironment;
+class ProgressListener;
 
-class WaypointReaderBase 
+class WaypointReaderBase
 {
 protected:
   const WaypointFactory factory;
@@ -51,7 +49,7 @@ public:
    * @return True if the waypoint file parsing was okay, False otherwise
    */
   void Parse(Waypoints &way_points, TLineReader &reader,
-             OperationEnvironment &operation);
+             ProgressListener &progress);
 
 protected:
   /**
@@ -64,5 +62,3 @@ protected:
    */
   virtual bool ParseLine(const TCHAR* line, Waypoints &way_points) = 0;
 };
-
-#endif

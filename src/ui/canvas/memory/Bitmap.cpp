@@ -27,6 +27,7 @@ Copyright_License {
 #include "UncompressedImage.hpp"
 
 #include <cassert>
+#include <utility> // for std::exchange()
 
 Bitmap::Bitmap(Bitmap &&src) noexcept
   :buffer(std::exchange(src.buffer, WritableImageBuffer<BitmapPixelTraits>::Empty()))

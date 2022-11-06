@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ATMOSPHERE_PRESSURE_H
-#define XCSOAR_ATMOSPHERE_PRESSURE_H
+#pragma once
+
+#include <compare> // for the defaulted spaceship operator
 
 /**
  * ICAO Standard Atmosphere calculations (valid in Troposphere, alt<11000m)
@@ -100,21 +101,8 @@ public:
     return value;
   }
 
-  constexpr bool operator<(AtmosphericPressure other) const noexcept {
-    return value < other.value;
-  }
-
-  constexpr bool operator<=(AtmosphericPressure other) const noexcept {
-    return value <= other.value;
-  }
-
-  constexpr bool operator>(AtmosphericPressure other) const noexcept {
-    return value > other.value;
-  }
-
-  constexpr bool operator>=(AtmosphericPressure other) const noexcept {
-    return value >= other.value;
-  }
+  friend constexpr auto operator<=>(const AtmosphericPressure &,
+                                    const AtmosphericPressure &) noexcept = default;
 
   constexpr auto operator+(AtmosphericPressure other) const noexcept {
     return AtmosphericPressure{value + other.value};
@@ -197,5 +185,3 @@ public:
   [[gnu::const]]
   static AtmosphericPressure PressureAltitudeToStaticPressure(double alt) noexcept;
 };
-
-#endif

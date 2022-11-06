@@ -148,7 +148,7 @@ RouteComputer::Reach(const MoreData &basic, DerivedInfo &calculated,
     protected_route_planner.SolveReach(start, config, h_ceiling, do_solve);
 
     if (do_solve) {
-      calculated.terrain_base = route_planner.GetTerrainBase();
+      calculated.terrain_base = protected_route_planner.GetTerrainBase();
       calculated.terrain_base_valid = true;
     }
   }

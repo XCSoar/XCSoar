@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SIMULATOR_PROMPT_WINDOW_HPP
-#define XCSOAR_SIMULATOR_PROMPT_WINDOW_HPP
+#pragma once
 
 #include "Simulator.hpp"
 
@@ -69,11 +68,9 @@ public:
 
 protected:
   /* virtual methods from class Window */
-  virtual void OnCreate() override;
-  virtual void OnResize(PixelSize new_size) override;
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnCreate() override;
+  void OnResize(PixelSize new_size) noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };
 
 #endif /* SIMULATOR_AVAILABLE */
-
-#endif

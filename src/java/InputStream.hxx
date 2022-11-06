@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef JAVA_INPUT_STREAM_HXX
-#define JAVA_INPUT_STREAM_HXX
+#pragma once
 
 #include <jni.h>
 #include <cassert>
@@ -64,5 +63,3 @@ public:
 };
 
 } // namespace Java
-
-#endif

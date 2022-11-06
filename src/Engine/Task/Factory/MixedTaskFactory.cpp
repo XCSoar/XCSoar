@@ -45,7 +45,8 @@ static constexpr LegalPointSet mixed_im_types{
   TaskPointFactoryType::AAT_CYLINDER,
   TaskPointFactoryType::AAT_SEGMENT,
   TaskPointFactoryType::AAT_ANNULAR_SECTOR,
-  TaskPointFactoryType::KEYHOLE_SECTOR,
+  TaskPointFactoryType::CUSTOM_KEYHOLE,
+  TaskPointFactoryType::DAEC_KEYHOLE,
   TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR,
   TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR,
 };

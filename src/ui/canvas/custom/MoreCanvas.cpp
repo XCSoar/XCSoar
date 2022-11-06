@@ -55,10 +55,9 @@ Canvas::DrawRaisedEdge(PixelRect &rc) noexcept
 }
 
 unsigned
-Canvas::DrawFormattedText(PixelRect r, BasicStringView<TCHAR> text,
+Canvas::DrawFormattedText(PixelRect r, tstring_view text,
                           unsigned format) noexcept
 {
-  assert(text != nullptr);
 #ifndef UNICODE
   assert(ValidateUTF8(text));
 #endif
@@ -70,7 +69,7 @@ Canvas::DrawFormattedText(PixelRect r, BasicStringView<TCHAR> text,
   unsigned max_lines = (format & DT_CALCRECT) ? -1 :
     (r.GetHeight() + skip - 1) / skip;
 
-  TCHAR *duplicated = new TCHAR[text.size + 1], *p = duplicated;
+  TCHAR *duplicated = new TCHAR[text.size() + 1], *p = duplicated;
   unsigned lines = 1;
   for (TCHAR ch : text) {
     if (ch == _T('\n')) {
@@ -153,7 +152,7 @@ Canvas::DrawFormattedText(PixelRect r, BasicStringView<TCHAR> text,
 
 void
 Canvas::DrawOpaqueText(PixelPoint p, const PixelRect &rc,
-                       BasicStringView<TCHAR> text) noexcept
+                       tstring_view text) noexcept
 {
   DrawFilledRectangle(rc, background_color);
   DrawTransparentText(p, text);

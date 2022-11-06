@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -71,7 +71,7 @@ LocalPath(const AvailableFile &file)
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 
-gcc_pure
+[[gnu::pure]]
 static const AvailableFile *
 FindRemoteFile(const FileRepository &repository, const char *name)
 {
@@ -79,7 +79,7 @@ FindRemoteFile(const FileRepository &repository, const char *name)
 }
 
 #ifdef _UNICODE
-gcc_pure
+[[gnu::pure]]
 static const AvailableFile *
 FindRemoteFile(const FileRepository &repository, const TCHAR *name)
 {
@@ -91,7 +91,7 @@ FindRemoteFile(const FileRepository &repository, const TCHAR *name)
 }
 #endif
 
-gcc_pure
+[[gnu::pure]]
 static bool
 CanDownload(const FileRepository &repository, const TCHAR *name)
 {
@@ -185,7 +185,7 @@ class ManagedFileListWidget
    * The list of file names (base names) that are currently being
    * downloaded.
    */
-  std::map<std::string, DownloadStatus> downloads;
+  std::map<std::string, DownloadStatus, std::less<>> downloads;
 
   /**
    * Each item in this set is a failed download.
@@ -214,17 +214,17 @@ public:
   void CreateButtons(WidgetDialog &dialog) noexcept;
 
 protected:
-  gcc_pure
+  [[gnu::pure]]
   bool IsDownloading(const char *name) const noexcept {
 #ifdef HAVE_DOWNLOAD_MANAGER
-    std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     return downloads.find(name) != downloads.end();
 #else
     return false;
 #endif
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsDownloading(const AvailableFile &file) const noexcept {
     return IsDownloading(file.GetName());
   }
@@ -232,7 +232,7 @@ protected:
   bool IsDownloading(const char *name,
                      DownloadStatus &status_r) const noexcept {
 #ifdef HAVE_DOWNLOAD_MANAGER
-    std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     auto i = downloads.find(name);
     if (i == downloads.end())
       return false;
@@ -249,22 +249,22 @@ protected:
     return IsDownloading(file.GetName(), status_r);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool HasFailed(const char *name) const noexcept {
 #ifdef HAVE_DOWNLOAD_MANAGER
-    std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     return failures.find(name) != failures.end();
 #else
     return false;
 #endif
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool HasFailed(const AvailableFile &file) const noexcept {
     return HasFailed(file.GetName());
   }
 
-  gcc_pure
+  [[gnu::pure]]
   int FindItem(const TCHAR *name) const noexcept;
 
   void LoadRepositoryFile();
@@ -348,7 +348,7 @@ ManagedFileListWidget::LoadRepositoryFile()
 try {
 #ifdef HAVE_DOWNLOAD_MANAGER
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     repository_modified = false;
     repository_failed = false;
   }
@@ -479,7 +479,7 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 }
 
 void
-ManagedFileListWidget::OnCursorMoved(unsigned index) noexcept
+ManagedFileListWidget::OnCursorMoved([[maybe_unused]] unsigned index) noexcept
 {
   UpdateButtons();
 }
@@ -515,14 +515,15 @@ ManagedFileListWidget::Download()
 class AddFileListItemRenderer final : public ListItemRenderer {
   const std::vector<AvailableFile> &list;
 
-  TextRowRenderer row_renderer;
+  TwoTextRowsRenderer row_renderer;
 
 public:
   explicit AddFileListItemRenderer(const std::vector<AvailableFile> &_list)
     :list(_list) {}
 
   unsigned CalculateLayout(const DialogLook &look) {
-    return row_renderer.CalculateLayout(*look.list.font);
+    return row_renderer.CalculateLayout(*look.list.font_bold,
+                                          look.small_font);
   }
 
   void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i) noexcept override;
@@ -538,7 +539,17 @@ AddFileListItemRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   const UTF8ToWideConverter name(file.GetName());
   if (name.IsValid())
-    row_renderer.DrawTextRow(canvas, rc, name);
+    row_renderer.DrawFirstRow(canvas, rc, name);
+
+  const UTF8ToWideConverter description(file.GetDescription());
+  if (description.IsValid())
+    row_renderer.DrawSecondRow(canvas, rc, description);
+
+  if (file.update_date.IsPlausible()) {
+    TCHAR string_buffer[21];
+    FormatISO8601(string_buffer, file.update_date);
+    row_renderer.DrawRightSecondRow(canvas, rc, string_buffer);
+  }
 }
 
 #endif
@@ -631,7 +642,7 @@ ManagedFileListWidget::OnTimer()
   bool download_active;
 
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     download_active = !downloads.empty();
   }
 
@@ -658,7 +669,7 @@ ManagedFileListWidget::OnDownloadAdded(Path path_relative,
   const std::string name3(name2);
 
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     downloads[name3] = DownloadStatus{size, position};
     failures.erase(name3);
   }
@@ -680,7 +691,7 @@ ManagedFileListWidget::OnDownloadComplete(Path path_relative) noexcept
   const std::string name3(name2);
 
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
 
     downloads.erase(name3);
 
@@ -695,7 +706,7 @@ ManagedFileListWidget::OnDownloadComplete(Path path_relative) noexcept
 
 void
 ManagedFileListWidget::OnDownloadError(Path path_relative,
-                                       std::exception_ptr error) noexcept
+                                       [[maybe_unused]] std::exception_ptr error) noexcept
 {
   const auto name = path_relative.GetBase();
   if (name == nullptr)
@@ -708,7 +719,7 @@ ManagedFileListWidget::OnDownloadError(Path path_relative,
   const std::string name3(name2);
 
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
 
     downloads.erase(name3);
 
@@ -728,7 +739,7 @@ ManagedFileListWidget::OnDownloadNotification() noexcept
   bool repository_modified2, repository_failed2;
 
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     repository_modified2 = std::exchange(repository_modified, false);
     repository_failed2 = std::exchange(repository_failed, false);
   }

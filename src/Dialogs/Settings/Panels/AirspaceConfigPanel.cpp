@@ -55,36 +55,36 @@ enum ControlIndex {
 };
 
 static constexpr StaticEnumChoice as_display_list[] = {
-  { (unsigned)AirspaceDisplayMode::ALLON, N_("All on"),
+  { AirspaceDisplayMode::ALLON, N_("All on"),
     N_("All airspaces are displayed.") },
-  { (unsigned)AirspaceDisplayMode::CLIP, N_("Clip"),
+  { AirspaceDisplayMode::CLIP, N_("Clip"),
     N_("Display airspaces below the clip altitude.") },
-  { (unsigned)AirspaceDisplayMode::AUTO, N_("Auto"),
+  { AirspaceDisplayMode::AUTO, N_("Auto"),
     N_("Display airspaces within a margin of the glider.") },
-  { (unsigned)AirspaceDisplayMode::ALLBELOW, N_("All below"),
+  { AirspaceDisplayMode::ALLBELOW, N_("All below"),
     N_("Display airspaces below the glider or within a margin.") },
-  { 0 }
+  nullptr
 };
 
 static constexpr StaticEnumChoice as_fill_mode_list[] = {
-  { (unsigned)AirspaceRendererSettings::FillMode::DEFAULT, N_("Default"),
+  { AirspaceRendererSettings::FillMode::DEFAULT, N_("Default"),
     N_("This selects the best performing option for your hardware. "
       "In fact it favours 'fill padding' except for PPC 2000 system.") },
-  { (unsigned)AirspaceRendererSettings::FillMode::ALL, N_("Fill all"),
+  { AirspaceRendererSettings::FillMode::ALL, N_("Fill all"),
     N_("Transparently fills the airspace colour over the whole area.") },
-  { (unsigned)AirspaceRendererSettings::FillMode::PADDING, N_("Fill padding"),
+  { AirspaceRendererSettings::FillMode::PADDING, N_("Fill padding"),
     N_("Draws a solid outline with a half transparent border around the airspace.") },
-  { (unsigned)AirspaceRendererSettings::FillMode::NONE, N_("No fill"),
+  { AirspaceRendererSettings::FillMode::NONE, N_("No fill"),
     N_("Don't fill the airspace area.") },
-  { 0 }
+  nullptr
 };
 
 static constexpr StaticEnumChoice as_label_selection_list[] = {
-  { (unsigned)AirspaceRendererSettings::LabelSelection::NONE, N_("None"),
+  { AirspaceRendererSettings::LabelSelection::NONE, N_("None"),
     N_("No labels will be displayed.") },
-  { (unsigned)AirspaceRendererSettings::LabelSelection::ALL, N_("All"),
+  { AirspaceRendererSettings::LabelSelection::ALL, N_("All"),
     N_("All labels will be displayed.") },
-  { 0 }
+  nullptr
 };
 
 class AirspaceConfigPanel final

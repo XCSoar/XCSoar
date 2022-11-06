@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -60,7 +60,7 @@ MapWindow::RenderRasp(Canvas &canvas)
   const WeatherUIState &state = GetUIState().weather;
   if (rasp_renderer && state.map != (int)rasp_renderer->GetParameter()) {
 #ifndef ENABLE_OPENGL
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
 #endif
 
     rasp_renderer.reset();
@@ -71,7 +71,7 @@ MapWindow::RenderRasp(Canvas &canvas)
 
   if (!rasp_renderer) {
 #ifndef ENABLE_OPENGL
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
 #endif
     rasp_renderer.reset(new RaspRenderer(*rasp_store, state.map));
   }
@@ -103,7 +103,7 @@ MapWindow::RenderTopographyLabels(Canvas &canvas)
 }
 
 inline void
-MapWindow::RenderOverlays(Canvas &canvas)
+MapWindow::RenderOverlays([[maybe_unused]] Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
   if (overlay)
@@ -161,7 +161,7 @@ MapWindow::DrawWaves(Canvas &canvas)
 
 #ifdef HAVE_SKYLINES_TRACKING
   if (skylines_data != nullptr) {
-    std::lock_guard<Mutex> lock(skylines_data->mutex);
+    const std::lock_guard lock{skylines_data->mutex};
     renderer.Draw(canvas, render_projection, *skylines_data);
   }
 #endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,13 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_UTIL_UTF8_HPP
-#define XCSOAR_UTIL_UTF8_HPP
+#pragma once
 
 #include <cstddef>
+#include <string_view>
 #include <utility>
-
-struct StringView;
 
 /**
  * Is this a valid UTF-8 string?
@@ -41,7 +39,7 @@ ValidateUTF8(const char *p) noexcept;
  */
 [[gnu::pure]]
 bool
-ValidateUTF8(StringView p) noexcept;
+ValidateUTF8(std::string_view p) noexcept;
 
 /**
  * @return the number of the sequence beginning with the given
@@ -122,7 +120,7 @@ CropIncompleteUTF8(char *p) noexcept;
  */
 [[gnu::pure]]
 std::size_t
-TruncateStringUTF8(StringView s, std::size_t max_chars) noexcept;
+TruncateStringUTF8(std::string_view s, std::size_t max_chars) noexcept;
 
 /**
  * Return the number of bytes representing the first #max_chars
@@ -161,5 +159,3 @@ CopyTruncateStringUTF8(char *dest, std::size_t dest_size,
 [[gnu::pure]] [[gnu::nonnull]]
 std::pair<unsigned, const char *>
 NextUTF8(const char *p) noexcept;
-
-#endif

@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LUA_META_TABLE_HXX
-#define LUA_META_TABLE_HXX
+#pragma once
 
 #include "StackIndex.hxx"
 #include "Util.hxx"
@@ -60,5 +59,3 @@ MakeIndexMetaTableFor(lua_State *L, I for_idx,
 }
 
 } // namespace Lua
-
-#endif

@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -144,7 +144,7 @@ public:
     if (combo_list.empty())
       return true;
 
-    const int old_value = df.GetAsInteger();
+    const int old_value = df.GetValue();
     const auto &item = GetSelectedItem();
     if (item.int_value == old_value)
       /* no change */
@@ -199,11 +199,11 @@ public:
     item_renderer.PaintItem(canvas, rc, combo_list[idx]);
   }
 
-  bool CanActivateItem(unsigned index) const noexcept override {
+  bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
     return true;
   }
 
-  void OnActivateItem(unsigned index) noexcept override {
+  void OnActivateItem([[maybe_unused]] unsigned index) noexcept override {
     dialog.SetModalResult(mrOK);
   }
 
@@ -270,7 +270,7 @@ PortPickerWidget::OnDeviceDetected(Type type, const char *address,
   }
 
   {
-    const std::lock_guard<Mutex> lock{detected_mutex};
+    const std::lock_guard lock{detected_mutex};
     detected_list.emplace_back(DetectedPort{port_type, address, name});
   }
 
@@ -288,7 +288,7 @@ inline void
 PortPickerWidget::OnDetectedNotification() noexcept
 {
   {
-    const std::lock_guard<Mutex> lock(detected_mutex);
+    const std::lock_guard lock{detected_mutex};
 
     while (!detected_list.empty()) {
       UpdateItem(std::move(detected_list.front()));

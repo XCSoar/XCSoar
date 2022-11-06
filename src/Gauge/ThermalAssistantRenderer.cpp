@@ -129,7 +129,7 @@ ThermalAssistantRenderer::PaintRadarPlane(Canvas &canvas) const
 
 static void
 DrawCircleLabel(Canvas &canvas, PixelPoint p,
-                BasicStringView<TCHAR> text) noexcept
+                tstring_view text) noexcept
 {
   const auto size = canvas.CalcTextSize(text);
   p.x -= size.width / 2;

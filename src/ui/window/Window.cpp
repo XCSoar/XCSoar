@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -117,12 +117,19 @@ Window::GetRootOwner() noexcept
 }
 
 void
+Window::ScrollParentTo() noexcept
+{
+  if (auto *parent = GetParent())
+    parent->ScrollTo(GetPosition());
+}
+
+void
 Window::OnCreate()
 {
 }
 
 void
-Window::OnDestroy()
+Window::OnDestroy() noexcept
 {
 #ifndef USE_WINUSER
   visible = false;
@@ -142,31 +149,32 @@ Window::OnDestroy()
 }
 
 void
-Window::OnResize(PixelSize new_size)
+Window::OnResize([[maybe_unused]] PixelSize new_size) noexcept
 {
 }
 
 bool
-Window::OnMouseMove(PixelPoint p, unsigned keys)
+Window::OnMouseMove([[maybe_unused]] PixelPoint p,
+                    [[maybe_unused]] unsigned keys) noexcept
 {
   /* not handled here */
   return false;
 }
 
 bool
-Window::OnMouseDown(PixelPoint p)
+Window::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
 {
   return false;
 }
 
 bool
-Window::OnMouseUp(PixelPoint p)
+Window::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 {
   return false;
 }
 
 bool
-Window::OnMouseDouble(PixelPoint p)
+Window::OnMouseDouble(PixelPoint p) noexcept
 {
   /* fall back to OnMouseDown() if the class didn't override
      OnMouseDouble() */
@@ -174,7 +182,8 @@ Window::OnMouseDouble(PixelPoint p)
 }
 
 bool
-Window::OnMouseWheel(PixelPoint p, int delta)
+Window::OnMouseWheel([[maybe_unused]] PixelPoint p,
+                     [[maybe_unused]] int delta) noexcept
 {
   return false;
 }
@@ -182,13 +191,13 @@ Window::OnMouseWheel(PixelPoint p, int delta)
 #ifdef HAVE_MULTI_TOUCH
 
 bool
-Window::OnMultiTouchDown()
+Window::OnMultiTouchDown() noexcept
 {
   return false;
 }
 
 bool
-Window::OnMultiTouchUp()
+Window::OnMultiTouchUp() noexcept
 {
   return false;
 }
@@ -196,31 +205,31 @@ Window::OnMultiTouchUp()
 #endif /* HAVE_MULTI_TOUCH */
 
 bool
-Window::OnKeyCheck(unsigned key_code) const
+Window::OnKeyCheck([[maybe_unused]] unsigned key_code) const noexcept
 {
   return false;
 }
 
 bool
-Window::OnKeyDown(unsigned key_code)
+Window::OnKeyDown([[maybe_unused]] unsigned key_code) noexcept
 {
   return false;
 }
 
 bool
-Window::OnKeyUp(unsigned key_code)
+Window::OnKeyUp([[maybe_unused]] unsigned key_code) noexcept
 {
   return false;
 }
 
 bool
-Window::OnCharacter(unsigned ch)
+Window::OnCharacter([[maybe_unused]] unsigned ch) noexcept
 {
   return false;
 }
 
 void
-Window::OnCancelMode()
+Window::OnCancelMode() noexcept
 {
 #ifndef USE_WINUSER
   ReleaseCapture();
@@ -228,7 +237,7 @@ Window::OnCancelMode()
 }
 
 void
-Window::OnSetFocus()
+Window::OnSetFocus() noexcept
 {
 #ifndef USE_WINUSER
   assert(!focused);
@@ -238,7 +247,7 @@ Window::OnSetFocus()
 }
 
 void
-Window::OnKillFocus()
+Window::OnKillFocus() noexcept
 {
 #ifndef USE_WINUSER
   assert(focused);

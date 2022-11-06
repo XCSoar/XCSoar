@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@ Copyright_License {
 #include "Message.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
-#include "util/Compiler.h"
 
 #include <tchar.h>
 #include <algorithm>
@@ -89,11 +88,11 @@ PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
 //#include "Audio/VarioSound.h"
 
 static bool
-PDAAV(NMEAInputLine &line, gcc_unused NMEAInfo &info)
+PDAAV(NMEAInputLine &line, [[maybe_unused]] NMEAInfo &info)
 {
-  gcc_unused unsigned short beepfrequency = line.Read(0);
-  gcc_unused unsigned short soundfrequency = line.Read(0);
-  gcc_unused unsigned char soundtype = line.Read(0);
+  [[maybe_unused]] unsigned short beepfrequency = line.Read(0);
+  [[maybe_unused]] unsigned short soundfrequency = line.Read(0);
+  [[maybe_unused]] unsigned char soundtype = line.Read(0);
 
   // Temporarily commented out - function as yet undefined
   //  audio_setconfig(beepfrequency, soundfrequency, soundtype);
@@ -102,7 +101,7 @@ PDAAV(NMEAInputLine &line, gcc_unused NMEAInfo &info)
 }
 
 bool
-VegaDevice::PDVSC(NMEAInputLine &line, gcc_unused NMEAInfo &info)
+VegaDevice::PDVSC(NMEAInputLine &line, [[maybe_unused]] NMEAInfo &info)
 {
   char responsetype[10];
   line.Read(responsetype, 10);
@@ -197,7 +196,7 @@ PDVVT(NMEAInputLine &line, NMEAInfo &info)
 
 // PDTSM,duration_ms,"free text"
 static bool
-PDTSM(NMEAInputLine &line, gcc_unused NMEAInfo &info)
+PDTSM(NMEAInputLine &line, [[maybe_unused]] NMEAInfo &info)
 {
   /*
   int duration = (int)strtol(String, nullptr, 10);

@@ -24,13 +24,13 @@ Copyright_License {
 #include "Polar/PolarStore.hpp"
 #include "Polar/Polar.hpp"
 #include "Units/System.hpp"
-#include "util/Macros.hpp"
-#include "util/StringAPI.hxx"
 
 #include <cassert>
 
+namespace PolarStore {
+
 PolarShape
-PolarStore::Item::ToPolarShape() const
+Item::ToPolarShape() const noexcept
 {
   PolarShape shape;
 
@@ -46,7 +46,7 @@ PolarStore::Item::ToPolarShape() const
 }
 
 PolarInfo
-PolarStore::Item::ToPolarInfo() const
+Item::ToPolarInfo() const noexcept
 {
   PolarInfo polar;
 
@@ -58,9 +58,9 @@ PolarStore::Item::ToPolarInfo() const
   return polar;
 }
 
-static constexpr PolarStore::Item default_polar =
-  { _T("LS-8 (15m)"), 325, 185, 70, -0.51, 115, -0.85, 173, -2.00, 10.5, 0.0, 108, 240 };
-
+static constexpr Item default_polar = {
+  _T("LS-8 (15m)"), 325, 185, 70, -0.51, 115, -0.85, 173, -2.00, 10.5, 0.0, 108, 240,
+};
 
 /**
  *  Note: Please keep in alphabetic order to ease finding and updateing.
@@ -68,8 +68,7 @@ static constexpr PolarStore::Item default_polar =
  *        as initial values only, because the table will be target of further refinement
  *        for ever.
  */
-static constexpr PolarStore::PolarList internal_polars =
-{
+static constexpr Item internal_polars[] = {
   { _T("206 Hornet"), 318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8, 41.666, 100, 227 },
   { _T("303 Mosquito"), 450, 0, 100.0, -0.68, 120.0, -0.92, 150.0, -1.45, 9.85, 0.0, 107, 242 },
   { _T("304CZ"), 310, 115, 115.03, -0.86, 174.04, -1.76, 212.72, -3.4, 0, 0.0, 110, 235 },
@@ -167,6 +166,10 @@ static constexpr PolarStore::PolarList internal_polars =
   { _T("Janus (18m)"), 498, 240, 100, -0.71, 120, -0.92, 150, -1.46, 16.6, 0.0, 102, 405 },
   { _T("Janus C FG"), 603, 170, 115.5, -0.76, 171.79, -1.98, 209.96, -4.0, 17.4, 47.222, 106, 405 }, // obviously wrong
   { _T("Janus C RG"), 519, 240, 90, -0.60, 120, -0.88, 160, -1.64, 17.3, 50, 108, 405 }, // from factory polar
+  { _T("JS-1B (18m)"), 405, 180, 108, -0.57, 152, -1.06, 180, -1.65, 11.25, 56.3, 121, 310 }, // from factory polar
+  { _T("JS-1C (21m)"), 441, 180, 108, -0.52, 156, -1.1, 180, -1.62, 12.25, 56.3, 127, 330 }, // from factory polar
+  { _T("JS-3 (15m)"), 350, 158, 100, -0.6, 130, -0.8, 160, -1.2, 8.75, 57.5, 116, 270 }, // from factory polar
+  { _T("JS-3 (18m)"), 398, 158, 100, -0.55, 130, -0.72, 160, -1.12, 9.95, 57.5, 122, 282 }, // from factory polar
   { _T("Ka 2b"), 418, 0, 87, -0.9, 120, -1.5, 150, -2.6, 17.5, 0.0, 78, 278 },
   { _T("Ka 4 Rhoenlerche"), 360, 0, 65, -0.95, 120, -2.5, 140, -3.5, 16.34, 0.0, 54, 220 },
   { _T("Ka 6CR"), 310, 0, 64.83 , -0.67 , 130.0, -2.26 , 170.0, -4.69 , 12.5 , 0.0 , 82, 185 },
@@ -237,9 +240,9 @@ static constexpr PolarStore::PolarList internal_polars =
   { _T("SZD-51-1 Junior"), 333, 0, 70, -0.58, 130, -1.6, 180, -3.6, 12.51, 0.0, 90, 242 },
 
   // From Perkoz handbook
-  { _T("SZD-54-2 Perkoz (FT 17m)") /* flat tip */,     442, 0, 98, -0.92, 174, -4.35, 250, -13.22, 16.36, 160, 98, 375 },
-  { _T("SZD-54-2 Perkoz (WL 17m)") /* winglet */,      442, 0, 99, -0.86, 175, -4.22, 250, -13.01, 16.36, 160, 98, 375 },
-  { _T("SZD-54-2 Perkoz (WL 20m)") /* long winglet */, 442, 0, 91, -0.69, 170, -3.98, 250, -12.66, 17.30, 160, 102, 380 },
+  { _T("SZD-54-2 Perkoz (FT 17m)") /* flat tip */,     442, 0, 98, -0.92, 174, -4.35, 250, -13.22, 16.36, 47.05, 98, 375 },
+  { _T("SZD-54-2 Perkoz (WL 17m)") /* winglet */,      442, 0, 99, -0.86, 175, -4.22, 250, -13.01, 16.36, 47.05, 98, 375 },
+  { _T("SZD-54-2 Perkoz (WL 20m)") /* long winglet */, 442, 0, 91, -0.69, 170, -3.98, 250, -12.66, 17.30, 47.05, 102, 380 },
 
   { _T("SZD-55-1 Promyk"), 350, 200, 100.0, -0.66, 120, -0.86, 150, -1.4, 9.60, 0.0, 106, 215 },
   { _T("SZD-9 bis 1E Bocian"), 540, 0, 70, -0.83, 90, -1.00, 140, -2.53, 20, 0.0, 76, 330 },
@@ -254,7 +257,7 @@ static constexpr PolarStore::PolarList internal_polars =
   // from LK8000
   { _T("VSO-10 Gradient"), 347, 0, 90, -0.78, 130, -1.41, 160, -2.44, 12.0, 44.444, 96, 250 },
   { _T("VT-116 Orlik II"), 335, 0, 80, -0.7, 100, -1.05, 120, -1.65, 12.8, 33.333, 86, 215 },
-  
+
   // from factory polar.
   // flight manual http://www.issoire-aviation.fr/doc_avia_gen/MdV_WA26P_R2.pdf
   // Contest handicap reference: http://docplayer.fr/79733029-Handicaps-planeurs-ffvv.html
@@ -263,30 +266,16 @@ static constexpr PolarStore::PolarList internal_polars =
   { _T("Zuni II"), 358, 182, 110, -0.88, 167, -2.21, 203.72, -3.6, 10.13, 0.0, 0, 238 },
 };
 
-const PolarStore::Item &
-PolarStore::GetDefault()
+const Item &
+GetDefault() noexcept
 {
   return default_polar;
 }
 
-const PolarStore::Item &
-PolarStore::GetItem(const char *name)
+std::span<const Item>
+GetAll() noexcept
 {
-  unsigned i;
-  for ( i = 0; i < Count(); i++)
-  {
-    if ( StringIsEqual((const char *)(internal_polars[i].name), name) )
-      break;
-  }
-  return internal_polars[i];
+  return internal_polars;
 }
 
-unsigned
-PolarStore::Count()
-{
-  return ARRAY_SIZE(internal_polars);
-}
-
-PolarStore::const_iterator PolarStore::cbegin() { return &internal_polars[0]; }
-PolarStore::const_iterator PolarStore::cend() { return &internal_polars[PolarStore::Count()]; }
-
+} // namespace PolarStore

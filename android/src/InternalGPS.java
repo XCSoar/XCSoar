@@ -84,6 +84,8 @@ public class InternalGPS
     try {
       locationManager.requestLocationUpdates(locationProvider,
                                              1000, 0, this);
+    } catch (SecurityException e) {
+      submitError(e.toString());
     } catch (IllegalArgumentException e) {
       /* this exception was recorded on the Android Market, message
          was: "provider=gps" - no idea what that means */
@@ -118,6 +120,18 @@ public class InternalGPS
     if (safeDestruct.increment()) {
       try {
         listener.onSensorStateChanged();
+      } finally {
+        safeDestruct.decrement();
+      }
+    }
+  }
+
+  private void submitError(String msg) {
+    state = STATE_FAILED;
+
+    if (safeDestruct.increment()) {
+      try {
+        listener.onSensorError(msg);
       } finally {
         safeDestruct.decrement();
       }

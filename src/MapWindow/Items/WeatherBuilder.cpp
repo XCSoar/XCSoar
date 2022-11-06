@@ -26,6 +26,7 @@ Copyright_License {
 #include "List.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
+#include "net/client/tim/Thermal.hpp"
 
 #ifdef HAVE_NOAA
 #include "Weather/NOAAStore.hpp"
@@ -66,5 +67,25 @@ MapItemListBuilder::AddThermals(const ThermalLocatorInfo &thermals,
 
     if (location.DistanceS(loc) < range)
       list.append(new ThermalMapItem(t));
+  }
+}
+
+void
+MapItemListBuilder::AddThermals(std::span<const TIM::Thermal> thermals) noexcept
+{
+  for (const auto &i : thermals) {
+    if (list.full())
+      break;
+
+    if (location.DistanceS(i.location) > range)
+      continue;
+
+    ThermalSource source;
+    source.location = i.location;
+    source.ground_height = 0; // TODO
+    source.lift_rate = i.climb_rate;
+    // TODO source.time = i.time;
+
+    list.append(new ThermalMapItem(source));
   }
 }

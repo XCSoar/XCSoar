@@ -27,7 +27,7 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "time/TimeoutClock.hpp"
 
-gcc_pure
+[[gnu::pure]]
 static const uint8_t *
 FindSpecial(const uint8_t *const begin, const uint8_t *const end)
 {

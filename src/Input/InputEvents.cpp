@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -92,14 +92,14 @@ static std::chrono::duration<unsigned> MenuTimeOut{};
  */
 static bool menu_dirty = false;
 
-gcc_pure
+[[gnu::pure]]
 static Mode
 getModeID() noexcept;
 
 static void
 UpdateOverlayMode() noexcept;
 
-gcc_pure
+[[gnu::pure]]
 static unsigned
 gesture_to_event(const TCHAR *data) noexcept;
 
@@ -221,7 +221,7 @@ InputEvents::drawButtons(Mode mode, bool full) noexcept
     ? &input_config.menus[overlay_mode]
     : NULL;
 
-  ButtonLabel::Set(menu, overlay_menu, full);
+  CommonInterface::main_window->ShowMenu(menu, overlay_menu, full);
 
   GlueMapWindow *map = CommonInterface::main_window->GetMapIfActive();
   if (map != nullptr){
@@ -270,7 +270,7 @@ InputEvents::UpdateOverlayMode() noexcept
 // Processing functions - which one to do
 // -----------------------------------------------------------------------
 
-gcc_pure
+[[gnu::pure]]
 static int
 FindMenuItemByEvent(InputEvents::Mode mode, InputEvents::Mode overlay_mode,
                     unsigned event_id) noexcept
@@ -301,7 +301,8 @@ InputEvents::ProcessEvent(unsigned event_id) noexcept
   InputEvents::Mode lastMode = getModeID();
 
   int bindex = FindMenuItemByEvent(lastMode, overlay_mode, event_id);
-  if (bindex < 0 || ButtonLabel::IsEnabled(bindex))
+  if (bindex < 0 ||
+      CommonInterface::main_window->IsMenuButtonEnabled(bindex))
     InputEvents::processGo(event_id);
 
   // experimental: update button text, macro may change the value
@@ -313,14 +314,14 @@ InputEvents::ProcessEvent(unsigned event_id) noexcept
  * Looks up the specified key code, and returns the associated event
  * id.  Returns 0 if the key was not found.
  */
-gcc_pure
+[[gnu::pure]]
 static unsigned
 key_to_event(InputEvents::Mode mode, unsigned key_code) noexcept
 {
   return input_config.GetKeyEvent(mode, key_code);
 }
 
-gcc_pure
+[[gnu::pure]]
 static unsigned
 key_to_event(InputEvents::Mode mode, InputEvents::Mode overlay_mode,
              unsigned key_code) noexcept
@@ -520,7 +521,7 @@ InputEvents::ProcessTimer() noexcept
 }
 
 void
-InputEvents::eventLockScreen(const TCHAR *mode)
+InputEvents::eventLockScreen([[maybe_unused]] const TCHAR *mode)
 {
   ShowLockBox();
 }

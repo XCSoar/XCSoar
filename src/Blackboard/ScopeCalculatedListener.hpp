@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,14 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCOPE_CALCULATED_LISTENER_HPP
-#define XCSOAR_SCOPE_CALCULATED_LISTENER_HPP
+#pragma once
 
 #include "BlackboardListener.hpp"
 #include "LiveBlackboard.hpp"
 
 #include <functional>
-
 #include <cassert>
 
 /**
@@ -60,5 +58,3 @@ public:
   virtual void OnCalculatedUpdate(const MoreData &basic,
                                   const DerivedInfo &calculated) override;
 };
-
-#endif

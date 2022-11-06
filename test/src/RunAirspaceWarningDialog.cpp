@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Main.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "Dialogs/DialogSettings.hpp"
@@ -46,15 +47,23 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor) {}
+void VisitDataFiles([[maybe_unused]] const TCHAR* filter,
+                    [[maybe_unused]] File::Visitor &visitor) {}
 
 InterfaceBlackboard CommonInterface::Private::blackboard;
 
 ProtectedAirspaceWarningManager *airspace_warnings;
 
 void
-dlgAirspaceDetails(ConstAirspacePtr the_airspace,
-                   ProtectedAirspaceWarningManager *airspace_warnings)
+dlgAirspaceDetails([[maybe_unused]] ConstAirspacePtr the_airspace,
+                   [[maybe_unused]] ProtectedAirspaceWarningManager *airspace_warnings)
+{
+}
+
+void
+ActionInterface::SetActiveFrequency([[maybe_unused]] const RadioFrequency freq,
+                                    [[maybe_unused]] const TCHAR * freq_name,
+                                    [[maybe_unused]] bool to_devices) noexcept
 {
 }
 
@@ -72,7 +81,7 @@ LoadFiles(Airspaces &airspace_database)
 }
 
 static void
-Main(TestMainWindow &main_window)
+Main([[maybe_unused]] TestMainWindow &main_window)
 {
   Airspaces airspace_database;
 

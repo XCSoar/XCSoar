@@ -368,11 +368,14 @@ GlueMapWindow::UpdateProjection()
   } else if (basic.location_available)
     // Pan is off
     SetLocationLazy(basic.location);
-  else if (!visible_projection.IsValid() && terrain != nullptr)
+  else if (!visible_projection.IsValid() && terrain != nullptr) {
     /* if there's no GPS fix yet and no home waypoint, start at the
        map center, to avoid showing a fully white map, which confuses
        users */
-    SetLocation(terrain->GetTerrainCenter());
+    if (const auto center = terrain->GetTerrainCenter();
+        center.IsValid())
+      SetLocation(center);
+  }
 
   OnProjectionModified();
 }

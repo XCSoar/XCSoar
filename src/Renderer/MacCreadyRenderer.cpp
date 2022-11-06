@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,8 +32,8 @@ Copyright_License {
 #include "util/StaticString.hxx"
 #include "GlidePolarInfoRenderer.hpp"
 
-#define MAX_MACCREADY 5.2
-#define STEPS_MACCREADY 25
+static constexpr double MAX_MACCREADY = 5.2;
+static constexpr unsigned STEPS_MACCREADY = 25;
 
 void
 MacCreadyCaption(TCHAR *sTmp, const GlidePolar &glide_polar)

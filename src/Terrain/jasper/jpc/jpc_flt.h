@@ -67,12 +67,9 @@
  * $Id$
  */
 
-#ifndef JPC_FLT_H
-#define JPC_FLT_H
+#pragma once
 
 /* The code ought to be modified so this type is not used at all. */
 /* Very few places in the code rely on floating-point arithmetic, aside
   from conversions in printf's. */
 typedef double jpc_flt_t;
-
-#endif

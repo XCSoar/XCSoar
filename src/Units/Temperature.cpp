@@ -25,13 +25,13 @@ Copyright_License {
 #include "Units.hpp"
 
 Temperature
-Temperature::FromUser(double value)
+Temperature::FromUser(double value) noexcept
 {
   return FromKelvin(Units::ToSysUnit(value, Units::GetUserTemperatureUnit()));
 }
 
 double
-Temperature::ToUser() const
+Temperature::ToUser() const noexcept
 {
   return Units::ToUserUnit(value, Units::GetUserTemperatureUnit());
 }

@@ -43,7 +43,7 @@ static constexpr unsigned char geometry_counts[] = {
 
 namespace InfoBoxLayout {
 
-gcc_const
+[[gnu::const]]
 static InfoBoxSettings::Geometry
 ValidateGeometry(InfoBoxSettings::Geometry geometry,
                  PixelSize screen_size) noexcept;

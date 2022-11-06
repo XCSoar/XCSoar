@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,48 +24,27 @@ Copyright_License {
 #include "Boolean.hpp"
 #include "ComboList.hpp"
 
-bool
-DataFieldBoolean::ParseString(const TCHAR *s) const noexcept
-{
-  return true_text.equals(s);
-}
-
 ComboList
-DataFieldBoolean::CreateComboList(const TCHAR *reference) const noexcept
+DataFieldBoolean::CreateComboList([[maybe_unused]] const TCHAR *reference) const noexcept
 {
   ComboList combo_list;
   combo_list.Append(false, false_text);
   combo_list.Append(true, true_text);
 
-  combo_list.current_index = GetAsInteger();
+  combo_list.current_index = GetValue();
   return combo_list;
 }
 
-int
-DataFieldBoolean::GetAsInteger() const noexcept
+void
+DataFieldBoolean::SetFromCombo(int i, const TCHAR *) noexcept
 {
-  if (mValue)
-    return 1;
-  else
-    return 0;
+  ModifyValue(i != 0);
 }
 
 const TCHAR *
 DataFieldBoolean::GetAsString() const noexcept
 {
   return mValue ? true_text : false_text;
-}
-
-void
-DataFieldBoolean::SetAsInteger(int Value) noexcept
-{
-  ModifyValue(Value != 0);
-}
-
-void
-DataFieldBoolean::SetAsString(const TCHAR *Value) noexcept
-{
-  ModifyValue(ParseString(Value));
 }
 
 void

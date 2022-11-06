@@ -40,6 +40,7 @@ ExternalSettings::Clear()
   standby_frequency.Clear();
   standby_freq_name.clear();
   swap_frequencies.Clear();
+  ballast_litres_available.Clear();
 }
 
 void
@@ -70,6 +71,11 @@ ExternalSettings::Complement(const ExternalSettings &add)
   if (add.ballast_overload_available.Modified(ballast_overload_available)) {
     ballast_overload = add.ballast_overload;
     ballast_overload_available = add.ballast_overload_available;
+  }
+
+  if (add.ballast_litres_available.Modified(ballast_litres_available)) {
+     ballast_litres = add.ballast_litres;
+     ballast_litres_available = add.ballast_litres_available;
   }
 
   if (add.bugs_available.Modified(bugs_available)) {
@@ -124,6 +130,11 @@ ExternalSettings::EliminateRedundant(const ExternalSettings &other,
       !last.CompareBallastOverload(ballast_overload))
     ballast_overload_available.Clear();
 
+  if (ballast_litres_available &&
+      other.CompareBallastOverload(ballast_litres) &&
+      !last.CompareBallastOverload(ballast_litres))
+    ballast_litres_available.Clear();
+
   if (wing_loading_available && other.CompareWingLoading(wing_loading) &&
       !last.CompareWingLoading(wing_loading))
     wing_loading_available.Clear();
@@ -154,6 +165,21 @@ ExternalSettings::ProvideMacCready(double value, TimeStamp time) noexcept
   mac_cready_available.Update(time);
   return true;
 }
+
+bool
+ExternalSettings::ProvideBallastLitres(double value, TimeStamp time) noexcept
+{
+  if (value < 0 || value > 1000)
+    /* failed sanity check */
+    return false;
+
+  if (CompareBallastLitres(value))
+    return false;
+  ballast_litres = value;
+  ballast_litres_available.Update(time);
+  return true;
+}
+
 
 bool
 ExternalSettings::ProvideBallastFraction(double value, TimeStamp time) noexcept

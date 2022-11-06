@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -79,7 +79,7 @@ LoggerImpl::LoggerImpl() = default;
 LoggerImpl::~LoggerImpl() noexcept = default;
 
 void
-LoggerImpl::StopLogger(const NMEAInfo &gps_info)
+LoggerImpl::StopLogger([[maybe_unused]] const NMEAInfo &gps_info)
 {
   // Logger can't be switched off if already off -> cancel
   if (writer == nullptr)
@@ -211,7 +211,7 @@ LoggerImpl::WritePoint(const NMEAInfo &gps_info)
 
 bool
 LoggerImpl::StartLogger(const NMEAInfo &gps_info,
-                        const LoggerSettings &settings,
+                        [[maybe_unused]] const LoggerSettings &settings,
                         const char *logger_id)
 {
   assert(logger_id != nullptr);

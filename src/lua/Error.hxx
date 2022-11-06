@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LUA_ERROR_HXX
-#define LUA_ERROR_HXX
+#pragma once
 
 #include <stdexcept>
 
@@ -77,5 +76,3 @@ void
 RaiseCurrent(lua_State *L);
 
 }
-
-#endif

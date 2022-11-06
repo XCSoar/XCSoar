@@ -27,7 +27,7 @@ Copyright_License {
 #include "Interface.hpp"
 
 void
-Message::AddMessage(const TCHAR* text, const TCHAR *data)
+Message::AddMessage(const TCHAR *text, const TCHAR *data) noexcept
 {
   if (CommonInterface::main_window->popup != nullptr)
     CommonInterface::main_window->popup->AddMessage(text, data);

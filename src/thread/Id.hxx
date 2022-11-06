@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef THREAD_ID_HXX
-#define THREAD_ID_HXX
+#pragma once
 
 #ifdef _WIN32
 #include <processthreadsapi.h>
@@ -103,5 +102,3 @@ public:
 		return *this == GetCurrent();
 	}
 };
-
-#endif

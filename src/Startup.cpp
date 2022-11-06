@@ -219,6 +219,8 @@ try {
   DataGlobals::UnsetTerrain();
   DataGlobals::SetTerrain(std::move(new_terrain));
   DataGlobals::UpdateHome(false);
+
+  SetAirspaceGroundLevels(airspace_database, *terrain);
 } catch (...) {
   LogError(std::current_exception(), "LoadTerrain failed");
 }
@@ -342,7 +344,6 @@ Startup(UI::Display &display)
   // Initialize DeviceBlackboard
   device_blackboard = new DeviceBlackboard();
   devices = new MultipleDevices(*asio_thread, *global_cares_channel);
-  device_blackboard->SetDevices(*devices);
 
   // Initialize main blackboard data
   task_events = new GlideComputerTaskEvents();
@@ -399,14 +400,17 @@ Startup(UI::Display &display)
   }
 
   // Read the waypoint files
+  LogFormat("ReadWaypoints");
   {
     SubOperationEnvironment sub_env(operation, 256, 512);
+    sub_env.SetText(_("Loading Waypoints..."));
     WaypointGlue::LoadWaypoints(way_points, terrain, sub_env);
   }
 
   // Read and parse the airfield info file
   {
     SubOperationEnvironment sub_env(operation, 512, 768);
+    sub_env.SetText(_("Loading Airfield Details File..."));
     WaypointDetails::ReadFileFromProfile(way_points, sub_env);
   }
 
@@ -428,9 +432,12 @@ Startup(UI::Display &display)
   // Reads the airspace files
   {
     SubOperationEnvironment sub_env(operation, 768, 1024);
-    ReadAirspace(airspace_database, terrain, computer_settings.pressure,
+    ReadAirspace(airspace_database, computer_settings.pressure,
                  sub_env);
   }
+
+  if (terrain != nullptr)
+    SetAirspaceGroundLevels(airspace_database, *terrain);
 
   {
     const AircraftState aircraft_state =
@@ -499,9 +506,6 @@ Startup(UI::Display &display)
 
   // Create the calculation thread
   CreateCalculationThread();
-
-  // Find unique ID of this PDA
-  ReadAssetNumber();
 
   glide_computer_events = new GlideComputerEvents();
   glide_computer_events->Reset();
@@ -579,8 +583,13 @@ Shutdown()
 
   // Stop logger and save igc file
   operation.SetText(_("Shutdown, saving logs..."));
-  if (logger != nullptr)
-    logger->GUIStopLogger(CommonInterface::Basic(), true);
+  if (logger != nullptr) {
+    try {
+      logger->GUIStopLogger(CommonInterface::Basic(), true);
+    } catch (...) {
+      LogError(std::current_exception());
+    }
+  }
 
   delete flight_logger;
   flight_logger = nullptr;
@@ -601,6 +610,9 @@ Shutdown()
   Profile::Save();
 
   operation.SetText(_("Shutdown, please wait..."));
+
+  // Close any device connections
+  devShutdown();
 
   // Stop threads
   LogFormat("Stop threads");
@@ -675,9 +687,6 @@ Shutdown()
   terrain = nullptr;
   delete topography;
   topography = nullptr;
-
-  // Close any device connections
-  devShutdown();
 
   delete nmea_logger;
   nmea_logger = nullptr;

@@ -37,19 +37,18 @@ Copyright_License {
 #endif
 
 #include "UncompressedImage.hpp"
-#include "util/ConstBuffer.hxx"
 
 #include <tchar.h>
 
-Bitmap::Bitmap(ConstBuffer<void> _buffer)
+Bitmap::Bitmap(std::span<const std::byte> _buffer)
 {
   Load(_buffer);
 }
 
 bool
-Bitmap::Load(ConstBuffer<void> buffer, Type type)
+Bitmap::Load(std::span<const std::byte> buffer, Type type)
 {
-  auto uncompressed = LoadPNG(buffer.data, buffer.size);
+  auto uncompressed = LoadPNG(buffer);
   return uncompressed.IsDefined() && Load(std::move(uncompressed), type);
 }
 
@@ -57,11 +56,11 @@ static UncompressedImage
 DecompressImageFile(Path path)
 {
 #ifdef USE_LIBTIFF
-  if (path.MatchesExtension(_T(".tif")) || path.MatchesExtension(_T(".tiff")))
+  if (path.EndsWithIgnoreCase(_T(".tif")) || path.EndsWithIgnoreCase(_T(".tiff")))
     return LoadTiff(path);
 #endif
 
-  if (path.MatchesExtension(_T(".png")))
+  if (path.EndsWithIgnoreCase(_T(".png")))
     return LoadPNG(path);
 
   return LoadJPEGFile(path);

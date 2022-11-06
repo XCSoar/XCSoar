@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef DIJKSTRA_HPP
-#define DIJKSTRA_HPP
+#pragma once
 
 #include "util/ReservablePriorityQueue.hpp"
 
@@ -33,32 +32,34 @@ Copyright_License {
  * Modifications by John Wharington to track optimal solution
  * @see http://en.giswiki.net/wiki/Dijkstra%27s_algorithm
  */
-template<typename Node, typename MapTemplate>
+template<typename Node, typename MapTemplate, typename ValueType=unsigned>
 class Dijkstra
 {
 public:
+  using value_type = ValueType;
+
   struct Edge
   {
     Node parent;
 
-    unsigned value;
+    value_type value;
 
-    constexpr Edge(Node _parent, unsigned _value) noexcept
+    constexpr Edge(Node _parent, value_type _value) noexcept
       :parent(_parent), value(_value) {}
   };
 
-  typedef typename MapTemplate::template Bind<Edge> EdgeMap;
-  typedef typename EdgeMap::iterator edge_iterator;
-  typedef typename EdgeMap::const_iterator edge_const_iterator;
+  using EdgeMap = typename MapTemplate::template Bind<Edge>;
+  using edge_iterator = typename EdgeMap::iterator;
+  using edge_const_iterator = typename EdgeMap::const_iterator;
 
 private:
   struct Value
   {
-    unsigned edge_value;
+    value_type edge_value;
 
     edge_iterator iterator;
 
-    constexpr Value(unsigned _edge_value, edge_iterator _iterator) noexcept
+    constexpr Value(value_type _edge_value, edge_iterator _iterator) noexcept
       :edge_value(_edge_value), iterator(_iterator) {}
   };
 
@@ -84,15 +85,24 @@ private:
    * The value of the current edge, i.e. the one that was consumed by
    * pop().
    */
-  unsigned current_value;
+  value_type current_value;
 
 public:
   /**
    * Default constructor
    */
-  Dijkstra() = default;
+  Dijkstra() noexcept {
+    /* this is a kludge to prevent rehashing, because rehashing would
+       invalidate all iterators stored inside the priority queue
+       "q", and would thus lead to use-after-free crashes */
+    // TODO this hard-codes the use of std::unordered_map
+    // TODO come up with a better solution
+    edges.reserve(4093);
+    edges.max_load_factor(1e10);
+  }
 
   Dijkstra(const Dijkstra &) = delete;
+  Dijkstra &operator=(const Dijkstra &) = delete;
 
   /** 
    * Clears the queues
@@ -132,7 +142,7 @@ public:
    * @return Queue size in elements
    */
   [[gnu::pure]]
-  unsigned GetQueueSize() const noexcept {
+  auto GetQueueSize() const noexcept {
     return q.size();
   }
 
@@ -140,7 +150,7 @@ public:
    * Hack to allow incremental / continuous runs, see
    * ContestDijkstra::AddIncrementalEdges().
    */
-  void SetCurrentValue(unsigned value) noexcept {
+  void SetCurrentValue(value_type value) noexcept {
     current_value = value;
   }
 
@@ -168,7 +178,7 @@ public:
    * @param e Edge distance
    * @return false if this link was worse than an existing one
    */
-  bool Link(const Node node, const Node parent, unsigned edge_value) noexcept {
+  bool Link(const Node node, const Node parent, value_type edge_value) noexcept {
     return Push(node, parent, current_value + edge_value);
   }
 
@@ -197,7 +207,7 @@ public:
   /**
    * Reserve queue size (if available)
    */
-  void Reserve(unsigned size) noexcept {
+  void Reserve(std::size_t size) noexcept {
     q.reserve(size);
   }
 
@@ -209,7 +219,7 @@ public:
     q.clear();
 
     for (const auto &i : edges)
-      q.push(Value(i.second.value, i));
+      q.emplace(i.second.value, i);
   }
 
 private:
@@ -222,15 +232,12 @@ private:
    * @return false if this link was worse than an existing one
    */
   bool Push(const Node node, const Node parent,
-            unsigned edge_value = 0) noexcept {
+            value_type edge_value = {}) noexcept {
     // Try to find the given node n in the EdgeMap
-    edge_iterator it = edges.find(node);
-    if (it == edges.end())
+    const auto [it, inserted] = edges.try_emplace(node, parent, edge_value);
+    if (inserted) {
       // first entry
-      // If the node wasn't found
-      // -> Insert a new node
-      it = edges.insert(std::make_pair(node, Edge(parent, edge_value))).first;
-    else if (it->second.value > edge_value)
+    } else if (it->second.value > edge_value)
       // If the node was found and the new value is smaller
       // -> Replace the value with the new one
       it->second = Edge(parent, edge_value);
@@ -239,9 +246,7 @@ private:
       // -> Don't use this new leg
       return false;
 
-    q.push(Value(edge_value, it));
+    q.emplace(edge_value, it);
     return true;
   }
 };
-
-#endif

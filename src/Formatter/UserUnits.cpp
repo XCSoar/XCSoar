@@ -48,7 +48,7 @@ FormatUserAltitude(double value, TCHAR *buffer, bool include_unit)
   FormatAltitude(buffer, value, Units::GetUserAltitudeUnit(), include_unit);
 }
 
-gcc_const
+[[gnu::const]]
 static Unit
 GetAlternateAltitudeUnit(Unit unit)
 {

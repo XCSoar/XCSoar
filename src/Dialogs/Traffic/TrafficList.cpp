@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -225,7 +225,7 @@ public:
      buttons(&_buttons) {
   }
 
-  gcc_pure
+  [[gnu::pure]]
   FlarmId GetCursorId() const {
     return items.empty()
       ? FlarmId::Undefined()
@@ -237,7 +237,7 @@ private:
    * Find an existing item by its FLARM id.  This is a simple linear
    * search that doesn't scale well with a large list.
    */
-  gcc_pure
+  [[gnu::pure]]
   ItemList::iterator FindItem(FlarmId id) {
     assert(id.IsDefined());
 
@@ -306,24 +306,24 @@ public:
                            unsigned idx) noexcept override;
 
   /* virtual methods from ListCursorHandler */
-  virtual void OnCursorMoved(unsigned index) noexcept override {
+  virtual void OnCursorMoved([[maybe_unused]] unsigned index) noexcept override {
     UpdateButtons();
   }
 
-  virtual bool CanActivateItem(unsigned index) const noexcept override {
+  virtual bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
     return true;
   }
 
   virtual void OnActivateItem(unsigned index) noexcept override;
 
   /* virtual methods from DataFieldListener */
-  void OnModified(DataField &df) noexcept override {
+  void OnModified([[maybe_unused]] DataField &df) noexcept override {
     UpdateList();
   }
 
 private:
   /* virtual methods from BlackboardListener */
-  virtual void OnGPSUpdate(const MoreData &basic) override {
+  virtual void OnGPSUpdate([[maybe_unused]] const MoreData &basic) override {
     UpdateVolatile();
   }
 };
@@ -339,8 +339,8 @@ public:
     listener = _listener;
   }
 
-  void Prepare(ContainerWindow &parent,
-               const PixelRect &rc) noexcept override {
+  void Prepare([[maybe_unused]] ContainerWindow &parent,
+               [[maybe_unused]] const PixelRect &rc) noexcept override {
     PrefixDataField *callsign_df = new PrefixDataField(_T(""), listener);
     Add(_("Competition ID"), nullptr, callsign_df);
   }
@@ -358,8 +358,8 @@ public:
     list = _list;
   }
 
-  void Prepare(ContainerWindow &parent,
-               const PixelRect &rc) noexcept override {
+  void Prepare([[maybe_unused]] ContainerWindow &parent,
+               [[maybe_unused]] const PixelRect &rc) noexcept override {
     AddButton(_("Details"), [this](){ list->OpenDetails(); });
     AddButton(_("Map"), [this](){ list->OpenMap(); });
     AddButton(_("Close"), dialog.MakeModalResultCallback(mrCancel));
@@ -406,7 +406,7 @@ TrafficListWidget::UpdateList()
        dialog (from dlgTeamCode) */
     if (buttons != nullptr) {
       const auto &data = tracking->GetSkyLinesData();
-      const std::lock_guard<Mutex> lock(data.mutex);
+      const std::lock_guard lock{data.mutex};
       for (const auto &i : data.traffic) {
         const auto name_i = data.user_names.find(i.first);
         tstring name = name_i != data.user_names.end()
@@ -482,7 +482,7 @@ TrafficListWidget::UpdateVolatile()
 #ifdef HAVE_SKYLINES_TRACKING
     } else if (i.IsSkyLines()) {
       const auto &data = tracking->GetSkyLinesData();
-      const std::lock_guard<Mutex> lock(data.mutex);
+      const std::lock_guard lock{data.mutex};
 
       auto live = data.traffic.find(i.skylines_id);
       if (live != data.traffic.end()) {
@@ -701,7 +701,7 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
 
     if (!tmp.empty())
       tmp.append(_T("; "));
-    tmp.append(FormatUserAltitude(item.altitude));
+    tmp.append(FormatUserAltitude(item.altitude).c_str());
 
     if (!tmp.empty())
       row_renderer.DrawSecondRow(canvas, rc, tmp);

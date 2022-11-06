@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -78,7 +78,7 @@ GeoFrom2D(DoublePoint2D p) noexcept
 /**
  * Convert a #GeoBounds instance to a boost::geometry box.
  */
-gcc_const
+[[gnu::const]]
 static boost::geometry::model::box<DoublePoint2D>
 ToBox(const GeoBounds b) noexcept
 {
@@ -88,7 +88,7 @@ ToBox(const GeoBounds b) noexcept
 /**
  * Convert a #GeoQuadrilateral instance to a boost::geometry ring.
  */
-gcc_const
+[[gnu::const]]
 static ArrayQuadrilateral
 ToArrayQuadrilateral(const GeoQuadrilateral q) noexcept
 {
@@ -101,7 +101,7 @@ ToArrayQuadrilateral(const GeoQuadrilateral q) noexcept
 /**
  * Clip the quadrilateral inside the screen bounds.
  */
-gcc_pure
+[[gnu::pure]]
 static ClippedMultiPolygon
 Clip(const GeoQuadrilateral &_geo, const GeoBounds &_bounds) noexcept
 {
@@ -120,7 +120,7 @@ Clip(const GeoQuadrilateral &_geo, const GeoBounds &_bounds) noexcept
   return clipped;
 }
 
-gcc_pure
+[[gnu::pure]]
 static DoublePoint2D
 MapInQuadrilateral(const GeoQuadrilateral &q, const GeoPoint p) noexcept
 {
@@ -137,8 +137,8 @@ MapOverlayBitmap::IsInside(GeoPoint p) const noexcept
 }
 
 void
-MapOverlayBitmap::Draw(Canvas &canvas,
-                       const WindowProjection &projection) noexcept
+MapOverlayBitmap::Draw([[maybe_unused]] Canvas &canvas,
+                       [[maybe_unused]] const WindowProjection &projection) noexcept
 {
   if (!simple_bounds.Overlaps(projection.GetScreenBounds()))
     /* not visible, outside of screen area */

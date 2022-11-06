@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,9 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MATH_CONSTANTS_HPP
-#define XCSOAR_MATH_CONSTANTS_HPP
-
+#pragma once
 #include <math.h>
 
 #ifndef M_PI
@@ -46,5 +44,3 @@ Copyright_License {
 
 static constexpr double DEG_TO_RAD = .0174532925199432958;
 static constexpr double RAD_TO_DEG = 57.2957795131;
-
-#endif

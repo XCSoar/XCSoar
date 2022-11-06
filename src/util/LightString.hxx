@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LIGHT_STRING_HXX
-#define LIGHT_STRING_HXX
+#pragma once
 
 #include "StringPointer.hxx"
 #include "AllocatedString.hxx"
@@ -86,5 +85,3 @@ public:
 		return allocation.Steal();
 	}
 };
-
-#endif

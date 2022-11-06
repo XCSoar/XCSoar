@@ -53,7 +53,7 @@ PrefixDataField::Inc() noexcept
     next = p[1];
 
   const TCHAR new_value[2] = { next, _T('\0') };
-  SetAsString(new_value);
+  ModifyValue(new_value);
 }
 
 void
@@ -80,5 +80,5 @@ PrefixDataField::Dec() noexcept
   }
 
   const TCHAR new_value[2] = { next, _T('\0') };
-  SetAsString(new_value);
+  ModifyValue(new_value);
 }

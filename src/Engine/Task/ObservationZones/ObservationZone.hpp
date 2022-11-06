@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@
 }
 */
 
-#ifndef OBSERVATIONZONE_HPP
-#define OBSERVATIONZONE_HPP
+#pragma once
 
 #include <cstdint>
 
@@ -57,16 +56,16 @@ private:
   const bool can_start_through_top;
 
 protected:
-  ObservationZone(Shape _shape, bool _can_start_through_top)
+  constexpr ObservationZone(Shape _shape, bool _can_start_through_top) noexcept
     :shape(_shape), can_start_through_top(_can_start_through_top) {}
 
 public:
-  virtual ~ObservationZone() {}
+  virtual ~ObservationZone() noexcept = default;
 
   ObservationZone(const ObservationZone &) = delete;
   ObservationZone &operator=(const ObservationZone &) = delete;
 
-  Shape GetShape() const {
+  constexpr Shape GetShape() const noexcept {
     return shape;
   }
 
@@ -76,15 +75,14 @@ public:
    * @return True if reference point is inside sector
    */
   [[gnu::pure]]
-  virtual bool IsInSector(const GeoPoint &location) const = 0;
+  virtual bool IsInSector(const GeoPoint &location) const noexcept = 0;
 
   /**
    * If zone when used for start can trigger task start via vertical exit
    *
    * @return True if zone type can have a valid start through top
    */
-  [[gnu::pure]]
-  bool CanStartThroughTop() const {
+  constexpr bool CanStartThroughTop() const noexcept {
     return can_start_through_top;
   }
 
@@ -98,7 +96,7 @@ public:
    */
   [[gnu::pure]]
   virtual bool TransitionConstraint(const GeoPoint &location,
-                                    const GeoPoint &last_location) const = 0;
+                                    const GeoPoint &last_location) const noexcept = 0;
 
   /**
    * Return an unordered list of boundary points for evaluation by the
@@ -113,7 +111,7 @@ public:
    * measurable advantage.
    */
   [[gnu::pure]]
-  virtual OZBoundary GetBoundary() const = 0;
+  virtual OZBoundary GetBoundary() const noexcept = 0;
 
   /**
    * Distance reduction for scoring when outside this OZ
@@ -123,7 +121,5 @@ public:
    * @return Distance (m) to subtract from score
    */
   [[gnu::pure]]
-  virtual double ScoreAdjustment() const = 0;
+  virtual double ScoreAdjustment() const noexcept = 0;
 };
-
-#endif

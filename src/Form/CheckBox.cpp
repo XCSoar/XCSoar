@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -74,7 +74,7 @@ CheckBoxControl::SetPressed(bool value)
 }
 
 bool
-CheckBoxControl::OnClicked()
+CheckBoxControl::OnClicked() noexcept
 {
   if (callback) {
     callback(GetState());
@@ -85,7 +85,7 @@ CheckBoxControl::OnClicked()
 }
 
 bool
-CheckBoxControl::OnKeyCheck(unsigned key_code) const
+CheckBoxControl::OnKeyCheck(unsigned key_code) const noexcept
 {
   switch (key_code) {
   case KEY_RETURN:
@@ -97,7 +97,7 @@ CheckBoxControl::OnKeyCheck(unsigned key_code) const
 }
 
 bool
-CheckBoxControl::OnKeyDown(unsigned key_code)
+CheckBoxControl::OnKeyDown(unsigned key_code) noexcept
 {
   switch (key_code) {
   case KEY_RETURN:
@@ -111,7 +111,7 @@ CheckBoxControl::OnKeyDown(unsigned key_code)
 }
 
 bool
-CheckBoxControl::OnMouseMove(PixelPoint p, unsigned keys)
+CheckBoxControl::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
   if (dragging) {
     SetPressed(IsInside(p));
@@ -121,7 +121,7 @@ CheckBoxControl::OnMouseMove(PixelPoint p, unsigned keys)
 }
 
 bool
-CheckBoxControl::OnMouseDown(PixelPoint p)
+CheckBoxControl::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
 {
   if (IsTabStop())
     SetFocus();
@@ -133,7 +133,7 @@ CheckBoxControl::OnMouseDown(PixelPoint p)
 }
 
 bool
-CheckBoxControl::OnMouseUp(PixelPoint p)
+CheckBoxControl::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 {
   if (!dragging)
     return true;
@@ -151,21 +151,21 @@ CheckBoxControl::OnMouseUp(PixelPoint p)
 }
 
 void
-CheckBoxControl::OnSetFocus()
+CheckBoxControl::OnSetFocus() noexcept
 {
   PaintWindow::OnSetFocus();
   Invalidate();
 }
 
 void
-CheckBoxControl::OnKillFocus()
+CheckBoxControl::OnKillFocus() noexcept
 {
   PaintWindow::OnKillFocus();
   Invalidate();
 }
 
 void
-CheckBoxControl::OnCancelMode()
+CheckBoxControl::OnCancelMode() noexcept
 {
   dragging = false;
   SetPressed(false);
@@ -174,7 +174,7 @@ CheckBoxControl::OnCancelMode()
 }
 
 void
-CheckBoxControl::OnPaint(Canvas &canvas)
+CheckBoxControl::OnPaint(Canvas &canvas) noexcept
 {
   const auto &cb_look = look->check_box;
 

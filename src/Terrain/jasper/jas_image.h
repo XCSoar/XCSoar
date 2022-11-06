@@ -66,8 +66,7 @@
  * @brief JasPer Image Class
  */
 
-#ifndef JAS_IMAGE_H
-#define JAS_IMAGE_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -780,6 +779,4 @@ JAS_DLLEXPORT int pgx_validate(jas_stream_t *in);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

@@ -30,10 +30,10 @@ Copyright_License {
 #include "ui/canvas/Brush.hpp"
 #include "ui/canvas/Font.hpp"
 #include "ui/canvas/Pen.hpp"
-#include "util/StringView.hxx"
+
+#include <string_view>
 
 #include <tchar.h>
-
 
 /* Workaround: Some Win32 headers define OPAQUE and TRANSPARENT as preprocessor
  * defines. Undefine them to avoid name conflict. */
@@ -77,13 +77,13 @@ protected:
   static AllocatedArray<BulkPixelPoint> vertex_buffer;
 
 public:
-  Canvas() = default;
-  Canvas(PixelSize _size):size(_size) {}
+  Canvas() noexcept = default;
+  constexpr Canvas(PixelSize _size) noexcept:size(_size) {}
 
   Canvas(const Canvas &other) = delete;
   Canvas &operator=(const Canvas &other) = delete;
 
-  void Create(PixelSize _size) {
+  constexpr void Create(PixelSize _size) noexcept {
     size = _size;
   }
 
@@ -93,102 +93,102 @@ protected:
    * been filled.  As an optimization, this function returns false if
    * brush and pen share the same color.
    */
-  bool IsPenOverBrush() const {
+  bool IsPenOverBrush() const noexcept {
     return pen.IsDefined() &&
       (brush.IsHollow() || brush.GetColor() != pen.GetColor());
   }
 
 public:
-  bool IsDefined() const {
+  bool IsDefined() const noexcept {
     return true;
   }
 
-  PixelSize GetSize() const {
+  PixelSize GetSize() const noexcept {
     return size;
   }
 
-  unsigned GetWidth() const {
+  unsigned GetWidth() const noexcept {
     return size.width;
   }
 
-  unsigned GetHeight() const {
+  unsigned GetHeight() const noexcept {
     return size.height;
   }
 
   [[gnu::pure]]
-  PixelRect GetRect() const {
+  PixelRect GetRect() const noexcept {
     return PixelRect(size);
   }
 
-  void SelectNullPen() {
+  void SelectNullPen() noexcept {
     pen = Pen(0, COLOR_BLACK);
   }
 
-  void SelectWhitePen() {
+  void SelectWhitePen() noexcept {
     pen = Pen(1, COLOR_WHITE);
   }
 
-  void SelectWhitePen(unsigned width) {
+  void SelectWhitePen(unsigned width) noexcept {
     pen = Pen(width, COLOR_WHITE);
   }
 
-  void SelectBlackPen() {
+  void SelectBlackPen() noexcept {
     pen = Pen(1, COLOR_BLACK);
   }
 
-  void SelectBlackPen(unsigned width) {
+  void SelectBlackPen(unsigned width) noexcept {
     pen = Pen(width, COLOR_BLACK);
   }
 
-  void SelectHollowBrush() {
+  void SelectHollowBrush() noexcept {
     brush.Destroy();
   }
 
-  void SelectWhiteBrush() {
+  void SelectWhiteBrush() noexcept {
     brush = Brush(COLOR_WHITE);
   }
 
-  void SelectBlackBrush() {
+  void SelectBlackBrush() noexcept {
     brush = Brush(COLOR_BLACK);
   }
 
-  void Select(const Pen &_pen) {
+  void Select(const Pen &_pen) noexcept {
     pen = _pen;
   }
 
-  void Select(const Brush &_brush) {
+  void Select(const Brush &_brush) noexcept {
     brush = _brush;
   }
 
-  void Select(const Font &_font) {
+  void Select(const Font &_font) noexcept {
     font = &_font;
   }
 
-  void SetTextColor(const Color c) {
+  void SetTextColor(const Color c) noexcept {
     text_color = c;
   }
 
-  Color GetTextColor() const {
+  Color GetTextColor() const noexcept {
     return text_color;
   }
 
-  void SetBackgroundColor(const Color c) {
+  void SetBackgroundColor(const Color c) noexcept {
     background_color = c;
   }
 
-  Color GetBackgroundColor() const {
+  Color GetBackgroundColor() const noexcept {
     return background_color;
   }
 
-  void SetBackgroundOpaque() {
+  void SetBackgroundOpaque() noexcept {
     background_mode = OPAQUE;
   }
 
-  void SetBackgroundTransparent() {
+  void SetBackgroundTransparent() noexcept {
     background_mode = TRANSPARENT;
   }
 
-  void InvertRectangle(PixelRect r);
+  void InvertRectangle(PixelRect r) noexcept;
 
   void DrawRectangle(PixelRect r) noexcept {
     DrawFilledRectangle(r, brush);
@@ -219,22 +219,22 @@ public:
    *
    * @param alpha the alpha value, 0=no change, 0xff=fully white.
    */
-  void FadeToWhite(PixelRect rc, GLubyte alpha);
-  void FadeToWhite(GLubyte alpha);
+  void FadeToWhite(PixelRect rc, GLubyte alpha) noexcept;
+  void FadeToWhite(GLubyte alpha) noexcept;
 
-  void Clear() {
+  void Clear() noexcept {
     DrawRectangle(PixelRect{GetSize()});
   }
 
-  void Clear(const Color color) {
+  void Clear(const Color color) noexcept {
     DrawFilledRectangle(PixelRect{GetSize()}, color);
   }
 
-  void Clear(const Brush &brush) {
+  void Clear(const Brush &brush) noexcept {
     DrawFilledRectangle(PixelRect{GetSize()}, brush);
   }
 
-  void ClearWhite() {
+  void ClearWhite() noexcept {
     Clear(COLOR_WHITE);
   }
 
@@ -242,20 +242,20 @@ public:
 
   void DrawRaisedEdge(PixelRect &rc) noexcept;
 
-  void DrawPolyline(const BulkPixelPoint *points, unsigned num_points);
+  void DrawPolyline(const BulkPixelPoint *points, unsigned num_points) noexcept;
 
-  void DrawPolygon(const BulkPixelPoint *points, unsigned num_points);
+  void DrawPolygon(const BulkPixelPoint *points, unsigned num_points) noexcept;
 
   /**
    * Draw a triangle fan (GL_TRIANGLE_FAN).  The first point is the
    * origin of the fan.
    */
-  void DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points);
+  void DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points) noexcept;
 
   /**
    * Draw a solid thin horizontal line.
    */
-  void DrawHLine(int x1, int x2, int y, Color color);
+  void DrawHLine(int x1, int x2, int y, Color color) noexcept;
 
   void DrawLine(PixelPoint a, PixelPoint b) noexcept;
 
@@ -266,7 +266,7 @@ public:
    */
   void DrawExactLine(PixelPoint a, PixelPoint b) noexcept;
 
-  void DrawLinePiece(const PixelPoint a, const PixelPoint b);
+  void DrawLinePiece(const PixelPoint a, const PixelPoint b) noexcept;
 
   void DrawTwoLines(PixelPoint a, PixelPoint b, PixelPoint c) noexcept;
 
@@ -278,43 +278,43 @@ public:
   void DrawCircle(PixelPoint center, unsigned radius) noexcept;
 
   void DrawSegment(PixelPoint center, unsigned radius,
-                   Angle start, Angle end, bool horizon=false);
+                   Angle start, Angle end, bool horizon=false) noexcept;
 
   void DrawAnnulus(PixelPoint center, unsigned small_radius,
                    unsigned big_radius,
-                   Angle start, Angle end);
+                   Angle start, Angle end) noexcept;
 
   void DrawKeyhole(PixelPoint center, unsigned small_radius,
                    unsigned big_radius,
-                   Angle start, Angle end);
+                   Angle start, Angle end) noexcept;
 
   void DrawArc(PixelPoint center, unsigned radius,
-               Angle start, Angle end);
+               Angle start, Angle end) noexcept;
 
-  void DrawFocusRectangle(PixelRect rc);
-
-  [[gnu::pure]]
-  const PixelSize CalcTextSize(BasicStringView<TCHAR> text) const noexcept;
+  void DrawFocusRectangle(PixelRect rc) noexcept;
 
   [[gnu::pure]]
-  unsigned CalcTextWidth(BasicStringView<TCHAR> text) const noexcept {
+  const PixelSize CalcTextSize(tstring_view text) const noexcept;
+
+  [[gnu::pure]]
+  unsigned CalcTextWidth(tstring_view text) const noexcept {
     return CalcTextSize(text).width;
   }
 
   [[gnu::pure]]
-  unsigned GetFontHeight() const {
+  unsigned GetFontHeight() const noexcept {
     return font != nullptr ? font->GetHeight() : 0;
   }
 
-  void DrawText(PixelPoint p, BasicStringView<TCHAR> text) noexcept;
+  void DrawText(PixelPoint p, tstring_view text) noexcept;
 
-  void DrawTransparentText(PixelPoint p, BasicStringView<TCHAR> text) noexcept;
+  void DrawTransparentText(PixelPoint p, tstring_view text) noexcept;
 
   void DrawOpaqueText(PixelPoint p, const PixelRect &rc,
-                      BasicStringView<TCHAR> text) noexcept;
+                      tstring_view text) noexcept;
 
   void DrawClippedText(PixelPoint p, const PixelRect &rc,
-                       BasicStringView<TCHAR> text) noexcept {
+                       tstring_view text) noexcept {
     // XXX
 
     if (p.x < rc.right)
@@ -322,17 +322,17 @@ public:
   }
 
   void DrawClippedText(PixelPoint p, PixelSize size,
-                       BasicStringView<TCHAR> text) noexcept;
+                       tstring_view text) noexcept;
 
   void DrawClippedText(PixelPoint p, unsigned width,
-                       BasicStringView<TCHAR> text) noexcept {
+                       tstring_view text) noexcept {
     DrawClippedText(p, {width, 16384u}, text);
   }
 
   /**
    * Render text, clip it within the bounds of this Canvas.
    */
-  void TextAutoClipped(PixelPoint p, BasicStringView<TCHAR> t) noexcept {
+  void TextAutoClipped(PixelPoint p, tstring_view t) noexcept {
     if (p.x < (int)GetWidth() && p.y < (int)GetHeight())
       DrawClippedText(p, {GetWidth() - p.x, GetHeight() - p.y}, t);
   }
@@ -342,7 +342,7 @@ public:
    *
    * @return the resulting text height
    */
-  unsigned DrawFormattedText(PixelRect r, BasicStringView<TCHAR> text,
+  unsigned DrawFormattedText(PixelRect r, tstring_view text,
                              unsigned format) noexcept;
 
   /**
@@ -354,21 +354,21 @@ public:
                PixelPoint src_position, PixelSize src_size) noexcept;
 
   void Stretch(PixelPoint dest_position, PixelSize dest_size,
-               const GLTexture &texture);
+               const GLTexture &texture) noexcept;
 
   void Copy(PixelPoint dest_position, PixelSize dest_size,
             const Bitmap &src, PixelPoint src_position) noexcept;
-  void Copy(const Bitmap &src);
+  void Copy(const Bitmap &src) noexcept;
 
-  void StretchNot(const Bitmap &src);
+  void StretchNot(const Bitmap &src) noexcept;
 
   void Stretch(PixelPoint dest_position, PixelSize dest_size,
                const Bitmap &src,
                PixelPoint src_position, PixelSize src_size) noexcept;
   void Stretch(PixelPoint dest_position, PixelSize dest_size,
-               const Bitmap &src);
+               const Bitmap &src) noexcept;
 
-  void Stretch(const Bitmap &src) {
+  void Stretch(const Bitmap &src) noexcept {
     Stretch({0,0}, size, src);
   }
 
@@ -384,7 +384,7 @@ public:
   void StretchMono(PixelPoint dest_position, PixelSize dest_size,
                    const Bitmap &src,
                    PixelPoint src_position, PixelSize src_size,
-                   Color fg_color, Color bg_color);
+                   Color fg_color, Color bg_color) noexcept;
 
   void ScaleCopy(PixelPoint dest_position,
                  const Bitmap &src,
@@ -395,5 +395,5 @@ public:
    * initialised already.  Note that the texture will be flipped
    * vertically. So the texture must be created with flipped=true.
    */
-  void CopyToTexture(GLTexture &texture, PixelRect src_rc) const;
+  void CopyToTexture(GLTexture &texture, PixelRect src_rc) const noexcept;
 };

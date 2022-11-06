@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -132,7 +132,7 @@ DeviceConfig::ShouldReopenOnTimeout() const noexcept
 }
 
 bool
-DeviceConfig::MaybeBluetooth(PortType port_type, const TCHAR *path) noexcept
+DeviceConfig::MaybeBluetooth(PortType port_type, [[maybe_unused]] const TCHAR *path) noexcept
 {
   /* note: RFCOMM_SERVER is not considered here because this
      function is used to check for the K6-Bt protocol, but the K6-Bt
@@ -168,7 +168,7 @@ DeviceConfig::MaybeBluetooth() const noexcept
 }
 
 bool
-DeviceConfig::BluetoothNameStartsWith(const char *prefix) const noexcept
+DeviceConfig::BluetoothNameStartsWith([[maybe_unused]] const char *prefix) const noexcept
 {
 #ifdef ANDROID
   if (port_type != PortType::RFCOMM)

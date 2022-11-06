@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CAST_HXX
-#define CAST_HXX
+#pragma once
 
 #include <cstddef>
 
@@ -97,5 +96,3 @@ ContainerCast(const A &a, A C::*member)
 {
 	return *OffsetCast<const C, const A>(&a, ContainerAttributeOffset<C, A>(member));
 }
-
-#endif

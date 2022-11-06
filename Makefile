@@ -141,6 +141,7 @@ include $(topdir)/build/liboperation.mk
 include $(topdir)/build/libnet.mk
 include $(topdir)/build/libhttp.mk
 include $(topdir)/build/libcoroutines.mk
+include $(topdir)/build/libclient.mk
 include $(topdir)/build/sdl.mk
 include $(topdir)/build/alsa.mk
 include $(topdir)/build/zlib.mk
@@ -174,6 +175,7 @@ include $(topdir)/build/libasync.mk
 include $(topdir)/build/form.mk
 include $(topdir)/build/libwidget.mk
 include $(topdir)/build/libaudio.mk
+include $(topdir)/build/libtopo.mk
 include $(topdir)/build/libterrain.mk
 include $(topdir)/build/lua.mk
 include $(topdir)/build/harness.mk

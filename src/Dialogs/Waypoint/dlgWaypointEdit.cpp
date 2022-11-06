@@ -61,28 +61,36 @@ private:
   bool Save(bool &changed) noexcept override;
 
   /* virtual methods from DataFieldListener */
-  void OnModified(gcc_unused DataField &df) noexcept override {
+  void OnModified(DataField &) noexcept override {
     modified = true;
   }
 };
 
 static constexpr StaticEnumChoice waypoint_types[] = {
-  { 0, N_("Turnpoint"), nullptr },
-  { 1, N_("Airport"), nullptr },
-  { 2, N_("Landable"), nullptr },
-  { 3, N_("Mountain Pass"), nullptr },
-  { 4, N_("Mountain Top"), nullptr },
-  { 5, N_("Transmitter Mast"), nullptr },
-  { 6, N_("Tower"), nullptr },
-  { 7, N_("Tunnel"), nullptr },
-  { 8, N_("Bridge"), nullptr },
-  { 9, N_("Power Plant"), nullptr },
-  { 0 }
+  { Waypoint::Type::NORMAL, N_("Turnpoint") },
+  { Waypoint::Type::AIRFIELD, N_("Airport") },
+  { Waypoint::Type::OUTLANDING, N_("Landable") },
+  { Waypoint::Type::MOUNTAIN_PASS, N_("Mountain Pass") },
+  { Waypoint::Type::MOUNTAIN_TOP, N_("Mountain Top") },
+  { Waypoint::Type::OBSTACLE, N_("Transmitter Mast") },
+  { Waypoint::Type::TOWER, N_("Tower") },
+  { Waypoint::Type::TUNNEL, N_("Tunnel") },
+  { Waypoint::Type::BRIDGE, N_("Bridge") },
+  { Waypoint::Type::POWERPLANT, N_("Power Plant") },
+  { Waypoint::Type::VOR, N_("VOR") },
+  { Waypoint::Type::NDB, N_("NDB") },
+  { Waypoint::Type::DAM, N_("Dam") },
+  { Waypoint::Type::CASTLE, N_("Castle") },
+  { Waypoint::Type::INTERSECTION, N_("Intersection") },
+  { Waypoint::Type::MARKER, N_("Marker") },
+  { Waypoint::Type::REPORTING_POINT, N_("Control Point") },
+  { Waypoint::Type::PGTAKEOFF, N_("PG Take Off") },
+  { Waypoint::Type::PGLANDING, N_("PG Landing Zone") },
+  nullptr
 };
 
 void
-WaypointEditWidget::Prepare(gcc_unused ContainerWindow &parent,
-                            gcc_unused const PixelRect &rc) noexcept
+WaypointEditWidget::Prepare(ContainerWindow &, const PixelRect &) noexcept
 {
   AddText(_("Name"), nullptr, value.name.c_str(), this);
   AddText(_("Short Name"), nullptr, value.shortname.c_str(), this);
@@ -95,9 +103,7 @@ WaypointEditWidget::Prepare(gcc_unused ContainerWindow &parent,
            _T("%.0f %s"), _T("%.0f"),
            0, 30000, 5, false,
            UnitGroup::ALTITUDE, value.elevation);
-  AddEnum(_("Type"), nullptr, waypoint_types,
-          value.IsAirport() ? 1u : (value.IsLandable() ? 2u : 0u),
-          this);
+  AddEnum(_("Type"), nullptr, waypoint_types, (unsigned)value.type);
 }
 
 bool
@@ -109,52 +115,15 @@ WaypointEditWidget::Save(bool &_changed) noexcept
   value.comment = GetValueString(COMMENT);
   value.location = ((GeoPointDataField &)GetDataField(LOCATION)).GetValue();
   changed |= SaveValue(ELEVATION, UnitGroup::ALTITUDE, value.elevation);
+
+  if (SaveValueEnum(TYPE, value.type)) {
+    changed = true;
+
+    value.flags.turn_point = value.type == Waypoint::Type::AIRFIELD ||
+      value.type == Waypoint::Type::NORMAL;
+  }
+
   _changed |= changed;
-
-  switch (GetValueInteger(TYPE)) {
-  case 1:
-    value.flags.turn_point = true;
-    value.type = Waypoint::Type::AIRFIELD;
-    break;
-
-  case 2:
-    value.type = Waypoint::Type::OUTLANDING;
-    break;
-
-  case 3:
-    value.type = Waypoint::Type::MOUNTAIN_PASS;
-    break;
-
-  case 4:
-    value.type = Waypoint::Type::MOUNTAIN_TOP;
-    break;
-
-  case 5:
-    value.type = Waypoint::Type::OBSTACLE;
-    break;
-
-  case 6:
-    value.type = Waypoint::Type::TOWER;
-    break;
-
-  case 7:
-    value.type = Waypoint::Type::TUNNEL;
-    break;
-
-  case 8:
-    value.type = Waypoint::Type::BRIDGE;
-    break;
-
-  case 9:
-    value.type = Waypoint::Type::POWERPLANT;
-    break;
-
-  default:
-    value.type = Waypoint::Type::NORMAL;
-    value.flags.turn_point = true;
-    break;
-  };
-
   return true;
 }
 

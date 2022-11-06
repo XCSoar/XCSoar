@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef REUSABLE_ARRAY_HPP
-#define REUSABLE_ARRAY_HPP
+#pragma once
 
 #include "util/AllocatedArray.hxx"
 
@@ -70,5 +69,3 @@ public:
     return array.data();
   }
 };
-
-#endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_TRAFFIC_LIST_HPP
-#define XCSOAR_FLARM_TRAFFIC_LIST_HPP
+#pragma once
 
 #include "Traffic.hpp"
 #include "NMEA/Validity.hpp"
@@ -50,13 +49,13 @@ struct TrafficList {
   /** Flarm traffic information */
   TrivialArray<FlarmTraffic, MAX_COUNT> list;
 
-  void Clear() {
+  constexpr void Clear() noexcept {
     modified.Clear();
     new_traffic.Clear();
     list.clear();
   }
 
-  bool IsEmpty() const {
+  constexpr bool IsEmpty() const noexcept {
     return list.empty();
   }
 
@@ -64,7 +63,7 @@ struct TrafficList {
    * Adds data from the specified object, unless already present in
    * this one.
    */
-  void Complement(const TrafficList &add) {
+  constexpr void Complement(const TrafficList &add) noexcept {
     if (IsEmpty() && !add.IsEmpty())
       *this = add;
     // Add unique traffic from 'add' list
@@ -78,7 +77,7 @@ struct TrafficList {
     }
   }
 
-  void Expire(TimeStamp clock) noexcept {
+  constexpr void Expire(TimeStamp clock) noexcept {
     modified.Expire(clock, std::chrono::minutes(5));
     new_traffic.Expire(clock, std::chrono::minutes(1));
 
@@ -87,7 +86,7 @@ struct TrafficList {
         list.quick_remove(i);
   }
 
-  unsigned GetActiveTrafficCount() const {
+  constexpr unsigned GetActiveTrafficCount() const noexcept {
     return list.size();
   }
 
@@ -97,7 +96,7 @@ struct TrafficList {
    * @param id FLARM id
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
-  FlarmTraffic *FindTraffic(FlarmId id) {
+  constexpr FlarmTraffic *FindTraffic(FlarmId id) noexcept {
     for (auto &traffic : list)
       if (traffic.id == id)
         return &traffic;
@@ -111,7 +110,7 @@ struct TrafficList {
    * @param id FLARM id
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
-  const FlarmTraffic *FindTraffic(FlarmId id) const {
+  constexpr const FlarmTraffic *FindTraffic(FlarmId id) const noexcept {
     for (const auto &traffic : list)
       if (traffic.id == id)
         return &traffic;
@@ -125,7 +124,7 @@ struct TrafficList {
    * @param name the name or call sign
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
-  FlarmTraffic *FindTraffic(const TCHAR *name) {
+  constexpr FlarmTraffic *FindTraffic(const TCHAR *name) noexcept {
     for (auto &traffic : list)
       if (traffic.name.equals(name))
         return &traffic;
@@ -139,7 +138,7 @@ struct TrafficList {
    * @param name the name or call sign
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
-  const FlarmTraffic *FindTraffic(const TCHAR *name) const {
+  constexpr const FlarmTraffic *FindTraffic(const TCHAR *name) const noexcept {
     for (const auto &traffic : list)
       if (traffic.name.equals(name))
         return &traffic;
@@ -152,7 +151,7 @@ struct TrafficList {
    *
    * @return the FLARM_TRAFFIC pointer, NULL if the array is full
    */
-  FlarmTraffic *AllocateTraffic() {
+  constexpr FlarmTraffic *AllocateTraffic() noexcept {
     return list.full()
       ? NULL
       : &list.append();
@@ -161,7 +160,7 @@ struct TrafficList {
   /**
    * Search for the previous traffic in the ordered list.
    */
-  const FlarmTraffic *PreviousTraffic(const FlarmTraffic *t) const {
+  constexpr const FlarmTraffic *PreviousTraffic(const FlarmTraffic *t) const noexcept {
     return t > list.begin()
       ? t - 1
       : NULL;
@@ -170,7 +169,7 @@ struct TrafficList {
   /**
    * Search for the next traffic in the ordered list.
    */
-  const FlarmTraffic *NextTraffic(const FlarmTraffic *t) const {
+  constexpr const FlarmTraffic *NextTraffic(const FlarmTraffic *t) const noexcept {
     return t + 1 < list.end()
       ? t + 1
       : NULL;
@@ -179,14 +178,14 @@ struct TrafficList {
   /**
    * Search for the first traffic in the ordered list.
    */
-  const FlarmTraffic *FirstTraffic() const {
+  constexpr const FlarmTraffic *FirstTraffic() const noexcept {
     return list.empty() ? NULL : list.begin();
   }
 
   /**
    * Search for the last traffic in the ordered list.
    */
-  const FlarmTraffic *LastTraffic() const {
+  constexpr const FlarmTraffic *LastTraffic() const noexcept {
     return list.empty() ? NULL : list.end() - 1;
   }
 
@@ -194,13 +193,12 @@ struct TrafficList {
    * Finds the most critical alert.  Returns NULL if there is no
    * alert.
    */
-  const FlarmTraffic *FindMaximumAlert() const;
+  [[gnu::pure]]
+  const FlarmTraffic *FindMaximumAlert() const noexcept;
 
-  unsigned TrafficIndex(const FlarmTraffic *t) const {
+  constexpr unsigned TrafficIndex(const FlarmTraffic *t) const noexcept {
     return t - list.begin();
   }
 };
 
 static_assert(std::is_trivial<TrafficList>::value, "type is not trivial");
-
-#endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef OS_PATH_HPP
-#define OS_PATH_HPP
+#pragma once
 
 #include "util/Compiler.h"
 
@@ -38,27 +37,3 @@ Copyright_License {
  */
 void
 ReplaceBaseName(TCHAR *path, const TCHAR *new_base);
-
-/**
- * Checks whether the given filename matches the given extension
- * @param filename Filename to check
- * @param extension Extension to check against (e.g. .xcm)
- * @return True if filename matches the given extension, False otherwise
- */
-gcc_pure
-bool MatchesExtension(const TCHAR *filename, const TCHAR *extension);
-
-#ifdef _UNICODE
-
-/**
- * Checks whether the given filename matches the given extension
- * @param filename Filename to check
- * @param extension Extension to check against (e.g. .xcm)
- * @return True if filename matches the given extension, False otherwise
- */
-gcc_pure
-bool MatchesExtension(const char *filename, const char *extension);
-
-#endif
-
-#endif

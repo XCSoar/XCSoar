@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ Copyright_License {
 #include "Atmosphere/CuSonde.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
+#include "DewPoint.hpp"
 #include "Temperature.hpp"
 
 #include <math.h>
@@ -37,15 +38,15 @@ Copyright_License {
  * @see http://en.wikipedia.org/wiki/Lapse_rate#Dry_adiabatic_lapse_rate
  * @see http://pds-atmospheres.nmsu.edu/education_and_outreach/encyclopedia/adiabatic_lapse_rate.htm
  */
-#define DALR -0.00974
+static constexpr double DALR = -0.00974;
 
 /** ThermalIndex threshold in degrees C */
-#define TITHRESHOLD -1.6
+static constexpr double TITHRESHOLD = -1.6;
 
 using std::max;
 
 void
-CuSonde::Reset()
+CuSonde::Reset() noexcept
 {
   last_level = 0;
   thermal_height = 0;
@@ -53,8 +54,8 @@ CuSonde::Reset()
   ground_height = 0;
   max_ground_temperature = Temperature::FromCelsius(25);
 
-  for (unsigned i = 0; i < NUM_LEVELS; ++i)
-    cslevels[i].Reset();
+  for (auto &i : cslevels)
+    i.Reset();
 }
 
 // TODO accuracy: recalculate thermal index etc if maxGroundTemp changes
@@ -64,7 +65,7 @@ CuSonde::Reset()
  * @param val New predicted maximum ground temperature in K
  */
 void
-CuSonde::SetForecastTemperature(Temperature val)
+CuSonde::SetForecastTemperature(Temperature val) noexcept
 {
   if (max_ground_temperature == val)
     return;
@@ -79,7 +80,7 @@ CuSonde::SetForecastTemperature(Temperature val)
 
   // iterate through all levels
   auto h_agl = -CuSonde::ground_height;
-  for (unsigned level = 0; level < NUM_LEVELS; level++, h_agl += HEIGHT_STEP) {
+  for (unsigned level = 0; level < cslevels.size(); level++, h_agl += HEIGHT_STEP) {
     // update the ThermalIndex for each level with
     // the new max_ground_temperature
     cslevels[level].UpdateThermalIndex(h_agl, max_ground_temperature);
@@ -107,7 +108,7 @@ CuSonde::SetForecastTemperature(Temperature val)
  */
 void
 CuSonde::UpdateMeasurements(const NMEAInfo &basic,
-                            const DerivedInfo &calculated)
+                            const DerivedInfo &calculated) noexcept
 {
   // if (not flying) nothing to update...
   if (!calculated.flight.flying)
@@ -129,7 +130,7 @@ CuSonde::UpdateMeasurements(const NMEAInfo &basic,
                                           / HEIGHT_STEP);
 
   // if (level out of range) cancel update
-  if (level >= NUM_LEVELS)
+  if (level >= cslevels.size())
     return;
 
   // if (level skipped) cancel update
@@ -170,7 +171,7 @@ CuSonde::UpdateMeasurements(const NMEAInfo &basic,
     auto h_agl = (level + 1) * HEIGHT_STEP - ground_height;
     cslevels[level + 1].UpdateThermalIndex(h_agl, max_ground_temperature);
 
-    if (level < NUM_LEVELS - 1) {
+    if (level < cslevels.size() - 1) {
       FindThermalHeight(level);
       FindCloudBase(level);
     }
@@ -185,7 +186,7 @@ CuSonde::UpdateMeasurements(const NMEAInfo &basic,
  * @param level Level used for calculation
  */
 void
-CuSonde::FindThermalHeight(unsigned short level)
+CuSonde::FindThermalHeight(unsigned short level) noexcept
 {
   if (cslevels[level + 1].empty())
     return;
@@ -208,7 +209,7 @@ CuSonde::FindThermalHeight(unsigned short level)
   auto dthermalheight = (level + dlevel) * HEIGHT_STEP;
 
   if (dlevel > 1
-      && (level + 2u < NUM_LEVELS)
+      && level + 2u < cslevels.size()
       && !cslevels[level + 2].empty())
       // estimated point should be in next level.
       return;
@@ -228,7 +229,7 @@ CuSonde::FindThermalHeight(unsigned short level)
  * @param level Level used for calculation
  */
 void
-CuSonde::FindCloudBase(unsigned short level)
+CuSonde::FindCloudBase(unsigned short level) noexcept
 {
   if (cslevels[level + 1].dewpoint_empty())
     return;
@@ -251,7 +252,7 @@ CuSonde::FindCloudBase(unsigned short level)
   auto dcloudbase = (level + dlevel) * HEIGHT_STEP;
 
   if (dlevel > 1
-      && (level + 2u < NUM_LEVELS)
+      && level + 2u < cslevels.size()
       && !cslevels[level + 2].empty())
     // estimated point should be in next level.
     return;
@@ -271,13 +272,12 @@ CuSonde::FindCloudBase(unsigned short level)
  * @param t Temperature in K
  */
 void
-CuSonde::Level::UpdateTemps(bool humidity_valid, double humidity, Temperature temperature)
+CuSonde::Level::UpdateTemps(bool humidity_valid, double humidity,
+                            Temperature temperature) noexcept
 {
   if (humidity_valid)
   {
-    auto log_ex = 7.5 * temperature.ToCelsius() / (237.3 + temperature.ToCelsius()) +
-              (log10(humidity) - 2);
-    auto _dewpoint = Temperature::FromCelsius(log_ex * 237.3 / (7.5 - log_ex));
+    auto _dewpoint = CalculateDewPoint(temperature, humidity);
 
     if (dewpoint_empty())
       dewpoint = _dewpoint;
@@ -306,7 +306,7 @@ CuSonde::Level::UpdateTemps(bool humidity_valid, double humidity, Temperature te
  */
 void
 CuSonde::Level::UpdateThermalIndex(double h_agl,
-                                   Temperature max_ground_temperature)
+                                   Temperature max_ground_temperature) noexcept
 {
   // Calculate the dry temperature at altitude = hlevel
   dry_temperature = max_ground_temperature + Temperature::FromKelvin(DALR * h_agl);

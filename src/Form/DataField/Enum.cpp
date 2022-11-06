@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -78,18 +78,6 @@ DataFieldEnum::GetValue() const noexcept
 {
   assert(value < entries.size());
   return entries[value].GetId();
-}
-
-int
-DataFieldEnum::GetAsInteger() const noexcept
-{
-  if (entries.empty()) {
-    assert(value == 0);
-    return 0;
-  } else {
-    assert(value < entries.size());
-    return entries[value].GetId();
-  }
 }
 
 void
@@ -237,18 +225,6 @@ DataFieldEnum::SetStringAutoAdd(const TCHAR *text) noexcept
 }
 
 void
-DataFieldEnum::SetAsInteger(int Value) noexcept
-{
-  ModifyValue(Value);
-}
-
-void
-DataFieldEnum::SetAsString(const TCHAR *Value) noexcept
-{
-  ModifyValue(Value);
-}
-
-void
 DataFieldEnum::Inc() noexcept
 {
   if (entries.empty()) {
@@ -291,7 +267,7 @@ DataFieldEnum::Sort(std::size_t startindex) noexcept
 }
 
 ComboList
-DataFieldEnum::CreateComboList(const TCHAR *reference_string) const noexcept
+DataFieldEnum::CreateComboList([[maybe_unused]] const TCHAR *reference_string) const noexcept
 {
   ComboList combo_list;
 
@@ -301,6 +277,12 @@ DataFieldEnum::CreateComboList(const TCHAR *reference_string) const noexcept
 
   combo_list.current_index = value;
   return combo_list;
+}
+
+void
+DataFieldEnum::SetFromCombo(int i, const TCHAR *) noexcept
+{
+  ModifyValue(i);
 }
 
 int

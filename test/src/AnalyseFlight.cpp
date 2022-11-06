@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -100,7 +100,7 @@ ComputeCircling(DebugReplay &replay, const CirclingSettings &circling_settings)
 }
 
 static void
-Finish(const MoreData &basic, const DerivedInfo &calculated,
+Finish(const MoreData &basic, [[maybe_unused]] const DerivedInfo &calculated,
        Result &result)
 {
   if (!basic.time_available || !basic.date_time_utc.IsDatePlausible())
@@ -175,7 +175,7 @@ Run(DebugReplay &replay, Result &result,
   flight_phase_detector.Finish();
 }
 
-gcc_pure
+[[gnu::pure]]
 static ContestStatistics
 SolveContest(Contest contest,
              Trace &full_trace, Trace &triangle_trace,

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ROUTE_COMPUTER_HPP
-#define XCSOAR_ROUTE_COMPUTER_HPP
+#pragma once
 
 #include "Task/ProtectedRoutePlanner.hpp"
 #include "Engine/Task/TaskType.hpp"
@@ -55,14 +54,6 @@ public:
   RouteComputer(const Airspaces &airspace_database,
                 const ProtectedAirspaceWarningManager *warnings);
 
-  /**
-   * Returns a reference to the unprotected route planner object,
-   * which must not be used outside of the calculation thread.
-   */
-  const RoutePlannerGlue &GetRoutePlanner() const {
-    return route_planner;
-  }
-
   const ProtectedRoutePlanner &GetProtectedRoutePlanner() const {
     return protected_route_planner;
   }
@@ -92,5 +83,3 @@ private:
   void Reach(const MoreData &basic, DerivedInfo &calculated,
              const RoutePlannerConfig &config);
 };
-
-#endif

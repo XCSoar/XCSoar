@@ -103,7 +103,7 @@ struct VisibleWaypoint {
       reachable = WaypointReachability::UNREACHABLE;
   }
 
-  bool CalculateRouteArrival(const RoutePlannerGlue &route_planner,
+  bool CalculateRouteArrival(const ProtectedRoutePlanner &route_planner,
                              const TaskBehaviour &task_behaviour) noexcept {
     const double elevation = waypoint->elevation +
       task_behaviour.safety_height_arrival;
@@ -118,7 +118,7 @@ struct VisibleWaypoint {
     return true;
   }
 
-  void CalculateReachability(const RoutePlannerGlue &route_planner,
+  void CalculateReachability(const ProtectedRoutePlanner &route_planner,
                              const TaskBehaviour &task_behaviour) noexcept
   {
     if (!CalculateRouteArrival(route_planner, task_behaviour))
@@ -412,13 +412,11 @@ public:
   }
 
   void CalculateRoute(const ProtectedRoutePlanner &route_planner) noexcept {
-    const ProtectedRoutePlanner::Lease lease(route_planner);
-
     for (VisibleWaypoint &vwp : waypoints) {
       const Waypoint &way_point = *vwp.waypoint;
 
       if (way_point.IsLandable() || way_point.flags.watched)
-        vwp.CalculateReachability(lease, task_behaviour);
+        vwp.CalculateReachability(route_planner, task_behaviour);
     }
   }
 

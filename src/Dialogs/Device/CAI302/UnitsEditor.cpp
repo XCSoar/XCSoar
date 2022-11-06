@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,13 +27,13 @@ Copyright_License {
 #include "Units/Units.hpp"
 
 void
-CAI302UnitsEditor::Prepare(ContainerWindow &parent,
-                           const PixelRect &rc) noexcept
+CAI302UnitsEditor::Prepare([[maybe_unused]] ContainerWindow &parent,
+                           [[maybe_unused]] const PixelRect &rc) noexcept
 {
   static constexpr StaticEnumChoice vario_list[] = {
     { 0, _T("m/s"), },
     { 1, _T("kt"), },
-    { 0 }
+    nullptr
   };
   AddEnum(_("Vario"), NULL, vario_list,
           data.GetVarioUnit());
@@ -41,7 +41,7 @@ CAI302UnitsEditor::Prepare(ContainerWindow &parent,
   static constexpr StaticEnumChoice altitude_list[] = {
     { 0, _T("m"), },
     { 1, _T("ft"), },
-    { 0 }
+    nullptr
   };
   AddEnum(_("Altitude"), NULL, altitude_list,
           data.GetAltitudeUnit());
@@ -49,7 +49,7 @@ CAI302UnitsEditor::Prepare(ContainerWindow &parent,
   static constexpr StaticEnumChoice temperature_list[] = {
     { 0, _T(DEG "C"), },
     { 1, _T(DEG "F"), },
-    { 0 }
+    nullptr
   };
   AddEnum(_("Temperature"), NULL, temperature_list,
           data.GetTemperatureUnit());
@@ -57,7 +57,7 @@ CAI302UnitsEditor::Prepare(ContainerWindow &parent,
   static constexpr StaticEnumChoice pressure_list[] = {
     { 0, _T("hPa"), },
     { 1, _T("inHg"), },
-    { 0 }
+    nullptr
   };
   AddEnum(_("Pressure"), NULL, pressure_list,
           data.GetPressureUnit());
@@ -66,7 +66,7 @@ CAI302UnitsEditor::Prepare(ContainerWindow &parent,
     { 0, _T("km"), },
     { 1, _T("NM"), },
     { 2, _T("mi"), },
-    { 0 }
+    nullptr
   };
   AddEnum(_("Distance"), NULL, distance_list,
           data.GetDistanceUnit());
@@ -75,7 +75,7 @@ CAI302UnitsEditor::Prepare(ContainerWindow &parent,
     { 0, _T("m/s"), },
     { 1, _T("kt"), },
     { 2, _T("mph"), },
-    { 0 }
+    nullptr
   };
   AddEnum(_("Speed"), NULL, speed_list,
           data.GetSpeedUnit());
@@ -83,7 +83,7 @@ CAI302UnitsEditor::Prepare(ContainerWindow &parent,
   static constexpr StaticEnumChoice sink_tone_list[] = {
     { 0, _T("off"), },
     { 1, _T("on"), },
-    { 0 }
+    nullptr
   };
   AddEnum(_("Sink tone"), NULL, sink_tone_list,
           data.GetSinkTone());
@@ -95,43 +95,43 @@ CAI302UnitsEditor::Save(bool &_changed) noexcept
   bool changed = false;
 
   unsigned vario = data.GetVarioUnit();
-  if (SaveValue(VarioUnit, vario)) {
+  if (SaveValueEnum(VarioUnit, vario)) {
     data.SetVarioUnit(vario);
     changed = true;
   }
 
   unsigned altitude = data.GetAltitudeUnit();
-  if (SaveValue(AltitudeUnit, altitude)) {
+  if (SaveValueEnum(AltitudeUnit, altitude)) {
     data.SetAltitudeUnit(altitude);
     changed = true;
   }
 
   unsigned temperature = data.GetTemperatureUnit();
-  if (SaveValue(TemperatureUnit, temperature)) {
+  if (SaveValueEnum(TemperatureUnit, temperature)) {
     data.SetTemperatureUnit(temperature);
     changed = true;
   }
 
   unsigned pressure = data.GetPressureUnit();
-  if (SaveValue(PressureUnit, pressure)) {
+  if (SaveValueEnum(PressureUnit, pressure)) {
     data.SetPressureUnit(pressure);
     changed = true;
   }
 
   unsigned distance = data.GetDistanceUnit();
-  if (SaveValue(DistanceUnit, distance)) {
+  if (SaveValueEnum(DistanceUnit, distance)) {
     data.SetDistanceUnit(distance);
     changed = true;
   }
 
   unsigned speed = data.GetSpeedUnit();
-  if (SaveValue(SpeedUnit, speed)) {
+  if (SaveValueEnum(SpeedUnit, speed)) {
     data.SetSpeedUnit(speed);
     changed = true;
   }
 
   unsigned sink_tone = data.GetSinkTone();
-  if (SaveValue(SinkTone, sink_tone)) {
+  if (SaveValueEnum(SinkTone, sink_tone)) {
     data.SetSinkTone(sink_tone);
     changed = true;
   }

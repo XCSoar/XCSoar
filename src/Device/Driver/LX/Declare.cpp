@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -62,7 +62,7 @@ LoadPilotInfo(LX::Pilot &lx_driver_Pilot, const Declaration &declaration)
   memset((void*)lx_driver_Pilot.unknown2, 0, sizeof(lx_driver_Pilot.unknown2));
 }
 
-gcc_const
+[[gnu::const]]
 static int32_t
 AngleToLX(Angle value)
 {
@@ -148,7 +148,7 @@ LoadTask(LX::Declaration &lx_driver_Declaration, const Declaration &declaration)
 
 static void
 LoadContestClass(LX::ContestClass &lx_driver_ContestClass,
-                 gcc_unused const Declaration &declaration)
+                 [[maybe_unused]] const Declaration &declaration)
 {
   copy_space_padded(lx_driver_ContestClass.contest_class, _T(""),
                     sizeof(lx_driver_ContestClass.contest_class));
@@ -156,7 +156,7 @@ LoadContestClass(LX::ContestClass &lx_driver_ContestClass,
 
 static bool
 DeclareInner(Port &port, const Declaration &declaration,
-             gcc_unused OperationEnvironment &env)
+             [[maybe_unused]] OperationEnvironment &env)
 {
   env.SetProgressRange(5);
   env.SetProgressPosition(0);
@@ -199,7 +199,7 @@ DeclareInner(Port &port, const Declaration &declaration,
 
 bool
 LXDevice::Declare(const Declaration &declaration,
-                  gcc_unused const Waypoint *home,
+                  [[maybe_unused]] const Waypoint *home,
                   OperationEnvironment &env)
 {
   if (declaration.Size() < 2 || declaration.Size() > 12)

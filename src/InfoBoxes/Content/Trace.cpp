@@ -41,7 +41,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Widget/CallbackWidget.hpp"
 
-gcc_const
+[[gnu::const]]
 static PixelRect
 GetSparkRect(PixelRect rc)
 {
@@ -173,7 +173,7 @@ ShowAnalysisBarograph() noexcept
 }
 
 static std::unique_ptr<Widget>
-LoadAnalysisBarographPanel(unsigned id) noexcept
+LoadAnalysisBarographPanel([[maybe_unused]] unsigned id) noexcept
 {
   return std::make_unique<CallbackWidget>(ShowAnalysisBarograph);
 }

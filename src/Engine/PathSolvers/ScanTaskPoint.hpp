@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,9 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef SCANTASKPOINT_HPP
-#define SCANTASKPOINT_HPP
+#pragma once
 
+#include <compare> // for the defaulted spaceship operator
 #include <cstdint>
 
 /**
@@ -48,20 +48,8 @@ public:
     return value;
   }
 
-  constexpr
-  bool operator==(const ScanTaskPoint other) const noexcept {
-    return Key() == other.Key();
-  }
-
-  constexpr
-  bool operator!=(const ScanTaskPoint other) const noexcept {
-    return Key() != other.Key();
-  }
-
-  constexpr
-  bool operator<(const ScanTaskPoint other) const noexcept {
-    return Key() < other.Key();
-  }
+  friend constexpr auto operator<=>(const ScanTaskPoint &,
+                                    const ScanTaskPoint &) noexcept = default;
 
   constexpr
   unsigned GetStageNumber() const noexcept {
@@ -89,5 +77,3 @@ public:
     return GetStageNumber() == 0;
   }
 };
-
-#endif

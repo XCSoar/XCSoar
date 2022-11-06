@@ -43,8 +43,7 @@ LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
     BufferedLineReader lr(mr);
     NullOperationEnvironment operation;
 
-    if (!ParseAirspaceFile(airspaces, lr, operation))
-      return EXIT_FAILURE;
+    ParseAirspaceFile(airspaces, lr, operation);
   } catch (...) {
     return EXIT_FAILURE;
   }

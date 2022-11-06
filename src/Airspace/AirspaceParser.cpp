@@ -24,7 +24,7 @@ Copyright_License {
 
 #include "AirspaceParser.hpp"
 #include "Airspace/Airspaces.hpp"
-#include "Operation/Operation.hpp"
+#include "Operation/ProgressListener.hpp"
 #include "Units/System.hpp"
 #include "Language/Language.hpp"
 #include "util/CharUtil.hxx"
@@ -38,7 +38,7 @@ Copyright_License {
 #include "Geo/GeoVector.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
 #include "util/ConvertString.hpp"
-#include "util/Exception.hxx"
+#include "util/RuntimeError.hxx"
 #include "util/StaticString.hxx"
 #include "util/StringCompare.hxx"
 
@@ -128,10 +128,10 @@ struct TempAirspaceType
 
   // General
   tstring name;
-  tstring radio;
+  RadioFrequency radio_frequency;
   AirspaceClass type;
-  AirspaceAltitude base;
-  AirspaceAltitude top;
+  std::optional<AirspaceAltitude> base;
+  std::optional<AirspaceAltitude> top;
   AirspaceActivity days_of_operation;
 
   // Polygon
@@ -148,9 +148,11 @@ struct TempAirspaceType
   Reset() noexcept
   {
     days_of_operation.SetAll();
-    radio = _T("");
+    name.clear();
+    radio_frequency = RadioFrequency::Null();
     type = OTHER;
-    base = top = AirspaceAltitude::Invalid();
+    base.reset();
+    top.reset();
     points.clear();
     center = GeoPoint::Invalid();
     radius = -1;
@@ -161,21 +163,52 @@ struct TempAirspaceType
   ResetTNP() noexcept
   {
     // Preserve type, radio and days_of_operation for next airspace blocks
+    name.clear();
     points.clear();
     center = GeoPoint::Invalid();
     radius = -1;
     rotation = 1;
   }
 
+  /**
+   * If there is an airspace, add it to the #Airspaces and return
+   * true.  Returns false if no airspace was being constructed.
+   * Throws if the airspace is bad.
+   */
+  bool Commit(Airspaces &airspace_database) {
+    if (!points.empty()) {
+      AddPolygon(airspace_database);
+      return true;
+    } else
+      return false;
+  }
+
+  /**
+   * Perform common checks before an airspace is committed to
+   * #Airspaces.  Throws on error.
+   */
+  void Check() {
+    if (type == OTHER && name.empty())
+      throw std::runtime_error{"Airspace has no name"};
+  }
+
   void
-  AddPolygon(Airspaces &airspace_database) noexcept
+  AddPolygon(Airspaces &airspace_database)
   {
+    Check();
+
     if (points.size() < 3)
-      return;
+      throw std::runtime_error{"Not enough polygon points"};
+
+    if (!base)
+      throw std::runtime_error{"No base altitude"};
+
+    if (!top)
+      throw std::runtime_error{"No top altitude"};
 
     auto as = std::make_shared<AirspacePolygon>(points);
-    as->SetProperties(std::move(name), type, base, top);
-    as->SetRadio(radio);
+    as->SetProperties(std::move(name), type, *base, *top);
+    as->SetRadioFrequency(radio_frequency);
     as->SetDays(days_of_operation);
     airspace_database.Add(std::move(as));
   }
@@ -195,10 +228,21 @@ struct TempAirspaceType
   void
   AddCircle(Airspaces &airspace_database)
   {
+    Check();
+
+    if (!points.empty())
+      throw std::runtime_error{"Airspace is a mix of polygon and circle"};
+
+    if (!base)
+      throw std::runtime_error{"No base altitude"};
+
+    if (!top)
+      throw std::runtime_error{"No top altitude"};
+
     auto as = std::make_shared<AirspaceCircle>(RequireCenter(),
                                                RequireRadius());
-    as->SetProperties(std::move(name), type, base, top);
-    as->SetRadio(radio);
+    as->SetProperties(std::move(name), type, *base, *top);
+    as->SetRadioFrequency(radio_frequency);
     as->SetDays(days_of_operation);
     airspace_database.Add(std::move(as));
   }
@@ -256,7 +300,7 @@ struct TempAirspaceType
   }
 
   void
-  AppendArc(Angle start, Angle end) noexcept
+  AppendArc(Angle start, Angle end)
   {
     const auto center = RequireCenter();
 
@@ -287,18 +331,9 @@ struct TempAirspaceType
   }
 };
 
-static void
-ShowParseWarning(const TCHAR *msg, int line, const TCHAR *str,
-                 OperationEnvironment &operation) noexcept
-{
-  StaticString<256> buffer;
-  buffer.Format(_T("%s [%d]\r\n\"%s\""),
-                msg, line, str);
-  operation.SetErrorMessage(buffer.c_str());
-}
-
-static void
-ReadAltitude(StringParser<TCHAR> &input, AirspaceAltitude &altitude)
+[[nodiscard]]
+static AirspaceAltitude
+ReadAltitude(StringParser<TCHAR> &input)
 {
   auto unit = Unit::FEET;
   enum { MSL, AGL, SFC, FL, STD, UNLIMITED } type = MSL;
@@ -334,6 +369,8 @@ ReadAltitude(StringParser<TCHAR> &input, AirspaceAltitude &altitude)
       input.Skip();
   }
 
+  AirspaceAltitude altitude;
+
   switch (type) {
   case FL:
     altitude.reference = AltitudeReference::STD;
@@ -341,12 +378,12 @@ ReadAltitude(StringParser<TCHAR> &input, AirspaceAltitude &altitude)
 
     /* prepare fallback, just in case we have no terrain */
     altitude.altitude = Units::ToSysUnit(value, Unit::FLIGHT_LEVEL);
-    return;
+    return altitude;
 
   case UNLIMITED:
     altitude.reference = AltitudeReference::MSL;
     altitude.altitude = 50000;
-    return;
+    return altitude;
 
   case SFC:
     altitude.reference = AltitudeReference::AGL;
@@ -354,7 +391,7 @@ ReadAltitude(StringParser<TCHAR> &input, AirspaceAltitude &altitude)
 
     /* prepare fallback, just in case we have no terrain */
     altitude.altitude = 0;
-    return;
+    return altitude;
 
   default:
     break;
@@ -366,7 +403,7 @@ ReadAltitude(StringParser<TCHAR> &input, AirspaceAltitude &altitude)
   case MSL:
     altitude.reference = AltitudeReference::MSL;
     altitude.altitude = value;
-    return;
+    return altitude;
 
   case AGL:
     altitude.reference = AltitudeReference::AGL;
@@ -374,7 +411,7 @@ ReadAltitude(StringParser<TCHAR> &input, AirspaceAltitude &altitude)
 
     /* prepare fallback, just in case we have no terrain */
     altitude.altitude = value;
-    return;
+    return altitude;
 
   case STD:
     altitude.reference = AltitudeReference::STD;
@@ -382,11 +419,13 @@ ReadAltitude(StringParser<TCHAR> &input, AirspaceAltitude &altitude)
 
     /* prepare fallback, just in case we have no QNH */
     altitude.altitude = value;
-    return;
+    return altitude;
 
   default:
     break;
   }
+
+  return altitude;
 }
 
 /**
@@ -588,8 +627,8 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
       if (!input.SkipWhitespace())
         break;
 
-      temp_area.AddPolygon(airspace_database);
-      temp_area.Reset();
+      if (temp_area.Commit(airspace_database))
+        temp_area.Reset();
 
       temp_area.type = ParseType(input.c_str());
       break;
@@ -603,13 +642,13 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
     case _T('L'):
     case _T('l'):
       if (input.SkipWhitespace())
-        ReadAltitude(input, temp_area.base);
+        temp_area.base = ReadAltitude(input);
       break;
 
     case _T('H'):
     case _T('h'):
       if (input.SkipWhitespace())
-        ReadAltitude(input, temp_area.top);
+        temp_area.top = ReadAltitude(input);
       break;
 
     /** 'AR 999.999 or 'AF 999.999' in accordance with the Naviter change proposed in 2018 - (Find 'Additional OpenAir fields' here) http://www.winpilot.com/UsersGuide/UserAirspace.asp **/
@@ -618,7 +657,7 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
     case _T('F'):
     case _T('f'):
       if (input.SkipWhitespace())
-        temp_area.radio = input.c_str();
+        temp_area.radio_frequency = RadioFrequency::Parse(input.c_str());
       break;
     }
 
@@ -819,23 +858,23 @@ ParseLineTNP(Airspaces &airspace_database, StringParser<TCHAR> &input,
     temp_area.rotation = -1;
     ParseArcTNP(input, temp_area);
   } else if (input.SkipMatchIgnoreCase(_T("TITLE="), 6)) {
-    temp_area.AddPolygon(airspace_database);
-    temp_area.ResetTNP();
+    if (temp_area.Commit(airspace_database))
+      temp_area.ResetTNP();
 
     temp_area.name = input.c_str();
   } else if (input.SkipMatchIgnoreCase(_T("TYPE="), 5)) {
-    temp_area.AddPolygon(airspace_database);
-    temp_area.ResetTNP();
+    if (temp_area.Commit(airspace_database))
+      temp_area.ResetTNP();
 
     temp_area.type = ParseTypeTNP(input.c_str());
   } else if (input.SkipMatchIgnoreCase(_T("CLASS="), 6)) {
     temp_area.type = ParseClassTNP(input.c_str());
   } else if (input.SkipMatchIgnoreCase(_T("TOPS="), 5)) {
-    ReadAltitude(input, temp_area.top);
+    temp_area.top = ReadAltitude(input);
   } else if (input.SkipMatchIgnoreCase(_T("BASE="), 5)) {
-    ReadAltitude(input, temp_area.base);
+    temp_area.base = ReadAltitude(input);
   } else if (input.SkipMatchIgnoreCase(_T("RADIO="), 6)) {
-    temp_area.radio = input.c_str();
+    temp_area.radio_frequency = RadioFrequency::Parse(input.c_str());
   } else if (input.SkipMatchIgnoreCase(_T("ACTIVE="), 7)) {
     if (input.MatchAllIgnoreCase(_T("WEEKEND")))
       temp_area.days_of_operation.SetWeekend();
@@ -861,15 +900,15 @@ DetectFileType(const TCHAR *line)
   return AirspaceFileType::UNKNOWN;
 }
 
-bool
+void
 ParseAirspaceFile(Airspaces &airspaces,
                   TLineReader &reader,
-                  OperationEnvironment &operation) noexcept
+                  ProgressListener &progress)
 {
   bool ignore = false;
 
   // Create and init ProgressDialog
-  operation.SetProgressRange(1024);
+  progress.SetProgressRange(1024);
 
   const long file_size = reader.GetSize();
 
@@ -901,24 +940,19 @@ ParseAirspaceFile(Airspaces &airspaces,
         ParseLineTNP(airspaces, input, temp_area, ignore);
       }
     } catch (...) {
-      const auto msg = GetFullMessage(std::current_exception());
-      ShowParseWarning(UTF8ToWideConverter(msg.c_str()), line_num, line,
-                       operation);
-      return false;
+      // TODO translate this?
+      std::throw_with_nested(FormatRuntimeError("Error in line %u ('%s')",
+                                                line_num, line));
     }
 
     // Update the ProgressDialog
     if ((line_num & 0xff) == 0)
-      operation.SetProgressPosition(reader.Tell() * 1024 / file_size);
+      progress.SetProgressPosition(reader.Tell() * 1024 / file_size);
   }
 
-  if (filetype == AirspaceFileType::UNKNOWN) {
-    operation.SetErrorMessage(_("Unknown airspace filetype"));
-    return false;
-  }
+  if (filetype == AirspaceFileType::UNKNOWN)
+    throw std::runtime_error(WideToUTF8Converter(_("Unknown airspace filetype")));
 
   // Process final area (if any)
-  temp_area.AddPolygon(airspaces);
-
-  return true;
+  temp_area.Commit(airspaces);
 }

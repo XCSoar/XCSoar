@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -179,9 +179,14 @@ static bool
 TestWaypointFile(Path filename, Waypoints &way_points, unsigned num_wps)
 {
   NullOperationEnvironment operation;
-  if (!ok1(ReadWaypointFile(filename, way_points,
-                            WaypointFactory(WaypointOrigin::NONE),
-                            operation))) {
+
+  try {
+    ReadWaypointFile(filename, way_points,
+                     WaypointFactory(WaypointOrigin::NONE),
+                     operation);
+    ok1(true);
+  } catch (...) {
+    ok1(false);
     skip(2, 0, "parsing waypoint file failed");
     return false;
   }
@@ -296,6 +301,19 @@ TestSeeYou(wp_vector org_wp)
   for (it2 = org_wp.begin(); it2 < org_wp.end(); it2++) {
     const auto wp2 = GetWaypoint(*it2, way_points2);
     TestSeeYouWaypoint(*it2, wp2.get());
+  }
+  // Test a SeeYou waypoint file with useradata and pics fields:
+  Waypoints way_points3;
+  if (!TestWaypointFile(Path(_T("test/data/waypoints3.cup")), way_points3,
+                        org_wp.size())) {
+    skip(9 * org_wp.size(), 0, "opening waypoints3.cup failed");
+    return;
+  }
+
+  wp_vector::iterator it3;
+  for (it3 = org_wp.begin(); it3 < org_wp.end(); it3++) {
+    const auto wp3 = GetWaypoint(*it3, way_points3);
+    TestSeeYouWaypoint(*it3, wp3.get());
   }
 }
 
@@ -533,11 +551,11 @@ CreateOriginalWaypoints()
   return org_wp;
 }
 
-int main(int argc, char **argv)
+int main()
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(360);
+  plan_tests(413);
 
   TestExtractParameters();
 

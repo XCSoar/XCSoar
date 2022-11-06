@@ -25,7 +25,7 @@
 #include "Geo/GeoVector.hpp"
 
 OZBoundary
-KeyholeZone::GetBoundary() const
+KeyholeZone::GetBoundary() const noexcept
 {
   OZBoundary boundary;
   boundary.push_front(GetSectorStart());
@@ -47,13 +47,13 @@ KeyholeZone::GetBoundary() const
 }
 
 double
-KeyholeZone::ScoreAdjustment() const
+KeyholeZone::ScoreAdjustment() const noexcept
 {
   return GetInnerRadius();
 }
 
-bool 
-KeyholeZone::IsInSector(const GeoPoint &location) const
+bool
+KeyholeZone::IsInSector(const GeoPoint &location) const noexcept
 {
   GeoVector f(GetReference(), location);
 

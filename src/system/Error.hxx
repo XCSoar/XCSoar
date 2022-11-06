@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2013-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SYSTEM_ERROR_HXX
-#define SYSTEM_ERROR_HXX
+#pragma once
 
 #include <system_error> // IWYU pragma: export
 #include <utility>
@@ -51,10 +50,32 @@ FormatSystemError(std::error_code code, const char *fmt,
 #include <windef.h> // for HWND (needed by winbase.h)
 #include <winbase.h> // for FormatMessageA()
 
+/**
+ * Returns the error_category to be used to wrap WIN32 GetLastError()
+ * values.  The C++ standard does not define this well, and this value
+ * is mostly guessed.
+ *
+ * TODO: verify
+ */
+[[gnu::const]]
+static inline const std::error_category &
+LastErrorCategory() noexcept
+{
+	return std::system_category();
+}
+
+[[gnu::pure]]
+inline bool
+IsLastError(const std::system_error &e, DWORD code) noexcept
+{
+	return e.code().category() == LastErrorCategory() &&
+		(DWORD)e.code().value() == code;
+}
+
 static inline std::system_error
 MakeLastError(DWORD code, const char *msg) noexcept
 {
-	return std::system_error(std::error_code(code, std::system_category()),
+	return std::system_error(std::error_code(code, LastErrorCategory()),
 				 msg);
 }
 
@@ -104,6 +125,7 @@ FormatLastError(const char *fmt, Args&&... args) noexcept
  *
  * @see https://stackoverflow.com/questions/28746372/system-error-categories-and-standard-system-error-codes
  */
+[[gnu::const]]
 static inline const std::error_category &
 ErrnoCategory() noexcept
 {
@@ -173,8 +195,7 @@ static inline bool
 IsFileNotFound(const std::system_error &e) noexcept
 {
 #ifdef _WIN32
-	return e.code().category() == std::system_category() &&
-		e.code().value() == ERROR_FILE_NOT_FOUND;
+	return IsLastError(e, ERROR_FILE_NOT_FOUND);
 #else
 	return IsErrno(e, ENOENT);
 #endif
@@ -185,8 +206,7 @@ static inline bool
 IsPathNotFound(const std::system_error &e) noexcept
 {
 #ifdef _WIN32
-	return e.code().category() == std::system_category() &&
-		e.code().value() == ERROR_PATH_NOT_FOUND;
+	return IsLastError(e, ERROR_PATH_NOT_FOUND);
 #else
 	return IsErrno(e, ENOTDIR);
 #endif
@@ -197,11 +217,8 @@ static inline bool
 IsAccessDenied(const std::system_error &e) noexcept
 {
 #ifdef _WIN32
-	return e.code().category() == std::system_category() &&
-		e.code().value() == ERROR_ACCESS_DENIED;
+	return IsLastError(e, ERROR_ACCESS_DENIED);
 #else
 	return IsErrno(e, EACCES);
 #endif
 }
-
-#endif

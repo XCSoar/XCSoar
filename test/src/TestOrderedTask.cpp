@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -37,31 +37,46 @@ static TaskBehaviour task_behaviour;
 static OrderedTaskSettings ordered_task_settings;
 static GlidePolar glide_polar(0);
 
-static GeoPoint
-MakeGeoPoint(double longitude, double latitude)
+static constexpr GeoPoint
+MakeGeoPoint(double longitude, double latitude) noexcept
 {
-  return GeoPoint(Angle::Degrees(longitude),
-                  Angle::Degrees(latitude));
+  return {Angle::Degrees(longitude), Angle::Degrees(latitude)};
 }
 
 static Waypoint
-MakeWaypoint(Waypoint wp, double altitude)
+MakeWaypoint(Waypoint wp, double altitude) noexcept
 {
   wp.elevation = altitude;
   return wp;
 }
 
 static Waypoint
-MakeWaypoint(double longitude, double latitude, double altitude)
+MakeWaypoint(double longitude, double latitude, double altitude) noexcept
 {
   return MakeWaypoint(Waypoint(MakeGeoPoint(longitude, latitude)), altitude);
 }
 
 template<typename... Args>
 static WaypointPtr
-MakeWaypointPtr(Args&&... args)
+MakeWaypointPtr(Args&&... args) noexcept
 {
   return WaypointPtr(new Waypoint(MakeWaypoint(std::forward<Args>(args)...)));
+}
+
+static constexpr AircraftState
+MakeAircraft(GeoPoint location, double altitude) noexcept
+{
+  AircraftState aircraft;
+  aircraft.Reset();
+  aircraft.location = location;
+  aircraft.altitude = altitude;
+  return aircraft;
+}
+
+static constexpr AircraftState
+MakeAircraft(double longitude, double latitude, double altitude) noexcept
+{
+  return MakeAircraft(MakeGeoPoint(longitude, latitude), altitude);
 }
 
 static const auto wp1 = MakeWaypointPtr(0, 45, 50);
@@ -71,7 +86,7 @@ static const auto wp4 = MakeWaypointPtr(1, 46, 50);
 static const auto wp5 = MakeWaypointPtr(0.3, 46, 50);
 
 static double
-GetSafetyHeight(const TaskPoint &tp)
+GetSafetyHeight([[maybe_unused]] const TaskPoint &tp) noexcept
 {
   return task_behaviour.safety_height_arrival;
 }
@@ -192,10 +207,7 @@ TestFlightToFinish(double aircraft_altitude)
 
   ok1(!IsError(task.CheckTask()));
 
-  AircraftState aircraft;
-  aircraft.Reset();
-  aircraft.location = wp1->location;
-  aircraft.altitude = aircraft_altitude;
+  const auto aircraft = MakeAircraft(wp1->location, aircraft_altitude);
   task.Update(aircraft, aircraft, glide_polar);
 
   const GeoVector vector = wp1->location.DistanceBearing(wp2->location);
@@ -232,10 +244,7 @@ TestSimpleTask()
 
   ok1(!IsError(task.CheckTask()));
 
-  AircraftState aircraft;
-  aircraft.Reset();
-  aircraft.location = MakeGeoPoint(0, 44.5);
-  aircraft.altitude = 1700;
+  const auto aircraft = MakeAircraft(0, 44.5, 1700);
   task.Update(aircraft, aircraft, glide_polar);
 
   const GeoVector tp1_to_tp2 = wp1->location.DistanceBearing(wp3->location);
@@ -272,10 +281,7 @@ TestHighFinish()
 
   ok1(!IsError(task.CheckTask()));
 
-  AircraftState aircraft;
-  aircraft.Reset();
-  aircraft.location = wp1->location;
-  aircraft.altitude = 1000;
+  const auto aircraft = MakeAircraft(wp1->location, 1000);
   task.Update(aircraft, aircraft, glide_polar);
 
   const GeoVector vector = wp1->location.DistanceBearing(wp2->location);
@@ -317,10 +323,7 @@ TestHighTP()
 
   ok1(!IsError(task.CheckTask()));
 
-  AircraftState aircraft;
-  aircraft.Reset();
-  aircraft.location = wp1->location;
-  aircraft.altitude = 2000;
+  const auto aircraft = MakeAircraft(wp1->location, 2000);
   task.Update(aircraft, aircraft, glide_polar);
 
   const TaskStats &stats = task.GetStats();
@@ -354,10 +357,7 @@ TestHighTPFinal()
 
   ok1(!IsError(task.CheckTask()));
 
-  AircraftState aircraft;
-  aircraft.Reset();
-  aircraft.location = wp1->location;
-  aircraft.altitude = 1200;
+  const auto aircraft = MakeAircraft(wp1->location, 1200);
   task.Update(aircraft, aircraft, glide_polar);
 
   const TaskStats &stats = task.GetStats();
@@ -391,10 +391,7 @@ TestLowTPFinal()
 
   ok1(!IsError(task.CheckTask()));
 
-  AircraftState aircraft;
-  aircraft.Reset();
-  aircraft.location = wp1->location;
-  aircraft.altitude = 2500;
+  const auto aircraft = MakeAircraft(wp1->location, 2500);
   task.Update(aircraft, aircraft, glide_polar);
 
   const TaskStats &stats = task.GetStats();
@@ -419,7 +416,7 @@ TestAll()
   TestLowTPFinal();
 }
 
-int main(int argc, char **argv)
+int main()
 {
   plan_tests(728);
 

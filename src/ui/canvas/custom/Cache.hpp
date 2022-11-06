@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,12 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_CACHE_HPP
-#define XCSOAR_SCREEN_OPENGL_CACHE_HPP
+#pragma once
 
 #include "ui/dim/Size.hpp"
 
-struct StringView;
+#include <string_view>
+
 class Font;
 
 #ifdef ENABLE_OPENGL
@@ -57,19 +57,17 @@ struct Result {
 
 [[gnu::pure]]
 PixelSize
-GetSize(const Font &font, StringView text) noexcept;
+GetSize(const Font &font, std::string_view text) noexcept;
 
 [[gnu::pure]]
 PixelSize
-LookupSize(const Font &font, StringView text) noexcept;
+LookupSize(const Font &font, std::string_view text) noexcept;
 
 [[gnu::pure]]
 Result
-Get(const Font &font, StringView text) noexcept;
+Get(const Font &font, std::string_view text) noexcept;
 
 void
 Flush() noexcept;
 
 } //namespace TextCache
-
-#endif

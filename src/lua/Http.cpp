@@ -26,9 +26,10 @@ Copyright_License {
 #include "Util.hxx"
 #include "Class.hxx"
 #include "Error.hxx"
-#include "net/http/Easy.hxx"
-#include "net/http/Adapter.hxx"
-#include "net/http/Handler.hxx"
+#include "lib/curl/Easy.hxx"
+#include "lib/curl/Adapter.hxx"
+#include "lib/curl/Handler.hxx"
+#include "util/SpanCast.hxx"
 
 extern "C" {
 #include <lauxlib.h>
@@ -43,7 +44,7 @@ class LuaHttpRequest final : CurlResponseHandler {
   CurlResponseHandlerAdapter adapter;
 
   int status;
-  std::multimap<std::string, std::string> response_headers;
+  Curl::Headers response_headers;
 
   std::string response_body;
 
@@ -65,15 +66,14 @@ public:
 
 private:
   /* virtual methods from class CurlResponseHandler */
-  void OnHeaders(unsigned _status,
-                 std::multimap<std::string, std::string> &&_headers) override {
+  void OnHeaders(unsigned _status, Curl::Headers &&_headers) override {
     status = _status;
     response_headers = std::move(_headers);
   }
 
-  void OnData(ConstBuffer<void> data) override {
+  void OnData(std::span<const std::byte> data) override {
     // TODO size check
-    response_body.append((const char *)data.data, data.size);
+    response_body.append(ToStringView(data));
   }
 
   void OnEnd() override {
@@ -123,7 +123,7 @@ LuaHttpRequest::Perform(lua_State *L)
     Lua::Raise(L, std::move(error));
 
   lua_newtable(L);
-  SetTable(L, RelativeStackIndex{-1}, "status", status);
+  SetTable(L, RelativeStackIndex{-1}, "status", (lua_Integer)status);
 
   lua_pushstring(L, "headers");
   lua_newtable(L);

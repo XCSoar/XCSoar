@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -248,10 +248,7 @@ void
 AirspaceRoute::AddNearby(const RouteLink &e) noexcept
 {
   if (m_inx.airspace == nullptr) {
-    // NOTE: m_inx is "mutable" so that const in AddNearbyTerrain is ignored!!
-    // The copy is really needed!
-    RoutePoint ptmp = m_inx.point;
-    AddNearbyTerrain(ptmp, e);
+    TerrainRoute::AddNearby(e);
   } else
     AddNearbyAirspace(m_inx, e);
 }
@@ -273,13 +270,12 @@ AirspaceRoute::CheckSecondary(const RouteLink &e) noexcept
 std::optional<RoutePoint>
 AirspaceRoute::CheckClearance(const RouteLink &e) const noexcept
 {
+  m_inx.airspace = nullptr;
+
   // attempt terrain clearance first
 
-  if (auto inp = CheckClearanceTerrain(e)) {
-    m_inx.airspace = nullptr;
-    m_inx.point = *inp;
+  if (auto inp = TerrainRoute::CheckClearance(e))
     return inp;
-  }
 
   if (!rpolars_route.IsAirspaceEnabled())
     return std::nullopt; // trivial
@@ -296,7 +292,7 @@ AirspaceRoute::CheckClearance(const RouteLink &e) const noexcept
 
 void
 AirspaceRoute::OnSolve(const AGeoPoint &origin,
-                       const AGeoPoint &destination) noexcept
+                       [[maybe_unused]] const AGeoPoint &destination) noexcept
 {
   if (m_airspaces.IsEmpty()) {
     projection.SetCenter(origin);

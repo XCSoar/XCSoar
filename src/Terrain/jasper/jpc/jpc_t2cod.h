@@ -67,8 +67,7 @@
  * $Id$
  */
 
-#ifndef JPC_T2COD_H
-#define	JPC_T2COD_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -297,5 +296,3 @@ void jpc_pchg_destroy(jpc_pchg_t *pchg);
 
 /* Copy a progression change. */
 jpc_pchg_t *jpc_pchg_copy(const jpc_pchg_t *pchg);
-
-#endif

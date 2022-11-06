@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,11 +20,9 @@
 }
  */
 
-#ifndef DATANODE_HPP
-#define DATANODE_HPP
+#pragma once
 
 #include "time/FloatDuration.hxx"
-#include "util/Compiler.h"
 
 #include <list>
 #include <memory>
@@ -134,10 +132,10 @@ public:
    */
   bool GetAttribute(const TCHAR *name, bool &value) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   RoughTime GetAttributeRoughTime(const TCHAR *name) const noexcept;
 
-  gcc_pure
+  [[gnu::pure]]
   RoughTimeSpan GetAttributeRoughTimeSpan(const TCHAR *start_name,
                                           const TCHAR *end_name) const noexcept;
 };
@@ -220,5 +218,3 @@ public:
    */
   void SetAttribute(const TCHAR *name, RoughTime value) noexcept;
 };
-
-#endif

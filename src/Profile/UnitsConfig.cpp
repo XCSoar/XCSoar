@@ -40,9 +40,8 @@ ApplyUnit(Unit &value, Unit new_value)
 /**
  * Convert XCSoar <= 6.2 profile value.
  */
-gcc_const
-static Unit
-ImportSpeedUnit(unsigned tmp)
+static constexpr Unit
+ImportSpeedUnit(unsigned tmp) noexcept
 {
   switch (tmp) {
   case 0:
@@ -66,9 +65,8 @@ GetLegacySpeedUnit(const ProfileMap &map, const char *key, Unit &value)
   return map.Get(key, tmp) && ApplyUnit(value, ImportSpeedUnit(tmp));
 }
 
-gcc_const
-static bool
-ValidSpeedUnit(Unit unit)
+static constexpr bool
+ValidSpeedUnit(Unit unit) noexcept
 {
   return unit == Unit::KILOMETER_PER_HOUR || unit == Unit::KNOTS ||
     unit == Unit::STATUTE_MILES_PER_HOUR || unit == Unit::METER_PER_SECOND ||
@@ -94,9 +92,8 @@ GetSpeedUnit(const ProfileMap &map, const char *key, const char *legacy_key,
 /**
  * Convert XCSoar <= 6.2 profile value.
  */
-gcc_const
-static Unit
-ImportVerticalSpeedUnit(unsigned tmp)
+static constexpr Unit
+ImportVerticalSpeedUnit(unsigned tmp) noexcept
 {
   switch (tmp) {
   case 0:
@@ -139,9 +136,8 @@ GetVerticalSpeedUnit(const ProfileMap &map, const char *key,
 /**
  * Convert XCSoar <= 6.2 profile value.
  */
-gcc_const
-static Unit
-ImportDistanceUnit(unsigned tmp)
+static constexpr Unit
+ImportDistanceUnit(unsigned tmp) noexcept
 {
   switch (tmp) {
   case 0:
@@ -165,9 +161,8 @@ GetLegacyDistanceUnit(const ProfileMap &map, const char *key, Unit &value)
   return map.Get(key, tmp) && ApplyUnit(value, ImportDistanceUnit(tmp));
 }
 
-gcc_const
-static bool
-ValidDistanceUnit(Unit unit)
+static constexpr bool
+ValidDistanceUnit(Unit unit) noexcept
 {
   return unit == Unit::KILOMETER || unit == Unit::NAUTICAL_MILES ||
     unit == Unit::STATUTE_MILES || unit == Unit::METER ||
@@ -193,9 +188,8 @@ GetDistanceUnit(const ProfileMap &map, const char *key, const char *legacy_key,
 /**
  * Convert XCSoar <= 6.2 profile value.
  */
-gcc_const
-static Unit
-ImportAltitudeUnit(unsigned tmp)
+static constexpr Unit
+ImportAltitudeUnit(unsigned tmp) noexcept
 {
   switch (tmp) {
   case 0:
@@ -235,9 +229,8 @@ GetAltitudeUnit(const ProfileMap &map, const char *key, const char *legacy_key,
 /**
  * Convert XCSoar <= 6.2 profile value.
  */
-gcc_const
-static Unit
-ImportTemperatureUnit(unsigned tmp)
+static constexpr Unit
+ImportTemperatureUnit(unsigned tmp) noexcept
 {
   switch (tmp) {
   case 0:
@@ -259,9 +252,8 @@ GetLegacyTemperatureUnit(const ProfileMap &map, const char *key, Unit &value)
     ApplyUnit(value, ImportTemperatureUnit(tmp));
 }
 
-gcc_const
-static bool
-ValidTemperatureUnit(Unit unit)
+static constexpr bool
+ValidTemperatureUnit(Unit unit) noexcept
 {
   return unit == Unit::KELVIN || unit == Unit::DEGREES_CELCIUS ||
     unit == Unit::DEGREES_FAHRENHEIT;
@@ -283,9 +275,8 @@ GetTemperatureUnit(const ProfileMap &map, const char *key,
   return true;
 }
 
-gcc_const
-static bool
-ValidPressureUnit(Unit unit)
+static constexpr bool
+ValidPressureUnit(Unit unit) noexcept
 {
   return unit == Unit::HECTOPASCAL || unit == Unit::MILLIBAR ||
     unit == Unit::TORR || unit == Unit::INCH_MERCURY;

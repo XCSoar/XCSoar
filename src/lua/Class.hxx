@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2017-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LUA_OBJECT_HXX
-#define LUA_OBJECT_HXX
+#pragma once
 
 #include "Util.hxx"
 #include "Assert.hxx"
@@ -63,7 +62,7 @@ struct Class {
 
 		/* let Lua's garbage collector call the destructor
 		   (but only if there is one) */
-		if (!std::is_trivially_destructible<T>::value)
+		if (!std::is_trivially_destructible_v<T>)
 			SetField(L, RelativeStackIndex{-1}, "__gc", l_gc);
 	}
 
@@ -136,5 +135,3 @@ private:
 };
 
 }
-
-#endif

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,13 +20,13 @@
 }
 */
 
-#ifndef FLAT_TRIANGLE_FAN_TREE_HPP
-#define FLAT_TRIANGLE_FAN_TREE_HPP
+#pragma once
 
 #include "Geo/Flat/FlatBoundingBox.hpp"
 #include "util/SliceAllocator.hxx"
 #include "FlatTriangleFan.hpp"
 
+#include <cstdint>
 #include <forward_list>
 
 class FlatProjection;
@@ -34,49 +34,50 @@ struct GeoPoint;
 struct RouteLink;
 struct AFlatGeoPoint;
 struct ReachFanParms;
-template<typename T> struct ConstBuffer;
+class FlatTriangleFanVisitor;
 
-class FlatTriangleFanVisitor {
-public:
-  virtual void VisitFan(FlatGeoPoint origin,
-                        ConstBuffer<FlatGeoPoint> fan) = 0;
-};
-
-class FlatTriangleFanTree: public FlatTriangleFan
+class FlatTriangleFanTree
 {
+  static constexpr unsigned BUFFER = 1;
+
+  static constexpr unsigned MAX_DEPTH = 4;
+  static constexpr unsigned MAX_VERTICES = 2000;
+
 public:
-  static constexpr unsigned REACH_MAX_FANS = 300;
+  static constexpr unsigned MIN_STEP = 25;
+  static constexpr unsigned MAX_FANS = 300;
 
 private:
+  FlatTriangleFan fan;
+
   using LeafVector =
     std::forward_list<FlatTriangleFanTree,
                       GlobalSliceAllocator<FlatTriangleFanTree, 128u>>;
 
   FlatBoundingBox bb_children;
   LeafVector children;
-  const unsigned char depth;
+  uint_least8_t depth;
   bool gaps_filled = false;
 
 public:
   friend class PrintHelper;
 
-  FlatTriangleFanTree(const unsigned char _depth = 0) noexcept
+  explicit FlatTriangleFanTree(const uint_least8_t _depth = 0) noexcept
     :depth(_depth) {}
 
-  bool IsRoot() const noexcept {
-    return depth == 0;
-  }
-
   void Clear() noexcept {
-    FlatTriangleFan::Clear();
+    fan.Clear();
     children.clear();
   }
 
-  void CalcBB() noexcept;
+  [[gnu::pure]]
+  bool IsEmpty() const noexcept {
+    return fan.IsEmpty();
+  }
 
   [[gnu::pure]]
-  bool IsInside(FlatGeoPoint p) const noexcept {
-    return FlatTriangleFan::IsInside(p, IsRoot());
+  auto GetHeight() const noexcept {
+    return fan.GetHeight();
   }
 
   void FillReach(const AFlatGeoPoint &origin, ReachFanParms &parms) noexcept;
@@ -89,22 +90,8 @@ public:
    */
   [[gnu::pure]]
   bool IsDummy() const noexcept {
-    return vs.size() == 1 && children.empty();
+    return fan.IsOnlyOrigin() && children.empty();
   }
-
-  /**
-   * @return true if a valid fan has been filled, false to discard
-   * this object
-   */
-  bool FillReach(const AFlatGeoPoint &origin,
-                 const int index_low, const int index_high,
-                 const ReachFanParms &parms) noexcept;
-
-  bool FillDepth(const AFlatGeoPoint &origin, ReachFanParms &parms) noexcept;
-  void FillGaps(const AFlatGeoPoint &origin, ReachFanParms &parms) noexcept;
-
-  bool CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
-                const RouteLink &e_2, ReachFanParms &parms) noexcept;
 
   /**
    * Attempt to find a path to the specified #FlatGeoPoint higher than
@@ -123,6 +110,25 @@ public:
   [[gnu::pure]]
   int DirectArrival(FlatGeoPoint dest,
                     const ReachFanParms &parms) const noexcept;
-};
 
-#endif
+private:
+  bool IsRoot() const noexcept {
+    return depth == 0;
+  }
+
+  const FlatBoundingBox &CalcBoundingBox() noexcept;
+
+  /**
+   * @return true if a valid fan has been filled, false to discard
+   * this object
+   */
+  bool FillReach(const AFlatGeoPoint &origin,
+                 const int index_low, const int index_high,
+                 const ReachFanParms &parms) noexcept;
+
+  bool FillDepth(const AFlatGeoPoint &origin, ReachFanParms &parms) noexcept;
+  void FillGaps(const AFlatGeoPoint &origin, ReachFanParms &parms) noexcept;
+
+  bool CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
+                const RouteLink &e_2, ReachFanParms &parms) noexcept;
+};

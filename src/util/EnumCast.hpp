@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef ENUM_CAST_HPP
-#define ENUM_CAST_HPP
+#pragma once
 
 #include <cstdint>
 
@@ -61,5 +60,3 @@ struct EnumCastInternal<T, sizeof(uint16_t)>
  */
 template<typename T>
 struct EnumCast : public EnumCastInternal<T, sizeof(T)> {};
-
-#endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -92,7 +92,7 @@ VegaParametersWidget::AddParameter(const StaticParameter &p)
   }
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 SettingExists(VegaDevice &device, const char *name)
 {
@@ -164,7 +164,26 @@ VegaParametersWidget::UpdateUI()
   for (unsigned i = 0, end = parameters.size(); i != end; ++i) {
     Parameter &parameter = parameters[i];
     if (loaded) {
-      const int ui_value = GetValueInteger(i);
+      int ui_value;
+
+      switch (GetDataField(i).GetType()) {
+      case DataField::Type::BOOLEAN:
+        ui_value = GetValueBoolean(i);
+        break;
+
+      case DataField::Type::INTEGER:
+        ui_value = GetValueInteger(i);
+        break;
+
+      case DataField::Type::ENUM:
+        ui_value = GetValueEnum(i);
+        break;
+
+      default:
+        gcc_unreachable();
+        assert(false);
+      }
+
       if (ui_value != parameter.value)
         /* don't update parameters that were changed by the user */
         continue;
@@ -172,8 +191,24 @@ VegaParametersWidget::UpdateUI()
 
     if (const auto x = device.GetSetting(parameter.name)) {
       parameter.value = *x;
-      GetDataField(i).SetAsInteger(*x);
-      GetControl(i).RefreshDisplay();
+
+      switch (GetDataField(i).GetType()) {
+      case DataField::Type::BOOLEAN:
+        LoadValue(i, (bool)parameter.value);
+        break;
+
+      case DataField::Type::INTEGER:
+        LoadValue(i, parameter.value);
+        break;
+
+      case DataField::Type::ENUM:
+        LoadValueEnum(i, parameter.value);
+        break;
+
+      default:
+        gcc_unreachable();
+        assert(false);
+      }
     }
   }
 

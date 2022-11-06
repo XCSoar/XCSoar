@@ -36,12 +36,6 @@ ParseString(const TCHAR *s) noexcept
   return ParseInt(s);
 }
 
-int
-DataFieldInteger::GetAsInteger() const noexcept
-{
-  return GetValue();
-}
-
 const TCHAR *
 DataFieldInteger::GetAsString() const noexcept
 {
@@ -64,12 +58,6 @@ DataFieldInteger::SetAsInteger(int _value) noexcept
   if (_value > max)
     _value = max;
   ModifyValue(_value);
-}
-
-void
-DataFieldInteger::SetAsString(const TCHAR *_value) noexcept
-{
-  SetAsInteger(ParseString(_value));
 }
 
 void
@@ -178,5 +166,5 @@ void
 DataFieldInteger::SetFromCombo([[maybe_unused]] int index,
                                const TCHAR *value) noexcept
 {
-  SetAsString(value);
+  SetAsInteger(ParseString(value));
 }

@@ -36,6 +36,11 @@
 
 #include "tap.h"
 
+#ifdef __GNUC__
+/* no, we're really not interested in the vasprintf() return value */
+#pragma GCC diagnostic ignored "-Wunused-result"
+#endif
+
 int verbose;
 
 static int no_plan = 0;
@@ -91,7 +96,7 @@ _gen_result(int ok, const char *func, const char *file, unsigned int line,
 	if(test_name != NULL) {
 #ifdef HAVE_VASPRINTF
 		va_start(ap, test_name);
-		(void) vasprintf(&local_test_name, test_name, ap); // Ignore return value
+		vasprintf(&local_test_name, test_name, ap);
 		va_end(ap);
 #else
                 (void)ap;
@@ -332,7 +337,7 @@ skip(unsigned int n, unsigned int ok, const char *fmt, ...)
 
 #ifdef HAVE_VASPRINTF
   va_start(ap, fmt);
-  (void) asprintf(&skip_msg, fmt, ap); // Ignore return value
+  asprintf(&skip_msg, fmt, ap);
   va_end(ap);
 #else
 #define skip_msg fmt
@@ -371,7 +376,7 @@ todo_start(char *fmt, ...)
 
 #ifdef HAVE_VASPRINTF
 	va_start(ap, fmt);
-	(void) vasprintf(&todo_msg, fmt, ap); // Ignore return value
+	vasprintf(&todo_msg, fmt, ap);
 	va_end(ap);
 #else
         (void)ap;

@@ -21,10 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DISPLAY_MODE_HPP
-#define XCSOAR_DISPLAY_MODE_HPP
-
-#include "util/Compiler.h"
+#pragma once
 
 #include <cstdint>
 
@@ -39,9 +36,7 @@ enum class DisplayMode: uint8_t {
   FINAL_GLIDE,
 };
 
-gcc_pure
+[[gnu::pure]]
 DisplayMode
 GetNewDisplayMode(const InfoBoxSettings &settings, const UIState &ui_state,
                   const DerivedInfo &derived_info);
-
-#endif

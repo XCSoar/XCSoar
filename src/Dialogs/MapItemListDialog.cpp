@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -51,24 +51,24 @@ static bool
 HasDetails(const MapItem &item)
 {
   switch (item.type) {
-  case MapItem::LOCATION:
-  case MapItem::ARRIVAL_ALTITUDE:
-  case MapItem::SELF:
-  case MapItem::THERMAL:
+  case MapItem::Type::LOCATION:
+  case MapItem::Type::ARRIVAL_ALTITUDE:
+  case MapItem::Type::SELF:
+  case MapItem::Type::THERMAL:
 #ifdef HAVE_SKYLINES_TRACKING
-  case MapItem::SKYLINES_TRAFFIC:
+  case MapItem::Type::SKYLINES_TRAFFIC:
 #endif
     return false;
 
-  case MapItem::AIRSPACE:
-  case MapItem::WAYPOINT:
-  case MapItem::TASK_OZ:
-  case MapItem::TRAFFIC:
+  case MapItem::Type::AIRSPACE:
+  case MapItem::Type::WAYPOINT:
+  case MapItem::Type::TASK_OZ:
+  case MapItem::Type::TRAFFIC:
 #ifdef HAVE_NOAA
-  case MapItem::WEATHER:
+  case MapItem::Type::WEATHER:
 #endif
-  case MapItem::OVERLAY:
-  case MapItem::RASP:
+  case MapItem::Type::OVERLAY:
+  case MapItem::Type::RASP:
     return true;
   }
 
@@ -125,7 +125,7 @@ public:
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
                    unsigned idx) noexcept override;
 
-  void OnCursorMoved(unsigned index) noexcept override {
+  void OnCursorMoved([[maybe_unused]] unsigned index) noexcept override {
     UpdateButtons();
   }
 
@@ -139,7 +139,7 @@ public:
 
   static bool CanGotoItem(const MapItem &item) noexcept {
     return protected_task_manager != NULL &&
-      item.type == MapItem::WAYPOINT;
+      item.type == MapItem::Type::WAYPOINT;
   }
 
   bool CanAckItem(unsigned index) const noexcept {
@@ -149,7 +149,7 @@ public:
   static bool CanAckItem(const MapItem &item) noexcept {
     const AirspaceMapItem &as_item = (const AirspaceMapItem &)item;
 
-    return item.type == MapItem::AIRSPACE &&
+    return item.type == MapItem::Type::AIRSPACE &&
       GetAirspaceWarnings() != nullptr &&
       !GetAirspaceWarnings()->GetAckDay(*as_item.airspace);
   }
@@ -214,7 +214,7 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 }
 
 void
-MapItemListWidget::OnActivateItem(unsigned index) noexcept
+MapItemListWidget::OnActivateItem([[maybe_unused]] unsigned index) noexcept
 {
   details_button->Click();
 }
@@ -228,7 +228,7 @@ MapItemListWidget::OnGotoClicked()
   unsigned index = GetCursorIndex();
   auto const &item = *list[index];
 
-  assert(item.type == MapItem::WAYPOINT);
+  assert(item.type == MapItem::Type::WAYPOINT);
 
   auto waypoint = ((const WaypointMapItem &)item).waypoint;
   protected_task_manager->DoGoto(std::move(waypoint));
@@ -270,41 +270,41 @@ ShowMapItemDialog(const MapItem &item,
                   ProtectedAirspaceWarningManager *airspace_warnings)
 {
   switch (item.type) {
-  case MapItem::LOCATION:
-  case MapItem::ARRIVAL_ALTITUDE:
-  case MapItem::SELF:
-  case MapItem::THERMAL:
+  case MapItem::Type::LOCATION:
+  case MapItem::Type::ARRIVAL_ALTITUDE:
+  case MapItem::Type::SELF:
+  case MapItem::Type::THERMAL:
 #ifdef HAVE_SKYLINES_TRACKING
-  case MapItem::SKYLINES_TRAFFIC:
+  case MapItem::Type::SKYLINES_TRAFFIC:
 #endif
     break;
 
-  case MapItem::AIRSPACE:
+  case MapItem::Type::AIRSPACE:
     dlgAirspaceDetails(((const AirspaceMapItem &)item).airspace,
                        airspace_warnings);
     break;
-  case MapItem::WAYPOINT:
+  case MapItem::Type::WAYPOINT:
     dlgWaypointDetailsShowModal(((const WaypointMapItem &)item).waypoint,
                                 true, true);
     break;
-  case MapItem::TASK_OZ:
+  case MapItem::Type::TASK_OZ:
     dlgTargetShowModal(((const TaskOZMapItem &)item).index);
     break;
-  case MapItem::TRAFFIC:
+  case MapItem::Type::TRAFFIC:
     dlgFlarmTrafficDetailsShowModal(((const TrafficMapItem &)item).id);
     break;
 
 #ifdef HAVE_NOAA
-  case MapItem::WEATHER:
+  case MapItem::Type::WEATHER:
     dlgNOAADetailsShowModal(((const WeatherStationMapItem &)item).station);
     break;
 #endif
 
-  case MapItem::OVERLAY:
+  case MapItem::Type::OVERLAY:
     ShowWeatherDialog(_T("overlay"));
     break;
 
-  case MapItem::RASP:
+  case MapItem::Type::RASP:
     ShowWeatherDialog(_T("rasp"));
     break;
   }

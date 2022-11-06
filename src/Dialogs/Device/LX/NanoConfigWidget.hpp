@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_Nano_CONFIG_WIDGET_HPP
-#define XCSOAR_Nano_CONFIG_WIDGET_HPP
+#pragma once
 
 #include "Widget/RowFormWidget.hpp"
 
@@ -53,7 +52,10 @@ public:
   bool Save(bool &changed) noexcept override;
 
 protected:
-  bool SaveSetting(const char *name, unsigned idx, OperationEnvironment &env);
+  bool SaveSettingBoolean(const char *name, unsigned idx,
+                          OperationEnvironment &env);
+  bool SaveSettingInteger(const char *name, unsigned idx,
+                          OperationEnvironment &env);
+  bool SaveSettingEnum(const char *name, unsigned idx,
+                          OperationEnvironment &env);
 };
-
-#endif

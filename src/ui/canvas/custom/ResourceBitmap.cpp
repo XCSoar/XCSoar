@@ -50,7 +50,7 @@ Bitmap::Load(ResourceId id, Type type)
   assert(IsScreenInitialized());
 
   ResourceLoader::Data data = ResourceLoader::Load(id);
-  if (data.IsNull())
+  if (data.data() == nullptr)
     return false;
 
   return Load(data, type);
@@ -59,7 +59,7 @@ Bitmap::Load(ResourceId id, Type type)
 #ifdef USE_MEMORY_CANVAS
 
 bool
-Bitmap::LoadStretch(ResourceId id, unsigned zoom)
+Bitmap::LoadStretch(ResourceId id, [[maybe_unused]] unsigned zoom)
 {
   assert(zoom > 0);
 

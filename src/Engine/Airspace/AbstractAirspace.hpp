@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -19,8 +19,8 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef ABSTRACTAIRSPACE_HPP
-#define ABSTRACTAIRSPACE_HPP
+ 
+#pragma once
 
 #include "util/TriState.hpp"
 #include "util/tstring.hpp"
@@ -29,6 +29,7 @@
 #include "AirspaceActivity.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SearchPointVector.hpp"
+#include "RadioFrequency.hpp"
 
 #ifdef DO_PRINT
 #include <iosfwd>
@@ -73,7 +74,7 @@ protected:
   tstring name;
 
   /** Radio frequency (optional) */
-  tstring radio;
+  RadioFrequency radio_frequency = RadioFrequency::Null();
 
   /** Actual border */
   SearchPointVector m_border;
@@ -225,8 +226,8 @@ public:
    *
    * @param _Radio Radio frequency of airspace
    */
-  void SetRadio(const tstring &_Radio) noexcept {
-    radio = _Radio;
+  void SetRadioFrequency(RadioFrequency _radio) noexcept {
+    radio_frequency = _radio;
   }
 
   /**
@@ -332,14 +333,9 @@ public:
   [[gnu::pure]]
   bool MatchNamePrefix(const TCHAR *prefix) const noexcept;
 
-  /**
-   * Produce text version of radio frequency.
-   *
-   * @return Text version of radio frequency
-   */
   [[gnu::pure]]
-  const tstring &GetRadioText() const noexcept {
-    return radio;
+  RadioFrequency GetRadioFrequency() const noexcept {
+    return radio_frequency;
   }
 
   /**
@@ -410,5 +406,3 @@ private:
                                                 double distance_end,
                                                 bool lower = true) const noexcept;
 };
-
-#endif

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,8 +20,7 @@
 }
 */
 
-#ifndef REACHFAN_HPP
-#define REACHFAN_HPP
+#pragma once
 
 #include "Geo/Flat/FlatProjection.hpp"
 #include "FlatTriangleFanTree.hpp"
@@ -55,10 +54,22 @@ public:
   bool Solve(const AGeoPoint origin, const RoutePolars &rpolars,
              const RasterMap *terrain, const bool do_solve = true) noexcept;
 
+  /**
+   * Find arrival height at destination.
+   *
+   * Requires solve_reach() to have been called for positive results.
+   *
+   * @param dest Destination location
+   * @param arrival_height_reach height at arrival (terrain reach) or -1 if out of reach
+   * @param arrival_height_direct height at arrival (pure glide reach) or -1 if out of reach
+   *
+   * @return true if check was successful
+   */
   [[gnu::pure]]
   std::optional<ReachResult> FindPositiveArrival(const AGeoPoint dest,
                                                  const RoutePolars &rpolars) const noexcept;
 
+  /** Visit reach (working or terrain reach) */
   void AcceptInRange(const GeoBounds &bounds,
                      FlatTriangleFanVisitor &visitor) const noexcept;
 
@@ -66,5 +77,3 @@ public:
     return terrain_base;
   }
 };
-
-#endif

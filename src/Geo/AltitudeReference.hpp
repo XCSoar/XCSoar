@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,20 +20,14 @@
 }
 */
 
-#ifndef XCSOAR_ALTITUDE_REFERENCE_HPP
-#define XCSOAR_ALTITUDE_REFERENCE_HPP
+#pragma once
 
 #include <cstdint>
 
 /**
  * This enum specifies the reference for altitude specifications.
  */
-enum class AltitudeReference : int8_t {
-  /**
-   * No reference set, the altitude value is invalid.
-   */
-  NONE = -1,
-
+enum class AltitudeReference : uint8_t {
   /**
    * Altitude is measured above ground level (AGL).
    *
@@ -56,5 +50,3 @@ enum class AltitudeReference : int8_t {
    */
   STD,
 };
-
-#endif

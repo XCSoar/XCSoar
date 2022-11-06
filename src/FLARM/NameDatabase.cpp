@@ -24,7 +24,7 @@ Copyright_License {
 #include "NameDatabase.hpp"
 
 int
-FlarmNameDatabase::Find(FlarmId id) const
+FlarmNameDatabase::Find(FlarmId id) const noexcept
 {
   assert(id.IsDefined());
 
@@ -36,7 +36,7 @@ FlarmNameDatabase::Find(FlarmId id) const
 }
 
 int
-FlarmNameDatabase::Find(const TCHAR *name) const
+FlarmNameDatabase::Find(const TCHAR *name) const noexcept
 {
   assert(name != nullptr);
 
@@ -48,7 +48,7 @@ FlarmNameDatabase::Find(const TCHAR *name) const
 }
 
 const TCHAR *
-FlarmNameDatabase::Get(FlarmId id) const
+FlarmNameDatabase::Get(FlarmId id) const noexcept
 {
   int i = Find(id);
   if (i < 0)
@@ -58,7 +58,7 @@ FlarmNameDatabase::Get(FlarmId id) const
 }
 
 FlarmId
-FlarmNameDatabase::Get(const TCHAR *name) const
+FlarmNameDatabase::Get(const TCHAR *name) const noexcept
 {
   int i = Find(name);
   if (i < 0)
@@ -68,7 +68,8 @@ FlarmNameDatabase::Get(const TCHAR *name) const
 }
 
 unsigned
-FlarmNameDatabase::Get(const TCHAR *name, FlarmId *buffer, unsigned max) const
+FlarmNameDatabase::Get(const TCHAR *name,
+                       FlarmId *buffer, unsigned max) const noexcept
 {
   assert(name != nullptr);
   assert(buffer != nullptr);
@@ -83,7 +84,7 @@ FlarmNameDatabase::Get(const TCHAR *name, FlarmId *buffer, unsigned max) const
 }
 
 bool
-FlarmNameDatabase::Set(FlarmId id, const TCHAR *name)
+FlarmNameDatabase::Set(FlarmId id, const TCHAR *name) noexcept
 {
   assert(id.IsDefined());
   assert(name != nullptr);

@@ -27,8 +27,7 @@
  * DEALINGS IN THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef MAPPRIMITIVE_H
-#define MAPPRIMITIVE_H
+#pragma once
 
  /**
  A rectObj represents a rectangle or bounding box.
@@ -129,5 +128,3 @@ typedef struct {
   double invgeotransform[6]; /* georef to pixel/line */
 } geotransformObj;
 #endif
-
-#endif /* MAPPRIMITIVE_H */

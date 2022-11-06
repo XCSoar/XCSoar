@@ -56,7 +56,7 @@ public:
 
   bool DataReceived(std::span<const std::byte> s) noexcept {
     {
-      const std::lock_guard<Mutex> lock(mutex);
+      const std::lock_guard lock{mutex};
       buffer.Shift();
       auto range = buffer.Write();
       const std::size_t nbytes = std::min(s.size(), range.size());
@@ -75,7 +75,7 @@ private:
       size_t length;
 
       {
-        std::lock_guard<Mutex> lock(mutex);
+        const std::lock_guard lock{mutex};
         auto range = buffer.Read();
         if (range.empty())
           break;

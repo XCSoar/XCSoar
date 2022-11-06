@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TRACKING_CLOUD_SETTINGS_HPP
-#define XCSOAR_TRACKING_CLOUD_SETTINGS_HPP
+#pragma once
 
 #include "Features.hpp"
 #include "util/TriState.hpp"
@@ -53,7 +52,5 @@ struct CloudSettings {
 };
 
 } /* namespace SkyLinesTracking */
-
-#endif
 
 #endif

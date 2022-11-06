@@ -30,7 +30,7 @@ Copyright_License {
 #include "Weather/Features.hpp"
 
 void
-MapWindow::OnResize(PixelSize new_size)
+MapWindow::OnResize(PixelSize new_size) noexcept
 {
   DoubleBufferWindow::OnResize(new_size);
 
@@ -69,7 +69,7 @@ MapWindow::OnCreate()
 }
 
 void
-MapWindow::OnDestroy()
+MapWindow::OnDestroy() noexcept
 {
 #ifdef HAVE_NOAA
   SetNOAAStore(nullptr);
@@ -87,16 +87,22 @@ MapWindow::OnDestroy()
   DoubleBufferWindow::OnDestroy();
 }
 
+#ifndef ENABLE_OPENGL
+
 void
-MapWindow::OnPaint(Canvas &canvas)
+MapWindow::OnPaint(Canvas &canvas) noexcept
 {
-#ifdef ENABLE_OPENGL
-  DoubleBufferWindow::OnPaint(canvas);
-#else /* !ENABLE_OPENGL */
-  if (buffer_generation == ui_generation)
+  if (buffer_generation == ui_generation) {
     DoubleBufferWindow::OnPaint(canvas);
-  else if (scale_buffer > 0 && visible_projection.IsValid() &&
-           buffer_projection.IsValid()) {
+    return;
+  }
+
+  /* access to buffer_projection and GetVisibleCanvas() needs to be
+     protected with the mutex */
+  const std::scoped_lock lock{mutex};
+
+  if (scale_buffer > 0 && visible_projection.IsValid() &&
+      buffer_projection.IsValid()) {
     /* while zooming/panning, project the current buffer into the
        Canvas */
 
@@ -146,7 +152,6 @@ MapWindow::OnPaint(Canvas &canvas)
 
     /* now stretch the buffer into the window Canvas */
 
-    std::lock_guard<Mutex> lock(DoubleBufferWindow::mutex);
     const Canvas &src = GetVisibleCanvas();
     canvas.Stretch(top_left,
                    {bottom_right.x - top_left.x, bottom_right.y - top_left.y},
@@ -156,5 +161,6 @@ MapWindow::OnPaint(Canvas &canvas)
        started: the buffer has invalid data, paint a white window
        instead */
     canvas.ClearWhite();
-#endif /* !ENABLE_OPENGL */
 }
+
+#endif /* !ENABLE_OPENGL */

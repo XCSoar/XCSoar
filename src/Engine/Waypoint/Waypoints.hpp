@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -19,15 +19,16 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef WAYPOINTS_HPP
-#define WAYPOINTS_HPP
+ 
+#pragma once
 
-#include "util/RadixTree.hpp"
-#include "util/QuadTree.hxx"
-#include "util/Serial.hpp"
 #include "Ptr.hpp"
 #include "Waypoint.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
+#include "util/RadixTree.hpp"
+#include "util/QuadTree.hxx"
+#include "util/Serial.hpp"
+#include "util/tstring_view.hxx"
 
 #include <functional>
 
@@ -44,12 +45,12 @@ class Waypoints {
    */
   struct WaypointAccessor {
     [[gnu::pure]]
-    int GetX(const WaypointPtr &wp) const {
+    int GetX(const WaypointPtr &wp) const noexcept {
       return wp->flat_location.x;
     }
 
     [[gnu::pure]]
-    int GetY(const WaypointPtr &wp) const {
+    int GetY(const WaypointPtr &wp) const noexcept {
       return wp->flat_location.y;
     }
   };
@@ -57,16 +58,18 @@ class Waypoints {
   /**
    * Type of KD-tree data structure for waypoint container
    */
-  typedef QuadTree<WaypointPtr, WaypointAccessor> WaypointTree;
+  using WaypointTree = QuadTree<WaypointPtr, WaypointAccessor>;
 
   class WaypointNameTree : public RadixTree<WaypointPtr> {
   public:
-    WaypointPtr Get(const TCHAR *name) const;
-    void VisitNormalisedPrefix(const TCHAR *prefix, const WaypointVisitor &visitor) const;
-    TCHAR *SuggestNormalisedPrefix(const TCHAR *prefix,
-                                   TCHAR *dest, size_t max_length) const;
-    void Add(WaypointPtr wp);
-    void Remove(const WaypointPtr &wp);
+    [[gnu::pure]]
+    WaypointPtr Get(tstring_view name) const noexcept;
+
+    void VisitNormalisedPrefix(tstring_view prefix, const WaypointVisitor &visitor) const;
+    TCHAR *SuggestNormalisedPrefix(tstring_view prefix,
+                                   TCHAR *dest, size_t max_length) const noexcept;
+    void Add(WaypointPtr wp) noexcept;
+    void Remove(const WaypointPtr &wp) noexcept;
   };
 
   /**
@@ -74,7 +77,7 @@ class Waypoints {
    */
   Serial serial;
 
-  unsigned next_id;
+  unsigned next_id = 1;
 
   WaypointTree waypoint_tree;
   WaypointNameTree name_tree;
@@ -83,7 +86,7 @@ class Waypoints {
   WaypointPtr home;
 
 public:
-  typedef WaypointTree::const_iterator const_iterator;
+  using const_iterator = WaypointTree::const_iterator;
 
   /**
    * Constructor.  Task projection is updated after call to Optimise().
@@ -93,11 +96,11 @@ public:
    * See below for usage notes --- further work is required.
    *
    */
-  Waypoints();
+  Waypoints() noexcept;
 
   Waypoints(const Waypoints &) = delete;
 
-  const Serial &GetSerial() const {
+  const Serial &GetSerial() const noexcept {
     return serial;
   }
 
@@ -108,7 +111,7 @@ public:
    *
    * @param wp Waypoint to add to internal store
    */
-  void Append(WaypointPtr wp);
+  void Append(WaypointPtr wp) noexcept;
 
   /**
    * Add waypoint to internal store.  Internal copy is made.
@@ -117,7 +120,7 @@ public:
    *
    * @param wp Waypoint to add to internal store
    */
-  WaypointPtr Append(Waypoint &&wp) {
+  WaypointPtr Append(Waypoint &&wp) noexcept {
     WaypointPtr ptr(new Waypoint(std::move(wp)));
     Append(ptr);
     return ptr;
@@ -129,13 +132,13 @@ public:
    *
    * @param wp Waypoint to erase from internal store
    */
-  void Erase(WaypointPtr &&wp);
+  void Erase(WaypointPtr &&wp) noexcept;
 
   /**
    * Erase all waypoints with origin==WaypointOrigin::USER &&
    * type==Type::MARKER.
    */
-  void EraseUserMarkers();
+  void EraseUserMarkers() noexcept;
 
   /**
    * Replace waypoint from the internal store.  Requires Optimise() to
@@ -144,7 +147,7 @@ public:
    * @param orig Waypoint that will be replaced
    * @param replacement New waypoint
    */
-  void Replace(const WaypointPtr &orig, Waypoint &&replacement);
+  void Replace(const WaypointPtr &orig, Waypoint &&replacement) noexcept;
 
   /**
    * Create new waypoint (without appending it to the store),
@@ -154,7 +157,7 @@ public:
    *
    * @return Blank object at given location, with id set
    */
-  Waypoint Create(const GeoPoint& location);
+  Waypoint Create(const GeoPoint& location) noexcept;
 
   /**
    * Optimise the internal search tree after adding/removing elements.
@@ -165,12 +168,12 @@ public:
    * being modified from multiple calls to Optimise() so it should
    * only be called once (until this is fixed).
    */
-  void Optimise();
+  void Optimise() noexcept;
 
   /**
    * Prepare and enable the next Optimise() call.
    */
-  void ScheduleOptimise() {
+  void ScheduleOptimise() noexcept {
     waypoint_tree.Flatten();
     waypoint_tree.ClearBounds();
   }
@@ -178,7 +181,7 @@ public:
   /**
    * Clear the waypoint store
    */
-  void Clear();
+  void Clear() noexcept;
 
   /**
    * Size of waypoints (in tree, not in temporary store) ---
@@ -187,7 +190,7 @@ public:
    * @return Number of waypoints in tree
    */
   [[gnu::pure]]
-  unsigned size() const {
+  unsigned size() const noexcept {
     return waypoint_tree.size();
   }
 
@@ -197,7 +200,7 @@ public:
    * @return True if no waypoints stored
    */
   [[gnu::pure]]
-  bool IsEmpty() const {
+  bool IsEmpty() const noexcept {
     return waypoint_tree.IsEmpty();
   }
 
@@ -206,21 +209,21 @@ public:
    *
    * @return waypoint copy
    */
-  Waypoint GenerateTakeoffPoint(const GeoPoint& location,
-                                double terrain_alt) const;
+  Waypoint GenerateTakeoffPoint(const GeoPoint &location,
+                                double terrain_alt) const noexcept;
 
   /**
    * Create a takeoff point or replaces previous.
    * This modifies the waypoint database.
    */
   void AddTakeoffPoint(const GeoPoint& location,
-                       double terrain_alt);
+                       double terrain_alt) noexcept;
 
   /**
    * Return the current home waypoint.  May be nullptr if none is
    * configured.
    */
-  WaypointPtr GetHome() const {
+  WaypointPtr GetHome() const noexcept {
     return home;
   }
 
@@ -230,7 +233,7 @@ public:
    * @return Pointer to waypoint if found (or nullptr if not)
    */
   [[gnu::pure]]
-  WaypointPtr FindHome();
+  WaypointPtr FindHome() noexcept;
 
   /**
    * Set single home waypoint (clearing all others as home)
@@ -238,7 +241,7 @@ public:
    * @param id Id of waypoint to set as home
    * @return True on success (id was found)
    */
-  bool SetHome(const unsigned id);
+  bool SetHome(unsigned id) noexcept;
 
   /**
    * Look up waypoint by ID.
@@ -248,7 +251,7 @@ public:
    * @return Pointer to waypoint if found (or nullptr if not)
    */
   [[gnu::pure]]
-  WaypointPtr LookupId(const unsigned id) const;
+  WaypointPtr LookupId(unsigned id) const noexcept;
 
   /**
    * Look up closest waypoint by location within range
@@ -260,7 +263,7 @@ public:
    */
   [[gnu::pure]]
   WaypointPtr LookupLocation(const GeoPoint &loc,
-                             const double range = 0) const;
+                             double range = 0) const noexcept;
 
   /**
    * Look up waypoint by name (returns first match)
@@ -270,12 +273,7 @@ public:
    * @return Pointer to waypoint if found (or nullptr if not)
    */
   [[gnu::pure]]
-  WaypointPtr LookupName(const TCHAR *name) const;
-
-  [[gnu::pure]]
-  WaypointPtr LookupName(const tstring &name) const {
-    return LookupName(name.c_str());
-  }
+  WaypointPtr LookupName(tstring_view name) const noexcept;
 
   /**
    * Check if a waypoint with same name and approximate location
@@ -285,7 +283,7 @@ public:
    *
    * @return reference to waypoint in tree (either existing or appended)
    */
-  WaypointPtr CheckExistsOrAppend(WaypointPtr waypoint);
+  WaypointPtr CheckExistsOrAppend(WaypointPtr waypoint) noexcept;
 
   /**
    * Call visitor function on waypoints within approximate range
@@ -303,15 +301,15 @@ public:
    * Call visitor function on waypoints with the specified name
    * prefix.
    */
-  void VisitNamePrefix(const TCHAR *prefix, WaypointVisitor visitor) const;
+  void VisitNamePrefix(tstring_view prefix, WaypointVisitor visitor) const;
 
   /**
    * Returns a set of possible characters following the specified
    * prefix.
    */
   [[gnu::pure]]
-  TCHAR *SuggestNamePrefix(const TCHAR *prefix,
-                           TCHAR *dest, size_t max_length) const {
+  TCHAR *SuggestNamePrefix(tstring_view prefix,
+                           TCHAR *dest, size_t max_length) const noexcept {
     return name_tree.SuggestNormalisedPrefix(prefix, dest, max_length);
   }
 
@@ -325,7 +323,7 @@ public:
    * @return Null if none found, otherwise pointer to nearest
    */
   [[gnu::pure]]
-  WaypointPtr GetNearest(const GeoPoint &loc, double range) const;
+  WaypointPtr GetNearest(const GeoPoint &loc, double range) const noexcept;
 
   /**
    * Looks up nearest landable waypoint to the
@@ -338,7 +336,8 @@ public:
    * @return Null if none found, otherwise pointer to nearest
    */
   [[gnu::pure]]
-  WaypointPtr GetNearestLandable(const GeoPoint &loc, double range) const;
+  WaypointPtr GetNearestLandable(const GeoPoint &loc,
+                                 double range) const noexcept;
 
   /**
    * Looks up nearest waypoint to the search location.
@@ -353,14 +352,14 @@ public:
    */
   [[gnu::pure]]
   WaypointPtr GetNearestIf(const GeoPoint &loc, double range,
-                           bool (*predicate)(const Waypoint &)) const;
+                           bool (*predicate)(const Waypoint &)) const noexcept;
 
   /**
    * Access first waypoint in store, for use in iterators.
    *
    * @return First waypoint in store
    */
-  const_iterator begin() const {
+  const_iterator begin() const noexcept {
     return waypoint_tree.begin();
   }
 
@@ -369,9 +368,7 @@ public:
    *
    * @return End waypoint in store
    */
-  const_iterator end() const {
+  const_iterator end() const noexcept {
     return waypoint_tree.end();
   }
 };
-
-#endif

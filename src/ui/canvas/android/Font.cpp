@@ -29,7 +29,6 @@ Copyright_License {
 #include "java/String.hxx"
 #include "Android/TextUtil.hpp"
 #include "util/StringCompare.hxx"
-#include "util/TStringView.hxx"
 
 #include <cassert>
 
@@ -62,7 +61,7 @@ Font::Destroy() noexcept
 }
 
 PixelSize
-Font::TextSize(TStringView text) const noexcept
+Font::TextSize(tstring_view text) const noexcept
 {
   if (text_util_object == nullptr) {
     PixelSize empty = { 0, 0 };
@@ -73,7 +72,7 @@ Font::TextSize(TStringView text) const noexcept
 }
 
 int
-Font::TextTextureGL(TStringView text, PixelSize &size,
+Font::TextTextureGL(tstring_view text, PixelSize &size,
                     PixelSize &allocated_size) const noexcept
 {
   if (!text_util_object)

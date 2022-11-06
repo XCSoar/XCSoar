@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -89,7 +89,7 @@ TriangleContest::ResetBranchAndBound() noexcept
   branch_and_bound.clear();
 }
 
-gcc_pure
+[[gnu::pure]]
 static double
 CalcLegDistance(const ContestTraceVector &solution,
                 const unsigned index) noexcept
@@ -341,9 +341,7 @@ TriangleContest::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
 
     // initialize bound-and-branch tree with root node (note: Candidate set interval is [min, max))
     CandidateSet root_candidates(*this, from, to + 1);
-    if (root_candidates.IsFeasible(validator) &&
-        root_candidates.df_max >= worst_d)
-      branch_and_bound.emplace(root_candidates.df_max, root_candidates);
+    CheckAddCandidate(worst_d, validator, root_candidates);
   }
 
   // set max_iterations only if non-exhaustive and predictive solving is enabled.
@@ -483,7 +481,7 @@ TriangleContest::CalculateResult() const noexcept
   return result;
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 IsInRange(const SearchPoint &a, const SearchPoint &b,
           unsigned half_max_range_sq, double max_distance) noexcept
@@ -508,12 +506,12 @@ TriangleContest::FindClosingPairs(unsigned old_size) noexcept
   };
 
   struct TracePointNodeAccessor {
-    gcc_pure
+    [[gnu::pure]]
     int GetX(const TracePointNode &node) const noexcept {
       return node.point->GetFlatLocation().x;
     }
 
-    gcc_pure
+    [[gnu::pure]]
     int GetY(const TracePointNode &node) const noexcept {
       return node.point->GetFlatLocation().y;
     }

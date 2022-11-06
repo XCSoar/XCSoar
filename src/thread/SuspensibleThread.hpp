@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,10 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_THREAD_SUSPENSIBLE_THREAD_HPP
-#define XCSOAR_THREAD_SUSPENSIBLE_THREAD_HPP
+#pragma once
 
-#include "util/Compiler.h"
 #include "thread/Thread.hpp"
 #include "Mutex.hxx"
 #include "Cond.hxx"
@@ -83,14 +81,14 @@ protected:
   /**
    * Has a suspend or stop command been received?
    */
-  gcc_pure
+  [[gnu::pure]]
   bool IsCommandPending() noexcept;
 
   /**
    * Like IsCommandPending(), but expects the mutex to be locked
    * already.
    */
-  gcc_pure
+  [[gnu::pure]]
   bool _IsCommandPending() const noexcept;
 
   /**
@@ -124,5 +122,3 @@ protected:
     return _WaitForStopped(lock, std::chrono::milliseconds(timeout_ms));
   }
 };
-
-#endif

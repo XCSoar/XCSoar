@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_THREAD_WORKER_THREAD_HPP
-#define XCSOAR_THREAD_WORKER_THREAD_HPP
+#pragma once
 
 #include "thread/SuspensibleThread.hpp"
 
@@ -56,7 +55,7 @@ public:
    * Wakes up the thread to do work, calls tick().
    */
   void Trigger() noexcept {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     if (!trigger_flag) {
       trigger_flag = true;
       trigger_cond.notify_one();
@@ -67,7 +66,7 @@ public:
    * Suspend execution until Resume() is called.
    */
   void BeginSuspend() noexcept {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     _BeginSuspend();
   }
 
@@ -80,7 +79,7 @@ public:
   }
 
   void Suspend() noexcept {
-    std::unique_lock<Mutex> lock(mutex);
+    std::unique_lock lock{mutex};
     _BeginSuspend();
     _WaitUntilSuspended(lock);
   }
@@ -90,7 +89,7 @@ public:
    * synchronously for the thread to exit.
    */
   void BeginStop() noexcept {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     SuspensibleThread::_BeginStop();
     trigger_cond.notify_one();
   }
@@ -103,5 +102,3 @@ protected:
    */
   virtual void Tick() noexcept = 0;
 };
-
-#endif

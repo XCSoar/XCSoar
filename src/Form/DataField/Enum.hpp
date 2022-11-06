@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DATA_FIELD_ENUM_HPP
-#define XCSOAR_DATA_FIELD_ENUM_HPP
+#pragma once
 
 #include "Base.hpp"
 #include "util/StaticArray.hxx"
@@ -37,6 +36,16 @@ struct StaticEnumChoice {
   unsigned id;
   const TCHAR *display_string;
   const TCHAR *help;
+
+  constexpr StaticEnumChoice(std::nullptr_t n) noexcept
+    :id(0), display_string(n), help(n) {}
+
+  template<typename T>
+  requires(std::is_same_v<T, unsigned> || std::is_same_v<T, int> ||
+           std::is_enum_v<T>)
+  constexpr StaticEnumChoice(T _id, const TCHAR *_display_string,
+                             const TCHAR *_help=nullptr) noexcept
+    :id(static_cast<unsigned>(_id)), display_string(_display_string), help(_help) {}
 };
 
 class DataFieldEnum final : public DataField {
@@ -210,12 +219,10 @@ public:
   /* virtual methods from class DataField */
   void Inc() noexcept override;
   void Dec() noexcept override;
-  int GetAsInteger() const noexcept override;
   const TCHAR *GetAsString() const noexcept override;
   const TCHAR *GetAsDisplayString() const noexcept override;
-  void SetAsInteger(int value) noexcept override;
-  void SetAsString(const TCHAR *value) noexcept override;
   ComboList CreateComboList(const TCHAR *reference) const noexcept override;
+  void SetFromCombo(int iDataFieldIndex, const TCHAR *sValue) noexcept override;
 
 protected:
   /**
@@ -229,5 +236,3 @@ protected:
 
   void SetIndex(std::size_t new_value, bool invoke_callback) noexcept;
 };
-
-#endif

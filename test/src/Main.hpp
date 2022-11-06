@@ -1,8 +1,32 @@
+/* Copyright_License {
+
+  XCSoar Glide Computer - http://www.xcsoar.org/
+  Copyright (C) 2000-2022 The XCSoar Project
+  A detailed list of copyright holders can be found in the file "AUTHORS".
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+}
+*/
+
 /*
  * This header contains common boilerplate initialisation code for a
  * lot of debug programs.
  *
  */
+ 
+ #pragma once
 
 #include "util/PrintException.hxx"
 
@@ -164,7 +188,7 @@ protected:
 #endif
   }
 
-  void OnResize(PixelSize new_size) override {
+  void OnResize(PixelSize new_size) noexcept override {
     SingleWindow::OnResize(new_size);
     Layout::Initialise(GetDisplay(), new_size);
 
@@ -174,7 +198,7 @@ protected:
 
 protected:
 #ifdef ENABLE_CLOSE_BUTTON
-  gcc_pure
+  [[gnu::pure]]
   PixelRect GetCloseButtonRect(PixelRect rc) const {
     rc.right -= 5;
     rc.left = rc.right - 120;
@@ -195,12 +219,12 @@ UIGlobals::GetMainWindow()
 #endif
 
 #ifndef _WIN32
-int main(int argc, char **argv)
+int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 #else
 int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-        LPSTR lpCmdLine2,
-        int nCmdShow)
+WinMain([[maybe_unused]] HINSTANCE hInstance, [[maybe_unused]] HINSTANCE hPrevInstance,
+        [[maybe_unused]] LPSTR lpCmdLine2,
+        [[maybe_unused]] int nCmdShow)
 #endif
 {
 #if defined(ENABLE_CMDLINE) || defined(ENABLE_MAIN_WINDOW)

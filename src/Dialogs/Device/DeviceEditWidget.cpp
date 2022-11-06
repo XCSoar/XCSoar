@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -100,7 +100,7 @@ FillPress(DataFieldEnum &dfe) noexcept
 
 static bool
 EditPortCallback(const TCHAR *caption, DataField &df,
-                 const TCHAR *help_text) noexcept
+                 [[maybe_unused]] const TCHAR *help_text) noexcept
 {
   return PortPicker((DataFieldEnum &)df, caption);
 }
@@ -139,7 +139,7 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config) noexcept
   UpdateVisibilities();
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 SupportsBulkBaudRate(const DataField &df) noexcept
 {
@@ -154,7 +154,7 @@ SupportsBulkBaudRate(const DataField &df) noexcept
   return driver->SupportsBulkBaudRate();
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 CanReceiveSettings(const DataField &df) noexcept
 {
@@ -169,7 +169,7 @@ CanReceiveSettings(const DataField &df) noexcept
   return driver->CanReceiveSettings();
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 CanSendSettings(const DataField &df) noexcept
 {
@@ -184,7 +184,7 @@ CanSendSettings(const DataField &df) noexcept
   return driver->CanSendSettings();
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 CanPassThrough(const DataField &df) noexcept
 {
@@ -420,19 +420,19 @@ DeviceEditWidget::Save(bool &_changed) noexcept
     changed |= SaveValue(K6Bt, config.k6bt);
 
   if (config.UsesSpeed()) {
-    changed |= SaveValue(BaudRate, config.baud_rate);
-    changed |= SaveValue(BulkBaudRate, config.bulk_baud_rate);
+    changed |= SaveValueEnum(BaudRate, config.baud_rate);
+    changed |= SaveValueEnum(BulkBaudRate, config.bulk_baud_rate);
   }
 
   if (config.UsesIPAddress())
     changed |= SaveValue(IP_ADDRESS, config.ip_address);
 
   if (config.UsesTCPPort())
-    changed |= SaveValue(TCPPort, config.tcp_port);
+    changed |= SaveValueEnum(TCPPort, config.tcp_port);
 
   if (config.UsesI2C()) {
-    changed |= SaveValue(I2CBus, config.i2c_bus);
-    changed |= SaveValue(I2CAddr, config.i2c_addr);
+    changed |= SaveValueEnum(I2CBus, config.i2c_bus);
+    changed |= SaveValueEnum(I2CAddr, config.i2c_addr);
     changed |= SaveValueEnum(PressureUsage, config.press_use);
   }
 

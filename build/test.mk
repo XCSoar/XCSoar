@@ -194,6 +194,7 @@ TEST_AIRSPACE_PARSER_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/RadioFrequency.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -807,6 +808,7 @@ DEBUG_PROGRAM_NAMES += DownloadFile \
 	RunDownloadToFile \
 	UploadFile \
 	RunWeGlideUploadFlight \
+	RunWeGlideDownloadTask \
 	RunTimClient \
 	RunNOAADownloader RunSkyLinesTracking RunLiveTrack24
 endif
@@ -936,7 +938,7 @@ DEBUG_DISPLAY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugDisplay.cpp
-DEBUG_DISPLAY_DEPENDS = SCREEN IO OS MATH UTIL
+DEBUG_DISPLAY_DEPENDS = SCREEN IO OS MATH UTIL OS
 $(eval $(call link-program,DebugDisplay,DEBUG_DISPLAY))
 
 DOWNLOAD_FILE_SOURCES = \
@@ -961,21 +963,35 @@ $(eval $(call link-program,UploadFile,UPLOAD_FILE))
 
 RUN_TIM_CLIENT_SOURCES = \
 	$(SRC)/Version.cpp \
-	$(SRC)/net/client/tim/Client.cpp \
 	$(TEST_SRC_DIR)/RunTimClient.cpp
-RUN_TIM_CLIENT_DEPENDS = JSON LIBHTTP ASYNC OS LIBNET IO UTIL
+RUN_TIM_CLIENT_DEPENDS = LIBCLIENT JSON LIBHTTP ASYNC OS LIBNET IO UTIL
 $(eval $(call link-program,RunTimClient,RUN_TIM_CLIENT))
 
 RUN_WEGLIDE_UPLOAD_FLIGHT_SOURCES = \
 	$(SRC)/Version.cpp \
-	$(SRC)/Cloud/weglide/UploadFlight.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/net/SocketError.cxx \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/RunWeGlideUploadFlight.cpp
-RUN_WEGLIDE_UPLOAD_FLIGHT_DEPENDS = JSON LIBHTTP ASYNC LIBNET OPERATION OS IO UTIL TIME
+RUN_WEGLIDE_UPLOAD_FLIGHT_DEPENDS = LIBCLIENT JSON LIBHTTP ASYNC LIBNET OPERATION OS IO UTIL TIME
 $(eval $(call link-program,RunWeGlideUploadFlight,RUN_WEGLIDE_UPLOAD_FLIGHT))
+
+RUN_WEGLIDE_DOWNLOAD_TASK_SOURCES = \
+	$(SRC)/Version.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(SRC)/XML/Node.cpp \
+	$(SRC)/XML/Parser.cpp \
+	$(SRC)/XML/Writer.cpp \
+	$(SRC)/XML/DataNode.cpp \
+	$(SRC)/XML/DataNodeXML.cpp \
+	$(SRC)/Task/Serialiser.cpp \
+	$(SRC)/Task/Deserialiser.cpp \
+	$(SRC)/Engine/Util/Gradient.cpp \
+	$(SRC)/net/SocketError.cxx \
+	$(TEST_SRC_DIR)/RunWeGlideDownloadTask.cpp
+RUN_WEGLIDE_DOWNLOAD_TASK_DEPENDS = LIBCLIENT TASK ROUTE GLIDE WAYPOINT GEO TIME MATH LIBHTTP ASYNC LIBNET OPERATION IO OS UTIL
+$(eval $(call link-program,RunWeGlideDownloadTask,RUN_WEGLIDE_DOWNLOAD_TASK))
 
 RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/net/SocketError.cxx \
@@ -1123,10 +1139,6 @@ KEY_CODE_DUMPER_DEPENDS = FORM SCREEN EVENT ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,KeyCodeDumper,KEY_CODE_DUMPER))
 
 LOAD_TOPOGRAPHY_SOURCES = \
-	$(SRC)/Topography/TopographyStore.cpp \
-	$(SRC)/Topography/TopographyFile.cpp \
-	$(SRC)/Topography/Index.cpp \
-	$(SRC)/Topography/XShape.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
@@ -1137,7 +1149,7 @@ ifeq ($(OPENGL),y)
 LOAD_TOPOGRAPHY_SOURCES += \
 	$(CANVAS_SRC_DIR)/opengl/Triangulate.cpp
 endif
-LOAD_TOPOGRAPHY_DEPENDS = OPERATION RESOURCE GEO MATH THREAD IO SYSTEM UTIL SHAPELIB ZZIP
+LOAD_TOPOGRAPHY_DEPENDS = OPERATION TOPO RESOURCE GEO MATH THREAD IO SYSTEM UTIL ZZIP
 LOAD_TOPOGRAPHY_CPPFLAGS = $(SCREEN_CPPFLAGS)
 $(eval $(call link-program,LoadTopography,LOAD_TOPOGRAPHY))
 
@@ -1224,6 +1236,7 @@ RUN_AIRSPACE_PARSER_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -1234,7 +1247,7 @@ $(eval $(call link-program,RunAirspaceParser,RUN_AIRSPACE_PARSER))
 
 ENUMERATE_PORTS_SOURCES = \
 	$(TEST_SRC_DIR)/EnumeratePorts.cpp
-ENUMERATE_PORTS_DEPENDS = PORT
+ENUMERATE_PORTS_DEPENDS = PORT OS
 $(eval $(call link-program,EnumeratePorts,ENUMERATE_PORTS))
 
 READ_PORT_SOURCES = \
@@ -1458,7 +1471,7 @@ LXN2IGC_SOURCES = \
 	$(SRC)/Device/Driver/LX/Convert.cpp \
 	$(SRC)/Device/Driver/LX/LXN.cpp \
 	$(TEST_SRC_DIR)/lxn2igc.cpp
-LXN2IGC_DEPENDS = IO UTIL
+LXN2IGC_DEPENDS = IO OS UTIL
 $(eval $(call link-program,lxn2igc,LXN2IGC))
 
 RUN_IGC_WRITER_SOURCES = \
@@ -1745,20 +1758,10 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Computer/Wind/Settings.cpp \
 	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/Logger/Settings.cpp \
-	$(SRC)/Cloud/weglide/WeGlideSettings.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/Task/ProtectedRoutePlanner.cpp \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
-	$(SRC)/Topography/TopographyFile.cpp \
-	$(SRC)/Topography/TopographyStore.cpp \
-	$(SRC)/Topography/Thread.cpp \
-	$(SRC)/Topography/TopographyFileRenderer.cpp \
-	$(SRC)/Topography/TopographyRenderer.cpp \
-	$(SRC)/Topography/TopographyGlue.cpp \
-	$(SRC)/Topography/Index.cpp \
-	$(SRC)/Topography/XShape.cpp \
-	$(SRC)/Topography/CachedTopographyRenderer.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -1817,12 +1820,11 @@ endif
 
 RUN_MAP_WINDOW_DEPENDS = \
 	LIBMAPWINDOW \
-	PROFILE TERRAIN \
+	PROFILE TERRAIN TOPO \
 	FORM \
 	LOOK \
 	SCREEN EVENT \
 	RESOURCE \
-	SHAPELIB \
 	OPERATION \
 	ASYNC OS IO THREAD \
 	TASK ROUTE GLIDE WAYPOINT AIRSPACE \
@@ -2206,7 +2208,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/TeamCode/TeamCode.cpp \
 	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/Logger/Settings.cpp \
-	$(SRC)/Cloud/weglide/WeGlideSettings.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/Blackboard/InterfaceBlackboard.cpp \
@@ -2271,6 +2272,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/RadioFrequency.cpp \
 	$(IO_SRC_DIR)/MapFile.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -99,7 +99,7 @@ AndroidDownloadManager::IsAvailable() noexcept
 void
 AndroidDownloadManager::AddListener(Net::DownloadListener &listener) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   assert(std::find(listeners.begin(), listeners.end(),
                    &listener) == listeners.end());
@@ -110,7 +110,7 @@ AndroidDownloadManager::AddListener(Net::DownloadListener &listener) noexcept
 void
 AndroidDownloadManager::RemoveListener(Net::DownloadListener &listener) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   auto i = std::find(listeners.begin(), listeners.end(), &listener);
   assert(i != listeners.end());
@@ -121,7 +121,7 @@ void
 AndroidDownloadManager::OnDownloadComplete(Path path_relative,
                                            bool success) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   if (success)
     for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
@@ -133,7 +133,7 @@ AndroidDownloadManager::OnDownloadComplete(Path path_relative,
 }
 
 JNIEXPORT void JNICALL
-Java_org_xcsoar_DownloadUtil_onDownloadAdded(JNIEnv *env, jobject obj,
+Java_org_xcsoar_DownloadUtil_onDownloadAdded(JNIEnv *env, [[maybe_unused]] jobject obj,
                                              jlong j_handler, jstring j_path,
                                              jlong size, jlong position)
 {
@@ -144,7 +144,7 @@ Java_org_xcsoar_DownloadUtil_onDownloadAdded(JNIEnv *env, jobject obj,
 }
 
 JNIEXPORT void JNICALL
-Java_org_xcsoar_DownloadUtil_onDownloadComplete(JNIEnv *env, jobject obj,
+Java_org_xcsoar_DownloadUtil_onDownloadComplete(JNIEnv *env, [[maybe_unused]] jobject obj,
                                                 jlong ptr,
                                                 jstring j_tmp_path,
                                                 jstring j_relative_path,
@@ -200,13 +200,13 @@ AndroidDownloadManager::Enqueue(JNIEnv *env, const char *uri,
   } catch (...) {
     const auto error = std::current_exception();
 
-    std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     for (auto *i : listeners)
       i->OnDownloadError(path_relative, error);
     return;
   }
 
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
     (*i)->OnDownloadAdded(path_relative, -1, -1);
 }

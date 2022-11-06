@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2018 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2010-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STRING_BUFFER_HXX
-#define STRING_BUFFER_HXX
+#pragma once
 
 #include <array>
 
@@ -61,7 +60,7 @@ public:
 		return front() == SENTINEL;
 	}
 
-	void clear() noexcept {
+	constexpr void clear() noexcept {
 		the_data[0] = SENTINEL;
 	}
 
@@ -69,7 +68,7 @@ public:
 		return the_data.data();
 	}
 
-	pointer data() noexcept {
+	constexpr pointer data() noexcept {
 		return the_data.data();
 	}
 
@@ -80,14 +79,14 @@ public:
 	/**
 	 * Returns one character.  No bounds checking.
 	 */
-	value_type operator[](size_type i) const noexcept {
+	constexpr value_type operator[](size_type i) const noexcept {
 		return the_data[i];
 	}
 
 	/**
 	 * Returns one writable character.  No bounds checking.
 	 */
-	reference operator[](size_type i) noexcept {
+	constexpr reference operator[](size_type i) noexcept {
 		return the_data[i];
 	}
 
@@ -106,5 +105,3 @@ public:
 
 template<std::size_t CAPACITY>
 class StringBuffer : public BasicStringBuffer<char, CAPACITY> {};
-
-#endif

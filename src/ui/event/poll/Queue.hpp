@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_POLL_QUEUE_HPP
-#define XCSOAR_EVENT_POLL_QUEUE_HPP
+#pragma once
 
 #include "../shared/Event.hpp"
 #include "thread/Mutex.hxx"
@@ -113,13 +112,13 @@ public:
   }
 #endif
 
-  void SetScreenSize(const PixelSize &screen_size) noexcept {
+  void SetScreenSize([[maybe_unused]] const PixelSize &screen_size) noexcept {
 #if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND)
     input_queue.SetScreenSize(screen_size);
 #endif
   }
 
-  void SetDisplayOrientation(DisplayOrientation orientation) noexcept {
+  void SetDisplayOrientation([[maybe_unused]] DisplayOrientation orientation) noexcept {
 #if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND) && !defined(USE_LIBINPUT)
     input_queue.SetDisplayOrientation(orientation);
 #endif
@@ -207,5 +206,3 @@ private:
 };
 
 } // namespace UI
-
-#endif

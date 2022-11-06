@@ -227,8 +227,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(SRC)/Atmosphere/CuSonde.cpp \
-	$(SRC)/Cloud/weglide/WeGlideSettings.cpp \
-	$(SRC)/contest/weglide/UploadIGCFile.cpp \
+	$(SRC)/net/client/WeGlide/UploadIGCFile.cpp \
 	$(SRC)/Plane/PlaneGlue.cpp \
 	$(SRC)/Plane/PlaneFileGlue.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
@@ -313,6 +312,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Waypoint/WaypointDetailsReader.cpp \
 	$(SRC)/Menu/MenuData.cpp \
 	$(SRC)/Menu/MenuBar.cpp \
+	$(SRC)/Menu/Glue.cpp \
 	$(SRC)/Menu/ButtonLabel.cpp \
 	$(SRC)/Menu/ExpandMacros.cpp \
 	$(SRC)/Menu/ShowMenuButton.cpp \
@@ -389,7 +389,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Weather/Rasp/RaspCache.cpp \
 	$(SRC)/Weather/Rasp/RaspRenderer.cpp \
 	$(SRC)/Weather/Rasp/RaspStyle.cpp \
-	$(SRC)/Weather/Rasp/Providers.cpp \
 	\
 	$(SRC)/Blackboard/BlackboardListener.cpp \
 	$(SRC)/Blackboard/ProxyBlackboardListener.cpp \
@@ -414,15 +413,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/CalculationThread.cpp \
 	$(SRC)/DisplayMode.cpp \
 	\
-	$(SRC)/Topography/TopographyFile.cpp \
-	$(SRC)/Topography/TopographyStore.cpp \
-	$(SRC)/Topography/TopographyFileRenderer.cpp \
-	$(SRC)/Topography/TopographyRenderer.cpp \
-	$(SRC)/Topography/Thread.cpp \
-	$(SRC)/Topography/TopographyGlue.cpp \
-	$(SRC)/Topography/XShape.cpp \
-	$(SRC)/Topography/Index.cpp \
-	$(SRC)/Topography/CachedTopographyRenderer.cpp \
 	$(SRC)/Markers/Markers.cpp \
 	\
 	$(SRC)/FlightStatistics.cpp \
@@ -638,11 +628,6 @@ XCSOAR_SOURCES += \
 	$(SRC)/XCSoar.cpp
 endif
 
-ifeq ($(TARGET_IS_KOBO),y)
-XCSOAR_SOURCES += \
-	$(SRC)/Kobo/Model.cpp
-endif
-
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/DownloadFilePicker.cpp \
@@ -664,9 +649,7 @@ XCSOAR_SOURCES += \
 endif
 
 XCSOAR_SOURCES += \
-	$(SRC)/net/client/tim/Client.cpp \
 	$(SRC)/net/client/tim/Glue.cpp \
-	$(SRC)/Cloud/weglide/UploadFlight.cpp \
 	$(SRC)/Tracking/SkyLines/Client.cpp \
 	$(SRC)/Tracking/SkyLines/Assemble.cpp \
 	$(SRC)/Tracking/SkyLines/Key.cpp \
@@ -683,6 +666,7 @@ XCSOAR_DEPENDS = \
 	LIBINFOBOX \
 	GETTEXT PROFILE \
 	TERRAIN \
+	TOPO \
 	WIDGET FORM DATA_FIELD \
 	LOOK \
 	AUDIO SCREEN EVENT \
@@ -692,8 +676,9 @@ XCSOAR_DEPENDS = \
 	LIBNMEA \
 	LIBHTTP CO IO ASYNC TASK CONTEST ROUTE GLIDE WAYPOINT AIRSPACE \
 	LUA \
-	SHAPELIB ZZIP \
+	ZZIP \
 	OPERATION \
+	LIBCLIENT \
 	JSON \
 	LIBNET TIME OS THREAD \
 	UTIL GEO MATH

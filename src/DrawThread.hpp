@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DRAW_THREAD_HPP
-#define XCSOAR_DRAW_THREAD_HPP
+#pragma once
 
 #include "thread/RecursivelySuspensibleThread.hpp"
 
@@ -54,7 +53,7 @@ public:
    * Triggers a redraw.
    */
   void TriggerRedraw() noexcept {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     pending = true;
     command_trigger.notify_one();
   }
@@ -62,5 +61,3 @@ public:
 protected:
   void Run() noexcept override;
 };
-
-#endif

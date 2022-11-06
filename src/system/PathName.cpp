@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,10 +22,9 @@ Copyright_License {
 */
 
 #include "system/PathName.hpp"
-#include "util/StringCompare.hxx"
 #include "util/StringAPI.hxx"
 
-gcc_pure
+[[gnu::pure]]
 static const TCHAR *
 LastSeparator(const TCHAR *path)
 {
@@ -38,7 +37,7 @@ LastSeparator(const TCHAR *path)
   return p;
 }
 
-gcc_pure
+[[gnu::pure]]
 static TCHAR *
 LastSeparator(TCHAR *path)
 {
@@ -55,29 +54,3 @@ ReplaceBaseName(TCHAR *path, const TCHAR *new_base)
     q = path;
   _tcscpy(q, new_base);
 }
-
-bool
-MatchesExtension(const TCHAR *filename, const TCHAR *extension)
-{
-  size_t filename_length = _tcslen(filename);
-  size_t extension_length = _tcslen(extension);
-
-  return filename_length > extension_length &&
-    StringIsEqualIgnoreCase(filename + filename_length - extension_length,
-                            extension);
-}
-
-#ifdef _UNICODE
-
-bool
-MatchesExtension(const char *filename, const char *extension)
-{
-  size_t filename_length = strlen(filename);
-  size_t extension_length = strlen(extension);
-
-  return filename_length > extension_length &&
-    StringIsEqualIgnoreCase(filename + filename_length - extension_length,
-                            extension);
-}
-
-#endif

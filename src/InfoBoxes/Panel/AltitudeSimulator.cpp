@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,7 +29,6 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
-#include "Simulator.hpp"
 
 class AltitudeSimulatorOffsetButtons final : public OffsetButtonsWidget {
 public:
@@ -43,17 +42,16 @@ protected:
 void
 AltitudeSimulatorOffsetButtons::OnOffset(const double step) noexcept
 {
-  if (!is_simulator())
-    return;
-
   const NMEAInfo &basic = CommonInterface::Basic();
+  if (!basic.gps.simulator)
+    return;
 
   device_blackboard->SetAltitude(basic.gps_altitude +
                                  Units::ToSysAltitude(step));
 }
 
 std::unique_ptr<Widget>
-LoadAltitudeSimulatorPanel(unsigned id)
+LoadAltitudeSimulatorPanel([[maybe_unused]] unsigned id)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   if (!basic.gps.simulator)

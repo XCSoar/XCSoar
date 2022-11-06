@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_VERSION_HPP
-#define XCSOAR_FLARM_VERSION_HPP
+#pragma once
 
 #include "NMEA/Validity.hpp"
 #include "time/Stamp.hpp"
@@ -39,11 +38,11 @@ struct FlarmVersion {
   NarrowString<7> hardware_version, software_version;
   NarrowString<19> obstacle_version;
 
-  void Clear() {
+  constexpr void Clear() noexcept {
     available.Clear();
   }
 
-  void Complement(const FlarmVersion &add) {
+  constexpr void Complement(const FlarmVersion &add) noexcept {
     if (available.Complement(add.available)) {
       hardware_version = add.hardware_version;
       software_version = add.software_version;
@@ -51,12 +50,10 @@ struct FlarmVersion {
     }
   }
 
-  void Expire([[maybe_unused]] TimeStamp clock) noexcept {
+  constexpr void Expire([[maybe_unused]] TimeStamp clock) noexcept {
     /* no expiry; this object will be cleared only when the device
        connection is lost */
   }
 };
 
 static_assert(std::is_trivial<FlarmVersion>::value, "type is not trivial");
-
-#endif

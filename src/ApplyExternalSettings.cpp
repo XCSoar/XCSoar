@@ -26,10 +26,9 @@ Copyright_License {
 #include "Components.hpp"
 #include "ActionInterface.hpp"
 #include "Device/MultipleDevices.hpp"
-#include "Operation/MessageOperationEnvironment.hpp"
 
 static bool
-BallastProcessTimer()
+BallastProcessTimer() noexcept
 {
   bool modified = false;
 
@@ -60,7 +59,22 @@ BallastProcessTimer()
 }
 
 static bool
-BugsProcessTimer()
+BallastLitresProcessTimer()
+{
+  bool modified = false;
+  static Validity last_ballast_litres_validity;
+  const NMEAInfo &basic = CommonInterface::Basic();
+  if(basic.settings.ballast_litres_available.Modified(last_ballast_litres_validity)){
+    PolarSettings &polar(CommonInterface::SetComputerSettings().polar);
+    polar.glide_polar_task.SetBallastLitres(basic.settings.ballast_litres);
+    modified = true;
+  }
+  last_ballast_litres_validity = basic.settings.ballast_litres_available;
+  return modified;
+}
+
+static bool
+BugsProcessTimer() noexcept
 {
   bool modified = false;
 
@@ -78,7 +92,7 @@ BugsProcessTimer()
 }
 
 static bool
-QNHProcessTimer()
+QNHProcessTimer(OperationEnvironment &env) noexcept
 {
   bool modified = false;
 
@@ -97,7 +111,6 @@ QNHProcessTimer()
     settings_computer.pressure = calculated.pressure;
     settings_computer.pressure_available = calculated.pressure_available;
 
-    MessageOperationEnvironment env;
     if (devices != nullptr)
       devices->PutQNH(settings_computer.pressure, env);
 
@@ -108,7 +121,7 @@ QNHProcessTimer()
 }
 
 static bool
-MacCreadyProcessTimer()
+MacCreadyProcessTimer() noexcept
 {
   bool modified = false;
 
@@ -139,7 +152,7 @@ MacCreadyProcessTimer()
 }
 
 static bool
-RadioProcess()
+RadioProcess() noexcept
 {
   bool modified = false;
 
@@ -170,12 +183,13 @@ RadioProcess()
 }
 
 bool
-ApplyExternalSettings()
+ApplyExternalSettings(OperationEnvironment &env) noexcept
 {
   bool modified = false;
+  modified |= BallastLitresProcessTimer();
   modified |= BallastProcessTimer();
   modified |= BugsProcessTimer();
-  modified |= QNHProcessTimer();
+  modified |= QNHProcessTimer(env);
   modified |= MacCreadyProcessTimer();
   modified |= RadioProcess();
   return modified;

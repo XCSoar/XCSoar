@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,13 +20,10 @@
 }
  */
 
-#ifndef WAYPOINT_PTR_HPP
-#define WAYPOINT_PTR_HPP
+#pragma once
 
 #include <memory>
 
 struct Waypoint;
 
 using WaypointPtr = std::shared_ptr<const Waypoint>;
-
-#endif

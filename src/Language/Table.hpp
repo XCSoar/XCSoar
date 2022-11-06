@@ -41,7 +41,7 @@ struct BuiltinLanguage {
    */
   const char *locale;
 #else
-  const void *begin;
+  const std::byte *begin;
   size_t size;
 #endif
   const TCHAR *resource;

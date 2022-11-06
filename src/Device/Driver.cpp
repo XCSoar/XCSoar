@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ Copyright_License {
 Device::~Device() {}
 
 bool
-AbstractDevice::EnableNMEA(OperationEnvironment &env)
+AbstractDevice::EnableNMEA([[maybe_unused]] OperationEnvironment &env)
 {
   return true;
 }
@@ -39,75 +39,75 @@ AbstractDevice::LinkTimeout()
 }
 
 bool
-AbstractDevice::ParseNMEA(const char *line, struct NMEAInfo &info)
+AbstractDevice::ParseNMEA([[maybe_unused]] const char *line, [[maybe_unused]] struct NMEAInfo &info)
 {
   return false;
 }
 
 bool
-AbstractDevice::PutMacCready(double MacCready, OperationEnvironment &env)
+AbstractDevice::PutMacCready([[maybe_unused]] double MacCready, [[maybe_unused]] OperationEnvironment &env)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutBugs(double bugs, OperationEnvironment &env)
+AbstractDevice::PutBugs([[maybe_unused]] double bugs, [[maybe_unused]] OperationEnvironment &env)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutBallast(double fraction, double overload,
-                           OperationEnvironment &env)
+AbstractDevice::PutBallast([[maybe_unused]] double fraction, [[maybe_unused]] double overload,
+                           [[maybe_unused]] OperationEnvironment &env)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutQNH(const AtmosphericPressure &pres,
-                       OperationEnvironment &env)
+AbstractDevice::PutQNH([[maybe_unused]] const AtmosphericPressure &pres,
+                       [[maybe_unused]] OperationEnvironment &env)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutVolume(unsigned volume, OperationEnvironment &env)
+AbstractDevice::PutVolume([[maybe_unused]] unsigned volume, [[maybe_unused]] OperationEnvironment &env)
 {
   return true;
 }
 
 
 bool
-AbstractDevice::PutPilotEvent(OperationEnvironment &env)
+AbstractDevice::PutPilotEvent([[maybe_unused]] OperationEnvironment &env)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutActiveFrequency(RadioFrequency frequency,
-                                   const TCHAR *name,
-                                   OperationEnvironment &env)
+AbstractDevice::PutActiveFrequency([[maybe_unused]] RadioFrequency frequency,
+                                   [[maybe_unused]] const TCHAR *name,
+                                   [[maybe_unused]] OperationEnvironment &env)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutStandbyFrequency(RadioFrequency frequency,
-                                    const TCHAR *name,
-                                    OperationEnvironment &env)
+AbstractDevice::PutStandbyFrequency([[maybe_unused]] RadioFrequency frequency,
+                                    [[maybe_unused]] const TCHAR *name,
+                                    [[maybe_unused]] OperationEnvironment &env)
 {
   return true;
 }
 
 bool
-AbstractDevice::EnablePassThrough(OperationEnvironment &env)
+AbstractDevice::EnablePassThrough([[maybe_unused]] OperationEnvironment &env)
 {
   return true;
 }
 
 bool
-AbstractDevice::Declare(const Declaration &declaration, const Waypoint *home,
-                        OperationEnvironment &env)
+AbstractDevice::Declare([[maybe_unused]] const Declaration &declaration, [[maybe_unused]] const Waypoint *home,
+                        [[maybe_unused]] OperationEnvironment &env)
 {
   return false;
 }
@@ -118,15 +118,15 @@ AbstractDevice::OnSysTicker()
 }
 
 bool
-AbstractDevice::ReadFlightList(RecordedFlightList &flight_list,
-                               OperationEnvironment &env)
+AbstractDevice::ReadFlightList([[maybe_unused]] RecordedFlightList &flight_list,
+                               [[maybe_unused]] OperationEnvironment &env)
 {
   return false;
 }
 
 bool
-AbstractDevice::DownloadFlight(const RecordedFlightInfo &flight,
-                               Path path, OperationEnvironment &env)
+AbstractDevice::DownloadFlight([[maybe_unused]] const RecordedFlightInfo &flight,
+                               [[maybe_unused]] Path path, [[maybe_unused]] OperationEnvironment &env)
 {
   return false;
 }

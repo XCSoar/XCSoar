@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_RASTER_RENDERER_HPP
-#define XCSOAR_RASTER_RENDERER_HPP
+#pragma once
 
 #include "Terrain/HeightMatrix.hpp"
 
@@ -30,7 +29,7 @@ Copyright_License {
 #include "Geo/GeoBounds.hpp"
 #endif
 
-#define NUM_COLOR_RAMP_LEVELS 13
+static constexpr unsigned NUM_COLOR_RAMP_LEVELS = 13;
 
 class Angle;
 class Canvas;
@@ -173,5 +172,3 @@ private:
 
   void ContourStart(const unsigned contour_height_scale);
 };
-
-#endif

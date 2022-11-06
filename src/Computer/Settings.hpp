@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_COMPUTER_SETTINGS_HPP
-#define XCSOAR_COMPUTER_SETTINGS_HPP
+#pragma once
 
 #include "Geo/GeoPoint.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
@@ -40,7 +39,7 @@ Copyright_License {
 #include "Wind/Settings.hpp"
 #include "WaveSettings.hpp"
 #include "RadioFrequency.hpp"
-#include "Cloud/weglide/WeGlideSettings.hpp"
+#include "net/client/WeGlide/Settings.hpp"
 
 #include <cstdint>
 #include <type_traits>
@@ -110,13 +109,15 @@ struct PlacesOfInterestSettings {
   GeoPoint home_location;
 
   /**
-   * The reference location for the "ATC radial" InfoBox.
+   * The reference location & declination for the "ATC radial" InfoBox.
    */
   GeoPoint atc_reference;
+  Angle magnetic_declination;
 
   void SetDefaults() {
     ClearHome();
     atc_reference.SetInvalid();
+    magnetic_declination = Angle::Zero();
   }
 
   void ClearHome();
@@ -243,6 +244,3 @@ struct ComputerSettings {
 
 static_assert(std::is_trivial<ComputerSettings>::value,
               "type is not trivial");
-
-#endif
-

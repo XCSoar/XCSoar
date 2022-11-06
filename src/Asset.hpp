@@ -20,10 +20,8 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef ASSET_H
-#define ASSET_H
 
-#include "util/Compiler.h"
+#pragma once
 
 #ifdef ANDROID
 #include "Android/Product.hpp"
@@ -32,17 +30,6 @@ Copyright_License {
 #ifdef __APPLE__
 #include <TargetConditionals.h>
 #endif
-
-#include <tchar.h>
-
-// asset/registration data
-extern TCHAR asset_number[];
-
-/**
- * Finds the unique ID of this PDA
- */
-void
-ReadAssetNumber() noexcept;
 
 /**
  * Returns whether this is a debug build.
@@ -181,7 +168,7 @@ HasIOIOLib() noexcept
  * that XCSoar is running on, False if the hardware has only buttons
  */
 #if defined(USE_CONSOLE) && !defined(KOBO)
-gcc_pure
+[[gnu::pure]]
 bool
 HasPointer() noexcept;
 #else
@@ -199,7 +186,7 @@ HasPointer() noexcept
  * sizing controls, as a touch screen may require bigger areas.
  */
 #ifdef USE_LIBINPUT
-gcc_pure
+[[gnu::pure]]
 bool
 HasTouchScreen() noexcept;
 #else
@@ -217,7 +204,7 @@ HasTouchScreen() noexcept
  * that XCSoar is running on, False if the hardware has no keyboard
  */
 #ifdef USE_LIBINPUT
-gcc_pure
+[[gnu::pure]]
 bool
 HasKeyboard() noexcept;
 #else
@@ -254,7 +241,7 @@ HasCursorKeys() noexcept
  * Does this device have a display with colors?
  */
 #ifdef ANDROID
-gcc_const
+[[gnu::const]]
 #else
 constexpr
 #endif
@@ -274,7 +261,7 @@ HasColors() noexcept
  * Is dithering black&white used on the display?
  */
 #if defined(ANDROID) && defined(__arm__)
-gcc_const
+[[gnu::const]]
 #else
 constexpr
 #endif
@@ -297,7 +284,7 @@ IsDithered() noexcept
  * returns true.
  */
 #if defined(ANDROID) && defined(__arm__)
-gcc_const
+[[gnu::const]]
 #else
 constexpr
 #endif
@@ -310,5 +297,3 @@ HasEPaper() noexcept
   return IsKobo();
 #endif
 }
-
-#endif

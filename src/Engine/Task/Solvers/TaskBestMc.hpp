@@ -20,8 +20,7 @@
 }
  */
 
-#ifndef TASKBESTMC_HPP
-#define TASKBESTMC_HPP
+#pragma once
 
 #include "TaskMacCreadyRemaining.hpp"
 #include "Math/ZeroFinder.hpp"
@@ -101,6 +100,3 @@ private:
   /* virtual methods from class ZeroFinder */
   virtual double f(double mc) noexcept override;
 };
-
-#endif
-

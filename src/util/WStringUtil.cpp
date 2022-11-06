@@ -22,35 +22,32 @@ Copyright_License {
 */
 
 #include "WStringUtil.hpp"
-#include "WStringAPI.hxx"
-#include "WStringCompare.hxx"
 #include "WCharUtil.hxx"
 #include "Compiler.h"
 
 #include <algorithm>
 
 wchar_t *
-CopyString(wchar_t *gcc_restrict dest, const wchar_t *gcc_restrict src,
-           size_t size)
+CopyString(wchar_t *gcc_restrict dest, size_t dest_size,
+           std::wstring_view src) noexcept
 {
-  size_t length = StringLength(src);
-  if (length >= size)
-    length = size - 1;
+  if (src.size() >= dest_size)
+    src = src.substr(0, dest_size -1);
 
-  wchar_t *p = std::copy_n(src, length, dest);
+  wchar_t *p = std::copy(src.begin(), src.end(), dest);
   *p = L'\0';
   return p;
 }
 
 wchar_t *
 NormalizeSearchString(wchar_t *gcc_restrict dest,
-                      const wchar_t *gcc_restrict src)
+                      std::wstring_view src) noexcept
 {
   wchar_t *retval = dest;
 
-  for (; !StringIsEmpty(src); ++src)
-    if (IsAlphaNumericASCII(*src))
-      *dest++ = ToUpperASCII(*src);
+  for (const auto ch : src)
+    if (IsAlphaNumericASCII(ch))
+      *dest++ = ToUpperASCII(ch);
 
   *dest = L'\0';
 

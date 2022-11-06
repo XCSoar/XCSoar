@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_WARNING_COMPUTER_HPP
-#define XCSOAR_WARNING_COMPUTER_HPP
+#pragma once
 
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
@@ -69,5 +68,3 @@ public:
               const DerivedInfo &calculated,
               AirspaceWarningsInfo &result);
 };
-
-#endif

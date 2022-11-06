@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_TOP_WINDOW_HXX
-#define XCSOAR_SCREEN_TOP_WINDOW_HXX
+#pragma once
 
 #include "ContainerWindow.hpp"
 
@@ -422,7 +421,7 @@ protected:
   virtual bool OnClose() noexcept;
 
 #ifdef KOBO
-  void OnDestroy() override;
+  void OnDestroy() noexcept override;
 #endif
 
 #ifdef USE_WINUSER
@@ -431,7 +430,7 @@ protected:
 #endif
 
 #ifndef USE_WINUSER
-  void OnResize(PixelSize new_size) override;
+  void OnResize(PixelSize new_size) noexcept override;
 #endif
 
 #ifdef ANDROID
@@ -460,5 +459,3 @@ public:
 };
 
 } // namespace UI
-
-#endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -54,7 +54,7 @@ CopyFromGreyscale(
 #ifdef KOBO
                   bool enable_dither,
 #endif
-                  void *dest_pixels, unsigned dest_pitch, unsigned dest_bpp,
+                  void *dest_pixels, unsigned dest_pitch, [[maybe_unused]] unsigned dest_bpp,
                   ConstImageBuffer<GreyscalePixelTraits> src)
 {
   const uint8_t *src_pixels = reinterpret_cast<const uint8_t *>(src.data);

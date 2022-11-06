@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,6 +29,10 @@
 
 #ifdef HAVE_POSIX
 #include "Device/Port/TTYEnumerator.hpp"
+#endif
+
+#ifdef _WIN32
+# include <fileapi.h>
 #endif
 
 #ifdef ANDROID
@@ -117,13 +121,22 @@ DetectSerialPorts(DataFieldEnum &df) noexcept
 
 #if defined(_WIN32) && !defined(HAVE_POSIX)
 
+[[gnu::pure]]
+static bool
+DosDeviceExists(const TCHAR *path) noexcept
+{
+  TCHAR dummy[MAX_PATH];
+  return QueryDosDevice(path, dummy, std::size(dummy)) > 0;
+}
+
 static void
 FillDefaultSerialPorts(DataFieldEnum &df) noexcept
 {
   for (unsigned i = 1; i <= 10; ++i) {
     TCHAR buffer[64];
     _stprintf(buffer, _T("COM%u:"), i);
-    AddPort(df, DeviceConfig::PortType::SERIAL, buffer);
+    if (DosDeviceExists(buffer))
+       AddPort(df, DeviceConfig::PortType::SERIAL, buffer);
   }
 }
 
@@ -191,8 +204,8 @@ FillAndroidBluetoothPorts(DataFieldEnum &df,
 }
 
 static void
-FillAndroidUsbSerialPorts(DataFieldEnum &df,
-                          const DeviceConfig &config) noexcept
+FillAndroidUsbSerialPorts([[maybe_unused]] DataFieldEnum &df,
+                          [[maybe_unused]] const DeviceConfig &config) noexcept
 {
 #ifdef ANDROID
   if (config.port_type == DeviceConfig::PortType::ANDROID_USB_SERIAL &&
@@ -202,7 +215,7 @@ FillAndroidUsbSerialPorts(DataFieldEnum &df,
 }
 
 static void
-FillAndroidIOIOPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept
+FillAndroidIOIOPorts([[maybe_unused]] DataFieldEnum &df, [[maybe_unused]] const DeviceConfig &config) noexcept
 {
 #if defined(ANDROID)
   df.EnableItemHelp(true);

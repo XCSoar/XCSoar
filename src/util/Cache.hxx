@@ -27,13 +27,12 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CACHE_HXX
-#define CACHE_HXX
+#pragma once
 
 #include "Manual.hxx"
 #include "Cast.hxx"
+#include "IntrusiveList.hxx"
 
-#include <boost/intrusive/list.hpp>
 #include <boost/intrusive/unordered_set.hpp>
 
 #include <array>
@@ -83,7 +82,8 @@ class Cache {
 
 	class Item
 		: public boost::intrusive::unordered_set_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>>,
-		  public boost::intrusive::list_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>> {
+		  public IntrusiveListHook
+	{
 
 		Manual<Pair> pair;
 
@@ -151,8 +151,7 @@ class Cache {
 		}
 	};
 
-	typedef boost::intrusive::list<Item,
-				       boost::intrusive::constant_time_size<false>> ItemList;
+	using ItemList = IntrusiveList<Item>;
 
 	/**
 	 * The list of unallocated items.
@@ -379,5 +378,3 @@ public:
 			f(i.GetKey(), i.GetData());
 	}
 };
-
-#endif

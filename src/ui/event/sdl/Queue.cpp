@@ -24,7 +24,6 @@ Copyright_License {
 #include "Queue.hpp"
 #include "Event.hpp"
 #include "../Timer.hpp"
-#include "system/Sleep.h"
 
 namespace UI {
 
@@ -83,12 +82,15 @@ EventQueue::Wait(Event &event) noexcept
       return true;
 
     ::SDL_PumpEvents();
-    int result = ::SDL_PeepEvents(&event.event, 1,
-                                 SDL_GETEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT);
+
+    const auto timeout = timers.GetTimeout(SteadyNow());
+
+    int result = timeout.count() >= 0
+      ? SDL_WaitEventTimeout(&event.event,
+                             std::chrono::duration_cast<std::chrono::milliseconds>(timeout).count())
+      : SDL_WaitEvent(&event.event);
     if (result != 0)
       return result > 0;
-
-    Sleep(10);
 
     FlushClockCaches();
   }
@@ -133,7 +135,7 @@ EventQueue::Purge(EventLoop::Callback callback, void *ctx) noexcept
 void
 EventQueue::AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   timers.Add(timer, SteadyNow() + d);
 }
@@ -141,7 +143,7 @@ EventQueue::AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexce
 void
 EventQueue::CancelTimer(Timer &timer) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   timers.Cancel(timer);
 }

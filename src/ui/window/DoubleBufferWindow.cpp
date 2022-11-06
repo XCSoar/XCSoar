@@ -32,13 +32,15 @@ DoubleBufferWindow::OnCreate()
 {
   PaintWindow::OnCreate();
 
+  next_size = GetSize();
+
   WindowCanvas a_canvas(*this);
   buffers[0].Create(a_canvas);
   buffers[1].Create(a_canvas);
 }
 
 void
-DoubleBufferWindow::OnDestroy()
+DoubleBufferWindow::OnDestroy() noexcept
 {
   PaintWindow::OnDestroy();
 
@@ -47,26 +49,40 @@ DoubleBufferWindow::OnDestroy()
 }
 
 void
-DoubleBufferWindow::Flip() noexcept
+DoubleBufferWindow::OnResize(PixelSize new_size) noexcept
 {
-  /* enable the drawing buffer */
+  PaintWindow::OnResize(new_size);
+
+  /* store the new size for the next Repaint() call in a thread-safe
+     field */
+  const std::lock_guard lock{mutex};
+  next_size = new_size;
+}
+
+void
+DoubleBufferWindow::Repaint() noexcept
+{
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
+    auto &canvas = GetPaintCanvas();
+
+    /* grow the current buffer, just in case the window has been
+       resized */
+    canvas.Grow(next_size);
+
+    OnPaintBuffer(canvas);
+
     current ^= 1;
   }
 
   /* commit the finished buffer to the screen (asynchronously) */
   invalidate_notify.SendNotification();
-
-  /* grow the current buffer, just in case the window has been
-     resized */
-  buffers[current].Grow(GetSize());
 }
 
 void
-DoubleBufferWindow::OnPaint(Canvas &canvas)
+DoubleBufferWindow::OnPaint(Canvas &canvas) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   canvas.Copy(GetVisibleCanvas());
 }
 

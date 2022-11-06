@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ Copyright_License {
 
 namespace UI {
 
-EventQueue::EventQueue(Display &_display) noexcept
+EventQueue::EventQueue([[maybe_unused]] Display &_display) noexcept
 #if defined(USE_X11) || defined(USE_WAYLAND) || defined(MESA_KMS)
   :display(_display)
 #endif
@@ -52,7 +52,7 @@ EventQueue::Push(const Event &event) noexcept
 {
   event_loop.Finish();
 
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   events.push(event);
 }
 
@@ -60,7 +60,7 @@ void
 EventQueue::Interrupt() noexcept
 {
   {
-    std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     if (!events.empty())
       return;
 
@@ -73,7 +73,7 @@ EventQueue::Interrupt() noexcept
 void
 EventQueue::Inject(const Event &event) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   events.push(event);
   WakeUp();
 }
@@ -86,7 +86,7 @@ EventQueue::Poll() noexcept
 }
 
 bool
-EventQueue::Generate(Event &event) noexcept
+EventQueue::Generate([[maybe_unused]] Event &event) noexcept
 {
 #ifndef NON_INTERACTIVE
   if (input_queue.Generate(event))
@@ -109,7 +109,7 @@ EventQueue::Pop(Event &event) noexcept
   if (quit)
     return false;
 
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   if (events.empty()) {
     return Generate(event);
   }
@@ -126,7 +126,7 @@ EventQueue::Wait(Event &event) noexcept
   if (quit)
     return false;
 
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   if (events.empty()) {
     if (Generate(event))
@@ -156,7 +156,7 @@ void
 EventQueue::Purge(bool (*match)(const Event &event, void *ctx) noexcept,
                   void *ctx) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   size_t n = events.size();
   while (n-- > 0) {
     if (!match(events.front(), ctx))

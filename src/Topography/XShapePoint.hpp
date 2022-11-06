@@ -22,16 +22,9 @@ Copyright_License {
 }
 */
 
-#ifndef TOPOGRAPHY_XSHAPE_POINT_HPP
-#define TOPOGRAPHY_XSHAPE_POINT_HPP
+#pragma once
 
 #include "Math/Point2D.hpp"
 
-struct ShapePoint : FloatPoint2D {
-  ShapePoint() = default;
-  using FloatPoint2D::FloatPoint2D;
-};
-
-typedef ShapePoint::scalar_type ShapeScalar;
-
-#endif
+using ShapePoint = FloatPoint2D;
+using ShapeScalar = ShapePoint::scalar_type;

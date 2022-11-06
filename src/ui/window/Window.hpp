@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_WINDOW_HPP
-#define XCSOAR_SCREEN_WINDOW_HPP
+#pragma once
 
 #include "Features.hpp"
 #include "ui/dim/Rect.hpp"
@@ -183,7 +182,7 @@ public:
   Window &operator=(const Window &other) = delete;
 
 #ifndef USE_WINUSER
-  const ContainerWindow *GetParent() const noexcept {
+  ContainerWindow *GetParent() const noexcept {
     assert(IsDefined());
 
     return parent;
@@ -214,6 +213,9 @@ public:
 
     return h == hWnd || ::IsChild(hWnd, h);
   }
+
+  [[gnu::pure]]
+  ContainerWindow *GetParent() const noexcept;
 #endif
 
 protected:
@@ -249,46 +251,6 @@ public:
     assert(IsDefined());
 
     return position;
-  }
-
-  int GetTop() const noexcept {
-    assert(IsDefined());
-
-    return position.y;
-  }
-
-  int GetLeft() const noexcept {
-    assert(IsDefined());
-
-    return position.x;
-  }
-
-  unsigned GetWidth() const noexcept {
-    assert(IsDefined());
-
-    return size.width;
-  }
-
-  unsigned GetHeight() const noexcept {
-    assert(IsDefined());
-
-    return size.height;
-  }
-
-  int GetRight() const {
-    return GetLeft() + GetWidth();
-  }
-
-  int GetBottom() const noexcept {
-    return GetTop() + GetHeight();
-  }
-#else /* USE_WINUSER */
-  unsigned GetWidth() const noexcept {
-    return GetSize().width;
-  }
-
-  unsigned GetHeight() const noexcept {
-    return GetSize().height;
   }
 #endif
 
@@ -327,28 +289,28 @@ public:
   [[gnu::pure]]
   bool IsMaximised() const noexcept;
 
-  void Move(int left, int top) noexcept {
+  void Move(PixelPoint _position) noexcept {
     AssertThread();
 
 #ifndef USE_WINUSER
-    position = { left, top };
+    position = _position;
     Invalidate();
 #else
-    ::SetWindowPos(hWnd, nullptr, left, top, 0, 0,
+    ::SetWindowPos(hWnd, nullptr, _position.x, _position.y, 0, 0,
                    SWP_NOSIZE | SWP_NOZORDER |
                    SWP_NOACTIVATE | SWP_NOOWNERZORDER);
 #endif
   }
 
-  void Move(int left, int top,
-            unsigned width, unsigned height) noexcept {
+  void Move(PixelPoint _position, PixelSize _size) noexcept {
     AssertThread();
 
 #ifndef USE_WINUSER
-    Move(left, top);
-    Resize(width, height);
+    Move(_position);
+    Resize(_size);
 #else /* USE_WINUSER */
-    ::SetWindowPos(hWnd, nullptr, left, top, width, height,
+    ::SetWindowPos(hWnd, nullptr, _position.x, _position.y,
+                   _size.width, _size.height,
                    SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
     // XXX store new size?
 #endif
@@ -358,7 +320,7 @@ public:
     assert(rc.left < rc.right);
     assert(rc.top < rc.bottom);
 
-    Move(rc.left, rc.top, rc.GetWidth(), rc.GetHeight());
+    Move(rc.GetTopLeft(), rc.GetSize());
   }
 
   void MoveToCenter() noexcept {
@@ -366,28 +328,28 @@ public:
     const PixelSize parent_size = GetParentClientRect().GetSize();
     int dialog_x = (int(parent_size.width) - int(window_size.width)) / 2;
     int dialog_y = (int(parent_size.height) - int(window_size.height)) / 2;
-    Move(dialog_x, dialog_y);
+    Move({dialog_x, dialog_y});
   }
 
   /**
-   * Like move(), but does not trigger a synchronous redraw.  The
+   * Like Move(), but does not trigger a synchronous redraw.  The
    * caller is responsible for redrawing.
    */
-  void FastMove(int left, int top,
-                unsigned width, unsigned height) noexcept {
+  void FastMove(PixelPoint _position, PixelSize _size) noexcept {
     AssertThread();
 
 #ifndef USE_WINUSER
-    Move(left, top, width, height);
+    Move(_position, _size);
 #else /* USE_WINUSER */
-    ::SetWindowPos(hWnd, nullptr, left, top, width, height,
+    ::SetWindowPos(hWnd, nullptr, _position.x, _position.y,
+                   _size.width, _size.height,
                    SWP_NOCOPYBITS | SWP_NOREDRAW | SWP_DEFERERASE |
                    SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
 #endif
   }
 
   void FastMove(const PixelRect rc) noexcept {
-    FastMove(rc.left, rc.top, rc.GetWidth(), rc.GetHeight());
+    FastMove(rc.GetTopLeft(), rc.GetSize());
   }
 
   /**
@@ -408,27 +370,23 @@ public:
 #endif
   }
 
-  void Resize(unsigned width, unsigned height) noexcept {
+  void Resize(PixelSize _size) noexcept {
     AssertThread();
 
 #ifndef USE_WINUSER
-    if (width == GetWidth() && height == GetHeight())
+    if (_size == size)
       return;
 
-    size = { width, height };
+    size = _size;
 
     Invalidate();
     OnResize(size);
 #else /* USE_WINUSER */
-    ::SetWindowPos(hWnd, nullptr, 0, 0, width, height,
+    ::SetWindowPos(hWnd, nullptr, 0, 0, _size.width, _size.height,
                    SWP_NOMOVE | SWP_NOZORDER |
                    SWP_NOACTIVATE | SWP_NOOWNERZORDER);
     // XXX store new size?
 #endif
-  }
-
-  void Resize(PixelSize size) noexcept {
-    Resize(size.width, size.height);
   }
 
 #ifndef USE_WINUSER
@@ -528,6 +486,12 @@ public:
     else
       Hide();
   }
+
+  /**
+   * Attempt to make this window visible by scrolling the parent (via
+   * ContainerWindow::ScrollTo()).
+   */
+  void ScrollParentTo() noexcept;
 
 #ifndef USE_WINUSER
   bool IsTransparent() const noexcept {
@@ -684,10 +648,7 @@ public:
   }
 #endif /* USE_WINUSER */
 
-#ifndef USE_WINUSER
-  void ToScreen(PixelRect &rc) const noexcept;
-#endif
-
+#ifdef USE_WINUSER
   /**
    * Returns the position on the screen.
    */
@@ -696,47 +657,40 @@ public:
   {
     assert(IsDefined());
 
-#ifndef USE_WINUSER
-    PixelRect rc = GetPosition();
-    ToScreen(rc);
-#else
     RECT rc;
     ::GetWindowRect(hWnd, &rc);
-#endif
     return rc;
   }
+#endif
 
   /**
    * Returns the position within the parent window.
    */
+#ifndef USE_WINUSER
   [[gnu::pure]]
   const PixelRect GetPosition() const noexcept
   {
     assert(IsDefined());
 
-#ifndef USE_WINUSER
-    return { GetLeft(), GetTop(), GetRight(), GetBottom() };
+    return { position, size };
+  }
 #else
-    PixelRect rc = GetScreenPosition();
-
-    HWND parent = ::GetParent(hWnd);
-    if (parent != nullptr) {
-      POINT pt;
-
-      pt.x = rc.left;
-      pt.y = rc.top;
-      ::ScreenToClient(parent, &pt);
-      rc.left = pt.x;
-      rc.top = pt.y;
-
-      pt.x = rc.right;
-      pt.y = rc.bottom;
-      ::ScreenToClient(parent, &pt);
-      rc.right = pt.x;
-      rc.bottom = pt.y;
-    }
-    return rc;
+  [[gnu::pure]]
+  const PixelRect GetPosition() const noexcept;
 #endif
+
+  /**
+   * Translate coordinates relative to this window to coordinates
+   * relative to the parent window.
+   */
+  [[gnu::pure]]
+  PixelPoint ToParentCoordinates(const PixelPoint p) const noexcept {
+    return GetPosition().GetTopLeft() + p;
+  }
+
+  [[gnu::pure]]
+  PixelRect ToParentCoordinates(const PixelRect &r) const noexcept {
+    return {ToParentCoordinates(r.GetTopLeft()), r.GetSize()};
   }
 
   [[gnu::pure]]
@@ -891,24 +845,24 @@ public:
    * created
    */
   virtual void OnCreate();
-  virtual void OnDestroy();
-  virtual void OnResize(PixelSize new_size);
-  virtual bool OnMouseMove(PixelPoint p, unsigned keys);
-  virtual bool OnMouseDown(PixelPoint p);
-  virtual bool OnMouseUp(PixelPoint p);
-  virtual bool OnMouseDouble(PixelPoint p);
-  virtual bool OnMouseWheel(PixelPoint p, int delta);
+  virtual void OnDestroy() noexcept;
+  virtual void OnResize(PixelSize new_size) noexcept;
+  virtual bool OnMouseMove(PixelPoint p, unsigned keys) noexcept;
+  virtual bool OnMouseDown(PixelPoint p) noexcept;
+  virtual bool OnMouseUp(PixelPoint p) noexcept;
+  virtual bool OnMouseDouble(PixelPoint p) noexcept;
+  virtual bool OnMouseWheel(PixelPoint p, int delta) noexcept;
 
 #ifdef HAVE_MULTI_TOUCH
   /**
    * A secondary pointer is being pressed.
    */
-  virtual bool OnMultiTouchDown();
+  virtual bool OnMultiTouchDown() noexcept;
 
   /**
    * A secondary pointer is being released.
    */
-  virtual bool OnMultiTouchUp();
+  virtual bool OnMultiTouchUp() noexcept;
 #endif
 
   /**
@@ -919,10 +873,10 @@ public:
    * dialog manager may use it
    */
   [[gnu::pure]]
-  virtual bool OnKeyCheck(unsigned key_code) const;
+  virtual bool OnKeyCheck(unsigned key_code) const noexcept;
 
-  virtual bool OnKeyDown(unsigned key_code);
-  virtual bool OnKeyUp(unsigned key_code);
+  virtual bool OnKeyDown(unsigned key_code) noexcept;
+  virtual bool OnKeyUp(unsigned key_code) noexcept;
 
   /**
    * A character was entered with the (virtual) keyboard.  This will
@@ -931,18 +885,18 @@ public:
    * @param ch the unicode character
    * @return true if the event was handled
    */
-  virtual bool OnCharacter(unsigned ch);
+  virtual bool OnCharacter(unsigned ch) noexcept;
 
 #ifdef USE_WINUSER
-  virtual bool OnCommand(unsigned id, unsigned code);
+  virtual bool OnCommand(unsigned id, unsigned code) noexcept;
 #endif
 
-  virtual void OnCancelMode();
-  virtual void OnSetFocus();
-  virtual void OnKillFocus();
+  virtual void OnCancelMode() noexcept;
+  virtual void OnSetFocus() noexcept;
+  virtual void OnKillFocus() noexcept;
 
 #ifdef USE_WINUSER
-  virtual bool OnUser(unsigned id);
+  virtual bool OnUser(unsigned id) noexcept;
 
   virtual LRESULT OnMessage(HWND hWnd, UINT message,
                             WPARAM wParam, LPARAM lParam) noexcept;
@@ -958,5 +912,3 @@ public:
                                   WPARAM wParam, LPARAM lParam) noexcept;
 #endif /* USE_WINUSER */
 };
-
-#endif

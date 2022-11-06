@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -45,7 +45,7 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config)
  * to an exclusive resource, like the same physical COM port.  If this
  * is detected, then the second device will be disabled.
  */
-gcc_pure
+[[gnu::pure]]
 static bool
 DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
 {
@@ -92,7 +92,7 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
 }
 
 template<typename I>
-gcc_pure
+[[gnu::pure]]
 static bool
 DeviceConfigOverlaps(const DeviceConfig &config, I begin, I end)
 {
@@ -171,8 +171,7 @@ devShutdown()
   // Stop COM devices
   LogFormat("Stop COM devices");
 
-  for (DeviceDescriptor *i : *devices)
-    i->Close();
+  devices->Close();
 }
 
 void

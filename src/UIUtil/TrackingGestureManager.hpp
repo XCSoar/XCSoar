@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef TRACKING_GESTURE_MANAGER_HPP
-#define TRACKING_GESTURE_MANAGER_HPP
+#pragma once
 
 #include "GestureManager.hpp"
 #include "ui/dim/Point.hpp"
@@ -80,5 +79,3 @@ public:
     return points;
   }
 };
-
-#endif

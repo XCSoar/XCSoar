@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,17 +25,19 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "util/StringCompare.hxx"
 #include "util/ConvertString.hpp"
-#include "net/http/CoRequest.hxx"
-#include "net/http/Setup.hxx"
+#include "lib/curl/CoRequest.hxx"
+#include "lib/curl/Setup.hxx"
 #include "Geo/GeoPoint.hpp"
 #include "co/Task.hxx"
 #include "util/RuntimeError.hxx"
-#include "util/StringView.hxx"
+#include "util/StringCompare.hxx"
 #include "Version.hpp"
 
 #include <cassert>
 #include <cstdlib>
 #include <stdexcept>
+
+using std::string_view_literals::operator""sv;
 
 namespace LiveTrack24 {
 
@@ -82,7 +84,7 @@ Client::GetUserID(const TCHAR *username, const TCHAR *password)
 
 Co::Task<void>
 Client::StartTracking(SessionID session, const TCHAR *username,
-                      const TCHAR *password, unsigned tracking_interval,
+                      const TCHAR *password, [[maybe_unused]] unsigned tracking_interval,
                       VehicleType vtype, const TCHAR *vname)
 {
   // http://www.livetrack24.com/track.php?leolive=2&sid=42664778&pid=1&
@@ -169,13 +171,13 @@ Client::SendRequest(CurlEasy easy)
   easy.SetFailOnError();
 
   const auto _response = co_await Curl::CoRequest(curl, std::move(easy));
-  StringView response{std::string_view{_response.body}};
-  if (response.StartsWith("OK"))
+  std::string_view response{_response.body};
+  if (response.starts_with("OK"sv))
     co_return;
 
-  if (response.SkipPrefix("NOK : ") && !response.empty())
+  if (SkipPrefix(response, "NOK : "sv) && !response.empty())
     throw FormatRuntimeError("Error from server: %.*s",
-                             int(response.size), response.data);
+                             int(response.size()), response.data());
 
   throw std::runtime_error("Error from server");
 }

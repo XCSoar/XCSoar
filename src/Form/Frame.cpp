@@ -77,7 +77,7 @@ WndFrame::GetTextHeight() const noexcept
 }
 
 void
-WndFrame::OnPaint(Canvas &canvas)
+WndFrame::OnPaint(Canvas &canvas) noexcept
 {
   if (HaveClipping())
     canvas.Clear(look.background_brush);

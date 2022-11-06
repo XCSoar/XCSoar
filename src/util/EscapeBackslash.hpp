@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,10 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_UTIL_ESCAPE_BACKSLASH_HPP
-#define XCSOAR_UTIL_ESCAPE_BACKSLASH_HPP
+#pragma once
 
-#include "TStringView.hxx"
+#include "util/tstring_view.hxx"
 
 /**
  * Parses the special characters (cr, lf, back slash) in the old_string and
@@ -32,7 +31,5 @@ Copyright_License {
  * @param old_string The old string with (or without) special characters
  * @return The new parsed string
  */
-TStringView::value_type *
-UnescapeBackslash(TStringView old_string) noexcept;
-
-#endif
+tstring_view::pointer
+UnescapeBackslash(tstring_view old_string) noexcept;

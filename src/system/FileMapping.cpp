@@ -55,13 +55,13 @@ FileMapping::FileMapping(Path path)
   if (st.st_size > 1024 * 1024 * 1024)
     throw FormatRuntimeError("File too large: %s", path.c_str());
 
-  m_size = (size_t)st.st_size;
+  const std::size_t size = (std::size_t)st.st_size;
 
-  m_data = mmap(nullptr, m_size, PROT_READ, MAP_SHARED, fd.Get(), 0);
-  if (m_data == nullptr)
+  void *data = mmap(nullptr, size, PROT_READ, MAP_SHARED, fd.Get(), 0);
+  if (data == (void *)-1)
     throw FormatErrno("Failed to map %s", path.c_str());
 
-  madvise(m_data, m_size, MADV_WILLNEED);
+  madvise(data, size, MADV_WILLNEED);
 #else /* !HAVE_POSIX */
   hFile = ::CreateFile(path.c_str(), GENERIC_READ, FILE_SHARE_READ,
                        nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
@@ -83,7 +83,7 @@ FileMapping::FileMapping(Path path)
     throw FormatRuntimeError("File too large: %s", path.c_str());
   }
 
-  m_size = fi.nFileSizeLow;
+  const std::size_t size = (std::size_t)fi.nFileSizeLow;
 
   hMapping = ::CreateFileMapping(hFile, nullptr, PAGE_READONLY,
                                  fi.nFileSizeHigh, fi.nFileSizeLow,
@@ -95,8 +95,8 @@ FileMapping::FileMapping(Path path)
                           (const char *)NarrowPathName(path));
   }
 
-  m_data = ::MapViewOfFile(hMapping, FILE_MAP_READ, 0, 0, m_size);
-  if (m_data == nullptr) {
+  void *data = ::MapViewOfFile(hMapping, FILE_MAP_READ, 0, 0, size);
+  if (data == nullptr) {
     const auto e = GetLastError();
     ::CloseHandle(hMapping);
     ::CloseHandle(hFile);
@@ -104,21 +104,17 @@ FileMapping::FileMapping(Path path)
                           (const char *)NarrowPathName(path));
   }
 #endif /* !HAVE_POSIX */
+
+  span = {(std::byte *)data, size};
 }
 
 FileMapping::~FileMapping() noexcept
 {
 #ifdef HAVE_POSIX
-  if (m_data != nullptr)
-    munmap(m_data, m_size);
+  munmap(span.data(), span.size());
 #else /* !HAVE_POSIX */
-  if (m_data != nullptr)
-    ::UnmapViewOfFile(m_data);
-
-  if (hMapping != nullptr)
-    ::CloseHandle(hMapping);
-
-  if (hFile != INVALID_HANDLE_VALUE)
-    ::CloseHandle(hFile);
+  ::UnmapViewOfFile(span.data());
+  ::CloseHandle(hMapping);
+  ::CloseHandle(hFile);
 #endif /* !HAVE_POSIX */
 }

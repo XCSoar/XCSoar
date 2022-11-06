@@ -22,9 +22,8 @@ Copyright_License {
 */
 
 #include "net/http/Init.hpp"
-#include "net/http/Request.hxx"
-#include "net/http/Handler.hxx"
-#include "net/http/Init.hpp"
+#include "lib/curl/Request.hxx"
+#include "lib/curl/Handler.hxx"
 #include "io/async/AsioThread.hpp"
 #include "system/ConvertPathName.hpp"
 #include "thread/AsyncWaiter.hxx"
@@ -52,8 +51,7 @@ public:
   }
 
   /* virtual methods from class CurlResponseHandler */
-  void OnHeaders(unsigned status,
-                 std::multimap<std::string, std::string> &&headers) override {
+  void OnHeaders(unsigned status, Curl::Headers &&headers) override {
     printf("status: %u\n", status);
 
     for (const auto &[name, value] : headers)
@@ -62,11 +60,11 @@ public:
     printf("\n");
   }
 
-  void OnData(ConstBuffer<void> data) override {
+  void OnData(std::span<const std::byte> data) override {
     if (file != nullptr)
-      fwrite(data.data, 1, data.size, file);
+      fwrite(data.data(), 1, data.size(), file);
     else
-      fwrite(data.data, 1, data.size, stdout);
+      fwrite(data.data(), 1, data.size(), stdout);
   }
 
   void OnEnd() override {

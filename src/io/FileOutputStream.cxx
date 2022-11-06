@@ -88,7 +88,7 @@ FileOutputStream::OpenCreate(bool visible)
 {
 	if (!visible) {
 		/* attempt to create a temporary file */
-		tmp_path = path.WithExtension(_T(".tmp"));
+		tmp_path = path.WithSuffix(_T(".tmp"));
 		Delete(tmp_path);
 
 		handle = CreateFile(tmp_path.c_str(), GENERIC_WRITE, 0, nullptr,
@@ -292,7 +292,12 @@ FileOutputStream::Sync()
 {
 	assert(IsDefined());
 
-	if (fdatasync(fd.Get()) < 0)
+#ifdef __linux__
+	const bool success = fdatasync(fd.Get()) == 0;
+#else
+	const bool success = fsync(fd.Get()) == 0;
+#endif
+	if (!success)
 		throw FormatErrno("Failed to sync %s", GetPath().c_str());
 }
 
@@ -361,7 +366,7 @@ FileOutputStream::Cancel() noexcept
 }
 
 inline void
-FileOutputStream::RenameOrThrow(Path old_path, Path new_path) const
+FileOutputStream::RenameOrThrow([[maybe_unused]] Path old_path, [[maybe_unused]] Path new_path) const
 {
 	assert(old_path != nullptr);
 	assert(new_path != nullptr);
@@ -381,15 +386,15 @@ FileOutputStream::RenameOrThrow(Path old_path, Path new_path) const
 }
 
 inline void
-FileOutputStream::Delete(Path path) const noexcept
+FileOutputStream::Delete(Path delete_path) const noexcept
 {
-	assert(path != nullptr);
+	assert(delete_path != nullptr);
 
 #ifdef _WIN32
-	DeleteFile(path.c_str());
+	DeleteFile(delete_path.c_str());
 #elif defined(__linux__)
-	unlinkat(directory_fd.Get(), path.c_str(), 0);
+	unlinkat(directory_fd.Get(), delete_path.c_str(), 0);
 #else
-	unlink(path.c_str());
+	unlink(delete_path.c_str());
 #endif
 }

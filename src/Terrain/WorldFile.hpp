@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TERRAIN_WORLD_FILE_HPP
-#define XCSOAR_TERRAIN_WORLD_FILE_HPP
+#pragma once
 
 struct zzip_dir;
 class GeoBounds;
@@ -30,5 +29,3 @@ class GeoBounds;
 GeoBounds
 LoadWorldFile(struct zzip_dir *dir, const char *path,
               unsigned width, unsigned height);
-
-#endif

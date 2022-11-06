@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -175,27 +175,27 @@ public:
 
   /* virtual methods from class ListCursorHandler */
   void OnCursorMoved(unsigned index) noexcept override;
-  bool CanActivateItem(unsigned index) const noexcept override {
+  bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
     return true;
   }
-  void OnActivateItem(unsigned index) noexcept override;
+  void OnActivateItem([[maybe_unused]] unsigned index) noexcept override;
 
   /* virtual methods from class PageLayoutEditWidget::Listener */
   void OnModified(const PageLayout &new_value) noexcept override;
 };
 
 void
-PageLayoutEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
+PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept
 {
   const InfoBoxSettings &info_box_settings =
     CommonInterface::GetUISettings().info_boxes;
 
   static constexpr StaticEnumChoice main_list[] = {
-    { (unsigned)PageLayout::Main::MAP, N_("Map") },
-    { (unsigned)PageLayout::Main::FLARM_RADAR, N_("FLARM radar") },
-    { (unsigned)PageLayout::Main::THERMAL_ASSISTANT, N_("Thermal assistant") },
-    { (unsigned)PageLayout::Main::HORIZON, N_("Horizon") },
-    { 0 }
+    { PageLayout::Main::MAP, N_("Map") },
+    { PageLayout::Main::FLARM_RADAR, N_("FLARM radar") },
+    { PageLayout::Main::THERMAL_ASSISTANT, N_("Thermal assistant") },
+    { PageLayout::Main::HORIZON, N_("Horizon") },
+    nullptr
   };
   AddEnum(_("Main area"),
           _("Specifies what should be displayed in the main area."),
@@ -205,7 +205,7 @@ PageLayoutEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noex
   static constexpr StaticEnumChoice ib_list[] = {
     { IBP_AUTO, N_("Auto"), N_("Displays either the Circling, Cruise or Final glide infoxboxes") },
     { IBP_NONE, N_("None"), N_("Show fullscreen (no InfoBoxes)") },
-    { 0 }
+    nullptr
   };
 
   WndProperty *wp = AddEnum(_("InfoBoxes"),
@@ -235,10 +235,9 @@ PageLayoutEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noex
   }
 
   static constexpr StaticEnumChoice bottom_list[] = {
-    { (unsigned)PageLayout::Bottom::NOTHING, N_("Nothing") },
-    { (unsigned)PageLayout::Bottom::CROSS_SECTION,
-                N_("Cross section") },
-    { 0 }
+    { PageLayout::Bottom::NOTHING, N_("Nothing") },
+    { PageLayout::Bottom::CROSS_SECTION, N_("Cross section") },
+    nullptr
   };
   AddEnum(_("Bottom area"),
           _("Specifies what should be displayed below the main area."),
@@ -412,7 +411,7 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 }
 
 void
-PageListWidget::OnCursorMoved(unsigned idx) noexcept
+PageListWidget::OnCursorMoved[[maybe_unused]] (unsigned idx) noexcept
 {
   UpdateButtons();
 
@@ -420,7 +419,7 @@ PageListWidget::OnCursorMoved(unsigned idx) noexcept
 }
 
 void
-PageListWidget::OnActivateItem(unsigned idx) noexcept
+PageListWidget::OnActivateItem([[maybe_unused]] unsigned idx) noexcept
 {
   editor->SetFocus();
 }

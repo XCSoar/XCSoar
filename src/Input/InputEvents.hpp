@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_INPUT_EVENTS_HPP
-#define XCSOAR_INPUT_EVENTS_HPP
+#pragma once
 
 #include "util/Compiler.h"
 
@@ -89,14 +88,14 @@ SetFlavour(const TCHAR *flavour) noexcept;
  *
  * @return the current flavour mode; may be NULL
  */
-gcc_pure
+[[gnu::pure]]
 bool
 IsFlavour(const TCHAR *flavour) noexcept;
 
 /**
  * @return: true if current mode is MODE_DEFAULT
  */
-gcc_pure
+[[gnu::pure]]
 bool
 IsDefault() noexcept;
 
@@ -214,5 +213,3 @@ void eventUploadIGCFile(const TCHAR *misc);
 // -------
 
 } // namespace InputEvents
-
-#endif

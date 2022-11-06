@@ -21,10 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_KOBO_MODEL_HPP
-#define XCSOAR_KOBO_MODEL_HPP
+#pragma once
 
-#include "util/Compiler.h"
+#ifndef KOBO
+#error This header is only for Kobo builds
+#endif
 
 enum class KoboModel {
   UNKNOWN,
@@ -37,10 +38,13 @@ enum class KoboModel {
   GLO_HD,
   CLARA_HD,
   NIA,
+  LIBRA2,
 };
 
-gcc_const
+[[gnu::const]]
 KoboModel
-DetectKoboModel();
+DetectKoboModel() noexcept;
 
-#endif
+[[gnu::const]]
+const char *
+GetKoboWifiInterface() noexcept;

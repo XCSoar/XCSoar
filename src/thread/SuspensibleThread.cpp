@@ -40,7 +40,7 @@ SuspensibleThread::BeginStop() noexcept
 {
   assert(!Thread::IsInside());
 
-  const std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   _BeginStop();
 }
 
@@ -59,7 +59,7 @@ SuspensibleThread::BeginSuspend() noexcept
   assert(!Thread::IsInside());
   assert(Thread::IsDefined());
 
-  const std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   _BeginSuspend();
 }
 
@@ -79,7 +79,7 @@ SuspensibleThread::WaitUntilSuspended() noexcept
   assert(!Thread::IsInside());
   assert(Thread::IsDefined());
 
-  std::unique_lock<Mutex> lock(mutex);
+  std::unique_lock lock{mutex};
   _WaitUntilSuspended(lock);
 }
 
@@ -108,7 +108,7 @@ SuspensibleThread::Resume() noexcept
 {
   assert(!Thread::IsInside());
 
-  const std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   suspend_received = false;
   command_trigger.notify_one();
 }
@@ -126,7 +126,7 @@ SuspensibleThread::IsCommandPending() noexcept
 {
   assert(Thread::IsInside());
 
-  const std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   return _IsCommandPending();
 }
 
@@ -153,7 +153,7 @@ SuspensibleThread::CheckStoppedOrSuspended() noexcept
 {
   assert(Thread::IsInside());
 
-  std::unique_lock<Mutex> lock(mutex);
+  std::unique_lock lock{mutex};
   return _CheckStoppedOrSuspended(lock);
 }
 
@@ -184,6 +184,6 @@ SuspensibleThread::WaitForStopped(std::chrono::steady_clock::duration timeout) n
 {
   assert(Thread::IsInside());
 
-  std::unique_lock<Mutex> lock(mutex);
+  std::unique_lock lock{mutex};
   return _WaitForStopped(lock, timeout);
 }

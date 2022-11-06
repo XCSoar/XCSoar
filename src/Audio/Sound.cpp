@@ -53,9 +53,8 @@ PlayResource(const TCHAR *resource_name)
     return sndPlaySound(resource_name, SND_ASYNC | SND_NODEFAULT);
 
   ResourceLoader::Data data = ResourceLoader::Load(resource_name, _T("WAVE"));
-  return !data.IsNull() &&
-         sndPlaySound((LPCTSTR)data.data,
-                      SND_MEMORY | SND_ASYNC | SND_NODEFAULT);
+  return data.data() != nullptr &&
+    sndPlaySound((LPCTSTR)data.data(), SND_MEMORY | SND_ASYNC | SND_NODEFAULT);
 
 #elif defined(HAVE_PCM_PLAYER)
 

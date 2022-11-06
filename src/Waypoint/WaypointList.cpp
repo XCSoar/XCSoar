@@ -41,24 +41,28 @@ WaypointListItem::GetVector(const GeoPoint &location) const noexcept
   return vec;
 }
 
-class WaypointDistanceCompare
-{
-  const GeoPoint &location;
-
-public:
-  explicit WaypointDistanceCompare(const GeoPoint &_location) noexcept
-    :location(_location) {}
-
-
-  [[gnu::pure]]
-  bool operator()(const WaypointListItem &a,
-                  const WaypointListItem &b) const noexcept {
-    return a.GetVector(location).distance < b.GetVector(location).distance;
-  }
-};
-
 void
 WaypointList::SortByDistance(const GeoPoint &location) noexcept
 {
-  std::sort(begin(), end(), WaypointDistanceCompare(location));
+  std::sort(begin(), end(), [location](const auto &a, const auto &b){
+    return a.GetVector(location).distance < b.GetVector(location).distance;
+  });
+}
+
+void
+WaypointList::SortByName() noexcept
+{
+  std::sort(begin(), end(), [](const auto &a, const auto &b){
+    return a.waypoint->name < b.waypoint->name;
+  });
+}
+
+void
+WaypointList::MakeUnique() noexcept
+{
+  auto new_end = std::unique(begin(), end(), [](const auto &a, const auto &b){
+    return a.waypoint == b.waypoint;
+  });
+
+  erase(new_end, end());
 }

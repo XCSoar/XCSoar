@@ -15,8 +15,7 @@
 **
 ***********************************************************************/
 
-#ifndef VLAPIHLP_H
-#define VLAPIHLP_H
+#pragma once
 
 #include "util/Compiler.h"
 
@@ -28,8 +27,6 @@ char *igc_filter(char *);
 void
 wordtoserno(char *buffer, unsigned serno);
 
-gcc_pure
+[[gnu::pure]]
 long
 pressure2altitude(unsigned pressure);
-
-#endif

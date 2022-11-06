@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TARGET_MAP_WINDOW_HPP
-#define XCSOAR_TARGET_MAP_WINDOW_HPP
+#pragma once
 
 #include "Projection/MapWindowProjection.hpp"
 #include "Renderer/AirspaceRenderer.hpp"
@@ -31,7 +30,6 @@ Copyright_License {
 #include "Renderer/BackgroundRenderer.hpp"
 #include "Renderer/WaypointRenderer.hpp"
 #include "Renderer/TrailRenderer.hpp"
-#include "util/Compiler.h"
 
 #ifndef ENABLE_OPENGL
 #include "ui/canvas/BufferCanvas.hpp"
@@ -189,7 +187,7 @@ private:
    *
    * @return true if click is near target
    */
-  gcc_pure
+  [[gnu::pure]]
   bool isClickOnTarget(PixelPoint drag_last) const;
 
   /**
@@ -220,18 +218,16 @@ protected:
 
 protected:
   /* virtual methods from class Window */
-  virtual void OnCreate() override;
-  virtual void OnDestroy() override;
-  virtual void OnResize(PixelSize new_size) override;
+  void OnCreate() override;
+  void OnDestroy() noexcept override;
+  void OnResize(PixelSize new_size) noexcept override;
 
-  virtual void OnPaintBuffer(Canvas& canvas) noexcept override;
-  virtual void OnPaint(Canvas& canvas) override;
+  void OnPaintBuffer(Canvas& canvas) noexcept override;
+  void OnPaint(Canvas& canvas) noexcept override;
 
-  virtual void OnCancelMode() override;
+  void OnCancelMode() noexcept override;
 
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnMouseUp(PixelPoint p) override;
-  bool OnMouseMove(PixelPoint p, unsigned keys) override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
 };
-
-#endif

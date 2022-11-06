@@ -67,8 +67,7 @@
  * $Id$
  */
 
-#ifndef JPC_MQDEC_H
-#define JPC_MQDEC_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -240,5 +239,3 @@ static bool jpc_mqdec_lpsexchange(uint_least32_t *areg_p, uint_least32_t delta, 
 }
 
 bool jpc_mqdec_getbit_func(jpc_mqdec_t *dec);
-
-#endif

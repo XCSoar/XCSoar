@@ -27,12 +27,9 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GLOBAL_SLICE_ALLOCATOR_HXX
-#define GLOBAL_SLICE_ALLOCATOR_HXX
+#pragma once
 
 #include "SliceAllocator.hxx"
 
 template<typename T, unsigned size>
 SliceAllocator<T, size> GlobalSliceAllocator<T, size>::allocator;
-
-#endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -72,7 +72,7 @@ private:
 public:
   LanguageFileVisitor(DataFieldEnum &_df): df(_df) {}
 
-  void Visit(Path path, Path filename) override {
+  void Visit([[maybe_unused]] Path path, Path filename) override {
     if (!df.Exists(filename.c_str()))
       df.addEnumText(filename.c_str());
   }
@@ -170,11 +170,11 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(MenuTimeout);
 
   static constexpr StaticEnumChoice text_input_list[] = {
-    { (unsigned)DialogSettings::TextInputStyle::Default, N_("Default") },
-    { (unsigned)DialogSettings::TextInputStyle::Keyboard, N_("Keyboard") },
-    { (unsigned)DialogSettings::TextInputStyle::HighScore,
+    { DialogSettings::TextInputStyle::Default, N_("Default") },
+    { DialogSettings::TextInputStyle::Keyboard, N_("Keyboard") },
+    { DialogSettings::TextInputStyle::HighScore,
       N_("HighScore Style") },
-    { 0 }
+    nullptr
   };
 
   AddEnum(_("Text input style"),
@@ -188,10 +188,10 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
 
 #ifdef HAVE_VIBRATOR
   static constexpr StaticEnumChoice haptic_feedback_list[] = {
-    { (unsigned)UISettings::HapticFeedback::DEFAULT, N_("OS settings") },
-    { (unsigned)UISettings::HapticFeedback::OFF, N_("Off") },
-    { (unsigned)UISettings::HapticFeedback::ON, N_("On") },
-    { 0 }
+    { UISettings::HapticFeedback::DEFAULT, N_("OS settings") },
+    { UISettings::HapticFeedback::OFF, N_("Off") },
+    { UISettings::HapticFeedback::ON, N_("On") },
+    nullptr
   };
 
   wp = AddEnum(_("Haptic feedback"),
@@ -207,8 +207,8 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
   UISettings &settings = CommonInterface::SetUISettings();
   bool changed = false;
 
-  if (SaveValueEnum(UIScale, ProfileKeys::UIScale,
-                    settings.scale))
+  if (SaveValueInteger(UIScale, ProfileKeys::UIScale,
+                       settings.scale))
     require_restart = changed = true;
 
   if (SaveValueEnum(CustomDPI, ProfileKeys::CustomDPI,
@@ -263,7 +263,7 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
   }
 #endif // HAVE_NLS
 
-  duration<unsigned> menu_timeout{GetValueInteger(MenuTimeout) * 2};
+  duration<unsigned> menu_timeout = GetValueTime(MenuTimeout) * 2;
   if (settings.menu_timeout != menu_timeout) {
     settings.menu_timeout = menu_timeout;
     Profile::Set(ProfileKeys::MenuTimeout, menu_timeout);

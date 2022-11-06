@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_INFO_BOX_DATA_HPP
-#define XCSOAR_INFO_BOX_DATA_HPP
+#pragma once
 
 #include "util/StaticString.hxx"
 #include "Units/Unit.hpp"
@@ -30,7 +29,6 @@ Copyright_License {
 
 #include <chrono>
 #include <cstdint>
-
 #include <tchar.h>
 
 class Angle;
@@ -282,5 +280,3 @@ struct InfoBoxData {
   bool CompareValue(const InfoBoxData &other) const noexcept;
   bool CompareComment(const InfoBoxData &other) const noexcept;
 };
-
-#endif

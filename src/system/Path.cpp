@@ -167,18 +167,13 @@ Path::RelativeTo(Path parent) const noexcept
 }
 
 bool
-Path::MatchesExtension(const_pointer extension) const noexcept
+Path::EndsWithIgnoreCase(const_pointer needle) const noexcept
 {
-  size_t filename_length = StringLength(c_str());
-  size_t extension_length = StringLength(extension);
-
-  return filename_length > extension_length &&
-    StringIsEqualIgnoreCase(c_str() + filename_length - extension_length,
-                            extension);
+  return StringEndsWithIgnoreCase(c_str(), needle);
 }
 
 Path::const_pointer
-Path::GetExtension() const noexcept
+Path::GetSuffix() const noexcept
 {
   auto base = GetBase();
   if (base == nullptr)
@@ -190,15 +185,15 @@ Path::GetExtension() const noexcept
 }
 
 AllocatedPath
-Path::WithExtension(const_pointer new_extension) const noexcept
+Path::WithSuffix(const_pointer new_suffix) const noexcept
 {
-  assert(new_extension != nullptr);
-  assert(*new_extension == _T('.'));
+  assert(new_suffix != nullptr);
+  assert(*new_suffix == _T('.'));
 
-  auto old_extension = GetExtension();
-  return old_extension != nullptr
-    ? AllocatedPath(c_str(), old_extension) + new_extension
-    : *this + new_extension;
+  auto old_suffix = GetSuffix();
+  return old_suffix != nullptr
+    ? AllocatedPath(c_str(), old_suffix) + new_suffix
+    : *this + new_suffix;
 }
 
 AllocatedPath

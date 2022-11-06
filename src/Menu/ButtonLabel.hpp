@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef BUTTON_LABEL_HPP
-#define BUTTON_LABEL_HPP
+#pragma once
 
 #include "util/Compiler.h"
 
@@ -30,39 +29,20 @@ Copyright_License {
 #include <cstddef>
 
 struct PixelRect;
-struct ButtonLook;
-class Font;
-class ContainerWindow;
 class Menu;
 
 namespace ButtonLabel {
-  struct Expanded {
-    bool visible, enabled;
-    const TCHAR *text;
-  };
 
-  void CreateButtonLabels(ContainerWindow &parent, ButtonLook &look);
-  void Destroy();
-
-  gcc_pure
-  Expanded Expand(const TCHAR *text, TCHAR *buffer, size_t size);
-
-  void SetLabelText(unsigned i, const TCHAR *text, unsigned event);
-
-  gcc_pure
-  bool IsEnabled(unsigned i);
-
-  bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
-
-  void OnResize(const PixelRect &rc);
-
-  /**
-   * Show the specified menu.
-   *
-   * @param full do a full update; if false, then only dynamic buttons
-   * are updated (to reduce flickering)
-   */
-  void Set(const Menu &menu, const Menu *overlay=nullptr, bool full=true);
+struct Expanded {
+  bool visible, enabled;
+  const TCHAR *text;
 };
 
-#endif
+[[gnu::pure]]
+Expanded
+Expand(const TCHAR *text, TCHAR *buffer, size_t size);
+
+bool
+ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
+
+} // namespace ButtonLabel

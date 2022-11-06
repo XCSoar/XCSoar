@@ -67,8 +67,7 @@
  * $Id$
  */
 
-#ifndef JPC_T2DEC_H
-#define JPC_T2DEC_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -92,5 +91,3 @@ int jpc_dec_decodepkts(jpc_dec_t *dec, jas_stream_t *pkthdrstream,
 /* Create a packet iterator for the decoder. */
 gcc_malloc
 jpc_pi_t *jpc_dec_pi_create(jpc_dec_t *dec, jpc_dec_tile_t *tile);
-
-#endif

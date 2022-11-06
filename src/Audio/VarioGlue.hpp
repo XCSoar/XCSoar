@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_AUDIO_VARIO_GLUE_HPP
-#define XCSOAR_AUDIO_VARIO_GLUE_HPP
+#pragma once
 
 #include "Features.hpp"
 
@@ -70,11 +69,9 @@ namespace AudioVarioGlue {
 #else
   static inline void Initialise() {}
   static inline void Deinitialise() {}
-  static inline void Configure(const VarioSoundSettings &settings) {}
-  static inline void SetValue(double vario) {}
+  static inline void Configure([[maybe_unused]] const VarioSoundSettings &settings) {}
+  static inline void SetValue([[maybe_unused]] double vario) {}
   static inline void NoValue() {}
   static inline bool HaveAudioVario() { return false; }
 #endif
 };
-
-#endif

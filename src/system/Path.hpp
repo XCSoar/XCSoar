@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef OS_ALLOCATED_PATH_HPP
-#define OS_ALLOCATED_PATH_HPP
+#pragma once
 
 #include "util/StringPointer.hxx"
 #include "util/AllocatedString.hxx"
@@ -132,23 +131,23 @@ public:
   Path RelativeTo(Path parent) const noexcept;
 
   [[gnu::pure]]
-  bool MatchesExtension(const_pointer extension) const noexcept;
+  bool EndsWithIgnoreCase(const_pointer needle) const noexcept;
 
   /**
-   * Returns the filename extension (starting with a dot) or nullptr
-   * if the base name doesn't have one.
+   * Returns the filename suffix (starting with a dot) or nullptr if
+   * the base name doesn't have one.
    */
   [[gnu::pure]]
-  const_pointer GetExtension() const noexcept;
+  const_pointer GetSuffix() const noexcept;
 
   /**
-   * Return the path with its filename extension replaced with the given one.
+   * Return the path with its filename suffix replaced with the given one.
    *
-   * @param new_extension the new filename extension (must start with
+   * @param new_suffix the new filename suffix (must start with
    * a dot)
    */
   [[gnu::pure]]
-  AllocatedPath WithExtension(const_pointer new_extension) const noexcept;
+  AllocatedPath WithSuffix(const_pointer new_suffix) const noexcept;
 };
 
 /**
@@ -299,19 +298,17 @@ public:
   }
 
   [[gnu::pure]]
-  bool MatchesExtension(const_pointer extension) const noexcept {
-    return Path(*this).MatchesExtension(extension);
+  bool EndsWithIgnoreCase(const_pointer needle) const noexcept {
+    return Path{*this}.EndsWithIgnoreCase(needle);
   }
 
   [[gnu::pure]]
-  const_pointer GetExtension() const noexcept {
-    return Path(*this).GetExtension();
+  const_pointer GetSuffix() const noexcept {
+    return Path{*this}.GetSuffix();
   }
 
   [[gnu::pure]]
-  AllocatedPath WithExtension(const_pointer new_extension) const noexcept {
-    return Path(*this).WithExtension(new_extension);
+  AllocatedPath WithSuffix(const_pointer new_suffix) const noexcept {
+    return Path{*this}.WithSuffix(new_suffix);
   }
 };
-
-#endif

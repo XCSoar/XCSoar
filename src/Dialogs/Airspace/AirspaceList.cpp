@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -101,7 +101,7 @@ public:
                    unsigned idx) noexcept override;
 
   /* virtual methods from ListCursorHandler */
-  bool CanActivateItem(unsigned index) const noexcept override {
+  bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
     return true;
   }
 
@@ -145,8 +145,8 @@ public:
     list = _list;
   }
 
-  void Prepare(ContainerWindow &parent,
-               const PixelRect &rc) noexcept override {
+  void Prepare([[maybe_unused]] ContainerWindow &parent,
+               [[maybe_unused]] const PixelRect &rc) noexcept override {
     AddButton(_("Details"), [this](){
       list->ShowDetails();
     });
@@ -184,7 +184,7 @@ static constexpr StaticEnumChoice type_filter_list[] = {
   { CLASSF, _T("Class F") },
   { TMZ, _T("TMZ") },
   { MATZ, _T("MATZ") },
-  { 0 }
+  nullptr
 };
 
 struct AirspaceListWidgetState
@@ -316,7 +316,7 @@ AirspaceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       CommonInterface::GetMapSettings().airspace);
 }
 
-gcc_pure
+[[gnu::pure]]
 static const TCHAR *
 GetHeadingString(TCHAR *buffer)
 {
@@ -415,8 +415,8 @@ CreateDirectionDataField(DataFieldListener *listener)
 }
 
 void
-AirspaceFilterWidget::Prepare(ContainerWindow &parent,
-                              const PixelRect &rc) noexcept
+AirspaceFilterWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                              [[maybe_unused]] const PixelRect &rc) noexcept
 {
   Add(_("Name"), nullptr, CreateNameDataField(listener));
   Add(_("Distance"), nullptr, CreateDistanceDataField(listener));

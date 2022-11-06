@@ -26,7 +26,7 @@ Copyright_License {
 #include <cassert>
 
 char *
-CopyIGCString(char *dest, char *dest_limit, const char *src)
+CopyIGCString(char *dest, char *dest_limit, const char *src) noexcept
 {
   assert(dest != nullptr);
   assert(dest_limit > dest);
@@ -47,7 +47,7 @@ CopyIGCString(char *dest, char *dest_limit, const char *src)
 #ifdef _UNICODE
 
 char *
-CopyIGCString(char *dest, char *dest_limit, const TCHAR *src)
+CopyIGCString(char *dest, char *dest_limit, const TCHAR *src) noexcept
 {
   assert(dest != nullptr);
   assert(dest_limit > dest);

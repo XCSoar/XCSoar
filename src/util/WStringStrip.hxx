@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef WSTRING_STRIP_HXX
-#define WSTRING_STRIP_HXX
+#pragma once
 
 #include <wchar.h>
 
@@ -97,5 +96,3 @@ StripRight(wchar_t *p) noexcept;
 [[gnu::returns_nonnull]] [[gnu::nonnull]]
 wchar_t *
 Strip(wchar_t *p) noexcept;
-
-#endif

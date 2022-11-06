@@ -73,7 +73,7 @@ WaypointInfoWidget::AddGlideResult(const TCHAR *label,
                                 result, settings.task.glide));
 }
 
-gcc_const
+[[gnu::const]]
 static BrokenTime
 BreakHourOfDay(double t) noexcept
 {
@@ -108,8 +108,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
   if (!waypoint->comment.empty())
     AddMultiLine(waypoint->comment.c_str());
 
-  if (waypoint->radio_frequency.IsDefined() &&
-      waypoint->radio_frequency.Format(buffer.buffer(),
+  if (waypoint->radio_frequency.Format(buffer.buffer(),
                                       buffer.capacity()) != nullptr) {
     buffer += _T(" MHz");
     AddReadOnly(_("Radio frequency"), nullptr, buffer);

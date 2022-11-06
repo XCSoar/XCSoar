@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_DEVICE_HPP
-#define XCSOAR_DEVICE_DEVICE_HPP
+#pragma once
 
 #include <tchar.h>
 
@@ -37,5 +36,3 @@ DeviceDescriptor *devVarioFindVega();
 void devStartup();
 void devShutdown();
 void devRestart();
-
-#endif

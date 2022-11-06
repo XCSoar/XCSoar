@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -62,7 +62,8 @@ void TopWindow::Refresh() noexcept {}
 #endif
 
 #ifdef USE_POLL_EVENT
-bool TopWindow::OnEvent(const UI::Event &event) { return false; }
+void TopWindow::OnResize(PixelSize) noexcept {}
+bool TopWindow::OnEvent([[maybe_unused]] const UI::Event &event) { return false; }
 #endif
 
 } // namespace UI
@@ -83,7 +84,7 @@ protected:
   }
 };
 
-int main(int argc, char **argv)
+int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   plan_tests(1);
 

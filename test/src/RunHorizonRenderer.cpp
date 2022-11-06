@@ -47,7 +47,7 @@ public:
   }
 
 protected:
-  virtual void OnPaint(Canvas &canvas) override {
+  void OnPaint(Canvas &canvas) noexcept override {
     canvas.ClearWhite();
     HorizonRenderer::Draw(canvas, canvas.GetRect(), look, attitude);
   }

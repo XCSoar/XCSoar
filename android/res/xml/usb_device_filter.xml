@@ -1,4 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <usb-device vendor-id="6991" product-id="8" />
+  <usb-device vendor-id="6991" product-id="8"/> <!-- IOIO board -->
+
+  <!-- keep the following list in sync with UsbSerialHelper.supported_ids -->
+
+  <usb-device vendor-id="5840" product-id="2985"/> <!-- GPSBip -->
+  <usb-device vendor-id="1027" product-id="24597"/> <!-- Digifly AIR (FT X-Series)-->
+  <usb-device vendor-id="1155" product-id="22336"/> <!-- SoftRF Dongle -->
+  <usb-device vendor-id="9114" product-id="32809"/> <!-- SoftRF Badge -->
+  <usb-device vendor-id="9025" product-id="32845"/> <!-- SoftRF Academy -->
+  <usb-device vendor-id="7504" product-id="24713"/> <!-- SoftRF ES -->
+  <usb-device vendor-id="11914" product-id="10"/> <!-- SoftRF Lego -->
+  <usb-device vendor-id="11914" product-id="61450"/> <!-- SoftRF Lego -->
+  <usb-device vendor-id="5562" product-id="68"/> <!-- SoftRF Balkan -->
+  <usb-device vendor-id="12346" product-id="33075"/> <!-- SoftRF Prime Mk3 -->
+
+  <usb-device vendor-id="1027" product-id="24577"/> <!-- FT232AM, FT232BM, FT232R FT245R -->
+  <usb-device vendor-id="1027" product-id="24592"/> <!-- FT2232D, FT2232H -->
+  <usb-device vendor-id="1027" product-id="24593"/> <!-- FT4232H -->
+  <usb-device vendor-id="1027" product-id="24596"/> <!-- FT232H -->
+
+  <usb-device vendor-id="4292" product-id="60000"/> <!-- CP210x -->
+  <usb-device vendor-id="6790" product-id="21972"/> <!-- CH9102 -->
+
+  <usb-device vendor-id="1659" product-id="8963"/> <!-- PL2303 -->
+
+  <usb-device vendor-id="5446" product-id="423"/> <!-- U-BLOX 7 USB GPS -->
 </resources>

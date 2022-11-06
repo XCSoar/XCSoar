@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -43,7 +43,7 @@ TopWindow::TopWindow(UI::Display &_display) noexcept
 void
 TopWindow::AnnounceResize(PixelSize _new_size) noexcept
 {
-  std::lock_guard<Mutex> lock(paused_mutex);
+  const std::lock_guard lock{paused_mutex};
   resized = true;
   new_size = _new_size;
 }
@@ -88,7 +88,7 @@ TopWindow::RefreshSize() noexcept
   PixelSize new_size_copy;
 
   {
-    std::lock_guard<Mutex> lock(paused_mutex);
+    const std::lock_guard lock{paused_mutex};
     if (!resized)
       return;
 
@@ -101,7 +101,7 @@ TopWindow::RefreshSize() noexcept
 }
 
 void
-TopWindow::OnResize(PixelSize new_size)
+TopWindow::OnResize(PixelSize new_size) noexcept
 {
   if (native_view != nullptr)
     native_view->SetSize(new_size.width, new_size.height);
@@ -121,7 +121,7 @@ TopWindow::OnPause() noexcept
 
   assert(!screen->IsReady());
 
-  const std::lock_guard<Mutex> lock(paused_mutex);
+  const std::lock_guard lock{paused_mutex};
   paused = true;
   resumed = false;
   paused_cond.notify_one();
@@ -141,7 +141,7 @@ TopWindow::OnResume() noexcept
 }
 
 static bool
-match_pause_and_resume(const Event &event, void *ctx) noexcept
+match_pause_and_resume(const Event &event, [[maybe_unused]] void *ctx) noexcept
 {
   return event.type == Event::PAUSE || event.type == Event::RESUME;
 }
@@ -152,7 +152,7 @@ TopWindow::Pause() noexcept
   event_queue->Purge(match_pause_and_resume, nullptr);
   event_queue->Inject(Event::PAUSE);
 
-  std::unique_lock<Mutex> lock(paused_mutex);
+  std::unique_lock lock{paused_mutex};
   paused_cond.wait(lock, [this]{ return !running || paused; });
 }
 
@@ -243,7 +243,7 @@ TopWindow::OnEvent(const Event &event)
 void
 TopWindow::BeginRunning() noexcept
 {
-  std::lock_guard<Mutex> lock(paused_mutex);
+  const std::lock_guard lock{paused_mutex};
   assert(!running);
   running = true;
 }
@@ -251,7 +251,7 @@ TopWindow::BeginRunning() noexcept
 void
 TopWindow::EndRunning() noexcept
 {
-  std::lock_guard<Mutex> lock(paused_mutex);
+  const std::lock_guard lock{paused_mutex};
   assert(running);
   running = false;
   /* wake up the Android Activity thread, just in case it's waiting

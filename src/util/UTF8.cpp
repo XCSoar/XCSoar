@@ -24,7 +24,6 @@ Copyright_License {
 #include "UTF8.hpp"
 #include "CharUtil.hxx"
 #include "Compiler.h"
-#include "StringView.hxx"
 
 #include <algorithm>
 
@@ -163,11 +162,19 @@ ValidateUTF8(const char *p) noexcept
   return true;
 }
 
+static char
+Shift(std::string_view &s) noexcept
+{
+  char ch = s.front();
+  s.remove_prefix(1);
+  return ch;
+}
+
 bool
-ValidateUTF8(StringView p) noexcept
+ValidateUTF8(std::string_view p) noexcept
 {
   while (!p.empty()) {
-    unsigned char ch = p.shift();
+    unsigned char ch = Shift(p);
     if (IsASCII(ch))
       continue;
 
@@ -177,30 +184,30 @@ ValidateUTF8(StringView p) noexcept
 
     if (IsLeading1(ch)) {
       /* 1 continuation */
-      if (p.size < 1 || !IsContinuation(p.shift()))
+      if (p.size() < 1 || !IsContinuation(Shift(p)))
         return false;
     } else if (IsLeading2(ch)) {
       /* 2 continuations */
-      if (p.size < 2 || !IsContinuation(p.shift()) ||
-          !IsContinuation(p.shift()))
+      if (p.size() < 2 || !IsContinuation(Shift(p)) ||
+          !IsContinuation(Shift(p)))
         return false;
     } else if (IsLeading3(ch)) {
       /* 3 continuations */
-      if (p.size < 3 || !IsContinuation(p.shift()) ||
-          !IsContinuation(p.shift()) ||
-          !IsContinuation(p.shift()))
+      if (p.size() < 3 || !IsContinuation(Shift(p)) ||
+          !IsContinuation(Shift(p)) ||
+          !IsContinuation(Shift(p)))
         return false;
     } else if (IsLeading4(ch)) {
       /* 4 continuations */
-      if (p.size < 4 || !IsContinuation(p.shift()) ||
-          !IsContinuation(p.shift()) ||
-          !IsContinuation(p.shift()) || !IsContinuation(p.shift()))
+      if (p.size() < 4 || !IsContinuation(Shift(p)) ||
+          !IsContinuation(Shift(p)) ||
+          !IsContinuation(Shift(p)) || !IsContinuation(Shift(p)))
         return false;
     } else if (IsLeading5(ch)) {
       /* 5 continuations */
-      if (p.size < 5 || !IsContinuation(p.shift()) ||
-          !IsContinuation(p.shift()) || !IsContinuation(p.shift()) ||
-          !IsContinuation(p.shift()) || !IsContinuation(p.shift()))
+      if (p.size() < 5 || !IsContinuation(Shift(p)) ||
+          !IsContinuation(Shift(p)) || !IsContinuation(Shift(p)) ||
+          !IsContinuation(Shift(p)) || !IsContinuation(Shift(p)))
         return false;
     } else
       return false;
@@ -489,18 +496,18 @@ CropIncompleteUTF8(char *const p) noexcept
 }
 
 std::size_t
-TruncateStringUTF8(StringView s, std::size_t max_chars) noexcept
+TruncateStringUTF8(std::string_view s, std::size_t max_chars) noexcept
 {
   assert(ValidateUTF8(s));
 
   std::size_t result = 0;
   while (!s.empty() && max_chars > 0) {
     std::size_t sequence = SequenceLengthUTF8(s.front());
-    if (sequence > s.size)
+    if (sequence > s.size())
       break;
 
     result += sequence;
-    s.skip_front(sequence);
+    s.remove_prefix(sequence);
     --max_chars;
   }
 

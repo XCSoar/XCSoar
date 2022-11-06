@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -43,7 +43,7 @@ enum Controls {
   Network,
 };
 
-gcc_pure
+[[gnu::pure]]
 static const TCHAR *
 GetGPSStatus(const NMEAInfo &basic) noexcept
 {
@@ -64,7 +64,7 @@ static const TCHAR *const net_state_strings[] = {
   N_("Roaming"),
 };
 
-gcc_pure
+[[gnu::pure]]
 static const TCHAR *
 ToString(NetState state) noexcept
 {
@@ -130,8 +130,8 @@ SystemStatusPanel::Refresh() noexcept
 }
 
 void
-SystemStatusPanel::Prepare(ContainerWindow &parent,
-                           const PixelRect &rc) noexcept
+SystemStatusPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
+                           [[maybe_unused]] const PixelRect &rc) noexcept
 {
   AddReadOnly(_("GPS lock"));
   AddReadOnly(_("Satellites in view"));
@@ -159,7 +159,7 @@ SystemStatusPanel::Hide() noexcept
 }
 
 void
-SystemStatusPanel::OnGPSUpdate(const MoreData &basic)
+SystemStatusPanel::OnGPSUpdate([[maybe_unused]] const MoreData &basic)
 {
   Refresh();
 }

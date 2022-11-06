@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_RASTERTILE_CACHE_HPP
-#define XCSOAR_RASTERTILE_CACHE_HPP
+#pragma once
 
 #include "RasterTraits.hpp"
 #include "RasterTile.hpp"
@@ -35,7 +34,7 @@ Copyright_License {
 #include <cstdint>
 #include <optional>
 
-#define RASTER_SLOPE_FACT 12
+static constexpr unsigned  RASTER_SLOPE_FACT = 12;
 
 struct jas_matrix;
 struct GridLocation;
@@ -159,7 +158,7 @@ public:
    *
    * @param x the pixel position within the map; may be out of range
    */
-  gcc_pure
+  [[gnu::pure]]
   TerrainHeight GetHeight(RasterLocation p) const noexcept;
 
   /**
@@ -168,7 +167,7 @@ public:
    *
    * @param p the sub-pixel position within the map; may be out of range
    */
-  gcc_pure
+  [[gnu::pure]]
   TerrainHeight GetInterpolatedHeight(RasterLocation p) const noexcept;
 
   /**
@@ -199,7 +198,7 @@ public:
   /**
    * @return {-1,-1} if no intersection was found
    */
-  gcc_pure SignedRasterLocation
+  [[gnu::pure]] SignedRasterLocation
   GroundIntersection(SignedRasterLocation origin,
                      SignedRasterLocation destination,
                      int h_origin, const int slope_fact,
@@ -213,7 +212,7 @@ private:
    * @return the terrain altitude and a flag that is true when the
    * value was loaded from a "fine" tile
    */
-  gcc_pure
+  [[gnu::pure]]
   std::pair<TerrainHeight, bool> GetFieldDirect(RasterLocation p) const noexcept;
 
 public:
@@ -255,7 +254,7 @@ public:
 public:
   /* methods called by class TerrainLoader */
 
-  gcc_pure
+  [[gnu::pure]]
   const MarkerSegmentInfo *
   FindMarkerSegment(uint32_t file_offset) const noexcept;
 
@@ -313,5 +312,3 @@ private:
     };
   }
 };
-
-#endif

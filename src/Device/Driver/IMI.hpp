@@ -4,9 +4,6 @@
    See CREDITS.TXT file for authors and copyrights
 */
 
-#ifndef DEVIMI_H
-#define DEVIMI_H
+#pragma once
 
 extern const struct DeviceRegister imi_driver;
-
-#endif /* DEVIMI_H */

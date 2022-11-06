@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef THREAD_WINDOWS_SHARED_MUTEX_HXX
-#define THREAD_WINDOWS_SHARED_MUTEX_HXX
+#pragma once
 
 #include <synchapi.h>
 
@@ -68,5 +67,3 @@ public:
 		ReleaseSRWLockShared(&srwlock);
 	}
 };
-
-#endif

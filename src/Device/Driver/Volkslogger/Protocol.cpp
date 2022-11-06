@@ -141,7 +141,7 @@ Volkslogger::SendCommand(Port &port, OperationEnvironment &env,
   return port.ReadByte() == std::byte{0};
 }
 
-gcc_const
+[[gnu::const]]
 static int
 GetBaudRateIndex(unsigned baud_rate)
 {

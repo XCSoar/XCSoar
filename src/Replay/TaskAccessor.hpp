@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,8 +20,7 @@
 }
 */
 
-#ifndef XCSOAR_TASK_ACCESSOR_HPP
-#define XCSOAR_TASK_ACCESSOR_HPP
+#pragma once
 
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
@@ -35,44 +34,44 @@ public:
   TaskAccessor(TaskManager &_task_manager, double _floor_alt)
     :task_manager(_task_manager), floor_alt(_floor_alt) {}
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsOrdered() const {
     const TaskInterface *task = task_manager.GetActiveTask();
     return task != nullptr && task->GetType() == TaskType::ORDERED;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   virtual bool IsEmpty() const {
     const TaskInterface *task = task_manager.GetActiveTask();
     return task == nullptr || task->TaskSize() == 0;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsFinished() const {
     return task_manager.GetOrderedTask().GetStats().task_finished;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsStarted() const {
     return task_manager.GetOrderedTask().GetStats().start.task_started;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint GetRandomOZPoint(unsigned index, const double noise) const {
     return task_manager.RandomPointInTask(index, noise);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned size() const {
     return task_manager.TaskSize();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint GetActiveTaskPointLocation() const {
     return task_manager.GetActiveTaskPoint()->GetLocation();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   bool HasEntered(unsigned index) const {
     const TaskInterface *task = task_manager.GetActiveTask();
     if (task == nullptr || task->GetType() != TaskType::ORDERED)
@@ -83,12 +82,12 @@ public:
       o_task.GetTaskPoint(index).HasEntered();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const ElementStat GetLegStats() const {
     return task_manager.GetStats().current_leg;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   double GetTargetHeight() const {
     if (task_manager.GetActiveTaskPoint())
       return std::max(floor_alt,
@@ -97,12 +96,12 @@ public:
       return floor_alt;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   double GetRemainingAltitudeDifference() const {
     return task_manager.GetStats().total.solution_remaining.altitude_difference;
   }
 
-  gcc_pure
+  [[gnu::pure]]
   GlidePolar GetGlidePolar() const {
     return task_manager.GetGlidePolar();
   }
@@ -111,10 +110,8 @@ public:
     task_manager.SetActiveTaskPoint(index);
   }
 
-  gcc_pure
+  [[gnu::pure]]
   unsigned GetActiveTaskPointIndex() const {
     return task_manager.GetActiveTaskPointIndex();
   }
 };
-
-#endif

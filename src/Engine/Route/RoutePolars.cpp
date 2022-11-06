@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@
 #include "Geo/Flat/FlatProjection.hpp"
 #include "Terrain/RasterMap.hpp"
 
-#define MC_CEILING_PENALTY_FACTOR 5.0
+static constexpr double MC_CEILING_PENALTY_FACTOR = 5.0;
 
 inline FlatGeoPoint
 RoutePolars::MSLIntercept(const int index, const FlatGeoPoint &fp,
@@ -106,7 +106,7 @@ RoutePolars::CalcVHeight(const RouteLink &link) const noexcept
 }
 
 std::optional<RoutePoint>
-RoutePolars::CheckClearance(const RouteLink &e, const RasterMap *map,
+RoutePolars::CheckClearance(const RouteLink &e, const RasterMap &map,
                             const FlatProjection &proj) const noexcept
 {
   if (!config.IsTerrainEnabled())
@@ -115,12 +115,10 @@ RoutePolars::CheckClearance(const RouteLink &e, const RasterMap *map,
   GeoPoint start = proj.Unproject(e.first);
   GeoPoint dest = proj.Unproject(e.second);
 
-  assert(map);
-
   const auto intersection =
-    map->FirstIntersection(start, e.first.altitude, dest,
-                           e.second.altitude, CalcVHeight(e),
-                           climb_ceiling, GetSafetyHeight());
+    map.FirstIntersection(start, e.first.altitude, dest,
+                          e.second.altitude, CalcVHeight(e),
+                          climb_ceiling, GetSafetyHeight());
   if (!intersection)
     return std::nullopt;
 

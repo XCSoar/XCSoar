@@ -14,12 +14,12 @@ SCREEN_SOURCES = \
 	$(CONTROL_SRC_DIR)/ProgressBar.cpp \
 	$(CANVAS_SRC_DIR)/Ramp.cpp \
 	$(CANVAS_SRC_DIR)/Util.cpp \
-	$(CANVAS_SRC_DIR)/Font.cpp \
 	$(CANVAS_SRC_DIR)/Icon.cpp \
 	$(CANVAS_SRC_DIR)/Canvas.cpp \
 	$(CANVAS_SRC_DIR)/Color.cpp \
 	$(CANVAS_SRC_DIR)/BufferCanvas.cpp \
 	$(WINDOW_SRC_DIR)/Window.cpp \
+	$(WINDOW_SRC_DIR)/ContainerWindow.cpp \
 	$(WINDOW_SRC_DIR)/SolidContainerWindow.cpp \
 	$(WINDOW_SRC_DIR)/BufferWindow.cpp \
 	$(WINDOW_SRC_DIR)/DoubleBufferWindow.cpp \

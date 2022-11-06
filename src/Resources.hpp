@@ -1,3 +1,26 @@
+/*
+Copyright_License {
+
+  XCSoar Glide Computer - http://www.xcsoar.org/
+  Copyright (C) 2000-2022 The XCSoar Project
+  A detailed list of copyright holders can be found in the file "AUTHORS".
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+}
+*/
+
 #include "ResourceId.hpp"
 
 #if defined(USE_GDI) || defined(ANDROID)
@@ -8,12 +31,9 @@
 #else
 
 #include <cstddef>
-#include <cstdint>
-
-#include "util/ConstBuffer.hxx"
 
 #define MAKE_RESOURCE(name, id) \
-  extern "C" uint8_t resource_ ## id[]; \
+  extern "C" std::byte resource_ ## id[]; \
   extern "C" const size_t resource_ ## id ## _size; \
   static constexpr ResourceId name(resource_ ##id, &resource_ ## id ## _size);
 
@@ -137,6 +157,22 @@ MAKE_RESOURCE(IDB_WEATHER_STATION, 368);
 MAKE_RESOURCE(IDB_WEATHER_STATION_HD, 5368);
 MAKE_RESOURCE(IDB_THERMAL_HOTSPOT, 369);
 MAKE_RESOURCE(IDB_THERMAL_HOTSPOT_HD, 5369);
+MAKE_RESOURCE(IDB_VOR, 370);
+MAKE_RESOURCE(IDB_VOR_HD, 5370);
+MAKE_RESOURCE(IDB_NDB, 371);
+MAKE_RESOURCE(IDB_NDB_HD, 5371);
+MAKE_RESOURCE(IDB_DAM, 372);
+MAKE_RESOURCE(IDB_DAM_HD, 5372);
+MAKE_RESOURCE(IDB_CASTLE, 373);
+MAKE_RESOURCE(IDB_CASTLE_HD, 5373);
+MAKE_RESOURCE(IDB_INTERSECTION, 374);
+MAKE_RESOURCE(IDB_INTERSECTION_HD, 5374);
+MAKE_RESOURCE(IDB_REPORTING_POINT, 375);
+MAKE_RESOURCE(IDB_REPORTING_POINT_HD, 5375);
+MAKE_RESOURCE(IDB_PGTAKEOFF, 376);
+MAKE_RESOURCE(IDB_PGTAKEOFF_HD, 5376);
+MAKE_RESOURCE(IDB_PGLANDING, 377);
+MAKE_RESOURCE(IDB_PGLANDING_HD, 5377);
 
 #ifdef USE_GDI
 MAKE_RESOURCE(IDI_XCSOAR, 101);

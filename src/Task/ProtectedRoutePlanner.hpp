@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,11 +20,12 @@
 }
  */
 
-#ifndef XCSOAR_PROTECTED_ROUTE_PLANNER_HPP
-#define XCSOAR_PROTECTED_ROUTE_PLANNER_HPP
+#pragma once
 
-#include "thread/Guard.hpp"
-#include "Task/RoutePlannerGlue.hpp"
+#include "RoutePlannerGlue.hpp"
+#include "Engine/Route/ReachFan.hpp"
+#include "Engine/Route/RoutePolars.hpp"
+#include "thread/Mutex.hxx"
 
 struct GlideSettings;
 struct RoutePlannerConfig;
@@ -36,55 +37,75 @@ class Airspaces;
  * Facade to task/airspace/waypoints as used by threads,
  * to manage locking
  */
-class ProtectedRoutePlanner: public Guard<RoutePlannerGlue>
+class ProtectedRoutePlanner
 {
-protected:
   const Airspaces &airspaces;
   const ProtectedAirspaceWarningManager *warnings;
 
+  mutable Mutex route_mutex;
+  RoutePlannerGlue &route_planner;
+
+  /**
+   * This mutex protects the "reach" fields.  It is a separate mutex
+   * to reduce lock contention between #CalculationThread and
+   * #DrawThread.
+   */
+  mutable Mutex reach_mutex;
+
+  RoutePolars rpolars_reach;
+  ReachFan reach_terrain;
+  ReachFan reach_working;
+
 public:
   ProtectedRoutePlanner(RoutePlannerGlue &route, const Airspaces &_airspaces,
-                        const ProtectedAirspaceWarningManager *_warnings)
-    :Guard<RoutePlannerGlue>(route),
-     airspaces(_airspaces), warnings(_warnings) {}
+                        const ProtectedAirspaceWarningManager *_warnings) noexcept
+    :airspaces(_airspaces), warnings(_warnings),
+     route_planner(route) {}
 
-  void Reset() {
-    ExclusiveLease lease(*this);
-    lease->Reset();
+  void Reset() noexcept {
+    ClearReach();
+
+    const std::scoped_lock lock{route_mutex};
+    route_planner.Reset();
   }
 
-  void ClearReach() {
-    ExclusiveLease lease(*this);
-    lease->ClearReach();
+  void ClearReach() noexcept {
+    const std::scoped_lock lock{reach_mutex};
+    reach_terrain.Reset();
+    reach_working.Reset();
   }
 
   [[gnu::pure]]
-  bool IsTerrainReachEmpty() const {
-    Lease lease(*this);
-    return lease->IsTerrainReachEmpty();
+  bool IsTerrainReachEmpty() const noexcept {
+    const std::scoped_lock lock{reach_mutex};
+    return reach_terrain.IsEmpty();
   }
 
-  void SetTerrain(const RasterTerrain *terrain);
+  void SetTerrain(const RasterTerrain *terrain) noexcept;
 
   void SetPolars(const GlideSettings &settings,
                  const RoutePlannerConfig &config,
                  const GlidePolar &glide_polar, const GlidePolar &safety_polar,
                  const SpeedVector &wind,
-                 const int height_min_working);
+                 int height_min_working) noexcept;
 
   void SolveRoute(const AGeoPoint &dest, const AGeoPoint &start,
                   const RoutePlannerConfig &config,
-                  const int h_ceiling);
-
-  [[gnu::pure]]
-  GeoPoint Intersection(const AGeoPoint &origin,
-                        const AGeoPoint &destination) const;
+                  int h_ceiling) noexcept;
 
   void SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
-                  int h_ceiling, bool do_solve);
+                  int h_ceiling, bool do_solve) noexcept;
 
   [[gnu::pure]]
-  const FlatProjection GetTerrainReachProjection() const;
-};
+  const FlatProjection GetTerrainReachProjection() const noexcept;
 
-#endif
+  [[gnu::pure]]
+  std::optional<ReachResult> FindPositiveArrival(const AGeoPoint &dest) const noexcept;
+
+  void AcceptInRange(const GeoBounds &bounds,
+                     FlatTriangleFanVisitor &visitor,
+                     bool working) const noexcept;
+
+  [[gnu::pure]]
+  int GetTerrainBase() const noexcept;
+};

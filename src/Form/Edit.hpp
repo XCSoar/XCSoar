@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FORM_EDIT_HPP
-#define XCSOAR_FORM_EDIT_HPP
+#pragma once
 
 #include "Form/Control.hpp"
 #include "ui/dim/Rect.hpp"
@@ -111,18 +110,18 @@ public:
   bool BeginEditing() noexcept;
 
 protected:
-  void OnResize(PixelSize new_size) override;
-  void OnSetFocus() override;
-  void OnKillFocus() override;
+  void OnResize(PixelSize new_size) noexcept override;
+  void OnSetFocus() noexcept override;
+  void OnKillFocus() noexcept override;
 
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnMouseUp(PixelPoint p) override;
-  bool OnMouseMove(PixelPoint p, unsigned keys) override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
 
-  bool OnKeyCheck(unsigned key_code) const override;
-  bool OnKeyDown(unsigned key_code) override;
+  bool OnKeyCheck(unsigned key_code) const noexcept override;
+  bool OnKeyDown(unsigned key_code) noexcept override;
 
-  void OnCancelMode() override;
+  void OnCancelMode() noexcept override;
 
 public:
   /**
@@ -162,7 +161,7 @@ private:
    * The OnPaint event is called when the button needs to be drawn
    * (derived from PaintWindow)
    */
-  void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 
   /** Increases the Editor value */
   int IncValue() noexcept;
@@ -171,5 +170,3 @@ private:
 
   void UpdateLayout() noexcept;
 };
-
-#endif

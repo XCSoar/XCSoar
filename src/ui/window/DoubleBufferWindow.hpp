@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_DOUBLE_BUFFER_WINDOW_HXX
-#define XCSOAR_SCREEN_DOUBLE_BUFFER_WINDOW_HXX
+#pragma once
 
 #ifdef ENABLE_OPENGL
 
@@ -53,12 +52,22 @@ class DoubleBufferWindow : public PaintWindow {
    * The buffer currently drawn into.  This buffer may only be
    * accessed by the drawing thread.  The other buffer (current^1) may
    * only be accessed by the main thread.
+   *
+   * Protected by #mutex.
    */
   unsigned current = 0;
 
+  /**
+   * The window size for the next OnPaintBuffer() call.  This field is
+   * thread-safe, unlike Window::GetSize().
+   *
+   * Protected by #mutex.
+   */
+  PixelSize next_size;
+
 protected:
   /**
-   * This mutex protects the variable "current".
+   * This mutex protects the fields #current and #next_size.
    */
   mutable Mutex mutex;
 
@@ -67,15 +76,9 @@ private:
    * Returns the Canvas which is currently used for rendering.  This
    * method may only be called within the drawing thread.
    */
-  Canvas &GetPaintCanvas() noexcept {
+  auto &GetPaintCanvas() noexcept {
     return buffers[current];
   }
-
-  /**
-   * Marks the hidden Canvas as "done" and schedules it for painting
-   * to the Window.
-   */
-  void Flip() noexcept;
 
 protected:
   /**
@@ -87,18 +90,28 @@ protected:
   }
 
 protected:
-  virtual void OnCreate() override;
-  virtual void OnDestroy() override;
-  virtual void OnPaint(Canvas &canvas) override;
+  /* virtual methods from class Window */
+  void OnCreate() override;
+  void OnDestroy() noexcept override;
+  void OnResize(PixelSize new_size) noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
+
+  /**
+   * Paint into the given #Canvas.  This is called from the thread
+   * that called Repaint().  The caller holds the mutex lock, and this
+   * method may (temporarily) unlock it for expensive drawing
+   * operations.
+   */
   virtual void OnPaintBuffer(Canvas &canvas) noexcept = 0;
 
 public:
-  void Repaint() noexcept {
-    OnPaintBuffer(GetPaintCanvas());
-    Flip();
-  }
+  /**
+   * Repaint via virtual method OnPaintBuffer() into the current
+   * buffer and flip it.
+   *
+   * This method is thread-safe.
+   */
+  void Repaint() noexcept;
 };
-
-#endif
 
 #endif

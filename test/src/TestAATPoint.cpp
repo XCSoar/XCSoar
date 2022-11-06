@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,29 +34,28 @@ static TaskBehaviour task_behaviour;
 static OrderedTaskSettings ordered_task_settings;
 static GlidePolar glide_polar(0);
 
-static GeoPoint
-MakeGeoPoint(double longitude, double latitude)
+static constexpr GeoPoint
+MakeGeoPoint(double longitude, double latitude) noexcept
 {
-  return GeoPoint(Angle::Degrees(longitude),
-                  Angle::Degrees(latitude));
+  return {Angle::Degrees(longitude), Angle::Degrees(latitude)};
 }
 
 static Waypoint
-MakeWaypoint(Waypoint wp, double altitude)
+MakeWaypoint(Waypoint wp, double altitude) noexcept
 {
   wp.elevation = altitude;
   return wp;
 }
 
 static Waypoint
-MakeWaypoint(double longitude, double latitude, double altitude)
+MakeWaypoint(double longitude, double latitude, double altitude) noexcept
 {
   return MakeWaypoint(Waypoint(MakeGeoPoint(longitude, latitude)), altitude);
 }
 
 template<typename... Args>
 static WaypointPtr
-MakeWaypointPtr(Args&&... args)
+MakeWaypointPtr(Args&&... args) noexcept
 {
   return WaypointPtr(new Waypoint(MakeWaypoint(std::forward<Args>(args)...)));
 }
@@ -145,7 +144,7 @@ TestAll()
   TestAATPoint();
 }
 
-int main(int argc, char **argv)
+int main()
 {
   plan_tests(717);
 

@@ -44,13 +44,13 @@ Copyright_License {
 static AllocatedPath startProfileFile = nullptr;
 
 Path
-Profile::GetPath()
+Profile::GetPath() noexcept
 {
   return startProfileFile;
 }
 
 void
-Profile::Load()
+Profile::Load() noexcept
 {
   assert(startProfileFile != nullptr);
 
@@ -60,7 +60,7 @@ Profile::Load()
 }
 
 void
-Profile::LoadFile(Path path)
+Profile::LoadFile(Path path) noexcept
 {
   try {
     LoadFile(map, path);
@@ -90,14 +90,14 @@ Profile::Save() noexcept
 }
 
 void
-Profile::SaveFile(Path path)
+Profile::SaveFile(Path path) noexcept
 {
   LogFormat(_T("Saving profile to %s"), path.c_str());
   SaveFile(map, path);
 }
 
 void
-Profile::SetFiles(Path override_path)
+Profile::SetFiles(Path override_path) noexcept
 {
   /* set the "modified" flag, because we are potentially saving to a
      new file now */
@@ -122,19 +122,19 @@ Profile::SetFiles(Path override_path)
 }
 
 AllocatedPath
-Profile::GetPath(const char *key)
+Profile::GetPath(const char *key) noexcept
 {
   return map.GetPath(key);
 }
 
 bool
-Profile::GetPathIsEqual(const char *key, Path value)
+Profile::GetPathIsEqual(const char *key, Path value) noexcept
 {
   return map.GetPathIsEqual(key, value);
 }
 
 void
-Profile::SetPath(const char *key, Path value)
+Profile::SetPath(const char *key, Path value) noexcept
 {
   map.SetPath(key, value);
 }

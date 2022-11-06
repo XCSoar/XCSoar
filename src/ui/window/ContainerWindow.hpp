@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_CONTAINER_WINDOW_HXX
-#define XCSOAR_SCREEN_CONTAINER_WINDOW_HXX
+#pragma once
 
 #include "PaintWindow.hpp"
 
@@ -65,22 +64,22 @@ public:
 
 protected:
 #ifndef USE_WINUSER
-  void OnDestroy() override;
-  void OnCancelMode() override;
-  bool OnMouseMove(PixelPoint p, unsigned keys) override;
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnMouseUp(PixelPoint p) override;
-  bool OnMouseDouble(PixelPoint p) override;
-  bool OnMouseWheel(PixelPoint p, int delta) override;
+  void OnDestroy() noexcept override;
+  void OnCancelMode() noexcept override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  bool OnMouseDouble(PixelPoint p) noexcept override;
+  bool OnMouseWheel(PixelPoint p, int delta) noexcept override;
 
 #ifdef HAVE_MULTI_TOUCH
-  bool OnMultiTouchDown() override;
-  bool OnMultiTouchUp() override;
+  bool OnMultiTouchDown() noexcept override;
+  bool OnMultiTouchUp() noexcept override;
 #endif
 
-  void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 #else /* USE_WINUSER */
-  virtual void OnPaint([[maybe_unused]] Canvas &canvas) {}
+  virtual void OnPaint([[maybe_unused]] Canvas &canvas) noexcept {}
 #endif
 
 public:
@@ -175,6 +174,10 @@ public:
    * @return true if the focus has been moved
    */
   bool FocusPreviousControl() noexcept;
-};
 
-#endif
+  /**
+   * If this is a scrollable window, then attempt to make the given
+   * rectangle visible in the view port.
+   */
+  virtual void ScrollTo(const PixelRect &rc) noexcept;
+};

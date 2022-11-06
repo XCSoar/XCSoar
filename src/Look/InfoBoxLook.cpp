@@ -56,6 +56,11 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
   focused_background_color = COLOR_XCSOAR_LIGHT;
   pressed_background_color = COLOR_YELLOW;
 
+  if (inverse) {
+    focused_background_color = DarkColor(focused_background_color);
+    pressed_background_color = DarkColor(pressed_background_color);
+  }
+
   Color border_color = Color(128, 128, 128);
   border_pen.Create(BORDER_WIDTH, border_color);
 

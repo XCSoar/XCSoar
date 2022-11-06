@@ -24,7 +24,7 @@ Copyright_License {
 #include "List.hpp"
 
 const FlarmTraffic *
-TrafficList::FindMaximumAlert() const
+TrafficList::FindMaximumAlert() const noexcept
 {
   const FlarmTraffic *alert = NULL;
 

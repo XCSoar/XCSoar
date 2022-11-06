@@ -226,7 +226,7 @@ try {
   if (driver->CreateOnPort != nullptr) {
     Device *new_device = driver->CreateOnPort(config, *port);
 
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     device = new_device;
 
     if (driver->HasPassThrough() && config.use_second_device)
@@ -248,7 +248,7 @@ try {
   throw;
 }
 
-bool
+inline bool
 DeviceDescriptor::OpenInternalSensors()
 {
 #ifdef HAVE_INTERNAL_GPS
@@ -272,7 +272,7 @@ DeviceDescriptor::OpenInternalSensors()
   return false;
 }
 
-bool
+inline bool
 DeviceDescriptor::OpenDroidSoarV2()
 {
 #ifdef ANDROID
@@ -309,7 +309,7 @@ DeviceDescriptor::OpenDroidSoarV2()
 #endif
 }
 
-bool
+inline bool
 DeviceDescriptor::OpenI2Cbaro()
 {
 #ifdef ANDROID
@@ -337,7 +337,7 @@ DeviceDescriptor::OpenI2Cbaro()
 #endif
 }
 
-bool
+inline bool
 DeviceDescriptor::OpenNunchuck()
 {
 #ifdef ANDROID
@@ -360,7 +360,7 @@ DeviceDescriptor::OpenNunchuck()
 #endif
 }
 
-bool
+inline bool
 DeviceDescriptor::OpenVoltage()
 {
 #ifdef ANDROID
@@ -388,7 +388,7 @@ DeviceDescriptor::OpenVoltage()
 #endif
 }
 
-bool
+inline bool
 DeviceDescriptor::OpenGliderLink()
 {
 #ifdef ANDROID
@@ -431,7 +431,7 @@ try {
   assert(config.IsAvailable());
 
   {
-    std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     error_message.clear();
   }
 
@@ -476,7 +476,7 @@ try {
     const auto _msg = GetFullMessage(e);
     const UTF8ToWideConverter what(_msg.c_str());
     if (what.IsValid()) {
-      std::lock_guard<Mutex> lock(mutex);
+      const std::lock_guard lock{mutex};
       error_message = what;
     }
 
@@ -579,7 +579,7 @@ DeviceDescriptor::Close() noexcept
   Device *old_device = device;
 
   {
-    const std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
     device = nullptr;
     /* after leaving this scope, no other thread may use the old
        object; to avoid locking the mutex for too long, the "delete"
@@ -750,14 +750,14 @@ DeviceDescriptor::Return() noexcept
 bool
 DeviceDescriptor::IsAlive() const noexcept
 {
-  std::lock_guard<Mutex> lock(device_blackboard->mutex);
+  const std::lock_guard lock{device_blackboard->mutex};
   return device_blackboard->RealState(index).alive;
 }
 
 TimeStamp
 DeviceDescriptor::GetClock() const noexcept
 {
-  const std::lock_guard<Mutex> lock(device_blackboard->mutex);
+  const std::lock_guard lock{device_blackboard->mutex};
   const NMEAInfo &basic = device_blackboard->RealState(index);
   return basic.clock;
 }
@@ -765,7 +765,7 @@ DeviceDescriptor::GetClock() const noexcept
 NMEAInfo
 DeviceDescriptor::GetData() const noexcept
 {
-  const std::lock_guard<Mutex> lock(device_blackboard->mutex);
+  const std::lock_guard lock{device_blackboard->mutex};
   return device_blackboard->RealState(index);
 }
 
@@ -1265,7 +1265,7 @@ DeviceDescriptor::OnSensorUpdate(const MoreData &basic) noexcept
   /* must hold the mutex because this method may run in any thread,
      just in case the main thread deletes the Device while this method
      still runs */
-  const std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   if (device != nullptr)
     try {
@@ -1329,7 +1329,7 @@ DeviceDescriptor::PortError(const char *msg) noexcept
   {
     const UTF8ToWideConverter tmsg(msg);
     if (tmsg.IsValid()) {
-      std::lock_guard<Mutex> lock(mutex);
+      const std::lock_guard lock{mutex};
       error_message = tmsg;
     }
   }

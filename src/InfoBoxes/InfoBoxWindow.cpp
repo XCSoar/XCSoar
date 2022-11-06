@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -114,7 +114,7 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 }
 
 void
-InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
+InfoBoxWindow::PaintValue(Canvas &canvas, [[maybe_unused]] Color background_color)
 {
   if (data.value.empty())
     return;
@@ -296,7 +296,7 @@ InfoBoxWindow::GetDialogContent() const
 }
 
 void
-InfoBoxWindow::OnDestroy()
+InfoBoxWindow::OnDestroy() noexcept
 {
   focus_timer.Cancel();
   dialog_timer.Cancel();
@@ -304,7 +304,7 @@ InfoBoxWindow::OnDestroy()
 }
 
 void
-InfoBoxWindow::OnResize(PixelSize new_size)
+InfoBoxWindow::OnResize(PixelSize new_size) noexcept
 {
   PaintWindow::OnResize(new_size);
 
@@ -337,7 +337,7 @@ InfoBoxWindow::OnResize(PixelSize new_size)
 }
 
 bool
-InfoBoxWindow::OnKeyDown(unsigned key_code)
+InfoBoxWindow::OnKeyDown(unsigned key_code) noexcept
 {
   /* handle local hot key */
 
@@ -379,7 +379,7 @@ InfoBoxWindow::OnKeyDown(unsigned key_code)
 }
 
 bool
-InfoBoxWindow::OnMouseDown(PixelPoint p)
+InfoBoxWindow::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
 {
   dialog_timer.Cancel();
 
@@ -398,7 +398,7 @@ InfoBoxWindow::OnMouseDown(PixelPoint p)
 }
 
 bool
-InfoBoxWindow::OnMouseUp(PixelPoint p)
+InfoBoxWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 {
   dialog_timer.Cancel();
 
@@ -426,7 +426,7 @@ InfoBoxWindow::OnMouseUp(PixelPoint p)
 }
 
 bool
-InfoBoxWindow::OnMouseDouble(PixelPoint p)
+InfoBoxWindow::OnMouseDouble([[maybe_unused]] PixelPoint p) noexcept
 {
   dialog_timer.Cancel();
   InputEvents::ShowMenu();
@@ -434,7 +434,7 @@ InfoBoxWindow::OnMouseDouble(PixelPoint p)
 }
 
 bool
-InfoBoxWindow::OnMouseMove(PixelPoint p, unsigned keys)
+InfoBoxWindow::OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned keys) noexcept
 {
   if (dragging) {
     SetPressed(IsInside(p));
@@ -453,7 +453,7 @@ InfoBoxWindow::OnPaintBuffer(Canvas &canvas) noexcept
 }
 
 void
-InfoBoxWindow::OnCancelMode()
+InfoBoxWindow::OnCancelMode() noexcept
 {
   if (dragging) {
     dragging = false;
@@ -468,7 +468,7 @@ InfoBoxWindow::OnCancelMode()
 }
 
 void
-InfoBoxWindow::OnSetFocus()
+InfoBoxWindow::OnSetFocus() noexcept
 {
   // Call the parent function
   PaintWindow::OnSetFocus();
@@ -482,7 +482,7 @@ InfoBoxWindow::OnSetFocus()
 }
 
 void
-InfoBoxWindow::OnKillFocus()
+InfoBoxWindow::OnKillFocus() noexcept
 {
   // Call the parent function
   PaintWindow::OnKillFocus();

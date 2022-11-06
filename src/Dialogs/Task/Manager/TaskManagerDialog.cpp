@@ -47,6 +47,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Widget/ButtonWidget.hpp"
 #include "Widget/TabWidget.hpp"
+#include "Widget/VScrollWidget.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 
@@ -120,7 +121,8 @@ TaskManagerDialog::Initialise(ContainerWindow &parent,
          _("Turn Points"), TurnPointIcon);
   AddTab(std::make_unique<TaskMiscPanel>(*this, task, &modified),
          _("Manage"), BrowseIcon);
-  AddTab(std::make_unique<TaskPropertiesPanel>(*this, task, &modified),
+  AddTab(std::make_unique<VScrollWidget>(std::make_unique<TaskPropertiesPanel>(*this, task, &modified),
+                                         GetLook()),
          _("Rules"), PropertiesIcon);
   AddTab(std::make_unique<TaskClosePanel>(*this, &modified,
                                           UIGlobals::GetDialogLook()),

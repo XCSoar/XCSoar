@@ -27,14 +27,12 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef THREAD_WINDOWS_COND_HXX
-#define THREAD_WINDOWS_COND_HXX
+#pragma once
 
 #include "CriticalSection.hxx"
 
 #include <windef.h> // for HWND (needed by winbase.h)
 #include <winbase.h> // for INFINITE
-
 #include <chrono>
 #include <mutex>
 
@@ -94,5 +92,3 @@ public:
 		return true;
 	}
 };
-
-#endif

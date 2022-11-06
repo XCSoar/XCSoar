@@ -65,8 +65,10 @@ TopCanvas::TopCanvas(UI::Display &_display)
 {
   evctx = { 0 };
   evctx.version = DRM_EVENT_CONTEXT_VERSION;
-  evctx.page_flip_handler = [](int fd, unsigned int frame, unsigned int sec,
-                               unsigned int usec, void *flip_finishedPtr) {
+  evctx.page_flip_handler = []([[maybe_unused]] int fd,
+                               [[maybe_unused]] unsigned int frame,
+                               [[maybe_unused]] unsigned int sec,
+                               [[maybe_unused]] unsigned int usec, void *flip_finishedPtr) {
     *reinterpret_cast<bool*>(flip_finishedPtr) = true;
   };
 
@@ -170,7 +172,8 @@ TopCanvas::Flip()
                                  gbm_bo_get_stride(new_bo),
                                  gbm_bo_get_handle(new_bo).u32);
 
-    gbm_bo_set_user_data(new_bo, fb, [](struct gbm_bo *bo, void *data) {
+    gbm_bo_set_user_data(new_bo, fb, []([[maybe_unused]] struct gbm_bo *bo,
+                                        void *data) {
       auto *fb = (EGL::DrmFrameBuffer *)data;
       delete fb;
     });

@@ -67,8 +67,7 @@
  * $Id$
  */
 
-#ifndef JPC_TAGTREE_H
-#define JPC_TAGTREE_H
+#pragma once
 
 /******************************************************************************\
 * Includes
@@ -163,5 +162,3 @@ int jpc_tagtree_encode(jpc_tagtree_t *tree, jpc_tagtreenode_t *leaf,
 
 /* Dump a tag tree (for debugging purposes). */
 void jpc_tagtree_dump(const jpc_tagtree_t *tree, FILE *out);
-
-#endif

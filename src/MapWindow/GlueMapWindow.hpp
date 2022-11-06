@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_GLUE_MAP_WINDOW_HPP
-#define XCSOAR_GLUE_MAP_WINDOW_HPP
+#pragma once
 
 #include "MapWindow.hpp"
 #include "time/PeriodClock.hpp"
@@ -189,6 +188,33 @@ public:
 
   void QuickRedraw();
 
+  /**
+   * Trigger a deferred redraw.  It will occur in the main thread
+   * after all other events have been handled.
+   *
+   * This method is thread-safe.
+   */
+  void InjectRedraw() noexcept {
+    redraw_notify.SendNotification();
+  }
+
+  /**
+   * Trigger a deferred redraw.  It will occur in the main thread
+   * after all other events have been handled.
+   */
+  void DeferRedraw() noexcept {
+#ifdef ENABLE_OPENGL
+    /* with OpenGL, redraws are synchronous (no DrawThread), but
+       Invalidate() defers this until the whole screen is redrawn */
+    Invalidate();
+#else
+    /* without OpenGL, we have a DrawThread, and the redraw_notify
+       will defer the DrawThread wakeup to merge adjacent calls to
+       this method */
+    InjectRedraw();
+#endif
+  }
+
   void SetPan(bool enable);
   void TogglePan();
   void PanTo(const GeoPoint &location);
@@ -206,22 +232,22 @@ protected:
                                   const PixelPoint aircraft_pos) override;
 
   /* virtual methods from class Window */
-  virtual void OnCreate() override;
-  virtual void OnDestroy() override;
-  bool OnMouseDouble(PixelPoint p) override;
-  bool OnMouseMove(PixelPoint p, unsigned keys) override;
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnMouseUp(PixelPoint p) override;
-  bool OnMouseWheel(PixelPoint p, int delta) override;
+  void OnCreate() override;
+  void OnDestroy() noexcept override;
+  bool OnMouseDouble(PixelPoint p) noexcept override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  bool OnMouseWheel(PixelPoint p, int delta) noexcept override;
 
 #ifdef HAVE_MULTI_TOUCH
-  virtual bool OnMultiTouchDown() override;
+  bool OnMultiTouchDown() noexcept override;
 #endif
 
-  virtual bool OnKeyDown(unsigned key_code) override;
-  virtual void OnCancelMode() override;
-  virtual void OnPaint(Canvas &canvas) override;
-  virtual void OnPaintBuffer(Canvas& canvas) noexcept override;
+  bool OnKeyDown(unsigned key_code) noexcept override;
+  void OnCancelMode() noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
+  void OnPaintBuffer(Canvas& canvas) noexcept override;
 
   /**
    * This event handler gets called when a gesture has
@@ -302,5 +328,3 @@ private:
   void OnKineticTimer() noexcept;
 #endif
 };
-
-#endif

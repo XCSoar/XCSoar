@@ -35,14 +35,14 @@ BMP_ICONS_160 = $(PNG_ICONS_160:.png=.bmp)
 # modify working copy of SVG to improve rendering
 $(SVG_NOALIAS_ICONS): $(DATA)/icons/%.svg: build/svg_preprocess.xsl Data/icons/%.svg | $(DATA)/icons/dirstamp
 	@$(NQ)echo "  XSLT    $@"
-	$(Q)xsltproc --stringparam DisableAA_Select "MASK_NOAA_" --output $@ $^
+	$(Q)xsltproc --nonet --stringparam DisableAA_Select "MASK_NOAA_" --output $@ $^
 
 # render from SVG to PNG
 # Default 100PPI (eg 320x240 4" display)
-$(eval $(call rsvg-convert,$(PNG_ICONS),$(DATA)/icons/%.png,$(DATA)/icons/%.svg,--x-zoom=1.0 --y-zoom=1.0))
+$(eval $(call rsvg-convert,$(PNG_ICONS),$(DATA)/icons/%.png,$(DATA)/icons/%.svg,--width=13,height=13))
 
 #160PPI (eg 640x480 5" display)
-$(eval $(call rsvg-convert,$(PNG_ICONS_160),$(DATA)/icons/%_160.png,$(DATA)/icons/%.svg,--x-zoom=1.6316 --y-zoom=1.6316))
+$(eval $(call rsvg-convert,$(PNG_ICONS_160),$(DATA)/icons/%_160.png,$(DATA)/icons/%.svg,--width=22,--height=22))
 
 # convert to uncompressed 8-bit BMP
 $(eval $(call convert-to-bmp,$(BMP_ICONS) $(BMP_ICONS_160),%.bmp,%_tile.png))
@@ -152,8 +152,8 @@ WAV_SOUNDS = $(wildcard Data/sound/*.wav)
 RAW_SOUNDS = $(patsubst Data/sound/%.wav,$(DATA)/sound/%.raw,$(WAV_SOUNDS))
 
 $(RAW_SOUNDS): $(DATA)/sound/%.raw: Data/sound/%.wav | $(DATA)/sound/dirstamp
-	@$(NQ)echo "  FFMPEG    $@"
-	$(Q)ffmpeg -y -v 0  -i $< -f s16le -ar 44100 -ac 1 -acodec pcm_s16le $@
+	@$(NQ)echo "  SOX     $@"
+	$(Q)sox -V1 $< --bits 16 --rate 44100 --channels 1 $@
 
 endif
 endif

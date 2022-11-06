@@ -21,27 +21,22 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ATMOSPHERE_AIRDENSITY_H
-#define XCSOAR_ATMOSPHERE_AIRDENSITY_H
-
-#include "util/Compiler.h"
+#pragma once
 
 /**
  * Calculates the air density from a given QNH-based altitude
  * @param altitude QNH-based altitude (m)
  * @return Air density (kg/m^3)
  */
-gcc_const
+[[gnu::const]]
 double
-AirDensity(double altitude);
+AirDensity(double altitude) noexcept;
 
 /**
  * Divide TAS by this number to get IAS
  * @param altitude QNH-based altitude (m)
  * @return Ratio of TAS to IAS
  */
-gcc_const
+[[gnu::const]]
 double
-AirDensityRatio(double altitude);
-
-#endif
+AirDensityRatio(double altitude) noexcept;

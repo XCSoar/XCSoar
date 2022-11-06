@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "CoInstance.hpp"
-#include "Cloud/weglide/UploadFlight.hpp"
-#include "Cloud/weglide/WeGlideSettings.hpp"
+#include "net/client/WeGlide/UploadFlight.hpp"
+#include "net/client/WeGlide/Settings.hpp"
 #include "net/http/Init.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "json/Serialize.hxx"

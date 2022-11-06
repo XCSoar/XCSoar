@@ -17,8 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef MPD_EVENT_CHRONO_HXX
-#define MPD_EVENT_CHRONO_HXX
+#pragma once
 
 #include <chrono>
 
@@ -33,5 +32,3 @@ using Duration = Clock::duration;
 using TimePoint = Clock::time_point;
 
 } // namespace Event
-
-#endif /* MAIN_NOTIFY_H */

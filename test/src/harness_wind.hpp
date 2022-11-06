@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,11 +20,13 @@
 }
 */
 
+#pragma once
+
 #include "Math/Angle.hpp"
 
 #include <stdio.h>
 
-#define NUM_WIND 9
+static constexpr unsigned NUM_WIND = 9;
 
 static inline double
 wind_to_mag(int n_wind)

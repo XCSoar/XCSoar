@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,15 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_COLOR_DATABASE_HPP
-#define XCSOAR_FLARM_COLOR_DATABASE_HPP
+#pragma once
 
 #include "FlarmId.hpp"
 #include "Color.hpp"
-#include "util/Compiler.h"
 
 #include <map>
-
 #include <cassert>
 
 class FlarmColorDatabase {
@@ -39,17 +36,17 @@ class FlarmColorDatabase {
 public:
   typedef Map::const_iterator const_iterator;
 
-  gcc_pure
+  [[gnu::pure]]
   const_iterator begin() const {
     return data.begin();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   const_iterator end() const {
     return data.end();
   }
 
-  gcc_pure
+  [[gnu::pure]]
   FlarmColor Get(FlarmId id) const {
     auto i = data.find(id);
     if (i == data.end())
@@ -72,5 +69,3 @@ public:
     data.erase(id);
   }
 };
-
-#endif

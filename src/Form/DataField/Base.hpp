@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,14 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DATA_FIELD_BASE_HPP
-#define XCSOAR_DATA_FIELD_BASE_HPP
+#pragma once
 
 #include <cassert>
 #include <tchar.h>
 #include <cstdint>
 
-#define OUTBUFFERSIZE 128
+static constexpr unsigned OUTBUFFERSIZE = 128;
 
 class DataFieldListener;
 class ComboList;
@@ -94,16 +93,10 @@ public:
   virtual void Dec() noexcept;
 
   [[gnu::pure]]
-  virtual int GetAsInteger() const noexcept;
-
-  [[gnu::pure]]
   virtual const TCHAR *GetAsString() const noexcept;
 
   [[gnu::pure]]
   virtual const TCHAR *GetAsDisplayString() const noexcept;
-
-  virtual void SetAsInteger(int value) noexcept;
-  virtual void SetAsString(const TCHAR *value) noexcept;
 
   virtual void EnableItemHelp([[maybe_unused]] bool value) noexcept {};
 
@@ -117,13 +110,14 @@ public:
   [[gnu::pure]]
   virtual ComboList CreateComboList(const TCHAR *reference) const noexcept;
 
-  virtual void SetFromCombo(int iDataFieldIndex,
+  virtual void SetFromCombo([[maybe_unused]] int iDataFieldIndex,
                             [[maybe_unused]] const TCHAR *sValue) noexcept
   {
-    SetAsInteger(iDataFieldIndex);
+    /* this method must be implemented by all classes which also
+       implement CreateComboList() */
   }
 
-  bool GetItemHelpEnabled() noexcept {
+  bool GetItemHelpEnabled() const noexcept {
     return item_help_enabled;
   }
 
@@ -134,5 +128,3 @@ protected:
    */
   void Modified() noexcept;
 };
-
-#endif

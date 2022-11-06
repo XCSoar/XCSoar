@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Protection.hpp"
-#include "Device/MultipleDevices.hpp"
 #include "Simulator.hpp"
 #include "RadioFrequency.hpp"
 
@@ -32,7 +31,7 @@ Copyright_License {
 /**
  * Initializes the DeviceBlackboard
  */
-DeviceBlackboard::DeviceBlackboard()
+DeviceBlackboard::DeviceBlackboard() noexcept
 {
   // Clear the gps_info and calculated_info
   gps_info.Reset();
@@ -43,7 +42,7 @@ DeviceBlackboard::DeviceBlackboard()
   gps_info.date_time_utc = BrokenDateTime::NowUTC();
   gps_info.time = TimeStamp{gps_info.date_time_utc.DurationSinceMidnight()};
 
-  std::fill_n(per_device_data, unsigned(NUMDEV), gps_info);
+  std::fill(per_device_data.begin(), per_device_data.end(), gps_info);
 
   real_data = simulator_data = replay_data = gps_info;
 
@@ -61,16 +60,17 @@ DeviceBlackboard::DeviceBlackboard()
  * @param alt New altitude
  */
 void
-DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const double alt)
+DeviceBlackboard::SetStartupLocation(const GeoPoint &loc,
+                                     const double alt) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   if (Calculated().flight.flying)
     return;
 
-  for (unsigned i = 0; i < unsigned(NUMDEV); ++i)
-    if (!per_device_data[i].location_available)
-      per_device_data[i].SetFakeLocation(loc, alt);
+  for (auto &i : per_device_data)
+    if (!i.location_available)
+      i.SetFakeLocation(loc, alt);
 
   if (!real_data.location_available)
     real_data.SetFakeLocation(loc, alt);
@@ -86,8 +86,10 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const double alt)
 /**
  * Stops the replay
  */
-void DeviceBlackboard::StopReplay() {
-  std::lock_guard<Mutex> lock(mutex);
+void
+DeviceBlackboard::StopReplay() noexcept
+{
+  const std::lock_guard lock{mutex};
 
   replay_data.Reset();
 
@@ -95,21 +97,21 @@ void DeviceBlackboard::StopReplay() {
 }
 
 void
-DeviceBlackboard::ProcessSimulation()
+DeviceBlackboard::ProcessSimulation() noexcept
 {
   if (!is_simulator())
     return;
 
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   simulator.Process(simulator_data);
   ScheduleMerge();
 }
 
 void
-DeviceBlackboard::SetSimulatorLocation(const GeoPoint &location)
+DeviceBlackboard::SetSimulatorLocation(const GeoPoint &location) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   NMEAInfo &basic = simulator_data;
 
   simulator.Touch(basic);
@@ -126,9 +128,9 @@ DeviceBlackboard::SetSimulatorLocation(const GeoPoint &location)
  * @param val New speed
  */
 void
-DeviceBlackboard::SetSpeed(double val)
+DeviceBlackboard::SetSpeed(double val) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   NMEAInfo &basic = simulator_data;
 
   simulator.Touch(basic);
@@ -144,9 +146,9 @@ DeviceBlackboard::SetSpeed(double val)
  * @param val New TrackBearing
  */
 void
-DeviceBlackboard::SetTrack(Angle val)
+DeviceBlackboard::SetTrack(Angle val) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   simulator.Touch(simulator_data);
   simulator_data.track = val.AsBearing();
 
@@ -160,9 +162,9 @@ DeviceBlackboard::SetTrack(Angle val)
  * @param val New altitude
  */
 void
-DeviceBlackboard::SetAltitude(double val)
+DeviceBlackboard::SetAltitude(double val) noexcept
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   NMEAInfo &basic = simulator_data;
 
   simulator.Touch(basic);
@@ -171,40 +173,15 @@ DeviceBlackboard::SetAltitude(double val)
   ScheduleMerge();
 }
 
-/**
- * Reads the given derived_info usually provided by the
- * GlideComputerBlackboard and saves it to the own Blackboard
- * @param derived_info Calculated information usually provided
- * by the GlideComputerBlackboard
- */
 void
-DeviceBlackboard::ReadBlackboard(const DerivedInfo &derived_info)
+DeviceBlackboard::ExpireWallClock() noexcept
 {
-  calculated_info = derived_info;
-}
-
-/**
- * Reads the given settings usually provided by the InterfaceBlackboard
- * and saves it to the own Blackboard
- * @param settings ComputerSettings usually provided by the
- * InterfaceBlackboard
- */
-void
-DeviceBlackboard::ReadComputerSettings(const ComputerSettings &settings)
-{
-  computer_settings = settings;
-}
-
-void
-DeviceBlackboard::ExpireWallClock()
-{
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   if (!Basic().alive)
     return;
 
   bool modified = false;
-  for (unsigned i = 0; i < unsigned(NUMDEV); ++i) {
-    NMEAInfo &basic = per_device_data[i];
+  for (auto &basic : per_device_data) {
     if (!basic.alive)
       continue;
 
@@ -218,24 +195,24 @@ DeviceBlackboard::ExpireWallClock()
 }
 
 void
-DeviceBlackboard::ScheduleMerge()
+DeviceBlackboard::ScheduleMerge() noexcept
 {
   TriggerMergeThread();
 }
 
 void
-DeviceBlackboard::Merge()
+DeviceBlackboard::Merge() noexcept
 {
   NMEAInfo &basic = SetBasic();
 
   real_data.Reset();
-  for (unsigned i = 0; i < unsigned(NUMDEV); ++i) {
-    if (!per_device_data[i].alive)
+  for (auto &basic : per_device_data) {
+    if (!basic.alive)
       continue;
 
-    per_device_data[i].UpdateClock();
-    per_device_data[i].Expire();
-    real_data.Complement(per_device_data[i]);
+    basic.UpdateClock();
+    basic.Expire();
+    real_data.Complement(basic);
   }
 
   real_clock.Normalise(real_data);
@@ -255,51 +232,4 @@ DeviceBlackboard::Merge()
   } else {
     basic = real_data;
   }
-}
-
-void
-DeviceBlackboard::SetBallast(double fraction, double overload,
-                             OperationEnvironment &env)
-{
-  if (devices != nullptr)
-    devices->PutBallast(fraction, overload, env);
-}
-
-void
-DeviceBlackboard::SetBugs(double bugs, OperationEnvironment &env)
-{
-  if (devices != nullptr)
-    devices->PutBugs(bugs, env);
-}
-
-void
-DeviceBlackboard::SetQNH(AtmosphericPressure qnh, OperationEnvironment &env)
-{
-  if (devices != nullptr)
-    devices->PutQNH(qnh, env);
-}
-
-void
-DeviceBlackboard::SetMC(double mc, OperationEnvironment &env)
-{
-  if (devices != nullptr)
-    devices->PutMacCready(mc, env);
-}
-
-void
-DeviceBlackboard::SetActiveFrequency(RadioFrequency frequency,
-                                     const TCHAR *name,
-                                     OperationEnvironment &env)
-{
-  if (devices != nullptr)
-    devices->PutActiveFrequency(frequency, name, env);
-}
-
-void
-DeviceBlackboard::SetStandbyFrequency(RadioFrequency frequency,
-                                      const TCHAR *name,
-                                      OperationEnvironment &env)
-{
-  if (devices != nullptr)
-    devices->PutStandbyFrequency(frequency, name, env);
 }

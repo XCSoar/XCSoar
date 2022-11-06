@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,15 +25,17 @@ Copyright_License {
 #include "Dialogs/DataField.hpp"
 
 int
-ShowMessageBox(const TCHAR *lpText, const TCHAR *lpCaption,
-               unsigned uType) noexcept
+ShowMessageBox([[maybe_unused]] const TCHAR *lpText,
+               [[maybe_unused]] const TCHAR *lpCaption,
+               [[maybe_unused]] unsigned uType) noexcept
 {
   return -1;
 }
 
 bool
-EditDataFieldDialog(const TCHAR *caption, DataField &df,
-                    const TCHAR *help_text)
+EditDataFieldDialog([[maybe_unused]] const TCHAR *caption,
+                    [[maybe_unused]] DataField &df,
+                    [[maybe_unused]] const TCHAR *help_text)
 {
   return false;
 }

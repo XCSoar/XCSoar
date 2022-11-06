@@ -118,7 +118,7 @@ mode=pan
 type=key
 data=APP1
 event=Pan off
-label=Pan\nOff
+label=Cancel
 location=1
 
 mode=pan
@@ -139,7 +139,7 @@ mode=pan
 type=key
 data=APP4
 event=NearestMapItems
-label=What's\nhere?
+label=What's here?
 location=4
 
 ###### main entry buttons
@@ -303,7 +303,6 @@ type=gesture
 data=LDR
 event=Checklist
 
-
 mode=default
 type=gesture
 data=URDL
@@ -361,7 +360,7 @@ type=key
 data=6
 event=Calculator
 event=Mode default
-label=Task
+label=Task Manager
 location=5
 
 mode=Nav1
@@ -383,7 +382,7 @@ type=key
 data=9
 event=WaypointDetails select
 event=Mode default
-label=Waypoint\nList$(CheckWaypointFile)
+label=Waypoint List$(CheckWaypointFile)
 location=8
 
 mode=Nav1
@@ -420,7 +419,7 @@ event=Mode default
 event=StatusMessage Dropped marker
 event=Logger note Mark
 event=MarkLocation
-label=Mark\nDrop
+label=Marker Drop
 location=6
 
 mode=Nav2
@@ -430,7 +429,7 @@ event=Mode default
 event=StatusMessage Pilot event announced
 event=Logger note PEV
 event=PilotEvent
-label=Pilot\nEvent
+label=Pilot Event Announce
 location=7
 
 mode=Nav2
@@ -438,7 +437,7 @@ type=key
 data=9
 event=Setup Target
 event=Mode default
-label=Target$(CheckTask)$(CheckTaskResumed)
+label=Target Show$(CheckTask)$(CheckTaskResumed)
 location=8
 
 # -------------
@@ -486,7 +485,7 @@ mode=Display1
 type=key
 data=0
 event=Pan on
-label=Pan\nOn
+label=Pan Mode
 location=9
 
 # -------------
@@ -610,7 +609,7 @@ type=key
 data=8
 event=WaypointEditor
 event=Mode default
-label=Waypoints Editor
+label=Waypoint Editor
 location=7
 
 mode=Config2
@@ -649,7 +648,7 @@ location=5
 
 mode=Config3
 type=key
-data=7
+data=8
 event=Logger nmea
 label=Raw Logger$(CheckLogger)
 location=6
@@ -660,7 +659,7 @@ data=7
 event=RunLuaFile
 event=Mode default
 label=Lua
-location=6
+location=7
 
 mode=Config3
 type=key
@@ -685,21 +684,21 @@ type=key
 data=6
 event=Setup Switches
 event=Mode default
-label=Airframe\nSwitches
+label=Airframe Switches
 location=5
 
 mode=Vario1
 type=key
 data=8
 event=AdjustVarioFilter xdemo
-label=Manual\nDemo
+label=Manual Demo
 location=7
 
 mode=Vario1
 type=key
 data=9
 event=AdjustVarioFilter zero
-label=Setup\nStall
+label=Setup Stall
 location=8
 
 mode=Vario1
@@ -725,14 +724,14 @@ type=key
 data=6
 event=AdjustVarioFilter zero
 event=StatusMessage Vario ASI zeroed
-label=ASI\nZero
+label=ASI Zero
 location=5
 
 mode=Vario2
 type=key
 data=7
 event=StatusMessage Accelerometer leveled
-label=Accel\nZero
+label=Accel Zero
 location=6
 
 mode=Vario2
@@ -747,14 +746,14 @@ mode=Vario2
 type=key
 data=9
 event=AdjustVarioFilter demostf
-label=Cruise\nDemo
+label=Cruise Demo
 location=8
 
 mode=Vario2
 type=key
 data=0
 event=AdjustVarioFilter democlimb
-label=Climb\nDemo
+label=Climb Demo
 location=9
 
 # -------------
@@ -788,7 +787,7 @@ type=key
 data=8
 event=NearestMapItems
 event=Mode default
-label=What's\nhere?
+label=What's here?
 location=7
 
 mode=Info1
@@ -796,7 +795,7 @@ type=key
 data=9
 event=Checklist
 event=Mode default
-label=Check\nlist
+label=Checklist
 location=8
 
 mode=Info1
@@ -830,7 +829,7 @@ type=key
 data=8
 event=Setup Teamcode
 event=Mode default
-label=Team\nCode
+label=Team Code
 location=7
 
 mode=Info2
@@ -880,7 +879,7 @@ mode=Info3
 type=key
 data=8
 event=RepeatStatusMessage
-label=Message\nRepeat
+label=Message Repeat
 location=7
 
 # -------------
@@ -920,7 +919,7 @@ type=key
 data=9
 event=LockScreen
 event=Mode default
-label=Lock\nScreen
+label=Lock Screen
 location=7
 
 mode=Menu
@@ -1012,7 +1011,7 @@ type=key
 data=0
 event=WaypointDetails select
 event=Mode default
-label=Waypoint\nList$(CheckWaypointFile)
+label=Waypoint List$(CheckWaypointFile)
 location=3
 
 mode=RemoteStick
@@ -1044,7 +1043,7 @@ type=key
 data=0
 event=Setup Target
 event=Mode default
-label=Target$(CheckTask)$(CheckTaskResumed)
+label=Target Show$(CheckTask)$(CheckTaskResumed)
 location=7
 
 
@@ -1063,14 +1062,14 @@ event=Mode default
 event=StatusMessage Dropped marker
 event=Logger note Mark
 event=MarkLocation
-label=Mark\nDrop
+label=Marker Drop
 location=10
 
 mode=RemoteStick
 type=key
 data=0
 event=Pan on
-label=Pan\nOn
+label=Pan Mode
 location=11
 
 mode=RemoteStick
@@ -1117,7 +1116,7 @@ type=key
 data=0
 event=Setup Basic
 event=Mode default
-label=Flight\nSetup
+label=Flight Setup
 location=17
 
 mode=RemoteStick
@@ -1125,7 +1124,7 @@ type=key
 data=0
 event=Setup Wind
 event=Mode default
-label=Setup\nWind
+label=Setup Wind
 location=18
 
 mode=RemoteStick
@@ -1133,7 +1132,7 @@ type=key
 data=0
 event=Setup System
 event=Mode default
-label=Setup\nSystem
+label=Setup System
 location=19
 
 mode=RemoteStick
@@ -1141,7 +1140,7 @@ type=key
 data=0
 event=Setup Airspace
 event=Mode default
-label=Settings\nAirspace$(CheckAirspace)
+label=Settings Airspace$(CheckAirspace)
 location=20
 
 mode=RemoteStick
@@ -1195,7 +1194,7 @@ type=key
 data=0
 event=NearestAirspaceDetails
 event=Mode default
-label=Nearest\nAirspace$(CheckAirspace)
+label=Nearest Airspace$(CheckAirspace)
 location=27
 
 mode=RemoteStick
@@ -1203,7 +1202,7 @@ type=key
 data=0
 event=Checklist
 event=Mode default
-label=Check\nlist
+label=Checklist
 location=28
 
 mode=RemoteStick

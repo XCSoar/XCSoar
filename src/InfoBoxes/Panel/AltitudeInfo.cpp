@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -106,13 +106,13 @@ AltitudeInfoPanel::Hide() noexcept
 }
 
 void
-AltitudeInfoPanel::OnGPSUpdate(const MoreData &basic)
+AltitudeInfoPanel::OnGPSUpdate([[maybe_unused]] const MoreData &basic)
 {
   Refresh();
 }
 
 std::unique_ptr<Widget>
-LoadAltitudeInfoPanel(unsigned id)
+LoadAltitudeInfoPanel([[maybe_unused]] unsigned id)
 {
   return std::make_unique<AltitudeInfoPanel>(UIGlobals::GetDialogLook());
 }

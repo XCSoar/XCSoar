@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@
 }
 */
 
-#ifndef SYMMETRICSECTORZONE_HPP
-#define SYMMETRICSECTORZONE_HPP
+#pragma once
 
 #include "SectorZone.hpp"
 
@@ -41,23 +40,23 @@ protected:
    *
    * @return Initialised object
    */
-  SymmetricSectorZone(Shape _shape, bool _can_start_through_top,
-                      bool _arc_boundary,
-                      const GeoPoint &loc,
-                      const double radius=10000.0,
-                      const Angle angle=Angle::QuarterCircle())
+  constexpr SymmetricSectorZone(Shape _shape, bool _can_start_through_top,
+                                bool _arc_boundary,
+                                const GeoPoint &loc,
+                                const double radius=10000.0,
+                                const Angle angle=Angle::QuarterCircle()) noexcept
     :SectorZone(_shape, _can_start_through_top, _arc_boundary,
                 loc, radius),
      sector_angle(angle) {}
 
-  SymmetricSectorZone(const SymmetricSectorZone &other,
-                      const GeoPoint &reference)
+public:
+  constexpr SymmetricSectorZone(const SymmetricSectorZone &other,
+                                const GeoPoint &reference) noexcept
     :SectorZone((const SectorZone &)other, reference),
      sector_angle(other.sector_angle) {}
 
-public:
   SymmetricSectorZone(const GeoPoint &loc,
-                      const double radius=10000.0)
+                      const double radius=10000.0) noexcept
     :SectorZone(Shape::SYMMETRIC_QUADRANT, true, true, loc, radius),
      sector_angle(Angle::QuarterCircle()) {
     UpdateSector();
@@ -97,23 +96,21 @@ public:
    * 
    * @return Angle (deg) of sector
    */
-  Angle GetSectorAngle() const {
+  constexpr Angle GetSectorAngle() const noexcept {
     return sector_angle;
   }
 
-  void SetSectorAngle(Angle _angle) {
+  void SetSectorAngle(Angle _angle) noexcept {
     sector_angle = _angle;
     UpdateSector();
   }
 
   /* virtual methods from class ObservationZonePoint */
-  void SetLegs(const GeoPoint *previous, const GeoPoint *next) override;
-  bool Equals(const ObservationZonePoint &other) const override;
+  void SetLegs(const GeoPoint *previous, const GeoPoint *next) noexcept override;
+  bool Equals(const ObservationZonePoint &other) const noexcept override;
 
   /* virtual methods from class ObservationZonePoint */
   std::unique_ptr<ObservationZonePoint> Clone(const GeoPoint &_reference) const noexcept override {
-    return std::unique_ptr<ObservationZonePoint>{new SymmetricSectorZone(*this, _reference)};
+    return std::make_unique<SymmetricSectorZone>(*this, _reference);
   }
 };
-
-#endif

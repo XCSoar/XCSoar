@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -74,7 +74,7 @@ public:
   }
 
 protected:
-  void OnResize(PixelSize new_size) override {
+  void OnResize(PixelSize new_size) noexcept override {
     projection.SetScreenOrigin(new_size.width / 2, new_size.height / 2);
     projection.SetGeoLocation(a.Middle(b));
     projection.SetScreenSize(new_size);
@@ -82,7 +82,7 @@ protected:
     projection.UpdateScreenBounds();
   }
 
-  bool OnMouseDown(PixelPoint p) override {
+  bool OnMouseDown(PixelPoint p) noexcept override {
     if (drag_mode != DragMode::NONE)
       return false;
 
@@ -103,7 +103,7 @@ protected:
     return false;
   }
 
-  bool OnMouseUp(PixelPoint p) override {
+  bool OnMouseUp([[maybe_unused]] PixelPoint p) noexcept override {
     if (drag_mode != DragMode::NONE) {
       drag_mode = DragMode::NONE;
       ReleaseCapture();
@@ -113,7 +113,7 @@ protected:
     return false;
   }
 
-  bool OnMouseMove(PixelPoint p, unsigned keys) override {
+  bool OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned keys) noexcept override {
     const GeoPoint gp = projection.ScreenToGeo(p);
     switch (drag_mode) {
     case DragMode::NONE:
@@ -133,7 +133,7 @@ protected:
     gcc_unreachable();
   }
 
-  virtual void OnPaint(Canvas &canvas) override {
+  void OnPaint(Canvas &canvas) noexcept override {
     canvas.ClearWhite();
 
     canvas.SelectBlackPen();

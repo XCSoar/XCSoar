@@ -62,10 +62,6 @@ AirspaceFormatter::FormatAltitudeShort(TCHAR *buffer,
       StringFormatUnsafe(buffer, _T("%d"),
                          iround(Units::ToUserAltitude(altitude.altitude)));
     break;
-
-  case AltitudeReference::NONE:
-    *buffer = _T('\0');
-    break;
   }
 }
 

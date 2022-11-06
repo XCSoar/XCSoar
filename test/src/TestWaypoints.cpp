@@ -76,8 +76,7 @@ AddSpiralWaypoints(Waypoints &waypoints,
 
     vector.bearing = angle_start + angle_step * i;
 
-    Waypoint waypoint;
-    waypoint.location = vector.EndPoint(center);
+    Waypoint waypoint{vector.EndPoint(center)};
     waypoint.original_id = i;
     waypoint.elevation = i * 10 - 500;
 

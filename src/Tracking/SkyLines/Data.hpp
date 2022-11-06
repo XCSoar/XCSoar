@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,13 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TRACKING_SKYLINES_TRAFFIC_HPP
-#define XCSOAR_TRACKING_SKYLINES_TRAFFIC_HPP
+#pragma once
 
 #include "Geo/GeoPoint.hpp"
 #include "thread/Mutex.hxx"
 #include "util/tstring.hpp"
-#include "util/Compiler.h"
 
 #include <map>
 #include <list>
@@ -104,12 +102,10 @@ struct Data {
 
   std::list<Thermal> thermals;
 
-  gcc_pure
+  [[gnu::pure]]
   bool IsUserKnown(uint32_t id) const {
     return user_names.find(id) != user_names.end();
   }
 };
 
 } /* namespace SkyLinesTracking */
-
-#endif

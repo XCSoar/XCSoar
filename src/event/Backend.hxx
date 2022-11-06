@@ -17,8 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef EVENT_BACKEND_HXX
-#define EVENT_BACKEND_HXX
+#pragma once
 
 #include "event/Features.h"
 
@@ -36,7 +35,5 @@ using EventPollBackend = EpollBackend;
 
 #include "PollBackend.hxx"
 using EventPollBackend = PollBackend;
-
-#endif
 
 #endif

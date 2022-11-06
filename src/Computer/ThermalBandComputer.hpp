@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_THERMAL_BAND_COMPUTER_HPP
-#define XCSOAR_THERMAL_BAND_COMPUTER_HPP
+#pragma once
 
 #include "NMEA/Validity.hpp"
 
@@ -30,7 +29,6 @@ struct MoreData;
 struct DerivedInfo;
 class ThermalEncounterBand;
 class ThermalEncounterCollection;
-struct ComputerSettings;
 
 /**
  * Record the thermal band.
@@ -45,10 +43,7 @@ public:
 
   void Compute(const MoreData &basic, const DerivedInfo &calculated,
                ThermalEncounterBand &tbe,
-               ThermalEncounterCollection &tbc,
-               const ComputerSettings &settings);
+               ThermalEncounterCollection &tbc);
 private:
   bool in_encounter;
 };
-
-#endif

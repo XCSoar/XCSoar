@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -190,7 +190,7 @@ ContestDijkstra::CalculateResult(const ContestTraceVector &solution) const noexc
     previous = current;
   }
 
-  #define FIFTH 0.0002
+  static constexpr double FIFTH = 0.0002;
   result.score *= FIFTH;
   result.score = ApplyHandicap(result.score);
 
@@ -255,7 +255,7 @@ ContestDijkstra::AddEdges(const ScanTaskPoint origin,
         CheckMinDistance(origin_tp.GetLocation(),
                          destination_tp.GetLocation())) {
       if (above) {
-        const unsigned d = weight * CalcEdgeDistance(origin, destination);
+        const value_type d = weight * CalcEdgeDistance(origin, destination);
         Link(destination, origin, d);
       } else if (previous_above) {
         /* After excessive thinning, the exact TracePoint that matches
@@ -265,7 +265,7 @@ ContestDijkstra::AddEdges(const ScanTaskPoint origin,
            matches. */
 
         /* TODO: interpolate the distance */
-        const unsigned d = weight * CalcEdgeDistance(origin, destination);
+        const value_type d = weight * CalcEdgeDistance(origin, destination);
         Link(destination, origin, d);
       }
     }
@@ -274,7 +274,7 @@ ContestDijkstra::AddEdges(const ScanTaskPoint origin,
   }
 
   if (IsFinal(destination) && predicted.IsDefined()) {
-    const unsigned d = weight * origin_tp.FlatDistanceTo(predicted);
+    const value_type d = weight * origin_tp.FlatDistanceTo(predicted);
     destination.SetPointIndex(predicted_index);
     Link(destination, origin, d);
   }

@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LUA_RUN_FILE_HXX
-#define LUA_RUN_FILE_HXX
+#pragma once
 
 struct lua_State;
 class Path;
@@ -44,5 +43,3 @@ void
 RunFile(lua_State *L, Path path);
 
 }
-
-#endif

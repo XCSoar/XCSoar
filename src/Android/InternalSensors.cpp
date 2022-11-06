@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -138,7 +138,7 @@ InternalSensors::create(JNIEnv *env, Context *context,
 
 // Helper for retrieving the set of sensors to which we can subscribe.
 void
-InternalSensors::getSubscribableSensors(JNIEnv *env, jobject sensors_obj)
+InternalSensors::getSubscribableSensors(JNIEnv *env, [[maybe_unused]] jobject sensors_obj)
 {
   jintArray ss_arr = (jintArray)
     env->CallObjectMethod(obj_NonGPSSensors_.Get(),

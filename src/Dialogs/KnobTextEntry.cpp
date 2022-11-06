@@ -33,7 +33,6 @@ Copyright_License {
 #include "util/Macros.hpp"
 #include "util/StringStrip.hxx"
 #include "util/TruncateString.hpp"
-#include "util/TStringView.hxx"
 
 #include <algorithm>
 
@@ -58,7 +57,7 @@ static constexpr unsigned MAXENTRYLETTERS = ARRAY_SIZE(EntryLetters) - 1;
  * (i.e. the index of the space character) if the given letter is
  * unknown.
  */
-gcc_const
+[[gnu::const]]
 static unsigned
 FindEntryLetter(TCHAR ch)
 {
@@ -143,11 +142,11 @@ public:
 
 protected:
   /* virtual methods from class Window */
-  void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };
 
 void
-KnobTextEntryWindow::OnPaint(Canvas &canvas)
+KnobTextEntryWindow::OnPaint(Canvas &canvas) noexcept
 {
   const PixelRect rc = GetClientRect();
 

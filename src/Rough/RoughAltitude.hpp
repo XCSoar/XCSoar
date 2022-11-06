@@ -21,11 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ROUGH_ALTITUDE_HPP
-#define XCSOAR_ROUGH_ALTITUDE_HPP
+#pragma once
 
 #include "Math/Util.hpp"
-#include "util/Compiler.h"
 
 #include <type_traits>
 
@@ -40,138 +38,98 @@ class RoughAltitude {
   short value;
 
 public:
-  RoughAltitude() = default;
+  RoughAltitude() noexcept = default;
 
-  explicit constexpr
-  RoughAltitude(short _value):value(_value) {}
+  explicit constexpr RoughAltitude(short _value) noexcept
+    :value(_value) {}
 
-  explicit constexpr
-  RoughAltitude(int _value):value((short)_value) {}
+  explicit constexpr RoughAltitude(int _value) noexcept
+    :value((short)_value) {}
 
-  RoughAltitude(double _value) {
+  RoughAltitude(double _value) noexcept {
     value = iround(_value);
   }
 
   /**
    * Create a representation of the largest possible value.
    */
-  constexpr
-  static RoughAltitude Max() {
+  static constexpr RoughAltitude Max() noexcept {
     return RoughAltitude((short)SHRT_MAX);
   }
 
-  RoughAltitude &operator=(short other) {
+  RoughAltitude &operator=(short other) noexcept {
     value = other;
     return *this;
   }
 
-  RoughAltitude &operator=(int other) {
+  RoughAltitude &operator=(int other) noexcept {
     value = (short)other;
     return *this;
   }
 
-  RoughAltitude &operator=(double other) {
+  RoughAltitude &operator=(double other) noexcept {
     value = iround(other);
     return *this;
   }
 
-  explicit constexpr
-  operator short() const {
+  explicit constexpr operator short() const noexcept {
     return value;
   }
 
-  explicit constexpr
-  operator int() const {
+  explicit constexpr operator int() const noexcept {
     return value;
   }
 
-  constexpr
-  operator double() const {
+  constexpr operator double() const noexcept {
     return double(value);
   }
 
-  constexpr
-  bool IsPositive() const {
+  constexpr bool IsPositive() const noexcept {
     return value > 0;
   }
 
-  constexpr
-  bool IsNegative() const {
+  constexpr bool IsNegative() const noexcept {
     return value < 0;
   }
 
-  constexpr
-  bool operator ==(const RoughAltitude other) const {
-    return value == other.value;
-  }
+  friend constexpr auto operator<=>(RoughAltitude,
+                                    RoughAltitude) noexcept = default;
 
-  constexpr
-  bool operator !=(const RoughAltitude other) const {
-    return value != other.value;
-  }
-
-  constexpr
-  bool operator <(const RoughAltitude other) const {
-    return value < other.value;
-  }
-
-  constexpr
-  bool operator <=(const RoughAltitude other) const {
-    return value <= other.value;
-  }
-
-  constexpr
-  bool operator >(const RoughAltitude other) const {
-    return value > other.value;
-  }
-
-  constexpr
-  bool operator >=(const RoughAltitude other) const {
-    return value >= other.value;
-  }
-
-  constexpr
-  RoughAltitude operator+(const RoughAltitude other) const {
+  constexpr RoughAltitude operator+(const RoughAltitude other) const noexcept {
     return RoughAltitude(value + other.value);
   }
 
-  constexpr
-  RoughAltitude operator-(const RoughAltitude other) const {
+  constexpr RoughAltitude operator-(const RoughAltitude other) const noexcept {
     return RoughAltitude(value - other.value);
   }
 
-  gcc_pure
-  double operator*(const double other) const {
+  constexpr double operator*(const double other) const noexcept {
     return value * other;
   }
 
-  gcc_pure
-  double operator/(const double other) const {
+  constexpr double operator/(const double other) const noexcept {
     return double(value) / other;
   }
 
-  gcc_pure
-  double operator/(const RoughAltitude other) const {
+  constexpr double operator/(const RoughAltitude other) const noexcept {
     return double(value) / other.value;
   }
 
-  RoughAltitude &operator+=(const RoughAltitude other) {
+  constexpr RoughAltitude &operator+=(const RoughAltitude other) noexcept {
     value += other.value;
     return *this;
   }
 
-  RoughAltitude &operator-=(const RoughAltitude other) {
+  constexpr RoughAltitude &operator-=(const RoughAltitude other) noexcept {
     value -= other.value;
     return *this;
   }
 };
 
-gcc_pure
-static inline
-double operator*(const double a, const RoughAltitude b) {
+static constexpr
+double operator*(const double a, const RoughAltitude b) noexcept
+{
   return b * a;
 }
 
-static_assert(std::is_trivial<RoughAltitude>::value, "type is not trivial");
-
-#endif
+static_assert(std::is_trivial_v<RoughAltitude>, "type is not trivial");

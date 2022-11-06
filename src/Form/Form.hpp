@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,15 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FORM_FORM_HPP
-#define XCSOAR_FORM_FORM_HPP
+#pragma once
 
 #include "ui/window/ContainerWindow.hpp"
 #include "ui/window/SolidContainerWindow.hpp"
 #include "util/tstring.hpp"
 
 #include <functional>
-
 #include <tchar.h>
 
 struct DialogLook;
@@ -81,7 +79,7 @@ protected:
 
   PixelPoint last_drag;
 
-  void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 
   tstring caption;
 
@@ -178,16 +176,16 @@ public:
 
   /** from class Window */
   void OnCreate() override;
-  void OnResize(PixelSize new_size) override;
-  void OnDestroy() override;
+  void OnResize(PixelSize new_size) noexcept override;
+  void OnDestroy() noexcept override;
 
-  bool OnMouseMove(PixelPoint p, unsigned keys) override;
-  bool OnMouseDown(PixelPoint p) override;
-  bool OnMouseUp(PixelPoint p) override;
-  void OnCancelMode() override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  void OnCancelMode() noexcept override;
 
 #ifdef _WIN32
-  bool OnCommand(unsigned id, unsigned code) override;
+  bool OnCommand(unsigned id, unsigned code) noexcept override;
 #endif
 
   void SetKeyDownFunction(KeyDownFunction function) {
@@ -208,13 +206,13 @@ public:
    *
    * @param parent_rc the parent's client rect
    */
-  virtual void ReinitialiseLayout(const PixelRect &parent_rc);
+  virtual void ReinitialiseLayout(const PixelRect &parent_rc) noexcept;
 
 protected:
   /**
    * Assign the initial keyboard focus.
    */
-  virtual void SetDefaultFocus();
+  virtual void SetDefaultFocus() noexcept;
 
   /**
    * This method can intercept a "key down" event before it gets
@@ -222,7 +220,5 @@ protected:
    *
    * @return true if the event has been handled and shall be consumed
    */
-  virtual bool OnAnyKeyDown(unsigned key_code);
+  virtual bool OnAnyKeyDown(unsigned key_code) noexcept;
 };
-
-#endif

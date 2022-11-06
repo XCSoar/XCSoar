@@ -1,17 +1,17 @@
-Index: boost_1_77_0/boost/math/policies/error_handling.hpp
+Index: boost_1_80_0/boost/math/policies/error_handling.hpp
 ===================================================================
---- boost_1_77_0.orig/boost/math/policies/error_handling.hpp
-+++ boost_1_77_0/boost/math/policies/error_handling.hpp
-@@ -8,7 +8,7 @@
- #ifndef BOOST_MATH_POLICY_ERROR_HANDLING_HPP
+--- boost_1_80_0.orig/boost/math/policies/error_handling.hpp
++++ boost_1_80_0/boost/math/policies/error_handling.hpp
+@@ -9,7 +9,7 @@
  #define BOOST_MATH_POLICY_ERROR_HANDLING_HPP
  
+ #include <boost/math/tools/config.hpp>
 -#include <iomanip>
 +//#include <iomanip>
  #include <string>
  #include <cstring>
- #include <typeinfo>
-@@ -32,7 +32,7 @@
+ #ifndef BOOST_NO_RTTI
+@@ -36,7 +36,7 @@
  // Note that this only occurs when the compiler can deduce code is unreachable,
  // for example when policy macros are used to ignore errors rather than throw.
  #endif
@@ -20,7 +20,7 @@ Index: boost_1_77_0/boost/math/policies/error_handling.hpp
  
  namespace boost{ namespace math{
  
-@@ -73,6 +73,7 @@ T user_indeterminate_result_error(const
+@@ -81,6 +81,7 @@ T user_indeterminate_result_error(const
  namespace detail
  {
  
@@ -28,7 +28,7 @@ Index: boost_1_77_0/boost/math/policies/error_handling.hpp
  template <class T>
  std::string prec_format(const T& val)
  {
-@@ -86,6 +87,7 @@ std::string prec_format(const T& val)
+@@ -94,6 +95,7 @@ std::string prec_format(const T& val)
     ss << val;
     return ss.str();
  }
@@ -36,23 +36,23 @@ Index: boost_1_77_0/boost/math/policies/error_handling.hpp
  
  inline void replace_all_in_string(std::string& result, const char* what, const char* with)
  {
-@@ -120,6 +122,7 @@ inline const char* name_of<BOOST_MATH_FL
+@@ -152,6 +154,7 @@ void raise_error(const char* pfunction,
+   BOOST_MATH_THROW_EXCEPTION(e)
  }
- #endif
  
 +#if 0
  template <class E, class T>
- void raise_error(const char* pfunction, const char* message)
+ void raise_error(const char* pfunction, const char* pmessage, const T& val)
  {
-@@ -181,6 +184,7 @@ inline T raise_domain_error(
-    // we never get here:
+@@ -207,6 +210,7 @@ inline constexpr T raise_domain_error(
+    // to be ignored so here we go anyway:
     return std::numeric_limits<T>::quiet_NaN();
  }
 +#endif
  
  template <class T>
- inline constexpr T raise_domain_error(
-@@ -217,6 +221,7 @@ inline T raise_domain_error(
+ inline T raise_domain_error(
+@@ -231,6 +235,7 @@ inline T raise_domain_error(
     return user_domain_error(function, message, val);
  }
  
@@ -60,31 +60,31 @@ Index: boost_1_77_0/boost/math/policies/error_handling.hpp
  template <class T>
  inline T raise_pole_error(
             const char* function,
-@@ -226,6 +231,7 @@ inline T raise_pole_error(
- {
+@@ -244,6 +249,7 @@ inline T raise_pole_error(
     return boost::math::policies::detail::raise_domain_error(function, message, val,  ::boost::math::policies::domain_error< ::boost::math::policies::throw_on_error>());
+ #endif
  }
 +#endif
  
  template <class T>
  inline constexpr T raise_pole_error(
-@@ -258,6 +264,7 @@ inline T raise_pole_error(
+@@ -275,6 +281,7 @@ inline T raise_pole_error(
+    return user_pole_error(function, message, val);
  }
- 
  
 +#if 0
  template <class T>
  inline T raise_overflow_error(
             const char* function,
-@@ -280,6 +287,7 @@ inline T raise_overflow_error(
-    // We should never get here:
+@@ -316,6 +323,7 @@ inline constexpr T raise_overflow_error(
+    // to be ignored so here we go anyway:
     return std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
  }
 +#endif
  
  template <class T>
  inline constexpr T raise_overflow_error(
-@@ -352,6 +360,7 @@ inline T raise_overflow_error(
+@@ -377,6 +385,7 @@ inline T raise_overflow_error(
     return user_overflow_error(function, m.c_str(), std::numeric_limits<T>::infinity());
  }
  
@@ -92,15 +92,15 @@ Index: boost_1_77_0/boost/math/policies/error_handling.hpp
  template <class T>
  inline T raise_underflow_error(
             const char* function,
-@@ -362,6 +371,7 @@ inline T raise_underflow_error(
-    // We should never get here:
+@@ -391,6 +400,7 @@ inline T raise_underflow_error(
     return 0;
+ #endif
  }
 +#endif
  
  template <class T>
  inline constexpr T raise_underflow_error(
-@@ -395,6 +405,7 @@ inline T raise_underflow_error(
+@@ -424,6 +434,7 @@ inline T raise_underflow_error(
     return user_underflow_error(function, message, T(0));
  }
  
@@ -108,15 +108,15 @@ Index: boost_1_77_0/boost/math/policies/error_handling.hpp
  template <class T>
  inline T raise_denorm_error(
             const char* function,
-@@ -406,6 +417,7 @@ inline T raise_denorm_error(
-    // we never get here:
+@@ -439,6 +450,7 @@ inline T raise_denorm_error(
     return T(0);
+ #endif
  }
 +#endif
  
  template <class T>
  inline constexpr T raise_denorm_error(
-@@ -442,6 +454,7 @@ inline T raise_denorm_error(
+@@ -475,6 +487,7 @@ inline T raise_denorm_error(
     return user_denorm_error(function, message, val);
  }
  
@@ -124,15 +124,15 @@ Index: boost_1_77_0/boost/math/policies/error_handling.hpp
  template <class T>
  inline T raise_evaluation_error(
             const char* function,
-@@ -453,6 +466,7 @@ inline T raise_evaluation_error(
-    // we never get here:
+@@ -490,6 +503,7 @@ inline T raise_evaluation_error(
     return T(0);
+ #endif
  }
 +#endif
  
  template <class T>
  inline constexpr T raise_evaluation_error(
-@@ -489,6 +503,7 @@ inline T raise_evaluation_error(
+@@ -526,6 +540,7 @@ inline T raise_evaluation_error(
     return user_evaluation_error(function, message, val);
  }
  
@@ -140,15 +140,15 @@ Index: boost_1_77_0/boost/math/policies/error_handling.hpp
  template <class T, class TargetType>
  inline TargetType raise_rounding_error(
             const char* function,
-@@ -501,6 +516,7 @@ inline TargetType raise_rounding_error(
-    // we never get here:
+@@ -542,6 +557,7 @@ inline TargetType raise_rounding_error(
     return TargetType(0);
+ #endif
  }
 +#endif
  
  template <class T, class TargetType>
  inline constexpr TargetType raise_rounding_error(
-@@ -556,6 +572,7 @@ inline TargetType raise_rounding_error(
+@@ -597,6 +613,7 @@ inline TargetType raise_rounding_error(
     return user_rounding_error(function, message, val, t);
  }
  
@@ -156,9 +156,9 @@ Index: boost_1_77_0/boost/math/policies/error_handling.hpp
  template <class T, class R>
  inline T raise_indeterminate_result_error(
             const char* function,
-@@ -568,6 +585,7 @@ inline T raise_indeterminate_result_erro
-    // we never get here:
+@@ -613,6 +630,7 @@ inline T raise_indeterminate_result_erro
     return std::numeric_limits<T>::quiet_NaN();
+ #endif
  }
 +#endif
  

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -49,8 +49,13 @@ ParseFile(Path path, Airspaces &airspaces)
 
   NullOperationEnvironment operation;
 
-  if (!ok1(ParseAirspaceFile(airspaces, reader, operation)))
+  try {
+    ParseAirspaceFile(airspaces, reader, operation);
+    ok1(true);
+  } catch (...) {
+    ok1(false);
     return false;
+  }
 
   airspaces.Optimise();
   return true;
@@ -129,9 +134,9 @@ TestOpenAir()
                  Angle::DMS(1, 30, 30),
                  Angle::DMS(1, 30, 30, true)));
     } else if (StringIsEqual(_T("Radio-Test 1 (AR with MHz)"), airspace.GetName())) {
-      ok1(StringIsEqual(_T("130.125 MHz"), airspace.GetRadioText().c_str()));
+      ok1(airspace.GetRadioFrequency() == RadioFrequency::FromMegaKiloHertz(130, 125));
     } else if (StringIsEqual(_T("Radio-Test 2 (AF without MHz)"), airspace.GetName())) {
-      ok1(StringIsEqual(_T("130.125"), airspace.GetRadioText().c_str()));
+      ok1(airspace.GetRadioFrequency() == RadioFrequency::FromMegaKiloHertz(130, 125));
     } else if (StringIsEqual(_T("Height-Test-1"), airspace.GetName())) {
       ok1(airspace.GetBase().IsTerrain());
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
@@ -237,7 +242,7 @@ TestTNP()
                  Angle::DMS(1, 30, 30),
                  Angle::DMS(1, 30, 30, true)));
     } else if (StringIsEqual(_T("Radio-Test"), airspace.GetName())) {
-      ok1(StringIsEqual(_T("130.125 MHz"), airspace.GetRadioText().c_str()));
+      ok1(airspace.GetRadioFrequency() == RadioFrequency::FromMegaKiloHertz(130, 125));
     } else if (StringIsEqual(_T("Height-Test-1"), airspace.GetName())) {
       ok1(airspace.GetBase().IsTerrain());
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
@@ -278,7 +283,7 @@ TestTNP()
   }
 }
 
-int main(int argc, char **argv)
+int main()
 try {
   plan_tests(105);
 

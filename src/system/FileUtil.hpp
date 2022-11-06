@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_OS_FILEUTIL_HPP
-#define XCSOAR_OS_FILEUTIL_HPP
+#pragma once
 
 #include "Path.hpp"
 
@@ -117,6 +116,19 @@ ExistsAny(Path path) noexcept;
 [[gnu::pure]]
 bool
 Exists(Path path) noexcept;
+
+#ifdef HAVE_POSIX
+
+/**
+ * Returns whether the given file descriptor is a character device e.g. /dev/ttyS<n>
+ * @param path File system path to check
+ * @return True if the character device exists
+ */
+[[gnu::pure]]
+bool
+IsCharDev(Path path) noexcept;
+
+#endif // HAVE_POSIX
 
 #if defined(_WIN32) && defined(UNICODE)
 [[gnu::pure]]
@@ -218,5 +230,3 @@ bool
 CreateExclusive(Path path) noexcept;
 
 } // namespace File
-
-#endif

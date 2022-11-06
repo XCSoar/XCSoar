@@ -39,7 +39,7 @@ WorkerThread::Run() noexcept
 {
   PeriodClock clock;
 
-  std::unique_lock<Mutex> lock(mutex);
+  std::unique_lock lock{mutex};
 
   while (true) {
     /* wait for work */

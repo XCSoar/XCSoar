@@ -35,15 +35,16 @@ namespace UI {
 
 static void
 WaylandRegistryGlobal(void *data, struct wl_registry *registry, uint32_t id,
-                      const char *interface, uint32_t version)
+                      const char *interface, [[maybe_unused]] uint32_t version)
 {
   auto &q = *(WaylandEventQueue *)data;
   q.RegistryHandler(registry, id, interface);
 }
 
 static void
-WaylandRegistryGlobalRemove(void *data, struct wl_registry *registry,
-                            uint32_t id)
+WaylandRegistryGlobalRemove([[maybe_unused]] void *data,
+                            [[maybe_unused]] struct wl_registry *registry,
+                            [[maybe_unused]] uint32_t id)
 {
 }
 
@@ -53,7 +54,9 @@ static constexpr struct wl_registry_listener registry_listener = {
 };
 
 static void
-WaylandSeatHandleCapabilities(void *data, struct wl_seat *seat, uint32_t caps)
+WaylandSeatHandleCapabilities(void *data,
+                              [[maybe_unused]] struct wl_seat *seat,
+                              uint32_t caps)
 {
   auto &queue = *(WaylandEventQueue *)data;
 
@@ -67,8 +70,10 @@ static constexpr struct wl_seat_listener seat_listener = {
 };
 
 static void
-WaylandPointerEnter(void *data, struct wl_pointer *wl_pointer, uint32_t serial,
-                    struct wl_surface *surface,
+WaylandPointerEnter(void *data,
+                    [[maybe_unused]] struct wl_pointer *wl_pointer,
+                    [[maybe_unused]] uint32_t serial,
+                    [[maybe_unused]] struct wl_surface *surface,
                     wl_fixed_t surface_x,
                     wl_fixed_t surface_y)
 {
@@ -79,13 +84,17 @@ WaylandPointerEnter(void *data, struct wl_pointer *wl_pointer, uint32_t serial,
 }
 
 static void
-WaylandPointerLeave(void *data, struct wl_pointer *wl_pointer, uint32_t serial,
-                    struct wl_surface *surface)
+WaylandPointerLeave([[maybe_unused]] void *data,
+                    [[maybe_unused]] struct wl_pointer *wl_pointer,
+                    [[maybe_unused]] uint32_t serial,
+                    [[maybe_unused]] struct wl_surface *surface)
 {
 }
 
 static void
-WaylandPointerMotion(void *data, struct wl_pointer *wl_pointer, uint32_t time,
+WaylandPointerMotion(void *data,
+                     [[maybe_unused]] struct wl_pointer *wl_pointer,
+                     [[maybe_unused]] uint32_t time,
                      wl_fixed_t surface_x, wl_fixed_t surface_y)
 {
   auto &queue = *(WaylandEventQueue *)data;
@@ -95,9 +104,12 @@ WaylandPointerMotion(void *data, struct wl_pointer *wl_pointer, uint32_t time,
 }
 
 static void
-WaylandPointerButton(void *data, struct wl_pointer *wl_pointer,
-                     uint32_t serial, uint32_t time,
-                     uint32_t button, uint32_t state)
+WaylandPointerButton(void *data,
+                     [[maybe_unused]] struct wl_pointer *wl_pointer,
+                     [[maybe_unused]] uint32_t serial,
+                     [[maybe_unused]] uint32_t time,
+                     [[maybe_unused]] uint32_t button,
+                     uint32_t state)
 {
   auto &queue = *(WaylandEventQueue *)data;
 
@@ -105,8 +117,10 @@ WaylandPointerButton(void *data, struct wl_pointer *wl_pointer,
 }
 
 static void
-WaylandPointerAxis(void *data, struct wl_pointer *wl_pointer,
-                   uint32_t time, uint32_t axis, wl_fixed_t value)
+WaylandPointerAxis(void *data,
+                   [[maybe_unused]] struct wl_pointer *wl_pointer,
+                   [[maybe_unused]] uint32_t time,
+                   uint32_t axis, wl_fixed_t value)
 {
   auto &queue = *(WaylandEventQueue *)data;
 
@@ -150,14 +164,14 @@ WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
 }
 
 bool
-WaylandEventQueue::Generate(Event &event)
+WaylandEventQueue::Generate([[maybe_unused]] Event &event)
 {
   wl_display_flush(display);
   return false;
 }
 
 void
-WaylandEventQueue::OnSocketReady(unsigned events) noexcept
+WaylandEventQueue::OnSocketReady([[maybe_unused]] unsigned events) noexcept
 {
   wl_display_dispatch(display);
 }
@@ -184,6 +198,8 @@ WaylandEventQueue::SeatHandleCapabilities(bool has_pointer, bool has_keyboard,
 {
   /* TODO: collect flags for HasTouchScreen(), HasPointer(),
      HasKeyboard(), HasCursorKeys() */
+  (void)has_keyboard;
+  (void)has_touch;
 
   if (has_pointer) {
     if (pointer == nullptr) {

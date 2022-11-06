@@ -66,8 +66,7 @@
  * @brief I/O Stream Class
  */
 
-#ifndef JAS_STREAM_H
-#define JAS_STREAM_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -1056,6 +1055,4 @@ static inline int jas_stream_putc_macro(jas_stream_t *stream, jas_uchar c)
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

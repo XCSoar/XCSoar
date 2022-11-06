@@ -33,14 +33,14 @@ Copyright_License {
 void
 BufferedPort::Flush()
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   buffer.Clear();
 }
 
 bool
 BufferedPort::StopRxThread()
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   running = false;
 
   cond.notify_all();
@@ -50,7 +50,7 @@ BufferedPort::StopRxThread()
 bool
 BufferedPort::StartRxThread()
 {
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
   if (!running) {
     running = true;
     buffer.Clear();
@@ -65,7 +65,7 @@ BufferedPort::Read(void *dest, std::size_t length)
 {
   assert(!running);
 
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   auto r = buffer.Read();
   std::size_t nbytes = std::min(length, r.size());
@@ -78,7 +78,7 @@ void
 BufferedPort::WaitRead(std::chrono::steady_clock::duration _timeout)
 {
   TimeoutClock timeout(_timeout);
-  std::unique_lock<Mutex> lock(mutex);
+  std::unique_lock lock{mutex};
 
   while (buffer.empty()) {
     if (running)
@@ -98,7 +98,7 @@ BufferedPort::DataReceived(std::span<const std::byte> s) noexcept
   if (running) {
     return handler.DataReceived(s);
   } else {
-    std::lock_guard<Mutex> lock(mutex);
+    const std::lock_guard lock{mutex};
 
     buffer.Shift();
     auto r = buffer.Write();

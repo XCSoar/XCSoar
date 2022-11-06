@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -19,8 +19,8 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#ifndef TASK_AUTOPILOT_HPP
-#define TASK_AUTOPILOT_HPP
+
+#pragma once
 
 #include "Math/Angle.hpp"
 #include "Math/Filter.hpp"
@@ -134,7 +134,5 @@ private:
   bool IsFarFromTarget(const TaskAccessor& task,
                        const AircraftState& state);
 };
-
-#endif
 
 

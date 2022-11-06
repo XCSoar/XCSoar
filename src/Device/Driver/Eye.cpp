@@ -61,7 +61,7 @@ EyeDevice::ParseNMEA(const char *_line, NMEAInfo &info)
     return false;
 }
 
-bool
+inline bool
 EyeDevice::PEYA(NMEAInputLine &line, NMEAInfo &info)
 {
   double value;
@@ -115,7 +115,7 @@ EyeDevice::PEYA(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
-bool
+inline bool
 EyeDevice::PEYI(NMEAInputLine &line, NMEAInfo &info)
 {
   double value;
@@ -157,7 +157,7 @@ EyeDevice::PEYI(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
-bool
+inline bool
 EyeDevice::ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
   double bearing, norm;
@@ -173,7 +173,7 @@ EyeDevice::ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
     return false;
 }
 
-bool
+inline bool
 EyeDevice::ReadAcceleration(NMEAInputLine &line, AccelerationState &value_r)
 {
   double x, y, z;
@@ -190,7 +190,7 @@ EyeDevice::ReadAcceleration(NMEAInputLine &line, AccelerationState &value_r)
 }
 
 static Device *
-EyeCreateOnPort(gcc_unused const DeviceConfig &config, gcc_unused Port &com_port)
+EyeCreateOnPort(const DeviceConfig &, Port &)
 {
   return new EyeDevice();
 }

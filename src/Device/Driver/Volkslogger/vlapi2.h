@@ -15,8 +15,7 @@
  **
  ***********************************************************************/
 
-#ifndef VLAPI2_H
-#define VLAPI2_H
+#pragma once
 
 #include "Geo/GeoPoint.hpp"
 
@@ -122,5 +121,3 @@ class VLAPI_DATA {
     void put(DBB *dbb) const;
   };
 };
-
-#endif

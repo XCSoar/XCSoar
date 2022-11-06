@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -53,7 +53,7 @@ GlueMapWindow::OnCreate()
 }
 
 void
-GlueMapWindow::OnDestroy()
+GlueMapWindow::OnDestroy() noexcept
 {
   /* stop the TopographyThread and the TerrainThread */
   SetTopography(nullptr);
@@ -69,7 +69,7 @@ GlueMapWindow::OnDestroy()
 }
 
 bool
-GlueMapWindow::OnMouseDouble(PixelPoint p)
+GlueMapWindow::OnMouseDouble([[maybe_unused]] PixelPoint p) noexcept
 {
   map_item_timer.Cancel();
 
@@ -81,7 +81,7 @@ GlueMapWindow::OnMouseDouble(PixelPoint p)
 }
 
 bool
-GlueMapWindow::OnMouseMove(PixelPoint p, unsigned keys)
+GlueMapWindow::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
   /* allow a bigger threshold on touch screens */
   const unsigned threshold = Layout::Scale(IsEmbedded() ? 50 : 10);
@@ -124,7 +124,7 @@ GlueMapWindow::OnMouseMove(PixelPoint p, unsigned keys)
   return MapWindow::OnMouseMove(p, keys);
 }
 
-gcc_pure
+[[gnu::pure]]
 static bool
 IsCtrlKeyPressed()
 {
@@ -140,7 +140,7 @@ IsCtrlKeyPressed()
 }
 
 bool
-GlueMapWindow::OnMouseDown(PixelPoint p)
+GlueMapWindow::OnMouseDown(PixelPoint p) noexcept
 {
   map_item_timer.Cancel();
 
@@ -210,7 +210,7 @@ GlueMapWindow::OnMouseDown(PixelPoint p)
 }
 
 bool
-GlueMapWindow::OnMouseUp(PixelPoint p)
+GlueMapWindow::OnMouseUp(PixelPoint p) noexcept
 {
   if (drag_mode != DRAG_NONE)
     ReleaseCapture();
@@ -297,7 +297,8 @@ GlueMapWindow::OnMouseUp(PixelPoint p)
 }
 
 bool
-GlueMapWindow::OnMouseWheel(PixelPoint p, int delta)
+GlueMapWindow::OnMouseWheel([[maybe_unused]] PixelPoint p,
+                            [[maybe_unused]] int delta) noexcept
 {
   map_item_timer.Cancel();
 
@@ -321,7 +322,7 @@ GlueMapWindow::OnMouseWheel(PixelPoint p, int delta)
 #ifdef HAVE_MULTI_TOUCH
 
 bool
-GlueMapWindow::OnMultiTouchDown()
+GlueMapWindow::OnMultiTouchDown() noexcept
 {
   if (!visible_projection.IsValid())
     return false;
@@ -348,7 +349,7 @@ GlueMapWindow::OnMouseGesture(const TCHAR* gesture)
 }
 
 bool
-GlueMapWindow::OnKeyDown(unsigned key_code)
+GlueMapWindow::OnKeyDown(unsigned key_code) noexcept
 {
   map_item_timer.Cancel();
 
@@ -364,7 +365,7 @@ GlueMapWindow::OnKeyDown(unsigned key_code)
 }
 
 void
-GlueMapWindow::OnCancelMode()
+GlueMapWindow::OnCancelMode() noexcept
 {
   MapWindow::OnCancelMode();
 
@@ -389,7 +390,7 @@ GlueMapWindow::OnCancelMode()
 }
 
 void
-GlueMapWindow::OnPaint(Canvas &canvas)
+GlueMapWindow::OnPaint(Canvas &canvas) noexcept
 {
   MapWindow::OnPaint(canvas);
 

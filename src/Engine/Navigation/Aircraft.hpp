@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -19,8 +19,8 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef AIRCRAFT_HPP
-#define AIRCRAFT_HPP
+ 
+#pragma once
 
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SpeedVector.hpp"
@@ -64,7 +64,7 @@ struct SpeedState
    */
   double true_airspeed;
 
-  void Reset() noexcept {
+  constexpr void Reset() noexcept {
     ground_speed = true_airspeed = 0;
   }
 };
@@ -87,7 +87,11 @@ struct AltitudeState
   /** Altitude over terrain */
   double altitude_agl;
 
-  void Reset() noexcept;
+  constexpr void Reset() noexcept {
+    altitude = 0;
+    working_band_fraction = 0;
+    altitude_agl = 0;
+  }
 };
 
 /**
@@ -107,7 +111,7 @@ struct VarioState
    */
   double netto_vario;
 
-  void Reset() noexcept {
+  constexpr void Reset() noexcept {
     vario = netto_vario = 0;
   }
 };
@@ -160,7 +164,7 @@ struct AircraftState:
     return time.IsDefined();
   }
 
-  void ResetTime() noexcept {
+  constexpr void ResetTime() noexcept {
     time = TimeStamp::Undefined();
   }
 
@@ -174,9 +178,18 @@ struct AircraftState:
   [[gnu::pure]]
   AircraftState GetPredictedState(FloatDuration in_time) const noexcept;
 
-  void Reset() noexcept;
+  constexpr void Reset() noexcept {
+    AltitudeState::Reset();
+    SpeedState::Reset();
+    VarioState::Reset();
+
+    ResetTime();
+    location.SetInvalid();
+    track = Angle::Zero();
+    g_load = 1;
+    wind = SpeedVector::Zero();
+    flying = false;
+  }
 };
 
 static_assert(std::is_trivial<AircraftState>::value, "type is not trivial");
-
-#endif

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -135,7 +135,7 @@ ZeroFinder::find_zero(const double xstart) noexcept
 }
 
 inline double
-ZeroFinder::find_zero_actual(const double xstart) noexcept
+ZeroFinder::find_zero_actual([[maybe_unused]] const double xstart) noexcept
 {
   double a, b, c; // Abscissae, descr. see above
   double fa; // f(a)
@@ -309,7 +309,7 @@ ZeroFinder::find_min(const double xstart) noexcept
 }
 
 inline double
-ZeroFinder::find_min_actual(const double xstart) noexcept
+ZeroFinder::find_min_actual([[maybe_unused]] const double xstart) noexcept
 {
   double x, v, w; // Abscissae, descr. see above
   double fx; // f(x)

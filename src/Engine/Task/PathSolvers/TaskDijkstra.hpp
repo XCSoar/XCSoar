@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,8 +20,7 @@
 }
  */
 
-#ifndef TASK_DIJKSTRA_HPP
-#define TASK_DIJKSTRA_HPP
+#pragma once
 
 #include "PathSolvers/NavDijkstra.hpp"
 #include "Geo/SearchPoint.hpp"
@@ -51,7 +50,7 @@ class SearchPointVector;
  *
  * This uses a Dijkstra search and so is O(N log(N)).
  */
-class TaskDijkstra : protected NavDijkstra
+class TaskDijkstra : protected NavDijkstra<>
 {
   const SearchPointVector *boundaries[MAX_STAGES];
 
@@ -92,7 +91,7 @@ protected:
   bool Run() noexcept;
 
   bool Link(const ScanTaskPoint node, const ScanTaskPoint parent,
-            unsigned value) noexcept {
+            value_type value) noexcept {
     if (!is_min)
       value = DIJKSTRA_MINMAX_OFFSET - value;
 
@@ -119,15 +118,15 @@ protected:
    * @return Distance (flat) from origin to destination
    */
   [[gnu::pure]]
-  unsigned CalcDistance(const ScanTaskPoint curNode,
-                        const SearchPoint &currentLocation) const noexcept {
+  value_type CalcDistance(const ScanTaskPoint curNode,
+                          const SearchPoint &currentLocation) const noexcept {
     /* using expensive floating point formulas here to avoid integer
        rounding errors */
 
     const GeoPoint &a = GetPoint(curNode).GetLocation();
     const GeoPoint &b = currentLocation.GetLocation();
 
-    return (unsigned)a.Distance(b);
+    return static_cast<value_type>(a.Distance(b));
   }
 
   /** 
@@ -139,8 +138,8 @@ protected:
    * @return Distance (flat) from origin to destination
    */
   [[gnu::pure]]
-  unsigned CalcDistance(const ScanTaskPoint s1,
-                        const ScanTaskPoint s2) const noexcept {
+  value_type CalcDistance(const ScanTaskPoint s1,
+                          const ScanTaskPoint s2) const noexcept {
     return CalcDistance(s1, GetPoint(s2));
   }
 
@@ -152,5 +151,3 @@ protected:
   /* methods from NavDijkstra */
   virtual void AddEdges(ScanTaskPoint curNode) noexcept final;
 };
-
-#endif

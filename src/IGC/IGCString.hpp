@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_IGC_STRING_HPP
-#define XCSOAR_IGC_STRING_HPP
+#pragma once
 
 #ifdef _UNICODE
 #include <tchar.h>
@@ -37,9 +36,8 @@ Copyright_License {
  *
  * @see IGC specification, section A6
  */
-constexpr
-static inline bool
-IsReservedIGCChar(char ch)
+static constexpr bool
+IsReservedIGCChar(char ch) noexcept
 {
   return ch == '$' || ch == '*' || ch == '!' || ch == '\\' ||
     ch == '^' || ch == '~';
@@ -50,17 +48,15 @@ IsReservedIGCChar(char ch)
  *
  * @see IGC specification, section A6
  */
-constexpr
-static inline bool
-IsValidIGCChar(char ch)
+static constexpr bool
+IsValidIGCChar(char ch) noexcept
 {
   return ch >= 0x20 && ch <= 0x7e && !IsReservedIGCChar(ch);
 }
 
 #ifdef _UNICODE
-constexpr
-static inline bool
-IsValidIGCChar(TCHAR ch)
+static constexpr bool
+IsValidIGCChar(TCHAR ch) noexcept
 {
   return ch >= 0x20 && ch <= 0x7e && !IsReservedIGCChar(char(ch));
 }
@@ -72,11 +68,9 @@ IsValidIGCChar(TCHAR ch)
  * The destination buffer will not be null-terminated.
  */
 char *
-CopyIGCString(char *dest, char *dest_limit, const char *src);
+CopyIGCString(char *dest, char *dest_limit, const char *src) noexcept;
 
 #ifdef _UNICODE
 char *
-CopyIGCString(char *dest, char *dest_limit, const TCHAR *src);
-#endif
-
+CopyIGCString(char *dest, char *dest_limit, const TCHAR *src) noexcept;
 #endif

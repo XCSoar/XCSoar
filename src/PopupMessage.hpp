@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_POPUP_MESSAGE_H
-#define XCSOAR_POPUP_MESSAGE_H
+#pragma once
 
 #include "ui/window/PaintWindow.hpp"
 #include "Renderer/TextRenderer.hpp"
@@ -64,31 +63,30 @@ private:
   static constexpr unsigned MAXMESSAGES = 20;
 
   struct Message {
-    Type type;
+    Type type = MSG_UNKNOWN;
     std::chrono::steady_clock::time_point tstart{}; // time message was created
     std::chrono::steady_clock::time_point texpiry{}; // time message will expire
     std::chrono::steady_clock::duration tshow; // time message is visible for
 
     StaticString<256u> text;
 
-    Message()
-      :type(MSG_UNKNOWN)
+    constexpr Message() noexcept
     {
       text.clear();
     }
 
-    bool IsUnknown() const {
+    constexpr bool IsUnknown() const noexcept {
       return type == MSG_UNKNOWN;
     }
 
-    bool IsNew() const {
+    constexpr bool IsNew() const noexcept {
       return texpiry == tstart;
     }
 
     /**
      * Expired for the first time?
      */
-    bool IsNewlyExpired(std::chrono::steady_clock::time_point now) const {
+    constexpr bool IsNewlyExpired(std::chrono::steady_clock::time_point now) const noexcept {
       return texpiry <= now && texpiry > tstart;
     }
 
@@ -121,20 +119,20 @@ private:
   struct Message messages[MAXMESSAGES];
   StaticString<2000> text;
 
-  unsigned n_visible;
+  unsigned n_visible = 0;
 
-  bool enable_sound;
+  bool enable_sound = true;
 
 public:
   PopupMessage(UI::SingleWindow &_parent, const DialogLook &_look,
-               const UISettings &settings);
+               const UISettings &settings) noexcept;
 
-  void Create(const PixelRect _rc);
+  void Create(const PixelRect _rc) noexcept;
 
-  void UpdateLayout(PixelRect _rc);
+  void UpdateLayout(PixelRect _rc) noexcept;
 
   /** returns true if messages have changed */
-  bool Render();
+  bool Render() noexcept;
 
 protected:
   /** Caller must hold the lock. */
@@ -142,36 +140,34 @@ protected:
                   const TCHAR *Text) noexcept;
 
 public:
-  void AddMessage(const TCHAR* text, const TCHAR *data=nullptr);
+  void AddMessage(const TCHAR* text, const TCHAR *data=nullptr) noexcept;
 
   /**
    * Repeats last non-visible message of specified type
    * (or any message type=MSG_UNKNOWN).
    */
-  void Repeat(Type type=MSG_UNKNOWN);
+  void Repeat(Type type=MSG_UNKNOWN) noexcept;
 
   /** Clears all visible messages (of specified type or if type=0, all). */
-  bool Acknowledge(Type type=MSG_UNKNOWN);
+  bool Acknowledge(Type type=MSG_UNKNOWN) noexcept;
 
 private:
   [[gnu::pure]]
-  unsigned CalculateWidth() const;
+  unsigned CalculateWidth() const noexcept;
 
   [[gnu::pure]]
-  PixelRect GetRect(unsigned width, unsigned height) const;
+  PixelRect GetRect(unsigned width, unsigned height) const noexcept;
 
   [[gnu::pure]]
-  PixelRect GetRect() const;
+  PixelRect GetRect() const noexcept;
 
-  void UpdateTextAndLayout();
-  int GetEmptySlot();
+  void UpdateTextAndLayout() noexcept;
+  int GetEmptySlot() noexcept;
 
 protected:
   /* virtual methods from class Window */
-  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
 
   /* virtual methods from class PaintWindow */
-  void OnPaint(Canvas &canvas) override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };
-
-#endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -91,7 +91,7 @@ private:
 
 public:
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept override;
 
   /* virtual methods from class List::Handler */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -109,11 +109,11 @@ public:
                                CommonInterface::GetMapSettings().waypoint);
   }
 
-  bool CanActivateItem(unsigned index) const noexcept override {
+  bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
     return true;
   }
 
-  void OnActivateItem(unsigned index) noexcept override;
+  void OnActivateItem([[maybe_unused]] unsigned index) noexcept override;
 };
 
 void
@@ -144,8 +144,8 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog)
 }
 
 void
-AlternatesListWidget::Prepare(ContainerWindow &parent,
-                              const PixelRect &rc) noexcept
+AlternatesListWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                              [[maybe_unused]] const PixelRect &rc) noexcept
 {
   CreateList(parent, dialog_look, rc,
              row_renderer.CalculateLayout(*dialog_look.list.font_bold,
@@ -155,7 +155,7 @@ AlternatesListWidget::Prepare(ContainerWindow &parent,
 }
 
 void
-AlternatesListWidget::OnActivateItem(unsigned index) noexcept
+AlternatesListWidget::OnActivateItem([[maybe_unused]] unsigned index) noexcept
 {
   details_button->Click();
 }

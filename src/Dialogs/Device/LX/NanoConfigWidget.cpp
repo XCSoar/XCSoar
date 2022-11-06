@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -78,19 +78,19 @@ WaitBoolValue(LXDevice &device, const char *name,
 }
 
 void
-NanoConfigWidget::Prepare(ContainerWindow &parent,
-                          const PixelRect &rc) noexcept
+NanoConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                          [[maybe_unused]] const PixelRect &rc) noexcept
 {
   RequestAllSettings(device);
 
   static constexpr StaticEnumChoice baud_list[] = {
-    { 2400, _T("2400"), NULL },
-    { 4800, _T("4800"), NULL },
-    { 9600, _T("9600"), NULL },
-    { 19200, _T("19200"), NULL },
-    { 38400, _T("38400"), NULL },
-    { 57600, _T("57600"), NULL },
-    { 115200, _T("115200"), NULL },
+    { 2400, _T("2400") },
+    { 4800, _T("4800") },
+    { 9600, _T("9600") },
+    { 19200, _T("19200") },
+    { 38400, _T("38400") },
+    { 57600, _T("57600") },
+    { 115200, _T("115200") },
     { 0 }
   };
 
@@ -115,17 +115,30 @@ NanoConfigWidget::Prepare(ContainerWindow &parent,
 }
 
 bool
-NanoConfigWidget::SaveSetting(const char *name, unsigned idx,
-                              OperationEnvironment &env)
+NanoConfigWidget::SaveSettingBoolean(const char *name, unsigned idx,
+                                     OperationEnvironment &env)
 {
-  const std::string old_value = device.GetNanoSetting(name);
-  unsigned value = strtoul(old_value.c_str(), NULL, 10);
-  if (!SaveValue(idx, value))
-    return false;
+  bool value = device.GetNanoSettingInteger(name);
+  return SaveValue(idx, value) &&
+    device.SendNanoSetting(name, value, env);
+}
 
-  NarrowString<32> buffer;
-  buffer.UnsafeFormat("%u", value);
-  return device.SendNanoSetting(name, buffer, env);
+bool
+NanoConfigWidget::SaveSettingInteger(const char *name, unsigned idx,
+                                     OperationEnvironment &env)
+{
+  unsigned value = device.GetNanoSettingInteger(name);
+  return SaveValueInteger(idx, value) &&
+    device.SendNanoSetting(name, value, env);
+}
+
+bool
+NanoConfigWidget::SaveSettingEnum(const char *name, unsigned idx,
+                                  OperationEnvironment &env)
+{
+  unsigned value = device.GetNanoSettingInteger(name);
+  return SaveValueEnum(idx, value) &&
+    device.SendNanoSetting(name, value, env);
 }
 
 bool
@@ -134,12 +147,12 @@ try {
   PopupOperationEnvironment env;
   bool changed = false;
 
-  changed |= SaveSetting("BAUDRATE", BAUDRATE, env);
-  changed |= SaveSetting("AUTOOFF", AUTOOFF, env);
-  changed |= SaveSetting("OFFFIN", OFFFIN, env);
-  changed |= SaveSetting("ALWRUN", ALWRUN, env);
-  changed |= SaveSetting("NMEA", NMEA, env);
-  changed |= SaveSetting("RECINT", RECINT, env);
+  changed |= SaveSettingEnum("BAUDRATE", BAUDRATE, env);
+  changed |= SaveSettingBoolean("AUTOOFF", AUTOOFF, env);
+  changed |= SaveSettingBoolean("OFFFIN", OFFFIN, env);
+  changed |= SaveSettingBoolean("ALWRUN", ALWRUN, env);
+  changed |= SaveSettingBoolean("NMEA", NMEA, env);
+  changed |= SaveSettingInteger("RECINT", RECINT, env);
 
   _changed |= changed;
   return true;

@@ -1,4 +1,5 @@
 import os
+import re
 import subprocess
 
 from build.project import Project
@@ -25,13 +26,33 @@ set(CMAKE_SYSTEM_PROCESSOR {toolchain.actual_arch.split('-', 1)[0]})
 set(CMAKE_C_COMPILER_TARGET {toolchain.actual_arch})
 set(CMAKE_CXX_COMPILER_TARGET {toolchain.actual_arch})
 
-set(CMAKE_C_FLAGS "{toolchain.cflags} {toolchain.cppflags}")
-set(CMAKE_CXX_FLAGS "{toolchain.cxxflags} {toolchain.cppflags}")
+set(CMAKE_C_FLAGS_INIT "{toolchain.cflags} {toolchain.cppflags}")
+set(CMAKE_CXX_FLAGS_INIT "{toolchain.cxxflags} {toolchain.cppflags}")
 """)
     __write_cmake_compiler(f, 'C', toolchain.cc)
     __write_cmake_compiler(f, 'CXX', toolchain.cxx)
 
-def configure(toolchain, src, build, args=()):
+    if cmake_system_name == 'Darwin':
+        # On macOS, cmake forcibly adds an "-isysroot" flag even if
+        # one is already present in the flags variable; this breaks
+        # cross-compiling for iOS, and can be worked around by setting
+        # the CMAKE_OSX_SYSROOT variable
+        # (https://cmake.org/cmake/help/latest/variable/CMAKE_OSX_SYSROOT.html).
+        m = re.search(r'-isysroot +(\S+)', toolchain.cflags)
+        if m:
+            sysroot = m.group(1)
+
+            print(f'set(CMAKE_OSX_SYSROOT {sysroot})', file=f)
+
+            # search libraries and headers only in the sysroot, not on
+            # the build host
+            f.write(f"""
+set(CMAKE_FIND_ROOT_PATH "{toolchain.install_prefix};{sysroot}")
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+""")
+
+def configure(toolchain, src, build, args=(), env=None):
     cross_args = []
 
     if toolchain.is_windows:
@@ -61,15 +82,23 @@ def configure(toolchain, src, build, args=()):
         '-GNinja',
     ] + cross_args + args
 
-    subprocess.check_call(configure, env=toolchain.env, cwd=build)
+    if env is None:
+        env = toolchain.env
+    else:
+        env = {**toolchain.env, **env}
+
+    print(configure)
+    subprocess.check_call(configure, env=env, cwd=build)
 
 class CmakeProject(Project):
     def __init__(self, url, alternative_url, md5, installed, configure_args=[],
                  windows_configure_args=[],
+                 env=None,
                  **kwargs):
         Project.__init__(self, url, alternative_url, md5, installed, **kwargs)
         self.configure_args = configure_args
         self.windows_configure_args = windows_configure_args
+        self.env = env
 
     def configure(self, toolchain):
         src = self.unpack(toolchain)
@@ -77,10 +106,10 @@ class CmakeProject(Project):
         configure_args = self.configure_args
         if toolchain.is_windows:
             configure_args = configure_args + self.windows_configure_args
-        configure(toolchain, src, build, configure_args)
+        configure(toolchain, src, build, configure_args, self.env)
         return build
 
     def _build(self, toolchain):
         build = self.configure(toolchain)
-        subprocess.check_call(['ninja', 'install'],
+        subprocess.check_call(['ninja', '-v', 'install'],
                               cwd=build, env=toolchain.env)

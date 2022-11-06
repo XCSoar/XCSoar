@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef JAVA_GLOBAL_HXX
-#define JAVA_GLOBAL_HXX
+#pragma once
 
 #include <jni.h>
 
@@ -55,5 +54,3 @@ GetEnv() noexcept
 }
 
 } // namespace Java
-
-#endif

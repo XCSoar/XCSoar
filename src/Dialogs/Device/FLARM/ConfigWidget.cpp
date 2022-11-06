@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -42,7 +42,7 @@ static const char *const flarm_setting_names[] = {
   NULL
 };
 
-gcc_pure
+[[gnu::pure]]
 static bool
 SettingExists(FlarmDevice &device, const char *name) noexcept
 {
@@ -100,60 +100,56 @@ GetUnsignedValue(const FlarmDevice &device, const char *name,
 }
 
 void
-FLARMConfigWidget::Prepare(ContainerWindow &parent,
-                           const PixelRect &rc) noexcept
+FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                           [[maybe_unused]] const PixelRect &rc) noexcept
 {
   RequestAllSettings(device);
 
   baud = GetUnsignedValue(device, "BAUD", 2);
-  priv = GetUnsignedValue(device, "PRIV", 0);
+  priv = GetUnsignedValue(device, "PRIV", 0) == 1;
   thre = GetUnsignedValue(device, "THRE", 2);
   range = GetUnsignedValue(device, "RANGE", 3000);
   acft = GetUnsignedValue(device, "ACFT", 0);
   log_int = GetUnsignedValue(device, "LOGINT", 2);
-  notrack = GetUnsignedValue(device, "NOTRACK", 0);
+  notrack = GetUnsignedValue(device, "NOTRACK", 0) == 1;
 
   static constexpr StaticEnumChoice baud_list[] = {
-    { 0, _T("4800"), NULL },
-    { 1, _T("9600"), NULL },
-    { 2, _T("19200"), NULL },
-    { 4, _T("38400"), NULL },
-    { 5, _T("57600"), NULL },
-    { 0 }
+    { 0, _T("4800") },
+    { 1, _T("9600") },
+    { 2, _T("19200") },
+    { 4, _T("38400") },
+    { 5, _T("57600") },
+    nullptr
   };
 
   AddEnum(_("Baud rate"), NULL, baud_list, baud);
-  AddBoolean(_("Stealth mode"), NULL, priv == 1);
+  AddBoolean(_("Stealth mode"), NULL, priv);
   AddInteger(_("Threshold"), NULL, _T("%d m/s"), _T("%d"), 1, 10, 1, thre);
   AddInteger(_("Range"), NULL, _T("%d m"), _T("%d"), 2000, 25500, 250, range);
 
   static constexpr StaticEnumChoice acft_list[] = {
-    { (unsigned)FlarmTraffic::AircraftType::UNKNOWN, N_("Unknown") },
-    { (unsigned)FlarmTraffic::AircraftType::GLIDER, N_("Glider") },
-    { (unsigned)FlarmTraffic::AircraftType::TOW_PLANE, N_("Tow plane") },
-    { (unsigned)FlarmTraffic::AircraftType::HELICOPTER, N_("Helicopter") },
-    { (unsigned)FlarmTraffic::AircraftType::PARACHUTE, N_("Parachute") },
-    { (unsigned)FlarmTraffic::AircraftType::DROP_PLANE, N_("Drop plane") },
-    { (unsigned)FlarmTraffic::AircraftType::HANG_GLIDER, N_("Hang glider") },
-    { (unsigned)FlarmTraffic::AircraftType::PARA_GLIDER, N_("Paraglider") },
-    { (unsigned)FlarmTraffic::AircraftType::POWERED_AIRCRAFT,
-      N_("Powered aircraft") },
-    { (unsigned)FlarmTraffic::AircraftType::JET_AIRCRAFT, N_("Jet aircraft") },
-    { (unsigned)FlarmTraffic::AircraftType::FLYING_SAUCER,
-      N_("Flying saucer") },
-    { (unsigned)FlarmTraffic::AircraftType::BALLOON, N_("Balloon") },
-    { (unsigned)FlarmTraffic::AircraftType::AIRSHIP, N_("Airship") },
-    { (unsigned)FlarmTraffic::AircraftType::UAV,
-      N_("Unmanned aerial vehicle") },
-    { (unsigned)FlarmTraffic::AircraftType::STATIC_OBJECT,
-      N_("Static object") },
-    { 0 }
+    { FlarmTraffic::AircraftType::UNKNOWN, N_("Unknown") },
+    { FlarmTraffic::AircraftType::GLIDER, N_("Glider") },
+    { FlarmTraffic::AircraftType::TOW_PLANE, N_("Tow plane") },
+    { FlarmTraffic::AircraftType::HELICOPTER, N_("Helicopter") },
+    { FlarmTraffic::AircraftType::PARACHUTE, N_("Parachute") },
+    { FlarmTraffic::AircraftType::DROP_PLANE, N_("Drop plane") },
+    { FlarmTraffic::AircraftType::HANG_GLIDER, N_("Hang glider") },
+    { FlarmTraffic::AircraftType::PARA_GLIDER, N_("Paraglider") },
+    { FlarmTraffic::AircraftType::POWERED_AIRCRAFT, N_("Powered aircraft") },
+    { FlarmTraffic::AircraftType::JET_AIRCRAFT, N_("Jet aircraft") },
+    { FlarmTraffic::AircraftType::FLYING_SAUCER, N_("Flying saucer") },
+    { FlarmTraffic::AircraftType::BALLOON, N_("Balloon") },
+    { FlarmTraffic::AircraftType::AIRSHIP, N_("Airship") },
+    { FlarmTraffic::AircraftType::UAV, N_("Unmanned aerial vehicle") },
+    { FlarmTraffic::AircraftType::STATIC_OBJECT, N_("Static object") },
+    nullptr
   };
 
   AddEnum(_("Type"), NULL, acft_list, acft);
   AddInteger(_("Logger interval"), NULL, _T("%d s"), _T("%d"),
              1, 8, 1, log_int);
-  AddBoolean(_("No tracking mode"), NULL, notrack == 1);
+  AddBoolean(_("No tracking mode"), NULL, notrack);
 
 }
 
@@ -164,7 +160,7 @@ try {
   bool changed = false;
   NarrowString<32> buffer;
 
-  if (SaveValue(Baud, baud)) {
+  if (SaveValueEnum(Baud, baud)) {
     buffer.UnsafeFormat("%u", baud);
     device.SendSetting("BAUD", buffer, env);
     changed = true;
@@ -176,25 +172,25 @@ try {
     changed = true;
   }
 
-  if (SaveValue(Thre, thre)) {
+  if (SaveValueInteger(Thre, thre)) {
     buffer.UnsafeFormat("%u", thre);
     device.SendSetting("THRE", buffer, env);
     changed = true;
   }
 
-  if (SaveValue(Range, range)) {
+  if (SaveValueInteger(Range, range)) {
     buffer.UnsafeFormat("%u", range);
     device.SendSetting("RANGE", buffer, env);
     changed = true;
   }
 
-  if (SaveValue(Acft, acft)) {
+  if (SaveValueEnum(Acft, acft)) {
     buffer.UnsafeFormat("%u", acft);
     device.SendSetting("ACFT", buffer, env);
     changed = true;
   }
 
-  if (SaveValue(LogInt, log_int)) {
+  if (SaveValueInteger(LogInt, log_int)) {
     buffer.UnsafeFormat("%u", log_int);
     device.SendSetting("LOGINT", buffer, env);
     changed = true;

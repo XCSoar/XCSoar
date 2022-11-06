@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STATIC_ARRAY_HXX
-#define STATIC_ARRAY_HXX
+#pragma once
 
 #include "TrivialArray.hxx"
 
@@ -43,5 +42,3 @@ public:
 
 	using TrivialArray<T, max>::TrivialArray;
 };
-
-#endif

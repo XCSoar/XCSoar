@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,25 +33,25 @@ Copyright_License {
 #include <tchar.h>
 
 pt2Event
-InputEvents::findEvent(TStringView name) noexcept
+InputEvents::findEvent(tstring_view name) noexcept
 {
   union {
     const TCHAR *in;
     pt2Event out;
   } u;
 
-  u.in = name.data;
+  u.in = name.data();
   return u.out;
 }
 
 int
-InputEvents::findGCE(const TCHAR *data)
+InputEvents::findGCE([[maybe_unused]] const TCHAR *data)
 {
   return -1;
 }
 
 int
-InputEvents::findNE(const TCHAR *data)
+InputEvents::findNE([[maybe_unused]] const TCHAR *data)
 {
   return -1;
 }

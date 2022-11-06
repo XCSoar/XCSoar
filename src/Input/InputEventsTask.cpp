@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -104,7 +104,7 @@ InputEvents::eventArmAdvance(const TCHAR *misc)
 }
 
 void
-InputEvents::eventCalculator(gcc_unused const TCHAR *misc)
+InputEvents::eventCalculator([[maybe_unused]] const TCHAR *misc)
 {
   dlgTaskManagerShowModal();
 
@@ -112,7 +112,7 @@ InputEvents::eventCalculator(gcc_unused const TCHAR *misc)
 }
 
 void
-InputEvents::eventGotoLookup(gcc_unused const TCHAR *misc)
+InputEvents::eventGotoLookup([[maybe_unused]] const TCHAR *misc)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
 
@@ -334,7 +334,7 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
 }
 
 void
-InputEvents::eventResetTask(const TCHAR *misc)
+InputEvents::eventResetTask([[maybe_unused]] const TCHAR *misc)
 {
   if (protected_task_manager == nullptr)
     return;

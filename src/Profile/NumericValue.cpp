@@ -25,7 +25,7 @@ Copyright_License {
 #include "util/NumberParser.hpp"
 
 bool
-ProfileMap::Get(const char *key, int &value) const
+ProfileMap::Get(const char *key, int &value) const noexcept
 {
   // Try to read the profile map
   const char *str = Get(key);
@@ -44,7 +44,7 @@ ProfileMap::Get(const char *key, int &value) const
 }
 
 bool
-ProfileMap::Get(const char *key, short &value) const
+ProfileMap::Get(const char *key, short &value) const noexcept
 {
   // Try to read the profile map
   const char *str = Get(key);
@@ -63,7 +63,7 @@ ProfileMap::Get(const char *key, short &value) const
 }
 
 bool
-ProfileMap::Get(const char *key, bool &value) const
+ProfileMap::Get(const char *key, bool &value) const noexcept
 {
   // Try to read the profile map
   const char *str = Get(key);
@@ -76,7 +76,7 @@ ProfileMap::Get(const char *key, bool &value) const
 }
 
 bool
-ProfileMap::Get(const char *key, unsigned &value) const
+ProfileMap::Get(const char *key, unsigned &value) const noexcept
 {
   // Try to read the profile map
   const char *str = Get(key);
@@ -95,7 +95,7 @@ ProfileMap::Get(const char *key, unsigned &value) const
 }
 
 bool
-ProfileMap::Get(const char *key, uint16_t &value) const
+ProfileMap::Get(const char *key, uint16_t &value) const noexcept
 {
   unsigned value32;
   if (!Get(key, value32) || value32 >= 0x10000)
@@ -106,7 +106,7 @@ ProfileMap::Get(const char *key, uint16_t &value) const
 }
 
 bool
-ProfileMap::Get(const char *key, uint8_t &value) const
+ProfileMap::Get(const char *key, uint8_t &value) const noexcept
 {
   unsigned value32;
   if (!Get(key, value32) || value32 >= 0x100)
@@ -117,7 +117,7 @@ ProfileMap::Get(const char *key, uint8_t &value) const
 }
 
 bool
-ProfileMap::Get(const char *key, double &value) const
+ProfileMap::Get(const char *key, double &value) const noexcept
 {
   // Try to read the profile map
   const char *str = Get(key);
@@ -136,7 +136,7 @@ ProfileMap::Get(const char *key, double &value) const
 }
 
 void
-ProfileMap::Set(const char *key, int value)
+ProfileMap::Set(const char *key, int value) noexcept
 {
   char tmp[50];
   sprintf(tmp, "%d", value);
@@ -144,7 +144,7 @@ ProfileMap::Set(const char *key, int value)
 }
 
 void
-ProfileMap::Set(const char *key, long value)
+ProfileMap::Set(const char *key, long value) noexcept
 {
   char tmp[50];
   sprintf(tmp, "%ld", value);
@@ -152,7 +152,7 @@ ProfileMap::Set(const char *key, long value)
 }
 
 void
-ProfileMap::Set(const char *key, unsigned value)
+ProfileMap::Set(const char *key, unsigned value) noexcept
 {
   char tmp[50];
   sprintf(tmp, "%u", value);
@@ -160,7 +160,7 @@ ProfileMap::Set(const char *key, unsigned value)
 }
 
 void
-ProfileMap::Set(const char *key, double value)
+ProfileMap::Set(const char *key, double value) noexcept
 {
   char tmp[50];
   sprintf(tmp, "%f", value);

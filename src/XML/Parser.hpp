@@ -26,8 +26,7 @@
  ****************************************************************************
  */
 
-#ifndef XCSOAR_XML_PARSER_HPP
-#define XCSOAR_XML_PARSER_HPP
+#pragma once
 
 #include <tchar.h>
 
@@ -47,5 +46,3 @@ XMLNode ParseString(const TCHAR *xml_string);
 XMLNode ParseFile(Path path);
 
 } // namespace XML
-
-#endif

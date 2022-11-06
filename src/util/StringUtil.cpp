@@ -22,35 +22,32 @@ Copyright_License {
 */
 
 #include "StringUtil.hpp"
-#include "StringCompare.hxx"
 #include "CharUtil.hxx"
 #include "Compiler.h"
 
 #include <algorithm>
 
-#include <string.h>
-
 char *
-CopyString(char *gcc_restrict dest, const char *gcc_restrict src, size_t size)
+CopyString(char *gcc_restrict dest, size_t dest_size,
+           std::string_view src) noexcept
 {
-  size_t length = strlen(src);
-  if (length >= size)
-    length = size - 1;
+  if (src.size() >= dest_size)
+    src = src.substr(0, dest_size -1);
 
-  char *p = std::copy_n(src, length, dest);
+  char *p = std::copy(src.begin(), src.end(), dest);
   *p = '\0';
   return p;
 }
 
 char *
 NormalizeSearchString(char *gcc_restrict dest,
-                      const char *gcc_restrict src)
+                      std::string_view src) noexcept
 {
   char *retval = dest;
 
-  for (; !StringIsEmpty(src); ++src)
-    if (IsAlphaNumericASCII(*src))
-      *dest++ = ToUpperASCII(*src);
+  for (const auto ch : src)
+    if (IsAlphaNumericASCII(ch))
+      *dest++ = ToUpperASCII(ch);
 
   *dest = '\0';
 

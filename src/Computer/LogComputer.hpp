@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_LOG_COMPUTER_HPP
-#define XCSOAR_LOG_COMPUTER_HPP
+#pragma once
 
 #include "Geo/GeoPoint.hpp"
 #include "time/GPSClock.hpp"
@@ -43,26 +42,22 @@ class LogComputer {
   /** number of points to log at high rate */
   unsigned fast_log_num;
 
-  Logger *logger;
+  Logger *logger = nullptr;
 
 public:
-  LogComputer();
-
-  void SetLogger(Logger *_logger) {
+  void SetLogger(Logger *_logger) noexcept {
     assert(logger == nullptr);
     assert(_logger != nullptr);
 
     logger = _logger;
   }
 
-  void Reset();
-  void StartTask(const NMEAInfo &basic);
+  void Reset() noexcept;
+  void StartTask(const NMEAInfo &basic) noexcept;
   bool Run(const MoreData &basic, const DerivedInfo &calculated,
-           const LoggerSettings &settings_logger);
+           const LoggerSettings &settings_logger) noexcept;
 
-  void SetFastLogging() {
+  void SetFastLogging() noexcept {
     fast_log_num = 5;
   }
 };
-
-#endif

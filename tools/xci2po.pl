@@ -1,15 +1,25 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
 use strict;
 
-my $line = 0;
-my $filename = "";
-my %msges = ();
+my @list;
+my %msges;
+
+sub add_message($$$) {
+    my ($msg, $filename, $line) = @_;
+    my $i = $msges{$msg};
+    unless (defined $i) {
+        $i = [$msg, ''];
+        push @list, $i;
+        $msges{$msg} = $i;
+    }
+    $i->[1] .= "#: $filename:$line\n";
+}
 
 while ( <@ARGV> ) {
 
     open (IN, "< " . $_) or die $!;
-    $filename = $_;
+    my $filename = $_;
 
     ## Process one event file like that:
     # mode=pan
@@ -22,7 +32,7 @@ while ( <@ARGV> ) {
     # event=StatusMessage Simulation\r\nNothing is real!
     #                         -> Also pick those messages and dump them into pot format
 
-    $line = 0;
+    my $line = 0;
     while (<>) {
         chomp;
         $line++;
@@ -32,18 +42,16 @@ while ( <@ARGV> ) {
         if (/^label=([^\$]*?[^\$\s])\s*(?:\\n[^[:alpha:]]*)?(?:\$.*)?$/) {
             my $msg = $1;
             $msg =~ s,\s*\\[nr]$,,g;
-            $msges{$msg} .= "#: $filename:$line\n";
+            add_message($msg, $filename, $line);
         } elsif (/^event=StatusMessage\s+(\S.*\S)\s*$/) {
-            $msges{ $1 } .= "#: $filename:$line\n";
-        } 
+            add_message($1, $filename, $line);
+        }
     }
 
     close IN;
 }
 
-my $k = "";
-my $v = "";
-
-while (($k, $v) = each %msges) {
+foreach my $i (@list) {
+    my ($k, $v) = @$i;
     print $v . "msgid \"$k\"\nmsgstr \"\"\n\n";
 }

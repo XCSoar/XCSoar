@@ -67,7 +67,7 @@ NMEALogger::Log(const char *text) noexcept
   if (!enabled)
     return;
 
-  std::lock_guard<Mutex> lock(mutex);
+  const std::lock_guard lock{mutex};
 
   try {
     Start();

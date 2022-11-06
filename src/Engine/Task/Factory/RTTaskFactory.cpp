@@ -42,7 +42,8 @@ static constexpr LegalPointSet rt_start_types{
 
 static constexpr LegalPointSet rt_im_types{
   TaskPointFactoryType::AST_CYLINDER,
-  TaskPointFactoryType::KEYHOLE_SECTOR,
+  TaskPointFactoryType::CUSTOM_KEYHOLE,
+  TaskPointFactoryType::DAEC_KEYHOLE,
   TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR,
   TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR,
   TaskPointFactoryType::FAI_SECTOR,
@@ -55,15 +56,15 @@ static constexpr LegalPointSet rt_finish_types{
   TaskPointFactoryType::FINISH_SECTOR,
 };
 
-RTTaskFactory::RTTaskFactory(OrderedTask& _task,
-                               const TaskBehaviour &tb)
+RTTaskFactory::RTTaskFactory(OrderedTask &_task,
+                             const TaskBehaviour &tb) noexcept
   :AbstractTaskFactory(rt_constraints, _task, tb,
                        rt_start_types, rt_im_types, rt_finish_types)
 {
 }
 
 TaskPointFactoryType
-RTTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
+RTTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const noexcept
 {
   const TaskPointFactoryType oldtype = GetType(tp);
   TaskPointFactoryType newtype = oldtype;
@@ -75,7 +76,8 @@ RTTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
   case TaskPointFactoryType::START_BGA:
     break;
 
-  case TaskPointFactoryType::KEYHOLE_SECTOR:
+  case TaskPointFactoryType::CUSTOM_KEYHOLE:
+  case TaskPointFactoryType::DAEC_KEYHOLE:
   case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
   case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
   case TaskPointFactoryType::FAI_SECTOR:
@@ -89,7 +91,7 @@ RTTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
     break;
 
   case TaskPointFactoryType::AAT_KEYHOLE:
-    newtype = TaskPointFactoryType::KEYHOLE_SECTOR;
+    newtype = TaskPointFactoryType::CUSTOM_KEYHOLE;
     break;
 
   case TaskPointFactoryType::AAT_SEGMENT:

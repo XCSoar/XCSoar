@@ -23,16 +23,17 @@ Copyright_License {
 
 #include "EscapeBackslash.hpp"
 
+#include <string.h>
 #include <tchar.h>
 
-TStringView::value_type *
-UnescapeBackslash(const TStringView old_string) noexcept
+tstring_view::pointer
+UnescapeBackslash(tstring_view old_string) noexcept
 {
   TCHAR buffer[2048]; // Note - max size of any string we cope with here !
 
-  TStringView::size_type used = 0;
+  tstring_view::size_type used = 0;
 
-  for (TStringView::size_type i = 0; i < old_string.size; i++) {
+  for (tstring_view::size_type i = 0; i < old_string.size(); i++) {
     if (used < 2045) {
       if (old_string[i] == '\\') {
         if (old_string[i + 1] == 'r') {

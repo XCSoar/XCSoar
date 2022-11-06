@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -95,7 +95,7 @@ ListControl::ActivateItem() noexcept
 }
 
 void
-ListControl::show_or_hide_scroll_bar() noexcept
+ListControl::ShowOrHideScrollBar() noexcept
 {
   const PixelSize size = GetSize();
 
@@ -109,7 +109,7 @@ ListControl::show_or_hide_scroll_bar() noexcept
 }
 
 void
-ListControl::OnResize(PixelSize new_size)
+ListControl::OnResize(PixelSize new_size) noexcept
 {
   PaintWindow::OnResize(new_size);
 
@@ -125,28 +125,28 @@ ListControl::OnResize(PixelSize new_size)
     /* make sure the cursor is still visible */
     EnsureVisible(GetCursorIndex());
 
-  show_or_hide_scroll_bar();
+  ShowOrHideScrollBar();
 }
 
 void
-ListControl::OnSetFocus()
+ListControl::OnSetFocus() noexcept
 {
   PaintWindow::OnSetFocus();
-  Invalidate_item(cursor);
+  InvalidateItem(cursor);
 }
 
 void
-ListControl::OnKillFocus()
+ListControl::OnKillFocus() noexcept
 {
   PaintWindow::OnKillFocus();
-  Invalidate_item(cursor);
+  InvalidateItem(cursor);
 }
 
 void
 ListControl::DrawItems(Canvas &canvas,
                        unsigned start, unsigned end) const noexcept
 {
-  PixelRect rc = item_rect(start);
+  PixelRect rc = GetItemRect(start);
 
   canvas.SetBackgroundColor(look.list.background_color);
   canvas.SetBackgroundTransparent();
@@ -190,7 +190,7 @@ ListControl::DrawItems(Canvas &canvas,
 }
 
 void
-ListControl::OnPaint(Canvas &canvas)
+ListControl::OnPaint(Canvas &canvas) noexcept
 {
   if (item_renderer != nullptr)
     DrawItems(canvas, origin, origin + items_visible + 2);
@@ -199,7 +199,7 @@ ListControl::OnPaint(Canvas &canvas)
 }
 
 void
-ListControl::OnPaint(Canvas &canvas, const PixelRect &dirty)
+ListControl::OnPaint(Canvas &canvas, const PixelRect &dirty) noexcept
 {
   if (item_renderer != nullptr)
     DrawItems(canvas, origin + (dirty.top + pixel_pan) / item_height,
@@ -215,7 +215,7 @@ ListControl::DrawScrollBar(Canvas &canvas) noexcept
     return;
 
   if (UsePixelPan())
-    scroll_bar.SetSlider(length * item_height, GetHeight(), GetPixelOrigin());
+    scroll_bar.SetSlider(length * item_height, GetSize().height, GetPixelOrigin());
   else
     scroll_bar.SetSlider(length, items_visible, origin);
 
@@ -226,9 +226,9 @@ void
 ListControl::SetItemHeight(unsigned _item_height) noexcept
 {
   item_height = _item_height;
-  items_visible = GetHeight() / item_height;
+  items_visible = GetSize().height / item_height;
 
-  show_or_hide_scroll_bar();
+  ShowOrHideScrollBar();
   Invalidate();
 }
 
@@ -247,7 +247,7 @@ ListControl::SetLength(unsigned n) noexcept
   else if (cursor >= n)
     cursor = n - 1;
 
-  items_visible = GetHeight() / item_height;
+  items_visible = GetSize().height / item_height;
 
   if (n <= items_visible)
     origin = 0;
@@ -256,7 +256,7 @@ ListControl::SetLength(unsigned n) noexcept
   else if (cursor < origin)
     origin = cursor;
 
-  show_or_hide_scroll_bar();
+  ShowOrHideScrollBar();
   Invalidate();
 
   SetCursorIndex(cursor);
@@ -275,7 +275,7 @@ ListControl::EnsureVisible(unsigned i) noexcept
       SetOrigin(i - items_visible);
 
       if (origin > 0 || i >= items_visible)
-        SetPixelPan(((items_visible + 1) * item_height - GetHeight()) % item_height);
+        SetPixelPan(((items_visible + 1) * item_height - GetSize().height) % item_height);
     } else {
       /* no pixel panning on e-paper screens to avoid tearing */
       SetOrigin(i + 1 - items_visible);
@@ -294,9 +294,9 @@ ListControl::SetCursorIndex(unsigned i) noexcept
 
   EnsureVisible(i);
 
-  Invalidate_item(cursor);
+  InvalidateItem(cursor);
   cursor = i;
-  Invalidate_item(cursor);
+  InvalidateItem(cursor);
 
   if (cursor_handler != nullptr)
     cursor_handler->OnCursorMoved(i);
@@ -369,7 +369,7 @@ ListControl::SetOrigin(int i) noexcept
 void
 ListControl::SetPixelOrigin(int pixel_origin) noexcept
 {
-  int max = length * item_height - GetHeight();
+  int max = length * item_height - GetSize().height;
   if (pixel_origin > max)
     pixel_origin = max;
 
@@ -394,7 +394,7 @@ ListControl::MoveOrigin(int delta) noexcept
 }
 
 bool
-ListControl::OnKeyCheck(unsigned key_code) const
+ListControl::OnKeyCheck(unsigned key_code) const noexcept
 {
   switch (key_code) {
   case KEY_RETURN:
@@ -412,7 +412,7 @@ ListControl::OnKeyCheck(unsigned key_code) const
 }
 
 bool
-ListControl::OnKeyDown(unsigned key_code)
+ListControl::OnKeyDown(unsigned key_code) noexcept
 {
   scroll_bar.DragEnd(this);
   kinetic_timer.Cancel();
@@ -471,7 +471,7 @@ ListControl::OnKeyDown(unsigned key_code)
 }
 
 bool
-ListControl::OnMouseUp(PixelPoint p)
+ListControl::OnMouseUp(PixelPoint p) noexcept
 {
   if (scroll_bar.IsDragging()) {
     scroll_bar.DragEnd(this);
@@ -479,7 +479,7 @@ ListControl::OnMouseUp(PixelPoint p)
   }
 
   if (drag_mode == DragMode::CURSOR &&
-      p.x >= 0 && p.x <= ((int)GetWidth() - scroll_bar.GetWidth())) {
+      p.x >= 0 && p.x <= ((int)GetSize().width - scroll_bar.GetWidth())) {
     drag_end();
     ActivateItem();
     return true;
@@ -505,7 +505,7 @@ ListControl::drag_end() noexcept
 {
   if (drag_mode != DragMode::NONE) {
     if (drag_mode == DragMode::CURSOR)
-      Invalidate_item(cursor);
+      InvalidateItem(cursor);
 
     drag_mode = DragMode::NONE;
     ReleaseCapture();
@@ -513,13 +513,14 @@ ListControl::drag_end() noexcept
 }
 
 bool
-ListControl::OnMouseMove(PixelPoint p, unsigned keys)
+ListControl::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
   // If we are currently dragging the ScrollBar slider
   if (scroll_bar.IsDragging()) {
     // -> Update ListBox origin
     if (UsePixelPan())
-      SetPixelOrigin(scroll_bar.DragMove(length * item_height, GetHeight(),
+      SetPixelOrigin(scroll_bar.DragMove(length * item_height,
+                                         GetSize().height,
                                          p.y));
     else
       SetOrigin(scroll_bar.DragMove(length, items_visible, p.y));
@@ -528,7 +529,7 @@ ListControl::OnMouseMove(PixelPoint p, unsigned keys)
   } else if (drag_mode == DragMode::CURSOR) {
     if (abs(p.y - drag_y_window) > ((int)item_height / 5)) {
       drag_mode = DragMode::SCROLL;
-      Invalidate_item(cursor);
+      InvalidateItem(cursor);
     } else
       return true;
   }
@@ -545,7 +546,7 @@ ListControl::OnMouseMove(PixelPoint p, unsigned keys)
 }
 
 bool
-ListControl::OnMouseDown(PixelPoint Pos)
+ListControl::OnMouseDown(PixelPoint Pos) noexcept
 {
   // End any previous drag
   scroll_bar.DragEnd(this);
@@ -591,7 +592,7 @@ ListControl::OnMouseDown(PixelPoint Pos)
     if (had_focus && (unsigned)index == GetCursorIndex() &&
         CanActivateItem()) {
       drag_mode = DragMode::CURSOR;
-      Invalidate_item(cursor);
+      InvalidateItem(cursor);
     } else {
       // If item was not selected before
       // -> select it
@@ -607,7 +608,7 @@ ListControl::OnMouseDown(PixelPoint Pos)
 }
 
 bool
-ListControl::OnMouseWheel(PixelPoint p, int delta)
+ListControl::OnMouseWheel([[maybe_unused]] PixelPoint p, int delta) noexcept
 {
   scroll_bar.DragEnd(this);
   drag_end();
@@ -626,7 +627,7 @@ ListControl::OnMouseWheel(PixelPoint p, int delta)
 }
 
 void
-ListControl::OnCancelMode()
+ListControl::OnCancelMode() noexcept
 {
   PaintWindow::OnCancelMode();
 
@@ -648,7 +649,7 @@ ListControl::OnKineticTimer() noexcept
 }
 
 void
-ListControl::OnDestroy()
+ListControl::OnDestroy() noexcept
 {
   kinetic_timer.Cancel();
 

@@ -21,10 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_KOBO_TOOLS_DIALOG_HPP
-#define XCSOAR_KOBO_TOOLS_DIALOG_HPP
+#pragma once
 
 void
 ShowToolsDialog();
-
-#endif

@@ -43,6 +43,8 @@
 
 #include <stdlib.h>
 
+static constexpr std::size_t CUP_MAX_TPS = 30;
+
 struct SeeYouTaskInformation {
   /** True = RT, False = AAT */
   bool wp_dis = true;
@@ -148,72 +150,60 @@ ParseOptions(SeeYouTaskInformation *task_info, const TCHAR *params[],
 {
   // Iterate through available task options
   for (unsigned i = 1; i < n_params; i++) {
-    if (StringIsEqual(params[i], _T("WpDis"), 5)) {
+    if (auto wp_dis = StringAfterPrefix(params[i], _T("WpDis="))) {
       // Parse WpDis option
-      if (_tcslen(params[i]) > 6 &&
-          StringIsEqual(params[i] + 6, _T("False"), 5))
+      if (StringIsEqual(wp_dis, _T("False")))
         task_info->wp_dis = false;
-    } else if (StringIsEqual(params[i], _T("TaskTime"), 8)) {
+    } else if (auto task_time = StringAfterPrefix(params[i], _T("TaskTime="))) {
       // Parse TaskTime option
-      if (_tcslen(params[i]) > 9)
-        task_info->task_time = ParseTaskTime(params[i] + 9);
+      if (!StringIsEmpty(task_time))
+        task_info->task_time = ParseTaskTime(task_time);
     }
   }
 }
 
 /**
- * Parses one ObsZone line from the See You task file
- * @param turnpoint_infos Updated with the OZ info
  * @param params Input array of parameters preparsed from See You task file
  * @param n_params Number parameters in the line
- * @return OZ index from CU (0 to n-1) or -1 if no OZ found
  */
-static int
-ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
+static void
+ParseOZs(SeeYouTurnpointInformation &tp_info, const TCHAR *params[],
          unsigned n_params)
 {
-  // Read OZ index
-  TCHAR* end;
-  const int oz_index = _tcstol(params[0] + 8, &end, 10);
-  if (params[0] + 8 == end || oz_index >= 30)
-    return -1;
-
-  turnpoint_infos[oz_index].valid = true;
+  tp_info.valid = true;
   // Iterate through available OZ options
-  for (unsigned i = 1; i < n_params; i++) {
+  for (unsigned i = 0; i < n_params; i++) {
     const TCHAR *pair = params[i];
-    SeeYouTurnpointInformation &tp_info = turnpoint_infos[oz_index];
 
-    if (StringIsEqual(pair, _T("Style"), 5)) {
-      if (_tcslen(pair) > 6)
-        tp_info.style = ParseStyle(pair + 6);
-    } else if (StringIsEqual(pair, _T("R1="), 3)) {
-      if (_tcslen(pair) > 3)
-        tp_info.radius1 = ParseRadius(pair + 3);
-    } else if (StringIsEqual(pair, _T("A1="), 3)) {
-      if (_tcslen(pair) > 3)
-        tp_info.angle1 = ParseAngle(pair + 3);
-    } else if (StringIsEqual(pair, _T("R2="), 3)) {
-      if (_tcslen(pair) > 3)
-        tp_info.radius2 = ParseRadius(pair + 3);
-    } else if (StringIsEqual(pair, _T("A2="), 3)) {
-      if (_tcslen(pair) > 3)
-        tp_info.angle2 = ParseAngle(pair + 3);
-    } else if (StringIsEqual(pair, _T("A12="), 4)) {
-      if (_tcslen(pair) > 3)
-        tp_info.angle12 = ParseAngle(pair + 4);
-    } else if (StringIsEqual(pair, _T("MaxAlt="), 7)) {
-      if (_tcslen(pair) > 7)
-        tp_info.max_altitude = ParseMaxAlt(pair + 7);
-      } else if (StringIsEqual(pair, _T("Line"), 4)) {
-      if (_tcslen(pair) > 5 && pair[5] == _T('1'))
+    if (auto style = StringAfterPrefix(pair, _T("Style="))) {
+      if (!StringIsEmpty(style))
+        tp_info.style = ParseStyle(style);
+    } else if (auto r1 = StringAfterPrefix(pair, _T("R1="))) {
+      if (!StringIsEmpty(r1))
+        tp_info.radius1 = ParseRadius(r1);
+    } else if (auto a1 = StringAfterPrefix(pair, _T("A1="))) {
+      if (!StringIsEmpty(a1))
+        tp_info.angle1 = ParseAngle(a1);
+    } else if (auto r2 = StringAfterPrefix(pair, _T("R2="))) {
+      if (!StringIsEmpty(r2))
+        tp_info.radius2 = ParseRadius(r2);
+    } else if (auto a2 = StringAfterPrefix(pair, _T("A2="))) {
+      if (!StringIsEmpty(a2))
+        tp_info.angle2 = ParseAngle(a2);
+    } else if (auto a12 = StringAfterPrefix(pair, _T("A12="))) {
+      if (!StringIsEmpty(a12))
+        tp_info.angle12 = ParseAngle(a12);
+    } else if (auto max_altitude = StringAfterPrefix(pair, _T("MaxAlt="))) {
+      if (!StringIsEmpty(max_altitude))
+        tp_info.max_altitude = ParseMaxAlt(max_altitude);
+    } else if (auto line = StringAfterPrefix(pair, _T("Line="))) {
+      if (*line == _T('1'))
         tp_info.is_line = true;
-    } else if (StringIsEqual(pair, _T("Reduce"), 6)) {
-      if (_tcslen(pair) > 7 && pair[7] == _T('1'))
+    } else if (auto reduce = StringAfterPrefix(pair, _T("Reduce="))) {
+      if (*reduce == _T('1'))
         tp_info.reduce = true;
     }
   }
-  return oz_index;
 }
 
 /**
@@ -230,7 +220,6 @@ ParseCUTaskDetails(TLineReader &reader, SeeYouTaskInformation *task_info,
   TCHAR params_buffer[1024];
   const TCHAR *params[20];
   TCHAR *line;
-  int TPIndex = 0;
   const unsigned int max_params = ARRAY_SIZE(params);
   while ((line = reader.ReadLine()) != nullptr &&
          line[0] != _T('\"') && line[0] != _T(',')) {
@@ -241,12 +230,17 @@ ParseCUTaskDetails(TLineReader &reader, SeeYouTaskInformation *task_info,
       // Options line found
       ParseOptions(task_info, params, n_params);
 
-    } else if (StringIsEqual(params[0], _T("ObsZone"), 7)) {
+    } else if (auto obs_zone = StringAfterPrefix(params[0], _T("ObsZone="))) {
       // Observation zone line found
-      if (_tcslen(params[0]) <= 8)
+      if (StringIsEmpty(obs_zone))
         continue;
 
-      TPIndex = ParseOZs(turnpoint_infos, params, n_params);
+      TCHAR *end;
+      const std::size_t TPIndex = _tcstol(obs_zone, &end, 10);
+      if (end == obs_zone || TPIndex >= CUP_MAX_TPS)
+        continue;
+
+      ParseOZs(turnpoint_infos[TPIndex], params + 1, n_params - 1);
       if (TPIndex == 0)
         task_info->max_start_altitude = turnpoint_infos[TPIndex].max_altitude;
     }
@@ -334,8 +328,13 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
     return nullptr;
 
   if (factType == TaskFactoryType::RACING &&
-      is_intermediate && isKeyhole(turnpoint_infos))
-    return KeyholeZone::CreateDAeCKeyholeZone(wp->location);
+      is_intermediate && isKeyhole(turnpoint_infos)) {
+    auto oz = KeyholeZone::CreateCustomKeyholeZone(wp->location,
+                                                   turnpoint_infos.radius1,
+                                                   turnpoint_infos.angle1);
+    oz->SetInnerRadius(turnpoint_infos.radius2);
+    return oz;
+  }
 
   else if (factType == TaskFactoryType::RACING &&
       is_intermediate && isBGAEnhancedOptionZone(turnpoint_infos))
@@ -483,8 +482,8 @@ try {
   // e.g. "Club day 4 Racing task","085PRI","083BOJ","170D_K","065SKY","0844YY", "0844YY"
   //       TASK NAME              , TAKEOFF, START  , TP1    , TP2    , FINISH ,  LANDING
   TCHAR waypoints_buffer[1024];
-  const TCHAR *wps[30];
-  size_t n_waypoints = ExtractParameters(line, waypoints_buffer, wps, 30,
+  const TCHAR *wps[CUP_MAX_TPS];
+  size_t n_waypoints = ExtractParameters(line, waypoints_buffer, wps, CUP_MAX_TPS,
                                          true, _T('"'));
 
   // Some versions of StrePla append a trailing ',' without a following
@@ -500,8 +499,8 @@ try {
   n_waypoints -= 3;
 
   SeeYouTaskInformation task_info;
-  SeeYouTurnpointInformation turnpoint_infos[30];
-  WaypointPtr waypoints_in_task[30];
+  SeeYouTurnpointInformation turnpoint_infos[CUP_MAX_TPS];
+  WaypointPtr waypoints_in_task[CUP_MAX_TPS];
 
   ParseCUTaskDetails(reader, &task_info, turnpoint_infos);
 
@@ -528,26 +527,28 @@ try {
     if (file_wp == nullptr)
       return nullptr;
 
-    // Try to find waypoint by name
-    auto wp = waypoints->LookupName(file_wp->name);
+    if (waypoints != nullptr) {
+      // Try to find waypoint by name
+      auto wp = waypoints->LookupName(file_wp->name);
 
-    // If waypoint by name found and closer than 10m to the original
-    if (wp != nullptr &&
-        wp->location.DistanceS(file_wp->location) <= 10) {
-      // Use this waypoint for the task
-      waypoints_in_task[i] = wp;
-      continue;
-    }
+      // If waypoint by name found and closer than 10m to the original
+      if (wp != nullptr &&
+          wp->location.DistanceS(file_wp->location) <= 10) {
+        // Use this waypoint for the task
+        waypoints_in_task[i] = wp;
+        continue;
+      }
 
-    // Try finding the closest waypoint to the original one
-    wp = waypoints->GetNearest(file_wp->location, 10);
+      // Try finding the closest waypoint to the original one
+      wp = waypoints->GetNearest(file_wp->location, 10);
 
-    // If closest waypoint found and closer than 10m to the original
-    if (wp != nullptr &&
-        wp->location.DistanceS(file_wp->location) <= 10) {
-      // Use this waypoint for the task
-      waypoints_in_task[i] = wp;
-      continue;
+      // If closest waypoint found and closer than 10m to the original
+      if (wp != nullptr &&
+          wp->location.DistanceS(file_wp->location) <= 10) {
+        // Use this waypoint for the task
+        waypoints_in_task[i] = wp;
+        continue;
+      }
     }
 
     // Use the original waypoint

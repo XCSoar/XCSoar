@@ -21,11 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef	XCSOAR_TEAM_CODE_CALCULATION_HPP
-#define	XCSOAR_TEAM_CODE_CALCULATION_HPP
+#pragma once
 
 #include "util/StaticString.hxx"
-#include "util/Compiler.h"
 
 #include <type_traits>
 
@@ -62,7 +60,7 @@ public:
    * @param ref Reference waypoint
    * @return The team member's position
    */
-  gcc_pure
+  [[gnu::pure]]
   GeoPoint GetLocation(const GeoPoint ref) const;
 
   /**
@@ -92,5 +90,3 @@ public:
 };
 
 static_assert(std::is_trivial<TeamCode>::value, "type is not trivial");
-
-#endif

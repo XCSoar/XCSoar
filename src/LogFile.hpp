@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_LOG_FILE_HPP
-#define XCSOAR_LOG_FILE_HPP
+#pragma once
 
 #include "util/Compiler.h"
 
@@ -55,7 +54,7 @@ LogFormat(const wchar_t *fmt, ...) noexcept;
 
 /* not using an empty inline function here because we don't want to
    evaluate the parameters */
-#define LogDebug(...)
+#define LogDebug(...) do {} while (false)
 
 #endif /* NDEBUG */
 
@@ -64,5 +63,3 @@ LogError(std::exception_ptr e) noexcept;
 
 void
 LogError(std::exception_ptr e, const char *msg) noexcept;
-
-#endif

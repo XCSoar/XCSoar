@@ -29,6 +29,10 @@ Copyright_License {
 
 #include <algorithm>
 
+#ifdef KOBO
+#include "Kobo/Model.hpp"
+#endif
+
 namespace UI {
 
 /**
@@ -75,19 +79,39 @@ public:
     switch (TranslateDefaultDisplayOrientation(orientation)) {
     case DisplayOrientation::DEFAULT:
     case DisplayOrientation::PORTRAIT:
-      SetInvert(true, false);
+#ifdef KOBO
+      if (DetectKoboModel() == KoboModel::LIBRA2)
+        SetInvert(false, false);
+      else
+#endif
+        SetInvert(true, false);
       break;
 
     case DisplayOrientation::LANDSCAPE:
-      SetInvert(false, false);
+#ifdef KOBO
+      if (DetectKoboModel() == KoboModel::LIBRA2)
+        SetInvert(false, true);
+      else
+#endif
+        SetInvert(false, false);
       break;
 
     case DisplayOrientation::REVERSE_PORTRAIT:
-      SetInvert(false, true);
+#ifdef KOBO
+      if (DetectKoboModel() == KoboModel::LIBRA2)
+        SetInvert(true, true);
+      else
+#endif
+        SetInvert(false, true);
       break;
 
     case DisplayOrientation::REVERSE_LANDSCAPE:
-      SetInvert(true, true);
+#ifdef KOBO
+      if (DetectKoboModel() == KoboModel::LIBRA2)
+        SetInvert(true, false);
+      else
+#endif
+        SetInvert(true, true);
       break;
     }
   }

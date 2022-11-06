@@ -1,5 +1,4 @@
-#ifndef JPC_RTC_H
-#define JPC_RTC_H
+#pragma once
 
 #include "util/Compiler.h"
 
@@ -28,6 +27,4 @@ extern "C" {
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

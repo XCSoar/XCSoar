@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LUA_ASSERT_HXX
-#define LUA_ASSERT_HXX
+#pragma once
 
 extern "C" {
 #include <lua.h>
@@ -68,5 +67,3 @@ public:
 };
 
 }
-
-#endif

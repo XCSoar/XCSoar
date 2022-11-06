@@ -21,12 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_UNITS_HPP
-#define XCSOAR_UNITS_HPP
+#pragma once
 
 #include "Units/Settings.hpp"
 #include "Units/System.hpp"
-#include "util/Compiler.h"
 
 #include <tchar.h>
 
@@ -48,97 +46,97 @@ namespace Units
    * Returns the user-specified unit for a wing loading
    * @return The user-specified unit for a wing loading
    */
-  gcc_pure
+  [[gnu::pure]]
   Unit GetUserWingLoadingUnit();
 
   /**
    * Returns the user-specified unit for mass
    * @return The user-specified unit for mass
    */
-  gcc_pure
+  [[gnu::pure]]
   Unit GetUserMassUnit();
 
   /**
    * Returns the user-specified unit for a horizontal distance
    * @return The user-specified unit for a horizontal distance
    */
-  gcc_pure
+  [[gnu::pure]]
   Unit GetUserDistanceUnit();
 
   /**
    * Returns the user-specified unit for an altitude
    * @return The user-specified unit for an altitude
    */
-  gcc_pure
+  [[gnu::pure]]
   Unit GetUserAltitudeUnit();
 
   /**
    * Returns the user-specified unit for a temperature
    * @return The user-specified unit for a temperature
    */
-  gcc_pure
+  [[gnu::pure]]
   Unit GetUserTemperatureUnit();
 
   /**
    * Returns the user-specified unit for a horizontal speed
    * @return The user-specified unit for a horizontal speed
    */
-  gcc_pure
+  [[gnu::pure]]
   Unit GetUserSpeedUnit();
 
   /**
    * Returns the user-specified unit for a task speed
    * @return The user-specified unit for a task speed
    */
-  gcc_pure
+  [[gnu::pure]]
   Unit GetUserTaskSpeedUnit();
 
   /**
    * Returns the user-specified unit for a vertical speed
    * @return The user-specified unit for a vertical speed
    */
-  gcc_pure
+  [[gnu::pure]]
   Unit GetUserVerticalSpeedUnit();
 
   /**
    * Returns the user-specified unit for a wind speed
    * @return The user-specified unit for a wind speed
    */
-  gcc_pure
+  [[gnu::pure]]
   Unit GetUserWindSpeedUnit();
 
   /**
    * Returns the user-specified unit for a pressure
    * @return The user-specified unit for a pressure
    */
-  gcc_pure
+  [[gnu::pure]]
   Unit GetUserPressureUnit();
 
-  gcc_pure
+  [[gnu::pure]]
   Unit GetUserUnitByGroup(UnitGroup group);
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetSpeedName();
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetVerticalSpeedName();
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetWindSpeedName();
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetDistanceName();
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetAltitudeName();
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetTemperatureName();
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetTaskSpeedName();
 
-  gcc_pure
+  [[gnu::pure]]
   const TCHAR *GetPressureName();
 
   static inline double
@@ -219,7 +217,7 @@ namespace Units
     return ToUserUnit(Value, current.pressure_unit);
   }
   
-  gcc_const
+  [[gnu::const]]
   double
   ToUserPressure(AtmosphericPressure value);
 
@@ -233,7 +231,7 @@ namespace Units
    * Convert a pressure value from the user unit to an
    * #AtmosphericPressure object.
    */
-  gcc_const
+  [[gnu::const]]
   AtmosphericPressure
   FromUserPressure(double value);
   
@@ -250,5 +248,3 @@ namespace Units
   }
     
 };
-
-#endif

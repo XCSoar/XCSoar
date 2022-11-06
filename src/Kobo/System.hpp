@@ -21,10 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_KOBO_SYSTEM_HPP
-#define XCSOAR_KOBO_SYSTEM_HPP
-
-#include "util/Compiler.h"
+#pragma once
 
 bool
 KoboReboot();
@@ -44,7 +41,7 @@ KoboExportUSBStorage();
 void
 KoboUnexportUSBStorage();
 
-gcc_pure
+[[gnu::pure]]
 bool
 IsKoboWifiOn();
 
@@ -74,5 +71,3 @@ KoboGetBacklightBrightness();
 
 void
 KoboSetBacklightBrightness(int percent);
-
-#endif

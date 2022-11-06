@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -37,7 +37,6 @@ TabDisplay::TabDisplay(TabWidget &_pager, const DialogLook &_look,
   :pager(_pager),
    look(_look),
    vertical(_vertical),
-   dragging(false),
    tab_line_height(Layout::VptScale(5))
 {
   style.TabStop();
@@ -120,10 +119,12 @@ TabDisplay::CalculateLayout() noexcept
   // Todo make the final margin display on either beginning or end of tab bar
   // depending on position of tab bar
 
+  const auto window_size = Window::GetSize();
+
   if (vertical) {
     const unsigned n = buttons.size();
     const unsigned but_height =
-       (GetHeight() - finalmargin) / n - margin;
+       (window_size.height - finalmargin) / n - margin;
 
     PixelRect rc = GetClientRect();
     rc.left = 0;
@@ -137,14 +138,14 @@ TabDisplay::CalculateLayout() noexcept
   } else {
     const unsigned n = buttons.size();
     const unsigned portraitRows = n > 4 ? 2 : 1;
-    const unsigned rowheight = (GetHeight() - tab_line_height)
+    const unsigned rowheight = (window_size.height - tab_line_height)
       / portraitRows - margin;
 
     const unsigned portraitColumnsRow0 = portraitRows == 1 ? n : n / 2;
     const unsigned portraitColumnsRow1 = portraitRows == 1 ? 0 : n - n / 2;
 
     const unsigned but_width1 =
-        (GetWidth() - finalmargin) / portraitColumnsRow0 - margin;
+        (window_size.width - finalmargin) / portraitColumnsRow0 - margin;
 
     for (unsigned i = 0; i < portraitColumnsRow0; ++i) {
       PixelRect &rc = buttons[i]->rc;
@@ -156,7 +157,7 @@ TabDisplay::CalculateLayout() noexcept
 
     if (portraitColumnsRow1 > 0) {
       const unsigned but_width2 =
-        (GetWidth() - finalmargin) / portraitColumnsRow1 - margin;
+        (window_size.width - finalmargin) / portraitColumnsRow1 - margin;
 
       for (unsigned i = portraitColumnsRow0; i < n; ++i) {
         PixelRect &rc = buttons[i]->rc;
@@ -192,7 +193,7 @@ TabDisplay::GetButtonIndexAt(PixelPoint p) const noexcept
 }
 
 void
-TabDisplay::OnResize(PixelSize new_size)
+TabDisplay::OnResize(PixelSize new_size) noexcept
 {
   PaintWindow::OnResize(new_size);
 
@@ -200,7 +201,7 @@ TabDisplay::OnResize(PixelSize new_size)
 }
 
 void
-TabDisplay::OnPaint(Canvas &canvas)
+TabDisplay::OnPaint(Canvas &canvas) noexcept
 {
   canvas.Clear(COLOR_BLACK);
 
@@ -216,28 +217,28 @@ TabDisplay::OnPaint(Canvas &canvas)
 }
 
 void
-TabDisplay::OnKillFocus()
+TabDisplay::OnKillFocus() noexcept
 {
   Invalidate();
   PaintWindow::OnKillFocus();
 }
 
 void
-TabDisplay::OnSetFocus()
+TabDisplay::OnSetFocus() noexcept
 {
   Invalidate();
   PaintWindow::OnSetFocus();
 }
 
 void
-TabDisplay::OnCancelMode()
+TabDisplay::OnCancelMode() noexcept
 {
   PaintWindow::OnCancelMode();
   EndDrag();
 }
 
 bool
-TabDisplay::OnKeyCheck(unsigned key_code) const
+TabDisplay::OnKeyCheck(unsigned key_code) const noexcept
 {
   switch (key_code) {
 
@@ -268,7 +269,7 @@ TabDisplay::OnKeyCheck(unsigned key_code) const
 }
 
 bool
-TabDisplay::OnKeyDown(unsigned key_code)
+TabDisplay::OnKeyDown(unsigned key_code) noexcept
 {
   switch (key_code) {
 
@@ -314,7 +315,7 @@ TabDisplay::OnKeyDown(unsigned key_code)
 }
 
 bool
-TabDisplay::OnMouseDown(PixelPoint p)
+TabDisplay::OnMouseDown(PixelPoint p) noexcept
 {
   EndDrag();
 
@@ -335,7 +336,7 @@ TabDisplay::OnMouseDown(PixelPoint p)
 }
 
 bool
-TabDisplay::OnMouseUp(PixelPoint p)
+TabDisplay::OnMouseUp(PixelPoint p) noexcept
 {
   if (dragging) {
     EndDrag();
@@ -350,7 +351,7 @@ TabDisplay::OnMouseUp(PixelPoint p)
 }
 
 bool
-TabDisplay::OnMouseMove(PixelPoint p, unsigned keys)
+TabDisplay::OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned keys) noexcept
 {
   if (!dragging)
     return false;

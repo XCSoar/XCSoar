@@ -5,8 +5,8 @@ use strict;
 sub generate_blob($$) {
     my ($var, $path) = @_;
 
-    print "extern const uint8_t ${var}\[\];\n";
-    print "extern const uint8_t ${var}_end\[\];\n";
+    print "extern const std::byte ${var}\[\];\n";
+    print "extern const std::byte ${var}_end\[\];\n";
 }
 
 print "#include <stdint.h>\n";
@@ -26,12 +26,11 @@ while (<>) {
     }
 }
 
-print "#include \"util/ConstBuffer.hxx\"\n";
 print "#include <tchar.h>\n";
 
 print "static constexpr struct {\n";
 print "  const TCHAR *name;\n";
-print "  ConstBuffer<void> data;\n";
+print "  std::span<const std::byte> data;\n";
 print "} named_resources[] = {";
 foreach my $i (@named) {
     my ($name, $size) = @$i;
@@ -39,5 +38,5 @@ foreach my $i (@named) {
     $variable =~ s,\.,_,g;
     print "  { _T(\"${name}\"), { ${variable}, ${size} } },\n";
 }
-print "  { 0, { nullptr, 0 } }\n";
+print "  { 0, {} }\n";
 print "};\n";

@@ -45,7 +45,7 @@
 #include "Formatter/IGCFilenameFormatter.hpp"
 #include "time/BrokenDate.hpp"
 #include "Interface.hpp"
-#include "contest/weglide/UploadIGCFile.hpp"
+#include "net/client/WeGlide/UploadIGCFile.hpp"
 
 
 class DeclareJob {

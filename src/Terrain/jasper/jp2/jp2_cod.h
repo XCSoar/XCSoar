@@ -67,8 +67,7 @@
  * $Id$
  */
 
-#ifndef JP2_COD_H
-#define JP2_COD_H
+#pragma once
 
 /******************************************************************************\
 * Includes.
@@ -319,6 +318,3 @@ static inline uint_least8_t JP2_BPCTODTYPE(uint_least8_t bpc)
 #define ICC_CS_GRAY	0x47524159
 
 const jp2_cdefchan_t *jp2_cdef_lookup(jp2_cdef_t *cdef, int channo);
-
-
-#endif

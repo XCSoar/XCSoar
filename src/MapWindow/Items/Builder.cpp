@@ -79,18 +79,8 @@ MapItemListBuilder::AddArrivalAltitudes(
   const AGeoPoint destination(location, target_elevation);
 
   // Calculate arrival altitudes
-  ReachResult reach;
-
-  {
-    ProtectedRoutePlanner::Lease leased_route_planner(route_planner);
-    auto _reach = leased_route_planner->FindPositiveArrival(destination);
-    if (!_reach)
-      return;
-
-    reach = *_reach;
-  }
-
-  list.append(new ArrivalAltitudeMapItem(elevation, reach, safety_height));
+  if (auto reach = route_planner.FindPositiveArrival(destination))
+    list.append(new ArrivalAltitudeMapItem(elevation, *reach, safety_height));
 }
 
 void

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_PROGRESS_WINDOW_HXX
-#define XCSOAR_SCREEN_PROGRESS_WINDOW_HXX
+#pragma once
 
 #include "ui/window/ContainerWindow.hpp"
 #include "ui/control/ProgressBar.hpp"
@@ -68,8 +67,6 @@ private:
   void UpdateLayout(PixelRect rc) noexcept;
 
 protected:
-  virtual void OnResize(PixelSize new_size) override;
-  virtual void OnPaint(Canvas &canvas) override;
+  void OnResize(PixelSize new_size) noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };
-
-#endif

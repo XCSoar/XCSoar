@@ -30,9 +30,11 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "LastUsed.hpp"
 
+namespace WaypointGlue {
+
 WaypointPtr
-WaypointGlue::FindHomeId(Waypoints &waypoints,
-                         PlacesOfInterestSettings &settings)
+FindHomeId(Waypoints &waypoints,
+           PlacesOfInterestSettings &settings) noexcept
 {
   if (settings.home_waypoint < 0)
     return nullptr;
@@ -50,8 +52,8 @@ WaypointGlue::FindHomeId(Waypoints &waypoints,
 }
 
 WaypointPtr
-WaypointGlue::FindHomeLocation(Waypoints &waypoints,
-                               PlacesOfInterestSettings &settings)
+FindHomeLocation(Waypoints &waypoints,
+                 PlacesOfInterestSettings &settings) noexcept
 {
   if (!settings.home_location_available)
     return nullptr;
@@ -68,8 +70,8 @@ WaypointGlue::FindHomeLocation(Waypoints &waypoints,
 }
 
 WaypointPtr
-WaypointGlue::FindFlaggedHome(Waypoints &waypoints,
-                              PlacesOfInterestSettings &settings)
+FindFlaggedHome(Waypoints &waypoints,
+                PlacesOfInterestSettings &settings) noexcept
 {
   auto wp = waypoints.FindHome();
   if (wp == nullptr)
@@ -80,11 +82,11 @@ WaypointGlue::FindFlaggedHome(Waypoints &waypoints,
 }
 
 void
-WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
-                      PlacesOfInterestSettings &poi_settings,
-                      TeamCodeSettings &team_code_settings,
-                      DeviceBlackboard *device_blackboard,
-                      const bool reset)
+SetHome(Waypoints &way_points, const RasterTerrain *terrain,
+        PlacesOfInterestSettings &poi_settings,
+        TeamCodeSettings &team_code_settings,
+        DeviceBlackboard *device_blackboard,
+        const bool reset) noexcept
 {
   if (reset)
     poi_settings.home_waypoint = -1;
@@ -125,9 +127,9 @@ WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 }
 
 void
-WaypointGlue::SaveHome(ProfileMap &profile,
-                       const PlacesOfInterestSettings &poi_settings,
-                       const TeamCodeSettings &team_code_settings)
+SaveHome(ProfileMap &profile,
+         const PlacesOfInterestSettings &poi_settings,
+         const TeamCodeSettings &team_code_settings) noexcept
 {
   profile.Set(ProfileKeys::HomeWaypoint, poi_settings.home_waypoint);
   if (poi_settings.home_location_available)
@@ -136,3 +138,5 @@ WaypointGlue::SaveHome(ProfileMap &profile,
   profile.Set(ProfileKeys::TeamcodeRefWaypoint,
               team_code_settings.team_code_reference_waypoint);
 }
+
+} // namespace WaypointGlue

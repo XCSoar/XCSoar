@@ -24,7 +24,6 @@ Copyright_License {
 #include "Look/FontDescription.hpp"
 #include "ui/canvas/Font.hpp"
 #include "util/ScopeExit.hxx"
-#include "util/TStringView.hxx"
 
 #ifndef ENABLE_OPENGL
 #include "thread/Mutex.hxx"
@@ -68,7 +67,7 @@ Font::Load(const FontDescription &d)
   NativeFontT *native_font;
 
 #ifndef ENABLE_OPENGL
-  const std::lock_guard<Mutex> lock(apple_font_mutex);
+  const std::lock_guard lock{apple_font_mutex};
 #endif
 
   if (d.IsMonospace())
@@ -109,16 +108,16 @@ Font::Load(const FontDescription &d)
 }
 
 PixelSize
-Font::TextSize(const TCHAR *text) const noexcept
+Font::TextSize(const tstring_view text) const noexcept
 {
   assert(nil != draw_attributes);
 
   NSString *ns_str =
-      [NSString stringWithCString: text encoding: NSUTF8StringEncoding];
+    [[NSString alloc] initWithBytes: text.data() length: text.size() encoding: NSUTF8StringEncoding];
   assert(nil != ns_str);
 
 #ifndef ENABLE_OPENGL
-  const std::lock_guard<Mutex> lock(apple_font_mutex);
+  const std::lock_guard lock{apple_font_mutex};
 #endif
 
   CGSize size = [ns_str sizeWithAttributes: draw_attributes];
@@ -127,13 +126,13 @@ Font::TextSize(const TCHAR *text) const noexcept
 }
 
 void
-Font::Render(TStringView text, const PixelSize size,
+Font::Render(tstring_view text, const PixelSize size,
              void *buffer) const noexcept
 {
   assert(nil != draw_attributes);
 
   NSString *ns_str =
-      [[NSString alloc] initWithBytes: text.data length: text.size encoding: NSUTF8StringEncoding];
+    [[NSString alloc] initWithBytes: text.data() length: text.size() encoding: NSUTF8StringEncoding];
   assert(nil != ns_str);
 
   memset(buffer, 0, size.width * size.height);
@@ -147,7 +146,7 @@ Font::Render(TStringView text, const PixelSize size,
   AtScopeExit(ctx) { CFRelease(ctx); };
 
 #ifndef ENABLE_OPENGL
-  const std::lock_guard<Mutex> lock(apple_font_mutex);
+  const std::lock_guard lock{apple_font_mutex};
 #endif
 
 #ifdef USE_APPKIT

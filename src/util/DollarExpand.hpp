@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef DOLLAR_EXPAND_HPP
-#define DOLLAR_EXPAND_HPP
+#pragma once
 
 #include "StringAPI.hxx"
 #include "TruncateString.hpp"
@@ -83,5 +82,3 @@ DollarExpand(const TCHAR *src, TCHAR *dest, size_t dest_size,
   dest_size = dest_end - dest;
   CopyTruncateString(dest, dest_size, src);
 }
-
-#endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,13 +21,14 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_IGC_WRITER_HPP
-#define XCSOAR_IGC_WRITER_HPP
+#pragma once
 
 #include "Logger/GRecord.hpp"
 #include "IGCFix.hpp"
 #include "io/FileOutputStream.hxx"
 #include "io/BufferedOutputStream.hxx"
+
+#include <string_view>
 
 #include <tchar.h>
 
@@ -65,21 +66,9 @@ public:
 
 private:
   /**
-   * Begin writing a new line.  The returned buffer has #MAX_IGC_BUFF
-   * bytes.  Call CommitLine() when you are done writing to the buffer.
-   *
-   * @return nullptr on error
-   */
-  char *BeginLine() {
-    return buffer;
-  }
-
-  /**
    * Finish writing the line.
-   *
-   * @param line the buffer obtained with BeginLine()
    */
-  void CommitLine(char *line);
+  void CommitLine(std::string_view line);
 
   void WriteLine(const char *line);
   void WriteLine(const char *a, const TCHAR *b);
@@ -122,5 +111,3 @@ public:
 protected:
   void LogEvent(const BrokenTime &time, const char *event = "");
 };
-
-#endif

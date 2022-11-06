@@ -133,13 +133,17 @@ MapWindow::OnPaintBuffer(Canvas &canvas) noexcept
   unsigned render_generation = ui_generation;
 #endif
 
+  {
 #ifdef ENABLE_OPENGL
-  GLCanvasScissor scissor(canvas);
+    GLCanvasScissor scissor(canvas);
+#else
+    const ScopeUnlock unlock{mutex};
 #endif
 
-  // Render the moving map
-  Render(canvas, GetClientRect());
-  draw_sw.Finish();
+    // Render the moving map
+    Render(canvas, GetClientRect());
+    draw_sw.Finish();
+  }
 
 #ifndef ENABLE_OPENGL
   /* save the generation number which was active when rendering had

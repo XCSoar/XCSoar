@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,10 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ATMOSPHERE_CUSONDE_HPP
-#define XCSOAR_ATMOSPHERE_CUSONDE_HPP
+#pragma once
 
 #include "Atmosphere/Temperature.hpp"
+
+#include <array>
 
 struct NMEAInfo;
 struct DerivedInfo;
@@ -37,8 +38,6 @@ class CuSonde {
 public:
   /** Meters between levels */
   static constexpr unsigned HEIGHT_STEP = 100;
-  /** Number of levels */
-  static constexpr unsigned NUM_LEVELS = 100;
 
   struct Level {
     /** Environmental temperature in K */
@@ -50,8 +49,10 @@ public:
     /** ThermalIndex in K */
     Temperature thermal_index;
 
-    void UpdateTemps(bool humidity_valid, double humidity, Temperature temperature);
-    void UpdateThermalIndex(double h_agl, Temperature max_ground_temperature);
+    void UpdateTemps(bool humidity_valid, double humidity,
+                     Temperature temperature) noexcept;
+    void UpdateThermalIndex(double h_agl,
+                            Temperature max_ground_temperature) noexcept;
 
     /** Has any data */
     bool has_data;
@@ -63,15 +64,15 @@ public:
     /** Estimated CloudBase with data of this level */
     double cloud_base;
 
-    bool empty() const {
+    constexpr bool empty() const noexcept {
       return !has_data;
     }
 
-    bool dewpoint_empty() const {
+    constexpr bool dewpoint_empty() const noexcept {
       return !has_dewpoint;
     }
 
-    void Reset() {
+    constexpr void Reset() noexcept {
       has_data = false;
       has_dewpoint = false;
     }
@@ -82,19 +83,18 @@ public:
   /** Height of ground above MSL */
   double ground_height;
   unsigned short last_level;
-  Level cslevels[NUM_LEVELS];
+  std::array<Level, 100> cslevels;
 
   /** Estimated ThermailHeight */
   double thermal_height;
   /** Estimated CloudBase */
   double cloud_base;
 
-  void Reset();
+  void Reset() noexcept;
 
-  void UpdateMeasurements(const NMEAInfo &basic, const DerivedInfo &calculated);
-  void FindCloudBase(unsigned short level);
-  void FindThermalHeight(unsigned short level);
-  void SetForecastTemperature(Temperature temperature);
+  void UpdateMeasurements(const NMEAInfo &basic,
+                          const DerivedInfo &calculated) noexcept;
+  void FindCloudBase(unsigned short level) noexcept;
+  void FindThermalHeight(unsigned short level) noexcept;
+  void SetForecastTemperature(Temperature temperature) noexcept;
 };
-
-#endif

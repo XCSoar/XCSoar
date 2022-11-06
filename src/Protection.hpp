@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,17 +21,17 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_PROTECTION_HPP
-#define XCSOAR_PROTECTION_HPP
+#pragma once
 
 /**
  * Notify the #MergeThread that new data has arrived in the
  * #DeviceBlackboard.
  */
 void
-TriggerMergeThread();
+TriggerMergeThread() noexcept;
 
-void TriggerGPSUpdate();
+void
+TriggerGPSUpdate() noexcept;
 
 /**
  * Force a #CalculationThread run.  This should be called when
@@ -40,24 +40,26 @@ void TriggerGPSUpdate();
  * recalculated.
  */
 void
-ForceCalculation();
+ForceCalculation() noexcept;
 
-void TriggerVarioUpdate();
+void
+TriggerVarioUpdate() noexcept;
 
 /**
  * Trigger a redraw of the map window.
  */
 void
-TriggerMapUpdate();
+TriggerMapUpdate() noexcept;
 
 /**
  * Called by the calculation thread when new calculation results are
  * available.  This updates the map and the info boxes.
  */
 void
-TriggerCalculatedUpdate();
+TriggerCalculatedUpdate() noexcept;
 
-void CreateCalculationThread();
+void
+CreateCalculationThread() noexcept;
 
 extern bool global_running;
 
@@ -66,19 +68,17 @@ extern bool global_running;
  * Call this before doing write operations on shared data.
  */
 void
-SuspendAllThreads();
+SuspendAllThreads() noexcept;
 
 /**
  * Resume all threads suspended by SuspendAllThreads().
  */
 void
-ResumeAllThreads();
+ResumeAllThreads() noexcept;
 
 class ScopeSuspendAllThreads {
 public:
-  ScopeSuspendAllThreads() { SuspendAllThreads(); }
-  ~ScopeSuspendAllThreads() { ResumeAllThreads(); }
+  ScopeSuspendAllThreads() noexcept { SuspendAllThreads(); }
+  ~ScopeSuspendAllThreads() noexcept { ResumeAllThreads(); }
 };
-
-#endif
 

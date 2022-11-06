@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,8 +30,9 @@ Copyright_License {
 #include "Formatter/AirspaceFormatter.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Language/Language.hpp"
-#include "util/Compiler.h"
+#include "util/StaticString.hxx"
 
 #include <cassert>
 
@@ -58,23 +59,37 @@ public:
 };
 
 void
-AirspaceDetailsWidget::Prepare(ContainerWindow &parent,
-                               const PixelRect &rc) noexcept
+AirspaceDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                               [[maybe_unused]] const PixelRect &rc) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
-  TCHAR buffer[64];
+
+  StaticString<64> buffer;
 
   AddMultiLine(airspace->GetName());
 
-  if (!airspace->GetRadioText().empty())
-    AddReadOnly(_("Radio"), nullptr, airspace->GetRadioText().c_str());
+  if (airspace->GetRadioFrequency().Format(buffer.data(),
+                                           buffer.capacity()) != nullptr) {
+    buffer += _T(" MHz");
+    AddReadOnly(_("Radio"), nullptr, buffer);
+
+    AddButton(_("Set Active Frequency"), [this](){
+      ActionInterface::SetActiveFrequency(airspace->GetRadioFrequency(),
+                                          airspace->GetName());
+    });
+
+    AddButton(_("Set Standby Frequency"), [this](){
+      ActionInterface::SetStandbyFrequency(airspace->GetRadioFrequency(),
+                                           airspace->GetName());
+    });
+  }
 
   AddReadOnly(_("Type"), nullptr, AirspaceFormatter::GetClass(*airspace));
 
-  AirspaceFormatter::FormatAltitude(buffer, airspace->GetTop());
+  AirspaceFormatter::FormatAltitude(buffer.data(), airspace->GetTop());
   AddReadOnly(_("Top"), nullptr, buffer);
 
-  AirspaceFormatter::FormatAltitude(buffer, airspace->GetBase());
+  AirspaceFormatter::FormatAltitude(buffer.data(), airspace->GetBase());
   AddReadOnly(_("Base"), nullptr, buffer);
 
   if (warnings != nullptr) {
@@ -82,7 +97,7 @@ AirspaceDetailsWidget::Prepare(ContainerWindow &parent,
       airspace->ClosestPoint(basic.location, warnings->GetProjection());
     const auto distance = closest.Distance(basic.location);
 
-    FormatUserDistance(distance, buffer);
+    FormatUserDistance(distance, buffer.data());
     AddReadOnly(_("Distance"), nullptr, buffer);
   }
 }

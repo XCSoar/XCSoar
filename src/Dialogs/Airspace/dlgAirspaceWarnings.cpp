@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -38,10 +38,10 @@ Copyright_License {
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "util/Macros.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Language/Language.hpp"
 #include "Widget/ListWidget.hpp"
 #include "UIGlobals.hpp"
-#include "util/Compiler.h"
 #include "Audio/Sound.hpp"
 
 #include <algorithm>
@@ -60,6 +60,7 @@ class AirspaceWarningListWidget final
   Button *ack_button;
   Button *ack_day_button;
   Button *enable_button;
+  Button *radio_button;
 
   std::vector<AirspaceWarning> warning_list;
 
@@ -85,21 +86,23 @@ public:
     ack_button = buttons.AddButton(_("ACK"), [this](){ Ack(); });
     ack_day_button = buttons.AddButton(_("ACK Day"), [this](){ AckDay(); });
     enable_button = buttons.AddButton(_("Enable"), [this](){ Enable(); });
+    radio_button = buttons.AddButton(_("Radio"), [this](){ Radio(); });
   }
 
   void CopyList();
   void UpdateList();
   void UpdateButtons();
 
-  gcc_pure
+  [[gnu::pure]]
   const AbstractAirspace *GetSelectedAirspace() const;
 
-  gcc_pure
+  [[gnu::pure]]
   bool HasWarning() const;
 
   void Ack();
   void AckDay();
   void Enable();
+  void Radio() noexcept;
 
   /* virtual methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -113,7 +116,7 @@ public:
   /* virtual methods from ListCursorHandler */
   void OnCursorMoved(unsigned index) noexcept override;
 
-  bool CanActivateItem(unsigned index) const noexcept override {
+  bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
     return true;
   }
 
@@ -144,6 +147,7 @@ AirspaceWarningListWidget::UpdateButtons()
     ack_button->SetVisible(false);
     ack_day_button->SetVisible(false);
     enable_button->SetVisible(false);
+    radio_button->SetVisible(false);
     return;
   }
 
@@ -159,6 +163,7 @@ AirspaceWarningListWidget::UpdateButtons()
   ack_button->SetVisible(ack_expired);
   ack_day_button->SetVisible(!ack_day);
   enable_button->SetVisible(!ack_expired);
+  radio_button->SetVisible(airspace->GetRadioFrequency().IsDefined());
 }
 
 void
@@ -198,7 +203,7 @@ AirspaceWarningListWidget::Hide() noexcept
 }
 
 void
-AirspaceWarningListWidget::OnActivateItem(gcc_unused unsigned i) noexcept
+AirspaceWarningListWidget::OnActivateItem([[maybe_unused]] unsigned i) noexcept
 {
   if (selected_airspace != nullptr)
     dlgAirspaceDetails(selected_airspace, &airspace_warnings);
@@ -268,6 +273,15 @@ AirspaceWarningListWidget::Enable()
   }
 
   UpdateList();
+}
+
+inline void
+AirspaceWarningListWidget::Radio() noexcept
+{
+  if (selected_airspace != nullptr &&
+      selected_airspace->GetRadioFrequency().IsDefined())
+    ActionInterface::SetActiveFrequency(selected_airspace->GetRadioFrequency(),
+                                        selected_airspace->GetName());
 }
 
 void

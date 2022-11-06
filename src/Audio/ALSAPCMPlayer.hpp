@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_AUDIO_ALSA_PCM_PLAYER_HPP
-#define XCSOAR_AUDIO_ALSA_PCM_PLAYER_HPP
+#pragma once
 
 #include "PCMPlayer.hpp"
 #include "event/SocketEvent.hxx"
@@ -31,10 +30,8 @@ Copyright_License {
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
-
 #include <forward_list>
 #include <memory>
-
 #include <alsa/asoundlib.h>
 
 /**
@@ -96,5 +93,3 @@ public:
 private:
   void OnSocketReady(unsigned events) noexcept;
 };
-
-#endif

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2014-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,13 +27,13 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef BUFFERED_OUTPUT_STREAM_HXX
-#define BUFFERED_OUTPUT_STREAM_HXX
+#pragma once
 
 #include "util/Compiler.h"
 #include "util/DynamicFifoBuffer.hxx"
 
 #include <cstddef>
+#include <span>
 
 #ifdef _UNICODE
 #include <wchar.h>
@@ -64,6 +64,10 @@ public:
 	 * Write the contents of a buffer.
 	 */
 	void Write(const void *data, std::size_t size);
+
+	void Write(std::span<const std::byte> src) {
+		Write(src.data(), src.size());
+	}
 
 	/**
 	 * Write the given object.  Note that this is only safe with
@@ -148,5 +152,3 @@ WithBufferedOutputStream(OutputStream &os, F &&f)
 	f(bos);
 	bos.Flush();
 }
-
-#endif

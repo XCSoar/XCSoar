@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef FLIGHT_STATISTICS_HPP
-#define FLIGHT_STATISTICS_HPP
+#pragma once
 
 #include "Math/LeastSquares.hpp"
 #include "Math/ConvexFilter.hpp"
@@ -42,13 +41,22 @@ public:
   Histogram vario_cruise_histogram;
   mutable Mutex mutex;
 
-  void StartTask();
+  void StartTask() noexcept;
 
-  double AverageThermalAdjusted(double wthis, const bool circling);
-  double GetMinWorkingHeight() const;
-  double GetMaxWorkingHeight() const;
-  double GetVarioScalePositive() const;
-  double GetVarioScaleNegative() const;
+  [[gnu::pure]]
+  double AverageThermalAdjusted(double wthis, bool circling) noexcept;
+
+  [[gnu::pure]]
+  double GetMinWorkingHeight() const noexcept;
+
+  [[gnu::pure]]
+  double GetMaxWorkingHeight() const noexcept;
+
+  [[gnu::pure]]
+  double GetVarioScalePositive() const noexcept;
+
+  [[gnu::pure]]
+  double GetVarioScaleNegative() const noexcept;
 
   void AddAltitude(FloatDuration tflight,
                    double alt, bool final_glide) noexcept;
@@ -61,7 +69,5 @@ public:
   void AddClimbRate(FloatDuration tflight,
                     double vario, bool circling) noexcept;
 
-  void Reset();
+  void Reset() noexcept;
 };
-
-#endif

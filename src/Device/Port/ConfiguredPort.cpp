@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -62,7 +62,7 @@ Copyright_License {
  * See http://msdn.microsoft.com/en-us/library/bb202042.aspx
  */
 static bool
-DetectGPS(TCHAR *path, std::size_t path_max_size)
+DetectGPS([[maybe_unused]] TCHAR *path, [[maybe_unused]] std::size_t path_max_size)
 {
   return false;
 }

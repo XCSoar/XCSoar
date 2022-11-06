@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Angle.hpp"
 #include "ComboList.hpp"
-#include "util/NumberParser.hpp"
 #include "util/Macros.hpp"
 
 #include <stdio.h>
@@ -71,12 +70,6 @@ AngleDataField::ModifyValue(Angle _value) noexcept
   Modified();
 }
 
-int
-AngleDataField::GetAsInteger() const noexcept
-{
-  return GetIntegerValue();
-}
-
 const TCHAR *
 AngleDataField::GetAsString() const noexcept
 {
@@ -89,18 +82,6 @@ AngleDataField::GetAsDisplayString() const noexcept
 {
   _stprintf(string_buffer, _T("%u°"), GetIntegerValue());
   return string_buffer;
-}
-
-void
-AngleDataField::SetAsInteger(int _value) noexcept
-{
-  ModifyValue(_value);
-}
-
-void
-AngleDataField::SetAsString(const TCHAR *_value) noexcept
-{
-  ModifyValue(Angle::Degrees(ParseDouble(_value)));
 }
 
 void
@@ -134,7 +115,7 @@ AppendComboValue(ComboList &combo_list, unsigned value) noexcept
 }
 
 ComboList
-AngleDataField::CreateComboList(const TCHAR *reference) const noexcept
+AngleDataField::CreateComboList([[maybe_unused]] const TCHAR *reference) const noexcept
 {
   ComboList combo_list;
 

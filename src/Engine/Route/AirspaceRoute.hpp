@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,13 +20,12 @@
 }
  */
 
-#ifndef XCSOAR_AIRSPACE_ROUTE_HPP
-#define XCSOAR_AIRSPACE_ROUTE_HPP
+#pragma once
 
-#include "RoutePlanner.hpp"
+#include "TerrainRoute.hpp"
 #include "Airspace/Airspaces.hpp"
 
-class AirspaceRoute : public RoutePlanner {
+class AirspaceRoute : public TerrainRoute {
   Airspaces m_airspaces;
 
   struct RouteAirspaceIntersection {
@@ -67,11 +66,11 @@ protected:
     return m_airspaces.IsEmpty() && RoutePlanner::IsTrivial();
   }
 
-private:
   std::optional<RoutePoint> CheckClearance(const RouteLink &e) const noexcept override;
   void AddNearby(const RouteLink &e) noexcept override;
   bool CheckSecondary(const RouteLink &e) noexcept override;
 
+private:
   void AddNearbyAirspace(const RouteAirspaceIntersection &inx,
                          const RouteLink &e) noexcept;
 
@@ -96,5 +95,3 @@ private:
                               const RoutePoint &start,
                               const RoutePoint &intc) const noexcept;
 };
-
-#endif
