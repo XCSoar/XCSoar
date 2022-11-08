@@ -60,7 +60,7 @@ CopyASCII(char *dest, std::size_t dest_size,
 	  const char *src, const char *src_end) noexcept;
 
 /**
- * Like CopyUpper(), but convert all letters to upper-case.
+ * Like CopyASCII(), but convert all letters to upper-case.
  */
 [[gnu::nonnull]]
 void
