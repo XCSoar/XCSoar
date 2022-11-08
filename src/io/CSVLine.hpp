@@ -23,9 +23,8 @@ Copyright_License {
 
 #pragma once
 
-#include "util/Range.hpp"
-
 #include <cstddef>
+#include <string_view>
 
 /**
  * A helper class which can dissect a NMEA input line.
@@ -37,8 +36,8 @@ protected:
 public:
   explicit CSVLine(const char *line) noexcept;
 
-  Range<const char *> Rest() const noexcept {
-    return Range<const char *>(data, end);
+  std::string_view Rest() const noexcept {
+    return {data, std::size_t(end - data)};
   }
 
   bool IsEmpty() const noexcept {

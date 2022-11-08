@@ -32,6 +32,7 @@
 #include "io/FileOutputStream.hxx"
 #include "time/TimeoutClock.hpp"
 #include "NMEA/InputLine.hpp"
+#include "util/SpanCast.hxx"
 
 #include <algorithm>
 #include <stdio.h>
@@ -281,10 +282,7 @@ HandleFlightLine(const char *_line, BufferedOutputStream &os,
     /* don't allow changes in file size */
     return false;
 
-  auto content = line.Rest();
-  size_t length = content.end() - content.begin();
-  os.Write(content.begin(), length);
-
+  os.Write(AsBytes(line.Rest()));
   os.Write("\r\n");
   ++i;
   return true;
