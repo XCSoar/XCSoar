@@ -53,7 +53,9 @@ class DeviceSettingsMap {
 
     bool old;
 
-    explicit constexpr Item(const V &_value) noexcept:value(_value) {}
+    template<typename VV>
+    explicit constexpr Item(VV &&_value) noexcept
+      :value(std::forward<VV>(_value)) {}
   };
 
   using Map = std::map<std::string, Item, std::less<>>;
@@ -133,9 +135,10 @@ public:
     return const_iterator(map.end());
   }
 
-  template<typename K>
-  void Set(const K &key, const V &value) {
-    auto [it, _] = map.insert_or_assign(key, Item(value));
+  template<typename K, typename VV>
+  void Set(K &&key, VV &&value) {
+    auto [it, _] = map.insert_or_assign(std::forward<K>(key),
+                                        Item{std::forward<VV>(value)});
     Item &item = it->second;
     item.old = false;
 
