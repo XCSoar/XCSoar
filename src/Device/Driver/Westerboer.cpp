@@ -32,6 +32,8 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
+using std::string_view_literals::operator""sv;
+
 /**
  * Device driver for Westerboer VW1150.
  * @see http://www.westerboer.de/PDF/VW1150/Datensaetze_V1.2.pdf
@@ -141,16 +143,16 @@ WesterboerDevice::ParseNMEA(const char *String, NMEAInfo &info)
     return false;
 
   NMEAInputLine line(String);
-  char type[16];
-  line.Read(type, 16);
 
-  if (StringIsEqual(type, "$PWES0"))
+  const auto type = line.ReadView();
+  if (type == "$PWES0"sv)
     return PWES0(line, info);
 
-  if (StringIsEqual(type, "$PWES1"))
+  else if (type == "$PWES1"sv)
     return PWES1(line, info);
 
-  return false;
+  else
+    return false;
 }
 
 bool

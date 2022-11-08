@@ -42,6 +42,8 @@ Copyright_License {
 #include <cassert>
 #include <stdio.h>
 
+using std::string_view_literals::operator""sv;
+
 // Additional sentance for EW support
 
 class EWMicroRecorderDevice : public AbstractDevice {
@@ -90,10 +92,9 @@ EWMicroRecorderDevice::ParseNMEA(const char *String, NMEAInfo &info)
     return false;
 
   NMEAInputLine line(String);
-  char type[16];
-  line.Read(type, 16);
 
-  if (StringIsEqual(type, "$PGRMZ")) {
+  const auto type = line.ReadView();
+  if (type == "$PGRMZ"sv) {
     double value;
 
     /* The normal Garmin $PGRMZ line contains the "true" barometric

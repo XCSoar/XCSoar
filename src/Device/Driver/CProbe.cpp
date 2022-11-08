@@ -29,6 +29,8 @@ Copyright_License {
 
 #include <cstdint>
 
+using std::string_view_literals::operator""sv;
+
 class CProbeDevice : public AbstractDevice {
 public:
   /* virtual methods from class Device */
@@ -123,14 +125,13 @@ bool
 CProbeDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
   NMEAInputLine line(_line);
-  char type[16];
-  line.Read(type, 16);
 
-  if (!StringIsEqual(type, "$PCPROBE"))
+  auto type = line.ReadView();
+  if (type != "$PCPROBE"sv)
     return false;
 
-  line.Read(type, 16);
-  if (StringIsEqual(type, "T"))
+  type = line.ReadView();
+  if (type ==  "T"sv)
     return ParseData(line, info);
   else
     return false;

@@ -50,9 +50,7 @@ Test1()
   ok1(line.ReadFirstChar() == '7');
 
   // Test read(char)
-  char temp[10];
-  line.Read(temp, 10);
-  ok1(strcmp(temp, "8") == 0);
+  ok1(line.ReadView() == "8"sv);
 
   // Test read_compare(char)
   ok1(line.ReadCompare("9"));

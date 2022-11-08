@@ -28,6 +28,8 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
 
+using std::string_view_literals::operator""sv;
+
 class ILECDevice : public AbstractDevice {
 public:
   /* virtual methods from class Device */
@@ -87,12 +89,11 @@ ILECDevice::ParseNMEA(const char *_line, NMEAInfo &info)
     return false;
 
   NMEAInputLine line(_line);
-  char type[16];
-  line.Read(type, sizeof(type));
 
-  if (StringIsEqual(type, "$PILC")) {
-    line.Read(type, sizeof(type));
-    if (StringIsEqual(type, "PDA1"))
+  auto type = line.ReadView();
+  if (type == "$PILC"sv) {
+    type = line.ReadView();
+    if (type == "PDA1"sv)
       return ParsePDA1(line, info);
     else
       return false;

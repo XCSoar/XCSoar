@@ -28,7 +28,8 @@ Copyright_License {
 #include "Units/Unit.hpp"
 #include "Units/Units.hpp"
 #include "NMEA/Checksum.hpp"
-#include "util/StringAPI.hxx"
+
+using std::string_view_literals::operator""sv;
 
 bool
 IMIDevice::EnableNMEA(OperationEnvironment &env)
@@ -70,10 +71,9 @@ IMIDevice::ParseNMEA(const char *String, NMEAInfo &info)
     return false;
 
   NMEAInputLine line(String);
-  char type[16];
-  line.Read(type, 16);
 
-  if (StringIsEqual(type, "$PGRMZ")) {
+  const auto type = line.ReadView();
+  if (type == "$PGRMZ"sv) {
     double value;
 
     /* The normal Garmin $PGRMZ line contains the "true" barometric

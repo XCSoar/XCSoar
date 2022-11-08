@@ -22,6 +22,8 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Info.hpp"
 
+using std::string_view_literals::operator""sv;
+
 bool
 ThermalExpressDevice::ParseTXP(NMEAInputLine &line, NMEAInfo &info)
 {
@@ -44,10 +46,8 @@ ThermalExpressDevice::ParseNMEA(const char *line, NMEAInfo &info)
 {
   NMEAInputLine input_line(line);
 
-  char buffer[5];
-  input_line.Read(buffer,5);
-
-  if (StringIsEqual(buffer,"$TXP"))
+  const auto type = input_line.ReadView();
+  if (type == "$TXP"sv)
     return ParseTXP(input_line, info);
   else
     return false;

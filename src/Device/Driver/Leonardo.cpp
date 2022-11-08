@@ -27,6 +27,8 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
 
+using std::string_view_literals::operator""sv;
+
 class LeonardoDevice : public AbstractDevice {
 public:
   /* virtual methods from class Device */
@@ -204,22 +206,19 @@ bool
 LeonardoDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
   NMEAInputLine line(_line);
-  char type[16];
-  line.Read(type, 16);
 
-  if (StringIsEqual(type, "$C") ||
-      StringIsEqual(type, "$c"))
+  const auto type = line.ReadView();
+  if (type == "$C"sv || type == "$c"sv)
     return LeonardoParseC(line, info);
 
-  else if (StringIsEqual(type, "$D") ||
-           StringIsEqual(type, "$d"))
+  else if (type == "$D"sv || type == "$d"sv)
     return LeonardoParseD(line, info);
 
-  else if (StringIsEqual(type, "$PDGFTL1") ||
-           StringIsEqual(type, "$PDGFTTL"))
+  else if (type == "$PDGFTL1"sv || type == "$PDGFTTL"sv)
     return PDGFTL1(line, info);
 
-  return false;
+  else
+    return false;
 }
 
 static Device *

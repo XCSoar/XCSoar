@@ -28,6 +28,8 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 
+using std::string_view_literals::operator""sv;
+
 static bool
 ParsePITV3(NMEAInputLine &line, NMEAInfo &info)
 {
@@ -162,14 +164,13 @@ VaulterDevice::ParseNMEA(const char *_line, NMEAInfo &info)
     return false;
 
   NMEAInputLine line(_line);
-  char type[16];
-  line.Read(type, 16);
 
-  if (StringIsEqual(type, "$PITV3"))
+  const auto type = line.ReadView();
+  if (type == "$PITV3"sv)
     return ParsePITV3(line, info);
-  else if (StringIsEqual(type, "$PITV4"))
+  else if (type == "$PITV4"sv)
     return ParsePITV4(line, info);
-  else if (StringIsEqual(type, "$PITV5"))
+  else if (type == "$PITV5"sv)
     return ParsePITV5(line, info);
   else
     return false;

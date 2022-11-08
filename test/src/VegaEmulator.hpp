@@ -34,10 +34,9 @@ Copyright_License {
 #include <string>
 #include <map>
 #include <stdio.h>
-#include <string.h>
 
 class VegaEmulator : public Emulator, PortLineSplitter {
-  std::map<std::string, std::string> settings;
+  std::map<std::string, std::string, std::less<>> settings;
 
 public:
   VegaEmulator() {
@@ -46,22 +45,22 @@ public:
 
 private:
   void PDVSC_S(NMEAInputLine &line) {
-    char name[64], value[256];
-    line.Read(name, ARRAY_SIZE(name));
-    line.Read(value, ARRAY_SIZE(value));
+    const auto name = line.ReadView();
+    const auto value = line.ReadView();
 
-    settings[name] = value;
+    settings[std::string{name}] = value;
 
     ConsoleOperationEnvironment env;
 
     char buffer[512];
-    snprintf(buffer, ARRAY_SIZE(buffer), "PDVSC,A,%s,%s", name, value);
+    snprintf(buffer, ARRAY_SIZE(buffer), "PDVSC,A,%.*s,%.*s",
+             (int)name.size(), name.data(),
+             (int)value.size(), value.data());
     PortWriteNMEA(*port, buffer, env);
   }
 
   void PDVSC_R(NMEAInputLine &line) {
-    char name[64];
-    line.Read(name, ARRAY_SIZE(name));
+    const auto name = line.ReadView();
 
     auto i = settings.find(name);
     if (i == settings.end())
@@ -72,17 +71,17 @@ private:
     ConsoleOperationEnvironment env;
 
     char buffer[512];
-    snprintf(buffer, ARRAY_SIZE(buffer), "PDVSC,A,%s,%s", name, value);
+    snprintf(buffer, ARRAY_SIZE(buffer), "PDVSC,A,%.*s,%s",
+             (int)name.size(), name.data(),
+             value);
     PortWriteNMEA(*port, buffer, env);
   }
 
   void PDVSC(NMEAInputLine &line) {
-    char command[4];
-    line.Read(command, ARRAY_SIZE(command));
-
-    if (strcmp(command, "S") == 0)
+    const auto command = line.ReadView();
+    if (command == "S"sv)
       PDVSC_S(line);
-    else if (strcmp(command, "R") == 0)
+    else if (command == "R"sv)
       PDVSC_R(line);
   }
 

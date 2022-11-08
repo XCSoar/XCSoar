@@ -30,6 +30,8 @@ Copyright_License {
 #include "Atmosphere/Pressure.hpp"
 #include "Math/Util.hpp"
 
+using std::string_view_literals::operator""sv;
+
 class EyeDevice : public AbstractDevice {
 public:
   /* virtual methods from class Device */
@@ -50,12 +52,11 @@ EyeDevice::ParseNMEA(const char *_line, NMEAInfo &info)
     return false;
 
   NMEAInputLine line(_line);
-  char type[16];
-  line.Read(type, 16);
 
-  if (StringIsEqual(type, "$PEYA"))
+  const auto type = line.ReadView();
+  if (type == "$PEYA"sv)
     return PEYA(line, info);
-  else if (StringIsEqual(type, "$PEYI"))
+  else if (type == "$PEYI"sv)
     return PEYI(line, info);
   else
     return false;

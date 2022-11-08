@@ -22,31 +22,28 @@ Copyright_License {
 */
 
 #include "Device.hpp"
-#include "util/Macros.hpp"
-#include "util/StringAPI.hxx"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 
 #include <string.h>
 
+using std::string_view_literals::operator""sv;
+
 bool
 FlarmDevice::ParsePFLAC(NMEAInputLine &line)
 {
-  char responsetype[10];
-  line.Read(responsetype, 10);
+  [[maybe_unused]] const auto responsetype = line.ReadView();
 
-  char name[80];
-  line.Read(name, 80);
+  const auto name = line.ReadView();
 
-  if (StringIsEqual(name, "ERROR"))
+  if (name == "ERROR"sv)
     // ignore error responses...
     return true;
 
-  char value[256];
-  line.Read(value, ARRAY_SIZE(value));
+  const auto value = line.ReadView();
 
   const std::lock_guard<Mutex> lock(settings);
-  settings.Set(name, value);
+  settings.Set(std::string{name}, value);
 
   return true;
 }
@@ -58,10 +55,9 @@ FlarmDevice::ParseNMEA(const char *_line, [[maybe_unused]] NMEAInfo &info)
     return false;
 
   NMEAInputLine line(_line);
-  char type[16];
-  line.Read(type, 16);
 
-  if (StringIsEqual(type, "$PFLAC"))
+  const auto type = line.ReadView();
+  if (type == "$PFLAC"sv)
     return ParsePFLAC(line);
   else
     return false;

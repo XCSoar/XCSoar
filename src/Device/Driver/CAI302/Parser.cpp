@@ -27,6 +27,8 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 
+using std::string_view_literals::operator""sv;
+
 static bool
 ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
@@ -148,17 +150,14 @@ CAI302Device::ParseNMEA(const char *String, NMEAInfo &info)
     return false;
 
   NMEAInputLine line(String);
-  char type[16];
-  line.Read(type, 16);
 
-  if (StringIsEqual(type, "$PCAIB"))
+  const auto type = line.ReadView();
+  if (type == "$PCAIB"sv)
     return cai_PCAIB(line, info);
-
-  if (StringIsEqual(type, "$PCAID"))
+  else if (type == "$PCAID"sv)
     return cai_PCAID(line, info);
-
-  if (StringIsEqual(type, "!w"))
+  else if (type == "!w"sv)
     return cai_w(line, info);
-
-  return false;
+  else
+    return false;
 }

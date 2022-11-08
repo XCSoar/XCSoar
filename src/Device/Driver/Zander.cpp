@@ -29,6 +29,8 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "util/StringAPI.hxx"
 
+using std::string_view_literals::operator""sv;
+
 class ZanderDevice : public AbstractDevice {
 public:
   /* virtual methods from class Device */
@@ -112,12 +114,11 @@ PZAN5(NMEAInputLine &line, NMEAInfo &info)
 {
   // $PZAN5,VA,MUEHL,123.4,KM,T,234*cc
 
-  char state[3];
-  line.Read(state, 3);
+  const auto state = line.ReadView();
 
-  if (StringIsEqual(state, "SF"))
+  if (state == "SF"sv)
     info.switch_state.flight_mode = SwitchState::FlightMode::CRUISE;
-  else if (StringIsEqual(state, "VA"))
+  else if (state == "VA"sv)
     info.switch_state.flight_mode = SwitchState::FlightMode::CIRCLING;
   else
     info.switch_state.flight_mode = SwitchState::FlightMode::UNKNOWN;
@@ -132,25 +133,26 @@ ZanderDevice::ParseNMEA(const char *String, NMEAInfo &info)
     return false;
 
   NMEAInputLine line(String);
-  char type[16];
-  line.Read(type, 16);
 
-  if (StringIsEqual(type, "$PZAN1"))
+  const auto type = line.ReadView();
+
+  if (type == "$PZAN1"sv)
     return PZAN1(line, info);
 
-  if (StringIsEqual(type, "$PZAN2"))
+  else if (type == "$PZAN2"sv)
     return PZAN2(line, info);
 
-  if (StringIsEqual(type, "$PZAN3"))
+  else if (type == "$PZAN3"sv)
     return PZAN3(line, info);
 
-  if (StringIsEqual(type, "$PZAN4"))
+  else if (type == "$PZAN4"sv)
     return PZAN4(line, info);
 
-  if (StringIsEqual(type, "$PZAN5"))
+  else if (type == "$PZAN5"sv)
     return PZAN5(line, info);
 
-  return false;
+  else
+    return false;
 }
 
 static Device *

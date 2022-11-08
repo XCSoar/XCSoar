@@ -28,6 +28,8 @@ Copyright_License {
 #include "NMEA/Checksum.hpp"
 #include "Units/System.hpp"
 
+using std::string_view_literals::operator""sv;
+
 /**
  * Parse a "$BRSF" sentence.
  *
@@ -250,14 +252,13 @@ FlytecDevice::ParseNMEA(const char *_line, NMEAInfo &info)
     return false;
 
   NMEAInputLine line(_line);
-  char type[16];
-  line.Read(type, 16);
 
-  if (StringIsEqual(type, "$BRSF"))
+  const auto type = line.ReadView();
+  if (type == "$BRSF"sv)
     return FlytecParseBRSF(line, info);
-  else if (StringIsEqual(type, "$VMVABD"))
+  else if (type == "$VMVABD"sv)
     return FlytecParseVMVABD(line, info);
-  else if (StringIsEqual(type, "$FLYSEN"))
+  else if (type == "$FLYSEN"sv)
     return ParseFLYSEN(line, info);
   else
     return false;

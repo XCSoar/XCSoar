@@ -28,6 +28,8 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 
+using std::string_view_literals::operator""sv;
+
 class FlymasterF1Device : public AbstractDevice {
   Port &port;
 
@@ -93,10 +95,9 @@ FlymasterF1Device::ParseNMEA(const char *String, NMEAInfo &info)
     return false;
 
   NMEAInputLine line(String);
-  char type[16];
-  line.Read(type, 16);
 
-  if (StringIsEqual(type, "$VARIO"))
+  const auto type = line.ReadView();
+  if (type == "$VARIO"sv)
     return VARIO(line, info);
   else
     return false;

@@ -32,6 +32,8 @@ Copyright_License {
 #include "Driver/FLARM/StaticParser.hpp"
 #include "util/CharUtil.hxx"
 
+using std::string_view_literals::operator""sv;
+
 NMEAParser::NMEAParser()
 {
   Reset();
@@ -58,58 +60,63 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
 
   NMEAInputLine line(string);
 
-  char type[16];
-  line.Read(type, 16);
+  const auto type = line.ReadView();
+  if (type.size() < 6)
+    return false;
 
   if (IsAlphaASCII(type[1]) && IsAlphaASCII(type[2])) {
-    if (StringIsEqual(type + 3, "GSA"))
+    const auto type2 = type.substr(3);
+
+    if (type2 == "GSA"sv)
       return GSA(line, info);
 
-    if (StringIsEqual(type + 3, "GLL"))
+    if (type2 == "GLL"sv)
       return GLL(line, info);
 
-    if (StringIsEqual(type + 3, "RMC"))
+    if (type2 == "RMC"sv)
       return RMC(line, info);
 
-    if (StringIsEqual(type + 3, "GGA"))
+    if (type2 == "GGA"sv)
       return GGA(line, info);
 
-    if (StringIsEqual(type + 3, "HDM"))
+    if (type2 == "HDM"sv)
       return HDM(line, info);
 
-    if (StringIsEqual(type + 3, "MWV"))
+    if (type2 == "MWV"sv)
       return MWV(line, info);
   }
 
   // if (proprietary sentence) ...
   if (type[1] == 'P') {
+    const auto type2 = type.substr(1);
+
     // Airspeed and vario sentence
-    if (StringIsEqual(type + 1, "PTAS1"))
+    if (type2 == "PTAS1"sv)
       return PTAS1(line, info);
 
     // FLARM sentences
-    if (StringIsEqual(type + 1, "PFLAE")) {
+    if (type2 == "PFLAE"sv) {
       ParsePFLAE(line, info.flarm.error, info.clock);
       return true;
     }
 
-    if (StringIsEqual(type + 1, "PFLAV")) {
+    if (type2 == "PFLAV"sv) {
       ParsePFLAV(line, info.flarm.version, info.clock);
       return true;
     }
 
-    if (StringIsEqual(type + 1, "PFLAA")) {
+    if (type2 == "PFLAA"sv) {
       ParsePFLAA(line, info.flarm.traffic, info.clock);
       return true;
     }
 
-    if (StringIsEqual(type + 1, "PFLAU")) {
+    if (type2 == "PFLAU"sv) {
       ParsePFLAU(line, info.flarm.status, info.clock);
       return true;
     }
 
     // Garmin altitude sentence
-    if (StringIsEqual(type + 1, "PGRMZ"))
+    if (type2 == "PGRMZ"sv)
       return RMZ(line, info);
 
     return false;
