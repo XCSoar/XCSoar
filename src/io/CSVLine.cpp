@@ -40,52 +40,51 @@ EndOfLine(const char *line) noexcept
 CSVLine::CSVLine(const char *line) noexcept
   :data(line), end(EndOfLine(line)) {}
 
-size_t
-CSVLine::Skip() noexcept
+std::string_view
+CSVLine::ReadView() noexcept
 {
   const char* _seperator = strchr(data, ',');
+
+  const char *s = data;
+  std::size_t length;
   if (_seperator != nullptr && _seperator < end) {
-    size_t length = _seperator - data;
+    length = _seperator - data;
     data = _seperator + 1;
-    return length;
   } else {
-    size_t length = end - data;
+    length = end - data;
     data = end;
-    return length;
   }
+
+  return {s, length};
 }
 
 char
 CSVLine::ReadFirstChar() noexcept
 {
-  char ch = *data;
-  return Skip() > 0 ? ch : '\0';
+  const auto s = ReadView();
+  return s.empty() ? '\0' : s.front();
 }
 
 char
 CSVLine::ReadOneChar() noexcept
 {
-  char ch = *data;
-  return Skip() == 1 ? ch : '\0';
+  const auto s = ReadView();
+  return s.size() == 1 ? s.front() : '\0';
 }
 
 void
 CSVLine::Read(char *dest, size_t size) noexcept
 {
-  const char *src = data;
-  size_t length = Skip();
-  if (length >= size)
-    length = size - 1;
-  *std::copy_n(src, length, dest) = '\0';
+  auto src = ReadView();
+  if (src.size() >= size)
+    src = src.substr(0, size - 1);
+  *std::copy(src.begin(), src.end(), dest) = '\0';
 }
 
 bool
 CSVLine::ReadCompare(std::string_view value) noexcept
 {
-  const char *src = data;
-  size_t src_length = Skip();
-
-  return std::string_view{src, src_length} == value;
+  return ReadView() == value;
 }
 
 long

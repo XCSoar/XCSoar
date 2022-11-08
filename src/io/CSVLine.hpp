@@ -45,11 +45,13 @@ public:
   }
 
   /**
-   * Skip the next column.
-   *
-   * @return the length of the column
+   * Read one column and return its contents as a std::string_view.
    */
-  size_t Skip() noexcept;
+  std::string_view ReadView() noexcept;
+
+  void Skip() noexcept {
+    ReadView();
+  }
 
   /**
    * Skip a number of columns.

@@ -161,10 +161,10 @@ static bool
 ParseLogbookContent(const char *_line, RecordedFlightInfo &info)
 {
   NMEAInputLine line(_line);
+  line.Skip();
 
   unsigned n;
-  return line.Skip() &&
-    line.ReadChecked(n) &&
+  return line.ReadChecked(n) &&
     ReadFilename(line, info) > 0 &&
     ReadDate(line, info.date) &&
     ReadTime(line, info.start_time) &&

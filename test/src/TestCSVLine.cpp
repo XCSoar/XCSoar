@@ -39,8 +39,8 @@ Test1()
   // Test rest()
   ok1(line.Rest() == "2,x,4,5,6,7,8,9,10"sv);
 
-  // Test skip()
-  ok1(line.Skip() == 1);
+  // Test ReadView()
+  ok1(line.ReadView() == "2"sv);
 
   // Test skip(int)
   line.Skip(3);
