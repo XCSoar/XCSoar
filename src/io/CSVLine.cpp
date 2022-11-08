@@ -22,12 +22,13 @@ Copyright_License {
 */
 
 #include "CSVLine.hpp"
-#include "util/StringAPI.hxx"
 
 #include <algorithm>
 
 #include <cassert>
+
 #include <stdlib.h>
+#include <string.h>
 
 [[gnu::pure]]
 static const char *
@@ -79,15 +80,12 @@ CSVLine::Read(char *dest, size_t size) noexcept
 }
 
 bool
-CSVLine::ReadCompare(const char *value) noexcept
+CSVLine::ReadCompare(std::string_view value) noexcept
 {
-  size_t expected_length = strlen(value);
-
   const char *src = data;
   size_t src_length = Skip();
 
-  return src_length == expected_length &&
-    StringIsEqual(value, src, expected_length);
+  return std::string_view{src, src_length} == value;
 }
 
 long
@@ -242,7 +240,7 @@ CSVLine::ReadChecked(unsigned &value_r) noexcept
 }
 
 bool
-CSVLine::ReadCheckedCompare(double &value_r, const char *string) noexcept
+CSVLine::ReadCheckedCompare(double &value_r, std::string_view string) noexcept
 {
   double value;
   if (ReadChecked(value)) {

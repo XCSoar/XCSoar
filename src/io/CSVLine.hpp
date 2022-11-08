@@ -68,7 +68,7 @@ public:
   char ReadOneChar() noexcept;
 
   void Read(char *dest, size_t size) noexcept;
-  bool ReadCompare(const char *value) noexcept;
+  bool ReadCompare(std::string_view value) noexcept;
 
   long Read(long default_value) noexcept;
   unsigned ReadHex(unsigned default_value) noexcept;
@@ -100,5 +100,5 @@ public:
   /**
    * Read a #double only if the unit string which follows matches.
    */
-  bool ReadCheckedCompare(double &value_r, const char *string) noexcept;
+  bool ReadCheckedCompare(double &value_r, std::string_view string) noexcept;
 };
