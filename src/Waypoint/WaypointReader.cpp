@@ -32,6 +32,7 @@ Copyright_License {
 #include "io/ZipLineReader.hpp"
 #include "io/FileLineReader.hpp"
 
+#include <stdexcept>
 #include <memory>
 
 static WaypointReaderBase *
