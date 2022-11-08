@@ -25,8 +25,8 @@ Copyright_License {
 
 #include <string.h>
 
-NMEAInputLine::NMEAInputLine(const char* line):
-  CSVLine(line)
+NMEAInputLine::NMEAInputLine(const char* line) noexcept
+  :CSVLine(line)
 {
   const char* asterisk = strchr(line, '*');
   if (asterisk != NULL)

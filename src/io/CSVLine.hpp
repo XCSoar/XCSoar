@@ -35,13 +35,13 @@ protected:
   const char *data, *end;
 
 public:
-  CSVLine(const char *line);
+  explicit CSVLine(const char *line) noexcept;
 
-  Range<const char *> Rest() const {
+  Range<const char *> Rest() const noexcept {
     return Range<const char *>(data, end);
   }
 
-  bool IsEmpty() const {
+  bool IsEmpty() const noexcept {
     return data >= end;
   }
 
@@ -50,45 +50,45 @@ public:
    *
    * @return the length of the column
    */
-  size_t Skip();
+  size_t Skip() noexcept;
 
   /**
    * Skip a number of columns.
    */
-  void Skip(unsigned n) {
+  void Skip(unsigned n) noexcept {
     while (n-- > 0)
       Skip();
   }
 
-  char ReadFirstChar();
+  char ReadFirstChar() noexcept;
 
   /**
    * Read a column, expect it to be exactly one character.  Returns 0
    * on failure.
    */
-  char ReadOneChar();
+  char ReadOneChar() noexcept;
 
-  void Read(char *dest, size_t size);
-  bool ReadCompare(const char *value);
+  void Read(char *dest, size_t size) noexcept;
+  bool ReadCompare(const char *value) noexcept;
 
-  long Read(long default_value);
-  unsigned ReadHex(unsigned default_value);
+  long Read(long default_value) noexcept;
+  unsigned ReadHex(unsigned default_value) noexcept;
 
-  int Read(int default_value) {
+  int Read(int default_value) noexcept {
     return (int)Read((long)default_value);
   }
 
-  int Read(bool default_value) {
+  int Read(bool default_value) noexcept {
     return Read((long)default_value) != 0;
   }
 
-  double Read(double default_value);
-  bool ReadChecked(double &value_r);
+  double Read(double default_value) noexcept;
+  bool ReadChecked(double &value_r) noexcept;
 
-  bool ReadChecked(int &value_r);
-  bool ReadChecked(long &value_r);
-  bool ReadChecked(unsigned long &value_r);
-  bool ReadChecked(unsigned &value_r);
+  bool ReadChecked(int &value_r) noexcept;
+  bool ReadChecked(long &value_r) noexcept;
+  bool ReadChecked(unsigned long &value_r) noexcept;
+  bool ReadChecked(unsigned &value_r) noexcept;
 
   /**
    * Tries to read a hexadecimal number from the next field
@@ -96,10 +96,10 @@ public:
    * number should be written into
    * @return True if number was read successfully, False otherwise
    */
-  bool ReadHexChecked(unsigned &value_r);
+  bool ReadHexChecked(unsigned &value_r) noexcept;
 
   /**
    * Read a #double only if the unit string which follows matches.
    */
-  bool ReadCheckedCompare(double &value_r, const char *string);
+  bool ReadCheckedCompare(double &value_r, const char *string) noexcept;
 };
