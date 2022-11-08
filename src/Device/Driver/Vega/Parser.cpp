@@ -206,7 +206,7 @@ PDTSM(NMEAInputLine &line, [[maybe_unused]] NMEAInfo &info)
   const auto message = line.Rest();
 
   StaticString<256> buffer;
-  buffer.SetASCII(message.begin(), message.end());
+  buffer.SetASCII(message);
 
   // todo duration handling
   Message::AddMessage(_T("VEGA:"), buffer);
@@ -239,7 +239,7 @@ VegaDevice::ParseNMEA(const char *String, NMEAInfo &info)
   else if (StringIsEqual(type, "$PDVSD")) {
     const auto message = line.Rest();
     StaticString<256> buffer;
-    buffer.SetASCII(message.begin(), message.end());
+    buffer.SetASCII(message);
     Message::AddMessage(buffer);
     return true;
   } else if (StringIsEqual(type, "$PDTSM"))

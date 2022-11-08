@@ -205,7 +205,7 @@ try {
         dot >= item.name.capacity())
       continue;
 
-    item.name.SetASCII(name.c_str(), name.c_str() + dot);
+    item.name.SetASCII(std::string_view{name}.substr(0, dot));
     item.label = nullptr;
     item.help = nullptr;
 

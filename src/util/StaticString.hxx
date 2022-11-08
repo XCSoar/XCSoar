@@ -100,23 +100,15 @@ public:
 		data()[new_length] = SENTINEL;
 	}
 
-	void SetASCII(const char *src, const char *src_end) noexcept {
-		pointer end = ::CopyASCII(data(), capacity() - 1, src, src_end);
+	void SetASCII(std::string_view src) noexcept {
+		pointer end = ::CopyASCII(data(), capacity() - 1, src);
 		*end = SENTINEL;
-	}
-
-	void SetASCII(const char *src) noexcept {
-		SetASCII(src, src + StringLength(src));
 	}
 
 #ifdef _UNICODE
-	void SetASCII(const wchar_t *src, const wchar_t *src_end) noexcept {
-		pointer end = ::CopyASCII(data(), capacity() - 1, src, src_end);
+	void SetASCII(std::wstring_view src) noexcept {
+		pointer end = ::CopyASCII(data(), capacity() - 1, src);
 		*end = SENTINEL;
-	}
-
-	void SetASCII(const wchar_t *src) noexcept {
-		SetASCII(src, src + StringLength(src));
 	}
 #endif
 

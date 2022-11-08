@@ -56,7 +56,7 @@ private:
 
     const auto value = line.Rest();
     NarrowString<256> value_buffer;
-    value_buffer.SetASCII(value.begin(), value.end());
+    value_buffer.SetASCII(value);
 
     settings[name] = value_buffer;
 
