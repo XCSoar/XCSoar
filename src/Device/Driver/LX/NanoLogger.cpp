@@ -33,11 +33,13 @@
 #include "time/TimeoutClock.hpp"
 #include "NMEA/InputLine.hpp"
 #include "util/SpanCast.hxx"
+#include "util/StringCompare.hxx"
 
 #include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+
+using std::string_view_literals::operator""sv;
 
 static void
 RequestLogbookInfo(Port &port, OperationEnvironment &env)
@@ -65,14 +67,14 @@ GetNumberOfFlights(Port &port, PortNMEAReader &reader,
     if (response == nullptr)
       return -1;
 
-    if (memcmp(response, ",A,", 3) == 0) {
+    if (auto a = StringAfterPrefix(response, ",A,"sv)) {
       /* old Nano firmware versions (e.g. 2.05) print "LOGBOOK,A,n" */
-      response += 3;
+      response = a;
       break;
-    } else if (memcmp(response, "SIZE,A,", 7) == 0) {
+    } else if (auto size_a = StringAfterPrefix(response, "SIZE,A,"sv)) {
       /* new Nano firmware versions (e.g. 2.10) print
          "LOGBOOKSIZE,A,n" */
-      response += 7;
+      response = size_a;
       break;
     }
   }

@@ -23,14 +23,16 @@ Copyright_License {
 
 #include "Convert.hpp"
 #include "LXN.hpp"
-#include "util/ByteOrder.hxx"
 #include "io/BufferedOutputStream.hxx"
+#include "util/ByteOrder.hxx"
+#include "util/StringCompare.hxx"
 
 #include <cstdint>
 #include <cstdio>
 
 #include <stdlib.h>
-#include <string.h>
+
+using std::string_view_literals::operator""sv;
 
 struct Context {
   uint8_t flight_no;
@@ -173,7 +175,7 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
     case LXN::START:
       data += sizeof(*packet.start);
       if (data > end ||
-          memcmp(packet.start->streraz, "STReRAZ", 8) != 0)
+          !StringStartsWith(packet.start->streraz, "STReRAZ"sv))
         return false;
 
       context.flight_no = packet.start->flight_no;
