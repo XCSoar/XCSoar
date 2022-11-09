@@ -31,6 +31,8 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Driver/FLARM/StaticParser.hpp"
 #include "util/CharUtil.hxx"
+#include "util/NumberParser.hxx"
+#include "util/StringSplit.hxx"
 
 using std::string_view_literals::operator""sv;
 
@@ -171,12 +173,11 @@ ReadGeoAngle(NMEAInputLine &line, Angle &a)
   if (x < 0 || x >= 60 || *endptr != 0)
     return false;
 
-  dot[-2] = 0;
-  long y = strtol(buffer, &endptr, 10);
-  if (y < 0 || y > 180 || endptr == buffer || *endptr != 0)
+  const auto degrees = ParseInteger<unsigned>(buffer, dot - 2);
+  if (!degrees || *degrees > 180)
     return false;
 
-  a = Angle::Degrees(y + x / 60.);
+  a = Angle::Degrees(*degrees + x / 60.);
   return true;
 }
 
@@ -374,18 +375,21 @@ NMEAParser::GLL(NMEAInputLine &line, NMEAInfo &info)
 bool
 NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
 {
-  char buffer[9];
-  line.Read(buffer, 9);
+  const auto s = line.ReadView();
+  if (s.size() != 6)
+    return false;
 
-  if (strlen(buffer) != 6)
+  const auto day = ParseInteger<unsigned>(s.substr(0, 2));
+  const auto month = ParseInteger<unsigned>(s.substr(2, 2));
+  const auto year = ParseInteger<unsigned>(s.substr(4, 2));
+
+  if (!day || !month || !year)
     return false;
 
   BrokenDate new_value;
-  new_value.year = atoi(buffer + 4) + 2000;
-  buffer[4] = '\0';
-  new_value.month = atoi(buffer + 2);
-  buffer[2] = '\0';
-  new_value.day = atoi(buffer);
+  new_value.year = *year + 2000;
+  new_value.month = *month;
+  new_value.day = *day;
   new_value.day_of_week = -1;
 
   if (!new_value.IsPlausible())
