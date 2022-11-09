@@ -71,8 +71,6 @@
 * Includes.
 \******************************************************************************/
 
-#include "jasper/jas_math.h"
-
 #include "jpc_fix.h"
 #include "jpc_mqcod.h"
 #include "jpc_tsfb.h"
