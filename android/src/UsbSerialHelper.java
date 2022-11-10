@@ -38,6 +38,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.hardware.usb.UsbConstants;
 import android.os.Build;
 import android.util.Log;
 
@@ -318,9 +319,12 @@ public final class UsbSerialHelper extends BroadcastReceiver {
         /* still exists */
         continue;
 
-      UsbDeviceInterface deviface = new UsbDeviceInterface(device, iface);
-      interfaces.add(deviface);
-      broadcastDetectedDeviceInterface(deviface);
+      int iclass = device.getInterface(iface).getInterfaceClass();
+      if (iclass == UsbConstants.USB_CLASS_VENDOR_SPEC || iclass == UsbConstants.USB_CLASS_CDC_DATA) {
+        UsbDeviceInterface deviface = new UsbDeviceInterface(device, iface);
+        interfaces.add(deviface);
+        broadcastDetectedDeviceInterface(deviface);
+      }
     }
   }
 
