@@ -124,6 +124,8 @@ EventLoop::AbandonFD(SocketEvent &event)  noexcept
 void
 EventLoop::Insert(CoarseTimerEvent &t) noexcept
 {
+	assert(IsInside());
+
 	coarse_timers.Insert(t, SteadyNow());
 	again = true;
 }
@@ -187,6 +189,8 @@ EventLoop::AddDefer(DeferEvent &e) noexcept
 void
 EventLoop::AddIdle(DeferEvent &e) noexcept
 {
+	assert(IsInside());
+
 	idle.push_back(e);
 
 #ifdef HAVE_THREADED_EVENT_LOOP
