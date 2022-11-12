@@ -82,7 +82,7 @@ class Cache {
 
 	class Item
 		: public boost::intrusive::unordered_set_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>>,
-		  public IntrusiveListHook
+		  public IntrusiveListHook<IntrusiveHookMode::NORMAL>
 	{
 
 		Manual<Pair> pair;
