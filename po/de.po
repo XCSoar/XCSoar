@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2022-09-03 19:15+0000\n"
+"PO-Revision-Date: 2022-11-15 19:48+0000\n"
 "Last-Translator: Philipp Wollschlegel <folken@kabelsalat.ch>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/xcsoar/"
 "translations/de/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -3458,14 +3458,12 @@ msgid "Wing Area"
 msgstr "Flügelfläche"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:124
-#, fuzzy
 msgid "Empty Mass"
-msgstr "Leere Aufgabe"
+msgstr "Leermasse"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:124
-#, fuzzy
 msgid "Net mass of the rigged plane."
-msgstr "Referenzmasse zur Polare"
+msgstr "Referenzmasse zur Polare."
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:128
 msgid "Max. Ballast"
@@ -3477,7 +3475,7 @@ msgstr "Ballast Ablasszeit"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:136
 msgid "Max. Cruise Speed"
-msgstr "Manövergeschwindigkeit"
+msgstr "Höchstgeschwindigkeit"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:143
 msgid "WeGlide Type"
@@ -3494,12 +3492,11 @@ msgstr "Import"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:134
 msgid "Reference Mass"
-msgstr "Referenz Gewicht"
+msgstr "Referenzmasse"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:134
-#, fuzzy
 msgid "Reference mass of the polar."
-msgstr "Referenzmasse zur Polare"
+msgstr "Referenzmasse zur Polare."
 
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:174
@@ -7021,11 +7018,9 @@ msgid "Uploads flights automatically after download from logger?"
 msgstr "Lade Flüge automatisch nach download vom Logger hoch?"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:96
-#, fuzzy
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
 msgstr ""
-"Die Zahl findest du in deinem WeGlide Profile. Oder setze 0 falls nicht "
-"benutzt."
+"Die Zahl findest du in deinem WeGlide Profile. Setze 0 falls nicht benutzt."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:99
 msgid "Pilot date of birth"
