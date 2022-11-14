@@ -32,8 +32,10 @@
 #include <charconv>
 #include <optional>
 #include <string_view>
+#include <type_traits> // for std::is_integral_v
 
 template<typename T>
+requires std::is_integral_v<T>
 [[gnu::pure]]
 std::optional<T>
 ParseInteger(const char *first, const char *last, int base=10) noexcept
@@ -47,6 +49,7 @@ ParseInteger(const char *first, const char *last, int base=10) noexcept
 }
 
 template<typename T>
+requires std::is_integral_v<T>
 [[gnu::pure]]
 std::optional<T>
 ParseInteger(std::string_view src, int base=10) noexcept
