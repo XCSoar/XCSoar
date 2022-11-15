@@ -112,10 +112,12 @@ LoadJPEGFile(Path path) noexcept
 }
 
 UncompressedImage
-LoadPNG(const void *data, size_t size) noexcept
+LoadPNG(std::span<const std::byte> raw)
 {
+  assert(raw.data() != nullptr);
+
   CGDataProviderRef data_provider = CGDataProviderCreateWithData(
-      nullptr, data, size, nullptr);
+      nullptr, raw.data(), raw.size(), nullptr);
   if (nullptr == data_provider)
     return {};
 
