@@ -23,7 +23,7 @@ Copyright_License {
 
 #pragma once
 
-#include <cstddef>
+#include <span>
 
 class Path;
 class UncompressedImage;
@@ -32,7 +32,7 @@ UncompressedImage
 LoadJPEGFile(Path path) noexcept;
 
 UncompressedImage
-LoadPNG(const void *data, size_t size) noexcept;
+LoadPNG(std::span<const std::byte> buffer);
 
 UncompressedImage
 LoadPNG(Path path) noexcept;
