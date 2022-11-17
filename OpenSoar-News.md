@@ -2,6 +2,8 @@ Version 7.28.04, not yet released
 ---------------
 * cleanup the commit history to have a clean starting point for OpenSoar-branch
 
+This is the Base Commit as Starting point for OpenSoar
+Do not touch commits below here
 
 Version 7.28.03, 2023/02/05
 ---------------
@@ -35,3 +37,4 @@ Version 7.28.01
   * RealTime Wind Value
   * RealTime Wind Value 
 * Releases: Win64, Linux, Android, OpenVario, OpenVario package
+
