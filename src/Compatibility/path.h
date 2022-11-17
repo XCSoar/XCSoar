@@ -41,7 +41,7 @@ static inline bool
 IsDirSeparator(TCHAR ch)
 {
 #ifdef _WIN32
-  // at Windows both separators are possible!
+  // at Windows both separators are possible!!!
   return ch == _T(DIR_SEPARATOR) || ch == _T('/');
 #else
   return ch == _T(DIR_SEPARATOR);
