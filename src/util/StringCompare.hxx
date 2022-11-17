@@ -37,8 +37,8 @@
 
 #include <string_view>
 
-[[gnu::pure]] [[gnu::nonnull]]
-static inline bool
+[[gnu::nonnull]]
+static constexpr bool
 StringIsEmpty(const char *string) noexcept
 {
 	return *string == 0;
