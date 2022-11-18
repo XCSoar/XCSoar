@@ -69,7 +69,7 @@ ComputerSettings::SetDefaults()
   circling.SetDefaults();
   wave.SetDefaults();
 
-  average_eff_time = ae30seconds;
+  average_eff_time = AverageEffTime::ae30seconds;
   set_system_time_from_gps = false;
   utc_offset = RoughTimeDelta::FromSeconds(GetTimeZoneOffset());
   forecast_temperature = Temperature::FromCelsius(25);

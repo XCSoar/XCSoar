@@ -99,19 +99,19 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(EnableExternalTriggerCruise);
 
   static constexpr StaticEnumChoice aver_eff_list[] = {
-    { ae15seconds, _T("15 s"), N_("Preferred period for paragliders.") },
-    { ae30seconds, _T("30 s") },
-    { ae60seconds, _T("60 s") },
-    { ae90seconds, _T("90 s"), N_("Preferred period for gliders.") },
-    { ae2minutes, _T("2 min") },
-    { ae3minutes, _T("3 min") },
+    { AverageEffTime::ae15seconds, _T("15 s"), N_("Preferred period for paragliders.") },
+    { AverageEffTime::ae30seconds, _T("30 s") },
+    { AverageEffTime::ae60seconds, _T("60 s") },
+    { AverageEffTime::ae90seconds, _T("90 s"), N_("Preferred period for gliders.") },
+    { AverageEffTime::ae2minutes, _T("2 min") },
+    { AverageEffTime::ae3minutes, _T("3 min") },
     nullptr
   };
 
   AddEnum(_("GR average period"),
           _("Here you can decide on how many seconds of flight this calculation must be done. "
               "Normally for gliders a good value is 90-120 seconds, and for paragliders 15 seconds."),
-          aver_eff_list, settings_computer.average_eff_time);
+          aver_eff_list, (unsigned)settings_computer.average_eff_time);
   SetExpertRow(AverEffTime);
 
   AddBoolean(_("Predict wind drift"),

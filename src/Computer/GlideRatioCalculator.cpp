@@ -37,22 +37,22 @@ GlideRatioCalculator::Initialize(const ComputerSettings &settings)
   unsigned bsize;
 
   switch (settings.average_eff_time) {
-  case ae15seconds:
+  case AverageEffTime::ae15seconds:
     bsize = 15; // useless, LDinst already there
     break;
-  case ae30seconds:
+  case AverageEffTime::ae30seconds:
     bsize = 30; // limited useful
     break;
-  case ae60seconds:
+  case AverageEffTime::ae60seconds:
     bsize = 60; // starting to be valuable
     break;
-  case ae90seconds:
+  case AverageEffTime::ae90seconds:
     bsize = 90; // good interval
     break;
-  case ae2minutes:
+  case AverageEffTime::ae2minutes:
     bsize = 120; // other software's interval
     break;
-  case ae3minutes:
+  case AverageEffTime::ae3minutes:
     bsize = 180; // probably too long interval
     break;
 #ifndef __clang__

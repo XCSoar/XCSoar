@@ -177,13 +177,13 @@ struct CirclingSettings {
   }
 };
 
-enum AverageEffTime {
-  ae15seconds,
-  ae30seconds,
-  ae60seconds,
-  ae90seconds,
-  ae2minutes,
-  ae3minutes,
+enum class AverageEffTime : uint8_t{
+  ae15seconds = 15,
+  ae30seconds = 30,
+  ae60seconds = 60,
+  ae90seconds = 90,
+  ae2minutes = 120,
+  ae3minutes = 180,
 };
 
 struct ComputerSettings {
