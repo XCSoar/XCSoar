@@ -87,17 +87,6 @@ EventLoop::GetUring() noexcept
 
 #endif
 
-void
-EventLoop::Break() noexcept
-{
-	if (quit.exchange(true))
-		return;
-
-#ifdef HAVE_THREADED_EVENT_LOOP
-	wake_fd.Write();
-#endif
-}
-
 bool
 EventLoop::AddFD(int fd, unsigned events, SocketEvent &event) noexcept
 {
@@ -282,6 +271,7 @@ EventLoop::Run() noexcept
 
 	assert(IsInside());
 	assert(!quit);
+	assert(!quit_injected);
 #ifdef HAVE_THREADED_EVENT_LOOP
 	assert(alive);
 	assert(busy);
@@ -435,6 +425,11 @@ EventLoop::OnSocketReady([[maybe_unused]] unsigned flags) noexcept
 	assert(IsInside());
 
 	wake_fd.Read();
+
+	if (quit_injected) {
+		Break();
+		return;
+	}
 
 	const std::scoped_lock<Mutex> lock(mutex);
 	HandleInject();
