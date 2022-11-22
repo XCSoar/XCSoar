@@ -36,7 +36,7 @@ void
 AsioThread::Stop()
 {
   /* set the "stop" flag and wake up the thread */
-  event_loop.Break();
+  event_loop.InjectBreak();
 
   /* wait for the thread to finish */
   Join();

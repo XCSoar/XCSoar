@@ -119,7 +119,7 @@ class EventLoop final
 	bool alive;
 #endif
 
-	std::atomic_bool quit{false};
+	bool quit = false;
 
 	/**
 	 * If true, then Run() will return after all pending events
@@ -134,6 +134,8 @@ class EventLoop final
 	bool again;
 
 #ifdef HAVE_THREADED_EVENT_LOOP
+	bool quit_injected = false;
+
 	/**
 	 * True when handling callbacks, false when waiting for I/O or
 	 * timeout.
@@ -193,11 +195,30 @@ public:
 #endif
 
 	/**
-	 * Stop execution of this #EventLoop at the next chance.  This
-	 * method is thread-safe and non-blocking: after returning, it
-	 * is not guaranteed that the EventLoop has really stopped.
+	 * Stop execution of this #EventLoop at the next chance.
+	 *
+	 * This method is not thread-safe.  For stopping the
+	 * #EventLoop from within another thread, use InjectBreak().
 	 */
-	void Break() noexcept;
+	void Break() noexcept {
+		quit = true;
+	}
+
+#ifdef HAVE_THREADED_EVENT_LOOP
+	/**
+	 * Like Break(), but thread-safe.  It is also non-blocking:
+	 * after returning, it is not guaranteed that the EventLoop
+	 * has really stopped.
+	 */
+	void InjectBreak() noexcept {
+		{
+			const std::scoped_lock lock{mutex};
+			quit_injected = true;
+		}
+
+		wake_fd.Write();
+	}
+#endif // HAVE_THREADED_EVENT_LOOP
 
 	/**
 	 * Finish Run() after all pending events have been handled.
