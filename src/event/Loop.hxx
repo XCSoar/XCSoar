@@ -21,12 +21,15 @@
 
 #include "Chrono.hxx"
 #include "TimerWheel.hxx"
-#include "TimerList.hxx"
 #include "Backend.hxx"
 #include "SocketEvent.hxx"
 #include "event/Features.h"
 #include "time/ClockCache.hxx"
 #include "util/IntrusiveList.hxx"
+
+#ifndef NO_FINE_TIMER_EVENT
+#include "TimerList.hxx"
+#endif // NO_FINE_TIMER_EVENT
 
 #ifdef HAVE_THREADED_EVENT_LOOP
 #include "WakeFD.hxx"
@@ -65,7 +68,10 @@ class EventLoop final
 #endif
 
 	TimerWheel coarse_timers;
+
+#ifndef NO_FINE_TIMER_EVENT
 	TimerList timers;
+#endif // NO_FINE_TIMER_EVENT
 
 	using DeferList = IntrusiveList<DeferEvent>;
 
@@ -247,7 +253,10 @@ public:
 	bool AbandonFD(SocketEvent &event) noexcept;
 
 	void Insert(CoarseTimerEvent &t) noexcept;
+
+#ifndef NO_FINE_TIMER_EVENT
 	void Insert(FineTimerEvent &t) noexcept;
+#endif // NO_FINE_TIMER_EVENT
 
 	/**
 	 * Schedule a call to DeferEvent::RunDeferred().
