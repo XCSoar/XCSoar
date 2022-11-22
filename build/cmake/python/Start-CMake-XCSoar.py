@@ -1,8 +1,15 @@
-
 #!/usr/bin/env python3
 
 import os, sys
 from CMakeXCSoar import create_xcsoar
+
+# ====================
+# ====================
+branch = 'dev-branch'
+# ====================
+# ====================
+
+
 class ComputerDirectories(object):
     def __init__(self, name, directories):
         self.name = name
@@ -44,7 +51,11 @@ arguments = []
 arguments.append('XCSoarAug')   # project_name
 # arguments.append('master')      # branch
 # arguments.append('weglide_msvc_new')      # branch
-arguments.append('augmaster')      # branch
+if branch:
+  arguments.append(branch)      # branch
+else:
+  arguments.append('no-branch')      # branch
+
 arguments.append(toolchain)     # build-toolchain
 arguments.append(creation_flag)   
 # arguments.append('Arg2')

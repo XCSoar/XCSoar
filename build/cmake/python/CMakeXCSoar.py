@@ -27,7 +27,7 @@ def gcc(toolchain, env):
   global prev_batch
   global program_dir
   global toolchain_file
-  src_dir = 'D:/Projects/XCSoar'
+  src_dir = 'D:/Projects/XCSoar/XCSoar'
   if sys.platform.startswith('win'):
       if toolchain == 'mingw' or toolchain.startswith('mgw'):
          toolchain_file = src_dir.replace('\\','/') + '/build/cmake/toolchains/MinGW.toolchain'
@@ -164,10 +164,14 @@ def create_xcsoar(args):
     program_dir = 'D:/Programs'
     # not necessary ?! install_bindir = 'bin'
     # src_dir = start_dir  # changed 05.12.2022
-    start_dir = project_dir + '/XCSoar'  # changed 05.12.2022
+    start_dir = project_dir + '/XCSoar/XCSoar'  # changed 05.12.2022
     src_dir = start_dir  # changed 05.12.2022
     ## binary_dir= start_dir + '/output'  # new from 02.02.2021, simular to XCSoar upstream
     binary_dir= start_dir + '/_build'  # changed 05.12.2022
+    if branch:
+       binary_dir= project_dir + '/Binaries/XCSoar/' + branch  # changed 10.01.2023
+    else:
+       binary_dir= project_dir + '/Binaries/XCSoar/build'  # changed 10.01.2023
     link_libs = project_dir + '/link_libs'  # Windows on August2111/Flaps6!!!
     # build_dir = binary_dir + '/'+ project_name + '/' + branch + '/' + toolchain
     build_dir = binary_dir + '/'+ toolchain
@@ -362,9 +366,9 @@ def create_xcsoar(args):
     elif toolchain.startswith('clang'):
       xcsoar_app = project_name + '-Clang.exe'
 
-    # XCSoarAug-MinGW.exe -1400x700' -fly -profile=D:\XCSoarData\August.prf -datapath=D:\XCSoarData
-    arguments = [build_dir + '/' + xcsoar_app, '-1400x700', '-fly', '-profile=D:\XCSoarData\August.prf', '-datapath=D:\XCSoarData']
-    # arguments = [build_dir + '/' + xcsoar_app, '-1400x700', '-fly', '-profile=D:\XCSoarData\August2.prf', '-datapath=D:\XCSoarData']
+    # XCSoarAug-MinGW.exe -1400x700' -fly -profile=D:\Data\XCSoarData\August.prf -datapath=D:/XCSoarData/Data
+    arguments = [build_dir + '/' + xcsoar_app, '-1400x700', '-fly', '-profile=D:/Data/XCSoarData/August.prf', '-datapath=D:/Data/XCSoarData']
+    # arguments = [build_dir + '/' + xcsoar_app, '-1400x700', '-fly', '-profile=D:/Data/XCSoarData/August2.prf', '-datapath=D:/Data/XCSoarData']
     # arguments = [build_dir + '/' + xcsoar_app, '-1400x700', '-fly', '-profile=August5.prf']
     if not os.path.exists(arguments[0]):
         print("App 'arguments[0]' doesn't exist!")
