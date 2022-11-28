@@ -50,6 +50,7 @@ protected:
 	Array the_data;
 
 public:
+	using iterator = typename Array::iterator;
 	using const_iterator = typename Array::const_iterator;
 
 	static constexpr size_type capacity() noexcept {
@@ -88,6 +89,14 @@ public:
 	 */
 	constexpr reference operator[](size_type i) noexcept {
 		return the_data[i];
+	}
+
+	constexpr iterator begin() noexcept {
+		return the_data.begin();
+	}
+
+	constexpr iterator end() noexcept {
+		return the_data.end();
 	}
 
 	constexpr const_iterator begin() const noexcept {
