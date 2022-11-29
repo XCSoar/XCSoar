@@ -29,6 +29,7 @@
 
 #pragma once
 
+#include "Error.hxx"
 #include "String.hxx"
 #include "util/Compiler.h"
 
@@ -92,7 +93,7 @@ public:
 	void SetOption(CURLoption option, T value) {
 		CURLcode code = curl_easy_setopt(handle, option, value);
 		if (code != CURLE_OK)
-			throw std::runtime_error(curl_easy_strerror(code));
+			throw Curl::MakeError(code, "Failed to set option");
 	}
 
 	void SetPrivate(void *pointer) {
@@ -216,7 +217,7 @@ public:
 	void Perform() {
 		CURLcode code = curl_easy_perform(handle);
 		if (code != CURLE_OK)
-			throw std::runtime_error(curl_easy_strerror(code));
+			throw Curl::MakeError(code, "CURL failed");
 	}
 
 	bool Unpause() noexcept {
