@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2020-04-22 14:11+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-12-11 21:51+0000\n"
+"Last-Translator: Jaume Prats <prats.jaume@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ca/>\n"
 "Language: ca\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.0.2-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -238,27 +238,31 @@ msgid ""
 "A sector that can vary in angle and radius.  Scored by farthest point "
 "reached inside area."
 msgstr ""
+"Un sector que pot variar en angle i ràdio. Puntuat pel punt més llunyà al "
+"que s´ha arribat dins de l´àrea"
 
 #: src/Task/TypeStrings.cpp:93
 #, no-c-format
 msgid "A 90 degree sector with 1km radius.  Cross edge to finish."
-msgstr ""
+msgstr "Un sector de 90 graus amb 1 km de ràdio. Creau la vorera per a acabar"
 
 #: src/Task/TypeStrings.cpp:94
 #, no-c-format
 msgid "Cross finish gate line into area to finish."
-msgstr ""
+msgstr "Creuau la línia de la porta d'arribada a l'àrea per a acabar."
 
 #: src/Task/TypeStrings.cpp:95
 #, no-c-format
 msgid "Enter cylinder to finish."
-msgstr ""
+msgstr "Entri en el cilindre per a  finalitzar."
 
 #: src/Task/TypeStrings.cpp:96
 #, no-c-format
 msgid ""
 "A 180 degree sector with 5km radius.  Exit area in any direction to start."
 msgstr ""
+"Un sector de 180 graus i un ràdio de 5 km. Surti de l´àrea en qualsevol "
+"direcció per a començar."
 
 #: src/Task/TypeStrings.cpp:97
 #, no-c-format
@@ -266,217 +270,220 @@ msgid ""
 "A sector that can vary in angle, inner and outer radius.  Scored by farthest "
 "point reached inside area."
 msgstr ""
+"Un sector que pot variar en angle, ràdios interior i exterior. Puntuat pel "
+"punt més llunyà al que s´ha arribat dins de l´àrea."
 
 #: src/Task/TypeStrings.cpp:99
 #, no-c-format
 msgid "A symmetric quadrant with a custom radius."
-msgstr ""
+msgstr "Un quadrant simètric amb un ràdio personalitzat"
 
 #: src/Task/TypeStrings.cpp:100
 #, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
 msgstr ""
+"Un cilindre. Puntuat pel punt més  llunyà al que s´ha arribat dins l´àrea."
 
 #: src/Task/TypeStrings.cpp:113
 #, no-c-format
 msgid "FAI start quadrant"
-msgstr ""
+msgstr "Quadrant de sortida FAI"
 
 #: src/Task/TypeStrings.cpp:114
 #, no-c-format
 msgid "Start line"
-msgstr ""
+msgstr "Lïnia de sortida"
 
 #: src/Task/TypeStrings.cpp:115
 #, no-c-format
 msgid "Start cylinder"
-msgstr ""
+msgstr "Cilindre de sortida"
 
 #: src/Task/TypeStrings.cpp:116 src/Dialogs/Task/dlgTaskHelpers.cpp:180
 #, no-c-format
 msgid "FAI quadrant"
-msgstr ""
+msgstr "Quadrant FAI"
 
 #: src/Task/TypeStrings.cpp:117
 #, no-c-format
 msgid "Keyhole sector"
-msgstr ""
+msgstr "Sector de cilindre"
 
 #: src/Task/TypeStrings.cpp:118
 #, no-c-format
 msgid "Keyhole sector (DAeC)"
-msgstr ""
+msgstr "Sector simètric (DAeC)"
 
 #: src/Task/TypeStrings.cpp:119
 #, no-c-format
 msgid "BGA Fixed Course sector"
-msgstr ""
+msgstr "Àrea amb línia definida de la BGA"
 
 #: src/Task/TypeStrings.cpp:120
 #, no-c-format
 msgid "BGA Enhanced Option Fixed Course sector"
-msgstr ""
+msgstr "Àrea millorada de línia definida de la BGA"
 
 #: src/Task/TypeStrings.cpp:121
 #, no-c-format
 msgid "Turn point cylinder"
-msgstr ""
+msgstr "Cilindre de punt de gir"
 
 #: src/Task/TypeStrings.cpp:122
 #, no-c-format
 msgid "Cylinder with 1 mile radius."
-msgstr ""
+msgstr "Cilindre amb ràdio d´1 milla"
 
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
 msgid "Area cylinder"
-msgstr ""
+msgstr "Àrea de cilindre"
 
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
 msgid "Area sector"
-msgstr ""
+msgstr "Àrea de sector"
 
 #: src/Task/TypeStrings.cpp:125
 #, no-c-format
 msgid "FAI finish quadrant"
-msgstr ""
+msgstr "Quadrant FAI d´arribada"
 
 #: src/Task/TypeStrings.cpp:126
 #, no-c-format
 msgid "Finish line"
-msgstr ""
+msgstr "Línia d´arribada"
 
 #: src/Task/TypeStrings.cpp:127
 #, no-c-format
 msgid "Finish cylinder"
-msgstr ""
+msgstr "Cilindre d´arribada"
 
 #: src/Task/TypeStrings.cpp:128
 #, no-c-format
 msgid "BGA start sector"
-msgstr ""
+msgstr "Sector de sortida BGA"
 
 #: src/Task/TypeStrings.cpp:129
 #, no-c-format
 msgid "Area sector with inner radius"
-msgstr ""
+msgstr "Sector d´àrea amb radi interior"
 
 #: src/Task/TypeStrings.cpp:130 src/Dialogs/Task/dlgTaskHelpers.cpp:229
 #, no-c-format
 msgid "Symmetric quadrant"
-msgstr ""
+msgstr "Quadrant simètric"
 
 #: src/Task/TypeStrings.cpp:131
 #, no-c-format
 msgid "Area keyhole"
-msgstr ""
+msgstr "Àrea simètrica"
 
 #: src/Task/ValidationErrorStrings.cpp:32
 #, no-c-format
 msgid "No valid start"
-msgstr ""
+msgstr "Sortida no vàlida"
 
 #: src/Task/ValidationErrorStrings.cpp:33
 #, no-c-format
 msgid "No valid finish"
-msgstr ""
+msgstr "Arribada no válida"
 
 #: src/Task/ValidationErrorStrings.cpp:34
 #, no-c-format
 msgid "Task not closed"
-msgstr ""
+msgstr "Tasca no tancada"
 
 #: src/Task/ValidationErrorStrings.cpp:35
 #, no-c-format
 msgid "All turnpoints not the same type"
-msgstr ""
+msgstr "Tots els punts de viratge no són de la mateixa casta"
 
 #: src/Task/ValidationErrorStrings.cpp:36
 #, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr ""
+msgstr "Nombre incorrecte de punts de viratge"
 
 #: src/Task/ValidationErrorStrings.cpp:37
 #, no-c-format
 msgid "Too many turnpoints"
-msgstr ""
+msgstr "Massa punts de viratge"
 
 #: src/Task/ValidationErrorStrings.cpp:38
 #, no-c-format
 msgid "Not enough turnpoints"
-msgstr ""
+msgstr "Insuficients punts de viratge"
 
 #: src/Task/ValidationErrorStrings.cpp:39
 #, no-c-format
 msgid "Turnpoints not unique"
-msgstr ""
+msgstr "Punts de viratge no únics"
 
 #: src/Task/ValidationErrorStrings.cpp:40
 #, no-c-format
 msgid "Empty task"
-msgstr ""
+msgstr "Tasca buida"
 
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
 msgid "non-FAI turn points"
-msgstr ""
+msgstr "Punts de viratge no-FAI"
 
 #: src/Task/ValidationErrorStrings.cpp:42
 #, no-c-format
 msgid "non-MAT turn points"
-msgstr ""
+msgstr "Punts de viratge no-MAT"
 
 #: src/Task/ValidationErrorStrings.cpp:43
 #, no-c-format
 msgid "Wrong shape"
-msgstr ""
+msgstr "Forma incorrecta"
 
 #: src/Airspace/AirspaceGlue.cpp:81
 msgid "Loading Airspace File..."
-msgstr ""
+msgstr "Carregant fitxer d´espai aeri"
 
 #: src/Airspace/AirspaceParser.cpp:965
 msgid "Unknown airspace filetype"
-msgstr ""
+msgstr "Tipus desconegut de fitxer d´espai aeri"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:112
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:113
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
 msgid "Username"
-msgstr ""
+msgstr "Nom d´usuari"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:114
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:142 Data/Input/default.xci:562
 msgid "Plane"
-msgstr ""
+msgstr "Avió"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:115
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:112
 msgid "Registration"
-msgstr ""
+msgstr "Registre"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:116
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:113
 msgid "Comp. ID"
-msgstr ""
+msgstr "Matrícula de competició"
 
 #. upload successful!
 #: src/net/client/WeGlide/UploadIGCFile.cpp:118
 #: src/net/client/WeGlide/UploadIGCFile.cpp:176
 msgid "WeGlide Upload"
-msgstr ""
+msgstr "Pujar a WeGlide"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:142 src/Input/InputEventsLua.cpp:60
 msgid "Not found"
-msgstr ""
+msgstr "No trobat"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:149
 msgid "Upload Flight"
-msgstr ""
+msgstr "Pugi vol"
 
 #. upload failed!
 #: src/net/client/WeGlide/UploadIGCFile.cpp:151
@@ -501,7 +508,7 @@ msgstr ""
 #: src/Dialogs/DownloadFilePicker.cpp:327
 #: src/Dialogs/DownloadFilePicker.cpp:389
 msgid "Error"
-msgstr ""
+msgstr "Error"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:158
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:109
@@ -509,27 +516,27 @@ msgstr ""
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:149
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:154
 msgid "Success"
-msgstr ""
+msgstr "Correcte"
 
 #: src/FLARM/Error.cpp:29
 #, no-c-format
 msgid "No error"
-msgstr ""
+msgstr "No error"
 
 #: src/FLARM/Error.cpp:30
 #, no-c-format
 msgid "Information"
-msgstr ""
+msgstr "Informació"
 
 #: src/FLARM/Error.cpp:31
 #, no-c-format
 msgid "Reduced functionality"
-msgstr ""
+msgstr "Funcionalitat reduïda"
 
 #: src/FLARM/Error.cpp:32
 #, no-c-format
 msgid "Fatal problem"
-msgstr ""
+msgstr "Problema fatal"
 
 #. valid but unknown number of sats
 #: src/FLARM/Error.cpp:41 src/FLARM/Error.cpp:71
@@ -543,143 +550,145 @@ msgstr ""
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:60
 #, no-c-format
 msgid "Unknown"
-msgstr ""
+msgstr "Desconegut"
 
 #: src/FLARM/Error.cpp:48
 #, no-c-format
 msgid "Firmware timeout"
-msgstr ""
+msgstr "Excés de temps de firmware"
 
 #: src/FLARM/Error.cpp:49
 #, no-c-format
 msgid "Power"
-msgstr ""
+msgstr "Bateria"
 
 #: src/FLARM/Error.cpp:50
 #, no-c-format
 msgid "GPS communication"
-msgstr ""
+msgstr "Comunicació GPS"
 
 #: src/FLARM/Error.cpp:51
 #, no-c-format
 msgid "GPS configuration"
-msgstr ""
+msgstr "Configuració de GPS"
 
 #: src/FLARM/Error.cpp:52
 #, no-c-format
 msgid "RF communication"
-msgstr ""
+msgstr "Comunicació de RF"
 
 #: src/FLARM/Error.cpp:53
 #, no-c-format
 msgid "Communication"
-msgstr ""
+msgstr "Comunicació"
 
 #: src/FLARM/Error.cpp:54
 #, no-c-format
 msgid "Flash memory"
-msgstr ""
+msgstr "Memòria flash"
 
 #: src/FLARM/Error.cpp:55
 #, no-c-format
 msgid "Pressure sensor"
-msgstr ""
+msgstr "Sensor de pressió"
 
 #: src/FLARM/Error.cpp:56 src/Dialogs/Device/ManageFlarmDialog.cpp:75
 #, no-c-format
 msgid "Obstacle database"
-msgstr ""
+msgstr "Base de dades d´obstacles"
 
 #: src/FLARM/Error.cpp:57
 #, no-c-format
 msgid "Flight recorder"
-msgstr ""
+msgstr "Gravador de vol"
 
 #: src/FLARM/Error.cpp:59
 #, no-c-format
 msgid "Transponder receiver"
-msgstr ""
+msgstr "Receptor de transponder"
 
 #: src/FLARM/Error.cpp:60
 #, no-c-format
 msgid "Other"
-msgstr ""
+msgstr "Altres"
 
 #: src/Logger/Logger.cpp:108 src/Dialogs/Device/ManageCAI302Dialog.cpp:106
 msgid "Start Logger"
-msgstr ""
+msgstr "Engegar gravador de vol"
 
 #: src/Logger/Logger.cpp:137 src/Dialogs/Device/ManageCAI302Dialog.cpp:116
 msgid "Stop Logger"
-msgstr ""
+msgstr "Aturar gravador de vol"
 
 #: src/Logger/ExternalLogger.cpp:85
 msgid "Declare task?"
-msgstr ""
+msgstr "¿Declarar tasca?"
 
 #: src/Logger/ExternalLogger.cpp:97 src/Logger/ExternalLogger.cpp:142
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:101
 msgid "Declare task"
-msgstr ""
+msgstr "Declari tasca"
 
 #: src/Logger/ExternalLogger.cpp:103
 msgid "Task declared!"
-msgstr ""
+msgstr "Tasca declarada!"
 
 #: src/Logger/ExternalLogger.cpp:108 src/Logger/ExternalLogger.cpp:120
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
+"Ha ocorregut un error,\n"
+"Tasca NO declarada!"
 
 #: src/Logger/ExternalLogger.cpp:141
 msgid "No logger connected"
-msgstr ""
+msgstr "Cap gravador de vol conectat"
 
 #: src/Logger/ExternalLogger.cpp:273 src/Logger/ExternalLogger.cpp:283
 msgid "Failed to download flight list."
-msgstr ""
+msgstr "Errada en descàrrega de llista de vols."
 
 #: src/Logger/ExternalLogger.cpp:274 src/Logger/ExternalLogger.cpp:285
 #: src/Logger/ExternalLogger.cpp:292 src/Logger/ExternalLogger.cpp:315
 #: src/Logger/ExternalLogger.cpp:326 src/Logger/ExternalLogger.cpp:348
 #: src/Logger/ExternalLogger.cpp:363
 msgid "Download flight"
-msgstr ""
+msgstr "Descarregui vol"
 
 #: src/Logger/ExternalLogger.cpp:291
 msgid "Logger is empty."
-msgstr ""
+msgstr "El registrador de vol és buit."
 
 #: src/Logger/ExternalLogger.cpp:314 src/Logger/ExternalLogger.cpp:324
 msgid "Failed to download flight."
-msgstr ""
+msgstr "Errada en descàrrega de vol."
 
 #. ask whether this IGC should be uploaded to WeGlide
 #: src/Logger/ExternalLogger.cpp:356
 msgid "Do you want to upload this flight to WeGlide?"
-msgstr ""
+msgstr "¿Vol pujar el vol a WeGlide?"
 
 #: src/Logger/ExternalLogger.cpp:357
 msgid "Upload flight"
-msgstr ""
+msgstr "Pujar vol"
 
 #: src/Logger/ExternalLogger.cpp:362
 msgid "Do you want to download another flight?"
-msgstr ""
+msgstr "¿Vol descarregar un altre vol?"
 
 #: src/Waypoint/WaypointGlue.cpp:91
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:37
 msgid "Loading Waypoints..."
-msgstr ""
+msgstr "Carregant punts de viratge..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:73
 msgid "Not moving"
-msgstr ""
+msgstr "Sense moviment"
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:201
 msgid "Not Circling"
-msgstr ""
+msgstr "Sense girar en cercles"
 
 #: src/Gauge/BigThermalAssistantWidget.cpp:76
 #: src/Gauge/BigTrafficWidget.cpp:601 src/Dialogs/FileManager.cpp:754
@@ -718,11 +727,11 @@ msgstr ""
 #: src/Dialogs/Weather/PCMetDialog.cpp:56
 #: src/Dialogs/Weather/NOAADetails.cpp:143
 msgid "Close"
-msgstr ""
+msgstr "Tancar"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:237
 msgid "No Traffic"
-msgstr ""
+msgstr "Sense tràfic"
 
 #: src/Gauge/BigTrafficWidget.cpp:301 src/Gauge/BigTrafficWidget.cpp:302
 #: src/Renderer/MapItemListRenderer.cpp:379
@@ -733,7 +742,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:333 src/InfoBoxes/Content/Factory.cpp:334
 #, no-c-format
 msgid "Vario"
-msgstr ""
+msgstr "Vàrio"
 
 #: src/Gauge/BigTrafficWidget.cpp:381 src/Renderer/MapItemListRenderer.cpp:79
 #: src/Renderer/MapItemListRenderer.cpp:85
@@ -750,11 +759,11 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:162
 #: src/Dialogs/Task/TargetDialog.cpp:375
 msgid "Distance"
-msgstr ""
+msgstr "Distància"
 
 #: src/Gauge/BigTrafficWidget.cpp:425 src/Gauge/BigTrafficWidget.cpp:427
 msgid "Rel. Alt."
-msgstr ""
+msgstr "Altitud Relativa"
 
 #: src/Gauge/BigTrafficWidget.cpp:598 src/Dialogs/MapItemListDialog.cpp:163
 #: src/Dialogs/Airspace/AirspaceList.cpp:150
@@ -764,117 +773,129 @@ msgstr ""
 #: src/Dialogs/Weather/NOAAList.cpp:117 src/InfoBoxes/Content/Task.cpp:67
 #, no-c-format
 msgid "Details"
-msgstr ""
+msgstr "Detalls"
 
 #: src/Waypoint/WaypointDetailsReader.cpp:132
 msgid "Loading Airfield Details File..."
-msgstr ""
+msgstr "Carregant fitxer de detalls d´aeroports..."
 
 #: src/Menu/ExpandMacros.cpp:83 src/Menu/ExpandMacros.cpp:116
 #: src/Menu/ExpandMacros.cpp:138
 msgid "Next Turnpoint"
-msgstr ""
+msgstr "Següent punt de viratge"
 
 #: src/Menu/ExpandMacros.cpp:87 src/Menu/ExpandMacros.cpp:124
 #: src/Menu/ExpandMacros.cpp:161
 msgid "Previous Turnpoint"
-msgstr ""
+msgstr "Previ punt de viratge"
 
 #: src/Menu/ExpandMacros.cpp:94
 msgid "Furthest Landpoint"
-msgstr ""
+msgstr "Punt aterrable més llunyà"
 
 #: src/Menu/ExpandMacros.cpp:95
 msgid "Next Landpoint"
-msgstr ""
+msgstr "Següent zona aterrable"
 
 #: src/Menu/ExpandMacros.cpp:101
 msgid "Closest Landpoint"
-msgstr ""
+msgstr "Zona aterrable més propera"
 
 #: src/Menu/ExpandMacros.cpp:102
 msgid "Previous Landpoint"
-msgstr ""
+msgstr "Zona aterrable prèvia"
 
 #: src/Menu/ExpandMacros.cpp:115 src/Menu/ExpandMacros.cpp:137
 msgid "Finish Turnpoint"
-msgstr ""
+msgstr "Punt de viratge d´arribada"
 
 #: src/Menu/ExpandMacros.cpp:119 src/Menu/ExpandMacros.cpp:156
 msgid "Next Startpoint"
-msgstr ""
+msgstr "Següent punt de sortida"
 
 #: src/Menu/ExpandMacros.cpp:123 src/Menu/ExpandMacros.cpp:160
 msgid "Start Turnpoint"
-msgstr ""
+msgstr "Punt de viratge de sortida"
 
 #: src/Menu/ExpandMacros.cpp:141
 msgid "Arm start"
-msgstr ""
+msgstr "Armar sortida"
 
 #: src/Menu/ExpandMacros.cpp:144
 msgid "Arm turn"
-msgstr ""
+msgstr "Armar punt de viratge"
 
 #: src/Menu/ExpandMacros.cpp:165
 msgid "Disarm start"
-msgstr ""
+msgstr "Desarmar sortida"
 
 #: src/Menu/ExpandMacros.cpp:168
 msgid "Disarm turn"
-msgstr ""
+msgstr "Desarmar punt de viratge"
 
 #: src/Menu/ExpandMacros.cpp:177
 msgid ""
 "Advance\n"
 "(manual)"
 msgstr ""
+"Avançar\n"
+"(manualment)"
 
 #: src/Menu/ExpandMacros.cpp:181
 msgid ""
 "Advance\n"
 "(auto)"
 msgstr ""
+"Avançar\n"
+"(automàtic)"
 
 #: src/Menu/ExpandMacros.cpp:184
 msgid ""
 "Abort\n"
 "Start"
 msgstr ""
+"Abortar\n"
+"sortida"
 
 #: src/Menu/ExpandMacros.cpp:187
 msgid ""
 "Arm\n"
 "Start"
 msgstr ""
+"Armar\n"
+"Sortida"
 
 #: src/Menu/ExpandMacros.cpp:190
 msgid ""
 "Abort\n"
 "Turn"
 msgstr ""
+"Abortar\n"
+"Punt de viratge"
 
 #: src/Menu/ExpandMacros.cpp:193
 msgid ""
 "Arm\n"
 "Turn"
 msgstr ""
+"Armar\n"
+"Punt de viratge"
 
 #: src/Menu/ExpandMacros.cpp:202 src/Menu/ExpandMacros.cpp:206
 #: src/Dialogs/Device/PortMonitor.cpp:165
 msgid "Resume"
-msgstr ""
+msgstr "Resum"
 
 #: src/Menu/ExpandMacros.cpp:203 src/Menu/ExpandMacros.cpp:207
 #: src/Dialogs/Message.cpp:120
 msgid "Abort"
-msgstr ""
+msgstr "Abortar"
 
 #: src/Menu/ExpandMacros.cpp:227 src/Menu/ExpandMacros.cpp:359
 #: src/Menu/ExpandMacros.cpp:380 src/Menu/ExpandMacros.cpp:430
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:196
 msgid "Manual"
-msgstr ""
+msgstr "Manual"
 
 #: src/Menu/ExpandMacros.cpp:227 src/Menu/ExpandMacros.cpp:359
 #: src/Menu/ExpandMacros.cpp:380 src/Menu/ExpandMacros.cpp:430
@@ -888,46 +909,46 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:33
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "Automàtic"
 
 #: src/Menu/ExpandMacros.cpp:229
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:44
 #, no-c-format
 msgid "Track up"
-msgstr ""
+msgstr "Direcció amunt"
 
 #: src/Menu/ExpandMacros.cpp:229
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:48
 #, no-c-format
 msgid "North up"
-msgstr ""
+msgstr "Nord amunt"
 
 #: src/Menu/ExpandMacros.cpp:313 src/Dialogs/Settings/dlgBasicSettings.cpp:140
 #: src/Dialogs/ReplayDialog.cpp:49
 msgid "Stop"
-msgstr ""
+msgstr "Aturar"
 
 #: src/Menu/ExpandMacros.cpp:314 src/Dialogs/ReplayDialog.cpp:48
 msgid "Start"
-msgstr ""
+msgstr "Sortida"
 
 #: src/Menu/ExpandMacros.cpp:318
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:92
 #, no-c-format
 msgid "Long"
-msgstr ""
+msgstr "Llarg"
 
 #: src/Menu/ExpandMacros.cpp:321
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:93
 #, no-c-format
 msgid "Short"
-msgstr ""
+msgstr "Curt"
 
 #: src/Menu/ExpandMacros.cpp:324
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:94
 #, no-c-format
 msgid "Full"
-msgstr ""
+msgstr "Sencer"
 
 #: src/Menu/ExpandMacros.cpp:327 src/Menu/ExpandMacros.cpp:332
 #: src/Menu/ExpandMacros.cpp:357 src/Menu/ExpandMacros.cpp:382
@@ -949,7 +970,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:31
 #, no-c-format
 msgid "Off"
-msgstr ""
+msgstr "Apagat"
 
 #: src/Menu/ExpandMacros.cpp:332 src/Menu/ExpandMacros.cpp:357
 #: src/Menu/ExpandMacros.cpp:382 src/Menu/ExpandMacros.cpp:428
@@ -963,45 +984,45 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:32
 #, no-c-format
 msgid "On"
-msgstr ""
+msgstr "Encès"
 
 #: src/Menu/ExpandMacros.cpp:343
 msgid "Topography On"
-msgstr ""
+msgstr "Topografia activa"
 
 #: src/Menu/ExpandMacros.cpp:346
 msgid "Terrain On"
-msgstr ""
+msgstr "Terreny actiu"
 
 #: src/Menu/ExpandMacros.cpp:349
 msgid "Terrain + Topography"
-msgstr ""
+msgstr "Terreny + Topografia"
 
 #: src/Menu/ExpandMacros.cpp:352
 msgid "Terrain Off"
-msgstr ""
+msgstr "Terreny no-visible"
 
 #: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:364
 #: src/Menu/ExpandMacros.cpp:366
 msgid "Hide"
-msgstr ""
+msgstr "Amagar"
 
 #: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:364
 #: src/Menu/ExpandMacros.cpp:366
 msgid "Show"
-msgstr ""
+msgstr "Mostrar"
 
 #: src/Menu/ExpandMacros.cpp:369 src/Input/InputEventsSettings.cpp:313
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:85
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:148
 #, no-c-format
 msgid "All"
-msgstr ""
+msgstr "Tot"
 
 #: src/Menu/ExpandMacros.cpp:370 src/Input/InputEventsSettings.cpp:314
 #, no-c-format
 msgid "Task & Landables"
-msgstr ""
+msgstr "Tasca i aterrables"
 
 #: src/Menu/ExpandMacros.cpp:372 src/Input/InputEventsSettings.cpp:316
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:192
@@ -1015,128 +1036,128 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:32
 #, no-c-format
 msgid "None"
-msgstr ""
+msgstr "Cap"
 
 #: src/Menu/ExpandMacros.cpp:373 src/Input/InputEventsSettings.cpp:317
 #, no-c-format
 msgid "Task & Airfields"
-msgstr ""
+msgstr "Tasca i aeròdroms"
 
 #: src/Input/InputEventsActions.cpp:156
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:292
 #: src/Dialogs/Waypoint/Manager.cpp:262
 msgid "Failed to save waypoints"
-msgstr ""
+msgstr "Errada en guardar els punts de viratge"
 
 #: src/Input/InputEventsActions.cpp:267
 msgid "Screen Mode Full"
-msgstr ""
+msgstr "Pantalla mode sencer"
 
 #: src/Input/InputEventsActions.cpp:269
 msgid "Auxiliary InfoBoxes"
-msgstr ""
+msgstr "Caselles auxiliars d´informació"
 
 #: src/Input/InputEventsActions.cpp:271
 msgid "Default InfoBoxes"
-msgstr ""
+msgstr "Caselles d´informació per defecte"
 
 #: src/Input/InputEventsActions.cpp:378
 msgid "No active waypoint!"
-msgstr ""
+msgstr "Cap punt de viratge actiu!"
 
 #: src/Input/InputEventsActions.cpp:482
 msgid "NMEA log on"
-msgstr ""
+msgstr "Gravador de NMEA encés"
 
 #: src/Input/InputEventsActions.cpp:484
 msgid "NMEA log off"
-msgstr ""
+msgstr "Gravador de NMEA apagat"
 
 #: src/Input/InputEventsActions.cpp:488
 msgid "Logger on"
-msgstr ""
+msgstr "Gravador de vol encès"
 
 #: src/Input/InputEventsActions.cpp:490
 msgid "Logger off"
-msgstr ""
+msgstr "Gravador de vol apagat"
 
 #: src/Input/InputEventsMap.cpp:71
 msgid "Auto. zoom on"
-msgstr ""
+msgstr "Auto.zoom encès"
 
 #: src/Input/InputEventsMap.cpp:73 src/Input/InputEventsMap.cpp:208
 msgid "Auto. zoom off"
-msgstr ""
+msgstr "Auto.zoom apagat"
 
 #: src/Input/InputEventsMap.cpp:98
 msgid "Circling zoom on"
-msgstr ""
+msgstr "Zoom de gir encès"
 
 #: src/Input/InputEventsMap.cpp:100
 msgid "Circling zoom off"
-msgstr ""
+msgstr "Zoom de gir apagat"
 
 #: src/Input/InputEventsAirspace.cpp:63
 msgid "Show airspace off"
-msgstr ""
+msgstr "Mostrar espai aeri desactivat"
 
 #: src/Input/InputEventsAirspace.cpp:65
 msgid "Show airspace on"
-msgstr ""
+msgstr "Mostrar espai aeri activat"
 
 #: src/Input/InputEventsTask.cpp:80
 msgid "Advance manually"
-msgstr ""
+msgstr "Avançar manualment"
 
 #: src/Input/InputEventsTask.cpp:83
 msgid "Advance automatically"
-msgstr ""
+msgstr "Avançar automàticament"
 
 #: src/Input/InputEventsTask.cpp:86
 msgid "Ready to start"
-msgstr ""
+msgstr "Preparat per a sortida"
 
 #: src/Input/InputEventsTask.cpp:89
 msgid "Hold start"
-msgstr ""
+msgstr "Aguantar sortida"
 
 #: src/Input/InputEventsTask.cpp:92
 msgid "Ready to turn"
-msgstr ""
+msgstr "Preparat per a girar"
 
 #: src/Input/InputEventsTask.cpp:95
 msgid "Hold turn"
-msgstr ""
+msgstr "Esperar gir"
 
 #: src/Input/InputEventsTask.cpp:161
 msgid "Auto. MacCready on"
-msgstr ""
+msgstr "MacCready automàtic activat"
 
 #: src/Input/InputEventsTask.cpp:163
 msgid "Auto. MacCready off"
-msgstr ""
+msgstr "MacCready automàtic desactivat"
 
 #: src/Input/InputEventsTask.cpp:168
 msgid "MacCready "
-msgstr ""
+msgstr "MacCready "
 
 #: src/Input/InputEventsTask.cpp:229
 msgid "Task aborted"
-msgstr ""
+msgstr "Tasca abortada"
 
 #: src/Input/InputEventsTask.cpp:232
 msgid "Go to target"
-msgstr ""
+msgstr "Anar a objectiu"
 
 #: src/Input/InputEventsTask.cpp:235
 msgid "Ordered task"
-msgstr ""
+msgstr "Tasca ordenada"
 
 #: src/Input/InputEventsTask.cpp:238
 #: src/Renderer/FlightStatisticsRenderer.cpp:322
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:139
 msgid "No task"
-msgstr ""
+msgstr "Sense tasca"
 
 #: src/Input/InputEventsTask.cpp:321 src/Renderer/MapItemListRenderer.cpp:373
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:46
@@ -1148,7 +1169,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:185
 #, no-c-format
 msgid "Altitude"
-msgstr ""
+msgstr "Altitud"
 
 #: src/Input/InputEventsTask.cpp:323
 #: src/Renderer/FlightStatisticsRenderer.cpp:214
@@ -1157,7 +1178,7 @@ msgstr ""
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:80
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:87
 msgid "Speed"
-msgstr ""
+msgstr "Velocitat"
 
 #. Important: all pages after Units in this list must not have data fields that are
 #. unit-dependent because they will be saved after their units may have changed.
@@ -1170,52 +1191,52 @@ msgstr ""
 #: src/Dialogs/Weather/RASPDialog.cpp:164
 #, no-c-format
 msgid "Time"
-msgstr ""
+msgstr "Temps"
 
 #: src/Input/InputEventsTask.cpp:328
 msgid "Task start"
-msgstr ""
+msgstr "Sortida de tasca"
 
 #: src/Input/InputEventsTask.cpp:330
 msgid "Next turnpoint"
-msgstr ""
+msgstr "Següent punt de viratge"
 
 #: src/Input/InputEventsTask.cpp:332
 msgid "Task finished"
-msgstr ""
+msgstr "Tasca completada"
 
 #: src/Input/InputEventsSettings.cpp:59
 msgid "Vario sounds on"
-msgstr ""
+msgstr "Sons del vàrio activats"
 
 #: src/Input/InputEventsSettings.cpp:61
 msgid "Vario sounds off"
-msgstr ""
+msgstr "Sons del vàrio desactivats"
 
 #: src/Input/InputEventsSettings.cpp:89
 msgid "Snail trail off"
-msgstr ""
+msgstr "Rastre de vol desactivat"
 
 #: src/Input/InputEventsSettings.cpp:93
 msgid "Long snail trail"
-msgstr ""
+msgstr "Rastre llarg de vol"
 
 #: src/Input/InputEventsSettings.cpp:97
 msgid "Short snail trail"
-msgstr ""
+msgstr "Rastre curt de vol"
 
 #: src/Input/InputEventsSettings.cpp:101
 msgid "Full snail trail"
-msgstr ""
+msgstr "Rastre sencer de vol"
 
 #: src/Input/InputEventsSettings.cpp:203
 msgid "Bugs performance"
-msgstr ""
+msgstr "Efecte d´insectes"
 
 #: src/Input/InputEventsSettings.cpp:246
 #, no-c-format
 msgid "Ballast %"
-msgstr ""
+msgstr "% llastre"
 
 #: src/Input/InputEventsSettings.cpp:282 src/Dialogs/ProfileListDialog.cpp:231
 #: src/Dialogs/ProfileListDialog.cpp:276
@@ -1228,24 +1249,24 @@ msgstr ""
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:171
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:213
 msgid "Failed to save file."
-msgstr ""
+msgstr "Errada en guardar fitxer."
 
 #: src/Input/InputEventsSettings.cpp:305 src/InfoBoxes/Content/Factory.cpp:547
 #, no-c-format
 msgid "Forecast temperature"
-msgstr ""
+msgstr "Temperatura prevista"
 
 #: src/Input/InputEventsSettings.cpp:336
 msgid "Waypoint labels"
-msgstr ""
+msgstr "Etiquetes de punts de viratge"
 
 #: src/Input/InputEventsSettings.cpp:463
 msgid "Topography/Terrain"
-msgstr ""
+msgstr "Topografia/Terreny"
 
 #: src/Input/InputEventsLua.cpp:65 src/Dialogs/FileManager.cpp:570
 msgid "Select a file"
-msgstr ""
+msgstr "Trïi un fitxer"
 
 #: src/PageSettings.cpp:44
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:106
@@ -1253,7 +1274,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:372
 #, no-c-format
 msgid "FLARM radar"
-msgstr ""
+msgstr "Radar de FLARM"
 
 #: src/PageSettings.cpp:48
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:115
@@ -1262,37 +1283,37 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:945
 #, no-c-format
 msgid "Thermal assistant"
-msgstr ""
+msgstr "Assistent de tèrmica"
 
 #: src/PageSettings.cpp:52 src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:197
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:380
 #: src/InfoBoxes/Content/Factory.cpp:856
 #, no-c-format
 msgid "Horizon"
-msgstr ""
+msgstr "Horitzó"
 
 #: src/PageSettings.cpp:60 src/InfoBoxes/Content/Altitude.cpp:47
 #: Data/Input/default.xci:914
 #, no-c-format
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: src/PageSettings.cpp:60
 msgid "Map and InfoBoxes"
-msgstr ""
+msgstr "Mapa i caselles d´informació"
 
 #: src/PageSettings.cpp:80
 msgid "Info Hide"
-msgstr ""
+msgstr "Informació amagada"
 
 #: src/PageSettings.cpp:82
 msgid "Map (Full screen)"
-msgstr ""
+msgstr "Mapa (pantalla sencera)"
 
 #: src/Renderer/ChartRenderer.cpp:255
 #: src/Dialogs/Device/DeviceListDialog.cpp:446
 msgid "No data"
-msgstr ""
+msgstr "Sense dades"
 
 #: src/Renderer/MapItemListRenderer.cpp:81
 #: src/Renderer/MapItemListRenderer.cpp:85
@@ -1300,13 +1321,13 @@ msgstr ""
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:99
 #: src/Dialogs/Waypoint/WaypointList.cpp:411
 msgid "Direction"
-msgstr ""
+msgstr "Direcció"
 
 #: src/Renderer/MapItemListRenderer.cpp:89
 #: src/Renderer/WaypointListRenderer.cpp:42
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:141
 msgid "Elevation"
-msgstr ""
+msgstr "Elevació"
 
 #: src/Renderer/MapItemListRenderer.cpp:154
 #: src/Renderer/MapItemListRenderer.cpp:177
@@ -1314,7 +1335,7 @@ msgstr ""
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:260
 #, no-c-format
 msgid "AGL"
-msgstr ""
+msgstr "AGL"
 
 #: src/Renderer/MapItemListRenderer.cpp:159
 #: src/Renderer/MapItemListRenderer.cpp:182
@@ -1322,56 +1343,56 @@ msgstr ""
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:262
 #, no-c-format
 msgid "MSL"
-msgstr ""
+msgstr "MSL"
 
 #: src/Renderer/MapItemListRenderer.cpp:168
 msgid "around terrain"
-msgstr ""
+msgstr "Envoltant terreny"
 
 #: src/Renderer/MapItemListRenderer.cpp:186
 msgid "Unreachable due to terrain."
-msgstr ""
+msgstr "Inabastable degut a terreny."
 
 #: src/Renderer/MapItemListRenderer.cpp:191
 msgid "Arrival altitude"
-msgstr ""
+msgstr "Altitud d´arribada"
 
 #: src/Renderer/MapItemListRenderer.cpp:213
 msgid "Your Position"
-msgstr ""
+msgstr "La seva posició"
 
 #: src/Renderer/MapItemListRenderer.cpp:270
 #: src/InfoBoxes/Content/Factory.cpp:946
 #, no-c-format
 msgid "Thermal"
-msgstr ""
+msgstr "Tèrmica"
 
 #: src/Renderer/MapItemListRenderer.cpp:281
 msgid "Avg. lift"
-msgstr ""
+msgstr "Tèrmica mitjana"
 
 #: src/Renderer/MapItemListRenderer.cpp:351
 msgid "FLARM Traffic"
-msgstr ""
+msgstr "Tràfic de FLARM"
 
 #: src/Renderer/MapItemListRenderer.cpp:425
 #: src/Dialogs/Traffic/TrafficList.cpp:691
 #, c-format
 msgid "%u minutes ago"
-msgstr ""
+msgstr "Fa %u minuts"
 
 #: src/Renderer/WaypointListRenderer.cpp:153
 msgid "Arrival Alt"
-msgstr ""
+msgstr "Altitud d´arribada"
 
 #: src/Renderer/WaypointListRenderer.cpp:165
 msgid " ("
-msgstr ""
+msgstr " ("
 
 #: src/Weather/Rasp/RaspStore.cpp:48 src/Weather/Rasp/RaspStore.cpp:53
 #, no-c-format
 msgid "W*"
-msgstr ""
+msgstr "W*"
 
 #: src/Weather/Rasp/RaspStore.cpp:49 src/Weather/Rasp/RaspStore.cpp:54
 #, no-c-format
@@ -1382,11 +1403,18 @@ msgid ""
 "present, since cloud condensation adds buoyancy aloft (i.e. this neglects "
 "\"cloudsuck\").  W* depends upon both the surface heating and the BL depth."
 msgstr ""
+"Tèrmica mitjana seca prop de l'alçada mitjana de la BL. Resta la taxa de "
+"descens del veler per a obtenir una lectura mitjana de vario per a tèrmiques "
+"blaves. Les forces de corrent ascendent seran més fortes que aquesta "
+"previsió si hi ha núvols convectius, ja que la condensació dels núvols "
+"afegeix flotabilitat a l'altura (és a dir, això desprecia l´efecte de”succió "
+"dels niguls\"). W* depèn tant de l'escalfament de la superfície com de la "
+"profunditat de la BL."
 
 #: src/Weather/Rasp/RaspStore.cpp:58
 #, no-c-format
 msgid "BL Wind spd"
-msgstr ""
+msgstr "Velocitat del vent a la BL"
 
 #: src/Weather/Rasp/RaspStore.cpp:59
 #, no-c-format
@@ -1395,11 +1423,14 @@ msgid ""
 "prediction can be misleading if there is a large change in wind direction "
 "through the BL."
 msgstr ""
+"La velocitat i la direcció mitjana vectorial del vent al BL. Aquesta "
+"predicció pot ser enganyosa si hi ha un gran canvi en la direcció del vent a "
+"través del BL."
 
 #: src/Weather/Rasp/RaspStore.cpp:63
 #, no-c-format
 msgid "H bl"
-msgstr ""
+msgstr "H bl"
 
 #: src/Weather/Rasp/RaspStore.cpp:64
 #, no-c-format
@@ -1413,11 +1444,20 @@ msgid ""
 "the mixing results from shear turbulence rather than thermal mixing this "
 "parameter is not useful for glider flying. "
 msgstr ""
+"Alçada de la part superior de la capa de mescla, que per a la convecció "
+"tèrmica és la part superior mitjana d'una tèrmica seca. En terreny pla, les "
+"altures màximes de calor seran més baixes a causa de la velocitat de descens "
+"del veler i altres factors. En presència de niguls (que alliberen "
+"flotabilitat addicional a l'altura, creant \"succió de niguls\"), la part "
+"superior del corrent ascendent estarà per sobre d'aquesta previsió, però "
+"l'alçada tèrmica màxima estarà limitada per la base del nigul. A més, quan "
+"la barreja resulta de la turbulència de cisalla en lloc de la barreja "
+"tèrmica, aquest paràmetre no és útil per al vol de veler. "
 
 #: src/Weather/Rasp/RaspStore.cpp:68
 #, no-c-format
 msgid "dwcrit"
-msgstr ""
+msgstr "dwcrit"
 
 #: src/Weather/Rasp/RaspStore.cpp:69
 #, no-c-format
@@ -1431,11 +1471,20 @@ msgid ""
 "the maximum thermalling height may instead be limited by the cloud base.  "
 "Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
+"Aquest paràmetre estima l'alçada sobre el sòl a la qual la força de corrent "
+"ascendent seca mitjana baixa per sota de 1 m/s i s'espera que doni millors "
+"números quantitatius per a l'alçada tèrmica màxima sense niguls que l'alçada "
+"BL Top, especialment quan es barregen els resultats de la cisalla vertical "
+"del vent en lloc de les tèrmiques. (Nota: els supòsits actuals tendeixen a "
+"subestimar l'alçada tèrmica màxima per a condicions seques.) En presència de "
+"niguls, l'alçada tèrmica màxima pot estar limitada per la base del nigul. En "
+"tractar-se de tèrmiques \"seques\", aquest paràmetre omet l'efecte de "
+"\"succió de niguls\"."
 
 #: src/Weather/Rasp/RaspStore.cpp:73
 #, no-c-format
 msgid "bl cloud"
-msgstr ""
+msgstr "Nigul a bl"
 
 #: src/Weather/Rasp/RaspStore.cpp:74
 #, no-c-format
@@ -1447,11 +1496,17 @@ msgid ""
 "humidity within the BL.  The cloud base height is not predicted, but is "
 "expected to be below the BL Top height."
 msgstr ""
+"Aquest paràmetre proporciona un mitjà addicional per avaluar la formació de "
+"niguls dins del BL i es pot utilitzar conjuntament amb o en lloc dels altres "
+"paràmetres de predicció del nigul. Suposa una relació molt senzilla entre el "
+"percentatge de cobertura de niguls i la humitat relativa màxima dins del BL. "
+"No es preveu l'alçada de la base del nigul, però s'espera que estigui per "
+"sota de l'alçada BL Top."
 
 #: src/Weather/Rasp/RaspStore.cpp:78
 #, no-c-format
 msgid "Sfc temp"
-msgstr ""
+msgstr "Temperatura Sfc"
 
 #: src/Weather/Rasp/RaspStore.cpp:79
 #, no-c-format
@@ -1461,11 +1516,16 @@ msgid ""
 "accuracy; e.g. if observed surface temperatures are significantly below "
 "those forecast, then soaring conditions will be poorer than forecast."
 msgstr ""
+"La temperatura a una alçada de 2 m sobre el nivell del sòl. Això es pot "
+"comparar amb les temperatures superficials observades com a indicació de la "
+"precisió de la simulació del model; per exemple. si les temperatures de la "
+"superfície observades són significativament inferiors a les previstes, les "
+"condicions de tèrmica seran més fluixes del previst."
 
 #: src/Weather/Rasp/RaspStore.cpp:83
 #, no-c-format
 msgid "hwcrit"
-msgstr ""
+msgstr "hwcrit"
 
 #: src/Weather/Rasp/RaspStore.cpp:84
 #, no-c-format
@@ -1479,11 +1539,20 @@ msgid ""
 "maximum thermalling height may instead be limited by the cloud base.  Being "
 "for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
+"Aquest paràmetre estima l'alçada a la qual la força de la corrent ascendent "
+"seca mitjana baixa per sota de 1 m/s i s'espera que doni millors números "
+"quantitatius per a l'alçada tèrmica màxima sense niguls que l'alçada BL Top, "
+"especialment quan es barregen els resultats de la cisalla vertical del vent "
+"en lloc de les tèrmiques. (Nota: els supòsits actuals tendeixen a subestimar "
+"l'alçada tèrmica màxima per a condicions seques.) En presència de niguls, "
+"l'alçada tèrmica màxima pot estar limitada per la base del nigul. En tractar-"
+"se de tèrmiques \"seques\", aquest paràmetre omet l'efecte de \"succió dels "
+"niguls\"."
 
 #: src/Weather/Rasp/RaspStore.cpp:88
 #, no-c-format
 msgid "wblmaxmin"
-msgstr ""
+msgstr "wblmaxmin"
 
 #: src/Weather/Rasp/RaspStore.cpp:89
 #, no-c-format
@@ -1494,34 +1563,40 @@ msgid ""
 "(divergence) produces subsiding vertical motion, creating low-level "
 "inversions which limit thermalling heights."
 msgstr ""
+"Moviment extens cap amunt o cap avall promediat per l'àrea de la quadrícula "
+"màxima dins del BL creat per la convergència horitzontal del vent. La "
+"convergència positiva s'associa amb línies de convergència locals a petita "
+"escala. La convergència negativa (divergència) produeix una disminució del "
+"moviment vertical, creant inversions de baix nivell que limiten les altures "
+"tèrmiques."
 
 #: src/Weather/Rasp/RaspStore.cpp:93
 #, no-c-format
 msgid "blcwbase"
-msgstr ""
+msgstr "blcwbase"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:211
 #: src/Renderer/FlightStatisticsRenderer.cpp:230
 #: src/Renderer/FlightStatisticsRenderer.cpp:256
 msgid "Score"
-msgstr ""
+msgstr "Puntuació"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:211
 #: src/Renderer/FlightStatisticsRenderer.cpp:230
 #: src/Renderer/FlightStatisticsRenderer.cpp:256
 msgid "pts"
-msgstr ""
+msgstr "pts"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:332
 #: src/Renderer/FlightStatisticsRenderer.cpp:342
 #: src/Renderer/FlightStatisticsRenderer.cpp:353
 msgid "Task to go"
-msgstr ""
+msgstr "Tasca preparada"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:333
 #: src/Renderer/FlightStatisticsRenderer.cpp:343
 msgid "AAT to go"
-msgstr ""
+msgstr "AAT preparada"
 
 #. landscape: info above buttons
 #: src/Renderer/FlightStatisticsRenderer.cpp:334
@@ -1529,121 +1604,123 @@ msgstr ""
 #: src/Renderer/FlightStatisticsRenderer.cpp:355
 #: src/Dialogs/dlgAnalysis.cpp:243
 msgid "Distance to go"
-msgstr ""
+msgstr "Distància per a acabar"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:336
 #: src/Renderer/FlightStatisticsRenderer.cpp:347
 msgid "Target speed"
-msgstr ""
+msgstr "Velocitat objectiu"
 
 #: src/Renderer/BarographRenderer.cpp:47 src/Renderer/BarographRenderer.cpp:53
 msgid "Working band"
-msgstr ""
+msgstr "Banda de treball"
 
 #: src/Renderer/BarographRenderer.cpp:57
 msgid "Ceiling trend"
-msgstr ""
+msgstr "Tendència del sostre"
 
 #: src/Renderer/ClimbChartRenderer.cpp:47
 #: src/Renderer/ClimbChartRenderer.cpp:52
 msgid "Avg. climb"
-msgstr ""
+msgstr "Tèrmica mitjana"
 
 #: src/Renderer/ClimbChartRenderer.cpp:55
 msgid "Climb trend"
-msgstr ""
+msgstr "Tendència de tèrmica"
 
 #: src/Renderer/GlidePolarRenderer.cpp:49
 msgid "L/D"
-msgstr ""
+msgstr "L/D"
 
 #: src/Renderer/GlidePolarRenderer.cpp:53
 msgid "Min. sink"
-msgstr ""
+msgstr "Caiguda mínima"
 
 #: src/Renderer/GlidePolarInfoRenderer.cpp:50 src/Dialogs/dlgAnalysis.cpp:514
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:228
 msgid "Mass"
-msgstr ""
+msgstr "Massa"
 
 #: src/Renderer/GlidePolarInfoRenderer.cpp:57
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:299
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:238
 msgid "Wing loading"
-msgstr ""
+msgstr "Càrrega alar"
 
 #: src/Renderer/CuRenderer.cpp:146
 msgid "Thermal height"
-msgstr ""
+msgstr "Alçada de tèrmica"
 
 #: src/Renderer/CuRenderer.cpp:149
 msgid "Cloud base"
-msgstr ""
+msgstr "Base de niguls"
 
 #: src/Renderer/MacCreadyRenderer.cpp:48 src/InfoBoxes/Content/Factory.cpp:491
 #, no-c-format
 msgid "Vopt"
-msgstr ""
+msgstr "Vopt"
 
 #: src/Renderer/MacCreadyRenderer.cpp:51 src/Renderer/TaskSpeedRenderer.cpp:49
 msgid "Vave"
-msgstr ""
+msgstr "Vave"
 
 #: src/Renderer/TaskSpeedRenderer.cpp:52
 msgid "Vest"
-msgstr ""
+msgstr "Vest"
 
 #: src/UIActions.cpp:52
 msgid "Quit program?"
-msgstr ""
+msgstr "¿Sortir del programa?"
 
 #: src/Units/UnitsStore.cpp:39
 #, no-c-format
 msgid "European"
-msgstr ""
+msgstr "Europeu"
 
 #: src/Units/UnitsStore.cpp:51
 #, no-c-format
 msgid "British"
-msgstr ""
+msgstr "Britànic"
 
 #: src/Units/UnitsStore.cpp:63
 #, no-c-format
 msgid "American"
-msgstr ""
+msgstr "Americà"
 
 #: src/Units/UnitsStore.cpp:75
 #, no-c-format
 msgid "Australian"
-msgstr ""
+msgstr "Australià"
 
 #: src/Polar/PolarGlue.cpp:63
 msgid ""
 "Polar has invalid coefficients.\n"
 "Using LS8 polar instead!"
 msgstr ""
+"La polar té coeficients invàlids\n"
+"En el seu lloc  s´empra la polar del Ls8"
 
 #: src/Polar/PolarGlue.cpp:64
 msgid "Warning"
-msgstr ""
+msgstr "Avís"
 
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:69
 msgid "Battery low"
-msgstr ""
+msgstr "Bateria baixa"
 
 #: src/Startup.cpp:197
 msgid "Loading Terrain File..."
-msgstr ""
+msgstr "Carregant fitxer de terreny..."
 
 #: src/Startup.cpp:318
 msgid "Initialising"
-msgstr ""
+msgstr "Iniciant"
 
 #. Start the device thread(s)
 #: src/Startup.cpp:455
 msgid "Starting devices"
-msgstr ""
+msgstr "Engegant dispositius"
 
 #.
 #. -- Reset polar in case devices need the data
@@ -1653,80 +1730,80 @@ msgstr ""
 #.
 #: src/Startup.cpp:465
 msgid "Initialising display"
-msgstr ""
+msgstr "Iniciant visualització"
 
 #. Show progress dialog
 #: src/Startup.cpp:564 src/Startup.cpp:599 src/Startup.cpp:667
 msgid "Shutdown, please wait..."
-msgstr ""
+msgstr "Apagant, per favor esperi..."
 
 #. Stop logger and save igc file
 #: src/Startup.cpp:577
 msgid "Shutdown, saving logs..."
-msgstr ""
+msgstr "Apagant, guardant gravacions..."
 
 #. Save settings to profile
 #: src/Startup.cpp:596
 msgid "Shutdown, saving profile..."
-msgstr ""
+msgstr "Apagant, guardant perfil..."
 
 #. Save the task for the next time
 #: src/Startup.cpp:653
 msgid "Shutdown, saving task..."
-msgstr ""
+msgstr "Apagant, guardant tasca..."
 
 #: src/Device/Descriptor.cpp:483 src/Device/Descriptor.cpp:495
 msgid "Unable to open port"
-msgstr ""
+msgstr "Impossible obrir port"
 
 #: src/Device/Descriptor.cpp:1116 src/Device/Descriptor.cpp:1122
 msgid "Sending declaration"
-msgstr ""
+msgstr "Enviant declaració"
 
 #: src/Device/Descriptor.cpp:1169 src/Device/Descriptor.cpp:1176
 msgid "Reading flight list"
-msgstr ""
+msgstr "Llegint llista de vols"
 
 #: src/Device/Descriptor.cpp:1200 src/Device/Descriptor.cpp:1207
 msgid "Downloading flight log"
-msgstr ""
+msgstr "Descarregant registre de vols"
 
 #: src/Device/Config.cpp:216 src/Dialogs/Device/PortDataField.cpp:51
 #: src/Dialogs/Device/DeviceListDialog.cpp:442
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:39
 #, no-c-format
 msgid "Disabled"
-msgstr ""
+msgstr "Inhabilitat"
 
 #: src/Device/Config.cpp:233 src/Dialogs/Device/PortPicker.cpp:76
 msgid "BLE sensor"
-msgstr ""
+msgstr "Sensor BLE"
 
 #: src/Device/Config.cpp:249 src/Dialogs/Device/PortPicker.cpp:73
 msgid "BLE port"
-msgstr ""
+msgstr "Port BLE"
 
 #: src/Device/Config.cpp:269 src/Dialogs/Device/PortDataField.cpp:56
 #, no-c-format
 msgid "Bluetooth server"
-msgstr ""
+msgstr "Servidor Bluetooth"
 
 #: src/Device/Config.cpp:288
 msgid "GPS Intermediate Driver"
-msgstr ""
+msgstr "Driver intermedi de GPS"
 
 #: src/Device/Config.cpp:291 src/Dialogs/Device/PortDataField.cpp:53
 #, no-c-format
 msgid "Built-in GPS & sensors"
-msgstr ""
+msgstr "GPS & sensors integrats"
 
 #: src/Device/Config.cpp:294
 msgid "GliderLink traffic receiver"
-msgstr ""
+msgstr "Receptor de tràfic GliderLink"
 
 #: src/Device/Config.cpp:315 src/Dialogs/Device/PortPicker.cpp:79
 msgid "USB serial"
-msgstr ""
+msgstr "USB sèrie"
 
 #. create buttons
 #: src/Dialogs/Message.cpp:96 src/Dialogs/WidgetDialog.cpp:264
@@ -1741,20 +1818,20 @@ msgstr ""
 #: src/Dialogs/TouchTextEntry.cpp:203 src/Dialogs/TimeEntry.cpp:65
 #: src/Dialogs/DateEntry.cpp:61 src/Dialogs/GeoPointEntry.cpp:76
 msgid "OK"
-msgstr ""
+msgstr "D´acord"
 
 #: src/Dialogs/Message.cpp:102 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:59
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:62
 msgid "Yes"
-msgstr ""
+msgstr "Sí"
 
 #: src/Dialogs/Message.cpp:104
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: src/Dialogs/Message.cpp:110
 msgid "Retry"
-msgstr ""
+msgstr "Tornar a provar"
 
 #: src/Dialogs/Message.cpp:116 src/Dialogs/ListPicker.cpp:183
 #: src/Dialogs/ProgressDialog.cpp:57 src/Dialogs/WidgetDialog.cpp:265
@@ -1777,22 +1854,22 @@ msgstr ""
 #: Data/Input/default.xci:638 Data/Input/default.xci:858
 #: Data/Input/default.xci:929
 msgid "Cancel"
-msgstr ""
+msgstr "Cancel.lar"
 
 #: src/Dialogs/Message.cpp:123
 msgid "Ignore"
-msgstr ""
+msgstr "Ignorar"
 
 #: src/Dialogs/ListPicker.cpp:173 src/Dialogs/Device/PortPicker.cpp:313
 #: src/Dialogs/Traffic/TrafficList.cpp:795
 #: src/Dialogs/ProfileListDialog.cpp:351
 #: src/Dialogs/Waypoint/WaypointList.cpp:228
 msgid "Select"
-msgstr ""
+msgstr "Triar"
 
 #: src/Dialogs/ListPicker.cpp:179 src/Dialogs/HelpDialog.cpp:38
 msgid "Help"
-msgstr ""
+msgstr "Ajuda"
 
 #: src/Dialogs/FileManager.cpp:419 src/Dialogs/FilePicker.cpp:50
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:131
@@ -1806,63 +1883,63 @@ msgstr ""
 #: src/Dialogs/DownloadFilePicker.cpp:297
 #: src/Dialogs/DownloadFilePicker.cpp:406
 msgid "Download"
-msgstr ""
+msgstr "Descàrrega"
 
 #: src/Dialogs/FileManager.cpp:420
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:112
 #: src/Dialogs/Weather/NOAAList.cpp:118 src/Monitor/MatTaskMonitor.cpp:58
 msgid "Add"
-msgstr ""
+msgstr "Afegir"
 
 #: src/Dialogs/FileManager.cpp:422
 msgid "Update all"
-msgstr ""
+msgstr "Actualitzar tots"
 
 #: src/Dialogs/FileManager.cpp:455
 msgid "Queued"
-msgstr ""
+msgstr "En cua"
 
 #: src/Dialogs/FileManager.cpp:457 src/Dialogs/FileManager.cpp:463
 msgid "Downloading"
-msgstr ""
+msgstr "Descarregant"
 
 #: src/Dialogs/FileManager.cpp:475
 msgid "Update available"
-msgstr ""
+msgstr "Actualització disposable"
 
 #: src/Dialogs/FileManager.cpp:743 src/Dialogs/DownloadFilePicker.cpp:386
 #: src/Dialogs/DownloadFilePicker.cpp:388
 msgid "Failed to download the repository index."
-msgstr ""
+msgstr "No s'ha pogut baixar l'índex del repositori."
 
 #: src/Dialogs/FileManager.cpp:753 src/Dialogs/FileManager.cpp:778
 #: src/Dialogs/DownloadFilePicker.cpp:400 Data/Input/default.xci:620
 msgid "File Manager"
-msgstr ""
+msgstr "Gestor de fitxers"
 
 #: src/Dialogs/FileManager.cpp:776 src/Dialogs/DownloadFilePicker.cpp:399
 msgid "The file manager is not available on this device."
-msgstr ""
+msgstr "El gestor de fitxers no és disposable en aquest dispositiu."
 
 #: src/Dialogs/Device/PortDataField.cpp:60
 #, no-c-format
 msgid "IOIO switches and Nunchuk"
-msgstr ""
+msgstr "Commutadors IOIO i Nunchuk"
 
 #: src/Dialogs/Device/PortDataField.cpp:62
 #, no-c-format
 msgid "IOIO I²C pressure sensor"
-msgstr ""
+msgstr "Sensor de presió IOIO I²C"
 
 #: src/Dialogs/Device/PortDataField.cpp:63
 #, no-c-format
 msgid "IOIO voltage sensor"
-msgstr ""
+msgstr "Sensor de voltatge IOIO"
 
 #: src/Dialogs/Device/PortDataField.cpp:66
 #, no-c-format
 msgid "TCP client"
-msgstr ""
+msgstr "Client TCP"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -1870,48 +1947,50 @@ msgstr ""
 #: src/Dialogs/Device/DeviceEditWidget.cpp:270
 #, no-c-format
 msgid "TCP port"
-msgstr ""
+msgstr "Port TCP"
 
 #: src/Dialogs/Device/PortDataField.cpp:71
 #, no-c-format
 msgid "UDP port"
-msgstr ""
+msgstr "Port UDP"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:247
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:253
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:97
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:125
 msgid "Baud rate"
-msgstr ""
+msgstr "Velocitat de transmissió"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:259
 msgid "Bulk baud rate"
-msgstr ""
+msgstr "Velocitat de transmissió per a transferències massives"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:260
 msgid ""
 "The baud rate used for bulk transfers, such as task declaration or flight "
 "download."
 msgstr ""
+"La velocitat de transmissió utilitzada per a les transferències massives, "
+"com ara la declaració de tasques o la descàrrega de vols."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:265
 msgid "IP address"
-msgstr ""
+msgstr "Direcció IP"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:275
 msgid "I²C bus"
-msgstr ""
+msgstr "Bus I²C"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:275
 msgid "Select the description or bus number that matches your configuration."
-msgstr ""
+msgstr "Trïi la descripció o nombre de bus que quadri amb la seva configuració."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:281
 msgid "I²C addr"
-msgstr ""
+msgstr "Adreça I²C"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:281
 msgid ""
@@ -1919,10 +1998,13 @@ msgid ""
 "your selection in the \"I²C bus\" field is not an I²C bus number. Assume "
 "this field is not in use if that doesn't make sense to you."
 msgstr ""
+"L'adreça I²C que coincideix amb la vostra configuració. Aquest camp no "
+"s'utilitza quan la vostra selecció al camp \"I²C bus\" no és un número de "
+"bus I²C. Suposam que aquest camp no s'utilitza si això no té sentit per a tu."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:289
 msgid "Pressure use"
-msgstr ""
+msgstr "Ús de presió"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:289
 msgid ""
@@ -1930,47 +2012,54 @@ msgid ""
 "pressure. Here you tell the system what pressure this is and what it should "
 "be used for."
 msgstr ""
+"Seleccioneu la finalitat d'aquest sensor de pressió. Aquest sensor mesura "
+"una mica de pressió. Aquí li indiqueu al sistema quina pressió és aquesta i "
+"per a què s'ha d'utilitzar."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:303
 msgid "Driver"
-msgstr ""
+msgstr "Driver"
 
 #. for a passthrough device, offer additional driver
 #: src/Dialogs/Device/DeviceEditWidget.cpp:306
 msgid "Passthrough device"
-msgstr ""
+msgstr "Dispositiu de pas"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:307
 msgid "Whether the device has a passed-through device connected."
-msgstr ""
+msgstr "Si el dispositiu té connectat un dispositiu de transmissió."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:318
 msgid "Second Driver"
-msgstr ""
+msgstr "Segon driver"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:320
 msgid "Sync. from device"
-msgstr ""
+msgstr "Sincronització des del dispositiu"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:321
 msgid ""
 "Tells XCSoar to use settings like the MacCready value, bugs and ballast from "
 "the device."
 msgstr ""
+"Indica a XCSoar que utilitzi configuracions com el valor de MacCready, "
+"insects i llast des del dispositiu."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:326
 msgid "Sync. to device"
-msgstr ""
+msgstr "Sincronitzat al dispositiu"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:327
 msgid ""
 "Tells XCSoar to send settings like the MacCready value, bugs and ballast to "
 "the device."
 msgstr ""
+"Indica a XCSoar que envïi configuracions com el valor de MacCready, errors i "
+"llast del dispositiu."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:333
 msgid "Whether you use a K6Bt to connect the device."
-msgstr ""
+msgstr "Si utilitzau un K6Bt per a connectar el dispositiu."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:287
 #: src/Dialogs/Plane/PlaneListDialog.cpp:147
@@ -1980,11 +2069,11 @@ msgstr ""
 #: src/InfoBoxes/Content/Radio.cpp:59
 #, no-c-format
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:291
 msgid "Flight download"
-msgstr ""
+msgstr "Descarregar vol"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:295
 #: src/Dialogs/Device/DeviceListDialog.cpp:561
@@ -1993,11 +2082,11 @@ msgstr ""
 #: src/Dialogs/Device/DeviceListDialog.cpp:641
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:123
 msgid "Manage"
-msgstr ""
+msgstr "Gestió"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:299
 msgid "Monitor"
-msgstr ""
+msgstr "Monitor"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:303
 #: src/Dialogs/Device/DeviceListDialog.cpp:530
@@ -2005,41 +2094,41 @@ msgstr ""
 #: src/Dialogs/Device/PortMonitor.cpp:140
 #: src/Dialogs/Device/PortMonitor.cpp:148
 msgid "Reconnect"
-msgstr ""
+msgstr "Reconnectar"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:307
 #: src/Dialogs/Device/DeviceListDialog.cpp:326
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:231
 msgid "Disable"
-msgstr ""
+msgstr "Desactivar"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:311
 #: src/Dialogs/Device/DeviceListDialog.cpp:431
 #: src/Dialogs/Device/DeviceListDialog.cpp:450
 #: src/Dialogs/Device/DeviceListDialog.cpp:718
 msgid "Debug"
-msgstr ""
+msgstr "Depurar"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:326
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:88
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:88
 msgid "Enable"
-msgstr ""
+msgstr "Habilitar"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:374
 #, c-format
 msgid "%s on %s"
-msgstr ""
+msgstr "%s sobre %s"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:388
 msgid "GPS fix"
-msgstr ""
+msgstr "Posició de GPS"
 
 #. device sends GPGGA, but no valid location
 #: src/Dialogs/Device/DeviceListDialog.cpp:391
 msgid "Bad GPS"
-msgstr ""
+msgstr "Mala recepció de GPS"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:393
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:63
@@ -2047,27 +2136,27 @@ msgstr ""
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:98
 #, no-c-format
 msgid "Connected"
-msgstr ""
+msgstr "Connectat"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:398
 msgid "Baro"
-msgstr ""
+msgstr "Baro"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:403
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:128
 msgid "Pitot"
-msgstr ""
+msgstr "Pitot"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:408
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:106
 msgid "Airspeed"
-msgstr ""
+msgstr "Velocitat"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:436
 #: src/InfoBoxes/Content/Factory.cpp:668
 #, no-c-format
 msgid "Battery"
-msgstr ""
+msgstr "Bateria"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:444
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:61
@@ -2075,46 +2164,48 @@ msgstr ""
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:69
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:73
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:460
 #: src/Dialogs/Device/DeviceListDialog.cpp:530
 msgid "Bluetooth is disabled"
-msgstr ""
+msgstr "Bluetooth és deshabilitat"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:463
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplicar"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:470
 msgid "Not connected"
-msgstr ""
+msgstr "No connectat"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:538
 #: src/Dialogs/Device/DeviceListDialog.cpp:567
 #: src/Dialogs/Device/DeviceListDialog.cpp:641
 #: src/Dialogs/Device/PortMonitor.cpp:148
 msgid "Device is occupied"
-msgstr ""
+msgstr "El dispositiu és ocupat"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:561
 #: src/Dialogs/Device/DeviceListDialog.cpp:635
 msgid "Device is not connected"
-msgstr ""
+msgstr "El dispositiu no és connectat"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:589
 msgid "Edit device"
-msgstr ""
+msgstr "Editar dispositiu"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:716
 #, c-format
 msgid "Communication with this device will be logged for the next %u minutes."
 msgstr ""
+"La comunicació amb aquest dispositiu es registrarà durant els propers %u "
+"minuts."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:733 Data/Input/default.xci:570
 #: Data/Input/default.xci:1166
 msgid "Devices"
-msgstr ""
+msgstr "Dispositius"
 
 #: src/Dialogs/Device/PortMonitor.cpp:139
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:107
@@ -2124,16 +2215,16 @@ msgstr ""
 #: src/Dialogs/DateEntry.cpp:69 src/Dialogs/GeoPointEntry.cpp:80
 #: src/InfoBoxes/Panel/ATCReference.cpp:95
 msgid "Clear"
-msgstr ""
+msgstr "Netejar"
 
 #: src/Dialogs/Device/PortMonitor.cpp:141
 #: src/Dialogs/Device/PortMonitor.cpp:168
 msgid "Pause"
-msgstr ""
+msgstr "Pausar"
 
 #: src/Dialogs/Device/PortMonitor.cpp:180
 msgid "Port monitor"
-msgstr ""
+msgstr "Monitor de Port"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:67
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:88
@@ -2141,7 +2232,7 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfiguration.cpp:143
 #, no-c-format
 msgid "Units"
-msgstr ""
+msgstr "Unitats"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:76
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:81
@@ -2151,20 +2242,20 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:73
 #, no-c-format
 msgid "Waypoints"
-msgstr ""
+msgstr "Punts de viratge"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:126
 msgid "Delete all flights"
-msgstr ""
+msgstr "Esborrar tots els vols"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:127
 msgid "Do you really want to delete all flights from the device?"
-msgstr ""
+msgstr "¿Realment vol esborrar tots els vols del dispositiu?"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:140
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:85
 msgid "Reboot"
-msgstr ""
+msgstr "Reiniciar"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:54
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:195
@@ -2172,53 +2263,53 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:67
 #, no-c-format
 msgid "Temperature"
-msgstr ""
+msgstr "Temperatura"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:62
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:129
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:218
 #: src/Weather/NOAAFormatter.cpp:153 src/Weather/NOAAFormatter.cpp:159
 msgid "Pressure"
-msgstr ""
+msgstr "Pressió"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:88
 msgid "Sink tone"
-msgstr ""
+msgstr "To de descens"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:41
 #: src/Dialogs/ProfileListDialog.cpp:220 src/Dialogs/ProfileListDialog.cpp:249
 msgid "Failed to load file."
-msgstr ""
+msgstr "Errada en la pujada del fitxer."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:46
 msgid "Too many waypoints."
-msgstr ""
+msgstr "Massa punts de viratge."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:50
 msgid "Uploading Waypoints"
-msgstr ""
+msgstr "Pujant punts de viratge"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:57
 msgid "Failed to switch baud rate."
-msgstr ""
+msgstr "Errada en canviar la velocitat de transmissió."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:66
 msgid "Failed to write waypoint."
-msgstr ""
+msgstr "Errada en escribir punt de viratge."
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:63
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:72
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:71
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:64
 msgid "Hardware version"
-msgstr ""
+msgstr "Versió de hardware"
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:69
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:78
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:77
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:69
 msgid "Firmware version"
-msgstr ""
+msgstr "Versió de firmware"
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:79
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:81
@@ -2227,93 +2318,93 @@ msgstr ""
 #: src/InfoBoxes/Content/Altitude.cpp:48 src/InfoBoxes/Content/MacCready.cpp:51
 #, no-c-format
 msgid "Setup"
-msgstr ""
+msgstr "Configuració"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:55
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:75
 #, no-c-format
 msgid "Volume"
-msgstr ""
+msgstr "Volum"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:68
 #, no-c-format
 msgid "Output mode"
-msgstr ""
+msgstr "Mode de sortida"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:70
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:122
 #: src/Dialogs/Waypoint/Manager.cpp:123
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:165
 msgid "Save"
-msgstr ""
+msgstr "Guardar"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:58
 msgid "Calibrate"
-msgstr ""
+msgstr "Calibració"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:130
 msgid "Offset"
-msgstr ""
+msgstr "Distància"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:144
 msgid "Pitot sensor calibration"
-msgstr ""
+msgstr "Calibració del sensor del pitot"
 
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:60
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:59
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:54
 msgid "Product"
-msgstr ""
+msgstr "Producte"
 
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:66
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:65
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:59
 msgid "Serial"
-msgstr ""
+msgstr "Nº sèrie"
 
 #: src/Dialogs/Device/LX/LXNAVVarioConfigWidget.cpp:89
 msgid "GPS baud rate"
-msgstr ""
+msgstr "Velocitat de transmissió GPS"
 
 #: src/Dialogs/Device/LX/LXNAVVarioConfigWidget.cpp:90
 msgid "PDA baud rate"
-msgstr ""
+msgstr "Velocitat de transmissió PDA"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:100
 msgid "Auto off"
-msgstr ""
+msgstr "Apagat automàtic"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:103
 msgid "Auto finish flight"
-msgstr ""
+msgstr "Fi automàtic de vol"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:106
 msgid "Always run"
-msgstr ""
+msgstr "Sempre actiu"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:109
 msgid "Enable NMEA"
-msgstr ""
+msgstr "Activar NMEA"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:112
 msgid "Recording interval"
-msgstr ""
+msgstr "Interval de gravació"
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:119
 msgid "Demo"
-msgstr ""
+msgstr "Demo"
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:152
 msgid "Set new audio scheme?  Old values will be lost."
-msgstr ""
+msgstr "Voleu establir un nou esquema d'àudio?   Els valors antics es perdran."
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:273
 msgid "Vario Configuration"
-msgstr ""
+msgstr "Configuració de vàrio"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:99
 msgid "TE vario"
-msgstr ""
+msgstr "Vario TE"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:100
 msgid ""
