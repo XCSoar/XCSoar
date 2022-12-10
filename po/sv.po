@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2022-07-21 13:50+0000\n"
+"PO-Revision-Date: 2022-12-11 21:50+0000\n"
 "Last-Translator: Markus Bagge <markus.bagge@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 "X-Launchpad-Export-Date: 2014-10-13 19:28+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -443,7 +443,7 @@ msgstr "Okänd filtyp för luftrum"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:112
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:113
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
@@ -2817,7 +2817,7 @@ msgstr "Kurvläge"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:61
 msgid "Estimate the wind vector while circling.  Requires only a GPS."
-msgstr ""
+msgstr "Skatta vindriktning vid kurvning. Kräver GPS endast."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
 #, fuzzy
@@ -2826,7 +2826,7 @@ msgstr "SickSack"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:65
 msgid "Estimate the wind vector during glides.  Requires an airspeed sensor."
-msgstr ""
+msgstr "Skatta vind under glid. Kräver vindmätare."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
 msgid "External wind"
@@ -2882,13 +2882,15 @@ msgstr "Töm barlast"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:285
 msgid "Crew"
-msgstr ""
+msgstr "Besättning"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:286
 msgid ""
 "All masses loaded to the glider beyond the empty weight including pilot and "
 "copilot, but not water ballast."
 msgstr ""
+"Alla vikter på farkosten utöver tomvikt (inklusive pilot och co-pilot) men "
+"utan vattenballast."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:293
 msgid "Ballast"
@@ -3594,7 +3596,7 @@ msgstr "Nära"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:98
 msgid "Share"
-msgstr ""
+msgstr "Dela"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:51
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:62
@@ -5038,13 +5040,13 @@ msgstr "Copilot namn"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:79
 msgid "Crew weight default"
-msgstr ""
+msgstr "Besättning vikt std.värde"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:80
 msgid ""
 "Default for all weight loaded to the glider beyond the empty weight and "
 "besides the water ballast."
-msgstr ""
+msgstr "Std.värde för all lastvikt utöver tomvikt förutom vattenballast."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:86
 msgid "Time step cruise"
@@ -6893,6 +6895,7 @@ msgid ""
 "Show thermal locations downloaded from Thermal Information Map (thermalmap."
 "info)."
 msgstr ""
+"Visa termikområden nedladdade från Thermal Information Map (thermalmap.info)."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:91
 msgid "Automatic Upload"
@@ -7059,6 +7062,8 @@ msgid ""
 "minimum height above ground for finish to be greater than 1000m below the "
 "start height."
 msgstr ""
+"Om aktiverad, saknar max starthöjd/hastighet och kräver att minsta höjd över "
+"mark vid mål är mer än 1000m under starthöjd."
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:72
 msgid "Task not saved"
@@ -9283,22 +9288,22 @@ msgstr "En cirkulär assistant som visar blåsans form och stig."
 #: src/InfoBoxes/Content/Factory.cpp:952
 #, no-c-format
 msgid "Start open/close countdown"
-msgstr "Nedräkning inför startens öppning/stängning"
+msgstr "Tid till start öppnar/stänger"
 
 #: src/InfoBoxes/Content/Factory.cpp:953
 #, no-c-format
 msgid "Start open"
-msgstr "Starten öppen"
+msgstr "Start öppnar"
 
 #: src/InfoBoxes/Content/Factory.cpp:954
 #, no-c-format
 msgid "Shows the time left until the start point opens or closes."
-msgstr "Återstående tid tills starten öppnar eller stänger."
+msgstr "Återstående tid till start öppnar eller stänger."
 
 #: src/InfoBoxes/Content/Factory.cpp:959
 #, no-c-format
 msgid "Start open/close countdown at reaching"
-msgstr "Start öppnar/stänger nedräkningen när detta nås"
+msgstr "Tid passad mot start öppnar/stänger"
 
 #: src/InfoBoxes/Content/Factory.cpp:960
 #, no-c-format
