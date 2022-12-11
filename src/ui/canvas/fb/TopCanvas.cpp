@@ -180,6 +180,7 @@ TopCanvas::TopCanvas(UI::Display &_display)
   case KoboModel::AURA2:
   case KoboModel::CLARA_HD:
   case KoboModel::LIBRA2:
+  case KoboModel::LIBRA_H2O:
     frame_sync = true;
     break;
 
@@ -283,6 +284,7 @@ TopCanvas::Flip()
 
   epd_update_marker++;
 
+  KoboModel kobo_model = DetectKoboModel();
   struct mxcfb_update_data epd_update_data = {
     {
       0, 0, buffer.width, buffer.height
@@ -290,11 +292,12 @@ TopCanvas::Flip()
 
     uint32_t(enable_dither &&
              (/* use A2 mode only on some Kobo models */
-              DetectKoboModel() == KoboModel::TOUCH2 ||
-              DetectKoboModel() == KoboModel::GLO_HD ||
-              DetectKoboModel() == KoboModel::AURA2 ||
-              DetectKoboModel() == KoboModel::LIBRA2 ||
-              DetectKoboModel() == KoboModel::CLARA_HD)
+              kobo_model == KoboModel::TOUCH2 ||
+              kobo_model == KoboModel::GLO_HD ||
+              kobo_model == KoboModel::AURA2 ||
+              kobo_model == KoboModel::LIBRA2 ||
+              kobo_model == KoboModel::LIBRA_H2O ||
+              kobo_model == KoboModel::CLARA_HD)
              ? WAVEFORM_MODE_A2
              : WAVEFORM_MODE_AUTO),
     UPDATE_MODE_FULL, // PARTIAL

@@ -111,9 +111,11 @@ bool
 IsKoboCustomKernel()
 try {
 #ifdef KOBO
-  /* All Kobo except Clara HD and Libra 2 have a factory kernel without OTG mode so
+  KoboModel kobo_model = DetectKoboModel();
+  /* All Kobo except Clara HD, Libra 2 and Libra H2O have a factory kernel without OTG mode so
      a custom kernel is installed for OTG. */
-  if (DetectKoboModel() == KoboModel::CLARA_HD || DetectKoboModel() == KoboModel::LIBRA2) return false;
+  if (kobo_model == KoboModel::CLARA_HD || kobo_model == KoboModel::LIBRA2
+      || kobo_model == KoboModel::LIBRA_H2O) return false;
 
   FileReader file(Path("/proc/config.gz"));
   GunzipReader gunzip(file);
@@ -134,8 +136,10 @@ bool
 IsKoboOTGHostMode()
 {
 #ifdef KOBO
-  if (DetectKoboModel() != KoboModel::CLARA_HD && DetectKoboModel() != KoboModel::LIBRA2) return IsKoboCustomKernel();
-  /* for Clara HD and Libra 2, read the mode from the debugfs */
+  KoboModel kobo_model = DetectKoboModel();
+  if (kobo_model != KoboModel::CLARA_HD && kobo_model != KoboModel::LIBRA2
+      && kobo_model != KoboModel::LIBRA_H2O) return IsKoboCustomKernel();
+  /* for Clara HD, Libra 2 and Libra H2O read the mode from the debugfs */
   char buffer[5];
   bool success = File::ReadString(Path("/sys/kernel/debug/ci_hdrc.0/role"),
                    buffer, 5);

@@ -71,9 +71,11 @@ bool
 KoboReboot()
 {
 #ifdef KOBO
-  /* CLARA_HD requires the -f option to for reboot to work */
-  if  (DetectKoboModel() == KoboModel::CLARA_HD || DetectKoboModel() == KoboModel::LIBRA2)
+  KoboModel kobo_model = DetectKoboModel();
+  if  (kobo_model == KoboModel::CLARA_HD || kobo_model == KoboModel::LIBRA2
+      || kobo_model == KoboModel::LIBRA_H2O)
   {
+    /* some models require the -f option for reboot to work */
     return Run("/sbin/reboot", "-f");
   }
   return Run("/sbin/reboot");
@@ -153,6 +155,7 @@ KoboExportUSBStorage()
 
   case KoboModel::CLARA_HD:
   case KoboModel::LIBRA2:
+  case KoboModel::LIBRA_H2O:
     InsMod("/drivers/mx6sll-ntx/usb/gadget/configfs.ko");
     InsMod("/drivers/mx6sll-ntx/usb/gadget/libcomposite.ko");
     InsMod("/drivers/mx6sll-ntx/usb/gadget/usb_f_mass_storage.ko");
@@ -180,7 +183,9 @@ void
 KoboUnexportUSBStorage()
 {
 #ifdef KOBO
-  if(DetectKoboModel() == KoboModel::CLARA_HD || DetectKoboModel() == KoboModel::LIBRA2)
+  KoboModel kobo_model = DetectKoboModel();
+  if(kobo_model == KoboModel::CLARA_HD || kobo_model == KoboModel::LIBRA2
+      || kobo_model == KoboModel::LIBRA_H2O)
   {
     RmMod("g_file_storage");
     RmMod("usb_f_mass_storage");
@@ -236,6 +241,7 @@ KoboWifiOn()
     break;
 
   case KoboModel::CLARA_HD:
+  case KoboModel::LIBRA_H2O:
     InsMod("/drivers/mx6sll-ntx/wifi/sdio_wifi_pwr.ko");
     InsMod("/drivers/mx6sll-ntx/wifi/8189fs.ko");
     break;
