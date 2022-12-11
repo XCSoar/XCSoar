@@ -68,6 +68,7 @@ static constexpr struct {
   { "SN-N249", KoboModel::CLARA_HD },
   { "SN-N306", KoboModel::NIA },
   { "SN-N418", KoboModel::LIBRA2 },
+  { "SN-N873", KoboModel::LIBRA_H2O },
 };
 
 static KoboModel

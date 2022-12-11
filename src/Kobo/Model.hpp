@@ -39,6 +39,7 @@ enum class KoboModel {
   CLARA_HD,
   NIA,
   LIBRA2,
+  LIBRA_H2O,
 };
 
 [[gnu::const]]
