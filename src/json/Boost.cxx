@@ -40,6 +40,6 @@
 #endif
 
 /* suppress -Wundef */
-#define BOOST_VERSION 0
-
+// #define BOOST_VERSION 0
+#include <boost/version.hpp>
 #include <boost/json/src.hpp>
