@@ -42,6 +42,7 @@
 #include "Device/Driver/ILEC.hpp"
 #include "Device/Driver/IMI.hpp"
 #include "Device/Driver/OpenVario.hpp"
+#include "Device/Driver/Larus.hpp"
 #include "Device/Driver/PosiGraph.hpp"
 #include "Device/Driver/Vaulter.hpp"
 #include "Device/Driver/Vega.hpp"
@@ -1239,6 +1240,79 @@ TestOpenVario()
 }
 
 static void
+TestLarus()
+{
+    NullPort null;
+    Device *device = larus_driver.CreateOnPort(dummy_config, null);
+    ok1(device != NULL);
+
+    NMEAInfo nmea_info;
+    nmea_info.Reset();
+    nmea_info.clock = TimeStamp{FloatDuration{1}};
+
+    // Empty sentence is handled by device driver
+    ok1(device->ParseNMEA("$POV*49", nmea_info));
+
+    // Checksums are validated
+    ok1(!device->ParseNMEA("$POV*48", nmea_info));
+
+    // TE vario is read
+    ok1(device->ParseNMEA("$POV,E,2.15*14", nmea_info));
+    ok1(nmea_info.total_energy_vario_available);
+    ok1(equals(nmea_info.total_energy_vario, 2.15));
+    nmea_info.Reset();
+
+    // Static pressure is read
+    ok1(device->ParseNMEA("$POV,P,1018.35*39", nmea_info));
+    ok1(nmea_info.static_pressure_available);
+    ok1(equals(nmea_info.static_pressure.GetHectoPascal(), 1018.35));
+    nmea_info.Reset();
+
+    // Dynamic pressure is read
+    ok1(device->ParseNMEA("$POV,Q,23.3*04", nmea_info));
+    ok1(nmea_info.dyn_pressure_available);
+    ok1(equals(nmea_info.dyn_pressure.GetPascal(), 23.3));
+    nmea_info.Reset();
+
+    // Total pressure is read
+    ok1(device->ParseNMEA("$POV,R,1025.17*35", nmea_info));
+    ok1(nmea_info.pitot_pressure_available);
+    ok1(equals(nmea_info.pitot_pressure.GetHectoPascal(), 1025.17));
+    nmea_info.Reset();
+
+    // Multiple pressures are read
+    ok1(device->ParseNMEA("$POV,P,1018.35,Q,23.3,R,1025.17*08", nmea_info));
+    ok1(nmea_info.static_pressure_available);
+    ok1(equals(nmea_info.static_pressure.GetHectoPascal(), 1018.35));
+    ok1(nmea_info.dyn_pressure_available);
+    ok1(equals(nmea_info.dyn_pressure.GetPascal(), 23.3));
+    ok1(nmea_info.pitot_pressure_available);
+    ok1(equals(nmea_info.pitot_pressure.GetHectoPascal(), 1025.17));
+    nmea_info.Reset();
+
+    // Airspeed is read
+    ok1(device->ParseNMEA("$POV,S,123.45*05", nmea_info));
+    ok1(nmea_info.airspeed_available);
+    ok1(nmea_info.airspeed_real);
+    ok1(equals(nmea_info.true_airspeed, 123.45 / 3.6));
+    nmea_info.Reset();
+
+    // Temperature is read
+    ok1(device->ParseNMEA("$POV,T,23.52*35", nmea_info));
+    ok1(nmea_info.temperature_available);
+    ok1(equals(nmea_info.temperature.ToKelvin(),
+               Temperature::FromCelsius(23.52).ToKelvin()));
+    nmea_info.Reset();
+
+    // Relative humidity is read
+    ok1(device->ParseNMEA("$POV,H,58.42*24", nmea_info));
+    ok1(nmea_info.humidity_available);
+    ok1(equals(nmea_info.humidity, 58.42));
+
+    delete device;
+}
+
+static void
 TestWesterboer()
 {
   NullPort null;
@@ -1651,6 +1725,7 @@ int main()
   TestLXV7();
   TestILEC();
   TestOpenVario();
+  TestLarus();
   TestVega();
   TestWesterboer();
   TestZander();
