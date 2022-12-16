@@ -1,0 +1,23 @@
+cmake_minimum_required(VERSION 3.18)
+
+set (TARGET_NAME         zzip)
+project(${TARGET_NAME})
+
+
+file(GLOB_RECURSE ${TARGET_NAME}_SOURCES "*.c*")
+file(GLOB_RECURSE HEADER_FILES "*.h*")
+
+set(${TARGET_NAME}_LIBRARY coding.c struct_model0.c struct_model1.c
+                    zzip.c block.c bwt.c)
+
+add_library(${TARGET_NAME} STATIC ${${TARGET_NAME}_LIBRARY} ${HEADER_FILES})
+
+install(TARGETS ${TARGET_NAME}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+install(FILES ${HEADER_FILES}
+  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+)
+

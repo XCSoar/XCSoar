@@ -1,0 +1,23 @@
+set(_SOURCES
+        NMEA/Acceleration.cpp
+        NMEA/Aircraft.cpp
+        NMEA/Attitude.cpp
+        NMEA/Checksum.cpp
+        NMEA/CirclingInfo.cpp
+        NMEA/ClimbHistory.cpp
+        NMEA/ClimbInfo.cpp
+        NMEA/Derived.cpp
+        NMEA/ExternalSettings.cpp
+        NMEA/FlyingState.cpp
+        NMEA/GPSState.cpp
+        NMEA/Info.cpp
+        NMEA/InputLine.cpp
+        NMEA/MoreData.cpp
+        NMEA/SwitchState.cpp
+        NMEA/ThermalLocator.cpp
+        NMEA/VarioInfo.cpp
+)
+
+set(SCRIPT_FILES
+    CMakeSource.cmake
+)

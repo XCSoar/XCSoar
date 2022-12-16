@@ -1,0 +1,53 @@
+set(_SOURCES
+        Computer/AutoQNH.cpp
+        Computer/AverageVarioComputer.cpp
+        Computer/BasicComputer.cpp
+        Computer/CirclingComputer.cpp
+        Computer/ClimbAverageCalculator.cpp
+        Computer/ConditionMonitor/ConditionMonitor.cpp
+        Computer/ConditionMonitor/ConditionMonitorAATTime.cpp
+        Computer/ConditionMonitor/ConditionMonitorFinalGlide.cpp
+        Computer/ConditionMonitor/ConditionMonitorGlideTerrain.cpp
+        Computer/ConditionMonitor/ConditionMonitorLandableReachable.cpp
+        Computer/ConditionMonitor/ConditionMonitors.cpp
+        Computer/ConditionMonitor/ConditionMonitorSunset.cpp
+        Computer/ConditionMonitor/ConditionMonitorWind.cpp
+        Computer/ConditionMonitor/AirspaceEnterMonitor.cpp
+        Computer/ConditionMonitor/MoreConditionMonitors.cpp
+        Computer/ContestComputer.cpp
+        Computer/CuComputer.cpp
+        Computer/Events.cpp
+        Computer/FlyingComputer.cpp
+        Computer/GlideComputer.cpp
+        Computer/GlideComputerAirData.cpp
+        Computer/GlideComputerBlackboard.cpp
+        Computer/GlideComputerInterface.cpp
+        Computer/GlideRatioCalculator.cpp
+        Computer/GlideRatioComputer.cpp
+        Computer/GroundSpeedComputer.cpp
+        Computer/LiftDatabaseComputer.cpp
+        Computer/LogComputer.cpp
+        Computer/RouteComputer.cpp
+        Computer/Settings.cpp
+        Computer/StatsComputer.cpp
+        Computer/TaskComputer.cpp
+        Computer/ThermalBandComputer.cpp
+        Computer/ThermalBase.cpp
+        Computer/ThermalLocator.cpp
+        Computer/ThermalRecency.cpp
+        Computer/TraceComputer.cpp
+        Computer/WarningComputer.cpp
+        Computer/WaveComputer.cpp
+        Computer/Wind/CirclingWind.cpp
+        Computer/Wind/Computer.cpp
+        Computer/Wind/MeasurementList.cpp
+        Computer/Wind/Settings.cpp
+        Computer/Wind/Store.cpp
+        Computer/Wind/WindEKF.cpp
+        Computer/Wind/WindEKFGlue.cpp
+)
+
+set(SCRIPT_FILES
+    CMakeSource.cmake
+)
+

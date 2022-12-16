@@ -1,0 +1,57 @@
+cmake_minimum_required(VERSION 3.18)
+
+set (TARGET_NAME      libsodium)
+project(${TARGET_NAME})
+
+set(_INCLUDE_DIR  ${CMAKE_CURRENT_SOURCE_DIR}/src/libsodium/include)
+file(GLOB_RECURSE ${TARGET_NAME}_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/libsodium/*.c")
+file(GLOB_RECURSE HEADER_FILES "${_INCLUDE_DIR}/*.h")
+
+message(STATUS -- Sodium!!!)
+foreach(SRC ${${TARGET_NAME}_SOURCES})
+     set(${TARGET_NAME}_LIBRARY ${${TARGET_NAME}_LIBRARY} ${SRC})
+     message(STATUS -- Sodium:  ${SRC})
+endforeach()
+
+add_compile_definitions(SODIUM_STATIC)
+add_compile_definitions(SODIUM_EXPORT=)
+
+include_directories(
+    ${_INCLUDE_DIR}
+    ${_INCLUDE_DIR}/sodium
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/quirks  # test only 
+)
+
+set(EXAMPLE "This is an example")
+set(VERSION "1.0")
+set(NUMBER 3)
+
+set(VERSION "1.0.18")
+
+set(SODIUM_LIBRARY_VERSION_MAJOR 10)
+set(SODIUM_LIBRARY_VERSION_MINOR 3)
+set(SODIUM_LIBRARY_MINIMAL_DEF )
+
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/libsodium/include/sodium/version.h.in 
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/libsodium/include/sodium/version.h
+)
+
+# add_definitions(-DLUA_ANSI=1)
+add_library(${TARGET_NAME} STATIC ${${TARGET_NAME}_LIBRARY} ${HEADER_FILES})
+
+install(TARGETS ${TARGET_NAME}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+foreach(header ${HEADER_FILES})
+    string(REPLACE "${_INCLUDE_DIR}/" "" inc_file ${header})
+    get_filename_component(inc_path ${inc_file} DIRECTORY)
+    install(FILES ${header}  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${inc_path}")
+endforeach()
+
+##message(FATAL_ERROR +++ Sodium: Stop!)
+
+

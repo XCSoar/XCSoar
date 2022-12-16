@@ -1,0 +1,42 @@
+set(_SOURCES
+        InfoBoxes/Content/Airspace.cpp
+        InfoBoxes/Content/Alternate.cpp
+        InfoBoxes/Content/Altitude.cpp
+        InfoBoxes/Content/Base.cpp
+        InfoBoxes/Content/Contest.cpp
+        InfoBoxes/Content/Direction.cpp
+        InfoBoxes/Content/Factory.cpp
+        InfoBoxes/Content/Glide.cpp
+        InfoBoxes/Content/MacCready.cpp
+        InfoBoxes/Content/Other.cpp
+        InfoBoxes/Content/Places.cpp
+        InfoBoxes/Content/Radio.cpp
+        InfoBoxes/Content/Speed.cpp
+        InfoBoxes/Content/Task.cpp
+        InfoBoxes/Content/Team.cpp
+        InfoBoxes/Content/Terrain.cpp
+        InfoBoxes/Content/Thermal.cpp
+        InfoBoxes/Content/Time.cpp
+        InfoBoxes/Content/Trace.cpp
+        InfoBoxes/Content/Weather.cpp
+        InfoBoxes/Data.cpp
+        InfoBoxes/Format.cpp
+        InfoBoxes/InfoBoxLayout.cpp
+        InfoBoxes/InfoBoxManager.cpp
+        InfoBoxes/InfoBoxSettings.cpp
+        InfoBoxes/InfoBoxWindow.cpp
+        InfoBoxes/Panel/AltitudeInfo.cpp
+        InfoBoxes/Panel/AltitudeSetup.cpp
+        InfoBoxes/Panel/AltitudeSimulator.cpp
+        InfoBoxes/Panel/ATCReference.cpp
+        InfoBoxes/Panel/ATCSetup.cpp
+        InfoBoxes/Panel/MacCreadyEdit.cpp
+        InfoBoxes/Panel/MacCreadySetup.cpp
+        InfoBoxes/Panel/RadioEdit.cpp
+        InfoBoxes/Panel/WindEdit.cpp
+        InfoBoxes/Units.cpp
+)
+
+set(SCRIPT_FILES
+    CMakeSource.cmake
+)
