@@ -64,9 +64,14 @@ Port::FullWrite(const void *buffer, std::size_t length,
                 std::chrono::steady_clock::duration _timeout)
 {
   const TimeoutClock timeout(_timeout);
-
+#ifdef _DEBUG  // TODO(August2111)
+  int iLoop = 0;
+#endif
   const char *p = (const char *)buffer, *end = p + length;
   while (p < end) {
+#ifdef _DEBUG
+    iLoop++; // TODO(August2111)
+#endif
     if (timeout.HasExpired())
       throw DeviceTimeout{"Port write timeout"};
 
