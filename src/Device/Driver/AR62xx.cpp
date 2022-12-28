@@ -101,7 +101,8 @@ class AR62xxDevice final : public AbstractDevice {
   //! Port the radio is connected to (from KRT2.cpp)
   Port &port; 
   //! Expected message length just receiving (from KRT2.cpp)
-  size_t expected_msg_length{};
+  // (at least currently) unused for AR62xx driver
+  // size_t expected_msg_length{};
   //! Buffer for messages from radio (from KRT2.cpp)
   StaticFifoBuffer<uint8_t, 256u> rx_buf;
   //! Last response received from the radio (frome KRT2.cpp)
@@ -614,9 +615,11 @@ AR62xxDevice::PutStandbyFrequency(RadioFrequency frequency,
 /*
  * Assign the selected port on Object construction
  * same as in KRT2.cpp
+ * TB 28.12.22: added [[maybe_unused]] to "&config" parameter as otherwise a compile error will be thrown as this parameter is indeed
+ * currently unused
  */
 static Device *
-AR62xxCreateOnPort(const DeviceConfig &config, 
+AR62xxCreateOnPort([[maybe_unused]] const DeviceConfig &config, 
                                   Port &comPort)
 {
   Device *dev = new AR62xxDevice(comPort);
