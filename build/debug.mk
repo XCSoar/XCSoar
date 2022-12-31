@@ -11,25 +11,8 @@ else
   OPTIMIZE += -DNDEBUG
 endif
 
-TARGET_OPTIMIZE :=
+TARGET_OPTIMIZE := -g
 HOST_OPTIMIZE := -g
-
-ifeq ($(CLANG),y)
-  TARGET_OPTIMIZE += -g
-else
-ifeq ($(HAVE_WIN32)$(X64),yn)
-  # WINE works best with stabs debug symbols (winedbg doesn't
-  # understand Dwarf, which is GCC's default)
-
-  # .. but on WIN64, stabs doesn't work because its relocations are
-  # limit to 32 bit, causing the dreaded "relocation truncated to fit:
-  # IMAGE_REL_AMD64_ADDR32" linker error, so we use Dwarf on WIN64
-
-  TARGET_OPTIMIZE += -gstabs
-else
-  TARGET_OPTIMIZE += -g
-endif
-endif
 
 # Enable fast floating point math.  XCSoar does not rely on strict
 # IEEE/ISO semantics, for example it is not interested in "errno" or
