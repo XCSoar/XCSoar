@@ -193,10 +193,6 @@ public:
 		SetOption(CURLOPT_POSTFIELDSIZE, (long)size);
 	}
 
-	void SetHttpPost(const struct curl_httppost *post) {
-		SetOption(CURLOPT_HTTPPOST, post);
-	}
-
 	void SetMimePost(const curl_mime *mime) {
 		SetOption(CURLOPT_MIMEPOST, mime);
 	}
