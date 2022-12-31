@@ -1,7 +1,7 @@
-Index: boost_1_80_0/boost/math/policies/error_handling.hpp
+Index: boost_1_81_0/boost/math/policies/error_handling.hpp
 ===================================================================
---- boost_1_80_0.orig/boost/math/policies/error_handling.hpp
-+++ boost_1_80_0/boost/math/policies/error_handling.hpp
+--- boost_1_81_0.orig/boost/math/policies/error_handling.hpp
++++ boost_1_81_0/boost/math/policies/error_handling.hpp
 @@ -9,7 +9,7 @@
  #define BOOST_MATH_POLICY_ERROR_HANDLING_HPP
  
@@ -36,15 +36,15 @@ Index: boost_1_80_0/boost/math/policies/error_handling.hpp
  
  inline void replace_all_in_string(std::string& result, const char* what, const char* with)
  {
-@@ -152,6 +154,7 @@ void raise_error(const char* pfunction,
-   BOOST_MATH_THROW_EXCEPTION(e)
+@@ -155,6 +157,7 @@ void raise_error(const char* pfunction,
+   BOOST_MATH_THROW_EXCEPTION(E(msg))
  }
  
 +#if 0
  template <class E, class T>
  void raise_error(const char* pfunction, const char* pmessage, const T& val)
  {
-@@ -207,6 +210,7 @@ inline constexpr T raise_domain_error(
+@@ -213,6 +216,7 @@ inline constexpr T raise_domain_error(
     // to be ignored so here we go anyway:
     return std::numeric_limits<T>::quiet_NaN();
  }
@@ -52,7 +52,7 @@ Index: boost_1_80_0/boost/math/policies/error_handling.hpp
  
  template <class T>
  inline T raise_domain_error(
-@@ -231,6 +235,7 @@ inline T raise_domain_error(
+@@ -237,6 +241,7 @@ inline T raise_domain_error(
     return user_domain_error(function, message, val);
  }
  
@@ -60,7 +60,7 @@ Index: boost_1_80_0/boost/math/policies/error_handling.hpp
  template <class T>
  inline T raise_pole_error(
             const char* function,
-@@ -244,6 +249,7 @@ inline T raise_pole_error(
+@@ -250,6 +255,7 @@ inline T raise_pole_error(
     return boost::math::policies::detail::raise_domain_error(function, message, val,  ::boost::math::policies::domain_error< ::boost::math::policies::throw_on_error>());
  #endif
  }
@@ -68,7 +68,7 @@ Index: boost_1_80_0/boost/math/policies/error_handling.hpp
  
  template <class T>
  inline constexpr T raise_pole_error(
-@@ -275,6 +281,7 @@ inline T raise_pole_error(
+@@ -281,6 +287,7 @@ inline T raise_pole_error(
     return user_pole_error(function, message, val);
  }
  
@@ -76,7 +76,7 @@ Index: boost_1_80_0/boost/math/policies/error_handling.hpp
  template <class T>
  inline T raise_overflow_error(
             const char* function,
-@@ -316,6 +323,7 @@ inline constexpr T raise_overflow_error(
+@@ -322,6 +329,7 @@ inline constexpr T raise_overflow_error(
     // to be ignored so here we go anyway:
     return std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
  }
@@ -84,7 +84,7 @@ Index: boost_1_80_0/boost/math/policies/error_handling.hpp
  
  template <class T>
  inline constexpr T raise_overflow_error(
-@@ -377,6 +385,7 @@ inline T raise_overflow_error(
+@@ -383,6 +391,7 @@ inline T raise_overflow_error(
     return user_overflow_error(function, m.c_str(), std::numeric_limits<T>::infinity());
  }
  
@@ -92,7 +92,7 @@ Index: boost_1_80_0/boost/math/policies/error_handling.hpp
  template <class T>
  inline T raise_underflow_error(
             const char* function,
-@@ -391,6 +400,7 @@ inline T raise_underflow_error(
+@@ -397,6 +406,7 @@ inline T raise_underflow_error(
     return 0;
  #endif
  }
@@ -100,7 +100,7 @@ Index: boost_1_80_0/boost/math/policies/error_handling.hpp
  
  template <class T>
  inline constexpr T raise_underflow_error(
-@@ -424,6 +434,7 @@ inline T raise_underflow_error(
+@@ -430,6 +440,7 @@ inline T raise_underflow_error(
     return user_underflow_error(function, message, T(0));
  }
  
@@ -108,7 +108,7 @@ Index: boost_1_80_0/boost/math/policies/error_handling.hpp
  template <class T>
  inline T raise_denorm_error(
             const char* function,
-@@ -439,6 +450,7 @@ inline T raise_denorm_error(
+@@ -445,6 +456,7 @@ inline T raise_denorm_error(
     return T(0);
  #endif
  }
@@ -116,7 +116,7 @@ Index: boost_1_80_0/boost/math/policies/error_handling.hpp
  
  template <class T>
  inline constexpr T raise_denorm_error(
-@@ -475,6 +487,7 @@ inline T raise_denorm_error(
+@@ -481,6 +493,7 @@ inline T raise_denorm_error(
     return user_denorm_error(function, message, val);
  }
  
@@ -124,7 +124,7 @@ Index: boost_1_80_0/boost/math/policies/error_handling.hpp
  template <class T>
  inline T raise_evaluation_error(
             const char* function,
-@@ -490,6 +503,7 @@ inline T raise_evaluation_error(
+@@ -496,6 +509,7 @@ inline T raise_evaluation_error(
     return T(0);
  #endif
  }
@@ -132,7 +132,7 @@ Index: boost_1_80_0/boost/math/policies/error_handling.hpp
  
  template <class T>
  inline constexpr T raise_evaluation_error(
-@@ -526,6 +540,7 @@ inline T raise_evaluation_error(
+@@ -532,6 +546,7 @@ inline T raise_evaluation_error(
     return user_evaluation_error(function, message, val);
  }
  
@@ -140,7 +140,7 @@ Index: boost_1_80_0/boost/math/policies/error_handling.hpp
  template <class T, class TargetType>
  inline TargetType raise_rounding_error(
             const char* function,
-@@ -542,6 +557,7 @@ inline TargetType raise_rounding_error(
+@@ -548,6 +563,7 @@ inline TargetType raise_rounding_error(
     return TargetType(0);
  #endif
  }
@@ -148,7 +148,7 @@ Index: boost_1_80_0/boost/math/policies/error_handling.hpp
  
  template <class T, class TargetType>
  inline constexpr TargetType raise_rounding_error(
-@@ -597,6 +613,7 @@ inline TargetType raise_rounding_error(
+@@ -588,6 +604,7 @@ inline TargetType raise_rounding_error(
     return user_rounding_error(function, message, val, t);
  }
  
@@ -156,7 +156,7 @@ Index: boost_1_80_0/boost/math/policies/error_handling.hpp
  template <class T, class R>
  inline T raise_indeterminate_result_error(
             const char* function,
-@@ -613,6 +630,7 @@ inline T raise_indeterminate_result_erro
+@@ -604,6 +621,7 @@ inline T raise_indeterminate_result_erro
     return std::numeric_limits<T>::quiet_NaN();
  #endif
  }

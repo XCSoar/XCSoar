@@ -39,7 +39,7 @@ tag_invoke(boost::json::value_from_tag, boost::json::value &jv,
            const GeoPoint &request) noexcept
 {
   jv = {
-    {"longitude", request.longitude},
-    {"latitude", request.latitude},
+    {"longitude", boost::json::value_from(request.longitude)},
+    {"latitude", boost::json::value_from(request.latitude)},
   };
 }
