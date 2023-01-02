@@ -361,6 +361,7 @@ LarusDevice::POV(NMEAInputLine &line, NMEAInfo &info)
         info.voltage_available.Update(info.clock);
         break;
       }
+      // R needs to be swapped for other sentence
       case 'R': {
         info.attitude.bank_angle = Angle::Degrees(value);
         info.attitude.bank_angle_available.Update(info.clock);
