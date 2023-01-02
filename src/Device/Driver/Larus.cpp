@@ -341,11 +341,11 @@ LarusDevice::POV(NMEAInputLine &line, NMEAInfo &info)
         info.ProvideDynamicPressure(pressure);
         break;
       }
-      case 'R': {
+      /**case 'R': {
         AtmosphericPressure pressure = AtmosphericPressure::HectoPascal(value);
         info.ProvidePitotPressure(pressure);
         break;
-      }
+      }**/
       case 'S': {
         value = Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR);
         info.ProvideTrueAirspeed(value);
@@ -359,6 +359,21 @@ LarusDevice::POV(NMEAInputLine &line, NMEAInfo &info)
       case 'V': {
         info.voltage = value;
         info.voltage_available.Update(info.clock);
+        break;
+      }
+      case 'R': {
+        info.attitude.bank_angle = Angle::Degrees(value);
+        info.attitude.bank_angle_available.Update(info.clock);
+        break;
+      }
+      case 'N': {
+        info.attitude.pitch_angle = Angle::Degrees(value);
+        info.attitude.pitch_angle_available.Update(info.clock);
+        break;
+      }
+      case 'Y': {
+        info.attitude.heading = Angle::Degrees(value);
+        info.attitude.heading_available.Update(info.clock);
         break;
       }
     }
