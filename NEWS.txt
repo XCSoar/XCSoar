@@ -6,6 +6,8 @@ Version 7.29 - not yet released
   - get rid of not usable USB interfaces in the 'Device -> Port' list
 * Kobo
   - Add support for Libra H2O
+* Polars
+  - Add LS-5 polar
 
 Version 7.28 - 2022/10/29
 * data files
