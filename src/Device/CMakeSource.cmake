@@ -60,6 +60,7 @@ set(_SOURCES
         Device/Driver/IMI/Protocol/Protocol.cpp
         Device/Driver/IMI/Register.cpp
         Device/Driver/KRT2.cpp
+        Device/Driver/Larus.cpp
         Device/Driver/Leonardo.cpp
         Device/Driver/LevilAHRS_G.cpp
         Device/Driver/LX/Convert.cpp
