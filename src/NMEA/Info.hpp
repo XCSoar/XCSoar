@@ -277,17 +277,30 @@ struct NMEAInfo {
   //################
 
   /**
-   * Is external wind information available?
+   * Is external average wind information available?
    * @see ExternalWindSpeed
    * @see ExternalWindDirection
    */
   Validity external_wind_available;
 
   /**
-   * The wind read from the device.  If ExternalWindAvailable is
+   * The average wind read from the device.  If ExternalWindAvailable is
    * false, then this value is undefined.
    */
   SpeedVector external_wind;
+
+  /**
+   * Is external instantaneous wind information available?
+   * @see ExternalWindSpeed
+   * @see ExternalWindDirection
+   */
+  Validity external_instantaneous_wind_available;
+
+  /**
+   * The instantaneous wind read from the device.  If ExternalWindAvailable is
+   * false, then this value is undefined.
+   */
+  SpeedVector external_instantaneous_wind;
 
   /**
    * Is temperature information available?
@@ -590,12 +603,21 @@ struct NMEAInfo {
   }
 
   /**
-   * Set the external wind value.
+   * Set the external average wind value.
    */
   void ProvideExternalWind(const SpeedVector &value) {
     external_wind = value;
     external_wind_available.Update(clock);
   }
+
+  /**
+   * Set the external instantaneous wind value.
+   */
+  void ProvideExternalInstantaneousWind(const SpeedVector &value) {
+    external_instantaneous_wind = value;
+    external_instantaneous_wind_available.Update(clock);
+  }
+
 
   /**
    * Clears all information, start with tabula rasa.
