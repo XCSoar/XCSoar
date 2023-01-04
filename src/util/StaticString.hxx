@@ -42,6 +42,7 @@
 
 #ifdef _UNICODE
 #include <wchar.h>
+#include "WStringCompare.hxx"
 #endif
 
 bool
