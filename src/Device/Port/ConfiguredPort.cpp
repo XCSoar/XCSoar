@@ -100,15 +100,10 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
       throw std::runtime_error("No port path configured");
 
 #ifdef _WIN32
-    StaticString<0x20> port_path;
-    // use the windows style of device names:
-    port_path.Format(_T("\\\\.\\%s"), config.path.c_str());
-    if (!port_path.empty() && port_path.back() == TCHAR(':')) {
-      /* On Windows strip the trailing colon if the port name setting
-      has the old style 'COMx:' instead of 'COMx' */
-      port_path.Truncate(port_path.length() - 1);
-    }
-    path = port_path.c_str();
+    // the usual windows style of device names:
+    _tcscpy(buffer, _T("\\\\.\\"));
+    _tcscat(buffer, config.path.c_str());
+    path = buffer;
 #else
     path = config.path.c_str();
 #endif
