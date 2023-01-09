@@ -136,42 +136,29 @@ namespace InfoBoxFactory
     e_CruiseEfficiency,
     e_WindArrow,
     e_ThermalAssistant,
-
+    // 100..109
     e_StartOpenLine,
     e_StartOpenArrivalLine,
-
     e_NextRadial,
     e_ATC_Radial,
-
     e_TaskSpeedHour,
     e_WP_NominalDistance,  // The nominal distance to the currently select ...
-
     e_CircleDiameter,
-
     e_TakeOffDistance,
     e_ContestSpeed,
-
     e_Final_MC0_Altitude,
-
     // 110..119 
     e_NextWPArrow,
     e_WP_Estimation, // Estimated arrival time at next waypoint assuming ...
-
     e_NonCircling_Climb_Perc,
-
     e_Climb_Perc_Chart,
-
     e_NbrSat, // Number of used Sat by GPS module 
-
     e_ActiveRadio, // Active Radio Frequency 
-
     e_StandbyRadio, // Standby Radio Frequency 
     e_Thermal_Time, // Time in Thermal
-
     e_Alternate_2_GR, // Geometric gradient to the arrival height above the ...
-
     e_HeartRate,
-
+    // 120.. 
     e_NUM_TYPES // Last item 
   };
 
