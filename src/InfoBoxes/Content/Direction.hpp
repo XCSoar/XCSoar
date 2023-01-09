@@ -31,3 +31,8 @@ public:
   void Update(InfoBoxData &data) noexcept override;
   bool HandleKey(const InfoBoxKeyCodes keycode) noexcept override;
 };
+
+class InfoBoxDrift : public InfoBoxContent {
+public:
+  void Update(InfoBoxData &data) noexcept override;
+};

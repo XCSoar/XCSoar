@@ -60,3 +60,15 @@ InfoBoxContentTrack::HandleKey(const InfoBoxKeyCodes keycode) noexcept
 
   return false;
 }
+
+void InfoBoxDrift::Update(InfoBoxData &data) noexcept {
+  const NMEAInfo &basic = CommonInterface::Basic();
+
+  if (!basic.track_available && !basic.attitude.heading_available) {
+    data.SetInvalid();
+    return;
+  }
+
+  Angle Value = basic.track - basic.attitude.heading;
+  data.SetValueFromBearingDifference(Value);
+}

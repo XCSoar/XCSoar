@@ -1133,6 +1133,14 @@ static constexpr MetaData meta_data[] = {
   },
 
   // 120.. 
+  // e_DriftAngle - TestBox for Track-Heading
+  {
+    N_("Drift Angle"), 
+    N_("Drift"), 
+    N_("Drift angle (Track - True Heading."),
+    IBFHelper<InfoBoxDrift>::Create,
+  },
+
   // e_NUM_TYPES // Last item 
  
 };

@@ -159,7 +159,9 @@ namespace InfoBoxFactory
     e_Alternate_2_GR, // Geometric gradient to the arrival height above the ...
     e_HeartRate, // Heart rate in beats per minute.
     // 120.. 
-    e_NUM_TYPES // Last item 
+    e_DriftAngle,
+
+    e_NUM_TYPES /* Last item */
   };
 
   static constexpr Type NUM_TYPES = e_NUM_TYPES;
