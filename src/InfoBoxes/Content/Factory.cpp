@@ -131,6 +131,7 @@ struct MetaData {
  */
 
 static constexpr MetaData meta_data[] = {
+  // 0..9 
   // e_HeightGPS
   {
     N_("Altitude GPS"),
@@ -213,6 +214,7 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxThermalLastTime,
   },
 
+  // 10..19 
   // e_MacCready
   {
     N_("MacCready setting"),
@@ -296,6 +298,7 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxFinalGR,
   },
 
+  // 20..29 
   // e_H_Terrain
   {
     N_("Terrain elevation"),
@@ -378,6 +381,7 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxTaskAADistanceMin,
   },
 
+  // 30..39 
   // e_AA_SpeedMax
   {
     N_("AAT speed max. distance"),
@@ -460,6 +464,7 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxTimeLocal,
   },
 
+  // 40..49 
   // e_TimeUTC
   {
     N_("Time UTC"),
@@ -542,6 +547,7 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxHumidity,
   },
 
+  // 50..59 
   // e_Home_Temperature
   {
     N_("Forecast temperature"),
@@ -622,6 +628,7 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxTaskSpeedInstant,
   },
 
+  // 60..69 
   // e_Home_Distance
   {
     N_("Distance home"),
@@ -702,6 +709,7 @@ static constexpr MetaData meta_data[] = {
     IBFHelperInt<InfoBoxContentAlternateGR, 0>::Create,
   },
 
+  // 70..79 
   // e_H_QFE
   {
     N_("Height above take-off"),
@@ -785,6 +793,7 @@ static constexpr MetaData meta_data[] = {
     IBFHelper<InfoBoxContentBarogram>::Create,
   },
 
+  // 80..89 
   // e_Vario_spark
   {
     N_("Vario trace"),
@@ -866,6 +875,7 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxNearestAirspaceHorizontal,
   },
 
+  // 90..99 
   // e_NearestAirspaceVertical
   {
     N_("Nearest airspace vertical"),
@@ -892,7 +902,7 @@ static constexpr MetaData meta_data[] = {
     wind_infobox_panels,
   },
 
-  // TerrainCollision
+  // e_TerrainCollision
   {
     N_("Terrain collision"),
     N_("Terr Coll"),
@@ -900,6 +910,7 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxTerrainCollision,
   },
 
+   // e_NavAltitude
   {
     N_("Altitude (Auto)"),
     N_("Alt Auto"),
@@ -908,7 +919,7 @@ static constexpr MetaData meta_data[] = {
     altitude_infobox_panels,
   },
 
-  // NextLegEqThermal
+  // e_NextLegEqThermal
   {
     N_("Thermal next leg equivalent"),
     N_("T Next Leg"),
@@ -916,7 +927,7 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxNextLegEqThermal,
   },
 
-  // HeadWindSimplified
+  // e_HeadWindSimplified
   {
     N_("Wind, head component (simplified)"),
     N_("Head Wind *"),
@@ -925,6 +936,7 @@ static constexpr MetaData meta_data[] = {
     wind_infobox_panels,
   },
 
+  // e_CruiseEfficiency
   {
     N_("Task cruise efficiency"),
     N_("Cruise Eff"),
@@ -934,6 +946,7 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxCruiseEfficiency,
   },
 
+  // e_WindArrow
   {
     N_("Wind arrow"),
     N_("Wind"),
@@ -941,6 +954,7 @@ static constexpr MetaData meta_data[] = {
     IBFHelper<InfoBoxContentWindArrow>::Create,
   },
 
+  // e_ThermalAssistant
   {
     N_("Thermal assistant"),
     N_("Thermal"),
@@ -948,6 +962,8 @@ static constexpr MetaData meta_data[] = {
     IBFHelper<InfoBoxContentThermalAssistant>::Create,
   },
 
+  // 100..109
+  // e_StartOpenLine
   {
     N_("Start open/close countdown"),
     N_("Start open"),
@@ -955,6 +971,7 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxStartOpen,
   },
 
+  // e_StartOpenArrivalLine
   {
     N_("Start open/close countdown at reaching"),
     N_("Start reach"),
@@ -962,6 +979,7 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxStartOpenArrival,
   },
 
+  // e_NextRadial,
   {
     N_("Next radial"),
     N_("Radial"),
@@ -970,6 +988,7 @@ static constexpr MetaData meta_data[] = {
     next_waypoint_infobox_panels,
   },
 
+  // e_ATC_Radial
   {
     N_("ATC radial"),
     N_("ATC radial"),
@@ -978,6 +997,7 @@ static constexpr MetaData meta_data[] = {
     atc_infobox_panels,
   },
 
+  // e_TaskSpeedHour
   {
     N_("Speed task last hour"),
     N_("V Task H"),
@@ -985,7 +1005,7 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxTaskSpeedHour,
   },
 
-  // WP_NOMINAL_DIST
+  // e_WP_NominalDistance
   {
     N_("Next distance (nominal)"),
     N_("WP Dist-N"),
@@ -994,6 +1014,7 @@ static constexpr MetaData meta_data[] = {
     next_waypoint_infobox_panels,
   },
 
+  // e_CircleDiameter
   {
     N_("Circle diameter"),
     N_("Circle D"),
@@ -1001,6 +1022,7 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxCircleDiameter,
   },
 
+  // e_TakeOffDistance
   {
     N_("Distance takeoff"),
     N_("Takeoff Dist"),
@@ -1008,7 +1030,7 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxTakeoffDistance,
   },
 
-  // CONTEST_SPEED
+  // e_ContestSpeed
   {
     N_("Contest speed"),
     N_("Cont Speed"),
@@ -1016,6 +1038,7 @@ static constexpr MetaData meta_data[] = {
     IBFHelper<InfoBoxContentContestSpeed>::Create,
   },
 
+  // e_Final_MC0_Altitude
   {
     N_("Final MC0 altitude difference"),
     N_("Fin MC0 AltD"),
@@ -1023,7 +1046,8 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxFinalMC0AltitudeDiff,
   },
 
-  // NEXT_ARROW
+  // 110..119
+  // e_NextWPArrow
   {
     N_("Next arrow"),
     N_("Next arrow"),
@@ -1035,7 +1059,7 @@ static constexpr MetaData meta_data[] = {
     IBFHelper<InfoBoxContentNextArrow>::Create,
   },
 
-  // e_WP_ETA_VMG
+  // e_WP_Estimation
   {
     N_("Next waypoint arrival time (ground speed)"),
     N_("WP ETA VMG"),
@@ -1076,6 +1100,7 @@ static constexpr MetaData meta_data[] = {
     IBFHelper<InfoBoxContentActiveRadioFrequency>::Create,
   },
 
+  // e_StandbyRadio
   {
     N_("Standby Radio Frequency"),
     N_("Stby Freq"),
@@ -1107,6 +1132,9 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxHeartRate,
   },
 
+  // 120.. 
+  // e_NUM_TYPES // Last item 
+ 
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,
