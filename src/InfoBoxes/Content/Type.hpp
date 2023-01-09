@@ -129,33 +129,33 @@ namespace InfoBoxFactory
     e_NearestAirspaceVertical,
     e_WP_MC0AltDiff,
     e_HeadWind,
-    TerrainCollision,
-    NavAltitude,
-    NextLegEqThermal,
-    HeadWindSimplified,
-    CruiseEfficiency,
-    WIND_ARROW,
-    THERMAL_ASSISTANT,
+    e_TerrainCollision,
+    e_NavAltitude,
+    e_NextLegEqThermal,
+    e_HeadWindSimplified,
+    e_CruiseEfficiency,
+    e_WindArrow,
+    e_ThermalAssistant,
 
-    START_OPEN_TIME,
-    START_OPEN_ARRIVAL_TIME,
+    e_StartOpenLine,
+    e_StartOpenArrivalLine,
 
-    NEXT_RADIAL,
-    ATC_RADIAL,
+    e_NextRadial,
+    e_ATC_Radial,
 
-    TASK_SPEED_HOUR,
-    WP_NOMINAL_DIST, /* The nominal distance to the currently selected waypoint. For AAT tasks, this is the distance to the origin of the AAT sector */
+    e_TaskSpeedHour,
+    e_WP_NominalDistance,  /* The nominal distance to the currently selected waypoint. For AAT tasks, this is the distance to the origin of the AAT sector */
 
-    CIRCLE_DIAMETER,
+    e_CircleDiameter,
 
-    TAKEOFF_DISTANCE,
-    CONTEST_SPEED,
+    e_TakeOffDistance,
+    e_ContestSpeed,
 
-    FIN_MC0_ALTD,
+    e_Final_MC0_Altitude,
 
     /* 110..119 */
-    NEXT_ARROW,
-    e_WP_ETA_VMG, /* Estimated arrival time at next waypoint assuming current speed is maintained*/
+    e_NextWPArrow,
+    e_WP_Estimation, /* Estimated arrival time at next waypoint assuming current speed is maintained*/
 
     e_NonCircling_Climb_Perc,
 
