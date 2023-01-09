@@ -54,7 +54,10 @@ SystemLoadCPU() noexcept
     unsigned dt_user = userTime-userTime_last;
     unsigned dt_kernel = kernelTime-kernelTime_last;
     unsigned dt = tick-tick_last;
-    retval = (100*(dt_user+dt_kernel))/dt;
+    if (dt)
+      retval = (100 * (dt_user + dt_kernel)) / dt;
+    else
+      retval = 0;
   }
 
   tick_last = tick;
