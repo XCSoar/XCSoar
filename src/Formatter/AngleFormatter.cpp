@@ -59,7 +59,7 @@ FormatAngleDelta(TCHAR *buffer, size_t size, Angle value)
   else if (degrees < -1)
     StringFormat(buffer, size, _T("«%u°"), unsigned(-degrees));
   else
-    _tcscpy(buffer, _T("«»"));
+    _tcscpy(buffer, _T("« * »"));
 }
 
 void
