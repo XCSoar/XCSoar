@@ -103,7 +103,7 @@ InfoBoxManager::DisplayInfoBox() noexcept
 
     InfoBoxFactory::Type DisplayType = settings.contents[i];
     if ((unsigned)DisplayType > (unsigned)InfoBoxFactory::MAX_TYPE_VAL)
-      DisplayType = InfoBoxFactory::NavAltitude;
+      DisplayType = InfoBoxFactory::e_NavAltitude;
 
     bool needupdate = ((DisplayType != DisplayTypeLast[i]) || first);
 
