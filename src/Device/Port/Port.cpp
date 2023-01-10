@@ -34,6 +34,11 @@ Copyright_License {
 
 #include <string.h>
 
+#if defined(__MSVC__) && defined(_DEBUG)
+# include <errhandlingapi.h>
+# include <iostream>
+#endif
+
 Port::Port(PortListener *_listener, DataHandler &_handler) noexcept
   :listener(_listener), handler(_handler) {}
 
@@ -76,6 +81,15 @@ Port::FullWrite(const void *buffer, std::size_t length,
       throw DeviceTimeout{"Port write timeout"};
 
     std::size_t nbytes = Write(p, end - p);
+#if defined(__MSVC__) && defined(_DEBUG)
+    if (nbytes == 0) {
+      // August2111: Wie kann p < end sein und bei Write(p, end - p) nur 0
+      // herauskommen
+      auto error = GetLastError();
+      std::cout << "Error: " << error << std ::endl;
+      break; // TODO(August2111)
+    }
+#endif
     assert(nbytes > 0);
 
     if (env.IsCancelled())
