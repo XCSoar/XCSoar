@@ -31,6 +31,7 @@ Copyright_License {
 #include "Math/Util.hpp"
 #include "Math/Screen.hpp"
 #include "NMEA/Derived.hpp"
+#include "NMEA/MoreData.hpp"
 #include "Units/Units.hpp"
 #include "util/Macros.hpp"
 #include "MapSettings.hpp"
@@ -47,7 +48,8 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
                              unsigned tail_length,
                              WindArrowStyle arrow_style,
                              int offset,
-                             unsigned scale) noexcept
+                             unsigned scale,
+                             const Brush &brush) noexcept
 {
   // Draw arrow
 
@@ -62,7 +64,7 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
   PolygonRotateShift({arrow, ARRAY_SIZE(arrow)}, pos, angle, scale);
 
   canvas.Select(look.arrow_pen);
-  canvas.Select(look.arrow_brush);
+  canvas.Select(brush);
   {
 #ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
@@ -88,8 +90,8 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
 void
 WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const SpeedVector wind, const PixelPoint pos,
-                        const PixelRect &rc,
-                        WindArrowStyle arrow_style) noexcept
+                        const PixelRect &rc, WindArrowStyle arrow_style,
+                        const Brush &brush) noexcept
 {
   constexpr unsigned arrow_width = 6;
   constexpr unsigned arrow_tail_length = 3;
@@ -105,10 +107,9 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
             arrow_width, length, arrow_tail_length,
             arrow_style,
             arrow_offset,
-            scale);
+            scale, brush);
 
   // Draw wind speed label
-
   StaticString<12> buffer;
   buffer.Format(_T("%i"), iround(Units::ToUserWindSpeed(wind.norm)));
 
@@ -131,7 +132,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
 void
 WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const PixelPoint pos, const PixelRect &rc,
-                        const DerivedInfo &calculated,
+                        const DerivedInfo &calculated, const MoreData &basic,
                         const MapSettings &settings) noexcept
 {
   if (!calculated.wind_available ||
@@ -143,5 +144,17 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
     return;
 
   WindArrowRenderer::Draw(canvas, screen_angle, calculated.wind, pos, rc,
-                          settings.wind_arrow_style);
+                          settings.wind_arrow_style, 
+                          (calculated.wind_source == 
+                          DerivedInfo::WindSource::EXTERNAL) ?
+                          look.arrow_brush_extern : look.arrow_brush);
+
+  if (!basic.external_instantaneous_wind_available) {
+    return;
+  }
+
+  WindArrowRenderer::Draw(canvas, screen_angle,
+                          basic.external_instantaneous_wind, pos, rc,
+                          settings.wind_arrow_style,
+                          look.arrow_brush_instantaneous);
 }

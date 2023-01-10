@@ -241,8 +241,9 @@ InfoBoxContentWindArrow::Update(InfoBoxData &data) noexcept
   data.SetComment(buffer);
 }
 
-void 
-PaintWindArrow(Canvas &canvas, const PixelRect &rc, const SpeedVector &wind)
+void
+PaintWindArrow(Canvas &canvas, const PixelRect &rc,
+               const SpeedVector &wind, const Brush &brush) noexcept
 {
   constexpr unsigned arrow_width = 6;
   constexpr unsigned arrow_tail_length = 3;
@@ -267,7 +268,7 @@ PaintWindArrow(Canvas &canvas, const PixelRect &rc, const SpeedVector &wind)
 
   WindArrowRenderer renderer(UIGlobals::GetLook().wind_arrow_info_box);
   renderer.DrawArrow(canvas, pt, wind.bearing, arrow_width, length,
-                     arrow_tail_length, style, offset, scale);
+                     arrow_tail_length, style, offset, scale, brush);
 }
 
 void
@@ -278,11 +279,15 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas,
   const auto &info = CommonInterface::Calculated();
   const auto &basic = CommonInterface::Basic();
   auto rel_wind = info.wind;
+  const auto &look = UIGlobals::GetLook().wind_arrow_info_box;
   rel_wind.bearing -= basic.attitude.heading;
-  PaintWindArrow(canvas, rc, rel_wind);
+  PaintWindArrow(canvas, rc, rel_wind,
+                 info.wind_source == DerivedInfo::WindSource::EXTERNAL ?
+                 look.arrow_brush_extern : look.arrow_brush);
   if (basic.external_instantaneous_wind_available) {
     rel_wind = basic.external_instantaneous_wind;
     rel_wind.bearing -= basic.attitude.heading;
-    PaintWindArrow(canvas, rc, rel_wind);
+    PaintWindArrow(canvas, rc, rel_wind,
+                   look.arrow_brush_instantaneous);
   }
 }

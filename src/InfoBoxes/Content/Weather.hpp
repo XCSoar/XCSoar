@@ -25,8 +25,10 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Base.hpp"
 
-void
-UpdateInfoBoxHumidity(InfoBoxData &data) noexcept;
+struct SpeedVector;
+class Brush;
+
+void UpdateInfoBoxHumidity(InfoBoxData &data) noexcept;
 
 void
 UpdateInfoBoxTemperature(InfoBoxData &data) noexcept;
@@ -57,6 +59,10 @@ UpdateInfoBoxHeadWind(InfoBoxData &data) noexcept;
 
 void
 UpdateInfoBoxHeadWindSimplified(InfoBoxData &data) noexcept;
+
+void 
+PaintWindArrow(Canvas &canvas, const PixelRect &rc,
+  const SpeedVector &wind, const Brush &brush) noexcept;
 
 class InfoBoxContentWindArrow: public InfoBoxContent
 {

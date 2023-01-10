@@ -37,7 +37,7 @@ MapWindow::DrawWind(Canvas &canvas, const PixelPoint &Start,
 
   WindArrowRenderer wind_arrow_renderer(look.wind);
   wind_arrow_renderer.Draw(canvas, render_projection.GetScreenAngle(),
-                           Start, rc, Calculated(), GetMapSettings());
+                           Start, rc, Calculated(), Basic(), GetMapSettings());
 }
 
 void
