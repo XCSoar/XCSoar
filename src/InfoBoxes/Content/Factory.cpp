@@ -1141,8 +1141,26 @@ static constexpr MetaData meta_data[] = {
     IBFHelper<InfoBoxDrift>::Create,
   },
 
+  // e_InstantaneousWindSpeed
+  {
+    N_("Instantaneous Wind Speed"), 
+    N_("Inst. Wind Speed"), 
+    N_("Speed of Instantaneous Wind."),
+    UpdateInfoBoxInstWindSpeed,
+    wind_infobox_panels,
+  },
+
+  // e_InstantaneousWindBearing
+  {
+    N_("Instantaneous Wind Bearing"), 
+    N_("Inst. Wind"), 
+    N_("Bearing of Instantaneous Wind."),
+    UpdateInfoBoxInstWindBearing,
+    wind_infobox_panels,
+  },
+
   // e_NUM_TYPES // Last item 
- 
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

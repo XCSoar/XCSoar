@@ -160,6 +160,8 @@ namespace InfoBoxFactory
     e_HeartRate, // Heart rate in beats per minute.
     // 120.. 
     e_DriftAngle,
+    e_InstantaneousWindSpeed,
+    e_InstantaneousWindBearing,
 
     e_NUM_TYPES /* Last item */
   };

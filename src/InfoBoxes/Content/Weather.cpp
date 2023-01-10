@@ -149,6 +149,40 @@ UpdateInfoBoxWindBearing(InfoBoxData &data) noexcept
   data.SetComment(buffer);
 }
 
+void UpdateInfoBoxInstWindSpeed(InfoBoxData &data) noexcept {
+  const auto &info = CommonInterface::Basic();
+  if (!info.external_instantaneous_wind_available) {
+    data.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  data.SetValue(_T("%2.0f"),
+                Units::ToUserWindSpeed(info.external_instantaneous_wind.norm));
+
+  // Set Unit
+  data.SetValueUnit(Units::current.wind_speed_unit);
+
+  // Set Comment
+  data.SetComment(info.external_instantaneous_wind.bearing);
+}
+
+void UpdateInfoBoxInstWindBearing(InfoBoxData &data) noexcept
+{
+  const auto &info = CommonInterface::Basic();
+  if (!info.external_instantaneous_wind_available) {
+    data.SetInvalid();
+    return;
+  }
+
+  data.SetValue(info.external_instantaneous_wind.bearing);
+
+  TCHAR buffer[16];
+  FormatUserWindSpeed(info.external_instantaneous_wind.norm,
+                      buffer, true, false);
+  data.SetComment(buffer);
+}
+
 void
 UpdateInfoBoxHeadWind(InfoBoxData &data) noexcept
 {
@@ -207,14 +241,11 @@ InfoBoxContentWindArrow::Update(InfoBoxData &data) noexcept
   data.SetComment(buffer);
 }
 
-void
-InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas,
-                                       const PixelRect &rc) noexcept
+void 
+PaintWindArrow(Canvas &canvas, const PixelRect &rc, const SpeedVector &wind)
 {
   constexpr unsigned arrow_width = 6;
   constexpr unsigned arrow_tail_length = 3;
-
-  const auto &info = CommonInterface::Calculated();
 
   const auto pt = rc.GetCenter();
 
@@ -228,19 +259,30 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas,
 
   // Normalize the size because the Layout::Scale is applied
   // by the DrawArrow() function again
-  size = size * 100 / scale;
-
-  auto angle = info.wind.bearing - CommonInterface::Basic().attitude.heading;
-
-  const int length =
-    std::min(size, std::max(10u, uround(4 * info.wind.norm)));
+  const int length = std::min(size, std::max(10u, uround(4 * wind.norm)));
 
   const int offset = -length / 2;
 
-  auto style = CommonInterface::GetMapSettings().wind_arrow_style;
+  const auto style = CommonInterface::GetMapSettings().wind_arrow_style;
 
   WindArrowRenderer renderer(UIGlobals::GetLook().wind_arrow_info_box);
-  renderer.DrawArrow(canvas, pt, angle,
-                     arrow_width, length, arrow_tail_length,
-                     style, offset, scale);
+  renderer.DrawArrow(canvas, pt, wind.bearing, arrow_width, length,
+                     arrow_tail_length, style, offset, scale);
+}
+
+void
+InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas,
+                                       const PixelRect &rc) noexcept
+{
+ 
+  const auto &info = CommonInterface::Calculated();
+  const auto &basic = CommonInterface::Basic();
+  auto rel_wind = info.wind;
+  rel_wind.bearing -= basic.attitude.heading;
+  PaintWindArrow(canvas, rc, rel_wind);
+  if (basic.external_instantaneous_wind_available) {
+    rel_wind = basic.external_instantaneous_wind;
+    rel_wind.bearing -= basic.attitude.heading;
+    PaintWindArrow(canvas, rc, rel_wind);
+  }
 }

@@ -47,6 +47,12 @@ void
 UpdateInfoBoxWindBearing(InfoBoxData &data) noexcept;
 
 void
+UpdateInfoBoxInstWindSpeed(InfoBoxData &data) noexcept;
+
+void
+UpdateInfoBoxInstWindBearing(InfoBoxData &data) noexcept;
+
+void
 UpdateInfoBoxHeadWind(InfoBoxData &data) noexcept;
 
 void
