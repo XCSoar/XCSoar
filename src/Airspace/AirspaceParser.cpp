@@ -422,6 +422,7 @@ ReadAltitude(StringParser<TCHAR> &input)
     return altitude;
 
   default:
+    altitude = {0, 0, 0, AltitudeReference::STD};  // otherwise not initialized
     break;
   }
 
