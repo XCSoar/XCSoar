@@ -100,7 +100,18 @@ LoadPath(const ProfileMap &map, DeviceConfig &config, unsigned n)
 {
   char buffer[64];
   MakeDeviceSettingName(buffer, "Port", n, "Path");
+#ifdef _WIN32
+  bool retvalue = map.Get(buffer, config.path);
+  // the usual windows port names has no colon at the end
+  if (retvalue && (config.path.back() == TCHAR(':')) && 
+    (_tcsncmp(config.path, _T("COM"), 3) == 0)) {
+    // config.path.StartsWith(_T("COM"))) {
+    config.path[config.path.length() - 1] = 0;
+  }
+  return retvalue;
+#else
   return map.Get(buffer, config.path);
+#endif
 }
 
 static bool
