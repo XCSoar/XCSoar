@@ -169,15 +169,16 @@ struct TrafficList {
 #if MCS_WORKAROUND
   constexpr const FlarmTraffic *
   PreviousTraffic(const FlarmTraffic *t) const noexcept {
-    // August ???? FlarmTraffic *x = t - 1;
-//    return (t == &list.front()) ?  nullptr : t - 1;
-#if 0
-    auto iter = std::find(list.begin(), list.end(), t);
-    if (iter > list.begin())
-      return &(*(iter - 1));
-    else
+#if 1  // August2111
+    const FlarmTraffic *ret = nullptr;
+    for (auto const &iter : list) {
+      if (&iter == t)
+        return ret; // the previous
+      else
+        ret = &iter;
+    }
 #endif
-      return nullptr;
+    return nullptr;
 #else
   constexpr const FlarmTraffic *
   PreviousTraffic(const FlarmTraffic *t) const noexcept {
@@ -191,15 +192,16 @@ struct TrafficList {
 #if MCS_WORKAROUND
   constexpr const FlarmTraffic *
   NextTraffic(const FlarmTraffic *t) const noexcept {
-#if 0
-//    return (t == &list.back()) ? t + 1 : nullptr;
-    auto iter = std::find(list.begin(), list.end(), t);
-    iter++;
-    if (iter < list.end())
-      return &(*iter);
-    else
+#if 1
+    bool found = false;
+    for (auto const &iter : list) {
+      if (&iter == t)
+        found = true; // and continue...
+      else if (found)
+        return &iter; // the next one in the list after t
+    }
 #endif
-      return nullptr;
+    return nullptr;
 #else
   constexpr const FlarmTraffic *
   NextTraffic(const FlarmTraffic *t) const noexcept {
@@ -238,13 +240,18 @@ struct TrafficList {
 
 #if MCS_WORKAROUND
   constexpr unsigned TrafficIndex(const FlarmTraffic *t) const noexcept {
-#if 1
+#if 0
+    /*/
+    auto iter = std::find(list.begin(), list.end(), &t);
+    return iter - list.begin();
+    /*/
     unsigned int i = 0;
-    for (auto traffic : list) {
-      if (traffic.name == t->name)
+    for (auto const traffic : list) {
+      if (traffic == *t)
         return i;
       i++;
     }
+     /**/
     return 0; // TODO(August2111): This is wrong!!!!
 #else
     auto iter = std::find(list.begin(), list.end(), t);
@@ -255,6 +262,22 @@ struct TrafficList {
     return t - list.begin();
 #endif
   }
+
 };
+
+constexpr bool
+operator==(const FlarmTraffic &t1,
+           const FlarmTraffic &t2) noexcept
+{
+  return t1.id == t2.id && t1.name == t2.name;
+}
+
+constexpr bool
+operator==(const FlarmTraffic &t1,
+           const FlarmTraffic *t2) noexcept
+{
+  return t1 == *t2;
+}
+
 
 static_assert(std::is_trivial<TrafficList>::value, "type is not trivial");
