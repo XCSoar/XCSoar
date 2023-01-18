@@ -43,10 +43,11 @@ GetInfo() noexcept
   Info info;
   auto &battery = info.battery;
   auto &external = info.external;
+  KoboModel kobo_model = DetectKoboModel();
 
   char line[256];
 
-  if (DetectKoboModel() == KoboModel::GLO_HD) {
+  if (kobo_model == KoboModel::GLO_HD) {
     if (File::ReadString(Path("/sys/class/power_supply/mc13892_bat/status"),
                          line, sizeof(line))) {
       if (StringIsEqual(line,"Not charging\n") ||
@@ -61,7 +62,7 @@ GetInfo() noexcept
       int rem = atoi(line);
       battery.remaining_percent = rem;
     }
-  } else if (DetectKoboModel() == KoboModel::LIBRA2) {
+  } else if (kobo_model == KoboModel::LIBRA2 || kobo_model == KoboModel::CLARA_2E) {
     if (File::ReadString(Path("/sys/class/power_supply/battery/status"),
                          line, sizeof(line))) {
       if (StringIsEqual(line,"Not charging\n") ||

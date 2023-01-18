@@ -179,6 +179,7 @@ TopCanvas::TopCanvas(UI::Display &_display)
   case KoboModel::GLO_HD:
   case KoboModel::AURA2:
   case KoboModel::CLARA_HD:
+  case KoboModel::CLARA_2E:
   case KoboModel::LIBRA2:
   case KoboModel::LIBRA_H2O:
     frame_sync = true;
@@ -297,7 +298,8 @@ TopCanvas::Flip()
               kobo_model == KoboModel::AURA2 ||
               kobo_model == KoboModel::LIBRA2 ||
               kobo_model == KoboModel::LIBRA_H2O ||
-              kobo_model == KoboModel::CLARA_HD)
+              kobo_model == KoboModel::CLARA_HD ||
+              kobo_model == KoboModel::CLARA_2E)
              ? WAVEFORM_MODE_A2
              : WAVEFORM_MODE_AUTO),
     UPDATE_MODE_FULL, // PARTIAL
