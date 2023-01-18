@@ -6,6 +6,7 @@ Version 7.29 - not yet released
   - get rid of not usable USB interfaces in the 'Device -> Port' list
 * Kobo
   - Add support for Libra H2O
+  - Add support for Clara 2E
 
 Version 7.28 - 2022/10/29
 * data files
