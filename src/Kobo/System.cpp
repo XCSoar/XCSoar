@@ -272,7 +272,8 @@ KoboWifiOn()
 
   Run("/sbin/ifconfig", interface, "up");
   Run("/sbin/iwconfig", interface, "power", "off");
-  Run("/bin/wlarm_le", "-i", interface, "up");
+  if (DetectKoboModel() != KoboModel::CLARA_2E)
+    Run("/bin/wlarm_le", "-i", interface, "up");
   Run("/bin/wpa_supplicant", "-i", interface,
       "-c", "/etc/wpa_supplicant/wpa_supplicant.conf",
       "-C", "/var/run/wpa_supplicant", "-B", "-D", driver);
@@ -295,7 +296,8 @@ KoboWifiOff()
 #ifdef KOBO
   const char *interface =  GetKoboWifiInterface();
   Run("/usr/bin/killall", "wpa_supplicant", "udhcpc");
-  Run("/bin/wlarm_le", "-i", interface, "down");
+  if (DetectKoboModel() != KoboModel::CLARA_2E)
+    Run("/bin/wlarm_le", "-i", interface, "down");
   Run("/sbin/ifconfig", interface, "down");
 
   RmMod("dhd");
