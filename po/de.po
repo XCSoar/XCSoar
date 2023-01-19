@@ -8119,12 +8119,14 @@ msgstr "Wind - Geschwindigkeit"
 #: src/InfoBoxes/Content/Factory.cpp:343 src/InfoBoxes/Content/Factory.cpp:940
 #, no-c-format
 msgid ""
-"Wind speed estimated by XCSoar. Manual adjustment is possible with the "
-"connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
-"through settings, adjust the values with left/right cursor keys."
+"Wind speed estimated by XCSoar or external sensor (if available). "
+"Manual adjustment is possible with the connected InfoBox dialogue. "
+"Pressing the up/down cursor keys to cycle through settings, adjust "
+"the values with left/right cursor keys."
 msgstr ""
-"Von XCSoar geschätzte Windgeschwindigkeit. Manuelles einstellen ist mit dem "
-"InfoBox Dialog möglich. Pfeiltaste hoch/runter wechselt durch die "
+"Von XCSoar oder einem externen Sensor (wenn verfügbar) geschätzte "
+"Windgeschwindigkeit. Manuelles Einstellen ist mit dem InfoBox Dialog "
+"möglich: Pfeiltaste hoch/runter wechselt durch die "
 "Einstellungen, links und rechts verändert die Werte."
 
 #: src/InfoBoxes/Content/Factory.cpp:350
@@ -8135,11 +8137,13 @@ msgstr "Wind - Richtung"
 #: src/InfoBoxes/Content/Factory.cpp:352
 #, no-c-format
 msgid ""
-"Wind bearing estimated by XCSoar. Manual adjustment is possible with the "
-"connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
-"through settings, adjust the values with left/right cursor keys."
+"Wind bearing estimated by XCSoar or external sensor (if available). "
+"Manual adjustment is possible with the connected InfoBox dialogue. "
+"Pressing the up/down cursor keys to cycle through settings, adjust "
+"the values with left/right cursor keys."
 msgstr ""
-"Von XCSoar geschätzte Windrichtung. Manuelles einstellen ist mit dem InfoBox "
+"Von XCSoar oder einem externen Sensor (wenn verfügbar) geschätzte "
+"Windrichtung. Manuelles Einstellen ist mit dem InfoBox "
 "Dialog möglich. Pfeiltaste hoch/runter wechselt durch die Einstellungen, "
 "links und rechts verändert die Werte."
 
@@ -9781,6 +9785,51 @@ msgstr "Herz"
 #, no-c-format
 msgid "Heart rate in beats per minute."
 msgstr "Herzschläge in der Minute."
+
+#: src/InfoBoxes/Content/Factory.cpp:1141
+#, no-c-format
+msgid "Wind - Drift Angle"
+msgstr "Wind - Driftwinkel"
+
+#: src/InfoBoxes/Content/Factory.cpp:1142
+#, no-c-format
+msgid "Wind Drift"
+msgstr "Wind Drift"
+
+#: src/InfoBoxes/Content/Factory.cpp:1143
+#, no-c-format
+msgid "Wind drift angle (Track - True Heading) - for a simple check, "
+"how the sensor works."
+msgstr "Wind Driftwinkel (Track - magn. Kurs) - für einen einfachen "
+"Test, wie gut der Sensor arbeitet."
+
+#: src/InfoBoxes/Content/Factory.cpp:1150
+#, no-c-format
+msgid "Wind - RealTime Speed"
+msgstr "Wind - momentane Geschwindigkeit"
+
+#: src/InfoBoxes/Content/Factory.cpp:1151
+#: src/InfoBoxes/Content/Factory.cpp:1160
+#, no-c-format
+msgid "RealTime Wind"
+msgstr "Echtzeit-Wind"
+
+#: src/InfoBoxes/Content/Factory.cpp:1152
+#, no-c-format
+msgid "Speed of instantaneous wind, estimated from an external sensor."
+msgstr "Die momentane Windgeschwindigkeit, berechnet durch einen "
+"externen Sensor"
+
+#: src/InfoBoxes/Content/Factory.cpp:1159
+#, no-c-format
+msgid "Wind - RealTime Bearing"
+msgstr "Wind - momentane Richtung"
+
+#: src/InfoBoxes/Content/Factory.cpp:1161
+#, no-c-format
+msgid "Bearing of instantaneous wind, estimated from an external sensor."
+msgstr "Die Richtung des momentanen Windes, berechnet durch einen "
+"externen Sensor"
 
 #: src/InfoBoxes/Content/Alternate.cpp:74
 #, c-format
