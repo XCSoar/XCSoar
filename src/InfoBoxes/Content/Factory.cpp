@@ -343,7 +343,10 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Wind speed"),
     N_("Wind"),
-    N_("Wind speed estimated by XCSoar. Manual adjustment is possible with the connected InfoBox dialogue. Pressing the up/down cursor keys to cycle through settings, adjust the values with left/right cursor keys."),
+    N_("Wind speed estimated by XCSoar or external sensor (if available). "
+       "Manual adjustment is possible with the connected InfoBox dialogue. "
+       "Pressing the up/down cursor keys to cycle through settings, adjust "
+       "the values with left/right cursor keys."),
     UpdateInfoBoxWindSpeed,
     wind_infobox_panels,
   },
@@ -352,7 +355,10 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Wind bearing"),
     N_("Wind"),
-    N_("Wind bearing estimated by XCSoar. Manual adjustment is possible with the connected InfoBox dialogue. Pressing the up/down cursor keys to cycle through settings, adjust the values with left/right cursor keys."),
+    N_("Wind bearing estimated by XCSoar or external sensor (if available). "
+       "Manual adjustment is possible with the connected InfoBox dialogue. "
+       "Pressing the up/down cursor keys to cycle through settings, adjust "
+       "the values with left/right cursor keys."),
     UpdateInfoBoxWindBearing,
     wind_infobox_panels,
   },
@@ -950,7 +956,10 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Wind arrow"),
     N_("Wind"),
-    N_("Wind speed estimated by XCSoar. Manual adjustment is possible with the connected InfoBox dialogue. Pressing the up/down cursor keys to cycle through settings, adjust the values with left/right cursor keys."),
+    N_("Wind speed estimated by XCSoar or external sensor (if available). "
+       "Manual adjustment is possible with the connected InfoBox dialogue. "
+       "Pressing the up/down cursor keys to cycle through settings, adjust "
+       "the values with left/right cursor keys."),
     IBFHelper<InfoBoxContentWindArrow>::Create,
   },
 
@@ -1135,26 +1144,27 @@ static constexpr MetaData meta_data[] = {
   // 120.. 
   // e_DriftAngle - TestBox for Track-Heading
   {
-    N_("Drift Angle"), 
-    N_("Drift"), 
-    N_("Drift angle (Track - True Heading."),
+    N_("Wind - Drift Angle"),
+    N_("Wind Drift"),
+    N_("Wind drift angle (Track - True Heading) - for a simple check, "
+       "how the sensor works."),
     IBFHelper<InfoBoxDrift>::Create,
   },
 
   // e_InstantaneousWindSpeed
   {
-    N_("Instantaneous Wind Speed"), 
-    N_("Inst. Wind Speed"), 
-    N_("Speed of Instantaneous Wind."),
+    N_("Wind - RealTime Speed"),
+    N_("RealTime Wind"),
+    N_("Speed of instantaneous wind, estimated from an external sensor."),
     UpdateInfoBoxInstWindSpeed,
     wind_infobox_panels,
   },
 
   // e_InstantaneousWindBearing
   {
-    N_("Instantaneous Wind Bearing"), 
-    N_("Inst. Wind"), 
-    N_("Bearing of Instantaneous Wind."),
+    N_("Wind - RealTime Bearing"),
+    N_("RealTime Wind"),
+    N_("Bearing of instantaneous wind, estimated from an external sensor."),
     UpdateInfoBoxInstWindBearing,
     wind_infobox_panels,
   },
