@@ -28,6 +28,7 @@ Copyright_License {
 #include "util/Macros.hpp"
 
 #include <cassert>
+#include <cstdint>
 
 #ifdef _WIN32
 /* we don't need that WIN32 API function, it's a macro that will
