@@ -8,6 +8,7 @@ set(_SOURCES
         Device/Driver.cpp
         Device/Driver/AirControlDisplay.cpp
         Device/Driver/AltairPro.cpp
+        Device/Driver/Anemoi.cpp
         Device/Driver/ATR833.cpp
         Device/Driver/BlueFly/Misc.cpp
         Device/Driver/BlueFly/Parser.cpp
