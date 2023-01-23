@@ -42,44 +42,17 @@ public:
 
   /* virtual methods from class Device */
   bool ParseNMEA(const char *line, NMEAInfo &info) override;
-  bool PutMacCready(double mc, OperationEnvironment &env) override;
-  bool PutBallast(double fraction, double overload,
-                  OperationEnvironment &env) override;
-  bool PutBugs(double bugs, OperationEnvironment &env) override;
-  void OnCalculatedUpdate(const MoreData &basic,
-                  const DerivedInfo &calculated) override;
+//  void OnCalculatedUpdate(const MoreData &basic,
+//                  const DerivedInfo &calculated) override;
 private:
-  bool POV(NMEAInputLine &line, NMEAInfo &info);
+  bool PLARA(NMEAInputLine &line, NMEAInfo &info);
+  bool PLARB(NMEAInputLine &line, NMEAInfo &info);
+  bool PLARD(NMEAInputLine &line, NMEAInfo &info);
+  bool PLARV(NMEAInputLine &line, NMEAInfo &info);
   bool PLARW(NMEAInputLine &line, NMEAInfo &info);
-  bool ComposeWrite(const char p_type,PolarCoefficients &p,
-                  OperationEnvironment &env);
-  bool InformUnavailable(const char *obj, OperationEnvironment &env);
-  bool RepeatIdealPolar(OperationEnvironment &env);
-  bool RepeatRealPolar(OperationEnvironment &env);
-  bool PutIdealPolar(const DerivedInfo &calculated,
-                  OperationEnvironment &env);
-  bool PutRealPolar(const DerivedInfo &calculated,
-                  OperationEnvironment &env);
-  bool RepeatBugs(OperationEnvironment &env);
-  bool RepeatBallast(OperationEnvironment &env);
-  bool RepeatMacCready(OperationEnvironment &env);
-  // all 3 coeffs equal between the 2 polars
-  constexpr bool IsEqual(const PolarCoefficients &p1, const PolarCoefficients &p2);
-  // copy the 3 coffeicients from src to dest
-  constexpr void Copy(PolarCoefficients &dest, const PolarCoefficients &src);
-
-  // remember the settings to be able to repeat the most recent values upon request
-  double _bugs = 1;
-  bool   _bugs_valid = false;
-  double _mc = 1;
-  bool   _mc_valid = false;
-  double _overload = 1;
-  bool   _overload_valid = false;
-  PolarCoefficients _ideal_polar; 
-  bool _ideal_polar_valid = false;
-  PolarCoefficients _real_polar; 
-  bool _real_polar_valid = false;
-};
+  bool HCHDT(NMEAInputLine &line, NMEAInfo &info);
+ 
+ };
 
 /**
  * Parses non-negative floating-point angle value in degrees.
@@ -98,198 +71,278 @@ ReadBearing(NMEAInputLine &line, Angle &value_r)
     return true;
 }
 
-constexpr bool
-LarusDevice::IsEqual(const PolarCoefficients &p1, const PolarCoefficients &p2)
-{
-  if (p1.a != p2.a) return false;
-  if (p1.b != p2.b) return false;
-  if (p1.c != p2.c) return false;
-  return true;
-}
-
-constexpr void
-LarusDevice::Copy(PolarCoefficients &dest, const PolarCoefficients &src)
-{
-  dest.a = src.a;
-  dest.b = src.b;
-  dest.c = src.c;
-}
-
 bool
-LarusDevice::ComposeWrite(const char p_type,PolarCoefficients &p,
-  OperationEnvironment &env)
+ReadSpeed(NMEAInputLine &line, double &value)
 {
-  if (!EnableNMEA(env))
-    return false;
+    double _value;
+    value = -1;
+    if (!line.ReadChecked(_value))
+        return false;
 
-  char buffer[50];
-  // Compose Polar String
-  sprintf(buffer,"POV,C,%cPO,%f,%f,%f", p_type, p.a, p.b, p.c);
-  PortWriteNMEA(port, buffer, env);
-  return true;
-}
+    switch (line.ReadOneChar()) {
+    case 'N':
+      value = Units::ToSysUnit(_value, Unit::KNOTS);
+      break;
 
-bool
-LarusDevice::InformUnavailable(const char *obj, OperationEnvironment &env)
-{
-  if (!EnableNMEA(env))
-    return false;
+    case 'K':
+      value = Units::ToSysUnit(_value, Unit::KILOMETER_PER_HOUR);
+      break;
 
-  char buffer[20];
-  const char preamble[] = "POV,C,NA,";
+    case 'M':
+      value = Units::ToSysUnit(_value, Unit::METER_PER_SECOND);
+      break;
 
-  if (sizeof(preamble) + strlen(obj) >= sizeof(buffer)) return false;
+    case 'F':
+      value = Units::ToSysUnit(_value, Unit::FEET_PER_MINUTE);
+      break;
 
-  strcpy(buffer,preamble);
-  strcat(buffer,obj);
-
-  PortWriteNMEA(port, buffer, env);
-  return true;
-}
-
-bool
-LarusDevice::PutIdealPolar(const DerivedInfo &calculated,
-  OperationEnvironment &env)
-{
-  bool rv = false;
-  PolarCoefficients polar = calculated.glide_polar_safety.GetCoefficients();
-
-  if (!IsEqual(polar,_ideal_polar) || !_ideal_polar_valid) {
-    rv = ComposeWrite('I',polar,env);
-    Copy(_ideal_polar,polar);
-    _ideal_polar_valid = true;
+    default:
+      return false;
     }
-  return rv;
+    if (_value < -10.0 || _value > 500) // vario values coud be lower then 0!
+      return false;
+
+    return true;
 }
 
 bool
-LarusDevice::RepeatIdealPolar(OperationEnvironment &env)
+ReadHeight(NMEAInputLine &line, double &value)
 {
-  if (!_ideal_polar_valid) {
-    return InformUnavailable("IPO", env);
-  } else {
-    return ComposeWrite('I',_ideal_polar,env);
-  }
-}
+    double _value;
+    value = -1;
+    if (!line.ReadChecked(_value))
+        return false;
 
-bool
-LarusDevice::RepeatRealPolar(OperationEnvironment &env)
-{
-  if (!_real_polar_valid) {
-    return InformUnavailable("RPO", env);
-  } else {
-    return ComposeWrite('R',_real_polar,env);
-  }
-}
+    switch (line.ReadOneChar()) {
+    case 'M':
+      value = Units::ToSysUnit(_value, Unit::METER);
+      break;
 
-bool
-LarusDevice::PutRealPolar(const DerivedInfo &calculated,
-  OperationEnvironment &env)
-{
-  bool rv = false;
-  PolarCoefficients polar = calculated.glide_polar_safety.GetRealCoefficients();
+    case 'F':
+      value = Units::ToSysUnit(_value, Unit::FEET);
+      break;
 
-  if (!IsEqual(polar,_real_polar) || !_real_polar_valid) {
-    rv = ComposeWrite('R',polar,env);
-    Copy(_real_polar,polar);
-    _real_polar_valid = true;
+    case 'K':
+      value = Units::ToSysUnit(_value, Unit::KILOMETER);
+      break;
+
+    default:
+      return false;
     }
-  return rv;
+
+    if (_value < -1000 || _value > 50000)
+      return false;
+    return true;
 }
 
-void
-LarusDevice::OnCalculatedUpdate([[maybe_unused]] const MoreData &basic,
-    const DerivedInfo &calculated)
-{
-  NullOperationEnvironment env;
-
-  PutIdealPolar(calculated, env);
-  PutRealPolar(calculated, env);
-
-  if (!_mc_valid) {
-    // this is the MacCready at start up
-    _mc = calculated.glide_polar_safety.GetMC();
-    _mc_valid = true;
-    RepeatMacCready(env);
-    }
-}
-
-bool
-LarusDevice::RepeatMacCready(OperationEnvironment &env)
-{
-  if (!_mc_valid) {
-    return InformUnavailable("MC", env);
-  }
-  
-  char buffer[20];
-  sprintf(buffer,"POV,C,MC,%0.2f", (double)_mc);
-  PortWriteNMEA(port, buffer, env);
-  return true;
-}
-
-bool
-LarusDevice::PutMacCready(double mc, OperationEnvironment &env)
-{
-  _mc = mc;
-  _mc_valid = true;
-  return RepeatMacCready(env);
-}
-
-bool
-LarusDevice::RepeatBallast(OperationEnvironment &env)
-{
-  if (!_overload_valid) {
-    return InformUnavailable("WL", env);
-  }
-  
-  char buffer[20];
-  sprintf(buffer,"POV,C,WL,%1.3f",(float)_overload);
-  PortWriteNMEA(port, buffer, env);
-  return true;
-}
-
-bool
-LarusDevice::PutBallast([[maybe_unused]] double fraction, double overload, OperationEnvironment &env)
-{
-  _overload = overload;
-  _overload_valid = true;
-  return RepeatBallast(env);
-}
-
-bool
-LarusDevice::RepeatBugs(OperationEnvironment &env)
-{
-  if (!_bugs_valid) {
-    return InformUnavailable("BU", env);
-  }
-  
-  char buffer[32];
-  sprintf(buffer, "POV,C,BU,%0.2f",(float)_bugs);
-  PortWriteNMEA(port, buffer, env);
-  return true;
-}
-
-bool
-LarusDevice::PutBugs(double bugs, OperationEnvironment &env)
-{
-  _bugs = bugs;
-  _bugs_valid = true;
-  return RepeatBugs(env);
-}
-
-bool
-LarusDevice::ParseNMEA(const char *_line, NMEAInfo &info)
-{
+bool LarusDevice::ParseNMEA(const char *_line, NMEAInfo &info) {
   if (!VerifyNMEAChecksum(_line))
     return false;
 
   NMEAInputLine line(_line);
-  if (line.ReadCompare("$PLARW"))
-    return PLARW(line, info);
-  else if (line.ReadCompare("$POV"))
-    return POV(line, info);
+  const auto type = line.ReadView();
+  if (type.starts_with("$PLAR"sv)) {
+    switch (type[5]) {
+    case 'A':
+      return PLARA(line, info);
+    case 'B':
+      return PLARB(line, info);
+    case 'D':
+      return PLARD(line, info);
+    case 'V':
+      return PLARV(line, info);
+    case 'W':
+      return PLARW(line, info);
+    default:
+      break;
+    }
+  }
+  else if (type == "$HCHDT"sv)
+    return HCHDT(line, info);
 
   return false;
+}
+
+bool
+LarusDevice::HCHDT(NMEAInputLine &line, NMEAInfo &info)
+{
+    /*
+   * Heading sentence
+     *
+     *        1   2 3
+     *        |   | |
+     * $HCHDT,x.x,a*hh<CR><LF>
+     * 
+     * State of Heading
+     *
+     * Field Number:
+     * 1)  Heading 
+     * 2)  Type: (T)rue or (M)agnetic
+     * 3)  Checksum
+    */
+  double value;
+  if (line.ReadChecked(value)) {
+    if (value >= 0 && value <= 360) {
+      switch (line.ReadOneChar()) {
+      case 'T':
+          info.attitude.heading = Angle::Degrees(value);
+          info.attitude.heading_available.Update(info.clock);
+        return true;
+      case 'M':
+      default:
+        return false; // false means: an other (general) parser should look
+      }
+    }
+  }
+  return false;
+}
+
+bool
+LarusDevice::PLARA(NMEAInputLine &line, NMEAInfo &info)
+{
+    /*
+     * Attitude-Sentence
+     *
+     *        1   2   3   4
+     *        |   |   |   |
+     * $PLARA,x.x,x.x,x.x*hh<CR><LF>
+     * 
+     * This sentence gives information about the current attitude. The different fields
+     * have the following meaning:
+     * 
+     * Field Number:
+     * 1)  Roll angle (positive while turning right)
+     * 2)  Pitch angle (positive when nose up)
+     * 3)  Yaw angle (true heading)
+     * 4)  Checksum
+    */
+  double value;
+  if (line.ReadChecked(value)) {
+    if (value >= -180 && value <= 180) {
+      info.attitude.bank_angle = Angle::Degrees(value);
+      info.attitude.bank_angle_available.Update(info.clock);
+    }
+  }
+  if (line.ReadChecked(value)) {
+    if (value >= -90 && value <= 90) {
+      info.attitude.pitch_angle = Angle::Degrees(value);
+      info.attitude.pitch_angle_available.Update(info.clock);
+    }
+  }
+  if (line.ReadChecked(value)) {
+    if (value >= 0 && value <= 360) {
+      info.attitude.heading = Angle::Degrees(value);
+      info.attitude.heading_available.Update(info.clock);
+    }
+  }
+    return true;
+}
+
+bool
+LarusDevice::PLARB(NMEAInputLine &line, NMEAInfo &info)
+{
+    /*
+   * Battery voltage sentence
+     *
+     *        1     2
+     *        |     |
+     * $PLARB,xx.xx*hh<CR><LF>
+     * 
+     * State of Battery
+     *
+     * Field Number:
+     * 1)  battery voltage in Volt
+     * 2)  Checksum
+    */
+  double value;
+  if (line.ReadChecked(value)) {
+    if (value >= 0 && value <= 25) {
+//      info.battery_level = value;
+//      info.battery_level_available.Update(info.clock);
+      info.voltage = value;
+      info.voltage_available.Update(info.clock);
+    }
+  }
+  return true;
+}
+
+bool
+LarusDevice::PLARD(NMEAInputLine &line, NMEAInfo &info)
+{
+   /*
+   * Instant air density sentence
+     *
+     *        1      2 3
+     *        |      | |
+     * $PLARD,xxxx.x,a*hh<CR><LF>
+     * 
+     * This sentence gives information about the instant air density at the
+     * current altitude. The different fields have the following meaning:
+     *
+     * Field Number:
+     * 1)  Instant air density in g/m^3.
+     * 2)  a = (M)easured or (E)stimated
+     * 3)  Checksum
+    */
+  double value;
+  if (line.ReadChecked(value)) {
+    switch (line.ReadOneChar()) {
+    case 'M':
+      break;
+    case 'E':
+      // TODO(Augut2111): is this correct???
+      // the density behaves similar to static pressure, but isn't equal
+
+      // info.static_pressure.HectoPascal(value);
+      // info.static_pressure_available.Update(info.clock);
+      break;
+    default:
+      break;
+    }
+  }
+  return true;
+}
+
+bool
+LarusDevice::PLARV(NMEAInputLine &line, NMEAInfo &info)
+{
+  /*
+    * $PLARV,x.x,M,x.x,M,x,M,x.x,K*hh
+    *
+    * Vario Data: TEK vario, average vario, height (std pressure)
+    *             and speed (tas)
+    * 
+    * Field Number:
+    *  1) Total Energy Variometer (TEK vario)
+    *  2) M/K/N/F - Unit: m/s, km/h, knots, ft/min
+    *  3) Average Climb Rate over one circle
+    *  4) M/K/N/F - Unit: m/s, km/h, knots, ft/min
+    *  5) Pressure Height
+    *  6) M/K/F - Unit: m, km, ft
+    *  7) True Air Speed (TAS)
+    *  8) M/K/N/F - Unit: m/s, km/h, knots, ft/min
+   *  9) Checksum
+    */
+
+  double value; // = 0;
+  // Parse total energy variometer
+  if (ReadSpeed(line, value))
+    info.ProvideTotalEnergyVario(value);
+
+  // Parse average climb rate, Larus is doing this over one circle!
+  if (ReadSpeed(line, value))
+    ; // Skip average vario data
+
+  // Parse barometric altitude
+  double altitude; // = 0;
+  if (ReadHeight(line, altitude))
+    info.ProvidePressureAltitude(altitude);
+
+  // Parse true airspeed
+  if (ReadSpeed(line, value))
+    info.ProvideTrueAirspeedWithAltitude(value, altitude);
+
+  return true;
 }
 
 bool
@@ -308,16 +361,17 @@ LarusDevice::PLARW(NMEAInputLine &line, NMEAInfo &info)
       *  7) Checksum
       */
 
-    Angle winddir;
-    if (!ReadBearing(line, winddir))
+  SpeedVector wind;
+//    Angle winddir;
+  if (!ReadBearing(line, wind.bearing))
         return false;
 
-    char ch = line.ReadOneChar();
+    char ch = line.ReadOneChar();  // T means (T)rue
 
     double windspeed;
-    if (!line.ReadChecked(windspeed))
-        return false;
-
+    if (!ReadSpeed(line, wind.norm)) // windspeed))
+      return false;
+    /*/
     ch = line.ReadOneChar();
     switch (ch) {
         case 'N':
@@ -335,11 +389,11 @@ LarusDevice::PLARW(NMEAInputLine &line, NMEAInfo &info)
         default:
             return false;
     }
+    /** / */
+//    SpeedVector wind(winddir, windspeed);
 
-    SpeedVector wind(winddir, windspeed);
-
-    ch = line.ReadOneChar();
-    switch (ch) {
+//    ch = ;
+    switch (line.ReadOneChar()) {
         case 'A':
             info.ProvideExternalWind(wind);
             break;
@@ -352,114 +406,6 @@ LarusDevice::PLARW(NMEAInputLine &line, NMEAInfo &info)
     }
 
     return true;
-}
-
-bool
-LarusDevice::POV(NMEAInputLine &line, NMEAInfo &info)
-{
-  /*
-   * Type definitions:
-   *
-   * E: TE vario in m/s
-   * H: relative humidity in %
-   * P: static pressure in hPa
-   * Q: dynamic pressure in Pa
-   * R: total pressure in hPa
-   * S: true airspeed in km/h
-   * T: temperature in deg C
-   * ?: respond with selected strings, e.g. Ballast, Bugs, Polar
-   *    Example: $POV,?,RPO,MC,WL*2E means: Real Polar, MacCready, Wing Load
-   */
-
-  while (!line.IsEmpty()) {
-    char type = line.ReadOneChar();
-    if (type == '\0')
-      break;
-
-    if (type == '?') {
-      NullOperationEnvironment env;
-
-      for (int i=0;i < 10;i++) { // not more than 10 loops!
-        const auto query_item = line.ReadView();
-        if (query_item.empty())
-          return true;
-
-        if (query_item == "WL"sv)
-          RepeatBallast(env);
-        else if (query_item == "BU"sv)
-          RepeatBugs(env);
-        else if (query_item == "MC"sv)
-          RepeatMacCready(env);
-        else if (query_item == "IPO"sv)
-          RepeatIdealPolar(env);
-        else if (query_item == "RPO"sv)
-          RepeatRealPolar(env);
-      }
-      return false;
-    }
-
-    double value;
-
-    switch (type) {
-      case 'E': {
-        if (!line.ReadChecked(value))
-          break;
-        info.ProvideTotalEnergyVario(value);
-        break;
-      }
-      case 'H': {
-        if (!line.ReadChecked(value))
-          break;
-        info.humidity_available = true;
-        info.humidity = value;
-        break;
-      }
-      case 'P': {
-        if (!line.ReadChecked(value))
-          break;
-        AtmosphericPressure pressure = AtmosphericPressure::HectoPascal(value);
-        info.ProvideStaticPressure(pressure);
-        break;
-      }
-      case 'Q': {
-        if (!line.ReadChecked(value))
-          break;
-        AtmosphericPressure pressure = AtmosphericPressure::Pascal(value);
-        info.ProvideDynamicPressure(pressure);
-        break;
-      }
-      case 'R': {
-        if (!line.ReadChecked(value))
-          break;
-        AtmosphericPressure pressure = AtmosphericPressure::HectoPascal(value);
-        info.ProvidePitotPressure(pressure);
-        break;
-      }
-      case 'S': {
-        if (!line.ReadChecked(value))
-          break;
-        value = Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR);
-        info.ProvideTrueAirspeed(value);
-        break;
-      }
-      case 'T': {
-        if (!line.ReadChecked(value))
-          break;
-        info.temperature = Temperature::FromCelsius(value);
-        info.temperature_available = true;
-        break;
-      }
-      case 'V': {
-        if (!line.ReadChecked(value))
-          break;
-        info.voltage = value;
-        info.voltage_available.Update(info.clock);
-        break;
-      }
-    }
-  }
-
-  return true;
 }
 
 static Device *
