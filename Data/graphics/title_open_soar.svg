@@ -25,15 +25,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.6568542"
-     inkscape:cx="116.76101"
-     inkscape:cy="7.1594562"
+     inkscape:cx="64.788659"
+     inkscape:cy="7.3362329"
      inkscape:document-units="px"
      inkscape:current-layer="layer4"
      showgrid="false"
      inkscape:window-width="1538"
      inkscape:window-height="1067"
      inkscape:window-x="143"
-     inkscape:window-y="3"
+     inkscape:window-y="0"
      inkscape:window-maximized="0"
      inkscape:showpageshadow="2"
      inkscape:pagecheckerboard="0"
@@ -56,18 +56,18 @@
      transform="translate(-2.1120622,-1037.9404)">
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:11.804px;line-height:0%;font-family:Arial;-inkscape-font-specification:Arial;fill:#3f76a8;fill-opacity:1;stroke:none;stroke-width:0.983665"
-       x="1.269474"
-       y="1033.6741"
+       style="font-style:normal;font-weight:bold;font-size:17.3333px;line-height:0%;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';fill:#3f76a8;fill-opacity:1;stroke:none;stroke-width:0.983665;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
+       x="1.8"
+       y="1034.8907"
        id="text9393-9-1"
-       transform="scale(0.98327658,1.0170078)"
+       transform="scale(0.98327662,1.0170078)"
        inkscape:export-filename="C:\Documents and Settings\Administrator\Desktop\loadhorz.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
-         x="1.269474"
-         y="1033.6741"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.6391px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans Bold';fill:#000000;fill-opacity:1;stroke-width:0.983665"
+         x="1.8"
+         y="1034.8907"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.3333334px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';fill:#000000;fill-opacity:1;stroke-width:0.983665;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
          id="tspan273">${PROGRAM_NAME}</tspan></text>
   </g>
   <g
@@ -78,8 +78,8 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:Arial;fill:#008000;fill-opacity:1;stroke:none"
-       x="33.793411"
-       y="33.738735"
+       x="51.301228"
+       y="28.790943"
        id="versionno"
        transform="scale(0.99960475,1.0003954)"
        inkscape:export-filename="C:\Documents and Settings\Administrator\Desktop\loadhorz.png"
@@ -88,8 +88,40 @@
        inkscape:label="versionno"><tspan
          sodipodi:role="line"
          id="tspan9395-4-7-2"
-         x="33.793411"
-         y="33.738735"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.932px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans Bold';fill:#008000;fill-opacity:1">${OPENSOAR_VERSION}</tspan></text>
+         x="51.301228"
+         y="28.790943"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#008000;fill-opacity:1">${OPENSOAR_VERSION}</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:12.0984px;line-height:0%;font-family:Arial;-inkscape-font-specification:Arial;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.0082"
+       x="52.190998"
+       y="42.659809"
+       id="versionno-9"
+       transform="scale(0.99960475,1.0003954)"
+       inkscape:export-filename="C:\Documents and Settings\Administrator\Desktop\loadhorz.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       inkscape:label="versionno"><tspan
+         sodipodi:role="line"
+         id="tspan9395-4-7-2-4"
+         x="52.190998"
+         y="42.659809"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#008000;fill-opacity:1;stroke-width:1.0082">7.29.00</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.3333px;line-height:0%;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.0082"
+       x="1.3695083"
+       y="-3.9128718"
+       id="versionno-9-5"
+       transform="scale(0.99960475,1.0003954)"
+       inkscape:export-filename="C:\Documents and Settings\Administrator\Desktop\loadhorz.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       inkscape:label="versionno"><tspan
+         sodipodi:role="line"
+         id="tspan9395-4-7-2-4-0"
+         x="1.3695083"
+         y="-3.9128718"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.3333px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#008000;fill-opacity:1;stroke-width:1.0082">OpenSoar</tspan></text>
   </g>
 </svg>
