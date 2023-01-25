@@ -314,33 +314,34 @@ LarusDevice::PLARV(NMEAInputLine &line, NMEAInfo &info)
     * 
     * Field Number:
     *  1) Total Energy Variometer (TEK vario)
-    *  2) M/K/N/F - Unit: m/s, km/h, knots, ft/min
-    *  3) Average Climb Rate over one circle
-    *  4) M/K/N/F - Unit: m/s, km/h, knots, ft/min
-    *  5) Pressure Height
-    *  6) M/K/F - Unit: m, km, ft
-    *  7) True Air Speed (TAS)
-    *  8) M/K/N/F - Unit: m/s, km/h, knots, ft/min
-   *  9) Checksum
+    *  2) Average Climb Rate over one circle
+    *  3) Pressure Height
+    *  4) True Air Speed (TAS)
+   *  5) Checksum
     */
 
-  double value; // = 0;
+  double value;
   // Parse total energy variometer
-  if (ReadSpeed(line, value))
-    info.ProvideTotalEnergyVario(value);
+  if (line.ReadChecked(value)) {
+    info.ProvideTotalEnergyVario(
+        Units::ToSysUnit(value, Unit::METER_PER_SECOND));
+  }
 
   // Parse average climb rate, Larus is doing this over one circle!
-  if (ReadSpeed(line, value))
+  if (line.ReadChecked(value))
     ; // Skip average vario data
 
   // Parse barometric altitude
-  double altitude; // = 0;
-  if (ReadHeight(line, altitude))
+  double altitude;
+  if (line.ReadChecked(altitude)) {
+    altitude = Units::ToSysUnit(value, Unit::METER);
     info.ProvidePressureAltitude(altitude);
+  }
 
   // Parse true airspeed
-  if (ReadSpeed(line, value))
-    info.ProvideTrueAirspeedWithAltitude(value, altitude);
+  if (line.ReadChecked(value))
+    info.ProvideTrueAirspeedWithAltitude(
+        Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR), altitude);
 
   return true;
 }
@@ -353,59 +354,33 @@ LarusDevice::PLARW(NMEAInputLine &line, NMEAInfo &info)
       *
       * Field Number:
       *  1) wind angle
-      *  2) (R)elative or (T)rue
-      *  3) wind speed
-      *  4) K/M/N
-      *  5) (A)verage or (I)nstantaneous
-      *  6) Status A=valid
-      *  7) Checksum
+      *  2) wind speed
+      *  3) (A)verage or (I)nstantaneous
+      *  4) Status A=valid
+      *  5) Checksum
       */
 
   SpeedVector wind;
-//    Angle winddir;
   if (!ReadBearing(line, wind.bearing))
         return false;
 
-    char ch = line.ReadOneChar();  // T means (T)rue
-
-    double windspeed;
-    if (!ReadSpeed(line, wind.norm)) // windspeed))
+  double windspeed;
+  if (!line.ReadChecked(windspeed))
       return false;
-    /*/
-    ch = line.ReadOneChar();
-    switch (ch) {
-        case 'N':
-            windspeed = Units::ToSysUnit(windspeed, Unit::KNOTS);
-            break;
+  wind.norm = Units::ToSysUnit(windspeed, Unit::KILOMETER_PER_HOUR);
 
-        case 'K':
-            windspeed = Units::ToSysUnit(windspeed, Unit::KILOMETER_PER_HOUR);
-            break;
+  switch (line.ReadOneChar()) {
+  case 'A':
+    info.ProvideExternalWind(wind);
+    break;
+  case 'I':
+    info.ProvideExternalInstantaneousWind(wind);
+    break;
+  default:
+    return false;
+  }
 
-        case 'M':
-            windspeed = Units::ToSysUnit(windspeed, Unit::METER_PER_SECOND);
-            break;
-
-        default:
-            return false;
-    }
-    /** / */
-//    SpeedVector wind(winddir, windspeed);
-
-//    ch = ;
-    switch (line.ReadOneChar()) {
-        case 'A':
-            info.ProvideExternalWind(wind);
-            break;
-        case 'I':
-            info.ProvideExternalInstantaneousWind(wind);
-            break;
-        default:
-            return false;
-
-    }
-
-    return true;
+  return true;
 }
 
 static Device *
