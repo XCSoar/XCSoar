@@ -8,6 +8,9 @@ endif()
 
 include(CMakeSource.cmake)
 
+# add_compile_definitions("PROGRAM_NAME_LC=\"${PROGRAM_NAME_LC}\"")
+add_compile_definitions("PROGRAM_NAME_LC=\"xcsoar\"")
+
 # organize the files in subdirectories
 set(SOURCE_FILES )
 foreach(source_file ${_SOURCES})

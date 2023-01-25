@@ -92,13 +92,13 @@ class LuaInputEvent final {
   Lua::Value callback;
 
 public:
-  static constexpr const char *registry_table = "xcsoar.input_events";
+  static constexpr const char *registry_table = PROGRAM_NAME_LC ".input_events";
 
   explicit LuaInputEvent(lua_State *_l, int callback_idx):L(_l), callback(L, Lua::StackIndex(callback_idx)) {
     auto d = (LuaInputEvent **)lua_newuserdata(L, sizeof(LuaInputEvent **));
     *d = this;
 
-    luaL_setmetatable(L, "xcsoar.input_event");
+    luaL_setmetatable(L, PROGRAM_NAME_LC ".input_event");
 
     Register(RelativeStackIndex{-1});
 
@@ -174,8 +174,8 @@ private:
 
   [[gnu::pure]]
   static LuaInputEvent &Check(lua_State *L, int idx) {
-    auto d = (LuaInputEvent **)luaL_checkudata(L, idx, "xcsoar.input_event");
-    luaL_argcheck(L, d != nullptr, idx, "`xcsoar.input_event' expected");
+    auto d = (LuaInputEvent **)luaL_checkudata(L, idx, PROGRAM_NAME_LC ".input_event");
+    luaL_argcheck(L, d != nullptr, idx, "'" PROGRAM_NAME_LC ".input_event' expected");
     return **d;
   }
 
@@ -284,7 +284,7 @@ static constexpr struct luaL_Reg input_event_methods[] = {
 static void
 CreateInputEventMetatable(lua_State *L)
 {
-  luaL_newmetatable(L, "xcsoar.input_event");
+  luaL_newmetatable(L, PROGRAM_NAME_LC ".input_event");
 
   /* metatable.__index = input_event_methods */
   luaL_newlib(L, input_event_methods);
@@ -305,7 +305,8 @@ Lua::InitInputEvent(lua_State *L)
   const int old_top = lua_gettop(L);
 #endif
 
-  lua_getglobal(L, "xcsoar");
+//  lua_getglobal(L, "xcsoar");
+  lua_getglobal(L, PROGRAM_NAME_LC );
 
   luaL_newlib(L, input_event_funcs); // create 'input_event'
 

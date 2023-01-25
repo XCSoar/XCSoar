@@ -28,8 +28,10 @@ extern "C" {
 #include <lua.h>
 }
 
-static constexpr char persistent_table[] = "xcsoar.persistent_table";
-static constexpr char persistent_callback[] = "xcsoar.persistent_callback";
+// static constexpr char persistent_table[] = "xcsoar.persistent_table";
+// static constexpr char persistent_callback[] = "xcsoar.persistent_callback";
+static constexpr char persistent_table[] = PROGRAM_NAME_LC ".persistent_table";
+static constexpr char persistent_callback[] = PROGRAM_NAME_LC ".persistent_callback";
 
 void
 Lua::InitPersistent(lua_State *L)

@@ -210,7 +210,8 @@ static constexpr struct luaL_Reg settings_funcs[] = {
 void
 Lua::InitLogger(lua_State *L)
 {
-  lua_getglobal(L, "xcsoar");
+  //  lua_getglobal(L, "xcsoar");
+  lua_getglobal(L, PROGRAM_NAME_LC );
 
   lua_newtable(L);
 

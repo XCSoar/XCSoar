@@ -30,7 +30,8 @@ extern "C" {
 
 #include <utility>
 
-static constexpr char catch_callback[] = "xcsoar.catch_callback";
+// static constexpr char catch_callback[] = "xcsoar.catch_callback";
+static constexpr char catch_callback[] = PROGRAM_NAME_LC ".catch_callback ";
 
 void
 Lua::SetCatchCallback(lua_State *L, CatchCallback callback)

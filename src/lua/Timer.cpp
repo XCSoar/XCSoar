@@ -103,7 +103,8 @@ static constexpr struct luaL_Reg timer_methods[] = {
   {nullptr, nullptr}
 };
 
-static constexpr char lua_timer_class[] = "xcsoar.timer";
+// static constexpr char lua_timer_class[] = "xcsoar.timer";
+static constexpr char lua_timer_class[] = PROGRAM_NAME_LC ".timer";
 using LuaTimerClass = Lua::Class<LuaTimer, lua_timer_class>;
 
 static constexpr auto
@@ -172,7 +173,8 @@ Lua::InitTimer(lua_State *L)
 {
   const Lua::ScopeCheckStack check_stack(L);
 
-  lua_getglobal(L, "xcsoar");
+//  lua_getglobal(L, "xcsoar");
+  lua_getglobal(L, PROGRAM_NAME_LC );
 
   luaL_newlib(L, timer_funcs); // create 'timer'
   lua_setfield(L, -2, "timer"); // xcsoar.timer = timer

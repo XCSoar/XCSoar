@@ -159,9 +159,11 @@ CreateHttpRequestMetatable(lua_State *L)
 void
 Lua::InitHttp(lua_State *L)
 {
+ 
   const Lua::ScopeCheckStack check_stack(L);
 
-  lua_getglobal(L, "xcsoar");
+//  lua_getglobal(L, "xcsoar");
+  lua_getglobal(L, PROGRAM_NAME_LC );
 
   /* create the "http" namespace */
   lua_newtable(L);

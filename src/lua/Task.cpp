@@ -387,7 +387,8 @@ l_task_index(lua_State *L)
 void
 Lua::InitTask(lua_State *L)
 {
-  lua_getglobal(L, "xcsoar");
+  //  lua_getglobal(L, "xcsoar");
+  lua_getglobal(L, PROGRAM_NAME_LC );
 
   lua_newtable(L);
 

@@ -64,9 +64,10 @@ Lua::NewBasicState()
   lua_newtable(L);
 
   SetField(L, RelativeStackIndex{-1},
-           "VERSION", WideToUTF8Converter(XCSoar_Version));
+           "VERSION", WideToUTF8Converter(OpenSoar_Version));
 
-  lua_setglobal(L, "xcsoar");
+//  lua_setglobal(L, "xcsoar");
+  lua_setglobal(L, PROGRAM_NAME_LC);
 
   return L;
 }

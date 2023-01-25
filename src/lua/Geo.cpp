@@ -31,7 +31,8 @@ Copyright_License {
 
 namespace Lua {
 
-static constexpr char lua_geo_point_class[] = "xcsoar.GeoPoint";
+// static constexpr char lua_geo_point_class[] = "xcsoar.GeoPoint";
+static constexpr char lua_geo_point_class[] = PROGRAM_NAME_LC ".GeoPoint";
 using LuaGeoPointClass = Lua::Class<GeoPoint, lua_geo_point_class>;
 
 static int
@@ -108,7 +109,8 @@ InitGeo(lua_State *L) noexcept
 {
   const Lua::ScopeCheckStack check_stack(L);
 
-  lua_getglobal(L, "xcsoar");
+//  lua_getglobal(L, "xcsoar");
+  lua_getglobal(L, PROGRAM_NAME_LC );
 
   luaL_newlib(L, geo_point_funcs);
   lua_setfield(L, -2, "GeoPoint"); // xcsoar.GeoPoint = geo_point_funcs

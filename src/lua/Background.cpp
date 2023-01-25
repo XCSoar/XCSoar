@@ -34,7 +34,8 @@ extern "C" {
 
 #include <cassert>
 
-static constexpr char background_lua_key[] = "xcsoar.background";
+// static constexpr char background_lua_key[] = "xcsoar.background";
+static constexpr char background_lua_key[] = PROGRAM_NAME_LC ".background";
 
 class BackgroundLua final
   : public boost::intrusive::list_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>>

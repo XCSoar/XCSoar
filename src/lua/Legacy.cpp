@@ -53,7 +53,8 @@ l_fire_legacy_event(lua_State *L)
 void
 Lua::InitLegacy(lua_State *L)
 {
-  lua_getglobal(L, "xcsoar");
+  //  lua_getglobal(L, "xcsoar");
+  lua_getglobal(L, PROGRAM_NAME_LC );
   SetField(L, RelativeStackIndex{-1},
            "fire_legacy_event", l_fire_legacy_event);
   lua_pop(L, 1);
