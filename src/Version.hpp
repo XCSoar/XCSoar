@@ -26,12 +26,12 @@ Copyright_License {
 #include <tchar.h>
 
 /** 5.2.5 */
-extern const TCHAR XCSoar_Version[];
+extern const TCHAR OpenSoar_Version[];
 /** 5.2.5F */
-extern const TCHAR XCSoar_VersionLong[];
+extern const TCHAR OpenSoar_VersionLong[];
 /** 5.2.5F-PC */
-extern const TCHAR XCSoar_VersionString[];
+extern const TCHAR OpenSoar_VersionString[];
 /** PC 5.2.5F 7. Oct 09 */
-extern const TCHAR XCSoar_VersionStringOld[];
+extern const TCHAR OpenSoar_VersionStringOld[];
 /** XCSoar v5.2.5F-PC */
-extern const TCHAR XCSoar_ProductToken[];
+extern const TCHAR OpenSoar_ProductToken[];

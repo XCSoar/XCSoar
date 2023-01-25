@@ -195,7 +195,8 @@ DetectLanguage() noexcept
 static void
 InitNativeGettext(const char *locale) noexcept
 {
-  const char *const domain = "xcsoar";
+//  const char *const domain = "xcsoar";
+  const char *const domain = "opensoar";  // TODO(August2111)
 
   /* we want to get UTF-8 strings from gettext() */
   bind_textdomain_codeset(domain, "utf8");

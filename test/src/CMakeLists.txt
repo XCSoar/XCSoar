@@ -37,7 +37,7 @@ foreach(source_file ${TEST_LIST})
 
     target_link_libraries(${test} PUBLIC ${XCSOAR_LINK_LIBRARIES})
 
-    add_dependencies(${test} util libXCSoar)
+    add_dependencies(${test} util libOpenSoar)
 
 #     message(STATUS "### ${test_path}  --- ${test}")
 endforeach()

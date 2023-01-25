@@ -13,13 +13,17 @@ message(STATUS "*** PROJECTGROUP_SOURCE_DIR = '${PROJECTGROUP_SOURCE_DIR}'")
 message(STATUS "*** PROJECTGROUP_BINARY_DIR = '${PROJECTGROUP_BINARY_DIR}'")
 
 get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_BINARY_DIR} NAME)
+set (PROJECT_NAME "OpenSoar-${PROJECT_NAME}")
 project(${PROJECT_NAME})
-set(TARGET_NAME ${PROJECT_NAME})
+set(TARGET_NAME OpenSoar)
+set(PROGRAM_NAME ${TARGET_NAME})
+string(TOLOWER  ${PROGRAM_NAME} PROGRAM_NAME_LC)
 
-#********************************************************************************
-set(AUGUST_SPECIAL=ON)
-add_compile_definitions(__AUGUST__=1)
-#********************************************************************************
+# add version string to OpenSoar:
+file(READ "VERSION.txt" OPENSOAR_VERSION)
+string(STRIP ${OPENSOAR_VERSION} OPENSOAR_VERSION)
+add_compile_definitions("OPENSOAR_VERSION=\"${OPENSOAR_VERSION}\"")
+
 find_program(CMAKE_APP     NAMES cmake REQUIRED)
 get_filename_component(CMAKE_PROGRAM_PATH ${CMAKE_APP} DIRECTORY)
 get_filename_component(CMAKE_PROGRAM_PATH ${CMAKE_PROGRAM_PATH} DIRECTORY)
@@ -28,7 +32,7 @@ get_filename_component(USER_PROGRAM_PATH ${CMAKE_PROGRAM_PATH} DIRECTORY)
   message(STATUS "CMAKE_PROGRAM_PATH        - ${CMAKE_PROGRAM_PATH}")
   message(STATUS "USER_PROGRAM_PATH         - ${USER_PROGRAM_PATH}")
 
-include(build/cmake/xcsoar.cmake)
+include(build/cmake/opensoar.cmake)
 get_filename_component(OUTPUT_FOLDER ${PROJECTGROUP_BINARY_DIR}/.. ABSOLUTE)
 set(OUTPUT ${OUTPUT_FOLDER})
 
@@ -187,11 +191,6 @@ include_directories(${THIRDPARTY_INCLUDES} )
 #####################################################################################
 add_compile_definitions(NOMINMAX)
 
-# add version string to xcsoar:
-file(READ "VERSION.txt" XCSOAR_VERSION)
-string(STRIP ${XCSOAR_VERSION} XCSOAR_VERSION)
-add_compile_definitions("XCSOAR_VERSION=\"${XCSOAR_VERSION}\"")
-
 if(ENABLE_OPENGL)
     message(FATAL_ERROR "Not funtional yet")
     add_compile_definitions(ENABLE_OPENGL)
@@ -256,9 +255,7 @@ if (JASPER_OUTSIDE)  # 2021
     add_compile_definitions(JASPER_OUTSIDE)
 endif (JASPER_OUTSIDE)
 
-
 set(SOURCE_FILES )  # clean it
-
     add_subdirectory(src/Airspace)
     add_subdirectory(src/Atmosphere)
     add_subdirectory(src/Audio)
@@ -329,18 +326,16 @@ endif()
 if(NOT ZZIP_OUTSIDE)
     add_subdirectory(src/zzip)   # aug: new!!
 endif()
-  add_subdirectory(src)   # libXCSoar!
+add_subdirectory(src)   # libOpenSoar!
 
-set(BITMAP_EXTENSION  .bmp)
-
-list(APPEND SOURCE_FILES "src/XCSoar.cpp")
+list(APPEND SOURCE_FILES "src/OpenSoar.cpp")
 list(APPEND SOURCE_FILES "src/Version.cpp")
 configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/Data/XCSoar.rc.in"
-    "${OUTPUT_FOLDER}/Data/XCSoar.rc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Data/OpenSoar.rc.in"
+    "${OUTPUT_FOLDER}/Data/OpenSoar.rc"
 )
-list(APPEND SOURCE_FILES "${OUTPUT_FOLDER}/Data/XCSoar.rc")
-list(APPEND SCRIPT_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Data/XCSoar.rc.in")
+list(APPEND SOURCE_FILES "${OUTPUT_FOLDER}/Data/OpenSoar.rc")
+list(APPEND SCRIPT_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Data/OpenSoar.rc.in")
 list(APPEND SOURCE_FILES "CMakeSource.cmake")
 
 if (MSVC)
@@ -353,7 +348,7 @@ endif()
 #==========================================================
 
 # preparing target_link_libraries!
-list(APPEND XCSOAR_LINK_LIBRARIES  libXCSoar     ${XCSOAR_SOURCE_LISTS})
+list(APPEND XCSOAR_LINK_LIBRARIES  libOpenSoar ${XCSOAR_SOURCE_LISTS})
 
 # TODO(aug): Cleaning up this code!!!
 if(1)
@@ -450,7 +445,7 @@ add_dependencies(${TARGET_NAME} util libXCSoar)
 if (MSVC)
     message(STATUS "Configure:     ${PROJECTGROUP_BINARY_DIR}/${TARGET_NAME}.vcxproj.user")
     configure_file(
-        "${CMAKE_CURRENT_SOURCE_DIR}/ide/msvc/XCSoar.vcxproj.user.in"
+        "${CMAKE_CURRENT_SOURCE_DIR}/ide/msvc/OpenSoar.vcxproj.user.in"
         "${PROJECTGROUP_BINARY_DIR}/${TARGET_NAME}.vcxproj.user"
     )
 endif()

@@ -23,11 +23,11 @@ Copyright_License {
 
 #include "Version.hpp"
 
-#ifndef XCSOAR_VERSION
-#error Macro "XCSOAR_VERSION" is not defined.  Check build/version.mk!
+#ifndef OPENSOAR_VERSION
+#error Macro "OPENSOAR_VERSION" is not defined.  Check build/version.mk!
 #endif
 
-#define VERSION XCSOAR_VERSION
+#define VERSION OPENSOAR_VERSION
 
 #if defined(ANDROID)
   #define TARGET "Android"
@@ -56,8 +56,8 @@ Copyright_License {
 #define GIT_SUFFIX
 #endif
 
-const TCHAR XCSoar_Version[] = _T(VERSION);
-const TCHAR XCSoar_VersionLong[] = _T(VERSION VERSION_SUFFIX);
-const TCHAR XCSoar_VersionString[] = _T(VERSION VERSION_SUFFIX "-" TARGET);
-const TCHAR XCSoar_VersionStringOld[] = _T(TARGET " " VERSION VERSION_SUFFIX);
-const TCHAR XCSoar_ProductToken[] = _T("XCSoar v" VERSION VERSION_SUFFIX "-" TARGET GIT_SUFFIX);
+const TCHAR OpenSoar_Version[] = _T(VERSION);
+const TCHAR OpenSoar_VersionLong[] = _T(VERSION VERSION_SUFFIX);
+const TCHAR OpenSoar_VersionString[] = _T(VERSION VERSION_SUFFIX "-" TARGET);
+const TCHAR OpenSoar_VersionStringOld[] = _T(TARGET " " VERSION VERSION_SUFFIX);
+const TCHAR OpenSoar_ProductToken[] = _T("OpenSoar v" VERSION VERSION_SUFFIX "-" TARGET GIT_SUFFIX);

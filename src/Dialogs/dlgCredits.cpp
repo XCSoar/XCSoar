@@ -90,11 +90,11 @@ LogoPageWindow::OnPaint(Canvas &canvas) noexcept
   x = middle;
   const TCHAR *version = _T("Version: ");
   PixelSize ts = canvas.CalcTextSize(version);
-  PixelSize ts2 = canvas.CalcTextSize(XCSoar_VersionString);
+  PixelSize ts2 = canvas.CalcTextSize(OpenSoar_VersionString);
   x = middle - ((ts.width + ts2.width) / 2 );
   canvas.DrawText({x, y}, version);
   x += ts.width;
-  canvas.DrawText({x, y}, XCSoar_VersionString);
+  canvas.DrawText({x, y}, OpenSoar_VersionString);
 
 
 #ifdef GIT_COMMIT_ID

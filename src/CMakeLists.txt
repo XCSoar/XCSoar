@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.18)
 
-set(TARGET_NAME libXCSoar)
+set(TARGET_NAME libOpenSoar)
+# set(TARGET_NAME libXCSoar)
 if (SHOW_SUBPROJECTS)
     message(STATUS "+++ Start CMake ${CMAKE_CURRENT_SOURCE_DIR} -- ${TARGET_NAME}!")
 endif()

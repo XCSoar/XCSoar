@@ -103,15 +103,16 @@ Client::StartTracking(SessionID session, const TCHAR *username,
 
 #ifdef _UNICODE
     NarrowString<32> version;
-    version.SetASCII(XCSoar_VersionLong);
+    version.SetASCII(OpenSoar_VersionLong);
 #else
-    const char *version = XCSoar_VersionLong;
+    const char *version = OpenSoar_VersionLong;
 #endif
 
     NarrowString<2048> url;
     url.Format("http://%s/track.php?leolive=2&sid=%u&pid=%u&"
                "client=%s&v=%s&user=%s&pass=%s&vtype=%u&vname=%s",
                GetServer(), session, 1,
+//               "OpenSoar", easy.Escape(version).c_str(),
                "XCSoar", easy.Escape(version).c_str(),
                easy.Escape(username2).c_str(),
                easy.Escape(password2).c_str(),

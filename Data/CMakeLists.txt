@@ -28,6 +28,10 @@ set(GRAPHIC_FILES
     ${_DATA_INPUT}/graphics/logo.svg
     ${_DATA_INPUT}/graphics/progress_border.svg
     ${_DATA_INPUT}/graphics/title.svg
+
+###    ${_DATA_INPUT}/graphics/logo.svg
+###    ${_DATA_INPUT}/graphics/progress_border.svg
+###    ${_DATA_INPUT}/graphics/title.svg
     # ${_DATA_INPUT}/graphics/dialog_title.svg
     # ${_DATA_INPUT}/graphics/launcher.svg
 )
@@ -87,9 +91,9 @@ if(ON) # MSVC)  # mit minGW geht das nicht??
     
    message(STATUS "Image-App: '${BMP_CONVERT_APP}' ")
     
-    # set(XCSOAR_VERSION "7.26+x")
+    # set(OPENSOAR_VERSION "7.28+") 
     configure_file(
-        ${_DATA_INPUT}/graphics/title.svg 
+        ${_DATA_INPUT}/graphics/title_open_soar.svg 
         ${_TEMP_OUTPUT}/title.svg
     )
     
@@ -107,8 +111,8 @@ if(ON) # MSVC)  # mit minGW geht das nicht??
         add_custom_command(OUTPUT ${GRAPHIC_BITMAPS}
                COMMENT "Convert graphics!"
                COMMAND ${CMAKE_COMMAND} -E make_directory ${_GRAPHICS_OUTPUT}
-               COMMAND ${BMP_CONVERT_APP} -size 160 Data/graphics/logo.svg bmp3:${_GRAPHICS_OUTPUT}/logo_160.bmp
-               COMMAND ${BMP_CONVERT_APP}  -size 80 Data/graphics/logo.svg bmp3:${_GRAPHICS_OUTPUT}/logo_80.bmp
+               COMMAND ${BMP_CONVERT_APP} -size 160 Data/graphics/logo_open_soar.svg bmp3:${_GRAPHICS_OUTPUT}/logo_160.bmp
+               COMMAND ${BMP_CONVERT_APP}  -size 80 Data/graphics/logo_open_soar.svg bmp3:${_GRAPHICS_OUTPUT}/logo_80.bmp
                COMMAND ${BMP_CONVERT_APP}  -background white -layers flatten +matte +dither -compress none -type optimize -colors 256  Data/graphics/launcher.svg bmp3:${_GRAPHICS_OUTPUT}/launcher_640.bmp
                COMMAND ${BMP_CONVERT_APP}  -crop "50${PERCENT_CHAR}x100${PERCENT_CHAR}" -scene 1  ${_GRAPHICS_OUTPUT}/launcher_640.bmp "bmp3:${_GRAPHICS_OUTPUT}/launcher_640_${PERCENT_CHAR}d.bmp"
                COMMAND ${BMP_CONVERT_APP}  Data/graphics/progress_border.svg bmp3:${_GRAPHICS_OUTPUT}/progress_border.bmp
@@ -117,9 +121,9 @@ if(ON) # MSVC)  # mit minGW geht das nicht??
                
                # COMMAND ${BMP_CONVERT_APP}  -size 320 -background white -layers flatten +matte +dither -compress none -type optimize -colors 256  Data/graphics/title.svg bmp3:${_GRAPHICS_OUTPUT}/title_320.bmp
                # WORKING_DIRECTORY ${PROJECTGROUP_SOURCE_DIR}
-               DEPENDS ${_DATA_INPUT}/graphics/logo.svg
+               DEPENDS ${_DATA_INPUT}/graphics/logo_open_soar.svg
                        ${_DATA_INPUT}/graphics/progress_border.svg
-                       ${_DATA_INPUT}/graphics/launcher.svg
+                       ${_DATA_INPUT}/graphics/launcher_open_soar.svg
                        ${_TEMP_OUTPUT}/title.svg
                WORKING_DIRECTORY ${PROJECTGROUP_SOURCE_DIR}
         )
@@ -154,7 +158,7 @@ if(ON) # MSVC)  # mit minGW geht das nicht??
        set (REMOVE_CMD)
      endif()
     if (OFF)
-       # linux is using XSLTPROC_APP, on Windows we using INKSCAPE_APP
+       # August2111: linux is using XSLTPROC_APP, on Windows we using INKSCAPE_APP, is this the same???
        set (COPY_CMD
          COMMAND ${XSLTPROC_APP} --nonet --stringparam DisableAA_Select "MASK_NOAA_" --output  ${PROJECTGROUP_SOURCE_DIR}/build/svg_preprocess.xsl  ${icon_file}
        )

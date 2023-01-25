@@ -47,7 +47,7 @@ add_library(${TARGET_NAME} ${XCSOAR_LIB_TYPE}
 
 target_link_libraries(${TARGET_NAME} PUBLIC
   Form
-  libXCSoar
+  libOpenSoar
   Blackboard
   UIUtil
   Dialogs

@@ -1,5 +1,3 @@
-set(TARGET_NAME "XCSoarAug-MSVC")  # hardcoded yet
-
 message(STATUS "+++ System = WIN32 / MSVC (${TOOLCHAIN})!")
 
 set(LIB_PREFIX "" )  # "lib")

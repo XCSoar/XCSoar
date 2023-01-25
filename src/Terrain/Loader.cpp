@@ -134,7 +134,7 @@ TerrainLoader::ParseBounds(const char *data)
   /* this code is obsolete, since new map files include a "world
      file", but we keep it for compatibility */
 
-  data = strstr(data, "XCSoar");
+  data = strstr(data, "OpenSoar");
   if (data == nullptr)
     return;
 
