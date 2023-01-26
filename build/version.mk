@@ -1,8 +1,7 @@
 VERSION = $(strip $(shell cat $(topdir)/VERSION.txt))
 FULL_VERSION = $(VERSION)
 
-# VERSION_CPPFLAGS = -DXCSOAR_VERSION=\"$(VERSION)\"
-VERSION_CPPFLAGS = -DOPENSOAR_VERSION=\"$(VERSION)\"
+VERSION_CPPFLAGS = -DPROGRAM_VERSION=\"$(VERSION)\"
 
 GIT_COMMIT_ID := $(shell git rev-parse --short --verify HEAD 2>$(NUL))
 RELEASE_COMMIT_ID := $(shell git rev-parse --short --verify "v$(VERSION)^{commit}" 2>$(NUL))

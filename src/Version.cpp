@@ -23,14 +23,11 @@ Copyright_License {
 
 #include "Version.hpp"
 
-#ifndef OPENSOAR_VERSION
-#ifndef XCSOAR_VERSION
-#error Macro "OPENSOAR_VERSION" is not defined.  Check build/version.mk!
-#endif
-#define OPENSOAR_VERSION XCSOAR_VERSION ".02"
+#ifndef PROGRAM_VERSION
+#error Macro "PROGRAM_VERSION" is not defined.  Check build/version.mk!
 #endif
 
-#define VERSION OPENSOAR_VERSION
+#define VERSION PROGRAM_VERSION
 
 #if defined(ANDROID)
   #define TARGET "Android"

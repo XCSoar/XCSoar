@@ -90,7 +90,7 @@ try {
 #else
          "%s\n",
 #endif
-         XCSoar_Version);
+         OpenSoar_Version);
 
   if (argc > 1 && strcmp(argv[1], "-?") != 0) {
     PathName path(argv[1]);

@@ -78,12 +78,12 @@ $(ICNS_SPLASH_1024): %.icns: %.png
 SVG_TITLE = Data/graphics/title.svg Data/graphics/title_red.svg
 PNG_TITLE_110 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_110.png,$(SVG_TITLE))
 BMP_TITLE_110 = $(PNG_TITLE_110:.png=.bmp)
-PNG_TITLE_320 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_320.png,$(SVG_TITLE))
+PNG_TITLE_320 = $(patsubst $(DATA)/temp/graphics/%.svg,$(DATA)/graphics/%_320.png,$(SVG_TMP_TITLE))
 BMP_TITLE_320 = $(PNG_TITLE_320:.png=.bmp)
 
 # render from SVG to PNG
-$(eval $(call rsvg-convert,$(PNG_TITLE_110),$(DATA)/graphics/%_110.png,Data/graphics/%.svg,--width=110))
-$(eval $(call rsvg-convert,$(PNG_TITLE_320),$(DATA)/graphics/%_320.png,Data/graphics/%.svg,--width=320))
+$(eval $(call rsvg-convert,$(PNG_TITLE_110),$(DATA)/graphics/%_110.png,$(DATA)/temp/graphics/%.svg,--width=110))
+$(eval $(call rsvg-convert,$(PNG_TITLE_320),$(DATA)/graphics/%_320.png,$(DATA)/temp/graphics/%.svg,--width=320))
 
 # convert to uncompressed 8-bit BMP
 $(eval $(call convert-to-bmp-white,$(BMP_TITLE_110) $(BMP_TITLE_320),%.bmp,%.png))
@@ -214,8 +214,7 @@ $(OUT)/include/resource.h: src/Resources.hpp | $(OUT)/include/dirstamp
 
 ifeq ($(USE_WIN32_RESOURCES),y)
 
-RESOURCE_TEXT = Data/XCSoar.rc
-
+RESOURCE_TEXT = Data/$(PROGRAM_NAME).rc
 RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/$(notdir $(RESOURCE_TEXT:.rc=.rsc))
 RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))
 
