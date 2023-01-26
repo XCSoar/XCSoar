@@ -9,6 +9,14 @@ else
 $(eval $(call pkg-config-library,LIBLUA,lua5.4))
 endif
 
+ifeq ($(USE_XCSOAR_ONLY),y)
+LIBLUA_CPPFLAGS += -DPROGRAM_NAME_LC=\"xcsoar\"
+else
+# August2111: use "xcsoar" instead of "opensoar" to make it aligned...
+LIBLUA_CPPFLAGS += -DPROGRAM_NAME_LC=\"xcsoar\"
+# LIBLUA_CPPFLAGS += -DPROGRAM_NAME_LC=\"opensoar\"
+endif
+
 LUA_SOURCES = \
 	$(SRC)/lua/Ptr.cpp \
 	$(SRC)/lua/Error.cxx \
