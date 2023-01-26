@@ -103,6 +103,9 @@ $(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.c | $(ABI_OUTPUT_DIR)/%/../dirstamp $(compil
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(WRAPPED_CC) $< -c -o $@ $(cc-flags)
 
+# switch verbose on (or off):
+# cxx-flags += -v
+
 $(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cpp | $(ABI_OUTPUT_DIR)/%/../dirstamp $(compile-depends)
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(WRAPPED_CXX) $< -c -o $@ $(cxx-flags)

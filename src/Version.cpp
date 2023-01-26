@@ -24,7 +24,10 @@ Copyright_License {
 #include "Version.hpp"
 
 #ifndef OPENSOAR_VERSION
+#ifndef XCSOAR_VERSION
 #error Macro "OPENSOAR_VERSION" is not defined.  Check build/version.mk!
+#endif
+#define OPENSOAR_VERSION XCSOAR_VERSION ".02"
 #endif
 
 #define VERSION OPENSOAR_VERSION

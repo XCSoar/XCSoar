@@ -625,8 +625,11 @@ XCSOAR_SOURCES += \
 else
 XCSOAR_SOURCES += \
 	$(SRC)/CommandLine.cpp \
-	$(SRC)/XCSoar.cpp
+	$(SRC)/OpenSoar.cpp
+
+#	$(SRC)/XCSoar.cpp
 endif
+
 
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
