@@ -70,7 +70,6 @@ else()
   message(FATAL_ERROR "Stop: unknown Compiler??? - ${CMAKE_CXX_COMPILER_ID}")
 endif()
 
-
 add_subdirectory(build/cmake)
 add_subdirectory(Data)
 add_subdirectory(po)
