@@ -15,7 +15,7 @@
    id="svg6431"
    version="1.1"
    inkscape:version="0.92.1 r15371"
-   sodipodi:docname="logo.svg"
+   sodipodi:docname="logo_red.svg"
    inkscape:export-filename="C:\Documents and Settings\Administrator\Desktop\XCSoar 48x48_10.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
@@ -334,7 +334,7 @@
      transform="translate(2.9999921,194.31251)"
      sodipodi:insensitive="true">
     <circle
-       style="display:inline;fill:#3f76a8;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       style="display:inline;fill:green;fill-opacity:1;fill-rule:nonzero;stroke:none"
        id="path5438"
        transform="matrix(7.9489511,0,0,7.9489511,1,-206.66478)"
        cx="15.976951"

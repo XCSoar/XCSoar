@@ -29,9 +29,6 @@ set(GRAPHIC_FILES
     ${_DATA_INPUT}/graphics/progress_border.svg
     ${_DATA_INPUT}/graphics/title.svg
 
-###    ${_DATA_INPUT}/graphics/logo.svg
-###    ${_DATA_INPUT}/graphics/progress_border.svg
-###    ${_DATA_INPUT}/graphics/title.svg
     # ${_DATA_INPUT}/graphics/dialog_title.svg
     # ${_DATA_INPUT}/graphics/launcher.svg
 )
@@ -93,7 +90,7 @@ if(ON) # MSVC)  # mit minGW geht das nicht??
     
     # set(OPENSOAR_VERSION "7.28+") 
     configure_file(
-        ${_DATA_INPUT}/graphics/title_open_soar.svg 
+        ${_DATA_INPUT}/graphics/title.svg 
         ${_TEMP_OUTPUT}/title.svg
     )
     
@@ -111,19 +108,19 @@ if(ON) # MSVC)  # mit minGW geht das nicht??
         add_custom_command(OUTPUT ${GRAPHIC_BITMAPS}
                COMMENT "Convert graphics!"
                COMMAND ${CMAKE_COMMAND} -E make_directory ${_GRAPHICS_OUTPUT}
-               COMMAND ${BMP_CONVERT_APP} -size 160 Data/graphics/logo_open_soar.svg bmp3:${_GRAPHICS_OUTPUT}/logo_160.bmp
-               COMMAND ${BMP_CONVERT_APP}  -size 80 Data/graphics/logo_open_soar.svg bmp3:${_GRAPHICS_OUTPUT}/logo_80.bmp
+               COMMAND ${BMP_CONVERT_APP} -size 160 Data/graphics/logo.svg bmp3:${_GRAPHICS_OUTPUT}/logo_160.bmp
+               COMMAND ${BMP_CONVERT_APP}  -size 80 Data/graphics/logo.svg bmp3:${_GRAPHICS_OUTPUT}/logo_80.bmp
                COMMAND ${BMP_CONVERT_APP}  -background white -layers flatten +matte +dither -compress none -type optimize -colors 256  Data/graphics/launcher.svg bmp3:${_GRAPHICS_OUTPUT}/launcher_640.bmp
                COMMAND ${BMP_CONVERT_APP}  -crop "50${PERCENT_CHAR}x100${PERCENT_CHAR}" -scene 1  ${_GRAPHICS_OUTPUT}/launcher_640.bmp "bmp3:${_GRAPHICS_OUTPUT}/launcher_640_${PERCENT_CHAR}d.bmp"
-               COMMAND ${BMP_CONVERT_APP}  Data/graphics/progress_border_open_soar.svg bmp3:${_GRAPHICS_OUTPUT}/progress_border.bmp
+               COMMAND ${BMP_CONVERT_APP}  Data/graphics/progress_border.svg bmp3:${_GRAPHICS_OUTPUT}/progress_border.bmp
                COMMAND ${BMP_CONVERT_APP}  -size 110x110 ${_TEMP_OUTPUT}/title.svg bmp3:${_GRAPHICS_OUTPUT}/title_110.bmp 
                COMMAND ${BMP_CONVERT_APP}  -size 320x320 ${_TEMP_OUTPUT}/title.svg bmp3:${_GRAPHICS_OUTPUT}/title_320.bmp
                
                # COMMAND ${BMP_CONVERT_APP}  -size 320 -background white -layers flatten +matte +dither -compress none -type optimize -colors 256  Data/graphics/title.svg bmp3:${_GRAPHICS_OUTPUT}/title_320.bmp
                # WORKING_DIRECTORY ${PROJECTGROUP_SOURCE_DIR}
-               DEPENDS ${_DATA_INPUT}/graphics/logo_open_soar.svg
-                       ${_DATA_INPUT}/graphics/progress_border_open_soar.svg
-                       ${_DATA_INPUT}/graphics/launcher_open_soar.svg
+               DEPENDS ${_DATA_INPUT}/graphics/logo.svg
+                       ${_DATA_INPUT}/graphics/progress_border.svg
+                       ${_DATA_INPUT}/graphics/launcher.svg
                        ${_TEMP_OUTPUT}/title.svg
                WORKING_DIRECTORY ${PROJECTGROUP_SOURCE_DIR}
         )
