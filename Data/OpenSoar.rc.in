@@ -48,7 +48,8 @@ HI_RES_AWARE CEUX {1}
 #endif  // _WIN32
 
 // --- Icons ---
-IDI_XCSOAR              ICON    DISCARDABLE     "@CMAKE_CURRENT_SOURCE_DIR@/Data/bitmaps/xcsoarswift.ico"
+ IDI_XCSOAR              ICON    DISCARDABLE     "@CMAKE_CURRENT_SOURCE_DIR@/Data/bitmaps/OpenSoar.ico"
+// IDI_XCSOAR              ICON    DISCARDABLE     "@CMAKE_CURRENT_SOURCE_DIR@/Data/bitmaps/xcsoarswift.ico"
 
 // --- Bitmaps ---
 

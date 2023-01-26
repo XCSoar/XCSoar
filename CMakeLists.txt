@@ -17,7 +17,8 @@ set (PROJECT_NAME "OpenSoar-${PROJECT_NAME}")
 project(${PROJECT_NAME})
 set(TARGET_NAME OpenSoar)
 set(PROGRAM_NAME ${TARGET_NAME})
-string(TOLOWER  ${PROGRAM_NAME} PROGRAM_NAME_LC)
+set(PROGRAM_NAME_CC ${TARGET_NAME})              # CamelCase
+string(TOLOWER  ${PROGRAM_NAME} PROGRAM_NAME_LC) # lowercase
 
 # add version string to OpenSoar:
 file(READ "VERSION.txt" PROGRAM_VERSION)

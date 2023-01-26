@@ -2,7 +2,7 @@ PROGRAM_NAME_LC = opensoar
 PROGRAM_NAME_CC = OpenSoar
 
 ifeq ($(HAVE_POSIX),y)
-PROGRAM_NAME = $(PROGRAM_NAME_LC)
+PROGRAM_NAME = $(PROGRAM_NAME_CC)  # all programs CamelCase
 else
 PROGRAM_NAME = $(PROGRAM_NAME_CC)
 endif
