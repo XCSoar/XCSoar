@@ -21,6 +21,13 @@ Copyright_License {
 }
 */
 
+/**
+* see Documentation https://github.com/larus-breeze/documentation_and_utilities,
+* for the driver you need https://github.com/larus-breeze/standards-larus-NMEA-protocol
+* and an emulator is here https://github.com/larus-breeze/SIL_flight_sensor_emulator
+*/
+
+
 #include "Device/Driver/Larus.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Util/NMEAWriter.hpp"
@@ -68,70 +75,6 @@ ReadBearing(NMEAInputLine &line, Angle &value_r)
         return false;
 
     value_r = Angle::Degrees(value).AsBearing();
-    return true;
-}
-
-bool
-ReadSpeed(NMEAInputLine &line, double &value)
-{
-    double _value;
-    value = -1;
-    if (!line.ReadChecked(_value))
-        return false;
-
-    switch (line.ReadOneChar()) {
-    case 'N':
-      value = Units::ToSysUnit(_value, Unit::KNOTS);
-      break;
-
-    case 'K':
-      value = Units::ToSysUnit(_value, Unit::KILOMETER_PER_HOUR);
-      break;
-
-    case 'M':
-      value = Units::ToSysUnit(_value, Unit::METER_PER_SECOND);
-      break;
-
-    case 'F':
-      value = Units::ToSysUnit(_value, Unit::FEET_PER_MINUTE);
-      break;
-
-    default:
-      return false;
-    }
-    if (_value < -10.0 || _value > 500) // vario values coud be lower then 0!
-      return false;
-
-    return true;
-}
-
-bool
-ReadHeight(NMEAInputLine &line, double &value)
-{
-    double _value;
-    value = -1;
-    if (!line.ReadChecked(_value))
-        return false;
-
-    switch (line.ReadOneChar()) {
-    case 'M':
-      value = Units::ToSysUnit(_value, Unit::METER);
-      break;
-
-    case 'F':
-      value = Units::ToSysUnit(_value, Unit::FEET);
-      break;
-
-    case 'K':
-      value = Units::ToSysUnit(_value, Unit::KILOMETER);
-      break;
-
-    default:
-      return false;
-    }
-
-    if (_value < -1000 || _value > 50000)
-      return false;
     return true;
 }
 
@@ -267,7 +210,7 @@ LarusDevice::PLARB(NMEAInputLine &line, NMEAInfo &info)
 }
 
 bool
-LarusDevice::PLARD(NMEAInputLine &line, NMEAInfo &info)
+LarusDevice::PLARD(NMEAInputLine &line, [[maybe_unused]] NMEAInfo &info)
 {
    /*
    * Instant air density sentence
@@ -328,8 +271,8 @@ LarusDevice::PLARV(NMEAInputLine &line, NMEAInfo &info)
   }
 
   // Parse average climb rate, Larus is doing this over one circle!
-  if (line.ReadChecked(value))
-    ; // Skip average vario data, TODO(August2111): create a new field for a
+  if (line.ReadChecked(value)) {
+  } // Skip average vario data, TODO(August2111): create a new field for a
       // - Full Circle Average Climbrate(!), make it visible and set it here
 
   // Parse barometric altitude
