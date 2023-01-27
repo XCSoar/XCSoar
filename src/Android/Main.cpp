@@ -154,7 +154,7 @@ try {
 
   InitialiseDataPath();
 
-  LogFormat(_T("Starting XCSoar %s"), XCSoar_ProductToken);
+  LogFormat(_T("Starting OpenSoar %s"), OpenSoar_ProductToken);
 
   TextUtil::Initialise(env);
 
