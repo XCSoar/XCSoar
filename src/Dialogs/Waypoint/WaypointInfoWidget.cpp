@@ -108,6 +108,8 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
   if (!waypoint->comment.empty())
     AddMultiLine(waypoint->comment.c_str());
 
+  AddReadOnly(_("Waypoint type"), nullptr, Waypoint::TypeMap[waypoint->type].c_str());
+
   if (waypoint->radio_frequency.Format(buffer.buffer(),
                                       buffer.capacity()) != nullptr) {
     buffer += _T(" MHz");

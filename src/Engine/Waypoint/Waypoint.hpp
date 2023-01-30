@@ -31,6 +31,7 @@
 #include "system/RunFile.hpp"
 
 #include <forward_list>
+#include <map>
 
 class FlatProjection;
 
@@ -66,6 +67,8 @@ struct Waypoint {
     PGTAKEOFF,
     PGLANDING
   };
+
+  static std::map<Type, tstring> TypeMap;
 
   /**
    * Bitfield structure for Waypoint capabilities

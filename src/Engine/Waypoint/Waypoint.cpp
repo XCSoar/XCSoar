@@ -22,6 +22,7 @@
 
 #include "Waypoint.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
+#include "Language/Language.hpp"
 
 Waypoint::Waypoint(const GeoPoint &_location) noexcept
   :location(_location)
@@ -44,3 +45,26 @@ Waypoint::Project(const FlatProjection &projection) noexcept
   flat_location_initialised = true;
 #endif
 }
+
+std::map<Waypoint::Type, tstring> Waypoint::TypeMap = {
+  { Waypoint::Type::NORMAL,N_("Normal") },
+  { Waypoint::Type::AIRFIELD,N_("Airfield") },
+  { Waypoint::Type::OUTLANDING,N_("Outlanding") },
+  { Waypoint::Type::MOUNTAIN_TOP,N_("Mountain Top") },
+  { Waypoint::Type::MOUNTAIN_PASS,N_("Mountain Pass") },
+  { Waypoint::Type::BRIDGE,N_("Bridge") },
+  { Waypoint::Type::TUNNEL,N_("Tunnel") },
+  { Waypoint::Type::TOWER,N_("Tower") },
+  { Waypoint::Type::POWERPLANT,N_("Powerplant") },
+  { Waypoint::Type::OBSTACLE,N_("Obstacle") },
+  { Waypoint::Type::THERMAL_HOTSPOT,N_("Thermal hotspot") },
+  { Waypoint::Type::MARKER,N_("Marker") },
+  { Waypoint::Type::VOR,N_("VOR") },
+  { Waypoint::Type::NDB,N_("NDB") },
+  { Waypoint::Type::DAM,N_("Dam") },
+  { Waypoint::Type::CASTLE,N_("Castle") },
+  { Waypoint::Type::INTERSECTION,N_("Intersection") },
+  { Waypoint::Type::REPORTING_POINT,N_("Reporting Point") },
+  { Waypoint::Type::PGTAKEOFF,N_("Paraglider Takeoff") },
+  { Waypoint::Type::PGLANDING,N_("Paraglider Landing") }
+};
