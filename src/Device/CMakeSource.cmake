@@ -46,6 +46,7 @@ set(_SOURCES
         Device/Driver/Flytec/Logger.cpp
         Device/Driver/Flytec/Parser.cpp
         Device/Driver/Flytec/Register.cpp
+        Device/Driver/FreeVario.cpp
         Device/Driver/Generic.cpp
         Device/Driver/ILEC.cpp
         Device/Driver/IMI/Declare.cpp
