@@ -79,8 +79,16 @@ $(ICNS_SPLASH_1024): %.icns: %.png
 
 ####### version
 
-SVG_TITLE = Data/graphics/title.svg Data/graphics/title_red.svg
-PNG_TITLE_110 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_110.png,$(SVG_TITLE))
+SVG_TITLE = Data/graphics/title.svg 
+# Data/graphics/title_red.svg
+SVG_TMP_TITLE = $(DATA)/temp/graphics/title.svg $(DATA)/temp/graphics/title_red.svg
+# convert to title
+$(DATA)/temp/graphics/%.svg: $(SVG_TITLE)
+	@$(NQ)echo "  TMP_SVG:   $< == $@"
+	$(Q)$(MKDIR) -p $(DATA)/temp/graphics
+	$(Q)python3 $(topdir)/tools/python/replace.py  $< $@ $(topdir)/OpenSoar.config
+
+PNG_TITLE_110 = $(patsubst $(DATA)/temp/graphics/%.svg,$(DATA)/graphics/%_110.png,$(SVG_TMP_TITLE))
 BMP_TITLE_110 = $(PNG_TITLE_110:.png=.bmp)
 PNG_TITLE_320 = $(patsubst $(DATA)/temp/graphics/%.svg,$(DATA)/graphics/%_320.png,$(SVG_TMP_TITLE))
 BMP_TITLE_320 = $(PNG_TITLE_320:.png=.bmp)
