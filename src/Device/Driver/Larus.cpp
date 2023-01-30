@@ -52,14 +52,13 @@ public:
 //  void OnCalculatedUpdate(const MoreData &basic,
 //                  const DerivedInfo &calculated) override;
 private:
-  bool PLARA(NMEAInputLine &line, NMEAInfo &info);
-  bool PLARB(NMEAInputLine &line, NMEAInfo &info);
-  bool PLARD(NMEAInputLine &line, NMEAInfo &info);
-  bool PLARV(NMEAInputLine &line, NMEAInfo &info);
-  bool PLARW(NMEAInputLine &line, NMEAInfo &info);
-  bool HCHDT(NMEAInputLine &line, NMEAInfo &info);
- 
- };
+  static bool PLARA(NMEAInputLine &line, NMEAInfo &info);
+  static bool PLARB(NMEAInputLine &line, NMEAInfo &info);
+  static bool PLARD(NMEAInputLine &line, NMEAInfo &info);
+  static bool PLARV(NMEAInputLine &line, NMEAInfo &info);
+  static bool PLARW(NMEAInputLine &line, NMEAInfo &info);
+  static bool HCHDT(NMEAInputLine &line, NMEAInfo &info);
+};
 
 /**
  * Parses non-negative floating-point angle value in degrees.
