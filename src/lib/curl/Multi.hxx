@@ -98,22 +98,6 @@ public:
 			throw std::runtime_error(curl_multi_strerror(code));
 	}
 
-	void FdSet(fd_set *read_fd_set, fd_set *write_fd_set, fd_set *exc_fd_set,
-		   int *max_fd) const {
-		CURLMcode code = curl_multi_fdset(handle, read_fd_set, write_fd_set,
-						  exc_fd_set, max_fd);
-		if (code != CURLM_OK)
-			throw std::runtime_error(curl_multi_strerror(code));
-	}
-
-	[[gnu::pure]]
-	long GetTimeout() const {
-		long timeout;
-		return ::curl_multi_timeout(handle, &timeout) == CURLM_OK
-			? timeout
-			: -1;
-	}
-
 	CURLMsg *InfoRead() noexcept {
 		int msgs_in_queue;
 		return curl_multi_info_read(handle, &msgs_in_queue);
