@@ -35,9 +35,6 @@ Copyright_License {
 
 using std::string_view_literals::operator""sv;
 
-static bool
-ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
-
 class ACDDevice : public AbstractDevice {
   Port &port;
   static bool syncInSync;
@@ -54,7 +51,7 @@ public:
   bool PutStandbyFrequency(RadioFrequency frequency,
                            const TCHAR *name,
                            OperationEnvironment &env) override;
-  static bool ParsePAAVS(NMEAInputLine &line, NMEAInfo &info,Port &port);
+  static bool ParsePAAVS(NMEAInputLine &line, NMEAInfo &info);
 private:
   static void setDeviceInSync(bool isSynchon);
   static bool getDeviceInSyncStatus();
@@ -99,7 +96,7 @@ ACDDevice::getLastSendPascalPresure(){
 }
 
 bool
-ACDDevice::ParsePAAVS(NMEAInputLine &line, NMEAInfo &info,Port &port)
+ACDDevice::ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
 {
   double value;
   bool result = false;
@@ -183,8 +180,7 @@ ACDDevice::ParsePAAVS(NMEAInputLine &line, NMEAInfo &info,Port &port)
       }
 
     }
-
-  } else if (StringIsEqual(type, "COM"sv)) {
+  } else if (type == "COM"sv) {
     /*
     $PAAVS,COM,<CHN1>,<CHN2>,<RXVOL1>,<RXVOL2>,<DWATCH>,<RX1>,<RX2>,<TX1>
      <CHN1> Primary radio channel;
@@ -246,8 +242,8 @@ ACDDevice::PutVolume(unsigned volume, OperationEnvironment &env)
 
 bool
 ACDDevice::PutStandbyFrequency(RadioFrequency frequency,
-                                   [[maybe_unused]] const TCHAR *name,
-                                   OperationEnvironment &env)
+                               [[maybe_unused]] const TCHAR *name,
+                               OperationEnvironment &env)
 {
   char buffer[100];
   unsigned freq = frequency.GetKiloHertz();
@@ -265,7 +261,7 @@ ACDDevice::ParseNMEA(const char *_line, NMEAInfo &info)
   NMEAInputLine line(_line);
 
   if (line.ReadCompare("$PAAVS"))
-    return ParsePAAVS(line, info, port);
+    return ParsePAAVS(line, info);
   else
     return false;
 }
