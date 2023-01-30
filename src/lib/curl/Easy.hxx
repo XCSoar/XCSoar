@@ -31,7 +31,6 @@
 
 #include "Error.hxx"
 #include "String.hxx"
-#include "util/Compiler.h"
 
 #include <curl/curl.h>
 
