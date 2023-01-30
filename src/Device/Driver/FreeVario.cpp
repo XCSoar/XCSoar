@@ -53,6 +53,7 @@ public:
   bool ParseNMEA(const char *line,NMEAInfo &info) override;
   static bool PFVParser(NMEAInputLine &line, NMEAInfo &info, Port &port);
   static bool POVParserAndForward(NMEAInputLine &line);
+  bool SendCmd(double value, const char *cmd, OperationEnvironment &env);
   bool PutMacCready(double mc, OperationEnvironment &env) override;
   bool PutBugs(double bugs, OperationEnvironment &env) override;
   bool PutQNH(const AtmosphericPressure &pres,
@@ -327,39 +328,36 @@ FreeVarioDevice::OnCalculatedUpdate(const MoreData &basic,
  *  be informed about MC changes doen in XCSoar
  */
 bool
-FreeVarioDevice::PutMacCready(double mc, OperationEnvironment &env)
-{
-  if (!EnableNMEA(env)){return false;}
-  char nmeaOutbuffer[80];
-  sprintf(nmeaOutbuffer,"PFV,MCI,%0.2f", (double)mc);
-  PortWriteNMEA(port, nmeaOutbuffer, env);
-  return true;
-}
-
-bool
-FreeVarioDevice::PutBugs(double bugs,OperationEnvironment &env)
-{
-  if (!EnableNMEA(env)) {
-    return false;
-  }
-  char nmeaOutbuffer[80];
-  double bugsAsPercentage = (1 - bugs) * 100;
-  sprintf(nmeaOutbuffer,"PFV,BUG,%f",bugsAsPercentage);
-  PortWriteNMEA(port, nmeaOutbuffer, env);
-  return true;
-}
-
-bool
-FreeVarioDevice::PutQNH(const AtmosphericPressure &pres,
+FreeVarioDevice::SendCmd(double value, const char *cmd,
   OperationEnvironment &env)
 {
   if (!EnableNMEA(env)) {
     return false;
   }
   char nmeaOutbuffer[80];
-  sprintf(nmeaOutbuffer,"PFV,QNH,%f",pres.GetHectoPascal());
+  sprintf(nmeaOutbuffer, cmd, value);
   PortWriteNMEA(port, nmeaOutbuffer, env);
   return true;
+}
+
+bool
+FreeVarioDevice::PutMacCready(double mc, OperationEnvironment &env)
+{
+  return SendCmd(mc, "PFV,MCI,%0.2f", env);
+}
+
+bool
+FreeVarioDevice::PutBugs(double bugs,OperationEnvironment &env)
+{
+  double bugsAsPercentage = (1 - bugs) * 100;
+  return SendCmd(bugsAsPercentage, "PFV,BUG,%f", env);
+}
+
+bool
+FreeVarioDevice::PutQNH(const AtmosphericPressure &pres,
+  OperationEnvironment &env)
+{
+  return SendCmd(pres.GetHectoPascal(), "PFV,QNH,%f", env);
 }
 
 
