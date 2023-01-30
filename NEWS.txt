@@ -7,6 +7,8 @@ Version 7.29 - not yet released
 * Kobo
   - Add support for Libra H2O
   - Add support for Clara 2E
+* Polars
+  - Add LS-5 polar
 
 Version 7.28 - 2022/10/29
 * data files
