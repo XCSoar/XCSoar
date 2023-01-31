@@ -28,7 +28,7 @@ ZIPALIGN = $(ANDROID_BUILD_TOOLS_DIR)/zipalign
 AAPT = $(ANDROID_BUILD_TOOLS_DIR)/aapt
 DX = $(ANDROID_BUILD_TOOLS_DIR)/dx
 
-ANDROID_LIB_NAMES = xcsoar
+ANDROID_LIB_NAMES = $(PROGRAM_NAME)
 
 APKSIGN = $(APKSIGNER) sign
 ifeq ($(V),2)
@@ -330,7 +330,6 @@ $(HOME)/.android/debug.keystore:
 		-dname "CN=Android Debug" \
 		-keyalg RSA -keysize 2048 -validity 10000
 
-# $(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_BUILD)/aligned.apk $(HOME)/.android/debug.keystore | $(ANDROID_BIN)/dirstamp
 $(ANDROID_BIN)/$(PROGRAM_NAME)-unsigned.apk: $(ANDROID_BUILD)/aligned.apk $(HOME)/.android/debug.keystore | $(ANDROID_BIN)/dirstamp
 	@$(NQ)echo "  UNSIGN  $@"
 	$(Q)$(APKSIGN) --in $< --out $@ --debuggable-apk-permitted -ks $(HOME)/.android/debug.keystore --ks-key-alias androiddebugkey --ks-pass pass:android

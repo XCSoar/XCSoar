@@ -696,9 +696,7 @@ endif
 XCSOAR_STRIP = y
 
 ifeq ($(TARGET),ANDROID)
-# $(eval $(call link-shared-library,$(PROGRAM_NAME),XCSOAR))
-# August2111: use xcsoar because problems inside package:
-$(eval $(call link-shared-library,xcsoar,XCSOAR))  
+$(eval $(call link-shared-library,$(PROGRAM_NAME),XCSOAR))
 else
 $(eval $(call link-program,$(PROGRAM_NAME),XCSOAR))
 endif
