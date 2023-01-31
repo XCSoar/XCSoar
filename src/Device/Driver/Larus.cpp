@@ -132,7 +132,7 @@ LarusDevice::HCHDT(NMEAInputLine &line, NMEAInfo &info)
         return true;
       case 'M':
       default:
-        return false; // false means: an other (general) parser should look
+        return false;  // false means: an other (general) parser should look
       }
     }
   }
@@ -184,14 +184,12 @@ bool
 LarusDevice::PLARB(NMEAInputLine &line, NMEAInfo &info)
 {
     /*
-   * Battery voltage sentence
+     * Battery voltage sentence
      *
      *        1     2
      *        |     |
      * $PLARB,xx.xx*hh<CR><LF>
      * 
-     * State of Battery
-     *
      * Field Number:
      * 1)  battery voltage in Volt
      * 2)  Checksum
@@ -199,8 +197,8 @@ LarusDevice::PLARB(NMEAInputLine &line, NMEAInfo &info)
   double value;
   if (line.ReadChecked(value)) {
     if (value >= 0 && value <= 25) {
-//      info.battery_level = value;
-//      info.battery_level_available.Update(info.clock);
+      // info.battery_level = value;
+      // info.battery_level_available.Update(info.clock);
       info.voltage = value;
       info.voltage_available.Update(info.clock);
     }
@@ -249,7 +247,7 @@ bool
 LarusDevice::PLARV(NMEAInputLine &line, NMEAInfo &info)
 {
   /*
-    * $PLARV,x.x,M,x.x,M,x,M,x.x,K*hh
+    * $PLARV,x.x,x.x,x,x.x*hh
     *
     * Vario Data: TEK vario, average vario, height (std pressure)
     *             and speed (tas)
@@ -259,7 +257,7 @@ LarusDevice::PLARV(NMEAInputLine &line, NMEAInfo &info)
     *  2) Average Climb Rate over one circle
     *  3) Pressure Height
     *  4) True Air Speed (TAS)
-   *  5) Checksum
+    *  5) Checksum
     */
 
   double value;
@@ -270,12 +268,12 @@ LarusDevice::PLARV(NMEAInputLine &line, NMEAInfo &info)
   }
 
   // Parse average climb rate, Larus is doing this over one circle!
-  if (line.ReadChecked(value)) {
-  } // Skip average vario data, TODO(August2111): create a new field for a
-      // - Full Circle Average Climbrate(!), make it visible and set it here
+  line.ReadChecked(value);  // Skip average vario data, TODO(August2111):
+  // create a new field for a Full Circle Average Climbrate(!),  make it
+  // visible and set it here
 
   // Parse barometric altitude
-  double altitude;
+  double altitude;  // used in ProvideTrueAirspeedWithAltitude too
   if (line.ReadChecked(altitude)) {
     altitude = Units::ToSysUnit(value, Unit::METER);
     info.ProvidePressureAltitude(altitude);
@@ -292,16 +290,16 @@ LarusDevice::PLARV(NMEAInputLine &line, NMEAInfo &info)
 bool
 LarusDevice::PLARW(NMEAInputLine &line, NMEAInfo &info)
 {
-    /*
-      * $PLARW,x.x,a,x.x,a,a,a*hh
-      *
-      * Field Number:
-      *  1) wind angle
-      *  2) wind speed
-      *  3) (A)verage or (I)nstantaneous
-      *  4) Status A=valid
-      *  5) Checksum
-      */
+  /*
+    * $PLARW,x.x,x.x,t,v*hh
+    *
+    * Field Number:
+    *  1) wind angle
+    *  2) wind speed
+    *  3) t = (A)verage or (I)nstantaneous
+    *  4) v = Status A=valid
+    *  5) Checksum
+    */
 
   SpeedVector wind;
   if (!ReadBearing(line, wind.bearing))
