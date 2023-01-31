@@ -42,10 +42,10 @@ Copyright_License {
 using std::string_view_literals::operator""sv;
 
 class LarusDevice : public AbstractDevice {
-  [[maybe_unused]] Port &port;
+  // unused up to now: Port &port;
 
 public:
-  LarusDevice(Port &_port):port(_port) {}
+  LarusDevice([[maybe_unused]] Port &_port) {}
 
   /* virtual methods from class Device */
   bool ParseNMEA(const char *line, NMEAInfo &info) override;
