@@ -330,11 +330,12 @@ $(HOME)/.android/debug.keystore:
 		-dname "CN=Android Debug" \
 		-keyalg RSA -keysize 2048 -validity 10000
 
-$(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_BUILD)/aligned.apk $(HOME)/.android/debug.keystore | $(ANDROID_BIN)/dirstamp
-	@$(NQ)echo "  SIGN    $@"
+# $(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_BUILD)/aligned.apk $(HOME)/.android/debug.keystore | $(ANDROID_BIN)/dirstamp
+$(ANDROID_BIN)/$(PROGRAM_NAME)-unsigned.apk: $(ANDROID_BUILD)/aligned.apk $(HOME)/.android/debug.keystore | $(ANDROID_BIN)/dirstamp
+	@$(NQ)echo "  UNSIGN  $@"
 	$(Q)$(APKSIGN) --in $< --out $@ --debuggable-apk-permitted -ks $(HOME)/.android/debug.keystore --ks-key-alias androiddebugkey --ks-pass pass:android
 
-$(ANDROID_BIN)/XCSoar.apk: $(ANDROID_BUILD)/aligned.apk | $(ANDROID_BIN)/dirstamp
+$(ANDROID_BIN)/$(PROGRAM_NAME).apk: $(ANDROID_BUILD)/aligned.apk | $(ANDROID_BIN)/dirstamp
 	@$(NQ)echo "  SIGN    $@"
 	$(Q)$(APKSIGN_RELEASE) --in $< --out $@ -ks $(ANDROID_KEYSTORE) --ks-key-alias $(ANDROID_KEY_ALIAS)
 

@@ -63,6 +63,15 @@
 #   USE_CCACHE  "y" to build with ccache
 #
 
+PROGRAM_NAME_LC = opensoar
+PROGRAM_NAME_CC = OpenSoar
+
+ifeq ($(HAVE_POSIX),y)
+PROGRAM_NAME = $(PROGRAM_NAME_CC)  # all programs CamelCase
+else
+PROGRAM_NAME = $(PROGRAM_NAME_CC)
+endif
+
 .DEFAULT_GOAL := all
 
 topdir = .
@@ -234,7 +243,7 @@ OUTPUTS := $(XCSOAR_BIN) $(VALI_XCS_BIN)
 endif
 
 ifeq ($(TARGET),ANDROID)
-OUTPUTS += $(ANDROID_BIN)/XCSoar-debug.apk
+OUTPUTS += $(ANDROID_BIN)/$(PROGRAM_NAME)-unsigned.apk
 endif
 
 ifeq ($(TARGET_IS_KOBO),y)

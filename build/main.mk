@@ -1,11 +1,11 @@
-PROGRAM_NAME_LC = opensoar
-PROGRAM_NAME_CC = OpenSoar
-
-ifeq ($(HAVE_POSIX),y)
-PROGRAM_NAME = $(PROGRAM_NAME_CC)  # all programs CamelCase
-else
-PROGRAM_NAME = $(PROGRAM_NAME_CC)
-endif
+### PROGRAM_NAME_LC = opensoar
+### PROGRAM_NAME_CC = OpenSoar
+### 
+### ifeq ($(HAVE_POSIX),y)
+### PROGRAM_NAME = $(PROGRAM_NAME_CC)  # all programs CamelCase
+### else
+### PROGRAM_NAME = $(PROGRAM_NAME_CC)
+### endif
 
 DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Inflate.cpp \
@@ -696,7 +696,9 @@ endif
 XCSOAR_STRIP = y
 
 ifeq ($(TARGET),ANDROID)
-$(eval $(call link-shared-library,$(PROGRAM_NAME),XCSOAR))
+# $(eval $(call link-shared-library,$(PROGRAM_NAME),XCSOAR))
+# August2111: use xcsoar because problems inside package:
+$(eval $(call link-shared-library,xcsoar,XCSOAR))  
 else
 $(eval $(call link-program,$(PROGRAM_NAME),XCSOAR))
 endif
