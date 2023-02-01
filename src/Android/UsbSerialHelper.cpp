@@ -41,7 +41,7 @@ UsbSerialHelper::Initialise(JNIEnv *env) noexcept
   assert(!cls.IsDefined());
   assert(env != nullptr);
 
-  if (!cls.FindOptional(env, "org/xcsoar/UsbSerialHelper")) {
+  if (!cls.FindOptional(env, "de/opensoar/UsbSerialHelper")) {
     /* Android < 3.1 doesn't have Usb Host support */
     return false;
   }
@@ -57,14 +57,14 @@ UsbSerialHelper::Initialise(JNIEnv *env) noexcept
 
   close_method = env->GetMethodID(cls, "close", "()V");
   connect_method = env->GetMethodID(cls, "connect",
-                                    "(Ljava/lang/String;I)Lorg/xcsoar/AndroidPort;");
+                                    "(Ljava/lang/String;I)Lde/opensoar/AndroidPort;");
 
   addDetectDeviceListener_method =
     env->GetMethodID(cls, "addDetectDeviceListener",
-                     "(Lorg/xcsoar/DetectDeviceListener;)V");
+                     "(Lde/opensoar/DetectDeviceListener;)V");
   removeDetectDeviceListener_method =
     env->GetMethodID(cls, "removeDetectDeviceListener",
-                     "(Lorg/xcsoar/DetectDeviceListener;)V");
+                     "(Lde/opensoar/DetectDeviceListener;)V");
 
   return true;
 }

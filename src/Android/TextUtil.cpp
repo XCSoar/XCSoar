@@ -43,7 +43,7 @@ TextUtil::Initialise(JNIEnv *_env) noexcept
 {
   env = _env;
 
-  cls.Find(_env, "org/xcsoar/TextUtil");
+  cls.Find(_env, "de/opensoar/TextUtil");
 
   midTextUtil = _env->GetMethodID(cls, "<init>", "(IIIZ)V");
   midGetFontMetrics = _env->GetMethodID(cls, "getFontMetrics", "([I)V");

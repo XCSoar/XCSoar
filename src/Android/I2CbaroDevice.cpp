@@ -32,10 +32,10 @@ static jmethodID i2cbaro_ctor;
 void
 I2CbaroDevice::Initialise(JNIEnv *env) noexcept
 {
-  i2cbaro_class.Find(env, "org/xcsoar/GlueI2Cbaro");
+  i2cbaro_class.Find(env, "de/opensoar/GlueI2Cbaro");
 
   i2cbaro_ctor = env->GetMethodID(i2cbaro_class, "<init>",
-                                 "(Lorg/xcsoar/IOIOConnectionHolder;IIIIILorg/xcsoar/SensorListener;)V");
+                                 "(Lde/opensoar/IOIOConnectionHolder;IIIIILde/opensoar/SensorListener;)V");
 }
 
 void

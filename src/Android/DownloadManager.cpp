@@ -61,7 +61,7 @@ AndroidDownloadManager::Initialise(JNIEnv *env) noexcept
   assert(util_class == nullptr);
   assert(env != nullptr);
 
-  if (!util_class.FindOptional(env, "org/xcsoar/DownloadUtil"))
+  if (!util_class.FindOptional(env, "de/opensoar/DownloadUtil"))
     return false;
 
   ctor = env->GetMethodID(util_class, "<init>",

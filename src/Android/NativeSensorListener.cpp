@@ -42,7 +42,7 @@ static jfieldID ptr_field;
 void
 NativeSensorListener::Initialise(JNIEnv *env) noexcept
 {
-  cls.Find(env, "org/xcsoar/NativeSensorListener");
+  cls.Find(env, "de/opensoar/NativeSensorListener");
   ctor = env->GetMethodID(cls, "<init>", "(J)V");
   ptr_field = env->GetFieldID(cls, "ptr", "J");
 }

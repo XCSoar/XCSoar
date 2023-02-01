@@ -59,7 +59,7 @@ AndroidTextEntryDialog::Initialise(JNIEnv *env) noexcept
   assert(text_entry_dialog_class == nullptr);
   assert(env != nullptr);
 
-  text_entry_dialog_class.Find(env, "org/xcsoar/TextEntryDialog");
+  text_entry_dialog_class.Find(env, "de/opensoar/TextEntryDialog");
 
   ctor = env->GetMethodID(text_entry_dialog_class, "<init>",
                           "(JLandroid/content/Context;Ljava/lang/String;Ljava/lang/String;I)V");

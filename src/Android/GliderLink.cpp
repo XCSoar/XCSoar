@@ -36,10 +36,10 @@ GliderLink::Initialise(JNIEnv *env) noexcept
   assert(!gl_cls.IsDefined());
   assert(env != nullptr);
 
-  gl_cls.Find(env, "org/xcsoar/GliderLinkReceiver");
+  gl_cls.Find(env, "de/opensoar/GliderLinkReceiver");
 
   gl_ctor_id = env->GetMethodID(gl_cls, "<init>",
-                                 "(Landroid/content/Context;Lorg/xcsoar/SensorListener;)V");
+                                 "(Landroid/content/Context;Lde/opensoar/SensorListener;)V");
 }
 
 void

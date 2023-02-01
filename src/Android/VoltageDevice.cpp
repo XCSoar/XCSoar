@@ -32,10 +32,10 @@ static jmethodID voltage_ctor;
 void
 VoltageDevice::Initialise(JNIEnv *env) noexcept
 {
-  voltage_class.Find(env, "org/xcsoar/GlueVoltage");
+  voltage_class.Find(env, "de/opensoar/GlueVoltage");
 
   voltage_ctor = env->GetMethodID(voltage_class, "<init>",
-                                 "(Lorg/xcsoar/IOIOConnectionHolder;ILorg/xcsoar/SensorListener;)V");
+                                 "(Lde/opensoar/IOIOConnectionHolder;ILde/opensoar/SensorListener;)V");
 }
 
 void

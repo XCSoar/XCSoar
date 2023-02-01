@@ -63,7 +63,7 @@ Java_de_opensoar_NativePortListener_portError(JNIEnv *env, jobject obj,
 void
 NativePortListener::Initialise(JNIEnv *env)
 {
-  cls.Find(env, "org/xcsoar/NativePortListener");
+  cls.Find(env, "de/opensoar/NativePortListener");
 
   ctor = env->GetMethodID(cls, "<init>", "(J)V");
   ptr_field = env->GetFieldID(cls, "ptr", "J");

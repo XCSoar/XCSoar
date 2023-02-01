@@ -53,7 +53,7 @@ Java_de_opensoar_NativeInputListener_dataReceived(JNIEnv *env, jobject obj,
 void
 NativeInputListener::Initialise(JNIEnv *env)
 {
-  cls.Find(env, "org/xcsoar/NativeInputListener");
+  cls.Find(env, "de/opensoar/NativeInputListener");
 
   ctor = env->GetMethodID(cls, "<init>", "(J)V");
   ptr_field = env->GetFieldID(cls, "ptr", "J");

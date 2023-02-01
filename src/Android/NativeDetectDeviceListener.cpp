@@ -59,7 +59,7 @@ Java_de_opensoar_NativeDetectDeviceListener_onDeviceDetected(JNIEnv *env, jobjec
 void
 NativeDetectDeviceListener::Initialise(JNIEnv *env) noexcept
 {
-  cls.Find(env, "org/xcsoar/NativeDetectDeviceListener");
+  cls.Find(env, "de/opensoar/NativeDetectDeviceListener");
   ctor = env->GetMethodID(cls, "<init>", "(J)V");
   ptr_field = env->GetFieldID(cls, "ptr", "J");
 }
