@@ -21,7 +21,7 @@
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 import android.util.Log;
 import ioio.lib.api.IOIO;

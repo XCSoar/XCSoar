@@ -21,7 +21,7 @@
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 import ioio.lib.api.IOIO;
 import ioio.lib.api.exception.ConnectionLostException;

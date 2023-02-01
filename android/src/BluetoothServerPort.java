@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 import java.util.UUID;
 import java.util.Collection;

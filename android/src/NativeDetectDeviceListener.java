@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 /**
  * An #DetectDeviceListener implementation that passes method calls to

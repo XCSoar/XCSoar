@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 /**
  * A listener for #AndroidPort objects.

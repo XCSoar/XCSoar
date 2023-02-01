@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

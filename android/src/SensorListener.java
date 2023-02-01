@@ -20,7 +20,7 @@
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 /**
  * Handler for sensor values obtained from Java code.

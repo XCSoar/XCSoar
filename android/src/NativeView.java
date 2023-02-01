@@ -20,7 +20,7 @@
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 import java.io.File;
 import android.util.Log;
@@ -221,10 +221,10 @@ class NativeView extends SurfaceView
    */
   private Bitmap loadResourceBitmap(String name) {
     /* find the resource */
-    int resourceId = resources.getIdentifier(name, "drawable", "org.xcsoar");
+    int resourceId = resources.getIdentifier(name, "drawable", "de.opensoar");
     if (resourceId == 0) {
       resourceId = resources.getIdentifier(name, "drawable",
-                                           "org.xcsoar.testing");
+                                           "de.opensoar.testing");
       if (resourceId == 0)
         return null;
     }
@@ -292,7 +292,7 @@ class NativeView extends SurfaceView
 
       /* this URI is going to be handled by FileProvider */
       Uri uri = new Uri.Builder().scheme("content")
-        .authority("org.xcsoar")
+        .authority("de.opensoar")
         .encodedPath("/waypoints/" + id + "/" + Uri.encode(filename))
         .build();
 

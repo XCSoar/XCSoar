@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 /**
  * Continuously receives callbacks about detected or updated devices.

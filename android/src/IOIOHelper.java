@@ -21,7 +21,7 @@
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 import java.util.Collection;
 import java.util.LinkedList;

@@ -20,7 +20,7 @@
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 class EventBridge {
   public static native void onKeyDown(int keyCode);

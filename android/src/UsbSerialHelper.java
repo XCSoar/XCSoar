@@ -20,7 +20,7 @@
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -48,7 +48,7 @@ import com.felhr.usbserial.UsbSerialDevice;
 public final class UsbSerialHelper extends BroadcastReceiver {
 
   private static final String TAG = "UsbSerialHelper";
-  private static final String ACTION_USB_PERMISSION = "org.xcsoar.otg.action.USB_PERMISSION";
+  private static final String ACTION_USB_PERMISSION = "de.opensoar.otg.action.USB_PERMISSION";
 
   private final Context context;
   private final UsbManager usbmanager;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.xcsoar.testing"
+          package="de.opensoar.testing"
           android:installLocation="auto"
           android:versionCode="155"
           android:versionName="7.29">
@@ -44,14 +44,14 @@
 
     <service android:name=".MyService" android:foregroundServiceType="location"/>
 
-    <provider android:name="org.xcsoar.FileProvider"
-              android:authorities="org.xcsoar"
+    <provider android:name="de.opensoar.FileProvider"
+              android:authorities="de.opensoar"
               android:exported="false"
               android:grantUriPermissions="true"/>
 
     <provider
-        android:name="org.xcsoar.AllFilesDocumentsProvider"
-        android:authorities="org.xcsoar.allfiles"
+        android:name="de.opensoar.AllFilesDocumentsProvider"
+        android:authorities="de.opensoar.allfiles"
         android:exported="true"
         android:grantUriPermissions="true"
         android:permission="android.permission.MANAGE_DOCUMENTS">

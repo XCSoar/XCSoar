@@ -20,7 +20,7 @@
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 import android.app.Service;
 import android.app.Notification;

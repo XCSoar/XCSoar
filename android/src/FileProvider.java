@@ -20,7 +20,7 @@
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 import java.io.File;
 import java.io.FileNotFoundException;

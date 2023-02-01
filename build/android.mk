@@ -44,7 +44,7 @@ ifeq ($(origin ANDROID_KEYSTORE_PASS),environment)
 APKSIGN_RELEASE += --ks-pass env:ANDROID_KEYSTORE_PASS
 endif
 
-JAVA_PACKAGE = org.xcsoar
+JAVA_PACKAGE = de.opensoar
 
 NATIVE_CLASSES := \
 	FileProvider \

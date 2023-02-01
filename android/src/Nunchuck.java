@@ -30,7 +30,7 @@
  * White	GND
  */
 
-package org.xcsoar;
+package de.opensoar;
 
 import java.io.IOException;
 

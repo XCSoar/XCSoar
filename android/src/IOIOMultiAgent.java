@@ -21,7 +21,7 @@
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 import java.util.ArrayList;
 import java.util.Collection;

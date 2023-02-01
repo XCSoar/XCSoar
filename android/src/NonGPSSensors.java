@@ -27,7 +27,7 @@
 //   all consumer devices.
 // - Explore new and exotic sensors.
 
-package org.xcsoar;
+package de.opensoar;
 
 import java.io.Closeable;
 

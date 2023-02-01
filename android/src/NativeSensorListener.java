@@ -20,7 +20,7 @@
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 /**
  * An #SensorListener implementation that passes method calls to

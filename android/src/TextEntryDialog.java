@@ -21,7 +21,7 @@
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 import java.io.Closeable;
 import android.os.Handler;

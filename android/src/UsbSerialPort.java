@@ -20,7 +20,7 @@
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 import android.annotation.TargetApi;
 import android.hardware.usb.UsbDevice;

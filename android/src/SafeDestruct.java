@@ -20,7 +20,7 @@
 }
 */
 
-package org.xcsoar;
+package de.opensoar;
 
 /**
  * This class manages safe destruction of objects that call native
