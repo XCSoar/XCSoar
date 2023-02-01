@@ -58,7 +58,7 @@ Init::Init()
 
 	ares_library_init_jvm(Java::jvm);
 	const auto env = Java::GetEnv();
-	Java::Class net_util(env, "org/xcsoar/NetUtil");
+	Java::Class net_util(env, "de/opensoar/NetUtil");
 
 	const auto getConnectivityManager =
 		env->GetStaticMethodID(net_util, "getConnectivityManager",
