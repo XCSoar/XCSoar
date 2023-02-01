@@ -33,7 +33,7 @@ Copyright_License {
 #include "io/CopyFile.hxx"
 #include "util/Macros.hpp"
 #include "util/StringAPI.hxx"
-#include "org_xcsoar_DownloadUtil.h"
+#include "de_opensoar_DownloadUtil.h"
 
 #include <algorithm>
 
@@ -133,7 +133,7 @@ AndroidDownloadManager::OnDownloadComplete(Path path_relative,
 }
 
 JNIEXPORT void JNICALL
-Java_org_xcsoar_DownloadUtil_onDownloadAdded(JNIEnv *env, [[maybe_unused]] jobject obj,
+Java_de_opensoar_DownloadUtil_onDownloadAdded(JNIEnv *env, [[maybe_unused]] jobject obj,
                                              jlong j_handler, jstring j_path,
                                              jlong size, jlong position)
 {
@@ -144,7 +144,7 @@ Java_org_xcsoar_DownloadUtil_onDownloadAdded(JNIEnv *env, [[maybe_unused]] jobje
 }
 
 JNIEXPORT void JNICALL
-Java_org_xcsoar_DownloadUtil_onDownloadComplete(JNIEnv *env, [[maybe_unused]] jobject obj,
+Java_de_opensoar_DownloadUtil_onDownloadComplete(JNIEnv *env, [[maybe_unused]] jobject obj,
                                                 jlong ptr,
                                                 jstring j_tmp_path,
                                                 jstring j_relative_path,

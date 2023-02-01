@@ -23,12 +23,12 @@ Copyright_License {
 
 #include "Hardware/PowerGlobal.hpp"
 #include "Hardware/PowerInfo.hpp"
-#include "org_xcsoar_BatteryReceiver.h"
+#include "de_opensoar_BatteryReceiver.h"
 #include "util/Compiler.h"
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_BatteryReceiver_setBatteryPercent([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jclass cls,
+Java_de_opensoar_BatteryReceiver_setBatteryPercent([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jclass cls,
                                                   jint value, jint plugged)
 {
   auto &info = Power::global_info;

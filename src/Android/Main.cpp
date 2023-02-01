@@ -65,7 +65,7 @@ Copyright_License {
 #include "java/URL.hxx"
 #include "java/Closeable.hxx"
 #include "util/Compiler.h"
-#include "org_xcsoar_NativeView.h"
+#include "de_opensoar_NativeView.h"
 #include "io/async/GlobalAsioThread.hpp"
 #include "io/async/AsioThread.hpp"
 #include "net/http/Init.hpp"
@@ -105,7 +105,7 @@ static Mutex shutdown_mutex;
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj,
+Java_de_opensoar_NativeView_runNative(JNIEnv *env, jobject obj,
                                      jobject _context,
                                      jint width, jint height,
                                      jint xdpi, jint ydpi,
@@ -281,7 +281,7 @@ try {
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
+Java_de_opensoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
                                          jint width, jint height)
 {
   const std::scoped_lock shutdown_lock{shutdown_mutex};
@@ -300,7 +300,7 @@ Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
+Java_de_opensoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
 {
   const std::scoped_lock shutdown_lock{shutdown_mutex};
 
@@ -317,7 +317,7 @@ Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
+Java_de_opensoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
 {
   const std::scoped_lock shutdown_lock{shutdown_mutex};
 
@@ -334,7 +334,7 @@ Java_org_xcsoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeView_setHapticFeedback([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jobject obj,
+Java_de_opensoar_NativeView_setHapticFeedback([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jobject obj,
                                              jboolean on)
 {
   os_haptic_feedback_enabled = on;

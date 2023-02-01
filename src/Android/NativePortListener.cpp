@@ -25,7 +25,7 @@ Copyright_License {
 #include "Device/Port/Listener.hpp"
 #include "java/Class.hxx"
 #include "java/String.hxx"
-#include "org_xcsoar_NativePortListener.h"
+#include "de_opensoar_NativePortListener.h"
 
 #include <cstddef>
 
@@ -36,7 +36,7 @@ static jfieldID ptr_field;
 } // namespace NativePortListener
 
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativePortListener_portStateChanged(JNIEnv *env, jobject obj)
+Java_de_opensoar_NativePortListener_portStateChanged(JNIEnv *env, jobject obj)
 {
   jlong ptr = env->GetLongField(obj, NativePortListener::ptr_field);
   if (ptr == 0)
@@ -48,7 +48,7 @@ Java_org_xcsoar_NativePortListener_portStateChanged(JNIEnv *env, jobject obj)
 }
 
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativePortListener_portError(JNIEnv *env, jobject obj,
+Java_de_opensoar_NativePortListener_portError(JNIEnv *env, jobject obj,
                                              jstring msg)
 {
   jlong ptr = env->GetLongField(obj, NativePortListener::ptr_field);

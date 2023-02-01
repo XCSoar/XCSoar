@@ -26,7 +26,7 @@ Copyright_License {
 #include "Main.hpp"
 #include "java/Class.hxx"
 #include "java/String.hxx"
-#include "org_xcsoar_NativeDetectDeviceListener.h"
+#include "de_opensoar_NativeDetectDeviceListener.h"
 
 namespace NativeDetectDeviceListener {
 static Java::TrivialClass cls;
@@ -35,7 +35,7 @@ static jfieldID ptr_field;
 } // namespace NativeDetectDeviceListener
 
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeDetectDeviceListener_onDeviceDetected(JNIEnv *env, jobject obj,
+Java_de_opensoar_NativeDetectDeviceListener_onDeviceDetected(JNIEnv *env, jobject obj,
                                                             jint type,
                                                             jstring _address,
                                                             jstring _name,

@@ -25,7 +25,7 @@ Copyright_License {
 #include "io/DataHandler.hpp"
 #include "java/Array.hxx"
 #include "java/Class.hxx"
-#include "org_xcsoar_NativeInputListener.h"
+#include "de_opensoar_NativeInputListener.h"
 
 #include <cstddef>
 
@@ -36,7 +36,7 @@ static jfieldID ptr_field;
 } // namespace NativeInputListener
 
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeInputListener_dataReceived(JNIEnv *env, jobject obj,
+Java_de_opensoar_NativeInputListener_dataReceived(JNIEnv *env, jobject obj,
                                                  jbyteArray data, jint length)
 {
   jlong ptr = env->GetLongField(obj, NativeInputListener::ptr_field);

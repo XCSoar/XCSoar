@@ -31,7 +31,7 @@ Copyright_License {
 #include "java/String.hxx"
 #include "time/SystemClock.hxx"
 #include "util/Compiler.h"
-#include "org_xcsoar_NativeSensorListener.h"
+#include "de_opensoar_NativeSensorListener.h"
 
 namespace NativeSensorListener {
 static Java::TrivialClass cls;
@@ -62,7 +62,7 @@ NativeSensorListener::Create(JNIEnv *env,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onConnected(JNIEnv *env, jobject obj,
+Java_de_opensoar_NativeSensorListener_onConnected(JNIEnv *env, jobject obj,
                                                  jint connected)
 {
   jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
@@ -75,7 +75,7 @@ Java_org_xcsoar_NativeSensorListener_onConnected(JNIEnv *env, jobject obj,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onLocationSensor(JNIEnv *env, jobject obj,
+Java_de_opensoar_NativeSensorListener_onLocationSensor(JNIEnv *env, jobject obj,
                                                       jlong time, jint n_satellites,
                                                       jdouble longitude, jdouble latitude,
                                                       jboolean hasAltitude,
@@ -102,7 +102,7 @@ Java_org_xcsoar_NativeSensorListener_onLocationSensor(JNIEnv *env, jobject obj,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onAccelerationSensor1(JNIEnv *env, jobject obj,
+Java_de_opensoar_NativeSensorListener_onAccelerationSensor1(JNIEnv *env, jobject obj,
                                                            jdouble acceleration)
 {
   jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
@@ -115,7 +115,7 @@ Java_org_xcsoar_NativeSensorListener_onAccelerationSensor1(JNIEnv *env, jobject 
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onAccelerationSensor(JNIEnv *env, jobject obj,
+Java_de_opensoar_NativeSensorListener_onAccelerationSensor(JNIEnv *env, jobject obj,
                                                           jfloat ddx, jfloat ddy,
                                                           jfloat ddz)
 {
@@ -129,7 +129,7 @@ Java_org_xcsoar_NativeSensorListener_onAccelerationSensor(JNIEnv *env, jobject o
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onRotationSensor(JNIEnv *env, jobject obj,
+Java_de_opensoar_NativeSensorListener_onRotationSensor(JNIEnv *env, jobject obj,
                                                       jfloat dtheta_x, jfloat dtheta_y,
                                                       jfloat dtheta_z)
 {
@@ -143,7 +143,7 @@ Java_org_xcsoar_NativeSensorListener_onRotationSensor(JNIEnv *env, jobject obj,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onMagneticFieldSensor(JNIEnv *env, jobject obj,
+Java_de_opensoar_NativeSensorListener_onMagneticFieldSensor(JNIEnv *env, jobject obj,
                                                            jfloat h_x, jfloat h_y,
                                                            jfloat h_z)
 {
@@ -157,7 +157,7 @@ Java_org_xcsoar_NativeSensorListener_onMagneticFieldSensor(JNIEnv *env, jobject 
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onBarometricPressureSensor(JNIEnv *env,
+Java_de_opensoar_NativeSensorListener_onBarometricPressureSensor(JNIEnv *env,
                                                                 jobject obj,
                                                                 jfloat pressure,
                                                                 jfloat sensor_noise_variance)
@@ -172,7 +172,7 @@ Java_org_xcsoar_NativeSensorListener_onBarometricPressureSensor(JNIEnv *env,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onPressureAltitudeSensor(JNIEnv *env,
+Java_de_opensoar_NativeSensorListener_onPressureAltitudeSensor(JNIEnv *env,
                                                                 jobject obj,
                                                                 jfloat altitude)
 {
@@ -185,7 +185,7 @@ Java_org_xcsoar_NativeSensorListener_onPressureAltitudeSensor(JNIEnv *env,
 }
 
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onI2CbaroSensor(JNIEnv *env, jobject obj,
+Java_de_opensoar_NativeSensorListener_onI2CbaroSensor(JNIEnv *env, jobject obj,
                                                      jint index,
                                                      jint sensorType,
                                                      jint pressure)
@@ -201,7 +201,7 @@ Java_org_xcsoar_NativeSensorListener_onI2CbaroSensor(JNIEnv *env, jobject obj,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onVarioSensor(JNIEnv *env,
+Java_de_opensoar_NativeSensorListener_onVarioSensor(JNIEnv *env,
                                                    jobject obj,
                                                    jfloat vario)
 {
@@ -215,7 +215,7 @@ Java_org_xcsoar_NativeSensorListener_onVarioSensor(JNIEnv *env,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onHeartRateSensor(JNIEnv *env,
+Java_de_opensoar_NativeSensorListener_onHeartRateSensor(JNIEnv *env,
                                                        jobject obj,
                                                        jint bpm)
 {
@@ -228,7 +228,7 @@ Java_org_xcsoar_NativeSensorListener_onHeartRateSensor(JNIEnv *env,
 }
 
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onVoltageValues(JNIEnv *env, jobject obj,
+Java_de_opensoar_NativeSensorListener_onVoltageValues(JNIEnv *env, jobject obj,
                                                      jint temp_adc,
                                                      jint voltage_index,
                                                      jint volt_adc)
@@ -243,7 +243,7 @@ Java_org_xcsoar_NativeSensorListener_onVoltageValues(JNIEnv *env, jobject obj,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onNunchuckValues(JNIEnv *env, jobject obj,
+Java_de_opensoar_NativeSensorListener_onNunchuckValues(JNIEnv *env, jobject obj,
                                                       jint joy_x, jint joy_y,
                                                       jint acc_x, jint acc_y,
                                                       jint acc_z,
@@ -259,7 +259,7 @@ Java_org_xcsoar_NativeSensorListener_onNunchuckValues(JNIEnv *env, jobject obj,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_setGliderLinkInfo(JNIEnv *env,
+Java_de_opensoar_NativeSensorListener_setGliderLinkInfo(JNIEnv *env,
                                                        jobject obj,
                                                        jlong gid,
                                                        jstring callsign,
@@ -285,7 +285,7 @@ Java_org_xcsoar_NativeSensorListener_setGliderLinkInfo(JNIEnv *env,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onTemperature(JNIEnv *env,
+Java_de_opensoar_NativeSensorListener_onTemperature(JNIEnv *env,
                                                    jobject obj,
                                                    jdouble temperature_kelvin)
 {
@@ -299,7 +299,7 @@ Java_org_xcsoar_NativeSensorListener_onTemperature(JNIEnv *env,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onBatteryPercent(JNIEnv *env,
+Java_de_opensoar_NativeSensorListener_onBatteryPercent(JNIEnv *env,
                                                       jobject obj,
                                                       jdouble battery_percent)
 {
@@ -313,7 +313,7 @@ Java_org_xcsoar_NativeSensorListener_onBatteryPercent(JNIEnv *env,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onSensorStateChanged(JNIEnv *env,
+Java_de_opensoar_NativeSensorListener_onSensorStateChanged(JNIEnv *env,
                                                           jobject obj)
 {
   jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
@@ -326,7 +326,7 @@ Java_org_xcsoar_NativeSensorListener_onSensorStateChanged(JNIEnv *env,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onSensorError(JNIEnv *env,
+Java_de_opensoar_NativeSensorListener_onSensorError(JNIEnv *env,
                                                    jobject obj,
                                                    jstring msg)
 {

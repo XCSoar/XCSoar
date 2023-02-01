@@ -30,7 +30,7 @@ Copyright_License {
 #include "java/Closeable.hxx"
 #include "java/Env.hxx"
 #include "java/String.hxx"
-#include "org_xcsoar_TextEntryDialog.h"
+#include "de_opensoar_TextEntryDialog.h"
 #include "UIGlobals.hpp"
 
 #include <cassert>
@@ -72,7 +72,7 @@ AndroidTextEntryDialog::Deinitialise(JNIEnv *env) noexcept
 }
 
 JNIEXPORT void JNICALL
-Java_org_xcsoar_TextEntryDialog_onResult(JNIEnv *env, [[maybe_unused]] jobject obj,
+Java_de_opensoar_TextEntryDialog_onResult(JNIEnv *env, [[maybe_unused]] jobject obj,
                                          jlong ptr, jstring value)
 {
   auto &dialog = *(AndroidTextEntryDialog *)(std::size_t)ptr;
