@@ -160,7 +160,7 @@ class NativeView extends SurfaceView
 
     try {
       try {
-        context.startService(new Intent(context, XCSoar.serviceClass));
+        context.startService(new Intent(context, OpenSoar.serviceClass));
       } catch (IllegalStateException e) {
         /* we get crash reports on this all the time, but I don't
            know why - Android docs say "the application is in a
@@ -175,7 +175,7 @@ class NativeView extends SurfaceView
                   (int)metrics.xdpi, (int)metrics.ydpi,
                   Build.VERSION.SDK_INT, Build.PRODUCT);
       } finally {
-        context.stopService(new Intent(context, XCSoar.serviceClass));
+        context.stopService(new Intent(context, OpenSoar.serviceClass));
       }
     } catch (Exception e) {
       Log.e(TAG, "Initialisation error", e);

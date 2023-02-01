@@ -51,7 +51,7 @@ import android.util.Log;
 public class MyService extends Service {
   private static final String TAG = "OpenSoar";
 
-  private static final String NOTIFICATION_CHANNEL_ID = "xcsoar";
+  private static final String NOTIFICATION_CHANNEL_ID = "opensoar";
 
   /**
    * Hack: this is set by onCreate(), to support the "testing"
@@ -63,14 +63,14 @@ public class MyService extends Service {
 
   @Override public void onCreate() {
     if (mainActivityClass == null)
-      mainActivityClass = XCSoar.class;
+      mainActivityClass = OpenSoar.class;
 
     super.onCreate();
 
     notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      String name = "XCSoar";
+      String name = "OpenSoar";
 
       /* this disables sound: */
       int importance = NotificationManager.IMPORTANCE_LOW;
@@ -85,8 +85,8 @@ public class MyService extends Service {
     Notification.Builder builder = new Notification.Builder(context)
       .setOngoing(true)
       .setContentIntent(intent)
-      .setContentTitle("XCSoar")
-      .setContentText("XCSoar is running")
+      .setContentTitle("OpenSoar")
+      .setContentText("OpenSoar is running")
       .setSmallIcon(R.drawable.notification_icon);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)

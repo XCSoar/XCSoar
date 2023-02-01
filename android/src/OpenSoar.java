@@ -49,7 +49,7 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 import android.provider.Settings;
 
-public class XCSoar extends Activity {
+public class OpenSoar extends Activity {
   private static final String TAG = "OpenSoar";
 
   /**
@@ -88,7 +88,7 @@ public class XCSoar extends Activity {
 
     if (!Loader.loaded) {
       TextView tv = new TextView(this);
-      tv.setText("Failed to load the native XCSoar libary.\n" +
+      tv.setText("Failed to load the native OpenSoar libary.\n" +
                  "Report this problem to us, and include the following information:\n" +
                  "ABI=" + Build.CPU_ABI + "\n" +
                  "PRODUCT=" + Build.PRODUCT + "\n" +
@@ -106,7 +106,7 @@ public class XCSoar extends Activity {
     window.requestFeature(Window.FEATURE_NO_TITLE);
 
     TextView tv = new TextView(this);
-    tv.setText("Loading XCSoar...");
+    tv.setText("Loading OpenSoar...");
     setContentView(tv);
 
     /* after setContentView(), Android has initialised a few default
@@ -128,8 +128,8 @@ public class XCSoar extends Activity {
   private void quit() {
     nativeView = null;
 
-    TextView tv = new TextView(XCSoar.this);
-    tv.setText("Shutting down XCSoar...");
+    TextView tv = new TextView(OpenSoar.this);
+    tv.setText("Shutting down OpenSoar...");
     setContentView(tv);
 
     finish();
@@ -144,7 +144,7 @@ public class XCSoar extends Activity {
   final Handler errorHandler = new Handler() {
     public void handleMessage(Message msg) {
       nativeView = null;
-      TextView tv = new TextView(XCSoar.this);
+      TextView tv = new TextView(OpenSoar.this);
       tv.setText(msg.obj.toString());
       setContentView(tv);
     }
@@ -274,12 +274,12 @@ public class XCSoar extends Activity {
     if (!hasAllPermissions()) {
       new AlertDialog.Builder(this)
         .setTitle("Location Permission")
-        .setMessage("XCSoar needs to collect location data to enable live navigation calculation and IGC logger, even when the app is in the background")
+        .setMessage("OpenSoar needs to collect location data to enable live navigation calculation and IGC logger, even when the app is in the background")
         .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
               try {
-                XCSoar.this.requestPermissions(NEEDED_PERMISSIONS, 0);
+                OpenSoar.this.requestPermissions(NEEDED_PERMISSIONS, 0);
               } catch (IllegalArgumentException e) {
                 Log.e(TAG, "could not request permissions: " + String.join(", ", NEEDED_PERMISSIONS), e);
               }
