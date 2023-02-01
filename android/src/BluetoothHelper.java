@@ -54,7 +54,7 @@ import android.content.pm.PackageManager;
 final class BluetoothHelper
   extends ScanCallback
 {
-  private static final String TAG = "XCSoar";
+  private static final String TAG = "OpenSoar";
   private static final UUID THE_UUID =
         UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 

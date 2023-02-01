@@ -57,7 +57,7 @@ class EGLException extends Exception {
  */
 class NativeView extends SurfaceView
   implements SurfaceHolder.Callback, Runnable {
-  private static final String TAG = "XCSoar";
+  private static final String TAG = "OpenSoar";
 
   /**
    * A native pointer to a C++ #TopWindow instance.

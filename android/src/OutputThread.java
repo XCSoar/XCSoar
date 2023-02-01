@@ -31,7 +31,7 @@ import android.util.Log;
  * A wrapper for an OutputStream which allows writing with a timeout.
  */
 class OutputThread extends Thread {
-  private static final String TAG = "XCSoar";
+  private static final String TAG = "OpenSoar";
 
   static final int BUFFER_SIZE = 256;
 

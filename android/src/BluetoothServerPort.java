@@ -40,7 +40,7 @@ import android.bluetooth.BluetoothSocket;
 final class BluetoothServerPort extends MultiPort
   implements Runnable, InputListener {
 
-  private static final String TAG = "XCSoar";
+  private static final String TAG = "OpenSoar";
 
   private BluetoothServerSocket serverSocket;
   private Collection<BluetoothSocket> sockets =

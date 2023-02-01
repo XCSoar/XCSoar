@@ -36,7 +36,7 @@ import ioio.lib.api.exception.ConnectionLostException;
  *
  */
 final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
-  private static final String TAG = "XCSoar";
+  private static final String TAG = "OpenSoar";
 
   private IOIOConnectionHolder holder;
 

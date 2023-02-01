@@ -50,7 +50,7 @@ import java.util.Map;
 public class NonGPSSensors
   implements SensorEventListener, Runnable, Closeable
 {
-  private static final String TAG = "XCSoar";
+  private static final String TAG = "OpenSoar";
 
   // Constant array saying whether we want to support certain sensors.
   // If modifying this array, make certain that the largest ID value inside

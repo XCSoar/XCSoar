@@ -50,7 +50,7 @@ import android.util.Log;
 import android.provider.Settings;
 
 public class XCSoar extends Activity {
-  private static final String TAG = "XCSoar";
+  private static final String TAG = "OpenSoar";
 
   /**
    * Hack: this is set by onCreate(), to support the "testing"

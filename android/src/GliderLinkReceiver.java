@@ -37,7 +37,7 @@ class GliderLinkReceiver
   extends BroadcastReceiver
   implements AndroidSensor
 {
-  private static final String TAG = "XCSoar";
+  private static final String TAG = "OpenSoar";
   public static final String ACTION = "link.glider.gliderlink.target_position";
 
   private final Context context;

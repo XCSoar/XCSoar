@@ -48,7 +48,7 @@ import ioio.lib.api.exception.ConnectionLostException;
  *
  */
 final class Nunchuck extends Thread {
-  private static final String TAG = "XCSoar";
+  private static final String TAG = "OpenSoar";
 
   private static final byte WII_NUN_ADDR = 0x52;
   private static final byte REG_DATA     = 0x00; /*  */

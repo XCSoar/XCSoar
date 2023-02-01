@@ -32,7 +32,7 @@ import android.util.Log;
  * Utilities for dealing with networking.
  */
 final class NetUtil {
-  private static final String TAG = "XCSoar";
+  private static final String TAG = "OpenSoar";
 
   private static final int STATE_UNKNOWN = 0;
   private static final int STATE_DISCONNECTED = 1;

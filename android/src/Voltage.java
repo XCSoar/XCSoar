@@ -34,7 +34,7 @@ import ioio.lib.api.exception.ConnectionLostException;
  * A driver for voltage measurement on the IOIO board.
  */
 final class Voltage extends Thread {
-  private static final String TAG = "XCSoar";
+  private static final String TAG = "OpenSoar";
 
   private AnalogInput h_volt;
   private AnalogInput h_temp;

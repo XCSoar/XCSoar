@@ -32,7 +32,7 @@ import android.bluetooth.BluetoothSocket;
  * connection.
  */
 class BluetoothClientPort extends ProxyAndroidPort implements Runnable {
-  private static final String TAG = "XCSoar";
+  private static final String TAG = "OpenSoar";
 
   private BluetoothSocket socket;
 

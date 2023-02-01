@@ -37,7 +37,7 @@ import ioio.lib.spi.IOIOConnectionFactory;
  * IOIOConnectionFactory.
  */
 final class IOIOAgent extends Thread {
-  private static final String TAG = "XCSoar";
+  private static final String TAG = "OpenSoar";
 
   interface Listener extends IOIOConnectionListener {
     boolean onIOIOIdle(IOIO ioio)

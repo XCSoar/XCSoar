@@ -37,7 +37,7 @@ class MultiPort implements AndroidPort, InputListener {
   private PortListener portListener;
   private InputListener inputListener;
 
-  private static final String TAG = "XCSoar";
+  private static final String TAG = "OpenSoar";
 
   private Collection<AndroidPort> ports = new LinkedList<AndroidPort>();
   private boolean error = false;

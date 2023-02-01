@@ -42,7 +42,7 @@ import android.util.Log;
 public class HM10Port
     extends BluetoothGattCallback
     implements AndroidPort  {
-  private static final String TAG = "XCSoar";
+  private static final String TAG = "OpenSoar";
 
   private static final int MAX_WRITE_CHUNK_SIZE = 20;
 

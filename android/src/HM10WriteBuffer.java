@@ -33,7 +33,7 @@ import android.util.Log;
  * device.
  */
 final class HM10WriteBuffer {
-  private static final String TAG = "XCSoar";
+  private static final String TAG = "OpenSoar";
 
   private static final int MAX_WRITE_CHUNK_SIZE = 20;
 

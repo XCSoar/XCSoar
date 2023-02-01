@@ -42,7 +42,7 @@ import ioio.lib.spi.IOIOConnectionFactory;
  */
 final class IOIOHelper implements IOIOConnectionHolder,
                                   IOIOAgent.Listener {
-  private static final String TAG = "XCSoar";
+  private static final String TAG = "OpenSoar";
 
   private IOIOMultiAgent agent;
 

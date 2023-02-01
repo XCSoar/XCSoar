@@ -35,7 +35,7 @@ import android.opengl.GLUtils;
  * Utilities for dealing with #Bitmap objects and OpenGL.
  */
 final class BitmapUtil {
-  private static final String TAG = "XCSoar";
+  private static final String TAG = "OpenSoar";
 
   public static int validateTextureSize(int i) {
     return NativeView.validateTextureSize(i);
