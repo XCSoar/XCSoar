@@ -51,7 +51,7 @@ import android.util.Log;
 public class MyService extends Service {
   private static final String TAG = "XCSoar";
 
-  private static final String NOTIFICATION_CHANNEL_ID = "xcsoar";
+  private static final String NOTIFICATION_CHANNEL_ID = "opensoar";
 
   /**
    * Hack: this is set by onCreate(), to support the "testing"
