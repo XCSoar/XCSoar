@@ -23,7 +23,7 @@
 package de.opensoar.testing;
 
 /**
- * Wrapper class to move de.opensoar.XCSoar forward to package
+ * Wrapper class to move de.opensoar.OpenSoar forward to package
  * de.opensoar.testing.
  */
 public class MyService extends de.opensoar.MyService {

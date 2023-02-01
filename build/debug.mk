@@ -14,7 +14,7 @@ endif
 TARGET_OPTIMIZE := -g
 HOST_OPTIMIZE := -g
 
-# Enable fast floating point math.  XCSoar does not rely on strict
+# Enable fast floating point math.  OpenSoar does not rely on strict
 # IEEE/ISO semantics, for example it is not interested in "errno" or
 # the difference between -0 and +0.  This allows using non-conforming
 # vector units on some platforms, e.g. ARM NEON.

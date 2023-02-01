@@ -25,7 +25,7 @@ package de.opensoar.testing;
 import android.os.Bundle;
 
 /**
- * Wrapper class to move de.opensoar.XCSoar forward to package
+ * Wrapper class to move de.opensoar.OpenSoar forward to package
  * de.opensoar.testing.
  */
 public class OpenSoar extends de.opensoar.OpenSoar {

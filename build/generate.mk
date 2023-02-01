@@ -84,11 +84,11 @@ $(TARGET_OUTPUT_DIR)/include/resource_data.h: $(TARGET_OUTPUT_DIR)/OpenSoar.rc \
 	$(Q)$(PERL) tools/GenerateResources.pl $< >$@.tmp
 	@mv $@.tmp $@
 
-$(TARGET_OUTPUT_DIR)/XCSoar-drawable.rc: Data/OpenSoar.rc $(OUT)/include/resource.h | $(TARGET_OUTPUT_DIR)/dirstamp
+$(TARGET_OUTPUT_DIR)/$(PROGRAM_NAME)-drawable.rc: Data/OpenSoar.rc $(OUT)/include/resource.h | $(TARGET_OUTPUT_DIR)/dirstamp
 	@$(NQ)echo "  CPP     $@"
 	$(Q)cat $< | $(HOSTCC) -E -o $@ $< -I$(OUT)/include $(TARGET_CPPFLAGS) -DANDROID_DRAWABLE -
 
-$(TARGET_OUTPUT_DIR)/include/android_drawable.h: $(TARGET_OUTPUT_DIR)/XCSoar-drawable.rc \
+$(TARGET_OUTPUT_DIR)/include/android_drawable.h: $(TARGET_OUTPUT_DIR)/$(PROGRAM_NAME)-drawable.rc \
 	$(RESOURCE_FILES) \
 	tools/GenerateAndroidResources.pl | $(TARGET_OUTPUT_DIR)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"

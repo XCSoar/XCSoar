@@ -5,18 +5,18 @@ TARGET_LDLIBS += -framework UIKit
 IPA_TMPDIR = $(TARGET_OUTPUT_DIR)/ipa
 
 ifeq ($(TESTING),y)
-IPA_NAME = xcsoar-testing.ipa
-IOS_APP_DIR_NAME = XCSoar.testing.app
-IOS_APP_BUNDLE_INENTIFIER = XCSoar-testing
-IOS_APP_DISPLAY_NAME = XCSoar Testing
+IPA_NAME = $(PROGRAM_NAME_LC)-testing.ipa
+IOS_APP_DIR_NAME = $(PROGRAM_NAME).testing.app
+IOS_APP_BUNDLE_INENTIFIER = $(PROGRAM_NAME)-testing
+IOS_APP_DISPLAY_NAME = $(PROGRAM_NAME) Testing
 IOS_ICON_SVG = $(topdir)/Data/iOS/iOS-Icon_red.svg
 IOS_SPLASH_BASE_IMG=$(DATA)/graphics/logo_red_320.png
 IOS_GRAPHICS_DIR=$(DATA)/ios-graphics-testing
 else
-IPA_NAME = xcsoar.ipa
-IOS_APP_DIR_NAME = XCSoar.app
-IOS_APP_BUNDLE_INENTIFIER = XCSoar
-IOS_APP_DISPLAY_NAME = XCSoar
+IPA_NAME = $(PROGRAM_NAME_LC).ipa
+IOS_APP_DIR_NAME = $(PROGRAM_NAME).app
+IOS_APP_BUNDLE_INENTIFIER = $(PROGRAM_NAME)
+IOS_APP_DISPLAY_NAME = $(PROGRAM_NAME)
 IOS_ICON_SVG = $(topdir)/Data/iOS/iOS-Icon.svg
 IOS_SPLASH_BASE_IMG=$(DATA)/graphics/logo_320.png
 IOS_GRAPHICS_DIR=$(DATA)/ios-graphics
@@ -104,11 +104,11 @@ else
 endif
 
 
-$(TARGET_OUTPUT_DIR)/$(IPA_NAME): $(TARGET_BIN_DIR)/xcsoar $(TARGET_OUTPUT_DIR)/Info.plist  $(IOS_GRAPHICS)
+$(TARGET_OUTPUT_DIR)/$(IPA_NAME): $(TARGET_BIN_DIR)/$(PROGRAM_NAME_LC) $(TARGET_OUTPUT_DIR)/Info.plist  $(IOS_GRAPHICS)
 	@$(NQ)echo "  IPA     $@"
 	$(Q)rm -rf $(IPA_TMPDIR)
 	$(Q)$(MKDIR) -p $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
-	$(Q)cp $(TARGET_BIN_DIR)/xcsoar $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)/XCSoar
+	$(Q)cp $(TARGET_BIN_DIR)/$(PROGRAM_NAME_LC) $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)/$(PROGRAM_NAME)
 	$(Q)cp $(TARGET_OUTPUT_DIR)/Info.plist $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
 	$(Q)cp $(IOS_GRAPHICS) $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
 	$(Q)cd $(IPA_TMPDIR) && zip -r -q ../$(IPA_NAME) ./*

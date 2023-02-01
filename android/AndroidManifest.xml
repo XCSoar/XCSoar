@@ -11,7 +11,7 @@
       android:appCategory="maps"
       android:icon="@drawable/icon"
       android:label="@string/app_name">
-    <activity android:name=".XCSoar"
+    <activity android:name=".OpenSoar"
               android:label="@string/app_name"
               android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale"
               android:launchMode="singleInstance">
