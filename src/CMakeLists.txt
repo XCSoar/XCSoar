@@ -12,7 +12,6 @@ if (${XCSOAR_LIB_TYPE} STREQUAL "WITHOUT")
   set(XCSOAR_LIB_TYPE STATIC)
 endif()
 
-# add_executable(${TARGET_NAME}
 add_library(${TARGET_NAME} ${XCSOAR_LIB_TYPE}
     ${SOURCE_FILES}
     ${HEADER_FILES}
@@ -21,6 +20,5 @@ add_library(${TARGET_NAME} ${XCSOAR_LIB_TYPE}
 
 set_target_properties(${TARGET_NAME} PROPERTIES FOLDER _Main)
 
-target_link_libraries(${TARGET_NAME} PUBLIC Dialogs Math WeGlide) # Data)
-# add_dependencies(${TARGET_NAME} Dialogs Math Data)
+target_link_libraries(${TARGET_NAME} PUBLIC Dialogs Math WeGlide)
 add_dependencies(${TARGET_NAME} util Data)

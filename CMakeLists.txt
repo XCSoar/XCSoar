@@ -20,10 +20,26 @@ set(PROGRAM_NAME ${TARGET_NAME})
 set(PROGRAM_NAME_CC ${TARGET_NAME})              # CamelCase
 string(TOLOWER  ${PROGRAM_NAME} PROGRAM_NAME_LC) # lowercase
 
+### file(READ "VERSION.txt" PROGRAM_VERSION)
 # add version string to OpenSoar:
-file(READ "VERSION.txt" PROGRAM_VERSION)
-string(STRIP ${PROGRAM_VERSION} PROGRAM_VERSION)
+file(READ ${PROGRAM_NAME}.config _config_file)
+# put the complete string in a list of lines
+string(REPLACE "\n" ";" _config_file ${_config_file})
+foreach(_line ${_config_file})
+  string(REPLACE "=" ";" _line ${_line} )
+  list(GET _line 0 _param0)
+  list(GET _line 1 _param1)
+  string(STRIP ${_param0} _param0)
+  string(STRIP ${_param1} _param1)
+  set(${_param0} ${_param1}) 
+  # message(STATUS "+++++ '${_param0}' = '${_param1}'")
+endforeach()# ---------------------------------------------------------------
+
+message(STATUS "+++++ PROGRAM_NAME = '${PROGRAM_NAME}'")
+message(STATUS "+++++ PROGRAM_VERSION = '${PROGRAM_VERSION}'")
+
 add_compile_definitions("PROGRAM_VERSION=\"${PROGRAM_VERSION}\"")
+file(WRITE "VERSION.txt" ${PROGRAM_VERSION})
 
 find_program(CMAKE_APP     NAMES cmake REQUIRED)
 get_filename_component(CMAKE_PROGRAM_PATH ${CMAKE_APP} DIRECTORY)
@@ -72,8 +88,8 @@ else()
 endif()
 
 add_subdirectory(build/cmake)
-add_subdirectory(Data)
-add_subdirectory(po)
+# add_subdirectory(Data)
+# add_subdirectory(po)
 
 if(UNIX)
  set(ENABLE_OPENGL ON)  # better outside????
@@ -127,6 +143,8 @@ message(STATUS "CMAKE_HOST_SYSTEM_NAME = ${CMAKE_HOST_SYSTEM_NAME} vs. CMAKE_SYS
 set(3RDPARTY_DEPENDENCIES ON)
 set(3RDPARTY_TARGETS )
 add_subdirectory(3rd_party)
+add_subdirectory(Data)
+add_subdirectory(po)
 
 set(SRC "${PROJECTGROUP_SOURCE_DIR}/src")
 include(CMakeSource.cmake)
@@ -169,7 +187,7 @@ message(STATUS "+++ Lib Pre- and Suffix: '${LIB_PREFIX}' -- '${LIB_SUFFIX}' !")
 
 
 include_directories("${SRC}/io") # only regarding Logfile!
-include_directories("${OUTPUT_FOLDER}/include")
+# include_directories("${OUTPUT_FOLDER}/include")
 
 #3rd party components
 add_compile_definitions(CURL_STATICLIB)
@@ -228,7 +246,6 @@ if(ENABLE_OPENGL)
      message(FATAL_ERROR "OpenGL-Stop!  OpenGL_INCLUDE_DIR = ${OpenGL_INCLUDE_DIR}")
   endif()
   set(OPENGL_DEFINED ON)
-  endif() # 0/1
 else()
       add_compile_definitions(USE_WIN32_RESOURCES USE_WINUSER)
 endif()
@@ -329,13 +346,13 @@ endif()
 add_subdirectory(src)   # libOpenSoar!
 
 list(APPEND SOURCE_FILES "src/OpenSoar.cpp")
-list(APPEND SOURCE_FILES "src/Version.cpp")
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/Data/OpenSoar.rc.in"
-    "${OUTPUT_FOLDER}/Data/OpenSoar.rc"
-)
-list(APPEND SOURCE_FILES "${OUTPUT_FOLDER}/Data/OpenSoar.rc")
-list(APPEND SCRIPT_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Data/OpenSoar.rc.in")
+# list(APPEND SOURCE_FILES "src/Version.cpp")
+## configure_file(
+##     "${CMAKE_CURRENT_SOURCE_DIR}/Data/OpenSoar.rc.in"
+##     "${OUTPUT_FOLDER}/Data/OpenSoar.rc"
+## )
+## list(APPEND SOURCE_FILES "${OUTPUT_FOLDER}/Data/OpenSoar.rc")
+## list(APPEND SCRIPT_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Data/OpenSoar.rc.in")
 list(APPEND SOURCE_FILES "CMakeSource.cmake")
 
 if (MSVC)
@@ -432,7 +449,7 @@ foreach(translation ${TRANSLATIONS})
         )
 endforeach()
 
-add_dependencies(${TARGET_NAME} util libXCSoar)
+add_dependencies(${TARGET_NAME} util libOpenSoar)
 
 # Test-Folder !!!!
 #=============================

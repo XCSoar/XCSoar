@@ -86,17 +86,24 @@ if(ON) # MSVC)  # mit minGW geht das nicht??
     endforeach()
     endif(WIN32)
     
-   message(STATUS "Image-App: '${BMP_CONVERT_APP}' ")
-    
+    message(STATUS "Image-App: '${BMP_CONVERT_APP}' ")
+   
     add_custom_command(OUTPUT ${_TEMP_OUTPUT}/title.svg
                COMMENT "Replace Strings!"
                COMMAND ${CMAKE_COMMAND} -E make_directory ${_TEMP_OUTPUT}
-               COMMAND ${PYTHON_APP} tools/python/replace.py ${_DATA_INPUT}/graphics/title.svg ${_TEMP_OUTPUT}/title.svg  "@PROGRAM_NAME@;${PROGRAM_NAME_CC}" "@PROGRAM_VERSION@;${PROGRAM_VERSION}"
-               DEPENDS ${_DATA_INPUT}/graphics/title.svg ${_TEMP_OUTPUT}/title.svg
+               COMMAND ${PYTHON_APP} tools/python/replace.py 
+                       ${_DATA_INPUT}/graphics/title.svg
+                       ${_TEMP_OUTPUT}/title.svg
+                       # ${PROJECTGROUP_SOURCE_DIR}/OpenSoar.config
+                       ${PROJECTGROUP_SOURCE_DIR}/${PROGRAM_NAME}.config
+               DEPENDS ${_DATA_INPUT}/graphics/title.svg
+                       ${_TEMP_OUTPUT}/title.svg
+                       ${PROJECTGROUP_SOURCE_DIR}/${PROGRAM_NAME}.config
                        ${PROJECTGROUP_SOURCE_DIR}/VERSION.txt
+                       ${PYTHON_APP} tools/python/replace.py 
                WORKING_DIRECTORY ${PROJECTGROUP_SOURCE_DIR}
         )
-    
+  
     if (_COMPLETE_INSTALL)
         set(GRAPHIC_BITMAPS
            ${_GRAPHICS_OUTPUT}/logo_160.bmp
@@ -272,8 +279,31 @@ endif()
     
     include_directories(${_DATA_INPUT})
 endif()
+    include_directories( ${OUTPUT_FOLDER}/include  )
+    include_directories(${Boost_INCLUDE_DIR})
+    add_compile_definitions(__MSVC__)
+
+if(WIN32)
+    set(BITMAP_EXTENSION  .bmp)
+else()
+    set(BITMAP_EXTENSION  .png)
+endif()
+
+configure_file(
+#    "${CMAKE_CURRENT_SOURCE_DIR}/Data/OpenSoar.rc.in"
+    OpenSoar.rc.in
+    ${_DATA_OUTPUT}/OpenSoar.rc
+)
+
+# list(APPEND SOURCE_FILES "${OUTPUT_FOLDER}/Data/OpenSoar.rc")
+# list(APPEND SCRIPT_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Data/OpenSoar.rc.in")
 
 add_library(${TARGET_NAME}  ${XCSOAR_LIB_TYPE}
+    OpenSoar.rc.in
+    ${_DATA_OUTPUT}/OpenSoar.rc
+#   ${OUTPUT_FOLDER}/Data/OpenSoar.rc
+#   ${CMAKE_CURRENT_SOURCE_DIR}/Data/OpenSoar.rc.in
+   
    ${C_FILES}
    ${HEADER_FILES}
    ${RESOURCE_OUT}

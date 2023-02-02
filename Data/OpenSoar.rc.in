@@ -13,19 +13,19 @@ HI_RES_AWARE CEUX {1}
 
 #ifdef _WIN32
 
-# include <boost/preprocessor/cat.hpp>
-# include <boost/preprocessor/stringize.hpp>
-
 #ifdef __MSVC__
 #define XC_RESOURCE(name, type, dir, file, ext) name type DISCARDABLE \
     dir##file##ext
 #else
+# include <boost/preprocessor/cat.hpp>
+# include <boost/preprocessor/stringize.hpp>
 #define XC_RESOURCE(name, type, dir, file, ext) name type DISCARDABLE \
     BOOST_PP_STRINGIZE(dir)  BOOST_PP_STRINGIZE(file) BOOST_PP_STRINGIZE(ext)
 #endif
 
+//  XC_RESOURCE(name, BITMAP, @CMAKE_CURRENT_SOURCE_DIR@/Data/bitmaps/, 
 #define BITMAP_BITMAP(name, file)  \
-  XC_RESOURCE(name, BITMAP, @CMAKE_CURRENT_SOURCE_DIR@/Data/bitmaps/, \
+  XC_RESOURCE(name, BITMAP, @_DATA_INPUT@/bitmaps/, \
               file, ${BITMAP_EXTENSION})
 
 #define BITMAP_ICON(name, file)  \
@@ -38,7 +38,9 @@ HI_RES_AWARE CEUX {1}
 # define HATCH_BITMAP(name, file) BITMAP_BITMAP(name, file)
 
 # define SOUND(name, file) \
-  XC_RESOURCE(name, WAVE, @CMAKE_CURRENT_SOURCE_DIR@/Data/sound/,  file, .wav)
+  XC_RESOURCE(name, WAVE, @_DATA_INPUT@/sound/,  file, .wav)
+
+//  XC_RESOURCE(name, WAVE, @CMAKE_CURRENT_SOURCE_DIR@/Data/sound/,  file, .wav)
 #else
 #define BITMAP_ICON(name, file)
 #define BITMAP_GRAPHIC(name, file)
@@ -48,7 +50,8 @@ HI_RES_AWARE CEUX {1}
 #endif  // _WIN32
 
 // --- Icons ---
- IDI_XCSOAR              ICON    DISCARDABLE     "@CMAKE_CURRENT_SOURCE_DIR@/Data/bitmaps/OpenSoar.ico"
+ IDI_XCSOAR              ICON    DISCARDABLE     "@_DATA_INPUT@/bitmaps/OpenSoar.ico"
+// IDI_XCSOAR              ICON    DISCARDABLE     "@CMAKE_CURRENT_SOURCE_DIR@/Data/bitmaps/OpenSoar.ico"
 // IDI_XCSOAR              ICON    DISCARDABLE     "@CMAKE_CURRENT_SOURCE_DIR@/Data/bitmaps/xcsoarswift.ico"
 
 // --- Bitmaps ---

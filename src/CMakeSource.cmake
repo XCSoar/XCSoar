@@ -59,6 +59,8 @@ set(BASIC_SOURCES
    
     ${SRC}/RateLimiter.cpp
     ${SRC}/TeamActions.cpp
+
+    ${SRC}/Version.cpp
 )
 
 set(SOURCE_FILES ${BASIC_SOURCES} )
