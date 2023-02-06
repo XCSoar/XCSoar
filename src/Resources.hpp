@@ -21,6 +21,9 @@ Copyright_License {
 }
 */
 
+#if defined(RC_FILE)
+#  define MAKE_RESOURCE(name, id) const int name = id
+#else
 #include "ResourceId.hpp"
 
 #if defined(USE_GDI) || defined(ANDROID)
@@ -38,6 +41,7 @@ Copyright_License {
   static constexpr ResourceId name(resource_ ##id, &resource_ ## id ## _size);
 
 #endif
+#endif   // RC_FILE
 
 MAKE_RESOURCE(IDB_LANDABLE, 139);
 MAKE_RESOURCE(IDB_LANDABLE_HD, 5139);
