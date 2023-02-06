@@ -42,7 +42,7 @@ Copyright_License {
 using std::string_view_literals::operator""sv;
 
 class LarusDevice : public AbstractDevice {
-  Port &port;
+  [[maybe_unused]] Port &port;
 
 public:
   LarusDevice(Port &_port):port(_port) {}
