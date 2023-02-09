@@ -71,13 +71,6 @@ bool
 KoboReboot()
 {
 #ifdef KOBO
-  KoboModel kobo_model = DetectKoboModel();
-  if  (kobo_model == KoboModel::CLARA_HD || kobo_model == KoboModel::CLARA_2E
-      || kobo_model == KoboModel::LIBRA2|| kobo_model == KoboModel::LIBRA_H2O)
-  {
-    /* some models require the -f option for reboot to work */
-    return Run("/sbin/reboot", "-f");
-  }
   return Run("/sbin/reboot");
 #else
   return false;

@@ -135,7 +135,4 @@ fi
 /opt/xcsoar/bin/simple_usbmodeswitch
 
 # finally, open the menu
-exec /opt/xcsoar/bin/KoboMenu
-
-# just in case launching KoboMenu fails: try xcsoar
-exec /opt/xcsoar/bin/xcsoar
+/opt/xcsoar/bin/KoboMenu &
