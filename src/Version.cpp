@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Version.hpp"
+#include "ProgramVersion.h"
 
 #ifndef PROGRAM_VERSION
 #error Macro "PROGRAM_VERSION" is not defined.  Check build/version.mk!
