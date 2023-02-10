@@ -533,6 +533,7 @@ static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, ms_bitarray 
         msSetBit(status, ids[i], 1);
     }
     free(ids);
+    ids = NULL;
   }
 
   if( zzip_fread( &numsubnodes, 4, 1, disktree->fp ) != 1 )
@@ -548,6 +549,7 @@ static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, ms_bitarray 
   
 error:
   msSetError(MS_IOERR, NULL, "searchDiskTreeNode()");
+  free(ids);
   return;
 }
 

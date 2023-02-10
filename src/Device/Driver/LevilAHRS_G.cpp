@@ -28,6 +28,8 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "Units/Units.hpp"
 
+using std::string_view_literals::operator""sv;
+
 static bool error_reported = false;
 
 class LevilDevice : public AbstractDevice {
@@ -136,18 +138,19 @@ bool
 LevilDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
   NMEAInputLine line(_line);
-  char type[16];
-  line.Read(type, 16);
 
   if (error_reported) return false;
 
-  if (StringIsEqual(type, "$RPYL"))
+  const auto type = line.ReadView();
+
+  if (type == "$RPYL"sv)
     return ParseRPYL(line, info);
 
-  if (StringIsEqual(type, "$APENV1"))
+  else if (type == "$APENV1"sv)
     return ParseAPENV1(line, info);
 
-  return false;
+  else
+    return false;
 }
 
 static Device *

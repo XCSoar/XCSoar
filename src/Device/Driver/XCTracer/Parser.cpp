@@ -43,6 +43,8 @@ Copyright_License {
  * $GPRMC,081158.800,A,4837.7018,N,00806.2923,E,2.34,261.89,110815,,,D*69
  */
 
+using std::string_view_literals::operator""sv;
+
 /**
  * Helper functions to parse and check an input field
  * Should these be added as methods to Class CSVLine ?
@@ -271,14 +273,14 @@ XCTracerDevice::ParseNMEA(const char *string, NMEAInfo &info)
     return false;
 
   NMEAInputLine line(string);
-  char type[16];
-  line.Read(type, 16);
 
-  if (StringIsEqual(type, "$LXWP0"))
+  const auto type = line.ReadView();
+  if (type == "$LXWP0"sv)
     return LXWP0(line, info);
 
-  if (StringIsEqual(type, "$XCTRC"))
+  else if (type == "$XCTRC"sv)
     return XCTRC(line, info);
 
-  return false;
+  else
+    return false;
 }

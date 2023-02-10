@@ -31,6 +31,10 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Driver/FLARM/StaticParser.hpp"
 #include "util/CharUtil.hxx"
+#include "util/NumberParser.hxx"
+#include "util/StringSplit.hxx"
+
+using std::string_view_literals::operator""sv;
 
 NMEAParser::NMEAParser()
 {
@@ -58,58 +62,63 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
 
   NMEAInputLine line(string);
 
-  char type[16];
-  line.Read(type, 16);
+  const auto type = line.ReadView();
+  if (type.size() < 6)
+    return false;
 
   if (IsAlphaASCII(type[1]) && IsAlphaASCII(type[2])) {
-    if (StringIsEqual(type + 3, "GSA"))
+    const auto type2 = type.substr(3);
+
+    if (type2 == "GSA"sv)
       return GSA(line, info);
 
-    if (StringIsEqual(type + 3, "GLL"))
+    if (type2 == "GLL"sv)
       return GLL(line, info);
 
-    if (StringIsEqual(type + 3, "RMC"))
+    if (type2 == "RMC"sv)
       return RMC(line, info);
 
-    if (StringIsEqual(type + 3, "GGA"))
+    if (type2 == "GGA"sv)
       return GGA(line, info);
 
-    if (StringIsEqual(type + 3, "HDM"))
+    if (type2 == "HDM"sv)
       return HDM(line, info);
 
-    if (StringIsEqual(type + 3, "MWV"))
+    if (type2 == "MWV"sv)
       return MWV(line, info);
   }
 
   // if (proprietary sentence) ...
   if (type[1] == 'P') {
+    const auto type2 = type.substr(1);
+
     // Airspeed and vario sentence
-    if (StringIsEqual(type + 1, "PTAS1"))
+    if (type2 == "PTAS1"sv)
       return PTAS1(line, info);
 
     // FLARM sentences
-    if (StringIsEqual(type + 1, "PFLAE")) {
+    if (type2 == "PFLAE"sv) {
       ParsePFLAE(line, info.flarm.error, info.clock);
       return true;
     }
 
-    if (StringIsEqual(type + 1, "PFLAV")) {
+    if (type2 == "PFLAV"sv) {
       ParsePFLAV(line, info.flarm.version, info.clock);
       return true;
     }
 
-    if (StringIsEqual(type + 1, "PFLAA")) {
+    if (type2 == "PFLAA"sv) {
       ParsePFLAA(line, info.flarm.traffic, info.clock);
       return true;
     }
 
-    if (StringIsEqual(type + 1, "PFLAU")) {
+    if (type2 == "PFLAU"sv) {
       ParsePFLAU(line, info.flarm.status, info.clock);
       return true;
     }
 
     // Garmin altitude sentence
-    if (StringIsEqual(type + 1, "PGRMZ"))
+    if (type2 == "PGRMZ"sv)
       return RMZ(line, info);
 
     return false;
@@ -164,12 +173,11 @@ ReadGeoAngle(NMEAInputLine &line, Angle &a)
   if (x < 0 || x >= 60 || *endptr != 0)
     return false;
 
-  dot[-2] = 0;
-  long y = strtol(buffer, &endptr, 10);
-  if (y < 0 || y > 180 || endptr == buffer || *endptr != 0)
+  const auto degrees = ParseInteger<unsigned>(buffer, dot - 2);
+  if (!degrees || *degrees > 180)
     return false;
 
-  a = Angle::Degrees(y + x / 60.);
+  a = Angle::Degrees(*degrees + x / 60.);
   return true;
 }
 
@@ -367,18 +375,21 @@ NMEAParser::GLL(NMEAInputLine &line, NMEAInfo &info)
 bool
 NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
 {
-  char buffer[9];
-  line.Read(buffer, 9);
+  const auto s = line.ReadView();
+  if (s.size() != 6)
+    return false;
 
-  if (strlen(buffer) != 6)
+  const auto day = ParseInteger<unsigned>(s.substr(0, 2));
+  const auto month = ParseInteger<unsigned>(s.substr(2, 2));
+  const auto year = ParseInteger<unsigned>(s.substr(4, 2));
+
+  if (!day || !month || !year)
     return false;
 
   BrokenDate new_value;
-  new_value.year = atoi(buffer + 4) + 2000;
-  buffer[4] = '\0';
-  new_value.month = atoi(buffer + 2);
-  buffer[2] = '\0';
-  new_value.day = atoi(buffer);
+  new_value.year = *year + 2000;
+  new_value.month = *month;
+  new_value.day = *day;
   new_value.day_of_week = -1;
 
   if (!new_value.IsPlausible())

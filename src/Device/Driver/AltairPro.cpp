@@ -41,6 +41,8 @@ Copyright_License {
 #include <cassert>
 #include <tchar.h>
 
+using std::string_view_literals::operator""sv;
+
 static constexpr unsigned DECELWPNAMESIZE = 24;                // max size of taskpoint name
 static constexpr unsigned DECELWPSIZE = DECELWPNAMESIZE + 25;  // max size of WP declaration
 
@@ -122,18 +124,17 @@ AltairProDevice::ParseNMEA(const char *String, NMEAInfo &info)
     return false;
 
   NMEAInputLine line(String);
-  char type[16];
-  line.Read(type, 16);
+  const auto type = line.ReadView();
 
   // no propriatary sentence
 
-  if (StringIsEqual(type, "$PGRMZ")) {
+  if (type == "$PGRMZ"sv) {
     double value;
     if (ReadAltitude(line, value))
       info.ProvidePressureAltitude(value);
 
     return true;
-  } else if (StringIsEqual(type, "$PTFRS")) {
+  } else if (type == "$PTFRS"sv) {
     return PTFRS(line, info);
   }
 

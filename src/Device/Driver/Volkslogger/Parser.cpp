@@ -26,6 +26,8 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 
+using std::string_view_literals::operator""sv;
+
 // RMN: Volkslogger
 // Source data:
 // $PGCS,1,0EC0,FFF9,0C6E,02*61
@@ -66,10 +68,9 @@ VolksloggerDevice::ParseNMEA(const char *String, NMEAInfo &info)
     return false;
 
   NMEAInputLine line(String);
-  char type[16];
-  line.Read(type, 16);
 
-  if (StringIsEqual(type, "$PGCS"))
+  const auto type = line.ReadView();
+  if (type == "$PGCS"sv)
     return vl_PGCS1(line, info);
   else
     return false;

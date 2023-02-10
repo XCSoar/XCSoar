@@ -22,82 +22,80 @@ Copyright_License {
 */
 
 #include "CSVLine.hpp"
-#include "util/StringAPI.hxx"
 
 #include <algorithm>
 
 #include <cassert>
-#include <stdlib.h>
 
+#include <stdlib.h>
+#include <string.h>
+
+[[gnu::pure]]
 static const char *
-EndOfLine(const char *line)
+EndOfLine(const char *line) noexcept
 {
   return line + strlen(line);
 }
 
-CSVLine::CSVLine(const char *line):
-  data(line), end(EndOfLine(line)) {}
+CSVLine::CSVLine(const char *line) noexcept
+  :data(line), end(EndOfLine(line)) {}
 
-size_t
-CSVLine::Skip()
+std::string_view
+CSVLine::ReadView() noexcept
 {
   const char* _seperator = strchr(data, ',');
+
+  const char *s = data;
+  std::size_t length;
   if (_seperator != nullptr && _seperator < end) {
-    size_t length = _seperator - data;
+    length = _seperator - data;
     data = _seperator + 1;
-    return length;
   } else {
-    size_t length = end - data;
+    length = end - data;
     data = end;
-    return length;
   }
+
+  return {s, length};
 }
 
 char
-CSVLine::ReadFirstChar()
+CSVLine::ReadFirstChar() noexcept
 {
-  char ch = *data;
-  return Skip() > 0 ? ch : '\0';
+  const auto s = ReadView();
+  return s.empty() ? '\0' : s.front();
 }
 
 char
-CSVLine::ReadOneChar()
+CSVLine::ReadOneChar() noexcept
 {
-  char ch = *data;
-  return Skip() == 1 ? ch : '\0';
+  const auto s = ReadView();
+  return s.size() == 1 ? s.front() : '\0';
 }
 
 void
-CSVLine::Read(char *dest, size_t size)
+CSVLine::Read(char *dest, size_t size) noexcept
 {
-  const char *src = data;
-  size_t length = Skip();
-  if (length >= size)
-    length = size - 1;
-  *std::copy_n(src, length, dest) = '\0';
+  auto src = ReadView();
+  if (src.size() >= size)
+    src = src.substr(0, size - 1);
+  *std::copy(src.begin(), src.end(), dest) = '\0';
 }
 
 bool
-CSVLine::ReadCompare(const char *value)
+CSVLine::ReadCompare(std::string_view value) noexcept
 {
-  size_t expected_length = strlen(value);
-
-  const char *src = data;
-  size_t src_length = Skip();
-
-  return src_length == expected_length &&
-    StringIsEqual(value, src, expected_length);
+  return ReadView() == value;
 }
 
 long
-CSVLine::Read(long default_value)
+CSVLine::Read(long default_value) noexcept
 {
   ReadChecked(default_value);
   return default_value;
 }
 
 unsigned
-CSVLine::ReadHex(unsigned default_value)
+CSVLine::ReadHex(unsigned default_value) noexcept
 {
   char *endptr;
   unsigned long value = strtoul(data, &endptr, 16);
@@ -120,14 +118,14 @@ CSVLine::ReadHex(unsigned default_value)
 }
 
 double
-CSVLine::Read(double default_value)
+CSVLine::Read(double default_value) noexcept
 {
   ReadChecked(default_value);
   return default_value;
 }
 
 bool
-CSVLine::ReadChecked(double &value_r)
+CSVLine::ReadChecked(double &value_r) noexcept
 {
   char *endptr;
   double value = strtod(data, &endptr);
@@ -150,7 +148,7 @@ CSVLine::ReadChecked(double &value_r)
 }
 
 bool
-CSVLine::ReadChecked(int &value_r)
+CSVLine::ReadChecked(int &value_r) noexcept
 {
   long lvalue;
   if (!ReadChecked(lvalue))
@@ -161,7 +159,7 @@ CSVLine::ReadChecked(int &value_r)
 }
 
 bool
-CSVLine::ReadChecked(long &value_r)
+CSVLine::ReadChecked(long &value_r) noexcept
 {
   char *endptr;
   long value = strtol(data, &endptr, 10);
@@ -184,7 +182,7 @@ CSVLine::ReadChecked(long &value_r)
 }
 
 bool
-CSVLine::ReadHexChecked(unsigned &value_r)
+CSVLine::ReadHexChecked(unsigned &value_r) noexcept
 {
   char *endptr;
   unsigned long value = strtoul(data, &endptr, 16);
@@ -207,7 +205,7 @@ CSVLine::ReadHexChecked(unsigned &value_r)
 }
 
 bool
-CSVLine::ReadChecked(unsigned long &value_r)
+CSVLine::ReadChecked(unsigned long &value_r) noexcept
 {
   char *endptr;
   unsigned long value = strtoul(data, &endptr, 10);
@@ -230,7 +228,7 @@ CSVLine::ReadChecked(unsigned long &value_r)
 }
 
 bool
-CSVLine::ReadChecked(unsigned &value_r)
+CSVLine::ReadChecked(unsigned &value_r) noexcept
 {
   unsigned long lvalue;
   if (!ReadChecked(lvalue))
@@ -241,7 +239,7 @@ CSVLine::ReadChecked(unsigned &value_r)
 }
 
 bool
-CSVLine::ReadCheckedCompare(double &value_r, const char *string)
+CSVLine::ReadCheckedCompare(double &value_r, std::string_view string) noexcept
 {
   double value;
   if (ReadChecked(value)) {

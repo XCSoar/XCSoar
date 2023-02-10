@@ -30,5 +30,5 @@ Copyright_License {
  */
 class NMEAInputLine: public CSVLine {
 public:
-  NMEAInputLine(const char* line);
+  explicit NMEAInputLine(const char* line) noexcept;
 };

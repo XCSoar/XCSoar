@@ -6,7 +6,6 @@ LIBHTTP_SOURCES = \
 	$(SRC)/net/http/DownloadManager.cpp \
 	$(SRC)/net/http/Progress.cpp \
 	$(SRC)/lib/curl/OutputStreamHandler.cxx \
-	$(SRC)/net/http/FormData.cpp \
 	$(SRC)/lib/curl/Adapter.cxx \
 	$(SRC)/lib/curl/Setup.cxx \
 	$(SRC)/lib/curl/Request.cxx \

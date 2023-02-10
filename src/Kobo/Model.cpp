@@ -66,8 +66,10 @@ static constexpr struct {
   { "SN-N437", KoboModel::GLO_HD },
   { "SN-RN437", KoboModel::GLO_HD },
   { "SN-N249", KoboModel::CLARA_HD },
+  { "SN-N506", KoboModel::CLARA_2E },
   { "SN-N306", KoboModel::NIA },
   { "SN-N418", KoboModel::LIBRA2 },
+  { "SN-N873", KoboModel::LIBRA_H2O },
 };
 
 static KoboModel
@@ -93,5 +95,13 @@ DetectKoboModel() noexcept
 const char *
 GetKoboWifiInterface() noexcept
 {
-  return DetectKoboModel() == KoboModel::LIBRA2 ? "wlan0" : "eth0";
+  switch (DetectKoboModel())
+  {
+    case KoboModel::LIBRA2:
+      return "wlan0";
+    case KoboModel::CLARA_2E:
+      return "mlan0";
+    default:
+      return "eth0";
+  }
 }

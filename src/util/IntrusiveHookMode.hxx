@@ -1,8 +1,5 @@
 /*
- * Copyright 2007-2021 CM4all GmbH
- * All rights reserved.
- *
- * author: Max Kellermann <mk@cm4all.com>
+ * Copyright 2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,54 +27,30 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Loop.hxx"
-#include "FineTimerEvent.hxx"
+#pragma once
 
-#ifdef NO_BOOST
-#include <algorithm>
-#endif
+/**
+ * Specifies the mode in which a hook for intrusive containers
+ * operates.  This is meant to be used as a template argument to the
+ * hook class (e.g. #IntrusiveListHook).
+ */
+enum class IntrusiveHookMode {
+	/**
+	 * No implicit initialization.
+	 */
+	NORMAL,
 
-constexpr bool
-TimerList::Compare::operator()(const FineTimerEvent &a,
-			       const FineTimerEvent &b) const noexcept
-{
-	return a.due < b.due;
-}
+	/**
+	 * Keep track of whether the item is currently linked, allows
+	 * using method is_linked().  This requires implicit
+	 * initialization and requires iterating all items when
+	 * deleting them which adds a considerable amount of overhead.
+	 */
+	TRACK,
 
-TimerList::TimerList() = default;
-
-TimerList::~TimerList() noexcept
-{
-	assert(timers.empty());
-}
-
-void
-TimerList::Insert(FineTimerEvent &t) noexcept
-{
-	timers.insert(t);
-}
-
-Event::Duration
-TimerList::Run(const Event::TimePoint now) noexcept
-{
-	while (true) {
-		auto i = timers.begin();
-		if (i == timers.end())
-			break;
-
-		auto &t = *i;
-		const auto timeout = t.due - now;
-		if (timeout > timeout.zero())
-			return timeout;
-
-#ifdef NO_BOOST
-		t.Cancel();
-#else
-		timers.erase(i);
-#endif
-
-		t.Run();
-	}
-
-	return Event::Duration(-1);
-}
+	/**
+	 * Automatically unlinks the item in the destructor.  This
+	 * implies #TRACK and adds code to the destructor.
+	 */
+	AUTO_UNLINK,
+};

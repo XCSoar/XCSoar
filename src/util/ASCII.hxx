@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2016 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2011-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,6 +30,7 @@
 #pragma once
 
 #include <cstddef>
+#include <string_view>
 
 #ifdef _UNICODE
 #include "WASCII.hxx"
@@ -57,10 +58,10 @@ CopyASCII(char *dest, const char *src) noexcept;
 [[gnu::nonnull]]
 char *
 CopyASCII(char *dest, std::size_t dest_size,
-	  const char *src, const char *src_end) noexcept;
+	  std::string_view src) noexcept;
 
 /**
- * Like CopyUpper(), but convert all letters to upper-case.
+ * Like CopyASCII(), but convert all letters to upper-case.
  */
 [[gnu::nonnull]]
 void

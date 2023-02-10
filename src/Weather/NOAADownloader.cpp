@@ -239,7 +239,7 @@ NOAADownloader::DownloadMETAR(const char *code, CurlGlobal &curl,
     *p = 0;
 
   metar.content.SetASCII(ob);
-  metar.decoded.SetASCII(response.body.c_str());
+  metar.decoded.SetASCII(response.body);
 
   // Trim the content strings
   StripRight(metar.content.buffer());

@@ -29,8 +29,8 @@
 
 #pragma once
 
+#include "Error.hxx"
 #include "String.hxx"
-#include "util/Compiler.h"
 
 #include <curl/curl.h>
 
@@ -92,7 +92,7 @@ public:
 	void SetOption(CURLoption option, T value) {
 		CURLcode code = curl_easy_setopt(handle, option, value);
 		if (code != CURLE_OK)
-			throw std::runtime_error(curl_easy_strerror(code));
+			throw Curl::MakeError(code, "Failed to set option");
 	}
 
 	void SetPrivate(void *pointer) {
@@ -193,10 +193,6 @@ public:
 		SetOption(CURLOPT_POSTFIELDSIZE, (long)size);
 	}
 
-	void SetHttpPost(const struct curl_httppost *post) {
-		SetOption(CURLOPT_HTTPPOST, post);
-	}
-
 	void SetMimePost(const curl_mime *mime) {
 		SetOption(CURLOPT_MIMEPOST, mime);
 	}
@@ -210,17 +206,17 @@ public:
 	 * Returns the response body's size, or -1 if that is unknown.
 	 */
 	[[gnu::pure]]
-	int64_t GetContentLength() const noexcept {
-		double value;
-		return GetInfo(CURLINFO_CONTENT_LENGTH_DOWNLOAD, &value)
-			? (int64_t)value
+	curl_off_t GetContentLength() const noexcept {
+		curl_off_t value;
+		return GetInfo(CURLINFO_CONTENT_LENGTH_DOWNLOAD_T, &value)
+			? value
 			: -1;
 	}
 
 	void Perform() {
 		CURLcode code = curl_easy_perform(handle);
 		if (code != CURLE_OK)
-			throw std::runtime_error(curl_easy_strerror(code));
+			throw Curl::MakeError(code, "CURL failed");
 	}
 
 	bool Unpause() noexcept {

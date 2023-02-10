@@ -26,6 +26,8 @@
 #include <cstring>
 #include <string>
 
+using std::string_view_literals::operator""sv;
+
 static void
 Test1()
 {
@@ -35,11 +37,10 @@ Test1()
   ok1(line.Read(-1) == 1);
 
   // Test rest()
-  const auto rest = line.Rest();
-  ok1(std::string(rest.begin(), rest.end()) == "2,x,4,5,6,7,8,9,10");
+  ok1(line.Rest() == "2,x,4,5,6,7,8,9,10"sv);
 
-  // Test skip()
-  ok1(line.Skip() == 1);
+  // Test ReadView()
+  ok1(line.ReadView() == "2"sv);
 
   // Test skip(int)
   line.Skip(3);
@@ -49,9 +50,7 @@ Test1()
   ok1(line.ReadFirstChar() == '7');
 
   // Test read(char)
-  char temp[10];
-  line.Read(temp, 10);
-  ok1(strcmp(temp, "8") == 0);
+  ok1(line.ReadView() == "8"sv);
 
   // Test read_compare(char)
   ok1(line.ReadCompare("9"));

@@ -38,8 +38,10 @@ Copyright_License {
 #include <stdio.h>
 #include <string.h>
 
+using std::string_view_literals::operator""sv;
+
 class FLARMEmulator : public Emulator, PortLineSplitter {
-  std::map<std::string, std::string> settings;
+  std::map<std::string, std::string, std::less<>> settings;
 
   bool binary;
   StaticFifoBuffer<std::byte, 256u> binary_buffer;
@@ -51,24 +53,23 @@ public:
 
 private:
   void PFLAC_S(NMEAInputLine &line) {
-    char name[64];
-    line.Read(name, ARRAY_SIZE(name));
+    const auto name = line.ReadView();
 
     const auto value = line.Rest();
     NarrowString<256> value_buffer;
-    value_buffer.SetASCII(value.begin(), value.end());
+    value_buffer.SetASCII(value);
 
-    settings[name] = value_buffer;
+    settings[std::string{name}] = value_buffer;
 
     char buffer[512];
-    snprintf(buffer, ARRAY_SIZE(buffer), "PFLAC,A,%s,%s", name,
+    snprintf(buffer, ARRAY_SIZE(buffer), "PFLAC,A,%.*s,%s",
+             (int)name.size(), name.data(),
              value_buffer.c_str());
     PortWriteNMEA(*port, buffer, *env);
   }
 
   void PFLAC_R(NMEAInputLine &line) {
-    char name[64];
-    line.Read(name, ARRAY_SIZE(name));
+    const auto name = line.ReadView();
 
     auto i = settings.find(name);
     if (i == settings.end())
@@ -77,17 +78,16 @@ private:
     const char *value = i->second.c_str();
 
     char buffer[512];
-    snprintf(buffer, ARRAY_SIZE(buffer), "PFLAC,A,%s,%s", name, value);
+    snprintf(buffer, ARRAY_SIZE(buffer), "PFLAC,A,%.*s,%s",
+             (int)name.size(), name.data(), value);
     PortWriteNMEA(*port, buffer, *env);
   }
 
   void PFLAC(NMEAInputLine &line) {
-    char command[4];
-    line.Read(command, ARRAY_SIZE(command));
-
-    if (strcmp(command, "S") == 0)
+    const auto command = line.ReadView();
+    if (command == "S"sv)
       PFLAC_S(line);
-    else if (strcmp(command, "R") == 0)
+    else if (command == "R"sv)
       PFLAC_R(line);
   }
 
@@ -225,12 +225,11 @@ protected:
       return true;
 
     NMEAInputLine line(_line);
-    char cmd[32];
-    line.Read(cmd, ARRAY_SIZE(cmd));
 
-    if (strcmp(cmd, "$PFLAC") == 0)
+    const auto cmd = line.ReadView();
+    if (cmd == "$PFLAC"sv)
       PFLAC(line);
-    else if (strcmp(cmd, "$PFLAX") == 0)
+    else if (cmd == "$PFLAX"sv)
       PFLAX();
 
     return true;

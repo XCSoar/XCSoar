@@ -32,6 +32,8 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "LogFile.hpp"
 
+using std::string_view_literals::operator""sv;
+
 class OpenVarioDevice : public AbstractDevice {
   Port &port;
 
@@ -295,17 +297,22 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
 
     if (type == '?') {
       NullOperationEnvironment env;
-      char query_item[5];
 
       for (int i=0;i < 10;i++) { // not more than 10 loops!
-        line.Read(query_item,sizeof(query_item));
-        if (strlen(query_item) == 0) return true;
+        const auto query_item = line.ReadView();
+        if (query_item.empty())
+          return true;
 
-        if (StringIsEqual(query_item,"WL")) RepeatBallast(env);
-        else if (StringIsEqual(query_item,"BU")) RepeatBugs(env);
-        else if (StringIsEqual(query_item,"MC")) RepeatMacCready(env);
-        else if (StringIsEqual(query_item,"IPO")) RepeatIdealPolar(env);
-        else if (StringIsEqual(query_item,"RPO")) RepeatRealPolar(env);
+        if (query_item == "WL"sv)
+          RepeatBallast(env);
+        else if (query_item == "BU"sv)
+          RepeatBugs(env);
+        else if (query_item == "MC"sv)
+          RepeatMacCready(env);
+        else if (query_item == "IPO"sv)
+          RepeatIdealPolar(env);
+        else if (query_item == "RPO"sv)
+          RepeatRealPolar(env);
       }
       return false;
     }

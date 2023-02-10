@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2016 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2011-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,6 +32,25 @@
 
 #include <cassert>
 
+template<typename D, typename S>
+static D *
+TemplateCopyASCII(D *dest, std::size_t dest_size,
+		  std::basic_string_view<S> src) noexcept
+{
+	const auto dest_end = dest + dest_size;
+	for (const auto ch : src) {
+		if (!IsASCII(ch))
+			continue;
+
+		if (dest == dest_end)
+			break;
+
+		*dest++ = ch;
+	}
+
+	return dest;
+}
+
 void
 CopyASCII(wchar_t *dest, const wchar_t *src) noexcept
 {
@@ -43,20 +62,9 @@ CopyASCII(wchar_t *dest, const wchar_t *src) noexcept
 
 wchar_t *
 CopyASCII(wchar_t *dest, std::size_t dest_size,
-	  const wchar_t *src, const wchar_t *src_end) noexcept
+	  std::wstring_view src) noexcept
 {
-	assert(dest != nullptr);
-	assert(dest_size > 0);
-	assert(src != nullptr);
-	assert(src_end != nullptr);
-	assert(src_end >= src);
-
-	const wchar_t *const dest_end = dest + dest_size;
-	for (; dest != dest_end && src != src_end; ++src)
-		if (IsASCII(*src))
-			*dest++ = *src;
-
-	return dest;
+	return TemplateCopyASCII(dest, dest_size, src);
 }
 
 void
@@ -68,37 +76,18 @@ CopyASCII(wchar_t *dest, const char *src) noexcept
 	} while (*src++ != '\0');
 }
 
-template<typename D, typename S>
-static D *
-TemplateCopyASCII(D *dest, std::size_t dest_size,
-		  const S *src, const S *src_end) noexcept
-{
-	assert(dest != nullptr);
-	assert(dest_size > 0);
-	assert(src != nullptr);
-	assert(src_end != nullptr);
-	assert(src_end >= src);
-
-	const D *const dest_end = dest + dest_size;
-	for (; dest != dest_end && src != src_end; ++src)
-		if (IsASCII(*src))
-			*dest++ = *src;
-
-	return dest;
-}
-
 wchar_t *
 CopyASCII(wchar_t *dest, std::size_t dest_size,
-	  const char *src, const char *src_end) noexcept
+	  std::string_view src) noexcept
 {
-	return TemplateCopyASCII(dest, dest_size, src, src_end);
+	return TemplateCopyASCII(dest, dest_size, src);
 }
 
 char *
 CopyASCII(char *dest, std::size_t dest_size,
-	  const wchar_t *src, const wchar_t *src_end) noexcept
+	  std::wstring_view src) noexcept
 {
-	return TemplateCopyASCII(dest, dest_size, src, src_end);
+	return TemplateCopyASCII(dest, dest_size, src);
 }
 
 void

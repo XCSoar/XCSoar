@@ -102,23 +102,63 @@ Display::Rotate(DisplayOrientation orientation)
                                               android_orientation);
 #elif defined(KOBO)
   const char *rotate = "3";
+  KoboModel kobo_model = DetectKoboModel();
 
   switch (orientation) {
   case DisplayOrientation::DEFAULT:
   case DisplayOrientation::PORTRAIT:
-    rotate = DetectKoboModel() == KoboModel::LIBRA2 ? "1" : "3";
+    switch(kobo_model) {
+    case KoboModel::LIBRA2:
+      rotate = "1";
+      break;
+    case KoboModel::LIBRA_H2O:
+      rotate = "0";
+      break;
+    default:
+      rotate = "3";
+      break;
+    }
     break;
-
   case DisplayOrientation::REVERSE_PORTRAIT:
-    rotate = DetectKoboModel() == KoboModel::LIBRA2 ? "3" : "1";
+    switch(kobo_model) {
+    case KoboModel::LIBRA2:
+      rotate = "3";
+      break;
+    case KoboModel::LIBRA_H2O:
+      rotate = "2";
+      break;
+    default:
+      rotate = "1";
+      break;
+    }
     break;
 
   case DisplayOrientation::LANDSCAPE:
-    rotate = DetectKoboModel() == KoboModel::LIBRA2 ? "2" : "0";
+    switch(kobo_model) {
+    case KoboModel::LIBRA2:
+      rotate = "2";
+      break;
+    case KoboModel::LIBRA_H2O:
+      rotate = "1";
+      break;
+    default:
+      rotate = "0";
+      break;
+    }
     break;
 
   case DisplayOrientation::REVERSE_LANDSCAPE:
-    rotate = DetectKoboModel() == KoboModel::LIBRA2 ? "0" : "2";
+    switch(kobo_model) {
+    case KoboModel::LIBRA2:
+      rotate = "0";
+      break;
+    case KoboModel::LIBRA_H2O:
+      rotate = "3";
+      break;
+    default:
+      rotate = "2";
+      break;
+    }
     break;
   };
 

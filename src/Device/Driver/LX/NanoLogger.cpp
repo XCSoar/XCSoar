@@ -32,11 +32,14 @@
 #include "io/FileOutputStream.hxx"
 #include "time/TimeoutClock.hpp"
 #include "NMEA/InputLine.hpp"
+#include "util/SpanCast.hxx"
+#include "util/StringCompare.hxx"
 
 #include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+
+using std::string_view_literals::operator""sv;
 
 static void
 RequestLogbookInfo(Port &port, OperationEnvironment &env)
@@ -64,14 +67,14 @@ GetNumberOfFlights(Port &port, PortNMEAReader &reader,
     if (response == nullptr)
       return -1;
 
-    if (memcmp(response, ",A,", 3) == 0) {
+    if (auto a = StringAfterPrefix(response, ",A,"sv)) {
       /* old Nano firmware versions (e.g. 2.05) print "LOGBOOK,A,n" */
-      response += 3;
+      response = a;
       break;
-    } else if (memcmp(response, "SIZE,A,", 7) == 0) {
+    } else if (auto size_a = StringAfterPrefix(response, "SIZE,A,"sv)) {
       /* new Nano firmware versions (e.g. 2.10) print
          "LOGBOOKSIZE,A,n" */
-      response += 7;
+      response = size_a;
       break;
     }
   }
@@ -160,10 +163,10 @@ static bool
 ParseLogbookContent(const char *_line, RecordedFlightInfo &info)
 {
   NMEAInputLine line(_line);
+  line.Skip();
 
   unsigned n;
-  return line.Skip() &&
-    line.ReadChecked(n) &&
+  return line.ReadChecked(n) &&
     ReadFilename(line, info) > 0 &&
     ReadDate(line, info.date) &&
     ReadTime(line, info.start_time) &&
@@ -281,10 +284,7 @@ HandleFlightLine(const char *_line, BufferedOutputStream &os,
     /* don't allow changes in file size */
     return false;
 
-  auto content = line.Rest();
-  size_t length = content.end() - content.begin();
-  os.Write(content.begin(), length);
-
+  os.Write(AsBytes(line.Rest()));
   os.Write("\r\n");
   ++i;
   return true;

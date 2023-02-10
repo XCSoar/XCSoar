@@ -1,8 +1,5 @@
 /*
- * Copyright 2007-2021 CM4all GmbH
- * All rights reserved.
- *
- * author: Max Kellermann <mk@cm4all.com>
+ * Copyright 2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,54 +27,31 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Loop.hxx"
-#include "FineTimerEvent.hxx"
+#pragma once
 
-#ifdef NO_BOOST
-#include <algorithm>
-#endif
+#include <curl/curl.h>
 
-constexpr bool
-TimerList::Compare::operator()(const FineTimerEvent &a,
-			       const FineTimerEvent &b) const noexcept
-{
-	return a.due < b.due;
-}
+#include <system_error>
 
-TimerList::TimerList() = default;
+namespace Curl {
 
-TimerList::~TimerList() noexcept
-{
-	assert(timers.empty());
-}
-
-void
-TimerList::Insert(FineTimerEvent &t) noexcept
-{
-	timers.insert(t);
-}
-
-Event::Duration
-TimerList::Run(const Event::TimePoint now) noexcept
-{
-	while (true) {
-		auto i = timers.begin();
-		if (i == timers.end())
-			break;
-
-		auto &t = *i;
-		const auto timeout = t.due - now;
-		if (timeout > timeout.zero())
-			return timeout;
-
-#ifdef NO_BOOST
-		t.Cancel();
-#else
-		timers.erase(i);
-#endif
-
-		t.Run();
+class ErrorCategory final : public std::error_category {
+public:
+	const char *name() const noexcept override {
+		return "curl";
 	}
 
-	return Event::Duration(-1);
+	std::string message(int condition) const override {
+		return curl_easy_strerror(static_cast<CURLcode>(condition));
+	}
+};
+
+inline ErrorCategory error_category;
+
+inline std::system_error
+MakeError(CURLcode code, const char *msg) noexcept
+{
+	return std::system_error(static_cast<int>(code), error_category, msg);
 }
+
+} // namespace Curl

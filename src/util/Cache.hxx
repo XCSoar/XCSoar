@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2011-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,11 +29,11 @@
 
 #pragma once
 
-#include "Manual.hxx"
 #include "Cast.hxx"
+#include "Concepts.hxx"
+#include "Manual.hxx"
+#include "IntrusiveHashSet.hxx"
 #include "IntrusiveList.hxx"
-
-#include <boost/intrusive/unordered_set.hpp>
 
 #include <array>
 
@@ -81,8 +81,8 @@ class Cache {
 	};
 
 	class Item
-		: public boost::intrusive::unordered_set_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>>,
-		  public IntrusiveListHook
+		: public IntrusiveHashSetHook<IntrusiveHookMode::NORMAL>,
+		  public IntrusiveListHook<IntrusiveHookMode::NORMAL>
 	{
 
 		Manual<Pair> pair;
@@ -160,12 +160,7 @@ class Cache {
 
 	ItemList chronological_list;
 
-	using KeyMap = boost::intrusive::unordered_set<Item,
-						       boost::intrusive::hash<ItemHash>,
-						       boost::intrusive::equal<ItemEqual>,
-						       boost::intrusive::constant_time_size<false>>;
-
-	std::array<typename KeyMap::bucket_type, table_size> buckets;
+	using KeyMap = IntrusiveHashSet<Item, table_size, ItemHash, ItemEqual>;
 
 	KeyMap map;
 
@@ -221,8 +216,7 @@ public:
 	using hasher = typename KeyMap::hasher;
 	using key_equal = typename KeyMap::key_equal;
 
-	Cache() noexcept
-		:map(typename KeyMap::bucket_traits(&buckets.front(), buckets.size())) {
+	Cache() noexcept {
 		for (auto &i : buffer)
 			unallocated_list.push_back(i);
 	}
@@ -266,8 +260,7 @@ public:
 	template<typename K>
 	[[gnu::pure]]
 	Data *Get(K &&key) noexcept {
-		auto i = map.find(std::forward<K>(key),
-				  map.hash_function(), map.key_eq());
+		auto i = map.find(std::forward<K>(key));
 		if (i == map.end())
 			return nullptr;
 
@@ -289,11 +282,12 @@ public:
 	 */
 	template<typename K, typename U>
 	Data &Put(K &&key, U &&data) {
+		assert(map.find(key) == map.end() &&
+		       "Key must not exist already");
+
 		Item &item = Make(std::forward<K>(key), std::forward<U>(data));
 		chronological_list.push_front(item);
-		auto i = map.insert(item);
-		(void)i;
-		assert(i.second && "Key must not exist already");
+		map.insert(item);
 		return item.GetData();
 	}
 
@@ -303,18 +297,15 @@ public:
 	 */
 	template<typename K, typename U>
 	Data &PutOrReplace(K &&key, U &&data) {
-		typename KeyMap::insert_commit_data icd;
-		auto i = map.insert_check(key,
-					  map.hash_function(), map.key_eq(),
-					  icd);
-		if (i.second) {
+		auto [position, inserted] = map.insert_check(key);
+		if (inserted) {
 			Item &item = Make(std::forward<K>(key), std::forward<U>(data));
 			chronological_list.push_front(item);
-			map.insert_commit(item, icd);
+			map.insert(position, item);
 			return item.GetData();
 		} else {
-			i.first->ReplaceData(std::forward<U>(data));
-			return i.first->GetData();
+			position->ReplaceData(std::forward<U>(data));
+			return position->GetData();
 		}
 	}
 
@@ -337,8 +328,7 @@ public:
 	 */
 	template<typename K>
 	void Remove(K &&key) noexcept {
-		auto i = map.find(std::forward<K>(key),
-				  map.hash_function(), map.key_eq());
+		auto i = map.find(std::forward<K>(key));
 		if (i == map.end())
 			return;
 
@@ -355,8 +345,7 @@ public:
 	 * Iterates over all items and remove all those which match
 	 * the given predicate.
 	 */
-	template<typename P>
-	void RemoveIf(P &&p) noexcept {
+	void RemoveIf(Predicate<const Key &, const Data &> auto p) noexcept {
 		chronological_list.remove_and_dispose_if([&p](const Item &item){
 				return p(item.GetKey(), item.GetData());
 			},
@@ -372,8 +361,7 @@ public:
 	 * given function.  The cache must not be modified from within
 	 * that function.
 	 */
-	template<typename F>
-	void ForEach(F &&f) const {
+	void ForEach(Invocable<const Key &, const Data &> auto f) const {
 		for (const auto &i : chronological_list)
 			f(i.GetKey(), i.GetData());
 	}

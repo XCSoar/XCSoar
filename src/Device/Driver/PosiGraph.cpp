@@ -37,6 +37,8 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 
+using std::string_view_literals::operator""sv;
+
 class PGDevice : public LXDevice {
 public:
   PGDevice(Port &_port, unsigned baud_rate, unsigned bulk_baud_rate)
@@ -62,12 +64,12 @@ bool
 PGDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
   NMEAInputLine line(String);
-  char type[16];
-  line.Read(type, 16);
+
+  const auto type = line.ReadView();
 
   // $GPWIN ... Winpilot proprietary sentance includinh baro altitude
   // $GPWIN ,01900 , 0 , 5159 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 * 6 B , 0 7 * 6 0 E
-  if (StringIsEqual(type, "$GPWIN"))
+  if (type == "$GPWIN"sv)
     return GPWIN(line, info);
   else
     return LXDevice::ParseNMEA(String, info);

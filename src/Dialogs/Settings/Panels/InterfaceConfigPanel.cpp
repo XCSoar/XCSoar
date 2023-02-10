@@ -118,7 +118,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
   AddFile(_("Events"),
           _("The Input Events file defines the menu system and how XCSoar responds to "
             "button presses and events from external devices."),
-          ProfileKeys::InputFile, _T("*.xci\0"));
+          ProfileKeys::InputFile, _T("*.xci\0"), FileType::XCI);
   SetExpertRow(InputFile);
 
 #ifdef HAVE_NLS

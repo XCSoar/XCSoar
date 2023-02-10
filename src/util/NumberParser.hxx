@@ -1,8 +1,5 @@
 /*
- * Copyright 2007-2021 CM4all GmbH
- * All rights reserved.
- *
- * author: Max Kellermann <mk@cm4all.com>
+ * Copyright 2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,54 +27,32 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Loop.hxx"
-#include "FineTimerEvent.hxx"
+#pragma once
 
-#ifdef NO_BOOST
-#include <algorithm>
-#endif
+#include <charconv>
+#include <optional>
+#include <string_view>
+#include <type_traits> // for std::is_integral_v
 
-constexpr bool
-TimerList::Compare::operator()(const FineTimerEvent &a,
-			       const FineTimerEvent &b) const noexcept
+template<typename T>
+requires std::is_integral_v<T>
+[[gnu::pure]]
+std::optional<T>
+ParseInteger(const char *first, const char *last, int base=10) noexcept
 {
-	return a.due < b.due;
+	T value;
+	auto [ptr, ec] = std::from_chars(first, last, value, base);
+	if (ptr == last && ec == std::errc{})
+		return value;
+	else
+		return std::nullopt;
 }
 
-TimerList::TimerList() = default;
-
-TimerList::~TimerList() noexcept
+template<typename T>
+requires std::is_integral_v<T>
+[[gnu::pure]]
+std::optional<T>
+ParseInteger(std::string_view src, int base=10) noexcept
 {
-	assert(timers.empty());
-}
-
-void
-TimerList::Insert(FineTimerEvent &t) noexcept
-{
-	timers.insert(t);
-}
-
-Event::Duration
-TimerList::Run(const Event::TimePoint now) noexcept
-{
-	while (true) {
-		auto i = timers.begin();
-		if (i == timers.end())
-			break;
-
-		auto &t = *i;
-		const auto timeout = t.due - now;
-		if (timeout > timeout.zero())
-			return timeout;
-
-#ifdef NO_BOOST
-		t.Cancel();
-#else
-		timers.erase(i);
-#endif
-
-		t.Run();
-	}
-
-	return Event::Duration(-1);
+	return ParseInteger<T>(src.data(), src.data() + src.size(), base);
 }

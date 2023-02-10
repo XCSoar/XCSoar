@@ -75,13 +75,18 @@ public:
 
   void SetDisplayOrientation(DisplayOrientation orientation) {
     SetSwap(AreAxesSwapped(orientation));
+#ifdef KOBO
+    KoboModel kobo_model = DetectKoboModel();
+#endif
 
     switch (TranslateDefaultDisplayOrientation(orientation)) {
     case DisplayOrientation::DEFAULT:
     case DisplayOrientation::PORTRAIT:
 #ifdef KOBO
-      if (DetectKoboModel() == KoboModel::LIBRA2)
+      if (kobo_model == KoboModel::LIBRA2)
         SetInvert(false, false);
+      else if (kobo_model == KoboModel::LIBRA_H2O)
+        SetInvert(true, false);
       else
 #endif
         SetInvert(true, false);
@@ -89,8 +94,10 @@ public:
 
     case DisplayOrientation::LANDSCAPE:
 #ifdef KOBO
-      if (DetectKoboModel() == KoboModel::LIBRA2)
+      if (kobo_model == KoboModel::LIBRA2)
         SetInvert(false, true);
+      else if (kobo_model == KoboModel::LIBRA_H2O)
+        SetInvert(false, false);
       else
 #endif
         SetInvert(false, false);
@@ -98,8 +105,10 @@ public:
 
     case DisplayOrientation::REVERSE_PORTRAIT:
 #ifdef KOBO
-      if (DetectKoboModel() == KoboModel::LIBRA2)
+      if (kobo_model == KoboModel::LIBRA2)
         SetInvert(true, true);
+      else if (kobo_model == KoboModel::LIBRA_H2O)
+        SetInvert(false, true);
       else
 #endif
         SetInvert(false, true);
@@ -107,8 +116,10 @@ public:
 
     case DisplayOrientation::REVERSE_LANDSCAPE:
 #ifdef KOBO
-      if (DetectKoboModel() == KoboModel::LIBRA2)
+      if (kobo_model == KoboModel::LIBRA2)
         SetInvert(true, false);
+      else if (kobo_model == KoboModel::LIBRA_H2O)
+        SetInvert(true, true);
       else
 #endif
         SetInvert(true, true);

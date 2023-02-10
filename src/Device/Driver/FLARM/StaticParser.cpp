@@ -30,12 +30,13 @@ Copyright_License {
 #include "util/Macros.hpp"
 #include "util/StringAPI.hxx"
 
+using std::string_view_literals::operator""sv;
+
 void
 ParsePFLAE(NMEAInputLine &line, FlarmError &error, TimeStamp clock) noexcept
 {
-  char type[2];
-  line.Read(type, ARRAY_SIZE(type));
-  if (!StringIsEqual(type, "A"))
+  const auto type = line.ReadView();
+  if (type != "A"sv)
     return;
 
   error.severity = (FlarmError::Severity)
@@ -49,21 +50,17 @@ void
 ParsePFLAV(NMEAInputLine &line, FlarmVersion &version,
            TimeStamp clock) noexcept
 {
-  char type[2];
-  line.Read(type, ARRAY_SIZE(type));
-  if (!StringIsEqual(type, "A"))
+  const auto type = line.ReadView();
+  if (type != "A"sv)
     return;
 
-  line.Read(version.hardware_version.buffer(),
-            version.hardware_version.capacity());
+  version.hardware_version = line.ReadView();
   version.hardware_version.CleanASCII();
 
-  line.Read(version.software_version.buffer(),
-            version.software_version.capacity());
+  version.software_version = line.ReadView();
   version.software_version.CleanASCII();
 
-  line.Read(version.obstacle_version.buffer(),
-            version.obstacle_version.capacity());
+  version.obstacle_version = line.ReadView();
   version.obstacle_version.CleanASCII();
 
   version.available.Update(clock);

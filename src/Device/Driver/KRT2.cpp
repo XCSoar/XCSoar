@@ -414,7 +414,7 @@ KRT2Device::HandleSTXCommand(const struct stx_msg * msg, struct NMEAInfo & info)
   const auto freq = RadioFrequency::FromMegaKiloHertz(msg->mhz, msg->khz * 5);
 
   StaticString<MAX_NAME_LENGTH> freq_name;
-  freq_name.SetASCII(&(msg->station[0]), &(msg->station[MAX_NAME_LENGTH - 1]));
+  freq_name.SetASCII(msg->station);
 
   if(msg->command == 'U') {
     info.settings.has_active_frequency.Update(info.clock);

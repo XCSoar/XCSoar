@@ -34,6 +34,8 @@ Copyright_License {
 
 #include <stdlib.h>
 
+using std::string_view_literals::operator""sv;
+
 /**
  * Character table for base-36.
  */
@@ -96,9 +98,9 @@ IGCParseDateRecord(const char *line, BrokenDate &date)
   if (line == nullptr)
     return false;
 
-  if (strncmp(line, "DATE", 4) == 0) {
-    line += 4;
-  }
+  if (auto date = StringAfterPrefix(line, "DATE"sv))
+    line = date;
+
   if (line[0] == ':') {
     line += 1;
   }

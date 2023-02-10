@@ -25,8 +25,11 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "NMEA/Info.hpp"
 #include "Math/WindowFilter.hpp"
+#include "util/StringCompare.hxx"
 
 #include <stdlib.h>
+
+using std::string_view_literals::operator""sv;
 
 class FlyNetDevice : public AbstractDevice {
   WindowFilter<40> vario_filter;
@@ -98,10 +101,10 @@ FlyNetDevice::ParsePRS(const char *content, NMEAInfo &info)
 bool
 FlyNetDevice::ParseNMEA(const char *line, NMEAInfo &info)
 {
-  if (memcmp(line, "_PRS ", 5) == 0)
-    return ParsePRS(line + 5, info);
-  else if (memcmp(line, "_BAT ", 5) == 0)
-    return ParseBAT(line + 5, info);
+  if (auto prs = StringAfterPrefix(line, "_PRS "sv))
+    return ParsePRS(prs, info);
+  else if (auto bat = StringAfterPrefix(line, "_BAT "sv))
+    return ParseBAT(bat, info);
   else
     return false;
 }

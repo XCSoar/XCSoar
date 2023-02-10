@@ -203,8 +203,11 @@ ParseScanResultsLine(WifiVisibleNetwork &dest, char *src)
   if (tab != nullptr)
     *tab = 0;
 
-  if (StringIsEmpty(src))
-    return false;
+  // src points to ssid or if empty we assume a hidden ssid.
+  if (StringIsEmpty(src)) {
+    dest.ssid.clear();
+    return true;
+  }
 
   dest.ssid = src;
   return true;
@@ -231,7 +234,9 @@ ParseScanResults(WifiVisibleNetwork *dest, std::size_t max, char *src)
     if (!ParseScanResultsLine(dest[n], src))
       break;
 
-    ++n;
+    // skip hidden ssid
+    if (!dest[n].ssid.empty())
+      ++n;
 
     if (eol == nullptr)
       break;

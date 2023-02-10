@@ -34,6 +34,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include <math.h>
 
+using std::string_view_literals::operator""sv;
 
 class XVCDevice : public AbstractDevice {
   Port &port;
@@ -178,15 +179,13 @@ XVCDevice::PXCV(NMEAInputLine &line, NMEAInfo &info)
 bool
 XVCDevice::XCV(NMEAInputLine &line, NMEAInfo &info)
 {
-  char topic[16];
-  line.Read(topic, sizeof(topic));
-  if (StringIsEqual(topic, "bal-water")) {
+  const auto topic = line.ReadView();
+  if (topic == "bal-water"sv) {
     double value;
     if (line.ReadChecked(value)) {
       info.settings.ProvideBallastLitres(value, info.clock);
     }
-  }
-  else if (StringIsEqual(topic, "version")) {
+  } else if (topic == "version"sv) {
     unsigned int value;
     if (line.ReadChecked(value)) {
       protocol_version = std::min(value, (unsigned int)XCV_VERSION_2);  // switch protocol version to the minimum version both can do
@@ -215,16 +214,14 @@ XVCDevice::ParseNMEA(const char *String, NMEAInfo &info)
   if (!VerifyNMEAChecksum(String))
     return false;
   NMEAInputLine line(String);
-  char type[16];
-  line.Read(type, sizeof(type));
-  if (StringIsEqual(type, "$PXCV")) {                // cyclic data from device useful for channel supervision
+  const auto type = line.ReadView();
+  if (type == "$PXCV"sv) {                // cyclic data from device useful for channel supervision
     xcvario_protocol_up = true;
     if (protocol_version != XCV_VERSION_UNKNOWN) {   // only parse NMEA once protocol version is set
       return PXCV(line, info);
     }
     return true;
-  }
-  else if (StringIsEqual(type, "!xcv")) {
+  } else if (type == "!xcv"sv) {
     return XCV(line, info);
   }
   return false;

@@ -1,8 +1,5 @@
 /*
- * Copyright 2007-2021 CM4all GmbH
- * All rights reserved.
- *
- * author: Max Kellermann <mk@cm4all.com>
+ * Copyright 2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,54 +27,37 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Loop.hxx"
-#include "FineTimerEvent.hxx"
+#pragma once
 
-#ifdef NO_BOOST
-#include <algorithm>
-#endif
+#include <concepts>
 
-constexpr bool
-TimerList::Compare::operator()(const FineTimerEvent &a,
-			       const FineTimerEvent &b) const noexcept
-{
-	return a.due < b.due;
-}
-
-TimerList::TimerList() = default;
-
-TimerList::~TimerList() noexcept
-{
-	assert(timers.empty());
-}
-
-void
-TimerList::Insert(FineTimerEvent &t) noexcept
-{
-	timers.insert(t);
-}
-
-Event::Duration
-TimerList::Run(const Event::TimePoint now) noexcept
-{
-	while (true) {
-		auto i = timers.begin();
-		if (i == timers.end())
-			break;
-
-		auto &t = *i;
-		const auto timeout = t.due - now;
-		if (timeout > timeout.zero())
-			return timeout;
-
-#ifdef NO_BOOST
-		t.Cancel();
+/**
+ * Compatibility wrapper for std::invocable which is unavailable in
+ * the Android NDK r25b and Apple Xcode.
+ */
+#if !defined(ANDROID) && !defined(__APPLE__)
+template<typename F, typename... Args>
+concept Invocable = std::invocable<F, Args...>;
 #else
-		timers.erase(i);
+template<typename F, typename... Args>
+concept Invocable = requires(F f, Args... args) {
+	{ f(args...) };
+};
 #endif
 
-		t.Run();
-	}
+/**
+ * Compatibility wrapper for std::predicate which is unavailable in
+ * the Android NDK r25b and Apple Xcode.
+ */
+#if !defined(ANDROID) && !defined(__APPLE__)
+template<typename F, typename... Args>
+concept Predicate = std::predicate<F, Args...>;
+#else
+template<typename F, typename... Args>
+concept Predicate = requires(F f, Args... args) {
+	{ f(args...) } -> std::same_as<bool>;
+};
+#endif
 
-	return Event::Duration(-1);
-}
+template<typename F, typename T>
+concept Disposer = Invocable<F, T *>;

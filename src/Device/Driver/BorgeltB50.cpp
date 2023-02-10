@@ -32,6 +32,8 @@ Copyright_License {
 
 #include <math.h>
 
+using std::string_view_literals::operator""sv;
+
 class B50Device : public AbstractDevice {
   Port &port;
 
@@ -126,10 +128,9 @@ B50Device::ParseNMEA(const char *String, NMEAInfo &info)
     return false;
 
   NMEAInputLine line(String);
-  char type[16];
-  line.Read(type, 16);
 
-  if (StringIsEqual(type, "$PBB50"))
+  const auto type = line.ReadView();
+  if (type == "$PBB50"sv)
     return PBB50(line, info);
   else
     return false;

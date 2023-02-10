@@ -86,10 +86,11 @@ ulimit -c unlimited
 # and at least for the Libra 2 we have to wait for /dev/mmcblk0
 sleep 1
 
-# load kernel modules for ClaraHD and Libra2 as factory kernel is OTG
+# load kernel modules for ClaraHD, Libra2 and Libra H2O as factory kernel is OTG
 # but missing modules. Also put ClaraHD and Libra2 in the right mode
 model=`dd if=/dev/mmcblk0 bs=8 count=1 skip=64`
-if [ `expr substr $model 1 7` = SN-N418 ] || [ `expr substr $model 1 7` = SN-N249 ]; then
+if [ `expr substr $model 1 7` = SN-N418 ] || [ `expr substr $model 1 7` = SN-N249 ] \
+    [ `expr substr $model 1 7` = SN-N873 ] || [ `expr substr $model 1 7` = SN-N506 ]; then
     insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/serial/usbserial.ko"
     insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/serial/aircable.ko"
     insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/serial/ch341.ko"
@@ -124,7 +125,7 @@ fi
 # workaround for Kobo Touch N905B kernel bug: the mxc_fb driver
 # crashes when KoboMenu tries to rotate the display too early after
 # boot
-if [ `dd if=/dev/mmcblk0 bs=8 count=1 skip=64` = "SN-N905B" ]; then
+if [ $model = "SN-N905B" ]; then
     sleep 1
 fi
 

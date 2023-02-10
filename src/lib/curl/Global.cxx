@@ -58,7 +58,10 @@ public:
 		   better solution? */
 	}
 
-	auto &GetEventLoop() const noexcept {
+	CurlSocket(const CurlSocket &) = delete;
+	CurlSocket &operator=(const CurlSocket &) = delete;
+
+	[[nodiscard]] auto &GetEventLoop() const noexcept {
 		return socket_event.GetEventLoop();
 	}
 
@@ -70,7 +73,7 @@ public:
 				  void *userp, void *socketp) noexcept;
 
 private:
-	SocketDescriptor GetSocket() const noexcept {
+	[[nodiscard]] SocketDescriptor GetSocket() const noexcept {
 		return socket_event.GetSocket();
 	}
 

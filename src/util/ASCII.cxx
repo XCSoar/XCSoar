@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2016 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2011-2022 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -43,15 +43,18 @@ CopyASCII(char *dest, const char *src) noexcept
 
 char *
 CopyASCII(char *dest, std::size_t dest_size,
-	  const char *src, const char *src_end) noexcept
+	  std::string_view src) noexcept
 {
-	assert(dest_size > 0);
-	assert(src_end >= src);
+	const auto dest_end = dest + dest_size;
+	for (const auto ch : src) {
+		if (!IsASCII(ch))
+			continue;
 
-	for (const char *const dest_end = dest + dest_size;
-	     dest != dest_end && src != src_end; ++src)
-		if (IsASCII(*src))
-			*dest++ = *src;
+		if (dest == dest_end)
+			break;
+
+		*dest++ = ch;
+	}
 
 	return dest;
 }

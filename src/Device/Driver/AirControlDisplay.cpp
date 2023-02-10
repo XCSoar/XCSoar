@@ -32,15 +32,16 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Math/Util.hpp"
 
+using std::string_view_literals::operator""sv;
+
 static bool
 ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
 {
   double value;
 
-  char type[16];
-  line.Read(type, 16);
+  const auto type = line.ReadView();
 
-  if (StringIsEqual(type, "ALT")) {
+  if (type == "ALT"sv) {
     /*
     $PAAVS,ALT,<ALTQNE>,<ALTQNH>,<QNH>
      <ALTQNE> Current QNE altitude in meters with two decimal places
@@ -57,7 +58,7 @@ ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
       auto qnh = AtmosphericPressure::Pascal(value);
       info.settings.ProvideQNH(qnh, info.clock);
     }
-  } else if (StringIsEqual(type, "COM")) {
+  } else if (type == "COM"sv) {
     /*
     $PAAVS,COM,<CHN1>,<CHN2>,<RXVOL1>,<RXVOL2>,<DWATCH>,<RX1>,<RX2>,<TX1>
      <CHN1> Primary radio channel;

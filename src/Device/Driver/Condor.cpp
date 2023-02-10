@@ -28,6 +28,8 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 
+using std::string_view_literals::operator""sv;
+
 class CondorDevice : public AbstractDevice {
 public:
   /* virtual methods from class Device */
@@ -102,13 +104,12 @@ CondorDevice::ParseNMEA(const char *String, NMEAInfo &info)
     return false;
 
   NMEAInputLine line(String);
-  char type[16];
-  line.Read(type, 16);
 
-  if (StringIsEqual(type, "$LXWP0"))
+  const auto type = line.ReadView();
+  if (type == "$LXWP0"sv)
     return cLXWP0(line, info);
-
-  return false;
+  else
+    return false;
 }
 
 static Device *

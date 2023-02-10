@@ -137,6 +137,7 @@ typedef const ms_uint32 *ms_const_bitarray;
 
 #ifdef SHAPELIB_DISABLED
 
+#include "mapflatgeobuf.h"
 #include "mapsymbol.h"
 #include "maptree.h" /* quadtree spatial index */
 #include "maphash.h"
@@ -500,6 +501,8 @@ extern "C" {
 
 #endif
 
+  enum MS_NUM_CHECK_TYPES { MS_NUM_CHECK_NONE=0, MS_NUM_CHECK_RANGE, MS_NUM_CHECK_GT, MS_NUM_CHECK_GTE };
+
   /* General enumerated types - needed by scripts */
   enum MS_FILE_TYPE {MS_FILE_MAP, MS_FILE_SYMBOL};
   enum MS_UNITS {MS_INCHES, MS_FEET, MS_MILES, MS_METERS, MS_KILOMETERS, MS_DD, MS_PIXELS, MS_PERCENTAGES, MS_NAUTICALMILES, MS_INHERIT = -1};
@@ -516,7 +519,7 @@ extern "C" {
 #define MS_LARGE 13
 #define MS_GIANT 16
   enum MS_QUERYMAP_STYLES {MS_NORMAL, MS_HILITE, MS_SELECTED};
-  enum MS_CONNECTION_TYPE {MS_INLINE, MS_SHAPEFILE, MS_TILED_SHAPEFILE, MS_UNUSED_2, MS_OGR, MS_UNUSED_1, MS_POSTGIS, MS_WMS, MS_ORACLESPATIAL, MS_WFS, MS_GRATICULE, MS_MYSQL, MS_RASTER, MS_PLUGIN, MS_UNION, MS_UVRASTER, MS_CONTOUR, MS_KERNELDENSITY, MS_IDW };
+  enum MS_CONNECTION_TYPE {MS_INLINE, MS_SHAPEFILE, MS_TILED_SHAPEFILE, MS_UNUSED_2, MS_OGR, MS_UNUSED_1, MS_POSTGIS, MS_WMS, MS_ORACLESPATIAL, MS_WFS, MS_GRATICULE, MS_MYSQL, MS_RASTER, MS_PLUGIN, MS_UNION, MS_UVRASTER, MS_CONTOUR, MS_KERNELDENSITY, MS_IDW, MS_FLATGEOBUF };
 #define IS_THIRDPARTY_LAYER_CONNECTIONTYPE(type) ((type) == MS_UNION || (type) == MS_KERNELDENSITY || (type) == MS_IDW)
   enum MS_JOIN_CONNECTION_TYPE {MS_DB_XBASE, MS_DB_CSV, MS_DB_MYSQL, MS_DB_ORACLE, MS_DB_POSTGRES};
   enum MS_JOIN_TYPE {MS_JOIN_ONE_TO_ONE, MS_JOIN_ONE_TO_MANY};
@@ -953,6 +956,13 @@ The :ref:`QUERYMAP <querymap>` object.
 Instances of querymapObj are always are always embedded inside the :class:`mapObj`.
 */
   typedef struct {
+#ifdef SWIG
+    %immutable;
+#endif /* SWIG */
+    struct mapObj *map; ///< Reference to parent :class:`mapObj`                                                                                                                 
+#ifdef SWIG
+    %mutable;
+#endif /* SWIG */
     int height; ///< See :ref:`SIZE <mapfile-querymap-size>`
     int width; ///< See :ref:`SIZE <mapfile-querymap-size>`
     int status; ///< See :ref:`STATUS <mapfile-querymap-status>`
@@ -1180,7 +1190,6 @@ The :ref:`LABEL <label>` object
 
     char wrap; ///< See :ref:`WRAP <mapfile-label-wrap>`
     int maxlength; ///< See :ref:`MAXLENGTH <mapfile-label-maxlength>`
-    int minlength; ///< This is a valid Mapfile keyword but is currently unused
     double space_size_10; ///< Cached size of a single space character used for label text alignment of rfc40
 
     /**
@@ -1503,6 +1512,17 @@ The :ref:`REFERENCE <reference>` object
   /*                             scalebarObj                              */
   /************************************************************************/
 
+  #define MS_SCALEBAR_INTERVALS_MIN 1
+  #define MS_SCALEBAR_INTERVALS_MAX 100
+
+  #define MS_SCALEBAR_WIDTH_MIN 5
+  #define MS_SCALEBAR_WIDTH_MAX 1000
+  #define MS_SCALEBAR_HEIGHT_MIN 2
+  #define MS_SCALEBAR_HEIGHT_MAX 100
+
+  #define MS_SCALEBAR_OFFSET_MIN -50
+  #define MS_SCALEBAR_OFFSET_MAX 50
+  
   /**
   The :ref:`SCALEBAR <scalebar>` object
   */
@@ -1532,6 +1552,11 @@ The :ref:`REFERENCE <reference>` object
   /************************************************************************/
   /*                              legendObj                               */
   /************************************************************************/
+
+  #define MS_LEGEND_KEYSIZE_MIN 5
+  #define MS_LEGEND_KEYSIZE_MAX 200
+  #define MS_LEGEND_KEYSPACING_MIN 0
+  #define MS_LEGEND_KEYSPACING_MAX 50
 
   /**
   The :ref:`LEGEND <legend>` object
@@ -1924,6 +1949,9 @@ void msPopulateTextSymbolForLabelAndString(textSymbolObj *ts, labelObj *l, char 
   /*      application.                                                    */
   /************************************************************************/
 
+  #define MS_RESOLUTION_MAX 1000 /* applies to resolution and defresolution */
+  #define MS_RESOLUTION_MIN 10
+
   /**
   The :ref:`MAP <map>` object
   */
@@ -2093,8 +2121,8 @@ void msPopulateTextSymbolForLabelAndString(textSymbolObj *ts, labelObj *l, char 
   ** a few other places (like mapscript)... found in mapfile.c
   */
   int getString(char **s);
-  int getDouble(double *d);
-  int getInteger(int *i);
+  int getDouble(double *d, int num_check_type, double value1, double value2); // getDouble(double *d);
+  int getInteger(int *i, int num_check_type, int value1, int value2); // getInteger(int *i);
   int getSymbol(int n, ...);
   int getCharacter(char *c);
 
@@ -2201,20 +2229,20 @@ void msPopulateTextSymbolForLabelAndString(textSymbolObj *ts, labelObj *l, char 
   MS_DLL_EXPORT mapObj  *msLoadMap(const char *filename, const char *new_mappath, const configObj *config);
   MS_DLL_EXPORT int msTransformXmlMapfile(const char *stylesheet, const char *xmlMapfile, FILE *tmpfile);
   MS_DLL_EXPORT int msSaveMap(mapObj *map, char *filename);
+  MS_DLL_EXPORT int msSaveConfig(configObj *map, const char *filename);
 #endif /* SHAPELIB_DISABLED */
   MS_DLL_EXPORT void msFreeCharArray(char **array, int num_items);
 #ifdef SHAPELIB_DISABLED
-  MS_DLL_EXPORT int msUpdateScalebarFromString(scalebarObj *scalebar, char *string, int url_string);
-  MS_DLL_EXPORT int msUpdateQueryMapFromString(queryMapObj *querymap, char *string, int url_string);
-  MS_DLL_EXPORT int msUpdateLabelFromString(labelObj *label, char *string, int url_string);
+  MS_DLL_EXPORT int msUpdateScalebarFromString(scalebarObj *scalebar, char *string);
+  MS_DLL_EXPORT int msUpdateQueryMapFromString(queryMapObj *querymap, char *string);
+  MS_DLL_EXPORT int msUpdateLabelFromString(labelObj *label, char *string);
   MS_DLL_EXPORT int msUpdateClusterFromString(clusterObj *cluster, char *string);
-  MS_DLL_EXPORT int msUpdateReferenceMapFromString(referenceMapObj *ref, char *string, int url_string);
-  MS_DLL_EXPORT int msUpdateLegendFromString(legendObj *legend, char *string, int url_string);
-  MS_DLL_EXPORT int msUpdateWebFromString(webObj *web, char *string, int url_string);
-  MS_DLL_EXPORT int msUpdateStyleFromString(styleObj *style, char *string, int url_string);
-  MS_DLL_EXPORT int msUpdateClassFromString(classObj *_class, char *string, int url_string);
-  MS_DLL_EXPORT int msUpdateLayerFromString(layerObj *layer, char *string, int url_string);
-  MS_DLL_EXPORT int msUpdateMapFromURL(mapObj *map, char *variable, char *string);
+  MS_DLL_EXPORT int msUpdateReferenceMapFromString(referenceMapObj *ref, char *string);
+  MS_DLL_EXPORT int msUpdateLegendFromString(legendObj *legend, char *string);
+  MS_DLL_EXPORT int msUpdateWebFromString(webObj *web, char *string);
+  MS_DLL_EXPORT int msUpdateStyleFromString(styleObj *style, char *string);
+  MS_DLL_EXPORT int msUpdateClassFromString(classObj *_class, char *string);
+  MS_DLL_EXPORT int msUpdateLayerFromString(layerObj *layer, char *string);
   MS_DLL_EXPORT char *msWriteLayerToString(layerObj *layer);
   MS_DLL_EXPORT char *msWriteMapToString(mapObj *map);
   MS_DLL_EXPORT char *msWriteClassToString(classObj *_class);
@@ -2639,6 +2667,7 @@ extern "C" {
 
   MS_DLL_EXPORT int msINLINELayerInitializeVirtualTable(layerObj *layer);
   MS_DLL_EXPORT int msSHPLayerInitializeVirtualTable(layerObj *layer);
+  MS_DLL_EXPORT int msFlatGeobufLayerInitializeVirtualTable(layerObj *layer);
   MS_DLL_EXPORT int msTiledSHPLayerInitializeVirtualTable(layerObj *layer);
   MS_DLL_EXPORT int msOGRLayerInitializeVirtualTable(layerObj *layer);
   MS_DLL_EXPORT int msPostGISLayerInitializeVirtualTable(layerObj *layer);

@@ -87,17 +87,6 @@ EventLoop::GetUring() noexcept
 
 #endif
 
-void
-EventLoop::Break() noexcept
-{
-	if (quit.exchange(true))
-		return;
-
-#ifdef HAVE_THREADED_EVENT_LOOP
-	wake_fd.Write();
-#endif
-}
-
 bool
 EventLoop::AddFD(int fd, unsigned events, SocketEvent &event) noexcept
 {
@@ -155,6 +144,8 @@ EventLoop::Insert(CoarseTimerEvent &t) noexcept
 	again = true;
 }
 
+#ifndef NO_FINE_TIMER_EVENT
+
 void
 EventLoop::Insert(FineTimerEvent &t) noexcept
 {
@@ -164,36 +155,61 @@ EventLoop::Insert(FineTimerEvent &t) noexcept
 	again = true;
 }
 
+#endif // NO_FINE_TIMER_EVENT
+
+/**
+ * Determines which timeout will happen earlier; either one may be
+ * negative to specify "no timeout at all".
+ */
+static constexpr Event::Duration
+GetEarlierTimeout(Event::Duration a, Event::Duration b) noexcept
+{
+	return b.count() < 0 || (a.count() >= 0 && a < b)
+		? a
+		: b;
+}
+
 inline Event::Duration
 EventLoop::HandleTimers() noexcept
 {
 	const auto now = SteadyNow();
 
+#ifndef NO_FINE_TIMER_EVENT
 	auto fine_timeout = timers.Run(now);
+#else
+	const Event::Duration fine_timeout{-1};
+#endif // NO_FINE_TIMER_EVENT
 	auto coarse_timeout = coarse_timers.Run(now);
 
-	return fine_timeout.count() < 0 ||
-		(coarse_timeout.count() >= 0 && coarse_timeout < fine_timeout)
-		? coarse_timeout
-		: fine_timeout;
+	return GetEarlierTimeout(coarse_timeout, fine_timeout);
 }
 
 void
-EventLoop::AddDefer(DeferEvent &d) noexcept
+EventLoop::AddDefer(DeferEvent &e) noexcept
 {
 #ifdef HAVE_THREADED_EVENT_LOOP
 	assert(!IsAlive() || IsInside());
 #endif
 
-	defer.push_back(d);
+	defer.push_back(e);
+
+#ifdef HAVE_THREADED_EVENT_LOOP
+	/* setting this flag here is only relevant if we've been
+	   called by a DeferEvent */
 	again = true;
+#endif
 }
 
 void
 EventLoop::AddIdle(DeferEvent &e) noexcept
 {
-	idle.push_front(e);
+	idle.push_back(e);
+
+#ifdef HAVE_THREADED_EVENT_LOOP
+	/* setting this flag here is only relevant if we've been
+	   called by a DeferEvent */
 	again = true;
+#endif
 }
 
 void
@@ -272,6 +288,7 @@ EventLoop::Run() noexcept
 
 	assert(IsInside());
 	assert(!quit);
+	assert(!quit_injected);
 #ifdef HAVE_THREADED_EVENT_LOOP
 	assert(alive);
 	assert(busy);
@@ -425,6 +442,11 @@ EventLoop::OnSocketReady([[maybe_unused]] unsigned flags) noexcept
 	assert(IsInside());
 
 	wake_fd.Read();
+
+	if (quit_injected) {
+		Break();
+		return;
+	}
 
 	const std::scoped_lock<Mutex> lock(mutex);
 	HandleInject();
