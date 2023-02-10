@@ -2,7 +2,8 @@
 // (see http://msdn.microsoft.com/en-us/library/ms889982.aspx)
 HI_RES_AWARE CEUX {1}
 
-#include "resource.h"
+// this path indirection make it visible in Visual Studio
+#include "../include/resource.h"
 
 #if !defined(ANDROID) || defined(ANDROID_DRAWABLE)
 #define BITMAP(name, path) name BITMAP DISCARDABLE path

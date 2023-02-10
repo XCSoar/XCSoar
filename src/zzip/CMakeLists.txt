@@ -9,7 +9,7 @@ endif()
 
 # organize the files in subdirectories
 
-if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows" AND WIN32 AND MINGW)
+if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows" AND WIN32 AND MINGW AND NOT CLANG)
   find_program(MINGW_APP NAMES mingw32-make REQUIRED)
 endif()
 
@@ -40,6 +40,12 @@ foreach(header_file ${HEADER_FILES_TEMP})
     ## message(STATUS "### ### ${src_path}  --- ${header_file}" )
 endforeach()
 #     message(FATAL_ERROR "### ### Header-Liste  --- ${HEADER_FILES}" )
+endif()
+
+if(WIN32)
+# this has to be defined in zzip-Project, not here (but without MSVC!)
+    add_compile_definitions(ZZIP_1_H)   # definition of uint32_t and Co.!
+    add_compile_definitions(WIN32)
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
