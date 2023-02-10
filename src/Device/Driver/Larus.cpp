@@ -268,7 +268,8 @@ LarusDevice::PLARV(NMEAInputLine &line, NMEAInfo &info)
   }
 
   // Parse average climb rate, Larus is doing this over one circle!
-  line.ReadChecked(value);  // Skip average vario data, TODO(August2111):
+  // line.ReadChecked(value); // Skip average vario data, TODO(August2111):
+  line.Skip();
   // create a new field for a Full Circle Average Climbrate(!),  make it
   // visible and set it here
 
