@@ -276,7 +276,7 @@ LarusDevice::PLARV(NMEAInputLine &line, NMEAInfo &info)
   // Parse barometric altitude
   double altitude;  // used in ProvideTrueAirspeedWithAltitude too
   if (line.ReadChecked(altitude)) {
-    altitude = Units::ToSysUnit(value, Unit::METER);
+    altitude = Units::ToSysUnit(altitude, Unit::METER);
     info.ProvidePressureAltitude(altitude);
   }
 
