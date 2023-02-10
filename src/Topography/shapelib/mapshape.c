@@ -43,9 +43,6 @@
 
 #include <string.h>
 #include <stdio.h>
-#ifndef __MSVC__
-# include <sys/param.h>
-#endif
 #include <stdbool.h>
 #include <math.h>
 #include "mapserver.h"
