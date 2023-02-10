@@ -32,6 +32,14 @@
 
 #pragma once
 
+#if defined(__AUGUST__)  // TODO(August2111): Tis isn't correct for make...
+#if defined(SSIZE_T)
+typedef SSIZE_T ssize_t;
+#else // SSIZE_T
+typedef long long ssize_t;
+#endif
+#endif
+
 namespace Cares {
 
 /**
