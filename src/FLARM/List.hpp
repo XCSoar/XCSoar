@@ -209,9 +209,9 @@ struct TrafficList {
   const FlarmTraffic *FindMaximumAlert() const noexcept;
 
   constexpr unsigned TrafficIndex(const FlarmTraffic *t) const noexcept {
-#ifndef __MSVC__
+#if 1 //ndef __MSVC__ // TODO(Augustr2111): make it ok
     unsigned int i = 0;
-    for (const auto traffic : list) {
+    for (const auto &traffic : list) {
       if (traffic.id == t->id)
         return i;
       i++;
