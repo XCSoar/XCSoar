@@ -29,12 +29,6 @@ Copyright_License {
 
 #include <type_traits>
 
-#ifdef _AUG_MSC
-# define MCS_WORKAROUND   1
-#else
-# define MCS_WORKAROUND   0
-#endif
-
 /**
  * This class keeps track of the traffic objects received from a
  * FLARM.
@@ -166,10 +160,8 @@ struct TrafficList {
   /**
    * Search for the previous traffic in the ordered list.
    */
-#if MCS_WORKAROUND
   constexpr const FlarmTraffic *
   PreviousTraffic(const FlarmTraffic *t) const noexcept {
-#if 1  // August2111
     const FlarmTraffic *ret = nullptr;
     for (auto const &iter : list) {
       if (&iter == t)
@@ -177,22 +169,14 @@ struct TrafficList {
       else
         ret = &iter;
     }
-#endif
     return nullptr;
-#else
-  constexpr const FlarmTraffic *
-  PreviousTraffic(const FlarmTraffic *t) const noexcept {
-    return t > list.begin() ? t - 1 : NULL;
-#endif
   }
 
   /**
    * Search for the next traffic in the ordered list.
    */
-#if MCS_WORKAROUND
   constexpr const FlarmTraffic *
   NextTraffic(const FlarmTraffic *t) const noexcept {
-#if 1
     bool found = false;
     for (auto const &iter : list) {
       if (&iter == t)
@@ -200,35 +184,21 @@ struct TrafficList {
       else if (found)
         return &iter; // the next one in the list after t
     }
-#endif
     return nullptr;
-#else
-  constexpr const FlarmTraffic *
-  NextTraffic(const FlarmTraffic *t) const noexcept {
-    return t + 1 < list.end() ? t + 1 : NULL;
-#endif
   }
 
   /**
    * Search for the first traffic in the ordered list.
    */
   constexpr const FlarmTraffic *FirstTraffic() const noexcept {
-#if MCS_WORKAROUND
     return list.empty() ? nullptr : &list.front();
-#else
-    return list.empty() ? NULL : list.begin();
-#endif
   }
 
   /**
    * Search for the last traffic in the ordered list.
    */
   constexpr const FlarmTraffic *LastTraffic() const noexcept {
-#if MCS_WORKAROUND
     return list.empty() ? nullptr : &list.back();
-#else
-    return list.empty() ? NULL : list.end() - 1;
-#endif
   }
 
   /**
@@ -238,16 +208,11 @@ struct TrafficList {
   [[gnu::pure]]
   const FlarmTraffic *FindMaximumAlert() const noexcept;
 
-#if MCS_WORKAROUND
   constexpr unsigned TrafficIndex(const FlarmTraffic *t) const noexcept {
-#if 0
-    /*/
-    auto iter = std::find(list.begin(), list.end(), &t);
-    return iter - list.begin();
-    /*/
+#ifndef __MSVC__
     unsigned int i = 0;
-    for (auto const traffic : list) {
-      if (traffic == *t)
+    for (const auto traffic : list) {
+      if (traffic.id == t->id)
         return i;
       i++;
     }
@@ -256,10 +221,6 @@ struct TrafficList {
 #else
     auto iter = std::find(list.begin(), list.end(), t);
     return iter - list.begin();
-#endif
-#else
-  constexpr unsigned TrafficIndex(const FlarmTraffic *t) const noexcept {
-    return t - list.begin();
 #endif
   }
 
