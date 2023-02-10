@@ -2,6 +2,9 @@
 
 import os, sys, subprocess
 
+Configuration = 'Release'
+Configuration = 'Debug'
+
 # Am 19.03.2020 aktuell!
 # Am 16.04.2020 cmd2py angefangen!
 
@@ -44,16 +47,25 @@ def gcc(toolchain, env):
 
 def clang(toolchain, env):
   global cmake_generator
+  global toolchain_file
 
   env_path = env['PATH']
   if sys.platform.startswith('win'):
      # env_path = program_dir.replace('/', '\\') + '\\MinGW\\mgw122;' + env_path
      # env_path = program_dir.replace('/', '\\') + '\\MinGW\\mgw122\\include;' + env_path
-     env_path = program_dir.replace('/', '\\') + '\\LLVM\\' + toolchain + '\\bin;' + env_path
-     #Android-Clang!
-#     env_path = program_dir.replace('/', '\\') + '\\LLVM\\clang14-android\\bin;' + env_path
-#     env_path = program_dir.replace('/', '\\') + '\\LLVM\\llvm\\bin;' + env_path
-     # program_dir + '/Android/android-ndk-r25b/toolchains/llvm/prebuilt/windows-x86_64/bin'
+     if toolchain == 'clangXX':
+        env_path = program_dir.replace('/', '\\') + '\\LLVM\\' + toolchain + '-llvm\\bin;' + env_path['PATH']
+        #Android-Clang!
+        #     env_path = program_dir.replace('/', '\\') + '\\LLVM\\clang14-android\\bin;' + env_path
+        #     env_path = program_dir.replace('/', '\\') + '\\LLVM\\llvm\\bin;' + env_path
+        ### Android: env_path = program_dir + '/Android/android-ndk-r25b/toolchains/llvm/prebuilt/windows-x86_64/bin;' + env_path
+        # toolchain_file = src_dir.replace('\\','/') + '/build/cmake/toolchains/MinGW.toolchain'
+     elif toolchain == 'clang12': 
+        env_path = program_dir.replace('/', '\\') + '\\MinGW\\mgw112\\bin;' + env_path
+     else: 
+        env_path = program_dir.replace('/', '\\') + '\\LLVM\\' + toolchain + '\\bin;' + env_path  # ['PATH']
+        # env_path = program_dir.replace('/', '\\') + '\\MinGW\\mgw112\\bin;' + env_path
+     toolchain_file = os.getcwd().replace('\\','/') + '/build/cmake/toolchains/Android/x86_64.toolchain'
   else:
      env_path = env['PATH']
       # cmake_generator ='Unix Makefiles'
@@ -316,14 +328,14 @@ def create_opensoar(args):
     print('Python Step 2 - Build with cmake')
     arguments = []
     arguments.append(cmake_exe)  # 'cmake')
-#    arguments.append('-S')
-#    arguments.append(src_dir)
     arguments.append('--build')
     arguments.append(build_dir)
+    # if toolchain.startswith('msvc') or toolchain.startswith('mgw'):
     arguments.append('--config')
-    arguments.append('Release') 
+    arguments.append(Configuration) 
     # if False:  # toolchain MinGW/GCC...
     if not toolchain.startswith('msvc'):
+    #if not (toolchain.startswith('msvc') or toolchain.startswith('clang')):
         arguments.append('--')  # nachfolgende Befehle werden zum Build tool durchgereicht
         arguments.append('-j')
         arguments.append('8')  # jobs...
@@ -331,6 +343,7 @@ def create_opensoar(args):
     myprocess.wait()
     if myprocess.returncode != 0:
       creation = 0
+      print('cmd: (', arguments, ')')
       print('cmd with failure! (', myprocess, ')')
     else:
         if verbose:
@@ -358,20 +371,19 @@ def create_opensoar(args):
   if creation & 0x08:   # ==>Run
     print('Python Step 4 - Execute OpenSoar')
     if toolchain.startswith('msvc'):
-      build_dir = build_dir + '/Release'
-      # build_dir = build_dir + '/Debug'
+      build_dir = build_dir + '/'+ Configuration
       opensoar_app = project_name + '-MSVC.exe'
     elif toolchain.startswith('mgw'):
       opensoar_app = project_name + '-MinGW.exe'
+      opensoar_app = 'XCSoarAug-MinGW.exe'
     elif toolchain.startswith('clang'):
       opensoar_app = project_name + '-Clang.exe'
 
-    # XCSoarAug-MinGW.exe -1400x700' -fly -profile=D:\Data\XCSoarData\August.prf -datapath=D:/XCSoarData/Data
     arguments = [build_dir + '/' + opensoar_app, '-1400x700', '-fly', '-profile=D:/Data/XCSoarData/August.prf', '-datapath=D:/Data/XCSoarData']
-    # arguments = [build_dir + '/' + opensoar_app, '-1400x700', '-fly', '-profile=D:/Data/XCSoarData/August2.prf', '-datapath=D:/Data/XCSoarData']
     # arguments = [build_dir + '/' + opensoar_app, '-1400x700', '-fly', '-profile=August5.prf']
     if not os.path.exists(arguments[0]):
-        print("App 'arguments[0]' doesn't exist!")
+        print("App '", arguments[0], "' doesn't exist!")
+        creation = 0
     else:
         # print('Command 4: ', arguments)
         myprocess = subprocess.Popen(arguments, env = my_env, shell = False)
