@@ -23,9 +23,6 @@ Copyright_License {
 
 #pragma once
 
-#ifndef COMPILER_H
-#define COMPILER_H
-
 #include <io.h>
 #include "corecrt_math_defines.h"
 #include <BaseTsd.h>
@@ -108,5 +105,3 @@ typedef SSIZE_T ssize_t;
 #define gcc_unused_field  [[maybe_unused]]  // C17++
 
 #define gcc_unreachable() __assume(0)   // GCC: __builtin_unreachable()
-
-#endif COMPILER_H
