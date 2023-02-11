@@ -36,10 +36,6 @@ Copyright_License {
 #include "util/UTF8.hpp"
 #include "util/ConvertString.hpp"
 
-#ifdef _WIN32
-# include "Protection.hpp"
-#endif
-
 #include <span>
 #include <string>
 
