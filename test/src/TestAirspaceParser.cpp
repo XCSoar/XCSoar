@@ -39,7 +39,7 @@ Copyright_License {
 struct AirspaceClassTestCouple
 {
   const TCHAR* name;
-  AirspaceClass type;
+  AirspaceClass asclass;
 };
 
 static bool
@@ -172,7 +172,7 @@ TestOpenAir()
     } else {
       for (const auto &c : classes)
         if (StringIsEqual(c.name, airspace.GetName()))
-          ok1(airspace.GetType() == c.type);
+          ok1(airspace.GetClass() == c.asclass);
     }
   }
 }
@@ -278,7 +278,7 @@ TestTNP()
     } else {
       for (const auto &c : classes)
         if (StringIsEqual(c.name, airspace.GetName()))
-          ok1(airspace.GetType() == c.type);
+          ok1(airspace.GetClass() == c.asclass);
     }
   }
 }
