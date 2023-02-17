@@ -163,6 +163,10 @@ private:
 public:
 	EagerTask() = default;
 
+	bool IsDefined() const noexcept {
+		return coroutine;
+	}
+
 	typename promise_type::Awaitable operator co_await() const noexcept {
 		return {coroutine.get()};
 	}
@@ -188,6 +192,10 @@ private:
 
 public:
 	Task() = default;
+
+	bool IsDefined() const noexcept {
+		return coroutine;
+	}
 
 	typename promise_type::Awaitable operator co_await() const noexcept {
 		return {coroutine.get()};
