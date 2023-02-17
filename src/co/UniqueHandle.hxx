@@ -59,6 +59,10 @@ public:
 		return &value;
 	}
 #endif
+
+	auto release() noexcept {
+		return std::exchange(value, nullptr);
+	}
 };
 
 } // namespace Co
