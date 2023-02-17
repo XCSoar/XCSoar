@@ -39,6 +39,23 @@ public:
 	}
 };
 
+/**
+ * This specialization supports returning references.
+ */
+template<typename R>
+class promise_result_manager<R &> {
+	R *value;
+
+public:
+	void return_value(R &_value) noexcept {
+		value = &_value;
+	}
+
+	R &GetReturnValue() noexcept {
+		return *value;
+	}
+};
+
 template<>
 class promise_result_manager<void> {
 public:
