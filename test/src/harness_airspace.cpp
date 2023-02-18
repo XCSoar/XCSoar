@@ -39,12 +39,12 @@
 static void
 airspace_random_properties(AbstractAirspace& as)
 {
-  AirspaceClass Type = (AirspaceClass)(rand()%14);
+  AirspaceClass asclass = (AirspaceClass)(rand()%14);
   AirspaceAltitude base;
   AirspaceAltitude top;
   base.altitude = rand()%4000;
   top.altitude = base.altitude+rand()%3000;
-  as.SetProperties(_T("hello"), Type, base, top);
+  as.SetProperties(_T("hello"), asclass, _T("E"), base, top);
 }
 
 
