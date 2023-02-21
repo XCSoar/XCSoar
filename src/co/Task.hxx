@@ -8,6 +8,7 @@
 #include "Compat.hxx"
 
 #include <cassert>
+#include <concepts>
 #include <exception>
 #include <optional>
 #include <utility>
@@ -36,6 +37,26 @@ public:
 		assert(value);
 
 		return std::move(*value);
+	}
+};
+
+/**
+ * Specialization for certain types to eliminate the std::optional
+ * overhead.
+ */
+template<typename R>
+requires std::default_initializable<R> && std::movable<R> && std::destructible<R>
+class promise_result_manager<R> {
+	R value;
+
+public:
+	template<typename U>
+	void return_value(U &&_value) noexcept {
+		value = std::forward<U>(_value);
+	}
+
+	decltype(auto) GetReturnValue() noexcept {
+		return std::move(value);
 	}
 };
 
