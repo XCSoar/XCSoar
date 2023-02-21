@@ -39,6 +39,9 @@ public:
 
 			template<typename PROMISE>
 			void await_suspend(std::coroutine_handle<PROMISE> coro) noexcept {
+				assert(coro);
+				assert(coro.done());
+
 				auto &p = coro.promise();
 				assert(p.callback);
 				p.callback(std::move(p.error));
