@@ -14,6 +14,8 @@ Version 7.29 - not yet released
 * Polars
   - Add LS-5 polar
 * fix exchange frequencies crash when no frequency was set
+* user interface
+  - show FLARMGauge only when traffic is within 4Km
 
 Version 7.28 - 2022/10/29
 * data files
