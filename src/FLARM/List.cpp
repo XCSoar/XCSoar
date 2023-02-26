@@ -40,3 +40,10 @@ TrafficList::FindMaximumAlert() const noexcept
 
   return alert;
 }
+
+bool
+TrafficList::InCloseRange() const noexcept
+{
+  return std::any_of(list.begin(), list.end(), [](const auto &traffic)
+    { return traffic.distance < (RoughDistance)4000; });
+}

@@ -199,6 +199,11 @@ struct TrafficList {
   constexpr unsigned TrafficIndex(const FlarmTraffic *t) const noexcept {
     return t - list.begin();
   }
+
+  /**
+   * Is set if traffic is present and closer than 4Km.
+   */
+  bool InCloseRange() const noexcept;
 };
 
 static_assert(std::is_trivial<TrafficList>::value, "type is not trivial");
