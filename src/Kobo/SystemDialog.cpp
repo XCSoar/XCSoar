@@ -29,6 +29,8 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "System.hpp"
+#include "ui/window/Init.hpp"
+#include "ui/canvas/custom/TopCanvas.hpp"
 
 #ifdef KOBO
 #include "Model.hpp"
@@ -74,8 +76,16 @@ void
 SystemWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept
 {
   AddButton("Reboot", [](){ KoboReboot(); });
-  switch_otg_mode = AddButton(IsKoboOTGHostMode() ? "Disable USB-OTG" : "Enable USB-OTG",
+
+  // Suppres OTG for CLARA HD 2E. It crashes the KOBO and implies a flash of SD Card
+  if ( DetectKoboModel() != KoboModel::CLARA_2E)
+  {
+    switch_otg_mode = AddButton(IsKoboOTGHostMode() ? "Disable USB-OTG" : "Enable USB-OTG",
             [this](){ SwitchOTGMode(); });
+  }
+  else 
+    AddDummy();
+
   usb_storage = AddButton("Export USB storage", [this](){ ExportUSBStorage(); });
   SetRowEnabled(USB_STORAGE, !IsKoboOTGHostMode());
 
@@ -88,6 +98,19 @@ SystemWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]]
     AddDummy();
     AddDummy();
   }
+
+  // Display the Kobo Model
+  char szInfos[500] ;
+  sprintf(szInfos,"Model : %s / ",GetKoboModel()) ;
+
+  PixelSize px = GetWindow().GetSize() ;
+
+  char  szTemp[100] ;
+  sprintf(szTemp,"Window resolution : %d %d \n",px.width,px.height) ;
+  strcat(szInfos,szTemp) ;
+
+  AddReadOnly("infos",nullptr,szInfos) ;
+
 }
 
 inline void

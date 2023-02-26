@@ -40,6 +40,7 @@ enum class KoboModel {
   NIA,
   LIBRA2,
   LIBRA_H2O,
+  CLARA_2E,
 };
 
 [[gnu::const]]
@@ -49,3 +50,7 @@ DetectKoboModel() noexcept;
 [[gnu::const]]
 const char *
 GetKoboWifiInterface() noexcept;
+
+[[gnu::const]]
+const char *
+GetKoboModel() noexcept;

@@ -84,7 +84,8 @@ ulimit -c unlimited
 # and the initial screen render is blank if we are too fast
 # delay should not cause any problem and might help other models
 # and at least for the Libra 2 we have to wait for /dev/mmcblk0
-sleep 1
+#  increase to 3 sec for kobo clara 2e
+sleep 3
 
 # load kernel modules for ClaraHD, Libra2 and Libra H2O as factory kernel is OTG
 # but missing modules. Also put ClaraHD and Libra2 in the right mode

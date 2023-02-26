@@ -88,7 +88,7 @@ ToolsWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] 
   unsigned max_script_buttons = std::min(len, MAX_SCRIPTS);
   for (unsigned i = 0; i < max_script_buttons; i++)
     AddButton(list[i].name, [this, i](){
-      Run(list[i].path.c_str());
+      Run("/bin/sh",list[i].path.c_str());
     });
 }
 

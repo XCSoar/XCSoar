@@ -61,7 +61,7 @@ GetInfo() noexcept
       int rem = atoi(line);
       battery.remaining_percent = rem;
     }
-  } else if (DetectKoboModel() == KoboModel::LIBRA2) {
+  } else if (DetectKoboModel() == KoboModel::LIBRA2 || DetectKoboModel() == KoboModel::CLARA_2E ) {
     if (File::ReadString(Path("/sys/class/power_supply/battery/status"),
                          line, sizeof(line))) {
       if (StringIsEqual(line,"Not charging\n") ||

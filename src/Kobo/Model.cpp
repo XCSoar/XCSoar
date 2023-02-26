@@ -69,6 +69,7 @@ static constexpr struct {
   { "SN-N306", KoboModel::NIA },
   { "SN-N418", KoboModel::LIBRA2 },
   { "SN-N873", KoboModel::LIBRA_H2O },
+  { "SN-N5062", KoboModel::CLARA_2E },
 };
 
 static KoboModel
@@ -94,5 +95,30 @@ DetectKoboModel() noexcept
 const char *
 GetKoboWifiInterface() noexcept
 {
-  return DetectKoboModel() == KoboModel::LIBRA2 ? "wlan0" : "eth0";
+  // CLARA 2E has a different WIFI interface than other models
+  
+  KoboModel  model = DetectKoboModel() ;
+
+  if (model == KoboModel::LIBRA2 )
+    return "wlan0" ;
+  else 
+  if (model == KoboModel::CLARA_2E )
+    return "mlan0" ;
+    
+  return "eth0";
+}
+
+//Function used to display the model in the system window (will be useful for new models)
+const char* 
+GetKoboModel() noexcept
+{
+  static char buffer[16];
+  if (!ReadFromFile("/dev/mmcblk0", 0x200, buffer, sizeof(buffer)))
+    buffer[0]=0 ;
+  
+  // trunc the string to 8 char
+  buffer[8]=0 ;
+
+  return buffer ;
+
 }

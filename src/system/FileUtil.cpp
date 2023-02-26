@@ -43,6 +43,11 @@ Copyright_License {
 #include <fnmatch.h>
 #include <utime.h>
 #include <time.h>
+#ifdef KOBO
+  #include <termios.h>
+  #include <sys/ioctl.h>
+  #include <linux/serial.h>
+#endif
 #endif
 
 void
@@ -314,8 +319,24 @@ File::Exists(Path path) noexcept
 bool
 File::IsCharDev(Path path) noexcept
 {
+
+// For KOBO only check serial ports
+#ifdef KOBO
+
+  int fd = open (path.c_str(), O_RDWR | O_NONBLOCK) ;
+  if (fd < 0) return false ;
+
+  struct serial_struct serinfo ;
+  int ret = ioctl (fd, TIOCGSERIAL, &serinfo) ;
+  close(fd) ;
+  if (ret >=0) return true ;
+  return false;
+  
+#else
   struct stat st;
   return stat(path.c_str(), &st) == 0 && S_ISCHR(st.st_mode);
+#endif 
+
 }
 
 #endif // HAVE_POSIX
