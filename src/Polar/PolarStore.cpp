@@ -213,6 +213,7 @@ static constexpr Item internal_polars[] = {
    // From Silene E78/E78B manual, available on Issoire Aviation website
   { _T("Silene E78"), 450, 0, 75, -0.548, 125, -1.267, 160, -2.439, 18, 47.222, 0, 365 },
   { _T("Skylark 4"), 395, 0, 78, -0.637, 139, -2, 200, -5.092, 16.1, 0, 84, 258 },
+  { _T("Std Austria S"), 297, 0, 70.0, -0.70, 118.0, -1.0, 145.0, -1.5, 13.5 , 38.9, 90, 205}, // From Schempp-Hirth sales handout, potentially too good
   { _T("Std Cirrus"), 337, 80, 93.23, -0.74, 149.17, -1.71, 205.1, -4.2, 10.04, 0.0, 99, 215 },
   { _T("Stemme S-10"), 850, 0, 133.47, -0.83, 167.75, -1.41, 205.03, -2.3, 18.70, 0.0, 110, 645 },
   { _T("SZD-30 Pirat"), 370, 0, 80, -0.72, 100, -0.98, 150, -2.46, 13.8, 0.0, 86, 260 },
