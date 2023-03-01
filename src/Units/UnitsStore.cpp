@@ -114,7 +114,6 @@ Units::Store::EqualsPresetUnits(const UnitSetting &config) noexcept
     // Search for the units, but ignore the coord.format
     if (config == Presets[i].Units) {
       return i+1;
-      break;
     }
   }
   return 0;
