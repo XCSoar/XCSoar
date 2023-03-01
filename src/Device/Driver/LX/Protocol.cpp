@@ -121,12 +121,11 @@ LX::ReceivePacketRetry(Port &port, Command command,
 uint8_t
 LX::calc_crc_char(uint8_t d, uint8_t crc)
 {
-  uint8_t tmp;
   const uint8_t crcpoly = 0x69;
   int count;
 
   for (count = 8; --count >= 0; d <<= 1) {
-    tmp = crc ^ d;
+    uint8_t tmp = crc ^ d;
     crc <<= 1;
     if (tmp & 0x80)
       crc ^= crcpoly;
