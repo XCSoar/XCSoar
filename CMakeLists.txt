@@ -360,7 +360,8 @@ list(APPEND SOURCE_FILES "src/OpenSoar.cpp")
 ##     "${CMAKE_CURRENT_SOURCE_DIR}/Data/OpenSoar.rc.in"
 ##     "${OUTPUT_FOLDER}/Data/OpenSoar.rc"
 ## )
-list(APPEND SOURCE_FILES "${OUTPUT_FOLDER}/Data/OpenSoar.rc")
+# list(APPEND SOURCE_FILES "${OUTPUT_FOLDER}/Data/OpenSoar.rc")
+# list(APPEND SOURCE_FILES "${PROJECTGROUP_BINARY_DIR}/OpenSoar.rc")
 ## list(APPEND SCRIPT_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Data/OpenSoar.rc.in")
 list(APPEND SCRIPT_FILES "CMakeSource.cmake")
 

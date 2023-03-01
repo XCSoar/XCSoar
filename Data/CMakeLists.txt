@@ -69,7 +69,8 @@ foreach(bin_file ${BIN_FILES})
        # COMMAND echo "${PYTHON_APP} tools/python/bin2c.py  ${bin_file}  ${_DATA_OUTPUT}"
        COMMAND ${PYTHON_APP} tools/python/bin2c.py  ${bin_file}  ${_DATA_OUTPUT}
        WORKING_DIRECTORY  ${PROJECTGROUP_SOURCE_DIR}
-       DEPENDS ${PROJECTGROUP_SOURCE_DIR}/${bin_file}
+       DEPENDS ${bin_file}
+       # DEPENDS ${PROJECTGROUP_SOURCE_DIR}/${bin_file}
     )
   else()
     message(STATUS "UNMATCHES!!!! ${bin_file}  --- ${txt_file}")
@@ -81,6 +82,7 @@ foreach(bin_file ${BIN_FILES})
       COMMAND ${PYTHON_APP} tools/python/bin2c.py  ${bin_file}  ${_DATA_OUTPUT}
       WORKING_DIRECTORY  ${PROJECTGROUP_SOURCE_DIR}
       DEPENDS ${PROJECTGROUP_SOURCE_DIR}/${bin_file}
+      # DEPENDS ${bin_file}
     )
   endif()
   list(APPEND C_FILES ${c_file})
@@ -105,19 +107,24 @@ add_custom_command(OUTPUT ${_TEMP_OUTPUT}/title.svg
   WORKING_DIRECTORY ${PROJECTGROUP_SOURCE_DIR}
 )
 # ============================================================================   
+if (1)  # NOT MINGW) # geht bei MinGW nicht???
 # create the resource file (for all targets )
-add_custom_command(OUTPUT ${_DATA_OUTPUT}/${PROGRAM_NAME}.rc
+# add_custom_command(OUTPUT ${_DATA_OUTPUT}/${PROGRAM_NAME}.rc
+add_custom_command(OUTPUT ${PROJECTGROUP_BINARY_DIR}/${PROGRAM_NAME}.rc
   COMMENT "Create Resource File!"
   COMMAND ${PYTHON_APP} ${PROJECTGROUP_SOURCE_DIR}/tools/python/create_resource.py 
           # ${CMAKE_CURRENT_SOURCE_DIR}/OpenSoar.rc  # Input
           ${CMAKE_CURRENT_SOURCE_DIR}/OpenSoar.rc  # Input
-          ${_DATA_OUTPUT}/${PROGRAM_NAME}.rc                               # Output
+          ${PROJECTGROUP_BINARY_DIR}/${PROGRAM_NAME}.rc                               # Output
           ${_DATA_INPUT}
           ${_DATA_OUTPUT}
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/OpenSoar.rc
-          ${PROJECTGROUP_SOURCE_DIR}/tools/python/create_recource.py 
+          # ${PROJECTGROUP_SOURCE_DIR}/tools/python/create_recource.py 
   # WORKING_DIRECTORY ${PROJECTGROUP_SOURCE_DIR}
 ) # add_custom_command
+endif()
+
+# message(FATAL_ERROR "!!!!!! ${PROJECTGROUP_BINARY_DIR}/${PROGRAM_NAME}.rc")
 # if (_COMPLETE_INSTALL)
 set(GRAPHIC_BITMAPS
    ${_GRAPHICS_OUTPUT}/logo_160.bmp
@@ -159,7 +166,7 @@ if(OFF) # ==>  for test it only with few icons!
     ${_DATA_INPUT}/icons/map_castle.svg
   )
 endif()
-set(ICON_FILES  )  # empty!!!!
+# set(ICON_FILES  )  # empty!!!!
 foreach(icon_file ${ICON_FILES})
   get_filename_component(_filename ${icon_file} NAME_WE)
   set(icon_file_out ${_ICONS_OUTPUT}/${_filename})
@@ -318,18 +325,23 @@ endif()
 # list(APPEND SCRIPT_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Data/OpenSoar.rc.in")
 
 if(MSVC)
-set(RESOURC_FILES
+set(RESOURCE_FILES
+#   ${CMAKE_CURRENT_SOURCE_DIR}/OpenSoar.rc  # Input
 #   ${OUTPUT_FOLDER}/Data/OpenSoar.rc
-   ${_DATA_OUTPUT}/${PROGRAM_NAME}.rc
+#   ${_DATA_OUTPUT}/${PROGRAM_NAME}.rc
+  ${PROJECTGROUP_BINARY_DIR}/${PROGRAM_NAME}.rc
 )
 elseif(MINGW)
-set(RESOURC_FILES
+set(RESOURCE_FILES
    # ${CMAKE_CURRENT_SOURCE_DIR}/OpenSoar.rc.in
-   ${_DATA_OUTPUT}/${PROGRAM_NAME}.rc
+   # ${_DATA_OUTPUT}/${PROGRAM_NAME}.rc
+   ### by Clang?? 
+   # ${PROJECTGROUP_BINARY_DIR}/${PROGRAM_NAME}.rc
 )
 elseif(CLANG)
-set(RESOURC_FILES
-   ${OUTPUT}/${PROGRAM_NAME}.rc
+set(RESOURCE_FILES
+   # ${OUTPUT}/${PROGRAM_NAME}.rc
+   # ${PROJECTGROUP_BINARY_DIR}/${PROGRAM_NAME}.rc
 # Clang:?    ${CMAKE_CURRENT_SOURCE_DIR}/OpenSoar.rc
 )
 else()
@@ -339,7 +351,7 @@ endif()
 
 add_library(${TARGET_NAME}  ${XCSOAR_LIB_TYPE}
 
-#   ${RESOURC_FILES}  # depends on system?
+   ${RESOURCE_FILES}  # depends on system?
    
    ${C_FILES}
    ${HEADER_FILES}
@@ -355,7 +367,7 @@ add_library(${TARGET_NAME}  ${XCSOAR_LIB_TYPE}
    # DefaultStatus # role for status defaults
    ${_INCLUDE_OUTPUT}/resource.h
    # EXCLUDE_FROM_ALL
-   ${CMAKE_CURRENT_SOURCE_DIR}/${PROGRAM_NAME}.rc.in
+   # ${CMAKE_CURRENT_SOURCE_DIR}/${PROGRAM_NAME}.rc.in
 )
 
 set_target_properties(${TARGET_NAME} PROPERTIES 

@@ -45,7 +45,8 @@ HI_RES_AWARE CEUX {1}
 
 // --- Icons ---
 
-IDI_XCSOAR              ICON    DISCARDABLE     "bitmaps/xcsoarswift.ico"
+ICON_ICON(IDI_XCSOAR,   "OpenSoar")
+// IDI_XCSOAR              ICON    DISCARDABLE     L"bitmaps/xcsoarswift.ico"
 
 // --- Bitmaps ---
 
