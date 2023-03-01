@@ -79,12 +79,11 @@ RenderMacCready(Canvas &canvas, const PixelRect rc,
 
   GlidePolar gp = glide_polar;
   double m = 0;
-  double m_last;
   gp.SetMC(m);
   double v_last = gp.GetVBestLD();
   double vav_last = 0;
   do {
-    m_last = m;
+    double m_last = m;
     m+= MAX_MACCREADY/STEPS_MACCREADY;
     gp.SetMC(m);
     const double v = gp.GetVBestLD();
