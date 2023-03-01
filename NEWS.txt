@@ -96,10 +96,10 @@ Version 7.24 - 2022/07/22
   - rework menu labels
   - increase popup message timeouts
   - fix missing wind arrow InfoBox updates
-* file handling 
+* file handling
   - guard against file corruption in poweroff situations
 * FLARM
-  - timeouts in flight downloads  
+  - timeouts in flight downloads
 * Linux
   - fix terrain renderer bug
   - allow changing the language at runtime
@@ -115,7 +115,7 @@ Version 7.24 - 2022/07/22
   - new default fonts
   - use 6 devices in serial port list (like all other targets)
 * XCVario/Borgelt
-  - revert cruise/circling mode change 
+  - revert cruise/circling mode change
 * Kobo
   - add ca certificates for https downloads
 
@@ -3368,13 +3368,13 @@ Changes from 4.22 to 4.5
 - Fix waypoint parsing - make it completely bullet proof
 - Package and release fonts (part of standard cab/exe)
 - Button & Event mapping - default and legacy
-  	legacy = same as version 4.22
-	default = changed from 4.22...
-		APP1 = Show button menu (was Full Screen)
-		APP3 = Full Screen (was Vario Sounds Toggle)
-		Take Off = Start logger (was manually)
-		Landing = Stop logger (was manually)
-		Info Box Control = Show labels (were hidden)
+    legacy = same as version 4.22
+    default = changed from 4.22...
+      APP1 = Show button menu (was Full Screen)
+      APP3 = Full Screen (was Vario Sounds Toggle)
+      Take Off = Start logger (was manually)
+      Landing = Stop logger (was manually)
+      Info Box Control = Show labels (were hidden)
 - Allow display of screen mode (Normal, Auxiliary, Full)
 - Fix spelling of MacCready (it was McCready).
   (reference: http://www.achievement.org/autodoc/page/mac0bio-1)
