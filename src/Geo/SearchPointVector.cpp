@@ -182,7 +182,7 @@ SearchPointVector::CalculateGeoBounds() const noexcept
 SearchPointVector::const_iterator
 SearchPointVector::NextCircular(const_iterator i) const noexcept
 {
-  i++;
+  ++i;
   if (i == end())
     i = begin();
   return i;
@@ -194,7 +194,7 @@ SearchPointVector::PreviousCircular(const_iterator i) const noexcept
   if (i == begin())
     i = begin() + size() - 1;
   else
-    i--;
+    --i;
   return i;
 }
 
