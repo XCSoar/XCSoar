@@ -40,47 +40,47 @@ static void
 Load(const ProfileMap &map, PageLayout &_pl, const unsigned page)
 {
   char profileKey[32];
-  unsigned prefixLen = sprintf(profileKey, "Page%u", page);
-  if (prefixLen <= 0)
-    return;
+  int prefixLen = snprintf(profileKey, 32, "Page%u", page);
+  if (prefixLen > 0 && prefixLen <= 32)
+  {
+    PageLayout pl = PageLayout::Default();
+    strcpy(profileKey + prefixLen, "InfoBoxMode");
+    if (!map.Get(profileKey, pl.infobox_config.auto_switch))
+      return;
+    strcpy(profileKey + prefixLen, "InfoBoxPanel");
+    if (!map.Get(profileKey, pl.infobox_config.panel))
+      return;
 
-  PageLayout pl = PageLayout::Default();
-  strcpy(profileKey + prefixLen, "InfoBoxMode");
-  if (!map.Get(profileKey, pl.infobox_config.auto_switch))
-    return;
-  strcpy(profileKey + prefixLen, "InfoBoxPanel");
-  if (!map.Get(profileKey, pl.infobox_config.panel))
-    return;
+    strcpy(profileKey + prefixLen, "Layout");
+    unsigned temp = 0;
+    map.Get(profileKey, temp);
+    switch (temp) {
+    case tlEmpty:
+      pl.valid = false;
+      break;
 
-  strcpy(profileKey + prefixLen, "Layout");
-  unsigned temp = 0;
-  map.Get(profileKey, temp);
-  switch (temp) {
-  case tlEmpty:
-    pl.valid = false;
-    break;
+    case tlMap:
+      pl.infobox_config.enabled = false;
+      break;
+    }
 
-  case tlMap:
-    pl.infobox_config.enabled = false;
-    break;
+    if (pl.infobox_config.panel >= InfoBoxSettings::MAX_PANELS)
+      return;
+    if (page == 0 && !pl.IsDefined())
+      return;
+
+    strcpy(profileKey + prefixLen, "Bottom");
+    if (!map.GetEnum(profileKey, pl.bottom) ||
+        unsigned(pl.bottom) >= unsigned(PageLayout::Bottom::MAX))
+      pl.bottom = PageLayout::Bottom::NOTHING;
+
+    strcpy(profileKey + prefixLen, "Main");
+    if (!map.GetEnum(profileKey, pl.main) ||
+        unsigned(pl.main) >= unsigned(PageLayout::Main::MAX))
+      pl.main = PageLayout::Main::MAP;
+
+    _pl = pl;
   }
-
-  if (pl.infobox_config.panel >= InfoBoxSettings::MAX_PANELS)
-    return;
-  if (page == 0 && !pl.IsDefined())
-    return;
-
-  strcpy(profileKey + prefixLen, "Bottom");
-  if (!map.GetEnum(profileKey, pl.bottom) ||
-      unsigned(pl.bottom) >= unsigned(PageLayout::Bottom::MAX))
-    pl.bottom = PageLayout::Bottom::NOTHING;
-
-  strcpy(profileKey + prefixLen, "Main");
-  if (!map.GetEnum(profileKey, pl.main) ||
-      unsigned(pl.main) >= unsigned(PageLayout::Main::MAX))
-    pl.main = PageLayout::Main::MAP;
-
-  _pl = pl;
 }
 
 void
@@ -98,27 +98,28 @@ void
 Profile::Save(ProfileMap &map, const PageLayout &page, const unsigned i)
 {
   char profileKey[32];
-  unsigned prefixLen = sprintf(profileKey, "Page%u", i);
-  if (prefixLen <= 0)
-    return;
-  strcpy(profileKey + prefixLen, "InfoBoxMode");
-  map.Set(profileKey, page.infobox_config.auto_switch);
-  strcpy(profileKey + prefixLen, "InfoBoxPanel");
-  map.Set(profileKey, page.infobox_config.panel);
+  int prefixLen = snprintf(profileKey, 32, "Page%u", i);
+  if (prefixLen > 0 && prefixLen <= 32)
+  {
+    strcpy(profileKey + prefixLen, "InfoBoxMode");
+    map.Set(profileKey, page.infobox_config.auto_switch);
+    strcpy(profileKey + prefixLen, "InfoBoxPanel");
+    map.Set(profileKey, page.infobox_config.panel);
 
-  strcpy(profileKey + prefixLen, "Layout");
-  map.Set(profileKey,
-          page.valid
-          ? (page.infobox_config.enabled
-             ? tlMapAndInfoBoxes
-             : tlMap)
-          : tlEmpty);
+    strcpy(profileKey + prefixLen, "Layout");
+    map.Set(profileKey,
+            page.valid
+            ? (page.infobox_config.enabled
+               ? tlMapAndInfoBoxes
+               : tlMap)
+            : tlEmpty);
 
-  strcpy(profileKey + prefixLen, "Bottom");
-  map.Set(profileKey, (unsigned)page.bottom);
+    strcpy(profileKey + prefixLen, "Bottom");
+    map.Set(profileKey, (unsigned)page.bottom);
 
-  strcpy(profileKey + prefixLen, "Main");
-  map.Set(profileKey, (unsigned)page.main);
+    strcpy(profileKey + prefixLen, "Main");
+    map.Set(profileKey, (unsigned)page.main);
+  }
 }
 
 
