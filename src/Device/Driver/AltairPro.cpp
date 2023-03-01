@@ -269,7 +269,7 @@ AltairProDevice::PutTurnPoint(const char *propertyName,
   char Buffer[DECELWPSIZE*2];
 
   int DegLat, DegLon;
-  double tmp, MinLat, MinLon;
+  double MinLat, MinLon;
   char NoS, EoW;
 
   if (waypoint != nullptr){
@@ -278,7 +278,7 @@ AltairProDevice::PutTurnPoint(const char *propertyName,
     else
       throw std::runtime_error("Invalid string");
 
-    tmp = (double)waypoint->location.latitude.Degrees();
+    double tmp = (double)waypoint->location.latitude.Degrees();
 
     if(tmp < 0){
       NoS = 'S';
