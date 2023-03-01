@@ -11,7 +11,9 @@ include_directories(D:/Programs/LLVM/${TOOLCHAIN}/include)
 # include_directories(D:/Programs/Android/android-ndk-r25b/sources/cxx-stl/llvm-libc++/include)
 # include_directories(D:/Programs/Android/android-ndk-r25b/sources/cxx-stl/system/include)
 
-include_directories(D:/Programs/LLVM/${TOOLCHAIN}/lib/clang/${TOOLCHAIN}.0.7/include)
+# include_directories(D:/Programs/LLVM/${TOOLCHAIN}/lib/clang/${TOOLCHAIN}.0.7/include)
+
+### message(FATAL_ERROR "Das ist WinClang!!!!")
 
 set(LIB_PREFIX "lib")
 set(LIB_SUFFIX ".a")
@@ -32,7 +34,9 @@ add_compile_definitions(_USE_MATH_DEFINES)   # necessary under C++17!
 
 # add_compile_options(-v)  # verbose compiler messages
 
+# 
 add_compile_options(-fcoroutines-ts)
+# add_compile_options(-fcoroutines)
 ## add_compile_options(-fconserve-space)
 ## add_compile_options(-fno-operator-names)
 
@@ -52,6 +56,12 @@ list(APPEND XCSOAR_LINK_LIBRARIES
     crypt32
 #    winpthread
 )
+if (0)
+list(APPEND XCSOAR_LINK_LIBRARIES
+    D:/Projects/link_libs/boost/boost-1.81.0/lib/clang15/libboost_container-clang15-mt-d-x64-1_81.lib
+    D:/Projects/link_libs/boost/boost-1.81.0/lib/clang15/libboost_json-clang15-mt-d-x64-1_81.lib
+)
+endif()
 
 add_compile_definitions(__CLANG__)
 
@@ -69,6 +79,7 @@ if(AUGUST_SPECIAL)
 endif()
 #********************************************************************************
 set(CMAKE_C_FLAGS    "${CMAKE_C_FLAGS} ${CMAKE_CXX_FLAGS}")
+# list(APPEND CMAKE_CXX_FLAGS  -msse4.1)
 list(APPEND CMAKE_CXX_FLAGS  -std=c++20)  ## c++20 - only for cpp and not for c - "add_compile_options(-std=c++20)"!
 # set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ -m64 -lwsock32 -lws2_32 -lgdi32 -lgdiplus -lcrypt32 ${CMAKE_CXX_STANDARD_LIBRARIES}")
 set(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -m64")
