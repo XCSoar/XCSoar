@@ -61,11 +61,13 @@ def clang(toolchain, env):
         ### Android: env_path = program_dir + '/Android/android-ndk-r25b/toolchains/llvm/prebuilt/windows-x86_64/bin;' + env_path
         # toolchain_file = src_dir.replace('\\','/') + '/build/cmake/toolchains/MinGW.toolchain'
      elif toolchain == 'clang12': 
-        env_path = program_dir.replace('/', '\\') + '\\MinGW\\mgw112\\bin;' + env_path
+        # env_path = program_dir.replace('/', '\\') + '\\MinGW\\mgw112\\bin;' + env_path
+        env_path = program_dir.replace('/', '\\') + '\\LLVM\\' + toolchain + '\\bin;' + env_path  # ['PATH']
      else: 
         env_path = program_dir.replace('/', '\\') + '\\LLVM\\' + toolchain + '\\bin;' + env_path  # ['PATH']
         # env_path = program_dir.replace('/', '\\') + '\\MinGW\\mgw112\\bin;' + env_path
-     toolchain_file = os.getcwd().replace('\\','/') + '/build/cmake/toolchains/Android/x86_64.toolchain'
+     # toolchain_file = os.getcwd().replace('\\','/') + '/build/cmake/toolchains/Android/x86_64.toolchain'
+     toolchain_file = os.getcwd().replace('\\','/') + '/build/cmake/toolchains/WinClang.toolchain'
   else:
      env_path = env['PATH']
       # cmake_generator ='Unix Makefiles'
@@ -88,6 +90,7 @@ generator = {
            'clang13' : 'Clang',
            'clang14' : 'Clang',
            'clang15' : 'Clang',
+           'clang16' : 'Clang',
            'msvc2015' : 'Visual Studio 14',
            'msvc2017' : 'Visual Studio 15',
            'msvc2019' : 'Visual Studio 16',
@@ -123,6 +126,7 @@ compiler_setup = {
            'clang13' : clang,
            'clang14' : clang,
            'clang15' : clang,
+           'clang16' : clang,
            'msvc2015' : visual_studio,
            'msvc2017' : visual_studio,
            'msvc2019' : visual_studio,
@@ -287,7 +291,7 @@ def create_opensoar(args):
         # input('Toolchain file: ', toolchain_file)
         arguments.append('-DCMAKE_TOOLCHAIN_FILE:PATH=' + toolchain_file)
       # if toolchain.starts('clang)
-      if build_system.startswith('android'):  # build_system gibt es momentan nocjh nicht!
+      if build_system.startswith('android'):  # build_system gibt es momentan noch nicht!
         arguments.append('-DCMAKE_TOOLCHAIN_FILE:PATH=\"' + program_dir + '/Android/android-ndk-r25b/build/cmake/android.toolchain.cmake\"')
     # else: arguments.append('-DCMAKE_TOOLCHAIN_FILE:PATH=\"' + src_dir.replace('\\','/') + '/.august/toolchains/mscv2019.toolchain\"')
     else:
@@ -326,6 +330,7 @@ def create_opensoar(args):
   #========================================================================
   if creation & 2:
     print('Python Step 2 - Build with cmake')
+    print('--------------------------------')
     arguments = []
     arguments.append(cmake_exe)  # 'cmake')
     arguments.append('--build')

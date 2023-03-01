@@ -38,7 +38,7 @@ if len(sys.argv) > 3:
 
 if sys.platform.startswith('win'):
     if not toolchain in ['mgw73', 'mgw103', 'mgw112', 'mgw122', 'ninja', 'msvc2019', 'msvc2022',
-        'clang10', 'clang11', 'clang12', 'clang13', 'clang14', 'clang15' ]:
+        'clang10', 'clang11', 'clang12', 'clang13', 'clang14', 'clang15', 'clang16' ]:
         toolchain = 'mgw112'  # standard toolchain on windows
 else:
     if not toolchain in ['unix', 'mingw']:
