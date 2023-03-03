@@ -185,6 +185,7 @@ PlaneEditWidget::PolarButtonClicked() noexcept
     LoadValue(TYPE, plane.polar_name.c_str());
 
   /* reload attributes that may have been modified */
+  LoadValue(HANDICAP, plane.handicap);
   LoadValue(WING_AREA, plane.wing_area);
   LoadValue(EMPTY_MASS, plane.empty_mass, UnitGroup::MASS);
   LoadValue(MAX_BALLAST, plane.max_ballast);
