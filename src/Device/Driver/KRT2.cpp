@@ -53,6 +53,7 @@ class KRT2Device final : public AbstractDevice {
   static constexpr std::byte ACK{0x06}; //!< Command acknowledged character.
   static constexpr std::byte NAK{0x15}; //!< Command not acknowledged character.
   static constexpr std::byte NO_RSP{0}; //!< No response received yet.
+  static constexpr std::byte RCQ{'S'};  //!< Respond to connection query
 
   static constexpr size_t MAX_NAME_LENGTH = 8; //!< Max. radio station name length.
 
@@ -246,7 +247,7 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
 
       if (range.size() >= expected_msg_length) {
         switch (*(const std::byte *) range.data()) {
-          case std::byte{'S'}:
+          case RCQ:
             // Respond to connection query.
             port.Write(0x01);
             break;
