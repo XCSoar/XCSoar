@@ -22,11 +22,11 @@ ANDROID_ABI_DIR = $(ANDROID_BUILD)/lib/$(ANDROID_APK_LIB_ABI)
 
 JAVA_CLASSFILES_DIR = $(ANDROID_OUTPUT_DIR)/classes
 
-ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/29.0.3
+ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/33.0.2
 APKSIGNER = $(ANDROID_BUILD_TOOLS_DIR)/apksigner
 ZIPALIGN = $(ANDROID_BUILD_TOOLS_DIR)/zipalign
 AAPT = $(ANDROID_BUILD_TOOLS_DIR)/aapt
-DX = $(ANDROID_BUILD_TOOLS_DIR)/dx
+D8 = $(ANDROID_BUILD_TOOLS_DIR)/d8
 
 ANDROID_LIB_NAMES = xcsoar
 
@@ -228,8 +228,10 @@ $(ANDROID_OUTPUT_DIR)/classes.dex: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java 
 		-d $(JAVA_CLASSFILES_DIR) $(GEN_DIR)/org/xcsoar/R.java \
 		-h $(NATIVE_INCLUDE) \
 		$(JAVA_SOURCES)
-	@$(NQ)echo "  DX      $@"
-	$(Q)$(DX) --dex --output $@ $(JAVA_CLASSFILES_DIR)
+	$(Q)zip -r $(ANDROID_OUTPUT_DIR)/classes.zip $(JAVA_CLASSFILES_DIR)
+	@$(NQ)echo "  D8      $@"
+	$(Q)$(D8) --output $(ANDROID_OUTPUT_DIR) $(ANDROID_OUTPUT_DIR)/classes.zip
+	$(Q)rm $(ANDROID_OUTPUT_DIR)/classes.zip
 
 ifeq ($(FAT_BINARY),y)
 
