@@ -161,7 +161,7 @@ Compiling for Android
 
 For Android, you need:
 
-- `Android SDK level 26 <http://developer.android.com/sdk/>`__
+- `Android SDK level 30 <http://developer.android.com/sdk/>`__
 
 - `Android NDK r25c <http://developer.android.com/sdk/ndk/>`__
 
@@ -175,7 +175,7 @@ On Debian::
 
 The required Android SDK components are:
 
-- Android SDK Build-Tools 28.0.3
+- Android SDK Build-Tools 33.0.2
 
 - SDK Platform 26
 
