@@ -247,29 +247,29 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
 
       if (range.size() >= expected_msg_length) {
         switch (*(const std::byte *) range.data()) {
-          case RCQ:
-            // Respond to connection query.
-            port.Write(0x01);
-            break;
-          case ACK:
-          case NAK:
+        case RCQ:
+          // Respond to connection query.
+          port.Write(0x01);
+          break;
+        case ACK:
+        case NAK:
+          {
             // Received a response to a normal command (STX)
-            {
-              const std::lock_guard lock{response_mutex};
-              response = *(const std::byte *) range.data();
-              // Signal the response to the TX thread
-              rx_cond.notify_one();
-            }
-            break;
-          case STX:
-            // Received a command from the radio (STX). Handle what we know.
-            {
-              const std::lock_guard lock{response_mutex};
-              const struct stx_msg * msg = (const struct stx_msg *) range.data();
-              HandleSTXCommand(msg, info);
-            }
-          default:
-            break;
+            const std::lock_guard lock{response_mutex};
+            response = *(const std::byte *) range.data();
+            // Signal the response to the TX thread
+            rx_cond.notify_one();
+          }
+          break;
+        case STX:
+          // Received a command from the radio (STX). Handle what we know.
+          {
+            const std::lock_guard lock{response_mutex};
+            const struct stx_msg * msg = (const struct stx_msg *) range.data();
+            HandleSTXCommand(msg, info);
+          }
+        default:
+          break;
         }
         // Message handled -> remove message
         rx_buf.Consume(expected_msg_length);
