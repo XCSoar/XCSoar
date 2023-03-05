@@ -44,10 +44,6 @@
 #include <version>
 #endif
 
-#ifdef __cpp_lib_span
-#include <span>
-#endif
-
 #ifdef HAVE_UN
 #include <string_view>
 #endif
@@ -161,14 +157,6 @@ public:
 	[[gnu::pure]]
 	IPv4Address UnmapV4() const noexcept;
 
-	operator std::span<const std::byte>() const noexcept {
-		const void *q = reinterpret_cast<const void *>(address);
-		return {
-			(const std::byte *)q,
-			(std::size_t)size,
-		};
-	}
-
 	/**
 	 * Does the address family support port numbers?
 	 */
@@ -185,7 +173,14 @@ public:
 	unsigned GetPort() const noexcept;
 #endif
 
-#ifdef __cpp_lib_span
+	operator std::span<const std::byte>() const noexcept {
+		const void *q = reinterpret_cast<const void *>(address);
+		return {
+			(const std::byte *)q,
+			(std::size_t)size,
+		};
+	}
+
 	/**
 	 * Return a buffer pointing to the "steady" portion of the
 	 * address, i.e. without volatile parts like the port number.
@@ -195,7 +190,6 @@ public:
 	 */
 	[[gnu::pure]]
 	std::span<const std::byte> GetSteadyPart() const noexcept;
-#endif
 
 	[[gnu::pure]]
 	bool operator==(const SocketAddress other) const noexcept;
