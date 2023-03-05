@@ -246,7 +246,7 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
       expected_msg_length = ExpectedMsgLength(range.data(), range.size());
 
       if (range.size() >= expected_msg_length) {
-        switch (*(const std::byte *) range.data()) {
+        switch (range.front()) {
         case RCQ:
           // Respond to connection query.
           port.Write(0x01);
@@ -256,7 +256,7 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
           {
             // Received a response to a normal command (STX)
             const std::lock_guard lock{response_mutex};
-            response = *(const std::byte *) range.data();
+            response = range.front();
             // Signal the response to the TX thread
             rx_cond.notify_one();
           }
