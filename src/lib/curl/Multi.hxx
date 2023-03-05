@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2011-2023 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,6 +31,7 @@
 
 #include <curl/curl.h>
 
+#include <chrono>
 #include <stdexcept>
 #include <utility>
 
@@ -109,5 +110,18 @@ public:
 		if (code != CURLM_OK)
 			throw std::runtime_error(curl_multi_strerror(code));
 		return running_handles;
+	}
+
+	unsigned Wait(int timeout=-1) {
+		int numfds;
+		auto code = curl_multi_wait(handle, nullptr, 0, timeout,
+					    &numfds);
+		if (code != CURLM_OK)
+			throw std::runtime_error(curl_multi_strerror(code));
+		return numfds;
+	}
+
+	unsigned Wait(std::chrono::milliseconds timeout) {
+		return Wait(timeout.count());
 	}
 };
