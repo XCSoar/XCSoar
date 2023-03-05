@@ -111,7 +111,7 @@ ParseFileRepository(FileRepository &repository, NLineReader &reader)
       else if (StringIsEqual(value, "xci"))
         file.type = FileType::XCI;
     } else if (StringIsEqual(name, "update")) {
-      int year, month, day;
+      unsigned year, month, day;
       if (sscanf(value, "%04u-%02u-%02u", &year, &month, &day) == 3)
         file.update_date = BrokenDate(year, month, day);
     } else if (StringIsEqual(name, "sha256")) {
