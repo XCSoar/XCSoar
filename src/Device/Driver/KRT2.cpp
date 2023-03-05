@@ -268,8 +268,6 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
             const struct stx_msg * msg = (const struct stx_msg *) range.data();
             HandleSTXCommand(msg, info);
           }
-        default:
-          break;
         }
         // Message handled -> remove message
         rx_buf.Consume(expected_msg_length);
