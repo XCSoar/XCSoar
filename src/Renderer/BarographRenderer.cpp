@@ -100,7 +100,9 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
       chart.GetCanvas().SelectWhiteBrush();
     else
       chart.GetCanvas().SelectBlackBrush();
-    const auto &s = fs.altitude.GetSlots()[fs.altitude.GetCount()-1];
+
+    const auto &slots = fs.altitude.GetSlots();
+    const auto &s = slots[fs.altitude.GetCount()-1];
     chart.DrawDot(s.x, s.y, Layout::Scale(2));
   }
 
