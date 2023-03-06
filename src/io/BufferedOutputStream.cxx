@@ -10,7 +10,6 @@
 #include <cstdarg>
 
 #include <string.h>
-#include <stdio.h>
 
 #ifdef _UNICODE
 #include "system/Error.hxx"
@@ -45,48 +44,6 @@ BufferedOutputStream::Write(std::span<const std::byte> src)
 
 	/* too large for the buffer: direct write */
 	os.Write(src);
-}
-
-void
-BufferedOutputStream::Format(const char *fmt, ...)
-{
-	auto r = buffer.Write();
-	if (r.empty()) {
-		Flush();
-		r = buffer.Write();
-	}
-
-	/* format into the buffer */
-	std::va_list ap;
-	va_start(ap, fmt);
-	std::size_t size = vsnprintf((char *)r.data(), r.size(), fmt, ap);
-	va_end(ap);
-
-	if (size >= r.size()) [[unlikely]] {
-		/* buffer was not large enough; flush it and try
-		   again */
-
-		Flush();
-
-		r = buffer.Write();
-
-		if (size >= r.size()) [[unlikely]] {
-			/* still not enough space: grow the buffer and
-			   try again */
-			++size;
-			r = {buffer.Write(size), size};
-		}
-
-		/* format into the new buffer */
-		va_start(ap, fmt);
-		size = vsnprintf((char *)r.data(), r.size(), fmt, ap);
-		va_end(ap);
-
-		/* this time, it must fit */
-		assert(size < r.size());
-	}
-
-	buffer.Append(size);
 }
 
 void
