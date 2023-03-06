@@ -104,6 +104,41 @@ WaypointExternalFileListHandler::OnPaintItem(Canvas &canvas,
 }
 #endif
 
+class DrawPanFrame : public WndOwnerDrawFrame {
+  protected:
+    PixelPoint last_mouse_pos, img_pos, offset;
+    bool is_dragging = false;
+
+  std::function<void(Canvas &canvas, const PixelRect &rc, PixelPoint &offset,
+    PixelPoint &img_pos)> mOnPaintCallback2;
+
+  public:
+    template<typename CB>
+    void Create(ContainerWindow &parent,
+                PixelRect rc, const WindowStyle style,
+                  CB &&_paint) {
+      mOnPaintCallback2 = std::move(_paint);
+      PaintWindow::Create(parent, rc, style);
+    }
+
+
+  protected:
+    /** from class Window */
+    bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
+    bool OnMouseDown(PixelPoint p) noexcept override;
+    bool OnMouseUp(PixelPoint p) noexcept override;
+
+
+  void
+  OnPaint(Canvas &canvas) noexcept override
+  {
+    if (mOnPaintCallback2 == nullptr)
+      return;
+
+    mOnPaintCallback2(canvas, GetClientRect(), offset, img_pos);
+  }
+};
+
 class WaypointDetailsWidget final
   : public NullWidget {
   struct Layout {
@@ -144,7 +179,7 @@ class WaypointDetailsWidget final
   ManagedWidget info_widget{new WaypointInfoWidget(look, waypoint)};
   PanelControl details_panel;
   ManagedWidget commands_widget;
-  WndOwnerDrawFrame image_window;
+  DrawPanFrame image_window;
 
 #ifdef HAVE_RUN_FILE
   ListControl file_list{look};
@@ -184,7 +219,8 @@ public:
 
   void OnGotoClicked();
 
-  void OnImagePaint(Canvas &canvas, const PixelRect &rc);
+  void OnImagePaint(Canvas &canvas, const PixelRect &rc, PixelPoint &offset,
+    PixelPoint &img_pos);
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -458,8 +494,9 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
 
   if (!images.empty())
     image_window.Create(parent, layout.main, dock_style,
-                        [this](Canvas &canvas, const PixelRect &rc){
-                          OnImagePaint(canvas, rc);
+                        [this](Canvas &canvas, const PixelRect &rc, PixelPoint offset,
+                          PixelPoint &img_pos) {
+                                 OnImagePaint(canvas, rc, offset, img_pos);
                         });
 
   last_page = 2 + images.size();
@@ -528,7 +565,6 @@ WaypointDetailsWidget::OnMagnifyClicked()
   zoom++;
 
   UpdateZoomControls();
-  image_window.Invalidate();
 }
 
 void
@@ -539,7 +575,6 @@ WaypointDetailsWidget::OnShrinkClicked()
   zoom--;
 
   UpdateZoomControls();
-  image_window.Invalidate();
 }
 
 bool
@@ -574,47 +609,81 @@ WaypointDetailsWidget::OnGotoClicked()
 }
 
 void
-WaypointDetailsWidget::OnImagePaint([[maybe_unused]] Canvas &canvas,
-                                    [[maybe_unused]] const PixelRect &rc)
-{
+WaypointDetailsWidget::OnImagePaint(Canvas &canvas, [[maybe_unused]] const PixelRect &rc,
+                  [[maybe_unused]] PixelPoint &offset, [[maybe_unused]] PixelPoint &img_pos) {
   canvas.ClearWhite();
-  if (page >= 3 && page < 3 + (int)images.size()) {
-    Bitmap &img = images[page-3];
-    static constexpr int zoom_factors[] = { 1, 2, 4, 8, 16, 32 };
-    PixelPoint img_pos, screen_pos;
-    PixelSize screen_size;
-    PixelSize img_size = img.GetSize();
-    double scale = std::min((double)canvas.GetWidth() / img_size.width,
-                            (double)canvas.GetHeight() / img_size.height) *
-      zoom_factors[zoom];
 
-    // centered image and optionally zoomed into the center of the image
-    double scaled_size = img_size.width * scale;
-    if (scaled_size <= canvas.GetWidth()) {
-      img_pos.x = 0;
-      screen_pos.x = (int) ((canvas.GetWidth() - scaled_size) / 2);
-      screen_size.width = (unsigned) scaled_size;
-    } else {
-      scaled_size = canvas.GetWidth() / scale;
-      img_pos.x = (int(img_size.width - scaled_size) / 2);
-      img_size.width = (unsigned) scaled_size;
-      screen_pos.x = 0;
-      screen_size.width = canvas.GetWidth();
-    }
-    scaled_size = img_size.height * scale;
-    if (scaled_size <= canvas.GetHeight()) {
-      img_pos.y = 0;
-      screen_pos.y = (int) ((canvas.GetHeight() - scaled_size) / 2);
-      screen_size.height = (unsigned) scaled_size;
-    } else {
-      scaled_size = canvas.GetHeight() / scale;
-      img_pos.y = (int) ((img_size.height - scaled_size) / 2);
-      img_size.height = (unsigned) scaled_size;
-      screen_pos.y = 0;
-      screen_size.height = canvas.GetHeight();
-    }
-    canvas.Stretch(screen_pos, screen_size, img, img_pos, img_size);
+  if (page < 3 || page >= 3 + static_cast<int>(images.size())) {
+    return;
   }
+
+  Bitmap &img = images[page - 3];
+  static constexpr int zoom_factors[] = {1, 2, 4, 8, 16, 32};
+  PixelSize img_size = img.GetSize();
+  double scale = std::min(static_cast<double>(canvas.GetWidth()) / img_size.width,
+                          static_cast<double>(canvas.GetHeight()) / img_size.height) *
+                 zoom_factors[zoom];
+
+  PixelPoint screen_pos;
+  PixelSize screen_size;
+
+  // Calculate horizontal scaling and positioning
+  double scaled_width = img_size.width * scale;
+  if (scaled_width <= canvas.GetWidth()) {
+    img_pos.x = zoom == 0 ? 0 : img_pos.x + offset.x / scale;
+    screen_pos.x = (canvas.GetWidth() - static_cast<int>(scaled_width)) / 2;
+    screen_size.width = static_cast<unsigned>(scaled_width);
+  } else {
+    double visible_width = canvas.GetWidth() / scale;
+    img_pos.x = zoom == 0 ? (img_size.width - visible_width) / 2 : img_pos.x + offset.x / scale;
+    img_pos.x = std::clamp(img_pos.x, 0, static_cast<int>(img_size.width - visible_width));
+    img_size.width = static_cast<unsigned>(visible_width);
+    screen_pos.x = 0;
+    screen_size.width = canvas.GetWidth();
+  }
+
+  // Calculate vertical scaling and positioning
+  double scaled_height = img_size.height * scale;
+  if (scaled_height <= canvas.GetHeight()) {
+    img_pos.y = 0;
+    screen_pos.y = (canvas.GetHeight() - static_cast<int>(scaled_height)) / 2;
+    screen_size.height = static_cast<unsigned>(scaled_height);
+  } else {
+    double visible_height = canvas.GetHeight() / scale;
+    img_pos.y = zoom == 0 ? (img_size.height - visible_height) / 2 : img_pos.y + offset.y / scale;
+    img_pos.y = std::clamp(img_pos.y, 0, static_cast<int>(img_size.height - visible_height));
+    img_size.height = static_cast<unsigned>(visible_height);
+    screen_pos.y = 0;
+    screen_size.height = canvas.GetHeight();
+  }
+  canvas.Stretch(screen_pos, screen_size, img, img_pos, img_size);
+}
+
+bool
+DrawPanFrame::OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned keys) noexcept
+{
+  if (!is_dragging)
+    return false;
+
+  offset = last_mouse_pos - p;
+  last_mouse_pos = p;
+  Invalidate();
+  return true;
+}
+
+bool
+DrawPanFrame::OnMouseDown(PixelPoint p) noexcept
+{
+  is_dragging = true;
+  last_mouse_pos = p;
+  return true;
+}
+
+bool
+DrawPanFrame::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
+{
+  is_dragging = false;
+  return true;
 }
 
 static void
