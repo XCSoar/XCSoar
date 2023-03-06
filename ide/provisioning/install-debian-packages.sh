@@ -60,7 +60,7 @@ apt-get install ${APTOPTS[*]} dpkg-dev \
 echo
 
 echo Installing dependencies for compiling with LLVM / Clang...
-apt-get install ${APTOPTS[*]} llvm clang libc++-dev
+apt-get install ${APTOPTS[*]} llvm clang libc++-dev libc++abi-dev
 echo
 
 echo Installing dependencies for compiling targets which need libinput or GBM...

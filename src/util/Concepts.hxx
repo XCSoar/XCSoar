@@ -30,13 +30,12 @@
 #pragma once
 
 #include <concepts>
-#include <util/Compiler.h>
 
 /**
  * Compatibility wrapper for std::invocable which is unavailable in
  * the Android NDK r25b and Apple Xcode.
  */
-#if !defined(ANDROID) && !defined(__APPLE__) && (CLANG_VERSION >= GCC_MAKE_VERSION(14,0,0))
+#if !defined(ANDROID) && !defined(__APPLE__) && (!defined __clang__ || __clang_major__ >=14)
 template<typename F, typename... Args>
 concept Invocable = std::invocable<F, Args...>;
 #else
@@ -50,7 +49,7 @@ concept Invocable = requires(F f, Args... args) {
  * Compatibility wrapper for std::predicate which is unavailable in
  * the Android NDK r25b and Apple Xcode.
  */
-#if !defined(ANDROID) && !defined(__APPLE__) && (CLANG_VERSION >= GCC_MAKE_VERSION(14,0,0))
+#if !defined(ANDROID) && !defined(__APPLE__) && (!defined __clang__ || __clang_major__ >=14)
 template<typename F, typename... Args>
 concept Predicate = std::predicate<F, Args...>;
 #else
