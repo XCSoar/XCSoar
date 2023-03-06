@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "Compiler.h"
-
 #include <cstdint>
 
 #if defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
@@ -81,7 +79,7 @@ GenericByteSwap64(uint64_t value) noexcept
 constexpr uint16_t
 ByteSwap16(uint16_t value) noexcept
 {
-#if CLANG_OR_GCC_VERSION(4,8)
+#ifdef __GNUC__
   return __builtin_bswap16(value);
 #else
   return GenericByteSwap16(value);
@@ -91,7 +89,7 @@ ByteSwap16(uint16_t value) noexcept
 constexpr uint32_t
 ByteSwap32(uint32_t value) noexcept
 {
-#if CLANG_OR_GCC_VERSION(4,3)
+#ifdef __GNUC__
   return __builtin_bswap32(value);
 #else
   return GenericByteSwap32(value);
@@ -101,7 +99,7 @@ ByteSwap32(uint32_t value) noexcept
 constexpr uint64_t
 ByteSwap64(uint64_t value) noexcept
 {
-#if CLANG_OR_GCC_VERSION(4,3)
+#ifdef __GNUC__
   return __builtin_bswap64(value);
 #else
   return GenericByteSwap64(value);
