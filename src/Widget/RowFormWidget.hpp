@@ -569,6 +569,9 @@ public:
     return &df == &GetDataField(i);
   }
 
+  /**
+   * Load a value into a #DataFieldInteger.
+   */
   void LoadValue(unsigned i, int value) noexcept;
   void LoadValue(unsigned i, bool value) noexcept;
   void LoadValueEnum(unsigned i, const TCHAR *text) noexcept;
