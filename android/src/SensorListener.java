@@ -61,6 +61,9 @@ public interface SensorListener {
                            double gspeed, double vspeed,
                            double bearing);
 
+  void onFlarmTraffic(int AlarmLevel,int RelativeNorth,int RelativeEast,int RelativeVertical,
+                      String ID,int Track,double TurnRate,int GroundSpeed,double ClimbRate,
+                      int AcftType,boolean Stealth);
   void onTemperature(double temperature_kelvin);
 
   void onBatteryPercent(double battery_percent);

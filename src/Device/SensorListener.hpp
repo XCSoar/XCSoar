@@ -77,6 +77,10 @@ public:
                                    double gspeed, double vspeed,
                                    unsigned bearing) noexcept = 0;
 
+  virtual void OnFlarmTraffic(int AlarmLevel,int RelativeNorth,int RelativeEast,int RelativeVertical,
+                              const char *ID,int Track,double TurnRate,int GroundSpeed,double ClimbRate,
+                              int AcftType,bool Stealth) noexcept = 0;
+
   virtual void OnTemperature(Temperature temperature) noexcept = 0;
 
   virtual void OnBatteryPercent(double battery_percent) noexcept = 0;

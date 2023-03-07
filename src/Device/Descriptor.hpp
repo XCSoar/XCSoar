@@ -647,6 +647,9 @@ private:
                            GeoPoint location, double altitude,
                            double gspeed, double vspeed,
                            unsigned bearing) noexcept override;
+  void OnFlarmTraffic(int AlarmLevel,int RelativeNorth,int RelativeEast,int RelativeVertical,
+                      const char *ID,int Track,double TurnRate,int GroundSpeed,double ClimbRate,
+                      int AcftType,bool Stealth) noexcept override;
   void OnTemperature(Temperature temperature) noexcept override;
   void OnBatteryPercent(double battery_percent) noexcept override;
   void OnSensorStateChanged() noexcept override;

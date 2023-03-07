@@ -448,6 +448,63 @@ DeviceDescriptor::OnGliderLinkTraffic(GliderLinkId id, const char *callsign,
 }
 
 void
+DeviceDescriptor::OnFlarmTraffic(int AlarmLevel,int RelativeNorth,int RelativeEast,int RelativeVertical,const char *ID,
+                                 int Track,double TurnRate,int GroundSpeed,double ClimbRate,int AcftType,bool Stealth) noexcept
+{
+    // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
+  //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
+
+  const auto e = BeginEdit();
+  NMEAInfo &basic = *e;
+  basic.UpdateClock();
+  basic.alive.Update(basic.clock);
+
+  TrafficList &traffic_list = basic.flarm.traffic;
+  FlarmId id = FlarmId::Parse(ID, NULL);
+  FlarmTraffic *traffic = traffic_list.FindTraffic(id);
+
+  if(traffic==nullptr){
+    traffic = traffic_list.AllocateTraffic();
+    if (traffic == nullptr)
+      // no more slots available
+      return;
+
+     traffic->Clear();
+    traffic->id = id;
+
+    traffic_list.new_traffic.Update(basic.clock);
+  }
+
+  traffic->alarm_level = (FlarmTraffic::AlarmType)AlarmLevel;
+
+  traffic->relative_north = RelativeNorth;
+
+  traffic->relative_east = RelativeEast;
+
+  traffic->relative_altitude = RelativeVertical;
+
+  traffic->id = id;
+
+  traffic->track = Angle::Degrees(Track);
+
+  traffic->turn_rate = TurnRate;
+
+  traffic->speed = GroundSpeed;
+
+  traffic->climb_rate = ClimbRate;
+
+  traffic->type = (FlarmTraffic::AircraftType) AcftType;
+
+  traffic->stealth = Stealth;
+
+    // set time of fix to current time
+  traffic->valid.Update(basic.clock);
+
+  e.Commit();
+
+}
+
+void
 DeviceDescriptor::OnTemperature(Temperature temperature) noexcept
 {
   const auto e = BeginEdit();
