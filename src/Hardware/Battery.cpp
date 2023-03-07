@@ -49,6 +49,7 @@ GetInfo() noexcept
   switch (DetectKoboModel())
   {
   case KoboModel::GLO_HD:
+  case KoboModel::CLARA_HD:
     if (File::ReadString(Path("/sys/class/power_supply/mc13892_bat/status"),
                          line, sizeof(line))) {
       if (StringIsEqual(line,"Not charging\n") ||
