@@ -60,6 +60,7 @@ public:
 	}
 #endif
 
+	[[nodiscard]]
 	auto release() noexcept {
 		return std::exchange(value, nullptr);
 	}

@@ -26,6 +26,7 @@ public:
 
 		std::exception_ptr error;
 
+		[[nodiscard]]
 		auto initial_suspend() noexcept {
 			assert(!error);
 
@@ -33,6 +34,7 @@ public:
 		}
 
 		struct final_awaitable {
+			[[nodiscard]]
 			bool await_ready() const noexcept {
 				return false;
 			}
@@ -51,6 +53,7 @@ public:
 			}
 		};
 
+		[[nodiscard]]
 		auto final_suspend() noexcept {
 			return final_awaitable{};
 		}
@@ -59,6 +62,7 @@ public:
 			assert(!error);
 		}
 
+		[[nodiscard]]
 		InvokeTask get_return_object() noexcept {
 			assert(!error);
 
@@ -74,12 +78,14 @@ public:
 private:
 	UniqueHandle<promise_type> coroutine;
 
+	[[nodiscard]]
 	explicit InvokeTask(std::coroutine_handle<promise_type> _coroutine) noexcept
 		:coroutine(_coroutine)
 	{
 	}
 
 public:
+	[[nodiscard]]
 	InvokeTask() noexcept {
 	}
 
@@ -87,6 +93,7 @@ public:
 		return coroutine;
 	}
 
+	[[nodiscard]]
 	bool done() const noexcept {
 		assert(coroutine);
 
