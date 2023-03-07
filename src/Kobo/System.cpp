@@ -359,12 +359,13 @@ KoboCanChangeBacklightBrightness()
 {
 #ifdef KOBO
   switch (DetectKoboModel()) {
-    case KoboModel::GLO_HD:
-    case KoboModel::LIBRA2:
-    case KoboModel::CLARA_2E:
-      return true;
-    default:
-      return false;
+  case KoboModel::GLO_HD:
+  case KoboModel::LIBRA2:
+  case KoboModel::CLARA_2E:
+    return true;
+
+  default:
+    return false;
   }
 #endif
   return false;
@@ -378,20 +379,22 @@ KoboGetBacklightBrightness()
   char line[4];
   int result = 0;
   switch (DetectKoboModel()) {
-    case KoboModel::GLO_HD:
-      if (File::ReadString(Path("/sys/class/backlight/mxc_msp430_fl.0/brightness"), line, sizeof(line))) {
-        result = atoi(line);
-      }
-      break;
-    case KoboModel::LIBRA2:
-    case KoboModel::CLARA_2E:
-      if (File::ReadString(Path("/sys/class/backlight/mxc_msp430.0/brightness"), line, sizeof(line))) {
-        result = atoi(line);
-      }
-      break;
-    default:
-      // nothing to do here...
-      break;
+  case KoboModel::GLO_HD:
+    if (File::ReadString(Path("/sys/class/backlight/mxc_msp430_fl.0/brightness"), line, sizeof(line))) {
+      result = atoi(line);
+    }
+    break;
+
+  case KoboModel::LIBRA2:
+  case KoboModel::CLARA_2E:
+    if (File::ReadString(Path("/sys/class/backlight/mxc_msp430.0/brightness"), line, sizeof(line))) {
+      result = atoi(line);
+    }
+    break;
+
+  default:
+    // nothing to do here...
+    break;
   }
   return result;
 #else
@@ -408,16 +411,18 @@ KoboSetBacklightBrightness([[maybe_unused]] int percent)
   if(percent > 100) { percent = 100; }
 
   switch (DetectKoboModel()) {
-    case KoboModel::GLO_HD:
-      File::WriteExisting(Path("/sys/class/backlight/mxc_msp430_fl.0/brightness"), std::to_string(percent).c_str());
-      break;
-    case KoboModel::LIBRA2:
-    case KoboModel::CLARA_2E:
-      File::WriteExisting(Path("/sys/class/backlight/mxc_msp430.0/brightness"), std::to_string(percent).c_str());
-      break;
-    default:
-      // nothing to do here...
-      break;
+  case KoboModel::GLO_HD:
+    File::WriteExisting(Path("/sys/class/backlight/mxc_msp430_fl.0/brightness"), std::to_string(percent).c_str());
+    break;
+
+  case KoboModel::LIBRA2:
+  case KoboModel::CLARA_2E:
+    File::WriteExisting(Path("/sys/class/backlight/mxc_msp430.0/brightness"), std::to_string(percent).c_str());
+    break;
+
+  default:
+    // nothing to do here...
+    break;
   }
 #endif
 }

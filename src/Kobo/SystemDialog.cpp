@@ -46,7 +46,7 @@ class SystemWidget final
     SWITCH_OTG_MODE,
     USB_STORAGE,
     INCREASE_BACKLIGHT_BRIGHTNESS,
-    DECREASE_BACKLIGHT_BRIGHTNESS
+    DECREASE_BACKLIGHT_BRIGHTNESS,
   };
 
   Button *switch_otg_mode;
@@ -63,7 +63,7 @@ private:
   void ExportUSBStorage();
   void IncreaseBacklightBrightness();
   void DecreaseBacklightBrightness();
-  void UpdateBacklightButtons(int percent);
+  void UpdateBacklightBrightnessButtons(int percent);
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent,
@@ -83,7 +83,7 @@ SystemWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]]
     increase_backlight_brightness = AddButton("Increase Backlight Brightness", [this]() { IncreaseBacklightBrightness(); });
     decrease_backlight_brightness = AddButton("Decrease Backlight Brightness", [this]() { DecreaseBacklightBrightness(); });
     int current_brightness = KoboGetBacklightBrightness();
-    UpdateBacklightButtons(current_brightness);
+    UpdateBacklightBrightnessButtons(current_brightness);
   } else {
     AddDummy();
     AddDummy();
@@ -202,7 +202,7 @@ SystemWidget::IncreaseBacklightBrightness()
 {
   int current_brightness = KoboGetBacklightBrightness();
   KoboSetBacklightBrightness(current_brightness + 20);
-  UpdateBacklightButtons(current_brightness + 20);
+  UpdateBacklightBrightnessButtons(current_brightness + 20);
 }
 
 inline void
@@ -210,11 +210,11 @@ SystemWidget::DecreaseBacklightBrightness()
 {
   int current_brightness = KoboGetBacklightBrightness();
   KoboSetBacklightBrightness(current_brightness - 20);
-  UpdateBacklightButtons(current_brightness - 20);
+  UpdateBacklightBrightnessButtons(current_brightness - 20);
 }
 
 inline void
-SystemWidget::UpdateBacklightButtons(int percent)
+SystemWidget::UpdateBacklightBrightnessButtons(int percent)
 {
   if(decrease_backlight_brightness != nullptr) {
     decrease_backlight_brightness->SetEnabled(percent != 0);
