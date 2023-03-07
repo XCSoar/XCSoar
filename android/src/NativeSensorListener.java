@@ -95,6 +95,11 @@ final class NativeSensorListener implements SensorListener {
                                          double bearing);
 
   @Override
+  public native void onFlarmTraffic(int AlarmLevel,int RelativeNorth,int RelativeEast,int RelativeVertical,
+                                    String ID,int Track,double TurnRate,int GroundSpeed,double ClimbRate,
+                                    int AcftType,boolean Stealth);
+
+  @Override
   public native void onTemperature(double temperature_kelvin);
 
   @Override
