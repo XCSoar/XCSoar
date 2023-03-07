@@ -12,6 +12,8 @@ Version 7.29 - not yet released
   - Reboot without -f (force)
   - Fix OTG mode for newer models
   - Add an E-ink friendly trail type
+  - Add Brightness control to Clara HD
+  - Support Brightness and Colour for ComfortLight PRO models
 * Polars
   - Add LS-5 polar
   - Add Silene E78 polar
