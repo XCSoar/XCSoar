@@ -53,6 +53,7 @@ class KRT2Device final : public AbstractDevice {
   static constexpr std::byte ACK{0x06}; //!< Command acknowledged character.
   static constexpr std::byte NAK{0x15}; //!< Command not acknowledged character.
   static constexpr std::byte NO_RSP{0}; //!< No response received yet.
+  static constexpr std::byte RCQ{'S'};  //!< Respond to connection query
 
   static constexpr size_t MAX_NAME_LENGTH = 8; //!< Max. radio station name length.
 
@@ -245,30 +246,28 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
       expected_msg_length = ExpectedMsgLength(range.data(), range.size());
 
       if (range.size() >= expected_msg_length) {
-        switch (*(const std::byte *) range.data()) {
-          case std::byte{'S'}:
-            // Respond to connection query.
-            port.Write(0x01);
-            break;
-          case ACK:
-          case NAK:
+        switch (range.front()) {
+        case RCQ:
+          // Respond to connection query.
+          port.Write(0x01);
+          break;
+        case ACK:
+        case NAK:
+          {
             // Received a response to a normal command (STX)
-            {
-              const std::lock_guard lock{response_mutex};
-              response = *(const std::byte *) range.data();
-              // Signal the response to the TX thread
-              rx_cond.notify_one();
-            }
-            break;
-          case STX:
-            // Received a command from the radio (STX). Handle what we know.
-            {
-              const std::lock_guard lock{response_mutex};
-              const struct stx_msg * msg = (const struct stx_msg *) range.data();
-              HandleSTXCommand(msg, info);
-            }
-          default:
-            break;
+            const std::lock_guard lock{response_mutex};
+            response = range.front();
+            // Signal the response to the TX thread
+            rx_cond.notify_one();
+          }
+          break;
+        case STX:
+          // Received a command from the radio (STX). Handle what we know.
+          {
+            const std::lock_guard lock{response_mutex};
+            const struct stx_msg * msg = (const struct stx_msg *) range.data();
+            HandleSTXCommand(msg, info);
+          }
         }
         // Message handled -> remove message
         rx_buf.Consume(expected_msg_length);

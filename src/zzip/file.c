@@ -144,12 +144,11 @@ dirsep_strcasecmp(zzip_char_t * s1, zzip_char_t * s2)
 {
     /* ASCII tolower - including mapping of backslash in normal slash */
     static const char mapping[] = "@abcdefghijklmnopqrstuvwxyz[/]^_";
-    int c1, c2;
 
     while (*s1 && *s2)
     {
-        c1 = (int) (unsigned char) *s1;
-        c2 = (int) (unsigned char) *s2;
+        int c1 = (int) (unsigned char) *s1;
+        int c2 = (int) (unsigned char) *s2;
         if ((c1 & 0xE0) == 0x40)
             c1 = mapping[c1 & 0x1f];
         if ((c2 & 0xE0) == 0x40)
@@ -1194,8 +1193,8 @@ zzip_tell32(ZZIP_FILE * fp)
     {
         off_t off = zzip_tell(fp);
         if (off >= 0) {
-            register long off32 = off;
-            if (off32 == off) return off32;
+            long off32 = off;
+            return off32;
 #ifdef ZZIP_DISABLED
             errno = EOVERFLOW;
 #endif /* ZZIP_DISABLED */
@@ -1217,8 +1216,8 @@ zzip_seek32(ZZIP_FILE * fp, long offset, int whence)
     {
         off_t off = zzip_seek(fp, offset, whence);
         if (off >= 0) {
-            register long off32 = off;
-            if (off32 == off) return off32;
+            long off32 = off;
+            return off32;
 #ifdef ZZIP_DISABLED
             errno = EOVERFLOW;
 #endif /* ZZIP_DISABLED */

@@ -163,9 +163,9 @@ WindSettingsPanel::OnModified(DataField &df) noexcept
     return;
 
   const NMEAInfo &basic = CommonInterface::Basic();
-  WindSettings &settings = CommonInterface::SetComputerSettings().wind;
 
   if (&df == &GetDataField(Speed) || &df == &GetDataField(Direction)) {
+    WindSettings &settings = CommonInterface::SetComputerSettings().wind;
     settings.manual_wind.norm = Units::ToSysWindSpeed(GetValueFloat(Speed));
     settings.manual_wind.bearing = GetValueAngle(Direction);
     settings.manual_wind_available.Update(basic.clock);

@@ -514,7 +514,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
 
   if (!variation_available)
     info.variation_available.Clear();
-  else if (variation_available) {
+  else {
     info.variation = variation;
     info.variation_available.Update(info.clock);
   }
@@ -546,7 +546,7 @@ NMEAParser::HDM(NMEAInputLine &line, NMEAInfo &info)
 
   if (!heading_available)
     info.attitude.heading_available.Clear();
-  else if (heading_available) {
+  else {
     info.attitude.heading = heading;
     info.attitude.heading_available.Update(info.clock);
   }

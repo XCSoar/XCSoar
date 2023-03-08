@@ -89,7 +89,7 @@ sleep 1
 # load kernel modules for ClaraHD, Libra2 and Libra H2O as factory kernel is OTG
 # but missing modules. Also put ClaraHD and Libra2 in the right mode
 model=`dd if=/dev/mmcblk0 bs=8 count=1 skip=64`
-if [ `expr substr $model 1 7` = SN-N418 ] || [ `expr substr $model 1 7` = SN-N249 ] \
+if [ `expr substr $model 1 7` = SN-N418 ] || [ `expr substr $model 1 7` = SN-N249 ] || \
     [ `expr substr $model 1 7` = SN-N873 ] || [ `expr substr $model 1 7` = SN-N506 ]; then
     insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/serial/usbserial.ko"
     insmod "/opt/xcsoar/lib/modules/4.1.15/drivers/usb/serial/aircable.ko"
@@ -135,7 +135,4 @@ fi
 /opt/xcsoar/bin/simple_usbmodeswitch
 
 # finally, open the menu
-exec /opt/xcsoar/bin/KoboMenu
-
-# just in case launching KoboMenu fails: try xcsoar
-exec /opt/xcsoar/bin/xcsoar
+/opt/xcsoar/bin/KoboMenu &

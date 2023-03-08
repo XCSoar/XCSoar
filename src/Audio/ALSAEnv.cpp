@@ -55,7 +55,7 @@ static const char *InitALSADeviceName()
 
 static unsigned InitALSALatency()
 {
-  unsigned latency = DEFAULT_ALSA_LATENCY;
+  unsigned latency;
   const char *latency_env_value = getenv(ALSA_LATENCY_ENV);
   if ((nullptr == latency_env_value) || ('\0' == *latency_env_value)) {
     latency = DEFAULT_ALSA_LATENCY;

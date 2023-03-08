@@ -798,7 +798,6 @@ __zzip_try_open(zzip_char_t * filename, int filemode,
                 zzip_strings_t * ext, zzip_plugin_io_t io)
 {
     auto char file[PATH_MAX];
-    int fd;
     zzip_size_t len = strlen(filename);
 
     if (len + 4 >= PATH_MAX)
@@ -813,7 +812,7 @@ __zzip_try_open(zzip_char_t * filename, int filemode,
     for (; *ext; ++ext)
     {
         strcpy(file + len, *ext);
-        fd = (io->fd.open)(file, filemode);
+        int fd = (io->fd.open)(file, filemode);
         if (fd != -1)
             return fd;
     }

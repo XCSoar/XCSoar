@@ -71,3 +71,15 @@ KoboGetBacklightBrightness();
 
 void
 KoboSetBacklightBrightness(int percent);
+
+const char *
+KoboGetBacklightColourFile() noexcept;
+
+bool
+KoboCanChangeBacklightColour() noexcept;
+
+bool
+KoboGetBacklightColour(unsigned int &colour) noexcept;
+
+void
+KoboSetBacklightColour(int colour) noexcept;

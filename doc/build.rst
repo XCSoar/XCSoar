@@ -161,9 +161,9 @@ Compiling for Android
 
 For Android, you need:
 
-- `Android SDK level 26 <http://developer.android.com/sdk/>`__
+- `Android SDK level 30 <http://developer.android.com/sdk/>`__
 
-- `Android NDK r25b <http://developer.android.com/sdk/ndk/>`__
+- `Android NDK r25c <http://developer.android.com/sdk/ndk/>`__
 
 - `Ogg Vorbis <http://www.vorbis.com/>`__
 
@@ -175,7 +175,7 @@ On Debian::
 
 The required Android SDK components are:
 
-- Android SDK Build-Tools 28.0.3
+- Android SDK Build-Tools 33.0.2
 
 - SDK Platform 26
 
@@ -186,7 +186,7 @@ tools/bin/sdkmanager  "build-tools;28.0.3"  "platforms;android-26"
 
 The ``Makefile`` assumes that the Android SDK is installed in
 ``~/opt/android-sdk-linux`` and the NDK is installed in
-``~/opt/android-ndk-r25b``. You can use the options ``ANDROID_SDK`` and
+``~/opt/android-ndk-r25c``. You can use the options ``ANDROID_SDK`` and
 ``ANDROID_NDK`` to override these paths.
 
 Load/update the IOIO source code::

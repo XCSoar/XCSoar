@@ -380,9 +380,12 @@ ActionInterface::ExchangeRadioFrequencies(bool to_devices) noexcept
 {
   const auto radio_settings = SetComputerSettings().radio;
 
-  const auto old_active_freq = radio_settings.active_frequency;
-  const auto old_active_freq_name = radio_settings.active_name;
+  if(radio_settings.active_frequency.IsDefined() &&
+     radio_settings.standby_frequency.IsDefined()) {
+    const auto old_active_freq = radio_settings.active_frequency;
+    const auto old_active_freq_name = radio_settings.active_name;
 
-  ActionInterface::SetActiveFrequency(radio_settings.standby_frequency, radio_settings.standby_name, to_devices);
-  ActionInterface::SetStandbyFrequency(old_active_freq, old_active_freq_name, to_devices);
+    ActionInterface::SetActiveFrequency(radio_settings.standby_frequency, radio_settings.standby_name, to_devices);
+    ActionInterface::SetStandbyFrequency(old_active_freq, old_active_freq_name, to_devices);
+  }
 }

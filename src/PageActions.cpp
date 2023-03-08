@@ -66,11 +66,10 @@ PageActions::LeavePage()
   if (state.special_page.IsDefined())
     return;
 
-  PageState &page = state.pages[state.current_index];
-
   const GlueMapWindow *map = UIGlobals::GetMapIfActive();
   if (map != nullptr) {
     const MapSettings &map_settings = CommonInterface::GetMapSettings();
+    PageState &page = state.pages[state.current_index];
     page.cruise_scale = map_settings.cruise_scale;
     page.circling_scale = map_settings.circling_scale;
     page.auto_zoom_enabled = map_settings.auto_zoom_enabled;

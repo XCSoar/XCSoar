@@ -569,7 +569,18 @@ public:
     return &df == &GetDataField(i);
   }
 
+  /**
+   * Load a value into a #DataFieldInteger.
+   */
   void LoadValue(unsigned i, int value) noexcept;
+
+  /**
+   * Load an unsigned value into a #DataFieldInteger.
+   */
+  void LoadValue(unsigned i, unsigned value) noexcept {
+    LoadValue(i, static_cast<int>(value));
+  }
+
   void LoadValue(unsigned i, bool value) noexcept;
   void LoadValueEnum(unsigned i, const TCHAR *text) noexcept;
   void LoadValueEnum(unsigned i, unsigned value) noexcept;

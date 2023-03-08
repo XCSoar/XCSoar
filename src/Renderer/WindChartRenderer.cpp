@@ -104,9 +104,8 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   // draw direction vectors
   const auto x_max = std::max(windstats_mag.GetMaxX(),
                               1.); // prevent /0 problems
-  double hfact;
   for (unsigned i = 0; i < numsteps; i++) {
-    hfact = double(i + 1) / (numsteps + 1);
+    double hfact = double(i + 1) / (numsteps + 1);
     auto h = height * hfact + fs.altitude_base.GetMinY();
 
     Vector wind = wind_store.GetWind(nmea_info.time, h, found);

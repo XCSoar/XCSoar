@@ -145,12 +145,12 @@ Canvas::DrawLine(PixelPoint a, PixelPoint b) noexcept
 
   SDLRasterCanvas canvas(buffer);
   const auto color = canvas.Import(pen.GetColor());
-  unsigned mask_position = 0;
-  if (thickness > 1)
+  if (thickness > 1) {
+    unsigned mask_position = 0;
     canvas.DrawThickLine(a.x, a.y, b.x, b.y, thickness, color,
                          mask, mask_position);
-  else
-    canvas.DrawLine(a.x, a.y, b.x, b.y, color, mask);
+  } else
+      canvas.DrawLine(a.x, a.y, b.x, b.y, color, mask);
 }
 
 void

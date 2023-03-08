@@ -180,14 +180,13 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   }
 
   bool draw_start_height = false;
-  double hstart = 0;
 
   draw_start_height = ordered_props
     && calculated.ordered_task_stats.task_valid
     && ordered_props->start_constraints.max_height != 0
     && calculated.terrain_valid;
   if (draw_start_height) {
-    hstart = ordered_props->start_constraints.max_height;
+    double hstart = ordered_props->start_constraints.max_height;
     if (ordered_props->start_constraints.max_height_ref == AltitudeReference::AGL &&
         calculated.terrain_valid)
       hstart += calculated.terrain_altitude;
