@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Svg Vector Icons : http://www.onlinewebfonts.com/icon -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
-<metadata> Svg Vector Icons : http://www.onlinewebfonts.com/icon </metadata>
-<g><path d="M500.9,99.1L256.2,583l-81.6-80.6c0,0-185.4,398.5-162.8,398.5l978.1-0.1l-205.3-440l-60.4,38L500.9,99.1L500.9,99.1z M353.1,499.4L503.9,205l140.5,252.9l-60.6,41.5l-82.4-79.8L353.1,499.4L353.1,499.4z"/></g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" width="26" height="26" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg">
+ <g transform="matrix(1.0501 0 0 1.0535 -64.249 -123.61)" stroke-width="1.4261">
+  <path d="m73.895 120.39-11.373 18.557 11.479-0.00391-0.37109-5.5215 2.3574-1.9141-0.9082-6.459 8.3066 13.555 1.2148-0.7461zm-0.42969 3.4297 0.99609 7.0879-2.3027 1.8711 0.31641 4.7383-7.4062 2e-3z" color="#000000" style="-inkscape-stroke:none"/>
+ </g>
 </svg>
