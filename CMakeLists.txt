@@ -361,7 +361,7 @@ list(APPEND SOURCE_FILES "src/OpenSoar.cpp")
 ##     "${OUTPUT_FOLDER}/Data/OpenSoar.rc"
 ## )
 # list(APPEND SOURCE_FILES "${OUTPUT_FOLDER}/Data/OpenSoar.rc")
-# list(APPEND SOURCE_FILES "${PROJECTGROUP_BINARY_DIR}/OpenSoar.rc")
+list(APPEND SOURCE_FILES "${PROJECTGROUP_BINARY_DIR}/OpenSoar.rc")
 ## list(APPEND SCRIPT_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Data/OpenSoar.rc.in")
 list(APPEND SCRIPT_FILES "CMakeSource.cmake")
 
@@ -458,6 +458,9 @@ foreach(translation ${TRANSLATIONS})
             COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECTGROUP_SOURCE_DIR}/src/_Deprecated/${translation}.mo.c ${CMAKE_CURRENT_BINARY_DIR}/po/${translation}.mo.c
         )
 endforeach()
+
+# list(APPEND SOURCE_FILES "${PROJECTGROUP_BINARY_DIR}/OpenSoar.rc")
+# target_sources(${TARGET_NAME} PRIVATE "${PROJECTGROUP_BINARY_DIR}/OpenSoar.rc")
 
 add_dependencies(${TARGET_NAME} util libOpenSoar)
 

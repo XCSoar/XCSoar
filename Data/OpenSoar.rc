@@ -45,9 +45,13 @@ HI_RES_AWARE CEUX {1}
 
 // --- Icons ---
 
-// ICON_ICON(IDI_XCSOAR,   "OpenSoar")
+#if defined(_WIN32) && defined(MSVC) // && defined(AUGUST_SPECIAL)
+// MSVC isn't correct, you have to call it CMAKE_PROJECT or this...
+// or doing the same as macro
+ICON_ICON(IDI_XCSOAR,   "OpenSoar")
+#else
 IDI_XCSOAR              ICON    DISCARDABLE     "bitmaps/OpenSoar.ico"
-
+#endif
 // --- Bitmaps ---
 
 BITMAP_ICON(IDB_ABORT, "mode_abort")
