@@ -1,81 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.1"
-   width="6"
-   height="6"
-   id="svg2816"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="map_bridge.svg">
-  <metadata
-     id="metadata9">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <sodipodi:namedview
-     pagecolor="#ff00ff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1432"
-     inkscape:window-height="988"
-     id="namedview7"
-     showgrid="true"
-     inkscape:zoom="33.552217"
-     inkscape:cx="-3.3795401"
-     inkscape:cy="0.43908607"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer5">
-    <inkscape:grid
-       type="xygrid"
-       id="grid4698"
-       empspacing="5"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true" />
-  </sodipodi:namedview>
-  <defs
-     id="defs2818" />
-  <g
-     transform="translate(-6.9470643,-2.0097858)"
-     id="layer1" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer5"
-     inkscape:label="NOAA_Image"
-     transform="translate(0.05293565,-12.009785)">
-    <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:square;stroke-linejoin:round;stroke-opacity:1"
-       d="m 2.4470643,2.509785 0,-0.5 2.5,-2.5 0.5,0"
-       id="path2827"
-       sodipodi:nodetypes="cccc"
-       transform="translate(0,15)" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:square;stroke-linejoin:round;stroke-opacity:1"
-       d="m 0.44706435,0.509785 0.5,0 2.49999995,-2.5 0,-0.5"
-       id="path2829"
-       sodipodi:nodetypes="cccc"
-       transform="translate(0,15)" />
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" width="26" height="26" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg">
+ <g transform="matrix(1.0501 0 0 1.0535 -561.67 -218.83)" stroke-width="1.4261">
+  <g transform="translate(323.85 175.12)" stroke-linecap="round" stroke-linejoin="round">
+   <path d="m230.35 41.414a0.71312 0.71312 0 0 0-0.50391 0.20898l-9.4785 9.4863a0.71312 0.71312 0 0 0-0.20898 0.50391v1.8965a0.71304 0.71304 0 0 0 0.71289 0.71289 0.71304 0.71304 0 0 0 0.71289-0.71289v-1.6016l9.0625-9.0684h1.5996a0.71304 0.71304 0 0 0 0.71289-0.71289 0.71304 0.71304 0 0 0-0.71289-0.71289z" color="#000000" style="-inkscape-stroke:none"/>
+   <path d="m225.88 35.631a0.71304 0.71304 0 0 0-0.71484 0.71289v1.6035l-9.0606 9.0664h-1.5996a0.71304 0.71304 0 0 0-0.71484 0.71289 0.71304 0.71304 0 0 0 0.71484 0.71289h1.8945a0.71312 0.71312 0 0 0 0.50391-0.20898l9.4805-9.4844a0.71312 0.71312 0 0 0 0.20898-0.50391v-1.8984a0.71304 0.71304 0 0 0-0.71289-0.71289z" color="#000000" style="-inkscape-stroke:none"/>
   </g>
+ </g>
 </svg>
