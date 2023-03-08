@@ -1,93 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.1"
-   width="10"
-   height="10"
-   id="svg2"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="airspace_intercept.svg">
-  <metadata
-     id="metadata11">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="774"
-     id="namedview9"
-     showgrid="true"
-     showguides="true"
-     inkscape:guide-bbox="true"
-     inkscape:zoom="27.842105"
-     inkscape:cx="9.5"
-     inkscape:cy="9.5"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer4">
-    <inkscape:grid
-       type="xygrid"
-       id="grid2822"
-       empspacing="5"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true" />
-  </sodipodi:namedview>
-  <defs
-     id="defs4" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="NOAA_Layer"
-     transform="translate(0,-22)">
-    <g
-       inkscape:groupmode="layer"
-       id="layer4"
-       inkscape:label="MASK_Background"
-       style="display:inline">
-      <path
-         d="m 0.52731403,30.500117 c -0.1233759,0.654644 0.16483958,1.018322 0.99461197,0.999162 l 6.9622825,0 c 0.811319,6.34e-4 1.1011389,-0.361446 0.9946127,-0.999162 l -3.978448,-7.493713 c -0.5235556,-0.91626 -0.7434301,-0.383434 -0.9946117,0 l -3.97844747,7.493713 z"
-         id="path3603"
-         style="fill:#fff200;fill-opacity:1;stroke:#ff6400;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;display:inline" />
-    </g>
-    <g
-       id="layer2"
-       style="display:inline"
-       transform="matrix(0.96238422,0,0,0.47118653,0.21450791,26.764067)" />
-    <g
-       id="layer3"
-       transform="matrix(0.91820293,0,0,0.92240324,0.41181699,22.390802)" />
-    <path
-       d="M 6,30.000124 A 1,1 0 1 1 5.99873,29.949617"
-       id="path3606"
-       style="fill:#000000;fill-opacity:1;stroke:none" />
-    <path
-       d="m 5,28 -0.5,-3.5 1,0 L 5,28 z"
-       id="path3608"
-       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       sodipodi:nodetypes="cccc" />
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
+ <g transform="translate(0,-22)">
+  <g>
+   <path d="m0.52731 30.5c-0.12338 0.65464 0.16484 1.0183 0.99461 0.99916h6.9623c0.81132 6.34e-4 1.1011-0.36145 0.99461-0.99916l-3.9784-7.4937c-0.52356-0.91626-0.74343-0.38343-0.99461 0l-3.9784 7.4937z" fill="#fff200" stroke="#ff6400" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
+  <path d="m6 30a1 1 0 1 1-0.00127-0.050507"/>
+  <path d="m5 28-0.5-3.5h1l-0.5 3.5z" stroke="#000" stroke-linecap="round" stroke-linejoin="round"/>
+ </g>
 </svg>
