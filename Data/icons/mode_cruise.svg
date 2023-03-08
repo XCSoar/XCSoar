@@ -1,82 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.1"
-   width="19"
-   height="19"
-   id="svg2924"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
-   sodipodi:docname="mode_cruise.svg">
-  <metadata
-     id="metadata2860">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <sodipodi:namedview
-     pagecolor="#ff00ff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1680"
-     inkscape:window-height="1027"
-     id="namedview2858"
-     showgrid="false"
-     inkscape:zoom="3.0532028"
-     inkscape:cx="-64.519194"
-     inkscape:cy="48.226508"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1"
-     inkscape:document-rotation="0" />
-  <defs
-     id="defs2926" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="Glider"
-     transform="translate(0,-13)"
-     style="display:inline">
-    <g
-       inkscape:groupmode="layer"
-       id="layer2"
-       inkscape:label="MASK_Background" />
-    <g
-       id="g1676"
-       transform="translate(731.75293,-377.67021)"
-       style="display:inline">
-      <circle
-         cx="-722.25293"
-         cy="401.18671"
-         id="circle4009"
-         style="display:inline;opacity:0.99;fill:#ffffff;stroke-width:0.952242"
-         r="8.4834995" />
-      <path
-         id="path4013"
-         style="display:inline;opacity:0.99;fill:#000000;stroke-width:0.952233"
-         d="m -728.93359,390.71484 a 7.1440002,7.1440002 0 0 0 13.35937,0.006 z"
-         transform="translate(0,13)" />
-      <path
-         id="rect4025"
-         style="fill:#000000;stroke:#000000;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none"
-         d="m -723.875,385.06055 c -0.35813,0 -0.64648,0.20559 -0.64648,0.46093 0,0.25535 0.28835,0.46094 0.64648,0.46094 h 1.19336 v 1.34766 h -6.75 a 0.5,0.5 0 0 0 -0.5,0.5 0.5,0.5 0 0 0 0.5,0.5 h 6.75 v 0.11133 c 0,0.29692 0.20523,0.53515 0.46094,0.53515 0.25571,0 0.46093,-0.23823 0.46093,-0.53515 v -0.11524 l 6.75586,0.004 a 0.5,0.5 0 0 0 0.5,-0.5 0.5,0.5 0 0 0 -0.5,-0.5 l -6.75586,-0.004 v -1.34375 h 1.20899 c 0.35813,0 0.64648,-0.20559 0.64648,-0.46094 0,-0.25534 -0.28835,-0.46093 -0.64648,-0.46093 h -1.66992 z"
-         transform="translate(0,13)" />
-    </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" width="26" height="26" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg">
+ <g transform="matrix(1.0466 0 0 1.0466 -.66261 -14.215)" stroke-width=".95544">
+  <g transform="matrix(1.4641,0,0,1.4641,1070.5,-561.38)">
+   <circle cx="-722.25" cy="401.19" r="8.4835" fill="#fff" opacity=".99" stroke-width=".62142"/>
+   <path transform="translate(0,13)" d="m-728.93 390.71a7.144 7.144 0 0 0 13.359 6e-3z" opacity=".99" stroke-width=".62141"/>
+   <path transform="translate(0,13)" d="m-723.88 385.06c-0.35813 0-0.64648 0.20559-0.64648 0.46093 0 0.25535 0.28835 0.46094 0.64648 0.46094h1.1934v1.3477h-6.75a0.5 0.5 0 0 0-0.5 0.5 0.5 0.5 0 0 0 0.5 0.5h6.75v0.11133c0 0.29692 0.20523 0.53515 0.46094 0.53515s0.46093-0.23823 0.46093-0.53515v-0.11524l6.7559 4e-3a0.5 0.5 0 0 0 0.5-0.5 0.5 0.5 0 0 0-0.5-0.5l-6.7559-4e-3v-1.3438h1.209c0.35813 0 0.64648-0.20559 0.64648-0.46094 0-0.25534-0.28835-0.46093-0.64648-0.46093h-1.6699z" stroke-width="0"/>
   </g>
+ </g>
 </svg>
