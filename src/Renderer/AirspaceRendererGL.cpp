@@ -64,8 +64,8 @@ public:
 private:
   void VisitCircle(const AirspaceCircle &airspace) {
     const AirspaceClassRendererSettings &class_settings =
-      settings.classes[airspace.GetType()];
-    const AirspaceClassLook &class_look = look.classes[airspace.GetType()];
+      settings.classes[airspace.GetClass()];
+    const AirspaceClassLook &class_look = look.classes[airspace.GetClass()];
 
     auto screen_center = projection.GeoToScreen(airspace.GetReferenceLocation());
     unsigned screen_radius = projection.GeoToScreenDistance(airspace.GetRadius());
@@ -104,7 +104,7 @@ private:
       return;
 
     const AirspaceClassRendererSettings &class_settings =
-      settings.classes[airspace.GetType()];
+      settings.classes[airspace.GetClass()];
 
     bool fill_airspace = warning_manager.HasWarning(airspace) ||
       warning_manager.IsInside(airspace) ||
@@ -158,7 +158,7 @@ public:
 
 private:
   bool SetupOutline(const AbstractAirspace &airspace) {
-    AirspaceClass type = airspace.GetType();
+    AirspaceClass type = airspace.GetClass();
 
     if (settings.black_outline)
       canvas.SelectBlackPen();
@@ -180,7 +180,7 @@ private:
 
   void SetupInterior(const AbstractAirspace &airspace,
                      bool check_fillstencil = false) {
-    const AirspaceClassLook &class_look = look.classes[airspace.GetType()];
+    const AirspaceClassLook &class_look = look.classes[airspace.GetClass()];
 
     // restrict drawing area and don't paint over previously drawn outlines
     if (check_fillstencil)
@@ -278,7 +278,7 @@ public:
 
 private:
   bool SetupOutline(const AbstractAirspace &airspace) {
-    AirspaceClass type = airspace.GetType();
+    AirspaceClass type = airspace.GetClass();
 
     if (settings.black_outline)
       canvas.SelectBlackPen();
@@ -297,7 +297,7 @@ private:
     if (settings.fill_mode == AirspaceRendererSettings::FillMode::NONE)
       return false;
 
-    const AirspaceClassLook &class_look = look.classes[airspace.GetType()];
+    const AirspaceClassLook &class_look = look.classes[airspace.GetClass()];
 
     canvas.Select(Brush(class_look.fill_color.WithAlpha(48)));
     canvas.SelectNullPen();

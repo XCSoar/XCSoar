@@ -88,7 +88,7 @@ public:
     if (warnings.IsAcked(airspace))
       return;
 
-    AirspaceClass airspace_class = airspace.GetType();
+    AirspaceClass airspace_class = airspace.GetClass();
     if (settings.fill_mode == AirspaceRendererSettings::FillMode::NONE ||
         settings.classes[airspace_class].fill_mode ==
         AirspaceClassRendererSettings::FillMode::NONE)
@@ -110,7 +110,7 @@ public:
 
 private:
   void SetBufferPens(const AbstractAirspace &airspace) {
-    AirspaceClass airspace_class = airspace.GetType();
+    AirspaceClass airspace_class = airspace.GetClass();
 
 #ifndef HAVE_HATCHED_BRUSH
     buffer.Select(look.classes[airspace_class].solid_brush);
@@ -174,7 +174,7 @@ protected:
     if (settings.black_outline)
       return true;
 
-    AirspaceClass type = airspace.GetType();
+    AirspaceClass type = airspace.GetClass();
     if (settings.classes[type].border_width == 0)
       // Don't draw outlines if border_width == 0
       return false;

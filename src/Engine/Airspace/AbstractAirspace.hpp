@@ -58,7 +58,7 @@ private:
   const Shape shape;
 
   /** Airspace class */
-  AirspaceClass type;
+  AirspaceClass asclass;
 
 protected:
   mutable TriState is_convex;
@@ -208,15 +208,15 @@ public:
    * Set fundamental properties of airspace
    *
    * @param _Name Name of airspace
-   * @param _Type Type/class
+   * @param _classs Class
    * @param _base Lower limit
    * @param _top Upper limit
    */
-  void SetProperties(tstring &&_name, const AirspaceClass _Type,
+  void SetProperties(tstring &&_name, const AirspaceClass _class,
                      const AirspaceAltitude &_base,
                      const AirspaceAltitude &_top) noexcept {
     name = std::move(_name);
-    type = _Type;
+    asclass = _class;
     altitude_base = _base;
     altitude_top = _top;
   }
@@ -240,12 +240,12 @@ public:
   }
 
   /**
-   * Get type of airspace
+   * Get asclass of airspace
    *
-   * @return Type/class of airspace
+   * @return Class of airspace
    */
-  AirspaceClass GetType() const noexcept {
-    return type;
+  AirspaceClass GetClass() const noexcept {
+    return asclass;
   }
 
   /**
