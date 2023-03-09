@@ -4,6 +4,8 @@ Version 7.29 - not yet released
   - fix crash when arc airspace has no center
   - allow xci files to be downloaded from repository
   - in OpenAir format use AC as Class and AY as Type (#1118)
+* devices
+  - ATR833: read-out active and standby frequencies
 * Android
   - get rid of not usable USB interfaces in the 'Device -> Port' list
 * Kobo
