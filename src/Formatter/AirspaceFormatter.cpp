@@ -106,3 +106,9 @@ AirspaceFormatter::GetClassShort(const AbstractAirspace &airspace)
 {
   return GetClassShort(airspace.GetClass());
 }
+
+const TCHAR *
+AirspaceFormatter::GetType(const AbstractAirspace &airspace)
+{
+  return airspace.GetType();
+}

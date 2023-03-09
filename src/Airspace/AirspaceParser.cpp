@@ -130,6 +130,7 @@ struct TempAirspace
   tstring name;
   RadioFrequency radio_frequency;
   AirspaceClass asclass;
+  tstring astype;
   std::optional<AirspaceAltitude> base;
   std::optional<AirspaceAltitude> top;
   AirspaceActivity days_of_operation;
@@ -151,6 +152,7 @@ struct TempAirspace
     name.clear();
     radio_frequency = RadioFrequency::Null();
     asclass = OTHER;
+    astype.clear();
     base.reset();
     top.reset();
     points.clear();
@@ -207,7 +209,7 @@ struct TempAirspace
       throw std::runtime_error{"No top altitude"};
 
     auto as = std::make_shared<AirspacePolygon>(points);
-    as->SetProperties(std::move(name), asclass, *base, *top);
+    as->SetProperties(std::move(name), asclass, std::move(astype), *base, *top);
     as->SetRadioFrequency(radio_frequency);
     as->SetDays(days_of_operation);
     airspace_database.Add(std::move(as));
@@ -241,7 +243,7 @@ struct TempAirspace
 
     auto as = std::make_shared<AirspaceCircle>(RequireCenter(),
                                                RequireRadius());
-    as->SetProperties(std::move(name), asclass, *base, *top);
+    as->SetProperties(std::move(name), asclass, std::move(astype), *base, *top);
     as->SetRadioFrequency(radio_frequency);
     as->SetDays(days_of_operation);
     airspace_database.Add(std::move(as));
@@ -651,6 +653,12 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
         temp_area.top = ReadAltitude(input);
       break;
 
+    case _T('Y'):
+    case _T('y'):
+      if (input.SkipWhitespace())
+        temp_area.astype = input.c_str();
+      break;
+
     /** 'AR 999.999 or 'AF 999.999' in accordance with the Naviter change proposed in 2018 - (Find 'Additional OpenAir fields' here) http://www.winpilot.com/UsersGuide/UserAirspace.asp **/
     case _T('R'):
     case _T('r'):
@@ -695,7 +703,7 @@ ParseClassTNP(const TCHAR *buffer) noexcept
 static AirspaceClass
 ParseTypeTNP(const TCHAR *buffer) noexcept
 {
-  // Handle e.g. "TYPE=CLASS C" properly
+  // Handle e.g. "CLASS=CLASS C" properly
   const TCHAR *asclass = StringAfterPrefixIgnoreCase(buffer, _T("CLASS "));
   if (asclass) {
     AirspaceClass _class = ParseClassTNP(asclass);

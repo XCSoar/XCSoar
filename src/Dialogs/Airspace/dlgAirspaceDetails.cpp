@@ -84,7 +84,8 @@ AirspaceDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     });
   }
 
-  AddReadOnly(_("Type"), nullptr, AirspaceFormatter::GetClass(*airspace));
+  AddReadOnly(_("Class"), nullptr, AirspaceFormatter::GetClassShort(*airspace));
+  AddReadOnly(_("Type"), nullptr, AirspaceFormatter::GetType(*airspace));
 
   AirspaceFormatter::FormatAltitude(buffer.data(), airspace->GetTop());
   AddReadOnly(_("Top"), nullptr, buffer);

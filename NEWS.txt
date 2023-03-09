@@ -19,6 +19,8 @@ Version 7.29 - not yet released
   - Add Silene E78 polar
   - updated handicap factors for 2023
 * fix exchange frequencies crash when no frequency was set
+* airspace parser
+  - in OpenAir format use AC as Class and AY as Type (#1118)
 
 Version 7.28 - 2022/10/29
 * data files
