@@ -17,6 +17,7 @@ Version 7.29 - not yet released
 * Polars
   - Add LS-5 polar
   - Add Silene E78 polar
+  - updated handicap factors for 2023
 * fix exchange frequencies crash when no frequency was set
 
 Version 7.28 - 2022/10/29
