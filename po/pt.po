@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2021-07-20 10:35+0000\n"
-"Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
+"PO-Revision-Date: 2023-03-12 12:40+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/xcsoar/"
 "translations/pt/>\n"
 "Language: pt\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Launchpad-Export-Date: 2012-12-05 23:28+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -67,7 +67,7 @@ msgstr "AAT"
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr ""
+msgstr "Prova de área modificada (MAT)"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
@@ -359,7 +359,7 @@ msgstr "Cilindro de chegada"
 #: src/Task/TypeStrings.cpp:128
 #, no-c-format
 msgid "BGA start sector"
-msgstr ""
+msgstr "Setor de largada BGA"
 
 #: src/Task/TypeStrings.cpp:129
 #, no-c-format
@@ -414,7 +414,7 @@ msgstr "Número de pilões insuficiente"
 #: src/Task/ValidationErrorStrings.cpp:39
 #, no-c-format
 msgid "Turnpoints not unique"
-msgstr ""
+msgstr "Pontos não são únicos"
 
 #: src/Task/ValidationErrorStrings.cpp:40
 #, no-c-format
@@ -427,14 +427,14 @@ msgid "non-FAI turn points"
 msgstr "Pilões não-FAI"
 
 #: src/Task/ValidationErrorStrings.cpp:42
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "non-MAT turn points"
-msgstr "Prox. turnpoint"
+msgstr "Pontos não são de MAT"
 
 #: src/Task/ValidationErrorStrings.cpp:43
 #, no-c-format
 msgid "Wrong shape"
-msgstr ""
+msgstr "Forma inválida"
 
 #: src/Airspace/AirspaceGlue.cpp:81
 msgid "Loading Airspace File..."
@@ -477,7 +477,7 @@ msgstr "Tipo de Veículo"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:142 src/Input/InputEventsLua.cpp:60
 msgid "Not found"
-msgstr ""
+msgstr "Não localizado"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:149
 #, fuzzy
@@ -1286,7 +1286,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:945
 #, no-c-format
 msgid "Thermal assistant"
-msgstr ""
+msgstr "Assistente de térmica"
 
 #: src/PageSettings.cpp:52 src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:197
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:380
@@ -1908,9 +1908,8 @@ msgid "Downloading"
 msgstr "Descarregando"
 
 #: src/Dialogs/FileManager.cpp:475
-#, fuzzy
 msgid "Update available"
-msgstr "TAF Indisponível!"
+msgstr "Atualização disponível"
 
 #: src/Dialogs/FileManager.cpp:743 src/Dialogs/DownloadFilePicker.cpp:386
 #: src/Dialogs/DownloadFilePicker.cpp:388
@@ -2571,7 +2570,7 @@ msgstr "Asa delta"
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:189
 #, no-c-format
 msgid "Paraglider"
-msgstr ""
+msgstr "Parapente"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:140
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:190
@@ -2636,7 +2635,7 @@ msgstr "Ir para"
 #: src/Dialogs/MapItemListDialog.cpp:169
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
 msgid "Ack Day"
-msgstr ""
+msgstr "REC Dia"
 
 #: src/Dialogs/MapItemListDialog.cpp:173 src/Dialogs/dlgAnalysis.cpp:475
 #: src/Dialogs/dlgAnalysis.cpp:519 src/Dialogs/dlgAnalysis.cpp:528
@@ -2810,7 +2809,7 @@ msgstr ""
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:87
 #: src/Monitor/AirspaceWarningMonitor.cpp:83
 msgid "ACK Day"
-msgstr ""
+msgstr "REC Dia"
 
 #. the warnings were emptied between the opening of the dialog and
 #. this refresh, so only need to display "No Warnings" for top
@@ -3025,7 +3024,7 @@ msgstr "FLARM, Outro"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:122
 #, no-c-format
 msgid "Audio Vario"
-msgstr ""
+msgstr "Áudio Vario"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:128
 #, no-c-format
@@ -3242,7 +3241,7 @@ msgstr "Rumo Relat"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:98
 msgid "Flarm lock"
-msgstr ""
+msgstr "Trava Flarm"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:206
 msgid "Unknown Competition Number"
@@ -3250,7 +3249,7 @@ msgstr "Número da Competição Desconhecido"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:207
 msgid "Not Found"
-msgstr ""
+msgstr "Não encontrado"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:211
 msgid "Set new teammate"
@@ -3291,7 +3290,7 @@ msgstr "Subida"
 
 #: src/Dialogs/dlgAnalysis.cpp:489
 msgid "Thermal Band"
-msgstr ""
+msgstr "Faixa da térmica"
 
 #: src/Dialogs/dlgAnalysis.cpp:498
 #, fuzzy
@@ -4342,7 +4341,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:121
 msgid "Thermal band"
-msgstr ""
+msgstr "Faixa da térmica"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:122
 msgid ""
@@ -5855,7 +5854,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:127
 #, no-c-format
 msgid "ParaGlider"
-msgstr ""
+msgstr "Parapente"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:128
 #, no-c-format
@@ -5922,7 +5921,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
 msgid "FLARM traffic"
-msgstr ""
+msgstr "Tráfego FLARM"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
 msgid "This enables the display of FLARM traffic on the map window."
@@ -7316,7 +7315,7 @@ msgstr "BGA Aprimorada"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:225
 msgid "BGA Start Sector"
-msgstr ""
+msgstr "BGA Setor de Start"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:241
 #, fuzzy
@@ -7663,7 +7662,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:161
 #, no-c-format
 msgid "Next bearing"
-msgstr ""
+msgstr "Próxima Proa"
 
 #: src/InfoBoxes/Content/Factory.cpp:163
 #, no-c-format
@@ -7700,12 +7699,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:178
 #, no-c-format
 msgid "GR cruise"
-msgstr ""
+msgstr "PLANEIO cruzeiro"
 
 #: src/InfoBoxes/Content/Factory.cpp:179
 #, no-c-format
 msgid "GR Cruise"
-msgstr ""
+msgstr "PLANEIO cruzeiro"
 
 #: src/InfoBoxes/Content/Factory.cpp:180
 #, no-c-format
@@ -7805,6 +7804,10 @@ msgid ""
 "auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
 "the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
+"A atual configuração de MacCready e o atual modo MacCready (manual ou "
+"automático). (Touch-screen/apenas no PC) também usado para ajustar as "
+"configurações de MacCready se a caixa de informações estiver ativada, a usar "
+"as teclas de cursor para cima e para baixo."
 
 #: src/InfoBoxes/Content/Factory.cpp:226
 #, no-c-format
@@ -8053,12 +8056,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:359
 #, no-c-format
 msgid "AAT time"
-msgstr ""
+msgstr "Tempo AA"
 
 #: src/InfoBoxes/Content/Factory.cpp:360
 #, no-c-format
 msgid "AAT Time"
-msgstr ""
+msgstr "AAT Hora"
 
 #: src/InfoBoxes/Content/Factory.cpp:361
 #, no-c-format
@@ -8966,7 +8969,7 @@ msgstr "Traço de altitude durante vôo"
 #: src/InfoBoxes/Content/Factory.cpp:790
 #, no-c-format
 msgid "Vario trace"
-msgstr ""
+msgstr "Traço vario"
 
 #: src/InfoBoxes/Content/Factory.cpp:791
 #, no-c-format
@@ -9023,7 +9026,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:814
 #, no-c-format
 msgid "Climb band"
-msgstr ""
+msgstr "Faixa de ganho"
 
 #: src/InfoBoxes/Content/Factory.cpp:815
 #, no-c-format
@@ -10311,7 +10314,7 @@ msgstr ""
 
 #: Data/Input/default.xci:429
 msgid "Pilot event announced"
-msgstr ""
+msgstr "Evento do Piloto Anúncio"
 
 #: Data/Input/default.xci:432
 #, fuzzy
@@ -10319,16 +10322,16 @@ msgid "Pilot Event Announce"
 msgstr "PILOTO"
 
 #: Data/Input/default.xci:440 Data/Input/default.xci:1046
-#, fuzzy
 msgid "Target Show"
-msgstr "Alvo"
+msgstr "Mostrar Alvo"
 
 #: Data/Input/default.xci:451
-#, fuzzy
 msgid ""
 "Display\n"
 "Page 2/2"
-msgstr "Ecrã"
+msgstr ""
+"Visual\n"
+"Pág. 2/2"
 
 #: Data/Input/default.xci:481
 msgid "Page Show"
@@ -10448,6 +10451,8 @@ msgid ""
 "Info\n"
 "Page 2/3"
 msgstr ""
+"Info\n"
+"Pág. 2/3"
 
 #: Data/Input/default.xci:774 Data/Input/default.xci:1181
 msgid "FLARM Radar"
@@ -10458,6 +10463,8 @@ msgid ""
 "Info\n"
 "Page 3/3"
 msgstr ""
+"Info\n"
+"Pág. 3/3"
 
 #: Data/Input/default.xci:840
 #, fuzzy
