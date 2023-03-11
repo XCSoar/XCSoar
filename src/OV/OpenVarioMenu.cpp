@@ -262,6 +262,7 @@ class MainMenuWidget final
 {
   enum Controls {
     XCSOAR,
+    LOGBOOK,
     FILE,
     SYSTEM,
     SHELL,
@@ -346,6 +347,17 @@ MainMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddButton("Start XCSoar", [this](){
     CancelTimer();
     StartXCSoar();
+  });
+
+  AddButton("Logbook", [this](){
+    CancelTimer();
+    static constexpr const char *argv[] = {
+      "/usr/bin/logbook.sh", nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Logbook", argv);
   });
 
   AddButton("File", [this](){
