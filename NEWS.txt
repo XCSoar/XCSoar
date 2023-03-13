@@ -19,6 +19,8 @@ Version 7.29 - not yet released
   - Add Silene E78 polar
   - updated handicap factors for 2023
 * fix exchange frequencies crash when no frequency was set
+* configuration
+  - Fixes changing number of markers changes home field (#1122)
 
 Version 7.28 - 2022/10/29
 * data files

@@ -36,12 +36,12 @@ WaypointPtr
 FindHomeId(Waypoints &waypoints,
            PlacesOfInterestSettings &settings) noexcept
 {
-  if (settings.home_waypoint < 0)
+  if (settings.home_waypoint_name.empty())
     return nullptr;
 
-  auto wp = waypoints.LookupId(settings.home_waypoint);
+  auto wp = waypoints.LookupName(settings.home_waypoint_name);
   if (wp == nullptr) {
-    settings.home_waypoint = -1;
+    settings.home_waypoint_name.clear();
     return nullptr;
   }
 
@@ -64,7 +64,7 @@ FindHomeLocation(Waypoints &waypoints,
     return nullptr;
   }
 
-  settings.home_waypoint = wp->id;
+  settings.home_waypoint_name = wp->name;
   waypoints.SetHome(wp->id);
   return wp;
 }
@@ -89,7 +89,7 @@ SetHome(Waypoints &way_points, const RasterTerrain *terrain,
         const bool reset) noexcept
 {
   if (reset)
-    poi_settings.home_waypoint = -1;
+    poi_settings.home_waypoint_name.clear();
 
   // check invalid home waypoint or forced reset due to file change
   auto wp = FindHomeId(way_points, poi_settings);
@@ -107,9 +107,12 @@ SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 
   // check invalid task ref waypoint or forced reset due to file change
   if (reset || way_points.IsEmpty() ||
-      !way_points.LookupId(team_code_settings.team_code_reference_waypoint))
+      !way_points.LookupId(team_code_settings.team_code_reference_waypoint)) {
     // set team code reference waypoint if we don't have one
-    team_code_settings.team_code_reference_waypoint = poi_settings.home_waypoint;
+    wp = way_points.LookupName(poi_settings.home_waypoint_name);
+    if (!wp)
+      team_code_settings.team_code_reference_waypoint = wp->id;
+  }
 
   if (device_blackboard != nullptr) {
     if (wp != nullptr) {
@@ -131,7 +134,7 @@ SaveHome(ProfileMap &profile,
          const PlacesOfInterestSettings &poi_settings,
          const TeamCodeSettings &team_code_settings) noexcept
 {
-  profile.Set(ProfileKeys::HomeWaypoint, poi_settings.home_waypoint);
+  profile.Set(ProfileKeys::HomeWaypoint, poi_settings.home_waypoint_name);
   if (poi_settings.home_location_available)
     profile.SetGeoPoint(ProfileKeys::HomeLocation, poi_settings.home_location);
 

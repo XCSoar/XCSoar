@@ -38,14 +38,14 @@ PolarSettings::SetDefaults()
 void
 PlacesOfInterestSettings::ClearHome()
 {
-  home_waypoint = -1;
+  home_waypoint_name.clear();
   home_location_available = false;
 }
 
 void
 PlacesOfInterestSettings::SetHome(const Waypoint &wp)
 {
-  home_waypoint = wp.id;
+  home_waypoint_name = wp.name;
   home_location = wp.location;
   home_location_available = true;
 }

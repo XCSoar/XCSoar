@@ -101,8 +101,8 @@ struct PolarSettings {
  * Options for tracking places of interest as alternates
  */
 struct PlacesOfInterestSettings {
-  /** Array index of the home waypoint */
-  int home_waypoint;
+  /** Name of the home waypoint */
+  StaticString<32> home_waypoint_name;
 
   bool home_location_available;
 

@@ -111,7 +111,7 @@ Profile::Load(const ProfileMap &map, TeamCodeSettings &settings)
 void
 Profile::Load(const ProfileMap &map, PlacesOfInterestSettings &settings)
 {
-  map.Get(ProfileKeys::HomeWaypoint, settings.home_waypoint);
+  map.Get(ProfileKeys::HomeWaypoint, settings.home_waypoint_name);
   settings.home_location_available =
     map.GetGeoPoint(ProfileKeys::HomeLocation, settings.home_location);
 }
