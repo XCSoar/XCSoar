@@ -21,10 +21,6 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_DRIVER_AR62XX_HPP
-#define XCSOAR_DEVICE_DRIVER_AR62XX_HPP
+#pragma once
 
 extern const struct DeviceRegister ar62xx_driver;
-
-#endif
-
