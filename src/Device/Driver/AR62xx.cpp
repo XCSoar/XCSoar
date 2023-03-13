@@ -88,8 +88,7 @@ struct Radio {
  * The driver retransmits messages in case of a failure.
  */
 class AR62xxDevice final : public AbstractDevice {
-  //!< Command timeout:
-  static constexpr auto CMD_TIMEOUT = std::chrono::milliseconds(250);
+  static constexpr auto CMD_TIMEOUT = std::chrono::milliseconds(250); //!< Command timeout 
   static constexpr unsigned NR_RETRIES = 3; //!< No. retries to send command
 
   static constexpr char STX = 0x02; /* Command start character */
@@ -520,7 +519,7 @@ AR62xxDevice::AR620xParseString(const char *msg_string,
 }
 
 /*
- * This function converts a AR62xx answer string to a readable number
+ * This function converts a AR62xx answer sting to a readable number
  *
  * sz_command     AR620x binary code to be converted, representing the state
  *                of a function (act. freq., pass. freq.)
@@ -616,9 +615,11 @@ AR62xxDevice::PutStandbyFrequency(RadioFrequency frequency,
 /*
  * Assign the selected port on Object construction
  * same as in KRT2.cpp
+ * TB 28.12.22: added [[maybe_unused]] to "&config" parameter as otherwise a compile error will be thrown as this parameter is indeed
+ * currently unused
  */
 static Device *
-AR62xxCreateOnPort([[maybe_unused]] const DeviceConfig &config,
+AR62xxCreateOnPort([[maybe_unused]] const DeviceConfig &config, 
                                   Port &comPort)
 {
   Device *dev = new AR62xxDevice(comPort);
