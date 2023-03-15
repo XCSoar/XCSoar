@@ -1,41 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    version="1.1"
-   width="13pt"
-   height="13pt"
-   id="svg2816"
-   viewBox="-5 -5 13 13"
+   viewBox="0 0 22 22"
+   id="svg2"
+   sodipodi:docname="map_small.svg"
+   width="22"
+   height="22"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:dc="http://purl.org/dc/elements/1.1/">
-  <metadata
-     id="metadata9">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
+   xmlns:svg="http://www.w3.org/2000/svg">
   <defs
-     id="defs2818" />
+     id="defs6" />
+  <sodipodi:namedview
+     id="namedview4"
+     pagecolor="#ff00ff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="9.0769225"
+     inkscape:cx="-28.148307"
+     inkscape:cy="2.3135595"
+     inkscape:window-width="2560"
+     inkscape:window-height="1417"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer2" />
   <g
-     id="layer1"
-     transform="translate(0,-16)"
-     style="display:inline">
-    <ellipse
-       style="display:inline;fill:#624e90;fill-opacity:1;stroke:none"
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Image">
+    <circle
+       style="display:inline;fill:#624e90;fill-opacity:1;stroke:none;stroke-width:1.09301"
        id="path1"
-       transform="matrix(0.79729731,0,0,0.84285716,9.1013515,8.7357142)"
-       cx="-9.5338984"
-       cy="10.398305"
-       rx="1.5677966"
-       ry="1.4830508" />
+       cx="11"
+       cy="11"
+       r="2.1153846" />
   </g>
 </svg>

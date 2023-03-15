@@ -23,6 +23,7 @@ Version 7.29 - not yet released
 * fix exchange frequencies crash when no frequency was set
 * user interface
   - show FLARMGauge only when traffic is within 4Km
+  - redesigned waypoint type icons
 
 Version 7.28 - 2022/10/29
 * data files
