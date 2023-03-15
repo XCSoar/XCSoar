@@ -1,85 +1,61 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   width="19"
-   height="19"
-   id="svg2816"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="winpilot_reachable.svg">
-  <metadata
-     id="metadata12">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
+   viewBox="0 0 22 22"
+   id="svg2"
+   sodipodi:docname="winpilot_reachable.svg"
+   width="22"
+   height="22"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6" />
   <sodipodi:namedview
+     id="namedview4"
      pagecolor="#ff00ff"
      bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
      inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="640"
-     inkscape:window-height="481"
-     id="namedview10"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
      showgrid="false"
-     inkscape:zoom="11.8"
-     inkscape:cx="10"
-     inkscape:cy="10"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0"
+     inkscape:zoom="4.5384613"
+     inkscape:cx="-64.449156"
+     inkscape:cy="56.847461"
+     inkscape:window-width="2560"
+     inkscape:window-height="1417"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
-  <defs
-     id="defs2818" />
   <g
      inkscape:groupmode="layer"
      id="layer1"
-     inkscape:label="MASK_Image">
+     inkscape:label="Image">
     <g
-       transform="translate(0,3)"
-       id="layer1-1">
+       id="g13650"
+       transform="scale(0.6875)"
+       style="stroke-width:1.45455">
       <path
-         d="M 20,10 A 10,10 0 1 1 0,10 10,10 0 1 1 20,10 z"
-         transform="matrix(0.95,0,0,0.95,0,-3)"
-         id="path2830"
-         style="opacity:0.98999999;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+         d="M 32,16 A 16,16 0 1 1 0,16 16,16 0 1 1 32,16 Z"
+         id="path13120"
+         style="opacity:0.99;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.38182" />
       <path
-         d="M 20,10 A 10,10 0 1 1 0,10 10,10 0 1 1 20,10 z"
-         transform="matrix(0.85,0,0,0.85,1,-2)"
-         id="path2830-4"
-         style="opacity:0.98999999;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+         d="M 30.315788,16 A 14.315789,14.315789 0 1 1 1.6842105,16 14.315789,14.315789 0 1 1 30.315788,16 Z"
+         id="path13117"
+         style="opacity:0.99;fill:#00ff00;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.23636" />
       <path
-         d="M 20,10 A 10,10 0 1 1 0,10 10,10 0 1 1 20,10 z"
-         transform="matrix(0.75,0,0,0.75,2,-1)"
-         id="path2830-4-0"
-         style="opacity:0.98999999;fill:#00ff00;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+         d="M 25.263158,16 A 9.263158,9.263158 0 1 1 6.736842,16 9.263158,9.263158 0 1 1 25.263158,16 Z"
+         id="path13114"
+         style="opacity:0.99;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.8" />
       <path
-         d="M 20,10 A 10,10 0 1 1 0,10 10,10 0 1 1 20,10 z"
-         transform="matrix(0.55,0,0,0.55,4,1)"
-         id="path2830-4-5"
-         style="opacity:0.98999999;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-      <path
-         d="M 20,10 A 10,10 0 1 1 0,10 10,10 0 1 1 20,10 z"
-         transform="matrix(0.45,0,0,0.45,5,2)"
-         id="path2830-4-5-9"
-         style="opacity:0.98999999;fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+         d="M 23.578947,16 A 7.5789472,7.5789472 0 1 1 8.4210525,16 7.5789473,7.5789473 0 1 1 23.578947,16 Z"
+         id="path13111"
+         style="opacity:0.99;fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.654545" />
     </g>
   </g>
 </svg>
