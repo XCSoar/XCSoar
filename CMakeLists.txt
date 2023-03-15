@@ -57,6 +57,8 @@ set(OUTPUT ${OUTPUT_FOLDER})
 set(JASPER_OUTSIDE      OFF)
 set(ZZIP_OUTSIDE        OFF)
 
+add_definitions(-DCMAKE_PROJECT)  # to decide if make or cmake...
+
 # find all necessary programs/apps
 find_program(PYTHON_APP         NAMES python3 python REQUIRED)
 find_program(PERL_APP           NAMES perl   REQUIRED)

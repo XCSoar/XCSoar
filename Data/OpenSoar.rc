@@ -45,7 +45,7 @@ HI_RES_AWARE CEUX {1}
 
 // --- Icons ---
 
-#if defined(_WIN32) && defined(MSVC) // && defined(AUGUST_SPECIAL)
+#if defined(CMAKE_PROJECT)  // defined(_WIN32) && && defined(__MSVC__)
 // MSVC isn't correct, you have to call it CMAKE_PROJECT or this...
 // or doing the same as macro
 ICON_ICON(IDI_XCSOAR,   "OpenSoar")
