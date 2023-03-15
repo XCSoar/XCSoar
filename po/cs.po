@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2023-01-15 07:05+0000\n"
+"PO-Revision-Date: 2023-03-17 06:36+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -3951,12 +3951,12 @@ msgstr "Horský vrchol"
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
 #, no-c-format
 msgid "Transmitter Mast"
-msgstr "Vysílač"
+msgstr "Stožár/překážka"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:76
 #, no-c-format
 msgid "Tower"
-msgstr "Věž"
+msgstr "Chladící věž"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:77
 #, no-c-format
