@@ -26,7 +26,7 @@ template<typename Key, typename Data,
 	 std::size_t table_size,
 	 typename Hash=std::hash<Key>,
 	 typename Equal=std::equal_to<Key>>
-class Cache {
+class StaticCache {
 
 	struct Pair {
 		Key key;
@@ -189,17 +189,17 @@ public:
 	using hasher = typename KeyMap::hasher;
 	using key_equal = typename KeyMap::key_equal;
 
-	Cache() noexcept {
+	StaticCache() noexcept {
 		for (auto &i : buffer)
 			unallocated_list.push_back(i);
 	}
 
-	~Cache() noexcept {
+	~StaticCache() noexcept {
 		Clear();
 	}
 
-	Cache(const Cache &) = delete;
-	Cache &operator=(const Cache &) = delete;
+	StaticCache(const StaticCache &) = delete;
+	StaticCache &operator=(const StaticCache &) = delete;
 
 	decltype(auto) hash_function() const noexcept {
 		return map.hash_function();

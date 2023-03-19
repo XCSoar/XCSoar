@@ -3,7 +3,7 @@
 
 #include "Cache.hpp"
 #include "ui/canvas/Font.hpp"
-#include "util/Cache.hxx"
+#include "util/StaticCache.hxx"
 #include "util/StringCompare.hxx"
 #include "util/StringAPI.hxx"
 #include "util/tstring_view.hxx"
@@ -155,8 +155,8 @@ struct RenderedText {
 static Mutex text_cache_mutex;
 #endif
 
-static Cache<TextCacheKey, PixelSize, 1024u, 701u, TextCacheKey::Hash> size_cache;
-static Cache<TextCacheKey, RenderedText, 256u, 211u, TextCacheKey::Hash> text_cache;
+static StaticCache<TextCacheKey, PixelSize, 1024u, 701u, TextCacheKey::Hash> size_cache;
+static StaticCache<TextCacheKey, RenderedText, 256u, 211u, TextCacheKey::Hash> text_cache;
 
 PixelSize
 TextCache::GetSize(const Font &font, std::string_view text) noexcept
