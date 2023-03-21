@@ -9,6 +9,8 @@
 #include "ui/display/Display.hpp"
 #endif
 
+#include <signal.h>
+
 namespace UI {
 
 EventQueue::EventQueue([[maybe_unused]] Display &_display) noexcept

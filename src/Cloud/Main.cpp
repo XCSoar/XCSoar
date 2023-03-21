@@ -23,6 +23,8 @@
 #include <iostream>
 #include <iomanip>
 
+#include <signal.h>
+
 // TODO: review these settings
 static constexpr double TRAFFIC_RANGE = 50000;
 static constexpr double THERMAL_RANGE = 50000;
