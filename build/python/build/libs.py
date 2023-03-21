@@ -242,9 +242,9 @@ proj = CmakeProject(
 )
 
 libpng = CmakeProject(
-    'ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.38.tar.xz',
-    'http://downloads.sourceforge.net/project/libpng/libpng16/1.6.38/libpng-1.6.38.tar.xz',
-    'b3683e8b8111ebf6f1ac004ebb6b0c975cd310ec469d98364388e9cedbfa68be',
+    'ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.39.tar.xz',
+    'http://downloads.sourceforge.net/project/libpng/libpng16/1.6.39/libpng-1.6.39.tar.xz',
+    '1f4696ce70b4ee5f85f1e1623dc1229b210029fa4b7aee573df3e2ba7b036937',
     'lib/libpng.a',
     [
         '-DPNG_SHARED=OFF',
