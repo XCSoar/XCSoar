@@ -96,9 +96,9 @@ musl = MuslProject(
 )
 
 openssl = OpenSSLProject(
-    'https://www.openssl.org/source/openssl-3.0.7.tar.gz',
-    'ftp://ftp.cert.dfn.de/pub/tools/net/openssl/source/openssl-3.0.7.tar.gz',
-    '83049d042a260e696f62406ac5c08bf706fd84383f945cf21bd61e9ed95c396e',
+    'https://www.openssl.org/source/openssl-3.1.0.tar.gz',
+    'https://artfiles.org/openssl.org/source/openssl-3.1.0.tar.gz',
+    'aaa925ad9828745c4cad9d9efeb273deca820f2cdcf2c3ac7d7c1212b7c497b4',
     'include/openssl/ossl_typ.h',
 )
 
