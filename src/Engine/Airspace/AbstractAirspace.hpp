@@ -58,7 +58,7 @@ private:
   const Shape shape;
 
   /** Airspace class */
-  AirspaceClass type;
+  AirspaceClass asclass;
 
 protected:
   mutable TriState is_convex;
@@ -72,6 +72,9 @@ protected:
 
   /** Airspace name (identifier) */
   tstring name;
+
+  /** Airspace type */
+  tstring astype;
 
   /** Radio frequency (optional) */
   RadioFrequency radio_frequency = RadioFrequency::Null();
@@ -208,15 +211,18 @@ public:
    * Set fundamental properties of airspace
    *
    * @param _Name Name of airspace
-   * @param _Type Type/class
+   * @param _classs Class
+   * @param _type Type
    * @param _base Lower limit
    * @param _top Upper limit
    */
-  void SetProperties(tstring &&_name, const AirspaceClass _Type,
+  void SetProperties(tstring &&_name, const AirspaceClass _class,
+                     tstring &&_type,
                      const AirspaceAltitude &_base,
                      const AirspaceAltitude &_top) noexcept {
     name = std::move(_name);
-    type = _Type;
+    asclass = _class;
+    astype = std::move(_type);
     altitude_base = _base;
     altitude_top = _top;
   }
@@ -240,12 +246,22 @@ public:
   }
 
   /**
-   * Get type of airspace
+   * Get asclass of airspace
    *
-   * @return Type/class of airspace
+   * @return Class of airspace
    */
-  AirspaceClass GetType() const noexcept {
-    return type;
+  AirspaceClass GetClass() const noexcept {
+    return asclass;
+  }
+
+  /**
+   * Get Type of airspace
+   *
+   * @return Type as text of airspace
+   */
+  [[gnu::pure]]
+  const TCHAR *GetType() const noexcept {
+    return astype.c_str();
   }
 
   /**

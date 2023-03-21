@@ -142,7 +142,7 @@ AirspaceIntersectionVisitorSlice::RenderBox(const PixelRect rc,
 inline void
 AirspaceIntersectionVisitorSlice::Render(const AbstractAirspace &as) const
 {
-  AirspaceClass type = as.GetType();
+  AirspaceClass asclass = as.GetClass();
 
   // No intersections for this airspace
   if (intersections.empty())
@@ -181,7 +181,7 @@ AirspaceIntersectionVisitorSlice::Render(const AbstractAirspace &as) const
       max_x = rcd.right;
 
     // Draw the airspace
-    RenderBox(rcd, type);
+    RenderBox(rcd, asclass);
   }
 
   min_x += Layout::GetTextPadding();

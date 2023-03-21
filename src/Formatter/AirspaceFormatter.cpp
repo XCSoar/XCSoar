@@ -98,11 +98,17 @@ AirspaceFormatter::GetClassShort(AirspaceClass airspace_class)
 const TCHAR *
 AirspaceFormatter::GetClass(const AbstractAirspace &airspace)
 {
-  return GetClass(airspace.GetType());
+  return GetClass(airspace.GetClass());
 }
 
 const TCHAR *
 AirspaceFormatter::GetClassShort(const AbstractAirspace &airspace)
 {
-  return GetClassShort(airspace.GetType());
+  return GetClassShort(airspace.GetClass());
+}
+
+const TCHAR *
+AirspaceFormatter::GetType(const AbstractAirspace &airspace)
+{
+  return airspace.GetType();
 }

@@ -90,7 +90,7 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
                                                    projection.GetScreenDistanceMeters())) {
     const AbstractAirspace &airspace = i.GetAirspace();
     if (visible(airspace))
-      labels.Add(airspace.GetCenter(), airspace.GetType(), airspace.GetBase(),
+      labels.Add(airspace.GetCenter(), airspace.GetClass(), airspace.GetBase(),
                  airspace.GetTop());
   }
 

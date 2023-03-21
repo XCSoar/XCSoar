@@ -54,4 +54,8 @@ const TCHAR *GetClassShort(const AbstractAirspace &airspace);
   /** Returns the airspace altitude limit as short text with unit. */
   void FormatAltitudeShort(TCHAR *buffer, const AirspaceAltitude &altitude,
                            bool include_unit = true);
+
+  /** Returns the type of the airspace as text. */
+[[gnu::pure]]
+const TCHAR *GetType(const AbstractAirspace &airspace);
 }

@@ -148,18 +148,18 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
                               const AirspaceLook &look)
 {
   AbstractAirspace::Shape shape = airspace.GetShape();
-  AirspaceClass type = airspace.GetType();
+  AirspaceClass asclass = airspace.GetClass();
 
   // Container for storing the points of a polygon airspace
   std::vector<BulkPixelPoint> pts;
   if (shape == AbstractAirspace::Shape::POLYGON && !IsAncientHardware())
     GetPolygonPoints(pts, (const AirspacePolygon &)airspace, pt, radius);
 
-  if (PrepareFill(canvas, type, look, settings)) {
+  if (PrepareFill(canvas, asclass, look, settings)) {
     DrawShape(canvas, shape, pt, radius, pts);
     UnprepareFill(canvas);
   }
 
-  if (PrepareOutline(canvas, type, look, settings))
+  if (PrepareOutline(canvas, asclass, look, settings))
     DrawShape(canvas, shape, pt, radius, pts);
 }

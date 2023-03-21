@@ -39,7 +39,7 @@ Copyright_License {
 struct AirspaceClassTestCouple
 {
   const TCHAR* name;
-  AirspaceClass type;
+  AirspaceClass asclass;
 };
 
 static bool
@@ -172,7 +172,7 @@ TestOpenAir()
     } else {
       for (const auto &c : classes)
         if (StringIsEqual(c.name, airspace.GetName()))
-          ok1(airspace.GetType() == c.type);
+          ok1(airspace.GetClass() == c.asclass);
     }
   }
 }
@@ -278,17 +278,39 @@ TestTNP()
     } else {
       for (const auto &c : classes)
         if (StringIsEqual(c.name, airspace.GetName()))
-          ok1(airspace.GetType() == c.type);
+          ok1(airspace.GetClass() == c.asclass);
+    }
+  }
+}
+
+static void
+TestOpenAirExtended()
+{
+  Airspaces airspaces;
+  if (!ParseFile(Path(_T("test/data/airspace/openair_extended.txt")), airspaces)) {
+    skip(3, 0, "Failed to parse input file");
+    return;
+  }
+
+  ok1(airspaces.GetSize() == 2);
+
+  for (const auto &as_ : airspaces.QueryAll()) {
+    const AbstractAirspace &airspace = as_.GetAirspace();
+    if (StringIsEqual(_T("Type-TMA-Test"), airspace.GetName())) {
+      ok1(StringIsEqual(_T("TMA"), airspace.GetType()));
+    } else if (StringIsEqual(_T("Type-GLIDING_SECTOR-Test"), airspace.GetName())) {
+      ok1(StringIsEqual(_T("GLIDING_SECTOR"), airspace.GetType()));
     }
   }
 }
 
 int main()
 try {
-  plan_tests(105);
+  plan_tests(109);
 
   TestOpenAir();
   TestTNP();
+  TestOpenAirExtended();
 
   return exit_status();
 } catch (const std::runtime_error &e) {
