@@ -80,9 +80,9 @@ constexpr uint16_t
 ByteSwap16(uint16_t value) noexcept
 {
 #ifdef __GNUC__
-  return __builtin_bswap16(value);
+	return __builtin_bswap16(value);
 #else
-  return GenericByteSwap16(value);
+	return GenericByteSwap16(value);
 #endif
 }
 
@@ -90,9 +90,9 @@ constexpr uint32_t
 ByteSwap32(uint32_t value) noexcept
 {
 #ifdef __GNUC__
-  return __builtin_bswap32(value);
+	return __builtin_bswap32(value);
 #else
-  return GenericByteSwap32(value);
+	return GenericByteSwap32(value);
 #endif
 }
 
@@ -100,9 +100,9 @@ constexpr uint64_t
 ByteSwap64(uint64_t value) noexcept
 {
 #ifdef __GNUC__
-  return __builtin_bswap64(value);
+	return __builtin_bswap64(value);
 #else
-  return GenericByteSwap64(value);
+	return GenericByteSwap64(value);
 #endif
 }
 
@@ -112,7 +112,7 @@ ByteSwap64(uint64_t value) noexcept
 constexpr uint16_t
 FromBE16(uint16_t value) noexcept
 {
-  return IsBigEndian() ? value : ByteSwap16(value);
+	return IsBigEndian() ? value : ByteSwap16(value);
 }
 
 /**
@@ -121,7 +121,7 @@ FromBE16(uint16_t value) noexcept
 constexpr uint32_t
 FromBE32(uint32_t value) noexcept
 {
-  return IsBigEndian() ? value : ByteSwap32(value);
+	return IsBigEndian() ? value : ByteSwap32(value);
 }
 
 /**
@@ -130,7 +130,7 @@ FromBE32(uint32_t value) noexcept
 constexpr uint64_t
 FromBE64(uint64_t value) noexcept
 {
-  return IsBigEndian() ? value : ByteSwap64(value);
+	return IsBigEndian() ? value : ByteSwap64(value);
 }
 
 /**
@@ -139,7 +139,7 @@ FromBE64(uint64_t value) noexcept
 constexpr uint16_t
 FromLE16(uint16_t value) noexcept
 {
-  return IsLittleEndian() ? value : ByteSwap16(value);
+	return IsLittleEndian() ? value : ByteSwap16(value);
 }
 
 /**
@@ -148,7 +148,7 @@ FromLE16(uint16_t value) noexcept
 constexpr uint32_t
 FromLE32(uint32_t value) noexcept
 {
-  return IsLittleEndian() ? value : ByteSwap32(value);
+	return IsLittleEndian() ? value : ByteSwap32(value);
 }
 
 /**
@@ -157,7 +157,7 @@ FromLE32(uint32_t value) noexcept
 constexpr uint64_t
 FromLE64(uint64_t value) noexcept
 {
-  return IsLittleEndian() ? value : ByteSwap64(value);
+	return IsLittleEndian() ? value : ByteSwap64(value);
 }
 
 /**
@@ -166,7 +166,7 @@ FromLE64(uint64_t value) noexcept
 constexpr uint16_t
 ToBE16(uint16_t value) noexcept
 {
-  return IsBigEndian() ? value : ByteSwap16(value);
+	return IsBigEndian() ? value : ByteSwap16(value);
 }
 
 /**
@@ -175,7 +175,7 @@ ToBE16(uint16_t value) noexcept
 constexpr uint32_t
 ToBE32(uint32_t value) noexcept
 {
-  return IsBigEndian() ? value : ByteSwap32(value);
+	return IsBigEndian() ? value : ByteSwap32(value);
 }
 
 /**
@@ -184,7 +184,7 @@ ToBE32(uint32_t value) noexcept
 constexpr uint64_t
 ToBE64(uint64_t value) noexcept
 {
-  return IsBigEndian() ? value : ByteSwap64(value);
+	return IsBigEndian() ? value : ByteSwap64(value);
 }
 
 /**
@@ -193,7 +193,7 @@ ToBE64(uint64_t value) noexcept
 constexpr uint16_t
 ToLE16(uint16_t value) noexcept
 {
-  return IsLittleEndian() ? value : ByteSwap16(value);
+	return IsLittleEndian() ? value : ByteSwap16(value);
 }
 
 /**
@@ -202,7 +202,7 @@ ToLE16(uint16_t value) noexcept
 constexpr uint32_t
 ToLE32(uint32_t value) noexcept
 {
-  return IsLittleEndian() ? value : ByteSwap32(value);
+	return IsLittleEndian() ? value : ByteSwap32(value);
 }
 
 /**
@@ -211,7 +211,7 @@ ToLE32(uint32_t value) noexcept
 constexpr uint64_t
 ToLE64(uint64_t value) noexcept
 {
-  return IsLittleEndian() ? value : ByteSwap64(value);
+	return IsLittleEndian() ? value : ByteSwap64(value);
 }
 
 /**
