@@ -311,12 +311,18 @@ simple_usbmodeswitch = AutotoolsProject(
 )
 
 libtiff = CmakeProject(
-    'http://download.osgeo.org/libtiff/tiff-4.4.0.tar.gz',
-    'https://fossies.org/linux/misc/tiff-4.4.0.tar.gz',
-    '917223b37538959aca3b790d2d73aa6e626b688e02dcda272aec24c2f498abed',
+    'http://download.osgeo.org/libtiff/tiff-4.5.0.tar.xz',
+    'https://fossies.org/linux/misc/tiff-4.5.0.tar.xz',
+    'dafac979c5e7b6c650025569c5a4e720995ba5f17bc17e6276d1f12427be267c',
     'lib/libtiff.a',
     [
         '-DBUILD_SHARED_LIBS=OFF',
+        '-Dtiff-tools=OFF',
+        '-Dtiff-tests=OFF',
+        '-Dtiff-contrib=OFF',
+        '-Dtiff-docs=OFF',
+        '-Dtiff-deprecated=OFF',
+        '-Dtiff-install=ON',
         '-Dld-version-script=OFF',
         '-Dccitt=OFF',
         '-Dpackbits=OFF',
