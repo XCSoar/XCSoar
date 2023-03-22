@@ -79,9 +79,9 @@ BITSTREAM_VERA_FILES = $(patsubst %,$(BITSTREAM_VERA_DIR)/%.ttf,$(BITSTREAM_VERA
 THIRDPARTY_TOOL_NAMES = simple_usbmodeswitch
 THIRDPARTY_TOOL_FILES = $(addprefix $(THIRDPARTY_LIBS_ROOT)/bin/,$(THIRDPARTY_TOOL_NAMES))
 
-CA_URL = https://curl.se/ca/cacert-2022-04-26.pem
+CA_URL = https://curl.se/ca/cacert-2023-01-10.pem
 CA_ALTERNATIVE_URL = $(CA_URL)
-CA_MD5 = aa5ac583708ca35225ac2d230f4acb62
+CA_MD5 = e7cf471ba7c88f4e313f492a76e624b3
 CA_DOWNLOAD = $(DOWNLOAD_DIR)/$(notdir $(CA_URL))
 
 $(CA_DOWNLOAD): | $(DOWNLOAD_DIR)/dirstamp
