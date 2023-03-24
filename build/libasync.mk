@@ -8,7 +8,6 @@ ASYNC_SOURCES = \
 	$(SRC)/event/Loop.cxx \
 	$(SRC)/event/Call.cxx \
 	$(SRC)/event/DeferEvent.cxx \
-	$(SRC)/event/IdleEvent.cxx \
 	$(SRC)/event/InjectEvent.cxx \
 	$(SRC)/event/SocketEvent.cxx \
 	$(SRC)/event/SignalMonitor.cxx \

@@ -1,86 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   width="9"
-   height="9"
-   id="svg2816"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="map_town.svg">
-  <metadata
-     id="metadata9">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
+   viewBox="0 0 22 22"
+   id="svg2"
+   sodipodi:docname="map_town.svg"
+   width="22"
+   height="22"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6" />
   <sodipodi:namedview
+     id="namedview4"
      pagecolor="#ff00ff"
      bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
      inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1680"
-     inkscape:window-height="988"
-     id="namedview7"
-     showgrid="true"
-     inkscape:zoom="82.333333"
-     inkscape:cx="2.1740891"
-     inkscape:cy="4.5"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="1.6045884"
+     inkscape:cx="-236.50925"
+     inkscape:cy="20.566022"
+     inkscape:window-width="2560"
+     inkscape:window-height="1417"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer5">
-    <inkscape:grid
-       type="xygrid"
-       id="grid4698"
-       empspacing="5"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true" />
-  </sodipodi:namedview>
-  <defs
-     id="defs2818" />
+     inkscape:current-layer="layer1" />
   <g
      inkscape:groupmode="layer"
-     id="layer5"
-     inkscape:label="NOAA_Image"
-     transform="translate(0,-10)">
-    <path
-       sodipodi:type="arc"
-       style="fill:#000000;fill-opacity:1"
-       id="path2831"
-       sodipodi:cx="4.5"
-       sodipodi:cy="4.5"
-       sodipodi:rx="4.5"
-       sodipodi:ry="4.5"
-       d="m 9,4.5 a 4.5,4.5 0 1 1 -9,0 4.5,4.5 0 1 1 9,0 z"
-       transform="translate(0,10)" />
-    <path
-       sodipodi:type="arc"
-       style="fill:#ffff00;fill-opacity:1"
-       id="path3605"
-       sodipodi:cx="4.5"
-       sodipodi:cy="4.5"
-       sodipodi:rx="3.5"
-       sodipodi:ry="3.5"
-       d="m 8,4.5 a 3.5,3.5 0 1 1 -7,0 3.5,3.5 0 1 1 7,0 z"
-       transform="translate(0,10)" />
+     id="layer1"
+     inkscape:label="Image">
+    <g
+       transform="matrix(0.99692305,0,0,0.99692305,-1.9599996,-11.92923)"
+       id="g4379"
+       style="stroke-width:1.30401;stroke-dasharray:none">
+      <circle
+         cx="13"
+         cy="23"
+         r="4.5"
+         id="circle4375"
+         style="stroke-width:1.30401;stroke-dasharray:none" />
+      <circle
+         cx="13"
+         cy="23"
+         r="3.5"
+         fill="#ffff00"
+         id="circle4377"
+         style="stroke-width:1.30401;stroke-dasharray:none" />
+    </g>
   </g>
 </svg>

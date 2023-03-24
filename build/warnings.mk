@@ -28,7 +28,10 @@ C_WARNINGS += -Wnested-externs
 WERROR ?= $(DEBUG)
 
 ifeq ($(WERROR),y)
-CXX_WARNINGS += -Werror
+  CXX_WARNINGS += -Werror
+ifeq ($(TARGET_IS_DARWIN),y)
+  CXX_WARNINGS += -Wno-error=deprecated-declarations
+endif
 C_WARNINGS += -Werror
 endif
 

@@ -1,80 +1,61 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   width="19"
-   height="19"
-   id="svg2816"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="winpilot_marginal.svg">
-  <metadata
-     id="metadata11">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
+   viewBox="0 0 22 22"
+   id="svg2"
+   sodipodi:docname="winpilot_marginal.svg"
+   width="22"
+   height="22"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6" />
   <sodipodi:namedview
-     pagecolor="#ffffff"
+     id="namedview4"
+     pagecolor="#ff00ff"
      bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
      inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1424"
-     inkscape:window-height="988"
-     id="namedview9"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
      showgrid="false"
-     inkscape:zoom="11.8"
-     inkscape:cx="-6.2288136"
-     inkscape:cy="10"
+     inkscape:zoom="9.0769226"
+     inkscape:cx="-28.699154"
+     inkscape:cy="7.4915258"
+     inkscape:window-width="2560"
+     inkscape:window-height="1417"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1-7" />
-  <defs
-     id="defs2818" />
+     inkscape:current-layer="layer1" />
   <g
      inkscape:groupmode="layer"
      id="layer1"
-     inkscape:label="MASK_Image">
+     inkscape:label="Image">
     <g
-       transform="translate(0,3)"
-       id="layer1-7">
+       id="g11448"
+       transform="scale(1.1578947)"
+       style="stroke-width:0.863636">
       <path
-         d="M 20,10 A 10,10 0 1 1 0,10 10,10 0 1 1 20,10 z"
-         transform="matrix(0.95,0,0,0.95,0,-3)"
-         id="path2830"
-         style="opacity:0.98999999;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+         d="m 19,9.5 a 9.5,9.5 0 1 1 -19,0 9.5,9.5 0 1 1 19,0 z"
+         id="path12923"
+         style="opacity:0.99;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.820454" />
       <path
-         d="M 20,10 A 10,10 0 1 1 0,10 10,10 0 1 1 20,10 z"
-         transform="matrix(0.85,0,0,0.85,1,-2)"
-         id="path2830-4"
-         style="opacity:0.98999999000000005;fill:#e04040;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+         d="m 18,9.5 a 8.5,8.5 0 1 1 -17,0 8.5,8.5 0 1 1 17,0 z"
+         id="path12920"
+         style="opacity:0.99;fill:#e04040;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.73409" />
       <path
-         d="M 20,10 A 10,10 0 1 1 0,10 10,10 0 1 1 20,10 z"
-         transform="matrix(0.55,0,0,0.55,4,1)"
-         id="path2830-4-5"
-         style="opacity:0.98999999;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+         d="m 15,9.5 a 5.5,5.5 0 1 1 -11,0 5.5,5.5 0 1 1 11,0 z"
+         id="path12917"
+         style="opacity:0.99;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.474999" />
       <path
-         d="M 20,10 A 10,10 0 1 1 0,10 10,10 0 1 1 20,10 z"
-         transform="matrix(0.45,0,0,0.45,5,2)"
-         id="path2830-4-5-9"
-         style="opacity:0.98999999;fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+         d="m 14,9.5 a 4.5,4.5 0 1 1 -9,0 4.5,4.5 0 1 1 9,0 z"
+         id="path12914"
+         style="opacity:0.99;fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.388637" />
     </g>
   </g>
 </svg>

@@ -48,7 +48,7 @@ jobs:
           echo "DEBUG=n" >> $GITHUB_ENV
           echo "TARGET_FINAL=xcsoar" >> $GITHUB_ENV
       - id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - id: cache-ccache
@@ -87,7 +87,7 @@ jobs:
           make -j$(nproc) TARGET=${{env.TARGET }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything check
 
       - name: upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}${{ env.TARGET_EXT }}
           path: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}${{ env.TARGET_EXT }}
@@ -117,7 +117,7 @@ jobs:
 
     steps:
       - id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - id: cache-ccache
@@ -170,7 +170,7 @@ jobs:
           echo "DEBUG=n" >> $GITHUB_ENV
 
       - id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
 
@@ -180,7 +180,7 @@ jobs:
           key: ${{ matrix.os }}-${{ matrix.type }}-${{ env.TARGET }}
 
       - name: "Cache third-party libraries"
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
           path: |
@@ -217,7 +217,7 @@ jobs:
             output/${{env.TARGET}}/${{ env.TARGET_BIN }}.${{ env.TARGET_EXT }}
 
       - name: upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}.${{ env.TARGET_EXT }}
           path: output/${{env.TARGET}}/${{ env.TARGET_BIN }}.${{ env.TARGET_EXT }}
@@ -253,7 +253,7 @@ jobs:
           echo "TARGET_FINAL=XCSoar" >> $GITHUB_ENV
 
       - id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
 
@@ -263,7 +263,7 @@ jobs:
           key: ${{ matrix.os }}-${{ matrix.type }}-${{ env.TARGET }}
 
       - name: "Cache third-party libraries"
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
           path: |
@@ -297,7 +297,7 @@ jobs:
             V=2
 
       - name: upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}.${{ env.TARGET_EXT }}
           path: output/ANDROID/bin/${{ env.TARGET_BIN }}.${{ env.TARGET_EXT }}
@@ -332,7 +332,7 @@ jobs:
           echo "DEBUG=n" >> $GITHUB_ENV
           echo "TARGET_FINAL=XCSoar" >> $GITHUB_ENV
       - id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - id: cache-ccache
@@ -341,7 +341,7 @@ jobs:
           key: ${{ matrix.os }}-${{ matrix.type }}-${{ env.TARGET }}
 
       - name: "Cache third-party libraries"
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
           path: |
@@ -370,13 +370,13 @@ jobs:
           make -j$(nproc) TARGET=${{env.TARGET }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
 
       - name: upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}${{ env.TARGET_EXT }}
           path: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}${{ env.TARGET_EXT }}
 
       - name: store checks and compile artefacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: xcsoar-${{ env.TARGET }}-artifact
           path: |
@@ -408,9 +408,9 @@ jobs:
     needs: build-windows
     steps:
       - id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: fetch artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: xcsoar-${{ env.TARGET }}-artifact
           path: ${{ github.workspace }}/output/${{ env.TARGET }}
@@ -498,7 +498,7 @@ jobs:
           submodules: true
 
       - name: "Cache third-party libraries"
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
           path: |

@@ -24,7 +24,7 @@ AirspaceFilterData::Match(const GeoPoint &location,
                           const FlatProjection &projection,
                           const AbstractAirspace &as) const noexcept
 {
-  if (cls != AirspaceClass::AIRSPACECLASSCOUNT && as.GetType() != cls)
+  if (cls != AirspaceClass::AIRSPACECLASSCOUNT && as.GetClass() != cls)
     return false;
 
   if (name_prefix != nullptr && !as.MatchNamePrefix(name_prefix))

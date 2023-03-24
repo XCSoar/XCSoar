@@ -1,26 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "AirspaceParser.hpp"
 #include "Airspace/Airspaces.hpp"
@@ -55,13 +34,13 @@ enum class AirspaceFileType {
 struct AirspaceClassCharCouple
 {
   const TCHAR character;
-  AirspaceClass type;
+  AirspaceClass asclass;
 };
 
 struct AirspaceClassStringCouple
 {
   const TCHAR *string;
-  AirspaceClass type;
+  AirspaceClass asclass;
 };
 
 static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
@@ -119,9 +98,9 @@ static constexpr AirspaceClassStringCouple airspace_tnp_type_strings[] = {
 
 // this can now be called multiple times to load several airspaces.
 
-struct TempAirspaceType
+struct TempAirspace
 {
-  TempAirspaceType() noexcept {
+  TempAirspace() noexcept {
     points.reserve(256);
     Reset();
   }
@@ -129,7 +108,8 @@ struct TempAirspaceType
   // General
   tstring name;
   RadioFrequency radio_frequency;
-  AirspaceClass type;
+  AirspaceClass asclass;
+  tstring astype;
   std::optional<AirspaceAltitude> base;
   std::optional<AirspaceAltitude> top;
   AirspaceActivity days_of_operation;
@@ -150,7 +130,8 @@ struct TempAirspaceType
     days_of_operation.SetAll();
     name.clear();
     radio_frequency = RadioFrequency::Null();
-    type = OTHER;
+    asclass = OTHER;
+    astype.clear();
     base.reset();
     top.reset();
     points.clear();
@@ -162,7 +143,7 @@ struct TempAirspaceType
   void
   ResetTNP() noexcept
   {
-    // Preserve type, radio and days_of_operation for next airspace blocks
+    // Preserve asclass, radio and days_of_operation for next airspace blocks
     name.clear();
     points.clear();
     center = GeoPoint::Invalid();
@@ -188,7 +169,7 @@ struct TempAirspaceType
    * #Airspaces.  Throws on error.
    */
   void Check() {
-    if (type == OTHER && name.empty())
+    if (asclass == OTHER && name.empty())
       throw std::runtime_error{"Airspace has no name"};
   }
 
@@ -207,7 +188,7 @@ struct TempAirspaceType
       throw std::runtime_error{"No top altitude"};
 
     auto as = std::make_shared<AirspacePolygon>(points);
-    as->SetProperties(std::move(name), type, *base, *top);
+    as->SetProperties(std::move(name), asclass, std::move(astype), *base, *top);
     as->SetRadioFrequency(radio_frequency);
     as->SetDays(days_of_operation);
     airspace_database.Add(std::move(as));
@@ -241,7 +222,7 @@ struct TempAirspaceType
 
     auto as = std::make_shared<AirspaceCircle>(RequireCenter(),
                                                RequireRadius());
-    as->SetProperties(std::move(name), type, *base, *top);
+    as->SetProperties(std::move(name), asclass, std::move(astype), *base, *top);
     as->SetRadioFrequency(radio_frequency);
     as->SetDays(days_of_operation);
     airspace_database.Add(std::move(as));
@@ -517,7 +498,7 @@ ParseRadiusNM(StringParser<TCHAR> &input)
  * Throws on error.
  */
 static void
-ParseArcBearings(StringParser<TCHAR> &input, TempAirspaceType &temp_area)
+ParseArcBearings(StringParser<TCHAR> &input, TempAirspace &temp_area)
 {
   // Determine radius and start/end bearing
 
@@ -542,7 +523,7 @@ ParseArcBearings(StringParser<TCHAR> &input, TempAirspaceType &temp_area)
  * Throws on error.
  */
 static void
-ParseArcPoints(StringParser<TCHAR> &input, TempAirspaceType &temp_area)
+ParseArcPoints(StringParser<TCHAR> &input, TempAirspace &temp_area)
 {
   // Read start coordinates
   GeoPoint start = ReadCoords(input);
@@ -564,7 +545,7 @@ ParseType(const TCHAR *buffer) noexcept
 {
   for (unsigned i = 0; i < ARRAY_SIZE(airspace_class_strings); i++)
     if (StringIsEqualIgnoreCase(buffer, airspace_class_strings[i].string))
-      return airspace_class_strings[i].type;
+      return airspace_class_strings[i].asclass;
 
   return OTHER;
 }
@@ -574,7 +555,7 @@ ParseType(const TCHAR *buffer) noexcept
  */
 static void
 ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
-          TempAirspaceType &temp_area)
+          TempAirspace &temp_area)
 {
   // Only return expected lines
   switch (input.pop_front()) {
@@ -631,7 +612,7 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
       if (temp_area.Commit(airspace_database))
         temp_area.Reset();
 
-      temp_area.type = ParseType(input.c_str());
+      temp_area.asclass = ParseType(input.c_str());
       break;
 
     case _T('N'):
@@ -650,6 +631,12 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
     case _T('h'):
       if (input.SkipWhitespace())
         temp_area.top = ReadAltitude(input);
+      break;
+
+    case _T('Y'):
+    case _T('y'):
+      if (input.SkipWhitespace())
+        temp_area.astype = input.c_str();
       break;
 
     /** 'AR 999.999 or 'AF 999.999' in accordance with the Naviter change proposed in 2018 - (Find 'Additional OpenAir fields' here) http://www.winpilot.com/UsersGuide/UserAirspace.asp **/
@@ -671,7 +658,7 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
  */
 static void
 ParseLine(Airspaces &airspace_database, TCHAR *line,
-          TempAirspaceType &temp_area)
+          TempAirspace &temp_area)
 {
   // Strip comments
   auto *comment = StringFind(line, _T('*'));
@@ -687,7 +674,7 @@ ParseClassTNP(const TCHAR *buffer) noexcept
 {
   for (unsigned i = 0; i < ARRAY_SIZE(airspace_tnp_class_chars); i++)
     if (buffer[0] == airspace_tnp_class_chars[i].character)
-      return airspace_tnp_class_chars[i].type;
+      return airspace_tnp_class_chars[i].asclass;
 
   return OTHER;
 }
@@ -696,19 +683,19 @@ ParseClassTNP(const TCHAR *buffer) noexcept
 static AirspaceClass
 ParseTypeTNP(const TCHAR *buffer) noexcept
 {
-  // Handle e.g. "TYPE=CLASS C" properly
-  const TCHAR *type = StringAfterPrefixIgnoreCase(buffer, _T("CLASS "));
-  if (type) {
-    AirspaceClass _class = ParseClassTNP(type);
+  // Handle e.g. "CLASS=CLASS C" properly
+  const TCHAR *asclass = StringAfterPrefixIgnoreCase(buffer, _T("CLASS "));
+  if (asclass) {
+    AirspaceClass _class = ParseClassTNP(asclass);
     if (_class != OTHER)
       return _class;
   } else {
-    type = buffer;
+    asclass = buffer;
   }
 
   for (unsigned i = 0; i < ARRAY_SIZE(airspace_tnp_type_strings); i++)
-    if (StringIsEqualIgnoreCase(type, airspace_tnp_type_strings[i].string))
-      return airspace_tnp_type_strings[i].type;
+    if (StringIsEqualIgnoreCase(asclass, airspace_tnp_type_strings[i].string))
+      return airspace_tnp_type_strings[i].asclass;
 
   return OTHER;
 }
@@ -778,7 +765,7 @@ ParseCoordsTNP(StringParser<TCHAR> &input)
  * Throws on error.
  */
 static void
-ParseArcTNP(StringParser<TCHAR> &input, TempAirspaceType &temp_area)
+ParseArcTNP(StringParser<TCHAR> &input, TempAirspace &temp_area)
 {
   if (temp_area.points.empty())
     throw std::runtime_error("Arc on empty airspace");
@@ -808,7 +795,7 @@ ParseArcTNP(StringParser<TCHAR> &input, TempAirspaceType &temp_area)
  * Throws on error.
  */
 static void
-ParseCircleTNP(StringParser<TCHAR> &input, TempAirspaceType &temp_area)
+ParseCircleTNP(StringParser<TCHAR> &input, TempAirspace &temp_area)
 {
   // CIRCLE RADIUS=17.00 CENTRE=N533813 E0095943
 
@@ -828,7 +815,7 @@ ParseCircleTNP(StringParser<TCHAR> &input, TempAirspaceType &temp_area)
  */
 static void
 ParseLineTNP(Airspaces &airspace_database, StringParser<TCHAR> &input,
-             TempAirspaceType &temp_area, bool &ignore)
+             TempAirspace &temp_area, bool &ignore)
 {
   if (input.Match('#'))
     return;
@@ -867,9 +854,9 @@ ParseLineTNP(Airspaces &airspace_database, StringParser<TCHAR> &input,
     if (temp_area.Commit(airspace_database))
       temp_area.ResetTNP();
 
-    temp_area.type = ParseTypeTNP(input.c_str());
+    temp_area.asclass = ParseTypeTNP(input.c_str());
   } else if (input.SkipMatchIgnoreCase(_T("CLASS="), 6)) {
-    temp_area.type = ParseClassTNP(input.c_str());
+    temp_area.asclass = ParseClassTNP(input.c_str());
   } else if (input.SkipMatchIgnoreCase(_T("TOPS="), 5)) {
     temp_area.top = ReadAltitude(input);
   } else if (input.SkipMatchIgnoreCase(_T("BASE="), 5)) {
@@ -913,7 +900,7 @@ ParseAirspaceFile(Airspaces &airspaces,
 
   const long file_size = reader.GetSize();
 
-  TempAirspaceType temp_area;
+  TempAirspace temp_area;
   AirspaceFileType filetype = AirspaceFileType::UNKNOWN;
 
   TCHAR *line;

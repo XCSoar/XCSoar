@@ -96,9 +96,9 @@ musl = MuslProject(
 )
 
 openssl = OpenSSLProject(
-    'https://www.openssl.org/source/openssl-3.0.7.tar.gz',
-    'ftp://ftp.cert.dfn.de/pub/tools/net/openssl/source/openssl-3.0.7.tar.gz',
-    '83049d042a260e696f62406ac5c08bf706fd84383f945cf21bd61e9ed95c396e',
+    'https://www.openssl.org/source/openssl-3.1.0.tar.gz',
+    'https://artfiles.org/openssl.org/source/openssl-3.1.0.tar.gz',
+    'aaa925ad9828745c4cad9d9efeb273deca820f2cdcf2c3ac7d7c1212b7c497b4',
     'include/openssl/ossl_typ.h',
 )
 
@@ -149,9 +149,9 @@ zlib = ZlibProject(
 )
 
 freetype = MesonProject(
-    'http://download.savannah.gnu.org/releases/freetype/freetype-2.12.1.tar.xz',
-    'http://downloads.sourceforge.net/project/freetype/freetype2/2.12.1/freetype-2.12.1.tar.xz',
-    '4766f20157cc4cf0cd292f80bf917f92d1c439b243ac3018debf6b9140c41a7f',
+    'http://download.savannah.gnu.org/releases/freetype/freetype-2.13.0.tar.xz',
+    'http://downloads.sourceforge.net/project/freetype/freetype2/2.13.0/freetype-2.13.0.tar.xz',
+    '6393c1451c2f1c5f83aed5ea92d280af078e27d9',
     'lib/libfreetype.a',
     [
         '-Dbrotli=disabled',
@@ -242,9 +242,9 @@ proj = CmakeProject(
 )
 
 libpng = CmakeProject(
-    'ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.38.tar.xz',
-    'http://downloads.sourceforge.net/project/libpng/libpng16/1.6.38/libpng-1.6.38.tar.xz',
-    'b3683e8b8111ebf6f1ac004ebb6b0c975cd310ec469d98364388e9cedbfa68be',
+    'ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.39.tar.xz',
+    'http://downloads.sourceforge.net/project/libpng/libpng16/1.6.39/libpng-1.6.39.tar.xz',
+    '1f4696ce70b4ee5f85f1e1623dc1229b210029fa4b7aee573df3e2ba7b036937',
     'lib/libpng.a',
     [
         '-DPNG_SHARED=OFF',
@@ -258,9 +258,9 @@ libpng = CmakeProject(
 )
 
 libjpeg = CmakeProject(
-    'http://downloads.sourceforge.net/project/libjpeg-turbo/2.1.4/libjpeg-turbo-2.1.4.tar.gz',
-    'http://sourceforge.mirrorservice.org/l/li/libjpeg-turbo/2.1.4/libjpeg-turbo-2.1.4.tar.gz',
-    'd3ed26a1131a13686dfca4935e520eb7c90ae76fbc45d98bb50a8dc86230342b',
+    'http://downloads.sourceforge.net/project/libjpeg-turbo/2.1.5.1/libjpeg-turbo-2.1.5.1.tar.gz',
+    'http://sourceforge.mirrorservice.org/l/li/libjpeg-turbo/2.1.5.1/libjpeg-turbo-2.1.5.1.tar.gz',
+    '2fdc3feb6e9deb17adec9bafa3321419aa19f8f4e5dea7bf8486844ca22207bf',
     'lib/libjpeg.a',
     [
         '-DENABLE_STATIC=ON',

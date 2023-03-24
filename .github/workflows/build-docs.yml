@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
      - id: checkout
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
        with:
          submodules: false
      - id: repository
@@ -41,7 +41,7 @@ jobs:
            cd /opt/xcsoar
            make manual V=2
      - name: upload artifact
-       uses: actions/upload-artifact@v2
+       uses: actions/upload-artifact@v3
        with:
          name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}
          path: output/${{ env.TARGET }}/*.${{ env.TARGET_EXT }}

@@ -1,84 +1,49 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   width="5"
-   height="6"
-   id="svg2816"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="map_tower.svg">
-  <metadata
-     id="metadata9">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
+   viewBox="0 0 22 22"
+   id="svg2"
+   sodipodi:docname="map_tower.svg"
+   width="22"
+   height="22"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6" />
   <sodipodi:namedview
+     id="namedview4"
      pagecolor="#ff00ff"
      bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
      inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1432"
-     inkscape:window-height="988"
-     id="namedview7"
-     showgrid="true"
-     inkscape:zoom="47.45"
-     inkscape:cx="-0.11827763"
-     inkscape:cy="1.0989805"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="9.0769225"
+     inkscape:cx="-43.902545"
+     inkscape:cy="29.084748"
+     inkscape:window-width="2560"
+     inkscape:window-height="1417"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer5">
-    <inkscape:grid
-       type="xygrid"
-       id="grid4698"
-       empspacing="5"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true" />
-  </sodipodi:namedview>
-  <defs
-     id="defs2818" />
-  <g
-     transform="translate(-6.9470643,-2.0097858)"
-     id="layer1" />
+     inkscape:current-layer="layer1" />
   <g
      inkscape:groupmode="layer"
-     id="layer5"
-     inkscape:label="NOAA_Image"
-     transform="translate(0.05293565,-12.009785)">
-    <path
-       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 1.4470643,17.50979 0,-3.300005 2,0 0,3.300005 -2,0 z"
-       id="path2827"
-       sodipodi:nodetypes="ccccc" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:square;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 0.44706435,12.509785 0,2 3.99999995,0 0,-2"
-       id="path3605"
-       sodipodi:nodetypes="cccc" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:square;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 2.4470643,12.509785 0,2"
-       id="path3607"
-       sodipodi:nodetypes="cc" />
+     id="layer1"
+     inkscape:label="Image">
+    <g
+       id="g8389"
+       style="stroke-width:2.12375"
+       transform="matrix(1.1777239,0,0,1.1766132,119.83135,66.416644)">
+      <path
+         style="color:#000000;fill:#000000;stroke-width:2.12375;stroke-linecap:round;stroke-linejoin:round;-inkscape-stroke:none"
+         d="m -96.082031,-56.447266 a 0.73004798,0.73004798 0 0 0 -0.728516,0.794922 c 0,0 0.82153,9.734943 -3.550783,16.78711 a 0.72997499,0.72997499 0 0 0 0.23438,1.005859 0.72997499,0.72997499 0 0 0 1.005856,-0.236328 c 4.413159,-7.11805 3.841845,-15.69608 3.75,-16.892578 h 5.923828 c -0.09184,1.196457 -0.661217,9.774508 3.751954,16.892578 a 0.72997499,0.72997499 0 0 0 1.005859,0.236328 0.72997499,0.72997499 0 0 0 0.234375,-1.005859 c -4.372312,-7.052167 -3.550781,-16.78711 -3.550781,-16.78711 a 0.73004798,0.73004798 0 0 0 -0.728516,-0.794922 z"
+         id="path4809" />
+    </g>
   </g>
 </svg>
