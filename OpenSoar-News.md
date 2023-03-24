@@ -1,4 +1,10 @@
-Version 7.28.04, not yet released
+Version 7.28.05, 2023/03/24
+---------------
+* cleanup the commit history to have a clean starting point for OpenSoar-branch
+* additional Becker driver for AR62xx
+* xcs-vali removed (still available on XCSoar)
+
+Version 7.28.04, 2023/02/05
 ---------------
 * cleanup the commit history to have a clean starting point for OpenSoar-branch
 
