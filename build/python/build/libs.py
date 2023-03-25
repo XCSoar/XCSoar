@@ -13,7 +13,7 @@ from .musl import MuslProject
 
 binutils = BinutilsProject(
     'https://ftp.gnu.org/gnu/binutils/binutils-2.39.tar.xz',
-    'http://mirrors.ibiblio.org/gnu/ftp/gnu/binutils/binutils-2.39.tar.xz',
+    'https://toolchains.bootlin.com/downloads/releases/sources/binutils-2.39/binutils-2.39.tar.xz',
     '645c25f563b8adc0a81dbd6a41cffbf4d37083a382e02d5d3df4f65c09516d00',
     'bin/as',
     [
@@ -35,7 +35,7 @@ linux_headers = SabotageLinuxHeadersProject(
 
 gcc = GccProject(
     'https://ftp.gnu.org/gnu/gcc/gcc-12.2.0/gcc-12.2.0.tar.xz',
-    'http://mirrors.ibiblio.org/gnu/ftp/gnu/gcc/gcc-12.2.0/gcc-12.2.0.tar.xz',
+    'https://fossies.org/linux/misc/gcc-12.2.0.tar.xz',
     'e549cf9cf3594a00e27b6589d4322d70e0720cdd213f39beb4181e06926230ff',
     'lib/libstdc++.a',
     [
