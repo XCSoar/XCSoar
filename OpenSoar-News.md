@@ -1,3 +1,8 @@
+Version 7.28.06, not yet released
+---------------
+* xcsoar merge '618996223'
+
+
 Version 7.28.05, 2023/03/24
 ---------------
 * cleanup the commit history to have a clean starting point for OpenSoar-branch
