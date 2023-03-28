@@ -1035,6 +1035,31 @@ DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency,
 }
 
 bool
+DeviceDescriptor::PutTransponderCode(TransponderCode code,
+                                     OperationEnvironment &env) noexcept
+{
+  assert(InMainThread());
+  assert(code.IsDefined());
+
+  if (device == nullptr || !config.sync_to_device)
+    return true;
+
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  try {
+    ScopeReturnDevice restore(*this, env);
+    return device->PutTransponderCode(code, env);
+  } catch (OperationCancelled) {
+    return false;
+  } catch (...) {
+    LogError(std::current_exception(), "PutTransponderCode() failed");
+    return false;
+  }
+}
+
+bool
 DeviceDescriptor::PutQNH(const AtmosphericPressure value,
                          OperationEnvironment &env) noexcept
 {

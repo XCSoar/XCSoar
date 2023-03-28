@@ -369,3 +369,21 @@ ActionInterface::ExchangeRadioFrequencies(bool to_devices) noexcept
     ActionInterface::SetStandbyFrequency(old_active_freq, old_active_freq_name, to_devices);
   }
 }
+
+void
+ActionInterface::SetTransponderCode(TransponderCode code, bool to_devices) noexcept
+{
+  assert(code.IsDefined());
+
+  /* update interface settings */
+  SetComputerSettings().transponder.transponder_code = code;
+
+  /* update InfoBoxes (that might show the code setting) */
+  InfoBoxManager::SetDirty();
+
+  /* send to external devices */
+  if (to_devices) {
+    MessageOperationEnvironment env;
+    devices->PutTransponderCode(code, env);
+  }
+}

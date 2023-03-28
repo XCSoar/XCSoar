@@ -10,6 +10,7 @@
 #include "Port/Listener.hpp"
 #include "Device/Parser.hpp"
 #include "RadioFrequency.hpp"
+#include "TransponderCode.hpp"
 #include "NMEA/ExternalSettings.hpp"
 #include "time/PeriodClock.hpp"
 #include "Job/Async.hpp"
@@ -545,6 +546,7 @@ public:
   bool PutStandbyFrequency(RadioFrequency frequency,
                            const TCHAR *name,
                            OperationEnvironment &env) noexcept;
+  bool PutTransponderCode(TransponderCode code, OperationEnvironment &env) noexcept;
   bool PutQNH(AtmosphericPressure pres,
               OperationEnvironment &env) noexcept;
 

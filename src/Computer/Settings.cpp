@@ -65,5 +65,6 @@ ComputerSettings::SetDefaults()
 #endif
   weather.SetDefaults();
   radio.SetDefaults();
+  transponder.SetDefaults();
   weglide.SetDefaults();
 }
