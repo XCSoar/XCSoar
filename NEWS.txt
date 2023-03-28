@@ -32,6 +32,7 @@ Version 7.29 - not yet released
   - increased precision in polar edit dialogue
   - extend QuickMenu to maximum of 64 entries
   - add PEV,FlarmTraffic,FileManager to joystick QuickMenu
+  - add transponder code infobox
 
 Version 7.28 - 2022/10/29
 * data files

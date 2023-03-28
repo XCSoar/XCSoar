@@ -30,6 +30,18 @@ UpdateInfoBoxFrequency(InfoBoxData &data, const RadioFrequency freq,
   }
 }
 
+static void
+UpdateInfoBoxTransponderCode(InfoBoxData &data, TransponderCode code) noexcept
+{
+  if(code.IsDefined()) {
+    TCHAR buf[16];
+    data.SetValue(code.Format(buf, size_t(buf)));
+  }
+  else {
+    data.SetValueInvalid();
+  }
+}
+
 static constexpr InfoBoxPanel active_frequency_panels[] = {
   { N_("Edit"), LoadActiveRadioFrequencyEditPanel },
   { nullptr, nullptr }
@@ -37,6 +49,10 @@ static constexpr InfoBoxPanel active_frequency_panels[] = {
 
 static constexpr InfoBoxPanel standby_frequency_panels[] = {
   { N_("Edit"), LoadStandbyRadioFrequencyEditPanel },
+  { nullptr, nullptr }
+};
+
+static constexpr InfoBoxPanel transponder_code_panels[] = {
   { nullptr, nullptr }
 };
 
@@ -68,4 +84,18 @@ InfoBoxContentStandbyRadioFrequency::Update(InfoBoxData &data) noexcept
     CommonInterface::GetComputerSettings().radio;
     data.SetValueColor(2);
   UpdateInfoBoxFrequency(data, settings_radio.standby_frequency, settings_radio.standby_name);
+}
+
+void
+InfoBoxContentTransponderCode::Update(InfoBoxData &data) noexcept
+{
+  const auto &settings_transponder =
+    CommonInterface::GetComputerSettings().transponder;
+  UpdateInfoBoxTransponderCode(data, settings_transponder.transponder_code);
+}
+
+const InfoBoxPanel *
+InfoBoxContentTransponderCode::GetDialogContent() noexcept
+{
+  return transponder_code_panels;
 }

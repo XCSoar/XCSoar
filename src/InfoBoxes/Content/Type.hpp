@@ -152,6 +152,8 @@ namespace InfoBoxFactory
 
     e_HeartRate,
 
+    e_TransponderCode, /* Transponder code */
+
     e_NUM_TYPES /* Last item */
   };
 
