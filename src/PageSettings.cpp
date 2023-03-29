@@ -87,7 +87,7 @@ PageSettings::SetDefaults()
 
   n_pages = 2;
 
-  distinct_zoom = false;
+  distinct_zoom = true;
 }
 
 void
