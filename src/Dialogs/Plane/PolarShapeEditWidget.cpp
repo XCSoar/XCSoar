@@ -148,15 +148,15 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent,
   rc.right = rc.left + edit_width;
   rc.bottom = height;
 
-  double step = 0.05, min = -10;
+  double step = 0.01, min = -10;
   switch (Units::current.vertical_speed_unit) {
   case Unit::FEET_PER_MINUTE:
-    step = 10;
+    step = 2;
     min = -2000;
     break;
 
   case Unit::KNOTS:
-    step = 0.1;
+    step = 0.02;
     min = -20;
     break;
 

@@ -26,6 +26,7 @@ Version 7.29 - not yet released
   - redesigned waypoint type icons
   - fix font resizing in Infobx titles and small values
   - align labels in forms on the left side
+  - increased precision in polar edit dialogue
 
 Version 7.28 - 2022/10/29
 * data files
