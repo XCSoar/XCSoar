@@ -15,4 +15,5 @@ enum class FileType : uint8_t {
   IGC,
   RASP,
   XCI,
+  TASK,
 };
