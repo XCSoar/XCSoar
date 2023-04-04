@@ -161,12 +161,49 @@ Die Wegpunkte können nach mehreren Abkürzungsregeln beschriftet werden, um auf
 \menulabel{\bmenut{Anzeige}{2/3}\blink\bmenut{Beschriftung}{Aufgabe}} der Karte nicht so viel Platz zu verschwenden und den Bildschirm übersichtlicher darstellen zu können. 
 So können die Beschriftung der Wegpunkte nur für die Aufgabe, für Aufgabe und Landeplätze oder aber für alle Wegpunkte aktiviert weren.
 
+\subsection*{Landbare Wegpunkte in Reichweite}
+%Landbare Wegpunkte in Reichweite werden zusammen mit der geschätzten Ankunftshöhe \emph{über der Sicherheitshöhe}
+%angezeigt. Diese Funktion ist eine der Stärken von XCSoar. Die Ankunftshöhe wird durch den \emph{Anflugrechner}
+%von XCSoar konfigurierbar berechnet. Dabei werden Parameter wie die Leistung des Segelflugzeuges (Polare),
+%MacCready-Einstellungen, Wind, Gelände und Sicherheitshöhe berücksichtigt. Da die Konfiguration
+%anpassbar ist, gibt es viele Fehlermöglichkeiten. Daher wird empfohlen, die Voreinstellungen von XCSoar zu verwenden,
+%es sei denn, man versteht das Konzept des Anflugrechners
+%\warning
+%und bewertet das Resultat mit Vorsicht.
+%Es liegt in der Verantwortung des Piloten, die Werte zu interpretieren und die Trends über Zeit zu beobachten.
+%
+%Wenn der Anflugrechner gemäss Kapitel~\ref{cha:glide} konfiguriert wurde, kann die Anzeige der geschätzten Ankunftshöhe,
+%die neben den landbaren Wegpunkte in Reichweite angezeigt werden, das Gelände berücksichtigen oder nicht oder auch beides anzeigen.
+%
+%Eine weitere Option ist die Anzeige des erforderlichen Gleitverhältnisses neben einem erreichbaren landbaren
+%Wegpunkte. Diese Berechnung ergibt sich aus der tatsächlichen Entfernung des Segelflugzeuges zu den landbaren Wegpunkten,
+%dividiert durch den Höhenunterschied zwischen tatsächlicher Höhe und Landehöhe. Auch hier wird die Sicherheitshöhe
+%zur Wegpunkthöhe hinzugefügt, aber es werden keine anderen Faktoren berücksichtigt wie Wind, Polare oder MacCready-Einstellungen,
+%sondern nur die Geometrie. Das Konzept des erforderlichen Gleitverhältnisses ist weit verbreitet und gilt als  robust.
+%\tip Beachten Sie, dass es eine starke Abhängigkeit zwischen den Anzeigen der \emph{Reichweite} und den Einstellungen
+%im Anflugrechner gibt.
 
-\xc berechnet kontinierlich und unter Berücksichtigung des Windes, welche Wegpunkte mit dem berechneten Gleitpfad erreichbar sind und stellt dies entsprechend der eingestellten Optionen dar.
+Landbare Wegpunkte, die in Reichweite liegen, werden zusammen mit der geschätzten Ankunftshöhe \emph{über der Sicherheitshöhe}
+angezeigt. Diese Funktion ist eine der Stärken von XCSoar. Die Ankunftshöhe wird durch den  \emph{Anflugrechner} von XCSoar
+berechnet und ist konfigurierbar. Dabei werden Parameter wie die Leistung des Segelflugzeugs (Polare),
+MacCready-Einstellungen, Wind, Gelände und Sicherheitshöhe berücksichtigt. Da der Anflugrechner konfigurierbar ist,
+besteht das Risiko von Fehlern. Daher wird empfohlen, die Voreinstellungen von XCSoar zu verwenden, es sei denn,
+man versteht das Konzept des Anflugrechners genau
+\warning
+und interpretiere das Resultat mit Vorsicht. Es liegt in der Verantwortung
+des Piloten, die Werte zu interpretieren und die Trends über die Zeit zu beobachten.
 
-Die angenommene Ankunftshöhe {\em oberhalb der Sicherheitshöhe} der erreichbaren Wegpunkte wird neben dem Wegpunkt angezeigt. Diese Ankunftshöhe wird berechnet aus der entsprechenden Leistung des Segelflugzeuges und dem MacCready Wert. 
+Wenn der Anflugrechner gemäss Kapitel~\ref{cha:glide} konfiguriert wurde, kann die Anzeige der geschätzten Ankunftshöhe, die neben
+den landbaren Wegpunkten in Reichweite angezeigt wird, das Gelände berücksichtigen oder auch nicht oder beides anzeigen.
+Eine weitere Option ist die Anzeige der erforderlichen Gleitzahl neben einem erreichbaren landbaren Wegpunkt.
+Diese Berechnung ergibt sich aus der tatsächlichen Entfernung des Segelflugzeugs zum landbaren Wegpunkten, dividiert
+durch den Höhenunterschied zwischen der tatsächlichen Höhe und der Wegpunktenhöhe. Auch hier wird die Sicherheitshöhe zur Wegpunkthöhe
+hinzugefügt, aber es werden keine anderen Faktoren wie Wind, Polare oder MacCready-Einstellungen berücksichtigt,
+sondern nur die Geometrie. Das Konzept des erforderlichen Gleitzahl ist weit verbreitet und gilt als robust.
 
-\config{reachpolar} Hierbei kann gewählt werden, ob die Berechnung mit einem Sicherheits-MacCready Wert, oder aber streng nach der Polare erfolgt.
+
+\tip Beachte die starke Abhängigkeit zwischen den angezeigten \emph{Reichweiten} und den Anflugrechner-Einstellungen.
+
 
 \subsection*{Nicht landbare Wegpunkte}
 Wenn in der Wegpunktdatenbank bzw. in der Beschreibung des einzelnen Wegpunktes Informationen zu dessen Beschaffenheit angegeben sind, so werden diese von \xc   entsprechend dargestellt. In der folgenden Tabelle sind die nicht landbaren Wegpunkte aufgelistet. 
