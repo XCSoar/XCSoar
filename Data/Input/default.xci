@@ -1246,3 +1246,10 @@ event=Logger note PEV
 event=PilotEvent
 label=Pilot Event Announce
 location=33
+
+mode=RemoteStick
+type=key
+data=0
+event=AirSpace toggle
+label=Airspace\n$(AirspaceToggleActionName)
+location=34
