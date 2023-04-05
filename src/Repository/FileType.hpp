@@ -14,5 +14,5 @@ enum class FileType : uint8_t {
   FLARMNET,
   IGC,
   RASP,
-  XCI
+  XCI,
 };
