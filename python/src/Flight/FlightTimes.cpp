@@ -36,7 +36,7 @@ Update(const MoreData &basic, const DerivedInfo &calculated,
   Update(basic, calculated.flight, result);
 }
 
-void
+static void
 Finish(const MoreData &basic, const DerivedInfo &calculated,
        FlightTimeResult &result)
 {
