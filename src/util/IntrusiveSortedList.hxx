@@ -6,6 +6,8 @@
 
 #include "IntrusiveList.hxx"
 
+#include <algorithm> // for std::find_if()
+
 /**
  * A variant of #IntrusiveList which is sorted automatically.  There
  * are obvious scalability problems with this approach, so use with
