@@ -41,8 +41,6 @@ void DouglasPeuckerMod::Encode(std::vector<IGCFixEnhanced> &fixes,
 
   double temp,
          max_dist,
-         abs_max_dist_squared = 0.0,
-         abs_max_dist,
          threshold_squared = pow(threshold, 2);
 
   /**
@@ -73,10 +71,6 @@ void DouglasPeuckerMod::Encode(std::vector<IGCFixEnhanced> &fixes,
         }
       }
 
-      if (max_dist > abs_max_dist_squared) {
-        abs_max_dist_squared = max_dist;
-      }
-
       if (max_dist > threshold_squared) {
         dists.push(std::pair<unsigned, double>(max_loc, sqrt(max_dist)));
         stack.push(std::pair<unsigned, unsigned>(current.first, max_loc));
@@ -85,9 +79,7 @@ void DouglasPeuckerMod::Encode(std::vector<IGCFixEnhanced> &fixes,
     }
   }
 
-  abs_max_dist = sqrt(abs_max_dist_squared);
-
-  Classify(fixes, dists, abs_max_dist, start, end);
+  Classify(fixes, dists, start, end);
 }
 
 /**
@@ -150,7 +142,6 @@ DouglasPeuckerMod::DistanceTime(const unsigned time0,
 
 void DouglasPeuckerMod::Classify(std::vector<IGCFixEnhanced> &fixes,
                                  DistQueue &dists,
-                                 const double abs_max_dist,
                                  const unsigned start,
                                  const unsigned end) {
 
