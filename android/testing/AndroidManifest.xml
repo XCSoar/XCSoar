@@ -29,13 +29,13 @@
       </intent-filter>
 
       <intent-filter>
-	<action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+        <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
       </intent-filter>
       <intent-filter>
         <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
       </intent-filter>
       <meta-data android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
-		 android:resource="@xml/accessory_filter" />
+                 android:resource="@xml/accessory_filter" />
       <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                  android:resource="@xml/usb_device_filter" />
       <meta-data android:name="android.max_aspect"
@@ -62,10 +62,10 @@
   </application>
 
   <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30"/>
-  <uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
-  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"></uses-permission>
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+  <uses-permission android:name="android.permission.BLUETOOTH"/>
+  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
   <uses-permission android:name="android.permission.WAKE_LOCK"/>
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>

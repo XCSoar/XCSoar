@@ -130,7 +130,7 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas) noexcept
 {
   const PixelRect rc = GetClientRect();
 
-  canvas.Clear(Color(0x40, 0x40, 0x00));
+  canvas.Clear(COLOR_BLACK);
 
   // Do the actual painting of the text
   const DialogLook &look = UIGlobals::GetDialogLook();
