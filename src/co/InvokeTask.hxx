@@ -22,6 +22,8 @@ public:
 	using Callback = BoundMethod<void(std::exception_ptr error) noexcept>;
 
 	struct promise_type {
+		InvokeTask *task;
+
 		Callback callback;
 
 		std::exception_ptr error;
@@ -40,13 +42,19 @@ public:
 			}
 
 			template<typename PROMISE>
-			void await_suspend(std::coroutine_handle<PROMISE> coro) noexcept {
+			bool await_suspend(std::coroutine_handle<PROMISE> coro) noexcept {
 				assert(coro);
 				assert(coro.done());
 
 				auto &p = coro.promise();
+				assert(p.task);
+				assert(p.task->coroutine);
 				assert(p.callback);
+
+				(void)p.task->coroutine.release();
 				p.callback(std::move(p.error));
+
+				return false;
 			}
 
 			void await_resume() const noexcept {
@@ -93,19 +101,13 @@ public:
 		return coroutine;
 	}
 
-	[[nodiscard]]
-	bool done() const noexcept {
-		assert(coroutine);
-
-		return coroutine->done();
-	}
-
 	void Start(Callback callback) noexcept {
 		assert(callback);
 		assert(coroutine);
 		assert(!coroutine->done());
 		assert(!coroutine->promise().error);
 
+		coroutine->promise().task = this;
 		coroutine->promise().callback = callback;
 		coroutine->resume();
 	}

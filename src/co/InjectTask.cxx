@@ -57,9 +57,7 @@ void
 InjectTask::OnCompletion(std::exception_ptr error) noexcept
 {
 	assert(alive);
-	assert(task);
 
-	task = {};
 	alive = false;
 
 	callback(std::move(error));
