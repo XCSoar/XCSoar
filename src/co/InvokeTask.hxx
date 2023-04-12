@@ -51,9 +51,15 @@ public:
 				assert(p.task->coroutine);
 				assert(p.callback);
 
+				/* release the coroutine_handle; it
+				   will be destroyed by our caller */
 				(void)p.task->coroutine.release();
+
 				p.callback(std::move(p.error));
 
+				/* this resumes the original coroutine
+				   which will then destroy the
+				   coroutine_handle */
 				return false;
 			}
 
