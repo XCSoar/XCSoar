@@ -14,6 +14,8 @@
 #include "UIState.hpp"
 #include "ActionInterface.hpp"
 #include "Language/Language.hpp"
+#include "system/FileUtil.hpp"
+#include "LocalPath.hpp"
 
 #include <stdio.h>
 
@@ -115,11 +117,16 @@ RASPSettingsPanel::OnTimeModified(const DataFieldEnum &df) noexcept
 void
 RASPSettingsPanel::Download() noexcept
 {
-  auto path = DownloadFilePicker(FileType::RASP);
-  if (path == nullptr)
+  auto downloaded_file_path = DownloadFilePicker(FileType::RASP);
+  if (downloaded_file_path == nullptr)
     return;
+  
+  auto rasp_file_path = LocalPath(_T(RASP_FILENAME));
+  
+  // Update RASP data file
+  File::Replace(downloaded_file_path, rasp_file_path);
 
-  rasp = std::make_shared<RaspStore>(std::move(path));
+  rasp = std::make_shared<RaspStore>(std::move(rasp_file_path));
   rasp->ScanAll();
 
   DataGlobals::SetRasp(std::shared_ptr<RaspStore>(rasp));
