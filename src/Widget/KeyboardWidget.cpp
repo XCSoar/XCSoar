@@ -142,7 +142,7 @@ KeyboardWidget::MoveButtonsToRow(const PixelRect &rc,
   for (unsigned i = 0; buttons[i] != _T('\0'); i++) {
     MoveButton(buttons[i],
                rc.GetTopLeft() + PixelSize(i * button_size.width + offset,
-                                           rc.top + row * button_size.height));
+                                           row * button_size.height));
   }
 }
 
