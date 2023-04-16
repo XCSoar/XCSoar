@@ -29,6 +29,8 @@ Version 7.29 - not yet released
   - fix font resizing in Infobx titles and small values
   - align labels in forms on the left side
   - increased precision in polar edit dialogue
+  - extend QuickMenu to maximum of 64 entries
+  - add PEV,FlarmTraffic,FileManager to joystick QuickMenu
 
 Version 7.28 - 2022/10/29
 * data files

@@ -1228,3 +1228,28 @@ event=ThermalAssistant
 event=Mode default
 label=Thermal Assistant$(CheckCircling)
 location=31
+
+mode=RemoteStick
+type=key
+data=0
+event=FileManager
+event=Mode default
+label=File Manager
+location=32
+
+mode=RemoteStick
+type=key
+data=0
+event=Mode default
+event=StatusMessage Pilot event announced
+event=Logger note PEV
+event=PilotEvent
+label=Pilot Event Announce
+location=33
+
+mode=RemoteStick
+type=key
+data=0
+event=AirSpace toggle
+label=Airspace\n$(AirspaceToggleActionName)
+location=34
