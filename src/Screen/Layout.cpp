@@ -119,5 +119,5 @@ Layout::Initialise(const UI::Display &display, PixelSize new_size,
     maximum_control_height = minimum_control_height;
   }
 
-  hit_radius = PtScale(HasTouchScreen() ? 24 : 6);
+  hit_radius = PtScale(HasTouchScreen() ? 28 : 6);
 }
