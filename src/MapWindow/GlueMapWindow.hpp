@@ -199,8 +199,8 @@ public:
   void TogglePan();
   void PanTo(const GeoPoint &location);
 
-  bool ShowMapItems(const GeoPoint &location,
-                    bool show_empty_message = true) const;
+  bool ShowMapItems(const GeoPoint &location, bool show_empty_message = true,
+                    bool pointer_in_use = true) const;
 
 protected:
   /* virtual methods from class MapWindow */

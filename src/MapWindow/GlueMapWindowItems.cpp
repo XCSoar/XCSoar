@@ -19,9 +19,9 @@
 #include "Interface.hpp"
 #include "Overlay.hpp"
 
-bool
-GlueMapWindow::ShowMapItems(const GeoPoint &location,
-                            bool show_empty_message) const
+bool GlueMapWindow::ShowMapItems(const GeoPoint &location,
+                                 bool show_empty_message,
+                                 bool pointer_in_use) const
 {
   /* not using MapWindowBlackboard here because this method is called
      by the main thread */
@@ -31,7 +31,12 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   const MoreData &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
-  auto range = visible_projection.DistancePixelsToMeters(Layout::GetHitRadius());
+  int range;
+  if (pointer_in_use)
+    range = visible_projection.DistancePixelsToMeters(Layout::GetHitRadius());
+  else
+    /* FastScale 29 is the radius of the shortest point in the cross hair */
+    range = visible_projection.DistancePixelsToMeters(Layout::FastScale(29));
 
   MapItemList list;
   MapItemListBuilder builder(list, location, range);
