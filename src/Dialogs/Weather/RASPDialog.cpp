@@ -107,7 +107,7 @@ inline void
 RASPSettingsPanel::OnTimeModified(const DataFieldEnum &df) noexcept
 {
   const int value = df.GetValue();
-  time = value >= 0
+  time = value > 0
     ? BrokenTime::FromMinuteOfDay(value)
     : BrokenTime::Invalid();
 }
