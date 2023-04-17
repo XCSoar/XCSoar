@@ -280,6 +280,8 @@ ActionInterface::SetActiveFrequency(const RadioFrequency freq,
                                     const TCHAR *freq_name,
                                     bool to_devices) noexcept
 {
+  assert(freq.IsDefined());
+
   /* update interface settings */
 
   SetComputerSettings().radio.active_frequency = freq;
@@ -307,6 +309,8 @@ ActionInterface::SetStandbyFrequency(const RadioFrequency freq,
                                      const TCHAR *freq_name,
                                      bool to_devices) noexcept
 {
+  assert(freq.IsDefined());
+
   /* update interface settings */
 
   SetComputerSettings().radio.standby_frequency = freq;
