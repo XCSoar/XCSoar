@@ -990,6 +990,7 @@ DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency,
                                      OperationEnvironment &env) noexcept
 {
   assert(InMainThread());
+  assert(frequency.IsDefined());
 
   if (device == nullptr || !config.sync_to_device)
     return true;
@@ -1015,6 +1016,7 @@ DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency,
                                       OperationEnvironment &env) noexcept
 {
   assert(InMainThread());
+  assert(frequency.IsDefined());
 
   if (device == nullptr || !config.sync_to_device)
     return true;
