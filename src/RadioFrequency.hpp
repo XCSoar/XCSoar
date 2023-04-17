@@ -63,7 +63,7 @@ public:
    * Set this object to "undefined".
    */
   constexpr void Clear() noexcept {
-    value = 0;
+    *this = Null();
   }
 
   constexpr unsigned GetKiloHertz() const noexcept {
