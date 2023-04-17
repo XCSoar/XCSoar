@@ -21,7 +21,7 @@ class RadioFrequency {
   /**
    * The radio frequency in kilohertz minus 100 MHz.
    */
-  uint16_t value;
+  uint_least16_t value;
 
   constexpr RadioFrequency(unsigned _value) noexcept:value(_value) {}
 
