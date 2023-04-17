@@ -17,7 +17,7 @@ UpdateInfoBoxFrequency(InfoBoxData &data, const RadioFrequency freq,
                        const TCHAR *freq_name) noexcept
 {
   if(freq.IsDefined()) {
-    data.FormatValue(_T("%u.%03u"), freq.GetKiloHertz() / 1000, freq.GetKiloHertz() % 1000);
+    freq.Format(data.value.data(), data.value.capacity());
   }
   else {
     data.SetValueInvalid();
