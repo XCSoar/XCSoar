@@ -71,7 +71,7 @@ WeGlideConfigPanel::Prepare(ContainerWindow &parent,
       weglide.enabled, this);
 
   AddBoolean(_("Automatic Upload"),
-             _("Asks wheter to upload flight to wegline, after flight is "
+             _("Asks whether to upload flight to Weglide, after flight is "
                "downloaded from external logger."),
              weglide.automatic_upload, this);
 
