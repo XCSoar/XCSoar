@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2023-03-17 06:36+0000\n"
+"PO-Revision-Date: 2023-04-18 15:47+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -1761,7 +1761,7 @@ msgstr "Stahuji záznam letu"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:39
 #, no-c-format
 msgid "Disabled"
-msgstr "Vypnuté"
+msgstr "Vypnuto"
 
 #: src/Device/Config.cpp:233 src/Dialogs/Device/PortPicker.cpp:76
 msgid "BLE sensor"
@@ -2124,7 +2124,7 @@ msgstr "Špatný příjem GPS"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:98
 #, no-c-format
 msgid "Connected"
-msgstr "Připojen"
+msgstr "Připojeno"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:398
 msgid "Baro"
@@ -2347,7 +2347,7 @@ msgstr "Produkt"
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:65
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:59
 msgid "Serial"
-msgstr "Výr. č."
+msgstr "Sériové číslo"
 
 #: src/Dialogs/Device/LX/LXNAVVarioConfigWidget.cpp:89
 msgid "GPS baud rate"
@@ -2944,7 +2944,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:365 Data/Input/default.xci:1119
 msgid "Flight Setup"
-msgstr "Nastavení letu"
+msgstr "Nastav let"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:96
 #: src/Dialogs/Settings/dlgConfiguration.cpp:163
@@ -3599,7 +3599,7 @@ msgstr "Sdílej"
 #: src/InfoBoxes/Content/Other.cpp:189
 #, no-c-format
 msgid "Disconnected"
-msgstr "Nepřipojen"
+msgstr "Odpojeno"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:53
 #: src/InfoBoxes/Content/Other.cpp:191
@@ -9771,7 +9771,7 @@ msgstr "Nadmořská výška: "
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:173
 msgid "GPS not connected"
-msgstr "GPS není připojena"
+msgstr "GPS není připojen"
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:176
 msgid "GPS waiting for fix"
@@ -10567,7 +10567,7 @@ msgstr "Nastav systém"
 
 #: Data/Input/default.xci:1143
 msgid "Settings Airspace"
-msgstr "Nastavení prostorů"
+msgstr "Nastav prostory"
 
 #: Data/Input/default.xci:1174
 msgid "Setup Plane"
