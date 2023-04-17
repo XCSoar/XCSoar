@@ -34,8 +34,7 @@ static void
 UpdateInfoBoxTransponderCode(InfoBoxData &data, TransponderCode code) noexcept
 {
   if(code.IsDefined()) {
-    TCHAR buf[16];
-    data.SetValue(code.Format(buf, size_t(buf)));
+    code.Format(data.value.data(), data.value.capacity());
   }
   else {
     data.SetValueInvalid();
