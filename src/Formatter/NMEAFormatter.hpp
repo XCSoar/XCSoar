@@ -6,7 +6,7 @@
 #include "NMEA/Info.hpp"
 
 /**
- * GPRMC,<1>,<2>,<3>,<4>,<5>,<6>,<7>,<8>,<9>
+ * GPRMC,<1>,<2>,<3>,<4>,<5>,<6>,<7>,<8>,<9>,<10>,<11>
  * 
  * <1>  UTC Time of position fix, hhmmss format
  * <2>  Status, A = Valid position, V = NAV receiver warning
@@ -18,6 +18,10 @@
  * <8>  Course over ground 000.0 to 359.9 degrees, true
  *      (leading zeros will be transmitted)
  * <9>  UTC date of position fix, ddmmyy format
+ * <10> Magnetic variation, 000.0 to 180.0 degrees
+ *      (leading zeros will be transmitted)
+ * <11> Magnetic variation direction, E or W
+ *      (westerly variation adds to true course)
  */
 void
 FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept;
@@ -29,3 +33,7 @@ FormatLatitude(char *buffer, size_t buffer_size, Angle latitude) noexcept;
 /** Returns longitude, dddmm.mmm format. */
 void
 FormatLongitude(char *buffer, size_t buffer_size, Angle longitude) noexcept;
+
+/** Returns magnetic variation including variation direction (west or east) */
+void
+FormatVariation(char *buffer, size_t buffer_size, Angle variation) noexcept;
