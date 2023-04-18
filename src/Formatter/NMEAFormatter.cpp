@@ -25,7 +25,7 @@ FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept
   StringFormat(buffer, buffer_size,
                "GPRMC,%02u%02u%02u,%c,%s,%s,%05.1f,%05.1f,%02u%02u%02u,,",
                now.hour, now.minute, now.second,
-               info.location.IsValid() ? 'A' : 'V',
+               info.location_available ? 'A' : 'V',
                lat_buffer,
                long_buffer,
                (double)Units::ToUserUnit(info.ground_speed, Unit::KNOTS),
