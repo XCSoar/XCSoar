@@ -5,7 +5,7 @@
 #include "Units/Units.hpp"
 
 bool
-FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info)
+FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept
 {
   char lat_buffer[20];
   char long_buffer[20];
@@ -36,7 +36,7 @@ FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info)
 }
 
 void
-FormatLatitude(char *buffer, size_t buffer_size, Angle latitude)
+FormatLatitude(char *buffer, size_t buffer_size, Angle latitude) noexcept
 {
   // Calculate Latitude sign
   char sign = latitude.IsNegative() ? 'S' : 'N';
@@ -52,7 +52,7 @@ FormatLatitude(char *buffer, size_t buffer_size, Angle latitude)
 }
 
 void
-FormatLongitude(char *buffer, size_t buffer_size, Angle longitude)
+FormatLongitude(char *buffer, size_t buffer_size, Angle longitude) noexcept
 {
   // Calculate Longitude sign
   char sign = longitude.IsNegative() ? 'W' : 'E';

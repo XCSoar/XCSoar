@@ -20,12 +20,12 @@
  * <9>  UTC date of position fix, ddmmyy format
  */
 bool
-FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info);
+FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept;
 
 /** Returns latitude, ddmm.mmm format. */
 void
-FormatLatitude(char *buffer, size_t buffer_size, Angle latitude);
+FormatLatitude(char *buffer, size_t buffer_size, Angle latitude) noexcept;
 
 /** Returns longitude, dddmm.mmm format. */
 void
-FormatLongitude(char *buffer, size_t buffer_size, Angle longitude);
+FormatLongitude(char *buffer, size_t buffer_size, Angle longitude) noexcept;
