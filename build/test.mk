@@ -109,6 +109,7 @@ TEST_NAMES = \
 	TestByteSizeFormatter \
 	TestTimeFormatter \
 	TestIGCFilenameFormatter \
+	TestNMEAFormatter \
 	TestLXNToIGC \
 	TestLeastSquares \
 	TestHexString \
@@ -476,6 +477,21 @@ TEST_IGC_FILENAME_FORMATTER_SOURCES = \
 	$(TEST_SRC_DIR)/TestIGCFilenameFormatter.cpp
 TEST_IGC_FILENAME_FORMATTER_DEPENDS = MATH UTIL TIME
 $(eval $(call link-program,TestIGCFilenameFormatter,TEST_IGC_FILENAME_FORMATTER))
+
+TEST_NMEA_FORMATTER_SOURCES = \
+	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(SRC)/Device/Parser.cpp \
+	$(SRC)/Device/Driver/FLARM/StaticParser.cpp \
+	$(SRC)/FLARM/Traffic.cpp \
+	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
+	$(TEST_SRC_DIR)/TestNMEAFormatter.cpp
+TEST_NMEA_FORMATTER_DEPENDS = LIBNMEA GEO MATH IO UTIL TIME
+$(eval $(call link-program,TestNMEAFormatter,TEST_NMEA_FORMATTER))
 
 TEST_STRINGS_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
