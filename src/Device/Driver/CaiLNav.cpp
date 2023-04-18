@@ -121,8 +121,8 @@ CaiLNavDevice::OnCalculatedUpdate(const MoreData &basic,
     AGeoPoint(current_leg.location_remaining,
               current_leg.solution_planned.min_arrival_altitude);
 
-  if (FormatGPRMC(buffer, sizeof(buffer), basic))
-    PortWriteNMEA(port, buffer, env);
+  FormatGPRMC(buffer, sizeof(buffer), basic);
+  PortWriteNMEA(port, buffer, env);
 
   if (FormatGPRMB(buffer, sizeof(buffer), here, destination))
     PortWriteNMEA(port, buffer, env);

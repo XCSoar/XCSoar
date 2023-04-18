@@ -4,7 +4,7 @@
 #include "NMEAFormatter.hpp"
 #include "Units/Units.hpp"
 
-bool
+void
 FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept
 {
   char lat_buffer[20];
@@ -31,8 +31,6 @@ FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept
            (double)Units::ToUserUnit(info.ground_speed, Unit::KNOTS),
            (double)info.track.Degrees(),
            now.day, now.month, now.year % 100);
-
-  return true;
 }
 
 void

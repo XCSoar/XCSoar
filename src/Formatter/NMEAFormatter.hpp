@@ -19,7 +19,7 @@
  *      (leading zeros will be transmitted)
  * <9>  UTC date of position fix, ddmmyy format
  */
-bool
+void
 FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept;
 
 /** Returns latitude, ddmm.mmm format. */
