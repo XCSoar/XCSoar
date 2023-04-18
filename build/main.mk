@@ -461,6 +461,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Formatter/LocalTimeFormatter.cpp \
 	$(SRC)/Formatter/IGCFilenameFormatter.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/Formatter/AirspaceFormatter.cpp \
 	$(SRC)/Formatter/AirspaceUserUnitsFormatter.cpp \
 	$(SRC)/Units/Descriptor.cpp \
