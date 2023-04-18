@@ -17,10 +17,7 @@ FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept
   FormatLatitude(lat_buffer, sizeof(lat_buffer), location.latitude);
   FormatLongitude(long_buffer, sizeof(long_buffer), location.longitude);
 
-  const BrokenDateTime now = info.time_available &&
-    info.date_time_utc.IsDatePlausible()
-    ? info.date_time_utc
-    : BrokenDateTime::NowUTC();
+  const BrokenDateTime now = info.date_time_utc;
 
   StringFormat(buffer, buffer_size,
                "GPRMC,%02u%02u%02u,%c,%s,%s,%05.1f,%05.1f,%02u%02u%02u,,",
