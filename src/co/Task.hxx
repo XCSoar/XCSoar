@@ -8,6 +8,7 @@
 #include "Compat.hxx"
 
 #include <cassert>
+#include <concepts>
 #include <exception>
 #include <optional>
 #include <utility>
@@ -28,6 +29,7 @@ public:
 		value.emplace(std::forward<U>(_value));
 	}
 
+	[[nodiscard]]
 	decltype(auto) GetReturnValue() noexcept {
 		/* this assertion can fail if control flows off the
 		   end of a coroutine without co_return, which is
@@ -36,6 +38,49 @@ public:
 		assert(value);
 
 		return std::move(*value);
+	}
+};
+
+#if !defined(ANDROID) && !defined(__APPLE__) && (!defined __clang__ || __clang_major__ >=14)
+
+/**
+ * Specialization for certain types to eliminate the std::optional
+ * overhead.
+ */
+template<typename R>
+requires std::default_initializable<R> && std::movable<R> && std::destructible<R>
+class promise_result_manager<R> {
+	R value;
+
+public:
+	template<typename U>
+	void return_value(U &&_value) noexcept {
+		value = std::forward<U>(_value);
+	}
+
+	[[nodiscard]]
+	decltype(auto) GetReturnValue() noexcept {
+		return std::move(value);
+	}
+};
+
+#endif
+
+/**
+ * This specialization supports returning references.
+ */
+template<typename R>
+class promise_result_manager<R &> {
+	R *value;
+
+public:
+	void return_value(R &_value) noexcept {
+		value = &_value;
+	}
+
+	[[nodiscard]]
+	R &GetReturnValue() noexcept {
+		return *value;
 	}
 };
 
@@ -53,6 +98,7 @@ class promise final : public detail::promise_result_manager<T> {
 	std::exception_ptr error;
 
 public:
+	[[nodiscard]]
 	auto initial_suspend() noexcept {
 		if constexpr (lazy)
 			return std::suspend_always{};
@@ -61,11 +107,13 @@ public:
 	}
 
 	struct final_awaitable {
+		[[nodiscard]]
 		bool await_ready() const noexcept {
 			return false;
 		}
 
 		template<typename PROMISE>
+		[[nodiscard]]
 		std::coroutine_handle<> await_suspend(std::coroutine_handle<PROMISE> coro) noexcept {
 			const auto &promise = coro.promise();
 
@@ -85,10 +133,12 @@ public:
 		}
 	};
 
+	[[nodiscard]]
 	auto final_suspend() noexcept {
 		return final_awaitable{};
 	}
 
+	[[nodiscard]]
 	auto get_return_object() noexcept {
 		return Task(std::coroutine_handle<promise>::from_promise(*this));
 	}
@@ -116,10 +166,12 @@ public:
 	struct Awaitable final {
 		const std::coroutine_handle<promise> coroutine;
 
+		[[nodiscard]]
 		bool await_ready() const noexcept {
 			return coroutine.done();
 		}
 
+		[[nodiscard]]
 		std::coroutine_handle<> await_suspend(std::coroutine_handle<> _continuation) noexcept {
 			coroutine.promise().SetContinuation(_continuation);
 
@@ -155,14 +207,21 @@ public:
 private:
 	UniqueHandle<promise_type> coroutine;
 
+	[[nodiscard]]
 	explicit EagerTask(std::coroutine_handle<promise_type> _coroutine) noexcept
 		:coroutine(_coroutine)
 	{
 	}
 
 public:
+	[[nodiscard]]
 	EagerTask() = default;
 
+	bool IsDefined() const noexcept {
+		return coroutine;
+	}
+
+	[[nodiscard]]
 	typename promise_type::Awaitable operator co_await() const noexcept {
 		return {coroutine.get()};
 	}
@@ -181,14 +240,21 @@ public:
 private:
 	UniqueHandle<promise_type> coroutine;
 
+	[[nodiscard]]
 	explicit Task(std::coroutine_handle<promise_type> _coroutine) noexcept
 		:coroutine(_coroutine)
 	{
 	}
 
 public:
+	[[nodiscard]]
 	Task() = default;
 
+	bool IsDefined() const noexcept {
+		return coroutine;
+	}
+
+	[[nodiscard]]
 	typename promise_type::Awaitable operator co_await() const noexcept {
 		return {coroutine.get()};
 	}

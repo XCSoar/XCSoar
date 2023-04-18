@@ -8,6 +8,6 @@ ContestSettings::SetDefaults() noexcept
 {
   enable = true;
   predict = false;
-  contest = Contest::OLC_PLUS;
+  contest = Contest::WEGLIDE_FREE;
   handicap = 100;
 }

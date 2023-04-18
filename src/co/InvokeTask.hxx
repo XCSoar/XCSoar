@@ -22,10 +22,13 @@ public:
 	using Callback = BoundMethod<void(std::exception_ptr error) noexcept>;
 
 	struct promise_type {
+		InvokeTask *task;
+
 		Callback callback;
 
 		std::exception_ptr error;
 
+		[[nodiscard]]
 		auto initial_suspend() noexcept {
 			assert(!error);
 
@@ -33,21 +36,38 @@ public:
 		}
 
 		struct final_awaitable {
+			[[nodiscard]]
 			bool await_ready() const noexcept {
 				return false;
 			}
 
 			template<typename PROMISE>
-			void await_suspend(std::coroutine_handle<PROMISE> coro) noexcept {
+			bool await_suspend(std::coroutine_handle<PROMISE> coro) noexcept {
+				assert(coro);
+				assert(coro.done());
+
 				auto &p = coro.promise();
+				assert(p.task);
+				assert(p.task->coroutine);
 				assert(p.callback);
+
+				/* release the coroutine_handle; it
+				   will be destroyed by our caller */
+				(void)p.task->coroutine.release();
+
 				p.callback(std::move(p.error));
+
+				/* this resumes the original coroutine
+				   which will then destroy the
+				   coroutine_handle */
+				return false;
 			}
 
 			void await_resume() const noexcept {
 			}
 		};
 
+		[[nodiscard]]
 		auto final_suspend() noexcept {
 			return final_awaitable{};
 		}
@@ -56,6 +76,7 @@ public:
 			assert(!error);
 		}
 
+		[[nodiscard]]
 		InvokeTask get_return_object() noexcept {
 			assert(!error);
 
@@ -71,12 +92,14 @@ public:
 private:
 	UniqueHandle<promise_type> coroutine;
 
+	[[nodiscard]]
 	explicit InvokeTask(std::coroutine_handle<promise_type> _coroutine) noexcept
 		:coroutine(_coroutine)
 	{
 	}
 
 public:
+	[[nodiscard]]
 	InvokeTask() noexcept {
 	}
 
@@ -90,6 +113,7 @@ public:
 		assert(!coroutine->done());
 		assert(!coroutine->promise().error);
 
+		coroutine->promise().task = this;
 		coroutine->promise().callback = callback;
 		coroutine->resume();
 	}

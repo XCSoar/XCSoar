@@ -6,6 +6,7 @@
 #include "NMEA/Validity.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "RadioFrequency.hpp"
+#include "TransponderCode.hpp"
 #include "util/StaticString.hxx"
 
 #include <stdlib.h>
@@ -71,6 +72,10 @@ struct ExternalSettings {
   StaticString<32> standby_freq_name;
 
   Validity swap_frequencies;
+
+  /** transponder */
+  Validity has_transponder_code;
+  TransponderCode transponder_code;
 
   void Clear();
   void Expire(TimeStamp time) noexcept;

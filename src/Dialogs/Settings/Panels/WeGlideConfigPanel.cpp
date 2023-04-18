@@ -65,11 +65,14 @@ WeGlideConfigPanel::Prepare(ContainerWindow &parent,
 
   RowFormWidget::Prepare(parent, rc);
 
-  AddBoolean(_("Enable"), nullptr,
-             weglide.enabled, this);
+  AddBoolean(
+      _("Enable"),
+      _("Allow download of declared tasks from Weglide in the Task Manager."),
+      weglide.enabled, this);
 
   AddBoolean(_("Automatic Upload"),
-             _("Uploads flights automatically after download from logger?"),
+             _("Asks whether to upload flight to Weglide, after flight is "
+               "downloaded from external logger."),
              weglide.automatic_upload, this);
 
   AddInteger(_("Pilot"),

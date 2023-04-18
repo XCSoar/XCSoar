@@ -17,6 +17,7 @@ class Path;
 class Port;
 class AtmosphericPressure;
 class RadioFrequency;
+class TransponderCode;
 class OperationEnvironment;
 struct RecordedFlightInfo;
 class RecordedFlightList;
@@ -127,6 +128,15 @@ public:
   virtual bool PutStandbyFrequency(RadioFrequency frequency,
                                    const TCHAR *name,
                                    OperationEnvironment &env) = 0;
+
+  /**
+   * Set a new transponder transponder code.
+   *
+   * @param TransponderCode code
+   * @return true on success
+   */
+  virtual bool PutTransponderCode(TransponderCode code,
+                                  OperationEnvironment &env) = 0;
 
   /**
    * Enable pass-through mode.  This may be used to communicate
@@ -244,6 +254,8 @@ public:
   bool PutStandbyFrequency(RadioFrequency frequency,
                            const TCHAR *name,
                            OperationEnvironment &env) override;
+
+  bool PutTransponderCode(TransponderCode code, OperationEnvironment &env) override;
 
   bool EnablePassThrough(OperationEnvironment &env) override;
 

@@ -111,6 +111,14 @@ MultipleDevices::PutStandbyFrequency(RadioFrequency frequency,
 }
 
 void
+MultipleDevices::PutTransponderCode(TransponderCode code,
+                                    OperationEnvironment &env) noexcept
+{
+  for (DeviceDescriptor *i : devices)
+    i->PutTransponderCode(code, env);
+}
+
+void
 MultipleDevices::PutQNH(AtmosphericPressure pres,
                         OperationEnvironment &env) noexcept
 {

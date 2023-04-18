@@ -143,6 +143,8 @@ namespace InfoBoxFactory
     e_InstantaneousWindSpeed,
     e_InstantaneousWindBearing,
 
+    e_TransponderCode, /* Transponder code */
+
     e_NUM_TYPES /* Last item */
   };
 

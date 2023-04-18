@@ -19,6 +19,7 @@
 #include "Wind/Settings.hpp"
 #include "WaveSettings.hpp"
 #include "RadioFrequency.hpp"
+#include "TransponderCode.hpp"
 #include "net/client/WeGlide/Settings.hpp"
 
 #include <cstdint>
@@ -123,6 +124,17 @@ struct RadioSettings {
 };
 
 /**
+ * Options for transponder remote control
+ */
+struct TransponderSettings {
+  TransponderCode transponder_code;
+
+  void SetDefaults() {
+    transponder_code.Clear();
+  }
+};
+
+/**
  * Options for glide computer features
  */
 struct FeaturesSettings {
@@ -218,6 +230,8 @@ struct ComputerSettings {
   WeatherSettings weather;
 
   RadioSettings radio;
+
+  TransponderSettings transponder;
 
   void SetDefaults();
 };

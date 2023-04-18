@@ -46,8 +46,6 @@ void Update(const MoreData &basic, const FlyingState &state, FlightTimeResult &r
 
 void Update(const MoreData &basic, const DerivedInfo &calculated, FlightTimeResult &result);
 
-void Finish(const MoreData &basic, const DerivedInfo &calculated, FlightTimeResult &result);
-
 bool Run(DebugReplay &replay, FlightTimeResult &result);
 
 void FlightTimes(DebugReplay &replay, std::vector<FlightTimeResult> &results);

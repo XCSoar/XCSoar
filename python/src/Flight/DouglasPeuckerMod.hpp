@@ -109,7 +109,6 @@ private:
    */
   void Classify(std::vector<IGCFixEnhanced> &fixes,
                 DistQueue &dists,
-                const double abs_max_dist,
                 const unsigned start,
                 const unsigned end);
 };

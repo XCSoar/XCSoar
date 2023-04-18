@@ -29,6 +29,15 @@ public:
 	{
 	}
 
+	/* this overload allows casting a specialized handle to a
+	   std::coroutine_handle<void> */
+	template<typename P>
+	requires(std::is_void_v<Promise> && !std::is_void_v<P>)
+	UniqueHandle(UniqueHandle<P> &&src) noexcept
+		:value(src.release())
+	{
+	}
+
 	~UniqueHandle() noexcept {
 		if (value)
 			value.destroy();
@@ -59,6 +68,11 @@ public:
 		return &value;
 	}
 #endif
+
+	[[nodiscard]]
+	auto release() noexcept {
+		return std::exchange(value, nullptr);
+	}
 };
 
 } // namespace Co

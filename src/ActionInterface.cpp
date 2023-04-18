@@ -280,6 +280,8 @@ ActionInterface::SetActiveFrequency(const RadioFrequency freq,
                                     const TCHAR *freq_name,
                                     bool to_devices) noexcept
 {
+  assert(freq.IsDefined());
+
   /* update interface settings */
 
   SetComputerSettings().radio.active_frequency = freq;
@@ -307,6 +309,8 @@ ActionInterface::SetStandbyFrequency(const RadioFrequency freq,
                                      const TCHAR *freq_name,
                                      bool to_devices) noexcept
 {
+  assert(freq.IsDefined());
+
   /* update interface settings */
 
   SetComputerSettings().radio.standby_frequency = freq;
@@ -367,5 +371,23 @@ ActionInterface::ExchangeRadioFrequencies(bool to_devices) noexcept
 
     ActionInterface::SetActiveFrequency(radio_settings.standby_frequency, radio_settings.standby_name, to_devices);
     ActionInterface::SetStandbyFrequency(old_active_freq, old_active_freq_name, to_devices);
+  }
+}
+
+void
+ActionInterface::SetTransponderCode(TransponderCode code, bool to_devices) noexcept
+{
+  assert(code.IsDefined());
+
+  /* update interface settings */
+  SetComputerSettings().transponder.transponder_code = code;
+
+  /* update InfoBoxes (that might show the code setting) */
+  InfoBoxManager::SetDirty();
+
+  /* send to external devices */
+  if (to_devices) {
+    MessageOperationEnvironment env;
+    devices->PutTransponderCode(code, env);
   }
 }

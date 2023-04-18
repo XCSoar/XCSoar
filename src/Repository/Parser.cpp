@@ -90,6 +90,8 @@ ParseFileRepository(FileRepository &repository, NLineReader &reader)
         file.type = FileType::RASP;
       else if (StringIsEqual(value, "xci"))
         file.type = FileType::XCI;
+      else if (StringIsEqual(value, "task"))
+        file.type = FileType::TASK;
     } else if (StringIsEqual(name, "update")) {
       unsigned year, month, day;
       if (sscanf(value, "%04u-%02u-%02u", &year, &month, &day) == 3)

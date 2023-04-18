@@ -110,14 +110,12 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog)
     auto const &waypoint = GetSelectedWaypoint();
     ActionInterface::SetActiveFrequency(waypoint.radio_frequency,
                                         waypoint.name.c_str());
-    cancel_button->Click();
   });
 
   dialog.AddButton(_("Set Standby Frequency"), [this](){
     auto const &waypoint = GetSelectedWaypoint();
     ActionInterface::SetStandbyFrequency(waypoint.radio_frequency,
                                          waypoint.name.c_str());
-    cancel_button->Click();
   });
 
   cancel_button = dialog.AddButton(_("Close"), mrCancel);

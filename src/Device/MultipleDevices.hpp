@@ -24,6 +24,7 @@ struct MoreData;
 struct DerivedInfo;
 class AtmosphericPressure;
 class RadioFrequency;
+class TransponderCode;
 class OperationEnvironment;
 
 /**
@@ -72,6 +73,7 @@ public:
                           OperationEnvironment &env) noexcept;
   void PutStandbyFrequency(RadioFrequency frequency, const TCHAR *name,
                            OperationEnvironment &env) noexcept;
+  void PutTransponderCode(TransponderCode code, OperationEnvironment &env) noexcept;
   void PutQNH(AtmosphericPressure pres, OperationEnvironment &env) noexcept;
   void NotifySensorUpdate(const MoreData &basic) noexcept;
   void NotifyCalculatedUpdate(const MoreData &basic,

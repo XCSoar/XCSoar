@@ -3,6 +3,7 @@
 
 #include "Device/Driver.hpp"
 #include "RadioFrequency.hpp"
+#include "TransponderCode.hpp"
 #include "system/Path.hpp"
 
 Device::~Device() {}
@@ -75,6 +76,13 @@ bool
 AbstractDevice::PutStandbyFrequency([[maybe_unused]] RadioFrequency frequency,
                                     [[maybe_unused]] const TCHAR *name,
                                     [[maybe_unused]] OperationEnvironment &env)
+{
+  return true;
+}
+
+bool
+AbstractDevice::PutTransponderCode([[maybe_unused]] TransponderCode code,
+                                   [[maybe_unused]] OperationEnvironment &env)
 {
   return true;
 }

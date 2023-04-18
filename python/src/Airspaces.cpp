@@ -43,7 +43,11 @@ static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
   { "RMZ", RMZ },
 };
 
-PyObject* xcsoar_Airspaces_new(PyTypeObject *type, PyObject *args, PyObject *kwargs) {
+PyObject *
+xcsoar_Airspaces_new(PyTypeObject *type,
+                     [[maybe_unused]] PyObject *args,
+                     [[maybe_unused]] PyObject *kwargs)
+{
   /* constructor */
   Pyxcsoar_Airspaces *self;
   self = (Pyxcsoar_Airspaces *)type->tp_alloc(type, 0);
@@ -170,7 +174,7 @@ PyObject* xcsoar_Airspaces_addPolygon(Pyxcsoar_Airspaces *self, PyObject *args) 
 
   /* Create airspace and save it into the database */
   auto as = std::make_shared<AirspacePolygon>(points);
-  as->SetProperties(std::move(name), type, base, top);
+  as->SetProperties(std::move(name), type, {}, base, top);
   self->airspace_database->Add(std::move(as));
 
   Py_RETURN_NONE;

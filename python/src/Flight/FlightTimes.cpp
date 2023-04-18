@@ -36,9 +36,8 @@ Update(const MoreData &basic, const DerivedInfo &calculated,
   Update(basic, calculated.flight, result);
 }
 
-void
-Finish(const MoreData &basic, const DerivedInfo &calculated,
-       FlightTimeResult &result)
+static void
+Finish(const MoreData &basic, FlightTimeResult &result)
 {
   if (!basic.time_available || !basic.date_time_utc.IsDatePlausible())
     return;
@@ -113,7 +112,7 @@ Run(DebugReplay &replay, FlightTimeResult &result)
   }
 
   Update(replay.Basic(), replay.Calculated(), result);
-  Finish(replay.Basic(), replay.Calculated(), result);
+  Finish(replay.Basic(), result);
 
   // landing detected or eof?
   if (replay.Tell() != replay.Size())

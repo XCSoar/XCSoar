@@ -9,78 +9,18 @@
 #include "NMEA/Checksum.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "RadioFrequency.hpp"
+#include "TransponderCode.hpp"
 #include "Units/System.hpp"
 #include "Math/Util.hpp"
-#include "Operation/Operation.hpp"
+#include "util/StaticString.hxx"
+#include "util/Macros.hpp"
 
 using std::string_view_literals::operator""sv;
 
-class ACDDevice : public AbstractDevice {
-  Port &port;
-  static bool syncInSync;
-  static double lastReceivedPascalPresure;
-  static double lastSendPascalPresure;
-
-public:
-  ACDDevice(Port &_port):port(_port) { syncInSync = false; lastReceivedPascalPresure = 0; lastSendPascalPresure = 0;}
-
-  /* virtual methods from class Device */
-  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
-  bool PutQNH(const AtmosphericPressure &pres,OperationEnvironment &env) override;
-  bool PutVolume(unsigned volume, OperationEnvironment &env) override;
-  bool PutStandbyFrequency(RadioFrequency frequency,
-                           const TCHAR *name,
-                           OperationEnvironment &env) override;
-  static bool ParsePAAVS(NMEAInputLine &line, NMEAInfo &info);
-private:
-  static void setDeviceInSync(bool isSynchon);
-  static bool getDeviceInSyncStatus();
-  static void setLastReceivedPascalPresure(double pascal);
-  static double getLastReceivedPascalPresure();
-  static void setLastSendPascalPresure(double pascal);
-  static double getLastSendPascalPresure();
-};
-
-bool ACDDevice::syncInSync = false;
-double ACDDevice::lastReceivedPascalPresure = 0;
-double ACDDevice::lastSendPascalPresure = 0;
-
-void
-ACDDevice::setDeviceInSync(bool sync){
-    syncInSync = sync;
-}
-
-bool
-ACDDevice::getDeviceInSyncStatus(){
-    return syncInSync;
-}
-
-void 
-ACDDevice::setLastReceivedPascalPresure(double pascal){
-  lastReceivedPascalPresure = pascal;
-}
-
-double
-ACDDevice::getLastReceivedPascalPresure(){
- return lastReceivedPascalPresure;
-}
-
-void 
-ACDDevice::setLastSendPascalPresure(double pascal){
-  lastSendPascalPresure = pascal;
-}
-
-double 
-ACDDevice::getLastSendPascalPresure(){
-  return lastSendPascalPresure;
-}
-
-bool
-ACDDevice::ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
+static bool
+ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
 {
   double value;
-  bool result = false;
-  NullOperationEnvironment env;
 
   const auto type = line.ReadView();
 
@@ -99,66 +39,7 @@ ACDDevice::ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
 
     if (line.ReadChecked(value)) {
       auto qnh = AtmosphericPressure::Pascal(value);
-
-      // If an external QNH is available on the xcsoar settings, send this value
-      // to the AirControl device before setting the new value received. So the old 
-      // value is synced to the AirControl display
-      char buffer[100];
-
-      // First device contact with qnh value. Sync with device.
-
-      if (getLastReceivedPascalPresure() == 0){
-
-        // external qnh available in xcsoar, sync to device
-         if (info.settings.qnh_available.IsValid()) {
-              unsigned qnhAsInt = uround(info.settings.qnh.GetPascal());
-              sprintf(buffer, "PAAVC,S,ALT,QNH,%u", qnhAsInt);
-              setLastReceivedPascalPresure(qnh.GetPascal());
-              setLastSendPascalPresure(info.settings.qnh.GetPascal());
-              return true;
-          }
-          // NO external qnh available in xcsoar, sync device value to xcsoar
-          else {
-              info.settings.ProvideQNH(qnh,info.clock);
-              setLastReceivedPascalPresure(info.settings.qnh.GetPascal());
-              setLastSendPascalPresure(info.settings.qnh.GetPascal());
-              return true;
-          }
-      }
-
-      else if (getLastReceivedPascalPresure() != qnh.GetPascal() && getDeviceInSyncStatus() == false ){
-        // Reset for new sync run
-        setLastReceivedPascalPresure(0);
-        return true;
-      }
-
-     else if (getLastReceivedPascalPresure() == qnh.GetPascal() && getDeviceInSyncStatus() == false ){
-         setDeviceInSync(true);
-         return true;
-    }
-
-      else if (getLastReceivedPascalPresure() == qnh.GetPascal() && getDeviceInSyncStatus() == true ){
-
-          if (info.settings.qnh.GetPascal() != qnh.GetPascal()){
-            unsigned qnhAsInt = uround(info.settings.qnh.GetPascal());
-            sprintf(buffer, "PAAVC,S,ALT,QNH,%u", qnhAsInt);
-            setLastReceivedPascalPresure(qnh.GetPascal());
-            setLastSendPascalPresure(info.settings.qnh.GetPascal());
-            setDeviceInSync(false);
-          }
-         return true;
-      }
-
-      else if (getLastReceivedPascalPresure() != qnh.GetPascal() && getDeviceInSyncStatus() == true ){
-          info.settings.ProvideQNH(qnh,info.clock);
-          setLastReceivedPascalPresure(info.settings.qnh.GetPascal());
-          setLastSendPascalPresure(info.settings.qnh.GetPascal());
-          return true;
-      }
-      else{
-        return true;
-      }
-
+      info.settings.ProvideQNH(qnh, info.clock);
     }
   } else if (type == "COM"sv) {
     /*
@@ -180,24 +61,64 @@ ACDDevice::ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
     if (line.ReadChecked(value)) {
       info.settings.has_active_frequency.Update(info.clock);
       info.settings.active_frequency = RadioFrequency::FromKiloHertz(value);
-      result = true;
     }
 
     if (line.ReadChecked(value)) {
       info.settings.has_standby_frequency.Update(info.clock);
       info.settings.standby_frequency = RadioFrequency::FromKiloHertz(value);
-      result = true;
     }
 
     unsigned volume;
-    if (line.ReadChecked(volume)){
+    if (line.ReadChecked(volume))
       info.settings.ProvideVolume(volume, info.clock);
-      result = true;
-    }
+  } else if (type == "XPDR"sv) {
+    /*
+    $PAAVS,XPDR,<SQUAWK>,<ACTIVE>,<ALTINH>
+    <SQUAWK> Squawk code value;
+             Octal unsigned integer value between 0000 and 7777 (digits 0–7).
+    <ACTIVE> Active flag;
+             0: standby (transponder is switched off / "SBY" mode)
+             1: active (transponder is switched on / "ALT" or "ON" mode
+                dependent of ALTINH)
+    <ALTINH> Altitude inhibit flag;
+             0: transmit altitude ("ALT" mode if active)
+             1: do not transmit altitude ("ON" mode if active)
+     */
+    unsigned code_value;
+    if (line.ReadChecked(code_value)) {
+      StaticString<16> buffer;
+      buffer.Format(_T("%04u"), code_value);
+      TransponderCode parsed_code = TransponderCode::Parse(buffer);
 
+      if (!parsed_code.IsDefined())
+        return false;
+
+      info.settings.transponder_code = parsed_code;
+      info.settings.has_transponder_code.Update(info.clock);
+    }
+  } else {
+    return false;
   }
-  return result; 
+
+  return true;
 }
+
+class ACDDevice : public AbstractDevice {
+  Port &port;
+
+public:
+  ACDDevice(Port &_port):port(_port) {}
+
+  /* virtual methods from class Device */
+  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
+  bool PutQNH(const AtmosphericPressure &pres,
+              OperationEnvironment &env) override;
+  bool PutVolume(unsigned volume, OperationEnvironment &env) override;
+  bool PutStandbyFrequency(RadioFrequency frequency,
+                           const TCHAR *name,
+                           OperationEnvironment &env) override;
+  bool PutTransponderCode(TransponderCode code, OperationEnvironment &env) override;
+};
 
 bool
 ACDDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
@@ -205,8 +126,6 @@ ACDDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
   char buffer[100];
   unsigned qnh = uround(pres.GetPascal());
   sprintf(buffer, "PAAVC,S,ALT,QNH,%u", qnh);
-  setLastSendPascalPresure(pres.GetPascal());
-  setDeviceInSync(false);
   PortWriteNMEA(port, buffer, env);
   return true;
 }
@@ -222,12 +141,21 @@ ACDDevice::PutVolume(unsigned volume, OperationEnvironment &env)
 
 bool
 ACDDevice::PutStandbyFrequency(RadioFrequency frequency,
-                               [[maybe_unused]] const TCHAR *name,
-                               OperationEnvironment &env)
+                                   [[maybe_unused]] const TCHAR *name,
+                                   OperationEnvironment &env)
 {
   char buffer[100];
   unsigned freq = frequency.GetKiloHertz();
   sprintf(buffer, "PAAVC,S,COM,CHN2,%u", freq);
+  PortWriteNMEA(port, buffer, env);
+  return true;
+}
+
+bool
+ACDDevice::PutTransponderCode(TransponderCode code, OperationEnvironment &env)
+{
+  char buffer[100];
+  sprintf(buffer, "PAAVC,S,XPDR,SQUAWK,%04o", code.GetCode());
   PortWriteNMEA(port, buffer, env);
   return true;
 }

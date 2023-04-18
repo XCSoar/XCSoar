@@ -8,7 +8,7 @@
 
 class GridView : public PanelControl {
 public:
-  static constexpr unsigned MAX_ITEMS = 32;
+  static constexpr unsigned MAX_ITEMS = 64;
 
   enum class Direction
   {

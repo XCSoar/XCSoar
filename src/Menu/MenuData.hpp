@@ -41,7 +41,7 @@ public:
  */
 class Menu {
 public:
-  static constexpr std::size_t MAX_ITEMS = 32;
+  static constexpr std::size_t MAX_ITEMS = 64;
 
 protected:
   std::array<MenuItem, MAX_ITEMS> items;

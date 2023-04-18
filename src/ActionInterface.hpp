@@ -135,6 +135,15 @@ OffsetStandbyFrequency(double offset_khz, bool to_devices=true) noexcept;
 void
 ExchangeRadioFrequencies(bool to_devices=true) noexcept;
 
+/**
+ * Update the Transponder Code in #ComputerSettings, and
+ * forward it to all XCSoar modules that want it.
+ *
+ * @param to_devices send the new setting to all devices?
+ */
+void
+SetTransponderCode(TransponderCode code, bool to_devices=true) noexcept;
+
 } // namespace ActionInterface
 
 /**

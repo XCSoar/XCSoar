@@ -12,7 +12,10 @@
     #define PyInt_AsLong PyLong_AsLong
 #endif
 
-PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs) {
+PyObject *
+xcsoar_encode([[maybe_unused]] PyObject *self,
+              PyObject *args, PyObject *kwargs)
+{
   PyObject *py_list,
            *py_method = nullptr;
   double floor_to = 1;

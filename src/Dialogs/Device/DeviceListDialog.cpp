@@ -61,7 +61,7 @@ class DeviceListWidget final
     bool alive:1, location:1, gps:1, baro:1, pitot:1, airspeed:1, vario:1, traffic:1;
     bool temperature:1;
     bool humidity:1;
-    bool radio:1;
+    bool radio:1, transponder:1;
     bool debug:1;
 
     int8_t battery_percent;
@@ -105,6 +105,7 @@ class DeviceListWidget final
       debug = device.IsDumpEnabled();
       radio = basic.settings.has_active_frequency || 
         basic.settings.has_standby_frequency;
+      transponder = basic.settings.has_transponder_code;
       battery_percent = basic.battery_level_available
         ? (int)basic.battery_level
         : -1;
@@ -404,6 +405,10 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     if (flags.radio) {
       buffer.append(_T("; "));
       buffer.append(_T("Radio"));
+    }
+
+    if (flags.transponder) {
+      buffer.append(_T("; XPDR"));
     }
 
     if (flags.debug) {
