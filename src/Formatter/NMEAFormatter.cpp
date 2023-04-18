@@ -22,15 +22,15 @@ FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept
     ? info.date_time_utc
     : BrokenDateTime::NowUTC();
 
-  snprintf(buffer, buffer_size,
-           "GPRMC,%02u%02u%02u,%c,%s,%s,%05.1f,%05.1f,%02u%02u%02u,,",
-           now.hour, now.minute, now.second,
-           info.location.IsValid() ? 'A' : 'V',
-           lat_buffer,
-           long_buffer,
-           (double)Units::ToUserUnit(info.ground_speed, Unit::KNOTS),
-           (double)info.track.Degrees(),
-           now.day, now.month, now.year % 100);
+  StringFormat(buffer, buffer_size,
+               "GPRMC,%02u%02u%02u,%c,%s,%s,%05.1f,%05.1f,%02u%02u%02u,,",
+               now.hour, now.minute, now.second,
+               info.location.IsValid() ? 'A' : 'V',
+               lat_buffer,
+               long_buffer,
+               (double)Units::ToUserUnit(info.ground_speed, Unit::KNOTS),
+               (double)info.track.Degrees(),
+               now.day, now.month, now.year % 100);
 }
 
 void
