@@ -100,7 +100,7 @@ private:
 	static int l_gc(lua_State *L) {
 		const ScopeCheckStack check_stack(L);
 
-		auto *p = Check(L, 1);
+		T *p = static_cast<T *>(lua_touserdata(L, 1));
 		/* call the destructor when this instance is
 		   garbage-collected */
 		p->~T();
