@@ -25,6 +25,7 @@
 #include "util/PrintException.hxx"
 #include "util/ScopeExit.hxx"
 #include "LocalPath.hpp"
+#include "System.hpp"
 
 #include <cassert>
 #include <cstdio>
@@ -441,6 +442,12 @@ Main()
 
   UI::TopWindowStyle main_style;
   main_style.Resizable();
+
+  DisplayOrientation orientation = DisplayOrientation::DEFAULT;
+  try {
+    orientation = OpenvarioGetRotation();
+  } catch (...) {}
+  main_style.InitialOrientation(orientation);
 
   UI::SingleWindow main_window{screen_init.GetDisplay()};
   main_window.Create(_T("XCSoar/OpenVarioMenu"), {600, 800}, main_style);
