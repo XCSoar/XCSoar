@@ -99,6 +99,60 @@ FileMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   });
 }
 
+class ScreenRotationWidget final
+  : public RowFormWidget
+{
+  UI::Display &display;
+  UI::EventQueue &event_queue;
+
+public:
+  ScreenRotationWidget(UI::Display &_display, UI::EventQueue &_event_queue,
+                 const DialogLook &look) noexcept
+    :RowFormWidget(look),
+     display(_display), event_queue(_event_queue) {}
+
+private:
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+  void SaveRotation(const string &rotationvalue);
+};
+
+/* x-menu writes the value for the display rotation to /sys because the value is also required for the console in the OpenVario.
+In addition, the display rotation is saved in /boot/config.uEnv so that the Openvario sets the correct rotation again when it is restarted.*/
+void
+ScreenRotationWidget::SaveRotation(const string &rotationString)
+{
+   File::WriteExisting(Path("/sys/class/graphics/fbcon/rotate"), (rotationString).c_str());
+   int rotationInt = stoi(rotationString);
+   ChangeConfigInt("rotation", rotationInt, "/boot/config.uEnv");
+}
+
+void
+ScreenRotationWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                             [[maybe_unused]] const PixelRect &rc) noexcept
+{
+ AddButton("Landscape", [this](){
+	SaveRotation("0");
+   Display::Rotate(DisplayOrientation::LANDSCAPE);
+ });
+
+ AddButton("Portrait (90°)", [this](){
+   SaveRotation("1");
+   Display::Rotate(DisplayOrientation::REVERSE_PORTRAIT);
+ });
+
+ AddButton("Landscape (180°)", [this](){
+   SaveRotation("2");
+   Display::Rotate(DisplayOrientation::REVERSE_LANDSCAPE);
+ });
+
+ AddButton("Portrait (270°)", [this](){
+   SaveRotation("3");
+   Display::Rotate(DisplayOrientation::PORTRAIT);
+ });  
+}
+
 class ScreenBrightnessWidget final
   : public RowFormWidget
 {
