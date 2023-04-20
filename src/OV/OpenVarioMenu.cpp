@@ -197,6 +197,18 @@ void
 SystemMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                           [[maybe_unused]] const PixelRect &rc) noexcept
 {
+  AddButton("WiFi Settings", [](){
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c", 
+      "printf '\nWiFi-Settings are not implemented, yet!! \n\nIf you are interessted to help with this, write me an email: dirk@freevario.de'", 
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "WiFi Settings", argv);
+  });
+
   AddButton("Update System", [](){
     static constexpr const char *argv[] = {
       "/usr/bin/update-system.sh", nullptr
