@@ -20,6 +20,48 @@
 
 #include <cassert>
 
+using namespace std;
+
+static void GetConfigInt(const string &keyvalue, int &value, const string &path)
+{
+  const Path ConfigPath(path.c_str());
+
+  ProfileMap configuration;
+  Profile::LoadFile(configuration, ConfigPath);
+  configuration.Get(keyvalue.c_str(), value);
+}
+
+static void ChangeConfigInt(const string &keyvalue, int value, const string &path)
+{
+  const Path ConfigPath(path.c_str());
+
+  ProfileMap configuration;
+
+  try {
+    Profile::LoadFile(configuration, ConfigPath);
+  } catch (exception &e) {
+    Profile::SaveFile(configuration, ConfigPath);
+  }
+  configuration.Set(keyvalue.c_str(), value);
+  Profile::SaveFile(configuration, ConfigPath);
+}
+
+template<typename T>
+static void ChangeConfigString(const string &keyvalue, T value, const string &path)
+{
+  const Path ConfigPath(path.c_str());
+
+  ProfileMap configuration;
+
+  try {
+    Profile::LoadFile(configuration, ConfigPath);
+  } catch (exception &e) {
+    Profile::SaveFile(configuration, ConfigPath);
+  }
+  configuration.Set(keyvalue.c_str(), value);
+  Profile::SaveFile(configuration, ConfigPath);
+}
+
 enum Buttons {
   LAUNCH_SHELL = 100,
 };
@@ -133,7 +175,6 @@ FileMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                      "Restore XCSoar", argv);
   });
 }
-
 
 class ScreenRotationWidget final
   : public RowFormWidget
