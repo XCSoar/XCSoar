@@ -99,6 +99,186 @@ FileMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   });
 }
 
+class ScreenLanguageWidget final
+  : public RowFormWidget
+{
+  UI::Display &display;
+  UI::EventQueue &event_queue;
+
+public:
+  ScreenLanguageWidget(UI::Display &_display, UI::EventQueue &_event_queue,
+                 const DialogLook &look) noexcept
+    :RowFormWidget(look),
+     display(_display), event_queue(_event_queue) {}
+
+private:
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+
+};
+
+void
+ScreenLanguageWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                              [[maybe_unused]] const PixelRect &rc) noexcept
+{
+  AddButton("English", [this](){
+    ChangeConfigString("LANG", "en_EN.UTF-8", "/etc/locale.conf");
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c",
+      "echo The language has been set to English",
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Englisch", argv);
+  });
+
+  AddButton("Deutsch", [this](){
+    ChangeConfigString("LANG", "de_DE.UTF-8", "/etc/locale.conf");
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c",
+      "echo The language has been set to German",
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Deutsch", argv);
+  });
+
+  AddButton("Français", [this](){
+    ChangeConfigString("LANG", "fr_FR.UTF-8", "/etc/locale.conf");
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c",
+      "echo The language has been set to French",
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Français", argv);
+  });
+
+  AddButton("Italiano", [this](){
+    ChangeConfigString("LANG", "it_IT.UTF-8", "/etc/locale.conf");
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c",
+      "echo The language has been set to Italian",
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Italiano", argv);
+  });
+
+  AddButton("Magyar", [this](){;
+    ChangeConfigString("LANG", "hu_HU.UTF-8", "/etc/locale.conf");
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c",
+      "echo The language has been set to Hungarian",
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Magyar", argv);
+  });
+
+  AddButton("Polski", [this](){
+    ChangeConfigString("LANG", "pl_PL.UTF-8", "/etc/locale.conf");
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c",
+      "echo The language has been set to Polish",
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Polski", argv);
+  });
+
+  AddButton("Čeština", [this](){
+    ChangeConfigString("LANG", "cs_CZ.UTF-8", "/etc/locale.conf");
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c",
+      "echo The language has been set to Czech",
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Čeština", argv);
+  });
+
+  AddButton("Slovenčina", [this](){
+    ChangeConfigString("LANG", "sk_SK.UTF-8", "/etc/locale.conf");
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c",
+      "echo The language has been set to Slovak",
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Slovenčina", argv);
+  });
+
+  AddButton("Lietuvių", [this](){
+    ChangeConfigString("LANG", "lt_LT.UTF-8", "/etc/locale.conf");
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c",
+      "echo The language has been set to Lithuanian",
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Lietuvių", argv);
+  });
+
+  AddButton("Русский", [this](){
+    ChangeConfigString("LANG", "ru_RU.UTF-8", "/etc/locale.conf");
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c",
+      "echo The language has been set to Russian",
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Русский", argv);
+  });
+
+  AddButton("Español", [this](){
+    ChangeConfigString("LANG", "es_ES.UTF-8", "/etc/locale.conf");
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c",
+      "echo The language has been set to Spanish",
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Español", argv);
+  });
+
+  AddButton("Dutch", [this](){
+    ChangeConfigString("LANG", "nl_NL.UTF-8", "/etc/locale.conf");
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c",
+      "echo The language has been set to Dutch",
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Dutch", argv);
+  });
+}
+
 class ScreenTimeoutWidget final
   : public RowFormWidget
 {
