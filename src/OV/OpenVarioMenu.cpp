@@ -99,6 +99,73 @@ FileMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   });
 }
 
+class ScreenBrightnessWidget final
+  : public RowFormWidget
+{
+  UI::Display &display;
+  UI::EventQueue &event_queue;
+
+public:
+  ScreenBrightnessWidget(UI::Display &_display, UI::EventQueue &_event_queue,
+                 const DialogLook &look) noexcept
+    :RowFormWidget(look),
+     display(_display), event_queue(_event_queue) {}
+
+private:
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+
+void SaveBrightness(const string &brightness);
+};
+
+void
+ScreenBrightnessWidget::SaveBrightness(const string &brightness)
+{
+    File::WriteExisting(Path("/sys/class/backlight/lcd/brightness"), (brightness).c_str());
+}
+
+void
+ScreenBrightnessWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                                [[maybe_unused]] const PixelRect &rc) noexcept
+{
+  AddButton("20", [this](){
+    SaveBrightness("2");
+  });
+
+  AddButton("30", [this](){
+    SaveBrightness("3");
+  });
+
+  AddButton("40", [this](){
+    SaveBrightness("4");
+  });
+
+  AddButton("50", [this](){
+    SaveBrightness("5");
+  });
+
+  AddButton("60", [this](){
+    SaveBrightness("6");
+  });
+
+  AddButton("70", [this](){
+    SaveBrightness("7");
+  });
+
+  AddButton("80", [this](){
+    SaveBrightness("8");
+  });
+
+  AddButton("90", [this](){
+    SaveBrightness("9");
+  });
+
+  AddButton("100", [this](){
+    SaveBrightness("10");
+  });
+}
+
 class ScreenLanguageWidget final
   : public RowFormWidget
 {
