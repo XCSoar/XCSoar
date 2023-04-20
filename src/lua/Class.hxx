@@ -10,7 +10,7 @@ extern "C" {
 #include <lauxlib.h>
 }
 
-#include <new>
+#include <memory>
 #include <type_traits>
 
 namespace Lua {
@@ -51,12 +51,12 @@ struct Class {
 	static pointer New(lua_State *L, Args&&... args) {
 		const ScopeCheckStack check_stack(L, 1);
 
-		void *p = lua_newuserdata(L, sizeof(value_type));
+		T *p = static_cast<T *>(lua_newuserdata(L, sizeof(value_type)));
 		luaL_getmetatable(L, name);
 		lua_setmetatable(L, -2);
 
 		try {
-			return ::new(p) T(std::forward<Args>(args)...);
+			return std::construct_at(p, std::forward<Args>(args)...);
 		} catch (...) {
 			lua_pop(L, 1);
 			throw;
@@ -103,7 +103,7 @@ private:
 		T *p = static_cast<T *>(lua_touserdata(L, 1));
 		/* call the destructor when this instance is
 		   garbage-collected */
-		p->~T();
+		std::destroy_at(p);
 		return 0;
 	}
 };
