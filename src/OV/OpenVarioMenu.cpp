@@ -105,11 +105,14 @@ class SystemMenuWidget final
   UI::Display &display;
   UI::EventQueue &event_queue;
 
+  WndForm &dialog;
+
 public:
   SystemMenuWidget(UI::Display &_display, UI::EventQueue &_event_queue,
-                   const DialogLook &look) noexcept
-    :RowFormWidget(look),
-     display(_display), event_queue(_event_queue) {}
+          WndForm &_dialog) noexcept
+    :RowFormWidget(_dialog.GetLook()),
+     display(_display), event_queue(_event_queue),
+     dialog(_dialog) {}
 
 private:
   /* virtual methods from class Widget */
