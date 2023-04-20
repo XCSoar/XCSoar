@@ -985,6 +985,7 @@ class MainMenuWidget final
 
   enum Controls {
     XCSOAR,
+    LOGBOOK,
     FILE,
     SYSTEM,
     SHELL,
@@ -1111,8 +1112,8 @@ MainMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 
     TWidgetDialog<SystemMenuWidget>
       sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
-                 GetLook(), "OpenVario System");
-    sub_dialog.SetWidget(display, event_queue, GetLook());
+                 GetLook(), "OpenVario System Settings");
+    sub_dialog.SetWidget(display, event_queue, sub_dialog); 
     sub_dialog.AddButton(_("Close"), mrOK);
     return sub_dialog.ShowModal();
   });
