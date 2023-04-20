@@ -240,6 +240,8 @@ SystemMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 class MainMenuWidget final
   : public RowFormWidget
 {
+  int remaining_seconds = 3;
+
   enum Controls {
     XCSOAR,
     FILE,
@@ -264,14 +266,15 @@ class MainMenuWidget final
     }
   }};
 
-  unsigned remaining_seconds = 3;
-
 public:
   MainMenuWidget(UI::Display &_display, UI::EventQueue &_event_queue,
                  WndForm &_dialog) noexcept
     :RowFormWidget(_dialog.GetLook()),
      display(_display), event_queue(_event_queue),
-     dialog(_dialog) {}
+     dialog(_dialog)
+     {
+       GetConfigInt("timeout", remaining_seconds, "/boot/config.uEnv");
+     }
 
 private:
   void StartXCSoar() noexcept {
