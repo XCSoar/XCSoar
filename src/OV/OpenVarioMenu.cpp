@@ -207,16 +207,6 @@ SystemMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                      "Update System", argv);
   });
 
-  AddButton("Update Maps", [](){
-    static constexpr const char *argv[] = {
-      "/usr/bin/update-maps.sh", nullptr
-    };
-
-    RunProcessDialog(UIGlobals::GetMainWindow(),
-                     UIGlobals::GetDialogLook(),
-                     "Update Maps", argv);
-  });
-
   AddButton("Calibrate Sensors", CalibrateSensors);
   AddButton("Calibrate Touch", [this](){
     const UI::ScopeDropMaster drop_master{display};
