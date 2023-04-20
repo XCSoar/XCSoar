@@ -14,11 +14,21 @@
 #include "ui/window/SingleWindow.hpp"
 #include "ui/event/Queue.hpp"
 #include "ui/event/Timer.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "Language/Language.hpp"
 #include "system/Process.hpp"
 #include "util/ScopeExit.hxx"
+#include "system/FileUtil.hpp"
+#include "Profile/File.hpp"
+#include "Profile/Map.hpp"
+#include "DisplayOrientation.hpp"
+#include "Hardware/DisplayGlue.hpp"
+#include "Hardware/DisplayDPI.hpp"
+#include "Hardware/RotateDisplay.hpp"
 
 #include <cassert>
+#include <string>
+#include <iostream>
 
 using namespace std;
 
