@@ -99,6 +99,95 @@ FileMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   });
 }
 
+class SystemSettingsWidget final
+  : public RowFormWidget
+{
+  UI::Display &display;
+  UI::EventQueue &event_queue;
+
+  WndForm &dialog;
+
+public:
+  SystemSettingsWidget(UI::Display &_display, UI::EventQueue &_event_queue,
+                 WndForm &_dialog) noexcept 
+    :RowFormWidget(_dialog.GetLook()),
+     display(_display), event_queue(_event_queue),
+     dialog(_dialog) {}
+
+private:
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+};
+
+void
+SystemSettingsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                              [[maybe_unused]] const PixelRect &rc) noexcept
+{
+  AddButton("Screen Rotation", [this](){
+    TWidgetDialog<ScreenRotationWidget>
+      sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
+                 GetLook(), "Display Rotation Settings");
+    sub_dialog.SetWidget(display, event_queue, GetLook());
+    sub_dialog.AddButton(_("Close"), mrOK);
+    return sub_dialog.ShowModal();
+  });
+
+  AddButton("Screen Brightness", [this](){
+    TWidgetDialog<ScreenBrightnessWidget>
+      sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
+                 GetLook(), "Display Brightness Settings");
+    sub_dialog.SetWidget(display, event_queue, GetLook());
+    sub_dialog.AddButton(_("Close"), mrOK);
+    return sub_dialog.ShowModal();
+  });
+
+  AddButton("Language", [this](){
+    TWidgetDialog<ScreenLanguageWidget>
+      sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
+                 GetLook(), "Language Settings");
+    sub_dialog.SetWidget(display, event_queue, GetLook());
+    sub_dialog.AddButton(_("Close"), mrOK);
+    return sub_dialog.ShowModal();
+  });
+
+  AddButton("Autostart Timeout", [this](){
+    TWidgetDialog<ScreenTimeoutWidget>
+      sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
+                 GetLook(), "Autostart Timeout");
+    sub_dialog.SetWidget(display, event_queue, GetLook());
+    sub_dialog.AddButton(_("Close"), mrOK);
+    return sub_dialog.ShowModal();
+  });
+
+  AddButton("SSH", [this](){
+    TWidgetDialog<ScreenSSHWidget>
+      sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
+                 GetLook(), "Enable or Disable SSH");
+    sub_dialog.SetWidget(display, event_queue, GetLook());
+    sub_dialog.AddButton(_("Close"), mrOK);
+    return sub_dialog.ShowModal();
+  });
+
+  AddButton("Variod", [this](){
+    TWidgetDialog<ScreenVariodWidget>
+      sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
+                 GetLook(), "Enable or Disable Variod");
+    sub_dialog.SetWidget(display, event_queue, GetLook());
+    sub_dialog.AddButton(_("Close"), mrOK);
+    return sub_dialog.ShowModal();
+  });
+
+  AddButton("Sensord", [this](){
+    TWidgetDialog<ScreenSensordWidget>
+      sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
+                 GetLook(), "Enable or Disable Sensord");
+    sub_dialog.SetWidget(display, event_queue, GetLook());
+    sub_dialog.AddButton(_("Close"), mrOK);
+    return sub_dialog.ShowModal();
+  });
+}
+
 class SystemMenuWidget final
   : public RowFormWidget
 {
