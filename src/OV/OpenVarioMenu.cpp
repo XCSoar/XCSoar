@@ -328,12 +328,12 @@ MainMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     StartXCSoar();
   });
 
-  AddButton("File", [this](){
+  AddButton("Files", [this](){
     CancelTimer();
 
     TWidgetDialog<FileMenuWidget>
       sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
-                 GetLook(), "OpenVario File");
+                 GetLook(), "OpenVario Files");
     sub_dialog.SetWidget(display, event_queue, GetLook());
     sub_dialog.AddButton(_("Close"), mrOK);
     return sub_dialog.ShowModal();
