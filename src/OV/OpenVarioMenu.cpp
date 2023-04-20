@@ -99,6 +99,101 @@ FileMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   });
 }
 
+class ScreenSSHWidget final
+  : public RowFormWidget
+{
+  UI::Display &display;
+  UI::EventQueue &event_queue;
+
+public:
+  ScreenSSHWidget(UI::Display &_display, UI::EventQueue &_event_queue,
+                 const DialogLook &look) noexcept
+    :RowFormWidget(look),
+     display(_display), event_queue(_event_queue) {}
+
+private:
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+};
+
+void
+ScreenSSHWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                         [[maybe_unused]] const PixelRect &rc) noexcept
+{
+  AddButton("Enable", [](){
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c", 
+      "systemctl enable dropbear.socket && printf '\nSSH has been enabled'", 
+      
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Enable", argv);
+  });
+
+  AddButton("Disable", [](){
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c", 
+      "systemctl disable dropbear.socket && printf '\nSSH has been disabled'", 
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Disable", argv);
+  });
+}
+
+class ScreenVariodWidget final
+  : public RowFormWidget
+{
+  UI::Display &display;
+  UI::EventQueue &event_queue;
+
+public:
+  ScreenVariodWidget(UI::Display &_display, UI::EventQueue &_event_queue,
+                 const DialogLook &look) noexcept
+    :RowFormWidget(look),
+     display(_display), event_queue(_event_queue) {}
+
+private:
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+};
+
+void
+ScreenVariodWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                            [[maybe_unused]] const PixelRect &rc) noexcept
+{
+  AddButton("Enable", [](){
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c", 
+      "systemctl enable variod && printf '\nvariod has been enabled'", 
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Enable", argv);
+  });
+
+  AddButton("Disable", [](){
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c", 
+      "systemctl disable variod && printf '\nvariod has been disabled'", 
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Disable", argv);
+  });
+}
+
 class SystemSettingsWidget final
   : public RowFormWidget
 {
