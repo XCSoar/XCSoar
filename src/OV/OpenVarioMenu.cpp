@@ -225,10 +225,14 @@ SystemMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   });
 
   AddButton("System Settings", [this](){
-    const UI::ScopeDropMaster drop_master{display};
-    const UI::ScopeSuspendEventQueue suspend_event_queue{event_queue};
-    Run("/usr/lib/openvario/libexec/system_settings.sh");
-  });
+      
+    TWidgetDialog<SystemSettingsWidget>
+      sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
+                 GetLook(), "OpenVario System Settings");
+    sub_dialog.SetWidget(display, event_queue, sub_dialog); 
+    sub_dialog.AddButton(_("Close"), mrOK);
+    return sub_dialog.ShowModal();
+  });  
 
   AddButton("System Info", [](){
     static constexpr const char *argv[] = {
