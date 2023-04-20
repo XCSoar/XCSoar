@@ -99,6 +99,115 @@ FileMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   });
 }
 
+class ScreenTimeoutWidget final
+  : public RowFormWidget
+{
+  UI::Display &display;
+  UI::EventQueue &event_queue;
+
+public:
+  ScreenTimeoutWidget(UI::Display &_display, UI::EventQueue &_event_queue,
+                 const DialogLook &look) noexcept
+    :RowFormWidget(look),
+     display(_display), event_queue(_event_queue) {}
+
+private:
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+  void SaveTimeout(int timeoutvalue);
+};
+
+void
+ScreenTimeoutWidget::SaveTimeout(int timeoutInt)
+{
+   ChangeConfigInt("timeout", timeoutInt, "/boot/config.uEnv");
+}
+
+void
+ScreenTimeoutWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                             [[maybe_unused]] const PixelRect &rc) noexcept
+
+{
+  AddButton("immediately", [this](){
+    SaveTimeout(0);
+        static constexpr const char *argv[] = {
+      "/bin/sh", "-c", 
+      "echo Automatic timeout was set to 0s", 
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "immediately", argv);
+  });
+
+  AddButton("1s", [this](){
+    SaveTimeout(1);
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c", 
+      "echo Automatic timeout was set to 1s", 
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "1s", argv);
+  });
+
+  AddButton("3s", [this](){
+    SaveTimeout(3);
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c", 
+      "echo Automatic timeout was set to 3s", 
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "3s", argv);
+  });
+
+  AddButton("5s", [this](){
+    SaveTimeout(5);
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c", 
+      "echo Automatic timeout was set to 5s", 
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "5s", argv);
+  });
+
+  AddButton("10s", [this](){
+    SaveTimeout(10);
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c", 
+      "echo Automatic timeout was set to 10s", 
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "10s", argv);
+  });
+
+  AddButton("30s", [this](){
+    SaveTimeout(30);
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c", 
+      "echo Automatic timeout was set to 30s", 
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "30s", argv);
+  });
+}
+
 class ScreenSSHWidget final
   : public RowFormWidget
 {
