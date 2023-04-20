@@ -410,6 +410,14 @@ Main()
 
 int main()
 {
+  /*the x-menu is waiting a second to solve timing problem with display rotation */
+  std::chrono::high_resolution_clock hrc;
+  auto start = hrc.now();
+  while(std::chrono::duration_cast<std::chrono::milliseconds>(hrc.now() - start).count() < 1000)
+  {
+    //I'm just waiting ;-)
+  }
+
   int action = Main();
 
   switch (action) {
