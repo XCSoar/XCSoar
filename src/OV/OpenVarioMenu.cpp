@@ -328,6 +328,17 @@ MainMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     StartXCSoar();
   });
 
+  AddButton("Logbook", [this](){
+    CancelTimer();
+    static constexpr const char *argv[] = {
+      "/usr/bin/logbook.sh", nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Logbook", argv);
+  });
+
   AddButton("Files", [this](){
     CancelTimer();
 
