@@ -176,4 +176,15 @@ SetPackagePath(lua_State *L, const char *path) noexcept
 	SetField(L, "package", "path", path);
 }
 
+template<typename V>
+void
+RawSet(lua_State *L, auto table_idx, int key, V &&value) noexcept
+{
+	const ScopeCheckStack check_stack(L);
+
+	Push(L, std::forward<V>(value));
+	StackPushed(table_idx);
+	lua_rawseti(L, GetStackIndex(table_idx), key);
+}
+
 }
