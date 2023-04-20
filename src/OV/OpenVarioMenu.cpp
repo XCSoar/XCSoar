@@ -691,6 +691,53 @@ ScreenVariodWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   });
 }
 
+class ScreenSensordWidget final
+  : public RowFormWidget
+{
+  UI::Display &display;
+  UI::EventQueue &event_queue;
+
+public:
+  ScreenSensordWidget(UI::Display &_display, UI::EventQueue &_event_queue,
+                 const DialogLook &look) noexcept
+    :RowFormWidget(look),
+     display(_display), event_queue(_event_queue) {}
+
+private:
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+};
+
+void
+ScreenSensordWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
+                             [[maybe_unused]] const PixelRect &rc) noexcept
+{
+  AddButton("Enable", [](){
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c", 
+      "systemctl enable sensord && printf '\nsensord has been enabled'", 
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Enable", argv);
+  });
+
+  AddButton("Disable", [](){
+    static constexpr const char *argv[] = {
+      "/bin/sh", "-c", 
+      "systemctl disable sensord && printf '\nsensord has been disabled'", 
+      nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Disable", argv);
+  });
+}
+
 class SystemSettingsWidget final
   : public RowFormWidget
 {
