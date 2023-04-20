@@ -414,9 +414,7 @@ int main()
 
   switch (action) {
   case LAUNCH_SHELL:
-    execl("/bin/bash", "bash", "--login", nullptr);
-    execl("/bin/ash", "-ash", nullptr);
-    execl("/bin/ash", "-sh", nullptr);
+    execl("/bin/sh", "sh", "-c", "clear; bash -il", nullptr);
     perror("Failed to launch shell");
     return EXIT_FAILURE;
   }
