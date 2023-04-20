@@ -315,7 +315,14 @@ private:
 
   bool KeyPress(unsigned key_code) noexcept override {
     CancelTimer();
-    return RowFormWidget::KeyPress(key_code);
+
+  /* ignore escape key at first menu page */
+    if (key_code != KEY_ESCAPE) {
+	    return RowFormWidget::KeyPress(key_code);
+	}
+	else {
+        return true;
+	}
   }
 };
 
