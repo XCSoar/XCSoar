@@ -52,8 +52,7 @@ struct Class {
 		ScopeCheckStack check_stack{L};
 
 		T *p = static_cast<T *>(lua_newuserdata(L, sizeof(value_type)));
-		luaL_getmetatable(L, name);
-		lua_setmetatable(L, -2);
+		luaL_setmetatable(L, name);
 
 		try {
 			p = std::construct_at(p, std::forward<Args>(args)...);
