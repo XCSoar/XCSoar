@@ -10,6 +10,10 @@ extern "C" {
 #include <lauxlib.h>
 }
 
+#ifdef LUA_LJDIR
+#include <exception>
+#endif
+
 #include <memory>
 #include <type_traits>
 
@@ -65,7 +69,25 @@ struct Class {
 			++check_stack;
 			return p;
 		} catch (...) {
-			lua_pop(L, 1);
+			/* pop the new object, its construction has
+			   failed, we must not use it */
+
+#ifdef LUA_LJDIR
+			if (std::current_exception()) {
+#endif
+				/* this is a C++ exception */
+				lua_pop(L, 1);
+#ifdef LUA_LJDIR
+			} else {
+				/* this is a lua_error() (only
+				   supported on LuaJit) and the error
+				   is on the top of the Lua stack; we
+				   need to use lua_remove() to remove
+				   the new object behind it */
+				lua_remove(L, -2);
+			}
+#endif
+
 			throw;
 		}
 	}
