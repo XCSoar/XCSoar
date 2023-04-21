@@ -52,10 +52,16 @@ struct Class {
 		ScopeCheckStack check_stack{L};
 
 		T *p = static_cast<T *>(lua_newuserdata(L, sizeof(value_type)));
-		luaL_setmetatable(L, name);
 
 		try {
 			p = std::construct_at(p, std::forward<Args>(args)...);
+
+			/* apply the metatable only after the
+			   constructor finishes successfully; the Lua
+			   GC must not call the destructor if the
+			   constructor has thrown an exception */
+			luaL_setmetatable(L, name);
+
 			++check_stack;
 			return p;
 		} catch (...) {
