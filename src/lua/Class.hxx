@@ -49,14 +49,16 @@ struct Class {
 	 */
 	template<typename... Args>
 	static pointer New(lua_State *L, Args&&... args) {
-		const ScopeCheckStack check_stack(L, 1);
+		ScopeCheckStack check_stack{L};
 
 		T *p = static_cast<T *>(lua_newuserdata(L, sizeof(value_type)));
 		luaL_getmetatable(L, name);
 		lua_setmetatable(L, -2);
 
 		try {
-			return std::construct_at(p, std::forward<Args>(args)...);
+			p = std::construct_at(p, std::forward<Args>(args)...);
+			++check_stack;
+			return p;
 		} catch (...) {
 			lua_pop(L, 1);
 			throw;
