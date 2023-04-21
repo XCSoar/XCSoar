@@ -23,7 +23,7 @@ namespace Lua {
 class ScopeCheckStack {
 #ifndef NDEBUG
 	lua_State *const L;
-	const int expected_top;
+	int expected_top;
 
 public:
 	explicit ScopeCheckStack(lua_State *_L, int offset = 0) noexcept
@@ -57,6 +57,21 @@ public:
 
 	ScopeCheckStack(const ScopeCheckStack &) = delete;
 	ScopeCheckStack &operator=(const ScopeCheckStack &) = delete;
+
+	ScopeCheckStack &operator++() noexcept {
+#ifndef NDEBUG
+		++expected_top;
+#endif
+		return *this;
+	}
+
+	ScopeCheckStack &operator--() noexcept {
+#ifndef NDEBUG
+		assert(expected_top > 0);
+		--expected_top;
+#endif
+		return *this;
+	}
 };
 
 }

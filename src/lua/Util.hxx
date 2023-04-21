@@ -103,11 +103,13 @@ template<typename I, typename K>
 void
 GetTable(lua_State *L, I idx, K &&key) noexcept
 {
-	const ScopeCheckStack check_stack(L, 1);
+	ScopeCheckStack check_stack{L};
 
 	Push(L, std::forward<K>(key));
 	StackPushed(idx);
 	lua_gettable(L, StackIndex{idx}.idx);
+
+	++check_stack;
 }
 
 template<typename I, typename K, typename V>
