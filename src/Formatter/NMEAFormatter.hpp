@@ -37,3 +37,11 @@ FormatLongitude(char *buffer, size_t buffer_size, Angle longitude) noexcept;
 /** Returns magnetic variation including variation direction (west or east) */
 void
 FormatVariation(char *buffer, size_t buffer_size, Angle variation) noexcept;
+
+/** Returns time, hhmmss.00 format. */
+void
+FormatTime(char *buffer, size_t buffer_size, BrokenDateTime time) noexcept;
+
+/** Returns date, ddmmyy format. */
+void
+FormatDate(char *buffer, size_t buffer_size, BrokenDateTime time) noexcept;
