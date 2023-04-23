@@ -14,6 +14,10 @@
 #include "Math/Util.hpp"
 #include "util/StaticString.hxx"
 #include "util/Macros.hpp"
+#include "Formatter/NMEAFormatter.hpp"
+#include "NMEA/MoreData.hpp"
+#include "Operation/Operation.hpp"
+#include "time/PeriodClock.hpp"
 
 using std::string_view_literals::operator""sv;
 
@@ -105,6 +109,7 @@ ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
 
 class ACDDevice : public AbstractDevice {
   Port &port;
+  PeriodClock status_clock;
 
 public:
   ACDDevice(Port &_port):port(_port) {}
@@ -118,6 +123,7 @@ public:
                            const TCHAR *name,
                            OperationEnvironment &env) override;
   bool PutTransponderCode(TransponderCode code, OperationEnvironment &env) override;
+  void OnSensorUpdate(const MoreData &basic) override;
 };
 
 bool
@@ -172,6 +178,27 @@ ACDDevice::ParseNMEA(const char *_line, NMEAInfo &info)
     return ParsePAAVS(line, info);
   else
     return false;
+}
+
+void
+ACDDevice::OnSensorUpdate(const MoreData &basic)
+{
+  NullOperationEnvironment env;
+
+  if (basic.gps.fix_quality != FixQuality::NO_FIX &&
+      status_clock.CheckUpdate(std::chrono::seconds(1))) {
+
+    char buffer[100];
+
+    FormatGPRMC(buffer, sizeof(buffer), basic);
+    PortWriteNMEA(port, buffer, env);
+
+    FormatGPGSA(buffer, sizeof(buffer), basic);
+    PortWriteNMEA(port, buffer, env);
+
+    FormatGPGGA(buffer, sizeof(buffer), basic);
+    PortWriteNMEA(port, buffer, env);
+  }
 }
 
 static Device *
