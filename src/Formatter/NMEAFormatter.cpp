@@ -22,17 +22,21 @@ FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept
   FormatTime(time_buffer, sizeof(time_buffer), date_time);
   FormatDate(date_buffer, sizeof(date_buffer), date_time);
 
-  StringFormat(buffer, buffer_size,
-               "GPRMC,%s,%c,%s,%s,%05.1f,%05.1f,%s,%s",
-               time_buffer,
-               info.location_available ? 'A' : 'V',
-               lat_buffer,
-               long_buffer,
-               (double)Units::ToUserUnit(info.ground_speed, Unit::KNOTS),
-               (double)info.track.Degrees(),
-               date_buffer,
-               info.variation_available ? var_buffer : ",");
-
+  if (info.time_available && info.location_available) {
+    StringFormat(buffer, buffer_size,
+                 "GPRMC,%s,A,%s,%s,%05.1f,%05.1f,%s,%s",
+                 time_buffer,
+                 lat_buffer,
+                 long_buffer,
+                 (double)Units::ToUserUnit(info.ground_speed, Unit::KNOTS),
+                 (double)info.track.Degrees(),
+                 date_buffer,
+                 info.variation_available ? var_buffer : ",");
+  } else {
+    StringFormat(buffer, buffer_size,
+                 "%s",
+                 "GPRMC,,V,,,,,,,,,");
+  }
 }
 
 void
