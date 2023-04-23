@@ -36,30 +36,21 @@ FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept
 void
 FormatLatitude(char *buffer, size_t buffer_size, Angle latitude) noexcept
 {
-  // Calculate Latitude sign
-  char sign = latitude.IsNegative() ? 'S' : 'N';
-
-  double mlat(latitude.AbsoluteDegrees());
-
-  int dd = (int)mlat;
-  // Calculate minutes
-  double mins = (mlat - dd) * 60.0;
-
-  // Save the string to the buffer
-  snprintf(buffer, buffer_size, "%02d%06.3f,%c", dd, mins, sign);
+  snprintf(buffer, buffer_size,
+           "%02u%02u.%03u,%c",
+           latitude.ToDMM().degrees,
+           latitude.ToDMM().minutes,
+           latitude.ToDMM().decimal_minutes,
+           latitude.IsNegative() ? 'S' : 'N');
 }
 
 void
 FormatLongitude(char *buffer, size_t buffer_size, Angle longitude) noexcept
 {
-  // Calculate Longitude sign
-  char sign = longitude.IsNegative() ? 'W' : 'E';
-
-  double mlong(longitude.AbsoluteDegrees());
-
-  int dd = (int)mlong;
-  // Calculate minutes
-  double mins = (mlong - dd) * 60.0;
-  // Save the string to the buffer
-  snprintf(buffer, buffer_size, "%02d%06.3f,%c", dd, mins, sign);
+  snprintf(buffer, buffer_size,
+           "%03u%02u.%03u,%c",
+           longitude.ToDMM().degrees,
+           longitude.ToDMM().minutes,
+           longitude.ToDMM().decimal_minutes,
+           longitude.IsNegative() ? 'W' : 'E');
 }
