@@ -11,9 +11,7 @@ FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept
   char long_buffer[20];
   char var_buffer[20];
 
-  const GeoPoint location = info.location_available
-    ? info.location
-    : GeoPoint::Zero();
+  const GeoPoint location = info.location;
 
   FormatLatitude(lat_buffer, sizeof(lat_buffer), location.latitude);
   FormatLongitude(long_buffer, sizeof(long_buffer), location.longitude);
