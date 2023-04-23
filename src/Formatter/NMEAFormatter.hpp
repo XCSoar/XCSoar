@@ -8,11 +8,14 @@
 /**
  * GPRMC,<1>,<2>,<3>,<4>,<5>,<6>,<7>,<8>,<9>,<10>,<11>
  * 
+ * Recommended Minimum Navigation Information
+ * NMEA 2.00 Standard
+ * 
  * <1>  UTC Time of position fix, hhmmss format
  * <2>  Status, A = Valid position, V = NAV receiver warning
- * <3>  Latitude,ddmm.mmm format (leading zeros will be transmitted)
+ * <3>  Latitude, ddmm.mmm format (leading zeros will be transmitted)
  * <4>  Latitude hemisphere, N or S
- * <5>  Longitude,dddmm.mmm format (leading zeros will be transmitted)
+ * <5>  Longitude, dddmm.mmm format (leading zeros will be transmitted)
  * <6>  Longitude hemisphere, E or W
  * <7>  Speed over ground, 0.0 to 999.9 knots
  * <8>  Course over ground 000.0 to 359.9 degrees, true
@@ -28,6 +31,9 @@ FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept;
 
 /**
  * GPGGA,<1>,<2>,<3>,<4>,<5>,<6>,<7>,<8>,<9>,<10>,<11>,<12>,<13>,<14>
+ * 
+ * Global Positioning System Fix Data
+ * NMEA 2.00 Standard
  * 
  * <1>  Universal Time Coordinated (UTC), hhmmss.ss
  * <2>  Latitude,ddmm.mmm format (leading zeros will be transmitted)
@@ -65,6 +71,9 @@ FormatGPGGA(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept;
 
 /*
  * GPGSA,<1>,<2>,<3>,<4>,<5>,<6>,<7>,<8>,<9>,<10>,<11>,<12>,<13>,<14>,<15>,<16>,<17>
+ * 
+ * GPS DOP and active satellites
+ * NMEA 2.00 Standard
  * 
  *  <1> Selection mode
  *        M=Manual, forced to operate in 2D or 3D
