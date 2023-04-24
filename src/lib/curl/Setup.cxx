@@ -31,6 +31,13 @@ Setup(CurlEasy &easy)
 	easy.SetVerifyHost(false);
 	easy.SetVerifyPeer(false);
 #endif
+
+#ifdef KOBO
+	/* no TLS certificate validation because Kobos usually don't
+	   have the correct date/time in the real-time clock, which
+	   causes the certificate validation to fail */
+	easy.SetVerifyPeer(false);
+#endif
 }
 
 } // namespace Curl
