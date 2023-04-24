@@ -12,7 +12,7 @@
 #include <windef.h> // for HWND (needed by winuser.h)
 #include <winuser.h>
 #else
-#include <boost/intrusive/list_hook.hpp>
+#include "util/IntrusiveList.hxx"
 #endif
 
 class Font;
@@ -129,8 +129,7 @@ class Window {
 
 #ifndef USE_WINUSER
   friend class WindowList;
-  typedef boost::intrusive::list_member_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>> SiblingsHook;
-  SiblingsHook siblings;
+  IntrusiveListHook<IntrusiveHookMode::NORMAL> siblings;
 #endif
 
 protected:
