@@ -29,3 +29,7 @@ IO_SOURCES = \
 IO_CPPFLAGS_INTERNAL = $(ZLIB_CPPFLAGS)
 
 $(eval $(call link-library,io,IO))
+
+IO_CPPFLAGS += $(FMT_CPPFLAGS)
+IO_LDADD += $(FMT_LDADD)
+IO_LDLIBS += $(FMT_LDLIBS)
