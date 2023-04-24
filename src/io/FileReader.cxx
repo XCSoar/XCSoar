@@ -3,7 +3,8 @@
 
 #include "FileReader.hxx"
 #include "Open.hxx"
-#include "system/Error.hxx"
+#include "lib/fmt/PathFormatter.hpp"
+#include "lib/fmt/SystemError.hxx"
 
 #include <cassert>
 
@@ -16,7 +17,7 @@ FileReader::FileReader(Path _path)
 			   nullptr))
 {
 	if (handle == INVALID_HANDLE_VALUE)
-		throw FormatLastError("Failed to open %s", path.ToUTF8().c_str());
+		throw FmtLastError("Failed to open {}", path);
 }
 
 std::size_t
@@ -26,8 +27,7 @@ FileReader::Read(void *data, std::size_t size)
 
 	DWORD nbytes;
 	if (!ReadFile(handle, data, size, &nbytes, nullptr))
-		throw FormatLastError("Failed to read from %s",
-				      path.ToUTF8().c_str());
+		throw FmtLastError("Failed to read from {}", path);
 
 	return nbytes;
 }
@@ -64,8 +64,7 @@ FileReader::Close() noexcept
 #else
 
 FileReader::FileReader(Path _path)
-	:path(_path),
-	 fd(OpenReadOnly(path.c_str()))
+	:path(_path), fd(OpenReadOnly(path.c_str()))
 {
 }
 
@@ -76,7 +75,7 @@ FileReader::Read(void *data, std::size_t size)
 
 	ssize_t nbytes = fd.Read(data, size);
 	if (nbytes < 0)
-		throw FormatErrno("Failed to read from %s", path.ToUTF8().c_str());
+		throw FmtErrno("Failed to read from {}", path);
 
 	return nbytes;
 }
