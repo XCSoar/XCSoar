@@ -6,7 +6,7 @@
 #include <tchar.h>
 
 /** 5.2.5 */
-extern const TCHAR XCSoar_Version[];
+extern const char XCSoar_Version[];
 /** 5.2.5F */
 extern const TCHAR XCSoar_VersionLong[];
 /** 5.2.5F-PC */

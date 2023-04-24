@@ -65,12 +65,7 @@ RunValidate(Path path)
 
 int main(int argc, char* argv[])
 try {
-  printf("Vali XCS for the XCSoar Flight Computer Version "
-#ifdef _UNICODE
-         "%S\n",
-#else
-         "%s\n",
-#endif
+  printf("Vali XCS for the XCSoar Flight Computer Version %s\n",
          XCSoar_Version);
 
   if (argc > 1 && strcmp(argv[1], "-?") != 0) {

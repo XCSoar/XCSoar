@@ -4,7 +4,6 @@
 #include "Basic.hpp"
 #include "Util.hxx"
 #include "Version.hpp"
-#include "util/ConvertString.hpp"
 
 extern "C" {
 #include <lauxlib.h>
@@ -43,8 +42,7 @@ Lua::NewBasicState()
   /* create the "xcsoar" namespace */
   lua_newtable(L);
 
-  SetField(L, RelativeStackIndex{-1},
-           "VERSION", WideToUTF8Converter(XCSoar_Version));
+  SetField(L, RelativeStackIndex{-1}, "VERSION", XCSoar_Version);
 
   lua_setglobal(L, "xcsoar");
 

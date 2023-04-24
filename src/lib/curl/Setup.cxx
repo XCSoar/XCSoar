@@ -3,7 +3,6 @@
 
 #include "Setup.hxx"
 #include "Easy.hxx"
-#include "util/ConvertString.hpp"
 #include "Version.hpp"
 
 #include <stdio.h>
@@ -14,8 +13,7 @@ void
 Setup(CurlEasy &easy)
 {
 	char user_agent[32];
-	snprintf(user_agent, 32, "XCSoar/%s",
-		 (const char *)WideToUTF8Converter(XCSoar_Version));
+	snprintf(user_agent, 32, "XCSoar/%s", XCSoar_Version);
 	easy.SetUserAgent(user_agent);
 
 #if !defined(ANDROID) && !defined(_WIN32)
