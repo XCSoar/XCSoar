@@ -49,6 +49,22 @@ extern GLint dashed_projection, dashed_translate,
   dashed_resolution, dashed_start, dashed_period, dashed_ratio;
 
 /**
+ * A shader that draws a circle outline.
+ */
+extern GLProgram *circle_outline_shader;
+extern GLint circle_outline_projection, circle_outline_translate,
+  circle_outline_center, circle_outline_radius1, circle_outline_radius2,
+  circle_outline_color;
+
+/**
+ * A shader that draws a filled circle.
+ */
+extern GLProgram *filled_circle_shader;
+extern GLint filled_circle_projection, filled_circle_translate,
+  filled_circle_center, filled_circle_radius1, filled_circle_radius2,
+  filled_circle_color1, filled_circle_color2;
+
+/**
  * Throws on error.
  */
 void InitShaders();

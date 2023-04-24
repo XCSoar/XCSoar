@@ -7,7 +7,6 @@
 #include "Texture.hpp"
 #include "Scope.hpp"
 #include "VertexArray.hpp"
-#include "Shapes.hpp"
 #include "Buffer.hpp"
 #include "VertexPointer.hpp"
 #include "ExactPixelPoint.hpp"
@@ -382,56 +381,25 @@ Canvas::DrawTwoLinesExact(PixelPoint a, PixelPoint b, PixelPoint c) noexcept
 void
 Canvas::DrawCircle(PixelPoint center, unsigned radius) noexcept
 {
-  OpenGL::solid_shader->Use();
+  if (brush.IsHollow()) {
+    OpenGL::circle_outline_shader->Use();
+    pen.GetColor().Uniform(OpenGL::circle_outline_color);
 
-  if (IsPenOverBrush() && pen.GetWidth() > 2) {
-    ScopeVertexPointer vp;
-    GLDonutVertices vertices(center.x, center.y,
-                             radius - pen.GetWidth() / 2,
-                             radius + pen.GetWidth() / 2);
-    if (!brush.IsHollow()) {
-      vertices.BindInnerCircle(vp);
-      brush.Bind();
-      glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.CIRCLE_SIZE);
-    }
-    vertices.Bind(vp);
-    pen.Bind();
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.SIZE);
-    pen.Unbind();
+    glUniform2f(OpenGL::circle_outline_center, center.x, center.y);
+    glUniform1f(OpenGL::circle_outline_radius2, radius);
+    glUniform1f(OpenGL::circle_outline_radius1, radius - pen.GetWidth());
+
+    GLDrawRectangle(PixelRect{center}.WithMargin(radius));
   } else {
-    auto &buffer = radius < 16
-      ? *OpenGL::small_circle_buffer
-      : *OpenGL::circle_buffer;
-    const unsigned n = radius < 16
-      ? OpenGL::SMALL_CIRCLE_SIZE
-      : OpenGL::CIRCLE_SIZE;
+    OpenGL::filled_circle_shader->Use();
+    pen.GetColor().Uniform(OpenGL::filled_circle_color2);
+    brush.BindUniform(OpenGL::filled_circle_color1);
 
-    buffer.Bind();
-    const auto points = (const FloatPoint2D *)nullptr;
-    const ScopeVertexPointer vp(points);
+    glUniform2f(OpenGL::filled_circle_center, center.x, center.y);
+    glUniform1f(OpenGL::filled_circle_radius2, radius);
+    glUniform1f(OpenGL::filled_circle_radius1, radius - pen.GetWidth());
 
-    glm::mat4 matrix2 = glm::scale(glm::translate(glm::mat4(1),
-                                                  glm::vec3(center.x, center.y, 0)),
-                                   glm::vec3(GLfloat(radius), GLfloat(radius),
-                                             1.));
-    glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
-                       glm::value_ptr(matrix2));
-
-    if (!brush.IsHollow()) {
-      brush.Bind();
-      glDrawArrays(GL_TRIANGLE_FAN, 0, n);
-    }
-
-    if (IsPenOverBrush()) {
-      pen.Bind();
-      glDrawArrays(GL_LINE_LOOP, 0, n);
-      pen.Unbind();
-    }
-
-    glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
-                       glm::value_ptr(glm::mat4(1)));
-
-    buffer.Unbind();
+    GLDrawRectangle(PixelRect{center}.WithMargin(radius));
   }
 }
 
