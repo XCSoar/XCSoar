@@ -21,7 +21,6 @@
 #include "thread/Mutex.hxx"
 #endif
 
-#include <atomic>
 #include <cassert>
 
 #include "io/uring/Features.h"
