@@ -12,9 +12,9 @@ from build.lua import LuaProject
 from .musl import MuslProject
 
 binutils = BinutilsProject(
-    'https://ftp.gnu.org/gnu/binutils/binutils-2.39.tar.xz',
-    'https://toolchains.bootlin.com/downloads/releases/sources/binutils-2.39/binutils-2.39.tar.xz',
-    '645c25f563b8adc0a81dbd6a41cffbf4d37083a382e02d5d3df4f65c09516d00',
+    'https://ftp.gnu.org/gnu/binutils/binutils-2.40.tar.xz',
+    'https://fossies.org/linux/misc/binutils-2.40.tar.xz',
+    '0f8a4c272d7f17f369ded10a4aca28b8e304828e95526da482b0ccc4dfc9d8e1',
     'bin/as',
     [
         '--with-system-zlib',
