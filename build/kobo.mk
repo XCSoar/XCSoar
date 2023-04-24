@@ -79,15 +79,6 @@ BITSTREAM_VERA_FILES = $(patsubst %,$(BITSTREAM_VERA_DIR)/%.ttf,$(BITSTREAM_VERA
 THIRDPARTY_TOOL_NAMES = simple_usbmodeswitch
 THIRDPARTY_TOOL_FILES = $(addprefix $(THIRDPARTY_LIBS_ROOT)/bin/,$(THIRDPARTY_TOOL_NAMES))
 
-CA_URL = https://curl.se/ca/cacert-2023-01-10.pem
-CA_ALTERNATIVE_URL = $(CA_URL)
-CA_MD5 = e7cf471ba7c88f4e313f492a76e624b3
-CA_DOWNLOAD = $(DOWNLOAD_DIR)/$(notdir $(CA_URL))
-
-$(CA_DOWNLOAD): | $(DOWNLOAD_DIR)/dirstamp
-	@$(NQ)echo "  GET     $@"
-	$(Q)./build/download.py $(CA_URL) $(CA_ALTERNATIVE_URL) $(CA_MD5) $(DOWNLOAD_DIR)
-
 KOBO_KERNEL_URL = https://download.xcsoar.org/contrib/kobo/kernel/kobo-1.0.uImage
 KOBO_KERNEL_ALTERNATIVE_URL = $(KOBO_KERNEL_URL)
 KOBO_KERNEL_MD5 = 207f1b732330ac0bdc9c1fa1d16dd402
@@ -158,14 +149,13 @@ $(TARGET_OUTPUT_DIR)/KoboRoot.tgz: $(XCSOAR_BIN) \
 	$(KOBO_MENU_BIN) $(KOBO_POWER_OFF_BIN) \
 	$(BITSTREAM_VERA_FILES) \
 	$(topdir)/kobo/inittab $(topdir)/kobo/rcS $(topdir)/kobo/udev.rules \
-	$(CA_DOWNLOAD) \
 	$(KOBO_KERNEL_DOWNLOAD) $(KOBOOTG_KERNEL_DOWNLOAD) \
 	$(GLOHD_KERNEL_DOWNLOAD) $(GLOHDOTG_KERNEL_DOWNLOAD) \
 	$(AURA2_KERNEL_DOWNLOAD) $(AURA2OTG_KERNEL_DOWNLOAD) \
 	$(CLARAHD_DRIVERS_DOWNLOAD)
 	@$(NQ)echo "  TAR     $@"
 	$(Q)rm -rf $(@D)/KoboRoot
-	$(Q)install -m 0755 -d $(@D)/KoboRoot/etc/udev/rules.d $(@D)/KoboRoot/opt/xcsoar/bin $(@D)/KoboRoot/opt/xcsoar/lib/kernel $(@D)/KoboRoot/opt/xcsoar/share/fonts $(@D)/KoboRoot/etc/ssl/certs
+	$(Q)install -m 0755 -d $(@D)/KoboRoot/etc/udev/rules.d $(@D)/KoboRoot/opt/xcsoar/bin $(@D)/KoboRoot/opt/xcsoar/lib/kernel $(@D)/KoboRoot/opt/xcsoar/share/fonts
 	$(Q)install -m 0755 $(XCSOAR_BIN) $(KOBO_MENU_BIN) $(KOBO_POWER_OFF_BIN) $(topdir)/kobo/rcS $(@D)/KoboRoot/opt/xcsoar/bin
 	$(Q)install -m 0755 --strip --strip-program=$(STRIP) $(THIRDPARTY_TOOL_FILES) $(@D)/KoboRoot/opt/xcsoar/bin
 	$(Q)if test -f $(KOBO_KERNEL_DOWNLOAD); then install -T -m 0644 $(KOBO_KERNEL_DOWNLOAD) $(@D)/KoboRoot/opt/xcsoar/lib/kernel/uImage.kobo; fi
@@ -178,7 +168,6 @@ $(TARGET_OUTPUT_DIR)/KoboRoot.tgz: $(XCSOAR_BIN) \
 	$(Q)install -m 0644 $(topdir)/kobo/inittab $(@D)/KoboRoot/etc
 	$(Q)install -m 0644 $(topdir)/kobo/udev.rules $(@D)/KoboRoot/etc/udev/rules.d/99-xcsoar.rules
 	$(Q)install -m 0644 $(BITSTREAM_VERA_FILES) $(@D)/KoboRoot/opt/xcsoar/share/fonts
-	$(Q)install -T -m 0644 $(CA_DOWNLOAD) $(@D)/KoboRoot/etc/ssl/certs/ca-certificates.crt
 	$(Q)fakeroot tar czfC $@ $(@D)/KoboRoot .
 
 endif
