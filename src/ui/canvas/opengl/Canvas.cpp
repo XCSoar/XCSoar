@@ -38,6 +38,23 @@
 
 AllocatedArray<BulkPixelPoint> Canvas::vertex_buffer;
 
+static void
+GLDrawRectangle(const PixelRect r) noexcept
+{
+  /* can't use glRecti() with GLSL because it bypasses the vertex
+     shader */
+
+  const BulkPixelPoint vertices[] = {
+    {r.left, r.top},
+    {r.right, r.top},
+    {r.left, r.bottom},
+    {r.right, r.bottom},
+  };
+
+  const ScopeVertexPointer vp{vertices};
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+}
+
 void
 Canvas::InvertRectangle(PixelRect r) noexcept
 {
@@ -86,18 +103,7 @@ Canvas::DrawFilledRectangle(PixelRect r, const Color color) noexcept
 
   color.Bind();
 
-  /* can't use glRecti() with GLSL because it bypasses the vertex
-     shader */
-
-  const BulkPixelPoint vertices[] = {
-    {r.left, r.top},
-    {r.right, r.top},
-    {r.left, r.bottom},
-    {r.right, r.bottom},
-  };
-
-  const ScopeVertexPointer vp(vertices);
-  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+  GLDrawRectangle(r);
 }
 
 void
