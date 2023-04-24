@@ -48,23 +48,7 @@ testslow: $(call name-to-bin,$(TESTSLOW))
 testfast: $(call name-to-bin,$(TESTFAST))
 	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(addprefix $(TARGET_BIN_DIR)/,$(TESTFAST))
 
-TEST1_LDADD = $(HARNESS_LIBS) \
-	$(TASK_LIBS) \
-	$(ROUTE_LIBS) \
-	$(GLIDE_LIBS) \
-	$(CONTEST_LIBS) \
-	$(WAYPOINT_LIBS) \
-	$(AIRSPACE_LIBS) \
-	$(IO_LIBS) \
-	$(OS_LIBS) \
-	$(THREAD_LIBS) \
-	$(ZZIP_LDADD) \
-	$(GEO_LIBS) \
-	$(TIME_LIBS) \
-	$(MATH_LIBS) \
-	$(UTIL_LIBS)
-TEST1_LDLIBS = \
-	$(ZZIP_LDLIBS)
+TEST1_DEPENDS = HARNESS TASK ROUTE GLIDE CONTEST WAYPOINT AIRSPACE IO OS THREAD ZZIP GEO TIME MATH UTIL
 
 define link-harness-program
 $(1)_SOURCES = \
@@ -80,9 +64,8 @@ $(1)_SOURCES = \
 	$(SRC)/Formatter/AirspaceFormatter.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/$(1).cpp
-$(1)_LDADD = $(TEST1_LDADD)
-$(1)_LDLIBS = $(TEST1_LDLIBS)
-$(call link-program,$(1),$(1))
+$(1)_DEPENDS = $(TEST1_DEPENDS)
+$$(eval $$(call link-program,$(1),$(1)))
 endef
 
 $(foreach name,$(HARNESS_PROGRAMS),$(eval $(call link-harness-program,$(name))))
@@ -2533,7 +2516,5 @@ TEST_REPLAY_RETROSPECTIVE_SOURCES = \
 	$(SRC)/RadioFrequency.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/test_replay_retrospective.cpp
-TEST_REPLAY_RETROSPECTIVE_DEPENDS = WAYPOINT OPERATION GEO MATH IO UTIL ZZIP OS THREAD
-TEST_REPLAY_RETROSPECTIVE_LDADD = $(TEST1_LDADD)
-TEST_REPLAY_RETROSPECTIVE_LDLIBS = $(TEST1_LDLIBS)
+TEST_REPLAY_RETROSPECTIVE_DEPENDS = $(TEST1_DEPENDS) OPERATION
 $(eval $(call link-program,test_replay_retrospective,TEST_REPLAY_RETROSPECTIVE))
