@@ -4,6 +4,8 @@
 #include "StringBuilder.hxx"
 #include "StringAPI.hxx"
 
+#include <algorithm>
+
 #ifdef _UNICODE
 #include <tchar.h>
 #endif
