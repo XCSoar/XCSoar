@@ -27,7 +27,7 @@ struct InfoBoxLook {
     Color fg_color;
   } title, value, comment;
 
-  Font value_font, small_value_font;
+  Font value_font, small_value_font, comment_font;
 
   /**
    * The font for units.

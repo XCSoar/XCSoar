@@ -70,9 +70,13 @@ InfoBoxLook::ReinitialiseLayout(unsigned width)
   AutoSizeFont(value_font_d, width, _T("1234m"));
   value_font.Load(value_font_d);
 
-  FontDescription small_value_font_d(10);
-  AutoSizeFont(small_value_font_d, width, _T("0123456789ABCDEFG"));
+  FontDescription small_value_font_d(8, true);
+  AutoSizeFont(small_value_font_d, width, _T("0123456m"));
   small_value_font.Load(small_value_font_d);
+
+  FontDescription comment_font_d(8);
+  AutoSizeFont(comment_font_d, width, _T("0123456789ABCDEF"));
+  comment_font.Load(comment_font_d);
 
   unsigned unit_font_height = std::max(value_font_d.GetHeight() * 2u / 5u, 7u);
   unit_font.Load(FontDescription(unit_font_height));
