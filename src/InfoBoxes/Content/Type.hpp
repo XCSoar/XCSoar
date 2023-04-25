@@ -154,6 +154,10 @@ namespace InfoBoxFactory
 
     e_TransponderCode, /* Transponder code */
 
+    e_EngineCHT,  /* Engine Cylinder Head Temperature */
+    e_EngineEGT,  /* Engine Exhaust Gas Temperature */
+    e_EngineRPM,  /* Engine Revolutions Per Minute */
+
     e_NUM_TYPES /* Last item */
   };
 
