@@ -161,7 +161,7 @@ Compiling for Android
 
 For Android, you need:
 
-- `Android SDK level 30 <http://developer.android.com/sdk/>`__
+- `Android SDK level 31 <http://developer.android.com/sdk/>`__
 
 - `Android NDK r25c <http://developer.android.com/sdk/ndk/>`__
 
