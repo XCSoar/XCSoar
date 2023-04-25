@@ -22,6 +22,7 @@
 #include "InfoBoxes/Content/Weather.hpp"
 #include "InfoBoxes/Content/Airspace.hpp"
 #include "InfoBoxes/Content/Radio.hpp"
+#include "InfoBoxes/Content/Engine.hpp"
 
 #include "util/Macros.hpp"
 #include "Language/Language.hpp"
@@ -1093,6 +1094,30 @@ static constexpr MetaData meta_data[] = {
     N_("Heart"),
     N_("Heart rate in beats per minute."),
     UpdateInfoBoxHeartRate,
+  },
+
+  // e_EngineTempCHT
+  {
+    N_("Engine CHT"),
+    N_("CHT"),
+    N_("Engine Cylinder Head Temperature"),
+    UpdateInfoBoxContentCHT,
+  },
+
+  // e_EngineTempEGT
+  {
+    N_("Engine EGT"),
+    N_("EGT"),
+    N_("Engine Exhaust Gas Temperature"),
+    UpdateInfoBoxContentEGT,
+  },
+
+  // e_EngineRPM
+  {
+    N_("Engine Revolutions Per Minute"),
+    N_("RPM"),
+    N_("Engine Revolutions Per Minute."),
+    UpdateInfoBoxContentRPM,
   },
 
 };
