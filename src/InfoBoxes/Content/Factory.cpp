@@ -1064,14 +1064,6 @@ static constexpr MetaData meta_data[] = {
     IBFHelper<InfoBoxContentStandbyRadioFrequency>::Create,
   },
 
-  // Transponder code
-  {
-    N_("Transponder Code"),
-    N_("XPDR Code"),
-    N_("The currently set Transponder code"),
-    IBFHelper<InfoBoxContentTransponderCode>::Create,
-  },
-
   // e_Thermal_Time
   {
     N_("Thermal time"),
@@ -1094,6 +1086,14 @@ static constexpr MetaData meta_data[] = {
     N_("Heart"),
     N_("Heart rate in beats per minute."),
     UpdateInfoBoxHeartRate,
+  },
+
+  // Transponder code
+  {
+    N_("Transponder Code"),
+    N_("XPDR Code"),
+    N_("The currently set Transponder code"),
+    IBFHelper<InfoBoxContentTransponderCode>::Create,
   },
 
   // e_EngineTempCHT
