@@ -181,6 +181,30 @@ Java_org_xcsoar_NativeSensorListener_onI2CbaroSensor(JNIEnv *env, jobject obj,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeSensorListener_onEngineSensors(JNIEnv *env,
+                                                     jobject obj,
+                                                     jboolean has_cht_temp,
+                                                     jint cht_temp,
+                                                     jboolean has_egt_temp,
+                                                     jint egt_temp,
+                                                     jboolean has_revs_per_sec,
+                                                     jint revs_per_sec)
+{
+  jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
+  if (ptr == 0)
+    return;
+
+  auto &listener = *(SensorListener *)ptr;
+  listener.OnEngineSensors(has_cht_temp,
+                           Temperature::FromKelvin(cht_temp),
+                           has_egt_temp,
+                           Temperature::FromKelvin(egt_temp),
+                           has_revs_per_sec,
+                           revs_per_sec);
+}
+
+gcc_visibility_default
+JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeSensorListener_onVarioSensor(JNIEnv *env,
                                                    jobject obj,
                                                    jfloat vario)

@@ -44,6 +44,20 @@ public:
                                AtmosphericPressure pressure) noexcept = 0;
   virtual void OnVarioSensor(float vario) noexcept = 0;
   virtual void OnHeartRateSensor(unsigned bpm) noexcept = 0;
+  /**
+   * @param[in] has_cht Is the Engine Cylinder Head Temperature sensor present?
+   * @param[in] cht Engine Cylinder Head Temperature.
+   * @param[in] has_egt Is the Engine Exhaust Gas Temperature sensor present?
+   * @param[in] egt Engine Exhaust Gas Temperature.
+   * @param[in] has_revs_per_sec Is the Engine Revolutions Per Second sensor present?
+   * @param[in] revs_per_sec Engine Revolutions Per Second, rotations per seconds of the camshaft.
+   */
+  virtual void OnEngineSensors(bool has_cht,
+                               Temperature cht,
+                               bool has_egt,
+                               Temperature egt,
+                               bool has_revs_per_sec,
+                               uint16_t revs_per_sec) noexcept = 0;
 
   virtual void OnVoltageValues(int temp_adc, unsigned voltage_index,
                                int volt_adc) noexcept = 0;

@@ -30,6 +30,20 @@ public interface SensorListener {
   void onI2CbaroSensor(int index, int sensorType, int pressure);
   void onVarioSensor(float vario);
   void onHeartRateSensor(int bpm);
+    /**
+   * @param[in] has_cht_temp Is the Engine Cylinder Head Temperature sensor present?
+   * @param[in] cht_temp Engine Cylinder Head Temperature.
+   * @param[in] has_egt_temp Is the Engine Exhaust Gas Temperature sensor present?
+   * @param[in] egt_temp Engine Exhaust Gas Temperature.
+   * @param[in] has_revs_per_sec Is the Engine Revolutions Per Second sensor present?
+   * @param[in] revs_per_sec Engine Revolutions Per Second, rotations per seconds of the camshaft.
+   */
+  void onEngineSensors(boolean has_cht_temp,
+                       int cht_temp,
+                       boolean has_egt_temp,
+                       int egt_temp,
+                       boolean has_revs_per_sec,
+                       int revs_per_sec);
 
   void onVoltageValues(int temp_adc, int voltage_index, int volt_adc);
 

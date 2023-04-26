@@ -288,6 +288,39 @@ DeviceDescriptor::OnHeartRateSensor(unsigned bpm) noexcept
 }
 
 void
+DeviceDescriptor::OnEngineSensors(bool has_cht,
+                                  Temperature cht,
+                                  bool has_egt,
+                                  Temperature egt,
+                                  bool has_revs_per_sec,
+                                  uint16_t revs_per_sec) noexcept
+{
+  const auto e = BeginEdit();
+  NMEAInfo &basic = *e;
+  basic.UpdateClock();
+  basic.alive.Update(basic.clock);
+  if(has_revs_per_sec){
+    basic.engine_state.revs_per_sec = revs_per_sec;
+    basic.engine_state.revs_per_sec_available.Update(basic.clock);
+  }else{
+    basic.engine_state.revs_per_sec_available.Clear();
+  }
+  if(has_cht){
+    basic.engine_state.cht_temperature = cht;
+    basic.engine_state.cht_temperature_available.Update(basic.clock);
+  }else{
+    basic.engine_state.cht_temperature_available.Clear();
+  }
+  if(has_egt){
+    basic.engine_state.egt_temperature = egt;
+    basic.engine_state.egt_temperature_available.Update(basic.clock);
+  }else{
+    basic.engine_state.egt_temperature_available.Clear();
+  }
+  e.Commit();
+}
+
+void
 DeviceDescriptor::OnVoltageValues(int temp_adc, unsigned voltage_index,
                                   int volt_adc) noexcept
 {
