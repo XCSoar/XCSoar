@@ -45,6 +45,6 @@ UpdateInfoBoxContentRPM(InfoBoxData &data) noexcept
     data.SetInvalid();
     return;
   }  
-  data.SetValue(_T("%d"), basic.engine_state.revs_per_sec * 60);
+  data.SetValue(_T("%.0f"), basic.engine_state.revs_per_sec * 60);
   data.SetComment(_("rpm"));
 }
