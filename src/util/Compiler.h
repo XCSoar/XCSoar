@@ -63,27 +63,17 @@
 /* GCC 4.x */
 
 #define gcc_const __attribute__((const))
-#define gcc_deprecated __attribute__((deprecated))
-#define gcc_may_alias __attribute__((may_alias))
 #define gcc_malloc __attribute__((malloc))
-#define gcc_noreturn __attribute__((noreturn))
 #define gcc_packed __attribute__((packed))
 #define gcc_printf(a,b) __attribute__((format(printf, a, b)))
 #define gcc_pure __attribute__((pure))
-#define gcc_sentinel __attribute__((sentinel))
 #define gcc_unused __attribute__((unused))
-#define gcc_warn_unused_result __attribute__((warn_unused_result))
 
-#define gcc_nonnull(...) __attribute__((nonnull(__VA_ARGS__)))
 #define gcc_nonnull_all __attribute__((nonnull))
-#define gcc_returns_nonnull __attribute__((returns_nonnull))
 
 #define gcc_likely(x) __builtin_expect (!!(x), 1)
 #define gcc_unlikely(x) __builtin_expect (!!(x), 0)
 
-#define gcc_aligned(n) __attribute__((aligned(n)))
-
-#define gcc_visibility_hidden __attribute__((visibility("hidden")))
 #define gcc_visibility_default __attribute__((visibility("default")))
 
 #define gcc_always_inline __attribute__((always_inline))
@@ -93,27 +83,17 @@
 /* generic C compiler */
 
 #define gcc_const
-#define gcc_deprecated
-#define gcc_may_alias
 #define gcc_malloc
-#define gcc_noreturn
 #define gcc_packed
 #define gcc_printf(a,b)
 #define gcc_pure
-#define gcc_sentinel
 #define gcc_unused
-#define gcc_warn_unused_result
 
-#define gcc_nonnull(...)
 #define gcc_nonnull_all
-#define gcc_returns_nonnull
 
 #define gcc_likely(x) (x)
 #define gcc_unlikely(x) (x)
 
-#define gcc_aligned(n)
-
-#define gcc_visibility_hidden
 #define gcc_visibility_default
 
 #define gcc_always_inline inline
@@ -123,12 +103,10 @@
 #if CLANG_OR_GCC_VERSION(4,3)
 
 #define gcc_hot __attribute__((hot))
-#define gcc_cold __attribute__((cold))
 
 #else /* ! GCC_UNUSED >= 40300 */
 
 #define gcc_hot
-#define gcc_cold
 
 #endif /* ! GCC_UNUSED >= 40300 */
 
