@@ -24,7 +24,7 @@ UpdateInfoBoxTimeLocal(InfoBoxData &data) noexcept
   FormatLocalTimeHHMM(data.value.buffer(), basic.time, settings.utc_offset);
 
   // Set Comment
-  data.UnsafeFormatComment(_T("%02u"), basic.date_time_utc.second);
+  data.FmtComment(_T("{:02}"), basic.date_time_utc.second);
 }
 
 void
@@ -39,10 +39,10 @@ UpdateInfoBoxTimeUTC(InfoBoxData &data) noexcept
 
   // Set Value
   const BrokenDateTime t = basic.date_time_utc;
-  data.UnsafeFormatValue(_T("%02d:%02d"), t.hour, t.minute);
+  data.FmtValue(_T("{:02}:{:02}"), t.hour, t.minute);
 
   // Set Comment
-  data.UnsafeFormatComment(_T("%02d"), t.second);
+  data.FmtComment(_T("{:02}"), t.second);
 }
 
 void

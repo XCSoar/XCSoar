@@ -66,7 +66,7 @@ InfoBoxContentContest::Update(InfoBoxData &data) noexcept
   // Set Value
   data.SetValueFromDistance(result_contest.distance);
 
-  data.UnsafeFormatComment(_T("%.1f pts"), (double)result_contest.score);
+  data.FmtComment(_T("{:.1f} pts"), result_contest.score);
 }
 
 const InfoBoxPanel *
@@ -100,5 +100,5 @@ InfoBoxContentContestSpeed::Update(InfoBoxData &data) noexcept
   // Set Value
   data.SetValueFromTaskSpeed(result_contest.GetSpeed());
 
-  data.UnsafeFormatComment(_T("%.1f pts"), (double)result_contest.score);
+  data.FmtComment(_T("{:.1f} pts"), result_contest.score);
 }

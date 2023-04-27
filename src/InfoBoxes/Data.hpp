@@ -3,9 +3,14 @@
 
 #pragma once
 
+#include "lib/fmt/tchar.hxx"
 #include "util/StaticString.hxx"
 #include "Units/Unit.hpp"
 #include "time/FloatDuration.hxx"
+
+#if FMT_VERSION < 90000
+#include <fmt/format.h> // for the fmt::buffer::flush() implementation
+#endif
 
 #include <chrono>
 #include <cstdint>
@@ -78,13 +83,47 @@ struct InfoBoxData {
     return title;
   };
 
+  void VFmtTitle(fmt_tstring_view format_str, fmt_tformat_args args) noexcept {
+    auto [p, _] = fmt::vformat_to_n(title.begin(), title.capacity() - 1,
+                                    format_str, args);
+    *p = 0;
+    title.CropIncompleteUTF8();
+  }
+
+  template<typename S, typename... Args>
+  void FmtTitle(const S &format_str, Args&&... args) noexcept {
+#if FMT_VERSION >= 90000
+    return VFmtTitle(format_str,
+                     fmt::make_format_args<fmt_tformat_context>(args...));
+#else
+    return VFmtTitle(fmt::to_string_view(format_str),
+                     fmt::make_args_checked<Args...>(format_str, args...));
+#endif
+  }
+
   /**
    * Sets the InfoBox value to the given Value
    * @param Value New value of the InfoBox value
    */
   void SetValue(const TCHAR *value) noexcept;
 
-  void SetValue(const TCHAR *format, double value) noexcept;
+  void VFmtValue(fmt_tstring_view format_str, fmt_tformat_args args) noexcept {
+    auto [p, _] = fmt::vformat_to_n(value.begin(), value.capacity() - 1,
+                                    format_str, args);
+    *p = 0;
+    value.CropIncompleteUTF8();
+  }
+
+  template<typename S, typename... Args>
+  void FmtValue(const S &format_str, Args&&... args) noexcept {
+#if FMT_VERSION >= 90000
+    return VFmtValue(format_str,
+                     fmt::make_format_args<fmt_tformat_context>(args...));
+#else
+    return VFmtValue(fmt::to_string_view(format_str),
+                     fmt::make_args_checked<Args...>(format_str, args...));
+#endif
+  }
 
   /**
    * Sets the InfoBox value to the given angle.
@@ -139,6 +178,24 @@ struct InfoBoxData {
    */
   void SetComment(const TCHAR *comment) noexcept;
 
+  void VFmtComment(fmt_tstring_view format_str, fmt_tformat_args args) noexcept {
+    auto [p, _] = fmt::vformat_to_n(comment.begin(), comment.capacity() - 1,
+                                    format_str, args);
+    *p = 0;
+    comment.CropIncompleteUTF8();
+  }
+
+  template<typename S, typename... Args>
+  void FmtComment(const S &format_str, Args&&... args) noexcept {
+#if FMT_VERSION >= 90000
+    return VFmtComment(format_str,
+                       fmt::make_format_args<fmt_tformat_context>(args...));
+#else
+    return VFmtComment(fmt::to_string_view(format_str),
+                       fmt::make_args_checked<Args...>(format_str, args...));
+#endif
+  }
+
   /**
    * Sets the InfoBox comment to the given angle.
    */
@@ -182,33 +239,6 @@ struct InfoBoxData {
    * Set the InfoBox comment to the specified percentage value.
    */
   void SetCommentFromPercent(double value) noexcept;
-
-  template<typename... Args>
-  void FormatTitle(const TCHAR *fmt, Args&&... args) noexcept {
-    title.Format(fmt, args...);
-    title.CropIncompleteUTF8();
-  }
-
-  template<typename... Args>
-  void FormatValue(const TCHAR *fmt, Args&&... args) noexcept {
-    value.Format(fmt, args...);
-  }
-
-  template<typename... Args>
-  void FormatComment(const TCHAR *fmt, Args&&... args) noexcept {
-    comment.Format(fmt, args...);
-    comment.CropIncompleteUTF8();
-  }
-
-  template<typename... Args>
-  void UnsafeFormatValue(const TCHAR *fmt, Args&&... args) noexcept {
-    value.UnsafeFormat(fmt, args...);
-  }
-
-  template<typename... Args>
-  void UnsafeFormatComment(const TCHAR *fmt, Args&&... args) noexcept {
-    comment.UnsafeFormat(fmt, args...);
-  }
 
   /**
    * Sets the unit of the InfoBox value

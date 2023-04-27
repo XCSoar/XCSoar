@@ -21,7 +21,7 @@ UpdateInfoBoxContentCHT(InfoBoxData &data) noexcept
     return;
   }
 
-  data.SetValue(_T("%3.0f"), basic.engine_state.cht_temperature.ToUser());
+  data.FmtValue(_T("{:3.0f}"), basic.engine_state.cht_temperature.ToUser());
   data.SetValueUnit(Units::current.temperature_unit);
 }
 
@@ -33,7 +33,7 @@ UpdateInfoBoxContentEGT(InfoBoxData &data) noexcept
     data.SetInvalid();
     return;
   }
-  data.SetValue(_T("%3.0f"), basic.engine_state.egt_temperature.ToUser());
+  data.FmtValue(_T("{:3.0f}"), basic.engine_state.egt_temperature.ToUser());
   data.SetValueUnit(Units::current.temperature_unit);
 }
 
@@ -45,6 +45,6 @@ UpdateInfoBoxContentRPM(InfoBoxData &data) noexcept
     data.SetInvalid();
     return;
   }  
-  data.SetValue(_T("%d"), basic.engine_state.revs_per_sec * 60);
+  data.FmtValue(_T("{}"), basic.engine_state.revs_per_sec * 60);
   data.SetComment(_("rpm"));
 }

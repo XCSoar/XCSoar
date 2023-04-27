@@ -27,7 +27,7 @@ UpdateInfoBoxHeartRate(InfoBoxData &data) noexcept
     return;
   }
 
-  data.FormatValue(_T("%u"), basic.heart_rate);
+  data.FmtValue(_T("{}"), basic.heart_rate);
 }
 
 void
@@ -39,7 +39,7 @@ UpdateInfoBoxGLoad(InfoBoxData &data) noexcept
   }
 
   // Set Value
-  data.SetValue(_T("%2.2f"), CommonInterface::Basic().acceleration.g_load);
+  data.FmtValue(_T("{:2.2f}"), CommonInterface::Basic().acceleration.g_load);
 }
 
 void
@@ -54,9 +54,9 @@ UpdateInfoBoxBattery(InfoBoxData &data) noexcept
   switch (external.status) {
   case Power::ExternalInfo::Status::OFF:
     if (CommonInterface::Basic().battery_level_available)
-      data.UnsafeFormatComment(_T("%s; %d%%"),
-                               _("AC Off"),
-                               (int)CommonInterface::Basic().battery_level);
+      data.FmtComment(_T("{}; {}%"),
+                      _("AC Off"),
+                      (int)CommonInterface::Basic().battery_level);
     else
       data.SetComment(_("AC Off"));
     break;
@@ -187,7 +187,7 @@ UpdateInfoBoxNbrSat(InfoBoxData &data) noexcept
         data.SetComment(_("No GPS"));
     else if (gps.satellites_used_available) {
         // known number of sats
-        data.FormatValue(_T("%u"), gps.satellites_used);
+        data.FmtValue(_T("{}"), gps.satellites_used);
     } else {
         // valid but unknown number of sats
         data.SetValueInvalid();
