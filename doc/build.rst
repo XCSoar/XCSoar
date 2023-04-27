@@ -126,6 +126,7 @@ similar operating systems:
 The following command installs these on Debian::
 
   sudo apt-get install make g++  zlib1g-dev \
+      libfmt-dev \
       libsodium-dev \
       libfreetype6-dev \
       libpng-dev libjpeg-dev \
