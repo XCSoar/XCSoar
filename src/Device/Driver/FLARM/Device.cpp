@@ -11,6 +11,8 @@
 #include "util/StringCompare.hxx"
 #include "NMEA/Checksum.hpp"
 
+#include <fmt/format.h>
+
 void
 FlarmDevice::LinkTimeout()
 {
@@ -66,9 +68,7 @@ FlarmDevice::GetRange(unsigned &range, OperationEnvironment &env)
 bool
 FlarmDevice::SetRange(unsigned range, OperationEnvironment &env)
 {
-  NarrowString<32> buffer;
-  buffer.Format("%d", range);
-  return SetConfig("RANGE", buffer, env);
+  return SetConfig("RANGE", fmt::format_int{range}.c_str(), env);
 }
 
 bool
@@ -90,9 +90,7 @@ FlarmDevice::GetBaudRate(unsigned &baud_id, OperationEnvironment &env)
 bool
 FlarmDevice::SetBaudRate(unsigned baud_id, OperationEnvironment &env)
 {
-  NarrowString<32> buffer;
-  buffer.Format("%u", baud_id);
-  return SetConfig("BAUD", buffer, env);
+  return SetConfig("BAUD", fmt::format_int{baud_id}.c_str(), env);
 }
 
 bool
