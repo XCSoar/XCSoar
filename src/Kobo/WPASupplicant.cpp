@@ -2,10 +2,10 @@
 // Copyright The XCSoar Project
 
 #include "WPASupplicant.hpp"
+#include "lib/fmt/ToBuffer.hxx"
 #include "net/AllocatedSocketAddress.hxx"
 #include "system/Error.hxx"
 #include "util/NumberParser.hpp"
-#include "util/StaticString.hxx"
 #include "util/StringCompare.hxx"
 
 #include <string.h>
@@ -269,9 +269,7 @@ void
 WPASupplicant::SetNetworkString(unsigned id,
                                 const char *name, const char *value)
 {
-  NarrowString<512> cmd;
-  cmd.Format("SET_NETWORK %u %s \"%s\"", id, name, value);
-  SendCommand(cmd);
+  SendCommand(FmtBuffer<512>("SET_NETWORK {} {} \"{}\"", id, name, value));
   ExpectOK();
 }
 
@@ -279,45 +277,35 @@ void
 WPASupplicant::SetNetworkID(unsigned id,
                                 const char *name, const char *value)
 {
-  NarrowString<512> cmd;
-  cmd.Format("SET_NETWORK %u %s %s", id, name, value);
-  SendCommand(cmd);
+  SendCommand(FmtBuffer<512>("SET_NETWORK {} {} {}", id, name, value));
   ExpectOK();
 }
 
 void
 WPASupplicant::SelectNetwork(unsigned id)
 {
-  NarrowString<64> cmd;
-  cmd.Format("SELECT_NETWORK %u", id);
-  SendCommand(cmd);
+  SendCommand(FmtBuffer<64>("SELECT_NETWORK {}", id));
   ExpectOK();
 }
 
 void
 WPASupplicant::EnableNetwork(unsigned id)
 {
-  NarrowString<64> cmd;
-  cmd.Format("ENABLE_NETWORK %u", id);
-  SendCommand(cmd);
+  SendCommand(FmtBuffer<64>("ENABLE_NETWORK {}", id));
   ExpectOK();
 }
 
 void
 WPASupplicant::DisableNetwork(unsigned id)
 {
-  NarrowString<64> cmd;
-  cmd.Format("DISABLE_NETWORK %u", id);
-  SendCommand(cmd);
+  SendCommand(FmtBuffer<64>("DISABLE_NETWORK {}", id));
   ExpectOK();
 }
 
 void
 WPASupplicant::RemoveNetwork(unsigned id)
 {
-  NarrowString<64> cmd;
-  cmd.Format("REMOVE_NETWORK %u", id);
-  SendCommand(cmd);
+  SendCommand(FmtBuffer<64>("REMOVE_NETWORK {}", id));
   ExpectOK();
 }
 
