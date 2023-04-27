@@ -24,6 +24,15 @@ public interface BluetoothUuids {
   UUID HEART_RATE_MEASUREMENT_CHARACTERISTIC =
     UUID.fromString("00002A37-0000-1000-8000-00805F9B34FB");
 
+  /**
+   * @see https://sites.google.com/view/ppgmeter/startpage
+   * Engine sensors service and characteristic
+   */
+  UUID ENGINE_SENSORS_SERVICE =
+    UUID.fromString("D2865ECA-2C07-4610-BF03-8AEEBEF047FB");
+  UUID ENGINE_SENSORS_CHARACTERISTIC =
+    UUID.fromString("D2865ECB-2C07-4610-BF03-8AEEBEF047FB");
+
   UUID HM10_SERVICE =
     UUID.fromString("0000FFE0-0000-1000-8000-00805F9B34FB");
 
