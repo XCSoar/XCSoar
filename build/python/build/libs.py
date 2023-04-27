@@ -34,9 +34,9 @@ linux_headers = SabotageLinuxHeadersProject(
 )
 
 gcc = GccProject(
-    'https://ftp.gnu.org/gnu/gcc/gcc-12.2.0/gcc-12.2.0.tar.xz',
-    'https://fossies.org/linux/misc/gcc-12.2.0.tar.xz',
-    'e549cf9cf3594a00e27b6589d4322d70e0720cdd213f39beb4181e06926230ff',
+    'https://ftp.gnu.org/gnu/gcc/gcc-13.1.0/gcc-13.1.0.tar.xz',
+    'https://fossies.org/linux/misc/gcc-13.1.0.tar.xz',
+    '61d684f0aa5e76ac6585ad8898a2427aade8979ed5e7f85492286c4dfc13ee86',
     'lib/libstdc++.a',
     [
         # GCC fails to build if we disable the shared libstdc++
@@ -64,6 +64,7 @@ gcc = GccProject(
 
         '--disable-libstdcxx-verbose',
         '--disable-libstdcxx-dual-abi',
+        '--disable-libstdcxx-backtrace',
         '--disable-libstdcxx-filesystem-ts',
 
         # TODO: don't hard-code Kobo settings
