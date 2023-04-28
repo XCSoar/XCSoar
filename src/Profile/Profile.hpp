@@ -4,7 +4,7 @@
 #pragma once
 
 // IWYU pragma: begin_exports
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Profile/ProfileMap.hpp"
 // IWYU pragma: end_exports
 

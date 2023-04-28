@@ -11,7 +11,7 @@
 #include "MapWindow/MapWindow.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/Loader.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Profile/ComputerProfile.hpp"
 #include "Profile/MapProfile.hpp"
 #include "Profile/Current.hpp"

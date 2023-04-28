@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "TaskRulesConfigPanel.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"

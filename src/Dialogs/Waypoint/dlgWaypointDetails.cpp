@@ -30,7 +30,7 @@
 #include "Waypoint/LastUsed.hpp"
 #include "Profile/Current.hpp"
 #include "Profile/Map.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "system/RunFile.hpp"
 #include "system/Path.hpp"
 #include "system/ConvertPathName.hpp"

@@ -11,7 +11,7 @@
 #include "Audio/GlobalVolumeController.hpp"
 #include "Audio/VolumeController.hpp"
 #include "Language/Language.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Widget/RowFormWidget.hpp"
 
 enum ControlIndex {

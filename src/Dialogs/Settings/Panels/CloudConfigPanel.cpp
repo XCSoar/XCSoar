@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "CloudConfigPanel.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Language/Language.hpp"
 #include "Tracking/SkyLines/Key.hpp"

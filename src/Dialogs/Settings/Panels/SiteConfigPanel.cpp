@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "UtilsSettings.hpp"

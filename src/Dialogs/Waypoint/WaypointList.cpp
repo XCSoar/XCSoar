@@ -12,7 +12,7 @@
 #include "Form/DataField/Prefix.hpp"
 #include "Profile/Current.hpp"
 #include "Profile/Map.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Waypoint/LastUsed.hpp"
 #include "Waypoint/WaypointList.hpp"
 #include "Waypoint/WaypointListBuilder.hpp"

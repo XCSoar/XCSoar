@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "RouteConfigPanel.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Interface.hpp"

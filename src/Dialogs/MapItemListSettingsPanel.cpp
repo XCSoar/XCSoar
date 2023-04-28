@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "MapItemListSettingsPanel.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"

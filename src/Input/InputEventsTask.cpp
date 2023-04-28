@@ -13,7 +13,7 @@
 #include "Formatter/LocalTimeFormatter.hpp"
 #include "Units/Units.hpp"
 #include "Profile/Profile.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "LocalPath.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"

@@ -3,7 +3,7 @@
 
 #include "WaypointDetailsReader.hpp"
 #include "Language/Language.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "io/ConfiguredFile.hpp"

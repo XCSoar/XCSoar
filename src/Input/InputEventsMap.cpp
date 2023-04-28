@@ -7,7 +7,7 @@
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
 #include "Profile/Profile.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Units/Units.hpp"

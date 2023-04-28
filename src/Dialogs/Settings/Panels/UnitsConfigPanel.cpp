@@ -6,7 +6,7 @@
 #include "Form/DataField/Listener.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsStore.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"

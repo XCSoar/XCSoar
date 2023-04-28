@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "WeatherConfigPanel.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Weather/Settings.hpp"
 #include "Widget/RowFormWidget.hpp"

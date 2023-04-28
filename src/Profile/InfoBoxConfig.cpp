@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "InfoBoxConfig.hpp"
-#include "ProfileKeys.hpp"
+#include "Keys.hpp"
 #include "Map.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 

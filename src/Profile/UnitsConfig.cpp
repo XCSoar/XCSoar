@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "UnitsConfig.hpp"
-#include "ProfileKeys.hpp"
+#include "Keys.hpp"
 #include "Map.hpp"
 #include "Units/Settings.hpp"
 #include "Units/UnitsGlue.hpp"

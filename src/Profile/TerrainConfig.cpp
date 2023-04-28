@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "TerrainConfig.hpp"
-#include "ProfileKeys.hpp"
+#include "Keys.hpp"
 #include "Map.hpp"
 #include "Terrain/TerrainSettings.hpp"
 

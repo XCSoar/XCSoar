@@ -3,7 +3,7 @@
 
 #include "WeGlideConfigPanel.hpp"
 #include "net/client/WeGlide/Settings.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Boolean.hpp"

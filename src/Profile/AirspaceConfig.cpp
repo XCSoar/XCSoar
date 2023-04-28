@@ -3,7 +3,7 @@
 
 #include "AirspaceConfig.hpp"
 #include "Map.hpp"
-#include "ProfileKeys.hpp"
+#include "Keys.hpp"
 #include "ui/canvas/Features.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"

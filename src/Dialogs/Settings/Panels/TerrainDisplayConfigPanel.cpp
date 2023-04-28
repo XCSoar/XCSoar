@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "TerrainDisplayConfigPanel.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Form/DataField/Enum.hpp"

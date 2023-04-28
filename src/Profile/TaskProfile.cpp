@@ -4,7 +4,7 @@
 #include "TaskProfile.hpp"
 #include "RouteProfile.hpp"
 #include "Map.hpp"
-#include "ProfileKeys.hpp"
+#include "Keys.hpp"
 #include "Task/TaskBehaviour.hpp"
 
 namespace Profile {

@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "SafetyFactorsConfigPanel.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Float.hpp"

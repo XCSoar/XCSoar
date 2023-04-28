@@ -3,7 +3,7 @@
 
 #include "WaypointGlue.hpp"
 #include "Profile/Map.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "LogFile.hpp"
 #include "Terrain/RasterTerrain.hpp"

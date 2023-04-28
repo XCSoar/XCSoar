@@ -3,7 +3,7 @@
 
 #include "WeatherProfile.hpp"
 #include "Map.hpp"
-#include "ProfileKeys.hpp"
+#include "Keys.hpp"
 #include "Weather/Settings.hpp"
 
 #ifdef HAVE_PCMET
