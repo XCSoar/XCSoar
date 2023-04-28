@@ -136,7 +136,7 @@ public final class BluetoothSensor
 
     // Just guessing the sensor_noise_variance.
     if(pressure != 0)
-      listener.onBarometricPressureSensor(c.getIntValue(c.FORMAT_UINT32, 7), 0.01f);
+      listener.onBarometricPressureSensor(pressure / 100.0f, 0.01f);
 
     final int revs_per_sec = c.getIntValue(c.FORMAT_UINT16, 11);
     listener.onEngineSensors(cht_temp != 0 ? true : false,
