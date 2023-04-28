@@ -78,6 +78,8 @@ RASPSettingsPanel::FillItemControl() noexcept
 
   const WeatherUIState &state = CommonInterface::GetUIState().weather;
   df.SetValue(state.map);
+
+  GetControl(ITEM).RefreshDisplay();
 }
 
 void
@@ -144,8 +146,6 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   wp = AddEnum(_("Field"), nullptr, this);
   wp->GetDataField()->EnableItemHelp(true);
   FillItemControl();
-
-  wp->RefreshDisplay();
 
   AddEnum(_("Time"), nullptr, this);
   UpdateTimeControl();
