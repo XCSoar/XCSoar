@@ -4,6 +4,7 @@ Version 7.29 - not yet released
   - fix crash when arc airspace has no center
   - allow xci files to be downloaded from repository
   - in OpenAir format use AC as Class and AY as Type (#1118)
+  - add RASP file selection
 * devices
   - ATR833: read-out active and standby frequencies
   - AirControlDisplay: Set and readout of transponder code

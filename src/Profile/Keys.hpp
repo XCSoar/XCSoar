@@ -276,4 +276,6 @@ constexpr char WaveAssistant[] = "WaveAssistant";
 
 constexpr char MasterAudioVolume[] = "MasterAudioVolume";
 
+constexpr char RaspFile[] = "RaspFile";
+
 }

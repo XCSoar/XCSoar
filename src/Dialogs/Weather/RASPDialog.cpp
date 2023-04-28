@@ -5,6 +5,8 @@
 #include "Dialogs/DownloadFilePicker.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
+#include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
 #include "ui/control/List.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/Enum.hpp"
@@ -119,11 +121,15 @@ RASPSettingsPanel::Download() noexcept
   if (path == nullptr)
     return;
 
+  Profile::SetPath(ProfileKeys::RaspFile, path);
+
   rasp = std::make_shared<RaspStore>(std::move(path));
   rasp->ScanAll();
 
   DataGlobals::SetRasp(std::shared_ptr<RaspStore>(rasp));
   FillItemControl();
+
+  Profile::Save();
 }
 
 void

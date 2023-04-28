@@ -15,6 +15,7 @@
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/AsyncLoader.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
+#include "Weather/Rasp/Configured.hpp"
 #include "Input/InputEvents.hpp"
 #include "Input/InputQueue.hpp"
 #include "Dialogs/StartupDialog.hpp"
@@ -406,8 +407,7 @@ Startup(UI::Display &display)
 
   // Scan for weather forecast
   LogFormat("RASP load");
-  auto rasp = std::make_shared<RaspStore>(LocalPath(_T(RASP_FILENAME)));
-  rasp->ScanAll();
+  auto rasp = LoadConfiguredRasp();
 
   // Reads the airspace files
   {
