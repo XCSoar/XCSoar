@@ -45,6 +45,7 @@ UpdateInfoBoxContentRPM(InfoBoxData &data) noexcept
     data.SetInvalid();
     return;
   }  
-  data.FmtValue(_T("{}"), basic.engine_state.revs_per_sec * 60);
-  data.SetComment(_("rpm"));
+
+  data.FmtValue(_T("{}"), Units::ToUserRotation(basic.engine_state.revs_per_sec));
+  data.SetValueUnit(Units::current.rotation_unit);
 }

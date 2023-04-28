@@ -46,6 +46,7 @@ constexpr char LiftUnitsValue[] = "LiftUnit";
 constexpr char PressureUnitsValue[] = "Pressure";
 constexpr char WingLoadingUnitValue[] = "WingLoadingUnit";
 constexpr char MassUnitValue[] = "MassUnit";
+constexpr char RotationUnitValue[] = "RotationUnit";
 constexpr char LatLonUnits[] = "LatLonUnits";
 constexpr char PolarID[] = "Polar";
 constexpr char Polar[] = "PolarInformation";

@@ -247,4 +247,16 @@ ToSysMass(double Value)
   return ToSysUnit(Value, current.mass_unit);
 }
 
+static inline double
+ToUserRotation(double Value) noexcept
+{
+  return ToUserUnit(Value, current.rotation_unit);
+}
+
+static inline double
+ToSysRotation(double Value) noexcept
+{
+  return ToSysUnit(Value, current.rotation_unit);
+}
+
 } // namespace Units

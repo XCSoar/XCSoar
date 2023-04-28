@@ -30,6 +30,8 @@ struct UnitSetting
   Unit wing_loading_unit;
   /** Unit for mass */
   Unit mass_unit;
+  /** Unit for rotation speed */
+  Unit rotation_unit;
 
   void SetDefaults() noexcept;
 

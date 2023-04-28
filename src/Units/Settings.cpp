@@ -16,6 +16,7 @@ UnitSetting::SetDefaults() noexcept
   pressure_unit = Unit::HECTOPASCAL;
   wing_loading_unit = Unit::KG_PER_M2;
   mass_unit = Unit::KG;
+  rotation_unit = Unit::RPM;
 }
 
 Unit
@@ -54,6 +55,9 @@ UnitSetting::GetByGroup(UnitGroup group) const noexcept
 
   case UnitGroup::MASS:
     return mass_unit;
+
+  case UnitGroup::ROTATION:
+    return rotation_unit;
   }
 
   return Unit::UNDEFINED;

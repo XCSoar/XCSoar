@@ -18,4 +18,5 @@ enum class UnitGroup: uint8_t
   PRESSURE,
   WING_LOADING,
   MASS,
+  ROTATION,
 };
