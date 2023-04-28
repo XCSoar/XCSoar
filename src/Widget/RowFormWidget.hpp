@@ -26,6 +26,7 @@ struct StaticEnumChoice;
 class Angle;
 class RoughTime;
 class RoughTimeDelta;
+class Path;
 class Button;
 
 /**
@@ -624,6 +625,9 @@ public:
 
   [[gnu::pure]]
   RoughTime GetValueRoughTime(unsigned i) const noexcept;
+
+  [[gnu::pure]]
+  Path GetValueFile(unsigned i) const noexcept;
 
   [[gnu::pure]]
   const TCHAR *GetValueString(unsigned i) const noexcept {
