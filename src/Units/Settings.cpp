@@ -58,18 +58,3 @@ UnitSetting::GetByGroup(UnitGroup group) const noexcept
 
   return Unit::UNDEFINED;
 }
-
-bool
-UnitSetting::operator==(const UnitSetting &right) const noexcept
-{
-  return (distance_unit == right.distance_unit &&
-      altitude_unit == right.altitude_unit &&
-      temperature_unit == right.temperature_unit &&
-      speed_unit == right.speed_unit &&
-      vertical_speed_unit == right.vertical_speed_unit &&
-      wind_speed_unit == right.wind_speed_unit &&
-      task_speed_unit == right.task_speed_unit &&
-      pressure_unit == right.pressure_unit &&
-      wing_loading_unit == right.wing_loading_unit &&
-      mass_unit == right.mass_unit);
-}
