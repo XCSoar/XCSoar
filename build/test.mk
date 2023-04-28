@@ -2302,7 +2302,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Audio/Sound.cpp \
 	$(MORE_SCREEN_SOURCES) \
-	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(IO_SRC_DIR)/MapFile.cpp \
