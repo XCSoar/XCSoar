@@ -132,6 +132,7 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
       rasp = LoadConfiguredRasp();
       DataGlobals::SetRasp(rasp);
       FillItemControl();
+      UpdateTimeControl();
       Profile::Save();
     }
   });
