@@ -2,7 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "util/MD5.hpp"
-#include "util/Macros.hpp"
 #include "util/ByteOrder.hxx"
 
 #include <algorithm>
@@ -103,10 +102,10 @@ MD5::Initialise() noexcept
 void
 MD5::Append(uint8_t ch) noexcept
 {
-  unsigned position = unsigned(message_length++) % ARRAY_SIZE(buff512bits);
+  unsigned position = unsigned(message_length++) % buff512bits.size();
   buff512bits[position++] = ch;
-  if (position == ARRAY_SIZE(buff512bits))
-    Process512(buff512bits);
+  if (position == buff512bits.size())
+    Process512();
 }
 
 void
@@ -139,8 +138,8 @@ MD5::Finalize() noexcept
     buff512bits[buffer_left_over] = 0x80;
 
     // pad with 56 - len to get exactly
-    std::fill(buff512bits + buffer_left_over + 1,
-              buff512bits + ARRAY_SIZE(buff512bits), 0);
+    std::fill(std::next(buff512bits.begin(), buffer_left_over + 1),
+              buff512bits.end(), 0);
 
     // exactly 64 bits left for message size bits
 
@@ -152,32 +151,32 @@ MD5::Finalize() noexcept
     buff512bits[buffer_left_over] = 0x80;
 
     // fill buffer w/ 0's and process
-    std::fill(buff512bits + buffer_left_over + 1,
-              buff512bits + ARRAY_SIZE(buff512bits), 0);
+    std::fill(std::next(buff512bits.begin(), buffer_left_over + 1),
+              buff512bits.end(), 0);
 
-    Process512(buff512bits);
+    Process512();
 
     // now  load 1st 56 bytes of buffer w/ all 0's,
-    std::fill_n(buff512bits, ARRAY_SIZE(buff512bits), 0);
+    std::fill(buff512bits.begin(), buff512bits.end(), 0);
 
     // ready to append message length
   }
 
   //append bit length (bit, not byte) of unpadded message as 64-bit little-endian integer to message
   // store 8 bytes of length into last 8 bytes of buffer (little endian least sig bytes first
-  WriteLE64(buff512bits + 56, message_length * 8);
+  WriteLE64(buff512bits.data() + 56, message_length * 8);
 
-  Process512(buff512bits);
+  Process512();
 }
 
 void
-MD5::Process512(const uint8_t *s512in) noexcept
+MD5::Process512() noexcept
 {
   // assume exactly 512 bits
 
   // copy the 64 chars into the 16 uint32_ts
   uint32_t w[16];
-  const uint32_t *s512_32 = (const uint32_t *)(const void *)s512in;
+  const uint32_t *s512_32 = (const uint32_t *)(const void *)buff512bits.data();
   for (int j = 0; j < 16; j++)
     w[j] = ToLE32(s512_32[j]);
 
