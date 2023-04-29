@@ -206,12 +206,13 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
   do {
     // Append new data to the buffer, as much as fits in there
     auto range = rx_buf.Write();
-    if (rx_buf.IsFull()) {
+    if (range.empty()) {
       // Overflow: reset buffer to recover quickly
       rx_buf.Clear();
       expected_msg_length = 0;
       continue;
     }
+
     size_t nbytes = std::min(range.size(), size_t(end - data));
     std::copy_n(data, nbytes, range.begin());
     data += nbytes;

@@ -112,7 +112,6 @@ ATR833Device::DataReceived(std::span<const std::byte> s,
   do {
     // Append new data to the buffer, as much as fits in there
     auto range = rx_buf.Write();
-
     if (range.empty()) {
       rx_buf.Clear();
       continue;
