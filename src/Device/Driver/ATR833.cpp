@@ -12,24 +12,24 @@
 
 #include <cstdint>
 
-static constexpr uint8_t STX = 0x02;
-static constexpr uint8_t SYNC = 'r';
+static constexpr std::byte STX{0x02};
+static constexpr std::byte SYNC{'r'};
 
 class ATR833Device final : public AbstractDevice {
-  static constexpr uint8_t ACK = 0x06;
-  static constexpr uint8_t NAK = 0x15;
-  static constexpr uint8_t ALIVE = 0x10;
-  static constexpr uint8_t EXCHANGE = 0x11;
-  static constexpr uint8_t SETSTANDBY = 0x12;
-  static constexpr uint8_t SETACTIVE = 0x13;
-  static constexpr uint8_t ALLDATA = 0x42;
-  static constexpr uint8_t REQUESTDATA = 0x82;
+  static constexpr std::byte ACK{0x06};
+  static constexpr std::byte NAK{0x15};
+  static constexpr std::byte ALIVE{0x10};
+  static constexpr std::byte EXCHANGE{0x11};
+  static constexpr std::byte SETSTANDBY{0x12};
+  static constexpr std::byte SETACTIVE{0x13};
+  static constexpr std::byte ALLDATA{0x42};
+  static constexpr std::byte REQUESTDATA{0x82};
 
   Port &port;
   /**
    * Buffer which receives the messages send from the radio.
   */ 
-  StaticFifoBuffer<uint8_t, 256u> rx_buf;
+  StaticFifoBuffer<std::byte, 256u> rx_buf;
 
 public:
   explicit ATR833Device(Port &_port):port(_port) {}
@@ -53,7 +53,8 @@ private:
   /**
    * Handles responses from the radio.
    */
-  void HandleResponse(const uint8_t *data, struct NMEAInfo &info);
+  void HandleResponse(const std::byte *data, struct NMEAInfo &info);
+
   /**
    * Calculates the length of the message just receiving.
    *
@@ -61,29 +62,31 @@ private:
    * @param length Number of characters received.
    * @return Expected message length.
    */
-  static size_t ExpectedMsgLength(const uint8_t *data, size_t length);
+  static std::size_t ExpectedMsgLength(const std::byte *data,
+                                       std::size_t length) noexcept;
+
   /**
    * Calculates the length of the command message just receiving.
    *
    * @param code Command code received after the STX+'r' character.
    * @return Expected message length after the code character.
    */
-  static size_t ExpectedMsgLengthCommand(uint8_t code);
+  static std::size_t ExpectedMsgLengthCommand(std::byte code) noexcept;
 };
 
 class ATRBuffer {
   uint8_t fill = 0;
-  uint8_t checksum = 0;
-  uint8_t data[32];
+  std::byte checksum{};
+  std::byte data[32];
 
 public:
-  explicit constexpr ATRBuffer(uint8_t msg_id) noexcept {
+  explicit constexpr ATRBuffer(std::byte msg_id) noexcept {
     data[fill++] = STX;
     Put(SYNC);
     Put(msg_id);
   }
 
-  void Put(uint8_t byte) {
+  constexpr void Put(std::byte byte) noexcept {
     data[fill++] = byte;
     checksum ^= byte;
     if (byte == STX) {
@@ -149,8 +152,8 @@ ATR833Device::DataReceived(std::span<const std::byte> s,
   when the first character is STX and the second character
   is not received yet.
 */
-size_t
-ATR833Device::ExpectedMsgLength(const uint8_t *data, size_t length)
+std::size_t
+ATR833Device::ExpectedMsgLength(const std::byte *data, std::size_t length) noexcept
 {
   assert(data != nullptr);
   assert(length > 0);
@@ -166,8 +169,8 @@ ATR833Device::ExpectedMsgLength(const uint8_t *data, size_t length)
     return 1;
 }
 
-size_t
-ATR833Device::ExpectedMsgLengthCommand(uint8_t code)
+std::size_t
+ATR833Device::ExpectedMsgLengthCommand(std::byte code) noexcept
 {
   switch (code) {
   case SETACTIVE:
@@ -195,7 +198,7 @@ ATR833Device::ExpectedMsgLengthCommand(uint8_t code)
 }
 
 void
-ATR833Device::HandleResponse(const uint8_t *data, struct NMEAInfo &info)
+ATR833Device::HandleResponse(const std::byte *data, struct NMEAInfo &info)
 {
   info.alive.Update(info.clock);
 
@@ -206,13 +209,15 @@ ATR833Device::HandleResponse(const uint8_t *data, struct NMEAInfo &info)
   if(data[2] == SETACTIVE) {
     info.settings.has_active_frequency.Update(info.clock);
     info.settings.active_frequency =
-      RadioFrequency::FromMegaKiloHertz(data[3], data[4] * 5);
+      RadioFrequency::FromMegaKiloHertz(static_cast<unsigned>(data[3]),
+                                        static_cast<unsigned>(data[4]) * 5);
   }
 
   if(data[2] == SETSTANDBY) {
     info.settings.has_standby_frequency.Update(info.clock);
     info.settings.standby_frequency =
-      RadioFrequency::FromMegaKiloHertz(data[3], data[4] * 5);
+      RadioFrequency::FromMegaKiloHertz(static_cast<unsigned>(data[3]),
+                                        static_cast<unsigned>(data[4]) * 5);
   }
 
   if(data[2] == EXCHANGE) {
@@ -235,11 +240,13 @@ ATR833Device::HandleResponse(const uint8_t *data, struct NMEAInfo &info)
     */
     info.settings.has_active_frequency.Update(info.clock);
     info.settings.active_frequency = 
-      RadioFrequency::FromMegaKiloHertz(data[3], data[4] * 5);
+      RadioFrequency::FromMegaKiloHertz(static_cast<unsigned>(data[3]),
+                                        static_cast<unsigned>(data[4]) * 5);
 
     info.settings.has_standby_frequency.Update(info.clock);
     info.settings.standby_frequency = 
-      RadioFrequency::FromMegaKiloHertz(data[5], data[6] * 5);
+      RadioFrequency::FromMegaKiloHertz(static_cast<unsigned>(data[5]),
+                                        static_cast<unsigned>(data[6]) * 5);
   }
 }
 
@@ -249,8 +256,8 @@ ATR833Device::PutActiveFrequency(RadioFrequency frequency,
                                  OperationEnvironment &env)
 {
   ATRBuffer buffer(SETACTIVE);
-  buffer.Put(frequency.GetKiloHertz() / 1000);
-  buffer.Put((frequency.GetKiloHertz() % 1000) / 5);
+  buffer.Put(static_cast<std::byte>(frequency.GetKiloHertz() / 1000));
+  buffer.Put(static_cast<std::byte>((frequency.GetKiloHertz() % 1000) / 5));
   buffer.Send(port, env);
   return true;
 }
@@ -262,8 +269,8 @@ ATR833Device::PutStandbyFrequency(RadioFrequency frequency,
                                   OperationEnvironment &env)
 {
   ATRBuffer buffer(SETSTANDBY);
-  buffer.Put(frequency.GetKiloHertz() / 1000);
-  buffer.Put((frequency.GetKiloHertz() % 1000) / 5);
+  buffer.Put(static_cast<std::byte>(frequency.GetKiloHertz() / 1000));
+  buffer.Put(static_cast<std::byte>((frequency.GetKiloHertz() % 1000) / 5));
   buffer.Send(port, env);
   return true;
 }

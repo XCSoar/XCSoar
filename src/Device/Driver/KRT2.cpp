@@ -73,7 +73,8 @@ private:
    *
    * @param msg Message to be send to the radio.
    */
-  bool Send(const uint8_t *msg, unsigned msg_size, OperationEnvironment &env);
+  bool Send(const std::byte *msg, unsigned msg_size, OperationEnvironment &env);
+
   /**
    * Calculates the length of the message just receiving.
    *
@@ -155,7 +156,7 @@ KRT2Device::KRT2Device(Port &_port)
 }
 
 bool
-KRT2Device::Send(const uint8_t *msg, unsigned msg_size,
+KRT2Device::Send(const std::byte *msg, unsigned msg_size,
                  OperationEnvironment &env)
 {
   //! Number of tries to send a message
@@ -422,7 +423,7 @@ KRT2Device::PutFrequency(char cmd,
     GetStationName(msg.station, name);
     msg.checksum = msg.mhz ^ msg.khz;
 
-    Send((uint8_t *) &msg, sizeof(msg), env);
+    Send((const std::byte *) &msg, sizeof(msg), env);
 
     return true;
   }
