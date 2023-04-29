@@ -274,41 +274,35 @@ KRT2Device::ExpectedMsgLength(std::span<const std::byte> src) noexcept
 {
   assert(!src.empty());
 
-  size_t expected_length;
-
   if (src[0] == STX) {
     if (src.size() > 1) {
-      expected_length = 2 + ExpectedMsgLengthSTX(src[1]);
+      return 2 + ExpectedMsgLengthSTX(src[1]);
     } else {
       // minimum 2 chars
-      expected_length = 2;
+      return 2;
     }
   } else
-    expected_length = 1;
-
-  return expected_length;
+    return 1;
 }
 
 size_t
 KRT2Device::ExpectedMsgLengthSTX(std::byte code)
 {
-  size_t expected_length;
-
   switch ((char)code) {
   case 'U':
     // Active frequency
   case 'R':
     // Standby frequency
-    expected_length = 11;
-    break;
+    return 11;
+
   case 'Z':
     // Set frequency
-    expected_length = 12;
-    break;
+    return 12;
+
   case 'A':
     // Set volume
-    expected_length = 4;
-    break;
+    return 4;
+
   case 'C':
     // Exchange frequencies
   case '8':
@@ -341,15 +335,12 @@ KRT2Device::ExpectedMsgLengthSTX(std::byte code)
     // RX on active frequency on (DUAL^)
   case 'm':
     // RX on active frequency off (DUAL)
-    expected_length = 0;
-    break;
+    return 0;
+
   default:
     // Received unknown STX code
-    expected_length = 0;
-    break;
+    return 0;
   }
-
-  return expected_length;
 }
 
 void
