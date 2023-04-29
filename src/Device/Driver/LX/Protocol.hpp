@@ -170,7 +170,7 @@ SendCommand(Port &port, Command command)
 
 void
 SendPacket(Port &port, Command command,
-           const void *data, size_t length,
+           std::span<const std::byte> payload,
            OperationEnvironment &env,
            std::chrono::steady_clock::duration timeout=std::chrono::seconds(5));
 
@@ -208,9 +208,6 @@ ReadCRC(Port &port, void *buffer, size_t length, OperationEnvironment &env,
         std::chrono::steady_clock::duration subsequent_timeout,
         std::chrono::steady_clock::duration total_timeout);
 
-/**
- * Writes data to a #Port, and keeps track of the CRC.
- */
 class CRCWriter {
   Port &port;
   uint8_t crc;
@@ -218,12 +215,12 @@ class CRCWriter {
 public:
   CRCWriter(Port &_port):port(_port), crc(0xff) {}
 
-  bool Write(const void *data, size_t length,
+  bool Write(std::span<const std::byte> src,
              OperationEnvironment &env,
              std::chrono::steady_clock::duration timeout=std::chrono::seconds(5)) {
-    port.FullWrite(data, length, env, timeout);
+    port.FullWrite(src, env, timeout);
 
-    crc = calc_crc((const uint8_t *)data, length, crc);
+    crc = calc_crc((const uint8_t *)src.data(), src.size(), crc);
     return true;
   }
 

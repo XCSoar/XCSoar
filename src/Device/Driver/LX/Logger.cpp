@@ -161,7 +161,8 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   LX::SeekMemory seek;
   seek.start_address = flight.internal.lx.start_address;
   seek.end_address = flight.internal.lx.end_address;
-  LX::SendPacket(port, LX::SEEK_MEMORY, &seek, sizeof(seek), env);
+  LX::SendPacket(port, LX::SEEK_MEMORY,
+                 std::as_bytes(std::span{&seek, 1}), env);
   LX::ExpectACK(port, env);
 
   LX::MemorySection memory_section;

@@ -61,15 +61,16 @@ PortBridge::setInputListener(JNIEnv *env, DataHandler *handler)
 }
 
 std::size_t
-PortBridge::write(JNIEnv *env, const void *data, size_t length)
+PortBridge::write(JNIEnv *env, std::span<const std::byte> src)
 {
-  if (length > write_buffer_size)
-    length = write_buffer_size;
+  if (src.size() > write_buffer_size)
+    src = src.first(write_buffer_size);
 
-  memcpy(Java::ByteArrayElements{env, write_buffer}.get(), data, length);
+  memcpy(Java::ByteArrayElements{env, write_buffer}.get(),
+         src.data(), src.size());
 
   int nbytes = env->CallIntMethod(Get(), write_method,
-                                  write_buffer.Get(), length);
+                                  write_buffer.Get(), src.size());
   Java::RethrowException(env);
   if (nbytes <= 0)
     throw std::runtime_error{"Port write failed"};

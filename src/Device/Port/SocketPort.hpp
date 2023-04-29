@@ -38,7 +38,7 @@ public:
     return 0;
   }
 
-  std::size_t Write(const void *data, std::size_t length) override;
+  std::size_t Write(std::span<const std::byte> src) override;
 
 protected:
   void Open(SocketDescriptor s) noexcept;

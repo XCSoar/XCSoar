@@ -8,6 +8,7 @@
 #include "Operation/Operation.hpp"
 #include "Operation/Cancelled.hpp"
 #include "util/Exception.hxx"
+#include "util/SpanCast.hxx"
 
 #include <algorithm>
 #include <cassert>
@@ -33,28 +34,27 @@ Port::WaitConnected(OperationEnvironment &env)
 std::size_t
 Port::Write(std::string_view s)
 {
-  return Write(s.data(), s.size());
+  return Write(AsBytes(s));
 }
 
 void
-Port::FullWrite(const void *buffer, std::size_t length,
+Port::FullWrite(std::span<const std::byte> src,
                 OperationEnvironment &env,
                 std::chrono::steady_clock::duration _timeout)
 {
   const TimeoutClock timeout(_timeout);
 
-  const char *p = (const char *)buffer, *end = p + length;
-  while (p < end) {
+  while (!src.empty()) {
     if (timeout.HasExpired())
       throw DeviceTimeout{"Port write timeout"};
 
-    std::size_t nbytes = Write(p, end - p);
+    std::size_t nbytes = Write(src);
     assert(nbytes > 0);
 
     if (env.IsCancelled())
       throw OperationCancelled{};
 
-    p += nbytes;
+    src = src.subspan(nbytes);
   }
 }
 
@@ -63,7 +63,7 @@ Port::FullWrite(std::string_view s,
                 OperationEnvironment &env,
                 std::chrono::steady_clock::duration timeout)
 {
-  FullWrite(s.data(), s.size(), env, timeout);
+  FullWrite(AsBytes(s), env, timeout);
 }
 
 std::byte

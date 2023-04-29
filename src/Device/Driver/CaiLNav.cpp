@@ -10,6 +10,7 @@
 #include "NMEA/Derived.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/NMEAFormatter.hpp"
+#include "util/SpanCast.hxx"
 
 static void
 PortWriteNMEANoChecksum(Port &port, const char *line,
@@ -18,7 +19,7 @@ PortWriteNMEANoChecksum(Port &port, const char *line,
   // reasonable hard-coded timeout; Copied from ::PortWriteNMEA()
   constexpr auto timeout = std::chrono::seconds(1);
 
-  port.FullWrite(line, strlen(line), env, timeout);
+  port.FullWrite(AsBytes(std::string_view{line}), env, timeout);
 }
 
 /*

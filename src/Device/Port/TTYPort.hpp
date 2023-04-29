@@ -54,7 +54,7 @@ public:
   virtual void Flush() override;
   virtual void SetBaudrate(unsigned baud_rate) override;
   virtual unsigned GetBaudrate() const noexcept override;
-  virtual std::size_t Write(const void *data, std::size_t length) override;
+  virtual std::size_t Write(std::span<const std::byte> src) override;
 
 private:
   void WaitWrite(unsigned timeout_ms);

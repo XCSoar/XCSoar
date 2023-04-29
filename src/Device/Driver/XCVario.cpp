@@ -234,7 +234,7 @@ XVCDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
   char buffer[32];
   unsigned qnh = uround(pres.GetHectoPascal());
   int msg_len = sprintf(buffer,"!g,q%u\r", std::min(qnh,(unsigned)2000));
-  port.FullWrite(buffer, msg_len, env, std::chrono::seconds(2));
+  port.FullWrite(std::as_bytes(std::span{buffer}.first(msg_len)), env, std::chrono::seconds(2));
   return true;
 }
 
@@ -262,10 +262,10 @@ XVCDevice::PutBallast(double fraction, [[maybe_unused]] double overload,
 {
   /* the XCVario understands CAI302 like command for ballast "!g,b" with
      float precision */
-   char buffer[32];
-   double ballast = fraction * 10.;
-   int msg_len = sprintf(buffer,"!g,b%.3f\r", ballast);
-   port.FullWrite(buffer, msg_len, env, std::chrono::seconds(2));
+  char buffer[32];
+  double ballast = fraction * 10.;
+  int msg_len = sprintf(buffer,"!g,b%.3f\r", ballast);
+  port.FullWrite(std::as_bytes(std::span{buffer}.first(msg_len)), env, std::chrono::seconds(2));
   return true;
 }
 

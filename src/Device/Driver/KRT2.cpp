@@ -202,7 +202,7 @@ KRT2Device::Send(std::span<const std::byte> msg,
     }
 
     // Send the message
-    port.FullWrite(msg.data(), msg.size(), env, CMD_TIMEOUT);
+    port.FullWrite(msg, env, CMD_TIMEOUT);
 
     // Wait for the response
     if (LockWaitResponse() == ACK)

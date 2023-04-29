@@ -79,12 +79,12 @@ Volkslogger::ConnectAndFlush(Port &port, OperationEnvironment &env,
 }
 
 static void
-SendWithCRC(Port &port, const void *data, size_t length,
+SendWithCRC(Port &port, std::span<const std::byte> src,
             OperationEnvironment &env)
 {
-  port.FullWrite(data, length, env, std::chrono::seconds(2));
+  port.FullWrite(src, env, std::chrono::seconds(2));
 
-  uint16_t crc16 = UpdateCRC16CCITT(data, length, 0);
+  uint16_t crc16 = UpdateCRC16CCITT(src.data(), src.size(), 0);
   port.Write(crc16 >> 8);
   port.Write(crc16 & 0xff);
 }
@@ -113,7 +113,7 @@ Volkslogger::SendCommand(Port &port, OperationEnvironment &env,
 
   env.Sleep(delay);
 
-  SendWithCRC(port, cmdarray, sizeof(cmdarray), env);
+  SendWithCRC(port, std::as_bytes(std::span{cmdarray}), env);
 
   /* wait for confirmation */
 
@@ -291,7 +291,7 @@ Volkslogger::WriteBulk(Port &port, OperationEnvironment &env,
     if (n > 400)
       n = 400;
 
-    n = port.Write(p, n);
+    n = port.Write(std::as_bytes(std::span{p, n}));
 
     crc16 = UpdateCRC16CCITT(p, n, crc16);
     p += n;

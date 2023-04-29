@@ -62,7 +62,7 @@ public:
   /* virtual methods from Port */
   PortState GetState() const noexcept override;
   bool WaitConnected(OperationEnvironment &env) override;
-  std::size_t Write(const void *data, std::size_t length) override;
+  std::size_t Write(std::span<const std::byte> src) override;
   bool Drain() override;
   void Flush() override;
   unsigned GetBaudrate() const noexcept override;

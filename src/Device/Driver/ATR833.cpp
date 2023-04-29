@@ -90,7 +90,7 @@ public:
 
   void Send(Port &port, OperationEnvironment &env) {
     data[fill++] = checksum;
-    port.FullWrite(data, fill, env, std::chrono::seconds(2));
+    port.FullWrite(std::span{data}.first(fill), env, std::chrono::seconds(2));
   }
 };
 

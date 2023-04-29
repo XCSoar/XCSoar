@@ -274,7 +274,7 @@ SerialPort::Run() noexcept
 }
 
 std::size_t
-SerialPort::Write(const void *data, std::size_t length)
+SerialPort::Write(std::span<const std::byte> src)
 {
   DWORD NumberOfBytesWritten;
 
@@ -284,14 +284,15 @@ SerialPort::Write(const void *data, std::size_t length)
   OverlappedEvent osWriter;
 
   // Start reading data
-  if (::WriteFile(hPort, data, length, &NumberOfBytesWritten, osWriter.GetPointer()))
+  if (::WriteFile(hPort, src.data(), src.size(),
+                  &NumberOfBytesWritten, osWriter.GetPointer()))
     return NumberOfBytesWritten;
 
   if (auto error = ::GetLastError(); error != ERROR_IO_PENDING)
     throw MakeLastError(error, "Port write failed");
 
   // Let's wait for ReadFile() to finish
-  unsigned timeout_ms = 1000 + length * 10;
+  unsigned timeout_ms = 1000 + src.size() * 10;
   switch (osWriter.Wait(timeout_ms)) {
   case OverlappedEvent::FINISHED:
     // Get results

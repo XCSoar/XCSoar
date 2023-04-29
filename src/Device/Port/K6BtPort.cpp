@@ -16,7 +16,7 @@ bool
 K6BtPort::SendCommand(std::byte cmd)
 {
   const std::byte data[2] = { ESCAPE, cmd };
-  return port->Write(data, sizeof(data)) == sizeof(data);
+  return port->Write(std::span{data}) == sizeof(data);
 }
 
 PortState
@@ -44,26 +44,27 @@ K6BtPort::WaitConnected(OperationEnvironment &env)
 }
 
 std::size_t
-K6BtPort::Write(const void *_data, std::size_t length)
+K6BtPort::Write(std::span<const std::byte> src)
 {
   /* in order to forward the buffer verbatim to the real device, we
      have to escape all ESCAPE bytes (i.e. send each of them twice) */
 
-  const std::byte *data = (const std::byte *)_data;
+  const std::byte *data = (const std::byte *)src.data();
+  std::size_t length = src.size();
 
   std::size_t total = 0;
 
   const std::byte *p;
   while ((p = (const std::byte *)memchr(data, (char)ESCAPE, length)) != nullptr) {
     std::size_t chunk = p - data + 1;
-    std::size_t nbytes = port->Write(data, chunk);
+    std::size_t nbytes = port->Write({data, chunk});
     total += nbytes;
     if (nbytes != chunk)
       return total;
 
     /* write the ESCAPE byte again (but don't consider it in the
        return value) */
-    port->Write(p, 1);
+    port->Write({p, 1});
 
     ++p;
 
@@ -72,7 +73,7 @@ K6BtPort::Write(const void *_data, std::size_t length)
   }
 
   if (length > 0)
-    total += port->Write(data, length);
+    total += port->Write({data, length});
 
   return total;
 }

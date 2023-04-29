@@ -49,14 +49,14 @@ LX::CommandModeQuick(Port &port, OperationEnvironment &env)
 
 void
 LX::SendPacket(Port &port, Command command,
-               const void *data, size_t length,
+               std::span<const std::byte> payload,
                OperationEnvironment &env,
                std::chrono::steady_clock::duration timeout)
 {
   SendCommand(port, command);
 
-  port.FullWrite(data, length, env, timeout);
-  port.Write(calc_crc(data, length, 0xff));
+  port.FullWrite(payload, env, timeout);
+  port.Write(calc_crc(payload.data(), payload.size(), 0xff));
 }
 
 bool

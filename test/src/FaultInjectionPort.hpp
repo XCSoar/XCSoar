@@ -32,8 +32,8 @@ public:
       : PortState::FAILED;
   }
 
-  size_t Write([[maybe_unused]] const void *data, size_t length) override {
-    return length;
+  std::size_t Write([[maybe_unused]] std::span<const std::byte> src) override {
+    return src.size();
   }
 
   bool Drain() override {

@@ -10,6 +10,7 @@
 #include "io/async/GlobalAsioThread.hpp"
 #include "io/async/AsioThread.hpp"
 #include "io/NullDataHandler.hpp"
+#include "util/SpanCast.hxx"
 #include "util/StaticString.hxx"
 #include "util/PrintException.hxx"
 #include "Math/Util.hpp"
@@ -61,7 +62,7 @@ try {
       sentence.AppendFormat("%08X", uround(pressure));
       sentence += "\n";
 
-      port->Write(sentence.c_str(), sentence.length());
+      port->Write(AsBytes(std::string_view{sentence}));
     }
 
     if (battery_clock.CheckUpdate(std::chrono::seconds(11))) {
@@ -74,7 +75,7 @@ try {
         sentence += "*";
 
       sentence += "\n";
-      port->Write(sentence.c_str(), sentence.length());
+      port->Write(sentence);
 
       if (battery_level == 0)
         battery_level = 11;

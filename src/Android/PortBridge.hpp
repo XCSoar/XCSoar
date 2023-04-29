@@ -6,6 +6,7 @@
 #include "java/Closeable.hxx"
 
 #include <cstddef>
+#include <span>
 
 class PortListener;
 class DataHandler;
@@ -49,5 +50,5 @@ public:
     return env->CallBooleanMethod(Get(), setBaudRate_method, baud_rate);
   }
 
-  std::size_t write(JNIEnv *env, const void *data, size_t length);
+  std::size_t write(JNIEnv *env, std::span<const std::byte> src);
 };

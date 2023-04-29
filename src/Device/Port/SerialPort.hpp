@@ -81,7 +81,7 @@ public:
   void Flush() override;
   void SetBaudrate(unsigned baud_rate) override;
   unsigned GetBaudrate() const noexcept override;
-  std::size_t Write(const void *data, std::size_t length) override;
+  std::size_t Write(std::span<const std::byte> src) override;
 
 protected:
   /* virtual methods from class Thread */

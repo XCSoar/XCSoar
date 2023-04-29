@@ -45,7 +45,7 @@ public:
 bool
 EWMicroRecorderDevice::EnableNMEA(OperationEnvironment &env)
 {
-  port.FullWrite("!!\r\n", 4, env, std::chrono::milliseconds(500));
+  port.FullWrite("!!\r\n", env, std::chrono::milliseconds(500));
   return true;
 }
 

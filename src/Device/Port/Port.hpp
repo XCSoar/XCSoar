@@ -10,6 +10,7 @@
 #include <cstddef>
 #include <exception>
 #include <cstddef>
+#include <span>
 #include <string_view>
 
 class OperationEnvironment;
@@ -54,7 +55,7 @@ public:
    * @return the number of bytes written
    */
   gcc_nonnull_all
-  virtual std::size_t Write(const void *data, std::size_t length) = 0;
+  virtual std::size_t Write(std::span<const std::byte> src) = 0;
 
   /**
    * Writes a null-terminated string to the serial port
@@ -68,7 +69,7 @@ public:
    * @param ch Byte to write
    */
   void Write(std::byte ch) {
-    Write(&ch, sizeof(ch));
+    Write(std::span{&ch, 1});
   }
 
   void Write(char ch) {
@@ -85,8 +86,7 @@ public:
    *
    * @param timeout give up after this duration
    */
-  gcc_nonnull_all
-  void FullWrite(const void *buffer, std::size_t length,
+  void FullWrite(std::span<const std::byte> src,
                  OperationEnvironment &env,
                  std::chrono::steady_clock::duration timeout);
 

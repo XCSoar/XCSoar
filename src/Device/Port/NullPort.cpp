@@ -35,9 +35,9 @@ NullPort::Flush()
 }
 
 std::size_t
-NullPort::Write([[maybe_unused]] const void *data, std::size_t length)
+NullPort::Write([[maybe_unused]] std::span<const std::byte> src)
 {
-  return length;
+  return src.size();
 }
 
 bool

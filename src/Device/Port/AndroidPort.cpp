@@ -58,9 +58,9 @@ AndroidPort::SetBaudrate(unsigned baud_rate)
 }
 
 std::size_t
-AndroidPort::Write(const void *data, std::size_t length)
+AndroidPort::Write(std::span<const std::byte> src)
 {
   assert(bridge != nullptr);
 
-  return bridge->write(Java::GetEnv(), data, length);
+  return bridge->write(Java::GetEnv(), src);
 }
