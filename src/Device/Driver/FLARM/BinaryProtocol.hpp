@@ -20,10 +20,10 @@ struct RecordedFlightInfo;
 
 namespace FLARM {
 
-static constexpr uint8_t START_FRAME = 0x73;
-static constexpr uint8_t ESCAPE = 0x78;
-static constexpr uint8_t ESCAPE_ESCAPE = 0x55;
-static constexpr uint8_t ESCAPE_START = 0x31;
+static constexpr std::byte START_FRAME{0x73};
+static constexpr std::byte ESCAPE{0x78};
+static constexpr std::byte ESCAPE_ESCAPE{0x55};
+static constexpr std::byte ESCAPE_START{0x31};
 
 enum MessageType {
   MT_ERROR = 0x00,

@@ -76,11 +76,11 @@ private:
     binary_buffer.Clear();
   }
 
-  size_t Unescape(const uint8_t *const data, const uint8_t *const end,
+  size_t Unescape(const std::byte *const data, const std::byte *const end,
                   void *_dest, size_t length) {
-    uint8_t *dest = (uint8_t *)_dest;
+    std::byte *dest = (std::byte *)_dest;
 
-    const uint8_t *p;
+    const std::byte *p;
     for (p = data; length > 0; ++p) {
       if (p >= end)
         return std::min(p - data, end - data - 1);
@@ -119,8 +119,8 @@ private:
   }
 
   size_t HandleBinary(const void *_data, size_t length) {
-    const uint8_t *const data = (const uint8_t *)_data, *end = data + length;
-    const uint8_t *p = data;
+    const std::byte *const data = (const std::byte *)_data, *end = data + length;
+    const std::byte *p = data;
 
     p = std::find(p, end, FLARM::START_FRAME);
     if (p == NULL)
