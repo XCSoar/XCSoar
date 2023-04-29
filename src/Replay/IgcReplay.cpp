@@ -85,6 +85,12 @@ IgcReplay::Update(NMEAInfo &basic)
   } else
     basic.engine_noise_level_available.Clear();
 
+  if (fix.rpm >= 0) {
+    basic.engine_state.revs_per_sec = fix.rpm / 60.;
+    basic.engine_state.revs_per_sec_available.Update(basic.clock);
+  } else
+    basic.engine_state.revs_per_sec_available.Clear();
+
   if (fix.trt >= 0) {
     basic.track = Angle::Degrees(fix.trt);
     basic.track_available.Update(basic.clock);
