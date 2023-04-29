@@ -97,22 +97,6 @@ private:
   bool Send(std::span<const std::byte> msg, OperationEnvironment &env);
 
   /**
-   * Calculates the length of the message just receiving.
-   *
-   * @param data Pointer to the first character of the message.
-   * @param length Number of characters received.
-   * @return Expected message length.
-   */
-  static std::size_t ExpectedMsgLength(std::span<const std::byte> src) noexcept;
-
-  /**
-   * Calculates the length of the command message just receiving.
-   *
-   * @param code Command code received after the STX character.
-   * @return Expected message length after the code character.
-   */
-  static size_t ExpectedMsgLengthSTX(std::byte code);
-  /**
    * Gets the displayable station name.
    *
    * @param name Name of the radio station.
@@ -154,7 +138,18 @@ private:
    * Handles STX commands from the radio, when these indicate a change in either
    * active of passive frequency.
    */
-   static void HandleSTX(const struct stx_msg &msg, NMEAInfo &info) noexcept;
+  static void HandleFrequency(const struct stx_msg &msg, NMEAInfo &info) noexcept;
+
+  static std::size_t HandleSTX(std::span<const std::byte> src, NMEAInfo &info) noexcept;
+
+  /**
+   * Handle a raw message data received on the port.  It may be called
+   * repeatedly until all data has been consumed.
+   *
+   * @return the number of bytes consumed or 0 if the message is
+   * incomplete
+   */
+  std::size_t HandleMessage(std::span<const std::byte> src, NMEAInfo &info) noexcept;
 
 public:
   /**
@@ -240,95 +235,19 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
 
     for (;;) {
       // Read data from buffer to handle the messages
-      const auto range = rx_buf.Read();
-      if (range.empty())
+      const auto consumed = HandleMessage(rx_buf.Read(), info);
+      if (consumed == 0)
+        // need more data
         break;
 
-      const auto expected_msg_length = ExpectedMsgLength(range);
-      if (range.size() < expected_msg_length)
-        break;
-
-      switch (range.front()) {
-      case RCQ:
-        // Respond to connection query.
-        port.Write(0x01);
-        break;
-      case ACK:
-      case NAK:
-        // Received a response to a normal command (STX)
-        LockSetResponse(range.front());
-        break;
-      case STX:
-        // Received a command from the radio (STX). Handle what we know.
-        HandleSTX(*(const struct stx_msg *)range.data(), info);
-      }
       // Message handled -> remove message
-      rx_buf.Consume(expected_msg_length);
+      rx_buf.Consume(consumed);
       // Received something from the radio -> the connection is alive
       info.alive.Update(info.clock);
     }
   } while (!s.empty());
 
   return true;
-}
-
-/**
-  The expected length of a received message may change,
-  when the first character is STX and the second character
-  is not received yet.
-*/
-inline std::size_t
-KRT2Device::ExpectedMsgLength(std::span<const std::byte> src) noexcept
-{
-  assert(!src.empty());
-
-  if (src[0] == STX) {
-    if (src.size() > 1) {
-      return 2 + ExpectedMsgLengthSTX(src[1]);
-    } else {
-      // minimum 2 chars
-      return 2;
-    }
-  } else
-    return 1;
-}
-
-inline size_t
-KRT2Device::ExpectedMsgLengthSTX(std::byte code)
-{
-  switch (code) {
-  case ACTIVE_FREQUENCY:
-  case STANDBY_FREQUENCY:
-    return 11;
-
-  case SET_FREQUENCY:
-    return 12;
-
-  case SET_VOLUME:
-    return 4;
-
-  case EXCHANGE_FREQUENCIES:
-  case UNKNOWN1:
-  case LOW_BATTERY:
-  case NO_LOW_BATTERY:
-  case PLL_ERROR:
-  case PLL_ERROR2:
-  case NO_PLL_ERROR:
-  case RX:
-  case NO_RX:
-  case TX:
-  case TE:
-  case NO_TX_RX:
-  case DUAL_ON:
-  case DUAL_OFF:
-  case RX_ON_ACTIVE_FREQUENCY:
-  case NO_RX_ON_ACTIVE_FREQUENCY:
-    return 0;
-
-  default:
-    // Received unknown STX code
-    return 0;
-  }
 }
 
 inline void
@@ -356,18 +275,8 @@ KRT2Device::GetStationName(char *station_name, const TCHAR *name)
 }
 
 inline void
-KRT2Device::HandleSTX(const struct stx_msg &msg, NMEAInfo &info) noexcept
+KRT2Device::HandleFrequency(const struct stx_msg &msg, NMEAInfo &info) noexcept
 {
-  if (msg.command != ACTIVE_FREQUENCY && msg.command != STANDBY_FREQUENCY &&
-      msg.command != EXCHANGE_FREQUENCIES) {
-    return;
-  }
-
-  if (msg.command == EXCHANGE_FREQUENCIES) {
-    info.settings.swap_frequencies.Update(info.clock);
-    return;
-  }
-
   if (msg.checksum != (msg.mhz ^ msg.khz)) {
     return;
   }
@@ -385,6 +294,82 @@ KRT2Device::HandleSTX(const struct stx_msg &msg, NMEAInfo &info) noexcept
     info.settings.has_standby_frequency.Update(info.clock);
     info.settings.standby_frequency = freq;
     info.settings.standby_freq_name = freq_name;
+  }
+}
+
+inline std::size_t
+KRT2Device::HandleSTX(std::span<const std::byte> src, NMEAInfo &info) noexcept
+{
+  if (src.size() < 2)
+    return 0;
+
+  switch (src[1]) {
+  case ACTIVE_FREQUENCY:
+  case STANDBY_FREQUENCY:
+    if (src.size() < sizeof(struct stx_msg))
+      return 0;
+
+    HandleFrequency(*(const struct stx_msg *)src.data(), info);
+    return sizeof(struct stx_msg);
+
+  case SET_FREQUENCY:
+    return src.size() < 14 ? 0 : 14;
+
+  case SET_VOLUME:
+    return src.size() < 6 ? 0 : 6;
+
+  case EXCHANGE_FREQUENCIES:
+    info.settings.swap_frequencies.Update(info.clock);
+    return 2;
+
+  case UNKNOWN1:
+  case LOW_BATTERY:
+  case NO_LOW_BATTERY:
+  case PLL_ERROR:
+  case PLL_ERROR2:
+  case NO_PLL_ERROR:
+  case RX:
+  case NO_RX:
+  case TX:
+  case TE:
+  case NO_TX_RX:
+  case DUAL_ON:
+  case DUAL_OFF:
+  case RX_ON_ACTIVE_FREQUENCY:
+  case NO_RX_ON_ACTIVE_FREQUENCY:
+    return 2;
+
+  default:
+    // Received unknown STX code
+    return 2;
+  }
+}
+
+inline std::size_t
+KRT2Device::HandleMessage(std::span<const std::byte> src,
+                          NMEAInfo &info) noexcept
+{
+  if (src.empty())
+    return 0;
+
+  switch (src.front()) {
+  case RCQ:
+    // Respond to connection query.
+    port.Write(0x01);
+    return 1;
+
+  case ACK:
+  case NAK:
+    // Received a response to a normal command (STX)
+    LockSetResponse(src.front());
+    return 1;
+
+  case STX:
+    // Received a command from the radio (STX). Handle what we know.
+    return HandleSTX(src, info);
+
+  default:
+    return 1;
   }
 }
 

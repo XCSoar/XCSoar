@@ -55,22 +55,16 @@ private:
    */
   void HandleResponse(const std::byte *data, struct NMEAInfo &info);
 
-  /**
-   * Calculates the length of the message just receiving.
-   *
-   * @param data Pointer to the first character of the message.
-   * @param length Number of characters received.
-   * @return Expected message length.
-   */
-  static std::size_t ExpectedMsgLength(std::span<const std::byte> src) noexcept;
+  static std::size_t HandleSTX(std::span<const std::byte> src, NMEAInfo &info) noexcept;
 
   /**
-   * Calculates the length of the command message just receiving.
+   * Handle a raw message data received on the port.  It may be called
+   * repeatedly until all data has been consumed.
    *
-   * @param code Command code received after the STX+'r' character.
-   * @return Expected message length after the code character.
+   * @return the number of bytes consumed or 0 if the message is
+   * incomplete
    */
-  static std::size_t ExpectedMsgLengthCommand(std::byte code) noexcept;
+  static std::size_t HandleMessage(std::span<const std::byte> src, NMEAInfo &info) noexcept;
 };
 
 class ATRBuffer {
@@ -118,118 +112,88 @@ ATR833Device::DataReceived(std::span<const std::byte> s,
 
     for (;;) {
       // Read data from buffer to handle the messages
-      const auto range = rx_buf.Read();;
-      if (range.empty())
+      const auto consumed = HandleMessage(rx_buf.Read(), info);
+      if (consumed == 0)
+        // need more data
         break;
 
-      const auto expected_msg_length = ExpectedMsgLength(range);
-      if (range.size() < expected_msg_length)
-        break;
-
-      if (range.front() == STX) {
-        HandleResponse(range.data(), info);
-      }
       // Message handled -> remove message
-      rx_buf.Consume(expected_msg_length);
+      rx_buf.Consume(consumed);
     }
   } while (!s.empty());
 
   return true;
 }
 
-/**
-  The expected length of a received message may change,
-  when the first character is STX and the second character
-  is not received yet.
-*/
 inline std::size_t
-ATR833Device::ExpectedMsgLength(std::span<const std::byte> src) noexcept
+ATR833Device::HandleSTX(std::span<const std::byte> src, NMEAInfo &info) noexcept
 {
-  assert(!src.empty());
+  if (src.size() < 3)
+    return 0;
 
-  if (src[0] == STX) {
-    if (src.size() > 2) {
-      return 3 + ExpectedMsgLengthCommand(src[2]);
-    } else {
-      // minimum 3 chars
-      return 3;
-    }
-  } else
-    return 1;
-}
-
-inline std::size_t
-ATR833Device::ExpectedMsgLengthCommand(std::byte code) noexcept
-{
-  switch (code) {
+  switch (src[2]) {
   case SETACTIVE:
     // Active frequency
-    return 2;
+    if (src.size() < 5)
+      return 0;
+
+    info.alive.Update(info.clock);
+    info.settings.has_active_frequency.Update(info.clock);
+    info.settings.active_frequency =
+      RadioFrequency::FromMegaKiloHertz(static_cast<unsigned>(src[3]),
+                                        static_cast<unsigned>(src[4]) * 5);
+    return 5;
+
   case SETSTANDBY:
     // Standby frequency
-    return 2;
+    if (src.size() < 5)
+      return 0;
+
+    info.alive.Update(info.clock);
+    info.settings.has_standby_frequency.Update(info.clock);
+    info.settings.standby_frequency =
+      RadioFrequency::FromMegaKiloHertz(static_cast<unsigned>(src[3]),
+                                        static_cast<unsigned>(src[4]) * 5);
+    return 5;
+
   case EXCHANGE:
     // Exchange frequencies
-    return 1;
+    info.alive.Update(info.clock);
+    info.settings.swap_frequencies.Update(info.clock);
+    return 3;
+
   case ALLDATA:
     // receive full dataset (freq, VOL, etc...)
-    return 12;
+    return src.size() < 15 ? 0 : 15;
+
   case ACK:
-    return 1;
+    return src.size() < 4 ? 0 : 4;
+
   case NAK:
-    return 2;
+    return src.size() < 5 ? 0 : 5;
+
   case ALIVE:
-    return 1;
+    return src.size() < 4 ? 0 : 4;
+
   default:
     // Received unknown msg id (code)
-    return 0;
+    return 3;
   }
 }
 
-inline void
-ATR833Device::HandleResponse(const std::byte *data, struct NMEAInfo &info)
+inline std::size_t
+ATR833Device::HandleMessage(std::span<const std::byte> src,
+                            NMEAInfo &info) noexcept
 {
-  info.alive.Update(info.clock);
+  if (src.empty())
+    return 0;
 
-  if(data[2] != EXCHANGE && data[2] != ALLDATA &&
-     data[2] != SETACTIVE && data[2] != SETSTANDBY)
-    return;
+  switch (src.front()) {
+  case STX:
+    return HandleSTX(src, info);
 
-  if(data[2] == SETACTIVE) {
-    info.settings.has_active_frequency.Update(info.clock);
-    info.settings.active_frequency =
-      RadioFrequency::FromMegaKiloHertz(static_cast<unsigned>(data[3]),
-                                        static_cast<unsigned>(data[4]) * 5);
-  }
-
-  if(data[2] == SETSTANDBY) {
-    info.settings.has_standby_frequency.Update(info.clock);
-    info.settings.standby_frequency =
-      RadioFrequency::FromMegaKiloHertz(static_cast<unsigned>(data[3]),
-                                        static_cast<unsigned>(data[4]) * 5);
-  }
-
-  if(data[2] == EXCHANGE) {
-    info.settings.swap_frequencies.Update(info.clock);
-  }
-
-  if(data[2] == ALLDATA) {
-    /*
-      byte 4: MHz active
-      byte 5: kHz/5 active
-      byte 6: MHz standby
-      byte 7: kHz/5 standby     
-      byte 8-15: not used by XCSoar (VOL, SQ, VOX, INT, DIM, EXT, spacing, dual)   
-    */
-    info.settings.has_active_frequency.Update(info.clock);
-    info.settings.active_frequency = 
-      RadioFrequency::FromMegaKiloHertz(static_cast<unsigned>(data[3]),
-                                        static_cast<unsigned>(data[4]) * 5);
-
-    info.settings.has_standby_frequency.Update(info.clock);
-    info.settings.standby_frequency = 
-      RadioFrequency::FromMegaKiloHertz(static_cast<unsigned>(data[5]),
-                                        static_cast<unsigned>(data[6]) * 5);
+  default:
+    return 1;
   }
 }
 
@@ -301,5 +265,3 @@ const DeviceRegister atr833_driver = {
   DeviceRegister::RAW_GPS_DATA,
   ATR833CreateOnPort,
 };
-
-
