@@ -625,7 +625,7 @@ private:
                        bool has_egt,
                        Temperature egt,
                        bool has_revs_per_sec,
-                       uint16_t revs_per_sec) noexcept override;
+                       float revs_per_sec) noexcept override;
   void OnVoltageValues(int temp_adc, unsigned voltage_index,
                        int volt_adc) noexcept override;
   void OnNunchukValues(int joy_x, int joy_y,

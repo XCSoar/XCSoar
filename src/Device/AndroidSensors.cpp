@@ -293,7 +293,7 @@ DeviceDescriptor::OnEngineSensors(bool has_cht,
                                   bool has_egt,
                                   Temperature egt,
                                   bool has_revs_per_sec,
-                                  uint16_t revs_per_sec) noexcept
+                                  float revs_per_sec) noexcept
 {
   const auto e = BeginEdit();
   NMEAInfo &basic = *e;

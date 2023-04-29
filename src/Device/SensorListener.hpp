@@ -57,7 +57,7 @@ public:
                                bool has_egt,
                                Temperature egt,
                                bool has_revs_per_sec,
-                               uint16_t revs_per_sec) noexcept = 0;
+                               float revs_per_sec) noexcept = 0;
 
   virtual void OnVoltageValues(int temp_adc, unsigned voltage_index,
                                int volt_adc) noexcept = 0;

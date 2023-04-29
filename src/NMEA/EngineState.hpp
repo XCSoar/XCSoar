@@ -13,7 +13,7 @@ struct EngineState
 {
   /* The engine box measured revolutions per second on the camshaft. */
   Validity revs_per_sec_available;
-  uint16_t revs_per_sec;
+  float revs_per_sec;
 
   /* The engine Cylinder Head Temperature (CHT) */
   Validity cht_temperature_available;

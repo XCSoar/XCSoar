@@ -188,7 +188,7 @@ Java_org_xcsoar_NativeSensorListener_onEngineSensors(JNIEnv *env,
                                                      jboolean has_egt_temp,
                                                      jint egt_temp,
                                                      jboolean has_revs_per_sec,
-                                                     jint revs_per_sec)
+                                                     jfloat revs_per_sec)
 {
   jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
   if (ptr == 0)
