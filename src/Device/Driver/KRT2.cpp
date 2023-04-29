@@ -428,9 +428,7 @@ KRT2Device::PutStandbyFrequency(RadioFrequency frequency,
 static Device *
 KRT2CreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &comPort)
 {
-  Device *dev = new KRT2Device(comPort);
-
-  return dev;
+  return new KRT2Device(comPort);
 }
 
 const DeviceRegister krt2_driver = {
