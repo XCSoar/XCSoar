@@ -13,6 +13,8 @@
 #include "ui/opengl/Features.hpp"
 #endif
 
+#include "ui/canvas/Features.hpp" // for DRAW_MOUSE_CURSOR
+
 #ifdef ANDROID
 #include "thread/Mutex.hxx"
 #include "thread/Cond.hxx"
