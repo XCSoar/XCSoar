@@ -109,20 +109,17 @@ ATR833Device::DataReceived(std::span<const std::byte> s,
 
   do {
     // Append new data to the buffer, as much as fits in there
-    auto range = rx_buf.Write();
-    if (range.empty()) {
+    const auto nbytes = rx_buf.MoveFrom(s);
+    if (nbytes == 0) {
       rx_buf.Clear();
       continue;
     }
 
-    size_t nbytes = std::min(range.size(), s.size());
-    memcpy(range.data(), s.data(), nbytes);
     s = s.subspan(nbytes);
-    rx_buf.Append(nbytes);
 
     for (;;) {
       // Read data from buffer to handle the messages
-      range = rx_buf.Read();;
+      const auto range = rx_buf.Read();;
 
       if (range.empty() || range.size() < expected_msg_length)
         break;
