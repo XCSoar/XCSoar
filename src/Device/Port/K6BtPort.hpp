@@ -14,10 +14,10 @@
  * K6Bt is a Bluetooth to RS-232 adapter from K6-Team.
  */
 class K6BtPort : public Port {
-  static constexpr uint8_t NOP = 0x00;
-  static constexpr uint8_t ESCAPE = 0xa5;
-  static constexpr uint8_t CHANGE_BAUD_RATE = 0x30;
-  static constexpr uint8_t FLUSH_BUFFERS = 0x40;
+  static constexpr std::byte NOP{0x00};
+  static constexpr std::byte ESCAPE{0xa5};
+  static constexpr std::byte CHANGE_BAUD_RATE{0x30};
+  static constexpr std::byte FLUSH_BUFFERS{0x40};
 
   std::unique_ptr<Port> port;
 
@@ -28,7 +28,7 @@ public:
            PortListener *listener, DataHandler &handler) noexcept;
 
 protected:
-  bool SendCommand(uint8_t cmd);
+  bool SendCommand(std::byte cmd);
   void SendSetBaudrate(unsigned baud_rate);
 
 public:
