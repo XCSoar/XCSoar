@@ -118,7 +118,7 @@ private:
    * Handles STX commands from the radio, when these indicate a change in either
    * active of passive frequency.
    */
-   static void HandleSTXCommand(const struct stx_msg *msg, NMEAInfo &info) noexcept;
+   static void HandleSTX(const struct stx_msg &msg, NMEAInfo &info) noexcept;
 
 public:
   /**
@@ -236,10 +236,7 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
       break;
       case STX:
         // Received a command from the radio (STX). Handle what we know.
-      {
-        const struct stx_msg * msg = (const struct stx_msg *) range.data();
-        HandleSTXCommand(msg, info);
-      }
+        HandleSTX(*(const struct stx_msg *)range.data(), info);
       }
       // Message handled -> remove message
       rx_buf.Consume(expected_msg_length);
@@ -355,32 +352,31 @@ KRT2Device::GetStationName(char *station_name, const TCHAR *name)
 }
 
 inline void
-KRT2Device::HandleSTXCommand(const struct stx_msg *msg, NMEAInfo &info) noexcept
+KRT2Device::HandleSTX(const struct stx_msg &msg, NMEAInfo &info) noexcept
 {
-  if(msg->command != 'U' && msg->command != 'R' && msg->command != 'C') {
+  if (msg.command != 'U' && msg.command != 'R' && msg.command != 'C') {
     return;
   }
 
-  if(msg->command == 'C') {
+  if (msg.command == 'C') {
     info.settings.swap_frequencies.Update(info.clock);
     return;
   }
 
-  if(msg->checksum != (msg->mhz ^ msg->khz)) {
+  if (msg.checksum != (msg.mhz ^ msg.khz)) {
     return;
   }
 
-  const auto freq = RadioFrequency::FromMegaKiloHertz(msg->mhz, msg->khz * 5);
+  const auto freq = RadioFrequency::FromMegaKiloHertz(msg.mhz, msg.khz * 5);
 
   StaticString<MAX_NAME_LENGTH> freq_name;
-  freq_name.SetASCII(msg->station);
+  freq_name.SetASCII(msg.station);
 
-  if(msg->command == 'U') {
+  if (msg.command == 'U') {
     info.settings.has_active_frequency.Update(info.clock);
     info.settings.active_frequency = freq;
     info.settings.active_freq_name = freq_name;
-  }
-  else if(msg->command == 'R') {
+  } else if (msg.command == 'R') {
     info.settings.has_standby_frequency.Update(info.clock);
     info.settings.standby_frequency = freq;
     info.settings.standby_freq_name = freq_name;
