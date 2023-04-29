@@ -112,6 +112,20 @@ private:
                     RadioFrequency frequency,
                     const TCHAR *name,
                     OperationEnvironment &env);
+
+  void LockSetResponse(std::byte _response) noexcept {
+    const std::lock_guard lock{response_mutex};
+    response = _response;
+    // Signal the response to the TX thread
+    rx_cond.notify_one();
+  }
+
+  std::byte LockWaitResponse() noexcept {
+    std::unique_lock lock{response_mutex};
+    rx_cond.wait_for(lock, CMD_TIMEOUT);
+    return response;
+  }
+
   /**
    * Handle an STX command from the radio.
    *
@@ -174,14 +188,7 @@ KRT2Device::Send(std::span<const std::byte> msg,
     port.FullWrite(msg.data(), msg.size(), env, CMD_TIMEOUT);
 
     // Wait for the response
-    std::byte _response;
-    {
-      std::unique_lock lock{response_mutex};
-      rx_cond.wait_for(lock, CMD_TIMEOUT);
-      _response = response;
-    }
-
-    if (_response == ACK)
+    if (LockWaitResponse() == ACK)
       // ACK received, finish
       return true;
 
@@ -226,14 +233,9 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
         break;
       case ACK:
       case NAK:
-      {
         // Received a response to a normal command (STX)
-        const std::lock_guard lock{response_mutex};
-        response = range.front();
-        // Signal the response to the TX thread
-        rx_cond.notify_one();
-      }
-      break;
+        LockSetResponse(range.front());
+        break;
       case STX:
         // Received a command from the radio (STX). Handle what we know.
         HandleSTX(*(const struct stx_msg *)range.data(), info);
