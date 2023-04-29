@@ -142,7 +142,7 @@ ATR833Device::DataReceived(std::span<const std::byte> s,
   when the first character is STX and the second character
   is not received yet.
 */
-std::size_t
+inline std::size_t
 ATR833Device::ExpectedMsgLength(std::span<const std::byte> src) noexcept
 {
   assert(!src.empty());
@@ -158,7 +158,7 @@ ATR833Device::ExpectedMsgLength(std::span<const std::byte> src) noexcept
     return 1;
 }
 
-std::size_t
+inline std::size_t
 ATR833Device::ExpectedMsgLengthCommand(std::byte code) noexcept
 {
   switch (code) {
@@ -186,7 +186,7 @@ ATR833Device::ExpectedMsgLengthCommand(std::byte code) noexcept
   }
 }
 
-void
+inline void
 ATR833Device::HandleResponse(const std::byte *data, struct NMEAInfo &info)
 {
   info.alive.Update(info.clock);

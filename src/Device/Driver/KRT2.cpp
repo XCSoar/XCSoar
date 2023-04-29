@@ -256,7 +256,7 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
   when the first character is STX and the second character
   is not received yet.
 */
-std::size_t
+inline std::size_t
 KRT2Device::ExpectedMsgLength(std::span<const std::byte> src) noexcept
 {
   assert(!src.empty());
@@ -272,7 +272,7 @@ KRT2Device::ExpectedMsgLength(std::span<const std::byte> src) noexcept
     return 1;
 }
 
-size_t
+inline size_t
 KRT2Device::ExpectedMsgLengthSTX(std::byte code)
 {
   switch ((char)code) {
@@ -330,7 +330,7 @@ KRT2Device::ExpectedMsgLengthSTX(std::byte code)
   }
 }
 
-void
+inline void
 KRT2Device::GetStationName(char *station_name, const TCHAR *name)
 {
   if(name == nullptr)
@@ -354,7 +354,7 @@ KRT2Device::GetStationName(char *station_name, const TCHAR *name)
   }
 }
 
-void
+inline void
 KRT2Device::HandleSTXCommand(const struct stx_msg *msg, NMEAInfo &info) noexcept
 {
   if(msg->command != 'U' && msg->command != 'R' && msg->command != 'C') {
