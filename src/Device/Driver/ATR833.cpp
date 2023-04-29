@@ -62,8 +62,7 @@ private:
    * @param length Number of characters received.
    * @return Expected message length.
    */
-  static std::size_t ExpectedMsgLength(const std::byte *data,
-                                       std::size_t length) noexcept;
+  static std::size_t ExpectedMsgLength(std::span<const std::byte> src) noexcept;
 
   /**
    * Calculates the length of the command message just receiving.
@@ -131,7 +130,7 @@ ATR833Device::DataReceived(std::span<const std::byte> s,
       if (range.empty() || range.size() < expected_msg_length)
         break;
 
-      expected_msg_length = ExpectedMsgLength(range.data(), range.size());
+      expected_msg_length = ExpectedMsgLength(range);
 
       if (range.size() >= expected_msg_length) {
         if (range.front() == STX) {
@@ -153,14 +152,13 @@ ATR833Device::DataReceived(std::span<const std::byte> s,
   is not received yet.
 */
 std::size_t
-ATR833Device::ExpectedMsgLength(const std::byte *data, std::size_t length) noexcept
+ATR833Device::ExpectedMsgLength(std::span<const std::byte> src) noexcept
 {
-  assert(data != nullptr);
-  assert(length > 0);
+  assert(!src.empty());
 
-  if (data[0] == STX) {
-    if (length > 2) {
-      return 3 + ExpectedMsgLengthCommand(data[2]);
+  if (src[0] == STX) {
+    if (src.size() > 2) {
+      return 3 + ExpectedMsgLengthCommand(src[2]);
     } else {
       // minimum 3 chars
       return 3;

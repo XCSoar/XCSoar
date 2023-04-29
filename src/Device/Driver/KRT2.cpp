@@ -83,7 +83,8 @@ private:
    * @param length Number of characters received.
    * @return Expected message length.
    */
-  static size_t ExpectedMsgLength(const std::byte *data, size_t length);
+  static std::size_t ExpectedMsgLength(std::span<const std::byte> src) noexcept;
+
   /**
    * Calculates the length of the command message just receiving.
    *
@@ -225,7 +226,7 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
       if (range.size() < expected_msg_length)
         break;
 
-      expected_msg_length = ExpectedMsgLength(range.data(), range.size());
+      expected_msg_length = ExpectedMsgLength(range);
 
       if (range.size() >= expected_msg_length) {
         switch (range.front()) {
@@ -268,17 +269,16 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
   when the first character is STX and the second character
   is not received yet.
 */
-size_t
-KRT2Device::ExpectedMsgLength(const std::byte *data, size_t length)
+std::size_t
+KRT2Device::ExpectedMsgLength(std::span<const std::byte> src) noexcept
 {
+  assert(!src.empty());
+
   size_t expected_length;
 
-  assert(data != nullptr);
-  assert(length > 0);
-
-  if (data[0] == STX) {
-    if (length > 1) {
-      expected_length = 2 + ExpectedMsgLengthSTX(data[1]);
+  if (src[0] == STX) {
+    if (src.size() > 1) {
+      expected_length = 2 + ExpectedMsgLengthSTX(src[1]);
     } else {
       // minimum 2 chars
       expected_length = 2;
