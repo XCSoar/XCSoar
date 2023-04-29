@@ -394,19 +394,15 @@ KRT2Device::PutFrequency(std::byte cmd,
                          const TCHAR *name,
                          OperationEnvironment &env)
 {
-  if (frequency.IsDefined()) {
-    stx_msg msg;
+  stx_msg msg;
 
-    msg.command = cmd;
-    msg.mhz = frequency.GetKiloHertz() / 1000;
-    msg.khz = (frequency.GetKiloHertz() % 1000) / 5;
-    GetStationName(msg.station, name);
-    msg.checksum = msg.mhz ^ msg.khz;
+  msg.command = cmd;
+  msg.mhz = frequency.GetKiloHertz() / 1000;
+  msg.khz = (frequency.GetKiloHertz() % 1000) / 5;
+  GetStationName(msg.station, name);
+  msg.checksum = msg.mhz ^ msg.khz;
 
-    return Send(std::as_bytes(std::span{&msg, 1}), env);
-  }
-
-  return false;
+  return Send(std::as_bytes(std::span{&msg, 1}), env);
 }
 
 bool
