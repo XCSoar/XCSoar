@@ -73,6 +73,7 @@ private:
    *
    * @param msg Message to be send to the radio.
    */
+  [[nodiscard]]
   bool Send(std::span<const std::byte> msg, OperationEnvironment &env);
 
   /**
@@ -423,9 +424,7 @@ KRT2Device::PutFrequency(char cmd,
     GetStationName(msg.station, name);
     msg.checksum = msg.mhz ^ msg.khz;
 
-    Send(std::as_bytes(std::span{&msg, 1}), env);
-
-    return true;
+    return Send(std::as_bytes(std::span{&msg, 1}), env);
   }
 
   return false;
