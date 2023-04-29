@@ -35,11 +35,33 @@ class KRT2Device final : public AbstractDevice {
   static constexpr std::byte NO_RSP{0}; //!< No response received yet.
   static constexpr std::byte RCQ{'S'};  //!< Respond to connection query
 
+  /** Unknown code, received once after power up, STX '8' */
+  static constexpr std::byte UNKNOWN1{'8'};
+  static constexpr std::byte SET_VOLUME{'A'};
+  static constexpr std::byte LOW_BATTERY{'B'};
+  static constexpr std::byte EXCHANGE_FREQUENCIES{'C'};
+  static constexpr std::byte NO_LOW_BATTERY{'D'};
+  static constexpr std::byte PLL_ERROR{'E'};
+  static constexpr std::byte NO_PLL_ERROR{'F'};
+  static constexpr std::byte RX{'J'};
+  static constexpr std::byte TX{'K'};
+  static constexpr std::byte TE{'L'};
+  static constexpr std::byte RX_ON_ACTIVE_FREQUENCY{'M'};
+  static constexpr std::byte DUAL_ON{'O'};
+  static constexpr std::byte STANDBY_FREQUENCY{'R'};
+  static constexpr std::byte ACTIVE_FREQUENCY{'U'};
+  static constexpr std::byte NO_RX{'V'};
+  static constexpr std::byte PLL_ERROR2{'W'};
+  static constexpr std::byte NO_TX_RX{'Y'};
+  static constexpr std::byte SET_FREQUENCY{'Z'};
+  static constexpr std::byte DUAL_OFF{'o'};
+  static constexpr std::byte NO_RX_ON_ACTIVE_FREQUENCY{'m'};
+
   static constexpr size_t MAX_NAME_LENGTH = 8; //!< Max. radio station name length.
 
   struct stx_msg {
     std::byte start = STX;
-    uint8_t command;
+    std::byte command;
     uint8_t mhz;
     uint8_t khz;
     char station[MAX_NAME_LENGTH];
@@ -108,7 +130,7 @@ private:
    * @param env Operation environment.
    * @return true if the frequency is defined.
    */
-  bool PutFrequency(char cmd,
+  bool PutFrequency(std::byte cmd,
                     RadioFrequency frequency,
                     const TCHAR *name,
                     OperationEnvironment &env);
@@ -274,53 +296,33 @@ KRT2Device::ExpectedMsgLength(std::span<const std::byte> src) noexcept
 inline size_t
 KRT2Device::ExpectedMsgLengthSTX(std::byte code)
 {
-  switch ((char)code) {
-  case 'U':
-    // Active frequency
-  case 'R':
-    // Standby frequency
+  switch (code) {
+  case ACTIVE_FREQUENCY:
+  case STANDBY_FREQUENCY:
     return 11;
 
-  case 'Z':
-    // Set frequency
+  case SET_FREQUENCY:
     return 12;
 
-  case 'A':
-    // Set volume
+  case SET_VOLUME:
     return 4;
 
-  case 'C':
-    // Exchange frequencies
-  case '8':
-    // Unknown code, received once after power up, STX '8'
-  case 'B':
-    // Low batt
-  case 'D':
-    // !Low batt
-  case 'E':
-    // PLL error
-  case 'W':
-    // PLL error
-  case 'F':
-    // !PLL error
-  case 'J':
-    // RX
-  case 'V':
-    // !RX
-  case 'K':
-    // TX
-  case 'L':
-    // Te
-  case 'Y':
-    // !TX || !RX
-  case 'O':
-    // Dual on
-  case 'o':
-    // Dual off
-  case 'M':
-    // RX on active frequency on (DUAL^)
-  case 'm':
-    // RX on active frequency off (DUAL)
+  case EXCHANGE_FREQUENCIES:
+  case UNKNOWN1:
+  case LOW_BATTERY:
+  case NO_LOW_BATTERY:
+  case PLL_ERROR:
+  case PLL_ERROR2:
+  case NO_PLL_ERROR:
+  case RX:
+  case NO_RX:
+  case TX:
+  case TE:
+  case NO_TX_RX:
+  case DUAL_ON:
+  case DUAL_OFF:
+  case RX_ON_ACTIVE_FREQUENCY:
+  case NO_RX_ON_ACTIVE_FREQUENCY:
     return 0;
 
   default:
@@ -356,11 +358,12 @@ KRT2Device::GetStationName(char *station_name, const TCHAR *name)
 inline void
 KRT2Device::HandleSTX(const struct stx_msg &msg, NMEAInfo &info) noexcept
 {
-  if (msg.command != 'U' && msg.command != 'R' && msg.command != 'C') {
+  if (msg.command != ACTIVE_FREQUENCY && msg.command != STANDBY_FREQUENCY &&
+      msg.command != EXCHANGE_FREQUENCIES) {
     return;
   }
 
-  if (msg.command == 'C') {
+  if (msg.command == EXCHANGE_FREQUENCIES) {
     info.settings.swap_frequencies.Update(info.clock);
     return;
   }
@@ -374,11 +377,11 @@ KRT2Device::HandleSTX(const struct stx_msg &msg, NMEAInfo &info) noexcept
   StaticString<MAX_NAME_LENGTH> freq_name;
   freq_name.SetASCII(msg.station);
 
-  if (msg.command == 'U') {
+  if (msg.command == ACTIVE_FREQUENCY) {
     info.settings.has_active_frequency.Update(info.clock);
     info.settings.active_frequency = freq;
     info.settings.active_freq_name = freq_name;
-  } else if (msg.command == 'R') {
+  } else if (msg.command == STANDBY_FREQUENCY) {
     info.settings.has_standby_frequency.Update(info.clock);
     info.settings.standby_frequency = freq;
     info.settings.standby_freq_name = freq_name;
@@ -386,7 +389,7 @@ KRT2Device::HandleSTX(const struct stx_msg &msg, NMEAInfo &info) noexcept
 }
 
 bool
-KRT2Device::PutFrequency(char cmd,
+KRT2Device::PutFrequency(std::byte cmd,
                          RadioFrequency frequency,
                          const TCHAR *name,
                          OperationEnvironment &env)
@@ -411,7 +414,7 @@ KRT2Device::PutActiveFrequency(RadioFrequency frequency,
                                const TCHAR *name,
                                OperationEnvironment &env)
 {
-  return PutFrequency('U', frequency, name, env);
+  return PutFrequency(ACTIVE_FREQUENCY, frequency, name, env);
 }
 
 bool
@@ -419,7 +422,7 @@ KRT2Device::PutStandbyFrequency(RadioFrequency frequency,
                                 const TCHAR *name,
                                 OperationEnvironment &env)
 {
-  return PutFrequency('R', frequency, name, env);
+  return PutFrequency(STANDBY_FREQUENCY, frequency, name, env);
 }
 
 static Device *
