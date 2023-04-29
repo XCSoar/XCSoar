@@ -67,8 +67,12 @@ public:
    * Writes a single byte to the serial port
    * @param ch Byte to write
    */
-  void Write(char ch) {
+  void Write(std::byte ch) {
     Write(&ch, sizeof(ch));
+  }
+
+  void Write(char ch) {
+    Write(static_cast<std::byte>(ch));
   }
 
   /**
