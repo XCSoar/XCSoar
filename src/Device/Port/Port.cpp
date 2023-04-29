@@ -211,7 +211,7 @@ Port::ExpectString(const char *token, OperationEnvironment &env,
 }
 
 void
-Port::WaitForChar(const char token, OperationEnvironment &env,
+Port::WaitForByte(const std::byte token, OperationEnvironment &env,
                   std::chrono::steady_clock::duration _timeout)
 {
   const TimeoutClock timeout(_timeout);
@@ -220,8 +220,8 @@ Port::WaitForChar(const char token, OperationEnvironment &env,
     WaitRead(env, timeout.GetRemainingOrZero());
 
     // Read and compare character with token
-    const char ch = (char)ReadByte();
-    if (ch == token)
+    const auto b = ReadByte();
+    if (b == token)
       break;
 
     if (timeout.HasExpired())

@@ -261,8 +261,13 @@ public:
    * operation
    * @param timeout give up after this duration
    */
-  void WaitForChar(const char token, OperationEnvironment &env,
+  void WaitForByte(std::byte token, OperationEnvironment &env,
                    std::chrono::steady_clock::duration timeout);
+
+  void WaitForChar(char token, OperationEnvironment &env,
+                   std::chrono::steady_clock::duration timeout) {
+    return WaitForByte(static_cast<std::byte>(token), env, timeout);
+  }
 
 protected:
   /**
