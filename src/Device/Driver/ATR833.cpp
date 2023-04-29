@@ -105,7 +105,6 @@ ATR833Device::DataReceived(std::span<const std::byte> s,
                            [[maybe_unused]] NMEAInfo &info) noexcept
 {
   assert(!s.empty());
-  size_t expected_msg_length{};
 
   do {
     // Append new data to the buffer, as much as fits in there
@@ -120,20 +119,18 @@ ATR833Device::DataReceived(std::span<const std::byte> s,
     for (;;) {
       // Read data from buffer to handle the messages
       const auto range = rx_buf.Read();;
-
-      if (range.empty() || range.size() < expected_msg_length)
+      if (range.empty())
         break;
 
-      expected_msg_length = ExpectedMsgLength(range);
+      const auto expected_msg_length = ExpectedMsgLength(range);
+      if (range.size() < expected_msg_length)
+        break;
 
-      if (range.size() >= expected_msg_length) {
-        if (range.front() == STX) {
-            HandleResponse(range.data(), info);
-        }
-        // Message handled -> remove message
-        rx_buf.Consume(expected_msg_length);
-        expected_msg_length = 0;
+      if (range.front() == STX) {
+        HandleResponse(range.data(), info);
       }
+      // Message handled -> remove message
+      rx_buf.Consume(expected_msg_length);
     }
   } while (!s.empty());
 

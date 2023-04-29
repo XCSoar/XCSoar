@@ -48,8 +48,6 @@ class KRT2Device final : public AbstractDevice {
 
   //! Port the radio is connected to.
   Port &port;
-  //! Expected length of the message just receiving.
-  size_t expected_msg_length{};
   //! Buffer which receives the messages send from the radio.
   StaticFifoBuffer<std::byte, 256u> rx_buf;
   //! Last response received from the radio.
@@ -206,7 +204,6 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
     if (nbytes == 0) {
       // Overflow: reset buffer to recover quickly
       rx_buf.Clear();
-      expected_msg_length = 0;
       continue;
     }
 
@@ -218,41 +215,37 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
       if (range.empty())
         break;
 
+      const auto expected_msg_length = ExpectedMsgLength(range);
       if (range.size() < expected_msg_length)
         break;
 
-      expected_msg_length = ExpectedMsgLength(range);
-
-      if (range.size() >= expected_msg_length) {
-        switch (range.front()) {
-        case RCQ:
-          // Respond to connection query.
-          port.Write(0x01);
-          break;
-        case ACK:
-        case NAK:
-          {
-            // Received a response to a normal command (STX)
-            const std::lock_guard lock{response_mutex};
-            response = range.front();
-            // Signal the response to the TX thread
-            rx_cond.notify_one();
-          }
-          break;
-        case STX:
-          // Received a command from the radio (STX). Handle what we know.
-          {
-            const std::lock_guard lock{response_mutex};
-            const struct stx_msg * msg = (const struct stx_msg *) range.data();
-            HandleSTXCommand(msg, info);
-          }
-        }
-        // Message handled -> remove message
-        rx_buf.Consume(expected_msg_length);
-        expected_msg_length = 0;
-        // Received something from the radio -> the connection is alive
-        info.alive.Update(info.clock);
+      switch (range.front()) {
+      case RCQ:
+        // Respond to connection query.
+        port.Write(0x01);
+        break;
+      case ACK:
+      case NAK:
+      {
+        // Received a response to a normal command (STX)
+        const std::lock_guard lock{response_mutex};
+        response = range.front();
+        // Signal the response to the TX thread
+        rx_cond.notify_one();
       }
+      break;
+      case STX:
+        // Received a command from the radio (STX). Handle what we know.
+      {
+        const std::lock_guard lock{response_mutex};
+        const struct stx_msg * msg = (const struct stx_msg *) range.data();
+        HandleSTXCommand(msg, info);
+      }
+      }
+      // Message handled -> remove message
+      rx_buf.Consume(expected_msg_length);
+      // Received something from the radio -> the connection is alive
+      info.alive.Update(info.clock);
     }
   } while (!s.empty());
 
