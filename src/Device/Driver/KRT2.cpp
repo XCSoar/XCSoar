@@ -128,7 +128,7 @@ private:
 
   std::byte LockWaitResponse() noexcept {
     std::unique_lock lock{response_mutex};
-    rx_cond.wait_for(lock, CMD_TIMEOUT);
+    rx_cond.wait_for(lock, CMD_TIMEOUT, [this]{ return response != NO_RSP; });
     return response;
   }
 
