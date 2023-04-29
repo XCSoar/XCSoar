@@ -118,7 +118,7 @@ private:
    * Handles STX commands from the radio, when these indicate a change in either
    * active of passive frequency.
    */
-   static void HandleSTXCommand(const struct stx_msg * msg, struct NMEAInfo & info);
+   static void HandleSTXCommand(const struct stx_msg *msg, NMEAInfo &info) noexcept;
 
 public:
   /**
@@ -147,7 +147,7 @@ public:
    * failure.
    */
   virtual bool DataReceived(std::span<const std::byte> s,
-                            struct NMEAInfo &info) noexcept override;
+                            NMEAInfo &info) noexcept override;
 };
 
 KRT2Device::KRT2Device(Port &_port)
@@ -194,7 +194,7 @@ KRT2Device::Send(std::span<const std::byte> msg,
 
 bool
 KRT2Device::DataReceived(std::span<const std::byte> s,
-                         struct NMEAInfo &info) noexcept
+                         NMEAInfo &info) noexcept
 {
   assert(!s.empty());
 
@@ -356,7 +356,7 @@ KRT2Device::GetStationName(char *station_name, const TCHAR *name)
 }
 
 void
-KRT2Device::HandleSTXCommand(const struct stx_msg * msg, struct NMEAInfo & info)
+KRT2Device::HandleSTXCommand(const struct stx_msg *msg, NMEAInfo &info) noexcept
 {
   if(msg->command != 'U' && msg->command != 'R' && msg->command != 'C') {
     return;
@@ -433,7 +433,7 @@ KRT2CreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &comPort)
   return dev;
 }
 
-const struct DeviceRegister krt2_driver = {
+const DeviceRegister krt2_driver = {
   _T("KRT2"),
   _T("KRT2"),
   DeviceRegister::NO_TIMEOUT
