@@ -72,12 +72,12 @@ private:
 };
 
 class ATRBuffer {
-  uint8_t fill;
-  uint8_t checksum;
+  uint8_t fill = 0;
+  uint8_t checksum = 0;
   uint8_t data[32];
 
 public:
-  explicit ATRBuffer(uint8_t msg_id):fill(0), checksum(0) {
+  explicit constexpr ATRBuffer(uint8_t msg_id) noexcept {
     data[fill++] = STX;
     Put(SYNC);
     Put(msg_id);
