@@ -210,13 +210,7 @@ ATR833Device::HandleResponse(const std::byte *data, struct NMEAInfo &info)
   }
 
   if(data[2] == EXCHANGE) {
-    const auto old_active_freq = info.settings.active_frequency;
-
-    info.settings.has_active_frequency.Update(info.clock);
-    info.settings.active_frequency = info.settings.standby_frequency;
-
-    info.settings.has_standby_frequency.Update(info.clock);
-    info.settings.standby_frequency = old_active_freq;
+    info.settings.swap_frequencies.Update(info.clock);
   }
 
   if(data[2] == ALLDATA) {
