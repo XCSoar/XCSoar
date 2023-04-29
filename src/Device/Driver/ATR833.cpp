@@ -105,8 +105,6 @@ ATR833Device::DataReceived(std::span<const std::byte> s,
                            [[maybe_unused]] NMEAInfo &info) noexcept
 {
   assert(!s.empty());
-  const auto *data = s.data();
-  const auto *const end = data + s.size();
   size_t expected_msg_length{};
 
   do {
@@ -117,9 +115,9 @@ ATR833Device::DataReceived(std::span<const std::byte> s,
       continue;
     }
 
-    size_t nbytes = std::min(range.size(), size_t(end - data));
-    memcpy(range.data(), data, nbytes);
-    data += nbytes;
+    size_t nbytes = std::min(range.size(), s.size());
+    memcpy(range.data(), s.data(), nbytes);
+    s = s.subspan(nbytes);
     rx_buf.Append(nbytes);
 
     for (;;) {
@@ -140,7 +138,7 @@ ATR833Device::DataReceived(std::span<const std::byte> s,
         expected_msg_length = 0;
       }
     }
-  } while (data < end);
+  } while (!s.empty());
 
   return true;
 }

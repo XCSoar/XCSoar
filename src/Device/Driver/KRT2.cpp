@@ -200,9 +200,6 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
 {
   assert(!s.empty());
 
-  const auto *data = s.data();
-  const auto *const end = data + s.size();
-
   do {
     // Append new data to the buffer, as much as fits in there
     auto range = rx_buf.Write();
@@ -213,9 +210,9 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
       continue;
     }
 
-    size_t nbytes = std::min(range.size(), size_t(end - data));
-    std::copy_n(data, nbytes, range.begin());
-    data += nbytes;
+    size_t nbytes = std::min(range.size(), s.size());
+    std::copy_n(s.begin(), nbytes, range.begin());
+    s = s.subspan(nbytes);
     rx_buf.Append(nbytes);
 
     for (;;) {
@@ -260,7 +257,7 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
         info.alive.Update(info.clock);
       }
     }
-  } while (data < end);
+  } while (!s.empty());
 
   return true;
 }
