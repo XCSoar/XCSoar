@@ -177,7 +177,7 @@ KRT2Device::Send(std::span<const std::byte> msg,
     std::byte _response;
     {
       std::unique_lock lock{response_mutex};
-      rx_cond.wait_for(lock, std::chrono::milliseconds(CMD_TIMEOUT));
+      rx_cond.wait_for(lock, CMD_TIMEOUT);
       _response = response;
     }
 
