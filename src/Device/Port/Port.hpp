@@ -10,6 +10,7 @@
 #include <cstddef>
 #include <exception>
 #include <cstddef>
+#include <string_view>
 
 class OperationEnvironment;
 class PortListener;
@@ -60,8 +61,7 @@ public:
    * @param s The string to write
    * @return the number of bytes written, or 0 on error
    */
-  gcc_nonnull_all
-  std::size_t Write(const char *s);
+  std::size_t Write(std::string_view s);
 
   /**
    * Writes a single byte to the serial port
@@ -90,13 +90,9 @@ public:
                  OperationEnvironment &env,
                  std::chrono::steady_clock::duration timeout);
 
-  /**
-   * Just like FullWrite(), but write a null-terminated string
-   */
-  gcc_nonnull_all
-  void FullWriteString(const char *s,
-                       OperationEnvironment &env,
-                       std::chrono::steady_clock::duration timeout);
+  void FullWrite(std::string_view s,
+                 OperationEnvironment &env,
+                 std::chrono::steady_clock::duration timeout);
 
   /**
    * Wait until all data in the output buffer has been sent.
@@ -246,8 +242,7 @@ public:
   /**
    * Throws on error.
    */
-  gcc_nonnull_all
-  void ExpectString(const char *token, OperationEnvironment &env,
+  void ExpectString(std::string_view token, OperationEnvironment &env,
                     std::chrono::steady_clock::duration timeout=std::chrono::seconds(2));
 
   /**

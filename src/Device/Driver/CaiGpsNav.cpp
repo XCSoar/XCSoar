@@ -33,7 +33,7 @@ CaiGpsNavDevice::EnableNMEA(OperationEnvironment &env)
 {
   port.Write(CtrlC);
   env.Sleep(std::chrono::milliseconds(200));
-  port.FullWriteString("NMEA\r", env, std::chrono::milliseconds{100});
+  port.FullWrite("NMEA\r", env, std::chrono::milliseconds{100});
 
   // This is for a slightly different mode, that
   // apparently outputs pressure info too...

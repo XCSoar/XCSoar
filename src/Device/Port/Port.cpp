@@ -12,8 +12,6 @@
 #include <algorithm>
 #include <cassert>
 
-#include <string.h>
-
 Port::Port(PortListener *_listener, DataHandler &_handler) noexcept
   :listener(_listener), handler(_handler) {}
 
@@ -33,9 +31,9 @@ Port::WaitConnected(OperationEnvironment &env)
 }
 
 std::size_t
-Port::Write(const char *s)
+Port::Write(std::string_view s)
 {
-  return Write(s, strlen(s));
+  return Write(s.data(), s.size());
 }
 
 void
@@ -61,11 +59,11 @@ Port::FullWrite(const void *buffer, std::size_t length,
 }
 
 void
-Port::FullWriteString(const char *s,
-                      OperationEnvironment &env,
-                      std::chrono::steady_clock::duration timeout)
+Port::FullWrite(std::string_view s,
+                OperationEnvironment &env,
+                std::chrono::steady_clock::duration timeout)
 {
-  FullWrite(s, strlen(s), env, timeout);
+  FullWrite(s.data(), s.size(), env, timeout);
 }
 
 std::byte
@@ -183,16 +181,16 @@ Port::WaitAndRead(void *buffer, std::size_t length,
 }
 
 void
-Port::ExpectString(const char *token, OperationEnvironment &env,
+Port::ExpectString(std::string_view token, OperationEnvironment &env,
                    std::chrono::steady_clock::duration _timeout)
 {
-  const char *const token_end = token + strlen(token);
+  const char *const token_end = token.data() + token.size();
 
   const TimeoutClock timeout(_timeout);
 
   char buffer[256];
 
-  const char *p = token;
+  const char *p = token.data();
   while (true) {
     auto nbytes = WaitAndRead(buffer,
                               std::min(sizeof(buffer),
@@ -203,7 +201,7 @@ Port::ExpectString(const char *token, OperationEnvironment &env,
       const char ch = *q;
       if (ch != *p)
         /* retry */
-        p = token;
+        p = token.data();
       else if (++p == token_end)
         return;
     }

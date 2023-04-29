@@ -72,7 +72,7 @@ try {
       strncpy(stamp, line + 7, sizeof(stamp));
     }
 
-    port->FullWriteString(line, env, std::chrono::seconds(1));
+    port->FullWrite(line, env, std::chrono::seconds(1));
   }
 
   return EXIT_SUCCESS;

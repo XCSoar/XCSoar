@@ -12,9 +12,9 @@
 #include <stdio.h>
 
 void
-CAI302::WriteString(Port &port, const char *p, OperationEnvironment &env)
+CAI302::WriteString(Port &port, std::string_view s, OperationEnvironment &env)
 {
-  port.FullWriteString(p, env, std::chrono::seconds(2));
+  port.FullWrite(s, env, std::chrono::seconds(2));
 }
 
 void

@@ -8,6 +8,7 @@
 
 #include <chrono>
 #include <cstdint>
+#include <string_view>
 
 class OperationEnvironment;
 class Port;
@@ -288,7 +289,7 @@ struct Navpoint {
 
 #pragma pack(pop)
 
-void WriteString(Port &port, const char *p, OperationEnvironment &env);
+void WriteString(Port &port, std::string_view s, OperationEnvironment &env);
 
 /**
  * Enter "command" mode, but don't wait for the prompt.

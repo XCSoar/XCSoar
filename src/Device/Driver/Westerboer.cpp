@@ -145,7 +145,7 @@ WesterboerDevice::PutMacCready(double _mac_cready, OperationEnvironment &env)
   sprintf(buffer, "$PWES4,,%02u,,,,,,,", mac_cready);
   AppendNMEAChecksum(buffer);
   strcat(buffer, "\r\n");
-  port.FullWriteString(buffer, env, std::chrono::milliseconds{100});
+  port.FullWrite(buffer, env, std::chrono::milliseconds{100});
 
   return true;
 }
@@ -160,7 +160,7 @@ WesterboerDevice::PutBugs(double _bugs, OperationEnvironment &env)
   sprintf(buffer, "$PWES4,,,,,%02u,,,,", bugs);
   AppendNMEAChecksum(buffer);
   strcat(buffer, "\r\n");
-  port.FullWriteString(buffer, env, std::chrono::milliseconds{100});
+  port.FullWrite(buffer, env, std::chrono::milliseconds{100});
 
   return true;
 }
