@@ -39,15 +39,15 @@ public interface SensorListener {
    * @param[in] cht_temp Engine Cylinder Head Temperature.
    * @param[in] has_egt_temp Is the Engine Exhaust Gas Temperature sensor present?
    * @param[in] egt_temp Engine Exhaust Gas Temperature.
-   * @param[in] has_revs_per_sec Is the Engine Revolutions Per Second sensor present?
-   * @param[in] revs_per_sec Engine Revolutions Per Second, rotations per seconds of the camshaft.
+   * @param[in] has_ignitions_per_second Is the Engine Ignitions Per Second sensor present?
+   * @param[in] ignitions_per_second Engine Ignitions Per Second, firing of the spark plug per second.
    */
   void onEngineSensors(boolean has_cht_temp,
                        int cht_temp,
                        boolean has_egt_temp,
                        int egt_temp,
-                       boolean has_revs_per_sec,
-                       float revs_per_sec);
+                       boolean has_ignitions_per_second,
+                       float ignitions_per_second);
 
   void onVoltageValues(int temp_adc, int voltage_index, int volt_adc);
 

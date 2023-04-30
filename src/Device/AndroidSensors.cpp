@@ -292,18 +292,19 @@ DeviceDescriptor::OnEngineSensors(bool has_cht,
                                   Temperature cht,
                                   bool has_egt,
                                   Temperature egt,
-                                  bool has_revs_per_sec,
-                                  float revs_per_sec) noexcept
+                                  bool has_ignitions_per_second,
+                                  float ignitions_per_second) noexcept
 {
   const auto e = BeginEdit();
   NMEAInfo &basic = *e;
   basic.UpdateClock();
   basic.alive.Update(basic.clock);
-  if(has_revs_per_sec){
-    basic.engine_state.revs_per_sec = revs_per_sec;
-    basic.engine_state.revs_per_sec_available.Update(basic.clock);
+  if(has_ignitions_per_second && config.engine_type != DeviceConfig::EngineType::NONE){
+    basic.engine_state.revolutions_per_second = ignitions_per_second *
+                                                config.ignitions_to_revolutions_factors[static_cast<unsigned>(config.engine_type)];
+    basic.engine_state.revolutions_per_second_available.Update(basic.clock);
   }else{
-    basic.engine_state.revs_per_sec_available.Clear();
+    basic.engine_state.revolutions_per_second_available.Clear();
   }
   if(has_cht){
     basic.engine_state.cht_temperature = cht;

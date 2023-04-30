@@ -119,7 +119,7 @@ public final class BluetoothSensor
 
   /**
    * Data in the characteristic has little endian byteorder.
-   * Lowest bit of flags indicates valid revs_per_sec reading.
+   * Lowest bit of flags indicates valid ignitions_per_sec reading.
    * 0 Kelvin indicates invalid temperatures e.g 
    * no temperature sensor present.
   */
@@ -138,13 +138,13 @@ public final class BluetoothSensor
     if(pressure != 0)
       listener.onBarometricPressureSensor(pressure / 100.0f, 0.01f);
 
-    final int revs_per_sec = c.getIntValue(c.FORMAT_UINT16, 11);
+    final int ignitions_per_second = c.getIntValue(c.FORMAT_UINT16, 11);
     listener.onEngineSensors(cht_temp != 0 ? true : false,
                              cht_temp,
                              egt_temp != 0 ? true : false,
                              egt_temp,
                              (flags&0x01) == 0x01 ? true : false,
-                             revs_per_sec);
+                             ignitions_per_second);
   }
 
   private void readHeartRateMeasurement(BluetoothGattCharacteristic c) {
