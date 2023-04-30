@@ -16,7 +16,7 @@
 #include "Interface.hpp"
 
 enum ControlIndex {
-  Port, BaudRate, BulkBaudRate,
+  Port, EngineTypes, BaudRate, BulkBaudRate,
   IP_ADDRESS,
   TCPPort,
   I2CBus, I2CAddr, PressureUsage, Driver, UseSecondDriver, SecondDriver,
@@ -78,6 +78,22 @@ FillPress(DataFieldEnum &dfe) noexcept
   dfe.addEnumText(_T("Pitot (airspeed)"), (unsigned)DeviceConfig::PressureUse::PITOT);
 }
 
+/**
+ * The user can choose from the following engine types:
+ * None.
+ * 2S1I, 2-stroke one ignition per revolution.
+ * 2S2I, 2-stroke two ignitions per revolution.
+ * 4S1I, 4-stroke one ignition per revolution.
+*/
+static void
+FillEngineType(DataFieldEnum &dfe) noexcept
+{
+  dfe.addEnumText(_T("None"), static_cast<unsigned>(DeviceConfig::EngineType::NONE));
+  dfe.addEnumText(_T("2S1I"), static_cast<unsigned>(DeviceConfig::EngineType::TWO_STROKE_1_IGN));
+  dfe.addEnumText(_T("2S2I"), static_cast<unsigned>(DeviceConfig::EngineType::TWO_STROKE_2_IGN));
+  dfe.addEnumText(_T("4S1I"), static_cast<unsigned>(DeviceConfig::EngineType::FOUR_STROKE_1_IGN));
+}
+
 static bool
 EditPortCallback(const TCHAR *caption, DataField &df,
                  [[maybe_unused]] const TCHAR *help_text) noexcept
@@ -115,6 +131,7 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config) noexcept
   LoadValue(SyncFromDevice, config.sync_from_device);
   LoadValue(SyncToDevice, config.sync_to_device);
   LoadValue(K6Bt, config.k6bt);
+  LoadValueEnum(EngineTypes, config.engine_type);
 
   UpdateVisibilities();
 }
@@ -188,6 +205,7 @@ DeviceEditWidget::UpdateVisibilities() noexcept
     DeviceConfig::MaybeBluetooth(type, port_df.GetAsString());
   const bool k6bt = maybe_bluetooth && GetValueBoolean(K6Bt);
   const bool uses_speed = DeviceConfig::UsesSpeed(type) || k6bt;
+  const bool maybe_engine_sensor = type == DeviceConfig::PortType::BLE_SENSOR;
 
   SetRowAvailable(BaudRate, uses_speed);
   SetRowAvailable(BulkBaudRate, uses_speed &&
@@ -214,6 +232,7 @@ DeviceEditWidget::UpdateVisibilities() noexcept
   SetRowVisible(SyncToDevice, DeviceConfig::UsesDriver(type) &&
                 CanSendSettings(GetDataField(Driver)));
   SetRowAvailable(K6Bt, maybe_bluetooth);
+  SetRowAvailable(EngineTypes, maybe_engine_sensor);
 }
 
 void
@@ -226,6 +245,11 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
   FillPorts(*port_df, config);
   auto *port_control = Add(_("Port"), nullptr, port_df);
   port_control->SetEditCallback(EditPortCallback);
+
+  DataFieldEnum *engine_type_df = new DataFieldEnum(this);
+  FillEngineType(*engine_type_df);
+  engine_type_df->SetValue(config.engine_type);
+  Add(_("Engine Type"), nullptr, engine_type_df);
 
   DataFieldEnum *baud_rate_df = new DataFieldEnum(this);
   FillBaudRates(*baud_rate_df);
@@ -395,6 +419,10 @@ DeviceEditWidget::Save(bool &_changed) noexcept
   bool changed = false;
 
   changed |= FinishPortField(config, (const DataFieldEnum &)GetDataField(Port));
+
+  const bool maybe_engine_sensor = config.port_type == DeviceConfig::PortType::BLE_SENSOR;
+  if (maybe_engine_sensor)
+    changed |= SaveValueEnum(EngineTypes, config.engine_type);
 
   if (config.MaybeBluetooth())
     changed |= SaveValue(K6Bt, config.k6bt);

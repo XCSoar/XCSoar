@@ -187,8 +187,8 @@ Java_org_xcsoar_NativeSensorListener_onEngineSensors(JNIEnv *env,
                                                      jint cht_temp,
                                                      jboolean has_egt_temp,
                                                      jint egt_temp,
-                                                     jboolean has_revs_per_sec,
-                                                     jfloat revs_per_sec)
+                                                     jboolean has_ignitions_per_second,
+                                                     jfloat ignitions_per_second)
 {
   jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
   if (ptr == 0)
@@ -199,8 +199,8 @@ Java_org_xcsoar_NativeSensorListener_onEngineSensors(JNIEnv *env,
                            Temperature::FromKelvin(cht_temp),
                            has_egt_temp,
                            Temperature::FromKelvin(egt_temp),
-                           has_revs_per_sec,
-                           revs_per_sec);
+                           has_ignitions_per_second,
+                           ignitions_per_second);
 }
 
 gcc_visibility_default

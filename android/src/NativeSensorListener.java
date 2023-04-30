@@ -38,8 +38,8 @@ final class NativeSensorListener implements SensorListener {
                                      int cht_temp,
                                      boolean has_egt_temp,
                                      int egt_temp,
-                                     boolean has_revs_per_sec,
-                                     float revs_per_sec);
+                                     boolean has_ignitions_per_second,
+                                     float ignitions_per_second);
 
   @Override
   public native void onAccelerationSensor(float ddx, float ddy, float ddz);

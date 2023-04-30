@@ -11,6 +11,10 @@
 */
 struct EngineState
 {
+  /* For future use. */
+  Validity ignitions_per_second_available;
+  float ignitions_per_second;
+
   /* The engine box measured revolutions per second on the camshaft. */
   Validity revolutions_per_second_available;
   float revolutions_per_second;
@@ -24,6 +28,7 @@ struct EngineState
   Temperature egt_temperature;
 
   void Clear() noexcept{
+    ignitions_per_second_available.Clear();
     revolutions_per_second_available.Clear();
     cht_temperature_available.Clear();
     egt_temperature_available.Clear();
@@ -34,12 +39,19 @@ struct EngineState
   }
 
   void Expire(TimeStamp clock) noexcept {
+    ignitions_per_second_available.Expire(clock, std::chrono::seconds(3));
     revolutions_per_second_available.Expire(clock, std::chrono::seconds(3));
     cht_temperature_available.Expire(clock, std::chrono::seconds(3));
     egt_temperature_available.Expire(clock, std::chrono::seconds(3));
   }
 
   void Complement(const EngineState &add) noexcept {
+    if (ignitions_per_second_available.Complement(add.ignitions_per_second_available))
+      ignitions_per_second = add.ignitions_per_second;
+
+    if (revolutions_per_second_available.Complement(add.revolutions_per_second_available)){
+      revolutions_per_second = add.revolutions_per_second;
+    }
     if (revolutions_per_second_available.Complement(add.revolutions_per_second_available)){
       revolutions_per_second = add.revolutions_per_second;
     }

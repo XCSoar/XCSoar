@@ -170,6 +170,37 @@ struct DeviceConfig {
   double sensor_factor;
 
   /**
+   * User choices of engine types supported.
+   * Depending on the engine used (2-stroke, 4-stroke etc.),
+   * ignitions per second have to be scaled to revolutions per second.
+   */
+  enum class EngineType : uint_least8_t{
+    NONE = 0,
+    TWO_STROKE_1_IGN,
+    TWO_STROKE_2_IGN,
+    FOUR_STROKE_1_IGN,
+
+    /**
+     * A dummy entry that is used for validating profile values.
+     */
+    MAX
+  } engine_type;
+
+  /**
+   *  Based on user choice of engine type, the measured ignitions of the
+   *  engine used, get scaled to revolutions per second. engine_type[0]
+   *  maps to ignitions_to_revolutions_factors[0] etc.
+   */
+  static constexpr float ignitions_to_revolutions_factors[] = {
+    0.0f,
+    1.0f,
+    0.5f,
+    2.0f,
+  };
+
+  static_assert(std::size(ignitions_to_revolutions_factors) == (std::size_t)EngineType::MAX);
+
+  /**
    * Name of the driver.
    */
   StaticString<32> driver_name;

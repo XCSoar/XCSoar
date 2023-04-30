@@ -29,10 +29,12 @@ void
 UpdateInfoBoxContentEGT(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
+
   if (!basic.engine_state.egt_temperature_available.IsValid()) {
     data.SetInvalid();
     return;
   }
+
   data.FmtValue(_T("{:3.0f}"), basic.engine_state.egt_temperature.ToUser());
   data.SetValueUnit(Units::current.temperature_unit);
 }
@@ -41,6 +43,7 @@ void
 UpdateInfoBoxContentRPM(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
+
   if (!basic.engine_state.revolutions_per_second_available.IsValid()) {
     data.SetInvalid();
     return;

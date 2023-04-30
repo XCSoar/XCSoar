@@ -49,15 +49,15 @@ public:
    * @param[in] cht Engine Cylinder Head Temperature.
    * @param[in] has_egt Is the Engine Exhaust Gas Temperature sensor present?
    * @param[in] egt Engine Exhaust Gas Temperature.
-   * @param[in] has_revs_per_sec Is the Engine Revolutions Per Second sensor present?
-   * @param[in] revs_per_sec Engine Revolutions Per Second, rotations per seconds of the camshaft.
+   * @param[in] has_ignitions_per_second Are the measured ignitions valid?
+   * @param[in] ignitions_per_second Engine Ignitions Per Second, firing of the spark plug per second.
    */
   virtual void OnEngineSensors(bool has_cht,
                                Temperature cht,
                                bool has_egt,
                                Temperature egt,
-                               bool has_revs_per_sec,
-                               float revs_per_sec) noexcept = 0;
+                               bool has_ignitions_per_second,
+                               float ignitions_per_second) noexcept = 0;
 
   virtual void OnVoltageValues(int temp_adc, unsigned voltage_index,
                                int volt_adc) noexcept = 0;
