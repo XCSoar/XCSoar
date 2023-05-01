@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2022-12-11 21:50+0000\n"
+"PO-Revision-Date: 2023-05-02 21:52+0000\n"
 "Last-Translator: Markus Bagge <markus.bagge@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Launchpad-Export-Date: 2014-10-13 19:28+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -7503,7 +7503,7 @@ msgstr "Inom sektor, armera nästa vägpunkt"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:43
 msgid "Arm"
-msgstr ""
+msgstr "Rigga"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:53 src/Monitor/MatTaskMonitor.cpp:62
 msgid "Dismiss"
@@ -8109,7 +8109,7 @@ msgstr "Indikerad hastighet rapporterad av en extern intelligent variometer."
 #: src/InfoBoxes/Content/Factory.cpp:407
 #, no-c-format
 msgid "Barometric altitude"
-msgstr "Barometrisk höjd"
+msgstr "Höjd barometrisk"
 
 #: src/InfoBoxes/Content/Factory.cpp:408
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:84
@@ -8927,6 +8927,9 @@ msgid ""
 "set. In case the FL is calculated from the GPS altitude, the FL label is "
 "coloured red."
 msgstr ""
+"Tryckhöjd som FL. Om barometrisk höjd ej finns tillgänglig beräknas FL "
+"m.h.a. GPS-höjd och under antagandet att QNH är korrekt angiven. Om GPS-höjd "
+"används färgas FL-etiketten röd."
 
 #: src/InfoBoxes/Content/Factory.cpp:782 src/InfoBoxes/Content/Factory.cpp:783
 #, no-c-format
@@ -9405,7 +9408,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1005
 #, no-c-format
 msgid "Distance takeoff"
-msgstr "Avstånd till start"
+msgstr "Distans till start"
 
 #: src/InfoBoxes/Content/Factory.cpp:1006
 #, no-c-format
@@ -9858,6 +9861,10 @@ msgid ""
 "[AVERAGE]: State HIGH if gross vario value is greater than average gross "
 "vario value."
 msgstr ""
+"Jämförelsemetod för att detektera stig-lägen (HÖG/LÅG).\n"
+"[INGEN]: Tillstånd LÅG inaktiverad\n"
+"[MACREADY]: Tillstånd HÖG om brutto-vario överstiger MacCready inställning.\n"
+"[AVERAGE]: Tillstånd HÖG om brutto-vario överstiger medel för brutto-vario."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:76
 #, no-c-format
@@ -9875,6 +9882,13 @@ msgid ""
 "[RELATIVE MC/2] LIFT tone when relative vario greater than half MC.\n"
 "[NET MC/2] LIFT tone when airmass velocity greater than half MC."
 msgstr ""
+"Jämförelsemetod för att detektera glid-tillstånd för att växla till stig-"
+"ljud under glid.\n"
+"[INGEN]: Stigton inaktiverad under glid\n"
+"[RELATIV NOLL] Stigton när relativ vario är positiv.\n"
+"[BRUTTO NOLL] Stigton när farkost stiger.\n"
+"[RELATIV MC/2] Stigton när relativ vario överstiger halva MC.\n"
+"[NET MC/2] Stigton när luftmassans hastighet överstiger halva MC."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:81
 #, no-c-format
@@ -10311,6 +10325,8 @@ msgid ""
 "Nav\n"
 "Page 2/2"
 msgstr ""
+"NAV\n"
+"Sida 2/2"
 
 #: Data/Input/default.xci:385 Data/Input/default.xci:1014
 #, fuzzy
@@ -10324,11 +10340,8 @@ msgid "Dropped marker"
 msgstr "Släppt markör"
 
 #: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
 msgid "Marker Drop"
-msgstr ""
-"Sätt\n"
-"markör"
+msgstr "Släpp markör"
 
 #: Data/Input/default.xci:429
 msgid "Pilot event announced"
@@ -10345,15 +10358,16 @@ msgid "Target Show"
 msgstr "Mål"
 
 #: Data/Input/default.xci:451
-#, fuzzy
 msgid ""
 "Display\n"
 "Page 2/2"
-msgstr "Visa"
+msgstr ""
+"Visa\n"
+"Sida 2/2"
 
 #: Data/Input/default.xci:481
 msgid "Page Show"
-msgstr ""
+msgstr "Visa sida"
 
 #: Data/Input/default.xci:488 Data/Input/default.xci:1072
 #, fuzzy
@@ -10377,12 +10391,16 @@ msgid ""
 "Config\n"
 "Page 2/3"
 msgstr ""
+"Konfig.\n"
+"Sida 2/3"
 
 #: Data/Input/default.xci:596
 msgid ""
 "Config\n"
 "Page 3/3"
 msgstr ""
+"Konfig.\n"
+"Sida 3/3"
 
 #: Data/Input/default.xci:653 Data/Input/default.xci:1158
 msgid "Raw Logger"
@@ -10401,6 +10419,8 @@ msgid ""
 "Vega\n"
 "Page 2/2"
 msgstr ""
+"Vega\n"
+"Sida 2/2"
 
 #: Data/Input/default.xci:687
 #, fuzzy
