@@ -20,7 +20,7 @@
 #include <stdio.h>
 
 class RASPSettingsPanel final
-  : public RowFormWidget, DataFieldListener {
+  : public RowFormWidget {
 
   enum Controls {
     FILE,
@@ -40,19 +40,10 @@ public:
 private:
   void FillItemControl() noexcept;
   void UpdateTimeControl() noexcept;
-  void OnTimeModified(const DataFieldEnum &df) noexcept;
 
   /* methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
-
-  /* virtual methods from DataFieldListener */
-  void OnModified(DataField &df) noexcept override {
-    if (IsDataField(ITEM, df))
-      UpdateTimeControl();
-    else if (IsDataField(TIME, df))
-      OnTimeModified((const DataFieldEnum &)df);
-  }
 };
 
 void
@@ -106,15 +97,6 @@ RASPSettingsPanel::UpdateTimeControl() noexcept
   }
 }
 
-inline void
-RASPSettingsPanel::OnTimeModified(const DataFieldEnum &df) noexcept
-{
-  const int value = df.GetValue();
-  time = value > 0
-    ? BrokenTime::FromMinuteOfDay(value)
-    : BrokenTime::Invalid();
-}
-
 void
 RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
                            [[maybe_unused]] const PixelRect &rc) noexcept
@@ -137,11 +119,20 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
     }
   });
 
-  wp = AddEnum(_("Field"), nullptr, this);
+  wp = AddEnum(_("Field"), nullptr);
+  wp->GetDataField()->SetOnModified([this]{
+      UpdateTimeControl();
+  });
   wp->GetDataField()->EnableItemHelp(true);
   FillItemControl();
 
-  AddEnum(_("Time"), nullptr, this);
+  AddEnum(_("Time"), nullptr);
+  wp->GetDataField()->SetOnModified([this]{
+    const unsigned value = GetValueEnum(TIME);
+    time = value > 0
+      ? BrokenTime::FromMinuteOfDay(value)
+      : BrokenTime::Invalid();
+  });
   UpdateTimeControl();
 }
 
