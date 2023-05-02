@@ -58,16 +58,22 @@ ATR833Device::HandleSTX(std::span<const std::byte> src, NMEAInfo &info) noexcept
     // Active frequency
     return WithSTX<2>(src, [&info](std::span<const std::byte, 2> payload){
       info.alive.Update(info.clock);
-      info.settings.has_active_frequency.Update(info.clock);
-      info.settings.active_frequency = ReadRadioFrequency(payload.subspan<0, 2>());
+
+      if (auto f = ReadRadioFrequency(payload.subspan<0, 2>()); f.IsDefined()) {
+        info.settings.has_active_frequency.Update(info.clock);
+        info.settings.active_frequency = f;
+      }
     });
 
   case SETSTANDBY:
     // Standby frequency
     return WithSTX<2>(src, [&info](std::span<const std::byte, 2> payload){
       info.alive.Update(info.clock);
-      info.settings.has_standby_frequency.Update(info.clock);
-      info.settings.standby_frequency = ReadRadioFrequency(payload.subspan<0, 2>());
+
+      if (auto f = ReadRadioFrequency(payload.subspan<0, 2>()); f.IsDefined()) {
+        info.settings.has_standby_frequency.Update(info.clock);
+        info.settings.standby_frequency = f;
+      }
     });
 
   case EXCHANGE:
@@ -88,10 +94,15 @@ ATR833Device::HandleSTX(std::span<const std::byte> src, NMEAInfo &info) noexcept
     return WithSTX<12>(src, [&info](std::span<const std::byte, 12> payload){
       info.alive.Update(info.clock);
 
-      info.settings.has_active_frequency.Update(info.clock);
-      info.settings.active_frequency = ReadRadioFrequency(payload.subspan<0, 2>());
-      info.settings.has_standby_frequency.Update(info.clock);
-      info.settings.standby_frequency = ReadRadioFrequency(payload.subspan<2, 2>());
+      if (auto f = ReadRadioFrequency(payload.subspan<0, 2>()); f.IsDefined()) {
+        info.settings.has_active_frequency.Update(info.clock);
+        info.settings.active_frequency = f;
+      }
+
+      if (auto f = ReadRadioFrequency(payload.subspan<2, 2>()); f.IsDefined()) {
+        info.settings.has_standby_frequency.Update(info.clock);
+        info.settings.standby_frequency = f;
+      }
     });
 
   case ACK:
