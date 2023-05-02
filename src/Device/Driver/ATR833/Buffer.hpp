@@ -11,7 +11,7 @@
 #include <cstddef>
 
 class ATRBuffer {
-  uint8_t fill = 0;
+  uint_least8_t fill = 0;
   std::byte checksum{};
   std::byte data[32];
 
