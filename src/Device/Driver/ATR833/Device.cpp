@@ -53,29 +53,26 @@ ATR833Device::HandleSTX(std::span<const std::byte> src, NMEAInfo &info) noexcept
   switch (src[2]) {
   case SETACTIVE:
     // Active frequency
-    if (src.size() < 5)
-      return 0;
-
-    info.alive.Update(info.clock);
-    info.settings.has_active_frequency.Update(info.clock);
-    info.settings.active_frequency = ReadRadioFrequency(src.subspan<3, 2>());
-    return 5;
+    return WithSTX<2>(src, [&info](std::span<const std::byte, 2> payload){
+      info.alive.Update(info.clock);
+      info.settings.has_active_frequency.Update(info.clock);
+      info.settings.active_frequency = ReadRadioFrequency(payload.subspan<0, 2>());
+    });
 
   case SETSTANDBY:
     // Standby frequency
-    if (src.size() < 5)
-      return 0;
-
-    info.alive.Update(info.clock);
-    info.settings.has_standby_frequency.Update(info.clock);
-    info.settings.standby_frequency = ReadRadioFrequency(src.subspan<3, 2>());
-    return 5;
+    return WithSTX<2>(src, [&info](std::span<const std::byte, 2> payload){
+      info.alive.Update(info.clock);
+      info.settings.has_standby_frequency.Update(info.clock);
+      info.settings.standby_frequency = ReadRadioFrequency(payload.subspan<0, 2>());
+    });
 
   case EXCHANGE:
     // Exchange frequencies
-    info.alive.Update(info.clock);
-    info.settings.swap_frequencies.Update(info.clock);
-    return 3;
+    return WithSTX<0>(src, [&info](auto){
+      info.alive.Update(info.clock);
+      info.settings.swap_frequencies.Update(info.clock);
+    });
 
   case ALLDATA:
     /*
@@ -85,30 +82,25 @@ ATR833Device::HandleSTX(std::span<const std::byte> src, NMEAInfo &info) noexcept
       byte 7: kHz/5 standby
       byte 8-15: not used by XCSoar (VOL, SQ, VOX, INT, DIM, EXT, spacing, dual)
     */
-    if (src.size() < 15)
-      return 0;
+    return WithSTX<12>(src, [&info](std::span<const std::byte, 12> payload){
+      info.alive.Update(info.clock);
 
-    info.alive.Update(info.clock);
-
-    info.settings.has_active_frequency.Update(info.clock);
-    info.settings.active_frequency = ReadRadioFrequency(src.subspan<3, 2>());
-    info.settings.has_standby_frequency.Update(info.clock);
-    info.settings.standby_frequency = ReadRadioFrequency(src.subspan<5, 2>());
-
-    return 15;
+      info.settings.has_active_frequency.Update(info.clock);
+      info.settings.active_frequency = ReadRadioFrequency(payload.subspan<0, 2>());
+      info.settings.has_standby_frequency.Update(info.clock);
+      info.settings.standby_frequency = ReadRadioFrequency(payload.subspan<2, 2>());
+    });
 
   case ACK:
-    return src.size() < 4 ? 0 : 4;
+    return WithSTX<1>(src, [](auto){});
 
   case NAK:
-    return src.size() < 5 ? 0 : 5;
+    return WithSTX<2>(src, [](auto){});
 
   case ALIVE:
-    if (src.size() < 4)
-      return 0;
-
-    info.alive.Update(info.clock);
-    return 4;
+    return WithSTX<1>(src, [&info](std::span<const std::byte, 1>){
+      info.alive.Update(info.clock);
+    });
 
   default:
     // Received unknown msg id (code)
