@@ -137,8 +137,7 @@ ATR833Device::PutActiveFrequency(RadioFrequency frequency,
                                  OperationEnvironment &env)
 {
   ATRBuffer buffer(SETACTIVE);
-  buffer.Put(static_cast<std::byte>(frequency.GetKiloHertz() / 1000));
-  buffer.Put(static_cast<std::byte>((frequency.GetKiloHertz() % 1000) / 5));
+  buffer.Put(frequency);
   buffer.Send(port, env);
   return true;
 }
@@ -149,8 +148,7 @@ ATR833Device::PutStandbyFrequency(RadioFrequency frequency,
                                   OperationEnvironment &env)
 {
   ATRBuffer buffer(SETSTANDBY);
-  buffer.Put(static_cast<std::byte>(frequency.GetKiloHertz() / 1000));
-  buffer.Put(static_cast<std::byte>((frequency.GetKiloHertz() % 1000) / 5));
+  buffer.Put(frequency);
   buffer.Send(port, env);
   return true;
 }

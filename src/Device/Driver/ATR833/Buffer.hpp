@@ -5,6 +5,7 @@
 
 #include "Protocol.hpp"
 #include "Device/Port/Port.hpp"
+#include "RadioFrequency.hpp"
 
 #include <cstdint>
 #include <cstddef>
@@ -32,6 +33,11 @@ public:
       data[fill++] = byte;
       checksum ^= byte;
     }
+  }
+
+  constexpr void Put(RadioFrequency f) noexcept {
+    Put(static_cast<std::byte>(f.GetKiloHertz() / 1000));
+    Put(static_cast<std::byte>((f.GetKiloHertz() % 1000) / 5));
   }
 
   void Send(Port &port, OperationEnvironment &env) {
