@@ -19,12 +19,12 @@ class VegaEmulator : public DeviceEmulator, PortLineSplitter {
   std::map<std::string, std::string, std::less<>> settings;
 
 public:
-  VegaEmulator() {
+  VegaEmulator() noexcept {
     handler = this;
   }
 
 private:
-  void PDVSC_S(NMEAInputLine &line) {
+  void PDVSC_S(NMEAInputLine &line) noexcept {
     const auto name = line.ReadView();
     const auto value = line.ReadView();
 
@@ -39,7 +39,7 @@ private:
     PortWriteNMEA(*port, buffer, env);
   }
 
-  void PDVSC_R(NMEAInputLine &line) {
+  void PDVSC_R(NMEAInputLine &line) noexcept {
     const auto name = line.ReadView();
 
     auto i = settings.find(name);
@@ -57,7 +57,7 @@ private:
     PortWriteNMEA(*port, buffer, env);
   }
 
-  void PDVSC(NMEAInputLine &line) {
+  void PDVSC(NMEAInputLine &line) noexcept {
     const auto command = line.ReadView();
     if (command == "S"sv)
       PDVSC_S(line);

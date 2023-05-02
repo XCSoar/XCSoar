@@ -27,12 +27,12 @@ class FLARMEmulator : public DeviceEmulator, PortLineSplitter {
   StaticFifoBuffer<std::byte, 256u> binary_buffer;
 
 public:
-  FLARMEmulator():binary(false) {
+  FLARMEmulator() noexcept:binary(false) {
     handler = this;
   }
 
 private:
-  void PFLAC_S(NMEAInputLine &line) {
+  void PFLAC_S(NMEAInputLine &line) noexcept {
     const auto name = line.ReadView();
 
     const auto value = line.Rest();
@@ -48,7 +48,7 @@ private:
     PortWriteNMEA(*port, buffer, *env);
   }
 
-  void PFLAC_R(NMEAInputLine &line) {
+  void PFLAC_R(NMEAInputLine &line) noexcept {
     const auto name = line.ReadView();
 
     auto i = settings.find(name);
@@ -63,7 +63,7 @@ private:
     PortWriteNMEA(*port, buffer, *env);
   }
 
-  void PFLAC(NMEAInputLine &line) {
+  void PFLAC(NMEAInputLine &line) noexcept {
     const auto command = line.ReadView();
     if (command == "S"sv)
       PFLAC_S(line);
@@ -71,13 +71,13 @@ private:
       PFLAC_R(line);
   }
 
-  void PFLAX() {
+  void PFLAX() noexcept {
     binary = true;
     binary_buffer.Clear();
   }
 
   size_t Unescape(const std::byte *const data, const std::byte *const end,
-                  void *_dest, size_t length) {
+                  void *_dest, size_t length) noexcept {
     std::byte *dest = (std::byte *)_dest;
 
     const std::byte *p;
@@ -106,7 +106,7 @@ private:
     return p - data;
   }
 
-  void SendACK(uint16_t sequence_number) {
+  void SendACK(uint16_t sequence_number) noexcept {
     uint16_t payload = ToLE16(sequence_number);
     FLARM::FrameHeader header =
       FLARM::PrepareFrameHeader(sequence_number, FLARM::MT_ACK,
@@ -118,7 +118,7 @@ private:
                        std::chrono::seconds(2));
   }
 
-  size_t HandleBinary(const void *_data, size_t length) {
+  size_t HandleBinary(const void *_data, size_t length) noexcept {
     const std::byte *const data = (const std::byte *)_data, *end = data + length;
     const std::byte *p = data;
 
