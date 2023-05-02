@@ -10,6 +10,7 @@
 
 #include "FLARMEmulator.hpp"
 #include "VegaEmulator.hpp"
+#include "ATR833Emulator.hpp"
 #include "DebugPort.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
 #include "Device/Config.hpp"
@@ -32,6 +33,8 @@ LoadEmulator(Args &args)
     return std::make_unique<VegaEmulator>();
   else if (StringIsEqual(driver, "FLARM"))
     return std::make_unique<FLARMEmulator>();
+  else if (StringIsEqual(driver, "ATR833"))
+    return std::make_unique<ATR833Emulator>();
   else {
     fprintf(stderr, "No such emulator driver: %s\n", driver);
     exit(EXIT_FAILURE);
