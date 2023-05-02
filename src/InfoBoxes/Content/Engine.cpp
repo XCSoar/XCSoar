@@ -41,11 +41,11 @@ void
 UpdateInfoBoxContentRPM(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
-  if (!basic.engine_state.revs_per_sec_available.IsValid()) {
+  if (!basic.engine_state.revolutions_per_second_available.IsValid()) {
     data.SetInvalid();
     return;
   }  
 
-  data.FmtValue(_T("{}"), Units::ToUserRotation(basic.engine_state.revs_per_sec));
+  data.FmtValue(_T("{}"), Units::ToUserRotation(basic.engine_state.revolutions_per_second));
   data.SetValueUnit(Units::current.rotation_unit);
 }

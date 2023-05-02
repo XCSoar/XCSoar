@@ -300,10 +300,10 @@ DeviceDescriptor::OnEngineSensors(bool has_cht,
   basic.UpdateClock();
   basic.alive.Update(basic.clock);
   if(has_revs_per_sec){
-    basic.engine_state.revs_per_sec = revs_per_sec;
-    basic.engine_state.revs_per_sec_available.Update(basic.clock);
+    basic.engine_state.revolutions_per_second = revs_per_sec;
+    basic.engine_state.revolutions_per_second_available.Update(basic.clock);
   }else{
-    basic.engine_state.revs_per_sec_available.Clear();
+    basic.engine_state.revolutions_per_second_available.Clear();
   }
   if(has_cht){
     basic.engine_state.cht_temperature = cht;
