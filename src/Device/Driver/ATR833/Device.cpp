@@ -101,7 +101,7 @@ ATR833Device::HandleSTX(std::span<const std::byte> src, NMEAInfo &info) noexcept
     return WithSTX<2>(src, [](auto){});
 
   case ALIVE:
-    return WithSTX<1>(src, [&info](std::span<const std::byte, 1>){
+    return WithSTX<0>(src, [&info](auto){
       info.alive.Update(info.clock);
     });
 

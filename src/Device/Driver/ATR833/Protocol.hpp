@@ -39,6 +39,8 @@ WithSTX(std::span<const std::byte> src,
   if (src.size() < size)
     return 0;
 
+  std::byte checksum = src[1] ^ src[2];
+
   // skip STX, SYNC, id
   auto s = std::next(src.begin(), 3);
 
@@ -50,6 +52,8 @@ WithSTX(std::span<const std::byte> src,
     if (s == src.end())
       // need more data
       return 0;
+
+    checksum ^= *s;
 
     if (*s == STX) {
       /* STX is escaped using STX,STX */
@@ -64,9 +68,22 @@ WithSTX(std::span<const std::byte> src,
       ++s;
     }
 
+    // the checksum contains both STX
+    checksum ^= STX;
+
     *d++ = *s++;
   }
 
+  /* verify the checksum - this requires one more byte */
+  if (s == src.end())
+    // need more data
+    return 0;
+
+  if (*s++ != checksum)
+    // bad checksum, skip header and wait for the next STX
+    return 3;
+
+  // invoke the handler function
   f(std::span{dest});
 
   return std::distance(src.begin(), s);
