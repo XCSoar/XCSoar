@@ -58,9 +58,7 @@ ATR833Device::HandleSTX(std::span<const std::byte> src, NMEAInfo &info) noexcept
 
     info.alive.Update(info.clock);
     info.settings.has_active_frequency.Update(info.clock);
-    info.settings.active_frequency =
-      RadioFrequency::FromMegaKiloHertz(static_cast<unsigned>(src[3]),
-                                        static_cast<unsigned>(src[4]) * 5);
+    info.settings.active_frequency = ReadRadioFrequency(src.subspan<3, 2>());
     return 5;
 
   case SETSTANDBY:
@@ -70,9 +68,7 @@ ATR833Device::HandleSTX(std::span<const std::byte> src, NMEAInfo &info) noexcept
 
     info.alive.Update(info.clock);
     info.settings.has_standby_frequency.Update(info.clock);
-    info.settings.standby_frequency =
-      RadioFrequency::FromMegaKiloHertz(static_cast<unsigned>(src[3]),
-                                        static_cast<unsigned>(src[4]) * 5);
+    info.settings.standby_frequency = ReadRadioFrequency(src.subspan<3, 2>());
     return 5;
 
   case EXCHANGE:
@@ -95,14 +91,8 @@ ATR833Device::HandleSTX(std::span<const std::byte> src, NMEAInfo &info) noexcept
     info.alive.Update(info.clock);
 
     info.settings.has_active_frequency.Update(info.clock);
-    info.settings.active_frequency =
-      RadioFrequency::FromMegaKiloHertz(static_cast<unsigned>(src[3]),
-                                        static_cast<unsigned>(src[4]) * 5);
-
-    info.settings.has_standby_frequency.Update(info.clock);
-    info.settings.standby_frequency =
-      RadioFrequency::FromMegaKiloHertz(static_cast<unsigned>(src[5]),
-                                        static_cast<unsigned>(src[6]) * 5);
+    info.settings.active_frequency = ReadRadioFrequency(src.subspan<3, 2>());
+    info.settings.standby_frequency = ReadRadioFrequency(src.subspan<5, 2>());
 
     return 15;
 
