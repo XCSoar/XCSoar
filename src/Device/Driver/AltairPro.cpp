@@ -220,6 +220,7 @@ AltairProDevice::PropertySetGet(const char *name, const char *value,
       return true;
     }
 
+    Buffer += nbytes;
     size -= nbytes;
   }
 
