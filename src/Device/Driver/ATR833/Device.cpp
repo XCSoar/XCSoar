@@ -92,6 +92,7 @@ ATR833Device::HandleSTX(std::span<const std::byte> src, NMEAInfo &info) noexcept
 
     info.settings.has_active_frequency.Update(info.clock);
     info.settings.active_frequency = ReadRadioFrequency(src.subspan<3, 2>());
+    info.settings.has_standby_frequency.Update(info.clock);
     info.settings.standby_frequency = ReadRadioFrequency(src.subspan<5, 2>());
 
     return 15;
