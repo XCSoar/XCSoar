@@ -163,8 +163,27 @@ ATR833Device::HandleSTX(std::span<const std::byte> src, NMEAInfo &info) noexcept
     return 3;
 
   case ALLDATA:
-    // receive full dataset (freq, VOL, etc...)
-    return src.size() < 15 ? 0 : 15;
+    /*
+      byte 4: MHz active
+      byte 5: kHz/5 active
+      byte 6: MHz standby
+      byte 7: kHz/5 standby
+      byte 8-15: not used by XCSoar (VOL, SQ, VOX, INT, DIM, EXT, spacing, dual)
+    */
+    if (src.size() < 15)
+      return 0;
+
+    info.settings.has_active_frequency.Update(info.clock);
+    info.settings.active_frequency =
+      RadioFrequency::FromMegaKiloHertz(static_cast<unsigned>(src[3]),
+                                        static_cast<unsigned>(src[4]) * 5);
+
+    info.settings.has_standby_frequency.Update(info.clock);
+    info.settings.standby_frequency =
+      RadioFrequency::FromMegaKiloHertz(static_cast<unsigned>(src[5]),
+                                        static_cast<unsigned>(src[6]) * 5);
+
+    return 15;
 
   case ACK:
     return src.size() < 4 ? 0 : 4;
