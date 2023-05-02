@@ -23,11 +23,12 @@ using std::string_view_literals::operator""sv;
 class FLARMEmulator : public DeviceEmulator, PortLineSplitter {
   std::map<std::string, std::string, std::less<>> settings;
 
-  bool binary;
   StaticFifoBuffer<std::byte, 256u> binary_buffer;
 
+  bool binary = false;
+
 public:
-  FLARMEmulator() noexcept:binary(false) {
+  FLARMEmulator() noexcept {
     handler = this;
   }
 
