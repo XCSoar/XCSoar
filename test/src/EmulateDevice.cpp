@@ -19,6 +19,7 @@
 #include "io/async/GlobalAsioThread.hpp"
 #include "io/async/AsioThread.hpp"
 #include "util/PrintException.hxx"
+#include "util/StringAPI.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,9 +28,9 @@ static DeviceEmulator *
 LoadEmulator(Args &args)
 {
   const char *driver = args.ExpectNext();
-  if (strcmp(driver, "Vega") == 0)
+  if (StringIsEqual(driver, "Vega"))
     return new VegaEmulator();
-  else if (strcmp(driver, "FLARM") == 0)
+  else if (StringIsEqual(driver, "FLARM"))
     return new FLARMEmulator();
   else {
     fprintf(stderr, "No such emulator driver: %s\n", driver);
