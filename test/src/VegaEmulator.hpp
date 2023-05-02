@@ -15,7 +15,7 @@
 #include <map>
 #include <stdio.h>
 
-class VegaEmulator : public Emulator, PortLineSplitter {
+class VegaEmulator : public DeviceEmulator, PortLineSplitter {
   std::map<std::string, std::string, std::less<>> settings;
 
 public:

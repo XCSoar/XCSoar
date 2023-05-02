@@ -6,10 +6,10 @@
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
 
-struct Emulator {
+struct DeviceEmulator {
   Port *port;
   DataHandler *handler;
   OperationEnvironment *env;
 
-  virtual ~Emulator() {}
+  virtual ~DeviceEmulator() noexcept {}
 };

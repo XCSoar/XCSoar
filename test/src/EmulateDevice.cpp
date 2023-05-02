@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static Emulator *
+static DeviceEmulator *
 LoadEmulator(Args &args)
 {
   const char *driver = args.ExpectNext();
@@ -41,7 +41,7 @@ int
 main(int argc, char **argv)
 try {
   Args args(argc, argv, "DRIVER PORT BAUD");
-  Emulator *emulator = LoadEmulator(args);
+  DeviceEmulator *emulator = LoadEmulator(args);
   DebugPort debug_port(args);
   args.ExpectEnd();
 

@@ -20,7 +20,7 @@
 
 using std::string_view_literals::operator""sv;
 
-class FLARMEmulator : public Emulator, PortLineSplitter {
+class FLARMEmulator : public DeviceEmulator, PortLineSplitter {
   std::map<std::string, std::string, std::less<>> settings;
 
   bool binary;
