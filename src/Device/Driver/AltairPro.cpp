@@ -203,7 +203,7 @@ AltairProDevice::PropertySetGet(const char *name, const char *value,
   char buffer[1024];
   StringFormat(buffer, std::size(buffer),
                "PDVSC,S,%s,%s", name, value);
-  PortWriteNMEA(port, Buffer, env);
+  PortWriteNMEA(port, buffer, env);
 
   // expect eg $PDVSC,A,FOO,
   port.ExpectString("PDVSC,A,", env, timeout.GetRemainingOrZero());
