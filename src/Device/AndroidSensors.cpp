@@ -301,31 +301,31 @@ DeviceDescriptor::OnEngineSensors(bool has_cht,
   basic.alive.Update(basic.clock);
 
   if (has_ignitions_per_second) {
-    basic.engine_state.ignitions_per_second = ignitions_per_second;
-    basic.engine_state.ignitions_per_second_available.Update(basic.clock);
+    basic.engine.ignitions_per_second = ignitions_per_second;
+    basic.engine.ignitions_per_second_available.Update(basic.clock);
 
     if (config.engine_type != DeviceConfig::EngineType::NONE) {
-      basic.engine_state.revolutions_per_second = ignitions_per_second *
+      basic.engine.revolutions_per_second = ignitions_per_second *
         config.ignitions_to_revolutions_factors[static_cast<unsigned>(config.engine_type)];
-      basic.engine_state.revolutions_per_second_available.Update(basic.clock);
+      basic.engine.revolutions_per_second_available.Update(basic.clock);
     } else
-      basic.engine_state.revolutions_per_second_available.Clear();
+      basic.engine.revolutions_per_second_available.Clear();
   } else {
-    basic.engine_state.ignitions_per_second_available.Clear();
-    basic.engine_state.revolutions_per_second_available.Clear();
+    basic.engine.ignitions_per_second_available.Clear();
+    basic.engine.revolutions_per_second_available.Clear();
   }
 
   if(has_cht){
-    basic.engine_state.cht_temperature = cht;
-    basic.engine_state.cht_temperature_available.Update(basic.clock);
+    basic.engine.cht_temperature = cht;
+    basic.engine.cht_temperature_available.Update(basic.clock);
   }else{
-    basic.engine_state.cht_temperature_available.Clear();
+    basic.engine.cht_temperature_available.Clear();
   }
   if(has_egt){
-    basic.engine_state.egt_temperature = egt;
-    basic.engine_state.egt_temperature_available.Update(basic.clock);
+    basic.engine.egt_temperature = egt;
+    basic.engine.egt_temperature_available.Update(basic.clock);
   }else{
-    basic.engine_state.egt_temperature_available.Clear();
+    basic.engine.egt_temperature_available.Clear();
   }
   e.Commit();
 }

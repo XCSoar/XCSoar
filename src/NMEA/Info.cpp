@@ -154,7 +154,7 @@ NMEAInfo::Reset()
   secondary_device.Clear();
   flarm.Clear();
 
-  engine_state.Reset();
+  engine.Reset();
 
 #ifdef ANDROID
   glink_data.Clear();
@@ -223,7 +223,7 @@ NMEAInfo::Expire()
   voltage_available.Expire(clock, std::chrono::minutes(5));
   battery_level_available.Expire(clock, std::chrono::minutes(5));
   flarm.Expire(clock);
-  engine_state.Expire(clock);
+  engine.Expire(clock);
 #ifdef ANDROID
   glink_data.Expire(clock);
 #endif
@@ -343,7 +343,7 @@ NMEAInfo::Complement(const NMEAInfo &add)
 
   flarm.Complement(add.flarm);
 
-  engine_state.Complement(add.engine_state);
+  engine.Complement(add.engine);
 
 #ifdef ANDROID
   glink_data.Complement(add.glink_data);

@@ -302,7 +302,7 @@ struct NMEAInfo {
    */
   double humidity;
 
-  EngineState engine_state;
+  EngineState engine;
 
   //###########
   //   Other
