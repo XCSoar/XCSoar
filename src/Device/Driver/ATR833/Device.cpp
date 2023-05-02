@@ -50,6 +50,9 @@ ATR833Device::HandleSTX(std::span<const std::byte> src, NMEAInfo &info) noexcept
   if (src.size() < 3)
     return 0;
 
+  if (src[1] != SYNC)
+    return 1;
+
   switch (src[2]) {
   case SETACTIVE:
     // Active frequency
