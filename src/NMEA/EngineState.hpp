@@ -27,6 +27,17 @@ struct EngineState
   Validity egt_temperature_available;
   Temperature egt_temperature;
 
+  /**
+   * Is any of the fields available?  This indicates that an engine
+   * sensor is connected.
+   */
+  bool IsAnyDefined() const noexcept {
+    return ignitions_per_second_available ||
+      revolutions_per_second_available ||
+      cht_temperature_available ||
+      egt_temperature_available;
+  }
+
   void Clear() noexcept{
     ignitions_per_second_available.Clear();
     revolutions_per_second_available.Clear();
