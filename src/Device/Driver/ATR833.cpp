@@ -194,7 +194,11 @@ ATR833Device::HandleSTX(std::span<const std::byte> src, NMEAInfo &info) noexcept
     return src.size() < 5 ? 0 : 5;
 
   case ALIVE:
-    return src.size() < 4 ? 0 : 4;
+    if (src.size() < 4)
+      return 0;
+
+    info.alive.Update(info.clock);
+    return 4;
 
   default:
     // Received unknown msg id (code)
