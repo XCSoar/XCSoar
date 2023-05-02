@@ -24,14 +24,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static DeviceEmulator *
+static std::unique_ptr<DeviceEmulator>
 LoadEmulator(Args &args)
 {
   const char *driver = args.ExpectNext();
   if (StringIsEqual(driver, "Vega"))
-    return new VegaEmulator();
+    return std::make_unique<VegaEmulator>();
   else if (StringIsEqual(driver, "FLARM"))
-    return new FLARMEmulator();
+    return std::make_unique<FLARMEmulator>();
   else {
     fprintf(stderr, "No such emulator driver: %s\n", driver);
     exit(EXIT_FAILURE);
@@ -42,7 +42,7 @@ int
 main(int argc, char **argv)
 try {
   Args args(argc, argv, "DRIVER PORT BAUD");
-  DeviceEmulator *emulator = LoadEmulator(args);
+  auto emulator = LoadEmulator(args);
   DebugPort debug_port(args);
   args.ExpectEnd();
 
@@ -57,13 +57,11 @@ try {
   emulator->env = &env;
 
   if (!port->WaitConnected(env)) {
-    delete emulator;
     fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
 
   if (!port->StartRxThread()) {
-    delete emulator;
     fprintf(stderr, "Failed to start the port thread\n");
     return EXIT_FAILURE;
   }
@@ -71,7 +69,6 @@ try {
   while (port->GetState() != PortState::FAILED)
     Sleep(1000);
 
-  delete emulator;
   return EXIT_SUCCESS;
 } catch (const std::exception &exception) {
   PrintException(exception);
