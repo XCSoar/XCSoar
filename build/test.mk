@@ -2469,6 +2469,8 @@ EMULATE_DEVICE_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
+	$(TEST_SRC_DIR)/FLARMEmulator.cpp \
+	$(TEST_SRC_DIR)/VegaEmulator.cpp \
 	$(TEST_SRC_DIR)/EmulateDevice.cpp
 EMULATE_DEVICE_DEPENDS = PORT ASYNC LIBNET OPERATION IO OS THREAD LIBNMEA GEO MATH TIME UTIL
 $(eval $(call link-program,EmulateDevice,EMULATE_DEVICE))
