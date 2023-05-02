@@ -6,6 +6,7 @@
 #include "RadioFrequency.hpp"
 #include "util/Concepts.hxx"
 
+#include <array>
 #include <cstddef>
 #include <span>
 
@@ -39,11 +40,36 @@ WithSTX(std::span<const std::byte> src,
     return 0;
 
   // skip STX, SYNC, id
-  src = src.subspan(3);
+  auto s = std::next(src.begin(), 3);
 
-  f(src.first<size>());
+  // copy unescaped data to this stack buffer
+  std::array<std::byte, size> dest;
+  auto d = dest.begin();
 
-  return 3 + size;
+  while (d != dest.end()) {
+    if (s == src.end())
+      // need more data
+      return 0;
+
+    if (*s == STX) {
+      /* STX is escaped using STX,STX */
+
+      if (s[1] != STX)
+        /* malformed escape: restart the message parser at the STX we
+           just found */
+        return std::distance(src.begin(), s);
+
+      /* discard the first STX, copy the second one to the destination
+         buffer */
+      ++s;
+    }
+
+    *d++ = *s++;
+  }
+
+  f(std::span{dest});
+
+  return std::distance(src.begin(), s);
 }
 
 static constexpr RadioFrequency
