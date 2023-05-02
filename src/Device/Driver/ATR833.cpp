@@ -173,6 +173,8 @@ ATR833Device::HandleSTX(std::span<const std::byte> src, NMEAInfo &info) noexcept
     if (src.size() < 15)
       return 0;
 
+    info.alive.Update(info.clock);
+
     info.settings.has_active_frequency.Update(info.clock);
     info.settings.active_frequency =
       RadioFrequency::FromMegaKiloHertz(static_cast<unsigned>(src[3]),
