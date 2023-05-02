@@ -114,7 +114,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   unsigned current_block = 0;
   unsigned valid_bytes;
   do {
-    int i = UploadFileData(port, true, header, allocated_size, env);
+    int i = CAI302::UploadFileData(port, true, {(std::byte *)header, allocated_size}, env);
     if (i < (int)sizeof(*header))
       return false;
 

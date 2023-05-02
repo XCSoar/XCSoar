@@ -81,7 +81,8 @@ IMI::Receive(Port &port, OperationEnvironment &env,
   while (true) {
     // read message
     IMIBYTE buffer[64];
-    size_t bytesRead = port.WaitAndRead(buffer, sizeof(buffer), env, timeout);
+    size_t bytesRead = port.WaitAndRead(std::as_writable_bytes(std::span{buffer}),
+                                        env, timeout);
 
     // parse message
     if (auto msg = mp.Parse(buffer, bytesRead))

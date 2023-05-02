@@ -70,7 +70,7 @@ std::byte
 Port::ReadByte()
 {
   std::byte b;
-  if (Read(&b, sizeof(b)) != sizeof(b))
+  if (Read(std::span{&b, 1}) != sizeof(b))
     throw std::runtime_error{"Port read failed"};
 
   return b;
@@ -92,25 +92,24 @@ Port::FullFlush(OperationEnvironment &env,
       return;
     }
 
-    if (char buffer[0x100];
-        Read(buffer, sizeof(buffer)) <= 0)
+    if (std::byte buffer[0x100];
+        Read(std::span{buffer}) <= 0)
       throw std::runtime_error{"Port read failed"};
   } while (!total_timeout.HasExpired());
 }
 
 void
-Port::FullRead(void *buffer, std::size_t length, OperationEnvironment &env,
+Port::FullRead(std::span<std::byte> dest, OperationEnvironment &env,
                std::chrono::steady_clock::duration first_timeout,
                std::chrono::steady_clock::duration subsequent_timeout,
                std::chrono::steady_clock::duration total_timeout)
 {
   const TimeoutClock full_timeout(total_timeout);
 
-  char *p = (char *)buffer, *end = p + length;
+  auto nbytes = WaitAndRead(dest, env, first_timeout);
+  dest = dest.subspan(nbytes);
 
-  p += WaitAndRead(buffer, length, env, first_timeout);
-
-  while (p < end) {
+  while (!dest.empty()) {
     const auto ft = full_timeout.GetRemainingSigned();
     if (ft.count() < 0)
       /* timeout */
@@ -118,15 +117,16 @@ Port::FullRead(void *buffer, std::size_t length, OperationEnvironment &env,
 
     const auto t = std::min(ft, subsequent_timeout);
 
-    p += WaitAndRead(p, end - p, env, t);
+    nbytes = WaitAndRead(dest, env, t);
+    dest = dest.subspan(nbytes);
   }
 }
 
 void
-Port::FullRead(void *buffer, std::size_t length, OperationEnvironment &env,
+Port::FullRead(std::span<std::byte> dest, OperationEnvironment &env,
                std::chrono::steady_clock::duration timeout)
 {
-  FullRead(buffer, length, env, timeout, timeout, timeout);
+  FullRead(dest, env, timeout, timeout, timeout);
 }
 
 void
@@ -156,13 +156,13 @@ Port::WaitRead(OperationEnvironment &env,
 }
 
 std::size_t
-Port::WaitAndRead(void *buffer, std::size_t length,
+Port::WaitAndRead(std::span<std::byte> dest,
                   OperationEnvironment &env,
                   std::chrono::steady_clock::duration timeout)
 {
   WaitRead(env, timeout);
 
-  int nbytes = Read(buffer, length);
+  const auto nbytes = Read(dest);
   if (nbytes <= 0)
     throw std::runtime_error{"Port read failed"};
 
@@ -170,14 +170,14 @@ Port::WaitAndRead(void *buffer, std::size_t length,
 }
 
 std::size_t
-Port::WaitAndRead(void *buffer, std::size_t length,
+Port::WaitAndRead(std::span<std::byte> dest,
                   OperationEnvironment &env, TimeoutClock timeout)
 {
   const auto remaining = timeout.GetRemainingSigned();
   if (remaining.count() < 0)
     throw DeviceTimeout{"Port read timeout"};
 
-  return WaitAndRead(buffer, length, env, remaining);
+  return WaitAndRead(dest, env, remaining);
 }
 
 void
@@ -192,10 +192,11 @@ Port::ExpectString(std::string_view token, OperationEnvironment &env,
 
   const char *p = token.data();
   while (true) {
-    auto nbytes = WaitAndRead(buffer,
-                              std::min(sizeof(buffer),
-                                       std::size_t(token_end - p)),
-                              env, timeout);
+    std::span<std::byte> dest = std::as_writable_bytes(std::span{buffer});
+    if (std::size_t(token_end - p) < dest.size())
+      dest = dest.first(token_end - p);
+
+    auto nbytes = WaitAndRead(dest, env, timeout);
 
     for (const char *q = buffer, *end = buffer + nbytes; q != end; ++q) {
       const char ch = *q;

@@ -124,18 +124,18 @@ DumpPort::StartRxThread()
 }
 
 std::size_t
-DumpPort::Read(void *buffer, std::size_t size)
+DumpPort::Read(std::span<std::byte> dest)
 {
   const bool enabled = CheckEnabled();
   if (enabled)
-    LogFormat("Read(%u)", (unsigned)size);
+    LogFormat("Read(%u)", (unsigned)dest.size());
 
-  auto nbytes = port->Read(buffer, size);
+  auto nbytes = port->Read(dest);
 
   if (enabled) {
-    LogFormat("Read(%u)=%u", (unsigned)size, (unsigned)nbytes);
+    LogFormat("Read(%u)=%u", (unsigned)dest.size(), (unsigned)nbytes);
     if (nbytes > 0)
-      HexDump("R ", buffer, nbytes);
+      HexDump("R ", dest.data(), nbytes);
   }
 
   return nbytes;

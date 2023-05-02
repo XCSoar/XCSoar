@@ -59,18 +59,19 @@ FLARM::SendEscaped(Port &port, const void *buffer, size_t length,
 }
 
 static std::byte *
-ReceiveSomeUnescape(Port &port, std::byte *buffer, size_t length,
+ReceiveSomeUnescape(Port &port, std::span<std::byte> dest,
                     OperationEnvironment &env, const TimeoutClock timeout)
 {
   /* read "length" bytes from the port, optimistically assuming that
      there are no escaped bytes */
 
-  size_t nbytes = port.WaitAndRead(buffer, length, env, timeout);
+  size_t nbytes = port.WaitAndRead(dest, env, timeout);
 
   /* unescape in-place */
 
-  std::byte *end = buffer + nbytes;
-  for (const std::byte *src = buffer; src != end;) {
+  std::byte *p = dest.data();
+  std::byte *end = dest.data() + nbytes;
+  for (const std::byte *src = dest.data(); src != end;) {
     if (*src == FLARM::ESCAPE) {
       ++src;
 
@@ -84,21 +85,21 @@ ReceiveSomeUnescape(Port &port, std::byte *buffer, size_t length,
         ch = *src++;
 
       if (ch == FLARM::ESCAPE_START)
-        *buffer++ = FLARM::START_FRAME;
+        *p++ = FLARM::START_FRAME;
       else if (ch == FLARM::ESCAPE_ESCAPE)
-        *buffer++ = FLARM::ESCAPE;
+        *p++ = FLARM::ESCAPE;
       else
         /* unknown escape */
         return nullptr;
     } else
       /* "harmless" byte */
-      *buffer++ = *src++;
+      *p++ = *src++;
   }
 
   /* return the current end position of the destination buffer; if
      there were escaped bytes, then this function must be called again
      to account for the escaping overhead */
-  return buffer;
+  return p;
 }
 
 bool
@@ -114,7 +115,8 @@ FLARM::ReceiveEscaped(Port &port, void *buffer, size_t length,
   // Receive data byte-by-byte including escaping until buffer is full
   std::byte *p = (std::byte *)buffer, *end = p + length;
   while (p < end) {
-    p = ReceiveSomeUnescape(port, p, end - p, env, timeout);
+    p = ReceiveSomeUnescape(port, {p, std::size_t(end - p)},
+                            env, timeout);
     if (p == nullptr)
       return false;
   }

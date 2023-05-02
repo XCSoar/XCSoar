@@ -42,6 +42,6 @@ public:
   unsigned GetBaudrate() const noexcept override;
   bool StopRxThread() override;
   bool StartRxThread() override;
-  std::size_t Read(void *Buffer, std::size_t Size) override;
+  std::size_t Read(std::span<std::byte> dest) override;
   void WaitRead(std::chrono::steady_clock::duration timeout) override;
 };

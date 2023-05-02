@@ -162,9 +162,9 @@ K6BtPort::StartRxThread(void)
 }
 
 std::size_t
-K6BtPort::Read(void *Buffer, std::size_t Size)
+K6BtPort::Read(std::span<std::byte> dest)
 {
-  return port->Read(Buffer, Size);
+  return port->Read(dest);
 }
 
 void

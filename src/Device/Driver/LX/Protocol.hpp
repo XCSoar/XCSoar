@@ -176,7 +176,7 @@ SendPacket(Port &port, Command command,
 
 bool
 ReceivePacket(Port &port, Command command,
-              void *data, size_t length, OperationEnvironment &env,
+              std::span<std::byte> dest, OperationEnvironment &env,
               std::chrono::steady_clock::duration first_timeout,
               std::chrono::steady_clock::duration subsequent_timeout,
               std::chrono::steady_clock::duration total_timeout);
@@ -188,43 +188,43 @@ ReceivePacket(Port &port, Command command,
  */
 bool
 ReceivePacketRetry(Port &port, Command command,
-                   void *data, size_t length, OperationEnvironment &env,
+                   std::span<std::byte> dest, OperationEnvironment &env,
                    std::chrono::steady_clock::duration first_timeout,
                    std::chrono::steady_clock::duration subsequent_timeout,
                    std::chrono::steady_clock::duration total_timeout,
                    unsigned n_retries);
 
 [[gnu::const]]
-uint8_t
-calc_crc_char(uint8_t d, uint8_t crc);
+std::byte
+calc_crc_char(std::byte d, std::byte crc) noexcept;
 
 [[gnu::pure]]
-uint8_t
-calc_crc(const void *p0, size_t len, uint8_t crc);
+std::byte
+calc_crc(std::span<const std::byte> src, std::byte crc) noexcept;
 
 bool
-ReadCRC(Port &port, void *buffer, size_t length, OperationEnvironment &env,
+ReadCRC(Port &port, std::span<std::byte> dest, OperationEnvironment &env,
         std::chrono::steady_clock::duration first_timeout,
         std::chrono::steady_clock::duration subsequent_timeout,
         std::chrono::steady_clock::duration total_timeout);
 
 class CRCWriter {
   Port &port;
-  uint8_t crc;
+  std::byte crc{0xff};
 
 public:
-  CRCWriter(Port &_port):port(_port), crc(0xff) {}
+  explicit constexpr CRCWriter(Port &_port) noexcept:port(_port) {}
 
   bool Write(std::span<const std::byte> src,
              OperationEnvironment &env,
              std::chrono::steady_clock::duration timeout=std::chrono::seconds(5)) {
     port.FullWrite(src, env, timeout);
 
-    crc = calc_crc((const uint8_t *)src.data(), src.size(), crc);
+    crc = calc_crc(src, crc);
     return true;
   }
 
-  void Write(uint8_t value) {
+  void Write(std::byte value) {
     port.Write(value);
     crc = calc_crc_char(value, crc);
   }
@@ -233,7 +233,7 @@ public:
    * Write the CRC, and reset it, so the object can be reused.
    */
   void Flush() {
-    port.Write(std::exchange(crc, 0xff));
+    port.Write(std::exchange(crc, std::byte{0xff}));
   }
 };
 

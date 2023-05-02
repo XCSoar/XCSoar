@@ -20,7 +20,8 @@ PortNMEAReader::Fill(TimeoutClock timeout)
     /* already full */
     return false;
 
-  size_t nbytes = port.WaitAndRead(dest.data(), dest.size(), env, timeout);
+  size_t nbytes = port.WaitAndRead(std::as_writable_bytes(dest),
+                                   env, timeout);
 
   buffer.Append(nbytes);
   return true;

@@ -8,6 +8,7 @@
 
 #include <chrono>
 #include <cstdint>
+#include <span>
 #include <string_view>
 
 class OperationEnvironment;
@@ -341,7 +342,7 @@ UploadMode(Port &port, OperationEnvironment &env);
  * header), -1 on error
  */
 int
-ReadShortReply(Port &port, void *buffer, unsigned max_size,
+ReadShortReply(Port &port, std::span<std::byte> dest,
                OperationEnvironment &env,
                std::chrono::steady_clock::duration timeout=std::chrono::seconds(2));
 
@@ -353,7 +354,7 @@ ReadShortReply(Port &port, void *buffer, unsigned max_size,
  * upload prompt was seen (probably due to transmission error)
  */
 int
-ReadLargeReply(Port &port, void *buffer, unsigned max_size,
+ReadLargeReply(Port &port, std::span<std::byte> dest,
                OperationEnvironment &env,
                std::chrono::steady_clock::duration timeout=std::chrono::seconds(8));
 
@@ -370,7 +371,7 @@ ReadLargeReply(Port &port, void *buffer, unsigned max_size,
  */
 int
 UploadShort(Port &port, const char *command,
-            void *response, unsigned max_size,
+            std::span<std::byte> response,
             OperationEnvironment &env,
             std::chrono::steady_clock::duration timeout=std::chrono::seconds(2));
 
@@ -387,7 +388,7 @@ UploadShort(Port &port, const char *command,
  */
 int
 UploadLarge(Port &port, const char *command,
-            void *response, unsigned max_size,
+            std::span<std::byte> response,
             OperationEnvironment &env,
             std::chrono::steady_clock::duration timeout=std::chrono::seconds(8));
 
@@ -407,7 +408,7 @@ UploadFileBinary(Port &port, unsigned i, FileBinary &data,
                  OperationEnvironment &env);
 
 int
-UploadFileData(Port &port, bool next, void *data, unsigned length,
+UploadFileData(Port &port, bool next, std::span<std::byte> dest,
                OperationEnvironment &env);
 
 bool
@@ -436,7 +437,7 @@ UploadPilot(Port &port, unsigned i, Pilot &data, OperationEnvironment &env);
  */
 int
 UploadPilotBlock(Port &port, unsigned start, unsigned count,
-                 unsigned record_size, void *buffer,
+                 unsigned record_size, std::byte *buffer,
                  OperationEnvironment &env);
 
 /**

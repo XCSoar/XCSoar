@@ -150,7 +150,7 @@ public:
    * available currently)
    */
   gcc_nonnull_all
-  virtual std::size_t Read(void *Buffer, std::size_t Size) = 0;
+  virtual std::size_t Read(std::span<std::byte> dest) = 0;
 
   /**
    * Wait until data becomes available or the timeout expires.
@@ -186,7 +186,7 @@ public:
    * @param total_timeout timeout for the whole operation
    */
   gcc_nonnull_all
-  void FullRead(void *buffer, std::size_t length, OperationEnvironment &env,
+  void FullRead(std::span<std::byte> dest, OperationEnvironment &env,
                 std::chrono::steady_clock::duration first_timeout,
                 std::chrono::steady_clock::duration subsequent_timeout,
                 std::chrono::steady_clock::duration total_timeout);
@@ -202,7 +202,7 @@ public:
    * @return true on success
    */
   gcc_nonnull_all
-  void FullRead(void *buffer, std::size_t length, OperationEnvironment &env,
+  void FullRead(std::span<std::byte> dest, OperationEnvironment &env,
                 std::chrono::steady_clock::duration timeout);
 
   /**
@@ -225,7 +225,7 @@ public:
    *
    * @return the number of bytes read (always positive)
    */
-  std::size_t WaitAndRead(void *buffer, std::size_t length,
+  std::size_t WaitAndRead(std::span<std::byte> dest,
                           OperationEnvironment &env,
                           std::chrono::steady_clock::duration timeout);
 
@@ -236,7 +236,7 @@ public:
    *
    * @return the number of bytes read (always positive)
    */
-  std::size_t WaitAndRead(void *buffer, std::size_t length,
+  std::size_t WaitAndRead(std::span<std::byte> dest,
                           OperationEnvironment &env, TimeoutClock timeout);
 
   /**

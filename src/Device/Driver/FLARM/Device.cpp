@@ -197,7 +197,8 @@ static bool
 ExpectChecksum(Port &port, uint8_t checksum, OperationEnvironment &env)
 {
   char data[4];
-  port.FullRead(data, 3, env, std::chrono::milliseconds(500));
+  port.FullRead(std::as_writable_bytes(std::span{data, 3}),
+                env, std::chrono::milliseconds(500));
   if (data[0] != '*')
     return false;
 

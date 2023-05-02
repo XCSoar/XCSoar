@@ -69,6 +69,6 @@ public:
   void SetBaudrate(unsigned baud_rate) override;
   bool StopRxThread() override;
   bool StartRxThread() override;
-  std::size_t Read(void *buffer, std::size_t size) override;
+  std::size_t Read(std::span<std::byte> dest) override;
   void WaitRead(std::chrono::steady_clock::duration timeout) override;
 };

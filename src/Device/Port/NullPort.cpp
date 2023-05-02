@@ -64,7 +64,7 @@ NullPort::SetBaudrate(unsigned)
 }
 
 std::size_t
-NullPort::Read([[maybe_unused]] void *Buffer, [[maybe_unused]] std::size_t Size)
+NullPort::Read([[maybe_unused]] std::span<std::byte> dest)
 {
   return 0;
 }

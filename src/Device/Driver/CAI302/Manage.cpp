@@ -96,7 +96,7 @@ CAI302Device::ReadPilotList(std::vector<CAI302::Pilot> &list,
 
   const unsigned block_count = 8;
 
-  uint8_t buffer[1024];
+  std::byte buffer[1024];
 
   for (unsigned i = 0; i < count; i += block_count) {
     unsigned this_block = std::min(count - i, block_count);
@@ -105,7 +105,7 @@ CAI302Device::ReadPilotList(std::vector<CAI302::Pilot> &list,
     if (n != this_block)
       return false;
 
-    const uint8_t *p = buffer;
+    const std::byte *p = buffer;
     for (unsigned j = 0; j < n; ++j, p += record_size)
       list.push_back(*(const CAI302::Pilot *)p);
   }

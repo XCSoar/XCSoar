@@ -103,8 +103,7 @@ TryConnect(Port &port, char *user_data, size_t max_user_data,
   TimeoutClock timeout(std::chrono::seconds(8));
 
   while (true) {
-    const size_t nbytes = port.WaitAndRead(user_data + user_size,
-                                           max_user_data - user_size,
+    const size_t nbytes = port.WaitAndRead(std::as_writable_bytes(std::span{user_data + user_size, max_user_data - user_size}),
                                            env, timeout);
     if (nbytes == 0)
       return false;

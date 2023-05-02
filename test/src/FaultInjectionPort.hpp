@@ -60,16 +60,15 @@ public:
     return true;
   }
 
-  std::size_t Read(void *Buffer, size_t Size) override {
+  std::size_t Read(std::span<std::byte> dest) override {
     if (inject_port_fault == 0)
       return 0;
 
     if (--inject_port_fault == 0)
       StateChanged();
 
-    char *p = (char *)Buffer;
-    std::fill_n(p, Size, ' ');
-    return Size;
+    std::fill(dest.begin(), dest.end(), std::byte{' '});
+    return dest.size();
   }
 
   void WaitRead([[maybe_unused]] std::chrono::steady_clock::duration timeout) override {
