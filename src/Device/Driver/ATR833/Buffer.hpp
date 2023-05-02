@@ -4,7 +4,6 @@
 #pragma once
 
 #include "Protocol.hpp"
-#include "Device/Port/Port.hpp"
 #include "RadioFrequency.hpp"
 
 #include <cstdint>
@@ -40,8 +39,8 @@ public:
     Put(static_cast<std::byte>((f.GetKiloHertz() % 1000) / 5));
   }
 
-  void Send(Port &port, OperationEnvironment &env) {
+  constexpr std::span<const std::byte> Finish() noexcept {
     data[fill++] = checksum;
-    port.FullWrite(std::span{data}.first(fill), env, std::chrono::seconds(2));
+    return std::span{data}.first(fill);
   }
 };

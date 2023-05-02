@@ -7,6 +7,7 @@
 #include "RadioFrequency.hpp"
 #include "NMEA/Info.hpp"
 #include "Operation/Operation.hpp"
+#include "Device/Port/Port.hpp"
 #include "time/TimeoutClock.hpp"
 
 #include <cstdint>
@@ -138,7 +139,7 @@ ATR833Device::PutActiveFrequency(RadioFrequency frequency,
 {
   ATRBuffer buffer(SETACTIVE);
   buffer.Put(frequency);
-  buffer.Send(port, env);
+  port.FullWrite(buffer.Finish(), env, std::chrono::seconds{2});
   return true;
 }
 
@@ -149,7 +150,7 @@ ATR833Device::PutStandbyFrequency(RadioFrequency frequency,
 {
   ATRBuffer buffer(SETSTANDBY);
   buffer.Put(frequency);
-  buffer.Send(port, env);
+  port.FullWrite(buffer.Finish(), env, std::chrono::seconds{2});
   return true;
 }
 
@@ -158,15 +159,15 @@ ATR833Device::LinkTimeout()
 {
   NullOperationEnvironment env;
 
-  ATRBuffer{ALIVE}.Send(port, env);
-  ATRBuffer{REQUESTDATA}.Send(port, env);
+  port.FullWrite(ATRBuffer{ALIVE}.Finish(), env, std::chrono::seconds{2});
+  port.FullWrite(ATRBuffer{REQUESTDATA}.Finish(), env, std::chrono::seconds{2});
 }
 
 bool
 ATR833Device::EnableNMEA(OperationEnvironment &env)
 {
-  ATRBuffer{ALIVE}.Send(port, env);
-  ATRBuffer{REQUESTDATA}.Send(port, env);
+  port.FullWrite(ATRBuffer{ALIVE}.Finish(), env, std::chrono::seconds{2});
+  port.FullWrite(ATRBuffer{REQUESTDATA}.Finish(), env, std::chrono::seconds{2});
 
   return true;
 }
@@ -178,8 +179,7 @@ ATR833Device::OnSysTicker()
   if (status_clock.CheckUpdate(std::chrono::seconds(5))) {
     NullOperationEnvironment env;
 
-    ATRBuffer{ALIVE}.Send(port, env);
-
-    ATRBuffer{REQUESTDATA}.Send(port, env);
+    port.FullWrite(ATRBuffer{ALIVE}.Finish(), env, std::chrono::seconds{2});
+    port.FullWrite(ATRBuffer{REQUESTDATA}.Finish(), env, std::chrono::seconds{2});
   }
 }
