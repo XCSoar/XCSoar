@@ -6,7 +6,6 @@
 #include "Protocol.hpp"
 #include "RadioFrequency.hpp"
 #include "NMEA/Info.hpp"
-#include "Operation/Operation.hpp"
 #include "Device/Port/Port.hpp"
 #include "time/TimeoutClock.hpp"
 
@@ -157,10 +156,8 @@ ATR833Device::PutStandbyFrequency(RadioFrequency frequency,
 void
 ATR833Device::LinkTimeout()
 {
-  NullOperationEnvironment env;
-
-  port.FullWrite(ATRBuffer{ALIVE}.Finish(), env, std::chrono::seconds{2});
-  port.FullWrite(ATRBuffer{REQUESTDATA}.Finish(), env, std::chrono::seconds{2});
+  port.Write(ATRBuffer{ALIVE}.Finish());
+  port.Write(ATRBuffer{REQUESTDATA}.Finish());
 }
 
 bool
@@ -177,9 +174,7 @@ ATR833Device::OnSysTicker()
 {
   // ALIVE shall be send every 5 seconds
   if (status_clock.CheckUpdate(std::chrono::seconds(5))) {
-    NullOperationEnvironment env;
-
-    port.FullWrite(ATRBuffer{ALIVE}.Finish(), env, std::chrono::seconds{2});
-    port.FullWrite(ATRBuffer{REQUESTDATA}.Finish(), env, std::chrono::seconds{2});
+    port.Write(ATRBuffer{ALIVE}.Finish());
+    port.Write(ATRBuffer{REQUESTDATA}.Finish());
   }
 }
