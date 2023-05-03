@@ -80,6 +80,13 @@ final class HM10WriteBuffer {
     final long TIMEOUT = 5000;
     final long waitUntil = System.currentTimeMillis() + TIMEOUT;
 
+    if (lastChunkWriteError) {
+      /* the last write() failed asynchronously; throw this error now
+         so the caller knows something went wrong */
+      lastChunkWriteError = false;
+      return false;
+    }
+
     while (pendingWriteChunks != null) {
       final long timeToWait = waitUntil - System.currentTimeMillis();
       if (timeToWait <= 0)
@@ -130,7 +137,6 @@ final class HM10WriteBuffer {
       / MAX_WRITE_CHUNK_SIZE;
     pendingWriteChunks = new byte[writeChunksCount][];
     nextWriteChunkIdx = 0;
-    lastChunkWriteError = false;
     for (int i = 0; i < writeChunksCount; ++i) {
       pendingWriteChunks[i] = Arrays.copyOfRange(data,
                                                  i * MAX_WRITE_CHUNK_SIZE,
@@ -138,20 +144,6 @@ final class HM10WriteBuffer {
                                                           length));
     }
 
-    try {
-      wait(TIMEOUT);
-    } catch (InterruptedException e) {
-      /* cancel the write on interruption */
-      pendingWriteChunks = null;
-      return 0;
-    }
-
-    if (pendingWriteChunks != null && nextWriteChunkIdx == 0) {
-      /* timeout */
-      pendingWriteChunks = null;
-      return 0;
-    }
-
-    return lastChunkWriteError ? 0 : length;
+    return length;
   }
 }
