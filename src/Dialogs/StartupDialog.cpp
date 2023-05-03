@@ -44,7 +44,7 @@ public:
     :look(_look), dialog(_dialog) {}
 
 private:
-  PixelRect GetButtonRect(PixelRect rc) {
+  PixelRect GetButtonRect(PixelRect rc) noexcept {
     rc.left = rc.right - Layout::Scale(75);
     rc.bottom = rc.top + Layout::GetMaximumControlHeight();
     return rc;
@@ -102,7 +102,7 @@ class StartupWidget final : public RowFormWidget {
 
 public:
   StartupWidget(const DialogLook &look, WndForm &_dialog,
-                DataField *_df)
+                DataField *_df) noexcept
     :RowFormWidget(look), dialog(_dialog), df(_df) {}
 
   /* virtual methods from class Widget */
@@ -119,7 +119,7 @@ public:
 
 static bool
 SelectProfileCallback([[maybe_unused]] const TCHAR *caption, [[maybe_unused]] DataField &_df,
-                      [[maybe_unused]] const TCHAR *help_text)
+                      [[maybe_unused]] const TCHAR *help_text) noexcept
 {
   FileDataField &df = (FileDataField &)_df;
 
@@ -142,7 +142,7 @@ StartupWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 }
 
 static bool
-SelectProfile(Path path)
+SelectProfile(Path path) noexcept
 {
   try {
     if (!CheckProfilePasswordResult(CheckProfileFilePassword(path)))
@@ -176,7 +176,7 @@ StartupWidget::Save(bool &changed) noexcept
 }
 
 bool
-dlgStartupShowModal()
+dlgStartupShowModal() noexcept
 {
   LogFormat("Startup dialog");
 
