@@ -51,7 +51,7 @@ ReplayControlWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
             nullptr,
             _T("*.nmea\0*.igc\0"),
             true);
-  ((FileDataField *)file->GetDataField())->SetValue(Path(replay->GetFilename()));
+  ((FileDataField *)file->GetDataField())->SetValue(replay->GetFilename());
   file->RefreshDisplay();
 
   AddFloat(_("Rate"),
