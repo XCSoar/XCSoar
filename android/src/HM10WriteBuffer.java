@@ -117,20 +117,6 @@ final class HM10WriteBuffer {
     if ((dataCharacteristic == null) || (deviceNameCharacteristic == null))
       return 0;
 
-    /* Workaround: To avoid a race condition when data is sent and received
-       at the same time, we place a read request for the device name
-       characteristic here. This way, we can place the actual write
-       operation in the read callback so that the write operation is performed
-       int the GATT event handling thread. */
-    if (!gattBusy) {
-      if (!gatt.readCharacteristic(deviceNameCharacteristic)) {
-        Log.e(TAG, "GATT characteristic read request failed");
-        return 0;
-      }
-
-      gattBusy = true;
-    }
-
     /* Write data in 20 byte large chunks at maximun. Most GATT devices do
        not support characteristic values which are larger than 20 bytes. */
     int writeChunksCount = (length + MAX_WRITE_CHUNK_SIZE - 1)
@@ -142,6 +128,21 @@ final class HM10WriteBuffer {
                                                  i * MAX_WRITE_CHUNK_SIZE,
                                                  Math.min((i + 1) * MAX_WRITE_CHUNK_SIZE,
                                                           length));
+    }
+
+    /* Workaround: To avoid a race condition when data is sent and received
+       at the same time, we place a read request for the device name
+       characteristic here. This way, we can place the actual write
+       operation in the read callback so that the write operation is performed
+       int the GATT event handling thread. */
+    if (!gattBusy) {
+      if (!gatt.readCharacteristic(deviceNameCharacteristic)) {
+        Log.e(TAG, "GATT characteristic read request failed");
+        clear();
+        return 0;
+      }
+
+      gattBusy = true;
     }
 
     return length;
