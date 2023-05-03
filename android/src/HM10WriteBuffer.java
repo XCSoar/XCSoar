@@ -34,6 +34,12 @@ final class HM10WriteBuffer {
    */
   private boolean gattBusy = false;
 
+  synchronized void reset() {
+    lastChunkWriteError = false;
+    gattBusy = false;
+    clear();
+  }
+
   synchronized boolean beginWriteNextChunk(BluetoothGatt gatt,
                                            BluetoothGattCharacteristic dataCharacteristic) {
     gattBusy = false;
@@ -59,13 +65,14 @@ final class HM10WriteBuffer {
     return true;
   }
 
-  synchronized void clear() {
+  private synchronized void clear() {
     pendingWriteChunks = null;
     notifyAll();
   }
 
   synchronized void setError() {
     lastChunkWriteError = true;
+    gattBusy = false;
     clear();
   }
 

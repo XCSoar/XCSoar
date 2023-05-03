@@ -102,7 +102,7 @@ public class HM10Port
       error(e.getMessage());
     }
 
-    writeBuffer.clear();
+    writeBuffer.reset();
     stateChanged();
     synchronized (gattStateSync) {
       gattState = newState;
@@ -181,7 +181,7 @@ public class HM10Port
     safeDestruct.beginShutdown();
 
     shutdown = true;
-    writeBuffer.clear();
+    writeBuffer.reset();
     gatt.disconnect();
     synchronized (gattStateSync) {
       long waitUntil = System.currentTimeMillis() + DISCONNECT_TIMEOUT;
