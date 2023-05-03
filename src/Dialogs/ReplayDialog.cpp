@@ -72,8 +72,7 @@ ReplayControlWidget::OnStopClicked() noexcept
 inline void
 ReplayControlWidget::OnStartClicked() noexcept
 {
-  const auto &df = (const FileDataField &)GetDataField(FILE);
-  const Path path = df.GetValue();
+  const Path path = GetValueFile(FILE);
 
   try {
     replay->Start(path);
