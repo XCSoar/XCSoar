@@ -13,6 +13,7 @@
 
 #ifdef _WIN32
 # include "system/WindowsRegistry.hpp"
+# include "util/StringFormat.hpp"
 # include <fileapi.h>
 #endif
 
@@ -100,6 +101,26 @@ DetectSerialPorts(DataFieldEnum &df) noexcept
 
 #elif defined(_WIN32)
 
+/**
+ * If this is a "COMx" name, parse "x" and return it; otherwise,
+ * return -1.
+ */
+[[gnu::pure]]
+static int
+ComIndex(TCHAR *name) noexcept
+{
+  const TCHAR *suffix = StringAfterPrefix(name, _T("COM"));
+  if (suffix == nullptr)
+    return -1;
+
+  TCHAR *endptr;
+  const auto i = _tcstoul(suffix, &endptr, 10);
+  if (endptr == suffix || *endptr != _T('\0'))
+    return -1;
+
+  return static_cast<int>(i);
+}
+
 static void
 DetectSerialPorts(DataFieldEnum &df) noexcept
 try {
@@ -112,29 +133,29 @@ try {
 
   for (unsigned i = 0;; ++i) {
     TCHAR name[128];
-    TCHAR path[64];
-
-    std::span<TCHAR> value{path};
-    /* reserve space for the colon (backwards compatibiity with older
-       XCSoar versions) */
-    value = value.first(value.size() - 1);
+    TCHAR value[64];
 
     DWORD type;
     if (!serialcomm.EnumValue(i, std::span{name}, &type,
-                              std::as_writable_bytes(value)))
+                              std::as_writable_bytes(std::span{value})))
       break;
 
     if (type != REG_SZ)
       // weird
       continue;
 
-    auto path_length = StringLength(path);
-    if (path_length == 0)
-      continue;
+    const TCHAR *path = value;
 
-    if (path[path_length - 1] != ':') {
-      path[path_length] = ':';
-      path[path_length + 1] = _T('\0');
+    TCHAR buffer[128];
+    if (const auto com_idx = ComIndex(value); com_idx >= 0) {
+      if (com_idx < 10)
+        /* old-style raw names (with trailing colon for backwards
+           compatibility with older XCSoar versions) */
+        StringFormatUnsafe(buffer, _T("%s:"), value);
+      else
+        /* COM10 and above must use UNC paths */
+        StringFormatUnsafe(buffer, _T("\\\\.\\%s"), value);
+      path = buffer;
     }
 
     AddPort(df, DeviceConfig::PortType::SERIAL, path, name);

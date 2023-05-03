@@ -37,6 +37,7 @@ Version 7.29 - 2023/05/03
   - Support Brightness and Colour for ComfortLight PRO models
 * Windows
   - show serial port names
+  - support COM10..COM255
 * Polars
   - Add LS-5 polar
   - Add Silene E78 polar
