@@ -21,7 +21,6 @@ def __write_cmake_toolchain_file(f, toolchain, no_isystem):
 
     cppflags = toolchain.cppflags
     if no_isystem:
-        import re
         cppflags = re.sub(r'\s*-isystem\s+\S+\s*', ' ', cppflags)
 
     f.write(f"""
