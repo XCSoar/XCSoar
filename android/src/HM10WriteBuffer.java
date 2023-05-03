@@ -22,8 +22,22 @@ final class HM10WriteBuffer {
   private int nextWriteChunkIdx;
   private boolean lastChunkWriteError;
 
+  /**
+   * Is the BluetoothGatt object currently busy, i.e. did we call
+   * readCharacteristic() or writeCharacteristic() and are we waiting
+   * for a beginWriteNextChunk() call from HM10Port?
+   *
+   * We need to track this because only one pending
+   * readCharacteristic()/writeCharacteristic() operation is allowed,
+   * and the second one will fail with
+   * BluetoothStatusCodes.ERROR_GATT_WRITE_REQUEST_BUSY.
+   */
+  private boolean gattBusy = false;
+
   synchronized boolean beginWriteNextChunk(BluetoothGatt gatt,
                                            BluetoothGattCharacteristic dataCharacteristic) {
+    gattBusy = false;
+
     if (pendingWriteChunks == null)
       return false;
 
@@ -33,6 +47,8 @@ final class HM10WriteBuffer {
       setError();
       return false;
     }
+
+    gattBusy = true;
 
     ++nextWriteChunkIdx;
     if (nextWriteChunkIdx >= pendingWriteChunks.length) {
@@ -92,9 +108,13 @@ final class HM10WriteBuffer {
        characteristic here. This way, we can place the actual write
        operation in the read callback so that the write operation is performed
        int the GATT event handling thread. */
-    if (!gatt.readCharacteristic(deviceNameCharacteristic)) {
-      Log.e(TAG, "GATT characteristic read request failed");
-      return 0;
+    if (!gattBusy) {
+      if (!gatt.readCharacteristic(deviceNameCharacteristic)) {
+        Log.e(TAG, "GATT characteristic read request failed");
+        return 0;
+      }
+
+      gattBusy = true;
     }
 
     /* Write data in 20 byte large chunks at maximun. Most GATT devices do
