@@ -62,8 +62,9 @@ final class HM10WriteBuffer {
 
     gattBusy = true;
 
-    if (head == tail)
-      clear();
+    /* wake up write() or drain() telling them some space in the
+       buffer has been freed */
+    notifyAll();
 
     return true;
   }
@@ -105,6 +106,37 @@ final class HM10WriteBuffer {
     return true;
   }
 
+  /**
+   * Wait until there is some free space in the buffer.
+   *
+   * @return false on error
+   */
+  synchronized boolean drainSome() {
+    final long TIMEOUT = 5000;
+    final long waitUntil = System.currentTimeMillis() + TIMEOUT;
+
+    if (lastChunkWriteError) {
+      /* the last write() failed asynchronously; throw this error now
+         so the caller knows something went wrong */
+      lastChunkWriteError = false;
+      return false;
+    }
+
+    while (head == 0 && tail == BUFFER_SIZE) {
+      final long timeToWait = waitUntil - System.currentTimeMillis();
+      if (timeToWait <= 0)
+        return false;
+
+      try {
+        wait(timeToWait);
+      } catch (InterruptedException e) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   synchronized int write(BluetoothGatt gatt,
                          BluetoothGattCharacteristic dataCharacteristic,
                          BluetoothGattCharacteristic deviceNameCharacteristic,
@@ -112,11 +144,19 @@ final class HM10WriteBuffer {
     if (0 == length)
       return 0;
 
-    if (!drain())
+    if (!drainSome())
       return 0;
 
     if ((dataCharacteristic == null) || (deviceNameCharacteristic == null))
       return 0;
+
+    if (head > 0) {
+      /* shift the buffer contents to the beginning to make room at
+         the end */
+      System.arraycopy(buffer, head, buffer, 0, tail - head);
+      tail -= head;
+      head = 0;
+    }
 
     final int nbytes = Math.min(length, BUFFER_SIZE - tail);
     System.arraycopy(data, 0, buffer, tail, nbytes);
