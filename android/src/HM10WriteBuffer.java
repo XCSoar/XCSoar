@@ -16,10 +16,13 @@ import android.util.Log;
 final class HM10WriteBuffer {
   private static final String TAG = "XCSoar";
 
+  private static final int BUFFER_SIZE = 256;
+
   private static final int MAX_WRITE_CHUNK_SIZE = 20;
 
-  private byte[][] pendingWriteChunks = null;
-  private int nextWriteChunkIdx;
+  private final byte[] buffer = new byte[BUFFER_SIZE];
+  private int head, tail;
+
   private boolean lastChunkWriteError;
 
   /**
@@ -44,10 +47,13 @@ final class HM10WriteBuffer {
                                            BluetoothGattCharacteristic dataCharacteristic) {
     gattBusy = false;
 
-    if (pendingWriteChunks == null)
+    if (head == tail)
       return false;
 
-    dataCharacteristic.setValue(pendingWriteChunks[nextWriteChunkIdx]);
+    final int nbytes = Math.min(tail - head, MAX_WRITE_CHUNK_SIZE);
+    dataCharacteristic.setValue(Arrays.copyOfRange(buffer, head, head + nbytes));
+    head += nbytes;
+
     if (!gatt.writeCharacteristic(dataCharacteristic)) {
       Log.e(TAG, "GATT characteristic write request failed");
       setError();
@@ -56,17 +62,14 @@ final class HM10WriteBuffer {
 
     gattBusy = true;
 
-    ++nextWriteChunkIdx;
-    if (nextWriteChunkIdx >= pendingWriteChunks.length) {
-      /* writing is done */
+    if (head == tail)
       clear();
-    }
 
     return true;
   }
 
   private synchronized void clear() {
-    pendingWriteChunks = null;
+    head = tail = 0;
     notifyAll();
   }
 
@@ -87,7 +90,7 @@ final class HM10WriteBuffer {
       return false;
     }
 
-    while (pendingWriteChunks != null) {
+    while (head != tail) {
       final long timeToWait = waitUntil - System.currentTimeMillis();
       if (timeToWait <= 0)
         return false;
@@ -106,8 +109,6 @@ final class HM10WriteBuffer {
                          BluetoothGattCharacteristic dataCharacteristic,
                          BluetoothGattCharacteristic deviceNameCharacteristic,
                          byte[] data, int length) {
-    final long TIMEOUT = 5000;
-
     if (0 == length)
       return 0;
 
@@ -117,18 +118,9 @@ final class HM10WriteBuffer {
     if ((dataCharacteristic == null) || (deviceNameCharacteristic == null))
       return 0;
 
-    /* Write data in 20 byte large chunks at maximun. Most GATT devices do
-       not support characteristic values which are larger than 20 bytes. */
-    int writeChunksCount = (length + MAX_WRITE_CHUNK_SIZE - 1)
-      / MAX_WRITE_CHUNK_SIZE;
-    pendingWriteChunks = new byte[writeChunksCount][];
-    nextWriteChunkIdx = 0;
-    for (int i = 0; i < writeChunksCount; ++i) {
-      pendingWriteChunks[i] = Arrays.copyOfRange(data,
-                                                 i * MAX_WRITE_CHUNK_SIZE,
-                                                 Math.min((i + 1) * MAX_WRITE_CHUNK_SIZE,
-                                                          length));
-    }
+    final int nbytes = Math.min(length, BUFFER_SIZE - tail);
+    System.arraycopy(data, 0, buffer, tail, nbytes);
+    tail += nbytes;
 
     /* Workaround: To avoid a race condition when data is sent and received
        at the same time, we place a read request for the device name
@@ -145,6 +137,6 @@ final class HM10WriteBuffer {
       gattBusy = true;
     }
 
-    return length;
+    return nbytes;
   }
 }
