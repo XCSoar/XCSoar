@@ -101,22 +101,16 @@ DetectSerialPorts(DataFieldEnum &df) noexcept
 
 #if defined(_WIN32) && !defined(HAVE_POSIX)
 
-[[gnu::pure]]
-static bool
-DosDeviceExists(const TCHAR *path) noexcept
-{
-  TCHAR dummy[MAX_PATH];
-  return QueryDosDevice(path, dummy, std::size(dummy)) > 0;
-}
-
 static void
 FillDefaultSerialPorts(DataFieldEnum &df) noexcept
 {
   for (unsigned i = 1; i <= 10; ++i) {
-    TCHAR buffer[64];
-    _stprintf(buffer, _T("COM%u:"), i);
-    if (DosDeviceExists(buffer))
-       AddPort(df, DeviceConfig::PortType::SERIAL, buffer);
+    TCHAR path[64];
+    _stprintf(path, _T("COM%u:"), i);
+
+    TCHAR display_name[MAX_PATH];
+    if (QueryDosDevice(path, display_name, std::size(display_name)) > 0)
+      AddPort(df, DeviceConfig::PortType::SERIAL, path, display_name);
   }
 }
 

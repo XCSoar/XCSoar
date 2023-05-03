@@ -23,6 +23,8 @@ Version 7.29 - not yet released
   - Add an E-ink friendly trail type
   - Add Brightness control to Clara HD
   - Support Brightness and Colour for ComfortLight PRO models
+* Windows
+  - show serial port names
 * Polars
   - Add LS-5 polar
   - Add Silene E78 polar
