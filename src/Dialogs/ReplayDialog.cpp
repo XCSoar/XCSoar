@@ -5,16 +5,16 @@
 #include "Dialogs/Error.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
-#include "Form/DataField/Listener.hpp"
 #include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "Replay/Replay.hpp"
+#include "Form/DataField/Base.hpp"
 #include "Form/DataField/File.hpp"
-#include "Form/DataField/Float.hpp"
 #include "Language/Language.hpp"
 
 class ReplayControlWidget final
-  : public RowFormWidget, DataFieldListener {
+  : public RowFormWidget
+{
   enum Controls {
     FILE,
     RATE,
@@ -39,10 +39,6 @@ public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent,
                const PixelRect &rc) noexcept override;
-
-private:
-  /* methods from DataFieldListener */
-  void OnModified(DataField &df) noexcept override;
 };
 
 void
@@ -61,7 +57,10 @@ ReplayControlWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddFloat(_("Rate"),
            _("Time acceleration of replay. Set to 0 for pause, 1 for normal real-time replay."),
            _T("%.0f x"), _T("%.0f"),
-           0, 10, 1, false, replay->GetTimeScale(), this);
+           0, 10, 1, false, replay->GetTimeScale());
+  GetDataField(RATE).SetOnModified([this]{
+    replay->SetTimeScale(GetValueFloat(RATE));
+  });
 }
 
 inline void
@@ -87,14 +86,6 @@ inline void
 ReplayControlWidget::OnFastForwardClicked()
 {
   replay->FastForward(std::chrono::minutes{10});
-}
-
-void
-ReplayControlWidget::OnModified(DataField &_df) noexcept
-{
-  const DataFieldFloat &df = (const DataFieldFloat &)_df;
-
-  replay->SetTimeScale(df.GetValue());
 }
 
 void
