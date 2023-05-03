@@ -143,13 +143,11 @@ public class HM10Port
   @Override
   public void onCharacteristicWrite(BluetoothGatt gatt,
       BluetoothGattCharacteristic characteristic, int status) {
-    synchronized (writeBuffer) {
-      if (BluetoothGatt.GATT_SUCCESS == status) {
-        writeBuffer.beginWriteNextChunk(gatt, dataCharacteristic);
-      } else {
-        Log.e(TAG, "GATT characteristic write failed");
-        writeBuffer.setError();
-      }
+    if (BluetoothGatt.GATT_SUCCESS == status) {
+      writeBuffer.beginWriteNextChunk(gatt, dataCharacteristic);
+    } else {
+      Log.e(TAG, "GATT characteristic write failed");
+      writeBuffer.setError();
     }
   }
 
