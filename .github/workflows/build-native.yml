@@ -443,6 +443,7 @@ jobs:
             quilt \
             librsvg \
             imagemagick gettext sox \
+            fmt \
             sdl2 \
             libsodium \
             freetype \
@@ -515,7 +516,6 @@ jobs:
           brew install \
             make \
             quilt \
-            fmt \
             librsvg \
             imagemagick gettext sox \
             cmake ninja
