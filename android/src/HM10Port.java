@@ -47,6 +47,8 @@ public class HM10Port
   private final Object gattStateSync = new Object();
   private int gattState = BluetoothGatt.STATE_DISCONNECTED;
 
+  private boolean setupCharacteristicsPending = false;
+
   public HM10Port(Context context, BluetoothDevice device)
     throws IOException
   {
@@ -131,7 +133,11 @@ public class HM10Port
       if (BluetoothGatt.GATT_SUCCESS != status)
         throw new Error("Discovering GATT services failed");
 
-      setupCharacteristics();
+      /* request a high MTU (usually, HM-10 chips support 23 bytes);
+         postpone the setupCharacteristics() call until onMtuChanged()
+         is called - we can't do both at the same time */
+      setupCharacteristicsPending = true;
+      gatt.requestMtu(256);
     } catch (Error e) {
       error(e.getMessage());
       stateChanged();
@@ -167,6 +173,25 @@ public class HM10Port
         } finally {
           safeDestruct.decrement();
         }
+      }
+    }
+  }
+
+  @Override
+  public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
+    super.onMtuChanged(gatt, mtu, status);
+
+    if (status == BluetoothGatt.GATT_SUCCESS && mtu > 0)
+      writeBuffer.setMtu(mtu);
+
+    if (setupCharacteristicsPending) {
+      setupCharacteristicsPending = false;
+
+      try {
+        setupCharacteristics();
+      } catch (Error e) {
+        error(e.getMessage());
+        stateChanged();
       }
     }
   }

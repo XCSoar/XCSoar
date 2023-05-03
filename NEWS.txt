@@ -1,6 +1,7 @@
 Version 7.30 - not yet released
 * Android
   - UsbSerial: fix permission crash bug
+  - negotiate MTU on Bluetooth HM10 devices
 
 Version 7.29 - 2023/05/03
 * data files

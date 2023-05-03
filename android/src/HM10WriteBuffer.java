@@ -20,7 +20,11 @@ final class HM10WriteBuffer {
 
   private static final int BUFFER_SIZE = 256;
 
-  private static final int MAX_WRITE_CHUNK_SIZE = 20;
+  /**
+   * The current mtu.  May be updated by
+   * BluetoothGattCallback.onMtuChanged() (via class HM10Port).
+   */
+  private int mtu = 20;
 
   private final byte[] buffer = new byte[BUFFER_SIZE];
   private int head, tail;
@@ -39,6 +43,10 @@ final class HM10WriteBuffer {
    */
   private boolean gattBusy = false;
 
+  void setMtu(int _mtu) {
+    mtu = _mtu;
+  }
+
   synchronized void reset() {
     lastChunkWriteError = false;
     gattBusy = false;
@@ -52,7 +60,7 @@ final class HM10WriteBuffer {
     if (head == tail)
       return false;
 
-    final int nbytes = Math.min(tail - head, MAX_WRITE_CHUNK_SIZE);
+    final int nbytes = Math.min(tail - head, mtu);
     final byte[] chunk = Arrays.copyOfRange(buffer, head, head + nbytes);
     head += nbytes;
 
