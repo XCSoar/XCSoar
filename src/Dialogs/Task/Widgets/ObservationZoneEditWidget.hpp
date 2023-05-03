@@ -24,9 +24,9 @@ private:
   Listener *listener;
 
 public:
-  ObservationZoneEditWidget(ObservationZone &_oz);
+  ObservationZoneEditWidget(ObservationZone &_oz) noexcept;
 
-  void SetListener(Listener *_listener) {
+  void SetListener(Listener *_listener) noexcept {
     assert(listener == nullptr);
     assert(_listener != nullptr);
 
@@ -34,11 +34,11 @@ public:
   }
 
 protected:
-  const ObservationZone &GetObject() const {
+  const ObservationZone &GetObject() const noexcept {
     return oz;
   }
 
-  ObservationZone &GetObject() {
+  ObservationZone &GetObject() noexcept {
     return oz;
   }
 

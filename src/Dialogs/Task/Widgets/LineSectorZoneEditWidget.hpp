@@ -14,11 +14,11 @@ public:
   LineSectorZoneEditWidget(LineSectorZone &oz, bool length_editable) noexcept;
 
 protected:
-  const LineSectorZone &GetObject() const {
+  const LineSectorZone &GetObject() const noexcept {
     return (const LineSectorZone &)ObservationZoneEditWidget::GetObject();
   }
 
-  LineSectorZone &GetObject() {
+  LineSectorZone &GetObject() noexcept {
     return (LineSectorZone &)ObservationZoneEditWidget::GetObject();
   }
 
