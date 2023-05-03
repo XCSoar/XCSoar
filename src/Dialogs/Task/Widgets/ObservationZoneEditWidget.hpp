@@ -21,7 +21,7 @@ public:
 private:
   ObservationZone &oz;
 
-  Listener *listener;
+  Listener *listener = nullptr;
 
 public:
   ObservationZoneEditWidget(ObservationZone &_oz) noexcept;
