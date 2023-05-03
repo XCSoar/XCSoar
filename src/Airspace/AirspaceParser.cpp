@@ -108,6 +108,9 @@ struct TempAirspace
    */
   struct CommitError {
     const char *msg;
+
+    explicit constexpr CommitError(const char *_msg) noexcept
+      :msg(_msg) {}
   };
 
   TempAirspace() noexcept {
