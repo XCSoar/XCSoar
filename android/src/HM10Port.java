@@ -146,7 +146,6 @@ public class HM10Port
     synchronized (writeBuffer) {
       if (BluetoothGatt.GATT_SUCCESS == status) {
         writeBuffer.beginWriteNextChunk(gatt, dataCharacteristic);
-        writeBuffer.notifyAll();
       } else {
         Log.e(TAG, "GATT characteristic write failed");
         writeBuffer.setError();
