@@ -7,6 +7,8 @@ import java.util.Arrays;
 
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothStatusCodes;
+import android.os.Build;
 import android.util.Log;
 
 /**
@@ -51,10 +53,21 @@ final class HM10WriteBuffer {
       return false;
 
     final int nbytes = Math.min(tail - head, MAX_WRITE_CHUNK_SIZE);
-    dataCharacteristic.setValue(Arrays.copyOfRange(buffer, head, head + nbytes));
+    final byte[] chunk = Arrays.copyOfRange(buffer, head, head + nbytes);
     head += nbytes;
 
-    if (!gatt.writeCharacteristic(dataCharacteristic)) {
+    boolean success;
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      int result = gatt.writeCharacteristic(dataCharacteristic, chunk,
+                                            dataCharacteristic.WRITE_TYPE_NO_RESPONSE);
+      success = result == BluetoothStatusCodes.SUCCESS;
+    } else {
+      dataCharacteristic.setValue(chunk);
+      success = gatt.writeCharacteristic(dataCharacteristic);
+    }
+
+    if (!success) {
       Log.e(TAG, "GATT characteristic write request failed");
       setError();
       return false;
