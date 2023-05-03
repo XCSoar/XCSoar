@@ -80,6 +80,20 @@ public class HM10Port
       throw new Error("GATT device name characteristic not found");
   }
 
+  private void setupCharacteristics() throws Error {
+    findCharacteristics();
+
+    if (!gatt.setCharacteristicNotification(dataCharacteristic, true))
+      throw new Error("Could not enable GATT characteristic notification");
+
+    BluetoothGattDescriptor descriptor =
+      dataCharacteristic.getDescriptor(BluetoothUuids.CLIENT_CHARACTERISTIC_CONFIGURATION);
+    descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+    gatt.writeDescriptor(descriptor);
+    portState = STATE_READY;
+    stateChanged();
+  }
+
   @Override
   public void onConnectionStateChange(BluetoothGatt gatt,
       int status,
@@ -117,19 +131,9 @@ public class HM10Port
       if (BluetoothGatt.GATT_SUCCESS != status)
         throw new Error("Discovering GATT services failed");
 
-      findCharacteristics();
-
-      if (!gatt.setCharacteristicNotification(dataCharacteristic, true))
-        throw new Error("Could not enable GATT characteristic notification");
-
-      BluetoothGattDescriptor descriptor =
-        dataCharacteristic.getDescriptor(BluetoothUuids.CLIENT_CHARACTERISTIC_CONFIGURATION);
-      descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-      gatt.writeDescriptor(descriptor);
-      portState = STATE_READY;
+      setupCharacteristics();
     } catch (Error e) {
       error(e.getMessage());
-    } finally {
       stateChanged();
     }
   }
