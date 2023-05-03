@@ -21,19 +21,19 @@ class ReplayControlWidget final
   };
 
 public:
-  ReplayControlWidget(const DialogLook &look)
+  explicit ReplayControlWidget(const DialogLook &look) noexcept
     :RowFormWidget(look) {}
 
-  void CreateButtons(WidgetDialog &dialog) {
+  void CreateButtons(WidgetDialog &dialog) noexcept {
     dialog.AddButton(_("Start"), [this](){ OnStartClicked(); });
     dialog.AddButton(_("Stop"), [this](){ OnStopClicked(); });
     dialog.AddButton(_T("+10'"), [this](){ OnFastForwardClicked(); });
   }
 
 private:
-  void OnStopClicked();
-  void OnStartClicked();
-  void OnFastForwardClicked();
+  void OnStopClicked() noexcept;
+  void OnStartClicked() noexcept;
+  void OnFastForwardClicked() noexcept;
 
 public:
   /* virtual methods from class Widget */
@@ -64,13 +64,13 @@ ReplayControlWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 }
 
 inline void
-ReplayControlWidget::OnStopClicked()
+ReplayControlWidget::OnStopClicked() noexcept
 {
   replay->Stop();
 }
 
 inline void
-ReplayControlWidget::OnStartClicked()
+ReplayControlWidget::OnStartClicked() noexcept
 {
   const auto &df = (const FileDataField &)GetDataField(FILE);
   const Path path = df.GetValue();
@@ -83,13 +83,13 @@ ReplayControlWidget::OnStartClicked()
 }
 
 inline void
-ReplayControlWidget::OnFastForwardClicked()
+ReplayControlWidget::OnFastForwardClicked() noexcept
 {
   replay->FastForward(std::chrono::minutes{10});
 }
 
 void
-ShowReplayDialog()
+ShowReplayDialog() noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   ReplayControlWidget *widget = new ReplayControlWidget(look);

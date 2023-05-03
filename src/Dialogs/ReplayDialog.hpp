@@ -4,4 +4,4 @@
 #pragma once
 
 void
-ShowReplayDialog();
+ShowReplayDialog() noexcept;
