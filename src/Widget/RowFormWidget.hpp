@@ -580,6 +580,8 @@ public:
 
   void LoadValue(unsigned i, RoughTime value) noexcept;
 
+  void LoadValue(unsigned i, Path value) noexcept;
+
   /**
    * Load a value into a control created by AddDuration().
    */

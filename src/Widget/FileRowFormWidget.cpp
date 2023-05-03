@@ -14,3 +14,13 @@ RowFormWidget::GetValueFile(unsigned i) const noexcept
   assert(df.GetType() == DataField::Type::FILE);
   return df.GetValue();
 }
+
+void
+RowFormWidget::LoadValue(unsigned i, Path value) noexcept
+{
+  WndProperty &control = GetControl(i);
+  FileDataField &df = *(FileDataField *)control.GetDataField();
+  assert(df.GetType() == DataField::Type::FILE);
+  df.SetValue(value);
+  control.RefreshDisplay();
+}

@@ -9,7 +9,6 @@
 #include "Components.hpp"
 #include "Replay/Replay.hpp"
 #include "Form/DataField/Base.hpp"
-#include "Form/DataField/File.hpp"
 #include "Language/Language.hpp"
 
 class ReplayControlWidget final
@@ -45,14 +44,12 @@ void
 ReplayControlWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                              [[maybe_unused]] const PixelRect &rc) noexcept
 {
-  auto *file =
-    AddFile(_("File"),
-            _("Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (.nmea), or if blank, runs the demo."),
-            nullptr,
-            _T("*.nmea\0*.igc\0"),
-            true);
-  ((FileDataField *)file->GetDataField())->SetValue(replay->GetFilename());
-  file->RefreshDisplay();
+  AddFile(_("File"),
+          _("Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (.nmea), or if blank, runs the demo."),
+          nullptr,
+          _T("*.nmea\0*.igc\0"),
+          true);
+  LoadValue(FILE, replay->GetFilename());
 
   AddFloat(_("Rate"),
            _("Time acceleration of replay. Set to 0 for pause, 1 for normal real-time replay."),
