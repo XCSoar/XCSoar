@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2023-04-18 15:47+0000\n"
+"PO-Revision-Date: 2023-05-05 15:52+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -6114,7 +6114,7 @@ msgstr "Šířka"
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:207
 #, no-c-format
 msgid "Radius"
-msgstr "Poloměr"
+msgstr "Rádius"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:147
 msgid "Default start type for new tasks you create."
@@ -6973,7 +6973,7 @@ msgstr "Poloměr pozorovací oblasti sektoru."
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:57
 msgid "Start radial"
-msgstr "Výchozí radiála"
+msgstr "Radial 1"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:57
 msgid "Start radial of the OZ area"
@@ -6981,7 +6981,7 @@ msgstr "Výchozí radiála pozorovací oblasti"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:61
 msgid "Finish radial"
-msgstr "Koncová radiála"
+msgstr "Radial 2"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:61
 msgid "Finish radial of the OZ area"
@@ -6990,7 +6990,7 @@ msgstr "Koncová radiála pozorovací oblasti"
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:69
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:49
 msgid "Inner radius"
-msgstr "Vnitřní poloměr"
+msgstr "Vnitřní r"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:69
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:49
