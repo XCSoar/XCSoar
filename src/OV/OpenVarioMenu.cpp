@@ -5,17 +5,23 @@
 #include "Dialogs/Message.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/ProcessDialog.hpp"
+#include "Dialogs/Error.hpp"
+#include "Widget/DrawWidget.hpp"
 #include "Widget/RowFormWidget.hpp"
+#include "Renderer/FlightListRenderer.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
 #include "../test/src/Fonts.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "ui/window/Init.hpp"
 #include "ui/window/SingleWindow.hpp"
 #include "ui/event/Queue.hpp"
 #include "ui/event/Timer.hpp"
+#include "Logger/FlightParser.hpp"
 #include "Language/Language.hpp"
 #include "system/Process.hpp"
+#include "io/FileLineReader.hpp"
 #include "util/PrintException.hxx"
 #include "util/ScopeExit.hxx"
 #include "LocalPath.hpp"
@@ -247,6 +253,7 @@ class MainMenuWidget final
 {
   enum Controls {
     XCSOAR,
+    LOGBOOK,
     FILE,
     SYSTEM,
     SHELL,
@@ -324,6 +331,36 @@ private:
   }
 };
 
+static void
+ShowLogbook() noexcept
+{
+  const auto &look = UIGlobals::GetDialogLook();
+  FlightListRenderer renderer{look.text_font, look.bold_font};
+
+  try {
+    FileLineReaderA file(LocalPath("flights.log"));
+
+    FlightParser parser{file};
+    FlightInfo flight;
+    while (parser.Read(flight))
+      renderer.AddFlight(flight);
+  } catch (...) {
+    ShowError(std::current_exception(), "Logbook");
+    return;
+  }
+
+  TWidgetDialog<DrawWidget>
+    sub_dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+               look, "Logbook");
+
+  sub_dialog.SetWidget([&renderer](Canvas &canvas, const PixelRect &rc){
+    renderer.Draw(canvas, rc);
+  });
+
+  sub_dialog.AddButton(_("Close"), mrOK);
+  sub_dialog.ShowModal();
+}
+
 void
 MainMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 			[[maybe_unused]] const PixelRect &rc) noexcept
@@ -332,6 +369,14 @@ MainMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     CancelTimer();
     StartXCSoar();
   });
+
+  if (have_data_path)
+      AddButton("Logbook", [this](){
+        CancelTimer();
+        ShowLogbook();
+      });
+  else
+    AddDummy();
 
   AddButton("Files", [this](){
     CancelTimer();
