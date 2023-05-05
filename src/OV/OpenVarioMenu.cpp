@@ -32,7 +32,7 @@
 
 using namespace std;
 
-static void GetConfigInt(const string &keyvalue, int &value, const string &path)
+static void GetConfigInt(const string &keyvalue, unsigned &value, const string &path)
 {
   const Path ConfigPath(path.c_str());
 
@@ -981,7 +981,7 @@ SystemMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 class MainMenuWidget final
   : public RowFormWidget
 {
-  int remaining_seconds = 3;
+  unsigned remaining_seconds = 3;
 
   enum Controls {
     XCSOAR,
