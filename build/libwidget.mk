@@ -27,6 +27,7 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/OffsetButtonsWidget.cpp \
 	$(SRC)/Widget/ButtonPanelWidget.cpp \
 	$(SRC)/Widget/ButtonWidget.cpp \
+	$(SRC)/Widget/DrawWidget.cpp \
 	$(SRC)/Widget/QuestionWidget.cpp \
 	$(SRC)/Widget/KeyboardWidget.cpp \
 	$(SRC)/Widget/ViewImageWidget.cpp
