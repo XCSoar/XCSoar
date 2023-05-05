@@ -263,7 +263,7 @@ void SaveBrightness(const string &brightness);
 void
 ScreenBrightnessWidget::SaveBrightness(const string &brightness)
 {
-    File::WriteExisting(Path("/sys/class/backlight/lcd/brightness"), (brightness).c_str());
+  File::WriteExisting(Path("/sys/class/backlight/lcd/brightness"), (brightness).c_str());
 }
 
 void
@@ -1012,8 +1012,7 @@ public:
                  WndForm &_dialog) noexcept
     :RowFormWidget(_dialog.GetLook()),
      display(_display), event_queue(_event_queue),
-     dialog(_dialog)
-     {
+     dialog(_dialog) {
        GetConfigInt("timeout", remaining_seconds, "/boot/config.uEnv");
      }
 
@@ -1052,9 +1051,9 @@ private:
       ScheduleTimer();
     }
     else {
-	  HideRow(Controls::TIMER);
+      HideRow(Controls::TIMER);
       StartXCSoar();
-	}
+    }
   }
 
   void Hide() noexcept override {
@@ -1067,11 +1066,11 @@ private:
 
   /* ignore escape key at first menu page */
     if (key_code != KEY_ESCAPE) {
-	    return RowFormWidget::KeyPress(key_code);
-	}
-	else {
+        return RowFormWidget::KeyPress(key_code);
+    }
+    else {
         return true;
-	}
+    }
   }
 };
 
