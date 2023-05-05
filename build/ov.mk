@@ -1,6 +1,7 @@
 OV_MENU_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/Asset.cpp \
+	$(SRC)/LocalPath.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Hardware/CPU.cpp \

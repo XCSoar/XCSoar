@@ -16,13 +16,18 @@
 #include "ui/event/Timer.hpp"
 #include "Language/Language.hpp"
 #include "system/Process.hpp"
+#include "util/PrintException.hxx"
 #include "util/ScopeExit.hxx"
+#include "LocalPath.hpp"
 
 #include <cassert>
+#include <cstdio>
 
 enum Buttons {
   LAUNCH_SHELL = 100,
 };
+
+static bool have_data_path = false;
 
 static DialogSettings dialog_settings;
 static UI::SingleWindow *global_main_window;
@@ -410,6 +415,19 @@ Main()
 
 int main()
 {
+  try {
+    InitialiseDataPath();
+    have_data_path = true;
+  } catch (...) {
+    fprintf(stderr, "Failed to locate data path: ");
+    PrintException(std::current_exception());
+  }
+
+  AtScopeExit() {
+    if (have_data_path)
+      DeinitialiseDataPath();
+  };
+
   int action = Main();
 
   switch (action) {
