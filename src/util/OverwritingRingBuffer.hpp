@@ -36,7 +36,7 @@ public:
 			return buffer.data[i];
 		}
 
-		typename TrivialOverwritingRingBuffer::const_iterator &operator++() noexcept {
+		auto &operator++() noexcept {
 			i = buffer.next(i);
 			return *this;
 		}
