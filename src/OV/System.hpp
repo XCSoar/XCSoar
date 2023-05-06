@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "DisplayOrientation.hpp"
+
 #include <map>
 #include <string>
 
@@ -29,6 +31,12 @@ OpenvarioGetBrightness() noexcept;
 
 void
 OpenvarioSetBrightness(uint_least8_t value) noexcept;
+
+DisplayOrientation
+OpenvarioGetRotation();
+
+void
+OpenvarioSetRotation(DisplayOrientation orientation);
 
 [[gnu::pure]]
 SSHStatus

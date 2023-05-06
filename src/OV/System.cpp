@@ -10,6 +10,8 @@
 #include "io/BufferedOutputStream.hxx"
 #include "io/FileLineReader.hpp"
 #include "Dialogs/Error.hpp"
+#include "DisplayOrientation.hpp"
+#include "Hardware/RotateDisplay.hpp"
 
 #include <unistd.h>
 #include <sys/stat.h>
@@ -60,6 +62,55 @@ OpenvarioSetBrightness(uint_least8_t value) noexcept
   if (value > 10) { value = 10; }
 
   File::WriteExisting(Path("/sys/class/backlight/lcd/brightness"), fmt::format_int{value}.c_str());
+}
+
+DisplayOrientation
+OpenvarioGetRotation()
+{
+  std::map<std::string, std::string, std::less<>> map;
+  LoadConfigFile(map, Path("/boot/config.uEnv"));
+
+  uint_least8_t result;
+  result = map.contains("rotation") ? std::stoi(map.find("rotation")->second) : 0;
+
+  switch (result) {
+  case 0: return DisplayOrientation::LANDSCAPE;
+  case 1: return DisplayOrientation::PORTRAIT;
+  case 2: return DisplayOrientation::REVERSE_LANDSCAPE;
+  case 3: return DisplayOrientation::REVERSE_PORTRAIT;
+  default: return DisplayOrientation::DEFAULT;
+  }
+}
+
+void
+OpenvarioSetRotation(DisplayOrientation orientation)
+{
+  std::map<std::string, std::string, std::less<>> map;
+
+  Display::Rotate(orientation);
+
+  int rotation; 
+  switch (orientation) {
+  case DisplayOrientation::DEFAULT:
+  case DisplayOrientation::LANDSCAPE:
+    rotation = 0;
+    break;
+  case DisplayOrientation::PORTRAIT:
+    rotation = 1;
+    break;
+  case DisplayOrientation::REVERSE_LANDSCAPE:
+    rotation = 2;
+    break;
+  case DisplayOrientation::REVERSE_PORTRAIT:
+    rotation = 3;
+    break;
+  };
+
+  File::WriteExisting(Path("/sys/class/graphics/fbcon/rotate"), fmt::format_int{rotation}.c_str());
+
+  LoadConfigFile(map, Path("/boot/config.uEnv"));
+  map.insert_or_assign("rotation", fmt::format_int{rotation}.c_str());
+  WriteConfigFile(map, Path("/boot/config.uEnv"));
 }
 
 SSHStatus
