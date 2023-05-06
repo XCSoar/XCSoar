@@ -30,6 +30,7 @@ set(BASIC_SOURCES
     ${SRC}/UIActions.cpp
 
     ${SRC}/Pan.cpp
+    ${SRC}/TransponderCode.cpp
 
     ${SRC}/PageSettings.cpp
     ${SRC}/PageState.cpp
