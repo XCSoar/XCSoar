@@ -9,6 +9,12 @@ enum class SSHStatus {
   TEMPORARY,
 };
 
+uint_least8_t
+OpenvarioGetBrightness() noexcept;
+
+void
+OpenvarioSetBrightness(uint_least8_t value) noexcept;
+
 [[gnu::pure]]
 SSHStatus
 OpenvarioGetSSHStatus();
