@@ -4,10 +4,41 @@
 #include "System.hpp"
 #include "system/Process.hpp"
 #include "system/FileUtil.hpp"
+#include "system/Path.hpp"
+#include "io/KeyValueFileReader.hpp"
+#include "io/FileOutputStream.hxx"
+#include "io/BufferedOutputStream.hxx"
+#include "io/FileLineReader.hpp"
+#include "Dialogs/Error.hpp"
 
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fmt/format.h>
+
+#include <map>
+
+void
+LoadConfigFile(std::map<std::string, std::string, std::less<>> &map, Path path)
+{
+  FileLineReaderA reader(path);
+  KeyValueFileReader kvreader(reader);
+  KeyValuePair pair;
+  while (kvreader.Read(pair))
+    map.emplace(pair.key, pair.value);
+}
+
+void
+WriteConfigFile(std::map<std::string, std::string, std::less<>> &map, Path path)
+{
+  FileOutputStream file(path);
+  BufferedOutputStream buffered(file);
+
+  for (const auto &i : map)
+    buffered.Fmt("{}={}\n", i.first, i.second);
+
+  buffered.Flush();
+  file.Commit();
+}
 
 uint_least8_t
 OpenvarioGetBrightness() noexcept
