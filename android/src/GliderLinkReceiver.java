@@ -4,7 +4,6 @@
 package org.xcsoar;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -12,7 +11,6 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.content.Context;
-import android.os.Handler;
 
 class GliderLinkReceiver
   extends BroadcastReceiver
@@ -26,33 +24,20 @@ class GliderLinkReceiver
   private final SensorListener listener;
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
-  private final Handler handler;
-
   private int state = STATE_LIMBO;
 
-  public GliderLinkReceiver(final Context context, SensorListener listener) {
+  public GliderLinkReceiver(Context context, SensorListener listener) {
     this.context = context;
     this.listener = listener;
 
-    handler = new Handler(context.getMainLooper());
-    handler.post(new Runnable() {
-      @Override
-      public void run() {
-        context.registerReceiver(GliderLinkReceiver.this, new IntentFilter(GliderLinkReceiver.ACTION));
-      }
-    });
+    context.registerReceiver(this, new IntentFilter(ACTION));
   }
 
   @Override
   public void close() {
     safeDestruct.beginShutdown();
 
-    handler.post(new Runnable() {
-      @Override
-      public void run() {
-        context.unregisterReceiver(GliderLinkReceiver.this);
-      }
-    });
+    context.unregisterReceiver(this);
 
     safeDestruct.finishShutdown();
   }
