@@ -162,7 +162,7 @@ Compiling for Android
 
 For Android, you need:
 
-- `Android SDK level 31 <http://developer.android.com/sdk/>`__
+- `Android SDK level 32 <http://developer.android.com/sdk/>`__
 
 - `Android NDK r25c <http://developer.android.com/sdk/ndk/>`__
 
@@ -178,12 +178,12 @@ The required Android SDK components are:
 
 - Android SDK Build-Tools 33.0.2
 
-- SDK Platform 26
+- SDK Platform 33
 
 These can be installed from the Android Studio SDK Manager, or using the
 SDK command line tools:
 
-tools/bin/sdkmanager  "build-tools;28.0.3"  "platforms;android-26"
+tools/bin/sdkmanager  "build-tools;33.0.2"  "platforms;android-33"
 
 The ``Makefile`` assumes that the Android SDK is installed in
 ``~/opt/android-sdk-linux`` and the NDK is installed in
