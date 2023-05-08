@@ -109,7 +109,7 @@ struct CoInstance {
 };
 
 static FlightData
-UploadFile(Path igc_path, StaticString<0x1000> &msg)
+UploadFile(Path igc_path)
 {
   WeGlideSettings settings = CommonInterface::GetComputerSettings().weglide;
   uint32_t glider_id = CommonInterface::GetComputerSettings().plane
@@ -120,7 +120,6 @@ UploadFile(Path igc_path, StaticString<0x1000> &msg)
   if (ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
                    _("Upload Flight"), instance.UpdateTask(igc_path, settings,
                                                            glider_id, env), &env) == false) {
-    msg.Format(_T("'%s' - %s"), igc_path.c_str(), _("Error"));
     return {};
   }
 
@@ -131,17 +130,13 @@ UploadFile(Path igc_path, StaticString<0x1000> &msg)
 bool
 UploadIGCFile(Path igc_path) noexcept
 try {
-  StaticString<0x1000> msg;
-  auto flight_data = UploadFile(igc_path, msg);
-  if (flight_data.flight_id > 0) {
-    // upload successful!
-    UploadSuccessDialog(flight_data);
-    return true;
-  } else {
-    // upload failed!
-    ShowMessageBox(msg.c_str(), _("Error"), MB_ICONEXCLAMATION);
+  auto flight_data = UploadFile(igc_path);
+  if (flight_data.flight_id == 0)
+    /* cancelled by the user */
     return false;
-  }
+
+  UploadSuccessDialog(flight_data);
+  return true;
 } catch (...) {
   ShowError(std::current_exception(), _("Error"));
   return false;
