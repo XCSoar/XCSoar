@@ -227,6 +227,12 @@ public class HM10Port
     if (0 == length)
       return 0;
 
+    if (portState != STATE_READY)
+      return 0;
+
+    assert(dataCharacteristic != null);
+    assert(deviceNameCharacteristic != null);
+
     return writeBuffer.write(gatt, dataCharacteristic,
                              deviceNameCharacteristic,
                              data, length);
