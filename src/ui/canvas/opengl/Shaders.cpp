@@ -185,6 +185,8 @@ static constexpr char dashed_fragment_shader[] =
     }
 )glsl";
 
+/* using "highp" for "vert_pos" because some (Adreno) GPUs have severe
+   rendering (rounding?) errors with "mediump" */
 static constexpr char circle_vertex_shader[] =
   GLSL_VERSION
   GLSL_PRECISION
@@ -192,7 +194,7 @@ static constexpr char circle_vertex_shader[] =
     uniform mat4 projection;
     uniform vec2 translate;
     attribute vec4 position;
-    varying vec2 vert_pos;
+    varying highp vec2 vert_pos;
     void main() {
       vert_pos = position.xy;
       gl_Position = position;
@@ -209,7 +211,7 @@ static constexpr char circle_outline_fragment_shader[] =
     uniform float radius1;
     uniform float radius2;
     uniform vec4 color;
-    varying vec2 vert_pos;
+    varying highp vec2 vert_pos;
     void main() {
       float distance = distance(center, vert_pos);
       if (distance < radius1 || distance > radius2) discard;
@@ -226,7 +228,7 @@ static constexpr char filled_circle_fragment_shader[] =
     uniform float radius2;
     uniform vec4 color1;
     uniform vec4 color2;
-    varying vec2 vert_pos;
+    varying highp vec2 vert_pos;
     void main() {
       float distance = distance(center, vert_pos);
       if (distance > radius2) discard;
