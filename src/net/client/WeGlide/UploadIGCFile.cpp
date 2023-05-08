@@ -6,8 +6,8 @@
 #include "Settings.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
-#include "LogFile.hpp"
 #include "co/InvokeTask.hxx"
+#include "Dialogs/Error.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/CoDialog.hpp"
 #include "Formatter/TimeFormatter.hpp"
@@ -141,17 +141,15 @@ try {
   auto flight_data = UploadFile(igc_path, msg);
   if (flight_data.flight_id > 0) {
     // upload successful!
-    LogFormat(_T("%s: %s"), _("WeGlide Upload"), msg.c_str());
     UploadSuccessDialog(flight_data, msg.c_str());
     return true;
   } else {
     // upload failed!
-    LogFormat(_T("%s: %s"), _("Error"), msg.c_str());
     ShowMessageBox(msg.c_str(), _("Error"), MB_ICONEXCLAMATION);
     return false;
   }
 } catch (...) {
-  LogError(std::current_exception());
+  ShowError(std::current_exception(), _("Error"));
   return false;
 }
 
