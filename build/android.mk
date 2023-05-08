@@ -367,7 +367,7 @@ $(ANDROID_BUILD)/unsigned.apk: $(ANDROID_OUTPUT_DIR)/classes.dex $(ANDROID_OUTPU
 	@$(NQ)echo "  APK     $@"
 	$(Q)cp $(ANDROID_OUTPUT_DIR)/classes.dex $(dir $@)/
 	$(Q)cp $(ANDROID_OUTPUT_DIR)/resources.apk $@
-	$(Q)cd $(dir $@) && $(ZIP) -q -r $(notdir $@) classes.dex lib/*/*.so
+	$(Q)cd $(dir $@) && $(ZIP) -r $(notdir $@) classes.dex lib/*/*.so
 
 .DELETE_ON_ERROR: $(ANDROID_BUILD)/aligned.apk
 $(ANDROID_BUILD)/aligned.apk: $(ANDROID_BUILD)/unsigned.apk
