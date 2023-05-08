@@ -89,8 +89,11 @@ JAVA_SOURCES := \
 	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/UsbSpiInterface.java \
 	android/UsbSerial/usbserial/src/main/java/com/felhr/utils/HexData.java \
 	android/UsbSerial/usbserial/src/main/java/com/felhr/utils/SafeUsbRequest.java \
-	$(wildcard android/ioio/IOIOLibCore/src/main/java/ioio/lib/*/*.java) \
-	$(wildcard android/ioio/IOIOLibCore/src/main/java/ioio/lib/*/*/*.java) \
+	$(wildcard android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/*.java) \
+	$(wildcard android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/exception/*.java) \
+	$(wildcard android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/*.java) \
+	$(wildcard android/ioio/IOIOLibCore/src/main/java/ioio/lib/spi/*.java) \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/util/IOIOConnectionRegistry.java \
 	$(wildcard android/ioio/IOIOLibAndroid/target/android/src/ioio/lib/spi/*.java) \
 	android/ioio/IOIOLibAndroid/src/main/java/ioio/lib/spi/LogImpl.java \
 	android/ioio/IOIOLibAndroid/src/main/java/ioio/lib/util/android/ContextWrapperDependent.java \
