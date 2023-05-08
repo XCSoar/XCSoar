@@ -62,16 +62,19 @@ public class MyService extends Service {
     }
   }
 
+  private static Notification.Builder createNotificationBuilder(Context context) {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+      ? new Notification.Builder(context, NOTIFICATION_CHANNEL_ID)
+      : new Notification.Builder(context);
+  }
+
   private static Notification createNotification(Context context, PendingIntent intent) {
-    Notification.Builder builder = new Notification.Builder(context)
+    Notification.Builder builder = createNotificationBuilder(context)
       .setOngoing(true)
       .setContentIntent(intent)
       .setContentTitle("XCSoar")
       .setContentText("XCSoar is running")
       .setSmallIcon(R.drawable.notification_icon);
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-      builder.setChannelId(NOTIFICATION_CHANNEL_ID);
 
     return builder.build();
   }
