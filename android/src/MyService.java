@@ -92,15 +92,7 @@ public class MyService extends Service {
     startForeground(1, notification);
   }
 
-  @Override public void onStart(Intent intent, int startId) {
-    /* used by API level 4 (Android 1.6) */
-
-    onStart();
-  }
-
   @Override public int onStartCommand(Intent intent, int flags, int startId) {
-    /* used by API level 5 (Android 2.0 and newer) */
-
     onStart();
 
     /* We want this service to continue running until it is explicitly
