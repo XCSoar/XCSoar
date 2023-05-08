@@ -79,7 +79,7 @@ public class MyService extends Service {
     return builder.build();
   }
 
-  private void onStart() {
+  @Override public int onStartCommand(Intent intent, int flags, int startId) {
     /* add an icon to the notification area while XCSoar runs, to
        remind the user that we're sucking his battery empty */
     Intent intent2 = new Intent(this, mainActivityClass);
@@ -90,10 +90,6 @@ public class MyService extends Service {
     notificationManager.notify(1, notification);
 
     startForeground(1, notification);
-  }
-
-  @Override public int onStartCommand(Intent intent, int flags, int startId) {
-    onStart();
 
     /* We want this service to continue running until it is explicitly
        stopped, so return sticky */
