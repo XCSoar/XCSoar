@@ -1,6 +1,7 @@
 Version 7.30 - not yet released
 * Android
   - UsbSerial: fix permission crash bug
+  - UsbSerial: fix null pointer crash bug
   - negotiate MTU on Bluetooth HM10 devices
   - fix circle airspace display problems on Adreno GPUs
 

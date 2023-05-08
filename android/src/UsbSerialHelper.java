@@ -162,7 +162,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     }
 
     public synchronized void permissionGranted() {
-      if (!port.isOpen())
+      if (port != null && !port.isOpen())
         port.open(usbmanager, device, iface);
     }
 
