@@ -14,7 +14,6 @@ set(_SOURCES
         Profile/PageProfile.cpp
         Profile/PathValue.cpp
         Profile/Profile.cpp
-        Profile/ProfileKeys.cpp
         Profile/ProfileMap.cpp
         Profile/RouteProfile.cpp
         Profile/Screen.cpp

@@ -18,6 +18,7 @@ set(_SOURCES
         Widget/ProfileRowFormWidget.cpp
         Widget/QuestionWidget.cpp
         Widget/RowFormWidget.cpp
+        Widget/FileRowFormWidget.cpp
         Widget/SolidWidget.cpp
         Widget/TabWidget.cpp
         Widget/TextListWidget.cpp

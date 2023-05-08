@@ -33,7 +33,6 @@ set(GRAPHIC_FILES
     # ${_DATA_INPUT}/graphics/launcher.svg
 )
 
-
 if("${PERCENT_CHAR}" STREQUAL "")
     message(FATAL_ERROR PERCENT_CHAR not used: Stop!)
 endif() 
@@ -265,8 +264,9 @@ endif()
                ${_INCLUDE_OUTPUT}/InputEvents_Text2NE.cpp
                ${_INCLUDE_OUTPUT}/InputEvents_default.cpp
     )
-    add_custom_command(OUTPUT  ${_INCLUDE_OUTPUT}/InputEvents_Char2GCE.cpp  # ${INPUTEVENTS_CPP}
+    # add_custom_command(OUTPUT  ${_INCLUDE_OUTPUT}/InputEvents_Char2GCE.cpp  ${_INCLUDE_OUTPUT}/InputEvents_Text2Event.cpp  # ${INPUTEVENTS_CPP}
     # add_custom_command(OUTPUT  InputFiles #  ${INPUTEVENTS_CPP}
+    add_custom_command(OUTPUT  ${INPUTEVENTS_CPP}
            COMMENT Create InputEvents_*.cpp!
            COMMAND ${CMAKE_COMMAND} -E make_directory ${_INCLUDE_OUTPUT} 
            COMMAND perl tools/Char2GCE.pl    src/Input/InputQueue.hpp >${_INCLUDE_OUTPUT}/InputEvents_Char2GCE.cpp

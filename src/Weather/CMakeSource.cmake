@@ -12,6 +12,7 @@ set(_SOURCES
         Weather/Rasp/RaspRenderer.cpp
         Weather/Rasp/RaspStore.cpp
         Weather/Rasp/RaspStyle.cpp
+        Weather/Rasp/Configured.cpp
 )
 
 set(SCRIPT_FILES

@@ -6,6 +6,7 @@ set(_SOURCES
         Formatter/GeoPointFormatter.cpp
         Formatter/GlideRatioFormatter.cpp
         Formatter/HexColor.cpp
+        Formatter/NMEAFormatter.cpp
         Formatter/IGCFilenameFormatter.cpp
         Formatter/LocalTimeFormatter.cpp
         Formatter/TimeFormatter.cpp

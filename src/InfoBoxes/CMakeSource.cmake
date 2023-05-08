@@ -5,6 +5,7 @@ set(_SOURCES
         InfoBoxes/Content/Base.cpp
         InfoBoxes/Content/Contest.cpp
         InfoBoxes/Content/Direction.cpp
+        InfoBoxes/Content/Engine.cpp
         InfoBoxes/Content/Factory.cpp
         InfoBoxes/Content/Glide.cpp
         InfoBoxes/Content/MacCready.cpp
