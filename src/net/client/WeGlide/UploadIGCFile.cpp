@@ -112,7 +112,6 @@ struct CoInstance {
 static FlightData
 UploadFile(Path igc_path, StaticString<0x1000> &msg) noexcept
 {
-  FlightData flight_data({ 0 });
   try {
     WeGlideSettings settings = CommonInterface::GetComputerSettings().weglide;
     uint32_t glider_id = CommonInterface::GetComputerSettings().plane
@@ -120,7 +119,7 @@ UploadFile(Path igc_path, StaticString<0x1000> &msg) noexcept
 
     if (!File::Exists(igc_path)) {
       msg.Format(_T("'%s' - %s"), igc_path.c_str(), _("Not found"));
-      return flight_data;  // with flight_id = 0!
+      return {};
     }
 
     PluggableOperationEnvironment env;
@@ -129,19 +128,18 @@ UploadFile(Path igc_path, StaticString<0x1000> &msg) noexcept
       _("Upload Flight"), instance.UpdateTask(igc_path, settings,
         glider_id, env), &env) == false) {
       msg.Format(_T("'%s' - %s"), igc_path.c_str(), _("Error"));
-      return flight_data;  // with flight_id = 0!
+      return {};
     }
 
-    // read the important data from json in a structure
-    flight_data = UploadJsonInterpreter(instance.value);
-
     msg = _("Success");
-    return flight_data;  // upload successful!
+
+    // read the important data from json in a structure
+    return UploadJsonInterpreter(instance.value);
   }
   catch (const std::exception &e) {
     msg.Format(_T("'%s' - %s"), igc_path.c_str(),
       UTF8ToWideConverter(e.what()).c_str());
-    return flight_data;  // with flight_id = 0!
+    return {};
   }
 }
 
