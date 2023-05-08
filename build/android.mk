@@ -282,10 +282,12 @@ $(ANDROID_OUTPUT_DIR)/classes.zip: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java 
 		$(JAVA_SOURCES)
 	$(Q)$(ZIP) -0 -r $(ANDROID_OUTPUT_DIR)/classes.zip $(JAVA_CLASSFILES_DIR)
 
+# Note: desugaring causes crashes on Android 13 (Pixel 6); as a
+# workaround, it's disabled for now.
 $(ANDROID_OUTPUT_DIR)/classes.dex: $(ANDROID_OUTPUT_DIR)/classes.zip
 	@$(NQ)echo "  D8      $@"
 	$(Q)$(D8) \
-		--classpath $(ANDROID_SDK_PLATFORM_DIR)/android.jar \
+		--no-desugaring \
 		--min-api 21 \
 		--output $(ANDROID_OUTPUT_DIR) $(ANDROID_OUTPUT_DIR)/classes.zip
 
