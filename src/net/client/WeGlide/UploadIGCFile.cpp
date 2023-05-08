@@ -79,14 +79,14 @@ UploadJsonInterpreter(const boost::json::value &json)
 // UploadSuccessDialog is only a preliminary DialogBox to show the 
 // result of this upload
 static void
-UploadSuccessDialog(const FlightData &flight_data, const TCHAR *msg)
+UploadSuccessDialog(const FlightData &flight_data) noexcept
 {
   StaticString<0x1000> display_string;
   // TODO: Create a real Dialog with fields in 'src/Dialogs/Cloud/weglide'!
   // With this Dialog insert the possibilty to update/patch the flight
   // f.e. copilot in double seater, scoring class, short comment and so on
-  display_string.Format(_T("%s\n\n%s: %u\n%s: %s\n%s: %s (%d)\n"
-    "%s: %s (%u)\n%s: %s, %s: %s"), msg,
+  display_string.Format(_T("%s: %u\n%s: %s\n%s: %s (%d)\n"
+    "%s: %s (%u)\n%s: %s, %s: %s"),
     _T("Flight ID"), flight_data.flight_id,
     _("Date"), flight_data.scoring_date.c_str(),
     _("Username"), flight_data.user.name.c_str(), flight_data.user.id,
@@ -124,8 +124,6 @@ try {
     return {};
   }
 
-  msg = _("Success");
-
   // read the important data from json in a structure
   return UploadJsonInterpreter(instance.value);
 } catch (const std::exception &e) {
@@ -141,7 +139,7 @@ try {
   auto flight_data = UploadFile(igc_path, msg);
   if (flight_data.flight_id > 0) {
     // upload successful!
-    UploadSuccessDialog(flight_data, msg.c_str());
+    UploadSuccessDialog(flight_data);
     return true;
   } else {
     // upload failed!
