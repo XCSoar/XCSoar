@@ -136,7 +136,7 @@ void UpdateInfoBoxInstWindSpeed(InfoBoxData &data) noexcept {
   }
 
   // Set Value
-  data.SetValue(_T("%2.0f"),
+  data.FmtValue(_T("{:2.0f}"),
                 Units::ToUserWindSpeed(info.external_instantaneous_wind.norm));
 
   // Set Unit
