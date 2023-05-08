@@ -89,17 +89,67 @@ JAVA_SOURCES := \
 	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/UsbSpiInterface.java \
 	android/UsbSerial/usbserial/src/main/java/com/felhr/utils/HexData.java \
 	android/UsbSerial/usbserial/src/main/java/com/felhr/utils/SafeUsbRequest.java \
-	$(wildcard android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/*.java) \
-	$(wildcard android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/exception/*.java) \
-	$(wildcard android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/*.java) \
-	$(wildcard android/ioio/IOIOLibCore/src/main/java/ioio/lib/spi/*.java) \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/AnalogInput.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/CapSense.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/Closeable.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/DigitalInput.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/DigitalOutput.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/IcspMaster.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/IOIOConnection.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/IOIOFactory.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/IOIO.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/PulseInput.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/PwmOutput.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/Sequencer.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/SpiMaster.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/TwiMaster.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/Uart.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/exception/ConnectionLostException.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/exception/IncompatibilityException.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/exception/OutOfResourceException.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/AbstractPin.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/AbstractResource.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/AnalogInputImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/Board.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/CapSenseImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/Constants.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/DigitalInputImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/DigitalOutputImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/FixedReadBufferedInputStream.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/FlowControlledOutputStream.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/FlowControlledPacketSender.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/GenericResourceAllocator.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/IcspMasterImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/IncapImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/IncomingState.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/InterruptibleQueue.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/IOIOImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/IOIOProtocol.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/PwmImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/QueueInputStream.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/ResourceLifeCycle.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/ResourceManager.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/SequencerImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/SocketIOIOConnectionBootstrap.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/SocketIOIOConnection.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/SpecificResourceAllocator.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/SpiMasterImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/TwiMasterImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/UartImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/Version.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/spi/IOIOConnectionBootstrap.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/spi/IOIOConnectionFactory.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/spi/Log.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/spi/NoRuntimeSupportException.java \
 	android/ioio/IOIOLibCore/src/main/java/ioio/lib/util/IOIOConnectionRegistry.java \
-	$(wildcard android/ioio/IOIOLibAndroid/target/android/src/ioio/lib/spi/*.java) \
 	android/ioio/IOIOLibAndroid/src/main/java/ioio/lib/spi/LogImpl.java \
 	android/ioio/IOIOLibAndroid/src/main/java/ioio/lib/util/android/ContextWrapperDependent.java \
-	$(wildcard android/ioio/IOIOLibAndroidAccessory/src/main/java/ioio/lib/android/accessory/*.java) \
-	$(wildcard android/ioio/IOIOLibAndroidBluetooth/src/main/java/ioio/lib/android/bluetooth/*.java) \
-	$(wildcard android/ioio/IOIOLibAndroidDevice/src/main/java/ioio/lib/android/device/*.java)
+	android/ioio/IOIOLibAndroidAccessory/src/main/java/ioio/lib/android/accessory/AccessoryConnectionBootstrap.java \
+	android/ioio/IOIOLibAndroidAccessory/src/main/java/ioio/lib/android/accessory/Adapter.java \
+	android/ioio/IOIOLibAndroidBluetooth/src/main/java/ioio/lib/android/bluetooth/BluetoothIOIOConnectionBootstrap.java \
+	android/ioio/IOIOLibAndroidBluetooth/src/main/java/ioio/lib/android/bluetooth/BluetoothIOIOConnection.java \
+	android/ioio/IOIOLibAndroidDevice/src/main/java/ioio/lib/android/device/DeviceConnectionBootstrap.java \
+	android/ioio/IOIOLibAndroidDevice/src/main/java/ioio/lib/android/device/Streams.java
 ifeq ($(TESTING),y)
 	JAVA_SOURCES += $(wildcard android/src/testing/*.java)
 endif
