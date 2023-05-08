@@ -141,8 +141,7 @@ final class HM10WriteBuffer {
                          BluetoothGattCharacteristic dataCharacteristic,
                          BluetoothGattCharacteristic deviceNameCharacteristic,
                          byte[] data, int length) {
-    if (0 == length)
-      return 0;
+    assert(length > 0);
 
     if (!drainSome())
       return 0;
