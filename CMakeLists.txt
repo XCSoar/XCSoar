@@ -198,6 +198,7 @@ message(STATUS "+++ Lib Pre- and Suffix: '${LIB_PREFIX}' -- '${LIB_SUFFIX}' !")
 
 
 include_directories("${SRC}/io") # only regarding Logfile!
+include_directories("${SRC}/lib/fmt") # ???!
 # include_directories("${OUTPUT_FOLDER}/include")
 
 #3rd party components
@@ -354,6 +355,7 @@ endif()
 if(NOT ZZIP_OUTSIDE)
     add_subdirectory(src/zzip)   # aug: new!!
 endif()
+    add_subdirectory(src/lib)
 add_subdirectory(src)   # libOpenSoar!
 
 list(APPEND SOURCE_FILES "src/OpenSoar.cpp")
@@ -393,12 +395,14 @@ if(1)
   #message(STATUS "Lua_3rd:      LUA_LIB_3RD     =  ${LUA_LIB_3RD} ")
   message(STATUS "ZLib:         ZLIB_LIB        =  ${ZLIB_LIB}      / ${ZLIB_TARGET} ")
   message(STATUS "ZZip:         ZZIP_LIB        =  ${ZZIP_LIB}      / ${ZZIP_TARGET} ")
+  message(STATUS "Fmt:          FMT_LIB         =  ${FMT_LIB}       / ${FMT_TARGET} ")
   # message(FATAL_ERROR "Stop: XCSOAR_LINK_LIBRARIES")
 endif()
 
 list(APPEND XCSOAR_LINK_LIBRARIES
    ${LUA_TARGET}
    ${CURL_TARGET}
+   ${FMT_TARGET}
 #   ${MAPSERVER_TARGET}
    ${LIBPNG_TARGET}
    ${ZLIB_TARGET}

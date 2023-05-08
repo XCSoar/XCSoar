@@ -65,6 +65,8 @@ set(XCSOAR_LIB_LISTS
 
     zzip    # Attention: this is the internal package, 3rd party lib zzip_3rd
     jasper  # Attention: this is the internal package, 3rd party lib jasper_3rd
+
+    lib
 )
 
 

@@ -17,6 +17,7 @@ else()
 endif()
 
 list(APPEND CMAKE_FILES sodium.cmake)
+list(APPEND CMAKE_FILES fmt.cmake)
 
 if(0)  # MapServer
     list(APPEND CMAKE_FILES mapserver.cmake)

@@ -7,6 +7,7 @@ set(CURL_VERSION        "7.85.0")
 set(PNG_VERSION         "1.6.37")
 set(SODIUM_VERSION      "1.0.18")
 set(LUA_VERSION         "5.4.4")
+set(FMT_VERSION         "9.1.0")
 
 set(ZLIB_VERSION        "1.2.12")
 set(INKSCAPE_VERSION    "1.2.1")
