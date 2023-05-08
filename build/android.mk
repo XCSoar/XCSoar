@@ -286,6 +286,7 @@ $(ANDROID_OUTPUT_DIR)/classes.dex: $(ANDROID_OUTPUT_DIR)/classes.zip
 	@$(NQ)echo "  D8      $@"
 	$(Q)$(D8) \
 		--classpath $(ANDROID_SDK_PLATFORM_DIR)/android.jar \
+		--min-api 21 \
 		--output $(ANDROID_OUTPUT_DIR) $(ANDROID_OUTPUT_DIR)/classes.zip
 
 ifeq ($(FAT_BINARY),y)
