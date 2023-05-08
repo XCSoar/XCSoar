@@ -15,8 +15,7 @@
 #include "Language/Language.hpp"
 #include "net/http/Init.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
-#include "system/ConvertPathName.hpp"
-#include "system/FileUtil.hpp"
+#include "system/Path.hpp"
 #include "util/StaticString.hxx"
 #include "util/ConvertString.hpp"
 
@@ -116,11 +115,6 @@ UploadFile(Path igc_path, StaticString<0x1000> &msg) noexcept
     WeGlideSettings settings = CommonInterface::GetComputerSettings().weglide;
     uint32_t glider_id = CommonInterface::GetComputerSettings().plane
       .weglide_glider_type;
-
-    if (!File::Exists(igc_path)) {
-      msg.Format(_T("'%s' - %s"), igc_path.c_str(), _("Not found"));
-      return {};
-    }
 
     PluggableOperationEnvironment env;
     CoInstance instance;
