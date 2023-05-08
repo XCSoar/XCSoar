@@ -109,8 +109,8 @@ struct CoInstance {
 };
 
 static FlightData
-UploadFile(Path igc_path, StaticString<0x1000> &msg) noexcept
-try {
+UploadFile(Path igc_path, StaticString<0x1000> &msg)
+{
   WeGlideSettings settings = CommonInterface::GetComputerSettings().weglide;
   uint32_t glider_id = CommonInterface::GetComputerSettings().plane
     .weglide_glider_type;
@@ -126,10 +126,6 @@ try {
 
   // read the important data from json in a structure
   return UploadJsonInterpreter(instance.value);
-} catch (const std::exception &e) {
-  msg.Format(_T("'%s' - %s"), igc_path.c_str(),
-             UTF8ToWideConverter(e.what()).c_str());
-  return {};
 }
 
 bool
