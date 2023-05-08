@@ -281,7 +281,8 @@ AR62xxDevice::Send(const uint8_t *msg,
     b_sending = true;
 
     /* Send the message */
-    port.FullWrite(msg, msg_size, env, CMD_TIMEOUT);
+    port.FullWrite(reinterpret_cast<const char*> (msg), env, CMD_TIMEOUT);
+    // TODO(August2111): const char* or better with std::span...
     response = ACK;
 
     /* Wait for the response */
