@@ -280,7 +280,7 @@ $(ANDROID_OUTPUT_DIR)/classes.zip: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java 
 		-d $(JAVA_CLASSFILES_DIR) $(GEN_DIR)/org/xcsoar/R.java \
 		-h $(NATIVE_INCLUDE) \
 		$(JAVA_SOURCES)
-	$(Q)zip -r $(ANDROID_OUTPUT_DIR)/classes.zip $(JAVA_CLASSFILES_DIR)
+	$(Q)zip -0 -r $(ANDROID_OUTPUT_DIR)/classes.zip $(JAVA_CLASSFILES_DIR)
 
 $(ANDROID_OUTPUT_DIR)/classes.dex: $(ANDROID_OUTPUT_DIR)/classes.zip
 	@$(NQ)echo "  D8      $@"
