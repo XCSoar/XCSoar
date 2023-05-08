@@ -44,8 +44,11 @@ public class SoundUtil {
       return false;
     }
 
-    mp.setOnCompletionListener((MediaPlayer mediaPlayer) -> {
+    mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+      @Override
+      public void onCompletion(MediaPlayer mediaPlayer) {
         mp.release();
+      }
     });
 
     mp.start();

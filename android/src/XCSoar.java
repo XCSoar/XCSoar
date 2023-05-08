@@ -260,11 +260,14 @@ public class XCSoar extends Activity {
         .setMessage("XCSoar needs to"
                      + "\n1.Collect location data to enable live navigation calculation and IGC logger, even when the app is in the background"
                      + "\n2.Bluetooth nearby device permission to connect external peripheral")
-        .setPositiveButton("Continue", (DialogInterface dialog, int which) -> {
-            try {
-              XCSoar.this.requestPermissions(NEEDED_PERMISSIONS, 0);
-            } catch (IllegalArgumentException e) {
-              Log.e(TAG, "could not request permissions: " + String.join(", ", NEEDED_PERMISSIONS), e);
+        .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              try {
+                XCSoar.this.requestPermissions(NEEDED_PERMISSIONS, 0);
+              } catch (IllegalArgumentException e) {
+                Log.e(TAG, "could not request permissions: " + String.join(", ", NEEDED_PERMISSIONS), e);
+              }
             }
         })
         .show();
