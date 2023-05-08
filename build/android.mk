@@ -225,7 +225,7 @@ $(ANDROID_OUTPUT_DIR)/classes.dex: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java 
 	$(Q)$(JAVAC) \
 		-source 1.7 -target 1.7 \
 		-Xlint:all \
-		-Xlint:-deprecation -Xlint:-dep-ann \
+		-Xlint:-deprecation \
 		-Xlint:-options \
 		-Xlint:-static \
 		-cp $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) \
