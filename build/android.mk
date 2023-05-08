@@ -282,7 +282,9 @@ $(ANDROID_OUTPUT_DIR)/classes.dex: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java 
 		$(JAVA_SOURCES)
 	$(Q)zip -r $(ANDROID_OUTPUT_DIR)/classes.zip $(JAVA_CLASSFILES_DIR)
 	@$(NQ)echo "  D8      $@"
-	$(Q)$(D8) --output $(ANDROID_OUTPUT_DIR) $(ANDROID_OUTPUT_DIR)/classes.zip
+	$(Q)$(D8) \
+		--classpath $(ANDROID_SDK_PLATFORM_DIR)/android.jar \
+		--output $(ANDROID_OUTPUT_DIR) $(ANDROID_OUTPUT_DIR)/classes.zip
 	$(Q)rm $(ANDROID_OUTPUT_DIR)/classes.zip
 
 ifeq ($(FAT_BINARY),y)
