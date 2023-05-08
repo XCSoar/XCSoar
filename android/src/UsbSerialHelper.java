@@ -362,7 +362,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     PendingIntent pi =
       PendingIntent.getBroadcast(context, 0,
                                  new Intent(UsbSerialHelper.ACTION_USB_PERMISSION),
-                                 0);
+                                 PendingIntent.FLAG_IMMUTABLE);
 
     usbmanager.requestPermission(device, pi);
   }
