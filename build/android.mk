@@ -89,14 +89,14 @@ JAVA_SOURCES := \
 	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/UsbSpiInterface.java \
 	android/UsbSerial/usbserial/src/main/java/com/felhr/utils/HexData.java \
 	android/UsbSerial/usbserial/src/main/java/com/felhr/utils/SafeUsbRequest.java \
-	$(wildcard android/ioio/software/IOIOLibCore/src/main/java/ioio/lib/*/*.java) \
-	$(wildcard android/ioio/software/IOIOLibCore/src/main/java/ioio/lib/*/*/*.java) \
-	$(wildcard android/ioio/software/IOIOLibAndroid/target/android/src/ioio/lib/spi/*.java) \
-	android/ioio/software/IOIOLibAndroid/src/main/java/ioio/lib/spi/LogImpl.java \
-	android/ioio/software/IOIOLibAndroid/src/main/java/ioio/lib/util/android/ContextWrapperDependent.java \
-	$(wildcard android/ioio/software/IOIOLibAndroidAccessory/src/main/java/ioio/lib/android/accessory/*.java) \
-	$(wildcard android/ioio/software/IOIOLibAndroidBluetooth/src/main/java/ioio/lib/android/bluetooth/*.java) \
-	$(wildcard android/ioio/software/IOIOLibAndroidDevice/src/main/java/ioio/lib/android/device/*.java)
+	$(wildcard android/ioio/IOIOLibCore/src/main/java/ioio/lib/*/*.java) \
+	$(wildcard android/ioio/IOIOLibCore/src/main/java/ioio/lib/*/*/*.java) \
+	$(wildcard android/ioio/IOIOLibAndroid/target/android/src/ioio/lib/spi/*.java) \
+	android/ioio/IOIOLibAndroid/src/main/java/ioio/lib/spi/LogImpl.java \
+	android/ioio/IOIOLibAndroid/src/main/java/ioio/lib/util/android/ContextWrapperDependent.java \
+	$(wildcard android/ioio/IOIOLibAndroidAccessory/src/main/java/ioio/lib/android/accessory/*.java) \
+	$(wildcard android/ioio/IOIOLibAndroidBluetooth/src/main/java/ioio/lib/android/bluetooth/*.java) \
+	$(wildcard android/ioio/IOIOLibAndroidDevice/src/main/java/ioio/lib/android/device/*.java)
 ifeq ($(TESTING),y)
 	JAVA_SOURCES += $(wildcard android/src/testing/*.java)
 endif
