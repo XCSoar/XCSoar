@@ -5,10 +5,10 @@ package org.xcsoar;
 
 import android.util.Log;
 import ioio.lib.api.IOIO;
-import ioio.lib.api.IOIOFactory;
 import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.api.exception.IncompatibilityException;
 import ioio.lib.spi.IOIOConnectionFactory;
+import ioio.lib.impl.IOIOImpl;
 
 /**
  * This class attempts to establish a connection to a IOIO through a
@@ -102,7 +102,7 @@ final class IOIOAgent extends Thread {
       if (shutdownFlag || interrupted())
         return null;
 
-      connecting = ioio = IOIOFactory.create(factory.createConnection());
+      connecting = ioio = new IOIOImpl(factory.createConnection());
     }
 
     try {

@@ -96,7 +96,6 @@ JAVA_SOURCES := \
 	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/DigitalOutput.java \
 	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/IcspMaster.java \
 	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/IOIOConnection.java \
-	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/IOIOFactory.java \
 	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/IOIO.java \
 	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/PulseInput.java \
 	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/PwmOutput.java \
@@ -141,7 +140,6 @@ JAVA_SOURCES := \
 	android/ioio/IOIOLibCore/src/main/java/ioio/lib/spi/IOIOConnectionFactory.java \
 	android/ioio/IOIOLibCore/src/main/java/ioio/lib/spi/Log.java \
 	android/ioio/IOIOLibCore/src/main/java/ioio/lib/spi/NoRuntimeSupportException.java \
-	android/ioio/IOIOLibCore/src/main/java/ioio/lib/util/IOIOConnectionRegistry.java \
 	android/ioio/IOIOLibAndroid/src/main/java/ioio/lib/spi/LogImpl.java \
 	android/ioio/IOIOLibAndroid/src/main/java/ioio/lib/util/android/ContextWrapperDependent.java \
 	android/ioio/IOIOLibAndroidAccessory/src/main/java/ioio/lib/android/accessory/AccessoryConnectionBootstrap.java \
