@@ -98,12 +98,10 @@ DetectSerialPorts(DataFieldEnum &df) noexcept
   return found;
 }
 
-#endif
-
-#if defined(_WIN32) && !defined(HAVE_POSIX)
+#elif defined(_WIN32)
 
 static void
-FillDefaultSerialPorts(DataFieldEnum &df) noexcept
+DetectSerialPorts(DataFieldEnum &df) noexcept
 try {
   /* the registry key HKEY_LOCAL_MACHINE/Hardware/DEVICEMAP/SERIALCOMM
      is the best way to discover serial ports on Windows */
@@ -172,10 +170,8 @@ SetPort(DataFieldEnum &df, DeviceConfig::PortType type,
 static void
 FillSerialPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept
 {
-#if defined(HAVE_POSIX)
+#if defined(HAVE_POSIX) || defined(_WIN32)
   DetectSerialPorts(df);
-#elif defined(_WIN32)
-  FillDefaultSerialPorts(df);
 #endif
 
   if (config.port_type == DeviceConfig::PortType::SERIAL)
