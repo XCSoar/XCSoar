@@ -92,6 +92,8 @@ struct DialogLook {
   ButtonLook button;
   CheckBoxLook check_box;
 
+  void LoadFonts();
+
   void Initialise();
 
   void SetBackgroundColor(Color color);

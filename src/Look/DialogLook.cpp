@@ -14,7 +14,7 @@
 #include <algorithm>
 
 void
-DialogLook::Initialise()
+DialogLook::LoadFonts()
 {
   const FontDescription text_font_d(std::min(Layout::FontScale(12),
                                              Layout::min_screen_pixels / 20));
@@ -25,6 +25,12 @@ DialogLook::Initialise()
   small_font.Load(small_font_d);
 
   bold_font.Load(text_font_d.WithBold());
+}
+
+void
+DialogLook::Initialise()
+{
+  LoadFonts();
 
   caption.text_color = COLOR_BLACK;
   caption.font = &text_font;
