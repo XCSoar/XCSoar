@@ -14,7 +14,6 @@
 #ifdef _WIN32
 # include "system/WindowsRegistry.hpp"
 # include "util/StringFormat.hpp"
-# include <fileapi.h>
 #endif
 
 #ifdef ANDROID
