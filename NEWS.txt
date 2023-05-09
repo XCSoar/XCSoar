@@ -1,5 +1,7 @@
 Version 7.30 - not yet released
 * fix crash in "ProfileSave" event
+* user interface
+  - reload fonts on window resize
 * Android
   - UsbSerial: fix permission crash bug
   - UsbSerial: fix null pointer crash bug
