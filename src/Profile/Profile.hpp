@@ -44,7 +44,7 @@ Save() noexcept;
  * Saves the profile into the given profile file
  */
 void
-SaveFile(Path path) noexcept;
+SaveFile(Path path);
 
 /**
  * Sets the profile files to load when calling Load()

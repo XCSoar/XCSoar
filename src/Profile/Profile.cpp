@@ -70,7 +70,7 @@ Profile::Save() noexcept
 }
 
 void
-Profile::SaveFile(Path path) noexcept
+Profile::SaveFile(Path path)
 {
   LogFormat(_T("Saving profile to %s"), path.c_str());
   SaveFile(map, path);
