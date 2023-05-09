@@ -77,6 +77,8 @@ NativeView::Initialise(JNIEnv *env)
 void
 NativeView::Deinitialise(JNIEnv *env)
 {
+  clsBitmapConfig.Clear(env);
+  clsBitmap.Clear(env);
   cls.Clear(env);
 }
 
