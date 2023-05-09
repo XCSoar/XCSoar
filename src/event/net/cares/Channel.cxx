@@ -49,8 +49,6 @@ Channel::Channel(EventLoop &event_loop)
 	int code = ares_init(&channel);
 	if (code != 0)
 		throw Error(code, "ares_init() failed");
-
-	UpdateSockets();
 }
 
 Channel::~Channel() noexcept
