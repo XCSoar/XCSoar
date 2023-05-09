@@ -43,7 +43,7 @@ private:
 };
 
 Channel::Channel(EventLoop &event_loop)
-	:defer_process(event_loop, BIND_THIS_METHOD(DeferredProcess)),
+	:defer_update_sockets(event_loop, BIND_THIS_METHOD(UpdateSockets)),
 	 timeout_event(event_loop, BIND_THIS_METHOD(OnTimeout))
 {
 	int code = ares_init(&channel);
@@ -61,8 +61,6 @@ Channel::UpdateSockets() noexcept
 {
 	timeout_event.Cancel();
 	sockets.clear();
-	FD_ZERO(&read_ready);
-	FD_ZERO(&write_ready);
 
 	fd_set rfds, wfds;
 	FD_ZERO(&rfds);
@@ -90,28 +88,29 @@ Channel::UpdateSockets() noexcept
 }
 
 void
-Channel::DeferredProcess() noexcept
-{
-	ares_process(channel, &read_ready, &write_ready);
-	UpdateSockets();
-}
-
-void
 Channel::OnSocket(SocketDescriptor fd, unsigned events) noexcept
 {
+	ares_socket_t read_fd = ARES_SOCKET_BAD, write_fd = ARES_SOCKET_BAD;
+
 	if (events & (SocketEvent::READ|SocketEvent::IMPLICIT_FLAGS))
-		FD_SET(fd.Get(), &read_ready);
+		read_fd = fd.Get();
 
 	if (events & (SocketEvent::WRITE|SocketEvent::IMPLICIT_FLAGS))
-		FD_SET(fd.Get(), &write_ready);
+		write_fd = fd.Get();
 
-	ScheduleProcess();
+	ares_process_fd(channel, read_fd, write_fd);
+
+	ScheduleUpdateSockets();
 }
 
 void
 Channel::OnTimeout() noexcept
 {
-	ScheduleProcess();
+	sockets.clear();
+
+	ares_process_fd(channel, ARES_SOCKET_BAD, ARES_SOCKET_BAD);
+
+	ScheduleUpdateSockets();
 }
 
 template<typename F>

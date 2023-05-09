@@ -27,13 +27,12 @@ class Channel {
 
 	ares_channel channel;
 
-	DeferEvent defer_process;
+	DeferEvent defer_update_sockets;
 	CoarseTimerEvent timeout_event;
 
 	class Socket;
 
 	std::forward_list<Socket> sockets;
-	fd_set read_ready, write_ready;
 
 	class Request;
 
@@ -42,7 +41,7 @@ public:
 	~Channel() noexcept;
 
 	EventLoop &GetEventLoop() const noexcept {
-		return defer_process.GetEventLoop();
+		return defer_update_sockets.GetEventLoop();
 	}
 
 	/**
@@ -61,10 +60,9 @@ public:
 
 private:
 	void UpdateSockets() noexcept;
-	void DeferredProcess() noexcept;
 
-	void ScheduleProcess() noexcept {
-		defer_process.Schedule();
+	void ScheduleUpdateSockets() noexcept {
+		defer_update_sockets.Schedule();
 	}
 
 	void OnSocket(SocketDescriptor fd, unsigned events) noexcept;
