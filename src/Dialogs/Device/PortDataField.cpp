@@ -12,6 +12,7 @@
 #endif
 
 #ifdef _WIN32
+# include "system/WindowsRegistry.hpp"
 # include <fileapi.h>
 #endif
 
@@ -103,15 +104,45 @@ DetectSerialPorts(DataFieldEnum &df) noexcept
 
 static void
 FillDefaultSerialPorts(DataFieldEnum &df) noexcept
-{
-  for (unsigned i = 1; i <= 10; ++i) {
-    TCHAR path[64];
-    _stprintf(path, _T("COM%u:"), i);
+try {
+  /* the registry key HKEY_LOCAL_MACHINE/Hardware/DEVICEMAP/SERIALCOMM
+     is the best way to discover serial ports on Windows */
 
-    TCHAR display_name[MAX_PATH];
-    if (QueryDosDevice(path, display_name, std::size(display_name)) > 0)
-      AddPort(df, DeviceConfig::PortType::SERIAL, path, display_name);
+  RegistryKey hardware{HKEY_LOCAL_MACHINE, _T("Hardware")};
+  RegistryKey devicemap{hardware, _T("DEVICEMAP")};
+  RegistryKey serialcomm{devicemap, _T("SERIALCOMM")};
+
+  for (unsigned i = 0;; ++i) {
+    TCHAR name[128];
+    TCHAR path[64];
+
+    std::span<TCHAR> value{path};
+    /* reserve space for the colon (backwards compatibiity with older
+       XCSoar versions) */
+    value = value.first(value.size() - 1);
+
+    DWORD type;
+    if (!serialcomm.EnumValue(i, std::span{name}, &type,
+                              std::as_writable_bytes(value)))
+      break;
+
+    if (type != REG_SZ)
+      // weird
+      continue;
+
+    auto path_length = StringLength(path);
+    if (path_length == 0)
+      continue;
+
+    if (path[path_length - 1] != ':') {
+      path[path_length] = ':';
+      path[path_length + 1] = _T('\0');
+    }
+
+    AddPort(df, DeviceConfig::PortType::SERIAL, path, name);
   }
+} catch (const std::system_error &) {
+  // silently ignore registry errors
 }
 
 #endif
