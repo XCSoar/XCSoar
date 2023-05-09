@@ -62,22 +62,20 @@ Channel::UpdateSockets() noexcept
 	timeout_event.Cancel();
 	sockets.clear();
 
-	fd_set rfds, wfds;
-	FD_ZERO(&rfds);
-	FD_ZERO(&wfds);
+	ares_socket_t socks[ARES_GETSOCK_MAXNUM];
+	const auto s = ares_getsock(channel, socks, ARES_GETSOCK_MAXNUM);
 
-	int max = ares_fds(channel, &rfds, &wfds);
-	for (int i = 0; i < max; ++i) {
+	for (unsigned i = 0; i < ARES_GETSOCK_MAXNUM; ++i) {
 		unsigned events = 0;
 
-		if (FD_ISSET(i, &rfds))
+		if (ARES_GETSOCK_READABLE(s, i))
 			events |= SocketEvent::READ;
 
-		if (FD_ISSET(i, &wfds))
+		if (ARES_GETSOCK_WRITABLE(s, i))
 			events |= SocketEvent::WRITE;
 
 		if (events != 0)
-			sockets.emplace_front(*this, SocketDescriptor(i),
+			sockets.emplace_front(*this, SocketDescriptor{socks[i]},
 					      events);
 	}
 
