@@ -49,22 +49,13 @@ protected:
       HorizonRenderer::Draw(canvas, canvas.GetRect(), look, attitude);
   }
 
-  /**
-   * @todo languages
-  */
   void PaintNoData(Canvas &canvas, PixelRect rc) const noexcept {
     const TCHAR *str = _("No Data");
     canvas.Select(look.no_data_font);
-    PixelSize textSize = canvas.CalcTextSize(str);
+    PixelSize text_size = canvas.CalcTextSize(str);
     canvas.SetTextColor(inverse ? COLOR_WHITE : COLOR_BLACK);
-    
-    const PixelPoint center{
-      int(rc.GetWidth()) / 2 - int(textSize.width) / 2,
-      int(rc.GetHeight()) / 2 - int(textSize.height) / 2
-    };
-
     canvas.SetBackgroundTransparent();
-    canvas.DrawText(center, str);
+    canvas.DrawText(rc.CenteredTopLeft(text_size), str);
   }
 };
 

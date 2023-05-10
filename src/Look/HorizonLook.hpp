@@ -9,7 +9,6 @@
 
 struct HorizonLook {
   Pen aircraft_pen;
-  
   static constexpr Color sky_color{0x0a, 0xb9, 0xf3};
   Brush sky_brush;
   Pen sky_pen;
