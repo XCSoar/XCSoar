@@ -23,13 +23,23 @@ TopWindow::TopWindow(UI::Display &_display) noexcept
 void
 TopWindow::AnnounceResize(PixelSize _new_size) noexcept
 {
-  const std::lock_guard lock{paused_mutex};
-  resized = true;
-  new_size = _new_size;
+  bool _acquire_surface = false;
 
-  /* this call originates from NativeView.surfaceChanged(), which
-     implies that we have a surface */
-  have_java_surface = true;
+  {
+    const std::lock_guard lock{paused_mutex};
+    resized = true;
+    new_size = _new_size;
+
+    /* this call originates from NativeView.surfaceChanged(), which
+       implies that we have a surface */
+    have_java_surface = true;
+
+    if (!have_native_surface)
+      _acquire_surface = should_acquire_surface = true;
+  }
+
+  if (_acquire_surface && event_queue != nullptr)
+    event_queue->Inject(Event::SURFACE);
 }
 
 bool
@@ -40,7 +50,7 @@ TopWindow::ResumeSurface() noexcept
      associated SurfaceHolder has a valid Surface"), therefore we're
      trying again until we're successful. */
 
-  assert(!should_pause);
+  assert(!screen->IsReady());
 
   {
     const std::lock_guard lock{paused_mutex};
@@ -49,7 +59,7 @@ TopWindow::ResumeSurface() noexcept
   }
 
   try {
-    if (!screen->IsReady() && !screen->AcquireSurface())
+    if (!screen->AcquireSurface())
       return false;
   } catch (...) {
     LogError(std::current_exception(), "Failed to initialize GL surface");
@@ -58,9 +68,10 @@ TopWindow::ResumeSurface() noexcept
 
   assert(screen->IsReady());
 
-  should_resume = false;
-
   RefreshSize();
+
+  /* schedule a redraw */
+  Invalidate();
 
   return true;
 }
@@ -68,7 +79,7 @@ TopWindow::ResumeSurface() noexcept
 bool
 TopWindow::CheckResumeSurface() noexcept
 {
-  return !should_pause && (!should_resume || ResumeSurface()) && screen->IsReady();
+  return !should_pause && screen->IsReady();
 }
 
 void
@@ -85,6 +96,11 @@ TopWindow::RefreshSize() noexcept
     new_size_copy = new_size;
   }
 
+  if (!screen->IsReady()) {
+    ResumeSurface();
+    return;
+  }
+
   if (screen->CheckResize(new_size_copy))
     Resize(new_size_copy);
 }
@@ -92,11 +108,12 @@ TopWindow::RefreshSize() noexcept
 inline void
 TopWindow::OnSurface() noexcept
 {
-  bool _release_surface;
+  bool _release_surface, _acquire_surface;
 
   {
     const std::lock_guard lock{paused_mutex};
     _release_surface = should_release_surface;
+    _acquire_surface = should_acquire_surface;
   }
 
   if (_release_surface) {
@@ -109,6 +126,15 @@ TopWindow::OnSurface() noexcept
     should_release_surface = false;
     paused_cond.notify_one();
   }
+
+  if (_acquire_surface) {
+    if (!screen->IsReady() && !ResumeSurface())
+      return;
+
+    const std::lock_guard lock{paused_mutex};
+    have_native_surface = true;
+    should_acquire_surface = false;
+  }
 }
 
 void
@@ -118,6 +144,7 @@ TopWindow::InvokeSurfaceDestroyed() noexcept
     const std::lock_guard lock{paused_mutex};
     have_java_surface = false;
     should_release_surface = true;
+    should_acquire_surface = false;
   }
 
   if (event_queue == nullptr)
@@ -132,6 +159,9 @@ TopWindow::InvokeSurfaceDestroyed() noexcept
 void
 TopWindow::OnResize(PixelSize new_size) noexcept
 {
+  if (!screen->IsReady())
+    ResumeSurface();
+
   if (native_view != nullptr)
     native_view->SetSize(new_size.width, new_size.height);
 
@@ -146,18 +176,12 @@ TopWindow::OnPause() noexcept
     return;
 
   should_pause = false;
-  should_resume = false;
   paused_cond.notify_one();
 }
 
 void
 TopWindow::OnResume() noexcept
 {
-  /* tell TopWindow::Expose() to reinitialize OpenGL */
-  should_resume = true;
-
-  /* schedule a redraw */
-  Invalidate();
 }
 
 static bool

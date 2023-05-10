@@ -166,15 +166,6 @@ class TopWindow : public ContainerWindow {
   bool should_pause = false;
 
   /**
-   * Has the application been resumed?  When this flag is set,
-   * TopWindow::Expose() attempts to reinitialize the OpenGL surface.
-   *
-   * This is initially true to trigger a call to
-   * TopCanvas::AcquireSurface().
-   */
-  bool should_resume = true;
-
-  /**
    * Does the Java #NativeView class have a surface?
    *
    * Protected by #paused_mutex.
@@ -195,6 +186,14 @@ class TopWindow : public ContainerWindow {
    * Protected by #paused_mutex.
    */
   bool should_release_surface = false;
+
+  /**
+   * Shall we acquire our EGL surface?  This will be done by the
+   * #SURFACE_DESTROYED event.
+   *
+   * Protected by #paused_mutex.
+   */
+  bool should_acquire_surface = false;
 
   /**
    * Was the application view resized while paused?  If true, then
