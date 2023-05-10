@@ -37,6 +37,7 @@ TopWindow::ResumeSurface() noexcept
      trying again until we're successful. */
 
   assert(paused);
+  assert(!should_pause);
 
   try {
     if (!screen->AcquireSurface())
@@ -59,7 +60,7 @@ TopWindow::ResumeSurface() noexcept
 bool
 TopWindow::CheckResumeSurface() noexcept
 {
-  return (!should_resume || ResumeSurface()) && !paused && screen->IsReady();
+  return !should_pause && (!should_resume || ResumeSurface()) && !paused && screen->IsReady();
 }
 
 void
@@ -102,6 +103,7 @@ TopWindow::OnPause() noexcept
   assert(!screen->IsReady());
 
   const std::lock_guard lock{paused_mutex};
+  should_pause = false;
   paused = true;
   should_resume = false;
   paused_cond.notify_one();
@@ -129,11 +131,16 @@ match_pause_and_resume(const Event &event, [[maybe_unused]] void *ctx) noexcept
 void
 TopWindow::Pause() noexcept
 {
+  {
+    const std::lock_guard lock{paused_mutex};
+    should_pause = true;
+  }
+
   event_queue->Purge(match_pause_and_resume, nullptr);
   event_queue->Inject(Event::PAUSE);
 
   std::unique_lock lock{paused_mutex};
-  paused_cond.wait(lock, [this]{ return !running || paused; });
+  paused_cond.wait(lock, [this]{ return !running || !should_pause; });
 }
 
 void
