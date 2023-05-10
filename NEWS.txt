@@ -1,6 +1,8 @@
 Version 7.31 - not yet released
 * Android
   - fix crash with buggy graphics drivers
+* user interface
+  - display no data text on the artificial horizon page when required data is not available
 
 Version 7.30 - 2023/05/09
 * fix crash in "ProfileSave" event
