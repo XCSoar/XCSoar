@@ -93,9 +93,6 @@ TopWindow::OnResize(PixelSize new_size) noexcept
 void
 TopWindow::OnPause() noexcept
 {
-  if (paused)
-    return;
-
   TextCache::Flush();
 
   screen->ReleaseSurface();
@@ -103,6 +100,9 @@ TopWindow::OnPause() noexcept
   assert(!screen->IsReady());
 
   const std::lock_guard lock{paused_mutex};
+  if (!should_pause)
+    return;
+
   should_pause = false;
   paused = true;
   should_resume = false;
