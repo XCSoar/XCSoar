@@ -31,7 +31,7 @@ namespace UI {
 TopWindow::~TopWindow() noexcept
 {
 #ifdef ANDROID
-  native_view->SetPointer(Java::GetEnv(), this);
+  native_view->SetPointer(Java::GetEnv(), nullptr);
 #endif
 
   delete screen;
