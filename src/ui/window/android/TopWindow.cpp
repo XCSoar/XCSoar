@@ -76,12 +76,6 @@ TopWindow::ResumeSurface() noexcept
   return true;
 }
 
-bool
-TopWindow::CheckResumeSurface() noexcept
-{
-  return screen->IsReady();
-}
-
 void
 TopWindow::RefreshSize() noexcept
 {

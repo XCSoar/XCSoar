@@ -359,23 +359,11 @@ public:
   bool ResumeSurface() noexcept;
 
   /**
-   * Reinitialise the OpenGL surface if the Android Activity has been
-   * resumed.
-   *
-   * @return true if there is a valid OpenGL surface
-   */
-  bool CheckResumeSurface() noexcept;
-
-  /**
    * Synchronously update the size of the TopWindow to the new OpenGL
    * surface dimensions.
    */
   void RefreshSize() noexcept;
 #else
-  bool CheckResumeSurface() noexcept {
-    return true;
-  }
-
   void RefreshSize() noexcept {}
 #endif
 

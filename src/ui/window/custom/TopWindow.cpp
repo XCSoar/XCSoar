@@ -146,7 +146,7 @@ TopWindow::Expose() noexcept
 void
 TopWindow::Refresh() noexcept
 {
-  if (!CheckResumeSurface())
+  if (!screen->IsReady())
     /* the application is paused/suspended, and we don't have an
        OpenGL surface - ignore all drawing requests */
     return;
