@@ -280,6 +280,16 @@ Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeView_surfaceDestroyedNative(JNIEnv *env, jobject obj)
+{
+  const std::scoped_lock shutdown_lock{shutdown_mutex};
+
+  if (auto *main_window = NativeView::GetPointer(env, obj))
+    main_window->InvokeSurfaceDestroyed();
+}
+
+gcc_visibility_default
+JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
 {
   const std::scoped_lock shutdown_lock{shutdown_mutex};

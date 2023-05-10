@@ -175,6 +175,28 @@ class TopWindow : public ContainerWindow {
   bool should_resume = true;
 
   /**
+   * Does the Java #NativeView class have a surface?
+   *
+   * Protected by #paused_mutex.
+   */
+  bool have_java_surface = true;
+
+  /**
+   * Does the C++ #TopCanvas class have a surface?
+   *
+   * Protected by #paused_mutex.
+   */
+  bool have_native_surface = false;
+
+  /**
+   * Shall we destroy our EGL surface?  This will be done by the
+   * #SURFACE_DESTROYED event.
+   *
+   * Protected by #paused_mutex.
+   */
+  bool should_destroy_surface = false;
+
+  /**
    * Was the application view resized while paused?  If true, then
    * new_size contains the new display dimensions.
    */
@@ -415,6 +437,11 @@ protected:
 
 #ifdef ANDROID
   /**
+   * @see Event::SURFACE_DESTROYED
+   */
+  void OnSurfaceDestroyed() noexcept;
+
+  /**
    * @see Event::PAUSE
    */
   void OnPause() noexcept;
@@ -425,6 +452,7 @@ protected:
   void OnResume() noexcept;
 
 public:
+  void InvokeSurfaceDestroyed() noexcept;
   void Pause() noexcept;
   void Resume() noexcept;
 #endif

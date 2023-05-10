@@ -130,6 +130,7 @@ class NativeView extends SurfaceView
   }
 
   @Override public void surfaceDestroyed(SurfaceHolder holder) {
+    surfaceDestroyedNative();
   }
 
   @Override public void run() {
@@ -173,6 +174,8 @@ class NativeView extends SurfaceView
                                   int sdk_version, String product);
 
   protected native void resizedNative(int width, int height);
+
+  protected native void surfaceDestroyedNative();
 
   protected native void pauseNative();
   protected native void resumeNative();

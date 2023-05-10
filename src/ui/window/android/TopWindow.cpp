@@ -26,6 +26,10 @@ TopWindow::AnnounceResize(PixelSize _new_size) noexcept
   const std::lock_guard lock{paused_mutex};
   resized = true;
   new_size = _new_size;
+
+  /* this call originates from NativeView.surfaceChanged(), which
+     implies that we have a surface */
+  have_java_surface = true;
 }
 
 bool
@@ -38,8 +42,14 @@ TopWindow::ResumeSurface() noexcept
 
   assert(!should_pause);
 
+  {
+    const std::lock_guard lock{paused_mutex};
+    if (!have_java_surface || should_destroy_surface)
+      return false;
+  }
+
   try {
-    if (!screen->AcquireSurface())
+    if (!screen->IsReady() && !screen->AcquireSurface())
       return false;
   } catch (...) {
     LogError(std::current_exception(), "Failed to initialize GL surface");
@@ -79,6 +89,37 @@ TopWindow::RefreshSize() noexcept
     Resize(new_size_copy);
 }
 
+inline void
+TopWindow::OnSurfaceDestroyed() noexcept
+{
+  TextCache::Flush();
+
+  screen->ReleaseSurface();
+
+  const std::lock_guard lock{paused_mutex};
+  have_native_surface = false;
+  should_destroy_surface = false;
+  paused_cond.notify_one();
+}
+
+void
+TopWindow::InvokeSurfaceDestroyed() noexcept
+{
+  {
+    const std::lock_guard lock{paused_mutex};
+    have_java_surface = false;
+    should_destroy_surface = true;
+  }
+
+  if (event_queue == nullptr)
+    return;
+
+  event_queue->Inject(Event::SURFACE_DESTROYED);
+
+  std::unique_lock lock{paused_mutex};
+  paused_cond.wait(lock, [this]{ return !running || !should_destroy_surface; });
+}
+
 void
 TopWindow::OnResize(PixelSize new_size) noexcept
 {
@@ -91,12 +132,6 @@ TopWindow::OnResize(PixelSize new_size) noexcept
 void
 TopWindow::OnPause() noexcept
 {
-  TextCache::Flush();
-
-  screen->ReleaseSurface();
-
-  assert(!screen->IsReady());
-
   const std::lock_guard lock{paused_mutex};
   if (!should_pause)
     return;
@@ -207,6 +242,10 @@ TopWindow::OnEvent(const Event &event)
        2.2.2); let's do one dummy call before we really draw
        something */
     screen->Flip();
+    return true;
+
+  case Event::SURFACE_DESTROYED:
+    OnSurfaceDestroyed();
     return true;
 
   case Event::PAUSE:

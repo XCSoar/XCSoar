@@ -44,6 +44,11 @@ struct Event {
     RESIZE,
 
     /**
+     * The OpenGL surface was destroyed.
+     */
+    SURFACE_DESTROYED,
+
+    /**
      * The Android Activity is being paused, and the OpenGL surface
      * will be destroyed.
      */
