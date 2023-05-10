@@ -36,7 +36,6 @@ TopWindow::ResumeSurface() noexcept
      associated SurfaceHolder has a valid Surface"), therefore we're
      trying again until we're successful. */
 
-  assert(paused);
   assert(!should_pause);
 
   try {
@@ -49,7 +48,6 @@ TopWindow::ResumeSurface() noexcept
 
   assert(screen->IsReady());
 
-  paused = false;
   should_resume = false;
 
   RefreshSize();
@@ -60,7 +58,7 @@ TopWindow::ResumeSurface() noexcept
 bool
 TopWindow::CheckResumeSurface() noexcept
 {
-  return !should_pause && (!should_resume || ResumeSurface()) && !paused && screen->IsReady();
+  return !should_pause && (!should_resume || ResumeSurface()) && screen->IsReady();
 }
 
 void
@@ -104,7 +102,6 @@ TopWindow::OnPause() noexcept
     return;
 
   should_pause = false;
-  paused = true;
   should_resume = false;
   paused_cond.notify_one();
 }
@@ -112,9 +109,6 @@ TopWindow::OnPause() noexcept
 void
 TopWindow::OnResume() noexcept
 {
-  if (!paused)
-    return;
-
   /* tell TopWindow::Expose() to reinitialize OpenGL */
   should_resume = true;
 
