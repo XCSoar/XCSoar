@@ -92,6 +92,13 @@ TopWindow::RefreshSize() noexcept
 inline void
 TopWindow::OnSurfaceDestroyed() noexcept
 {
+  {
+    const std::lock_guard lock{paused_mutex};
+    if (!should_release_surface)
+      /* obsolete event */
+      return;
+  }
+
   TextCache::Flush();
 
   screen->ReleaseSurface();
