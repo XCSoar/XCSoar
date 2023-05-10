@@ -49,7 +49,7 @@ TopWindow::ResumeSurface() noexcept
   assert(screen->IsReady());
 
   paused = false;
-  resumed = false;
+  should_resume = false;
 
   RefreshSize();
 
@@ -59,7 +59,7 @@ TopWindow::ResumeSurface() noexcept
 bool
 TopWindow::CheckResumeSurface() noexcept
 {
-  return (!resumed || ResumeSurface()) && !paused && screen->IsReady();
+  return (!should_resume || ResumeSurface()) && !paused && screen->IsReady();
 }
 
 void
@@ -103,7 +103,7 @@ TopWindow::OnPause() noexcept
 
   const std::lock_guard lock{paused_mutex};
   paused = true;
-  resumed = false;
+  should_resume = false;
   paused_cond.notify_one();
 }
 
@@ -114,7 +114,7 @@ TopWindow::OnResume() noexcept
     return;
 
   /* tell TopWindow::Expose() to reinitialize OpenGL */
-  resumed = true;
+  should_resume = true;
 
   /* schedule a redraw */
   Invalidate();

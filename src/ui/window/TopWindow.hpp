@@ -174,7 +174,7 @@ class TopWindow : public ContainerWindow {
    * This is initially true to trigger a call to
    * TopCanvas::AcquireSurface().
    */
-  bool resumed = true;
+  bool should_resume = true;
 
   /**
    * Was the application view resized while paused?  If true, then
