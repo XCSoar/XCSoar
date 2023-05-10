@@ -417,12 +417,12 @@ protected:
   /**
    * @see Event::PAUSE
    */
-  virtual void OnPause() noexcept;
+  void OnPause() noexcept;
 
   /**
    * @see Event::RESUME
    */
-  virtual void OnResume() noexcept;
+  void OnResume() noexcept;
 
 public:
   void Pause() noexcept;
