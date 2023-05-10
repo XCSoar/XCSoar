@@ -6,6 +6,7 @@ Version 7.30 - 2023/05/09
 * fix crash in "ProfileSave" event
 * user interface
   - reload fonts on window resize
+  - display no data text on the artificial horizon page when required data is not available
 * Windows
   - look up serial ports in the registry
 * Android

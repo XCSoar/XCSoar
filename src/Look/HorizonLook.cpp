@@ -3,6 +3,7 @@
 
 #include "HorizonLook.hpp"
 #include "Screen/Layout.hpp"
+#include "FontDescription.hpp"
 
 void
 HorizonLook::Initialise()
@@ -14,4 +15,7 @@ HorizonLook::Initialise()
 
   terrain_brush.Create(terrain_color);
   terrain_pen.Create(Layout::Scale(1), DarkColor(terrain_color));
+
+  no_data_font.Load(FontDescription(Layout::FontScale(22)));
+
 }
