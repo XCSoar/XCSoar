@@ -116,6 +116,9 @@ TopCanvas::AcquireSurface()
 
   ANativeWindow *native_window =
     ANativeWindow_fromSurface(env, android_surface.Get());
+  if (native_window == nullptr)
+    return false;
+
   CreateSurface(native_window);
 
   return true;
