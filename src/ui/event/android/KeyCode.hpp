@@ -11,6 +11,8 @@ enum {
   KEY_DOWN = 0x14,
   KEY_LEFT = 0x15,
   KEY_RIGHT = 0x16,
+  KEY_VOLUME_UP = 0x18,
+  KEY_VOLUME_DOWN = 0x19,
   KEY_TAB = 0x3d,
   KEY_SPACE = 0x3e,
   KEY_RETURN = 0x42,
