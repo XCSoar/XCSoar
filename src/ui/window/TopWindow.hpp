@@ -437,9 +437,9 @@ protected:
 
 #ifdef ANDROID
   /**
-   * @see Event::SURFACE_DESTROYED
+   * @see Event::SURFACE
    */
-  void OnSurfaceDestroyed() noexcept;
+  void OnSurface() noexcept;
 
   /**
    * @see Event::PAUSE

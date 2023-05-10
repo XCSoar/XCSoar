@@ -90,23 +90,25 @@ TopWindow::RefreshSize() noexcept
 }
 
 inline void
-TopWindow::OnSurfaceDestroyed() noexcept
+TopWindow::OnSurface() noexcept
 {
+  bool _release_surface;
+
   {
     const std::lock_guard lock{paused_mutex};
-    if (!should_release_surface)
-      /* obsolete event */
-      return;
+    _release_surface = should_release_surface;
   }
 
-  TextCache::Flush();
+  if (_release_surface) {
+    TextCache::Flush();
 
-  screen->ReleaseSurface();
+    screen->ReleaseSurface();
 
-  const std::lock_guard lock{paused_mutex};
-  have_native_surface = false;
-  should_release_surface = false;
-  paused_cond.notify_one();
+    const std::lock_guard lock{paused_mutex};
+    have_native_surface = false;
+    should_release_surface = false;
+    paused_cond.notify_one();
+  }
 }
 
 void
@@ -121,7 +123,7 @@ TopWindow::InvokeSurfaceDestroyed() noexcept
   if (event_queue == nullptr)
     return;
 
-  event_queue->Inject(Event::SURFACE_DESTROYED);
+  event_queue->Inject(Event::SURFACE);
 
   std::unique_lock lock{paused_mutex};
   paused_cond.wait(lock, [this]{ return !running || !should_release_surface; });
@@ -251,8 +253,8 @@ TopWindow::OnEvent(const Event &event)
     screen->Flip();
     return true;
 
-  case Event::SURFACE_DESTROYED:
-    OnSurfaceDestroyed();
+  case Event::SURFACE:
+    OnSurface();
     return true;
 
   case Event::PAUSE:
