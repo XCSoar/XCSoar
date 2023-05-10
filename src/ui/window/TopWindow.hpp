@@ -194,7 +194,7 @@ class TopWindow : public ContainerWindow {
    *
    * Protected by #paused_mutex.
    */
-  bool should_destroy_surface = false;
+  bool should_release_surface = false;
 
   /**
    * Was the application view resized while paused?  If true, then

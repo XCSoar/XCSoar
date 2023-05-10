@@ -44,7 +44,7 @@ TopWindow::ResumeSurface() noexcept
 
   {
     const std::lock_guard lock{paused_mutex};
-    if (!have_java_surface || should_destroy_surface)
+    if (!have_java_surface || should_release_surface)
       return false;
   }
 
@@ -98,7 +98,7 @@ TopWindow::OnSurfaceDestroyed() noexcept
 
   const std::lock_guard lock{paused_mutex};
   have_native_surface = false;
-  should_destroy_surface = false;
+  should_release_surface = false;
   paused_cond.notify_one();
 }
 
@@ -108,7 +108,7 @@ TopWindow::InvokeSurfaceDestroyed() noexcept
   {
     const std::lock_guard lock{paused_mutex};
     have_java_surface = false;
-    should_destroy_surface = true;
+    should_release_surface = true;
   }
 
   if (event_queue == nullptr)
@@ -117,7 +117,7 @@ TopWindow::InvokeSurfaceDestroyed() noexcept
   event_queue->Inject(Event::SURFACE_DESTROYED);
 
   std::unique_lock lock{paused_mutex};
-  paused_cond.wait(lock, [this]{ return !running || !should_destroy_surface; });
+  paused_cond.wait(lock, [this]{ return !running || !should_release_surface; });
 }
 
 void
