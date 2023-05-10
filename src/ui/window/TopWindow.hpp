@@ -158,14 +158,6 @@ class TopWindow : public ContainerWindow {
   bool running = false;
 
   /**
-   * This is set to true while a PAUSE event is in flight.  This
-   * safely prevents certain things in the C++ main thread from
-   * happening while the Java main thread waits for PAUSE to be
-   * handled.
-   */
-  bool should_pause = false;
-
-  /**
    * Does the Java #NativeView class have a surface?
    *
    * Protected by #paused_mutex.

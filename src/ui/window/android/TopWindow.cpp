@@ -79,7 +79,7 @@ TopWindow::ResumeSurface() noexcept
 bool
 TopWindow::CheckResumeSurface() noexcept
 {
-  return !should_pause && screen->IsReady();
+  return screen->IsReady();
 }
 
 void
@@ -171,12 +171,6 @@ TopWindow::OnResize(PixelSize new_size) noexcept
 void
 TopWindow::OnPause() noexcept
 {
-  const std::lock_guard lock{paused_mutex};
-  if (!should_pause)
-    return;
-
-  should_pause = false;
-  paused_cond.notify_one();
 }
 
 void
@@ -193,16 +187,8 @@ match_pause_and_resume(const Event &event, [[maybe_unused]] void *ctx) noexcept
 void
 TopWindow::Pause() noexcept
 {
-  {
-    const std::lock_guard lock{paused_mutex};
-    should_pause = true;
-  }
-
   event_queue->Purge(match_pause_and_resume, nullptr);
   event_queue->Inject(Event::PAUSE);
-
-  std::unique_lock lock{paused_mutex};
-  paused_cond.wait(lock, [this]{ return !running || !should_pause; });
 }
 
 void
