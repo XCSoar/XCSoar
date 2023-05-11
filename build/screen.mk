@@ -110,7 +110,6 @@ SCREEN_SOURCES += \
 	$(SRC)/ui/display/opengl/Display.cpp \
 	$(CANVAS_SRC_DIR)/custom/Cache.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Init.cpp \
-	$(CANVAS_SRC_DIR)/opengl/Dynamic.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Rotate.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Geo.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Globals.cpp \
