@@ -271,8 +271,12 @@ Compiling for macOS (with Homebrew)
 
 Install the required Homebrew packages::
 
-  brew install automake autoconf libtool imagemagick sox \
-      librsvg quilt pkg-config
+  brew install \
+    automake autoconf libtool \
+    quilt \
+    librsvg \
+    imagemagick sox \
+    pkg-config
 
 Then compile::
 
