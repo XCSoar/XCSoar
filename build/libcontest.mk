@@ -27,4 +27,6 @@ CONTEST_SOURCES = \
 	$(CONTEST_SRC_DIR)/Solvers/WeglideOR.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/Charron.cpp \
 
+CONTEST_DEPENDS = GEO
+
 $(eval $(call link-library,libcontest,CONTEST))

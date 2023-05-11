@@ -20,4 +20,6 @@ AIRSPACE_SOURCES = \
 	$(AIRSPACE_SRC_DIR)/AirspaceWarning.cpp \
 	$(AIRSPACE_SRC_DIR)/AirspaceSorter.cpp
 
+AIRSPACE_DEPENDS = GEO
+
 $(eval $(call link-library,libairspace,AIRSPACE))

@@ -2,6 +2,8 @@
 
 HAVE_HTTP := y
 
+LIBHTTP_DEPENDS = LIBSODIUM
+
 LIBHTTP_SOURCES = \
 	$(SRC)/net/http/DownloadManager.cpp \
 	$(SRC)/net/http/Progress.cpp \
@@ -29,10 +31,7 @@ CURL_CPPFLAGS += -DCURL_STATICLIB
 endif
 
 LIBHTTP_CPPFLAGS = $(CURL_CPPFLAGS)
-LIBHTTP_LDADD = $(ZLIB_LDADD)
-LIBHTTP_LDLIBS = $(CURL_LDLIBS) $(ZLIB_LDLIBS)
+LIBHTTP_DEPENDS += CURL ZLIB
 endif
-
-LIBHTTP_LDLIBS += $(LIBSODIUM_LDLIBS)
 
 $(eval $(call link-library,libhttp,LIBHTTP))
