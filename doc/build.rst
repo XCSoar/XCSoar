@@ -273,7 +273,7 @@ Install the required Homebrew packages::
 
   brew install \
     automake autoconf libtool \
-    pkg-config
+    pkg-config \
     quilt \
     librsvg \
     imagemagick gettext sox \
