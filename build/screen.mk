@@ -259,6 +259,11 @@ SCREEN_CPPFLAGS = \
 
 SCREEN_DEPENDS = SDL FB FREETYPE LIBPNG LIBJPEG LIBTIFF COREGRAPHICS GDI OPENGL WAYLAND EGL GLX APPKIT UIKIT
 
+ifeq ($(LIBPNG),y)
+# LibPNG.cpp uses class FileMapping
+SCREEN_DEPENDS += IO
+endif
+
 $(eval $(call link-library,screen,SCREEN))
 
 ifeq ($(USE_FB)$(VFB),yy)
