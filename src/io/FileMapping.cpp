@@ -2,18 +2,18 @@
 // Copyright The XCSoar Project
 
 #include "FileMapping.hpp"
-#include "Path.hpp"
-#include "Error.hxx"
+#include "system/Path.hpp"
+#include "system/Error.hxx"
 #include "util/RuntimeError.hxx"
 
 #ifdef HAVE_POSIX
-#include "io/UniqueFileDescriptor.hxx"
-#include "io/Open.hxx"
+#include "UniqueFileDescriptor.hxx"
+#include "Open.hxx"
 
 #include <sys/mman.h>
 #include <sys/stat.h>
 #else
-#include "ConvertPathName.hpp"
+#include "system/ConvertPathName.hpp"
 
 #include <fileapi.h>
 #endif
