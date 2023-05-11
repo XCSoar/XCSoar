@@ -12,30 +12,30 @@
  */
 class VirtualCanvas : public Canvas {
 public:
-  VirtualCanvas() = default;
-  VirtualCanvas(PixelSize new_size);
-  VirtualCanvas(const Canvas &canvas, PixelSize new_size);
+  VirtualCanvas() noexcept = default;
+  VirtualCanvas(PixelSize new_size) noexcept;
+  VirtualCanvas(const Canvas &canvas, PixelSize new_size) noexcept;
 
-  ~VirtualCanvas() {
+  ~VirtualCanvas() noexcept {
     Destroy();
   }
 
-  void Create(PixelSize new_size);
+  void Create(PixelSize new_size) noexcept;
 
-  void Create(const Canvas &canvas, PixelSize new_size);
+  void Create(const Canvas &canvas, PixelSize new_size) noexcept;
 
-  void Create(const Canvas &canvas) {
+  void Create(const Canvas &canvas) noexcept {
     Create(canvas, canvas.GetSize());
   }
 
-  void Destroy();
+  void Destroy() noexcept;
 
 #ifdef USE_MEMORY_CANVAS
-  void Resize(PixelSize new_size) {
+  void Resize(PixelSize new_size) noexcept {
     if (new_size != GetSize())
       Create(*this, new_size);
   }
 
-  void Grow(PixelSize new_size);
+  void Grow(PixelSize new_size) noexcept;
 #endif
 };

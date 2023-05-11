@@ -48,41 +48,41 @@ class BufferCanvas : public Canvas {
 #endif
 
 public:
-  ~BufferCanvas() {
+  ~BufferCanvas() noexcept {
     Destroy();
   }
 
-  bool IsDefined() const {
+  bool IsDefined() const noexcept {
     return texture != nullptr;
   }
 
-  void Create(PixelSize new_size);
+  void Create(PixelSize new_size) noexcept;
 
-  void Create([[maybe_unused]] const Canvas &canvas, PixelSize new_size) {
+  void Create([[maybe_unused]] const Canvas &canvas, PixelSize new_size) noexcept {
     assert(canvas.IsDefined());
 
     Create(new_size);
   }
 
-  void Create(const Canvas &canvas) {
+  void Create(const Canvas &canvas) noexcept {
     Create(canvas, canvas.GetSize());
   }
 
-  void Destroy();
+  void Destroy() noexcept;
 
-  void Resize(PixelSize new_size);
+  void Resize(PixelSize new_size) noexcept;
 
   /**
    * Similar to Resize(), but never shrinks the buffer.
    */
-  void Grow(PixelSize new_size);
+  void Grow(PixelSize new_size) noexcept;
 
   /**
    * Begin painting to the buffer and to the specified #Canvas.
    *
    * @param other an on-screen #Canvas
    */
-  void Begin(Canvas &other);
+  void Begin(Canvas &other) noexcept;
 
   /**
    * Commit the data that was painted into this #BufferCanvas into
@@ -94,7 +94,7 @@ public:
    *
    * @param other an on-screen #Canvas
    */
-  void Commit(Canvas &other);
+  void Commit(Canvas &other) noexcept;
 
-  void CopyTo(Canvas &other);
+  void CopyTo(Canvas &other) noexcept;
 };

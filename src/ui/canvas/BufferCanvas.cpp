@@ -6,7 +6,7 @@
 #include <algorithm>
 
 void
-BufferCanvas::Grow(PixelSize new_size)
+BufferCanvas::Grow(PixelSize new_size) noexcept
 {
   const unsigned old_width = GetWidth();
   const unsigned old_height = GetHeight();

@@ -5,20 +5,20 @@
 
 #include <cassert>
 
-BufferCanvas::BufferCanvas(const Canvas &canvas, PixelSize new_size)
+BufferCanvas::BufferCanvas(const Canvas &canvas, PixelSize new_size) noexcept
   :VirtualCanvas(canvas, new_size)
 {
   bitmap = ::CreateCompatibleBitmap(canvas, new_size.width, new_size.height);
   ::SelectObject(dc, bitmap);
 }
 
-BufferCanvas::~BufferCanvas()
+BufferCanvas::~BufferCanvas() noexcept
 {
   Destroy();
 }
 
 void
-BufferCanvas::Create(const Canvas &canvas, PixelSize new_size)
+BufferCanvas::Create(const Canvas &canvas, PixelSize new_size) noexcept
 {
   assert(canvas.IsDefined());
 
@@ -29,13 +29,13 @@ BufferCanvas::Create(const Canvas &canvas, PixelSize new_size)
 }
 
 void
-BufferCanvas::Create(const Canvas &canvas)
+BufferCanvas::Create(const Canvas &canvas) noexcept
 {
   Create(canvas, canvas.GetSize());
 }
 
 void
-BufferCanvas::Destroy()
+BufferCanvas::Destroy() noexcept
 {
   VirtualCanvas::Destroy();
   if (bitmap != nullptr) {
@@ -50,7 +50,7 @@ BufferCanvas::Destroy()
 }
 
 void
-BufferCanvas::Resize(PixelSize new_size)
+BufferCanvas::Resize(PixelSize new_size) noexcept
 {
   assert(dc != nullptr);
 

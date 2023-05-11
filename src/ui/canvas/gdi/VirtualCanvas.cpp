@@ -5,26 +5,26 @@
 
 #include <cassert>
 
-VirtualCanvas::VirtualCanvas(PixelSize new_size)
+VirtualCanvas::VirtualCanvas(PixelSize new_size) noexcept
   :Canvas(::CreateCompatibleDC(nullptr), new_size)
 {
 }
 
-VirtualCanvas::VirtualCanvas(const Canvas &canvas, PixelSize new_size)
+VirtualCanvas::VirtualCanvas(const Canvas &canvas, PixelSize new_size) noexcept
   :Canvas(::CreateCompatibleDC(canvas), new_size)
 {
   assert(canvas.IsDefined());
 }
 
 void
-VirtualCanvas::Create(PixelSize new_size)
+VirtualCanvas::Create(PixelSize new_size) noexcept
 {
   Destroy();
   Canvas::Create(CreateCompatibleDC(nullptr), new_size);
 }
 
 void
-VirtualCanvas::Create(const Canvas &canvas, PixelSize new_size)
+VirtualCanvas::Create(const Canvas &canvas, PixelSize new_size) noexcept
 {
   assert(canvas.IsDefined());
 
@@ -32,7 +32,8 @@ VirtualCanvas::Create(const Canvas &canvas, PixelSize new_size)
   Canvas::Create(CreateCompatibleDC(canvas), new_size);
 }
 
-void VirtualCanvas::Destroy()
+void
+VirtualCanvas::Destroy() noexcept
 {
   Canvas::Destroy();
 
