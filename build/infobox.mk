@@ -37,6 +37,6 @@ LIBINFOBOX_SOURCES = \
 	$(SRC)/InfoBoxes/Panel/ATCSetup.cpp \
 	$(SRC)/InfoBoxes/Panel/RadioEdit.cpp
 
-LIBINFOBOX_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
+LIBINFOBOX_DEPENDS = SCREEN
 
 $(eval $(call link-library,libinfobox,LIBINFOBOX))

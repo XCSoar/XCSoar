@@ -23,6 +23,8 @@ OS_SOURCES += \
 	$(SRC)/Kobo/Model.cpp
 endif
 
+OS_DEPENDS = UTIL
+
 $(eval $(call link-library,libos,OS))
 
 ifeq ($(HAVE_POSIX),n)

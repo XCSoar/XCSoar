@@ -7,9 +7,7 @@ ZZIP_SOURCES = \
 	$(ZZIPSRC)/stat.c
 
 ZZIP_CFLAGS = -Wno-strict-aliasing
-ZZIP_CPPFLAGS_INTERNAL = $(ZLIB_CPPFLAGS)
+
+ZZIP_DEPENDS = ZLIB
 
 $(eval $(call link-library,zzip,ZZIP))
-
-ZZIP_LDADD += $(ZLIB_LDADD)
-ZZIP_LDLIBS += $(ZLIB_LDLIBS)
