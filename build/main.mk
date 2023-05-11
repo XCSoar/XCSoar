@@ -663,7 +663,6 @@ ifeq ($(HAVE_PCM_PLAYER),y)
 XCSOAR_SOURCES += $(SRC)/Audio/VarioGlue.cpp
 endif
 
-XCSOAR_LDADD = $(IO_LDADD)
 XCSOAR_DEPENDS = \
 	FMT \
 	LIBMAPWINDOW \
