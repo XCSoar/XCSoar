@@ -127,20 +127,6 @@ if 'mingw32' in actual_host_triplet:
     # mingw.  This prevents some libraries such as libsodium to enable
     # it.
     cppflags += ' -D_FORTIFY_SOURCE=0'
-elif re.match('(arm.*|aarch64)-apple-darwin', actual_host_triplet) is not None:
-    thirdparty_libs = [
-        libfmt,
-        libsodium,
-        openssl,
-        cares,
-        curl,
-        lua,
-        sqlite3,
-        proj,
-        libtiff,
-        libgeotiff,
-        sdl2
-    ]
 elif 'apple-darwin' in actual_host_triplet:
     thirdparty_libs = [
         libfmt,
