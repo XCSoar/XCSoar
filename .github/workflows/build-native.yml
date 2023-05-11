@@ -458,13 +458,9 @@ jobs:
         # LLVM bug in Apple Xcode which crashes clang with "fatal
         # error: error in backend: Cannot select: intrinsic
         # %llvm.coro.size"
-
-        # This build uses third-party libraries installed via
-        # Homebrew, not built using build/thirdparty.py
         run: |
           gmake -j$(sysctl -n hw.logicalcpu) TARGET=${{env.TARGET }} USE_CCACHE=y \
             OPTIMIZE="-O0" \
-            USE_THIRDPARTY_LIBS=n \
             USE_HOMEBREW=y \
             V=2 \
             everything check

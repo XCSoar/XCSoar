@@ -273,10 +273,19 @@ Install the required Homebrew packages::
 
   brew install \
     automake autoconf libtool \
+    pkg-config
     quilt \
     librsvg \
-    imagemagick sox \
-    pkg-config
+    imagemagick gettext sox \
+    fmt \
+    sdl2 \
+    libsodium \
+    freetype \
+    libpng libjpeg-turbo \
+    libtiff libgeotiff proj \
+    c-ares \
+    curl \
+    lua
 
 Then compile::
 

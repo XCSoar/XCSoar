@@ -9,7 +9,7 @@ else ifeq ($(TARGET),ANDROID)
   else
     USE_THIRDPARTY_LIBS = y
   endif
-else ifeq ($(TARGET_IS_DARWIN),y)
+else ifeq ($(TARGET_IS_IOS),y)
 USE_THIRDPARTY_LIBS = y
 else
 USE_THIRDPARTY_LIBS = n
