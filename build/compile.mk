@@ -55,12 +55,7 @@ CXX_VERSION := $(shell $(CXX) -dumpversion)
 
 ####### paths
 
-ifeq ($(LLVM),y)
-# generate LLVM bitcode
-OBJ_SUFFIX = .bc
-else
 OBJ_SUFFIX = .o
-endif
 
 # Converts a list of source file names to *.o
 SRC_TO_OBJ = $(subst /./,/,$(patsubst %.cpp,%$(OBJ_SUFFIX),$(patsubst %.cxx,%$(OBJ_SUFFIX),$(patsubst %.c,%$(OBJ_SUFFIX),$(addprefix $(ABI_OUTPUT_DIR)/,$(1))))))
