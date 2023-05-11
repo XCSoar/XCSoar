@@ -143,6 +143,15 @@ OpenGL::SetupContext()
   }
 #endif
 
+#ifdef GL_EXT_discard_framebuffer
+  if (IsExtensionSupported("GL_EXT_discard_framebuffer")) {
+    GLExt::discard_framebuffer = (PFNGLDISCARDFRAMEBUFFEREXTPROC)
+      GetProcAddress("glDiscardFramebufferEXT");
+  } else {
+    GLExt::discard_framebuffer = nullptr;
+  }
+#endif
+
   render_buffer_depth_stencil = CheckDepthStencil();
 
   render_buffer_stencil = CheckStencil();

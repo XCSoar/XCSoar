@@ -23,6 +23,10 @@ inline PFNGLMULTIDRAWARRAYSEXTPROC multi_draw_arrays;
 inline PFNGLMULTIDRAWELEMENTSEXTPROC multi_draw_elements;
 #endif
 
+#ifdef GL_EXT_discard_framebuffer
+inline PFNGLDISCARDFRAMEBUFFEREXTPROC discard_framebuffer;
+#endif
+
 static inline bool HaveMultiDrawElements() noexcept {
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
   return multi_draw_elements != nullptr;

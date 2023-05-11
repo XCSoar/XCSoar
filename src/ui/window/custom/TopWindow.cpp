@@ -22,6 +22,10 @@
 #include "ui/event/shared/Event.hpp"
 #endif
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Dynamic.hpp" // for GLExt::discard_framebuffer
+#endif
+
 #ifdef DRAW_MOUSE_CURSOR
 #include "Screen/Layout.hpp"
 #endif
@@ -141,6 +145,22 @@ TopWindow::Expose() noexcept
   }
 
   screen->Flip();
+
+#if defined(ENABLE_OPENGL) && defined(GL_EXT_discard_framebuffer)
+  /* tell the GPU that we won't be needing the frame buffer contents
+     again which can increase rendering performance; see
+     https://registry.khronos.org/OpenGL/extensions/EXT/EXT_discard_framebuffer.txt */
+  if (GLExt::discard_framebuffer != nullptr) {
+    static constexpr GLenum attachments[3] = {
+      GL_COLOR_EXT,
+      GL_DEPTH_EXT,
+      GL_STENCIL_EXT
+    };
+
+    GLExt::discard_framebuffer(GL_FRAMEBUFFER, std::size(attachments),
+                               attachments);
+  }
+#endif
 }
 
 void
