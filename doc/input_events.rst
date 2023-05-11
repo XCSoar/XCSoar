@@ -258,9 +258,21 @@ The key type can have the following possible values:
 
 - ``APP1-APP6``: Hardware key on pocket pc
 - ``F1-F12``: Standard function keys
-- ``LEFT, RIGHT, UP, DOWN, RETURN``: Mapped to arrow keys - joystick
-  on organisers
+- ``LEFT, RIGHT, UP, DOWN, RETURN, ESCAPE, MENU, TAB``: Mapped to arrow 
+  keys - joystick on organisers
 - ``A-Z, 0-9``: and other possible keyboard buttons (case is ignored)
+
+Android only:
+
+- ``BUTTON_R1, BUTTON_R2, BUTTON_L1, BUTTON_L2, BUTTON_A, BUTTON_B, 
+  BUTTON_C, BUTTON_X, BUTTON_Y, BUTTON_Z, MEDIA_NEXT, MEDIA_PREVIOUS, 
+  MEDIA_PLAY_PAUSE, VOLUME_UP, VOLUME_DOWN``: intended for Bluetooth
+  keypads, media controllers
+
+Windows only:
+
+- ``F13-F20``: intended for the Triadis-RemoteStick, as well as for
+  expanded keyboards
 
 XXX Review... Input Types
 
