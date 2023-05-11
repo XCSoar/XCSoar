@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "DownloadTask.hpp"
+#include "Error.hpp"
 #include "Settings.hpp"
 #include "Task/Ordered/OrderedTask.hpp"
 #include "Task/Deserialiser.hpp"
@@ -12,8 +13,11 @@
 #include "lib/curl/CoStreamRequest.hxx"
 #include "lib/curl/Easy.hxx"
 #include "lib/curl/Setup.hxx"
+#include "lib/fmt/RuntimeError.hxx"
 #include "io/StringOutputStream.hxx"
 #include "util/ConvertString.hpp"
+
+#include <boost/json.hpp>
 
 #include <cassert>
 
@@ -36,18 +40,25 @@ DownloadDeclaredTask(CurlGlobal &curl, const WeGlideSettings &settings,
   CurlEasy easy{url};
   Curl::Setup(easy);
   const Net::ProgressAdapter progress_adapter{easy, progress};
-  easy.SetFailOnError();
 
   StringOutputStream sos;
   const auto response =
     co_await Curl::CoStreamRequest(curl, std::move(easy), sos);
 
   if (const auto i = response.headers.find("content-type"sv);
-      i != response.headers.end() && i->second == "application/json"sv)
+      i != response.headers.end() && i->second == "application/json"sv) {
     /* on error, WeGlide returns a JSON document, and if a user does
        not have a declared task (or if the user does not exist), it
        returns a JSON "null" value */
-    co_return nullptr;
+    if (response.status == 200)
+      co_return nullptr;
+
+    throw ResponseToException(response.status,
+                              boost::json::parse(sos.GetValue()));
+  }
+
+  if (response.status != 200)
+    throw FmtRuntimeError("WeGlide status {}", response.status);
 
   /* XCSoar task files are returned with
      "Content-Type:application/octet-stream", and we could verify

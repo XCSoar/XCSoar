@@ -3,6 +3,7 @@
 
 LIBCLIENT_SOURCES = \
 	$(SRC)/net/client/tim/Client.cpp \
+	$(SRC)/net/client/WeGlide/Error.cpp \
 	$(SRC)/net/client/WeGlide/DownloadTask.cpp \
 	$(SRC)/net/client/WeGlide/UploadFlight.cpp
 

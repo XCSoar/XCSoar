@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "UploadFlight.hpp"
+#include "Error.hpp"
 #include "Settings.hpp"
 #include "net/http/Progress.hpp"
 #include "lib/curl/CoStreamRequest.hxx"
@@ -47,7 +48,6 @@ UploadFlight(CurlGlobal &curl, const WeGlideSettings &settings,
   CurlEasy easy{url};
   Curl::Setup(easy);
   const Net::ProgressAdapter progress_adapter{easy, progress};
-  easy.SetFailOnError();
 
   const auto mime = MakeUploadFlightMime(easy.Get(), settings,
                                          glider_type, igc_path);
@@ -56,7 +56,12 @@ UploadFlight(CurlGlobal &curl, const WeGlideSettings &settings,
   Json::ParserOutputStream parser;
   const auto response =
     co_await Curl::CoStreamRequest(curl, std::move(easy), parser);
-  co_return parser.Finish();
+  auto body = parser.Finish();
+
+  if (response.status != 201)
+    throw ResponseToException(response.status, body);
+
+  co_return body;
 }
 
 } // namespace WeGlide

@@ -1,6 +1,7 @@
 Version 7.31 - not yet released
 * WeGlide
   - fix crash bug after WeGlide flight upload
+  - show WeGlide error messages
 * Android
   - fix crash with buggy graphics drivers
 
