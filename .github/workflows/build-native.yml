@@ -460,15 +460,12 @@ jobs:
         # %llvm.coro.size"
 
         # This build uses third-party libraries installed via
-        # Homebrew, not built using build/thirdparty.py; to be
-        # compatible with Homebrew's builds, we need
-        # to build with "-mmacosx-version-min=12.0".
+        # Homebrew, not built using build/thirdparty.py
         run: |
           gmake -j$(sysctl -n hw.logicalcpu) TARGET=${{env.TARGET }} USE_CCACHE=y \
             OPTIMIZE="-O0" \
             USE_THIRDPARTY_LIBS=n \
             USE_HOMEBREW=y \
-            OSX_MIN_SUPPORTED_VERSION=12.0 \
             V=2 \
             everything check
 
