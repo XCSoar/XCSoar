@@ -13,6 +13,7 @@
 #include "Components.hpp"
 #include "MainWindow.hpp"
 #include "PageActions.hpp"
+#include "Protection.hpp" // for global_running
 
 void
 DataGlobals::UnsetTerrain() noexcept
@@ -39,11 +40,14 @@ DataGlobals::SetTerrain(std::unique_ptr<RasterTerrain> _terrain) noexcept
 
   terrain = _terrain.release();
   main_window.SetTerrain(terrain);
-  glide_computer->SetTerrain(terrain);
+
+  if (glide_computer != nullptr)
+    glide_computer->SetTerrain(terrain);
 
   /* re-create the bottom widget if it was deleted by
      UnsetTerrain() */
-  PageActions::Update();
+  if (global_running)
+    PageActions::Update();
 }
 
 std::shared_ptr<RaspStore>

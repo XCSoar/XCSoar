@@ -1,4 +1,6 @@
 Version 7.31 - not yet released
+* user interface
+  - fix crash during startup
 * WeGlide
   - fix crash bug after WeGlide flight upload
   - show WeGlide error messages
