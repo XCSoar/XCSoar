@@ -46,6 +46,8 @@ static constexpr struct string_to_key string_to_key[] = {
   { _T("MEDIA_NEXT"), KEYCODE_MEDIA_NEXT},
   { _T("MEDIA_PREVIOUS"), KEYCODE_MEDIA_PREVIOUS},
   { _T("MEDIA_PLAY_PAUSE"), KEYCODE_MEDIA_PLAY_PAUSE},
+  { _T("VOLUME_UP"), KEY_VOLUME_UP },
+  { _T("VOLUME_DOWN"), KEY_VOLUME_DOWN },  
 #endif
 
 #ifdef USE_WINUSER
