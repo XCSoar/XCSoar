@@ -48,13 +48,15 @@ else
 $(2)_NOSTRIP = $$($(2)_BIN)
 endif
 
-$(2)_LDADD += $(patsubst %,$$(%_LDADD),$($(2)_DEPENDS))
-$(2)_LDLIBS += $(patsubst %,$$(%_LDLIBS),$($(2)_DEPENDS))
+$(2)_DEPENDS_FLAT = $$(call flat-depends,$(2))
+
+$(2)_LDADD += $$(foreach i,$$($(2)_DEPENDS_FLAT),$$($$(i)_LDADD))
+$(2)_LDLIBS += $$(foreach i,$$($(2)_DEPENDS_FLAT),$$($$(i)_LDLIBS))
 
 # Compile
 $(2)_OBJS = $$(call SRC_TO_OBJ,$$($(2)_SOURCES))
 $$($(2)_OBJS): CPPFLAGS += $$($(2)_CPPFLAGS)
-$$($(2)_OBJS): CPPFLAGS += $(patsubst %,$$(%_CPPFLAGS),$($(2)_DEPENDS))
+$$($(2)_OBJS): CPPFLAGS += $$(foreach i,$$($(2)_DEPENDS_FLAT),$$($$(i)_CPPFLAGS))
 
 # Link the unstripped binary
 $$($(2)_NOSTRIP): $$($(2)_OBJS) $$($(2)_LDADD) $$(TARGET_LDADD) | $$(TARGET_BIN_DIR)/dirstamp
@@ -115,13 +117,15 @@ else
 $(2)_NOSTRIP = $$($(2)_BIN)
 endif
 
-$(2)_LDADD += $(patsubst %,$$(%_LDADD),$($(2)_DEPENDS))
-$(2)_LDLIBS += $(patsubst %,$$(%_LDLIBS),$($(2)_DEPENDS))
+$(2)_DEPENDS_FLAT = $$(call flat-depends,$(2))
+
+$(2)_LDADD += $$(foreach i,$$($(2)_DEPENDS_FLAT),$$($$(i)_LDADD))
+$(2)_LDLIBS += $$(foreach i,$$($(2)_DEPENDS_FLAT),$$($$(i)_LDLIBS))
 
 # Compile
 $(2)_OBJS = $$(call SRC_TO_OBJ,$$($(2)_SOURCES))
 $$($(2)_OBJS): CPPFLAGS += $$($(2)_CPPFLAGS)
-$$($(2)_OBJS): CPPFLAGS += $(patsubst %,$$(%_CPPFLAGS),$($(2)_DEPENDS))
+$$($(2)_OBJS): CPPFLAGS += $$(foreach i,$$($(2)_DEPENDS_FLAT),$$($$(i)_CPPFLAGS))
 
 # Link the unstripped binary
 ifneq ($(TARGET_IS_DARWIN),y)
