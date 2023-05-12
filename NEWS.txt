@@ -1,4 +1,4 @@
-Version 7.31 - not yet released
+Version 7.31 - 2023/05/12
 * user interface
   - fix crash during startup
 * WeGlide
