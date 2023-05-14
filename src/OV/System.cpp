@@ -75,9 +75,9 @@ OpenvarioGetRotation()
 
   switch (result) {
   case 0: return DisplayOrientation::LANDSCAPE;
-  case 1: return DisplayOrientation::PORTRAIT;
+  case 1: return DisplayOrientation::REVERSE_PORTRAIT;
   case 2: return DisplayOrientation::REVERSE_LANDSCAPE;
-  case 3: return DisplayOrientation::REVERSE_PORTRAIT;
+  case 3: return DisplayOrientation::PORTRAIT;
   default: return DisplayOrientation::DEFAULT;
   }
 }
@@ -95,13 +95,13 @@ OpenvarioSetRotation(DisplayOrientation orientation)
   case DisplayOrientation::LANDSCAPE:
     rotation = 0;
     break;
-  case DisplayOrientation::PORTRAIT:
+  case DisplayOrientation::REVERSE_PORTRAIT:
     rotation = 1;
     break;
   case DisplayOrientation::REVERSE_LANDSCAPE:
     rotation = 2;
     break;
-  case DisplayOrientation::REVERSE_PORTRAIT:
+  case DisplayOrientation::PORTRAIT:
     rotation = 3;
     break;
   };
