@@ -304,6 +304,15 @@ InputEvents::eventChecklist([[maybe_unused]] const char *misc)
   dlgChecklistShowModal();
 }
 
+// Frequency Card
+// Displays the frequency card dialog
+//  See the frequency card dialog section of the reference manual for more info.
+void
+InputEvents::eventFrequencyCard(gcc_unused const char *misc)
+{
+  FrequencyDialogShowModal();
+}
+
 // Status
 // Displays one of the three status dialogs:
 //    system: display the system status
