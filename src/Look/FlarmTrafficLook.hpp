@@ -3,12 +3,14 @@
 
 #pragma once
 
+#include "GaugeLook.hpp"
 #include "ui/canvas/Color.hpp"
 #include "ui/canvas/Pen.hpp"
 #include "ui/canvas/Brush.hpp"
 #include "ui/canvas/Font.hpp"
 
 struct TrafficLook;
+struct GaugeLook;
 
 struct FlarmTrafficLook {
   Color warning_color;
@@ -45,7 +47,9 @@ struct FlarmTrafficLook {
 
   Pen unit_fraction_pen;
 
-  Font label_font, side_info_font, no_traffic_font;
+  GaugeLook gauge_look;
+  Font* no_traffic_font;
+  Font label_font, side_info_font;
   Font info_values_font, info_units_font, info_labels_font, call_sign_font;
 
   void Initialise(const TrafficLook &other, bool small, bool inverse = false);

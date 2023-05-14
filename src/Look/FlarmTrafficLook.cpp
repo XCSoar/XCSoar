@@ -44,7 +44,9 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small, bool inverse)
 
   unit_fraction_pen.Create(1, inverse ? COLOR_WHITE : COLOR_BLACK);
 
-  no_traffic_font.Load(FontDescription(Layout::FontScale(22)));
+  gauge_look.Initialise(Font);
+  Font* no_traffic_font = &gauge_look.no_data_font;
+  
   label_font.Load(FontDescription(Layout::FontScale(12)));
   side_info_font.Load(FontDescription(Layout::FontScale(small ? 8 : 12),
                                       true));
