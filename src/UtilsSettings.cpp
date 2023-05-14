@@ -53,6 +53,7 @@ bool AirspaceFileChanged = false;
 bool AirfieldFileChanged = false;
 bool WaypointFileChanged = false;
 bool FlarmFileChanged = false;
+bool FrequenciesFileChanged = false;
 bool RaspFileChanged = false;
 bool InputFileChanged = false;
 bool LanguageChanged = false;
@@ -71,6 +72,7 @@ SettingsEnter()
   AirfieldFileChanged = false;
   WaypointFileChanged = false;
   FlarmFileChanged = false;
+  FrequenciesFileChanged = false;
   RaspFileChanged = false;
   InputFileChanged = false;
   DevicePortChanged = false;
