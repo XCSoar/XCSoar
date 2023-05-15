@@ -16,7 +16,7 @@ public:
   };
 
 public:
-  OverlappedEvent()
+  OverlappedEvent() noexcept
   {
     os.Offset = os.OffsetHigh = 0;
     os.Internal = os.InternalHigh = 0;
@@ -24,19 +24,19 @@ public:
     os.hEvent = CreateEvent(nullptr, TRUE, FALSE, nullptr);
   }
 
-  ~OverlappedEvent() {
+  ~OverlappedEvent() noexcept {
     ::CloseHandle(os.hEvent);
   }
 
-  bool Defined() const {
+  bool Defined() const noexcept {
     return os.hEvent != nullptr;
   }
 
-  OVERLAPPED *GetPointer() {
+  OVERLAPPED *GetPointer() noexcept {
     return &os;
   }
 
-  WaitResult Wait(unsigned timeout_ms=INFINITE) {
+  WaitResult Wait(unsigned timeout_ms=INFINITE) noexcept {
     switch (::WaitForSingleObject(os.hEvent, timeout_ms)) {
     case WAIT_OBJECT_0:
       return FINISHED;
