@@ -6,6 +6,7 @@
 #include "LocalPath.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "system/Path.hpp"
+#include "util/SpanCast.hxx"
 #include "util/StaticString.hxx"
 
 NMEALogger::NMEALogger() noexcept {}
@@ -35,10 +36,10 @@ NMEALogger::Start()
 static void
 WriteLine(OutputStream &os, std::string_view text)
 {
-  os.Write(text.data(), text.size());
+  os.Write(AsBytes(text));
 
   static constexpr char newline = '\n';
-  os.Write(&newline, sizeof(newline));
+  os.Write(std::as_bytes(std::span{&newline, 1}));
 }
 
 void

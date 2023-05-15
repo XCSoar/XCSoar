@@ -22,7 +22,7 @@ public:
 
   template<typename T>
   void WriteT(const T &value) {
-    Write(&value, sizeof(value));
+    Write(std::as_bytes(std::span{&value, 1}));
   }
 
   void Write8(uint8_t value) {

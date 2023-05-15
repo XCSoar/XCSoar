@@ -134,7 +134,7 @@ FileCache::Save(const TCHAR *name, Path original_path)
   File::Delete(path);
 
   auto os = std::make_unique<FileOutputStream>(path);
-  os->Write(&FILE_CACHE_MAGIC, sizeof(FILE_CACHE_MAGIC));
-  os->Write(&original_info, sizeof(original_info));
+  os->Write(std::as_bytes(std::span{&FILE_CACHE_MAGIC, 1}));
+  os->Write(std::as_bytes(std::span{&original_info, 1}));
   return os;
 }

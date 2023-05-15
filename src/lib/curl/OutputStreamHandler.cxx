@@ -8,7 +8,7 @@ void
 OutputStreamCurlResponseHandler::OnData(std::span<const std::byte> data)
 {
 	try {
-		os.Write(data.data(), data.size());
+		os.Write(data);
 	} catch (...) {
 		waiter.SetError(std::current_exception());
 		throw Pause{};

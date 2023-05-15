@@ -9,7 +9,7 @@ namespace Curl {
 void
 CoStreamRequest::OnData(std::span<const std::byte> data)
 try {
-	os.Write(data.data(), data.size());
+	os.Write(data);
 } catch (...) {
 	DeferError(std::current_exception());
 	throw Pause{};

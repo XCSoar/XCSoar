@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: BSD-2-Clause
 // author: Max Kellermann <max.kellermann@gmail.com>
 
-#ifndef STRING_OUTPUT_STREAM_HXX
-#define STRING_OUTPUT_STREAM_HXX
+#pragma once
 
 #include "OutputStream.hxx"
+#include "util/SpanCast.hxx"
 
 #include <string>
 
@@ -21,9 +21,7 @@ public:
 	}
 
 	/* virtual methods from class OutputStream */
-	void Write(const void *data, size_t size) override {
-		value.append((const char *)data, size);
+	void Write(std::span<const std::byte> src) override {
+		value.append(ToStringView(src));
 	}
 };
-
-#endif

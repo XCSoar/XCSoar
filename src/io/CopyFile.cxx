@@ -16,7 +16,7 @@ Copy(Reader &r, OutputStream &w)
 		if (n == 0)
 			break;
 
-		w.Write(buffer, n);
+		w.Write(std::span{buffer}.first(n));
 	}
 }
 

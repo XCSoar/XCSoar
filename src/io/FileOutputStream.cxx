@@ -115,16 +115,16 @@ FileOutputStream::Tell() const noexcept
 }
 
 void
-FileOutputStream::Write(const void *data, size_t size)
+FileOutputStream::Write(std::span<const std::byte> src)
 {
 	assert(IsDefined());
 
 	DWORD nbytes;
-	if (!WriteFile(handle, data, size, &nbytes, nullptr))
+	if (!WriteFile(handle, src.data(), src.size(), &nbytes, nullptr))
 		throw FormatLastError("Failed to write to %s",
 				      GetPath().c_str());
 
-	if (size_t(nbytes) != size)
+	if (size_t(nbytes) != src.size())
 		throw FormatLastError(ERROR_DISK_FULL, "Failed to write to %s",
 				      GetPath().c_str());
 }
@@ -249,14 +249,14 @@ FileOutputStream::Tell() const noexcept
 }
 
 void
-FileOutputStream::Write(const void *data, size_t size)
+FileOutputStream::Write(std::span<const std::byte> src)
 {
 	assert(IsDefined());
 
-	ssize_t nbytes = fd.Write(data, size);
+	ssize_t nbytes = fd.Write(src.data(), src.size());
 	if (nbytes < 0)
 		throw FormatErrno("Failed to write to %s", GetPath().c_str());
-	else if ((size_t)nbytes < size)
+	else if ((size_t)nbytes < src.size())
 		throw FormatErrno(ENOSPC, "Failed to write to %s",
 				  GetPath().c_str());
 }

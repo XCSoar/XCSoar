@@ -322,8 +322,7 @@ FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
       length--;
 
     // Read IGC data
-    const char *igc_data = (const char *)data.data() + 3;
-    os.Write(igc_data, length);
+    os.Write({data.data() + 3, length});
 
     if (is_last_packet)
       break;

@@ -17,7 +17,7 @@ RasterTile::SaveCache(BufferedOutputStream &os) const
   data.start = start;
   data.end = end;
 
-  os.Write(&data, sizeof(data));
+  os.Write(std::as_bytes(std::span{&data, 1}));
 }
 
 void
