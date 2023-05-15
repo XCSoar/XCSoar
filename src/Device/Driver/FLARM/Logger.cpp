@@ -220,7 +220,7 @@ FlarmDevice::ReadFlightInfo(RecordedFlightInfo &flight,
   SendFrameHeader(header, env, std::chrono::seconds(1));
 
   // Wait for an answer and save the payload for further processing
-  AllocatedArray<uint8_t> data;
+  AllocatedArray<std::byte> data;
   uint16_t length;
   uint8_t ack_result =
     WaitForACKOrNACK(header.sequence_number, data, length,
@@ -300,7 +300,7 @@ FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
     SendFrameHeader(header, env, std::chrono::seconds(1));
 
     // Wait for an answer and save the payload for further processing
-    AllocatedArray<uint8_t> data;
+    AllocatedArray<std::byte> data;
     uint16_t length;
     bool ack = WaitForACKOrNACK(header.sequence_number, data,
                                 length, env, std::chrono::seconds(10)) == FLARM::MT_ACK;
@@ -312,8 +312,8 @@ FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
     length -= 3;
 
     // Read progress (in percent)
-    uint8_t progress = *(data.begin() + 2);
-    env.SetProgressPosition(std::min((unsigned)progress, 100u));
+    const auto progress = static_cast<unsigned>(data[2]);
+    env.SetProgressPosition(std::min(progress, 100u));
 
     const char last_char = (char)data.back();
     bool is_last_packet = (last_char == 0x1A);

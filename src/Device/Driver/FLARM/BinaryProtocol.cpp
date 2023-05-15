@@ -179,7 +179,7 @@ FlarmDevice::ReceiveFrameHeader(FLARM::FrameHeader &header,
 
 FLARM::MessageType
 FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
-                              AllocatedArray<uint8_t> &data, uint16_t &length,
+                              AllocatedArray<std::byte> &data, uint16_t &length,
                               OperationEnvironment &env,
                               std::chrono::steady_clock::duration _timeout)
 {
@@ -235,7 +235,7 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
                               OperationEnvironment &env,
                               std::chrono::steady_clock::duration timeout)
 {
-  AllocatedArray<uint8_t> data;
+  AllocatedArray<std::byte> data;
   uint16_t length;
   return WaitForACKOrNACK(sequence_number, data, length, env, timeout);
 }

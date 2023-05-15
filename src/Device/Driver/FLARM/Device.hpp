@@ -203,7 +203,7 @@ private:
    * @return Message type if N(ACK) was received properly, otherwise 0x00
    */
   FLARM::MessageType
-  WaitForACKOrNACK(uint16_t sequence_number, AllocatedArray<uint8_t> &data,
+  WaitForACKOrNACK(uint16_t sequence_number, AllocatedArray<std::byte> &data,
                    uint16_t &length,
                    OperationEnvironment &env,
                    std::chrono::steady_clock::duration timeout);
