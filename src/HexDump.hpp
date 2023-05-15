@@ -6,29 +6,31 @@
 #include "util/StaticString.hxx"
 #include "LogFile.hpp"
 
-#include <cstdint>
+#include <algorithm>
+#include <cstddef>
+#include <span>
 
-static inline bool
-IsPrintable(uint8_t ch)
+static constexpr bool
+IsPrintable(std::byte ch) noexcept
 {
-  return ch >= 0x20 && ch < 0x80;
+  return ch >= std::byte{0x20} && ch < std::byte{0x80};
 }
 
 static inline void
 HexDumpLine(const char *prefix, unsigned offset,
-            const uint8_t *data, size_t length)
+            std::span<const std::byte> src) noexcept
 {
   NarrowString<128> line;
   line.clear();
 
-  for (size_t i = 0; i < length; ++i) {
+  for (size_t i = 0; i < src.size(); ++i) {
     if ((i & 0x7) == 0)
       line += " ";
 
-    line.AppendFormat(" %02x", data[i]);
+    line.AppendFormat(" %02x", static_cast<unsigned>(src[i]));
   }
 
-  for (size_t i = length; i < 0x10; ++i) {
+  for (size_t i = src.size(); i < 0x10; ++i) {
     if ((i & 0x7) == 0)
       line += " ";
 
@@ -36,12 +38,12 @@ HexDumpLine(const char *prefix, unsigned offset,
   }
 
   line += " ";
-  for (size_t i = 0; i < length; ++i) {
+  for (size_t i = 0; i < src.size(); ++i) {
     if ((i & 0x7) == 0)
       line += " ";
 
     char byte[2];
-    byte[0] = IsPrintable(data[i]) ? (char)data[i] : '.';
+    byte[0] = IsPrintable(src[i]) ? static_cast<char>(src[i]) : '.';
     byte[1] = '\0';
     line += byte;
   }
@@ -50,23 +52,19 @@ HexDumpLine(const char *prefix, unsigned offset,
 }
 
 static inline void
-HexDump(const char *prefix, const void *_data, size_t length)
+HexDump(const char *prefix, std::span<const std::byte> src) noexcept
 {
-  const uint8_t *data = (const uint8_t *)_data;
   unsigned offset = 0;
-  while (length > 0) {
-    size_t line_length = length;
-    if (line_length > 0x10)
-      line_length = 0x10;
-    HexDumpLine(prefix, offset, data, line_length);
-    data += line_length;
-    length -= line_length;
+  while (!src.empty()) {
+    size_t line_length = std::min(src.size(), std::size_t{0x10});
+    HexDumpLine(prefix, offset, src.first(line_length));
+    src = src.subspan(line_length);
     offset += 0x10;
   }
 }
 
 static inline void
-HexDump(const void *data, size_t length)
+HexDump(std::span<const std::byte> src) noexcept
 {
-  HexDump("", data, length);
+  HexDump("", src);
 }

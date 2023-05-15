@@ -37,7 +37,7 @@ public:
     char prefix[16];
     sprintf(prefix, "%12llu ", (unsigned long long)
             std::chrono::steady_clock::now().time_since_epoch().count());
-    HexDump(prefix, s.data(), s.size());
+    HexDump(prefix, s);
     return true;
   }
 };

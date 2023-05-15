@@ -46,7 +46,7 @@ public:
     char prefix[32];
     sprintf(prefix, "[%u] %12llu ", no, (unsigned long long)
             std::chrono::steady_clock::now().time_since_epoch().count());
-    HexDump(prefix, s.data(), s.size());
+    HexDump(prefix, s);
 
     if (to_port != nullptr)
       to_port->Write(s);

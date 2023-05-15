@@ -66,7 +66,7 @@ DumpPort::Write(std::span<const std::byte> src)
 
   if (enabled) {
     LogFormat("Write(%u)=%u", (unsigned)src.size(), (unsigned)nbytes);
-    HexDump("W ", src.data(), nbytes);
+    HexDump("W ", src.first(nbytes));
   }
 
   return nbytes;
@@ -135,7 +135,7 @@ DumpPort::Read(std::span<std::byte> dest)
   if (enabled) {
     LogFormat("Read(%u)=%u", (unsigned)dest.size(), (unsigned)nbytes);
     if (nbytes > 0)
-      HexDump("R ", dest.data(), nbytes);
+      HexDump("R ", dest.first(nbytes));
   }
 
   return nbytes;
