@@ -2,18 +2,20 @@
 // Copyright The XCSoar Project
 
 #include "Serialiser.hpp"
+#include "util/SpanCast.hxx"
 
-#include <algorithm>
 #include <stdexcept>
 
 #include <string.h>
 
 void
-Serialiser::WriteString(const char *s)
+Serialiser::WriteString(std::string_view s)
 {
-  size_t length = std::min<size_t>(strlen(s), 0xff00);
-  Write16(length);
-  Write(s, length);
+  if (s.size() > 0xff00)
+    s = s.substr(0, 0xff00);
+
+  Write16(s.size());
+  Write(AsBytes(s));
 }
 
 std::string
