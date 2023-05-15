@@ -9,11 +9,11 @@
  * Launch a child process but don't wait for it to exit.
  */
 bool
-Start(const char *const*argv);
+Start(const char *const*argv) noexcept;
 
 template<typename... Args>
 static inline bool
-Start(const char *path, Args... args)
+Start(const char *path, Args... args) noexcept
 {
   const char *const argv[]{path, args..., nullptr};
   return Start(argv);
@@ -23,11 +23,11 @@ Start(const char *path, Args... args)
  * Launch a child process and wait for it to exit.
  */
 bool
-Run(const char *const*argv);
+Run(const char *const*argv) noexcept;
 
 template<typename... Args>
 static inline bool
-Run(const char *path, Args... args)
+Run(const char *path, Args... args) noexcept
 {
   const char *const argv[]{path, args..., nullptr};
   return Run(argv);
