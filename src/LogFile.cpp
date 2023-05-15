@@ -56,12 +56,14 @@ OpenLog()
 }
 
 static void
-LogString(const char *p) noexcept
+LogString(std::string_view s) noexcept
 {
 #ifdef ANDROID
-  __android_log_print(ANDROID_LOG_INFO, "XCSoar", "%s", p);
+  __android_log_print(ANDROID_LOG_INFO, "XCSoar", "%.*s",
+                      int(s.size()), s.data());
 #elif defined(HAVE_POSIX) && !defined(NDEBUG)
-  fprintf(stderr, "%s\n", p);
+  fprintf(stderr, "%.*s\n",
+          int(s.size()), s.data());
 #endif
 
   try {
@@ -77,7 +79,7 @@ LogString(const char *p) noexcept
     }
 
     bos.Write("] ");
-    bos.Write(p);
+    bos.Write(s);
     bos.NewLine();
 
     bos.Flush();
@@ -102,7 +104,7 @@ LogFormat(const char *fmt, ...) noexcept
 #ifdef _UNICODE
 
 static void
-LogString(const wchar_t *p) noexcept
+LogString(std::wstring_view s) noexcept
 {
   try {
     auto fos = OpenLog();
@@ -117,7 +119,7 @@ LogString(const wchar_t *p) noexcept
     }
 
     bos.Write("] ");
-    bos.Write(p);
+    bos.Write(s);
     bos.NewLine();
 
     bos.Flush();
@@ -144,7 +146,7 @@ LogFormat(const wchar_t *Str, ...) noexcept
 void
 LogError(std::exception_ptr e) noexcept
 {
-  LogString(GetFullMessage(e).c_str());
+  LogString(GetFullMessage(e));
 }
 
 void
