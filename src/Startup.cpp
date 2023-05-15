@@ -239,20 +239,20 @@ Startup(UI::Display &display)
   if (!main_window->IsDefined())
     return false;
 
-  LogFormat("Display dpi=%u,%u",
-            Display::GetDPI(display).x, Display::GetDPI(display).y);
+  LogFmt("Display dpi={},{}",
+         Display::GetDPI(display).x, Display::GetDPI(display).y);
 
 #ifdef ENABLE_OPENGL
-  LogFormat("OpenGL: "
+  LogFmt("OpenGL: "
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
-            "mda=%d "
+         "mda={} "
 #endif
-            "npot=%d stencil=%#x",
+         "npot={} stencil={:#x}",
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
-            GLExt::HaveMultiDrawElements(),
+         GLExt::HaveMultiDrawElements(),
 #endif
-             OpenGL::texture_non_power_of_two,
-            OpenGL::render_buffer_stencil);
+         OpenGL::texture_non_power_of_two,
+         OpenGL::render_buffer_stencil);
 #endif
 
 #ifdef ANDROID
