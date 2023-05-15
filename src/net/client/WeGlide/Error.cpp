@@ -22,17 +22,20 @@ ResponseToException(unsigned status, const boost::json::value &body)
       const auto &detail = d->value().as_array().at(0).as_object();
       if (auto i = detail.find("msg"sv); i != detail.end())
         return FmtRuntimeError("WeGlide status {}: {}",
-                               status, i->value().as_string());
+                               status,
+                               (std::string_view)i->value().as_string());
     }
   }
 
   if (auto i = o.find("error_description"sv); i != o.end())
     return FmtRuntimeError("WeGlide status {}: {}",
-                           status, i->value().as_string());
+                           status,
+                           (std::string_view)i->value().as_string());
 
   if (auto i = o.find("error"sv); i != o.end())
     return FmtRuntimeError("WeGlide status {}: {}",
-                           status, i->value().as_string());
+                           status,
+                           (std::string_view)i->value().as_string());
 
   return FmtRuntimeError("WeGlide status {}", status);
 }
