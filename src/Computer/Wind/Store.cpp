@@ -75,9 +75,4 @@ WindStore::NewWind([[maybe_unused]] const NMEAInfo &info, DerivedInfo &derived,
   } else {
     // TODO code: give warning, wind estimate bogus or very strong!
   }
-
-  #ifdef DEBUG_WIND
-  LogDebug(_T("%f %f 0 # wind estimate\n"), wind.x, wind.y);
-  #endif
-
 }
