@@ -104,11 +104,11 @@ FLARMEmulator::SendACK(uint16_t sequence_number) noexcept
   uint16_t payload = ToLE16(sequence_number);
   FLARM::FrameHeader header =
     FLARM::PrepareFrameHeader(sequence_number, FLARM::MessageType::ACK,
-                              &payload, sizeof(payload));
+                              std::as_bytes(std::span{&payload, 1}));
   port->Write(FLARM::START_FRAME);
-  FLARM::SendEscaped(*port, &header, sizeof(header), *env,
+  FLARM::SendEscaped(*port, std::as_bytes(std::span{&header, 1}), *env,
                      std::chrono::seconds(2));
-  FLARM::SendEscaped(*port, &payload, sizeof(payload), *env,
+  FLARM::SendEscaped(*port, std::as_bytes(std::span{&payload, 1}), *env,
                      std::chrono::seconds(2));
 }
 

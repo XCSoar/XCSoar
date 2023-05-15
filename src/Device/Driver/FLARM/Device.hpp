@@ -135,16 +135,16 @@ private:
   bool DeclareInternal(const Declaration &declaration,
                        OperationEnvironment &env);
 
-  void SendEscaped(const void *data, size_t length,
+  void SendEscaped(std::span<const std::byte> src,
                    OperationEnvironment &env,
                    std::chrono::steady_clock::duration timeout) {
-    FLARM::SendEscaped(port, data, length, env, timeout);
+    FLARM::SendEscaped(port, src, env, timeout);
   }
 
-  bool ReceiveEscaped(void *data, size_t length,
+  bool ReceiveEscaped(std::span<std::byte> dest,
                       OperationEnvironment &env,
                       std::chrono::steady_clock::duration timeout) {
-    return FLARM::ReceiveEscaped(port, data, length, env, timeout);
+    return FLARM::ReceiveEscaped(port, dest, env, timeout);
   }
 
   /**
@@ -171,8 +171,7 @@ private:
    * @return An initialized FrameHeader instance
    */
   FLARM::FrameHeader PrepareFrameHeader(FLARM::MessageType message_type,
-                                        const void *data = nullptr,
-                                        size_t length = 0);
+                                        std::span<const std::byte> payload={}) noexcept;
 
   /**
    * Sends a FrameHeader to the port. Remember that a StartByte should be

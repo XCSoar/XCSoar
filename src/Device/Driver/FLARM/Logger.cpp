@@ -238,14 +238,14 @@ FLARM::MessageType
 FlarmDevice::SelectFlight(uint8_t record_number, OperationEnvironment &env)
 {
   // Create header for selecting a log record
-  uint8_t data[1] = { record_number };
+  std::byte data[] = { static_cast<std::byte>(record_number) };
   FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MessageType::SELECTRECORD,
-                                                 data, sizeof(data));
+                                                 std::span{data});
 
   // Send request
   SendStartByte();
   SendFrameHeader(header, env, std::chrono::seconds(1));
-  SendEscaped(data, sizeof(data), env, std::chrono::seconds(1));
+  SendEscaped(std::span{data}, env, std::chrono::seconds(1));
 
   // Wait for an answer
   return WaitForACKOrNACK(header.sequence_number,

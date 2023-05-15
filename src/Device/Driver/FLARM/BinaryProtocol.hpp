@@ -4,13 +4,12 @@
 #pragma once
 
 #include "util/ByteOrder.hxx"
-#include "util/Compiler.h"
 
 #include <chrono>
-#include <type_traits>
-
 #include <cstdint>
 #include <cstddef>
+#include <span>
+#include <type_traits>
 
 /* damn you, windows.h! */
 #ifdef ERROR
@@ -86,16 +85,13 @@ static_assert(std::is_trivial<FrameHeader>::value, "type is not trivial");
  * Convenience function. Returns a pre-populated FrameHeader instance that is
  * ready to be sent by the SendFrameHeader() function.
  * @param message_type Message type of the FrameHeader
- * @param data Optional pointer to the first byte of the payload. Used for
- * CRC calculations.
- * @param length Optional length of the payload
+ * @param payload the payload; used for CRC calculations
  * @return An initialized FrameHeader instance
  */
 FrameHeader
 PrepareFrameHeader(unsigned sequence_number,
                    MessageType message_type,
-                   const void *data = nullptr,
-                   size_t length = 0);
+                   std::span<const std::byte> payload={}) noexcept;
 
 /**
  * Sends the specified data stream to the FLARM using the escaping algorithm
@@ -105,7 +101,7 @@ PrepareFrameHeader(unsigned sequence_number,
  * number of bytes can be larger due to the escaping.
  */
 void
-SendEscaped(Port &port, const void *buffer, size_t length,
+SendEscaped(Port &port, std::span<const std::byte> src,
             OperationEnvironment &env,
             std::chrono::steady_clock::duration timeout);
 
@@ -119,7 +115,7 @@ SendEscaped(Port &port, const void *buffer, size_t length,
  * or any transfer problems occurred
  */
 bool
-ReceiveEscaped(Port &port, void *data, size_t length,
+ReceiveEscaped(Port &port, std::span<std::byte> dest,
                OperationEnvironment &env,
                std::chrono::steady_clock::duration timeout);
 
