@@ -1,4 +1,6 @@
 Version 7.32 - not yet released
+* user interface
+  - fix horizon roll, show bank angles greater than 90°
 
 Version 7.31 - 2023/05/12
 * user interface
