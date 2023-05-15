@@ -47,12 +47,6 @@ BufferedOutputStream::Write(const void *data, std::size_t size)
 }
 
 void
-BufferedOutputStream::Write(const char *p)
-{
-	Write(p, strlen(p));
-}
-
-void
 BufferedOutputStream::Format(const char *fmt, ...)
 {
 	auto r = buffer.Write();
@@ -111,16 +105,9 @@ BufferedOutputStream::VFmt(fmt::string_view format_str, fmt::format_args args)
 #ifdef _UNICODE
 
 void
-BufferedOutputStream::Write(const wchar_t *p)
+BufferedOutputStream::WriteWideToUTF8(std::wstring_view src)
 {
-	WriteWideToUTF8(p, wcslen(p));
-}
-
-void
-BufferedOutputStream::WriteWideToUTF8(const wchar_t *src,
-				      std::size_t src_length)
-{
-	if (src_length == 0)
+	if (src.empty())
 		return;
 
 	auto r = buffer.Write();
@@ -129,7 +116,7 @@ BufferedOutputStream::WriteWideToUTF8(const wchar_t *src,
 		r = buffer.Write();
 	}
 
-	int length = WideCharToMultiByte(CP_UTF8, 0, src, src_length,
+	int length = WideCharToMultiByte(CP_UTF8, 0, src.data(), src.size(),
 					 (char *)r.data(), r.size(),
 					 nullptr, nullptr);
 	if (length <= 0) {
@@ -138,13 +125,13 @@ BufferedOutputStream::WriteWideToUTF8(const wchar_t *src,
 			throw MakeLastError(error, "UTF-8 conversion failed");
 
 		/* how much buffer do we need? */
-		length = WideCharToMultiByte(CP_UTF8, 0, src, src_length,
+		length = WideCharToMultiByte(CP_UTF8, 0, src.data(), src.size(),
 					     nullptr, 0, nullptr, nullptr);
 		if (length <= 0)
 			throw MakeLastError(error, "UTF-8 conversion failed");
 
 		/* grow the buffer and try again */
-		length = WideCharToMultiByte(CP_UTF8, 0, src, src_length,
+		length = WideCharToMultiByte(CP_UTF8, 0, src.data(), src.size(),
 					     (char *)buffer.Write(length), length,
 					     nullptr, nullptr);
 		if (length <= 0)
