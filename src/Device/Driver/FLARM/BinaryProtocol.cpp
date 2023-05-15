@@ -148,7 +148,7 @@ FLARM::PrepareFrameHeader(unsigned sequence_number, MessageType message_type,
   header.length = 8 + length;
   header.version = 0;
   header.sequence_number = sequence_number++;
-  header.type = (uint8_t)message_type;
+  header.type = message_type;
   header.crc = CalculateCRC(header, data, length);
   return header;
 }
@@ -214,7 +214,8 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
       continue;
 
     // Check message type
-    if (header.type != FLARM::MT_ACK && header.type != FLARM::MT_NACK)
+    if (header.type != FLARM::MessageType::ACK &&
+        header.type != FLARM::MessageType::NACK)
       continue;
 
     // Check payload length
@@ -227,7 +228,7 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
       return (FLARM::MessageType)header.type;
   }
 
-  return FLARM::MT_ERROR;
+  return FLARM::MessageType::ERROR;
 }
 
 FLARM::MessageType
@@ -245,7 +246,7 @@ FlarmDevice::WaitForACK(uint16_t sequence_number,
                         OperationEnvironment &env,
                         std::chrono::steady_clock::duration timeout)
 {
-  return WaitForACKOrNACK(sequence_number, env, timeout) == FLARM::MT_ACK;
+  return WaitForACKOrNACK(sequence_number, env, timeout) == FLARM::MessageType::ACK;
 }
 
 bool
@@ -255,7 +256,7 @@ try {
   const TimeoutClock timeout(_timeout);
 
   // Create header for sending a binary ping request
-  FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MT_PING);
+  FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MessageType::PING);
 
   // Send request and wait for positive answer
 
@@ -273,7 +274,7 @@ FlarmDevice::BinaryReset(OperationEnvironment &env,
   TimeoutClock timeout(_timeout);
 
   // Create header for sending a binary reset request
-  FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MT_EXIT);
+  FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MessageType::EXIT);
 
   // Send request and wait for positive answer
   SendStartByte();

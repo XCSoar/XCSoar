@@ -213,7 +213,7 @@ FlarmDevice::ReadFlightInfo(RecordedFlightInfo &flight,
                             OperationEnvironment &env)
 {
   // Create header for getting record information
-  FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MT_GETRECORDINFO);
+  FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MessageType::GETRECORDINFO);
 
   // Send request
   SendStartByte();
@@ -222,12 +222,12 @@ FlarmDevice::ReadFlightInfo(RecordedFlightInfo &flight,
   // Wait for an answer and save the payload for further processing
   AllocatedArray<std::byte> data;
   uint16_t length;
-  uint8_t ack_result =
+  const auto ack_result =
     WaitForACKOrNACK(header.sequence_number, data, length,
                      env, std::chrono::seconds(5));
 
   // If neither ACK nor NACK was received
-  if (ack_result != FLARM::MT_ACK || length <= 2)
+  if (ack_result != FLARM::MessageType::ACK || length <= 2)
     return false;
 
   char *record_info = (char *)data.data() + 2;
@@ -239,7 +239,7 @@ FlarmDevice::SelectFlight(uint8_t record_number, OperationEnvironment &env)
 {
   // Create header for selecting a log record
   uint8_t data[1] = { record_number };
-  FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MT_SELECTRECORD,
+  FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MessageType::SELECTRECORD,
                                                  data, sizeof(data));
 
   // Send request
@@ -265,11 +265,11 @@ FlarmDevice::ReadFlightList(RecordedFlightList &flight_list,
       FLARM::MessageType ack_result = SelectFlight(i, env);
 
       // Last record reached -> bail out and return list
-      if (ack_result == FLARM::MT_NACK)
+      if (ack_result == FLARM::MessageType::NACK)
         break;
 
       // If neither ACK nor NACK was received
-      if (ack_result != FLARM::MT_ACK) {
+      if (ack_result != FLARM::MessageType::ACK) {
         mode = Mode::UNKNOWN;
         return false;
       }
@@ -293,7 +293,7 @@ FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
   env.SetProgressRange(100);
   while (true) {
     // Create header for getting IGC file data
-    FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MT_GETIGCDATA);
+    FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MessageType::GETIGCDATA);
 
     // Send request
     SendStartByte();
@@ -303,7 +303,8 @@ FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
     AllocatedArray<std::byte> data;
     uint16_t length;
     bool ack = WaitForACKOrNACK(header.sequence_number, data,
-                                length, env, std::chrono::seconds(10)) == FLARM::MT_ACK;
+                                length, env,
+                                std::chrono::seconds(10)) == FLARM::MessageType::ACK;
 
     // If no ACK was received
     if (!ack || length <= 3)
@@ -345,7 +346,7 @@ FlarmDevice::DownloadFlight(const RecordedFlightInfo &flight,
   FLARM::MessageType ack_result = SelectFlight(flight.internal.flarm, env);
 
   // If no ACK was received -> cancel
-  if (ack_result != FLARM::MT_ACK)
+  if (ack_result != FLARM::MessageType::ACK)
     return false;
 
   try {

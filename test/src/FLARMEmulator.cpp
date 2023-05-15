@@ -103,7 +103,7 @@ FLARMEmulator::SendACK(uint16_t sequence_number) noexcept
 {
   uint16_t payload = ToLE16(sequence_number);
   FLARM::FrameHeader header =
-    FLARM::PrepareFrameHeader(sequence_number, FLARM::MT_ACK,
+    FLARM::PrepareFrameHeader(sequence_number, FLARM::MessageType::ACK,
                               &payload, sizeof(payload));
   port->Write(FLARM::START_FRAME);
   FLARM::SendEscaped(*port, &header, sizeof(header), *env,
@@ -133,14 +133,17 @@ FLARMEmulator::HandleBinary(const void *_data, size_t length) noexcept
   //XXX size_t payload_length = header.GetLength();
 
   switch (header.type) {
-  case FLARM::MT_PING:
-  case FLARM::MT_SELECTRECORD:
+  case FLARM::MessageType::PING:
+  case FLARM::MessageType::SELECTRECORD:
     SendACK(header.sequence_number);
     break;
 
-  case FLARM::MT_EXIT:
+  case FLARM::MessageType::EXIT:
     SendACK(header.sequence_number);
     binary = false;
+    break;
+
+  default:
     break;
   }
 

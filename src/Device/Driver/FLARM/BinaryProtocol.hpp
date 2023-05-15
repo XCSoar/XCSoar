@@ -12,6 +12,11 @@
 #include <cstdint>
 #include <cstddef>
 
+/* damn you, windows.h! */
+#ifdef ERROR
+#undef ERROR
+#endif
+
 class Port;
 struct Declaration;
 class OperationEnvironment;
@@ -25,17 +30,17 @@ static constexpr std::byte ESCAPE{0x78};
 static constexpr std::byte ESCAPE_ESCAPE{0x55};
 static constexpr std::byte ESCAPE_START{0x31};
 
-enum MessageType {
-  MT_ERROR = 0x00,
-  MT_ACK = 0xA0,
-  MT_NACK = 0xB7,
-  MT_PING = 0x01,
-  MT_SETBAUDRATE = 0x02,
-  MT_FLASHUPLOAD = 0x10,
-  MT_EXIT = 0x12,
-  MT_SELECTRECORD = 0x20,
-  MT_GETRECORDINFO = 0x21,
-  MT_GETIGCDATA = 0x22,
+enum class MessageType : uint8_t {
+  ERROR = 0x00,
+  ACK = 0xA0,
+  NACK = 0xB7,
+  PING = 0x01,
+  SETBAUDRATE = 0x02,
+  FLASHUPLOAD = 0x10,
+  EXIT = 0x12,
+  SELECTRECORD = 0x20,
+  GETRECORDINFO = 0x21,
+  GETIGCDATA = 0x22,
 };
 
 /**
@@ -63,7 +68,7 @@ struct FrameHeader {
   PackedLE16 sequence_number;
 
   /** Message type */
-  uint8_t type;
+  MessageType type;
 
   /**
    * CRC over the complete message, except CRC field.
