@@ -31,20 +31,20 @@ class PathName {
   Value value;
 
 public:
-  explicit PathName(Value::const_pointer _value)
+  explicit PathName(Value::const_pointer _value) noexcept
     :value(_value) {}
 
 #ifdef _UNICODE
-  explicit PathName(const char *_value)
+  explicit PathName(const char *_value) noexcept
     :value(ConvertACPToWide(_value)) {}
 #endif
 
 public:
-  bool IsDefined() const {
+  bool IsDefined() const noexcept {
     return !value.IsNull();
   }
 
-  operator Path() const {
+  operator Path() const noexcept {
     return Path(value.c_str());
   }
 };
@@ -65,19 +65,19 @@ class NarrowPathName {
 
 public:
 #ifdef _UNICODE
-  explicit NarrowPathName(Path _value)
+  explicit NarrowPathName(Path _value) noexcept
     :value(ConvertWideToACP(_value.c_str())) {}
 #else
-  explicit NarrowPathName(Path _value)
+  explicit NarrowPathName(Path _value) noexcept
     :value(_value.c_str()) {}
 #endif
 
 public:
-  bool IsDefined() const {
+  bool IsDefined() const noexcept {
     return !value.IsNull();
   }
 
-  operator Value::const_pointer() const {
+  operator Value::const_pointer() const noexcept {
     return value.c_str();
   }
 };
