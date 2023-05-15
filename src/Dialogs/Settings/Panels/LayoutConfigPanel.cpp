@@ -305,7 +305,7 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
       Display::RotateRestore();
     else {
       if (!Display::Rotate(ui_settings.display.orientation))
-        LogFormat("Display rotation failed");
+        LogString("Display rotation failed");
     }
 
 #ifdef USE_POLL_EVENT

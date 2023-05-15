@@ -76,7 +76,7 @@ bool
 DumpPort::Drain()
 {
   if (CheckEnabled())
-    LogFormat("Drain");
+    LogString("Drain");
 
   return port->Drain();
 }
@@ -85,7 +85,7 @@ void
 DumpPort::Flush()
 {
   if (CheckEnabled())
-    LogFormat("Flush");
+    LogString("Flush");
 
   port->Flush();
 }
@@ -109,7 +109,7 @@ bool
 DumpPort::StopRxThread()
 {
   if (CheckEnabled())
-    LogFormat("StopRxThread");
+    LogString("StopRxThread");
 
   return port->StopRxThread();
 }
@@ -118,7 +118,7 @@ bool
 DumpPort::StartRxThread()
 {
   if (CheckEnabled())
-    LogFormat("StartRxThread");
+    LogString("StartRxThread");
 
   return port->StartRxThread();
 }

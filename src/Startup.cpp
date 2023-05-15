@@ -170,7 +170,7 @@ MainWindow::LoadTerrain() noexcept
 
   if (const auto path = Profile::GetPath(ProfileKeys::MapFile);
       path != nullptr) {
-    LogFormat("LoadTerrain");
+    LogString("LoadTerrain");
     terrain_loader = new AsyncTerrainOverviewLoader();
 
     terrain_loader_env = std::make_unique<PluggableOperationEnvironment>();
@@ -381,7 +381,7 @@ Startup(UI::Display &display)
   }
 
   // Read the waypoint files
-  LogFormat("ReadWaypoints");
+  LogString("ReadWaypoints");
   {
     SubOperationEnvironment sub_env(operation, 256, 512);
     sub_env.SetText(_("Loading Waypoints..."));
@@ -406,7 +406,7 @@ Startup(UI::Display &display)
   CommonInterface::ReadBlackboardBasic(device_blackboard->Basic());
 
   // Scan for weather forecast
-  LogFormat("RASP load");
+  LogString("RASP load");
   auto rasp = LoadConfiguredRasp();
 
   // Reads the airspace files
@@ -501,7 +501,7 @@ Startup(UI::Display &display)
   if (computer_settings.logger.enable_nmea_logger)
     nmea_logger->Enable();
 
-  LogFormat("ProgramStarted");
+  LogString("ProgramStarted");
 
   // Give focus to the map
   main_window->SetDefaultFocus();
@@ -552,7 +552,7 @@ Shutdown()
   operation.SetText(_("Shutdown, please wait..."));
 
   // Log shutdown information
-  LogFormat("Entering shutdown...");
+  LogString("Entering shutdown...");
 
   main_window->BeginShutdown();
 
@@ -595,7 +595,7 @@ Shutdown()
   devShutdown();
 
   // Stop threads
-  LogFormat("Stop threads");
+  LogString("Stop threads");
 #ifdef HAVE_DOWNLOAD_MANAGER
   Net::DownloadManager::BeginDeinitialise();
 #endif
@@ -611,7 +611,7 @@ Shutdown()
     merge_thread->BeginStop();
 
   // Wait for the calculations thread to finish
-  LogFormat("Waiting for calculation thread");
+  LogString("Waiting for calculation thread");
 
   if (merge_thread != nullptr) {
     merge_thread->Join();
@@ -627,7 +627,7 @@ Shutdown()
 
   //  Wait for the drawing thread to finish
 #ifndef ENABLE_OPENGL
-  LogFormat("Waiting for draw thread");
+  LogString("Waiting for draw thread");
 
   if (draw_thread != nullptr) {
     draw_thread->Join();
@@ -636,7 +636,7 @@ Shutdown()
   }
 #endif
 
-  LogFormat("delete MapWindow");
+  LogString("delete MapWindow");
   main_window->Deinitialise();
 
   // Stop sound
@@ -645,7 +645,7 @@ Shutdown()
   // Save the task for the next time
   operation.SetText(_("Shutdown, saving task..."));
 
-  LogFormat("Save default task");
+  LogString("Save default task");
   if (protected_task_manager != nullptr) {
     try {
       protected_task_manager->TaskSaveDefault();
@@ -708,7 +708,7 @@ Shutdown()
 #endif
 
   // Close the progress dialog
-  LogFormat("Close Progress Dialog");
+  LogString("Close Progress Dialog");
   operation.Hide();
 
   delete glide_computer;
@@ -727,7 +727,7 @@ Shutdown()
   delete file_cache;
   file_cache = nullptr;
 
-  LogFormat("Close Windows - main");
+  LogString("Close Windows - main");
   main_window->Destroy();
   delete main_window;
   CommonInterface::main_window = nullptr;
@@ -736,5 +736,5 @@ Shutdown()
 
   Display::RestoreOrientation();
 
-  LogFormat("Finished shutdown");
+  LogString("Finished shutdown");
 }

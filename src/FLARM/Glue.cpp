@@ -45,7 +45,7 @@ try {
 static void
 LoadSecondary(FlarmNameDatabase &db)
 try {
-  LogFormat("OpenFLARMDetails");
+  LogString("OpenFLARMDetails");
 
   auto reader = OpenDataTextFile(_T("xcsoar-flarm.txt"));
   LoadFlarmNameFile(*reader, db);

@@ -9,6 +9,13 @@
 #include <cstdio>
 
 void
+LogString(std::string_view s) noexcept
+{
+  fprintf(stderr, "%.*s\n",
+          int(s.size()), s.data());
+}
+
+void
 LogFormat(const char *fmt, ...) noexcept
 {
   va_list ap;

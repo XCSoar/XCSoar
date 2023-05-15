@@ -36,7 +36,7 @@ bool
 LoadConfiguredTopography(TopographyStore &store,
                          OperationEnvironment &operation)
 {
-  LogFormat("Loading Topography File...");
+  LogString("Loading Topography File...");
   operation.SetText(_("Loading Topography File..."));
 
   return LoadConfiguredTopographyZip(store, operation);

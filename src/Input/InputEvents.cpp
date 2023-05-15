@@ -103,7 +103,7 @@ static InputConfig input_config;
 void
 InputEvents::readFile()
 {
-  LogFormat("Loading input events file");
+  LogString("Loading input events file");
 
   // clear the GCE and NMEA queues
   ClearQueues();

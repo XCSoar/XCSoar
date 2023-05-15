@@ -55,7 +55,7 @@ OpenLog()
   return FileOutputStream{path, FileOutputStream::Mode::APPEND_OR_CREATE};
 }
 
-static void
+void
 LogString(std::string_view s) noexcept
 {
 #ifdef ANDROID

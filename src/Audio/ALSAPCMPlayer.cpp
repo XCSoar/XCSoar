@@ -31,7 +31,7 @@ ALSAPCMPlayer::TryRecoverFromError(snd_pcm_t &alsa_handle, int error)
   assert(error < 0);
 
   if (-EPIPE == error)
-    LogFormat("ALSA PCM buffer underrun");
+    LogString("ALSA PCM buffer underrun");
   else if ((-EINTR == error) || (-ESTRPIPE == error))
     LogFormat("ALSA PCM error: %s - trying to recover",
               snd_strerror(error));
@@ -44,7 +44,7 @@ ALSAPCMPlayer::TryRecoverFromError(snd_pcm_t &alsa_handle, int error)
 
   int recover_error = snd_pcm_recover(&alsa_handle, error, 1);
   if (0 == recover_error) {
-    LogFormat("ALSA PCM successfully recovered");
+    LogString("ALSA PCM successfully recovered");
     return true;
   } else {
     LogFormat("snd_pcm_recover(0x%p, %d, 1) failed: %d - %s",

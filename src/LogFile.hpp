@@ -6,10 +6,20 @@
 #include "util/Compiler.h"
 
 #include <exception>
+#include <string_view>
 
 #ifdef _UNICODE
 #include <wchar.h>
 #endif
+
+/**
+ * Write a line to the log file.
+ *
+ * @param s the line, which must not contain newline or carriage
+ * return characters
+ */
+void
+LogString(std::string_view s) noexcept;
 
 /**
  * Write a formatted line to the log file.
