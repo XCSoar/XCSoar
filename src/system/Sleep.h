@@ -12,7 +12,7 @@
 #include <time.h>
 
 static inline void
-Sleep(unsigned ms)
+Sleep(unsigned ms) noexcept
 {
   const struct timespec ts = {
     static_cast<time_t>(ms / 1000),
