@@ -14,7 +14,6 @@
 #include "Form/Button.hpp"
 #include "Screen/Layout.hpp"
 #include "Profile/Profile.hpp"
-#include "LogFile.hpp"
 #include "util/Macros.hpp"
 #include "Panels/ConfigPanel.hpp"
 #include "Panels/PagesConfigPanel.hpp"
@@ -350,7 +349,6 @@ void dlgConfigurationShowModal()
 
   if (dialog.GetChanged()) {
     Profile::Save();
-    LogDebug(_T("Configuration: Changes saved"));
     if (require_restart)
       ShowMessageBox(_("Changes to configuration saved.  Restart XCSoar to apply changes."),
                   _T(""), MB_OK);
