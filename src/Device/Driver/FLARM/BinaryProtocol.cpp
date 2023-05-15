@@ -7,13 +7,14 @@
 #include "Device/Port/Port.hpp"
 #include "time/TimeoutClock.hpp"
 
-[[gnu::pure]]
-static const std::byte *
-FindSpecial(const std::byte *const begin, const std::byte *const end)
+#include <algorithm> // for std::find_if()
+
+static constexpr const std::byte *
+FindSpecial(const std::byte *const begin, const std::byte *const end) noexcept
 {
-  const std::byte *start = std::find(begin, end, FLARM::START_FRAME);
-  const std::byte *escape = std::find(begin, end, FLARM::ESCAPE);
-  return std::min(start, escape);
+  return std::find_if(begin, end, [](std::byte b){
+    return b == FLARM::START_FRAME || b == FLARM::ESCAPE;
+  });
 }
 
 void
