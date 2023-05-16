@@ -39,8 +39,7 @@ message(STATUS "+++++ PROGRAM_NAME = '${PROGRAM_NAME}'")
 message(STATUS "+++++ PROGRAM_VERSION = '${PROGRAM_VERSION}'")
 
 add_compile_definitions("PROGRAM_VERSION=\"${PROGRAM_VERSION}\"")
-
-# this was wrong...: file(WRITE "VERSION.txt" ${PROGRAM_VERSION})
+file(WRITE "${PROJECTGROUP_BINARY_DIR}/VERSION.txt" ${PROGRAM_VERSION})
 
 find_program(CMAKE_APP     NAMES cmake REQUIRED)
 get_filename_component(CMAKE_PROGRAM_PATH ${CMAKE_APP} DIRECTORY)
@@ -425,7 +424,10 @@ endif()
 
 list(APPEND SCRIPT_FILES
     CMakeSource.cmake
-    VERSION.txt
+    ${PROJECTGROUP_BINARY_DIR}/VERSION.txt
+    OpenSoar.config
+    OpenSoar-News.md
+    OpenSoar-AddOn.md
     NEWS.txt
 )
 
@@ -439,7 +441,7 @@ else()        # executable!
 endif()
 
 
-list(APPEND XCSOAR_LINK_LIBRARIES ) # sequence is very important!!!!
+list(APPEND XCSOAR_LINK_LIBRARIES ) # sequence is very important, I don't no, why'!!!!
 
 target_link_libraries(${TARGET_NAME} PUBLIC ${XCSOAR_LINK_LIBRARIES})
 if(MSVC)
