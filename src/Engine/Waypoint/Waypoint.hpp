@@ -66,39 +66,14 @@ struct Waypoint {
     bool watched:1 = false;
   };
 
-  /** Unique id */
-  unsigned id;
-
-  /**
-   * The id number as specified in the input file.
-   */
-  unsigned original_id;
-
   /** Geodetic location */
   GeoPoint location;
 
   /** Flat projected location */
   FlatGeoPoint flat_location;
 
-#ifndef NDEBUG
-  bool flat_location_initialised = false;
-#endif
-
   /** Height AMSL (m) of waypoint terrain */
   double elevation;
-
-  /** Main runway */
-  Runway runway = Runway::Null();
-
-  RadioFrequency radio_frequency = RadioFrequency::Null();
-
-  /** Type of the waypoint */
-  Type type = Type::NORMAL;
-  /** Flag types of this waypoint */
-  Flags flags;
-
-  /** File number to store waypoint in */
-  WaypointOrigin origin = WaypointOrigin::NONE;
 
   /** Short name (code) label of waypoint */
   tstring shortname;
@@ -114,6 +89,32 @@ struct Waypoint {
 #ifdef HAVE_RUN_FILE
   /** Additional files to be opened by external programs */
   std::forward_list<tstring> files_external;
+#endif
+
+  /** Unique id */
+  unsigned id;
+
+  /**
+   * The id number as specified in the input file.
+   */
+  unsigned original_id;
+
+  /** Main runway */
+  Runway runway = Runway::Null();
+
+  RadioFrequency radio_frequency = RadioFrequency::Null();
+
+  /** Flag types of this waypoint */
+  Flags flags;
+
+  /** Type of the waypoint */
+  Type type = Type::NORMAL;
+
+  /** File number to store waypoint in */
+  WaypointOrigin origin = WaypointOrigin::NONE;
+
+#ifndef NDEBUG
+  bool flat_location_initialised = false;
 #endif
 
   /**
