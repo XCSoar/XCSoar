@@ -24,7 +24,6 @@ public:
   explicit WaypointReaderSeeYou(WaypointFactory _factory)
     :WaypointReaderBase(_factory) {}
 
-protected:
   /* virtual methods from class WaypointReaderBase */
   bool ParseLine(const TCHAR* line, Waypoints &way_points) override;
 };
