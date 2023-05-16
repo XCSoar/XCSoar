@@ -53,7 +53,7 @@ ReadWaypointFile(Path path, WaypointFileType file_type,
   if (!reader)
     throw std::runtime_error{"Unrecognised waypoint file"};
 
-  FileLineReader line_reader(path, Charset::AUTO);
+  FileLineReaderA line_reader(path);
   reader->Parse(way_points, line_reader, progress);
 }
 
@@ -75,6 +75,6 @@ ReadWaypointFile(struct zzip_dir *dir, const char *path,
   if (!reader)
     throw std::runtime_error{"Unrecognised waypoint file"};
 
-  ZipLineReader line_reader(dir, path, Charset::AUTO);
+  ZipLineReaderA line_reader(dir, path);
   reader->Parse(way_points, line_reader, progress);
 }

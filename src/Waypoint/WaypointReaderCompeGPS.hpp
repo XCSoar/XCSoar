@@ -4,10 +4,13 @@
 #pragma once
 
 #include "WaypointReaderBase.hpp"
+#include "io/StringConverter.hpp"
 
 #include <string_view>
 
 class WaypointReaderCompeGPS final : public WaypointReaderBase {
+  StringConverter string_converter;
+
   bool is_utm = false;
 
 public:
@@ -19,5 +22,5 @@ public:
 
 protected:
   /* virtual methods from class WaypointReaderBase */
-  bool ParseLine(const TCHAR *line, Waypoints &way_points) override;
+  bool ParseLine(const char *line, Waypoints &way_points) override;
 };

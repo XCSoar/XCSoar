@@ -4,6 +4,7 @@
 #pragma once
 
 #include "WaypointReaderBase.hpp"
+#include "io/StringConverter.hpp"
 
 /**
  * Parses a SeeYou waypoint file.
@@ -11,6 +12,8 @@
  * @see http://data.naviter.si/docs/cup_format.pdf
  */
 class WaypointReaderSeeYou final : public WaypointReaderBase {
+  StringConverter string_converter;
+
   bool first = true;
 
   bool ignore_following = false;
@@ -25,5 +28,5 @@ public:
     :WaypointReaderBase(_factory) {}
 
   /* virtual methods from class WaypointReaderBase */
-  bool ParseLine(const TCHAR* line, Waypoints &way_points) override;
+  bool ParseLine(const char *line, Waypoints &way_points) override;
 };

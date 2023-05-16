@@ -417,17 +417,17 @@ CreatePoint(unsigned pos, unsigned n_waypoints, WaypointPtr &&wp,
  * file contains no task
  */
 static bool
-ParseSeeYouWaypoints(TLineReader &reader, Waypoints &way_points)
+ParseSeeYouWaypoints(NLineReader &reader, Waypoints &way_points)
 {
   const WaypointFactory factory(WaypointOrigin::NONE);
   WaypointReaderSeeYou waypoint_file(factory);
 
   while (true) {
-    TCHAR *line = reader.ReadLine();
+    char *line = reader.ReadLine();
     if (line == nullptr)
       return false;
 
-    if (StringIsEqualIgnoreCase(line, _T("-----Related Tasks-----")))
+    if (StringIsEqualIgnoreCase(line, "-----Related Tasks-----"))
       return true;
 
     waypoint_file.ParseLine(line, way_points);
@@ -456,14 +456,16 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
                         const Waypoints *waypoints, unsigned index) const
 try {
   // Create FileReader for reading the task
-  FileLineReader reader(path, Charset::AUTO);
+  auto narrow_reader = std::make_unique<FileLineReaderA>(path);
 
   // Read waypoints from the CUP file
   Waypoints file_waypoints;
-  if (!ParseSeeYouWaypoints(reader, file_waypoints))
+  if (!ParseSeeYouWaypoints(*narrow_reader, file_waypoints))
     return nullptr;
 
   file_waypoints.Optimise();
+
+  ConvertLineReader reader{std::move(narrow_reader)};
 
   TCHAR *line = AdvanceReaderToTask(reader, index);
   if (line == nullptr)

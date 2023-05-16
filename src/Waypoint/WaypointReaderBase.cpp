@@ -6,14 +6,14 @@
 #include "io/LineReader.hpp"
 
 void
-WaypointReaderBase::Parse(Waypoints &way_points, TLineReader &reader,
+WaypointReaderBase::Parse(Waypoints &way_points, NLineReader &reader,
                           ProgressListener &progress)
 {
   const long filesize = std::max(reader.GetSize(), 1l);
   progress.SetProgressRange(100);
 
   // Read through the lines of the file
-  TCHAR *line;
+  char *line;
   for (unsigned i = 0; (line = reader.ReadLine()) != nullptr; i++) {
     // and parse them
     ParseLine(line, way_points);

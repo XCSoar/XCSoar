@@ -5,10 +5,8 @@
 
 #include "Factory.hpp"
 
-#include <tchar.h>
-
 class Waypoints;
-class TLineReader;
+class NLineReader;
 class ProgressListener;
 
 class WaypointReaderBase
@@ -28,7 +26,7 @@ public:
    * @param way_points The waypoint list to fill
    * @return True if the waypoint file parsing was okay, False otherwise
    */
-  void Parse(Waypoints &way_points, TLineReader &reader,
+  void Parse(Waypoints &way_points, NLineReader &reader,
              ProgressListener &progress);
 
 protected:
@@ -40,5 +38,5 @@ protected:
    * @return True if the line was parsed correctly or ignored, False if
    * parsing error occured
    */
-  virtual bool ParseLine(const TCHAR* line, Waypoints &way_points) = 0;
+  virtual bool ParseLine(const char *line, Waypoints &way_points) = 0;
 };
