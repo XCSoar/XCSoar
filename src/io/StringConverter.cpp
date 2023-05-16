@@ -26,25 +26,32 @@ iso_latin_1_to_tchar(TCHAR *dest, const char *src) noexcept
 
 #endif
 
-TCHAR *
-StringConverter::Convert(char *narrow)
+char *
+StringConverter::DetectStrip(char *src) noexcept
 {
-  assert(narrow != nullptr);
+  assert(src != nullptr);
 
   // Check if there is byte order mark in front
   if (charset == Charset::AUTO || charset == Charset::UTF8) {
-    char *p = SkipByteOrderMark(narrow);
-    if (p != nullptr) {
-      narrow = p;
+    if (char *p = SkipByteOrderMark(src); p != nullptr) {
+      src = p;
 
       /* switch to UTF-8 now */
       charset = Charset::UTF8;
     }
   }
 
-  if (charset == Charset::AUTO && !ValidateUTF8(narrow))
+  if (charset == Charset::AUTO && !ValidateUTF8(src))
     /* invalid UTF-8 sequence detected: switch to ISO-Latin-1 */
     charset = Charset::ISO_LATIN_1;
+
+  return src;
+}
+
+TCHAR *
+StringConverter::Convert(char *narrow)
+{
+  narrow = DetectStrip(narrow);
 
 #ifdef _UNICODE
   size_t narrow_length = strlen(narrow);

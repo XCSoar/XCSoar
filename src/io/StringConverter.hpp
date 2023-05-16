@@ -43,6 +43,14 @@ public:
   }
 
   /**
+   * Feed a string from the file and attempt to auto-detect the
+   * charset.  Returns a pointer into the string after a byte-order
+   * marker.
+   */
+  [[gnu::pure]]
+  char *DetectStrip(char *src) noexcept;
+
+  /**
    * Convert the given string.  The returned pointer may be the given
    * pointer or owned by this class and will be invalidated by the
    * next Convert() call.
