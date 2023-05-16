@@ -109,19 +109,17 @@ ParseAltitude(const TCHAR *src, double &dest)
   return true;
 }
 
-static bool
+static void
 ParseString(const TCHAR *src, tstring &dest, unsigned len = 0)
 {
   if (src[0] == 0)
-    return true;
+    return;
 
   dest.assign(src);
   if (len > 0)
     dest = dest.substr(0, len);
 
   trim_inplace(dest);
-
-  return true;
 }
 
 bool
@@ -164,8 +162,7 @@ WaypointReaderFS::ParseLine(const TCHAR *line, Waypoints &way_points)
 
   Waypoint new_waypoint = factory.Create(location);
 
-  if (!ParseString(line, new_waypoint.name, 8))
-    return false;
+  ParseString(line, new_waypoint.name, 8);
 
   if (ParseAltitude(line + (is_utm ? 32 : 41), new_waypoint.elevation))
     new_waypoint.has_elevation = true;
