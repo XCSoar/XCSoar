@@ -413,6 +413,15 @@ CreatePoint(unsigned pos, unsigned n_waypoints, WaypointPtr &&wp,
   return pt;
 }
 
+static void
+ParseSeeYouWaypoints(TLineReader &reader, Waypoints &way_points)
+{
+  const WaypointFactory factory(WaypointOrigin::NONE);
+  WaypointReaderSeeYou waypoint_file(factory);
+  NullOperationEnvironment operation;
+  waypoint_file.Parse(way_points, reader, operation);
+}
+
 static TCHAR *
 AdvanceReaderToTask(TLineReader &reader, const unsigned index)
 {
@@ -444,12 +453,7 @@ try {
 
   // Read waypoints from the CUP file
   Waypoints file_waypoints;
-  {
-    const WaypointFactory factory(WaypointOrigin::NONE);
-    WaypointReaderSeeYou waypoint_file(factory);
-    NullOperationEnvironment operation;
-    waypoint_file.Parse(file_waypoints, reader, operation);
-  }
+  ParseSeeYouWaypoints(reader, file_waypoints);
   file_waypoints.Optimise();
 
   reader.Rewind();
