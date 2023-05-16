@@ -3,6 +3,7 @@
 
 #include "StringConverter.hpp"
 #include "util/Compiler.h"
+#include "util/StringCompare.hxx"
 #include "util/UTF8.hpp"
 
 #include <cassert>
@@ -26,24 +27,6 @@ iso_latin_1_to_tchar(TCHAR *dest, const char *src) noexcept
 
 #endif
 
-/**
- * Does the given string start with the UTF-8 byte order mark?  This
- * is often a prefix which marks a file/string as UTF-8.
- */
-[[gnu::pure]]
-static bool
-IsByteOrderMark(const char *s) noexcept
-{
-  return s[0] == (char)0xef && s[1] == (char)0xbb && s[2] == (char)0xbf;
-}
-
-[[gnu::pure]]
-static char *
-SkipByteOrderMark(char *s) noexcept
-{
-  return IsByteOrderMark(s) ? s + 3 : nullptr;
-}
-
 char *
 StringConverter::DetectStrip(char *src) noexcept
 {
@@ -51,8 +34,8 @@ StringConverter::DetectStrip(char *src) noexcept
 
   // Check if there is byte order mark in front
   if (charset == Charset::AUTO || charset == Charset::UTF8) {
-    if (char *p = SkipByteOrderMark(src); p != nullptr) {
-      src = p;
+    if (StringStartsWith(src, utf8_byte_order_mark)) {
+      src += utf8_byte_order_mark.size();
 
       /* switch to UTF-8 now */
       charset = Charset::UTF8;
