@@ -16,8 +16,8 @@
 
 #ifdef _UNICODE
 
-static void
-iso_latin_1_to_tchar(TCHAR *dest, const char *src)
+static constexpr void
+iso_latin_1_to_tchar(TCHAR *dest, const char *src) noexcept
 {
     do {
       *dest++ = (unsigned char)*src;
