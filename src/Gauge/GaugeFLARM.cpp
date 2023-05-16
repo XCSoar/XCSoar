@@ -13,7 +13,7 @@
 #endif
 
 class SmallTrafficWindow : public FlarmTrafficWindow {
-  bool dragging, pressed;
+  bool dragging = false, pressed = false;
 
 public:
   SmallTrafficWindow(ContainerWindow &parent, const PixelRect &rc,
@@ -44,8 +44,7 @@ SmallTrafficWindow::SmallTrafficWindow(ContainerWindow &parent,
                                        const PixelRect &rc,
                                        const FlarmTrafficLook &look,
                                        const WindowStyle style) noexcept
-  :FlarmTrafficWindow(look, 1, 1, true),
-   dragging(false), pressed(false)
+  :FlarmTrafficWindow(look, 1, 1, true)
 {
   Create(parent, rc, style);
 }
