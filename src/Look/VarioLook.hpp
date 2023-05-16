@@ -34,5 +34,8 @@ struct VarioLook {
   Pen unit_fraction_pen;
 
   void Initialise(bool inverse, bool colors,
+                  unsigned width,
                   const Font &text_font);
+
+  void ReinitialiseLayout(unsigned width);
 };

@@ -6,11 +6,17 @@
 #include "Screen/Layout.hpp"
 #include "Units/Units.hpp"
 #include "Resources.hpp"
+#include "ui/canvas/Features.hpp" // for HAVE_TEXT_CACHE
+
+#ifdef HAVE_TEXT_CACHE
+#include "ui/canvas/custom/Cache.hpp"
+#endif
 
 #include <algorithm>
 
 void
 VarioLook::Initialise(bool _inverse, bool _colors,
+                      unsigned width,
                       const Font &_text_font)
 {
   inverse = _inverse;
@@ -35,7 +41,6 @@ VarioLook::Initialise(bool _inverse, bool _colors,
 
   arc_pen.Create(Layout::ScalePenWidth(2), text_color);
   tick_pen.Create(Layout::ScalePenWidth(1), text_color);
-  arc_label_font.Load(FontDescription{Layout::FontScale(14), true});
 
   thick_background_pen.Create(Layout::Scale(5), background_color);
   thick_sink_pen.Create(Layout::Scale(5), sink_color);
@@ -45,10 +50,26 @@ VarioLook::Initialise(bool _inverse, bool _colors,
 
   text_font = &_text_font;
 
-  const unsigned value_font_height = Layout::FontScale(10);
+  ReinitialiseLayout(width);
+}
+
+void
+VarioLook::ReinitialiseLayout(unsigned width)
+{
+  /* Layout::FontScale() applies the configured UI scale, and
+     additionally we limit font sizes if the vario gauge is small */
+
+  const unsigned arc_label_font_height = std::min(Layout::FontScale(14), width / 5);
+  arc_label_font.Load(FontDescription{arc_label_font_height, true});
+
+  const unsigned value_font_height = std::min(Layout::FontScale(10), width / 6);
   value_font.Load(FontDescription(value_font_height, false, false, true));
 
   unsigned unit_font_height = std::max(value_font_height * 2u / 5u, 7u);
   unit_font.Load(FontDescription(unit_font_height));
   unit_fraction_pen.Create(1, COLOR_GRAY);
+
+#ifdef HAVE_TEXT_CACHE
+  TextCache::Flush();
+#endif
 }
