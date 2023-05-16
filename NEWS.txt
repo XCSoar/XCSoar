@@ -2,6 +2,8 @@ Version 7.32 - not yet released
 * user interface
   - fix horizon roll, show bank angles greater than 90°
   - fix horizon pitch, show sky instead of ground when pitch is greater than 50°
+* data files
+  - support waypoints without elevation data
 
 Version 7.31 - 2023/05/12
 * user interface
