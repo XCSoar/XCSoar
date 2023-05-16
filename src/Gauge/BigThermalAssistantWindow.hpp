@@ -12,12 +12,12 @@ class BigThermalAssistantWindow : public ThermalAssistantWindow {
 
 public:
   BigThermalAssistantWindow(const ThermalAssistantLook &look,
-                            unsigned padding)
+                            unsigned padding) noexcept
     :ThermalAssistantWindow(look, padding, false),
      dragging(false) {}
 
 private:
-  void StopDragging() {
+  void StopDragging() noexcept {
     if (!dragging)
       return;
 
