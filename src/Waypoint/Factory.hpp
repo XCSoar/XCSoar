@@ -19,10 +19,11 @@ class WaypointFactory {
 
 public:
   explicit WaypointFactory(WaypointOrigin _origin,
-                           const RasterTerrain *_terrain=nullptr)
+                           const RasterTerrain *_terrain=nullptr) noexcept
     :origin(_origin), terrain(_terrain) {}
 
-  Waypoint Create(const GeoPoint &location) const {
+  [[gnu::pure]]
+  Waypoint Create(const GeoPoint &location) const noexcept {
     Waypoint w(location);
     w.origin = origin;
     w.original_id = 0;
@@ -37,5 +38,5 @@ public:
    * @return true if a fallback was found and Waypoint::elevation was
    * set, false if no fallback was found
    */
-  bool FallbackElevation(Waypoint &waypoint) const;
+  bool FallbackElevation(Waypoint &waypoint) const noexcept;
 };
