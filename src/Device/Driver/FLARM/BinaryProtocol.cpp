@@ -24,7 +24,7 @@ static constexpr std::span<const std::byte>
 MakeSpan(typename std::span<const std::byte>::iterator begin,
          typename std::span<const std::byte>::iterator end) noexcept
 {
-#ifdef ANDROID
+#if defined(ANDROID) || defined(__APPLE__)
   return {&*begin, (std::size_t)std::distance(begin, end)};
 #else
   return {begin, end};
