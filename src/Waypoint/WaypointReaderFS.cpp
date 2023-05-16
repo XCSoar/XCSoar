@@ -112,9 +112,6 @@ ParseAltitude(const TCHAR *src, double &dest)
 static void
 ParseString(const TCHAR *src, tstring &dest, unsigned len = 0)
 {
-  if (src[0] == 0)
-    return;
-
   dest.assign(src);
   if (len > 0)
     dest = dest.substr(0, len);
