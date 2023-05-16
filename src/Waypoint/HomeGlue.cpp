@@ -95,7 +95,8 @@ SetHome(Waypoints &way_points, const RasterTerrain *terrain,
     if (wp != nullptr) {
       // OK, passed all checks now
       LogString("Start at home waypoint");
-      device_blackboard->SetStartupLocation(wp->location, wp->elevation);
+      device_blackboard->SetStartupLocation(wp->location,
+                                            wp->GetElevationOrZero());
     } else if (terrain != nullptr) {
       // no home at all, so set it from center of terrain if available
       GeoPoint loc = terrain->GetTerrainCenter();

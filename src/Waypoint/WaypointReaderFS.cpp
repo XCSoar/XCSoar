@@ -167,9 +167,10 @@ WaypointReaderFS::ParseLine(const TCHAR *line, Waypoints &way_points)
   if (!ParseString(line, new_waypoint.name, 8))
     return false;
 
-  if (!ParseAltitude(line + (is_utm ? 32 : 41), new_waypoint.elevation) &&
-      !factory.FallbackElevation(new_waypoint))
-    return false;
+  if (ParseAltitude(line + (is_utm ? 32 : 41), new_waypoint.elevation))
+    new_waypoint.has_elevation = true;
+  else
+    factory.FallbackElevation(new_waypoint);
 
   // Description (Characters 35-44)
   if (len > (is_utm ? 38 : 47))

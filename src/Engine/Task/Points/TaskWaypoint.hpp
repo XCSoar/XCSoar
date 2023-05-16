@@ -47,6 +47,7 @@ protected:
    * Altitude (AMSL, m) of task point terrain.
    */
   double GetBaseElevation() const {
-    return waypoint->elevation;
+    // TODO can we avoid the zero fallback somehow?
+    return waypoint->GetElevationOrZero();
   }
 };

@@ -223,7 +223,8 @@ CAI302Device::WriteNavpoint(unsigned id, const Waypoint &wp,
   ToASCII(remark, ARRAY_SIZE(remark), wp.comment.c_str());
 
   try {
-    CAI302::DownloadNavpoint(port, wp.location, (int)wp.elevation, id,
+    CAI302::DownloadNavpoint(port, wp.location, (int)wp.GetElevationOrZero(),
+                             id,
                              wp.IsTurnpoint(), wp.IsAirport(), false,
                              wp.IsLandable(), wp.IsStartpoint(),
                              wp.IsFinishpoint(), wp.flags.home,

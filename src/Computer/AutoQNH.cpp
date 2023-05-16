@@ -46,7 +46,7 @@ AutoQNH::CalculateQNH(const NMEAInfo &basic, DerivedInfo &calculated,
 {
   const auto next_wp = way_points.LookupLocation(basic.location, 1000);
 
-  if (next_wp && next_wp->IsAirport())
+  if (next_wp && next_wp->IsAirport() && next_wp->has_elevation)
     CalculateQNH(basic, calculated, next_wp->elevation);
   else if (calculated.terrain_valid)
     CalculateQNH(basic, calculated, calculated.terrain_altitude);

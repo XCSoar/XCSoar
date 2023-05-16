@@ -60,6 +60,7 @@ AddSpiralWaypoints(Waypoints &waypoints,
     Waypoint waypoint{vector.EndPoint(center)};
     waypoint.original_id = i;
     waypoint.elevation = i * 10 - 500;
+    waypoint.has_elevation = true;
 
     StaticString<256> buffer;
 

@@ -1555,6 +1555,7 @@ TestDeclare(const struct DeviceRegister &driver)
   Waypoint wp(gp);
   wp.name = _T("Foo");
   wp.elevation = 123;
+  wp.has_elevation = true;
   declaration.Append(wp);
   declaration.Append(wp);
   declaration.Append(wp);

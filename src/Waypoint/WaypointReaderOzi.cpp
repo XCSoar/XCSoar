@@ -94,10 +94,11 @@ WaypointReaderOzi::ParseLine(const TCHAR *line, Waypoints &way_points)
   if (!ParseString(params[1], new_waypoint.name))
     return false;
 
-  if (ParseNumber(params[14], value) && value != -777)
+  if (ParseNumber(params[14], value) && value != -777) {
     new_waypoint.elevation = Units::ToSysUnit(value, Unit::FEET);
-  else if (!factory.FallbackElevation(new_waypoint))
-    return false;
+    new_waypoint.has_elevation = true;
+  } else
+    factory.FallbackElevation(new_waypoint);
 
   // Description
   ParseString(params[10], new_waypoint.comment);

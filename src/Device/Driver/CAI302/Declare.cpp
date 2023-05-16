@@ -40,7 +40,7 @@ cai302DeclAddWaypoint(Port &port, int DeclIndex, const Waypoint &way_point,
   convert_string(Name, sizeof(Name), way_point.name.c_str());
 
   CAI302::DeclareTP(port, DeclIndex, way_point.location,
-                    (int)way_point.elevation,
+                    (int)way_point.GetElevationOrZero(),
                     Name, env);
 }
 

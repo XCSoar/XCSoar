@@ -72,7 +72,11 @@ struct Waypoint {
   /** Flat projected location */
   FlatGeoPoint flat_location;
 
-  /** Height AMSL (m) of waypoint terrain */
+  /**
+   * Height AMSL (m) of waypoint terrain.
+   *
+   * This field is only usable if #has_elevation is true.
+   */
   double elevation;
 
   /** Short name (code) label of waypoint */
@@ -112,6 +116,11 @@ struct Waypoint {
 
   /** File number to store waypoint in */
   WaypointOrigin origin = WaypointOrigin::NONE;
+
+  /**
+   * Does the #elevation field contain a value?
+   */
+  bool has_elevation = false;
 
 #ifndef NDEBUG
   bool flat_location_initialised = false;
@@ -165,6 +174,10 @@ struct Waypoint {
    */
   constexpr bool IsFinishpoint() const noexcept {
     return flags.finish_point;
+  }
+
+  constexpr double GetElevationOrZero() const noexcept {
+    return has_elevation ? elevation : 0.;
   }
 
   /**

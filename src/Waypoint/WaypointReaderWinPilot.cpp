@@ -220,9 +220,10 @@ WaypointReaderWinPilot::ParseLine(const TCHAR *line, Waypoints &waypoints)
 
   // Altitude (e.g. 458M)
   /// @todo configurable behaviour
-  if (!ParseAltitude(params[3], new_waypoint.elevation) &&
-      !factory.FallbackElevation(new_waypoint))
-    return false;
+  if (ParseAltitude(params[3], new_waypoint.elevation))
+    new_waypoint.has_elevation = true;
+  else
+    factory.FallbackElevation(new_waypoint);
 
   if (n_params > 6) {
     // Description (e.g. 119.750 Airport)
