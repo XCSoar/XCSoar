@@ -18,11 +18,11 @@
 #ifdef _UNICODE
 
 static constexpr void
-iso_latin_1_to_tchar(TCHAR *dest, const char *src) noexcept
+iso_latin_1_to_tchar(TCHAR *dest, std::string_view src) noexcept
 {
-    do {
-      *dest++ = (unsigned char)*src;
-    } while (*src++ != '\0');
+  for (unsigned char ch : src)
+    *dest++ = ch;
+  *dest = _T('\0');
 }
 
 #endif
@@ -55,24 +55,24 @@ StringConverter::Convert(char *narrow)
   narrow = DetectStrip(narrow);
 
 #ifdef _UNICODE
-  size_t narrow_length = strlen(narrow);
+  const std::string_view src{narrow};
 
-  TCHAR *t = tbuffer.get(narrow_length + 1);
+  TCHAR *t = tbuffer.get(src.size() + 1);
   assert(t != nullptr);
 
-  if (narrow_length == 0) {
+  if (src.empty()) {
     t[0] = _T('\0');
     return t;
   }
 
   switch (charset) {
   case Charset::ISO_LATIN_1:
-    iso_latin_1_to_tchar(t, narrow);
+    iso_latin_1_to_tchar(t, src);
     break;
 
   default:
-    int length = MultiByteToWideChar(CP_UTF8, 0, narrow, narrow_length,
-                                     t, narrow_length);
+    int length = MultiByteToWideChar(CP_UTF8, 0, src.data(), src.size(),
+                                     t, src.size());
     if (length == 0)
       throw MakeLastError("Failed to convert string");
 
