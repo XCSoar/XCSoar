@@ -75,7 +75,7 @@ TopCanvas::TopCanvas(UI::Display &_display, SDL_Window *_window)
     throw FormatRuntimeError("SDL_GL_CreateContext(%p) has failed: %s",
                              window, ::SDL_GetError());
 
-  LogFormat("GLX config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d",
+  LogFormat("SDL_GL config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d",
             GetConfigAttrib(SDL_GL_RED_SIZE, 0),
             GetConfigAttrib(SDL_GL_GREEN_SIZE, 0),
             GetConfigAttrib(SDL_GL_BLUE_SIZE, 0),
