@@ -8,6 +8,7 @@
 #include "Widget/RowFormWidget.hpp"
 #include "Form/Frame.hpp"
 #include "Form/Button.hpp"
+#include "Form/CheckBox.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/DataField/Enum.hpp"
@@ -52,7 +53,7 @@ class InfoBoxesConfigWidget final
   : public RowFormWidget, DataFieldListener {
 
   enum Controls {
-    NAME, INFOBOX, CONTENT, DESCRIPTION
+    SET_NAME, SPACER, BOX_POS, BOX_NAME, BOX_DESCR
   };
 
   struct Layout {
@@ -60,7 +61,7 @@ class InfoBoxesConfigWidget final
 
     PixelRect form;
 
-    PixelRect copy_button, paste_button, close_button;
+    PixelRect swap_chkbox, copy_button, paste_button, close_button;
 
     Layout(PixelRect rc, InfoBoxSettings::Geometry geometry);
   };
@@ -78,6 +79,7 @@ class InfoBoxesConfigWidget final
   unsigned current_preview;
 
   Button copy_button, paste_button, close_button;
+  CheckBoxControl swap_chkbox;
 
 public:
   InfoBoxesConfigWidget(WndForm &_dialog,
@@ -111,6 +113,7 @@ public:
 
   void OnCopy();
   void OnPaste();
+  void OnSwap(bool);
 
   void SetCurrentInfoBox(unsigned _current_preview);
 
@@ -123,7 +126,7 @@ public:
   }
 
   void BeginEditing() {
-    GetControl(CONTENT).BeginEditing();
+    GetControl(BOX_NAME).BeginEditing();
   }
 
   /* virtual methods from class Widget */
@@ -139,6 +142,7 @@ public:
     copy_button.MoveAndShow(layout.copy_button);
     paste_button.MoveAndShow(layout.paste_button);
     close_button.MoveAndShow(layout.close_button);
+    swap_chkbox.MoveAndShow(layout.swap_chkbox);
 
     for (unsigned i = 0; i < previews.size(); ++i)
       previews[i].MoveAndShow(layout.info_boxes.positions[i]);
@@ -150,6 +154,7 @@ public:
     copy_button.Hide();
     paste_button.Hide();
     close_button.Hide();
+    swap_chkbox.Hide();
 
     for (auto &i : previews)
       i.Hide();
@@ -163,10 +168,11 @@ public:
     copy_button.Move(layout.copy_button);
     paste_button.Move(layout.paste_button);
     close_button.Move(layout.close_button);
+    swap_chkbox.Move(layout.swap_chkbox);
   }
 
   bool SetFocus() noexcept override {
-    GetGeneric(INFOBOX).SetFocus();
+    GetGeneric(BOX_POS).SetFocus();
     return true;
   }
 
@@ -174,10 +180,10 @@ private:
   /* virtual methods from class DataFieldListener */
 
   void OnModified(DataField &df) noexcept override {
-    if (IsDataField(INFOBOX, df)) {
+    if (IsDataField(BOX_POS, df)) {
       const DataFieldEnum &dfe = (const DataFieldEnum &)df;
       SetCurrentInfoBox(dfe.GetValue());
-    } else if (IsDataField(CONTENT, df)) {
+    } else if (IsDataField(BOX_NAME, df)) {
       const DataFieldEnum &dfe = (const DataFieldEnum &)df;
 
       auto new_value = (InfoBoxFactory::Type)dfe.GetValue();
@@ -200,22 +206,31 @@ InfoBoxesConfigWidget::Layout::Layout(PixelRect rc,
   form = info_boxes.remaining;
   auto buttons = form.CutTopSafe(::Layout::GetMaximumControlHeight());
 
-  copy_button = paste_button = close_button = buttons;
-  copy_button.right = paste_button.left =
-    (2 * buttons.left + buttons.right) / 3;
-  paste_button.right = close_button.left =
-    (buttons.left + 2 * buttons.right) / 3;
+  swap_chkbox = copy_button = paste_button = close_button = buttons;
+
+  int L = buttons.left;
+  int W = buttons.right-L;
+
+  swap_chkbox.left   = L;
+  swap_chkbox.right  = copy_button.left  = L + (1*W)/4;
+  copy_button.right  = paste_button.left = L + (2*W)/4;
+  paste_button.right = close_button.left = L + (3*W)/4;
+  close_button.right = L + W;
 }
 
 void
 InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
                                const PixelRect &rc) noexcept
 {
+  /**
+   * This set up the modal dialogue that infoboxes are assigned to a
+   * panel.
+   */
   const Layout layout(rc, geometry);
 
-  AddText(_("Name"), nullptr,
+  AddText(_("Set"), nullptr,
           allow_name_change ? (const TCHAR *)data.name : gettext(data.name));
-  SetReadOnly(NAME, !allow_name_change);
+  SetReadOnly(SET_NAME, !allow_name_change);
 
   DataFieldEnum *dfe = new DataFieldEnum(this);
   for (unsigned i = 0; i < layout.info_boxes.count; ++i) {
@@ -224,7 +239,8 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
     dfe->addEnumText(label, i);
   }
 
-  Add(_("InfoBox"), nullptr, dfe);
+  AddSpacer();
+  Add(_("Position"), nullptr, dfe)->SetReadOnly();
 
   dfe = new DataFieldEnum(this);
   for (unsigned i = InfoBoxFactory::MIN_TYPE_VAL; i < InfoBoxFactory::NUM_TYPES; i++) {
@@ -247,12 +263,16 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
   button_style.TabStop();
 
   const auto &button_look = GetLook().button;
-  copy_button.Create(parent, button_look, _("Copy"), layout.copy_button,
+  copy_button.Create(parent, button_look, _("Copy set"), layout.copy_button,
                      button_style, [this](){ OnCopy(); });
-  paste_button.Create(parent, button_look, _("Paste"), layout.paste_button,
+  paste_button.Create(parent, button_look, _("Paste set"), layout.paste_button,
                       button_style, [this](){ OnPaste(); });
   close_button.Create(parent, button_look, _("Close"), layout.close_button,
                       button_style, dialog.MakeModalResultCallback(mrOK));
+
+  const DialogLook &chbox_look = GetLook();
+  swap_chkbox.Create(parent, chbox_look, _("Swap"), layout.swap_chkbox,
+                        button_style, [this](bool s) { OnSwap(s); } );
 
   WindowStyle preview_style;
   preview_style.Hide();
@@ -274,7 +294,7 @@ bool
 InfoBoxesConfigWidget::Save(bool &changed_r) noexcept
 {
   if (allow_name_change) {
-    const auto *new_name = GetValueString(InfoBoxesConfigWidget::NAME);
+    const auto *new_name = GetValueString(InfoBoxesConfigWidget::SET_NAME);
     if (!StringIsEqual(new_name, data.name)) {
       data.name = new_name;
       changed = true;
@@ -288,15 +308,27 @@ InfoBoxesConfigWidget::Save(bool &changed_r) noexcept
 void
 InfoBoxesConfigWidget::RefreshEditContentDescription()
 {
-  DataFieldEnum &df = (DataFieldEnum &)GetDataField(CONTENT);
-  WndFrame &description = (WndFrame &)GetRow(DESCRIPTION);
+  DataFieldEnum &df = (DataFieldEnum &)GetDataField(BOX_NAME);
+  WndFrame &description = (WndFrame &)GetRow(BOX_DESCR);
   description.SetText(df.GetHelp() != nullptr ? df.GetHelp() : _T(""));
 }
 
 void
 InfoBoxesConfigWidget::RefreshEditContent()
 {
-  LoadValueEnum(CONTENT, data.contents[current_preview]);
+  LoadValueEnum(BOX_NAME, data.contents[current_preview]);
+}
+
+void
+InfoBoxesConfigWidget::OnSwap(bool checked)
+{
+  WndFrame &description = (WndFrame &)GetRow(BOX_DESCR);
+  if ( checked ) {
+     description.SetText(_T("Swap two Infoboxes. Moves selected InfoBox to the position you select next. The first position remains current selection for next move."));
+   }
+   else {
+     description.SetText(_T("Swap finished"));
+   }
 }
 
 void
@@ -338,16 +370,31 @@ InfoBoxesConfigWidget::SetCurrentInfoBox(unsigned _current_preview)
 {
   assert(_current_preview < previews.size());
 
-  if (_current_preview == current_preview)
+  if (_current_preview == current_preview) {
+    swap_chkbox.SetState(false);
     return;
+  }
+
+  bool is_checked = swap_chkbox.GetState();
 
   previews[current_preview].Invalidate();
-  current_preview = _current_preview;
+  if ( is_checked ) {
+    // Swap selected Infobox with the previous one.
+    InfoBoxFactory::Type targetBox = data.contents[_current_preview];
+    data.contents[_current_preview] = data.contents[current_preview];
+    data.contents[current_preview] = targetBox;
+    changed = true;
+  }
+  else {
+    // Make selected InfoBox current.
+    current_preview = _current_preview;
+  }
   previews[current_preview].Invalidate();
 
-  LoadValueEnum(INFOBOX, current_preview);
+  LoadValueEnum(BOX_POS, current_preview);
 
   RefreshEditContent();
+  RefreshEditContentDescription();
 }
 
 bool
