@@ -8,6 +8,7 @@ Version 7.32 - not yet released
   - support waypoints without elevation data
 * Android
   - don't disable IOIO completely if Bluetooth permission was not granted
+  - fix crash with initial IOIO connection
 
 Version 7.31 - 2023/05/12
 * user interface
