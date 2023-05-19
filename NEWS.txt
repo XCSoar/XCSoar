@@ -6,6 +6,8 @@ Version 7.32 - not yet released
   - support hot keys, gestures and double click on Horizon page
 * data files
   - support waypoints without elevation data
+* Android
+  - don't disable IOIO completely if Bluetooth permission was not granted
 
 Version 7.31 - 2023/05/12
 * user interface

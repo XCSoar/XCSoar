@@ -82,7 +82,11 @@ final class IOIOHelper implements IOIOConnectionHolder,
   public static Collection<IOIOConnectionFactory> getConnectionFactories() {
     Collection<IOIOConnectionFactory> result = new LinkedList<IOIOConnectionFactory>();
     for (IOIOConnectionBootstrap bootstrap : bootstraps) {
-      bootstrap.getFactories(result);
+      try {
+        bootstrap.getFactories(result);
+      } catch (SecurityException e) {
+        Log.e(TAG, "Failed to initialise IOIO bootstrap '" + bootstrap + "': " + e.getMessage());
+      }
     }
     return result;
   }
