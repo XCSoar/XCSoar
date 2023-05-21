@@ -13,7 +13,7 @@
 
 namespace UI {
 
-EventQueue::EventQueue([[maybe_unused]] Display &_display) noexcept
+EventQueue::EventQueue([[maybe_unused]] Display &_display)
 #if defined(USE_X11) || defined(USE_WAYLAND) || defined(MESA_KMS)
   :display(_display)
 #endif

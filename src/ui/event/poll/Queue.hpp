@@ -51,7 +51,10 @@ class EventQueue final {
   bool quit = false;
 
 public:
-  explicit EventQueue(Display &display) noexcept;
+  /**
+   * Throws on error.
+   */
+  explicit EventQueue(Display &display);
   ~EventQueue() noexcept;
 
   auto &GetEventLoop() noexcept {
