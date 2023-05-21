@@ -15,6 +15,7 @@ struct wl_seat;
 struct wl_pointer;
 struct wl_shell;
 struct wl_registry;
+struct xdg_wm_base;
 
 namespace UI {
 
@@ -34,6 +35,7 @@ class WaylandEventQueue final {
   struct wl_seat *seat = nullptr;
   struct wl_pointer *pointer = nullptr;
   struct wl_shell *shell = nullptr;
+  struct xdg_wm_base *wm_base = nullptr;
 
   IntPoint2D pointer_position = {0, 0};
 
@@ -53,6 +55,10 @@ public:
 
   struct wl_shell *GetShell() const noexcept {
     return shell;
+  }
+
+  struct xdg_wm_base *GetWmBase() const noexcept {
+    return wm_base;
   }
 
   bool IsVisible() const noexcept {

@@ -101,8 +101,12 @@ endif
 
 ifeq ($(USE_WAYLAND),y)
 SCREEN_SOURCES += \
+	$(WAYLAND_GENERATED)/xdg-shell-public.c \
 	$(SRC)/ui/display/wayland/Display.cpp \
 	$(WINDOW_SRC_DIR)/wayland/TopWindow.cpp
+
+$(call SRC_TO_OBJ,$(SRC)/ui/window/wayland/TopWindow.cpp): $(WAYLAND_GENERATED)/xdg-shell-client-protocol.h
+$(call SRC_TO_OBJ,$(SRC)/ui/event/poll/WaylandQueue.cpp): $(WAYLAND_GENERATED)/xdg-shell-client-protocol.h
 endif
 
 ifeq ($(OPENGL),y)

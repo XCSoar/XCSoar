@@ -6,6 +6,7 @@
 #include "../shared/Event.hpp"
 #include "ui/display/Display.hpp"
 #include "util/StringAPI.hxx"
+#include "xdg-shell-client-protocol.h"
 
 #include <wayland-client.h>
 
@@ -141,8 +142,8 @@ WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
   if (seat == nullptr)
     throw std::runtime_error("No Wayland seat found");
 
-  if (shell == nullptr)
-    throw std::runtime_error("No Wayland shell found");
+  if (wm_base == nullptr && shell == nullptr)
+    throw std::runtime_error{"No Wayland xdg_wm_base/shell found"};
 
   socket_event.Open(SocketDescriptor(wl_display_get_fd(display)));
   socket_event.ScheduleRead();
@@ -201,6 +202,9 @@ WaylandEventQueue::RegistryHandler(struct wl_registry *registry, uint32_t id,
   } else if (StringIsEqual(interface, "wl_shell"))
     shell = (wl_shell *)wl_registry_bind(registry, id,
                                          &wl_shell_interface, 1);
+  else if (StringIsEqual(interface, "xdg_wm_base"))
+    wm_base = (xdg_wm_base *)wl_registry_bind(registry, id,
+                                              &xdg_wm_base_interface, 1);
 }
 
 inline void

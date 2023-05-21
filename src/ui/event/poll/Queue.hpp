@@ -87,6 +87,10 @@ public:
   struct wl_shell *GetShell() noexcept {
     return input_queue.GetShell();
   }
+
+  auto GetWmBase() noexcept {
+    return input_queue.GetWmBase();
+  }
 #endif
 
 #if defined(USE_X11) || defined(USE_WAYLAND)
