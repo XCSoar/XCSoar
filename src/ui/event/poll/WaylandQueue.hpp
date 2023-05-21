@@ -45,29 +45,29 @@ public:
    */
   WaylandEventQueue(UI::Display &display, EventQueue &queue);
 
-  struct wl_compositor *GetCompositor() {
+  struct wl_compositor *GetCompositor() const noexcept {
     return compositor;
   }
 
-  struct wl_shell *GetShell() {
+  struct wl_shell *GetShell() const noexcept {
     return shell;
   }
 
-  bool IsVisible() const {
+  bool IsVisible() const noexcept {
     // TODO: implement
     return true;
   }
 
-  bool Generate(Event &event);
+  bool Generate(Event &event) noexcept;
 
   void RegistryHandler(struct wl_registry *registry, uint32_t id,
-                       const char *interface);
+                       const char *interface) noexcept;
 
-  void SeatHandleCapabilities(bool pointer, bool keyboard, bool touch);
+  void SeatHandleCapabilities(bool pointer, bool keyboard, bool touch) noexcept;
 
-  void Push(const Event &event);
-  void PointerMotion(IntPoint2D new_pointer_position);
-  void PointerButton(bool pressed);
+  void Push(const Event &event) noexcept;
+  void PointerMotion(IntPoint2D new_pointer_position) noexcept;
+  void PointerButton(bool pressed) noexcept;
 
 private:
   void OnSocketReady(unsigned events) noexcept;

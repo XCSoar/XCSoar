@@ -144,7 +144,7 @@ WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
 }
 
 bool
-WaylandEventQueue::Generate([[maybe_unused]] Event &event)
+WaylandEventQueue::Generate([[maybe_unused]] Event &event) noexcept
 {
   wl_display_flush(display);
   return false;
@@ -158,7 +158,7 @@ WaylandEventQueue::OnSocketReady([[maybe_unused]] unsigned events) noexcept
 
 inline void
 WaylandEventQueue::RegistryHandler(struct wl_registry *registry, uint32_t id,
-                                   const char *interface)
+                                   const char *interface) noexcept
 {
   if (StringIsEqual(interface, "wl_compositor"))
     compositor = (wl_compositor *)
@@ -174,7 +174,7 @@ WaylandEventQueue::RegistryHandler(struct wl_registry *registry, uint32_t id,
 
 inline void
 WaylandEventQueue::SeatHandleCapabilities(bool has_pointer, bool has_keyboard,
-                                          bool has_touch)
+                                          bool has_touch) noexcept
 {
   /* TODO: collect flags for HasTouchScreen(), HasPointer(),
      HasKeyboard(), HasCursorKeys() */
@@ -196,13 +196,13 @@ WaylandEventQueue::SeatHandleCapabilities(bool has_pointer, bool has_keyboard,
 }
 
 inline void
-WaylandEventQueue::Push(const Event &event)
+WaylandEventQueue::Push(const Event &event) noexcept
 {
   queue.Push(event);
 }
 
 inline void
-WaylandEventQueue::PointerMotion(IntPoint2D new_pointer_position)
+WaylandEventQueue::PointerMotion(IntPoint2D new_pointer_position) noexcept
 {
   if (new_pointer_position == pointer_position)
     return;
@@ -213,7 +213,7 @@ WaylandEventQueue::PointerMotion(IntPoint2D new_pointer_position)
 }
 
 inline void
-WaylandEventQueue::PointerButton(bool pressed)
+WaylandEventQueue::PointerButton(bool pressed) noexcept
 {
   Push(Event(pressed ? Event::MOUSE_DOWN : Event::MOUSE_UP,
              PixelPoint(pointer_position.x, pointer_position.y)));
