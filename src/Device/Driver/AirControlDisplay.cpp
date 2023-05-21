@@ -43,7 +43,7 @@ ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
 
     if (line.ReadChecked(value)) {
       auto qnh = AtmosphericPressure::Pascal(value);
-      info.settings.ProvideQNH(qnh,info.clock);
+      info.settings.ProvideQNH(qnh, info.clock);
     }
   } else if (type == "COM"sv) {
     /*
@@ -208,7 +208,7 @@ ACDDevice::OnCalculatedUpdate(const MoreData &basic,[[maybe_unused]] const Deriv
    NullOperationEnvironment env;
 
    if (basic.settings.qnh_available.IsValid()){
-	 char buffer[100];
+     char buffer[100];
      unsigned qnh = basic.settings.qnh.GetPascal();
      sprintf(buffer,"PAAVC,S,ALT,QNH,%u",qnh);
      PortWriteNMEA(port, buffer, env);
