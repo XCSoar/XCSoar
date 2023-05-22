@@ -9,14 +9,18 @@
  * Internal class.  Do not use directly.
  */
 template<typename F>
-class ScopeExitGuard : F {
+class ScopeExitGuard {
+	[[no_unique_address]]
+	F function;
+
 	bool enabled = true;
 
 public:
-	explicit ScopeExitGuard(F &&f) noexcept:F(std::forward<F>(f)) {}
+	explicit ScopeExitGuard(F &&f) noexcept
+		:function(std::forward<F>(f)) {}
 
 	ScopeExitGuard(ScopeExitGuard &&src) noexcept
-		:F(std::move(src)),
+		:function(std::move(src.function)),
 		 enabled(std::exchange(src.enabled, false)) {}
 
 	/* destructors are "noexcept" by default; this explicit
@@ -25,7 +29,7 @@ public:
 	   would std::terminate() */
 	~ScopeExitGuard() noexcept(noexcept(std::declval<F>()())) {
 		if (enabled)
-			F::operator()();
+			function();
 	}
 
 	ScopeExitGuard(const ScopeExitGuard &) = delete;
