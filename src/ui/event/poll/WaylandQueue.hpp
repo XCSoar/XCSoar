@@ -13,6 +13,7 @@ struct wl_display;
 struct wl_compositor;
 struct wl_seat;
 struct wl_pointer;
+struct wl_keyboard;
 struct wl_shell;
 struct wl_registry;
 struct xdg_wm_base;
@@ -34,6 +35,7 @@ class WaylandEventQueue final {
   struct wl_compositor *compositor = nullptr;
   struct wl_seat *seat = nullptr;
   struct wl_pointer *pointer = nullptr;
+  struct wl_keyboard *keyboard = nullptr;
   struct wl_shell *shell = nullptr;
   struct xdg_wm_base *wm_base = nullptr;
 
@@ -76,6 +78,8 @@ public:
   void Push(const Event &event) noexcept;
   void PointerMotion(IntPoint2D new_pointer_position) noexcept;
   void PointerButton(bool pressed) noexcept;
+
+  void KeyboardKey(uint32_t key, uint32_t state) noexcept;
 
 private:
   void OnSocketReady(unsigned events) noexcept;

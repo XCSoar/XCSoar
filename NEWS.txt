@@ -10,6 +10,7 @@ Version 7.32 - not yet released
   - IMI: fix crash when there are more than 128 recorded flights
 * Linux
   - Wayland XDG_WM_BASE support
+  - Wayland keyboard support
 * Android
   - don't disable IOIO completely if Bluetooth permission was not granted
   - fix crash with initial IOIO connection

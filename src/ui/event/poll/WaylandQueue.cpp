@@ -121,6 +121,73 @@ static constexpr struct wl_pointer_listener pointer_listener = {
   .axis = WaylandPointerAxis,
 };
 
+static void
+WaylandKeyboardKeymap([[maybe_unused]] void *data,
+                      [[maybe_unused]] struct wl_keyboard *wl_keyboard,
+                      [[maybe_unused]] uint32_t format,
+                      [[maybe_unused]] int32_t fd,
+                      [[maybe_unused]] uint32_t size) noexcept
+{
+}
+
+static void
+WaylandKeyboardEnter([[maybe_unused]] void *data,
+                     [[maybe_unused]] struct wl_keyboard *wl_keyboard,
+                     [[maybe_unused]] uint32_t serial,
+                     [[maybe_unused]] struct wl_surface *surface,
+                     [[maybe_unused]] struct wl_array *keys) noexcept
+{
+}
+
+static void
+WaylandKeyboardLeave([[maybe_unused]] void *data,
+                     [[maybe_unused]] struct wl_keyboard *wl_keyboard,
+                     [[maybe_unused]] uint32_t serial,
+                     [[maybe_unused]] struct wl_surface *surface) noexcept
+{
+}
+
+static void
+WaylandKeyboardKey(void *data,
+                   [[maybe_unused]] struct wl_keyboard *wl_keyboard,
+                   [[maybe_unused]] uint32_t serial,
+                   [[maybe_unused]] uint32_t time,
+                   uint32_t key,
+                   uint32_t state) noexcept
+{
+  auto &queue = *(WaylandEventQueue *)data;
+
+  queue.KeyboardKey(key, state);
+}
+
+static void
+WaylandKeyboardModifiers([[maybe_unused]] void *data,
+                         [[maybe_unused]] struct wl_keyboard *wl_keyboard,
+                         [[maybe_unused]] uint32_t serial,
+                         [[maybe_unused]] uint32_t mods_depressed,
+                         [[maybe_unused]] uint32_t mods_latched,
+                         [[maybe_unused]] uint32_t mods_locked,
+                         [[maybe_unused]] uint32_t group) noexcept
+{
+}
+
+static void
+WaylandKeyboardRepeatInfo([[maybe_unused]] void *data,
+                          [[maybe_unused]] struct wl_keyboard *wl_keyboard,
+                          [[maybe_unused]] int32_t rate,
+                          [[maybe_unused]] int32_t delay) noexcept
+{
+}
+
+static constexpr struct wl_keyboard_listener keyboard_listener = {
+  .keymap = WaylandKeyboardKeymap,
+  .enter = WaylandKeyboardEnter,
+  .leave = WaylandKeyboardLeave,
+  .key = WaylandKeyboardKey,
+  .modifiers = WaylandKeyboardModifiers,
+  .repeat_info = WaylandKeyboardRepeatInfo,
+};
+
 WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
   :queue(_queue),
    display(_display.GetWaylandDisplay()),
@@ -213,7 +280,6 @@ WaylandEventQueue::SeatHandleCapabilities(bool has_pointer, bool has_keyboard,
 {
   /* TODO: collect flags for HasTouchScreen(), HasPointer(),
      HasKeyboard(), HasCursorKeys() */
-  (void)has_keyboard;
   (void)has_touch;
 
   if (has_pointer) {
@@ -227,7 +293,16 @@ WaylandEventQueue::SeatHandleCapabilities(bool has_pointer, bool has_keyboard,
       wl_pointer_destroy(pointer);
   }
 
-  // TODO: support keyboard devices
+  if (has_keyboard) {
+    if (keyboard == nullptr) {
+      keyboard = wl_seat_get_keyboard(seat);
+      if (keyboard != nullptr)
+        wl_keyboard_add_listener(keyboard, &keyboard_listener, this);
+    }
+  } else {
+    if (keyboard != nullptr)
+      wl_keyboard_destroy(keyboard);
+  }
 }
 
 inline void
@@ -252,6 +327,20 @@ WaylandEventQueue::PointerButton(bool pressed) noexcept
 {
   Push(Event(pressed ? Event::MOUSE_DOWN : Event::MOUSE_UP,
              PixelPoint(pointer_position.x, pointer_position.y)));
+}
+
+void
+WaylandEventQueue::KeyboardKey(uint32_t key, uint32_t state) noexcept
+{
+  switch (state) {
+  case WL_KEYBOARD_KEY_STATE_RELEASED:
+    queue.Push(Event{Event::KEY_UP, key});
+    break;
+
+  case WL_KEYBOARD_KEY_STATE_PRESSED:
+    queue.Push(Event{Event::KEY_DOWN, key});
+    break;
+  }
 }
 
 } // namespace UI
