@@ -21,9 +21,8 @@
  *
  * i must be below or equal to 128.
  */
-constexpr
-static inline unsigned
-MIX(unsigned x, unsigned y, unsigned i)
+static constexpr unsigned
+MIX(unsigned x, unsigned y, unsigned i) noexcept
 {
   return (x * i + y * ((1 << 7) - i)) >> 7;
 }
@@ -36,9 +35,8 @@ MIX(unsigned x, unsigned y, unsigned i)
  * illum > 0:  Highlight, mixed with up to 25% yellow
  * illum = 0:  No shading
  */
-[[gnu::const]]
-inline RawColor
-TerrainShading(const int illum, RGB8Color color)
+static constexpr RawColor
+TerrainShading(const int illum, RGB8Color color) noexcept
 {
   if (illum == -64) {
     // brown color mixed in for contours
@@ -61,9 +59,8 @@ TerrainShading(const int illum, RGB8Color color)
     return RawColor(color.Red(), color.Green(), color.Blue());
 }
 
-[[gnu::const]]
-static unsigned
-ContourInterval(const unsigned h, const unsigned contour_height_scale)
+static constexpr unsigned
+ContourInterval(unsigned h, unsigned contour_height_scale) noexcept
 {
   return std::min(254u, h >> contour_height_scale);
 }
@@ -78,12 +75,9 @@ ContourInterval(const TerrainHeight h, const unsigned contour_height_scale)
   return ContourInterval(h.GetValue(), contour_height_scale);
 }
 
-RasterRenderer::RasterRenderer()
-{
-}
+RasterRenderer::RasterRenderer() noexcept = default;
 
-
-RasterRenderer::~RasterRenderer()
+RasterRenderer::~RasterRenderer() noexcept
 {
   delete[] color_table;
   delete image;
@@ -94,7 +88,7 @@ RasterRenderer::~RasterRenderer()
 
 [[gnu::pure]]
 static unsigned
-GetQuantisation()
+GetQuantisation() noexcept
 {
   if (IsUserIdle(2000))
     /* full terrain resolution when the user is idle */
@@ -109,14 +103,14 @@ GetQuantisation()
 }
 
 bool
-RasterRenderer::UpdateQuantisation()
+RasterRenderer::UpdateQuantisation() noexcept
 {
   quantisation_pixels = GetQuantisation();
   return quantisation_pixels < last_quantisation_pixels;
 }
 
 const GLTexture &
-RasterRenderer::BindAndGetTexture() const
+RasterRenderer::BindAndGetTexture() const noexcept
 {
   return image->BindAndGetTexture();
 }
@@ -124,7 +118,8 @@ RasterRenderer::BindAndGetTexture() const
 #endif
 
 void
-RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection)
+RasterRenderer::ScanMap(const RasterMap &map,
+                        const WindowProjection &projection) noexcept
 {
   // Coordinates of the MapWindow center
   const auto p = projection.GetScreenCenter();
@@ -178,7 +173,7 @@ RasterRenderer::GenerateImage(bool do_shading,
                               unsigned height_scale,
                               int contrast, int brightness,
                               const Angle sunazimuth,
-                              bool do_contour)
+                              bool do_contour) noexcept
 {
   if (image == nullptr ||
       height_matrix.GetWidth() > image->GetSize().width ||
@@ -209,8 +204,8 @@ RasterRenderer::GenerateImage(bool do_shading,
 }
 
 void
-RasterRenderer::GenerateUnshadedImage(unsigned height_scale,
-                                      const unsigned contour_height_scale)
+RasterRenderer::GenerateUnshadedImage(const unsigned height_scale,
+                                      const unsigned contour_height_scale) noexcept
 {
   const auto *src = height_matrix.GetData();
   const RawColor *oColorBuf = color_table + 64 * 256;
@@ -259,16 +254,14 @@ RasterRenderer::GenerateUnshadedImage(unsigned height_scale,
  * GenerateSlopeImage() formula when the map file is broken, avoiding
  * the sqrt() call with a negative argument.
  */
-[[gnu::const]]
-static int
-ClipHeightDelta(int d)
+static constexpr int
+ClipHeightDelta(int d) noexcept
 {
   return Clamp(d, -512, 512);
 }
 
-[[gnu::const]]
-static int
-ClipHeightDelta(TerrainHeight a, TerrainHeight b)
+static constexpr int
+ClipHeightDelta(TerrainHeight a, TerrainHeight b) noexcept
 {
   return ClipHeightDelta(a.GetValue() - b.GetValue());
 }
@@ -282,7 +275,7 @@ void
 RasterRenderer::GenerateSlopeImage(unsigned height_scale,
                                    int contrast,
                                    const int sx, const int sy, const int sz,
-                                   const unsigned contour_height_scale)
+                                   const unsigned contour_height_scale) noexcept
 {
   assert(quantisation_effective > 0);
 
@@ -413,7 +406,7 @@ void
 RasterRenderer::GenerateSlopeImage(unsigned height_scale,
                                    int contrast, int brightness,
                                    const Angle sunazimuth,
-                                   const unsigned contour_height_scale)
+                                   const unsigned contour_height_scale) noexcept
 {
   const Angle fudgeelevation = Angle::Degrees(10) +
     Angle::Degrees(80.0 / 255.0) * brightness;
@@ -428,7 +421,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 
 void
 RasterRenderer::PrepareColorTable(const ColorRamp *color_ramp, bool do_water,
-                                  unsigned height_scale, int interp_levels)
+                                  unsigned height_scale, int interp_levels) noexcept
 {
   if (color_table == nullptr)
     color_table = new RawColor[256 * 128];
@@ -461,7 +454,7 @@ RasterRenderer::PrepareColorTable(const ColorRamp *color_ramp, bool do_water,
 }
 
 void
-RasterRenderer::ContourStart(const unsigned contour_height_scale)
+RasterRenderer::ContourStart(const unsigned contour_height_scale) noexcept
 {
   // initialise column to first row
   const auto *src = height_matrix.GetData();
@@ -473,7 +466,7 @@ RasterRenderer::ContourStart(const unsigned contour_height_scale)
 void
 RasterRenderer::Draw([[maybe_unused]] Canvas &canvas,
                      const WindowProjection &projection,
-                     [[maybe_unused]] bool transparent_white) const
+                     [[maybe_unused]] bool transparent_white) const noexcept
 {
 #ifdef ENABLE_OPENGL
   if (bounds.IsValid() && bounds.Overlaps(projection.GetScreenBounds()))
