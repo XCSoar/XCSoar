@@ -66,7 +66,6 @@ X11EventQueue::HandleEvent(_XEvent &event)
       if (key_sym == NoSymbol)
         break;
 
-      Event e(Event::KEY_DOWN, key_sym);
       queue.Push(Event(Event::KEY_UP, key_sym));
     }
     break;
