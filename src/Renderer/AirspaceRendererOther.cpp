@@ -16,7 +16,6 @@
 #include "Airspace/AirspaceWarningCopy.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "MapWindow/StencilMapCanvas.hpp"
-#include "Asset.hpp"
 
 /**
  * Class to render airspaces onto map in two passes,
@@ -42,7 +41,7 @@ public:
     switch (settings.fill_mode) {
     case AirspaceRendererSettings::FillMode::DEFAULT:
     case AirspaceRendererSettings::FillMode::PADDING:
-      use_stencil = !IsAncientHardware();
+      use_stencil = true;
       break;
 
     case AirspaceRendererSettings::FillMode::ALL:

@@ -5,19 +5,12 @@
 #include "Settings.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "Asset.hpp"
 
-static constexpr unsigned full_trace_size =
-  HasLittleMemory() ? 512 : 1024;
+static constexpr unsigned full_trace_size = 1024;
+static constexpr unsigned contest_trace_size = 256;
+static constexpr unsigned sprint_trace_size = 128;
 
-static constexpr unsigned contest_trace_size =
-  HasLittleMemory() ? 128 : 256;
-
-static constexpr unsigned sprint_trace_size =
-  IsAncientHardware() ? 96 : 128;
-
-static constexpr auto full_trace_no_thin_time =
-  HasLittleMemory() ? std::chrono::minutes{1} : std::chrono::minutes{2};
+static constexpr auto full_trace_no_thin_time = std::chrono::minutes{2};
 
 TraceComputer::TraceComputer()
  :full(full_trace_no_thin_time, Trace::null_time, full_trace_size),

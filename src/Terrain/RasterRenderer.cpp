@@ -11,7 +11,6 @@
 #include "ui/canvas/RawBitmap.hpp"
 #include "Renderer/GeoBitmapRenderer.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "Asset.hpp"
 #include "ui/event/Idle.hpp"
 
 #include <cassert>
@@ -81,10 +80,6 @@ ContourInterval(const TerrainHeight h, const unsigned contour_height_scale)
 
 RasterRenderer::RasterRenderer()
 {
-  // scale quantisation_pixels so resolution is not too high on old hardware
-  // with large displays
-  if (IsAncientHardware())
-    quantisation_pixels = Layout::FastScale(quantisation_pixels);
 }
 
 

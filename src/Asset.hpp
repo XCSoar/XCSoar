@@ -26,17 +26,6 @@ IsDebug() noexcept
 }
 
 /**
- * Is XCSoar running on ancient and slow hardware?  If yes, then some
- * expensive UI features are disabled.
- */
-constexpr
-static inline bool
-IsAncientHardware() noexcept
-{
-  return false;
-}
-
-/**
  * Returns whether the application is running on Android
  */
 constexpr
@@ -115,17 +104,6 @@ static inline bool
 IsEmbedded() noexcept
 {
   return IsAndroid() || IsKobo() || IsIOS();
-}
-
-/**
- * Does this device have little main memory?  On those, some expensive
- * features are disabled.
- */
-constexpr
-static inline bool
-HasLittleMemory() noexcept
-{
-  return IsAncientHardware();
 }
 
 /**
