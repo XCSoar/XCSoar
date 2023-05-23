@@ -34,9 +34,9 @@ handle_popup_done([[maybe_unused]] void *data,
 }
 
 static constexpr struct wl_shell_surface_listener shell_surface_listener = {
-  handle_ping,
-  handle_configure,
-  handle_popup_done
+  .ping = handle_ping,
+  .configure = handle_configure,
+  .popup_done = handle_popup_done
 };
 
 void
