@@ -13,7 +13,7 @@
 #include <cassert>
 
 void
-HeightMatrix::SetSize(size_t _size)
+HeightMatrix::SetSize(std::size_t _size) noexcept
 {
   assert(_size > 0);
 
@@ -21,7 +21,7 @@ HeightMatrix::SetSize(size_t _size)
 }
 
 void
-HeightMatrix::SetSize(unsigned _width, unsigned _height)
+HeightMatrix::SetSize(unsigned _width, unsigned _height) noexcept
 {
   width = _width;
   height = _height;
@@ -31,7 +31,7 @@ HeightMatrix::SetSize(unsigned _width, unsigned _height)
 
 void
 HeightMatrix::SetSize(unsigned width, unsigned height,
-                      unsigned quantisation_pixels)
+                      unsigned quantisation_pixels) noexcept
 {
   SetSize((width + quantisation_pixels - 1) / quantisation_pixels,
           (height + quantisation_pixels - 1) / quantisation_pixels);
@@ -41,7 +41,7 @@ HeightMatrix::SetSize(unsigned width, unsigned height,
 
 void
 HeightMatrix::Fill(const RasterMap &map, const GeoBounds &bounds,
-                   unsigned width, unsigned height, bool interpolate)
+                   unsigned width, unsigned height, bool interpolate) noexcept
 {
   SetSize(width, height);
 
@@ -59,7 +59,7 @@ HeightMatrix::Fill(const RasterMap &map, const GeoBounds &bounds,
 
 void
 HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
-                   unsigned quantisation_pixels, bool interpolate)
+                   unsigned quantisation_pixels, bool interpolate) noexcept
 {
   const auto screen_size = projection.GetScreenSize();
 

@@ -16,18 +16,19 @@ class WindowProjection;
 
 class HeightMatrix {
   AllocatedArray<TerrainHeight> data;
-  unsigned width, height;
+  unsigned width = 0, height = 0;
 
 public:
-  HeightMatrix():width(0), height(0) {}
+  HeightMatrix() noexcept = default;
 
   HeightMatrix(const HeightMatrix &) = delete;
   HeightMatrix &operator=(const HeightMatrix &) = delete;
 
 protected:
-  void SetSize(size_t _size);
-  void SetSize(unsigned width, unsigned height);
-  void SetSize(unsigned width, unsigned height, unsigned quantisation_pixels);
+  void SetSize(std::size_t _size) noexcept;
+  void SetSize(unsigned width, unsigned height) noexcept;
+  void SetSize(unsigned width, unsigned height,
+               unsigned quantisation_pixels) noexcept;
 
 public:
 #ifdef ENABLE_OPENGL
@@ -35,32 +36,32 @@ public:
    * Copy values from the #RasterMap to the buffer, north-up only.
    */
   void Fill(const RasterMap &map, const GeoBounds &bounds,
-            unsigned _width, unsigned _height, bool interpolate);
+            unsigned _width, unsigned _height, bool interpolate) noexcept;
 #else
   /**
    * @param interpolate true enables interpolation of sub-pixel values
    */
   void Fill(const RasterMap &map, const WindowProjection &map_projection,
-            unsigned quantisation_pixels, bool interpolate);
+            unsigned quantisation_pixels, bool interpolate) noexcept;
 #endif
 
-  unsigned GetWidth() const {
+  unsigned GetWidth() const noexcept {
     return width;
   }
 
-  unsigned GetHeight() const {
+  unsigned GetHeight() const noexcept {
     return height;
   }
 
-  const TerrainHeight *GetData() const {
+  const TerrainHeight *GetData() const noexcept {
     return data.data();
   }
 
-  const TerrainHeight *GetRow(unsigned y) const {
+  const TerrainHeight *GetRow(unsigned y) const noexcept {
     return GetData() + y * width;
   }
 
-  const TerrainHeight *GetDataEnd() const {
+  const TerrainHeight *GetDataEnd() const noexcept {
     return GetRow(height);
   }
 };
