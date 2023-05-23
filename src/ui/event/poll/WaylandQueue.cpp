@@ -164,7 +164,7 @@ WaylandEventQueue::OnSocketReady(unsigned events) noexcept
   if (wl_display_dispatch(display) < 0) {
     const int e = errno;
     if (e != EAGAIN) {
-      fprintf(stderr, "wl_display_dispatch() failed: %s\n", strerror(errno));
+      fprintf(stderr, "wl_display_dispatch() failed: %s\n", strerror(e));
       abort();
     }
   }
@@ -178,7 +178,13 @@ WaylandEventQueue::OnSocketReady(unsigned events) noexcept
 void
 WaylandEventQueue::OnFlush() noexcept
 {
-  wl_display_flush(display);
+  if (wl_display_flush(display) < 0) {
+    const int e = errno;
+    if (e != EAGAIN) {
+      fprintf(stderr, "wl_display_flush() failed: %s\n", strerror(e));
+      abort();
+    }
+  }
 }
 
 inline void
