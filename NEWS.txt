@@ -8,6 +8,8 @@ Version 7.32 - not yet released
   - support waypoints without elevation data
 * devices
   - IMI: fix crash when there are more than 128 recorded flights
+* Linux
+  - Wayland XDG_WM_BASE support
 * Android
   - don't disable IOIO completely if Bluetooth permission was not granted
   - fix crash with initial IOIO connection
