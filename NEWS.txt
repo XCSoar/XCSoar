@@ -6,6 +6,8 @@ Version 7.32 - not yet released
   - support hot keys, gestures and double click on Horizon page
 * data files
   - support waypoints without elevation data
+* devices
+  - IMI: fix crash when there are more than 128 recorded flights
 * Android
   - don't disable IOIO completely if Bluetooth permission was not granted
   - fix crash with initial IOIO connection
