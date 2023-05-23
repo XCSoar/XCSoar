@@ -111,12 +111,12 @@ public:
 #endif
   }
 
-#if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND)
+#if !defined(NON_INTERACTIVE) && !defined(USE_X11)
   bool HasPointer() const noexcept {
     return input_queue.HasPointer();
   }
 
-#ifdef USE_LIBINPUT
+#if defined(USE_LIBINPUT) || defined(USE_WAYLAND)
   bool HasTouchScreen() const noexcept {
     return input_queue.HasTouchScreen();
   }
@@ -126,9 +126,11 @@ public:
   }
 #endif
 
+#ifndef USE_WAYLAND
   PixelPoint GetMousePosition() const noexcept {
     return input_queue.GetMousePosition();
   }
+#endif
 
 #endif /* !NON_INTERACTIVE */
 

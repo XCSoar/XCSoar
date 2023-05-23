@@ -39,6 +39,8 @@ class WaylandEventQueue final {
   struct wl_shell *shell = nullptr;
   struct xdg_wm_base *wm_base = nullptr;
 
+  bool has_touchscreen = false;
+
   IntPoint2D pointer_position = {0, 0};
 
   SocketEvent socket_event;
@@ -66,6 +68,18 @@ public:
   bool IsVisible() const noexcept {
     // TODO: implement
     return true;
+  }
+
+  bool HasPointer() const noexcept {
+    return pointer != nullptr;
+  }
+
+  bool HasTouchScreen() const noexcept {
+    return has_touchscreen;
+  }
+
+  bool HasKeyboard() const noexcept {
+    return keyboard != nullptr;
   }
 
   bool Generate(Event &event) noexcept;

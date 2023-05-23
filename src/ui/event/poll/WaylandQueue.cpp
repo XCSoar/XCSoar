@@ -278,9 +278,7 @@ inline void
 WaylandEventQueue::SeatHandleCapabilities(bool has_pointer, bool has_keyboard,
                                           bool has_touch) noexcept
 {
-  /* TODO: collect flags for HasTouchScreen(), HasPointer(),
-     HasKeyboard(), HasCursorKeys() */
-  (void)has_touch;
+  /* TODO: collect flags for HasCursorKeys() */
 
   if (has_pointer) {
     if (pointer == nullptr) {
@@ -303,6 +301,8 @@ WaylandEventQueue::SeatHandleCapabilities(bool has_pointer, bool has_keyboard,
     if (keyboard != nullptr)
       wl_keyboard_destroy(keyboard);
   }
+
+  has_touchscreen = has_touch;
 }
 
 inline void

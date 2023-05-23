@@ -3,7 +3,7 @@
 
 #include "Asset.hpp"
 
-#if defined(USE_CONSOLE) && !defined(KOBO)
+#if (defined(USE_CONSOLE) && !defined(KOBO)) || defined(USE_WAYLAND)
 
 bool
 HasPointer() noexcept

@@ -3,12 +3,12 @@
 
 #include "Asset.hpp"
 
-#ifdef USE_CONSOLE
+#if defined(USE_CONSOLE) || defined(USE_WAYLAND)
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
 #endif
 
-#if defined(USE_CONSOLE) && !defined(KOBO)
+#if (defined(USE_CONSOLE) && !defined(KOBO)) || defined(USE_WAYLAND)
 
 bool
 HasPointer() noexcept
@@ -18,7 +18,7 @@ HasPointer() noexcept
 
 #endif
 
-#ifdef USE_LIBINPUT
+#if defined(USE_LIBINPUT) || defined(USE_WAYLAND)
 
 bool
 HasTouchScreen() noexcept
