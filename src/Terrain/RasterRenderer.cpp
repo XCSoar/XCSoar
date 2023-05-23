@@ -158,8 +158,7 @@ RasterRenderer::ScanMap(const RasterMap &map,
   bounds.IntersectWith(map.GetBounds());
 
   height_matrix.Fill(map, bounds,
-                     projection.GetScreenSize().width / quantisation_pixels,
-                     projection.GetScreenSize().height / quantisation_pixels,
+                     (UnsignedPoint2D)projection.GetScreenSize() / quantisation_pixels,
                      true);
 
   last_quantisation_pixels = quantisation_pixels;
@@ -176,13 +175,13 @@ RasterRenderer::GenerateImage(bool do_shading,
                               bool do_contour) noexcept
 {
   if (image == nullptr ||
-      height_matrix.GetWidth() > image->GetSize().width ||
-      height_matrix.GetHeight() > image->GetSize().height) {
+      height_matrix.GetSize().x > image->GetSize().width ||
+      height_matrix.GetSize().y > image->GetSize().height) {
     delete image;
-    image = new RawBitmap({height_matrix.GetWidth(), height_matrix.GetHeight()});
+    image = new RawBitmap(PixelSize{height_matrix.GetSize()});
 
     delete[] contour_column_base;
-    contour_column_base = new unsigned char[height_matrix.GetWidth()];
+    contour_column_base = new unsigned char[height_matrix.GetSize().x];
   }
 
   if (quantisation_effective == 0) {
@@ -211,14 +210,14 @@ RasterRenderer::GenerateUnshadedImage(const unsigned height_scale,
   const RawColor *oColorBuf = color_table + 64 * 256;
   RawColor *dest = image->GetTopRow();
 
-  for (unsigned y = height_matrix.GetHeight(); y > 0; --y) {
+  for (unsigned y = height_matrix.GetSize().y; y > 0; --y) {
     RawColor *p = dest;
     dest = image->GetNextRow(dest);
 
     unsigned contour_row_base = ContourInterval(*src, contour_height_scale);
     unsigned char *contour_this_column_base = contour_column_base;
 
-    for (unsigned x = height_matrix.GetWidth(); x > 0; --x) {
+    for (unsigned x = height_matrix.GetSize().x; x > 0; --x) {
       const auto e = *src++;
       if (gcc_likely(!e.IsSpecial())) {
         unsigned h = std::max(0, (int)e.GetValue());
@@ -279,11 +278,8 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 {
   assert(quantisation_effective > 0);
 
-  PixelRect border;
-  border.left = quantisation_effective;
-  border.top = quantisation_effective;
-  border.right = height_matrix.GetWidth() - quantisation_effective;
-  border.bottom = height_matrix.GetHeight() - quantisation_effective;
+  const auto border = PixelRect{PixelSize{height_matrix.GetSize()}}
+    .WithPadding(quantisation_effective);
 
   const unsigned height_slope_factor =
     Clamp((unsigned)pixel_size, 1u,
@@ -297,15 +293,15 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 
   RawColor *dest = image->GetTopRow();
 
-  for (unsigned y = 0; y < height_matrix.GetHeight(); ++y) {
+  for (unsigned y = 0; y < height_matrix.GetSize().y; ++y) {
     const unsigned row_plus_index = y < (unsigned)border.bottom
       ? quantisation_effective
-      : height_matrix.GetHeight() - 1 - y;
-    const unsigned row_plus_offset = height_matrix.GetWidth() * row_plus_index;
+      : height_matrix.GetSize().y - 1 - y;
+    const unsigned row_plus_offset = height_matrix.GetSize().x * row_plus_index;
 
     const unsigned row_minus_index = y >= quantisation_effective
       ? quantisation_effective : y;
-    const unsigned row_minus_offset = height_matrix.GetWidth() * row_minus_index;
+    const unsigned row_minus_offset = height_matrix.GetSize().x * row_minus_index;
 
     const unsigned p31 = row_plus_index + row_minus_index;
 
@@ -315,7 +311,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
     unsigned contour_row_base = ContourInterval(*src, contour_height_scale);
     unsigned char *contour_this_column_base = contour_column_base;
 
-    for (unsigned x = 0; x < height_matrix.GetWidth(); ++x, ++src) {
+    for (unsigned x = 0; x < height_matrix.GetSize().x; ++x, ++src) {
       const auto e = *src;
       if (gcc_likely(!e.IsSpecial())) {
         unsigned h = std::max(0, (int)e.GetValue());
@@ -337,7 +333,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 
         const unsigned column_plus_index = x < (unsigned)border.right
           ? quantisation_effective
-          : height_matrix.GetWidth() - 1 - x;
+          : height_matrix.GetSize().x - 1 - x;
         const unsigned column_minus_index = x >= (unsigned)border.left
           ? quantisation_effective : x;
 
@@ -459,7 +455,7 @@ RasterRenderer::ContourStart(const unsigned contour_height_scale) noexcept
   // initialise column to first row
   const auto *src = height_matrix.GetData();
   unsigned char *col_base = contour_column_base;
-  for (unsigned x = height_matrix.GetWidth(); x > 0; --x)
+  for (unsigned x = height_matrix.GetSize().x; x > 0; --x)
     *col_base++ = ContourInterval(*src++, contour_height_scale);
 }
 
@@ -471,12 +467,11 @@ RasterRenderer::Draw([[maybe_unused]] Canvas &canvas,
 #ifdef ENABLE_OPENGL
   if (bounds.IsValid() && bounds.Overlaps(projection.GetScreenBounds()))
     DrawGeoBitmap(*image,
-                  PixelSize(height_matrix.GetWidth(),
-                            height_matrix.GetHeight()),
+                  PixelSize{height_matrix.GetSize()},
                   bounds,
                   projection);
 #else
-  image->StretchTo({height_matrix.GetWidth(), height_matrix.GetHeight()},
+  image->StretchTo(PixelSize{height_matrix.GetSize()},
                    canvas, projection.GetScreenSize(),
                    transparent_white);
 #endif

@@ -21,37 +21,40 @@ HeightMatrix::SetSize(std::size_t _size) noexcept
 }
 
 void
-HeightMatrix::SetSize(unsigned _width, unsigned _height) noexcept
+HeightMatrix::SetSize(UnsignedPoint2D _size) noexcept
 {
-  width = _width;
-  height = _height;
+  size = _size;
 
-  SetSize(width * height);
+  SetSize(std::size_t{size.x} * std::size_t{size.y});
 }
 
 void
-HeightMatrix::SetSize(unsigned width, unsigned height,
+HeightMatrix::SetSize(UnsignedPoint2D _size,
                       unsigned quantisation_pixels) noexcept
 {
-  SetSize((width + quantisation_pixels - 1) / quantisation_pixels,
-          (height + quantisation_pixels - 1) / quantisation_pixels);
+  const UnsignedPoint2D round_up{
+    quantisation_pixels - 1,
+    quantisation_pixels - 1,
+  };
+
+  SetSize((_size + round_up) / quantisation_pixels);
 }
 
 #ifdef ENABLE_OPENGL
 
 void
 HeightMatrix::Fill(const RasterMap &map, const GeoBounds &bounds,
-                   unsigned width, unsigned height, bool interpolate) noexcept
+                   const UnsignedPoint2D _size, bool interpolate) noexcept
 {
-  SetSize(width, height);
+  SetSize(_size);
 
-  const Angle delta_y = bounds.GetHeight() / height;
+  const Angle delta_y = bounds.GetHeight() / _size.y;
   Angle latitude = bounds.GetNorth();
-  for (auto p = data.data(), end = p + width * height;
-       p != end; p += width, latitude -= delta_y) {
+  for (auto p = data.data(), end = p + std::size_t{_size.x} * std::size_t{_size.y};
+       p != end; p += _size.x, latitude -= delta_y) {
     map.ScanLine(GeoPoint(bounds.GetWest(), latitude),
                  GeoPoint(bounds.GetEast(), latitude),
-                 p, width, interpolate);
+                 p, _size.x, interpolate);
   }
 }
 
@@ -63,15 +66,14 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
 {
   const auto screen_size = projection.GetScreenSize();
 
-  SetSize((screen_size.width + quantisation_pixels - 1) / quantisation_pixels,
-          (screen_size.height + quantisation_pixels - 1) / quantisation_pixels);
+  SetSize((UnsignedPoint2D)screen_size, quantisation_pixels);
 
   auto p = data.data();
-  for (unsigned y = 0; y < screen_size.height;
-       y += quantisation_pixels, p += width) {
+  for (unsigned y = 0; y < size.y;
+       y += quantisation_pixels, p += size.x) {
     map.ScanLine(projection.ScreenToGeo({0, (int)y}),
                  projection.ScreenToGeo({(int)screen_size.width, (int)y}),
-                 p, width, interpolate);
+                 p, size.x, interpolate);
   }
 }
 

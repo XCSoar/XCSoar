@@ -70,12 +70,8 @@ public:
     return height_matrix;
   }
 
-  unsigned GetWidth() const noexcept {
-    return height_matrix.GetWidth();
-  }
-
-  unsigned GetHeight() const noexcept {
-    return height_matrix.GetHeight();
+  UnsignedPoint2D GetSize() const noexcept {
+    return height_matrix.GetSize();
   }
 
 #ifdef ENABLE_OPENGL

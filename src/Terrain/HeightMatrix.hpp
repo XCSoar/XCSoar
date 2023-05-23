@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Height.hpp"
+#include "Math/Point2D.hpp"
 #include "util/AllocatedArray.hxx"
 
 class RasterMap;
@@ -16,7 +17,7 @@ class WindowProjection;
 
 class HeightMatrix {
   AllocatedArray<TerrainHeight> data;
-  unsigned width = 0, height = 0;
+  UnsignedPoint2D size;
 
 public:
   HeightMatrix() noexcept = default;
@@ -26,8 +27,8 @@ public:
 
 protected:
   void SetSize(std::size_t _size) noexcept;
-  void SetSize(unsigned width, unsigned height) noexcept;
-  void SetSize(unsigned width, unsigned height,
+  void SetSize(UnsignedPoint2D _size) noexcept;
+  void SetSize(UnsignedPoint2D _size,
                unsigned quantisation_pixels) noexcept;
 
 public:
@@ -36,7 +37,7 @@ public:
    * Copy values from the #RasterMap to the buffer, north-up only.
    */
   void Fill(const RasterMap &map, const GeoBounds &bounds,
-            unsigned _width, unsigned _height, bool interpolate) noexcept;
+            UnsignedPoint2D _size, bool interpolate) noexcept;
 #else
   /**
    * @param interpolate true enables interpolation of sub-pixel values
@@ -45,12 +46,8 @@ public:
             unsigned quantisation_pixels, bool interpolate) noexcept;
 #endif
 
-  unsigned GetWidth() const noexcept {
-    return width;
-  }
-
-  unsigned GetHeight() const noexcept {
-    return height;
+  UnsignedPoint2D GetSize() const noexcept {
+    return size;
   }
 
   const TerrainHeight *GetData() const noexcept {
@@ -58,10 +55,10 @@ public:
   }
 
   const TerrainHeight *GetRow(unsigned y) const noexcept {
-    return GetData() + y * width;
+    return GetData() + y * size.x;
   }
 
   const TerrainHeight *GetDataEnd() const noexcept {
-    return GetRow(height);
+    return GetRow(size.y);
   }
 };
