@@ -11,6 +11,7 @@ Version 7.32 - not yet released
   - support waypoints without elevation data
 * devices
   - IMI: fix crash when there are more than 128 recorded flights
+  - FLARM: parse AircraftType hex values correctly in PFLAA
 * Linux
   - Wayland XDG_WM_BASE support
   - Wayland keyboard support
