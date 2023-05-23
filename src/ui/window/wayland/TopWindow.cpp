@@ -58,6 +58,10 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
 
   // TODO: wl_shell_surface_set_fullscreen(shell_surface);
 
+  const auto region = wl_compositor_create_region(compositor);
+  wl_region_add(region, 0, 0, size.width, size.height);
+  wl_surface_set_opaque_region(surface, region);
+
   native_window = wl_egl_window_create(surface, size.width, size.height);
   if (native_window == EGL_NO_SURFACE)
     throw std::runtime_error("Failed to create Wayland EGL window");
