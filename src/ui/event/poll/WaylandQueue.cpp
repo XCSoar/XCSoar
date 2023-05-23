@@ -9,6 +9,10 @@
 
 #include <wayland-client.h>
 
+#include <cerrno>
+#include <cstdio> // for fprintf()
+#include <cstdlib> // for abort()
+#include <cstring> // for strerror()
 #include <stdexcept>
 
 namespace UI {
@@ -151,9 +155,20 @@ WaylandEventQueue::Generate([[maybe_unused]] Event &event) noexcept
 }
 
 void
-WaylandEventQueue::OnSocketReady([[maybe_unused]] unsigned events) noexcept
+WaylandEventQueue::OnSocketReady(unsigned events) noexcept
 {
-  wl_display_dispatch(display);
+  if (wl_display_dispatch(display) < 0) {
+    const int e = errno;
+    if (e != EAGAIN) {
+      fprintf(stderr, "wl_display_dispatch() failed: %s\n", strerror(errno));
+      abort();
+    }
+  }
+
+  if (events & SocketEvent::HANGUP) {
+    fprintf(stderr, "Wayland server hung up\n");
+    abort();
+  }
 }
 
 inline void
