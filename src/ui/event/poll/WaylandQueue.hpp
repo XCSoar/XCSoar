@@ -4,6 +4,7 @@
 #pragma once
 
 #include "event/SocketEvent.hxx"
+#include "event/IdleEvent.hxx"
 #include "Math/Point2D.hpp"
 
 #include <cstdint>
@@ -37,6 +38,7 @@ class WaylandEventQueue final {
   IntPoint2D pointer_position = {0, 0};
 
   SocketEvent socket_event;
+  IdleEvent flush_event;
 
 public:
   /**
@@ -71,6 +73,7 @@ public:
 
 private:
   void OnSocketReady(unsigned events) noexcept;
+  void OnFlush() noexcept;
 };
 
 } // namespace UI

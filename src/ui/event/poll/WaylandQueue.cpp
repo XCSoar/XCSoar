@@ -123,7 +123,8 @@ static constexpr struct wl_pointer_listener pointer_listener = {
 WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
   :queue(_queue),
    display(_display.GetWaylandDisplay()),
-   socket_event(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady))
+   socket_event(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady)),
+   flush_event(queue.GetEventLoop(), BIND_THIS_METHOD(OnFlush))
 {
   if (display == nullptr)
     throw std::runtime_error("wl_display_connect() failed");
@@ -145,18 +146,21 @@ WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
 
   socket_event.Open(SocketDescriptor(wl_display_get_fd(display)));
   socket_event.ScheduleRead();
+  flush_event.Schedule();
 }
 
 bool
 WaylandEventQueue::Generate([[maybe_unused]] Event &event) noexcept
 {
-  wl_display_flush(display);
+  flush_event.Schedule();
   return false;
 }
 
 void
 WaylandEventQueue::OnSocketReady(unsigned events) noexcept
 {
+  flush_event.Schedule();
+
   if (wl_display_dispatch(display) < 0) {
     const int e = errno;
     if (e != EAGAIN) {
@@ -169,6 +173,12 @@ WaylandEventQueue::OnSocketReady(unsigned events) noexcept
     fprintf(stderr, "Wayland server hung up\n");
     abort();
   }
+}
+
+void
+WaylandEventQueue::OnFlush() noexcept
+{
+  wl_display_flush(display);
 }
 
 inline void
