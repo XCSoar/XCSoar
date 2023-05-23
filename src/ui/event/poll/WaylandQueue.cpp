@@ -34,8 +34,8 @@ WaylandRegistryGlobalRemove([[maybe_unused]] void *data,
 }
 
 static constexpr struct wl_registry_listener registry_listener = {
-  WaylandRegistryGlobal,
-  WaylandRegistryGlobalRemove,
+  .global = WaylandRegistryGlobal,
+  .global_remove = WaylandRegistryGlobalRemove,
 };
 
 static void
@@ -51,7 +51,7 @@ WaylandSeatHandleCapabilities(void *data,
 }
 
 static constexpr struct wl_seat_listener seat_listener = {
-  WaylandSeatHandleCapabilities,
+  .capabilities = WaylandSeatHandleCapabilities,
 };
 
 static void
@@ -114,11 +114,11 @@ WaylandPointerAxis(void *data,
 }
 
 static constexpr struct wl_pointer_listener pointer_listener = {
-  WaylandPointerEnter,
-  WaylandPointerLeave,
-  WaylandPointerMotion,
-  WaylandPointerButton,
-  WaylandPointerAxis,
+  .enter = WaylandPointerEnter,
+  .leave = WaylandPointerLeave,
+  .motion = WaylandPointerMotion,
+  .button = WaylandPointerButton,
+  .axis = WaylandPointerAxis,
 };
 
 WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
