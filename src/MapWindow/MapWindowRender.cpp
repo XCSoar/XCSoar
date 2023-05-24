@@ -271,7 +271,7 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
 #endif
 
   if (basic.location_available)
-      DrawGLinkTraffic(canvas, aircraft_pos);
+      DrawGLinkTraffic(canvas);
 
   DrawTeammate(canvas);
 

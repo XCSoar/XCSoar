@@ -97,8 +97,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
  * @param canvas Canvas for drawing
  */
 void
-MapWindow::DrawGLinkTraffic([[maybe_unused]] Canvas &canvas,
-                            [[maybe_unused]] const PixelPoint aircraft_pos) const noexcept
+MapWindow::DrawGLinkTraffic([[maybe_unused]] Canvas &canvas) const noexcept
 {
 #ifdef ANDROID
 
