@@ -129,6 +129,7 @@ if 'mingw32' in actual_host_triplet:
     cppflags += ' -D_FORTIFY_SOURCE=0'
 elif 'apple-darwin' in actual_host_triplet:
     thirdparty_libs = [
+        zlib,
         libfmt,
         libsodium,
         openssl,
