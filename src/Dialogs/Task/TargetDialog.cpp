@@ -41,13 +41,13 @@ public:
                         const TaskLook &task_look,
                         const AircraftLook &aircraft_look,
                         const TopographyLook &topography_look,
-                        const OverlayLook &overlay_look)
+                        const OverlayLook &overlay_look) noexcept
     :TargetMapWindow(waypoint_look, airspace_look, trail_look,
                      task_look, aircraft_look, topography_look, overlay_look),
      widget(_widget) {}
 
 protected:
-  void OnTaskModified() override;
+  void OnTaskModified() noexcept override;
 };
 
 class TargetWidget
@@ -497,7 +497,7 @@ TargetWidget::UpdateNameButton()
 }
 
 void
-TargetDialogMapWindow::OnTaskModified()
+TargetDialogMapWindow::OnTaskModified() noexcept
 {
   TargetMapWindow::OnTaskModified();
   widget.RefreshCalculator();
