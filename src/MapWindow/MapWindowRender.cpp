@@ -270,13 +270,11 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
   DrawSkyLinesTraffic(canvas);
 #endif
 
-  if (basic.location_available)
-      DrawGLinkTraffic(canvas);
+  DrawGLinkTraffic(canvas);
 
   DrawTeammate(canvas);
 
-  if (basic.location_available)
-    DrawFLARMTraffic(canvas, aircraft_pos);
+  DrawFLARMTraffic(canvas, aircraft_pos);
 
   //////////////////////////////////////////////// own aircraft
   // Finally, draw you!
