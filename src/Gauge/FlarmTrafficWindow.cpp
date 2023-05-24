@@ -32,7 +32,6 @@ FlarmTrafficWindow::FlarmTrafficWindow(const FlarmTrafficLook &_look,
    small(_small)
 {
   data.Clear();
-  data_modified.Clear();
 }
 
 bool
@@ -164,7 +163,7 @@ FlarmTrafficWindow::Update(Angle new_direction, const TrafficList &new_data,
                            const TeamCodeSettings &new_settings) noexcept
 {
   static constexpr Angle min_heading_delta = Angle::Degrees(2);
-  if (new_data.modified == data_modified &&
+  if (new_data.modified == data.modified &&
       (heading - new_direction).Absolute() < min_heading_delta)
     /* no change - don't redraw */
     return;
@@ -180,7 +179,6 @@ FlarmTrafficWindow::Update(Angle new_direction, const TrafficList &new_data,
     pt.y = -100;
   }
 
-  data_modified = new_data.modified;
   heading = new_direction;
   fr = -heading;
   fir = heading;
