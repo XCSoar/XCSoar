@@ -69,11 +69,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
     // JMW TODO enhancement: decluttering of FLARM altitudes (sort by max lift)
 
-    int dx = sc_av.x - aircraft_pos.x;
-    int dy = sc_av.y - aircraft_pos.y;
-
     // only draw labels if not close to aircraft
-    if (dx * dx + dy * dy > Layout::Scale(30 * 30)) {
+    if ((sc_av - aircraft_pos).MagnitudeSquared() > Layout::Scale(30 * 30)) {
       // If FLARM callsign/name available draw it to the canvas
       if (traffic.HasName() && !StringIsEmpty(traffic.name))
         TextInBox(canvas, traffic.name, sc_name,
