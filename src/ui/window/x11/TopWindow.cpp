@@ -67,6 +67,12 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
   XFree(vi);
 #endif
 
+  if (XClassHint *class_hint = XAllocClassHint()) {
+    class_hint->res_name = class_hint->res_class = const_cast<char *>("xcsoar");
+    XSetClassHint(x_display, x_window, class_hint);
+    XFree(class_hint);
+  }
+
   XMapWindow(x_display, x_window);
   XStoreName(x_display, x_window, text);
 
