@@ -47,6 +47,53 @@ struct FlarmTraffic {
     STATIC_OBJECT = 15    //!< static object
   };
 
+  /** Location of the FLARM target */
+  GeoPoint location;
+
+  /** Turnrate of the FLARM target */
+  double turn_rate;
+
+  /** Climbrate of the FLARM target */
+  double climb_rate;
+
+  /** Average climb rate over 30s */
+  double climb_rate_avg30s;
+
+  /** Latitude-based distance of the FLARM target */
+  double relative_north;
+
+  /** Longitude-based distance of the FLARM target */
+  double relative_east;
+
+  /** Is this object valid, or has it expired already? */
+  Validity valid;
+
+  /** FLARM id of the FLARM target */
+  FlarmId id;
+
+  /** Distance from our plane to the FLARM target */
+  RoughDistance distance;
+
+  /** TrackBearing of the FLARM target */
+  RoughAngle track;
+
+  /** Speed of the FLARM target */
+  RoughSpeed speed;
+
+  /** Altitude of the FLARM target */
+  RoughAltitude altitude;
+
+  /** Altidude-based distance of the FLARM target */
+  RoughAltitude relative_altitude;
+
+  /** (if exists) Name of the FLARM target */
+  StaticString<10> name;
+
+  AlarmType alarm_level;
+
+  /** Type of the aircraft */
+  AircraftType type;
+
   /** Is the target in stealth mode */
   bool stealth;
 
@@ -70,53 +117,6 @@ struct FlarmTraffic {
 
   /** Has the averaged climb rate of the target been calculated yet? */
   bool climb_rate_avg30s_available;
-
-  /** Is this object valid, or has it expired already? */
-  Validity valid;
-
-  /** Location of the FLARM target */
-  GeoPoint location;
-
-  /** Distance from our plane to the FLARM target */
-  RoughDistance distance;
-
-  /** TrackBearing of the FLARM target */
-  RoughAngle track;
-
-  /** Speed of the FLARM target */
-  RoughSpeed speed;
-
-  /** Altitude of the FLARM target */
-  RoughAltitude altitude;
-
-  /** Altidude-based distance of the FLARM target */
-  RoughAltitude relative_altitude;
-
-  /** Turnrate of the FLARM target */
-  double turn_rate;
-
-  /** Climbrate of the FLARM target */
-  double climb_rate;
-
-  /** Latitude-based distance of the FLARM target */
-  double relative_north;
-
-  /** Longitude-based distance of the FLARM target */
-  double relative_east;
-
-  /** FLARM id of the FLARM target */
-  FlarmId id;
-
-  /** (if exists) Name of the FLARM target */
-  StaticString<10> name;
-
-  AlarmType alarm_level;
-
-  /** Type of the aircraft */
-  AircraftType type;
-
-  /** Average climb rate over 30s */
-  double climb_rate_avg30s;
 
   bool IsDefined() const noexcept {
     return valid;
