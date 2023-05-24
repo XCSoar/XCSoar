@@ -23,46 +23,46 @@ class MapWindowBlackboard:
 
 protected:
   [[gnu::const]]
-  const MoreData &Basic() const {
+  const MoreData &Basic() const noexcept {
     assert(InDrawThread());
 
     return BaseBlackboard::Basic();
   }
 
   [[gnu::const]]
-  const DerivedInfo &Calculated() const {
+  const DerivedInfo &Calculated() const noexcept {
     assert(InDrawThread());
 
     return BaseBlackboard::Calculated();
   }
 
   [[gnu::const]]
-  const ComputerSettings &GetComputerSettings() const {
+  const ComputerSettings &GetComputerSettings() const noexcept {
     assert(InDrawThread());
 
     return ComputerSettingsBlackboard::GetComputerSettings();
   }
 
   [[gnu::const]]
-  const MapSettings &GetMapSettings() const {
+  const MapSettings &GetMapSettings() const noexcept {
     assert(InDrawThread());
 
     return settings_map;
   }
 
   [[gnu::const]]
-  const UIState &GetUIState() const {
+  const UIState &GetUIState() const noexcept {
     assert(InDrawThread());
 
     return ui_state;
   }
 
   void ReadBlackboard(const MoreData &nmea_info,
-                      const DerivedInfo &derived_info);
-  void ReadComputerSettings(const ComputerSettings &settings);
-  void ReadMapSettings(const MapSettings &settings);
+                      const DerivedInfo &derived_info) noexcept;
+  void ReadComputerSettings(const ComputerSettings &settings) noexcept;
+  void ReadMapSettings(const MapSettings &settings) noexcept;
 
-  void ReadUIState(const UIState &new_value) {
+  void ReadUIState(const UIState &new_value) noexcept {
     ui_state = new_value;
   }
 };
