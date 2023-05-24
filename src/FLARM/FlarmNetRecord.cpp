@@ -5,7 +5,7 @@
 #include "FlarmId.hpp"
 
 FlarmId
-FlarmNetRecord::GetId() const
+FlarmNetRecord::GetId() const noexcept
 {
   return FlarmId::Parse(this->id, NULL);
 };
