@@ -40,10 +40,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
   canvas.Select(*traffic_look.font);
 
   // Circle through the FLARM targets
-  for (auto it = flarm.list.begin(), end = flarm.list.end();
-      it != end; ++it) {
-    const FlarmTraffic &traffic = *it;
-
+  for (const auto &traffic : flarm.list) {
     if (!traffic.location_available)
       continue;
 
