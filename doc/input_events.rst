@@ -186,7 +186,7 @@ Event list
      ``short``, ``long``, ``show``.
  * - ``ScreenModes M``
    - Set the screen mode. Possible arguments: ``normal``, ``auxilary``,
-     ``toggleauxiliary``, ``full``, ``togglefull``, ``toggle``.
+     ``toggleauxiliary``, ``full``, ``togglefull``, ``toggle``, ``show``, ``previous``, ``next``.
  * - ``Sounds S``
    - Change vario sounds. Possible arguments: ``toggle``, ``on``,
      ``off``, ``show``.
@@ -196,6 +196,90 @@ Event list
    - Everything about zoom of map. Possible arguments: ``auto
      toogle``, ``auto on``, ``auto off``, ``auto show``, ``in``,
      ``out``, ``+``, ``++``, ``-``, ``–-``.
+ * - ``PilotEvent``
+   -
+ * - ``ClearStatusMessages``
+   - Clear event warnings
+ * - ``Checklist``
+   - Displays the checklist dialog
+ * - ``Status``
+   - Displays one of the three status dialogs given as an argument: ``system``, ``aircraft``, ``task``
+ * - ``Analysis``
+   - Displays the analysis/statistics dialog
+ * - ``WaypointDetails W``
+   - Displays waypoint details
+     
+     ``current``: the current active waypoint
+     
+     ``select``: brings up the waypoint selector, if the user then selects a waypoint, then the details dialog is shown.
+ * - ``WaypointEditor``
+   - 
+ * - ``AutoLogger C``
+   - Same as ``Logger``, but checks if 'Autologger' is active beforhand
+ * - ``Logger C``
+   - Activates the internal IGC logger
+
+     ``start``: starts the logger
+
+     ``start ask``: starts the logger after asking the user to confirm
+
+     ``stop``: stops the logger
+
+     ``stop ask``: stops the logger after asking the user to confirm
+
+     ``toggle``: toggles between on and off
+
+     ``toggle ask``: toggles between on and off, asking the user to confirm
+
+     ``show``: displays a status message indicating whether the logger is active
+
+     ``nmea``: turns on and off NMEA logging
+
+     ``note``: the text following the 'note' characters is added to the log file
+ * - ``RepeatStatusMessage``
+   - Repeats the last status message.  If pressed repeatedly, will repeat previous status messages
+ * - ``NearestWaypointDetails``
+   - Displays the waypoint details dialog
+ * - ``NearestMapItems``
+   - Displays the map item list dialog
+ * - ``Null``
+   - The null event does nothing.  This can be used to override default functionality
+ * - ``Beep``
+   - Plays beep sound
+ * - ``Setup D``
+   - Activates configuration and setting dialogs
+     
+     ``Basic``: Basic settings (QNH/Bugs/Ballast/MaxTemperature)
+
+     ``Wind``: Wind settings
+
+     ``Task``: Task editor
+
+     ``Airspace``: Airspace filter settings
+
+     ``Replay``: IGC replay dialog
+
+     ``System``, ``Weather``, ``Switches``, ``Teamcode``, ``Target``, ``Plane``, ``Profile``, ``Alternates``
+ * - ``Credits``
+   - 
+ * - ``Run PATH``
+   - Runs an external program of the specified filename. Note that XCSoar will wait until this program exits.
+ * - ``Exit``
+   - close XCSoar
+ * - ``UserDisplayModeForce M``
+   - ``unforce``, ``forceclimb``, ``forcecruise``, ``forcefinal``
+ * - ``AddWaypoint W``
+   - You can add ``takeoff`` as an option, when called without an option a dialog pops up.
+ * - ``Weather``
+   - 
+ * - ``QuickMenu``
+   - 
+ * - ``FileManager``
+   - 
+ * - ``ExchangeFrequencies``
+   - 
+ * - ``UploadIGCFile``
+   - 
 
 Modes
 -----
@@ -211,6 +295,8 @@ List of known modes
 
 - ``default``: Really map mode, where you mostly are.
 - ``infobox``: An info box has been selected on the screen.
+- ``pan``: Pan mode is active.
+- ``Menu``: 
 - ``*``: Any other arbitrary string.
 
 Mode precedence has been tricky, so instead of solving the problem it is
@@ -258,8 +344,9 @@ The key type can have the following possible values:
 
 - ``APP1-APP6``: Hardware key on pocket pc
 - ``F1-F12``: Standard function keys
-- ``LEFT, RIGHT, UP, DOWN, RETURN, ESCAPE, MENU, TAB``: Mapped to arrow 
+- ``LEFT, RIGHT, UP, DOWN, RETURN``: Mapped to arrow 
   keys - joystick on organisers
+- ``ESCAPE, MENU, TAB``: function keys
 - ``A-Z, 0-9``: and other possible keyboard buttons (case is ignored)
 
 Android only:
