@@ -9,10 +9,11 @@ class FlarmId;
 
 namespace FlarmFriends {
 
+[[gnu::pure]]
 FlarmColor
-GetFriendColor(FlarmId id);
+GetFriendColor(FlarmId id) noexcept;
 
 void
-SetFriendColor(FlarmId id, FlarmColor color);
+SetFriendColor(FlarmId id, FlarmColor color) noexcept;
 
 } // namespace FlarmFriends

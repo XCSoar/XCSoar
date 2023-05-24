@@ -9,7 +9,7 @@
 namespace FlarmFriends {
 
 FlarmColor
-GetFriendColor(FlarmId id)
+GetFriendColor(FlarmId id) noexcept
 {
   if (traffic_databases == nullptr)
     return FlarmColor::NONE;
@@ -18,7 +18,7 @@ GetFriendColor(FlarmId id)
 }
 
 void
-SetFriendColor(FlarmId id, FlarmColor color)
+SetFriendColor(FlarmId id, FlarmColor color) noexcept
 {
   assert(traffic_databases != nullptr);
 
