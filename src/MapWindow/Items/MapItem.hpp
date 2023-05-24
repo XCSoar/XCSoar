@@ -5,7 +5,7 @@
 
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
-#include "FLARM/FlarmId.hpp"
+#include "FLARM/Id.hpp"
 #include "FLARM/Color.hpp"
 #include "NMEA/ThermalLocator.hpp"
 #include "Weather/Features.hpp"

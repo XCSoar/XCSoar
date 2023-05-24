@@ -3,9 +3,9 @@
 
 #pragma once
 
+#include "FLARM/Id.hpp"
 #include "util/StaticString.hxx"
 #include "TeamCode.hpp"
-#include "FLARM/FlarmId.hpp"
 
 #include <type_traits>
 

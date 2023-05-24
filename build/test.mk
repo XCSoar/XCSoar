@@ -394,7 +394,7 @@ $(eval $(call link-program,TestGeoBounds,TEST_GEO_BOUNDS))
 
 TEST_FLARM_NET_SOURCES = \
 	$(SRC)/FLARM/FlarmNetReader.cpp \
-	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Id.cpp \
 	$(SRC)/FLARM/FlarmNetRecord.cpp \
 	$(SRC)/FLARM/FlarmNetDatabase.cpp \
 	$(TEST_SRC_DIR)/tap.c \
@@ -485,7 +485,7 @@ TEST_NMEA_FORMATTER_SOURCES = \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Driver/FLARM/StaticParser.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
-	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Id.cpp \
 	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
@@ -659,8 +659,8 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
-	$(SRC)/FLARM/FlarmId.cpp \
-	$(SRC)/FLARM/FlarmCalculations.cpp \
+	$(SRC)/FLARM/Id.cpp \
+	$(SRC)/FLARM/Calculations.cpp \
 	$(SRC)/FLARM/List.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
@@ -865,7 +865,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(ENGINE_SRC_DIR)/ThermalBand/ThermalEncounterBand.cpp \
 	$(ENGINE_SRC_DIR)/ThermalBand/ThermalEncounterCollection.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
-	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Id.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/List.cpp \
 	$(SRC)/Computer/BasicComputer.cpp \
@@ -1300,7 +1300,7 @@ SPLICE_PORTS_DEPENDS = PORT ASYNC LIBNET OPERATION IO OS THREAD TIME UTIL
 $(eval $(call link-program,SplicePorts,SPLICE_PORTS))
 
 RUN_DEVICE_DRIVER_SOURCES = \
-	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Id.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Device/Port/Port.cpp \
@@ -1313,7 +1313,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/List.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
-	$(SRC)/FLARM/FlarmCalculations.cpp \
+	$(SRC)/FLARM/Calculations.cpp \
 	$(SRC)/Computer/ClimbAverageCalculator.cpp \
 	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
@@ -1505,7 +1505,7 @@ $(eval $(call link-program,lxn2igc,LXN2IGC))
 RUN_IGC_WRITER_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Version.cpp \
-	$(SRC)/FLARM/FlarmCalculations.cpp \
+	$(SRC)/FLARM/Calculations.cpp \
 	$(SRC)/Computer/ClimbAverageCalculator.cpp \
 	$(SRC)/IGC/IGCFix.cpp \
 	$(SRC)/IGC/IGCWriter.cpp \
@@ -1739,7 +1739,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(IO_SRC_DIR)/DataFile.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
-	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Id.cpp \
 	$(SRC)/FLARM/Friends.cpp \
 	$(SRC)/FLARM/List.cpp \
 	$(SRC)/FLARM/Global.cpp \
@@ -2544,7 +2544,7 @@ $(eval $(call link-program,DumpTaskFile,DUMP_TASK_FILE))
 
 DUMP_FLARM_NET_SOURCES = \
 	$(SRC)/FLARM/FlarmNetReader.cpp \
-	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Id.cpp \
 	$(SRC)/FLARM/FlarmNetRecord.cpp \
 	$(SRC)/FLARM/FlarmNetDatabase.cpp \
 	$(TEST_SRC_DIR)/DumpFlarmNet.cpp

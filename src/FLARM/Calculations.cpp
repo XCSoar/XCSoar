@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "FLARM/FlarmCalculations.hpp"
+#include "Calculations.hpp"
 
 double
 FlarmCalculations::Average30s(FlarmId id, TimeStamp time,

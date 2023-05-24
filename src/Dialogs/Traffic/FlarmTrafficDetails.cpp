@@ -17,7 +17,7 @@
 #include "Widget/RowFormWidget.hpp"
 #include "FLARM/FlarmNetRecord.hpp"
 #include "FLARM/Traffic.hpp"
-#include "FLARM/FlarmDetails.hpp"
+#include "FLARM/Details.hpp"
 #include "FLARM/Friends.hpp"
 #include "FLARM/Glue.hpp"
 #include "Renderer/ColorButtonRenderer.hpp"

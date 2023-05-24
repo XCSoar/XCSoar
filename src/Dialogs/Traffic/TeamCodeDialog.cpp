@@ -8,7 +8,7 @@
 #include "Dialogs/Message.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
-#include "FLARM/FlarmDetails.hpp"
+#include "FLARM/Details.hpp"
 #include "FLARM/Glue.hpp"
 #include "Computer/Settings.hpp"
 #include "Profile/Profile.hpp"

@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "FLARM/FlarmDetails.hpp"
+#include "Details.hpp"
+#include "Id.hpp"
 #include "Global.hpp"
 #include "TrafficDatabases.hpp"
-#include "FLARM/FlarmId.hpp"
 #include "util/StringCompare.hxx"
 
 #include <cassert>

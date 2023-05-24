@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "FlarmId.hpp"
+#include "Id.hpp"
 #include "Color.hpp"
 
 #include <map>

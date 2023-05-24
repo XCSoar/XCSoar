@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "FlarmId.hpp"
+#include "Id.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "NMEA/Validity.hpp"
 #include "util/StaticString.hxx"

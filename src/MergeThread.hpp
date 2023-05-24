@@ -5,7 +5,7 @@
 
 #include "thread/WorkerThread.hpp"
 #include "Computer/BasicComputer.hpp"
-#include "FLARM/FlarmComputer.hpp"
+#include "FLARM/Computer.hpp"
 #include "NMEA/MoreData.hpp"
 
 class DeviceBlackboard;

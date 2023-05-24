@@ -28,7 +28,7 @@
 #include "Math/Screen.hpp"
 #include "Look/FinalGlideBarLook.hpp"
 #include "Renderer/TrafficRenderer.hpp"
-#include "FLARM/FlarmDetails.hpp"
+#include "FLARM/Details.hpp"
 #include "FLARM/FlarmNetRecord.hpp"
 #include "Weather/Features.hpp"
 #include "FLARM/List.hpp"

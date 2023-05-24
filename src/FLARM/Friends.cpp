@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "FLARM/Friends.hpp"
-#include "FLARM/FlarmId.hpp"
+#include "Friends.hpp"
+#include "Id.hpp"
 #include "Global.hpp"
 #include "TrafficDatabases.hpp"
 

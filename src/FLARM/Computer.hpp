@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "FLARM/FlarmCalculations.hpp"
+#include "Calculations.hpp"
 
 struct FlarmData;
 struct NMEAInfo;
