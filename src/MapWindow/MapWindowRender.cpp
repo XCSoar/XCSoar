@@ -227,8 +227,7 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
 
   //////////////////////////////////////////////// aircraft level items
   // Render the snail trail
-  if (basic.location_available)
-    RenderTrail(canvas, aircraft_pos);
+  RenderTrail(canvas, aircraft_pos);
 
   DrawWaves(canvas);
 

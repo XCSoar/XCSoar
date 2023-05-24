@@ -4,6 +4,8 @@ Version 7.32 - not yet released
   - fix horizon pitch, show sky instead of ground when pitch is greater than 50°
   - improve font scaling in the vario gauge
   - support hot keys, gestures and double click on Horizon page
+* map display
+  - draw the trail even if there is no GPS fix
 * data files
   - support waypoints without elevation data
 * devices
