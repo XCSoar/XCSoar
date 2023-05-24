@@ -597,9 +597,12 @@ InputEvents::eventRun(const TCHAR *misc)
   ::CloseHandle(pi.hProcess);
   ::CloseHandle(pi.hThread);
 
-  #elif !defined(__APPLE__) || !TARGET_OS_IPHONE
+#elif defined(__APPLE__) && TARGET_OS_IPHONE
+  // can't execute external programs on iOS
+  (void)misc;
+#else
   if (system(misc)) {;} // Ignore return value
-  #endif
+#endif
 }
 
 void
