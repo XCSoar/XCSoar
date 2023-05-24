@@ -16,6 +16,7 @@ namespace TrafficRenderer
 {
 void
 Draw(Canvas &canvas, const TrafficLook &traffic_look,
+     bool fading,
      const FlarmTraffic &traffic, Angle angle,
      FlarmColor color, PixelPoint pt) noexcept;
 

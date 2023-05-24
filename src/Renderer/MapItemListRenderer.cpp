@@ -316,7 +316,8 @@ Draw(Canvas &canvas, PixelRect rc,
 
   // Render the representation of the traffic icon
   if (traffic != nullptr)
-    TrafficRenderer::Draw(canvas, traffic_look, *traffic, traffic->track,
+    TrafficRenderer::Draw(canvas, traffic_look, false,
+                          *traffic, traffic->track,
                           item.color, pt);
 
   rc.left += line_height + text_padding;

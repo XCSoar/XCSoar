@@ -14,6 +14,7 @@
 enum ControlIndex {
   DISPLAY_TRACK_BEARING,
   ENABLE_FLARM_MAP,
+  FADE_TRAFFIC,
   TRAIL_LENGTH,
   TRAIL_DRIFT,
   TRAIL_TYPE,
@@ -137,6 +138,9 @@ SymbolsConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddBoolean(_("FLARM traffic"), _("This enables the display of FLARM traffic on the map window."),
              settings_map.show_flarm_on_map);
 
+  AddBoolean(_("Fade traffic"), _("Keep showing traffic for a while after it has disappeared."),
+             settings_map.fade_traffic);
+
   AddEnum(_("Trail length"),
           _("Determines whether and how long a snail trail is drawn behind the glider."),
           trail_length_list,
@@ -193,6 +197,9 @@ SymbolsConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValue(ENABLE_FLARM_MAP, ProfileKeys::EnableFLARMMap,
                        settings_map.show_flarm_on_map);
+
+  changed |= SaveValue(FADE_TRAFFIC, ProfileKeys::FadeTraffic,
+                       settings_map.fade_traffic);
 
   changed |= SaveValueEnum(TRAIL_LENGTH, ProfileKeys::SnailTrail, settings_map.trail.length);
 

@@ -9,6 +9,8 @@
 #include "thread/Debug.hpp"
 #include "UIState.hpp"
 
+#include <map>
+
 /**
  * Blackboard used by map window: provides read-only access to local
  * copies of data required by map window
@@ -20,6 +22,12 @@ class MapWindowBlackboard:
   public MapSettingsBlackboard
 {
   UIState ui_state;
+
+  /**
+   * FLARM traffic that has disappeared, but will remain on the map
+   * (greyed out) for some time.
+   */
+  std::map<FlarmId, FlarmTraffic> fading_flarm_traffic;
 
 protected:
   [[gnu::const]]
@@ -34,6 +42,11 @@ protected:
     assert(InDrawThread());
 
     return BaseBlackboard::Calculated();
+  }
+
+  [[gnu::const]]
+  const auto &GetFadingFlarmTraffic() const noexcept {
+    return fading_flarm_traffic;
   }
 
   [[gnu::const]]

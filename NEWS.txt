@@ -6,6 +6,7 @@ Version 7.32 - not yet released
   - support hot keys, gestures and double click on Horizon page
 * map display
   - draw the trail even if there is no GPS fix
+  - keep showing disappeared FLARM traffic for some time
 * data files
   - support waypoints without elevation data
 * devices

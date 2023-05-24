@@ -16,7 +16,7 @@
 
 static void
 DrawFlarmTraffic(Canvas &canvas, const WindowProjection &projection,
-                 const TrafficLook &look,
+                 const TrafficLook &look, bool fading,
                  const PixelPoint aircraft_pos,
                  const FlarmTraffic &traffic) noexcept
 {
@@ -32,7 +32,8 @@ DrawFlarmTraffic(Canvas &canvas, const WindowProjection &projection,
     return;
 
   TextInBoxMode mode;
-  mode.shape = LabelShape::OUTLINED;
+  if (!fading)
+    mode.shape = LabelShape::OUTLINED;
 
   // JMW TODO enhancement: decluttering of FLARM altitudes (sort by max lift)
 
@@ -48,7 +49,7 @@ DrawFlarmTraffic(Canvas &canvas, const WindowProjection &projection,
                 mode, projection.GetScreenRect());
     }
 
-    if (traffic.climb_rate_avg30s >= 0.1) {
+    if (!fading && traffic.climb_rate_avg30s >= 0.1) {
       // If average climb data available draw it to the canvas
       TCHAR label_avg[100];
       FormatUserVerticalSpeed(traffic.climb_rate_avg30s,
@@ -64,7 +65,8 @@ DrawFlarmTraffic(Canvas &canvas, const WindowProjection &projection,
   }
 
   auto color = FlarmFriends::GetFriendColor(traffic.id);
-  TrafficRenderer::Draw(canvas, look, traffic,
+
+  TrafficRenderer::Draw(canvas, look, fading, traffic,
                         traffic.track - projection.GetScreenAngle(),
                         color, sc);
 }
@@ -83,8 +85,6 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
   // Return if FLARM data is not available
   const TrafficList &flarm = Basic().flarm.traffic;
-  if (flarm.IsEmpty())
-    return;
 
   const WindowProjection &projection = render_projection;
 
@@ -101,8 +101,17 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     if (!traffic.location_available)
       continue;
 
-    DrawFlarmTraffic(canvas, projection, traffic_look,
+    DrawFlarmTraffic(canvas, projection, traffic_look, false,
                      aircraft_pos, traffic);
+  }
+
+  if (const auto &fading = GetFadingFlarmTraffic(); !fading.empty()) {
+    for (const auto &[id, traffic] : fading) {
+      assert(traffic.location_available);
+
+      DrawFlarmTraffic(canvas, projection, traffic_look, true,
+                       aircraft_pos, traffic);
+    }
   }
 }
 

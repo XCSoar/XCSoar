@@ -156,6 +156,11 @@ struct MapSettings {
    */
   bool show_flarm_alarm_level;
 
+  /**
+   * Keep showing traffic for a while after it has disappeared?
+   */
+  bool fade_traffic;
+
   /** Display climb band on map */
   bool show_thermal_profile;
 
