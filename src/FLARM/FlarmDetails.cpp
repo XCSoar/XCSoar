@@ -12,7 +12,7 @@
 namespace FlarmDetails {
 
 const FlarmNetRecord *
-LookupRecord(FlarmId id)
+LookupRecord(FlarmId id) noexcept
 {
   // try to find flarm from FlarmNet.org File
   if (traffic_databases == nullptr)
@@ -22,7 +22,7 @@ LookupRecord(FlarmId id)
 }
 
 const TCHAR *
-LookupCallsign(FlarmId id)
+LookupCallsign(FlarmId id) noexcept
 {
   if (traffic_databases == nullptr)
     return nullptr;
@@ -31,7 +31,7 @@ LookupCallsign(FlarmId id)
 }
 
 FlarmId
-LookupId(const TCHAR *cn)
+LookupId(const TCHAR *cn) noexcept
 {
   assert(traffic_databases != nullptr);
 
@@ -39,7 +39,7 @@ LookupId(const TCHAR *cn)
 }
 
 bool
-AddSecondaryItem(FlarmId id, const TCHAR *name)
+AddSecondaryItem(FlarmId id, const TCHAR *name) noexcept
 {
   assert(id.IsDefined());
   assert(traffic_databases != nullptr);
@@ -48,8 +48,7 @@ AddSecondaryItem(FlarmId id, const TCHAR *name)
 }
 
 unsigned
-FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
-                                unsigned size)
+FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size) noexcept
 {
   assert(cn != NULL);
   assert(!StringIsEmpty(cn));

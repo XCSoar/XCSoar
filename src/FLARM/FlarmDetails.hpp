@@ -16,8 +16,9 @@ namespace FlarmDetails {
  * @param id FLARM id
  * @return The corresponding FLARMNet Record if found, otherwise NULL
  */
+[[gnu::pure]]
 const FlarmNetRecord *
-LookupRecord(FlarmId id);
+LookupRecord(FlarmId id) noexcept;
 
 /**
  * Looks up the FLARM id in the FLARM details array
@@ -25,8 +26,9 @@ LookupRecord(FlarmId id);
  * @param id FLARM id
  * @return The corresponding callsign if found, otherwise NULL
  */
+[[gnu::pure]]
 const TCHAR *
-LookupCallsign(FlarmId id);
+LookupCallsign(FlarmId id) noexcept;
 
 /**
  * Looks up the callsign in the FLARM details array
@@ -34,8 +36,9 @@ LookupCallsign(FlarmId id);
  * @param cn Callsign
  * @return The corresponding FLARM id if found, otherwise 0
  */
+[[gnu::pure]]
 FlarmId
-LookupId(const TCHAR *cn);
+LookupId(const TCHAR *cn) noexcept;
 
 /**
  * Adds a FLARM details couple (callsign + FLARM id)
@@ -45,9 +48,9 @@ LookupId(const TCHAR *cn);
  * @return True if successfully added, False otherwise
  */
 bool
-AddSecondaryItem(FlarmId id, const TCHAR *name);
+AddSecondaryItem(FlarmId id, const TCHAR *name) noexcept;
 
 unsigned
-FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size);
+FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size) noexcept;
 
 } // namespace FlarmDetails
