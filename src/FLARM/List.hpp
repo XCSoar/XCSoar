@@ -50,6 +50,13 @@ struct TrafficList {
     if (add.new_traffic.Modified(new_traffic))
       new_traffic = add.new_traffic;
 
+    if (list.empty() && !add.list.empty()) {
+      /* don't bother merging the two lists, we can simply memcpy()
+         it */
+      list = add.list;
+      return;
+    }
+
     // Add unique traffic from 'add' list
     for (auto &traffic : add.list) {
       if (FindTraffic(traffic.id) == nullptr) {
