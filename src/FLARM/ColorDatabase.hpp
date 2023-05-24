@@ -39,10 +39,7 @@ public:
     assert(color != FlarmColor::NONE);
     assert(color != FlarmColor::COUNT);
 
-    auto i = data.insert(std::make_pair(id, color));
-    if (!i.second)
-      /* the id already exists in the map: overwrite the old color */
-      i.first->second = color;
+    data.insert_or_assign(id, color);
   }
 
   void Remove(FlarmId id) noexcept {
