@@ -8,7 +8,7 @@
 
 void
 FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
-                       const NMEAInfo &basic)
+                       const NMEAInfo &basic) noexcept
 {
   // Cleanup old calculation instances
   if (basic.time_available)
