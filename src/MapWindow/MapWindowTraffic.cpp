@@ -44,14 +44,11 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     if (!traffic.location_available)
       continue;
 
-    // Save the location of the FLARM target
-    GeoPoint target_loc = traffic.location;
-
     // Points for the screen coordinates for the icon, name and average climb
     PixelPoint sc;
 
     // If FLARM target not on the screen, move to the next one
-    if (auto p = projection.GeoToScreenIfVisible(target_loc))
+    if (auto p = projection.GeoToScreenIfVisible(traffic.location))
       sc = *p;
     else
       continue;
@@ -122,14 +119,11 @@ MapWindow::DrawGLinkTraffic([[maybe_unused]] Canvas &canvas,
   // Circle through the GliderLink targets
   for (const auto &traf : traffic.list) {
 
-    // Save the location of the target
-    GeoPoint target_loc = traf.location;
-
     // Points for the screen coordinates for the icon, name and average climb
     PixelPoint sc;
 
     // If FLARM target not on the screen, move to the next one
-    if (auto p = projection.GeoToScreenIfVisible(target_loc))
+    if (auto p = projection.GeoToScreenIfVisible(traf.location))
       sc = *p;
     else
       continue;
