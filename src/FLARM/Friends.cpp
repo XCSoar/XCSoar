@@ -6,8 +6,10 @@
 #include "Global.hpp"
 #include "TrafficDatabases.hpp"
 
+namespace FlarmFriends {
+
 FlarmColor
-FlarmFriends::GetFriendColor(FlarmId id)
+GetFriendColor(FlarmId id)
 {
   if (traffic_databases == nullptr)
     return FlarmColor::NONE;
@@ -16,7 +18,7 @@ FlarmFriends::GetFriendColor(FlarmId id)
 }
 
 void
-FlarmFriends::SetFriendColor(FlarmId id, FlarmColor color)
+SetFriendColor(FlarmId id, FlarmColor color)
 {
   assert(traffic_databases != nullptr);
 
@@ -25,3 +27,5 @@ FlarmFriends::SetFriendColor(FlarmId id, FlarmColor color)
   else
     traffic_databases->flarm_colors.Set(id, color);
 }
+
+} // namespace FlarmFriends

@@ -7,8 +7,12 @@
 
 class FlarmId;
 
-namespace FlarmFriends
-{
-  FlarmColor GetFriendColor(FlarmId id);
-  void SetFriendColor(FlarmId id, FlarmColor color);
-};
+namespace FlarmFriends {
+
+FlarmColor
+GetFriendColor(FlarmId id);
+
+void
+SetFriendColor(FlarmId id, FlarmColor color);
+
+} // namespace FlarmFriends
