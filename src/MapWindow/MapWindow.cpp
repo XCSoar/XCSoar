@@ -18,7 +18,7 @@
  * Constructor of the MapWindow class
  */
 MapWindow::MapWindow(const MapLook &_look,
-                     const TrafficLook &_traffic_look)
+                     const TrafficLook &_traffic_look) noexcept
   :look(_look),
    traffic_look(_traffic_look),
    waypoint_renderer(nullptr, look.waypoint),
@@ -26,7 +26,7 @@ MapWindow::MapWindow(const MapLook &_look,
    airspace_label_renderer(look.airspace),
    trail_renderer(look.trail) {}
 
-MapWindow::~MapWindow()
+MapWindow::~MapWindow() noexcept
 {
   Destroy();
 
@@ -36,7 +36,7 @@ MapWindow::~MapWindow()
 #ifdef ENABLE_OPENGL
 
 void
-MapWindow::SetOverlay(std::unique_ptr<MapOverlay> &&_overlay)
+MapWindow::SetOverlay(std::unique_ptr<MapOverlay> &&_overlay) noexcept
 {
   overlay = std::move(_overlay);
 }
@@ -44,7 +44,7 @@ MapWindow::SetOverlay(std::unique_ptr<MapOverlay> &&_overlay)
 #endif
 
 void
-MapWindow::SetGlideComputer(GlideComputer *_gc)
+MapWindow::SetGlideComputer(GlideComputer *_gc) noexcept
 {
   glide_computer = _gc;
   airspace_renderer.SetAirspaceWarnings(glide_computer != nullptr
@@ -53,7 +53,7 @@ MapWindow::SetGlideComputer(GlideComputer *_gc)
 }
 
 void
-MapWindow::FlushCaches()
+MapWindow::FlushCaches() noexcept
 {
   background.Flush();
   if (rasp_renderer)
@@ -73,7 +73,7 @@ void
 MapWindow::ReadBlackboard(const MoreData &nmea_info,
                           const DerivedInfo &derived_info,
                           const ComputerSettings &settings_computer,
-                          const MapSettings &settings_map)
+                          const MapSettings &settings_map) noexcept
 {
   MapWindowBlackboard::ReadBlackboard(nmea_info, derived_info);
   ReadComputerSettings(settings_computer);
@@ -81,7 +81,7 @@ MapWindow::ReadBlackboard(const MoreData &nmea_info,
 }
 
 unsigned
-MapWindow::UpdateTopography(unsigned max_update)
+MapWindow::UpdateTopography(unsigned max_update) noexcept
 {
   if (topography != nullptr && GetMapSettings().topography_enabled)
     return topography->ScanVisibility(visible_projection, max_update);
@@ -90,7 +90,7 @@ MapWindow::UpdateTopography(unsigned max_update)
 }
 
 bool
-MapWindow::UpdateTerrain()
+MapWindow::UpdateTerrain() noexcept
 {
   if (terrain == nullptr)
     return false;
@@ -134,7 +134,7 @@ MapWindow::OnPaintBuffer(Canvas &canvas) noexcept
 }
 
 void
-MapWindow::SetTopography(TopographyStore *_topography)
+MapWindow::SetTopography(TopographyStore *_topography) noexcept
 {
   topography = _topography;
 
@@ -145,14 +145,14 @@ MapWindow::SetTopography(TopographyStore *_topography)
 }
 
 void
-MapWindow::SetTerrain(RasterTerrain *_terrain)
+MapWindow::SetTerrain(RasterTerrain *_terrain) noexcept
 {
   terrain = _terrain;
   background.SetTerrain(_terrain);
 }
 
 void
-MapWindow::SetRasp(const std::shared_ptr<RaspStore> &_rasp_store)
+MapWindow::SetRasp(const std::shared_ptr<RaspStore> &_rasp_store) noexcept
 {
   rasp_renderer.reset();
   rasp_store = _rasp_store;

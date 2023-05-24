@@ -11,4 +11,4 @@ struct FAITriangleSettings;
 void
 RenderFAISector(Canvas &canvas, const WindowProjection &projection,
                 const GeoPoint &pt1, const GeoPoint &pt2,
-                bool reverse, const FAITriangleSettings &settings);
+                bool reverse, const FAITriangleSettings &settings) noexcept;

@@ -14,7 +14,7 @@
 #include "Look/MapLook.hpp"
 
 void
-MapWindow::DrawTask(Canvas &canvas)
+MapWindow::DrawTask(Canvas &canvas) noexcept
 {
   if (task == nullptr)
     return;
@@ -64,7 +64,7 @@ MapWindow::DrawTask(Canvas &canvas)
 }
 
 void
-MapWindow::DrawRoute(Canvas &canvas)
+MapWindow::DrawRoute(Canvas &canvas) noexcept
 {
   const auto &route = Calculated().planned_route;
 
@@ -83,7 +83,7 @@ MapWindow::DrawRoute(Canvas &canvas)
 }
 
 void
-MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
+MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas) noexcept
 {
   if (Calculated().circling 
       || !Basic().location_available

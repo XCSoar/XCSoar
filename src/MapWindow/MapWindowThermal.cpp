@@ -14,7 +14,7 @@ DrawThermalSources(Canvas &canvas, const MaskedIcon &icon,
                    const WindowProjection &projection,
                    const T &sources,
                    const double aircraft_altitude,
-                   const SpeedVector &wind)
+                   const SpeedVector &wind) noexcept
 {
   for (const auto &source : sources) {
     // find height difference
@@ -33,7 +33,7 @@ DrawThermalSources(Canvas &canvas, const MaskedIcon &icon,
 }
 
 void
-MapWindow::DrawThermalEstimate(Canvas &canvas) const
+MapWindow::DrawThermalEstimate(Canvas &canvas) const noexcept
 {
   const MoreData &basic = Basic();
   const DerivedInfo &calculated = Calculated();

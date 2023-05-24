@@ -17,7 +17,7 @@ static constexpr Angle MIN_RATE = Angle::Degrees(1.0); // degrees/s
 
 void
 TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
-                        const Angle track_angle, const PixelPoint pos)
+                        const Angle track_angle, const PixelPoint pos) noexcept
 {
   const auto sc = (track_angle - screen_angle).SinCos();
   const auto x = sc.first, y = sc.second;
@@ -36,7 +36,7 @@ TrackLineRenderer::Draw(Canvas &canvas,
                         const PixelPoint pos, const NMEAInfo &basic,
                         const DerivedInfo &calculated,
                         const MapSettings &settings,
-                        bool wind_relative)
+                        bool wind_relative) noexcept
 {
   if (!basic.track_available || !basic.attitude.heading_available)
     return;
@@ -58,13 +58,13 @@ TrackLineRenderer::Draw(Canvas &canvas,
   TrackLineRenderer::Draw(canvas, projection.GetScreenAngle(), basic.track, pos);
 }
 
-void
+inline void
 TrackLineRenderer::DrawProjected(Canvas &canvas,
                                  const WindowProjection &projection,
                                  const NMEAInfo &basic,
                                  const DerivedInfo &calculated,
                                  [[maybe_unused]] const MapSettings &settings,
-                                 bool wind_relative)
+                                 bool wind_relative) noexcept
 {
   // projection.GetMapScale() <= 6000;
 

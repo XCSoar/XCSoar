@@ -15,7 +15,7 @@
 
 void
 CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
-                      const PixelRect rc)
+                      const PixelRect rc) noexcept
 {
   PixelPoint pos(rc.right - Layout::Scale(19),
                  Layout::Scale(19) + rc.top);
@@ -24,7 +24,7 @@ CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
 
 void
 CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
-                      const PixelPoint pos)
+                      const PixelPoint pos) noexcept
 {
   BulkPixelPoint arrow[] = { { 0, -13 }, { -6, 10 }, { 0, 4 }, { 6, 10 } };
 

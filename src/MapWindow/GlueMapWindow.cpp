@@ -12,7 +12,7 @@
 #include "Topography/Thread.hpp"
 #include "Terrain/Thread.hpp"
 
-GlueMapWindow::GlueMapWindow(const Look &look)
+GlueMapWindow::GlueMapWindow(const Look &look) noexcept
   :MapWindow(look.map, look.traffic),
    thermal_band_renderer(look.thermal_band, look.chart),
    final_glide_bar_renderer(look.final_glide_bar, look.map.task),
@@ -21,13 +21,13 @@ GlueMapWindow::GlueMapWindow(const Look &look)
 {
 }
 
-GlueMapWindow::~GlueMapWindow()
+GlueMapWindow::~GlueMapWindow() noexcept
 {
   Destroy();
 }
 
 void
-GlueMapWindow::SetTopography(TopographyStore *_topography)
+GlueMapWindow::SetTopography(TopographyStore *_topography) noexcept
 {
   if (topography_thread != nullptr) {
     topography_thread->LockStop();
@@ -43,7 +43,7 @@ GlueMapWindow::SetTopography(TopographyStore *_topography)
 }
 
 void
-GlueMapWindow::SetTerrain(RasterTerrain *_terrain)
+GlueMapWindow::SetTerrain(RasterTerrain *_terrain) noexcept
 {
   if (terrain_thread != nullptr) {
     terrain_thread->LockStop();
@@ -59,7 +59,7 @@ GlueMapWindow::SetTerrain(RasterTerrain *_terrain)
 }
 
 void
-GlueMapWindow::SetMapSettings(const MapSettings &new_value)
+GlueMapWindow::SetMapSettings(const MapSettings &new_value) noexcept
 {
   AssertThreadOrUndefined();
 
@@ -72,7 +72,7 @@ GlueMapWindow::SetMapSettings(const MapSettings &new_value)
 }
 
 void
-GlueMapWindow::SetComputerSettings(const ComputerSettings &new_value)
+GlueMapWindow::SetComputerSettings(const ComputerSettings &new_value) noexcept
 {
   AssertThreadOrUndefined();
 
@@ -85,7 +85,7 @@ GlueMapWindow::SetComputerSettings(const ComputerSettings &new_value)
 }
 
 void
-GlueMapWindow::SetUIState(const UIState &new_value)
+GlueMapWindow::SetUIState(const UIState &new_value) noexcept
 {
   AssertThreadOrUndefined();
 
@@ -98,7 +98,7 @@ GlueMapWindow::SetUIState(const UIState &new_value)
 }
 
 void
-GlueMapWindow::ExchangeBlackboard()
+GlueMapWindow::ExchangeBlackboard() noexcept
 {
   /* copy device_blackboard to MapWindow */
 
@@ -119,7 +119,7 @@ GlueMapWindow::ExchangeBlackboard()
 }
 
 void
-GlueMapWindow::SuspendThreads()
+GlueMapWindow::SuspendThreads() noexcept
 {
 #ifndef ENABLE_OPENGL
   if (draw_thread != nullptr)
@@ -128,7 +128,7 @@ GlueMapWindow::SuspendThreads()
 }
 
 void
-GlueMapWindow::ResumeThreads()
+GlueMapWindow::ResumeThreads() noexcept
 {
 #ifndef ENABLE_OPENGL
   if (draw_thread != nullptr)
@@ -137,7 +137,7 @@ GlueMapWindow::ResumeThreads()
 }
 
 void
-GlueMapWindow::FullRedraw()
+GlueMapWindow::FullRedraw() noexcept
 {
   UpdateDisplayMode();
   UpdateScreenAngle();
@@ -161,7 +161,7 @@ GlueMapWindow::PartialRedraw() noexcept
 }
 
 void
-GlueMapWindow::QuickRedraw()
+GlueMapWindow::QuickRedraw() noexcept
 {
   UpdateScreenAngle();
   UpdateProjection();

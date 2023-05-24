@@ -10,7 +10,7 @@
 
 void
 MapWindow::DrawWind(Canvas &canvas, const PixelPoint &Start,
-                    const PixelRect &rc) const
+                    const PixelRect &rc) const noexcept
 {
   if (IsPanning())
     return;
@@ -21,7 +21,7 @@ MapWindow::DrawWind(Canvas &canvas, const PixelPoint &Start,
 }
 
 void
-MapWindow::DrawCompass(Canvas &canvas, const PixelRect &rc) const
+MapWindow::DrawCompass(Canvas &canvas, const PixelRect &rc) const noexcept
 {
   if (!compass_visible)
     return;
@@ -31,7 +31,8 @@ MapWindow::DrawCompass(Canvas &canvas, const PixelRect &rc) const
 }
 
 void
-MapWindow::DrawBestCruiseTrack(Canvas &canvas, const PixelPoint aircraft_pos) const
+MapWindow::DrawBestCruiseTrack(Canvas &canvas,
+                               const PixelPoint aircraft_pos) const noexcept
 {
   if (Basic().location_available)
     BestCruiseArrowRenderer::Draw(canvas, look.task,
@@ -40,7 +41,8 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas, const PixelPoint aircraft_pos) co
 }
 
 void
-MapWindow::DrawTrackBearing(Canvas &canvas, const PixelPoint aircraft_pos, bool circling) const
+MapWindow::DrawTrackBearing(Canvas &canvas, const PixelPoint aircraft_pos,
+                            bool circling) const noexcept
 {
   if (!Basic().location_available)
     return;

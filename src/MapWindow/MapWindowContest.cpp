@@ -14,14 +14,14 @@
 static void
 RenderFAISectors(Canvas &canvas, const WindowProjection &projection,
                  const GeoPoint &a, const GeoPoint &b,
-                 const FAITriangleSettings &settings)
+                 const FAITriangleSettings &settings) noexcept
 {
   RenderFAISector(canvas, projection, a, b, false, settings);
   RenderFAISector(canvas, projection, a, b, true, settings);
 }
 
 void
-MapWindow::DrawContest(Canvas &canvas)
+MapWindow::DrawContest(Canvas &canvas) noexcept
 {
   const FlyingState &flying = Calculated().flight;
 

@@ -13,8 +13,8 @@ class CompassRenderer {
   const MapLook &look;
 
 public:
-  CompassRenderer(const MapLook &_look):look(_look) {}
+  CompassRenderer(const MapLook &_look) noexcept:look(_look) {}
 
-  void Draw(Canvas &canvas, Angle screen_angle, PixelPoint pos);
-  void Draw(Canvas &canvas, Angle screen_angle, PixelRect rc);
+  void Draw(Canvas &canvas, Angle screen_angle, PixelPoint pos) noexcept;
+  void Draw(Canvas &canvas, Angle screen_angle, PixelRect rc) noexcept;
 };

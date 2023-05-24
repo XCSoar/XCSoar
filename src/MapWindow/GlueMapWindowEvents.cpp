@@ -106,7 +106,7 @@ GlueMapWindow::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 
 [[gnu::pure]]
 static bool
-IsCtrlKeyPressed()
+IsCtrlKeyPressed() noexcept
 {
 #ifdef ENABLE_SDL
   return SDL_GetModState() & (KMOD_LCTRL|KMOD_RCTRL);
@@ -323,7 +323,7 @@ GlueMapWindow::OnMultiTouchDown() noexcept
 #endif /* HAVE_MULTI_TOUCH */
 
 bool
-GlueMapWindow::OnMouseGesture(const TCHAR* gesture)
+GlueMapWindow::OnMouseGesture(const TCHAR *gesture) noexcept
 {
   return InputEvents::processGesture(gesture);
 }
@@ -433,7 +433,7 @@ GlueMapWindow::OnKineticTimer() noexcept
 #endif
 
 void
-GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc)
+GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
 {
   MapWindow::Render(canvas, rc);
 

@@ -21,16 +21,16 @@ class TrackLineRenderer {
   const MapLook &look;
 
 public:
-  TrackLineRenderer(const MapLook &_look):look(_look) {}
+  constexpr TrackLineRenderer(const MapLook &_look) noexcept:look(_look) {}
 
   void Draw(Canvas &canvas, const Angle screen_angle, const Angle track_angle,
-            PixelPoint pos);
+            PixelPoint pos) noexcept;
 
   void Draw(Canvas &canvas,
             const WindowProjection &projection,
             PixelPoint pos, const NMEAInfo &basic,
             const DerivedInfo &calculated, const MapSettings &settings,
-            bool wind_relative);
+            bool wind_relative) noexcept;
 
 protected:
   void DrawProjected(Canvas &canvas,
@@ -38,5 +38,5 @@ protected:
                      const NMEAInfo &basic,
                      const DerivedInfo &calculated,
                      const MapSettings &settings,
-                     bool wind_relative);
+                     bool wind_relative) noexcept;
 };

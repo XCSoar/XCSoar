@@ -6,7 +6,7 @@
 #include "Computer/GlideComputer.hpp"
 
 void
-MapWindow::RenderTrail(Canvas &canvas, const PixelPoint aircraft_pos)
+MapWindow::RenderTrail(Canvas &canvas, const PixelPoint aircraft_pos) noexcept
 {
   auto min_time = std::max(Basic().time - std::chrono::minutes{10},
                            TimeStamp{});

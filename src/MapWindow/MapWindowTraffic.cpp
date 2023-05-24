@@ -18,7 +18,7 @@
  */
 void
 MapWindow::DrawFLARMTraffic(Canvas &canvas,
-                            const PixelPoint aircraft_pos) const
+                            const PixelPoint aircraft_pos) const noexcept
 {
   // Return if FLARM icons on moving map are disabled
   if (!GetMapSettings().show_flarm_on_map)
@@ -105,7 +105,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
  */
 void
 MapWindow::DrawGLinkTraffic([[maybe_unused]] Canvas &canvas,
-                            [[maybe_unused]] const PixelPoint aircraft_pos) const
+                            [[maybe_unused]] const PixelPoint aircraft_pos) const noexcept
 {
 #ifdef ANDROID
 
@@ -195,7 +195,7 @@ MapWindow::DrawGLinkTraffic([[maybe_unused]] Canvas &canvas,
  * @param canvas Canvas for drawing
  */
 void
-MapWindow::DrawTeammate(Canvas &canvas) const
+MapWindow::DrawTeammate(Canvas &canvas) const noexcept
 {
   const TeamInfo &teamcode_info = Calculated();
 
@@ -208,7 +208,7 @@ MapWindow::DrawTeammate(Canvas &canvas) const
 #ifdef HAVE_SKYLINES_TRACKING
 
 void
-MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const
+MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const noexcept
 {
   if (DisplaySkyLinesTrafficMapMode::OFF == GetMapSettings().skylines_traffic_map_mode ||
       skylines_data == nullptr)
