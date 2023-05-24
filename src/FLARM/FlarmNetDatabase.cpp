@@ -20,10 +20,9 @@ FlarmNetDatabase::Insert(const FlarmNetRecord &record) noexcept
 const FlarmNetRecord *
 FlarmNetDatabase::FindFirstRecordByCallSign(const TCHAR *cn) const noexcept
 {
-  for (const auto &i : map) {
-    assert(i.first.IsDefined());
+  for (const auto &[id, record] : map) {
+    assert(id.IsDefined());
 
-    const FlarmNetRecord &record = i.second;
     if (StringIsEqual(record.callsign, cn))
       return &record;
   }
@@ -38,10 +37,9 @@ FlarmNetDatabase::FindRecordsByCallSign(const TCHAR *cn,
 {
   unsigned count = 0;
 
-  for (const auto &i : map) {
-    assert(i.first.IsDefined());
+  for (const auto &[id, record] : map) {
+    assert(id.IsDefined());
 
-    const FlarmNetRecord &record = i.second;
     if (StringIsEqual(record.callsign, cn))
       array[count++] = &record;
   }
@@ -55,12 +53,11 @@ FlarmNetDatabase::FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
 {
   unsigned count = 0;
 
-  for (const auto &i : map) {
-    assert(i.first.IsDefined());
+  for (const auto &[id, record] : map) {
+    assert(id.IsDefined());
 
-    const FlarmNetRecord &record = i.second;
     if (StringIsEqual(record.callsign, cn))
-      array[count++] = i.first;
+      array[count++] = id;
   }
 
   return count;
