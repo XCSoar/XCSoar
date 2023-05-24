@@ -507,6 +507,7 @@ jobs:
       - name: Install dependencies
         run: |
           brew install \
+            automake autoconf libtool \
             make \
             quilt \
             librsvg \
