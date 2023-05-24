@@ -8,20 +8,20 @@
  * This is a no-op if this has been attempted already.
  */
 void
-LoadFlarmDatabases();
+LoadFlarmDatabases() noexcept;
 
 /**
  * Same as LoadFlarmDatabases except that this method forces reload even if the database
  * has been loaded previously.
  */
 void
-ReloadFlarmDatabases();
+ReloadFlarmDatabases() noexcept;
 
 void
-SaveFlarmColors();
+SaveFlarmColors() noexcept;
 
 void
-SaveFlarmNames();
+SaveFlarmNames() noexcept;
 
 void
-DeinitTrafficGlobals();
+DeinitTrafficGlobals() noexcept;

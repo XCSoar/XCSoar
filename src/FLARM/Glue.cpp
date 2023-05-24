@@ -23,7 +23,7 @@
  * Loads the FLARMnet file
  */
 static void
-LoadFLARMnet(FlarmNetDatabase &db)
+LoadFLARMnet(FlarmNetDatabase &db) noexcept
 try {
   auto path = Profile::GetPath(ProfileKeys::FlarmFile);
   if (path == nullptr) {
@@ -43,7 +43,7 @@ try {
  * @see AddSecondaryItem
  */
 static void
-LoadSecondary(FlarmNameDatabase &db)
+LoadSecondary(FlarmNameDatabase &db) noexcept
 try {
   LogString("OpenFLARMDetails");
 
@@ -54,7 +54,7 @@ try {
 }
 
 void
-LoadFlarmDatabases()
+LoadFlarmDatabases() noexcept
 {
   if (traffic_databases != nullptr)
     return;
@@ -63,7 +63,7 @@ LoadFlarmDatabases()
 }
 
 void
-ReloadFlarmDatabases()
+ReloadFlarmDatabases() noexcept
 {
   traffic_databases = new TrafficDatabases();
 
@@ -79,7 +79,7 @@ ReloadFlarmDatabases()
 }
 
 void
-SaveFlarmColors()
+SaveFlarmColors() noexcept
 {
   if (traffic_databases != nullptr)
     Profile::Save(Profile::map, traffic_databases->flarm_colors);
@@ -90,7 +90,7 @@ SaveFlarmColors()
  * corresponding file (xcsoar-flarm.txt)
    */
 static void
-SaveSecondary(FlarmNameDatabase &flarm_names)
+SaveSecondary(FlarmNameDatabase &flarm_names) noexcept
 try {
   FileOutputStream fos(LocalPath(_T("xcsoar-flarm.txt")));
   BufferedOutputStream bos(fos);
@@ -102,14 +102,14 @@ try {
 }
 
 void
-SaveFlarmNames()
+SaveFlarmNames() noexcept
 {
   if (traffic_databases != nullptr)
     SaveSecondary(traffic_databases->flarm_names);
 }
 
 void
-DeinitTrafficGlobals()
+DeinitTrafficGlobals() noexcept
 {
   delete traffic_databases;
   traffic_databases = nullptr;
