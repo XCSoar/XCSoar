@@ -48,7 +48,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     GeoPoint target_loc = traffic.location;
 
     // Points for the screen coordinates for the icon, name and average climb
-    PixelPoint sc, sc_name, sc_av;
+    PixelPoint sc;
 
     // If FLARM target not on the screen, move to the next one
     if (auto p = projection.GeoToScreenIfVisible(target_loc))
@@ -56,31 +56,33 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     else
       continue;
 
-    // Draw the name 16 points below the icon
-    sc_name = sc;
-    sc_name.y -= Layout::Scale(20);
-
-    // Draw the average climb value above the icon
-    sc_av = sc;
-    sc_av.y += Layout::Scale(5);
-
     TextInBoxMode mode;
     mode.shape = LabelShape::OUTLINED;
 
     // JMW TODO enhancement: decluttering of FLARM altitudes (sort by max lift)
 
     // only draw labels if not close to aircraft
-    if ((sc_av - aircraft_pos).MagnitudeSquared() > Layout::Scale(30 * 30)) {
+    if ((sc - aircraft_pos).MagnitudeSquared() > Layout::Scale(30 * 30)) {
       // If FLARM callsign/name available draw it to the canvas
-      if (traffic.HasName() && !StringIsEmpty(traffic.name))
+      if (traffic.HasName() && !StringIsEmpty(traffic.name)) {
+        // Draw the name 16 points below the icon
+        auto sc_name = sc;
+        sc_name.y -= Layout::Scale(20);
+
         TextInBox(canvas, traffic.name, sc_name,
                   mode, GetClientRect());
+      }
 
       if (traffic.climb_rate_avg30s >= 0.1) {
         // If average climb data available draw it to the canvas
         TCHAR label_avg[100];
         FormatUserVerticalSpeed(traffic.climb_rate_avg30s,
                                        label_avg, false);
+
+        // Draw the average climb value above the icon
+        auto sc_av = sc;
+        sc_av.y += Layout::Scale(5);
+
         TextInBox(canvas, label_avg, sc_av, mode, GetClientRect());
       }
     }
@@ -124,7 +126,7 @@ MapWindow::DrawGLinkTraffic([[maybe_unused]] Canvas &canvas,
     GeoPoint target_loc = traf.location;
 
     // Points for the screen coordinates for the icon, name and average climb
-    PixelPoint sc, sc_name, sc_av, sc_alt;
+    PixelPoint sc;
 
     // If FLARM target not on the screen, move to the next one
     if (auto p = projection.GeoToScreenIfVisible(target_loc))
@@ -132,29 +134,20 @@ MapWindow::DrawGLinkTraffic([[maybe_unused]] Canvas &canvas,
     else
       continue;
 
-    // Draw the callsign above the icon
-    sc_name = sc;
-    sc_name.x -= Layout::Scale(10);
-    sc_name.y -= Layout::Scale(15);
-
-    // Draw the average climb to the right of the icon
-    sc_av = sc;
-    sc_av.x += Layout::Scale(10);
-    sc_av.y -= Layout::Scale(8);
-
-    // Location of altitude label
-    sc_alt = sc;
-    sc_alt.x -= Layout::Scale(10);
-    sc_alt.y -= Layout::Scale(0);
-
     TextInBoxMode mode;
     mode.shape = LabelShape::OUTLINED;
     mode.align = TextInBoxMode::Alignment::RIGHT;
 
     // If callsign/name available draw it to the canvas
-    if (traf.HasName() && !StringIsEmpty(traf.name))
+    if (traf.HasName() && !StringIsEmpty(traf.name)) {
+      // Draw the callsign above the icon
+      auto sc_name = sc;
+      sc_name.x -= Layout::Scale(10);
+      sc_name.y -= Layout::Scale(15);
+
       TextInBox(canvas, traf.name, sc_name,
                 mode, GetClientRect());
+    }
 
     if (traf.climb_rate_received) {
 
@@ -163,6 +156,12 @@ MapWindow::DrawGLinkTraffic([[maybe_unused]] Canvas &canvas,
       FormatUserVerticalSpeed(traf.climb_rate,
                                      label_avg, false);
       mode.align = TextInBoxMode::Alignment::LEFT;
+
+      // Draw the average climb to the right of the icon
+      auto sc_av = sc;
+      sc_av.x += Layout::Scale(10);
+      sc_av.y -= Layout::Scale(8);
+
       TextInBox(canvas, label_avg, sc_av, mode, GetClientRect());
     }
 
@@ -173,6 +172,11 @@ MapWindow::DrawGLinkTraffic([[maybe_unused]] Canvas &canvas,
       TCHAR label_alt[100];
       double alt = (double(traf.altitude) - basic.gps_altitude) / 100.0;
       FormatRelativeUserAltitude(alt, label_alt, false);
+
+      // Location of altitude label
+      auto sc_alt = sc;
+      sc_alt.x -= Layout::Scale(10);
+      sc_alt.y -= Layout::Scale(0);
 
       mode.align = TextInBoxMode::Alignment::RIGHT;
       TextInBox(canvas, label_alt, sc_alt, mode, GetClientRect());
