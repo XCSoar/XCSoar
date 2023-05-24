@@ -12,6 +12,63 @@
 #include "Tracking/SkyLines/Data.hpp"
 #include "util/StringCompare.hxx"
 
+#include <cassert>
+
+static void
+DrawFlarmTraffic(Canvas &canvas, const WindowProjection &projection,
+                 const TrafficLook &look,
+                 const PixelPoint aircraft_pos,
+                 const FlarmTraffic &traffic) noexcept
+{
+  assert(traffic.location_available);
+
+  // Points for the screen coordinates for the icon, name and average climb
+  PixelPoint sc;
+
+  // If FLARM target not on the screen, move to the next one
+  if (auto p = projection.GeoToScreenIfVisible(traffic.location))
+    sc = *p;
+  else
+    return;
+
+  TextInBoxMode mode;
+  mode.shape = LabelShape::OUTLINED;
+
+  // JMW TODO enhancement: decluttering of FLARM altitudes (sort by max lift)
+
+  // only draw labels if not close to aircraft
+  if ((sc - aircraft_pos).MagnitudeSquared() > Layout::Scale(30 * 30)) {
+    // If FLARM callsign/name available draw it to the canvas
+    if (traffic.HasName() && !StringIsEmpty(traffic.name)) {
+      // Draw the name 16 points below the icon
+      auto sc_name = sc;
+      sc_name.y -= Layout::Scale(20);
+
+      TextInBox(canvas, traffic.name, sc_name,
+                mode, projection.GetScreenRect());
+    }
+
+    if (traffic.climb_rate_avg30s >= 0.1) {
+      // If average climb data available draw it to the canvas
+      TCHAR label_avg[100];
+      FormatUserVerticalSpeed(traffic.climb_rate_avg30s,
+                              label_avg, false);
+
+      // Draw the average climb value above the icon
+      auto sc_av = sc;
+      sc_av.y += Layout::Scale(5);
+
+      TextInBox(canvas, label_avg, sc_av, mode,
+                projection.GetScreenRect());
+    }
+  }
+
+  auto color = FlarmFriends::GetFriendColor(traffic.id);
+  TrafficRenderer::Draw(canvas, look, traffic,
+                        traffic.track - projection.GetScreenAngle(),
+                        color, sc);
+}
+
 /**
  * Draws the FLARM traffic icons onto the given canvas
  * @param canvas Canvas for drawing
@@ -44,50 +101,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     if (!traffic.location_available)
       continue;
 
-    // Points for the screen coordinates for the icon, name and average climb
-    PixelPoint sc;
-
-    // If FLARM target not on the screen, move to the next one
-    if (auto p = projection.GeoToScreenIfVisible(traffic.location))
-      sc = *p;
-    else
-      continue;
-
-    TextInBoxMode mode;
-    mode.shape = LabelShape::OUTLINED;
-
-    // JMW TODO enhancement: decluttering of FLARM altitudes (sort by max lift)
-
-    // only draw labels if not close to aircraft
-    if ((sc - aircraft_pos).MagnitudeSquared() > Layout::Scale(30 * 30)) {
-      // If FLARM callsign/name available draw it to the canvas
-      if (traffic.HasName() && !StringIsEmpty(traffic.name)) {
-        // Draw the name 16 points below the icon
-        auto sc_name = sc;
-        sc_name.y -= Layout::Scale(20);
-
-        TextInBox(canvas, traffic.name, sc_name,
-                  mode, GetClientRect());
-      }
-
-      if (traffic.climb_rate_avg30s >= 0.1) {
-        // If average climb data available draw it to the canvas
-        TCHAR label_avg[100];
-        FormatUserVerticalSpeed(traffic.climb_rate_avg30s,
-                                       label_avg, false);
-
-        // Draw the average climb value above the icon
-        auto sc_av = sc;
-        sc_av.y += Layout::Scale(5);
-
-        TextInBox(canvas, label_avg, sc_av, mode, GetClientRect());
-      }
-    }
-
-    auto color = FlarmFriends::GetFriendColor(traffic.id);
-    TrafficRenderer::Draw(canvas, traffic_look, traffic,
-                          traffic.track - projection.GetScreenAngle(),
-                          color, sc);
+    DrawFlarmTraffic(canvas, projection, traffic_look,
+                     aircraft_pos, traffic);
   }
 }
 
