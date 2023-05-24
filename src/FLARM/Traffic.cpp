@@ -11,7 +11,7 @@ static constexpr const TCHAR* acTypes[16] = {
     _T("Unknown"), _T("StaticObject") };
 
 const TCHAR *
-FlarmTraffic::GetTypeString(AircraftType type)
+FlarmTraffic::GetTypeString(AircraftType type) noexcept
 {
   unsigned index = (unsigned)type;
   if (index < 16)
@@ -21,7 +21,7 @@ FlarmTraffic::GetTypeString(AircraftType type)
 }
 
 void
-FlarmTraffic::Update(const FlarmTraffic &other)
+FlarmTraffic::Update(const FlarmTraffic &other) noexcept
 {
   alarm_level = other.alarm_level;
   relative_north = other.relative_north;

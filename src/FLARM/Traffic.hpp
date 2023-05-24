@@ -118,11 +118,11 @@ struct FlarmTraffic {
   /** Average climb rate over 30s */
   double climb_rate_avg30s;
 
-  bool IsDefined() const {
+  bool IsDefined() const noexcept {
     return valid;
   }
 
-  bool HasAlarm() const {
+  bool HasAlarm() const noexcept {
     return alarm_level != AlarmType::NONE;
   }
 
@@ -130,26 +130,26 @@ struct FlarmTraffic {
    * Does the target have a name?
    * @return True if a name has been assigned to the target
    */
-  bool HasName() const {
+  bool HasName() const noexcept {
     return !name.empty();
   }
 
-  void Clear() {
+  void Clear() noexcept {
     valid.Clear();
     name.clear();
   }
 
-  Angle Bearing() const {
+  Angle Bearing() const noexcept {
     return Angle::FromXY(relative_north, relative_east);
   }
 
-  bool IsPowered() const {
+  bool IsPowered() const noexcept {
     return type != AircraftType::GLIDER &&
            type != AircraftType::HANG_GLIDER &&
            type != AircraftType::PARA_GLIDER;
   }
 
-  bool IsPassive() const {
+  bool IsPassive() const noexcept {
     return IsPowered() || speed < 4;
   }
 
@@ -163,9 +163,10 @@ struct FlarmTraffic {
     return valid;
   }
 
-  static const TCHAR* GetTypeString(AircraftType type);
+  [[gnu::const]]
+  static const TCHAR *GetTypeString(AircraftType type) noexcept;
 
-  void Update(const FlarmTraffic &other);
+  void Update(const FlarmTraffic &other) noexcept;
 };
 
 static_assert(std::is_trivial<FlarmTraffic>::value, "type is not trivial");
