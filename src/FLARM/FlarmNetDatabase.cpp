@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "FlarmNetDatabase.hpp"
-#include "util/StringUtil.hpp"
+#include "util/StringAPI.hxx"
 
 #include <cassert>
 
