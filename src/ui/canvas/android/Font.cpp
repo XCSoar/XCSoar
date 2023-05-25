@@ -44,10 +44,8 @@ Font::Destroy() noexcept
 PixelSize
 Font::TextSize(tstring_view text) const noexcept
 {
-  if (text_util_object == nullptr) {
-    PixelSize empty = { 0, 0 };
-    return empty;
-  }
+  if (text_util_object == nullptr || text.empty())
+    return {0, 0};
 
   return text_util_object->getTextBounds(text);
 }
