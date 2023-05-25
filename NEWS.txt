@@ -1,4 +1,4 @@
-Version 7.32 - not yet released
+Version 7.32 - 2023/05/25
 * user interface
   - fix horizon roll, show bank angles greater than 90°
   - fix horizon pitch, show sky instead of ground when pitch is greater than 50°
