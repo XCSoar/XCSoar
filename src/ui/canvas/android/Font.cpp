@@ -4,12 +4,7 @@
 #include "ui/canvas/Font.hpp"
 #include "ui/canvas/opengl/Texture.hpp"
 #include "Screen/Debug.hpp"
-#include "Look/FontDescription.hpp"
-#include "java/Global.hxx"
-#include "java/Class.hxx"
-#include "java/String.hxx"
 #include "Android/TextUtil.hpp"
-#include "util/StringCompare.hxx"
 
 #include <cassert>
 
