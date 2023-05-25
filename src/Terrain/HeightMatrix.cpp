@@ -25,7 +25,7 @@ HeightMatrix::SetSize(UnsignedPoint2D _size) noexcept
 {
   size = _size;
 
-  SetSize(std::size_t{size.x} * std::size_t{size.y});
+  SetSize(size.Area());
 }
 
 void
@@ -50,7 +50,7 @@ HeightMatrix::Fill(const RasterMap &map, const GeoBounds &bounds,
 
   const Angle delta_y = bounds.GetHeight() / _size.y;
   Angle latitude = bounds.GetNorth();
-  for (auto p = data.data(), end = p + std::size_t{_size.x} * std::size_t{_size.y};
+  for (auto p = data.data(), end = p + _size.Area();
        p != end; p += _size.x, latitude -= delta_y) {
     map.ScanLine(GeoPoint(bounds.GetWest(), latitude),
                  GeoPoint(bounds.GetEast(), latitude),
