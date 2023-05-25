@@ -25,7 +25,7 @@ public:
   static void Initialise(JNIEnv *env) noexcept;
   static void Deinitialise(JNIEnv *env) noexcept;
 
-  static TextUtil *create(const FontDescription &d) noexcept;
+  static TextUtil *create(const FontDescription &d);
 
   [[gnu::pure]]
   PixelSize getTextBounds(std::string_view text) const noexcept;

@@ -58,7 +58,7 @@ TextUtil::TextUtil(const Java::LocalObject &_obj) noexcept
 }
 
 TextUtil *
-TextUtil::create(const FontDescription &d) noexcept
+TextUtil::create(const FontDescription &d)
 {
   jint paramStyle, paramTextSize;
 
