@@ -64,7 +64,7 @@ bool
 GlueMapWindow::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
   /* allow a bigger threshold on touch screens */
-  const unsigned threshold = Layout::Scale(IsEmbedded() ? 50 : 10);
+  const unsigned threshold = Layout::Scale(HasTouchScreen() ? 50 : 10);
   if (drag_mode != DRAG_NONE && arm_mapitem_list &&
       ((unsigned)ManhattanDistance(drag_start, p) > threshold ||
        mouse_down_clock.Elapsed() > std::chrono::milliseconds(200)))
