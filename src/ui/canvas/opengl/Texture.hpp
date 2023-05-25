@@ -85,12 +85,6 @@ public:
   }
 
   /**
-   * Enable interpolation when minifying/magnifying the texture.  The
-   * caller must bind the texture prior to calling this method.
-   */
-  static void EnableInterpolation() noexcept;
-
-  /**
    * Change the size of the texture, discarding any previous contents.
    */
   void ResizeDiscard(GLint internal_format, PixelSize new_size,

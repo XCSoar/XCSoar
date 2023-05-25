@@ -25,8 +25,6 @@ RawBitmap::RawBitmap(PixelSize _size) noexcept
 {
   assert(size.width > 0);
   assert(size.height > 0);
-
-  texture->EnableInterpolation();
 }
 
 RawBitmap::~RawBitmap() noexcept = default;

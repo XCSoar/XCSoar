@@ -61,8 +61,6 @@ protected:
   GLTexture *texture = nullptr;
   PixelSize size;
 
-  bool interpolation = false;
-
   /**
    * Flip up/down?  Some image formats (such as BMP and TIFF) store
    * the bottom-most row first.
@@ -140,12 +138,6 @@ public:
   unsigned GetHeight() const noexcept {
     return GetSize().height;
   }
-#endif
-
-#ifdef ENABLE_OPENGL
-  void EnableInterpolation() noexcept;
-#else
-  void EnableInterpolation() noexcept {}
 #endif
 
 #ifndef USE_GDI

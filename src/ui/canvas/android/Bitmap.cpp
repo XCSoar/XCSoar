@@ -63,11 +63,6 @@ Bitmap::MakeTexture(jobject _bmp, Type _type, bool flipped) noexcept
 
   texture = new GLTexture(result[0], PixelSize(result[1], result[2]),
                           PixelSize(result[3], result[4]), flipped);
-  if (interpolation) {
-    texture->Bind();
-    texture->EnableInterpolation();
-  }
-
   return true;
 }
 

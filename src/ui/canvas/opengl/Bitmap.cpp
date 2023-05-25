@@ -11,7 +11,6 @@
 Bitmap::Bitmap(Bitmap &&src) noexcept
   :texture(std::exchange(src.texture, nullptr)),
    size(src.size),
-   interpolation(src.interpolation),
    flipped(src.flipped)
 {
 }
@@ -21,19 +20,8 @@ Bitmap &Bitmap::operator=(Bitmap &&src) noexcept
   delete texture;
   texture = std::exchange(src.texture, nullptr);
   size = src.size;
-  interpolation = src.interpolation;
   flipped = src.flipped;
   return *this;
-}
-
-void
-Bitmap::EnableInterpolation() noexcept
-{
-  interpolation = true;
-  if (texture != nullptr) {
-    texture->Bind();
-    texture->EnableInterpolation();
-  }
 }
 
 bool
@@ -47,9 +35,6 @@ Bitmap::MakeTexture(const UncompressedImage &uncompressed, Type type) noexcept
     : ImportTexture(uncompressed);
   if (texture == nullptr)
     return false;
-
-  if (interpolation)
-    texture->EnableInterpolation();
 
   return true;
 }
