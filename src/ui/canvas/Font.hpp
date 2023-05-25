@@ -10,6 +10,11 @@
 #import <Foundation/Foundation.h>
 #endif
 
+#ifdef ANDROID
+#include <memory>
+class GLTexture;
+#endif
+
 #include <cstddef>
 
 #ifdef _WIN32
@@ -109,8 +114,7 @@ public:
   void Render(tstring_view text, const PixelSize size,
               void *buffer) const noexcept;
 #elif defined(ANDROID)
-  int TextTextureGL(tstring_view text, PixelSize &size,
-                    PixelSize &allocated_size) const noexcept;
+  std::unique_ptr<GLTexture> TextTextureGL(tstring_view text) const noexcept;
 #elif defined(USE_GDI)
   HFONT Native() const noexcept {
     return font;

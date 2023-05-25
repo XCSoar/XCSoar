@@ -116,8 +116,8 @@ struct RenderedText {
   {
   }
 #elif defined(ANDROID)
-  RenderedText(int id, PixelSize size, PixelSize allocated_size) noexcept
-    :texture(new GLTexture(id, size, allocated_size)) {}
+  RenderedText(std::unique_ptr<GLTexture> &&_texture) noexcept
+    :texture(std::move(_texture)) {}
 #endif
 #else
   RenderedText(PixelSize _size, std::unique_ptr<uint8_t[]> &&_data) noexcept
@@ -244,12 +244,11 @@ TextCache::Get(const Font &font, std::string_view text) noexcept
 #endif
 
 #elif defined(ANDROID)
-  PixelSize size, allocated_size;
-  int texture_id = font.TextTextureGL(text, size, allocated_size);
-  if (texture_id == 0)
+  auto texture = font.TextTextureGL(text);
+  if (!texture)
     return nullptr;
 
-  RenderedText rt(texture_id, size, allocated_size);
+  RenderedText rt{std::move(texture)};
 #else
 #error No font renderer
 #endif
