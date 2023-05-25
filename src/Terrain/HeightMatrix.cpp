@@ -69,7 +69,7 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
   SetSize((UnsignedPoint2D)screen_size, quantisation_pixels);
 
   auto p = data.data();
-  for (unsigned y = 0; y < size.y;
+  for (unsigned y = 0; y < screen_size.height;
        y += quantisation_pixels, p += size.x) {
     map.ScanLine(projection.ScreenToGeo({0, (int)y}),
                  projection.ScreenToGeo({(int)screen_size.width, (int)y}),
