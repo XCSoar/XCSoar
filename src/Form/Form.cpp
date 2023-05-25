@@ -291,7 +291,7 @@ WndForm::ShowModal()
 #endif /* USE_WINUSER */
 
   PeriodClock enter_clock;
-  if (IsEmbedded())
+  if (HasTouchScreen())
     enter_clock.Update();
 
   ShowOnTop();
@@ -330,7 +330,7 @@ WndForm::ShowModal()
     }
 
     // hack to stop exiting immediately
-    if (IsEmbedded() && !hastimed &&
+    if (HasTouchScreen() && !hastimed &&
         event.IsUserInput()) {
       if (!enter_clock.Check(std::chrono::milliseconds(200)))
         /* ignore user input in the first 200ms */
