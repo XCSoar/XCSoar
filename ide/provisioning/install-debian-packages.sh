@@ -52,6 +52,11 @@ apt-get install ${APTOPTS[*]} make g++ \
   xz-utils
 echo
 
+echo Installing dependencies for the Wayland target...
+apt-get install ${APTOPTS[*]} wayland-protocols \
+ libwayland-bin
+echo
+
 echo Installing dependencies for creating Debian package
 apt-get install ${APTOPTS[*]} dpkg-dev \
   debhelper \
@@ -87,7 +92,8 @@ apt-get install ${APTOPTS[*]} \
 echo
 
 echo Installing dependencies for the Android target, not including SDK / NDK...
-apt-get install ${APTOPTS[*]} openjdk-11-jdk-headless vorbis-tools adb libtool unzip
+apt-get install ${APTOPTS[*]} openjdk-11-jdk-headless vorbis-tools adb libtool unzip \
+  sqlite3
 echo
 
 echo Clean up downloaded resources in order to free space
