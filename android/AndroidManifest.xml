@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.xcsoar"
           android:installLocation="auto"
-          android:versionCode="154"
-          android:versionName="7.33">
+          android:versionCode="155"
+          android:versionName="7.34">
   <application
       android:requestLegacyExternalStorage="true"
       android:preserveLegacyExternalStorage="true"
