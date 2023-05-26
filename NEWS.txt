@@ -1,4 +1,6 @@
 Version 7.33 - not yet released
+* map display
+  - fix crash bug in FLARM traffic renderer
 
 Version 7.32 - 2023/05/25
 * user interface
