@@ -1,4 +1,6 @@
 Version 7.34 - not yet released
+* user interface
+  - New InfoBox Swap feature and refurbished the config dialoge.
 
 Version 7.33 - 2023/05/26
 * map display
