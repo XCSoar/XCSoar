@@ -140,14 +140,14 @@ try {
 
   InitThreadDebug();
 
-  const ScopeGlobalAsioThread global_asio_thread;
-  const Net::ScopeInit net_init(asio_thread->GetEventLoop());
-
   const bool have_bluetooth = BluetoothHelper::Initialise(env);
   const bool have_usb_serial = UsbSerialHelper::Initialise(env);
   const bool have_ioio = IOIOHelper::Initialise(env);
 
   context = new Context(env, _context);
+
+  const ScopeGlobalAsioThread global_asio_thread;
+  const Net::ScopeInit net_init(asio_thread->GetEventLoop());
 
   InitialiseDataPath();
 

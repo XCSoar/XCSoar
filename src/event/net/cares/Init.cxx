@@ -6,9 +6,11 @@
 #include "Error.hxx"
 
 #ifdef ANDROID
+#include "Android/Main.hpp"
+#include "Android/Context.hpp"
+#include "java/Exception.hxx"
 #include "java/Global.hxx"
-#include "java/Class.hxx"
-#include "java/Object.hxx"
+#include "java/Ref.hxx"
 #endif
 
 #include <ares.h>
@@ -28,17 +30,17 @@ Init::Init()
 	   https://c-ares.haxx.se/ares_library_init_android.html for
 	   details */
 
+	assert(context != nullptr);
+
 	ares_library_init_jvm(Java::jvm);
+
 	const auto env = Java::GetEnv();
-	Java::Class net_util(env, "org/xcsoar/NetUtil");
+	const auto obj = context->GetSystemService(env, "connectivity");
+	Java::RethrowException(env);
 
-	const auto getConnectivityManager =
-		env->GetStaticMethodID(net_util, "getConnectivityManager",
-				       "()Landroid/net/ConnectivityManager;");
-	assert(getConnectivityManager);
+	if (!obj)
+		throw std::runtime_error("No ConnectivityManager");
 
-	Java::LocalObject obj(env, env->CallStaticObjectMethod(net_util,
-							       getConnectivityManager));
 	ares_library_init_android(obj);
 #endif
 }

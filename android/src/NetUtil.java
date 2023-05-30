@@ -46,13 +46,4 @@ final class NetUtil {
       return STATE_UNKNOWN;
     }
   }
-
-  /**
-   * This method is needed for ares_library_init_android().
-   *
-   * @see https://c-ares.haxx.se/ares_library_init_android.html
-   */
-  public static ConnectivityManager getConnectivityManager() {
-    return cm;
-  }
 }
