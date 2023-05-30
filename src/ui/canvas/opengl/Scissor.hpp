@@ -13,9 +13,11 @@
 
 class GLCanvasScissor : public GLEnable<GL_SCISSOR_TEST> {
 public:
+  [[nodiscard]]
   explicit GLCanvasScissor(const Canvas &canvas) noexcept
     :GLCanvasScissor(canvas.GetRect()) {}
 
+  [[nodiscard]]
   explicit GLCanvasScissor(PixelRect rc) noexcept {
     Scissor(rc);
   }
@@ -31,11 +33,13 @@ private:
 
 class GLCanvasScissor : public GLScissor {
 public:
+  [[nodiscard]]
   GLCanvasScissor(const Canvas &canvas) noexcept
     :GLScissor(OpenGL::translate.x,
                OpenGL::viewport_size.y - OpenGL::translate.y - canvas.GetHeight(),
                canvas.GetWidth(), canvas.GetHeight()) {}
 
+  [[nodiscard]]
   explicit GLCanvasScissor(PixelRect rc) noexcept
     :GLScissor(OpenGL::translate.x + rc.left,
                OpenGL::viewport_size.y - OpenGL::translate.y - rc.bottom,

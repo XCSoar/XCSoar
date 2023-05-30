@@ -11,6 +11,7 @@
 template<GLenum cap>
 class GLEnable {
 public:
+  [[nodiscard]]
   GLEnable() noexcept {
     ::glEnable(cap);
   }
@@ -25,10 +26,12 @@ public:
 
 class GLBlend : public GLEnable<GL_BLEND> {
 public:
+  [[nodiscard]]
   GLBlend(GLenum sfactor, GLenum dfactor) noexcept {
     ::glBlendFunc(sfactor, dfactor);
   }
 
+  [[nodiscard]]
   GLBlend(GLclampf alpha) noexcept {
     ::glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
     ::glBlendColor(0, 0, 0, alpha);
@@ -41,11 +44,13 @@ public:
  */
 class ScopeAlphaBlend : GLBlend {
 public:
+  [[nodiscard]]
   ScopeAlphaBlend() noexcept:GLBlend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) {}
 };
 
 class GLScissor : public GLEnable<GL_SCISSOR_TEST> {
 public:
+  [[nodiscard]]
   GLScissor(GLint x, GLint y, GLsizei width, GLsizei height) noexcept {
     ::glScissor(x, y, width, height);
   }
