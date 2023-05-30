@@ -92,8 +92,8 @@ apt-get install ${APTOPTS[*]} \
 echo
 
 echo Installing dependencies for the Android target, not including SDK / NDK...
-apt-get install ${APTOPTS[*]} openjdk-11-jdk-headless vorbis-tools adb libtool unzip \
-  sqlite3
+apt-get install ${APTOPTS[*]} openjdk-11-jdk-headless vorbis-tools adb libtool \
+    unzip
 echo
 
 echo Clean up downloaded resources in order to free space

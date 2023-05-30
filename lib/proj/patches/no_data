@@ -1,14 +1,26 @@
-commit 65708880af2830230992f453b8dc5e9ca999bee8
+commit b6007421eb99bcf8ad65390f9a3c96f7973d995a
 Author: Max Kellermann <max.kellermann@gmail.com>
 Date:   Thu Aug 11 09:10:26 2022 +0200
 
     CMakeLists.txt: don't generate and install data
 
-Index: proj-9.1.0/CMakeLists.txt
-===================================================================
---- proj-9.1.0.orig/CMakeLists.txt
-+++ proj-9.1.0/CMakeLists.txt
-@@ -323,7 +323,6 @@ endif()
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index be05dd53..88562fc6 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -171,11 +171,6 @@ message(STATUS "nlohmann/json: ${NLOHMANN_JSON}")
+ # Check for sqlite3
+ ################################################################################
+ 
+-find_program(EXE_SQLITE3 sqlite3)
+-if(NOT EXE_SQLITE3)
+-  message(SEND_ERROR "sqlite3 binary not found!")
+-endif()
+-
+ find_package(Sqlite3 REQUIRED)
+ if(NOT SQLITE3_FOUND)
+   message(SEND_ERROR "sqlite3 dependency not found!")
+@@ -323,7 +318,6 @@ endif()
  ################################################################################
  include_directories(${PROJ_SOURCE_DIR}/src)
  

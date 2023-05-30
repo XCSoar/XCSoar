@@ -175,7 +175,6 @@ On Debian::
   sudo apt-get install
       default-jdk-headless \
       vorbis-tools \
-      sqlite3 \
       adb
 
 The required Android SDK components are:
