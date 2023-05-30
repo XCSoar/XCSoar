@@ -1,4 +1,6 @@
 Version 7.34 - not yet released
+* Android
+  - fix crash with failed IOIO Accessory connection
 
 Version 7.33 - 2023/05/26
 * map display
