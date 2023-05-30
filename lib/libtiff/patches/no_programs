@@ -1,7 +1,13 @@
-Index: tiff-4.4.0/CMakeLists.txt
-===================================================================
---- tiff-4.4.0.orig/CMakeLists.txt
-+++ tiff-4.4.0/CMakeLists.txt
+commit 5c59a1e0a12c3387f3183745826a075db10a7bd4
+Author: Max Kellermann <max.kellermann@gmail.com>
+Date:   Tue May 30 16:31:26 2023 +0200
+
+    CMakeLists.txt: don't build programs
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 770b0fac..c0a4b84f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
 @@ -135,12 +135,6 @@ include(Release)
  # Process subdirectories
  add_subdirectory(port)
