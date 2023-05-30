@@ -79,6 +79,8 @@ public class XCSoar extends Activity {
       return;
     }
 
+    NativeView.initNative(Build.VERSION.SDK_INT);
+
     NetUtil.initialise(this);
 
     IOIOHelper.onCreateContext(this);

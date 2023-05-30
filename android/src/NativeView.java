@@ -155,7 +155,7 @@ class NativeView extends SurfaceView
       try {
         runNative(context, r.width(), r.height(),
                   (int)metrics.xdpi, (int)metrics.ydpi,
-                  Build.VERSION.SDK_INT, Build.PRODUCT);
+                  Build.PRODUCT);
       } finally {
         context.stopService(new Intent(context, XCSoar.serviceClass));
       }
@@ -168,10 +168,12 @@ class NativeView extends SurfaceView
     quitHandler.sendEmptyMessage(0);
   }
 
+  static native void initNative(int sdk_version);
+
   protected native void runNative(Context context,
                                   int width, int height,
                                   int xdpi, int ydpi,
-                                  int sdk_version, String product);
+                                  String product);
 
   protected native void resizedNative(int width, int height);
 
