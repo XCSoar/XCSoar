@@ -1,4 +1,6 @@
 Version 7.34 - not yet released
+* map display
+  - thicker border on disappeared FLARM traffic
 * devices
   - allow listing up to 512 flights (increased from 128)
 * Android
