@@ -22,12 +22,12 @@ struct PageLayout
     bool auto_switch;
     unsigned panel;
 
-    InfoBoxConfig() = default;
+    constexpr InfoBoxConfig() noexcept = default;
 
-    constexpr InfoBoxConfig(bool _auto_switch, unsigned _panel)
+    constexpr InfoBoxConfig(bool _auto_switch, unsigned _panel) noexcept
       :enabled(true), auto_switch(_auto_switch), panel(_panel) {}
 
-    void SetDefaults() {
+    constexpr void SetDefaults() noexcept {
       auto_switch = true;
       panel = 0;
     }
@@ -97,46 +97,43 @@ struct PageLayout
    * Return an "undefined" page.  Its IsDefined() method will return
    * false.
    */
-  constexpr
-  static PageLayout Undefined() {
-    return PageLayout(false, InfoBoxConfig(false, 0));
+  static constexpr PageLayout Undefined() noexcept {
+    return {false, InfoBoxConfig(false, 0)};
   }
 
   /**
    * Returns the default page that will be created initially.
    */
-  constexpr
-  static PageLayout Default() {
-    return PageLayout(true, InfoBoxConfig(true, 0));
+  static constexpr PageLayout Default() noexcept  {
+    return {true, InfoBoxConfig(true, 0)};
   }
 
   /**
    * Returns the default page that will show the "Aux" InfoBoxes.
    */
-  constexpr
-  static PageLayout Aux() {
-    return PageLayout(true, InfoBoxConfig(false, 3));
+  static constexpr PageLayout Aux() noexcept {
+    return {true, InfoBoxConfig(false, 3)};
   }
 
   /**
    * Returns a default full-screen page.
    */
-  static PageLayout FullScreen() {
-    PageLayout pl = Default();
+  static constexpr PageLayout FullScreen() noexcept {
+    auto pl = Default();
     pl.infobox_config.enabled = false;
     return pl;
   }
 
-  bool IsDefined() const {
+  constexpr bool IsDefined() const {
     return valid;
   }
 
-  void SetUndefined() {
+  constexpr void SetUndefined() noexcept {
     valid = false;
   }
 
   void MakeTitle(const InfoBoxSettings &info_box_settings,
-                 TCHAR *str, const bool concise=false) const;
+                 TCHAR *str, const bool concise=false) const noexcept;
 
   constexpr bool operator==(const PageLayout &other) const noexcept = default;
   constexpr bool operator!=(const PageLayout &other) const noexcept = default;
@@ -155,12 +152,12 @@ struct PageSettings {
    */
   bool distinct_zoom;
 
-  void SetDefaults();
+  void SetDefaults() noexcept;
 
   /**
    * Eliminate empty pages to make the array contiguous.
    */
-  void Compress();
+  void Compress() noexcept;
 };
 
 static_assert(std::is_trivial<PageSettings>::value, "type is not trivial");

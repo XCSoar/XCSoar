@@ -9,7 +9,7 @@
 
 void
 PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
-                      TCHAR *buffer, const bool concise) const
+                      TCHAR *buffer, const bool concise) const noexcept
 {
   if (!valid) {
     _tcscpy(buffer, _T("---"));
@@ -78,7 +78,7 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
 }
 
 void
-PageSettings::SetDefaults()
+PageSettings::SetDefaults() noexcept
 {
   pages[0] = PageLayout::Default();
   pages[1] = PageLayout::FullScreen();
@@ -91,7 +91,7 @@ PageSettings::SetDefaults()
 }
 
 void
-PageSettings::Compress()
+PageSettings::Compress() noexcept
 {
   auto last = std::remove_if(pages.begin(), pages.end(),
                              [](const PageLayout &layout) {
