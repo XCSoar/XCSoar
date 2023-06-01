@@ -51,5 +51,5 @@ struct RecordedFlightInfo : FlightInfo {
   } internal;
 };
 
-class RecordedFlightList : public StaticArray<RecordedFlightInfo, 128u> {
+class RecordedFlightList : public StaticArray<RecordedFlightInfo, 512u> {
 };
