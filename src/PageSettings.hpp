@@ -32,15 +32,8 @@ struct PageLayout
       panel = 0;
     }
 
-    bool operator==(const InfoBoxConfig &other) const {
-      return enabled == other.enabled &&
-        auto_switch == other.auto_switch &&
-        panel == other.panel;
-    }
-
-    bool operator!=(const InfoBoxConfig &other) const {
-      return !(*this == other);
-    }
+    constexpr bool operator==(const InfoBoxConfig &other) const noexcept = default;
+    constexpr bool operator!=(const InfoBoxConfig &other) const noexcept = default;
   };
 
   bool valid;
@@ -145,16 +138,8 @@ struct PageLayout
   void MakeTitle(const InfoBoxSettings &info_box_settings,
                  TCHAR *str, const bool concise=false) const;
 
-  bool operator==(const PageLayout &other) const {
-    return valid == other.valid &&
-      main == other.main &&
-      bottom == other.bottom &&
-      infobox_config == other.infobox_config;
-  }
-
-  bool operator!=(const PageLayout &other) const {
-    return !(*this == other);
-  }
+  constexpr bool operator==(const PageLayout &other) const noexcept = default;
+  constexpr bool operator!=(const PageLayout &other) const noexcept = default;
 };
 
 struct PageSettings {
