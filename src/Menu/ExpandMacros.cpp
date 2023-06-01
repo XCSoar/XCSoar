@@ -412,8 +412,7 @@ LookupMacro(const TCHAR *name, bool &invalid)
     static TCHAR label[30]; // TODO: oh no, a static string buffer!
     const PageLayout &page =
       CommonInterface::GetUISettings().pages.pages[PageActions::NextIndex()];
-    page.MakeTitle(CommonInterface::GetUISettings().info_boxes, label, true);
-    return label;
+    return page.MakeTitle(CommonInterface::GetUISettings().info_boxes, label, true);
   } else
     return nullptr;
 }

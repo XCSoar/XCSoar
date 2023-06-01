@@ -132,8 +132,9 @@ struct PageLayout
     valid = false;
   }
 
-  void MakeTitle(const InfoBoxSettings &info_box_settings,
-                 TCHAR *str, const bool concise=false) const noexcept;
+  [[nodiscard]]
+  const TCHAR *MakeTitle(const InfoBoxSettings &info_box_settings,
+                         TCHAR *str, const bool concise=false) const noexcept;
 
   constexpr bool operator==(const PageLayout &other) const noexcept = default;
   constexpr bool operator!=(const PageLayout &other) const noexcept = default;

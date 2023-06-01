@@ -7,30 +7,25 @@
 
 #include <algorithm>
 
-void
+const TCHAR *
 PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
                       TCHAR *buffer, const bool concise) const noexcept
 {
-  if (!valid) {
-    _tcscpy(buffer, _T("---"));
-    return;
-  }
+  if (!valid)
+    return _T("---");
 
   switch (main) {
   case PageLayout::Main::MAP:
     break;
 
   case PageLayout::Main::FLARM_RADAR:
-    _tcscpy(buffer, _("FLARM radar"));
-    return;
+    return _("FLARM radar");
 
   case PageLayout::Main::THERMAL_ASSISTANT:
-    _tcscpy(buffer, _("Thermal assistant"));
-    return;
+    return _("Thermal assistant");
 
   case PageLayout::Main::HORIZON:
-    _tcscpy(buffer, _("Horizon"));
-    return;
+    return _("Horizon");
 
   case PageLayout::Main::MAX:
     gcc_unreachable();
@@ -75,6 +70,8 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
   case Bottom::MAX:
     gcc_unreachable();
   }
+
+  return buffer;
 }
 
 void
