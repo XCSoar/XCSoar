@@ -67,9 +67,9 @@ struct UISettings {
   DialogSettings dialog;
   SoundSettings sound;
 
-  void SetDefaults();
+  void SetDefaults() noexcept;
 
-  unsigned GetPercentScale() const {
+  constexpr unsigned GetPercentScale() const noexcept {
     return scale;
   }
 };

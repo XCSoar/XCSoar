@@ -55,7 +55,7 @@ struct WaypointRendererSettings {
 
   int landable_rendering_scale;
 
-  void SetDefaults() {
+  void SetDefaults() noexcept {
     display_text_type = DisplayTextType::FIRST_FIVE;
     arrival_height_display = ArrivalHeightDisplay::GLIDE;
     label_selection = LabelSelection::ALL;
@@ -67,5 +67,5 @@ struct WaypointRendererSettings {
     landable_rendering_scale = 100;
   }
 
-  void LoadFromProfile();
+  void LoadFromProfile() noexcept;
 };

@@ -23,10 +23,10 @@ struct InfoBoxSettings {
     StaticString<32u> name;
     InfoBoxFactory::Type contents[MAX_CONTENTS];
 
-    void Clear();
+    void Clear() noexcept;
 
     [[gnu::pure]]
-    bool IsEmpty() const;
+    bool IsEmpty() const noexcept;
   };
 
   static constexpr unsigned MAX_PANELS = 8;
@@ -120,5 +120,5 @@ struct InfoBoxSettings {
 
   Panel panels[MAX_PANELS];
 
-  void SetDefaults();
+  void SetDefaults() noexcept;
 };

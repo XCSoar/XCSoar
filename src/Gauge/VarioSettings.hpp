@@ -13,5 +13,5 @@ struct VarioSettings {
   bool show_average_needle;
   bool show_thermal_average_needle;
 
-  void SetDefaults();
+  void SetDefaults() noexcept;
 };

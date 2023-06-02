@@ -29,5 +29,5 @@ struct DialogSettings {
    */
   bool expert;
 
-  void SetDefaults();
+  void SetDefaults() noexcept;
 };

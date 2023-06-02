@@ -4,7 +4,7 @@
 #include "DialogSettings.hpp"
 
 void
-DialogSettings::SetDefaults()
+DialogSettings::SetDefaults() noexcept
 {
   text_input_style = TextInputStyle::Default;
   tab_style = TabStyle::Text;

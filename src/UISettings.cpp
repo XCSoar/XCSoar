@@ -4,7 +4,7 @@
 #include "UISettings.hpp"
 
 void
-UISettings::SetDefaults()
+UISettings::SetDefaults() noexcept
 {
   display.SetDefaults();
 
