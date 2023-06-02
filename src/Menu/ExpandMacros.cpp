@@ -409,7 +409,7 @@ LookupMacro(tstring_view name, bool &invalid) noexcept
   } else if (name == _T("ZoomAutoToggleActionName")) {
     return GetMapSettings().auto_zoom_enabled ? _("Manual") : _("Auto");
   } else if (name == _T("NextPageName")) {
-    static TCHAR label[30]; // TODO: oh no, a static string buffer!
+    static TCHAR label[64]; // TODO: oh no, a static string buffer!
     const PageLayout &page =
       CommonInterface::GetUISettings().pages.pages[PageActions::NextIndex()];
     return page.MakeTitle(CommonInterface::GetUISettings().info_boxes,
