@@ -15,9 +15,8 @@
 /**
  * @return false if there is at least one ASCII letter in the string
  */
-[[gnu::pure]]
-static bool
-LacksAlphaASCII(const TCHAR *s)
+static constexpr bool
+LacksAlphaASCII(const TCHAR *s) noexcept
 {
   for (; *s != 0; ++s)
     if (IsAlphaASCII(*s))
@@ -34,7 +33,7 @@ LacksAlphaASCII(const TCHAR *s)
 [[gnu::pure]]
 static const TCHAR *
 GetTextN(const TCHAR *src, const TCHAR *src_end,
-         TCHAR *buffer, size_t buffer_size)
+         TCHAR *buffer, size_t buffer_size) noexcept
 {
   if (src == src_end)
     /* gettext("") returns the PO header, and thus we need to exclude
@@ -54,7 +53,7 @@ GetTextN(const TCHAR *src, const TCHAR *src_end,
 }
 
 ButtonLabel::Expanded
-ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
+ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size) noexcept
 {
   Expanded expanded;
   const TCHAR *dollar;

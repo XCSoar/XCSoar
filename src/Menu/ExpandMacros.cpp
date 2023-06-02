@@ -30,7 +30,7 @@ static const TCHAR *
 ExpandTaskMacros(tstring_view name,
                  bool &invalid,
                  const DerivedInfo &calculated,
-                 const ComputerSettings &settings_computer)
+                 const ComputerSettings &settings_computer) noexcept
 {
   const TaskStats &task_stats = calculated.task_stats;
   const TaskStats &ordered_task_stats = calculated.ordered_task_stats;
@@ -196,7 +196,7 @@ ExpandTaskMacros(tstring_view name,
 
 [[gnu::pure]]
 static const TCHAR *
-ExpandTrafficMacros(tstring_view name)
+ExpandTrafficMacros(tstring_view name) noexcept
 {
   TrafficWidget *widget = (TrafficWidget *)
     CommonInterface::main_window->GetFlavourWidget(_T("Traffic"));
@@ -212,37 +212,37 @@ ExpandTrafficMacros(tstring_view name)
 }
 
 static const NMEAInfo &
-Basic()
+Basic() noexcept
 {
   return CommonInterface::Basic();
 }
 
 static const DerivedInfo &
-Calculated()
+Calculated() noexcept
 {
   return CommonInterface::Calculated();
 }
 
 static const ComputerSettings &
-GetComputerSettings()
+GetComputerSettings() noexcept
 {
   return CommonInterface::GetComputerSettings();
 }
 
 static const MapSettings &
-GetMapSettings()
+GetMapSettings() noexcept
 {
   return CommonInterface::GetMapSettings();
 }
 
 static const UIState &
-GetUIState()
+GetUIState() noexcept
 {
   return CommonInterface::GetUIState();
 }
 
 static const TCHAR *
-LookupMacro(tstring_view name, bool &invalid)
+LookupMacro(tstring_view name, bool &invalid) noexcept
 {
   if (name ==_T("CheckAirspace")) {
     invalid |= airspace_database.IsEmpty();
@@ -418,7 +418,7 @@ LookupMacro(tstring_view name, bool &invalid)
 }
 
 bool
-ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
+ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size) noexcept
 {
   // ToDo, check Buffer Size
   bool invalid = false;

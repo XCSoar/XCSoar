@@ -20,9 +20,9 @@ struct Expanded {
 
 [[gnu::pure]]
 Expanded
-Expand(const TCHAR *text, TCHAR *buffer, size_t size);
+Expand(const TCHAR *text, TCHAR *buffer, size_t size) noexcept;
 
 bool
-ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
+ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size) noexcept;
 
 } // namespace ButtonLabel
