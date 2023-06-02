@@ -272,14 +272,12 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValueEnum(AppInfoBoxBorder, ProfileKeys::AppInfoBoxBorder,
                            ui_settings.info_boxes.border_style);
 
-  if (SaveValue(AppInverseInfoBox, ProfileKeys::AppInverseInfoBox,
-                ui_settings.info_boxes.inverse))
-    require_restart = changed = true;
+  changed |= SaveValue(AppInverseInfoBox, ProfileKeys::AppInverseInfoBox,
+                       ui_settings.info_boxes.inverse);
 
-  if (HasColors() &&
-      SaveValue(AppInfoBoxColors, ProfileKeys::AppInfoBoxColors,
-                ui_settings.info_boxes.use_colors))
-    require_restart = changed = true;
+  if (HasColors())
+    changed |= SaveValue(AppInfoBoxColors, ProfileKeys::AppInfoBoxColors,
+                         ui_settings.info_boxes.use_colors);
 
 #ifdef KOBO
   if (SaveValue(ShowMenuButton, ProfileKeys::ShowMenuButton,ui_settings.show_menu_button))

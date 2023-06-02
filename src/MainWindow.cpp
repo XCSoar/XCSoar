@@ -443,6 +443,8 @@ MainWindow::ReinitialiseLook() noexcept
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
                              Fonts::map, Fonts::map_bold,
                              ib_layout.control_size.width);
+
+  InfoBoxManager::ScheduleRedraw();
 }
 
 void

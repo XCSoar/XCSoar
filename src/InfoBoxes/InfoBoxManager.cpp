@@ -119,6 +119,16 @@ InfoBoxManager::SetDirty() noexcept
 }
 
 void
+InfoBoxManager::ScheduleRedraw() noexcept
+{
+  if (infoboxes_hidden)
+    return;
+
+  for (unsigned i = 0; i < layout.count; i++)
+    infoboxes[i]->Invalidate();
+}
+
+void
 InfoBoxManager::ProcessTimer() noexcept
 {
   InfoBoxDrawIfDirty();

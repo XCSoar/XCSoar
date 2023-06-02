@@ -168,7 +168,9 @@ SettingsLeave(const UISettings &old_ui_settings)
   const MapSettings &old_settings_map = old_ui_settings.map;
   const MapSettings &settings_map = ui_settings.map;
 
-  if (settings_map.trail.type != old_settings_map.trail.type ||
+  if (ui_settings.info_boxes.inverse != old_ui_settings.info_boxes.inverse ||
+      ui_settings.info_boxes.use_colors != old_ui_settings.info_boxes.use_colors ||
+      settings_map.trail.type != old_settings_map.trail.type ||
       settings_map.trail.scaling_enabled != old_settings_map.trail.scaling_enabled ||
       settings_map.waypoint.landable_style != old_settings_map.waypoint.landable_style)
     main_window.ReinitialiseLook();

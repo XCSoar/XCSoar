@@ -20,6 +20,9 @@ void
 SetDirty() noexcept;
 
 void
+ScheduleRedraw() noexcept;
+
+void
 Create(ContainerWindow &parent, const InfoBoxLayout::Layout &layout,
        const InfoBoxLook &look) noexcept;
 
