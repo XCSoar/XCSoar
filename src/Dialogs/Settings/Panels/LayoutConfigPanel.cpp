@@ -156,12 +156,12 @@ static constexpr StaticEnumChoice infobox_border_list[] = {
 };
 
 static constexpr StaticEnumChoice dark_mode_list[] = {
-  { FinalGlideBarDisplayMode::OFF, N_("Off"),
-    N_("Black text on white background") },
-  { FinalGlideBarDisplayMode::ON, N_("On"),
-    N_("White text on black background") },
-  { FinalGlideBarDisplayMode::AUTO, N_("Auto"),
+  { UISettings::DarkMode::AUTO, N_("Auto"),
     N_("Use the system-wide setting") },
+  { UISettings::DarkMode::OFF, N_("Off"),
+    N_("Black text on white background") },
+  { UISettings::DarkMode::ON, N_("On"),
+    N_("White text on black background") },
   nullptr
 };
 
