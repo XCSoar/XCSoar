@@ -20,11 +20,11 @@ public:
    */
   double distance;
 
-  NearestAirspace():airspace(nullptr) {}
-  NearestAirspace(const AbstractAirspace &_airspace, double _distance)
+  NearestAirspace() noexcept:airspace(nullptr) {}
+  NearestAirspace(const AbstractAirspace &_airspace, double _distance) noexcept
     :airspace(&_airspace), distance(_distance) {}
 
-  bool IsDefined() const {
+  bool IsDefined() const noexcept {
     return airspace != nullptr;
   }
 
@@ -32,11 +32,11 @@ public:
   static NearestAirspace
   FindHorizontal(const MoreData &basic,
                  const ProtectedAirspaceWarningManager &airspace_warnings,
-                 const Airspaces &airspace_database);
+                 const Airspaces &airspace_database) noexcept;
 
   static NearestAirspace
   FindVertical(const MoreData &basic,
                const DerivedInfo &calculated,
                const ProtectedAirspaceWarningManager &airspace_warnings,
-               const Airspaces &airspace_database);
+               const Airspaces &airspace_database) noexcept;
 };
