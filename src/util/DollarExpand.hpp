@@ -6,6 +6,7 @@
 #include "Concepts.hxx"
 #include "StringAPI.hxx"
 #include "TruncateString.hpp"
+#include "tstring_view.hxx"
 
 #include <tchar.h>
 
@@ -16,7 +17,7 @@
  */
 void
 DollarExpand(const TCHAR *src, TCHAR *dest, size_t dest_size,
-             Invocable<const TCHAR *> auto lookup_function) noexcept
+             Invocable<tstring_view> auto lookup_function) noexcept
 {
   const TCHAR *const dest_end = dest + dest_size;
 
@@ -25,10 +26,12 @@ DollarExpand(const TCHAR *src, TCHAR *dest, size_t dest_size,
     if (dollar == nullptr)
       break;
 
-    auto name = dollar + 2;
-    auto closing = StringFind(name, _T(')'));
+    auto name_start = dollar + 2;
+    auto closing = StringFind(name_start, _T(')'));
     if (closing == nullptr)
       break;
+
+    const tstring_view name(name_start, closing - name_start);
 
     dest_size = dest_end - dest;
     if (size_t(dollar - src) >= dest_size)
@@ -39,19 +42,10 @@ DollarExpand(const TCHAR *src, TCHAR *dest, size_t dest_size,
     dest = std::copy(src, dollar, dest);
     src = closing + 1;
 
-    /* copy the name to the destination buffer so we can
-       null-terminate it for the callback */
+    /* look up the name and copy the result to the destination
+       buffer */
 
-    const size_t name_size = closing - name;
-    dest_size = dest_end - dest;
-    if (name_size >= dest_size)
-      break;
-
-    *std::copy(name, closing, dest) = 0;
-
-    /* look it up and copy the result to the destination buffer */
-
-    const TCHAR *const expansion = lookup_function(dest);
+    const TCHAR *const expansion = lookup_function(name);
     if (expansion != nullptr) {
       dest_size = dest_end - dest;
       dest = CopyTruncateString(dest, dest_size, expansion);
