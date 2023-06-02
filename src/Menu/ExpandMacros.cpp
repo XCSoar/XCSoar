@@ -418,12 +418,11 @@ LookupMacro(tstring_view name, bool &invalid) noexcept
 }
 
 bool
-ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size) noexcept
+ButtonLabel::ExpandMacros(const TCHAR *In, std::span<TCHAR> dest) noexcept
 {
-  // ToDo, check Buffer Size
   bool invalid = false;
 
-  DollarExpand(In, {OutBuffer, Size},
+  DollarExpand(In, dest,
                [&invalid](tstring_view name){
                  return LookupMacro(name, invalid);
                });

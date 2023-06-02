@@ -53,7 +53,7 @@ GetTextN(const TCHAR *src, const TCHAR *src_end,
 }
 
 ButtonLabel::Expanded
-ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size) noexcept
+ButtonLabel::Expand(const TCHAR *text, std::span<TCHAR> buffer) noexcept
 {
   Expanded expanded;
   const TCHAR *dollar;
@@ -83,7 +83,7 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size) noexcept
 
       /* concatenate the translated text and the part starting with '\n' */
       try {
-        expanded.text = BuildString(std::span{buffer, size}, translated, nl);
+        expanded.text = BuildString(buffer, translated, nl);
       } catch (BasicStringBuilder<TCHAR>::Overflow) {
         expanded.text = gettext(text);
       }
@@ -98,7 +98,7 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size) noexcept
     macros = StripRight(text, macros);
 
     TCHAR s[100];
-    expanded.enabled = !ExpandMacros(text, s, ARRAY_SIZE(s));
+    expanded.enabled = !ExpandMacros(text, std::span{s});
     if (s[0] == _T('\0') || s[0] == _T(' ')) {
       expanded.visible = false;
       return expanded;
@@ -118,7 +118,7 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size) noexcept
 
     /* concatenate the translated text and the macro output */
     expanded.visible = true;
-    expanded.text = BuildString(std::span{buffer, size}, translated, s + (macros - text));
+    expanded.text = BuildString(buffer, translated, s + (macros - text));
     return expanded;
   }
 }
