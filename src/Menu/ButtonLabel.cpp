@@ -84,7 +84,7 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
 
       /* concatenate the translated text and the part starting with '\n' */
       try {
-        expanded.text = BuildString(buffer, size, translated, nl);
+        expanded.text = BuildString(std::span{buffer, size}, translated, nl);
       } catch (BasicStringBuilder<TCHAR>::Overflow) {
         expanded.text = gettext(text);
       }
@@ -119,7 +119,7 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
 
     /* concatenate the translated text and the macro output */
     expanded.visible = true;
-    expanded.text = BuildString(buffer, size, translated, s + (macros - text));
+    expanded.text = BuildString(std::span{buffer, size}, translated, s + (macros - text));
     return expanded;
   }
 }
