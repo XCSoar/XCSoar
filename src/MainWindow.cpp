@@ -431,6 +431,21 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
 }
 
 void
+MainWindow::ReinitialiseLook() noexcept
+{
+  const auto &ui_settings = CommonInterface::GetUISettings();
+
+  const InfoBoxLayout::Layout ib_layout =
+    InfoBoxLayout::Calculate(GetClientRect(),
+                             ui_settings.info_boxes.geometry);
+
+  assert(look != nullptr);
+  look->InitialiseConfigured(CommonInterface::GetUISettings(),
+                             Fonts::map, Fonts::map_bold,
+                             ib_layout.control_size.width);
+}
+
+void
 MainWindow::Destroy() noexcept
 {
   Deinitialise();

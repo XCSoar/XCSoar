@@ -228,6 +228,12 @@ public:
   void ReinitialiseLayout() noexcept;
 
   /**
+   * Reinitialise the #Look after relevant #UISettings have been
+   * changed.
+   */
+  void ReinitialiseLook() noexcept;
+
+  /**
    * Suspend threads that are owned by this object.
    */
   void SuspendThreads() noexcept;
