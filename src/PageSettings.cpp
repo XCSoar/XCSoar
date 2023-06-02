@@ -4,12 +4,14 @@
 #include "PageSettings.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Language/Language.hpp"
+#include "util/StringBuilder.hxx"
 
 #include <algorithm>
 
 const TCHAR *
 PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
-                      TCHAR *buffer, const bool concise) const noexcept
+                      std::span<TCHAR> buffer,
+                      const bool concise) const noexcept
 {
   if (!valid)
     return _T("---");
@@ -31,47 +33,51 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
     gcc_unreachable();
   }
 
-  if (infobox_config.enabled) {
-    _tcscpy(buffer, concise ? _("Info") : _("Map and InfoBoxes"));
+  BasicStringBuilder<TCHAR> builder{buffer};
 
-    if (!infobox_config.auto_switch &&
-        infobox_config.panel < InfoBoxSettings::MAX_PANELS) {
-      _tcscat(buffer, _T(" "));
-      _tcscat(buffer,
-              gettext(info_box_settings.panels[infobox_config.panel].name));
-    }
-    else {
-      if (concise) {
-        _tcscat(buffer, _T(" "));
-        _tcscat(buffer, _("Auto"));
-      } else {
-        _tcscat(buffer, _T(" ("));
-        _tcscat(buffer, _("Auto"));
-        _tcscat(buffer, _T(")"));
+  try {
+    if (infobox_config.enabled) {
+      builder.Append(concise ? _("Info") : _("Map and InfoBoxes"));
+
+      if (!infobox_config.auto_switch &&
+          infobox_config.panel < InfoBoxSettings::MAX_PANELS) {
+        builder.Append(' ');
+        builder.Append(gettext(info_box_settings.panels[infobox_config.panel].name));
       }
+      else {
+        if (concise) {
+          builder.Append(' ');
+          builder.Append(_("Auto"));
+        } else {
+          builder.Append(_T(" ("));
+          builder.Append(_("Auto"));
+          builder.Append(')');
+        }
+      }
+    } else {
+      if (concise)
+        builder.Append(_("Info Hide"));
+      else
+        builder.Append(_("Map (Full screen)"));
     }
-  } else {
-    if (concise)
-      _tcscpy(buffer, _("Info Hide"));
-    else
-      _tcscpy(buffer, _("Map (Full screen)"));
+
+    switch (bottom) {
+    case Bottom::NOTHING:
+    case Bottom::CUSTOM:
+      break;
+
+    case Bottom::CROSS_SECTION:
+      // TODO: better text and translate
+      builder.Append(_T(", XS"));
+      break;
+
+    case Bottom::MAX:
+      gcc_unreachable();
+    }
+  } catch (BasicStringBuilder<TCHAR>::Overflow) {
   }
 
-  switch (bottom) {
-  case Bottom::NOTHING:
-  case Bottom::CUSTOM:
-    break;
-
-  case Bottom::CROSS_SECTION:
-    // TODO: better text and translate
-    _tcscat(buffer, _T(", XS"));
-    break;
-
-  case Bottom::MAX:
-    gcc_unreachable();
-  }
-
-  return buffer;
+  return buffer.data();
 }
 
 void

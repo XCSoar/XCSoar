@@ -4,9 +4,10 @@
 #pragma once
 
 #include <array>
+#include <cstdint>
+#include <span>
 #include <type_traits>
 
-#include <cstdint>
 #include <tchar.h>
 
 struct InfoBoxSettings;
@@ -134,7 +135,8 @@ struct PageLayout
 
   [[nodiscard]]
   const TCHAR *MakeTitle(const InfoBoxSettings &info_box_settings,
-                         TCHAR *str, const bool concise=false) const noexcept;
+                         std::span<TCHAR> buffer,
+                         const bool concise=false) const noexcept;
 
   constexpr bool operator==(const PageLayout &other) const noexcept = default;
   constexpr bool operator!=(const PageLayout &other) const noexcept = default;
