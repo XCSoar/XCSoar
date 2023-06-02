@@ -423,7 +423,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   // ToDo, check Buffer Size
   bool invalid = false;
 
-  DollarExpand(In, OutBuffer, Size,
+  DollarExpand(In, {OutBuffer, Size},
                [&invalid](tstring_view name){
                  return LookupMacro(name, invalid);
                });

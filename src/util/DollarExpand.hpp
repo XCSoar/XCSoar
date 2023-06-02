@@ -8,6 +8,8 @@
 #include "TruncateString.hpp"
 #include "tstring_view.hxx"
 
+#include <span>
+
 #include <tchar.h>
 
 /**
@@ -16,11 +18,9 @@
  * buffer is too small, then the output is truncated silently.
  */
 void
-DollarExpand(const TCHAR *src, TCHAR *dest, size_t dest_size,
+DollarExpand(const TCHAR *src, std::span<TCHAR> dest,
              Invocable<tstring_view> auto lookup_function) noexcept
 {
-  const TCHAR *const dest_end = dest + dest_size;
-
   while (true) {
     auto dollar = StringFind(src, _T("$("));
     if (dollar == nullptr)
@@ -33,13 +33,14 @@ DollarExpand(const TCHAR *src, TCHAR *dest, size_t dest_size,
 
     const tstring_view name(name_start, closing - name_start);
 
-    dest_size = dest_end - dest;
-    if (size_t(dollar - src) >= dest_size)
+    const std::size_t prefix_size = dollar - src;
+    if (prefix_size >= dest.size())
       break;
 
     /* copy the portion up to the dollar to the destination buffer */
 
-    dest = std::copy(src, dollar, dest);
+    std::copy(src, dollar, dest.begin());
+    dest = dest.subspan(prefix_size);
     src = closing + 1;
 
     /* look up the name and copy the result to the destination
@@ -47,12 +48,15 @@ DollarExpand(const TCHAR *src, TCHAR *dest, size_t dest_size,
 
     const TCHAR *const expansion = lookup_function(name);
     if (expansion != nullptr) {
-      dest_size = dest_end - dest;
-      dest = CopyTruncateString(dest, dest_size, expansion);
+      const tstring_view ex{expansion};
+      if (ex.size() >= dest.size())
+        break;
+
+      std::copy(ex.begin(), ex.end(), dest.begin());
+      dest = dest.subspan(ex.size());
     }
   }
 
   /* copy the remainder */
-  dest_size = dest_end - dest;
-  CopyTruncateString(dest, dest_size, src);
+  CopyTruncateString(dest.data(), dest.size(), src);
 }
