@@ -13,8 +13,7 @@
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 
-[[gnu::pure]]
-__attribute__((always_inline))
+[[gnu::pure]] [[gnu::always_inline]]
 static inline NearestAirspace
 CalculateNearestAirspaceHorizontal(const GeoPoint &location,
                                    const FlatProjection &projection,
