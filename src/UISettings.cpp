@@ -24,6 +24,8 @@ UISettings::SetDefaults() noexcept
 
   show_menu_button = true;
 
+  dark_mode = DarkMode::AUTO;
+
   format.SetDefaults();
   map.SetDefaults();
   info_boxes.SetDefaults();

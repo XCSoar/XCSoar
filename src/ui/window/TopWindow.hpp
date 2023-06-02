@@ -415,6 +415,8 @@ protected:
 #endif
 
 #ifdef ANDROID
+  virtual void OnLook() noexcept {}
+
   /**
    * @see Event::SURFACE
    */

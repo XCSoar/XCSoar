@@ -27,6 +27,7 @@ import android.content.BroadcastReceiver;
 import android.content.ServiceConnection;
 import android.content.ComponentName;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.util.Log;
 import android.provider.Settings;
 
@@ -96,6 +97,8 @@ public class XCSoar extends Activity {
        window flags, which we now remember for
        WindowUtil.leaveFullScreenMode() to avoid clearing those */
     initialWindowFlags = window.getAttributes().flags;
+
+    submitConfiguration(getResources().getConfiguration());
 
     batteryReceiver = new BatteryReceiver();
     registerReceiver(batteryReceiver,
@@ -353,5 +356,15 @@ public class XCSoar extends Activity {
       return true;
     } else
       return super.dispatchTouchEvent(ev);
+  }
+
+  private void submitConfiguration(Configuration config) {
+    final boolean nightMode = (config.uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+    NativeView.onConfigurationChangedNative(nightMode);
+  }
+
+  @Override public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    submitConfiguration(newConfig);
   }
 }

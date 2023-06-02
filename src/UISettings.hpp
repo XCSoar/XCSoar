@@ -58,6 +58,12 @@ struct UISettings {
     ON,
   } haptic_feedback;
 
+  enum class DarkMode : uint_least8_t {
+    OFF,
+    ON,
+    AUTO,
+  } dark_mode;
+
   FormatSettings format;
   MapSettings map;
   InfoBoxSettings info_boxes;

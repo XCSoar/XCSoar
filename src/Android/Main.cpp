@@ -51,6 +51,7 @@
 #include "net/http/Init.hpp"
 #include "thread/Debug.hpp"
 #include "util/Exception.hxx"
+#include "GlobalSettings.hpp"
 
 #include "IOIOHelper.hpp"
 #include "BMP085Device.hpp"
@@ -126,6 +127,27 @@ Java_org_xcsoar_NativeView_initNative(JNIEnv *env, [[maybe_unused]] jclass cls,
   static std::once_flag init_native_flag;
 
   std::call_once(init_native_flag, InitNative, env, sdk_version);
+}
+
+gcc_visibility_default
+void
+Java_org_xcsoar_NativeView_onConfigurationChangedNative([[maybe_unused]] JNIEnv *env,
+                                                        [[maybe_unused]] jclass cls,
+                                                        jboolean night_mode)
+{
+  if (night_mode == GlobalSettings::dark_mode)
+    // no change
+    return;
+
+  GlobalSettings::dark_mode = night_mode;
+
+  const std::scoped_lock shutdown_lock{shutdown_mutex};
+
+  if (event_queue == nullptr)
+    return;
+
+  event_queue->Purge(UI::Event::LOOK);
+  event_queue->Inject(UI::Event::LOOK);
 }
 
 gcc_visibility_default

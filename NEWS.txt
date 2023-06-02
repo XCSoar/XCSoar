@@ -1,12 +1,14 @@
 Version 7.34 - not yet released
 * user interface
   - fix crash with long InfoBox set names
+  - rename "Inverse InfoBoxes" to "Dark mode"
 * map display
   - thicker border on disappeared FLARM traffic
 * devices
   - allow listing up to 512 flights (increased from 128)
 * Android
   - fix crash with failed IOIO Accessory connection
+  - use the global dark mode setting by default
 
 Version 7.33 - 2023/05/26
 * map display

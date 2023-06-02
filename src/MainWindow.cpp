@@ -447,6 +447,16 @@ MainWindow::ReinitialiseLook() noexcept
   InfoBoxManager::ScheduleRedraw();
 }
 
+#ifdef ANDROID
+
+void
+MainWindow::OnLook() noexcept
+{
+  ReinitialiseLook();
+}
+
+#endif // ANDROID
+
 void
 MainWindow::Destroy() noexcept
 {

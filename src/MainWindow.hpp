@@ -403,5 +403,9 @@ protected:
   void OnPaint(Canvas &canvas) noexcept override;
 
   /* virtual methods from class TopWindow */
-  virtual bool OnClose() noexcept override;
+  bool OnClose() noexcept override;
+
+#ifdef ANDROID
+  void OnLook() noexcept override;
+#endif
 };

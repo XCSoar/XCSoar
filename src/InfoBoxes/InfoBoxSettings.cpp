@@ -33,7 +33,6 @@ InfoBoxSettings::SetDefaults() noexcept
 
   geometry = Geometry::SPLIT_8;
 
-  inverse = false;
   use_colors = true;
   border_style = BorderStyle::SHADED;
 

@@ -44,6 +44,11 @@ struct Event {
     RESIZE,
 
     /**
+     * Global look settings have been changed.
+     */
+    LOOK,
+
+    /**
      * Update the OpenGL surface.
      */
     SURFACE,
