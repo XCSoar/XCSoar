@@ -189,13 +189,7 @@ MainWindow::InitialiseConfigured()
   menu_bar = new MenuBar(*this, look->dialog.button);
 
   ReinitialiseLayout_vario(ib_layout);
-
   ReinitialiseLayoutTA(rc, ib_layout);
-
-  WindowStyle hidden_border;
-  hidden_border.Hide();
-  hidden_border.Border();
-
   ReinitialiseLayout_flarm(rc, ib_layout);
 
 #ifdef HAVE_SHOW_MENU_BUTTON
