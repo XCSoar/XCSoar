@@ -16,7 +16,7 @@
 template<typename F>
 void
 DollarExpand(const TCHAR *src, TCHAR *dest, size_t dest_size,
-             F &&lookup_function)
+             F &&lookup_function) noexcept
 {
   const TCHAR *const dest_end = dest + dest_size;
 
