@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Concepts.hxx"
 #include "StringAPI.hxx"
 #include "TruncateString.hpp"
 
@@ -13,10 +14,9 @@
  * string and copy the result to the destination buffer.  If the
  * buffer is too small, then the output is truncated silently.
  */
-template<typename F>
 void
 DollarExpand(const TCHAR *src, TCHAR *dest, size_t dest_size,
-             F &&lookup_function) noexcept
+             Invocable<const TCHAR *> auto lookup_function) noexcept
 {
   const TCHAR *const dest_end = dest + dest_size;
 
