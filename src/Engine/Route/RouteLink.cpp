@@ -55,11 +55,10 @@ RouteLink::CalcSpeedups(const FlatProjection &proj) noexcept
   inv_d = 1. / d;
 }
 
-#define ROUTE_MIN_STEP 3
-
 bool
 RouteLinkBase::IsShort() const noexcept
 {
+  constexpr unsigned MIN_STEP = 3;
   const auto delta = GetDelta();
-  return abs(delta.x) < ROUTE_MIN_STEP && abs(delta.y) < ROUTE_MIN_STEP;
+  return (unsigned)abs(delta.x) < MIN_STEP && (unsigned)abs(delta.y) < MIN_STEP;
 }
