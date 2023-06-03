@@ -24,16 +24,7 @@ struct RouteLinkBase {
                           const RoutePoint _origin) noexcept
     :first(_dest), second(_origin) {}
 
-  /**
-   * Equality comparison operator
-   *
-   * @param o object to compare to
-   *
-   * @return true if origins and destinations are equal
-   */
-  constexpr bool operator==(const RouteLinkBase o) const noexcept {
-    return (first == o.first) && (second == o.second);
-  }
+  constexpr bool operator==(const RouteLinkBase &) const noexcept = default;
 
   /**
    * Return 2d Distance of this link
