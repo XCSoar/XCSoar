@@ -10,6 +10,13 @@
 
 #include <algorithm>
 
+[[gnu::const]]
+static PixelPoint
+MultiplyRound(PixelPoint p, double f) noexcept
+{
+  return PixelPoint(lround(p.x * f), lround(p.y * f));
+}
+
 PixelPoint
 ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
                    const PixelPoint &p3, int offset) noexcept
@@ -34,8 +41,7 @@ ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
 
     const auto f = std::clamp(double(proj) / mag12, 0., 1.);
     // location of 'closest' point
-    return PixelPoint(lround(v12.x * f) + p1.x,
-                      lround(v12.y * f) + p1.y);
+    return p1 + MultiplyRound(v12, f);
   } else {
     return p1;
   }
