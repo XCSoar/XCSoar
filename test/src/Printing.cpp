@@ -114,14 +114,6 @@ void PrintHelper::print_route(RoutePlanner& r)
            (double)i->latitude.Degrees(),
            (int)i->altitude);
   }
-  printf("# solution\n");
-  printf("# solution\n");
-  printf("# stats:\n");
-  printf("#   dijkstra links %d\n", (int)r.count_dij);
-  printf("#   unique links %d\n", (int)r.count_unique);
-  printf("#   airspace queries %d\n", (int)r.count_airspace);
-  printf("#   terrain queries %d\n", (int)r.count_terrain);
-  printf("#   supressed %d\n", (int)r.count_supressed);
 }
 
 #include "Route/ReachFan.hpp"

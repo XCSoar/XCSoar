@@ -71,15 +71,12 @@ AirspaceRoute::FirstIntersecting(const RouteLink &e) const noexcept
   AIV visitor(e, projection, rpolars_route);
   m_airspaces.VisitIntersecting(origin, dest, visitor);
   const AIV::AIVResult res(visitor.GetNearest());
-  ++count_airspace;
   return RouteAirspaceIntersection(res.first, res.second);
 }
 
 const AbstractAirspace *
 AirspaceRoute::InsideOthers(const AGeoPoint &origin) const noexcept
 {
-  ++count_airspace;
-
   for (const auto &i : m_airspaces.QueryWithinRange(origin, 1))
     return &i.GetAirspace();
 

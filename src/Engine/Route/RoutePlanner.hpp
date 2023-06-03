@@ -108,14 +108,8 @@ private:
   /** Destination at last call to solve() */
   AFlatGeoPoint destination_last;
 
-  mutable unsigned long count_dij;
-  mutable unsigned long count_unique;
-  mutable unsigned long count_supressed;
-
 protected:
   RoutePoint astar_goal;
-  mutable unsigned long count_airspace;
-  mutable unsigned long count_terrain;
 
 public:
   friend class PrintHelper;

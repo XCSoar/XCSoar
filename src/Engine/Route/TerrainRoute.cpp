@@ -95,7 +95,6 @@ TerrainRoute::CheckClearanceTerrain(const RouteLink &e) const noexcept
   if (!terrain || !terrain->IsDefined())
     return std::nullopt;
 
-  count_terrain++;
   return rpolars_route.CheckClearance(e, *terrain, projection);
 }
 

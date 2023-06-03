@@ -72,11 +72,6 @@ RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
   if (!rpolars_route.IsAchievable(e_test))
     return false;
 
-  count_dij = 0;
-  count_airspace = 0;
-  count_terrain = 0;
-  count_supressed = 0;
-
   bool retval = false;
   planner.Restart(start);
 
@@ -119,8 +114,6 @@ RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
     }
 
   }
-
-  count_unique = unique_links.size();
 
   if (retval) {
     // correct solution for rounding
@@ -224,7 +217,6 @@ RoutePlanner::LinkCleared(const RouteLink &e) noexcept
 
   assert(!(e.first==e.second));
 
-  count_dij++;
   AStarPriorityValue v((is_final ? RoutePolars::RoundTime(g+h) : g),
                        (is_final ? 0 : RoutePolars::RoundTime(h)));
   // add one to tie-break towards lower number of links
@@ -237,12 +229,7 @@ RoutePlanner::LinkCleared(const RouteLink &e) noexcept
 bool
 RoutePlanner::IsSetUnique(const RouteLinkBase &e) noexcept
 {
-  const bool inserted = unique_links.insert(e).second;
-  if (inserted)
-    return true;
-
-  count_supressed++;
-  return false;
+  return unique_links.insert(e).second;
 }
 
 void
