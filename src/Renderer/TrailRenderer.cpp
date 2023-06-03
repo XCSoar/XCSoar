@@ -15,7 +15,7 @@
 #include <algorithm>
 
 bool
-TrailRenderer::LoadTrace(const TraceComputer &trace_computer)
+TrailRenderer::LoadTrace(const TraceComputer &trace_computer) noexcept
 {
   trace.clear();
   trace_computer.LockedCopyTo(trace);
@@ -25,7 +25,7 @@ TrailRenderer::LoadTrace(const TraceComputer &trace_computer)
 bool
 TrailRenderer::LoadTrace(const TraceComputer &trace_computer,
                          TimeStamp min_time,
-                         const WindowProjection &projection)
+                         const WindowProjection &projection) noexcept
 {
   trace.clear();
   trace_computer.LockedCopyTo(trace,
@@ -41,9 +41,8 @@ TrailRenderer::LoadTrace(const TraceComputer &trace_computer,
  * @param vario Input value between min_vario and max_vario
  * @return SnailTrail color array index
  */
-[[gnu::const]]
-static unsigned
-GetSnailColorIndex(double vario, double min_vario, double max_vario)
+static constexpr unsigned
+GetSnailColorIndex(double vario, double min_vario, double max_vario) noexcept
 {
   auto cv = vario < 0 ? -vario / min_vario : vario / max_vario;
 
@@ -51,17 +50,17 @@ GetSnailColorIndex(double vario, double min_vario, double max_vario)
                     0, (int)(TrailLook::NUMSNAILCOLORS - 1));
 }
 
-[[gnu::const]]
-static unsigned
-GetAltitudeColorIndex(double alt, double min_alt, double max_alt)
+static constexpr unsigned
+GetAltitudeColorIndex(double alt, double min_alt, double max_alt) noexcept
 {
   auto relative_altitude = (alt - min_alt) / (max_alt - min_alt);
   int _max = TrailLook::NUMSNAILCOLORS - 1;
   return std::clamp((int)(relative_altitude * _max), 0, _max);
 }
 
+[[gnu::pure]]
 static std::pair<double, double>
-GetMinMax(TrailSettings::Type type, const TracePointVector &trace)
+GetMinMax(TrailSettings::Type type, const TracePointVector &trace) noexcept
 {
   double value_min, value_max;
 
@@ -95,7 +94,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                     TimeStamp min_time,
                     bool enable_traildrift, const PixelPoint pos,
                     const NMEAInfo &basic, const DerivedInfo &calculated,
-                    const TrailSettings &settings)
+                    const TrailSettings &settings) noexcept
 {
   if (settings.length == TrailSettings::Length::OFF)
     return;
@@ -183,7 +182,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 }
 
 void
-TrailRenderer::Draw(Canvas &canvas, const WindowProjection &projection)
+TrailRenderer::Draw(Canvas &canvas, const WindowProjection &projection) noexcept
 {
   canvas.Select(look.trace_pen);
   DrawTraceVector(canvas, projection, trace);
@@ -199,14 +198,14 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 }
 
 BulkPixelPoint *
-TrailRenderer::Prepare(unsigned n)
+TrailRenderer::Prepare(unsigned n) noexcept
 {
   points.GrowDiscard(n);
   return points.data();
 }
 
 void
-TrailRenderer::DrawPreparedPolyline(Canvas &canvas, unsigned n)
+TrailRenderer::DrawPreparedPolyline(Canvas &canvas, unsigned n) noexcept
 {
   assert(points.size() >= n);
 
@@ -214,7 +213,7 @@ TrailRenderer::DrawPreparedPolyline(Canvas &canvas, unsigned n)
 }
 
 void
-TrailRenderer::DrawPreparedPolygon(Canvas &canvas, unsigned n)
+TrailRenderer::DrawPreparedPolygon(Canvas &canvas, unsigned n) noexcept
 {
   assert(points.size() >= n);
 
@@ -223,7 +222,7 @@ TrailRenderer::DrawPreparedPolygon(Canvas &canvas, unsigned n)
 
 void
 TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
-                               const ContestTraceVector &trace)
+                               const ContestTraceVector &trace) noexcept
 {
   const unsigned n = trace.size();
   auto *p = Prepare(n);
@@ -236,7 +235,7 @@ TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
 
 void
 TrailRenderer::DrawTriangle(Canvas &canvas, const Projection &projection,
-                            const ContestTraceVector &trace)
+                            const ContestTraceVector &trace) noexcept
 {
   assert(trace.size() == 5);
 
@@ -252,7 +251,7 @@ TrailRenderer::DrawTriangle(Canvas &canvas, const Projection &projection,
 
 void
 TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
-                               const TracePointVector &trace)
+                               const TracePointVector &trace) noexcept
 {
   const unsigned n = trace.size();
   auto *p = Prepare(n);
