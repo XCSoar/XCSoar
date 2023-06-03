@@ -62,6 +62,11 @@ struct Point2D {
   constexpr product_type MagnitudeSquared() const noexcept {
     return PT(x) * PT(x) + PT(y) * PT(y);
   }
+
+  [[gnu::pure]]
+  double Magnitude() const noexcept {
+    return std::hypot(x, y);
+  }
 };
 
 struct UnsignedPoint2D : Point2D<unsigned> {
@@ -75,30 +80,8 @@ struct UnsignedPoint2D : Point2D<unsigned> {
 static_assert(std::is_trivial<UnsignedPoint2D>::value, "type is not trivial");
 
 using IntPoint2D = Point2D<int>;
-
-struct DoublePoint2D : Point2D<double> {
-  DoublePoint2D() = default;
-  using Point2D::Point2D;
-
-  [[gnu::pure]]
-  double Magnitude() const noexcept {
-    return hypot(x, y);
-  }
-};
-
-static_assert(std::is_trivial<DoublePoint2D>::value, "type is not trivial");
-
-struct FloatPoint2D : Point2D<float> {
-  FloatPoint2D() = default;
-  using Point2D::Point2D;
-
-  [[gnu::pure]]
-  float Magnitude() const noexcept {
-    return hypotf(x, y);
-  }
-};
-
-static_assert(std::is_trivial<FloatPoint2D>::value, "type is not trivial");
+using DoublePoint2D = Point2D<double>;
+using FloatPoint2D = Point2D<float>;
 
 template<typename P>
 concept AnyPoint2D = std::is_base_of_v<Point2D<typename P::scalar_type,

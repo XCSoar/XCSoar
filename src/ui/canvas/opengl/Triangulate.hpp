@@ -4,9 +4,9 @@
 #pragma once
 
 #include "ui/opengl/System.hpp"
+#include "Math/Point2D.hpp"
 
 struct BulkPixelPoint;
-struct FloatPoint2D;
 template<class T> class AllocatedArray;
 
 /**
