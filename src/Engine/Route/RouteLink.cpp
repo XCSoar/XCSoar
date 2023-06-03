@@ -55,14 +55,6 @@ RouteLink::CalcSpeedups(const FlatProjection &proj) noexcept
   inv_d = 1. / d;
 }
 
-RouteLink
-RouteLink::Flat() const noexcept
-{
-  RouteLink copy(*this);
-  copy.second.altitude = copy.first.altitude;
-  return copy;
-}
-
 #define ROUTE_MIN_STEP 3
 
 bool

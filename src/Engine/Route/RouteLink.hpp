@@ -92,15 +92,6 @@ public:
   RouteLink(const RoutePoint &_first, const RoutePoint &_second,
             const FlatProjection &proj) noexcept;
 
-  /**
-   * Generate RouteLink projected flat such that the destination altitude equals
-   * the start altitude.  The start altitude is unaffected.
-   *
-   * @return link equivalent to this link flattened
-   */
-  [[gnu::pure]]
-  RouteLink Flat() const noexcept;
-
 private:
   void CalcSpeedups(const FlatProjection &proj) noexcept;
 };
