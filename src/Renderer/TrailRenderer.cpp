@@ -68,17 +68,17 @@ GetMinMax(TrailSettings::Type type, const TracePointVector &trace) noexcept
     value_max = 1000;
     value_min = 500;
 
-    for (auto it = trace.begin(); it != trace.end(); ++it) {
-      value_max = std::max(it->GetAltitude(), value_max);
-      value_min = std::min(it->GetAltitude(), value_min);
+    for (const auto &i : trace) {
+      value_max = std::max(i.GetAltitude(), value_max);
+      value_min = std::min(i.GetAltitude(), value_min);
     }
   } else {
     value_max = 0.75;
     value_min = -2.0;
 
-    for (auto it = trace.begin(); it != trace.end(); ++it) {
-      value_max = std::max(it->GetVario(), value_max);
-      value_min = std::min(it->GetVario(), value_min);
+    for (const auto &i : trace) {
+      value_max = std::max(i.GetVario(), value_max);
+      value_min = std::min(i.GetVario(), value_min);
     }
 
     value_max = std::min(7.5, value_max);
@@ -124,11 +124,10 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 
   PixelPoint last_point(0, 0);
   bool last_valid = false;
-  for (auto it = trace.begin(), end = trace.end(); it != end; ++it) {
+  for (const auto &i : trace) {
     const GeoPoint gp = enable_traildrift
-      ? it->GetLocation().Parametric(traildrift,
-                                     it->CalculateDrift(basic.time))
-      : it->GetLocation();
+      ? i.GetLocation().Parametric(traildrift, i.CalculateDrift(basic.time))
+      : i.GetLocation();
     if (!bounds.IsInside(gp)) {
       /* the point is outside of the MapWindow; don't paint it */
       last_valid = false;
@@ -139,14 +138,14 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 
     if (last_valid) {
       if (settings.type == TrailSettings::Type::ALTITUDE) {
-        unsigned index = GetAltitudeColorIndex(it->GetAltitude(),
+        unsigned index = GetAltitudeColorIndex(i.GetAltitude(),
                                                value_min, value_max);
         canvas.Select(look.trail_pens[index]);
         canvas.DrawLinePiece(last_point, pt);
       } else {
-        unsigned color_index = GetSnailColorIndex(it->GetVario(),
+        unsigned color_index = GetSnailColorIndex(i.GetVario(),
                                                   value_min, value_max);
-        if (it->GetVario() < 0 &&
+        if (i.GetVario() < 0 &&
             (settings.type == TrailSettings::Type::VARIO_1_DOTS ||
              settings.type == TrailSettings::Type::VARIO_2_DOTS ||
              settings.type == TrailSettings::Type::VARIO_DOTS_AND_LINES ||
