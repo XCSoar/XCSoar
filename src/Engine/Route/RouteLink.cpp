@@ -60,6 +60,6 @@ RouteLink::CalcSpeedups(const FlatProjection &proj) noexcept
 bool
 RouteLinkBase::IsShort() const noexcept
 {
-  return abs(first.x - second.x) < ROUTE_MIN_STEP &&
-         abs(first.y - second.y) < ROUTE_MIN_STEP;
+  const auto delta = GetDelta();
+  return abs(delta.x) < ROUTE_MIN_STEP && abs(delta.y) < ROUTE_MIN_STEP;
 }
