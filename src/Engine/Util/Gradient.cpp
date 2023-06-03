@@ -2,7 +2,8 @@
 // Copyright The XCSoar Project
 
 #include "Gradient.hpp"
-#include "util/Clamp.hpp"
+
+#include <algorithm> // for std::clamp()
 
 #include <math.h>
 
@@ -10,7 +11,7 @@ double
 AngleToGradient(const double d) noexcept
 {
   if (d != 0) {
-    return Clamp(1. / d, -999., 999.);
+    return std::clamp(1. / d, -999., 999.);
   } else {
     return 999;
   }

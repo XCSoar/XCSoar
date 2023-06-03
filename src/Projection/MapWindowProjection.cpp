@@ -5,8 +5,8 @@
 #include "Screen/Layout.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "util/Macros.hpp"
-#include "util/Clamp.hpp"
 
+#include <algorithm> // for std::clamp()
 #include <cassert>
 
 static constexpr unsigned ScaleList[] = {
@@ -57,7 +57,7 @@ double
 MapWindowProjection::StepMapScale(const double scale, int Step) const noexcept
 {
   int i = FindMapScale(scale) + Step;
-  i = Clamp(i, 0, (int)ScaleListCount - 1);
+  i = std::clamp(i, 0, (int)ScaleListCount - 1);
   return CalculateMapScale(i);
 }
 

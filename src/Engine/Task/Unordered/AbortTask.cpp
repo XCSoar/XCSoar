@@ -9,7 +9,6 @@
 #include "Task/Solvers/TaskSolution.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "util/Clamp.hpp"
 
 /** min search range in m */
 static constexpr double min_search_range = 50000;
@@ -85,8 +84,8 @@ AbortTask::GetAbortRange(const AircraftState &state,
                          const GlidePolar &glide_polar) const noexcept
 {
   // always scan at least min range or approx glide range
-  return Clamp(state.altitude * glide_polar.GetBestLD(),
-               min_search_range, max_search_range);
+  return std::clamp(state.altitude * glide_polar.GetBestLD(),
+                    min_search_range, max_search_range);
 }
 
 [[gnu::pure]]

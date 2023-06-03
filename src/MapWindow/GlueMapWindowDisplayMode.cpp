@@ -8,7 +8,8 @@
 #include "Interface.hpp"
 #include "Profile/Profile.hpp"
 #include "Screen/Layout.hpp"
-#include "util/Clamp.hpp"
+
+#include <algorithm> // for std::clamp()
 
 void
 OffsetHistory::Reset() noexcept
@@ -245,8 +246,8 @@ GlueMapWindow::UpdateMapScale() noexcept
     distance /= auto_zoom_factor / 100.;
 
     // Clip map auto zoom range to reasonable values
-    distance = Clamp(distance, 525.,
-                     settings.max_auto_zoom_distance / 10.);
+    distance = std::clamp(distance, 525.,
+                          settings.max_auto_zoom_distance / 10.);
 
     visible_projection.SetFreeMapScale(distance);
     settings.cruise_scale = visible_projection.GetScale();

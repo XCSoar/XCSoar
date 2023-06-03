@@ -11,7 +11,6 @@
 #include "util/Compiler.h"
 #include "Interface.hpp"
 #include "Pan.hpp"
-#include "util/Clamp.hpp"
 #include "Topography/Thread.hpp"
 #include "Asset.hpp"
 
@@ -23,6 +22,8 @@
 #ifdef ENABLE_SDL
 #include <SDL_keyboard.h>
 #endif
+
+#include <algorithm> // for std::clamp()
 
 void
 GlueMapWindow::OnCreate()
@@ -248,8 +249,8 @@ GlueMapWindow::OnMouseUp(PixelPoint p) noexcept
       const Angle new_bearing = drag_start_geopoint.Bearing(location);
       if ((new_bearing - old_bearing).AsDelta().Absolute() < Angle::Degrees(30) ||
           (CommonInterface::Basic().ground_speed < min_speed))
-        device_blackboard->SetSpeed(Clamp(distance / Layout::FastScale(3),
-                                          min_speed, 100.));
+        device_blackboard->SetSpeed(std::clamp(distance / Layout::FastScale(3),
+                                               min_speed, 100.));
 
       device_blackboard->SetTrack(new_bearing);
       // change bearing without changing speed if direction change > 30

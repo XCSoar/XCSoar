@@ -17,13 +17,12 @@
 #include "Renderer/FinalGlideBarRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "util/Macros.hpp"
-#include "util/Clamp.hpp"
 #include "util/StringAPI.hxx"
 #include "Look/GestureLook.hpp"
 #include "Input/InputEvents.hpp"
 #include "Renderer/MapScaleRenderer.hpp"
 
-#include <stdio.h>
+#include <algorithm> // for std::clamp()
 
 void
 GlueMapWindow::DrawGesture(Canvas &canvas) const noexcept
@@ -452,7 +451,7 @@ GlueMapWindow::DrawStallRatio(Canvas &canvas,
 {
   if (Basic().stall_ratio_available) {
     // JMW experimental, display stall sensor
-    auto s = Clamp(Basic().stall_ratio, 0., 1.);
+    auto s = std::clamp(Basic().stall_ratio, 0., 1.);
     int m = rc.GetHeight() * s * s;
 
     const auto p = rc.GetBottomRight();

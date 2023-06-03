@@ -9,9 +9,11 @@
 #include "NMEA/Info.hpp"
 #include "Device/Port/Port.hpp"
 #include "NMEA/InputLine.hpp"
-#include "util/Clamp.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Operation/Operation.hpp"
+
+#include <algorithm> // for std::clamp()
+
 #include <math.h>
 
 using std::string_view_literals::operator""sv;
@@ -99,7 +101,7 @@ XVCDevice::PXCV(NMEAInputLine &line, NMEAInfo &info)
 
   // Bugs setting as entered in XCVario
   if (line.ReadChecked(value))
-    info.settings.ProvideBugs(1 - Clamp(value, 0., 30.) / 100.,
+    info.settings.ProvideBugs(1 - std::clamp(value, 0., 30.) / 100.,
                               info.clock);
 
   // legacy reading of fractional water ballast in protocol version 1

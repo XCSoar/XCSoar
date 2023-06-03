@@ -26,7 +26,8 @@
 #include "Units/Units.hpp"
 #include "Blackboard/RateLimitedBlackboardListener.hpp"
 #include "Interface.hpp"
-#include "util/Clamp.hpp"
+
+#include <algorithm> // for std::clamp()
 
 class TargetWidget;
 
@@ -686,7 +687,7 @@ TargetWidget::InitTargetPoints(int _target_point)
     target_point = initial_active_task_point;
   }
 
-  target_point = Clamp(int(target_point), 0, (int)task_size - 1);
+  target_point = std::clamp(int(target_point), 0, (int)task_size - 1);
   return true;
 }
 

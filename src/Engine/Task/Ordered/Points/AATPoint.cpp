@@ -4,7 +4,7 @@
 #include "AATPoint.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
 #include "Geo/Flat/FlatLine.hpp"
-#include "util/Clamp.hpp"
+#include "util/Compiler.h"
 
 const GeoPoint &
 AATPoint::GetLocationRemaining() const noexcept
@@ -159,7 +159,7 @@ AATPoint::GetTargetRangeRadial(double oldrange) const
   const auto radius = d < 0
     ? floc.Distance(GetLocationMin())
     : floc.Distance(GetLocationMax());
-  const auto range = Clamp(d / radius, -1., 1.);
+  const auto range = std::clamp(d / radius, -1., 1.);
 
   if (oldrange == 0 && range == 0)
     radial = Angle::Zero();

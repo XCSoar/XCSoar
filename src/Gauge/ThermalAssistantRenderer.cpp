@@ -3,7 +3,6 @@
 
 #include "ThermalAssistantRenderer.hpp"
 #include "util/Macros.hpp"
-#include "util/Clamp.hpp"
 #include "NMEA/Attitude.hpp"
 #include "NMEA/Derived.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -15,6 +14,8 @@
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
 #endif
+
+#include <algorithm> // for std::clamp()
 
 PixelPoint
 ThermalAssistantRenderer::LiftPoints::GetAverage() const
@@ -84,7 +85,7 @@ double
 ThermalAssistantRenderer::NormalizeLift(double lift, double max_lift)
 {
   lift = (lift + max_lift) / (2 * max_lift);
-  return Clamp(lift, 0., 1.);
+  return std::clamp(lift, 0., 1.);
 }
 
 void

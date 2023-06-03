@@ -11,7 +11,6 @@
 #include "Projection/WindowProjection.hpp"
 #include "Geo/Math.hpp"
 #include "Engine/Contest/ContestTrace.hpp"
-#include "util/Clamp.hpp"
 
 #include <algorithm>
 
@@ -48,8 +47,8 @@ GetSnailColorIndex(double vario, double min_vario, double max_vario)
 {
   auto cv = vario < 0 ? -vario / min_vario : vario / max_vario;
 
-  return Clamp((int)((cv + 1) / 2 * TrailLook::NUMSNAILCOLORS),
-               0, (int)(TrailLook::NUMSNAILCOLORS - 1));
+  return std::clamp((int)((cv + 1) / 2 * TrailLook::NUMSNAILCOLORS),
+                    0, (int)(TrailLook::NUMSNAILCOLORS - 1));
 }
 
 [[gnu::const]]
@@ -58,7 +57,7 @@ GetAltitudeColorIndex(double alt, double min_alt, double max_alt)
 {
   auto relative_altitude = (alt - min_alt) / (max_alt - min_alt);
   int _max = TrailLook::NUMSNAILCOLORS - 1;
-  return Clamp((int)(relative_altitude * _max), 0, _max);
+  return std::clamp((int)(relative_altitude * _max), 0, _max);
 }
 
 static std::pair<double, double>

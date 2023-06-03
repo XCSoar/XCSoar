@@ -8,7 +8,8 @@
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
-#include "util/Clamp.hpp"
+
+#include <algorithm> // for std::clamp()
 
 #include <math.h>
 
@@ -76,7 +77,7 @@ PBB50(NMEAInputLine &line, NMEAInfo &info)
   // of max performance
 
   if (line.ReadChecked(value))
-    info.settings.ProvideBugs(1 - Clamp(value, 0., 30.) / 100.,
+    info.settings.ProvideBugs(1 - std::clamp(value, 0., 30.) / 100.,
                               info.clock);
 
   double ballast_overload;

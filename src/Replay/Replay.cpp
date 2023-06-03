@@ -12,11 +12,10 @@
 #include "Interface.hpp"
 #include "CatmullRomInterpolator.hpp"
 #include "time/Cast.hxx"
-#include "util/Clamp.hpp"
 
-#include <stdexcept>
-
+#include <algorithm> // for std::clamp()
 #include <cassert>
+#include <stdexcept>
 
 void
 Replay::Stop()
@@ -216,7 +215,7 @@ Replay::OnTimer()
     constexpr std::chrono::steady_clock::duration upper = std::chrono::seconds(3);
     const FloatDuration delta_s((next_data.time - virtual_time) / time_scale);
     const auto delta = std::chrono::duration_cast<std::chrono::steady_clock::duration>(delta_s);
-    schedule = Clamp(delta, lower, upper);
+    schedule = std::clamp(delta, lower, upper);
   }
 
   timer.Schedule(schedule);

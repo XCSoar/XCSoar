@@ -4,7 +4,8 @@
 #include "TaskOptTarget.hpp"
 #include "Task/Ordered/Points/AATPoint.hpp"
 #include "Task/Ordered/Points/StartPoint.hpp"
-#include "util/Clamp.hpp"
+
+#include <algorithm> // for std::clamp()
 
 double
 TaskOptTarget::f(const double p) noexcept
@@ -49,7 +50,7 @@ TaskOptTarget::search(const double tp)
 void
 TaskOptTarget::SetTarget(const double p)
 {
-  const GeoPoint loc = iso.Parametric(Clamp(p, xmin, xmax));
+  const GeoPoint loc = iso.Parametric(std::clamp(p, xmin, xmax));
   tp_current.SetTarget(loc);
   tp_start.ScanDistanceRemaining(aircraft.location);
 }

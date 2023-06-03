@@ -8,7 +8,8 @@
 #include "Map.hpp"
 #include "Keys.hpp"
 #include "MapSettings.hpp"
-#include "util/Clamp.hpp"
+
+#include <algorithm> // for std::clamp()
 
 static bool
 IsValidMapOrientation(unsigned value)
@@ -106,10 +107,10 @@ Profile::Load(const ProfileMap &map, MapSettings &settings)
 
   double tmp;
   if (map.Get(ProfileKeys::ClimbMapScale, tmp))
-    settings.circling_scale = Clamp(tmp / 10000, 0.0003, 10.);
+    settings.circling_scale = std::clamp(tmp / 10000, 0.0003, 10.);
 
   if (map.Get(ProfileKeys::CruiseMapScale, tmp))
-    settings.cruise_scale = Clamp(tmp / 10000, 0.0003, 10.);
+    settings.cruise_scale = std::clamp(tmp / 10000, 0.0003, 10.);
 
   map.GetEnum(ProfileKeys::MapShiftBias, settings.map_shift_bias);
   map.Get(ProfileKeys::EnableFLARMMap, settings.show_flarm_on_map);

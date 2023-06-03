@@ -7,7 +7,8 @@
 #include "NMEA/FlyingState.hpp"
 #include "Settings.hpp"
 #include "Math/LowPassFilter.hpp"
-#include "util/Clamp.hpp"
+
+#include <algorithm> // for std::clamp()
 
 static constexpr Angle MIN_TURN_RATE = Angle::Degrees(4);
 
@@ -67,8 +68,8 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
 
     // JMW limit rate to 50 deg per second otherwise a big spike
     // will cause spurious lock on circling for a long time
-    Angle turn_rate = Clamp(circling_info.turn_rate,
-                            Angle::Degrees(-50), Angle::Degrees(50));
+    Angle turn_rate = std::clamp(circling_info.turn_rate,
+                                 Angle::Degrees(-50), Angle::Degrees(50));
 
     // Make the turn rate more smooth using the LowPassFilter
     auto smoothed = LowPassFilter(circling_info.turn_rate_smoothed.Native(),
@@ -76,8 +77,8 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
     circling_info.turn_rate_smoothed = Angle::Native(smoothed);
 
     // Makes smoothing of heading turn rate
-    turn_rate = Clamp(circling_info.turn_rate_heading,
-                      Angle::Degrees(-50), Angle::Degrees(50));
+    turn_rate = std::clamp(circling_info.turn_rate_heading,
+                           Angle::Degrees(-50), Angle::Degrees(50));
     // Make the heading turn rate more smooth using the LowPassFilter
     smoothed = LowPassFilter(circling_info.turn_rate_heading_smoothed.Native(),
                              turn_rate.Native(), 0.3);

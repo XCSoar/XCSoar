@@ -6,7 +6,8 @@
 #include "NMEA/LiftDatabase.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/CirclingInfo.hpp"
-#include "util/Clamp.hpp"
+
+#include <algorithm> // for std::clamp()
 
 void
 LiftDatabaseComputer::Clear(LiftDatabase &lift_database,
@@ -49,7 +50,7 @@ heading_to_index(const Angle heading)
   unsigned index = (unsigned)
       ((heading + afive).AsBearing().Degrees() / 10);
 
-  return Clamp(index, 0u, 35u);
+  return std::clamp(index, 0u, 35u);
 }
 
 void
