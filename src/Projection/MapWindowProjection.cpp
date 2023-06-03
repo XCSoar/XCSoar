@@ -4,7 +4,6 @@
 #include "MapWindowProjection.hpp"
 #include "Screen/Layout.hpp"
 #include "Waypoint/Waypoint.hpp"
-#include "util/Macros.hpp"
 
 #include <algorithm> // for std::clamp()
 #include <cassert>
@@ -31,7 +30,7 @@ static constexpr unsigned ScaleList[] = {
   1000000,
 };
 
-static constexpr unsigned ScaleListCount = ARRAY_SIZE(ScaleList);
+static constexpr unsigned ScaleListCount = std::size(ScaleList);
 
 bool
 MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const noexcept
