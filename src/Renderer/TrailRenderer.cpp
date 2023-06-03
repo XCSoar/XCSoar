@@ -224,10 +224,10 @@ TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
                                const ContestTraceVector &trace) noexcept
 {
   const unsigned n = trace.size();
-  auto *p = Prepare(n);
 
-  for (const auto &i : trace)
-    *p++ = projection.GeoToScreen(i.GetLocation());
+  std::transform(trace.begin(), trace.end(), Prepare(n), [&projection](const auto &i){
+    return projection.GeoToScreen(i.GetLocation());
+  });
 
   DrawPreparedPolyline(canvas, n);
 }
@@ -253,10 +253,10 @@ TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
                                const TracePointVector &trace) noexcept
 {
   const unsigned n = trace.size();
-  auto *p = Prepare(n);
 
-  for (const auto &i : trace)
-    *p++ = projection.GeoToScreen(i.GetLocation());
+  std::transform(trace.begin(), trace.end(), Prepare(n), [&projection](const auto &i){
+    return projection.GeoToScreen(i.GetLocation());
+  });
 
   DrawPreparedPolyline(canvas, n);
 }
