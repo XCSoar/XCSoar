@@ -167,7 +167,7 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
       x += libinput_event_pointer_get_dx(ptr_li_event);
       x = std::clamp<double>(x, 0, screen_size.width);
       y += libinput_event_pointer_get_dy(ptr_li_event);
-      y = Clamp<double>(y, 0, screen_size.height);
+      y = std::clamp<double>(y, 0, screen_size.height);
       queue.Push(Event(Event::MOUSE_MOTION,
                        PixelPoint((unsigned)x, (unsigned)y)));
     }
