@@ -266,7 +266,7 @@ RoutePlanner::AddShortcut(const RoutePoint &node) noexcept
   bool ok = true;
   do {
     RoutePoint pre_new = planner.GetPredecessor(pre);
-    if (!((FlatGeoPoint)pre_new == (FlatGeoPoint)previous))
+    if ((FlatGeoPoint)pre_new != (FlatGeoPoint)previous)
       ok = false;
     if (pre_new == pre)
       return;
