@@ -22,7 +22,10 @@ public:
    *
    * @param _oz The OZ to store
    */
-  explicit ObservationZoneClient(std::unique_ptr<ObservationZonePoint> _oz_point) noexcept;
+  template<typename T>
+  explicit ObservationZoneClient(T &&_oz_point) noexcept
+    :oz_point(std::forward<T>(_oz_point)) {}
+
   ~ObservationZoneClient() noexcept;
 
   /**
