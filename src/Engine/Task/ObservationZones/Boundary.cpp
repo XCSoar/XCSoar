@@ -6,7 +6,7 @@
 
 void
 OZBoundary::GenerateArcExcluding(const GeoPoint &center, double radius,
-                                 Angle start_radial, Angle end_radial)
+                                 Angle start_radial, Angle end_radial) noexcept
 {
   const unsigned steps = 20;
   const Angle delta = Angle::FullCircle() / steps;
