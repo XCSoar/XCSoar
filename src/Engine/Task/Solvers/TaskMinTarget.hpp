@@ -68,7 +68,7 @@ private:
    *
    * @return True if solution is valid
    */
-  bool valid(double p);
+  bool valid(double p) const noexcept;
 
 public:
   /**
@@ -81,8 +81,8 @@ public:
    *
    * @return Range value for solution
    */
-  double search(double p);
+  double search(double p) noexcept;
 
 private:
-  void set_range(double p);
+  void set_range(double p) noexcept;
 };
