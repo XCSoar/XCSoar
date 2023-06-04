@@ -227,7 +227,6 @@ protected:
    *
    * @return True if path is clear
    */
-  [[gnu::pure]]
   virtual bool CheckSecondary([[maybe_unused]] const RouteLink &e) noexcept {
     return true;
   }
