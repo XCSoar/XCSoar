@@ -306,16 +306,18 @@ public:
    * Retrieve ballast in litres
    * @return Ballast (l or kg)
    */
-  [[gnu::pure]]
-  double GetBallastLitres() const;
+  constexpr double GetBallastLitres() const noexcept {
+    return ballast;
+  }
 
   /**
    * Determine if glider carries ballast
    *
    * @return True if glider can carry ballast
    */
-  [[gnu::pure]]
-  bool IsBallastable() const;
+  constexpr bool IsBallastable() const noexcept {
+    return ballast_ratio > 0;
+  }
 
   /**
    * Set MacCready value.  Internally this performs search

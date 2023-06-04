@@ -352,18 +352,6 @@ GlidePolar::GetWingLoading() const
   return 0;
 }
 
-double
-GlidePolar::GetBallastLitres() const
-{
-  return ballast;
-}
-
-bool
-GlidePolar::IsBallastable() const
-{
-  return ballast_ratio > 0;
-}
-
 static double
 FRiskFunction(const double x, const double k)
 {
