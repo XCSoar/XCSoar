@@ -73,7 +73,7 @@ public:
    *
    * @return True if solution is valid
    */
-  virtual bool valid(double p);
+  bool valid(double p) noexcept;
 
   /**
    * Search for active task point's target isoline to minimise elapsed time
@@ -85,9 +85,9 @@ public:
    *
    * @return Isoline value for solution
    */
-  virtual double search(double p);
+  double search(double p) noexcept;
 
 private:
   /** Sets target location along isoline */
-  void SetTarget(double p);
+  void SetTarget(double p) noexcept;
 };
