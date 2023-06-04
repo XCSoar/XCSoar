@@ -106,6 +106,13 @@ class FlatGeoPointPrinter:
     def to_string(self):
         return 'FlatGeoPoint(%d %d)' % (self.value['x'], self.value['y'])
 
+class AFlatGeoPointPrinter:
+    def __init__(self, value):
+        self.value = value
+
+    def to_string(self):
+        return 'AFlatGeoPoint(%d %d %d)' % (self.value['x'], self.value['y'], self.value['altitude'])
+
 class SearchPointPrinter:
     def __init__(self, value):
         self.gp = GeoPointPrinter(value['location'])
@@ -222,6 +229,8 @@ def lookup_function(value):
         return SpeedVectorPrinter(value)
     elif typename == 'FlatGeoPoint':
         return FlatGeoPointPrinter(value)
+    elif typename == 'AFlatGeoPoint':
+        return AFlatGeoPointPrinter(value)
     elif typename == 'SearchPoint':
         return SearchPointPrinter(value)
     elif typename == 'Validity':
