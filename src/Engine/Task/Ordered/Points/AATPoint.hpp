@@ -188,7 +188,7 @@ public:
   const GeoPoint &GetLocationRemaining() const noexcept override;
 
   /* virtual methods from class ObservationZoneClient */
-  double ScoreAdjustment() const override {
+  double ScoreAdjustment() const noexcept override {
     return 0;
   }
 
