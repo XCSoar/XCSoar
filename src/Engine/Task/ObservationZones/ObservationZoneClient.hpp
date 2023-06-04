@@ -14,7 +14,7 @@ struct GeoPoint;
  * Class holding an ObzervationZonePoint, directing calls to it
  */
 class ObservationZoneClient {
-  std::unique_ptr<ObservationZonePoint> oz_point;
+  const std::unique_ptr<ObservationZonePoint> oz_point;
 
 public:
   /**
