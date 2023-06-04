@@ -128,7 +128,7 @@ struct GlideResult {
   Validity validity;
 
   /** Construct an uninitialised object. */
-  GlideResult() = default;
+  constexpr GlideResult() noexcept = default;
 
   /**
    * Constructor with partial initialisation for a particular
@@ -141,9 +141,9 @@ struct GlideResult {
    *
    * @return Blank glide result
    */
-  GlideResult(const GlideState &task, double V);
+  GlideResult(const GlideState &task, double V) noexcept;
 
-  bool IsDefined() const {
+  constexpr bool IsDefined() const noexcept {
     return validity != Validity::NO_SOLUTION;
   }
 
@@ -151,7 +151,7 @@ struct GlideResult {
    * Calculate additional items (CruiseTrackBearing and AltitudeRequired) that were
    * deferred.
    */
-  void CalcDeferred();
+  void CalcDeferred() noexcept;
 
   /**
    * Check whether aircraft can finish this task without
@@ -160,7 +160,7 @@ struct GlideResult {
    * @return True if aircraft is at or above final glide
    */
   [[gnu::pure]]
-  bool IsFinalGlide() const;
+  bool IsFinalGlide() const noexcept;
 
   /**
    * Check whether task is partially achievable.  It will
@@ -168,9 +168,7 @@ struct GlideResult {
    *
    * @return True if task is at least partially achievable
    */
-  bool
-  IsOk() const
-  {
+  constexpr bool IsOk() const noexcept {
     return validity == Validity::OK;
   }
 
@@ -179,8 +177,7 @@ struct GlideResult {
    *
    * @return True if target is reachable
    */
-  [[gnu::pure]]
-  bool IsAchievable() const {
+  constexpr bool IsAchievable() const noexcept {
     return IsOk();
   }
 
@@ -188,8 +185,7 @@ struct GlideResult {
    * Altitude required at the start of the task to solve it in
    * pure glide [m MSL].
    */
-  [[gnu::pure]]
-  double GetRequiredAltitude() const {
+  constexpr double GetRequiredAltitude() const noexcept {
     return pure_glide_min_arrival_altitude + pure_glide_height;
   }
 
@@ -198,8 +194,7 @@ struct GlideResult {
    * [m MSL], as specified in the MacCready calculation input
    * parameters.
    */
-  [[gnu::pure]]
-  double GetStartAltitude() const {
+  constexpr double GetStartAltitude() const noexcept {
     return GetRequiredAltitude() + altitude_difference;
   }
 
@@ -210,8 +205,7 @@ struct GlideResult {
    *
    * @param start_altitude the current aircraft altitude
    */
-  [[gnu::pure]]
-  double GetArrivalAltitude(double start_altitude) const {
+  constexpr double GetArrivalAltitude(double start_altitude) const noexcept {
     return start_altitude - pure_glide_height;
   }
 
@@ -220,8 +214,7 @@ struct GlideResult {
    * this leg, not assuming any climbs [m MSL].  It may be below the
    * safety altitude or even below terrain.
    */
-  [[gnu::pure]]
-  double GetArrivalAltitude() const {
+  constexpr double GetArrivalAltitude() const noexcept {
     return GetArrivalAltitude(GetStartAltitude());
   }
 
@@ -230,8 +223,7 @@ struct GlideResult {
    * drift while circling [m MSL].  This is a theoretical value,
    * because this altitude will probably never actually be reached.
    */
-  [[gnu::pure]]
-  double GetRequiredAltitudeWithDrift() const {
+  constexpr double GetRequiredAltitudeWithDrift() const noexcept {
     return min_arrival_altitude + height_glide;
   }
 
@@ -241,8 +233,7 @@ struct GlideResult {
    *
    * @param start_altitude the current aircraft altitude
    */
-  [[gnu::pure]]
-  double GetArrivalAltitudeWithDrift(double start_altitude) const {
+  constexpr double GetArrivalAltitudeWithDrift(double start_altitude) const noexcept {
     return start_altitude - height_glide;
   }
 
@@ -252,13 +243,11 @@ struct GlideResult {
    *
    * @param start_altitude the current aircraft altitude
    */
-  [[gnu::pure]]
-  double GetPureGlideAltitudeDifference(double start_altitude) const {
+  constexpr double GetPureGlideAltitudeDifference(double start_altitude) const noexcept {
     return start_altitude - GetRequiredAltitude();
   }
 
-  [[gnu::pure]]
-  double SelectAltitudeDifference(const GlideSettings &settings) const {
+  constexpr double SelectAltitudeDifference(const GlideSettings &settings) const noexcept {
     return settings.predict_wind_drift
       ? altitude_difference
       : pure_glide_altitude_difference;
@@ -271,7 +260,7 @@ struct GlideResult {
    *
    * @param s2 The other glide result segment
    */
-  void Add(const GlideResult &s2);
+  void Add(const GlideResult &s2) noexcept;
 
   /**
    * Find the gradient of this solution relative to ground.
@@ -280,7 +269,7 @@ struct GlideResult {
    * @return Glide gradient (positive down), or inf if no distance to travel.
    */
   [[gnu::pure]]
-  double GlideAngleGround() const;
+  double GlideAngleGround() const noexcept;
 
   /**
    * Find the gradient of the target relative to ground
@@ -289,10 +278,12 @@ struct GlideResult {
    * @return Glide gradient (positive down), or inf if no distance to travel.
    */
   [[gnu::pure]]
-  double DestinationAngleGround() const;
+  double DestinationAngleGround() const noexcept;
 
   /** Reset/clear the solution */
-  void Reset();
+  constexpr void Reset() noexcept {
+    validity = Validity::NO_SOLUTION;
+  }
 
   /**
    * Calculate instantaneous task speed according to enhanced Pirker
@@ -301,15 +292,16 @@ struct GlideResult {
    *
    * @return instantaneous speed (m/s)
    */
+  [[gnu::pure]]
   double InstantSpeed(const AircraftState &aircraft, const GlideResult& leg,
-                      const GlidePolar& glide_polar);
+                      const GlidePolar &glide_polar) const noexcept;
 
 private:
   /**
    * Calculate cruise track bearing from internal variables.
    * This is expensive so is only done on demand.
    */
-  void CalcCruiseBearing();
+  void CalcCruiseBearing() noexcept;
 };
 
 static_assert(std::is_trivial<GlideResult>::value, "type is not trivial");
