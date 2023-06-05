@@ -6,6 +6,8 @@ Version 7.34 - not yet released
   - thicker border on disappeared FLARM traffic
 * devices
   - allow listing up to 512 flights (increased from 128)
+* calculations
+  - fix freeze bug in route planner
 * Android
   - fix crash with failed IOIO Accessory connection
   - use the global dark mode setting by default

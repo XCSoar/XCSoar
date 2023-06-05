@@ -66,6 +66,17 @@ class RoutePlanner {
     }
   };
 
+  struct RouteLinkBaseEqual {
+    constexpr bool operator()(const RouteLinkBase &a,
+                              const RouteLinkBase &b) const noexcept {
+      /* by casting the AFlatGeoPoint to FlatGeoPoint, we ignore the
+         AFlatGeoPoint::altitude field which is not relevant for
+         #unique_links */
+      return (FlatGeoPoint)a.first == (FlatGeoPoint)b.first &&
+        (FlatGeoPoint)a.second == (FlatGeoPoint)b.second;
+    }
+  };
+
 protected:
   typedef std::pair<AFlatGeoPoint, AFlatGeoPoint> ClearingPair;
 
@@ -90,7 +101,8 @@ private:
    */
   SearchPointVector search_hull;
 
-  typedef std::unordered_set<RouteLinkBase, RouteLinkBaseHasher> RouteLinkSet;
+  typedef std::unordered_set<RouteLinkBase, RouteLinkBaseHasher,
+                             RouteLinkBaseEqual> RouteLinkSet;
 
   /** Links that have been visited during solution */
   RouteLinkSet unique_links{50000};
