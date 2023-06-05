@@ -38,12 +38,11 @@ OpenvarioGetRotation();
 void
 OpenvarioSetRotation(DisplayOrientation orientation);
 
-[[gnu::pure]]
 SSHStatus
 OpenvarioGetSSHStatus();
 
-bool
+void
 OpenvarioEnableSSH(bool temporary);
 
-bool
+void
 OpenvarioDisableSSH();

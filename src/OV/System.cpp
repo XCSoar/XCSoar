@@ -2,7 +2,9 @@
 // Copyright The XCSoar Project
 
 #include "System.hpp"
-#include "system/Process.hpp"
+#include "lib/dbus/Connection.hxx"
+#include "lib/dbus/ScopeMatch.hxx"
+#include "lib/dbus/Systemd.hxx"
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
 #include "io/KeyValueFileReader.hpp"
@@ -115,28 +117,37 @@ OpenvarioSetRotation(DisplayOrientation orientation)
 SSHStatus
 OpenvarioGetSSHStatus()
 {
-  if (Run("/bin/systemctl", "--quiet", "is-enabled", "dropbear.socket")) {
+  auto connection = ODBus::Connection::GetSystem();
+
+  if (Systemd::IsUnitEnabled(connection, "dropbear.socket")) {
     return SSHStatus::ENABLED;
-  } else if (Run("/bin/systemctl", "--quiet", "is-active", "dropbear.socket")) {
+  } else if (Systemd::IsUnitActive(connection, "dropbear.socket")) {
     return SSHStatus::TEMPORARY;
   } else {
     return SSHStatus::DISABLED;
   }
 }
 
-bool
+void
 OpenvarioEnableSSH(bool temporary)
 {
-  if (temporary) {
-    return Run("/bin/systemctl", "disable", "dropbear.socket") && 
-      Run("/bin/systemctl", "start", "dropbear.socket");
-  }
+  auto connection = ODBus::Connection::GetSystem();
+  const ODBus::ScopeMatch job_removed_match{connection, Systemd::job_removed_match};
 
-  return Run("/bin/systemctl", "enable", "--now", "dropbear.socket");
+  if (temporary)
+    Systemd::DisableUnitFile(connection, "dropbear.socket");
+  else
+    Systemd::EnableUnitFile(connection, "dropbear.socket");
+
+  Systemd::StartUnit(connection, "dropbear.socket");
 }
 
-bool
+void
 OpenvarioDisableSSH()
 {
-  return Run("/bin/systemctl", "disable", "--now", "dropbear.socket");
+  auto connection = ODBus::Connection::GetSystem();
+  const ODBus::ScopeMatch job_removed_match{connection, Systemd::job_removed_match};
+
+  Systemd::DisableUnitFile(connection, "dropbear.socket");
+  Systemd::StopUnit(connection, "dropbear.socket");
 }
