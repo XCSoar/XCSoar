@@ -74,7 +74,7 @@ AirspaceRoute::FirstIntersecting(const RouteLink &e) const noexcept
   return RouteAirspaceIntersection(res.first, res.second);
 }
 
-const AbstractAirspace *
+inline const AbstractAirspace *
 AirspaceRoute::InsideOthers(const AGeoPoint &origin) const noexcept
 {
   for (const auto &i : m_airspaces.QueryWithinRange(origin, 1))
@@ -86,7 +86,7 @@ AirspaceRoute::InsideOthers(const AGeoPoint &origin) const noexcept
 
 // Node generation utilities
 
-AirspaceRoute::ClearingPair
+inline AirspaceRoute::ClearingPair
 AirspaceRoute::FindClearingPair(const SearchPointVector &spv,
                                 const SearchPointVector::const_iterator start,
                                 const SearchPointVector::const_iterator end,
@@ -206,7 +206,7 @@ AirspaceRoute::Synchronise(const Airspaces &master,
   }
 }
 
-void
+inline void
 AirspaceRoute::AddNearbyAirspace(const RouteAirspaceIntersection &inx,
                                  const RouteLink &e) noexcept
 {

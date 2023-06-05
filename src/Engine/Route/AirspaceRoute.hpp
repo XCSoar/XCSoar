@@ -55,6 +55,7 @@ private:
   void AddNearbyAirspace(const RouteAirspaceIntersection &inx,
                          const RouteLink &e) noexcept;
 
+  [[gnu::pure]]
   RouteAirspaceIntersection FirstIntersecting(const RouteLink &e) const noexcept;
 
   [[gnu::pure]]
