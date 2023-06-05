@@ -12,4 +12,6 @@ ROUTE_SOURCES = \
 	$(ROUTE_SRC_DIR)/FlatTriangleFanTree.cpp \
 	$(ROUTE_SRC_DIR)/ReachFan.cpp
 
+ROUTE_DEPENDS = GEO GLIDE
+
 $(eval $(call link-library,libroute,ROUTE))

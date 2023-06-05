@@ -9,4 +9,6 @@ GLIDE_SOURCES = \
 	$(GLIDE_SRC_DIR)/MacCready.cpp \
 	$(GLIDE_SRC_DIR)/InstantSpeed.cpp
 
+GLIDE_DEPENDS = MATH
+
 $(eval $(call link-library,libglide,GLIDE))
