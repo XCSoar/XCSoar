@@ -77,7 +77,7 @@ public:
                         const AGeoPoint &destination) const noexcept;
 
 protected:
-  std::optional<RoutePoint> CheckClearance(const RouteLink &e) const noexcept override;
+  bool IsClear(const RouteLink &e) const noexcept override;
   void AddNearby(const RouteLink &e) noexcept override;
 
 private:
@@ -104,17 +104,4 @@ private:
    * @param e Link that was attempted
    */
   void AddNearbyTerrain(const RoutePoint &inx, const RouteLink &e) noexcept;
-
-  /**
-   * Check whether a desired link may be flown without intersecting with
-   * terrain.  If it does, find also the first location that is clear to
-   * the destination.
-   *
-   * @param e Link to attempt
-   *
-   * @return std::nullopt if path is clear or clearance point if
-   * intersection occurs
-   */
-  [[gnu::pure]]
-  std::optional<RoutePoint> CheckClearanceTerrain(const RouteLink &e) const noexcept;
 };

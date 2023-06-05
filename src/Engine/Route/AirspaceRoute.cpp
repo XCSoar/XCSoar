@@ -245,27 +245,23 @@ AirspaceRoute::CheckSecondary(const RouteLink &e) noexcept
   return true;
 }
 
-std::optional<RoutePoint>
-AirspaceRoute::CheckClearance(const RouteLink &e) const noexcept
+bool
+AirspaceRoute::IsClear(const RouteLink &e) const noexcept
 {
   m_inx.airspace = nullptr;
 
   // attempt terrain clearance first
 
-  if (auto inp = TerrainRoute::CheckClearance(e))
-    return inp;
+  if (!TerrainRoute::IsClear(e))
+    return false;
 
   if (!rpolars_route.IsAirspaceEnabled())
-    return std::nullopt; // trivial
+    return true; // trivial
 
   // passes terrain, so now check airspace clearance
 
   m_inx = FirstIntersecting(e);
-  if (m_inx.airspace != nullptr)
-    return m_inx.point;
-
-  // made it this far!
-  return std::nullopt;
+  return m_inx.airspace == nullptr;
 }
 
 void

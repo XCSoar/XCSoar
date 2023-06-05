@@ -283,7 +283,7 @@ RoutePlanner::AddShortcut(const RoutePoint &node) noexcept
   if (!rpolars_route.CanClimb())
     r_shortcut.second.altitude = r_shortcut.first.altitude + vh;
 
-  if (!CheckClearance(r_shortcut))
+  if (IsClear(r_shortcut))
     LinkCleared(r_shortcut);
 }
 
@@ -292,7 +292,7 @@ RoutePlanner::AddEdges(const RouteLink &e) noexcept
 {
   const bool this_short = e.IsShort();
 
-  if (CheckClearance(e)) {
+  if (!IsClear(e)) {
     if (!this_short)
       AddNearby(e);
 

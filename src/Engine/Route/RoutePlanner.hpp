@@ -243,16 +243,14 @@ protected:
 
   /**
    * Check whether a desired link may be flown without intersecting with
-   * any obstacle.  If it does, find also the first location that is clear to
-   * the destination.
+   * any obstacle.
    *
    * @param e Link to attempt
    *
-   * @return std::nullopt if path is clear or clearance point if
-   * intersection occurs
+   * @return true if path is clear
    */
   [[gnu::pure]]
-  virtual std::optional<RoutePoint> CheckClearance(const RouteLink &e) const noexcept = 0;
+  virtual bool IsClear(const RouteLink &e) const noexcept = 0;
 
   /**
    * Given a desired path e, and a clearance point, generate candidates directly
