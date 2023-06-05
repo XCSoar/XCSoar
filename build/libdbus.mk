@@ -7,6 +7,7 @@ DBUS_SOURCES = \
 	$(SRC)/lib/dbus/Error.cxx \
 	$(SRC)/lib/dbus/Message.cxx \
 	$(SRC)/lib/dbus/ScopeMatch.cxx \
+	$(SRC)/lib/dbus/TimeDate.cxx \
 	$(SRC)/lib/dbus/Systemd.cxx
 
 DBUS_CPPFLAGS = $(LIBDBUS_CPPFLAGS)
