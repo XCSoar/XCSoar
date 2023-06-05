@@ -128,6 +128,7 @@ include $(topdir)/build/libjson.mk
 ifeq ($(FAT_BINARY),n)
 # Create libraries for zzip, jasper and compatibility stuff
 include $(topdir)/build/libfmt.mk
+include $(topdir)/build/libdbus.mk
 include $(topdir)/build/libresource.mk
 include $(topdir)/build/liblook.mk
 include $(topdir)/build/libstdcxx.mk
