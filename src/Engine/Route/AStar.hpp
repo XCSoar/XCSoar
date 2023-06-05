@@ -56,12 +56,8 @@ class AStar
   typedef std::unordered_map<Node, AStarPriorityValue, Hash, KeyEqual> node_value_map;
 
   typedef typename node_value_map::iterator node_value_iterator;
-  typedef typename node_value_map::const_iterator node_value_const_iterator;
 
   typedef std::unordered_map<Node, Node, Hash, KeyEqual> node_parent_map;
-
-  typedef typename node_parent_map::iterator node_parent_iterator;
-  typedef typename node_parent_map::const_iterator node_parent_const_iterator;
 
   struct NodeValue {
     AStarPriorityValue priority;
@@ -206,7 +202,7 @@ public:
   [[gnu::pure]]
   Node GetPredecessor(const Node &node) const noexcept {
     // Try to find the given node in the node_parent_map
-    node_parent_const_iterator it = node_parents.find(node);
+    const auto it = node_parents.find(node);
     if (it == node_parents.end())
       // first entry
       // If the node wasn't found
@@ -232,7 +228,7 @@ public:
     if (cur->first == node)
       return cur->second;
 
-    node_value_const_iterator it = node_values.find(node);
+    const auto it = node_values.find(node);
     if (it == node_values.end())
       return AStarPriorityValue(0);
 
