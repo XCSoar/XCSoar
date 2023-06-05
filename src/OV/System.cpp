@@ -89,11 +89,10 @@ OpenvarioSetRotation(DisplayOrientation orientation)
 
   Display::Rotate(orientation);
 
-  int rotation; 
+  int rotation = 0; 
   switch (orientation) {
   case DisplayOrientation::DEFAULT:
   case DisplayOrientation::LANDSCAPE:
-    rotation = 0;
     break;
   case DisplayOrientation::PORTRAIT:
     rotation = 1;
