@@ -25,14 +25,14 @@ FlatRay::IntersectsRatio(const FlatRay &that) const noexcept
 
   const FlatGeoPoint delta = that.point - point;
   r.first = delta.CrossProduct(that.vector);
-  if ((sgn(r.first) * sgn(r.second) < 0) || (abs(r.first) > abs(r.second))) {
+  if (sgn(r.first) * sgn(r.second) < 0 || abs(r.first) > abs(r.second)) {
     // outside first line
     r.second = 0;
     return r;
   }
 
   const int ub = delta.CrossProduct(vector);
-  if ((sgn(ub) * sgn(r.second) < 0) || (abs(ub) > abs(r.second))) {
+  if (sgn(ub) * sgn(r.second) < 0 || abs(ub) > abs(r.second)) {
     // outside second line
     r.second = 0;
     return r;
@@ -64,9 +64,9 @@ bool
 FlatRay::IntersectsDistinct(const FlatRay &that) const noexcept
 {
   std::pair<int, int> r = IntersectsRatio(that);
-  return (r.second != 0) &&
-         (sgn(r.second) * r.first > 0) &&
-         (abs(r.first) < abs(r.second));
+  return r.second != 0 &&
+    sgn(r.second) * r.first > 0 &&
+    abs(r.first) < abs(r.second);
 }
 
 double
