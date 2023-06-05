@@ -112,7 +112,7 @@ AirspaceRoute::FindClearingPair(const SearchPointVector &spv,
         continue;
       }
     } else {
-      AGeoPoint gborder(projection.Unproject(pborder), dest.altitude); // @todo alt!
+      AGeoPoint gborder(i->GetLocation(), pborder.altitude);
       if (!check_others || !InsideOthers(gborder)) {
         if (j == 0) {
           p.first = pborder;
