@@ -47,6 +47,8 @@ struct AStarPriorityValue
  * AStar search algorithm, based on Dijkstra algorithm
  * Modifications by John Wharington to track optimal solution
  * @see http://en.giswiki.net/wiki/Dijkstra%27s_algorithm
+ *
+ * @param m_min Whether this algorithm will search for min or max distance
  */
 template <class Node, class Hash=std::hash<Node>,
           class KeyEqual=std::equal_to<Node>,
@@ -99,21 +101,13 @@ class AStar
 public:
   static constexpr unsigned DEFAULT_QUEUE_SIZE = 1024;
 
-  /**
-   * Default constructor
-   *
-   * @param is_min Whether this algorithm will search for min or max distance
-   */
   AStar(unsigned reserve_default = DEFAULT_QUEUE_SIZE) noexcept
   {
     Reserve(reserve_default);
   }
 
   /**
-   * Constructor
-   *
-   * @param n Node to start
-   * @param is_min Whether this algorithm will search for min or max distance
+   * @param node Node to start
    */
   AStar(const Node &node,
         unsigned reserve_default = DEFAULT_QUEUE_SIZE) noexcept
