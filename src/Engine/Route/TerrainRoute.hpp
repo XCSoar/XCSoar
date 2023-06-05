@@ -80,6 +80,18 @@ protected:
   bool IsClear(const RouteLink &e) const noexcept override;
   void AddNearby(const RouteLink &e) noexcept override;
 
+  /**
+   * Check a second category of obstacle clearance.  This allows compound
+   * obstacle categories by subclasses.
+   *
+   * @param e Link to attempt
+   *
+   * @return True if path is clear
+   */
+  virtual bool CheckSecondary([[maybe_unused]] const RouteLink &e) noexcept {
+    return true;
+  }
+
 private:
   /**
    * Generate a candidate to left or right of the clearance point, unless:

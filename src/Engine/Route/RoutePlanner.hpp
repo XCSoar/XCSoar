@@ -230,18 +230,6 @@ protected:
 
 protected:
   /**
-   * Check a second category of obstacle clearance.  This allows compound
-   * obstacle categories by subclasses.
-   *
-   * @param e Link to attempt
-   *
-   * @return True if path is clear
-   */
-  virtual bool CheckSecondary([[maybe_unused]] const RouteLink &e) noexcept {
-    return true;
-  }
-
-  /**
    * Check whether a desired link may be flown without intersecting with
    * any obstacle.
    *
