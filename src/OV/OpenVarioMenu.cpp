@@ -133,10 +133,10 @@ CalibrateSensors() noexcept
 {
   /* make sure sensord is stopped while calibrating sensors */
   static constexpr const char *start_sensord[] = {
-    "/bin/systemctl", "start", "sensord.service", nullptr
+    "/bin/systemctl", "start", "sensord.socket", nullptr
   };
   static constexpr const char *stop_sensord[] = {
-    "/bin/systemctl", "stop", "sensord.service", nullptr
+    "/bin/systemctl", "stop", "sensord.socket", nullptr
   };
 
   RunProcessDialog(UIGlobals::GetMainWindow(),
