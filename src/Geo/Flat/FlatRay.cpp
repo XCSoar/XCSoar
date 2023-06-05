@@ -14,11 +14,6 @@ FlatRay::Magnitude() const noexcept
   return ihypot(vector.x, vector.y);
 }
 
-/*
- * Checks whether two lines intersect or not
- * @see http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
- * adapted from line_line_intersection
- */
 std::pair<int, int>
 FlatRay::IntersectsRatio(const FlatRay &that) const noexcept
 {
