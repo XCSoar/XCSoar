@@ -12,6 +12,14 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 
+#if defined(__linux__) && defined(USE_POLL_EVENT) && !defined(KOBO)
+#include "lib/dbus/Connection.hxx"
+#include "lib/dbus/TimeDate.hxx"
+#include "LogFile.hpp"
+
+#include <unistd.h> // for geteuid()
+#endif
+
 static TaskEventObserver task_event_observer;
 
 void
@@ -20,6 +28,32 @@ UIReceiveSensorData(OperationEnvironment &env)
   XCSoarInterface::ReceiveGPS();
 
   ApplyVegaSwitches();
+
+#if defined(__linux__) && defined(USE_POLL_EVENT) && !defined(KOBO)
+  static bool clock_set = false;
+  if (const auto &basic = CommonInterface::Basic();
+      !clock_set &&
+      basic.gps.real &&
+      basic.time_available &&
+      CommonInterface::Basic().date_time_utc.IsDatePlausible() &&
+      geteuid() == 0) {
+    /* copy the GPS clock to the system clock if NTP synchronizarion
+       hasn't been done yet (maybe because we are airborne and have no
+       internet connection); this feature is designed for OpenVario
+       where geteuid()==0 */
+
+    clock_set = true;
+
+    try {
+      auto connection = ODBus::Connection::GetSystem();
+      if (!TimeDate::IsNTPSynchronized(connection))
+        TimeDate::SetTime(connection, CommonInterface::Basic().date_time_utc.ToTimePoint());
+      LogFormat("Set system clock from GPS");
+    } catch (...) {
+      LogError(std::current_exception(), "Failed to set the system clock from GPS");
+    }
+  }
+#endif
 
   bool modified = ApplyExternalSettings(env);
 

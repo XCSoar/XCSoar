@@ -11,6 +11,8 @@ Version 7.34 - not yet released
 * Android
   - fix crash with failed IOIO Accessory connection
   - use the global dark mode setting by default
+* OpenVario
+  - set system clock from GPS if NTP is unavailable
 
 Version 7.33 - 2023/05/26
 * map display
