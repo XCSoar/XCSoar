@@ -148,16 +148,6 @@ public:
   }
 
   /**
-   * Return size of queue
-   *
-   * @return Queue size in elements
-   */
-  [[gnu::pure]]
-  unsigned QueueSize() const noexcept {
-    return q.size();
-  }
-
-  /**
    * Return top element of queue for processing
    *
    * @return Node for processing
