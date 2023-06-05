@@ -54,15 +54,13 @@ class GlidePolar;
  */
 class RoutePlanner {
   struct RoutePointHasher {
-    [[gnu::const]]
-    std::size_t operator()(const RoutePoint &p) const noexcept {
+    constexpr std::size_t operator()(const RoutePoint &p) const noexcept {
       return p.x * std::size_t(104729) + p.y;
     }
   };
 
   struct RouteLinkBaseHasher {
-    [[gnu::const]]
-    std::size_t operator()(const RouteLinkBase &l) const noexcept {
+    constexpr std::size_t operator()(const RouteLinkBase &l) const noexcept {
       RoutePointHasher p;
       return p(l.first) * std::size_t(27644437) + p(l.second);
     }
