@@ -8,14 +8,21 @@ struct Plane;
 class KeyValueFileReader;
 class KeyValueFileWriter;
 
-namespace PlaneGlue
-{
-  bool Read(Plane &plane, KeyValueFileReader &reader);
-  bool ReadFile(Plane &plane, Path path);
-  void Write(const Plane &plane, KeyValueFileWriter &writer);
+namespace PlaneGlue {
+
+bool
+Read(Plane &plane, KeyValueFileReader &reader);
+
+bool
+ReadFile(Plane &plane, Path path);
+
+void
+Write(const Plane &plane, KeyValueFileWriter &writer);
 
 /**
  * Throws exception on error.
  */
-void WriteFile(const Plane &plane, Path path);
-}
+void
+WriteFile(const Plane &plane, Path path);
+
+} // namespace PlaneGlue
