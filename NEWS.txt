@@ -1,4 +1,4 @@
-Version 7.34 - not yet released
+Version 7.34 - 2023/06/06
 * user interface
   - fix crash with long InfoBox set names
   - rename "Inverse InfoBoxes" to "Dark mode"
