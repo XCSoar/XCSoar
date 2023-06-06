@@ -157,7 +157,11 @@ PlaneListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   } else
     row_renderer.DrawFirstRow(canvas, rc, list[i].name);
 
-  row_renderer.DrawSecondRow(canvas, rc, list[i].path.c_str());
+  Path path = list[i].path;
+  if (auto relative_path = RelativePath(path); relative_path != nullptr)
+    path = relative_path;
+
+  row_renderer.DrawSecondRow(canvas, rc, path.c_str());
 }
 
 static bool
