@@ -13,13 +13,13 @@
 #include "LogFile.hpp"
 
 static bool
-ReadPolar(const char *string, Plane &plane)
+ReadPolar(const char *string, Plane &plane) noexcept
 {
   return ParsePolarShape(plane.polar_shape, string);
 }
 
 static bool
-ReadDouble(const char *string, double &out)
+ReadDouble(const char *string, double &out) noexcept
 {
   char *endptr;
   double tmp = ParseDouble(string, &endptr);
@@ -31,7 +31,7 @@ ReadDouble(const char *string, double &out)
 }
 
 static bool
-ReadUnsigned(const char *string, unsigned &out)
+ReadUnsigned(const char *string, unsigned &out) noexcept
 {
   char *endptr;
   unsigned tmp = ParseUnsigned(string, &endptr, 0);
@@ -132,7 +132,7 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
 }
 
 bool
-PlaneGlue::ReadFile(Plane &plane, Path path)
+PlaneGlue::ReadFile(Plane &plane, Path path) noexcept
 try {
   FileLineReaderA reader(path);
   KeyValueFileReader kvreader(reader);

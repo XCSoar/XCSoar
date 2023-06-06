@@ -10,17 +10,23 @@ class KeyValueFileWriter;
 
 namespace PlaneGlue {
 
+/**
+ * Throws on I/O error.
+ */
 bool
 Read(Plane &plane, KeyValueFileReader &reader);
 
 bool
-ReadFile(Plane &plane, Path path);
+ReadFile(Plane &plane, Path path) noexcept;
 
+/**
+ * Throws on I/O error.
+ */
 void
 Write(const Plane &plane, KeyValueFileWriter &writer);
 
 /**
- * Throws exception on error.
+ * Throws on I/O error.
  */
 void
 WriteFile(const Plane &plane, Path path);

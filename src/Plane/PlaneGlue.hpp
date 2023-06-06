@@ -11,10 +11,10 @@ class ProfileMap;
 namespace PlaneGlue {
 
 void
-FromProfile(Plane &plane, const ProfileMap &profile);
+FromProfile(Plane &plane, const ProfileMap &profile) noexcept;
 
 void
 Synchronize(const Plane &plane, ComputerSettings &settings,
-            GlidePolar &gp);
+            GlidePolar &gp) noexcept;
 
 } // namespace PlaneGlue

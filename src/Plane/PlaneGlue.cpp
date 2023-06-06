@@ -14,7 +14,7 @@
 #include <algorithm> // for std::clamp()
 
 void
-PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile)
+PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile) noexcept
 {
   {
     auto plane_path = profile.GetPath("PlanePath");
@@ -56,7 +56,7 @@ PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile)
 
 void
 PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
-                       GlidePolar &gp)
+                       GlidePolar &gp) noexcept
 {
   settings.contest.handicap = plane.handicap;
 
