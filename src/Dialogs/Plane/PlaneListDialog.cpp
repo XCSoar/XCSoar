@@ -205,7 +205,7 @@ PlaneListWidget::LoadClicked() noexcept
 inline void
 PlaneListWidget::NewClicked() noexcept
 {
-  Plane plane = CommonInterface::GetComputerSettings().plane;
+  Plane plane{};
 
   while (dlgPlaneDetailsShowModal(plane)) {
     if (plane.registration.empty()) {
