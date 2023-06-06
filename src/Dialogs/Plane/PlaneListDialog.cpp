@@ -22,6 +22,7 @@
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "util/StringAPI.hxx"
+#include "util/StringCompare.hxx"
 
 #include <vector>
 #include <cassert>
@@ -38,7 +39,7 @@ class PlaneListWidget final
     StaticString<32> name;
     AllocatedPath path;
 
-    ListItem(const TCHAR *_name, Path _path) noexcept
+    ListItem(tstring_view _name, Path _path) noexcept
       :name(_name), path(_path) {}
 
     bool operator<(const ListItem &i2) const noexcept {
@@ -54,7 +55,10 @@ class PlaneListWidget final
     PlaneFileVisitor(std::vector<ListItem> &_list) noexcept:list(_list) {}
 
     void Visit(Path path, Path filename) override {
-      list.emplace_back(filename.c_str(), path);
+      tstring_view name{filename.c_str()};
+      RemoveSuffix(name, tstring_view{_T(".xcp")});
+
+      list.emplace_back(name, path);
     }
   };
 
