@@ -34,10 +34,10 @@ class PlaneEditWidget final
 
 public:
   PlaneEditWidget(const Plane &_plane, const DialogLook &_look,
-                  WndForm *_dialog)
+                  WndForm *_dialog) noexcept
     :RowFormWidget(_look), dialog(_dialog), plane(_plane) {}
 
-  const Plane &GetValue() const {
+  const Plane &GetValue() const noexcept {
     return plane;
   }
 
@@ -173,7 +173,7 @@ PlaneEditWidget::PolarButtonClicked() noexcept
 }
 
 bool
-dlgPlaneDetailsShowModal(Plane &_plane)
+dlgPlaneDetailsShowModal(Plane &_plane) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   TWidgetDialog<PlaneEditWidget>

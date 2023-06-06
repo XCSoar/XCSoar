@@ -38,10 +38,10 @@ class PlaneListWidget final
     StaticString<32> name;
     AllocatedPath path;
 
-    ListItem(const TCHAR *_name, Path _path)
+    ListItem(const TCHAR *_name, Path _path) noexcept
       :name(_name), path(_path) {}
 
-    bool operator<(const ListItem &i2) const {
+    bool operator<(const ListItem &i2) const noexcept {
       return StringCollate(name, i2.name) < 0;
     }
   };
@@ -51,7 +51,7 @@ class PlaneListWidget final
     std::vector<ListItem> &list;
 
   public:
-    PlaneFileVisitor(std::vector<ListItem> &_list):list(_list) {}
+    PlaneFileVisitor(std::vector<ListItem> &_list) noexcept:list(_list) {}
 
     void Visit(Path path, Path filename) override {
       list.emplace_back(filename.c_str(), path);
@@ -66,17 +66,17 @@ class PlaneListWidget final
   TwoTextRowsRenderer row_renderer;
 
 public:
-  void CreateButtons(WidgetDialog &dialog);
+  void CreateButtons(WidgetDialog &dialog) noexcept;
 
 private:
-  void UpdateList();
-  bool Load(unsigned i);
-  bool LoadWithDialog(unsigned i);
+  void UpdateList() noexcept;
+  bool Load(unsigned i) noexcept;
+  bool LoadWithDialog(unsigned i) noexcept;
 
-  void LoadClicked();
-  void NewClicked();
-  void EditClicked();
-  void DeleteClicked();
+  void LoadClicked() noexcept;
+  void NewClicked() noexcept;
+  void EditClicked() noexcept;
+  void DeleteClicked() noexcept;
 
 public:
   /* virtual methods from class Widget */
@@ -96,7 +96,7 @@ protected:
 };
 
 void
-PlaneListWidget::UpdateList()
+PlaneListWidget::UpdateList() noexcept
 {
   list.clear();
 
@@ -119,7 +119,7 @@ PlaneListWidget::UpdateList()
 }
 
 void
-PlaneListWidget::CreateButtons(WidgetDialog &dialog)
+PlaneListWidget::CreateButtons(WidgetDialog &dialog) noexcept
 {
   form = &dialog;
 
@@ -156,7 +156,7 @@ PlaneListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 }
 
 static bool
-LoadFile(Path path)
+LoadFile(Path path) noexcept
 {
   ComputerSettings &settings = CommonInterface::SetComputerSettings();
 
@@ -173,7 +173,7 @@ LoadFile(Path path)
 }
 
 bool
-PlaneListWidget::Load(unsigned i)
+PlaneListWidget::Load(unsigned i) noexcept
 {
   assert(i < list.size());
 
@@ -181,7 +181,7 @@ PlaneListWidget::Load(unsigned i)
 }
 
 bool
-PlaneListWidget::LoadWithDialog(unsigned i)
+PlaneListWidget::LoadWithDialog(unsigned i) noexcept
 {
   bool result = Load(i);
   if (!result) {
@@ -196,14 +196,14 @@ PlaneListWidget::LoadWithDialog(unsigned i)
 }
 
 inline void
-PlaneListWidget::LoadClicked()
+PlaneListWidget::LoadClicked() noexcept
 {
   if (LoadWithDialog(GetList().GetCursorIndex()))
     form->SetModalResult(mrOK);
 }
 
 inline void
-PlaneListWidget::NewClicked()
+PlaneListWidget::NewClicked() noexcept
 {
   Plane plane = CommonInterface::GetComputerSettings().plane;
 
@@ -241,7 +241,7 @@ PlaneListWidget::NewClicked()
 }
 
 inline void
-PlaneListWidget::EditClicked()
+PlaneListWidget::EditClicked() noexcept
 {
   assert(GetList().GetCursorIndex() < list.size());
 
@@ -307,7 +307,7 @@ PlaneListWidget::EditClicked()
 }
 
 inline void
-PlaneListWidget::DeleteClicked()
+PlaneListWidget::DeleteClicked() noexcept
 {
   assert(GetList().GetCursorIndex() < list.size());
 
@@ -339,7 +339,7 @@ PlaneListWidget::OnActivateItem(unsigned i) noexcept
 }
 
 void
-dlgPlanesShowModal()
+dlgPlanesShowModal() noexcept
 {
   TWidgetDialog<PlaneListWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
