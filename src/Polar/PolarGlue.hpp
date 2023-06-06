@@ -8,12 +8,12 @@ struct PolarInfo;
 namespace PolarGlue {
 
 PolarInfo
-GetDefault();
+GetDefault() noexcept;
 
 bool
-LoadFromProfile(PolarInfo &polar);
+LoadFromProfile(PolarInfo &polar) noexcept;
 
 PolarInfo
-LoadFromProfile();
+LoadFromProfile() noexcept;
 
 } // namespace PolarGlue

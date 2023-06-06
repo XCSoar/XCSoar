@@ -10,7 +10,7 @@
 #include <tchar.h>
 
 bool
-ParsePolarShape(PolarShape &shape, const char *s)
+ParsePolarShape(PolarShape &shape, const char *s) noexcept
 {
   char *p;
   auto v1 = Units::ToSysUnit(ParseDouble(s, &p), Unit::KILOMETER_PER_HOUR);
@@ -47,7 +47,7 @@ ParsePolarShape(PolarShape &shape, const char *s)
 }
 
 bool
-ParsePolar(PolarInfo &polar_r, const char *s)
+ParsePolar(PolarInfo &polar_r, const char *s) noexcept
 {
   PolarInfo polar;
   // Example:
@@ -96,7 +96,7 @@ ParsePolar(PolarInfo &polar_r, const char *s)
 }
 
 void
-FormatPolarShape(const PolarShape &shape, char *buffer, size_t max_size)
+FormatPolarShape(const PolarShape &shape, char *buffer, size_t max_size) noexcept
 {
   double v1, v2, v3;
   v1 = Units::ToUserUnit(shape[0].v, Unit::KILOMETER_PER_HOUR);
@@ -111,7 +111,7 @@ FormatPolarShape(const PolarShape &shape, char *buffer, size_t max_size)
 
 void
 FormatPolar(const PolarInfo &polar, char *buffer, size_t max_size,
-            bool include_v_no)
+            bool include_v_no) noexcept
 {
   double v1, v2, v3;
   v1 = Units::ToUserUnit(polar.shape[0].v, Unit::KILOMETER_PER_HOUR);

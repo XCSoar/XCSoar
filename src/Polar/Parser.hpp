@@ -9,14 +9,14 @@ struct PolarShape;
 struct PolarInfo;
 
 bool
-ParsePolarShape(PolarShape &shape, const char *s);
+ParsePolarShape(PolarShape &shape, const char *s) noexcept;
 
 bool
-ParsePolar(PolarInfo &polar, const char *s);
+ParsePolar(PolarInfo &polar, const char *s) noexcept;
 
 void
-FormatPolarShape(const PolarShape &shape, char *buffer, size_t max_size);
+FormatPolarShape(const PolarShape &shape, char *buffer, size_t max_size) noexcept;
 
 void
 FormatPolar(const PolarInfo &polar, char *buffer, size_t max_size,
-              bool include_v_no=false);
+            bool include_v_no=false) noexcept;

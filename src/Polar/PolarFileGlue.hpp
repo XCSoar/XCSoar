@@ -7,19 +7,30 @@ struct PolarInfo;
 class Path;
 class NLineReader;
 class BufferedOutputStream;
-class Error;
 
 namespace PolarGlue {
 
+/**
+ * Throws on I/O error.
+ */
 void
 LoadFromFile(PolarInfo &polar, Path path);
 
+/**
+ * Throws on I/O error.
+ */
 void
 SaveToFile(const PolarInfo &polar, Path path);
 
+/**
+ * Throws on I/O error.
+ */
 bool
 LoadFromFile(PolarInfo &polar, NLineReader &reader);
 
+/**
+ * Throws on I/O error.
+ */
 void
 SaveToFile(const PolarInfo &polar, BufferedOutputStream &writer);
 

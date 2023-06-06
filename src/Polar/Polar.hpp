@@ -22,9 +22,9 @@ struct PolarInfo
   double v_no;         /**< Maximum speed for normal operations (m/s) */
 
   [[gnu::pure]]
-  PolarCoefficients CalculateCoefficients() const;
+  PolarCoefficients CalculateCoefficients() const noexcept;
 
-  bool IsValid() const {
+  bool IsValid() const noexcept {
     return shape.IsValid();
   }
 };
