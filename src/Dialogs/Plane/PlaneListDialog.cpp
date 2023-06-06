@@ -59,7 +59,7 @@ class PlaneListWidget final
   };
 
   WndForm *form;
-  Button *edit_button, *delete_button, *load_button;
+  Button *edit_button, *copy_button, *delete_button, *load_button;
 
   std::vector<ListItem> list;
 
@@ -75,7 +75,7 @@ private:
 
   void LoadClicked() noexcept;
   void NewClicked() noexcept;
-  void EditClicked() noexcept;
+  void EditClicked(bool copy) noexcept;
   void DeleteClicked() noexcept;
 
 public:
@@ -124,7 +124,8 @@ PlaneListWidget::CreateButtons(WidgetDialog &dialog) noexcept
   form = &dialog;
 
   dialog.AddButton(_("New"), [this](){ NewClicked(); });
-  edit_button = dialog.AddButton(_("Edit"), [this](){ EditClicked(); });
+  edit_button = dialog.AddButton(_("Edit"), [this](){ EditClicked(false); });
+  copy_button = dialog.AddButton(_("Copy"), [this](){ EditClicked(true); });
   delete_button = dialog.AddButton(_("Delete"), [this](){ DeleteClicked(); });
   load_button = dialog.AddButton(_("Activate"), [this](){ LoadClicked(); });
 }
@@ -240,8 +241,8 @@ PlaneListWidget::NewClicked() noexcept
   }
 }
 
-inline void
-PlaneListWidget::EditClicked() noexcept
+void
+PlaneListWidget::EditClicked(bool copy) noexcept
 {
   assert(GetList().GetCursorIndex() < list.size());
 
@@ -262,7 +263,7 @@ PlaneListWidget::EditClicked() noexcept
     StaticString<42> filename(plane.registration);
     filename += _T(".xcp");
 
-    if (filename != old_filename) {
+    if (copy || filename != old_filename) {
       const auto path = AllocatedPath::Build(old_path.GetParent(),
                                              filename);
 
@@ -275,7 +276,8 @@ PlaneListWidget::EditClicked() noexcept
           continue;
       }
 
-      File::Delete(old_path);
+      if (!copy)
+        File::Delete(old_path);
 
       try {
         PlaneGlue::WriteFile(plane, path);
@@ -284,7 +286,7 @@ PlaneListWidget::EditClicked() noexcept
         return;
       }
 
-      if (Profile::GetPathIsEqual("PlanePath", old_path)) {
+      if (!copy && Profile::GetPathIsEqual("PlanePath", old_path)) {
         list[index].path = Path(path);
         list[index].name = filename;
         Load(index);

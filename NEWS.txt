@@ -3,6 +3,7 @@ Version 7.34 - not yet released
   - fix crash with long InfoBox set names
   - rename "Inverse InfoBoxes" to "Dark mode"
   - planes: "New" creates an empty plane
+  - planes: add "Copy" button
 * map display
   - thicker border on disappeared FLARM traffic
 * devices
