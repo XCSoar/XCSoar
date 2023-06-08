@@ -482,7 +482,6 @@ private:
                             const FlatBoundingBox &bb_now,
                             const FlatBoundingBox &bb_last,
                             bool &transition_enter, bool &transition_exit,
-                            bool &last_started,
                             const bool is_start);
 
   bool CheckTransitionOptionalStart(const AircraftState &state_now,
@@ -490,8 +489,7 @@ private:
                                     const FlatBoundingBox& bb_now,
                                     const FlatBoundingBox& bb_last,
                                     bool &transition_enter,
-                                    bool &transition_exit,
-                                    bool &last_started);
+                                    bool &transition_exit);
 
   /**
    * @param waypoints Active waypoint database

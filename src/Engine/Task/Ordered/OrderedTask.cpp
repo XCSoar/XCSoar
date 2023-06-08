@@ -433,7 +433,7 @@ OrderedTask::CheckTransitions(const AircraftState &state,
   FlatBoundingBox bb_now(task_projection.ProjectInteger(state.location),
                          1);
 
-  bool last_started = stats.start.task_started;
+  const auto last_started_time = stats.start.GetStartedTime();
   const bool last_finished = stats.task_finished;
 
   const int t_min = std::max(0, (int)active_task_point - 1);
@@ -449,14 +449,13 @@ OrderedTask::CheckTransitions(const AircraftState &state,
       full_update |= CheckTransitionOptionalStart(state, state_last,
                                                   bb_now, bb_last,
                                                   transition_enter,
-                                                  transition_exit,
-                                                  last_started);
+                                                  transition_exit);
     }
 
     full_update |= CheckTransitionPoint(*task_points[i],
                                         state, state_last, bb_now, bb_last,
                                         transition_enter, transition_exit,
-                                        last_started, i == 0);
+                                        i == 0);
 
     if (i == (int)active_task_point) {
       const bool last_request_armed = task_advance.NeedToArm();
@@ -502,7 +501,7 @@ OrderedTask::CheckTransitions(const AircraftState &state,
   }
 
   if (task_events != nullptr) {
-    if (stats.start.task_started && !last_started)
+    if (stats.start.GetStartedTime() > last_started_time)
       task_events->TaskStart();
 
     if (stats.task_finished && !last_finished)
@@ -518,8 +517,7 @@ OrderedTask::CheckTransitionOptionalStart(const AircraftState &state,
                                           const FlatBoundingBox& bb_now,
                                           const FlatBoundingBox& bb_last,
                                           bool &transition_enter,
-                                          bool &transition_exit,
-                                          bool &last_started)
+                                          bool &transition_exit)
 {
   bool full_update = false;
 
@@ -528,7 +526,7 @@ OrderedTask::CheckTransitionOptionalStart(const AircraftState &state,
     full_update |= CheckTransitionPoint(**i,
                                         state, state_last, bb_now, bb_last,
                                         transition_enter, transition_exit,
-                                        last_started, true);
+                                        true);
 
     if (transition_enter || transition_exit) {
       // we have entered or exited this optional start point, so select it.
@@ -551,7 +549,6 @@ OrderedTask::CheckTransitionPoint(OrderedTaskPoint &point,
                                   const FlatBoundingBox &bb_last,
                                   bool &transition_enter,
                                   bool &transition_exit,
-                                  bool &last_started,
                                   const bool is_start)
 {
   const bool nearby = point.BoundingBoxOverlaps(bb_now) ||
@@ -569,10 +566,6 @@ OrderedTask::CheckTransitionPoint(OrderedTaskPoint &point,
 
     if (task_events != nullptr)
       task_events->ExitTransition(point);
-
-    // detect restart
-    if (is_start && last_started)
-      last_started = false;
   }
 
   if (is_start)

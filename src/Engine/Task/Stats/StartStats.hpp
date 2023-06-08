@@ -42,6 +42,12 @@ struct StartStats {
    * #AircraftState.
    */
   void SetStarted(const AircraftState &aircraft) noexcept;
+
+  TimeStamp GetStartedTime() const noexcept {
+    return task_started
+      ? time
+      : TimeStamp::Undefined();
+  }
 };
 
 static_assert(std::is_trivial<StartStats>::value, "type is not trivial");
