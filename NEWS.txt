@@ -1,4 +1,6 @@
 Version 7.35 - not yet released
+* user interface
+  - fix crash in plane list
 
 Version 7.34 - 2023/06/06
 * user interface
