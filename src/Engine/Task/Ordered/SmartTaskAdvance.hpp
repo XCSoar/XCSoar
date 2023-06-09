@@ -8,14 +8,9 @@
 /** Class used to control advancement through an OrderedTask */
 class SmartTaskAdvance final : public TaskAdvance {
   /** active advance state */
-  State state;
+  State state = TaskAdvance::MANUAL;
 
 public:
-  /** 
-   * Constructor.  Sets defaults to auto-mode
-   */
-  SmartTaskAdvance();
-
   virtual State GetState() const;
 
   /** 

@@ -6,11 +6,6 @@
 #include "Points/StartPoint.hpp"
 #include "util/Compiler.h"
 
-SmartTaskAdvance::SmartTaskAdvance()
-  :state(TaskAdvance::MANUAL)
-{
-}
-
 bool
 SmartTaskAdvance::CheckReadyToAdvance(const TaskPoint &tp,
                                       const AircraftState &aircraft,
