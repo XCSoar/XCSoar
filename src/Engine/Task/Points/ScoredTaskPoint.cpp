@@ -32,7 +32,6 @@ ScoredTaskPoint::TransitionExit(const AircraftState &ref_now,
 
   if (ScoreLastExit()) {
     ClearSampleAllButLast(ref_last, projection);
-    entered_state = ref_last;
   }
 
   exited_state = ref_last;
