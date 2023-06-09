@@ -6,7 +6,7 @@
 #include "Navigation/Aircraft.hpp"
 
 SampledTaskPoint::SampledTaskPoint(const GeoPoint &location,
-                                   const bool b_scored)
+                                   const bool b_scored) noexcept
   :boundary_scored(b_scored), past(false),
    nominal_points(1, location)
 {
@@ -20,7 +20,7 @@ SampledTaskPoint::SampledTaskPoint(const GeoPoint &location,
 
 bool
 SampledTaskPoint::AddInsideSample(const AircraftState& state,
-                                  const FlatProjection &projection)
+                                  const FlatProjection &projection) noexcept
 {
   assert(state.location.IsValid());
 
@@ -46,7 +46,7 @@ SampledTaskPoint::AddInsideSample(const AircraftState& state,
 
 void
 SampledTaskPoint::ClearSampleAllButLast(const AircraftState& ref_last,
-                                        const FlatProjection &projection)
+                                        const FlatProjection &projection) noexcept
 {
   if (HasSampled()) {
     sampled_points.clear();
@@ -59,7 +59,7 @@ SampledTaskPoint::ClearSampleAllButLast(const AircraftState& ref_last,
 
 void
 SampledTaskPoint::UpdateOZ(const FlatProjection &projection,
-                           const OZBoundary &_boundary)
+                           const OZBoundary &_boundary) noexcept
 {
   search_max = search_min = nominal_points.front();
   boundary_points.clear();
@@ -73,7 +73,7 @@ SampledTaskPoint::UpdateOZ(const FlatProjection &projection,
 // SAMPLES + BOUNDARY
 
 void
-SampledTaskPoint::UpdateProjection(const FlatProjection &projection)
+SampledTaskPoint::UpdateProjection(const FlatProjection &projection) noexcept
 {
   search_max.Project(projection);
   search_min.Project(projection);
@@ -83,13 +83,13 @@ SampledTaskPoint::UpdateProjection(const FlatProjection &projection)
 }
 
 void
-SampledTaskPoint::Reset()
+SampledTaskPoint::Reset() noexcept
 {
   sampled_points.clear();
 }
 
 const SearchPointVector &
-SampledTaskPoint::GetSearchPoints() const
+SampledTaskPoint::GetSearchPoints() const noexcept
 {
   assert(!boundary_points.empty());
 

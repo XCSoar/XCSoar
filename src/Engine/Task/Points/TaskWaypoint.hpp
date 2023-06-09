@@ -24,7 +24,7 @@ public:
    *
    * @return Initialised object
    */
-  TaskWaypoint(TaskPointType _type, WaypointPtr &&wp)
+  TaskWaypoint(TaskPointType _type, WaypointPtr &&wp) noexcept
     :TaskPoint(_type, wp->location),
      waypoint(std::move(wp)) {}
 
@@ -34,11 +34,11 @@ public:
    * task point)
    */
   [[gnu::pure]]
-  const Waypoint &GetWaypoint() const {
+  const Waypoint &GetWaypoint() const noexcept {
     return *waypoint;
   }
 
-  WaypointPtr GetWaypointPtr() const {
+  WaypointPtr GetWaypointPtr() const noexcept {
     return waypoint;
   }
 
@@ -46,7 +46,7 @@ protected:
   /**
    * Altitude (AMSL, m) of task point terrain.
    */
-  double GetBaseElevation() const {
+  double GetBaseElevation() const noexcept {
     // TODO can we avoid the zero fallback somehow?
     return waypoint->GetElevationOrZero();
   }

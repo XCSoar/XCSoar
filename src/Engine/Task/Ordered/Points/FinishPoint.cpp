@@ -25,14 +25,14 @@ FinishPoint::SetTaskBehaviour(const TaskBehaviour &tb) noexcept
 }
 
 void
-FinishPoint::Reset()
+FinishPoint::Reset() noexcept
 {
   OrderedTaskPoint::Reset();
   fai_finish_height = 0;
 }
 
 bool
-FinishPoint::EntryPrecondition() const
+FinishPoint::EntryPrecondition() const noexcept
 {
   return GetPrevious() != NULL && GetPrevious()->HasEntered();
 }

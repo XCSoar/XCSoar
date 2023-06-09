@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 #include "ScoredTaskPoint.hpp"
 
-ScoredTaskPoint::ScoredTaskPoint(const GeoPoint &location, bool b_scored)
+ScoredTaskPoint::ScoredTaskPoint(const GeoPoint &location, bool b_scored) noexcept
   :SampledTaskPoint(location, b_scored)
 {
   Reset();
@@ -10,7 +10,7 @@ ScoredTaskPoint::ScoredTaskPoint(const GeoPoint &location, bool b_scored)
 
 bool 
 ScoredTaskPoint::TransitionEnter(const AircraftState &ref_now,
-                                 const AircraftState &ref_last)
+                                 const AircraftState &ref_last) noexcept
 {
   if (!CheckEnterTransition(ref_now, ref_last))
     return false;
@@ -24,7 +24,7 @@ ScoredTaskPoint::TransitionEnter(const AircraftState &ref_now,
 bool 
 ScoredTaskPoint::TransitionExit(const AircraftState &ref_now,
                                 const AircraftState &ref_last,
-                                const FlatProjection &projection)
+                                const FlatProjection &projection) noexcept
 {
   if (!CheckExitTransition(ref_now, ref_last))
     return false;
@@ -40,7 +40,7 @@ ScoredTaskPoint::TransitionExit(const AircraftState &ref_now,
 }
 
 const GeoPoint &
-ScoredTaskPoint::GetLocationScored() const
+ScoredTaskPoint::GetLocationScored() const noexcept
 {
   if (IsBoundaryScored() || !HasEntered())
     return GetLocationMin();
@@ -49,7 +49,7 @@ ScoredTaskPoint::GetLocationScored() const
 }
 
 void 
-ScoredTaskPoint::Reset()
+ScoredTaskPoint::Reset() noexcept
 {
   SampledTaskPoint::Reset();
   state_entered.ResetTime();
