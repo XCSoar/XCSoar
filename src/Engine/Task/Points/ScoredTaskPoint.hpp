@@ -19,7 +19,7 @@
 class ScoredTaskPoint : public SampledTaskPoint
 {
   AircraftState state_entered;
-  bool has_exited;
+  bool has_exited = false;
 
 public:
   /**

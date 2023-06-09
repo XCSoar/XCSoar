@@ -5,7 +5,7 @@
 ScoredTaskPoint::ScoredTaskPoint(const GeoPoint &location, bool b_scored) noexcept
   :SampledTaskPoint(location, b_scored)
 {
-  Reset();
+  state_entered.ResetTime();
 }
 
 bool 
