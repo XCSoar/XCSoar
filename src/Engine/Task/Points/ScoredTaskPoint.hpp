@@ -18,7 +18,12 @@
  */
 class ScoredTaskPoint : public SampledTaskPoint
 {
+  /**
+   * The first state within the OZ.  If its HasTime() method returns
+   * false, the aircraft has not yet entered the OZ.
+   */
   AircraftState entered_state;
+
   bool has_exited = false;
 
 public:
