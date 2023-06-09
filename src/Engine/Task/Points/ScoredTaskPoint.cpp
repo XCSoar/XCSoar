@@ -6,6 +6,7 @@ ScoredTaskPoint::ScoredTaskPoint(const GeoPoint &location, bool b_scored) noexce
   :SampledTaskPoint(location, b_scored)
 {
   entered_state.ResetTime();
+  exited_state.ResetTime();
 }
 
 bool 
@@ -34,7 +35,7 @@ ScoredTaskPoint::TransitionExit(const AircraftState &ref_now,
     entered_state = ref_last;
   }
 
-  has_exited = true;
+  exited_state = ref_last;
 
   return true;
 }
@@ -53,5 +54,5 @@ ScoredTaskPoint::Reset() noexcept
 {
   SampledTaskPoint::Reset();
   entered_state.ResetTime();
-  has_exited = false;
+  exited_state.ResetTime();
 }

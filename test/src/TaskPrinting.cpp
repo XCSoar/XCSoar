@@ -166,6 +166,7 @@ PrintHelper::orderedtaskpoint_print(std::ostream& f,
     taskpoint_print(f,tp,state);
     orderedtaskpoint_print_boundary(f,tp,state);
     f << "# Entered " << tp.GetEnteredState().time.ToDuration().count() << "\n";
+    f << "# Exited " << tp.GetExitedState().time.ToDuration().count() << "\n";
     f << "# Bearing travelled " << tp.GetVectorTravelled().bearing << "\n";
     f << "# Distance travelled " << tp.GetVectorTravelled().distance << "\n";
     f << "# Bearing remaining " << tp.GetVectorRemaining(state.location).bearing << "\n";

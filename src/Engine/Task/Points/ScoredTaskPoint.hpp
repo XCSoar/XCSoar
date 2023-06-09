@@ -24,7 +24,12 @@ class ScoredTaskPoint : public SampledTaskPoint
    */
   AircraftState entered_state;
 
-  bool has_exited = false;
+  /**
+   * The last state within the OZ before the aircraft left it.  If its
+   * HasTime() method returns false, the aircraft has not yet exited
+   * the OZ.
+   */
+  AircraftState exited_state;
 
 public:
   /**
@@ -66,7 +71,11 @@ public:
    * @return True if aircraft has exited the OZ
    */
   bool HasExited() const noexcept {
-    return has_exited;
+    return exited_state.HasTime();
+  }
+
+  const AircraftState &GetExitedState() const noexcept {
+    return exited_state;
   }
 
   /**
