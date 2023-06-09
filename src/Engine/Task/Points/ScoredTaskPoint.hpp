@@ -78,6 +78,12 @@ public:
     return exited_state;
   }
 
+  const AircraftState &GetScoredState() const noexcept {
+    return HasExited() && ScoreLastExit()
+      ? exited_state
+      : entered_state;
+  }
+
   /**
    * Test whether aircraft has entered observation zone and
    * was previously outside; records this transition.

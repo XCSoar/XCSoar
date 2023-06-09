@@ -51,7 +51,7 @@ RenderTaskLegs(ChartRenderer &chart,
     if (!IsTaskLegVisible(tp))
       continue;
 
-    auto dt = tp.GetEnteredState().time - calculated.flight.takeoff_time;
+    auto dt = tp.GetScoredState().time - calculated.flight.takeoff_time;
     if (dt.count() >= 0) {
       const double x = dt / std::chrono::hours{1};
       if (y>=0) {

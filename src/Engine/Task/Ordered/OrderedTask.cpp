@@ -177,14 +177,14 @@ OrderedTask::ScanTotalStartTime() noexcept
   if (task_points.empty())
     return TimeStamp::Undefined();
 
-  return task_points.front()->GetEnteredState().time;
+  return task_points.front()->GetScoredState().time;
 }
 
 TimeStamp
 OrderedTask::ScanLegStartTime() noexcept
 {
   if (active_task_point > 0)
-    return task_points[active_task_point-1]->GetEnteredState().time;
+    return task_points[active_task_point-1]->GetScoredState().time;
 
   return TimeStamp::Undefined();
 }

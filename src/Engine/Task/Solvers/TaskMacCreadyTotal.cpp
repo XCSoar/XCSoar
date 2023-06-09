@@ -25,7 +25,7 @@ TaskMacCreadyTotal::get_aircraft_start(const AircraftState &aircraft) const
   assert(tp.GetType() != TaskPointType::UNORDERED);
 
   if (tp.HasEntered()) {
-    return tp.GetEnteredState();
+    return tp.GetScoredState();
   } else if (aircraft.location.IsValid()) {
     return aircraft;
   } else {
