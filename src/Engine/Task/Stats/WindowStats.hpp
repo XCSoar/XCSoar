@@ -20,7 +20,7 @@ struct WindowStats {
    */
   double speed;
 
-  void Reset() {
+  constexpr void Reset() noexcept {
     duration = -1;
   }
 };

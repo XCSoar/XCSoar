@@ -16,7 +16,7 @@ class TaskVario
   double value;
 
 public:
-  void Reset() {
+  constexpr void Reset() noexcept {
     value = 0;
   }
 
@@ -25,7 +25,7 @@ public:
  * 
  * @return Current vario value (m/s, positive up)
  */
-  double get_value() const {
+  constexpr double get_value() const noexcept {
     return value;
   }
 };

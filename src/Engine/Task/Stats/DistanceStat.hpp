@@ -24,13 +24,13 @@ protected:
   double speed_incremental;
 
 public:
-  void Reset() {
+  constexpr void Reset() noexcept {
     distance = -1;
     speed = 0;
     speed_incremental = 0;
   }
 
-  bool IsDefined() const {
+  constexpr bool IsDefined() const noexcept {
     return distance >= 0;
   }
 
@@ -39,7 +39,7 @@ public:
    *
    * @param d Distance value (m)
    */
-  void SetDistance(const double d) {
+  constexpr void SetDistance(const double d) noexcept {
     distance = d;
   }
 
@@ -48,7 +48,7 @@ public:
    *
    * @return Distance value (m)
    */
-  double GetDistance() const {
+  constexpr double GetDistance() const noexcept {
     assert(IsDefined());
 
     return distance;
@@ -59,7 +59,7 @@ public:
    *
    * @return Speed (m/s)
    */
-  double GetSpeed() const {
+  constexpr double GetSpeed() const noexcept {
     assert(IsDefined());
 
     return speed;
@@ -71,7 +71,7 @@ public:
    *
    * @return Speed incremental (m/s)
    */
-  double GetSpeedIncremental() const {
+  constexpr double GetSpeedIncremental() const noexcept {
     assert(IsDefined());
 
     return speed_incremental;

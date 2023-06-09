@@ -5,7 +5,7 @@
 #include "Navigation/Aircraft.hpp"
 
 void
-StartStats::SetStarted(const AircraftState &aircraft)
+StartStats::SetStarted(const AircraftState &aircraft) noexcept
 {
   task_started = true;
   time = aircraft.time;

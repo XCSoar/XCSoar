@@ -33,7 +33,7 @@ struct StartStats {
    */
   double ground_speed;
 
-  void Reset() {
+  constexpr void Reset() noexcept {
     task_started = false;
   }
 
@@ -41,7 +41,7 @@ struct StartStats {
    * Enable the #task_started flag and copy data from the
    * #AircraftState.
    */
-  void SetStarted(const AircraftState &aircraft);
+  void SetStarted(const AircraftState &aircraft) noexcept;
 };
 
 static_assert(std::is_trivial<StartStats>::value, "type is not trivial");
