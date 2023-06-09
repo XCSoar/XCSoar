@@ -492,7 +492,8 @@ OrderedTask::CheckTransitions(const AircraftState &state,
     taskpoint_finish->HasEntered();
 
   if (TaskStarted()) {
-    const AircraftState start_state = taskpoint_start->GetEnteredState();
+    const AircraftState &start_state = taskpoint_start->GetExitedState();
+    assert(start_state.HasTime());
     stats.start.SetStarted(start_state);
 
     if (taskpoint_finish != nullptr)
