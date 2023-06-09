@@ -293,7 +293,7 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
   if (StringIsEqual(misc, _T("start"))) {
     const StartStats &start_stats =
       CommonInterface::Calculated().ordered_task_stats.start;
-    if (!start_stats.task_started)
+    if (!start_stats.HasStarted())
       return;
 
     TCHAR TempAll[120];

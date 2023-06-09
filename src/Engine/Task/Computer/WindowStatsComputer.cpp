@@ -11,7 +11,7 @@ WindowStatsComputer::Compute(TimeStamp time, const TaskStats &task_stats,
   if (!time.IsDefined())
     return;
 
-  if (!task_stats.task_valid || !task_stats.start.task_started ||
+  if (!task_stats.task_valid || !task_stats.start.HasStarted() ||
       !task_stats.total.travelled.IsDefined()) {
     Reset();
     stats.Reset();

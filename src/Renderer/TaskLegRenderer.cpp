@@ -40,7 +40,7 @@ RenderTaskLegs(ChartRenderer &chart,
 {
   const TaskStats &task_stats = calculated.ordered_task_stats;
 
-  if (!task_stats.start.task_started)
+  if (!task_stats.start.HasStarted())
     return;
 
   TCHAR sTmp[5];

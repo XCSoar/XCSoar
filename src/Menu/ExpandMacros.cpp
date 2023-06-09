@@ -187,7 +187,7 @@ ExpandTaskMacros(tstring_view name,
         : _("Abort");
   } else if (name == _T("CheckTaskRestart")) {
     invalid |= !(common_stats.task_type == TaskType::ORDERED &&
-                 task_stats.start.task_started);
+                 task_stats.start.HasStarted());
     return _T("");
   }
 

@@ -354,7 +354,7 @@ l_task_index(lua_State *L)
       Lua::Push(L, d/v);
   } else if (StringIsEqual(name, "cruise_efficiency")) {
       const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-      if (!task_stats.task_valid || !task_stats.start.task_started) 
+      if (!task_stats.task_valid || !task_stats.start.HasStarted())
         return 0;
 
       Lua::Push(L, task_stats.cruise_efficiency);
