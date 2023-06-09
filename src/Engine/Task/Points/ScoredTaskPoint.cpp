@@ -5,7 +5,7 @@
 ScoredTaskPoint::ScoredTaskPoint(const GeoPoint &location, bool b_scored) noexcept
   :SampledTaskPoint(location, b_scored)
 {
-  state_entered.ResetTime();
+  entered_state.ResetTime();
 }
 
 bool 
@@ -16,7 +16,7 @@ ScoredTaskPoint::TransitionEnter(const AircraftState &ref_now,
     return false;
 
   if (EntryPrecondition() && (!ScoreFirstEntry() || !HasEntered()))
-    state_entered = ref_now;
+    entered_state = ref_now;
 
   return true;
 }
@@ -31,7 +31,7 @@ ScoredTaskPoint::TransitionExit(const AircraftState &ref_now,
 
   if (ScoreLastExit()) {
     ClearSampleAllButLast(ref_last, projection);
-    state_entered = ref_last;
+    entered_state = ref_last;
   }
 
   has_exited = true;
@@ -52,6 +52,6 @@ void
 ScoredTaskPoint::Reset() noexcept
 {
   SampledTaskPoint::Reset();
-  state_entered.ResetTime();
+  entered_state.ResetTime();
   has_exited = false;
 }

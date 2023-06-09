@@ -18,7 +18,7 @@
  */
 class ScoredTaskPoint : public SampledTaskPoint
 {
-  AircraftState state_entered;
+  AircraftState entered_state;
   bool has_exited = false;
 
 public:
@@ -41,7 +41,7 @@ public:
    * @return True if observation zone has been entered
    */
   bool HasEntered() const noexcept {
-    return state_entered.HasTime();
+    return entered_state.HasTime();
   }
 
   /**
@@ -50,7 +50,7 @@ public:
    * @return State at entry, or null if never entered
    */
   const AircraftState &GetEnteredState() const noexcept {
-    return state_entered;
+    return entered_state;
   }
 
   virtual void Reset() noexcept;
