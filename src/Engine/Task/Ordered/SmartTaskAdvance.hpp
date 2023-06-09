@@ -11,7 +11,7 @@ class SmartTaskAdvance final : public TaskAdvance {
   State state = TaskAdvance::MANUAL;
 
 public:
-  virtual State GetState() const;
+  State GetState() const noexcept override;
 
   /** 
    * Determine whether all conditions are satisfied for a turnpoint
@@ -25,10 +25,10 @@ public:
    * 
    * @return true if this tp is ready to advance
    */
-  virtual bool CheckReadyToAdvance(const TaskPoint &tp,
-                                   const AircraftState &state,
-                                   const bool x_enter, const bool x_exit);
+  bool CheckReadyToAdvance(const TaskPoint &tp,
+                           const AircraftState &state,
+                           bool x_enter, bool x_exit) noexcept override;
 
 protected:
-  virtual void UpdateState();
+  void UpdateState() noexcept override;
 };
