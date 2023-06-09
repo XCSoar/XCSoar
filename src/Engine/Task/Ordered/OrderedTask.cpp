@@ -1088,7 +1088,7 @@ OrderedTask::Reset() noexcept
 
   AbstractTask::Reset();
   stats.task_finished = false;
-  stats.start.task_started = false;
+  stats.start.Reset();
   task_advance.Reset();
   SetActiveTaskPoint(0);
   UpdateStatsGeometry();
