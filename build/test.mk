@@ -815,8 +815,7 @@ ifeq ($(HAVE_HTTP)$(TARGET_IS_ANDROID),yn)
 DEBUG_PROGRAM_NAMES += DownloadFile \
 	RunDownloadToFile \
 	UploadFile \
-	RunWeGlideUploadFlight \
-	RunWeGlideDownloadTask \
+	RunWeGlideClient \
 	RunTimClient \
 	RunNOAADownloader RunSkyLinesTracking RunLiveTrack24
 endif
@@ -966,19 +965,10 @@ RUN_TIM_CLIENT_SOURCES = \
 RUN_TIM_CLIENT_DEPENDS = LIBCLIENT JSON LIBHTTP ASYNC OS LIBNET IO UTIL
 $(eval $(call link-program,RunTimClient,RUN_TIM_CLIENT))
 
-RUN_WEGLIDE_UPLOAD_FLIGHT_SOURCES = \
+RUN_WEGLIDE_CLIENT_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
-	$(SRC)/net/SocketError.cxx \
-	$(TEST_SRC_DIR)/FakeLogFile.cpp \
-	$(TEST_SRC_DIR)/RunWeGlideUploadFlight.cpp
-RUN_WEGLIDE_UPLOAD_FLIGHT_DEPENDS = LIBCLIENT JSON LIBHTTP ASYNC LIBNET OPERATION IO OS UTIL TIME
-$(eval $(call link-program,RunWeGlideUploadFlight,RUN_WEGLIDE_UPLOAD_FLIGHT))
-
-RUN_WEGLIDE_DOWNLOAD_TASK_SOURCES = \
-	$(SRC)/Version.cpp \
-	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
@@ -988,9 +978,9 @@ RUN_WEGLIDE_DOWNLOAD_TASK_SOURCES = \
 	$(SRC)/Task/Deserialiser.cpp \
 	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/net/SocketError.cxx \
-	$(TEST_SRC_DIR)/RunWeGlideDownloadTask.cpp
-RUN_WEGLIDE_DOWNLOAD_TASK_DEPENDS = LIBCLIENT JSON TASK ROUTE GLIDE WAYPOINT GEO TIME MATH LIBHTTP ASYNC LIBNET OPERATION IO OS UTIL FMT
-$(eval $(call link-program,RunWeGlideDownloadTask,RUN_WEGLIDE_DOWNLOAD_TASK))
+	$(TEST_SRC_DIR)/RunWeGlideClient.cpp
+RUN_WEGLIDE_CLIENT_DEPENDS = LIBCLIENT JSON TASK ROUTE GLIDE WAYPOINT GEO TIME MATH LIBHTTP ASYNC LIBNET OPERATION IO OS UTIL FMT
+$(eval $(call link-program,RunWeGlideClient,RUN_WEGLIDE_CLIENT))
 
 RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/net/SocketError.cxx \
