@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2021-10-31 00:33+0000\n"
+"PO-Revision-Date: 2023-01-13 12:50+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -174,9 +174,9 @@ msgid ""
 msgstr "반경 무제한의 90도 부채꼴 섹터: 경계를 안에서 밖으로 통과하는 경우."
 
 #: src/Task/TypeStrings.cpp:81
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A keyhole.  Scored from center."
-msgstr "키홀 섹터. 영역내 가장 먼 점에서 득점한다."
+msgstr "키홀 섹터.   영역내 가장 먼 점에서 득점한다."
 
 #: src/Task/TypeStrings.cpp:82
 #, no-c-format
@@ -291,9 +291,9 @@ msgid "FAI quadrant"
 msgstr "FAI 90도섹터"
 
 #: src/Task/TypeStrings.cpp:117
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Keyhole sector"
-msgstr "키홀 섹터(DAeC)"
+msgstr "키홀 섹터"
 
 #: src/Task/TypeStrings.cpp:118
 #, no-c-format
@@ -435,7 +435,7 @@ msgstr "공역파일 형식이 잘못되었음"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:112
 msgid "Date"
-msgstr ""
+msgstr "날짜"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:113
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
@@ -462,18 +462,16 @@ msgstr "선수번호"
 #. upload successful!
 #: src/net/client/WeGlide/UploadIGCFile.cpp:118
 #: src/net/client/WeGlide/UploadIGCFile.cpp:176
-#, fuzzy
 msgid "WeGlide Upload"
-msgstr "기체종류"
+msgstr "WeGlide 업로드"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:142 src/Input/InputEventsLua.cpp:60
 msgid "Not found"
 msgstr "찾을 수 없음"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:149
-#, fuzzy
 msgid "Upload Flight"
-msgstr "비행 파일 다운로드"
+msgstr "비행기록 올리기"
 
 #. upload failed!
 #: src/net/client/WeGlide/UploadIGCFile.cpp:151
@@ -656,14 +654,12 @@ msgstr "비행 파일 다운로드 실패."
 
 #. ask whether this IGC should be uploaded to WeGlide
 #: src/Logger/ExternalLogger.cpp:356
-#, fuzzy
 msgid "Do you want to upload this flight to WeGlide?"
-msgstr "다른 비행을 다운로드합니까?"
+msgstr "이 비행기록을 WeGlide에 올리겠습니까?"
 
 #: src/Logger/ExternalLogger.cpp:357
-#, fuzzy
 msgid "Upload flight"
-msgstr "비행 파일 다운로드"
+msgstr "비행기록 올리기"
 
 #: src/Logger/ExternalLogger.cpp:362
 msgid "Do you want to download another flight?"
@@ -1002,15 +998,13 @@ msgstr "지형 표시 끔"
 
 #: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:364
 #: src/Menu/ExpandMacros.cpp:366
-#, fuzzy
 msgid "Hide"
-msgstr "박스 감추기"
+msgstr "감추기"
 
 #: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:364
 #: src/Menu/ExpandMacros.cpp:366
-#, fuzzy
 msgid "Show"
-msgstr "노후도/피로도 보기"
+msgstr "보기"
 
 #: src/Menu/ExpandMacros.cpp:369 src/Input/InputEventsSettings.cpp:313
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:85
@@ -1387,7 +1381,7 @@ msgstr "도착 고도"
 
 #: src/Renderer/WaypointListRenderer.cpp:165
 msgid " ("
-msgstr ""
+msgstr " ("
 
 #: src/Weather/Rasp/RaspStore.cpp:48 src/Weather/Rasp/RaspStore.cpp:53
 #, no-c-format
@@ -2770,22 +2764,20 @@ msgid "Airspace Warnings"
 msgstr "공역경고"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:60
-#, fuzzy
 msgid "Circling wind"
-msgstr "써클링"
+msgstr "써클링 바람"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:61
 msgid "Estimate the wind vector while circling.  Requires only a GPS."
-msgstr ""
+msgstr "써클링하는 동안 바람 방향을 계산한다.   GPS만 사용해도 계산가능하다."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
-#, fuzzy
 msgid "ZigZag wind"
-msgstr "지그재그"
+msgstr "지그재그 바람측정"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:65
 msgid "Estimate the wind vector during glides.  Requires an airspeed sensor."
-msgstr ""
+msgstr "활공하는 동안 바람 방향을 계산한다.   대기속도센서가 필요하다."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
 msgid "External wind"
@@ -2841,13 +2833,14 @@ msgstr "덤프"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:285
 msgid "Crew"
-msgstr ""
+msgstr "크루"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:286
 msgid ""
 "All masses loaded to the glider beyond the empty weight including pilot and "
 "copilot, but not water ballast."
-msgstr ""
+msgstr "조종사와 부조종사를 포함하여 Empty 중량 이상으로 글라이더에 실린 무게(물 "
+"밸러스트 제외)."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:293
 msgid "Ballast"
@@ -3381,14 +3374,12 @@ msgid "Wing Area"
 msgstr "기체면적"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:124
-#, fuzzy
 msgid "Empty Mass"
-msgstr "빈 타스크"
+msgstr "빈 무게"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:124
-#, fuzzy
 msgid "Net mass of the rigged plane."
-msgstr "폴라의 기본중량"
+msgstr "고정 글라이더의 Net Mass."
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:128
 msgid "Max. Ballast"
@@ -3403,9 +3394,8 @@ msgid "Max. Cruise Speed"
 msgstr "최대 순항속도"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:143
-#, fuzzy
 msgid "WeGlide Type"
-msgstr "기체종류"
+msgstr "WeGlide 타입"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:63
 msgid "List"
@@ -3421,9 +3411,8 @@ msgid "Reference Mass"
 msgstr "설정중량"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:134
-#, fuzzy
 msgid "Reference mass of the polar."
-msgstr "폴라의 기본중량"
+msgstr "폴라의 기본중량."
 
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:174
@@ -3549,7 +3538,7 @@ msgstr "가까운웨이포인트"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:98
 msgid "Share"
-msgstr ""
+msgstr "공유"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:51
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:62
@@ -3766,9 +3755,9 @@ msgstr "활주로"
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:135
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:87
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Short Name"
-msgstr "짧은 항적"
+msgstr "짧은 이름"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:166
 msgid "Bearing and Distance"
@@ -3895,39 +3884,39 @@ msgid "Landable"
 msgstr "착륙가능"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:73
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Mountain Pass"
-msgstr "산"
+msgstr "통과가능한 산"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Mountain Top"
-msgstr "산"
+msgstr "산 꼭대기"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
 #, no-c-format
 msgid "Transmitter Mast"
-msgstr ""
+msgstr "송신 안테나"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:76
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Tower"
-msgstr "전원"
+msgstr "타워"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:77
 #, no-c-format
 msgid "Tunnel"
-msgstr ""
+msgstr "터널"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:78
 #, no-c-format
 msgid "Bridge"
-msgstr ""
+msgstr "다리"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:79
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Power Plant"
-msgstr "전원"
+msgstr "발전소"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:88
 msgid "Comment"
@@ -4866,7 +4855,7 @@ msgstr "지도 (풀 스크린)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:197
 msgid "Run XCSoar in full screen mode"
-msgstr ""
+msgstr "전체화면으로 XCSoar 실행"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:202
 msgid "Display orientation"
@@ -4965,13 +4954,13 @@ msgstr "보조파일럿 이름"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:79
 msgid "Crew weight default"
-msgstr ""
+msgstr "기본 크루 체중"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:80
 msgid ""
 "Default for all weight loaded to the glider beyond the empty weight and "
 "besides the water ballast."
-msgstr ""
+msgstr "물 밸러스트 외에 글라이더에 적재된 모든 무게에 대한 기본값."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:86
 msgid "Time step cruise"
@@ -6160,6 +6149,8 @@ msgid ""
 "LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance "
 "is 20km, 5 points per km."
 msgstr ""
+"LVZC Charron.online, 200 km 이하는 최소 5 포인트 이상, 6개 포인트를 "
+"넘어선다면, 최소 구간 거리는 20km로 만든 타스크, km당 5포인트이다."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:129
 msgid "Contest"
@@ -6515,7 +6506,8 @@ msgstr "웨이포인트 이름을 표시하지 않음."
 msgid ""
 "The short name of each waypoint is displayed. If unavailable, the first five "
 "letters of the full name are displayed."
-msgstr ""
+msgstr "각 웨이포인트의 짧은 이름이 표시된다. 사용할 수 없는 경우 전체 이름의 처음 "
+"다섯 글자가 표시된다."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:105
 msgid "Label format"
@@ -6792,7 +6784,8 @@ msgstr "서버에 저장된 열의 위치를 확인하고 표시한다."
 msgid ""
 "Show thermal locations downloaded from Thermal Information Map (thermalmap."
 "info)."
-msgstr ""
+msgstr "Thermal Information Map(thermalmap.info)에서 다운로드한 써멀의 위치를 "
+"표시한다."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:91
 #, fuzzy
@@ -6801,15 +6794,15 @@ msgstr "자동"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:92
 msgid "Uploads flights automatically after download from logger?"
-msgstr ""
+msgstr "로거에서 다운로드한 후 기록을 자동으로 업로드합니까?"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:96
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
-msgstr ""
+msgstr "WeGlide 프로필에서 가져온다. 사용하지 않을 경우 0으로 설정한다."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:99
 msgid "Pilot date of birth"
-msgstr ""
+msgstr "파일럿의 생년월일"
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:43
 msgid "Radius of the OZ cylinder."
@@ -10124,6 +10117,8 @@ msgid ""
 "Nav\n"
 "Page 2/2"
 msgstr ""
+"내비게이션\n"
+"2/2"
 
 #: Data/Input/default.xci:385 Data/Input/default.xci:1014
 #, fuzzy
@@ -10166,11 +10161,11 @@ msgstr "화면"
 
 #: Data/Input/default.xci:481
 msgid "Page Show"
-msgstr ""
+msgstr "페이지 보기"
 
 #: Data/Input/default.xci:488 Data/Input/default.xci:1072
 msgid "Pan Mode"
-msgstr ""
+msgstr "넓게 보기"
 
 #: Data/Input/default.xci:507 Data/Input/default.xci:1080
 msgid "Labels"
@@ -10189,12 +10184,16 @@ msgid ""
 "Config\n"
 "Page 2/3"
 msgstr ""
+"설정\n"
+"2/3"
 
 #: Data/Input/default.xci:596
 msgid ""
 "Config\n"
 "Page 3/3"
 msgstr ""
+"설정\n"
+"3/3"
 
 #: Data/Input/default.xci:653 Data/Input/default.xci:1158
 msgid "Raw Logger"
@@ -10215,6 +10214,8 @@ msgid ""
 "Vega\n"
 "Page 2/2"
 msgstr ""
+"Vega\n"
+"2/2"
 
 #: Data/Input/default.xci:687
 #, fuzzy

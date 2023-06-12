@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2021-08-20 21:34+0000\n"
+"PO-Revision-Date: 2023-01-18 11:50+0000\n"
 "Last-Translator: Веско <v.jeliazkov@jeliazkov.net>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/bg/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -181,9 +181,9 @@ msgstr ""
 "90 градусов сектор с безкрайни рамене. Сектора е от външната стана на ъгъла."
 
 #: src/Task/TypeStrings.cpp:81
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A keyhole.  Scored from center."
-msgstr "Ключова точка. Счета се най-далечната точка достигната в областта."
+msgstr "Ключова точка. Зачита се най-далечната точка достигната в областта."
 
 #: src/Task/TypeStrings.cpp:82
 #, no-c-format
@@ -192,7 +192,7 @@ msgid ""
 "sector.  Scored from center."
 msgstr ""
 "Немски правила - всяка точка до 1/2 км от центъра или на 10 км от 90 "
-"градусов сектор. Центъра се счита за достигнат."
+"градусов сектор. Центъра се смята за достигнат."
 
 #: src/Task/TypeStrings.cpp:84
 #, no-c-format
@@ -301,9 +301,9 @@ msgid "FAI quadrant"
 msgstr "FAI сектор"
 
 #: src/Task/TypeStrings.cpp:117
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Keyhole sector"
-msgstr "Ключов сектор (DAeC)"
+msgstr "Ключов сектор"
 
 #: src/Task/TypeStrings.cpp:118
 #, no-c-format
@@ -445,7 +445,7 @@ msgstr "Непознат тип файл за въздушно простран�
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:112
 msgid "Date"
-msgstr ""
+msgstr "Дата"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:113
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
@@ -470,9 +470,8 @@ msgstr "Състезателен №"
 #. upload successful!
 #: src/net/client/WeGlide/UploadIGCFile.cpp:118
 #: src/net/client/WeGlide/UploadIGCFile.cpp:176
-#, fuzzy
 msgid "WeGlide Upload"
-msgstr "Тип на летателния апарат"
+msgstr "Изпращане в WeGlide"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:142 src/Input/InputEventsLua.cpp:60
 msgid "Not found"
@@ -664,9 +663,8 @@ msgstr "Грешка при изтегляне на полет."
 
 #. ask whether this IGC should be uploaded to WeGlide
 #: src/Logger/ExternalLogger.cpp:356
-#, fuzzy
 msgid "Do you want to upload this flight to WeGlide?"
-msgstr "Желаете ли да изтеглите друг полет?"
+msgstr "Желаете ли да изпратите този полет до WeGlide?"
 
 #: src/Logger/ExternalLogger.cpp:357
 #, fuzzy
@@ -1004,15 +1002,13 @@ msgstr "Релеф Изкл."
 
 #: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:364
 #: src/Menu/ExpandMacros.cpp:366
-#, fuzzy
 msgid "Hide"
-msgstr "Скриване на инфо-полета"
+msgstr "Скриване"
 
 #: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:364
 #: src/Menu/ExpandMacros.cpp:366
-#, fuzzy
 msgid "Show"
-msgstr "Показване на замърсяването"
+msgstr "Показване"
 
 #: src/Menu/ExpandMacros.cpp:369 src/Input/InputEventsSettings.cpp:313
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:85

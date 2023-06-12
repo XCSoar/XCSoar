@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2022-07-21 13:50+0000\n"
+"PO-Revision-Date: 2023-05-02 21:52+0000\n"
 "Last-Translator: Markus Bagge <markus.bagge@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Launchpad-Export-Date: 2014-10-13 19:28+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -443,7 +443,7 @@ msgstr "Okänd filtyp för luftrum"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:112
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:113
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
@@ -2817,7 +2817,7 @@ msgstr "Kurvläge"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:61
 msgid "Estimate the wind vector while circling.  Requires only a GPS."
-msgstr ""
+msgstr "Skatta vindriktning vid kurvning. Kräver GPS endast."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
 #, fuzzy
@@ -2826,7 +2826,7 @@ msgstr "SickSack"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:65
 msgid "Estimate the wind vector during glides.  Requires an airspeed sensor."
-msgstr ""
+msgstr "Skatta vind under glid. Kräver vindmätare."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
 msgid "External wind"
@@ -2882,13 +2882,15 @@ msgstr "Töm barlast"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:285
 msgid "Crew"
-msgstr ""
+msgstr "Besättning"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:286
 msgid ""
 "All masses loaded to the glider beyond the empty weight including pilot and "
 "copilot, but not water ballast."
 msgstr ""
+"Alla vikter på farkosten utöver tomvikt (inklusive pilot och co-pilot) men "
+"utan vattenballast."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:293
 msgid "Ballast"
@@ -3594,7 +3596,7 @@ msgstr "Nära"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:98
 msgid "Share"
-msgstr ""
+msgstr "Dela"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:51
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:62
@@ -5038,13 +5040,13 @@ msgstr "Copilot namn"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:79
 msgid "Crew weight default"
-msgstr ""
+msgstr "Besättning vikt std.värde"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:80
 msgid ""
 "Default for all weight loaded to the glider beyond the empty weight and "
 "besides the water ballast."
-msgstr ""
+msgstr "Std.värde för all lastvikt utöver tomvikt förutom vattenballast."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:86
 msgid "Time step cruise"
@@ -6893,6 +6895,7 @@ msgid ""
 "Show thermal locations downloaded from Thermal Information Map (thermalmap."
 "info)."
 msgstr ""
+"Visa termikområden nedladdade från Thermal Information Map (thermalmap.info)."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:91
 msgid "Automatic Upload"
@@ -7059,6 +7062,8 @@ msgid ""
 "minimum height above ground for finish to be greater than 1000m below the "
 "start height."
 msgstr ""
+"Om aktiverad, saknar max starthöjd/hastighet och kräver att minsta höjd över "
+"mark vid mål är mer än 1000m under starthöjd."
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:72
 msgid "Task not saved"
@@ -7498,7 +7503,7 @@ msgstr "Inom sektor, armera nästa vägpunkt"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:43
 msgid "Arm"
-msgstr ""
+msgstr "Rigga"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:53 src/Monitor/MatTaskMonitor.cpp:62
 msgid "Dismiss"
@@ -8104,7 +8109,7 @@ msgstr "Indikerad hastighet rapporterad av en extern intelligent variometer."
 #: src/InfoBoxes/Content/Factory.cpp:407
 #, no-c-format
 msgid "Barometric altitude"
-msgstr "Barometrisk höjd"
+msgstr "Höjd barometrisk"
 
 #: src/InfoBoxes/Content/Factory.cpp:408
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:84
@@ -8922,6 +8927,9 @@ msgid ""
 "set. In case the FL is calculated from the GPS altitude, the FL label is "
 "coloured red."
 msgstr ""
+"Tryckhöjd som FL. Om barometrisk höjd ej finns tillgänglig beräknas FL "
+"m.h.a. GPS-höjd och under antagandet att QNH är korrekt angiven. Om GPS-höjd "
+"används färgas FL-etiketten röd."
 
 #: src/InfoBoxes/Content/Factory.cpp:782 src/InfoBoxes/Content/Factory.cpp:783
 #, no-c-format
@@ -9283,22 +9291,22 @@ msgstr "En cirkulär assistant som visar blåsans form och stig."
 #: src/InfoBoxes/Content/Factory.cpp:952
 #, no-c-format
 msgid "Start open/close countdown"
-msgstr "Nedräkning inför startens öppning/stängning"
+msgstr "Tid till start öppnar/stänger"
 
 #: src/InfoBoxes/Content/Factory.cpp:953
 #, no-c-format
 msgid "Start open"
-msgstr "Starten öppen"
+msgstr "Start öppnar"
 
 #: src/InfoBoxes/Content/Factory.cpp:954
 #, no-c-format
 msgid "Shows the time left until the start point opens or closes."
-msgstr "Återstående tid tills starten öppnar eller stänger."
+msgstr "Återstående tid till start öppnar eller stänger."
 
 #: src/InfoBoxes/Content/Factory.cpp:959
 #, no-c-format
 msgid "Start open/close countdown at reaching"
-msgstr "Start öppnar/stänger nedräkningen när detta nås"
+msgstr "Tid passad mot start öppnar/stänger"
 
 #: src/InfoBoxes/Content/Factory.cpp:960
 #, no-c-format
@@ -9400,7 +9408,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1005
 #, no-c-format
 msgid "Distance takeoff"
-msgstr "Avstånd till start"
+msgstr "Distans till start"
 
 #: src/InfoBoxes/Content/Factory.cpp:1006
 #, no-c-format
@@ -9853,6 +9861,10 @@ msgid ""
 "[AVERAGE]: State HIGH if gross vario value is greater than average gross "
 "vario value."
 msgstr ""
+"Jämförelsemetod för att detektera stig-lägen (HÖG/LÅG).\n"
+"[INGEN]: Tillstånd LÅG inaktiverad\n"
+"[MACREADY]: Tillstånd HÖG om brutto-vario överstiger MacCready inställning.\n"
+"[AVERAGE]: Tillstånd HÖG om brutto-vario överstiger medel för brutto-vario."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:76
 #, no-c-format
@@ -9870,6 +9882,13 @@ msgid ""
 "[RELATIVE MC/2] LIFT tone when relative vario greater than half MC.\n"
 "[NET MC/2] LIFT tone when airmass velocity greater than half MC."
 msgstr ""
+"Jämförelsemetod för att detektera glid-tillstånd för att växla till stig-"
+"ljud under glid.\n"
+"[INGEN]: Stigton inaktiverad under glid\n"
+"[RELATIV NOLL] Stigton när relativ vario är positiv.\n"
+"[BRUTTO NOLL] Stigton när farkost stiger.\n"
+"[RELATIV MC/2] Stigton när relativ vario överstiger halva MC.\n"
+"[NET MC/2] Stigton när luftmassans hastighet överstiger halva MC."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:81
 #, no-c-format
@@ -10306,6 +10325,8 @@ msgid ""
 "Nav\n"
 "Page 2/2"
 msgstr ""
+"NAV\n"
+"Sida 2/2"
 
 #: Data/Input/default.xci:385 Data/Input/default.xci:1014
 #, fuzzy
@@ -10319,11 +10340,8 @@ msgid "Dropped marker"
 msgstr "Släppt markör"
 
 #: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
 msgid "Marker Drop"
-msgstr ""
-"Sätt\n"
-"markör"
+msgstr "Släpp markör"
 
 #: Data/Input/default.xci:429
 msgid "Pilot event announced"
@@ -10340,15 +10358,16 @@ msgid "Target Show"
 msgstr "Mål"
 
 #: Data/Input/default.xci:451
-#, fuzzy
 msgid ""
 "Display\n"
 "Page 2/2"
-msgstr "Visa"
+msgstr ""
+"Visa\n"
+"Sida 2/2"
 
 #: Data/Input/default.xci:481
 msgid "Page Show"
-msgstr ""
+msgstr "Visa sida"
 
 #: Data/Input/default.xci:488 Data/Input/default.xci:1072
 #, fuzzy
@@ -10372,12 +10391,16 @@ msgid ""
 "Config\n"
 "Page 2/3"
 msgstr ""
+"Konfig.\n"
+"Sida 2/3"
 
 #: Data/Input/default.xci:596
 msgid ""
 "Config\n"
 "Page 3/3"
 msgstr ""
+"Konfig.\n"
+"Sida 3/3"
 
 #: Data/Input/default.xci:653 Data/Input/default.xci:1158
 msgid "Raw Logger"
@@ -10396,6 +10419,8 @@ msgid ""
 "Vega\n"
 "Page 2/2"
 msgstr ""
+"Vega\n"
+"Sida 2/2"
 
 #: Data/Input/default.xci:687
 #, fuzzy
