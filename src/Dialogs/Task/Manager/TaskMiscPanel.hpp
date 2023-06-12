@@ -10,6 +10,11 @@ class OrderedTask;
 
 class TaskMiscPanel final : public PagerWidget {
 public:
+  enum Pages {
+    PAGE_ACTIONS,
+    PAGE_LIST,
+  };
+
   TaskMiscPanel(TaskManagerDialog &dialog,
                 std::unique_ptr<OrderedTask> &_active_task,
                 bool *_task_modified) noexcept;
