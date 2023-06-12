@@ -40,6 +40,20 @@ DownloadTask(const WeGlideSettings &settings,
                                          progress);
 }
 
+static void
+PrintTask(const OrderedTask &task)
+{
+  auto xml_node = XMLNode::CreateRoot(_T("Task"));
+  WritableDataNodeXML data_node{xml_node};
+
+  SaveTask(data_node, task);
+
+  StdioOutputStream _stdout{stdout};
+  BufferedOutputStream bos{_stdout};
+  xml_node.Serialise(bos, true);
+  bos.Flush();
+}
+
 int
 main(int argc, char *argv[])
 try {
@@ -70,15 +84,7 @@ try {
     return EXIT_FAILURE;
   }
 
-  auto xml_node = XMLNode::CreateRoot(_T("Task"));
-  WritableDataNodeXML data_node{xml_node};
-
-  SaveTask(data_node, *value);
-
-  StdioOutputStream _stdout{stdout};
-  BufferedOutputStream bos{_stdout};
-  xml_node.Serialise(bos, true);
-  bos.Flush();
+  PrintTask(*value);
 
   return EXIT_SUCCESS;
 } catch (...) {
