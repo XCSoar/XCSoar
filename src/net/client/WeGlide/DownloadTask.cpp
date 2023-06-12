@@ -26,18 +26,12 @@ using std::string_view_literals::operator""sv;
 
 namespace WeGlide {
 
-Co::Task<std::unique_ptr<OrderedTask>>
-DownloadDeclaredTask(CurlGlobal &curl, const WeGlideSettings &settings,
-                     const TaskBehaviour &task_behaviour,
-                     const Waypoints *waypoints,
-                     ProgressListener &progress)
+static Co::Task<std::unique_ptr<OrderedTask>>
+DownloadTask(CurlGlobal &curl, CurlEasy easy,
+             const TaskBehaviour &task_behaviour,
+             const Waypoints *waypoints,
+             ProgressListener &progress)
 {
-  assert(settings.pilot_id != 0);
-
-  const auto url = FmtBuffer<256>("{}/task/declaration/{}?cup=false&tsk=true",
-                                  settings.default_url, settings.pilot_id);
-
-  CurlEasy easy{url};
   Curl::Setup(easy);
   const Net::ProgressAdapter progress_adapter{easy, progress};
 
@@ -72,6 +66,21 @@ DownloadDeclaredTask(CurlGlobal &curl, const WeGlideSettings &settings,
   auto task = std::make_unique<OrderedTask>(task_behaviour);
   LoadTask(*task, data_node, waypoints);
   co_return task;
+}
+
+Co::Task<std::unique_ptr<OrderedTask>>
+DownloadDeclaredTask(CurlGlobal &curl, const WeGlideSettings &settings,
+                     const TaskBehaviour &task_behaviour,
+                     const Waypoints *waypoints,
+                     ProgressListener &progress)
+{
+  assert(settings.pilot_id != 0);
+
+  const auto url = FmtBuffer<256>("{}/task/declaration/{}?cup=false&tsk=true",
+                                  settings.default_url, settings.pilot_id);
+  return DownloadTask(curl, CurlEasy{url},
+                      task_behaviour, waypoints,
+                      progress);
 }
 
 } // namespace WeGlide
