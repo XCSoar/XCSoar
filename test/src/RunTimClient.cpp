@@ -13,14 +13,6 @@
 
 struct Instance : CoInstance {
   const Net::ScopeInit net_init{GetEventLoop()};
-
-  std::vector<TIM::Thermal> value;
-
-  Co::InvokeTask DoRun(std::chrono::hours max_age,
-                       GeoPoint location, unsigned radius)
-  {
-    value = co_await TIM::GetThermals(*Net::curl, max_age, location, radius);
-  }
 };
 
 int
@@ -39,9 +31,10 @@ try {
 
   Instance instance;
 
-  instance.Run(instance.DoRun(max_age, location, radius));
+  const auto thermals = instance.Run(TIM::GetThermals(*Net::curl, max_age,
+                                                      location, radius));
 
-  for (const auto &i : instance.value) {
+  for (const auto &i : thermals) {
     printf("%f %f\n",
            i.location.latitude.Degrees(), i.location.longitude.Degrees());
   }

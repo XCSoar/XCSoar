@@ -20,26 +20,25 @@
 
 struct Instance : CoInstance {
   const Net::ScopeInit net_init{GetEventLoop()};
-
-  std::unique_ptr<OrderedTask> value;
-
-  Co::InvokeTask DoRun(const WeGlideSettings &settings,
-                       uint_least64_t task_id,
-                       const TaskBehaviour &task_behaviour,
-                       const Waypoints *waypoints,
-                       ProgressListener &progress)
-  {
-    if (task_id != 0)
-      value = co_await WeGlide::DownloadTask(*Net::curl, settings,
-                                             task_id,
-                                             task_behaviour, waypoints,
-                                             progress);
-    else
-      value = co_await WeGlide::DownloadDeclaredTask(*Net::curl, settings,
-                                                     task_behaviour, waypoints,
-                                                     progress);
-  }
 };
+
+static auto
+DownloadTask(const WeGlideSettings &settings,
+             uint_least64_t task_id,
+             const TaskBehaviour &task_behaviour,
+             const Waypoints *waypoints,
+             ProgressListener &progress)
+{
+  if (task_id != 0)
+    return WeGlide::DownloadTask(*Net::curl, settings,
+                                 task_id,
+                                 task_behaviour, waypoints,
+                                 progress);
+  else
+    return WeGlide::DownloadDeclaredTask(*Net::curl, settings,
+                                         task_behaviour, waypoints,
+                                         progress);
+}
 
 int
 main(int argc, char *argv[])
@@ -63,10 +62,10 @@ try {
 
   ConsoleOperationEnvironment env;
 
-  instance.Run(instance.DoRun(settings, task_id,
-                              task_behaviour, nullptr, env));
+  const auto value = instance.Run(DownloadTask(settings, task_id,
+                                               task_behaviour, nullptr, env));
 
-  if (!instance.value) {
+  if (!value) {
     fprintf(stderr, "No task\n");
     return EXIT_FAILURE;
   }
@@ -74,7 +73,7 @@ try {
   auto xml_node = XMLNode::CreateRoot(_T("Task"));
   WritableDataNodeXML data_node{xml_node};
 
-  SaveTask(data_node, *instance.value);
+  SaveTask(data_node, *value);
 
   StdioOutputStream _stdout{stdout};
   BufferedOutputStream bos{_stdout};

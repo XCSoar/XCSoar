@@ -19,17 +19,6 @@
 
 struct Instance : CoInstance {
   const Net::ScopeInit net_init{GetEventLoop()};
-
-  boost::json::value value;
-
-  Co::InvokeTask DoRun(const WeGlideSettings &settings,
-                       uint_least32_t glider_type,
-                       Path igc_path,
-                       ProgressListener &progress)
-  {
-    value = co_await WeGlide::UploadFlight(*Net::curl, settings, glider_type,
-                                           igc_path, progress);
-  }
 };
 
 int
@@ -53,11 +42,12 @@ try {
   Instance instance;
   ConsoleOperationEnvironment env;
 
-  instance.Run(instance.DoRun(settings, glider,
-                              igc_path, env));
+  const auto value =
+    instance.Run(WeGlide::UploadFlight(*Net::curl, settings, glider,
+                                       igc_path, env));
 
   StdioOutputStream _stdout(stdout);
-  Json::Serialize(_stdout, instance.value);
+  Json::Serialize(_stdout, value);
   return EXIT_SUCCESS;
 } catch (...) {
   PrintException(std::current_exception());
