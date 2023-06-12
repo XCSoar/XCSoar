@@ -69,6 +69,20 @@ DownloadTask(CurlGlobal &curl, CurlEasy easy,
 }
 
 Co::Task<std::unique_ptr<OrderedTask>>
+DownloadTask(CurlGlobal &curl, const WeGlideSettings &settings,
+             uint_least64_t task_id,
+             const TaskBehaviour &task_behaviour,
+             const Waypoints *waypoints,
+             ProgressListener &progress)
+{
+  const auto url = FmtBuffer<256>("{}/task/{}?cup=false&tsk=true",
+                                  settings.default_url, task_id);
+  return DownloadTask(curl, CurlEasy{url},
+                      task_behaviour, waypoints,
+                      progress);
+}
+
+Co::Task<std::unique_ptr<OrderedTask>>
 DownloadDeclaredTask(CurlGlobal &curl, const WeGlideSettings &settings,
                      const TaskBehaviour &task_behaviour,
                      const Waypoints *waypoints,

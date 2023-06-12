@@ -24,21 +24,33 @@ struct Instance : CoInstance {
   std::unique_ptr<OrderedTask> value;
 
   Co::InvokeTask DoRun(const WeGlideSettings &settings,
+                       uint_least64_t task_id,
                        const TaskBehaviour &task_behaviour,
                        const Waypoints *waypoints,
                        ProgressListener &progress)
   {
-    value = co_await WeGlide::DownloadDeclaredTask(*Net::curl, settings,
-                                                   task_behaviour, waypoints,
-                                                   progress);
+    if (task_id != 0)
+      value = co_await WeGlide::DownloadTask(*Net::curl, settings,
+                                             task_id,
+                                             task_behaviour, waypoints,
+                                             progress);
+    else
+      value = co_await WeGlide::DownloadDeclaredTask(*Net::curl, settings,
+                                                     task_behaviour, waypoints,
+                                                     progress);
   }
 };
 
 int
 main(int argc, char *argv[])
 try {
-  Args args(argc, argv, "PILOT");
+  Args args(argc, argv, "PILOT_ID [TASK_ID]");
   const unsigned pilot = atoi(args.ExpectNext());
+
+  uint_least64_t task_id = 0;
+  if (!args.IsEmpty())
+    task_id = ParseUint64(args.GetNext());
+
   args.ExpectEnd();
 
   WeGlideSettings settings;
@@ -48,9 +60,11 @@ try {
   task_behaviour.SetDefaults();
 
   Instance instance;
+
   ConsoleOperationEnvironment env;
 
-  instance.Run(instance.DoRun(settings, task_behaviour, nullptr, env));
+  instance.Run(instance.DoRun(settings, task_id,
+                              task_behaviour, nullptr, env));
 
   if (!instance.value) {
     fprintf(stderr, "No task\n");
