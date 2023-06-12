@@ -3,6 +3,7 @@
 
 #include "CoInstance.hpp"
 #include "net/client/WeGlide/DownloadTask.hpp"
+#include "net/client/WeGlide/ListDeclaredTasks.hpp"
 #include "net/client/WeGlide/Settings.hpp"
 #include "net/client/WeGlide/UploadFlight.hpp"
 #include "net/http/Init.hpp"
@@ -25,6 +26,7 @@
 static constexpr auto usage = R"usage(
   task TASK_ID
   declaration USER_ID
+  declarations
   upload USER_ID BIRTHDAY GLIDER IGCFILE
 )usage";
 
@@ -87,6 +89,16 @@ try {
       throw "No task";
 
     PrintTask(*task);
+    return EXIT_SUCCESS;
+  } else if (StringIsEqual(cmd, "declarations")) {
+    args.ExpectEnd();
+
+    const auto tasks = instance.Run(
+      WeGlide::ListDeclaredTasks(*Net::curl, settings, env));
+
+    for (const auto &task : tasks)
+      fmt::print("{}\t{:4.0f}\t{}\t{}\n", task.id, task.distance, task.name, task.user_name);
+
     return EXIT_SUCCESS;
   } else if (StringIsEqual(cmd, "upload")) {
     settings.pilot_id = atoi(args.ExpectNext());
