@@ -126,7 +126,7 @@ TaskActionsPanel::ReClick() noexcept
 }
 
 void
-TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
+TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &_parent,
                           [[maybe_unused]] const PixelRect &rc) noexcept
 {
   const auto &settings = CommonInterface::GetComputerSettings();
@@ -139,6 +139,10 @@ TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   if (settings.weglide.pilot_id != 0)
     AddButton(_("Download WeGlide task"),
               [this](){ OnDownloadClicked(); });
+
+  AddButton(_("All WeGlide tasks"), [this](){
+    parent.SetCurrent(parent.PAGE_WEGLIDE_LIST);
+  });
 
   if (is_simulator())
     /* cannot communicate with real devices in simulator mode */
