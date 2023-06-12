@@ -54,8 +54,6 @@ HAVE_POSIX := n
 HAVE_WIN32 := y
 HAVE_MSVCRT := y
 
-USE_CROSSTOOL_NG := n
-
 TARGET_ARCH :=
 
 # virtual targets ("flavors")
@@ -214,11 +212,7 @@ endif
 ifeq ($(TARGET),NEON)
   # Experimental target for generic ARMv7 with NEON on Linux
   override TARGET = UNIX
-  ifeq ($(USE_CROSSTOOL_NG),y)
-    HOST_TRIPLET ?= arm-unknown-linux-gnueabihf
-  else
-    HOST_TRIPLET ?= arm-linux-gnueabihf
-  endif
+  HOST_TRIPLET ?= arm-linux-gnueabihf
   TCPREFIX ?= $(HOST_TRIPLET)-
   ifeq ($(CLANG),n)
     TARGET_ARCH += -mcpu=cortex-a8
@@ -473,22 +467,9 @@ ifeq ($(TARGET_IS_KOBO),y)
   # the actual host triplet is different.
   ACTUAL_HOST_TRIPLET = armv7a-a8neon-linux-musleabihf
 
-  ifeq ($(USE_CROSSTOOL_NG),y)
-    HOST_TRIPLET = $(ACTUAL_HOST_TRIPLET)
-    LLVM_TARGET = $(ACTUAL_HOST_TRIPLET)
-    KOBO_TOOLCHAIN = $(HOME)/x-tools/$(HOST_TRIPLET)
-    KOBO_SYSROOT = $(KOBO_TOOLCHAIN)/$(HOST_TRIPLET)/sysroot
-    TCPREFIX = $(KOBO_TOOLCHAIN)/bin/$(HOST_TRIPLET)-
+  TARGET_CXXFLAGS += -Wno-psabi
 
-    ifeq ($(CLANG),y)
-      TARGET_CPPFLAGS += -B$(KOBO_TOOLCHAIN)
-      TARGET_CPPFLAGS += --sysroot=$(KOBO_SYSROOT)
-    endif
-  else
-    TARGET_CXXFLAGS += -Wno-psabi
-
-    TCPREFIX = $(abspath $(THIRDPARTY_LIBS_DIR))/bin/$(ACTUAL_HOST_TRIPLET)-
-  endif
+  TCPREFIX = $(abspath $(THIRDPARTY_LIBS_DIR))/bin/$(ACTUAL_HOST_TRIPLET)-
 endif
 
 ifeq ($(TARGET),ANDROID)
@@ -561,14 +542,6 @@ ifeq ($(TARGET_IS_KOBO),y)
   # pick up libc.a(pthread_cond_*.o); these linker options force the
   # linker to use them.  This needs a proper solution!
   TARGET_LDFLAGS += -Wl,-u,pthread_cond_signal -Wl,-u,pthread_cond_broadcast -Wl,-u,pthread_cond_wait
-
-  ifeq ($(USE_CROSSTOOL_NG),y)
-    ifeq ($(CLANG),y)
-     TARGET_LDFLAGS += -B$(KOBO_TOOLCHAIN)
-     TARGET_LDFLAGS += -B$(KOBO_TOOLCHAIN)/bin
-     TARGET_LDFLAGS += --sysroot=$(KOBO_SYSROOT)
-    endif
-  endif
 endif
 
 ifeq ($(TARGET),ANDROID)
