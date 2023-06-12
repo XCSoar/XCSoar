@@ -51,7 +51,7 @@ TaskManagerDialog::KeyPress(unsigned key_code) noexcept
 
     if (GetCurrentIndex() != 3) {
       /* switch to "close" page instead of closing the dialog */
-      SetCurrent(3);
+      SetCurrent(CloseTab);
       SetFocus();
       return true;
     }
