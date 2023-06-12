@@ -14,6 +14,7 @@
 #include "lib/curl/Easy.hxx"
 #include "lib/curl/Setup.hxx"
 #include "lib/fmt/RuntimeError.hxx"
+#include "lib/fmt/ToBuffer.hxx"
 #include "io/StringOutputStream.hxx"
 #include "util/ConvertString.hpp"
 
@@ -33,9 +34,8 @@ DownloadDeclaredTask(CurlGlobal &curl, const WeGlideSettings &settings,
 {
   assert(settings.pilot_id != 0);
 
-  char url[256];
-  snprintf(url, sizeof(url), "%s/task/declaration/%u?cup=false&tsk=true",
-           settings.default_url, settings.pilot_id);
+  const auto url = FmtBuffer<256>("{}/task/declaration/{}?cup=false&tsk=true",
+                                  settings.default_url, settings.pilot_id);
 
   CurlEasy easy{url};
   Curl::Setup(easy);
