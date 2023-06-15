@@ -13,7 +13,7 @@
 
 void
 FormatIGCTaskTimestamp(char *buffer, const BrokenDateTime &date_time,
-                       unsigned number_of_turnpoints)
+                       unsigned number_of_turnpoints) noexcept
 {
   assert(date_time.IsPlausible());
 
@@ -29,7 +29,7 @@ FormatIGCTaskTimestamp(char *buffer, const BrokenDateTime &date_time,
 }
 
 char *
-FormatIGCLocation(char *buffer, const GeoPoint &location)
+FormatIGCLocation(char *buffer, const GeoPoint &location) noexcept
 {
   char latitude_suffix = location.latitude.IsNegative() ? 'S' : 'N';
   unsigned latitude =
@@ -48,7 +48,7 @@ FormatIGCLocation(char *buffer, const GeoPoint &location)
 
 void
 FormatIGCTaskTurnPoint(std::span<char> dest, const GeoPoint &location,
-                       const TCHAR *name)
+                       const TCHAR *name) noexcept
 {
   char *p = dest.data();
   char *const end = p + dest.size();
