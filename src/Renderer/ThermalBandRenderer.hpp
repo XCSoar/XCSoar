@@ -20,63 +20,63 @@ class ThermalBandRenderer {
   const ChartLook &chart_look;
 
 public:
-  ThermalBandRenderer(const ThermalBandLook &_look,
-                      const ChartLook &_chart_look)
+  constexpr ThermalBandRenderer(const ThermalBandLook &_look,
+                                const ChartLook &_chart_look) noexcept
     :look(_look), chart_look(_chart_look) {}
 
-  void DrawThermalBand(const MoreData& basic,
-                       const DerivedInfo& calculated,
+  void DrawThermalBand(const MoreData &basic,
+                       const DerivedInfo &calculated,
                        const ComputerSettings &settings_computer,
                        Canvas &canvas,
                        const PixelRect &rc,
-                       const TaskBehaviour& task_props,
+                       const TaskBehaviour &task_props,
                        const bool is_map,
-                       const OrderedTaskSettings *ordered_props=nullptr) const;
+                       const OrderedTaskSettings *ordered_props=nullptr) const noexcept;
 
   void DrawThermalBandSpark(const MoreData &basic,
-                            const DerivedInfo& calculated,
+                            const DerivedInfo &calculated,
                             const ComputerSettings &settings_computer,
                             Canvas &canvas,
                             const PixelRect &rc,
-                            const TaskBehaviour& task_props) const;
+                            const TaskBehaviour &task_props) const noexcept;
 
 protected:
   void _DrawThermalBand(const MoreData &basic,
-                        const DerivedInfo& calculated,
+                        const DerivedInfo &calculated,
                         const ComputerSettings &settings_computer,
                         ChartRenderer &chart,
-                        const TaskBehaviour& task_props,
+                        const TaskBehaviour &task_props,
                         const bool is_infobox,
                         const bool is_map,
-                        const OrderedTaskSettings* ordered_props) const;
+                        const OrderedTaskSettings* ordered_props) const noexcept;
 
   void ScaleChart(const DerivedInfo &calculated,
                   const ComputerSettings &settings_computer,
-                  const TaskBehaviour& task_props,
+                  const TaskBehaviour &task_props,
                   ChartRenderer &chart,
-                  const double hoffset) const;
+                  const double hoffset) const noexcept;
 
-  void DrawWorkingBand(const DerivedInfo& calculated,
+  void DrawWorkingBand(const DerivedInfo &calculated,
                        ChartRenderer &chart,
-                       const double hoffset) const;
+                       const double hoffset) const noexcept;
 
-  double GetHeightOffset(const DerivedInfo& calculated,
-                         const TaskBehaviour& task_props) const;
+  double GetHeightOffset(const DerivedInfo &calculated,
+                         const TaskBehaviour &task_props) const noexcept;
 
   void DrawThermalProfile(const ThermalBand &thermal_band,
                           ChartRenderer &chart,
-                          const double hoffset,
-                          const bool alpha_shade,
-                          const bool active) const;
+                          double hoffset,
+                          bool alpha_shade,
+                          bool active) const noexcept;
 
   static void ScaleChartFromThermalBand(const ThermalBand &thermal_band,
                                         ChartRenderer &chart,
-                                        const double hoffset);
+                                        double hoffset) noexcept;
 
-  static void DrawRiskMC(const DerivedInfo& calculated,
+  static void DrawRiskMC(const DerivedInfo &calculated,
                          const ComputerSettings &settings_computer,
                          ChartRenderer &chart,
-                         const double hoffset,
-                         const bool is_infobox,
-                         const bool is_map);
+                         double hoffset,
+                         bool is_infobox,
+                         bool is_map) noexcept;
 };

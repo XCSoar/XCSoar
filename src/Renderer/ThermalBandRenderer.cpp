@@ -22,10 +22,10 @@
 
 void
 ThermalBandRenderer::ScaleChart(const DerivedInfo &calculated,
-                                 const ComputerSettings &settings_computer,
-                                 const TaskBehaviour& task_props,
+                                const ComputerSettings &settings_computer,
+                                const TaskBehaviour &task_props,
                                 ChartRenderer &chart,
-                                const double hoffset) const
+                                const double hoffset) const noexcept
 {
   chart.ScaleYFromValue(task_props.route_planner.safety_height_terrain);
   chart.ScaleYFromValue(calculated.common_stats.height_max_working-hoffset);
@@ -38,7 +38,7 @@ ThermalBandRenderer::ScaleChart(const DerivedInfo &calculated,
 void
 ThermalBandRenderer::ScaleChartFromThermalBand(const ThermalBand &thermal_band,
                                                ChartRenderer &chart,
-                                               const double hoffset)
+                                               const double hoffset) noexcept
 {
   if (thermal_band.Valid()) {
     chart.ScaleXFromValue(thermal_band.GetMaxW());
@@ -52,7 +52,7 @@ ThermalBandRenderer::DrawThermalProfile(const ThermalBand &thermal_band,
                                         ChartRenderer &chart,
                                         const double hoffset,
                                         const bool is_infobox,
-                                        const bool active) const
+                                        const bool active) const noexcept
 {
   if (!thermal_band.Valid())
     return;
@@ -84,7 +84,7 @@ ThermalBandRenderer::DrawThermalProfile(const ThermalBand &thermal_band,
   }
 
   const Pen *pen = is_infobox ? nullptr : (active? &look.pen_active : &look.pen_inactive);
-  const Brush& brush = active? look.brush_active : look.brush_inactive;
+  const Brush &brush = active? look.brush_active : look.brush_inactive;
 
   if (!is_infobox) {
 #ifdef ENABLE_OPENGL
@@ -100,12 +100,12 @@ ThermalBandRenderer::DrawThermalProfile(const ThermalBand &thermal_band,
 
 
 void
-ThermalBandRenderer::DrawRiskMC(const DerivedInfo& calculated,
+ThermalBandRenderer::DrawRiskMC(const DerivedInfo &calculated,
                                 const ComputerSettings &settings_computer,
                                 ChartRenderer &chart,
                                 const double hoffset,
                                 const bool is_infobox,
-                                const bool is_map)
+                                const bool is_map) noexcept
 {
   if (settings_computer.polar.glide_polar_task.GetMC()<= 0)
     return;
@@ -140,13 +140,13 @@ ThermalBandRenderer::DrawRiskMC(const DerivedInfo& calculated,
 
 void
 ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
-                                      const DerivedInfo& calculated,
+                                      const DerivedInfo &calculated,
                                       const ComputerSettings &settings_computer,
                                       ChartRenderer &chart,
-                                      const TaskBehaviour& task_props,
+                                      const TaskBehaviour &task_props,
                                       const bool is_infobox,
                                       const bool is_map,
-                                      const OrderedTaskSettings *ordered_props) const
+                                      const OrderedTaskSettings *ordered_props) const noexcept
 {
   // all heights here are relative to ground
   const auto hoffset = calculated.GetTerrainBaseFallback();
@@ -214,13 +214,13 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
 
 void
 ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
-                                     const DerivedInfo& calculated,
+                                     const DerivedInfo &calculated,
                                      const ComputerSettings &settings_computer,
                                      Canvas &canvas,
                                      const PixelRect &rc,
-                                     const TaskBehaviour& task_props,
+                                     const TaskBehaviour &task_props,
                                      const bool is_map,
-                                     const OrderedTaskSettings *ordered_props) const
+                                     const OrderedTaskSettings *ordered_props) const noexcept
 {
   ChartRenderer chart(chart_look, canvas, rc, !is_map);
   if (!is_map) {
@@ -248,11 +248,11 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
 
 void
 ThermalBandRenderer::DrawThermalBandSpark(const MoreData &basic,
-                                          const DerivedInfo& calculated,
+                                          const DerivedInfo &calculated,
                                           const ComputerSettings &settings_computer,
                                           Canvas &canvas,
                                           const PixelRect &rc,
-                                          const TaskBehaviour &task_props) const
+                                          const TaskBehaviour &task_props) const noexcept
 {
   ChartRenderer chart(chart_look, canvas, rc, false);
   chart.Begin();
@@ -264,9 +264,9 @@ ThermalBandRenderer::DrawThermalBandSpark(const MoreData &basic,
 }
 
 void
-ThermalBandRenderer::DrawWorkingBand(const DerivedInfo& calculated_info,
+ThermalBandRenderer::DrawWorkingBand(const DerivedInfo &calculated_info,
                                      ChartRenderer &chart,
-                                     const double hoffset) const
+                                     const double hoffset) const noexcept
 {
   const auto h_max = calculated_info.common_stats.height_max_working-hoffset;
   if ((h_max> chart.GetYMin()) && (h_max< chart.GetYMax())) {
