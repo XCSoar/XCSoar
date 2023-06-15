@@ -71,19 +71,19 @@ struct IGCFix
    */
   int16_t siu;
 
-  void ClearExtensions() {
+  constexpr void ClearExtensions() noexcept {
     enl = rpm = -1;
     hdm = hdt = trm = trt = -1;
     gsp = ias = tas = -1;
     siu = -1;
   }
 
-  void Clear() {
+  constexpr void Clear() noexcept {
     time = BrokenTime::Invalid();
     ClearExtensions();
   }
 
-  bool IsDefined() const {
+  constexpr bool IsDefined() const noexcept {
     return time.IsPlausible();
   }
 
@@ -92,5 +92,5 @@ struct IGCFix
    *
    * @return true if this object is a valid new fix
    */
-  bool Apply(const NMEAInfo &basic);
+  bool Apply(const NMEAInfo &basic) noexcept;
 };
