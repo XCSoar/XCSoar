@@ -38,8 +38,8 @@ IGCWriter::WriteLine(const char *line)
   assert(strchr(line, '\r') == NULL);
   assert(strchr(line, '\n') == NULL);
 
-  char *const dest = buffer;
-  char *const end = dest + MAX_IGC_BUFF;
+  char *const dest = buffer.data();
+  char *const end = dest + buffer.size();
 
   char *p = CopyIGCString(dest, end, line);
 
@@ -50,10 +50,10 @@ void
 IGCWriter::WriteLine(const char *a, const TCHAR *b)
 {
   size_t a_length = strlen(a);
-  assert(a_length < MAX_IGC_BUFF);
+  assert(a_length < buffer.size());
 
-  char *const dest = buffer;
-  char *const end = dest + MAX_IGC_BUFF, *p = dest;
+  char *const dest = buffer.data();
+  char *const end = dest + buffer.size(), *p = dest;
 
   p = std::copy_n(a, a_length, p);
   p = CopyIGCString(p, end, b);

@@ -8,6 +8,7 @@
 #include "io/FileOutputStream.hxx"
 #include "io/BufferedOutputStream.hxx"
 
+#include <array>
 #include <string_view>
 
 #include <tchar.h>
@@ -19,10 +20,6 @@ struct NMEAInfo;
 struct GeoPoint;
 
 class IGCWriter {
-  enum {
-    MAX_IGC_BUFF = 255,
-  };
-
   FileOutputStream file;
   BufferedOutputStream buffered;
 
@@ -30,7 +27,7 @@ class IGCWriter {
 
   IGCFix fix;
 
-  char buffer[MAX_IGC_BUFF];
+  std::array<char, 255> buffer;
 
 public:
   /**
