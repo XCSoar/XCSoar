@@ -156,8 +156,8 @@ IGCWriter::LoggerNote(const TCHAR *text)
  * Applies range checks to the specified altitude value and converts
  * it to an integer suitable for printing in the IGC file.
  */
-static int
-NormalizeIGCAltitude(int value)
+static constexpr int
+NormalizeIGCAltitude(int value) noexcept
 {
   if (value < -9999)
     /* for negative values, there are only 4 characters left (after
