@@ -34,11 +34,16 @@ CopyASCII(char *dest, std::size_t dest_size,
 }
 
 char *
-CopyASCIIUpper(char *dest, std::string_view src) noexcept
+CopyASCIIUpper(char *dest, std::size_t dest_size,
+	       std::string_view src) noexcept
 {
+	const auto dest_end = dest + dest_size;
 	for (auto ch : src) {
 		if (!IsASCII(ch))
 			continue;
+
+		if (dest == dest_end)
+			break;
 
 		*dest++ = ToUpperASCII(ch);
 	}

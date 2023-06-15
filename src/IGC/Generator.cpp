@@ -47,12 +47,13 @@ FormatIGCLocation(char *buffer, const GeoPoint &location)
 }
 
 void
-FormatIGCTaskTurnPoint(char *buffer, const GeoPoint &location,
+FormatIGCTaskTurnPoint(std::span<char> dest, const GeoPoint &location,
                        const TCHAR *name)
 {
-  char *p = buffer;
+  char *p = dest.data();
+  char *const end = p + dest.size();
   *p++ = 'C';
   p = FormatIGCLocation(p, location);
-  p = CopyASCIIUpper(p, name);
+  p = CopyASCIIUpper(p, end - p - 1, name);
   *p = '\0';
 }

@@ -39,4 +39,5 @@ CopyASCII(char *dest, std::size_t dest_size,
  */
 [[gnu::nonnull]]
 char *
-CopyASCIIUpper(char *dest, std::string_view src) noexcept;
+CopyASCIIUpper(char *dest, std::size_t dest_size,
+	       std::string_view src) noexcept;

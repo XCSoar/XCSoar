@@ -3,6 +3,7 @@ Version 7.35 - not yet released
   - fix crash in plane list
 * calculations
   - fix bogus "Task Started" after re-entering the start zone
+* fix IGC logger crash with very long turnpoint names
 
 Version 7.34 - 2023/06/06
 * user interface
