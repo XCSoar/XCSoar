@@ -64,15 +64,16 @@ CopyASCII(char *dest, std::size_t dest_size,
 	return TemplateCopyASCII(dest, dest_size, src);
 }
 
-void
-CopyASCIIUpper(char *dest, const wchar_t *src) noexcept
+char *
+CopyASCIIUpper(char *dest, std::wstring_view src) noexcept
 {
-	do {
-		wchar_t t = *src;
+	for (auto t : src) {
 		if (!IsASCII(t))
 			continue;
 
 		char ch = (char)t;
 		*dest++ = ToUpperASCII(ch);
-	} while (*src++ != '\0');
+	}
+
+	return dest;
 }

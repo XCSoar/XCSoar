@@ -53,5 +53,6 @@ FormatIGCTaskTurnPoint(char *buffer, const GeoPoint &location,
   char *p = buffer;
   *p++ = 'C';
   p = FormatIGCLocation(p, location);
-  CopyASCIIUpper(p, name);
+  p = CopyASCIIUpper(p, name);
+  *p = '\0';
 }
