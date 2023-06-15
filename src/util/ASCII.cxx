@@ -38,11 +38,9 @@ CopyASCIIUpper(char *dest, const char *src) noexcept
 {
 	do {
 		char ch = *src;
-		if (IsASCII(ch)) {
-			if (IsLowerAlphaASCII(ch))
-				ch -= 'a' - 'A';
+		if (!IsASCII(ch))
+			continue;
 
-			*dest++ = ch;
-		}
+		*dest++ = ToUpperASCII(ch);
 	} while (*src++ != '\0');
 }

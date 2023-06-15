@@ -69,12 +69,10 @@ CopyASCIIUpper(char *dest, const wchar_t *src) noexcept
 {
 	do {
 		wchar_t t = *src;
-		if (IsASCII(t)) {
-			char ch = (char)t;
-			if (IsLowerAlphaASCII(ch))
-				ch -= 'a' - 'A';
+		if (!IsASCII(t))
+			continue;
 
-			*dest++ = ch;
-		}
+		char ch = (char)t;
+		*dest++ = ToUpperASCII(ch);
 	} while (*src++ != '\0');
 }
