@@ -189,7 +189,7 @@ PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
     return;
   }
 
-  ChartProjection projection(rc, task);
+  ChartProjection projection(rc, task.GetTaskProjection(), 1);
   PaintTask(canvas, projection, task, location,
             settings_map,
             task_look, airspace_look, terrain, airspaces,

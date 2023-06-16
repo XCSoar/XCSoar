@@ -288,7 +288,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
       return;
     }
 
-    proj.Set(rc_chart, task);
+    proj.Set(rc_chart, task.GetTaskProjection(), 1);
 
     // TODO still holding the task lock, now taking the terrain lock
     background_renderer.Draw(canvas, proj, settings_map.terrain);
