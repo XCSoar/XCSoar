@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "BackgroundRenderer.hpp"
 #include "TrailRenderer.hpp"
 
 #include <tchar.h>
@@ -25,13 +26,18 @@ class FlightStatisticsRenderer {
   const ChartLook &chart_look;
   const MapLook &map_look;
 
+  BackgroundRenderer background_renderer;
+
   TrailRenderer trail_renderer;
 
 public:
   FlightStatisticsRenderer(const ChartLook &_chart_look,
                            const MapLook &_map_look) noexcept;
 
-public:
+  void SetTerrain(const RasterTerrain *terrain) noexcept {
+    background_renderer.SetTerrain(terrain);
+  }
+
   void RenderContest(Canvas &canvas, const PixelRect rc,
                      const NMEAInfo &nmea_info,
                      const ComputerSettings &settings_computer,

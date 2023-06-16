@@ -98,6 +98,13 @@ FlightStatisticsRenderer::RenderContest(Canvas &canvas, const PixelRect rc,
 
   const ChartProjection proj(rc_chart, TaskProjection(bounds));
 
+  background_renderer.Draw(canvas, proj, settings_map.terrain);
+
+#ifdef ENABLE_OPENGL
+  /* desaturate the map background, to focus on the contest */
+  canvas.FadeToWhite(0xc0);
+#endif
+
   {
     // draw place names found in the retrospective task
     //    canvas.Select(*dialog_look.small_font);
@@ -268,6 +275,14 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
     }
 
     proj.Set(rc_chart, task);
+
+    // TODO still holding the task lock, now taking the terrain lock
+    background_renderer.Draw(canvas, proj, settings_map.terrain);
+
+#ifdef ENABLE_OPENGL
+    /* desaturate the map background, to focus on the task */
+    canvas.FadeToWhite(0xc0);
+#endif
 
     OZRenderer ozv(map_look.task, map_look.airspace, settings_map.airspace);
     TaskPointRenderer tpv(canvas, proj, map_look.task,
