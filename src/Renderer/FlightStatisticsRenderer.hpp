@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "Renderer/TrailRenderer.hpp"
+#include "TrailRenderer.hpp"
 
 #include <tchar.h>
 
@@ -29,7 +29,7 @@ class FlightStatisticsRenderer {
 
 public:
   FlightStatisticsRenderer(const ChartLook &_chart_look,
-                           const MapLook &_map_look);
+                           const MapLook &_map_look) noexcept;
 
 public:
   void RenderContest(Canvas &canvas, const PixelRect rc,
@@ -38,22 +38,22 @@ public:
                      const MapSettings &settings_map,
                      const ContestStatistics &contest,
                      const TraceComputer &trace_computer,
-                     const Retrospective &retrospective) const;
+                     const Retrospective &retrospective) const noexcept;
 
   void RenderTask(Canvas &canvas, const PixelRect rc,
                   const NMEAInfo &nmea_info,
                   const ComputerSettings &settings_computer,
                   const MapSettings &settings_map,
                   const ProtectedTaskManager &task,
-                  const TraceComputer *trace_computer) const;
+                  const TraceComputer *trace_computer) const noexcept;
 
-  static void CaptionTask(TCHAR *sTmp, const DerivedInfo &derived);
+  static void CaptionTask(TCHAR *sTmp, const DerivedInfo &derived) noexcept;
   static void CaptionContest(TCHAR *sTmp, const ContestSettings &settings,
-                             const DerivedInfo &derived);
+                             const DerivedInfo &derived) noexcept;
 
 private:
   void DrawContestSolution(Canvas &canvas, const Projection &projection,
-                           const ContestStatistics &statistics, unsigned i) const;
+                           const ContestStatistics &statistics, unsigned i) const noexcept;
   void DrawContestTriangle(Canvas &canvas, const Projection &projection,
-                           const ContestStatistics &statistics, unsigned i) const;
+                           const ContestStatistics &statistics, unsigned i) const noexcept;
 };

@@ -32,7 +32,7 @@
 using std::max;
 
 FlightStatisticsRenderer::FlightStatisticsRenderer(const ChartLook &_chart_look,
-                                                   const MapLook &_map_look)
+                                                   const MapLook &_map_look) noexcept
   :chart_look(_chart_look),
    map_look(_map_look),
    trail_renderer(map_look.trail) {}
@@ -41,7 +41,7 @@ void
 FlightStatisticsRenderer::DrawContestSolution(Canvas &canvas,
                                               const Projection &projection,
                                               const ContestStatistics &statistics,
-                                              unsigned i) const
+                                              unsigned i) const noexcept
 {
   if (!statistics.GetResult(i).IsDefined())
     return;
@@ -53,7 +53,7 @@ FlightStatisticsRenderer::DrawContestSolution(Canvas &canvas,
 
 void
 FlightStatisticsRenderer::DrawContestTriangle(Canvas &canvas, const Projection &projection,
-                                              const ContestStatistics &statistics, unsigned i) const
+                                              const ContestStatistics &statistics, unsigned i) const noexcept
 {
   if (!statistics.GetResult(i).IsDefined() ||
       statistics.GetSolution(i).size() != 5)
@@ -72,7 +72,7 @@ FlightStatisticsRenderer::RenderContest(Canvas &canvas, const PixelRect rc,
                                         const MapSettings &settings_map,
                                         const ContestStatistics &contest,
                                         const TraceComputer &trace_computer,
-                                        const Retrospective &retrospective) const
+                                        const Retrospective &retrospective) const noexcept
 {
   ChartRenderer chart(chart_look, canvas, rc);
   chart.Begin();
@@ -170,7 +170,7 @@ FlightStatisticsRenderer::RenderContest(Canvas &canvas, const PixelRect rc,
 void
 FlightStatisticsRenderer::CaptionContest(TCHAR *sTmp,
                                          const ContestSettings &settings,
-                                         const DerivedInfo &derived)
+                                         const DerivedInfo &derived) noexcept
 {
   if (settings.contest == Contest::OLC_PLUS) {
     const ContestResult& result =
@@ -248,7 +248,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
                                      [[maybe_unused]] const ComputerSettings &settings_computer,
                                      const MapSettings &settings_map,
                                      const ProtectedTaskManager &_task_manager,
-                                     const TraceComputer *trace_computer) const
+                                     const TraceComputer *trace_computer) const noexcept
 {
   ChartRenderer chart(chart_look, canvas, rc);
   chart.Begin();
@@ -294,7 +294,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
 }
 
 void
-FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived)
+FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived) noexcept
 {
   const TaskStats &task_stats = derived.ordered_task_stats;
   const CommonStats &common = derived.common_stats;
