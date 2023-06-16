@@ -614,28 +614,6 @@ public:
   bool HasTargets() const;
 
   /**
-   * Find location of center of task (for rendering purposes)
-   *
-   * @return Location of center of task or GeoPoint::Invalid()
-   */
-  [[gnu::pure]]
-  GeoPoint GetTaskCenter() const noexcept {
-    assert(!IsEmpty());
-    return task_projection.GetCenter();
-  }
-
-  /**
-   * Find approximate radius of task from center to edge (for rendering purposes)
-   *
-   * @return Radius (m) from center to edge of task
-   */
-  [[gnu::pure]]
-  double GetTaskRadius() const noexcept {
-    assert(!IsEmpty());
-    return task_projection.ApproxRadius();
-  }
-
-  /**
    * returns the index of the highest intermediate TP that has been entered.
    * if none have been entered, returns zero
    * If start has exited, returns zero
