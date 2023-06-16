@@ -390,6 +390,7 @@ ChartControl::OnPaint(Canvas &canvas) noexcept
       const auto &trace_computer = glide_computer.GetTraceComputer();
       fs_renderer.RenderTask(canvas, rcgfx, basic,
                              settings_computer, settings_map,
+                             calculated.ordered_task_stats,
                              *protected_task_manager,
                              &trace_computer);
     }

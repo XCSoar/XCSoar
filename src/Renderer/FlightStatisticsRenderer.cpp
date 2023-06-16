@@ -268,15 +268,41 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
                                      const NMEAInfo &nmea_info,
                                      [[maybe_unused]] const ComputerSettings &settings_computer,
                                      const MapSettings &settings_map,
+                                     const TaskStats &task_stats,
                                      const ProtectedTaskManager &_task_manager,
                                      const TraceComputer *trace_computer) noexcept
 {
   ChartRenderer chart(chart_look, canvas, rc);
   chart.Begin();
 
-  ChartProjection proj;
+  if (!task_stats.task_valid || !task_stats.bounds.IsValid()) {
+    chart.DrawNoData();
+    chart.Finish();
+    return;
+  }
 
   const PixelRect &rc_chart = chart.GetChartRect();
+  const ChartProjection proj{rc_chart, TaskProjection{task_stats.bounds}, 1};
+
+  background_renderer.Draw(canvas, proj, settings_map.terrain);
+
+  {
+#ifndef ENABLE_OPENGL
+    BufferCanvas stencil_canvas;
+    stencil_canvas.Create(canvas);
+#endif
+
+    airspace_renderer.Draw(canvas,
+#ifndef ENABLE_OPENGL
+                           stencil_canvas,
+#endif
+                           proj, settings_map.airspace);
+  }
+
+#ifdef ENABLE_OPENGL
+  /* desaturate the map background, to focus on the task */
+  canvas.FadeToWhite(0xc0);
+#endif
 
   {
     ProtectedTaskManager::Lease task_manager(_task_manager);
@@ -287,29 +313,6 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
       chart.Finish();
       return;
     }
-
-    proj.Set(rc_chart, task.GetTaskProjection(), 1);
-
-    // TODO still holding the task lock, now taking the terrain lock
-    background_renderer.Draw(canvas, proj, settings_map.terrain);
-
-    {
-#ifndef ENABLE_OPENGL
-      BufferCanvas stencil_canvas;
-      stencil_canvas.Create(canvas);
-#endif
-
-      airspace_renderer.Draw(canvas,
-#ifndef ENABLE_OPENGL
-                             stencil_canvas,
-#endif
-                             proj, settings_map.airspace);
-    }
-
-#ifdef ENABLE_OPENGL
-    /* desaturate the map background, to focus on the task */
-    canvas.FadeToWhite(0xc0);
-#endif
 
     OZRenderer ozv(map_look.task, map_look.airspace, settings_map.airspace);
     TaskPointRenderer tpv(canvas, proj, map_look.task,

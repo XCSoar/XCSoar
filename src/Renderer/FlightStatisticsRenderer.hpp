@@ -15,6 +15,7 @@ struct DerivedInfo;
 struct ContestSettings;
 struct ComputerSettings;
 struct MapSettings;
+class TaskStats;
 class Canvas;
 class ProtectedTaskManager;
 class TraceComputer;
@@ -57,6 +58,7 @@ public:
                   const NMEAInfo &nmea_info,
                   const ComputerSettings &settings_computer,
                   const MapSettings &settings_map,
+                  const TaskStats &task_stats,
                   const ProtectedTaskManager &task,
                   const TraceComputer *trace_computer) noexcept;
 
