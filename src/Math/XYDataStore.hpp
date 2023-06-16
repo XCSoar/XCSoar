@@ -57,26 +57,38 @@ public:
   void StoreReset() noexcept;
 
   constexpr double GetMinX() const noexcept {
+    assert(!IsEmpty());
+
     return x_min;
   }
 
   constexpr double GetMaxX() const noexcept {
+    assert(!IsEmpty());
+
     return x_max;
   }
 
   constexpr double GetMiddleX() const noexcept {
+    assert(!IsEmpty());
+
     return (x_min + x_max) / 2.;
   }
 
   constexpr double GetMinY() const noexcept {
+    assert(!IsEmpty());
+
     return y_min;
   }
 
   constexpr double GetMaxY() const noexcept {
+    assert(!IsEmpty());
+
     return y_max;
   }
 
   constexpr std::span<const Slot> GetSlots() const noexcept {
+    assert(!IsEmpty());
+
     return slots;
   }
 
