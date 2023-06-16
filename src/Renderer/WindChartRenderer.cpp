@@ -47,6 +47,12 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   chart.SetYLabel(_T("h"), Units::GetAltitudeName());
   chart.Begin();
 
+  if (fs.altitude_base.IsEmpty() || fs.altitude_ceiling.IsEmpty()) {
+    chart.DrawNoData();
+    chart.Finish();
+    return;
+  }
+
   const auto height =
     fs.altitude_ceiling.GetMaxY() - fs.altitude_ceiling.GetMinY();
   if (height <= 10) {
