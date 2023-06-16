@@ -41,8 +41,9 @@ class ChartRenderer
     double scale, min, max;
     bool unscaled = true;
 
-    [[gnu::pure]]
-    int ToScreen(double value) const noexcept;
+    constexpr int ToScreen(double value) const noexcept {
+      return int((value - min) * scale);
+    }
   } x, y;
 
   int x_label_left, y_label_bottom;
@@ -138,14 +139,18 @@ public:
   double GetXMax() const noexcept { return x.max; }
 
   [[gnu::pure]]
-  int ScreenX(double x) const noexcept;
+  int ScreenX(double _x) const noexcept {
+    return rc_chart.left + x.ToScreen(_x);
+  }
 
   [[gnu::pure]]
-  int ScreenY(double y) const noexcept;
+  int ScreenY(double _y) const noexcept {
+    return rc_chart.bottom - y.ToScreen(_y);
+  }
 
   [[gnu::pure]]
   PixelPoint ToScreen(double x, double y) const noexcept {
-    return PixelPoint{ ScreenX(x), ScreenY(y) };
+    return {ScreenX(x), ScreenY(y)};
   }
 
   Canvas &GetCanvas() noexcept { return canvas; }

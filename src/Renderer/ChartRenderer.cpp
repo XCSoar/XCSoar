@@ -17,12 +17,6 @@
 #include "ui/canvas/opengl/Scope.hpp"
 #endif
 
-int
-ChartRenderer::Axis::ToScreen(double value) const noexcept
-{
-  return int((value - min) * scale);
-}
-
 ChartRenderer::ChartRenderer(const ChartLook &_look, Canvas &the_canvas,
                              const PixelRect &the_rc,
                              [[maybe_unused]] const bool has_padding) noexcept
@@ -604,18 +598,6 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step,
     canvas.DrawLine(line[0], line[2]);
     canvas.DrawLine(line[1], line[3]);
   }
-}
-
-int
-ChartRenderer::ScreenX(double _x) const noexcept
-{
-  return rc_chart.left + x.ToScreen(_x);
-}
-
-int
-ChartRenderer::ScreenY(double _y) const noexcept
-{
-  return rc_chart.bottom - y.ToScreen(_y);
 }
 
 void
