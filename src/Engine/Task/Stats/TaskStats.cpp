@@ -10,6 +10,7 @@ static constexpr int flight_mode_height_margin = 120;
 void
 TaskStats::reset() noexcept
 {
+  bounds.SetInvalid();
   total.Reset();
   current_leg.Reset();
 

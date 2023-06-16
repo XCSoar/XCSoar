@@ -114,6 +114,21 @@ OrderedTask::UpdateStatsGeometry()
 {
   ScanStartFinish();
 
+  if (task_points.empty())
+    stats.bounds.SetInvalid();
+  else {
+    // scan location of task points
+    auto &first = *task_points.front();
+    stats.bounds = first.GetLocation();
+
+    for (const auto &tp : task_points)
+      tp->ScanBounds(stats.bounds);
+
+    // ... and optional start points
+    for (const auto &tp : optional_start_points)
+      tp->ScanBounds(stats.bounds);
+  }
+
   stats.task_valid = !IsError(CheckTask());
   stats.has_targets = stats.task_valid && HasTargets();
   stats.is_mat = GetFactoryType() == TaskFactoryType::MAT;
@@ -132,17 +147,7 @@ OrderedTask::UpdateGeometry()
 
   first.ScanActive(*task_points[active_task_point]);
 
-  // scan location of task points
-  GeoBounds bounds(first.GetLocation());
-  for (const auto &tp : task_points)
-    tp->ScanBounds(bounds);
-
-  // ... and optional start points
-  for (const auto &tp : optional_start_points)
-    tp->ScanBounds(bounds);
-
-  // projection can now be determined
-  task_projection = TaskProjection(bounds);
+  task_projection = TaskProjection(stats.bounds);
 
   // update OZ's for items that depend on next-point geometry
   UpdateObservationZones(task_points, task_projection);

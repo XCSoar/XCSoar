@@ -3,6 +3,7 @@
  
 #pragma once
 
+#include "Geo/GeoBounds.hpp"
 #include "ElementStat.hpp"
 #include "StartStats.hpp"
 #include "WindowStats.hpp"
@@ -15,6 +16,8 @@ struct TaskBehaviour;
 class TaskStats 
 {
 public:
+  GeoBounds bounds;
+
   /** Total task statistics */
   ElementStat total;
   /** Current (active) leg statistics */
