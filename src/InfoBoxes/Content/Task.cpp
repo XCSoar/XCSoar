@@ -484,7 +484,7 @@ UpdateInfoBoxTaskSpeedHour(InfoBoxData &data) noexcept
 {
   const WindowStats &window =
     CommonInterface::Calculated().task_stats.last_hour;
-  if (window.duration < 0) {
+  if (!window.IsDefined()) {
     data.SetInvalid();
     return;
   }

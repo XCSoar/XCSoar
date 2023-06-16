@@ -20,6 +20,10 @@ struct WindowStats {
    */
   double speed;
 
+  constexpr bool IsDefined() const noexcept {
+    return duration >= 0;
+  }
+
   constexpr void Reset() noexcept {
     duration = -1;
   }

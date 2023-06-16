@@ -212,7 +212,7 @@ l_task_index(lua_State *L)
       Lua::Push(L, task_stats.inst_speed_fast);
   } else if (StringIsEqual(name, "task_speed_hour")) {
       const WindowStats &window = CommonInterface::Calculated().task_stats.last_hour;
-      if (window.duration < 0)
+      if (!window.IsDefined())
         return 0;
 
       Lua::Push(L, window.speed);
