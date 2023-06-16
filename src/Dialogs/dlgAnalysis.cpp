@@ -83,6 +83,7 @@ public:
      dragging(false),
      blackboard(_blackboard), glide_computer(_glide_computer) {
     fs_renderer.SetTerrain(terrain);
+    fs_renderer.SetAirspaces(airspaces);
     cross_section_renderer.SetAirspaces(airspaces);
     cross_section_renderer.SetTerrain(terrain);
   }

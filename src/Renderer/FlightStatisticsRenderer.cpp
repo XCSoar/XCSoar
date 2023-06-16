@@ -35,6 +35,7 @@ FlightStatisticsRenderer::FlightStatisticsRenderer(const ChartLook &_chart_look,
                                                    const MapLook &_map_look) noexcept
   :chart_look(_chart_look),
    map_look(_map_look),
+   airspace_renderer(map_look.airspace),
    trail_renderer(map_look.trail) {}
 
 void
@@ -99,6 +100,19 @@ FlightStatisticsRenderer::RenderContest(Canvas &canvas, const PixelRect rc,
   const ChartProjection proj(rc_chart, TaskProjection(bounds));
 
   background_renderer.Draw(canvas, proj, settings_map.terrain);
+
+  {
+#ifndef ENABLE_OPENGL
+    BufferCanvas stencil_canvas;
+    stencil_canvas.Create(canvas);
+#endif
+
+    airspace_renderer.Draw(canvas,
+#ifndef ENABLE_OPENGL
+                           stencil_canvas,
+#endif
+                           proj, settings_map.airspace);
+  }
 
 #ifdef ENABLE_OPENGL
   /* desaturate the map background, to focus on the contest */
@@ -278,6 +292,19 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
 
     // TODO still holding the task lock, now taking the terrain lock
     background_renderer.Draw(canvas, proj, settings_map.terrain);
+
+    {
+#ifndef ENABLE_OPENGL
+      BufferCanvas stencil_canvas;
+      stencil_canvas.Create(canvas);
+#endif
+
+      airspace_renderer.Draw(canvas,
+#ifndef ENABLE_OPENGL
+                             stencil_canvas,
+#endif
+                             proj, settings_map.airspace);
+    }
 
 #ifdef ENABLE_OPENGL
     /* desaturate the map background, to focus on the task */

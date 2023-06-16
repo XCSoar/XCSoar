@@ -4,6 +4,7 @@
 #pragma once
 
 #include "BackgroundRenderer.hpp"
+#include "AirspaceRenderer.hpp"
 #include "TrailRenderer.hpp"
 
 #include <tchar.h>
@@ -28,6 +29,8 @@ class FlightStatisticsRenderer {
 
   BackgroundRenderer background_renderer;
 
+  AirspaceRenderer airspace_renderer;
+
   TrailRenderer trail_renderer;
 
 public:
@@ -36,6 +39,10 @@ public:
 
   void SetTerrain(const RasterTerrain *terrain) noexcept {
     background_renderer.SetTerrain(terrain);
+  }
+
+  void SetAirspaces(const Airspaces *_airspaces) noexcept {
+    airspace_renderer.SetAirspaces(_airspaces);
   }
 
   void RenderContest(Canvas &canvas, const PixelRect rc,

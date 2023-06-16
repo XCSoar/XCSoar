@@ -1,7 +1,7 @@
 Version 7.35 - not yet released
 * user interface
   - fix crash in plane list
-  - show terrain and topopgraphy on task/contest analysis pages
+  - show terrain, topopgraphy and airspaces on task/contest analysis pages
 * calculations
   - fix bogus "Task Started" after re-entering the start zone
 * fix IGC logger crash with very long turnpoint names

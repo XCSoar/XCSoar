@@ -2184,6 +2184,10 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Projection/CompareProjection.cpp \
 	$(SRC)/Renderer/BackgroundRenderer.cpp \
 	$(SRC)/Renderer/GeoBitmapRenderer.cpp \
+	$(SRC)/Renderer/AirspaceRenderer.cpp \
+	$(SRC)/Renderer/AirspaceRendererGL.cpp \
+	$(SRC)/Renderer/AirspaceRendererOther.cpp \
+	$(SRC)/Renderer/TransparentRendererCache.cpp \
 	$(SRC)/Renderer/GradientRenderer.cpp \
 	$(SRC)/Renderer/ChartRenderer.cpp \
 	$(SRC)/Renderer/TaskRenderer.cpp \
@@ -2192,6 +2196,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Renderer/AircraftRenderer.cpp \
 	$(SRC)/Renderer/TrailRenderer.cpp \
 	$(SRC)/MapWindow/MapCanvas.cpp \
+	$(SRC)/MapWindow/StencilMapCanvas.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Temperature.cpp \
