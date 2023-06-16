@@ -128,8 +128,8 @@ CrossSectionRenderer::PaintGlide(ChartRenderer &chart) const
 
   // draw glide line if above zero
   if (result.GetArrivalAltitude()> 0.) {
-    chart.DrawLine(0, altitude, result.vector.distance,
-                   result.GetArrivalAltitude(),
+    chart.DrawLine({0, altitude},
+                   {result.vector.distance, result.GetArrivalAltitude()},
                    ChartLook::STYLE_BLUE);
   } else {
     // draw glide line to zero
@@ -138,8 +138,8 @@ CrossSectionRenderer::PaintGlide(ChartRenderer &chart) const
       // proportion of distance to intercept zero
       const double p = altitude / dh;
 
-      chart.DrawLine(0, altitude,
-                     result.vector.distance * p, 0,
+      chart.DrawLine({0, altitude},
+                     {result.vector.distance * p, 0},
                      ChartLook::STYLE_BLUE);
     }
   }
@@ -150,11 +150,11 @@ CrossSectionRenderer::PaintWorking(ChartRenderer &chart) const
 {
   const auto &h_max = calculated_info.common_stats.height_max_working;
   if ((h_max> chart.GetYMin()) && (h_max< chart.GetYMax())) {
-    chart.DrawLine(0, h_max, chart.GetXMax(), h_max, ChartLook::STYLE_BLUETHINDASH);
+    chart.DrawLine({0, h_max}, {chart.GetXMax(), h_max}, ChartLook::STYLE_BLUETHINDASH);
   }
   const auto &h_min = calculated_info.common_stats.height_min_working;
   if ((h_min> chart.GetYMin()) && (h_min< chart.GetYMax())) {
-    chart.DrawLine(0, h_min, chart.GetXMax(), h_min, ChartLook::STYLE_BLUETHINDASH);
+    chart.DrawLine({0, h_min}, {chart.GetXMax(), h_min}, ChartLook::STYLE_BLUETHINDASH);
   }
 }
 
@@ -169,7 +169,7 @@ CrossSectionRenderer::PaintAircraft(Canvas &canvas, const ChartRenderer &chart,
   canvas.SelectNullPen();
 
   BulkPixelPoint line[4];
-  line[0] = chart.ToScreen(0, gps_info.nav_altitude);
+  line[0] = chart.ToScreen({0, gps_info.nav_altitude});
   line[1].x = rc.left;
   line[1].y = line[0].y;
   line[2].x = line[1].x;

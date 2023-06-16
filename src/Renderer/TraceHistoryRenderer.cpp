@@ -49,8 +49,7 @@ void
 TraceHistoryRenderer::RenderAxis(ChartRenderer &chart,
                                   const TraceVariableHistory& var) const
 {
-  chart.DrawLine(0, 0,
-                 var.capacity() - 1, 0,
+  chart.DrawLine({0, 0}, {var.capacity() - 1., 0},
                  look.axis_pen);
 }
 
@@ -58,37 +57,33 @@ void
 TraceHistoryRenderer::render_filled_posneg(ChartRenderer &chart,
                                            const TraceVariableHistory& var) const
 {
-  double x_last(0), y_last(0);
+  DoublePoint2D last{0, 0};
   unsigned i=0;
   for (auto it = var.begin(); it != var.end(); ++it, ++i) {
-    double x = i;
-    double y = *it;
+    const DoublePoint2D p{double(i), *it};
     if (i) {
-      if (y * y_last < 0) {
-        if (y_last > 0)
-          chart.DrawFilledLine(x_last, y_last, x_last + 0.5, 0,
+      if (p.y * last.y < 0) {
+        if (last.y > 0)
+          chart.DrawFilledLine(last, {last.x + 0.5, 0},
                                vario_look.lift_brush);
-        else if (y_last < 0)
-          chart.DrawFilledLine(x_last, y_last, x_last + 0.5, 0,
+        else if (last.y < 0)
+          chart.DrawFilledLine(last, {last.x + 0.5, 0},
                                vario_look.sink_brush);
 
-        x_last = x - 0.5;
-        y_last = 0;
-
+        last = {p.x - 0.5, 0};
       }
-      if (y > 0 || y_last > 0)
-        chart.DrawFilledLine(x_last, y_last, x, y, vario_look.lift_brush);
-      else if (y < 0 || y_last < 0)
-        chart.DrawFilledLine(x_last, y_last, x, y, vario_look.sink_brush);
+      if (p.y > 0 || last.y > 0)
+        chart.DrawFilledLine(last, p, vario_look.lift_brush);
+      else if (p.y < 0 || last.y < 0)
+        chart.DrawFilledLine(last, p, vario_look.sink_brush);
     }
-    x_last = x;
-    y_last = y;
+    last = p;
   }
   if (look.inverse)
     chart.GetCanvas().SelectWhiteBrush();
   else
     chart.GetCanvas().SelectBlackBrush();
-  chart.DrawDot(x_last, y_last, Layout::Scale(2));
+  chart.DrawDot(last, Layout::Scale(2));
 }
 
 void
@@ -108,8 +103,8 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
 
   if (mc > 0) {
     canvas.SetBackgroundTransparent();
-    chart.DrawLine(0, mc,
-                   var.capacity() - 1, mc,
+    chart.DrawLine({0, mc},
+                   {var.capacity() - 1., mc},
                    ChartLook::STYLE_GREENDASH);
   }
 

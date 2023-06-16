@@ -92,13 +92,12 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
 
   chart.DrawTrend(fs.thermal_average, ChartLook::STYLE_BLUETHINDASH);
 
-  chart.DrawLine(chart.GetXMin(), MACCREADY,
-                 chart.GetXMax(), MACCREADY,
+  chart.DrawLine({chart.GetXMin(), MACCREADY},
+                 {chart.GetXMax(), MACCREADY},
                  ChartLook::STYLE_REDTHICKDASH);
 
-  chart.DrawLabel(_T("MC"),
-                  chart.GetXMin()*0.9+chart.GetXMax()*0.1,
-                  MACCREADY);
+  chart.DrawLabel({chart.GetXMin()*0.9+chart.GetXMax()*0.1, MACCREADY},
+                  _T("MC"));
 
   chart.Finish();
 }

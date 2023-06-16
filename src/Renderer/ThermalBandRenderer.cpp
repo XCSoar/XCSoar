@@ -133,7 +133,7 @@ ThermalBandRenderer::DrawRiskMC(const DerivedInfo &calculated,
 
   chart.DrawLineGraph(tmp, (is_map || is_infobox)? ChartLook::STYLE_WHITE: ChartLook::STYLE_REDTHICKDASH);
   if (!is_map && !is_infobox) {
-    chart.DrawLabel(_T("MC"), rmc, h_m);
+    chart.DrawLabel({rmc, h_m}, _T("MC"));
   }
 }
 
@@ -200,15 +200,16 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   if (basic.NavAltitudeAvailable()) {
     const Pen &pen = is_infobox && look.inverse
       ? look.white_pen : look.black_pen;
-    chart.DrawLine(0, h,
-                   settings_computer.polar.glide_polar_task.GetMC(), h, pen);
+    chart.DrawLine({0, h},
+                   {settings_computer.polar.glide_polar_task.GetMC(), h},
+                   pen);
 
     if (is_infobox && look.inverse)
       chart.GetCanvas().SelectWhiteBrush();
     else
       chart.GetCanvas().SelectBlackBrush();
-    chart.DrawDot(settings_computer.polar.glide_polar_task.GetMC(),
-                  h, Layout::Scale(2));
+    chart.DrawDot({settings_computer.polar.glide_polar_task.GetMC(), h},
+                  Layout::Scale(2));
   }
 }
 
@@ -270,12 +271,11 @@ ThermalBandRenderer::DrawWorkingBand(const DerivedInfo &calculated_info,
 {
   const auto h_max = calculated_info.common_stats.height_max_working-hoffset;
   if ((h_max> chart.GetYMin()) && (h_max< chart.GetYMax())) {
-    chart.DrawLine(0, h_max, chart.GetXMax(), h_max, look.working_band_pen);
+    chart.DrawLine({0, h_max}, {chart.GetXMax(), h_max}, look.working_band_pen);
   }
   const auto h_min = calculated_info.common_stats.height_min_working-hoffset;
   if ((h_min> chart.GetYMin()) && (h_min< chart.GetYMax())) {
-    chart.DrawLine(0, h_min, chart.GetXMax(), h_min, look.working_band_pen);
+    chart.DrawLine({0, h_min}, {chart.GetXMax(), h_min}, look.working_band_pen);
   }
-  chart.DrawLine(0, chart.GetYMin(), chart.GetXMax()*0.5, chart.GetYMin(), look.working_band_pen);
+  chart.DrawLine({0, chart.GetYMin()}, {chart.GetXMax()*0.5, chart.GetYMin()}, look.working_band_pen);
 }
-

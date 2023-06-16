@@ -97,7 +97,7 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
 
     Angle angle = Angle::FromXY(wind.y, -wind.x);
 
-    auto point = chart.ToScreen((chart.GetXMin() + chart.GetXMax()) / 2, h);
+    auto point = chart.ToScreen({(chart.GetXMin() + chart.GetXMax()) / 2, h});
 
     DrawArrow(canvas, point, mag * WINDVECTORMAG, angle);
   }
