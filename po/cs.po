@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2023-05-07 07:52+0000\n"
+"PO-Revision-Date: 2023-06-16 10:52+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 4.18.1-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -273,7 +273,7 @@ msgstr "Symetrická výseč s vlastním poloměrem."
 #: src/Task/TypeStrings.cpp:100
 #, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
-msgstr "Kruh+výseč, bodováno dle nejzazšího dosaženého hodu v oblasti."
+msgstr "Kruh+výseč, bodováno dle nejzazšího dosaženého bodu v oblasti."
 
 #: src/Task/TypeStrings.cpp:113
 #, no-c-format
