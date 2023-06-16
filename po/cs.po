@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2023-06-16 10:52+0000\n"
+"PO-Revision-Date: 2023-06-17 11:51+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.18.1-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -609,7 +609,7 @@ msgstr "Zapnout logger"
 
 #: src/Logger/Logger.cpp:137 src/Dialogs/Device/ManageCAI302Dialog.cpp:116
 msgid "Stop Logger"
-msgstr "Zastavit logger"
+msgstr "Zastav logger"
 
 #: src/Logger/ExternalLogger.cpp:85
 msgid "Declare task?"
@@ -618,7 +618,7 @@ msgstr "Deklarovat úlohu?"
 #: src/Logger/ExternalLogger.cpp:97 src/Logger/ExternalLogger.cpp:142
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:101
 msgid "Declare task"
-msgstr "Deklarovat úlohu"
+msgstr "Deklaruj úlohu"
 
 #: src/Logger/ExternalLogger.cpp:103
 msgid "Task declared!"
@@ -2013,9 +2013,7 @@ msgstr "Průchozí zařízení"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:307
 msgid "Whether the device has a passed-through device connected."
-msgstr ""
-"Volba umožňuje nastavit, zda má toto zařízení připojeno další průchozí "
-"zařízení."
+msgstr "Volba umožňuje nastavit, zda je připojeno další průchozí zařízení."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:318
 msgid "Second Driver"
@@ -6329,7 +6327,7 @@ msgstr "Terén"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:201
 msgid "Draw a digital elevation terrain on the map."
-msgstr "Na mapě se zobrazí digitální elevace terénu."
+msgstr "Na mapě vykreslí digitální výškový model terénu."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:205
 msgid "Topography display"
@@ -6488,7 +6486,7 @@ msgstr "Nahraje nastavení jednotek."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:131
 msgid "Custom"
-msgstr "Uživatelské"
+msgstr "Vlastní"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:131
 msgid "My individual set of units."
@@ -7489,8 +7487,8 @@ msgid ""
 "Below this lift threshold the vario will start to play sounds if the "
 "'Deadband' feature is enabled."
 msgstr ""
-"Pod touto hodnotou stoupání začne variometr vydávat zvuk, pokud je zapnuta "
-"volba \"Pásmo ticha\"."
+"Pokud je zapnuta volba \"Pásmo ticha\", pod touto hodnotou stoupání začne "
+"variometr vydávat zvuk."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:116
 msgid "Deadband max. lift"
@@ -7501,8 +7499,8 @@ msgid ""
 "Above this lift threshold the vario will start to play sounds if the "
 "'Deadband' feature is enabled."
 msgstr ""
-"Nad touto hodnotou stoupání začne variometr vydávat zvuk, pokud je zapnuta "
-"volba \"Pásmo ticha\"."
+"Pokud je zapnuta volba \"Pásmo ticha\", nad touto hodnotou stoupání začne "
+"variometr vydávat zvuk."
 
 #: src/Dialogs/Settings/Panels/AudioConfigPanel.cpp:60
 msgid "Master Volume"
@@ -7970,7 +7968,7 @@ msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
 "terrain file at the current GPS location."
 msgstr ""
-"Výška terénu nad střední hladinou moře, získaná ze souboru terénních dat na "
+"Výška terénu nad střední hladinou moře, získaná ze souboru výškových dat, na "
 "současných GPS souřadnicích."
 
 #: src/InfoBoxes/Content/Factory.cpp:309
@@ -9792,12 +9790,12 @@ msgstr "Změna větru"
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:32
 #, no-c-format
 msgid "Gear on delay"
-msgstr "Doba vysunutí podvozku"
+msgstr "Zpoždění vysunutí podvozku"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:35
 #, no-c-format
 msgid "Gear off delay"
-msgstr "Doba zasunutí podvozku"
+msgstr "Zpoždění zasunutí podvozku"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:38
 #, no-c-format
@@ -9807,7 +9805,7 @@ msgstr "Interval; podvozek"
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:41
 #, no-c-format
 msgid "Radio com. max. delay"
-msgstr "Max. zpoždění rádiového spojení"
+msgstr "Max. zpoždění rádiové komunikace"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:44
 #, no-c-format
