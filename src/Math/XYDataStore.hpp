@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "Point2D.hpp"
 #include "util/TrivialArray.hxx"
 
 #include <type_traits>
@@ -25,15 +26,13 @@ private:
 
   unsigned sum_n;
 
-  struct Slot {
-    double x, y;
-
+  struct Slot : DoublePoint2D {
     double weight;
 
     Slot() = default;
 
     constexpr Slot(double _x, double _y, double _weight) noexcept
-      :x(_x), y(_y), weight(_weight) {}
+      :DoublePoint2D(_x, _y), weight(_weight) {}
   };
 
   TrivialArray<Slot, 1000> slots;
