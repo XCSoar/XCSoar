@@ -10,7 +10,6 @@
 #include "util/TrivialArray.hxx"
 
 #include <type_traits>
-#define LEASTSQS_WEIGHT_STORE
 
 class XYDataStore
 {
@@ -29,18 +28,12 @@ private:
   struct Slot {
     double x, y;
 
-#ifdef LEASTSQS_WEIGHT_STORE
     double weight;
-#endif
 
     Slot() = default;
 
     constexpr Slot(double _x, double _y, double _weight) noexcept
-      :x(_x), y(_y)
-#ifdef LEASTSQS_WEIGHT_STORE
-      , weight(_weight)
-#endif
-    {}
+      :x(_x), y(_y), weight(_weight) {}
   };
 
   TrivialArray<Slot, 1000> slots;

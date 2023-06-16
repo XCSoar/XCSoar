@@ -153,10 +153,7 @@ LeastSquares::Remove(const unsigned i) noexcept
   const auto &s = GetSlots();
   const auto &pt = s[i];
   // Remove weighted point
-  double weight = 1;
-#ifdef LEASTSQS_WEIGHT_STORE
-  weight = pt.weight;
-#endif
+  const auto weight = pt.weight;
 
   sum_xxw -= Square(pt.x) * weight;
   sum_xyw -= (pt.x * pt.y * weight);

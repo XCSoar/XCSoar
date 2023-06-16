@@ -50,10 +50,7 @@ XYDataStore::StoreRemove(const unsigned i) noexcept
   const auto &pt = slots[i];
 
   // Remove weighted point
-  auto weight = 1;
-#ifdef LEASTSQS_WEIGHT_STORE
-  weight = pt.weight;
-#endif
+  const auto weight = pt.weight;
 
   sum_weights -= weight;
 
