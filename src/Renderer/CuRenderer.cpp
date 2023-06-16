@@ -52,6 +52,7 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
 
   if (hmin >= hmax) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 

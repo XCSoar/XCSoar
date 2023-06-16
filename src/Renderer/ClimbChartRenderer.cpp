@@ -54,6 +54,7 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
 
   if (fs.thermal_average.IsEmpty()) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 

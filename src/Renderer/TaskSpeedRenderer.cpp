@@ -50,6 +50,7 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
 
   if (!fs.task_speed.HasResult() || !task.CheckOrderedTask()) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 

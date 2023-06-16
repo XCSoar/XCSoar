@@ -234,6 +234,7 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
   if (!is_map && (calculated.common_stats.height_max_working <= 0)) {
     // no climbs recorded
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
   _DrawThermalBand(basic, calculated, settings_computer,

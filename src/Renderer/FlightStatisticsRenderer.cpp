@@ -79,6 +79,7 @@ FlightStatisticsRenderer::RenderContest(Canvas &canvas, const PixelRect rc,
 
   if (!trail_renderer.LoadTrace(trace_computer)) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 
@@ -262,6 +263,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
 
     if (IsError(task.CheckTask())) {
       chart.DrawNoData();
+      chart.Finish();
       return;
     }
 

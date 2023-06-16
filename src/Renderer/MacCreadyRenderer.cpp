@@ -46,6 +46,7 @@ RenderMacCready(Canvas &canvas, const PixelRect rc,
 
   if (!glide_polar.IsValid()) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 

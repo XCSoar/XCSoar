@@ -51,6 +51,7 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
 
   if (!vec.IsValid() || !start.IsValid()) {
     chart.DrawNoData(_("Not moving"));
+    chart.Finish();
     return;
   }
 

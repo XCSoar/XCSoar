@@ -51,6 +51,7 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
     fs.altitude_ceiling.GetMaxY() - fs.altitude_ceiling.GetMinY();
   if (height <= 10) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 

@@ -30,6 +30,7 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   if (fs.vario_cruise_histogram.empty() &&
       fs.vario_circling_histogram.empty()) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 

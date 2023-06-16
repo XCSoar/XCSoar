@@ -105,6 +105,7 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
 
   if (!fs.altitude.HasResult()) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 
