@@ -7,20 +7,18 @@
 #include "ui/canvas/Canvas.hpp"
 #include "NMEA/Derived.hpp"
 
-const Angle BackgroundRenderer::DEFAULT_SHADING_ANGLE = Angle::Degrees(-45);
-
-BackgroundRenderer::BackgroundRenderer() {}
-BackgroundRenderer::~BackgroundRenderer() {}
+BackgroundRenderer::BackgroundRenderer() noexcept = default;
+BackgroundRenderer::~BackgroundRenderer() noexcept = default;
 
 void
-BackgroundRenderer::Flush()
+BackgroundRenderer::Flush() noexcept
 {
   if (renderer != nullptr)
     renderer->Flush();
 }
 
 void
-BackgroundRenderer::SetTerrain(const RasterTerrain *_terrain)
+BackgroundRenderer::SetTerrain(const RasterTerrain *_terrain) noexcept
 {
   terrain = _terrain;
   renderer.reset();
@@ -29,7 +27,7 @@ BackgroundRenderer::SetTerrain(const RasterTerrain *_terrain)
 void
 BackgroundRenderer::Draw(Canvas& canvas,
                          const WindowProjection& proj,
-                         const TerrainRendererSettings &terrain_settings)
+                         const TerrainRendererSettings &terrain_settings) noexcept
 {
   canvas.ClearWhite();
 
@@ -49,7 +47,7 @@ BackgroundRenderer::Draw(Canvas& canvas,
 void
 BackgroundRenderer::SetShadingAngle(const WindowProjection& projection,
                                     const TerrainRendererSettings &settings,
-                                    const DerivedInfo &calculated)
+                                    const DerivedInfo &calculated) noexcept
 {
   Angle angle;
 
@@ -68,9 +66,9 @@ BackgroundRenderer::SetShadingAngle(const WindowProjection& projection,
   SetShadingAngle(projection, angle);
 }
 
-void
+inline void
 BackgroundRenderer::SetShadingAngle([[maybe_unused]] const WindowProjection& projection,
-                                    Angle angle)
+                                    Angle angle) noexcept
 {
 #ifdef ENABLE_OPENGL
   /* on OpenGL, the texture is rotated to apply the screen angle */
