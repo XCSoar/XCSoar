@@ -1,4 +1,4 @@
-Version 7.35 - not yet released
+Version 7.35 - 2023/06/16
 * user interface
   - fix crash in plane list
   - show terrain, topopgraphy and airspaces on task/contest analysis pages
