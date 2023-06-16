@@ -41,7 +41,7 @@ void
 FlightStatisticsRenderer::DrawContestSolution(Canvas &canvas,
                                               const Projection &projection,
                                               const ContestStatistics &statistics,
-                                              unsigned i) const noexcept
+                                              unsigned i) noexcept
 {
   if (!statistics.GetResult(i).IsDefined())
     return;
@@ -53,7 +53,7 @@ FlightStatisticsRenderer::DrawContestSolution(Canvas &canvas,
 
 void
 FlightStatisticsRenderer::DrawContestTriangle(Canvas &canvas, const Projection &projection,
-                                              const ContestStatistics &statistics, unsigned i) const noexcept
+                                              const ContestStatistics &statistics, unsigned i) noexcept
 {
   if (!statistics.GetResult(i).IsDefined() ||
       statistics.GetSolution(i).size() != 5)
@@ -72,7 +72,7 @@ FlightStatisticsRenderer::RenderContest(Canvas &canvas, const PixelRect rc,
                                         const MapSettings &settings_map,
                                         const ContestStatistics &contest,
                                         const TraceComputer &trace_computer,
-                                        const Retrospective &retrospective) const noexcept
+                                        const Retrospective &retrospective) noexcept
 {
   ChartRenderer chart(chart_look, canvas, rc);
   chart.Begin();
@@ -248,7 +248,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
                                      [[maybe_unused]] const ComputerSettings &settings_computer,
                                      const MapSettings &settings_map,
                                      const ProtectedTaskManager &_task_manager,
-                                     const TraceComputer *trace_computer) const noexcept
+                                     const TraceComputer *trace_computer) noexcept
 {
   ChartRenderer chart(chart_look, canvas, rc);
   chart.Begin();

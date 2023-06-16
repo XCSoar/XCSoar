@@ -25,7 +25,7 @@ class FlightStatisticsRenderer {
   const ChartLook &chart_look;
   const MapLook &map_look;
 
-  mutable TrailRenderer trail_renderer;
+  TrailRenderer trail_renderer;
 
 public:
   FlightStatisticsRenderer(const ChartLook &_chart_look,
@@ -38,14 +38,14 @@ public:
                      const MapSettings &settings_map,
                      const ContestStatistics &contest,
                      const TraceComputer &trace_computer,
-                     const Retrospective &retrospective) const noexcept;
+                     const Retrospective &retrospective) noexcept;
 
   void RenderTask(Canvas &canvas, const PixelRect rc,
                   const NMEAInfo &nmea_info,
                   const ComputerSettings &settings_computer,
                   const MapSettings &settings_map,
                   const ProtectedTaskManager &task,
-                  const TraceComputer *trace_computer) const noexcept;
+                  const TraceComputer *trace_computer) noexcept;
 
   static void CaptionTask(TCHAR *sTmp, const DerivedInfo &derived) noexcept;
   static void CaptionContest(TCHAR *sTmp, const ContestSettings &settings,
@@ -53,7 +53,7 @@ public:
 
 private:
   void DrawContestSolution(Canvas &canvas, const Projection &projection,
-                           const ContestStatistics &statistics, unsigned i) const noexcept;
+                           const ContestStatistics &statistics, unsigned i) noexcept;
   void DrawContestTriangle(Canvas &canvas, const Projection &projection,
-                           const ContestStatistics &statistics, unsigned i) const noexcept;
+                           const ContestStatistics &statistics, unsigned i) noexcept;
 };
