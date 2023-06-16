@@ -4,7 +4,7 @@
 #include "GeoBounds.hpp"
 
 bool
-GeoBounds::Extend(const GeoPoint pt)
+GeoBounds::Extend(const GeoPoint pt) noexcept
 {
   if (!pt.IsValid())
     return false;
@@ -20,14 +20,14 @@ GeoBounds::Extend(const GeoPoint pt)
 }
 
 bool
-GeoBounds::IntersectWith(const GeoBounds &other)
+GeoBounds::IntersectWith(const GeoBounds &other) noexcept
 {
   return longitude.IntersectWith(other.longitude) &&
     latitude.IntersectWith(other.latitude);
 }
 
 GeoPoint
-GeoBounds::GetCenter() const
+GeoBounds::GetCenter() const noexcept
 {
   if (!IsValid())
     return GeoPoint::Invalid();
@@ -36,7 +36,7 @@ GeoBounds::GetCenter() const
 }
 
 GeoBounds
-GeoBounds::Scale(double factor) const
+GeoBounds::Scale(double factor) const noexcept
 {
   if (!IsValid())
     return Invalid();

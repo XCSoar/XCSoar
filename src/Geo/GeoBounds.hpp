@@ -24,15 +24,13 @@ class GeoBounds {
   AngleRange latitude;
 
 public:
-  GeoBounds() = default;
+  constexpr GeoBounds() noexcept = default;
 
-  constexpr
-  GeoBounds(const GeoPoint pt)
+  constexpr GeoBounds(const GeoPoint pt) noexcept
     :longitude(pt.longitude, pt.longitude),
      latitude(pt.latitude, pt.latitude) {}
 
-  constexpr
-  GeoBounds(const GeoPoint north_west, const GeoPoint south_east)
+  constexpr GeoBounds(GeoPoint north_west, GeoPoint south_east) noexcept
     :longitude(north_west.longitude, south_east.longitude),
      latitude(south_east.latitude, north_west.latitude) {}
 
@@ -41,8 +39,7 @@ public:
    * return false.  The return value must not be used in any
    * calculation.
    */
-  constexpr
-  static GeoBounds Invalid() {
+  constexpr static GeoBounds Invalid() noexcept {
     return GeoBounds(GeoPoint::Invalid());
   }
 
@@ -50,39 +47,39 @@ public:
    * Set this instance to "invalid", i.e. IsValid() will return false.
    * The return value must not be used in any calculation.
    */
-  void SetInvalid() {
+  constexpr void SetInvalid() noexcept {
     latitude.end = Angle::FullCircle();
   }
 
-  constexpr Angle GetWest() const {
+  constexpr Angle GetWest() const noexcept {
     return longitude.start;
   }
 
-  constexpr Angle GetEast() const {
+  constexpr Angle GetEast() const noexcept {
     return longitude.end;
   }
 
-  constexpr Angle GetSouth() const {
+  constexpr Angle GetSouth() const noexcept {
     return latitude.start;
   }
 
-  constexpr Angle GetNorth() const {
+  constexpr Angle GetNorth() const noexcept {
     return latitude.end;
   }
 
-  constexpr GeoPoint GetNorthWest() const {
+  constexpr GeoPoint GetNorthWest() const noexcept {
     return GeoPoint(GetWest(), GetNorth());
   }
 
-  constexpr GeoPoint GetNorthEast() const {
+  constexpr GeoPoint GetNorthEast() const noexcept {
     return GeoPoint(GetEast(), GetNorth());
   }
 
-  constexpr GeoPoint GetSouthWest() const {
+  constexpr GeoPoint GetSouthWest() const noexcept {
     return GeoPoint(GetWest(), GetSouth());
   }
 
-  constexpr GeoPoint GetSouthEast() const {
+  constexpr GeoPoint GetSouthEast() const noexcept {
     return GeoPoint(GetEast(), GetSouth());
   }
 
@@ -92,8 +89,7 @@ public:
    * check; it is only designed to catch instances created by
    * Invalid().  If you want a real check, call Check().
    */
-  constexpr
-  bool IsValid() const {
+  constexpr bool IsValid() const noexcept {
     return latitude.end <= Angle::HalfCircle();
   }
 
@@ -102,20 +98,20 @@ public:
    * all you want is check if this object was constructed by
    * Invalid(), then call the cheaper method IsValid().
    */
-  constexpr bool Check() const {
+  constexpr bool Check() const noexcept {
     return GetSouthWest().Check() && GetNorthEast().Check() &&
       GetNorth() >= GetSouth();
   }
 
-  constexpr bool IsEmpty() const {
+  constexpr bool IsEmpty() const noexcept {
     return longitude.IsEmpty() || latitude.IsEmpty();
   }
 
-  Angle GetWidth() const {
+  Angle GetWidth() const noexcept {
     return longitude.GetLength();
   }
 
-  Angle GetHeight() const {
+  Angle GetHeight() const noexcept {
     return latitude.GetLength();
   }
 
@@ -124,7 +120,7 @@ public:
    * center in metres.
    */
   [[gnu::pure]]
-  double GetGeoWidth() const {
+  double GetGeoWidth() const noexcept {
     const Angle middle_latitude = latitude.GetMiddle();
     return GeoPoint(GetWest(), middle_latitude)
       .Distance(GeoPoint(GetEast(), middle_latitude));
@@ -135,7 +131,7 @@ public:
    * metres.
    */
   [[gnu::pure]]
-  double GetGeoHeight() const {
+  double GetGeoHeight() const noexcept {
     return GetNorthWest().Distance(GetSouthWest());
   }
 
@@ -144,17 +140,17 @@ public:
    *
    * @return true if the bounds have been modified
    */
-  bool Extend(const GeoPoint pt);
+  bool Extend(const GeoPoint pt) noexcept;
 
-  bool IsInside(Angle _longitude, Angle _latitude) const {
+  bool IsInside(Angle _longitude, Angle _latitude) const noexcept {
     return longitude.IsInside(_longitude) && latitude.IsInside(_latitude);
   }
 
-  bool IsInside(const GeoPoint pt) const {
+  bool IsInside(const GeoPoint pt) const noexcept {
     return IsInside(pt.longitude, pt.latitude);
   }
 
-  bool IsInside(const GeoBounds &interior) const {
+  bool IsInside(const GeoBounds &interior) const noexcept {
     return longitude.IsInside(interior.longitude) &&
       latitude.IsInside(interior.latitude);
   }
@@ -163,7 +159,7 @@ public:
    * Does this GeoBounds instance overlap with the specified one?
    */
   [[gnu::pure]]
-  bool Overlaps(const GeoBounds &other) const {
+  bool Overlaps(const GeoBounds &other) const noexcept {
     return longitude.Overlaps(other.longitude) &&
       latitude.Overlaps(other.latitude);
   }
@@ -174,10 +170,10 @@ public:
    * @return false if the two objects do not overlap; in this case,
    * the object is left in an undefined state
    */
-  bool IntersectWith(const GeoBounds &other);
+  bool IntersectWith(const GeoBounds &other) noexcept;
 
   [[gnu::pure]]
-  GeoPoint GetCenter() const;
+  GeoPoint GetCenter() const noexcept;
 
   /**
    * Returns a scaled version of the GeoBounds.
@@ -186,5 +182,5 @@ public:
    * @return A scaled version of the GeoBounds
    */
   [[gnu::pure]]
-  GeoBounds Scale(double factor) const;
+  GeoBounds Scale(double factor) const noexcept;
 };
