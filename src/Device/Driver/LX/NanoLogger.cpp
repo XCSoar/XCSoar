@@ -94,6 +94,10 @@ ReadDate(NMEAInputLine &line, BrokenDate &date)
   if (endptr == p || *endptr != 0)
     return false;
 
+  // Check if the date is the fallback value 1980-00-00
+  if (date.year == 1980 && date.month == 00 && date.day == 00)
+    return true;
+
   return date.IsPlausible();
 }
 
