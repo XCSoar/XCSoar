@@ -6,7 +6,7 @@
 #include "TaskListPanel.hpp"
 #include "Internal.hpp"
 #include "../dlgTaskHelpers.hpp"
-#include "Dialogs/CoDialog.hpp"
+#include "Dialogs/CoFunctionDialog.hpp"
 #include "Dialogs/Error.hpp"
 #include "Dialogs/Message.hpp"
 #include "Components.hpp"
@@ -22,7 +22,6 @@
 #include "Operation/PluggableOperationEnvironment.hpp"
 #include "net/http/Init.hpp"
 #include "net/client/WeGlide/DownloadTask.hpp"
-#include "co/InvokeTask.hxx"
 
 TaskActionsPanel::TaskActionsPanel(TaskManagerDialog &_dialog,
                                    TaskMiscPanel &_parent,
@@ -88,39 +87,30 @@ TaskActionsPanel::OnDeclareClicked()
   ExternalLogger::Declare(decl, way_points.GetHome().get());
 }
 
-static Co::InvokeTask
-DownloadWeGlideTask(std::unique_ptr<OrderedTask> &task,
-                    CurlGlobal &curl, const WeGlideSettings &settings,
-                    const TaskBehaviour &task_behaviour,
-                    const Waypoints *waypoints,
-                    ProgressListener &progress)
-{
-  task = co_await WeGlide::DownloadDeclaredTask(curl, settings,
-                                                task_behaviour, waypoints,
-                                                progress);
-}
-
 inline void
 TaskActionsPanel::OnDownloadClicked() noexcept
 try {
   const auto &settings = CommonInterface::GetComputerSettings();
 
-  std::unique_ptr<OrderedTask> task;
   PluggableOperationEnvironment env;
-  if (!ShowCoDialog(dialog.GetMainWindow(), GetLook(),
-                    _("Download"),
-                    DownloadWeGlideTask(task, *Net::curl, settings.weglide,
-                                        settings.task,
-                                        &way_points, env),
-                    &env))
+
+  auto task = ShowCoFunctionDialog(dialog.GetMainWindow(), GetLook(),
+                                   _("Download"),
+                                   WeGlide::DownloadDeclaredTask(*Net::curl,
+                                                                 settings.weglide,
+                                                                 settings.task,
+                                                                 &way_points,
+                                                                 env),
+                                   &env);
+  if (!task)
     return;
 
-  if (!task) {
+  if (!*task) {
     ShowMessageBox(_("No task"), _("Error"), MB_OK|MB_ICONEXCLAMATION);
     return;
   }
 
-  active_task = task->Clone(settings.task);
+  active_task = (*task)->Clone(settings.task);
   *task_modified = true;
   dialog.ResetTaskView();
 

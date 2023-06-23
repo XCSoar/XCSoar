@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "MapOverlayWidget.hpp"
-#include "Dialogs/CoDialog.hpp"
+#include "Dialogs/CoFunctionDialog.hpp"
 #include "Dialogs/Error.hpp"
 #include "UIGlobals.hpp"
 #include "ui/canvas/Bitmap.hpp"
@@ -19,7 +19,6 @@
 #include "Interface.hpp"
 #include "LocalPath.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
-#include "co/InvokeTask.hxx"
 #include "co/Task.hxx"
 #include "net/http/Init.hpp"
 #include "system/Path.hpp"
@@ -332,16 +331,6 @@ WeatherMapOverlayListWidget::SetOverlay(Path path, const TCHAR *label)
   UpdateActiveIndex();
 }
 
-static Co::InvokeTask
-OverlayDownloadTask(std::optional<PCMet::Overlay> &overlay,
-                    const PCMet::OverlayInfo &info, BrokenDateTime now_utc,
-                    const PCMetSettings &settings,
-                    ProgressListener &progress)
-{
-  overlay = co_await PCMet::DownloadOverlay(info, now_utc, settings,
-                                            *Net::curl, progress);
-}
-
 void
 WeatherMapOverlayListWidget::UseClicked(unsigned i)
 {
@@ -359,14 +348,17 @@ WeatherMapOverlayListWidget::UseClicked(unsigned i)
       const auto &settings = CommonInterface::GetComputerSettings().weather.pcmet;
 
       try {
-        std::optional<PCMet::Overlay> overlay;
         PluggableOperationEnvironment env;
-        if (!ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-                          _("Download"),
-                          OverlayDownloadTask(overlay, info,
-                                              BrokenDateTime::NowUTC(),
-                                              settings, env),
-                          &env))
+
+        auto overlay = ShowCoFunctionDialog(UIGlobals::GetMainWindow(),
+                                            UIGlobals::GetDialogLook(),
+                                            _("Download"),
+                                            PCMet::DownloadOverlay(info,
+                                                                   BrokenDateTime::NowUTC(),
+                                                                   settings, *Net::curl,
+                                                                   env),
+                                            &env);
+        if (!overlay)
           return;
 
         item.path = std::move(overlay->path);
@@ -391,13 +383,16 @@ WeatherMapOverlayListWidget::UpdateClicked()
       try {
         const auto &info = *item.pc_met;
 
-        std::optional<PCMet::Overlay> overlay;
         PluggableOperationEnvironment env;
-        if (!ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-                          _("Download"),
-                          OverlayDownloadTask(overlay, info, now,
-                                              settings, env),
-                          &env))
+
+        auto overlay = ShowCoFunctionDialog(UIGlobals::GetMainWindow(),
+                                            UIGlobals::GetDialogLook(),
+                                            _("Download"),
+                                            PCMet::DownloadOverlay(info, now,
+                                                                   settings, *Net::curl,
+                                                                   env),
+                                            &env);
+        if (!overlay)
           return;
 
         if (i == active_index)
