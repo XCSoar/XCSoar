@@ -26,7 +26,9 @@ tag_invoke(boost::json::value_to_tag<TaskInfo>,
   info.id = json.at("id").to_number<uint_least64_t>();
   info.name = json.at("name").as_string();
   info.user_name = json.at("user").at("name").as_string();
-  info.distance = json.at("distance").to_number<double>();
+
+  // convert km to m
+  info.distance = json.at("distance").to_number<double>() * 1000;
   return info;
 }
 

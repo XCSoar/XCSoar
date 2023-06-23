@@ -21,6 +21,9 @@ struct TaskInfo {
 
   std::string user_name;
 
+  /**
+   * The total task distance [m].
+   */
   double distance;
 };
 
