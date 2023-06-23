@@ -121,10 +121,7 @@ ${SRC_DIR}/RunWindEKF.cpp
 ${SRC_DIR}/RunWindZigZag.cpp
 ${SRC_DIR}/RunXMLParser.cpp
 
-${SRC_DIR}/RunWeGlideUploadFlight.cpp
-# ${SRC_DIR}/TaskEventsPrint.cpp
-# ${SRC_DIR}/TaskInfo.cpp
-# ${SRC_DIR}/TaskPrinting.cpp
+${SRC_DIR}/RunWeGlideClient.cpp
 ${SRC_DIR}/TestAATPoint.cpp
 ${SRC_DIR}/TestARange.cpp
 ${SRC_DIR}/TestAirspaceParser.cpp
@@ -228,7 +225,7 @@ ${SRC_DIR}/TestZeroFinder.cpp
 set(TEST_LIST
     ${SRC_DIR}/TestPlanes.cpp
     ${SRC_DIR}/UploadFile.cpp
-    ${SRC_DIR}/RunWeGlideUploadFlight.cpp
+    ${SRC_DIR}/RunWeGlideClient.cpp
 )
 
 set(SCRIPT_FILES
