@@ -59,8 +59,10 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const noexcept
     }
   }
 
-  if (tim_glue != nullptr && GetComputerSettings().weather.enable_tim)
+  if (tim_glue != nullptr && GetComputerSettings().weather.enable_tim) {
+    const auto lock = tim_glue->Lock();
     for (const auto &i : tim_glue->Get())
       if (auto p = render_projection.GeoToScreenIfVisible(i.location))
         look.thermal_source_icon.Draw(canvas, *p);
+  }
 }

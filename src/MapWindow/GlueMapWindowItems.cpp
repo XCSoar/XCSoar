@@ -66,8 +66,10 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   if (visible_projection.GetMapScale() <= 4000) {
     builder.AddThermals(calculated.thermal_locator, basic, calculated);
 
-    if (tim_glue != nullptr && computer_settings.weather.enable_tim)
+    if (tim_glue != nullptr && computer_settings.weather.enable_tim) {
+      const auto lock = tim_glue->Lock();
       builder.AddThermals(tim_glue->Get());
+    }
   }
 
   if (waypoints)
