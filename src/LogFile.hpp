@@ -60,7 +60,7 @@ LogFormat(const wchar_t *fmt, ...) noexcept;
 
 #if !defined(NDEBUG)
 
-#define LogDebug(...) LogFormat(__VA_ARGS__)
+#define LogDebug(...) LogFmt(__VA_ARGS__)
 
 #else /* NDEBUG */
 
