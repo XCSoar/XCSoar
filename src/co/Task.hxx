@@ -6,11 +6,10 @@
 
 #include "UniqueHandle.hxx"
 #include "Compat.hxx"
+#include "util/ReturnValue.hxx"
 
 #include <cassert>
-#include <concepts>
 #include <exception>
-#include <optional>
 #include <utility>
 
 namespace Co {
@@ -19,68 +18,17 @@ namespace detail {
 
 template<typename R>
 class promise_result_manager {
-	std::optional<R> value;
+	ReturnValue<R> value;
 
 public:
 	template<typename U>
 	void return_value(U &&_value) noexcept {
-		assert(!value);
-
-		value.emplace(std::forward<U>(_value));
+		value.Set(std::forward<U>(_value));
 	}
 
 	[[nodiscard]]
 	decltype(auto) GetReturnValue() noexcept {
-		/* this assertion can fail if control flows off the
-		   end of a coroutine without co_return, which is
-		   undefined behavior according to
-		   https://timsong-cpp.github.io/cppwp/n4861/stmt.return.coroutine */
-		assert(value);
-
-		return std::move(*value);
-	}
-};
-
-#if !defined(ANDROID) && !defined(__APPLE__) && (!defined __clang__ || __clang_major__ >=14)
-
-/**
- * Specialization for certain types to eliminate the std::optional
- * overhead.
- */
-template<typename R>
-requires std::default_initializable<R> && std::movable<R> && std::destructible<R>
-class promise_result_manager<R> {
-	R value;
-
-public:
-	template<typename U>
-	void return_value(U &&_value) noexcept {
-		value = std::forward<U>(_value);
-	}
-
-	[[nodiscard]]
-	decltype(auto) GetReturnValue() noexcept {
-		return std::move(value);
-	}
-};
-
-#endif
-
-/**
- * This specialization supports returning references.
- */
-template<typename R>
-class promise_result_manager<R &> {
-	R *value;
-
-public:
-	void return_value(R &_value) noexcept {
-		value = &_value;
-	}
-
-	[[nodiscard]]
-	R &GetReturnValue() noexcept {
-		return *value;
+		return std::move(value).Get();
 	}
 };
 
