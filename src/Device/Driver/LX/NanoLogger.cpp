@@ -205,7 +205,12 @@ Nano::ReadFlightList(Port &port, RecordedFlightList &flight_list,
 
   env.SetProgressRange(nflights);
 
-  unsigned requested_tail = 1;
+  /* Start download at first flight in logger if capacity of flight_list is
+     enough for all flights in logger. Otherwise, calculate the starting
+     point to fill flight_list to capacity with only the latest flights. */
+  unsigned requested_tail = (unsigned) std::max(1,
+                     (signed) nflights - (signed) flight_list.max_size() + 1);
+
   while (true) {
     const unsigned room = flight_list.max_size() - flight_list.size();
     const unsigned remaining = nflights - requested_tail + 1;
