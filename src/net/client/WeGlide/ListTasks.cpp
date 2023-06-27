@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "ListDeclaredTasks.hpp"
+#include "ListTasks.hpp"
 #include "Error.hpp"
 #include "Settings.hpp"
 #include "json/ParserOutputStream.hxx"

@@ -3,7 +3,7 @@
 
 #include "CoInstance.hpp"
 #include "net/client/WeGlide/DownloadTask.hpp"
-#include "net/client/WeGlide/ListDeclaredTasks.hpp"
+#include "net/client/WeGlide/ListTasks.hpp"
 #include "net/client/WeGlide/Settings.hpp"
 #include "net/client/WeGlide/UploadFlight.hpp"
 #include "net/http/Init.hpp"

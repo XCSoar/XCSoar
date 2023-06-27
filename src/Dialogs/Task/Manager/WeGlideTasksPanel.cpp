@@ -20,7 +20,7 @@
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
 #include "ui/event/CoInjectFunction.hpp"
-#include "net/client/WeGlide/ListDeclaredTasks.hpp"
+#include "net/client/WeGlide/ListTasks.hpp"
 #include "net/client/WeGlide/DownloadTask.hpp"
 #include "net/http/Init.hpp"
 #include "lib/curl/Global.hxx"
