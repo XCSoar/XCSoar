@@ -28,6 +28,16 @@ struct TaskInfo {
 };
 
 /**
+ * Download a list of all tasks by the specified user.
+ *
+ * @see https://api.weglide.org/docs#/task/get_task_by_user_v1_task_get
+ */
+Co::Task<std::vector<TaskInfo>>
+ListTasksByUser(CurlGlobal &curl, const WeGlideSettings &settings,
+                uint_least64_t user_id,
+                ProgressListener &progress);
+
+/**
  * Download a list of all tasks declared in WeGlide.
  *
  * @see https://api.weglide.org/docs#/task/get_all_declared_tasks_v1_task_declaration_get
