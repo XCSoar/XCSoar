@@ -84,7 +84,6 @@ public:
   void LoadTask() noexcept;
 
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
-  void Unprepare() noexcept override;
   void Show(const PixelRect &rc) noexcept override;
   void Hide() noexcept override;
 
@@ -199,14 +198,6 @@ WeGlideTasksPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcep
                                           look.small_font));
 
   CreateButtons(buttons->GetButtonPanel());
-
-  ReloadList();
-}
-
-void
-WeGlideTasksPanel::Unprepare() noexcept
-{
-  inject_reload.Cancel();
 }
 
 void
@@ -215,6 +206,7 @@ WeGlideTasksPanel::Show(const PixelRect &rc) noexcept
   // TODO dialog.ShowTaskView(get_cursor_task());
 
   RefreshView();
+  ReloadList();
 
   ListWidget::Show(rc);
 }
