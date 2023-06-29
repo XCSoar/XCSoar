@@ -29,7 +29,7 @@ namespace SunEphemeris
    * @return days to J2000
    */
   [[gnu::const]]
-  double FNday(const BrokenDateTime &date_time);
+  double FNday(const BrokenDateTime date_time);
 
   /**
    * Calculating the hourangle
@@ -61,7 +61,7 @@ namespace SunEphemeris
 }
 
 double
-SunEphemeris::FNday(const BrokenDateTime &date_time)
+SunEphemeris::FNday(const BrokenDateTime date_time)
 {
   assert(date_time.IsPlausible());
 

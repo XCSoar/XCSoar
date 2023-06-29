@@ -24,7 +24,7 @@ CalculateZoneLetter(const Angle latitude)
 
 [[gnu::const]]
 static unsigned
-CalculateZoneNumber(const GeoPoint &p)
+CalculateZoneNumber(const GeoPoint p)
 {
   if (p.latitude <= Angle::Degrees(64) &&
       p.latitude >= Angle::Degrees(56) &&
