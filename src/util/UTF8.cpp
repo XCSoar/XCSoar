@@ -498,7 +498,7 @@ std::size_t
 TruncateStringUTF8(const char *p,
                    std::size_t max_chars, std::size_t max_bytes) noexcept
 {
-#if !CLANG_CHECK_VERSION(3,6)
+#ifndef __clang__
   /* disabled on clang due to -Wtautological-pointer-compare */
   assert(p != nullptr);
 #endif

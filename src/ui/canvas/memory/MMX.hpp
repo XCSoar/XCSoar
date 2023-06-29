@@ -12,7 +12,7 @@
 
 #include <mmintrin.h>
 
-#if CLANG_OR_GCC_VERSION(4,8)
+#ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcast-align"
 #endif
@@ -138,6 +138,6 @@ public:
 
 #endif /* !GREYSCALE */
 
-#if CLANG_OR_GCC_VERSION(4,8)
+#ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif

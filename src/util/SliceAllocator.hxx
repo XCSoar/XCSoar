@@ -182,7 +182,7 @@ public:
 	}
 };
 
-#if CLANG_CHECK_VERSION(3,9)
+#ifdef __clang__
 #pragma GCC diagnostic push
 /* suppress this warning, because GlobalSliceAllocator::allocator is
    going to be instantiated in GlobalSliceAllocator.hxx */
@@ -244,6 +244,6 @@ public:
 	}
 };
 
-#if CLANG_CHECK_VERSION(3,9)
+#ifdef __clang__
 #pragma GCC diagnostic pop
 #endif

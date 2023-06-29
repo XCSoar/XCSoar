@@ -164,7 +164,7 @@ TopCanvas::OnResize(PixelSize new_size) noexcept
 
 #ifdef GREYSCALE
 
-#if CLANG_OR_GCC_VERSION(4,8)
+#ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcast-align"
 #endif
@@ -233,7 +233,7 @@ CopyFromGreyscale(
   ::SDL_UnlockTexture(dest);
 }
 
-#if CLANG_OR_GCC_VERSION(4,8)
+#ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
 
