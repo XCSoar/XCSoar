@@ -13,13 +13,13 @@ struct UTM {
 
   UTM() = default;
   constexpr UTM(unsigned char _zone_number, char _zone_letter,
-                double _easting, double _northing)
+                double _easting, double _northing) noexcept
     :zone_number(_zone_number), zone_letter(_zone_letter),
      easting(_easting), northing(_northing) {}
 
   [[gnu::const]]
-  static UTM FromGeoPoint(GeoPoint p);
+  static UTM FromGeoPoint(GeoPoint p) noexcept;
 
   [[gnu::pure]]
-  GeoPoint ToGeoPoint() const;
+  GeoPoint ToGeoPoint() const noexcept;
 };
