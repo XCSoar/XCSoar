@@ -39,7 +39,7 @@ static bool
 ParseString(const TCHAR *src, tstring &dest) noexcept
 {
   if (src[0] == 0)
-    return true;
+    return false;
 
   dest.assign(src);
   trim_inplace(dest);

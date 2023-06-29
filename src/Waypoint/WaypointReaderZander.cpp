@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 static bool
-ParseString(const TCHAR* src, tstring& dest, unsigned len) noexcept
+ParseString(const TCHAR* src, tstring &dest, unsigned len) noexcept
 {
   if (src[0] == 0)
     return true;
