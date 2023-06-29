@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "Asset.hpp"
-
 #include <linux/input.h>
 
 static constexpr struct {
