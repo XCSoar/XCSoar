@@ -234,7 +234,7 @@ TabDisplay::OnPaint(Canvas &canvas) noexcept
     const auto &button = *buttons[i];
 
     const bool is_down = dragging && i == down_index && !drag_off_button;
-    const bool is_selected = i == pager.GetCurrentIndex();
+    const bool is_selected = i == current_index;
 
     button.Draw(canvas, look, is_focused, is_down, is_selected);
   }
@@ -276,10 +276,10 @@ TabDisplay::OnKeyCheck(unsigned key_code) const noexcept
     return true;
 
   case KEY_LEFT:
-    return pager.GetCurrentIndex() > 0;
+    return current_index > 0;
 
   case KEY_RIGHT:
-    return pager.GetCurrentIndex() < buttons.size() - 1;
+    return current_index < buttons.size() - 1;
 
   case KEY_DOWN:
     return false;
@@ -318,7 +318,7 @@ TabDisplay::OnKeyDown(unsigned key_code) noexcept
     return true;
 
   case KEY_RETURN:
-    pager.ClickPage(pager.GetCurrentIndex());
+    pager.ClickPage(current_index);
     return true;
 
   case KEY_DOWN:

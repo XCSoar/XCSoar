@@ -257,6 +257,6 @@ TabWidget::KeyPress(unsigned key_code) noexcept
 void
 TabWidget::OnPageFlipped() noexcept
 {
-  tab_display->Invalidate();
+  tab_display->SetCurrentIndex(GetCurrentIndex());
   PagerWidget::OnPageFlipped();
 }

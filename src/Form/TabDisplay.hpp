@@ -29,6 +29,8 @@ class TabDisplay final : public PaintWindow
 
   const unsigned tab_line_height;
 
+  unsigned current_index = 0;
+
   unsigned down_index; // index of tab where mouse down occurred
 
   bool vertical;
@@ -64,6 +66,14 @@ public:
 
   [[gnu::pure]]
   const TCHAR *GetCaption(unsigned i) const noexcept;
+
+  void SetCurrentIndex(unsigned i) noexcept {
+    if (i == current_index)
+      return;
+
+    current_index = i;
+    Invalidate();
+  }
 
 private:
   /**
