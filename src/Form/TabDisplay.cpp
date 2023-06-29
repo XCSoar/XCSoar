@@ -208,7 +208,7 @@ TabDisplay::GetCaption(unsigned i) const noexcept
 int
 TabDisplay::GetButtonIndexAt(PixelPoint p) const noexcept
 {
-  for (unsigned i = 0; i < GetSize(); i++) {
+  for (std::size_t i = 0; i < buttons.size(); i++) {
     if (buttons[i]->rc.Contains(p))
       return i;
   }
@@ -279,7 +279,7 @@ TabDisplay::OnKeyCheck(unsigned key_code) const noexcept
     return pager.GetCurrentIndex() > 0;
 
   case KEY_RIGHT:
-    return pager.GetCurrentIndex() < GetSize() - 1;
+    return pager.GetCurrentIndex() < buttons.size() - 1;
 
   case KEY_DOWN:
     return false;
@@ -298,22 +298,22 @@ TabDisplay::OnKeyDown(unsigned key_code) noexcept
   switch (key_code) {
 
   case KEY_APP1:
-    if (GetSize() > 0)
+    if (buttons.size() > 0)
       pager.ClickPage(0);
     return true;
 
   case KEY_APP2:
-    if (GetSize() > 1)
+    if (buttons.size() > 1)
       pager.ClickPage(1);
     return true;
 
   case KEY_APP3:
-    if (GetSize() > 2)
+    if (buttons.size() > 2)
       pager.ClickPage(2);
     return true;
 
   case KEY_APP4:
-    if (GetSize() > 3)
+    if (buttons.size() > 3)
       pager.ClickPage(3);
     return true;
 

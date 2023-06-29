@@ -59,10 +59,6 @@ public:
 
   void UpdateLayout(const PixelRect &rc, bool _vertical) noexcept;
 
-  unsigned GetSize() const noexcept {
-    return buttons.size();
-  }
-
   void Add(const TCHAR *caption, const MaskedIcon *icon=nullptr) noexcept;
 
   [[gnu::pure]]
