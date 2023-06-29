@@ -13,7 +13,10 @@ TaskMiscPanel::TaskMiscPanel(TaskManagerDialog &dialog,
   Add(std::make_unique<TaskActionsPanel>(dialog, *this, _active_task, _task_modified));
 
   Add(CreateTaskListPanel(dialog, _active_task, _task_modified));
-  Add(CreateWeGlideTasksPanel(dialog, _active_task, _task_modified));
+  Add(CreateWeGlideTasksPanel(dialog, WeGlideTaskSelection::USER,
+                              _active_task, _task_modified));
+  Add(CreateWeGlideTasksPanel(dialog, WeGlideTaskSelection::PUBLIC_DECLARED,
+                              _active_task, _task_modified));
 }
 
 void

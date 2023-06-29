@@ -9,7 +9,13 @@ class Widget;
 class TaskManagerDialog;
 class OrderedTask;
 
+enum class WeGlideTaskSelection {
+  USER,
+  PUBLIC_DECLARED,
+};
+
 std::unique_ptr<Widget>
 CreateWeGlideTasksPanel(TaskManagerDialog &dialog,
+                        WeGlideTaskSelection selection,
                         std::unique_ptr<OrderedTask> &active_task,
                         bool *task_modified) noexcept;

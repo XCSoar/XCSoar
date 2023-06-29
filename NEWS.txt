@@ -1,6 +1,6 @@
 Version 7.36 - not yet released
 * WeGlide
-  - allow downloading arbitrary public task declarations
+  - allow downloading all user tasks and public task declarations
 
 Version 7.35 - 2023/06/16
 * user interface

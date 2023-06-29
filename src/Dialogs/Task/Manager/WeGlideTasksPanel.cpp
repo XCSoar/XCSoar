@@ -24,6 +24,7 @@
 #include "net/client/WeGlide/DownloadTask.hpp"
 #include "net/http/Init.hpp"
 #include "lib/curl/Global.hxx"
+#include "util/Compiler.h"
 #include "util/ConvertString.hpp"
 #include "UIGlobals.hpp"
 #include "Components.hpp"
@@ -56,13 +57,17 @@ class WeGlideTasksPanel final
   NullOperationEnvironment null_progress_listener;
   UI::CoInjectFunction<List> inject_reload{Net::curl->GetEventLoop()};
 
+  const WeGlideTaskSelection selection;
+
 public:
   WeGlideTasksPanel(TaskManagerDialog &_dialog,
+                    WeGlideTaskSelection _selection,
                     std::unique_ptr<OrderedTask> &_active_task, bool *_task_modified,
                     TextWidget &_summary) noexcept
     :dialog(_dialog),
      active_task(_active_task), task_modified(_task_modified),
-     summary(_summary)  {}
+     summary(_summary),
+     selection(_selection) {}
 
   void SetTwoWidgets(TwoWidgets &_two_widgets) noexcept {
     two_widgets = &_two_widgets;
@@ -115,11 +120,31 @@ WeGlideTasksPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   if (UTF8ToWideConverter w{info.name.c_str()}; w.IsValid())
     row_renderer.DrawFirstRow(canvas, rc, w);
 
-  if (UTF8ToWideConverter w{info.user_name.c_str()}; w.IsValid())
-    row_renderer.DrawSecondRow(canvas, rc, w);
+  if (selection != WeGlideTaskSelection::USER)
+    if (UTF8ToWideConverter w{info.user_name.c_str()}; w.IsValid())
+      row_renderer.DrawSecondRow(canvas, rc, w);
 
   row_renderer.DrawRightSecondRow(canvas, rc,
                                   FormatUserDistanceSmart(info.distance));
+}
+
+static auto
+LoadTaskList(WeGlideTaskSelection selection,
+             const WeGlideSettings &settings,
+             ProgressListener &progress) noexcept
+{
+  switch (selection) {
+  case WeGlideTaskSelection::USER:
+    return WeGlide::ListTasksByUser(*Net::curl, settings,
+                                    settings.pilot_id,
+                                    progress);
+
+  case WeGlideTaskSelection::PUBLIC_DECLARED:
+    return WeGlide::ListDeclaredTasks(*Net::curl, settings,
+                                      progress);
+  }
+
+  gcc_unreachable();
 }
 
 inline void
@@ -128,8 +153,8 @@ WeGlideTasksPanel::ReloadList() noexcept
   const auto &settings = CommonInterface::GetComputerSettings();
 
   inject_reload.Cancel();
-  inject_reload.Start(WeGlide::ListDeclaredTasks(*Net::curl, settings.weglide,
-                                                 null_progress_listener),
+  inject_reload.Start(LoadTaskList(selection, settings.weglide,
+                                   null_progress_listener),
                       [this](List &&_list){
                         list = std::move(_list);
                         GetList().SetLength(list.size());
@@ -220,12 +245,14 @@ WeGlideTasksPanel::Hide() noexcept
 
 std::unique_ptr<Widget>
 CreateWeGlideTasksPanel(TaskManagerDialog &dialog,
+                        WeGlideTaskSelection selection,
                         std::unique_ptr<OrderedTask> &active_task,
                         bool *task_modified) noexcept
 {
   auto summary = std::make_unique<TextWidget>();
-  auto widget = std::make_unique<WeGlideTasksPanel>(dialog, active_task, task_modified,
-                                                *summary);
+  auto widget = std::make_unique<WeGlideTasksPanel>(dialog, selection,
+                                                    active_task, task_modified,
+                                                    *summary);
   auto tw = std::make_unique<TwoWidgets>(std::move(widget),
                                          std::move(summary));
   auto &list = (WeGlideTasksPanel &)tw->GetFirst();

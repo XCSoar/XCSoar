@@ -140,8 +140,12 @@ TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &_parent,
     AddButton(_("Download WeGlide task"),
               [this](){ OnDownloadClicked(); });
 
-  AddButton(_("All WeGlide tasks"), [this](){
-    parent.SetCurrent(parent.PAGE_WEGLIDE_LIST);
+  AddButton(_("My WeGlide tasks"), [this](){
+    parent.SetCurrent(parent.PAGE_WEGLIDE_USER);
+  });
+
+  AddButton(_("Public WeGlide tasks"), [this](){
+    parent.SetCurrent(parent.PAGE_WEGLIDE_PUBLIC_DECLARED);
   });
 
   if (is_simulator())
