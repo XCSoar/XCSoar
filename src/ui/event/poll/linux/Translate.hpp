@@ -60,7 +60,7 @@ static constexpr struct {
 };
 
 static unsigned
-TranslateKeyCode(unsigned key_code, bool &is_char)
+TranslateKeyCode(unsigned key_code, bool &is_char) noexcept
 {
   for (auto i : key_code_translation_table) {
     if (key_code == i.from) {
