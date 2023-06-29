@@ -5,6 +5,7 @@
 #include "Waypoint/Waypoints.hpp"
 #include "Geo/UTM.hpp"
 #include "io/LineReader.hpp"
+#include "util/StringStrip.hxx"
 
 #include <stdlib.h>
 
@@ -113,9 +114,7 @@ ParseAltitude(const TCHAR *src, double &dest) noexcept
 static tstring
 ParseString(tstring_view src) noexcept
 {
-  tstring dest{src};
-  trim_inplace(dest);
-  return dest;
+  return tstring{Strip(src)};
 }
 
 bool

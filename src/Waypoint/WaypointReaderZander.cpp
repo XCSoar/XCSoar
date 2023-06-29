@@ -3,24 +3,26 @@
 
 #include "WaypointReaderZander.hpp"
 #include "Waypoint/Waypoints.hpp"
+#include "util/StringStrip.hxx"
 
 #include <stdlib.h>
 
 static bool
-ParseString(const TCHAR* src, tstring &dest, unsigned len) noexcept
+ParseString(tstring_view src, tstring &dest, std::size_t len) noexcept
 {
-  if (src[0] == 0)
+  if (src.empty())
     return false;
 
-  dest.assign(src);
+  src = Strip(src);
+
+  if (src.size() > len)
+    src = src.substr(0, len);
 
   // Cut the string after the first space, tab or null character
-  size_t found = dest.find_first_of(_T("\t\0"));
-  if (found != tstring::npos)
-    dest = dest.substr(0, found);
+  if (auto i = dest.find_first_of(_T("\t\0")); i != dest.npos)
+    src = src.substr(0, i);
 
-  dest = dest.substr(0, len);
-  trim_inplace(dest);
+  dest.assign(src);
   return true;
 }
 

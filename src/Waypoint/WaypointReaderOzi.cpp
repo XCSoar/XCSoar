@@ -36,14 +36,12 @@ ParseNumber(const TCHAR *src, long &dest) noexcept
 }
 
 static bool
-ParseString(const TCHAR *src, tstring &dest) noexcept
+ParseString(tstring_view src, tstring &dest) noexcept
 {
-  if (src[0] == 0)
+  if (src.empty())
     return false;
 
-  dest.assign(src);
-  trim_inplace(dest);
-
+  dest.assign(Strip(src));
   return true;
 }
 
