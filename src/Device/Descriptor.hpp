@@ -364,7 +364,6 @@ private:
    *
    * Throws on error.
    */
-  gcc_nonnull_all
   bool OpenOnPort(std::unique_ptr<DumpPort> &&port, OperationEnvironment &env);
 
   bool OpenInternalSensors();

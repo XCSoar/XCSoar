@@ -5,7 +5,6 @@
 
 #include "Concepts.hpp"
 #include "../PortableColor.hpp"
-#include "util/Compiler.h"
 
 #include <functional>
 
@@ -43,7 +42,7 @@ struct PerPixelOperations : private WritePixelOperation {
     WritePixelOperation::WritePixel(p, c);
   }
 
-  gcc_hot
+  [[gnu::hot]]
   void FillPixels(pointer p, unsigned n, source_color_type c) const {
     PixelTraits::ForHorizontal(p, n, [this, c](pointer p){
         /* requires "this->" due to gcc 4.7.2 crash bug */
@@ -51,7 +50,7 @@ struct PerPixelOperations : private WritePixelOperation {
       });
   }
 
-  gcc_hot
+  [[gnu::hot]]
   void CopyPixels(rpointer p, source_const_rpointer src,
                   unsigned n) const {
     for (unsigned i = 0; i < n; ++i)

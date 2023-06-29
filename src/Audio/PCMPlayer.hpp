@@ -9,8 +9,6 @@
 
 #if !defined(ANDROID) && !defined(_WIN32)
 
-#include "util/Compiler.h"
-
 #include <cstddef>
 #include <cstdint>
 
@@ -71,7 +69,7 @@ protected:
    * @return The number of read frames (an upmixed mono frame counts as one),
    * not including the silence frames.
    */
-  gcc_nonnull_all
+  [[gnu::nonnull]]
   size_t FillPCMBuffer(int16_t *buffer, size_t n);
 #endif
 };

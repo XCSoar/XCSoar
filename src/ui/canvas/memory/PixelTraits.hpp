@@ -193,14 +193,14 @@ struct GreyscalePixelTraits {
    * row.  Pass the pointer to each pixel.
    */
   template<typename F>
-  gcc_hot
+  [[gnu::hot]]
   static void ForHorizontal(pointer p, unsigned n, F f) {
     for (unsigned i = 0; i < n; ++i)
       f(Next(p, i));
   }
 
   template<typename F>
-  gcc_hot
+  [[gnu::hot]]
   static void ForHorizontal(rpointer p, const_rpointer q,
                             unsigned n, F f) {
     for (unsigned i = 0; i < n; ++i)
@@ -212,7 +212,7 @@ struct GreyscalePixelTraits {
    * column.  Pass the pointer to each pixel.
    */
   template<typename F>
-  gcc_hot
+  [[gnu::hot]]
   static void ForVertical(pointer p, std::size_t pitch,
                           unsigned n, F f) noexcept {
     for (; n > 0; --n, p = NextByte(p, pitch))
@@ -228,7 +228,7 @@ struct GreyscalePixelTraits {
   template<AnyPixelTraits SPT>
   struct Mixed {
     template<typename F>
-    gcc_hot
+    [[gnu::hot]]
     static void ForHorizontal(pointer p,
                               typename SPT::const_pointer q,
                               unsigned n, F f) {
