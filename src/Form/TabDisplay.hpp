@@ -27,13 +27,14 @@ class TabDisplay final : public PaintWindow
   class Button;
   StaticArray<Button *, 32> buttons;
 
+  const unsigned tab_line_height;
+
+  unsigned down_index; // index of tab where mouse down occurred
+
   bool vertical;
 
   bool dragging = false; // tracks that mouse is down and captured
   bool drag_off_button; // set by mouse_move
-  unsigned down_index; // index of tab where mouse down occurred
-
-  const unsigned tab_line_height;
 
 public:
   TabDisplay(TabWidget &_pager, const DialogLook &look,

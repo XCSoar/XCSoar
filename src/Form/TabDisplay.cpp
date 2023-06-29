@@ -55,8 +55,8 @@ TabDisplay::TabDisplay(TabWidget &_pager, const DialogLook &_look,
                        WindowStyle style) noexcept
   :pager(_pager),
    look(_look),
-   vertical(_vertical),
-   tab_line_height(Layout::VptScale(5))
+   tab_line_height(Layout::VptScale(5)),
+   vertical(_vertical)
 {
   style.TabStop();
   Create(parent, rc, style);
