@@ -168,8 +168,9 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR *line, Waypoints &waypoints)
 
   // Parse location
   GeoPoint location;
-  if ((!is_utm && !ParseLocation(line, location)) ||
-      (is_utm && !ParseLocationUTM(line, location)))
+  if (!(is_utm
+        ? ParseLocationUTM(line, location)
+        : ParseLocation(line, location)))
     return false;
 
   // Skip whitespace
