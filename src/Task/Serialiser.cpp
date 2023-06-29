@@ -131,6 +131,8 @@ Serialise(WritableDataNode &node, const ObservationZonePoint &data)
   case ObservationZone::Shape::CUSTOM_KEYHOLE: {
     const KeyholeZone &keyhole = (const KeyholeZone &)data;
     node.SetAttribute(_T("type"), _T("CustomKeyhole"));
+    node.SetAttribute(_T("angle"), keyhole.GetSectorAngle());
+    node.SetAttribute(_T("radius"), keyhole.GetRadius());
     node.SetAttribute(_T("inner_radius"), keyhole.GetInnerRadius());
     break;
   }
