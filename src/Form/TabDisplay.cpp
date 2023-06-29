@@ -205,7 +205,7 @@ TabDisplay::GetCaption(unsigned i) const noexcept
   return buttons[i]->caption.c_str();
 }
 
-int
+inline int
 TabDisplay::GetButtonIndexAt(PixelPoint p) const noexcept
 {
   for (std::size_t i = 0; i < buttons.size(); i++) {

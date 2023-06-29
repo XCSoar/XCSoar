@@ -64,13 +64,13 @@ public:
   [[gnu::pure]]
   const TCHAR *GetCaption(unsigned i) const noexcept;
 
+private:
   /**
    * @return -1 if there is no button at the specified position
    */
   [[gnu::pure]]
   int GetButtonIndexAt(PixelPoint p) const noexcept;
 
-private:
   void CalculateLayout() noexcept;
 
 protected:
