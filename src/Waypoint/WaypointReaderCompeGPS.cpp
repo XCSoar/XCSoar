@@ -7,7 +7,7 @@
 #include "Geo/UTM.hpp"
 
 static bool
-ParseAngle(const TCHAR *&src, Angle &angle)
+ParseAngle(const TCHAR *&src, Angle &angle) noexcept
 {
   // 41.234234N
 
@@ -42,7 +42,7 @@ ParseAngle(const TCHAR *&src, Angle &angle)
 }
 
 static bool
-ParseLocation(const TCHAR *&src, GeoPoint &p)
+ParseLocation(const TCHAR *&src, GeoPoint &p) noexcept
 {
   // A 41.234234N 7.234424W
 
@@ -70,7 +70,7 @@ ParseLocation(const TCHAR *&src, GeoPoint &p)
 }
 
 static bool
-ParseLocationUTM(const TCHAR *&src, GeoPoint &p)
+ParseLocationUTM(const TCHAR *&src, GeoPoint &p) noexcept
 {
   // 31T 318570 4657569
 
@@ -106,7 +106,7 @@ ParseLocationUTM(const TCHAR *&src, GeoPoint &p)
 }
 
 static bool
-ParseAltitude(const TCHAR *&src, double &dest)
+ParseAltitude(const TCHAR *&src, double &dest) noexcept
 {
   TCHAR *endptr;
   double value = _tcstod(src, &endptr);
