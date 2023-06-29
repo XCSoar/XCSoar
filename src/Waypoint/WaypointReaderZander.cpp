@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 static bool
-ParseString(const TCHAR* src, tstring& dest, unsigned len)
+ParseString(const TCHAR* src, tstring& dest, unsigned len) noexcept
 {
   if (src[0] == 0)
     return true;
@@ -25,7 +25,7 @@ ParseString(const TCHAR* src, tstring& dest, unsigned len)
 }
 
 static bool
-ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
+ParseAngle(const TCHAR* src, Angle& dest, const bool lat) noexcept
 {
   TCHAR *endptr;
 
@@ -58,7 +58,7 @@ ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
 }
 
 static bool
-ParseAltitude(const TCHAR *src, double &dest)
+ParseAltitude(const TCHAR *src, double &dest) noexcept
 {
   // Parse string
   TCHAR *endptr;
@@ -72,7 +72,7 @@ ParseAltitude(const TCHAR *src, double &dest)
 }
 
 static bool
-ParseFlags(const TCHAR* src, Waypoint &dest)
+ParseFlags(const TCHAR *src, Waypoint &dest) noexcept
 {
   // WP = Waypoint
   // HA = Home Field
@@ -112,7 +112,7 @@ ParseFlags(const TCHAR* src, Waypoint &dest)
 }
 
 static bool
-ParseFlagsFromDescription(const TCHAR* src, Waypoint &dest)
+ParseFlagsFromDescription(const TCHAR* src, Waypoint &dest) noexcept
 {
   // If the description starts with 1 the waypoint is an airport
   // (usually the description of an airport is the frequency)
