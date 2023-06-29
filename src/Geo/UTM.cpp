@@ -44,7 +44,7 @@ CalculateZoneNumber(const GeoPoint p) noexcept
       return 37;
   }
 
-  return (int)floor((p.longitude.Degrees() + 180) / 6) + 1;
+  return unsigned((p.longitude.Degrees() + 180) / 6) + 1;
 }
 
 static constexpr Angle
