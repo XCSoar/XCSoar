@@ -17,48 +17,54 @@ static constexpr double SUN_DIAMETER = 0.53;
 // Atmospheric refraction degrees
 static constexpr double AIR_REFRACTION = 34.0 / 60.0;
 
-namespace SunEphemeris
-{
-  /**
-   * Get the days to J2000
-   * FNday only works between 1901 to 2099 - see Meeus chapter 7
-   * @param y Year
-   * @param m Month
-   * @param d Day
-   * @param h UT in decimal hours
-   * @return days to J2000
-   */
-  [[gnu::const]]
-  double FNday(const BrokenDateTime date_time);
+namespace SunEphemeris {
 
-  /**
-   * Calculating the hourangle
-   * @param lat Latitude
-   * @param declin Declination
-   * @return The hourangle
-   */
-  [[gnu::const]]
-  Angle GetHourAngle(Angle lat, Angle declin);
+/**
+ * Get the days to J2000
+ * FNday only works between 1901 to 2099 - see Meeus chapter 7
+ * @param y Year
+ * @param m Month
+ * @param d Day
+ * @param h UT in decimal hours
+ * @return days to J2000
+ */
+[[gnu::const]]
+double
+FNday(const BrokenDateTime date_time);
 
-  /**
-   * Calculating the hourangle for twilight times
-   * @param lat Latitude
-   * @param declin Declination
-   * @return The hourangle for twilight times
-   */
-  [[gnu::const]]
-  Angle GetHourAngleTwilight(Angle lat, Angle declin);
+/**
+ * Calculating the hourangle
+ * @param lat Latitude
+ * @param declin Declination
+ * @return The hourangle
+ */
+[[gnu::const]]
+Angle
+GetHourAngle(Angle lat, Angle declin);
 
-  /**
-   * Find the ecliptic longitude of the Sun
-   * @return The ecliptic longitude of the Sun
-   */
-  [[gnu::pure]]
-  Angle GetEclipticLongitude(double d, Angle l);
+/**
+ * Calculating the hourangle for twilight times
+ * @param lat Latitude
+ * @param declin Declination
+ * @return The hourangle for twilight times
+ */
+[[gnu::const]]
+Angle
+GetHourAngleTwilight(Angle lat, Angle declin);
 
-  [[gnu::pure]]
-  Angle GetMeanSunLongitude(double d);
-}
+/**
+ * Find the ecliptic longitude of the Sun
+ * @return The ecliptic longitude of the Sun
+ */
+[[gnu::pure]]
+Angle
+GetEclipticLongitude(double d, Angle l);
+
+[[gnu::pure]]
+Angle
+GetMeanSunLongitude(double d);
+
+} // namespace SunEphemeris
 
 double
 SunEphemeris::FNday(const BrokenDateTime date_time)
