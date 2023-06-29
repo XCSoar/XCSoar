@@ -29,42 +29,7 @@ namespace SunEphemeris {
  * @return days to J2000
  */
 [[gnu::const]]
-double
-FNday(const BrokenDateTime date_time);
-
-/**
- * Calculating the hourangle
- * @param lat Latitude
- * @param declin Declination
- * @return The hourangle
- */
-[[gnu::const]]
-Angle
-GetHourAngle(Angle lat, Angle declin);
-
-/**
- * Calculating the hourangle for twilight times
- * @param lat Latitude
- * @param declin Declination
- * @return The hourangle for twilight times
- */
-[[gnu::const]]
-Angle
-GetHourAngleTwilight(Angle lat, Angle declin);
-
-/**
- * Find the ecliptic longitude of the Sun
- * @return The ecliptic longitude of the Sun
- */
-[[gnu::pure]]
-Angle
-GetEclipticLongitude(double d, Angle l);
-
-[[gnu::pure]]
-Angle
-GetMeanSunLongitude(double d);
-
-double
+static double
 FNday(const BrokenDateTime date_time)
 {
   assert(date_time.IsPlausible());
@@ -76,7 +41,14 @@ FNday(const BrokenDateTime date_time)
   return double(luku) - 730531.5 + (date_time.hour % 24) / 24.;
 }
 
-Angle
+/**
+ * Calculating the hourangle
+ * @param lat Latitude
+ * @param declin Declination
+ * @return The hourangle
+ */
+[[gnu::const]]
+static Angle
 GetHourAngle(Angle lat, Angle declin)
 {
   Angle dfo = Angle::Degrees(SUN_DIAMETER / 2 + AIR_REFRACTION);
@@ -89,7 +61,14 @@ GetHourAngle(Angle lat, Angle declin)
   return Angle::asin(fo) + Angle::QuarterCircle();
 }
 
-Angle
+/**
+ * Calculating the hourangle for twilight times
+ * @param lat Latitude
+ * @param declin Declination
+ * @return The hourangle for twilight times
+ */
+[[gnu::const]]
+static Angle
 GetHourAngleTwilight(Angle lat, Angle declin)
 {
   Angle df1 = Angle::Degrees(6);
@@ -102,7 +81,12 @@ GetHourAngleTwilight(Angle lat, Angle declin)
   return Angle::asin(fi) + Angle::QuarterCircle();
 }
 
-Angle
+/**
+ * Find the ecliptic longitude of the Sun
+ * @return The ecliptic longitude of the Sun
+ */
+[[gnu::pure]]
+static Angle
 GetEclipticLongitude(double d, Angle L)
 {
   //   mean anomaly of the Sun
@@ -113,7 +97,8 @@ GetEclipticLongitude(double d, Angle L)
           Angle::Degrees(.02) * (g * 2).sin()).AsBearing();
 }
 
-Angle
+[[gnu::pure]]
+static Angle
 GetMeanSunLongitude(double d)
 {
   // mean longitude of the Sun
