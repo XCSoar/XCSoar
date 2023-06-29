@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "Form/TabDisplay.hpp"
-#include "Widget/TabWidget.hpp"
+#include "TabDisplay.hpp"
+#include "TabHandler.hpp"
 #include "Renderer/TabRenderer.hpp"
 #include "Look/DialogLook.hpp"
 #include "ui/event/KeyCode.hpp"
@@ -49,11 +49,11 @@ public:
   }
 };
 
-TabDisplay::TabDisplay(TabWidget &_pager, const DialogLook &_look,
+TabDisplay::TabDisplay(TabHandler &_handler, const DialogLook &_look,
                        ContainerWindow &parent, PixelRect rc,
                        bool _vertical,
                        WindowStyle style) noexcept
-  :pager(_pager),
+  :handler(_handler),
    look(_look),
    tab_line_height(Layout::VptScale(5)),
    vertical(_vertical)
@@ -299,40 +299,40 @@ TabDisplay::OnKeyDown(unsigned key_code) noexcept
 
   case KEY_APP1:
     if (buttons.size() > 0)
-      pager.ClickPage(0);
+      handler.ClickPage(0);
     return true;
 
   case KEY_APP2:
     if (buttons.size() > 1)
-      pager.ClickPage(1);
+      handler.ClickPage(1);
     return true;
 
   case KEY_APP3:
     if (buttons.size() > 2)
-      pager.ClickPage(2);
+      handler.ClickPage(2);
     return true;
 
   case KEY_APP4:
     if (buttons.size() > 3)
-      pager.ClickPage(3);
+      handler.ClickPage(3);
     return true;
 
   case KEY_RETURN:
-    pager.ClickPage(current_index);
+    handler.ClickPage(current_index);
     return true;
 
   case KEY_DOWN:
     break;
 
   case KEY_RIGHT:
-    pager.NextPage();
+    handler.NextPage();
     return true;
 
   case KEY_UP:
     break;
 
   case KEY_LEFT:
-    pager.PreviousPage();
+    handler.PreviousPage();
     return true;
   }
   return PaintWindow::OnKeyDown(key_code);
@@ -366,7 +366,7 @@ TabDisplay::OnMouseUp(PixelPoint p) noexcept
     EndDrag();
 
     if (!drag_off_button)
-      pager.ClickPage(down_index);
+      handler.ClickPage(down_index);
 
     return true;
   } else {

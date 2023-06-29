@@ -4,6 +4,7 @@
 #pragma once
 
 #include "PagerWidget.hpp"
+#include "Form/TabHandler.hpp"
 
 #include <cassert>
 #include <memory>
@@ -15,7 +16,7 @@ class TabDisplay;
 /**
  * A #PagerWidget that navigates with a #TabDisplay.
  */
-class TabWidget : public PagerWidget {
+class TabWidget : public PagerWidget, TabHandler {
 public:
   enum class Orientation {
     AUTO,
@@ -119,10 +120,7 @@ public:
   [[gnu::pure]]
   const TCHAR *GetButtonCaption(unsigned i) const noexcept;
 
-  bool ClickPage(unsigned i) noexcept;
-  bool NextPage() noexcept;
-  bool PreviousPage() noexcept;
-
+public:
   /* virtual methods from class Widget */
   PixelSize GetMinimumSize() const noexcept override;
   PixelSize GetMaximumSize() const noexcept override;
@@ -139,4 +137,10 @@ public:
 protected:
   /* virtual methods from class PagerWidget */
   void OnPageFlipped() noexcept override;
+
+private:
+  /* virtual methods from class TabHandler */
+  bool ClickPage(unsigned i) noexcept override;
+  bool NextPage() noexcept override;
+  bool PreviousPage() noexcept override;
 };

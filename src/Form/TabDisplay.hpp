@@ -11,7 +11,7 @@
 struct DialogLook;
 class MaskedIcon;
 class ContainerWindow;
-class TabWidget;
+class TabHandler;
 
 /**
  * TabDisplay class handles onPaint callback for TabBar UI
@@ -21,7 +21,7 @@ class TabWidget;
  */
 class TabDisplay final : public PaintWindow
 {
-  TabWidget &pager;
+  TabHandler &handler;
   const DialogLook &look;
 
   class Button;
@@ -39,7 +39,7 @@ class TabDisplay final : public PaintWindow
   bool drag_off_button; // set by mouse_move
 
 public:
-  TabDisplay(TabWidget &_pager, const DialogLook &look,
+  TabDisplay(TabHandler &_handler, const DialogLook &look,
              ContainerWindow &parent, PixelRect rc,
              bool vertical,
              WindowStyle style=WindowStyle()) noexcept;
