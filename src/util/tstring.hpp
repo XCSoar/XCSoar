@@ -10,6 +10,3 @@ using tstring = std::wstring;
 #else
 using tstring = std::string;
 #endif
-
-tstring &
-trim_inplace(tstring &s);
