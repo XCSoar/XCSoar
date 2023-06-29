@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "Geo/UTM.hpp"
-#include "Geo/GeoPoint.hpp"
+#include "UTM.hpp"
+#include "GeoPoint.hpp"
 #include "WGS84.hpp"
 
 static constexpr double k0 = 0.9996;
