@@ -69,9 +69,6 @@
 #define gcc_pure __attribute__((pure))
 #define gcc_unused __attribute__((unused))
 
-#define gcc_likely(x) __builtin_expect (!!(x), 1)
-#define gcc_unlikely(x) __builtin_expect (!!(x), 0)
-
 #define gcc_visibility_default __attribute__((visibility("default")))
 
 #else
@@ -84,9 +81,6 @@
 #define gcc_printf(a,b)
 #define gcc_pure
 #define gcc_unused
-
-#define gcc_likely(x) (x)
-#define gcc_unlikely(x) (x)
 
 #define gcc_visibility_default
 

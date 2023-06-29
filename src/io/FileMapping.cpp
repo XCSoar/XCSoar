@@ -45,7 +45,7 @@ FileMapping::FileMapping(Path path)
 #else /* !HAVE_POSIX */
   hFile = ::CreateFile(path.c_str(), GENERIC_READ, FILE_SHARE_READ,
                        nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-  if (gcc_unlikely(hFile == INVALID_HANDLE_VALUE))
+  if (hFile == INVALID_HANDLE_VALUE) [[unlikely]]
     throw FormatLastError("Failed to open %s",
                           (const char *)NarrowPathName(path));
 
@@ -68,7 +68,7 @@ FileMapping::FileMapping(Path path)
   hMapping = ::CreateFileMapping(hFile, nullptr, PAGE_READONLY,
                                  fi.nFileSizeHigh, fi.nFileSizeLow,
                                  nullptr);
-  if (gcc_unlikely(hMapping == nullptr)) {
+  if (hMapping == nullptr) [[unlikely]] {
     const auto e = GetLastError();
     ::CloseHandle(hFile);
     throw FormatLastError(e, "Failed to map %s",
