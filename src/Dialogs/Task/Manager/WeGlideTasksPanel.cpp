@@ -59,27 +59,27 @@ class WeGlideTasksPanel final
 public:
   WeGlideTasksPanel(TaskManagerDialog &_dialog,
                     std::unique_ptr<OrderedTask> &_active_task, bool *_task_modified,
-                    TextWidget &_summary)
+                    TextWidget &_summary) noexcept
     :dialog(_dialog),
      active_task(_active_task), task_modified(_task_modified),
      summary(_summary)  {}
 
-  void SetTwoWidgets(TwoWidgets &_two_widgets) {
+  void SetTwoWidgets(TwoWidgets &_two_widgets) noexcept {
     two_widgets = &_two_widgets;
   }
 
-  void SetButtonPanel(ButtonPanelWidget &_buttons) {
+  void SetButtonPanel(ButtonPanelWidget &_buttons) noexcept {
     buttons = &_buttons;
   }
 
-  void CreateButtons(ButtonPanel &buttons) {
+  void CreateButtons(ButtonPanel &buttons) noexcept {
     buttons.Add(_("Load"), [this](){ LoadTask(); });
     buttons.Add(_("Refresh"), [this](){ ReloadList(); });
   }
 
   void ReloadList() noexcept;
 
-  void RefreshView();
+  void RefreshView() noexcept;
 
   void LoadTask() noexcept;
 
@@ -140,7 +140,7 @@ WeGlideTasksPanel::ReloadList() noexcept
 }
 
 void
-WeGlideTasksPanel::RefreshView()
+WeGlideTasksPanel::RefreshView() noexcept
 {
   //const auto &info = list[GetList().GetCursorIndex()];
 
