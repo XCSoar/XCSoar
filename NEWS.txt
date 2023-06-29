@@ -5,6 +5,7 @@ Version 7.36 - not yet released
   - add blackboard.altitude_agl
 * Kobo
   - fix flight durations on power-off screen
+  - fix bogus last entry on power-off screen
 
 Version 7.35 - 2023/06/16
 * user interface
