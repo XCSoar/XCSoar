@@ -148,10 +148,11 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
       uint32_t key_code = libinput_event_keyboard_get_key(kb_li_event);
       libinput_key_state key_state =
         libinput_event_keyboard_get_key_state(kb_li_event);
-      bool is_char;
+
+      const auto [translated_key_code, is_char] = TranslateKeyCode(key_code);
       Event e(key_state == LIBINPUT_KEY_STATE_PRESSED
                   ? Event::KEY_DOWN : Event::KEY_UP,
-              TranslateKeyCode(key_code, is_char));
+              translated_key_code);
       e.is_char = is_char;
       queue.Push(e);
     }

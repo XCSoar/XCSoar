@@ -194,9 +194,9 @@ LinuxInputDevice::Read() noexcept
          * on the executing shell. This fixes #3403. */
         tcflush(STDIN_FILENO, TCIFLUSH);
 
-        bool is_char;
+        const auto [translated_key_code, is_char] = TranslateKeyCode(e.code);
         Event ev(e.value ? Event::KEY_DOWN : Event::KEY_UP,
-                 TranslateKeyCode(e.code, is_char));
+                 translated_key_code);
         ev.is_char = is_char;
         queue.Push(ev);
       }
