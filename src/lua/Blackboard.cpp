@@ -45,6 +45,7 @@ static int
 l_blackboard_index(lua_State *L)
 {
   const auto &basic = CommonInterface::Basic();
+  const auto &calculated = CommonInterface::Calculated();
 
   const char *name = lua_tostring(L, 2);
   if (name == nullptr)
@@ -59,6 +60,8 @@ l_blackboard_index(lua_State *L)
     Lua::PushOptional(L, basic.location_available, basic.location);
   else if (StringIsEqual(name, "altitude"))
     Lua::PushOptional(L, basic.NavAltitudeAvailable(), basic.nav_altitude);
+  else if (StringIsEqual(name, "altitude_agl"))
+    Lua::PushOptional(L, calculated.altitude_agl_valid, calculated.altitude_agl);
   else if (StringIsEqual(name, "track"))
     Lua::PushOptional(L, basic.track_available, basic.track);
   else if (StringIsEqual(name, "ground_speed"))
