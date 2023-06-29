@@ -3,12 +3,51 @@
 
 #include "Form/TabDisplay.hpp"
 #include "Widget/TabWidget.hpp"
+#include "Renderer/TabRenderer.hpp"
 #include "Look/DialogLook.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "ui/canvas/Icon.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "util/StaticString.hxx"
 #include "Asset.hpp"
+
+/**
+ * Holds display and callbacks data for a single tab.
+ */
+class TabDisplay::Button {
+  TabRenderer renderer;
+
+public:
+  StaticString<32> caption;
+  const MaskedIcon *icon;
+  PixelRect rc;
+
+public:
+  Button(const TCHAR *_caption, const MaskedIcon *_icon) noexcept
+    :icon(_icon)
+  {
+    caption = _caption;
+  };
+
+  void InvalidateLayout() {
+    renderer.InvalidateLayout();
+  }
+
+  [[gnu::pure]]
+  unsigned GetRecommendedWidth(const DialogLook &look) const noexcept;
+
+  [[gnu::pure]]
+  unsigned GetRecommendedHeight(const DialogLook &look) const noexcept;
+
+  /**
+   * Paints one button
+   */
+  void Draw(Canvas &canvas, const DialogLook &look,
+            bool focused, bool pressed, bool selected) const noexcept {
+    renderer.Draw(canvas, rc, look, caption, icon, focused, pressed, selected);
+  }
+};
 
 TabDisplay::TabDisplay(TabWidget &_pager, const DialogLook &_look,
                        ContainerWindow &parent, PixelRect rc,
@@ -30,7 +69,7 @@ TabDisplay::~TabDisplay() noexcept
 }
 
 inline unsigned
-TabButton::GetRecommendedWidth(const DialogLook &look) const noexcept
+TabDisplay::Button::GetRecommendedWidth(const DialogLook &look) const noexcept
 {
   if (icon != nullptr)
     return icon->GetSize().width + 2 * Layout::GetTextPadding();
@@ -39,7 +78,7 @@ TabButton::GetRecommendedWidth(const DialogLook &look) const noexcept
 }
 
 inline unsigned
-TabButton::GetRecommendedHeight(const DialogLook &look) const noexcept
+TabDisplay::Button::GetRecommendedHeight(const DialogLook &look) const noexcept
 {
   if (icon != nullptr)
     return icon->GetSize().height + 2 * Layout::GetTextPadding();
@@ -156,9 +195,14 @@ TabDisplay::CalculateLayout() noexcept
 void
 TabDisplay::Add(const TCHAR *caption, const MaskedIcon *icon) noexcept
 {
-  TabButton *b = new TabButton(caption, icon);
-  buttons.append(b);
+  buttons.append(new Button(caption, icon));
   CalculateLayout();
+}
+
+const TCHAR *
+TabDisplay::GetCaption(unsigned i) const noexcept
+{
+  return buttons[i]->caption.c_str();
 }
 
 int
@@ -187,7 +231,7 @@ TabDisplay::OnPaint(Canvas &canvas) noexcept
 
   const bool is_focused = !HasCursorKeys() || HasFocus();
   for (unsigned i = 0; i < buttons.size(); i++) {
-    const TabButton &button = *buttons[i];
+    const auto &button = *buttons[i];
 
     const bool is_down = dragging && i == down_index && !drag_off_button;
     const bool is_selected = i == pager.GetCurrentIndex();

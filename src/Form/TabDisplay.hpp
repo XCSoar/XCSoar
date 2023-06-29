@@ -4,9 +4,7 @@
 #pragma once
 
 #include "ui/window/PaintWindow.hpp"
-#include "Renderer/TabRenderer.hpp"
 #include "util/StaticArray.hxx"
-#include "util/StaticString.hxx"
 
 #include <tchar.h>
 
@@ -14,43 +12,6 @@ struct DialogLook;
 class MaskedIcon;
 class ContainerWindow;
 class TabWidget;
-
-/**
- * TabButton class holds display and callbacks data for a single tab
- */
-class TabButton {
-  TabRenderer renderer;
-
-public:
-  StaticString<32> caption;
-  const MaskedIcon *icon;
-  PixelRect rc;
-
-public:
-  TabButton(const TCHAR *_caption, const MaskedIcon *_icon) noexcept
-    :icon(_icon)
-  {
-    caption = _caption;
-  };
-
-  void InvalidateLayout() {
-    renderer.InvalidateLayout();
-  }
-
-  [[gnu::pure]]
-  unsigned GetRecommendedWidth(const DialogLook &look) const noexcept;
-
-  [[gnu::pure]]
-  unsigned GetRecommendedHeight(const DialogLook &look) const noexcept;
-
-  /**
-   * Paints one button
-   */
-  void Draw(Canvas &canvas, const DialogLook &look,
-            bool focused, bool pressed, bool selected) const noexcept {
-    renderer.Draw(canvas, rc, look, caption, icon, focused, pressed, selected);
-  }
-};
 
 /**
  * TabDisplay class handles onPaint callback for TabBar UI
@@ -63,7 +24,8 @@ class TabDisplay final : public PaintWindow
   TabWidget &pager;
   const DialogLook &look;
 
-  StaticArray<TabButton *, 32> buttons;
+  class Button;
+  StaticArray<Button *, 32> buttons;
 
   bool vertical;
 
@@ -104,9 +66,7 @@ public:
   void Add(const TCHAR *caption, const MaskedIcon *icon=nullptr) noexcept;
 
   [[gnu::pure]]
-  const TCHAR *GetCaption(unsigned i) const noexcept {
-    return buttons[i]->caption.c_str();
-  }
+  const TCHAR *GetCaption(unsigned i) const noexcept;
 
   /**
    * @return -1 if there is no button at the specified position
