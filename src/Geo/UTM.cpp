@@ -4,7 +4,6 @@
 #include "Geo/UTM.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "WGS84.hpp"
-#include "util/Macros.hpp"
 
 static constexpr double k0 = 0.9996;
 
@@ -19,7 +18,7 @@ static constexpr char
 CalculateZoneLetter(const Angle latitude) noexcept
 {
   unsigned index = (unsigned)((latitude.Degrees() + 80) / 8);
-  return (index < ARRAY_SIZE(letters)) ? letters[index] : '\0';
+  return index < std::size(letters) ? letters[index] : '\0';
 }
 
 [[gnu::const]]
