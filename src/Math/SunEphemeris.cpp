@@ -28,9 +28,8 @@ namespace SunEphemeris {
  * @param h UT in decimal hours
  * @return days to J2000
  */
-[[gnu::const]]
-static double
-FNday(const BrokenDateTime date_time)
+static constexpr double
+FNday(const BrokenDateTime date_time) noexcept
 {
   assert(date_time.IsPlausible());
 
@@ -49,7 +48,7 @@ FNday(const BrokenDateTime date_time)
  */
 [[gnu::const]]
 static Angle
-GetHourAngle(Angle lat, Angle declin)
+GetHourAngle(Angle lat, Angle declin) noexcept
 {
   Angle dfo = Angle::Degrees(SUN_DIAMETER / 2 + AIR_REFRACTION);
 
@@ -69,7 +68,7 @@ GetHourAngle(Angle lat, Angle declin)
  */
 [[gnu::const]]
 static Angle
-GetHourAngleTwilight(Angle lat, Angle declin)
+GetHourAngleTwilight(Angle lat, Angle declin) noexcept
 {
   Angle df1 = Angle::Degrees(6);
 
@@ -87,7 +86,7 @@ GetHourAngleTwilight(Angle lat, Angle declin)
  */
 [[gnu::pure]]
 static Angle
-GetEclipticLongitude(double d, Angle L)
+GetEclipticLongitude(double d, Angle L) noexcept
 {
   //   mean anomaly of the Sun
   Angle g = Angle::Degrees(357.528 + .9856003 * d).AsBearing();
@@ -99,7 +98,7 @@ GetEclipticLongitude(double d, Angle L)
 
 [[gnu::pure]]
 static Angle
-GetMeanSunLongitude(double d)
+GetMeanSunLongitude(double d) noexcept
 {
   // mean longitude of the Sun
   return Angle::Degrees(280.461 + .9856474 * d).AsBearing();
@@ -113,9 +112,10 @@ GetMeanSunLongitude(double d)
  * @return sun's azimuth
  * @see http://www.providence.edu/mcs/rbg/java/sungraph.htm
  */
+[[gnu::pure]]
 static Angle
 CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
-                 const RoughTimeDelta time_zone, const Angle dec)
+                 const RoughTimeDelta time_zone, const Angle dec) noexcept
 {
   assert(time.IsPlausible());
 
@@ -136,7 +136,7 @@ CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
 
 Result
 CalcSunTimes(const GeoPoint &location, const BrokenDateTime &date_time,
-             const RoughTimeDelta time_zone)
+             const RoughTimeDelta time_zone) noexcept
 {
   Result result;
 
@@ -199,7 +199,7 @@ CalcSunTimes(const GeoPoint &location, const BrokenDateTime &date_time,
 
 Angle
 CalcAzimuth(const GeoPoint &location, const BrokenDateTime &date_time,
-            const RoughTimeDelta time_zone)
+            const RoughTimeDelta time_zone) noexcept
 {
   assert(date_time.IsPlausible());
 

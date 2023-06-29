@@ -29,9 +29,10 @@ struct Result {
  * @param time_zone UTC offset for When?
  * @return Attributes of the sun
  */
+[[gnu::pure]]
 Result
 CalcSunTimes(const GeoPoint &location, const BrokenDateTime &date_time,
-             RoughTimeDelta time_zone);
+             RoughTimeDelta time_zone) noexcept;
 
 /**
  * Calculates only the sun's azimuth
@@ -40,8 +41,9 @@ CalcSunTimes(const GeoPoint &location, const BrokenDateTime &date_time,
  * @param time_zone UTC offset for When?
  * @return Attributes of the sun
  */
+[[gnu::pure]]
 Angle
 CalcAzimuth(const GeoPoint &location, const BrokenDateTime &date_time,
-            RoughTimeDelta time_zone);
+            RoughTimeDelta time_zone) noexcept;
 
 } // namespace SunEphemeris
