@@ -64,10 +64,8 @@ GetEclipticLongitude(double d, Angle l);
 Angle
 GetMeanSunLongitude(double d);
 
-} // namespace SunEphemeris
-
 double
-SunEphemeris::FNday(const BrokenDateTime date_time)
+FNday(const BrokenDateTime date_time)
 {
   assert(date_time.IsPlausible());
 
@@ -79,7 +77,7 @@ SunEphemeris::FNday(const BrokenDateTime date_time)
 }
 
 Angle
-SunEphemeris::GetHourAngle(Angle lat, Angle declin)
+GetHourAngle(Angle lat, Angle declin)
 {
   Angle dfo = Angle::Degrees(SUN_DIAMETER / 2 + AIR_REFRACTION);
 
@@ -92,7 +90,7 @@ SunEphemeris::GetHourAngle(Angle lat, Angle declin)
 }
 
 Angle
-SunEphemeris::GetHourAngleTwilight(Angle lat, Angle declin)
+GetHourAngleTwilight(Angle lat, Angle declin)
 {
   Angle df1 = Angle::Degrees(6);
 
@@ -105,7 +103,7 @@ SunEphemeris::GetHourAngleTwilight(Angle lat, Angle declin)
 }
 
 Angle
-SunEphemeris::GetEclipticLongitude(double d, Angle L)
+GetEclipticLongitude(double d, Angle L)
 {
   //   mean anomaly of the Sun
   Angle g = Angle::Degrees(357.528 + .9856003 * d).AsBearing();
@@ -116,7 +114,7 @@ SunEphemeris::GetEclipticLongitude(double d, Angle L)
 }
 
 Angle
-SunEphemeris::GetMeanSunLongitude(double d)
+GetMeanSunLongitude(double d)
 {
   // mean longitude of the Sun
   return Angle::Degrees(280.461 + .9856474 * d).AsBearing();
@@ -151,10 +149,9 @@ CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
                         dec.cos() * t.sin());
 }
 
-SunEphemeris::Result
-SunEphemeris::CalcSunTimes(const GeoPoint &location,
-                           const BrokenDateTime &date_time,
-                           const RoughTimeDelta time_zone)
+Result
+CalcSunTimes(const GeoPoint &location, const BrokenDateTime &date_time,
+             const RoughTimeDelta time_zone)
 {
   Result result;
 
@@ -216,9 +213,8 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
 }
 
 Angle
-SunEphemeris::CalcAzimuth(const GeoPoint &location,
-                          const BrokenDateTime &date_time,
-                          const RoughTimeDelta time_zone)
+CalcAzimuth(const GeoPoint &location, const BrokenDateTime &date_time,
+            const RoughTimeDelta time_zone)
 {
   assert(date_time.IsPlausible());
 
@@ -237,3 +233,5 @@ SunEphemeris::CalcAzimuth(const GeoPoint &location,
 
   return CalculateAzimuth(location, date_time, time_zone, delta);
 }
+
+} // namespace SunEphemeris
