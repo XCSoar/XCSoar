@@ -69,14 +69,10 @@
 #define gcc_pure __attribute__((pure))
 #define gcc_unused __attribute__((unused))
 
-#define gcc_nonnull_all __attribute__((nonnull))
-
 #define gcc_likely(x) __builtin_expect (!!(x), 1)
 #define gcc_unlikely(x) __builtin_expect (!!(x), 0)
 
 #define gcc_visibility_default __attribute__((visibility("default")))
-
-#define gcc_always_inline __attribute__((always_inline))
 
 #else
 
@@ -89,37 +85,11 @@
 #define gcc_pure
 #define gcc_unused
 
-#define gcc_nonnull_all
-
 #define gcc_likely(x) (x)
 #define gcc_unlikely(x) (x)
 
 #define gcc_visibility_default
 
-#define gcc_always_inline inline
-
-#endif
-
-#if CLANG_OR_GCC_VERSION(4,3)
-
-#define gcc_hot __attribute__((hot))
-
-#else /* ! GCC_UNUSED >= 40300 */
-
-#define gcc_hot
-
-#endif /* ! GCC_UNUSED >= 40300 */
-
-#if GCC_CHECK_VERSION(4,6)
-#define gcc_flatten __attribute__((flatten))
-#else
-#define gcc_flatten
-#endif
-
-#ifdef __GNUC__
-#define gcc_fallthrough __attribute__((fallthrough))
-#else
-#define gcc_fallthrough
 #endif
 
 #ifndef __cplusplus
