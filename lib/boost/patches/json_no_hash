@@ -1,0 +1,149 @@
+Index: boost_1_82_0/boost/json/impl/array.ipp
+===================================================================
+--- boost_1_82_0.orig/boost/json/impl/array.ipp
++++ boost_1_82_0/boost/json/impl/array.ipp
+@@ -10,7 +10,9 @@
+ #ifndef BOOST_JSON_IMPL_ARRAY_IPP
+ #define BOOST_JSON_IMPL_ARRAY_IPP
+ 
++#ifdef ENABLE_HASH
+ #include <boost/container_hash/hash.hpp>
++#endif // ENABLE_HASH
+ #include <boost/json/array.hpp>
+ #include <boost/json/pilfer.hpp>
+ #include <boost/json/detail/except.hpp>
+@@ -749,6 +751,8 @@ equal(
+ } // namespace json
+ } // namespace boost
+ 
++#ifdef ENABLE_HASH
++
+ //----------------------------------------------------------
+ //
+ // std::hash specialization
+@@ -762,6 +766,8 @@ std::hash<::boost::json::array>::operato
+     return ::boost::hash< ::boost::json::array >()( ja );
+ }
+ 
++#endif // ENABLE_HASH
++
+ //----------------------------------------------------------
+ 
+ #endif
+Index: boost_1_82_0/boost/json/impl/object.ipp
+===================================================================
+--- boost_1_82_0.orig/boost/json/impl/object.ipp
++++ boost_1_82_0/boost/json/impl/object.ipp
+@@ -10,7 +10,9 @@
+ #ifndef BOOST_JSON_IMPL_OBJECT_IPP
+ #define BOOST_JSON_IMPL_OBJECT_IPP
+ 
++#ifdef ENABLE_HASH
+ #include <boost/container_hash/hash.hpp>
++#endif // ENABLE_HASH
+ #include <boost/json/object.hpp>
+ #include <boost/json/detail/digest.hpp>
+ #include <boost/json/detail/except.hpp>
+@@ -889,6 +891,8 @@ reindex_relocate(
+ } // namespace json
+ } // namespace boost
+ 
++#ifdef ENABLE_HASH
++
+ //----------------------------------------------------------
+ //
+ // std::hash specialization
+@@ -902,6 +906,8 @@ std::hash<::boost::json::object>::operat
+     return ::boost::hash< ::boost::json::object >()( jo );
+ }
+ 
++#endif // ENABLE_HASH
++
+ //----------------------------------------------------------
+ 
+ 
+Index: boost_1_82_0/boost/json/impl/string.ipp
+===================================================================
+--- boost_1_82_0.orig/boost/json/impl/string.ipp
++++ boost_1_82_0/boost/json/impl/string.ipp
+@@ -420,6 +420,8 @@ reserve_impl(size_type new_cap)
+ 
+ //----------------------------------------------------------
+ 
++#ifdef ENABLE_HASH
++
+ std::size_t
+ std::hash< ::boost::json::string >::operator()(
+     ::boost::json::string const& js ) const noexcept
+@@ -427,4 +429,6 @@ std::hash< ::boost::json::string >::oper
+     return ::boost::hash< ::boost::json::string >()( js );
+ }
+ 
++#endif // ENABLE_HASH
++
+ #endif
+Index: boost_1_82_0/boost/json/impl/value.ipp
+===================================================================
+--- boost_1_82_0.orig/boost/json/impl/value.ipp
++++ boost_1_82_0/boost/json/impl/value.ipp
+@@ -10,7 +10,9 @@
+ #ifndef BOOST_JSON_IMPL_VALUE_IPP
+ #define BOOST_JSON_IMPL_VALUE_IPP
+ 
++#ifdef ENABLE_HASH
+ #include <boost/container_hash/hash.hpp>
++#endif // ENABLE_HASH
+ #include <boost/json/value.hpp>
+ #include <boost/json/parser.hpp>
+ #include <cstring>
+@@ -24,6 +26,8 @@
+ namespace boost {
+ namespace json {
+ 
++#ifdef ENABLE_HASH
++
+ namespace
+ {
+ 
+@@ -40,6 +44,8 @@ struct value_hasher
+ 
+ } // namespace
+ 
++#endif // ENABLE_HASH
++
+ value::
+ ~value() noexcept
+ {
+@@ -611,6 +617,8 @@ key_value_pair(
+ 
+ //----------------------------------------------------------
+ 
++#ifdef ENABLE_HASH
++
+ namespace detail
+ {
+ 
+@@ -627,9 +635,14 @@ hash_value_impl( value const& jv ) noexc
+ }
+ 
+ } // namespace detail
++
++#endif // ENABLE_HASH
++
+ } // namespace json
+ } // namespace boost
+ 
++#ifdef ENABLE_HASH
++
+ //----------------------------------------------------------
+ //
+ // std::hash specialization
+@@ -643,6 +656,8 @@ std::hash<::boost::json::value>::operato
+     return ::boost::hash< ::boost::json::value >()( jv );
+ }
+ 
++#endif // ENABLE_HASH
++
+ //----------------------------------------------------------
+ 
+ #endif
