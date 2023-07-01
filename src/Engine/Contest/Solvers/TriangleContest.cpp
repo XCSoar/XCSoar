@@ -186,7 +186,7 @@ TriangleContest::SolveTriangle(bool exhaustive) noexcept
            ++relaxed)
         relax_last = std::max(relax_last, relaxed->second);
 
-      relaxed_pairs.Insert(ClosingPair(relax_first, relax_last));
+      relaxed_pairs.Insert({relax_first, relax_last});
     }
 
     // TODO: reverse sort relaxed pairs according to number of contained points
@@ -208,7 +208,7 @@ TriangleContest::SolveTriangle(bool exhaustive) noexcept
         // solution is better than best_d
         // only if triangle is inside a unrelaxed pair...
 
-        auto unrelaxed = closing_pairs.FindRange(ClosingPair(std::get<0>(triangle), std::get<2>(triangle)));
+        auto unrelaxed = closing_pairs.FindRange({std::get<0>(triangle), std::get<2>(triangle)});
         if (unrelaxed.first != 0 || unrelaxed.second != 0) {
           // fortunately it is inside a unrelaxed closing pair :-)
           start = unrelaxed.first;
@@ -301,7 +301,7 @@ TriangleContest::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
     trace_master.ProjectRange(GetPoint(from).GetLocation(), fastskiprange);
 
   if (fastskiprange_flat < worst_d)
-    return {0, 0, 0, 0};
+    return {};
 
   bool integral_feasible = false;
   unsigned best_d = 0,
@@ -391,11 +391,11 @@ TriangleContest::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
 
         if (split <= node->second.tp2.index_max) {
           CheckAddCandidate(worst_d, validator,
-                            {TurnPointRange(*this, node->second.tp1.index_min, split),
+                            {{*this, node->second.tp1.index_min, split},
                              node->second.tp2, node->second.tp3});
 
           CheckAddCandidate(worst_d, validator,
-                            {TurnPointRange(*this, split, node->second.tp1.index_max),
+                            {{*this, split, node->second.tp1.index_max},
                              node->second.tp2, node->second.tp3});
         }
       } else if (tp2_diag == max_diag && node->second.tp2.GetSize() != 1) {
@@ -405,12 +405,12 @@ TriangleContest::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
         if (split <= node->second.tp3.index_max && split >= node->second.tp1.index_min) {
           CheckAddCandidate(worst_d, validator,
                             {node->second.tp1,
-                             TurnPointRange(*this, node->second.tp2.index_min, split),
+                             {*this, node->second.tp2.index_min, split},
                              node->second.tp3});
 
           CheckAddCandidate(worst_d, validator,
                             {node->second.tp1,
-                             TurnPointRange(*this, split, node->second.tp2.index_max),
+                             {*this, split, node->second.tp2.index_max},
                              node->second.tp3});
         }
       } else if (node->second.tp3.GetSize() != 1) {
@@ -420,11 +420,11 @@ TriangleContest::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
         if (split >= node->second.tp2.index_min) {
           CheckAddCandidate(worst_d, validator,
                             {node->second.tp1, node->second.tp2,
-                             TurnPointRange(*this, node->second.tp3.index_min, split)});
+                             {*this, node->second.tp3.index_min, split}});
 
           CheckAddCandidate(worst_d, validator,
                             {node->second.tp1, node->second.tp2,
-                             TurnPointRange(*this, split, node->second.tp3.index_max)});
+                             {*this, split, node->second.tp3.index_max}});
         }
       }
     }
@@ -437,15 +437,14 @@ TriangleContest::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
   if (branch_and_bound.empty())
     running = false;
 
-  if (integral_feasible) {
-    if (tp1 > tp2) std::swap(tp1, tp2);
-    if (tp2 > tp3) std::swap(tp2, tp3);
-    if (tp1 > tp2) std::swap(tp1, tp2);
+  if (!integral_feasible)
+    return {};
 
-    return {tp1, tp2, tp3, best_d};
-  } else {
-    return {0, 0, 0, 0};
-  }
+  if (tp1 > tp2) std::swap(tp1, tp2);
+  if (tp2 > tp3) std::swap(tp2, tp3);
+  if (tp1 > tp2) std::swap(tp1, tp2);
+
+  return {tp1, tp2, tp3, best_d};
 }
 
 ContestResult
@@ -478,7 +477,7 @@ bool
 TriangleContest::FindClosingPairs(unsigned old_size) noexcept
 {
   if (predict) {
-    return closing_pairs.Insert(ClosingPair(0, n_points-1));
+    return closing_pairs.Insert({0, n_points - 1});
   }
 
   struct TracePointNode {
@@ -550,7 +549,7 @@ TriangleContest::FindClosingPairs(unsigned old_size) noexcept
 
     search_point_tree.VisitWithinRange(point, max_range, visitor);
 
-    if (last != 0 && closing_pairs.Insert(ClosingPair(first, last)))
+    if (last != 0 && closing_pairs.Insert({first, last}))
       new_pair = true;
   }
 
