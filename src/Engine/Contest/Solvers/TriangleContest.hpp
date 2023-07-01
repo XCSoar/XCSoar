@@ -286,6 +286,6 @@ public:
 
 protected:
   /* virtual methods from AbstractContest */
-  void CopySolution(ContestTraceVector &vec) const noexcept override;
+  const ContestTraceVector &GetCurrentPath() const noexcept override;
   ContestResult CalculateResult() const noexcept override;
 };

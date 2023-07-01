@@ -26,10 +26,10 @@ OLCPlus::Solve([[maybe_unused]] bool exhaustive) noexcept
     : SolverResult::FAILED;
 }
 
-void
-OLCPlus::CopySolution(ContestTraceVector &vec) const noexcept
+const ContestTraceVector &
+OLCPlus::GetCurrentPath() const noexcept
 {
-  vec = solution_classic;
+  return solution_classic;
 }
 
 ContestResult

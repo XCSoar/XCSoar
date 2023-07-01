@@ -62,10 +62,10 @@ OLCLeague::Solve([[maybe_unused]] bool exhaustive) noexcept
   return SolverResult::VALID;
 }
 
-void
-OLCLeague::CopySolution(ContestTraceVector &vec) const noexcept
+const ContestTraceVector &
+OLCLeague::GetCurrentPath() const noexcept
 {
-  vec = solution;
+  return solution;
 }
 
 ContestResult

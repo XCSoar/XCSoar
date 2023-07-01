@@ -25,7 +25,7 @@ AbstractContest::SaveSolution() noexcept
     return false;
 
   best_result = result;
-  CopySolution(best_solution);
+  best_solution = GetCurrentPath();
   return true;
 }
 

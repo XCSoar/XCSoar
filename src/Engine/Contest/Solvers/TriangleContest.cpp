@@ -557,9 +557,9 @@ TriangleContest::FindClosingPairs(unsigned old_size) noexcept
   return new_pair;
 }
 
-void
-TriangleContest::CopySolution(ContestTraceVector &result) const noexcept
+const ContestTraceVector &
+TriangleContest::GetCurrentPath() const noexcept
 {
-  result = solution;
-  assert(result.size() == 5);
+  assert(solution.size() == 5);
+  return solution;
 }

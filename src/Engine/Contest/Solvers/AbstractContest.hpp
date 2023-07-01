@@ -59,11 +59,10 @@ protected:
   virtual ContestResult CalculateResult() const noexcept = 0;
 
   /**
-   * Copy the best Contest path solution
-   *
-   * @param vec output vector
+   * Return the path for the result returned by CalculateResult().
    */
-  virtual void CopySolution(ContestTraceVector &vec) const noexcept = 0;
+  [[gnu::pure]]
+  virtual const ContestTraceVector &GetCurrentPath() const noexcept = 0;
 
 public:
   /**
