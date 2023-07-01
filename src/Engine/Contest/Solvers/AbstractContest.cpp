@@ -16,13 +16,6 @@ AbstractContest::Reset() noexcept
 }
 
 bool
-AbstractContest::UpdateScore() noexcept
-{
-  // for normal contests, nothing needs to be done
-  return false;
-}
-
-bool
 AbstractContest::SaveSolution() noexcept
 {
   ContestResult result = CalculateResult();

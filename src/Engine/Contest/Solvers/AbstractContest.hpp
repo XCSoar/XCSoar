@@ -81,15 +81,6 @@ public:
   virtual SolverResult Solve(bool exhaustive) noexcept = 0;
 
 protected:
-  /**
-   * Perform check on whether score needs to be
-   * updated (even if score isn't improved, due to
-   * new conditions occuring, e.g. closure of path)
-   *
-   * @return true if score is updated
-   */
-  virtual bool UpdateScore() noexcept;
-
   [[gnu::pure]]
   bool IsFinishAltitudeValid(const TracePoint &start,
                              const TracePoint &finish) const noexcept;
