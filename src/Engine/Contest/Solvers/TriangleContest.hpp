@@ -75,7 +75,7 @@ private:
   struct ClosingPairs {
     std::map<unsigned, unsigned> closing_pairs;
 
-    bool Insert(const ClosingPair &p) noexcept {
+    bool Insert(const ClosingPair p) noexcept {
       auto found = FindRange(p);
       if (found.first == 0 && found.second == 0) {
         const auto result = closing_pairs.insert(p);
@@ -89,7 +89,7 @@ private:
     }
 
     [[gnu::pure]]
-    ClosingPair FindRange(const ClosingPair &p) const noexcept {
+    ClosingPair FindRange(const ClosingPair p) const noexcept {
       for (const auto &i : closing_pairs) {
         if (i.first > p.first)
           break;
