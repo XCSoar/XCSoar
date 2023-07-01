@@ -251,7 +251,7 @@ public:
     incremental = _incremental;
   }
 
-protected:
+private:
   bool FindClosingPairs(unsigned old_size) noexcept;
   void SolveTriangle(bool exhaustive) noexcept;
 
@@ -262,7 +262,6 @@ protected:
   void UpdateTrace(bool force) noexcept override;
   void ResetBranchAndBound() noexcept;
 
-private:
   void CheckAddCandidate(unsigned worst_d,
                          const OLCTriangleValidator &validator,
                          CandidateSet candidate_set) noexcept {

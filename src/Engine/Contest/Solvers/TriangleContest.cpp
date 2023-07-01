@@ -85,7 +85,7 @@ CalcLegDistance(const ContestTraceVector &solution,
   return p_start.Distance(p_dest);
 }
 
-void
+inline void
 TriangleContest::UpdateTrace(bool force) noexcept
 {
   if (IsMasterAppended()) return; /* unmodified */
@@ -150,7 +150,7 @@ TriangleContest::Solve(bool exhaustive) noexcept
   }
 }
 
-void
+inline void
 TriangleContest::SolveTriangle(bool exhaustive) noexcept
 {
   unsigned tp1 = 0,
