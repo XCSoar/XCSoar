@@ -10,6 +10,7 @@
 #include "Geo/Flat/FlatBoundingBox.hpp"
 
 #include <map>
+#include <utility> // for std::swap()
 
 /**
  * Specialisation of AbstractContest for OLC Triangle (triangle) rules
@@ -118,6 +119,20 @@ private:
   };
 
   ClosingPairs closing_pairs;
+
+  struct Candidate {
+    unsigned tp1, tp2, tp3;
+    unsigned distance;
+
+    void Sort() noexcept {
+      if (tp1 > tp2)
+        std::swap(tp1, tp2);
+      if (tp2 > tp3)
+        std::swap(tp2, tp3);
+      if (tp1 > tp2)
+        std::swap(tp1, tp2);
+    }
+  };
 
   /**
    * A bounding box around a range of trace points.
@@ -255,9 +270,8 @@ private:
   bool FindClosingPairs(unsigned old_size) noexcept;
   void SolveTriangle(bool exhaustive) noexcept;
 
-  std::tuple<unsigned, unsigned, unsigned, unsigned>
-  RunBranchAndBound(unsigned from, unsigned to, unsigned best_d,
-                    bool exhaustive) noexcept;
+  Candidate RunBranchAndBound(unsigned from, unsigned to, unsigned best_d,
+                              bool exhaustive) noexcept;
 
   void UpdateTrace(bool force) noexcept override;
   void ResetBranchAndBound() noexcept;
