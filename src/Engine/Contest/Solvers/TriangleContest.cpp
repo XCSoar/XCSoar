@@ -155,9 +155,8 @@ TriangleContest::SolveTriangle(bool exhaustive) noexcept
 {
   unsigned tp1 = 0,
            tp2 = 0,
-           tp3 = 0,
-           start = 0,
-           finish = 0;
+           tp3 = 0;
+  ClosingPair best_closing_pair;
 
   if (exhaustive || !predict) {
     ClosingPairs relaxed_pairs;
@@ -211,11 +210,10 @@ TriangleContest::SolveTriangle(bool exhaustive) noexcept
         auto unrelaxed = closing_pairs.FindRange({std::get<0>(triangle), std::get<2>(triangle)});
         if (unrelaxed.first != 0 || unrelaxed.second != 0) {
           // fortunately it is inside a unrelaxed closing pair :-)
-          start = unrelaxed.first;
+          best_closing_pair = unrelaxed;
           tp1 = std::get<0>(triangle);
           tp2 = std::get<1>(triangle);
           tp3 = std::get<2>(triangle);
-          finish = unrelaxed.second;
 
           best_d = std::get<3>(triangle);
         } else {
@@ -238,11 +236,10 @@ TriangleContest::SolveTriangle(bool exhaustive) noexcept
       if (std::get<3>(triangle) > best_d) {
         // solution is better than best_d
 
-        start = close_look_pair.first;
+        best_closing_pair = close_look_pair;
         tp1 = std::get<0>(triangle);
         tp2 = std::get<1>(triangle);
         tp3 = std::get<2>(triangle);
-        finish = close_look_pair.second;
 
         best_d = std::get<3>(triangle);
       }
@@ -259,11 +256,10 @@ TriangleContest::SolveTriangle(bool exhaustive) noexcept
     if (std::get<3>(triangle) > best_d) {
       // solution is better than best_d
 
-      start = 0;
+      best_closing_pair = {0, n_points - 1};
       tp1 = std::get<0>(triangle);
       tp2 = std::get<1>(triangle);
       tp3 = std::get<2>(triangle);
-      finish = n_points - 1;
 
       best_d = std::get<3>(triangle);
     }
@@ -272,11 +268,11 @@ TriangleContest::SolveTriangle(bool exhaustive) noexcept
   if (best_d > 0) {
     solution.resize(5);
 
-    solution[0] = TraceManager::GetPoint(start);
+    solution[0] = TraceManager::GetPoint(best_closing_pair.first);
     solution[1] = TraceManager::GetPoint(tp1);
     solution[2] = TraceManager::GetPoint(tp2);
     solution[3] = TraceManager::GetPoint(tp3);
-    solution[4] = TraceManager::GetPoint(finish);
+    solution[4] = TraceManager::GetPoint(best_closing_pair.second);
 
     is_complete = true;
   }
