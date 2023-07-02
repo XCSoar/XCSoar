@@ -61,7 +61,6 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
   void ShowTerrainControls();
-  void OnPreviewPaint(Canvas &canvas);
 
   /* methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
