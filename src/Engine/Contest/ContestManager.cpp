@@ -67,6 +67,23 @@ ContestManager::SetPredicted(const TracePoint &predicted) noexcept
 
   if (net_coupe.SetPredicted(predicted) && contest == Contest::NET_COUPE)
     stats.Reset();
+
+  if (weglide_distance.SetPredicted(predicted)) {
+    weglide_fai.Reset();
+    weglide_or.Reset();
+    weglide_free.Reset();
+
+    if (contest == Contest::WEGLIDE_DISTANCE ||
+        contest == Contest::WEGLIDE_FAI ||
+        contest == Contest::WEGLIDE_OR ||
+        contest == Contest::WEGLIDE_FREE)
+      stats.Reset();
+  } else {
+    if (weglide_fai.SetPredicted(predicted) && contest == Contest::WEGLIDE_FAI)
+      stats.Reset();
+    if (weglide_or.SetPredicted(predicted) && contest == Contest::WEGLIDE_OR)
+      stats.Reset();
+  }
 }
 
 void
