@@ -64,6 +64,9 @@ ContestManager::SetPredicted(const TracePoint &predicted) noexcept
   if (dmst_quad.SetPredicted(predicted) &&
       contest == Contest::DMST)
     stats.Reset();
+
+  if (net_coupe.SetPredicted(predicted) && contest == Contest::NET_COUPE)
+    stats.Reset();
 }
 
 void
