@@ -84,6 +84,14 @@ ContestManager::SetPredicted(const TracePoint &predicted) noexcept
     if (weglide_or.SetPredicted(predicted) && contest == Contest::WEGLIDE_OR)
       stats.Reset();
   }
+
+  const bool reset_charron_large = charron_large.SetPredicted(predicted);
+  const bool reset_charron_small = charron_small.SetPredicted(predicted);
+  if (reset_charron_large)
+    charron_small.Reset();
+
+  if ((reset_charron_large || reset_charron_small) && contest == Contest::CHARRON)
+      stats.Reset();
 }
 
 void

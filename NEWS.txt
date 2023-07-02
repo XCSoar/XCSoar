@@ -2,7 +2,7 @@ Version 7.36 - not yet released
 * task
   - save outer radius and angle of custom keyholes in task files
 * calculations
-  - implement the "predict" option for Netcoupe FFVV, WeGlide
+  - implement the "predict" option for Netcoupe FFVV, WeGlide, Charron
 * WeGlide
   - allow downloading all user tasks and public task declarations
 * Lua scripting
