@@ -17,6 +17,11 @@
 #define	DO_INTERSECT      1
 #define COLLINEAR         2
 
+#define LEFT 0
+#define TOP 1
+#define RIGHT 2
+#define BOTTOM 3
+
 int HorizonRenderer::lines_intersect(PixelPoint p1, PixelPoint p2, 
                     PixelPoint p3, PixelPoint p4, 
                     PixelPoint &intersect){
@@ -146,7 +151,7 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   PixelPoint c = center;
   PixelPoint p1 = {0, c.y - int(u_y - u_p)};
   PixelPoint p2 = {2*c.x, c.y + int(u_y + u_p)};
-  canvas.DrawLine(p1, p2);
+  // canvas.DrawLine(p1, p2);
 
   // std::cout << "p1: {" << p1.x << ", " << p1.y << "}, "
   //   << ", p2: {" << p2.x << ", " << p2.y << "} "
@@ -155,14 +160,20 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   //   << ", h: " << rc.GetHeight()
   //   << std::endl;
 
-  BulkPixelPoint corners[] = {
-    {0, int(rc.GetHeight())},
-    {0,0},
-    {int(rc.GetWidth()), 0},
-    {int(rc.GetWidth()), int(rc.GetHeight())},
-    {0, int(rc.GetHeight())}
-  };
+  int w = int(rc.GetWidth());
+  int h = int(rc.GetHeight());
+  PixelPoint k11 = {0,0};
+  PixelPoint k12 = {w,0};
+  PixelPoint k22 = {w,h};
+  PixelPoint k21 = {0,h};
+
+  BulkPixelPoint terrain[] = {k11, k12, k21, k22};
+  canvas.Select(look.terrain_pen);
+  canvas.Select(look.terrain_brush);
+  canvas.DrawPolygon(terrain, 4);
+
   int i, j;
+  BulkPixelPoint corners[] = {k21, k11, k12, k22, k21};
   PixelPoint intersect_left = {0, 0};
   PixelPoint intersect_right = {0, 0};
   for (i=0; i < 4; i++){
@@ -181,52 +192,41 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   //   << ", j: " << j << ", {" << intersect_right.x << ", " << intersect_right.y << "}, "
   //   << std::endl;
 
-  BulkPixelPoint sky[] = {
-    {0,0},
-    {0,0},
-    {0,0},
-    {0,0},
-    {0,0},
-    };
-  if (i < j){
-    sky[0] = intersect_left;
-    for (int k=i; k<j;k++)
-      sky[k-i+1] = corners[k-i+1];
-  }
-  sky[j-i+1] = intersect_right;
-
-  for (int k = 0; k < 5; k++)
-    std::cout << "{" << sky[k].x << ", " << sky[k].y << "}, ";
-  std::cout   << std::endl;
-
-
   canvas.Select(look.sky_pen);
   canvas.Select(look.sky_brush);
-  canvas.DrawPolygon(sky, j-i+2);
-
-  BulkPixelPoint terrain[] = {
-      {2*c.x+1, 2*c.y+1},
-      {-1, 2*c.y+1},
-      p1,
-      p2
-    };
-  canvas.Select(look.terrain_pen);
-  canvas.Select(look.terrain_brush);
-  canvas.DrawPolygon(terrain, 4);
-
+  if (i==LEFT){
+    if (j==TOP) {
+      BulkPixelPoint sky[3] = {intersect_left, k11, intersect_right};
+      canvas.DrawPolygon(sky, 3);
+    } else if (j==RIGHT){
+      BulkPixelPoint sky[4] = {intersect_left, k11, k12, intersect_right};
+      canvas.DrawPolygon(sky, 4);
+    } else if (j==BOTTOM) {
+      BulkPixelPoint sky[5] = {intersect_left, k11, k12, k22, intersect_right};
+      canvas.DrawPolygon(sky, 5);
+    }
+  }
+  else if (i==TOP){
+    if (j==RIGHT) {
+      BulkPixelPoint sky[3] = {intersect_left, k12, intersect_right};
+      canvas.DrawPolygon(sky, 3);
+    } else if (j==BOTTOM) {
+      BulkPixelPoint sky[4] = {intersect_left, k12, k22, intersect_right};
+      canvas.DrawPolygon(sky, 4);
+    }
+  }
+  else if (i==BOTTOM){
+    if (j==TOP) {
+      BulkPixelPoint sky[4] = {intersect_left, k21, k11, intersect_right};
+      canvas.DrawPolygon(sky, 4);
+    } else if (j==RIGHT) {
+      BulkPixelPoint sky[5] = {intersect_left, k21, k11, k12, intersect_right};
+      canvas.DrawPolygon(sky, 5);
+    }
+  }
 
   canvas.Select(look.horizon_pen);
   canvas.DrawLine(p1, p2);
-
-  // double u_x = radius * (roll-Angle::QuarterCircle()).tan();
-
-  // canvas.Select(look.aircraft_pen);
-
-  // p1 = {std::max(0, c.x - int(u_x)), 
-  //       std::max(0, c.y - int(u_y - u_p))};
-  // p2 = {std::min(2*c.x, c.x + int(u_x)), 
-  //       std::min(2*c.y, c.y + int(u_y + u_p))};
-  // canvas.DrawLine(p1, p2);
 
 
   
@@ -237,6 +237,12 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   canvas.DrawLine({center.x + radius/10, center.y + radius / 10}, {center.x + radius/10, center.y});
   canvas.DrawLine({center.x - radius/10, center.y + radius / 10}, {center.x - radius/10, center.y});
   canvas.DrawLine({center.x - 2, center.y}, {center.x +2, center.y});
+
+  BulkPixelPoint triangle[3] = {
+    {center.x - radius + Layout::Scale(22), center.y-Layout::Scale(5)},
+    {center.x - radius + Layout::Scale(12), center.y},
+    {center.x - radius + Layout::Scale(22), center.y+Layout::Scale(5)}};
+  canvas.DrawPolygon(triangle, 3);
 
   /*
   // draw 45 degree dash marks
