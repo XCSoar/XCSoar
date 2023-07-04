@@ -9,6 +9,7 @@ struct AttitudeState;
 class Canvas;
 
 struct PixelPoint;
+class Angle;
 
 namespace HorizonRenderer
 {
@@ -19,5 +20,9 @@ namespace HorizonRenderer
 int lines_intersect(PixelPoint p1, PixelPoint p2, 
                     PixelPoint p3, PixelPoint p4, 
                     PixelPoint &intersect);
+
+void rotate(PixelPoint point, PixelPoint center, 
+            Angle a, PixelPoint &rotated);
+
 
 }

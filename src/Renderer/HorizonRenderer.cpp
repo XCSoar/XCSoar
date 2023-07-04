@@ -83,6 +83,11 @@ int HorizonRenderer::lines_intersect(PixelPoint p1, PixelPoint p2,
     return ( DO_INTERSECT );
 }
 
+void HorizonRenderer::rotate(PixelPoint point, PixelPoint center, 
+                    Angle a, PixelPoint &rotated){
+  rotated.x = int(point.x * a.cos() - point.y * a.sin() + center.x);
+  rotated.y = int(point.x * a.sin() + point.y * a.cos() + center.y);
+}
 
 void
 HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
@@ -114,51 +119,15 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     ? attitude.pitch_angle.Degrees()
     : 0.;
 
-  auto cosine_ratio = pitch_degrees / 50;
-  auto alpha = Angle::acos(std::clamp(cosine_ratio, -1., 1.));
-  auto sphi = Angle::HalfCircle() - Angle::Degrees(bank_degrees);
-  auto alpha1 = sphi - alpha;
-  auto alpha2 = sphi + alpha;
 
-  // draw sky part
-  if (cosine_ratio > -1 ) { // when less than -1 then the sky is not visible
-    canvas.Select(look.sky_pen);
-    canvas.Select(look.sky_brush);
-    // canvas.DrawSegment(center, radius*3./2, alpha2, alpha1, true);
-    // canvas.Select(look.horizon_pen);
-    canvas.DrawSegment(center, radius, alpha2, alpha1, true);
-    // canvas.DrawSegment(center, radius - Layout::Scale(12), alpha2, alpha1, true);
-  
-  }
-
-  // draw ground part
-  if (cosine_ratio < 1) { // when greater than 1 then the ground is not visible
-    canvas.Select(look.terrain_pen);
-    canvas.Select(look.terrain_brush);
-    // canvas.DrawSegment(center, radius*2, alpha1, alpha2, true);
-    // canvas.Select(look.horizon_pen);
-    canvas.DrawSegment(center, radius, alpha1, alpha2, true);
-  }
-
-  // draw horizon line
-  canvas.Select(look.horizon_pen);
+  // compute theoretical horizon line
   auto roll = -Angle::Degrees(bank_degrees);
   auto pitch = Angle::Degrees(pitch_degrees);
-
   double u_y = radius * roll.tan();
   double u_p = radius * pitch.tan();
 
-  PixelPoint c = center;
-  PixelPoint p1 = {0, c.y - int(u_y - u_p)};
-  PixelPoint p2 = {2*c.x, c.y + int(u_y + u_p)};
-  // canvas.DrawLine(p1, p2);
-
-  // std::cout << "p1: {" << p1.x << ", " << p1.y << "}, "
-  //   << ", p2: {" << p2.x << ", " << p2.y << "} "
-  //   << std::endl;
-  // std::cout << "w: " << rc.GetWidth()
-  //   << ", h: " << rc.GetHeight()
-  //   << std::endl;
+  PixelPoint p1 = {0, center.y - int(u_y - u_p)};
+  PixelPoint p2 = {2*center.x, center.y + int(u_y + u_p)};
 
   int w = int(rc.GetWidth());
   int h = int(rc.GetHeight());
@@ -166,11 +135,6 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   PixelPoint k12 = {w,0};
   PixelPoint k22 = {w,h};
   PixelPoint k21 = {0,h};
-
-  BulkPixelPoint terrain[] = {k11, k12, k21, k22};
-  canvas.Select(look.terrain_pen);
-  canvas.Select(look.terrain_brush);
-  canvas.DrawPolygon(terrain, 4);
 
   int i, j;
   BulkPixelPoint corners[] = {k21, k11, k12, k22, k21};
@@ -225,103 +189,104 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     }
   }
 
+  canvas.Select(look.terrain_pen);
+  canvas.Select(look.terrain_brush);
+  if (i==LEFT){
+    if (j==TOP) {
+      BulkPixelPoint terrain[5] = {intersect_left, k21, k22, k12, intersect_right};
+      canvas.DrawPolygon(terrain, 5);
+    } else if (j==RIGHT){
+      BulkPixelPoint terrain[4] = {intersect_left, k21, k22, intersect_right};
+      canvas.DrawPolygon(terrain, 4);
+    } else if (j==BOTTOM) {
+      BulkPixelPoint terrain[3] = {intersect_left, k21, intersect_right};
+      canvas.DrawPolygon(terrain, 3);
+    }
+  }
+
+
+
   canvas.Select(look.horizon_pen);
-  canvas.DrawLine(p1, p2);
+  canvas.DrawLine(intersect_left, intersect_right);
 
 
   
   // draw aircraft symbol
   canvas.Select(look.aircraft_pen);
-  canvas.DrawLine({center.x + radius / 2, center.y}, {center.x + radius / 10, center.y});
-  canvas.DrawLine({center.x - radius / 2, center.y}, {center.x - radius / 10, center.y});
+  canvas.Select(look.aircraft_brush);
+  canvas.DrawLine({center.x + radius - radius/5, center.y}, {center.x + radius / 10, center.y});
+  canvas.DrawLine({center.x - radius + radius/5, center.y}, {center.x - radius / 10, center.y});
   canvas.DrawLine({center.x + radius/10, center.y + radius / 10}, {center.x + radius/10, center.y});
   canvas.DrawLine({center.x - radius/10, center.y + radius / 10}, {center.x - radius/10, center.y});
-  canvas.DrawLine({center.x - 2, center.y}, {center.x +2, center.y});
+  // canvas.DrawLine({center.x - 2, center.y}, {center.x +2, center.y});
+  canvas.DrawCircle(center, 2);
 
   BulkPixelPoint triangle[3] = {
-    {center.x - radius + Layout::Scale(22), center.y-Layout::Scale(5)},
-    {center.x - radius + Layout::Scale(12), center.y},
-    {center.x - radius + Layout::Scale(22), center.y+Layout::Scale(5)}};
+    {center.x - Layout::Scale(4), center.y - radius + Layout::Scale(22)},
+    {center.x, center.y - radius + Layout::Scale(12)},
+    {center.x + Layout::Scale(4), center.y - radius + Layout::Scale(22)}};
   canvas.DrawPolygon(triangle, 3);
 
-  /*
-  // draw 45 degree dash marks
   canvas.Select(look.mark_pen);
+  canvas.Select(look.mark_brush);
 
-  int x1 = - radius + Layout::Scale(2);
-  int y1 = 0;
-  int x2 = - radius + Layout::Scale(12);
-  int y2 = 0;
+  PixelPoint m1 = {- radius + Layout::Scale(2),0};
+  PixelPoint m2 = {- radius + Layout::Scale(12),0};
+  // PixelPoint p1 = {0,0};
+  // PixelPoint p2 = {0,0};
+  
+  rotate(m1, center, Angle::Degrees(0 - bank_degrees), p1);
+  rotate(m2, center, Angle::Degrees(0 - bank_degrees), p2);
+  canvas.DrawLine(p1,p2);
+  rotate(m1, center, Angle::Degrees(30 - bank_degrees), p1);
+  rotate(m2, center, Angle::Degrees(30 - bank_degrees), p2);
+  canvas.DrawLine(p1,p2);
+  rotate(m1, center, Angle::Degrees(60 - bank_degrees), p1);
+  rotate(m2, center, Angle::Degrees(60 - bank_degrees), p2);
+  canvas.DrawLine(p1,p2);
+  // rotate(m1, center, Angle::Degrees(90 - bank_degrees), p1);
+  // rotate(m2, center, Angle::Degrees(90 - bank_degrees), p2);
+  // canvas.DrawLine(p1,p2);
+  rotate(m1, center, Angle::Degrees(120 - bank_degrees), p1);
+  rotate(m2, center, Angle::Degrees(120 - bank_degrees), p2);
+  canvas.DrawLine(p1,p2);
+  rotate(m1, center, Angle::Degrees(150 - bank_degrees), p1);
+  rotate(m2, center, Angle::Degrees(150 - bank_degrees), p2);
+  canvas.DrawLine(p1,p2);
+  rotate(m1, center, Angle::Degrees(180 - bank_degrees), p1);
+  rotate(m2, center, Angle::Degrees(180 - bank_degrees), p2);
+  canvas.DrawLine(p1,p2);
 
-  auto a = Angle::Degrees(0 - bank_degrees);
-  canvas.DrawLine({int(x1 * a.cos() - y1 * a.sin() + center.x), 
-                   int(x1 * a.sin() + y1 * a.cos() + center.y)}, 
-                  {int(x2 * a.cos() - y2 * a.sin() + center.x), 
-                   int(x2 * a.sin() + y2 * a.cos() + center.y)});
-  a = Angle::Degrees(30 - bank_degrees);
-  canvas.DrawLine({int(x1 * a.cos() - y1 * a.sin() + center.x), 
-                   int(x1 * a.sin() + y1 * a.cos() + center.y)}, 
-                  {int(x2 * a.cos() - y2 * a.sin() + center.x), 
-                   int(x2 * a.sin() + y2 * a.cos() + center.y)});
-  a = Angle::Degrees(60 - bank_degrees);
-  canvas.DrawLine({int(x1 * a.cos() - y1 * a.sin() + center.x), 
-                   int(x1 * a.sin() + y1 * a.cos() + center.y)}, 
-                  {int(x2 * a.cos() - y2 * a.sin() + center.x), 
-                   int(x2 * a.sin() + y2 * a.cos() + center.y)});
-  a = Angle::Degrees(90 - bank_degrees);
-  canvas.DrawLine({int(x1 * a.cos() - y1 * a.sin() + center.x), 
-                   int(x1 * a.sin() + y1 * a.cos() + center.y)}, 
-                  {int(x2 * a.cos() - y2 * a.sin() + center.x), 
-                   int(x2 * a.sin() + y2 * a.cos() + center.y)});
-  a = Angle::Degrees(120 - bank_degrees);
-  canvas.DrawLine({int(x1 * a.cos() - y1 * a.sin() + center.x), 
-                   int(x1 * a.sin() + y1 * a.cos() + center.y)}, 
-                  {int(x2 * a.cos() - y2 * a.sin() + center.x), 
-                   int(x2 * a.sin() + y2 * a.cos() + center.y)});
-  a = Angle::Degrees(150 - bank_degrees);
-  canvas.DrawLine({int(x1 * a.cos() - y1 * a.sin() + center.x), 
-                   int(x1 * a.sin() + y1 * a.cos() + center.y)}, 
-                  {int(x2 * a.cos() - y2 * a.sin() + center.x), 
-                   int(x2 * a.sin() + y2 * a.cos() + center.y)});
-  a = Angle::Degrees(180 - bank_degrees);
-  canvas.DrawLine({int(x1 * a.cos() - y1 * a.sin() + center.x), 
-                   int(x1 * a.sin() + y1 * a.cos() + center.y)}, 
-                  {int(x2 * a.cos() - y2 * a.sin() + center.x), 
-                   int(x2 * a.sin() + y2 * a.cos() + center.y)});
+  m1.x = - radius + Layout::Scale(7);
+  rotate(m1, center, Angle::Degrees(70 - bank_degrees), p1);
+  rotate(m2, center, Angle::Degrees(70 - bank_degrees), p2);
+  canvas.DrawLine(p1,p2);
+  rotate(m1, center, Angle::Degrees(80 - bank_degrees), p1);
+  rotate(m2, center, Angle::Degrees(80 - bank_degrees), p2);
+  canvas.DrawLine(p1,p2);
+  rotate(m1, center, Angle::Degrees(100 - bank_degrees), p1);
+  rotate(m2, center, Angle::Degrees(100 - bank_degrees), p2);
+  canvas.DrawLine(p1,p2);
+  rotate(m1, center, Angle::Degrees(110 - bank_degrees), p1);
+  rotate(m2, center, Angle::Degrees(110 - bank_degrees), p2);
+  canvas.DrawLine(p1,p2);
 
-  x1 = - radius + Layout::Scale(2+5);
-  a = Angle::Degrees(70 - bank_degrees);
-  canvas.DrawLine({int(x1 * a.cos() - y1 * a.sin() + center.x), 
-                   int(x1 * a.sin() + y1 * a.cos() + center.y)}, 
-                  {int(x2 * a.cos() - y2 * a.sin() + center.x), 
-                   int(x2 * a.sin() + y2 * a.cos() + center.y)});
-  a = Angle::Degrees(80 - bank_degrees);
-  canvas.DrawLine({int(x1 * a.cos() - y1 * a.sin() + center.x), 
-                   int(x1 * a.sin() + y1 * a.cos() + center.y)}, 
-                  {int(x2 * a.cos() - y2 * a.sin() + center.x), 
-                   int(x2 * a.sin() + y2 * a.cos() + center.y)});
-  a = Angle::Degrees(100 - bank_degrees);
-  canvas.DrawLine({int(x1 * a.cos() - y1 * a.sin() + center.x), 
-                   int(x1 * a.sin() + y1 * a.cos() + center.y)}, 
-                  {int(x2 * a.cos() - y2 * a.sin() + center.x), 
-                   int(x2 * a.sin() + y2 * a.cos() + center.y)});
-  a = Angle::Degrees(110 - bank_degrees);
-  canvas.DrawLine({int(x1 * a.cos() - y1 * a.sin() + center.x), 
-                   int(x1 * a.sin() + y1 * a.cos() + center.y)}, 
-                  {int(x2 * a.cos() - y2 * a.sin() + center.x), 
-                   int(x2 * a.sin() + y2 * a.cos() + center.y)});
+  m2.x = - radius + Layout::Scale(9);
+  rotate(m2, center, Angle::Degrees(45 - bank_degrees), p2);
+  canvas.DrawCircle(p2, 2);
+  rotate(m2, center, Angle::Degrees(135 - bank_degrees), p2);
+  canvas.DrawCircle(p2, 2);
 
-  x2 = - radius + Layout::Scale(12-5+2);
-  a = Angle::Degrees(45 - bank_degrees);
-  canvas.DrawLine({int(x1 * a.cos() - y1 * a.sin() + center.x), 
-                   int(x1 * a.sin() + y1 * a.cos() + center.y)}, 
-                  {int(x2 * a.cos() - y2 * a.sin() + center.x), 
-                   int(x2 * a.sin() + y2 * a.cos() + center.y)});
-  a = Angle::Degrees(135 - bank_degrees);
-  canvas.DrawLine({int(x1 * a.cos() - y1 * a.sin() + center.x), 
-                   int(x1 * a.sin() + y1 * a.cos() + center.y)}, 
-                  {int(x2 * a.cos() - y2 * a.sin() + center.x), 
-                   int(x2 * a.sin() + y2 * a.cos() + center.y)});
+  PixelPoint m3 = {- radius + Layout::Scale(12),0};
+  m1 = {- radius + Layout::Scale(2), -5};
+  m2 = {- radius + Layout::Scale(2), 5};
+  PixelPoint p3 = {0, 0};
+  rotate(m1, center, Angle::Degrees(90 - bank_degrees), p1);
+  rotate(m2, center, Angle::Degrees(90 - bank_degrees), p2);
+  rotate(m3, center, Angle::Degrees(90 - bank_degrees), p3);
 
-*/
+  BulkPixelPoint zero_mark[3] = {p1, p2, p3};
+  canvas.DrawPolygon(zero_mark, 3);
+
+
 }
