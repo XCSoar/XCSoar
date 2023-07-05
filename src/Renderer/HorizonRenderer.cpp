@@ -120,41 +120,37 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     : 0.;
 
 
-  // compute theoretical horizon line
-  auto roll = -Angle::Degrees(bank_degrees);
-  auto pitch = Angle::Degrees(pitch_degrees);
-  double u_y = radius * roll.tan();
-  double u_p = radius * pitch.tan();
-
-  PixelPoint p1 = {0, center.y - int(u_y - u_p)};
-  PixelPoint p2 = {2*center.x, center.y + int(u_y + u_p)};
-
   int w = int(rc.GetWidth());
   int h = int(rc.GetHeight());
-  PixelPoint k11 = {0,0};
-  PixelPoint k12 = {w,0};
-  PixelPoint k22 = {w,h};
-  PixelPoint k21 = {0,h};
+
+  // compute theoretical horizon line
+  PixelPoint p1 = {-w, int(h/2.f * pitch_degrees /40.f)};
+  PixelPoint p2 = {w, int(h/2.f * pitch_degrees /40.f)};
+  rotate(p1, center, Angle::Degrees(- bank_degrees), p1);
+  rotate(p2, center, Angle::Degrees(- bank_degrees), p2);
+
+  PixelPoint p3 = {(p1.x+p2.x)/2, (p1.y+p2.y)/2};
+  PixelPoint k11 = {0,0}; // up left
+  PixelPoint k12 = {w,0}; // up right
+  PixelPoint k22 = {w,h}; // down right
+  PixelPoint k21 = {0,h}; // down left
 
   int i, j;
   BulkPixelPoint corners[] = {k21, k11, k12, k22, k21};
   PixelPoint intersect_left = {0, 0};
   PixelPoint intersect_right = {0, 0};
   for (i=0; i < 4; i++){
-    int res = lines_intersect(p1, center, corners[i], 
+    int res = lines_intersect(p1, p3, corners[i], 
                               corners[i+1], intersect_left);
     if (res == DO_INTERSECT) break;
     if (i==3) return;
   }
   for (j=0; j < 4; j++){
-    int res = lines_intersect(center, p2, corners[j], 
+    int res = lines_intersect(p3, p2, corners[j], 
                               corners[j+1], intersect_right);
     if (res == DO_INTERSECT) break;
     if (j==3) return;
   }
-  // std::cout << "i: " << i << ", {" << intersect_left.x << ", " << intersect_left.y << "}, "
-  //   << ", j: " << j << ", {" << intersect_right.x << ", " << intersect_right.y << "}, "
-  //   << std::endl;
 
   canvas.Select(look.sky_pen);
   canvas.Select(look.sky_brush);
@@ -204,36 +200,15 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     }
   }
 
-
-
   canvas.Select(look.horizon_pen);
   canvas.DrawLine(intersect_left, intersect_right);
 
-
-  
-  // draw aircraft symbol
-  canvas.Select(look.aircraft_pen);
-  canvas.Select(look.aircraft_brush);
-  canvas.DrawLine({center.x + radius - radius/5, center.y}, {center.x + radius / 10, center.y});
-  canvas.DrawLine({center.x - radius + radius/5, center.y}, {center.x - radius / 10, center.y});
-  canvas.DrawLine({center.x + radius/10, center.y + radius / 10}, {center.x + radius/10, center.y});
-  canvas.DrawLine({center.x - radius/10, center.y + radius / 10}, {center.x - radius/10, center.y});
-  // canvas.DrawLine({center.x - 2, center.y}, {center.x +2, center.y});
-  canvas.DrawCircle(center, 2);
-
-  BulkPixelPoint triangle[3] = {
-    {center.x - Layout::Scale(4), center.y - radius + Layout::Scale(22)},
-    {center.x, center.y - radius + Layout::Scale(12)},
-    {center.x + Layout::Scale(4), center.y - radius + Layout::Scale(22)}};
-  canvas.DrawPolygon(triangle, 3);
-
+  // marks
   canvas.Select(look.mark_pen);
   canvas.Select(look.mark_brush);
 
   PixelPoint m1 = {- radius + Layout::Scale(2),0};
   PixelPoint m2 = {- radius + Layout::Scale(12),0};
-  // PixelPoint p1 = {0,0};
-  // PixelPoint p2 = {0,0};
   
   rotate(m1, center, Angle::Degrees(0 - bank_degrees), p1);
   rotate(m2, center, Angle::Degrees(0 - bank_degrees), p2);
@@ -244,9 +219,6 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   rotate(m1, center, Angle::Degrees(60 - bank_degrees), p1);
   rotate(m2, center, Angle::Degrees(60 - bank_degrees), p2);
   canvas.DrawLine(p1,p2);
-  // rotate(m1, center, Angle::Degrees(90 - bank_degrees), p1);
-  // rotate(m2, center, Angle::Degrees(90 - bank_degrees), p2);
-  // canvas.DrawLine(p1,p2);
   rotate(m1, center, Angle::Degrees(120 - bank_degrees), p1);
   rotate(m2, center, Angle::Degrees(120 - bank_degrees), p2);
   canvas.DrawLine(p1,p2);
@@ -280,7 +252,6 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   PixelPoint m3 = {- radius + Layout::Scale(12),0};
   m1 = {- radius + Layout::Scale(2), -5};
   m2 = {- radius + Layout::Scale(2), 5};
-  PixelPoint p3 = {0, 0};
   rotate(m1, center, Angle::Degrees(90 - bank_degrees), p1);
   rotate(m2, center, Angle::Degrees(90 - bank_degrees), p2);
   rotate(m3, center, Angle::Degrees(90 - bank_degrees), p3);
@@ -288,5 +259,35 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   BulkPixelPoint zero_mark[3] = {p1, p2, p3};
   canvas.DrawPolygon(zero_mark, 3);
 
+  for (int k=-20; k<=20; k+=10){
+    m1 = {-radius/5, int(h/2.f*(pitch_degrees+k)/40)};
+    m2 = {+radius/5, int(h/2.f*(pitch_degrees+k)/40)};
+    rotate(m1, center, Angle::Degrees(- bank_degrees), p1);
+    rotate(m2, center, Angle::Degrees(- bank_degrees), p2);
+    canvas.DrawLine(p1,p2);
+  }
+  for (int k=-25; k<=25; k+=10){
+    m1 = {-radius/10, int(h/2.f*(pitch_degrees+k)/40)};
+    m2 = {+radius/10, int(h/2.f*(pitch_degrees+k)/40)};
+    rotate(m1, center, Angle::Degrees(- bank_degrees), p1);
+    rotate(m2, center, Angle::Degrees(- bank_degrees), p2);
+    canvas.DrawLine(p1,p2);
+  }
+
+  // draw aircraft symbol
+  canvas.Select(look.aircraft_pen);
+  canvas.Select(look.aircraft_brush);
+  canvas.DrawLine({center.x + radius - radius/5, center.y}, {center.x + radius / 10, center.y});
+  canvas.DrawLine({center.x - radius + radius/5, center.y}, {center.x - radius / 10, center.y});
+  canvas.DrawLine({center.x + radius/10, center.y + radius / 10}, {center.x + radius/10, center.y});
+  canvas.DrawLine({center.x - radius/10, center.y + radius / 10}, {center.x - radius/10, center.y});
+  // canvas.DrawLine({center.x - 2, center.y}, {center.x +2, center.y});
+  canvas.DrawCircle(center, 2);
+
+  BulkPixelPoint triangle[3] = {
+    {center.x - Layout::Scale(4), center.y - radius + Layout::Scale(22)},
+    {center.x, center.y - radius + Layout::Scale(12)},
+    {center.x + Layout::Scale(4), center.y - radius + Layout::Scale(22)}};
+  canvas.DrawPolygon(triangle, 3);
 
 }
