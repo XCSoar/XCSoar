@@ -198,6 +198,22 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
       BulkPixelPoint terrain[3] = {intersect_left, k21, intersect_right};
       canvas.DrawPolygon(terrain, 3);
     }
+  } else if (i==TOP){
+    if (j==RIGHT) {
+      BulkPixelPoint terrain[5] = {intersect_left, k11, k21, k22, intersect_right};
+      canvas.DrawPolygon(terrain, 5);
+    } else if (j==BOTTOM) {
+      BulkPixelPoint terrain[4] = {intersect_left, k11, k21, intersect_right};
+      canvas.DrawPolygon(terrain, 4);
+    }
+  } else if (i==BOTTOM){
+    if (j==TOP) {
+      BulkPixelPoint terrain[4] = {intersect_left, k22, k12, intersect_right};
+      canvas.DrawPolygon(terrain, 4);
+    } else if (j==RIGHT) {
+      BulkPixelPoint terrain[3] = {intersect_left, k22, intersect_right};
+      canvas.DrawPolygon(terrain, 3);
+    }
   }
 
   canvas.Select(look.horizon_pen);
