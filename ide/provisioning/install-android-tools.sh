@@ -11,6 +11,11 @@ ANDROID_REPO_URL=https://dl.google.com/android/repository
 ANDROID_SDK_DIR=~/opt/android-sdk-linux
 ANDROID_NDK_DIR=~/opt/android-ndk-${ANDROID_NDK_VERSION}
 
+if [ "$(id -u)" -eq 0 ];
+    then echo "Do not run as root. Android SDK is meant to be installed locally to a user." >&2
+    exit 1
+fi
+
 if [ -d "${ANDROID_SDK_DIR}"/build-tools/"${ANDROID_BUILD_TOOLS_VERSION}" ]
 then
   echo "Not installing Android SDK, because ${ANDROID_SDK_DIR}/build-tools/${ANDROID_BUILD_TOOLS_VERSION} exists already"
