@@ -164,7 +164,7 @@ PlanePolarWidget::ListClicked() noexcept
     plane.wing_area = item.wing_area;
 
   if (item.v_no > 0.0)
-    plane.max_speed = item.v_no;
+    plane.max_speed = item.VNoToMaxSpeed();
 
   plane.polar_shape = item.ToPolarShape();
 

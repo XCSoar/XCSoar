@@ -40,7 +40,7 @@ struct Item {
   /** Reference wing area (m^2), 0.0 if unknown */
   double wing_area;
 
-  /** Maximum speed for normal operations (m/s), 0.0 if unknown */
+  /** Maximum speed for normal operations (kph), 0.0 if unknown */
   double v_no;
 
   /** Contest handicap, 0 if unknown */
@@ -48,6 +48,9 @@ struct Item {
 
   /** empty rigged glider mass (kg), make the polar reference mass independent of the lift of weight sum */
   unsigned empty_mass;
+
+  [[gnu::pure]]
+  double VNoToMaxSpeed() const noexcept;
 
   [[gnu::pure]]
   PolarShape ToPolarShape() const noexcept;
