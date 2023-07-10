@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2023-06-17 11:51+0000\n"
+"PO-Revision-Date: 2023-07-11 10:51+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -2644,8 +2644,8 @@ msgid ""
 "If enabled a row at the top will be added showing you the distance and "
 "bearing to the location and the elevation."
 msgstr ""
-"Pokud je zapnuto, bude nahoru přidán řádek, zobrazující vzdálenost a směr k "
-"vybranému místu a jeho výšku."
+"Pokud je zapnuto, bude nahoře zobrazen řádek, zobrazující vzdálenost a směr "
+"k vybranému místu a jeho výšku."
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:46
 msgid "Show Arrival Altitude"
@@ -5124,7 +5124,7 @@ msgid ""
 "up."
 msgstr ""
 "Pohyblivý displej s mapou bude natočen tak, aby směr letu kluzáku byl "
-"orientována nahoru."
+"orientován nahoru."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:49
 #, no-c-format
@@ -5133,7 +5133,7 @@ msgid ""
 "glider icon will be rotated to show its course."
 msgstr ""
 "Pohyblivý displej s mapou bude natočen severem nahoru a ikona kluzáku bude "
-"natočena podle aktuálního kurzu."
+"orientována podle směru letu."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:50
 #, no-c-format
@@ -5161,7 +5161,7 @@ msgid ""
 "down. (can be useful for wave flying)"
 msgstr ""
 "Pohyblivý displej s mapou bude natočen tak, aby směr větru byl vždy "
-"orientován shora dolů. (může být užitečné ve vlně)"
+"orientován shora dolů. (Může být užitečné ve vlně)"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
 #, no-c-format
