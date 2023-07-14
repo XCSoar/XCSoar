@@ -18,6 +18,8 @@ enum ControlIndex {
   SPACER,
   SHOW_FAI_TRIANGLE_AREAS,
   FAI_TRIANGLE_THRESHOLD,
+  SPACER2,
+  SHOW_95_PERCENT_RULE_HELPERS
 };
 
 class ScoringConfigPanel final
@@ -129,6 +131,16 @@ ScoringConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
           (unsigned)map_settings.fai_triangle_settings.threshold);
   SetExpertRow(FAI_TRIANGLE_THRESHOLD);
 
+  AddSpacer();
+  SetExpertRow(SPACER2);
+
+  AddBoolean(_("95% dist. rule helpers"),
+             _("Show helpers for Argentinean Federation \"95% distance\" rule."
+               "The AAT Distance Around Target infobox will show projected "
+               "distance vs max. and change colors as you approach 95%."),
+             map_settings.show_95_percent_rule_helpers);
+  SetExpertRow(SHOW_95_PERCENT_RULE_HELPERS);
+
   ShowFAITriangleControls(map_settings.show_fai_triangle_areas);
 }
 
@@ -153,6 +165,10 @@ ScoringConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValueEnum(FAI_TRIANGLE_THRESHOLD,
                            ProfileKeys::FAITriangleThreshold,
                            map_settings.fai_triangle_settings.threshold);
+
+  changed |= SaveValue(SHOW_95_PERCENT_RULE_HELPERS,
+                       ProfileKeys::Show95PercentRuleHelpers,
+                       map_settings.show_95_percent_rule_helpers);
 
   _changed |= changed;
 

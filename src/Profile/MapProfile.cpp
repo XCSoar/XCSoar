@@ -130,6 +130,9 @@ Profile::Load(const ProfileMap &map, MapSettings &settings)
 
   Load(map, settings.trail);
   Load(map, settings.item_list);
+
+  map.Get(ProfileKeys::Show95PercentRuleHelpers,
+          settings.show_95_percent_rule_helpers);
 }
 
 void
