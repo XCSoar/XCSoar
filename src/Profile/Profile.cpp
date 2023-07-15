@@ -102,19 +102,19 @@ Profile::SetFiles(Path override_path) noexcept
 }
 
 AllocatedPath
-Profile::GetPath(const char *key) noexcept
+Profile::GetPath(std::string_view key) noexcept
 {
   return map.GetPath(key);
 }
 
 bool
-Profile::GetPathIsEqual(const char *key, Path value) noexcept
+Profile::GetPathIsEqual(std::string_view key, Path value) noexcept
 {
   return map.GetPathIsEqual(key, value);
 }
 
 void
-Profile::SetPath(const char *key, Path value) noexcept
+Profile::SetPath(std::string_view key, Path value) noexcept
 {
   map.SetPath(key, value);
 }
