@@ -17,10 +17,8 @@
 #include <string.h>
 
 std::unique_ptr<NLineReader>
-OpenConfiguredTextFileA(const char *profile_key)
+OpenConfiguredTextFileA(std::string_view profile_key)
 try {
-  assert(profile_key != nullptr);
-
   const auto path = Profile::GetPath(profile_key);
   if (path == nullptr)
     return nullptr;
@@ -32,10 +30,8 @@ try {
 }
 
 std::unique_ptr<TLineReader>
-OpenConfiguredTextFile(const char *profile_key, Charset cs)
+OpenConfiguredTextFile(std::string_view profile_key, Charset cs)
 {
-  assert(profile_key != nullptr);
-
   auto reader = OpenConfiguredTextFileA(profile_key);
   if (!reader)
     return nullptr;
@@ -71,10 +67,9 @@ OpenMapTextFile(const char *in_map_file, Charset cs)
 }
 
 std::unique_ptr<TLineReader>
-OpenConfiguredTextFile(const char *profile_key, const char *in_map_file,
+OpenConfiguredTextFile(std::string_view profile_key, const char *in_map_file,
                        Charset cs)
 {
-  assert(profile_key != nullptr);
   assert(in_map_file != nullptr);
 
   auto reader = OpenConfiguredTextFile(profile_key, cs);

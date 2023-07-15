@@ -5,6 +5,7 @@
 #include "Charset.hpp"
 
 #include <memory>
+#include <string_view>
 
 class NLineReader;
 class TLineReader;
@@ -19,7 +20,7 @@ class TLineReader;
  * file
  */
 std::unique_ptr<NLineReader>
-OpenConfiguredTextFileA(const char *profile_key);
+OpenConfiguredTextFileA(std::string_view profile_key);
 
 /**
  * Opens a file whose name is configured in the profile.
@@ -31,7 +32,7 @@ OpenConfiguredTextFileA(const char *profile_key);
  * there is no such setting, or if an error occurred opening the file
  */
 std::unique_ptr<TLineReader>
-OpenConfiguredTextFile(const char *profile_key,
+OpenConfiguredTextFile(std::string_view profile_key,
                        Charset cs=Charset::UTF8);
 
 /**
@@ -47,5 +48,5 @@ OpenConfiguredTextFile(const char *profile_key,
  * there is no such setting, or if an error occurred opening the file
  */
 std::unique_ptr<TLineReader>
-OpenConfiguredTextFile(const char *profile_key, const char *in_map_file,
+OpenConfiguredTextFile(std::string_view profile_key, const char *in_map_file,
                        Charset cs=Charset::UTF8);
