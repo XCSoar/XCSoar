@@ -24,9 +24,9 @@ Profile::Get(std::string_view key, const char *default_value) noexcept
 }
 
 bool
-Profile::Get(std::string_view key, TCHAR *value, std::size_t max_size) noexcept
+Profile::Get(std::string_view key, std::span<TCHAR> value) noexcept
 {
-  return map.Get(key, value, max_size);
+  return map.Get(key, value);
 }
 
 bool

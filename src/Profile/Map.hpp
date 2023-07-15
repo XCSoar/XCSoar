@@ -7,6 +7,7 @@
 #include "util/StringBuffer.hxx"
 
 #include <map>
+#include <span>
 #include <string>
 
 #include <cstdint>
@@ -93,15 +94,13 @@ public:
    *
    * @param key name of the value that should be read
    * @param value Pointer to the output buffer
-   * @param max_size maximum size of the output buffer
    */
-  bool Get(std::string_view key,
-           TCHAR *value, std::size_t max_size) const noexcept;
+  bool Get(std::string_view key, std::span<TCHAR> value) const noexcept;
 
   template<size_t max>
   bool Get(std::string_view key,
            BasicStringBuffer<TCHAR, max> &value) const noexcept {
-    return Get(key, value.data(), value.capacity());
+    return Get(key, std::span{value.data(), value.capacity()});
   }
 
 #ifdef _UNICODE

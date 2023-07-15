@@ -13,8 +13,7 @@
 #endif
 
 bool
-ProfileMap::Get(std::string_view key,
-                TCHAR *value, std::size_t max_size) const noexcept
+ProfileMap::Get(std::string_view key, std::span<TCHAR> value) const noexcept
 {
   const char *src = Get(key);
   if (src == nullptr) {
@@ -24,13 +23,13 @@ ProfileMap::Get(std::string_view key,
 
 #ifdef _UNICODE
   int result = MultiByteToWideChar(CP_UTF8, 0, src, -1,
-                                   value, max_size);
+                                   value.data(), value.size());
   return result > 0;
 #else
   if (!ValidateUTF8(src))
     return false;
 
-  CopyTruncateString(value, max_size, src);
+  CopyTruncateString(value.data(), value.size(), src);
   return true;
 #endif
 }

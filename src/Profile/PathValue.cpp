@@ -8,7 +8,6 @@
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
 #include "util/StringPointer.hxx"
-#include "util/Macros.hpp"
 
 #ifdef _UNICODE
 #include "util/AllocatedString.hxx"
@@ -20,7 +19,7 @@ AllocatedPath
 ProfileMap::GetPath(std::string_view key) const noexcept
 {
   TCHAR buffer[MAX_PATH];
-  if (!Get(key, buffer, ARRAY_SIZE(buffer)))
+  if (!Get(key, std::span{buffer}))
       return nullptr;
 
   if (StringIsEmpty(buffer))
@@ -58,7 +57,7 @@ BasicAllocatedString<TCHAR>
 ProfileMap::GetPathBase(std::string_view key) const noexcept
 {
   TCHAR buffer[MAX_PATH];
-  if (!Get(key, buffer, ARRAY_SIZE(buffer)))
+  if (!Get(key, std::span{buffer}))
       return nullptr;
 
   const TCHAR *base = BackslashBaseName(buffer).c_str();

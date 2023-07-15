@@ -23,10 +23,10 @@ Profile::Get([[maybe_unused]] std::string_view key,
 }
 
 bool
-Profile::Get([[maybe_unused]] std::string_view key, TCHAR *pPos,
-             [[maybe_unused]] size_t dwSize) noexcept
+Profile::Get([[maybe_unused]] std::string_view key,
+             std::span<TCHAR> value) noexcept
 {
-  pPos[0] = _T('\0');
+  value[0] = _T('\0');
   return false;
 }
 

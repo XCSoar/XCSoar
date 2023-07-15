@@ -7,6 +7,7 @@
 
 #include <chrono>
 #include <cstdint>
+#include <span>
 #include <string_view>
 
 #include <tchar.h>
@@ -48,7 +49,7 @@ Get(std::string_view key, const char *default_value=nullptr) noexcept;
  * @param max_size Maximum size of the output buffer
  */
 bool
-Get(std::string_view key, TCHAR *value, std::size_t max_size) noexcept;
+Get(std::string_view key, std::span<TCHAR> value) noexcept;
 
 /**
  * Writes a value to the profile map
@@ -131,7 +132,7 @@ template<std::size_t max>
 static inline bool
 Get(std::string_view key, BasicStringBuffer<TCHAR, max> &value) noexcept
 {
-  return Get(key, value.data(), value.capacity());
+  return Get(key, std::span{value.data(), value.capacity()});
 }
 
 bool
