@@ -8,14 +8,10 @@ ifeq ($(CLANG),n)
   CXX_FEATURES += -fcoroutines
   CXX_FEATURES += -fconserve-space -fno-operator-names
 else
-  CXX_FEATURES += -fcoroutines-ts
-  # suppress clang 16 warning "the '-fcoroutines-ts' flag is deprecated
-  # and it will be removed in Clang 17"; TODO: remove -fcoroutines-ts
-  # eventually
-  ifneq ($(TARGET_IS_DARWIN),y)
-    ifeq ($(shell expr $(CXX_MAJOR_VERSION) \>= 14), 1)
-      CXX_FEATURES += -Wno-deprecated-experimental-coroutine
-    endif
+  ifeq ($(shell expr $(CXX_MAJOR_VERSION) \< 17), 1)
+    # The "-fcoroutines-ts" option is only necessary in clang versions
+    # older than 17
+    CXX_FEATURES += -fcoroutines-ts
   endif
 endif
 
