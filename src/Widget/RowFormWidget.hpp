@@ -638,13 +638,7 @@ public:
 
   bool SaveValue(unsigned i, bool &value, bool negated = false) const noexcept;
 
-#if defined(__clang__) && __clang_major__ < 15
-  // C++20 concepts not implemented in libc++ 14 (Android NDK r25)
-  template<typename T>
-  requires std::is_integral_v<T>
-#else
   template<std::integral T>
-#endif
   bool SaveValueInteger(unsigned i, T &value) const noexcept {
     int new_value = GetValueInteger(i);
 
@@ -729,13 +723,7 @@ public:
   bool SaveValue(unsigned i, UnitGroup unit_group,
                  const char *profile_key, unsigned int &value) const noexcept;
 
-#if defined(__clang__) && __clang_major__ < 15
-  // C++20 concepts not implemented in libc++ 14 (Android NDK r25)
-  template<typename T>
-  requires std::is_integral_v<T> && std::is_unsigned_v<T>
-#else
   template<std::unsigned_integral T>
-#endif
   bool SaveValueEnum(unsigned i, T &value) const noexcept {
     const auto new_value = static_cast<T>(GetValueEnum(i));
     if (new_value == value)

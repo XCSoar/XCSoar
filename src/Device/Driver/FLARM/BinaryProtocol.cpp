@@ -18,13 +18,13 @@ FindSpecial(std::span<const std::byte>::iterator begin,
   });
 }
 
-/* kludge because several constructor overloads are missing in libc++
-   on Android NDK r25c */
+/* kludge because several constructor overloads are missing in Apple
+   Xcode */
 static constexpr std::span<const std::byte>
 MakeSpan(typename std::span<const std::byte>::iterator begin,
          typename std::span<const std::byte>::iterator end) noexcept
 {
-#if defined(ANDROID) || defined(__APPLE__)
+#if defined(__APPLE__)
   return {&*begin, (std::size_t)std::distance(begin, end)};
 #else
   return {begin, end};
