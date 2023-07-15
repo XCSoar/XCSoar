@@ -98,12 +98,12 @@ include $(topdir)/build/glx.mk
 include $(topdir)/build/opengl.mk
 endif
 
+include $(topdir)/build/compile.mk
+include $(topdir)/build/host.mk
 include $(topdir)/build/flags.mk
 include $(topdir)/build/charset.mk
 include $(topdir)/build/warnings.mk
-include $(topdir)/build/host.mk
 include $(topdir)/build/depends.mk
-include $(topdir)/build/compile.mk
 include $(topdir)/build/link.mk
 include $(topdir)/build/resource.mk
 include $(topdir)/build/libdata.mk
