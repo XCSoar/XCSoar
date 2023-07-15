@@ -13,7 +13,7 @@ CXX_FEATURES += -fcoroutines-ts
 # and it will be removed in Clang 17"; TODO: remove -fcoroutines-ts
 # eventually
 ifneq ($(TARGET_IS_DARWIN),y)
-    ifeq ($(shell expr `$(CXX) -dumpversion | cut -f1 -d.` \>= 14), 1)
+    ifeq ($(shell expr $(shell echo $(CXX_VERSION) | cut -f1 -d.) \>= 14), 1)
         CXX_FEATURES += -Wno-deprecated-experimental-coroutine
     endif
 endif
