@@ -428,12 +428,12 @@ public:
   void AddSpacer() noexcept;
 
   WndProperty *AddFile(const TCHAR *label, const TCHAR *help,
-                       const char *profile_key, const TCHAR *filters,
+                       std::string_view profile_key, const TCHAR *filters,
                        FileType file_type,
                        bool nullable = true) noexcept;
 
   WndProperty *AddFile(const TCHAR *label, const TCHAR *help,
-                       const char *profile_key, const TCHAR *filters,
+                       std::string_view profile_key, const TCHAR *filters,
                        bool nullable = true) noexcept {
     return AddFile(label, help, profile_key, filters, FileType::UNKNOWN,
                    nullable);
@@ -677,35 +677,35 @@ public:
     return SaveValue(i, value.data(), value.capacity());
   }
 
-  bool SaveValue(unsigned i, const char *profile_key,
+  bool SaveValue(unsigned i, std::string_view profile_key,
                  TCHAR *string, size_t max_size) const noexcept;
 
   template<size_t max>
-  bool SaveValue(unsigned i, const char *profile_key,
+  bool SaveValue(unsigned i, std::string_view profile_key,
                  BasicStringBuffer<TCHAR, max> &value) const noexcept {
     return SaveValue(i, profile_key, value.data(), value.capacity());
   }
 
-  bool SaveValue(unsigned i, const char *profile_key, bool &value,
+  bool SaveValue(unsigned i, std::string_view profile_key, bool &value,
                  bool negated = false) const noexcept;
 
   template<typename T>
-  bool SaveValueInteger(unsigned i, const char *registry_key,
+  bool SaveValueInteger(unsigned i, std::string_view profile_key,
                         T &value) const noexcept {
     bool result = SaveValueInteger(i, value);
     if (result)
-      SetProfile(registry_key, value);
+      SetProfile(profile_key, value);
 
     return result;
   }
 
-  bool SaveValue(unsigned i, const char *profile_key, double &value) const noexcept;
-  bool SaveValue(unsigned i, const char *profile_key, BrokenDate &value) const noexcept;
-  bool SaveValue(unsigned i, const char *profile_key,
+  bool SaveValue(unsigned i, std::string_view profile_key, double &value) const noexcept;
+  bool SaveValue(unsigned i, std::string_view profile_key, BrokenDate &value) const noexcept;
+  bool SaveValue(unsigned i, std::string_view profile_key,
                  std::chrono::seconds &value) const noexcept;
 
   template<class Rep, class Period>
-  bool SaveValue(unsigned i, const char *profile_key,
+  bool SaveValue(unsigned i, std::string_view profile_key,
                  std::chrono::duration<Rep,Period> &value_r) const noexcept {
     auto value = std::chrono::round<std::chrono::seconds>(value_r);
     if (!SaveValue(i, profile_key, value))
@@ -718,10 +718,10 @@ public:
   bool SaveValue(unsigned i, UnitGroup unit_group, double &value) const noexcept;
 
   bool SaveValue(unsigned i, UnitGroup unit_group,
-                 const char *profile_key, double &value) const noexcept;
+                 std::string_view profile_key, double &value) const noexcept;
 
   bool SaveValue(unsigned i, UnitGroup unit_group,
-                 const char *profile_key, unsigned int &value) const noexcept;
+                 std::string_view profile_key, unsigned int &value) const noexcept;
 
   template<std::unsigned_integral T>
   bool SaveValueEnum(unsigned i, T &value) const noexcept {
@@ -740,19 +740,19 @@ public:
   }
 
   template<typename T>
-  bool SaveValueEnum(unsigned i, const char *registry_key,
+  bool SaveValueEnum(unsigned i, std::string_view profile_key,
                      T &value) const noexcept {
     bool result = SaveValueEnum(i, value);
     if (result)
-      SetProfile(registry_key, static_cast<unsigned>(value));
+      SetProfile(profile_key, static_cast<unsigned>(value));
 
     return result;
   }
 
-  bool SaveValueFileReader(unsigned i, const char *profile_key) noexcept;
+  bool SaveValueFileReader(unsigned i, std::string_view profile_key) noexcept;
 
 private:
-  static void SetProfile(const char *registry_key, unsigned value) noexcept;
+  static void SetProfile(std::string_view profile_key, unsigned value) noexcept;
 
 protected:
   [[gnu::pure]]

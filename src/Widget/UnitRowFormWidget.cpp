@@ -79,7 +79,7 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
 
 bool
 RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
-                         const char *registry_key,
+                         std::string_view profile_key,
                          double &value) const noexcept
 {
   const DataFieldFloat &df =
@@ -94,13 +94,13 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
     return false;
 
   value = Units::ToSysUnit(new_value, unit);
-  Profile::Set(registry_key, value);
+  Profile::Set(profile_key, value);
   return true;
 }
 
 bool
 RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
-                         const char *registry_key,
+                         std::string_view profile_key,
                          unsigned int &value) const noexcept
 {
   const DataFieldFloat &df =
@@ -116,6 +116,6 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
     return false;
 
   value = iround(Units::ToSysUnit(new_value, unit));
-  Profile::Set(registry_key, value);
+  Profile::Set(profile_key, value);
   return true;
 }
