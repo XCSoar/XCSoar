@@ -207,6 +207,8 @@ ifeq ($(TARGET),KOBO)
   # Experimental target for Kobo Mini
   override TARGET = NEON
   TARGET_IS_KOBO = y
+
+  HOST_TRIPLET = armv7a-a8neon-linux-musleabihf
 endif
 
 ifeq ($(TARGET),NEON)
@@ -462,10 +464,6 @@ ifeq ($(TARGET_IS_KOBO),y)
     # http://www.openwall.com/lists/musl/2017/10/07/3
     TARGET_ARCH += -fomit-frame-pointer
   endif
-
-  # We are using a GNU toolchain (triplet arm-linux-gnueabihf) by default, but
-  # the actual host triplet is different.
-  ACTUAL_HOST_TRIPLET = armv7a-a8neon-linux-musleabihf
 
   TARGET_CXXFLAGS += -Wno-psabi
 

@@ -156,22 +156,7 @@ elif 'android' in actual_host_triplet:
         libgeotiff,
     ]
 elif toolchain_host_triplet.endswith('-musleabihf'):
-    thirdparty_libs = [
-        zlib,
-        libfmt,
-        libsodium,
-        freetype,
-        openssl,
-        cares,
-        curl,
-        libpng,
-        libjpeg,
-        lua,
-        libsalsa,
-        libusb,
-        simple_usbmodeswitch,
-    ]
-else:
+    # Kobo
     thirdparty_libs = [
         binutils,
         linux_headers,
@@ -192,6 +177,8 @@ else:
         libusb,
         simple_usbmodeswitch,
     ]
+else:
+    raise RuntimeError('Unrecognized target')
 
 # build the third-party libraries
 toolchain = Toolchain(tarball_path, src_path, build_path, install_prefix,
