@@ -1,7 +1,7 @@
 ifeq ($(TARGET_IS_KOBO),y)
-USE_THIRDPARTY_LIBS = y
+  USE_THIRDPARTY_LIBS = y
 else ifeq ($(TARGET),PC)
-USE_THIRDPARTY_LIBS = y
+  USE_THIRDPARTY_LIBS = y
 else ifeq ($(TARGET),ANDROID)
   ifeq ($(FAT_BINARY),y)
     # this is handled by android.mk
@@ -10,9 +10,9 @@ else ifeq ($(TARGET),ANDROID)
     USE_THIRDPARTY_LIBS = y
   endif
 else ifeq ($(TARGET_IS_IOS),y)
-USE_THIRDPARTY_LIBS = y
+  USE_THIRDPARTY_LIBS = y
 else
-USE_THIRDPARTY_LIBS = n
+  USE_THIRDPARTY_LIBS = n
 endif
 
 ifeq ($(USE_THIRDPARTY_LIBS),y)
