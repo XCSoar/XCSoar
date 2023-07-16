@@ -10,7 +10,6 @@ class AutotoolsProject(MakeProject):
                  libs='',
                  install_prefix=None,
                  use_destdir=False,
-                 use_actual_arch=False,
                  subdirs=None,
                  **kwargs):
         MakeProject.__init__(self, url, alternative_url, md5, installed, **kwargs)
@@ -21,7 +20,6 @@ class AutotoolsProject(MakeProject):
         self.libs = libs
         self.install_prefix = install_prefix
         self.use_destdir = use_destdir
-        self.use_actual_arch = use_actual_arch
         self.subdirs = subdirs
 
     def configure(self, toolchain, src=None, build=None, target_toolchain=None):
@@ -70,14 +68,12 @@ class AutotoolsProject(MakeProject):
             '--disable-silent-rules',
         ]
 
-        arch = toolchain.actual_arch if self.use_actual_arch else toolchain.toolchain_arch
-        if arch is not None:
-            configure.append('--host=' + arch)
+        if toolchain.host_triplet is not None:
+            configure.append('--host=' + toolchain.host_triplet)
 
         if target_toolchain is not None:
-            arch = target_toolchain.actual_arch if self.use_actual_arch else target_toolchain.toolchain_arch
-            if arch is not None:
-                configure.append('--target=' + arch)
+            if target_toolchain.host_triplet is not None:
+                configure.append('--target=' + target_toolchain.host_triplet)
 
         configure += self.configure_args
 

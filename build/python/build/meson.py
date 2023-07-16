@@ -17,18 +17,18 @@ def make_cross_file(toolchain):
         system = 'linux'
         windres = ''
 
-    if toolchain.actual_arch.startswith('arm'):
+    if toolchain.host_triplet.startswith('arm'):
         cpu_family = 'arm'
-        if toolchain.actual_arch.startswith('armv7'):
+        if toolchain.host_triplet.startswith('armv7'):
             cpu = 'armv7'
         else:
             cpu = 'armv6'
-    elif toolchain.actual_arch.startswith('aarch64'):
+    elif toolchain.host_triplet.startswith('aarch64'):
         cpu_family = 'aarch64'
         cpu = 'arm64-v8a'
     else:
         cpu_family = 'x86'
-        if 'x86_64' in toolchain.actual_arch:
+        if 'x86_64' in toolchain.host_triplet:
             cpu = 'x86_64'
         else:
             cpu = 'i686'
@@ -68,7 +68,7 @@ cpp_args = {repr((toolchain.cppflags + ' ' + toolchain.cxxflags).split())}
 cpp_link_args = {repr(toolchain.ldflags.split() + toolchain.libs.split())}
 """)
 
-        if 'android' in toolchain.actual_arch:
+        if 'android' in toolchain.host_triplet:
             f.write("""
 # Keep Meson from executing Android-x86 test binariees
 needs_exe_wrapper = true

@@ -28,7 +28,7 @@ class OpenSSLProject(MakeProject):
 
         # OpenSSL has a weird target architecture scheme with lots of
         # hard-coded architectures; this table translates between our
-        # "toolchain_arch" (HOST_TRIPLET) and the OpenSSL target
+        # host triplet and the OpenSSL target
         openssl_archs = {
             # not using "android-*" because those OpenSSL targets want
             # to know where the SDK is, but our own build scripts
@@ -54,8 +54,8 @@ class OpenSSLProject(MakeProject):
             'aarch64-apple-darwin': 'darwin64-arm64-cc',
         }
 
-        openssl_arch = openssl_archs[toolchain.toolchain_arch]
-        cross_compile_prefix = toolchain.toolchain_arch + '-'
+        openssl_arch = openssl_archs[toolchain.host_triplet]
+        cross_compile_prefix = toolchain.host_triplet + '-'
 
         subprocess.check_call(['./Configure',
                                'no-shared',
