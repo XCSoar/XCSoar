@@ -43,7 +43,7 @@ class OpenSSLProject(MakeProject):
             'arm-linux-gnueabihf': 'linux-generic32',
 
             # Kobo
-            'armv7a-a8neon-linux-musleabihf': 'linux-generic32',
+            'armv7a-kobo-linux-musleabihf': 'linux-generic32',
 
             # Windows
             'i686-w64-mingw32': 'mingw',

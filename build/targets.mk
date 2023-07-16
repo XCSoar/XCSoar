@@ -208,7 +208,7 @@ ifeq ($(TARGET),KOBO)
   override TARGET = NEON
   TARGET_IS_KOBO = y
 
-  HOST_TRIPLET = armv7a-a8neon-linux-musleabihf
+  HOST_TRIPLET = armv7a-kobo-linux-musleabihf
 endif
 
 ifeq ($(TARGET),NEON)
