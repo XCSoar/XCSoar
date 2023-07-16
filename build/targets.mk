@@ -467,7 +467,7 @@ ifeq ($(TARGET_IS_KOBO),y)
 
   TARGET_CXXFLAGS += -Wno-psabi
 
-  TCPREFIX = $(abspath $(THIRDPARTY_LIBS_DIR))/bin/$(ACTUAL_HOST_TRIPLET)-
+  TCPREFIX = $(abspath $(THIRDPARTY_LIBS_DIR))/bin/$(HOST_TRIPLET)-
 endif
 
 ifeq ($(TARGET),ANDROID)
