@@ -1,6 +1,8 @@
 Version 7.37 - not yet released
 * WeGlide
   - fix crash bug
+* Android
+  - fix crash with disallowed IOIO Accessory connection
 
 Version 7.36 - 2023/07/02
 * task
