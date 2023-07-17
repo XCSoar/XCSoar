@@ -4,14 +4,13 @@
 #pragma once
 
 #include "Cast.hxx"
-#include "Concepts.hxx"
 #include "Manual.hxx"
 #include "IntrusiveHashSet.hxx"
 #include "IntrusiveList.hxx"
 
 #include <array>
-
 #include <cassert>
+#include <concepts>
 
 /**
  * A simple LRU cache.  Item lookup is done with a hash table.  No
@@ -319,7 +318,7 @@ public:
 	 * Iterates over all items and remove all those which match
 	 * the given predicate.
 	 */
-	void RemoveIf(Predicate<const Key &, const Data &> auto p) noexcept {
+	void RemoveIf(std::predicate<const Key &, const Data &> auto p) noexcept {
 		chronological_list.remove_and_dispose_if([&p](const Item &item){
 				return p(item.GetKey(), item.GetData());
 			},
@@ -335,7 +334,7 @@ public:
 	 * given function.  The cache must not be modified from within
 	 * that function.
 	 */
-	void ForEach(Invocable<const Key &, const Data &> auto f) const {
+	void ForEach(std::invocable<const Key &, const Data &> auto f) const {
 		for (const auto &i : chronological_list)
 			f(i.GetKey(), i.GetData());
 	}
