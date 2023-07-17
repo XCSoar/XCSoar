@@ -276,6 +276,7 @@ jobs:
       TARGET_BIN: XCSoar-debug
       TARGET_FINAL: XCSoar-debug
       TARGET_EXT: apk
+      NDK: r26-beta1
 
     steps:
       - name: set vars for push
@@ -326,6 +327,15 @@ jobs:
             imagemagick gettext sox \
             vorbis-tools \
             cmake ninja-build
+
+      - name: Install Android NDK
+        # We need NDK r26, but the GitHub runner has only r25
+        working-directory: output/download
+        run: |
+          wget --quiet https://dl.google.com/android/repository/android-ndk-${{env.NDK}}-linux.zip
+          unzip -q android-ndk-${{env.NDK}}-linux.zip
+          rm android-ndk-${{env.NDK}}-linux.zip
+          echo ANDROID_NDK_LATEST_HOME=$PWD/android-ndk-${{env.NDK}} >> $GITHUB_ENV
 
       - name: Compile XCSoar
         run: |
