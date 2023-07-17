@@ -29,6 +29,7 @@ on:
 
 env:
   DEBUG: y
+  BOOST: boost_1_82_0
 
 jobs:
   build-ubuntu:
@@ -54,6 +55,16 @@ jobs:
         uses: hendrikmuhs/ccache-action@v1
         with:
           key: ${{ env.TARGET }}
+
+      - name: "Cache Boost"
+        uses: actions/cache@v3
+        with:
+          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
+          path: |
+            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
+            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
+            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
+
       - name: find githash
         run: |
           echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
@@ -129,6 +140,15 @@ jobs:
         run: |
           echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
 
+      - name: "Cache Boost"
+        uses: actions/cache@v3
+        with:
+          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
+          path: |
+            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
+            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
+            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
+
       - name: Install dependencies
         run: |
           sudo apt-get update
@@ -181,6 +201,15 @@ jobs:
         uses: hendrikmuhs/ccache-action@v1
         with:
           key: ${{ env.TARGET }}
+
+      - name: "Cache Boost"
+        uses: actions/cache@v3
+        with:
+          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
+          path: |
+            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
+            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
+            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
 
       - name: "Cache third-party libraries"
         uses: actions/cache@v3
@@ -265,6 +294,15 @@ jobs:
         with:
           key: ${{ env.TARGET }}
 
+      - name: "Cache Boost"
+        uses: actions/cache@v3
+        with:
+          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
+          path: |
+            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
+            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
+            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
+
       - name: "Cache third-party libraries"
         uses: actions/cache@v3
         with:
@@ -342,6 +380,15 @@ jobs:
         uses: hendrikmuhs/ccache-action@v1
         with:
           key: ${{ env.TARGET }}
+
+      - name: "Cache Boost"
+        uses: actions/cache@v3
+        with:
+          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
+          path: |
+            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
+            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
+            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
 
       - name: "Cache third-party libraries"
         uses: actions/cache@v3
@@ -438,6 +485,15 @@ jobs:
         with:
           key: macos
 
+      - name: "Cache Boost"
+        uses: actions/cache@v3
+        with:
+          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
+          path: |
+            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
+            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
+            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
+
       - name: Install dependencies
         run: |
           brew install \
@@ -505,6 +561,15 @@ jobs:
         uses: hendrikmuhs/ccache-action@v1
         with:
           key: ios
+
+      - name: "Cache Boost"
+        uses: actions/cache@v3
+        with:
+          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
+          path: |
+            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
+            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
+            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
 
       - name: Install dependencies
         run: |
