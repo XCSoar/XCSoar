@@ -1,4 +1,6 @@
 Version 7.37 - not yet released
+* WeGlide
+  - fix crash bug
 
 Version 7.36 - 2023/07/02
 * task
