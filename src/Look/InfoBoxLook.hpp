@@ -7,6 +7,8 @@
 #include "ui/canvas/Brush.hpp"
 #include "ui/canvas/Font.hpp"
 #include "util/Macros.hpp"
+#include "InfoBoxes/InfoBoxSettings.hpp"
+#include "UISettings.hpp"
 
 class Font;
 
@@ -16,7 +18,8 @@ struct InfoBoxLook {
   bool inverse;
 
   Pen border_pen;
-  Color background_color, focused_background_color, pressed_background_color;
+  Color foreground_color, background_color,
+        focused_background_color, pressed_background_color;
 
   /**
    * Used only by #InfoBoxSettings::BorderStyle::SHADED.
@@ -40,10 +43,9 @@ struct InfoBoxLook {
 
   Color colors[6];
 
-  void Initialise(bool inverse, bool use_colors,
-                  unsigned width);
+  void Initialise(const UISettings &settings, unsigned infobox_width);
 
-  void ReinitialiseLayout(unsigned width);
+  void ReinitialiseLayout(const UISettings &settings, unsigned width);
 
   Color GetColor(int i, Color default_color) const {
     if (i < 0)

@@ -314,7 +314,7 @@ MainWindow::ReinitialiseLayout() noexcept
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
 
-  look->ReinitialiseLayout(ib_layout.control_size.width);
+  look->ReinitialiseLayout(ui_settings, ib_layout.control_size.width);
 
   InfoBoxManager::Create(*this, ib_layout, look->info_box);
   InfoBoxManager::ProcessTimer();

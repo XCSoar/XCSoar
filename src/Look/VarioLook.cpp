@@ -15,21 +15,23 @@
 #include <algorithm>
 
 void
-VarioLook::Initialise(bool _inverse, bool _colors,
+VarioLook::Initialise(const UISettings &settings,
                       unsigned width,
                       const Font &_text_font)
+
 {
-  inverse = _inverse;
-  colors = _colors;
+  inverse = UISettings::GetDarkMode(settings);
+  uint8_t bg_color_val = UISettings::GetBgColor(settings);
+  colors = settings.info_boxes.use_colors;
 
   if (inverse) {
-    background_color = COLOR_BLACK;
+    background_color = Color(bg_color_val, bg_color_val, bg_color_val); //COLOR_BLACK;
     text_color = COLOR_WHITE;
     dimmed_text_color = Color(0xa0, 0xa0, 0xa0);
     sink_color = Color(0xc4, 0x80, 0x1e);
     lift_color = Color(0x1e, 0xf1, 0x73);
   } else {
-    background_color = COLOR_WHITE;
+    background_color = Color(bg_color_val, bg_color_val, bg_color_val); // COLOR_WHITE;
     text_color = COLOR_BLACK;
     dimmed_text_color = Color((uint8_t)~0xa0, (uint8_t)~0xa0, (uint8_t)~0xa0);
     sink_color = Color(0xa3,0x69,0x0d);

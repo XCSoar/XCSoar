@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "UISettings.hpp"
+#include "GlobalSettings.hpp"
 
 void
 UISettings::SetDefaults() noexcept
@@ -34,4 +35,32 @@ UISettings::SetDefaults() noexcept
   pages.SetDefaults();
   dialog.SetDefaults();
   sound.SetDefaults();
+}
+
+
+[[gnu::pure]]
+bool UISettings::GetDarkMode(const UISettings &settings) noexcept
+{
+  switch (settings.dark_mode) {
+  case UISettings::DarkMode::OFF:
+    break;
+
+  case UISettings::DarkMode::ON:
+    return true;
+
+  case UISettings::DarkMode::AUTO:
+    return GlobalSettings::dark_mode;
+  }
+
+  return false;
+}
+
+uint8_t UISettings::GetBgColor(const UISettings &settings) noexcept
+{
+  /* Get background (brightness) color value for infoboxes, vario etc.
+  Contrast is any integer 0 to 5 (max contrast). */
+  uint8_t contrast = settings.info_boxes.contrast;
+  uint8_t bg = (contrast>5) ? 0 : 16*(5-contrast);
+  bool dark_mode = UISettings::GetDarkMode(settings);
+  return dark_mode ? bg : 255-bg;
 }

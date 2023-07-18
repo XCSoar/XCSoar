@@ -21,15 +21,15 @@
 #define COLOR_INVERSE_GREEN COLOR_GREEN
 #define COLOR_INVERSE_MAGENTA COLOR_MAGENTA
 
+
 void
-InfoBoxLook::Initialise(bool _inverse, bool use_colors,
+InfoBoxLook::Initialise(const UISettings &settings,
                         unsigned width)
 {
-  inverse = _inverse;
 
-  value.fg_color = title.fg_color = comment.fg_color =
-    inverse ? COLOR_WHITE : COLOR_BLACK;
-  background_color = inverse ? COLOR_BLACK : COLOR_WHITE;
+  bool use_colors = settings.info_boxes.use_colors;
+  inverse = UISettings::GetDarkMode(settings);
+
   caption_background_color = inverse
     ? Color(0x40, 0x40, 0x40)
     : Color(0xe0, 0xe0, 0xe0);
@@ -44,9 +44,7 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
   Color border_color = Color(128, 128, 128);
   border_pen.Create(BORDER_WIDTH, border_color);
 
-  ReinitialiseLayout(width);
-
-  unit_fraction_pen.Create(1, value.fg_color);
+  ReinitialiseLayout(settings, width);
 
   colors[0] = border_color;
   if (HasColors() && use_colors) {
@@ -60,8 +58,17 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
 }
 
 void
-InfoBoxLook::ReinitialiseLayout(unsigned width)
+InfoBoxLook::ReinitialiseLayout(const UISettings &settings,
+      unsigned width)
 {
+
+  uint8_t bg = UISettings::GetBgColor(settings);
+  background_color = Color(bg,bg,bg);
+
+  uint8_t fg = inverse ? 255 : 0;
+  value.fg_color = title.fg_color = comment.fg_color = Color(fg,fg,fg);
+  unit_fraction_pen.Create(1, value.fg_color);
+
   const unsigned max_font_height = Layout::FontScale(12);
 
   FontDescription title_font_d(8);

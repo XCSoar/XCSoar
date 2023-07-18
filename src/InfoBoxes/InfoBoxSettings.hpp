@@ -6,6 +6,7 @@
 #include "util/StaticString.hxx"
 #include "util/Compiler.h"
 #include "InfoBoxes/Content/Type.hpp"
+#include "ui/canvas/Color.hpp"
 
 #include <cstdint>
 
@@ -110,6 +111,8 @@ struct InfoBoxSettings {
   } geometry;
 
   bool use_colors;
+  uint8_t contrast;
+  Color background_color;
 
   enum class BorderStyle : uint8_t {
     BOX,

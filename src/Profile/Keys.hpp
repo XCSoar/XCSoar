@@ -107,6 +107,7 @@ constexpr std::string_view AppIndLandable = "AppIndLandable";
 constexpr std::string_view AppUseSWLandablesRendering = "AppUseSWLandablesRendering";
 constexpr std::string_view AppLandableRenderingScale = "AppLandableRenderingScale";
 constexpr std::string_view AppScaleRunwayLength = "AppScaleRunwayLength";
+constexpr std::string_view AppInfoBoxContrast = "AppInfoBoxContrast";
 
 /** deprecated, use #DarkMode */
 constexpr std::string_view AppInverseInfoBox = "AppInverseInfoBox";

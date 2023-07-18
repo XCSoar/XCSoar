@@ -8,6 +8,7 @@
 #include "ui/canvas/Pen.hpp"
 #include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/Font.hpp"
+#include "UISettings.hpp"
 
 class Font;
 
@@ -33,7 +34,7 @@ struct VarioLook {
   Font unit_font;
   Pen unit_fraction_pen;
 
-  void Initialise(bool inverse, bool colors,
+  void Initialise(const UISettings &settings,
                   unsigned width,
                   const Font &text_font);
 

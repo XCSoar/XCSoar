@@ -38,6 +38,7 @@ enum ControlIndex {
   AppFlarmLocation,
   TabDialogStyle,
   AppStatusMessageAlignment,
+  AppInfoBoxContrast,
   AppInfoBoxColors,
   AppInfoBoxBorder,
 #ifdef KOBO
@@ -215,6 +216,11 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
           (unsigned)ui_settings.popup_message_position);
   SetExpertRow(AppStatusMessageAlignment);
 
+  AddInteger(_("InfoBox contrast"), _("Set InfoBox contrast from 0 (low) to 5 (high)."),
+             _T("%d"), _T("%d"),
+             0, 5, 1, ui_settings.info_boxes.contrast);
+  SetExpertRow(AppInfoBoxContrast);
+
   if (HasColors()) {
     AddBoolean(_("Colored InfoBoxes"),
                _("If true, certain InfoBoxes will have coloured text.  For example, the active waypoint "
@@ -288,6 +294,9 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
   if (HasColors())
     changed |= SaveValue(AppInfoBoxColors, ProfileKeys::AppInfoBoxColors,
                          ui_settings.info_boxes.use_colors);
+
+  changed |= SaveValueInteger(AppInfoBoxContrast, ProfileKeys::AppInfoBoxContrast,
+                              ui_settings.info_boxes.contrast);
 
 #ifdef KOBO
   if (SaveValue(ShowMenuButton, ProfileKeys::ShowMenuButton,ui_settings.show_menu_button))

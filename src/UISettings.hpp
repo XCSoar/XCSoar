@@ -78,6 +78,12 @@ struct UISettings {
   constexpr unsigned GetPercentScale() const noexcept {
     return scale;
   }
+
+  [[gnu::pure]]
+  static bool GetDarkMode(const UISettings &settings) noexcept;
+
+  static uint8_t GetBgColor(const UISettings &settings) noexcept;
+
 };
 
 static_assert(std::is_trivial<UISettings>::value, "type is not trivial");

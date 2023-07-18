@@ -34,6 +34,7 @@ InfoBoxSettings::SetDefaults() noexcept
   geometry = Geometry::SPLIT_8;
 
   use_colors = true;
+  contrast = 5;
   border_style = BorderStyle::SHADED;
 
   for (unsigned i = 0; i < MAX_PANELS; ++i)
