@@ -240,6 +240,11 @@ public class XCSoar extends Activity {
   };
 
   private boolean hasAllPermissions() {
+    if (android.os.Build.VERSION.SDK_INT < 23)
+      /* we don't need to request permissions on this old Android
+         version */
+      return true;
+
     for (String p : NEEDED_PERMISSIONS) {
       if (checkSelfPermission(p) != PackageManager.PERMISSION_GRANTED) {
         return false;
@@ -250,11 +255,6 @@ public class XCSoar extends Activity {
   }
 
   private void requestAllPermissions() {
-    if (android.os.Build.VERSION.SDK_INT < 23)
-      /* we don't need to request permissions on this old Android
-         version */
-      return;
-
     /* starting with Android 6.0, we need to explicitly request all
        permissions before using them; mentioning them in the manifest
        is not enough */
