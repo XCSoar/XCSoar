@@ -71,6 +71,9 @@ public class InternalGPS
                                              this))
       return;
 
+    permissionManager.requestPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                                        null);
+
     try {
       locationManager.requestLocationUpdates(locationProvider,
                                              1000, 0, this);
