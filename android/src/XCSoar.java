@@ -9,6 +9,8 @@ import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.MotionEvent;
 import android.view.KeyEvent;
 import android.view.Window;
@@ -271,11 +273,30 @@ public class XCSoar extends Activity {
     if (hasAllPermissions())
       return;
 
+    /* using HTML so the privacy policy link is clickable */
+    final String html = "<p>" +
+      "XCSoar is free software developed by volunteers just for fun. " +
+      "The project is non-profit - you don't pay for XCSoar, and we don't sell your data (or anything else). " +
+      "</p>" +
+      "<p>" +
+      "XCSoar needs permission to access your GPS location - obviously, because XCSoar's purpose is to help you navigate an aircraft; " +
+      "several optional features (e.g. flight logging and score calculation) benefit from location access while the app is in background. " +
+      "Additional sensors (e.g. built-in or Bluetooth) can be used to improve XCSoar's accuracy." +
+      "</p>" +
+      "<p>" +
+      "All those accesses are only in your own interest; we don't collect your data and we don't track you (unless you explicitly ask XCSoar to). " +
+      "</p>" +
+      "<p>" +
+      "More details can be found in the <a href=\"https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md\">Privacy policy</a>. " +
+      "</p>";
+
+    final TextView tv  = new TextView(this);
+    tv.setMovementMethod(LinkMovementMethod.getInstance());
+    tv.setText(Html.fromHtml(html));
+
     new AlertDialog.Builder(this)
-      .setTitle("Permission request")
-      .setMessage("XCSoar needs to"
-                  + "\n1.Collect location data to enable live navigation calculation and IGC logger, even when the app is in the background"
-                  + "\n2.Bluetooth nearby device permission to connect external peripheral")
+      .setTitle("Welcome to XCSoar!")
+      .setView(tv)
       .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
