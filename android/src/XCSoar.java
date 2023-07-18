@@ -104,11 +104,7 @@ public class XCSoar extends Activity {
     registerReceiver(batteryReceiver,
                      new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
-    /* TODO: this sure is the wrong place to request permissions -
-       we should request permissions when we need them, but
-       implementing that is complicated, so for now, we do it
-       here to give users a quick solution for the problem */
-    requestAllPermissions();
+    maybeShowWelcome();
   }
 
   private void quit() {
@@ -259,24 +255,34 @@ public class XCSoar extends Activity {
        permissions before using them; mentioning them in the manifest
        is not enough */
 
-    if (!hasAllPermissions()) {
-      new AlertDialog.Builder(this)
-        .setTitle("Permission request")
-        .setMessage("XCSoar needs to"
-                     + "\n1.Collect location data to enable live navigation calculation and IGC logger, even when the app is in the background"
-                     + "\n2.Bluetooth nearby device permission to connect external peripheral")
-        .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-              try {
-                XCSoar.this.requestPermissions(NEEDED_PERMISSIONS, 0);
-              } catch (IllegalArgumentException e) {
-                Log.e(TAG, "could not request permissions: " + String.join(", ", NEEDED_PERMISSIONS), e);
-              }
-            }
-        })
-        .show();
+    /* TODO: this sure is the wrong place to request permissions - we
+       should request permissions when we need them, but implementing
+       that is complicated, so for now, we do it here to give users a
+       quick solution for the problem */
+
+    try {
+      requestPermissions(NEEDED_PERMISSIONS, 0);
+    } catch (IllegalArgumentException e) {
+      Log.e(TAG, "could not request permissions: " + String.join(", ", NEEDED_PERMISSIONS), e);
     }
+  }
+
+  private void maybeShowWelcome() {
+    if (hasAllPermissions())
+      return;
+
+    new AlertDialog.Builder(this)
+      .setTitle("Permission request")
+      .setMessage("XCSoar needs to"
+                  + "\n1.Collect location data to enable live navigation calculation and IGC logger, even when the app is in the background"
+                  + "\n2.Bluetooth nearby device permission to connect external peripheral")
+      .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            requestAllPermissions();
+          }
+        })
+      .show();
   }
 
   @Override protected void onResume() {
