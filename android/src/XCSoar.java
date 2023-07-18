@@ -282,6 +282,18 @@ public class XCSoar extends Activity {
             requestAllPermissions();
           }
         })
+      .setOnCancelListener(new DialogInterface.OnCancelListener() {
+          @Override
+          public void onCancel(DialogInterface dialog) {
+            requestAllPermissions();
+          }
+        })
+      .setOnDismissListener(new DialogInterface.OnDismissListener() {
+          @Override
+          public void onDismiss(DialogInterface dialog) {
+            requestAllPermissions();
+          }
+        })
       .show();
   }
 
