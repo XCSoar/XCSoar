@@ -38,10 +38,9 @@ UISettings::SetDefaults() noexcept
 }
 
 
-[[gnu::pure]]
-bool UISettings::GetDarkMode(const UISettings &settings) noexcept
+bool UISettings::GetDarkMode() const noexcept
 {
-  switch (settings.dark_mode) {
+  switch (this->dark_mode) {
   case UISettings::DarkMode::OFF:
     break;
 
@@ -55,12 +54,12 @@ bool UISettings::GetDarkMode(const UISettings &settings) noexcept
   return false;
 }
 
-uint8_t UISettings::GetBgColor(const UISettings &settings) noexcept
+uint8_t UISettings::GetBgColorVal() const noexcept
 {
   /* Get background (brightness) color value for infoboxes, vario etc.
   Contrast is any integer 0 to 5 (max contrast). */
-  uint8_t contrast = settings.info_boxes.contrast;
+  uint8_t contrast = this->info_boxes.contrast;
   uint8_t bg = (contrast>5) ? 0 : 16*(5-contrast);
-  bool dark_mode = UISettings::GetDarkMode(settings);
+  bool dark_mode = this->GetDarkMode();
   return dark_mode ? bg : 255-bg;
 }

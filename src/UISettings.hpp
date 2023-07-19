@@ -79,10 +79,9 @@ struct UISettings {
     return scale;
   }
 
-  [[gnu::pure]]
-  static bool GetDarkMode(const UISettings &settings) noexcept;
+  bool GetDarkMode() const noexcept;
 
-  static uint8_t GetBgColor(const UISettings &settings) noexcept;
+  uint8_t GetBgColorVal() const noexcept;
 
 };
 

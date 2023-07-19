@@ -20,7 +20,7 @@ Look::InitialiseConfigured(const UISettings &settings,
                            const Font &map_font, const Font &map_bold_font,
                            unsigned infobox_width)
 {
-  const bool dark_mode = UISettings::GetDarkMode(settings);
+  const bool dark_mode = settings.GetDarkMode();
 
   dialog.Initialise();
   terminal.Initialise();

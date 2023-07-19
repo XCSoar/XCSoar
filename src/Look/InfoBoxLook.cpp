@@ -28,7 +28,7 @@ InfoBoxLook::Initialise(const UISettings &settings,
 {
 
   bool use_colors = settings.info_boxes.use_colors;
-  inverse = UISettings::GetDarkMode(settings);
+  inverse = settings.GetDarkMode();
 
   caption_background_color = inverse
     ? Color(0x40, 0x40, 0x40)
@@ -62,7 +62,7 @@ InfoBoxLook::ReinitialiseLayout(const UISettings &settings,
       unsigned width)
 {
 
-  uint8_t bg = UISettings::GetBgColor(settings);
+  uint8_t bg = settings.GetBgColorVal();
   background_color = Color(bg,bg,bg);
 
   uint8_t fg = inverse ? 255 : 0;

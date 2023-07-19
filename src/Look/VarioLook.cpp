@@ -20,8 +20,8 @@ VarioLook::Initialise(const UISettings &settings,
                       const Font &_text_font)
 
 {
-  inverse = UISettings::GetDarkMode(settings);
-  uint8_t bg_color_val = UISettings::GetBgColor(settings);
+  inverse = settings.GetDarkMode();
+  uint8_t bg_color_val = settings.GetBgColorVal();
   colors = settings.info_boxes.use_colors;
 
   if (inverse) {
