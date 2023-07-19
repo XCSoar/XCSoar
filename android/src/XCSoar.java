@@ -353,6 +353,8 @@ public class XCSoar extends Activity {
 
     IOIOHelper.onDestroyContext();
 
+    NativeView.deinitNative();
+
     super.onDestroy();
     System.exit(0);
   }

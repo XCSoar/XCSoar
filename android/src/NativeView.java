@@ -169,6 +169,7 @@ class NativeView extends SurfaceView
   }
 
   static native void initNative(int sdk_version);
+  static native void deinitNative();
 
   static native void onConfigurationChangedNative(boolean nightMode);
 

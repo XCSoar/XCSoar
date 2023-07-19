@@ -130,6 +130,32 @@ Java_org_xcsoar_NativeView_initNative(JNIEnv *env, [[maybe_unused]] jclass cls,
 
 gcc_visibility_default
 void
+Java_org_xcsoar_NativeView_deinitNative(JNIEnv *env,
+                                        [[maybe_unused]] jclass cls)
+{
+  AndroidTextEntryDialog::Deinitialise(env);
+  BMP085Device::Deinitialise(env);
+  I2CbaroDevice::Deinitialise(env);
+  NunchuckDevice::Deinitialise(env);
+  VoltageDevice::Deinitialise(env);
+  IOIOHelper::Deinitialise(env);
+  NativeDetectDeviceListener::Deinitialise(env);
+  UsbSerialHelper::Deinitialise(env);
+  BluetoothHelper::Deinitialise(env);
+  NativeInputListener::Deinitialise(env);
+  NativePortListener::Deinitialise(env);
+  InternalSensors::Deinitialise(env);
+  NativeSensorListener::Deinitialise(env);
+  GliderLink::Deinitialise(env);
+  AndroidBitmap::Deinitialise(env);
+  Environment::Deinitialise(env);
+  Context::Deinitialise(env);
+  NativeView::Deinitialise(env);
+  Java::URL::Deinitialise(env);
+}
+
+gcc_visibility_default
+void
 Java_org_xcsoar_NativeView_onConfigurationChangedNative([[maybe_unused]] JNIEnv *env,
                                                         [[maybe_unused]] jclass cls,
                                                         jboolean night_mode)
@@ -260,6 +286,7 @@ try {
   vibrator = nullptr;
 
   SoundUtil::Deinitialise(env);
+
   delete native_view;
   native_view = nullptr;
 
@@ -269,26 +296,6 @@ try {
 
   delete context;
   context = nullptr;
-
-  AndroidTextEntryDialog::Deinitialise(env);
-  BMP085Device::Deinitialise(env);
-  I2CbaroDevice::Deinitialise(env);
-  NunchuckDevice::Deinitialise(env);
-  VoltageDevice::Deinitialise(env);
-  IOIOHelper::Deinitialise(env);
-  NativeDetectDeviceListener::Deinitialise(env);
-  UsbSerialHelper::Deinitialise(env);
-  BluetoothHelper::Deinitialise(env);
-  NativeInputListener::Deinitialise(env);
-  NativePortListener::Deinitialise(env);
-  InternalSensors::Deinitialise(env);
-  NativeSensorListener::Deinitialise(env);
-  GliderLink::Deinitialise(env);
-  AndroidBitmap::Deinitialise(env);
-  Environment::Deinitialise(env);
-  Context::Deinitialise(env);
-  NativeView::Deinitialise(env);
-  Java::URL::Deinitialise(env);
 } catch (...) {
   /* if an error occurs, rethrow the C++ exception as Java exception,
      to be displayed by the Java glue code */
