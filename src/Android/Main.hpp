@@ -17,6 +17,8 @@ extern unsigned android_api_level;
 
 extern Context *context;
 
+inline class _jobject *permission_manager;
+
 extern NativeView *native_view;
 
 extern Vibrator *vibrator;

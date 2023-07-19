@@ -3,6 +3,9 @@
 
 package org.xcsoar;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -33,7 +36,7 @@ import android.content.res.Configuration;
 import android.util.Log;
 import android.provider.Settings;
 
-public class XCSoar extends Activity {
+public class XCSoar extends Activity implements PermissionManager {
   private static final String TAG = "XCSoar";
 
   /**
@@ -202,7 +205,8 @@ public class XCSoar extends Activity {
 
     nativeView = new NativeView(this, quitHandler,
                                 wakeLockHandler, fullScreenHandler,
-                                errorHandler);
+                                errorHandler,
+                                this);
     setContentView(nativeView);
     // Receive keyboard events
     nativeView.setFocusableInTouchMode(true);
@@ -231,7 +235,6 @@ public class XCSoar extends Activity {
   }
 
   private static final String[] NEEDED_PERMISSIONS = new String[] {
-    Manifest.permission.ACCESS_FINE_LOCATION,
     Manifest.permission.WRITE_EXTERNAL_STORAGE,
     Manifest.permission.BLUETOOTH_CONNECT,
     Manifest.permission.BLUETOOTH_SCAN
@@ -407,5 +410,48 @@ public class XCSoar extends Activity {
   @Override public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
     submitConfiguration(newConfig);
+  }
+
+  @Override
+  public synchronized void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                                      int[] grantResults) {
+    PermissionHandler handler = permissionHandlers.remove(requestCode);
+    if (handler != null)
+      handler.onRequestPermissionsResult(grantResults[0] == PackageManager.PERMISSION_GRANTED);
+  }
+
+  /* virtual methods from PermissionManager */
+
+  private final Map<Integer, PermissionHandler> permissionHandlers =
+    new TreeMap<Integer, PermissionHandler>();
+  private int nextPermissionHandlerId = 0;
+
+  @Override
+  public boolean requestPermission(String permission, PermissionHandler handler) {
+    if (android.os.Build.VERSION.SDK_INT < 23)
+      /* we don't need to request permissions on this old Android
+         version */
+      return true;
+
+    if (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED)
+      return true;
+
+    // TODO check shouldShowRequestPermissionRationale()
+
+    final int id = nextPermissionHandlerId++;
+
+    if (handler != null) {
+      synchronized(this) {
+        permissionHandlers.put(id, handler);
+      }
+    }
+
+    requestPermissions(new String[]{permission}, id);
+    return false;
+  }
+
+  @Override
+  public synchronized void cancelRequestPermission(PermissionHandler handler) {
+    permissionHandlers.values().remove(handler);
   }
 }

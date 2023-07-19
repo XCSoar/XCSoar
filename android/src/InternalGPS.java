@@ -12,14 +12,17 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.Manifest;
 
 /**
  * Code to support the internal GPS receiver via #LocationManager.
  */
 public class InternalGPS
-  implements LocationListener, Runnable, AndroidSensor
+  implements LocationListener, Runnable, AndroidSensor,
+  PermissionManager.PermissionHandler
 {
   private final Handler handler;
+  private final PermissionManager permissionManager;
 
   private final SensorListener listener;
 
@@ -33,8 +36,10 @@ public class InternalGPS
 
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
-  InternalGPS(Context context, SensorListener listener) {
+  InternalGPS(Context context, PermissionManager permissionManager,
+              SensorListener listener) {
     handler = new Handler(context.getMainLooper());
+    this.permissionManager = permissionManager;
     this.listener = listener;
 
     locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
@@ -62,6 +67,10 @@ public class InternalGPS
    * LocationManager subscription inside the main thread.
    */
   @Override public void run() {
+    if (!permissionManager.requestPermission(Manifest.permission.ACCESS_FINE_LOCATION,
+                                             this))
+      return;
+
     try {
       locationManager.requestLocationUpdates(locationProvider,
                                              1000, 0, this);
@@ -74,8 +83,19 @@ public class InternalGPS
   }
 
   @Override
+  public void onRequestPermissionsResult(boolean granted) {
+    if (granted)
+      /* try again */
+      handler.post(this);
+    else
+      submitError("Permission denied by user");
+  }
+
+  @Override
   public void close() {
     safeDestruct.beginShutdown();
+
+    permissionManager.cancelRequestPermission(InternalGPS.this);
 
     handler.removeCallbacks(this);
     handler.post(new Runnable() {

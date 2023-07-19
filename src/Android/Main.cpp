@@ -179,6 +179,7 @@ gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj,
                                      jobject _context,
+                                     jobject _permission_manager,
                                      jint width, jint height,
                                      jint xdpi, jint ydpi,
                                      jstring product)
@@ -196,6 +197,9 @@ try {
     delete context;
     context = nullptr;
   };
+
+  permission_manager = env->NewGlobalRef(_permission_manager);
+  AtScopeExit(env) { env->DeleteGlobalRef(permission_manager); };
 
   const ScopeGlobalAsioThread global_asio_thread;
   const Net::ScopeInit net_init(asio_thread->GetEventLoop());

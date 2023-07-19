@@ -2,6 +2,7 @@ Version 7.37 - not yet released
 * WeGlide
   - fix crash bug
 * Android
+  - request ACCESS_FINE_LOCATION only when internal GPS is used
   - fix crash with disallowed IOIO Accessory connection
   - remove Nook support
 

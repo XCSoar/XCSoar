@@ -236,8 +236,9 @@ DeviceDescriptor::OpenInternalSensors()
     return true;
 
 #ifdef ANDROID
-  internal_sensors =
-      InternalSensors::create(Java::GetEnv(), context, *this);
+  internal_sensors = InternalSensors::Create(Java::GetEnv(), context,
+                                             permission_manager,
+                                             *this);
   if (internal_sensors) {
     // TODO: Allow user to specify whether they want certain sensors.
     internal_sensors->subscribeToSensor(InternalSensors::TYPE_PRESSURE);
