@@ -4,9 +4,3 @@
 #include "Product.hpp"
 
 bool has_cursor_keys;
-
-#ifdef __arm__
-
-bool is_nook, is_dithered;
-
-#endif

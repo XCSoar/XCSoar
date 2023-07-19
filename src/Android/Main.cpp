@@ -22,7 +22,6 @@
 #include "TextUtil.hpp"
 #include "TextEntryDialog.hpp"
 #include "Product.hpp"
-#include "Nook.hpp"
 #include "Language/Language.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "LocalPath.hpp"
@@ -205,9 +204,6 @@ try {
   assert(native_view == nullptr);
   native_view = new NativeView(env, obj, width, height, xdpi, ydpi,
                                product);
-#ifdef __arm__
-  is_nook = StringIsEqual(native_view->GetProduct(), "NOOK");
-#endif
 
   SoundUtil::Initialise(env);
   Vibrator::Initialise(env);
@@ -237,15 +233,6 @@ try {
     }
   }
 
-#ifdef __arm__
-  if (IsNookSimpleTouch()) {
-    is_dithered = Nook::EnterFastMode();
-
-    /* enable USB host mode if this is a Nook */
-    Nook::InitUsb();
-  }
-#endif
-
   ScreenGlobalInit screen_init;
 
   AllowLanguage();
@@ -259,10 +246,6 @@ try {
   }
 
   Shutdown();
-
-  if (IsNookSimpleTouch()) {
-    Nook::ExitFastMode();
-  }
 
   if (CommonInterface::main_window != nullptr) {
     CommonInterface::main_window->Destroy();

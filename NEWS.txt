@@ -3,6 +3,7 @@ Version 7.37 - not yet released
   - fix crash bug
 * Android
   - fix crash with disallowed IOIO Accessory connection
+  - remove Nook support
 
 Version 7.36 - 2023/07/02
 * task
