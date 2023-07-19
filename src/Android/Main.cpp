@@ -50,6 +50,7 @@
 #include "net/http/Init.hpp"
 #include "thread/Debug.hpp"
 #include "util/Exception.hxx"
+#include "util/ScopeExit.hxx"
 #include "GlobalSettings.hpp"
 
 #include "IOIOHelper.hpp"
@@ -191,23 +192,40 @@ try {
   const bool have_ioio = IOIOHelper::Initialise(env);
 
   context = new Context(env, _context);
+  AtScopeExit() {
+    delete context;
+    context = nullptr;
+  };
 
   const ScopeGlobalAsioThread global_asio_thread;
   const Net::ScopeInit net_init(asio_thread->GetEventLoop());
 
   InitialiseDataPath();
+  AtScopeExit() { DeinitialiseDataPath(); };
 
   LogFormat(_T("Starting XCSoar %s"), XCSoar_ProductToken);
 
   TextUtil::Initialise(env);
+  AtScopeExit(env) { TextUtil::Deinitialise(env); };
 
   assert(native_view == nullptr);
   native_view = new NativeView(env, obj, width, height, xdpi, ydpi,
                                product);
+  AtScopeExit() {
+    delete native_view;
+    native_view = nullptr;
+  };
 
   SoundUtil::Initialise(env);
+  AtScopeExit(env) { SoundUtil::Deinitialise(env); };
+
   Vibrator::Initialise(env);
   vibrator = Vibrator::Create(env, *context);
+
+  AtScopeExit() {
+    delete vibrator;
+    vibrator = nullptr;
+  };
 
   if (have_bluetooth) {
     try {
@@ -217,6 +235,11 @@ try {
     }
   }
 
+  AtScopeExit() {
+    delete bluetooth_helper;
+    bluetooth_helper = nullptr;
+  };
+
   if (have_usb_serial) {
     try {
       usb_serial_helper = new UsbSerialHelper(env, *context);
@@ -224,6 +247,11 @@ try {
       LogError(std::current_exception(), "Failed to initialise USB serial support");
     }
   }
+
+  AtScopeExit() {
+    delete usb_serial_helper;
+    usb_serial_helper = nullptr;
+  };
 
   if (have_ioio) {
     try {
@@ -233,10 +261,26 @@ try {
     }
   }
 
+  AtScopeExit() {
+    delete ioio_helper;
+    ioio_helper = nullptr;
+  };
+
   ScreenGlobalInit screen_init;
+  AtScopeExit() { Fonts::Deinitialize(); };
 
   AllowLanguage();
+  AtScopeExit() { DisallowLanguage(); };
+
   InitLanguage();
+
+  AtScopeExit() {
+    if (CommonInterface::main_window != nullptr) {
+      CommonInterface::main_window->Destroy();
+      delete CommonInterface::main_window;
+      CommonInterface::main_window = nullptr;
+    }
+  };
 
   {
     const ScopeUnlock shutdown_unlock{shutdown_mutex};
@@ -246,39 +290,6 @@ try {
   }
 
   Shutdown();
-
-  if (CommonInterface::main_window != nullptr) {
-    CommonInterface::main_window->Destroy();
-    delete CommonInterface::main_window;
-    CommonInterface::main_window = nullptr;
-  }
-
-  DisallowLanguage();
-  Fonts::Deinitialize();
-
-  delete ioio_helper;
-  ioio_helper = nullptr;
-
-  delete usb_serial_helper;
-  usb_serial_helper = nullptr;
-
-  delete bluetooth_helper;
-  bluetooth_helper = nullptr;
-
-  delete vibrator;
-  vibrator = nullptr;
-
-  SoundUtil::Deinitialise(env);
-
-  delete native_view;
-  native_view = nullptr;
-
-  TextUtil::Deinitialise(env);
-
-  DeinitialiseDataPath();
-
-  delete context;
-  context = nullptr;
 } catch (...) {
   /* if an error occurs, rethrow the C++ exception as Java exception,
      to be displayed by the Java glue code */
