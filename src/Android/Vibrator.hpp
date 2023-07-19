@@ -25,6 +25,4 @@ public:
 
   void Cancel(JNIEnv *env);
   void Vibrate(JNIEnv *env, unsigned duration_ms);
-
-  bool IsOSHapticFeedbackEnabled();
 };

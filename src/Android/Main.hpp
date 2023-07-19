@@ -20,7 +20,6 @@ extern Context *context;
 extern NativeView *native_view;
 
 extern Vibrator *vibrator;
-extern bool os_haptic_feedback_enabled;
 
 extern BluetoothHelper *bluetooth_helper;
 extern UsbSerialHelper *usb_serial_helper;

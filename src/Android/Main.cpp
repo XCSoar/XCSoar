@@ -73,7 +73,6 @@ Context *context;
 NativeView *native_view;
 
 Vibrator *vibrator;
-bool os_haptic_feedback_enabled;
 
 BluetoothHelper *bluetooth_helper;
 UsbSerialHelper *usb_serial_helper;
@@ -366,5 +365,5 @@ JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_setHapticFeedback([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jobject obj,
                                              jboolean on)
 {
-  os_haptic_feedback_enabled = on;
+  GlobalSettings::haptic_feedback = on;
 }

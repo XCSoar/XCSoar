@@ -2,7 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "Vibrator.hpp"
-#include "Main.hpp"
 #include "Context.hpp"
 #include "java/Class.hxx"
 
@@ -38,8 +37,3 @@ Vibrator::Vibrate(JNIEnv *env, unsigned duration_ms)
 {
   env->CallVoidMethod(object, vibrate_method, (jlong)duration_ms);
 }
-
-bool Vibrator::IsOSHapticFeedbackEnabled()
-{
-  return os_haptic_feedback_enabled;
-};
