@@ -12,13 +12,13 @@
 #include "GlobalSettings.hpp"
 
 bool
-HaveVibrator()
+HaveVibrator() noexcept
 {
   return vibrator != nullptr;
 }
 
 void
-VibrateShort()
+VibrateShort() noexcept
 {
   if (vibrator != nullptr) {
     const UISettings &ui_settings = CommonInterface::GetUISettings();
