@@ -8,7 +8,7 @@
 jmethodID Vibrator::cancel_method, Vibrator::vibrate_method;
 
 void
-Vibrator::Initialise(JNIEnv *env)
+Vibrator::Initialise(JNIEnv *env) noexcept
 {
   Java::Class cls(env, "android/os/Vibrator");
 
@@ -17,7 +17,7 @@ Vibrator::Initialise(JNIEnv *env)
 }
 
 Vibrator *
-Vibrator::Create(JNIEnv *env, Context &context)
+Vibrator::Create(JNIEnv *env, Context &context) noexcept
 {
   const auto obj = context.GetVibrator(env);
   if (obj == nullptr)
@@ -27,13 +27,13 @@ Vibrator::Create(JNIEnv *env, Context &context)
 }
 
 void
-Vibrator::Cancel(JNIEnv *env)
+Vibrator::Cancel(JNIEnv *env) noexcept
 {
   env->CallVoidMethod(object, cancel_method);
 }
 
 void
-Vibrator::Vibrate(JNIEnv *env, unsigned duration_ms)
+Vibrator::Vibrate(JNIEnv *env, unsigned duration_ms) noexcept
 {
   env->CallVoidMethod(object, vibrate_method, (jlong)duration_ms);
 }
