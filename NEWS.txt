@@ -3,6 +3,7 @@ Version 7.37 - not yet released
   - fix crash bug
 * Android
   - request ACCESS_FINE_LOCATION only when internal GPS is used
+  - request BLUETOOTH_CONNECT and BLUETOOTH_SCAN only when Bluetooth is used
   - re-enable background location (yet another attempt)
   - fix crash with disallowed IOIO Accessory connection
   - remove Nook support
