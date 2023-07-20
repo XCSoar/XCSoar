@@ -110,6 +110,20 @@ final class BluetoothHelper
     }
   }
 
+  private synchronized void startLeScan() {
+    if (scanner != null)
+      return;
+
+    try {
+      scanner = adapter.getBluetoothLeScanner();
+      if (scanner != null)
+        scanner.startScan(this);
+    } catch (Exception e) {
+      Log.e(TAG, "Bluetooth LE scan failed", e);
+      scanner = null;
+    }
+  }
+
   public synchronized void addDetectDeviceListener(DetectDeviceListener l) {
     detectListeners.add(l);
 
@@ -127,15 +141,8 @@ final class BluetoothHelper
       Log.e(TAG, "Cannot list bonded Bluetooth devices", e);
     }
 
-    if (hasLe && scanner == null) {
-      try {
-        scanner = adapter.getBluetoothLeScanner();
-        if (scanner != null)
-          scanner.startScan(this);
-      } catch (Exception e) {
-        Log.e(TAG, "Bluetooth LE scan failed", e);
-        scanner = null;
-      }
+    if (hasLe) {
+      startLeScan();
     }
   }
 
