@@ -113,6 +113,16 @@ final class BluetoothHelper
     }
   }
 
+  private static void submitBondedDevices(Collection<BluetoothDevice> devices,
+                                          DetectDeviceListener l) {
+    for (BluetoothDevice device : devices)
+      l.onDeviceDetected(device.getType() == BluetoothDevice.DEVICE_TYPE_LE
+                         ? DetectDeviceListener.TYPE_BLUETOOTH_LE
+                         : DetectDeviceListener.TYPE_BLUETOOTH_CLASSIC,
+                         device.getAddress(), getName(device),
+                         0);
+  }
+
   private synchronized void startLeScan() {
     if (scanner != null || detectListeners.isEmpty())
       return;
@@ -143,12 +153,7 @@ final class BluetoothHelper
     try {
       Set<BluetoothDevice> devices = adapter.getBondedDevices();
       if (devices != null)
-        for (BluetoothDevice device : devices)
-          l.onDeviceDetected(device.getType() == BluetoothDevice.DEVICE_TYPE_LE
-                             ? DetectDeviceListener.TYPE_BLUETOOTH_LE
-                             : DetectDeviceListener.TYPE_BLUETOOTH_CLASSIC,
-                             device.getAddress(), getName(device),
-                             0);
+        submitBondedDevices(devices, l);
     } catch (SecurityException e) {
       // we don't have permission.BLUETOOTH_CONNECT
       Log.e(TAG, "Cannot list bonded Bluetooth devices", e);
