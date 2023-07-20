@@ -63,7 +63,9 @@
   </application>
 
   <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="31"/>
-  <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
+
+  <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
+                   android:usesPermissionFlags="neverForLocation"/>
   <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
