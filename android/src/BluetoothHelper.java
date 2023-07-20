@@ -73,16 +73,22 @@ final class BluetoothHelper
   }
 
   /**
+   * Wrapper for BluetoothDevice.getName() which catches
+   * SecurityException and returns null in this case.
+   */
+  private static String getName(BluetoothDevice device) {
+    try {
+      return device.getName();
+    } catch (SecurityException e) {
+      return null;
+    }
+  }
+
+  /**
    * Turns the #BluetoothDevice into a human-readable string.
    */
   public static String getDisplayString(BluetoothDevice device) {
-    String name = null;
-
-    try {
-      name = device.getName();
-    } catch (SecurityException e) {
-    }
-
+    String name = getName(device);
     String address = device.getAddress();
 
     if (name == null)
@@ -97,12 +103,9 @@ final class BluetoothHelper
 
   public String getNameFromAddress(String address) {
     try {
-      return adapter.getRemoteDevice(address).getName();
+      return getName(adapter.getRemoteDevice(address));
     } catch (IllegalArgumentException e) {
       // address is malformed
-      return null;
-    } catch (SecurityException e) {
-      // we don't have permission.BLUETOOTH_CONNECT
       return null;
     }
   }
@@ -117,7 +120,7 @@ final class BluetoothHelper
           l.onDeviceDetected(device.getType() == BluetoothDevice.DEVICE_TYPE_LE
                              ? DetectDeviceListener.TYPE_BLUETOOTH_LE
                              : DetectDeviceListener.TYPE_BLUETOOTH_CLASSIC,
-                             device.getAddress(), device.getName(),
+                             device.getAddress(), getName(device),
                              0);
     } catch (SecurityException e) {
       // we don't have permission.BLUETOOTH_CONNECT
@@ -230,7 +233,7 @@ final class BluetoothHelper
 
     for (DetectDeviceListener l : detectListeners)
       l.onDeviceDetected(DetectDeviceListener.TYPE_BLUETOOTH_LE,
-                         device.getAddress(), device.getName(),
+                         device.getAddress(), getName(device),
                          features);
   }
 
