@@ -38,7 +38,9 @@ BluetoothHelper::Initialise(JNIEnv *env) noexcept
 
 
   ctor = env->GetMethodID(cls, "<init>",
-                          "(Landroid/content/Context;)V");
+                          "(Landroid/content/Context;"
+                          "Lorg/xcsoar/PermissionManager;"
+                          ")V");
   if (Java::DiscardException(env)) {
     /* need to check for Java exceptions again because the first
        method lookup initializes the Java class */
@@ -78,9 +80,11 @@ BluetoothHelper::Deinitialise(JNIEnv *env) noexcept
   cls.ClearOptional(env);
 }
 
-BluetoothHelper::BluetoothHelper(JNIEnv *env, Context &context)
+BluetoothHelper::BluetoothHelper(JNIEnv *env, Context &context,
+                                 jobject permission_manager)
   :Java::GlobalObject(env,
-                      Java::NewObjectRethrow(env, cls, ctor, context.Get()))
+                      Java::NewObjectRethrow(env, cls, ctor, context.Get(),
+                                             permission_manager))
 {
 }
 

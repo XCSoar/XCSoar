@@ -233,7 +233,8 @@ try {
 
   if (have_bluetooth) {
     try {
-      bluetooth_helper = new BluetoothHelper(env, *context);
+      bluetooth_helper = new BluetoothHelper(env, *context,
+                                             permission_manager);
     } catch (...) {
       LogError(std::current_exception(), "Failed to initialise Bluetooth");
     }

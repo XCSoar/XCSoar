@@ -237,7 +237,6 @@ public class XCSoar extends Activity implements PermissionManager {
   private static final String[] NEEDED_PERMISSIONS = new String[] {
     Manifest.permission.WRITE_EXTERNAL_STORAGE,
     Manifest.permission.BLUETOOTH_CONNECT,
-    Manifest.permission.BLUETOOTH_SCAN
   };
 
   private boolean hasAllPermissions() {

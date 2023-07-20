@@ -22,6 +22,7 @@ import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanRecord;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.Manifest;
 
 /**
  * A library that constructs Bluetooth ports.  It is called by C++
@@ -35,6 +36,7 @@ final class BluetoothHelper
         UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
   private final Context context;
+  private final PermissionManager permissionManager;
 
   private final BluetoothAdapter adapter;
 
@@ -48,8 +50,9 @@ final class BluetoothHelper
   private final Collection<DetectDeviceListener> detectListeners =
     new LinkedList<DetectDeviceListener>();
 
-  BluetoothHelper(Context context) throws Exception {
+  BluetoothHelper(Context context, PermissionManager permissionManager) throws Exception {
     this.context = context;
+    this.permissionManager = permissionManager;
 
     BluetoothManager manager = (BluetoothManager)
       context.getSystemService(Context.BLUETOOTH_SERVICE);
@@ -111,7 +114,7 @@ final class BluetoothHelper
   }
 
   private synchronized void startLeScan() {
-    if (scanner != null)
+    if (scanner != null || detectListeners.isEmpty())
       return;
 
     try {
@@ -123,6 +126,16 @@ final class BluetoothHelper
       scanner = null;
     }
   }
+
+  private final PermissionManager.PermissionHandler leScanPermissionHandler =
+    new PermissionManager.PermissionHandler() {
+      @Override
+      public void onRequestPermissionsResult(boolean granted) {
+        if (granted)
+          /* try again */
+          startLeScan();
+      }
+    };
 
   public synchronized void addDetectDeviceListener(DetectDeviceListener l) {
     detectListeners.add(l);
@@ -142,7 +155,9 @@ final class BluetoothHelper
     }
 
     if (hasLe) {
-      startLeScan();
+      if (permissionManager.requestPermission(Manifest.permission.BLUETOOTH_SCAN,
+                                              leScanPermissionHandler))
+        startLeScan();
     }
   }
 
