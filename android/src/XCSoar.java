@@ -47,6 +47,8 @@ public class XCSoar extends Activity implements PermissionManager {
 
   private static NativeView nativeView;
 
+  private Handler mainHandler;
+
   PowerManager.WakeLock wakeLock;
 
   BatteryReceiver batteryReceiver;
@@ -85,6 +87,8 @@ public class XCSoar extends Activity implements PermissionManager {
       return;
     }
 
+    mainHandler = new Handler(getMainLooper());
+
     NativeView.initNative(Build.VERSION.SDK_INT);
 
     NetUtil.initialise(this);
@@ -109,7 +113,7 @@ public class XCSoar extends Activity implements PermissionManager {
     registerReceiver(batteryReceiver,
                      new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
-    maybeShowWelcome();
+    requestAllPermissions();
   }
 
   private void quit() {
@@ -238,21 +242,6 @@ public class XCSoar extends Activity implements PermissionManager {
     Manifest.permission.WRITE_EXTERNAL_STORAGE,
   };
 
-  private boolean hasAllPermissions() {
-    if (android.os.Build.VERSION.SDK_INT < 23)
-      /* we don't need to request permissions on this old Android
-         version */
-      return true;
-
-    for (String p : NEEDED_PERMISSIONS) {
-      if (checkSelfPermission(p) != PackageManager.PERMISSION_GRANTED) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
   private void requestAllPermissions() {
     /* starting with Android 6.0, we need to explicitly request all
        permissions before using them; mentioning them in the manifest
@@ -268,55 +257,6 @@ public class XCSoar extends Activity implements PermissionManager {
     } catch (IllegalArgumentException e) {
       Log.e(TAG, "could not request permissions: " + String.join(", ", NEEDED_PERMISSIONS), e);
     }
-  }
-
-  private void maybeShowWelcome() {
-    if (hasAllPermissions())
-      return;
-
-    /* using HTML so the privacy policy link is clickable */
-    final String html = "<p>" +
-      "XCSoar is free software developed by volunteers just for fun. " +
-      "The project is non-profit - you don't pay for XCSoar, and we don't sell your data (or anything else). " +
-      "</p>" +
-      "<p>" +
-      "XCSoar needs permission to access your GPS location - obviously, because XCSoar's purpose is to help you navigate an aircraft; " +
-      "several optional features (e.g. flight logging and score calculation) benefit from location access while the app is in background. " +
-      "Additional sensors (e.g. built-in or Bluetooth) can be used to improve XCSoar's accuracy." +
-      "</p>" +
-      "<p>" +
-      "All those accesses are only in your own interest; we don't collect your data and we don't track you (unless you explicitly ask XCSoar to). " +
-      "</p>" +
-      "<p>" +
-      "More details can be found in the <a href=\"https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md\">Privacy policy</a>. " +
-      "</p>";
-
-    final TextView tv  = new TextView(this);
-    tv.setMovementMethod(LinkMovementMethod.getInstance());
-    tv.setText(Html.fromHtml(html));
-
-    new AlertDialog.Builder(this)
-      .setTitle("Welcome to XCSoar!")
-      .setView(tv)
-      .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            requestAllPermissions();
-          }
-        })
-      .setOnCancelListener(new DialogInterface.OnCancelListener() {
-          @Override
-          public void onCancel(DialogInterface dialog) {
-            requestAllPermissions();
-          }
-        })
-      .setOnDismissListener(new DialogInterface.OnDismissListener() {
-          @Override
-          public void onDismiss(DialogInterface dialog) {
-            requestAllPermissions();
-          }
-        })
-      .show();
   }
 
   @Override protected void onResume() {
@@ -418,6 +358,94 @@ public class XCSoar extends Activity implements PermissionManager {
       handler.onRequestPermissionsResult(grantResults[0] == PackageManager.PERMISSION_GRANTED);
   }
 
+  private static String getPermissionRationale(String permission) {
+    if (permission == Manifest.permission.ACCESS_FINE_LOCATION)
+      return "XCSoar needs permission to access your GPS location - obviously, because XCSoar's purpose is to help you navigate an aircraft.";
+    else if (permission == Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+      return "Several optional features (e.g. flight logging and score calculation) benefit from location access while XCSoar is in background. " +
+        "If you choose not to allow this, calculation results may be incomplete.";
+    else if (permission == Manifest.permission.BLUETOOTH_CONNECT ||
+             permission == Manifest.permission.BLUETOOTH_SCAN)
+      return "If you want XCSoar to connect to Bluetooth sensors, it needs your permission.";
+    else
+      return null;
+  }
+
+  private void showRequestPermissionRationale(final String permission,
+                                              final String rationale,
+                                              final PermissionHandler handler) {
+    /* using HTML so the privacy policy link is clickable */
+    final String html = "<p>" +
+      "XCSoar is free software developed by volunteers just for fun. " +
+      "The project is non-profit - you don't pay for XCSoar, and we don't sell your data (or anything else). " +
+      "</p>" +
+      "<p><big>" +
+      rationale +
+      "</big></p>" +
+      "<p>" +
+      "All those accesses are only in your own interest; we don't collect your data and we don't track you (unless you explicitly ask XCSoar to). " +
+      "</p>" +
+      "<p>" +
+      "More details can be found in the <a href=\"https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md\">Privacy policy</a>. " +
+      "</p>";
+
+    final TextView tv  = new TextView(this);
+    tv.setMovementMethod(LinkMovementMethod.getInstance());
+    tv.setText(Html.fromHtml(html));
+
+    new AlertDialog.Builder(this)
+      .setTitle("Requesting your permission")
+      .setView(tv)
+      .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            doRequestPermission(permission, handler);
+          }
+        })
+      .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            if (handler != null)
+              handler.onRequestPermissionsResult(false);
+          }
+        })
+      .setOnCancelListener(new DialogInterface.OnCancelListener() {
+          @Override
+          public void onCancel(DialogInterface dialog) {
+            if (handler != null)
+              handler.onRequestPermissionsResult(false);
+          }
+        })
+      .setOnDismissListener(new DialogInterface.OnDismissListener() {
+          @Override
+          public void onDismiss(DialogInterface dialog) {
+            if (handler != null)
+              handler.onRequestPermissionsResult(false);
+          }
+        })
+      .show();
+  }
+
+  /**
+   * @return true if an alert is being displayed (and an asynchronous
+   * callback will then actually request the permission), false if no
+   * rationale was displayed (and no permission was requested)
+   */
+  private boolean showRequestPermissionRationaleIndirect(final String permission,
+                                                         final PermissionHandler handler) {
+    final String rationale = getPermissionRationale(permission);
+    if (rationale == null)
+      return false;
+
+    mainHandler.post(new Runnable() {
+        @Override public void run() {
+          showRequestPermissionRationale(permission, rationale, handler);
+        }
+      });
+
+    return true;
+  }
+
   private synchronized int addPermissionHandler(PermissionHandler handler) {
     final int id = nextPermissionHandlerId++;
 
@@ -450,7 +478,9 @@ public class XCSoar extends Activity implements PermissionManager {
       /* we already have the permission */
       return true;
 
-    // TODO check shouldShowRequestPermissionRationale()
+    if (shouldShowRequestPermissionRationale(permission) &&
+        showRequestPermissionRationaleIndirect(permission, handler))
+      return false;
 
     doRequestPermission(permission, handler);
     return false;
