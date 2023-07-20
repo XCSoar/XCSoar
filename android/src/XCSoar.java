@@ -420,6 +420,15 @@ public class XCSoar extends Activity implements PermissionManager {
       handler.onRequestPermissionsResult(grantResults[0] == PackageManager.PERMISSION_GRANTED);
   }
 
+  private synchronized int addPermissionHandler(PermissionHandler handler) {
+    final int id = nextPermissionHandlerId++;
+
+    if (handler != null)
+      permissionHandlers.put(id, handler);
+
+    return id;
+  }
+
   /* virtual methods from PermissionManager */
 
   private final Map<Integer, PermissionHandler> permissionHandlers =
@@ -438,15 +447,7 @@ public class XCSoar extends Activity implements PermissionManager {
 
     // TODO check shouldShowRequestPermissionRationale()
 
-    final int id = nextPermissionHandlerId++;
-
-    if (handler != null) {
-      synchronized(this) {
-        permissionHandlers.put(id, handler);
-      }
-    }
-
-    requestPermissions(new String[]{permission}, id);
+    requestPermissions(new String[]{permission}, addPermissionHandler(handler));
     return false;
   }
 
