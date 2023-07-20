@@ -449,6 +449,7 @@ public class XCSoar extends Activity implements PermissionManager {
       return true;
 
     if (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED)
+      /* we already have the permission */
       return true;
 
     // TODO check shouldShowRequestPermissionRationale()

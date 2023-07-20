@@ -69,6 +69,8 @@ public class InternalGPS
   @Override public void run() {
     if (!permissionManager.requestPermission(Manifest.permission.ACCESS_FINE_LOCATION,
                                              this))
+      /* permission is requested asynchronously,
+         onRequestPermissionsResult() will be called later */
       return;
 
     permissionManager.requestPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
