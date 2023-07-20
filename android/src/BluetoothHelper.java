@@ -64,14 +64,25 @@ final class BluetoothHelper
   }
 
   public boolean isEnabled() {
-    return adapter.isEnabled();
+    try {
+      return adapter.isEnabled();
+    } catch (SecurityException e) {
+      // only Android R or older
+      return false;
+    }
   }
 
   /**
    * Turns the #BluetoothDevice into a human-readable string.
    */
   public static String getDisplayString(BluetoothDevice device) {
-    String name = device.getName();
+    String name = null;
+
+    try {
+      name = device.getName();
+    } catch (SecurityException e) {
+    }
+
     String address = device.getAddress();
 
     if (name == null)
@@ -99,14 +110,19 @@ final class BluetoothHelper
   public synchronized void addDetectDeviceListener(DetectDeviceListener l) {
     detectListeners.add(l);
 
-    Set<BluetoothDevice> devices = adapter.getBondedDevices();
-    if (devices != null)
-      for (BluetoothDevice device : devices)
-        l.onDeviceDetected(device.getType() == BluetoothDevice.DEVICE_TYPE_LE
-                           ? DetectDeviceListener.TYPE_BLUETOOTH_LE
-                           : DetectDeviceListener.TYPE_BLUETOOTH_CLASSIC,
-                           device.getAddress(), device.getName(),
-                           0);
+    try {
+      Set<BluetoothDevice> devices = adapter.getBondedDevices();
+      if (devices != null)
+        for (BluetoothDevice device : devices)
+          l.onDeviceDetected(device.getType() == BluetoothDevice.DEVICE_TYPE_LE
+                             ? DetectDeviceListener.TYPE_BLUETOOTH_LE
+                             : DetectDeviceListener.TYPE_BLUETOOTH_CLASSIC,
+                             device.getAddress(), device.getName(),
+                             0);
+    } catch (SecurityException e) {
+      // we don't have permission.BLUETOOTH_CONNECT
+      Log.e(TAG, "Cannot list bonded Bluetooth devices", e);
+    }
 
     if (hasLe && scanner == null) {
       try {
@@ -154,8 +170,8 @@ final class BluetoothHelper
     if (device == null)
       throw new IOException("Bluetooth device not found");
 
-    Log.d(TAG, String.format("Bluetooth device \"%s\" (%s) is a LE device, trying to connect using GATT...",
-                             device.getName(), device.getAddress()));
+    Log.d(TAG, String.format("Bluetooth device \"%s\" is a LE device, trying to connect using GATT...",
+                             getDisplayString(device)));
     return new HM10Port(context, device);
   }
 
