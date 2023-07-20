@@ -429,6 +429,12 @@ public class XCSoar extends Activity implements PermissionManager {
     return id;
   }
 
+  private void doRequestPermission(String permission,
+                                   PermissionHandler handler) {
+    requestPermissions(new String[]{permission},
+                       addPermissionHandler(handler));
+  }
+
   /* virtual methods from PermissionManager */
 
   private final Map<Integer, PermissionHandler> permissionHandlers =
@@ -447,7 +453,7 @@ public class XCSoar extends Activity implements PermissionManager {
 
     // TODO check shouldShowRequestPermissionRationale()
 
-    requestPermissions(new String[]{permission}, addPermissionHandler(handler));
+    doRequestPermission(permission, handler);
     return false;
   }
 
