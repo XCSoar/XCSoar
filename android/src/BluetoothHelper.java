@@ -87,8 +87,11 @@ final class BluetoothHelper
   public String getNameFromAddress(String address) {
     try {
       return adapter.getRemoteDevice(address).getName();
-    } catch (Exception e) {
-      Log.e(TAG, "Failed to look up name of " + address, e);
+    } catch (IllegalArgumentException e) {
+      // address is malformed
+      return null;
+    } catch (SecurityException e) {
+      // we don't have permission.BLUETOOTH_CONNECT
       return null;
     }
   }
