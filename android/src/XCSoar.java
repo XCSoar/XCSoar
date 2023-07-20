@@ -355,7 +355,9 @@ public class XCSoar extends Activity implements PermissionManager {
                                                       int[] grantResults) {
     PermissionHandler handler = permissionHandlers.remove(requestCode);
     if (handler != null)
-      handler.onRequestPermissionsResult(grantResults[0] == PackageManager.PERMISSION_GRANTED);
+      // grantResults is empty when user cancels
+      handler.onRequestPermissionsResult(grantResults.length > 0 &&
+                                         grantResults[0] == PackageManager.PERMISSION_GRANTED);
   }
 
   private static String getPermissionRationale(String permission) {
