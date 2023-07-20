@@ -6,6 +6,7 @@ Version 7.37 - not yet released
   - re-enable background location (yet another attempt)
   - fix crash with disallowed IOIO Accessory connection
   - remove Nook support
+  - add SoftRF Ham and Midi into 'white list' of USB devices
 
 Version 7.36 - 2023/07/02
 * task
