@@ -166,7 +166,7 @@ class StaticCache {
 		assert(!unallocated_list.empty());
 
 		Item &item = unallocated_list.front();
-		unallocated_list.erase(unallocated_list.iterator_to(item));
+		unallocated_list.pop_front();
 		return item;
 	}
 
