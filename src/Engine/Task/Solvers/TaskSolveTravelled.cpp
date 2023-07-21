@@ -23,7 +23,7 @@ TaskSolveTravelled::time_error()
 #endif
   d += res.time_virtual;
 
-  return d.count() * inv_dt;
+  return ToFloatSeconds(d) * inv_dt;
 }
 
 double

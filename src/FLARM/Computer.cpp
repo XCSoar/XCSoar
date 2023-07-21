@@ -5,6 +5,7 @@
 #include "Details.hpp"
 #include "NMEA/Info.hpp"
 #include "Geo/GeoVector.hpp"
+#include "time/Cast.hxx"
 
 void
 FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
@@ -95,7 +96,7 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
       // Calculate the immediate climb rate
       if (!traffic.climb_rate_received)
         traffic.climb_rate =
-          (traffic.relative_altitude - last_traffic->relative_altitude) / dt.count();
+          (traffic.relative_altitude - last_traffic->relative_altitude) / ToFloatSeconds(dt);
     } else {
       // Since the time difference is zero (or negative)
       // we can just copy the old values
@@ -116,12 +117,12 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
       if (!traffic.turn_rate_received) {
         Angle turn_rate = traffic.track - last_traffic->track;
         traffic.turn_rate =
-          turn_rate.AsDelta().Degrees() / dt.count();
+          turn_rate.AsDelta().Degrees() / ToFloatSeconds(dt);
       }
 
       // Calculate the speed [m/s]
       if (!traffic.speed_received)
-        traffic.speed = vec.distance / dt.count();
+        traffic.speed = vec.distance / ToFloatSeconds(dt);
     } else {
       // Since the time difference is zero (or negative)
       // we can just copy the old values

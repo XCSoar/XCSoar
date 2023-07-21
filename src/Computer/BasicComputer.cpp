@@ -294,7 +294,7 @@ ComputeGPSVario(MoreData &basic,
 
       auto delta_h = basic.gps_altitude - last_gps.gps_altitude;
 
-      basic.gps_vario = delta_h / delta_t.count();
+      basic.gps_vario = delta_h / ToFloatSeconds(delta_t);
       basic.gps_vario_available = basic.gps_altitude_available;
     }
   } else {

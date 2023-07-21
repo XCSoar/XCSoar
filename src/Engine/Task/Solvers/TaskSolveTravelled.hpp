@@ -5,6 +5,7 @@
 
 #include "TaskMacCreadyTravelled.hpp"
 #include "Math/ZeroFinder.hpp"
+#include "time/Cast.hxx"
 
 /**
  *  Abstract class to solve for travelled time.
@@ -42,7 +43,7 @@ public:
   {
     dt = _aircraft.time - tps.begin()->GetEnteredState().time;
     if (dt.count() > 0) {
-      inv_dt = 1. / dt.count();
+      inv_dt = 1. / ToFloatSeconds(dt);
     } else {
       inv_dt = 0; // error!
     }
