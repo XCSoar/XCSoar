@@ -135,7 +135,8 @@ TargetMapWindow::DrawTask(Canvas &canvas) noexcept
                              which may be invalid at this point, but it
                              will be used only if active, so it's ok */
                           task_manager->GetOrderedTask().GetTaskProjection(),
-                          ozv, false, TaskPointRenderer::ALL,
+                          ozv, false,
+                          TaskPointRenderer::TargetVisibility::ALL,
                           Basic().location_available
                           ? Basic().location : GeoPoint::Invalid());
     tpv.SetTaskFinished(Calculated().task_stats.task_finished);

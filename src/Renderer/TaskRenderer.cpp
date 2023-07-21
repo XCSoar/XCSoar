@@ -33,8 +33,9 @@ TaskRenderer::Draw(const OrderedTask &task)
   for (unsigned i = 0; i < 4; i++) {
     tpv.ResetIndex();
 
-    if (i != TaskPointRenderer::LAYER_SYMBOLS &&
-        i != TaskPointRenderer::LAYER_LEG) {
+    const auto layer = static_cast<TaskPointRenderer::Layer>(i);
+    if (layer != TaskPointRenderer::Layer::SYMBOLS &&
+        layer != TaskPointRenderer::Layer::LEG) {
       tpv.SetModeOptional(true);
 
       for (const auto &tp : task.GetOptionalStartPoints())
@@ -43,7 +44,7 @@ TaskRenderer::Draw(const OrderedTask &task)
 
     tpv.SetModeOptional(false);
     for (const auto &tp : task.GetPoints())
-      tpv.Draw(tp, (TaskPointRenderer::Layer)i);
+      tpv.Draw(tp, layer);
   }
 }
 

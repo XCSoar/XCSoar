@@ -21,7 +21,7 @@ struct TaskLook;
 class TaskPointRenderer
 {
 public:
-  enum TargetVisibility : uint_least8_t {
+  enum class TargetVisibility : uint_least8_t {
     ALL,
     ACTIVE,
     NONE,
@@ -49,11 +49,11 @@ private:
   bool mode_optional_start = false;
 
 public:
-  enum Layer : uint_least8_t {
-    LAYER_OZ_SHADE,
-    LAYER_LEG,
-    LAYER_OZ_OUTLINE,
-    LAYER_SYMBOLS,
+  enum class Layer : uint_least8_t {
+    OZ_SHADE,
+    LEG,
+    OZ_OUTLINE,
+    SYMBOLS,
   };
 
   /**
