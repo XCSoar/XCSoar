@@ -3,12 +3,17 @@
 
 #pragma once
 
+#include "Math/Point2D.hpp"
+
 class WindEKF {
   float X[3];
   float k;
 
 public:
   void Init() noexcept;
-  void Update(double airspeed, const float gps_vel[2]) noexcept;
-  const float* get_state() const noexcept { return X; };
+  void Update(float airspeed, FloatPoint2D gps_vel) noexcept;
+
+  constexpr FloatPoint2D GetResult() const noexcept {
+    return {X[0], X[1]};
+  }
 };
