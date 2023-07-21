@@ -26,12 +26,8 @@ TaskPointRenderer::TaskPointRenderer(Canvas &_canvas,
    flat_projection(_flat_projection),
    draw_bearing(_draw_bearing),
    target_visibility(_target_visibility),
-   index(0),
    ozv(_ozv),
-   active_index(0),
-   location(_location),
-   task_finished(false),
-   mode_optional_start(false)
+   location(_location)
 {
 }
 

@@ -36,13 +36,13 @@ private:
   TargetVisibility target_visibility;
 
   GeoPoint last_point;
-  unsigned index;
+  unsigned index = 0;
   OZRenderer &ozv;
-  unsigned active_index;
+  unsigned active_index = 0;
   const GeoPoint location;
   FlatBoundingBox bb_screen;
-  bool task_finished;
-  bool mode_optional_start;
+  bool task_finished = false;
+  bool mode_optional_start = false;
 
 public:
   enum Layer {
