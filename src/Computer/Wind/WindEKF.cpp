@@ -10,7 +10,7 @@ static constexpr float WIND_K0 = 1.0e-2f;
 static constexpr float WIND_K1 = 1.0e-5f;
 
 void
-WindEKF::Update(const double airspeed, const float gps_vel[2])
+WindEKF::Update(const double airspeed, const float gps_vel[2]) noexcept
 {
   assert(!std::isnan(airspeed));
   assert(!std::isnan(gps_vel[0]));
@@ -43,7 +43,7 @@ WindEKF::Update(const double airspeed, const float gps_vel[2])
 }
 
 void
-WindEKF::Init()
+WindEKF::Init() noexcept
 {
   k = WIND_K0*4;
 

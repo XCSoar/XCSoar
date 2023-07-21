@@ -7,7 +7,7 @@
 #include "NMEA/Derived.hpp"
 
 void
-WindEKFGlue::Reset()
+WindEKFGlue::Reset() noexcept
 {
   reset_pending = true;
   last_ground_speed_available.Clear();
@@ -18,7 +18,7 @@ WindEKFGlue::Reset()
 }
 
 static constexpr unsigned
-CounterToQuality(unsigned i)
+CounterToQuality(unsigned i) noexcept
 {
   return i >= 600u
     ? 4u
@@ -30,7 +30,7 @@ CounterToQuality(unsigned i)
 }
 
 WindEKFGlue::Result
-WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
+WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived) noexcept
 {
   // @todo accuracy: correct TAS for vertical speed if dynamic pullup
 

@@ -8,7 +8,7 @@ class WindEKF {
   float k;
 
 public:
-  void Init();
-  void Update(double airspeed, const float gps_vel[2]);
-  const float* get_state() const { return X; };
+  void Init() noexcept;
+  void Update(double airspeed, const float gps_vel[2]) noexcept;
+  const float* get_state() const noexcept { return X; };
 };
