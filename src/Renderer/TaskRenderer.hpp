@@ -14,7 +14,7 @@ class TaskInterface;
 class TaskRenderer
 {
   TaskPointRenderer &tpv;
-  GeoBounds screen_bounds;
+  const GeoBounds screen_bounds;
 
 public:
   constexpr TaskRenderer(TaskPointRenderer &_tpv,
