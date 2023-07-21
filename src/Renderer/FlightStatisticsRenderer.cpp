@@ -29,8 +29,6 @@
 
 #include <algorithm>
 
-using std::max;
-
 FlightStatisticsRenderer::FlightStatisticsRenderer(const ChartLook &_chart_look,
                                                    const MapLook &_map_look) noexcept
   :chart_look(_chart_look),
