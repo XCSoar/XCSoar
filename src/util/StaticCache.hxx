@@ -165,9 +165,7 @@ class StaticCache {
 	Item &Allocate() noexcept {
 		assert(!unallocated_list.empty());
 
-		Item &item = unallocated_list.front();
-		unallocated_list.pop_front();
-		return item;
+		return unallocated_list.pop_front();
 	}
 
 	template<typename K, typename U>
