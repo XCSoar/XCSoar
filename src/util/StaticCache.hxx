@@ -272,7 +272,7 @@ public:
 		if (inserted) {
 			Item &item = Make(std::forward<K>(key), std::forward<U>(data));
 			chronological_list.push_front(item);
-			map.insert(position, item);
+			map.insert_commit(position, item);
 			return item.GetData();
 		} else {
 			position->ReplaceData(std::forward<U>(data));
