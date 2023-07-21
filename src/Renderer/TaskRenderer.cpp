@@ -8,11 +8,8 @@
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "TaskPointRenderer.hpp"
 
-TaskRenderer::TaskRenderer(TaskPointRenderer &_tpv, GeoBounds _screen_bounds)
-  :tpv(_tpv), screen_bounds(_screen_bounds) {}
-
 void 
-TaskRenderer::Draw(const AbortTask &task)
+TaskRenderer::Draw(const AbortTask &task) noexcept
 {
   tpv.SetActiveIndex(task.GetActiveIndex());
   tpv.SetModeOptional(false);
@@ -26,7 +23,7 @@ TaskRenderer::Draw(const AbortTask &task)
 }
 
 void 
-TaskRenderer::Draw(const OrderedTask &task)
+TaskRenderer::Draw(const OrderedTask &task) noexcept
 {
   tpv.SetBoundingBox(task.GetTaskProjection().Project(screen_bounds));
   tpv.SetActiveIndex(task.GetActiveIndex());
@@ -49,7 +46,7 @@ TaskRenderer::Draw(const OrderedTask &task)
 }
 
 void 
-TaskRenderer::Draw(const GotoTask &task)
+TaskRenderer::Draw(const GotoTask &task) noexcept
 {
   tpv.SetActiveIndex(0);
   tpv.SetModeOptional(false);
@@ -62,7 +59,7 @@ TaskRenderer::Draw(const GotoTask &task)
 }
 
 void
-TaskRenderer::Draw(const TaskInterface &task)
+TaskRenderer::Draw(const TaskInterface &task) noexcept
 {
   switch (task.GetType()) {
   case TaskType::NONE:
