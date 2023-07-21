@@ -24,8 +24,6 @@ struct MoreData : public NMEAInfo {
 
   /** GPS-based vario */
   double gps_vario;
-  /** GPS-based vario including energy height */
-  double gps_vario_TE;
 
   Validity gps_vario_available;
 

@@ -10,7 +10,7 @@ MoreData::Reset() noexcept
   energy_height = 0;
   TE_altitude = 0;
 
-  gps_vario = gps_vario_TE = 0;
+  gps_vario = 0;
   gps_vario_available.Clear();
 
   netto_vario = 0;
