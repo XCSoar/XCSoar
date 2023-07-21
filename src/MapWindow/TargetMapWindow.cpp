@@ -137,8 +137,7 @@ TargetMapWindow::DrawTask(Canvas &canvas) noexcept
                           task_manager->GetOrderedTask().GetTaskProjection(),
                           ozv, false,
                           TaskPointRenderer::TargetVisibility::ALL,
-                          Basic().location_available
-                          ? Basic().location : GeoPoint::Invalid());
+                          Basic().GetLocationOrInvalid());
     tpv.SetTaskFinished(Calculated().task_stats.task_finished);
     TaskRenderer dv(tpv, projection.GetScreenBounds());
     dv.Draw(*task);

@@ -53,8 +53,7 @@ MapWindow::DrawTask(Canvas &canvas) noexcept
     TaskPointRenderer tpv(canvas, render_projection, look.task,
                           flat_projection,
                           ozv, draw_bearing, target_visibility,
-                          Basic().location_available
-                          ? Basic().location : GeoPoint::Invalid());
+                          Basic().GetLocationOrInvalid());
     tpv.SetTaskFinished(Calculated().task_stats.task_finished);
     TaskRenderer dv(tpv, render_projection.GetScreenBounds());
     dv.Draw(*task);

@@ -484,6 +484,17 @@ struct NMEAInfo {
   }
 
   /**
+   * Returns the aircraft location or GeoPoint::Invalid() if we don't
+   * have a location.
+   */
+  [[nodiscard]]
+  constexpr GeoPoint GetLocationOrInvalid() const noexcept {
+    return location_available
+      ? location
+      : GeoPoint::Invalid();
+  }
+
+  /**
    * Returns the pressure altitude, and falls back to the barometric
    * altitude or the GPS altitude.  Returns `std::nullopt` if none is
    * available.
