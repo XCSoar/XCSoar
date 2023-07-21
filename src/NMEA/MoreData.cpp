@@ -4,7 +4,7 @@
 #include "NMEA/MoreData.hpp"
 
 void
-MoreData::Reset()
+MoreData::Reset() noexcept
 {
   nav_altitude = 0;
   energy_height = 0;

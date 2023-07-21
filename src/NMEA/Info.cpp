@@ -6,7 +6,7 @@
 #include "time/Cast.hxx"
 
 void
-NMEAInfo::UpdateClock()
+NMEAInfo::UpdateClock() noexcept
 {
   clock = TimeStamp{std::chrono::steady_clock::now().time_since_epoch()};
 }
@@ -36,7 +36,7 @@ NMEAInfo::ProvideTime(TimeStamp _time) noexcept
 }
 
 void
-NMEAInfo::ProvideDate(const BrokenDate &date)
+NMEAInfo::ProvideDate(const BrokenDate &date) noexcept
 {
   assert(date.IsPlausible());
 
@@ -44,7 +44,7 @@ NMEAInfo::ProvideDate(const BrokenDate &date)
 }
 
 void
-NMEAInfo::ProvideTrueAirspeedWithAltitude(double tas, double altitude)
+NMEAInfo::ProvideTrueAirspeedWithAltitude(double tas, double altitude) noexcept
 {
   true_airspeed = tas;
   indicated_airspeed = true_airspeed / AirDensityRatio(altitude);
@@ -53,7 +53,8 @@ NMEAInfo::ProvideTrueAirspeedWithAltitude(double tas, double altitude)
 }
 
 void
-NMEAInfo::ProvideIndicatedAirspeedWithAltitude(double ias, double altitude)
+NMEAInfo::ProvideIndicatedAirspeedWithAltitude(double ias,
+                                               double altitude) noexcept
 {
   indicated_airspeed = ias;
   true_airspeed = indicated_airspeed * AirDensityRatio(altitude);
@@ -62,7 +63,7 @@ NMEAInfo::ProvideIndicatedAirspeedWithAltitude(double ias, double altitude)
 }
 
 void
-NMEAInfo::ProvideTrueAirspeed(double tas)
+NMEAInfo::ProvideTrueAirspeed(double tas) noexcept
 {
   auto any_altitude = GetAnyAltitude();
 
@@ -74,7 +75,7 @@ NMEAInfo::ProvideTrueAirspeed(double tas)
 }
 
 void
-NMEAInfo::ProvideIndicatedAirspeed(double ias)
+NMEAInfo::ProvideIndicatedAirspeed(double ias) noexcept
 {
   auto any_altitude = GetAnyAltitude();
 
@@ -86,7 +87,7 @@ NMEAInfo::ProvideIndicatedAirspeed(double ias)
 }
 
 void
-NMEAInfo::Reset()
+NMEAInfo::Reset() noexcept
 {
   UpdateClock();
 
@@ -162,7 +163,7 @@ NMEAInfo::Reset()
 }
 
 void
-NMEAInfo::ExpireWallClock()
+NMEAInfo::ExpireWallClock() noexcept
 {
   if (!alive)
     return;
@@ -190,7 +191,7 @@ NMEAInfo::ExpireWallClock()
 }
 
 void
-NMEAInfo::Expire()
+NMEAInfo::Expire() noexcept
 {
   if (location_available.Expire(clock, std::chrono::seconds(10)))
     /* if the location expires, then GPSState should expire as well,
@@ -231,7 +232,7 @@ NMEAInfo::Expire()
 }
 
 void
-NMEAInfo::Complement(const NMEAInfo &add)
+NMEAInfo::Complement(const NMEAInfo &add) noexcept
 {
   if (!add.alive)
     /* if there is no heartbeat on the other object, there cannot be

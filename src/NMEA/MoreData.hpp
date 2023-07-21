@@ -38,9 +38,9 @@ struct MoreData : public NMEAInfo {
 
   Validity brutto_vario_available;
 
-  void Reset();
+  void Reset() noexcept;
 
-  bool NavAltitudeAvailable() const {
+  constexpr bool NavAltitudeAvailable() const noexcept {
     return baro_altitude_available || gps_altitude_available;
   }
 };

@@ -4,7 +4,7 @@
 #include "NMEA/Info.hpp"
 
 void
-GPSState::Reset()
+GPSState::Reset() noexcept
 {
   fix_quality = FixQuality::NO_FIX;
   fix_quality_available.Clear();
