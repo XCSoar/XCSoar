@@ -24,10 +24,10 @@ TaskPointRenderer::TaskPointRenderer(Canvas &_canvas,
               _projection.GetScreenBounds().Scale(1.1)),
    task_look(_task_look),
    flat_projection(_flat_projection),
-   draw_bearing(_draw_bearing),
-   target_visibility(_target_visibility),
    ozv(_ozv),
-   location(_location)
+   location(_location),
+   target_visibility(_target_visibility),
+   draw_bearing(_draw_bearing)
 {
 }
 

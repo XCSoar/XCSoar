@@ -7,6 +7,8 @@
 #include "Geo/Flat/FlatBoundingBox.hpp"
 #include "MapWindow/MapCanvas.hpp"
 
+#include <cstdint>
+
 class Canvas;
 class WindowProjection;
 class OZRenderer;
@@ -19,7 +21,7 @@ struct TaskLook;
 class TaskPointRenderer
 {
 public:
-  enum TargetVisibility {
+  enum TargetVisibility : uint_least8_t {
     ALL,
     ACTIVE,
     NONE,
@@ -32,20 +34,22 @@ private:
   const TaskLook &task_look;
   const FlatProjection &flat_projection;
 
-  const bool draw_bearing;
-  TargetVisibility target_visibility;
-
   GeoPoint last_point;
-  unsigned index = 0;
   OZRenderer &ozv;
-  unsigned active_index = 0;
   const GeoPoint location;
   FlatBoundingBox bb_screen;
+
+  unsigned index = 0;
+  unsigned active_index = 0;
+
+  const TargetVisibility target_visibility;
+  const bool draw_bearing;
+
   bool task_finished = false;
   bool mode_optional_start = false;
 
 public:
-  enum Layer {
+  enum Layer : uint_least8_t {
     LAYER_OZ_SHADE,
     LAYER_LEG,
     LAYER_OZ_OUTLINE,
