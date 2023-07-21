@@ -18,7 +18,7 @@ TaskPointRenderer::TaskPointRenderer(Canvas &_canvas,
                                      OZRenderer &_ozv,
                                      bool _draw_bearing,
                                      TargetVisibility _target_visibility,
-                                     const GeoPoint &_location)
+                                     const GeoPoint &_location) noexcept
   :canvas(_canvas), m_proj(_projection),
    map_canvas(_canvas, _projection,
               _projection.GetScreenBounds().Scale(1.1)),
@@ -32,7 +32,8 @@ TaskPointRenderer::TaskPointRenderer(Canvas &_canvas,
 }
 
 void
-TaskPointRenderer::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
+TaskPointRenderer::DrawOrdered(const OrderedTaskPoint &tp,
+                               Layer layer) noexcept
 {
   int offset = index - active_index;
 
@@ -76,7 +77,7 @@ TaskPointRenderer::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
 }
 
 bool
-TaskPointRenderer::IsTargetVisible(const TaskPoint &tp) const
+TaskPointRenderer::IsTargetVisible(const TaskPoint &tp) const noexcept
 {
   if (!tp.HasTarget() || target_visibility == NONE)
     return false;
@@ -88,7 +89,7 @@ TaskPointRenderer::IsTargetVisible(const TaskPoint &tp) const
 }
 
 void
-TaskPointRenderer::DrawBearing(const TaskPoint &tp)
+TaskPointRenderer::DrawBearing(const TaskPoint &tp) noexcept
 {
   if (!location.IsValid() || !draw_bearing || !PointCurrent())
     return;
@@ -98,7 +99,7 @@ TaskPointRenderer::DrawBearing(const TaskPoint &tp)
 }
 
 void
-TaskPointRenderer::DrawTarget(const TaskPoint &tp)
+TaskPointRenderer::DrawTarget(const TaskPoint &tp) noexcept
 {
   if (!IsTargetVisible(tp))
     return;
@@ -108,7 +109,8 @@ TaskPointRenderer::DrawTarget(const TaskPoint &tp)
 }
 
 void
-TaskPointRenderer::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
+TaskPointRenderer::DrawTaskLine(const GeoPoint &start,
+                                const GeoPoint &end) noexcept
 {
   canvas.Select(LegActive() ? task_look.leg_active_pen :
                               task_look.leg_inactive_pen);
@@ -137,7 +139,7 @@ TaskPointRenderer::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
 }
 
 inline void
-TaskPointRenderer::DrawIsoline(const AATPoint &tp)
+TaskPointRenderer::DrawIsoline(const AATPoint &tp) noexcept
 {
   if (!tp.valid() || !IsTargetVisible(tp))
     return;
@@ -171,14 +173,15 @@ TaskPointRenderer::DrawIsoline(const AATPoint &tp)
 
 inline void
 TaskPointRenderer::DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp,
-                                    int offset)
+                                    int offset) noexcept
 {
   ozv.Draw(canvas, OZRenderer::LAYER_SHADE, m_proj, tp.GetObservationZone(),
            offset);
 }
 
 inline void
-TaskPointRenderer::DrawOZForeground(const OrderedTaskPoint &tp, int offset)
+TaskPointRenderer::DrawOZForeground(const OrderedTaskPoint &tp,
+                                    int offset) noexcept
 {
   ozv.Draw(canvas, OZRenderer::LAYER_INACTIVE, m_proj, tp.GetObservationZone(),
            offset);
@@ -187,7 +190,7 @@ TaskPointRenderer::DrawOZForeground(const OrderedTaskPoint &tp, int offset)
 }
 
 void
-TaskPointRenderer::Draw(const TaskPoint &tp, Layer layer)
+TaskPointRenderer::Draw(const TaskPoint &tp, Layer layer) noexcept
 {
   const OrderedTaskPoint &otp = (const OrderedTaskPoint &)tp;
   const AATPoint &atp = (const AATPoint &)tp;
