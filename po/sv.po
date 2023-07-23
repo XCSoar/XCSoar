@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2023-07-20 14:05+0000\n"
-"Last-Translator: Markus Bagge <markus.bagge@gmail.com>\n"
+"PO-Revision-Date: 2023-07-24 22:05+0000\n"
+"Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
 "Language: sv\n"
@@ -2411,7 +2411,7 @@ msgstr ""
 #: src/InfoBoxes/InfoBoxSettings.cpp:79
 #, no-c-format
 msgid "Circling"
-msgstr "Kurvläge"
+msgstr "Cirkulerande"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:112
 msgid "This forces the variometer into circling or cruise mode"
@@ -9660,7 +9660,7 @@ msgstr "Ingen GPS"
 
 #: src/InfoBoxes/Content/Speed.cpp:120
 msgid "BLOCK"
-msgstr ""
+msgstr "BLOCK"
 
 #: src/InfoBoxes/Content/Speed.cpp:122
 msgid "DOLPHIN"
@@ -9694,7 +9694,7 @@ msgstr "Referens"
 #: src/InfoBoxes/InfoBoxSettings.cpp:80
 #, no-c-format
 msgid "Cruise"
-msgstr "Glidläge"
+msgstr "Kryssa"
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:81
 #, no-c-format
@@ -9732,17 +9732,17 @@ msgstr "Signifikant vindförändring"
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:32
 #, no-c-format
 msgid "Gear on delay"
-msgstr ""
+msgstr "Växel på fördröjning"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:35
 #, no-c-format
 msgid "Gear off delay"
-msgstr ""
+msgstr "Fördröjning av växel"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:38
 #, no-c-format
 msgid "Interval; gear"
-msgstr ""
+msgstr "Intervall;växel"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:41
 #, no-c-format
@@ -10177,6 +10177,10 @@ msgid ""
 "connected the baud rate will be fixed at 38400.  For OzFLARM, the value can "
 "be set to 19200."
 msgstr ""
+"Baudhastighet för seriell enhet ansluten till Vega-port X1. Använd detta vid "
+"behov när du använder en tredjeparts-GPS eller dataloggare istället för "
+"FLARM. Om FLARM är ansluten kommer baudhastigheten att vara fixerad till "
+"38400. För OzFLARM kan värdet ställas in på 19200."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:77
 #, no-c-format
@@ -10274,7 +10278,7 @@ msgstr "Headset tröskelnivå"
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:41
 #, no-c-format
 msgid "Urgent min. volume"
-msgstr ""
+msgstr "Viktigt minsta. volym"
 
 #: Data/Input/default.xci:48
 msgid "Takeoff"
@@ -10331,9 +10335,8 @@ msgid "Pilot event announced"
 msgstr "Pilot event annonserad"
 
 #: Data/Input/default.xci:432
-#, fuzzy
 msgid "Pilot Event Announce"
-msgstr "Pilot event annonserad"
+msgstr "Pilot event annonsering"
 
 #: Data/Input/default.xci:440 Data/Input/default.xci:1046
 msgid "Target Show"
@@ -10404,9 +10407,8 @@ msgstr ""
 "Sida 2/2"
 
 #: Data/Input/default.xci:687
-#, fuzzy
 msgid "Airframe Switches"
-msgstr "Växlar"
+msgstr "Flygskrov växlar"
 
 #: Data/Input/default.xci:694
 msgid "Manual Demo"
