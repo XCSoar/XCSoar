@@ -497,9 +497,13 @@ try {
 } catch (OperationCancelled) {
   return false;
 } catch (...) {
-  const auto _msg = GetFullMessage(std::current_exception());
+  const auto e = std::current_exception();
+  LogError(e);
+
+  const auto _msg = GetFullMessage(e);
 
   if (const UTF8ToWideConverter msg{_msg.c_str()}; msg.IsValid()) {
+    LockSetErrorMessage(msg);
     env.SetErrorMessage(msg);
   }
 
