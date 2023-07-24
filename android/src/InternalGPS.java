@@ -21,6 +21,7 @@ public class InternalGPS
   implements LocationListener, Runnable, AndroidSensor,
   PermissionManager.PermissionHandler
 {
+  private final Context context;
   private final Handler handler;
   private final PermissionManager permissionManager;
 
@@ -38,6 +39,7 @@ public class InternalGPS
 
   InternalGPS(Context context, PermissionManager permissionManager,
               SensorListener listener) {
+    this.context = context;
     handler = new Handler(context.getMainLooper());
     this.permissionManager = permissionManager;
     this.listener = listener;
@@ -46,14 +48,6 @@ public class InternalGPS
     if (locationManager == null)
       /* can this really happen? */
       throw new IllegalStateException("No LocationManager");
-
-    if (!locationManager.isProviderEnabled(locationProvider) &&
-        !queriedLocationSettings) {
-      // Let user turn on GPS, XCSoar is not allowed to.
-      Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-      context.startActivity(myIntent);
-      queriedLocationSettings = true;
-    }
 
     // schedule a run() call in the MainLooper thread
     handler.post(this);
@@ -74,6 +68,14 @@ public class InternalGPS
                                         null);
 
     try {
+      if (!locationManager.isProviderEnabled(locationProvider) &&
+          !queriedLocationSettings) {
+        // Let user turn on GPS, XCSoar is not allowed to.
+        Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        context.startActivity(myIntent);
+        queriedLocationSettings = true;
+      }
+
       locationManager.requestLocationUpdates(locationProvider,
                                              1000, 0, this);
     } catch (SecurityException e) {
