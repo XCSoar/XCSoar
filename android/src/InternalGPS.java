@@ -43,13 +43,7 @@ public class InternalGPS
     this.listener = listener;
 
     locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-    if (locationManager == null ||
-        locationManager.getProvider(locationProvider) == null) {
-      /* on the Nook Simple Touch, LocationManager.isProviderEnabled()
-         can crash, but LocationManager.getProvider() appears to be
-         safe, therefore we're first checking the latter; if the
-         device does have a GPS, it returns non-null even when the
-         user has disabled GPS */
+    if (locationManager == null) {
       return;
     } else if (!locationManager.isProviderEnabled(locationProvider) &&
         !queriedLocationSettings) {
