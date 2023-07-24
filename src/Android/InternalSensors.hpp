@@ -4,7 +4,6 @@
 #pragma once
 
 #include "java/Object.hxx"
-#include "java/Class.hxx"
 #include "java/Closeable.hxx"
 
 #include <jni.h>
@@ -19,18 +18,6 @@ class SensorListener;
  * specific sensors.
  */
 class InternalSensors {
-  static Java::TrivialClass gps_cls, sensors_cls;
-
-  // IDs for methods in InternalGPS.java.
-  static jmethodID gps_ctor_id, close_method;
-
-  // IDs for methods in NonGPSSensors.java.
-  static jmethodID sensors_ctor_id;
-  static jmethodID mid_sensors_getSubscribableSensors;
-  static jmethodID mid_sensors_subscribeToSensor_;
-  static jmethodID mid_sensors_cancelSensorSubscription_;
-  static jmethodID mid_sensors_subscribedToSensor_;
-
 public:
   static bool Initialise(JNIEnv *env);
   static void Deinitialise(JNIEnv *env);

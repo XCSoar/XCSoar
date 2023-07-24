@@ -8,15 +8,16 @@
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "java/Array.hxx"
+#include "java/Class.hxx"
 #include "java/Env.hxx"
 
-Java::TrivialClass InternalSensors::gps_cls, InternalSensors::sensors_cls;
-jmethodID InternalSensors::gps_ctor_id;
-jmethodID InternalSensors::sensors_ctor_id;
-jmethodID InternalSensors::mid_sensors_getSubscribableSensors;
-jmethodID InternalSensors::mid_sensors_subscribeToSensor_;
-jmethodID InternalSensors::mid_sensors_cancelSensorSubscription_;
-jmethodID InternalSensors::mid_sensors_subscribedToSensor_;
+static Java::TrivialClass gps_cls, sensors_cls;
+static jmethodID gps_ctor_id;
+static jmethodID sensors_ctor_id;
+static jmethodID mid_sensors_getSubscribableSensors;
+static jmethodID mid_sensors_subscribeToSensor_;
+static jmethodID mid_sensors_cancelSensorSubscription_;
+static jmethodID mid_sensors_subscribedToSensor_;
 
 bool
 InternalSensors::Initialise(JNIEnv *env)
