@@ -25,11 +25,11 @@ class InternalSensors {
 
   InternalSensors(const Java::LocalObject &gps_obj,
                   const Java::LocalObject &sensors_obj) noexcept;
-  void getSubscribableSensors(JNIEnv *env, jobject sensors_obj);
+  void getSubscribableSensors(JNIEnv *env, jobject sensors_obj) noexcept;
 
 public:
   static bool Initialise(JNIEnv *env);
-  static void Deinitialise(JNIEnv *env);
+  static void Deinitialise(JNIEnv *env) noexcept;
 
   /* Sensor type identifier constants for use with subscription
      methods below.  These must have the same numerical values as
@@ -41,13 +41,15 @@ public:
 
   // For information on these methods, see comments around analogous methods
   // in NonGPSSensors.java.
-  const auto &getSubscribableSensors() const {
+  const auto &getSubscribableSensors() const noexcept {
     return subscribable_sensors_;
   }
 
-  bool subscribeToSensor(int id);
-  bool cancelSensorSubscription(int id);
-  bool subscribedToSensor(int id) const;
+  bool subscribeToSensor(int id) noexcept;
+  bool cancelSensorSubscription(int id) noexcept;
+
+  [[gnu::pure]]
+  bool subscribedToSensor(int id) const noexcept;
 
   static InternalSensors *Create(JNIEnv *env, Context *native_view,
                                  jobject permission_manager,
