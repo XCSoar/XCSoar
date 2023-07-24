@@ -461,8 +461,7 @@ try {
     const auto _msg = GetFullMessage(e);
     const UTF8ToWideConverter what(_msg.c_str());
     if (what.IsValid()) {
-      const std::lock_guard lock{mutex};
-      error_message = what;
+      LockSetErrorMessage(what);
     }
 
     msg.Format(_T("%s: %s (%s)"), _("Unable to open port"), name,
@@ -1304,6 +1303,24 @@ DeviceDescriptor::OnCalculatedUpdate(const MoreData &basic,
     }
 }
 
+inline void
+DeviceDescriptor::LockSetErrorMessage(const TCHAR *msg) noexcept
+{
+    const std::lock_guard lock{mutex};
+    error_message = msg;
+}
+
+#ifdef _UNICODE
+
+inline void
+DeviceDescriptor::LockSetErrorMessage(const char *msg) noexcept
+{
+  if (const UTF8ToWideConverter tmsg(msg); tmsg.IsValid())
+    LockSetErrorMessage(tmsg);
+}
+
+#endif
+
 void
 DeviceDescriptor::OnJobFinished() noexcept
 {
@@ -1341,10 +1358,7 @@ DeviceDescriptor::PortError(const char *msg) noexcept
               config.GetPortName(buffer, 64), msg);
   }
 
-  if (const UTF8ToWideConverter tmsg(msg); tmsg.IsValid()) {
-    const std::lock_guard lock{mutex};
-    error_message = tmsg;
-  }
+  LockSetErrorMessage(msg);
 
   has_failed = true;
 
