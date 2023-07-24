@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Sensor.hpp"
 #include "java/Object.hxx"
 #include "java/Closeable.hxx"
 
@@ -30,6 +31,11 @@ class InternalSensors {
 public:
   static bool Initialise(JNIEnv *env);
   static void Deinitialise(JNIEnv *env) noexcept;
+
+  [[gnu::pure]]
+  PortState GetState(JNIEnv *env) const noexcept {
+    return AndroidSensor::GetState(env, internal_gps);
+  }
 
   /* Sensor type identifier constants for use with subscription
      methods below.  These must have the same numerical values as

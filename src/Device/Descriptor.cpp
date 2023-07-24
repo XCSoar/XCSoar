@@ -120,6 +120,9 @@ DeviceDescriptor::GetState() const noexcept
 #ifdef ANDROID
   if (java_sensor != nullptr)
     return AndroidSensor::GetState(Java::GetEnv(), *java_sensor);
+
+  if (internal_sensors != nullptr)
+    return internal_sensors->GetState(Java::GetEnv());
 #endif
 
   return PortState::FAILED;
