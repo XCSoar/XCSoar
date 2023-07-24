@@ -45,11 +45,11 @@ public:
     return subscribable_sensors_;
   }
 
-  bool subscribeToSensor(int id) noexcept;
-  bool cancelSensorSubscription(int id) noexcept;
+  bool SubscribeToSensor(JNIEnv *env, int id) noexcept;
+  bool CancelSensorSubscription(JNIEnv *env, int id) noexcept;
 
   [[gnu::pure]]
-  bool subscribedToSensor(int id) const noexcept;
+  bool IsSubscribedToSensor(JNIEnv *env, int id) const noexcept;
 
   static InternalSensors *Create(JNIEnv *env, Context *native_view,
                                  jobject permission_manager,

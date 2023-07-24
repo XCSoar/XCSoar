@@ -72,26 +72,23 @@ InternalSensors::InternalSensors(const Java::LocalObject &gps_obj,
 }
 
 bool
-InternalSensors::subscribeToSensor(int id) noexcept
+InternalSensors::SubscribeToSensor(JNIEnv *env, int id) noexcept
 {
-  JNIEnv *env = Java::GetEnv();
   return env->CallBooleanMethod(obj_NonGPSSensors_.Get(),
                                 mid_sensors_subscribeToSensor_, (jint) id);
 }
 
 bool
-InternalSensors::cancelSensorSubscription(int id) noexcept
+InternalSensors::CancelSensorSubscription(JNIEnv *env, int id) noexcept
 {
-  JNIEnv *env = Java::GetEnv();
   return env->CallBooleanMethod(obj_NonGPSSensors_.Get(),
                                 mid_sensors_cancelSensorSubscription_,
                                 (jint)id);
 }
 
 bool
-InternalSensors::subscribedToSensor(int id) const noexcept
+InternalSensors::IsSubscribedToSensor(JNIEnv *env, int id) const noexcept
 {
-  JNIEnv *env = Java::GetEnv();
   return env->CallBooleanMethod(obj_NonGPSSensors_.Get(),
                                 mid_sensors_subscribedToSensor_, (jint)id);
 }

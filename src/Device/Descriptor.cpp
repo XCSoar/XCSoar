@@ -236,13 +236,14 @@ DeviceDescriptor::OpenInternalSensors()
     return true;
 
 #ifdef ANDROID
-  internal_sensors = InternalSensors::Create(Java::GetEnv(), context,
+  JNIEnv *const env = Java::GetEnv() ;
+  internal_sensors = InternalSensors::Create(env, context,
                                              permission_manager,
                                              *this);
   if (internal_sensors) {
     // TODO: Allow user to specify whether they want certain sensors.
-    internal_sensors->subscribeToSensor(InternalSensors::TYPE_PRESSURE);
-    internal_sensors->subscribeToSensor(InternalSensors::TYPE_ACCELEROMETER);
+    internal_sensors->SubscribeToSensor(env, InternalSensors::TYPE_PRESSURE);
+    internal_sensors->SubscribeToSensor(env, InternalSensors::TYPE_ACCELEROMETER);
     return true;
   }
 #elif defined(__APPLE__)
