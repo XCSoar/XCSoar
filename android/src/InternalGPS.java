@@ -55,6 +55,7 @@ public class InternalGPS
       queriedLocationSettings = true;
     }
 
+    // schedule a run() call in the MainLooper thread
     handler.post(this);
   }
 
