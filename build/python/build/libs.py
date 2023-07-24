@@ -7,7 +7,6 @@ from build.cmake import CmakeProject
 from build.openssl import OpenSSLProject
 from build.gcc import BinutilsProject, GccProject, GccBootstrapProject
 from build.linux import SabotageLinuxHeadersProject
-from build.sdl2 import SDL2Project
 from build.lua import LuaProject
 from .musl import MuslProject
 
@@ -362,7 +361,7 @@ libgeotiff = CmakeProject(
     patches=abspath('lib/libgeotiff/patches'),
 )
 
-sdl2 = SDL2Project(
+sdl2 = AutotoolsProject(
     'http://www.libsdl.org/release/SDL2-2.28.1.tar.gz',
     'https://fossies.org/linux/misc/SDL2-2.28.1.tar.gz',
     '4977ceba5c0054dbe6c2f114641aced43ce3bf2b41ea64b6a372d6ba129cb15d',
