@@ -43,9 +43,11 @@ public class InternalGPS
     this.listener = listener;
 
     locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-    if (locationManager == null) {
-      return;
-    } else if (!locationManager.isProviderEnabled(locationProvider) &&
+    if (locationManager == null)
+      /* can this really happen? */
+      throw new IllegalStateException("No LocationManager");
+
+    if (!locationManager.isProviderEnabled(locationProvider) &&
         !queriedLocationSettings) {
       // Let user turn on GPS, XCSoar is not allowed to.
       Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
