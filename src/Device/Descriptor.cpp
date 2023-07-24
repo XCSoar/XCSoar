@@ -501,8 +501,11 @@ try {
   return false;
 } catch (...) {
   const auto _msg = GetFullMessage(std::current_exception());
-  const UTF8ToWideConverter msg(_msg.c_str());
-  env.SetErrorMessage(msg);
+
+  if (const UTF8ToWideConverter msg{_msg.c_str()}; msg.IsValid()) {
+    env.SetErrorMessage(msg);
+  }
+
   return false;
 }
 
@@ -1338,12 +1341,9 @@ DeviceDescriptor::PortError(const char *msg) noexcept
               config.GetPortName(buffer, 64), msg);
   }
 
-  {
-    const UTF8ToWideConverter tmsg(msg);
-    if (tmsg.IsValid()) {
-      const std::lock_guard lock{mutex};
-      error_message = tmsg;
-    }
+  if (const UTF8ToWideConverter tmsg(msg); tmsg.IsValid()) {
+    const std::lock_guard lock{mutex};
+    error_message = tmsg;
   }
 
   has_failed = true;
