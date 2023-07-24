@@ -65,6 +65,12 @@ class DeviceListWidget final
     bool engine:1;
     bool debug:1;
 
+#ifdef ANDROID
+    bool bluetooth_disabled:1;
+#else
+    static constexpr bool bluetooth_disabled = false;
+#endif
+
     int8_t battery_percent;
 
     void Set(const DeviceConfig &config, const DeviceDescriptor &device,
@@ -108,6 +114,13 @@ class DeviceListWidget final
         basic.settings.has_standby_frequency;
       transponder = basic.settings.has_transponder_code;
       engine = basic.engine.IsAnyDefined();
+
+#ifdef ANDROID
+      bluetooth_disabled = config.IsAndroidBluetooth() &&
+        bluetooth_helper != nullptr &&
+        !bluetooth_helper->IsEnabled(Java::GetEnv());
+#endif
+
       battery_percent = basic.battery_level_available
         ? (int)basic.battery_level
         : -1;
@@ -441,12 +454,8 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     }
 
     status = buffer;
-#ifdef ANDROID
-  } else if (config.IsAndroidBluetooth() &&
-             bluetooth_helper != nullptr &&
-             !bluetooth_helper->IsEnabled(Java::GetEnv())) {
+  } else if (flags.bluetooth_disabled) {
     status = _("Bluetooth is disabled");
-#endif
   } else if (flags.duplicate) {
     status = _("Duplicate");
   } else if (flags.error) {
