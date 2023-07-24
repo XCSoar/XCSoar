@@ -64,6 +64,11 @@ struct Event {
      * can be created again.
      */
     RESUME,
+
+    /**
+     * A task has been received and the task manager should be opened.
+     */
+    TASK_RECEIVED,
 #endif
 
 #ifdef USE_X11

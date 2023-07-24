@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Main.hpp"
+#include "ReceiveTask.hpp"
 #include "Environment.hpp"
 #include "Components.hpp"
 #include "Context.hpp"
@@ -173,6 +174,18 @@ Java_org_xcsoar_NativeView_onConfigurationChangedNative([[maybe_unused]] JNIEnv 
 
   event_queue->Purge(UI::Event::LOOK);
   event_queue->Inject(UI::Event::LOOK);
+}
+
+gcc_visibility_default
+JNIEXPORT jstring JNICALL
+Java_org_xcsoar_NativeView_onReceiveXCTrackTask(JNIEnv *env,
+                                                [[maybe_unused]] jclass cls,
+                                                jstring data)
+try {
+  ReceiveXCTrackTask(Java::String::GetUTFChars(env, data).c_str());
+  return nullptr;
+} catch (...) {
+  return env->NewStringUTF(GetFullMessage(std::current_exception()).c_str());
 }
 
 gcc_visibility_default

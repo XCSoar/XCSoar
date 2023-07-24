@@ -45,6 +45,20 @@
 
     <service android:name=".MyService" android:foregroundServiceType="location"/>
 
+    <!-- this Activity receives scanned QR codes -->
+    <activity android:name=".ReceiveTaskActivity"
+              android:exported="true">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+
+        <!-- URI scheme for XCTrack v2 tasks, see
+             https://xctrack.org/Competition_Interfaces.html -->
+        <data android:scheme="xctsk" />
+      </intent-filter>
+    </activity>
+
     <provider android:name="org.xcsoar.FileProvider"
               android:authorities="org.xcsoar"
               android:exported="false"

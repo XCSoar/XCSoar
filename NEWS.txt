@@ -2,6 +2,7 @@ Version 7.38 - not yet released
 * WeGlide
   - fix another crash bug
 * Android
+  - support scanning QR codes with XCTrack tasks
   - fix location permission request on old Android versions
   - fix IllegalArgumentException crash on old Android versions
   - improved error messages for problems opening devices

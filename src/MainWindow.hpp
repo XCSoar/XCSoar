@@ -407,5 +407,6 @@ protected:
 
 #ifdef ANDROID
   void OnLook() noexcept override;
+  void OnTaskReceived() noexcept override;
 #endif
 };
