@@ -18,11 +18,6 @@ class SensorListener;
  * specific sensors.
  */
 class InternalSensors {
-public:
-  static bool Initialise(JNIEnv *env);
-  static void Deinitialise(JNIEnv *env);
-
-private:
   // Java objects working with the GPS and the other sensors respectively.
   Java::GlobalCloseable internal_gps;
   Java::GlobalCloseable obj_NonGPSSensors_;
@@ -33,6 +28,9 @@ private:
   void getSubscribableSensors(JNIEnv *env, jobject sensors_obj);
 
 public:
+  static bool Initialise(JNIEnv *env);
+  static void Deinitialise(JNIEnv *env);
+
   /* Sensor type identifier constants for use with subscription
      methods below.  These must have the same numerical values as
      their counterparts in the Android API's Sensor class. */
