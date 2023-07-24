@@ -456,18 +456,16 @@ try {
 
     LogError(e, WideToUTF8Converter(name));
 
-    StaticString<256> msg;
-
     const auto _msg = GetFullMessage(e);
-    const UTF8ToWideConverter what(_msg.c_str());
-    if (what.IsValid()) {
+    if (const UTF8ToWideConverter what{_msg.c_str()}; what.IsValid()) {
       LockSetErrorMessage(what);
+
+      StaticString<256> msg;
+      msg.Format(_T("%s: %s (%s)"), _("Unable to open port"), name,
+                 (const TCHAR *)what);
+      env.SetErrorMessage(msg);
     }
 
-    msg.Format(_T("%s: %s (%s)"), _("Unable to open port"), name,
-               (const TCHAR *)what);
-
-    env.SetErrorMessage(msg);
     return false;
   }
 
