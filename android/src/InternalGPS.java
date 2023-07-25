@@ -64,8 +64,9 @@ public class InternalGPS
          onRequestPermissionsResult() will be called later */
       return;
 
-    permissionManager.requestPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                                        null);
+    if (android.os.Build.VERSION.SDK_INT >= 29)
+      permissionManager.requestPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                                          null);
 
     try {
       if (!locationManager.isProviderEnabled(locationProvider) &&

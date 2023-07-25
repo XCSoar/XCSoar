@@ -3,6 +3,7 @@ Version 7.38 - not yet released
   - fix another crash bug
 * Android
   - fix location permission request on old Android versions
+  - fix IllegalArgumentException crash on old Android versions
   - improved error messages for problems opening devices
 
 Version 7.37 - 2023/07/21
