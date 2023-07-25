@@ -170,14 +170,6 @@ XCSOAR_SOURCES := \
 	$(IO_SRC_DIR)/DataFile.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Airspace/ActivePredicate.cpp \
-	$(SRC)/Task/Serialiser.cpp \
-	$(SRC)/Task/Deserialiser.cpp \
-	$(SRC)/Task/SaveFile.cpp \
-	$(SRC)/Task/LoadFile.cpp \
-	$(SRC)/Task/TaskFile.cpp \
-	$(SRC)/Task/TaskFileXCSoar.cpp \
-	$(SRC)/Task/TaskFileIGC.cpp \
-	$(SRC)/Task/TaskFileSeeYou.cpp \
 	$(SRC)/Task/DefaultTask.cpp \
 	$(SRC)/Task/MapTaskManager.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
@@ -500,11 +492,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Profile/AirspaceConfig.cpp \
 	$(SRC)/Profile/TerrainConfig.cpp \
 	$(SRC)/Profile/FlarmProfile.cpp \
-	$(SRC)/XML/Node.cpp \
-	$(SRC)/XML/Parser.cpp \
-	$(SRC)/XML/Writer.cpp \
-	$(SRC)/XML/DataNode.cpp \
-	$(SRC)/XML/DataNodeXML.cpp \
 	\
 	$(SRC)/Repository/FileRepository.cpp \
 	$(SRC)/Repository/Parser.cpp \
@@ -678,7 +665,9 @@ XCSOAR_DEPENDS = \
 	DRIVER PORT \
 	LIBCOMPUTER \
 	LIBNMEA \
-	LIBHTTP CO IO ASYNC TASK CONTEST ROUTE GLIDE WAYPOINT AIRSPACE \
+	LIBHTTP CO IO ASYNC \
+	TASKFILE CONTEST ROUTE GLIDE \
+	WAYPOINT AIRSPACE \
 	LUA \
 	ZZIP \
 	OPERATION \
