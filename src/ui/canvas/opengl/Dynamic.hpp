@@ -42,10 +42,6 @@ static inline void MultiDrawElements(Args... args) noexcept {
 #endif /* GL_EXT_multi_draw_arrays */
 
 #ifdef GL_EXT_discard_framebuffer
-#if defined(__APPLE__) && TARGET_OS_IPHONE
-/* this typedef is missing in the iOS SDK */
-typedef void (GL_APIENTRYP PFNGLDISCARDFRAMEBUFFEREXTPROC) (GLenum target, GLsizei numAttachments, const GLenum *attachments);
-#endif // TARGET_OS_IPHONE
 inline PFNGLDISCARDFRAMEBUFFEREXTPROC discard_framebuffer;
 #endif // GL_EXT_discard_framebuffer
 
