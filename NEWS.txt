@@ -5,6 +5,7 @@ Version 7.38 - not yet released
   - fix location permission request on old Android versions
   - fix IllegalArgumentException crash on old Android versions
   - improved error messages for problems opening devices
+  - fix crash on Android 5
 
 Version 7.37 - 2023/07/21
 * WeGlide

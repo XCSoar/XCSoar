@@ -243,6 +243,11 @@ public class XCSoar extends Activity implements PermissionManager {
   };
 
   private void requestAllPermissions() {
+    if (android.os.Build.VERSION.SDK_INT < 23)
+      /* we don't need to request permissions on this old Android
+         version */
+      return;
+
     /* starting with Android 6.0, we need to explicitly request all
        permissions before using them; mentioning them in the manifest
        is not enough */
