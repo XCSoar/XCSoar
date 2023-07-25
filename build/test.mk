@@ -77,6 +77,7 @@ TEST_NAMES = \
 	test_task \
 	TestOverwritingRingBuffer \
 	TestDateTime TestRoughTime TestWrapClock \
+	TestPolylineDecoder \
 	TestTransponderCode \
 	TestMath \
 	TestMathTables \
@@ -194,6 +195,13 @@ TEST_DATE_TIME_SOURCES = \
 	$(TEST_SRC_DIR)/TestDateTime.cpp
 TEST_DATE_TIME_DEPENDS = MATH TIME
 $(eval $(call link-program,TestDateTime,TEST_DATE_TIME))
+
+TEST_POLYLINE_DECODER_SOURCES = \
+	$(SRC)/Task/PolylineDecoder.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestPolylineDecoder.cpp
+TEST_POLYLINE_DECODER_DEPENDS = GEO UTIL
+$(eval $(call link-program,TestPolylineDecoder,TEST_POLYLINE_DECODER))
 
 TEST_TRANSPONDER_CODE_SOURCES = \
 	$(SRC)/TransponderCode.cpp \

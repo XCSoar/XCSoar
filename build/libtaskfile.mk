@@ -1,4 +1,7 @@
 TASKFILE_SOURCES = \
+	$(SRC)/Task/PolylineDecoder.cpp \
+	$(SRC)/Task/XCTrackTaskDecoder.cpp \
+	$(SRC)/Task/XCTrackTaskFile.cpp \
 	$(SRC)/Task/TaskFile.cpp \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
 	$(SRC)/Task/TaskFileSeeYou.cpp \
@@ -8,6 +11,6 @@ TASKFILE_SOURCES = \
 	$(SRC)/Task/SaveFile.cpp \
 	$(SRC)/Task/LoadFile.cpp
 
-TASKFILE_DEPENDS = TASK XML
+TASKFILE_DEPENDS = TASK XML JSON
 
 $(eval $(call link-library,libtaskfile,TASKFILE))

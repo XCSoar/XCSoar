@@ -5,6 +5,7 @@
 #include "Task/TaskFileXCSoar.hpp"
 #include "Task/TaskFileSeeYou.hpp"
 #include "Task/TaskFileIGC.hpp"
+#include "XCTrackTaskFile.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 
 #include <stdlib.h>
@@ -23,6 +24,11 @@ TaskFile::Create(Path path)
   // If IGC file -> return new TaskFileIGC
   if (path.EndsWithIgnoreCase(_T(".igc")))
     return std::make_unique<TaskFileIGC>(path);
+
+  /* TODO ".xctsk" is not a real filename suffix; there is just the
+     MIME type "application/xctsk" */
+  if (path.EndsWithIgnoreCase(_T(".xctsk")))
+    return std::make_unique<XCTrackTaskFile>(path);
 
   // unknown task file type
   return nullptr;
