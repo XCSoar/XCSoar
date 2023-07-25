@@ -1,3 +1,2 @@
 no_atof.diff
-tiff_libm
-zlib
+tiff_pkg_config
