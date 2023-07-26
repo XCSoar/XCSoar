@@ -32,7 +32,6 @@ try {
   ok1(v.size() == decoded.size());
 
   for (std::size_t i = 0; i < decoded.size(); ++i) {
-    fprintf(stderr, "%f %f\n", v[i].latitude.Degrees(), v[i].longitude.Degrees());
     ok1(equals(v[i], decoded[i]));
   }
 
