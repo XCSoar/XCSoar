@@ -128,6 +128,16 @@ final class BluetoothHelper
       submitBondedDevices(devices, l);
   }
 
+  private final boolean requestScanPermission(PermissionManager.PermissionHandler handler) {
+    return permissionManager.requestPermission(Manifest.permission.BLUETOOTH_SCAN,
+                                               handler);
+  }
+
+  private final boolean requestConnectPermission(PermissionManager.PermissionHandler handler) {
+    return permissionManager.requestPermission(Manifest.permission.BLUETOOTH_CONNECT,
+                                               handler);
+  }
+
   private final PermissionManager.PermissionHandler bondedPermissionHandler =
     new PermissionManager.PermissionHandler() {
       @Override
@@ -174,8 +184,7 @@ final class BluetoothHelper
   public synchronized void addDetectDeviceListener(DetectDeviceListener l) {
     detectListeners.add(l);
 
-    if (permissionManager.requestPermission(Manifest.permission.BLUETOOTH_CONNECT,
-                                            bondedPermissionHandler)) {
+    if (requestConnectPermission(bondedPermissionHandler)) {
       try {
         Set<BluetoothDevice> devices = adapter.getBondedDevices();
         if (devices != null)
@@ -187,8 +196,7 @@ final class BluetoothHelper
     }
 
     if (hasLe) {
-      if (permissionManager.requestPermission(Manifest.permission.BLUETOOTH_SCAN,
-                                              leScanPermissionHandler))
+      if (requestScanPermission(leScanPermissionHandler))
         startLeScan();
     }
   }
@@ -212,8 +220,7 @@ final class BluetoothHelper
       throw new IOException("No Bluetooth LE support");
 
     // TODO wait for permission to be granted
-    permissionManager.requestPermission(Manifest.permission.BLUETOOTH_CONNECT,
-                                        null);
+    requestConnectPermission(null);
 
     BluetoothDevice device = adapter.getRemoteDevice(address);
     if (device == null)
@@ -232,8 +239,7 @@ final class BluetoothHelper
       throw new IOException("Bluetooth device not found");
 
     // TODO wait for permission to be granted
-    permissionManager.requestPermission(Manifest.permission.BLUETOOTH_CONNECT,
-                                        null);
+    requestConnectPermission(null);
 
     Log.d(TAG, String.format("Bluetooth device \"%s\" is a LE device, trying to connect using GATT...",
                              getDisplayString(device)));
@@ -247,8 +253,7 @@ final class BluetoothHelper
       throw new IOException("Bluetooth device not found");
 
     // TODO wait for permission to be granted
-    permissionManager.requestPermission(Manifest.permission.BLUETOOTH_CONNECT,
-                                        null);
+    requestConnectPermission(null);
 
     BluetoothSocket socket =
       device.createRfcommSocketToServiceRecord(THE_UUID);
@@ -257,8 +262,7 @@ final class BluetoothHelper
 
   public AndroidPort createServer() throws IOException {
     // TODO wait for permission to be granted
-    permissionManager.requestPermission(Manifest.permission.BLUETOOTH_CONNECT,
-                                        null);
+    requestConnectPermission(null);
 
     return new BluetoothServerPort(adapter, THE_UUID);
   }
