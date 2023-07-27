@@ -256,6 +256,11 @@ proj = CmakeProject(
         '-DBUILD_SHARED_LIBS=OFF',
         '-DUSE_THREAD=OFF',
     ],
+    env={
+        # suppress "visibility default" from geodesic.h
+        'CFLAGS': '-DGEOD_DLL=',
+        'CXXFLAGS': '-DGEOD_DLL=',
+    },
     patches=abspath('lib/proj/patches'),
 )
 
