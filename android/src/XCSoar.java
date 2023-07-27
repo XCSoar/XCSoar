@@ -104,7 +104,7 @@ public class XCSoar extends Activity implements PermissionManager {
     registerReceiver(batteryReceiver,
                      new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
-    requestAllPermissions();
+    requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, null);
   }
 
   private void quit() {
@@ -227,32 +227,6 @@ public class XCSoar extends Activity implements PermissionManager {
 
     if (nativeView != null)
       nativeView.setHapticFeedback(hapticFeedbackEnabled);
-  }
-
-  private static final String[] NEEDED_PERMISSIONS = new String[] {
-    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-  };
-
-  private void requestAllPermissions() {
-    if (android.os.Build.VERSION.SDK_INT < 23)
-      /* we don't need to request permissions on this old Android
-         version */
-      return;
-
-    /* starting with Android 6.0, we need to explicitly request all
-       permissions before using them; mentioning them in the manifest
-       is not enough */
-
-    /* TODO: this sure is the wrong place to request permissions - we
-       should request permissions when we need them, but implementing
-       that is complicated, so for now, we do it here to give users a
-       quick solution for the problem */
-
-    try {
-      requestPermissions(NEEDED_PERMISSIONS, 0);
-    } catch (IllegalArgumentException e) {
-      Log.e(TAG, "could not request permissions: " + String.join(", ", NEEDED_PERMISSIONS), e);
-    }
   }
 
   @Override protected void onResume() {
