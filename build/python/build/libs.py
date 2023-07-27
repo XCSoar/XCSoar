@@ -151,6 +151,9 @@ libsodium = AutotoolsProject(
     [
         '--disable-shared', '--enable-static',
     ],
+
+    # suppress "visibility default" from sodium/export.h
+    cppflags='-DSODIUM_STATIC'
 )
 
 zlib = ZlibProject(
