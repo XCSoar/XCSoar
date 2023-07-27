@@ -129,13 +129,19 @@ final class BluetoothHelper
   }
 
   private final boolean requestScanPermission(PermissionManager.PermissionHandler handler) {
-    return permissionManager.requestPermission(Manifest.permission.BLUETOOTH_SCAN,
-                                               handler);
+    /* this permission was introduced in Android 12 and is granted
+       implicitly in older versions */
+    return android.os.Build.VERSION.SDK_INT < 31 ||
+      permissionManager.requestPermission(Manifest.permission.BLUETOOTH_SCAN,
+                                          handler);
   }
 
   private final boolean requestConnectPermission(PermissionManager.PermissionHandler handler) {
-    return permissionManager.requestPermission(Manifest.permission.BLUETOOTH_CONNECT,
-                                               handler);
+    /* this permission was introduced in Android 12 and is granted
+       implicitly in older versions */
+    return android.os.Build.VERSION.SDK_INT < 31 ||
+      permissionManager.requestPermission(Manifest.permission.BLUETOOTH_CONNECT,
+                                          handler);
   }
 
   private final PermissionManager.PermissionHandler bondedPermissionHandler =

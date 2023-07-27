@@ -1,4 +1,6 @@
 Version 7.39 - not yet released
+* Android
+  - fix Bluetooth device list on Android versions older than 12
 
 Version 7.38 - 2023/07/27
 * WeGlide
