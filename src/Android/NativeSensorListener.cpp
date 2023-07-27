@@ -247,11 +247,11 @@ Java_org_xcsoar_NativeSensorListener_onVoltageValues(JNIEnv *env, jobject obj,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onNunchuckValues(JNIEnv *env, jobject obj,
-                                                      jint joy_x, jint joy_y,
-                                                      jint acc_x, jint acc_y,
-                                                      jint acc_z,
-                                                      jint switches)
+Java_org_xcsoar_NativeSensorListener_onNunchukValues(JNIEnv *env, jobject obj,
+                                                     jint joy_x, jint joy_y,
+                                                     jint acc_x, jint acc_y,
+                                                     jint acc_z,
+                                                     jint switches)
  {
   jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
   if (ptr == 0)
@@ -263,16 +263,16 @@ Java_org_xcsoar_NativeSensorListener_onNunchuckValues(JNIEnv *env, jobject obj,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_setGliderLinkInfo(JNIEnv *env,
-                                                       jobject obj,
-                                                       jlong gid,
-                                                       jstring callsign,
-                                                       jdouble latitude,
-                                                       jdouble longitude,
-                                                       jdouble altitude,
-                                                       jdouble gspeed,
-                                                       jdouble vspeed,
-                                                       jint bearing)
+Java_org_xcsoar_NativeSensorListener_onGliderLinkTraffic(JNIEnv *env,
+                                                         jobject obj,
+                                                         jlong gid,
+                                                         jstring callsign,
+                                                         jdouble latitude,
+                                                         jdouble longitude,
+                                                         jdouble altitude,
+                                                         jdouble gspeed,
+                                                         jdouble vspeed,
+                                                         jint bearing)
 {
   jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
   if (ptr == 0)

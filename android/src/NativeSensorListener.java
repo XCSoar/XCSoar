@@ -81,7 +81,7 @@ final class NativeSensorListener implements SensorListener {
                                          double longitude, double latitude,
                                          double altitude,
                                          double gspeed, double vspeed,
-                                         double bearing);
+                                         int bearing);
 
   @Override
   public native void onTemperature(double temperature_kelvin);
