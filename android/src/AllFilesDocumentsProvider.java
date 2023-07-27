@@ -54,8 +54,6 @@ import java.util.LinkedList;
 import java.util.Objects;
 
 public class AllFilesDocumentsProvider extends DocumentsProvider {
-  private final static String AUTHORITY = "org.xcsoar.allfiles";
-
   private static final String[] DEFAULT_ROOT_PROJECTION = {
     Root.COLUMN_ROOT_ID,
     Root.COLUMN_TITLE,
@@ -90,10 +88,14 @@ public class AllFilesDocumentsProvider extends DocumentsProvider {
     return projection != null ? projection : DEFAULT_DOCUMENT_PROJECTION;
   }
 
+  private String getAuthority() {
+    return getContext().getPackageName() + ".allfiles";
+  }
+
   private void notifyChildDocumentsChange(String parentDocumentId) {
     ContentResolver contentResolver = getContext().getContentResolver();
     contentResolver.notifyChange(
-      DocumentsContract.buildChildDocumentsUri(AUTHORITY, parentDocumentId),
+      DocumentsContract.buildChildDocumentsUri(getAuthority(), parentDocumentId),
       null, false);
   }
 

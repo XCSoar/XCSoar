@@ -60,13 +60,13 @@
     </activity>
 
     <provider android:name="org.xcsoar.FileProvider"
-              android:authorities="org.xcsoar"
+              android:authorities="org.xcsoar.testing"
               android:exported="false"
               android:grantUriPermissions="true"/>
 
     <provider
         android:name="org.xcsoar.AllFilesDocumentsProvider"
-        android:authorities="org.xcsoar.allfiles"
+        android:authorities="org.xcsoar.testing.allfiles"
         android:exported="true"
         android:grantUriPermissions="true"
         android:permission="android.permission.MANAGE_DOCUMENTS">
