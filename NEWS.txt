@@ -1,4 +1,4 @@
-Version 7.38 - not yet released
+Version 7.38 - 2023/07/27
 * WeGlide
   - fix another crash bug
 * Android
