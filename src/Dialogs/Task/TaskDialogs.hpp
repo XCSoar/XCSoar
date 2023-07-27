@@ -3,7 +3,16 @@
 
 #pragma once
 
+#include <memory>
+
 class OrderedTask;
+
+/**
+ * @param task if set, load this task into the dialog; if not set,
+ * show the current task
+ */
+void
+dlgTaskManagerShowModal(std::unique_ptr<OrderedTask> task);
 
 void
 dlgTaskManagerShowModal();

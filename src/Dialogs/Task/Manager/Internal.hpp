@@ -25,10 +25,11 @@ class TaskManagerDialog final : public TabWidget {
 
   bool fullscreen = false;
 
-  bool modified = false;
+  bool modified = true;
 
 public:
-  explicit TaskManagerDialog(WndForm &_dialog) noexcept;
+  TaskManagerDialog(WndForm &_dialog,
+                    std::unique_ptr<OrderedTask> &&_task) noexcept;
 
   ~TaskManagerDialog() noexcept override;
 
