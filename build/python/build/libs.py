@@ -228,6 +228,7 @@ sqlite3 = AutotoolsProject(
     'lib/libsqlite3.a',
     [
         '--disable-shared', '--enable-static',
+        '--disable-fts5',
     ],
     patches=abspath('lib/sqlite/patches'),
     autogen=True,
