@@ -39,12 +39,6 @@ import android.provider.Settings;
 public class XCSoar extends Activity implements PermissionManager {
   private static final String TAG = "XCSoar";
 
-  /**
-   * Hack: this is set by onCreate(), to support the "testing"
-   * package.
-   */
-  public static Class<?> serviceClass;
-
   private static NativeView nativeView;
 
   private Handler mainHandler;
@@ -62,9 +56,6 @@ public class XCSoar extends Activity implements PermissionManager {
   boolean fullScreen = false;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
-    if (serviceClass == null)
-      serviceClass = MyService.class;
-
     super.onCreate(savedInstanceState);
 
     Log.d(TAG, "ABI=" + Build.CPU_ABI);

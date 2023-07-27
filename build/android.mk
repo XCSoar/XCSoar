@@ -147,9 +147,6 @@ JAVA_SOURCES := \
 	android/ioio/IOIOLibAndroidBluetooth/src/main/java/ioio/lib/android/bluetooth/BluetoothIOIOConnection.java \
 	android/ioio/IOIOLibAndroidDevice/src/main/java/ioio/lib/android/device/DeviceConnectionBootstrap.java \
 	android/ioio/IOIOLibAndroidDevice/src/main/java/ioio/lib/android/device/Streams.java
-ifeq ($(TESTING),y)
-	JAVA_SOURCES += $(wildcard android/src/testing/*.java)
-endif
 
 GEN_DIR = $(ANDROID_OUTPUT_DIR)/gen
 RES_DIR = $(ANDROID_OUTPUT_DIR)/res
