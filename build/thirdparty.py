@@ -53,7 +53,7 @@ if toolchain.is_windows:
     # mingw.  This prevents some libraries such as libsodium to enable
     # it.
     cppflags += ' -D_FORTIFY_SOURCE=0'
-elif 'apple-darwin' in host_triplet:
+elif toolchain.is_darwin:
     thirdparty_libs = [
         zlib,
         libfmt,
@@ -68,7 +68,7 @@ elif 'apple-darwin' in host_triplet:
         libgeotiff,
         sdl2
     ]
-elif 'android' in host_triplet:
+elif toolchain.is_android:
     thirdparty_libs = [
         libfmt,
         libsodium,

@@ -1,3 +1,4 @@
+import sys
 import os
 from typing import Union
 
@@ -13,7 +14,9 @@ class NativeToolchain:
         self.build_path = other.build_path
         self.install_prefix = lib_path
         self.host_triplet = None
-        self.is_windows = None
+        self.is_windows = False
+        self.is_android = False
+        self.is_darwin = sys.platform == 'darwin'
 
         self.cc = 'ccache gcc'
         self.cxx = 'ccache g++'
@@ -45,6 +48,8 @@ class Toolchain:
         self.install_prefix = install_prefix
         self.host_triplet = host_triplet
         self.is_windows = 'mingw32' in host_triplet
+        self.is_android = '-android' in host_triplet
+        self.is_darwin = '-darwin' in host_triplet
 
         self.cc = cc
         self.cxx = cxx

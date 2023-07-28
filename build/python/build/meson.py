@@ -70,7 +70,7 @@ cpp_args = {repr((toolchain.cppflags + ' ' + toolchain.cxxflags).split())}
 cpp_link_args = {repr(toolchain.ldflags.split() + toolchain.libs.split())}
 """)
 
-        if 'android' in toolchain.host_triplet:
+        if toolchain.is_android:
             f.write("""
 # Keep Meson from executing Android-x86 test binariees
 needs_exe_wrapper = true
