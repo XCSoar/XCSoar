@@ -85,7 +85,6 @@ endian = '{endian}'
     return path
 
 def configure(toolchain, src: str, build: str, args: list[str]=[]) -> None:
-    cross_file = make_cross_file(toolchain)
     configure = [
         'meson',
         src, build,
@@ -95,9 +94,12 @@ def configure(toolchain, src: str, build: str, args: list[str]=[]) -> None:
         '--buildtype', 'plain',
 
         '--default-library=static',
-
-        '--cross-file', cross_file,
     ] + args
+
+    if toolchain.host_triplet is not None:
+        # cross-compiling: write a cross-file
+        cross_file = make_cross_file(toolchain)
+        configure.append(f'--cross-file={cross_file}')
 
     env = toolchain.env.copy()
 
