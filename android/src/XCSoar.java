@@ -80,7 +80,7 @@ public class XCSoar extends Activity implements PermissionManager {
 
     mainHandler = new Handler(getMainLooper());
 
-    NativeView.initNative(Build.VERSION.SDK_INT);
+    NativeView.initNative();
 
     NetUtil.initialise(this);
 
