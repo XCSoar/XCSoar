@@ -5,6 +5,7 @@ from typing import cast, BinaryIO, Optional
 from build.download import download_and_verify
 from build.tar import untar
 from build.quilt import push_all
+from .toolchain import AnyToolchain
 
 class Project:
     def __init__(self, url: str, alternative_url: Optional[str], md5: str, installed: str,
@@ -37,10 +38,10 @@ class Project:
 
         self.__unpack_lockfile: Optional[BinaryIO] = None
 
-    def download(self, toolchain) -> str:
+    def download(self, toolchain: AnyToolchain) -> str:
         return download_and_verify(self.url, self.alternative_url, self.md5, toolchain.tarball_path)
 
-    def is_installed(self, toolchain) -> bool:
+    def is_installed(self, toolchain: AnyToolchain) -> bool:
         tarball = self.download(toolchain)
         installed = os.path.join(toolchain.install_prefix, self.installed)
         tarball_mtime = os.path.getmtime(tarball)
@@ -49,7 +50,7 @@ class Project:
         except FileNotFoundError:
             return False
 
-    def unpack(self, toolchain, out_of_tree: bool=True) -> str:
+    def unpack(self, toolchain: AnyToolchain, out_of_tree: bool=True) -> str:
         if out_of_tree:
             parent_path = toolchain.src_path
         else:
@@ -66,7 +67,7 @@ class Project:
             push_all(toolchain, path, self.patches)
         return path
 
-    def make_build_path(self, toolchain, lazy: bool=False) -> str:
+    def make_build_path(self, toolchain: AnyToolchain, lazy: bool=False) -> str:
         path = os.path.join(toolchain.build_path, self.base)
         if lazy and os.path.isdir(path):
             return path
@@ -77,11 +78,11 @@ class Project:
         os.makedirs(path, exist_ok=True)
         return path
 
-    def _build(self, toolchain, target_toolchain=None) -> None:
+    def _build(self, toolchain: AnyToolchain, target_toolchain: Optional[AnyToolchain]=None) -> None:
         # abstract
         pass
 
-    def build(self, toolchain) -> None:
+    def build(self, toolchain: AnyToolchain) -> None:
         try:
             self._build(toolchain)
         finally:

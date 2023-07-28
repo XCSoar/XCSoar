@@ -2,6 +2,7 @@ import os.path, subprocess, sys
 from typing import Collection, Iterable, Optional
 
 from build.makeproject import MakeProject
+from .toolchain import AnyToolchain
 
 class AutotoolsProject(MakeProject):
     def __init__(self, url: str, alternative_url: Optional[str], md5: str, installed: str,
@@ -24,7 +25,7 @@ class AutotoolsProject(MakeProject):
         self.use_destdir = use_destdir
         self.subdirs = subdirs
 
-    def configure(self, toolchain, src: Optional[str]=None, build: Optional[str]=None, target_toolchain=None) -> str:
+    def configure(self, toolchain: AnyToolchain, src: Optional[str]=None, build: Optional[str]=None, target_toolchain: Optional[AnyToolchain]=None) -> str:
         if src is None:
             src = self.unpack(toolchain)
 
@@ -94,16 +95,16 @@ class AutotoolsProject(MakeProject):
 
         return build
 
-    def get_make_args(self, toolchain) -> list[str]:
+    def get_make_args(self, toolchain: AnyToolchain) -> list[str]:
         return MakeProject.get_make_args(self, toolchain)
 
-    def get_make_install_args(self, toolchain) -> list[str]:
+    def get_make_install_args(self, toolchain: AnyToolchain) -> list[str]:
         args = MakeProject.get_make_install_args(self, toolchain)
         if self.use_destdir:
             args += ['DESTDIR=' + toolchain.install_prefix]
         return args
 
-    def _build(self, toolchain, target_toolchain=None) -> None:
+    def _build(self, toolchain: AnyToolchain, target_toolchain: Optional[AnyToolchain]=None) -> None:
         build = self.configure(toolchain, target_toolchain=target_toolchain)
         if self.subdirs is not None:
             for subdir in self.subdirs:

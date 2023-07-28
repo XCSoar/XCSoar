@@ -3,13 +3,14 @@ from typing import Optional
 
 from build.makeproject import MakeProject
 from build.quilt import push_all
+from .toolchain import AnyToolchain
 
 class LuaProject(MakeProject):
     def __init__(self, url: str, alternative_url: Optional[str], md5: str, installed: str,
                  **kwargs):
         MakeProject.__init__(self, url, alternative_url, md5, installed, **kwargs)
 
-    def get_make_args(self, toolchain) -> list[str]:
+    def get_make_args(self, toolchain: AnyToolchain) -> list[str]:
         cflags = toolchain.cflags + ' ' + toolchain.cppflags
 
         # hard-code lua_getlocaledecpoint() because
@@ -26,7 +27,7 @@ class LuaProject(MakeProject):
             'liblua.a'
         ]
 
-    def _build(self, toolchain, target_toolchain=None) -> None:
+    def _build(self, toolchain: AnyToolchain, target_toolchain: Optional[AnyToolchain]=None) -> None:
         src = self.unpack(toolchain, out_of_tree=False)
 
         wd = os.path.join(src, 'src')

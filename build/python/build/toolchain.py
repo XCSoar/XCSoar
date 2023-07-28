@@ -1,4 +1,5 @@
 import os
+from typing import Union
 
 class NativeToolchain:
     """A toolchain for building native binaries, e.g. to be run on the
@@ -81,3 +82,5 @@ class Toolchain:
         self.env['QEMU_GUEST_BASE'] = '42'
 
         self.native = NativeToolchain(lib_path, self)
+
+AnyToolchain = Union[Toolchain, NativeToolchain]
