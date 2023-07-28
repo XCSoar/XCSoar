@@ -55,9 +55,6 @@ class OpenSSLProject(MakeProject):
             'aarch64-apple-darwin': 'darwin64-arm64-cc',
         }
 
-        openssl_arch = openssl_archs[toolchain.host_triplet]
-        cross_compile_prefix = toolchain.host_triplet + '-'
-
         configure = [
             './Configure',
             'no-shared',
@@ -67,8 +64,6 @@ class OpenSSLProject(MakeProject):
             'no-async',
             'no-tests',
             'no-makedepend',
-            openssl_arch,
-            '--cross-compile-prefix=' + cross_compile_prefix,
             '--libdir=lib', # no "lib64" on amd64, please
             '--prefix=' + toolchain.install_prefix,
         ]
@@ -76,6 +71,10 @@ class OpenSSLProject(MakeProject):
         if toolchain.is_windows:
             # workaround for build failures
             configure.append('no-asm')
+
+        if toolchain.host_triplet is not None:
+            configure.append(openssl_archs[toolchain.host_triplet])
+            configure.append(f'--cross-compile-prefix={toolchain.host_triplet}-')
 
         subprocess.check_call(configure, cwd=src, env=toolchain.env)
         self.build_make(toolchain, src)
