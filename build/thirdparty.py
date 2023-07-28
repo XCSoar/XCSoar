@@ -26,10 +26,17 @@ if 'MAKEFLAGS' in os.environ:
     # which breaks the zlib Makefile (and maybe others)
     del os.environ['MAKEFLAGS']
 
+from build.toolchain import Toolchain, NativeToolchain
+toolchain = Toolchain(xcsoar_path, lib_path,
+                      tarball_path, src_path, build_path, install_prefix,
+                      host_triplet,
+                      arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags,
+                      ranlib, strip, windres)
+
 # a list of third-party libraries to be used by XCSoar
 from build.libs import *
 
-if 'mingw32' in host_triplet:
+if toolchain.is_windows:
     thirdparty_libs = [
         zlib,
         libfmt,
@@ -99,12 +106,6 @@ else:
     raise RuntimeError('Unrecognized target')
 
 # build the third-party libraries
-from build.toolchain import Toolchain, NativeToolchain
-toolchain = Toolchain(xcsoar_path, lib_path,
-                      tarball_path, src_path, build_path, install_prefix,
-                      host_triplet,
-                      arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags,
-                      ranlib, strip, windres)
 for x in thirdparty_libs:
     if not x.is_installed(toolchain):
         x.build(toolchain)
