@@ -26,18 +26,24 @@ def __write_cmake_toolchain_file(f: TextIO, toolchain: Toolchain, no_isystem: bo
     if no_isystem:
         cppflags = re.sub(r'\s*-isystem\s+\S+\s*', ' ', cppflags)
 
+    # Objective-C support here is a kludge; we use the C flags and the
+    # C compiler, but that appears to be good enough for macOS / iOS.
+
     f.write(f"""
 set(CMAKE_SYSTEM_NAME {cmake_system_name})
 set(CMAKE_SYSTEM_PROCESSOR {toolchain.host_triplet.split('-', 1)[0]})
 
 set(CMAKE_C_COMPILER_TARGET {toolchain.host_triplet})
 set(CMAKE_CXX_COMPILER_TARGET {toolchain.host_triplet})
+set(CMAKE_OBJC_COMPILER_TARGET {toolchain.host_triplet})
 
 set(CMAKE_C_FLAGS_INIT "{toolchain.cflags} {cppflags}")
 set(CMAKE_CXX_FLAGS_INIT "{toolchain.cxxflags} {cppflags}")
+set(CMAKE_OBJC_FLAGS_INIT "{toolchain.cflags} {cppflags}")
 """)
     __write_cmake_compiler(f, 'C', toolchain.cc)
     __write_cmake_compiler(f, 'CXX', toolchain.cxx)
+    __write_cmake_compiler(f, 'OBJC', toolchain.cc)
 
     f.write(f"""
 set(CMAKE_AR {toolchain.ar})
