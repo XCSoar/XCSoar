@@ -58,16 +58,21 @@ class OpenSSLProject(MakeProject):
         openssl_arch = openssl_archs[toolchain.host_triplet]
         cross_compile_prefix = toolchain.host_triplet + '-'
 
-        subprocess.check_call(['./Configure',
-                               'no-shared',
-                               'no-module', 'no-engine', 'no-static-engine',
-                               'no-async',
-                               'no-tests',
-                               'no-makedepend',
-                               'no-asm', # "asm" causes build failures on Windows
-                               openssl_arch,
-                               '--cross-compile-prefix=' + cross_compile_prefix,
-                               '--libdir=lib', # no "lib64" on amd64, please
-                               '--prefix=' + toolchain.install_prefix],
-                              cwd=src, env=toolchain.env)
+        configure = [
+            './Configure',
+            'no-shared',
+            'no-module',
+            'no-engine',
+            'no-static-engine',
+            'no-async',
+            'no-tests',
+            'no-makedepend',
+            'no-asm', # "asm" causes build failures on Windows
+            openssl_arch,
+            '--cross-compile-prefix=' + cross_compile_prefix,
+            '--libdir=lib', # no "lib64" on amd64, please
+            '--prefix=' + toolchain.install_prefix,
+        ]
+
+        subprocess.check_call(configure, cwd=src, env=toolchain.env)
         self.build_make(toolchain, src)
