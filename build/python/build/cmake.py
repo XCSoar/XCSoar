@@ -70,34 +70,37 @@ def configure(toolchain, src: str, build: str, args: list[str]=[], env=None) -> 
     if toolchain.is_windows:
         cross_args.append('-DCMAKE_RC_COMPILER=' + toolchain.windres)
 
-    # Several targets need a sysroot to prevent pkg-config from
-    # looking for libraries on the build host (TODO: fix this
-    # properly); but we must not do that on Android because the NDK
-    # has a sysroot already
-    no_isystem = False
-    if '-android' not in toolchain.host_triplet and '-darwin' not in toolchain.host_triplet:
-        cross_args.append('-DCMAKE_SYSROOT=' + toolchain.install_prefix)
-
-        # strip "-isystem" to avoid build failures with C++ headers
-        # because "#include_next" ceases to work
-        no_isystem = True
-
-    os.makedirs(build, exist_ok=True)
-    cmake_toolchain_file = os.path.join(build, 'cmake_toolchain_file')
-    with open(cmake_toolchain_file, 'w') as f:
-        __write_cmake_toolchain_file(f, toolchain, no_isystem)
-
     configure = [
         'cmake',
         src,
-
-        '-DCMAKE_TOOLCHAIN_FILE=' + cmake_toolchain_file,
 
         '-DCMAKE_INSTALL_PREFIX=' + toolchain.install_prefix,
         '-DCMAKE_BUILD_TYPE=release',
 
         '-GNinja',
     ] + cross_args + args
+
+    if toolchain.host_triplet is not None:
+        # cross-compiling: write a toolchain file
+        os.makedirs(build, exist_ok=True)
+
+        # Several targets need a sysroot to prevent pkg-config from
+        # looking for libraries on the build host (TODO: fix this
+        # properly); but we must not do that on Android because the NDK
+        # has a sysroot already
+        no_isystem = False
+        if '-android' not in toolchain.host_triplet and '-darwin' not in toolchain.host_triplet:
+            configure.append('-DCMAKE_SYSROOT=' + toolchain.install_prefix)
+
+            # strip "-isystem" to avoid build failures with C++ headers
+            # because "#include_next" ceases to work
+            no_isystem = True
+
+        cmake_toolchain_file = os.path.join(build, 'cmake_toolchain_file')
+        with open(cmake_toolchain_file, 'w') as f:
+            __write_cmake_toolchain_file(f, toolchain, no_isystem)
+
+        configure.append('-DCMAKE_TOOLCHAIN_FILE=' + cmake_toolchain_file)
 
     if env is None:
         env = toolchain.env
