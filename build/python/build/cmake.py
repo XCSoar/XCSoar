@@ -38,6 +38,11 @@ set(CMAKE_CXX_FLAGS_INIT "{toolchain.cxxflags} {cppflags}")
     __write_cmake_compiler(f, 'C', toolchain.cc)
     __write_cmake_compiler(f, 'CXX', toolchain.cxx)
 
+    f.write(f"""
+set(CMAKE_AR {toolchain.ar})
+set(CMAKE_RANLIB {toolchain.ranlib})
+""")
+
     if cmake_system_name == 'Darwin':
         # On macOS, cmake forcibly adds an "-isysroot" flag even if
         # one is already present in the flags variable; this breaks
