@@ -1,17 +1,19 @@
 import os
 import re
 import subprocess
+from typing import Optional, TextIO
+from collections.abc import Mapping
 
 from build.project import Project
 
-def __write_cmake_compiler(f, language, compiler):
+def __write_cmake_compiler(f: TextIO, language: str, compiler: str) -> None:
     s = compiler.split(' ', 1)
     if len(s) == 2:
         print(f'set(CMAKE_{language}_COMPILER_LAUNCHER {s[0]})', file=f)
         compiler = s[1]
     print(f'set(CMAKE_{language}_COMPILER {compiler})', file=f)
 
-def __write_cmake_toolchain_file(f, toolchain, no_isystem):
+def __write_cmake_toolchain_file(f: TextIO, toolchain, no_isystem: bool) -> None:
     if '-darwin' in toolchain.host_triplet:
         cmake_system_name = 'Darwin'
     elif toolchain.is_windows:
@@ -57,8 +59,8 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 """)
 
-def configure(toolchain, src, build, args=(), env=None):
-    cross_args = []
+def configure(toolchain, src: str, build: str, args: list[str]=[], env=None) -> None:
+    cross_args: list[str] = []
 
     if toolchain.is_windows:
         cross_args.append('-DCMAKE_RC_COMPILER=' + toolchain.windres)
@@ -101,16 +103,17 @@ def configure(toolchain, src, build, args=(), env=None):
     subprocess.check_call(configure, env=env, cwd=build)
 
 class CmakeProject(Project):
-    def __init__(self, url, alternative_url, md5, installed, configure_args=[],
-                 windows_configure_args=[],
-                 env=None,
+    def __init__(self, url: str, alternative_url: Optional[str], md5: str, installed: str,
+                 configure_args: list[str]=[],
+                 windows_configure_args: list[str]=[],
+                 env: Optional[Mapping[str, str]]=None,
                  **kwargs):
         Project.__init__(self, url, alternative_url, md5, installed, **kwargs)
         self.configure_args = configure_args
         self.windows_configure_args = windows_configure_args
         self.env = env
 
-    def configure(self, toolchain):
+    def configure(self, toolchain) -> str:
         src = self.unpack(toolchain)
         build = self.make_build_path(toolchain)
         configure_args = self.configure_args
@@ -119,7 +122,7 @@ class CmakeProject(Project):
         configure(toolchain, src, build, configure_args, self.env)
         return build
 
-    def _build(self, toolchain):
+    def _build(self, toolchain, target_toolchain=None) -> None:
         build = self.configure(toolchain)
         subprocess.check_call(['ninja', '-v', 'install'],
                               cwd=build, env=toolchain.env)

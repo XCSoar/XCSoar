@@ -30,7 +30,7 @@ class NativeToolchain:
     """A toolchain for building native binaries, e.g. to be run on the
     build host."""
 
-    def __init__(self, other):
+    def __init__(self, other: 'Toolchain'):
         self.native = self
 
         self.tarball_path = other.tarball_path
@@ -58,9 +58,11 @@ class NativeToolchain:
         self.env = dict(os.environ)
 
 class Toolchain:
-    def __init__(self, tarball_path, src_path, build_path, install_prefix,
-                 host_triplet, arch_cflags, cppflags,
-                 arch_ldflags, cc, cxx, ar, arflags, ranlib, strip, windres):
+    def __init__(self, tarball_path: str, src_path: str, build_path: str, install_prefix: str,
+                 host_triplet: str, arch_cflags: str, cppflags: str,
+                 arch_ldflags: str,
+                 cc: str, cxx: str, ar: str, arflags: str,
+                 ranlib: str, strip: str, windres: str):
         self.tarball_path = tarball_path
         self.src_path = src_path
         self.build_path = build_path

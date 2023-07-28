@@ -1,7 +1,7 @@
 from .autotools import AutotoolsProject
 
 class MuslProject(AutotoolsProject):
-    def configure(self, toolchain, *args, **kwargs):
+    def configure(self, toolchain, *args, **kwargs) -> str:
         # Musl's configure script ignores the commonly used "AR"
         # etc. variables, but instead uses CROSS_COMPILE to build the
         # paths to all build tools.  This kludge takes strips "ar"

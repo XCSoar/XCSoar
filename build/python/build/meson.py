@@ -1,15 +1,16 @@
 import os
 import subprocess
 import platform
+from typing import Optional
 
 from build.project import Project
 
-def __no_ccache(cmd):
+def __no_ccache(cmd: str) -> str:
     if cmd.startswith('ccache '):
         cmd = cmd[7:]
     return cmd
 
-def make_cross_file(toolchain):
+def make_cross_file(toolchain) -> str:
     if toolchain.is_windows:
         system = 'windows'
         windres = "windres = '%s'" % toolchain.windres
@@ -83,7 +84,7 @@ endian = '{endian}'
 """)
     return path
 
-def configure(toolchain, src, build, args=()):
+def configure(toolchain, src: str, build: str, args: list[str]=[]) -> None:
     cross_file = make_cross_file(toolchain)
     configure = [
         'meson',
@@ -106,18 +107,19 @@ def configure(toolchain, src, build, args=()):
     subprocess.check_call(configure, env=env)
 
 class MesonProject(Project):
-    def __init__(self, url, alternative_url, md5, installed, configure_args=[],
+    def __init__(self, url: str, alternative_url: Optional[str], md5: str, installed: str,
+                 configure_args: list[str]=[],
                  **kwargs):
         Project.__init__(self, url, alternative_url, md5, installed, **kwargs)
         self.configure_args = configure_args
 
-    def configure(self, toolchain):
+    def configure(self, toolchain) -> str:
         src = self.unpack(toolchain)
         build = self.make_build_path(toolchain)
         configure(toolchain, src, build, self.configure_args)
         return build
 
-    def _build(self, toolchain):
+    def _build(self, toolchain, target_toolchain=None) -> None:
         build = self.configure(toolchain)
         subprocess.check_call(['ninja', '-v', 'install'],
                               cwd=build, env=toolchain.env)
