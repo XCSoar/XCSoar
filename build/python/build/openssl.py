@@ -67,12 +67,15 @@ class OpenSSLProject(MakeProject):
             'no-async',
             'no-tests',
             'no-makedepend',
-            'no-asm', # "asm" causes build failures on Windows
             openssl_arch,
             '--cross-compile-prefix=' + cross_compile_prefix,
             '--libdir=lib', # no "lib64" on amd64, please
             '--prefix=' + toolchain.install_prefix,
         ]
+
+        if toolchain.is_windows:
+            # workaround for build failures
+            configure.append('no-asm')
 
         subprocess.check_call(configure, cwd=src, env=toolchain.env)
         self.build_make(toolchain, src)
