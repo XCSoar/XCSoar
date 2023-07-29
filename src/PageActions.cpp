@@ -12,6 +12,7 @@
 #include "Pan.hpp"
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
+#include "Components.hpp"
 
 #if defined(ENABLE_SDL) && defined(main)
 /* on some platforms, SDL wraps the main() function and clutters our
@@ -203,7 +204,7 @@ LoadBottom(PageLayout::Bottom bottom)
     break;
 
   case PageLayout::Bottom::CROSS_SECTION:
-    CommonInterface::main_window->SetBottomWidget(new CrossSectionWidget());
+    CommonInterface::main_window->SetBottomWidget(new CrossSectionWidget(*data_components));
     break;
 
   case PageLayout::Bottom::CUSTOM:

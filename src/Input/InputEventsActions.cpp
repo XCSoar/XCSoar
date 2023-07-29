@@ -50,7 +50,6 @@ doc/html/advanced/input/ALL  http://xcsoar.sourceforge.net/advanced/input/
 #include "UIActions.hpp"
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
-#include "Components.hpp"
 #include "Language/Language.hpp"
 #include "Logger/Logger.hpp"
 #include "Logger/NMEALogger.hpp"
@@ -68,6 +67,8 @@ doc/html/advanced/input/ALL  http://xcsoar.sourceforge.net/advanced/input/
 #include "Form/DataField/File.hpp"
 #include "Dialogs/FilePicker.hpp"
 #include "net/client/WeGlide/UploadIGCFile.hpp"
+#include "Components.hpp"
+#include "DataComponents.hpp"
 
 #include <cassert>
 #include <tchar.h>
@@ -119,6 +120,7 @@ trigger_redraw()
 static WaypointPtr
 SuspendAppendWaypoint(Waypoint &&wp)
 {
+  auto &way_points = *data_components->waypoints;
   ScopeSuspendAllThreads suspend;
   auto ptr = way_points.Append(std::move(wp));
   way_points.Optimise();
@@ -151,7 +153,7 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
 
   if (StringIsEqual(misc, _T("reset"))) {
     ScopeSuspendAllThreads suspend;
-    way_points.EraseUserMarkers();
+    data_components->waypoints->EraseUserMarkers();
   } else {
     const auto location = GetVisibleLocation();
     if (!location.IsValid())
@@ -159,7 +161,8 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
 
     MarkLocation(location, basic.date_time_utc);
 
-    const WaypointFactory factory(WaypointOrigin::USER, terrain);
+    const WaypointFactory factory(WaypointOrigin::USER,
+                                  data_components->terrain.get());
     Waypoint wp = factory.Create(location);
     factory.FallbackElevation(wp);
 
@@ -331,8 +334,8 @@ InputEvents::eventAnalysis([[maybe_unused]] const TCHAR *misc)
                        CommonInterface::main_window->GetLook(),
                        CommonInterface::Full(),
                        *glide_computer,
-                       &airspace_database,
-                       terrain);
+                       data_components->airspaces.get(),
+                       data_components->terrain.get());
 }
 
 // WaypointDetails
@@ -368,17 +371,18 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
     allow_navigation = false;
     allow_edit = false;
   } else if (StringIsEqual(misc, _T("select"))) {
-    wp = ShowWaypointListDialog(way_points, basic.location);
+    wp = ShowWaypointListDialog(*data_components->waypoints, basic.location);
   }
   if (wp)
-    dlgWaypointDetailsShowModal(&way_points, std::move(wp),
+    dlgWaypointDetailsShowModal(data_components->waypoints.get(),
+                                std::move(wp),
                                 allow_navigation, allow_edit);
 }
 
 void
 InputEvents::eventWaypointEditor([[maybe_unused]] const TCHAR *misc)
 {
-  dlgConfigWaypointsShowModal(way_points);
+  dlgConfigWaypointsShowModal(*data_components->waypoints);
 }
 
 // StatusMessage
@@ -500,7 +504,7 @@ InputEvents::eventNearestWaypointDetails([[maybe_unused]] const TCHAR *misc)
     return;
 
   // big range..
-  PopupNearestWaypointDetails(way_points, location, 1.0e5);
+  PopupNearestWaypointDetails(*data_components->waypoints, location, 1.0e5);
 }
 
 // NearestMapItems
@@ -570,7 +574,7 @@ InputEvents::eventSetup(const TCHAR *misc)
   else if (StringIsEqual(misc, _T("Profile")))
     ProfileListDialog();
   else if (StringIsEqual(misc, _T("Alternates")))
-    dlgAlternatesListShowModal(&way_points);
+    dlgAlternatesListShowModal(data_components->waypoints.get());
 
   trigger_redraw();
 }
@@ -640,6 +644,7 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
+  auto &way_points = *data_components->waypoints;
 
   if (StringIsEqual(misc, _T("takeoff"))) {
     if (basic.location_available && calculated.terrain_valid) {

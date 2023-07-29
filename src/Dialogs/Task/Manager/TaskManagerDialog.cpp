@@ -30,6 +30,7 @@
 #include "Widget/VScrollWidget.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "DataComponents.hpp"
 
 inline
 TaskManagerDialog::TaskManagerDialog(WndForm &_dialog,
@@ -187,8 +188,8 @@ TaskManagerDialog::Commit()
     { // this must be done in thread lock because it potentially changes the
       // waypoints database
       ScopeSuspendAllThreads suspend;
-      task->CheckDuplicateWaypoints(way_points);
-      way_points.Optimise();
+      task->CheckDuplicateWaypoints(*data_components->waypoints);
+      data_components->waypoints->Optimise();
     }
 
     protected_task_manager->TaskCommit(*task);

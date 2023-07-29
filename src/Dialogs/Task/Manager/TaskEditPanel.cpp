@@ -30,6 +30,7 @@
 #include "util/StringCompare.hxx"
 #include "UIGlobals.hpp"
 #include "Components.hpp"
+#include "DataComponents.hpp"
 
 #include <cassert>
 
@@ -294,7 +295,7 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
 
     AbstractTaskFactory &factory = ordered_task->GetFactory();
     auto way_point =
-      ShowWaypointListDialog(way_points,
+      ShowWaypointListDialog(*data_components->waypoints,
                              ordered_task->TaskSize() > 0
                              ? ordered_task->GetPoint(ordered_task->TaskSize() - 1).GetLocation()
                              : CommonInterface::Basic().location,

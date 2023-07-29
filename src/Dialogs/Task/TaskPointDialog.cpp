@@ -34,6 +34,7 @@
 #include "Widgets/SectorZoneEditWidget.hpp"
 #include "Widgets/LineSectorZoneEditWidget.hpp"
 #include "Widgets/KeyholeZoneEditWidget.hpp"
+#include "DataComponents.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scissor.hpp"
@@ -399,7 +400,8 @@ TaskPointWidget::PaintMap(Canvas &canvas, const PixelRect &rc)
                  basic.GetLocationOrInvalid(),
                  CommonInterface::GetMapSettings(),
                  look.task, look.airspace, look.overlay,
-                 terrain, &airspace_database);
+                 data_components->terrain.get(),
+                 data_components->airspaces.get());
 }
 
 inline void
@@ -422,7 +424,8 @@ inline void
 TaskPointWidget::OnDetailsClicked()
 {
   const OrderedTaskPoint &task_point = ordered_task.GetPoint(active_index);
-  dlgWaypointDetailsShowModal(&way_points, task_point.GetWaypointPtr(), false);
+  dlgWaypointDetailsShowModal(data_components->waypoints.get(),
+                              task_point.GetWaypointPtr(), false);
 }
 
 inline void
@@ -432,7 +435,7 @@ TaskPointWidget::OnRelocateClicked()
     ? ordered_task.GetPoint(active_index - 1).GetLocation()
     : CommonInterface::Basic().location;
 
-  auto wp = ShowWaypointListDialog(way_points, gpBearing,
+  auto wp = ShowWaypointListDialog(*data_components->waypoints, gpBearing,
                                    &ordered_task, active_index);
   if (wp == nullptr)
     return;
@@ -482,7 +485,7 @@ TaskPointWidget::OnNextClicked()
 inline void
 TaskPointWidget::OnOptionalStartsClicked()
 {
-  if (dlgTaskOptionalStarts(way_points, ordered_task)) {
+  if (dlgTaskOptionalStarts(*data_components->waypoints, ordered_task)) {
     ordered_task.ClearName();
     ordered_task.UpdateGeometry();
     task_modified = true;

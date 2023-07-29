@@ -3,15 +3,11 @@
 
 #include "Components.hpp"
 #include "Computer/GlideComputer.hpp"
-#include "Engine/Airspace/Airspaces.hpp"
-#include "Waypoint/Waypoints.hpp"
 #include "net/http/Features.hpp"
 #include "thread/Debug.hpp"
 #include "thread/Handle.hpp"
 
 FileCache *file_cache;
-TopographyStore *topography;
-RasterTerrain *terrain;
 AsyncTerrainOverviewLoader *terrain_loader;
 
 #ifndef ENABLE_OPENGL
@@ -37,11 +33,7 @@ TrackingGlue *tracking;
 TIM::Glue *tim_glue;
 #endif
 
-Waypoints way_points;
-
 ProtectedTaskManager *protected_task_manager;
-
-Airspaces airspace_database;
 
 GlideComputer *glide_computer;
 

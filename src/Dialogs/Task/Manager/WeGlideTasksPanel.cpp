@@ -28,6 +28,7 @@
 #include "util/ConvertString.hpp"
 #include "UIGlobals.hpp"
 #include "Components.hpp"
+#include "DataComponents.hpp"
 #include "Interface.hpp"
 
 #include <cassert>
@@ -199,7 +200,7 @@ try {
                                                          settings.weglide,
                                                          info.id,
                                                          settings.task,
-                                                         &way_points,
+                                                         data_components->waypoints.get(),
                                                          env),
                                    &env);
   if (!task)

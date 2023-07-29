@@ -14,6 +14,7 @@
 #include "StatusPanels/SystemStatusPanel.hpp"
 #include "StatusPanels/TimesStatusPanel.hpp"
 #include "Components.hpp"
+#include "DataComponents.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -49,7 +50,7 @@ dlgStatusShowModal(int start_page)
 
   const NMEAInfo &basic = CommonInterface::Basic();
   auto nearest_waypoint = basic.location_available
-    ? way_points.GetNearest(CommonInterface::Basic().location, 100000)
+    ? data_components->waypoints->GetNearest(CommonInterface::Basic().location, 100000)
     : nullptr;
 
   /* setup tabs */

@@ -12,6 +12,7 @@
 #include "Terrain/TerrainRenderer.hpp"
 #include "Projection/MapWindowProjection.hpp"
 #include "Components.hpp"
+#include "DataComponents.hpp"
 #include "Interface.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -251,12 +252,12 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
   GetDataField(TerrainContours).SetListener(this);
   SetExpertRow(TerrainContours);
 
-  have_terrain_preview = ::terrain != nullptr;
+  have_terrain_preview = data_components->terrain != nullptr;
   if (have_terrain_preview) {
     WindowStyle style;
     style.Border();
 
-    auto preview = std::make_unique<TerrainPreviewWindow>(*::terrain);
+    auto preview = std::make_unique<TerrainPreviewWindow>(*data_components->terrain);
     preview->Create((ContainerWindow &)GetWindow(), {0, 0, 100, 100}, style);
     AddRemaining(std::move(preview));
   }

@@ -14,6 +14,7 @@
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Language/Language.hpp"
 #include "Widget/CallbackWidget.hpp"
+#include "DataComponents.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
@@ -22,7 +23,7 @@ static std::unique_ptr<Widget>
 LoadAlternatesPanel([[maybe_unused]] unsigned id) noexcept
 {
   return std::make_unique<CallbackWidget>([]{
-    dlgAlternatesListShowModal(&way_points);
+    dlgAlternatesListShowModal(data_components->waypoints.get());
   });
 }
 

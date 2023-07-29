@@ -10,6 +10,7 @@
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Language/Language.hpp"
 #include "Widget/CallbackWidget.hpp"
+#include "DataComponents.hpp"
 
 #include <tchar.h>
 
@@ -19,8 +20,9 @@ ShowAnalysis8() noexcept
   dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
                        UIGlobals::GetLook(),
                        CommonInterface::Full(), *glide_computer,
-                       &airspace_database,
-                       terrain, AnalysisPage::CONTEST);
+                       data_components->airspaces.get(),
+                       data_components->terrain.get(),
+                       AnalysisPage::CONTEST);
 }
 
 static std::unique_ptr<Widget>

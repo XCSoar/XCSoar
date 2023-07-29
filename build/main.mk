@@ -526,6 +526,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/MainWindow.cpp \
 	$(SRC)/Startup.cpp \
 	$(SRC)/Components.cpp \
+	$(SRC)/DataComponents.cpp \
 	$(SRC)/DataGlobals.cpp \
 	\
 	$(SRC)/Device/Declaration.cpp \

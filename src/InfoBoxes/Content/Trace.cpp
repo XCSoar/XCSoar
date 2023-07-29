@@ -20,6 +20,7 @@
 #include "util/Macros.hpp"
 #include "Language/Language.hpp"
 #include "Widget/CallbackWidget.hpp"
+#include "DataComponents.hpp"
 
 [[gnu::const]]
 static PixelRect
@@ -148,8 +149,9 @@ ShowAnalysisBarograph() noexcept
   dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
                        UIGlobals::GetLook(),
                        CommonInterface::Full(), *glide_computer,
-                       &airspace_database,
-                       terrain, AnalysisPage::BAROGRAPH);
+                       data_components->airspaces.get(),
+                       data_components->terrain.get(),
+                       AnalysisPage::BAROGRAPH);
 }
 
 static std::unique_ptr<Widget>

@@ -17,6 +17,7 @@
 #include "Renderer/NextArrowRenderer.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
+#include "DataComponents.hpp"
 
 #include <tchar.h>
 
@@ -30,7 +31,8 @@ ShowNextWaypointDetails() noexcept
   if (wp == nullptr)
     return;
 
-  dlgWaypointDetailsShowModal(&way_points, std::move(wp), false);
+  dlgWaypointDetailsShowModal(data_components->waypoints.get(),
+                              std::move(wp), false);
 }
 
 static std::unique_ptr<Widget>

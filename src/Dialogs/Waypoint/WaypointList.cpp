@@ -34,6 +34,7 @@
 #include "Blackboard/BlackboardListener.hpp"
 #include "Language/Language.hpp"
 #include "Components.hpp"
+#include "DataComponents.hpp"
 
 #include <algorithm>
 #include <list>
@@ -384,7 +385,7 @@ void
 WaypointFilterWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                               [[maybe_unused]] const PixelRect &rc) noexcept
 {
-  Add(_("Name"), nullptr, CreateNameDataField(way_points, listener));
+  Add(_("Name"), nullptr, CreateNameDataField(*data_components->waypoints, listener));
   Add(_("Distance"), nullptr, CreateDistanceDataField(listener));
   Add(_("Direction"), nullptr, CreateDirectionDataField(listener, last_heading));
   Add(_("Type"), nullptr, CreateTypeDataField(listener));

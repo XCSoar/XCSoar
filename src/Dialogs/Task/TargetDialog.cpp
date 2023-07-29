@@ -26,6 +26,7 @@
 #include "Units/Units.hpp"
 #include "Blackboard/RateLimitedBlackboardListener.hpp"
 #include "Interface.hpp"
+#include "DataComponents.hpp"
 
 #include <algorithm> // for std::clamp()
 
@@ -114,10 +115,10 @@ public:
      delta_t(dialog_look),
      speed_remaining(dialog_look),
      speed_achieved(dialog_look) {
-    map.SetTerrain(terrain);
-    map.SetTopograpgy(topography);
-    map.SetAirspaces(&airspace_database);
-    map.SetWaypoints(&way_points);
+    map.SetTerrain(data_components->terrain.get());
+    map.SetTopograpgy(data_components->topography.get());
+    map.SetAirspaces(data_components->airspaces.get());
+    map.SetWaypoints(data_components->waypoints.get());
     map.SetTask(protected_task_manager);
     map.SetGlideComputer(glide_computer);
   }
@@ -655,7 +656,8 @@ TargetWidget::OnNameClicked()
     waypoint = tp.GetWaypointPtr();
   }
 
-  dlgWaypointDetailsShowModal(&way_points, waypoint, false);
+  dlgWaypointDetailsShowModal(data_components->waypoints.get(),
+                              waypoint, false);
 }
 
 bool

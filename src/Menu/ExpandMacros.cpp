@@ -9,6 +9,7 @@
 #include "Gauge/BigTrafficWidget.hpp"
 #include "Computer/Settings.hpp"
 #include "Components.hpp"
+#include "DataComponents.hpp"
 #include "DataGlobals.hpp"
 #include "MapSettings.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -245,7 +246,7 @@ static const TCHAR *
 LookupMacro(tstring_view name, bool &invalid) noexcept
 {
   if (name ==_T("CheckAirspace")) {
-    invalid |= airspace_database.IsEmpty();
+    invalid |= data_components->airspaces->IsEmpty();
     return nullptr;
   }
 
@@ -275,7 +276,7 @@ LookupMacro(tstring_view name, bool &invalid) noexcept
     invalid |= CommonInterface::MovementDetected();
     return nullptr;
   } else if (name == _T("CheckWaypointFile")) {
-    invalid |= way_points.IsEmpty();
+    invalid |= data_components->waypoints->IsEmpty();
     return nullptr;
   } else if (name == _T("CheckLogger")) {
     invalid |= Basic().gps.replay;

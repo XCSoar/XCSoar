@@ -6,6 +6,7 @@
 #include "system/Path.hpp"
 #include "java/String.hxx"
 #include "Components.hpp"
+#include "DataComponents.hpp"
 #include "LocalPath.hpp"
 
 #include <cassert>
@@ -14,7 +15,7 @@ JNIEXPORT jstring JNICALL
 Java_org_xcsoar_FileProvider_getWaypointFileForUri(JNIEnv *env, jclass,
                                                    jint id, jstring _filename)
 {
-  auto w = way_points.LookupId(id);
+  auto w = data_components->waypoints->LookupId(id);
   if (!w)
     return nullptr;
 

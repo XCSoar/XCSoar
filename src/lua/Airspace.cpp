@@ -10,10 +10,12 @@
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Airspace/NearestAirspace.hpp"
+#include "DataComponents.hpp"
 
 static int
 l_airspace_index(lua_State *L)
 {
+  const auto &airspace_database = *data_components->airspaces;
   const char *name = lua_tostring(L, 2);
   if (name == nullptr)
     return 0;

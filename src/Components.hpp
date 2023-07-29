@@ -4,8 +4,6 @@
 #pragma once
 
 class FileCache;
-class TopographyStore;
-class RasterTerrain;
 class AsyncTerrainOverviewLoader;
 class GlideComputer;
 class DrawThread;
@@ -13,8 +11,6 @@ class MultipleDevices;
 class DeviceBlackboard;
 class MergeThread;
 class CalculationThread;
-class Waypoints;
-class Airspaces;
 class ProtectedAirspaceWarningManager;
 class ProtectedTaskManager;
 class Replay;
@@ -24,14 +20,12 @@ class GlueFlightLogger;
 class TrackingGlue;
 namespace TIM { class Glue; }
 
+inline struct DataComponents *data_components;
+
 // other global objects
 extern FileCache *file_cache;
-extern Airspaces airspace_database;
-extern Waypoints way_points;
 extern ProtectedTaskManager *protected_task_manager;
 extern Replay *replay;
-extern TopographyStore *topography;
-extern RasterTerrain *terrain;
 extern AsyncTerrainOverviewLoader *terrain_loader;
 extern GlideComputer *glide_computer;
 #ifndef ENABLE_OPENGL

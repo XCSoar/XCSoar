@@ -8,6 +8,7 @@
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
 #include "Components.hpp"
+#include "DataComponents.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
 #include "Engine/Airspace/AirspaceAircraftPerformance.hpp"
@@ -45,7 +46,7 @@ InputEvents::eventAirSpace(const TCHAR *misc)
       Message::AddMessage(_("Show airspace on"));
     return;
   } else if (StringIsEqual(misc, _T("list"))) {
-    ShowAirspaceListDialog(airspace_database, GetAirspaceWarnings());
+    ShowAirspaceListDialog(*data_components->airspaces, GetAirspaceWarnings());
     return;
   }
 
@@ -95,7 +96,7 @@ InputEvents::eventNearestAirspaceDetails([[maybe_unused]] const TCHAR *misc)
   polar.SetMC(std::max(polar.GetMC(), 1.));
   const AirspaceAircraftPerformance perf(polar);
 
-  const auto as = FindSoonestAirspace(airspace_database, aircraft_state, perf,
+  const auto as = FindSoonestAirspace(*data_components->airspaces, aircraft_state, perf,
                                       std::move(visible),
                                       std::chrono::minutes{30});
   if (!as) {
