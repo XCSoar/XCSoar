@@ -149,12 +149,13 @@ class WaypointDetailsWidget final
   int zoom = 0;
 
 public:
-  WaypointDetailsWidget(WidgetDialog &_dialog, WaypointPtr _waypoint,
+  WaypointDetailsWidget(WidgetDialog &_dialog,
+                        Waypoints *waypoints, WaypointPtr _waypoint,
                         ProtectedTaskManager *_task_manager, bool allow_edit) noexcept
     :dialog(_dialog),
      waypoint(std::move(_waypoint)),
      task_manager(_task_manager),
-     commands_widget(new WaypointCommandsWidget(look, &dialog, waypoint,
+     commands_widget(new WaypointCommandsWidget(look, &dialog, waypoints, waypoint,
                                                 task_manager, allow_edit)) {}
 
   void UpdatePage() noexcept;
@@ -652,7 +653,7 @@ UpdateCaption(WndForm *form, const Waypoint &waypoint)
 }
 
 void
-dlgWaypointDetailsShowModal(WaypointPtr _waypoint,
+dlgWaypointDetailsShowModal(Waypoints *waypoints, WaypointPtr _waypoint,
                             bool allow_navigation, bool allow_edit)
 {
   LastUsedWaypoints::Add(*_waypoint);
@@ -661,7 +662,7 @@ dlgWaypointDetailsShowModal(WaypointPtr _waypoint,
   TWidgetDialog<WaypointDetailsWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            look, nullptr);
-  dialog.SetWidget(dialog, _waypoint,
+  dialog.SetWidget(dialog, waypoints, _waypoint,
                    allow_navigation ? protected_task_manager : nullptr,
                    allow_edit);
 

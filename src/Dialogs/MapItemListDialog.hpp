@@ -9,6 +9,7 @@ struct MapLook;
 struct TrafficLook;
 struct FinalGlideBarLook;
 struct MapSettings;
+class Waypoints;
 class ProtectedAirspaceWarningManager;
 
 void
@@ -18,6 +19,7 @@ ShowMapItemListDialog(const MapItemList &_list,
                       const TrafficLook &_traffic_look,
                       const FinalGlideBarLook &_final_glide_look,
                       const MapSettings &_settings,
+                      Waypoints *waypoints,
                       ProtectedAirspaceWarningManager *airspace_warnings);
 
 void ShowMapItemListSettingsDialog();

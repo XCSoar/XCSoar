@@ -7,6 +7,7 @@
 #include "Engine/Waypoint/Ptr.hpp"
 
 class WndForm;
+class Waypoints;
 class ProtectedTaskManager;
 
 /**
@@ -16,6 +17,8 @@ class WaypointCommandsWidget final
   : public RowFormWidget {
   WndForm *const form;
 
+  Waypoints *const waypoints;
+
   const WaypointPtr waypoint;
 
   ProtectedTaskManager *const task_manager;
@@ -24,10 +27,12 @@ class WaypointCommandsWidget final
 
 public:
   WaypointCommandsWidget(const DialogLook &look, WndForm *_form,
+                         Waypoints *_waypoints,
                          WaypointPtr _waypoint,
                          ProtectedTaskManager *_task_manager,
                          bool _allow_edit) noexcept
     :RowFormWidget(look), form(_form),
+     waypoints(_waypoints),
      waypoint(std::move(_waypoint)), task_manager(_task_manager),
      allow_edit(_allow_edit) {}
 

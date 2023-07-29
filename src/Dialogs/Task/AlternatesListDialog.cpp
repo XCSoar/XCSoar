@@ -139,7 +139,7 @@ AlternatesListWidget::OnActivateItem([[maybe_unused]] unsigned index) noexcept
 }
 
 void
-dlgAlternatesListShowModal()
+dlgAlternatesListShowModal(Waypoints *waypoints) noexcept
 {
   if (protected_task_manager == nullptr)
     return;
@@ -165,5 +165,6 @@ dlgAlternatesListShowModal()
   if (i < 0 || (unsigned)i >= dialog.GetWidget().alternates.size())
     return;
 
-  dlgWaypointDetailsShowModal(dialog.GetWidget().alternates[i].waypoint, true);
+  dlgWaypointDetailsShowModal(waypoints,
+                              dialog.GetWidget().alternates[i].waypoint, true);
 }

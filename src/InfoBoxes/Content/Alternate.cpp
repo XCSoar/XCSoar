@@ -21,7 +21,9 @@
 static std::unique_ptr<Widget>
 LoadAlternatesPanel([[maybe_unused]] unsigned id) noexcept
 {
-  return std::make_unique<CallbackWidget>(dlgAlternatesListShowModal);
+  return std::make_unique<CallbackWidget>([]{
+    dlgAlternatesListShowModal(&way_points);
+  });
 }
 
 static constexpr

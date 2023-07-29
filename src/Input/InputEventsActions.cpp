@@ -371,14 +371,14 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
     wp = ShowWaypointListDialog(basic.location);
   }
   if (wp)
-    dlgWaypointDetailsShowModal(std::move(wp),
+    dlgWaypointDetailsShowModal(&way_points, std::move(wp),
                                 allow_navigation, allow_edit);
 }
 
 void
 InputEvents::eventWaypointEditor([[maybe_unused]] const TCHAR *misc)
 {
-  dlgConfigWaypointsShowModal();
+  dlgConfigWaypointsShowModal(way_points);
 }
 
 // StatusMessage
@@ -570,7 +570,7 @@ InputEvents::eventSetup(const TCHAR *misc)
   else if (StringIsEqual(misc, _T("Profile")))
     ProfileListDialog();
   else if (StringIsEqual(misc, _T("Alternates")))
-    dlgAlternatesListShowModal();
+    dlgAlternatesListShowModal(&way_points);
 
   trigger_redraw();
 }

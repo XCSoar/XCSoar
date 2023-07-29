@@ -247,6 +247,7 @@ ShowMapItemListDialog(const MapItemList &list,
 
 static void
 ShowMapItemDialog(const MapItem &item,
+                  Waypoints *waypoints,
                   ProtectedAirspaceWarningManager *airspace_warnings)
 {
   switch (item.type) {
@@ -264,7 +265,8 @@ ShowMapItemDialog(const MapItem &item,
                        airspace_warnings);
     break;
   case MapItem::Type::WAYPOINT:
-    dlgWaypointDetailsShowModal(((const WaypointMapItem &)item).waypoint,
+    dlgWaypointDetailsShowModal(waypoints,
+                                ((const WaypointMapItem &)item).waypoint,
                                 true, true);
     break;
   case MapItem::Type::TASK_OZ:
@@ -297,6 +299,7 @@ ShowMapItemListDialog(const MapItemList &list,
                       const TrafficLook &traffic_look,
                       const FinalGlideBarLook &final_glide_look,
                       const MapSettings &settings,
+                      Waypoints *waypoints,
                       ProtectedAirspaceWarningManager *airspace_warnings)
 {
   switch (list.size()) {
@@ -306,7 +309,7 @@ ShowMapItemListDialog(const MapItemList &list,
 
   case 1:
     /* only one map item, show it */
-    ShowMapItemDialog(*list[0], airspace_warnings);
+    ShowMapItemDialog(*list[0], waypoints, airspace_warnings);
     break;
 
   default:
@@ -316,6 +319,6 @@ ShowMapItemListDialog(const MapItemList &list,
                                   traffic_look, final_glide_look, settings);
     assert(i >= -1 && i < (int)list.size());
     if (i >= 0)
-      ShowMapItemDialog(*list[i], airspace_warnings);
+      ShowMapItemDialog(*list[i], waypoints, airspace_warnings);
   }
 }

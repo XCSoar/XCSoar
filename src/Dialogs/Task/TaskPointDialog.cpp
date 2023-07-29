@@ -422,7 +422,7 @@ inline void
 TaskPointWidget::OnDetailsClicked()
 {
   const OrderedTaskPoint &task_point = ordered_task.GetPoint(active_index);
-  dlgWaypointDetailsShowModal(task_point.GetWaypointPtr(), false);
+  dlgWaypointDetailsShowModal(&way_points, task_point.GetWaypointPtr(), false);
 }
 
 inline void

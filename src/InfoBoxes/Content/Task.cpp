@@ -30,7 +30,7 @@ ShowNextWaypointDetails() noexcept
   if (wp == nullptr)
     return;
 
-  dlgWaypointDetailsShowModal(std::move(wp), false);
+  dlgWaypointDetailsShowModal(&way_points, std::move(wp), false);
 }
 
 static std::unique_ptr<Widget>
