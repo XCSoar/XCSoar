@@ -11,7 +11,7 @@ class Waypoints;
 class OrderedTask;
 
 WaypointPtr
-ShowWaypointListDialog(const GeoPoint &location,
+ShowWaypointListDialog(Waypoints &waypoints, const GeoPoint &location,
                        OrderedTask *ordered_task = nullptr,
                        unsigned ordered_task_index = 0);
 

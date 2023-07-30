@@ -18,6 +18,7 @@
 #include <cassert>
 
 class OptionStartsWidget : public ListWidget {
+  Waypoints &waypoints;
   OrderedTask &task;
   bool modified = false;
 
@@ -26,8 +27,8 @@ class OptionStartsWidget : public ListWidget {
   TextRowRenderer row_renderer;
 
 public:
-  explicit OptionStartsWidget(OrderedTask &_task)
-    :task(_task) {}
+  OptionStartsWidget(Waypoints &_waypoints, OrderedTask &_task) noexcept
+    :waypoints(_waypoints), task(_task) {}
 
   void CreateButtons(WidgetDialog &dialog) {
     relocate_button = dialog.AddButton(_("Relocate"), [this](){
@@ -141,7 +142,7 @@ OptionStartsWidget::Relocate(unsigned ItemIndex)
   const unsigned index_optional_starts = ItemIndex - 1;
 
   const GeoPoint &location = task.GetPoint(0).GetLocation();
-  auto way_point = ShowWaypointListDialog(location);
+  auto way_point = ShowWaypointListDialog(waypoints, location);
   if (!way_point)
     return;
 
@@ -169,7 +170,7 @@ OptionStartsWidget::Remove(unsigned i)
 }
 
 bool
-dlgTaskOptionalStarts(OrderedTask &task)
+dlgTaskOptionalStarts(Waypoints &waypoints, OrderedTask &task)
 {
   assert(task.TaskSize() > 0);
 
@@ -177,7 +178,7 @@ dlgTaskOptionalStarts(OrderedTask &task)
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            UIGlobals::GetDialogLook(),
            _("Alternate Start Points"));
-  dialog.SetWidget(task);
+  dialog.SetWidget(waypoints, task);
   dialog.GetWidget().CreateButtons(dialog);
   dialog.EnableCursorSelection();
 

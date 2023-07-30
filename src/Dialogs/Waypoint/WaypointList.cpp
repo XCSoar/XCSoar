@@ -18,7 +18,6 @@
 #include "Waypoint/WaypointListBuilder.hpp"
 #include "Waypoint/WaypointFilter.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "Components.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "util/StringPointer.hxx"
 #include "util/AllocatedString.hxx"
@@ -34,6 +33,7 @@
 #include "Interface.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 #include "Language/Language.hpp"
+#include "Components.hpp"
 
 #include <algorithm>
 #include <list>
@@ -101,6 +101,8 @@ class WaypointFilterWidget;
 class WaypointListWidget final
   : public ListWidget, public DataFieldListener,
     NullBlackboardListener {
+  Waypoints &way_points;
+
   WndForm &dialog;
 
   WaypointFilterWidget &filter_widget;
@@ -116,12 +118,12 @@ class WaypointListWidget final
   const unsigned ordered_task_index;
 
 public:
-  WaypointListWidget(WndForm &_dialog,
+  WaypointListWidget(Waypoints &_way_points, WndForm &_dialog,
                      WaypointFilterWidget &_filter_widget,
                      GeoPoint _location, Angle _heading,
                      OrderedTask *_ordered_task,
                      unsigned _ordered_task_index)
-    :dialog(_dialog),
+    :way_points(_way_points), dialog(_dialog),
      filter_widget(_filter_widget),
      location(_location), last_heading(_heading),
      ordered_task(_ordered_task),
@@ -313,17 +315,13 @@ WaypointListWidget::Prepare(ContainerWindow &parent,
   UpdateList();
 }
 
-static const TCHAR *
-WaypointNameAllowedCharacters(const TCHAR *prefix)
-{
-  static TCHAR buffer[256];
-  return way_points.SuggestNamePrefix(prefix, buffer, ARRAY_SIZE(buffer));
-}
-
 static DataField *
-CreateNameDataField(DataFieldListener *listener)
+CreateNameDataField(Waypoints &waypoints, DataFieldListener *listener)
 {
-  return new PrefixDataField(_T(""), WaypointNameAllowedCharacters, listener);
+  return new PrefixDataField(_T(""), [&waypoints](const TCHAR *prefix){
+    static TCHAR buffer[256];
+    return waypoints.SuggestNamePrefix(prefix, buffer, ARRAY_SIZE(buffer));
+  }, listener);
 }
 
 static DataField *
@@ -386,7 +384,7 @@ void
 WaypointFilterWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                               [[maybe_unused]] const PixelRect &rc) noexcept
 {
-  Add(_("Name"), nullptr, CreateNameDataField(listener));
+  Add(_("Name"), nullptr, CreateNameDataField(way_points, listener));
   Add(_("Distance"), nullptr, CreateDistanceDataField(listener));
   Add(_("Direction"), nullptr, CreateDirectionDataField(listener, last_heading));
   Add(_("Type"), nullptr, CreateTypeDataField(listener));
@@ -477,7 +475,7 @@ WaypointListWidget::OnGPSUpdate([[maybe_unused]] const MoreData &basic)
 }
 
 WaypointPtr
-ShowWaypointListDialog(const GeoPoint &_location,
+ShowWaypointListDialog(Waypoints &waypoints, const GeoPoint &_location,
                        OrderedTask *_ordered_task, unsigned _ordered_task_index)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
@@ -498,7 +496,7 @@ ShowWaypointListDialog(const GeoPoint &_location,
   auto &buttons_widget = (WaypointListButtons &)left_widget->GetSecond();
 
   auto list_widget =
-    std::make_unique<WaypointListWidget>(dialog, filter_widget,
+    std::make_unique<WaypointListWidget>(waypoints, dialog, filter_widget,
                                          _location, heading,
                                          _ordered_task, _ordered_task_index);
   const auto &list_widget_ = *list_widget;

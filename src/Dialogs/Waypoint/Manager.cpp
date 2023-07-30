@@ -200,7 +200,7 @@ inline void
 WaypointManagerWidget::OnWaypointImportClicked()
 {
   const auto way_point =
-    ShowWaypointListDialog(CommonInterface::Basic().location);
+    ShowWaypointListDialog(way_points, CommonInterface::Basic().location);
   if (way_point) {
     Waypoint wp_copy = *way_point;
 

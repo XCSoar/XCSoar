@@ -99,7 +99,7 @@ InputEvents::eventGotoLookup([[maybe_unused]] const TCHAR *misc)
   if (protected_task_manager == NULL)
     return;
 
-  auto wp = ShowWaypointListDialog(basic.location);
+  auto wp = ShowWaypointListDialog(way_points, basic.location);
   if (wp != NULL) {
     protected_task_manager->DoGoto(std::move(wp));
     trigger_redraw();

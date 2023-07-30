@@ -432,7 +432,8 @@ TaskPointWidget::OnRelocateClicked()
     ? ordered_task.GetPoint(active_index - 1).GetLocation()
     : CommonInterface::Basic().location;
 
-  auto wp = ShowWaypointListDialog(gpBearing, &ordered_task, active_index);
+  auto wp = ShowWaypointListDialog(way_points, gpBearing,
+                                   &ordered_task, active_index);
   if (wp == nullptr)
     return;
 
@@ -481,7 +482,7 @@ TaskPointWidget::OnNextClicked()
 inline void
 TaskPointWidget::OnOptionalStartsClicked()
 {
-  if (dlgTaskOptionalStarts(ordered_task)) {
+  if (dlgTaskOptionalStarts(way_points, ordered_task)) {
     ordered_task.ClearName();
     ordered_task.UpdateGeometry();
     task_modified = true;

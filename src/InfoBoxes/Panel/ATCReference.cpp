@@ -65,7 +65,8 @@ ATCReferencePanel::Prepare(ContainerWindow &parent,
 
   AddButton(_("Relocate"), [this](){
     auto &location = CommonInterface::SetComputerSettings().poi.atc_reference;
-    auto waypoint = ShowWaypointListDialog(CommonInterface::Basic().location);
+    auto waypoint = ShowWaypointListDialog(way_points,
+                                           CommonInterface::Basic().location);
     if (waypoint != nullptr) {
       location = waypoint->location;
       UpdateValues();

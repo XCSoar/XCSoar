@@ -368,7 +368,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
     allow_navigation = false;
     allow_edit = false;
   } else if (StringIsEqual(misc, _T("select"))) {
-    wp = ShowWaypointListDialog(basic.location);
+    wp = ShowWaypointListDialog(way_points, basic.location);
   }
   if (wp)
     dlgWaypointDetailsShowModal(&way_points, std::move(wp),
