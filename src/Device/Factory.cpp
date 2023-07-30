@@ -12,7 +12,6 @@
 #include "Android/I2CbaroDevice.hpp"
 #include "Android/InternalSensors.hpp"
 #include "Android/IOIOHelper.hpp"
-#include "Android/Main.hpp"
 #include "Android/NunchuckDevice.hpp"
 #include "Android/VoltageDevice.hpp"
 #include "java/Closeable.hxx"
@@ -42,7 +41,7 @@ DeviceFactory::OpenInternalSensors(SensorListener &listener)
 {
 #ifdef ANDROID
   JNIEnv *const env = Java::GetEnv() ;
-  auto *internal_sensors = InternalSensors::Create(env, context,
+  auto *internal_sensors = InternalSensors::Create(env, &context,
                                                    permission_manager,
                                                    listener);
   if (internal_sensors) {
@@ -127,7 +126,7 @@ DeviceFactory::OpenVoltage(SensorListener &listener)
 Java::LocalCloseable
 DeviceFactory::OpenGliderLink(SensorListener &listener)
 {
-  return GliderLink::Create(Java::GetEnv(), *context, listener);
+  return GliderLink::Create(Java::GetEnv(), context, listener);
 }
 
 Java::LocalCloseable

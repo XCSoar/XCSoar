@@ -344,6 +344,10 @@ Startup(UI::Display &display)
   device_blackboard = new DeviceBlackboard();
   device_factory = new DeviceFactory{
     *asio_thread, *global_cares_channel,
+#ifdef ANDROID
+    *context, permission_manager,
+    bluetooth_helper, ioio_helper, usb_serial_helper,
+#endif
   };
   devices = new MultipleDevices(*device_factory);
 
