@@ -529,6 +529,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/DataComponents.cpp \
 	$(SRC)/DataGlobals.cpp \
 	\
+	$(SRC)/Device/Factory.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/MultipleDevices.cpp \
 	$(SRC)/Device/device.cpp \

@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Descriptor.hpp"
+#include "Factory.hpp"
 #include "DataEditor.hpp"
 #include "Driver.hpp"
 #include "Parser.hpp"
@@ -29,18 +30,9 @@
 #include "Job/Job.hpp"
 
 #ifdef ANDROID
-#include "java/Object.hxx"
 #include "java/Closeable.hxx"
 #include "java/Global.hxx"
-#include "Android/BluetoothHelper.hpp"
 #include "Android/InternalSensors.hpp"
-#include "Android/GliderLink.hpp"
-#include "Android/Main.hpp"
-#include "Android/Product.hpp"
-#include "Android/IOIOHelper.hpp"
-#include "Android/I2CbaroDevice.hpp"
-#include "Android/NunchuckDevice.hpp"
-#include "Android/VoltageDevice.hpp"
 #include "Android/Sensor.hpp"
 #endif
 
@@ -63,11 +55,11 @@ public:
   };
 };
 
-DeviceDescriptor::DeviceDescriptor(EventLoop &_event_loop,
-                                   Cares::Channel &_cares,
+DeviceDescriptor::DeviceDescriptor(DeviceFactory &_factory,
                                    unsigned _index,
                                    PortListener *_port_listener) noexcept
-  :event_loop(_event_loop), cares(_cares), index(_index),
+  :factory(_factory),
+   index(_index),
    port_listener(_port_listener)
 {
   config.Clear();
@@ -238,23 +230,11 @@ DeviceDescriptor::OpenInternalSensors()
   if (is_simulator())
     return true;
 
-#ifdef ANDROID
-  JNIEnv *const env = Java::GetEnv() ;
-  internal_sensors = InternalSensors::Create(env, context,
-                                             permission_manager,
-                                             *this);
-  if (internal_sensors) {
-    // TODO: Allow user to specify whether they want certain sensors.
-    internal_sensors->SubscribeToSensor(env, InternalSensors::TYPE_PRESSURE);
-    internal_sensors->SubscribeToSensor(env, InternalSensors::TYPE_ACCELEROMETER);
-    return true;
-  }
-#elif defined(__APPLE__)
-  internal_sensors = new InternalSensors(*this);
-  return (internal_sensors != nullptr);
-#endif
-#endif
+  internal_sensors = factory.OpenInternalSensors(*this);
+  return internal_sensors != nullptr;
+#else
   return false;
+#endif
 }
 
 inline bool
@@ -264,29 +244,12 @@ DeviceDescriptor::OpenDroidSoarV2()
   if (is_simulator())
     return true;
 
-  if (ioio_helper == nullptr)
-    return false;
-
   /* we use different values for the I2C Kalman filter */
   kalman_filter = {KF_I2C_MAX_DT, KF_I2C_VAR_ACCEL};
 
-  auto i2c = I2CbaroDevice::Create(Java::GetEnv(),
-                                   ioio_helper->GetHolder(),
-                                   0,
-                                   2 + (0x77 << 8) + (27 << 16), 0,	// bus, address
-                                   5,                               // update freq.
-                                   0,                               // flags
-                                   *this);
-  java_sensor = new Java::GlobalCloseable(i2c);
-
-  i2c = I2CbaroDevice::Create(Java::GetEnv(),
-                              ioio_helper->GetHolder(),
-                              1,
-                              1 + (0x77 << 8) + (46 << 16), 0 ,
-                              5,
-                              0,
-                              *this);
-  second_java_sensor = new Java::GlobalCloseable(i2c);
+  auto [a, b] = factory.OpenDroidSoarV2(*this);
+  java_sensor = new Java::GlobalCloseable(a);
+  second_java_sensor = new Java::GlobalCloseable(b);
 
   return true;
 #else
@@ -301,19 +264,10 @@ DeviceDescriptor::OpenI2Cbaro()
   if (is_simulator())
     return true;
 
-  if (ioio_helper == nullptr)
-    return false;
-
   /* we use different values for the I2C Kalman filter */
   kalman_filter = {KF_I2C_MAX_DT, KF_I2C_VAR_ACCEL};
 
-  auto i2c = I2CbaroDevice::Create(Java::GetEnv(),
-                                   ioio_helper->GetHolder(),
-                                   0,
-                                   config.i2c_bus, config.i2c_addr,
-                                   config.press_use == DeviceConfig::PressureUse::TEK_PRESSURE ? 20 : 5,
-                                   0, // called flags, actually reserved for future use.
-                                   *this);
+  auto i2c = factory.OpenI2Cbaro(config, *this);
   java_sensor = new Java::GlobalCloseable(i2c);
 
   return true;
@@ -329,15 +283,9 @@ DeviceDescriptor::OpenNunchuck()
   if (is_simulator())
     return true;
 
-  if (ioio_helper == nullptr)
-    return false;
-
   joy_state_x = joy_state_y = 0;
 
-  auto nunchuk = NunchuckDevice::Create(Java::GetEnv(),
-                                        ioio_helper->GetHolder(),
-                                        config.i2c_bus, 5, // twi, sample_rate
-                                        *this);
+  auto nunchuk = factory.OpenNunchuck(config, *this);
   java_sensor = new Java::GlobalCloseable(nunchuk);
   return true;
 #else
@@ -352,9 +300,6 @@ DeviceDescriptor::OpenVoltage()
   if (is_simulator())
     return true;
 
-  if (ioio_helper == nullptr)
-    return false;
-
   voltage_offset = config.sensor_offset;
   voltage_factor = config.sensor_factor;
 
@@ -362,10 +307,7 @@ DeviceDescriptor::OpenVoltage()
     i.Reset();
   temperature_filter.Reset();
 
-  auto voltage = VoltageDevice::Create(Java::GetEnv(),
-                                       ioio_helper->GetHolder(),
-                                       60, // sample_rate per minute
-                                       *this);
+  auto voltage = factory.OpenVoltage(*this);
   java_sensor = new Java::GlobalCloseable(voltage);
   return true;
 #else
@@ -380,8 +322,7 @@ DeviceDescriptor::OpenGliderLink()
   if (is_simulator())
     return true;
 
-  java_sensor = new Java::GlobalCloseable(GliderLink::Create(Java::GetEnv(),
-                                                             *context, *this));
+  java_sensor = new Java::GlobalCloseable(factory.OpenGliderLink(*this));
   return true;
 #else
   return false;
@@ -395,15 +336,7 @@ DeviceDescriptor::OpenBluetoothSensor()
   if (is_simulator())
     return true;
 
-  if (bluetooth_helper == nullptr)
-    throw std::runtime_error("Bluetooth not available");
-
-  if (config.bluetooth_mac.empty())
-    throw std::runtime_error("No Bluetooth MAC configured");
-
-  java_sensor = new Java::GlobalCloseable(bluetooth_helper->connectSensor(Java::GetEnv(),
-                                                                          config.bluetooth_mac,
-                                                                          *this));
+  java_sensor = new Java::GlobalCloseable(factory.OpenBluetoothSensor(config, *this));
   return true;
 #else
   return false;
@@ -445,7 +378,7 @@ try {
 
   std::unique_ptr<Port> port;
   try {
-    port = OpenPort(event_loop, cares, config, this, *this);
+    port = factory.OpenPort(config, this, *this);
   } catch (OperationCancelled) {
     return false;
   } catch (...) {

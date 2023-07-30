@@ -16,8 +16,7 @@
 #include <list>
 #include <tchar.h>
 
-namespace Cares { class Channel; }
-class EventLoop;
+class DeviceFactory;
 class DeviceDescriptor;
 class DeviceDispatcher;
 struct MoreData;
@@ -38,7 +37,7 @@ class MultipleDevices final : PortListener {
   std::list<PortListener *> listeners;
 
 public:
-  MultipleDevices(EventLoop &event_loop, Cares::Channel &cares) noexcept;
+  explicit MultipleDevices(DeviceFactory &factory) noexcept;
   ~MultipleDevices() noexcept;
 
   DeviceDescriptor &operator[](unsigned i) const noexcept {

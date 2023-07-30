@@ -6,14 +6,13 @@
 #include "Descriptor.hpp"
 #include "Dispatcher.hpp"
 
-MultipleDevices::MultipleDevices(EventLoop &event_loop,
-                                 Cares::Channel &cares) noexcept
+MultipleDevices::MultipleDevices(DeviceFactory &factory) noexcept
 {
   for (unsigned i = 0; i < NUMDEV; ++i) {
     DeviceDispatcher *dispatcher = dispatchers[i] =
       new DeviceDispatcher(*this, i);
 
-    devices[i] = new DeviceDescriptor(event_loop, cares, i, this);
+    devices[i] = new DeviceDescriptor(factory, i, this);
     devices[i]->SetDispatcher(dispatcher);
   }
 }

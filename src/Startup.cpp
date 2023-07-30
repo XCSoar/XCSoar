@@ -33,6 +33,7 @@
 #include "Waypoint/WaypointDetailsReader.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
+#include "Device/Factory.hpp"
 #include "Device/device.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Topography/TopographyStore.hpp"
@@ -109,6 +110,7 @@ static TaskManager *task_manager;
 static GlideComputerEvents *glide_computer_events;
 static AllMonitors *all_monitors;
 static GlideComputerTaskEvents *task_events;
+static DeviceFactory *device_factory;
 
 static bool
 LoadProfile()
@@ -340,7 +342,10 @@ Startup(UI::Display &display)
 
   // Initialize DeviceBlackboard
   device_blackboard = new DeviceBlackboard();
-  devices = new MultipleDevices(*asio_thread, *global_cares_channel);
+  device_factory = new DeviceFactory{
+    *asio_thread, *global_cares_channel,
+  };
+  devices = new MultipleDevices(*device_factory);
 
   // Initialize main blackboard data
   task_events = new GlideComputerTaskEvents();
@@ -692,6 +697,8 @@ Shutdown()
 
   delete devices;
   devices = nullptr;
+  delete device_factory;
+  device_factory = nullptr;
   delete device_blackboard;
   device_blackboard = nullptr;
 
