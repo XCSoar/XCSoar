@@ -30,6 +30,7 @@ DeviceFactory::OpenPort(const DeviceConfig &config, PortListener *listener,
 #ifdef ANDROID
                     bluetooth_helper,
                     ioio_helper,
+                    usb_serial_helper,
 #endif
                     config, listener, handler);
 }

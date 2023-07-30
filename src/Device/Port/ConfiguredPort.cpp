@@ -68,6 +68,7 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
 #ifdef ANDROID
                  BluetoothHelper *bluetooth_helper,
                  IOIOHelper *ioio_helper,
+                 UsbSerialHelper *usb_serial_helper,
 #endif
                  const DeviceConfig &config, PortListener *listener,
                  DataHandler &handler)
@@ -205,7 +206,11 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
     if (config.path.empty())
       throw std::runtime_error("No name configured");
 
-    return OpenAndroidUsbSerialPort(config.path.c_str(), config.baud_rate,
+    if (usb_serial_helper == nullptr)
+      throw std::runtime_error{"USB serial not available"};
+
+    return OpenAndroidUsbSerialPort(*usb_serial_helper,
+                                    config.path.c_str(), config.baud_rate,
                                     listener, handler);
 #else
     throw std::runtime_error("Android USB serial not available");
@@ -229,6 +234,7 @@ OpenPort(EventLoop &event_loop, Cares::Channel &cares,
 #ifdef ANDROID
          BluetoothHelper *bluetooth_helper,
          IOIOHelper *ioio_helper,
+         UsbSerialHelper *usb_serial_helper,
 #endif
          const DeviceConfig &config, PortListener *listener,
          DataHandler &handler)
@@ -237,6 +243,7 @@ OpenPort(EventLoop &event_loop, Cares::Channel &cares,
 #ifdef ANDROID
                                bluetooth_helper,
                                ioio_helper,
+                               usb_serial_helper,
 #endif
                                config, listener, handler);
   if (port != nullptr)

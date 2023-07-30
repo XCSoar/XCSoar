@@ -8,7 +8,9 @@
 class Port;
 class PortListener;
 class DataHandler;
+class UsbSerialHelper;
 
 std::unique_ptr<Port>
-OpenAndroidUsbSerialPort(const char *name, unsigned baud,
+OpenAndroidUsbSerialPort(UsbSerialHelper &usb_serial_helper,
+                         const char *name, unsigned baud,
                          PortListener *_listener, DataHandler &handler);

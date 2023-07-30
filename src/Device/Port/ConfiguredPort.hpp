@@ -15,6 +15,7 @@ struct DeviceConfig;
 #ifdef ANDROID
 class BluetoothHelper;
 class IOIOHelper;
+class UsbSerialHelper;
 #endif
 
 /**
@@ -26,6 +27,7 @@ OpenPort(EventLoop &event_loop, Cares::Channel &cares,
 #ifdef ANDROID
          BluetoothHelper *bluetooth_helper,
          IOIOHelper *ioio_helper,
+         UsbSerialHelper *usb_serial_helper,
 #endif
          const DeviceConfig &config, PortListener *listener,
          DataHandler &handler);
