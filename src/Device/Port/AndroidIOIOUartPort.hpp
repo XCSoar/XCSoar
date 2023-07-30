@@ -11,6 +11,7 @@
 class Port;
 class PortListener;
 class DataHandler;
+class IOIOHelper;
 
 namespace AndroidIOIOUartPort
 {
@@ -33,5 +34,6 @@ namespace AndroidIOIOUartPort
 }
 
 std::unique_ptr<Port>
-OpenAndroidIOIOUartPort(unsigned uart_id, unsigned baud_rate,
+OpenAndroidIOIOUartPort(IOIOHelper &ioio_helper,
+                        unsigned uart_id, unsigned baud_rate,
                         PortListener *listener, DataHandler &handler);

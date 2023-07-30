@@ -67,6 +67,7 @@ static std::unique_ptr<Port>
 OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
 #ifdef ANDROID
                  BluetoothHelper *bluetooth_helper,
+                 IOIOHelper *ioio_helper,
 #endif
                  const DeviceConfig &config, PortListener *listener,
                  DataHandler &handler)
@@ -129,7 +130,11 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
     if (config.ioio_uart_id >= AndroidIOIOUartPort::getNumberUarts())
       throw std::runtime_error("No IOIOUart configured in profile");
 
-    return OpenAndroidIOIOUartPort(config.ioio_uart_id, config.baud_rate,
+    if (ioio_helper == nullptr)
+      throw std::runtime_error{"IOIO not available"};
+
+    return OpenAndroidIOIOUartPort(*ioio_helper,
+                                   config.ioio_uart_id, config.baud_rate,
                                    listener, handler);
 #else
     throw std::runtime_error("IOIO driver not available");
@@ -223,6 +228,7 @@ std::unique_ptr<Port>
 OpenPort(EventLoop &event_loop, Cares::Channel &cares,
 #ifdef ANDROID
          BluetoothHelper *bluetooth_helper,
+         IOIOHelper *ioio_helper,
 #endif
          const DeviceConfig &config, PortListener *listener,
          DataHandler &handler)
@@ -230,6 +236,7 @@ OpenPort(EventLoop &event_loop, Cares::Channel &cares,
   auto port = OpenPortInternal(event_loop, cares,
 #ifdef ANDROID
                                bluetooth_helper,
+                               ioio_helper,
 #endif
                                config, listener, handler);
   if (port != nullptr)
