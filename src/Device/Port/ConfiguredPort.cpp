@@ -65,6 +65,9 @@ WrapPort(const DeviceConfig &config, PortListener *listener,
 
 static std::unique_ptr<Port>
 OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
+#ifdef ANDROID
+                 BluetoothHelper *bluetooth_helper,
+#endif
                  const DeviceConfig &config, PortListener *listener,
                  DataHandler &handler)
 {
@@ -87,7 +90,12 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
     if (config.bluetooth_mac.empty())
       throw std::runtime_error("No Bluetooth MAC configured");
 
-    return OpenAndroidBleHm10Port(config.bluetooth_mac, listener, handler);
+    if (bluetooth_helper == nullptr)
+      throw std::runtime_error("Bluetooth not available");
+                         
+    return OpenAndroidBleHm10Port(*bluetooth_helper,
+                                  config.bluetooth_mac,
+                                  listener, handler);
 #else
     throw std::runtime_error("Bluetooth not available");
 #endif
@@ -97,14 +105,21 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
     if (config.bluetooth_mac.empty())
       throw std::runtime_error("No Bluetooth MAC configured");
 
-    return OpenAndroidBluetoothPort(config.bluetooth_mac, listener, handler);
+    if (bluetooth_helper == nullptr)
+      throw std::runtime_error("Bluetooth not available");
+
+    return OpenAndroidBluetoothPort(*bluetooth_helper, config.bluetooth_mac,
+                                    listener, handler);
 #else
     throw std::runtime_error("Bluetooth not available");
 #endif
 
   case DeviceConfig::PortType::RFCOMM_SERVER:
 #ifdef ANDROID
-    return OpenAndroidBluetoothServerPort(listener, handler);
+    if (bluetooth_helper == nullptr)
+      throw std::runtime_error("Bluetooth not available");
+
+    return OpenAndroidBluetoothServerPort(*bluetooth_helper, listener, handler);
 #else
     throw std::runtime_error("Bluetooth not available");
 #endif
@@ -206,10 +221,17 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
 
 std::unique_ptr<Port>
 OpenPort(EventLoop &event_loop, Cares::Channel &cares,
+#ifdef ANDROID
+         BluetoothHelper *bluetooth_helper,
+#endif
          const DeviceConfig &config, PortListener *listener,
          DataHandler &handler)
 {
-  auto port = OpenPortInternal(event_loop, cares, config, listener, handler);
+  auto port = OpenPortInternal(event_loop, cares,
+#ifdef ANDROID
+                               bluetooth_helper,
+#endif
+                               config, listener, handler);
   if (port != nullptr)
     port = WrapPort(config, listener, handler, std::move(port));
   return port;

@@ -27,6 +27,9 @@ DeviceFactory::OpenPort(const DeviceConfig &config, PortListener *listener,
                         DataHandler &handler)
 {
   return ::OpenPort(event_loop, cares,
+#ifdef ANDROID
+                    bluetooth_helper,
+#endif
                     config, listener, handler);
 }
 
