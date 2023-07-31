@@ -9,6 +9,10 @@ struct lua_State;
 
 namespace Lua {
 
+/**
+ * Representation of a Lua error in a C++ object which can be thrown
+ * to C++ exception handlers.
+ */
 class Error : public std::runtime_error {
 public:
 	using std::runtime_error::runtime_error;
