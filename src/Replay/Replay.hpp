@@ -23,7 +23,7 @@ class Replay final
 
   AbstractReplay *replay = nullptr;
 
-  Logger *logger;
+  Logger *const logger;
   ProtectedTaskManager &task_manager;
 
   AllocatedPath path = nullptr;
