@@ -569,7 +569,7 @@ InputEvents::eventSetup(const TCHAR *misc)
     ShowWeatherDialog(_T("rasp"));
   else if (StringIsEqual(misc, _T("Replay"))) {
     if (!CommonInterface::MovementDetected())
-      ShowReplayDialog();
+      ShowReplayDialog(*replay);
   } else if (StringIsEqual(misc, _T("Switches")))
     dlgSwitchesShowModal();
   else if (StringIsEqual(misc, _T("Teamcode")))

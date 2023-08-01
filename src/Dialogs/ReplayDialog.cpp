@@ -19,9 +19,11 @@ class ReplayControlWidget final
     RATE,
   };
 
+  Replay &replay;
+
 public:
-  explicit ReplayControlWidget(const DialogLook &look) noexcept
-    :RowFormWidget(look) {}
+  ReplayControlWidget(Replay &_replay, const DialogLook &look) noexcept
+    :RowFormWidget(look), replay(_replay) {}
 
   void CreateButtons(WidgetDialog &dialog) noexcept {
     dialog.AddButton(_("Start"), [this](){ OnStartClicked(); });
@@ -49,21 +51,21 @@ ReplayControlWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
           {},
           _T("*.nmea\0*.igc\0"),
           true);
-  LoadValue(FILE, replay->GetFilename());
+  LoadValue(FILE, replay.GetFilename());
 
   AddFloat(_("Rate"),
            _("Time acceleration of replay. Set to 0 for pause, 1 for normal real-time replay."),
            _T("%.0f x"), _T("%.0f"),
-           0, 10, 1, false, replay->GetTimeScale());
+           0, 10, 1, false, replay.GetTimeScale());
   GetDataField(RATE).SetOnModified([this]{
-    replay->SetTimeScale(GetValueFloat(RATE));
+    replay.SetTimeScale(GetValueFloat(RATE));
   });
 }
 
 inline void
 ReplayControlWidget::OnStopClicked() noexcept
 {
-  replay->Stop();
+  replay.Stop();
 }
 
 inline void
@@ -72,7 +74,7 @@ ReplayControlWidget::OnStartClicked() noexcept
   const Path path = GetValueFile(FILE);
 
   try {
-    replay->Start(path);
+    replay.Start(path);
   } catch (...) {
     ShowError(std::current_exception(), _("Replay"));
   }
@@ -81,14 +83,14 @@ ReplayControlWidget::OnStartClicked() noexcept
 inline void
 ReplayControlWidget::OnFastForwardClicked() noexcept
 {
-  replay->FastForward(std::chrono::minutes{10});
+  replay.FastForward(std::chrono::minutes{10});
 }
 
 void
-ShowReplayDialog() noexcept
+ShowReplayDialog(Replay &replay) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  ReplayControlWidget *widget = new ReplayControlWidget(look);
+  ReplayControlWidget *widget = new ReplayControlWidget(replay, look);
   WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
                       look, _("Replay"), widget);
   widget->CreateButtons(dialog);
