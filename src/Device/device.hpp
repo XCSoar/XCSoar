@@ -3,5 +3,11 @@
 
 #pragma once
 
-void devStartup();
-void devRestart();
+struct SystemSettings;
+class MultipleDevices;
+
+void
+devStartup(MultipleDevices &devices, const SystemSettings &settings);
+
+void
+devRestart(MultipleDevices &devices, const SystemSettings &settings);

@@ -472,8 +472,10 @@ Startup(UI::Display &display)
   AudioVarioGlue::Configure(ui_settings.sound.vario);
 
   // Start the device thread(s)
-  operation.SetText(_("Starting devices"));
-  devStartup();
+  if (devices != nullptr) {
+    operation.SetText(_("Starting devices"));
+    devStartup(*devices, CommonInterface::GetSystemSettings());
+  }
 
 /*
   -- Reset polar in case devices need the data

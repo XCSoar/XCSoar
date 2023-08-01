@@ -7,10 +7,9 @@
 #include "Features.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Device/Descriptor.hpp"
-#include "Components.hpp"
 #include "LogFile.hpp"
-#include "Interface.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
+#include "SystemSettings.hpp"
 
 static void
 devInitOne(DeviceDescriptor &device, const DeviceConfig &config)
@@ -82,15 +81,13 @@ DeviceConfigOverlaps(const DeviceConfig &config, I begin, I end)
 }
 
 void
-devStartup()
+devStartup(MultipleDevices &devices, const SystemSettings &settings)
 {
   LogString("Register serial devices");
 
-  const SystemSettings &settings = CommonInterface::GetSystemSettings();
-
   bool none_available = true;
   for (unsigned i = 0; i < NUMDEV; ++i) {
-    DeviceDescriptor &device = (*devices)[i];
+    DeviceDescriptor &device = devices[i];
     const DeviceConfig &config = settings.devices[i];
     if (!config.IsAvailable()) {
       device.ClearConfig();
@@ -99,7 +96,7 @@ devStartup()
 
     none_available = false;
 
-    if (DeviceConfigOverlaps(config, devices->begin(), devices->begin() + i)) {
+    if (DeviceConfigOverlaps(config, devices.begin(), devices.begin() + i)) {
       device.ClearConfig();
       continue;
     }
@@ -117,23 +114,23 @@ devStartup()
     config.Clear();
     config.port_type = DeviceConfig::PortType::INTERNAL;
 
-    DeviceDescriptor &device = (*devices)[0];
+    DeviceDescriptor &device = devices[0];
     devInitOne(device, config);
 #endif
   }
 }
 
 void
-devRestart()
+devRestart(MultipleDevices &devices, const SystemSettings &settings)
 {
   LogString("RestartCommPorts");
 
-  devices->Close();
+  devices.Close();
 
-  devStartup();
+  devStartup(devices, settings);
 
   /* this OperationEnvironment instance must be persistent, because
      DeviceDescriptor::Open() is asynchronous */
   static PopupOperationEnvironment env;
-  devices->Open(env);
+  devices.Open(env);
 }

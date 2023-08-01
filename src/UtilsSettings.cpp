@@ -157,8 +157,8 @@ SettingsLeave(const UISettings &old_ui_settings)
       SetAirspaceGroundLevels(airspace_database, *data_components->terrain);
   }
 
-  if (DevicePortChanged)
-    devRestart();
+  if (DevicePortChanged && devices != nullptr)
+    devRestart(*devices, CommonInterface::GetSystemSettings());
 
   if (FlarmFileChanged) {
     ReloadFlarmDatabases();
