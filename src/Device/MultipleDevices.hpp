@@ -16,6 +16,8 @@
 #include <list>
 #include <tchar.h>
 
+class DeviceBlackboard;
+class NMEALogger;
 class DeviceFactory;
 class DeviceDescriptor;
 class DeviceDispatcher;
@@ -37,7 +39,9 @@ class MultipleDevices final : PortListener {
   std::list<PortListener *> listeners;
 
 public:
-  explicit MultipleDevices(DeviceFactory &factory) noexcept;
+  MultipleDevices(DeviceBlackboard &blackboard,
+                  NMEALogger *nmea_logger,
+                  DeviceFactory &factory) noexcept;
   ~MultipleDevices() noexcept;
 
   DeviceDescriptor &operator[](unsigned i) const noexcept {

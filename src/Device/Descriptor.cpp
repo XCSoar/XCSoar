@@ -11,7 +11,6 @@
 #include "Driver/FLARM/Device.hpp"
 #include "Driver/LX/Internal.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
-#include "Components.hpp"
 #include "Port/ConfiguredPort.hpp"
 #include "Port/DumpPort.hpp"
 #include "NMEA/Info.hpp"
@@ -55,10 +54,13 @@ public:
   };
 };
 
-DeviceDescriptor::DeviceDescriptor(DeviceFactory &_factory,
+DeviceDescriptor::DeviceDescriptor(DeviceBlackboard &_blackboard,
+                                   NMEALogger *_nmea_logger,
+                                   DeviceFactory &_factory,
                                    unsigned _index,
                                    PortListener *_port_listener) noexcept
-  :factory(_factory),
+  :blackboard(_blackboard), nmea_logger(_nmea_logger),
+   factory(_factory),
    index(_index),
    port_listener(_port_listener)
 {
@@ -602,7 +604,7 @@ DeviceDescriptor::CanDeclare() const noexcept
 {
   return driver != nullptr &&
     (driver->CanDeclare() ||
-     device_blackboard->IsFLARM(index));
+     blackboard.IsFLARM(index));
 }
 
 bool
@@ -672,29 +674,29 @@ DeviceDescriptor::Return() noexcept
 bool
 DeviceDescriptor::IsAlive() const noexcept
 {
-  const std::lock_guard lock{device_blackboard->mutex};
-  return device_blackboard->RealState(index).alive;
+  const std::lock_guard lock{blackboard.mutex};
+  return blackboard.RealState(index).alive;
 }
 
 TimeStamp
 DeviceDescriptor::GetClock() const noexcept
 {
-  const std::lock_guard lock{device_blackboard->mutex};
-  const NMEAInfo &basic = device_blackboard->RealState(index);
+  const std::lock_guard lock{blackboard.mutex};
+  const NMEAInfo &basic = blackboard.RealState(index);
   return basic.clock;
 }
 
 NMEAInfo
 DeviceDescriptor::GetData() const noexcept
 {
-  const std::lock_guard lock{device_blackboard->mutex};
-  return device_blackboard->RealState(index);
+  const std::lock_guard lock{blackboard.mutex};
+  return blackboard.RealState(index);
 }
 
 DeviceDataEditor
 DeviceDescriptor::BeginEdit() noexcept
 {
-  return {*device_blackboard, index};
+  return {blackboard, index};
 }
 
 bool
@@ -1095,7 +1097,7 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
       second_device->Declare(declaration, home, env);
   } else {
     /* enable the "muxed FLARM" hack? */
-    const bool flarm = device_blackboard->IsFLARM(index) &&
+    const bool flarm = blackboard.IsFLARM(index) &&
       !IsDriver(_T("FLARM"));
 
     return DoDeclare(declaration, *port, *driver, device, flarm,
@@ -1309,7 +1311,7 @@ DeviceDescriptor::DataReceived(std::span<const std::byte> s) noexcept
 
   // Pass data directly to drivers that use binary data protocols
   if (driver != nullptr && device != nullptr && driver->UsesRawData()) {
-    auto basic = device_blackboard->LockGetDeviceDataUpdateClock(index);
+    auto basic = blackboard.LockGetDeviceDataUpdateClock(index);
 
     const ExternalSettings old_settings = basic.settings;
 
@@ -1319,7 +1321,7 @@ DeviceDescriptor::DataReceived(std::span<const std::byte> s) noexcept
       if (!config.sync_from_device)
         basic.settings = old_settings;
 
-      device_blackboard->LockSetDeviceDataScheduleMerge(index, basic);
+      blackboard.LockSetDeviceDataScheduleMerge(index, basic);
     }
 
     return true;

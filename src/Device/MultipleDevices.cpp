@@ -8,13 +8,16 @@
 
 #include <algorithm> // for std::any_of()
 
-MultipleDevices::MultipleDevices(DeviceFactory &factory) noexcept
+MultipleDevices::MultipleDevices(DeviceBlackboard &blackboard,
+                                 NMEALogger *nmea_logger,
+                                 DeviceFactory &factory) noexcept
 {
   for (unsigned i = 0; i < NUMDEV; ++i) {
     DeviceDispatcher *dispatcher = dispatchers[i] =
       new DeviceDispatcher(*this, i);
 
-    devices[i] = new DeviceDescriptor(factory, i, this);
+    devices[i] = new DeviceDescriptor(blackboard, nmea_logger,
+                                      factory, i, this);
     devices[i]->SetDispatcher(dispatcher);
   }
 }

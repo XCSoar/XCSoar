@@ -40,6 +40,8 @@
 #include <stdio.h>
 
 namespace Java { class GlobalCloseable; }
+class DeviceBlackboard;
+class NMEALogger;
 struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;
@@ -65,6 +67,10 @@ class DeviceDescriptor final
     SensorListener,
 #endif
     PortLineSplitter {
+
+  DeviceBlackboard &blackboard;
+
+  NMEALogger *const nmea_logger;
 
   DeviceFactory &factory;
 
@@ -262,7 +268,9 @@ class DeviceDescriptor final
   bool borrowed = false;
 
 public:
-  DeviceDescriptor(DeviceFactory &_factory,
+  DeviceDescriptor(DeviceBlackboard &_blackboard,
+                   NMEALogger *_nmea_logger,
+                   DeviceFactory &_factory,
                    unsigned index, PortListener *port_listener) noexcept;
   ~DeviceDescriptor() noexcept;
 

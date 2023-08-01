@@ -352,7 +352,7 @@ Startup(UI::Display &display)
     bluetooth_helper, ioio_helper, usb_serial_helper,
 #endif
   };
-  devices = new MultipleDevices(*device_factory);
+  devices = new MultipleDevices(*device_blackboard, nmea_logger, *device_factory);
 
   // Initialize main blackboard data
   task_events = new GlideComputerTaskEvents();
