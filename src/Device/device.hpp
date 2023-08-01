@@ -14,5 +14,4 @@ VarioWriteNMEA(const TCHAR *Text, OperationEnvironment &env);
 DeviceDescriptor *devVarioFindVega();
 
 void devStartup();
-void devShutdown();
 void devRestart();

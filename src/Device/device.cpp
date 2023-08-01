@@ -143,23 +143,11 @@ devVarioFindVega()
 }
 
 void
-devShutdown()
-{
-  if (devices == nullptr)
-    return;
-
-  // Stop COM devices
-  LogString("Stop COM devices");
-
-  devices->Close();
-}
-
-void
 devRestart()
 {
   LogString("RestartCommPorts");
 
-  devShutdown();
+  devices->Close();
 
   devStartup();
 

@@ -624,7 +624,10 @@ Shutdown()
   operation.SetText(_("Shutdown, please wait..."));
 
   // Close any device connections
-  devShutdown();
+  if (devices != nullptr) {
+    LogString("Stop devices");
+    devices->Close();
+  }
 
   // Stop threads
   LogString("Stop threads");
