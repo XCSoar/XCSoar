@@ -74,7 +74,7 @@ CreateCalculationThread() noexcept
 
   /* create and run MergeThread, because GlideComputer's first
      iteration depends on MergeThread's results */
-  merge_thread = new MergeThread(*device_blackboard);
+  merge_thread = new MergeThread(*device_blackboard, devices);
   merge_thread->FirstRun();
 
   /* copy the MergeThead::FirstRun() results to the
