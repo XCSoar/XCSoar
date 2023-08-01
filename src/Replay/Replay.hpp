@@ -9,6 +9,7 @@
 #include "time/Stamp.hpp"
 #include "system/Path.hpp"
 
+class DeviceBlackboard;
 class Logger;
 class ProtectedTaskManager;
 class AbstractReplay;
@@ -17,6 +18,8 @@ class Error;
 
 class Replay final
 {
+  DeviceBlackboard &device_blackboard;
+
   UI::Timer timer{[this]{ OnTimer(); }};
 
   double time_scale = 1;
@@ -57,8 +60,10 @@ class Replay final
   CatmullRomInterpolator *cli = nullptr;
 
 public:
-  Replay(Logger *_logger, ProtectedTaskManager &_task_manager)
-    :logger(_logger), task_manager(_task_manager) {}
+  Replay(DeviceBlackboard &_device_blackboard,
+         Logger *_logger, ProtectedTaskManager &_task_manager)
+    :device_blackboard(_device_blackboard),
+     logger(_logger), task_manager(_task_manager) {}
 
   ~Replay() {
     Stop();

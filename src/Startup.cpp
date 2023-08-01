@@ -376,7 +376,7 @@ Startup(UI::Display &display)
   glide_computer->SetLogger(logger);
   glide_computer->Initialise();
 
-  replay = new Replay(logger, *protected_task_manager);
+  replay = new Replay(*device_blackboard, logger, *protected_task_manager);
 
 #ifdef HAVE_CMDLINE_REPLAY
   if (CommandLine::replay_path != nullptr) {
