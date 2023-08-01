@@ -7,6 +7,7 @@
 #include "thread/Mutex.hxx"
 #include "Computer/Settings.hpp"
 
+class DeviceBlackboard;
 class GlideComputer;
 
 /**
@@ -32,11 +33,14 @@ class CalculationThread final : public WorkerThread {
 
   double screen_distance_meters;
 
+  DeviceBlackboard &device_blackboard;
+
   /** Pointer to the GlideComputer that should be used */
   GlideComputer &glide_computer;
 
 public:
-  CalculationThread(GlideComputer &_glide_computer);
+  CalculationThread(DeviceBlackboard &_device_blackboard,
+                    GlideComputer &_glide_computer) noexcept;
 
   void SetComputerSettings(const ComputerSettings &new_value);
   void SetScreenDistanceMeters(double new_value);

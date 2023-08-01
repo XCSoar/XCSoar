@@ -91,7 +91,8 @@ CreateCalculationThread() noexcept
   /* copy GlideComputer results to DeviceBlackboard */
   device_blackboard->ReadBlackboard(glide_computer->Calculated());
 
-  calculation_thread = new CalculationThread(*glide_computer);
+  calculation_thread = new CalculationThread(*device_blackboard,
+                                             *glide_computer);
   calculation_thread->SetComputerSettings(CommonInterface::GetComputerSettings());
 }
 
