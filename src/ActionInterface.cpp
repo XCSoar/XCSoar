@@ -100,7 +100,7 @@ ActionInterface::SetBallast(double ballast, bool to_devices) noexcept
     backend_components->protected_task_manager->SetGlidePolar(polar);
 
   if (backend_components->calculation_thread) {
-    backend_components->calculation_thread->SetComputerSettings(GetComputerSettings());
+    backend_components->calculation_thread->SetPolarSettings(GetComputerSettings().polar);
     backend_components->calculation_thread->ForceTrigger();
   }
 
@@ -130,7 +130,7 @@ ActionInterface::SetBugs(double bugs, bool to_devices) noexcept
     backend_components->protected_task_manager->SetGlidePolar(polar);
 
   if (backend_components->calculation_thread) {
-    backend_components->calculation_thread->SetComputerSettings(GetComputerSettings());
+    backend_components->calculation_thread->SetPolarSettings(GetComputerSettings().polar);
     backend_components->calculation_thread->ForceTrigger();
   }
 
@@ -166,7 +166,7 @@ ActionInterface::SetMacCready(double mc, bool to_devices) noexcept
     backend_components->protected_task_manager->SetGlidePolar(polar);
 
   if (backend_components->calculation_thread) {
-    backend_components->calculation_thread->SetComputerSettings(GetComputerSettings());
+    backend_components->calculation_thread->SetPolarSettings(GetComputerSettings().polar);
     backend_components->calculation_thread->ForceTrigger();
   }
 

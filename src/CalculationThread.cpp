@@ -36,6 +36,13 @@ CalculationThread::SetComputerSettings(const ComputerSettings &new_value) noexce
 }
 
 void
+CalculationThread::SetPolarSettings(const PolarSettings &new_value) noexcept
+{
+  const std::lock_guard lock{mutex};
+  settings_computer.polar = new_value;
+}
+
+void
 CalculationThread::SetScreenDistanceMeters(double new_value) noexcept
 {
   const std::lock_guard lock{mutex};

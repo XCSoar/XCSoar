@@ -43,6 +43,7 @@ public:
                     GlideComputer &_glide_computer) noexcept;
 
   void SetComputerSettings(const ComputerSettings &new_value) noexcept;
+  void SetPolarSettings(const PolarSettings &new_value) noexcept;
   void SetScreenDistanceMeters(double new_value) noexcept;
 
   /**
