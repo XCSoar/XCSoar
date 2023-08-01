@@ -381,14 +381,15 @@ Startup(UI::Display &display)
   backend_components->glide_computer->SetLogger(backend_components->igc_logger.get());
   backend_components->glide_computer->Initialise();
 
-  replay = new Replay(*backend_components->device_blackboard,
-                      backend_components->igc_logger.get(),
-                      *backend_components->protected_task_manager);
+  backend_components->replay =
+    std::make_unique<Replay>(*backend_components->device_blackboard,
+                             backend_components->igc_logger.get(),
+                             *backend_components->protected_task_manager);
 
 #ifdef HAVE_CMDLINE_REPLAY
   if (CommandLine::replay_path != nullptr) {
     try {
-      replay->Start(Path(CommandLine::replay_path));
+      backend_components->replay->Start(Path(CommandLine::replay_path));
     } catch (...) {
       LogError(std::current_exception());
     }
@@ -701,9 +702,6 @@ Shutdown()
 
   delete terrain_loader;
   terrain_loader = nullptr;
-
-  delete replay;
-  replay = nullptr;
 
   backend_components->devices.reset();
   delete device_factory;

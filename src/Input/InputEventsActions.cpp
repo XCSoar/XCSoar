@@ -568,8 +568,8 @@ InputEvents::eventSetup(const TCHAR *misc)
   else if (StringIsEqual(misc, _T("Weather")))
     ShowWeatherDialog(_T("rasp"));
   else if (StringIsEqual(misc, _T("Replay"))) {
-    if (!CommonInterface::MovementDetected())
-      ShowReplayDialog(*replay);
+    if (!CommonInterface::MovementDetected() && backend_components->replay)
+      ShowReplayDialog(*backend_components->replay);
   } else if (StringIsEqual(misc, _T("Switches")))
     dlgSwitchesShowModal();
   else if (StringIsEqual(misc, _T("Teamcode")))

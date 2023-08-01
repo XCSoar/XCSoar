@@ -226,16 +226,16 @@ ProcessTimer() noexcept
       backend_components->devices->Tick();
 
     // also service replay logger
-    if (replay && replay->IsActive()) {
+    if (backend_components->replay && backend_components->replay->IsActive()) {
       if (CommonInterface::MovementDetected())
-        replay->Stop();
+        backend_components->replay->Stop();
     }
 
     ConnectionProcessTimer();
   } else {
     static PeriodClock m_clock;
 
-    if (replay && replay->IsActive()) {
+    if (backend_components->replay && backend_components->replay->IsActive()) {
       m_clock.Update();
     } else if (m_clock.Elapsed() >= std::chrono::seconds(1)) {
       m_clock.Update();

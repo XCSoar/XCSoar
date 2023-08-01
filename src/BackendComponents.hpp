@@ -14,6 +14,7 @@ class MergeThread;
 class ProtectedTaskManager;
 class GlideComputer;
 class CalculationThread;
+class Replay;
 
 /**
  * This singleton manages components that are part of XCSoar's backend
@@ -32,6 +33,8 @@ struct BackendComponents {
   std::unique_ptr<ProtectedTaskManager> protected_task_manager;
   std::unique_ptr<GlideComputer> glide_computer;
   std::unique_ptr<CalculationThread> calculation_thread;
+
+  std::unique_ptr<Replay> replay;
 
   BackendComponents() noexcept;
   ~BackendComponents() noexcept;

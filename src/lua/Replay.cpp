@@ -6,9 +6,10 @@
 #include "MetaTable.hxx"
 #include "Util.hxx"
 #include "system/Path.hpp"
-#include "Components.hpp"
 #include "Replay/Replay.hpp"
 #include "util/ConvertString.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 extern "C" {
 #include <lauxlib.h>
@@ -21,9 +22,9 @@ l_replay_index(lua_State *L)
   if (name == nullptr) {
     return 0;
   } else if (StringIsEqual(name, "time_scale")) {
-    Lua::Push(L, (lua_Integer)replay->GetTimeScale());
+    Lua::Push(L, (lua_Integer)backend_components->replay->GetTimeScale());
   } else if (StringIsEqual(name, "virtual_time")) {
-    Lua::Push(L, replay->GetVirtualTime());
+    Lua::Push(L, backend_components->replay->GetVirtualTime());
   } else
     return 0;
 
@@ -38,7 +39,7 @@ l_replay_settimescale(lua_State *L)
     return luaL_error(L, "Invalid parameters");
 
   float timescale = luaL_checknumber(L, 1);
-  replay->SetTimeScale(timescale);
+  backend_components->replay->SetTimeScale(timescale);
 
   return 0;
 }
@@ -51,7 +52,7 @@ l_replay_fastforward(lua_State *L)
     return luaL_error(L, "Invalid parameters");
 
   FloatDuration delta_s{luaL_checknumber(L, 1)};
-  return !replay->FastForward(delta_s);
+  return !backend_components->replay->FastForward(delta_s);
 }
 
 static int
@@ -65,7 +66,7 @@ l_replay_start(lua_State *L)
     Path p(filename);
 
     try {
-      replay->Start(p);
+      backend_components->replay->Start(p);
       return 0;
     } catch (...) {
     }
@@ -76,7 +77,7 @@ l_replay_start(lua_State *L)
 static int
 l_replay_stop([[maybe_unused]] lua_State *L)
 {
-  replay->Stop();
+  backend_components->replay->Stop();
   return 0;
 }
 

@@ -15,8 +15,6 @@ AsyncTerrainOverviewLoader *terrain_loader;
 DrawThread *draw_thread;
 #endif
 
-Replay *replay;
-
 #ifdef HAVE_TRACKING
 TrackingGlue *tracking;
 #endif
