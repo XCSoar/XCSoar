@@ -11,7 +11,7 @@ class ProtectedTaskManager;
 class DemoReplayGlue
   : public AbstractReplay, private DemoReplay
 {
-  ProtectedTaskManager* task_manager;
+  ProtectedTaskManager &task_manager;
 
 public:
   DemoReplayGlue(ProtectedTaskManager &_task_manager);

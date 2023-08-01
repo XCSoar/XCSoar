@@ -9,9 +9,9 @@
 #include "NMEA/Info.hpp"
 
 DemoReplayGlue::DemoReplayGlue(ProtectedTaskManager &_task_manager)
-  :task_manager(&_task_manager)
+  :task_manager(_task_manager)
 {
-  ProtectedTaskManager::ExclusiveLease protected_task_manager(*task_manager);
+  ProtectedTaskManager::ExclusiveLease protected_task_manager{task_manager};
   const TaskAccessor ta(protected_task_manager, 0);
   parms.SetRealistic();
   parms.start_alt = device_blackboard->Basic().nav_altitude;
@@ -32,7 +32,7 @@ DemoReplayGlue::Update(NMEAInfo &data)
   bool retval;
 
   {
-    ProtectedTaskManager::ExclusiveLease protected_task_manager(*task_manager);
+    ProtectedTaskManager::ExclusiveLease protected_task_manager{task_manager};
     TaskAccessor ta(protected_task_manager, floor_alt);
     retval = DemoReplay::Update(std::chrono::seconds{1}, ta);
   }
