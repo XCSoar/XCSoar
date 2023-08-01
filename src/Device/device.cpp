@@ -11,7 +11,6 @@
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
-#include "util/Algorithm.hpp"
 
 static void
 devInitOne(DeviceDescriptor &device, const DeviceConfig &config)
@@ -76,10 +75,10 @@ template<typename I>
 static bool
 DeviceConfigOverlaps(const DeviceConfig &config, I begin, I end)
 {
-  return ExistsIf(begin, end,
-                  [&config](const DeviceDescriptor *d) {
-                    return DeviceConfigOverlaps(config, d->GetConfig());
-                  });
+  return std::any_of(begin, end,
+                     [&config](const DeviceDescriptor *d) {
+                       return DeviceConfigOverlaps(config, d->GetConfig());
+                     });
 }
 
 void
