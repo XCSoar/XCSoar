@@ -75,14 +75,14 @@ class DeviceListWidget final
 
     int8_t battery_percent;
 
-    void Set(const DeviceConfig &config, const DeviceDescriptor &device,
+    void Set(const DeviceConfig &config, const DeviceDescriptor *device,
              const NMEAInfo &basic) {
       /* if a DeviceDescriptor is "unconfigured" but its DeviceConfig
          contains a valid configuration, then it got disabled by
          DeviceConfigOverlaps(), i.e. it's duplicate */
-      duplicate = !config.IsDisabled() && !device.IsConfigured();
+      duplicate = !config.IsDisabled() && (device != nullptr && !device->IsConfigured());
 
-      switch (device.GetState()) {
+      switch (device != nullptr ? device->GetState() : PortState::LIMBO) {
       case PortState::READY:
         open = true;
         error = false;
@@ -111,7 +111,7 @@ class DeviceListWidget final
       traffic = basic.flarm.IsDetected();
       temperature = basic.temperature_available;
       humidity = basic.humidity_available;
-      debug = device.IsDumpEnabled();
+      debug = device != nullptr && device->IsDumpEnabled();
       radio = basic.settings.has_active_frequency || 
         basic.settings.has_standby_frequency;
       transponder = basic.settings.has_transponder_code;
@@ -141,7 +141,7 @@ class DeviceListWidget final
       i = 0;
     }
 
-    void Set(const DeviceConfig &config, const DeviceDescriptor &device,
+    void Set(const DeviceConfig &config, const DeviceDescriptor *device,
              const NMEAInfo &basic) {
       i = 0;
       flags.Set(config, device, basic);
@@ -210,7 +210,8 @@ public:
   void Show(const PixelRect &rc) noexcept override {
     ListWidget::Show(rc);
 
-    devices->AddPortListener(*this);
+    if (devices != nullptr)
+      devices->AddPortListener(*this);
     CommonInterface::GetLiveBlackboard().AddListener(*this);
 
     RefreshList();
@@ -221,7 +222,9 @@ public:
     ListWidget::Hide();
 
     CommonInterface::GetLiveBlackboard().RemoveListener(*this);
-    devices->RemovePortListener(*this);
+
+    if (devices != nullptr)
+      devices->RemovePortListener(*this);
   }
 
   /* virtual methods from class List::Handler */
@@ -264,17 +267,20 @@ DeviceListWidget::RefreshList()
 
     Item n;
     n.Set(CommonInterface::GetSystemSettings().devices[i],
-          (*devices)[i], device_blackboard.RealState(i));
+          devices != nullptr ? &(*devices)[i] : nullptr,
+          device_blackboard.RealState(i));
 
     if (n != item) {
       item = n;
       modified = true;
     }
 
-    auto error_message = (*devices)[i].GetErrorMessage();
-    if (error_message != error_messages[i]) {
-      error_messages[i] = std::move(error_message);
-      modified = true;
+    if (devices != nullptr) {
+      auto error_message = (*devices)[i].GetErrorMessage();
+      if (error_message != error_messages[i]) {
+        error_messages[i] = std::move(error_message);
+        modified = true;
+      }
     }
   }
 
@@ -331,7 +337,7 @@ DeviceListWidget::UpdateButtons()
   } else
     disable_button->SetEnabled(false);
 
-  if (is_simulator() || current >= NUMDEV) {
+  if (is_simulator() || current >= NUMDEV || devices == nullptr) {
     reconnect_button->SetEnabled(false);
     flight_button->SetEnabled(false);
     manage_button->SetEnabled(false);
@@ -501,23 +507,30 @@ DeviceListWidget::EnableDisableCurrent()
   Profile::SetDeviceConfig(Profile::map, index, config);
   Profile::Save();
 
-  /* .. and reopen the device */
-
-  DeviceDescriptor &descriptor = (*devices)[index];
-  descriptor.SetConfig(config);
+  /* update the UI */
 
   GetList().Invalidate();
   UpdateButtons();
 
-  /* this OperationEnvironment instance must be persistent, because
-     DeviceDescriptor::Open() is asynchronous */
-  static MessageOperationEnvironment env;
-  descriptor.Reopen(env);
+  /* .. and reopen the device */
+
+  if (devices != nullptr) {
+    DeviceDescriptor &descriptor = (*devices)[index];
+    descriptor.SetConfig(config);
+
+    /* this OperationEnvironment instance must be persistent, because
+       DeviceDescriptor::Open() is asynchronous */
+    static MessageOperationEnvironment env;
+    descriptor.Reopen(env);
+  }
 }
 
 inline void
 DeviceListWidget::ReconnectCurrent()
 {
+  if (devices == nullptr)
+    return;
+
   const unsigned current = GetList().GetCursorIndex();
   if (current >= NUMDEV)
     return;
@@ -552,6 +565,9 @@ DeviceListWidget::ReconnectCurrent()
 inline void
 DeviceListWidget::DownloadFlightFromCurrent()
 {
+  if (devices == nullptr)
+    return;
+
   const unsigned current = GetList().GetCursorIndex();
   if (current >= NUMDEV)
     return;
@@ -599,23 +615,30 @@ DeviceListWidget::EditCurrent()
   Profile::SetDeviceConfig(Profile::map, index, config);
   Profile::Save();
 
-  /* .. and reopen the device */
-
-  DeviceDescriptor &descriptor = (*devices)[index];
-  descriptor.SetConfig(widget.GetConfig());
+  /* update the UI */
 
   GetList().Invalidate();
   UpdateButtons();
 
-  /* this OperationEnvironment instance must be persistent, because
-     DeviceDescriptor::Open() is asynchronous */
-  static MessageOperationEnvironment env;
-  descriptor.Reopen(env);
+  /* .. and reopen the device */
+
+  if (devices != nullptr) {
+    DeviceDescriptor &descriptor = (*devices)[index];
+    descriptor.SetConfig(widget.GetConfig());
+
+    /* this OperationEnvironment instance must be persistent, because
+       DeviceDescriptor::Open() is asynchronous */
+    static MessageOperationEnvironment env;
+    descriptor.Reopen(env);
+  }
 }
 
 inline void
 DeviceListWidget::ManageCurrent()
 {
+  if (devices == nullptr)
+    return;
+
   const unsigned current = GetList().GetCursorIndex();
   if (current >= NUMDEV)
     return;
@@ -691,6 +714,9 @@ DeviceListWidget::ManageCurrent()
 inline void
 DeviceListWidget::MonitorCurrent()
 {
+  if (devices == nullptr)
+    return;
+
   const unsigned current = GetList().GetCursorIndex();
   if (current >= NUMDEV)
     return;
@@ -702,6 +728,9 @@ DeviceListWidget::MonitorCurrent()
 inline void
 DeviceListWidget::DebugCurrent()
 {
+  if (devices == nullptr)
+    return;
+
   const unsigned current = GetList().GetCursorIndex();
   if (current >= NUMDEV)
     return;
