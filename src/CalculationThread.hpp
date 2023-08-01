@@ -42,8 +42,8 @@ public:
   CalculationThread(DeviceBlackboard &_device_blackboard,
                     GlideComputer &_glide_computer) noexcept;
 
-  void SetComputerSettings(const ComputerSettings &new_value);
-  void SetScreenDistanceMeters(double new_value);
+  void SetComputerSettings(const ComputerSettings &new_value) noexcept;
+  void SetScreenDistanceMeters(double new_value) noexcept;
 
   /**
    * Throws on error.
@@ -53,7 +53,7 @@ public:
     SetLowPriority();
   }
 
-  void ForceTrigger();
+  void ForceTrigger() noexcept;
 
 protected:
   void Tick() noexcept override;

@@ -29,14 +29,14 @@ CalculationThread::CalculationThread(DeviceBlackboard &_device_blackboard,
 }
 
 void
-CalculationThread::SetComputerSettings(const ComputerSettings &new_value)
+CalculationThread::SetComputerSettings(const ComputerSettings &new_value) noexcept
 {
   const std::lock_guard lock{mutex};
   settings_computer = new_value;
 }
 
 void
-CalculationThread::SetScreenDistanceMeters(double new_value)
+CalculationThread::SetScreenDistanceMeters(double new_value) noexcept
 {
   const std::lock_guard lock{mutex};
   screen_distance_meters = new_value;
@@ -105,7 +105,7 @@ CalculationThread::Tick() noexcept
 }
 
 void
-CalculationThread::ForceTrigger()
+CalculationThread::ForceTrigger() noexcept
 {
   {
     const std::lock_guard lock{mutex};
