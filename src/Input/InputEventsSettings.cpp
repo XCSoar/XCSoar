@@ -186,7 +186,7 @@ InputEvents::eventBugs(const TCHAR *misc)
 
   if (BUGS != oldBugs) {
     settings.SetBugs(BUGS);
-    backend_components->protected_task_manager->SetGlidePolar(settings.glide_polar_task);
+    backend_components->SetTaskPolar(settings);
   }
 }
 
@@ -203,8 +203,8 @@ InputEvents::eventBallast(const TCHAR *misc)
   if (!backend_components->protected_task_manager)
     return;
 
-  GlidePolar &polar =
-    CommonInterface::SetComputerSettings().polar.glide_polar_task;
+  auto &settings = CommonInterface::SetComputerSettings().polar;
+  GlidePolar &polar = settings.glide_polar_task;
   auto BALLAST = polar.GetBallast();
   auto oldBallast = BALLAST;
 
@@ -229,7 +229,7 @@ InputEvents::eventBallast(const TCHAR *misc)
 
   if (BALLAST != oldBallast) {
     polar.SetBallast(BALLAST);
-    backend_components->protected_task_manager->SetGlidePolar(polar);
+    backend_components->SetTaskPolar(settings);
   }
 }
 

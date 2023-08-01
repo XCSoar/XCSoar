@@ -69,8 +69,7 @@ public:
   void FlipBallastTimer();
 
   void PublishPolarSettings() {
-    if (backend_components->protected_task_manager)
-      backend_components->protected_task_manager->SetGlidePolar(polar_settings.glide_polar_task);
+    backend_components->SetTaskPolar(polar_settings);
   }
 
   void SetBallastLitres(double ballast_litres) {
