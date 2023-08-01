@@ -1,13 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
-#include "DemoReplay.hpp"
 
-DemoReplay::DemoReplay():
-  parms(),
-  autopilot(parms),
-  aircraft()
-{
-}
+#include "DemoReplay.hpp"
 
 void
 DemoReplay::Start(const TaskAccessor& task, const GeoPoint& default_location)

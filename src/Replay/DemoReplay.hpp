@@ -11,10 +11,8 @@ class DemoReplay
 {
 public:
   AutopilotParameters parms;
-  TaskAutoPilot autopilot;
+  TaskAutoPilot autopilot{parms};
   AircraftSim aircraft;
-
-  DemoReplay();
 
 protected:
   void Start(const TaskAccessor& task, const GeoPoint& default_location);
