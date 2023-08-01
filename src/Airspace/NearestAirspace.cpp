@@ -51,7 +51,7 @@ FindHorizontal(const GeoPoint &location,
 [[gnu::pure]]
 NearestAirspace
 NearestAirspace::FindHorizontal(const MoreData &basic,
-                                const ProtectedAirspaceWarningManager &airspace_warnings,
+                                const ProtectedAirspaceWarningManager *airspace_warnings,
                                 const Airspaces &airspace_database) noexcept
 {
   if (!basic.location_available)
@@ -61,7 +61,7 @@ NearestAirspace::FindHorizontal(const MoreData &basic,
   /* find the nearest airspace */
   //consider only active airspaces
   auto outside_and_active =
-    MakeAndPredicate(ActiveAirspacePredicate(&airspace_warnings),
+    MakeAndPredicate(ActiveAirspacePredicate(airspace_warnings),
                      OutsideAirspacePredicate(AGeoPoint(basic.location, 0)));
 
   //if altitude is available, filter airspaces in same height as airplane
@@ -84,7 +84,7 @@ NearestAirspace::FindHorizontal(const MoreData &basic,
 NearestAirspace
 NearestAirspace::FindVertical(const MoreData &basic,
                               const DerivedInfo &calculated,
-                              const ProtectedAirspaceWarningManager &airspace_warnings,
+                              const ProtectedAirspaceWarningManager *airspace_warnings,
                               const Airspaces &airspace_database) noexcept
 {
   if (!basic.location_available ||
@@ -101,7 +101,7 @@ NearestAirspace::FindVertical(const MoreData &basic,
 
   const AbstractAirspace *nearest = nullptr;
   double nearest_delta = 100000;
-  const ActiveAirspacePredicate active_predicate(&airspace_warnings);
+  const ActiveAirspacePredicate active_predicate(airspace_warnings);
 
   for (const auto &i : airspace_database.QueryInside(basic.location)) {
     const AbstractAirspace &airspace = i.GetAirspace();

@@ -8,7 +8,6 @@
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
-#include "Computer/GlideComputer.hpp"
 #include "Airspace/NearestAirspace.hpp"
 #include "DataComponents.hpp"
 
@@ -22,26 +21,26 @@ l_airspace_index(lua_State *L)
   else if (StringIsEqual(name, "nearest_vertical_distance")) {
     NearestAirspace nearest = NearestAirspace::FindVertical(CommonInterface::Basic(),
                                                             CommonInterface::Calculated(),
-                                                            glide_computer->GetAirspaceWarnings(),
+                                                            GetAirspaceWarnings(),
                                                             airspace_database);
     if (!nearest.IsDefined()) return 0;
     Lua::Push(L, nearest.distance);
   } else if (StringIsEqual(name, "nearest_vertical_name")) {
     NearestAirspace nearest = NearestAirspace::FindVertical(CommonInterface::Basic(),
                                                             CommonInterface::Calculated(),
-                                                            glide_computer->GetAirspaceWarnings(),
+                                                            GetAirspaceWarnings(),
                                                             airspace_database);
     if (!nearest.IsDefined()) return 0;
     Lua::Push(L, nearest.airspace->GetName());
   } else if (StringIsEqual(name, "nearest_horizontal_distance")) {
     NearestAirspace nearest = NearestAirspace::FindHorizontal(CommonInterface::Basic(),
-                                                              glide_computer->GetAirspaceWarnings(),
+                                                              GetAirspaceWarnings(),
                                                               airspace_database);
     if (!nearest.IsDefined()) return 0;
     Lua::Push(L, nearest.distance);
   } else if (StringIsEqual(name, "nearest_horizontal_name")) {
     NearestAirspace nearest = NearestAirspace::FindHorizontal(CommonInterface::Basic(),
-                                                              glide_computer->GetAirspaceWarnings(),
+                                                              GetAirspaceWarnings(),
                                                               airspace_database);
     if (!nearest.IsDefined()) return 0;
     Lua::Push(L, nearest.airspace->GetName());

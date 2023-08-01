@@ -7,14 +7,13 @@
 #include "Components.hpp"
 #include "DataComponents.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
-#include "Computer/GlideComputer.hpp"
 #include "Airspace/NearestAirspace.hpp"
 
 void
 UpdateInfoBoxNearestAirspaceHorizontal(InfoBoxData &data) noexcept
 {
   NearestAirspace nearest = NearestAirspace::FindHorizontal(CommonInterface::Basic(),
-                                                            glide_computer->GetAirspaceWarnings(),
+                                                            GetAirspaceWarnings(),
                                                             *data_components->airspaces);
   if (!nearest.IsDefined()) {
     data.SetInvalid();
@@ -30,7 +29,7 @@ UpdateInfoBoxNearestAirspaceVertical(InfoBoxData &data) noexcept
 {
   NearestAirspace nearest = NearestAirspace::FindVertical(CommonInterface::Basic(),
                                                           CommonInterface::Calculated(),
-                                                          glide_computer->GetAirspaceWarnings(),
+                                                          GetAirspaceWarnings(),
                                                           *data_components->airspaces);
   if (!nearest.IsDefined()) {
     data.SetInvalid();
