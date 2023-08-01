@@ -13,6 +13,7 @@ class MultipleDevices;
 class DeviceBlackboard;
 class MergeThread;
 class ProtectedTaskManager;
+class ProtectedAirspaceWarningManager;
 class GlideComputer;
 class CalculationThread;
 class Replay;
@@ -42,6 +43,13 @@ struct BackendComponents {
 
   BackendComponents(const BackendComponents &) = delete;
   BackendComponents &operator=(const BackendComponents &) = delete;
+
+/**
+ * Returns the global ProtectedAirspaceWarningManager instance.  May
+ * be nullptr if disabled.
+ */
+  [[gnu::pure]]
+  ProtectedAirspaceWarningManager *GetAirspaceWarnings() noexcept;
 
   /**
    * Call this after modifying the #GlidePolar in #PolarSettings to

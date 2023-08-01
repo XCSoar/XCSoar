@@ -131,8 +131,8 @@ public:
     const AirspaceMapItem &as_item = (const AirspaceMapItem &)item;
 
     return item.type == MapItem::Type::AIRSPACE &&
-      GetAirspaceWarnings() != nullptr &&
-      !GetAirspaceWarnings()->GetAckDay(*as_item.airspace);
+      backend_components->GetAirspaceWarnings() != nullptr &&
+      !backend_components->GetAirspaceWarnings()->GetAckDay(*as_item.airspace);
   }
 
   void OnActivateItem(unsigned index) noexcept override;
@@ -221,7 +221,7 @@ MapItemListWidget::OnAckClicked()
 {
   const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
     list[GetCursorIndex()];
-  GetAirspaceWarnings()->AcknowledgeDay(as_item.airspace);
+  backend_components->GetAirspaceWarnings()->AcknowledgeDay(as_item.airspace);
   UpdateButtons();
 }
 

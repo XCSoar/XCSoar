@@ -22,11 +22,3 @@ extern DrawThread *draw_thread;
 
 extern TrackingGlue *tracking;
 extern TIM::Glue *tim_glue;
-
-/**
- * Returns the global ProtectedAirspaceWarningManager instance.  May
- * be nullptr if disabled.
- */
-[[gnu::pure]]
-ProtectedAirspaceWarningManager *
-GetAirspaceWarnings();

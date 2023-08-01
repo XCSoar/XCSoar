@@ -20,6 +20,14 @@ BackendComponents::BackendComponents() noexcept
 
 BackendComponents::~BackendComponents() noexcept = default;
 
+ProtectedAirspaceWarningManager *
+BackendComponents::GetAirspaceWarnings() noexcept
+{
+  return glide_computer
+    ? &glide_computer->GetAirspaceWarnings()
+    : nullptr;
+}
+
 void
 BackendComponents::SetTaskPolar(const PolarSettings &settings) noexcept
 {

@@ -3,7 +3,6 @@
 
 #include "AirspaceWarningMonitor.hpp"
 #include "Interface.hpp"
-#include "Components.hpp"
 #include "Asset.hpp"
 #include "Audio/Sound.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
@@ -16,6 +15,8 @@
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Formatter/TimeFormatter.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 class AirspaceWarningWidget final
   : public QuestionWidget {
@@ -116,7 +117,7 @@ AirspaceWarningMonitor::Check() noexcept
 
   last = calculated.airspace_warnings.latest;
 
-  auto *airspace_warnings = GetAirspaceWarnings();
+  auto *airspace_warnings = backend_components->GetAirspaceWarnings();
   if (airspace_warnings == nullptr) {
     HideWidget();
     return;

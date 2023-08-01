@@ -2,11 +2,12 @@
 // Copyright The XCSoar Project
 
 #include "Components.hpp"
-#include "BackendComponents.hpp"
-#include "Computer/GlideComputer.hpp"
+#include "Tracking/Features.hpp"
 #include "net/http/Features.hpp"
 #include "thread/Debug.hpp"
 #include "thread/Handle.hpp"
+
+#include <cassert>
 
 FileCache *file_cache;
 AsyncTerrainOverviewLoader *terrain_loader;
@@ -22,14 +23,6 @@ TrackingGlue *tracking;
 #ifdef HAVE_HTTP
 TIM::Glue *tim_glue;
 #endif
-
-ProtectedAirspaceWarningManager *
-GetAirspaceWarnings()
-{
-  return backend_components->glide_computer != nullptr
-    ? &backend_components->glide_computer->GetAirspaceWarnings()
-    : nullptr;
-}
 
 #ifndef NDEBUG
 

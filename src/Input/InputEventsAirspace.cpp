@@ -8,6 +8,7 @@
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
@@ -46,7 +47,8 @@ InputEvents::eventAirSpace(const TCHAR *misc)
       Message::AddMessage(_("Show airspace on"));
     return;
   } else if (StringIsEqual(misc, _T("list"))) {
-    ShowAirspaceListDialog(*data_components->airspaces, GetAirspaceWarnings());
+    ShowAirspaceListDialog(*data_components->airspaces,
+                           backend_components->GetAirspaceWarnings());
     return;
   }
 
@@ -58,8 +60,7 @@ InputEvents::eventAirSpace(const TCHAR *misc)
 void
 InputEvents::eventClearAirspaceWarnings([[maybe_unused]] const TCHAR *misc)
 {
-  ProtectedAirspaceWarningManager *airspace_warnings = GetAirspaceWarnings();
-  if (airspace_warnings != NULL)
+  if (auto *airspace_warnings = backend_components->GetAirspaceWarnings())
     airspace_warnings->AcknowledgeAll();
 }
 
@@ -78,7 +79,7 @@ InputEvents::eventNearestAirspaceDetails([[maybe_unused]] const TCHAR *misc)
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();
 
-  ProtectedAirspaceWarningManager *airspace_warnings = GetAirspaceWarnings();
+  auto *airspace_warnings = backend_components->GetAirspaceWarnings();
   if (airspace_warnings != nullptr && !airspace_warnings->IsEmpty()) {
     // Prevent the dialog from closing itself without active warning
     // This is relevant if there are only acknowledged airspaces in the list
