@@ -33,13 +33,13 @@ class MergeThread final : public WorkerThread {
   FlarmComputer flarm_computer;
 
 public:
-  MergeThread(DeviceBlackboard &_device_blackboard);
+  MergeThread(DeviceBlackboard &_device_blackboard) noexcept;
 
   /**
    * This method is called during XCSoar startup, for the initial run
    * of the MergeThread.
    */
-  void FirstRun() {
+  void FirstRun() noexcept {
     assert(!IsDefined());
 
     Process();
@@ -54,7 +54,7 @@ public:
   }
 
 private:
-  void Process();
+  void Process() noexcept;
 
 protected:
   void Tick() noexcept override;

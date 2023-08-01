@@ -9,7 +9,7 @@
 #include "Audio/VarioGlue.hpp"
 #include "Device/MultipleDevices.hpp"
 
-MergeThread::MergeThread(DeviceBlackboard &_device_blackboard)
+MergeThread::MergeThread(DeviceBlackboard &_device_blackboard) noexcept
   :WorkerThread("MergeThread",
 #ifdef KOBO
                 /* throttle more on the Kobo, because the EPaper
@@ -28,7 +28,7 @@ MergeThread::MergeThread(DeviceBlackboard &_device_blackboard)
 }
 
 void
-MergeThread::Process()
+MergeThread::Process() noexcept
 {
   assert(!IsDefined() || IsInside());
 
