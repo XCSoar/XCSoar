@@ -5,6 +5,9 @@
 
 #include <memory>
 
+class Logger;
+class NMEALogger;
+class GlueFlightLogger;
 class MultipleDevices;
 class DeviceBlackboard;
 class MergeThread;
@@ -17,6 +20,10 @@ class CalculationThread;
  * loggers).
  */
 struct BackendComponents {
+  std::unique_ptr<Logger> igc_logger;
+  std::unique_ptr<NMEALogger> nmea_logger;
+  std::unique_ptr<GlueFlightLogger> flight_logger;
+
   const std::unique_ptr<DeviceBlackboard> device_blackboard;
   std::unique_ptr<MultipleDevices> devices;
   std::unique_ptr<MergeThread> merge_thread;

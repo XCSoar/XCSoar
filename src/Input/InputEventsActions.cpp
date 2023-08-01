@@ -215,7 +215,8 @@ try {
   protected_task_manager->SetStartTimeSpan(ts);
 
   // Log pilot event
-  logger->LogPilotEvent(CommonInterface::Basic());
+  if (backend_components->igc_logger)
+    backend_components->igc_logger->LogPilotEvent(CommonInterface::Basic());
 
   // Let devices know the pilot event was pressed
   if (backend_components->devices) {
@@ -439,6 +440,7 @@ InputEvents::eventAutoLogger(const TCHAR *misc)
 void
 InputEvents::eventLogger(const TCHAR *misc)
 try {
+  auto *logger = backend_components->igc_logger.get();
   if (logger == nullptr)
     return;
 
@@ -466,8 +468,8 @@ try {
     logger->GUIToggleLogger(basic, settings_computer,
                             protected_task_manager, true);
   else if (StringIsEqual(misc, _T("nmea"))) {
-    nmea_logger->ToggleEnabled();
-    if (nmea_logger->IsEnabled()) {
+    backend_components->nmea_logger->ToggleEnabled();
+    if (backend_components->nmea_logger->IsEnabled()) {
       Message::AddMessage(_("NMEA log on"));
     } else {
       Message::AddMessage(_("NMEA log off"));

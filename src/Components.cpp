@@ -15,9 +15,6 @@ AsyncTerrainOverviewLoader *terrain_loader;
 DrawThread *draw_thread;
 #endif
 
-Logger *logger;
-NMEALogger *nmea_logger;
-GlueFlightLogger *flight_logger;
 Replay *replay;
 
 #ifdef HAVE_TRACKING

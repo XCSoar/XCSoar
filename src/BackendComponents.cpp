@@ -5,6 +5,9 @@
 #include "Device/MultipleDevices.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Computer/GlideComputer.hpp"
+#include "Logger/Logger.hpp"
+#include "Logger/NMEALogger.hpp"
+#include "Logger/GlueFlightLogger.hpp"
 #include "MergeThread.hpp"
 #include "CalculationThread.hpp"
 

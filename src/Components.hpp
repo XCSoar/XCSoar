@@ -9,9 +9,6 @@ class DrawThread;
 class ProtectedAirspaceWarningManager;
 class ProtectedTaskManager;
 class Replay;
-class Logger;
-class NMEALogger;
-class GlueFlightLogger;
 class TrackingGlue;
 namespace TIM { class Glue; }
 
@@ -26,10 +23,6 @@ extern AsyncTerrainOverviewLoader *terrain_loader;
 #ifndef ENABLE_OPENGL
 extern DrawThread *draw_thread;
 #endif
-
-extern Logger *logger;
-extern NMEALogger *nmea_logger;
-extern GlueFlightLogger *flight_logger;
 
 extern TrackingGlue *tracking;
 extern TIM::Glue *tim_glue;

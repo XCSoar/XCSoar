@@ -292,7 +292,8 @@ LookupMacro(tstring_view name, bool &invalid) noexcept
     invalid |= !Calculated().terrain_valid;
     return nullptr;
   } else if (name == _T("LoggerActive")) {
-    return logger != nullptr && logger->IsLoggerActive()
+    return backend_components->igc_logger != nullptr &&
+      backend_components->igc_logger->IsLoggerActive()
       ? _("Stop")
       : _("Start");
   } else if (name == _T("SnailTrailToggleName")) {

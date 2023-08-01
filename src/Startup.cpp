@@ -342,8 +342,8 @@ Startup(UI::Display &display)
 
   InputEvents::readFile();
 
-  logger = new Logger();
-  nmea_logger = new NMEALogger();
+  backend_components->igc_logger = std::make_unique<Logger>();
+  backend_components->nmea_logger = std::make_unique<NMEALogger>();
 
   // Initialize DeviceBlackboard
   device_factory = new DeviceFactory{
@@ -355,7 +355,8 @@ Startup(UI::Display &display)
   };
 
   backend_components->devices = std::make_unique<MultipleDevices>(*backend_components->device_blackboard,
-                                                                  nmea_logger, *device_factory);
+                                                                  backend_components->nmea_logger.get(),
+                                                                  *device_factory);
 
   // Initialize main blackboard data
   task_events = new GlideComputerTaskEvents();
@@ -377,10 +378,11 @@ Startup(UI::Display &display)
                                     *protected_task_manager,
                                     *task_events);
   backend_components->glide_computer->SetTerrain(data_components->terrain.get());
-  backend_components->glide_computer->SetLogger(logger);
+  backend_components->glide_computer->SetLogger(backend_components->igc_logger.get());
   backend_components->glide_computer->Initialise();
 
-  replay = new Replay(*backend_components->device_blackboard, logger,
+  replay = new Replay(*backend_components->device_blackboard,
+                      backend_components->igc_logger.get(),
                       *protected_task_manager);
 
 #ifdef HAVE_CMDLINE_REPLAY
@@ -535,12 +537,12 @@ Startup(UI::Display &display)
   all_monitors = new AllMonitors();
 
   if (!is_simulator() && computer_settings.logger.enable_flight_logger) {
-    flight_logger = new GlueFlightLogger(live_blackboard);
-    flight_logger->SetPath(LocalPath(_T("flights.log")));
+    backend_components->flight_logger = std::make_unique<GlueFlightLogger>(live_blackboard);
+    backend_components->flight_logger->SetPath(LocalPath(_T("flights.log")));
   }
 
   if (computer_settings.logger.enable_nmea_logger)
-    nmea_logger->Enable();
+    backend_components->nmea_logger->Enable();
 
   LogString("ProgramStarted");
 
@@ -604,16 +606,13 @@ Shutdown()
 
   // Stop logger and save igc file
   operation.SetText(_("Shutdown, saving logs..."));
-  if (logger != nullptr) {
+  if (backend_components->igc_logger != nullptr) {
     try {
-      logger->GUIStopLogger(CommonInterface::Basic(), true);
+      backend_components->igc_logger->GUIStopLogger(CommonInterface::Basic(), true);
     } catch (...) {
       LogError(std::current_exception());
     }
   }
-
-  delete flight_logger;
-  flight_logger = nullptr;
 
   delete all_monitors;
   all_monitors = nullptr;
@@ -710,8 +709,7 @@ Shutdown()
   delete device_factory;
   device_factory = nullptr;
 
-  delete nmea_logger;
-  nmea_logger = nullptr;
+  backend_components->nmea_logger.reset();
 
   if (protected_task_manager != nullptr) {
     protected_task_manager->SetRoutePlanner(nullptr);
@@ -747,8 +745,6 @@ Shutdown()
 
   delete task_events;
   task_events = nullptr;
-  delete logger;
-  logger = nullptr;
 
   // Destroy FlarmNet records
   DeinitTrafficGlobals();
