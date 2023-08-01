@@ -340,6 +340,9 @@ Startup(UI::Display &display)
 
   InputEvents::readFile();
 
+  logger = new Logger();
+  nmea_logger = new NMEALogger();
+
   // Initialize DeviceBlackboard
   device_blackboard = new DeviceBlackboard();
   device_factory = new DeviceFactory{
@@ -363,9 +366,6 @@ Startup(UI::Display &display)
 
   // Read the terrain file
   main_window->LoadTerrain();
-
-  logger = new Logger();
-  nmea_logger = new NMEALogger();
 
   glide_computer = new GlideComputer(computer_settings,
                                      *data_components->waypoints,
@@ -698,9 +698,6 @@ Shutdown()
   delete terrain_loader;
   terrain_loader = nullptr;
 
-  delete nmea_logger;
-  nmea_logger = nullptr;
-
   delete replay;
   replay = nullptr;
 
@@ -710,6 +707,9 @@ Shutdown()
   device_factory = nullptr;
   delete device_blackboard;
   device_blackboard = nullptr;
+
+  delete nmea_logger;
+  nmea_logger = nullptr;
 
   if (protected_task_manager != nullptr) {
     protected_task_manager->SetRoutePlanner(nullptr);
