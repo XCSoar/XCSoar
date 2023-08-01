@@ -109,7 +109,7 @@ public:
    * Overwrites a device's data and schedule the MergeThread.  The
    * method takes care for locking and unlocking the mutex.
    */
-  void LockSetDeviceDataScheuduleMerge(unsigned i, const NMEAInfo &src) noexcept {
+  void LockSetDeviceDataScheduleMerge(unsigned i, const NMEAInfo &src) noexcept {
     {
       const std::lock_guard lock{mutex};
       per_device_data[i] = src;

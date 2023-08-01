@@ -1319,7 +1319,7 @@ DeviceDescriptor::DataReceived(std::span<const std::byte> s) noexcept
       if (!config.sync_from_device)
         basic.settings = old_settings;
 
-      device_blackboard->LockSetDeviceDataScheuduleMerge(index, basic);
+      device_blackboard->LockSetDeviceDataScheduleMerge(index, basic);
     }
 
     return true;
