@@ -18,7 +18,7 @@
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
-#include "Device/device.hpp"
+#include "Device/MultipleDevices.hpp"
 #include "PageActions.hpp"
 #include "util/DollarExpand.hpp"
 #include "util/Macros.hpp"
@@ -270,7 +270,7 @@ LookupMacro(tstring_view name, bool &invalid) noexcept
     invalid |= !Calculated().circling;
     return nullptr;
   } else if (name == _T("CheckVega")) {
-    invalid |= devVarioFindVega() == nullptr;
+    invalid |= devices == nullptr || !devices->HasVega();
     return nullptr;
   } else if (name == _T("CheckReplay")) {
     invalid |= CommonInterface::MovementDetected();

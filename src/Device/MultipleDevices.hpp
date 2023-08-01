@@ -62,6 +62,12 @@ public:
   void Open(OperationEnvironment &env) noexcept;
   void Close() noexcept;
   void AutoReopen(OperationEnvironment &env) noexcept;
+
+  [[gnu::pure]]
+  bool HasVega() const noexcept;
+
+  void VegaWriteNMEA(const TCHAR *text, OperationEnvironment &env) noexcept;
+
   void PutMacCready(double mac_cready, OperationEnvironment &env) noexcept;
   void PutBugs(double bugs, OperationEnvironment &env) noexcept;
   void PutBallast(double fraction, double overload,

@@ -3,15 +3,5 @@
 
 #pragma once
 
-#include <tchar.h>
-
-class DeviceDescriptor;
-class OperationEnvironment;
-
-void
-VarioWriteNMEA(const TCHAR *Text, OperationEnvironment &env);
-
-DeviceDescriptor *devVarioFindVega();
-
 void devStartup();
 void devRestart();

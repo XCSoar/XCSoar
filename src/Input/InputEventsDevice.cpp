@@ -3,7 +3,6 @@
 
 #include "InputEvents.hpp"
 #include "Dialogs/Device/DeviceListDialog.hpp"
-#include "Device/device.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Device/Descriptor.hpp"
 #include "Components.hpp"
@@ -20,9 +19,9 @@
 void
 InputEvents::eventSendNMEA(const TCHAR *misc)
 {
-  if (misc != NULL) {
+  if (misc != NULL && devices != nullptr) {
     PopupOperationEnvironment env;
-    VarioWriteNMEA(misc, env);
+    devices->VegaWriteNMEA(misc, env);
   }
 }
 

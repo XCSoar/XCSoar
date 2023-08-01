@@ -125,24 +125,6 @@ devStartup()
 }
 
 void
-VarioWriteNMEA(const TCHAR *text, OperationEnvironment &env)
-{
-  for (DeviceDescriptor *i : *devices)
-    if (i->IsVega())
-      i->WriteNMEA(text, env);
-}
-
-DeviceDescriptor *
-devVarioFindVega()
-{
-  for (DeviceDescriptor *i : *devices)
-    if (i->IsVega())
-      return i;
-
-  return nullptr;
-}
-
-void
 devRestart()
 {
   LogString("RestartCommPorts");

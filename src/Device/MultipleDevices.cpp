@@ -6,6 +6,8 @@
 #include "Descriptor.hpp"
 #include "Dispatcher.hpp"
 
+#include <algorithm> // for std::any_of()
+
 MultipleDevices::MultipleDevices(DeviceFactory &factory) noexcept
 {
   for (unsigned i = 0; i < NUMDEV; ++i) {
@@ -52,6 +54,22 @@ MultipleDevices::AutoReopen(OperationEnvironment &env) noexcept
 {
   for (DeviceDescriptor *i : devices)
     i->AutoReopen(env);
+}
+
+bool
+MultipleDevices::HasVega() const noexcept
+{
+  return std::any_of(devices.begin(), devices.end(),
+                     [](const auto *d) { return d->IsVega(); });
+}
+
+void
+MultipleDevices::VegaWriteNMEA(const TCHAR *text,
+                               OperationEnvironment &env) noexcept
+{
+  for (DeviceDescriptor *i : devices)
+    if (i->IsVega())
+      i->WriteNMEA(text, env);
 }
 
 void
