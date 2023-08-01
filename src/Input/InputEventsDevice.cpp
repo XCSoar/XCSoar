@@ -53,5 +53,5 @@ InputEvents::eventDevice(const TCHAR *misc)
   assert(misc != NULL);
 
   if (StringIsEqual(misc, _T("list")))
-    ShowDeviceList();
+    ShowDeviceList(*device_blackboard, devices);
 }

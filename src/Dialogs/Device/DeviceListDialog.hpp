@@ -3,5 +3,8 @@
 
 #pragma once
 
+class DeviceBlackboard;
+class MultipleDevices;
+
 void
-ShowDeviceList();
+ShowDeviceList(DeviceBlackboard &device_blackboard, MultipleDevices *devices);

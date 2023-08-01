@@ -25,7 +25,6 @@
 #include "ui/event/Notify.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Blackboard/BlackboardListener.hpp"
-#include "Components.hpp"
 #include "Look/DialogLook.hpp"
 #include "Widget/ListWidget.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -51,6 +50,9 @@ using namespace UI;
 class DeviceListWidget final
   : public ListWidget,
     NullBlackboardListener, PortListener {
+  DeviceBlackboard &device_blackboard;
+  MultipleDevices *const devices;
+
   const DialogLook &look;
 
   unsigned font_height;
@@ -179,8 +181,12 @@ class DeviceListWidget final
   }};
 
 public:
-  DeviceListWidget(const DialogLook &_look)
-    :look(_look) {}
+  DeviceListWidget(DeviceBlackboard &_device_blackboard,
+                   MultipleDevices *_devices,
+                   const DialogLook &_look) noexcept
+    :device_blackboard(_device_blackboard),
+     devices(_devices),
+     look(_look) {}
 
   void CreateButtons(WidgetDialog &dialog);
 
@@ -258,7 +264,7 @@ DeviceListWidget::RefreshList()
 
     Item n;
     n.Set(CommonInterface::GetSystemSettings().devices[i],
-          (*devices)[i], device_blackboard->RealState(i));
+          (*devices)[i], device_blackboard.RealState(i));
 
     if (n != item) {
       item = n;
@@ -653,8 +659,8 @@ DeviceListWidget::ManageCurrent()
     FlarmVersion version;
 
     {
-      const std::lock_guard lock{device_blackboard->mutex};
-      const NMEAInfo &basic = device_blackboard->RealState(current);
+      const std::lock_guard lock{device_blackboard.mutex};
+      const NMEAInfo &basic = device_blackboard.RealState(current);
       version = basic.flarm.version;
     }
 
@@ -663,8 +669,8 @@ DeviceListWidget::ManageCurrent()
     DeviceInfo info, secondary_info;
 
     {
-      const std::lock_guard lock{device_blackboard->mutex};
-      const NMEAInfo &basic = device_blackboard->RealState(current);
+      const std::lock_guard lock{device_blackboard.mutex};
+      const NMEAInfo &basic = device_blackboard.RealState(current);
       info = basic.device;
       secondary_info = basic.secondary_device;
     }
@@ -723,13 +729,14 @@ DeviceListWidget::OnGPSUpdate([[maybe_unused]] const MoreData &basic)
 }
 
 void
-ShowDeviceList()
+ShowDeviceList(DeviceBlackboard &device_blackboard, MultipleDevices *devices)
 {
   TWidgetDialog<DeviceListWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            UIGlobals::GetDialogLook(), _("Devices"));
   dialog.AddButton(_("Close"), mrOK);
-  dialog.SetWidget(UIGlobals::GetDialogLook());
+  dialog.SetWidget(device_blackboard, devices,
+                   UIGlobals::GetDialogLook());
   dialog.GetWidget().CreateButtons(dialog);
   dialog.EnableCursorSelection();
 
