@@ -16,6 +16,7 @@
 #include "Operation/PopupOperationEnvironment.hpp"
 #include "Math/Util.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
 
 static double VegaDemoW = 0;
 static double VegaDemoV = 0;
@@ -34,7 +35,7 @@ VegaWriteDemo()
             iround(VegaDemoV * 10));
 
   PopupOperationEnvironment env;
-  devices->VegaWriteNMEA(dbuf, env);
+  backend_components->devices->VegaWriteNMEA(dbuf, env);
 }
 
 class VegaDemoWidget final
@@ -98,8 +99,8 @@ void
 dlgVegaDemoShowModal()
 {
   PopupOperationEnvironment env;
-  devices->VegaWriteNMEA(_T("PDVSC,S,DemoMode,0"), env);
-  devices->VegaWriteNMEA(_T("PDVSC,S,DemoMode,3"), env);
+  backend_components->devices->VegaWriteNMEA(_T("PDVSC,S,DemoMode,0"), env);
+  backend_components->devices->VegaWriteNMEA(_T("PDVSC,S,DemoMode,3"), env);
 
   const DialogLook &look = UIGlobals::GetDialogLook();
   TWidgetDialog<VegaDemoWidget>
@@ -110,5 +111,5 @@ dlgVegaDemoShowModal()
   dialog.ShowModal();
 
   // deactivate demo.
-  devices->VegaWriteNMEA(_T("PDVSC,S,DemoMode,0"), env);
+  backend_components->devices->VegaWriteNMEA(_T("PDVSC,S,DemoMode,0"), env);
 }

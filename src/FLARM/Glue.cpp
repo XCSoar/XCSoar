@@ -7,6 +7,7 @@
 #include "FlarmNetReader.hpp"
 #include "NameFile.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
 #include "MergeThread.hpp"
 #include "LocalPath.hpp"
 #include "io/DataFile.hpp"
@@ -69,13 +70,13 @@ ReloadFlarmDatabases() noexcept
 
   /* the MergeThread must be suspended, because it reads the FLARM
      databases */
-  merge_thread->Suspend();
+  backend_components->merge_thread->Suspend();
 
   LoadSecondary(traffic_databases->flarm_names);
   LoadFLARMnet(traffic_databases->flarm_net);
   Profile::Load(Profile::map, traffic_databases->flarm_colors);
 
-  merge_thread->Resume();
+  backend_components->merge_thread->Resume();
 }
 
 void

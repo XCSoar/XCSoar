@@ -2,7 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "GlueMapWindow.hpp"
-#include "Components.hpp"
 #include "DrawThread.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Look/Look.hpp"
@@ -11,6 +10,8 @@
 #include "ui/event/Idle.hpp"
 #include "Topography/Thread.hpp"
 #include "Terrain/Thread.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 GlueMapWindow::GlueMapWindow(const Look &look) noexcept
   :MapWindow(look.map, look.traffic),
@@ -103,9 +104,10 @@ GlueMapWindow::ExchangeBlackboard() noexcept
   /* copy device_blackboard to MapWindow */
 
   {
-    const std::lock_guard lock{device_blackboard->mutex};
-    ReadBlackboard(device_blackboard->Basic(),
-                   device_blackboard->Calculated());
+    auto &device_blackboard = *backend_components->device_blackboard;
+    const std::lock_guard lock{device_blackboard.mutex};
+    ReadBlackboard(device_blackboard.Basic(),
+                   device_blackboard.Calculated());
   }
 
 #ifndef ENABLE_OPENGL

@@ -4,6 +4,7 @@
 #include "ApplyExternalSettings.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
 #include "ActionInterface.hpp"
 #include "Device/MultipleDevices.hpp"
 
@@ -91,8 +92,8 @@ QNHProcessTimer(OperationEnvironment &env) noexcept
     settings_computer.pressure = calculated.pressure;
     settings_computer.pressure_available = calculated.pressure_available;
 
-    if (devices != nullptr)
-      devices->PutQNH(settings_computer.pressure, env);
+    if (backend_components->devices)
+      backend_components->devices->PutQNH(settings_computer.pressure, env);
 
     modified = true;
   }

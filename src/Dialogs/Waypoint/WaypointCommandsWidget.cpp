@@ -14,6 +14,7 @@
 #include "Interface.hpp"
 #include "Protection.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Pan.hpp"
@@ -189,7 +190,7 @@ SetHome(Waypoints *way_points, const Waypoint &waypoint)
     if (way_points != nullptr)
       WaypointGlue::SetHome(*way_points, data_components->terrain.get(),
                             settings_computer.poi, settings_computer.team_code,
-                            device_blackboard, false);
+                            backend_components->device_blackboard.get(), false);
     WaypointGlue::SaveHome(Profile::map,
                            settings_computer.poi, settings_computer.team_code);
   }

@@ -40,6 +40,7 @@
 #include "Weather/Rasp/RaspStore.hpp"
 #include "Weather/Rasp/Configured.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 #include "DataGlobals.hpp"
 
@@ -141,11 +142,10 @@ SettingsLeave(const UISettings &old_ui_settings)
   }
 
   if (AirspaceFileChanged) {
-    if (glide_computer != nullptr)
-      glide_computer->GetAirspaceWarnings().Clear();
-
-    if (glide_computer != nullptr)
-      glide_computer->ClearAirspaces();
+    if (backend_components->glide_computer) {
+      backend_components->glide_computer->GetAirspaceWarnings().Clear();
+      backend_components->glide_computer->ClearAirspaces();
+    }
 
     auto &airspace_database = *data_components->airspaces;
     airspace_database.Clear();
@@ -157,8 +157,9 @@ SettingsLeave(const UISettings &old_ui_settings)
       SetAirspaceGroundLevels(airspace_database, *data_components->terrain);
   }
 
-  if (DevicePortChanged && devices != nullptr)
-    devRestart(*devices, CommonInterface::GetSystemSettings());
+  if (DevicePortChanged && backend_components->devices != nullptr)
+    devRestart(*backend_components->devices,
+               CommonInterface::GetSystemSettings());
 
   if (FlarmFileChanged) {
     ReloadFlarmDatabases();

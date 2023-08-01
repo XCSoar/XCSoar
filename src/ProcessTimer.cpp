@@ -8,7 +8,6 @@
 #include "Input/InputEvents.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
-#include "Components.hpp"
 #include "time/PeriodClock.hpp"
 #include "MainWindow.hpp"
 #include "PopupMessage.hpp"
@@ -22,6 +21,8 @@
 #include "net/client/tim/Glue.hpp"
 #include "ui/event/Idle.hpp"
 #include "Dialogs/Tracking/CloudEnableDialog.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 static void
 MessageProcessTimer() noexcept
@@ -85,7 +86,7 @@ SystemProcessTimer() noexcept
 static void
 BlackboardProcessTimer() noexcept
 {
-  device_blackboard->ExpireWallClock();
+  backend_components->device_blackboard->ExpireWallClock();
   XCSoarInterface::ExchangeBlackboard();
 }
 
@@ -179,7 +180,7 @@ CommonProcessTimer() noexcept
 static void
 ConnectionProcessTimer() noexcept
 {
-  if (devices == nullptr)
+  if (backend_components->devices == nullptr)
     return;
 
   static bool connected_last = false;
@@ -211,7 +212,7 @@ ConnectionProcessTimer() noexcept
   /* this OperationEnvironment instance must be persistent, because
      DeviceDescriptor::Open() is asynchronous */
   static QuietOperationEnvironment env;
-  devices->AutoReopen(env);
+  backend_components->devices->AutoReopen(env);
 }
 
 void
@@ -221,8 +222,8 @@ ProcessTimer() noexcept
 
   if (!is_simulator()) {
     // now check GPS status
-    if (devices != nullptr)
-      devices->Tick();
+    if (backend_components->devices != nullptr)
+      backend_components->devices->Tick();
 
     // also service replay logger
     if (replay && replay->IsActive()) {
@@ -238,7 +239,7 @@ ProcessTimer() noexcept
       m_clock.Update();
     } else if (m_clock.Elapsed() >= std::chrono::seconds(1)) {
       m_clock.Update();
-      device_blackboard->ProcessSimulation();
+      backend_components->device_blackboard->ProcessSimulation();
     } else if (!m_clock.IsDefined())
       m_clock.Update();
   }

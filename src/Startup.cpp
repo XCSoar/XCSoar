@@ -4,6 +4,7 @@
 #include "Startup.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 #include "DataGlobals.hpp"
 #include "ui/canvas/Features.hpp" // for SOFTWARE_ROTATE_DISPLAY
@@ -335,6 +336,7 @@ Startup(UI::Display &display)
   file_cache = new FileCache(GetCachePath());
 
   data_components = new DataComponents();
+  backend_components = new BackendComponents();
 
   ReadLanguageFile();
 
@@ -344,7 +346,6 @@ Startup(UI::Display &display)
   nmea_logger = new NMEALogger();
 
   // Initialize DeviceBlackboard
-  device_blackboard = new DeviceBlackboard();
   device_factory = new DeviceFactory{
     *asio_thread, *global_cares_channel,
 #ifdef ANDROID
@@ -352,7 +353,9 @@ Startup(UI::Display &display)
     bluetooth_helper, ioio_helper, usb_serial_helper,
 #endif
   };
-  devices = new MultipleDevices(*device_blackboard, nmea_logger, *device_factory);
+
+  backend_components->devices = std::make_unique<MultipleDevices>(*backend_components->device_blackboard,
+                                                                  nmea_logger, *device_factory);
 
   // Initialize main blackboard data
   task_events = new GlideComputerTaskEvents();
@@ -367,16 +370,18 @@ Startup(UI::Display &display)
   // Read the terrain file
   main_window->LoadTerrain();
 
-  glide_computer = new GlideComputer(computer_settings,
-                                     *data_components->waypoints,
-                                     *data_components->airspaces,
-                                     *protected_task_manager,
-                                     *task_events);
-  glide_computer->SetTerrain(data_components->terrain.get());
-  glide_computer->SetLogger(logger);
-  glide_computer->Initialise();
+  backend_components->glide_computer =
+    std::make_unique<GlideComputer>(computer_settings,
+                                    *data_components->waypoints,
+                                    *data_components->airspaces,
+                                    *protected_task_manager,
+                                    *task_events);
+  backend_components->glide_computer->SetTerrain(data_components->terrain.get());
+  backend_components->glide_computer->SetLogger(logger);
+  backend_components->glide_computer->Initialise();
 
-  replay = new Replay(*device_blackboard, logger, *protected_task_manager);
+  replay = new Replay(*backend_components->device_blackboard, logger,
+                      *protected_task_manager);
 
 #ifdef HAVE_CMDLINE_REPLAY
   if (CommandLine::replay_path != nullptr) {
@@ -429,11 +434,12 @@ Startup(UI::Display &display)
                         data_components->terrain.get(),
                         CommonInterface::SetComputerSettings().poi,
                         CommonInterface::SetComputerSettings().team_code,
-                        device_blackboard, false);
+                        backend_components->device_blackboard.get(),
+                        false);
 
   // ReSynchronise the blackboards here since SetHome touches them
-  device_blackboard->Merge();
-  CommonInterface::ReadBlackboardBasic(device_blackboard->Basic());
+  backend_components->device_blackboard->Merge();
+  CommonInterface::ReadBlackboardBasic(backend_components->device_blackboard->Basic());
 
   // Scan for weather forecast
   LogString("RASP load");
@@ -453,9 +459,9 @@ Startup(UI::Display &display)
 
   {
     const AircraftState aircraft_state =
-      ToAircraftState(device_blackboard->Basic(),
-                      device_blackboard->Calculated());
-    ProtectedAirspaceWarningManager::ExclusiveLease lease(glide_computer->GetAirspaceWarnings());
+      ToAircraftState(backend_components->device_blackboard->Basic(),
+                      backend_components->device_blackboard->Calculated());
+    ProtectedAirspaceWarningManager::ExclusiveLease lease(backend_components->glide_computer->GetAirspaceWarnings());
     lease->Reset(aircraft_state);
   }
 
@@ -472,9 +478,10 @@ Startup(UI::Display &display)
   AudioVarioGlue::Configure(ui_settings.sound.vario);
 
   // Start the device thread(s)
-  if (devices != nullptr) {
+  if (backend_components->devices != nullptr) {
     operation.SetText(_("Starting devices"));
-    devStartup(*devices, CommonInterface::GetSystemSettings());
+    devStartup(*backend_components->devices,
+               CommonInterface::GetSystemSettings());
   }
 
 /*
@@ -490,8 +497,8 @@ Startup(UI::Display &display)
   if (map_window != nullptr) {
     map_window->SetWaypoints(data_components->waypoints.get());
     map_window->SetTask(protected_task_manager);
-    map_window->SetRoutePlanner(&glide_computer->GetProtectedRoutePlanner());
-    map_window->SetGlideComputer(glide_computer);
+    map_window->SetRoutePlanner(&backend_components->glide_computer->GetProtectedRoutePlanner());
+    map_window->SetGlideComputer(backend_components->glide_computer.get());
     map_window->SetAirspaces(data_components->airspaces.get());
 
     map_window->SetTopography(data_components->topography.get());
@@ -541,8 +548,8 @@ Startup(UI::Display &display)
   main_window->SetDefaultFocus();
 
   // Start calculation thread
-  merge_thread->Start();
-  calculation_thread->Start();
+  backend_components->merge_thread->Start();
+  backend_components->calculation_thread->Start();
 
   PageActions::Update();
 
@@ -626,9 +633,9 @@ Shutdown()
   operation.SetText(_("Shutdown, please wait..."));
 
   // Close any device connections
-  if (devices != nullptr) {
+  if (backend_components->devices != nullptr) {
     LogString("Stop devices");
-    devices->Close();
+    backend_components->devices->Close();
   }
 
   // Stop threads
@@ -641,25 +648,23 @@ Shutdown()
     draw_thread->BeginStop();
 #endif
 
-  if (calculation_thread != nullptr)
-    calculation_thread->BeginStop();
+  if (backend_components->calculation_thread)
+    backend_components->calculation_thread->BeginStop();
 
-  if (merge_thread != nullptr)
-    merge_thread->BeginStop();
+  if (backend_components->merge_thread)
+    backend_components->merge_thread->BeginStop();
 
   // Wait for the calculations thread to finish
   LogString("Waiting for calculation thread");
 
-  if (merge_thread != nullptr) {
-    merge_thread->Join();
-    delete merge_thread;
-    merge_thread = nullptr;
+  if (backend_components->merge_thread) {
+    backend_components->merge_thread->Join();
+    backend_components->merge_thread.reset();
   }
 
-  if (calculation_thread != nullptr) {
-    calculation_thread->Join();
-    delete calculation_thread;
-    calculation_thread = nullptr;
+  if (backend_components->calculation_thread) {
+    backend_components->calculation_thread->Join();
+    backend_components->calculation_thread.reset();
   }
 
   //  Wait for the drawing thread to finish
@@ -701,12 +706,9 @@ Shutdown()
   delete replay;
   replay = nullptr;
 
-  delete devices;
-  devices = nullptr;
+  backend_components->devices.reset();
   delete device_factory;
   device_factory = nullptr;
-  delete device_blackboard;
-  device_blackboard = nullptr;
 
   delete nmea_logger;
   nmea_logger = nullptr;
@@ -743,8 +745,6 @@ Shutdown()
   LogString("Close Progress Dialog");
   operation.Hide();
 
-  delete glide_computer;
-  glide_computer = nullptr;
   delete task_events;
   task_events = nullptr;
   delete logger;
@@ -752,6 +752,9 @@ Shutdown()
 
   // Destroy FlarmNet records
   DeinitTrafficGlobals();
+
+  delete backend_components;
+  backend_components = nullptr;
 
   delete data_components;
   data_components = nullptr;

@@ -10,7 +10,6 @@
 #include "Renderer/TaskProgressRenderer.hpp"
 #include "ui/dim/Rect.hpp"
 #include "Formatter/UserUnits.hpp"
-#include "Components.hpp"
 #include "Interface.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
@@ -20,6 +19,8 @@
 #include "util/Macros.hpp"
 #include "Language/Language.hpp"
 #include "Widget/CallbackWidget.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 
 [[gnu::const]]
@@ -138,7 +139,7 @@ InfoBoxContentBarogram::OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexc
   RenderBarographSpark(canvas, GetSparkRect(rc),
                        look.chart, look.cross_section,
                        look.info_box.inverse,
-                       glide_computer->GetFlightStats(),
+                       backend_components->glide_computer->GetFlightStats(),
                        CommonInterface::Basic(),
                        CommonInterface::Calculated(), protected_task_manager);
 }
@@ -148,7 +149,8 @@ ShowAnalysisBarograph() noexcept
 {
   dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
                        UIGlobals::GetLook(),
-                       CommonInterface::Full(), *glide_computer,
+                       CommonInterface::Full(),
+                       *backend_components->glide_computer,
                        data_components->airspaces.get(),
                        data_components->terrain.get(),
                        AnalysisPage::BAROGRAPH);

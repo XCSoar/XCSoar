@@ -26,6 +26,7 @@
 #include "Units/Units.hpp"
 #include "Blackboard/RateLimitedBlackboardListener.hpp"
 #include "Interface.hpp"
+#include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 
 #include <algorithm> // for std::clamp()
@@ -120,7 +121,7 @@ public:
     map.SetAirspaces(data_components->airspaces.get());
     map.SetWaypoints(data_components->waypoints.get());
     map.SetTask(protected_task_manager);
-    map.SetGlideComputer(glide_computer);
+    map.SetGlideComputer(backend_components->glide_computer.get());
   }
 
   bool GetTaskData();

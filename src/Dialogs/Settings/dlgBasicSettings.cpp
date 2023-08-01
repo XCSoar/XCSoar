@@ -13,7 +13,6 @@
 #include "Form/DataField/Listener.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
-#include "Components.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -21,6 +20,8 @@
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "ui/event/PeriodicTimer.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 #include <math.h>
 
@@ -133,7 +134,7 @@ FlightSetupPanel::SetBallast()
   if (wl > 0)
     LoadValue(WingLoading, wl, UnitGroup::WING_LOADING);
 
-  if (devices != nullptr) {
+  if (backend_components->devices != nullptr) {
     const Plane &plane = CommonInterface::GetComputerSettings().plane;
     if (plane.empty_mass > 0) {
       auto dry_mass = plane.empty_mass + polar_settings.glide_polar_task.GetCrewMass();
@@ -142,7 +143,7 @@ FlightSetupPanel::SetBallast()
         dry_mass;
 
       MessageOperationEnvironment env;
-      devices->PutBallast(fraction, overload, env);
+      backend_components->devices->PutBallast(fraction, overload, env);
     }
   }
 }
@@ -199,9 +200,9 @@ FlightSetupPanel::SetBugs(double bugs) {
   polar_settings.SetBugs(bugs);
   PublishPolarSettings();
 
-  if (devices != nullptr) {
+  if (backend_components->devices != nullptr) {
     MessageOperationEnvironment env;
-    devices->PutBugs(bugs, env);
+    backend_components->devices->PutBugs(bugs, env);
   }
 }
 
@@ -214,9 +215,9 @@ FlightSetupPanel::SetQNH(AtmosphericPressure qnh)
   settings_computer.pressure = qnh;
   settings_computer.pressure_available.Update(basic.clock);
 
-  if (devices != nullptr) {
+  if (backend_components->devices != nullptr) {
     MessageOperationEnvironment env;
-    devices->PutQNH(qnh, env);
+    backend_components->devices->PutQNH(qnh, env);
   }
 
   RefreshAltitudeControl();

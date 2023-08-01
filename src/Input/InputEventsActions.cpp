@@ -68,6 +68,7 @@ doc/html/advanced/input/ALL  http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/FilePicker.hpp"
 #include "net/client/WeGlide/UploadIGCFile.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 
 #include <cassert>
@@ -217,8 +218,10 @@ try {
   logger->LogPilotEvent(CommonInterface::Basic());
 
   // Let devices know the pilot event was pressed
-  MessageOperationEnvironment env;
-  devices->PutPilotEvent(env);
+  if (backend_components->devices) {
+    MessageOperationEnvironment env;
+    backend_components->devices->PutPilotEvent(env);
+  }
 } catch (...) {
   ShowError(std::current_exception(), _("Logger Error"));
 }
@@ -333,7 +336,7 @@ InputEvents::eventAnalysis([[maybe_unused]] const TCHAR *misc)
   dlgAnalysisShowModal(*CommonInterface::main_window,
                        CommonInterface::main_window->GetLook(),
                        CommonInterface::Full(),
-                       *glide_computer,
+                       *backend_components->glide_computer,
                        data_components->airspaces.get(),
                        data_components->terrain.get());
 }

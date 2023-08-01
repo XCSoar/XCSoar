@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Components.hpp"
+#include "BackendComponents.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "net/http/Features.hpp"
 #include "thread/Debug.hpp"
@@ -13,12 +14,6 @@ AsyncTerrainOverviewLoader *terrain_loader;
 #ifndef ENABLE_OPENGL
 DrawThread *draw_thread;
 #endif
-
-MultipleDevices *devices;
-DeviceBlackboard *device_blackboard;
-
-MergeThread *merge_thread;
-CalculationThread *calculation_thread;
 
 Logger *logger;
 NMEALogger *nmea_logger;
@@ -35,13 +30,11 @@ TIM::Glue *tim_glue;
 
 ProtectedTaskManager *protected_task_manager;
 
-GlideComputer *glide_computer;
-
 ProtectedAirspaceWarningManager *
 GetAirspaceWarnings()
 {
-  return glide_computer != nullptr
-    ? &glide_computer->GetAirspaceWarnings()
+  return backend_components->glide_computer != nullptr
+    ? &backend_components->glide_computer->GetAirspaceWarnings()
     : nullptr;
 }
 

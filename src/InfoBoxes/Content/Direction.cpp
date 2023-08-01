@@ -6,6 +6,7 @@
 #include "Interface.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
 
 void
 InfoBoxContentTrack::Update(InfoBoxData &data) noexcept
@@ -23,17 +24,18 @@ InfoBoxContentTrack::HandleKey(const InfoBoxKeyCodes keycode) noexcept
   if (!CommonInterface::Basic().gps.simulator)
     return false;
 
+  auto &device_blackboard = *backend_components->device_blackboard;
   const Angle a5 = Angle::Degrees(5);
   switch (keycode) {
   case ibkUp:
   case ibkRight:
-    device_blackboard->SetTrack(
+    device_blackboard.SetTrack(
         CommonInterface::Basic().track + a5);
     return true;
 
   case ibkDown:
   case ibkLeft:
-    device_blackboard->SetTrack(
+    device_blackboard.SetTrack(
         CommonInterface::Basic().track - a5);
     return true;
   }

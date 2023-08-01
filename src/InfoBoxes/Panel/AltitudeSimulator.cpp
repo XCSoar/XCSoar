@@ -4,11 +4,12 @@
 #include "AltitudeSimulator.hpp"
 #include "Look/DialogLook.hpp"
 #include "Widget/OffsetButtonsWidget.hpp"
-#include "Components.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Units/Units.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 class AltitudeSimulatorOffsetButtons final : public OffsetButtonsWidget {
 public:
@@ -26,8 +27,8 @@ AltitudeSimulatorOffsetButtons::OnOffset(const double step) noexcept
   if (!basic.gps.simulator)
     return;
 
-  device_blackboard->SetAltitude(basic.gps_altitude +
-                                 Units::ToSysAltitude(step));
+  backend_components->device_blackboard->SetAltitude(basic.gps_altitude +
+                                                     Units::ToSysAltitude(step));
 }
 
 std::unique_ptr<Widget>

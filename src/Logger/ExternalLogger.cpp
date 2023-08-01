@@ -11,6 +11,7 @@
 #include "Device/MultipleDevices.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
 #include "LocalPath.hpp"
 #include "UIGlobals.hpp"
 #include "Operation/Cancelled.hpp"
@@ -108,7 +109,7 @@ ExternalLogger::Declare(const Declaration &decl, const Waypoint *home)
 {
   bool found_logger = false;
 
-  for (DeviceDescriptor *i : *devices) {
+  for (DeviceDescriptor *i : *backend_components->devices) {
     DeviceDescriptor &device = *i;
 
     if (device.CanDeclare() && device.GetState() == PortState::READY) {

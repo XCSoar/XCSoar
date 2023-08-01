@@ -9,6 +9,7 @@
 #include "Gauge/BigTrafficWidget.hpp"
 #include "Computer/Settings.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 #include "DataGlobals.hpp"
 #include "MapSettings.hpp"
@@ -270,7 +271,8 @@ LookupMacro(tstring_view name, bool &invalid) noexcept
     invalid |= !Calculated().circling;
     return nullptr;
   } else if (name == _T("CheckVega")) {
-    invalid |= devices == nullptr || !devices->HasVega();
+    invalid |= backend_components->devices == nullptr ||
+      !backend_components->devices->HasVega();
     return nullptr;
   } else if (name == _T("CheckReplay")) {
     invalid |= CommonInterface::MovementDetected();

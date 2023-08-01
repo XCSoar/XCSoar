@@ -5,8 +5,9 @@
 #include "Dialogs/Device/DeviceListDialog.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Device/Descriptor.hpp"
-#include "Components.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 #include <cassert>
 
@@ -19,9 +20,9 @@
 void
 InputEvents::eventSendNMEA(const TCHAR *misc)
 {
-  if (misc != NULL && devices != nullptr) {
+  if (misc != NULL && backend_components->devices != nullptr) {
     PopupOperationEnvironment env;
-    devices->VegaWriteNMEA(misc, env);
+    backend_components->devices->VegaWriteNMEA(misc, env);
   }
 }
 
@@ -32,7 +33,7 @@ InputEvents::eventSendNMEAPort1(const TCHAR *misc)
 
   if (misc != NULL && i < NUMDEV) {
     PopupOperationEnvironment env;
-    (*devices)[i].WriteNMEA(misc, env);
+    (*backend_components->devices)[i].WriteNMEA(misc, env);
   }
 }
 
@@ -43,7 +44,7 @@ InputEvents::eventSendNMEAPort2(const TCHAR *misc)
 
   if (misc != NULL && i < NUMDEV) {
     PopupOperationEnvironment env;
-    (*devices)[i].WriteNMEA(misc, env);
+    (*backend_components->devices)[i].WriteNMEA(misc, env);
   }
 }
 
@@ -53,5 +54,6 @@ InputEvents::eventDevice(const TCHAR *misc)
   assert(misc != NULL);
 
   if (StringIsEqual(misc, _T("list")))
-    ShowDeviceList(*device_blackboard, devices);
+    ShowDeviceList(*backend_components->device_blackboard,
+                   backend_components->devices.get());
 }
