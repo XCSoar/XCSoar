@@ -19,9 +19,9 @@ class Replay final
 {
   UI::Timer timer{[this]{ OnTimer(); }};
 
-  double time_scale;
+  double time_scale = 1;
 
-  AbstractReplay *replay;
+  AbstractReplay *replay = nullptr;
 
   Logger *logger;
   ProtectedTaskManager &task_manager;
@@ -54,13 +54,11 @@ class Replay final
    */
   NMEAInfo next_data;
 
-  CatmullRomInterpolator *cli;
+  CatmullRomInterpolator *cli = nullptr;
 
 public:
   Replay(Logger *_logger, ProtectedTaskManager &_task_manager)
-    :time_scale(1), replay(nullptr),
-     logger(_logger), task_manager(_task_manager), cli(nullptr) {
-  }
+    :logger(_logger), task_manager(_task_manager) {}
 
   ~Replay() {
     Stop();
