@@ -25,8 +25,6 @@ TrackingGlue *tracking;
 TIM::Glue *tim_glue;
 #endif
 
-ProtectedTaskManager *protected_task_manager;
-
 ProtectedAirspaceWarningManager *
 GetAirspaceWarnings()
 {

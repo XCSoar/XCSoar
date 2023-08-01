@@ -3,7 +3,6 @@
 
 #include "Task/MapTaskManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Components.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/StartPoint.hpp"
@@ -11,6 +10,8 @@
 #include "Engine/Task/Ordered/Points/IntermediatePoint.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Interface.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 static const TaskBehaviour&
 GetTaskBehaviour()
@@ -76,8 +77,8 @@ MutateFromGoto(OrderedTask &task, WaypointPtr &&finish_waypoint,
 MapTaskManager::TaskEditResult
 MapTaskManager::AppendToTask(WaypointPtr &&waypoint)
 {
-  assert(protected_task_manager != nullptr);
-  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
+  assert(backend_components->protected_task_manager != nullptr);
+  ProtectedTaskManager::ExclusiveLease task_manager{*backend_components->protected_task_manager};
   TaskEditResult result = MapTaskManager::UNMODIFIED;
   if (!IsError(task_manager->GetOrderedTask().CheckTask())) {
     auto task = task_manager->Clone(GetTaskBehaviour());
@@ -146,8 +147,8 @@ InsertInTask(OrderedTask &task, WaypointPtr &&waypoint) noexcept
 MapTaskManager::TaskEditResult
 MapTaskManager::InsertInTask(WaypointPtr &&waypoint)
 {
-  assert(protected_task_manager != nullptr);
-  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
+  assert(backend_components->protected_task_manager != nullptr);
+  ProtectedTaskManager::ExclusiveLease task_manager{*backend_components->protected_task_manager};
   TaskEditResult result = MapTaskManager::UNMODIFIED;
   if (!IsError(task_manager->GetOrderedTask().CheckTask())) {
     auto task = task_manager->Clone(GetTaskBehaviour());
@@ -202,8 +203,8 @@ ReplaceInTask(OrderedTask &task, WaypointPtr &&waypoint) noexcept
 MapTaskManager::TaskEditResult
 MapTaskManager::ReplaceInTask(WaypointPtr &&waypoint)
 {
-  assert(protected_task_manager != nullptr);
-  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
+  assert(backend_components->protected_task_manager != nullptr);
+  ProtectedTaskManager::ExclusiveLease task_manager{*backend_components->protected_task_manager};
   auto task = task_manager->Clone(GetTaskBehaviour());
 
   TaskEditResult result = ReplaceInTask(*task, std::move(waypoint));
@@ -238,8 +239,8 @@ GetIndexInTask(const OrderedTask &task, const Waypoint &waypoint)
 int
 MapTaskManager::GetIndexInTask(const Waypoint &waypoint)
 {
-  assert(protected_task_manager != nullptr);
-  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
+  assert(backend_components->protected_task_manager != nullptr);
+  ProtectedTaskManager::ExclusiveLease task_manager{*backend_components->protected_task_manager};
   if (task_manager->GetMode() == TaskType::ORDERED) {
     const OrderedTask &task = task_manager->GetOrderedTask();
     return GetIndexInTask(task, waypoint);
@@ -273,8 +274,8 @@ RemoveFromTask(OrderedTask &task, const Waypoint &waypoint)
 MapTaskManager::TaskEditResult
 MapTaskManager::RemoveFromTask(const Waypoint &wp)
 {
-  assert(protected_task_manager != nullptr);
-  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
+  assert(backend_components->protected_task_manager != nullptr);
+  ProtectedTaskManager::ExclusiveLease task_manager{*backend_components->protected_task_manager};
   auto task = task_manager->Clone(GetTaskBehaviour());
 
   TaskEditResult result = RemoveFromTask(*task, wp);

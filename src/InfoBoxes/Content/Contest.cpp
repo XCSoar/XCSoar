@@ -51,7 +51,8 @@ InfoBoxContentContest::Update(InfoBoxData &data) noexcept
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();
 
-   if (!settings_computer.contest.enable || !protected_task_manager) {
+   if (!settings_computer.contest.enable ||
+       !backend_components->protected_task_manager) {
     data.SetInvalid();
     return;
   }
@@ -85,7 +86,8 @@ InfoBoxContentContestSpeed::Update(InfoBoxData &data) noexcept
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();
 
-  if (!settings_computer.contest.enable || !protected_task_manager) {
+  if (!settings_computer.contest.enable ||
+      !backend_components->protected_task_manager) {
     data.SetInvalid();
     return;
   }

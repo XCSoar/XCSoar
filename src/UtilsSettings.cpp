@@ -113,8 +113,9 @@ SettingsLeave(const UISettings &old_ui_settings)
     WaypointDetails::ReadFileFromProfile(way_points, operation);
   }
 
-  if (WaypointFileChanged && protected_task_manager != nullptr) {
-    ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
+  if (WaypointFileChanged &&
+      backend_components->protected_task_manager) {
+    ProtectedTaskManager::ExclusiveLease lease{*backend_components->protected_task_manager};
     auto task = lease->Clone(CommonInterface::GetComputerSettings().task);
     if (task) {
       // this must be done in thread lock because it potentially changes the

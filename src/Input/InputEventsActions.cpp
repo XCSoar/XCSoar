@@ -191,7 +191,7 @@ InputEvents::eventPilotEvent([[maybe_unused]] const TCHAR *misc)
 try {
   // Configure start window
   const OrderedTaskSettings &ots =
-      protected_task_manager->GetOrderedTaskSettings();
+    backend_components->protected_task_manager->GetOrderedTaskSettings();
   const StartConstraints &start = ots.start_constraints;
 
   const BrokenTime bt = BrokenDateTime::NowUTC();
@@ -212,7 +212,7 @@ try {
   }
   const RoughTimeSpan ts = RoughTimeSpan(new_start, new_end);
 
-  protected_task_manager->SetStartTimeSpan(ts);
+  backend_components->protected_task_manager->SetStartTimeSpan(ts);
 
   // Log pilot event
   if (backend_components->igc_logger)
@@ -359,10 +359,10 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
   bool allow_edit = true;
 
   if (StringIsEqual(misc, _T("current"))) {
-    if (protected_task_manager == NULL)
+    if (!backend_components->protected_task_manager)
       return;
 
-    wp = protected_task_manager->GetActiveWaypoint();
+    wp = backend_components->protected_task_manager->GetActiveWaypoint();
     if (!wp) {
       Message::AddMessage(_("No active waypoint!"));
       return;
@@ -453,20 +453,22 @@ try {
 
   if (StringIsEqual(misc, _T("start ask")))
     logger->GUIStartLogger(basic, settings_computer,
-                           protected_task_manager);
+                           backend_components->protected_task_manager.get());
   else if (StringIsEqual(misc, _T("start")))
     logger->GUIStartLogger(basic, settings_computer,
-                           protected_task_manager, true);
+                           backend_components->protected_task_manager.get(),
+                           true);
   else if (StringIsEqual(misc, _T("stop ask")))
     logger->GUIStopLogger(basic);
   else if (StringIsEqual(misc, _T("stop")))
     logger->GUIStopLogger(basic, true);
   else if (StringIsEqual(misc, _T("toggle ask")))
     logger->GUIToggleLogger(basic, settings_computer,
-                            protected_task_manager);
+                            backend_components->protected_task_manager.get());
   else if (StringIsEqual(misc, _T("toggle")))
     logger->GUIToggleLogger(basic, settings_computer,
-                            protected_task_manager, true);
+                            backend_components->protected_task_manager.get(),
+                            true);
   else if (StringIsEqual(misc, _T("nmea"))) {
     backend_components->nmea_logger->ToggleEnabled();
     if (backend_components->nmea_logger->IsEnabled()) {

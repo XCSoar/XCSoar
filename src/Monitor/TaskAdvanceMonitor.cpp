@@ -9,6 +9,7 @@
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/TaskAdvance.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
 #include "Interface.hpp"
 
 class TaskAdvanceWidget final
@@ -22,7 +23,7 @@ public:
      monitor(_monitor) {
     AddButton(_("Arm"), [](){
       {
-        ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
+        ProtectedTaskManager::ExclusiveLease task_manager(*backend_components->protected_task_manager);
         TaskAdvance &advance = task_manager->SetTaskAdvance();
         advance.SetArmed(true);
       }

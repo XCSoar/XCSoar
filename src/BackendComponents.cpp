@@ -4,6 +4,7 @@
 #include "BackendComponents.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Logger/Logger.hpp"
 #include "Logger/NMEALogger.hpp"

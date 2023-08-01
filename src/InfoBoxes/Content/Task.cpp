@@ -17,6 +17,7 @@
 #include "Renderer/NextArrowRenderer.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
+#include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 
 #include <tchar.h>
@@ -24,10 +25,10 @@
 static void
 ShowNextWaypointDetails() noexcept
 {
-  if (protected_task_manager == nullptr)
+  if (!backend_components->protected_task_manager)
     return;
 
-  auto wp = protected_task_manager->GetActiveWaypoint();
+  auto wp = backend_components->protected_task_manager->GetActiveWaypoint();
   if (wp == nullptr)
     return;
 
@@ -106,8 +107,8 @@ InfoBoxContentNextWaypoint::Update(InfoBoxData &data) noexcept
 {
   // use proper non-terminal next task stats
 
-  const auto way_point = protected_task_manager != nullptr
-    ? protected_task_manager->GetActiveWaypoint()
+  const auto way_point = backend_components->protected_task_manager
+    ? backend_components->protected_task_manager->GetActiveWaypoint()
     : nullptr;
 
   if (!way_point) {
@@ -155,8 +156,8 @@ InfoBoxContentNextWaypoint::GetDialogContent() noexcept
 void
 UpdateInfoBoxNextDistance(InfoBoxData &data) noexcept
 {
-  const auto way_point = protected_task_manager != nullptr
-    ? protected_task_manager->GetActiveWaypoint()
+  const auto way_point = backend_components->protected_task_manager
+    ? backend_components->protected_task_manager->GetActiveWaypoint()
     : nullptr;
 
   // Set title
@@ -189,8 +190,8 @@ UpdateInfoBoxNextDistance(InfoBoxData &data) noexcept
 void
 UpdateInfoBoxNextDistanceNominal(InfoBoxData &data) noexcept
 {
-  const auto way_point = protected_task_manager != nullptr
-    ? protected_task_manager->GetActiveWaypoint()
+  const auto way_point = backend_components->protected_task_manager
+    ? backend_components->protected_task_manager->GetActiveWaypoint()
     : nullptr;
 
   if (!way_point) {
@@ -659,10 +660,10 @@ UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data) noexcept
   const auto &calculated = CommonInterface::Calculated();
   const auto &task_stats = calculated.ordered_task_stats;
   const auto &common_stats = calculated.common_stats;
-  const double maxheight = protected_task_manager->GetOrderedTaskSettings().start_constraints.max_height;
+  const double maxheight = backend_components->protected_task_manager->GetOrderedTaskSettings().start_constraints.max_height;
 
   if (!task_stats.task_valid || maxheight <= 0
-      || !protected_task_manager
+      || !backend_components->protected_task_manager
       || !common_stats.TimeUnderStartMaxHeight.IsDefined()) {
     data.SetInvalid();
     return;
@@ -878,8 +879,8 @@ InfoBoxContentNextArrow::Update(InfoBoxData &data) noexcept
   bool angle_valid = distance_valid && basic.track_available;
 
   // Set title. Use waypoint name if available.
-  const auto way_point = protected_task_manager != nullptr
-    ? protected_task_manager->GetActiveWaypoint()
+  const auto way_point = backend_components->protected_task_manager
+    ? backend_components->protected_task_manager->GetActiveWaypoint()
     : nullptr;
   if (!way_point)
     data.SetTitle(_("Next arrow"));

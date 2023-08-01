@@ -141,7 +141,8 @@ InfoBoxContentBarogram::OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexc
                        look.info_box.inverse,
                        backend_components->glide_computer->GetFlightStats(),
                        CommonInterface::Basic(),
-                       CommonInterface::Calculated(), protected_task_manager);
+                       CommonInterface::Calculated(),
+                       backend_components->protected_task_manager.get());
 }
 
 static void

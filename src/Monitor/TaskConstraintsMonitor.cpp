@@ -3,12 +3,13 @@
 
 #include "TaskConstraintsMonitor.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Components.hpp"
 #include "Interface.hpp"
 #include "Message.hpp"
 #include "Language/Language.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "util/StaticString.hxx"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 [[gnu::pure]]
 static bool
@@ -28,7 +29,7 @@ TaskConstraintsMonitor::Check()
   const auto &basic = CommonInterface::Basic();
 
   if (InStartSector()) {
-    const auto settings = protected_task_manager->GetOrderedTaskSettings();
+    const auto settings = backend_components->protected_task_manager->GetOrderedTaskSettings();
 
     if (basic.ground_speed_available &&
         !settings.start_constraints.CheckSpeed(basic.ground_speed) &&

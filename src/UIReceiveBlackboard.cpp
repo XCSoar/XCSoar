@@ -82,8 +82,8 @@ UIReceiveCalculatedData()
     backend_components->devices->NotifyCalculatedUpdate(CommonInterface::Basic(),
                                                         CommonInterface::Calculated());
 
-  {
-    const ProtectedTaskManager::Lease lease(*protected_task_manager);
+  if (backend_components->protected_task_manager) {
+    const ProtectedTaskManager::Lease lease{*backend_components->protected_task_manager};
     task_event_observer.Check(lease);
   }
 }

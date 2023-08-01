@@ -111,8 +111,8 @@ BallastDumpProcessTimer() noexcept
     // Plane is dry now -> disable ballast_timer
     settings_computer.polar.ballast_timer_active = false;
 
-  if (protected_task_manager != nullptr)
-    protected_task_manager->SetGlidePolar(glide_polar);
+  if (backend_components->protected_task_manager != nullptr)
+    backend_components->protected_task_manager->SetGlidePolar(glide_polar);
 }
 
 static void

@@ -14,6 +14,7 @@
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Language/Language.hpp"
 #include "Widget/CallbackWidget.hpp"
+#include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 
 #include <stdio.h>
@@ -36,12 +37,12 @@ InfoBoxPanel alternate_infobox_panels[] = {
 void
 InfoBoxContentAlternateName::Update(InfoBoxData &data) noexcept
 {
-  if (protected_task_manager == NULL) {
+  if (!backend_components->protected_task_manager) {
     data.SetInvalid();
     return;
   }
 
-  ProtectedTaskManager::Lease lease(*protected_task_manager);
+  ProtectedTaskManager::Lease lease{*backend_components->protected_task_manager};
   const AlternateList &alternates = lease->GetAlternates();
 
   const AlternatePoint *alternate;
@@ -82,12 +83,12 @@ InfoBoxContentAlternateName::GetDialogContent() noexcept
 void
 InfoBoxContentAlternateGR::Update(InfoBoxData &data) noexcept
 {
-  if (protected_task_manager == NULL) {
+  if (!backend_components->protected_task_manager) {
     data.SetInvalid();
     return;
   }
 
-  ProtectedTaskManager::Lease lease(*protected_task_manager);
+  ProtectedTaskManager::Lease lease{*backend_components->protected_task_manager};
   const AlternateList &alternates = lease->GetAlternates();
 
   const AlternatePoint *alternate;

@@ -37,6 +37,7 @@
 #include "LogFile.hpp"
 #include "util/StringPointer.hxx"
 #include "util/AllocatedString.hxx"
+#include "BackendComponents.hpp"
 
 #ifdef ANDROID
 #include "Android/NativeView.hpp"
@@ -663,7 +664,7 @@ dlgWaypointDetailsShowModal(Waypoints *waypoints, WaypointPtr _waypoint,
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            look, nullptr);
   dialog.SetWidget(dialog, waypoints, _waypoint,
-                   allow_navigation ? protected_task_manager : nullptr,
+                   allow_navigation ? backend_components->protected_task_manager.get() : nullptr,
                    allow_edit);
 
   UpdateCaption(&dialog, *_waypoint);

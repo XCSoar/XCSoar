@@ -17,11 +17,12 @@
 #include "Widget/ListWidget.hpp"
 #include "Form/Button.hpp"
 #include "Weather/Features.hpp"
-#include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 #ifdef HAVE_NOAA
 #include "Dialogs/Weather/NOAADetails.hpp"
@@ -118,7 +119,7 @@ public:
   }
 
   static bool CanGotoItem(const MapItem &item) noexcept {
-    return protected_task_manager != NULL &&
+    return backend_components->protected_task_manager &&
       item.type == MapItem::Type::WAYPOINT;
   }
 
@@ -202,7 +203,7 @@ MapItemListWidget::OnActivateItem([[maybe_unused]] unsigned index) noexcept
 inline void
 MapItemListWidget::OnGotoClicked()
 {
-  if (protected_task_manager == NULL)
+  if (!backend_components->protected_task_manager)
     return;
 
   unsigned index = GetCursorIndex();
@@ -211,7 +212,7 @@ MapItemListWidget::OnGotoClicked()
   assert(item.type == MapItem::Type::WAYPOINT);
 
   auto waypoint = ((const WaypointMapItem &)item).waypoint;
-  protected_task_manager->DoGoto(std::move(waypoint));
+  backend_components->protected_task_manager->DoGoto(std::move(waypoint));
   cancel_button->Click();
 }
 

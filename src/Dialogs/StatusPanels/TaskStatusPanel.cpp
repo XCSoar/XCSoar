@@ -7,9 +7,10 @@
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/TimeFormatter.hpp"
-#include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Language/Language.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 enum Controls {
   TaskTime,
@@ -42,7 +43,7 @@ TaskStatusPanel::OnModified(DataField &df) noexcept
 void
 TaskStatusPanel::Refresh() noexcept
 {
-  if (protected_task_manager == nullptr)
+  if (!backend_components->protected_task_manager)
     return;
 
   const DerivedInfo &calculated = CommonInterface::Calculated();
@@ -51,7 +52,7 @@ TaskStatusPanel::Refresh() noexcept
   SetRowVisible(TaskTime, task_stats.has_targets);
   if (task_stats.has_targets)
     SetText(TaskTime,
-            FormatTimeHHMM(protected_task_manager->GetOrderedTaskSettings().aat_min_time));
+            FormatTimeHHMM(backend_components->protected_task_manager->GetOrderedTaskSettings().aat_min_time));
 
   SetText(ETETime,
           FormatSignedTimeHHMM(task_stats.GetEstimatedTotalTime()));

@@ -156,7 +156,7 @@ AfterStartup()
       way_points.Optimise();
     }
 
-    protected_task_manager->TaskCommit(*defaultTask);
+    backend_components->protected_task_manager->TaskCommit(*defaultTask);
   }
 
   task_manager->Resume();
@@ -365,8 +365,8 @@ Startup(UI::Display &display)
   task_manager->SetTaskEvents(*task_events);
   task_manager->Reset();
 
-  protected_task_manager =
-    new ProtectedTaskManager(*task_manager, computer_settings.task);
+  backend_components->protected_task_manager =
+    std::make_unique<ProtectedTaskManager>(*task_manager, computer_settings.task);
 
   // Read the terrain file
   main_window->LoadTerrain();
@@ -375,7 +375,7 @@ Startup(UI::Display &display)
     std::make_unique<GlideComputer>(computer_settings,
                                     *data_components->waypoints,
                                     *data_components->airspaces,
-                                    *protected_task_manager,
+                                    *backend_components->protected_task_manager,
                                     *task_events);
   backend_components->glide_computer->SetTerrain(data_components->terrain.get());
   backend_components->glide_computer->SetLogger(backend_components->igc_logger.get());
@@ -383,7 +383,7 @@ Startup(UI::Display &display)
 
   replay = new Replay(*backend_components->device_blackboard,
                       backend_components->igc_logger.get(),
-                      *protected_task_manager);
+                      *backend_components->protected_task_manager);
 
 #ifdef HAVE_CMDLINE_REPLAY
   if (CommandLine::replay_path != nullptr) {
@@ -498,7 +498,7 @@ Startup(UI::Display &display)
   GlueMapWindow *map_window = main_window->GetMap();
   if (map_window != nullptr) {
     map_window->SetWaypoints(data_components->waypoints.get());
-    map_window->SetTask(protected_task_manager);
+    map_window->SetTask(backend_components->protected_task_manager.get());
     map_window->SetRoutePlanner(&backend_components->glide_computer->GetProtectedRoutePlanner());
     map_window->SetGlideComputer(backend_components->glide_computer.get());
     map_window->SetAirspaces(data_components->airspaces.get());
@@ -687,9 +687,9 @@ Shutdown()
   operation.SetText(_("Shutdown, saving task..."));
 
   LogString("Save default task");
-  if (protected_task_manager != nullptr) {
+  if (backend_components->protected_task_manager) {
     try {
-      protected_task_manager->TaskSaveDefault();
+      backend_components->protected_task_manager->TaskSaveDefault();
     } catch (...) {
       LogError(std::current_exception());
     }
@@ -711,10 +711,9 @@ Shutdown()
 
   backend_components->nmea_logger.reset();
 
-  if (protected_task_manager != nullptr) {
-    protected_task_manager->SetRoutePlanner(nullptr);
-    delete protected_task_manager;
-    protected_task_manager = nullptr;
+  if (backend_components->protected_task_manager) {
+    backend_components->protected_task_manager->SetRoutePlanner(nullptr);
+    backend_components->protected_task_manager.reset();
   }
 
   delete task_manager;

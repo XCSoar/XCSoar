@@ -11,6 +11,7 @@ class GlueFlightLogger;
 class MultipleDevices;
 class DeviceBlackboard;
 class MergeThread;
+class ProtectedTaskManager;
 class GlideComputer;
 class CalculationThread;
 
@@ -28,6 +29,7 @@ struct BackendComponents {
   std::unique_ptr<MultipleDevices> devices;
   std::unique_ptr<MergeThread> merge_thread;
 
+  std::unique_ptr<ProtectedTaskManager> protected_task_manager;
   std::unique_ptr<GlideComputer> glide_computer;
   std::unique_ptr<CalculationThread> calculation_thread;
 

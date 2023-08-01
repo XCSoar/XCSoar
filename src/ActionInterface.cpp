@@ -96,8 +96,8 @@ ActionInterface::SetBallast(double ballast, bool to_devices) noexcept
   polar.SetBallast(ballast);
 
   // send to calculation thread and trigger recalculation
-  if (protected_task_manager != nullptr)
-    protected_task_manager->SetGlidePolar(polar);
+  if (backend_components->protected_task_manager)
+    backend_components->protected_task_manager->SetGlidePolar(polar);
 
   if (backend_components->calculation_thread) {
     backend_components->calculation_thread->SetComputerSettings(GetComputerSettings());
@@ -126,8 +126,8 @@ ActionInterface::SetBugs(double bugs, bool to_devices) noexcept
   GlidePolar &polar = SetComputerSettings().polar.glide_polar_task;
 
   // send to calculation thread and trigger recalculation
-  if (protected_task_manager != nullptr)
-    protected_task_manager->SetGlidePolar(polar);
+  if (backend_components->protected_task_manager)
+    backend_components->protected_task_manager->SetGlidePolar(polar);
 
   if (backend_components->calculation_thread) {
     backend_components->calculation_thread->SetComputerSettings(GetComputerSettings());
@@ -162,8 +162,8 @@ ActionInterface::SetMacCready(double mc, bool to_devices) noexcept
 
   /* send to calculation thread and trigger recalculation */
 
-  if (protected_task_manager != nullptr)
-    protected_task_manager->SetGlidePolar(polar);
+  if (backend_components->protected_task_manager)
+    backend_components->protected_task_manager->SetGlidePolar(polar);
 
   if (backend_components->calculation_thread) {
     backend_components->calculation_thread->SetComputerSettings(GetComputerSettings());

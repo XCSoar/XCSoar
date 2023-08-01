@@ -48,12 +48,12 @@ ExpandTaskMacros(tstring_view name,
     return _T("");
   }
 
-  if (protected_task_manager == nullptr) {
+  if (!backend_components->protected_task_manager) {
     invalid = true;
     return nullptr;
   }
 
-  ProtectedTaskManager::Lease task_manager(*protected_task_manager);
+  ProtectedTaskManager::Lease task_manager{*backend_components->protected_task_manager};
 
   const AbstractTask *task = task_manager->GetActiveTask();
   if (task == nullptr || !task_stats.task_valid ||

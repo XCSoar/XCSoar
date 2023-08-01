@@ -7,7 +7,6 @@ class FileCache;
 class AsyncTerrainOverviewLoader;
 class DrawThread;
 class ProtectedAirspaceWarningManager;
-class ProtectedTaskManager;
 class Replay;
 class TrackingGlue;
 namespace TIM { class Glue; }
@@ -17,7 +16,6 @@ inline struct BackendComponents *backend_components;
 
 // other global objects
 extern FileCache *file_cache;
-extern ProtectedTaskManager *protected_task_manager;
 extern Replay *replay;
 extern AsyncTerrainOverviewLoader *terrain_loader;
 #ifndef ENABLE_OPENGL
