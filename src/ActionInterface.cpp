@@ -96,13 +96,7 @@ ActionInterface::SetBallast(double ballast, bool to_devices) noexcept
   polar.SetBallast(ballast);
 
   // send to calculation thread and trigger recalculation
-  if (backend_components->protected_task_manager)
-    backend_components->protected_task_manager->SetGlidePolar(polar);
-
-  if (backend_components->calculation_thread) {
-    backend_components->calculation_thread->SetPolarSettings(GetComputerSettings().polar);
-    backend_components->calculation_thread->ForceTrigger();
-  }
+  backend_components->SetTaskPolar(GetComputerSettings().polar);
 
   // send to external devices
   if (to_devices && backend_components->devices) {
@@ -123,16 +117,9 @@ ActionInterface::SetBugs(double bugs, bool to_devices) noexcept
 {
   // Write Bugs into settings
   CommonInterface::SetComputerSettings().polar.SetBugs(bugs);
-  GlidePolar &polar = SetComputerSettings().polar.glide_polar_task;
 
   // send to calculation thread and trigger recalculation
-  if (backend_components->protected_task_manager)
-    backend_components->protected_task_manager->SetGlidePolar(polar);
-
-  if (backend_components->calculation_thread) {
-    backend_components->calculation_thread->SetPolarSettings(GetComputerSettings().polar);
-    backend_components->calculation_thread->ForceTrigger();
-  }
+  backend_components->SetTaskPolar(GetComputerSettings().polar);
 
   // send to external devices
   if (to_devices && backend_components->devices) {
@@ -161,14 +148,7 @@ ActionInterface::SetMacCready(double mc, bool to_devices) noexcept
   InfoBoxManager::SetDirty();
 
   /* send to calculation thread and trigger recalculation */
-
-  if (backend_components->protected_task_manager)
-    backend_components->protected_task_manager->SetGlidePolar(polar);
-
-  if (backend_components->calculation_thread) {
-    backend_components->calculation_thread->SetPolarSettings(GetComputerSettings().polar);
-    backend_components->calculation_thread->ForceTrigger();
-  }
+  backend_components->SetTaskPolar(GetComputerSettings().polar);
 
   /* send to external devices */
 

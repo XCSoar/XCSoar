@@ -5,6 +5,7 @@
 
 #include <memory>
 
+struct PolarSettings;
 class Logger;
 class NMEALogger;
 class GlueFlightLogger;
@@ -41,4 +42,11 @@ struct BackendComponents {
 
   BackendComponents(const BackendComponents &) = delete;
   BackendComponents &operator=(const BackendComponents &) = delete;
+
+  /**
+   * Call this after modifying the #GlidePolar in #PolarSettings to
+   * propagate it to the #CalculationThread and the
+   * #ProtectedTaskManager.
+   */
+  void SetTaskPolar(const PolarSettings &settings) noexcept;
 };

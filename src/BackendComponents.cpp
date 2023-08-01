@@ -19,3 +19,15 @@ BackendComponents::BackendComponents() noexcept
 }
 
 BackendComponents::~BackendComponents() noexcept = default;
+
+void
+BackendComponents::SetTaskPolar(const PolarSettings &settings) noexcept
+{
+  if (protected_task_manager)
+    protected_task_manager->SetGlidePolar(settings.glide_polar_task);
+
+  if (calculation_thread) {
+    calculation_thread->SetPolarSettings(settings);
+    calculation_thread->ForceTrigger();
+  }
+}
