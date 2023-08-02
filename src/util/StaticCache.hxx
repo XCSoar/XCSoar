@@ -100,27 +100,10 @@ class StaticCache {
 		}
 	};
 
-	struct ItemHash : Hash {
-		using Hash::operator();
-
+	struct ItemGetKey {
 		[[gnu::pure]]
-		std::size_t operator()(const Item &a) const noexcept {
-			return Hash::operator()(a.GetKey());
-		}
-	};
-
-	struct ItemEqual : Equal {
-		using Equal::operator();
-
-		[[gnu::pure]]
-		bool operator()(const Item &a, const Item &b) const noexcept {
-			return Equal::operator()(a.GetKey(), b.GetKey());
-		}
-
-		template<typename A>
-		[[gnu::pure]]
-		bool operator()(A &&a, const Item &b) const noexcept {
-			return Equal::operator()(std::forward<A>(a), b.GetKey());
+		const Key &operator()(const Item &item) const noexcept {
+			return item.GetKey();
 		}
 	};
 
@@ -133,9 +116,10 @@ class StaticCache {
 
 	ItemList chronological_list;
 
-	using KeyMap = IntrusiveHashSet<Item, table_size,
-					IntrusiveHashSetOperators<ItemHash,
-								  ItemEqual>>;
+	using KeyMap =
+		IntrusiveHashSet<Item, table_size,
+				 IntrusiveHashSetOperators<Hash, Equal,
+							   ItemGetKey>>;
 
 	KeyMap map;
 
