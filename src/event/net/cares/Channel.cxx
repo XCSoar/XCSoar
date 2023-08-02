@@ -205,9 +205,9 @@ Channel::Request::HostCallback(int status, struct hostent *he) noexcept
 			success = true;
 
 			for (auto i = he->h_addr_list; *i != nullptr; ++i)
-				AsSocketAddress(*he, *i, [&handler = *handler](SocketAddress address){
-						handler.OnCaresAddress(address);
-					});
+				AsSocketAddress(*he, *i, [&_handler = *handler](SocketAddress address){
+					_handler.OnCaresAddress(address);
+				});
 
 			if (pending == 0)
 				handler->OnCaresSuccess();
