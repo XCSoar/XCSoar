@@ -133,7 +133,9 @@ class StaticCache {
 
 	ItemList chronological_list;
 
-	using KeyMap = IntrusiveHashSet<Item, table_size, ItemHash, ItemEqual>;
+	using KeyMap = IntrusiveHashSet<Item, table_size,
+					IntrusiveHashSetOperators<ItemHash,
+								  ItemEqual>>;
 
 	KeyMap map;
 
