@@ -95,8 +95,17 @@ class StaticCache {
 
 		template<typename K, typename U>
 		void Replace(K &&_key, U &&value) {
-			pair->Replace(std::forward<K>(_key),
-				      std::forward<U>(value));
+			if constexpr (std::is_assignable_v<Data &, decltype(value)>) {
+				/* can replace key and value */
+				pair->Replace(std::forward<K>(_key),
+					      std::forward<U>(value));
+			} else {
+				/* not assignable, fall back to
+				   destruct & construct */
+				Destruct();
+				Construct(std::forward<K>(_key),
+					  std::forward<U>(value));
+			}
 		}
 	};
 
@@ -261,7 +270,16 @@ public:
 			map.insert_commit(position, item);
 			return item.GetData();
 		} else {
-			position->ReplaceData(std::forward<U>(data));
+			if constexpr (std::is_assignable_v<Data &, decltype(data)>) {
+				/* can replace only the value */
+				position->ReplaceData(std::forward<U>(data));
+			} else {
+				/* not assignable, fall back to
+				   destruct & construct */
+				position->Destruct();
+				position->Construct(std::forward<K>(key), std::forward<U>(data));
+			}
+
 			return position->GetData();
 		}
 	}
