@@ -220,6 +220,15 @@ public:
 	}
 
 	/**
+	 * Obtain a reference to the key of an item that is currently
+	 * in the cache.
+	 */
+	[[gnu::const]]
+	static const Key &KeyOf(const Data &data) noexcept {
+		return Item::Cast(const_cast<Data &>(data)).GetKey();
+	}
+
+	/**
 	 * Look up an item by its key.  Returns nullptr if no such
 	 * item exists.
 	 */
