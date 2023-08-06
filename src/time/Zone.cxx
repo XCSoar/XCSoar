@@ -12,9 +12,6 @@
 #include <time.h>
 #endif
 
-/**
- * Determine the time zone offset in a portable way.
- */
 int
 GetTimeZoneOffset() noexcept
 {

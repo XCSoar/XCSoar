@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "GaugesConfigPanel.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Interface.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Enum.hpp"

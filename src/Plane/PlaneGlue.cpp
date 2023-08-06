@@ -4,7 +4,7 @@
 #include "PlaneGlue.hpp"
 #include "PlaneFileGlue.hpp"
 #include "Plane.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Profile/Map.hpp"
 #include "Polar/Polar.hpp"
 #include "Polar/PolarGlue.hpp"

@@ -51,7 +51,7 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data) noexcept
     alternate = NULL;
   }
 
-  data.FormatTitle(_("Altn %d"), index + 1);
+  data.FmtTitle(_("Altn {}"), index + 1);
 
   if (alternate == NULL || !CommonInterface::Basic().track_available) {
     data.SetInvalid();
@@ -97,7 +97,7 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data) noexcept
     alternate = NULL;
   }
 
-  data.FormatTitle(_T("Altn %d GR"), index + 1);
+  data.FmtTitle(_T("Altn {} GR"), index + 1);
 
   if (alternate == NULL) {
     data.SetInvalid();

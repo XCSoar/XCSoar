@@ -86,7 +86,8 @@ FlarmDevice::Receive(const char *prefix, char *buffer, size_t length,
 
   char *p = (char *)buffer, *end = p + length;
   while (true) {
-    size_t nbytes = port.WaitAndRead(p, end - p, env, timeout);
+    size_t nbytes = port.WaitAndRead(std::as_writable_bytes(std::span{p, std::size_t(end - p)}),
+                                     env, timeout);
 
     char *q = (char *)memchr(p, '*', nbytes);
     if (q != nullptr) {

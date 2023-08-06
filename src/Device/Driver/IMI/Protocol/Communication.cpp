@@ -22,13 +22,13 @@ namespace IMI
 
 void
 IMI::Send(Port &port, OperationEnvironment &env,
-          IMIBYTE msgID, const void *payload, IMIWORD payloadSize,
+          IMIBYTE msgID, std::span<const std::byte> payload,
           IMIBYTE parameter1, IMIWORD parameter2, IMIWORD parameter3)
 {
   Sync sync;
   sync.syncChar1 = IMICOMM_SYNC_CHAR1;
   sync.syncChar2 = IMICOMM_SYNC_CHAR2;
-  port.FullWrite(&sync, sizeof(sync), env, std::chrono::seconds{1});
+  port.FullWrite(std::as_bytes(std::span{&sync, 1}), env, std::chrono::seconds{1});
 
   Header header;
   header.sn = _serialNumber;
@@ -36,20 +36,21 @@ IMI::Send(Port &port, OperationEnvironment &env,
   header.parameter1 = parameter1;
   header.parameter2 = parameter2;
   header.parameter3 = parameter3;
-  header.payloadSize = payloadSize;
+  header.payloadSize = payload.size();
 
   IMIWORD crc = 0xffff;
   crc = UpdateCRC16CCITT(&header, sizeof(header), crc);
 
-  port.FullWrite(&header, sizeof(header), env, std::chrono::seconds{1});
+  port.FullWrite(std::as_bytes(std::span{&header, 1}), env, std::chrono::seconds{1});
 
-  if (payloadSize > 0) {
-    port.FullWrite(payload, payloadSize, env, std::chrono::seconds{2});
-    crc = UpdateCRC16CCITT(payload, payloadSize, crc);
+  if (!payload.empty()) {
+    port.FullWrite(payload, env, std::chrono::seconds{2});
+    crc = UpdateCRC16CCITT(payload.data(), payload.size(), crc);
   }
 
   crc = ToBE16(crc);
-  port.FullWrite(&crc, sizeof(crc), env, std::chrono::seconds{1});
+  port.FullWrite(std::as_bytes(std::span{&crc, 1}), env,
+                 std::chrono::seconds{1});
 }
 
 static constexpr std::chrono::steady_clock::duration
@@ -80,7 +81,8 @@ IMI::Receive(Port &port, OperationEnvironment &env,
   while (true) {
     // read message
     IMIBYTE buffer[64];
-    size_t bytesRead = port.WaitAndRead(buffer, sizeof(buffer), env, timeout);
+    size_t bytesRead = port.WaitAndRead(std::as_writable_bytes(std::span{buffer}),
+                                        env, timeout);
 
     // parse message
     if (auto msg = mp.Parse(buffer, bytesRead))
@@ -91,16 +93,16 @@ IMI::Receive(Port &port, OperationEnvironment &env,
 
 IMI::TMsg
 IMI::SendRet(Port &port, OperationEnvironment &env,
-             IMIBYTE msgID, const void *payload,
-             IMIWORD payloadSize, IMIBYTE reMsgID, IMIWORD retPayloadSize,
+             IMIBYTE msgID, std::span<const std::byte> payload,
+             IMIBYTE reMsgID, IMIWORD retPayloadSize,
              IMIBYTE parameter1, IMIWORD parameter2, IMIWORD parameter3,
              std::chrono::steady_clock::duration extra_timeout,
              int retry)
 {
-  extra_timeout += CalcPayloadTimeout(payloadSize, port.GetBaudrate());
+  extra_timeout += CalcPayloadTimeout(payload.size(), port.GetBaudrate());
 
   while (true) {
-    Send(port, env, msgID, payload, payloadSize, parameter1, parameter2,
+    Send(port, env, msgID, payload, parameter1, parameter2,
          parameter3);
 
     try {
@@ -161,7 +163,7 @@ IMI::FlashRead(Port &port, void *buffer, unsigned address, unsigned size,
     return true;
 
   const auto msg = SendRet(port, env,
-                           MSG_FLASH, 0, 0, MSG_FLASH, -1,
+                           MSG_FLASH, {}, MSG_FLASH, -1,
                            IMICOMM_BIGPARAM1(address),
                            IMICOMM_BIGPARAM2(address),
                            size, std::chrono::seconds{3}, 2);

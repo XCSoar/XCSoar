@@ -4,11 +4,14 @@ Version 7.29 - not yet released
   - fix crash when arc airspace has no center
   - allow xci files to be downloaded from repository
   - in OpenAir format use AC as Class and AY as Type (#1118)
+  - add RASP file selection
 * devices
   - ATR833: read-out active and standby frequencies
   - AirControlDisplay: Set and readout of transponder code
+  - AirControlDisplay: forward gps data to device
 * Android
   - get rid of not usable USB interfaces in the 'Device -> Port' list
+  - Upgrade targetSdkVersion to 31
 * Kobo
   - Add support for Libra H2O
   - Add support for Clara 2E
@@ -27,12 +30,14 @@ Version 7.29 - not yet released
 * user interface
   - show FLARMGauge only when traffic is within 4Km
   - redesigned waypoint type icons
-  - fix font resizing in Infobx titles and small values
   - align labels in forms on the left side
   - increased precision in polar edit dialogue
   - extend QuickMenu to maximum of 64 entries
   - add PEV,FlarmTraffic,FileManager to joystick QuickMenu
   - add transponder code infobox
+  - Pan mode fully keyboard / joystick operatable
+  - Pan mode use buttons for zoom and what's here
+  - Slight increase in touch selection on map
 
 Version 7.28 - 2022/10/29
 * data files

@@ -6,7 +6,7 @@
 #include "TaskProfile.hpp"
 #include "TrackingProfile.hpp"
 #include "WeatherProfile.hpp"
-#include "ProfileKeys.hpp"
+#include "Keys.hpp"
 #include "ContestProfile.hpp"
 #include "Map.hpp"
 #include "Computer/Settings.hpp"

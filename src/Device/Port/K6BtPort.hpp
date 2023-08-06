@@ -14,10 +14,10 @@
  * K6Bt is a Bluetooth to RS-232 adapter from K6-Team.
  */
 class K6BtPort : public Port {
-  static constexpr uint8_t NOP = 0x00;
-  static constexpr uint8_t ESCAPE = 0xa5;
-  static constexpr uint8_t CHANGE_BAUD_RATE = 0x30;
-  static constexpr uint8_t FLUSH_BUFFERS = 0x40;
+  static constexpr std::byte NOP{0x00};
+  static constexpr std::byte ESCAPE{0xa5};
+  static constexpr std::byte CHANGE_BAUD_RATE{0x30};
+  static constexpr std::byte FLUSH_BUFFERS{0x40};
 
   std::unique_ptr<Port> port;
 
@@ -28,20 +28,20 @@ public:
            PortListener *listener, DataHandler &handler) noexcept;
 
 protected:
-  bool SendCommand(uint8_t cmd);
+  bool SendCommand(std::byte cmd);
   void SendSetBaudrate(unsigned baud_rate);
 
 public:
   /* virtual methods from Port */
   PortState GetState() const noexcept override;
   bool WaitConnected(OperationEnvironment &env) override;
-  std::size_t Write(const void *data, std::size_t length) override;
+  std::size_t Write(std::span<const std::byte> src) override;
   bool Drain() override;
   void Flush() override;
   void SetBaudrate(unsigned baud_rate) override;
   unsigned GetBaudrate() const noexcept override;
   bool StopRxThread() override;
   bool StartRxThread() override;
-  std::size_t Read(void *Buffer, std::size_t Size) override;
+  std::size_t Read(std::span<std::byte> dest) override;
   void WaitRead(std::chrono::steady_clock::duration timeout) override;
 };

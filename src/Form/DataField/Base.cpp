@@ -18,6 +18,9 @@ DataField::DataField(Type _type, bool _supports_combolist,
 void
 DataField::Modified() noexcept
 {
+  if (on_modified)
+    on_modified();
+
   if (listener != nullptr)
     listener->OnModified(*this);
 }

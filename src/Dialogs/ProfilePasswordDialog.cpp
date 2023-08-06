@@ -7,7 +7,7 @@
 #include "Error.hpp"
 #include "Profile/Map.hpp"
 #include "Profile/File.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Language/Language.hpp"
 #include "system/Path.hpp"
 #include "util/StringAPI.hxx"

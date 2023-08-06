@@ -6,6 +6,8 @@
 #include "Unit.hpp"
 #include "Group.hpp"
 
+#include <compare> // for the defaulted spaceship operator
+
 struct UnitSetting
 {
   /** Unit for distances */
@@ -28,6 +30,8 @@ struct UnitSetting
   Unit wing_loading_unit;
   /** Unit for mass */
   Unit mass_unit;
+  /** Unit for rotation speed */
+  Unit rotation_unit;
 
   void SetDefaults() noexcept;
 
@@ -37,5 +41,6 @@ struct UnitSetting
   [[gnu::pure]]
   Unit GetByGroup(UnitGroup group) const noexcept;
 
-  bool operator==(const UnitSetting &right) const noexcept;
+  friend constexpr auto operator<=>(const UnitSetting &,
+                                    const UnitSetting &) noexcept = default;
 };

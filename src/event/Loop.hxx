@@ -21,7 +21,6 @@
 #include "thread/Mutex.hxx"
 #endif
 
-#include <atomic>
 #include <cassert>
 
 #include "io/uring/Features.h"
@@ -172,6 +171,10 @@ public:
 #endif
 
 		return steady_clock_cache.now();
+	}
+
+	void FlushClockCaches() noexcept {
+		steady_clock_cache.flush();
 	}
 
 #ifdef HAVE_URING

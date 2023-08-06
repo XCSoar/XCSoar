@@ -62,13 +62,13 @@ public:
   /* virtual methods from Port */
   PortState GetState() const noexcept override;
   bool WaitConnected(OperationEnvironment &env) override;
-  std::size_t Write(const void *data, std::size_t length) override;
+  std::size_t Write(std::span<const std::byte> src) override;
   bool Drain() override;
   void Flush() override;
   unsigned GetBaudrate() const noexcept override;
   void SetBaudrate(unsigned baud_rate) override;
   bool StopRxThread() override;
   bool StartRxThread() override;
-  std::size_t Read(void *buffer, std::size_t size) override;
+  std::size_t Read(std::span<std::byte> dest) override;
   void WaitRead(std::chrono::steady_clock::duration timeout) override;
 };

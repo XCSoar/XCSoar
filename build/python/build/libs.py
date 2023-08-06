@@ -12,9 +12,9 @@ from build.lua import LuaProject
 from .musl import MuslProject
 
 binutils = BinutilsProject(
-    'https://ftp.gnu.org/gnu/binutils/binutils-2.39.tar.xz',
-    'https://toolchains.bootlin.com/downloads/releases/sources/binutils-2.39/binutils-2.39.tar.xz',
-    '645c25f563b8adc0a81dbd6a41cffbf4d37083a382e02d5d3df4f65c09516d00',
+    'https://ftp.gnu.org/gnu/binutils/binutils-2.40.tar.xz',
+    'https://fossies.org/linux/misc/binutils-2.40.tar.xz',
+    '0f8a4c272d7f17f369ded10a4aca28b8e304828e95526da482b0ccc4dfc9d8e1',
     'bin/as',
     [
         '--with-system-zlib',
@@ -34,9 +34,9 @@ linux_headers = SabotageLinuxHeadersProject(
 )
 
 gcc = GccProject(
-    'https://ftp.gnu.org/gnu/gcc/gcc-12.2.0/gcc-12.2.0.tar.xz',
-    'https://fossies.org/linux/misc/gcc-12.2.0.tar.xz',
-    'e549cf9cf3594a00e27b6589d4322d70e0720cdd213f39beb4181e06926230ff',
+    'https://ftp.gnu.org/gnu/gcc/gcc-13.1.0/gcc-13.1.0.tar.xz',
+    'https://fossies.org/linux/misc/gcc-13.1.0.tar.xz',
+    '61d684f0aa5e76ac6585ad8898a2427aade8979ed5e7f85492286c4dfc13ee86',
     'lib/libstdc++.a',
     [
         # GCC fails to build if we disable the shared libstdc++
@@ -64,6 +64,7 @@ gcc = GccProject(
 
         '--disable-libstdcxx-verbose',
         '--disable-libstdcxx-dual-abi',
+        '--disable-libstdcxx-backtrace',
         '--disable-libstdcxx-filesystem-ts',
 
         # TODO: don't hard-code Kobo settings
@@ -131,6 +132,21 @@ openssh = AutotoolsProject(
     use_destdir=True,
 )
 
+libfmt = CmakeProject(
+    'https://github.com/fmtlib/fmt/archive/9.1.0.tar.gz',
+    'https://github.com/fmtlib/fmt/archive/9.1.0.tar.gz',
+    '5dea48d1fcddc3ec571ce2058e13910a0d4a6bab4cc09a809d8b1dd1c88ae6f2',
+    'lib/libfmt.a',
+    [
+        '-DBUILD_SHARED_LIBS=OFF',
+        '-DFMT_DOC=OFF',
+        '-DFMT_TEST=OFF',
+    ],
+    name='fmt',
+    version='9.1.0',
+    base='fmt-9.1.0',
+)
+
 libsodium = AutotoolsProject(
     'https://download.libsodium.org/libsodium/releases/libsodium-1.0.18.tar.gz',
     "https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz",
@@ -176,9 +192,9 @@ cares = CmakeProject(
 )
 
 curl = CmakeProject(
-    'https://curl.se/download/curl-7.86.0.tar.xz',
-    'https://github.com/curl/curl/releases/download/curl-7_86_0/curl-7.86.0.tar.xz',
-    '2d61116e5f485581f6d59865377df4463f2e788677ac43222b496d4e49fb627b',
+    'https://curl.se/download/curl-8.0.1.tar.xz',
+    'https://github.com/curl/curl/releases/download/curl-8_0_1/curl-8.0.1.tar.xz',
+    '0a381cd82f4d00a9a334438b8ca239afea5bfefcfa9a1025f2bf118e79e0b5f0',
     'lib/libcurl.a',
     [
         '-DBUILD_CURL_EXE=OFF',

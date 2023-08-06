@@ -70,6 +70,7 @@ jobs:
             librsvg2-bin xsltproc \
             imagemagick gettext sox \
             zlib1g-dev \
+            libfmt-dev \
             libsodium-dev \
             libfreetype6-dev \
             libpng-dev libjpeg-dev \
@@ -139,6 +140,7 @@ jobs:
             librsvg2-bin xsltproc \
             imagemagick gettext sox \
             zlib1g-dev \
+            libfmt-dev \
             libsodium-dev \
             libfreetype6-dev \
             libpng-dev libjpeg-dev \
@@ -442,6 +444,7 @@ jobs:
             quilt \
             librsvg \
             imagemagick gettext sox \
+            fmt \
             sdl2 \
             libsodium \
             freetype \

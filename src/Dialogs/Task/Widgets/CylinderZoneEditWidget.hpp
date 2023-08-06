@@ -14,11 +14,11 @@ public:
   CylinderZoneEditWidget(CylinderZone &oz, bool _length_editable) noexcept;
 
 protected:
-  const CylinderZone &GetObject() const {
+  const CylinderZone &GetObject() const noexcept {
     return (const CylinderZone &)ObservationZoneEditWidget::GetObject();
   }
 
-  CylinderZone &GetObject() {
+  CylinderZone &GetObject() noexcept {
     return (CylinderZone &)ObservationZoneEditWidget::GetObject();
   }
 

@@ -6,6 +6,7 @@
 #include "Types.hpp"
 
 #include <chrono>
+#include <span>
 
 class Port;
 class OperationEnvironment;
@@ -20,15 +21,14 @@ namespace IMI {
  * @param port Device handle
  * @param msgID ID of the message to send
  * @param payload Payload buffer to use for the message
- * @param payloadSize The size of the payload buffer
  * @param parameter1 1st parameter for to put in the message
  * @param parameter2 2nd parameter for to put in the message
  * @param parameter3 3rd parameter for to put in the message
  */
 void
 Send(Port &port, OperationEnvironment &env,
-     IMIBYTE msgID, const void *payload = 0,
-     IMIWORD payloadSize = 0, IMIBYTE parameter1 = 0,
+     IMIBYTE msgID, std::span<const std::byte> payload={},
+     IMIBYTE parameter1 = 0,
      IMIWORD parameter2 = 0, IMIWORD parameter3 = 0);
 
 /**
@@ -60,8 +60,8 @@ Receive(Port &port, OperationEnvironment &env,
  */
 TMsg
 SendRet(Port &port, OperationEnvironment &env,
-        IMIBYTE msgID, const void *payload,
-        IMIWORD payloadSize, IMIBYTE reMsgID,
+        IMIBYTE msgID, std::span<const std::byte> payload,
+        IMIBYTE reMsgID,
         IMIWORD retPayloadSize, IMIBYTE parameter1 = 0,
         IMIWORD parameter2 = 0, IMIWORD parameter3 = 0,
         std::chrono::steady_clock::duration extra_timeout = std::chrono::milliseconds{300},

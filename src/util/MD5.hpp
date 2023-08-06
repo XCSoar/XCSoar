@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <array>
 #include <cstdint>
 #include <cstddef>
 
@@ -16,11 +17,11 @@ public:
   };
 
 private:
-  uint8_t buff512bits[64];
+  std::array<uint8_t, 64> buff512bits;
   State state;
   uint64_t message_length;
 
-  void Process512(const uint8_t *in) noexcept;
+  void Process512() noexcept;
 
 public:
   /**

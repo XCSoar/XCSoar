@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "Compiler.h"
-
 #include <cstdint>
 #include <cstddef>
 

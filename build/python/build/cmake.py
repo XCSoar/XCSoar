@@ -11,13 +11,17 @@ def __write_cmake_compiler(f, language, compiler):
         compiler = s[1]
     print(f'set(CMAKE_{language}_COMPILER {compiler})', file=f)
 
-def __write_cmake_toolchain_file(f, toolchain):
+def __write_cmake_toolchain_file(f, toolchain, no_isystem):
     if '-darwin' in toolchain.actual_arch:
         cmake_system_name = 'Darwin'
     elif toolchain.is_windows:
         cmake_system_name = 'Windows'
     else:
         cmake_system_name = 'Linux'
+
+    cppflags = toolchain.cppflags
+    if no_isystem:
+        cppflags = re.sub(r'\s*-isystem\s+\S+\s*', ' ', cppflags)
 
     f.write(f"""
 set(CMAKE_SYSTEM_NAME {cmake_system_name})
@@ -26,8 +30,8 @@ set(CMAKE_SYSTEM_PROCESSOR {toolchain.actual_arch.split('-', 1)[0]})
 set(CMAKE_C_COMPILER_TARGET {toolchain.actual_arch})
 set(CMAKE_CXX_COMPILER_TARGET {toolchain.actual_arch})
 
-set(CMAKE_C_FLAGS_INIT "{toolchain.cflags} {toolchain.cppflags}")
-set(CMAKE_CXX_FLAGS_INIT "{toolchain.cxxflags} {toolchain.cppflags}")
+set(CMAKE_C_FLAGS_INIT "{toolchain.cflags} {cppflags}")
+set(CMAKE_CXX_FLAGS_INIT "{toolchain.cxxflags} {cppflags}")
 """)
     __write_cmake_compiler(f, 'C', toolchain.cc)
     __write_cmake_compiler(f, 'CXX', toolchain.cxx)
@@ -62,13 +66,18 @@ def configure(toolchain, src, build, args=(), env=None):
     # looking for libraries on the build host (TODO: fix this
     # properly); but we must not do that on Android because the NDK
     # has a sysroot already
+    no_isystem = False
     if '-android' not in toolchain.actual_arch and '-darwin' not in toolchain.actual_arch:
         cross_args.append('-DCMAKE_SYSROOT=' + toolchain.install_prefix)
+
+        # strip "-isystem" to avoid build failures with C++ headers
+        # because "#include_next" ceases to work
+        no_isystem = True
 
     os.makedirs(build, exist_ok=True)
     cmake_toolchain_file = os.path.join(build, 'cmake_toolchain_file')
     with open(cmake_toolchain_file, 'w') as f:
-        __write_cmake_toolchain_file(f, toolchain)
+        __write_cmake_toolchain_file(f, toolchain, no_isystem)
 
     configure = [
         'cmake',

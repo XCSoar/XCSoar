@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "UtilsSettings.hpp"
@@ -21,7 +21,8 @@ enum ControlIndex {
   AirspaceFile,
   AdditionalAirspaceFile,
   AirfieldFile,
-  FlarmFile
+  FlarmFile,
+  RaspFile,
 };
 
 class SiteConfigPanel final : public RowFormWidget {
@@ -90,6 +91,10 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
           _("The name of the file containing information about registered FLARM devices."),
           ProfileKeys::FlarmFile, _T("*.fln\0"),
           FileType::FLARMNET);
+
+  AddFile(_T("RASP"), nullptr,
+          ProfileKeys::RaspFile, _T("*-rasp*.dat\0"),
+          FileType::RASP);
 }
 
 bool
@@ -111,8 +116,11 @@ SiteConfigPanel::Save(bool &_changed) noexcept
 
   AirfieldFileChanged = SaveValueFileReader(AirfieldFile, ProfileKeys::AirfieldFile);
 
+  RaspFileChanged = SaveValueFileReader(RaspFile, ProfileKeys::RaspFile);
 
-  changed = WaypointFileChanged || AirfieldFileChanged || MapFileChanged || FlarmFileChanged;
+  changed = WaypointFileChanged || AirfieldFileChanged || MapFileChanged ||
+    FlarmFileChanged ||
+    RaspFileChanged;
 
   _changed |= changed;
 

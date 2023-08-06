@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "UnitsConfig.hpp"
-#include "ProfileKeys.hpp"
+#include "Keys.hpp"
 #include "Map.hpp"
 #include "Units/Settings.hpp"
 #include "Units/UnitsGlue.hpp"
@@ -307,6 +307,23 @@ GetMassUnit(const ProfileMap &map, const char *key, Unit &value)
   return true;
 }
 
+static constexpr bool
+ValidRotationUnit(Unit unit) noexcept
+{
+  return unit == Unit::HZ || unit == Unit::RPM;
+}
+
+static bool
+GetRotationUnit(const ProfileMap &map, const char *key, Unit &value)
+{
+  Unit tmp;
+  if (!map.GetEnum(key, tmp) || !ValidRotationUnit(tmp))
+    return false;
+
+  value = tmp;
+  return true;
+}
+
 void
 Profile::LoadUnits(const ProfileMap &map, UnitSetting &config)
 {
@@ -328,4 +345,5 @@ Profile::LoadUnits(const ProfileMap &map, UnitSetting &config)
   GetWingLoadingUnit(map, ProfileKeys::WingLoadingUnitValue,
                      config.wing_loading_unit);
   GetMassUnit(map, ProfileKeys::MassUnitValue, config.mass_unit);
+  GetRotationUnit(map, ProfileKeys::RotationUnitValue, config.rotation_unit);
 }

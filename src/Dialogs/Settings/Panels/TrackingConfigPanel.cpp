@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "TrackingConfigPanel.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/Enum.hpp"

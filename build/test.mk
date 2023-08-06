@@ -48,23 +48,7 @@ testslow: $(call name-to-bin,$(TESTSLOW))
 testfast: $(call name-to-bin,$(TESTFAST))
 	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(addprefix $(TARGET_BIN_DIR)/,$(TESTFAST))
 
-TEST1_LDADD = $(HARNESS_LIBS) \
-	$(TASK_LIBS) \
-	$(ROUTE_LIBS) \
-	$(GLIDE_LIBS) \
-	$(CONTEST_LIBS) \
-	$(WAYPOINT_LIBS) \
-	$(AIRSPACE_LIBS) \
-	$(IO_LIBS) \
-	$(OS_LIBS) \
-	$(THREAD_LIBS) \
-	$(ZZIP_LDADD) \
-	$(GEO_LIBS) \
-	$(TIME_LIBS) \
-	$(MATH_LIBS) \
-	$(UTIL_LIBS)
-TEST1_LDLIBS = \
-	$(ZZIP_LDLIBS)
+TEST1_DEPENDS = HARNESS TASK ROUTE GLIDE CONTEST WAYPOINT AIRSPACE IO OS THREAD ZZIP GEO TIME MATH UTIL
 
 define link-harness-program
 $(1)_SOURCES = \
@@ -80,9 +64,8 @@ $(1)_SOURCES = \
 	$(SRC)/Formatter/AirspaceFormatter.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/$(1).cpp
-$(1)_LDADD = $(TEST1_LDADD)
-$(1)_LDLIBS = $(TEST1_LDLIBS)
-$(call link-program,$(1),$(1))
+$(1)_DEPENDS = $(TEST1_DEPENDS)
+$$(eval $$(call link-program,$(1),$(1)))
 endef
 
 $(foreach name,$(HARNESS_PROGRAMS),$(eval $(call link-harness-program,$(name))))
@@ -126,6 +109,7 @@ TEST_NAMES = \
 	TestByteSizeFormatter \
 	TestTimeFormatter \
 	TestIGCFilenameFormatter \
+	TestNMEAFormatter \
 	TestLXNToIGC \
 	TestLeastSquares \
 	TestHexString \
@@ -494,6 +478,21 @@ TEST_IGC_FILENAME_FORMATTER_SOURCES = \
 TEST_IGC_FILENAME_FORMATTER_DEPENDS = MATH UTIL TIME
 $(eval $(call link-program,TestIGCFilenameFormatter,TEST_IGC_FILENAME_FORMATTER))
 
+TEST_NMEA_FORMATTER_SOURCES = \
+	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(SRC)/Device/Parser.cpp \
+	$(SRC)/Device/Driver/FLARM/StaticParser.cpp \
+	$(SRC)/FLARM/Traffic.cpp \
+	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
+	$(TEST_SRC_DIR)/TestNMEAFormatter.cpp
+TEST_NMEA_FORMATTER_DEPENDS = LIBNMEA GEO MATH IO UTIL TIME
+$(eval $(call link-program,TestNMEAFormatter,TEST_NMEA_FORMATTER))
+
 TEST_STRINGS_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestStrings.cpp
@@ -671,6 +670,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(SRC)/TransponderCode.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
@@ -766,6 +766,7 @@ DEBUG_PROGRAM_NAMES += \
 	ReadProfileString ReadProfileInt \
 	KeyCodeDumper \
 	ReadPort RunPortHandler LogPort \
+	SplicePorts \
 	RunDeviceDriver RunDeclare RunFlightList RunDownloadFlight \
 	RunEnableNMEA \
 	CAI302Tool \
@@ -857,6 +858,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceWarningConfig.cpp \
 	$(ENGINE_SRC_DIR)/ThermalBand/ThermalBand.cpp \
 	$(ENGINE_SRC_DIR)/ThermalBand/ThermalSlice.cpp \
@@ -885,16 +887,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(TEST_SRC_DIR)/DebugReplayIGC.cpp \
 	$(TEST_SRC_DIR)/DebugReplayNMEA.cpp \
 	$(TEST_SRC_DIR)/DebugReplay.cpp
-DEBUG_REPLAY_LDADD = \
-	$(DRIVER_LDADD) \
-	$(OPERATION_LDADD) \
-	$(LIBNMEA_LDADD) \
-	$(ASYNC_LIBS) \
-	$(LIBNET_LIBS) \
-	$(IO_LIBS) \
-	$(OS_LIBS) \
-	$(THREAD_LIBS) \
-	$(TIME_LDADD)
+DEBUG_REPLAY_DEPENDS = DRIVER OPERATION LIBNMEA ASYNC LIBNET IO OS THREAD TIME
 
 BENCHMARK_PROJECTION_SOURCES = \
 	$(SRC)/Projection/Projection.cpp \
@@ -983,7 +976,7 @@ RUN_WEGLIDE_UPLOAD_FLIGHT_SOURCES = \
 	$(SRC)/net/SocketError.cxx \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/RunWeGlideUploadFlight.cpp
-RUN_WEGLIDE_UPLOAD_FLIGHT_DEPENDS = LIBCLIENT JSON LIBHTTP ASYNC LIBNET OPERATION OS IO UTIL TIME
+RUN_WEGLIDE_UPLOAD_FLIGHT_DEPENDS = LIBCLIENT JSON LIBHTTP ASYNC LIBNET OPERATION IO OS UTIL TIME
 $(eval $(call link-program,RunWeGlideUploadFlight,RUN_WEGLIDE_UPLOAD_FLIGHT))
 
 RUN_WEGLIDE_DOWNLOAD_TASK_SOURCES = \
@@ -1034,10 +1027,10 @@ RUN_SL_TRACKING_SOURCES = \
 	$(SRC)/net/SocketError.cxx \
 	$(SRC)/Tracking/SkyLines/Client.cpp \
 	$(SRC)/Tracking/SkyLines/Assemble.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/TransponderCode.cpp \
 	$(TEST_SRC_DIR)/RunSkyLinesTracking.cpp
-RUN_SL_TRACKING_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_SL_TRACKING_DEPENDS = ASYNC GEO MATH UTIL
+RUN_SL_TRACKING_DEPENDS = $(DEBUG_REPLAY_DEPENDS) ASYNC GEO MATH UTIL
 $(eval $(call link-program,RunSkyLinesTracking,RUN_SL_TRACKING))
 
 RUN_LIVETRACK24_SOURCES = \
@@ -1050,10 +1043,10 @@ RUN_LIVETRACK24_SOURCES = \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/TransponderCode.cpp \
 	$(TEST_SRC_DIR)/RunLiveTrack24.cpp
-RUN_LIVETRACK24_LDADD = $(LIBHTTP_LDADD) $(DEBUG_REPLAY_LDADD)
-RUN_LIVETRACK24_DEPENDS = LIBHTTP CO ASYNC LIBNET OS IO THREAD GEO MATH UTIL
+RUN_LIVETRACK24_DEPENDS = LIBHTTP $(DEBUG_REPLAY_DEPENDS) CO ASYNC LIBNET OS IO THREAD GEO MATH UTIL
 $(eval $(call link-program,RunLiveTrack24,RUN_LIVETRACK24))
 
 RUN_REPOSITORY_PARSER_SOURCES = \
@@ -1295,6 +1288,18 @@ LOG_PORT_SOURCES = \
 LOG_PORT_DEPENDS = PORT ASYNC LIBNET OPERATION IO OS THREAD TIME UTIL
 $(eval $(call link-program,LogPort,LOG_PORT))
 
+SPLICE_PORTS_SOURCES = \
+	$(SRC)/Device/Port/ConfiguredPort.cpp \
+	$(SRC)/Device/Config.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/DebugPort.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/SplicePorts.cpp
+SPLICE_PORTS_DEPENDS = PORT ASYNC LIBNET OPERATION IO OS THREAD TIME UTIL
+$(eval $(call link-program,SplicePorts,SPLICE_PORTS))
+
 RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -1314,6 +1319,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/TransponderCode.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
@@ -1335,6 +1341,7 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/TransponderCode.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
@@ -1359,6 +1366,7 @@ RUN_ENABLE_NMEA_SOURCES = \
 	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/TransponderCode.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
@@ -1373,8 +1381,11 @@ RUN_VEGA_SETTINGS_SOURCES = \
 	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -1428,6 +1439,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/TransponderCode.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
@@ -1451,6 +1463,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/TransponderCode.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
@@ -1504,9 +1517,9 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Logger/LoggerEPE.cpp \
 	$(SRC)/util/MD5.cpp \
 	$(SRC)/TransponderCode.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(TEST_SRC_DIR)/RunIGCWriter.cpp
-RUN_IGC_WRITER_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_IGC_WRITER_DEPENDS = GEO MATH UTIL
+RUN_IGC_WRITER_DEPENDS = $(DEBUG_REPLAY_DEPENDS) GEO MATH UTIL
 $(eval $(call link-program,RunIGCWriter,RUN_IGC_WRITER))
 
 RUN_FLIGHT_LOGGER_SOURCES = \
@@ -1514,31 +1527,32 @@ RUN_FLIGHT_LOGGER_SOURCES = \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Logger/FlightLogger.cpp \
 	$(SRC)/TransponderCode.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/RunFlightLogger.cpp
-RUN_FLIGHT_LOGGER_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_FLIGHT_LOGGER_DEPENDS = GEO MATH UTIL TIME
+RUN_FLIGHT_LOGGER_DEPENDS = $(DEBUG_REPLAY_DEPENDS) GEO MATH UTIL TIME
 $(eval $(call link-program,RunFlightLogger,RUN_FLIGHT_LOGGER))
 
 RUN_FLYING_COMPUTER_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/TransponderCode.cpp \
 	$(TEST_SRC_DIR)/RunFlyingComputer.cpp
-RUN_FLYING_COMPUTER_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_FLYING_COMPUTER_DEPENDS = GEO MATH UTIL
+RUN_FLYING_COMPUTER_DEPENDS = $(DEBUG_REPLAY_DEPENDS) GEO MATH UTIL
 $(eval $(call link-program,RunFlyingComputer,RUN_FLYING_COMPUTER))
 
 RUN_CIRCLING_WIND_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Computer/Wind/CirclingWind.cpp \
 	$(SRC)/TransponderCode.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(TEST_SRC_DIR)/RunCirclingWind.cpp
-RUN_CIRCLING_WIND_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_CIRCLING_WIND_DEPENDS = GEO MATH UTIL
+RUN_CIRCLING_WIND_DEPENDS = $(DEBUG_REPLAY_DEPENDS) GEO MATH UTIL
 $(eval $(call link-program,RunCirclingWind,RUN_CIRCLING_WIND))
 
 RUN_WIND_EKF_SOURCES = \
@@ -1547,10 +1561,10 @@ RUN_WIND_EKF_SOURCES = \
 	$(SRC)/Computer/Wind/WindEKF.cpp \
 	$(SRC)/Computer/Wind/WindEKFGlue.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/TransponderCode.cpp \
 	$(TEST_SRC_DIR)/RunWindEKF.cpp
-RUN_WIND_EKF_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_WIND_EKF_DEPENDS = GEO MATH UTIL TIME
+RUN_WIND_EKF_DEPENDS = $(DEBUG_REPLAY_DEPENDS) GEO MATH UTIL TIME
 $(eval $(call link-program,RunWindEKF,RUN_WIND_EKF))
 
 RUN_WIND_COMPUTER_SOURCES = \
@@ -1564,23 +1578,24 @@ RUN_WIND_COMPUTER_SOURCES = \
 	$(SRC)/Computer/Wind/MeasurementList.cpp \
 	$(SRC)/Computer/Wind/Store.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/TransponderCode.cpp \
 	$(TEST_SRC_DIR)/RunWindComputer.cpp
-RUN_WIND_COMPUTER_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_WIND_COMPUTER_DEPENDS = GEO MATH UTIL TIME
+RUN_WIND_COMPUTER_DEPENDS = $(DEBUG_REPLAY_DEPENDS) GEO MATH UTIL TIME
 $(eval $(call link-program,RunWindComputer,RUN_WIND_COMPUTER))
 
 RUN_EXTERNAL_WIND_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/TransponderCode.cpp \
 	$(TEST_SRC_DIR)/RunExternalWind.cpp
-RUN_EXTERNAL_WIND_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_EXTERNAL_WIND_DEPENDS = GEO MATH UTIL TIME
+RUN_EXTERNAL_WIND_DEPENDS = $(DEBUG_REPLAY_DEPENDS) GEO MATH UTIL TIME
 $(eval $(call link-program,RunExternalWind,RUN_EXTERNAL_WIND))
 
 RUN_TASK_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/Task/TaskFile.cpp \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
@@ -1602,35 +1617,34 @@ RUN_TASK_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/RunTask.cpp
-RUN_TASK_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_TASK_DEPENDS = TASK WAYPOINT GLIDE GEO MATH UTIL IO TIME
+RUN_TASK_DEPENDS = $(DEBUG_REPLAY_DEPENDS) TASK WAYPOINT GLIDE GEO MATH UTIL IO TIME
 $(eval $(call link-program,RunTask,RUN_TASK))
 
 RUN_TRACE_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/TransponderCode.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/RunTrace.cpp
-RUN_TRACE_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_TRACE_DEPENDS = UTIL LIBNMEA GEO MATH TIME
+RUN_TRACE_DEPENDS = $(DEBUG_REPLAY_DEPENDS) UTIL LIBNMEA GEO MATH TIME
 $(eval $(call link-program,RunTrace,RUN_TRACE))
 
 RUN_CONTEST_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/TransponderCode.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/ContestPrinting.cpp \
 	$(TEST_SRC_DIR)/RunContestAnalysis.cpp
-RUN_CONTEST_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_CONTEST_DEPENDS = CONTEST UTIL GEO MATH TIME
+RUN_CONTEST_DEPENDS = $(DEBUG_REPLAY_DEPENDS) CONTEST UTIL GEO MATH TIME
 $(eval $(call link-program,RunContestAnalysis,RUN_CONTEST))
 
 RUN_WAVE_COMPUTER_SOURCES = \
@@ -1639,17 +1653,18 @@ RUN_WAVE_COMPUTER_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(SRC)/TransponderCode.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(TEST_SRC_DIR)/RunWaveComputer.cpp
-RUN_WAVE_COMPUTER_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_WAVE_COMPUTER_DEPENDS = UTIL GEO MATH TIME
+RUN_WAVE_COMPUTER_DEPENDS = $(DEBUG_REPLAY_DEPENDS) UTIL GEO MATH TIME
 $(eval $(call link-program,RunWaveComputer,RUN_WAVE_COMPUTER))
 
 ANALYSE_FLIGHT_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/TransponderCode.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
@@ -1664,8 +1679,7 @@ ANALYSE_FLIGHT_SOURCES = \
 	$(TEST_SRC_DIR)/FlightPhaseJSON.cpp \
 	$(TEST_SRC_DIR)/FlightPhaseDetector.cpp \
 	$(TEST_SRC_DIR)/AnalyseFlight.cpp
-ANALYSE_FLIGHT_LDADD = $(DEBUG_REPLAY_LDADD)
-ANALYSE_FLIGHT_DEPENDS = CONTEST JSON UTIL GEO MATH TIME
+ANALYSE_FLIGHT_DEPENDS = $(DEBUG_REPLAY_DEPENDS) CONTEST JSON UTIL GEO MATH TIME
 $(eval $(call link-program,AnalyseFlight,ANALYSE_FLIGHT))
 
 FLIGHT_PATH_SOURCES = \
@@ -1673,13 +1687,13 @@ FLIGHT_PATH_SOURCES = \
 	$(SRC)/TransponderCode.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/FlightPath.cpp
-FLIGHT_PATH_LDADD = $(DEBUG_REPLAY_LDADD)
-FLIGHT_PATH_DEPENDS = UTIL GEO MATH TIME
+FLIGHT_PATH_DEPENDS = $(DEBUG_REPLAY_DEPENDS) UTIL GEO MATH TIME
 $(eval $(call link-program,FlightPath,FLIGHT_PATH))
 
 LOAD_IMAGE_SOURCES = \
@@ -2197,6 +2211,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Profile/Profile.cpp \
@@ -2300,7 +2315,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Audio/Sound.cpp \
 	$(MORE_SCREEN_SOURCES) \
-	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(IO_SRC_DIR)/MapFile.cpp \
@@ -2354,21 +2368,22 @@ PLAY_TONE_DEPENDS = AUDIO MATH SCREEN EVENT ASYNC THREAD OS IO UTIL
 $(eval $(call link-program,PlayTone,PLAY_TONE))
 
 PLAY_VARIO_SOURCES = \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/TransponderCode.cpp \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/PlayVario.cpp
-PLAY_VARIO_LDADD = $(AUDIO_LDADD) $(SCREEN_LDADD) $(EVENT_LDADD) $(filter-out $(THREAD_LIBS),$(filter-out $(OS_LIBS),$(DEBUG_REPLAY_LDADD)))
-PLAY_VARIO_DEPENDS = AUDIO GEO MATH SCREEN EVENT ASYNC THREAD OS TIME UTIL
+PLAY_VARIO_LDADD = $(AUDIO_LDADD) $(SCREEN_LDADD) $(EVENT_LDADD)
+PLAY_VARIO_DEPENDS = $(DEBUG_REPLAY_DEPENDS) AUDIO GEO MATH SCREEN EVENT ASYNC THREAD OS TIME UTIL
 $(eval $(call link-program,PlayVario,PLAY_VARIO))
 
 DUMP_VARIO_SOURCES = \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/TransponderCode.cpp \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(TEST_SRC_DIR)/DumpVario.cpp
-DUMP_VARIO_LDADD = $(DEBUG_REPLAY_LDADD)
-DUMP_VARIO_DEPENDS = AUDIO GEO MATH SCREEN EVENT UTIL OS TIME
+DUMP_VARIO_DEPENDS = $(DEBUG_REPLAY_DEPENDS) AUDIO GEO MATH SCREEN EVENT UTIL OS TIME
 $(eval $(call link-program,DumpVario,DUMP_VARIO))
 
 RUN_TASK_EDITOR_DIALOG_SOURCES = \
@@ -2456,14 +2471,20 @@ EMULATE_DEVICE_SOURCES = \
 	$(SRC)/Device/Util/LineSplitter.cpp \
 	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Device/Util/NMEAReader.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(SRC)/Device/Driver/FLARM/BinaryProtocol.cpp \
 	$(SRC)/Device/Driver/FLARM/CRC16.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/io/CSVLine.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
+	$(TEST_SRC_DIR)/ATR833Emulator.cpp \
+	$(TEST_SRC_DIR)/FLARMEmulator.cpp \
+	$(TEST_SRC_DIR)/VegaEmulator.cpp \
 	$(TEST_SRC_DIR)/EmulateDevice.cpp
 EMULATE_DEVICE_DEPENDS = PORT ASYNC LIBNET OPERATION IO OS THREAD LIBNMEA GEO MATH TIME UTIL
 $(eval $(call link-program,EmulateDevice,EMULATE_DEVICE))
@@ -2532,10 +2553,10 @@ $(eval $(call link-program,DumpFlarmNet,DUMP_FLARM_NET))
 
 IGC2NMEA_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/TransponderCode.cpp \
 	$(TEST_SRC_DIR)/IGC2NMEA.cpp
-IGC2NMEA_DEPENDS = GEO MATH UTIL TIME
-IGC2NMEA_LDADD = $(DEBUG_REPLAY_LDADD)
+IGC2NMEA_DEPENDS = $(DEBUG_REPLAY_DEPENDS) GEO MATH UTIL TIME
 
 $(eval $(call link-program,IGC2NMEA,IGC2NMEA))
 
@@ -2559,7 +2580,5 @@ TEST_REPLAY_RETROSPECTIVE_SOURCES = \
 	$(SRC)/RadioFrequency.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/test_replay_retrospective.cpp
-TEST_REPLAY_RETROSPECTIVE_DEPENDS = WAYPOINT OPERATION GEO MATH IO UTIL ZZIP OS THREAD
-TEST_REPLAY_RETROSPECTIVE_LDADD = $(TEST1_LDADD)
-TEST_REPLAY_RETROSPECTIVE_LDLIBS = $(TEST1_LDLIBS)
+TEST_REPLAY_RETROSPECTIVE_DEPENDS = $(TEST1_DEPENDS) OPERATION
 $(eval $(call link-program,test_replay_retrospective,TEST_REPLAY_RETROSPECTIVE))

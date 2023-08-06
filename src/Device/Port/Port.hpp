@@ -10,6 +10,8 @@
 #include <cstddef>
 #include <exception>
 #include <cstddef>
+#include <span>
+#include <string_view>
 
 class OperationEnvironment;
 class PortListener;
@@ -53,22 +55,25 @@ public:
    * @return the number of bytes written
    */
   gcc_nonnull_all
-  virtual std::size_t Write(const void *data, std::size_t length) = 0;
+  virtual std::size_t Write(std::span<const std::byte> src) = 0;
 
   /**
    * Writes a null-terminated string to the serial port
    * @param s The string to write
    * @return the number of bytes written, or 0 on error
    */
-  gcc_nonnull_all
-  std::size_t Write(const char *s);
+  std::size_t Write(std::string_view s);
 
   /**
    * Writes a single byte to the serial port
    * @param ch Byte to write
    */
+  void Write(std::byte ch) {
+    Write(std::span{&ch, 1});
+  }
+
   void Write(char ch) {
-    Write(&ch, sizeof(ch));
+    Write(static_cast<std::byte>(ch));
   }
 
   /**
@@ -81,18 +86,13 @@ public:
    *
    * @param timeout give up after this duration
    */
-  gcc_nonnull_all
-  void FullWrite(const void *buffer, std::size_t length,
+  void FullWrite(std::span<const std::byte> src,
                  OperationEnvironment &env,
                  std::chrono::steady_clock::duration timeout);
 
-  /**
-   * Just like FullWrite(), but write a null-terminated string
-   */
-  gcc_nonnull_all
-  void FullWriteString(const char *s,
-                       OperationEnvironment &env,
-                       std::chrono::steady_clock::duration timeout);
+  void FullWrite(std::string_view s,
+                 OperationEnvironment &env,
+                 std::chrono::steady_clock::duration timeout);
 
   /**
    * Wait until all data in the output buffer has been sent.
@@ -150,7 +150,7 @@ public:
    * available currently)
    */
   gcc_nonnull_all
-  virtual std::size_t Read(void *Buffer, std::size_t Size) = 0;
+  virtual std::size_t Read(std::span<std::byte> dest) = 0;
 
   /**
    * Wait until data becomes available or the timeout expires.
@@ -186,7 +186,7 @@ public:
    * @param total_timeout timeout for the whole operation
    */
   gcc_nonnull_all
-  void FullRead(void *buffer, std::size_t length, OperationEnvironment &env,
+  void FullRead(std::span<std::byte> dest, OperationEnvironment &env,
                 std::chrono::steady_clock::duration first_timeout,
                 std::chrono::steady_clock::duration subsequent_timeout,
                 std::chrono::steady_clock::duration total_timeout);
@@ -202,7 +202,7 @@ public:
    * @return true on success
    */
   gcc_nonnull_all
-  void FullRead(void *buffer, std::size_t length, OperationEnvironment &env,
+  void FullRead(std::span<std::byte> dest, OperationEnvironment &env,
                 std::chrono::steady_clock::duration timeout);
 
   /**
@@ -225,7 +225,7 @@ public:
    *
    * @return the number of bytes read (always positive)
    */
-  std::size_t WaitAndRead(void *buffer, std::size_t length,
+  std::size_t WaitAndRead(std::span<std::byte> dest,
                           OperationEnvironment &env,
                           std::chrono::steady_clock::duration timeout);
 
@@ -236,14 +236,13 @@ public:
    *
    * @return the number of bytes read (always positive)
    */
-  std::size_t WaitAndRead(void *buffer, std::size_t length,
+  std::size_t WaitAndRead(std::span<std::byte> dest,
                           OperationEnvironment &env, TimeoutClock timeout);
 
   /**
    * Throws on error.
    */
-  gcc_nonnull_all
-  void ExpectString(const char *token, OperationEnvironment &env,
+  void ExpectString(std::string_view token, OperationEnvironment &env,
                     std::chrono::steady_clock::duration timeout=std::chrono::seconds(2));
 
   /**
@@ -257,8 +256,13 @@ public:
    * operation
    * @param timeout give up after this duration
    */
-  void WaitForChar(const char token, OperationEnvironment &env,
+  void WaitForByte(std::byte token, OperationEnvironment &env,
                    std::chrono::steady_clock::duration timeout);
+
+  void WaitForChar(char token, OperationEnvironment &env,
+                   std::chrono::steady_clock::duration timeout) {
+    return WaitForByte(static_cast<std::byte>(token), env, timeout);
+  }
 
 protected:
   /**

@@ -43,6 +43,8 @@ static constexpr UnitSymbolStrings symbol_strings[] = {
   { _T("%"), _T(" "), false },
   { nullptr, _T(":1"), false },
   { nullptr, _T("V"), false },
+  { nullptr, _T("Hz"), false },
+  { nullptr, _T("rpm"), false },
 };
 
 static_assert(ARRAY_SIZE(symbol_strings) == (size_t)Unit::COUNT,

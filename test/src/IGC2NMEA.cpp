@@ -8,54 +8,35 @@
 #include "Units/System.hpp"
 #include "system/Args.hpp"
 #include "util/PrintException.hxx"
+#include "Formatter/NMEAFormatter.hpp"
 
 #include <stdio.h>
 
 static void
 GenerateNMEA(BufferedOutputStream &os,
-             const GeoPoint &loc, const double speed,
-             const Angle bearing, const double alt,
-             const double baroalt, const TimeStamp t) noexcept
+             const NMEAInfo basic) noexcept
 {
-  const auto time = BrokenTime::FromSinceMidnightChecked(t.ToDuration());
-
-  const auto lat = loc.latitude.ToDMS();
-  double lat_ms = lat.minutes + lat.seconds / 60.;
-
-  const auto lon = loc.longitude.ToDMS();
-  double lon_ms = lon.minutes + lon.seconds / 60.;
-
-  NarrowString<256> gprmc("$GPRMC");
-  gprmc.AppendFormat(",%02u%02u%02u", time.hour, time.minute, time.second);
-  gprmc.append(",A");
-  gprmc.AppendFormat(",%02d%06.3f", lat.degrees, lat_ms);
-  gprmc.append(lat.negative ? ",S" : ",N");
-  gprmc.AppendFormat(",%03d%06.3f", lon.degrees, lon_ms);
-  gprmc.append(lon.negative ? ",W" : ",E");
-  gprmc.AppendFormat(",%.0f", (double)Units::ToUserUnit(speed, Unit::KNOTS));
-  gprmc.AppendFormat(",%.0f", (double)bearing.Degrees());
+  char gprmc_buffer[100];
+  FormatGPRMC(gprmc_buffer, sizeof(gprmc_buffer), basic);
+  NarrowString<256> gprmc("$");
+  gprmc.append(gprmc_buffer);
   AppendNMEAChecksum(gprmc.buffer());
-
   os.Write(gprmc);
   os.NewLine();
 
-  NarrowString<256> gpgga("$GPGGA");
-  gpgga.AppendFormat(",%02u%02u%02u", time.hour, time.minute, time.second);
-  gpgga.AppendFormat(",%02d%06.3f", lat.degrees, lat_ms);
-  gprmc.append(lat.negative ? ",S" : ",N");
-  gpgga.AppendFormat(",%03d%06.3f", lon.degrees, lon_ms);
-  gprmc.append(lon.negative ? ",W" : ",E");
-  gpgga.append(",1,,");
-  gpgga.AppendFormat(",%.0f,m", (double)alt);
+  char gpgga_buffer[100];
+  FormatGPGGA(gpgga_buffer, sizeof(gpgga_buffer), basic);
+  NarrowString<256> gpgga("$");
+  gpgga.append(gpgga_buffer);
   AppendNMEAChecksum(gpgga.buffer());
-
   os.Write(gpgga);
   os.NewLine();
 
-  NarrowString<256> pgrmz("$PGRMZ");
-  pgrmz.AppendFormat(",%.0f,m", (double)baroalt);
+  char pgrmz_buffer[100];
+  FormatPGRMZ(pgrmz_buffer, sizeof(pgrmz_buffer), basic);
+  NarrowString<256> pgrmz("$");
+  pgrmz.append(pgrmz_buffer);
   AppendNMEAChecksum(pgrmz.buffer());
-
   os.Write(pgrmz);
   os.NewLine();
 }
@@ -76,9 +57,7 @@ try {
 
   while (replay->Next()) {
     const NMEAInfo &basic = replay->Basic();
-    GenerateNMEA(bos, basic.location,
-                 basic.ground_speed, basic.track, basic.gps_altitude,
-                 basic.baro_altitude, basic.time);
+    GenerateNMEA(bos, basic);
   }
 
   bos.Flush();

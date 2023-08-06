@@ -24,7 +24,7 @@ KeyValueFileWriter::Write(const char *key, const char *value)
     value = "";
 
   // write the value to the output file
-  os.Format("%s=\"%s\"\n", key, value);
+  os.Fmt("{}=\"{}\"\n", key, value);
 }
 
 #ifdef _UNICODE

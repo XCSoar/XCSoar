@@ -8,7 +8,7 @@
 #include "Form/DataField/Listener.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Language/Language.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"

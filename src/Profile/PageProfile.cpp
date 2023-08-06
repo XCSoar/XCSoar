@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "PageProfile.hpp"
-#include "ProfileKeys.hpp"
+#include "Keys.hpp"
 #include "Map.hpp"
 #include "PageSettings.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"

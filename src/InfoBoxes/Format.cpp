@@ -8,12 +8,6 @@
 #include "Math/Angle.hpp"
 
 void
-InfoBoxData::SetValue(const TCHAR *format, double value) noexcept
-{
-  UnsafeFormatValue(format, (double)value);
-}
-
-void
 InfoBoxData::SetValue(Angle _value, const TCHAR *suffix) noexcept
 {
   assert(suffix != NULL);
@@ -57,19 +51,19 @@ InfoBoxData::SetValueFromTimeTwoLines(std::chrono::seconds dd) noexcept
 void
 InfoBoxData::SetValueFromPercent(double dd) noexcept
 {
-  UnsafeFormatValue(_T("%d"), (int)(dd));
+  FmtValue(_T("{}"), (int)dd);
   SetValueUnit(Unit::PERCENT);
 }
 
 void
 InfoBoxData::SetCommentFromPercent(double dd) noexcept
 {
-  UnsafeFormatComment(_T("%d %%"), (int)(dd));
+  FmtComment(_T("{} %"), (int)(dd));
 }
 
 void
 InfoBoxData::SetValueFromVoltage(double dd) noexcept
 {
-  UnsafeFormatValue(_T("%2.1f"), dd);
+  FmtValue(_T("{:2.1f}"), dd);
   SetValueUnit(Unit::VOLT);
 }

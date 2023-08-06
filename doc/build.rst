@@ -126,6 +126,7 @@ similar operating systems:
 The following command installs these on Debian::
 
   sudo apt-get install make g++  zlib1g-dev \
+      libfmt-dev \
       libsodium-dev \
       libfreetype6-dev \
       libpng-dev libjpeg-dev \
@@ -161,7 +162,7 @@ Compiling for Android
 
 For Android, you need:
 
-- `Android SDK level 30 <http://developer.android.com/sdk/>`__
+- `Android SDK level 31 <http://developer.android.com/sdk/>`__
 
 - `Android NDK r25c <http://developer.android.com/sdk/ndk/>`__
 

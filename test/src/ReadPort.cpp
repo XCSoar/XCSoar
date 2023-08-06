@@ -36,7 +36,7 @@ try {
     return EXIT_FAILURE;
   }
 
-  char buffer[4096];
+  std::byte buffer[4096];
   while (true) {
     try {
       port->WaitRead(env, std::chrono::minutes(1));
@@ -44,7 +44,7 @@ try {
       continue;
     }
 
-    std::size_t nbytes = port->Read(buffer, sizeof(buffer));
+    std::size_t nbytes = port->Read(std::span{buffer});
     fwrite((const void *)buffer, 1, nbytes, stdout);
   }
 

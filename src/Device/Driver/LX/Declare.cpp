@@ -160,16 +160,16 @@ DeclareInner(Port &port, const Declaration &declaration,
   LX::SendCommand(port, LX::WRITE_FLIGHT_INFO); // start declaration
 
   LX::CRCWriter writer(port);
-  writer.Write(&pilot, sizeof(pilot), env);
+  writer.Write(std::as_bytes(std::span{&pilot, 1}), env);
   env.SetProgressPosition(3);
 
-  writer.Write(&lx_driver_Declaration, sizeof(lx_driver_Declaration), env);
+  writer.Write(std::as_bytes(std::span{&lx_driver_Declaration, 1}), env);
   writer.Flush();
   LX::ExpectACK(port, env);
 
   env.SetProgressPosition(4);
   LX::SendCommand(port, LX::WRITE_CONTEST_CLASS);
-  writer.Write(&contest_class, sizeof(contest_class), env);
+  writer.Write(std::as_bytes(std::span{&contest_class, 1}), env);
   env.SetProgressPosition(5);
 
   writer.Flush();

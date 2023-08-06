@@ -8,11 +8,11 @@
 #include "time/TimeoutClock.hpp"
 
 [[gnu::pure]]
-static const uint8_t *
-FindSpecial(const uint8_t *const begin, const uint8_t *const end)
+static const std::byte *
+FindSpecial(const std::byte *const begin, const std::byte *const end)
 {
-  const uint8_t *start = std::find(begin, end, FLARM::START_FRAME);
-  const uint8_t *escape = std::find(begin, end, FLARM::ESCAPE);
+  const std::byte *start = std::find(begin, end, FLARM::START_FRAME);
+  const std::byte *escape = std::find(begin, end, FLARM::ESCAPE);
   return std::min(start, escape);
 }
 
@@ -27,14 +27,14 @@ FLARM::SendEscaped(Port &port, const void *buffer, size_t length,
   const TimeoutClock timeout(_timeout);
 
   // Send data byte-by-byte including escaping
-  const uint8_t *p = (const uint8_t *)buffer, *end = p + length;
+  const std::byte *p = (const std::byte *)buffer, *end = p + length;
   while (true) {
-    const uint8_t *special = FindSpecial(p, end);
+    const std::byte *special = FindSpecial(p, end);
 
     if (special > p) {
       /* bulk write of "harmless" characters */
 
-      port.FullWrite(p, special - p, env, timeout.GetRemainingOrZero());
+      port.FullWrite({p, special}, env, timeout.GetRemainingOrZero());
 
       p = special;
     }
@@ -58,47 +58,48 @@ FLARM::SendEscaped(Port &port, const void *buffer, size_t length,
   }
 }
 
-static uint8_t *
-ReceiveSomeUnescape(Port &port, uint8_t *buffer, size_t length,
+static std::byte *
+ReceiveSomeUnescape(Port &port, std::span<std::byte> dest,
                     OperationEnvironment &env, const TimeoutClock timeout)
 {
   /* read "length" bytes from the port, optimistically assuming that
      there are no escaped bytes */
 
-  size_t nbytes = port.WaitAndRead(buffer, length, env, timeout);
+  size_t nbytes = port.WaitAndRead(dest, env, timeout);
 
   /* unescape in-place */
 
-  uint8_t *end = buffer + nbytes;
-  for (const uint8_t *src = buffer; src != end;) {
+  std::byte *p = dest.data();
+  std::byte *end = dest.data() + nbytes;
+  for (const std::byte *src = dest.data(); src != end;) {
     if (*src == FLARM::ESCAPE) {
       ++src;
 
-      uint8_t ch;
+      std::byte ch;
       if (src == end) {
         /* at the end of the buffer; need to read one more byte */
         port.WaitRead(env, timeout.GetRemainingOrZero());
 
-        ch = (uint8_t)port.ReadByte();
+        ch = (std::byte)port.ReadByte();
       } else
         ch = *src++;
 
       if (ch == FLARM::ESCAPE_START)
-        *buffer++ = FLARM::START_FRAME;
+        *p++ = FLARM::START_FRAME;
       else if (ch == FLARM::ESCAPE_ESCAPE)
-        *buffer++ = FLARM::ESCAPE;
+        *p++ = FLARM::ESCAPE;
       else
         /* unknown escape */
         return nullptr;
     } else
       /* "harmless" byte */
-      *buffer++ = *src++;
+      *p++ = *src++;
   }
 
   /* return the current end position of the destination buffer; if
      there were escaped bytes, then this function must be called again
      to account for the escaping overhead */
-  return buffer;
+  return p;
 }
 
 bool
@@ -112,9 +113,10 @@ FLARM::ReceiveEscaped(Port &port, void *buffer, size_t length,
   const TimeoutClock timeout(_timeout);
 
   // Receive data byte-by-byte including escaping until buffer is full
-  uint8_t *p = (uint8_t *)buffer, *end = p + length;
+  std::byte *p = (std::byte *)buffer, *end = p + length;
   while (p < end) {
-    p = ReceiveSomeUnescape(port, p, end - p, env, timeout);
+    p = ReceiveSomeUnescape(port, {p, std::size_t(end - p)},
+                            env, timeout);
     if (p == nullptr)
       return false;
   }
@@ -132,7 +134,7 @@ inline void
 FlarmDevice::WaitForStartByte(OperationEnvironment &env,
                               std::chrono::steady_clock::duration timeout)
 {
-  port.WaitForChar(FLARM::START_FRAME, env, timeout);
+  port.WaitForByte(FLARM::START_FRAME, env, timeout);
 }
 
 FLARM::FrameHeader

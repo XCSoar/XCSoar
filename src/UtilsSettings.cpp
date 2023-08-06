@@ -39,6 +39,8 @@
 #include "Audio/VolumeController.hpp"
 #include "PageActions.hpp"
 #include "FLARM/Glue.hpp"
+#include "Weather/Rasp/RaspStore.hpp"
+#include "Weather/Rasp/Configured.hpp"
 #include "DataGlobals.hpp"
 
 bool DevicePortChanged = false;
@@ -47,6 +49,7 @@ bool AirspaceFileChanged = false;
 bool AirfieldFileChanged = false;
 bool WaypointFileChanged = false;
 bool FlarmFileChanged = false;
+bool RaspFileChanged = false;
 bool InputFileChanged = false;
 bool LanguageChanged = false;
 bool require_restart;
@@ -64,6 +67,7 @@ SettingsEnter()
   AirfieldFileChanged = false;
   WaypointFileChanged = false;
   FlarmFileChanged = false;
+  RaspFileChanged = false;
   InputFileChanged = false;
   DevicePortChanged = false;
   LanguageChanged = false;
@@ -153,6 +157,9 @@ SettingsLeave(const UISettings &old_ui_settings)
   if (FlarmFileChanged) {
     ReloadFlarmDatabases();
   }
+
+  if (RaspFileChanged)
+    DataGlobals::SetRasp(LoadConfiguredRasp());
 
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 

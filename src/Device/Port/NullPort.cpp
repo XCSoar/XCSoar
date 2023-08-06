@@ -35,9 +35,9 @@ NullPort::Flush()
 }
 
 std::size_t
-NullPort::Write([[maybe_unused]] const void *data, std::size_t length)
+NullPort::Write([[maybe_unused]] std::span<const std::byte> src)
 {
-  return length;
+  return src.size();
 }
 
 bool
@@ -64,7 +64,7 @@ NullPort::SetBaudrate(unsigned)
 }
 
 std::size_t
-NullPort::Read([[maybe_unused]] void *Buffer, [[maybe_unused]] std::size_t Size)
+NullPort::Read([[maybe_unused]] std::span<std::byte> dest)
 {
   return 0;
 }

@@ -80,8 +80,7 @@ bool
 RowFormWidget::SaveValueFileReader(unsigned i,
                                    const char *registry_key) noexcept
 {
-  const auto *dfe = (const FileDataField *)GetControl(i).GetDataField();
-  Path new_value = dfe->GetValue();
+  Path new_value = GetValueFile(i);
   const auto contracted = ContractLocalPath(new_value);
   if (contracted != nullptr)
     new_value = contracted;

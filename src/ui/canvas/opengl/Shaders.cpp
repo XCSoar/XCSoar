@@ -32,6 +32,16 @@ GLProgram *dashed_shader;
 GLint dashed_projection, dashed_translate,
   dashed_resolution, dashed_start, dashed_period, dashed_ratio;
 
+GLProgram *circle_outline_shader;
+GLint circle_outline_projection, circle_outline_translate,
+  circle_outline_center, circle_outline_radius1, circle_outline_radius2,
+  circle_outline_color;
+
+GLProgram *filled_circle_shader;
+GLint filled_circle_projection, filled_circle_translate,
+  filled_circle_center, filled_circle_radius1, filled_circle_radius2,
+  filled_circle_color1, filled_circle_color2;
+
 } // namespace OpenGL
 
 #define GLSL_VERSION "#version 100\n"
@@ -175,6 +185,59 @@ static constexpr char dashed_fragment_shader[] =
     }
 )glsl";
 
+static constexpr char circle_vertex_shader[] =
+  GLSL_VERSION
+  GLSL_PRECISION
+  R"glsl(
+    uniform mat4 projection;
+    uniform vec2 translate;
+    attribute vec4 position;
+    varying vec2 vert_pos;
+    void main() {
+      vert_pos = position.xy;
+      gl_Position = position;
+      gl_Position.xy += translate;
+      gl_Position = projection * gl_Position;
+    }
+)glsl";
+
+static constexpr char circle_outline_fragment_shader[] =
+  GLSL_VERSION
+  GLSL_PRECISION
+  R"glsl(
+    uniform vec2 center;
+    uniform float radius1;
+    uniform float radius2;
+    uniform vec4 color;
+    varying vec2 vert_pos;
+    void main() {
+      float distance = distance(center, vert_pos);
+      if (distance < radius1 || distance > radius2) discard;
+      gl_FragColor = color;
+    }
+)glsl";
+
+static constexpr char filled_circle_fragment_shader[] =
+  GLSL_VERSION
+  GLSL_PRECISION
+  R"glsl(
+    uniform vec2 center;
+    uniform float radius1;
+    uniform float radius2;
+    uniform vec4 color1;
+    uniform vec4 color2;
+    varying vec2 vert_pos;
+    void main() {
+      float distance = distance(center, vert_pos);
+      if (distance > radius2) discard;
+
+      if (distance < radius1)
+        gl_FragColor = color1;
+      else
+        gl_FragColor = color2;
+    }
+)glsl";
+
 static void
 CompileAttachShader(GLProgram &program, GLenum type, const char *code)
 {
@@ -295,11 +358,38 @@ OpenGL::InitShaders()
   dashed_start = dashed_shader->GetUniformLocation("start");
   dashed_period = dashed_shader->GetUniformLocation("period");
   dashed_ratio = dashed_shader->GetUniformLocation("ratio");
+
+  circle_outline_shader = CompileProgram(circle_vertex_shader, circle_outline_fragment_shader);
+  circle_outline_shader->BindAttribLocation(Attribute::POSITION, "position");
+  LinkProgram(*circle_outline_shader);
+
+  circle_outline_projection = circle_outline_shader->GetUniformLocation("projection");
+  circle_outline_translate = circle_outline_shader->GetUniformLocation("translate");
+  circle_outline_center = circle_outline_shader->GetUniformLocation("center");
+  circle_outline_radius1 = circle_outline_shader->GetUniformLocation("radius1");
+  circle_outline_radius2 = circle_outline_shader->GetUniformLocation("radius2");
+  circle_outline_color = circle_outline_shader->GetUniformLocation("color");
+
+  filled_circle_shader = CompileProgram(circle_vertex_shader, filled_circle_fragment_shader);
+  filled_circle_shader->BindAttribLocation(Attribute::POSITION, "position");
+  LinkProgram(*filled_circle_shader);
+
+  filled_circle_projection = filled_circle_shader->GetUniformLocation("projection");
+  filled_circle_translate = filled_circle_shader->GetUniformLocation("translate");
+  filled_circle_center = filled_circle_shader->GetUniformLocation("center");
+  filled_circle_radius1 = filled_circle_shader->GetUniformLocation("radius1");
+  filled_circle_radius2 = filled_circle_shader->GetUniformLocation("radius2");
+  filled_circle_color1 = filled_circle_shader->GetUniformLocation("color1");
+  filled_circle_color2 = filled_circle_shader->GetUniformLocation("color2");
 }
 
 void
 OpenGL::DeinitShaders() noexcept
 {
+  delete filled_circle_shader;
+  filled_circle_shader = nullptr;
+  delete circle_outline_shader;
+  circle_outline_shader = nullptr;
   delete dashed_shader;
   dashed_shader = nullptr;
   delete combine_texture_shader;
@@ -341,6 +431,14 @@ OpenGL::UpdateShaderProjectionMatrix() noexcept
   glUniformMatrix4fv(dashed_projection, 1, GL_FALSE,
                      glm::value_ptr(projection_matrix));
   glUniform2f(dashed_resolution, viewport_size.x, viewport_size.y);
+
+  circle_outline_shader->Use();
+  glUniformMatrix4fv(circle_outline_projection, 1, GL_FALSE,
+                     glm::value_ptr(projection_matrix));
+
+  filled_circle_shader->Use();
+  glUniformMatrix4fv(filled_circle_projection, 1, GL_FALSE,
+                     glm::value_ptr(projection_matrix));
 }
 
 void
@@ -365,4 +463,10 @@ OpenGL::UpdateShaderTranslate() noexcept
 
   dashed_shader->Use();
   glUniform2f(dashed_translate, t.x, t.y);
+
+  circle_outline_shader->Use();
+  glUniform2f(circle_outline_translate, t.x, t.y);
+
+  filled_circle_shader->Use();
+  glUniform2f(filled_circle_translate, t.x, t.y);
 }

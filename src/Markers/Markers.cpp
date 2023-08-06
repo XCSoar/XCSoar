@@ -17,11 +17,11 @@ try {
   FileOutputStream file(LocalPath(_T("xcsoar-marks.txt")),
                         FileOutputStream::Mode::APPEND_OR_CREATE);
   BufferedOutputStream os(file);
-  os.Format("%02u.%02u.%04u\t%02u:%02u:%02u\tLon:%f\tLat:%f\n",
-            time.day, time.month, time.year,
-            time.hour, time.minute, time.second,
-            (double)loc.longitude.Degrees(),
-            (double)loc.latitude.Degrees());
+  os.Fmt("{:02}.{:02}.{:04}\t{:02}:{:02}:{:02}\tLon:{:f}\tLat:{:f}\n",
+         time.day, time.month, time.year,
+         time.hour, time.minute, time.second,
+         loc.longitude.Degrees(),
+         loc.latitude.Degrees());
   os.Flush();
   file.Commit();
 } catch (...) {

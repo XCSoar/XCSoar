@@ -44,6 +44,20 @@ public:
                                AtmosphericPressure pressure) noexcept = 0;
   virtual void OnVarioSensor(float vario) noexcept = 0;
   virtual void OnHeartRateSensor(unsigned bpm) noexcept = 0;
+  /**
+   * @param[in] has_cht Is the Engine Cylinder Head Temperature sensor present?
+   * @param[in] cht Engine Cylinder Head Temperature.
+   * @param[in] has_egt Is the Engine Exhaust Gas Temperature sensor present?
+   * @param[in] egt Engine Exhaust Gas Temperature.
+   * @param[in] has_ignitions_per_second Are the measured ignitions valid?
+   * @param[in] ignitions_per_second Engine Ignitions Per Second, firing of the spark plug per second.
+   */
+  virtual void OnEngineSensors(bool has_cht,
+                               Temperature cht,
+                               bool has_egt,
+                               Temperature egt,
+                               bool has_ignitions_per_second,
+                               float ignitions_per_second) noexcept = 0;
 
   virtual void OnVoltageValues(int temp_adc, unsigned voltage_index,
                                int volt_adc) noexcept = 0;

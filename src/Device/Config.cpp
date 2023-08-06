@@ -183,6 +183,7 @@ DeviceConfig::Clear() noexcept
   sync_from_device = true;
   sync_to_device = true;
   k6bt = false;
+  engine_type = EngineType::NONE;
 #ifndef NDEBUG
   dump_port = false;
 #endif

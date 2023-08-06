@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "ContestProfile.hpp"
-#include "ProfileKeys.hpp"
+#include "Keys.hpp"
 #include "Map.hpp"
 #include "Engine/Contest/Settings.hpp"
 

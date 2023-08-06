@@ -117,6 +117,36 @@ public final class BluetoothSensor
     }
   }
 
+  /**
+   * Data in the characteristic has little endian byteorder.
+   * Lowest bit of flags indicates valid ignitions_per_sec reading.
+   * 0 Kelvin indicates invalid temperatures e.g 
+   * no temperature sensor present.
+  */
+  private void engineSensorDataToListeners(BluetoothGattCharacteristic c) {
+    final int flags = c.getIntValue(c.FORMAT_UINT8, 0);
+    final int cht_temp = c.getIntValue(c.FORMAT_UINT16, 1);
+    final int egt_temp = c.getIntValue(c.FORMAT_UINT16, 3);
+    final int outside_air_temperature = c.getIntValue(c.FORMAT_UINT16, 5);
+
+    if(outside_air_temperature != 0)
+      listener.onTemperature(outside_air_temperature);
+
+    final int pressure = c.getIntValue(c.FORMAT_UINT32, 7);
+
+    // Just guessing the sensor_noise_variance.
+    if(pressure != 0)
+      listener.onBarometricPressureSensor(pressure / 100.0f, 0.01f);
+
+    final int ignitions_per_second = c.getIntValue(c.FORMAT_UINT16, 11);
+    listener.onEngineSensors(cht_temp != 0 ? true : false,
+                             cht_temp,
+                             egt_temp != 0 ? true : false,
+                             egt_temp,
+                             (flags&0x01) == 0x01 ? true : false,
+                             ignitions_per_second);
+  }
+
   private void readHeartRateMeasurement(BluetoothGattCharacteristic c) {
     int offset = 0;
     final int flags = c.getIntValue(c.FORMAT_UINT8, offset);
@@ -154,6 +184,11 @@ public final class BluetoothSensor
         if (BluetoothUuids.HEART_RATE_MEASUREMENT_CHARACTERISTIC.equals(c.getUuid())) {
           readHeartRateMeasurement(c);
         }
+      }
+
+      if (BluetoothUuids.ENGINE_SENSORS_SERVICE.equals(c.getService().getUuid()) &&
+          BluetoothUuids.ENGINE_SENSORS_CHARACTERISTIC.equals(c.getUuid())) {
+        engineSensorDataToListeners(c);
       }
 
       if (BluetoothUuids.FLYTEC_SENSBOX_SERVICE.equals(c.getService().getUuid())) {
@@ -239,6 +274,17 @@ public final class BluetoothSensor
     if (service != null) {
       BluetoothGattCharacteristic c =
         service.getCharacteristic(BluetoothUuids.HEART_RATE_MEASUREMENT_CHARACTERISTIC);
+      if (c != null) {
+        setStateSafe(STATE_READY);
+        enableNotification(c);
+      }
+    }
+
+    /* enable notifications for DR Solutions engine sensor box */
+    service = gatt.getService(BluetoothUuids.ENGINE_SENSORS_SERVICE);
+    if (service != null) {
+      BluetoothGattCharacteristic c =
+        service.getCharacteristic(BluetoothUuids.ENGINE_SENSORS_CHARACTERISTIC);
       if (c != null) {
         setStateSafe(STATE_READY);
         enableNotification(c);

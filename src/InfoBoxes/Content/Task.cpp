@@ -119,8 +119,8 @@ InfoBoxContentNextWaypoint::Update(InfoBoxData &data) noexcept
   // Set Comment
   if (way_point->radio_frequency.IsDefined()) {
     const unsigned freq = way_point->radio_frequency.GetKiloHertz();
-    data.FormatComment(_T("%u.%03u %s"),
-                       freq / 1000, freq % 1000, way_point->comment.c_str());
+    data.FmtComment(_T("{}.{:03} {}"),
+                    freq / 1000, freq % 1000, way_point->comment);
   }
   else
     data.SetComment(way_point->comment.c_str());
@@ -251,10 +251,10 @@ UpdateInfoBoxNextETA(InfoBoxData &data) noexcept
     std::chrono::duration_cast<std::chrono::seconds>(task_stats.current_leg.solution_remaining.time_elapsed);
 
   // Set Value
-  data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
+  data.FmtValue(_T("{:02}:{:02}"), t.hour, t.minute);
 
   // Set Comment
-  data.UnsafeFormatComment(_T("%02u"), t.second);
+  data.FmtComment(_T("{:02}"), t.second);
 }
 
 static void
@@ -399,10 +399,10 @@ UpdateInfoBoxFinalETA(InfoBoxData &data) noexcept
     std::chrono::duration_cast<std::chrono::seconds>(task_stats.total.solution_remaining.time_elapsed);
 
   // Set Value
-  data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
+  data.FmtValue(_T("{:02}:{:02}"), t.hour, t.minute);
 
   // Set Comment
-  data.UnsafeFormatComment(_T("%02u"), t.second);
+  data.FmtComment(_T("{:02}"), t.second);
 }
 
 void
@@ -720,8 +720,8 @@ UpdateInfoBoxNextETAVMG(InfoBoxData &data) noexcept
   if (now_local.IsPlausible()) {
     const std::chrono::seconds dd{long(d/v)};
     const BrokenTime t = now_local + dd;
-    data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
-    data.UnsafeFormatComment(_T("%02u"), t.second);
+    data.FmtValue(_T("{:02}:{:02}"), t.hour, t.minute);
+    data.FmtComment(_T("{:02}"), t.second);
   }
 
 }
@@ -800,7 +800,7 @@ UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
   } else if (open.HasBegun(now)) {
     if (open.GetEnd().IsValid()) {
       unsigned seconds = SecondsUntil(now_s, open.GetEnd());
-      data.UnsafeFormatValue(_T("%02u:%02u"), seconds / 60, seconds % 60);
+      data.FmtValue(_T("{:02}:{:02}"), seconds / 60, seconds % 60);
       data.SetValueColor(3);
     } else
       data.SetValueInvalid();
@@ -808,7 +808,7 @@ UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
     data.SetComment(_("Open"));
   } else {
     unsigned seconds = SecondsUntil(now_s, open.GetStart());
-    data.UnsafeFormatValue(_T("%02u:%02u"), seconds / 60, seconds % 60);
+    data.FmtValue(_T("{:02}:{:02}"), seconds / 60, seconds % 60);
     data.SetValueColor(2);
     data.SetComment(_("Waiting"));
   }
@@ -845,7 +845,7 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
   } else if (open.HasBegun(arrival)) {
     if (open.GetEnd().IsValid()) {
       unsigned seconds = SecondsUntil(arrival_s, open.GetEnd());
-      data.UnsafeFormatValue(_T("%02u:%02u"), seconds / 60, seconds % 60);
+      data.FmtValue(_T("{:02}:{:02}"), seconds / 60, seconds % 60);
       data.SetValueColor(3);
     } else
       data.SetValueInvalid();
@@ -853,7 +853,7 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
     data.SetComment(_("Open"));
   } else {
     unsigned seconds = SecondsUntil(arrival_s, open.GetStart());
-    data.UnsafeFormatValue(_T("%02u:%02u"), seconds / 60, seconds % 60);
+    data.FmtValue(_T("{:02}:{:02}"), seconds / 60, seconds % 60);
     data.SetValueColor(2);
     data.SetComment(_("Waiting"));
   }

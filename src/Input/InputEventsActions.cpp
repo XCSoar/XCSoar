@@ -20,7 +20,7 @@ It also covers the configuration side of on screen labels.
 For further information on config file formats see
 
 source/Common/Data/Input/ALL
-doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
+doc/html/advanced/input/ALL  http://xcsoar.sourceforge.net/advanced/input/
 
 */
 
@@ -187,7 +187,7 @@ InputEvents::eventPilotEvent([[maybe_unused]] const TCHAR *misc)
 try {
   // Configure start window
   const OrderedTaskSettings &ots =
-  	protected_task_manager->GetOrderedTaskSettings();
+      protected_task_manager->GetOrderedTaskSettings();
   const StartConstraints &start = ots.start_constraints;
 
   const BrokenTime bt = BrokenDateTime::NowUTC();
@@ -512,7 +512,7 @@ InputEvents::eventNearestMapItems([[maybe_unused]] const TCHAR *misc)
   if (!location.IsValid())
     return;
 
-  CommonInterface::main_window->GetMap()->ShowMapItems(location);
+  CommonInterface::main_window->GetMap()->ShowMapItems(location, true, false);
 }
 
 // Null
@@ -672,29 +672,30 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
 
 /* Recently done
 
-eventTaskLoad		- Load tasks from a file (misc = filename)
-eventTaskSave		- Save tasks to a file (misc = filename)
-eventProfileLoad		- Load profile from a file (misc = filename)
-eventProfileSave		- Save profile to a file (misc = filename)
+eventTaskLoad         - Load tasks from a file (misc = filename)
+eventTaskSave         - Save tasks to a file (misc = filename)
+eventProfileLoad      - Load profile from a file (misc = filename)
+eventProfileSave      - Save profile to a file (misc = filename)
 
 */
 
 /* TODO feature: - new events
 
-eventPanWaypoint		                - Set pan to a waypoint
+eventPanWaypoint                    - Set pan to a waypoint
 - Waypoint could be "next", "first", "last", "previous", or named
 - Note: wrong name - probably just part of eventPan
-eventPressure		- Increase, Decrease, show, Set pressure value
-eventDeclare			- (JMW separate from internal logger)
-eventAirspaceDisplay	- all, below nnn, below me, auto nnn
-eventAirspaceWarnings- on, off, time nn, ack nn
-eventTerrain			- see map_window.Event_Terrain
-eventCompass			- on, off, cruise on, crusie off, climb on, climb off
-eventVario			- on, off // JMW what does this do?
-eventOrientation		- north, track,  ???
-eventTerrainRange	        - on, off (might be part of eventTerrain)
-eventSounds			- Include Task and Modes sounds along with Vario
-- Include master nn, deadband nn, netto trigger mph/kts/...
+eventPressure         - Increase, Decrease, show, Set pressure value
+eventDeclare          - (JMW separate from internal logger)
+eventAirspaceDisplay  - all, below nnn, below me, auto nnn
+eventAirspaceWarnings - on, off, time nn, ack nn
+eventTerrain          - see map_window.Event_Terrain
+eventCompass          - on, off, cruise on, crusie off, climb on, climb off
+eventVario            - on, off // JMW what does this do?
+eventOrientation      - north, track,  ???
+eventTerrainRange     - on, off (might be part of eventTerrain)
+eventSounds           - Include Task and Modes sounds along with Vario
+                      - Include master nn, deadband nn, netto trigger
+mph/kts/...
 
 */
 

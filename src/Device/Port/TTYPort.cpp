@@ -246,7 +246,7 @@ TTYPort::WaitWrite(unsigned timeout_ms)
 }
 
 std::size_t
-TTYPort::Write(const void *data, std::size_t length)
+TTYPort::Write(std::span<const std::byte> src)
 {
   assert(socket.IsDefined());
 
@@ -254,14 +254,14 @@ TTYPort::Write(const void *data, std::size_t length)
     throw std::runtime_error("Port is closed");
 
   TTYDescriptor fd(socket.GetFileDescriptor());
-  auto nbytes = fd.Write(data, length);
+  auto nbytes = fd.Write(src.data(), src.size());
   if (nbytes < 0) {
     if (errno != EAGAIN)
       /* the output fifo is full; wait until we can write (or until
          the timeout expires) */
       WaitWrite(5000);
 
-    nbytes = fd.Write(data, length);
+    nbytes = fd.Write(src.data(), src.size());
     if (nbytes < 0)
       throw MakeErrno("Port write failed");
   }

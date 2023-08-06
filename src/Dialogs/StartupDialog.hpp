@@ -8,4 +8,4 @@
  * button
  */
 bool
-dlgStartupShowModal();
+dlgStartupShowModal() noexcept;

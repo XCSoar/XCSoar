@@ -34,6 +34,14 @@ final class NativeSensorListener implements SensorListener {
   public native void onAccelerationSensor1(double acceleration);
 
   @Override
+  public native void onEngineSensors(boolean has_cht_temp,
+                                     int cht_temp,
+                                     boolean has_egt_temp,
+                                     int egt_temp,
+                                     boolean has_ignitions_per_second,
+                                     float ignitions_per_second);
+
+  @Override
   public native void onAccelerationSensor(float ddx, float ddy, float ddz);
 
   @Override

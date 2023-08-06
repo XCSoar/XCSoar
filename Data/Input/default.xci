@@ -142,6 +142,24 @@ event=NearestMapItems
 label=What's here?
 location=4
 
+mode=pan
+type=key
+data=F1
+event=Zoom in
+location=5
+
+mode=pan
+type=key
+data=F3
+event=Zoom out
+location=6
+
+mode=pan
+type=key
+data=RETURN
+event=NearestMapItems
+location=7
+
 ###### main entry buttons
 
 mode=default

@@ -20,9 +20,9 @@ PortWriteNMEA(Port &port, const char *line, OperationEnvironment &env)
   static constexpr auto timeout = std::chrono::seconds(1);
 
   port.Write('$');
-  port.FullWriteString(line, env, timeout);
+  port.FullWrite(line, env, timeout);
 
   char checksum[16];
   sprintf(checksum, "*%02X\r\n", NMEAChecksum(line));
-  port.FullWriteString(checksum, env, timeout);
+  port.FullWrite(checksum, env, timeout);
 }

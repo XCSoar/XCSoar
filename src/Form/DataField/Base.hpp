@@ -4,8 +4,10 @@
 #pragma once
 
 #include <cassert>
-#include <tchar.h>
 #include <cstdint>
+#include <functional>
+
+#include <tchar.h>
 
 static constexpr unsigned OUTBUFFERSIZE = 128;
 
@@ -36,8 +38,12 @@ public:
     DATE,
   };
 
+  using ModifiedCallback = std::function<void()>;
+
 private:
-  DataFieldListener *listener;
+  ModifiedCallback on_modified;
+
+  DataFieldListener *listener; // deprecated
 
   // all Types dataField support combolist except DataFieldString.
   const bool supports_combolist;
@@ -54,6 +60,11 @@ protected:
 public:
   virtual ~DataField() noexcept = default;
 
+  void SetOnModified(ModifiedCallback &&_callback) noexcept {
+    on_modified = std::move(_callback);
+  }
+
+  // deprecated
   void SetListener(DataFieldListener *_listener) noexcept {
     assert(listener == nullptr);
     assert(_listener != nullptr);

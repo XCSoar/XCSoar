@@ -393,6 +393,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Weather/Rasp/RaspCache.cpp \
 	$(SRC)/Weather/Rasp/RaspRenderer.cpp \
 	$(SRC)/Weather/Rasp/RaspStyle.cpp \
+	$(SRC)/Weather/Rasp/Configured.cpp \
 	\
 	$(SRC)/Blackboard/BlackboardListener.cpp \
 	$(SRC)/Blackboard/ProxyBlackboardListener.cpp \
@@ -464,6 +465,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Formatter/LocalTimeFormatter.cpp \
 	$(SRC)/Formatter/IGCFilenameFormatter.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/Formatter/AirspaceFormatter.cpp \
 	$(SRC)/Formatter/AirspaceUserUnitsFormatter.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -669,6 +671,7 @@ endif
 
 XCSOAR_LDADD = $(IO_LDADD)
 XCSOAR_DEPENDS = \
+	FMT \
 	LIBMAPWINDOW \
 	LIBINFOBOX \
 	GETTEXT PROFILE \

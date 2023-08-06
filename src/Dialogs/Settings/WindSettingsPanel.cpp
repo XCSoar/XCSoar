@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "WindSettingsPanel.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Profile/ProfileMap.hpp"
 #include "Form/Button.hpp"
 #include "Form/DataField/Float.hpp"

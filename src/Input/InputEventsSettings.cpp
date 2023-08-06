@@ -8,7 +8,7 @@
 #include "ActionInterface.hpp"
 #include "Message.hpp"
 #include "Profile/Profile.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Profile/Settings.hpp"
 #include "Profile/Current.hpp"
 #include "util/Macros.hpp"

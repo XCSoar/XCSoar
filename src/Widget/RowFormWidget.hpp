@@ -26,6 +26,7 @@ struct StaticEnumChoice;
 class Angle;
 class RoughTime;
 class RoughTimeDelta;
+class Path;
 class Button;
 
 /**
@@ -579,6 +580,8 @@ public:
 
   void LoadValue(unsigned i, RoughTime value) noexcept;
 
+  void LoadValue(unsigned i, Path value) noexcept;
+
   /**
    * Load a value into a control created by AddDuration().
    */
@@ -624,6 +627,9 @@ public:
 
   [[gnu::pure]]
   RoughTime GetValueRoughTime(unsigned i) const noexcept;
+
+  [[gnu::pure]]
+  Path GetValueFile(unsigned i) const noexcept;
 
   [[gnu::pure]]
   const TCHAR *GetValueString(unsigned i) const noexcept {

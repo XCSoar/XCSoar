@@ -21,10 +21,10 @@ using std::endl;
 static inline void
 ToKML(BufferedOutputStream &os, const AGeoPoint p)
 {
-  os.Format("<Point><coordinates>%f,%f,%f</coordinates></Point>",
-            p.longitude.Degrees(),
-            p.latitude.Degrees(),
-            p.altitude);
+  os.Fmt("<Point><coordinates>{:f},{:f},{:f}</coordinates></Point>",
+         p.longitude.Degrees(),
+         p.latitude.Degrees(),
+         p.altitude);
 }
 
 [[maybe_unused]]
@@ -37,14 +37,14 @@ ToKML(BufferedOutputStream &os, const GeoPoint p)
 static void
 ToKML(BufferedOutputStream &os, const CloudClient &client)
 {
-  os.Format("<Placemark>\n"
-            "  <name>%u</name>\n"
-            "  <ExtendedData>\n"
-            "    <SchemaData schemaUrl=\"#traffic\">\n"
-            "      <SimpleData name=\"id\">%u</SimpleData>\n"
-            "    </SchemaData>\n"
-            "  </ExtendedData>\n",
-            client.id, client.id);
+  os.Fmt("<Placemark>\n"
+         "  <name>%u</name>\n"
+         "  <ExtendedData>\n"
+         "    <SchemaData schemaUrl=\"#traffic\">\n"
+         "      <SimpleData name=\"id\">%u</SimpleData>\n"
+         "    </SchemaData>\n"
+         "  </ExtendedData>\n",
+         client.id, client.id);
   ToKML(os, AGeoPoint(client.location, client.altitude));
   os.Write("</Placemark>\n");
 }
@@ -75,14 +75,14 @@ ToKML(BufferedOutputStream &os, const CloudClientContainer &clients)
 static void
 ToKML(BufferedOutputStream &os, const CloudThermal &thermal)
 {
-  os.Format("<Placemark>\n"
-            "  <name>%f m/s</name>\n"
-            "  <ExtendedData>\n"
-            "    <SchemaData schemaUrl=\"#thermal\">\n"
-            "      <SimpleData name=\"lift\">%f</SimpleData>\n"
-            "    </SchemaData>\n"
-            "  </ExtendedData>\n",
-            thermal.lift, thermal.lift);
+  os.Fmt("<Placemark>\n"
+         "  <name>{:f} m/s</name>\n"
+         "  <ExtendedData>\n"
+         "    <SchemaData schemaUrl=\"#thermal\">\n"
+         "      <SimpleData name=\"lift\">{:f}</SimpleData>\n"
+         "    </SchemaData>\n"
+         "  </ExtendedData>\n",
+         thermal.lift, thermal.lift);
   ToKML(os, thermal.bottom_location);
   os.Write("</Placemark>\n");
 }

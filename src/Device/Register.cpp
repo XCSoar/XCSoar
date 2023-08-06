@@ -39,7 +39,7 @@
 #include "Device/Driver/FreeVario.hpp"
 #include "Device/Driver/Larus.hpp"
 #include "Device/Driver/Vaulter.hpp"
-#include "Device/Driver/ATR833.hpp"
+#include "Device/Driver/ATR833/Register.hpp"
 #include "Device/Driver/XCTracer.hpp"
 #include "Device/Driver/KRT2.hpp"
 #include "Device/Driver/AR62xx.hpp"

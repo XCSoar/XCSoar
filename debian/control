@@ -3,7 +3,8 @@ Section: misc
 Priority: extra
 Maintainer: Max Kellermann <max.kellermann@gmail.com>
 Build-Depends: debhelper (>= 12~),
- g++ (>= 4:4.6),
+ g++ (>= 4:10),
+ libfmt-dev,
  libraspberrypi-dev | libegl1-mesa-dev | libsdl2-dev,
  libfreetype6-dev,
  libgl-dev,

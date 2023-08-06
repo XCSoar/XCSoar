@@ -74,7 +74,7 @@ try {
 
     last_stamp = current_stamp;
 
-    port->FullWrite(start, end - start, env, std::chrono::seconds(1));
+    port->FullWrite({start, std::size_t(end - start)}, env, std::chrono::seconds(1));
   }
 
   return EXIT_SUCCESS;

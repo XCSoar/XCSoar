@@ -15,6 +15,7 @@
 #include "Atmosphere/Pressure.hpp"
 #include "Atmosphere/Temperature.hpp"
 #include "DeviceInfo.hpp"
+#include "EngineState.hpp"
 #include "FLARM/Data.hpp"
 #include "Geo/SpeedVector.hpp"
 
@@ -313,6 +314,8 @@ struct NMEAInfo {
    * @see HumidityAvailable
    */
   double humidity;
+
+  EngineState engine;
 
   //###########
   //   Other

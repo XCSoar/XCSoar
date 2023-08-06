@@ -106,7 +106,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   env.SetProgressRange(num_blocks);
 
   unsigned allocated_size = sizeof(CAI302::FileData) + bytes_per_block;
-  std::unique_ptr<uint8_t> allocated(new uint8_t[allocated_size]);
+  std::unique_ptr<uint8_t[]> allocated(new uint8_t[allocated_size]);
   // TODO: alignment?
   CAI302::FileData *header = (CAI302::FileData *)(void *)allocated.get();
   void *data = header + 1;
@@ -114,7 +114,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   unsigned current_block = 0;
   unsigned valid_bytes;
   do {
-    int i = UploadFileData(port, true, header, allocated_size, env);
+    int i = CAI302::UploadFileData(port, true, {(std::byte *)header, allocated_size}, env);
     if (i < (int)sizeof(*header))
       return false;
 

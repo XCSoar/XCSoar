@@ -36,7 +36,7 @@ struct Class {
 
 		/* let Lua's garbage collector call the destructor
 		   (but only if there is one) */
-		if (!std::is_trivially_destructible_v<T>)
+		if constexpr (!std::is_trivially_destructible_v<T>)
 			SetField(L, RelativeStackIndex{-1}, "__gc", l_gc);
 	}
 
@@ -100,7 +100,7 @@ private:
 	static int l_gc(lua_State *L) {
 		const ScopeCheckStack check_stack(L);
 
-		auto *p = Check(L, 1);
+		T *p = static_cast<T *>(lua_touserdata(L, 1));
 		/* call the destructor when this instance is
 		   garbage-collected */
 		p->~T();

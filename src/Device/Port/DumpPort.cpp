@@ -49,24 +49,24 @@ DumpPort::WaitConnected(OperationEnvironment &env)
 }
 
 std::size_t
-DumpPort::Write(const void *data, std::size_t length)
+DumpPort::Write(std::span<const std::byte> src)
 {
   const bool enabled = CheckEnabled();
   if (enabled)
-    LogFormat("Write(%u)", (unsigned)length);
+    LogFormat("Write(%u)", (unsigned)src.size());
 
   std::size_t nbytes;
   try {
-    nbytes = port->Write(data, length);
+    nbytes = port->Write(src);
   } catch (...) {
     if (enabled)
-      LogFormat("Write(%u)=error", (unsigned)length);
+      LogFormat("Write(%u)=error", (unsigned)src.size());
     throw;
   }
 
   if (enabled) {
-    LogFormat("Write(%u)=%u", (unsigned)length, (unsigned)nbytes);
-    HexDump("W ", data, nbytes);
+    LogFormat("Write(%u)=%u", (unsigned)src.size(), (unsigned)nbytes);
+    HexDump("W ", src.data(), nbytes);
   }
 
   return nbytes;
@@ -124,18 +124,18 @@ DumpPort::StartRxThread()
 }
 
 std::size_t
-DumpPort::Read(void *buffer, std::size_t size)
+DumpPort::Read(std::span<std::byte> dest)
 {
   const bool enabled = CheckEnabled();
   if (enabled)
-    LogFormat("Read(%u)", (unsigned)size);
+    LogFormat("Read(%u)", (unsigned)dest.size());
 
-  auto nbytes = port->Read(buffer, size);
+  auto nbytes = port->Read(dest);
 
   if (enabled) {
-    LogFormat("Read(%u)=%u", (unsigned)size, (unsigned)nbytes);
+    LogFormat("Read(%u)=%u", (unsigned)dest.size(), (unsigned)nbytes);
     if (nbytes > 0)
-      HexDump("R ", buffer, nbytes);
+      HexDump("R ", dest.data(), nbytes);
   }
 
   return nbytes;

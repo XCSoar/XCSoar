@@ -4,7 +4,6 @@
 #include "Basic.hpp"
 #include "Util.hxx"
 #include "Version.hpp"
-#include "util/ConvertString.hpp"
 
 extern "C" {
 #include <lauxlib.h>

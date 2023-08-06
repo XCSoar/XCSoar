@@ -4,9 +4,9 @@
 #include "ObservationZoneEditWidget.hpp"
 #include "UIGlobals.hpp"
 
-ObservationZoneEditWidget::ObservationZoneEditWidget(ObservationZone &_oz)
+ObservationZoneEditWidget::ObservationZoneEditWidget(ObservationZone &_oz) noexcept
   :RowFormWidget(UIGlobals::GetDialogLook()),
-   oz(_oz), listener(nullptr) {}
+   oz(_oz) {}
 
 void
 ObservationZoneEditWidget::OnModified([[maybe_unused]] DataField &df) noexcept

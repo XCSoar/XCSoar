@@ -6,7 +6,7 @@
 #include "Form/DataField/Listener.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsStore.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -25,7 +25,8 @@ enum ControlIndex {
   UnitsMass,
   UnitsWingLoading,
   spacer_2,
-  UnitsLatLon
+  UnitsLatLon,
+  ROTATION,
 };
 
 class UnitsConfigPanel final
@@ -235,6 +236,16 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent,
           units_lat_lon_list,
           (unsigned)coordinate_format);
   SetExpertRow(UnitsLatLon);
+
+  static constexpr StaticEnumChoice rotation_labels_list[] = {
+    { Unit::HZ, _T("Hz") },
+    { Unit::RPM, _T("rpm") },
+    nullptr
+  };
+  AddEnum(_("Rotation"), _("Unit used for rotation."),
+          rotation_labels_list,
+          (unsigned)config.rotation_unit, this);
+  SetExpertRow(ROTATION);
 }
 
 bool
@@ -271,6 +282,9 @@ UnitsConfigPanel::Save(bool &_changed) noexcept
                            config.wing_loading_unit);
 
   changed |= SaveValueEnum(UnitsLatLon, ProfileKeys::LatLonUnits, coordinate_format);
+
+  changed |= SaveValueEnum(ROTATION, ProfileKeys::RotationUnitValue,
+                           config.rotation_unit);
 
   _changed |= changed;
 

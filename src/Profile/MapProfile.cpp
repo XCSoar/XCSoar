@@ -6,7 +6,7 @@
 #include "TerrainConfig.hpp"
 #include "AirspaceConfig.hpp"
 #include "Map.hpp"
-#include "ProfileKeys.hpp"
+#include "Keys.hpp"
 #include "MapSettings.hpp"
 #include "util/Clamp.hpp"
 

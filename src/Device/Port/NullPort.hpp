@@ -16,14 +16,14 @@ public:
 
   /* virtual methods from class Port */
   PortState GetState() const noexcept override;
-  std::size_t Write(const void *data, std::size_t length) override;
+  std::size_t Write(std::span<const std::byte> src) override;
   bool Drain() override;
   void Flush() override;
   unsigned GetBaudrate() const noexcept override;
   void SetBaudrate(unsigned baud_rate) override;
   bool StopRxThread() override;
   bool StartRxThread() override;
-  std::size_t Read(void *Buffer, std::size_t Size) override;
+  std::size_t Read(std::span<std::byte> dest) override;
 
   [[noreturn]]
   void WaitRead(std::chrono::steady_clock::duration timeout) override;

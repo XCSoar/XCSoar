@@ -3,7 +3,7 @@
 
 #include "TrackingProfile.hpp"
 #include "Map.hpp"
-#include "ProfileKeys.hpp"
+#include "Keys.hpp"
 #include "Tracking/TrackingSettings.hpp"
 #include "util/NumberParser.hpp"
 

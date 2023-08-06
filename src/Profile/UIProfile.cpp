@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "UIProfile.hpp"
-#include "ProfileKeys.hpp"
+#include "Keys.hpp"
 #include "Map.hpp"
 #include "MapProfile.hpp"
 #include "InfoBoxConfig.hpp"

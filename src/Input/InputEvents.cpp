@@ -32,7 +32,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Protection.hpp"
 #include "LogFile.hpp"
 #include "Menu/ButtonLabel.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Menu/MenuData.hpp"
 #include "io/ConfiguredFile.hpp"
 #include "io/LineReader.hpp"

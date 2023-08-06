@@ -53,12 +53,12 @@ SocketPort::GetState() const noexcept
 }
 
 std::size_t
-SocketPort::Write(const void *data, std::size_t length)
+SocketPort::Write(std::span<const std::byte> src)
 {
   if (!socket.IsDefined())
     throw std::runtime_error("Port is closed");
 
-  ssize_t nbytes = socket.GetSocket().Write(data, length);
+  ssize_t nbytes = socket.GetSocket().Write(src.data(), src.size());
   if (nbytes < 0)
     // TODO check EAGAIN?
     throw MakeSocketError("Failed to send");

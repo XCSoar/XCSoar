@@ -3,7 +3,6 @@
 
 #include "Setup.hxx"
 #include "Easy.hxx"
-#include "util/ConvertString.hpp"
 #include "Version.hpp"
 
 #include <stdio.h>
@@ -14,7 +13,7 @@ void
 Setup(CurlEasy &easy)
 {
 	char user_agent[32];
-	snprintf(user_agent, 32, "XCSoar/%s",
+	snprintf(user_agent, 32, "XCSoar/%s",  // "OpenSoar/%s" ??
 		 (const char *)WideToUTF8Converter(OpenSoar_Version));
 	easy.SetUserAgent(user_agent);
 
@@ -29,6 +28,13 @@ Setup(CurlEasy &easy)
 	/* this is disabled until we figure out how to use Android's
 	   CA certificates with libcurl */
 	easy.SetVerifyHost(false);
+	easy.SetVerifyPeer(false);
+#endif
+
+#ifdef KOBO
+	/* no TLS certificate validation because Kobos usually don't
+	   have the correct date/time in the real-time clock, which
+	   causes the certificate validation to fail */
 	easy.SetVerifyPeer(false);
 #endif
 }

@@ -5,76 +5,71 @@
 #include "Dialogs/Error.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
-#include "Form/DataField/Listener.hpp"
 #include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "Replay/Replay.hpp"
-#include "Form/DataField/File.hpp"
-#include "Form/DataField/Float.hpp"
+#include "Form/DataField/Base.hpp"
 #include "Language/Language.hpp"
 
 class ReplayControlWidget final
-  : public RowFormWidget, DataFieldListener {
+  : public RowFormWidget
+{
   enum Controls {
     FILE,
     RATE,
   };
 
 public:
-  ReplayControlWidget(const DialogLook &look)
+  explicit ReplayControlWidget(const DialogLook &look) noexcept
     :RowFormWidget(look) {}
 
-  void CreateButtons(WidgetDialog &dialog) {
+  void CreateButtons(WidgetDialog &dialog) noexcept {
     dialog.AddButton(_("Start"), [this](){ OnStartClicked(); });
     dialog.AddButton(_("Stop"), [this](){ OnStopClicked(); });
     dialog.AddButton(_T("+10'"), [this](){ OnFastForwardClicked(); });
   }
 
 private:
-  void OnStopClicked();
-  void OnStartClicked();
-  void OnFastForwardClicked();
+  void OnStopClicked() noexcept;
+  void OnStartClicked() noexcept;
+  void OnFastForwardClicked() noexcept;
 
 public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent,
                const PixelRect &rc) noexcept override;
-
-private:
-  /* methods from DataFieldListener */
-  void OnModified(DataField &df) noexcept override;
 };
 
 void
 ReplayControlWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                              [[maybe_unused]] const PixelRect &rc) noexcept
 {
-  auto *file =
-    AddFile(_("File"),
-            _("Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (.nmea), or if blank, runs the demo."),
-            nullptr,
-            _T("*.nmea\0*.igc\0"),
-            true);
-  ((FileDataField *)file->GetDataField())->SetValue(Path(replay->GetFilename()));
-  file->RefreshDisplay();
+  AddFile(_("File"),
+          _("Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (.nmea), or if blank, runs the demo."),
+          nullptr,
+          _T("*.nmea\0*.igc\0"),
+          true);
+  LoadValue(FILE, replay->GetFilename());
 
   AddFloat(_("Rate"),
            _("Time acceleration of replay. Set to 0 for pause, 1 for normal real-time replay."),
            _T("%.0f x"), _T("%.0f"),
-           0, 10, 1, false, replay->GetTimeScale(), this);
+           0, 10, 1, false, replay->GetTimeScale());
+  GetDataField(RATE).SetOnModified([this]{
+    replay->SetTimeScale(GetValueFloat(RATE));
+  });
 }
 
 inline void
-ReplayControlWidget::OnStopClicked()
+ReplayControlWidget::OnStopClicked() noexcept
 {
   replay->Stop();
 }
 
 inline void
-ReplayControlWidget::OnStartClicked()
+ReplayControlWidget::OnStartClicked() noexcept
 {
-  const auto &df = (const FileDataField &)GetDataField(FILE);
-  const Path path = df.GetValue();
+  const Path path = GetValueFile(FILE);
 
   try {
     replay->Start(path);
@@ -84,21 +79,13 @@ ReplayControlWidget::OnStartClicked()
 }
 
 inline void
-ReplayControlWidget::OnFastForwardClicked()
+ReplayControlWidget::OnFastForwardClicked() noexcept
 {
   replay->FastForward(std::chrono::minutes{10});
 }
 
 void
-ReplayControlWidget::OnModified(DataField &_df) noexcept
-{
-  const DataFieldFloat &df = (const DataFieldFloat &)_df;
-
-  replay->SetTimeScale(df.GetValue());
-}
-
-void
-ShowReplayDialog()
+ShowReplayDialog() noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   ReplayControlWidget *widget = new ReplayControlWidget(look);

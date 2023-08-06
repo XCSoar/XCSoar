@@ -17,7 +17,7 @@
 #include "Profile/Current.hpp"
 #include "LogFile.hpp"
 #include "Profile/Profile.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 
 /**
  * Loads the FLARMnet file

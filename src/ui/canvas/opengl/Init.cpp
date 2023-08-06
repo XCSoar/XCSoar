@@ -5,7 +5,6 @@
 #include "Debug.hpp"
 #include "Extension.hpp"
 #include "Globals.hpp"
-#include "Shapes.hpp"
 #include "Function.hpp"
 #include "Dynamic.hpp"
 #include "FBO.hpp"
@@ -154,8 +153,6 @@ OpenGL::SetupContext()
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_DITHER);
 
-  InitShapes();
-
   InitShaders();
 }
 
@@ -232,8 +229,6 @@ void
 OpenGL::Deinitialise() noexcept
 {
   DeinitShaders();
-
-  DeinitShapes();
 
   TextCache::Flush();
 }

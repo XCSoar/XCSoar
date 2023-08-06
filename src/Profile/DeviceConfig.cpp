@@ -168,6 +168,11 @@ Profile::GetDeviceConfig(const ProfileMap &map, unsigned n,
 
   MakeDeviceSettingName(buffer, "Port", n, "SecondDevice");
   map.Get(buffer, config.driver2_name);
+
+  MakeDeviceSettingName(buffer, "Port", n, "EngineType");
+  if (!map.GetEnum(buffer, config.engine_type) ||
+      unsigned(config.engine_type) >= unsigned(DeviceConfig::EngineType::MAX))
+    config.engine_type = DeviceConfig::EngineType::NONE;
 }
 
 static const char *
@@ -264,4 +269,7 @@ Profile::SetDeviceConfig(ProfileMap &map,
 
   MakeDeviceSettingName(buffer, "Port", n, "SecondDevice");
   map.Set(buffer, config.driver2_name);
+
+  MakeDeviceSettingName(buffer, "Port", n, "EngineType");
+  map.Set(buffer, static_cast<unsigned>(config.engine_type));
 }

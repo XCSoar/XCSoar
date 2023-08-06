@@ -62,8 +62,13 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
 void
 InfoBoxLook::ReinitialiseLayout(unsigned width)
 {
+  const unsigned max_font_height = Layout::FontScale(12);
+
   FontDescription title_font_d(8);
-  AutoSizeFont(title_font_d, width, _T("0123456789ABCD"));
+  AutoSizeFont(title_font_d, width, _T("0123456789"));
+  if (title_font_d.GetHeight() > max_font_height)
+    title_font_d.SetHeight(max_font_height);
+
   title_font.Load(title_font_d);
 
   FontDescription value_font_d(10, true);
@@ -71,7 +76,7 @@ InfoBoxLook::ReinitialiseLayout(unsigned width)
   value_font.Load(value_font_d);
 
   FontDescription small_value_font_d(10);
-  AutoSizeFont(small_value_font_d, width, _T("0123456789ABCDEFG"));
+  AutoSizeFont(small_value_font_d, width, _T("12345m"));
   small_value_font.Load(small_value_font_d);
 
   unsigned unit_font_height = std::max(value_font_d.GetHeight() * 2u / 5u, 7u);

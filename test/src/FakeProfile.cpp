@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Profile/Profile.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "system/Path.hpp"
 
 void

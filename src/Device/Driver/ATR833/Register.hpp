@@ -4,4 +4,3 @@
 #pragma once
 
 extern const struct DeviceRegister atr833_driver;
-
