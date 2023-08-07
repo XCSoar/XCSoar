@@ -100,9 +100,22 @@ static constexpr AirspaceClassStringCouple airspace_tnp_type_strings[] = {
 
 struct TempAirspace
 {
+  /**
+   * This exception class gets thrown when Commit() fails; in that
+   * case, the error messages doesn't show the current line (which
+   * begins a new airspace) but the first line of the airspace that is
+   * being committed.
+   */
+  struct CommitError {
+    const char *msg;
+
+    explicit constexpr CommitError(const char *_msg) noexcept
+      :msg(_msg) {}
+  };
+
   TempAirspace() noexcept {
     points.reserve(256);
-    Reset();
+    Reset(0);
   }
 
   // General
@@ -124,8 +137,13 @@ struct TempAirspace
   // Arc
   int rotation;
 
+  /**
+   * The line number where the current airspace began.
+   */
+  unsigned first_line_number;
+
   void
-  Reset() noexcept
+  Reset(unsigned line_number) noexcept
   {
     days_of_operation.SetAll();
     name.clear();
@@ -138,10 +156,11 @@ struct TempAirspace
     center = GeoPoint::Invalid();
     radius = -1;
     rotation = 1;
+    first_line_number = line_number;
   }
 
   void
-  ResetTNP() noexcept
+  ResetTNP(unsigned line_number) noexcept
   {
     // Preserve asclass, radio and days_of_operation for next airspace blocks
     name.clear();
@@ -149,6 +168,7 @@ struct TempAirspace
     center = GeoPoint::Invalid();
     radius = -1;
     rotation = 1;
+    first_line_number = line_number;
   }
 
   /**
@@ -170,7 +190,7 @@ struct TempAirspace
    */
   void Check() {
     if (asclass == OTHER && name.empty())
-      throw std::runtime_error{"Airspace has no name"};
+      throw CommitError{"Airspace has no name"};
   }
 
   void
@@ -179,13 +199,13 @@ struct TempAirspace
     Check();
 
     if (points.size() < 3)
-      throw std::runtime_error{"Not enough polygon points"};
+      throw CommitError{"Not enough polygon points"};
 
     if (!base)
-      throw std::runtime_error{"No base altitude"};
+      throw CommitError{"No base altitude"};
 
     if (!top)
-      throw std::runtime_error{"No top altitude"};
+      throw CommitError{"No top altitude"};
 
     auto as = std::make_shared<AirspacePolygon>(points);
     as->SetProperties(std::move(name), asclass, std::move(astype), *base, *top);
@@ -196,13 +216,13 @@ struct TempAirspace
 
   GeoPoint RequireCenter() {
     if (!center.IsValid())
-      throw std::runtime_error("No center");
+      throw CommitError("No center");
     return center;
   }
 
   double RequireRadius() {
     if (radius < 0)
-      throw std::runtime_error("No radius");
+      throw CommitError("No radius");
     return radius;
   }
 
@@ -212,13 +232,13 @@ struct TempAirspace
     Check();
 
     if (!points.empty())
-      throw std::runtime_error{"Airspace is a mix of polygon and circle"};
+      throw CommitError{"Airspace is a mix of polygon and circle"};
 
     if (!base)
-      throw std::runtime_error{"No base altitude"};
+      throw CommitError{"No base altitude"};
 
     if (!top)
-      throw std::runtime_error{"No top altitude"};
+      throw CommitError{"No top altitude"};
 
     auto as = std::make_shared<AirspaceCircle>(RequireCenter(),
                                                RequireRadius());
@@ -554,7 +574,8 @@ ParseType(const TCHAR *buffer) noexcept
  * Throws on error.
  */
 static void
-ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
+ParseLine(Airspaces &airspace_database, unsigned line_number,
+          StringParser<TCHAR> &&input,
           TempAirspace &temp_area)
 {
   // Only return expected lines
@@ -574,7 +595,7 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
     case _T('c'):
       temp_area.radius = ParseRadiusNM(input);
       temp_area.AddCircle(airspace_database);
-      temp_area.Reset();
+      temp_area.Reset(line_number);
       break;
 
     case _T('A'):
@@ -610,7 +631,7 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
         break;
 
       if (temp_area.Commit(airspace_database))
-        temp_area.Reset();
+        temp_area.Reset(line_number);
 
       temp_area.asclass = ParseType(input.c_str());
       break;
@@ -657,7 +678,7 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
  * Throws on error.
  */
 static void
-ParseLine(Airspaces &airspace_database, TCHAR *line,
+ParseLine(Airspaces &airspace_database, unsigned line_number, TCHAR *line,
           TempAirspace &temp_area)
 {
   // Strip comments
@@ -665,7 +686,8 @@ ParseLine(Airspaces &airspace_database, TCHAR *line,
   if (comment != nullptr)
     *comment = _T('\0');
 
-  ParseLine(airspace_database, StringParser<TCHAR>(line), temp_area);
+  ParseLine(airspace_database, line_number, StringParser<TCHAR>(line),
+            temp_area);
 }
 
 [[gnu::pure]]
@@ -814,7 +836,8 @@ ParseCircleTNP(StringParser<TCHAR> &input, TempAirspace &temp_area)
  * Throws on error.
  */
 static void
-ParseLineTNP(Airspaces &airspace_database, StringParser<TCHAR> &input,
+ParseLineTNP(Airspaces &airspace_database, unsigned line_number,
+             StringParser<TCHAR> &input,
              TempAirspace &temp_area, bool &ignore)
 {
   if (input.Match('#'))
@@ -838,7 +861,7 @@ ParseLineTNP(Airspaces &airspace_database, StringParser<TCHAR> &input,
     ParseCircleTNP(input, temp_area);
 
     temp_area.AddCircle(airspace_database);
-    temp_area.ResetTNP();
+    temp_area.ResetTNP(line_number);
   } else if (input.SkipMatchIgnoreCase(_T("CLOCKWISE "), 10)) {
     temp_area.rotation = 1;
     ParseArcTNP(input, temp_area);
@@ -847,12 +870,12 @@ ParseLineTNP(Airspaces &airspace_database, StringParser<TCHAR> &input,
     ParseArcTNP(input, temp_area);
   } else if (input.SkipMatchIgnoreCase(_T("TITLE="), 6)) {
     if (temp_area.Commit(airspace_database))
-      temp_area.ResetTNP();
+      temp_area.ResetTNP(line_number);
 
     temp_area.name = input.c_str();
   } else if (input.SkipMatchIgnoreCase(_T("TYPE="), 5)) {
     if (temp_area.Commit(airspace_database))
-      temp_area.ResetTNP();
+      temp_area.ResetTNP(line_number);
 
     temp_area.asclass = ParseTypeTNP(input.c_str());
   } else if (input.SkipMatchIgnoreCase(_T("CLASS="), 6)) {
@@ -922,11 +945,14 @@ ParseAirspaceFile(Airspaces &airspaces,
     // Parse the line
     try {
       if (filetype == AirspaceFileType::OPENAIR)
-        ParseLine(airspaces, line, temp_area);
+        ParseLine(airspaces, line_num, line, temp_area);
       if (filetype == AirspaceFileType::TNP) {
         StringParser<TCHAR> input(line);
-        ParseLineTNP(airspaces, input, temp_area, ignore);
+        ParseLineTNP(airspaces, line_num, input, temp_area, ignore);
       }
+    } catch (const TempAirspace::CommitError &e) {
+      throw FormatRuntimeError("Error in airspace at line %u: %s",
+                               temp_area.first_line_number, e.msg);
     } catch (...) {
       // TODO translate this?
       std::throw_with_nested(FormatRuntimeError("Error in line %u ('%s')",

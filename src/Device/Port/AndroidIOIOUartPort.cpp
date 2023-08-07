@@ -15,6 +15,9 @@ OpenAndroidIOIOUartPort(unsigned uart_id, unsigned baud_rate,
 {
   assert(uart_id < AndroidIOIOUartPort::getNumberUarts());
 
+  if (ioio_helper == nullptr)
+    throw std::runtime_error{"IOIO not available"};
+
   PortBridge *bridge = ioio_helper->openUart(Java::GetEnv(),
                                              uart_id, baud_rate);
   if (bridge == nullptr)
