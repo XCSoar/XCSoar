@@ -4,6 +4,7 @@
 #include "Setup.hxx"
 #include "Easy.hxx"
 #include "Version.hpp"
+#include "util/ConvertString.hpp"
 
 #include <stdio.h>
 
