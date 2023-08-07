@@ -44,8 +44,10 @@ FlightListRenderer::Draw(Canvas &canvas, PixelRect rc)
   int y = rc.bottom - row_height * 2;
   canvas.Select(font);
 
-  while (!flights.empty() && y > (int) rc.top + (int) header_height + (int) row_height) {
-    const FlightInfo flight = flights.pop();
+  for (auto i = flights.end();
+       i != flights.begin() && y > int(rc.top + header_height + row_height);
+       --i) {
+    const auto &flight = *i;
     int x = rc.left + padding;
 
     StaticString<64> buffer;

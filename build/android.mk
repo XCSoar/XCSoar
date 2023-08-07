@@ -89,13 +89,65 @@ JAVA_SOURCES := \
 	android/UsbSerial/usbserial/src/main/java/com/felhr/usbserial/UsbSpiInterface.java \
 	android/UsbSerial/usbserial/src/main/java/com/felhr/utils/HexData.java \
 	android/UsbSerial/usbserial/src/main/java/com/felhr/utils/SafeUsbRequest.java \
-	$(wildcard android/ioio/software/IOIOLib/src/ioio/lib/*/*.java) \
-	$(wildcard android/ioio/software/IOIOLib/src/ioio/lib/*/*/*.java) \
-	$(wildcard android/ioio/software/IOIOLib/target/android/src/ioio/lib/spi/*.java) \
-	android/ioio/software/IOIOLib/target/android/src/ioio/lib/util/android/ContextWrapperDependent.java \
-	$(wildcard android/ioio/software/IOIOLibAccessory/src/ioio/lib/android/accessory/*.java) \
-	$(wildcard android/ioio/software/IOIOLibBT/src/ioio/lib/android/bluetooth/*.java) \
-	$(wildcard android/ioio/software/IOIOLibAndroidDevice/src/ioio/lib/android/device/*.java)
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/AnalogInput.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/CapSense.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/Closeable.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/DigitalInput.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/DigitalOutput.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/IcspMaster.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/IOIOConnection.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/IOIO.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/PulseInput.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/PwmOutput.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/Sequencer.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/SpiMaster.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/TwiMaster.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/Uart.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/exception/ConnectionLostException.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/exception/IncompatibilityException.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/api/exception/OutOfResourceException.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/AbstractPin.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/AbstractResource.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/AnalogInputImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/Board.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/CapSenseImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/Constants.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/DigitalInputImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/DigitalOutputImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/FixedReadBufferedInputStream.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/FlowControlledOutputStream.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/FlowControlledPacketSender.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/GenericResourceAllocator.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/IcspMasterImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/IncapImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/IncomingState.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/InterruptibleQueue.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/IOIOImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/IOIOProtocol.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/PwmImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/QueueInputStream.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/ResourceLifeCycle.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/ResourceManager.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/SequencerImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/SocketIOIOConnectionBootstrap.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/SocketIOIOConnection.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/SpecificResourceAllocator.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/SpiMasterImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/TwiMasterImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/UartImpl.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/impl/Version.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/spi/IOIOConnectionBootstrap.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/spi/IOIOConnectionFactory.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/spi/Log.java \
+	android/ioio/IOIOLibCore/src/main/java/ioio/lib/spi/NoRuntimeSupportException.java \
+	android/ioio/IOIOLibAndroid/src/main/java/ioio/lib/spi/LogImpl.java \
+	android/ioio/IOIOLibAndroid/src/main/java/ioio/lib/util/android/ContextWrapperDependent.java \
+	android/ioio/IOIOLibAndroidAccessory/src/main/java/ioio/lib/android/accessory/AccessoryConnectionBootstrap.java \
+	android/ioio/IOIOLibAndroidAccessory/src/main/java/ioio/lib/android/accessory/Adapter.java \
+	android/ioio/IOIOLibAndroidBluetooth/src/main/java/ioio/lib/android/bluetooth/BluetoothIOIOConnectionBootstrap.java \
+	android/ioio/IOIOLibAndroidBluetooth/src/main/java/ioio/lib/android/bluetooth/BluetoothIOIOConnection.java \
+	android/ioio/IOIOLibAndroidDevice/src/main/java/ioio/lib/android/device/DeviceConnectionBootstrap.java \
+	android/ioio/IOIOLibAndroidDevice/src/main/java/ioio/lib/android/device/Streams.java
 ifeq ($(TESTING),y)
 	JAVA_SOURCES += $(wildcard android/src/testing/*.java)
 endif
@@ -216,22 +268,28 @@ $(ANDROID_OUTPUT_DIR)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_R
 # R.java is generated by aapt, when resources.apk is generated
 $(GEN_DIR)/de/$(PROGRAM_NAME_LC)/R.java: $(ANDROID_OUTPUT_DIR)/resources.apk
 
-$(ANDROID_OUTPUT_DIR)/classes.dex: $(JAVA_SOURCES) $(GEN_DIR)/de/$(PROGRAM_NAME_LC)/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
+$(ANDROID_OUTPUT_DIR)/classes.zip: $(JAVA_SOURCES) $(GEN_DIR)/de/$(PROGRAM_NAME_LC)/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
 	@$(NQ)echo "  JAVAC   $(JAVA_CLASSFILES_DIR)"
 	$(Q)$(JAVAC) \
 		-source 1.7 -target 1.7 \
 		-Xlint:all \
-		-Xlint:-deprecation -Xlint:-dep-ann \
+		-Xlint:-deprecation \
 		-Xlint:-options \
 		-Xlint:-static \
 		-cp $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) \
 		-d $(JAVA_CLASSFILES_DIR) $(GEN_DIR)/de/$(PROGRAM_NAME_LC)/R.java \
 		-h $(NATIVE_INCLUDE) \
 		$(JAVA_SOURCES)
-	$(Q)zip -r $(ANDROID_OUTPUT_DIR)/classes.zip $(JAVA_CLASSFILES_DIR)
+	$(Q)$(ZIP) -0 -r $(ANDROID_OUTPUT_DIR)/classes.zip $(JAVA_CLASSFILES_DIR)
+
+# Note: desugaring causes crashes on Android 13 (Pixel 6); as a
+# workaround, it's disabled for now.
+$(ANDROID_OUTPUT_DIR)/classes.dex: $(ANDROID_OUTPUT_DIR)/classes.zip
 	@$(NQ)echo "  D8      $@"
-	$(Q)$(D8) --output $(ANDROID_OUTPUT_DIR) $(ANDROID_OUTPUT_DIR)/classes.zip
-	$(Q)rm $(ANDROID_OUTPUT_DIR)/classes.zip
+	$(Q)$(D8) \
+		--no-desugaring \
+		--min-api 21 \
+		--output $(ANDROID_OUTPUT_DIR) $(ANDROID_OUTPUT_DIR)/classes.zip
 
 ifeq ($(FAT_BINARY),y)
 
@@ -282,7 +340,7 @@ compile: $(ANDROID_LIB_BUILD)
 # Generate symbols.zip (symbolication file) for Google Play, which
 # allows Google Play to show symbol names in stack traces.
 $(TARGET_OUTPUT_DIR)/symbols.zip: $(ANDROID_SYMBOLICATION_BUILD)
-	cd $(ANDROID_BUILD)/symbols && zip $(abspath $@) */*.so
+	cd $(ANDROID_BUILD)/symbols && $(ZIP) $(abspath $@) */*.so
 
 else # !FAT_BINARY
 
@@ -312,7 +370,7 @@ $(ANDROID_BUILD)/unsigned.apk: $(ANDROID_OUTPUT_DIR)/classes.dex $(ANDROID_OUTPU
 	@$(NQ)echo "  APK     $@"
 	$(Q)cp $(ANDROID_OUTPUT_DIR)/classes.dex $(dir $@)/
 	$(Q)cp $(ANDROID_OUTPUT_DIR)/resources.apk $@
-	$(Q)cd $(dir $@) && zip -q -r $(notdir $@) classes.dex lib/*/*.so
+	$(Q)cd $(dir $@) && $(ZIP) -r $(notdir $@) classes.dex lib/*/*.so
 
 .DELETE_ON_ERROR: $(ANDROID_BUILD)/aligned.apk
 $(ANDROID_BUILD)/aligned.apk: $(ANDROID_BUILD)/unsigned.apk

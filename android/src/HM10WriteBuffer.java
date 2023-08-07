@@ -7,6 +7,8 @@ import java.util.Arrays;
 
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothStatusCodes;
+import android.os.Build;
 import android.util.Log;
 
 /**
@@ -18,7 +20,11 @@ final class HM10WriteBuffer {
 
   private static final int BUFFER_SIZE = 256;
 
-  private static final int MAX_WRITE_CHUNK_SIZE = 20;
+  /**
+   * The current mtu.  May be updated by
+   * BluetoothGattCallback.onMtuChanged() (via class HM10Port).
+   */
+  private int mtu = 20;
 
   private final byte[] buffer = new byte[BUFFER_SIZE];
   private int head, tail;
@@ -37,6 +43,10 @@ final class HM10WriteBuffer {
    */
   private boolean gattBusy = false;
 
+  void setMtu(int _mtu) {
+    mtu = _mtu;
+  }
+
   synchronized void reset() {
     lastChunkWriteError = false;
     gattBusy = false;
@@ -50,11 +60,22 @@ final class HM10WriteBuffer {
     if (head == tail)
       return false;
 
-    final int nbytes = Math.min(tail - head, MAX_WRITE_CHUNK_SIZE);
-    dataCharacteristic.setValue(Arrays.copyOfRange(buffer, head, head + nbytes));
+    final int nbytes = Math.min(tail - head, mtu);
+    final byte[] chunk = Arrays.copyOfRange(buffer, head, head + nbytes);
     head += nbytes;
 
-    if (!gatt.writeCharacteristic(dataCharacteristic)) {
+    boolean success;
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      int result = gatt.writeCharacteristic(dataCharacteristic, chunk,
+                                            dataCharacteristic.WRITE_TYPE_NO_RESPONSE);
+      success = result == BluetoothStatusCodes.SUCCESS;
+    } else {
+      dataCharacteristic.setValue(chunk);
+      success = gatt.writeCharacteristic(dataCharacteristic);
+    }
+
+    if (!success) {
       Log.e(TAG, "GATT characteristic write request failed");
       setError();
       return false;
@@ -141,13 +162,11 @@ final class HM10WriteBuffer {
                          BluetoothGattCharacteristic dataCharacteristic,
                          BluetoothGattCharacteristic deviceNameCharacteristic,
                          byte[] data, int length) {
-    if (0 == length)
-      return 0;
+    assert(dataCharacteristic != null);
+    assert(deviceNameCharacteristic != null);
+    assert(length > 0);
 
     if (!drainSome())
-      return 0;
-
-    if ((dataCharacteristic == null) || (deviceNameCharacteristic == null))
       return 0;
 
     if (head > 0) {

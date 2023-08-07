@@ -287,6 +287,35 @@ struct DeviceConfig {
   [[gnu::pure]]
   bool ShouldReopenOnTimeout() const noexcept;
 
+  constexpr bool IsAndroidBluetooth() const noexcept {
+    switch (port_type) {
+    case PortType::BLE_SENSOR:
+    case PortType::BLE_HM10:
+    case PortType::RFCOMM:
+    case PortType::RFCOMM_SERVER:
+      return true;
+
+    case PortType::DISABLED:
+    case PortType::GLIDER_LINK:
+    case PortType::DROIDSOAR_V2:
+    case PortType::NUNCHUCK:
+    case PortType::I2CPRESSURESENSOR:
+    case PortType::IOIOVOLTAGE:
+    case PortType::INTERNAL:
+    case PortType::SERIAL:
+    case PortType::AUTO:
+    case PortType::TCP_LISTENER:
+    case PortType::TCP_CLIENT:
+    case PortType::IOIOUART:
+    case PortType::PTY:
+    case PortType::UDP_LISTENER:
+    case PortType::ANDROID_USB_SERIAL:
+      break;
+    }
+
+    return false;
+  }
+
   [[gnu::pure]]
   static bool MaybeBluetooth(PortType port_type, const TCHAR *path) noexcept;
 

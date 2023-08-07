@@ -1,3 +1,15 @@
+Version 7.30 - 2023/05/09
+* fix crash in "ProfileSave" event
+* user interface
+  - reload fonts on window resize
+* Windows
+  - look up serial ports in the registry
+* Android
+  - UsbSerial: fix permission crash bug
+  - UsbSerial: fix null pointer crash bug
+  - negotiate MTU on Bluetooth HM10 devices
+  - fix circle airspace display problems on Adreno GPUs
+
 Version 7.29 - 2023/05/03
 * data files
   - reject implausible runway lengths in CUP files
@@ -25,6 +37,7 @@ Version 7.29 - 2023/05/03
   - Support Brightness and Colour for ComfortLight PRO models
 * Windows
   - show serial port names
+  - support COM10..COM255
 * Polars
   - Add LS-5 polar
   - Add Silene E78 polar

@@ -442,9 +442,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
     status = buffer;
 #ifdef ANDROID
-  } else if ((config.port_type == DeviceConfig::PortType::RFCOMM ||
-              config.port_type == DeviceConfig::PortType::BLE_HM10 ||
-              config.port_type == DeviceConfig::PortType::RFCOMM_SERVER) &&
+  } else if (config.IsAndroidBluetooth() &&
              bluetooth_helper != nullptr &&
              !bluetooth_helper->IsEnabled(Java::GetEnv())) {
     status = _("Bluetooth is disabled");

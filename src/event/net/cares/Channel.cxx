@@ -43,19 +43,16 @@ private:
 };
 
 Channel::Channel(EventLoop &event_loop)
-	:defer_process(event_loop, BIND_THIS_METHOD(DeferredProcess)),
+	:defer_update_sockets(event_loop, BIND_THIS_METHOD(UpdateSockets)),
 	 timeout_event(event_loop, BIND_THIS_METHOD(OnTimeout))
 {
 	int code = ares_init(&channel);
 	if (code != 0)
 		throw Error(code, "ares_init() failed");
-
-	UpdateSockets();
 }
 
 Channel::~Channel() noexcept
 {
-	defer_process.Cancel();
 	ares_destroy(channel);
 }
 
@@ -64,25 +61,21 @@ Channel::UpdateSockets() noexcept
 {
 	timeout_event.Cancel();
 	sockets.clear();
-	FD_ZERO(&read_ready);
-	FD_ZERO(&write_ready);
 
-	fd_set rfds, wfds;
-	FD_ZERO(&rfds);
-	FD_ZERO(&wfds);
+	ares_socket_t socks[ARES_GETSOCK_MAXNUM];
+	const auto s = ares_getsock(channel, socks, ARES_GETSOCK_MAXNUM);
 
-	int max = ares_fds(channel, &rfds, &wfds);
-	for (int i = 0; i < max; ++i) {
+	for (unsigned i = 0; i < ARES_GETSOCK_MAXNUM; ++i) {
 		unsigned events = 0;
 
-		if (FD_ISSET(i, &rfds))
+		if (ARES_GETSOCK_READABLE(s, i))
 			events |= SocketEvent::READ;
 
-		if (FD_ISSET(i, &wfds))
+		if (ARES_GETSOCK_WRITABLE(s, i))
 			events |= SocketEvent::WRITE;
 
 		if (events != 0)
-			sockets.emplace_front(*this, SocketDescriptor(i),
+			sockets.emplace_front(*this, SocketDescriptor{socks[i]},
 					      events);
 	}
 
@@ -93,28 +86,29 @@ Channel::UpdateSockets() noexcept
 }
 
 void
-Channel::DeferredProcess() noexcept
-{
-	ares_process(channel, &read_ready, &write_ready);
-	UpdateSockets();
-}
-
-void
 Channel::OnSocket(SocketDescriptor fd, unsigned events) noexcept
 {
+	ares_socket_t read_fd = ARES_SOCKET_BAD, write_fd = ARES_SOCKET_BAD;
+
 	if (events & (SocketEvent::READ|SocketEvent::IMPLICIT_FLAGS))
-		FD_SET(fd.Get(), &read_ready);
+		read_fd = fd.Get();
 
 	if (events & (SocketEvent::WRITE|SocketEvent::IMPLICIT_FLAGS))
-		FD_SET(fd.Get(), &write_ready);
+		write_fd = fd.Get();
 
-	ScheduleProcess();
+	ares_process_fd(channel, read_fd, write_fd);
+
+	ScheduleUpdateSockets();
 }
 
 void
 Channel::OnTimeout() noexcept
 {
-	ScheduleProcess();
+	sockets.clear();
+
+	ares_process_fd(channel, ARES_SOCKET_BAD, ARES_SOCKET_BAD);
+
+	ScheduleUpdateSockets();
 }
 
 template<typename F>

@@ -10,6 +10,8 @@
 #include "Hardware/CPU.hpp"
 
 #ifdef ANDROID
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
 #include "ui/event/android/Loop.hpp"
 #include "util/ScopeExit.hxx"
 #elif defined(ENABLE_SDL)
@@ -28,6 +30,10 @@ namespace UI {
 
 TopWindow::~TopWindow() noexcept
 {
+#ifdef ANDROID
+  native_view->SetPointer(Java::GetEnv(), this);
+#endif
+
   delete screen;
 }
 

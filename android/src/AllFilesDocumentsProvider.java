@@ -237,9 +237,7 @@ public class AllFilesDocumentsProvider extends DocumentsProvider {
                 // allow to delete and modify existing file
                 flags |= Document.FLAG_SUPPORTS_DELETE;
                 flags |= Document.FLAG_SUPPORTS_WRITE;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    flags |= Document.FLAG_SUPPORTS_RENAME;
-                }
+                flags |= Document.FLAG_SUPPORTS_RENAME;
             }
         }
         row.add(Document.COLUMN_FLAGS, flags);

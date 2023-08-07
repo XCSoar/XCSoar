@@ -46,5 +46,9 @@ Look::InitialiseConfigured(const UISettings &settings,
 void
 Look::ReinitialiseLayout(unsigned infobox_width)
 {
+  /* dialog fonts have an upper bound depending on the window size,
+     and thus they might need to be reloaded */
+  dialog.LoadFonts();
+
   info_box.ReinitialiseLayout(infobox_width);
 }

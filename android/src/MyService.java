@@ -62,21 +62,24 @@ public class MyService extends Service {
     }
   }
 
+  private static Notification.Builder createNotificationBuilder(Context context) {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+      ? new Notification.Builder(context, NOTIFICATION_CHANNEL_ID)
+      : new Notification.Builder(context);
+  }
+
   private static Notification createNotification(Context context, PendingIntent intent) {
-    Notification.Builder builder = new Notification.Builder(context)
+    Notification.Builder builder = createNotificationBuilder(context)
       .setOngoing(true)
       .setContentIntent(intent)
       .setContentTitle("OpenSoar")
       .setContentText("OpenSoar is running")
       .setSmallIcon(R.drawable.notification_icon);
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-      builder.setChannelId(NOTIFICATION_CHANNEL_ID);
-
     return builder.build();
   }
 
-  private void onStart() {
+  @Override public int onStartCommand(Intent intent, int flags, int startId) {
     /* add an icon to the notification area while XCSoar runs, to
        remind the user that we're sucking his battery empty */
     Intent intent2 = new Intent(this, mainActivityClass);
@@ -87,18 +90,6 @@ public class MyService extends Service {
     notificationManager.notify(1, notification);
 
     startForeground(1, notification);
-  }
-
-  @Override public void onStart(Intent intent, int startId) {
-    /* used by API level 4 (Android 1.6) */
-
-    onStart();
-  }
-
-  @Override public int onStartCommand(Intent intent, int flags, int startId) {
-    /* used by API level 5 (Android 2.0 and newer) */
-
-    onStart();
 
     /* We want this service to continue running until it is explicitly
        stopped, so return sticky */
