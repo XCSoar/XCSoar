@@ -12,56 +12,54 @@
 #endif
 
 #ifdef _WIN32
-# include "system/WindowsRegistry.hpp"
-# include "util/StringFormat.hpp"
+#include <fileapi.h>
 #endif
 
 #ifdef ANDROID
-#include "java/Global.hxx"
-#include "java/String.hxx"
-#include "Android/Main.hpp"
 #include "Android/BluetoothHelper.hpp"
+#include "Android/Main.hpp"
 #include "Android/UsbSerialHelper.hpp"
 #include "Device/Port/AndroidIOIOUartPort.hpp"
+#include "java/Global.hxx"
+#include "java/String.hxx"
 #endif
 
 static constexpr struct {
   DeviceConfig::PortType type;
   const TCHAR *label;
 } port_types[] = {
-  { DeviceConfig::PortType::DISABLED, N_("Disabled") },
+    {DeviceConfig::PortType::DISABLED, N_("Disabled")},
 #ifdef HAVE_INTERNAL_GPS
-  { DeviceConfig::PortType::INTERNAL, N_("Built-in GPS & sensors") },
+    {DeviceConfig::PortType::INTERNAL, N_("Built-in GPS & sensors")},
 #endif
 #ifdef ANDROID
-  { DeviceConfig::PortType::RFCOMM_SERVER, N_("Bluetooth server") },
-  { DeviceConfig::PortType::DROIDSOAR_V2, _T("DroidSoar V2") },
-  { DeviceConfig::PortType::GLIDER_LINK, _T("GliderLink traffic receiver") },
+    {DeviceConfig::PortType::RFCOMM_SERVER, N_("Bluetooth server")},
+    {DeviceConfig::PortType::DROIDSOAR_V2, _T("DroidSoar V2")},
+    {DeviceConfig::PortType::GLIDER_LINK, _T("GliderLink traffic receiver")},
 #ifndef NDEBUG
-  { DeviceConfig::PortType::NUNCHUCK, N_("IOIO switches and Nunchuk") },
+    {DeviceConfig::PortType::NUNCHUCK, N_("IOIO switches and Nunchuk")},
 #endif
-  { DeviceConfig::PortType::I2CPRESSURESENSOR, N_("IOIO I²C pressure sensor") },
-  { DeviceConfig::PortType::IOIOVOLTAGE, N_("IOIO voltage sensor") },
+    {DeviceConfig::PortType::I2CPRESSURESENSOR, N_("IOIO I²C pressure sensor")},
+    {DeviceConfig::PortType::IOIOVOLTAGE, N_("IOIO voltage sensor")},
 #endif
 
-  { DeviceConfig::PortType::TCP_CLIENT, N_("TCP client") },
+    {DeviceConfig::PortType::TCP_CLIENT, N_("TCP client")},
 
-  /* label not translated for now, until we have a TCP/UDP port
-     selection UI */
-  { DeviceConfig::PortType::TCP_LISTENER, N_("TCP port") },
-  { DeviceConfig::PortType::UDP_LISTENER, N_("UDP port") },
+    /* label not translated for now, until we have a TCP/UDP port
+       selection UI */
+    {DeviceConfig::PortType::TCP_LISTENER, N_("TCP port")},
+    {DeviceConfig::PortType::UDP_LISTENER, N_("UDP port")},
 
-  { DeviceConfig::PortType::SERIAL, nullptr } /* sentinel */
+    {DeviceConfig::PortType::SERIAL, nullptr} /* sentinel */
 };
 
 /** the number of fixed port types (excludes Serial, Bluetooth and IOIOUart) */
 static constexpr unsigned num_port_types = std::size(port_types) - 1;
 
-static unsigned
-AddPort(DataFieldEnum &df, DeviceConfig::PortType type,
-        const TCHAR *text, const TCHAR *display_string=nullptr,
-        const TCHAR *help=nullptr) noexcept
-{
+static unsigned AddPort(DataFieldEnum &df, DeviceConfig::PortType type,
+                        const TCHAR *text,
+                        const TCHAR *display_string = nullptr,
+                        const TCHAR *help = nullptr) noexcept {
   /* the upper 16 bit is the port type, and the lower 16 bit is a
      serial number to make the enum id unique */
 
@@ -72,9 +70,7 @@ AddPort(DataFieldEnum &df, DeviceConfig::PortType type,
 
 #if defined(HAVE_POSIX)
 
-static bool
-DetectSerialPorts(DataFieldEnum &df) noexcept
-{
+static bool DetectSerialPorts(DataFieldEnum &df) noexcept {
   TTYEnumerator enumerator;
   if (enumerator.HasFailed())
     return false;
@@ -98,90 +94,25 @@ DetectSerialPorts(DataFieldEnum &df) noexcept
   return found;
 }
 
-#elif defined(_WIN32)
+#endif
 
-/**
- * If this is a "COMx" name, parse "x" and return it; otherwise,
- * return -1.
- */
-[[gnu::pure]]
-static int
-ComIndex(TCHAR *name) noexcept
-{
-  const TCHAR *suffix = StringAfterPrefix(name, _T("COM"));
-  if (suffix == nullptr)
-    return -1;
+#if defined(_WIN32) && !defined(HAVE_POSIX)
 
-  TCHAR *endptr;
-  const auto i = _tcstoul(suffix, &endptr, 10);
-  if (endptr == suffix || *endptr != _T('\0'))
-    return -1;
+static void FillDefaultSerialPorts(DataFieldEnum &df) noexcept {
+  for (unsigned i = 1; i <= 10; ++i) {
+    TCHAR path[64];
+    _stprintf(path, _T("COM%u:"), i);
 
-  return static_cast<int>(i);
-}
-
-static void
-#ifdef TEST_AUGUST
-FillDefaultSerialPorts(DataFieldEnum &df) noexcept
-{
-    for (unsigned i = 1; i <= 255; ++i) {
-      TCHAR port[64];
-      _stprintf(port, _T("COM%u"), i);
-      TCHAR name[MAX_PATH];
-      if (QueryDosDevice(port, name, std::size(name)) > 0) {
-        _stprintf(name, _T("%s (%s)"), port, name + strlen("\\Device\\"));
-        AddPort(df, DeviceConfig::PortType::SERIAL, port, name);
-      }
-    }
-#else
-
-DetectSerialPorts(DataFieldEnum &df) noexcept
-try {
-  /* the registry key HKEY_LOCAL_MACHINE/Hardware/DEVICEMAP/SERIALCOMM
-     is the best way to discover serial ports on Windows */
-
-  RegistryKey hardware{HKEY_LOCAL_MACHINE, _T("Hardware")};
-  RegistryKey devicemap{hardware, _T("DEVICEMAP")};
-  RegistryKey serialcomm{devicemap, _T("SERIALCOMM")};
-
-  for (unsigned i = 0;; ++i) {
-    TCHAR name[128];
-    TCHAR value[64];
-
-    DWORD type;
-    if (!serialcomm.EnumValue(i, std::span{name}, &type,
-                              std::as_writable_bytes(std::span{value})))
-      break;
-
-    if (type != REG_SZ)
-      // weird
-      continue;
-
-    const TCHAR *path = value;
-
-    TCHAR buffer[128];
-    if (const auto com_idx = ComIndex(value); com_idx >= 0) {
-      if (com_idx < 10)
-        /* old-style raw names (with trailing colon for backwards
-           compatibility with older XCSoar versions) */
-        StringFormatUnsafe(buffer, _T("%s:"), value);
-      else
-        /* COM10 and above must use UNC paths */
-        StringFormatUnsafe(buffer, _T("\\\\.\\%s"), value);
-      path = buffer;
-    }
-
-    AddPort(df, DeviceConfig::PortType::SERIAL, path, name);
+    TCHAR display_name[MAX_PATH];
+    if (QueryDosDevice(path, display_name, std::size(display_name)) > 0)
+      AddPort(df, DeviceConfig::PortType::SERIAL, path, display_name);
   }
-} catch (const std::system_error &) {
-  // silently ignore registry errors
-#endif
 }
+
 #endif
 
-static void
-FillPortTypes(DataFieldEnum &df, const DeviceConfig &config) noexcept
-{
+static void FillPortTypes(DataFieldEnum &df,
+                          const DeviceConfig &config) noexcept {
   for (unsigned i = 0; port_types[i].label != nullptr; i++) {
     unsigned id = AddPort(df, port_types[i].type, port_types[i].label,
                           gettext(port_types[i].label));
@@ -191,19 +122,16 @@ FillPortTypes(DataFieldEnum &df, const DeviceConfig &config) noexcept
   }
 }
 
-void
-SetPort(DataFieldEnum &df, DeviceConfig::PortType type,
-        const TCHAR *value) noexcept
-{
+void SetPort(DataFieldEnum &df, DeviceConfig::PortType type,
+             const TCHAR *value) noexcept {
   assert(value != nullptr);
 
   if (!df.SetValue(value))
     df.SetValue(AddPort(df, type, value));
 }
 
-static void
-FillSerialPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept
-{
+static void FillSerialPorts(DataFieldEnum &df,
+                            const DeviceConfig &config) noexcept {
 #if defined(HAVE_POSIX)
   DetectSerialPorts(df);
 #elif defined(_WIN32)
@@ -214,36 +142,30 @@ FillSerialPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept
     SetPort(df, config.port_type, config.path);
 }
 
-void
-SetBluetoothPort(DataFieldEnum &df, DeviceConfig::PortType type,
-                 const TCHAR *bluetooth_mac) noexcept
-{
+void SetBluetoothPort(DataFieldEnum &df, DeviceConfig::PortType type,
+                      const TCHAR *bluetooth_mac) noexcept {
   assert(bluetooth_mac != nullptr);
 
   if (!df.SetValue(bluetooth_mac)) {
     const TCHAR *name = nullptr;
 #ifdef ANDROID
     if (bluetooth_helper != nullptr)
-      name = bluetooth_helper->GetNameFromAddress(Java::GetEnv(),
-                                                  bluetooth_mac);
+      name =
+          bluetooth_helper->GetNameFromAddress(Java::GetEnv(), bluetooth_mac);
 #endif
     df.SetValue(AddPort(df, type, bluetooth_mac, name));
   }
 }
 
-static void
-FillAndroidBluetoothPorts(DataFieldEnum &df,
-                          const DeviceConfig &config) noexcept
-{
-  if (config.UsesBluetoothMac() &&
-      !config.bluetooth_mac.empty())
+static void FillAndroidBluetoothPorts(DataFieldEnum &df,
+                                      const DeviceConfig &config) noexcept {
+  if (config.UsesBluetoothMac() && !config.bluetooth_mac.empty())
     SetBluetoothPort(df, config.port_type, config.bluetooth_mac);
 }
 
-static void
-FillAndroidUsbSerialPorts([[maybe_unused]] DataFieldEnum &df,
-                          [[maybe_unused]] const DeviceConfig &config) noexcept
-{
+static void FillAndroidUsbSerialPorts(
+    [[maybe_unused]] DataFieldEnum &df,
+    [[maybe_unused]] const DeviceConfig &config) noexcept {
 #ifdef ANDROID
   if (config.port_type == DeviceConfig::PortType::ANDROID_USB_SERIAL &&
       !config.path.empty())
@@ -252,8 +174,8 @@ FillAndroidUsbSerialPorts([[maybe_unused]] DataFieldEnum &df,
 }
 
 static void
-FillAndroidIOIOPorts([[maybe_unused]] DataFieldEnum &df, [[maybe_unused]] const DeviceConfig &config) noexcept
-{
+FillAndroidIOIOPorts([[maybe_unused]] DataFieldEnum &df,
+                     [[maybe_unused]] const DeviceConfig &config) noexcept {
 #if defined(ANDROID)
   df.EnableItemHelp(true);
 
@@ -262,9 +184,8 @@ FillAndroidIOIOPorts([[maybe_unused]] DataFieldEnum &df, [[maybe_unused]] const 
   for (unsigned i = 0; i < AndroidIOIOUartPort::getNumberUarts(); i++) {
     StringFormatUnsafe(tempID, _T("%u"), i);
     StringFormat(tempName, sizeof(tempName), _T("IOIO UART %u"), i);
-    unsigned id = AddPort(df, DeviceConfig::PortType::IOIOUART,
-                          tempID, tempName,
-                          AndroidIOIOUartPort::getPortHelp(i));
+    unsigned id = AddPort(df, DeviceConfig::PortType::IOIOUART, tempID,
+                          tempName, AndroidIOIOUartPort::getPortHelp(i));
     if (config.port_type == DeviceConfig::PortType::IOIOUART &&
         config.ioio_uart_id == i)
       df.SetValue(id);
@@ -272,9 +193,7 @@ FillAndroidIOIOPorts([[maybe_unused]] DataFieldEnum &df, [[maybe_unused]] const 
 #endif
 }
 
-void
-FillPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept
-{
+void FillPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept {
   FillPortTypes(df, config);
   FillSerialPorts(df, config);
   FillAndroidBluetoothPorts(df, config);
@@ -282,10 +201,8 @@ FillPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept
   FillAndroidIOIOPorts(df, config);
 }
 
-void
-UpdatePortEntry(DataFieldEnum &df, DeviceConfig::PortType type,
-                const TCHAR *value, const TCHAR *name) noexcept
-{
+void UpdatePortEntry(DataFieldEnum &df, DeviceConfig::PortType type,
+                     const TCHAR *value, const TCHAR *name) noexcept {
   for (std::size_t i = 0, n = df.Count(); i < n; ++i) {
     const auto &item = df[i];
     if (DeviceConfig::PortType(item.GetId() >> 16) == type &&
@@ -299,9 +216,7 @@ UpdatePortEntry(DataFieldEnum &df, DeviceConfig::PortType type,
   AddPort(df, type, value, name);
 }
 
-void
-SetPort(DataFieldEnum &df, const DeviceConfig &config) noexcept
-{
+void SetPort(DataFieldEnum &df, const DeviceConfig &config) noexcept {
   switch (config.port_type) {
   case DeviceConfig::PortType::DISABLED:
   case DeviceConfig::PortType::AUTO:
@@ -344,9 +259,7 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config) noexcept
   }
 }
 
-DeviceConfig::PortType
-GetPortType(const DataFieldEnum &df) noexcept
-{
+DeviceConfig::PortType GetPortType(const DataFieldEnum &df) noexcept {
   const unsigned port = df.GetValue();
 
   if (port < num_port_types)
