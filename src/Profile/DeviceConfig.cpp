@@ -83,10 +83,18 @@ LoadPath(const ProfileMap &map, DeviceConfig &config, unsigned n)
 #ifdef _WIN32
   bool retvalue = map.Get(buffer, config.path);
   // the usual windows port names has no colon at the end
-  if (retvalue && (config.path.back() == TCHAR(':')) && 
-    (_tcsncmp(config.path, _T("COM"), 3) == 0)) {
-    // config.path.StartsWith(_T("COM"))) {
-    config.path[config.path.length() - 1] = 0;
+  if (retvalue) {
+    if ((config.path.back() == TCHAR(':')) &&
+        // (_tcsncmp(config.path, _T("COM"), 3) == 0)) {
+      config.path.StartsWith(_T("COM"))) {
+      /* old-style raw names has a trailing colon (for backwards
+       compatibility with older XCSoar versions) */
+      config.path[config.path.length() - 1] = 0;
+    } else if (config.path.StartsWith(_T("\\\\.\\COM"))) {
+      /* since 7.30 the raw names in the XCSoar config has the UNC style
+       (compatibility with this XCSoar versions config) */
+      _tcscpy(config.path.buffer(), config.path + 4);
+    }
   }
   return retvalue;
 #else

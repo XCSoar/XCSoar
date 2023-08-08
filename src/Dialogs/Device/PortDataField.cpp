@@ -143,21 +143,7 @@ try {
       // weird
       continue;
 
-    const TCHAR *path = value;
-
-    TCHAR buffer[128];
-    if (const auto com_idx = ComIndex(value); com_idx >= 0) {
-      if (com_idx < 10)
-        /* old-style raw names (with trailing colon for backwards
-           compatibility with older XCSoar versions) */
-        StringFormatUnsafe(buffer, _T("%s:"), value);
-      else
-        /* COM10 and above must use UNC paths */
-        StringFormatUnsafe(buffer, _T("\\\\.\\%s"), value);
-      path = buffer;
-    }
-
-    AddPort(df, DeviceConfig::PortType::SERIAL, path, name);
+    AddPort(df, DeviceConfig::PortType::SERIAL, value, name);
   }
 } catch (const std::system_error &) {
   // silently ignore registry errors
