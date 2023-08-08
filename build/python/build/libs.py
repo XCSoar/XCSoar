@@ -281,9 +281,9 @@ libpng = CmakeProject(
 )
 
 libjpeg = CmakeProject(
-    'http://downloads.sourceforge.net/project/libjpeg-turbo/2.1.5.1/libjpeg-turbo-2.1.5.1.tar.gz',
-    'http://sourceforge.mirrorservice.org/l/li/libjpeg-turbo/2.1.5.1/libjpeg-turbo-2.1.5.1.tar.gz',
-    '2fdc3feb6e9deb17adec9bafa3321419aa19f8f4e5dea7bf8486844ca22207bf',
+    'http://downloads.sourceforge.net/project/libjpeg-turbo/3.0.0/libjpeg-turbo-3.0.0.tar.gz',
+    'https://netcologne.dl.sourceforge.net/project/libjpeg-turbo/3.0.0/libjpeg-turbo-3.0.0.tar.gz',
+    'c77c65fcce3d33417b2e90432e7a0eb05f59a7fff884022a9d931775d583bfaa',
     'lib/libjpeg.a',
     [
         '-DENABLE_STATIC=ON',
