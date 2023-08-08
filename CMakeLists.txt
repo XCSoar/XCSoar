@@ -39,7 +39,8 @@ message(STATUS "+++++ PROGRAM_NAME = '${PROGRAM_NAME}'")
 message(STATUS "+++++ PROGRAM_VERSION = '${PROGRAM_VERSION}'")
 
 add_compile_definitions("PROGRAM_VERSION=\"${PROGRAM_VERSION}\"")
-file(WRITE "VERSION.txt" ${PROGRAM_VERSION})
+
+# this was wrong...: file(WRITE "VERSION.txt" ${PROGRAM_VERSION})
 
 find_program(CMAKE_APP     NAMES cmake REQUIRED)
 get_filename_component(CMAKE_PROGRAM_PATH ${CMAKE_APP} DIRECTORY)
