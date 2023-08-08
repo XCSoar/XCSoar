@@ -34,7 +34,11 @@ UpdateFadingTraffic(bool fade_traffic,
     return;
   }
 
+#ifdef _DEBUG  // TODO(August)...
+  if (new_list.modified.Modified(old_list.modified) && false) {  // TODO(August)...
+#else
   if (new_list.modified.Modified(old_list.modified)||true) {
+#endif
     /* first add all items from the old list */
     for (const auto &traffic : old_list.list)
       if (traffic.location_available)
