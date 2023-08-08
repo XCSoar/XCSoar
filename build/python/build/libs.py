@@ -32,9 +32,9 @@ linux_headers = SabotageLinuxHeadersProject(
 )
 
 gcc = GccProject(
-    'https://ftp.gnu.org/gnu/gcc/gcc-13.1.0/gcc-13.1.0.tar.xz',
-    'https://fossies.org/linux/misc/gcc-13.1.0.tar.xz',
-    '61d684f0aa5e76ac6585ad8898a2427aade8979ed5e7f85492286c4dfc13ee86',
+    'https://ftp.gnu.org/gnu/gcc/gcc-13.2.0/gcc-13.2.0.tar.xz',
+    'https://fossies.org/linux/misc/gcc-13.2.0.tar.xz',
+    'e275e76442a6067341a27f04c5c6b83d8613144004c0413528863dc6b5c743da',
     'lib/libstdc++.a',
     [
         # GCC fails to build if we disable the shared libstdc++
