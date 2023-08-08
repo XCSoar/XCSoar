@@ -1,9 +1,9 @@
 set(_SOURCES
         FLARM/Error.cpp
-        FLARM/FlarmCalculations.cpp
-        FLARM/FlarmComputer.cpp
-        FLARM/FlarmDetails.cpp
-        FLARM/FlarmId.cpp
+        FLARM/Calculations.cpp
+        FLARM/Computer.cpp
+        FLARM/Details.cpp
+        FLARM/Id.cpp
         FLARM/FlarmNetDatabase.cpp
         FLARM/FlarmNetReader.cpp
         FLARM/FlarmNetRecord.cpp

@@ -13,6 +13,8 @@ set(_SOURCES
         io/FileCache.cpp
         io/FileLineReader.cpp
         io/FileOutputStream.cxx
+        io/FileDescriptor.cxx
+        io/FileMapping.cpp
         io/FileReader.cxx
         io/FileTransaction.cpp
         io/KeyValueFileReader.cpp
@@ -22,7 +24,6 @@ set(_SOURCES
         io/ZipArchive.cpp
         io/ZipLineReader.cpp
         io/ZipReader.cpp
-        io/FileDescriptor.cxx
 )
 # if(UNIX)
 #   list(APPEND _SOURCES

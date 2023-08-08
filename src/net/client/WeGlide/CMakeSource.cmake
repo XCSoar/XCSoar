@@ -3,6 +3,7 @@ set(_SOURCES
         DownloadTask.cpp
 
         UploadIGCFile.cpp
+        Error.cpp
 )
 
 set(SCRIPT_FILES

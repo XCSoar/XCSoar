@@ -1,6 +1,5 @@
 set(_SOURCES
         system/EventPipe.cxx
-        system/FileMapping.cpp
         system/FileUtil.cpp
         system/Path.cpp
         system/PathName.cpp
