@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "FLARM/FlarmId.hpp"
+#include "Id.hpp"
 #include "Computer/ClimbAverageCalculator.hpp"
 
 #include <map>

@@ -11,7 +11,7 @@
 
 ThermalAssistantWindow::ThermalAssistantWindow(const ThermalAssistantLook &_look,
                                                unsigned _padding, bool _small,
-                                               [[maybe_unused]] bool _transparent)
+                                               [[maybe_unused]] bool _transparent) noexcept
   :renderer(_look, _padding, _small)
 #ifdef ENABLE_OPENGL
   , transparent(_transparent)
@@ -20,7 +20,7 @@ ThermalAssistantWindow::ThermalAssistantWindow(const ThermalAssistantLook &_look
 
 void
 ThermalAssistantWindow::Update(const AttitudeState &attitude,
-                               const DerivedInfo &derived)
+                               const DerivedInfo &derived) noexcept
 {
   renderer.Update(attitude, derived);
   Invalidate();
@@ -35,7 +35,7 @@ ThermalAssistantWindow::OnResize(PixelSize new_size) noexcept
 }
 
 void
-ThermalAssistantWindow::DrawCircle(Canvas &canvas)
+ThermalAssistantWindow::DrawCircle(Canvas &canvas) noexcept
 {
   canvas.DrawCircle(renderer.GetMiddle(), renderer.GetRadius());
 }

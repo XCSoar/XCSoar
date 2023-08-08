@@ -6,9 +6,14 @@
 #include "../shared/Event.hpp"
 #include "ui/display/Display.hpp"
 #include "util/StringAPI.hxx"
+#include "xdg-shell-client-protocol.h"
 
 #include <wayland-client.h>
 
+#include <cerrno>
+#include <cstdio> // for fprintf()
+#include <cstdlib> // for abort()
+#include <cstring> // for strerror()
 #include <stdexcept>
 
 namespace UI {
@@ -29,8 +34,8 @@ WaylandRegistryGlobalRemove([[maybe_unused]] void *data,
 }
 
 static constexpr struct wl_registry_listener registry_listener = {
-  WaylandRegistryGlobal,
-  WaylandRegistryGlobalRemove,
+  .global = WaylandRegistryGlobal,
+  .global_remove = WaylandRegistryGlobalRemove,
 };
 
 static void
@@ -46,7 +51,7 @@ WaylandSeatHandleCapabilities(void *data,
 }
 
 static constexpr struct wl_seat_listener seat_listener = {
-  WaylandSeatHandleCapabilities,
+  .capabilities = WaylandSeatHandleCapabilities,
 };
 
 static void
@@ -109,17 +114,85 @@ WaylandPointerAxis(void *data,
 }
 
 static constexpr struct wl_pointer_listener pointer_listener = {
-  WaylandPointerEnter,
-  WaylandPointerLeave,
-  WaylandPointerMotion,
-  WaylandPointerButton,
-  WaylandPointerAxis,
+  .enter = WaylandPointerEnter,
+  .leave = WaylandPointerLeave,
+  .motion = WaylandPointerMotion,
+  .button = WaylandPointerButton,
+  .axis = WaylandPointerAxis,
+};
+
+static void
+WaylandKeyboardKeymap([[maybe_unused]] void *data,
+                      [[maybe_unused]] struct wl_keyboard *wl_keyboard,
+                      [[maybe_unused]] uint32_t format,
+                      [[maybe_unused]] int32_t fd,
+                      [[maybe_unused]] uint32_t size) noexcept
+{
+}
+
+static void
+WaylandKeyboardEnter([[maybe_unused]] void *data,
+                     [[maybe_unused]] struct wl_keyboard *wl_keyboard,
+                     [[maybe_unused]] uint32_t serial,
+                     [[maybe_unused]] struct wl_surface *surface,
+                     [[maybe_unused]] struct wl_array *keys) noexcept
+{
+}
+
+static void
+WaylandKeyboardLeave([[maybe_unused]] void *data,
+                     [[maybe_unused]] struct wl_keyboard *wl_keyboard,
+                     [[maybe_unused]] uint32_t serial,
+                     [[maybe_unused]] struct wl_surface *surface) noexcept
+{
+}
+
+static void
+WaylandKeyboardKey(void *data,
+                   [[maybe_unused]] struct wl_keyboard *wl_keyboard,
+                   [[maybe_unused]] uint32_t serial,
+                   [[maybe_unused]] uint32_t time,
+                   uint32_t key,
+                   uint32_t state) noexcept
+{
+  auto &queue = *(WaylandEventQueue *)data;
+
+  queue.KeyboardKey(key, state);
+}
+
+static void
+WaylandKeyboardModifiers([[maybe_unused]] void *data,
+                         [[maybe_unused]] struct wl_keyboard *wl_keyboard,
+                         [[maybe_unused]] uint32_t serial,
+                         [[maybe_unused]] uint32_t mods_depressed,
+                         [[maybe_unused]] uint32_t mods_latched,
+                         [[maybe_unused]] uint32_t mods_locked,
+                         [[maybe_unused]] uint32_t group) noexcept
+{
+}
+
+static void
+WaylandKeyboardRepeatInfo([[maybe_unused]] void *data,
+                          [[maybe_unused]] struct wl_keyboard *wl_keyboard,
+                          [[maybe_unused]] int32_t rate,
+                          [[maybe_unused]] int32_t delay) noexcept
+{
+}
+
+static constexpr struct wl_keyboard_listener keyboard_listener = {
+  .keymap = WaylandKeyboardKeymap,
+  .enter = WaylandKeyboardEnter,
+  .leave = WaylandKeyboardLeave,
+  .key = WaylandKeyboardKey,
+  .modifiers = WaylandKeyboardModifiers,
+  .repeat_info = WaylandKeyboardRepeatInfo,
 };
 
 WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
   :queue(_queue),
    display(_display.GetWaylandDisplay()),
-   socket_event(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady))
+   socket_event(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady)),
+   flush_event(queue.GetEventLoop(), BIND_THIS_METHOD(OnFlush))
 {
   if (display == nullptr)
     throw std::runtime_error("wl_display_connect() failed");
@@ -136,29 +209,55 @@ WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
   if (seat == nullptr)
     throw std::runtime_error("No Wayland seat found");
 
-  if (shell == nullptr)
-    throw std::runtime_error("No Wayland shell found");
+  if (wm_base == nullptr && shell == nullptr)
+    throw std::runtime_error{"No Wayland xdg_wm_base/shell found"};
 
   socket_event.Open(SocketDescriptor(wl_display_get_fd(display)));
   socket_event.ScheduleRead();
+  flush_event.Schedule();
 }
 
 bool
-WaylandEventQueue::Generate([[maybe_unused]] Event &event)
+WaylandEventQueue::Generate([[maybe_unused]] Event &event) noexcept
 {
-  wl_display_flush(display);
+  flush_event.Schedule();
   return false;
 }
 
 void
-WaylandEventQueue::OnSocketReady([[maybe_unused]] unsigned events) noexcept
+WaylandEventQueue::OnSocketReady(unsigned events) noexcept
 {
-  wl_display_dispatch(display);
+  flush_event.Schedule();
+
+  if (wl_display_dispatch(display) < 0) {
+    const int e = errno;
+    if (e != EAGAIN) {
+      fprintf(stderr, "wl_display_dispatch() failed: %s\n", strerror(e));
+      abort();
+    }
+  }
+
+  if (events & SocketEvent::HANGUP) {
+    fprintf(stderr, "Wayland server hung up\n");
+    abort();
+  }
+}
+
+void
+WaylandEventQueue::OnFlush() noexcept
+{
+  if (wl_display_flush(display) < 0) {
+    const int e = errno;
+    if (e != EAGAIN) {
+      fprintf(stderr, "wl_display_flush() failed: %s\n", strerror(e));
+      abort();
+    }
+  }
 }
 
 inline void
 WaylandEventQueue::RegistryHandler(struct wl_registry *registry, uint32_t id,
-                                   const char *interface)
+                                   const char *interface) noexcept
 {
   if (StringIsEqual(interface, "wl_compositor"))
     compositor = (wl_compositor *)
@@ -170,16 +269,16 @@ WaylandEventQueue::RegistryHandler(struct wl_registry *registry, uint32_t id,
   } else if (StringIsEqual(interface, "wl_shell"))
     shell = (wl_shell *)wl_registry_bind(registry, id,
                                          &wl_shell_interface, 1);
+  else if (StringIsEqual(interface, "xdg_wm_base"))
+    wm_base = (xdg_wm_base *)wl_registry_bind(registry, id,
+                                              &xdg_wm_base_interface, 1);
 }
 
 inline void
 WaylandEventQueue::SeatHandleCapabilities(bool has_pointer, bool has_keyboard,
-                                          bool has_touch)
+                                          bool has_touch) noexcept
 {
-  /* TODO: collect flags for HasTouchScreen(), HasPointer(),
-     HasKeyboard(), HasCursorKeys() */
-  (void)has_keyboard;
-  (void)has_touch;
+  /* TODO: collect flags for HasCursorKeys() */
 
   if (has_pointer) {
     if (pointer == nullptr) {
@@ -192,17 +291,28 @@ WaylandEventQueue::SeatHandleCapabilities(bool has_pointer, bool has_keyboard,
       wl_pointer_destroy(pointer);
   }
 
-  // TODO: support keyboard devices
+  if (has_keyboard) {
+    if (keyboard == nullptr) {
+      keyboard = wl_seat_get_keyboard(seat);
+      if (keyboard != nullptr)
+        wl_keyboard_add_listener(keyboard, &keyboard_listener, this);
+    }
+  } else {
+    if (keyboard != nullptr)
+      wl_keyboard_destroy(keyboard);
+  }
+
+  has_touchscreen = has_touch;
 }
 
 inline void
-WaylandEventQueue::Push(const Event &event)
+WaylandEventQueue::Push(const Event &event) noexcept
 {
   queue.Push(event);
 }
 
 inline void
-WaylandEventQueue::PointerMotion(IntPoint2D new_pointer_position)
+WaylandEventQueue::PointerMotion(IntPoint2D new_pointer_position) noexcept
 {
   if (new_pointer_position == pointer_position)
     return;
@@ -213,10 +323,24 @@ WaylandEventQueue::PointerMotion(IntPoint2D new_pointer_position)
 }
 
 inline void
-WaylandEventQueue::PointerButton(bool pressed)
+WaylandEventQueue::PointerButton(bool pressed) noexcept
 {
   Push(Event(pressed ? Event::MOUSE_DOWN : Event::MOUSE_UP,
              PixelPoint(pointer_position.x, pointer_position.y)));
+}
+
+void
+WaylandEventQueue::KeyboardKey(uint32_t key, uint32_t state) noexcept
+{
+  switch (state) {
+  case WL_KEYBOARD_KEY_STATE_RELEASED:
+    queue.Push(Event{Event::KEY_UP, key});
+    break;
+
+  case WL_KEYBOARD_KEY_STATE_PRESSED:
+    queue.Push(Event{Event::KEY_DOWN, key});
+    break;
+  }
 }
 
 } // namespace UI

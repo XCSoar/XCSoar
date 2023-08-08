@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "FLARM/FlarmCalculations.hpp"
+#include "Calculations.hpp"
 
 struct FlarmData;
 struct NMEAInfo;
@@ -17,5 +17,5 @@ public:
    * looks up the callsign of each target
    */
   void Process(FlarmData &flarm, const FlarmData &last_flarm,
-               const NMEAInfo &basic);
+               const NMEAInfo &basic) noexcept;
 };

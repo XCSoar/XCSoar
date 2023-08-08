@@ -150,7 +150,7 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock) noexcept
 
   traffic.stealth = stealth;
 
-  unsigned type = line.Read(0);
+  unsigned type = line.ReadHex(0);
   if (type > 15 || type == 14)
     traffic.type = FlarmTraffic::AircraftType::UNKNOWN;
   else

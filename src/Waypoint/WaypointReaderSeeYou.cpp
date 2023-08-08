@@ -255,10 +255,12 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
 
   // Elevation (e.g. 458.0m)
   /// @todo configurable behaviour
-  if ((iElevation >= n_params ||
-      !ParseAltitude(params[iElevation], new_waypoint.elevation)) &&
-      !factory.FallbackElevation(new_waypoint))
-    return false;
+  if (iElevation < n_params) {
+    if (ParseAltitude(params[iElevation], new_waypoint.elevation))
+      new_waypoint.has_elevation = true;
+    else
+      factory.FallbackElevation(new_waypoint);
+  }
 
   // Style (e.g. 5)
   if (iStyle < n_params)

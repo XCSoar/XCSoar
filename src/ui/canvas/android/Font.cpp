@@ -2,13 +2,9 @@
 // Copyright The XCSoar Project
 
 #include "ui/canvas/Font.hpp"
+#include "ui/canvas/opengl/Texture.hpp"
 #include "Screen/Debug.hpp"
-#include "Look/FontDescription.hpp"
-#include "java/Global.hxx"
-#include "java/Class.hxx"
-#include "java/String.hxx"
 #include "Android/TextUtil.hpp"
-#include "util/StringCompare.hxx"
 
 #include <cassert>
 
@@ -43,29 +39,24 @@ Font::Destroy() noexcept
 PixelSize
 Font::TextSize(tstring_view text) const noexcept
 {
-  if (text_util_object == nullptr) {
-    PixelSize empty = { 0, 0 };
-    return empty;
-  }
+  if (text_util_object == nullptr || text.empty())
+    return {0, 0};
 
   return text_util_object->getTextBounds(text);
 }
 
-int
-Font::TextTextureGL(tstring_view text, PixelSize &size,
-                    PixelSize &allocated_size) const noexcept
+std::unique_ptr<GLTexture>
+Font::TextTextureGL(tstring_view text) const noexcept
 {
   if (!text_util_object)
-    return 0;
+    return {};
 
   if (text.empty())
-    return 0;
+    return {};
 
   const TextUtil::Texture texture =
     text_util_object->getTextTextureGL(text);
-  size.width = texture.width;
-  size.height = texture.height;
-  allocated_size.width = texture.allocated_width;
-  allocated_size.height = texture.allocated_height;
-  return texture.id;
+  return std::make_unique<GLTexture>(texture.id,
+                                     PixelSize{texture.width, texture.height},
+                                     PixelSize{texture.allocated_width, texture.allocated_height});
 }

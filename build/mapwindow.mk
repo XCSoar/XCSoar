@@ -35,6 +35,6 @@ LIBMAPWINDOW_SOURCES += \
 	$(SRC)/MapWindow/OverlayBitmap.cpp
 endif
 
-LIBMAPWINDOW_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
+LIBMAPWINDOW_DEPENDS = SCREEN
 
 $(eval $(call link-library,libmapwindow,LIBMAPWINDOW))

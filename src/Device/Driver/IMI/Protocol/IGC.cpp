@@ -32,7 +32,7 @@ IMI::WriteString(BufferedOutputStream &os, const char *buffer, size_t max_length
   if (zero != nullptr)
     length = zero - buffer;
 
-  os.Write(buffer, length);
+  os.Write(std::as_bytes(std::span{buffer, length}));
 }
 
 void

@@ -22,6 +22,9 @@ struct PixelSize {
   constexpr PixelSize(long _width, long _height) noexcept
     :width(_width), height(_height) {}
 
+  explicit constexpr PixelSize(UnsignedPoint2D src) noexcept
+    :width(src.x), height(src.y) {}
+
   constexpr bool operator==(const PixelSize &other) const noexcept {
     return width == other.width && height == other.height;
   }
@@ -48,6 +51,10 @@ struct PixelSize {
 
   constexpr PixelSize operator/(float v) const noexcept {
     return {unsigned(width / v), unsigned(height / v)};
+  }
+
+  explicit operator UnsignedPoint2D() const noexcept {
+    return { width, height };
   }
 };
 

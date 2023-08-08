@@ -69,7 +69,8 @@ DeserialiseWaypoint(const ConstDataNode &node, const Waypoints *waypoints)
   if (comment != nullptr)
     wp->comment.assign(comment);
 
-  node.GetAttribute(_T("altitude"), wp->elevation);
+  if (node.GetAttribute(_T("altitude"), wp->elevation))
+    wp->has_elevation = true;
 
   return WaypointPtr(wp);
 }

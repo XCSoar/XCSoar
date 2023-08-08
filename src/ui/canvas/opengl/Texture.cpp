@@ -5,7 +5,6 @@
 #include "Globals.hpp"
 #include "VertexPointer.hpp"
 #include "ui/dim/BulkPoint.hpp"
-#include "Asset.hpp"
 #include "Scope.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
@@ -119,18 +118,9 @@ GLTexture::Configure() noexcept
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-  GLint filter = IsEmbedded() ? GL_NEAREST : GL_LINEAR;
+  constexpr GLint filter = GL_LINEAR;
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
-}
-
-void
-GLTexture::EnableInterpolation() noexcept
-{
-  if (IsEmbedded()) {
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  }
 }
 
 void

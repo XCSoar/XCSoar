@@ -19,8 +19,11 @@ typedef StaticString<256u> Buffer;
 static void
 FormatWaypointDetails(Buffer &buffer, const Waypoint &waypoint)
 {
-  buffer.Format(_T("%s: %s"), _("Elevation"),
-                FormatUserAltitude(waypoint.elevation).c_str());
+  if (waypoint.has_elevation)
+    buffer.Format(_T("%s: %s"), _("Elevation"),
+                  FormatUserAltitude(waypoint.elevation).c_str());
+  else
+    buffer.Format(_T("%s: %s"), _("Elevation"), _T("?"));
 
   if (waypoint.radio_frequency.IsDefined()) {
     TCHAR radio[16];

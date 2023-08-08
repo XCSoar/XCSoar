@@ -12,7 +12,6 @@ TOPO_SOURCES = \
 
 TOPO_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
 
-$(eval $(call link-library,libtopo,TOPO))
+TOPO_DEPENDS = SHAPELIB
 
-TOPO_LDADD += $(SHAPELIB_LDADD)
-TOPO_LDLIBS += $(SHAPELIB_LDLIBS)
+$(eval $(call link-library,libtopo,TOPO))

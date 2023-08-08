@@ -109,19 +109,13 @@ ParseAltitude(const TCHAR *src, double &dest)
   return true;
 }
 
-static bool
-ParseString(const TCHAR *src, tstring &dest, unsigned len = 0)
+[[nodiscard]] [[gnu::pure]]
+static tstring
+ParseString(tstring_view src) noexcept
 {
-  if (src[0] == 0)
-    return true;
-
-  dest.assign(src);
-  if (len > 0)
-    dest = dest.substr(0, len);
-
+  tstring dest{src};
   trim_inplace(dest);
-
-  return true;
+  return dest;
 }
 
 bool
@@ -164,16 +158,16 @@ WaypointReaderFS::ParseLine(const TCHAR *line, Waypoints &way_points)
 
   Waypoint new_waypoint = factory.Create(location);
 
-  if (!ParseString(line, new_waypoint.name, 8))
-    return false;
+  new_waypoint.name = ParseString({line, 8});
 
-  if (!ParseAltitude(line + (is_utm ? 32 : 41), new_waypoint.elevation) &&
-      !factory.FallbackElevation(new_waypoint))
-    return false;
+  if (ParseAltitude(line + (is_utm ? 32 : 41), new_waypoint.elevation))
+    new_waypoint.has_elevation = true;
+  else
+    factory.FallbackElevation(new_waypoint);
 
   // Description (Characters 35-44)
   if (len > (is_utm ? 38 : 47))
-    ParseString(line + (is_utm ? 38 : 47), new_waypoint.comment);
+    new_waypoint.comment = ParseString(line + (is_utm ? 38 : 47));
 
   way_points.Append(std::move(new_waypoint));
   return true;

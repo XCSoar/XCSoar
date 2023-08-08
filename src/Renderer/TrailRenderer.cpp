@@ -104,7 +104,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   if (!LoadTrace(trace_computer, min_time, projection))
     return;
 
-  if (!calculated.wind_available)
+  if (!basic.location_available || !calculated.wind_available)
     enable_traildrift = false;
 
   GeoPoint traildrift;

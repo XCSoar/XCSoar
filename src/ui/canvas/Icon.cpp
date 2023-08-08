@@ -54,7 +54,6 @@ MaskedIcon::LoadResource(ResourceId id, ResourceId big_id, bool center)
 #ifdef ENABLE_OPENGL
     stretch = IconStretchFixed10(source_dpi);
     bitmap.Load(id);
-    bitmap.EnableInterpolation();
 #else
     bitmap.LoadStretch(id, IconStretchInteger(source_dpi));
 #endif

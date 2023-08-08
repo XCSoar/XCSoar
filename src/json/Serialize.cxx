@@ -4,6 +4,7 @@
 
 #include "Serialize.hxx"
 #include "io/OutputStream.hxx"
+#include "util/SpanCast.hxx"
 
 #include <boost/json/serializer.hpp>
 
@@ -20,7 +21,7 @@ Serialize(OutputStream &os, const boost::json::value &v)
 	while (!s.done()) {
 		char buffer[BOOST_JSON_STACK_BUFFER_SIZE];
 		auto r = s.read(buffer);
-		os.Write(r.data(), r.size());
+		os.Write(AsBytes(r));
 	}
 }
 

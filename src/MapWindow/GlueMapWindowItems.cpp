@@ -19,9 +19,10 @@
 #include "Interface.hpp"
 #include "Overlay.hpp"
 
-bool GlueMapWindow::ShowMapItems(const GeoPoint &location,
-                                 bool show_empty_message,
-                                 bool pointer_in_use) const
+bool
+GlueMapWindow::ShowMapItems(const GeoPoint &location,
+                            bool show_empty_message,
+                            bool pointer_in_use) const noexcept
 {
   /* not using MapWindowBlackboard here because this method is called
      by the main thread */

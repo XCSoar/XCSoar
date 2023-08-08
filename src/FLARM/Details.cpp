@@ -1,16 +1,18 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "FLARM/FlarmDetails.hpp"
+#include "Details.hpp"
+#include "Id.hpp"
 #include "Global.hpp"
 #include "TrafficDatabases.hpp"
-#include "FLARM/FlarmId.hpp"
 #include "util/StringCompare.hxx"
 
 #include <cassert>
 
+namespace FlarmDetails {
+
 const FlarmNetRecord *
-FlarmDetails::LookupRecord(FlarmId id)
+LookupRecord(FlarmId id) noexcept
 {
   // try to find flarm from FlarmNet.org File
   if (traffic_databases == nullptr)
@@ -20,7 +22,7 @@ FlarmDetails::LookupRecord(FlarmId id)
 }
 
 const TCHAR *
-FlarmDetails::LookupCallsign(FlarmId id)
+LookupCallsign(FlarmId id) noexcept
 {
   if (traffic_databases == nullptr)
     return nullptr;
@@ -29,7 +31,7 @@ FlarmDetails::LookupCallsign(FlarmId id)
 }
 
 FlarmId
-FlarmDetails::LookupId(const TCHAR *cn)
+LookupId(const TCHAR *cn) noexcept
 {
   assert(traffic_databases != nullptr);
 
@@ -37,7 +39,7 @@ FlarmDetails::LookupId(const TCHAR *cn)
 }
 
 bool
-FlarmDetails::AddSecondaryItem(FlarmId id, const TCHAR *name)
+AddSecondaryItem(FlarmId id, const TCHAR *name) noexcept
 {
   assert(id.IsDefined());
   assert(traffic_databases != nullptr);
@@ -46,8 +48,7 @@ FlarmDetails::AddSecondaryItem(FlarmId id, const TCHAR *name)
 }
 
 unsigned
-FlarmDetails::FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
-                                unsigned size)
+FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size) noexcept
 {
   assert(cn != NULL);
   assert(!StringIsEmpty(cn));
@@ -55,3 +56,5 @@ FlarmDetails::FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
 
   return traffic_databases->FindIdsByName(cn, array, size);
 }
+
+} // namespace FlarmDetails

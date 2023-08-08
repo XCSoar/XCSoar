@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "FlarmId.hpp"
+#include "Id.hpp"
 #include "FlarmNetRecord.hpp"
 
 #include <map>
@@ -17,15 +17,15 @@ class FlarmNetDatabase {
   RecordMap map;
 
 public:
-  bool IsEmpty() const {
+  bool IsEmpty() const noexcept {
     return map.empty();
   }
 
-  void Clear() {
+  void Clear() noexcept {
     map.clear();
   }
 
-  void Insert(const FlarmNetRecord &record);
+  void Insert(const FlarmNetRecord &record) noexcept;
 
   /**
    * Finds a FLARMNetRecord object based on the given FLARM id
@@ -33,7 +33,7 @@ public:
    * @return FLARMNetRecord object
    */
   [[gnu::pure]]
-  const FlarmNetRecord *FindRecordById(FlarmId id) const {
+  const FlarmNetRecord *FindRecordById(FlarmId id) const noexcept {
     auto i = map.find(id);
     return i != map.end()
       ? &i->second
@@ -46,19 +46,21 @@ public:
    * @return FLARMNetRecord object
    */
   [[gnu::pure]]
-  const FlarmNetRecord *FindFirstRecordByCallSign(const TCHAR *cn) const;
+  const FlarmNetRecord *FindFirstRecordByCallSign(const TCHAR *cn) const noexcept;
 
   unsigned FindRecordsByCallSign(const TCHAR *cn,
                                  const FlarmNetRecord *array[],
-                                 unsigned size) const;
+                                 unsigned size) const noexcept;
   unsigned FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
-                             unsigned size) const;
+                             unsigned size) const noexcept;
 
-  RecordMap::const_iterator begin() const {
+  [[gnu::pure]]
+  auto begin() const noexcept {
     return map.begin();
   }
 
-  RecordMap::const_iterator end() const {
+  [[gnu::pure]]
+  auto end() const noexcept {
     return map.end();
   }
 };

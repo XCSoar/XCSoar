@@ -11,6 +11,7 @@ IO_SOURCES = \
 	$(IO_SRC_DIR)/BufferedReader.cxx \
 	$(IO_SRC_DIR)/BufferedLineReader.cpp \
 	$(IO_SRC_DIR)/FileDescriptor.cxx \
+	$(IO_SRC_DIR)/FileMapping.cpp \
 	$(IO_SRC_DIR)/FileReader.cxx \
 	$(IO_SRC_DIR)/BufferedOutputStream.cxx \
 	$(IO_SRC_DIR)/FileOutputStream.cxx \
@@ -26,10 +27,8 @@ IO_SOURCES = \
 	$(IO_SRC_DIR)/ZipLineReader.cpp \
 	$(IO_SRC_DIR)/CSVLine.cpp
 
-IO_CPPFLAGS_INTERNAL = $(ZLIB_CPPFLAGS) $(FMT_CPPFLAGS)
+IO_DEPENDS = OS ZLIB FMT UTIL
 
 $(eval $(call link-library,io,IO))
 
 IO_CPPFLAGS += $(FMT_CPPFLAGS)
-IO_LDADD += $(FMT_LDADD)
-IO_LDLIBS += $(FMT_LDLIBS)

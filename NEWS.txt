@@ -1,3 +1,34 @@
+Version 7.32 - 2023/05/25
+* user interface
+  - fix horizon roll, show bank angles greater than 90°
+  - fix horizon pitch, show sky instead of ground when pitch is greater than 50°
+  - improve font scaling in the vario gauge
+  - support hot keys, gestures and double click on Horizon page
+* map display
+  - draw the trail even if there is no GPS fix
+  - keep showing disappeared FLARM traffic for some time
+* data files
+  - support waypoints without elevation data
+* devices
+  - IMI: fix crash when there are more than 128 recorded flights
+  - FLARM: parse AircraftType hex values correctly in PFLAA
+* Linux
+  - Wayland XDG_WM_BASE support
+  - Wayland keyboard support
+* Android
+  - don't disable IOIO completely if Bluetooth permission was not granted
+  - fix crash with initial IOIO connection
+  - fix lockup with IOIO Accessory connection
+
+Version 7.31 - 2023/05/12
+* user interface
+  - fix crash during startup
+* WeGlide
+  - fix crash bug after WeGlide flight upload
+  - show WeGlide error messages
+* Android
+  - fix crash with buggy graphics drivers
+
 Version 7.30 - 2023/05/09
 * fix crash in "ProfileSave" event
 * user interface

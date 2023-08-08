@@ -27,17 +27,17 @@ class TerrainThread;
 
 class OffsetHistory
 {
-  unsigned int pos;
+  unsigned int pos = 0;
   std::array<PixelPoint, 30> offsets;
 
 public:
-  OffsetHistory():pos(0) {
+  OffsetHistory() noexcept {
     Reset();
   }
 
-  void Reset();
-  void Add(PixelPoint p);
-  PixelPoint GetAverage() const;
+  void Reset() noexcept;
+  void Add(PixelPoint p) noexcept;
+  PixelPoint GetAverage() const noexcept;
 };
 
 
@@ -126,15 +126,15 @@ class GlueMapWindow : public MapWindow {
   UI::Notify redraw_notify{[this]{ PartialRedraw(); }};
 
 public:
-  GlueMapWindow(const Look &look);
-  virtual ~GlueMapWindow();
+  GlueMapWindow(const Look &look) noexcept;
+  virtual ~GlueMapWindow() noexcept;
 
-  void SetTopography(TopographyStore *_topography);
-  void SetTerrain(RasterTerrain *_terrain);
+  void SetTopography(TopographyStore *_topography) noexcept;
+  void SetTerrain(RasterTerrain *_terrain) noexcept;
 
-  void SetMapSettings(const MapSettings &new_value);
-  void SetComputerSettings(const ComputerSettings &new_value);
-  void SetUIState(const UIState &new_value);
+  void SetMapSettings(const MapSettings &new_value) noexcept;
+  void SetComputerSettings(const ComputerSettings &new_value) noexcept;
+  void SetUIState(const UIState &new_value) noexcept;
 
   /**
    * Sets a relative margin at the bottom of the screen where no HUD
@@ -148,25 +148,25 @@ public:
    * Update the blackboard from DeviceBlackboard and
    * InterfaceBlackboard.
    */
-  void ExchangeBlackboard();
+  void ExchangeBlackboard() noexcept;
 
   /**
    * Suspend threads that are owned by this object.
    */
-  void SuspendThreads();
+  void SuspendThreads() noexcept;
 
   /**
    * Resumt threads that are owned by this object.
    */
-  void ResumeThreads();
+  void ResumeThreads() noexcept;
 
   /**
    * Trigger a full redraw of the map.
    */
-  void FullRedraw();
+  void FullRedraw() noexcept;
   void PartialRedraw() noexcept;
 
-  void QuickRedraw();
+  void QuickRedraw() noexcept;
 
   /**
    * Trigger a deferred redraw.  It will occur in the main thread
@@ -195,21 +195,21 @@ public:
 #endif
   }
 
-  void SetPan(bool enable);
-  void TogglePan();
-  void PanTo(const GeoPoint &location);
+  void SetPan(bool enable) noexcept;
+  void TogglePan() noexcept;
+  void PanTo(const GeoPoint &location) noexcept;
 
   bool ShowMapItems(const GeoPoint &location, bool show_empty_message = true,
-                    bool pointer_in_use = true) const;
+                    bool pointer_in_use = true) const noexcept;
 
 protected:
   /* virtual methods from class MapWindow */
-  virtual void Render(Canvas &canvas, const PixelRect &rc) override;
-  virtual void DrawThermalEstimate(Canvas &canvas) const override;
-  virtual void RenderTrail(Canvas &canvas,
-                           const PixelPoint aircraft_pos) override;
-  virtual void RenderTrackBearing(Canvas &canvas,
-                                  const PixelPoint aircraft_pos) override;
+  void Render(Canvas &canvas, const PixelRect &rc) noexcept override;
+  void DrawThermalEstimate(Canvas &canvas) const noexcept override;
+  void RenderTrail(Canvas &canvas,
+                   const PixelPoint aircraft_pos) noexcept override;
+  void RenderTrackBearing(Canvas &canvas,
+                          const PixelPoint aircraft_pos) noexcept override;
 
   /* virtual methods from class Window */
   void OnCreate() override;
@@ -236,42 +236,42 @@ protected:
    * @return True if the gesture was handled by the
    * event handler, False otherwise
    */
-  bool OnMouseGesture(const TCHAR* gesture);
+  bool OnMouseGesture(const TCHAR* gesture) noexcept;
 
 private:
-  void DrawGesture(Canvas &canvas) const;
+  void DrawGesture(Canvas &canvas) const noexcept;
   void DrawMapScale(Canvas &canvas, const PixelRect &rc,
-                    const MapWindowProjection &projection) const;
-  void DrawFlightMode(Canvas &canvas, const PixelRect &rc) const;
+                    const MapWindowProjection &projection) const noexcept;
+  void DrawFlightMode(Canvas &canvas, const PixelRect &rc) const noexcept;
   void DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
-                     const NMEAInfo &info) const;
-  void DrawCrossHairs(Canvas &canvas) const;
-  void DrawPanInfo(Canvas &canvas) const;
-  void DrawThermalBand(Canvas &canvas, const PixelRect &rc) const;
-  void DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const;
-  void DrawVario(Canvas &canvas, const PixelRect &rc) const;
-  void DrawStallRatio(Canvas &canvas, const PixelRect &rc) const;
+                     const NMEAInfo &info) const noexcept;
+  void DrawCrossHairs(Canvas &canvas) const noexcept;
+  void DrawPanInfo(Canvas &canvas) const noexcept;
+  void DrawThermalBand(Canvas &canvas, const PixelRect &rc) const noexcept;
+  void DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const noexcept;
+  void DrawVario(Canvas &canvas, const PixelRect &rc) const noexcept;
+  void DrawStallRatio(Canvas &canvas, const PixelRect &rc) const noexcept;
 
-  void SwitchZoomClimb();
+  void SwitchZoomClimb() noexcept;
 
-  void SaveDisplayModeScales();
+  void SaveDisplayModeScales() noexcept;
 
   /**
    * The attribute visible_projection has been edited.
    */
-  void OnProjectionModified() {}
+  void OnProjectionModified() noexcept {}
 
   /**
    * Invoke WindowProjection::UpdateScreenBounds() and trigger updates
    * of data file caches for the new bounds (e.g. topography).
    */
-  void UpdateScreenBounds();
+  void UpdateScreenBounds() noexcept;
 
-  void UpdateScreenAngle();
-  void UpdateProjection();
+  void UpdateScreenAngle() noexcept;
+  void UpdateProjection() noexcept;
 
 public:
-  void SetLocation(const GeoPoint location);
+  void SetLocation(const GeoPoint location) noexcept;
 
   /**
    * Update the visible_projection location, but only if the new
@@ -279,25 +279,25 @@ public:
    * shall avoid unnecessary map jiggling.  This is a great
    * improvement for E Ink displays to reduce flickering.
    */
-  void SetLocationLazy(const GeoPoint location);
+  void SetLocationLazy(const GeoPoint location) noexcept;
 
-  void UpdateMapScale();
+  void UpdateMapScale() noexcept;
 
   /**
    * Restore the map scale from MapSettings::cruise_scale or
    * MapSettings::circling_scale.
    */
-  void RestoreMapScale();
+  void RestoreMapScale() noexcept;
 
-  void UpdateDisplayMode();
-  void SetMapScale(double scale);
+  void UpdateDisplayMode() noexcept;
+  void SetMapScale(double scale) noexcept;
 
 protected:
-  DisplayMode GetDisplayMode() const {
+  DisplayMode GetDisplayMode() const noexcept {
     return GetUIState().display_mode;
   }
 
-  bool InCirclingMode() const {
+  bool InCirclingMode() const noexcept {
     return GetUIState().display_mode == DisplayMode::CIRCLING;
   }
 

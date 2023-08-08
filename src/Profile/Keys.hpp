@@ -136,6 +136,7 @@ constexpr char TerrainContrast[] = "TerrainContrast";
 constexpr char TerrainBrightness[] = "TerrainBrightness";
 constexpr char TerrainRamp[] = "TerrainRamp";
 constexpr char EnableFLARMMap[] = "EnableFLARMDisplay";
+constexpr char FadeTraffic[] = "FadeTraffic";
 constexpr char EnableFLARMGauge[] = "EnableFLARMGauge";
 constexpr char AutoCloseFlarmDialog[] = "AutoCloseFlarmDialog";
 constexpr char EnableTAGauge[] = "EnableTAGauge";

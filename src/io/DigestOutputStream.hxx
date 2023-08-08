@@ -29,8 +29,8 @@ public:
 	}
 
 	/* virtual methods from class OutputStream */
-	void Write(const void *data, size_t size) override {
-		next.Write(data, size);
-		state.Update(std::span<const std::byte>{(const std::byte *)data, size});
+	void Write(std::span<const std::byte> src) override {
+		next.Write(src);
+		state.Update(src);
 	}
 };

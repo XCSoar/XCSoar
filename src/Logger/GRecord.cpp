@@ -131,7 +131,7 @@ GRecord::WriteTo(BufferedOutputStream &writer) const
   for (const char *i = digest, *end = digest + DIGEST_LENGTH;
        i != end; i += chars_per_line) {
     writer.Write('G');
-    writer.Write(i, chars_per_line);
+    writer.Write(std::string_view{i, chars_per_line});
     writer.Write('\n');
   }
 }

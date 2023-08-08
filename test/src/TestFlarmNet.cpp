@@ -4,7 +4,7 @@
 #include "FLARM/FlarmNetDatabase.hpp"
 #include "FLARM/FlarmNetReader.hpp"
 #include "FLARM/FlarmNetRecord.hpp"
-#include "FLARM/FlarmId.hpp"
+#include "FLARM/Id.hpp"
 #include "system/Path.hpp"
 #include "TestUtil.hpp"
 

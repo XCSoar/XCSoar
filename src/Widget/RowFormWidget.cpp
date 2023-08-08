@@ -11,7 +11,6 @@
 #include "Screen/Layout.hpp"
 #include "ui/control/LargeTextWindow.hpp"
 #include "ui/canvas/Font.hpp"
-#include "Asset.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -275,12 +274,7 @@ RowFormWidget::AddMultiLine(const TCHAR *text) noexcept
     InitialControlRect(Layout::GetMinimumControlHeight());
 
   LargeTextWindowStyle style;
-  if (IsEmbedded() || Layout::scale_1024 < 2048)
-    /* sunken edge doesn't fit well on the tiny screen of an embedded
-       device */
-    style.Border();
-  else
-    style.SunkenEdge();
+  style.SunkenEdge();
 
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
   auto ltw = std::make_unique<LargeTextWindow>();

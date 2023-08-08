@@ -31,6 +31,6 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/GridView.cpp \
 	$(FORM_SRC_DIR)/HLine.cpp
 
-FORM_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
+FORM_DEPENDS = SCREEN TIME GEO
 
 $(eval $(call link-library,form,FORM))

@@ -32,6 +32,7 @@ Look::InitialiseConfigured(const UISettings &settings,
                       infobox_width);
   vario.Initialise(settings.info_boxes.inverse,
                    settings.info_boxes.use_colors,
+                   infobox_width,
                    info_box.title_font);
   wind_arrow_info_box.Initialise(map_bold_font, settings.info_boxes.inverse);
   flarm_gauge.Initialise(traffic, true, settings.info_boxes.inverse);
@@ -51,4 +52,5 @@ Look::ReinitialiseLayout(unsigned infobox_width)
   dialog.LoadFonts();
 
   info_box.ReinitialiseLayout(infobox_width);
+  vario.ReinitialiseLayout(infobox_width);
 }

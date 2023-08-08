@@ -195,9 +195,10 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR *line, Waypoints &waypoints)
   waypoint.name.assign(name, name_length);
 
   // Parse altitude
-  if (!ParseAltitude(line, waypoint.elevation) &&
-      !factory.FallbackElevation(waypoint))
-    return false;
+  if (ParseAltitude(line, waypoint.elevation))
+    waypoint.has_elevation = true;
+  else
+    factory.FallbackElevation(waypoint);
 
   // Skip whitespace
   while (*line == _T(' '))

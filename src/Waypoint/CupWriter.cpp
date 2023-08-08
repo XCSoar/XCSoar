@@ -144,7 +144,8 @@ WriteCup(BufferedOutputStream &writer, const Waypoint &wp)
   writer.Write(',');
 
   // Write Elevation
-  WriteAltitude(writer, wp.elevation);
+  if (wp.has_elevation)
+    WriteAltitude(writer, wp.elevation);
   writer.Write(',');
 
   // Write Style

@@ -172,7 +172,11 @@ For Android, you need:
 
 On Debian::
   
-  sudo apt-get install default-jdk-headless vorbis-tools adb
+  sudo apt-get install
+      default-jdk-headless \
+      vorbis-tools \
+      sqlite3 \
+      adb
 
 The required Android SDK components are:
 
@@ -271,8 +275,21 @@ Compiling for macOS (with Homebrew)
 
 Install the required Homebrew packages::
 
-  brew install automake autoconf libtool imagemagick sox \
-      librsvg quilt pkg-config
+  brew install \
+    automake autoconf libtool \
+    pkg-config \
+    quilt \
+    librsvg \
+    imagemagick gettext sox \
+    fmt \
+    sdl2 \
+    libsodium \
+    freetype \
+    libpng libjpeg-turbo \
+    libtiff libgeotiff proj \
+    c-ares \
+    curl \
+    lua
 
 Then compile::
 

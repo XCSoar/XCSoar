@@ -22,12 +22,11 @@ struct TrafficDatabases {
    */
   FlarmId team_flarm_id;
 
-  TrafficDatabases()
+  TrafficDatabases() noexcept
     :team_flarm_id(FlarmId::Undefined()) {}
 
   [[gnu::pure]]
-  FlarmColor GetColor(FlarmId id) const
-  {
+  FlarmColor GetColor(FlarmId id) const noexcept {
     FlarmColor color = flarm_colors.Get(id);
     if (color == FlarmColor::NONE && id == team_flarm_id)
       /* if no color found but target is teammate, use green */
@@ -37,10 +36,10 @@ struct TrafficDatabases {
   }
 
   [[gnu::pure]]
-  const TCHAR *FindNameById(FlarmId id) const;
+  const TCHAR *FindNameById(FlarmId id) const noexcept;
 
-  [[gnu::pure]] gcc_nonnull_all
-  FlarmId FindIdByName(const TCHAR *name) const;
+  [[gnu::pure]] [[gnu::nonnull]]
+  FlarmId FindIdByName(const TCHAR *name) const noexcept;
 
   /**
    * Look up all records with the specified name.
@@ -48,7 +47,7 @@ struct TrafficDatabases {
    * @param max the maximum size of the given buffer
    * @return the number of items copied to the given buffer
    */
-  gcc_nonnull_all
+  [[gnu::nonnull]]
   unsigned FindIdsByName(const TCHAR *name,
-                         FlarmId *buffer, unsigned max) const;
+                         FlarmId *buffer, unsigned max) const noexcept;
 };

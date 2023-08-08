@@ -12,15 +12,14 @@
 #endif
 
 class GaugeThermalAssistantWindow : public ThermalAssistantWindow {
-  bool dragging, pressed;
+  bool dragging = false, pressed = false;
 
 public:
   GaugeThermalAssistantWindow(ContainerWindow &parent,
                               PixelRect rc,
                               const ThermalAssistantLook &look,
                               WindowStyle style=WindowStyle()) noexcept
-    :ThermalAssistantWindow(look, 5, true, true),
-     dragging(false), pressed(false)
+    :ThermalAssistantWindow(look, 5, true, true)
   {
     Create(parent, rc, style);
   }

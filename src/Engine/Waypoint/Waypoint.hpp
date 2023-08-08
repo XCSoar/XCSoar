@@ -66,39 +66,18 @@ struct Waypoint {
     bool watched:1 = false;
   };
 
-  /** Unique id */
-  unsigned id;
-
-  /**
-   * The id number as specified in the input file.
-   */
-  unsigned original_id;
-
   /** Geodetic location */
   GeoPoint location;
 
   /** Flat projected location */
   FlatGeoPoint flat_location;
 
-#ifndef NDEBUG
-  bool flat_location_initialised = false;
-#endif
-
-  /** Height AMSL (m) of waypoint terrain */
+  /**
+   * Height AMSL (m) of waypoint terrain.
+   *
+   * This field is only usable if #has_elevation is true.
+   */
   double elevation;
-
-  /** Main runway */
-  Runway runway = Runway::Null();
-
-  RadioFrequency radio_frequency = RadioFrequency::Null();
-
-  /** Type of the waypoint */
-  Type type = Type::NORMAL;
-  /** Flag types of this waypoint */
-  Flags flags;
-
-  /** File number to store waypoint in */
-  WaypointOrigin origin = WaypointOrigin::NONE;
 
   /** Short name (code) label of waypoint */
   tstring shortname;
@@ -114,6 +93,37 @@ struct Waypoint {
 #ifdef HAVE_RUN_FILE
   /** Additional files to be opened by external programs */
   std::forward_list<tstring> files_external;
+#endif
+
+  /** Unique id */
+  unsigned id;
+
+  /**
+   * The id number as specified in the input file.
+   */
+  unsigned original_id;
+
+  /** Main runway */
+  Runway runway = Runway::Null();
+
+  RadioFrequency radio_frequency = RadioFrequency::Null();
+
+  /** Flag types of this waypoint */
+  Flags flags;
+
+  /** Type of the waypoint */
+  Type type = Type::NORMAL;
+
+  /** File number to store waypoint in */
+  WaypointOrigin origin = WaypointOrigin::NONE;
+
+  /**
+   * Does the #elevation field contain a value?
+   */
+  bool has_elevation = false;
+
+#ifndef NDEBUG
+  bool flat_location_initialised = false;
 #endif
 
   /**
@@ -164,6 +174,10 @@ struct Waypoint {
    */
   constexpr bool IsFinishpoint() const noexcept {
     return flags.finish_point;
+  }
+
+  constexpr double GetElevationOrZero() const noexcept {
+    return has_elevation ? elevation : 0.;
   }
 
   /**

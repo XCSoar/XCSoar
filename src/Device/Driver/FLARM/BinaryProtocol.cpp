@@ -7,34 +7,50 @@
 #include "Device/Port/Port.hpp"
 #include "time/TimeoutClock.hpp"
 
-[[gnu::pure]]
-static const std::byte *
-FindSpecial(const std::byte *const begin, const std::byte *const end)
+#include <algorithm> // for std::find_if()
+
+static constexpr auto
+FindSpecial(std::span<const std::byte>::iterator begin,
+            std::span<const std::byte>::iterator end) noexcept
 {
-  const std::byte *start = std::find(begin, end, FLARM::START_FRAME);
-  const std::byte *escape = std::find(begin, end, FLARM::ESCAPE);
-  return std::min(start, escape);
+  return std::find_if(begin, end, [](std::byte b){
+    return b == FLARM::START_FRAME || b == FLARM::ESCAPE;
+  });
+}
+
+/* kludge because several constructor overloads are missing in libc++
+   on Android NDK r25c */
+static constexpr std::span<const std::byte>
+MakeSpan(typename std::span<const std::byte>::iterator begin,
+         typename std::span<const std::byte>::iterator end) noexcept
+{
+#if defined(ANDROID) || defined(__APPLE__)
+  return {&*begin, (std::size_t)std::distance(begin, end)};
+#else
+  return {begin, end};
+#endif
 }
 
 void
-FLARM::SendEscaped(Port &port, const void *buffer, size_t length,
+FLARM::SendEscaped(Port &port, std::span<const std::byte> src,
                    OperationEnvironment &env,
                    std::chrono::steady_clock::duration _timeout)
 {
-  assert(buffer != nullptr);
-  assert(length > 0);
+  assert(!src.empty());
 
   const TimeoutClock timeout(_timeout);
 
   // Send data byte-by-byte including escaping
-  const std::byte *p = (const std::byte *)buffer, *end = p + length;
+  auto p = src.begin();
+  const auto end = src.end();
   while (true) {
-    const std::byte *special = FindSpecial(p, end);
+    const auto special = FindSpecial(p, end);
 
-    if (special > p) {
+    if (special != p) {
       /* bulk write of "harmless" characters */
 
-      port.FullWrite({p, special}, env, timeout.GetRemainingOrZero());
+      port.FullWrite(MakeSpan(p, special), env,
+                     timeout.GetRemainingOrZero());
 
       p = special;
     }
@@ -103,17 +119,16 @@ ReceiveSomeUnescape(Port &port, std::span<std::byte> dest,
 }
 
 bool
-FLARM::ReceiveEscaped(Port &port, void *buffer, size_t length,
+FLARM::ReceiveEscaped(Port &port, std::span<std::byte> dest,
                       OperationEnvironment &env,
                       std::chrono::steady_clock::duration _timeout)
 {
-  assert(buffer != nullptr);
-  assert(length > 0);
+  assert(!dest.empty());
 
   const TimeoutClock timeout(_timeout);
 
   // Receive data byte-by-byte including escaping until buffer is full
-  std::byte *p = (std::byte *)buffer, *end = p + length;
+  std::byte *p = dest.data(), *end = p + dest.size();
   while (p < end) {
     p = ReceiveSomeUnescape(port, {p, std::size_t(end - p)},
                             env, timeout);
@@ -139,26 +154,23 @@ FlarmDevice::WaitForStartByte(OperationEnvironment &env,
 
 FLARM::FrameHeader
 FLARM::PrepareFrameHeader(unsigned sequence_number, MessageType message_type,
-                          const void *data, size_t length)
+                          std::span<const std::byte> payload) noexcept
 {
-  assert((data != nullptr && length > 0) ||
-         (data == nullptr && length == 0));
-
   FrameHeader header;
-  header.length = 8 + length;
+  header.length = 8 + payload.size();
   header.version = 0;
   header.sequence_number = sequence_number++;
-  header.type = (uint8_t)message_type;
-  header.crc = CalculateCRC(header, data, length);
+  header.type = message_type;
+  header.crc = CalculateCRC(header, payload.data(), payload.size());
   return header;
 }
 
 FLARM::FrameHeader
 FlarmDevice::PrepareFrameHeader(FLARM::MessageType message_type,
-                                const void *data, size_t length)
+                                std::span<const std::byte> payload) noexcept
 {
   return FLARM::PrepareFrameHeader(sequence_number++, message_type,
-                                   data, length);
+                                   payload);
 }
 
 void
@@ -166,7 +178,7 @@ FlarmDevice::SendFrameHeader(const FLARM::FrameHeader &header,
                              OperationEnvironment &env,
                              std::chrono::steady_clock::duration timeout)
 {
-  SendEscaped(&header, sizeof(header), env, timeout);
+  SendEscaped(std::as_bytes(std::span{&header, 1}), env, timeout);
 }
 
 bool
@@ -174,12 +186,13 @@ FlarmDevice::ReceiveFrameHeader(FLARM::FrameHeader &header,
                                 OperationEnvironment &env,
                                 std::chrono::steady_clock::duration timeout)
 {
-  return ReceiveEscaped(&header, sizeof(header), env, timeout);
+  return ReceiveEscaped(std::as_writable_bytes(std::span{&header, 1}),
+                        env, timeout);
 }
 
 FLARM::MessageType
 FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
-                              AllocatedArray<uint8_t> &data, uint16_t &length,
+                              AllocatedArray<std::byte> &data, uint16_t &length,
                               OperationEnvironment &env,
                               std::chrono::steady_clock::duration _timeout)
 {
@@ -205,7 +218,7 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
 
     // Read payload and check length
     data.GrowDiscard(length);
-    if (!ReceiveEscaped(data.data(), length,
+    if (!ReceiveEscaped({data.data(), length},
                         env, timeout.GetRemainingOrZero()))
       continue;
 
@@ -214,7 +227,8 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
       continue;
 
     // Check message type
-    if (header.type != FLARM::MT_ACK && header.type != FLARM::MT_NACK)
+    if (header.type != FLARM::MessageType::ACK &&
+        header.type != FLARM::MessageType::NACK)
       continue;
 
     // Check payload length
@@ -227,7 +241,7 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
       return (FLARM::MessageType)header.type;
   }
 
-  return FLARM::MT_ERROR;
+  return FLARM::MessageType::ERROR;
 }
 
 FLARM::MessageType
@@ -235,7 +249,7 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
                               OperationEnvironment &env,
                               std::chrono::steady_clock::duration timeout)
 {
-  AllocatedArray<uint8_t> data;
+  AllocatedArray<std::byte> data;
   uint16_t length;
   return WaitForACKOrNACK(sequence_number, data, length, env, timeout);
 }
@@ -245,7 +259,7 @@ FlarmDevice::WaitForACK(uint16_t sequence_number,
                         OperationEnvironment &env,
                         std::chrono::steady_clock::duration timeout)
 {
-  return WaitForACKOrNACK(sequence_number, env, timeout) == FLARM::MT_ACK;
+  return WaitForACKOrNACK(sequence_number, env, timeout) == FLARM::MessageType::ACK;
 }
 
 bool
@@ -255,7 +269,7 @@ try {
   const TimeoutClock timeout(_timeout);
 
   // Create header for sending a binary ping request
-  FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MT_PING);
+  FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MessageType::PING);
 
   // Send request and wait for positive answer
 
@@ -273,7 +287,7 @@ FlarmDevice::BinaryReset(OperationEnvironment &env,
   TimeoutClock timeout(_timeout);
 
   // Create header for sending a binary reset request
-  FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MT_EXIT);
+  FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MessageType::EXIT);
 
   // Send request and wait for positive answer
   SendStartByte();

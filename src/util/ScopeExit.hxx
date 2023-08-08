@@ -9,20 +9,27 @@
  * Internal class.  Do not use directly.
  */
 template<typename F>
-class ScopeExitGuard : F {
+class ScopeExitGuard {
+	[[no_unique_address]]
+	F function;
+
 	bool enabled = true;
 
 public:
-	explicit ScopeExitGuard(F &&f):F(std::forward<F>(f)) {}
+	explicit ScopeExitGuard(F &&f) noexcept
+		:function(std::forward<F>(f)) {}
 
-	ScopeExitGuard(ScopeExitGuard &&src)
-		:F(std::move(src)), enabled(src.enabled) {
-		src.enabled = false;
-	}
+	ScopeExitGuard(ScopeExitGuard &&src) noexcept
+		:function(std::move(src.function)),
+		 enabled(std::exchange(src.enabled, false)) {}
 
-	~ScopeExitGuard() {
+	/* destructors are "noexcept" by default; this explicit
+	   "noexcept" declaration allows the destructor to throw if
+	   the function can throw; without this, a throwing function
+	   would std::terminate() */
+	~ScopeExitGuard() noexcept(noexcept(std::declval<F>()())) {
 		if (enabled)
-			F::operator()();
+			function();
 	}
 
 	ScopeExitGuard(const ScopeExitGuard &) = delete;
@@ -37,7 +44,7 @@ struct ScopeExitTag {
 	   parantheses at the end of the expression AtScopeExit()
 	   call */
 	template<typename F>
-	ScopeExitGuard<F> operator+(F &&f) {
+	ScopeExitGuard<F> operator+(F &&f) noexcept {
 		return ScopeExitGuard<F>(std::forward<F>(f));
 	}
 };

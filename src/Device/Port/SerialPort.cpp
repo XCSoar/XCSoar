@@ -7,7 +7,6 @@
 #include "system/Error.hxx"
 #include "system/Sleep.h"
 #include "system/OverlappedEvent.hpp"
-#include "Asset.hpp"
 
 #include <fileapi.h>
 
@@ -27,7 +26,7 @@ SerialPort::~SerialPort() noexcept
   if (hPort != INVALID_HANDLE_VALUE) {
     StoppableThread::BeginStop();
 
-    if (CloseHandle(hPort) && !IsEmbedded())
+    if (CloseHandle(hPort))
       Sleep(2000); // needed for windows bug
 
     Thread::Join();

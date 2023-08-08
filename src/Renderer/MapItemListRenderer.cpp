@@ -28,7 +28,7 @@
 #include "Math/Screen.hpp"
 #include "Look/FinalGlideBarLook.hpp"
 #include "Renderer/TrafficRenderer.hpp"
-#include "FLARM/FlarmDetails.hpp"
+#include "FLARM/Details.hpp"
 #include "FLARM/FlarmNetRecord.hpp"
 #include "Weather/Features.hpp"
 #include "FLARM/List.hpp"
@@ -316,7 +316,8 @@ Draw(Canvas &canvas, PixelRect rc,
 
   // Render the representation of the traffic icon
   if (traffic != nullptr)
-    TrafficRenderer::Draw(canvas, traffic_look, *traffic, traffic->track,
+    TrafficRenderer::Draw(canvas, traffic_look, false,
+                          *traffic, traffic->track,
                           item.color, pt);
 
   rc.left += line_height + text_padding;

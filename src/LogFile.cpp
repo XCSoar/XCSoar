@@ -13,6 +13,8 @@
 #include "io/UniqueFileDescriptor.hxx"
 #include "util/Exception.hxx"
 
+#include <fmt/format.h>
+
 #include <cwchar>
 
 #include <stdio.h>
@@ -55,13 +57,15 @@ OpenLog()
   return FileOutputStream{path, FileOutputStream::Mode::APPEND_OR_CREATE};
 }
 
-static void
-LogString(const char *p) noexcept
+void
+LogString(std::string_view s) noexcept
 {
 #ifdef ANDROID
-  __android_log_print(ANDROID_LOG_INFO, "XCSoar", "%s", p);
+  __android_log_print(ANDROID_LOG_INFO, "XCSoar", "%.*s",
+                      int(s.size()), s.data());
 #elif defined(HAVE_POSIX) && !defined(NDEBUG)
-  fprintf(stderr, "%s\n", p);
+  fprintf(stderr, "%.*s\n",
+          int(s.size()), s.data());
 #endif
 
   try {
@@ -77,13 +81,25 @@ LogString(const char *p) noexcept
     }
 
     bos.Write("] ");
-    bos.Write(p);
+    bos.Write(s);
     bos.NewLine();
 
     bos.Flush();
     fos.Commit();
   } catch (...) {
   }
+}
+
+void
+LogVFmt(fmt::string_view format_str, fmt::format_args args) noexcept
+{
+	fmt::memory_buffer buffer;
+#if FMT_VERSION >= 80000
+	fmt::vformat_to(std::back_inserter(buffer), format_str, args);
+#else
+	fmt::vformat_to(buffer, format_str, args);
+#endif
+	LogString({buffer.data(), buffer.size()});
 }
 
 void
@@ -102,7 +118,7 @@ LogFormat(const char *fmt, ...) noexcept
 #ifdef _UNICODE
 
 static void
-LogString(const wchar_t *p) noexcept
+LogString(std::wstring_view s) noexcept
 {
   try {
     auto fos = OpenLog();
@@ -117,7 +133,7 @@ LogString(const wchar_t *p) noexcept
     }
 
     bos.Write("] ");
-    bos.Write(p);
+    bos.Write(s);
     bos.NewLine();
 
     bos.Flush();
@@ -144,7 +160,7 @@ LogFormat(const wchar_t *Str, ...) noexcept
 void
 LogError(std::exception_ptr e) noexcept
 {
-  LogString(GetFullMessage(e).c_str());
+  LogString(GetFullMessage(e));
 }
 
 void

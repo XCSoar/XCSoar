@@ -18,7 +18,7 @@
 #include <cassert>
 
 void
-BufferCanvas::Create(PixelSize new_size)
+BufferCanvas::Create(PixelSize new_size) noexcept
 {
   assert(!active);
 
@@ -39,7 +39,7 @@ BufferCanvas::Create(PixelSize new_size)
 }
 
 void
-BufferCanvas::Destroy()
+BufferCanvas::Destroy() noexcept
 {
   assert(!active);
 
@@ -56,7 +56,7 @@ BufferCanvas::Destroy()
 }
 
 void
-BufferCanvas::Resize(PixelSize new_size)
+BufferCanvas::Resize(PixelSize new_size) noexcept
 {
   assert(IsDefined());
 
@@ -83,7 +83,7 @@ BufferCanvas::Resize(PixelSize new_size)
 }
 
 void
-BufferCanvas::Begin(Canvas &other)
+BufferCanvas::Begin(Canvas &other) noexcept
 {
   assert(IsDefined());
   assert(!active);
@@ -132,7 +132,7 @@ BufferCanvas::Begin(Canvas &other)
 }
 
 void
-BufferCanvas::Commit(Canvas &other)
+BufferCanvas::Commit(Canvas &other) noexcept
 {
   assert(IsDefined());
   assert(active);
@@ -179,7 +179,7 @@ BufferCanvas::Commit(Canvas &other)
 }
 
 void
-BufferCanvas::CopyTo(Canvas &other)
+BufferCanvas::CopyTo(Canvas &other) noexcept
 {
   assert(IsDefined());
   assert(!active || frame_buffer != nullptr);

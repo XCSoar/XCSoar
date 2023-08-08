@@ -51,7 +51,10 @@ class EventQueue final {
   bool quit = false;
 
 public:
-  explicit EventQueue(Display &display) noexcept;
+  /**
+   * Throws on error.
+   */
+  explicit EventQueue(Display &display);
   ~EventQueue() noexcept;
 
   auto &GetEventLoop() noexcept {
@@ -84,6 +87,10 @@ public:
   struct wl_shell *GetShell() noexcept {
     return input_queue.GetShell();
   }
+
+  auto GetWmBase() noexcept {
+    return input_queue.GetWmBase();
+  }
 #endif
 
 #if defined(USE_X11) || defined(USE_WAYLAND)
@@ -104,12 +111,12 @@ public:
 #endif
   }
 
-#if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND)
+#if !defined(NON_INTERACTIVE) && !defined(USE_X11)
   bool HasPointer() const noexcept {
     return input_queue.HasPointer();
   }
 
-#ifdef USE_LIBINPUT
+#if defined(USE_LIBINPUT) || defined(USE_WAYLAND)
   bool HasTouchScreen() const noexcept {
     return input_queue.HasTouchScreen();
   }
@@ -119,9 +126,11 @@ public:
   }
 #endif
 
+#ifndef USE_WAYLAND
   PixelPoint GetMousePosition() const noexcept {
     return input_queue.GetMousePosition();
   }
+#endif
 
 #endif /* !NON_INTERACTIVE */
 

@@ -266,26 +266,32 @@ RasterTileCache::SaveCache(BufferedOutputStream &os) const
   header.num_marker_segments = segments.size();
   header.bounds = bounds;
 
+#ifdef TEST_AUGUST
+// TODO(August2111): Das war der Workaround vor 7.32??
   os.Write(&header, sizeof(header));
   // TODO(August2111): error MSVC!
   os.Write(&(*segments.begin()), sizeof(*segments.begin()) * segments.size());
+#else
+  os.Write(std::as_bytes(std::span{&header, 1}));
+  os.Write(std::as_bytes(std::span{segments}));
+#endif
 
   /* save tiles */
   unsigned i;
   for (i = 0; i < tiles.GetSize(); ++i) {
     const auto &tile = tiles.GetLinear(i);
     if (tile.IsDefined()) {
-      os.Write(&i, sizeof(i));
+      os.Write(std::as_bytes(std::span{&i, 1}));
       tile.SaveCache(os);
     }
   }
 
   i = -1;
-  os.Write(&i, sizeof(i));
+  os.Write(std::as_bytes(std::span{&i, 1}));
 
   /* save overview */
   size_t overview_size = overview.GetSize().Area();
-  os.Write(overview.GetData(), sizeof(*overview.GetData()) * overview_size);
+  os.Write(std::as_bytes(std::span{overview.GetData(), overview_size}));
 }
 
 void

@@ -23,12 +23,13 @@ public:
    */
   ThermalAssistantWindow(const ThermalAssistantLook &look,
                          unsigned _padding, bool _small = false,
-                         bool transparent=false);
+                         bool transparent=false) noexcept;
 
-  void Update(const AttitudeState &attitude, const DerivedInfo &_derived);
+  void Update(const AttitudeState &attitude,
+              const DerivedInfo &_derived) noexcept;
 
 protected:
-  void DrawCircle(Canvas &canvas);
+  void DrawCircle(Canvas &canvas) noexcept;
 
   virtual void OnResize(PixelSize new_size) noexcept override;
   virtual void OnPaintBuffer(Canvas &canvas) noexcept override;

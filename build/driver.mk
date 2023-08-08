@@ -87,7 +87,7 @@ XCTRACER_SOURCES = \
 
 THERMALEXPRESS_SOURCES = \
 	$(DRIVER_SRC_DIR)/ThermalExpress/Driver.cpp
- 
+
 DRIVER_SOURCES = \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
@@ -132,5 +132,7 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/AR62xx.cpp \
 	$(DRIVER_SRC_DIR)/ATR833/Device.cpp \
 	$(DRIVER_SRC_DIR)/ATR833/Register.cpp
+
+DRIVER_DEPENDS = TIME LIBNMEA GEO OPERATION
 
 $(eval $(call link-library,driver,DRIVER))

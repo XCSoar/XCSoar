@@ -233,6 +233,8 @@ sqlite3 = AutotoolsProject(
     [
         '--disable-shared', '--enable-static',
     ],
+    patches=abspath('lib/sqlite/patches'),
+    autogen=True,
 )
 
 proj = CmakeProject(

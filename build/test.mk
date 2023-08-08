@@ -394,7 +394,7 @@ $(eval $(call link-program,TestGeoBounds,TEST_GEO_BOUNDS))
 
 TEST_FLARM_NET_SOURCES = \
 	$(SRC)/FLARM/FlarmNetReader.cpp \
-	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Id.cpp \
 	$(SRC)/FLARM/FlarmNetRecord.cpp \
 	$(SRC)/FLARM/FlarmNetDatabase.cpp \
 	$(TEST_SRC_DIR)/tap.c \
@@ -485,7 +485,7 @@ TEST_NMEA_FORMATTER_SOURCES = \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Driver/FLARM/StaticParser.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
-	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Id.cpp \
 	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
@@ -659,8 +659,8 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
-	$(SRC)/FLARM/FlarmId.cpp \
-	$(SRC)/FLARM/FlarmCalculations.cpp \
+	$(SRC)/FLARM/Id.cpp \
+	$(SRC)/FLARM/Calculations.cpp \
 	$(SRC)/FLARM/List.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
@@ -865,7 +865,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(ENGINE_SRC_DIR)/ThermalBand/ThermalEncounterBand.cpp \
 	$(ENGINE_SRC_DIR)/ThermalBand/ThermalEncounterCollection.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
-	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Id.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/List.cpp \
 	$(SRC)/Computer/BasicComputer.cpp \
@@ -887,7 +887,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(TEST_SRC_DIR)/DebugReplayIGC.cpp \
 	$(TEST_SRC_DIR)/DebugReplayNMEA.cpp \
 	$(TEST_SRC_DIR)/DebugReplay.cpp
-DEBUG_REPLAY_DEPENDS = DRIVER OPERATION LIBNMEA ASYNC LIBNET IO OS THREAD TIME
+DEBUG_REPLAY_DEPENDS = DRIVER ASYNC LIBNET IO OS THREAD TIME
 
 BENCHMARK_PROJECTION_SOURCES = \
 	$(SRC)/Projection/Projection.cpp \
@@ -992,7 +992,7 @@ RUN_WEGLIDE_DOWNLOAD_TASK_SOURCES = \
 	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/net/SocketError.cxx \
 	$(TEST_SRC_DIR)/RunWeGlideDownloadTask.cpp
-RUN_WEGLIDE_DOWNLOAD_TASK_DEPENDS = LIBCLIENT TASK ROUTE GLIDE WAYPOINT GEO TIME MATH LIBHTTP ASYNC LIBNET OPERATION IO OS UTIL
+RUN_WEGLIDE_DOWNLOAD_TASK_DEPENDS = LIBCLIENT JSON TASK ROUTE GLIDE WAYPOINT GEO TIME MATH LIBHTTP ASYNC LIBNET OPERATION IO OS UTIL FMT
 $(eval $(call link-program,RunWeGlideDownloadTask,RUN_WEGLIDE_DOWNLOAD_TASK))
 
 RUN_NOAA_DOWNLOADER_SOURCES = \
@@ -1030,7 +1030,7 @@ RUN_SL_TRACKING_SOURCES = \
 	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/TransponderCode.cpp \
 	$(TEST_SRC_DIR)/RunSkyLinesTracking.cpp
-RUN_SL_TRACKING_DEPENDS = $(DEBUG_REPLAY_DEPENDS) ASYNC GEO MATH UTIL
+RUN_SL_TRACKING_DEPENDS = $(DEBUG_REPLAY_DEPENDS)
 $(eval $(call link-program,RunSkyLinesTracking,RUN_SL_TRACKING))
 
 RUN_LIVETRACK24_SOURCES = \
@@ -1066,7 +1066,6 @@ $(eval $(call link-program,RunXMLParser,RUN_XML_PARSER))
 
 READ_MO_SOURCES = \
 	$(SRC)/Language/MOFile.cpp \
-	$(SRC)/system/FileMapping.cpp \
 	$(TEST_SRC_DIR)/ReadMO.cpp
 READ_MO_DEPENDS = IO UTIL
 $(eval $(call link-program,ReadMO,READ_MO))
@@ -1301,7 +1300,7 @@ SPLICE_PORTS_DEPENDS = PORT ASYNC LIBNET OPERATION IO OS THREAD TIME UTIL
 $(eval $(call link-program,SplicePorts,SPLICE_PORTS))
 
 RUN_DEVICE_DRIVER_SOURCES = \
-	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Id.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Device/Port/Port.cpp \
@@ -1314,7 +1313,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/List.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
-	$(SRC)/FLARM/FlarmCalculations.cpp \
+	$(SRC)/FLARM/Calculations.cpp \
 	$(SRC)/Computer/ClimbAverageCalculator.cpp \
 	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
@@ -1506,7 +1505,7 @@ $(eval $(call link-program,lxn2igc,LXN2IGC))
 RUN_IGC_WRITER_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Version.cpp \
-	$(SRC)/FLARM/FlarmCalculations.cpp \
+	$(SRC)/FLARM/Calculations.cpp \
 	$(SRC)/Computer/ClimbAverageCalculator.cpp \
 	$(SRC)/IGC/IGCFix.cpp \
 	$(SRC)/IGC/IGCWriter.cpp \
@@ -1740,7 +1739,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(IO_SRC_DIR)/DataFile.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
-	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Id.cpp \
 	$(SRC)/FLARM/Friends.cpp \
 	$(SRC)/FLARM/List.cpp \
 	$(SRC)/FLARM/Global.cpp \
@@ -2537,6 +2536,7 @@ DUMP_TASK_FILE_SOURCES = \
 	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/RadioFrequency.cpp \
+	$(SRC)/Engine/Route/Config.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/DumpTaskFile.cpp
 DUMP_TASK_FILE_DEPENDS = TASK GLIDE WAYPOINT OPERATION IO OS THREAD ZZIP GEO TIME MATH UTIL
@@ -2544,7 +2544,7 @@ $(eval $(call link-program,DumpTaskFile,DUMP_TASK_FILE))
 
 DUMP_FLARM_NET_SOURCES = \
 	$(SRC)/FLARM/FlarmNetReader.cpp \
-	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Id.cpp \
 	$(SRC)/FLARM/FlarmNetRecord.cpp \
 	$(SRC)/FLARM/FlarmNetDatabase.cpp \
 	$(TEST_SRC_DIR)/DumpFlarmNet.cpp

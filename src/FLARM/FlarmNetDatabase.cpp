@@ -2,12 +2,12 @@
 // Copyright The XCSoar Project
 
 #include "FlarmNetDatabase.hpp"
-#include "util/StringUtil.hpp"
+#include "util/StringAPI.hxx"
 
 #include <cassert>
 
 void
-FlarmNetDatabase::Insert(const FlarmNetRecord &record)
+FlarmNetDatabase::Insert(const FlarmNetRecord &record) noexcept
 {
   FlarmId id = record.GetId();
   if (!id.IsDefined())
@@ -18,12 +18,11 @@ FlarmNetDatabase::Insert(const FlarmNetRecord &record)
 }
 
 const FlarmNetRecord *
-FlarmNetDatabase::FindFirstRecordByCallSign(const TCHAR *cn) const
+FlarmNetDatabase::FindFirstRecordByCallSign(const TCHAR *cn) const noexcept
 {
-  for (const auto &i : map) {
-    assert(i.first.IsDefined());
+  for (const auto &[id, record] : map) {
+    assert(id.IsDefined());
 
-    const FlarmNetRecord &record = i.second;
     if (StringIsEqual(record.callsign, cn))
       return &record;
   }
@@ -34,14 +33,13 @@ FlarmNetDatabase::FindFirstRecordByCallSign(const TCHAR *cn) const
 unsigned
 FlarmNetDatabase::FindRecordsByCallSign(const TCHAR *cn,
                                         const FlarmNetRecord *array[],
-                                        [[maybe_unused]] unsigned size) const
+                                        [[maybe_unused]] unsigned size) const noexcept
 {
   unsigned count = 0;
 
-  for (const auto &i : map) {
-    assert(i.first.IsDefined());
+  for (const auto &[id, record] : map) {
+    assert(id.IsDefined());
 
-    const FlarmNetRecord &record = i.second;
     if (StringIsEqual(record.callsign, cn))
       array[count++] = &record;
   }
@@ -51,16 +49,15 @@ FlarmNetDatabase::FindRecordsByCallSign(const TCHAR *cn,
 
 unsigned
 FlarmNetDatabase::FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
-                                    [[maybe_unused]] unsigned size) const
+                                    [[maybe_unused]] unsigned size) const noexcept
 {
   unsigned count = 0;
 
-  for (const auto &i : map) {
-    assert(i.first.IsDefined());
+  for (const auto &[id, record] : map) {
+    assert(id.IsDefined());
 
-    const FlarmNetRecord &record = i.second;
     if (StringIsEqual(record.callsign, cn))
-      array[count++] = i.first;
+      array[count++] = id;
   }
 
   return count;

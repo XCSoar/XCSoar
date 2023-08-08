@@ -35,7 +35,7 @@ Display::LoadOrientation(VerboseOperationEnvironment &env)
 #endif
 
   if (!Display::Rotate(orientation)) {
-    LogFormat("Display rotation failed");
+    LogString("Display rotation failed");
     return;
   }
 
@@ -43,7 +43,7 @@ Display::LoadOrientation(VerboseOperationEnvironment &env)
   UI::event_queue->SetDisplayOrientation(orientation);
 #endif
 
-  LogFormat("Display rotated");
+  LogString("Display rotated");
 
   CommonInterface::main_window->Initialise();
 

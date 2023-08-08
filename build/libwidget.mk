@@ -32,6 +32,6 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/KeyboardWidget.cpp \
 	$(SRC)/Widget/ViewImageWidget.cpp
 
-WIDGET_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
+WIDGET_DEPENDS = SCREEN
 
 $(eval $(call link-library,libwidget,WIDGET))

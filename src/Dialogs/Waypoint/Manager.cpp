@@ -171,9 +171,14 @@ inline void
 WaypointManagerWidget::OnWaypointNewClicked()
 {
   Waypoint edit_waypoint = way_points.Create(CommonInterface::Basic().location);
-  edit_waypoint.elevation = CommonInterface::Calculated().terrain_valid
-    ? CommonInterface::Calculated().terrain_altitude
-    : CommonInterface::Basic().nav_altitude;
+
+  if (CommonInterface::Calculated().terrain_valid) {
+    edit_waypoint.elevation = CommonInterface::Calculated().terrain_altitude;
+    edit_waypoint.has_elevation = true;
+  } else if (CommonInterface::Basic().NavAltitudeAvailable()) {
+    edit_waypoint.elevation = CommonInterface::Basic().nav_altitude;
+    edit_waypoint.has_elevation = true;
+  }
 
   if (dlgWaypointEditShowModal(edit_waypoint) == WaypointEditResult::MODIFIED &&
       edit_waypoint.name.size()) {

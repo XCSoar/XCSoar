@@ -158,23 +158,34 @@ class TopWindow : public ContainerWindow {
   bool running = false;
 
   /**
-   * Is the application currently paused?  While this flag is set, no
-   * OpenGL operations are allowed, because the OpenGL surface does
-   * not exist.
+   * Does the Java #NativeView class have a surface?
    *
-   * This is initially true to trigger a call to
-   * TopCanvas::AcquireSurface().
+   * Protected by #paused_mutex.
    */
-  bool paused = true;
+  bool have_java_surface = true;
 
   /**
-   * Has the application been resumed?  When this flag is set,
-   * TopWindow::Expose() attempts to reinitialize the OpenGL surface.
+   * Does the C++ #TopCanvas class have a surface?
    *
-   * This is initially true to trigger a call to
-   * TopCanvas::AcquireSurface().
+   * Protected by #paused_mutex.
    */
-  bool resumed = true;
+  bool have_native_surface = false;
+
+  /**
+   * Shall we destroy our EGL surface?  This will be done by the
+   * #SURFACE_DESTROYED event.
+   *
+   * Protected by #paused_mutex.
+   */
+  bool should_release_surface = false;
+
+  /**
+   * Shall we acquire our EGL surface?  This will be done by the
+   * #SURFACE_DESTROYED event.
+   *
+   * Protected by #paused_mutex.
+   */
+  bool should_acquire_surface = false;
 
   /**
    * Was the application view resized while paused?  If true, then
@@ -348,23 +359,11 @@ public:
   bool ResumeSurface() noexcept;
 
   /**
-   * Reinitialise the OpenGL surface if the Android Activity has been
-   * resumed.
-   *
-   * @return true if there is a valid OpenGL surface
-   */
-  bool CheckResumeSurface() noexcept;
-
-  /**
    * Synchronously update the size of the TopWindow to the new OpenGL
    * surface dimensions.
    */
   void RefreshSize() noexcept;
 #else
-  bool CheckResumeSurface() noexcept {
-    return true;
-  }
-
   void RefreshSize() noexcept {}
 #endif
 
@@ -417,16 +416,22 @@ protected:
 
 #ifdef ANDROID
   /**
+   * @see Event::SURFACE
+   */
+  void OnSurface() noexcept;
+
+  /**
    * @see Event::PAUSE
    */
-  virtual void OnPause() noexcept;
+  void OnPause() noexcept;
 
   /**
    * @see Event::RESUME
    */
-  virtual void OnResume() noexcept;
+  void OnResume() noexcept;
 
 public:
+  void InvokeSurfaceDestroyed() noexcept;
   void Pause() noexcept;
   void Resume() noexcept;
 #endif

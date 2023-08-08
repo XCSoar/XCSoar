@@ -5,6 +5,9 @@
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Interface.hpp"
+#include "Input/InputEvents.hpp"
+#include "UIUtil/GestureManager.hpp"
+#include "Screen/Layout.hpp"
 #include "ui/window/AntiFlickerWindow.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Renderer/HorizonRenderer.hpp"
@@ -17,6 +20,9 @@ class HorizonWindow : public AntiFlickerWindow {
   const bool& inverse;
 
   AttitudeState attitude;
+
+  GestureManager gestures;
+  bool dragging = false;
 
 public:
   /**
@@ -33,6 +39,15 @@ public:
     Invalidate();
   }
 
+private:
+  void StopDragging() noexcept {
+    if (!dragging)
+      return;
+
+    dragging = false;
+    ReleaseCapture();
+  }
+
 protected:
   /* virtual methods from AntiFlickerWindow */
   void OnPaintBuffer(Canvas &canvas) noexcept override {
@@ -47,7 +62,72 @@ protected:
 
     HorizonRenderer::Draw(canvas, canvas.GetRect(), look, attitude);
   }
+
+  /* virtual methods from Window */
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
+  bool OnMouseDouble(PixelPoint p) noexcept override;
+  bool OnKeyDown(unsigned key_code) noexcept override;
+  void OnCancelMode() noexcept override;
 };
+
+bool
+HorizonWindow::OnMouseDouble([[maybe_unused]] PixelPoint p) noexcept
+{
+  StopDragging();
+  InputEvents::ShowMenu();
+  return true;
+}
+
+bool
+HorizonWindow::OnMouseDown(PixelPoint p) noexcept
+{
+  if (!dragging) {
+    dragging = true;
+    SetCapture();
+    gestures.Start(p, Layout::Scale(20));
+  }
+
+  return true;
+}
+
+bool
+HorizonWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
+{
+  if (dragging) {
+    StopDragging();
+
+    const TCHAR *gesture = gestures.Finish();
+    if (gesture && InputEvents::processGesture(gesture))
+      return true;
+  }
+
+  return false;
+}
+
+bool
+HorizonWindow::OnMouseMove(PixelPoint p,
+                           [[maybe_unused]] unsigned keys) noexcept
+{
+  if (dragging)
+    gestures.Update(p);
+
+  return true;
+}
+
+void
+HorizonWindow::OnCancelMode() noexcept
+{
+  AntiFlickerWindow::OnCancelMode();
+  StopDragging();
+}
+
+bool
+HorizonWindow::OnKeyDown(unsigned key_code) noexcept
+{
+  return InputEvents::processKey(key_code);
+}
 
 void
 HorizonWidget::Update(const MoreData &basic) noexcept
@@ -64,7 +144,6 @@ HorizonWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 
   WindowStyle style;
   style.Hide();
-  style.Disable();
 
   auto w = std::make_unique<HorizonWindow>(look.horizon, look.info_box.inverse);
   w->Create(parent, rc, style);

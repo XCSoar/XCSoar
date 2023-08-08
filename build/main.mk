@@ -234,16 +234,16 @@ XCSOAR_SOURCES := \
 	$(SRC)/net/client/WeGlide/UploadIGCFile.cpp \
 	$(SRC)/Plane/PlaneGlue.cpp \
 	$(SRC)/Plane/PlaneFileGlue.cpp \
-	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Id.cpp \
 	$(SRC)/FLARM/Error.cpp \
 	$(SRC)/FLARM/List.cpp \
 	$(SRC)/FLARM/FlarmNetRecord.cpp \
 	$(SRC)/FLARM/FlarmNetDatabase.cpp \
 	$(SRC)/FLARM/FlarmNetReader.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
-	$(SRC)/FLARM/FlarmCalculations.cpp \
+	$(SRC)/FLARM/Calculations.cpp \
 	$(SRC)/FLARM/Friends.cpp \
-	$(SRC)/FLARM/FlarmComputer.cpp \
+	$(SRC)/FLARM/Computer.cpp \
 	$(SRC)/FLARM/Global.cpp \
 	$(SRC)/FLARM/Glue.cpp \
 	$(SRC)/BallastDumpManager.cpp \
@@ -473,7 +473,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Temperature.cpp \
 	$(SRC)/Formatter/AngleFormatter.cpp \
-	$(SRC)/FLARM/FlarmDetails.cpp \
+	$(SRC)/FLARM/Details.cpp \
 	$(SRC)/FLARM/NameDatabase.cpp \
 	$(SRC)/FLARM/NameFile.cpp \
 	$(SRC)/FLARM/TrafficDatabases.cpp \
@@ -669,7 +669,6 @@ ifeq ($(HAVE_PCM_PLAYER),y)
 XCSOAR_SOURCES += $(SRC)/Audio/VarioGlue.cpp
 endif
 
-XCSOAR_LDADD = $(IO_LDADD)
 XCSOAR_DEPENDS = \
 	FMT \
 	LIBMAPWINDOW \

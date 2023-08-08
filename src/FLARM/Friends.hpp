@@ -7,8 +7,13 @@
 
 class FlarmId;
 
-namespace FlarmFriends
-{
-  FlarmColor GetFriendColor(FlarmId id);
-  void SetFriendColor(FlarmId id, FlarmColor color);
-};
+namespace FlarmFriends {
+
+[[gnu::pure]]
+FlarmColor
+GetFriendColor(FlarmId id) noexcept;
+
+void
+SetFriendColor(FlarmId id, FlarmColor color) noexcept;
+
+} // namespace FlarmFriends

@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "FlarmId.hpp"
+#include "Id.hpp"
 #include "Color.hpp"
 
 #include <map>
@@ -17,17 +17,17 @@ public:
   typedef Map::const_iterator const_iterator;
 
   [[gnu::pure]]
-  const_iterator begin() const {
+  const_iterator begin() const noexcept {
     return data.begin();
   }
 
   [[gnu::pure]]
-  const_iterator end() const {
+  const_iterator end() const noexcept {
     return data.end();
   }
 
   [[gnu::pure]]
-  FlarmColor Get(FlarmId id) const {
+  FlarmColor Get(FlarmId id) const noexcept {
     auto i = data.find(id);
     if (i == data.end())
       return FlarmColor::NONE;
@@ -35,17 +35,14 @@ public:
     return i->second;
   }
 
-  void Set(FlarmId id, FlarmColor color) {
+  void Set(FlarmId id, FlarmColor color) noexcept {
     assert(color != FlarmColor::NONE);
     assert(color != FlarmColor::COUNT);
 
-    auto i = data.insert(std::make_pair(id, color));
-    if (!i.second)
-      /* the id already exists in the map: overwrite the old color */
-      i.first->second = color;
+    data.insert_or_assign(id, color);
   }
 
-  void Remove(FlarmId id) {
+  void Remove(FlarmId id) noexcept {
     data.erase(id);
   }
 };

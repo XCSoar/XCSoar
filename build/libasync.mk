@@ -33,7 +33,6 @@ ASYNC_SOURCES += \
 endif
 endif
 
-ASYNC_CPPFLAGS_INTERNAL = $(CARES_CPPFLAGS)
-ASYNC_LDLIBS = $(CARES_LDLIBS)
+ASYNC_DEPENDS = CARES OS
 
 $(eval $(call link-library,async,ASYNC))

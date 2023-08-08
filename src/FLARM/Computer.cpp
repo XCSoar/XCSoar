@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "FLARM/FlarmComputer.hpp"
-#include "FLARM/FlarmDetails.hpp"
+#include "Computer.hpp"
+#include "Details.hpp"
 #include "NMEA/Info.hpp"
 #include "Geo/GeoVector.hpp"
 
 void
 FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
-                       const NMEAInfo &basic)
+                       const NMEAInfo &basic) noexcept
 {
   // Cleanup old calculation instances
   if (basic.time_available)

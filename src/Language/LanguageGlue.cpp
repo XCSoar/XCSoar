@@ -289,7 +289,7 @@ ReadLanguageFile() noexcept
 #ifdef HAVE_NLS
   CloseLanguageFile();
 
-  LogFormat("Loading language file");
+  LogString("Loading language file");
 
   auto value = Profile::GetPath(ProfileKeys::LanguageFile);
 

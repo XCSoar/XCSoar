@@ -18,9 +18,6 @@ LogoView::LogoView() noexcept try
 #ifndef USE_GDI
   font.Load(FontDescription(Layout::FontScale(10)));
 #endif
-
-  big_logo.EnableInterpolation();
-  big_title.EnableInterpolation();
 } catch (...) {
   /* ignore Bitmap/Font loader exceptions */
 }

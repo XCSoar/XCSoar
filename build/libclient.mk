@@ -3,10 +3,10 @@
 
 LIBCLIENT_SOURCES = \
 	$(SRC)/net/client/tim/Client.cpp \
+	$(SRC)/net/client/WeGlide/Error.cpp \
 	$(SRC)/net/client/WeGlide/DownloadTask.cpp \
 	$(SRC)/net/client/WeGlide/UploadFlight.cpp
 
-LIBCLIENT_CPPFLAGS_INTERNAL = $(LIBHTTP_CPPFLAGS)
-LIBCLIENT_LDLIBS = $(LIBHTTP_LDLIBS)
+LIBCLIENT_DEPENDS = LIBHTTP FMT
 
 $(eval $(call link-library,libclient,LIBCLIENT))

@@ -26,13 +26,12 @@ struct ProjectedFan {
    */
   unsigned size;
 
-  ProjectedFan() = default;
+  ProjectedFan() noexcept = default;
 
-  ProjectedFan(unsigned n):size(n) {
-  }
+  constexpr ProjectedFan(unsigned n) noexcept:size(n) {}
 
 #ifdef ENABLE_OPENGL
-  void DrawFill(const BulkPixelPoint *points, unsigned start) const {
+  void DrawFill(const BulkPixelPoint *points, unsigned start) const noexcept {
     /* triangulate the polygon */
     AllocatedArray<GLushort> triangle_buffer;
 
@@ -49,15 +48,15 @@ struct ProjectedFan {
                    triangle_buffer.data());
   }
 
-  void DrawOutline(unsigned start) const {
+  void DrawOutline(unsigned start) const noexcept {
     glDrawArrays(GL_LINE_LOOP, start, size);
   }
 #else
-  void DrawFill(Canvas &canvas, const BulkPixelPoint *points) const {
+  void DrawFill(Canvas &canvas, const BulkPixelPoint *points) const noexcept {
     canvas.DrawPolygon(&points[0], size);
   }
 
-  void DrawOutline(Canvas &canvas, const BulkPixelPoint *points) const {
+  void DrawOutline(Canvas &canvas, const BulkPixelPoint *points) const noexcept {
     canvas.DrawPolygon(&points[0], size);
   }
 #endif
@@ -76,31 +75,27 @@ struct ProjectedFans {
   BulkPixelPointVector points;
 
 #ifndef NDEBUG
-  unsigned remaining;
+  unsigned remaining = 0;
 #endif
 
-  ProjectedFans()
-#ifndef NDEBUG
-    :remaining(0)
-#endif
-  {
+  ProjectedFans() noexcept {
     /* try to guess the total number of vertices */
     points.reserve(FlatTriangleFanTree::MAX_FANS * ROUTEPOLAR_POINTS / 10);
   }
 
-  bool empty() const {
+  bool empty() const noexcept {
     return fans.empty();
   }
 
-  bool full() const {
+  bool full() const noexcept {
     return fans.full();
   }
 
-  ProjectedFanVector::size_type size() const {
+  ProjectedFanVector::size_type size() const noexcept {
     return fans.size();
   }
 
-  ProjectedFan &Append(unsigned n) {
+  ProjectedFan &Append(unsigned n) noexcept {
 #ifndef NDEBUG
     assert(remaining == 0);
     remaining = n;
@@ -112,7 +107,7 @@ struct ProjectedFans {
     return fans.back();
   }
 
-  void Append(const PixelPoint &pt) {
+  void Append(const PixelPoint &pt) noexcept {
 #ifndef NDEBUG
     assert(remaining > 0);
     --remaining;
@@ -121,7 +116,7 @@ struct ProjectedFans {
     points.push_back(pt);
   }
 
-  void DrawFill([[maybe_unused]] Canvas &canvas) const {
+  void DrawFill([[maybe_unused]] Canvas &canvas) const noexcept {
     assert(remaining == 0);
 
 #ifdef ENABLE_OPENGL
@@ -140,7 +135,7 @@ struct ProjectedFans {
 #endif
   }
 
-  void DrawOutline([[maybe_unused]] Canvas &canvas) const {
+  void DrawOutline([[maybe_unused]] Canvas &canvas) const noexcept {
     assert(remaining == 0);
 
 #ifdef ENABLE_OPENGL
@@ -177,7 +172,7 @@ public:
   ProjectedFans fans;
 
   TriangleCompound(const FlatProjection &_flat_projection,
-                   const MapWindowProjection& _proj)
+                   const MapWindowProjection &_proj) noexcept
     :flat_projection(_flat_projection), proj(_proj),
      clip(_proj.GetScreenBounds().Scale(1.1))
   {
@@ -211,7 +206,7 @@ public:
 };
 
 void
-MapWindow::DrawTerrainAbove(Canvas &canvas)
+MapWindow::DrawTerrainAbove(Canvas &canvas) noexcept
 {
   // Don't draw at all if
   // .. no GPS fix
@@ -243,7 +238,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
  * @param buffer The drawing buffer
  */
 void
-MapWindow::RenderTerrainAbove(Canvas &canvas, bool working)
+MapWindow::RenderTerrainAbove(Canvas &canvas, bool working) noexcept
 {
   // Create a visitor for the Reach code
   TriangleCompound visitor(route_planner->GetTerrainReachProjection(),
@@ -421,7 +416,7 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working)
 
 
 void
-MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
+MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const noexcept
 {
   if (!Calculated().flight.flying ||
       !Calculated().terrain_warning_location.IsValid() ||

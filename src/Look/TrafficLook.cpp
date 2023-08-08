@@ -19,6 +19,12 @@ TrafficLook::Initialise(const Font &_font)
   warning_in_altitude_range_brush.Create(warning_in_altitude_range_color);
   alarm_brush.Create(alarm_color);
 
+  fading_pen.Create(Pen::Style::DASH1, 1, fading_outline_color);
+
+#ifdef ENABLE_OPENGL
+  fading_brush.Create(fading_fill_color);
+#endif
+
   unsigned width = Layout::ScalePenWidth(2);
   team_pen_green.Create(width, team_color_green);
   team_pen_blue.Create(width, team_color_blue);

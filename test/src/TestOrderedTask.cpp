@@ -28,6 +28,7 @@ static Waypoint
 MakeWaypoint(Waypoint wp, double altitude) noexcept
 {
   wp.elevation = altitude;
+  wp.has_elevation = true;
   return wp;
 }
 
@@ -253,6 +254,7 @@ TestHighFinish()
   task.Append(tp1);
   Waypoint wp2b(*wp2);
   wp2b.elevation = 1000;
+  wp2b.has_elevation = true;
   const FinishPoint tp2(std::make_unique<LineSectorZone>(wp2b.location),
                         WaypointPtr(new Waypoint(wp2b)), task_behaviour,
                         ordered_task_settings.finish_constraints, false);

@@ -13,6 +13,6 @@
  * Opens a file in the user's preferred application.
  */
 bool
-RunFile(const TCHAR *path);
+RunFile(const TCHAR *path) noexcept;
 
 #endif

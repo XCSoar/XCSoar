@@ -3,6 +3,7 @@
 
 #include "BufferedOutputStream.hxx"
 #include "OutputStream.hxx"
+#include "util/SpanCast.hxx"
 
 #include <fmt/format.h>
 
@@ -17,39 +18,33 @@
 #endif
 
 bool
-BufferedOutputStream::AppendToBuffer(const void *data, std::size_t size) noexcept
+BufferedOutputStream::AppendToBuffer(std::span<const std::byte> src) noexcept
 {
-	auto r = buffer.Write();
-	if (r.size() < size)
+	auto w = buffer.Write();
+	if (w.size() < src.size())
 		return false;
 
-	memcpy(r.data(), data, size);
-	buffer.Append(size);
+	std::copy(src.begin(), src.end(), w.begin());
+	buffer.Append(src.size());
 	return true;
 }
 
 void
-BufferedOutputStream::Write(const void *data, std::size_t size)
+BufferedOutputStream::Write(std::span<const std::byte> src)
 {
 	/* try to append to the current buffer */
-	if (AppendToBuffer(data, size))
+	if (AppendToBuffer(src))
 		return;
 
 	/* not enough room in the buffer - flush it */
 	Flush();
 
 	/* see if there's now enough room */
-	if (AppendToBuffer(data, size))
+	if (AppendToBuffer(src))
 		return;
 
 	/* too large for the buffer: direct write */
-	os.Write(data, size);
-}
-
-void
-BufferedOutputStream::Write(const char *p)
-{
-	Write(p, strlen(p));
+	os.Write(src);
 }
 
 void
@@ -105,22 +100,15 @@ BufferedOutputStream::VFmt(fmt::string_view format_str, fmt::format_args args)
 #else
 	fmt::vformat_to(b, format_str, args);
 #endif
-	return Write(b.data(), b.size());
+	return Write(std::as_bytes(std::span{b.data(), b.size()}));
 }
 
 #ifdef _UNICODE
 
 void
-BufferedOutputStream::Write(const wchar_t *p)
+BufferedOutputStream::WriteWideToUTF8(std::wstring_view src)
 {
-	WriteWideToUTF8(p, wcslen(p));
-}
-
-void
-BufferedOutputStream::WriteWideToUTF8(const wchar_t *src,
-				      std::size_t src_length)
-{
-	if (src_length == 0)
+	if (src.empty())
 		return;
 
 	auto r = buffer.Write();
@@ -129,7 +117,7 @@ BufferedOutputStream::WriteWideToUTF8(const wchar_t *src,
 		r = buffer.Write();
 	}
 
-	int length = WideCharToMultiByte(CP_UTF8, 0, src, src_length,
+	int length = WideCharToMultiByte(CP_UTF8, 0, src.data(), src.size(),
 					 (char *)r.data(), r.size(),
 					 nullptr, nullptr);
 	if (length <= 0) {
@@ -138,13 +126,13 @@ BufferedOutputStream::WriteWideToUTF8(const wchar_t *src,
 			throw MakeLastError(error, "UTF-8 conversion failed");
 
 		/* how much buffer do we need? */
-		length = WideCharToMultiByte(CP_UTF8, 0, src, src_length,
+		length = WideCharToMultiByte(CP_UTF8, 0, src.data(), src.size(),
 					     nullptr, 0, nullptr, nullptr);
 		if (length <= 0)
 			throw MakeLastError(error, "UTF-8 conversion failed");
 
 		/* grow the buffer and try again */
-		length = WideCharToMultiByte(CP_UTF8, 0, src, src_length,
+		length = WideCharToMultiByte(CP_UTF8, 0, src.data(), src.size(),
 					     (char *)buffer.Write(length), length,
 					     nullptr, nullptr);
 		if (length <= 0)
@@ -163,6 +151,6 @@ BufferedOutputStream::Flush()
 	if (r.empty())
 		return;
 
-	os.Write(r.data(), r.size());
+	os.Write(r);
 	buffer.Consume(r.size());
 }

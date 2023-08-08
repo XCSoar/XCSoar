@@ -5,18 +5,19 @@
 
 #include <cassert>
 
-VirtualCanvas::VirtualCanvas(PixelSize new_size)
+VirtualCanvas::VirtualCanvas(PixelSize new_size) noexcept
 {
   Create(new_size);
 }
 
-VirtualCanvas::VirtualCanvas([[maybe_unused]] const Canvas &canvas, PixelSize new_size)
+VirtualCanvas::VirtualCanvas([[maybe_unused]] const Canvas &canvas,
+                             PixelSize new_size) noexcept
 {
   Create(new_size);
 }
 
 void
-VirtualCanvas::Create(PixelSize new_size)
+VirtualCanvas::Create(PixelSize new_size) noexcept
 {
   Destroy();
 
@@ -24,7 +25,8 @@ VirtualCanvas::Create(PixelSize new_size)
 }
 
 void
-VirtualCanvas::Create([[maybe_unused]] const Canvas &canvas, PixelSize new_size)
+VirtualCanvas::Create([[maybe_unused]] const Canvas &canvas,
+                      PixelSize new_size) noexcept
 {
 #if defined(ENABLE_OPENGL)
   assert(canvas.IsDefined());
@@ -34,7 +36,7 @@ VirtualCanvas::Create([[maybe_unused]] const Canvas &canvas, PixelSize new_size)
 }
 
 void
-VirtualCanvas::Destroy()
+VirtualCanvas::Destroy() noexcept
 {
   buffer.Free();
 }

@@ -4,13 +4,11 @@
 #pragma once
 
 #include "util/StaticString.hxx"
-#include "util/Compiler.h"
 
 class FlarmId;
 
-constexpr
-static inline size_t
-LatinBufferSize(size_t size)
+static constexpr std::size_t
+LatinBufferSize(std::size_t size) noexcept
 {
 #ifdef _UNICODE
 /* with wide characters, the exact size of the FLARMNet database field
@@ -49,5 +47,5 @@ struct FlarmNetRecord {
   StaticString<LatinBufferSize(8)> frequency;
 
   [[gnu::pure]]
-  FlarmId GetId() const;
+  FlarmId GetId() const noexcept;
 };

@@ -82,7 +82,7 @@ WaypointEditWidget::Prepare(ContainerWindow &, const PixelRect &) noexcept
   AddFloat(_("Altitude"), nullptr,
            _T("%.0f %s"), _T("%.0f"),
            0, 30000, 5, false,
-           UnitGroup::ALTITUDE, value.elevation);
+           UnitGroup::ALTITUDE, value.GetElevationOrZero());
   AddEnum(_("Type"), nullptr, waypoint_types, (unsigned)value.type);
 }
 
@@ -94,7 +94,12 @@ WaypointEditWidget::Save(bool &_changed) noexcept
   value.shortname = GetValueString(SHORTNAME);
   value.comment = GetValueString(COMMENT);
   value.location = ((GeoPointDataField &)GetDataField(LOCATION)).GetValue();
-  changed |= SaveValue(ELEVATION, UnitGroup::ALTITUDE, value.elevation);
+
+  if (double elevation = value.GetElevationOrZero();
+      SaveValue(ELEVATION, UnitGroup::ALTITUDE, elevation)) {
+    value.elevation = elevation;
+    value.has_elevation = true;
+  }
 
   if (SaveValueEnum(TYPE, value.type)) {
     changed = true;

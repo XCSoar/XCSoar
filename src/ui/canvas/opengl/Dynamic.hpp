@@ -13,14 +13,14 @@
 namespace GLExt {
 
 #ifdef HAVE_DYNAMIC_MAPBUFFER
-extern PFNGLMAPBUFFEROESPROC map_buffer;
-extern PFNGLUNMAPBUFFEROESPROC unmap_buffer;
+inline PFNGLMAPBUFFEROESPROC map_buffer;
+inline PFNGLUNMAPBUFFEROESPROC unmap_buffer;
 #endif
 
 #ifdef GL_EXT_multi_draw_arrays
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
-extern PFNGLMULTIDRAWARRAYSEXTPROC multi_draw_arrays;
-extern PFNGLMULTIDRAWELEMENTSEXTPROC multi_draw_elements;
+inline PFNGLMULTIDRAWARRAYSEXTPROC multi_draw_arrays;
+inline PFNGLMULTIDRAWELEMENTSEXTPROC multi_draw_elements;
 #endif
 
 static inline bool HaveMultiDrawElements() noexcept {
@@ -40,5 +40,9 @@ static inline void MultiDrawElements(Args... args) noexcept {
 #endif
 }
 #endif /* GL_EXT_multi_draw_arrays */
+
+#ifdef GL_EXT_discard_framebuffer
+inline PFNGLDISCARDFRAMEBUFFEREXTPROC discard_framebuffer;
+#endif
 
 } // namespace GLExt

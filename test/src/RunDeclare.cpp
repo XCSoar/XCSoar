@@ -78,6 +78,7 @@ MakeWaypoint(const TCHAR *name, int altitude,
                        Angle::Degrees(latitude)));
   wp.name = name;
   wp.elevation = altitude;
+  wp.has_elevation = true;
   return wp;
 }
 

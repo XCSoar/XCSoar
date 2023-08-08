@@ -94,12 +94,13 @@ SetHome(Waypoints &way_points, const RasterTerrain *terrain,
   if (device_blackboard != nullptr) {
     if (wp != nullptr) {
       // OK, passed all checks now
-      LogFormat("Start at home waypoint");
-      device_blackboard->SetStartupLocation(wp->location, wp->elevation);
+      LogString("Start at home waypoint");
+      device_blackboard->SetStartupLocation(wp->location,
+                                            wp->GetElevationOrZero());
     } else if (terrain != nullptr) {
       // no home at all, so set it from center of terrain if available
       GeoPoint loc = terrain->GetTerrainCenter();
-      LogFormat("Start at terrain center");
+      LogString("Start at terrain center");
       device_blackboard->SetStartupLocation(loc,
                                             terrain->GetTerrainHeight(loc).GetValueOr0());
     }

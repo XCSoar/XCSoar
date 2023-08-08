@@ -14,18 +14,18 @@ protected:
   HBITMAP bitmap;
 
 public:
-  BufferCanvas():bitmap(nullptr) {}
-  BufferCanvas(const Canvas &canvas, PixelSize new_size);
-  ~BufferCanvas();
+  BufferCanvas() noexcept:bitmap(nullptr) {}
+  BufferCanvas(const Canvas &canvas, PixelSize new_size) noexcept;
+  ~BufferCanvas() noexcept;
 
-  void Create(const Canvas &canvas, PixelSize new_size);
-  void Create(const Canvas &canvas);
-  void Destroy();
+  void Create(const Canvas &canvas, PixelSize new_size) noexcept;
+  void Create(const Canvas &canvas) noexcept;
+  void Destroy() noexcept;
 
-  void Resize(PixelSize new_size);
+  void Resize(PixelSize new_size) noexcept;
 
   /**
    * Similar to Resize(), but never shrinks the buffer.
    */
-  void Grow(PixelSize new_size);
+  void Grow(PixelSize new_size) noexcept;
 };

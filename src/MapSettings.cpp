@@ -41,6 +41,7 @@ MapSettings::SetDefaults()
   cruise_scale = 1 / 60.;
   show_flarm_on_map = true;
   show_flarm_alarm_level = true;
+  fade_traffic = true;
   show_thermal_profile = true;
   final_glide_bar_mc0_enabled = true;
   final_glide_bar_display_mode = FinalGlideBarDisplayMode::ON;

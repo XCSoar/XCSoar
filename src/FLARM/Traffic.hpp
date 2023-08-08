@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "FlarmId.hpp"
+#include "Id.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "NMEA/Validity.hpp"
 #include "util/StaticString.hxx"
@@ -47,6 +47,53 @@ struct FlarmTraffic {
     STATIC_OBJECT = 15    //!< static object
   };
 
+  /** Location of the FLARM target */
+  GeoPoint location;
+
+  /** Turnrate of the FLARM target */
+  double turn_rate;
+
+  /** Climbrate of the FLARM target */
+  double climb_rate;
+
+  /** Average climb rate over 30s */
+  double climb_rate_avg30s;
+
+  /** Latitude-based distance of the FLARM target */
+  double relative_north;
+
+  /** Longitude-based distance of the FLARM target */
+  double relative_east;
+
+  /** Is this object valid, or has it expired already? */
+  Validity valid;
+
+  /** FLARM id of the FLARM target */
+  FlarmId id;
+
+  /** Distance from our plane to the FLARM target */
+  RoughDistance distance;
+
+  /** TrackBearing of the FLARM target */
+  RoughAngle track;
+
+  /** Speed of the FLARM target */
+  RoughSpeed speed;
+
+  /** Altitude of the FLARM target */
+  RoughAltitude altitude;
+
+  /** Altidude-based distance of the FLARM target */
+  RoughAltitude relative_altitude;
+
+  /** (if exists) Name of the FLARM target */
+  StaticString<10> name;
+
+  AlarmType alarm_level;
+
+  /** Type of the aircraft */
+  AircraftType type;
+
   /** Is the target in stealth mode */
   bool stealth;
 
@@ -71,58 +118,11 @@ struct FlarmTraffic {
   /** Has the averaged climb rate of the target been calculated yet? */
   bool climb_rate_avg30s_available;
 
-  /** Is this object valid, or has it expired already? */
-  Validity valid;
-
-  /** Location of the FLARM target */
-  GeoPoint location;
-
-  /** Distance from our plane to the FLARM target */
-  RoughDistance distance;
-
-  /** TrackBearing of the FLARM target */
-  RoughAngle track;
-
-  /** Speed of the FLARM target */
-  RoughSpeed speed;
-
-  /** Altitude of the FLARM target */
-  RoughAltitude altitude;
-
-  /** Altidude-based distance of the FLARM target */
-  RoughAltitude relative_altitude;
-
-  /** Turnrate of the FLARM target */
-  double turn_rate;
-
-  /** Climbrate of the FLARM target */
-  double climb_rate;
-
-  /** Latitude-based distance of the FLARM target */
-  double relative_north;
-
-  /** Longitude-based distance of the FLARM target */
-  double relative_east;
-
-  /** FLARM id of the FLARM target */
-  FlarmId id;
-
-  /** (if exists) Name of the FLARM target */
-  StaticString<10> name;
-
-  AlarmType alarm_level;
-
-  /** Type of the aircraft */
-  AircraftType type;
-
-  /** Average climb rate over 30s */
-  double climb_rate_avg30s;
-
-  bool IsDefined() const {
+  bool IsDefined() const noexcept {
     return valid;
   }
 
-  bool HasAlarm() const {
+  bool HasAlarm() const noexcept {
     return alarm_level != AlarmType::NONE;
   }
 
@@ -130,26 +130,26 @@ struct FlarmTraffic {
    * Does the target have a name?
    * @return True if a name has been assigned to the target
    */
-  bool HasName() const {
+  bool HasName() const noexcept {
     return !name.empty();
   }
 
-  void Clear() {
+  void Clear() noexcept {
     valid.Clear();
     name.clear();
   }
 
-  Angle Bearing() const {
+  Angle Bearing() const noexcept {
     return Angle::FromXY(relative_north, relative_east);
   }
 
-  bool IsPowered() const {
+  bool IsPowered() const noexcept {
     return type != AircraftType::GLIDER &&
            type != AircraftType::HANG_GLIDER &&
            type != AircraftType::PARA_GLIDER;
   }
 
-  bool IsPassive() const {
+  bool IsPassive() const noexcept {
     return IsPowered() || speed < 4;
   }
 
@@ -163,9 +163,10 @@ struct FlarmTraffic {
     return valid;
   }
 
-  static const TCHAR* GetTypeString(AircraftType type);
+  [[gnu::const]]
+  static const TCHAR *GetTypeString(AircraftType type) noexcept;
 
-  void Update(const FlarmTraffic &other);
+  void Update(const FlarmTraffic &other) noexcept;
 };
 
 static_assert(std::is_trivial<FlarmTraffic>::value, "type is not trivial");

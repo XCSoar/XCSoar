@@ -156,8 +156,6 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
         heat = 0;
       }
     }
-    //LogDebug(_T("polygon thinning (%u) removed %u of %u vertices"),
-    //         min_distance, orig_num_points-num_points, orig_num_points);
   }
 
   // triangulation
@@ -231,7 +229,6 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
 
     if (heat++ > num_points) {
       // if polygon edges overlap we may loop endlessly
-      //LogDebug(_T("polygon_to_triangle: bad polygon"));
       delete[] next;
       return 0;
     }
@@ -422,10 +419,6 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
 
   // copy strip over triangles
   std::copy(triangle_strip, strip, triangles);
-
-  //LogDebug(_T("triangle_to_strip: indices=%u strip indices=%u (%u%%)"),
-  //         index_count, strip - triangle_strip,
-  //         (strip - triangle_strip)*100/index_count);
 
   delete[] triangle_strip;
   delete[] vcount;

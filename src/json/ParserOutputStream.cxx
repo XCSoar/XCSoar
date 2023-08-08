@@ -2,13 +2,14 @@
 // Copyright Max Kellermann <max.kellermann@gmail.com>
 
 #include "ParserOutputStream.hxx"
+#include "util/SpanCast.hxx"
 
 namespace Json {
 
 void
-ParserOutputStream::Write(const void *data, size_t size)
+ParserOutputStream::Write(std::span<const std::byte> src)
 {
-	parser.write((const char *)data, size);
+	parser.write(ToStringView(src));
 }
 
 } // namespace Json

@@ -60,26 +60,22 @@ class RasterRenderer {
   RawColor *color_table = nullptr;
 
 public:
-  RasterRenderer();
-  ~RasterRenderer();
+  RasterRenderer() noexcept;
+  ~RasterRenderer() noexcept;
 
   RasterRenderer(const RasterRenderer &) = delete;
   RasterRenderer &operator=(const RasterRenderer &) = delete;
 
-  const HeightMatrix &GetHeightMatrix() const {
+  const HeightMatrix &GetHeightMatrix() const noexcept {
     return height_matrix;
   }
 
-  unsigned GetWidth() const {
-    return height_matrix.GetWidth();
-  }
-
-  unsigned GetHeight() const {
-    return height_matrix.GetHeight();
+  UnsignedPoint2D GetSize() const noexcept {
+    return height_matrix.GetSize();
   }
 
 #ifdef ENABLE_OPENGL
-  void Invalidate() {
+  void Invalidate() noexcept {
     bounds.SetInvalid();
   }
 
@@ -89,13 +85,13 @@ public:
    * @return true if the new #quantisation_pixels value is smaller
    * than the previous one (redraw needed)
    */
-  bool UpdateQuantisation();
+  bool UpdateQuantisation() noexcept;
 
-  const GeoBounds &GetBounds() const {
+  const GeoBounds &GetBounds() const noexcept {
     return bounds;
   }
 
-  const GLTexture &BindAndGetTexture() const;
+  const GLTexture &BindAndGetTexture() const noexcept;
 #endif
 
   /**
@@ -104,12 +100,13 @@ public:
    * preventing the same color calculations over and over again.
    */
   void PrepareColorTable(const ColorRamp *color_ramp, bool do_water,
-                         unsigned height_scale, int interp_levels);
+                         unsigned height_scale, int interp_levels) noexcept;
 
   /**
    * Scan the map and fill the height matrix.
    */
-  void ScanMap(const RasterMap &map, const WindowProjection &projection);
+  void ScanMap(const RasterMap &map,
+               const WindowProjection &projection) noexcept;
 
   /**
    * Convert the height matrix into the image.
@@ -117,38 +114,37 @@ public:
   void GenerateImage(bool do_shading,
                      unsigned height_scale, int contrast, int brightness,
                      const Angle sunazimuth,
-                     bool do_contour);
+                     bool do_contour) noexcept;
 
-  const RawBitmap &GetImage() const {
+  const RawBitmap &GetImage() const noexcept {
     return *image;
   }
 
   void Draw(Canvas &canvas, const WindowProjection &projection,
-            bool transparent_white=false) const;
+            bool transparent_white=false) const noexcept;
 
 protected:
   /**
    * Convert the height matrix into the image, without shading.
    */
   void GenerateUnshadedImage(unsigned height_scale,
-                             const unsigned contour_height_scale);
+                             unsigned contour_height_scale) noexcept;
 
   /**
    * Convert the height matrix into the image, with slope shading.
    */
   void GenerateSlopeImage(unsigned height_scale, int contrast,
-                          const int sx, const int sy, const int sz,
-                          const unsigned contour_height_scale);
+                          int sx, int sy, int sz,
+                          unsigned contour_height_scale) noexcept;
 
   /**
    * Convert the height matrix into the image, with slope shading.
    */
   void GenerateSlopeImage(unsigned height_scale,
                           int contrast, int brightness,
-                          const Angle sunazimuth,
-                          const unsigned contour_height_scale);
+                          Angle sunazimuth,
+                          unsigned contour_height_scale) noexcept;
 
 private:
-
-  void ContourStart(const unsigned contour_height_scale);
+  void ContourStart(unsigned contour_height_scale) noexcept;
 };

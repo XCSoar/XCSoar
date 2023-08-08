@@ -3,6 +3,7 @@
 
 #include "StringConverter.hpp"
 #include "util/Compiler.h"
+#include "util/StringCompare.hxx"
 #include "util/UTF8.hpp"
 
 #include <cassert>
@@ -16,55 +17,62 @@
 
 #ifdef _UNICODE
 
-static void
-iso_latin_1_to_tchar(TCHAR *dest, const char *src)
+static constexpr void
+iso_latin_1_to_tchar(TCHAR *dest, std::string_view src) noexcept
 {
-    do {
-      *dest++ = (unsigned char)*src;
-    } while (*src++ != '\0');
+  for (unsigned char ch : src)
+    *dest++ = ch;
+  *dest = _T('\0');
 }
 
 #endif
 
-TCHAR *
-StringConverter::Convert(char *narrow)
+char *
+StringConverter::DetectStrip(char *src) noexcept
 {
-  assert(narrow != nullptr);
+  assert(src != nullptr);
 
   // Check if there is byte order mark in front
   if (charset == Charset::AUTO || charset == Charset::UTF8) {
-    char *p = SkipByteOrderMark(narrow);
-    if (p != nullptr) {
-      narrow = p;
+    if (StringStartsWith(src, utf8_byte_order_mark)) {
+      src += utf8_byte_order_mark.size();
 
       /* switch to UTF-8 now */
       charset = Charset::UTF8;
     }
   }
 
-  if (charset == Charset::AUTO && !ValidateUTF8(narrow))
+  if (charset == Charset::AUTO && !ValidateUTF8(src))
     /* invalid UTF-8 sequence detected: switch to ISO-Latin-1 */
     charset = Charset::ISO_LATIN_1;
 
-#ifdef _UNICODE
-  size_t narrow_length = strlen(narrow);
+  return src;
+}
 
-  TCHAR *t = tbuffer.get(narrow_length + 1);
+TCHAR *
+StringConverter::Convert(char *narrow)
+{
+  narrow = DetectStrip(narrow);
+
+#ifdef _UNICODE
+  const std::string_view src{narrow};
+
+  TCHAR *t = tbuffer.get(src.size() + 1);
   assert(t != nullptr);
 
-  if (narrow_length == 0) {
+  if (src.empty()) {
     t[0] = _T('\0');
     return t;
   }
 
   switch (charset) {
   case Charset::ISO_LATIN_1:
-    iso_latin_1_to_tchar(t, narrow);
+    iso_latin_1_to_tchar(t, src);
     break;
 
   default:
-    int length = MultiByteToWideChar(CP_UTF8, 0, narrow, narrow_length,
-                                     t, narrow_length);
+    int length = MultiByteToWideChar(CP_UTF8, 0, src.data(), src.size(),
+                                     t, src.size());
     if (length == 0)
       throw MakeLastError("Failed to convert string");
 

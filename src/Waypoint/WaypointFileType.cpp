@@ -14,7 +14,7 @@
 template<class R>
 [[gnu::pure]]
 static bool
-VerifyFormat(Path path)
+VerifyFormat(Path path) noexcept
 try {
   FileLineReader reader(path, Charset::UTF8);
   return R::VerifyFormat(reader);
@@ -23,7 +23,7 @@ try {
 }
 
 WaypointFileType
-DetermineWaypointFileType(Path path)
+DetermineWaypointFileType(Path path) noexcept
 {
   // If WinPilot waypoint file -> save type and return true
   if (path.EndsWithIgnoreCase(_T(".dat")) ||

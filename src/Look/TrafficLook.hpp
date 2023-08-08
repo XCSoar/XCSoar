@@ -23,6 +23,14 @@ struct TrafficLook {
   Brush warning_in_altitude_range_brush;
   Brush alarm_brush;
 
+  static constexpr Color fading_outline_color = ColorWithAlpha({0x60, 0x60, 0x60}, 0xa0);
+  Pen fading_pen;
+
+#ifdef ENABLE_OPENGL
+  static constexpr Color fading_fill_color = ColorWithAlpha({0xc0, 0xc0, 0xc0}, 0x60);
+  Brush fading_brush;
+#endif
+
   static constexpr Color team_color_green = Color(0x74, 0xff, 0);
   static constexpr Color team_color_magenta = Color(0xff, 0, 0xcb);
   static constexpr Color team_color_blue = Color(0, 0x90, 0xff);

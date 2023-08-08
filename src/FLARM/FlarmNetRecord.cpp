@@ -2,10 +2,10 @@
 // Copyright The XCSoar Project
 
 #include "FlarmNetRecord.hpp"
-#include "FlarmId.hpp"
+#include "Id.hpp"
 
 FlarmId
-FlarmNetRecord::GetId() const
+FlarmNetRecord::GetId() const noexcept
 {
   return FlarmId::Parse(this->id, NULL);
 };

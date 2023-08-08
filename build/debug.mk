@@ -48,11 +48,6 @@ ifeq ($(LTO),y)
   endif
 endif
 
-ifeq ($(LLVM),y)
-  # generate LLVM bitcode
-  TARGET_OPTIMIZE += -emit-llvm
-endif
-
 OPTIMIZE_LDFLAGS = $(filter-out -emit-llvm,$(OPTIMIZE) $(TARGET_OPTIMIZE))
 ifeq ($(CLANG)$(TARGET_IS_DARWIN)$(LTO),yny)
   # The Gold linker is known to work for LTO with LLVM Clang.  LLD

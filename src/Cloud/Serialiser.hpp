@@ -22,7 +22,7 @@ public:
 
   template<typename T>
   void WriteT(const T &value) {
-    Write(&value, sizeof(value));
+    Write(std::as_bytes(std::span{&value, 1}));
   }
 
   void Write8(uint8_t value) {
@@ -66,11 +66,7 @@ public:
     Write64(u.i);
   }
 
-  void WriteString(const char *s);
-
-  void WriteString(const std::string &s) {
-    WriteString(s.c_str());
-  }
+  void WriteString(std::string_view s);
 
   Serialiser &operator<<(std::chrono::system_clock::time_point t) {
     Write64(std::chrono::system_clock::to_time_t(t));

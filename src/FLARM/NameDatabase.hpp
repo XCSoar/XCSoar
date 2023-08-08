@@ -3,9 +3,9 @@
 
 #pragma once
 
+#include "Id.hpp"
 #include "util/StaticString.hxx"
 #include "util/StaticArray.hxx"
-#include "FlarmId.hpp"
 
 #include <cassert>
 #include <tchar.h>

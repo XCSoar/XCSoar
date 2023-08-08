@@ -9,7 +9,6 @@
 #include "Look/AirspaceLook.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "Asset.hpp"
 
 #include <vector>
 
@@ -115,8 +114,6 @@ DrawShape(Canvas &canvas, AbstractAirspace::Shape shape, const PixelPoint pt,
 {
   if (shape == AbstractAirspace::Shape::CIRCLE)
     canvas.DrawCircle(pt, radius);
-  else if (IsAncientHardware())
-    canvas.DrawRectangle(PixelRect{pt}.WithMargin(radius));
   else
     canvas.DrawPolygon(&pts[0], (unsigned)pts.size());
 }
@@ -132,7 +129,7 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
 
   // Container for storing the points of a polygon airspace
   std::vector<BulkPixelPoint> pts;
-  if (shape == AbstractAirspace::Shape::POLYGON && !IsAncientHardware())
+  if (shape == AbstractAirspace::Shape::POLYGON)
     GetPolygonPoints(pts, (const AirspacePolygon &)airspace, pt, radius);
 
   if (PrepareFill(canvas, asclass, look, settings)) {

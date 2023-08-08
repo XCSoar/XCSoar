@@ -19,4 +19,4 @@ enum class WaypointFileType: uint8_t {
 
 [[gnu::pure]]
 WaypointFileType
-DetermineWaypointFileType(Path path);
+DetermineWaypointFileType(Path path) noexcept;

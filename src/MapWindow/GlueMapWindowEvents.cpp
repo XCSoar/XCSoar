@@ -64,7 +64,7 @@ bool
 GlueMapWindow::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
   /* allow a bigger threshold on touch screens */
-  const unsigned threshold = Layout::Scale(IsEmbedded() ? 50 : 10);
+  const unsigned threshold = Layout::Scale(HasTouchScreen() ? 50 : 10);
   if (drag_mode != DRAG_NONE && arm_mapitem_list &&
       ((unsigned)ManhattanDistance(drag_start, p) > threshold ||
        mouse_down_clock.Elapsed() > std::chrono::milliseconds(200)))
@@ -106,7 +106,7 @@ GlueMapWindow::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 
 [[gnu::pure]]
 static bool
-IsCtrlKeyPressed()
+IsCtrlKeyPressed() noexcept
 {
 #ifdef ENABLE_SDL
   return SDL_GetModState() & (KMOD_LCTRL|KMOD_RCTRL);
@@ -323,7 +323,7 @@ GlueMapWindow::OnMultiTouchDown() noexcept
 #endif /* HAVE_MULTI_TOUCH */
 
 bool
-GlueMapWindow::OnMouseGesture(const TCHAR* gesture)
+GlueMapWindow::OnMouseGesture(const TCHAR *gesture) noexcept
 {
   return InputEvents::processGesture(gesture);
 }
@@ -433,7 +433,7 @@ GlueMapWindow::OnKineticTimer() noexcept
 #endif
 
 void
-GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc)
+GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
 {
   MapWindow::Render(canvas, rc);
 

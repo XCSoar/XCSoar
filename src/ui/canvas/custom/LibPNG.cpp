@@ -4,7 +4,7 @@
 #include "LibPNG.hpp"
 #include "UncompressedImage.hpp"
 #include "system/Path.hpp"
-#include "system/FileMapping.hpp"
+#include "io/FileMapping.hpp"
 
 #include <png.h>
 

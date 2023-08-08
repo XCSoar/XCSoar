@@ -7,17 +7,16 @@
 #include "UIUtil/GestureManager.hpp"
 
 class BigThermalAssistantWindow : public ThermalAssistantWindow {
-  bool dragging;
+  bool dragging = false;
   GestureManager gestures;
 
 public:
   BigThermalAssistantWindow(const ThermalAssistantLook &look,
-                            unsigned padding)
-    :ThermalAssistantWindow(look, padding, false),
-     dragging(false) {}
+                            unsigned padding) noexcept
+    :ThermalAssistantWindow(look, padding, false) {}
 
 private:
-  void StopDragging() {
+  void StopDragging() noexcept {
     if (!dragging)
       return;
 

@@ -210,7 +210,7 @@ TestFLARM()
     skip(12, 0, "traffic == NULL");
   }
 
-  ok1(parser.ParseLine("$PFLAA,0,1206,574,21,2,DDAED5,196,,32,1.0,1*10",
+  ok1(parser.ParseLine("$PFLAA,0,1206,574,21,2,DDAED5,196,,32,1.0,C*62",
                        nmea_info));
   ok1(nmea_info.flarm.traffic.GetActiveTrafficCount() == 3);
 
@@ -229,7 +229,7 @@ TestFLARM()
     ok1(traffic->speed_received);
     ok1(equals(traffic->climb_rate, 1.0));
     ok1(traffic->climb_rate_received);
-    ok1(traffic->type == FlarmTraffic::AircraftType::GLIDER);
+    ok1(traffic->type == FlarmTraffic::AircraftType::AIRSHIP);
     ok1(!traffic->stealth);
   } else {
     skip(15, 0, "traffic == NULL");
@@ -1629,6 +1629,7 @@ TestDeclare(const struct DeviceRegister &driver)
   Waypoint wp(gp);
   wp.name = _T("Foo");
   wp.elevation = 123;
+  wp.has_elevation = true;
   declaration.Append(wp);
   declaration.Append(wp);
   declaration.Append(wp);

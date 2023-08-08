@@ -12,19 +12,19 @@
 #include "Screen/Layout.hpp"
 
 void
-TargetMapWindow::OnTaskModified()
+TargetMapWindow::OnTaskModified() noexcept
 {
   Invalidate();
 }
 
 void
-TargetMapWindow::TargetPaintDrag(Canvas &canvas, const PixelPoint drag_last)
+TargetMapWindow::TargetPaintDrag(Canvas &canvas, const PixelPoint drag_last) noexcept
 {
   task_look.target_icon.Draw(canvas, drag_last);
 }
 
 bool
-TargetMapWindow::TargetDragged(PixelPoint p)
+TargetMapWindow::TargetDragged(PixelPoint p) noexcept
 {
   assert(task != nullptr);
 
@@ -43,7 +43,7 @@ TargetMapWindow::TargetDragged(PixelPoint p)
 }
 
 bool
-TargetMapWindow::isClickOnTarget(const PixelPoint pc) const
+TargetMapWindow::isClickOnTarget(const PixelPoint pc) const noexcept
 {
   if (task == nullptr)
     return false;
@@ -61,7 +61,7 @@ TargetMapWindow::isClickOnTarget(const PixelPoint pc) const
 }
 
 bool
-TargetMapWindow::isInSector(PixelPoint pt)
+TargetMapWindow::isInSector(PixelPoint pt) const noexcept
 {
   assert(task != nullptr);
 

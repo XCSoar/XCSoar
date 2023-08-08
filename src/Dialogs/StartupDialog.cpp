@@ -178,7 +178,7 @@ StartupWidget::Save(bool &changed) noexcept
 bool
 dlgStartupShowModal() noexcept
 {
-  LogFormat("Startup dialog");
+  LogString("Startup dialog");
 
   /* scan all profile files */
   auto *dff = new FileDataField();

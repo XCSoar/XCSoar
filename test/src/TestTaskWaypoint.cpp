@@ -35,12 +35,14 @@ TaskWaypointTest::Run()
   Waypoint wp(gp);
   wp.name = _T("Test");
   wp.elevation = 42;
+  wp.has_elevation = true;
 
   DummyTaskWaypoint tw(TaskPointType::AST, WaypointPtr(new Waypoint(wp)));
 
   const Waypoint &wp2 = tw.GetWaypoint();
   ok1(wp2.name == _T("Test"));
   ok1(equals(tw.GetBaseElevation(), 42));
+  ok1(wp2.has_elevation);
   ok1(equals(tw.GetBaseElevation(), wp2.elevation));
   ok1(equals(wp2.location, gp));
   ok1(equals(tw.GetLocation(), gp));
@@ -48,7 +50,7 @@ TaskWaypointTest::Run()
 
 int main()
 {
-  plan_tests(5);
+  plan_tests(6);
 
   TaskWaypointTest test;
   test.Run();

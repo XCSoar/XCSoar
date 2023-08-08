@@ -7,6 +7,8 @@
 #include <string_view>
 #include <utility>
 
+constexpr std::string_view utf8_byte_order_mark{"\xef\xbb\xbf"};
+
 /**
  * Is this a valid UTF-8 string?
  */

@@ -3,7 +3,7 @@
 
 #include "TeamActions.hpp"
 #include "Interface.hpp"
-#include "FLARM/FlarmDetails.hpp"
+#include "FLARM/Details.hpp"
 #include "FLARM/TrafficDatabases.hpp"
 #include "FLARM/Global.hpp"
 

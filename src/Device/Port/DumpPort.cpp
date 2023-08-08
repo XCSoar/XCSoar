@@ -53,20 +53,20 @@ DumpPort::Write(std::span<const std::byte> src)
 {
   const bool enabled = CheckEnabled();
   if (enabled)
-    LogFormat("Write(%u)", (unsigned)src.size());
+    LogFmt("Write({})", src.size());
 
   std::size_t nbytes;
   try {
     nbytes = port->Write(src);
   } catch (...) {
     if (enabled)
-      LogFormat("Write(%u)=error", (unsigned)src.size());
+      LogFmt("Write({})=error", src.size());
     throw;
   }
 
   if (enabled) {
-    LogFormat("Write(%u)=%u", (unsigned)src.size(), (unsigned)nbytes);
-    HexDump("W ", src.data(), nbytes);
+    LogFmt("Write({})={}", src.size(), nbytes);
+    HexDump("W ", src.first(nbytes));
   }
 
   return nbytes;
@@ -76,7 +76,7 @@ bool
 DumpPort::Drain()
 {
   if (CheckEnabled())
-    LogFormat("Drain");
+    LogString("Drain");
 
   return port->Drain();
 }
@@ -85,7 +85,7 @@ void
 DumpPort::Flush()
 {
   if (CheckEnabled())
-    LogFormat("Flush");
+    LogString("Flush");
 
   port->Flush();
 }
@@ -100,7 +100,7 @@ void
 DumpPort::SetBaudrate(unsigned baud_rate)
 {
   if (CheckEnabled())
-    LogFormat("SetBaudrate %u", baud_rate);
+    LogFmt("SetBaudrate {}", baud_rate);
 
   port->SetBaudrate(baud_rate);
 }
@@ -109,7 +109,7 @@ bool
 DumpPort::StopRxThread()
 {
   if (CheckEnabled())
-    LogFormat("StopRxThread");
+    LogString("StopRxThread");
 
   return port->StopRxThread();
 }
@@ -118,7 +118,7 @@ bool
 DumpPort::StartRxThread()
 {
   if (CheckEnabled())
-    LogFormat("StartRxThread");
+    LogString("StartRxThread");
 
   return port->StartRxThread();
 }
@@ -128,14 +128,14 @@ DumpPort::Read(std::span<std::byte> dest)
 {
   const bool enabled = CheckEnabled();
   if (enabled)
-    LogFormat("Read(%u)", (unsigned)dest.size());
+    LogFmt("Read({})", dest.size());
 
   auto nbytes = port->Read(dest);
 
   if (enabled) {
-    LogFormat("Read(%u)=%u", (unsigned)dest.size(), (unsigned)nbytes);
+    LogFmt("Read({})={}", dest.size(), nbytes);
     if (nbytes > 0)
-      HexDump("R ", dest.data(), nbytes);
+      HexDump("R ", dest.first(nbytes));
   }
 
   return nbytes;
@@ -146,17 +146,17 @@ DumpPort::WaitRead(std::chrono::steady_clock::duration timeout)
 {
   const bool enabled = CheckEnabled();
   if (enabled)
-    LogFormat("WaitRead %lu", (unsigned long)timeout.count());
+    LogFmt("WaitRead {}", timeout.count());
 
   try {
     port->WaitRead(timeout);
   } catch (const DeviceTimeout &) {
     if (enabled)
-      LogFormat("WaitRead %lu = timeout", (unsigned long)timeout.count());
+      LogFmt("WaitRead {} = timeout", timeout.count());
     throw;
   } catch (...) {
     if (enabled)
-      LogFormat("WaitRead %lu = error", (unsigned long)timeout.count());
+      LogFmt("WaitRead {} = error", timeout.count());
     throw;
   }
 }

@@ -67,6 +67,9 @@ struct VisibleWaypoint {
     assert(basic.location_available);
     assert(basic.NavAltitudeAvailable());
 
+    if (!waypoint->has_elevation)
+      return;
+
     const auto elevation = waypoint->elevation +
       task_behaviour.safety_height_arrival;
     const GlideState state(GeoVector(basic.location, waypoint->location),
@@ -85,6 +88,9 @@ struct VisibleWaypoint {
 
   bool CalculateRouteArrival(const ProtectedRoutePlanner &route_planner,
                              const TaskBehaviour &task_behaviour) noexcept {
+    if (!waypoint->has_elevation)
+      return false;
+
     const double elevation = waypoint->elevation +
       task_behaviour.safety_height_arrival;
     const AGeoPoint p_dest (waypoint->location, elevation);
@@ -221,7 +227,8 @@ protected:
 
     if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR ||
         settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR_AND_TERRAIN) {
-      if (!basic.location_available || !basic.NavAltitudeAvailable())
+      if (!basic.location_available || !basic.NavAltitudeAvailable() ||
+          !way_point.has_elevation)
         return;
 
       const auto safety_height = task_behaviour.safety_height_arrival;

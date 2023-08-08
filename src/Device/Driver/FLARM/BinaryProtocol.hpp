@@ -4,13 +4,17 @@
 #pragma once
 
 #include "util/ByteOrder.hxx"
-#include "util/Compiler.h"
 
 #include <chrono>
-#include <type_traits>
-
 #include <cstdint>
 #include <cstddef>
+#include <span>
+#include <type_traits>
+
+/* damn you, windows.h! */
+#ifdef ERROR
+#undef ERROR
+#endif
 
 class Port;
 struct Declaration;
@@ -25,17 +29,17 @@ static constexpr std::byte ESCAPE{0x78};
 static constexpr std::byte ESCAPE_ESCAPE{0x55};
 static constexpr std::byte ESCAPE_START{0x31};
 
-enum MessageType {
-  MT_ERROR = 0x00,
-  MT_ACK = 0xA0,
-  MT_NACK = 0xB7,
-  MT_PING = 0x01,
-  MT_SETBAUDRATE = 0x02,
-  MT_FLASHUPLOAD = 0x10,
-  MT_EXIT = 0x12,
-  MT_SELECTRECORD = 0x20,
-  MT_GETRECORDINFO = 0x21,
-  MT_GETIGCDATA = 0x22,
+enum class MessageType : uint8_t {
+  ERROR = 0x00,
+  ACK = 0xA0,
+  NACK = 0xB7,
+  PING = 0x01,
+  SETBAUDRATE = 0x02,
+  FLASHUPLOAD = 0x10,
+  EXIT = 0x12,
+  SELECTRECORD = 0x20,
+  GETRECORDINFO = 0x21,
+  GETIGCDATA = 0x22,
 };
 
 /**
@@ -63,7 +67,7 @@ struct FrameHeader {
   PackedLE16 sequence_number;
 
   /** Message type */
-  uint8_t type;
+  MessageType type;
 
   /**
    * CRC over the complete message, except CRC field.
@@ -81,16 +85,13 @@ static_assert(std::is_trivial<FrameHeader>::value, "type is not trivial");
  * Convenience function. Returns a pre-populated FrameHeader instance that is
  * ready to be sent by the SendFrameHeader() function.
  * @param message_type Message type of the FrameHeader
- * @param data Optional pointer to the first byte of the payload. Used for
- * CRC calculations.
- * @param length Optional length of the payload
+ * @param payload the payload; used for CRC calculations
  * @return An initialized FrameHeader instance
  */
 FrameHeader
 PrepareFrameHeader(unsigned sequence_number,
                    MessageType message_type,
-                   const void *data = nullptr,
-                   size_t length = 0);
+                   std::span<const std::byte> payload={}) noexcept;
 
 /**
  * Sends the specified data stream to the FLARM using the escaping algorithm
@@ -100,7 +101,7 @@ PrepareFrameHeader(unsigned sequence_number,
  * number of bytes can be larger due to the escaping.
  */
 void
-SendEscaped(Port &port, const void *buffer, size_t length,
+SendEscaped(Port &port, std::span<const std::byte> src,
             OperationEnvironment &env,
             std::chrono::steady_clock::duration timeout);
 
@@ -114,7 +115,7 @@ SendEscaped(Port &port, const void *buffer, size_t length,
  * or any transfer problems occurred
  */
 bool
-ReceiveEscaped(Port &port, void *data, size_t length,
+ReceiveEscaped(Port &port, std::span<std::byte> dest,
                OperationEnvironment &env,
                std::chrono::steady_clock::duration timeout);
 
