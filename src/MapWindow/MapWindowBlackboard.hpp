@@ -30,6 +30,12 @@ class MapWindowBlackboard:
   std::map<FlarmId, FlarmTraffic> fading_flarm_traffic;
 
 protected:
+  MapWindowBlackboard() noexcept {
+    /* this needs to be initialised because ReadBlackboard() uses the
+       previous FLARM traffic list */
+    gps_info.Reset();
+  }
+
   [[gnu::const]]
   const MoreData &Basic() const noexcept {
     assert(InDrawThread());
