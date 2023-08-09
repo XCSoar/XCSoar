@@ -15,5 +15,5 @@ unsigned
 FlatGeoPoint::DistanceSquared(const FlatGeoPoint &sp) const noexcept
 {
   const FlatGeoPoint delta = *this - sp;
-  return delta.DotProduct(delta);
+  return delta.MagnitudeSquared();
 }

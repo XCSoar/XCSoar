@@ -15,9 +15,8 @@
 /**
  * @return false if there is at least one ASCII letter in the string
  */
-[[gnu::pure]]
-static bool
-LacksAlphaASCII(const TCHAR *s)
+static constexpr bool
+LacksAlphaASCII(const TCHAR *s) noexcept
 {
   for (; *s != 0; ++s)
     if (IsAlphaASCII(*s))
@@ -34,7 +33,7 @@ LacksAlphaASCII(const TCHAR *s)
 [[gnu::pure]]
 static const TCHAR *
 GetTextN(const TCHAR *src, const TCHAR *src_end,
-         TCHAR *buffer, size_t buffer_size)
+         TCHAR *buffer, size_t buffer_size) noexcept
 {
   if (src == src_end)
     /* gettext("") returns the PO header, and thus we need to exclude
@@ -54,7 +53,7 @@ GetTextN(const TCHAR *src, const TCHAR *src_end,
 }
 
 ButtonLabel::Expanded
-ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
+ButtonLabel::Expand(const TCHAR *text, std::span<TCHAR> buffer) noexcept
 {
   Expanded expanded;
   const TCHAR *dollar;
@@ -84,7 +83,7 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
 
       /* concatenate the translated text and the part starting with '\n' */
       try {
-        expanded.text = BuildString(buffer, size, translated, nl);
+        expanded.text = BuildString(buffer, translated, nl);
       } catch (BasicStringBuilder<TCHAR>::Overflow) {
         expanded.text = gettext(text);
       }
@@ -99,7 +98,7 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
     macros = StripRight(text, macros);
 
     TCHAR s[100];
-    expanded.enabled = !ExpandMacros(text, s, ARRAY_SIZE(s));
+    expanded.enabled = !ExpandMacros(text, std::span{s});
     if (s[0] == _T('\0') || s[0] == _T(' ')) {
       expanded.visible = false;
       return expanded;
@@ -119,7 +118,7 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
 
     /* concatenate the translated text and the macro output */
     expanded.visible = true;
-    expanded.text = BuildString(buffer, size, translated, s + (macros - text));
+    expanded.text = BuildString(buffer, translated, s + (macros - text));
     return expanded;
   }
 }

@@ -10,9 +10,17 @@
  *         0 if a^2 + b^2 = c^2,
  *        -1 if a^2 + b^2 < c^2,
  */
-[[gnu::const]]
-int
-compare_squared(int a, int b, int c) noexcept;
+constexpr int
+compare_squared(int a, int b, int c) noexcept
+{
+  const unsigned a2b2 = a * a + b * b;
+  const unsigned c2 = c * c;
+  if (a2b2 > c2)
+    return 1;
+  if (a2b2 < c2)
+    return -1;
+  return 0;
+}
 
 [[gnu::const]]
 unsigned

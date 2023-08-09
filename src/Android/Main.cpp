@@ -51,6 +51,7 @@
 #include "net/http/Init.hpp"
 #include "thread/Debug.hpp"
 #include "util/Exception.hxx"
+#include "GlobalSettings.hpp"
 
 #include "IOIOHelper.hpp"
 #include "BMP085Device.hpp"
@@ -59,6 +60,8 @@
 #include "VoltageDevice.hpp"
 
 #include <cassert>
+#include <mutex>
+
 #include <stdlib.h>
 
 using namespace UI;
@@ -83,25 +86,12 @@ IOIOHelper *ioio_helper;
  */
 static Mutex shutdown_mutex;
 
-gcc_visibility_default
-JNIEXPORT void JNICALL
-Java_de_opensoar_NativeView_runNative(JNIEnv *env, jobject obj,
-                                     jobject _context,
-                                     jint width, jint height,
-                                     jint xdpi, jint ydpi,
-                                     jint sdk_version, jstring product)
-try {
-  const std::scoped_lock shutdown_lock{shutdown_mutex};
-
-  Java::Init(env);
-
+static void
+InitNative(JNIEnv *env, int sdk_version) noexcept
+{
   android_api_level = sdk_version;
 
-  InitThreadDebug();
-
-  const ScopeGlobalAsioThread global_asio_thread;
-  const Net::ScopeInit net_init(asio_thread->GetEventLoop());
-
+  Java::Init(env);
   Java::Object::Initialise(env);
   Java::File::Initialise(env);
   Java::InputStream::Initialise(env);
@@ -120,17 +110,66 @@ try {
   NativeInputListener::Initialise(env);
   AndroidSensor::Initialise(env);
   PortBridge::Initialise(env);
-  const bool have_bluetooth = BluetoothHelper::Initialise(env);
-  const bool have_usb_serial = UsbSerialHelper::Initialise(env);
+
   NativeDetectDeviceListener::Initialise(env);
-  const bool have_ioio = IOIOHelper::Initialise(env);
   BMP085Device::Initialise(env);
   I2CbaroDevice::Initialise(env);
   NunchuckDevice::Initialise(env);
   VoltageDevice::Initialise(env);
   AndroidTextEntryDialog::Initialise(env);
+}
+
+gcc_visibility_default
+void
+Java_org_xcsoar_NativeView_initNative(JNIEnv *env, [[maybe_unused]] jclass cls,
+                                      int sdk_version)
+{
+  static std::once_flag init_native_flag;
+
+  std::call_once(init_native_flag, InitNative, env, sdk_version);
+}
+
+gcc_visibility_default
+void
+Java_org_xcsoar_NativeView_onConfigurationChangedNative([[maybe_unused]] JNIEnv *env,
+                                                        [[maybe_unused]] jclass cls,
+                                                        jboolean night_mode)
+{
+  if (night_mode == GlobalSettings::dark_mode)
+    // no change
+    return;
+
+  GlobalSettings::dark_mode = night_mode;
+
+  const std::scoped_lock shutdown_lock{shutdown_mutex};
+
+  if (event_queue == nullptr)
+    return;
+
+  event_queue->Purge(UI::Event::LOOK);
+  event_queue->Inject(UI::Event::LOOK);
+}
+
+gcc_visibility_default
+JNIEXPORT void JNICALL
+Java_de_opensoar_NativeView_runNative(JNIEnv *env, jobject obj,
+                                     jobject _context,
+                                     jint width, jint height,
+                                     jint xdpi, jint ydpi,
+                                     jstring product)
+try {
+  const std::scoped_lock shutdown_lock{shutdown_mutex};
+
+  InitThreadDebug();
+
+  const bool have_bluetooth = BluetoothHelper::Initialise(env);
+  const bool have_usb_serial = UsbSerialHelper::Initialise(env);
+  const bool have_ioio = IOIOHelper::Initialise(env);
 
   context = new Context(env, _context);
+
+  const ScopeGlobalAsioThread global_asio_thread;
+  const Net::ScopeInit net_init(asio_thread->GetEventLoop());
 
   InitialiseDataPath();
 

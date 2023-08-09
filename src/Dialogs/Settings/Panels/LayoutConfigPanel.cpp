@@ -33,11 +33,11 @@ enum ControlIndex {
   FullScreen,
 #endif
   MapOrientation,
+  DarkMode,
   AppInfoBoxGeom,
   AppFlarmLocation,
   TabDialogStyle,
   AppStatusMessageAlignment,
-  AppInverseInfoBox,
   AppInfoBoxColors,
   AppInfoBoxBorder,
 #ifdef KOBO
@@ -155,6 +155,16 @@ static constexpr StaticEnumChoice infobox_border_list[] = {
   nullptr
 };
 
+static constexpr StaticEnumChoice dark_mode_list[] = {
+  { UISettings::DarkMode::AUTO, N_("Auto"),
+    N_("Use the system-wide setting") },
+  { UISettings::DarkMode::OFF, N_("Off"),
+    N_("Black text on white background") },
+  { UISettings::DarkMode::ON, N_("On"),
+    N_("White text on black background") },
+  nullptr
+};
+
 class LayoutConfigPanel final : public RowFormWidget {
 public:
   LayoutConfigPanel()
@@ -184,6 +194,10 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
   else
     AddDummy();
 
+  AddEnum(_("Dark mode"), nullptr, dark_mode_list,
+          (unsigned)ui_settings.dark_mode);
+  SetExpertRow(DarkMode);
+
   AddEnum(_("InfoBox geometry"),
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
           info_box_geometry_list, (unsigned)ui_settings.info_boxes.geometry);
@@ -200,10 +214,6 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
           popup_msg_position_list,
           (unsigned)ui_settings.popup_message_position);
   SetExpertRow(AppStatusMessageAlignment);
-
-  AddBoolean(_("Inverse InfoBoxes"), _("If true, the InfoBoxes are white on black, otherwise black on white."),
-             ui_settings.info_boxes.inverse);
-  SetExpertRow(AppInverseInfoBox);
 
   if (HasColors()) {
     AddBoolean(_("Colored InfoBoxes"),
@@ -254,6 +264,9 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
     changed |= orientation_changed;
   }
 
+  changed |= SaveValueEnum(DarkMode, ProfileKeys::DarkMode,
+                           ui_settings.dark_mode);
+
   bool info_box_geometry_changed = false;
 
   info_box_geometry_changed |=
@@ -272,14 +285,9 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValueEnum(AppInfoBoxBorder, ProfileKeys::AppInfoBoxBorder,
                            ui_settings.info_boxes.border_style);
 
-  if (SaveValue(AppInverseInfoBox, ProfileKeys::AppInverseInfoBox,
-                ui_settings.info_boxes.inverse))
-    require_restart = changed = true;
-
-  if (HasColors() &&
-      SaveValue(AppInfoBoxColors, ProfileKeys::AppInfoBoxColors,
-                ui_settings.info_boxes.use_colors))
-    require_restart = changed = true;
+  if (HasColors())
+    changed |= SaveValue(AppInfoBoxColors, ProfileKeys::AppInfoBoxColors,
+                         ui_settings.info_boxes.use_colors);
 
 #ifdef KOBO
   if (SaveValue(ShowMenuButton, ProfileKeys::ShowMenuButton,ui_settings.show_menu_button))

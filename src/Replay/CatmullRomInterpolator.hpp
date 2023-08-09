@@ -7,7 +7,6 @@
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
 #include "time/Stamp.hpp"
-#include "util/Clamp.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -161,7 +160,7 @@ private:
     const auto fraction = (time - p[1].time) / (p[2].time - p[1].time);
 
     if (limit_range)
-      return Clamp(fraction, 0., 1.);
+      return std::clamp(fraction, 0., 1.);
     else
       return fraction;
   }

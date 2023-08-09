@@ -17,7 +17,7 @@ struct FormatSettings {
 
   UnitSetting units;
 
-  void SetDefaults() {
+  void SetDefaults() noexcept {
       coordinate_format = CoordinateFormat::DDMMSS;
       units.SetDefaults();
   }

@@ -71,15 +71,12 @@ AirspaceRoute::FirstIntersecting(const RouteLink &e) const noexcept
   AIV visitor(e, projection, rpolars_route);
   m_airspaces.VisitIntersecting(origin, dest, visitor);
   const AIV::AIVResult res(visitor.GetNearest());
-  ++count_airspace;
   return RouteAirspaceIntersection(res.first, res.second);
 }
 
-const AbstractAirspace *
+inline const AbstractAirspace *
 AirspaceRoute::InsideOthers(const AGeoPoint &origin) const noexcept
 {
-  ++count_airspace;
-
   for (const auto &i : m_airspaces.QueryWithinRange(origin, 1))
     return &i.GetAirspace();
 
@@ -89,7 +86,7 @@ AirspaceRoute::InsideOthers(const AGeoPoint &origin) const noexcept
 
 // Node generation utilities
 
-AirspaceRoute::ClearingPair
+inline AirspaceRoute::ClearingPair
 AirspaceRoute::FindClearingPair(const SearchPointVector &spv,
                                 const SearchPointVector::const_iterator start,
                                 const SearchPointVector::const_iterator end,
@@ -115,7 +112,7 @@ AirspaceRoute::FindClearingPair(const SearchPointVector &spv,
         continue;
       }
     } else {
-      AGeoPoint gborder(projection.Unproject(pborder), dest.altitude); // @todo alt!
+      AGeoPoint gborder(i->GetLocation(), pborder.altitude);
       if (!check_others || !InsideOthers(gborder)) {
         if (j == 0) {
           p.first = pborder;
@@ -209,7 +206,7 @@ AirspaceRoute::Synchronise(const Airspaces &master,
   }
 }
 
-void
+inline void
 AirspaceRoute::AddNearbyAirspace(const RouteAirspaceIntersection &inx,
                                  const RouteLink &e) noexcept
 {
@@ -248,27 +245,23 @@ AirspaceRoute::CheckSecondary(const RouteLink &e) noexcept
   return true;
 }
 
-std::optional<RoutePoint>
-AirspaceRoute::CheckClearance(const RouteLink &e) const noexcept
+bool
+AirspaceRoute::IsClear(const RouteLink &e) const noexcept
 {
   m_inx.airspace = nullptr;
 
   // attempt terrain clearance first
 
-  if (auto inp = TerrainRoute::CheckClearance(e))
-    return inp;
+  if (!TerrainRoute::IsClear(e))
+    return false;
 
   if (!rpolars_route.IsAirspaceEnabled())
-    return std::nullopt; // trivial
+    return true; // trivial
 
   // passes terrain, so now check airspace clearance
 
   m_inx = FirstIntersecting(e);
-  if (m_inx.airspace != nullptr)
-    return m_inx.point;
-
-  // made it this far!
-  return std::nullopt;
+  return m_inx.airspace == nullptr;
 }
 
 void

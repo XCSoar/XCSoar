@@ -5,10 +5,11 @@
 
 struct Plane;
 
-void dlgPlanesShowModal();
+void
+dlgPlanesShowModal() noexcept;
 
 bool
-dlgPlaneDetailsShowModal(Plane &plane);
+dlgPlaneDetailsShowModal(Plane &plane) noexcept;
 
 bool
-dlgPlanePolarShowModal(Plane &plane);
+dlgPlanePolarShowModal(Plane &plane) noexcept;

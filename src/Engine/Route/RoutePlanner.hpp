@@ -54,17 +54,26 @@ class GlidePolar;
  */
 class RoutePlanner {
   struct RoutePointHasher {
-    [[gnu::const]]
-    std::size_t operator()(const RoutePoint &p) const noexcept {
+    constexpr std::size_t operator()(const RoutePoint &p) const noexcept {
       return p.x * std::size_t(104729) + p.y;
     }
   };
 
   struct RouteLinkBaseHasher {
-    [[gnu::const]]
-    std::size_t operator()(const RouteLinkBase &l) const noexcept {
+    constexpr std::size_t operator()(const RouteLinkBase &l) const noexcept {
       RoutePointHasher p;
       return p(l.first) * std::size_t(27644437) + p(l.second);
+    }
+  };
+
+  struct RouteLinkBaseEqual {
+    constexpr bool operator()(const RouteLinkBase &a,
+                              const RouteLinkBase &b) const noexcept {
+      /* by casting the AFlatGeoPoint to FlatGeoPoint, we ignore the
+         AFlatGeoPoint::altitude field which is not relevant for
+         #unique_links */
+      return (FlatGeoPoint)a.first == (FlatGeoPoint)b.first &&
+        (FlatGeoPoint)a.second == (FlatGeoPoint)b.second;
     }
   };
 
@@ -92,7 +101,8 @@ private:
    */
   SearchPointVector search_hull;
 
-  typedef std::unordered_set<RouteLinkBase, RouteLinkBaseHasher> RouteLinkSet;
+  typedef std::unordered_set<RouteLinkBase, RouteLinkBaseHasher,
+                             RouteLinkBaseEqual> RouteLinkSet;
 
   /** Links that have been visited during solution */
   RouteLinkSet unique_links{50000};
@@ -108,14 +118,8 @@ private:
   /** Destination at last call to solve() */
   AFlatGeoPoint destination_last;
 
-  mutable unsigned long count_dij;
-  mutable unsigned long count_unique;
-  mutable unsigned long count_supressed;
-
 protected:
   RoutePoint astar_goal;
-  mutable unsigned long count_airspace;
-  mutable unsigned long count_terrain;
 
 public:
   friend class PrintHelper;
@@ -226,30 +230,15 @@ protected:
 
 protected:
   /**
-   * Check a second category of obstacle clearance.  This allows compound
-   * obstacle categories by subclasses.
-   *
-   * @param e Link to attempt
-   *
-   * @return True if path is clear
-   */
-  [[gnu::pure]]
-  virtual bool CheckSecondary([[maybe_unused]] const RouteLink &e) noexcept {
-    return true;
-  }
-
-  /**
    * Check whether a desired link may be flown without intersecting with
-   * any obstacle.  If it does, find also the first location that is clear to
-   * the destination.
+   * any obstacle.
    *
    * @param e Link to attempt
    *
-   * @return std::nullopt if path is clear or clearance point if
-   * intersection occurs
+   * @return true if path is clear
    */
   [[gnu::pure]]
-  virtual std::optional<RoutePoint> CheckClearance(const RouteLink &e) const noexcept = 0;
+  virtual bool IsClear(const RouteLink &e) const noexcept = 0;
 
   /**
    * Given a desired path e, and a clearance point, generate candidates directly

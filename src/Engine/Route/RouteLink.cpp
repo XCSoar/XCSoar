@@ -42,34 +42,23 @@ RouteLink::RouteLink(const RoutePoint& _destination, const RoutePoint& _origin,
 void
 RouteLink::CalcSpeedups(const FlatProjection &proj) noexcept
 {
-  const auto scale = proj.GetApproximateScale();
-  const auto dx = first.x - second.x;
-  const auto dy = first.y - second.y;
-  if (dx == 0 && dy == 0) {
+  const auto delta = GetDelta();
+  if (delta.x == 0 && delta.y == 0) {
     d = 0;
     inv_d = 0;
     polar_index = 0;
     return;
   }
 
-  polar_index = XYToIndex(dx, dy);
-  d = hypot(dx, dy) * scale;
+  polar_index = XYToIndex(delta.x, delta.y);
+  d = hypot(delta.x, delta.y) * proj.GetApproximateScale();
   inv_d = 1. / d;
 }
-
-RouteLink
-RouteLink::Flat() const noexcept
-{
-  RouteLink copy(*this);
-  copy.second.altitude = copy.first.altitude;
-  return copy;
-}
-
-#define ROUTE_MIN_STEP 3
 
 bool
 RouteLinkBase::IsShort() const noexcept
 {
-  return abs(first.x - second.x) < ROUTE_MIN_STEP &&
-         abs(first.y - second.y) < ROUTE_MIN_STEP;
+  constexpr unsigned MIN_STEP = 3;
+  const auto delta = GetDelta();
+  return (unsigned)abs(delta.x) < MIN_STEP && (unsigned)abs(delta.y) < MIN_STEP;
 }

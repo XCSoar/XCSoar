@@ -5,7 +5,7 @@
 #include "Profile/Profile.hpp"
 
 void
-WaypointRendererSettings::LoadFromProfile()
+WaypointRendererSettings::LoadFromProfile() noexcept
 {
   using namespace Profile;
 

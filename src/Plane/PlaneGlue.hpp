@@ -8,10 +8,13 @@ struct ComputerSettings;
 class GlidePolar;
 class ProfileMap;
 
-namespace PlaneGlue
-{
-  void FromProfile(Plane &plane, const ProfileMap &profile);
+namespace PlaneGlue {
 
-  void Synchronize(const Plane &plane, ComputerSettings &settings,
-                   GlidePolar &gp);
-}
+void
+FromProfile(Plane &plane, const ProfileMap &profile) noexcept;
+
+void
+Synchronize(const Plane &plane, ComputerSettings &settings,
+            GlidePolar &gp) noexcept;
+
+} // namespace PlaneGlue

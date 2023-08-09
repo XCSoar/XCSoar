@@ -109,7 +109,6 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
     break;
   }
 
-  map.Get(ProfileKeys::AppInverseInfoBox, settings.inverse);
   map.Get(ProfileKeys::AppInfoBoxColors, settings.use_colors);
 
   map.GetEnum(ProfileKeys::AppInfoBoxBorder, settings.border_style);

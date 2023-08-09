@@ -14,16 +14,15 @@ TaskMinTarget::f(const double p) noexcept
   return (res.time_elapsed - t_remaining).count();
 }
 
-
-bool
-TaskMinTarget::valid([[maybe_unused]] const double tp)
+inline bool
+TaskMinTarget::valid([[maybe_unused]] const double tp) const noexcept
 {
   //  const double ff = f(tp);
   return res.IsOk(); // && (ff>= -tolerance*2);
 }
 
 double
-TaskMinTarget::search(const double tp)
+TaskMinTarget::search(const double tp) noexcept
 {
   if (!tm.has_targets())
     // don't bother if nothing to adjust
@@ -40,8 +39,8 @@ TaskMinTarget::search(const double tp)
   }
 }
 
-void
-TaskMinTarget::set_range(const double p)
+inline void
+TaskMinTarget::set_range(const double p) noexcept
 {
   tm.set_range(p, force_current);
   tp_start.ScanDistanceRemaining(aircraft.location);

@@ -10,10 +10,11 @@
 #include "Polar/PolarGlue.hpp"
 #include "Computer/Settings.hpp"
 #include "system/Path.hpp"
-#include "util/Clamp.hpp"
+
+#include <algorithm> // for std::clamp()
 
 void
-PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile)
+PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile) noexcept
 {
   {
     auto plane_path = profile.GetPath("PlanePath");
@@ -55,7 +56,7 @@ PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile)
 
 void
 PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
-                       GlidePolar &gp)
+                       GlidePolar &gp) noexcept
 {
   settings.contest.handicap = plane.handicap;
 
@@ -81,7 +82,7 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
 
   // set VMax from settings but assure the range [VMin, VMax] is reasonable
   if (plane.max_speed > 0)
-    gp.SetVMax(Clamp(plane.max_speed, gp.GetVMin() + 10, 75.));
+    gp.SetVMax(std::clamp(plane.max_speed, gp.GetVMin() + 10, 75.));
 
   settings.plane.competition_id = plane.competition_id;
   settings.plane.registration = plane.registration;

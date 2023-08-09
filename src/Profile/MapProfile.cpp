@@ -8,7 +8,8 @@
 #include "Map.hpp"
 #include "Keys.hpp"
 #include "MapSettings.hpp"
-#include "util/Clamp.hpp"
+
+#include <algorithm> // for std::clamp()
 
 static bool
 IsValidMapOrientation(unsigned value)
@@ -61,16 +62,17 @@ Profile::Load(const ProfileMap &map, MapSettings &settings)
 
   bool orientation_found = false;
 
-  unsigned Temp = (unsigned)MapOrientation::NORTH_UP;
-  if (map.Get(ProfileKeys::OrientationCircling, Temp)) {
+  if (unsigned Temp = (unsigned)MapOrientation::NORTH_UP;
+      map.Get(ProfileKeys::OrientationCircling, Temp)) {
     orientation_found = true;
 
     if (IsValidMapOrientation(Temp))
       settings.circling_orientation = (MapOrientation)Temp;
   }
 
-  Temp = (unsigned)MapOrientation::NORTH_UP;
-  if (map.Get(ProfileKeys::OrientationCruise, Temp)) {
+  
+  if (unsigned Temp = (unsigned)MapOrientation::NORTH_UP;
+      map.Get(ProfileKeys::OrientationCruise, Temp)) {
     orientation_found = true;
 
     if (IsValidMapOrientation(Temp))
@@ -78,7 +80,7 @@ Profile::Load(const ProfileMap &map, MapSettings &settings)
   }
 
   if (!orientation_found) {
-    Temp = 1;
+    unsigned Temp = 1;
     map.Get(ProfileKeys::DisplayUpValue, Temp);
     switch (Temp) {
     case 0:
@@ -104,12 +106,11 @@ Profile::Load(const ProfileMap &map, MapSettings &settings)
     }
   }
 
-  double tmp;
-  if (map.Get(ProfileKeys::ClimbMapScale, tmp))
-    settings.circling_scale = Clamp(tmp / 10000, 0.0003, 10.);
+  if (double tmp; map.Get(ProfileKeys::ClimbMapScale, tmp))
+    settings.circling_scale = std::clamp(tmp / 10000, 0.0003, 10.);
 
-  if (map.Get(ProfileKeys::CruiseMapScale, tmp))
-    settings.cruise_scale = Clamp(tmp / 10000, 0.0003, 10.);
+  if (double tmp; map.Get(ProfileKeys::CruiseMapScale, tmp))
+    settings.cruise_scale = std::clamp(tmp / 10000, 0.0003, 10.);
 
   map.GetEnum(ProfileKeys::MapShiftBias, settings.map_shift_bias);
   map.Get(ProfileKeys::EnableFLARMMap, settings.show_flarm_on_map);

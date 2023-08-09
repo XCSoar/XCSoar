@@ -20,6 +20,9 @@
 #include "ui/event/Timer.hpp"
 #include "Logger/FlightParser.hpp"
 #include "Language/Language.hpp"
+#include "lib/dbus/Connection.hxx"
+#include "lib/dbus/ScopeMatch.hxx"
+#include "lib/dbus/Systemd.hxx"
 #include "system/Process.hpp"
 #include "io/FileLineReader.hpp"
 #include "util/PrintException.hxx"
@@ -130,29 +133,26 @@ private:
 
 static void
 CalibrateSensors() noexcept
-{
+try {
   /* make sure sensord is stopped while calibrating sensors */
-  static constexpr const char *start_sensord[] = {
-    "/bin/systemctl", "start", "sensord.service", nullptr
-  };
-  static constexpr const char *stop_sensord[] = {
-    "/bin/systemctl", "stop", "sensord.service", nullptr
-  };
+  auto connection = ODBus::Connection::GetSystem();
+  const ODBus::ScopeMatch job_removed_match{connection, Systemd::job_removed_match};
 
-  RunProcessDialog(UIGlobals::GetMainWindow(),
-                   UIGlobals::GetDialogLook(),
-                   "Calibrate Sensors", stop_sensord,
-                   [](int status){
-                     return status == EXIT_SUCCESS ? mrOK : 0;
-                   });
+  bool has_sensord = false;
 
-  AtScopeExit(){
-    RunProcessDialog(UIGlobals::GetMainWindow(),
-                     UIGlobals::GetDialogLook(),
-                     "Calibrate Sensors", start_sensord,
-                     [](int status){
-                       return status == EXIT_SUCCESS ? mrOK : 0;
-                     });
+  if (Systemd::IsUnitActive(connection, "sensord.socket")) {
+    has_sensord = true;
+
+    try {
+      Systemd::StopUnit(connection, "sensord.socket");
+    } catch (...) {
+      std::throw_with_nested(std::runtime_error{"Failed to stop sensord"});
+    }
+  }
+
+  AtScopeExit(&connection, has_sensord){
+    if (has_sensord)
+      Systemd::StartUnit(connection, "sensord.socket");
   };
 
   /* calibrate the sensors */
@@ -202,6 +202,8 @@ CalibrateSensors() noexcept
                        ? RESULT_BOARD_NOT_INITIALISED
                        : 0;
                    });
+} catch (...) {
+  ShowError(std::current_exception(), "Calibrate Sensors");
 }
 
 void

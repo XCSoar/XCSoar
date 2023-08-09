@@ -3,39 +3,44 @@
 
 #include "Math/Screen.hpp"
 #include "Math/Angle.hpp"
-#include "Math/FastMath.hpp"
 #include "FastRotation.hpp"
 #include "ui/dim/Point.hpp"
 #include "ui/dim/BulkPoint.hpp"
 
 #include <algorithm>
 
+[[gnu::const]]
+static PixelPoint
+MultiplyRound(PixelPoint p, double f) noexcept
+{
+  return PixelPoint(lround(p.x * f), lround(p.y * f));
+}
+
 PixelPoint
 ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
-                   const PixelPoint &p3, int offset) noexcept
+                   const PixelPoint &p3, int _offset) noexcept
 {
   const PixelPoint v12 = p2 - p1;
   const PixelPoint v13 = p3 - p1;
 
-  const int mag = v12.MagnitudeSquared();
-  if (mag > 1) {
-    const int mag12 = isqrt4(mag);
+  const double mag12 = DoublePoint2D{v12}.Magnitude();
+  if (mag12 > 1) {
     // projection of v13 along v12 = v12.v13/|v12|
-    int proj = DotProduct(v12, v13) / mag12;
+    double proj = DotProduct(v12, v13) / mag12;
     // fractional distance
-    if (offset > 0) {
+    if (_offset > 0) {
+      const double offset = _offset;
       if (offset * 2 < mag12) {
-        proj = std::max(0, std::min(proj, mag12));
+        proj = std::max(0., std::min(proj, mag12));
         proj = std::max(offset, std::min(mag12 - offset, proj + offset));
       } else {
         proj = mag12 / 2;
       }
     }
 
-    const auto f = std::clamp(double(proj) / mag12, 0., 1.);
+    const auto f = std::clamp(proj / mag12, 0., 1.);
     // location of 'closest' point
-    return PixelPoint(lround(v12.x * f) + p1.x,
-                      lround(v12.y * f) + p1.y);
+    return p1 + MultiplyRound(v12, f);
   } else {
     return p1;
   }

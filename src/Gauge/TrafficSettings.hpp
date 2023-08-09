@@ -27,5 +27,5 @@ struct TrafficSettings {
     CentreBottom,
   } gauge_location;
 
-  void SetDefaults();
+  void SetDefaults() noexcept;
 };

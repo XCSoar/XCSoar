@@ -5,11 +5,15 @@
 
 struct PolarInfo;
 
-namespace PolarGlue
-{
-  PolarInfo GetDefault();
+namespace PolarGlue {
 
-  bool LoadFromProfile(PolarInfo &polar);
+PolarInfo
+GetDefault() noexcept;
 
-  PolarInfo LoadFromProfile();
-}
+bool
+LoadFromProfile(PolarInfo &polar) noexcept;
+
+PolarInfo
+LoadFromProfile() noexcept;
+
+} // namespace PolarGlue

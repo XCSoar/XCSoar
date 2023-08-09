@@ -7,14 +7,14 @@
 #include "Math/ZeroFinder.hpp"
 #include "Math/Quadratic.hpp"
 #include "Math/Util.hpp"
-#include "util/Clamp.hpp"
 #include "Navigation/Aircraft.hpp"
 
 #include <algorithm>
 
 #include <cassert>
 
-GlidePolar::GlidePolar(const double _mc, const double _bugs, const double _ballast)
+GlidePolar::GlidePolar(const double _mc, const double _bugs,
+                       const double _ballast) noexcept
   :mc(_mc),
    bugs(_bugs),
    ballast(_ballast),
@@ -36,7 +36,7 @@ GlidePolar::GlidePolar(const double _mc, const double _bugs, const double _balla
 }
 
 void
-GlidePolar::Update()
+GlidePolar::Update() noexcept
 {
   assert(bugs > 0);
 
@@ -59,7 +59,7 @@ GlidePolar::Update()
 }
 
 void
-GlidePolar::UpdateSMax()
+GlidePolar::UpdateSMax() noexcept
 {
   assert(polar.IsValid());
 
@@ -67,7 +67,7 @@ GlidePolar::UpdateSMax()
 }
 
 void
-GlidePolar::SetBugs(const double clean)
+GlidePolar::SetBugs(const double clean) noexcept
 {
   assert(clean > 0 && clean <= 1);
   bugs = clean;
@@ -75,14 +75,14 @@ GlidePolar::SetBugs(const double clean)
 }
 
 void
-GlidePolar::SetBallast(const double bal)
+GlidePolar::SetBallast(const double bal) noexcept
 {
   assert(bal >= 0);
   SetBallastLitres(bal * ballast_ratio * reference_mass);
 }
 
 void
-GlidePolar::SetBallastLitres(const double litres)
+GlidePolar::SetBallastLitres(const double litres) noexcept
 {
   assert(litres >= 0);
   ballast = litres;
@@ -90,7 +90,7 @@ GlidePolar::SetBallastLitres(const double litres)
 }
 
 void
-GlidePolar::SetMC(const double _mc)
+GlidePolar::SetMC(const double _mc) noexcept
 {
   mc = _mc;
 
@@ -104,13 +104,13 @@ GlidePolar::SetMC(const double _mc)
 }
 
 double
-GlidePolar::MSinkRate(const double V) const
+GlidePolar::MSinkRate(const double V) const noexcept
 {
   return SinkRate(V) + mc;
 }
 
 double
-GlidePolar::SinkRate(const double V) const
+GlidePolar::SinkRate(const double V) const noexcept
 {
   assert(polar.IsValid());
 
@@ -118,7 +118,7 @@ GlidePolar::SinkRate(const double V) const
 }
 
 double
-GlidePolar::SinkRate(const double V, const double n) const
+GlidePolar::SinkRate(const double V, const double n) const noexcept
 {
   const auto w0 = SinkRate(V);
   const auto vl = VbestLD / std::max(VbestLD / 2, V);
@@ -145,7 +145,7 @@ public:
    *
    * @return Initialised object (no search yet)
    */
-  GlidePolarVopt(const GlidePolar &_polar, const double vmin, const double vmax)
+  GlidePolarVopt(const GlidePolar &_polar, const double vmin, const double vmax) noexcept
     :ZeroFinder(vmin, vmax, TOLERANCE_BEST_LD),
      polar(_polar)
   {
@@ -158,14 +158,14 @@ public:
    *
    * @return MacCready-adjusted inverse glide ratio
    */
-  double f(const double V) {
+  double f(const double V) noexcept override {
     return -V/polar.MSinkRate(V);
   }
 };
 #endif
 
 void
-GlidePolar::UpdateBestLD()
+GlidePolar::UpdateBestLD() noexcept
 {
 #if 0
   // this method to be used if polar is not parabolic
@@ -175,7 +175,7 @@ GlidePolar::UpdateBestLD()
   assert(polar.IsValid());
   assert(mc >= 0);
 
-  VbestLD = Clamp(sqrt((polar.c + mc) / polar.a), Vmin, Vmax);
+  VbestLD = std::clamp(sqrt((polar.c + mc) / polar.a), Vmin, Vmax);
   SbestLD = SinkRate(VbestLD);
   bestLD = VbestLD / SbestLD;
 #endif
@@ -199,20 +199,20 @@ public:
    *
    * @return Initialised object (no search yet)
    */
-  GlidePolarMinSink(const GlidePolar &_polar, const double vmax)
+  GlidePolarMinSink(const GlidePolar &_polar, const double vmax) noexcept
     :ZeroFinder(1, vmax, TOLERANCE_MIN_SINK),
      polar(_polar)
   {
   }
 
-  double f(const double V) {
+  double f(const double V) noexcept override {
     return polar.SinkRate(V);
   }
 };
 #endif
 
 void 
-GlidePolar::UpdateSMin()
+GlidePolar::UpdateSMin() noexcept
 {
 #if 0
   // this method to be used if polar is not parabolic
@@ -229,7 +229,7 @@ GlidePolar::UpdateSMin()
 }
 
 bool
-GlidePolar::IsGlidePossible(const GlideState &task) const
+GlidePolar::IsGlidePossible(const GlideState &task) const noexcept
 {
   if (task.altitude_difference <= 0)
     return false;
@@ -303,7 +303,8 @@ public:
 };
 
 double
-GlidePolar::SpeedToFly(const double stf_sink_rate, const double head_wind) const
+GlidePolar::SpeedToFly(const double stf_sink_rate,
+                       const double head_wind) const noexcept
 {
   assert(IsValid());
   GlidePolarSpeedToFly gp_stf(*this, stf_sink_rate, head_wind, Vmin, Vmax);
@@ -312,7 +313,8 @@ GlidePolar::SpeedToFly(const double stf_sink_rate, const double head_wind) const
 
 double
 GlidePolar::SpeedToFly(const AircraftState &state,
-                       const GlideResult &solution, const bool block_stf) const
+                       const GlideResult &solution,
+                       const bool block_stf) const noexcept
 {
   assert(IsValid());
 
@@ -339,13 +341,13 @@ GlidePolar::SpeedToFly(const AircraftState &state,
 }
 
 double
-GlidePolar::GetTotalMass() const
+GlidePolar::GetTotalMass() const noexcept
 {
   return empty_mass + crew_mass + GetBallastLitres();
 }
 
 double
-GlidePolar::GetWingLoading() const
+GlidePolar::GetWingLoading() const noexcept
 {
   if (wing_area > 0)
     return GetTotalMass() / wing_area;
@@ -353,31 +355,21 @@ GlidePolar::GetWingLoading() const
   return 0;
 }
 
-double
-GlidePolar::GetBallastLitres() const
-{
-  return ballast;
-}
-
-bool
-GlidePolar::IsBallastable() const
-{
-  return ballast_ratio > 0;
-}
-
+[[gnu::const]]
 static double
-FRiskFunction(const double x, const double k)
+FRiskFunction(const double x, const double k) noexcept
 {
   return 2 / (1 + exp(-x * k)) - 1;
 }
 
 double
-GlidePolar::GetRiskMC(double height_fraction, const double riskGamma) const
+GlidePolar::GetRiskMC(double height_fraction,
+                      const double riskGamma) const noexcept
 {
   constexpr double low_limit = 0.1;
   constexpr double up_limit = 0.9;
 
-  height_fraction = Clamp(height_fraction, 0., 1.);
+  height_fraction = std::clamp(height_fraction, 0., 1.);
 
   if (riskGamma < low_limit)
     return mc;
@@ -389,7 +381,7 @@ GlidePolar::GetRiskMC(double height_fraction, const double riskGamma) const
 }
 
 double
-GlidePolar::GetBestGlideRatioSpeed(double head_wind) const
+GlidePolar::GetBestGlideRatioSpeed(double head_wind) const noexcept
 {
   assert(polar.IsValid());
 
@@ -403,13 +395,13 @@ GlidePolar::GetBestGlideRatioSpeed(double head_wind) const
 }
 
 double
-GlidePolar::GetVTakeoff() const
+GlidePolar::GetVTakeoff() const noexcept
 {
   return GetVMin() / 2;
 }
 
 double
-GlidePolar::GetLDOverGround(Angle track, SpeedVector wind) const
+GlidePolar::GetLDOverGround(Angle track, SpeedVector wind) const noexcept
 {
   if (wind.IsZero())
     return bestLD;
@@ -430,13 +422,14 @@ GlidePolar::GetLDOverGround(Angle track, SpeedVector wind) const
 }
 
 double
-GlidePolar::GetLDOverGround(const AircraftState &state) const
+GlidePolar::GetLDOverGround(const AircraftState &state) const noexcept
 {
   return GetLDOverGround(state.track, state.wind);
 }
 
 double
-GlidePolar::GetNextLegEqThermal(double current_wind, double next_wind) const
+GlidePolar::GetNextLegEqThermal(double current_wind,
+                                double next_wind) const noexcept
 {
   assert(polar.IsValid());
 
@@ -456,7 +449,7 @@ GlidePolar::GetNextLegEqThermal(double current_wind, double next_wind) const
 }
 
 
-double GlidePolar::GetAverageSpeed() const
+double GlidePolar::GetAverageSpeed() const noexcept
 {
   const double m = GetMC();
   if (m>0) {

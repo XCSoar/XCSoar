@@ -18,7 +18,7 @@
 CrossSectionRenderer::CrossSectionRenderer(const CrossSectionLook &_look,
                                            const AirspaceLook &_airspace_look,
                                            const ChartLook &_chart_look,
-                                           const bool &_inverse)
+                                           const bool _inverse) noexcept
   :inverse(_inverse), look(_look), chart_look(_chart_look),
    airspace_renderer(_airspace_look),
    terrain_renderer(look)

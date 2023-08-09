@@ -4,7 +4,7 @@
 #include "TrafficSettings.hpp"
 
 void
-TrafficSettings::SetDefaults()
+TrafficSettings::SetDefaults() noexcept
 {
   enable_gauge = true;
   auto_close_dialog = false;

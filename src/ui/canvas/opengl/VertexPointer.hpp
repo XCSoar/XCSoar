@@ -5,9 +5,9 @@
 
 #include "ui/opengl/System.hpp"
 #include "ui/opengl/Types.hpp"
+#include "Math/Point2D.hpp"
 #include "Attribute.hpp"
 
-struct FloatPoint2D;
 struct BulkPixelPoint;
 struct ExactPixelPoint;
 

@@ -71,12 +71,11 @@ public:
     return SearchPoint(GeoPoint::Invalid());
   }
 
-  [[gnu::pure]]
-  bool IsValid() const noexcept {
+  constexpr bool IsValid() const noexcept {
     return location.IsValid();
   }
 
-  void SetInvalid() noexcept {
+  constexpr void SetInvalid() noexcept {
     location.SetInvalid();
 #ifndef NDEBUG
     projected = false;
@@ -93,7 +92,7 @@ public:
   /**
    * The actual location
    */
-  const GeoPoint &GetLocation() const noexcept {
+  constexpr const GeoPoint &GetLocation() const noexcept {
     return location;
   }
 
@@ -102,7 +101,7 @@ public:
    *
    * @return Flat projected coordinate
    */
-  const FlatGeoPoint &GetFlatLocation() const noexcept {
+  constexpr const FlatGeoPoint &GetFlatLocation() const noexcept {
     assert(projected);
 
     return flat_location;
@@ -115,8 +114,7 @@ public:
    *
    * @return True if points coincident
    */
-  [[gnu::pure]]
-  bool Equals(const SearchPoint &sp) const noexcept {
+  constexpr bool Equals(const SearchPoint &sp) const noexcept {
     return sp.location == location;
   }
 

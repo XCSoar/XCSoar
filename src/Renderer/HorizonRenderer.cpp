@@ -8,7 +8,6 @@
 #include "NMEA/Attitude.hpp"
 #include "Math/Constants.hpp"
 #include "Math/Util.hpp"
-#include "util/Clamp.hpp"
 
 #include <algorithm>
 
@@ -43,8 +42,7 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     : 0.;
 
   auto cosine_ratio = pitch_degrees / 50;
-  auto alpha = Angle::acos(Clamp(cosine_ratio,
-                                 -1., 1.));
+  auto alpha = Angle::acos(std::clamp(cosine_ratio, -1., 1.));
   auto sphi = Angle::HalfCircle() - Angle::Degrees(bank_degrees);
   auto alpha1 = sphi - alpha;
   auto alpha2 = sphi + alpha;

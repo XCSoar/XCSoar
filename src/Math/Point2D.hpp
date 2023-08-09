@@ -32,13 +32,8 @@ struct Point2D {
     :x(static_cast<scalar_type>(src.x)),
      y(static_cast<scalar_type>(src.y)) {}
 
-  constexpr bool operator==(const Point2D<T, PT> &other) const noexcept {
-    return x == other.x && y == other.y;
-  }
-
-  constexpr bool operator!=(const Point2D<T, PT> &other) const noexcept {
-    return !(*this == other);
-  }
+  constexpr bool operator==(const Point2D<T, PT> &) const noexcept = default;
+  constexpr bool operator!=(const Point2D<T, PT> &) const noexcept = default;
 
   constexpr Point2D<T, PT> operator+(Point2D<T, PT> other) const noexcept {
     return { scalar_type(x + other.x), scalar_type(y + other.y) };
@@ -67,6 +62,11 @@ struct Point2D {
   constexpr product_type MagnitudeSquared() const noexcept {
     return PT(x) * PT(x) + PT(y) * PT(y);
   }
+
+  [[gnu::pure]]
+  double Magnitude() const noexcept {
+    return std::hypot(x, y);
+  }
 };
 
 struct UnsignedPoint2D : Point2D<unsigned> {
@@ -80,30 +80,8 @@ struct UnsignedPoint2D : Point2D<unsigned> {
 static_assert(std::is_trivial<UnsignedPoint2D>::value, "type is not trivial");
 
 using IntPoint2D = Point2D<int>;
-
-struct DoublePoint2D : Point2D<double> {
-  DoublePoint2D() = default;
-  using Point2D::Point2D;
-
-  [[gnu::pure]]
-  double Magnitude() const noexcept {
-    return hypot(x, y);
-  }
-};
-
-static_assert(std::is_trivial<DoublePoint2D>::value, "type is not trivial");
-
-struct FloatPoint2D : Point2D<float> {
-  FloatPoint2D() = default;
-  using Point2D::Point2D;
-
-  [[gnu::pure]]
-  float Magnitude() const noexcept {
-    return hypotf(x, y);
-  }
-};
-
-static_assert(std::is_trivial<FloatPoint2D>::value, "type is not trivial");
+using DoublePoint2D = Point2D<double>;
+using FloatPoint2D = Point2D<float>;
 
 template<typename P>
 concept AnyPoint2D = std::is_base_of_v<Point2D<typename P::scalar_type,

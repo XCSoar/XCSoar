@@ -139,6 +139,15 @@ final class IOIOAgent extends Thread {
       Log.e(TAG, "IOIO connection " + getName() + " incompatible");
       ioio.disconnect();
       return null;
+    } catch (IllegalArgumentException e) {
+      /* called from AccessoryConnectionBootstrap.tryOpen(),
+         UsbManager.openAccessory() can throw
+         IllegalArgumentException("no accessory attached") which seems
+         like the wrong exception type, and this is a workaround for
+         this Android quirk */
+      Log.e(TAG, "IOIO connection " + getName() + " failed: " + e);
+      ioio.disconnect();
+      return null;
     } catch (InterruptedException e) {
       ioio.disconnect();
       return null;

@@ -114,13 +114,13 @@ public:
  */
 template<typename T, typename... Args>
 static inline const T *
-BuildString(T *buffer, size_t size, Args&&... args)
+BuildString(std::span<T> buffer, Args&&... args)
 {
 	static_assert(sizeof...(Args) > 0, "Argument list must be non-empty");
 
-	BasicStringBuilder<T> builder(buffer, size);
+	BasicStringBuilder<T> builder{buffer};
 	builder.Append(std::forward<Args>(args)...);
-	return buffer;
+	return buffer.data();
 }
 
 /**

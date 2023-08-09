@@ -189,13 +189,7 @@ MainWindow::InitialiseConfigured()
   menu_bar = new MenuBar(*this, look->dialog.button);
 
   ReinitialiseLayout_vario(ib_layout);
-
   ReinitialiseLayoutTA(rc, ib_layout);
-
-  WindowStyle hidden_border;
-  hidden_border.Hide();
-  hidden_border.Border();
-
   ReinitialiseLayout_flarm(rc, ib_layout);
 
 #ifdef HAVE_SHOW_MENU_BUTTON
@@ -435,6 +429,33 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
 
   traffic_gauge.Move(rc);
 }
+
+void
+MainWindow::ReinitialiseLook() noexcept
+{
+  const auto &ui_settings = CommonInterface::GetUISettings();
+
+  const InfoBoxLayout::Layout ib_layout =
+    InfoBoxLayout::Calculate(GetClientRect(),
+                             ui_settings.info_boxes.geometry);
+
+  assert(look != nullptr);
+  look->InitialiseConfigured(CommonInterface::GetUISettings(),
+                             Fonts::map, Fonts::map_bold,
+                             ib_layout.control_size.width);
+
+  InfoBoxManager::ScheduleRedraw();
+}
+
+#ifdef ANDROID
+
+void
+MainWindow::OnLook() noexcept
+{
+  ReinitialiseLook();
+}
+
+#endif // ANDROID
 
 void
 MainWindow::Destroy() noexcept

@@ -184,6 +184,16 @@ MainWindow::LoadTerrain() noexcept
 
     terrain_loader->Start(file_cache, path, *terrain_loader_env,
                           terrain_loader_notify);
+  } else if (terrain != nullptr) {
+    /* the map file has been disabled - remove the terrain from all
+       subsystems and dispose the object */
+
+    const ScopeSuspendAllThreads suspend;
+    DataGlobals::UnsetTerrain();
+
+    /* this call is only necessary so the bottom widget that may have
+       been cleared by UnsetTerrain() gets created again */
+    DataGlobals::SetTerrain(nullptr);
   }
 }
 

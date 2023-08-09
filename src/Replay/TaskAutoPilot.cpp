@@ -5,7 +5,8 @@
 #include "TaskAccessor.hpp"
 #include "Task/Stats/ElementStat.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "util/Clamp.hpp"
+
+#include <algorithm> // for std::clamp()
 
 #include <stdlib.h>
 
@@ -180,7 +181,7 @@ TaskAutoPilot::UpdateCruiseBearing(const TaskAccessor& task,
   auto diff = (bearing - heading).AsDelta();
   auto d = diff.Degrees();
   auto max_turn = parms.turn_speed * timestep.count();
-  heading += Angle::Degrees(Clamp(d, -max_turn, max_turn));
+  heading += Angle::Degrees(std::clamp(d, -max_turn, max_turn));
   if (parms.bearing_noise > 0)
     heading += GetHeadingDeviation() * timestep.count();
 

@@ -71,6 +71,7 @@ jobs:
             imagemagick gettext sox \
             zlib1g-dev \
             libfmt-dev \
+            libdbus-1-dev \
             libsodium-dev \
             libfreetype6-dev \
             libpng-dev libjpeg-dev \
@@ -141,6 +142,7 @@ jobs:
             imagemagick gettext sox \
             zlib1g-dev \
             libfmt-dev \
+            libdbus-1-dev \
             libsodium-dev \
             libfreetype6-dev \
             libpng-dev libjpeg-dev \

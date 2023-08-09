@@ -3,10 +3,10 @@
 
 #pragma once
 
-#include "util/Compiler.h"
+#include <cstddef>
+#include <span>
 
 #include <tchar.h>
-#include <cstddef>
 
 struct PixelRect;
 class Menu;
@@ -20,9 +20,9 @@ struct Expanded {
 
 [[gnu::pure]]
 Expanded
-Expand(const TCHAR *text, TCHAR *buffer, size_t size);
+Expand(const TCHAR *text, std::span<TCHAR> buffer) noexcept;
 
 bool
-ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
+ExpandMacros(const TCHAR *In, std::span<TCHAR> dest) noexcept;
 
 } // namespace ButtonLabel

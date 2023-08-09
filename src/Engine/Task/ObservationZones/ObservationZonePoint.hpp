@@ -13,7 +13,7 @@
  * - add arc type for future use
  */
 class ObservationZonePoint : public ObservationZone {
-  GeoPoint reference;
+  const GeoPoint reference;
 
 protected:
   constexpr ObservationZonePoint(const ObservationZonePoint &other,

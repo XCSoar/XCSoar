@@ -14,7 +14,7 @@ struct GeoPoint;
  * Class holding an ObzervationZonePoint, directing calls to it
  */
 class ObservationZoneClient {
-  std::unique_ptr<ObservationZonePoint> oz_point;
+  const std::unique_ptr<ObservationZonePoint> oz_point;
 
 public:
   /**
@@ -22,7 +22,10 @@ public:
    *
    * @param _oz The OZ to store
    */
-  explicit ObservationZoneClient(std::unique_ptr<ObservationZonePoint> _oz_point) noexcept;
+  template<typename T>
+  explicit ObservationZoneClient(T &&_oz_point) noexcept
+    :oz_point(std::forward<T>(_oz_point)) {}
+
   ~ObservationZoneClient() noexcept;
 
   /**
@@ -30,30 +33,31 @@ public:
    *
    * @return Observation zone
    */
-  ObservationZonePoint &GetObservationZone() {
+  ObservationZonePoint &GetObservationZone() noexcept {
     return *oz_point;
   }
 
-  const ObservationZonePoint &GetObservationZone() const {
+  const ObservationZonePoint &GetObservationZone() const noexcept {
     return *oz_point;
   }
 
-  bool IsInSector(const GeoPoint &location) const;
+  bool IsInSector(const GeoPoint &location) const noexcept;
 
   [[gnu::pure]]
-  bool CanStartThroughTop() const;
+  bool CanStartThroughTop() const noexcept;
 
   [[gnu::pure]]
   bool TransitionConstraint(const GeoPoint &location,
-                            const GeoPoint &last_location) const;
+                            const GeoPoint &last_location) const noexcept;
 
   [[gnu::pure]]
-  OZBoundary GetBoundary() const;
-
-  virtual double ScoreAdjustment() const;
-
-  void SetLegs(const TaskPoint *previous, const TaskPoint *next);
+  OZBoundary GetBoundary() const noexcept;
 
   [[gnu::pure]]
-  GeoPoint GetRandomPointInSector(double mag) const;
+  virtual double ScoreAdjustment() const noexcept;
+
+  void SetLegs(const TaskPoint *previous, const TaskPoint *next) noexcept;
+
+  [[gnu::pure]]
+  GeoPoint GetRandomPointInSector(double mag) const noexcept;
 };

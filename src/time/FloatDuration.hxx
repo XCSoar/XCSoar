@@ -12,6 +12,7 @@
  */
 using FloatDuration = std::chrono::duration<double>;
 
+[[gnu::const]]
 static inline FloatDuration
 fdim(FloatDuration a, FloatDuration b) noexcept
 {

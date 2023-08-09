@@ -16,11 +16,12 @@
 #include "Profile/Profile.hpp"
 #include "Profile/Keys.hpp"
 #include "Math/Constants.hpp"
-#include "util/Clamp.hpp"
 
 extern "C" {
 #include <lauxlib.h>
 }
+
+#include <algorithm> // for std::clamp()
 
 static int
 l_map_index(lua_State *L)
@@ -180,7 +181,7 @@ l_map_zoom(lua_State *L)
     ? scale_100m
     : std::max(scale_100m, scale_2min_distance);
 
-  value = Clamp(value, minreasonable, scale_1600km);
+  value = std::clamp(value, minreasonable, scale_1600km);
   map_window->SetMapScale(value);
   map_window->QuickRedraw();
 

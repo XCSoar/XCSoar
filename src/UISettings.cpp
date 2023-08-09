@@ -4,7 +4,7 @@
 #include "UISettings.hpp"
 
 void
-UISettings::SetDefaults()
+UISettings::SetDefaults() noexcept
 {
   display.SetDefaults();
 
@@ -23,6 +23,8 @@ UISettings::SetDefaults()
   haptic_feedback = HapticFeedback::DEFAULT;
 
   show_menu_button = true;
+
+  dark_mode = DarkMode::AUTO;
 
   format.SetDefaults();
   map.SetDefaults();

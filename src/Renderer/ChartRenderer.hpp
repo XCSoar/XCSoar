@@ -13,7 +13,6 @@
 
 #include <tchar.h>
 
-struct DoublePoint2D;
 class XYDataStore;
 class LeastSquares;
 class Canvas;

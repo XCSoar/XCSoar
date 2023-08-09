@@ -44,13 +44,13 @@ struct StartConstraints {
   bool fai_finish;
 
   /**
-   * Wait time in minutes after Pilot Event (PEV) and start gate open time.
+   * Wait duration after Pilot Event (PEV) and start gate open time.
    */
   std::chrono::duration<unsigned> pev_start_wait_time;
 
   /**
-   * Time in minutes start gate remains open after Pilot Event and PEV Wait
-   * Time.
+   * Duration the start gate remains open after Pilot Event and
+   * #pev_start_wait_time.
    */
   std::chrono::duration<unsigned> pev_start_window;
 

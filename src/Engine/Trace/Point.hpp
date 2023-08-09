@@ -79,50 +79,49 @@ public:
    */
   explicit TracePoint(const AircraftState &state);
 
-  [[gnu::const]]
-  static TracePoint Invalid() {
+  static constexpr TracePoint Invalid() noexcept {
     TracePoint point;
     point.Clear();
     ((SearchPoint &)point).SetInvalid();
     return point;
   }
 
-  void Clear() {
+  constexpr void Clear() noexcept {
     time = INVALID_TIME;
   }
 
-  bool IsDefined() const {
+  constexpr bool IsDefined() const noexcept {
     return time != INVALID_TIME;
   }
 
-  Time GetTime() const noexcept {
+  constexpr Time GetTime() const noexcept {
     return time;
   }
 
-  bool IsOlderThan(const TracePoint &other) const {
+  constexpr bool IsOlderThan(const TracePoint &other) const noexcept {
     return time < other.time;
   }
 
-  bool IsNewerThan(const TracePoint &other) const {
+  constexpr bool IsNewerThan(const TracePoint &other) const noexcept {
     return time > other.time;
   }
 
-  Time DeltaTime(const TracePoint &previous) const {
+  constexpr Time DeltaTime(const TracePoint &previous) const noexcept {
     assert(!IsOlderThan(previous));
 
     return time - previous.time;
   }
 
-  double CalculateDrift(TimeStamp now) const noexcept {
+  constexpr double CalculateDrift(TimeStamp now) const noexcept {
     const double dt = (now.ToDuration() - std::chrono::duration_cast<FloatDuration>(time)).count();
     return dt * drift_factor / 256;
   }
 
-  double GetAltitude() const {
+  constexpr double GetAltitude() const {
     return altitude;
   }
 
-  unsigned GetEngineNoiseLevel() const {
+  constexpr unsigned GetEngineNoiseLevel() const {
     return engine_noise_level;
   }
 
@@ -130,11 +129,11 @@ public:
    * Returns the altitude as an integer.  Some calculations may not
    * need the fractional part.
    */
-  int GetIntegerAltitude() const {
+  constexpr int GetIntegerAltitude() const noexcept {
     return (int)altitude;
   }
 
-  double GetVario() const {
+  constexpr double GetVario() const noexcept {
     return vario;
   }
 };

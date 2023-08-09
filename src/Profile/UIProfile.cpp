@@ -131,6 +131,15 @@ Profile::Load(const ProfileMap &map, UISettings &settings)
 
   map.Get(ProfileKeys::ShowMenuButton, settings.show_menu_button);
 
+  if (!map.GetEnum(ProfileKeys::DarkMode, settings.dark_mode)) {
+    /* migrate the old AppInverseInfoBox setting */
+    bool inverse;
+    if (map.Get(ProfileKeys::AppInverseInfoBox, inverse))
+      settings.dark_mode = inverse
+        ? UISettings::DarkMode::ON
+        : UISettings::DarkMode::OFF;
+  }
+
   Load(map, settings.format);
   Load(map, settings.map);
   Load(map, settings.info_boxes);

@@ -25,7 +25,7 @@ public:
    * @param from Origin of ray
    * @param to End point of ray
    */
-  FlatRay(const FlatGeoPoint& from, const FlatGeoPoint& to)
+  constexpr FlatRay(const FlatGeoPoint &from, const FlatGeoPoint &to) noexcept
     :point(from), vector(to - from),
      fx(vector.x != 0 ? 1.0 / vector.x : 0),
      fy(vector.y != 0 ? 1.0 / vector.y : 0) {}
@@ -34,7 +34,7 @@ public:
    * Return the length of the ray.
    */
   [[gnu::pure]]
-  int Magnitude() const;
+  int Magnitude() const noexcept;
 
   /**
    * Test whether two rays intersect
@@ -44,7 +44,7 @@ public:
    * @return Parameter [0,1] of vector on this ray that intersection occurs (or -1 if fail)
    */
   [[gnu::pure]]
-  double Intersects(const FlatRay &that) const;
+  double Intersects(const FlatRay &that) const noexcept;
 
   /**
    * Parametric form of ray
@@ -54,13 +54,13 @@ public:
    * @return Location of end point
    */
   [[gnu::pure]]
-  FlatGeoPoint Parametric(const double t) const;
+  FlatGeoPoint Parametric(double t) const noexcept;
 
   /**
    * Determine if two rays intersect away from their nodes
    */
   [[gnu::pure]]
-  bool IntersectsDistinct(const FlatRay& that) const;
+  bool IntersectsDistinct(const FlatRay &that) const noexcept;
 
   /**
    * Determine if two rays intersect away from their nodes, and return
@@ -68,9 +68,15 @@ public:
    * intersect.
    */
   [[gnu::pure]]
-  double DistinctIntersection(const FlatRay& that) const;
+  double DistinctIntersection(const FlatRay &that) const noexcept;
 
 private:
+  /**
+   * Checks whether two lines intersect or not
+   *
+   * @see http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
+   * adapted from line_line_intersection
+   */
   [[gnu::pure]]
-  std::pair<int, int> IntersectsRatio(const FlatRay &that) const;
+  std::pair<int, int> IntersectsRatio(const FlatRay &that) const noexcept;
 };

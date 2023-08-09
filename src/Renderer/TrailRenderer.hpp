@@ -33,21 +33,21 @@ class TrailRenderer {
   AllocatedArray<BulkPixelPoint> points;
 
 public:
-  TrailRenderer(const TrailLook &_look):look(_look) {}
+  TrailRenderer(const TrailLook &_look) noexcept:look(_look) {}
 
   /**
    * Load the full trace into this object.
    */
-  bool LoadTrace(const TraceComputer &trace_computer);
+  bool LoadTrace(const TraceComputer &trace_computer) noexcept;
 
   /**
    * Load a filtered trace into this object.
    */
   bool LoadTrace(const TraceComputer &trace_computer,
                  TimeStamp min_time,
-                 const WindowProjection &projection);
+                 const WindowProjection &projection) noexcept;
 
-  void ScanBounds(GeoBounds &bounds) const {
+  void ScanBounds(GeoBounds &bounds) const noexcept {
     trace.ScanBounds(bounds);
   }
 
@@ -55,37 +55,38 @@ public:
             const WindowProjection &projection,
             TimeStamp min_time,
             bool enable_traildrift, PixelPoint pos, const NMEAInfo &basic,
-            const DerivedInfo &calculated, const TrailSettings &settings);
+            const DerivedInfo &calculated,
+            const TrailSettings &settings) noexcept;
 
   /**
    * Draw the trace that was obtained by LoadTrace() with the trace pen.
    */
-  void Draw(Canvas &canvas, const WindowProjection &projection);
+  void Draw(Canvas &canvas, const WindowProjection &projection) noexcept;
 
   void Draw(Canvas &canvas, const TraceComputer &trace_computer,
             const WindowProjection &projection,
             TimeStamp min_time={}) noexcept;
 
   [[gnu::malloc]]
-  BulkPixelPoint *Prepare(unsigned n);
+  BulkPixelPoint *Prepare(unsigned n) noexcept;
 
-  void DrawPreparedPolyline(Canvas &canvas, unsigned n);
-  void DrawPreparedPolygon(Canvas &canvas, unsigned n);
+  void DrawPreparedPolyline(Canvas &canvas, unsigned n) noexcept;
+  void DrawPreparedPolygon(Canvas &canvas, unsigned n) noexcept;
 
   /**
    * Draw a ContestTraceVector.  The caller must select a Pen.
    */
   void DrawTraceVector(Canvas &canvas, const Projection &projection,
-                       const ContestTraceVector &trace);
+                       const ContestTraceVector &trace) noexcept;
 
   /**
    * Draw a triangle described by trace index 1..3; expected trace
    * size is 5 (0=start, 4=finish).
    */
   void DrawTriangle(Canvas &canvas, const Projection &projection,
-                    const ContestTraceVector &trace);
+                    const ContestTraceVector &trace) noexcept;
 
 private:
   void DrawTraceVector(Canvas &canvas, const Projection &projection,
-                       const TracePointVector &trace);
+                       const TracePointVector &trace) noexcept;
 };

@@ -8,6 +8,8 @@
 #include "Flat/FlatRay.hpp"
 #include "Flat/FlatBoundingBox.hpp"
 
+#include <limits.h> // for UINT_MAX
+
 bool
 SearchPointVector::PruneInterior() noexcept
 {
@@ -79,7 +81,7 @@ static FlatGeoPoint
 NearestPointNonConvex(const SearchPointVector &spv,
                       const FlatGeoPoint &p3) noexcept
 {
-  unsigned distance_min = 0-1;
+  unsigned distance_min = UINT_MAX;
   FlatGeoPoint point_best;
 
   for (auto i = spv.begin(); i!= spv.end(); ++i) {

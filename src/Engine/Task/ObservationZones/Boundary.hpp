@@ -21,5 +21,5 @@ public:
    * @param end_radial The most CW portion of the arc - radians.
    */
   void GenerateArcExcluding(const GeoPoint &center, double radius,
-                            Angle start_radial, Angle end_radial);
+                            Angle start_radial, Angle end_radial) noexcept;
 };

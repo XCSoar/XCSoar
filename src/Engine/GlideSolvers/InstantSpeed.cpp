@@ -13,7 +13,7 @@
 double
 GlideResult::InstantSpeed(const AircraftState& aircraft,
                           const GlideResult& leg,
-                          const GlidePolar& glide_polar)
+                          const GlidePolar& glide_polar) const noexcept
 {
   // projection of ground speed to target
   const double v_a = (leg.vector.bearing-aircraft.track).cos() * aircraft.ground_speed;

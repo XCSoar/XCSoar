@@ -8,6 +8,7 @@ namespace ProfileKeys {
 constexpr char FullScreen[] = "FullScreen";
 constexpr char UIScale[] = "UIScale";
 constexpr char CustomDPI[] = "CustomDPI";
+constexpr char DarkMode[] = "DarkMode";
 constexpr char Password[] = "Password";
 constexpr char AirspaceWarning[] = "AirspaceWarn";
 constexpr char AirspaceWarningDialog[] = "AirspaceWarnDialog";
@@ -104,7 +105,10 @@ constexpr char AppIndLandable[] = "AppIndLandable";
 constexpr char AppUseSWLandablesRendering[] = "AppUseSWLandablesRendering";
 constexpr char AppLandableRenderingScale[] = "AppLandableRenderingScale";
 constexpr char AppScaleRunwayLength[] = "AppScaleRunwayLength";
+
+/** deprecated, use #DarkMode */
 constexpr char AppInverseInfoBox[] = "AppInverseInfoBox";
+
 constexpr char AppGaugeVarioSpeedToFly[] = "AppGaugeVarioSpeedToFly";
 constexpr char AppGaugeVarioAvgText[] = "AppGaugeVarioAvgText";
 constexpr char AppGaugeVarioMc[] = "AppGaugeVarioMc";

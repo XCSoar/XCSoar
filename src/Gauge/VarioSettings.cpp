@@ -4,7 +4,7 @@
 #include "VarioSettings.hpp"
 
 void
-VarioSettings::SetDefaults()
+VarioSettings::SetDefaults() noexcept
 {
   show_average = false;
   show_mc = false;

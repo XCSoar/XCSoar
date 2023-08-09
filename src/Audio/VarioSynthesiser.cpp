@@ -3,10 +3,8 @@
 
 #include "VarioSynthesiser.hpp"
 #include "Math/FastMath.hpp"
-#include "util/Clamp.hpp"
 
 #include <algorithm>
-
 #include <cassert>
 
 /**
@@ -28,7 +26,7 @@ VarioSynthesiser::SetVario(double vario)
 {
   const std::lock_guard lock{mutex};
 
-  const int ivario = Clamp((int)(vario * 100), min_vario, max_vario);
+  const int ivario = std::clamp((int)(vario * 100), min_vario, max_vario);
 
   if (dead_band_enabled && InDeadBand(ivario)) {
     /* inside the "dead band" */

@@ -49,9 +49,9 @@ private:
   /** ActiveState determined from ScanActive() */
   ActiveState active_state;
 
-  OrderedTaskPoint* tp_next;
-  OrderedTaskPoint* tp_previous;
-  FlatBoundingBox flat_bb;
+  OrderedTaskPoint *tp_next = nullptr;
+  OrderedTaskPoint *tp_previous = nullptr;
+  FlatBoundingBox flat_bb{}; // empty, not initialised
 
 public:
   /**

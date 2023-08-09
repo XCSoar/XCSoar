@@ -127,6 +127,7 @@ The following command installs these on Debian::
 
   sudo apt-get install make g++  zlib1g-dev \
       libfmt-dev \
+      libdbus-1-dev \
       libsodium-dev \
       libfreetype6-dev \
       libpng-dev libjpeg-dev \
@@ -175,7 +176,6 @@ On Debian::
   sudo apt-get install
       default-jdk-headless \
       vorbis-tools \
-      sqlite3 \
       adb
 
 The required Android SDK components are:

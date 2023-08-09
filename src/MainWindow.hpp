@@ -228,6 +228,12 @@ public:
   void ReinitialiseLayout() noexcept;
 
   /**
+   * Reinitialise the #Look after relevant #UISettings have been
+   * changed.
+   */
+  void ReinitialiseLook() noexcept;
+
+  /**
    * Suspend threads that are owned by this object.
    */
   void SuspendThreads() noexcept;
@@ -397,5 +403,9 @@ protected:
   void OnPaint(Canvas &canvas) noexcept override;
 
   /* virtual methods from class TopWindow */
-  virtual bool OnClose() noexcept override;
+  bool OnClose() noexcept override;
+
+#ifdef ANDROID
+  void OnLook() noexcept override;
+#endif
 };

@@ -257,6 +257,10 @@ TopWindow::OnEvent(const Event &event)
     screen->Flip();
     return true;
 
+  case Event::LOOK:
+    OnLook();
+    return true;
+
   case Event::SURFACE:
     OnSurface();
     return true;

@@ -7,7 +7,8 @@
 #include "Look/Look.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
-#include "util/Clamp.hpp"
+
+#include <algorithm> // for std::clamp()
 
 void
 CrossSectionWidget::Update(const MoreData &basic,
@@ -24,8 +25,8 @@ CrossSectionWidget::Update(const MoreData &basic,
   if (basic.location_available && basic.track_available) {
     w.SetStart(basic.location);
     w.SetDirection(basic.track);
-    w.SetRange(Clamp(double(w.GetSize().width) / settings.cruise_scale,
-                     5000., 200000.));
+    w.SetRange(std::clamp(double(w.GetSize().width) / settings.cruise_scale,
+                          5000., 200000.));
   } else
     w.SetInvalid();
 

@@ -10,14 +10,14 @@
 using namespace InfoBoxFactory;
 
 void
-InfoBoxSettings::Panel::Clear()
+InfoBoxSettings::Panel::Clear() noexcept
 {
   name.clear();
   std::fill_n(contents, MAX_CONTENTS, InfoBoxFactory::MIN_TYPE_VAL);
 }
 
 bool
-InfoBoxSettings::Panel::IsEmpty() const
+InfoBoxSettings::Panel::IsEmpty() const noexcept
 {
   for (unsigned i = 0; i < MAX_CONTENTS; ++i)
     if (contents[i] != 0)
@@ -27,13 +27,12 @@ InfoBoxSettings::Panel::IsEmpty() const
 }
 
 void
-InfoBoxSettings::SetDefaults()
+InfoBoxSettings::SetDefaults() noexcept
 {
   use_final_glide = false;
 
   geometry = Geometry::SPLIT_8;
 
-  inverse = false;
   use_colors = true;
   border_style = BorderStyle::SHADED;
 

@@ -4,7 +4,7 @@
 #include "AATPoint.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
 #include "Geo/Flat/FlatLine.hpp"
-#include "util/Clamp.hpp"
+#include "util/Compiler.h"
 
 const GeoPoint &
 AATPoint::GetLocationRemaining() const noexcept
@@ -38,8 +38,8 @@ AATPoint::UpdateSampleFar(const AircraftState &state,
     CheckTarget(state, true);
 }
 
-bool
-AATPoint::CheckTarget(const AircraftState &state, const bool known_outside)
+inline bool
+AATPoint::CheckTarget(const AircraftState &state, const bool known_outside) noexcept
 {
   if (IsCurrent() && target_locked)
     return false;
@@ -54,7 +54,8 @@ AATPoint::CheckTarget(const AircraftState &state, const bool known_outside)
 }
 
 bool
-AATPoint::IsCloseToTarget(const AircraftState& state, const double threshold) const
+AATPoint::IsCloseToTarget(const AircraftState &state,
+                          const double threshold) const noexcept
 {
   if (!valid())
     return false;
@@ -63,8 +64,8 @@ AATPoint::IsCloseToTarget(const AircraftState& state, const double threshold) co
     - DoubleLegDistance(target_location) > -threshold;
 }
 
-bool
-AATPoint::CheckTargetInside(const AircraftState& state)
+inline bool
+AATPoint::CheckTargetInside(const AircraftState &state) noexcept
 {
   /* target must be moved if d(p_last,t)+d(t,p_next) <
      d(p_last,state)+d(state,p_next) */
@@ -80,14 +81,14 @@ AATPoint::CheckTargetInside(const AircraftState& state)
   return true;
 }
 
-bool
-AATPoint::CheckTargetOutside([[maybe_unused]] const AircraftState& state)
+inline bool
+AATPoint::CheckTargetOutside([[maybe_unused]] const AircraftState &state) noexcept
 {
   return false;
 }
 
 bool
-AATPoint::SetRange(const double p, const bool force_if_current)
+AATPoint::SetRange(const double p, const bool force_if_current) noexcept
 {
   if (target_locked)
     return false;
@@ -113,14 +114,14 @@ AATPoint::SetRange(const double p, const bool force_if_current)
 }
 
 void
-AATPoint::SetTarget(const GeoPoint &loc, const bool override_lock)
+AATPoint::SetTarget(const GeoPoint &loc, const bool override_lock) noexcept
 {
   if (override_lock || !target_locked)
     target_location = loc;
 }
 
 void
-AATPoint::SetTarget(RangeAndRadial rar, const FlatProjection &proj)
+AATPoint::SetTarget(RangeAndRadial rar, const FlatProjection &proj) noexcept
 {
   const auto fprev =
     proj.ProjectFloat(GetPrevious()->GetLocationRemaining());
@@ -133,9 +134,8 @@ AATPoint::SetTarget(RangeAndRadial rar, const FlatProjection &proj)
   const auto radius = fradius.GetDistance() * fabs(rar.range);
 
   const auto angle = rar.radial - flb.GetAngle();
-
-  const FlatPoint ftarget1(radius * angle.cos(),
-                           radius * -(angle).sin());
+  const auto [angle_sin, angle_cos] = angle.SinCos();
+  const FlatPoint ftarget1{radius * angle_cos, radius * -angle_sin};
 
   const auto ftarget2 = floc + ftarget1;
   const auto targetG = proj.Unproject(ftarget2);
@@ -144,7 +144,7 @@ AATPoint::SetTarget(RangeAndRadial rar, const FlatProjection &proj)
 }
 
 RangeAndRadial
-AATPoint::GetTargetRangeRadial(double oldrange) const
+AATPoint::GetTargetRangeRadial(double oldrange) const noexcept
 {
   const auto fprev = GetPrevious()->GetLocationRemaining();
   const auto floc = GetLocation();
@@ -159,7 +159,7 @@ AATPoint::GetTargetRangeRadial(double oldrange) const
   const auto radius = d < 0
     ? floc.Distance(GetLocationMin())
     : floc.Distance(GetLocationMax());
-  const auto range = Clamp(d / radius, -1., 1.);
+  const auto range = std::clamp(d / radius, -1., 1.);
 
   if (oldrange == 0 && range == 0)
     radial = Angle::Zero();

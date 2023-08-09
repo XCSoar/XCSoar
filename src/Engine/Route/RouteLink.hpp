@@ -24,16 +24,7 @@ struct RouteLinkBase {
                           const RoutePoint _origin) noexcept
     :first(_dest), second(_origin) {}
 
-  /**
-   * Equality comparison operator
-   *
-   * @param o object to compare to
-   *
-   * @return true if origins and destinations are equal
-   */
-  constexpr bool operator==(const RouteLinkBase o) const noexcept {
-    return (first == o.first) && (second == o.second);
-  }
+  constexpr bool operator==(const RouteLinkBase &) const noexcept = default;
 
   /**
    * Return 2d Distance of this link
@@ -78,7 +69,6 @@ struct RouteLinkBase {
     return o.GetDelta().CrossProduct(GetDelta());
   }
 
-private:
   constexpr FlatGeoPoint GetDelta() const noexcept {
     return FlatGeoPoint(second) - FlatGeoPoint(first);
   }
@@ -101,15 +91,6 @@ public:
   RouteLink(const RouteLinkBase &link, const FlatProjection &proj) noexcept;
   RouteLink(const RoutePoint &_first, const RoutePoint &_second,
             const FlatProjection &proj) noexcept;
-
-  /**
-   * Generate RouteLink projected flat such that the destination altitude equals
-   * the start altitude.  The start altitude is unaffected.
-   *
-   * @return link equivalent to this link flattened
-   */
-  [[gnu::pure]]
-  RouteLink Flat() const noexcept;
 
 private:
   void CalcSpeedups(const FlatProjection &proj) noexcept;

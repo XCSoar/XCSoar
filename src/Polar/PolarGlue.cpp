@@ -16,14 +16,14 @@
 #include <memory>
 
 PolarInfo
-PolarGlue::GetDefault()
+PolarGlue::GetDefault() noexcept
 {
   // Return LS8 polar
   return PolarStore::GetDefault().ToPolarInfo();
 }
 
 bool
-PolarGlue::LoadFromProfile(PolarInfo &polar)
+PolarGlue::LoadFromProfile(PolarInfo &polar) noexcept
 {
   const char *polar_string = Profile::Get(ProfileKeys::Polar);
   if (polar_string != nullptr && !StringIsEmpty(polar_string) &&
@@ -35,7 +35,7 @@ PolarGlue::LoadFromProfile(PolarInfo &polar)
 }
 
 PolarInfo
-PolarGlue::LoadFromProfile()
+PolarGlue::LoadFromProfile() noexcept
 {
   PolarInfo polar;
   if (!LoadFromProfile(polar) || !polar.IsValid()) {

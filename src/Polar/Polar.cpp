@@ -5,7 +5,7 @@
 #include "Engine/GlideSolvers/PolarCoefficients.hpp"
 
 PolarCoefficients
-PolarInfo::CalculateCoefficients() const
+PolarInfo::CalculateCoefficients() const noexcept
 {
   return shape.CalculateCoefficients();
 }

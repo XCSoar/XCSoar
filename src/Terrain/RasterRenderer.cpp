@@ -4,7 +4,6 @@
 #include "Terrain/RasterRenderer.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Math/Constants.hpp"
-#include "util/Clamp.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/canvas/Ramp.hpp"
 #include "ui/canvas/Color.hpp"
@@ -13,6 +12,7 @@
 #include "Projection/WindowProjection.hpp"
 #include "ui/event/Idle.hpp"
 
+#include <algorithm> // for std::clamp()
 #include <cassert>
 #include <cstdint>
 
@@ -256,7 +256,7 @@ RasterRenderer::GenerateUnshadedImage(const unsigned height_scale,
 static constexpr int
 ClipHeightDelta(int d) noexcept
 {
-  return Clamp(d, -512, 512);
+  return std::clamp(d, -512, 512);
 }
 
 static constexpr int
@@ -282,12 +282,12 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
     .WithPadding(quantisation_effective);
 
   const unsigned height_slope_factor =
-    Clamp((unsigned)pixel_size, 1u,
-          /* this upper limit avoids integer overflows in the "mag"
-             formula; it effectively limits "dd2" so calculating its
-             square will not overflow */
-          8192u / (quantisation_effective * quantisation_effective));
-
+    std::clamp((unsigned)pixel_size, 1u,
+               /* this upper limit avoids integer overflows in the
+                  "mag" formula; it effectively limits "dd2" so
+                  calculating its square will not overflow */
+               8192u / (quantisation_effective * quantisation_effective));
+  
   const auto *src = height_matrix.GetData();
   const RawColor *oColorBuf = color_table + 64 * 256;
 
@@ -384,7 +384,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
         /* TODO: debug this problem and replace this workaround */
         const int sval = num / int(mag|1);
         const int sindex = (sval - sz) * contrast / 128;
-        *p++ = oColorBuf[int(h) + 256 * Clamp(sindex, -63, 63)];
+        *p++ = oColorBuf[int(h) + 256 * std::clamp(sindex, -63, 63)];
       } else if (e.IsWater()) {
         // we're in the water, so look up the color for water
         *p++ = oColorBuf[255];

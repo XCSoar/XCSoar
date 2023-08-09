@@ -1,7 +1,13 @@
-Index: tiff-4.4.0/libtiff-4.pc.in
-===================================================================
---- tiff-4.4.0.orig/libtiff-4.pc.in
-+++ tiff-4.4.0/libtiff-4.pc.in
+commit 3b9c6e16c1782add7f98fe582217e31e9296fe76
+Author: Max Kellermann <max.kellermann@gmail.com>
+Date:   Tue May 30 16:31:56 2023 +0200
+
+    libtiff-4.pc.in: add "-lm"
+
+diff --git a/libtiff-4.pc.in b/libtiff-4.pc.in
+index 92305ac5..24f40bac 100644
+--- a/libtiff-4.pc.in
++++ b/libtiff-4.pc.in
 @@ -6,7 +6,7 @@ includedir=@includedir@
  Name: libtiff
  Description:  Tag Image File Format (TIFF) library.

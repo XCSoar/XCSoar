@@ -4,7 +4,8 @@
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Border.hpp"
 #include "util/Macros.hpp"
-#include "util/Clamp.hpp"
+
+#include <algorithm> // for std::clamp()
 
 static constexpr double CONTROLHEIGHTRATIO = 7.4;
 
@@ -517,18 +518,18 @@ static constexpr unsigned
 CalculateInfoBoxRowHeight(unsigned screen_height,
                           unsigned control_width) noexcept
 {
-  return Clamp(unsigned(screen_height / CONTROLHEIGHTRATIO),
-               control_width * 5 / 7,
-               control_width);
+  return std::clamp(unsigned(screen_height / CONTROLHEIGHTRATIO),
+                    control_width * 5 / 7,
+                    control_width);
 }
 
 static constexpr unsigned
 CalculateInfoBoxColumnWidth(unsigned screen_width,
                             unsigned control_height) noexcept
 {
-  return Clamp(unsigned(screen_width / CONTROLHEIGHTRATIO * 1.3),
-               control_height,
-               control_height * 7 / 5);
+  return std::clamp(unsigned(screen_width / CONTROLHEIGHTRATIO * 1.3),
+                    control_height,
+                    control_height * 7 / 5);
 }
 
 void

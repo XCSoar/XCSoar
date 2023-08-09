@@ -69,13 +69,16 @@ TerrainRoute::Intersection(const AGeoPoint &origin,
   return rpolars_route.Intersection(origin, destination, terrain, proj);
 }
 
-std::optional<RoutePoint>
-TerrainRoute::CheckClearance(const RouteLink &e) const noexcept
+bool
+TerrainRoute::IsClear(const RouteLink &e) const noexcept
 {
-  auto inp = CheckClearanceTerrain(e);
+  if (terrain == nullptr || !terrain->IsDefined())
+    return true;
+
+  auto inp = rpolars_route.CheckClearance(e, *terrain, projection);
   if (inp)
     m_inx_terrain = *inp;
-  return inp;
+  return !inp;
 }
 
 void
@@ -88,16 +91,6 @@ TerrainRoute::AddNearby(const RouteLink &e) noexcept
   add_edges loop: only add edges in links originating from the node?
   - or do shortcut checks at end of add_edges loop
 */
-
-inline std::optional<RoutePoint>
-TerrainRoute::CheckClearanceTerrain(const RouteLink &e) const noexcept
-{
-  if (!terrain || !terrain->IsDefined())
-    return std::nullopt;
-
-  count_terrain++;
-  return rpolars_route.CheckClearance(e, *terrain, projection);
-}
 
 void
 TerrainRoute::AddNearbyTerrainSweep(const RoutePoint &p,

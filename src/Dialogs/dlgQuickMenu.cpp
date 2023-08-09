@@ -14,7 +14,6 @@
 #include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "util/StaticString.hxx"
-#include "util/Macros.hpp"
 #include "Menu/ButtonLabel.hpp"
 #include "Menu/MenuData.hpp"
 #include "UIGlobals.hpp"
@@ -152,7 +151,7 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 
     TCHAR buffer[100];
     const auto expanded =
-      ButtonLabel::Expand(menuItem.label, buffer, ARRAY_SIZE(buffer));
+      ButtonLabel::Expand(menuItem.label, std::span{buffer});
     if (!expanded.visible)
       continue;
 

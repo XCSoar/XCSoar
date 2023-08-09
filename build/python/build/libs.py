@@ -133,9 +133,9 @@ openssh = AutotoolsProject(
 )
 
 libfmt = CmakeProject(
-    'https://github.com/fmtlib/fmt/archive/9.1.0.tar.gz',
-    'https://github.com/fmtlib/fmt/archive/9.1.0.tar.gz',
-    '5dea48d1fcddc3ec571ce2058e13910a0d4a6bab4cc09a809d8b1dd1c88ae6f2',
+    'https://github.com/fmtlib/fmt/archive/10.0.0.tar.gz',
+    'https://github.com/fmtlib/fmt/archive/10.0.0.tar.gz',
+    'ede1b6b42188163a3f2e0f25ad5c0637eca564bd8df74d02e31a311dd6b37ad8',
     'lib/libfmt.a',
     [
         '-DBUILD_SHARED_LIBS=OFF',
@@ -143,8 +143,8 @@ libfmt = CmakeProject(
         '-DFMT_TEST=OFF',
     ],
     name='fmt',
-    version='9.1.0',
-    base='fmt-9.1.0',
+    version='10.0.0',
+    base='fmt-10.0.0',
 )
 
 libsodium = AutotoolsProject(
@@ -192,9 +192,9 @@ cares = CmakeProject(
 )
 
 curl = CmakeProject(
-    'https://curl.se/download/curl-8.0.1.tar.xz',
-    'https://github.com/curl/curl/releases/download/curl-8_0_1/curl-8.0.1.tar.xz',
-    '0a381cd82f4d00a9a334438b8ca239afea5bfefcfa9a1025f2bf118e79e0b5f0',
+    'https://curl.se/download/curl-8.1.2.tar.xz',
+    'https://github.com/curl/curl/releases/download/curl-8_1_2/curl-8.1.2.tar.xz',
+    '31b1118eb8bfd43cd95d9a3f146f814ff874f6ed3999b29d94f4d1e7dbac5ef6',
     'lib/libcurl.a',
     [
         '-DBUILD_CURL_EXE=OFF',
@@ -238,9 +238,9 @@ sqlite3 = AutotoolsProject(
 )
 
 proj = CmakeProject(
-    'http://download.osgeo.org/proj/proj-9.1.0.tar.gz',
-    'https://fossies.org/linux/privat/proj-9.1.0.tar.gz',
-    '81b2239b94cad0886222cde4f53cb49d34905aad2a1317244a0c30a553db2315',
+    'http://download.osgeo.org/proj/proj-9.2.0.tar.gz',
+    'https://fossies.org/linux/privat/proj-9.2.0.tar.gz',
+    'dea816f5aa732ae6b2ee3977b9bdb28b1d848cf56a1aad8faf6708b89f0ed50e',
     'lib/libproj.a',
     [
         '-DBUILD_TESTING=OFF',
@@ -311,12 +311,18 @@ simple_usbmodeswitch = AutotoolsProject(
 )
 
 libtiff = CmakeProject(
-    'http://download.osgeo.org/libtiff/tiff-4.4.0.tar.gz',
-    'https://fossies.org/linux/misc/tiff-4.4.0.tar.gz',
-    '917223b37538959aca3b790d2d73aa6e626b688e02dcda272aec24c2f498abed',
+    'http://download.osgeo.org/libtiff/tiff-4.5.0.tar.xz',
+    'https://fossies.org/linux/misc/tiff-4.5.0.tar.xz',
+    'dafac979c5e7b6c650025569c5a4e720995ba5f17bc17e6276d1f12427be267c',
     'lib/libtiff.a',
     [
         '-DBUILD_SHARED_LIBS=OFF',
+        '-Dtiff-tools=OFF',
+        '-Dtiff-tests=OFF',
+        '-Dtiff-contrib=OFF',
+        '-Dtiff-docs=OFF',
+        '-Dtiff-deprecated=OFF',
+        '-Dtiff-install=ON',
         '-Dld-version-script=OFF',
         '-Dccitt=OFF',
         '-Dpackbits=OFF',
@@ -382,9 +388,9 @@ sdl2 = SDL2Project(
 )
 
 lua = LuaProject(
-    'http://www.lua.org/ftp/lua-5.4.4.tar.gz',
-    'https://fossies.org/linux/misc/lua-5.4.4.tar.gz',
-    '164c7849653b80ae67bec4b7473b884bf5cc8d2dca05653475ec2ed27b9ebf61',
+    'http://www.lua.org/ftp/lua-5.4.6.tar.gz',
+    'https://fossies.org/linux/misc/lua-5.4.6.tar.gz',
+    '7d5ea1b9cb6aa0b59ca3dde1c6adcb57ef83a1ba8e5432c0ecd06bf439b3ad88',
     'lib/liblua.a',
     patches=abspath('lib/lua/patches'),
 )

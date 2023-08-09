@@ -3,7 +3,6 @@
 
 #include "UtilsSettings.hpp"
 #include "Protection.hpp"
-#include "Look/Look.hpp"
 #include "MainWindow.hpp"
 #include "Computer/Settings.hpp"
 #include "MapSettings.hpp"
@@ -169,12 +168,12 @@ SettingsLeave(const UISettings &old_ui_settings)
   const MapSettings &old_settings_map = old_ui_settings.map;
   const MapSettings &settings_map = ui_settings.map;
 
-  if (settings_map.trail.type != old_settings_map.trail.type ||
-      settings_map.trail.scaling_enabled != old_settings_map.trail.scaling_enabled)
-    main_window.SetLook().map.trail.Initialise(settings_map.trail);
-
-  if (settings_map.waypoint.landable_style != old_settings_map.waypoint.landable_style)
-    main_window.SetLook().map.waypoint.Reinitialise(settings_map.waypoint);
+  if (ui_settings.dark_mode != old_ui_settings.dark_mode ||
+      ui_settings.info_boxes.use_colors != old_ui_settings.info_boxes.use_colors ||
+      settings_map.trail.type != old_settings_map.trail.type ||
+      settings_map.trail.scaling_enabled != old_settings_map.trail.scaling_enabled ||
+      settings_map.waypoint.landable_style != old_settings_map.waypoint.landable_style)
+    main_window.ReinitialiseLook();
 
   ResumeAllThreads();
   main_window.ResumeThreads();

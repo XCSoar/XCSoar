@@ -4,14 +4,14 @@
 #include "MapSettings.hpp"
 
 void
-MapItemListSettings::SetDefaults()
+MapItemListSettings::SetDefaults() noexcept
 {
   add_location = true;
   add_arrival_altitude = true;
 }
 
 void
-TrailSettings::SetDefaults()
+TrailSettings::SetDefaults() noexcept
 {
   wind_drift_enabled = true;
   scaling_enabled = true;
@@ -20,7 +20,7 @@ TrailSettings::SetDefaults()
 }
 
 void
-MapSettings::SetDefaults()
+MapSettings::SetDefaults() noexcept
 {
   circle_zoom_enabled = true;
   max_auto_zoom_distance = 100000; /* 100 km */

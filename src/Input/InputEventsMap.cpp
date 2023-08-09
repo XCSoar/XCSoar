@@ -15,8 +15,9 @@
 #include "Pan.hpp"
 #include "PageActions.hpp"
 #include "Math/Constants.hpp"
-#include "util/Clamp.hpp"
 #include "Screen/Layout.hpp"
+
+#include <algorithm> // for std::clamp()
 
 // eventAutoZoom - Turn on|off|toggle AutoZoom
 // misc:
@@ -196,7 +197,7 @@ InputEvents::sub_SetZoom(double value)
     ? scale_100m
     : std::max(scale_100m, scale_2min_distance);
 
-  value = Clamp(value, minreasonable, scale_1600km);
+  value = std::clamp(value, minreasonable, scale_1600km);
   map_window->SetMapScale(value);
   map_window->QuickRedraw();
 }

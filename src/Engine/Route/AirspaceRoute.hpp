@@ -47,7 +47,7 @@ protected:
     return m_airspaces.IsEmpty() && RoutePlanner::IsTrivial();
   }
 
-  std::optional<RoutePoint> CheckClearance(const RouteLink &e) const noexcept override;
+  bool IsClear(const RouteLink &e) const noexcept override;
   void AddNearby(const RouteLink &e) noexcept override;
   bool CheckSecondary(const RouteLink &e) noexcept override;
 
@@ -55,6 +55,7 @@ private:
   void AddNearbyAirspace(const RouteAirspaceIntersection &inx,
                          const RouteLink &e) noexcept;
 
+  [[gnu::pure]]
   RouteAirspaceIntersection FirstIntersecting(const RouteLink &e) const noexcept;
 
   [[gnu::pure]]

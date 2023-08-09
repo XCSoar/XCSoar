@@ -34,6 +34,7 @@ echo Installing dependencies for the Linux target...
 apt-get install ${APTOPTS[*]} make g++ \
   zlib1g-dev \
   libfmt-dev \
+  libdbus-1-dev \
   libsodium-dev \
   libfreetype6-dev \
   libpng-dev libjpeg-dev \
@@ -50,6 +51,11 @@ apt-get install ${APTOPTS[*]} make g++ \
   mesa-common-dev libgl1-mesa-dev libegl1-mesa-dev \
   fonts-dejavu \
   xz-utils
+echo
+
+echo Installing dependencies for the Wayland target...
+apt-get install ${APTOPTS[*]} wayland-protocols \
+ libwayland-bin
 echo
 
 echo Installing dependencies for creating Debian package
@@ -87,7 +93,8 @@ apt-get install ${APTOPTS[*]} \
 echo
 
 echo Installing dependencies for the Android target, not including SDK / NDK...
-apt-get install ${APTOPTS[*]} openjdk-11-jdk-headless vorbis-tools adb libtool unzip
+apt-get install ${APTOPTS[*]} openjdk-11-jdk-headless vorbis-tools adb libtool \
+    unzip
 echo
 
 echo Clean up downloaded resources in order to free space

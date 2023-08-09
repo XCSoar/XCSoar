@@ -9,18 +9,13 @@
 #define sgn(x) (x >= 0 ? 1 : -1)
 
 int
-FlatRay::Magnitude() const
+FlatRay::Magnitude() const noexcept
 {
   return ihypot(vector.x, vector.y);
 }
 
-/*
- * Checks whether two lines intersect or not
- * @see http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
- * adapted from line_line_intersection
- */
 std::pair<int, int>
-FlatRay::IntersectsRatio(const FlatRay &that) const
+FlatRay::IntersectsRatio(const FlatRay &that) const noexcept
 {
   std::pair<int, int> r;
   r.second = vector.CrossProduct(that.vector);
@@ -30,14 +25,14 @@ FlatRay::IntersectsRatio(const FlatRay &that) const
 
   const FlatGeoPoint delta = that.point - point;
   r.first = delta.CrossProduct(that.vector);
-  if ((sgn(r.first) * sgn(r.second) < 0) || (abs(r.first) > abs(r.second))) {
+  if (sgn(r.first) * sgn(r.second) < 0 || abs(r.first) > abs(r.second)) {
     // outside first line
     r.second = 0;
     return r;
   }
 
   const int ub = delta.CrossProduct(vector);
-  if ((sgn(ub) * sgn(r.second) < 0) || (abs(ub) > abs(r.second))) {
+  if (sgn(ub) * sgn(r.second) < 0 || abs(ub) > abs(r.second)) {
     // outside second line
     r.second = 0;
     return r;
@@ -48,7 +43,7 @@ FlatRay::IntersectsRatio(const FlatRay &that) const
 }
 
 FlatGeoPoint
-FlatRay::Parametric(const double t) const
+FlatRay::Parametric(const double t) const noexcept
 {
   FlatGeoPoint p = point;
   p.x += iround(vector.x * t);
@@ -57,7 +52,7 @@ FlatRay::Parametric(const double t) const
 }
 
 double
-FlatRay::Intersects(const FlatRay &that) const
+FlatRay::Intersects(const FlatRay &that) const noexcept
 {
   std::pair<int, int> r = IntersectsRatio(that);
   if (r.second == 0)
@@ -66,16 +61,16 @@ FlatRay::Intersects(const FlatRay &that) const
 }
 
 bool
-FlatRay::IntersectsDistinct(const FlatRay& that) const
+FlatRay::IntersectsDistinct(const FlatRay &that) const noexcept
 {
   std::pair<int, int> r = IntersectsRatio(that);
-  return (r.second != 0) &&
-         (sgn(r.second) * r.first > 0) &&
-         (abs(r.first) < abs(r.second));
+  return r.second != 0 &&
+    sgn(r.second) * r.first > 0 &&
+    abs(r.first) < abs(r.second);
 }
 
 double
-FlatRay::DistinctIntersection(const FlatRay& that) const
+FlatRay::DistinctIntersection(const FlatRay &that) const noexcept
 {
   std::pair<int, int> r = IntersectsRatio(that);
   if (r.second != 0 &&
