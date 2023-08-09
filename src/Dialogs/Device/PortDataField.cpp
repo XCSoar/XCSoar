@@ -100,26 +100,6 @@ DetectSerialPorts(DataFieldEnum &df) noexcept
 
 #elif defined(_WIN32)
 
-/**
- * If this is a "COMx" name, parse "x" and return it; otherwise,
- * return -1.
- */
-[[gnu::pure]]
-static int
-ComIndex(TCHAR *name) noexcept
-{
-  const TCHAR *suffix = StringAfterPrefix(name, _T("COM"));
-  if (suffix == nullptr)
-    return -1;
-
-  TCHAR *endptr;
-  const auto i = _tcstoul(suffix, &endptr, 10);
-  if (endptr == suffix || *endptr != _T('\0'))
-    return -1;
-
-  return static_cast<int>(i);
-}
-
 static void
 DetectSerialPorts(DataFieldEnum &df) noexcept
 try {
