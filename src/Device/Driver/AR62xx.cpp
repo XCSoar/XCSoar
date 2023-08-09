@@ -263,9 +263,9 @@ AR62xxDevice::DataReceived(std::span<const std::byte> s,
 /**
  * Writes the message to the serial port on which the radio is connected
  */
-bool 
-AR62xxDevice::Send(const uint8_t *msg, 
-                   unsigned msg_size, 
+bool
+AR62xxDevice::Send(const uint8_t *msg,
+                   [[maybe_unused]] unsigned msg_size,
                    OperationEnvironment &env)
 {
   //! Number of tries to send a message i.e. 3 retries, taken from KRT2-driver
@@ -429,9 +429,9 @@ AR62xxDevice::CRCBitwise(uint8_t *data,
  */
 int 
 AR62xxDevice::SetAR620xStation(uint8_t *command,
-                               int active_passive, 
+                               int active_passive,
                                double f_frequency,
-                               const TCHAR* station) noexcept
+                               [[maybe_unused]] const TCHAR *station) noexcept
 {
   unsigned int len = 0;
 
