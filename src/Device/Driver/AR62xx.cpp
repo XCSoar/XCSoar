@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 /**
- * The driver is derived from the KRT2-driver. 
+ * The driver is derived from the KRT2-driver.
  * This version has implemented two methods yet:
  * setting the active frequency
  * setting the passive frequency
  * But it can be added:
- * setting/reading the volume of the radio 
+ * setting/reading the volume of the radio
  * setting/reading dual scan on/off (listening on both channels)
  * being noticed of frequency change on the radio itself
  * setting/reading squelsh settings
@@ -69,15 +69,15 @@ union IntConvertStruct {
 };
 
 struct Radio {
-  double active_frequency; 
+  double active_frequency;
   /* active station frequency, MHz(25KHz mode) or channel (8.33KHz mode)
      MHz are represented as floating point and the channel too is shown
-     as floating point on the display 
+     as floating point on the display
    */
   double passive_frequency;
   /* passive station frequency, MHz(25KHz mode) or channel (8.33KHz mode)
      MHz are represented as floating point and the channel too is shown
-     as floating point on the display 
+     as floating point on the display
    */
 };
 
@@ -98,9 +98,9 @@ class AR62xxDevice final : public AbstractDevice {
   static constexpr char NO_RSP = 0; /* No response received yet */
 
   //! Struct containing active and passive frequency (from LK8000)
-  Radio radio_para; 
+  Radio radio_para;
   //! Port the radio is connected to (from KRT2.cpp)
-  Port &port; 
+  Port &port;
   //! Expected message length just receiving (from KRT2.cpp)
   // (at least currently) unused for AR62xx driver
   // size_t expected_msg_length{};
@@ -109,7 +109,7 @@ class AR62xxDevice final : public AbstractDevice {
   //! Last response received from the radio (frome KRT2.cpp)
   uint8_t response;
   //! Condition to signal a response was received from radio (from KRT2.cpp)
-  Cond rx_cond; 
+  Cond rx_cond;
   //! Mutex to be locked to access response (from KRT2.cpp)
   Mutex response_mutex;
 
@@ -132,75 +132,75 @@ private:
    * @param msg Message to be send to the radio.
    * Doing the real work.
    */
-  bool 
+  bool
   Send(const uint8_t *msg, unsigned msg_size, OperationEnvironment &env);
 
   /*
    * Creates the correct index for a given readable frequency
    */
-  int 
+  int
   Frq2Idx(double f_freq) noexcept;
 
   /*
    * Creates a correct frequency-number given by the index
    */
-  double 
+  double
   Idx2Freq(uint16_t u_freq_idx);
 
   /*
    * This function sets the station name and frequency on the AR62xx
    */
-  int 
-  SetAR620xStation(uint8_t *command, int active_passive, 
+  int
+  SetAR620xStation(uint8_t *command, int active_passive,
                    double f_frequency, const TCHAR* station) noexcept;
 
   /*
    * Parses the messages which XCSoar receives from the radio.
    */
-  bool 
+  bool
   AR620xParseString(const char *msg_string, size_t len);
 
   /*
    * this function converts a AR62xx answer sting to a NMEA sequence
    */
-  int 
+  int
   AR620xConvertAnswer(uint8_t *sz_command, int len, uint16_t crc);
 
   /*
    * Creates a correct frequency-number to show
    */
-  uint16_t 
+  uint16_t
   Freq2Idx(double a) noexcept;
 
   /*
    * Not unsed in the Moment
    * Used for function detection inside the binary string received
-   */  
+   */ 
 /*
-  uint32_t 
+  uint32_t
   Bitshift(int n) noexcept;
-*/  
+*/ 
   /*
    * Used for creating the binary string to send
    */
-  uint16_t 
+  uint16_t
   CRCBitwise(uint8_t *data, size_t len) noexcept;
-  
+ 
 public:
   /**
    * Sets the active frequency on the radio.
    */
   virtual bool PutActiveFrequency(RadioFrequency frequency,
-                                  const TCHAR *name, 
+                                  const TCHAR *name,
                                   OperationEnvironment &env) override;
-  
+ 
   /**
    * Sets the standby frequency on the radio.
    */
   virtual bool PutStandbyFrequency(RadioFrequency frequency,
-                                   const TCHAR *name, 
+                                   const TCHAR *name,
                                    OperationEnvironment &env) override;
-  
+ 
   /**
    * Receives and handles data from the radio.
    *
@@ -269,10 +269,10 @@ AR62xxDevice::Send(const uint8_t *msg,
                    OperationEnvironment &env)
 {
   //! Number of tries to send a message i.e. 3 retries, taken from KRT2-driver
-  unsigned retries = NR_RETRIES; 
-  
+  unsigned retries = NR_RETRIES;
+ 
   assert(msg_size > 0);
-  
+ 
   do {
     {
       const std::lock_guard<Mutex> lock(response_mutex);
@@ -297,11 +297,11 @@ AR62xxDevice::Send(const uint8_t *msg,
       /* ACK received, finish, all went well */
       return true;
     }
-    
+   
     /* No ACK received, retry, possibly an error occured */
     retries--;
   } while (retries);
-  
+ 
   return false;
 }
 
@@ -310,7 +310,7 @@ AR62xxDevice::Send(const uint8_t *msg,
  * Helper for Bit shifting, AR62xx have a binary protocol
  */
 /*
-inline uint32_t 
+inline uint32_t
 AR62xxDevice::Bitshift(int n) noexcept
 {
 	return (1 << (n));
@@ -322,7 +322,7 @@ AR62xxDevice::Bitshift(int n) noexcept
  * depending on use in 25Khz or 8.33Khz mode,
  * the developer in LK8000 might have used "index" for that value
  */
-inline int 
+inline int
 AR62xxDevice::Frq2Idx(double f_freq) noexcept
 {
 	return (int)(((f_freq)-118.0) * 3040/(137.00-118.0)+0.5);
@@ -334,7 +334,7 @@ AR62xxDevice::Frq2Idx(double f_freq) noexcept
  * depending on use in 25Khz or 8.33Khz mode,
  * the developer in LK8000 might have used "index" for that value
  */
-double 
+double
 AR62xxDevice::Idx2Freq(uint16_t u_freq_idx)
 {
   double f_freq= 118.000 + (u_freq_idx & 0xFFF0) * (137.000-118.000)/3040.0;
@@ -365,13 +365,13 @@ AR62xxDevice::Idx2Freq(uint16_t u_freq_idx)
  * depending on use in 25Khz or 8.33Khz mode,
  * the developer in LK8000 might have used "index" for that value
  */
-uint16_t 
+uint16_t
 AR62xxDevice::Freq2Idx(double f_freq) noexcept
 {
   uint16_t  u_fre_idx= Frq2Idx(f_freq);
   u_fre_idx &= 0xFFF0;
   uint8_t uiFrac = ((int)(f_freq*1000.0+0.5)) - (((int)(f_freq *10.0))*100);
-  
+ 
   switch(uiFrac) {
     case 0:   u_fre_idx += 0;  break;
     case 5:   u_fre_idx += 1;  break;
@@ -398,7 +398,7 @@ AR62xxDevice::Freq2Idx(double f_freq) noexcept
 /*
  * Creates the binary value for the message for the radio
  */
-uint16_t 
+uint16_t
 AR62xxDevice::CRCBitwise(uint8_t *data,
                          size_t len) noexcept
 {
@@ -422,12 +422,12 @@ AR62xxDevice::CRCBitwise(uint8_t *data,
  * f_frequency    station frequency
  * station        station name string
  *
- * The AR62xx always sends and receives both frequencies/channels. 
+ * The AR62xx always sends and receives both frequencies/channels.
  * The one which remains unchanged is controlled by the "active_passive"-flag
  *
  * station is not used in the moment, AR62xx does not read it yet
  */
-int 
+int
 AR62xxDevice::SetAR620xStation(uint8_t *command,
                                int active_passive,
                                double f_frequency,
@@ -443,16 +443,16 @@ AR62xxDevice::SetAR620xStation(uint8_t *command,
   }
 
   /* converting both actual frequencies active and passive */
-  IntConvertStruct active_freq_idx;  
+  IntConvertStruct active_freq_idx; 
   active_freq_idx.int_val16  = Freq2Idx(radio_para.active_frequency);
-  IntConvertStruct passive_freq_idx; 
+  IntConvertStruct passive_freq_idx;
   passive_freq_idx.int_val16 = Freq2Idx(radio_para.passive_frequency);
   command [len++] = HEADER_ID ;
   command [len++] = PROTID ;
   command [len++] = 5;
 
   /* converting the frequency to be changed */
-  switch (active_passive) { 
+  switch (active_passive) {
     case ACTIVE_STATION:
       active_freq_idx.int_val16 = Freq2Idx(f_frequency);
       break;
@@ -476,8 +476,8 @@ AR62xxDevice::SetAR620xStation(uint8_t *command,
 /*
  * Parses the messages which XCSoar receives from the radio.
  */
-bool 
-AR62xxDevice::AR620xParseString(const char *msg_string, 
+bool
+AR62xxDevice::AR620xParseString(const char *msg_string,
                                 size_t len)
 {
   size_t cnt = 0;
@@ -527,12 +527,12 @@ AR62xxDevice::AR620xParseString(const char *msg_string,
  *                of a function (act. freq., pass. freq.)
  * len            length of the AR620x binary code to be converted
  */
-int 
-AR62xxDevice::AR620xConvertAnswer(uint8_t *sz_command, 
-                                  int len, 
+int
+AR62xxDevice::AR620xConvertAnswer(uint8_t *sz_command,
+                                  int len,
                                   uint16_t crc)
 {
-  
+ 
   if(sz_command == NULL) return 0;
   if(len == 0) return 0;
 
@@ -581,9 +581,9 @@ AR62xxDevice::AR620xConvertAnswer(uint8_t *sz_command,
  * Sets the active frequency on the radio.
  * same as in KRT2.cpp
  */
-bool 
+bool
 AR62xxDevice::PutActiveFrequency(RadioFrequency frequency,
-                                 const TCHAR* name, 
+                                 const TCHAR* name,
                                  OperationEnvironment &env)
 {
   unsigned int ufreq = frequency.GetKiloHertz();
@@ -600,9 +600,9 @@ AR62xxDevice::PutActiveFrequency(RadioFrequency frequency,
  * Sets the standby (passive) frequency on the radio.
  * same as in KRT2.cpp
  */
-bool 
+bool
 AR62xxDevice::PutStandbyFrequency(RadioFrequency frequency,
-                                  const TCHAR *name, 
+                                  const TCHAR *name,
                                   OperationEnvironment &env)
 {
   unsigned int ufreq = frequency.GetKiloHertz();
