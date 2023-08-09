@@ -48,7 +48,6 @@ set(_SOURCES
         Engine/GlideSolvers/GlueGlideState.cpp
         Engine/GlideSolvers/InstantSpeed.cpp
         Engine/GlideSolvers/MacCready.cpp
-        Engine/GlideSolvers/PolarCoefficients.cpp
         Engine/Navigation/Aircraft.cpp
         Engine/Navigation/TraceHistory.cpp
         Engine/Route/AirspaceRoute.cpp
