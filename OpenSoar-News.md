@@ -1,10 +1,22 @@
-Version 7.31.06, not yet released
+Version 7.34.14, not yet released
 ---------------
-because xcsoar 7.29 and 7.30 only very short term releases no version 
-OpenSoar 7.29.xx and 7.30.xx released!
+* xcsoar merge release v7.34, '9987faae'
 
-* xcsoar merge '7b43125bd' (2023/05/13) - with version 7.31
-* xcsoar merge '37bb8e6cf' (2023/05/10) - with version 7.30
+Version 7.33.13, 2023/08/09
+---------------
+* xcsoar merge release v7.33, 'e122cbc5'
+
+Version 7.32.12, 2023/08/08
+---------------
+* xcsoar merge release v7.32, '2351dab'
+
+Version 7.30.11, 2023/08/08
+---------------
+* xcsoar merge release v7.30, 'b32faf31'
+
+because xcsoar 7.29 and 7.31 only very short term releases no version 
+OpenSoar 7.29.xx and 7.31.xx released!
+
 * xcsoar merge 'bedf78b0f' (2023/05/07) - with version 7.29
 * xcsoar merge '3fe70253b' (2023/04/17)
 * xcsoar merge '618996223' (2023/03/27)
