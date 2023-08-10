@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 git fetch OpenSoaring_OpenSoar
 # git reset --hard august/weglide-tmp 
