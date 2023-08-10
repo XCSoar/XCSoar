@@ -121,7 +121,7 @@ InitNative(JNIEnv *env, int sdk_version) noexcept
 
 gcc_visibility_default
 void
-Java_org_xcsoar_NativeView_initNative(JNIEnv *env, [[maybe_unused]] jclass cls,
+Java_de_opensoar_NativeView_initNative(JNIEnv *env, [[maybe_unused]] jclass cls,
                                       int sdk_version)
 {
   static std::once_flag init_native_flag;
@@ -131,7 +131,7 @@ Java_org_xcsoar_NativeView_initNative(JNIEnv *env, [[maybe_unused]] jclass cls,
 
 gcc_visibility_default
 void
-Java_org_xcsoar_NativeView_onConfigurationChangedNative([[maybe_unused]] JNIEnv *env,
+Java_de_opensoar_NativeView_onConfigurationChangedNative([[maybe_unused]] JNIEnv *env,
                                                         [[maybe_unused]] jclass cls,
                                                         jboolean night_mode)
 {
