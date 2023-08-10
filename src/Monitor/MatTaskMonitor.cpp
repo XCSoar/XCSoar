@@ -123,7 +123,7 @@ FindMatTurnpoint()
       /* require a valid MAT task */
       !stats.task_valid || !stats.is_mat ||
       /* task must be started already, but not finished */
-      !stats.start.task_started || stats.task_finished ||
+      !stats.start.HasStarted() || stats.task_finished ||
       /* not inside an existing observation zone */
       stats.inside_oz ||
       /* valid GPS fix required to calculate nearest turn point */

@@ -114,6 +114,21 @@ OrderedTask::UpdateStatsGeometry()
 {
   ScanStartFinish();
 
+  if (task_points.empty())
+    stats.bounds.SetInvalid();
+  else {
+    // scan location of task points
+    auto &first = *task_points.front();
+    stats.bounds = first.GetLocation();
+
+    for (const auto &tp : task_points)
+      tp->ScanBounds(stats.bounds);
+
+    // ... and optional start points
+    for (const auto &tp : optional_start_points)
+      tp->ScanBounds(stats.bounds);
+  }
+
   stats.task_valid = !IsError(CheckTask());
   stats.has_targets = stats.task_valid && HasTargets();
   stats.is_mat = GetFactoryType() == TaskFactoryType::MAT;
@@ -132,17 +147,7 @@ OrderedTask::UpdateGeometry()
 
   first.ScanActive(*task_points[active_task_point]);
 
-  // scan location of task points
-  GeoBounds bounds(first.GetLocation());
-  for (const auto &tp : task_points)
-    tp->ScanBounds(bounds);
-
-  // ... and optional start points
-  for (const auto &tp : optional_start_points)
-    tp->ScanBounds(bounds);
-
-  // projection can now be determined
-  task_projection = TaskProjection(bounds);
+  task_projection = TaskProjection(stats.bounds);
 
   // update OZ's for items that depend on next-point geometry
   UpdateObservationZones(task_points, task_projection);
@@ -177,14 +182,14 @@ OrderedTask::ScanTotalStartTime() noexcept
   if (task_points.empty())
     return TimeStamp::Undefined();
 
-  return task_points.front()->GetEnteredState().time;
+  return task_points.front()->GetScoredState().time;
 }
 
 TimeStamp
 OrderedTask::ScanLegStartTime() noexcept
 {
   if (active_task_point > 0)
-    return task_points[active_task_point-1]->GetEnteredState().time;
+    return task_points[active_task_point-1]->GetScoredState().time;
 
   return TimeStamp::Undefined();
 }
@@ -433,7 +438,7 @@ OrderedTask::CheckTransitions(const AircraftState &state,
   FlatBoundingBox bb_now(task_projection.ProjectInteger(state.location),
                          1);
 
-  bool last_started = stats.start.task_started;
+  const auto last_started_time = stats.start.GetStartedTime();
   const bool last_finished = stats.task_finished;
 
   const int t_min = std::max(0, (int)active_task_point - 1);
@@ -449,14 +454,13 @@ OrderedTask::CheckTransitions(const AircraftState &state,
       full_update |= CheckTransitionOptionalStart(state, state_last,
                                                   bb_now, bb_last,
                                                   transition_enter,
-                                                  transition_exit,
-                                                  last_started);
+                                                  transition_exit);
     }
 
     full_update |= CheckTransitionPoint(*task_points[i],
                                         state, state_last, bb_now, bb_last,
                                         transition_enter, transition_exit,
-                                        last_started, i == 0);
+                                        i == 0);
 
     if (i == (int)active_task_point) {
       const bool last_request_armed = task_advance.NeedToArm();
@@ -491,10 +495,10 @@ OrderedTask::CheckTransitions(const AircraftState &state,
 
   stats.task_finished = taskpoint_finish != nullptr &&
     taskpoint_finish->HasEntered();
-  stats.start.task_started = TaskStarted();
 
-  if (stats.start.task_started) {
-    const AircraftState start_state = taskpoint_start->GetEnteredState();
+  if (TaskStarted()) {
+    const AircraftState &start_state = taskpoint_start->GetExitedState();
+    assert(start_state.HasTime());
     stats.start.SetStarted(start_state);
 
     if (taskpoint_finish != nullptr)
@@ -502,7 +506,7 @@ OrderedTask::CheckTransitions(const AircraftState &state,
   }
 
   if (task_events != nullptr) {
-    if (stats.start.task_started && !last_started)
+    if (stats.start.GetStartedTime() > last_started_time)
       task_events->TaskStart();
 
     if (stats.task_finished && !last_finished)
@@ -518,8 +522,7 @@ OrderedTask::CheckTransitionOptionalStart(const AircraftState &state,
                                           const FlatBoundingBox& bb_now,
                                           const FlatBoundingBox& bb_last,
                                           bool &transition_enter,
-                                          bool &transition_exit,
-                                          bool &last_started)
+                                          bool &transition_exit)
 {
   bool full_update = false;
 
@@ -528,7 +531,7 @@ OrderedTask::CheckTransitionOptionalStart(const AircraftState &state,
     full_update |= CheckTransitionPoint(**i,
                                         state, state_last, bb_now, bb_last,
                                         transition_enter, transition_exit,
-                                        last_started, true);
+                                        true);
 
     if (transition_enter || transition_exit) {
       // we have entered or exited this optional start point, so select it.
@@ -551,7 +554,6 @@ OrderedTask::CheckTransitionPoint(OrderedTaskPoint &point,
                                   const FlatBoundingBox &bb_last,
                                   bool &transition_enter,
                                   bool &transition_exit,
-                                  bool &last_started,
                                   const bool is_start)
 {
   const bool nearby = point.BoundingBoxOverlaps(bb_now) ||
@@ -569,10 +571,6 @@ OrderedTask::CheckTransitionPoint(OrderedTaskPoint &point,
 
     if (task_events != nullptr)
       task_events->ExitTransition(point);
-
-    // detect restart
-    if (is_start && last_started)
-      last_started = false;
   }
 
   if (is_start)
@@ -1096,7 +1094,7 @@ OrderedTask::Reset() noexcept
 
   AbstractTask::Reset();
   stats.task_finished = false;
-  stats.start.task_started = false;
+  stats.start.Reset();
   task_advance.Reset();
   SetActiveTaskPoint(0);
   UpdateStatsGeometry();

@@ -32,16 +32,17 @@
 using std::max;
 
 FlightStatisticsRenderer::FlightStatisticsRenderer(const ChartLook &_chart_look,
-                                                   const MapLook &_map_look)
+                                                   const MapLook &_map_look) noexcept
   :chart_look(_chart_look),
    map_look(_map_look),
+   airspace_renderer(map_look.airspace),
    trail_renderer(map_look.trail) {}
 
 void
 FlightStatisticsRenderer::DrawContestSolution(Canvas &canvas,
                                               const Projection &projection,
                                               const ContestStatistics &statistics,
-                                              unsigned i) const
+                                              unsigned i) noexcept
 {
   if (!statistics.GetResult(i).IsDefined())
     return;
@@ -53,7 +54,7 @@ FlightStatisticsRenderer::DrawContestSolution(Canvas &canvas,
 
 void
 FlightStatisticsRenderer::DrawContestTriangle(Canvas &canvas, const Projection &projection,
-                                              const ContestStatistics &statistics, unsigned i) const
+                                              const ContestStatistics &statistics, unsigned i) noexcept
 {
   if (!statistics.GetResult(i).IsDefined() ||
       statistics.GetSolution(i).size() != 5)
@@ -72,13 +73,14 @@ FlightStatisticsRenderer::RenderContest(Canvas &canvas, const PixelRect rc,
                                         const MapSettings &settings_map,
                                         const ContestStatistics &contest,
                                         const TraceComputer &trace_computer,
-                                        const Retrospective &retrospective) const
+                                        const Retrospective &retrospective) noexcept
 {
   ChartRenderer chart(chart_look, canvas, rc);
   chart.Begin();
 
   if (!trail_renderer.LoadTrace(trace_computer)) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 
@@ -96,6 +98,26 @@ FlightStatisticsRenderer::RenderContest(Canvas &canvas, const PixelRect rc,
   }
 
   const ChartProjection proj(rc_chart, TaskProjection(bounds));
+
+  background_renderer.Draw(canvas, proj, settings_map.terrain);
+
+  {
+#ifndef ENABLE_OPENGL
+    BufferCanvas stencil_canvas;
+    stencil_canvas.Create(canvas);
+#endif
+
+    airspace_renderer.Draw(canvas,
+#ifndef ENABLE_OPENGL
+                           stencil_canvas,
+#endif
+                           proj, settings_map.airspace);
+  }
+
+#ifdef ENABLE_OPENGL
+  /* desaturate the map background, to focus on the contest */
+  canvas.FadeToWhite(0xc0);
+#endif
 
   {
     // draw place names found in the retrospective task
@@ -169,7 +191,7 @@ FlightStatisticsRenderer::RenderContest(Canvas &canvas, const PixelRect rc,
 void
 FlightStatisticsRenderer::CaptionContest(TCHAR *sTmp,
                                          const ContestSettings &settings,
-                                         const DerivedInfo &derived)
+                                         const DerivedInfo &derived) noexcept
 {
   if (settings.contest == Contest::OLC_PLUS) {
     const ContestResult& result =
@@ -246,15 +268,41 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
                                      const NMEAInfo &nmea_info,
                                      [[maybe_unused]] const ComputerSettings &settings_computer,
                                      const MapSettings &settings_map,
+                                     const TaskStats &task_stats,
                                      const ProtectedTaskManager &_task_manager,
-                                     const TraceComputer *trace_computer) const
+                                     const TraceComputer *trace_computer) noexcept
 {
   ChartRenderer chart(chart_look, canvas, rc);
   chart.Begin();
 
-  ChartProjection proj;
+  if (!task_stats.task_valid || !task_stats.bounds.IsValid()) {
+    chart.DrawNoData();
+    chart.Finish();
+    return;
+  }
 
   const PixelRect &rc_chart = chart.GetChartRect();
+  const ChartProjection proj{rc_chart, TaskProjection{task_stats.bounds}, 1};
+
+  background_renderer.Draw(canvas, proj, settings_map.terrain);
+
+  {
+#ifndef ENABLE_OPENGL
+    BufferCanvas stencil_canvas;
+    stencil_canvas.Create(canvas);
+#endif
+
+    airspace_renderer.Draw(canvas,
+#ifndef ENABLE_OPENGL
+                           stencil_canvas,
+#endif
+                           proj, settings_map.airspace);
+  }
+
+#ifdef ENABLE_OPENGL
+  /* desaturate the map background, to focus on the task */
+  canvas.FadeToWhite(0xc0);
+#endif
 
   {
     ProtectedTaskManager::Lease task_manager(_task_manager);
@@ -262,10 +310,9 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
 
     if (IsError(task.CheckTask())) {
       chart.DrawNoData();
+      chart.Finish();
       return;
     }
-
-    proj.Set(rc_chart, task);
 
     OZRenderer ozv(map_look.task, map_look.airspace, settings_map.airspace);
     TaskPointRenderer tpv(canvas, proj, map_look.task,
@@ -292,7 +339,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
 }
 
 void
-FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived)
+FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived) noexcept
 {
   const TaskStats &task_stats = derived.ordered_task_stats;
   const CommonStats &common = derived.common_stats;

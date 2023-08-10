@@ -50,6 +50,7 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
 
   if (!glide_polar.IsValid()) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 
@@ -79,7 +80,8 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
     auto w_dolphin = -glide_polar.SinkRate(v_dolphin)+w;
     inrange = w_dolphin > s_min;
     if ((v_dolphin > v_dolphin_last) && inrange) {
-      chart.DrawLine(v_dolphin_last, w_dolphin_last, v_dolphin, w_dolphin,
+      chart.DrawLine({v_dolphin_last, w_dolphin_last},
+                     {v_dolphin, w_dolphin},
                      ChartLook::STYLE_REDTHICKDASH);
       v_dolphin_last = v_dolphin;
       w_dolphin_last = w_dolphin;
@@ -99,14 +101,14 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   for (auto i = vmin; i <= vmax; i+= dv) {
     auto sinkrate0 = -glide_polar.SinkRate(i);
     auto sinkrate1 = -glide_polar.SinkRate(i+dv);
-    chart.DrawLine(i, sinkrate0, i + dv, sinkrate1,
+    chart.DrawLine({i, sinkrate0}, {i + dv, sinkrate1},
                    ChartLook::STYLE_BLACK);
 
     if (climb_history.Check(i)) {
       auto v1 = climb_history.Get(i);
 
       if (v0valid)
-        chart.DrawLine(i0, v0, i, v1, ChartLook::STYLE_BLUE);
+        chart.DrawLine({i0, v0}, {i, v1}, ChartLook::STYLE_BLUE);
 
       v0 = v1;
       i0 = i;
@@ -118,17 +120,17 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   auto sb = -glide_polar.GetSBestLD();
   auto slope = (sb - MACCREADY) / glide_polar.GetVBestLD();
 
-  chart.DrawLine(vmin, MACCREADY + slope * vmin,
-                 vmax, MACCREADY + slope * vmax,
+  chart.DrawLine({vmin, MACCREADY + slope * vmin},
+                 {vmax, MACCREADY + slope * vmax},
                  ChartLook::STYLE_BLUETHINDASH);
 
   // draw labels and other overlays
 
   double vv = 0.9*vmax+0.1*vmin;
-  chart.DrawLabel(_T("Polar"), vv, -glide_polar.SinkRate(vv));
+  chart.DrawLabel({vv, -glide_polar.SinkRate(vv)}, _T("Polar"));
   vv = 0.8*vmax+0.2*vmin;
-  chart.DrawLabel(_T("Best glide"), vv, MACCREADY + slope * vv);
-  chart.DrawLabel(_T("Dolphin"), v_dolphin_last_l, w_dolphin_last_l);
+  chart.DrawLabel({vv, MACCREADY + slope * vv}, _T("Best glide"));
+  chart.DrawLabel({v_dolphin_last_l, w_dolphin_last_l},_T("Dolphin"));
 
   RenderGlidePolarInfo(canvas, rc, chart_look, glide_polar);
 

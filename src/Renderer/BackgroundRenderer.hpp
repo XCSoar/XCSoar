@@ -15,34 +15,33 @@ class RasterTerrain;
 struct DerivedInfo;
 
 /**
- * Utility class to draw terrain, topography (not implemented yet)
+ * Utility class to draw terrain, topography.
  */
 class BackgroundRenderer {
-  static const Angle DEFAULT_SHADING_ANGLE;
+  static constexpr Angle DEFAULT_SHADING_ANGLE = Angle::Degrees(-45);
 
   const RasterTerrain *terrain = nullptr;
   std::unique_ptr<TerrainRenderer> renderer;
   Angle shading_angle = DEFAULT_SHADING_ANGLE;
 
 public:
-  BackgroundRenderer();
-
-  ~BackgroundRenderer();
+  BackgroundRenderer() noexcept;
+  ~BackgroundRenderer() noexcept;
 
   /**
    * Flush all caches.
    */
-  void Flush();
+  void Flush() noexcept;
 
   void Draw(Canvas& canvas,
             const WindowProjection& proj,
-            const TerrainRendererSettings &terrain_settings);
+            const TerrainRendererSettings &terrain_settings) noexcept;
 
   void SetShadingAngle(const WindowProjection &projection,
                        const TerrainRendererSettings &settings,
-                       const DerivedInfo &calculated);
-  void SetTerrain(const RasterTerrain *terrain);
+                       const DerivedInfo &calculated) noexcept;
+  void SetTerrain(const RasterTerrain *terrain) noexcept;
 
 private:
-  void SetShadingAngle(const WindowProjection& proj, Angle angle);
+  void SetShadingAngle(const WindowProjection& proj, Angle angle) noexcept;
 };

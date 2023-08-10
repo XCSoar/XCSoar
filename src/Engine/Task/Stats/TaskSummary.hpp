@@ -27,16 +27,17 @@ struct TaskSummary {
   /** Vector of turnpoint data */
   TaskSummaryPointVector pts;
 
-  void clear() {
+  constexpr void clear() noexcept {
     active = 0;
     p_remaining = 1;
     pts.clear();
   }
-  void append(const TaskSummaryPoint& tsp) {
+
+  void append(const TaskSummaryPoint& tsp) noexcept {
     pts.push_back(tsp);
   }
 
-  void update(double d_remaining, double d_planned) {
+  constexpr void update(double d_remaining, double d_planned) noexcept {
     if (d_planned <= 0)
       return;
 

@@ -41,21 +41,21 @@ public:
   /**
    * Resets as if never flown
    */
-  virtual void Reset();
+  virtual void Reset() noexcept;
 
   /**
    * Set arming trigger
    *
    * @param do_armed True to arm trigger, false to clear
    */
-  void SetArmed(const bool do_armed);
+  void SetArmed(const bool do_armed) noexcept;
 
   /**
    * Accessor for arm state
    *
    * @return True if armed
    */
-  bool IsArmed() const {
+  bool IsArmed() const noexcept {
     return armed;
   }
 
@@ -64,7 +64,7 @@ public:
    *
    * @return True if arm requested
    */
-  bool NeedToArm() const  {
+  bool NeedToArm() const noexcept  {
     return request_armed;
   }
 
@@ -73,14 +73,14 @@ public:
    *
    * @return Arm state after toggle
    */
-  bool ToggleArmed();
+  bool ToggleArmed() noexcept;
 
   /** 
    * Retrieve current advance state
    * 
    * @return Advance state
    */
-  virtual State GetState() const = 0;
+  virtual State GetState() const noexcept = 0;
 
   /**
    * Determine whether all conditions are satisfied for a turnpoint
@@ -96,13 +96,13 @@ public:
    */
   virtual bool CheckReadyToAdvance(const TaskPoint &tp,
                                    const AircraftState &state,
-                                   const bool x_enter, const bool x_exit) = 0;
+                                   bool x_enter, bool x_exit) noexcept = 0;
 
 protected:
   /** 
    * Update state after external change to the arm state
    */
-  virtual void UpdateState() = 0;
+  virtual void UpdateState() noexcept = 0;
 
   /**
    * Determine whether, according to OZ entry, an AAT OZ is ready to advance
@@ -113,7 +113,7 @@ protected:
    * @return True if ready to advance
    */
   virtual bool IsAATStateReady(const bool has_entered,
-                               const bool close_to_target) const;
+                               const bool close_to_target) const noexcept;
 
   /**
    * Determine whether state is satisfied for a turnpoint
@@ -128,6 +128,6 @@ protected:
   [[gnu::pure]]
   bool IsStateReady(const TaskPoint &tp,
                     const AircraftState &state,
-                    const bool x_enter,
-                    const bool x_exit) const;
+                    bool x_enter,
+                    bool x_exit) const noexcept;
 };

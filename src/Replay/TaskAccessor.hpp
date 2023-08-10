@@ -34,7 +34,7 @@ public:
 
   [[gnu::pure]]
   bool IsStarted() const {
-    return task_manager.GetOrderedTask().GetStats().start.task_started;
+    return task_manager.GetOrderedTask().GetStats().start.HasStarted();
   }
 
   [[gnu::pure]]

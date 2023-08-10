@@ -50,6 +50,7 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
 
   if (!fs.task_speed.HasResult() || !task.CheckOrderedTask()) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 
@@ -84,21 +85,18 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
   chart.DrawXGrid(0.25, 0.25, ChartRenderer::UnitFormat::TIME);
   chart.DrawYGrid(Units::ToSysTaskSpeed(10), 10, ChartRenderer::UnitFormat::NUMERIC);
 
-  chart.DrawLine(chart.GetXMin(), vref,
-                 chart.GetXMax(), vref,
+  chart.DrawLine({chart.GetXMin(), vref},
+                 {chart.GetXMax(), vref},
                  ChartLook::STYLE_REDTHICKDASH);
 
   chart.DrawLineGraph(fs.task_speed, ChartLook::STYLE_BLACK);
   chart.DrawTrend(fs.task_speed, ChartLook::STYLE_BLUETHINDASH);
 
-  chart.DrawLabel(_T("Vest"),
-                  chart.GetXMin()*0.9+chart.GetXMax()*0.1,
-                  vref);
+  chart.DrawLabel({chart.GetXMin()*0.9+chart.GetXMax()*0.1, vref},
+                  _T("Vest"));
 
   const double tref = chart.GetXMin()*0.5+chart.GetXMax()*0.5;
-  chart.DrawLabel(_T("Vave"),
-                  tref,
-                  fs.task_speed.GetYAt(tref));
+  chart.DrawLabel({tref, fs.task_speed.GetYAt(tref)}, _T("Vave"));
 
   chart.Finish();
 }

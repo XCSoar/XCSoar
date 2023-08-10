@@ -4,7 +4,7 @@
 #include "ElementStat.hpp"
 
 void
-ElementStat::Reset()
+ElementStat::Reset() noexcept
 {
   location_remaining = GeoPoint::Invalid();
   vector_remaining = GeoVector::Invalid();

@@ -26,7 +26,7 @@ TaskMacCreadyTravelled::get_aircraft_start(const AircraftState &aircraft) const
   assert(tp.GetType() != TaskPointType::UNORDERED);
 
   if (tp.HasEntered()) {
-    return tp.GetEnteredState();
+    return tp.GetExitedState();
   } else {
     return aircraft;
   }

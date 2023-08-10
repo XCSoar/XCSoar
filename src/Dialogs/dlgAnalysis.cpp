@@ -82,6 +82,8 @@ public:
      cross_section_renderer(cross_section_look, airspace_look, chart_look, false),
      dragging(false),
      blackboard(_blackboard), glide_computer(_glide_computer) {
+    fs_renderer.SetTerrain(terrain);
+    fs_renderer.SetAirspaces(airspaces);
     cross_section_renderer.SetAirspaces(airspaces);
     cross_section_renderer.SetTerrain(terrain);
   }
@@ -388,6 +390,7 @@ ChartControl::OnPaint(Canvas &canvas) noexcept
       const auto &trace_computer = glide_computer.GetTraceComputer();
       fs_renderer.RenderTask(canvas, rcgfx, basic,
                              settings_computer, settings_map,
+                             calculated.ordered_task_stats,
                              *protected_task_manager,
                              &trace_computer);
     }

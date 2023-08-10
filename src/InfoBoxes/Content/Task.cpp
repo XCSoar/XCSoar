@@ -484,7 +484,7 @@ UpdateInfoBoxTaskSpeedHour(InfoBoxData &data) noexcept
 {
   const WindowStats &window =
     CommonInterface::Calculated().task_stats.last_hour;
-  if (window.duration < 0) {
+  if (!window.IsDefined()) {
     data.SetInvalid();
     return;
   }
@@ -754,7 +754,7 @@ void
 UpdateInfoBoxCruiseEfficiency(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  if (!task_stats.task_valid || !task_stats.start.task_started) {
+  if (!task_stats.task_valid || !task_stats.start.HasStarted()) {
     data.SetInvalid();
     return;
   }

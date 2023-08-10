@@ -9,7 +9,7 @@
 #include "util/Compiler.h"
 
 void
-TaskAdvance::Reset()
+TaskAdvance::Reset() noexcept
 {
   armed = false;
   request_armed = false;
@@ -19,7 +19,7 @@ bool
 TaskAdvance::IsStateReady(const TaskPoint &tp,
                           const AircraftState &state,
                           [[maybe_unused]] const bool x_enter,
-                          const bool x_exit) const
+                          const bool x_exit) const noexcept
 {
   switch (tp.GetType()) {
   case TaskPointType::UNORDERED:
@@ -53,13 +53,13 @@ TaskAdvance::IsStateReady(const TaskPoint &tp,
 
 bool
 TaskAdvance::IsAATStateReady(const bool has_entered,
-                             [[maybe_unused]] const bool close_to_target) const
+                             [[maybe_unused]] const bool close_to_target) const noexcept
 {
   return has_entered;
 }
 
 void
-TaskAdvance::SetArmed(const bool do_armed)
+TaskAdvance::SetArmed(const bool do_armed) noexcept
 {
   armed = do_armed;
   request_armed = false;
@@ -67,7 +67,7 @@ TaskAdvance::SetArmed(const bool do_armed)
 }
 
 bool
-TaskAdvance::ToggleArmed()
+TaskAdvance::ToggleArmed() noexcept
 {
   armed = !armed;
   if (armed)

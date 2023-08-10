@@ -83,7 +83,7 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
 
     const auto &slots = fs.altitude.GetSlots();
     const auto &s = slots[fs.altitude.GetCount()-1];
-    chart.DrawDot(s.x, s.y, Layout::Scale(2));
+    chart.DrawDot(s, Layout::Scale(2));
   }
 
   chart.Finish();
@@ -105,6 +105,7 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
 
   if (!fs.altitude.HasResult()) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 

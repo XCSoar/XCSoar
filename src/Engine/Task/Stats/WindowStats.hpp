@@ -3,12 +3,14 @@
 
 #pragma once
 
+#include "time/FloatDuration.hxx"
+
 struct WindowStats {
   /**
    * The duration of this window [seconds].  A negative value means
    * this object is undefined.
    */
-  double duration;
+  FloatDuration duration;
 
   /**
    * The distance travelled in this window.
@@ -20,7 +22,11 @@ struct WindowStats {
    */
   double speed;
 
-  void Reset() {
-    duration = -1;
+  constexpr bool IsDefined() const noexcept {
+    return duration >= FloatDuration{};
+  }
+
+  constexpr void Reset() noexcept {
+    duration = FloatDuration{-1};
   }
 };

@@ -15,12 +15,9 @@ class DistanceMemento
   mutable GeoPoint destination;
 
   /** Distance in meters saved from previous query */
-  mutable double value;
+  mutable double value = -1.0;
 
 public:
-  /** Constructor, initialises to trigger update on first call. */
-  DistanceMemento(): value(-1.0) {}
-
   /**
    * Returns the distance from the origin to destination in meters, 
    * from previously saved value if input arguments are identical. 

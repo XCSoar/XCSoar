@@ -11,7 +11,7 @@ WindowStatsComputer::Compute(TimeStamp time, const TaskStats &task_stats,
   if (!time.IsDefined())
     return;
 
-  if (!task_stats.task_valid || !task_stats.start.task_started ||
+  if (!task_stats.task_valid || !task_stats.start.HasStarted() ||
       !task_stats.total.travelled.IsDefined()) {
     Reset();
     stats.Reset();
@@ -35,9 +35,9 @@ WindowStatsComputer::Compute(TimeStamp time, const TaskStats &task_stats,
   travelled_distance.Push(time.ToDuration().count(),
                           task_stats.total.travelled.GetDistance());
 
-  stats.duration = travelled_distance.GetDeltaXChecked();
-  if (stats.duration > 0) {
+  stats.duration = FloatDuration{travelled_distance.GetDeltaXChecked()};
+  if (stats.duration > FloatDuration{}) {
     stats.distance = travelled_distance.GetDeltaY();
-    stats.speed = stats.distance / stats.duration;
+    stats.speed = stats.distance / stats.duration.count();
   }
 }

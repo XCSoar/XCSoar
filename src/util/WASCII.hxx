@@ -32,5 +32,6 @@ CopyASCII(char *dest, std::size_t dest_size,
 	  std::wstring_view src) noexcept;
 
 [[gnu::nonnull]]
-void
-CopyASCIIUpper(char *dest, const wchar_t *src) noexcept;
+char *
+CopyASCIIUpper(char *dest, std::size_t dest_size,
+	       std::wstring_view src) noexcept;

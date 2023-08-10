@@ -75,12 +75,12 @@ public:
   /**
    * Reset the stats as if never flown
    */
-  void Reset();
+  void Reset() noexcept;
 
   /**
    * Reset the task stats
    */
-  void ResetTask();
+  void ResetTask() noexcept;
 
   /**
    * Automatic positive vario scale from history [m/s]

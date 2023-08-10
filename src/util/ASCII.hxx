@@ -38,5 +38,6 @@ CopyASCII(char *dest, std::size_t dest_size,
  * Like CopyASCII(), but convert all letters to upper-case.
  */
 [[gnu::nonnull]]
-void
-CopyASCIIUpper(char *dest, const char *src) noexcept;
+char *
+CopyASCIIUpper(char *dest, std::size_t dest_size,
+	       std::string_view src) noexcept;

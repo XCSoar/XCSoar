@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <span>
+
 #include <tchar.h>
 
 struct BrokenDateTime;
@@ -12,14 +14,14 @@ struct GeoPoint;
  * Generate a task declaration takeoff line according to IGC GNSS
  * specification 3.6.3
  */
-static inline const char *
-IGCMakeTaskTakeoff()
+static constexpr const char *
+IGCMakeTaskTakeoff() noexcept
 {
   return "C0000000N00000000ETAKEOFF";
 }
 
-static inline const char *
-IGCMakeTaskLanding()
+static constexpr const char *
+IGCMakeTaskLanding() noexcept
 {
   return "C0000000N00000000ELANDING";
 }
@@ -29,14 +31,14 @@ IGCMakeTaskLanding()
  */
 void
 FormatIGCTaskTimestamp(char *buffer, const BrokenDateTime &date_time,
-                       unsigned number_of_turnpoints);
+                       unsigned number_of_turnpoints) noexcept;
 
 /**
  * @return a pointer to the end of the buffer
  */
 char *
-FormatIGCLocation(char *buffer, const GeoPoint &location);
+FormatIGCLocation(char *buffer, const GeoPoint &location) noexcept;
 
 void
-FormatIGCTaskTurnPoint(char *buffer, const GeoPoint &location,
-                       const TCHAR *name);
+FormatIGCTaskTurnPoint(std::span<char> dest, const GeoPoint &location,
+                       const TCHAR *name) noexcept;

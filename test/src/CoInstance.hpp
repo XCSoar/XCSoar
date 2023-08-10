@@ -4,6 +4,7 @@
 #pragma once
 
 #include "co/InvokeTask.hxx"
+#include "co/Task.hxx"
 #include "event/Loop.hxx"
 #include "event/DeferEvent.hxx"
 
@@ -29,7 +30,19 @@ public:
       std::rethrow_exception(error);
   }
 
+  template<typename T>
+  auto Run(Co::Task<T> &&task) {
+    std::optional<T> result;
+    Run(RunTask(std::move(task), result));
+    return std::move(*result);
+  }
+
 private:
+  template<typename T>
+  Co::InvokeTask RunTask(Co::Task<T> task, std::optional<T> &result_r) {
+    result_r.emplace(co_await task);
+  }
+
   void OnCompletion(std::exception_ptr _error) noexcept {
     error = std::move(_error);
     event_loop.Break();

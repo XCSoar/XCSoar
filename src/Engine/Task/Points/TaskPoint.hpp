@@ -25,14 +25,14 @@ public:
    *
    * @return Initialised object
    */
-  TaskPoint(TaskPointType _type, const GeoPoint &_location) noexcept
+  constexpr TaskPoint(TaskPointType _type, const GeoPoint &_location) noexcept
     :type(_type), location(_location) {}
 
-  TaskPointType GetType() const {
+  constexpr TaskPointType GetType() const noexcept {
     return type;
   }
 
-  bool IsIntermediatePoint() const noexcept {
+  constexpr bool IsIntermediatePoint() const noexcept {
     return type == TaskPointType::AST || type == TaskPointType::AAT;
   }
 

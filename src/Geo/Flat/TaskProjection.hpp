@@ -52,6 +52,10 @@ public:
    */
   bool Update();
 
+  const auto &GetBounds() const noexcept {
+    return bounds;
+  }
+
   /** 
    * Calculate radius of points used in task projection
    * 

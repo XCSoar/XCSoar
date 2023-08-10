@@ -6,7 +6,7 @@
 #include "Units/System.hpp"
 
 bool
-IGCFix::Apply(const NMEAInfo &basic)
+IGCFix::Apply(const NMEAInfo &basic) noexcept
 {
   if (!basic.time_available)
     return false;

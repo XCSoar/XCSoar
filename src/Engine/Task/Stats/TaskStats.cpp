@@ -8,8 +8,9 @@
 static constexpr int flight_mode_height_margin = 120;
 
 void
-TaskStats::reset()
+TaskStats::reset() noexcept
 {
+  bounds.SetInvalid();
   total.Reset();
   current_leg.Reset();
 
@@ -39,7 +40,7 @@ TaskStats::reset()
 }
 
 bool
-TaskStats::calc_flight_mode(const TaskBehaviour &settings)
+TaskStats::calc_flight_mode(const TaskBehaviour &settings) noexcept
 {
   const int margin = flight_mode_final_glide
     ? flight_mode_height_margin

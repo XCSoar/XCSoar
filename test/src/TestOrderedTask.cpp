@@ -196,7 +196,7 @@ TestFlightToFinish(double aircraft_altitude)
 
   const TaskStats &stats = task.GetStats();
   ok1(stats.task_valid);
-  ok1(!stats.start.task_started);
+  ok1(!stats.start.HasStarted());
   ok1(!stats.task_finished);
   ok1(stats.flight_mode_final_glide == (stats.total.solution_remaining.altitude_difference >= 0));
   ok1(equals(stats.distance_nominal, vector.distance));
@@ -233,7 +233,7 @@ TestSimpleTask()
 
   const TaskStats &stats = task.GetStats();
   ok1(stats.task_valid);
-  ok1(!stats.start.task_started);
+  ok1(!stats.start.HasStarted());
   ok1(!stats.task_finished);
   ok1(!stats.flight_mode_final_glide);
   ok1(equals(stats.distance_nominal, tp1_to_tp2.distance));
@@ -271,7 +271,7 @@ TestHighFinish()
 
   const TaskStats &stats = task.GetStats();
   ok1(stats.task_valid);
-  ok1(!stats.start.task_started);
+  ok1(!stats.start.HasStarted());
   ok1(!stats.task_finished);
   ok1(!stats.flight_mode_final_glide);
   ok1(equals(stats.distance_nominal, vector.distance));
@@ -311,7 +311,7 @@ TestHighTP()
 
   const TaskStats &stats = task.GetStats();
   ok1(stats.task_valid);
-  ok1(!stats.start.task_started);
+  ok1(!stats.start.HasStarted());
   ok1(!stats.task_finished);
   ok1(!stats.flight_mode_final_glide);
 
@@ -345,7 +345,7 @@ TestHighTPFinal()
 
   const TaskStats &stats = task.GetStats();
   ok1(stats.task_valid);
-  ok1(!stats.start.task_started);
+  ok1(!stats.start.HasStarted());
   ok1(!stats.task_finished);
   ok1(!stats.flight_mode_final_glide);
 
@@ -379,7 +379,7 @@ TestLowTPFinal()
 
   const TaskStats &stats = task.GetStats();
   ok1(stats.task_valid);
-  ok1(!stats.start.task_started);
+  ok1(!stats.start.HasStarted());
   ok1(!stats.task_finished);
   ok1(!stats.flight_mode_final_glide);
 

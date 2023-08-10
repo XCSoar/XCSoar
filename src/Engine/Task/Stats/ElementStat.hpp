@@ -87,7 +87,7 @@ struct ElementStat
   TaskVario vario;
 
   /** Resets all to zero. */
-  void Reset();
+  void Reset() noexcept;
 
   /**
    * Calculate element times
@@ -106,7 +106,7 @@ struct ElementStat
    *
    * @return True if can finish the task
    */
-  bool IsAchievable() const {
+  bool IsAchievable() const noexcept {
     return solution_remaining.IsAchievable();
   }
 };

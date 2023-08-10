@@ -81,7 +81,7 @@ public:
 
 private:
   /* virtual methods from class ScoredTaskPoint */
-  bool ScoreLastExit() const override {
+  bool ScoreLastExit() const noexcept override {
     return true;
   }
 };

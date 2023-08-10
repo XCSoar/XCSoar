@@ -18,8 +18,18 @@
  */
 class ScoredTaskPoint : public SampledTaskPoint
 {
-  AircraftState state_entered;
-  bool has_exited;
+  /**
+   * The first state within the OZ.  If its HasTime() method returns
+   * false, the aircraft has not yet entered the OZ.
+   */
+  AircraftState entered_state;
+
+  /**
+   * The last state within the OZ before the aircraft left it.  If its
+   * HasTime() method returns false, the aircraft has not yet exited
+   * the OZ.
+   */
+  AircraftState exited_state;
 
 public:
   /**
@@ -29,9 +39,9 @@ public:
    *
    * @return Partially initialised object
    */
-  ScoredTaskPoint(const GeoPoint &location, bool b_scored);
+  ScoredTaskPoint(const GeoPoint &location, bool b_scored) noexcept;
 
-  const GeoPoint &GetLocationRemaining() const {
+  const GeoPoint &GetLocationRemaining() const noexcept {
     return GetLocationMin();
   }
 
@@ -40,8 +50,8 @@ public:
    *
    * @return True if observation zone has been entered
    */
-  bool HasEntered() const {
-    return state_entered.HasTime();
+  bool HasEntered() const noexcept {
+    return entered_state.HasTime();
   }
 
   /**
@@ -49,19 +59,29 @@ public:
    *
    * @return State at entry, or null if never entered
    */
-  const AircraftState &GetEnteredState() const {
-    return state_entered;
+  const AircraftState &GetEnteredState() const noexcept {
+    return entered_state;
   }
 
-  virtual void Reset();
+  virtual void Reset() noexcept;
 
   /**
    * Test whether aircraft has exited the OZ
    *
    * @return True if aircraft has exited the OZ
    */
-  bool HasExited() const {
-    return has_exited;
+  bool HasExited() const noexcept {
+    return exited_state.HasTime();
+  }
+
+  const AircraftState &GetExitedState() const noexcept {
+    return exited_state;
+  }
+
+  const AircraftState &GetScoredState() const noexcept {
+    return HasExited() && ScoreLastExit()
+      ? exited_state
+      : entered_state;
   }
 
   /**
@@ -74,7 +94,7 @@ public:
    * @return True if observation zone is entered now
    */
   bool TransitionEnter(const AircraftState &ref_now,
-                       const AircraftState &ref_last);
+                       const AircraftState &ref_last) noexcept;
 
   /**
    * Test whether aircraft has exited observation zone and
@@ -87,18 +107,18 @@ public:
    */
   bool TransitionExit(const AircraftState &ref_now,
                       const AircraftState &ref_last,
-                      const FlatProjection &projection);
+                      const FlatProjection &projection) noexcept;
 
   /** Retrieve location to be used for the scored task. */
   [[gnu::pure]]
-  const GeoPoint &GetLocationScored() const;
+  const GeoPoint &GetLocationScored() const noexcept;
 
   /**
    * Retrieve location to be used for the task already travelled.
    * This is always the scored best location for prior-active task points.
    */
   [[gnu::pure]]
-  const GeoPoint &GetLocationTravelled() const {
+  const GeoPoint &GetLocationTravelled() const noexcept {
     return GetLocationMin();
   }
 
@@ -113,7 +133,7 @@ protected:
    */
   [[gnu::pure]]
   virtual bool CheckEnterTransition(const AircraftState &ref_now,
-                                    const AircraftState &ref_last) const = 0;
+                                    const AircraftState &ref_last) const noexcept = 0;
 
   /**
    * Check if aircraft has transitioned to outside sector
@@ -125,21 +145,21 @@ protected:
    */
   [[gnu::pure]]
   virtual bool CheckExitTransition(const AircraftState &ref_now,
-                                   const AircraftState &ref_last) const = 0;
+                                   const AircraftState &ref_last) const noexcept = 0;
 
 private:
   [[gnu::pure]]
-  virtual bool EntryPrecondition() const {
+  virtual bool EntryPrecondition() const noexcept {
     return true;
   }
 
   [[gnu::pure]]
-  virtual bool ScoreLastExit() const {
+  virtual bool ScoreLastExit() const noexcept {
     return false;
   }
 
   [[gnu::pure]]
-  virtual bool ScoreFirstEntry() const {
+  virtual bool ScoreFirstEntry() const noexcept {
     return false;
   }
 };

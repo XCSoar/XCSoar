@@ -4,11 +4,14 @@
 #include "StartStats.hpp"
 #include "Navigation/Aircraft.hpp"
 
+#include <cassert>
+
 void
-StartStats::SetStarted(const AircraftState &aircraft)
+StartStats::SetStarted(const AircraftState &aircraft) noexcept
 {
-  task_started = true;
   time = aircraft.time;
   altitude = aircraft.altitude;
   ground_speed = aircraft.ground_speed;
+
+  assert(HasStarted());
 }

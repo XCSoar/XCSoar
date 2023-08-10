@@ -84,7 +84,7 @@ AbstractTask::UpdateIdle(const AircraftState &state,
 {
   const bool valid = state.location.IsValid() && glide_polar.IsValid();
 
-  if (stats.start.task_started && task_behaviour.calc_cruise_efficiency &&
+  if (stats.start.HasStarted() && task_behaviour.calc_cruise_efficiency &&
       valid) {
     double val = 1;
     if (CalcCruiseEfficiency(state, glide_polar, val))
@@ -93,7 +93,7 @@ AbstractTask::UpdateIdle(const AircraftState &state,
     stats.cruise_efficiency = ce_lpf.Reset(1);
   }
 
-  if (stats.start.task_started && task_behaviour.calc_effective_mc &&
+  if (stats.start.HasStarted() && task_behaviour.calc_effective_mc &&
       valid) {
     auto val = glide_polar.GetMC();
     if (CalcEffectiveMC(state, glide_polar, val))
@@ -137,7 +137,7 @@ AbstractTask::UpdateStatsDistances(const GeoPoint &location,
   stats.total.planned.SetDistance(ScanDistancePlanned());
 
   if (IsScored()) {
-    if (!stats.start.task_started)
+    if (!stats.start.HasStarted())
       stats.distance_scored = 0;
     else if (!stats.task_finished)
       stats.distance_scored = ScanDistanceScored(location);

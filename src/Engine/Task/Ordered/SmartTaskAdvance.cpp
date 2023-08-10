@@ -6,15 +6,11 @@
 #include "Points/StartPoint.hpp"
 #include "util/Compiler.h"
 
-SmartTaskAdvance::SmartTaskAdvance()
-  :state(TaskAdvance::MANUAL)
-{
-}
-
 bool
 SmartTaskAdvance::CheckReadyToAdvance(const TaskPoint &tp,
                                       const AircraftState &aircraft,
-                                      const bool x_enter, const bool x_exit)
+                                      const bool x_enter,
+                                      const bool x_exit) noexcept
 {
   const bool state_ready = IsStateReady(tp, aircraft, x_enter, x_exit);
 
@@ -65,13 +61,13 @@ SmartTaskAdvance::CheckReadyToAdvance(const TaskPoint &tp,
 }
 
 TaskAdvance::State
-SmartTaskAdvance::GetState() const
+SmartTaskAdvance::GetState() const noexcept
 {
   return state;
 }
 
 void
-SmartTaskAdvance::UpdateState()
+SmartTaskAdvance::UpdateState() noexcept
 {
   switch (state) {
   case TaskAdvance::START_ARMED:

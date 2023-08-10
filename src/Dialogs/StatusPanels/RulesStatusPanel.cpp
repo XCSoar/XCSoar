@@ -35,13 +35,13 @@ RulesStatusPanel::Refresh() noexcept
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
 
   /// @todo proper task validity check
-  SetText(ValidStart, start_stats.task_started
+  SetText(ValidStart, start_stats.HasStarted()
           ? _("Yes") : _T("No"));
 
   SetText(ValidFinish, task_stats.task_finished
           ? _("Yes") : _T("No"));
 
-  if (start_stats.task_started) {
+  if (start_stats.HasStarted()) {
     SetText(StartTime,
             FormatLocalTimeHHMM(start_stats.time, settings.utc_offset));
 

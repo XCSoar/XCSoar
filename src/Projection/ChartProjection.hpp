@@ -4,7 +4,6 @@
 #include "WindowProjection.hpp"
 
 class TaskProjection;
-class OrderedTask;
 class OrderedTaskPoint;
 
 /**
@@ -24,10 +23,6 @@ public:
     Set(rc, task_projection, radius_factor);
   }
 
-  ChartProjection(const PixelRect &rc, const OrderedTask &task) noexcept {
-    Set(rc, task);
-  }
-
   ChartProjection(const PixelRect &rc,
                   const OrderedTaskPoint &point) noexcept {
     Set(rc, point);
@@ -35,8 +30,6 @@ public:
 
   void Set(const PixelRect &rc, const TaskProjection &task_projection,
            double radius_factor=1.1) noexcept;
-
-  void Set(const PixelRect &rc, const OrderedTask &task) noexcept;
 
   void Set(const PixelRect &rc, const OrderedTaskPoint &point) noexcept;
 

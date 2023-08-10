@@ -56,7 +56,7 @@ public:
   double GetElevation() const noexcept override;
 
   /* virtual methods from class ScoredTaskPoint */
-  void Reset() override;
+  void Reset() noexcept override;
   bool CheckEnterTransition(const AircraftState &ref_now,
                             const AircraftState &ref_last) const noexcept override;
 
@@ -69,8 +69,8 @@ public:
 
 private:
   /* virtual methods from class ScoredTaskPoint */
-  bool EntryPrecondition() const override;
-  bool ScoreFirstEntry() const override {
+  bool EntryPrecondition() const noexcept override;
+  bool ScoreFirstEntry() const noexcept override {
     return true;
   }
 

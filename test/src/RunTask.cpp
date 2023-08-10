@@ -80,7 +80,7 @@ Run(DebugReplay &replay, OrderedTask &task, const GlidePolar &glide_polar)
   const TaskStats &task_stats = task.GetStats();
 
   printf("task_started=%d task_finished=%d\n",
-         task_stats.start.task_started,
+         task_stats.start.HasStarted(),
          task_stats.task_finished);
 
   printf("task elapsed %ds\n", (int)task_stats.total.time_elapsed.count());

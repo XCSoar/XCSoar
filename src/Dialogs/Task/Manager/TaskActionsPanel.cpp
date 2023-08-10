@@ -57,7 +57,7 @@ TaskActionsPanel::SaveTask()
 inline void
 TaskActionsPanel::OnBrowseClicked()
 {
-  parent.SetCurrent(1);
+  parent.SetCurrent(parent.PAGE_LIST);
 }
 
 inline void

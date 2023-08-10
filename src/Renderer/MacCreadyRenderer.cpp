@@ -46,6 +46,7 @@ RenderMacCready(Canvas &canvas, const PixelRect rc,
 
   if (!glide_polar.IsValid()) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 
@@ -68,22 +69,23 @@ RenderMacCready(Canvas &canvas, const PixelRect rc,
     gp.SetMC(m);
     const double v = gp.GetVBestLD();
     const double vav = gp.GetAverageSpeed();
-    chart.DrawLine(m_last, v_last, m, v, ChartLook::STYLE_BLACK);
-    chart.DrawLine(m_last, vav_last, m, vav, ChartLook::STYLE_BLUETHINDASH);
+    chart.DrawLine({m_last, v_last}, {m, v}, ChartLook::STYLE_BLACK);
+    chart.DrawLine({m_last, vav_last}, {m, vav}, ChartLook::STYLE_BLUETHINDASH);
     v_last = v;
     vav_last = vav;
   } while (m<MAX_MACCREADY);
 
   // draw current MC setting
-  chart.DrawLine(glide_polar.GetMC(), 0, glide_polar.GetMC(), glide_polar.GetVMax(),
+  chart.DrawLine({glide_polar.GetMC(), 0},
+                 {glide_polar.GetMC(), glide_polar.GetVMax()},
                  ChartLook::STYLE_REDTHICKDASH);
 
   // draw labels and other overlays
 
   gp.SetMC(0.9*MAX_MACCREADY);
-  chart.DrawLabel(_T("Vopt"), 0.9*MAX_MACCREADY, gp.GetVBestLD());
+  chart.DrawLabel({0.9*MAX_MACCREADY, gp.GetVBestLD()}, _T("Vopt"));
   gp.SetMC(0.9*MAX_MACCREADY);
-  chart.DrawLabel(_T("Vave"), 0.9*MAX_MACCREADY, gp.GetAverageSpeed());
+  chart.DrawLabel({0.9*MAX_MACCREADY, gp.GetAverageSpeed()}, _T("Vave"));
 
   chart.Finish();
 

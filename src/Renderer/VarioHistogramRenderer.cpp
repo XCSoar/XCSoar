@@ -30,6 +30,7 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   if (fs.vario_cruise_histogram.empty() &&
       fs.vario_circling_histogram.empty()) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 
@@ -84,15 +85,15 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   chart.DrawLineGraph(fs.vario_circling_histogram.GetSlots(), ChartLook::STYLE_RED, true);
 
   // draw current MC setting
-  chart.DrawLine(0, mc, scale, mc, ChartLook::STYLE_REDTHICKDASH);
-  chart.DrawLine(0, s, scale, s, ChartLook::STYLE_BLUETHINDASH);
+  chart.DrawLine({0, mc}, {scale, mc}, ChartLook::STYLE_REDTHICKDASH);
+  chart.DrawLine({0, s}, {scale, s}, ChartLook::STYLE_BLUETHINDASH);
 
   // draw labels and other overlays
   chart.DrawYGrid(Units::ToSysVSpeed(1), 1, ChartRenderer::UnitFormat::NUMERIC);
 
   const double tref = chart.GetXMin()*0.1+chart.GetXMax()*0.9;
-  chart.DrawLabel(_T("MC"), tref, mc);
-  chart.DrawLabel(_T("S cruise"), tref, s);
+  chart.DrawLabel({tref, mc}, _T("MC"));
+  chart.DrawLabel({tref, s}, _T("S cruise"));
 
   chart.Finish();
 }

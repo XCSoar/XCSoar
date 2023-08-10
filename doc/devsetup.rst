@@ -36,7 +36,6 @@ dependencies for various XCSoar target platforms.
 ::
 
    cd ide/provisioning
-   sudo ./add-debian-unstable.sh
    sudo ./install-debian-packages.sh
    ./install-android-tools.sh
 

@@ -119,6 +119,7 @@ PlaneListWidget::UpdateList() noexcept
   const bool empty = list.empty();
   load_button->SetEnabled(!empty);
   edit_button->SetEnabled(!empty);
+  copy_button->SetEnabled(!empty);
   delete_button->SetEnabled(!empty);
 }
 

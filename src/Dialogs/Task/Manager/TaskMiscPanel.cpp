@@ -18,7 +18,7 @@ void
 TaskMiscPanel::ReClick() noexcept
 {
   if (GetCurrentIndex() > 0)
-    SetCurrent(0);
+    SetCurrent(PAGE_ACTIONS);
   else
     PagerWidget::ReClick();
 }
@@ -26,6 +26,6 @@ TaskMiscPanel::ReClick() noexcept
 void
 TaskMiscPanel::Show(const PixelRect &rc) noexcept
 {
-  SetCurrent(0);
+  SetCurrent(PAGE_ACTIONS);
   PagerWidget::Show(rc);
 }

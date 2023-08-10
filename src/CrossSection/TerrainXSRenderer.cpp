@@ -35,8 +35,8 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart,
         type != last_type &&
         last_type != TerrainType::UNKNOWN) {
       const auto center_distance = (distance + last_distance) / 2;
-      points.append() = chart.ToScreen(center_distance, hmin);
-      points.append() = chart.ToScreen(center_distance, hmin);
+      points.append() = chart.ToScreen({center_distance, hmin});
+      points.append() = chart.ToScreen({center_distance, hmin});
 
       DrawPolygon(canvas, last_type, points.data(), points.size());
     }
@@ -46,26 +46,26 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart,
 
       if (j == 0) {
         // Start first polygon
-        points.append() = chart.ToScreen(distance, hmin);
-        points.append() = chart.ToScreen(distance, h);
+        points.append() = chart.ToScreen({distance, hmin});
+        points.append() = chart.ToScreen({distance, h});
       } else if (type != last_type) {
         // Start new polygon
         points.clear();
 
         const auto center_distance = (distance + last_distance) / 2;
-        points.append() = chart.ToScreen(center_distance, hmin);
-        points.append() = chart.ToScreen(center_distance, hmin);
+        points.append() = chart.ToScreen({center_distance, hmin});
+        points.append() = chart.ToScreen({center_distance, hmin});
       }
 
       if (j + 1 == CrossSectionRenderer::NUM_SLICES) {
         // Close and paint last polygon
-        points.append() = chart.ToScreen(distance, h);
-        points.append() = chart.ToScreen(distance, hmin);
+        points.append() = chart.ToScreen({distance, h});
+        points.append() = chart.ToScreen({distance, hmin});
 
         DrawPolygon(canvas, type, points.data(), points.size());
       } else if (type == last_type && j != 0) {
         // Add single point to polygon
-        points.append() = chart.ToScreen(distance, h);
+        points.append() = chart.ToScreen({distance, h});
       }
     }
 

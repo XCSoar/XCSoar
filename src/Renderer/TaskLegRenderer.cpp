@@ -40,7 +40,7 @@ RenderTaskLegs(ChartRenderer &chart,
 {
   const TaskStats &task_stats = calculated.ordered_task_stats;
 
-  if (!task_stats.start.task_started)
+  if (!task_stats.start.HasStarted())
     return;
 
   TCHAR sTmp[5];
@@ -51,23 +51,24 @@ RenderTaskLegs(ChartRenderer &chart,
     if (!IsTaskLegVisible(tp))
       continue;
 
-    auto dt = tp.GetEnteredState().time - calculated.flight.takeoff_time;
+    auto dt = tp.GetScoredState().time - calculated.flight.takeoff_time;
     if (dt.count() >= 0) {
       const double x = dt / std::chrono::hours{1};
       if (y>=0) {
         if (i==0) {
-          chart.DrawBlankRectangle(chart.GetXMin(), chart.GetYMin(),
-                                   x, chart.GetYMax());
+          chart.DrawBlankRectangle({chart.GetXMin(), chart.GetYMin()},
+                                   {x, chart.GetYMax()});
         } else if (i+1 == task.TaskSize()) {
-          chart.DrawBlankRectangle(x, chart.GetYMin(),
-                                   chart.GetXMax(), chart.GetYMax());
+          chart.DrawBlankRectangle({x, chart.GetYMin()},
+                                   {chart.GetXMax(), chart.GetYMax()});
         }
-        chart.DrawLine(x, chart.GetYMin(), x, chart.GetYMax(),
+        chart.DrawLine({x, chart.GetYMin()}, {x, chart.GetYMax()},
                        ChartLook::STYLE_GRIDZERO);
       }
       if (y>=0) {
         StringFormatUnsafe(sTmp, _T("%d"), i);
-        chart.DrawLabel(sTmp, x, chart.GetYMax()*y + chart.GetYMin()*(1-y));
+        chart.DrawLabel({x, chart.GetYMax()*y + chart.GetYMin()*(1-y)},
+                        sTmp);
       }
     }
   }

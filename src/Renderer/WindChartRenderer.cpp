@@ -47,10 +47,17 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   chart.SetYLabel(_T("h"), Units::GetAltitudeName());
   chart.Begin();
 
+  if (fs.altitude_base.IsEmpty() || fs.altitude_ceiling.IsEmpty()) {
+    chart.DrawNoData();
+    chart.Finish();
+    return;
+  }
+
   const auto height =
     fs.altitude_ceiling.GetMaxY() - fs.altitude_ceiling.GetMinY();
   if (height <= 10) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 
@@ -97,7 +104,7 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
 
     Angle angle = Angle::FromXY(wind.y, -wind.x);
 
-    auto point = chart.ToScreen((chart.GetXMin() + chart.GetXMax()) / 2, h);
+    auto point = chart.ToScreen({(chart.GetXMin() + chart.GetXMax()) / 2, h});
 
     DrawArrow(canvas, point, mag * WINDVECTORMAG, angle);
   }
