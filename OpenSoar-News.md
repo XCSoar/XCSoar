@@ -1,4 +1,4 @@
-Version 7.34.14, not yet released
+Version 7.34.14, 2023/08/10
 ---------------
 * xcsoar merge release v7.34, '9987faae'
 
