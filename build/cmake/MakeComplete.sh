@@ -2,8 +2,13 @@
 
 echo "Make Complete"
 echo "============="
-git fetch OpenSoaring_OpenSoar
-git reset --hard OpenSoaring_OpenSoar/opensoar-dev
+
+if [ "$GIT_REPOSITORY" == "" ]; then GIT_REPOSITORY=august ; fi
+if [ "$GIT_BRANCH" == "" ]; then GIT_BRANCH=opensoar-dev ; fi
+#  or origin ; fi
+
+git fetch ${GIT_REPOSITORY}
+git reset --hard ${GIT_REPOSITORY}/${GIT_BRANCH}
 ./git-clean-submodule.sh
 . ./OpenSoar.config
 echo "PROGRAM_VERSION = ${PROGRAM_VERSION}"
