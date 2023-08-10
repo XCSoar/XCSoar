@@ -78,6 +78,7 @@ topdir = .
 
 -include $(topdir)/build/local-config.mk
 
+
 include $(topdir)/build/make.mk
 include $(topdir)/build/thunk.mk
 include $(topdir)/build/bool.mk
@@ -95,6 +96,9 @@ include $(topdir)/build/debug.mk
 include $(topdir)/build/abi.mk
 include $(topdir)/build/coverage.mk
 include $(topdir)/build/libintl.mk
+
+# August2111: prepare version before compile...
+include $(topdir)/build/version.mk
 
 ifeq ($(HEADLESS),y)
 else
@@ -120,7 +124,7 @@ include $(topdir)/build/java.mk
 include $(topdir)/build/android.mk
 include $(topdir)/build/llvm.mk
 include $(topdir)/build/tools.mk
-include $(topdir)/build/version.mk
+# include $(topdir)/build/version.mk
 include $(topdir)/build/darwin.mk
 include $(topdir)/build/ios.mk
 include $(topdir)/build/osx.mk
