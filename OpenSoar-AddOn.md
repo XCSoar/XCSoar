@@ -1,6 +1,8 @@
 Differences OpenSoar to XCSoar-Project
 --------------------------------------
 
+Windows:
+* use a different serial port name: Unique COMx (instead of 'COMx:' or '\\.\COMxx'
 
 Additional Drivers
 ==================
