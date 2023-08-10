@@ -9949,7 +9949,6 @@ msgstr ""
 #, fuzzy
 msgid "Altn {}"
 msgstr "Altn 1"
->>>>>>> c5c49879417dda654534795db92e14526e373794
 
 #: src/InfoBoxes/Content/Altitude.cpp:26
 #: src/MapWindow/GlueMapWindowOverlays.cpp:333
