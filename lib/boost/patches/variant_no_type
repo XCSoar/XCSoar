@@ -1,0 +1,46 @@
+Index: boost_1_82_0/boost/variant/variant.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/variant/variant.hpp
++++ boost_1_82_0/boost/variant/variant.hpp
+@@ -18,7 +18,9 @@
+ #include <cstddef> // for std::size_t
+ #include <new> // for placement new
+ 
++#ifdef ENABLE_TYPE_INDEX
+ #include <boost/type_index.hpp>
++#endif // ENABLE_TYPE_INDEX
+ 
+ #include <boost/variant/detail/config.hpp>
+ #include <boost/mpl/aux_/value_wknd.hpp>
+@@ -896,6 +898,8 @@ private:
+ 
+ };
+ 
++#ifdef ENABLE_TYPE_INDEX
++
+ ///////////////////////////////////////////////////////////////////////////////
+ // (detail) class reflect
+ //
+@@ -915,6 +919,8 @@ public: // visitor interfaces
+ 
+ };
+ 
++#endif // ENABLE_TYPE_INDEX
++
+ ///////////////////////////////////////////////////////////////////////////////
+ // (detail) class comparer
+ //
+@@ -2208,11 +2214,13 @@ public: // queries
+         return false;
+     }
+ 
++#ifdef ENABLE_TYPE_INDEX
+     const boost::typeindex::type_info& type() const
+     {
+         detail::variant::reflect visitor;
+         return this->apply_visitor(visitor);
+     }
++#endif // ENABLE_TYPE_INDEX
+ 
+ public: // prevent comparison with foreign types
+ 

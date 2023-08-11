@@ -4,6 +4,7 @@
 #pragma once
 
 #include "PagerWidget.hpp"
+#include "Form/TabHandler.hpp"
 
 #include <cassert>
 #include <memory>
@@ -15,7 +16,7 @@ class TabDisplay;
 /**
  * A #PagerWidget that navigates with a #TabDisplay.
  */
-class TabWidget : public PagerWidget {
+class TabWidget : public PagerWidget, TabHandler {
 public:
   enum class Orientation {
     AUTO,
@@ -29,10 +30,11 @@ private:
 
     bool vertical;
 
+    [[nodiscard]]
     Layout(Orientation orientation, PixelRect rc,
-           const TabDisplay &td, const Widget *e);
+           const TabDisplay &td, const Widget *e) noexcept;
 
-    static bool IsVertical(Orientation orientation, PixelRect rc) {
+    static constexpr bool IsVertical(Orientation orientation, PixelRect rc) noexcept {
       switch (orientation) {
       case Orientation::AUTO:
         break;
@@ -81,7 +83,7 @@ public:
     large_extra = false;
   }
 
-  Widget &GetExtra() {
+  Widget &GetExtra() noexcept {
     assert(extra != nullptr);
 
     return *extra;
@@ -90,9 +92,9 @@ public:
   /**
    * Make the "extra" Widget large, as if it were a page.
    */
-  void LargeExtra();
+  void LargeExtra() noexcept;
 
-  const PixelRect &GetEffectiveExtraPosition() const {
+  const PixelRect &GetEffectiveExtraPosition() const noexcept {
     assert(extra != nullptr);
 
     return large_extra
@@ -103,9 +105,9 @@ public:
   /**
    * Restore the "extra" widget to regular size.
    */
-  void RestoreExtra();
+  void RestoreExtra() noexcept;
 
-  void ToggleLargeExtra() {
+  void ToggleLargeExtra() noexcept {
     if (large_extra)
       RestoreExtra();
     else
@@ -113,15 +115,12 @@ public:
   }
 
   void AddTab(std::unique_ptr<Widget> widget, const TCHAR *caption,
-              const MaskedIcon *icon=nullptr);
+              const MaskedIcon *icon=nullptr) noexcept;
 
   [[gnu::pure]]
-  const TCHAR *GetButtonCaption(unsigned i) const;
+  const TCHAR *GetButtonCaption(unsigned i) const noexcept;
 
-  bool ClickPage(unsigned i);
-  bool NextPage();
-  bool PreviousPage();
-
+public:
   /* virtual methods from class Widget */
   PixelSize GetMinimumSize() const noexcept override;
   PixelSize GetMaximumSize() const noexcept override;
@@ -138,4 +137,10 @@ public:
 protected:
   /* virtual methods from class PagerWidget */
   void OnPageFlipped() noexcept override;
+
+private:
+  /* virtual methods from class TabHandler */
+  bool ClickPage(unsigned i) noexcept override;
+  bool NextPage() noexcept override;
+  bool PreviousPage() noexcept override;
 };

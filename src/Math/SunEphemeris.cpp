@@ -17,51 +17,19 @@ static constexpr double SUN_DIAMETER = 0.53;
 // Atmospheric refraction degrees
 static constexpr double AIR_REFRACTION = 34.0 / 60.0;
 
-namespace SunEphemeris
-{
-  /**
-   * Get the days to J2000
-   * FNday only works between 1901 to 2099 - see Meeus chapter 7
-   * @param y Year
-   * @param m Month
-   * @param d Day
-   * @param h UT in decimal hours
-   * @return days to J2000
-   */
-  [[gnu::const]]
-  double FNday(const BrokenDateTime &date_time);
+namespace SunEphemeris {
 
-  /**
-   * Calculating the hourangle
-   * @param lat Latitude
-   * @param declin Declination
-   * @return The hourangle
-   */
-  [[gnu::const]]
-  Angle GetHourAngle(Angle lat, Angle declin);
-
-  /**
-   * Calculating the hourangle for twilight times
-   * @param lat Latitude
-   * @param declin Declination
-   * @return The hourangle for twilight times
-   */
-  [[gnu::const]]
-  Angle GetHourAngleTwilight(Angle lat, Angle declin);
-
-  /**
-   * Find the ecliptic longitude of the Sun
-   * @return The ecliptic longitude of the Sun
-   */
-  [[gnu::pure]]
-  Angle GetEclipticLongitude(double d, Angle l);
-
-  [[gnu::pure]]
-  Angle GetMeanSunLongitude(double d);
-}
-
-double
-SunEphemeris::FNday(const BrokenDateTime &date_time)
+/**
+ * Get the days to J2000
+ * FNday only works between 1901 to 2099 - see Meeus chapter 7
+ * @param y Year
+ * @param m Month
+ * @param d Day
+ * @param h UT in decimal hours
+ * @return days to J2000
+ */
+static constexpr double
+FNday(const BrokenDateTime date_time) noexcept
 {
   assert(date_time.IsPlausible());
 
@@ -72,8 +40,15 @@ SunEphemeris::FNday(const BrokenDateTime &date_time)
   return double(luku) - 730531.5 + (date_time.hour % 24) / 24.;
 }
 
-Angle
-SunEphemeris::GetHourAngle(Angle lat, Angle declin)
+/**
+ * Calculating the hourangle
+ * @param lat Latitude
+ * @param declin Declination
+ * @return The hourangle
+ */
+[[gnu::const]]
+static Angle
+GetHourAngle(Angle lat, Angle declin) noexcept
 {
   Angle dfo = Angle::Degrees(SUN_DIAMETER / 2 + AIR_REFRACTION);
 
@@ -85,8 +60,15 @@ SunEphemeris::GetHourAngle(Angle lat, Angle declin)
   return Angle::asin(fo) + Angle::QuarterCircle();
 }
 
-Angle
-SunEphemeris::GetHourAngleTwilight(Angle lat, Angle declin)
+/**
+ * Calculating the hourangle for twilight times
+ * @param lat Latitude
+ * @param declin Declination
+ * @return The hourangle for twilight times
+ */
+[[gnu::const]]
+static Angle
+GetHourAngleTwilight(Angle lat, Angle declin) noexcept
 {
   Angle df1 = Angle::Degrees(6);
 
@@ -98,8 +80,13 @@ SunEphemeris::GetHourAngleTwilight(Angle lat, Angle declin)
   return Angle::asin(fi) + Angle::QuarterCircle();
 }
 
-Angle
-SunEphemeris::GetEclipticLongitude(double d, Angle L)
+/**
+ * Find the ecliptic longitude of the Sun
+ * @return The ecliptic longitude of the Sun
+ */
+[[gnu::pure]]
+static Angle
+GetEclipticLongitude(double d, Angle L) noexcept
 {
   //   mean anomaly of the Sun
   Angle g = Angle::Degrees(357.528 + .9856003 * d).AsBearing();
@@ -109,8 +96,9 @@ SunEphemeris::GetEclipticLongitude(double d, Angle L)
           Angle::Degrees(.02) * (g * 2).sin()).AsBearing();
 }
 
-Angle
-SunEphemeris::GetMeanSunLongitude(double d)
+[[gnu::pure]]
+static Angle
+GetMeanSunLongitude(double d) noexcept
 {
   // mean longitude of the Sun
   return Angle::Degrees(280.461 + .9856474 * d).AsBearing();
@@ -124,9 +112,10 @@ SunEphemeris::GetMeanSunLongitude(double d)
  * @return sun's azimuth
  * @see http://www.providence.edu/mcs/rbg/java/sungraph.htm
  */
+[[gnu::pure]]
 static Angle
 CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
-                 const RoughTimeDelta time_zone, const Angle dec)
+                 const RoughTimeDelta time_zone, const Angle dec) noexcept
 {
   assert(time.IsPlausible());
 
@@ -145,10 +134,9 @@ CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
                         dec.cos() * t.sin());
 }
 
-SunEphemeris::Result
-SunEphemeris::CalcSunTimes(const GeoPoint &location,
-                           const BrokenDateTime &date_time,
-                           const RoughTimeDelta time_zone)
+Result
+CalcSunTimes(const GeoPoint &location, const BrokenDateTime &date_time,
+             const RoughTimeDelta time_zone) noexcept
 {
   Result result;
 
@@ -210,9 +198,8 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
 }
 
 Angle
-SunEphemeris::CalcAzimuth(const GeoPoint &location,
-                          const BrokenDateTime &date_time,
-                          const RoughTimeDelta time_zone)
+CalcAzimuth(const GeoPoint &location, const BrokenDateTime &date_time,
+            const RoughTimeDelta time_zone) noexcept
 {
   assert(date_time.IsPlausible());
 
@@ -231,3 +218,5 @@ SunEphemeris::CalcAzimuth(const GeoPoint &location,
 
   return CalculateAzimuth(location, date_time, time_zone, delta);
 }
+
+} // namespace SunEphemeris

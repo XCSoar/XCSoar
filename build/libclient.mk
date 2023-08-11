@@ -5,7 +5,7 @@ LIBCLIENT_SOURCES = \
 	$(SRC)/net/client/tim/Client.cpp \
 	$(SRC)/net/client/WeGlide/Error.cpp \
 	$(SRC)/net/client/WeGlide/DownloadTask.cpp \
-	$(SRC)/net/client/WeGlide/ListDeclaredTasks.cpp \
+	$(SRC)/net/client/WeGlide/ListTasks.cpp \
 	$(SRC)/net/client/WeGlide/UploadFlight.cpp
 
 LIBCLIENT_DEPENDS = LIBHTTP FMT

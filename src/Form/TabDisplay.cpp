@@ -1,23 +1,62 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "Form/TabDisplay.hpp"
-#include "Widget/TabWidget.hpp"
+#include "TabDisplay.hpp"
+#include "TabHandler.hpp"
+#include "Renderer/TabRenderer.hpp"
 #include "Look/DialogLook.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "ui/canvas/Icon.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "util/StaticString.hxx"
 #include "Asset.hpp"
 
-TabDisplay::TabDisplay(TabWidget &_pager, const DialogLook &_look,
+/**
+ * Holds display and callbacks data for a single tab.
+ */
+class TabDisplay::Button {
+  TabRenderer renderer;
+
+public:
+  StaticString<32> caption;
+  const MaskedIcon *icon;
+  PixelRect rc;
+
+public:
+  Button(const TCHAR *_caption, const MaskedIcon *_icon) noexcept
+    :icon(_icon)
+  {
+    caption = _caption;
+  };
+
+  void InvalidateLayout() {
+    renderer.InvalidateLayout();
+  }
+
+  [[gnu::pure]]
+  unsigned GetRecommendedWidth(const DialogLook &look) const noexcept;
+
+  [[gnu::pure]]
+  unsigned GetRecommendedHeight(const DialogLook &look) const noexcept;
+
+  /**
+   * Paints one button
+   */
+  void Draw(Canvas &canvas, const DialogLook &look,
+            bool focused, bool pressed, bool selected) const noexcept {
+    renderer.Draw(canvas, rc, look, caption, icon, focused, pressed, selected);
+  }
+};
+
+TabDisplay::TabDisplay(TabHandler &_handler, const DialogLook &_look,
                        ContainerWindow &parent, PixelRect rc,
                        bool _vertical,
                        WindowStyle style) noexcept
-  :pager(_pager),
+  :handler(_handler),
    look(_look),
-   vertical(_vertical),
-   tab_line_height(Layout::VptScale(5))
+   tab_line_height(Layout::VptScale(5)),
+   vertical(_vertical)
 {
   style.TabStop();
   Create(parent, rc, style);
@@ -30,7 +69,7 @@ TabDisplay::~TabDisplay() noexcept
 }
 
 inline unsigned
-TabButton::GetRecommendedWidth(const DialogLook &look) const noexcept
+TabDisplay::Button::GetRecommendedWidth(const DialogLook &look) const noexcept
 {
   if (icon != nullptr)
     return icon->GetSize().width + 2 * Layout::GetTextPadding();
@@ -39,7 +78,7 @@ TabButton::GetRecommendedWidth(const DialogLook &look) const noexcept
 }
 
 inline unsigned
-TabButton::GetRecommendedHeight(const DialogLook &look) const noexcept
+TabDisplay::Button::GetRecommendedHeight(const DialogLook &look) const noexcept
 {
   if (icon != nullptr)
     return icon->GetSize().height + 2 * Layout::GetTextPadding();
@@ -156,15 +195,20 @@ TabDisplay::CalculateLayout() noexcept
 void
 TabDisplay::Add(const TCHAR *caption, const MaskedIcon *icon) noexcept
 {
-  TabButton *b = new TabButton(caption, icon);
-  buttons.append(b);
+  buttons.append(new Button(caption, icon));
   CalculateLayout();
 }
 
-int
+const TCHAR *
+TabDisplay::GetCaption(unsigned i) const noexcept
+{
+  return buttons[i]->caption.c_str();
+}
+
+inline int
 TabDisplay::GetButtonIndexAt(PixelPoint p) const noexcept
 {
-  for (unsigned i = 0; i < GetSize(); i++) {
+  for (std::size_t i = 0; i < buttons.size(); i++) {
     if (buttons[i]->rc.Contains(p))
       return i;
   }
@@ -187,10 +231,10 @@ TabDisplay::OnPaint(Canvas &canvas) noexcept
 
   const bool is_focused = !HasCursorKeys() || HasFocus();
   for (unsigned i = 0; i < buttons.size(); i++) {
-    const TabButton &button = *buttons[i];
+    const auto &button = *buttons[i];
 
     const bool is_down = dragging && i == down_index && !drag_off_button;
-    const bool is_selected = i == pager.GetCurrentIndex();
+    const bool is_selected = i == current_index;
 
     button.Draw(canvas, look, is_focused, is_down, is_selected);
   }
@@ -232,10 +276,10 @@ TabDisplay::OnKeyCheck(unsigned key_code) const noexcept
     return true;
 
   case KEY_LEFT:
-    return pager.GetCurrentIndex() > 0;
+    return current_index > 0;
 
   case KEY_RIGHT:
-    return pager.GetCurrentIndex() < GetSize() - 1;
+    return current_index < buttons.size() - 1;
 
   case KEY_DOWN:
     return false;
@@ -254,41 +298,41 @@ TabDisplay::OnKeyDown(unsigned key_code) noexcept
   switch (key_code) {
 
   case KEY_APP1:
-    if (GetSize() > 0)
-      pager.ClickPage(0);
+    if (buttons.size() > 0)
+      handler.ClickPage(0);
     return true;
 
   case KEY_APP2:
-    if (GetSize() > 1)
-      pager.ClickPage(1);
+    if (buttons.size() > 1)
+      handler.ClickPage(1);
     return true;
 
   case KEY_APP3:
-    if (GetSize() > 2)
-      pager.ClickPage(2);
+    if (buttons.size() > 2)
+      handler.ClickPage(2);
     return true;
 
   case KEY_APP4:
-    if (GetSize() > 3)
-      pager.ClickPage(3);
+    if (buttons.size() > 3)
+      handler.ClickPage(3);
     return true;
 
   case KEY_RETURN:
-    pager.ClickPage(pager.GetCurrentIndex());
+    handler.ClickPage(current_index);
     return true;
 
   case KEY_DOWN:
     break;
 
   case KEY_RIGHT:
-    pager.NextPage();
+    handler.NextPage();
     return true;
 
   case KEY_UP:
     break;
 
   case KEY_LEFT:
-    pager.PreviousPage();
+    handler.PreviousPage();
     return true;
   }
   return PaintWindow::OnKeyDown(key_code);
@@ -322,7 +366,7 @@ TabDisplay::OnMouseUp(PixelPoint p) noexcept
     EndDrag();
 
     if (!drag_off_button)
-      pager.ClickPage(down_index);
+      handler.ClickPage(down_index);
 
     return true;
   } else {

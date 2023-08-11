@@ -3,29 +3,31 @@
 
 #include "WaypointReaderZander.hpp"
 #include "Waypoint/Waypoints.hpp"
+#include "util/StringStrip.hxx"
 
 #include <stdlib.h>
 
 static bool
-ParseString(const TCHAR* src, tstring& dest, unsigned len)
+ParseString(tstring_view src, tstring &dest, std::size_t len) noexcept
 {
-  if (src[0] == 0)
-    return true;
+  if (src.empty())
+    return false;
 
-  dest.assign(src);
+  src = Strip(src);
+
+  if (src.size() > len)
+    src = src.substr(0, len);
 
   // Cut the string after the first space, tab or null character
-  size_t found = dest.find_first_of(_T("\t\0"));
-  if (found != tstring::npos)
-    dest = dest.substr(0, found);
+  if (auto i = dest.find_first_of(_T("\t\0")); i != dest.npos)
+    src = src.substr(0, i);
 
-  dest = dest.substr(0, len);
-  trim_inplace(dest);
+  dest.assign(src);
   return true;
 }
 
 static bool
-ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
+ParseAngle(const TCHAR* src, Angle& dest, const bool lat) noexcept
 {
   TCHAR *endptr;
 
@@ -58,7 +60,7 @@ ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
 }
 
 static bool
-ParseAltitude(const TCHAR *src, double &dest)
+ParseAltitude(const TCHAR *src, double &dest) noexcept
 {
   // Parse string
   TCHAR *endptr;
@@ -72,7 +74,7 @@ ParseAltitude(const TCHAR *src, double &dest)
 }
 
 static bool
-ParseFlags(const TCHAR* src, Waypoint &dest)
+ParseFlags(const TCHAR *src, Waypoint &dest) noexcept
 {
   // WP = Waypoint
   // HA = Home Field
@@ -112,7 +114,7 @@ ParseFlags(const TCHAR* src, Waypoint &dest)
 }
 
 static bool
-ParseFlagsFromDescription(const TCHAR* src, Waypoint &dest)
+ParseFlagsFromDescription(const TCHAR* src, Waypoint &dest) noexcept
 {
   // If the description starts with 1 the waypoint is an airport
   // (usually the description of an airport is the frequency)

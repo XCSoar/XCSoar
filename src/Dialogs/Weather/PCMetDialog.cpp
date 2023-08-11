@@ -10,7 +10,7 @@
 
 #include "UIGlobals.hpp"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Dialogs/CoDialog.hpp"
+#include "Dialogs/CoFunctionDialog.hpp"
 #include "Dialogs/Error.hpp"
 #include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -38,32 +38,26 @@ BitmapDialog(const Bitmap &bitmap)
   dialog.ShowModal();
 }
 
-static Co::InvokeTask
-DownloadTask(AllocatedPath &path, const char *type, const char *area,
-             const PCMetSettings &settings,
-             CurlGlobal &curl, ProgressListener &progress)
-{
-  path = co_await PCMet::DownloadLatestImage(type, area, settings,
-                                             curl, progress);
-}
-
 static void
 BitmapDialog(const PCMet::ImageType &type, const PCMet::ImageArea &area)
 {
   const auto &settings = CommonInterface::GetComputerSettings().weather.pcmet;
 
   try {
-    AllocatedPath path;
     PluggableOperationEnvironment env;
-    if (!ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-                      _("Download"),
-                      DownloadTask(path, type.uri, area.name,
-                                   settings, *Net::curl, env),
-                      &env))
+
+    auto path = ShowCoFunctionDialog(UIGlobals::GetMainWindow(),
+                                     UIGlobals::GetDialogLook(),
+                                     _("Download"),
+                                     PCMet::DownloadLatestImage(type.uri, area.name,
+                                                                settings,
+                                                                *Net::curl, env),
+                                     &env);
+    if (!path)
       return;
 
     Bitmap bitmap;
-    bitmap.LoadFile(path);
+    bitmap.LoadFile(*path);
     BitmapDialog(bitmap);
   } catch (...) {
     ShowError(std::current_exception(), _T("pc_met"));

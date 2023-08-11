@@ -16,13 +16,6 @@ AbstractContest::Reset() noexcept
 }
 
 bool
-AbstractContest::UpdateScore() noexcept
-{
-  // for normal contests, nothing needs to be done
-  return false;
-}
-
-bool
 AbstractContest::SaveSolution() noexcept
 {
   ContestResult result = CalculateResult();
@@ -32,7 +25,7 @@ AbstractContest::SaveSolution() noexcept
     return false;
 
   best_result = result;
-  CopySolution(best_solution);
+  best_solution = GetCurrentPath();
   return true;
 }
 

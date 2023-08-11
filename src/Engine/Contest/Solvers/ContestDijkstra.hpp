@@ -170,7 +170,7 @@ public:
 protected:
   /* protected virtual methods from AbstractContest */
   ContestResult CalculateResult() const noexcept override;
-  void CopySolution(ContestTraceVector &vec) const noexcept override;
+  const ContestTraceVector &GetCurrentPath() const noexcept override;
 
 protected:
   /* virtual methods from NavDijkstra */

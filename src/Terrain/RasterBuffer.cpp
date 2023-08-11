@@ -136,7 +136,7 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
 
       *buffer++ = GetInterpolated(cx, cy, ix, iy);
     }
-  } else if (gcc_likely(dx > 0)) {
+  } else if (dx > 0) [[likely]] {
     /* no interpolation needed, forward scan */
 
     const TerrainHeight *gcc_restrict src =

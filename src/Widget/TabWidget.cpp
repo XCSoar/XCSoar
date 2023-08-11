@@ -7,7 +7,7 @@
 #include "Asset.hpp"
 
 TabWidget::Layout::Layout(Orientation orientation, PixelRect rc,
-                          const TabDisplay &td, const Widget *e)
+                          const TabDisplay &td, const Widget *e) noexcept
   :pager(rc)
 {
   vertical = IsVertical(orientation, rc);
@@ -59,7 +59,7 @@ TabWidget::~TabWidget() noexcept
 }
 
 void
-TabWidget::LargeExtra()
+TabWidget::LargeExtra() noexcept
 {
   assert(extra != nullptr);
 
@@ -71,7 +71,7 @@ TabWidget::LargeExtra()
 }
 
 void
-TabWidget::RestoreExtra()
+TabWidget::RestoreExtra() noexcept
 {
   assert(extra != nullptr);
 
@@ -84,20 +84,20 @@ TabWidget::RestoreExtra()
 
 void
 TabWidget::AddTab(std::unique_ptr<Widget> widget, const TCHAR *caption,
-                  const MaskedIcon *icon)
+                  const MaskedIcon *icon) noexcept
 {
   tab_display->Add(caption, icon);
   PagerWidget::Add(std::move(widget));
 }
 
 const TCHAR *
-TabWidget::GetButtonCaption(unsigned i) const
+TabWidget::GetButtonCaption(unsigned i) const noexcept
 {
   return tab_display->GetCaption(i);
 }
 
 bool
-TabWidget::ClickPage(unsigned i)
+TabWidget::ClickPage(unsigned i) noexcept
 {
   if (!PagerWidget::ClickPage(i))
     return false;
@@ -110,13 +110,13 @@ TabWidget::ClickPage(unsigned i)
 }
 
 bool
-TabWidget::NextPage()
+TabWidget::NextPage() noexcept
 {
   return Next(HasPointer());
 }
 
 bool
-TabWidget::PreviousPage()
+TabWidget::PreviousPage() noexcept
 {
   return Previous(HasPointer());
 }
@@ -257,6 +257,6 @@ TabWidget::KeyPress(unsigned key_code) noexcept
 void
 TabWidget::OnPageFlipped() noexcept
 {
-  tab_display->Invalidate();
+  tab_display->SetCurrentIndex(GetCurrentIndex());
   PagerWidget::OnPageFlipped();
 }

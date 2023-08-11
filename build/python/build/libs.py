@@ -97,9 +97,9 @@ musl = MuslProject(
 )
 
 openssl = OpenSSLProject(
-    'https://www.openssl.org/source/openssl-3.1.0.tar.gz',
-    'https://artfiles.org/openssl.org/source/openssl-3.1.0.tar.gz',
-    'aaa925ad9828745c4cad9d9efeb273deca820f2cdcf2c3ac7d7c1212b7c497b4',
+    'https://www.openssl.org/source/openssl-3.1.1.tar.gz',
+    'https://artfiles.org/openssl.org/source/openssl-3.1.1.tar.gz',
+    'b3aa61334233b852b63ddb048df181177c2c659eb9d4376008118f9c08d07674',
     'include/openssl/ossl_typ.h',
 )
 
@@ -165,9 +165,9 @@ zlib = ZlibProject(
 )
 
 freetype = MesonProject(
-    'http://download.savannah.gnu.org/releases/freetype/freetype-2.13.0.tar.xz',
-    'http://downloads.sourceforge.net/project/freetype/freetype2/2.13.0/freetype-2.13.0.tar.xz',
-    '6393c1451c2f1c5f83aed5ea92d280af078e27d9',
+    'http://download.savannah.gnu.org/releases/freetype/freetype-2.13.1.tar.xz',
+    'http://downloads.sourceforge.net/project/freetype/freetype2/2.13.1/freetype-2.13.1.tar.xz',
+    'ea67e3b019b1104d1667aa274f5dc307d8cbd606b399bc32df308a77f1a564bf',
     'lib/libfreetype.a',
     [
         '-Dbrotli=disabled',
@@ -238,9 +238,9 @@ sqlite3 = AutotoolsProject(
 )
 
 proj = CmakeProject(
-    'http://download.osgeo.org/proj/proj-9.2.0.tar.gz',
-    'https://fossies.org/linux/privat/proj-9.2.0.tar.gz',
-    'dea816f5aa732ae6b2ee3977b9bdb28b1d848cf56a1aad8faf6708b89f0ed50e',
+    'http://download.osgeo.org/proj/proj-9.2.1.tar.gz',
+    'https://fossies.org/linux/privat/proj-9.2.1.tar.gz',
+    '15ebf4afa8744b9e6fccb5d571fc9f338dc3adcf99907d9e62d1af815d4971a1',
     'lib/libproj.a',
     [
         '-DBUILD_TESTING=OFF',
@@ -260,9 +260,9 @@ proj = CmakeProject(
 )
 
 libpng = CmakeProject(
-    'ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.39.tar.xz',
-    'http://downloads.sourceforge.net/project/libpng/libpng16/1.6.39/libpng-1.6.39.tar.xz',
-    '1f4696ce70b4ee5f85f1e1623dc1229b210029fa4b7aee573df3e2ba7b036937',
+    'ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.40.tar.xz',
+    'http://downloads.sourceforge.net/project/libpng/libpng16/1.6.40/libpng-1.6.40.tar.xz',
+    '535b479b2467ff231a3ec6d92a525906fb8ef27978be4f66dbe05d3f3a01b3a1',
     'lib/libpng.a',
     [
         '-DPNG_SHARED=OFF',
@@ -311,9 +311,9 @@ simple_usbmodeswitch = AutotoolsProject(
 )
 
 libtiff = CmakeProject(
-    'http://download.osgeo.org/libtiff/tiff-4.5.0.tar.xz',
-    'https://fossies.org/linux/misc/tiff-4.5.0.tar.xz',
-    'dafac979c5e7b6c650025569c5a4e720995ba5f17bc17e6276d1f12427be267c',
+    'http://download.osgeo.org/libtiff/tiff-4.5.1.tar.xz',
+    'https://fossies.org/linux/misc/tiff-4.5.1.tar.xz',
+    '3c080867114c26edab3129644a63b708028a90514b7fe3126e38e11d24f9f88a',
     'lib/libtiff.a',
     [
         '-DBUILD_SHARED_LIBS=OFF',

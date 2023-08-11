@@ -239,7 +239,7 @@ public:
 
   template<class Rep, class Period>
   [[gnu::const]]
-  static RoughTimeDelta FromDuration(const std::chrono::duration<Rep,Period> &d) noexcept {
+  static RoughTimeDelta FromDuration(const std::chrono::duration<Rep,Period> d) noexcept {
     return RoughTimeDelta{std::chrono::duration_cast<Duration>(d)};
   }
 

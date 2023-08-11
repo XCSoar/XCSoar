@@ -10,6 +10,7 @@
 #include "Geo/Flat/FlatBoundingBox.hpp"
 
 #include <map>
+#include <utility> // for std::swap()
 
 /**
  * Specialisation of AbstractContest for OLC Triangle (triangle) rules
@@ -75,7 +76,7 @@ private:
   struct ClosingPairs {
     std::map<unsigned, unsigned> closing_pairs;
 
-    bool Insert(const ClosingPair &p) noexcept {
+    bool Insert(const ClosingPair p) noexcept {
       auto found = FindRange(p);
       if (found.first == 0 && found.second == 0) {
         const auto result = closing_pairs.insert(p);
@@ -89,7 +90,7 @@ private:
     }
 
     [[gnu::pure]]
-    ClosingPair FindRange(const ClosingPair &p) const noexcept {
+    ClosingPair FindRange(const ClosingPair p) const noexcept {
       for (const auto &i : closing_pairs) {
         if (i.first > p.first)
           break;
@@ -118,6 +119,20 @@ private:
   };
 
   ClosingPairs closing_pairs;
+
+  struct Candidate {
+    unsigned tp1, tp2, tp3;
+    unsigned distance;
+
+    void Sort() noexcept {
+      if (tp1 > tp2)
+        std::swap(tp1, tp2);
+      if (tp2 > tp3)
+        std::swap(tp2, tp3);
+      if (tp1 > tp2)
+        std::swap(tp1, tp2);
+    }
+  };
 
   /**
    * A bounding box around a range of trace points.
@@ -251,18 +266,16 @@ public:
     incremental = _incremental;
   }
 
-protected:
+private:
   bool FindClosingPairs(unsigned old_size) noexcept;
   void SolveTriangle(bool exhaustive) noexcept;
 
-  std::tuple<unsigned, unsigned, unsigned, unsigned>
-  RunBranchAndBound(unsigned from, unsigned to, unsigned best_d,
-                    bool exhaustive) noexcept;
+  Candidate RunBranchAndBound(unsigned from, unsigned to, unsigned best_d,
+                              bool exhaustive) noexcept;
 
   void UpdateTrace(bool force) noexcept override;
   void ResetBranchAndBound() noexcept;
 
-private:
   void CheckAddCandidate(unsigned worst_d,
                          const OLCTriangleValidator &validator,
                          CandidateSet candidate_set) noexcept {
@@ -286,7 +299,6 @@ public:
 
 protected:
   /* virtual methods from AbstractContest */
-  bool UpdateScore() noexcept override;
-  void CopySolution(ContestTraceVector &vec) const noexcept override;
+  const ContestTraceVector &GetCurrentPath() const noexcept override;
   ContestResult CalculateResult() const noexcept override;
 };

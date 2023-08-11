@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "Geo/UTM.hpp"
-#include "Geo/GeoPoint.hpp"
+#include "UTM.hpp"
+#include "GeoPoint.hpp"
 #include "WGS84.hpp"
-#include "util/Macros.hpp"
 
 static constexpr double k0 = 0.9996;
 
@@ -13,18 +12,18 @@ static constexpr double e2 = e * e;
 static constexpr double e3 = e * e;
 static constexpr double e_p2 = e / (1.0 - e);
 
-[[gnu::const]]
-static char
-CalculateZoneLetter(const Angle latitude)
+static constexpr char letters[] = "CDEFGHJKLMNPQRSTUVWXX";
+
+static constexpr char
+CalculateZoneLetter(const Angle latitude) noexcept
 {
-  static constexpr char letters[] = "CDEFGHJKLMNPQRSTUVWXX";
   unsigned index = (unsigned)((latitude.Degrees() + 80) / 8);
-  return (index < ARRAY_SIZE(letters)) ? letters[index] : '\0';
+  return index < std::size(letters) ? letters[index] : '\0';
 }
 
 [[gnu::const]]
 static unsigned
-CalculateZoneNumber(const GeoPoint &p)
+CalculateZoneNumber(const GeoPoint p) noexcept
 {
   if (p.latitude <= Angle::Degrees(64) &&
       p.latitude >= Angle::Degrees(56) &&
@@ -45,18 +44,17 @@ CalculateZoneNumber(const GeoPoint &p)
       return 37;
   }
 
-  return (int)floor((p.longitude.Degrees() + 180) / 6) + 1;
+  return unsigned((p.longitude.Degrees() + 180) / 6) + 1;
 }
 
-[[gnu::const]]
-static Angle
-GetCentralMeridian(unsigned zone_number)
+static constexpr Angle
+GetCentralMeridian(unsigned zone_number) noexcept
 {
   return Angle::Degrees(int(zone_number - 1) * 6 - 180 + 3);
 }
 
 UTM
-UTM::FromGeoPoint(GeoPoint p)
+UTM::FromGeoPoint(GeoPoint p) noexcept
 {
   double lat = (double)p.latitude.Radians();
   double _sin = (double)p.latitude.sin();
@@ -100,7 +98,7 @@ UTM::FromGeoPoint(GeoPoint p)
 }
 
 GeoPoint
-UTM::ToGeoPoint() const
+UTM::ToGeoPoint() const noexcept
 {
   // remove longitude offset
   double x = (double)easting - 500000;

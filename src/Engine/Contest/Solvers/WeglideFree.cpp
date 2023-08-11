@@ -28,10 +28,10 @@ WeglideFree::Solve([[maybe_unused]] bool exhaustive) noexcept
     : SolverResult::FAILED;
 }
 
-void
-WeglideFree::CopySolution(ContestTraceVector &vec) const noexcept
+const ContestTraceVector &
+WeglideFree::GetCurrentPath() const noexcept
 {
-  vec = solution_distance;
+  return solution_distance;
 }
 
 ContestResult

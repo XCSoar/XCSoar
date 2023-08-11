@@ -338,9 +338,9 @@ Latin1ToUTF8(const char *gcc_restrict src, char *gcc_restrict buffer,
 char *
 UnicodeToUTF8(unsigned ch, char *q) noexcept
 {
-  if (gcc_likely(ch < 0x80)) {
+  if (ch < 0x80) [[likely]] {
     *q++ = (char)ch;
-  } else if (gcc_likely(ch < 0x800)) {
+  } else if (ch < 0x800) [[likely]] {
     *q++ = MakeLeading1(ch >> 6);
     *q++ = MakeContinuation(ch);
   } else if (ch < 0x10000) {
@@ -498,7 +498,7 @@ std::size_t
 TruncateStringUTF8(const char *p,
                    std::size_t max_chars, std::size_t max_bytes) noexcept
 {
-#if !CLANG_CHECK_VERSION(3,6)
+#ifndef __clang__
   /* disabled on clang due to -Wtautological-pointer-compare */
   assert(p != nullptr);
 #endif

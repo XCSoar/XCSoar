@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "Asset.hpp"
+#include <utility> // for std::pair
 
 #include <linux/input.h>
 
@@ -59,19 +59,20 @@ static constexpr struct {
   { KEY_SPACE, ' ', true },
 };
 
-[[gnu::const]]
-static unsigned
-TranslateKeyCode(unsigned key_code, bool &is_char)
+/**
+ * @return the translated key code and a flag indicating whether this
+ * is an (ASCII) character
+ */
+constexpr std::pair<unsigned, bool>
+TranslateKeyCode(unsigned key_code) noexcept
 {
   for (auto i : key_code_translation_table) {
     if (key_code == i.from) {
-      is_char = i.is_char;
-      return i.to;
+      return {i.to, i.is_char};
     }
   }
 
-  is_char = false;
-  return key_code;
+  return {key_code, false};
 }
 
 /* these macros conflict with Event::Type */

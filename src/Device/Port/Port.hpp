@@ -4,7 +4,6 @@
 #pragma once
 
 #include "State.hpp"
-#include "util/Compiler.h"
 
 #include <chrono>
 #include <cstddef>
@@ -54,7 +53,6 @@ public:
    * @param length Length of the string
    * @return the number of bytes written
    */
-  gcc_nonnull_all
   virtual std::size_t Write(std::span<const std::byte> src) = 0;
 
   /**
@@ -149,7 +147,6 @@ public:
    * @return Number of bytes read from the port (0 if no data is
    * available currently)
    */
-  gcc_nonnull_all
   virtual std::size_t Read(std::span<std::byte> dest) = 0;
 
   /**
@@ -185,7 +182,6 @@ public:
    * @param subsequent_timeout timeout for the subsequent reads
    * @param total_timeout timeout for the whole operation
    */
-  gcc_nonnull_all
   void FullRead(std::span<std::byte> dest, OperationEnvironment &env,
                 std::chrono::steady_clock::duration first_timeout,
                 std::chrono::steady_clock::duration subsequent_timeout,
@@ -201,7 +197,6 @@ public:
    * @param timeout give up after this duration
    * @return true on success
    */
-  gcc_nonnull_all
   void FullRead(std::span<std::byte> dest, OperationEnvironment &env,
                 std::chrono::steady_clock::duration timeout);
 

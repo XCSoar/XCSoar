@@ -13,6 +13,8 @@ public:
   enum Pages {
     PAGE_ACTIONS,
     PAGE_LIST,
+    PAGE_WEGLIDE_USER,
+    PAGE_WEGLIDE_PUBLIC_DECLARED,
   };
 
   TaskMiscPanel(TaskManagerDialog &dialog,

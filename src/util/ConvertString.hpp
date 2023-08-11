@@ -4,7 +4,6 @@
 #pragma once
 
 #include "UTF8.hpp"
-#include "Compiler.h"
 
 #ifdef _UNICODE
 #include "AllocatedString.hxx"
@@ -21,28 +20,28 @@
 /**
  * @return nullptr on error
  */
-gcc_nonnull_all
+[[gnu::nonnull]]
 BasicAllocatedString<wchar_t>
 ConvertUTF8ToWide(const char *p) noexcept;
 
 /**
  * @return nullptr on error
  */
-gcc_nonnull_all
+[[gnu::nonnull]]
 BasicAllocatedString<wchar_t>
 ConvertACPToWide(const char *p) noexcept;
 
 /**
  * @return nullptr on error
  */
-gcc_nonnull_all
+[[gnu::nonnull]]
 AllocatedString
 ConvertWideToUTF8(const wchar_t *p) noexcept;
 
 /**
  * @return nullptr on error
  */
-gcc_nonnull_all
+[[gnu::nonnull]]
 AllocatedString
 ConvertWideToACP(const wchar_t *p) noexcept;
 

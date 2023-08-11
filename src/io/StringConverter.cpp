@@ -100,8 +100,7 @@ StringConverter::Convert(char *narrow)
       /* abort on invalid UTF-8 sequence */
       throw std::runtime_error("Invalid UTF-8");
 
-    /* fall through ... */
-    gcc_fallthrough;
+    [[fallthrough]];
 
   case Charset::AUTO:
     return narrow;

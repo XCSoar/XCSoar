@@ -5,11 +5,12 @@
 #include "Waypoint/Waypoints.hpp"
 #include "Geo/UTM.hpp"
 #include "io/LineReader.hpp"
+#include "util/StringStrip.hxx"
 
 #include <stdlib.h>
 
 static bool
-ParseAngle(const TCHAR *src, Angle &angle)
+ParseAngle(const TCHAR *src, Angle &angle) noexcept
 {
   bool is_positive;
   if (src[0] == _T('N') || src[0] == _T('n') ||
@@ -47,7 +48,7 @@ ParseAngle(const TCHAR *src, Angle &angle)
 }
 
 static bool
-ParseLocation(const TCHAR *src, GeoPoint &p)
+ParseLocation(const TCHAR *src, GeoPoint &p) noexcept
 {
   Angle lon, lat;
 
@@ -67,7 +68,7 @@ ParseLocation(const TCHAR *src, GeoPoint &p)
 }
 
 static bool
-ParseLocationUTM(const TCHAR *src, GeoPoint &p)
+ParseLocationUTM(const TCHAR *src, GeoPoint &p) noexcept
 {
   TCHAR *endptr;
 
@@ -98,7 +99,7 @@ ParseLocationUTM(const TCHAR *src, GeoPoint &p)
 }
 
 static bool
-ParseAltitude(const TCHAR *src, double &dest)
+ParseAltitude(const TCHAR *src, double &dest) noexcept
 {
   TCHAR *endptr;
   long alt = _tcstol(src, &endptr, 10);
@@ -113,9 +114,7 @@ ParseAltitude(const TCHAR *src, double &dest)
 static tstring
 ParseString(tstring_view src) noexcept
 {
-  tstring dest{src};
-  trim_inplace(dest);
-  return dest;
+  return tstring{Strip(src)};
 }
 
 bool

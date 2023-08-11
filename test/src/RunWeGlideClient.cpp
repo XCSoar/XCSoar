@@ -3,7 +3,7 @@
 
 #include "CoInstance.hpp"
 #include "net/client/WeGlide/DownloadTask.hpp"
-#include "net/client/WeGlide/ListDeclaredTasks.hpp"
+#include "net/client/WeGlide/ListTasks.hpp"
 #include "net/client/WeGlide/Settings.hpp"
 #include "net/client/WeGlide/UploadFlight.hpp"
 #include "net/http/Init.hpp"
@@ -95,6 +95,17 @@ try {
 
     const auto tasks = instance.Run(
       WeGlide::ListDeclaredTasks(*Net::curl, settings, env));
+
+    for (const auto &task : tasks)
+      fmt::print("{}\t{:4.0f}\t{}\t{}\n", task.id, task.distance, task.name, task.user_name);
+
+    return EXIT_SUCCESS;
+  } else if (StringIsEqual(cmd, "by_user")) {
+    const uint_least64_t user_id = ParseUint64(args.ExpectNext());
+    args.ExpectEnd();
+
+    const auto tasks = instance.Run(
+      WeGlide::ListTasksByUser(*Net::curl, settings, user_id, env));
 
     for (const auto &task : tasks)
       fmt::print("{}\t{:4.0f}\t{}\t{}\n", task.id, task.distance, task.name, task.user_name);

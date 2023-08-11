@@ -5,7 +5,6 @@
 
 #include "PixelOperations.hpp"
 #include "PixelTraits.hpp"
-#include "util/Compiler.h"
 
 #ifdef __ARM_NEON__
 #include "NEON.hpp"
@@ -50,7 +49,7 @@ public:
 
   using Portable::WritePixel;
 
-  gcc_flatten gcc_nonnull_all
+  [[gnu::flatten]] [[gnu::nonnull]]
   void FillPixels(rpointer p, unsigned n, color_type c) const {
     const unsigned no = n & OPTIMISED_MASK;
     const unsigned np = n & PORTABLE_MASK;
@@ -59,7 +58,7 @@ public:
     Portable::FillPixels(PixelTraits::Next(p, no), np, c);
   }
 
-  gcc_flatten gcc_nonnull_all
+  [[gnu::flatten]] [[gnu::nonnull]]
   void CopyPixels(rpointer p, const_rpointer q, unsigned n) const {
     const unsigned no = n & OPTIMISED_MASK;
     const unsigned np = n & PORTABLE_MASK;

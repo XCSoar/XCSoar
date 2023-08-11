@@ -193,6 +193,8 @@ The following attributes are provided by ``xcsoar.blackboard``:
      ``latitude`` [°]) according to GPS.
  * - ``altitude``
    - The current altitude above MSL [m].
+ * - ``altitude_agl``
+   - The current altitude above ground [m].
  * - ``track``
    - The current flying direction above ground [°].
  * - ``ground_speed``

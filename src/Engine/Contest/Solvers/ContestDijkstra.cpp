@@ -309,12 +309,12 @@ ContestDijkstra::AddIncrementalEdges(unsigned first_point) noexcept
   AddStartEdges();
 }
 
-void
-ContestDijkstra::CopySolution(ContestTraceVector &result) const noexcept
+const ContestTraceVector &
+ContestDijkstra::GetCurrentPath() const noexcept
 {
   assert(num_stages <= MAX_STAGES);
 
-  result = solution;
+  return solution;
 }
 
 void

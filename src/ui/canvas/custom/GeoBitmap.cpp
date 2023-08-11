@@ -5,7 +5,6 @@
 #include "UncompressedImage.hpp"
 #include "Geo/Quadrilateral.hpp"
 #include "system/Path.hpp"
-#include "util/Compiler.h"
 
 #ifdef USE_GEOTIFF
 #include "LibTiff.hpp"
@@ -15,7 +14,7 @@
 
 #include <tchar.h>
 
-#if !defined(USE_GEOTIFF) && GCC_CHECK_VERSION(4,9)
+#if !defined(USE_GEOTIFF) && defined(__GNUC__)
 #pragma GCC diagnostic ignored "-Wsuggest-attribute=noreturn"
 #endif
 

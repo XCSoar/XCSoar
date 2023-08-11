@@ -10,6 +10,7 @@
 #include "system/Path.hpp"
 #include "util/tstring.hpp"
 #include "util/StringAPI.hxx"
+#include "util/StringStrip.hxx"
 #include "util/ExtractParameters.hpp"
 #include "Operation/Operation.hpp"
 
@@ -317,6 +318,16 @@ TestZanderWaypoint(const Waypoint org_wp, const Waypoint *wp)
 }
 
 static void
+TruncateStrip(tstring &s, std::size_t max_length) noexcept
+{
+  tstring_view v = s;
+  if (v.size() > max_length)
+    v = v.substr(0, max_length);
+  v = Strip(v);
+  s.assign(v);
+}
+
+static void
 TestZander(wp_vector org_wp)
 {
   Waypoints way_points;
@@ -328,9 +339,7 @@ TestZander(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    if (it->name.length() > 12)
-      it->name = it->name.erase(12);
-    trim_inplace(it->name);
+    TruncateStrip(it->name, 12);
     const auto wp = GetWaypoint(*it, way_points);
     TestZanderWaypoint(*it, wp.get());
   }
@@ -348,9 +357,7 @@ TestFS(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    if (it->name.length() > 8)
-      it->name = it->name.erase(8);
-    trim_inplace(it->name);
+    TruncateStrip(it->name, 8);
     GetWaypoint(*it, way_points);
   }
 }
@@ -367,9 +374,7 @@ TestFS_UTM(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    if (it->name.length() > 8)
-      it->name = it->name.erase(8);
-    trim_inplace(it->name);
+    TruncateStrip(it->name, 8);
     GetWaypoint(*it, way_points);
   }
 }
@@ -386,7 +391,7 @@ TestOzi(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    trim_inplace(it->name);
+    it->name = tstring{Strip(it->name)};
     GetWaypoint(*it, way_points);
   }
 }
@@ -407,10 +412,7 @@ TestCompeGPS(wp_vector org_wp)
     while ((pos = it->name.find_first_of(_T(' '))) != tstring::npos)
       it->name.erase(pos, 1);
 
-    if (it->name.length() > 6)
-      it->name = it->name.erase(6);
-
-    trim_inplace(it->name);
+    TruncateStrip(it->name, 6);
     const auto wp = GetWaypoint(*it, way_points);
     ok1(wp->comment == it->comment);
   }
@@ -432,10 +434,7 @@ TestCompeGPS_UTM(wp_vector org_wp)
     while ((pos = it->name.find_first_of(_T(' '))) != tstring::npos)
       it->name.erase(pos, 1);
 
-    if (it->name.length() > 6)
-      it->name = it->name.erase(6);
-
-    trim_inplace(it->name);
+    TruncateStrip(it->name, 6);
     const auto wp = GetWaypoint(*it, way_points);
     ok1(wp->comment == it->comment);
   }

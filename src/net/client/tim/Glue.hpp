@@ -4,6 +4,7 @@
 #pragma once
 
 #include "co/InjectTask.hxx"
+#include "thread/Mutex.hxx"
 #include "event/DeferEvent.hxx"
 #include "time/PeriodClock.hpp"
 
@@ -25,9 +26,9 @@ class Glue {
 
   PeriodClock clock;
 
-  std::vector<Thermal> thermals;
+  mutable Mutex mutex;
 
-  std::vector<Thermal> new_thermals;
+  std::vector<Thermal> thermals;
 
   Co::InjectTask inject_task;
 
@@ -35,6 +36,13 @@ public:
   explicit Glue(CurlGlobal &_curl) noexcept;
   ~Glue() noexcept;
 
+  auto Lock() const noexcept {
+    return std::lock_guard{mutex};
+  }
+
+  /**
+   * Must lock the #mutex while accessing the returned reference.
+   */
   const auto &Get() const noexcept {
     return thermals;
   }

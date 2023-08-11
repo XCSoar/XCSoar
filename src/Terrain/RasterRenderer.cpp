@@ -69,7 +69,10 @@ ContourInterval(unsigned h, unsigned contour_height_scale) noexcept
 static unsigned
 ContourInterval(const TerrainHeight h, const unsigned contour_height_scale)
 {
-  if (gcc_unlikely(h.IsSpecial()) || h.GetValue() <= 0)
+  if (h.IsSpecial()) [[unlikely]]
+    return 0;
+
+  if (h.GetValue() <= 0)
     return 0;
 
   return ContourInterval(h.GetValue(), contour_height_scale);
@@ -219,16 +222,15 @@ RasterRenderer::GenerateUnshadedImage(const unsigned height_scale,
 
     for (unsigned x = height_matrix.GetSize().x; x > 0; --x) {
       const auto e = *src++;
-      if (gcc_likely(!e.IsSpecial())) {
+      if (!e.IsSpecial()) [[likely]] {
         unsigned h = std::max(0, (int)e.GetValue());
 
         const unsigned contour_interval =
           ContourInterval(h, contour_height_scale);
 
         h = std::min(254u, h >> height_scale);
-        if (gcc_unlikely((contour_interval != contour_row_base)
-                         || (contour_interval != *contour_this_column_base))) {
-
+        if (contour_interval != contour_row_base ||
+            contour_interval != *contour_this_column_base) [[unlikely]] {
           *p++ = oColorBuf[(int)h - 64 * 256];
           *contour_this_column_base = contour_row_base = contour_interval;
         } else {
@@ -313,7 +315,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 
     for (unsigned x = 0; x < height_matrix.GetSize().x; ++x, ++src) {
       const auto e = *src;
-      if (gcc_likely(!e.IsSpecial())) {
+      if (!e.IsSpecial()) [[likely]] {
         unsigned h = std::max(0, (int)e.GetValue());
 
         const unsigned contour_interval =
@@ -347,10 +349,8 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
         const auto h_left = src[-(int)column_minus_index];
         const auto h_right = src[column_plus_index];
 
-        if (gcc_unlikely(h_above.IsSpecial() ||
-                         h_below.IsSpecial() ||
-                         h_left.IsSpecial() ||
-                         h_right.IsSpecial())) {
+        if (h_above.IsSpecial() || h_below.IsSpecial() ||
+            h_left.IsSpecial() || h_right.IsSpecial()) [[unlikely]] {
           /* some "special" terrain value surrounding us (water or
              invalid), skip slope calculation */
           *p++ = oColorBuf[h];
@@ -358,8 +358,8 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
           continue;
         }
 
-        if (gcc_unlikely((contour_interval != contour_row_base)
-                         || (contour_interval != *contour_this_column_base))) {
+        if (contour_interval != contour_row_base ||
+            contour_interval != *contour_this_column_base) [[unlikely]] {
 
           *contour_this_column_base++ = contour_row_base = contour_interval;
           *p++ = oColorBuf[int(h) - 64 * 256];

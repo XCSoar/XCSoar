@@ -2,7 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "Process.hpp"
-#include "util/Compiler.h"
 
 #ifdef HAVE_POSIX
 
@@ -55,7 +54,7 @@ Start(const char *const*argv) noexcept
 {
   /* double fork to detach from this process */
   const pid_t pid = fork();
-  if (gcc_unlikely(pid < 0))
+  if (pid < 0) [[unlikely]]
     return false;
 
   if (pid == 0)

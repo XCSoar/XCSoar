@@ -40,8 +40,13 @@ Glue::OnTimer(const NMEAInfo &basic) noexcept
 Co::InvokeTask
 Glue::Start(const GeoPoint &location)
 {
-  new_thermals = co_await GetThermals(curl, std::chrono::hours(1),
-                                      location, 20);
+  auto new_thermals = co_await GetThermals(curl, std::chrono::hours(1),
+                                           location, 20);
+  LogDebug("Downloaded {} thermals from ThermalInfoMap",
+           new_thermals.size());
+
+  const auto lock = Lock();
+  thermals = std::move(new_thermals);
 }
 
 void
@@ -49,11 +54,6 @@ Glue::OnCompletion(std::exception_ptr error) noexcept
 {
   if (error)
     LogError(error, "ThermalInfoMap request failed");
-  else
-    LogDebug("Downloaded %u thermals from ThermalInfoMap",
-             unsigned(new_thermals.size()));
-
-  thermals = std::move(new_thermals);
 }
 
 } // namespace TIM

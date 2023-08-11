@@ -102,7 +102,7 @@ struct BrokenTime {
    */
   template<class Rep, class Period>
   [[gnu::const]]
-  static BrokenTime FromSinceMidnight(const std::chrono::duration<Rep,Period> &since_midnight) noexcept {
+  static BrokenTime FromSinceMidnight(const std::chrono::duration<Rep,Period> since_midnight) noexcept {
     return FromSecondOfDay(std::chrono::duration_cast<std::chrono::seconds>(since_midnight).count());
   }
 
@@ -119,7 +119,7 @@ struct BrokenTime {
    */
   template<class Rep, class Period>
   [[gnu::const]]
-  static BrokenTime FromSinceMidnightChecked(const std::chrono::duration<Rep,Period> &since_midnight) noexcept {
+  static BrokenTime FromSinceMidnightChecked(const std::chrono::duration<Rep,Period> since_midnight) noexcept {
     return FromSecondOfDayChecked(std::chrono::duration_cast<std::chrono::seconds>(since_midnight).count());
   }
 

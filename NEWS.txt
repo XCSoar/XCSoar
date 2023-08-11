@@ -1,3 +1,16 @@
+Version 7.36 - 2023/07/02
+* task
+  - save outer radius and angle of custom keyholes in task files
+* calculations
+  - implement the "predict" option for Netcoupe FFVV, WeGlide, Charron
+* WeGlide
+  - allow downloading all user tasks and public task declarations
+* Lua scripting
+  - add blackboard.altitude_agl
+* Kobo
+  - fix flight durations on power-off screen
+  - fix bogus last entry on power-off screen
+
 Version 7.35 - 2023/06/16
 * user interface
   - fix crash in plane list

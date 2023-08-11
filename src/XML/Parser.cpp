@@ -241,10 +241,9 @@ GetNextToken(Parser *pXML)
 
   // Find next non-white space character
   ch = FindNonWhiteSpace(pXML);
-  if (gcc_unlikely(ch == 0)) {
+  if (ch == 0) [[unlikely]]
     // If we failed to obtain a valid character
     return {{}, TokenType::ERROR};
-  }
 
   // Cache the current string pointer
   lpXML = pXML->lpXML;
@@ -439,7 +438,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
   while (true) {
     // Obtain the next token
     NextToken token = GetNextToken(pXML);
-    if (gcc_unlikely(token.type == TokenType::ERROR))
+    if (token.type == TokenType::ERROR) [[unlikely]]
       return;
 
     // Check the current status

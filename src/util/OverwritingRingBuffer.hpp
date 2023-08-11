@@ -46,6 +46,18 @@ public:
 			return *this;
 		}
 
+		auto operator++(int) noexcept {
+			auto result = *this;
+			i = buffer.next(i);
+			return result;
+		}
+
+		auto operator--(int) noexcept {
+			auto result = *this;
+			i = buffer.previous(i);
+			return result;
+		}
+
 		bool operator==(const const_iterator &other) const noexcept {
 			assert(&buffer == &other.buffer);
 			return i == other.i;

@@ -12,7 +12,7 @@
 #include <stdlib.h>
 
 static bool
-ParseAngle(const TCHAR *src, Angle &angle)
+ParseAngle(const TCHAR *src, Angle &angle) noexcept
 {
   TCHAR *endptr;
   double deg = _tcstod(src, &endptr);
@@ -24,7 +24,7 @@ ParseAngle(const TCHAR *src, Angle &angle)
 }
 
 static bool
-ParseNumber(const TCHAR *src, long &dest)
+ParseNumber(const TCHAR *src, long &dest) noexcept
 {
   TCHAR *endptr;
   long temp = _tcstol(src, &endptr, 10);
@@ -36,14 +36,12 @@ ParseNumber(const TCHAR *src, long &dest)
 }
 
 static bool
-ParseString(const TCHAR *src, tstring &dest)
+ParseString(tstring_view src, tstring &dest) noexcept
 {
-  if (src[0] == 0)
-    return true;
+  if (src.empty())
+    return false;
 
-  dest.assign(src);
-  trim_inplace(dest);
-
+  dest.assign(Strip(src));
   return true;
 }
 

@@ -21,8 +21,21 @@ struct TaskInfo {
 
   std::string user_name;
 
+  /**
+   * The total task distance [m].
+   */
   double distance;
 };
+
+/**
+ * Download a list of all tasks by the specified user.
+ *
+ * @see https://api.weglide.org/docs#/task/get_task_by_user_v1_task_get
+ */
+Co::Task<std::vector<TaskInfo>>
+ListTasksByUser(CurlGlobal &curl, const WeGlideSettings &settings,
+                uint_least64_t user_id,
+                ProgressListener &progress);
 
 /**
  * Download a list of all tasks declared in WeGlide.
