@@ -19,7 +19,6 @@ XCSOAR_SOURCES += \
 	Android/Environment.cpp \
 	Android/Bitmap.cpp \
 	Android/Product.cpp \
-	Android/Nook.cpp \
 	Android/InternalSensors.cpp \
 	Android/SoundUtil.cpp \
 	Android/TextUtil.cpp \
