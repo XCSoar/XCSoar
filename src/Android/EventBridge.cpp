@@ -55,7 +55,7 @@ void
 Java_de_opensoar_EventBridge_onKeyDown([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jclass cls, jint key_code)
 {
   if (event_queue == nullptr)
-    /* XCSoar not yet initialised */
+    /* OpenSoar not yet initialised */
     return;
 
   if (!has_cursor_keys && IsCursorKey(key_code))
@@ -72,7 +72,7 @@ void
 Java_de_opensoar_EventBridge_onKeyUp([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jclass cls, jint key_code)
 {
   if (event_queue == nullptr)
-    /* XCSoar not yet initialised */
+    /* OpenSoar not yet initialised */
     return;
 
   event_queue->Inject(Event(Event::KEY_UP, TranslateKeyCode(key_code)));
@@ -85,7 +85,7 @@ Java_de_opensoar_EventBridge_onMouseDown([[maybe_unused]] JNIEnv *env, [[maybe_u
                                         jint x, jint y)
 {
   if (event_queue == nullptr)
-    /* XCSoar not yet initialised */
+    /* OpenSoar not yet initialised */
     return;
 
   event_queue->Inject(Event(Event::MOUSE_DOWN, PixelPoint(x, y)));
@@ -98,7 +98,7 @@ Java_de_opensoar_EventBridge_onMouseUp([[maybe_unused]] JNIEnv *env, [[maybe_unu
                                       jint x, jint y)
 {
   if (event_queue == nullptr)
-    /* XCSoar not yet initialised */
+    /* OpenSoar not yet initialised */
     return;
 
   event_queue->Inject(Event(Event::MOUSE_UP, PixelPoint(x, y)));
@@ -111,7 +111,7 @@ Java_de_opensoar_EventBridge_onMouseMove([[maybe_unused]] JNIEnv *env, [[maybe_u
                                         jint x, jint y)
 {
   if (event_queue == nullptr)
-    /* XCSoar not yet initialised */
+    /* OpenSoar not yet initialised */
     return;
 
   event_queue->Purge(Event::MOUSE_MOTION);
@@ -124,7 +124,7 @@ void
 Java_de_opensoar_EventBridge_onPointerDown([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jclass cls)
 {
   if (event_queue == nullptr)
-    /* XCSoar not yet initialised */
+    /* OpenSoar not yet initialised */
     return;
 
   event_queue->Inject(Event::POINTER_DOWN);
@@ -136,7 +136,7 @@ void
 Java_de_opensoar_EventBridge_onPointerUp([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jclass cls)
 {
   if (event_queue == nullptr)
-    /* XCSoar not yet initialised */
+    /* OpenSoar not yet initialised */
     return;
 
   event_queue->Inject(Event::POINTER_UP);

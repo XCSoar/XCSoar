@@ -39,7 +39,7 @@ BluetoothHelper::Initialise(JNIEnv *env) noexcept
 
   ctor = env->GetMethodID(cls, "<init>",
                           "(Landroid/content/Context;"
-                          "Lorg/xcsoar/PermissionManager;"
+                          "Lde/opensoar/PermissionManager;"
                           ")V");
   if (Java::DiscardException(env)) {
     /* need to check for Java exceptions again because the first

@@ -29,8 +29,8 @@ InternalSensors::Initialise(JNIEnv *env)
 
   gps_ctor_id = env->GetMethodID(gps_cls, "<init>",
                                  "(Landroid/content/Context;"
-                                 "Lorg/opensoar/PermissionManager;"
-                                 "Lorg/opensoar/SensorListener;)V");
+                                 "Lde/opensoar/PermissionManager;"
+                                 "Lde/opensoar/SensorListener;)V");
 
   sensors_cls.Find(env, "de/opensoar/NonGPSSensors");
 
