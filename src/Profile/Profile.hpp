@@ -8,6 +8,8 @@
 #include "Profile/ProfileMap.hpp"
 // IWYU pragma: end_exports
 
+#include <string_view>
+
 class Path;
 class AllocatedPath;
 
@@ -62,13 +64,13 @@ SetFiles(Path override_path) noexcept;
  */
 [[gnu::pure]]
 AllocatedPath
-GetPath(const char *key) noexcept;
+GetPath(std::string_view key) noexcept;
 
 void
-SetPath(const char *key, Path value) noexcept;
+SetPath(std::string_view key, Path value) noexcept;
 
 [[gnu::pure]]
 bool
-GetPathIsEqual(const char *key, Path value) noexcept;
+GetPathIsEqual(std::string_view key, Path value) noexcept;
 
 } // namespace Profile

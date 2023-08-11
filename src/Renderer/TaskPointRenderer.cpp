@@ -18,25 +18,22 @@ TaskPointRenderer::TaskPointRenderer(Canvas &_canvas,
                                      OZRenderer &_ozv,
                                      bool _draw_bearing,
                                      TargetVisibility _target_visibility,
-                                     const GeoPoint &_location)
+                                     const GeoPoint &_location) noexcept
   :canvas(_canvas), m_proj(_projection),
    map_canvas(_canvas, _projection,
               _projection.GetScreenBounds().Scale(1.1)),
    task_look(_task_look),
    flat_projection(_flat_projection),
-   draw_bearing(_draw_bearing),
-   target_visibility(_target_visibility),
-   index(0),
    ozv(_ozv),
-   active_index(0),
    location(_location),
-   task_finished(false),
-   mode_optional_start(false)
+   target_visibility(_target_visibility),
+   draw_bearing(_draw_bearing)
 {
 }
 
 void
-TaskPointRenderer::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
+TaskPointRenderer::DrawOrdered(const OrderedTaskPoint &tp,
+                               Layer layer) noexcept
 {
   int offset = index - active_index;
 
@@ -48,14 +45,14 @@ TaskPointRenderer::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
     offset = -1;
 
   switch (layer) {
-  case LAYER_OZ_SHADE:
+  case Layer::OZ_SHADE:
     if (tp.BoundingBoxOverlaps(bb_screen))
       // draw shaded part of observation zone
       DrawOZBackground(canvas, tp, offset);
 
     break;
 
-  case LAYER_LEG:
+  case Layer::LEG:
     if (index > 0)
       DrawTaskLine(last_point, tp.GetLocationRemaining());
 
@@ -63,7 +60,7 @@ TaskPointRenderer::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
 
     break;
 
-  case LAYER_OZ_OUTLINE:
+  case Layer::OZ_OUTLINE:
     if (tp.BoundingBoxOverlaps(bb_screen)) {
       if (mode_optional_start && offset == 0)
         /* render optional starts as deactivated */
@@ -74,25 +71,25 @@ TaskPointRenderer::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
 
     break;
 
-  case LAYER_SYMBOLS:
+  case Layer::SYMBOLS:
     return;
   }
 }
 
 bool
-TaskPointRenderer::IsTargetVisible(const TaskPoint &tp) const
+TaskPointRenderer::IsTargetVisible(const TaskPoint &tp) const noexcept
 {
-  if (!tp.HasTarget() || target_visibility == NONE)
+  if (!tp.HasTarget() || target_visibility == TargetVisibility::NONE)
     return false;
 
-  if (target_visibility == ALL)
+  if (target_visibility == TargetVisibility::ALL)
     return true;
 
   return PointCurrent();
 }
 
 void
-TaskPointRenderer::DrawBearing(const TaskPoint &tp)
+TaskPointRenderer::DrawBearing(const TaskPoint &tp) noexcept
 {
   if (!location.IsValid() || !draw_bearing || !PointCurrent())
     return;
@@ -102,7 +99,7 @@ TaskPointRenderer::DrawBearing(const TaskPoint &tp)
 }
 
 void
-TaskPointRenderer::DrawTarget(const TaskPoint &tp)
+TaskPointRenderer::DrawTarget(const TaskPoint &tp) noexcept
 {
   if (!IsTargetVisible(tp))
     return;
@@ -112,7 +109,8 @@ TaskPointRenderer::DrawTarget(const TaskPoint &tp)
 }
 
 void
-TaskPointRenderer::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
+TaskPointRenderer::DrawTaskLine(const GeoPoint &start,
+                                const GeoPoint &end) noexcept
 {
   canvas.Select(LegActive() ? task_look.leg_active_pen :
                               task_look.leg_inactive_pen);
@@ -141,7 +139,7 @@ TaskPointRenderer::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
 }
 
 inline void
-TaskPointRenderer::DrawIsoline(const AATPoint &tp)
+TaskPointRenderer::DrawIsoline(const AATPoint &tp) noexcept
 {
   if (!tp.valid() || !IsTargetVisible(tp))
     return;
@@ -175,33 +173,36 @@ TaskPointRenderer::DrawIsoline(const AATPoint &tp)
 
 inline void
 TaskPointRenderer::DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp,
-                                    int offset)
+                                    int offset) noexcept
 {
   ozv.Draw(canvas, OZRenderer::LAYER_SHADE, m_proj, tp.GetObservationZone(),
            offset);
 }
 
 inline void
-TaskPointRenderer::DrawOZForeground(const OrderedTaskPoint &tp, int offset)
+TaskPointRenderer::DrawOZForeground(const OrderedTaskPoint &tp,
+                                    int offset) noexcept
 {
-  ozv.Draw(canvas, OZRenderer::LAYER_INACTIVE, m_proj, tp.GetObservationZone(),
+  ozv.Draw(canvas, OZRenderer::LAYER_INACTIVE,
+           m_proj, tp.GetObservationZone(),
            offset);
-  ozv.Draw(canvas, OZRenderer::LAYER_ACTIVE, m_proj, tp.GetObservationZone(),
+  ozv.Draw(canvas, OZRenderer::LAYER_ACTIVE,
+           m_proj, tp.GetObservationZone(),
            offset);
 }
 
 void
-TaskPointRenderer::Draw(const TaskPoint &tp, Layer layer)
+TaskPointRenderer::Draw(const TaskPoint &tp, Layer layer) noexcept
 {
   const OrderedTaskPoint &otp = (const OrderedTaskPoint &)tp;
   const AATPoint &atp = (const AATPoint &)tp;
 
   switch (tp.GetType()) {
   case TaskPointType::UNORDERED:
-    if (layer == LAYER_LEG && location.IsValid())
+    if (layer == Layer::LEG && location.IsValid())
       DrawTaskLine(location, tp.GetLocationRemaining());
 
-    if (layer == LAYER_SYMBOLS)
+    if (layer == Layer::SYMBOLS)
       DrawBearing(tp);
 
     index++;
@@ -211,7 +212,7 @@ TaskPointRenderer::Draw(const TaskPoint &tp, Layer layer)
     index = 0;
 
     DrawOrdered(otp, layer);
-    if (layer == LAYER_SYMBOLS) {
+    if (layer == Layer::SYMBOLS) {
       DrawBearing(tp);
       DrawTarget(tp);
     }
@@ -222,7 +223,7 @@ TaskPointRenderer::Draw(const TaskPoint &tp, Layer layer)
     index++;
 
     DrawOrdered(otp, layer);
-    if (layer == LAYER_SYMBOLS) {
+    if (layer == Layer::SYMBOLS) {
       DrawBearing(tp);
       DrawTarget(tp);
     }
@@ -232,7 +233,7 @@ TaskPointRenderer::Draw(const TaskPoint &tp, Layer layer)
     index++;
 
     DrawOrdered(otp, layer);
-    if (layer == LAYER_SYMBOLS) {
+    if (layer == Layer::SYMBOLS) {
       DrawIsoline(atp);
       DrawBearing(tp);
       DrawTarget(tp);
@@ -243,7 +244,7 @@ TaskPointRenderer::Draw(const TaskPoint &tp, Layer layer)
     index++;
 
     DrawOrdered(otp, layer);
-    if (layer == LAYER_SYMBOLS) {
+    if (layer == Layer::SYMBOLS) {
       DrawBearing(tp);
       DrawTarget(tp);
     }

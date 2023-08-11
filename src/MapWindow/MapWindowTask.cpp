@@ -35,8 +35,9 @@ MapWindow::DrawTask(Canvas &canvas) noexcept
   ProtectedTaskManager::Lease task_manager(*task);
   const AbstractTask *task = task_manager->GetActiveTask();
   if (task && !IsError(task->CheckTask())) {
-    TaskPointRenderer::TargetVisibility target_visibility =
-        IsNearSelf() ? TaskPointRenderer::ACTIVE : TaskPointRenderer::ALL;
+    const auto target_visibility = IsNearSelf()
+      ? TaskPointRenderer::TargetVisibility::ACTIVE
+      : TaskPointRenderer::TargetVisibility::ALL;
 
     /* the FlatProjection parameter is used by class TaskPointRenderer
        only when drawing an OrderedTask, so it's okay to pass an
@@ -52,8 +53,7 @@ MapWindow::DrawTask(Canvas &canvas) noexcept
     TaskPointRenderer tpv(canvas, render_projection, look.task,
                           flat_projection,
                           ozv, draw_bearing, target_visibility,
-                          Basic().location_available
-                          ? Basic().location : GeoPoint::Invalid());
+                          Basic().GetLocationOrInvalid());
     tpv.SetTaskFinished(Calculated().task_stats.task_finished);
     TaskRenderer dv(tpv, render_projection.GetScreenBounds());
     dv.Draw(*task);

@@ -40,8 +40,6 @@ public:
 	}
 };
 
-#if !defined(ANDROID) && !defined(__APPLE__) && (!defined __clang__ || __clang_major__ >=14)
-
 /**
  * Specialization for certain types to eliminate the std::optional
  * overhead.
@@ -62,8 +60,6 @@ public:
 		return std::move(value);
 	}
 };
-
-#endif
 
 /**
  * This specialization supports returning references.

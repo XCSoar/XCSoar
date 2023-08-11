@@ -51,7 +51,8 @@ AR = $(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX)$(EXE)
 RANLIB = true
 endif
 
-CXX_VERSION := $(shell $(CXX) -dumpversion)
+CXX_VERSION = $(shell $(CXX) -dumpversion)
+CXX_MAJOR_VERSION = $(firstword $(subst ., ,$(CXX_VERSION)))
 
 ####### paths
 

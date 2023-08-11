@@ -7,7 +7,7 @@
 #include "util/Macros.hpp"
 
 void
-ProfileMap::SetColor(const char *key, const RGB8Color color) noexcept
+ProfileMap::SetColor(std::string_view key, const RGB8Color color) noexcept
 {
   char buffer[16];
   FormatHexColor(buffer, ARRAY_SIZE(buffer), color);
@@ -15,7 +15,7 @@ ProfileMap::SetColor(const char *key, const RGB8Color color) noexcept
 }
 
 bool
-ProfileMap::GetColor(const char *key, RGB8Color &color) const noexcept
+ProfileMap::GetColor(std::string_view key, RGB8Color &color) const noexcept
 {
   const char *color_string = Get(key);
   if (!color_string)

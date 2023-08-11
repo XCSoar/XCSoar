@@ -248,10 +248,7 @@ ComputeGPSVario(MoreData &basic,
     if (delta_t.count() > 0) {
       /* only update when a new value was received */
 
-      const auto delta_e = basic.energy_height - last.energy_height;
-
       basic.gps_vario = basic.noncomp_vario;
-      basic.gps_vario_TE = basic.noncomp_vario + delta_e / ToFloatSeconds(delta_t);
       basic.gps_vario_available = basic.noncomp_vario_available;
     }
   } else if (basic.pressure_altitude_available && last.pressure_altitude_available) {
@@ -266,10 +263,8 @@ ComputeGPSVario(MoreData &basic,
       /* only update when a new value was received */
 
       auto delta_h = basic.pressure_altitude - last.pressure_altitude;
-      auto delta_e = basic.energy_height - last.energy_height;
 
       basic.gps_vario = delta_h / ToFloatSeconds(delta_t);
-      basic.gps_vario_TE = (delta_h + delta_e) / ToFloatSeconds(delta_t);
       basic.gps_vario_available = basic.pressure_altitude_available;
     }
   } else if (basic.baro_altitude_available && last.baro_altitude_available) {
@@ -283,10 +278,8 @@ ComputeGPSVario(MoreData &basic,
       /* only update when a new value was received */
 
       auto delta_h = basic.baro_altitude - last.baro_altitude;
-      auto delta_e = basic.energy_height - last.energy_height;
 
       basic.gps_vario = delta_h / ToFloatSeconds(delta_t);
-      basic.gps_vario_TE = (delta_h + delta_e) / ToFloatSeconds(delta_t);
       basic.gps_vario_available = basic.baro_altitude_available;
     }
   } else if (basic.gps_altitude_available && last_gps.gps_altitude_available &&
@@ -300,14 +293,12 @@ ComputeGPSVario(MoreData &basic,
       /* only update when a new value was received */
 
       auto delta_h = basic.gps_altitude - last_gps.gps_altitude;
-      auto delta_e = basic.energy_height - last_gps.energy_height;
 
-      basic.gps_vario = delta_h / delta_t.count();
-      basic.gps_vario_TE = (delta_h + delta_e) / delta_t.count();
+      basic.gps_vario = delta_h / ToFloatSeconds(delta_t);
       basic.gps_vario_available = basic.gps_altitude_available;
     }
   } else {
-    basic.gps_vario = basic.gps_vario_TE = 0;
+    basic.gps_vario = 0;
     basic.gps_vario_available.Clear();
   }
 }

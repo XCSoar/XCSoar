@@ -7,6 +7,7 @@
 #include "NMEA/FlyingState.hpp"
 #include "Settings.hpp"
 #include "Math/LowPassFilter.hpp"
+#include "time/Cast.hxx"
 
 #include <algorithm> // for std::clamp()
 
@@ -62,9 +63,9 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
 
   if (dt.count() > 0) {
     circling_info.turn_rate =
-      (basic.track - last_track).AsDelta() / dt.count();
+      (basic.track - last_track).AsDelta() / ToFloatSeconds(dt);
     circling_info.turn_rate_heading =
-      (basic.attitude.heading - last_heading).AsDelta() / dt.count();
+      (basic.attitude.heading - last_heading).AsDelta() / ToFloatSeconds(dt);
 
     // JMW limit rate to 50 deg per second otherwise a big spike
     // will cause spurious lock on circling for a long time
@@ -237,7 +238,7 @@ CirclingComputer::PercentCircling(const MoreData &basic,
     circling_info.time_circling += dt;
 
     // Add the Vario signal to the total climb height
-    circling_info.total_height_gain += basic.gps_vario * dt.count();
+    circling_info.total_height_gain += basic.gps_vario * ToFloatSeconds(dt);
 
     if (basic.gps_vario>= 0) {
       circling_info.time_climb_circling += dt;

@@ -14,13 +14,15 @@ class TaskInterface;
 class TaskRenderer
 {
   TaskPointRenderer &tpv;
-  GeoBounds screen_bounds;
+  const GeoBounds screen_bounds;
 
 public:
-  TaskRenderer(TaskPointRenderer &_tpv, GeoBounds _screen_bounds);
+  constexpr TaskRenderer(TaskPointRenderer &_tpv,
+                         const GeoBounds &_screen_bounds) noexcept
+    :tpv(_tpv), screen_bounds(_screen_bounds) {}
 
-  void Draw(const TaskInterface &task);
-  void Draw(const AbortTask &task);
-  void Draw(const OrderedTask &task);
-  void Draw(const GotoTask &task);
+  void Draw(const TaskInterface &task) noexcept;
+  void Draw(const AbortTask &task) noexcept;
+  void Draw(const OrderedTask &task) noexcept;
+  void Draw(const GotoTask &task) noexcept;
 };

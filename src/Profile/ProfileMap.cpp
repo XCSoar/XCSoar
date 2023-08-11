@@ -18,61 +18,61 @@ Profile::SetModified(bool _modified) noexcept
 }
 
 const char *
-Profile::Get(const char *key, const char *default_value) noexcept
+Profile::Get(std::string_view key, const char *default_value) noexcept
 {
   return map.Get(key, default_value);
 }
 
 bool
-Profile::Get(const char *key, TCHAR *value, std::size_t max_size) noexcept
-{
-  return map.Get(key, value, max_size);
-}
-
-bool
-Profile::Get(const char *key, int &value) noexcept
+Profile::Get(std::string_view key, std::span<TCHAR> value) noexcept
 {
   return map.Get(key, value);
 }
 
 bool
-Profile::Get(const char *key, short &value) noexcept
+Profile::Get(std::string_view key, int &value) noexcept
 {
   return map.Get(key, value);
 }
 
 bool
-Profile::Get(const char *key, bool &value) noexcept
+Profile::Get(std::string_view key, short &value) noexcept
 {
   return map.Get(key, value);
 }
 
 bool
-Profile::Get(const char *key, unsigned &value) noexcept
+Profile::Get(std::string_view key, bool &value) noexcept
 {
   return map.Get(key, value);
 }
 
 bool
-Profile::Get(const char *key, uint16_t &value) noexcept
+Profile::Get(std::string_view key, unsigned &value) noexcept
 {
   return map.Get(key, value);
 }
 
 bool
-Profile::Get(const char *key, uint8_t &value) noexcept
+Profile::Get(std::string_view key, uint16_t &value) noexcept
 {
   return map.Get(key, value);
 }
 
 bool
-Profile::Get(const char *key, double &value) noexcept
+Profile::Get(std::string_view key, uint8_t &value) noexcept
+{
+  return map.Get(key, value);
+}
+
+bool
+Profile::Get(std::string_view key, double &value) noexcept
 {
   return map.Get(key, value);
 }
 
 void
-Profile::Set(const char *key, const char *value) noexcept
+Profile::Set(std::string_view key, const char *value) noexcept
 {
   map.Set(key, value);
 }
@@ -80,7 +80,7 @@ Profile::Set(const char *key, const char *value) noexcept
 #ifdef _UNICODE
 
 void
-Profile::Set(const char *key, const TCHAR *value) noexcept
+Profile::Set(std::string_view key, const TCHAR *value) noexcept
 {
   map.Set(key, value);
 }
@@ -88,31 +88,31 @@ Profile::Set(const char *key, const TCHAR *value) noexcept
 #endif
 
 void
-Profile::Set(const char *key, int value) noexcept
+Profile::Set(std::string_view key, int value) noexcept
 {
   map.Set(key, value);
 }
 
 void
-Profile::Set(const char *key, long value) noexcept
+Profile::Set(std::string_view key, long value) noexcept
 {
   map.Set(key, value);
 }
 
 void
-Profile::Set(const char *key, unsigned value) noexcept
+Profile::Set(std::string_view key, unsigned value) noexcept
 {
   map.Set(key, value);
 }
 
 void
-Profile::Set(const char *key, double value) noexcept
+Profile::Set(std::string_view key, double value) noexcept
 {
   map.Set(key, value);
 }
 
 bool
-Profile::Exists(const char *key) noexcept
+Profile::Exists(std::string_view key) noexcept
 {
   return map.Exists(key);
 }

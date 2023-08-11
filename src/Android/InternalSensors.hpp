@@ -63,6 +63,7 @@ public:
   bool cancelSensorSubscription(int id);
   bool subscribedToSensor(int id) const;
 
-  static InternalSensors *create(JNIEnv* env, Context* native_view,
+  static InternalSensors *Create(JNIEnv* env, Context* native_view,
+                                 jobject permission_manager,
                                  SensorListener &listener);
 };

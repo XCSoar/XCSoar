@@ -20,7 +20,8 @@ public:
   static bool Initialise(JNIEnv *env) noexcept;
   static void Deinitialise(JNIEnv *env) noexcept;
 
-  BluetoothHelper(JNIEnv *env, Context &context);
+  BluetoothHelper(JNIEnv *env, Context &context,
+                  jobject permission_manager);
 
   /**
    * Is the default Bluetooth adapter enabled in the Android Bluetooth

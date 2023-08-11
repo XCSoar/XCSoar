@@ -17,15 +17,21 @@ template<typename T>
 [[nodiscard]]
 std::optional<T>
 ShowCoFunctionDialog(UI::SingleWindow &parent, const DialogLook &dialog_look,
-                     const TCHAR *caption, Co::Task<T> task,
+                     const TCHAR *caption, Co::Task<T> &&task,
                      PluggableOperationEnvironment *env)
 {
   ReturnValue<T> value;
-  auto invoke = [&task, &value]() -> Co::InvokeTask {
+
+  /* note: we pass the task as parameter by value so ownership gets
+     transferred to the Co::InvokeTask instance, so the task gets
+     destructed inside the I/O thread and not in this function
+     (i.e. the UI thread) */
+  auto invoke = [&value](Co::Task<T> task) -> Co::InvokeTask {
     value.Set(co_await task);
   };
 
-  if (ShowCoDialog(parent, dialog_look, caption, invoke(), env))
+  if (ShowCoDialog(parent, dialog_look, caption,
+                   invoke(std::move(task)), env))
     return std::move(value).Get();
 
   return std::nullopt;

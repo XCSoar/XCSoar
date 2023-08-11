@@ -93,6 +93,6 @@ struct GPSState
   bool nonexpiring_internal_gps;
 #endif
 
-  void Reset();
+  void Reset() noexcept;
   void Expire(TimeStamp now) noexcept;
 };

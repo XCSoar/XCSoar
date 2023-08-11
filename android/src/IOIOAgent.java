@@ -148,6 +148,13 @@ final class IOIOAgent extends Thread {
       Log.e(TAG, "IOIO connection " + getName() + " failed: " + e);
       ioio.disconnect();
       return null;
+    } catch (SecurityException e) {
+      /* called from AccessoryConnectionBootstrap.tryOpen(),
+         UsbManager.openAccessory() can throw SecurityException if no
+         permission was given to open the device */
+      Log.e(TAG, "IOIO connection " + getName() + " failed: " + e);
+      ioio.disconnect();
+      return null;
     } catch (InterruptedException e) {
       ioio.disconnect();
       return null;

@@ -7,6 +7,7 @@
 #include "util/StringBuffer.hxx"
 
 #include <map>
+#include <span>
 #include <string>
 
 #include <cstdint>
@@ -45,11 +46,11 @@ public:
   }
 
   [[gnu::pure]]
-  bool Exists(const char *key) const noexcept {
+  bool Exists(std::string_view key) const noexcept {
     return map.find(key) != map.end();
   }
 
-  void Remove(const char *key) noexcept {
+  void Remove(std::string_view key) noexcept {
     if (auto i = map.find(key); i != map.end())
       map.erase(i);
   }
@@ -75,7 +76,7 @@ public:
    * profile), or default_value if the key does not exist
    */
   [[gnu::pure]]
-  const char *Get(const char *key,
+  const char *Get(const std::string_view key,
                   const char *default_value=nullptr) const noexcept {
     const auto i = map.find(key);
     if (i == map.end())
@@ -84,7 +85,7 @@ public:
     return i->second.c_str();
   }
 
-  void Set(const char *key, const char *value) noexcept;
+  void Set(std::string_view key, const char *value) noexcept;
 
   // TCHAR string values
 
@@ -93,31 +94,30 @@ public:
    *
    * @param key name of the value that should be read
    * @param value Pointer to the output buffer
-   * @param max_size maximum size of the output buffer
    */
-  bool Get(const char *key, TCHAR *value, size_t max_size) const noexcept;
+  bool Get(std::string_view key, std::span<TCHAR> value) const noexcept;
 
   template<size_t max>
-  bool Get(const char *key,
+  bool Get(std::string_view key,
            BasicStringBuffer<TCHAR, max> &value) const noexcept {
-    return Get(key, value.data(), value.capacity());
+    return Get(key, std::span{value.data(), value.capacity()});
   }
 
 #ifdef _UNICODE
-  void Set(const char *key, const TCHAR *value) noexcept;
+  void Set(std::string_view key, const TCHAR *value) noexcept;
 #endif
 
   // numeric values
 
-  bool Get(const char *key, int &value) const noexcept;
-  bool Get(const char *key, short &value) const noexcept;
-  bool Get(const char *key, bool &value) const noexcept;
-  bool Get(const char *key, unsigned &value) const noexcept;
-  bool Get(const char *key, uint16_t &value) const noexcept;
-  bool Get(const char *key, uint8_t &value) const noexcept;
-  bool Get(const char *key, double &value) const noexcept;
+  bool Get(std::string_view key, int &value) const noexcept;
+  bool Get(std::string_view key, short &value) const noexcept;
+  bool Get(std::string_view key, bool &value) const noexcept;
+  bool Get(std::string_view key, unsigned &value) const noexcept;
+  bool Get(std::string_view key, uint16_t &value) const noexcept;
+  bool Get(std::string_view key, uint8_t &value) const noexcept;
+  bool Get(std::string_view key, double &value) const noexcept;
 
-  bool Get(const char *key, FloatDuration &value) const noexcept {
+  bool Get(std::string_view key, FloatDuration &value) const noexcept {
     double _value;
     bool result = Get(key, _value);
     if (result)
@@ -125,7 +125,7 @@ public:
     return result;
   }
 
-  bool Get(const char *key,
+  bool Get(std::string_view key,
            std::chrono::duration<unsigned> &value) const noexcept {
     unsigned _value;
     bool result = Get(key, _value);
@@ -134,27 +134,27 @@ public:
     return result;
   }
 
-  void Set(const char *key, bool value) noexcept {
+  void Set(std::string_view key, bool value) noexcept {
     Set(key, value ? "1" : "0");
   }
 
-  void Set(const char *key, int value) noexcept;
-  void Set(const char *key, long value) noexcept;
-  void Set(const char *key, unsigned value) noexcept;
-  void Set(const char *key, double value) noexcept;
+  void Set(std::string_view key, int value) noexcept;
+  void Set(std::string_view key, long value) noexcept;
+  void Set(std::string_view key, unsigned value) noexcept;
+  void Set(std::string_view key, double value) noexcept;
 
-  void Set(const char *key, FloatDuration value) noexcept {
+  void Set(std::string_view key, FloatDuration value) noexcept {
     Set(key, value.count());
   }
 
-  void Set(const char *key, std::chrono::duration<unsigned> value) noexcept {
+  void Set(std::string_view key, std::chrono::duration<unsigned> value) noexcept {
     Set(key, value.count());
   }
 
   // enum values
 
   template<typename T>
-  bool GetEnum(const char *key, T &value) const noexcept {
+  bool GetEnum(std::string_view key, T &value) const noexcept {
     int i;
     bool success = Get(key, i);
     if (success)
@@ -163,53 +163,53 @@ public:
   }
 
   template<typename T>
-  void SetEnum(const char *key, T value) noexcept {
+  void SetEnum(std::string_view key, T value) noexcept {
     Set(key, (int)value);
   }
 
   // path values
 
-  AllocatedPath GetPath(const char *key) const noexcept;
+  AllocatedPath GetPath(std::string_view key) const noexcept;
 
   [[gnu::pure]]
-  bool GetPathIsEqual(const char *key, Path value) const noexcept;
+  bool GetPathIsEqual(std::string_view key, Path value) const noexcept;
 
   /**
    * Gets a path from the profile and return its base name only.
    */
 #ifdef _UNICODE
-  BasicAllocatedString<TCHAR> GetPathBase(const char *key) const noexcept;
+  BasicAllocatedString<TCHAR> GetPathBase(std::string_view key) const noexcept;
 #else
   [[gnu::pure]]
-  StringPointer<TCHAR> GetPathBase(const char *key) const noexcept;
+  StringPointer<TCHAR> GetPathBase(std::string_view key) const noexcept;
 #endif
 
-  void SetPath(const char *key, Path value) noexcept;
+  void SetPath(std::string_view key, Path value) noexcept;
 
   // geo value
 
   /**
    * Load a GeoPoint from the profile.
    */
-  bool GetGeoPoint(const char *key, GeoPoint &value) const noexcept;
+  bool GetGeoPoint(std::string_view key, GeoPoint &value) const noexcept;
 
   /**
    * Save a GeoPoint to the profile.  It is stored as a string,
    * longitude and latitude formatted in degrees separated by a space
    * character.
    */
-  void SetGeoPoint(const char *key, const GeoPoint &value) noexcept;
+  void SetGeoPoint(std::string_view key, const GeoPoint &value) noexcept;
 
   // screen values
 
   /**
    * Load a Color from the profile.
    */
-  bool GetColor(const char *key, RGB8Color &value) const noexcept;
+  bool GetColor(std::string_view key, RGB8Color &value) const noexcept;
 
   /**
    * Save a Color to the profile.  It is stored as a RGB hex string
    * e.g. #123456
    */
-  void SetColor(const char *key, const RGB8Color value) noexcept;
+  void SetColor(std::string_view key, const RGB8Color value) noexcept;
 };

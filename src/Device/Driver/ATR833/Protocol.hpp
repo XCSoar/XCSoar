@@ -4,9 +4,9 @@
 #pragma once
 
 #include "RadioFrequency.hpp"
-#include "util/Concepts.hxx"
 
 #include <array>
+#include <concepts>
 #include <cstddef>
 #include <span>
 
@@ -34,7 +34,7 @@ static constexpr std::byte REQUESTDATA{0x82};
 template<std::size_t size>
 static constexpr std::size_t
 WithSTX(std::span<const std::byte> src,
-        Invocable<std::span<const std::byte, size>> auto f) noexcept
+        std::invocable<std::span<const std::byte, size>> auto f) noexcept
 {
   if (src.size() < size)
     return 0;

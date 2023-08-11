@@ -39,7 +39,7 @@ ImportSpeedUnit(unsigned tmp) noexcept
 }
 
 static bool
-GetLegacySpeedUnit(const ProfileMap &map, const char *key, Unit &value)
+GetLegacySpeedUnit(const ProfileMap &map, std::string_view key, Unit &value)
 {
   unsigned tmp;
   return map.Get(key, tmp) && ApplyUnit(value, ImportSpeedUnit(tmp));
@@ -54,7 +54,8 @@ ValidSpeedUnit(Unit unit) noexcept
 }
 
 static bool
-GetSpeedUnit(const ProfileMap &map, const char *key, const char *legacy_key,
+GetSpeedUnit(const ProfileMap &map, std::string_view key,
+             std::string_view legacy_key,
              Unit &value_r)
 {
   Unit tmp;
@@ -91,14 +92,15 @@ ImportVerticalSpeedUnit(unsigned tmp) noexcept
 }
 
 static bool
-GetLegacyVerticalSpeedUnit(const ProfileMap &map, const char *key, Unit &value)
+GetLegacyVerticalSpeedUnit(const ProfileMap &map, std::string_view key,
+                           Unit &value)
 {
   unsigned tmp;
   return map.Get(key, tmp) && ApplyUnit(value, ImportVerticalSpeedUnit(tmp));
 }
 
 static bool
-GetVerticalSpeedUnit(const ProfileMap &map, const char *key,
+GetVerticalSpeedUnit(const ProfileMap &map, std::string_view key,
                      const char *legacy_key, Unit &value_r)
 {
   Unit tmp;
@@ -135,7 +137,7 @@ ImportDistanceUnit(unsigned tmp) noexcept
 }
 
 static bool
-GetLegacyDistanceUnit(const ProfileMap &map, const char *key, Unit &value)
+GetLegacyDistanceUnit(const ProfileMap &map, std::string_view key, Unit &value)
 {
   unsigned tmp;
   return map.Get(key, tmp) && ApplyUnit(value, ImportDistanceUnit(tmp));
@@ -150,7 +152,8 @@ ValidDistanceUnit(Unit unit) noexcept
 }
 
 static bool
-GetDistanceUnit(const ProfileMap &map, const char *key, const char *legacy_key,
+GetDistanceUnit(const ProfileMap &map, std::string_view key,
+                std::string_view legacy_key,
                 Unit &value_r)
 {
   Unit tmp;
@@ -184,14 +187,14 @@ ImportAltitudeUnit(unsigned tmp) noexcept
 }
 
 static bool
-GetLegacyAltitudeUnit(const ProfileMap &map, const char *key, Unit &value)
+GetLegacyAltitudeUnit(const ProfileMap &map, std::string_view key, Unit &value)
 {
   unsigned tmp;
   return map.Get(key, tmp) && ApplyUnit(value, ImportAltitudeUnit(tmp));
 }
 
 static bool
-GetAltitudeUnit(const ProfileMap &map, const char *key, const char *legacy_key,
+GetAltitudeUnit(const ProfileMap &map, std::string_view key, const char *legacy_key,
                 Unit &value_r)
 {
   Unit tmp;
@@ -225,7 +228,8 @@ ImportTemperatureUnit(unsigned tmp) noexcept
 }
 
 static bool
-GetLegacyTemperatureUnit(const ProfileMap &map, const char *key, Unit &value)
+GetLegacyTemperatureUnit(const ProfileMap &map, std::string_view key,
+                         Unit &value)
 {
   unsigned tmp;
   return map.Get(key, tmp) &&
@@ -240,7 +244,7 @@ ValidTemperatureUnit(Unit unit) noexcept
 }
 
 static bool
-GetTemperatureUnit(const ProfileMap &map, const char *key,
+GetTemperatureUnit(const ProfileMap &map, std::string_view key,
                    const char *legacy_key, Unit &value_r)
 {
   Unit tmp;
@@ -263,7 +267,7 @@ ValidPressureUnit(Unit unit) noexcept
 }
 
 static bool
-GetPressureUnit(const ProfileMap &map, const char *key, Unit &value)
+GetPressureUnit(const ProfileMap &map, std::string_view key, Unit &value)
 {
   Unit tmp;
   if (!map.GetEnum(key, tmp) || !ValidPressureUnit(tmp))
@@ -280,7 +284,7 @@ ValidWingLoadingUnit(Unit unit)
 }
 
 static bool
-GetWingLoadingUnit(const ProfileMap &map, const char *key, Unit &value)
+GetWingLoadingUnit(const ProfileMap &map, std::string_view key, Unit &value)
 {
   Unit tmp;
   if (!map.GetEnum(key, tmp) || !ValidWingLoadingUnit(tmp))
@@ -297,7 +301,7 @@ ValidMassUnit(Unit unit)
 }
 
 static bool
-GetMassUnit(const ProfileMap &map, const char *key, Unit &value)
+GetMassUnit(const ProfileMap &map, std::string_view key, Unit &value)
 {
   Unit tmp;
   if (!map.GetEnum(key, tmp) || !ValidMassUnit(tmp))
@@ -314,7 +318,7 @@ ValidRotationUnit(Unit unit) noexcept
 }
 
 static bool
-GetRotationUnit(const ProfileMap &map, const char *key, Unit &value)
+GetRotationUnit(const ProfileMap &map, std::string_view key, Unit &value)
 {
   Unit tmp;
   if (!map.GetEnum(key, tmp) || !ValidRotationUnit(tmp))

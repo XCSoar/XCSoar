@@ -7,7 +7,7 @@
 #include "util/StaticString.hxx"
 
 bool
-ProfileMap::GetGeoPoint(const char *key, GeoPoint &value) const noexcept
+ProfileMap::GetGeoPoint(std::string_view key, GeoPoint &value) const noexcept
 {
   const char *p = Get(key);
   if (p == nullptr)
@@ -31,7 +31,7 @@ ProfileMap::GetGeoPoint(const char *key, GeoPoint &value) const noexcept
 }
 
 void
-ProfileMap::SetGeoPoint(const char *key, const GeoPoint &value) noexcept
+ProfileMap::SetGeoPoint(std::string_view key, const GeoPoint &value) noexcept
 {
   NarrowString<128> buffer;
   buffer.UnsafeFormat("%f %f",

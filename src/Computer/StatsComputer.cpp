@@ -35,8 +35,7 @@ StatsComputer::DoLogging(const MoreData &basic,
   bool location_jump = basic.location_available && last_location.IsValid() &&
     basic.location.DistanceS(last_location) > 200;
 
-  last_location = basic.location_available
-    ? basic.location : GeoPoint::Invalid();
+  last_location = basic.GetLocationOrInvalid();
 
   if (location_jump || !basic.location_available)
     // prevent bad fixes from being logged or added to contest store

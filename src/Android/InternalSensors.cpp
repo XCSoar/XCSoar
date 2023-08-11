@@ -28,7 +28,9 @@ InternalSensors::Initialise(JNIEnv *env)
   gps_cls.Find(env, "de/opensoar/InternalGPS");
 
   gps_ctor_id = env->GetMethodID(gps_cls, "<init>",
-                                 "(Landroid/content/Context;Lde/opensoar/SensorListener;)V");
+                                 "(Landroid/content/Context;"
+                                 "Lorg/opensoar/PermissionManager;"
+                                 "Lorg/opensoar/SensorListener;)V");
 
   sensors_cls.Find(env, "de/opensoar/NonGPSSensors");
 
@@ -94,7 +96,8 @@ InternalSensors::subscribedToSensor(int id) const
 }
 
 InternalSensors *
-InternalSensors::create(JNIEnv *env, Context *context,
+InternalSensors::Create(JNIEnv *env, Context *context,
+                        jobject permission_manager,
                         SensorListener &_listener)
 {
   assert(sensors_cls != nullptr);
@@ -104,7 +107,9 @@ InternalSensors::create(JNIEnv *env, Context *context,
 
   // Construct InternalGPS object.
   auto gps_obj = Java::NewObjectRethrow(env, gps_cls, gps_ctor_id,
-                                        context->Get(), listener.Get());
+                                        context->Get(),
+                                        permission_manager,
+                                        listener.Get());
   assert(gps_obj != nullptr);
 
   // Construct NonGPSSensors object.

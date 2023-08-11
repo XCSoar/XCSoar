@@ -4,17 +4,19 @@
 #include "Map.hpp"
 
 void
-ProfileMap::Set(const char *key, const char *value) noexcept
+ProfileMap::Set(std::string_view key, const char *value) noexcept
 {
-  auto i = map.try_emplace(key, value);
-  if (!i.second) {
+  const auto i = map.lower_bound(key);
+  if (i != map.end() && i->first == key) {
     /* exists already */
 
-    if (i.first->second.compare(value) == 0)
+    if (i->second == value)
       /* not modified, don't set the "modified" flag */
       return;
 
-    i.first->second.assign(value);
+    i->second.assign(value);
+  } else {
+    map.emplace_hint(i, key, value);
   }
 
   SetModified();

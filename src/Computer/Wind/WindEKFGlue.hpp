@@ -49,16 +49,16 @@ public:
     SpeedVector wind;
     int quality;
 
-    Result() {}
-    Result(int _quality):quality(_quality) {}
+    constexpr Result() noexcept {}
+    constexpr Result(int _quality) noexcept:quality(_quality) {}
   };
 
-  void Reset();
+  void Reset() noexcept;
 
-  Result Update(const NMEAInfo &basic, const DerivedInfo &derived);
+  Result Update(const NMEAInfo &basic, const DerivedInfo &derived) noexcept;
 
 private:
-  void ResetBlackout() {
+  void ResetBlackout() noexcept {
     time_blackout = TimeStamp::Undefined();
   }
 
@@ -66,7 +66,7 @@ private:
     return time < time_blackout;
   }
 
-  void SetBlackout(const TimeStamp time) {
+  void SetBlackout(const TimeStamp time) noexcept {
     time_blackout = time + BLACKOUT_TIME;
   }
 };

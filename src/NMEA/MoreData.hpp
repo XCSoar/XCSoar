@@ -24,8 +24,6 @@ struct MoreData : public NMEAInfo {
 
   /** GPS-based vario */
   double gps_vario;
-  /** GPS-based vario including energy height */
-  double gps_vario_TE;
 
   Validity gps_vario_available;
 
@@ -38,9 +36,9 @@ struct MoreData : public NMEAInfo {
 
   Validity brutto_vario_available;
 
-  void Reset();
+  void Reset() noexcept;
 
-  bool NavAltitudeAvailable() const {
+  constexpr bool NavAltitudeAvailable() const noexcept {
     return baro_altitude_available || gps_altitude_available;
   }
 };

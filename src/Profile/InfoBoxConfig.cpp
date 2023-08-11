@@ -29,7 +29,8 @@ GetV60InfoBoxManagerConfig(const ProfileMap &map, InfoBoxSettings &settings)
 }
 
 static bool
-GetIBType(const ProfileMap &map, const char *key, InfoBoxFactory::Type &val)
+GetIBType(const ProfileMap &map, std::string_view key,
+          InfoBoxFactory::Type &val)
 {
   unsigned _val = val;
   bool ret = map.Get(key, _val);

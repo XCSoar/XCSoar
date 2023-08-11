@@ -17,14 +17,13 @@ public:
    * Global initialisation.  Looks up the methods of the
    * Vibrator Java class.
    */
-  static void Initialise(JNIEnv *env);
+  static void Initialise(JNIEnv *env) noexcept;
 
-  Vibrator(JNIEnv *env, jobject obj):object(env, obj) {}
+  Vibrator(JNIEnv *env, jobject obj) noexcept
+    :object(env, obj) {}
 
-  static Vibrator *Create(JNIEnv *env, Context &context);
+  static Vibrator *Create(JNIEnv *env, Context &context) noexcept;
 
-  void Cancel(JNIEnv *env);
-  void Vibrate(JNIEnv *env, unsigned duration_ms);
-
-  bool IsOSHapticFeedbackEnabled();
+  void Cancel(JNIEnv *env) noexcept;
+  void Vibrate(JNIEnv *env, unsigned duration_ms) noexcept;
 };

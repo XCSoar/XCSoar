@@ -1,0 +1,16 @@
+Index: sqlite-autoconf-3390300/configure.ac
+===================================================================
+--- sqlite-autoconf-3390300.orig/configure.ac
++++ sqlite-autoconf-3390300/configure.ac
+@@ -26,7 +26,10 @@ AC_PROG_MKDIR_P
+ 
+ # Check for library functions that SQLite can optionally use.
+ AC_CHECK_FUNCS([fdatasync usleep fullfsync localtime_r gmtime_r])
+-AC_FUNC_STRERROR_R
++
++dnl No strerror_r() on Android because it causes a build breakage
++dnl TODO: figure out how to fix this properly
++dnl AC_FUNC_STRERROR_R
+ 
+ AC_CONFIG_FILES([Makefile sqlite3.pc])
+ BUILD_CFLAGS=

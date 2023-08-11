@@ -12,7 +12,8 @@
 #include "Engine/Navigation/Aircraft.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "util/Concepts.hxx"
+
+#include <concepts>
 
 [[gnu::pure]] [[gnu::always_inline]]
 static inline NearestAirspace
@@ -37,7 +38,7 @@ struct CompareNearestAirspace {
 static NearestAirspace
 FindHorizontal(const GeoPoint &location,
                const Airspaces &airspace_database,
-               Predicate<const AbstractAirspace &> auto predicate) noexcept
+               std::predicate<const AbstractAirspace &> auto predicate) noexcept
 {
   const auto &projection = airspace_database.GetProjection();
   return FindMinimum(airspace_database, location, 30000, predicate,

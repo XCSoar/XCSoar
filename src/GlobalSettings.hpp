@@ -11,6 +11,7 @@ namespace GlobalSettings {
 
 #ifdef ANDROID
 inline bool dark_mode = false;
+inline bool haptic_feedback = false;
 #else
 static constexpr bool dark_mode = false;
 #endif

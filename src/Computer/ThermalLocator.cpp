@@ -7,6 +7,7 @@
 #include "Geo/SpeedVector.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
 #include "NMEA/ThermalLocator.hpp"
+#include "time/Cast.hxx"
 
 #include <algorithm>
 
@@ -24,7 +25,7 @@ ThermalLocator::Point::Drift(TimeStamp t, const FlatProjection &projection,
   recency_weight = thermal_recency_fn(duration_cast<duration<unsigned>>(abs(dt)).count());
   lift_weight = w*recency_weight;
 
-  GeoPoint p = location + wind_drift * dt.count();
+  GeoPoint p = location + wind_drift * ToFloatSeconds(dt);
 
   // convert to flat earth coordinates
   loc_drift = projection.ProjectFloat(p);

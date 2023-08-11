@@ -32,8 +32,7 @@ try {
     last_location.IsValid() &&
     basic.location.DistanceS(last_location) > 200;
 
-  last_location = basic.location_available
-    ? basic.location : GeoPoint::Invalid();
+  last_location = basic.GetLocationOrInvalid();
 
   if (location_jump)
     // prevent bad fixes from being logged

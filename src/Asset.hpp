@@ -198,17 +198,10 @@ HasCursorKeys() noexcept
 /**
  * Does this device have a display with colors?
  */
-#ifdef ANDROID
-[[gnu::const]]
-#else
-constexpr
-#endif
-static inline bool
+static constexpr bool
 HasColors() noexcept
 {
-#ifdef ANDROID
-  return !IsNookSimpleTouch();
-#elif defined(GREYSCALE)
+#if defined(GREYSCALE)
   return false;
 #else
   return !IsKobo();
@@ -218,18 +211,11 @@ HasColors() noexcept
 /**
  * Is dithering black&white used on the display?
  */
-#if defined(ANDROID) && defined(__arm__)
-[[gnu::const]]
-#else
-constexpr
-#endif
-static inline bool
+static constexpr bool
 IsDithered() noexcept
 {
 #ifdef DITHER
   return true;
-#elif defined(ANDROID) && defined(__arm__)
-  return is_dithered;
 #else
   return false;
 #endif
@@ -241,17 +227,8 @@ IsDithered() noexcept
  * and show ghosting.  Animations shall be disabled when this function
  * returns true.
  */
-#if defined(ANDROID) && defined(__arm__)
-[[gnu::const]]
-#else
-constexpr
-#endif
-static inline bool
+static constexpr bool
 HasEPaper() noexcept
 {
-#if defined(ANDROID) && defined(__arm__)
-  return IsNookSimpleTouch();
-#else
   return IsKobo();
-#endif
 }

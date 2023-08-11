@@ -45,6 +45,8 @@ class NativeView extends SurfaceView
    */
   private long ptr;
 
+  final PermissionManager permissionManager;
+
   final Handler quitHandler, wakelockhandler, fullScreenHandler, errorHandler;
 
   Resources resources;
@@ -62,13 +64,15 @@ class NativeView extends SurfaceView
   public NativeView(Activity context, Handler _quitHandler,
                     Handler _wakeLockHandler,
                     Handler _fullScreenHandler,
-                    Handler _errorHandler) {
+                    Handler _errorHandler,
+                    PermissionManager permissionManager) {
     super(context);
 
     quitHandler = _quitHandler;
     wakelockhandler = _wakeLockHandler;
     fullScreenHandler = _fullScreenHandler;
     errorHandler = _errorHandler;
+    this.permissionManager = permissionManager;
 
     resources = context.getResources();
 
@@ -153,7 +157,8 @@ class NativeView extends SurfaceView
       }
 
       try {
-        runNative(context, r.width(), r.height(),
+        runNative(context, permissionManager,
+                  r.width(), r.height(),
                   (int)metrics.xdpi, (int)metrics.ydpi,
                   Build.PRODUCT);
       } finally {
@@ -169,10 +174,12 @@ class NativeView extends SurfaceView
   }
 
   static native void initNative(int sdk_version);
+  static native void deinitNative();
 
   static native void onConfigurationChangedNative(boolean nightMode);
 
   protected native void runNative(Context context,
+                                  PermissionManager permissionManager,
                                   int width, int height,
                                   int xdpi, int ydpi,
                                   String product);

@@ -7,7 +7,7 @@
 #include "NMEA/Derived.hpp"
 
 void
-WindEKFGlue::Reset()
+WindEKFGlue::Reset() noexcept
 {
   reset_pending = true;
   last_ground_speed_available.Clear();
@@ -18,7 +18,7 @@ WindEKFGlue::Reset()
 }
 
 static constexpr unsigned
-CounterToQuality(unsigned i)
+CounterToQuality(unsigned i) noexcept
 {
   return i >= 600u
     ? 4u
@@ -30,7 +30,7 @@ CounterToQuality(unsigned i)
 }
 
 WindEKFGlue::Result
-WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
+WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived) noexcept
 {
   // @todo accuracy: correct TAS for vertical speed if dynamic pullup
 
@@ -81,30 +81,29 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   // clear blackout
   ResetBlackout();
 
-  auto V = basic.true_airspeed;
-  float gps_vel[2];
-  const auto sc = basic.track.SinCos();
-  const auto gps_east = sc.first, gps_north = sc.second;
-  gps_vel[0] = (float)(gps_east * basic.ground_speed);
-  gps_vel[1] = (float)(gps_north * basic.ground_speed);
-
   if (reset_pending) {
     /* do the postponed WindEKF reset */
     reset_pending = false;
     ekf.Init();
   }
 
-  ekf.Update(V, gps_vel);
+  const auto [gps_east, gps_north] = basic.track.SinCos();
+  FloatPoint2D gps_vel{
+    (float)(gps_east * basic.ground_speed),
+    (float)(gps_north * basic.ground_speed),
+  };
+
+  ekf.Update(basic.true_airspeed, gps_vel);
 
   ++i;
   if (i % 10 != 0)
     return Result(0);
 
-  const float* x = ekf.get_state();
+  const auto result = ekf.GetResult();
 
   Result res;
   res.quality = CounterToQuality(i);
-  res.wind = SpeedVector(-x[0], -x[1]);
+  res.wind = SpeedVector(-result.x, -result.y);
 
   return res;
 }

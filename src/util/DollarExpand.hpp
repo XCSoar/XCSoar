@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "Concepts.hxx"
 #include "StringAPI.hxx"
 #include "TruncateString.hpp"
 #include "tstring_view.hxx"
 
+#include <concepts>
 #include <span>
 
 #include <tchar.h>
@@ -19,7 +19,7 @@
  */
 void
 DollarExpand(const TCHAR *src, std::span<TCHAR> dest,
-             Invocable<tstring_view> auto lookup_function) noexcept
+             std::invocable<tstring_view> auto lookup_function) noexcept
 {
   while (true) {
     auto dollar = StringFind(src, _T("$("));

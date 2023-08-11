@@ -3,6 +3,7 @@
 
 #include "GroundSpeedComputer.hpp"
 #include "NMEA/Info.hpp"
+#include "time/Cast.hxx"
 
 void
 GroundSpeedComputer::Compute(NMEAInfo &basic)
@@ -24,7 +25,7 @@ GroundSpeedComputer::Compute(NMEAInfo &basic)
                                       std::chrono::seconds{5});
     if (dt.count() > 0) {
       auto distance = basic.location.DistanceS(last_location);
-      basic.ground_speed = distance / dt.count();
+      basic.ground_speed = distance / ToFloatSeconds(dt);
       basic.ground_speed_available = basic.location_available;
     }
   }

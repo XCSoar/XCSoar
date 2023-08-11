@@ -4,11 +4,11 @@ import os, os.path
 import re
 import sys
 
-if len(sys.argv) != 14:
-    print("Usage: build.py LIB_PATH HOST_TRIPLET ACTUAL_HOST_TRIPLET ARCH_CFLAGS CPPFLAGS ARCH_LDFLAGS CC CXX AR ARFLAGS RANLIB STRIP WINDRES", file=sys.stderr)
+if len(sys.argv) != 13:
+    print("Usage: build.py LIB_PATH HOST_TRIPLET ARCH_CFLAGS CPPFLAGS ARCH_LDFLAGS CC CXX AR ARFLAGS RANLIB STRIP WINDRES", file=sys.stderr)
     sys.exit(1)
 
-lib_path, toolchain_host_triplet, actual_host_triplet, arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags, ranlib, strip, windres = sys.argv[1:]
+lib_path, host_triplet, arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags, ranlib, strip, windres = sys.argv[1:]
 
 # the path to the XCSoar sources
 xcsoar_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]) or '.', '..'))
@@ -19,7 +19,7 @@ from build.dirs import tarball_path, src_path
 
 lib_path = os.path.abspath(lib_path)
 build_path = os.path.join(lib_path, 'build')
-install_prefix = os.path.join(lib_path, actual_host_triplet)
+install_prefix = os.path.join(lib_path, host_triplet)
 
 if 'MAKEFLAGS' in os.environ:
     # build/make.mk adds "--no-builtin-rules --no-builtin-variables",
@@ -37,8 +37,7 @@ class NativeToolchain:
         self.src_path = other.src_path
         self.build_path = other.build_path
         self.install_prefix = lib_path
-        self.toolchain_arch = None
-        self.actual_arch = None
+        self.host_triplet = None
         self.is_windows = None
 
         self.cc = 'ccache gcc'
@@ -60,15 +59,14 @@ class NativeToolchain:
 
 class Toolchain:
     def __init__(self, tarball_path, src_path, build_path, install_prefix,
-                 toolchain_arch, actual_arch, arch_cflags, cppflags,
+                 host_triplet, arch_cflags, cppflags,
                  arch_ldflags, cc, cxx, ar, arflags, ranlib, strip, windres):
         self.tarball_path = tarball_path
         self.src_path = src_path
         self.build_path = build_path
         self.install_prefix = install_prefix
-        self.toolchain_arch = toolchain_arch
-        self.actual_arch = actual_arch
-        self.is_windows = 'mingw32' in actual_arch
+        self.host_triplet = host_triplet
+        self.is_windows = 'mingw32' in host_triplet
 
         self.cc = cc
         self.cxx = cxx
@@ -110,7 +108,7 @@ class Toolchain:
 # a list of third-party libraries to be used by XCSoar
 from build.libs import *
 
-if 'mingw32' in actual_host_triplet:
+if 'mingw32' in host_triplet:
     thirdparty_libs = [
         zlib,
         libfmt,
@@ -127,7 +125,7 @@ if 'mingw32' in actual_host_triplet:
     # mingw.  This prevents some libraries such as libsodium to enable
     # it.
     cppflags += ' -D_FORTIFY_SOURCE=0'
-elif 'apple-darwin' in actual_host_triplet:
+elif 'apple-darwin' in host_triplet:
     thirdparty_libs = [
         zlib,
         libfmt,
@@ -142,7 +140,7 @@ elif 'apple-darwin' in actual_host_triplet:
         libgeotiff,
         sdl2
     ]
-elif 'android' in actual_host_triplet:
+elif 'android' in host_triplet:
     thirdparty_libs = [
         libfmt,
         libsodium,
@@ -155,23 +153,8 @@ elif 'android' in actual_host_triplet:
         libtiff,
         libgeotiff,
     ]
-elif toolchain_host_triplet.endswith('-musleabihf'):
-    thirdparty_libs = [
-        zlib,
-        libfmt,
-        libsodium,
-        freetype,
-        openssl,
-        cares,
-        curl,
-        libpng,
-        libjpeg,
-        lua,
-        libsalsa,
-        libusb,
-        simple_usbmodeswitch,
-    ]
-else:
+elif host_triplet.endswith('-musleabihf'):
+    # Kobo
     thirdparty_libs = [
         binutils,
         linux_headers,
@@ -192,10 +175,12 @@ else:
         libusb,
         simple_usbmodeswitch,
     ]
+else:
+    raise RuntimeError('Unrecognized target')
 
 # build the third-party libraries
 toolchain = Toolchain(tarball_path, src_path, build_path, install_prefix,
-                      toolchain_host_triplet, actual_host_triplet,
+                      host_triplet,
                       arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags,
                       ranlib, strip, windres)
 for x in thirdparty_libs:

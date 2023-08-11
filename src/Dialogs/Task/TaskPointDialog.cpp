@@ -396,8 +396,7 @@ TaskPointWidget::PaintMap(Canvas &canvas, const PixelRect &rc)
   const MapLook &look = UIGlobals::GetMapLook();
   const NMEAInfo &basic = CommonInterface::Basic();
   PaintTaskPoint(canvas, rc, ordered_task, tp,
-                 basic.location_available
-                 ? basic.location : GeoPoint::Invalid(),
+                 basic.GetLocationOrInvalid(),
                  CommonInterface::GetMapSettings(),
                  look.task, look.airspace, look.overlay,
                  terrain, &airspace_database);

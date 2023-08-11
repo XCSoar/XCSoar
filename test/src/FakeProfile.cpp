@@ -16,28 +16,28 @@ Profile::SetFiles([[maybe_unused]] Path override_path) noexcept
 }
 
 const char *
-Profile::Get([[maybe_unused]] const char *key,
+Profile::Get([[maybe_unused]] std::string_view key,
              [[maybe_unused]] const char *default_value) noexcept
 {
   return NULL;
 }
 
 bool
-Profile::Get([[maybe_unused]] const char *key, TCHAR *pPos,
-             [[maybe_unused]] size_t dwSize) noexcept
+Profile::Get([[maybe_unused]] std::string_view key,
+             std::span<TCHAR> value) noexcept
 {
-  pPos[0] = _T('\0');
+  value[0] = _T('\0');
   return false;
 }
 
 void
-Profile::Set([[maybe_unused]] const char *key,
+Profile::Set([[maybe_unused]] std::string_view key,
              [[maybe_unused]] const char *value) noexcept
 {
 }
 
 AllocatedPath
-Profile::GetPath([[maybe_unused]] const char *key) noexcept
+Profile::GetPath([[maybe_unused]] std::string_view key) noexcept
 {
   return nullptr;
 }

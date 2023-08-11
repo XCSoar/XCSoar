@@ -613,7 +613,7 @@ UpdateCaption(WndForm *form, const Waypoint &waypoint)
   StaticString<256> buffer;
   buffer.Format(_T("%s: %s"), _("Waypoint"), waypoint.name.c_str());
 
-  const char *key = nullptr;
+  std::string_view key{};
   const TCHAR *name = nullptr;
 
   switch (waypoint.origin) {
@@ -641,7 +641,7 @@ UpdateCaption(WndForm *form, const Waypoint &waypoint)
     break;
   }
 
-  if (key != nullptr) {
+  if (!key.empty()) {
     const auto filename = Profile::map.GetPathBase(key);
     if (filename != nullptr)
       buffer.AppendFormat(_T(" (%s)"), filename.c_str());

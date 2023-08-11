@@ -1,3 +1,14 @@
+Version 7.37 - 2023/07/21
+* WeGlide
+  - fix crash bug
+* Android
+  - request ACCESS_FINE_LOCATION only when internal GPS is used
+  - request BLUETOOTH_CONNECT and BLUETOOTH_SCAN only when Bluetooth is used
+  - re-enable background location (yet another attempt)
+  - fix crash with disallowed IOIO Accessory connection
+  - remove Nook support
+  - add SoftRF Ham and Midi into 'white list' of USB devices
+
 Version 7.36 - 2023/07/02
 * task
   - save outer radius and angle of custom keyholes in task files

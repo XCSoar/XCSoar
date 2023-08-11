@@ -7,6 +7,8 @@
 
 #include <chrono>
 #include <cstdint>
+#include <span>
+#include <string_view>
 
 #include <tchar.h>
 
@@ -38,7 +40,7 @@ SetModified(bool modified) noexcept;
  */
 [[gnu::pure]]
 const char *
-Get(const char *key, const char *default_value=nullptr) noexcept;
+Get(std::string_view key, const char *default_value=nullptr) noexcept;
 
 /**
  * Reads a value from the profile map
@@ -47,7 +49,7 @@ Get(const char *key, const char *default_value=nullptr) noexcept;
  * @param max_size Maximum size of the output buffer
  */
 bool
-Get(const char *key, TCHAR *value, std::size_t max_size) noexcept;
+Get(std::string_view key, std::span<TCHAR> value) noexcept;
 
 /**
  * Writes a value to the profile map
@@ -55,37 +57,37 @@ Get(const char *key, TCHAR *value, std::size_t max_size) noexcept;
  * @param value Value that should be written
  */
 void
-Set(const char *key, const char *value) noexcept;
+Set(std::string_view key, const char *value) noexcept;
 
 #ifdef _UNICODE
 void
-Set(const char *key, const TCHAR *value) noexcept;
+Set(std::string_view key, const TCHAR *value) noexcept;
 #endif
 
 bool
-Get(const char *key, int &value) noexcept;
+Get(std::string_view key, int &value) noexcept;
 
 bool
-Get(const char *key, short &value) noexcept;
+Get(std::string_view key, short &value) noexcept;
 
 bool
-Get(const char *key, bool &value) noexcept;
+Get(std::string_view key, bool &value) noexcept;
 
 bool
-Get(const char *key, unsigned &value) noexcept;
+Get(std::string_view key, unsigned &value) noexcept;
 
 bool
-Get(const char *key, uint16_t &value) noexcept;
+Get(std::string_view key, uint16_t &value) noexcept;
 
 bool
-Get(const char *key, uint8_t &value) noexcept;
+Get(std::string_view key, uint8_t &value) noexcept;
 
 bool
-Get(const char *key, double &value) noexcept;
+Get(std::string_view key, double &value) noexcept;
 
 template<typename T>
 static inline bool
-GetEnum(const char *key, T &value) noexcept
+GetEnum(std::string_view key, T &value) noexcept
 {
   int i;
   if (Get(key, i)) {
@@ -96,45 +98,45 @@ GetEnum(const char *key, T &value) noexcept
 }
 
 static inline void
-Set(const char *key, bool value) noexcept
+Set(std::string_view key, bool value) noexcept
 {
   Set(key, value ? _T("1") : _T("0"));
 }
 
 void
-Set(const char *key, int value) noexcept;
+Set(std::string_view key, int value) noexcept;
 
 void
-Set(const char *key, long value) noexcept;
+Set(std::string_view key, long value) noexcept;
 
 void
-Set(const char *key, unsigned value) noexcept;
+Set(std::string_view key, unsigned value) noexcept;
 
 void
-Set(const char *key, double value) noexcept;
+Set(std::string_view key, double value) noexcept;
 
 static inline void
-Set(const char *key, std::chrono::duration<unsigned> value) noexcept
+Set(std::string_view key, std::chrono::duration<unsigned> value) noexcept
 {
   Set(key, value.count());
 }
 
 template<typename T>
 static inline void
-SetEnum(const char *key, T value) noexcept
+SetEnum(std::string_view key, T value) noexcept
 {
   Set(key, (int)value);
 }
 
 template<std::size_t max>
 static inline bool
-Get(const char *key, BasicStringBuffer<TCHAR, max> &value) noexcept
+Get(std::string_view key, BasicStringBuffer<TCHAR, max> &value) noexcept
 {
-  return Get(key, value.data(), value.capacity());
+  return Get(key, std::span{value.data(), value.capacity()});
 }
 
 bool
-Exists(const char *key) noexcept;
+Exists(std::string_view key) noexcept;
 
 void
 Clear() noexcept;

@@ -4,14 +4,13 @@
 #pragma once
 
 #include "Cast.hxx"
-#include "Concepts.hxx"
 #include "Manual.hxx"
 #include "IntrusiveHashSet.hxx"
 #include "IntrusiveList.hxx"
 
 #include <array>
-
 #include <cassert>
+#include <concepts>
 
 /**
  * A simple LRU cache.  Item lookup is done with a hash table.  No
@@ -27,7 +26,7 @@ template<typename Key, typename Data,
 	 std::size_t table_size,
 	 typename Hash=std::hash<Key>,
 	 typename Equal=std::equal_to<Key>>
-class Cache {
+class StaticCache {
 
 	struct Pair {
 		Key key;
@@ -166,9 +165,7 @@ class Cache {
 	Item &Allocate() noexcept {
 		assert(!unallocated_list.empty());
 
-		Item &item = unallocated_list.front();
-		unallocated_list.erase(unallocated_list.iterator_to(item));
-		return item;
+		return unallocated_list.pop_front();
 	}
 
 	template<typename K, typename U>
@@ -190,17 +187,17 @@ public:
 	using hasher = typename KeyMap::hasher;
 	using key_equal = typename KeyMap::key_equal;
 
-	Cache() noexcept {
+	StaticCache() noexcept {
 		for (auto &i : buffer)
 			unallocated_list.push_back(i);
 	}
 
-	~Cache() noexcept {
+	~StaticCache() noexcept {
 		Clear();
 	}
 
-	Cache(const Cache &) = delete;
-	Cache &operator=(const Cache &) = delete;
+	StaticCache(const StaticCache &) = delete;
+	StaticCache &operator=(const StaticCache &) = delete;
 
 	decltype(auto) hash_function() const noexcept {
 		return map.hash_function();
@@ -275,7 +272,7 @@ public:
 		if (inserted) {
 			Item &item = Make(std::forward<K>(key), std::forward<U>(data));
 			chronological_list.push_front(item);
-			map.insert(position, item);
+			map.insert_commit(position, item);
 			return item.GetData();
 		} else {
 			position->ReplaceData(std::forward<U>(data));
@@ -319,7 +316,7 @@ public:
 	 * Iterates over all items and remove all those which match
 	 * the given predicate.
 	 */
-	void RemoveIf(Predicate<const Key &, const Data &> auto p) noexcept {
+	void RemoveIf(std::predicate<const Key &, const Data &> auto p) noexcept {
 		chronological_list.remove_and_dispose_if([&p](const Item &item){
 				return p(item.GetKey(), item.GetData());
 			},
@@ -335,7 +332,7 @@ public:
 	 * given function.  The cache must not be modified from within
 	 * that function.
 	 */
-	void ForEach(Invocable<const Key &, const Data &> auto f) const {
+	void ForEach(std::invocable<const Key &, const Data &> auto f) const {
 		for (const auto &i : chronological_list)
 			f(i.GetKey(), i.GetData());
 	}

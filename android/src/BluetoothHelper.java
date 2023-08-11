@@ -8,8 +8,6 @@ import java.util.Set;
 import java.util.Collection;
 import java.util.List;
 import java.util.LinkedList;
-import java.util.Map;
-import java.util.TreeMap;
 import java.io.IOException;
 
 import android.os.ParcelUuid;
@@ -17,8 +15,6 @@ import android.util.Log;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothSocket;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
@@ -26,6 +22,7 @@ import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanRecord;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.Manifest;
 
 /**
  * A library that constructs Bluetooth ports.  It is called by C++
@@ -39,6 +36,7 @@ final class BluetoothHelper
         UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
   private final Context context;
+  private final PermissionManager permissionManager;
 
   private final BluetoothAdapter adapter;
 
@@ -52,8 +50,9 @@ final class BluetoothHelper
   private final Collection<DetectDeviceListener> detectListeners =
     new LinkedList<DetectDeviceListener>();
 
-  BluetoothHelper(Context context) throws Exception {
+  BluetoothHelper(Context context, PermissionManager permissionManager) throws Exception {
     this.context = context;
+    this.permissionManager = permissionManager;
 
     BluetoothManager manager = (BluetoothManager)
       context.getSystemService(Context.BLUETOOTH_SERVICE);
@@ -68,14 +67,31 @@ final class BluetoothHelper
   }
 
   public boolean isEnabled() {
-    return adapter.isEnabled();
+    try {
+      return adapter.isEnabled();
+    } catch (SecurityException e) {
+      // only Android R or older
+      return false;
+    }
+  }
+
+  /**
+   * Wrapper for BluetoothDevice.getName() which catches
+   * SecurityException and returns null in this case.
+   */
+  private static String getName(BluetoothDevice device) {
+    try {
+      return device.getName();
+    } catch (SecurityException e) {
+      return null;
+    }
   }
 
   /**
    * Turns the #BluetoothDevice into a human-readable string.
    */
   public static String getDisplayString(BluetoothDevice device) {
-    String name = device.getName();
+    String name = getName(device);
     String address = device.getAddress();
 
     if (name == null)
@@ -90,34 +106,90 @@ final class BluetoothHelper
 
   public String getNameFromAddress(String address) {
     try {
-      return adapter.getRemoteDevice(address).getName();
-    } catch (Exception e) {
-      Log.e(TAG, "Failed to look up name of " + address, e);
+      return getName(adapter.getRemoteDevice(address));
+    } catch (IllegalArgumentException e) {
+      // address is malformed
       return null;
     }
   }
 
+  private static void submitBondedDevices(Collection<BluetoothDevice> devices,
+                                          DetectDeviceListener l) {
+    for (BluetoothDevice device : devices)
+      l.onDeviceDetected(device.getType() == BluetoothDevice.DEVICE_TYPE_LE
+                         ? DetectDeviceListener.TYPE_BLUETOOTH_LE
+                         : DetectDeviceListener.TYPE_BLUETOOTH_CLASSIC,
+                         device.getAddress(), getName(device),
+                         0);
+  }
+
+  private synchronized void broadcastBondedDevices(Collection<BluetoothDevice> devices) {
+    for (DetectDeviceListener l : detectListeners)
+      submitBondedDevices(devices, l);
+  }
+
+  private final PermissionManager.PermissionHandler bondedPermissionHandler =
+    new PermissionManager.PermissionHandler() {
+      @Override
+      public void onRequestPermissionsResult(boolean granted) {
+        if (!granted)
+          return;
+
+        /* try again */
+        try {
+          Set<BluetoothDevice> devices = adapter.getBondedDevices();
+          if (devices != null)
+            broadcastBondedDevices(devices);
+        } catch (SecurityException e) {
+          // we still don't have permission.BLUETOOTH_CONNECT??
+          Log.e(TAG, "Cannot list bonded Bluetooth devices", e);
+        }
+      }
+    };
+
+  private synchronized void startLeScan() {
+    if (scanner != null || detectListeners.isEmpty())
+      return;
+
+    try {
+      scanner = adapter.getBluetoothLeScanner();
+      if (scanner != null)
+        scanner.startScan(this);
+    } catch (Exception e) {
+      Log.e(TAG, "Bluetooth LE scan failed", e);
+      scanner = null;
+    }
+  }
+
+  private final PermissionManager.PermissionHandler leScanPermissionHandler =
+    new PermissionManager.PermissionHandler() {
+      @Override
+      public void onRequestPermissionsResult(boolean granted) {
+        if (granted)
+          /* try again */
+          startLeScan();
+      }
+    };
+
   public synchronized void addDetectDeviceListener(DetectDeviceListener l) {
     detectListeners.add(l);
 
-    Set<BluetoothDevice> devices = adapter.getBondedDevices();
-    if (devices != null)
-      for (BluetoothDevice device : devices)
-        l.onDeviceDetected(device.getType() == BluetoothDevice.DEVICE_TYPE_LE
-                           ? DetectDeviceListener.TYPE_BLUETOOTH_LE
-                           : DetectDeviceListener.TYPE_BLUETOOTH_CLASSIC,
-                           device.getAddress(), device.getName(),
-                           0);
-
-    if (hasLe && scanner == null) {
+    if (permissionManager.requestPermission(Manifest.permission.BLUETOOTH_CONNECT,
+                                            bondedPermissionHandler)) {
       try {
-        scanner = adapter.getBluetoothLeScanner();
-        if (scanner != null)
-          scanner.startScan(this);
-      } catch (Exception e) {
-        Log.e(TAG, "Bluetooth LE scan failed", e);
-        scanner = null;
+        Set<BluetoothDevice> devices = adapter.getBondedDevices();
+        if (devices != null)
+          submitBondedDevices(devices, l);
+      } catch (SecurityException e) {
+        // we don't have permission.BLUETOOTH_CONNECT
+        Log.e(TAG, "Cannot list bonded Bluetooth devices", e);
       }
+    }
+
+    if (hasLe) {
+      if (permissionManager.requestPermission(Manifest.permission.BLUETOOTH_SCAN,
+                                              leScanPermissionHandler))
+        startLeScan();
     }
   }
 
@@ -139,6 +211,10 @@ final class BluetoothHelper
     if (!hasLe)
       throw new IOException("No Bluetooth LE support");
 
+    // TODO wait for permission to be granted
+    permissionManager.requestPermission(Manifest.permission.BLUETOOTH_CONNECT,
+                                        null);
+
     BluetoothDevice device = adapter.getRemoteDevice(address);
     if (device == null)
       throw new IOException("Bluetooth device not found");
@@ -155,8 +231,12 @@ final class BluetoothHelper
     if (device == null)
       throw new IOException("Bluetooth device not found");
 
-    Log.d(TAG, String.format("Bluetooth device \"%s\" (%s) is a LE device, trying to connect using GATT...",
-                             device.getName(), device.getAddress()));
+    // TODO wait for permission to be granted
+    permissionManager.requestPermission(Manifest.permission.BLUETOOTH_CONNECT,
+                                        null);
+
+    Log.d(TAG, String.format("Bluetooth device \"%s\" is a LE device, trying to connect using GATT...",
+                             getDisplayString(device)));
     return new HM10Port(context, device);
   }
 
@@ -166,12 +246,20 @@ final class BluetoothHelper
     if (device == null)
       throw new IOException("Bluetooth device not found");
 
+    // TODO wait for permission to be granted
+    permissionManager.requestPermission(Manifest.permission.BLUETOOTH_CONNECT,
+                                        null);
+
     BluetoothSocket socket =
       device.createRfcommSocketToServiceRecord(THE_UUID);
     return new BluetoothClientPort(socket);
   }
 
   public AndroidPort createServer() throws IOException {
+    // TODO wait for permission to be granted
+    permissionManager.requestPermission(Manifest.permission.BLUETOOTH_CONNECT,
+                                        null);
+
     return new BluetoothServerPort(adapter, THE_UUID);
   }
 
@@ -215,7 +303,7 @@ final class BluetoothHelper
 
     for (DetectDeviceListener l : detectListeners)
       l.onDeviceDetected(DetectDeviceListener.TYPE_BLUETOOTH_LE,
-                         device.getAddress(), device.getName(),
+                         device.getAddress(), getName(device),
                          features);
   }
 

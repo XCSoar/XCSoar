@@ -8,11 +8,8 @@
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "TaskPointRenderer.hpp"
 
-TaskRenderer::TaskRenderer(TaskPointRenderer &_tpv, GeoBounds _screen_bounds)
-  :tpv(_tpv), screen_bounds(_screen_bounds) {}
-
 void 
-TaskRenderer::Draw(const AbortTask &task)
+TaskRenderer::Draw(const AbortTask &task) noexcept
 {
   tpv.SetActiveIndex(task.GetActiveIndex());
   tpv.SetModeOptional(false);
@@ -26,15 +23,16 @@ TaskRenderer::Draw(const AbortTask &task)
 }
 
 void 
-TaskRenderer::Draw(const OrderedTask &task)
+TaskRenderer::Draw(const OrderedTask &task) noexcept
 {
   tpv.SetBoundingBox(task.GetTaskProjection().Project(screen_bounds));
   tpv.SetActiveIndex(task.GetActiveIndex());
   for (unsigned i = 0; i < 4; i++) {
     tpv.ResetIndex();
 
-    if (i != TaskPointRenderer::LAYER_SYMBOLS &&
-        i != TaskPointRenderer::LAYER_LEG) {
+    const auto layer = static_cast<TaskPointRenderer::Layer>(i);
+    if (layer != TaskPointRenderer::Layer::SYMBOLS &&
+        layer != TaskPointRenderer::Layer::LEG) {
       tpv.SetModeOptional(true);
 
       for (const auto &tp : task.GetOptionalStartPoints())
@@ -43,12 +41,12 @@ TaskRenderer::Draw(const OrderedTask &task)
 
     tpv.SetModeOptional(false);
     for (const auto &tp : task.GetPoints())
-      tpv.Draw(tp, (TaskPointRenderer::Layer)i);
+      tpv.Draw(tp, layer);
   }
 }
 
 void 
-TaskRenderer::Draw(const GotoTask &task)
+TaskRenderer::Draw(const GotoTask &task) noexcept
 {
   tpv.SetActiveIndex(0);
   tpv.SetModeOptional(false);
@@ -61,7 +59,7 @@ TaskRenderer::Draw(const GotoTask &task)
 }
 
 void
-TaskRenderer::Draw(const TaskInterface &task)
+TaskRenderer::Draw(const TaskInterface &task) noexcept
 {
   switch (task.GetType()) {
   case TaskType::NONE:

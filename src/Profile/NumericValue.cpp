@@ -5,7 +5,7 @@
 #include "util/NumberParser.hpp"
 
 bool
-ProfileMap::Get(const char *key, int &value) const noexcept
+ProfileMap::Get(std::string_view key, int &value) const noexcept
 {
   // Try to read the profile map
   const char *str = Get(key);
@@ -24,7 +24,7 @@ ProfileMap::Get(const char *key, int &value) const noexcept
 }
 
 bool
-ProfileMap::Get(const char *key, short &value) const noexcept
+ProfileMap::Get(std::string_view key, short &value) const noexcept
 {
   // Try to read the profile map
   const char *str = Get(key);
@@ -43,7 +43,7 @@ ProfileMap::Get(const char *key, short &value) const noexcept
 }
 
 bool
-ProfileMap::Get(const char *key, bool &value) const noexcept
+ProfileMap::Get(std::string_view key, bool &value) const noexcept
 {
   // Try to read the profile map
   const char *str = Get(key);
@@ -56,7 +56,7 @@ ProfileMap::Get(const char *key, bool &value) const noexcept
 }
 
 bool
-ProfileMap::Get(const char *key, unsigned &value) const noexcept
+ProfileMap::Get(std::string_view key, unsigned &value) const noexcept
 {
   // Try to read the profile map
   const char *str = Get(key);
@@ -75,7 +75,7 @@ ProfileMap::Get(const char *key, unsigned &value) const noexcept
 }
 
 bool
-ProfileMap::Get(const char *key, uint16_t &value) const noexcept
+ProfileMap::Get(std::string_view key, uint16_t &value) const noexcept
 {
   unsigned value32;
   if (!Get(key, value32) || value32 >= 0x10000)
@@ -86,7 +86,7 @@ ProfileMap::Get(const char *key, uint16_t &value) const noexcept
 }
 
 bool
-ProfileMap::Get(const char *key, uint8_t &value) const noexcept
+ProfileMap::Get(std::string_view key, uint8_t &value) const noexcept
 {
   unsigned value32;
   if (!Get(key, value32) || value32 >= 0x100)
@@ -97,7 +97,7 @@ ProfileMap::Get(const char *key, uint8_t &value) const noexcept
 }
 
 bool
-ProfileMap::Get(const char *key, double &value) const noexcept
+ProfileMap::Get(std::string_view key, double &value) const noexcept
 {
   // Try to read the profile map
   const char *str = Get(key);
@@ -116,7 +116,7 @@ ProfileMap::Get(const char *key, double &value) const noexcept
 }
 
 void
-ProfileMap::Set(const char *key, int value) noexcept
+ProfileMap::Set(std::string_view key, int value) noexcept
 {
   char tmp[50];
   sprintf(tmp, "%d", value);
@@ -124,7 +124,7 @@ ProfileMap::Set(const char *key, int value) noexcept
 }
 
 void
-ProfileMap::Set(const char *key, long value) noexcept
+ProfileMap::Set(std::string_view key, long value) noexcept
 {
   char tmp[50];
   sprintf(tmp, "%ld", value);
@@ -132,7 +132,7 @@ ProfileMap::Set(const char *key, long value) noexcept
 }
 
 void
-ProfileMap::Set(const char *key, unsigned value) noexcept
+ProfileMap::Set(std::string_view key, unsigned value) noexcept
 {
   char tmp[50];
   sprintf(tmp, "%u", value);
@@ -140,7 +140,7 @@ ProfileMap::Set(const char *key, unsigned value) noexcept
 }
 
 void
-ProfileMap::Set(const char *key, double value) noexcept
+ProfileMap::Set(std::string_view key, double value) noexcept
 {
   char tmp[50];
   sprintf(tmp, "%f", value);

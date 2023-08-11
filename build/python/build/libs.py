@@ -23,7 +23,6 @@ binutils = BinutilsProject(
         '--disable-libquadmath',
         '--disable-lto',
     ],
-    use_actual_arch=True,
 )
 
 linux_headers = SabotageLinuxHeadersProject(
@@ -72,17 +71,15 @@ gcc = GccProject(
         '--with-fpu=neon',
         '--with-float=hard',
     ],
-    use_actual_arch=True,
 )
 
 gcc_bootstrap = GccBootstrapProject(
     gcc.url,
     gcc.alternative_url,
     gcc.md5,
-    '../bin/armv7a-a8neon-linux-musleabihf-g++',
+    '../bin/armv7a-kobo-linux-musleabihf-g++',
     gcc.configure_args,
     install_target='install-gcc',
-    use_actual_arch=True,
 )
 
 musl = MuslProject(

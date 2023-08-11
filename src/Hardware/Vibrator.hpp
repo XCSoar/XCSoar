@@ -17,20 +17,19 @@
  */
 [[gnu::const]]
 bool
-HaveVibrator();
+HaveVibrator() noexcept;
 
 /**
  * Vibrate for a very short amount of time.  This function has no
  * effect if the device does not have a vibrator.
  */
 void
-VibrateShort();
+VibrateShort() noexcept;
 
 #else
 
-constexpr
-static inline bool
-HaveVibrator()
+static constexpr bool
+HaveVibrator() noexcept
 {
   return false;
 }

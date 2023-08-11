@@ -154,7 +154,8 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
   OZRenderer ozv(task_look, airspace_look, settings_map.airspace);
   TaskPointRenderer tpv(canvas, projection, task_look,
                         task.GetTaskProjection(),
-                        ozv, false, TaskPointRenderer::NONE,
+                        ozv, false,
+                        TaskPointRenderer::TargetVisibility::NONE,
                         location);
   TaskRenderer dv(tpv, projection.GetScreenBounds());
   dv.Draw(task);

@@ -29,8 +29,6 @@
 
 #include <algorithm>
 
-using std::max;
-
 FlightStatisticsRenderer::FlightStatisticsRenderer(const ChartLook &_chart_look,
                                                    const MapLook &_map_look) noexcept
   :chart_look(_chart_look),
@@ -317,9 +315,8 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
     OZRenderer ozv(map_look.task, map_look.airspace, settings_map.airspace);
     TaskPointRenderer tpv(canvas, proj, map_look.task,
                           task.GetTaskProjection(),
-                          ozv, false, TaskPointRenderer::ALL,
-                          nmea_info.location_available
-                          ? nmea_info.location : GeoPoint::Invalid());
+                          ozv, false, TaskPointRenderer::TargetVisibility::ALL,
+                          nmea_info.GetLocationOrInvalid());
     ::TaskRenderer dv(tpv, proj.GetScreenBounds());
     dv.Draw(task);
   }

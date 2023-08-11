@@ -264,16 +264,14 @@ public:
 
 	void clear_and_dispose(Disposer<value_type> auto disposer) noexcept {
 		while (!empty()) {
-			auto *item = &front();
-			pop_front();
-			disposer(item);
+			disposer(&pop_front());
 		}
 	}
 
 	/**
 	 * @return the number of removed items
 	 */
-	std::size_t remove_and_dispose_if(Predicate<const_reference> auto pred,
+	std::size_t remove_and_dispose_if(std::predicate<const_reference> auto pred,
 					  Disposer<value_type> auto dispose) noexcept {
 		std::size_t result = 0;
 
@@ -302,15 +300,15 @@ public:
 		return *Cast(head.next);
 	}
 
-	void pop_front() noexcept {
-		ToHook(front()).unlink();
-		--counter;
-	}
-
-	void pop_front_and_dispose(Disposer<value_type> auto disposer) noexcept {
+	reference pop_front() noexcept {
 		auto &i = front();
 		ToHook(i).unlink();
 		--counter;
+		return i;
+	}
+
+	void pop_front_and_dispose(Disposer<value_type> auto disposer) noexcept {
+		auto &i = pop_front();
 		disposer(&i);
 	}
 
@@ -319,7 +317,8 @@ public:
 	}
 
 	void pop_back() noexcept {
-		ToHook(back()).unlink();
+		auto &i = back();
+		ToHook(i).unlink();
 		--counter;
 	}
 
@@ -487,6 +486,12 @@ public:
 		insert(end(), t);
 	}
 
+	/**
+	 * Insert a new item before the given position.
+	 *
+	 * @param p a valid iterator (end() is allowed)for this list
+	 * describing the position where to insert
+	 */
 	void insert(iterator p, reference t) noexcept {
 		static_assert(!constant_time_size ||
 			      GetHookMode() < IntrusiveHookMode::AUTO_UNLINK,
@@ -500,6 +505,13 @@ public:
 		IntrusiveListNode::Connect(new_node, existing_node);
 
 		++counter;
+	}
+
+	/**
+	 * Like insert(), but insert after the given position.
+	 */
+	void insert_after(iterator p, reference t) noexcept {
+		insert(std::next(p), t);
 	}
 
 	/**

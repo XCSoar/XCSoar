@@ -207,6 +207,8 @@ ifeq ($(TARGET),KOBO)
   # Experimental target for Kobo Mini
   override TARGET = NEON
   TARGET_IS_KOBO = y
+
+  HOST_TRIPLET = armv7a-kobo-linux-musleabihf
 endif
 
 ifeq ($(TARGET),NEON)
@@ -311,7 +313,7 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r25c
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r26-beta1
 
   ANDROID_SDK_PLATFORM = android-33
   ANDROID_NDK_API = 21
@@ -463,13 +465,9 @@ ifeq ($(TARGET_IS_KOBO),y)
     TARGET_ARCH += -fomit-frame-pointer
   endif
 
-  # We are using a GNU toolchain (triplet arm-linux-gnueabihf) by default, but
-  # the actual host triplet is different.
-  ACTUAL_HOST_TRIPLET = armv7a-a8neon-linux-musleabihf
-
   TARGET_CXXFLAGS += -Wno-psabi
 
-  TCPREFIX = $(abspath $(THIRDPARTY_LIBS_DIR))/bin/$(ACTUAL_HOST_TRIPLET)-
+  TCPREFIX = $(abspath $(THIRDPARTY_LIBS_DIR))/bin/$(HOST_TRIPLET)-
 endif
 
 ifeq ($(TARGET),ANDROID)

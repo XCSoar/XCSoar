@@ -182,7 +182,7 @@ public:
 		counter.reset();
 	}
 
-	void remove_and_dispose_if(Predicate<const_reference> auto pred,
+	void remove_and_dispose_if(std::predicate<const_reference> auto pred,
 				   Disposer<value_type> auto disposer) noexcept {
 		for (auto &bucket : table)
 			counter -= bucket.remove_and_dispose_if(pred, disposer);
@@ -200,7 +200,7 @@ public:
 	}
 
 	constexpr void remove_and_dispose_if(const auto &key,
-					     Predicate<const_reference> auto pred,
+					     std::predicate<const_reference> auto pred,
 					     Disposer<value_type> auto disposer) noexcept {
 		auto &bucket = GetBucket(key);
 		counter -= bucket.remove_and_dispose_if([this, &key, &pred](const auto &item){
@@ -213,6 +213,13 @@ public:
 		return Bucket::iterator_to(item);
 	}
 
+	/**
+	 * Prepare insertion of a new item.  If the key already
+	 * exists, return an iterator to the existing item and
+	 * `false`.  If the key does not exist, return an iterator to
+	 * the bucket where the new item may be inserted using
+	 * insert() and `true`.
+	 */
 	[[nodiscard]] [[gnu::pure]]
 	constexpr std::pair<bucket_iterator, bool> insert_check(const auto &key) noexcept {
 		auto &bucket = GetBucket(key);
@@ -220,14 +227,30 @@ public:
 			if (equal(key, i))
 				return {bucket.iterator_to(i), false};
 
-		return {bucket.begin(), true};
+		/* bucket.end() is a pointer to the bucket's list
+		   head, a stable value that is guaranteed to be still
+		   valid when insert_commit() gets called
+		   eventually */
+		return {bucket.end(), true};
 	}
 
-	constexpr void insert(bucket_iterator bucket, reference item) noexcept {
+	/**
+	 * Finish the insertion if insert_check() has returned true.
+	 *
+	 * @param bucket the bucket returned by insert_check()
+	 */
+	constexpr void insert_commit(bucket_iterator bucket, reference item) noexcept {
 		++counter;
-		GetBucket(item).insert(bucket, item);
+
+		/* using insert_after() so the new item gets inserted
+		   at the front of the bucket list */
+		GetBucket(item).insert_after(bucket, item);
 	}
 
+	/**
+	 * Insert a new item without checking whether the key already
+	 * exists.
+	 */
 	constexpr void insert(reference item) noexcept {
 		++counter;
 		GetBucket(item).push_front(item);
@@ -273,7 +296,7 @@ public:
 	 */
 	[[nodiscard]] [[gnu::pure]]
 	constexpr bucket_iterator find_if(const auto &key,
-					  Predicate<const_reference> auto pred) noexcept {
+					  std::predicate<const_reference> auto pred) noexcept {
 		auto &bucket = GetBucket(key);
 		for (auto &i : bucket)
 			if (equal(key, i) && pred(i))
@@ -297,9 +320,9 @@ public:
 	 */
 	[[nodiscard]] [[gnu::pure]]
 	constexpr bucket_iterator expire_find_if(const auto &key,
-						 Predicate<const_reference> auto expired_pred,
+						 std::predicate<const_reference> auto expired_pred,
 						 Disposer<value_type> auto disposer,
-						 Predicate<const_reference> auto match_pred) noexcept {
+						 std::predicate<const_reference> auto match_pred) noexcept {
 		auto &bucket = GetBucket(key);
 
 		for (auto i = bucket.begin(), e = bucket.end(); i != e;) {

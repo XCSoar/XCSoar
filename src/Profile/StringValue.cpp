@@ -13,7 +13,7 @@
 #endif
 
 bool
-ProfileMap::Get(const char *key, TCHAR *value, size_t max_size) const noexcept
+ProfileMap::Get(std::string_view key, std::span<TCHAR> value) const noexcept
 {
   const char *src = Get(key);
   if (src == nullptr) {
@@ -23,13 +23,13 @@ ProfileMap::Get(const char *key, TCHAR *value, size_t max_size) const noexcept
 
 #ifdef _UNICODE
   int result = MultiByteToWideChar(CP_UTF8, 0, src, -1,
-                                   value, max_size);
+                                   value.data(), value.size());
   return result > 0;
 #else
   if (!ValidateUTF8(src))
     return false;
 
-  CopyTruncateString(value, max_size, src);
+  CopyTruncateString(value.data(), value.size(), src);
   return true;
 #endif
 }
@@ -37,7 +37,7 @@ ProfileMap::Get(const char *key, TCHAR *value, size_t max_size) const noexcept
 #ifdef _UNICODE
 
 void
-ProfileMap::Set(const char *key, const TCHAR *value) noexcept
+ProfileMap::Set(std::string_view key, const TCHAR *value) noexcept
 {
   char buffer[MAX_PATH];
   int length = WideCharToMultiByte(CP_UTF8, 0, value, -1,
