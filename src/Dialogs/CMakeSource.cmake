@@ -117,6 +117,7 @@ set(_SOURCES
         Dialogs/Task/Manager/TaskMapButtonRenderer.cpp
         Dialogs/Task/Manager/TaskMiscPanel.cpp
         Dialogs/Task/Manager/TaskPropertiesPanel.cpp
+        Dialogs/Task/Manager/WeGlideTasksPanel.cpp  # 7.36
         Dialogs/Task/MutateTaskPointDialog.cpp
         Dialogs/Task/OptionalStartsDialog.cpp
         Dialogs/Task/TargetDialog.cpp

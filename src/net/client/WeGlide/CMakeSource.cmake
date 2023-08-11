@@ -1,8 +1,10 @@
 set(_SOURCES
         UploadFlight.cpp
-        DownloadTask.cpp
-
         UploadIGCFile.cpp
+
+        DownloadTask.cpp
+        ListTasks.cpp
+
         Error.cpp
 )
 

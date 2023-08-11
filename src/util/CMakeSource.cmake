@@ -11,9 +11,8 @@ set(_SOURCES
         util/StringCompare.cxx
         util/StringStrip.cxx
         util/StringUtil.cpp
-        # util/StringView.cxx
         util/TruncateString.cpp
-        util/tstring.cpp
+        # removed 7.36: util/tstring.cpp
         util/UTF8.cpp
         util/MD5.cpp  # new with 6.8.14
 )
