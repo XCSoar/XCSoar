@@ -13,3 +13,10 @@ Additional Drivers
 | **anemoi**    |    | RS-Flight | | realtime wind |
 | **Larus**    |    | Larus Breeze | | realtime wind and variometer|
 | **Becker AR62xx** |    | Becker | | Becker Radio driver |
+
+Build-Process
+=============
+
+* organizing the (Linux-) make build process with 1 script file ./build/cmake/MakeComplete.sh, dependend from include file ./build/cmake/MakeAll.sh
+
+* CMake build process only available on Windows with VisualStudio, MinGW64 and Clang (and only with Windows executable) yet

@@ -1,3 +1,11 @@
+Version 7.36.16, 2023/08/11
+---------------
+* xcsoar merge release v7.36, 'a626d3ef'
+
+Version 7.35.15, 2023/08/10
+---------------
+* xcsoar merge release v7.35, 'c5c49879'
+
 Version 7.34.14, 2023/08/10
 ---------------
 * xcsoar merge release v7.34, '9987faae'
