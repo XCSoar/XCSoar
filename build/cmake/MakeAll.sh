@@ -1,7 +1,6 @@
 #!/bin/bash
 
 if [ "$COMPLETE" == "" ]; then COMPLETE=y ; fi
-# rm -rv output/data/temp/graphics/*
 
 #delete all old Android packages:
 
@@ -12,12 +11,10 @@ rm -v  $BIN_NAME
 echo "============================================================================="
 echo "Make Android v8a (64 bit):"
 if [ "$COMPLETE" == "y" ]; then rm -rv output/ANDROID/arm64-v8a/opt/src ; fi
-# else rm -rv output/ANDROID/arm64-v8a/opt/src/Version.* ; fi
-# rm -rv output/include/ProgramVersion.*
 
 make DEBUG=n TARGET=ANDROIDAARCH64
 
-if [ -e $BIN_NAME ]; then    # exit ; fi
+if [ ! -e $BIN_NAME ]; then    # exit ; fi
 cp -v $BIN_NAME output/ANDROID/bin/OpenSoar-${PROGRAM_VERSION}-64.apk 
 
 if [ ! "$ANDROID_ARM64_ONLY" == "y" ]; then
