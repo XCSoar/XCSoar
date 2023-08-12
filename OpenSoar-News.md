@@ -1,3 +1,10 @@
+Version 7.37.17  - not yet released
+---------------
+* This is a weak step towards bringing OpenSoar up to date with XCSoar (current version v7.39) like the merges before, no additional features!
+* Build Process: Very strange behavior: On an incremental build, the app crashed on Android when local GPS permissions were requested. After a full build it behaves like xcsoar with version v7.37
+
+* xcsoar merge release v7.37, '33fbf7be'
+
 Version 7.36.16, 2023/08/11
 ---------------
 * xcsoar merge release v7.36, 'a626d3ef'
