@@ -196,7 +196,7 @@ public class OpenSoar extends Activity implements PermissionManager {
     if (!Loader.loaded)
       return;
 
-    /* check if external storage is available; XCSoar doesn't work as
+    /* check if external storage is available; OpenSoar doesn't work as
        long as external storage is being forwarded to a PC */
     String state = Environment.getExternalStorageState();
     if (!Environment.MEDIA_MOUNTED.equals(state)) {
@@ -362,13 +362,13 @@ public class OpenSoar extends Activity implements PermissionManager {
 
   private static String getPermissionRationale(String permission) {
     if (permission == Manifest.permission.ACCESS_FINE_LOCATION)
-      return "XCSoar needs permission to access your GPS location - obviously, because XCSoar's purpose is to help you navigate an aircraft.";
+      return "OpenSoar needs permission to access your GPS location - obviously, because OpenSoar's purpose is to help you navigate an aircraft.";
     else if (permission == Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-      return "Several optional features (e.g. flight logging and score calculation) benefit from location access while XCSoar is in background. " +
+      return "Several optional features (e.g. flight logging and score calculation) benefit from location access while OpenSoar is in background. " +
         "If you choose not to allow this, calculation results may be incomplete.";
     else if (permission == Manifest.permission.BLUETOOTH_CONNECT ||
              permission == Manifest.permission.BLUETOOTH_SCAN)
-      return "If you want XCSoar to connect to Bluetooth sensors, it needs your permission.";
+      return "If you want OpenSoar to connect to Bluetooth sensors, it needs your permission.";
     else
       return null;
   }
@@ -378,14 +378,14 @@ public class OpenSoar extends Activity implements PermissionManager {
                                               final PermissionHandler handler) {
     /* using HTML so the privacy policy link is clickable */
     final String html = "<p>" +
-      "XCSoar is free software developed by volunteers just for fun. " +
-      "The project is non-profit - you don't pay for XCSoar, and we don't sell your data (or anything else). " +
+      "OpenSoar is free software developed by volunteers just for fun. " +
+      "The project is non-profit - you don't pay for OpenSoar, and we don't sell your data (or anything else). " +
       "</p>" +
       "<p><big>" +
       rationale +
       "</big></p>" +
       "<p>" +
-      "All those accesses are only in your own interest; we don't collect your data and we don't track you (unless you explicitly ask XCSoar to). " +
+      "All those accesses are only in your own interest; we don't collect your data and we don't track you (unless you explicitly ask OpenSoar to). " +
       "</p>" +
       "<p>" +
       "More details can be found in the <a href=\"https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md\">Privacy policy</a>. " +
