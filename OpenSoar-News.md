@@ -1,3 +1,6 @@
+Version 7.38.18 - not yet released
+---------------
+
 Version 7.37.17, 2023/08/12
 ---------------
 * This is a weak step towards bringing OpenSoar up to date with XCSoar (current version v7.39) like the merges before, no additional features!
