@@ -43,6 +43,6 @@ static inline void MultiDrawElements(Args... args) noexcept {
 
 #ifdef GL_EXT_discard_framebuffer
 inline PFNGLDISCARDFRAMEBUFFEREXTPROC discard_framebuffer;
-#endif
+#endif // GL_EXT_discard_framebuffer
 
 } // namespace GLExt

@@ -54,6 +54,7 @@ set(CMAKE_CXX_FLAGS_INIT "{toolchain.cxxflags} {cppflags}")
 set(CMAKE_FIND_ROOT_PATH "{toolchain.install_prefix};{sysroot}")
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 """)
 
 def configure(toolchain, src, build, args=(), env=None):

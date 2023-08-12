@@ -153,8 +153,7 @@ elif 'android' in host_triplet:
         libtiff,
         libgeotiff,
     ]
-elif host_triplet.endswith('-musleabihf'):
-    # Kobo
+elif '-kobo-linux-' in host_triplet:
     thirdparty_libs = [
         binutils,
         linux_headers,

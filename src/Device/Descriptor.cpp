@@ -120,6 +120,9 @@ DeviceDescriptor::GetState() const noexcept
 #ifdef ANDROID
   if (java_sensor != nullptr)
     return AndroidSensor::GetState(Java::GetEnv(), *java_sensor);
+
+  if (internal_sensors != nullptr)
+    return internal_sensors->GetState(Java::GetEnv());
 #endif
 
   return PortState::FAILED;
@@ -236,13 +239,14 @@ DeviceDescriptor::OpenInternalSensors()
     return true;
 
 #ifdef ANDROID
-  internal_sensors = InternalSensors::Create(Java::GetEnv(), context,
+  JNIEnv *const env = Java::GetEnv() ;
+  internal_sensors = InternalSensors::Create(env, context,
                                              permission_manager,
                                              *this);
   if (internal_sensors) {
     // TODO: Allow user to specify whether they want certain sensors.
-    internal_sensors->subscribeToSensor(InternalSensors::TYPE_PRESSURE);
-    internal_sensors->subscribeToSensor(InternalSensors::TYPE_ACCELEROMETER);
+    internal_sensors->SubscribeToSensor(env, InternalSensors::TYPE_PRESSURE);
+    internal_sensors->SubscribeToSensor(env, InternalSensors::TYPE_ACCELEROMETER);
     return true;
   }
 #elif defined(__APPLE__)
@@ -452,19 +456,16 @@ try {
 
     LogError(e, WideToUTF8Converter(name));
 
-    StaticString<256> msg;
-
     const auto _msg = GetFullMessage(e);
-    const UTF8ToWideConverter what(_msg.c_str());
-    if (what.IsValid()) {
-      const std::lock_guard lock{mutex};
-      error_message = what;
+    if (const UTF8ToWideConverter what{_msg.c_str()}; what.IsValid()) {
+      LockSetErrorMessage(what);
+
+      StaticString<256> msg;
+      msg.Format(_T("%s: %s (%s)"), _("Unable to open port"), name,
+                 (const TCHAR *)what);
+      env.SetErrorMessage(msg);
     }
 
-    msg.Format(_T("%s: %s (%s)"), _("Unable to open port"), name,
-               (const TCHAR *)what);
-
-    env.SetErrorMessage(msg);
     return false;
   }
 
@@ -496,9 +497,16 @@ try {
 } catch (OperationCancelled) {
   return false;
 } catch (...) {
-  const auto _msg = GetFullMessage(std::current_exception());
-  const UTF8ToWideConverter msg(_msg.c_str());
-  env.SetErrorMessage(msg);
+  const auto e = std::current_exception();
+  LogError(e);
+
+  const auto _msg = GetFullMessage(e);
+
+  if (const UTF8ToWideConverter msg{_msg.c_str()}; msg.IsValid()) {
+    LockSetErrorMessage(msg);
+    env.SetErrorMessage(msg);
+  }
+
   return false;
 }
 
@@ -1297,6 +1305,24 @@ DeviceDescriptor::OnCalculatedUpdate(const MoreData &basic,
     }
 }
 
+inline void
+DeviceDescriptor::LockSetErrorMessage(const TCHAR *msg) noexcept
+{
+    const std::lock_guard lock{mutex};
+    error_message = msg;
+}
+
+#ifdef _UNICODE
+
+inline void
+DeviceDescriptor::LockSetErrorMessage(const char *msg) noexcept
+{
+  if (const UTF8ToWideConverter tmsg(msg); tmsg.IsValid())
+    LockSetErrorMessage(tmsg);
+}
+
+#endif
+
 void
 DeviceDescriptor::OnJobFinished() noexcept
 {
@@ -1334,13 +1360,7 @@ DeviceDescriptor::PortError(const char *msg) noexcept
               config.GetPortName(buffer, 64), msg);
   }
 
-  {
-    const UTF8ToWideConverter tmsg(msg);
-    if (tmsg.IsValid()) {
-      const std::lock_guard lock{mutex};
-      error_message = tmsg;
-    }
-  }
+  LockSetErrorMessage(msg);
 
   has_failed = true;
 

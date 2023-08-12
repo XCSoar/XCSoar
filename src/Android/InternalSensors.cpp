@@ -8,15 +8,16 @@
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "java/Array.hxx"
+#include "java/Class.hxx"
 #include "java/Env.hxx"
 
-Java::TrivialClass InternalSensors::gps_cls, InternalSensors::sensors_cls;
-jmethodID InternalSensors::gps_ctor_id;
-jmethodID InternalSensors::sensors_ctor_id;
-jmethodID InternalSensors::mid_sensors_getSubscribableSensors;
-jmethodID InternalSensors::mid_sensors_subscribeToSensor_;
-jmethodID InternalSensors::mid_sensors_cancelSensorSubscription_;
-jmethodID InternalSensors::mid_sensors_subscribedToSensor_;
+static Java::TrivialClass gps_cls, sensors_cls;
+static jmethodID gps_ctor_id;
+static jmethodID sensors_ctor_id;
+static jmethodID mid_sensors_getSubscribableSensors;
+static jmethodID mid_sensors_subscribeToSensor_;
+static jmethodID mid_sensors_cancelSensorSubscription_;
+static jmethodID mid_sensors_subscribedToSensor_;
 
 bool
 InternalSensors::Initialise(JNIEnv *env)
@@ -55,7 +56,7 @@ InternalSensors::Initialise(JNIEnv *env)
 }
 
 void
-InternalSensors::Deinitialise(JNIEnv *env)
+InternalSensors::Deinitialise(JNIEnv *env) noexcept
 {
   gps_cls.Clear(env);
   sensors_cls.Clear(env);
@@ -71,26 +72,23 @@ InternalSensors::InternalSensors(const Java::LocalObject &gps_obj,
 }
 
 bool
-InternalSensors::subscribeToSensor(int id)
+InternalSensors::SubscribeToSensor(JNIEnv *env, int id) noexcept
 {
-  JNIEnv *env = Java::GetEnv();
   return env->CallBooleanMethod(obj_NonGPSSensors_.Get(),
                                 mid_sensors_subscribeToSensor_, (jint) id);
 }
 
 bool
-InternalSensors::cancelSensorSubscription(int id)
+InternalSensors::CancelSensorSubscription(JNIEnv *env, int id) noexcept
 {
-  JNIEnv *env = Java::GetEnv();
   return env->CallBooleanMethod(obj_NonGPSSensors_.Get(),
                                 mid_sensors_cancelSensorSubscription_,
                                 (jint)id);
 }
 
 bool
-InternalSensors::subscribedToSensor(int id) const
+InternalSensors::IsSubscribedToSensor(JNIEnv *env, int id) const noexcept
 {
-  JNIEnv *env = Java::GetEnv();
   return env->CallBooleanMethod(obj_NonGPSSensors_.Get(),
                                 mid_sensors_subscribedToSensor_, (jint)id);
 }
@@ -123,7 +121,8 @@ InternalSensors::Create(JNIEnv *env, Context *context,
 
 // Helper for retrieving the set of sensors to which we can subscribe.
 void
-InternalSensors::getSubscribableSensors(JNIEnv *env, [[maybe_unused]] jobject sensors_obj)
+InternalSensors::getSubscribableSensors(JNIEnv *env,
+                                        [[maybe_unused]] jobject sensors_obj) noexcept
 {
   jintArray ss_arr = (jintArray)
     env->CallObjectMethod(obj_NonGPSSensors_.Get(),

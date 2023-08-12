@@ -7,7 +7,6 @@ from build.cmake import CmakeProject
 from build.openssl import OpenSSLProject
 from build.gcc import BinutilsProject, GccProject, GccBootstrapProject
 from build.linux import SabotageLinuxHeadersProject
-from build.sdl2 import SDL2Project
 from build.lua import LuaProject
 from .musl import MuslProject
 
@@ -329,13 +328,15 @@ libtiff = CmakeProject(
         '-Dlogluv=OFF',
         '-Dmdi=OFF',
         '-Dpixarlog=OFF',
-        '-Djpeg=OFF',
-        '-Dold-jpeg=OFF',
-        '-Djbig=OFF',
-        '-Dlzma=OFF',
-        '-Dzstd=OFF',
-        '-Dlerc=OFF',
-        '-Dwebp=OFF',
+        '-DCMAKE_DISABLE_FIND_PACKAGE_Deflate=ON',
+        '-DCMAKE_DISABLE_FIND_PACKAGE_JPEG=ON',
+        '-DCMAKE_DISABLE_FIND_PACKAGE_JBIG=ON',
+        '-DCMAKE_DISABLE_FIND_PACKAGE_liblzma=ON',
+        '-DCMAKE_DISABLE_FIND_PACKAGE_ZSTD=ON',
+        '-DCMAKE_DISABLE_FIND_PACKAGE_LERC=ON',
+        '-DCMAKE_DISABLE_FIND_PACKAGE_WebP=ON',
+        '-DCMAKE_DISABLE_FIND_PACKAGE_OpenGL=ON',
+        '-DCMAKE_DISABLE_FIND_PACKAGE_GLUT=ON',
         '-Dcxx=OFF',
         '-Dstrip-chopping=OFF',
         '-Dextrasample-as-alpha=OFF',
@@ -360,26 +361,39 @@ libgeotiff = CmakeProject(
     patches=abspath('lib/libgeotiff/patches'),
 )
 
-sdl2 = SDL2Project(
-    'http://www.libsdl.org/release/SDL2-2.0.22.tar.gz',
-    'https://fossies.org/linux/misc/SDL2-2.0.22.tar.gz',
-    'fe7cbf3127882e3fc7259a75a0cb585620272c51745d3852ab9dd87960697f2e',
+sdl2 = AutotoolsProject(
+    'http://www.libsdl.org/release/SDL2-2.28.1.tar.gz',
+    'https://fossies.org/linux/misc/SDL2-2.28.1.tar.gz',
+    '4977ceba5c0054dbe6c2f114641aced43ce3bf2b41ea64b6a372d6ba129cb15d',
     'lib/libSDL2.a',
     [
         '--disable-shared', '--enable-static',
         '--disable-joystick',
         '--disable-haptic',
+        '--disable-hidapi',
         '--disable-sensor',
         '--disable-power',
         '--disable-filesystem',
+        '--disable-threads',
         '--disable-timers',
         '--disable-file',
         '--disable-misc',
         '--disable-locale',
         '--disable-loadso',
+        '--disable-cpuinfo',
+        '--disable-oss',
+        '--disable-jack',
+        '--disable-esd',
+        '--disable-arts',
+        '--disable-nas',
+        '--disable-sndio',
         '--disable-diskaudio',
         '--disable-dummyaudio',
+        '--disable-libsamplerate',
         '--disable-video-dummy',
+        '--disable-video-opengl',
+        '--disable-video-opengles1',
+        '--disable-sdl2-config',
     ],
     patches=abspath('lib/sdl2/patches'),
 )

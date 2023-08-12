@@ -581,6 +581,11 @@ public:
                           const DerivedInfo &calculated) noexcept;
 
 private:
+  void LockSetErrorMessage(const TCHAR *msg) noexcept;
+#ifdef _UNICODE
+  void LockSetErrorMessage(const char *msg) noexcept;
+#endif
+
   void OnJobFinished() noexcept;
 
   /* virtual methods from class PortListener */

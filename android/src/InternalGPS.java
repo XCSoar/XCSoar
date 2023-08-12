@@ -21,6 +21,7 @@ public class InternalGPS
   implements LocationListener, Runnable, AndroidSensor,
   PermissionManager.PermissionHandler
 {
+  private final Context context;
   private final Handler handler;
   private final PermissionManager permissionManager;
 
@@ -38,27 +39,17 @@ public class InternalGPS
 
   InternalGPS(Context context, PermissionManager permissionManager,
               SensorListener listener) {
+    this.context = context;
     handler = new Handler(context.getMainLooper());
     this.permissionManager = permissionManager;
     this.listener = listener;
 
     locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-    if (locationManager == null ||
-        locationManager.getProvider(locationProvider) == null) {
-      /* on the Nook Simple Touch, LocationManager.isProviderEnabled()
-         can crash, but LocationManager.getProvider() appears to be
-         safe, therefore we're first checking the latter; if the
-         device does have a GPS, it returns non-null even when the
-         user has disabled GPS */
-      return;
-    } else if (!locationManager.isProviderEnabled(locationProvider) &&
-        !queriedLocationSettings) {
-      // Let user turn on GPS, XCSoar is not allowed to.
-      Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-      context.startActivity(myIntent);
-      queriedLocationSettings = true;
-    }
+    if (locationManager == null)
+      /* can this really happen? */
+      throw new IllegalStateException("No LocationManager");
 
+    // schedule a run() call in the MainLooper thread
     handler.post(this);
   }
 
@@ -73,10 +64,19 @@ public class InternalGPS
          onRequestPermissionsResult() will be called later */
       return;
 
-    permissionManager.requestPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                                        null);
+    if (android.os.Build.VERSION.SDK_INT >= 29)
+      permissionManager.requestPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                                          null);
 
     try {
+      if (!locationManager.isProviderEnabled(locationProvider) &&
+          !queriedLocationSettings) {
+        // Let user turn on GPS, XCSoar is not allowed to.
+        Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        context.startActivity(myIntent);
+        queriedLocationSettings = true;
+      }
+
       locationManager.requestLocationUpdates(locationProvider,
                                              1000, 0, this);
     } catch (SecurityException e) {

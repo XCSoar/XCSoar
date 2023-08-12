@@ -39,12 +39,6 @@ import android.provider.Settings;
 public class OpenSoar extends Activity implements PermissionManager {
   private static final String TAG = "OpenSoar";
 
-  /**
-   * Hack: this is set by onCreate(), to support the "testing"
-   * package.
-   */
-  public static Class<?> serviceClass;
-
   private static NativeView nativeView;
 
   private Handler mainHandler;
@@ -62,9 +56,6 @@ public class OpenSoar extends Activity implements PermissionManager {
   boolean fullScreen = false;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
-    if (serviceClass == null)
-      serviceClass = MyService.class;
-
     super.onCreate(savedInstanceState);
 
     Log.d(TAG, "ABI=" + Build.CPU_ABI);
@@ -243,6 +234,11 @@ public class OpenSoar extends Activity implements PermissionManager {
   };
 
   private void requestAllPermissions() {
+    if (android.os.Build.VERSION.SDK_INT < 23)
+      /* we don't need to request permissions on this old Android
+         version */
+      return;
+
     /* starting with Android 6.0, we need to explicitly request all
        permissions before using them; mentioning them in the manifest
        is not enough */

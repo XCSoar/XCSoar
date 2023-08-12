@@ -11,7 +11,7 @@
       android:appCategory="maps"
       android:icon="@drawable/icon"
       android:label="@string/app_name">
-    <activity android:name=".OpenSoar"
+    <activity android:name="de.opensoar.OpenSoar"
               android:exported="true"
               android:label="@string/app_name_testing"
               android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale"
@@ -43,16 +43,30 @@
                  android:value="2.1"/>
     </activity>
 
-    <service android:name=".MyService" android:foregroundServiceType="location"/>
+    <service android:name="org.xcsoar.MyService" android:foregroundServiceType="location"/>
+
+    <!-- this Activity receives scanned QR codes -->
+    <activity android:name="org.xcsoar.ReceiveTaskActivity"
+              android:exported="true">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+
+        <!-- URI scheme for XCTrack v2 tasks, see
+             https://xctrack.org/Competition_Interfaces.html -->
+        <data android:scheme="xctsk" />
+      </intent-filter>
+    </activity>
 
     <provider android:name="de.opensoar.FileProvider"
-              android:authorities="de.opensoar"
+              android:authorities="de.opensoar.testing"
               android:exported="false"
               android:grantUriPermissions="true"/>
 
     <provider
         android:name="de.opensoar.AllFilesDocumentsProvider"
-        android:authorities="de.opensoar.allfiles"
+        android:authorities="de.opensoar.testing.allfiles"
         android:exported="true"
         android:grantUriPermissions="true"
         android:permission="android.permission.MANAGE_DOCUMENTS">

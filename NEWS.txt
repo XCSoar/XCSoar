@@ -1,3 +1,14 @@
+Version 7.38 - 2023/07/27
+* WeGlide
+  - fix another crash bug
+* Android
+  - support scanning QR codes with XCTrack tasks
+  - fix location permission request on old Android versions
+  - fix IllegalArgumentException crash on old Android versions
+  - improved error messages for problems opening devices
+  - fix crash on Android 5
+  - fix conflict between "org.xcsoar" and "org.xcsoar.testing" apps
+
 Version 7.37 - 2023/07/21
 * WeGlide
   - fix crash bug

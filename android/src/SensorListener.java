@@ -58,7 +58,7 @@ public interface SensorListener {
   void onGliderLinkTraffic(long gid, String callsign,
                            double longitude, double latitude, double altitude,
                            double gspeed, double vspeed,
-                           double bearing);
+                           int bearing);
 
   void onTemperature(double temperature_kelvin);
 
