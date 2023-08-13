@@ -16,6 +16,9 @@ set(_SOURCES
         Task/TaskStore.cpp
         Task/TypeStrings.cpp
         Task/ValidationErrorStrings.cpp
+        Task/XCTrackTaskFile.cpp  # add 7.38
+        Task/XCTrackTaskDecoder.cpp  # add 7.38
+        Task/PolylineDecoder.cpp  # add 7.38
 )
 
 set(SCRIPT_FILES

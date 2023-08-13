@@ -187,6 +187,7 @@ ${SRC_DIR}/TestWaypointReader.cpp
 ${SRC_DIR}/TestWaypoints.cpp
 ${SRC_DIR}/TestWrapClock.cpp
 ${SRC_DIR}/TestZeroFinder.cpp
+${SRC_DIR}/TestPolylineDecoder.cpp    # add 7.38
 # ${SRC_DIR}/VerifyGRecord.cpp
 # ${SRC_DIR}/ViewImage.cpp
 # ${SRC_DIR}/WriteTextFile.cpp
