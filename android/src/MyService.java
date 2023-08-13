@@ -22,7 +22,7 @@ import android.util.Log;
  * extreme pressure.  Since this services runs in-process, Android
  * will also not terminate our main Activity.
  *
- * XCSoar needs high reliability, because it usually runs in
+ * OpenSoar needs high reliability, because it usually runs in
  * foreground as the only active application and should not be killed
  * by an incoming phone call.
  *
@@ -71,9 +71,9 @@ public class MyService extends Service {
   }
 
   @Override public int onStartCommand(Intent intent, int flags, int startId) {
-    /* add an icon to the notification area while XCSoar runs, to
+    /* add an icon to the notification area while OpenSoar runs, to
        remind the user that we're sucking his battery empty */
-    Intent intent2 = new Intent(this, XCSoar.class);
+    Intent intent2 = new Intent(this, OpenSoar.class);
     PendingIntent contentIntent =
       PendingIntent.getActivity(this, 0, intent2, PendingIntent.FLAG_IMMUTABLE);
     Notification notification = createNotification(this, contentIntent);
