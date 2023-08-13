@@ -1,3 +1,6 @@
+OpenSoar Version 7.39.20 - not yet released
+---------------
+
 OpenSoar Version 7.39.19 - 2023/08/13
 ---------------
 * merge xcsoar 7.39 only
