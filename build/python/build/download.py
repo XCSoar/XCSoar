@@ -1,3 +1,4 @@
+from typing import Optional
 from build.verify import verify_file_digest
 from .lockfile import lockfile
 import os
@@ -5,7 +6,7 @@ from tempfile import NamedTemporaryFile
 import urllib.request
 import sys
 
-def __download(url, alternative_url, path):
+def __download(url: str, alternative_url: Optional[str], path: str) -> None:
     print("download", url)
     try:
         urllib.request.urlretrieve(url, path)
@@ -16,12 +17,12 @@ def __download(url, alternative_url, path):
         print("download (alternative location)", alternative_url)
         urllib.request.urlretrieve(alternative_url, path)
 
-def __download_and_verify_to(url, alternative_url, md5, path):
+def __download_and_verify_to(url: str, alternative_url: Optional[str], md5: str, path: str) -> None:
     __download(url, alternative_url, path)
     if not verify_file_digest(path, md5):
         raise RuntimeError("Digest mismatch")
 
-def download_and_verify(url, alternative_url, md5, parent_path):
+def download_and_verify(url: str, alternative_url: Optional[str], md5: str, parent_path: str) -> str:
     """Download a file, verify its MD5 checksum and return the local path."""
 
     os.makedirs(parent_path, exist_ok=True)

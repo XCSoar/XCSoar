@@ -151,6 +151,9 @@ libsodium = AutotoolsProject(
     [
         '--disable-shared', '--enable-static',
     ],
+
+    # suppress "visibility default" from sodium/export.h
+    cppflags='-DSODIUM_STATIC'
 )
 
 zlib = ZlibProject(
@@ -222,12 +225,13 @@ curl = CmakeProject(
 
 # Needed by proj
 sqlite3 = AutotoolsProject(
-    'https://sqlite.org/2022/sqlite-autoconf-3390300.tar.gz',
-    'https://fossies.org/linux/misc/sqlite-autoconf-3390300.tar.gz',
-    '7868fb3082be3f2cf4491c6fba6de2bddcbc293a35fefb0624ee3c13f01422b9',
+    'https://www.sqlite.org/2023/sqlite-autoconf-3420000.tar.gz',
+    'https://fossies.org/linux/misc/sqlite-autoconf-3420000.tar.gz',
+    '7abcfd161c6e2742ca5c6c0895d1f853c940f203304a0b49da4e1eca5d088ca6',
     'lib/libsqlite3.a',
     [
         '--disable-shared', '--enable-static',
+        '--disable-fts5',
     ],
     patches=abspath('lib/sqlite/patches'),
     autogen=True,
@@ -252,6 +256,11 @@ proj = CmakeProject(
         '-DBUILD_SHARED_LIBS=OFF',
         '-DUSE_THREAD=OFF',
     ],
+    env={
+        # suppress "visibility default" from geodesic.h
+        'CFLAGS': '-DGEOD_DLL=',
+        'CXXFLAGS': '-DGEOD_DLL=',
+    },
     patches=abspath('lib/proj/patches'),
 )
 
@@ -361,39 +370,46 @@ libgeotiff = CmakeProject(
     patches=abspath('lib/libgeotiff/patches'),
 )
 
-sdl2 = AutotoolsProject(
+sdl2 = CmakeProject(
     'http://www.libsdl.org/release/SDL2-2.28.1.tar.gz',
     'https://fossies.org/linux/misc/SDL2-2.28.1.tar.gz',
     '4977ceba5c0054dbe6c2f114641aced43ce3bf2b41ea64b6a372d6ba129cb15d',
     'lib/libSDL2.a',
     [
-        '--disable-shared', '--enable-static',
-        '--disable-joystick',
-        '--disable-haptic',
-        '--disable-hidapi',
-        '--disable-sensor',
-        '--disable-power',
-        '--disable-filesystem',
-        '--disable-threads',
-        '--disable-timers',
-        '--disable-file',
-        '--disable-misc',
-        '--disable-locale',
-        '--disable-loadso',
-        '--disable-cpuinfo',
-        '--disable-oss',
-        '--disable-jack',
-        '--disable-esd',
-        '--disable-arts',
-        '--disable-nas',
-        '--disable-sndio',
-        '--disable-diskaudio',
-        '--disable-dummyaudio',
-        '--disable-libsamplerate',
-        '--disable-video-dummy',
-        '--disable-video-opengl',
-        '--disable-video-opengles1',
-        '--disable-sdl2-config',
+        '-DBUILD_SHARED_LIBS=OFF',
+
+        '-DSDL_TEST=OFF',
+
+        # subsystems
+        '-DSDL_RENDER=OFF',
+        '-DSDL_JOYSTICK=OFF',
+        '-DSDL_HAPTIC=OFF',
+        '-DSDL_HIDAPI=OFF',
+        '-DSDL_POWER=OFF',
+        '-DSDL_TIMERS=OFF',
+        '-DSDL_FILE=OFF',
+        '-DSDL_LOADSO=OFF',
+        '-DSDL_CPUINFO=OFF',
+        '-DSDL_FILESYSTEM=OFF',
+        '-DSDL_SENSOR=OFF',
+        '-DSDL_LOCALE=OFF',
+        '-DSDL_MISC=OFF',
+
+        '-DSDL2_DISABLE_SDL2MAIN=OFF',
+
+        '-DSDL_DISKAUDIO=OFF',
+        '-DSDL_DUMMYAUDIO=OFF',
+        '-DSDL_DUMMYVIDEO=OFF',
+        '-DSDL_OPENGL=OFF',
+        '-DSDL_OPENGLES=ON',
+        '-DSDL_OSS=OFF',
+        '-DSDL_JACK=OFF',
+        '-DSDL_ESD=OFF',
+        '-DSDL_ARTS=OFF',
+        '-DSDL_NAS=OFF',
+        '-DSDL_SNDIO=OFF',
+        '-DSDL_LIBSAMPLERATE=OFF',
+        '-DSDL_COCOA=OFF',
     ],
     patches=abspath('lib/sdl2/patches'),
 )

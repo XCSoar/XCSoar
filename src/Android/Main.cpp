@@ -67,8 +67,6 @@
 
 using namespace UI;
 
-unsigned android_api_level;
-
 Context *context;
 
 NativeView *native_view;
@@ -87,10 +85,8 @@ IOIOHelper *ioio_helper;
 static Mutex shutdown_mutex;
 
 static void
-InitNative(JNIEnv *env, int sdk_version) noexcept
+InitNative(JNIEnv *env) noexcept
 {
-  android_api_level = sdk_version;
-
   Java::Init(env);
   Java::Object::Initialise(env);
   Java::File::Initialise(env);
@@ -121,12 +117,11 @@ InitNative(JNIEnv *env, int sdk_version) noexcept
 
 gcc_visibility_default
 void
-Java_de_opensoar_NativeView_initNative(JNIEnv *env, [[maybe_unused]] jclass cls,
-                                      int sdk_version)
+Java_de_opensoar_NativeView_initNative(JNIEnv *env, [[maybe_unused]] jclass cls)
 {
   static std::once_flag init_native_flag;
 
-  std::call_once(init_native_flag, InitNative, env, sdk_version);
+  std::call_once(init_native_flag, InitNative, env);
 }
 
 gcc_visibility_default
@@ -178,7 +173,7 @@ Java_de_opensoar_NativeView_onConfigurationChangedNative([[maybe_unused]] JNIEnv
 
 gcc_visibility_default
 JNIEXPORT jstring JNICALL
-Java_org_xcsoar_NativeView_onReceiveXCTrackTask(JNIEnv *env,
+Java_de_opensoar_NativeView_onReceiveXCTrackTask(JNIEnv *env,
                                                 [[maybe_unused]] jclass cls,
                                                 jstring data)
 try {

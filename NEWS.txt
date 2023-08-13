@@ -1,3 +1,8 @@
+Version 7.39 - 2023/07/28
+* Android
+  - fix Bluetooth device list on Android versions older than 12
+  - do not request permission WRITE_EXTERNAL_STORAGE on Android 11 or newer
+
 Version 7.38 - 2023/07/27
 * WeGlide
   - fix another crash bug

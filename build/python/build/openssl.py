@@ -1,13 +1,15 @@
 import subprocess
+from typing import Optional
 
 from build.makeproject import MakeProject
+from .toolchain import AnyToolchain
 
 class OpenSSLProject(MakeProject):
-    def __init__(self, url, alternative_url, md5, installed,
+    def __init__(self, url: str, alternative_url: Optional[str], md5: str, installed: str,
                  **kwargs):
         MakeProject.__init__(self, url, alternative_url, md5, installed, install_target='install_dev', **kwargs)
 
-    def get_make_args(self, toolchain):
+    def get_make_args(self, toolchain: AnyToolchain) -> list[str]:
         return MakeProject.get_make_args(self, toolchain) + [
             'CC=' + toolchain.cc,
             'CFLAGS=' + toolchain.cflags,
@@ -17,13 +19,13 @@ class OpenSSLProject(MakeProject):
             'build_libs',
         ]
 
-    def get_make_install_args(self, toolchain):
+    def get_make_install_args(self, toolchain: AnyToolchain) -> list[str]:
         # OpenSSL's Makefile runs "ranlib" during installation
         return MakeProject.get_make_install_args(self, toolchain) + [
             'RANLIB=' + toolchain.ranlib,
         ]
 
-    def _build(self, toolchain):
+    def _build(self, toolchain: AnyToolchain, target_toolchain: Optional[AnyToolchain]=None) -> None:
         src = self.unpack(toolchain, out_of_tree=False)
 
         # OpenSSL has a weird target architecture scheme with lots of
@@ -54,19 +56,26 @@ class OpenSSLProject(MakeProject):
             'aarch64-apple-darwin': 'darwin64-arm64-cc',
         }
 
-        openssl_arch = openssl_archs[toolchain.host_triplet]
-        cross_compile_prefix = toolchain.host_triplet + '-'
+        configure = [
+            './Configure',
+            'no-shared',
+            'no-module',
+            'no-engine',
+            'no-static-engine',
+            'no-async',
+            'no-tests',
+            'no-makedepend',
+            '--libdir=lib', # no "lib64" on amd64, please
+            '--prefix=' + toolchain.install_prefix,
+        ]
 
-        subprocess.check_call(['./Configure',
-                               'no-shared',
-                               'no-module', 'no-engine', 'no-static-engine',
-                               'no-async',
-                               'no-tests',
-                               'no-makedepend',
-                               'no-asm', # "asm" causes build failures on Windows
-                               openssl_arch,
-                               '--cross-compile-prefix=' + cross_compile_prefix,
-                               '--libdir=lib', # no "lib64" on amd64, please
-                               '--prefix=' + toolchain.install_prefix],
-                              cwd=src, env=toolchain.env)
+        if toolchain.is_windows:
+            # workaround for build failures
+            configure.append('no-asm')
+
+        if toolchain.host_triplet is not None:
+            configure.append(openssl_archs[toolchain.host_triplet])
+            configure.append(f'--cross-compile-prefix={toolchain.host_triplet}-')
+
+        subprocess.check_call(configure, cwd=src, env=toolchain.env)
         self.build_make(toolchain, src)
