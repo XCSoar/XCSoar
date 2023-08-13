@@ -1,24 +1,41 @@
-# D:\Projects\Binaries\XCSoarAug\msvc2019\3rd_party\3rd_party.cmake
+# D:\Projects\OpenSoaring\OpenSoar\3rd_party\3rd_party.cmake
+# ./3rd_party/3rd_party.cmake
 # =================================================================
 
-set(BOOST_VERSION       "1.81.0")
-set(CARES_VERSION       "1.17.1")
-set(CURL_VERSION        "7.85.0")
-set(PNG_VERSION         "1.6.37")
+set(BOOST_VERSION       "1.82.0")
+set(CARES_VERSION       "1.18.1")
+set(CARES_VERSION       "1.17.1") # old version necessary...
+set(CURL_VERSION        "8.1.2")
+set(PNG_VERSION         "1.6.40")
 set(SODIUM_VERSION      "1.0.18")
-set(LUA_VERSION         "5.4.4")
-set(FMT_VERSION         "9.1.0")
+set(LUA_VERSION         "5.4.6")
+set(FMT_VERSION         "10.0.0")
+
+if (NO_MSVC)
+    set(TIFF_VERSION        "4.5.1")
+    set(JPEG_VERSION        "2.1.5.1")
+    set(PROJ_VERSION        "9.2.1")
+    set(FREETYPE_VERSION    "2.13.1")
+    set(OPENSSL_VERSION     "3.1.1")
+    set(UPSTREAM_VERSION    "8.0.1")
+    set(GCC_VERSION         "13.1")
+    set(BINUTILS_VERSION    "2.40")
+    set(_VERSION    "")
+    set(_VERSION    "")
+endif()
+
 
 set(ZLIB_VERSION        "1.2.12")
 set(INKSCAPE_VERSION    "1.2.1")
 set(FREEGLUT_VERSION    "3.2.2")
 set(SDL_VERSION         "2.24.0")  # for OpenGL...
+set(SDL2_VERSION        "2.28.01")  # for OpenGL...
 set(GLM_VERSION         "0.9.9.8")  # GL Mathematics for OpenGL...
 # set(RSVG_VERSION        "2.55.1")
-if (0)
-set(XLST_VERSION        "1.1.37")
-set(XML2_VERSION        "2.10.2")
-set(ICONV_VERSION        "1.17")
+if (NO_MSVC)
+    set(XLST_VERSION        "1.1.37")
+    set(XML2_VERSION        "2.10.2")
+    set(ICONV_VERSION        "1.17")
 endif()
 
 # 3rd-party! 
