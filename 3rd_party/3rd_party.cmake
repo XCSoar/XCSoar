@@ -3,8 +3,8 @@
 # =================================================================
 
 set(BOOST_VERSION       "1.82.0")
-set(CARES_VERSION       "1.18.1")
-set(CARES_VERSION       "1.17.1") # old version necessary...
+set(CARES_VERSION       "1.18.1")  # not valid!
+set(CARES_VERSION       "1.17.1")  # old version necessary...
 set(CURL_VERSION        "8.1.2")
 set(PNG_VERSION         "1.6.40")
 set(SODIUM_VERSION      "1.0.18")
