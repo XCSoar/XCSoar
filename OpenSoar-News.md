@@ -1,6 +1,17 @@
+OpenSoar Version 7.39.19 - 2023/08/13
+---------------
+* merge xcsoar 7.39 only
+* xcsoar merge release v7.39, '1418e0dc'
+
+Version 7.39 - 2023/07/28
+* Android
+  - fix Bluetooth device list on Android versions older than 12
+  - do not request permission WRITE_EXTERNAL_STORAGE on Android 11 or newer
+
 OpenSoar Version 7.38.18 - 2023/08/13
 ---------------
 * merge xcsoar 7.38 only
+* merge NEWS.txt in OpenSoar-News.md
 * xcsoar merge release v7.38, '7f3184b8'
 
 Version 7.38 - 2023/07/27
