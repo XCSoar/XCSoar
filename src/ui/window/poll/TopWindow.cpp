@@ -51,6 +51,7 @@ TopWindow::OnEvent(const Event &event)
 
   case Event::MOUSE_MOTION:
 #ifdef DRAW_MOUSE_CURSOR
+    cursor_visible_until = std::chrono::steady_clock::now() + std::chrono::seconds(10);
     /* redraw to update the mouse cursor position */
     Invalidate();
 #endif

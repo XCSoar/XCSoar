@@ -1,5 +1,7 @@
 Version 7.40 - not yet released
-
+* user interface
+  - hide mouse cursor after 10 seconds of inactivity
+  
 Version 7.39 - 2023/07/28
 * Android
   - fix Bluetooth device list on Android versions older than 12

@@ -139,8 +139,8 @@ class TopWindow : public ContainerWindow {
 #ifdef DRAW_MOUSE_CURSOR
   uint8_t cursor_size = 1;
   bool invert_cursor_colors = false;
+  std::chrono::steady_clock::time_point cursor_visible_until = std::chrono::steady_clock::now();
 #endif
-
 #ifndef USE_WINUSER
   TopCanvas *screen = nullptr;
 
