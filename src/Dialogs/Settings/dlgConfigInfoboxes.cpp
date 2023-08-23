@@ -234,6 +234,16 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
       dfe->addEnumText(gettext(name), i, desc != NULL ? gettext(desc) : NULL);
   }
 
+  for (unsigned i = InfoBoxFactory::e_NUM_AREA_2nd;
+       i < InfoBoxFactory::NUM_TYPES_2nd; i++) {
+    const InfoBoxFactory::Type type = (InfoBoxFactory::Type) (i);
+    const TCHAR *name = InfoBoxFactory::GetName(type);
+    const TCHAR *desc = InfoBoxFactory::GetDescription(type);
+    if (name != NULL)
+      dfe->addEnumText(gettext(name), type,
+                       desc != NULL ? gettext(desc) : NULL);
+  }
+
   dfe->EnableItemHelp(true);
   dfe->Sort(0);
 

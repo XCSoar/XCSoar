@@ -139,20 +139,28 @@ namespace InfoBoxFactory
     e_Alternate_2_GR, // Geometric gradient to the arrival height above the ...
     e_HeartRate, // Heart rate in beats per minute.
     // 120.. 
-    e_DriftAngle,
-    e_InstantaneousWindSpeed,
-    e_InstantaneousWindBearing,
-
     e_TransponderCode, /* Transponder code */
 
     e_EngineCHT,  /* Engine Cylinder Head Temperature */
     e_EngineEGT,  /* Engine Exhaust Gas Temperature */
     e_EngineRPM,  /* Engine Revolutions Per Minute */
 
-    e_NUM_TYPES /* Last item */
-  };
+    e_NUM_TYPES, /* Last item */
+    
+    e_NUM_AREA_2nd = 500,
+    e_DriftAngle = e_NUM_AREA_2nd,
+    e_InstantaneousWindSpeed,
+    e_InstantaneousWindBearing,
+    e_InternalWind,
+    e_InternalZigZagWind,
+
+    e_NUM_TYPES_2nd /* Last item 2nd area*/
+};
 
   static constexpr Type NUM_TYPES = e_NUM_TYPES;
+  static constexpr Type NUM_TYPES_2nd = e_NUM_TYPES_2nd;
   static constexpr Type MIN_TYPE_VAL = (Type)0;
   static constexpr Type MAX_TYPE_VAL = (Type)(e_NUM_TYPES - 1);
+
+  bool TypeIsValid(Type t);
 }

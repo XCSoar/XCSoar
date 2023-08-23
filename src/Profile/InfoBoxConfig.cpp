@@ -35,7 +35,7 @@ GetIBType(const ProfileMap &map, std::string_view key,
   unsigned _val = val;
   bool ret = map.Get(key, _val);
 
-  if (_val >= e_NUM_TYPES)
+  if (!TypeIsValid((InfoBoxFactory::Type)_val))
     return false;
 
   val = (InfoBoxFactory::Type)_val;

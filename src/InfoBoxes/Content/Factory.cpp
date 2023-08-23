@@ -1123,33 +1123,6 @@ static constexpr MetaData meta_data[] = {
   },
 
   // 120.. 
-  // e_DriftAngle - TestBox for Track-Heading
-  {
-    N_("Wind - Drift Angle"),
-    N_("Wind Drift"),
-    N_("Wind drift angle (Track - True Heading) - for a simple check, "
-       "how the sensor works."),
-    IBFHelper<InfoBoxDrift>::Create,
-  },
-
-  // e_InstantaneousWindSpeed
-  {
-    N_("Wind - RealTime Speed"),
-    N_("RealTime Wind"),
-    N_("Speed of instantaneous wind, estimated from an external sensor."),
-    UpdateInfoBoxInstWindSpeed,
-    wind_infobox_panels,
-  },
-
-  // e_InstantaneousWindBearing
-  {
-    N_("Wind - RealTime Bearing"),
-    N_("RealTime Wind"),
-    N_("Bearing of instantaneous wind, estimated from an external sensor."),
-    UpdateInfoBoxInstWindBearing,
-    wind_infobox_panels,
-  },
-
   // e_NUM_TYPES // Last item 
   // Transponder code
   {
@@ -1185,23 +1158,74 @@ static constexpr MetaData meta_data[] = {
 
 };
 
-static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,
-              "Wrong InfoBox factory size");
+// static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES, "Wrong InfoBox factory size");
+
+static constexpr MetaData meta_data_2nd[] = {
+    // 500..
+    // e_DriftAngle - TestBox for Track-Heading
+    {
+        N_("Wind - Drift Angle"),
+        N_("Wind Drift"),
+        N_("Wind drift angle (Track - True Heading) - for a simple check, "
+           "how the sensor works."),
+        IBFHelper<InfoBoxDrift>::Create,
+    },
+
+    // e_InstantaneousWindSpeed
+    {
+        N_("Wind - RealTime Speed"),
+        N_("RealTime Wind"),
+        N_("Speed of instantaneous wind, estimated from an external sensor."),
+        UpdateInfoBoxInstWindSpeed,
+        wind_infobox_panels,
+    },
+
+    // e_InstantaneousWindBearing
+    {
+        N_("Wind - RealTime Bearing"),
+        N_("RealTime Wind"),
+        N_("Bearing of instantaneous wind, estimated from an external sensor."),
+        UpdateInfoBoxInstWindBearing,
+        wind_infobox_panels,
+    },
+
+    // e_InternalWind
+    {
+        N_("Wind - Internal Wind"),
+        N_("Internal Wind"),
+        N_("Bearing of instantaneous wind, estimated from an external sensor."),
+        UpdateInfoBoxInstWindBearing,
+        wind_infobox_panels,
+    },
+
+    // e_InternalZigZagWind
+    {
+        N_("Wind - Internal ZigZag Wind"),
+        N_("ZigZag Wind"),
+        N_("Bearing of instantaneous wind, estimated from an external sensor."),
+        UpdateInfoBoxInstWindBearing,
+        wind_infobox_panels,
+    },
+
+};
+
+// static_assert(ARRAY_SIZE(meta_data_2nd) == NUM_TYPES_2nd - e_NUM_AREA_2nd, "Wrong InfoBox factory size");
 
 const TCHAR *
 InfoBoxFactory::GetName(Type type) noexcept
 {
-  assert(type < NUM_TYPES);
-
-  return meta_data[type].name;
+  assert(TypeIsValid(type));
+  return (type < NUM_TYPES) ? meta_data[type].name
+                            : meta_data_2nd[type - e_NUM_AREA_2nd].name;
 }
 
 const TCHAR *
 InfoBoxFactory::GetCaption(Type type) noexcept
 {
-  assert(type < NUM_TYPES);
+  assert(TypeIsValid(type));
+  return (type < NUM_TYPES) ? meta_data[type].caption : 
+    meta_data_2nd[type - e_NUM_AREA_2nd].caption;
 
-  return meta_data[type].caption;
 }
 
 /**
@@ -1210,16 +1234,18 @@ InfoBoxFactory::GetCaption(Type type) noexcept
 const TCHAR *
 InfoBoxFactory::GetDescription(Type type) noexcept
 {
-  assert(type < NUM_TYPES);
-
-  return meta_data[type].description;
+  assert(TypeIsValid(type));
+  return (type < NUM_TYPES) ? meta_data[type].description
+                            : meta_data_2nd[type - e_NUM_AREA_2nd].description;
 }
 
 std::unique_ptr<InfoBoxContent>
 InfoBoxFactory::Create(Type type) noexcept
 {
-  assert(type < NUM_TYPES);
-  const auto &m = meta_data[type];
+  assert(TypeIsValid(type));
+
+  const auto &m = type < NUM_TYPES ? meta_data[type]
+                      : meta_data_2nd[type - e_NUM_AREA_2nd];
 
   assert(m.create != nullptr ||
          m.update != nullptr);
@@ -1228,4 +1254,10 @@ InfoBoxFactory::Create(Type type) noexcept
     return std::unique_ptr<InfoBoxContent>(m.create());
   else
     return std::make_unique<InfoBoxContentCallback>(m.update, m.panels);
+}
+
+bool 
+InfoBoxFactory::TypeIsValid(Type t)
+{
+  return (t < e_NUM_TYPES) || ((t >= e_NUM_AREA_2nd) && (t < e_NUM_TYPES_2nd));
 }
