@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2022-10-19 07:03+0000\n"
+"PO-Revision-Date: 2023-08-24 06:53+0000\n"
 "Last-Translator: Cloud Esp <Frederic.Darboux@inrae.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -7946,7 +7946,7 @@ msgstr "Différence d'altitude prochain waypoint"
 #: src/InfoBoxes/Content/Factory.cpp:236
 #, no-c-format
 msgid "WP AltD"
-msgstr "DAlt WP"
+msgstr "Δz WP"
 
 #: src/InfoBoxes/Content/Factory.cpp:237
 #, no-c-format
@@ -8009,7 +8009,7 @@ msgstr "Différence d'altitude en arrivée"
 #: src/InfoBoxes/Content/Factory.cpp:262
 #, no-c-format
 msgid "Fin AltD"
-msgstr "DAlt Arr"
+msgstr "Δz Arr"
 
 #: src/InfoBoxes/Content/Factory.cpp:263
 #, no-c-format
@@ -9332,7 +9332,7 @@ msgstr "Différence d'altitude prochain point de virage à MC0"
 #: src/InfoBoxes/Content/Factory.cpp:880
 #, no-c-format
 msgid "WP MC0 AltD"
-msgstr "DAlt WP MC0"
+msgstr "Δz WP MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:881
 #, no-c-format
@@ -9600,7 +9600,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1005
 #, no-c-format
 msgid "Distance takeoff"
-msgstr "Distance du pt de décollage"
+msgstr "Distance au pt de décollage"
 
 #: src/InfoBoxes/Content/Factory.cpp:1006
 #, no-c-format
@@ -9639,7 +9639,7 @@ msgstr "Différence d'altitude en arrivée au calage 0"
 #: src/InfoBoxes/Content/Factory.cpp:1021
 #, no-c-format
 msgid "Fin MC0 AltD"
-msgstr "DAlt Arr MC0"
+msgstr "Δz Arr MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:1022
 #, no-c-format
@@ -10540,7 +10540,6 @@ msgid "Dropped marker"
 msgstr "Marqueur déposé"
 
 #: Data/Input/default.xci:422 Data/Input/default.xci:1065
-#, fuzzy
 msgid "Marker Drop"
 msgstr "Marquer"
 
