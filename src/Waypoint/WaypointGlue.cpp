@@ -76,10 +76,6 @@ LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
   // Delete old waypoints
   way_points.Clear();
 
-  LoadWaypointFile(way_points, LocalPath(_T("user.cup")),
-                   WaypointFileType::SEEYOU,
-                   WaypointOrigin::USER, terrain, progress);
-
   // ### FIRST FILE ###
   auto path = Profile::GetPath(ProfileKeys::WaypointFile);
   if (path != nullptr)
@@ -97,6 +93,11 @@ LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
   if (path != nullptr)
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::WATCHED,
                               terrain, progress);
+
+  // ### user.cup markers/Fourth FILE ###
+  LoadWaypointFile(way_points, LocalPath(_T("user.cup")),
+                   WaypointFileType::SEEYOU,
+                   WaypointOrigin::USER, terrain, progress);
 
   // ### MAP/FOURTH FILE ###
 
