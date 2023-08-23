@@ -85,7 +85,8 @@ LoadPath(const ProfileMap &map, DeviceConfig &config, unsigned n)
   // the usual windows port names has no colon at the end
   if (retvalue && !config.path.empty()) {
 #ifdef _DEBUG  // TODO(August)...
-    if ((config.path.back() == TCHAR(':')) &&
+    if ((config.path[config.path.length() - 1] == TCHAR(':')) &&
+    // ??? if ((config.path.back() == TCHAR(':')) &&
 #else
     if ((config.path[config.path.length() - 1] == TCHAR(':')) &&
 #endif
