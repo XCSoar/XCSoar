@@ -265,9 +265,7 @@ endif()
                ${_INCLUDE_OUTPUT}/InputEvents_Text2NE.cpp
                ${_INCLUDE_OUTPUT}/InputEvents_default.cpp
     )
-    # add_custom_command(OUTPUT  ${_INCLUDE_OUTPUT}/InputEvents_Char2GCE.cpp  ${_INCLUDE_OUTPUT}/InputEvents_Text2Event.cpp  # ${INPUTEVENTS_CPP}
-    # add_custom_command(OUTPUT  InputFiles #  ${INPUTEVENTS_CPP}
-    add_custom_command(OUTPUT  ${INPUTEVENTS_CPP}
+    add_custom_command(OUTPUT  ${_INCLUDE_OUTPUT}/InputCppFiles.txt
            COMMENT Create InputEvents_*.cpp!
            COMMAND ${CMAKE_COMMAND} -E make_directory ${_INCLUDE_OUTPUT} 
            COMMAND perl tools/Char2GCE.pl    src/Input/InputQueue.hpp >${_INCLUDE_OUTPUT}/InputEvents_Char2GCE.cpp
@@ -276,6 +274,7 @@ endif()
            COMMAND perl tools/Text2GCE.pl    src/Input/InputQueue.hpp >${_INCLUDE_OUTPUT}/InputEvents_Text2GCE.cpp
            COMMAND perl tools/Text2NE.pl     src/Input/InputQueue.hpp >${_INCLUDE_OUTPUT}/InputEvents_Text2NE.cpp
            COMMAND perl tools/xci2cpp.pl     Data/Input/default.xci  >${_INCLUDE_OUTPUT}/InputEvents_default.cpp
+           COMMAND perl tools/xci2cpp.pl     Data/Input/default.xci  >${_INCLUDE_OUTPUT}/InputCppFiles.txt
            DEPENDS ${PROJECTGROUP_SOURCE_DIR}/src/Input/InputQueue.hpp 
                    ${PROJECTGROUP_SOURCE_DIR}/src/Input/InputEvents.hpp
                    ${_DATA_INPUT}/Input/default.xci
@@ -364,7 +363,8 @@ add_library(${TARGET_NAME}  ${XCSOAR_LIB_TYPE}
    ${ICON_FILES}
    ${PROJECTGROUP_SOURCE_DIR}/tools/Char2GCE.pl
    # ${INPUTEVENTS_CPP}
-   # InputFiles    # role for input files
+   ${_INCLUDE_OUTPUT}/InputCppFiles.txt
+   # InputCppFiles    # role for input files
    # DefaultStatus # role for status defaults
    ${_INCLUDE_OUTPUT}/resource.h
    # EXCLUDE_FROM_ALL
