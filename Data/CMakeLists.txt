@@ -33,6 +33,7 @@ set(GRAPHIC_FILES
     # ${_DATA_INPUT}/graphics/launcher.svg
 )
 
+
 if("${PERCENT_CHAR}" STREQUAL "")
     message(FATAL_ERROR PERCENT_CHAR not used: Stop!)
 endif() 
