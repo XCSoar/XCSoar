@@ -13,6 +13,7 @@ if (_COMPLETE_INSTALL)
         "-DCMAKE_BUILD_TYPE=Release"
         "-DCARES_SHARED=OFF"
         "-DCARES_STATIC=ON"
+        "-DCARES_STATIC_PIC=ON"
         "-DCARES_BUILD_TESTS=OFF" )
 
     string(REPLACE "." "_" GIT_TAG cares-${${TARGET_CNAME}_VERSION})  # after 1.17.1 only 'cares', before c-ares!
