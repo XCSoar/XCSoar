@@ -94,11 +94,6 @@ LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::WATCHED,
                               terrain, progress);
 
-  // ### user.cup markers/Fourth FILE ###
-  LoadWaypointFile(way_points, LocalPath(_T("user.cup")),
-                   WaypointFileType::SEEYOU,
-                   WaypointOrigin::USER, terrain, progress);
-
   // ### MAP/FOURTH FILE ###
 
   // If no waypoint file found yet
