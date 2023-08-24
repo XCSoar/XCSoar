@@ -1,4 +1,6 @@
 Version 7.40 - not yet released
+* user interface
+  - Added infobox that combines ETA with AAT dT
 
 Version 7.39 - 2023/07/28
 * Android

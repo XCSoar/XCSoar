@@ -927,3 +927,26 @@ InfoBoxContentNextArrow::OnCustomPaint(Canvas &canvas,
   NextArrowRenderer renderer(UIGlobals::GetLook().wind_arrow_info_box);
   renderer.DrawArrow(canvas, rc, bd);
 }
+
+/*
+ * This infobox shows either AAT dT + ETA, or only ETA depending on task type
+ */
+void
+UpdateInfoTaskETAorAATdT(InfoBoxData& data) noexcept
+{
+  const auto& calculated = CommonInterface::Calculated();
+  const TaskStats& task_stats = calculated.ordered_task_stats;
+
+  // Always call the ETA infobox function. If task is AAT, the value of
+  // ETA infobox will be used as the comment of AATdT infobox
+  UpdateInfoBoxFinalETA(data);
+  if (task_stats.has_targets) { // Is AAT
+    // save the HH:MM ETA to use it as a comment of AATdT infobox
+    auto eta_text = data.value;
+    UpdateInfoBoxTaskAATimeDelta(data);
+    data.SetComment(eta_text);
+
+    data.SetTitle(_T("AAT delta time"));
+  } else
+    data.SetTitle(_T("Task arrival time"));
+}

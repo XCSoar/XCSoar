@@ -134,3 +134,6 @@ public:
   void Update(InfoBoxData &data) noexcept override;
   void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
 };
+
+void
+UpdateInfoTaskETAorAATdT(InfoBoxData &data) noexcept;
