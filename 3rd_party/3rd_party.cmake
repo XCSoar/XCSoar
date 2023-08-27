@@ -19,9 +19,7 @@ if (NO_MSVC)
     set(OPENSSL_VERSION     "3.1.1")
     set(UPSTREAM_VERSION    "8.0.1")
     set(GCC_VERSION         "13.1")
-    set(BINUTILS_VERSION    "2.40")
-    set(_VERSION    "")
-    set(_VERSION    "")
+    set(BINUTILS_VERSION    "2.41")
 endif()
 
 
