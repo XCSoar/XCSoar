@@ -23,7 +23,7 @@ if (NO_MSVC)
 endif()
 
 
-set(ZLIB_VERSION        "1.2.12")
+set(ZLIB_VERSION        "1.3")
 set(INKSCAPE_VERSION    "1.2.1")
 set(FREEGLUT_VERSION    "3.2.2")
 set(SDL_VERSION         "2.28.2")  # for OpenGL...
