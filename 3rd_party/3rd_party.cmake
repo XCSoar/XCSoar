@@ -13,7 +13,7 @@ set(FMT_VERSION         "10.0.0")
 
 if (NO_MSVC)
     set(TIFF_VERSION        "4.5.1")
-    set(JPEG_VERSION        "2.1.5.1")
+    set(JPEG_VERSION        "3.0.0")
     set(PROJ_VERSION        "9.2.1")
     set(FREETYPE_VERSION    "2.13.1")
     set(OPENSSL_VERSION     "3.1.2")
