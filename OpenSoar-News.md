@@ -1,12 +1,14 @@
 OpenSoar Version 7.39.20 - not yet released
 ---------------
 
+* merge xcsoar commit  '32147e1e' from 2023/08/24
+
 OpenSoar Version 7.39.19 - 2023/08/13
 ---------------
 * merge xcsoar 7.39 only
 * xcsoar merge release v7.39, '1418e0dc'
 
-Version 7.39 - 2023/07/28
+#### XCSoar Version 7.39 - 2023/07/28
 * Android
   - fix Bluetooth device list on Android versions older than 12
   - do not request permission WRITE_EXTERNAL_STORAGE on Android 11 or newer
@@ -17,7 +19,7 @@ OpenSoar Version 7.38.18 - 2023/08/13
 * merge NEWS.txt in OpenSoar-News.md
 * xcsoar merge release v7.38, '7f3184b8'
 
-Version 7.38 - 2023/07/27
+#### XCSoar Version 7.38 - 2023/07/27
 * WeGlide
   - fix another crash bug
 * Android
@@ -35,7 +37,7 @@ OpenSoar Version 7.37.17, 2023/08/12
 
 * xcsoar merge release v7.37, '33fbf7be'
 
-Version 7.37 - 2023/07/21
+#### XCSoar Version 7.37 - 2023/07/21
 * WeGlide
   - fix crash bug
 * Android
@@ -50,7 +52,7 @@ OpenSoar Version 7.36.16, 2023/08/11
 ---------------
 * xcsoar merge release v7.36, 'a626d3ef'
 
-Version 7.36 - 2023/07/02
+#### XCSoar Version 7.36 - 2023/07/02
 * task
   - save outer radius and angle of custom keyholes in task files
 * calculations
@@ -67,7 +69,7 @@ OpenSoar Version 7.35.15, 2023/08/10
 ---------------
 * xcsoar merge release v7.35, 'c5c49879'
 
-Version 7.35 - 2023/06/16
+#### XCSoar Version 7.35 - 2023/06/16
 * user interface
   - fix crash in plane list
   - show terrain, topopgraphy and airspaces on task/contest analysis pages
@@ -79,7 +81,7 @@ OpenSoar Version 7.34.14, 2023/08/10
 ---------------
 * xcsoar merge release v7.34, '9987faae'
 
-Version 7.34 - 2023/06/06
+#### XCSoar Version 7.34 - 2023/06/06
 * user interface
   - fix crash with long InfoBox set names
   - rename "Inverse InfoBoxes" to "Dark mode"
@@ -101,7 +103,7 @@ OpenSoar Version 7.33.13, 2023/08/09
 ---------------
 * xcsoar merge release v7.33, 'e122cbc5'
 
-Version 7.33 - 2023/05/26
+#### XCSoar Version 7.33 - 2023/05/26
 * map display
   - fix crash bug in FLARM traffic renderer
 
@@ -109,7 +111,7 @@ OpenSoar Version 7.32.12, 2023/08/08
 ---------------
 * xcsoar merge release v7.32, '2351dab'
 
-Version 7.32 - 2023/05/25
+#### XCSoar Version 7.32 - 2023/05/25
 * user interface
   - fix horizon roll, show bank angles greater than 90°
   - fix horizon pitch, show sky instead of ground when pitch is greater than 50°
@@ -131,7 +133,7 @@ Version 7.32 - 2023/05/25
   - fix crash with initial IOIO connection
   - fix lockup with IOIO Accessory connection
 
-Version 7.31 - 2023/05/12
+#### XCSoar Version 7.31 - 2023/05/12
 * user interface
   - fix crash during startup
 * WeGlide
@@ -151,7 +153,7 @@ OpenSoar 7.29.xx and 7.31.xx released!
 * xcsoar merge '3fe70253b' (2023/04/17)
 * xcsoar merge '618996223' (2023/03/27)
 
-Version 7.30 - 2023/05/09
+#### XCSoar Version 7.30 - 2023/05/09
 * fix crash in "ProfileSave" event
 * user interface
   - reload fonts on window resize
@@ -209,7 +211,7 @@ OpenSoar Version 7.28.01
   * RealTime Wind Value 
 * Releases: Win64, Linux, Android, OpenVario, OpenVario package
 
-Version 7.29 - 2023/05/03
+#### XCSoar Version 7.29 - 2023/05/03
 * data files
   - reject implausible runway lengths in CUP files
   - fix crash when arc airspace has no center
@@ -255,7 +257,7 @@ Version 7.29 - 2023/05/03
   - Pan mode use buttons for zoom and what's here
   - Slight increase in touch selection on map
 
-Version 7.28 - 2022/10/29
+#### XCSoar Version 7.28 - 2022/10/29
 * data files
   - fix crash after loading new map file
   - fix AAT OZ angles in tasks loaded from CUP files
@@ -278,7 +280,7 @@ Version 7.28 - 2022/10/29
   - allow connection to COM port 10 to 254 (f.e. for BlueTooth user)
   - remove index based COM port setting (obsolete since XCSoar 5)
 
-Version 7.27 - 2022/09/23
+#### XCSoar Version 7.27 - 2022/09/23
 * user interface
   - vertical scroll bar in some modal dialogs
   - rasp sources from repository
@@ -299,7 +301,7 @@ Version 7.27 - 2022/09/23
   - add JS-3 (18m) polar
 * fix IGC logger crash on I/O errors
 
-Version 7.26 - 2022/09/03
+#### XCSoar Version 7.26 - 2022/09/03
 * user interface
   - fix pressed InfoBox colors in inverted mode
 * task
@@ -311,7 +313,7 @@ Version 7.26 - 2022/09/03
 * Kobo
   - fix crash bug
 
-Version 7.25 - 2022/08/24
+#### XCSoar Version 7.25 - 2022/08/24
 * stricter airspace parser
 * user interface
   - add radio frequency buttons to airspace dialogs
@@ -332,7 +334,7 @@ Version 7.25 - 2022/08/24
   - display XCSoarData/kobo/poweroff.txt at the bottom
   - fix crash in waypoint dialog
 
-Version 7.24 - 2022/07/22
+#### XCSoar Version 7.24 - 2022/07/22
 * user interface
   - padding in fields
   - rework menu labels
@@ -361,7 +363,7 @@ Version 7.24 - 2022/07/22
 * Kobo
   - add ca certificates for https downloads
 
-Version 7.23 - 2022/02/10
+#### XCSoar Version 7.23 - 2022/02/10
 * user interface
   - add "Set Frequency" buttons to alternates list
   - revamped Credits dialog
@@ -381,7 +383,7 @@ Version 7.23 - 2022/02/10
   - add OTG support (serial, sound, net) for Clara HD
   - fix "Network failure" in Wifi dialog
 
-Version 7.22 - 2022/01/14
+#### XCSoar Version 7.22 - 2022/01/14
 * user interface
   - close the download dialog after successful download
   - add "Share" button to the status dialog
@@ -403,7 +405,7 @@ Version 7.22 - 2022/01/14
   - use app-specific data directory by default
   - allow using all external storages
 
-Version 7.21 - 2021/12/11
+#### XCSoar Version 7.21 - 2021/12/11
 * data files
   - Support for AF/AR frequency fields in OpenAir
 * devices
@@ -414,7 +416,7 @@ Version 7.21 - 2021/12/11
 * Android
   - re-enable background location and comply with Google Play Store policy
 
-Version 7.20 - 2021/10/22
+#### XCSoar Version 7.20 - 2021/10/22
 * map
   - fix crash in the topography loader
 * tracking
@@ -423,7 +425,7 @@ Version 7.20 - 2021/10/22
   - disable background location access due to Google Play Store policy
   - fix compatibility with Android older than 7
 
-Version 7.19 - 2021/10/01
+#### XCSoar Version 7.19 - 2021/10/01
 * data files
   - fix bug in OpenAir arc parser
   - fix crash bug in terrain loader
@@ -440,7 +442,7 @@ Version 7.19 - 2021/10/01
   - fix crash with USB serial adapter
   - add WCH CH9102F into the list of accepted USB serial adapters
 
-Version 7.18 - 2021/09/10
+#### XCSoar Version 7.18 - 2021/09/10
 * data files
   - load terrain while XCSoar is running
 * devices
@@ -452,7 +454,7 @@ Version 7.18 - 2021/09/10
 * Android
   - fix opening waypoint pictures
 
-Version 7.17 - 2021/09/04
+#### XCSoar Version 7.17 - 2021/09/04
 * map display
   - fix airspace display bug
 * user interface
@@ -471,13 +473,13 @@ Version 7.17 - 2021/09/04
   - Mali: Support for old Linux-Sunxi EGL headers, and new Bootlin EGL headers
   - Support for KMS/DRI and Lima instead of closed source Mali blob.
 
-Version 7.16 - 2021/08/27
+#### XCSoar Version 7.16 - 2021/08/27
 * user interface
   - don't draw "---" over graphical InfoBoxes
 * Android
   - fix deadlock bug with Bluetooth sensors and the internal GPS
 
-Version 7.15 - 2021/08/23
+#### XCSoar Version 7.15 - 2021/08/23
 * user interface
   - fix crash in Config/System
   - fix overlapping axes labels in cross section
@@ -487,13 +489,13 @@ Version 7.15 - 2021/08/23
 * Android
   - fix crash on Android 5 and 6
 
-Version 7.14 - 2021/08/20
+#### XCSoar Version 7.14 - 2021/08/20
 * Android
   - keep screen on, even if not in full-screen mode
   - fix bottom bar background in non-full-screen mode
   - fix touch position in non-full-screen mode
 
-Version 7.13 - 2021/08/19
+#### XCSoar Version 7.13 - 2021/08/19
 * fix freeze bug
 * fix terrain cache file bug
 * task management
@@ -510,7 +512,7 @@ Version 7.13 - 2021/08/19
   - disable full-screen mode in multi-window mode
   - make full-screen mode optional
 
-Version 7.12 - 2021/08/13
+#### XCSoar Version 7.12 - 2021/08/13
 * calculations
   - fix the "Height above takeoff" InfoBox
 * devices
@@ -523,7 +525,7 @@ Version 7.12 - 2021/08/13
   - throttle sensor-triggered screen updates
   - improve performance of graphical InfoBoxes
 
-Version 7.11 - 2021/07/30
+#### XCSoar Version 7.11 - 2021/07/30
 * fix crash bug in pc_met viewer
 * user interface
   - new vario gauge background
@@ -543,7 +545,7 @@ Version 7.11 - 2021/07/30
 * Polars
   - new Wassmer WA 26 P Squale polar
 
-Version 7.10 - 2021/07/09
+#### XCSoar Version 7.10 - 2021/07/09
 * weather
   - work around connection problems to NOAA server (for METAR/TAF)
 * Raspberry Pi
@@ -551,7 +553,7 @@ Version 7.10 - 2021/07/09
 * Android
   - fix crash with reconnected USB serial adapter
 
-Version 7.9 - 2021/07/05
+#### XCSoar Version 7.9 - 2021/07/05
 * fix crash bug in terrain renderer
 * fix crash bug in IGC file parser
 * settings
@@ -569,7 +571,7 @@ Version 7.9 - 2021/07/05
   - support USB serial adapters
   - auto-reconnect to IOIO UARTs
 
-Version 7.8 - 2021/06/02
+#### XCSoar Version 7.8 - 2021/06/02
 * don't delete old IGC files automatically
 * devices
   - TCP: fix error "Address already in use" on reconnect
@@ -577,7 +579,7 @@ Version 7.8 - 2021/06/02
   - fix downloads on Android 10 and later
   - fix logging while in background on Android 10 and later
 
-Version 7.7 - 2021/05/14
+#### XCSoar Version 7.7 - 2021/05/14
 * user interface
   - fix dialog labels
   - fix freeze bug in waypoint/airspace list dialog
@@ -586,12 +588,12 @@ Version 7.7 - 2021/05/14
 * Android
   - writing to port times out after 5 seconds (to avoid locking up XCSoar)
 
-Version 7.6 - 2021/05/01
+#### XCSoar Version 7.6 - 2021/05/01
 * user interface
   - fix disappearing aircraft symbol
   - fix crash bug in task editor
 
-Version 7.5 - 2021/04/30
+#### XCSoar Version 7.5 - 2021/04/30
 * fix crash bug in terrain loader
 * fix paths with backslashes
 * user interface
@@ -601,13 +603,13 @@ Version 7.5 - 2021/04/30
 * Kobo
   - fix touch screen
 
-Version 7.4 - 2021/04/08
+#### XCSoar Version 7.4 - 2021/04/08
 * user interface
   - properly save and apply updated settings in the configuration dialog
   - fix overlapping observation zones in the task point list
   - fix text background in the analysis graphs
 
-Version 7.3 - 2021/04/07
+#### XCSoar Version 7.3 - 2021/04/07
 * user interface
   - fix crash in waypoint editor
   - fix swapped longitude/latitude in waypoint editor
@@ -617,7 +619,7 @@ Version 7.3 - 2021/04/07
 * Android
   - fix download progress
 
-Version 7.2 - 2021/04/04
+#### XCSoar Version 7.2 - 2021/04/04
 * user interface
   - fix task point editor
   - display goto button in wp details when called from alternate
@@ -625,7 +627,7 @@ Version 7.2 - 2021/04/04
   - fix crash bug when loading broken CUP files
 * fix crash when loading broken PNG files
 
-Version 7.1 - 2021/03/28
+#### XCSoar Version 7.1 - 2021/03/28
 * user interface
   - fix crash when canceling a download
   - fix crash when repository index download failed
@@ -634,7 +636,7 @@ Version 7.1 - 2021/03/28
   - show early initialisation errors
   - store the terrain cache in the Android cache directory
 
-Version 7.0 - 2021/03/25
+#### XCSoar Version 7.0 - 2021/03/25
 * LUA scripting
 * user interface
   - screen layout with 12 infoboxes on the left, vario+3 infoboxes on right
@@ -715,13 +717,13 @@ Version 7.0 - 2021/03/25
   - resizable mouse cursor
   - autodetect display orientation
 
-Version 6.8.17 - 2020/09/22
+#### XCSoar Version 6.8.17 - 2020/09/22
 * tracking
   - SkyLines: update tracking IP address
 * terrain
   - fix several crash bugs (JasPer)
 
-Version 6.8.16 - 2020/07/26
+#### XCSoar Version 6.8.16 - 2020/07/26
 * input events
   - fix two crash bugs with malformed files
 * user interface
@@ -736,7 +738,7 @@ Version 6.8.16 - 2020/07/26
   - fix several crash bugs
   - fix rendering errors on very wide text lines
 
-Version 6.8.15 - 2020/06/13
+#### XCSoar Version 6.8.15 - 2020/06/13
 * user interface
   - vario: fix overlapping text lines
 * tracking
@@ -751,7 +753,7 @@ Version 6.8.15 - 2020/06/13
 * macOS
   - add macOS Catalina font path
 
-Version 6.8.14 - 2020/05/14
+#### XCSoar Version 6.8.14 - 2020/05/14
 * user interface
   - fix average needle color in inverted mode
 * Android
@@ -761,7 +763,7 @@ Version 6.8.14 - 2020/05/14
 * Kobo
   - fix crash bug
 
-Version 6.8.13 - 2020/04/08
+#### XCSoar Version 6.8.13 - 2020/04/08
 * devices
   - LX: fix buffer overflow
   - LX: support downloading flights from LX7000 Pro IGC
@@ -774,7 +776,7 @@ Version 6.8.13 - 2020/04/08
   - build with GCC 9
 * allow the hyphen in XCI files
 
-Version 6.8.12 - 2019/04/30
+#### XCSoar Version 6.8.12 - 2019/04/30
 * weather
   - update source URLs for METARs and TAFs (https://)
 * Android
@@ -788,17 +790,17 @@ Version 6.8.12 - 2019/04/30
   - IMI: raise max payload size to 2kB
 * fix IGC logger crash when no date is available
 
-Version 6.8.11 - 2018/08/18
+#### XCSoar Version 6.8.11 - 2018/08/18
 * terrain
   - fix yet another crash bug (libJasper)
 * Android
   - fix crash on Android 8 due to overzealous seccomp filter
 
-Version 6.8.10 - 2017/10/07
+#### XCSoar Version 6.8.10 - 2017/10/07
 * terrain
   - fix crash bug (6.8.9 regression)
 
-Version 6.8.9 - 2017/10/05
+#### XCSoar Version 6.8.9 - 2017/10/05
 * terrain
   - fix several crash bugs
 * fix two crash bugs
@@ -806,7 +808,7 @@ Version 6.8.9 - 2017/10/05
   - fix internet access (#3869)
   - support for Kobo Glo HD Refurbished
 
-Version 6.8.8 - 2017/09/09
+#### XCSoar Version 6.8.8 - 2017/09/09
 * data files
   - support "GSEC" in OpenAir files
 * weather
@@ -825,7 +827,7 @@ Version 6.8.8 - 2017/09/09
 * Raspberry Pi / Cubieboard
   - fix for freeze on shutdown (#3679)
 
-Version 6.8.7 - 2016/08/12
+#### XCSoar Version 6.8.7 - 2016/08/12
 * data files
   - fix freeze after loading malformed topography file
 * tracking
@@ -835,7 +837,7 @@ Version 6.8.7 - 2016/08/12
 * Android
   - remove the deprecated crash dumper
 
-Version 6.8.6 - 2016/07/22
+#### XCSoar Version 6.8.6 - 2016/07/22
 * calculations
   - show takeoff time after landing (#3786)
 * user interface
@@ -857,7 +859,7 @@ Version 6.8.6 - 2016/07/22
 * Kobo
   - support USB-OTG for Kobo Glo HD and Kobo Touch 2.0
 
-Version 6.8.5 - 2016/06/12
+#### XCSoar Version 6.8.5 - 2016/06/12
 * calculations
   - update circling percentage only when flying
   - fix circling height gain calculation
@@ -875,7 +877,7 @@ Version 6.8.5 - 2016/06/12
   - reduce ghosting on old Kobo models; regression due to screen
     flashing fix in 6.8.4 (#3756)
 
-Version 6.8.4 - 2016/05/18
+#### XCSoar Version 6.8.4 - 2016/05/18
 * airspace cross-section
   - use airspace visibility configuration (#3751)
 * data files
@@ -898,7 +900,7 @@ Version 6.8.4 - 2016/05/18
   - eliminate screen flashing on Kobo Glo HD, Kobo Touch 2.0
   - support battery status on Kobo Glo HD, Kobo Touch 2.0
 
-Version 6.8.3 - 2016/03/09
+#### XCSoar Version 6.8.3 - 2016/03/09
 * map
   - fix distorted terrain when zoomed out
   - fix missing airspaces in cross section (#3537)
@@ -919,7 +921,7 @@ Version 6.8.3 - 2016/03/09
   - support Kobo Glo HD, Kobo Touch 2.0
 * fix crash in SkyLines tracking
 
-Version 6.8.2 - 2015/09/19
+#### XCSoar Version 6.8.2 - 2015/09/19
 * Rubik R-26S polar
 * user interface
   - save settings after copy&pasting an InfoBox set (#3649)
@@ -937,7 +939,7 @@ Version 6.8.2 - 2015/09/19
 * Raspberry Pi / Cubieboard
   - support digit and letter keys (#3611)
 
-Version 6.8.1 - 2015/08/27
+#### XCSoar Version 6.8.1 - 2015/08/27
 * fix freeze bug when starting without GPS fix
 * fix crash with empty xcsoar-checklist.txt file
 * devices
@@ -949,7 +951,7 @@ Version 6.8.1 - 2015/08/27
 * Android
   - fix USB-RS232-OTG permissions on Android
 
-Version 6.8 - 2015/08/18
+#### XCSoar Version 6.8 - 2015/08/18
 * data files
   - optimise the topography loader
   - faster RASP map change
@@ -1036,7 +1038,7 @@ Version 6.8 - 2015/08/18
   - export data partition via USB storage
   - support the Kobo Aura screen (#3490)
 
-Version 6.7.9 - 2015/07/03
+#### XCSoar Version 6.7.9 - 2015/07/03
 * user interface
   - fix crash in task editor
   - fix crash while panning the map
@@ -1051,7 +1053,7 @@ Version 6.7.9 - 2015/07/03
 * Kobo
   - enable crash dumps in XCSoarData/crash/
 
-Version 6.7.8 - 2015-05-22
+#### XCSoar Version 6.7.8 - 2015-05-22
 * user interface
   - draw gray title bar on inactive dialogs
   - improved dialog button placement
@@ -1065,7 +1067,7 @@ Version 6.7.8 - 2015-05-22
   - support Raspberry Pi 2
   - show ports renamed by udev
 
-Version 6.7.7 - 2015/02/20
+#### XCSoar Version 6.7.7 - 2015/02/20
 * airspace
   - accept airspaces of class RMZ in OpenAir format files (#3437)
   - fix wrong AGL height due to longitude east/west wraparound (#3468)
@@ -1080,7 +1082,7 @@ Version 6.7.7 - 2015/02/20
 * replay
   - fix replay progress while replay is paused (#3446)
 
-Version 6.7.6 - 2014/10/18
+#### XCSoar Version 6.7.6 - 2014/10/18
 * tracking
   - updated SkyLines server IP
 * user interface
@@ -1096,7 +1098,7 @@ Version 6.7.6 - 2014/10/18
 * configuration
   - report missing plane configuration file in log file
 
-Version 6.7.5 - 2014/06/09
+#### XCSoar Version 6.7.5 - 2014/06/09
 * fix crash in task manager (#3305)
 * work around crash on Windows (PC) (#3284)
 * devices
@@ -1112,7 +1114,7 @@ Version 6.7.5 - 2014/06/09
 * tasks
   - fix loading of some tasks from .cup files
 
-Version 6.7.4 - 2014/04/11
+#### XCSoar Version 6.7.4 - 2014/04/11
 * map
   - fix topography rendering for polygon shapes (#3245)
   - fix SDL clipped polygon rendering algorithm (#3250)
@@ -1127,7 +1129,7 @@ Version 6.7.4 - 2014/04/11
 * infoboxes
   - don't use depreciated content in default configuration (#3278)
 
-Version 6.7.3 - 2014/01/22
+#### XCSoar Version 6.7.3 - 2014/01/22
 * tracking
   - changed host for DHV tracking server (#3208)
 * user interface
@@ -1143,7 +1145,7 @@ Version 6.7.3 - 2014/01/22
 * Kobo
   - fix touch screen bug (#3195, #3204, #3211)
 
-Version 6.7.2 - 2013/12/19
+#### XCSoar Version 6.7.2 - 2013/12/19
 * user interface
   - fix crash in alternates list (#3146)
   - new translation: Slovenian
@@ -1172,7 +1174,7 @@ Version 6.7.2 - 2013/12/19
   - mount /dev/pts for telnetd (#3135)
   - fix crash in file manager and METAR/TAF dialog (#3078)
 
-Version 6.7.1 - 2013/10/11
+#### XCSoar Version 6.7.1 - 2013/10/11
 * replay
   - fix crash replaying an IGC file with no B record extensions (#3107)
 * data files
@@ -1188,7 +1190,7 @@ Version 6.7.1 - 2013/10/11
   - fix passphrase entry in WiFi setup (#3053)
   - fix compatibility with old Kobo firmware
 
-Version 6.7 - 2013/09/30
+#### XCSoar Version 6.7 - 2013/09/30
 * new target: Kobo e-book readers
 * user interface
   - resizable main window
@@ -1257,7 +1259,7 @@ Version 6.7 - 2013/09/30
   - log file is called "xcsoar.log" instead of "xcsoar-startup.log"
   - fix name truncation when saving a waypoint file on Windows (#3096)
 
-Version 6.6.5 - 2013/08/21
+#### XCSoar Version 6.6.5 - 2013/08/21
 * user interface
   - reduce flickering in system configuration
 * map
@@ -1269,7 +1271,7 @@ Version 6.6.5 - 2013/08/21
 * configuration
   - fix loading home waypoint on longitudes bigger than 90 degrees
 
-Version 6.6.4 - 2013/07/11
+#### XCSoar Version 6.6.4 - 2013/07/11
 * map
   - fix stuttering terrain on Windows CE
   - fix multi-touch pan gesture (#2684)
@@ -1282,7 +1284,7 @@ Version 6.6.4 - 2013/07/11
   - fix bogus error message after pressing "Cancel"
   - show Bluetooth name instead of MAC address in device list
 
-Version 6.6.3 - 2013/07/02
+#### XCSoar Version 6.6.3 - 2013/07/02
 * map
   - fill FAI triangle areas on Windows
 * devices
@@ -1296,7 +1298,7 @@ Version 6.6.3 - 2013/07/02
 * data files
   - added "Pilatus B4" polar
 
-Version 6.6.2 - 2013/06/12
+#### XCSoar Version 6.6.2 - 2013/06/12
 * map
   - fix misplaced topography labels (#2564)
   - fix keyboard panning with track up (#2908)
@@ -1320,7 +1322,7 @@ Version 6.6.2 - 2013/06/12
 * Android
   - faster startup
 
-Version 6.6.1 - 2013/05/08
+#### XCSoar Version 6.6.1 - 2013/05/08
 * cross section
   - fix airspace display after display rotation (#2825)
 * user interface
@@ -1339,7 +1341,7 @@ Version 6.6.1 - 2013/05/08
   - fix regression with polar configuration (#2803)
 * support gcc 4.8
 
-Version 6.6 - 2013/04/23
+#### XCSoar Version 6.6 - 2013/04/23
 * map
   - optional distinct map zoom on each page (#1603)
   - add label selection "Task waypoints & airfields"
@@ -1392,14 +1394,14 @@ Version 6.6 - 2013/04/23
 * configuration
   - fix saving of configuration values in non-metric setups (#2771)
 
-Version 6.5.4 - 2013/04/10
+#### XCSoar Version 6.5.4 - 2013/04/10
 * devices
   - Volkslogger: increase timeout for reading flight list
   - V7: fix QNH change
 * logger
   - fix failing IGC logger (#2658, #2735, #2736, #2746, #2751)
 
-Version 6.5.3 - 2013/03/26
+#### XCSoar Version 6.5.3 - 2013/03/26
 * user interface
   - eliminate flickering in the cross section on Windows
   - fix wrong radial display in target dialog
@@ -1416,14 +1418,14 @@ Version 6.5.3 - 2013/03/26
 * infoboxes
   - fix rendering of thermal assistant aircraft symbol (#2702)
 
-Version 6.5.2 - 2013/03/15
+#### XCSoar Version 6.5.2 - 2013/03/15
 * user interface
   - fix hang during startup (#2662, #2663)
   - fix freeze in dialogs (#2664)
   - automatically re-enable manual wind controls (#2336)
   - fix crash after connecting FLARM (#2669)
 
-Version 6.5.1 - 2013/03/12
+#### XCSoar Version 6.5.1 - 2013/03/12
 * infoboxes
   - fix MacCready adjustment for non-metric units (#2654)
 * user interface
@@ -1437,7 +1439,7 @@ Version 6.5.1 - 2013/03/12
   - use the terrain cache even when the system clock is wrong
   - fix G record regression (#2657)
 
-Version 6.5 - 2013/03/08
+#### XCSoar Version 6.5 - 2013/03/08
 * map
   - lower zoom levels possible while circling (#1120)
   - draw FAI triangle areas (#1563)
@@ -1499,7 +1501,7 @@ Version 6.5 - 2013/03/08
   - started a French translation of the manual
   - included an almost complete German translation of the manual
 
-Version 6.4.6 - 2013/01/23
+#### XCSoar Version 6.4.6 - 2013/01/23
 * devices
   - Leonardo: fixed vario parser for the $c sentence
   - C-Probe: fixed temperature offset bug
@@ -1515,7 +1517,7 @@ Version 6.4.6 - 2013/01/23
 * configuration
   - save waypoint label display configuration changed from menu (#2548)
 
-Version 6.4.5 - 2012/12/14
+#### XCSoar Version 6.4.5 - 2012/12/14
 * calculations
   - fix rounding error in convex boundary calculation (#2477)
 * devices
@@ -1529,7 +1531,7 @@ Version 6.4.5 - 2012/12/14
 * data files
   - added "LAK-12" polar
 
-Version 6.4.4 - 2012/11/15
+#### XCSoar Version 6.4.4 - 2012/11/15
 * devices
   - CAI302: longer timeout for "CLEAR LOG"
 * user interface
@@ -1542,7 +1544,7 @@ Version 6.4.4 - 2012/11/15
 * Windows
   - fix garbled screen area in task manager (#2272)
 
-Version 6.4.3 - 2012/11/01
+#### XCSoar Version 6.4.3 - 2012/11/01
 * devices
   - fix freeze bug on device reconnect
   - LXNAV Nano: fix crash in Nano configuration dialog
@@ -1551,7 +1553,7 @@ Version 6.4.3 - 2012/11/01
 * user interface
   - fix the download manager on Samsung phones
 
-Version 6.4.2 - 2012/10/17
+#### XCSoar Version 6.4.2 - 2012/10/17
 * calculations
   - contest: relax altitude difference check (#2348)
   - improve take-off and landing detection (#2391)
@@ -1572,7 +1574,7 @@ Version 6.4.2 - 2012/10/17
   - fix excess error messages in file manager (#2395)
   - validate UTF-8 in xcsoar-checklist.txt (#2396)
 
-Version 6.4.1 - 2012/08/30
+#### XCSoar Version 6.4.1 - 2012/08/30
 * calculations
   - fix "final GR" calculation (#2256)
   - improved great circle vector calculation precision
@@ -1599,7 +1601,7 @@ Version 6.4.1 - 2012/08/30
   - log pressure altitude in IGC files
 * fix crash on low battery in simulator mode (#2306)
 
-Version 6.4 - 2012/07/31
+#### XCSoar Version 6.4 - 2012/07/31
 * calculations
   - Contest: add FFVV NetCoupe (#1648)
   - Contest: optionally include next task point in OLC classic/plus
@@ -1635,7 +1637,7 @@ Version 6.4 - 2012/07/31
   - support x86 and MIPS CPUs
   - Bluetooth server for NMEA out
 
-Version 6.3.11 - 2012/07/27
+#### XCSoar Version 6.3.11 - 2012/07/27
 * calculations
   - fix freeze in glide solver
   - fix transition in small cylinder for key hole observation zones
@@ -1649,11 +1651,11 @@ Version 6.3.11 - 2012/07/27
   - fix bogus "around terrain: -1" map element (#2205)
   - fix waypoint label style when no map is loaded
 
-Version 6.3.10 - 2012/07/20
+#### XCSoar Version 6.3.10 - 2012/07/20
 * calculations
   - fix rounding error in sector angle calculation (#2102, #2209)
 
-Version 6.3.9 - 2012/07/18
+#### XCSoar Version 6.3.9 - 2012/07/18
 * calculations
   - show AAT/target info before the first GPS fix (#2183)
 * data files
@@ -1662,10 +1664,10 @@ Version 6.3.9 - 2012/07/18
   - plausibility tests for NMEA input
   - fixed Westerboer VW921 airspeed reading
 
-Version 6.3.8 - 2012/06/22
+#### XCSoar Version 6.3.8 - 2012/06/22
 * fix broken graphics (#2182, #2184, #2185)
 
-Version 6.3.7 - 2012/06/21
+#### XCSoar Version 6.3.7 - 2012/06/21
 * calculations
   - show altitude difference to target point, not area centre
   - enforce the 150 minutes limit for OLC league (#2174)
@@ -1679,7 +1681,7 @@ Version 6.3.7 - 2012/06/21
   - fix crash during METAR download (#2156)
   - fix map flipping (#2154)
 
-Version 6.3.6 - 2012/06/06
+#### XCSoar Version 6.3.6 - 2012/06/06
 * calculations
   - fix task start arming inconsistency
   - fix crash in thermal locator (#2137)
@@ -1698,7 +1700,7 @@ Version 6.3.6 - 2012/06/06
   - fix interference of two or more IOIO UARTs (#2107)
   - eliminate delay from IOIO connect
 
-Version 6.3.5 - 2012/05/31
+#### XCSoar Version 6.3.5 - 2012/05/31
 * calculations
   - fix rounding error in task minimum search for finish lines (#2102)
 * devices
@@ -1712,7 +1714,7 @@ Version 6.3.5 - 2012/05/31
   - save crash dumps in directory "XCSoarData/crash/";
     this requires the Android permission "READ_LOGS"
 
-Version 6.3.4 - 2012/05/24
+#### XCSoar Version 6.3.4 - 2012/05/24
 * calculations
   - fix overflow in ETE/ETA calculations on big tasks (#2066)
   - fix bogus landing detection right after takeoff (#2081)
@@ -1729,7 +1731,7 @@ Version 6.3.4 - 2012/05/24
 * Android
   - fix profile path on Samsung devices with external SD card (#2051)
 
-Version 6.3.3 - 2012/05/05
+#### XCSoar Version 6.3.3 - 2012/05/05
 * calculations
   - use arrival height instead of terrain safety height for MC0 Alt.D
     (#1991, #1992)
@@ -1745,7 +1747,7 @@ Version 6.3.3 - 2012/05/05
   - Fix logging of "start" events
   - Fix logging of "before takeoff position fixes" in IGC logs (#2052)
 
-Version 6.3.2 - 2012/04/26
+#### XCSoar Version 6.3.2 - 2012/04/26
 * devices
   - FLARM: fix flight download (#2024)
 * user interface
@@ -1754,7 +1756,7 @@ Version 6.3.2 - 2012/04/26
 * Android
   - apply a Kalman filter to the pressure reading (#1928)
 
-Version 6.3.1 - 2011/04/19
+#### XCSoar Version 6.3.1 - 2011/04/19
 * calculations
   - fix crash with far away task (#1969)
   - fix high speed remaining when wind drift is disabled (#1962)
@@ -1793,7 +1795,7 @@ Version 6.3.1 - 2011/04/19
 * Altair
   - recover focused dialog control (#1868)
 
-Version 6.3 - 2012/03/29
+#### XCSoar Version 6.3 - 2012/03/29
 * calculations
   - real-time OLC score
   - configurable permanent polar degradation
@@ -1853,7 +1855,7 @@ Version 6.3 - 2012/03/29
 * LX MiniMap
   - support for the hardware buttons
 
-Version 6.2.6 - 2012/02/25
+#### XCSoar Version 6.2.6 - 2012/02/25
 * calculations
   - fix bogus terrain warnings
   - fix incorrect expiration of wind data, e.g. for temporary manually
@@ -1870,7 +1872,7 @@ Version 6.2.6 - 2012/02/25
 * Windows
   - allow configuring the UTC offset on Windows CE
 
-Version 6.2.5 - 2012/01/27
+#### XCSoar Version 6.2.5 - 2012/01/27
 * calculations
   - fix time calculation when goal is above aircraft
   - fix speed to fly when goal is below aircraft
@@ -1891,7 +1893,7 @@ Version 6.2.5 - 2012/01/27
 * Windows
   - fix freeze on the Windows Mobile "Today" screen
 
-Version 6.2.4 - 2011/12/24
+#### XCSoar Version 6.2.4 - 2011/12/24
 * calculations
   - fix arrival altitude calculation when goal is above aircraft
   - take terrain safety height into account for start point
@@ -1925,7 +1927,7 @@ Version 6.2.4 - 2011/12/24
   - load configured METAR/TAF stations on startup
   - remember UTC offsets > +12 hours.
 
-Version 6.2.3 - 2011/11/19
+#### XCSoar Version 6.2.3 - 2011/11/19
 * calculations
   - show correct "next distance" even if glide solver fails
   - don't discard manual wind when auto wind is disabled
@@ -1949,7 +1951,7 @@ Version 6.2.3 - 2011/11/19
 * Mac OS X
   - initial public release, distributed in a DMG package
 
-Version 6.2.2 - 2011/11/04
+#### XCSoar Version 6.2.2 - 2011/11/04
 * devices
   - save the "bulk baud rate" setting
   - don't auto-restart NMEAOut and XCOM760
@@ -1970,7 +1972,7 @@ Version 6.2.2 - 2011/11/04
 * Android
   - acquire "Vibrate" permission
 
-Version 6.2.1 - 2011/09/26
+#### XCSoar Version 6.2.1 - 2011/09/26
 * faster METAR and TAF download
 * devices
   - FLARM: clear old barometric altitude as soon as FLARM is detected
@@ -1988,7 +1990,7 @@ Version 6.2.1 - 2011/09/26
   - fix clock query
   - store data in ~/XCSoarData
 
-Version 6.2 - 2011/09/08
+#### XCSoar Version 6.2 - 2011/09/08
 * devices
   - Android IOIO
   - Android: support native serial ports and USB-RS232 adapters
@@ -2030,7 +2032,7 @@ Version 6.2 - 2011/09/08
 * tasks
   - allow finish height in MSL or AGL
 
-Version 6.1.5 - 2011/08/20
+#### XCSoar Version 6.1.5 - 2011/08/20
 * data files
   - fixed arcs in TNP airspace files
 * devices
@@ -2041,7 +2043,7 @@ Version 6.1.5 - 2011/08/20
 * Android
   - fix timer crash
 
-Version 6.1.4 - 2011/07/30
+#### XCSoar Version 6.1.4 - 2011/07/30
 * memory leaks fixed
 * calculations
   - fix miscalculation in start point chooser
@@ -2058,7 +2060,7 @@ Version 6.1.4 - 2011/07/30
 * Altair:
   - fix upside down screen
 
-Version 6.1.3 - 2011/07/14
+#### XCSoar Version 6.1.3 - 2011/07/14
 * devices
   - fix task declaration on PC
   - LX: correct byte alignment for task declaration
@@ -2083,7 +2085,7 @@ Version 6.1.3 - 2011/07/14
   - reduce texture memory usage on newer GPUs
   - fix terrain rendering on Mali-400 (Samsung Galaxy S II)
 
-Version 6.1.2 - 2011/06/28
+#### XCSoar Version 6.1.2 - 2011/06/28
 * devices
   - workaround for GPGGA/GPRMC clock difference
 * calculations
@@ -2108,7 +2110,7 @@ Version 6.1.2 - 2011/06/28
 * Altair
   - the Escape button saves dialogs (such as InfoBox setup)
 
-Version 6.1.1 - 2011/06/01
+#### XCSoar Version 6.1.1 - 2011/06/01
 * calculations
   - fix arrival heights which are below the safety height
   - reduce memory usage
@@ -2131,7 +2133,7 @@ Version 6.1.1 - 2011/06/01
   - fix clipped cursor in text entry dialog
   - fix default font for "important topology"
 
-Version 6.1 - 2011/05/19
+#### XCSoar Version 6.1 - 2011/05/19
 * devices
   - CAI302: read QNH setting
   - Vega: send configured QNH to Vega
@@ -2240,7 +2242,7 @@ Version 6.1 - 2011/05/19
   - Waypoint select dialog allows filtering by start/finish
   - Airspace warning dialog only shows buttons suitable for the respective airspace item,
 
-Version 6.0.10 - 2011-04-29
+#### XCSoar Version 6.0.10 - 2011-04-29
 * fix crash in flarm teammate setting
 * user interface
   - enable gestures by default
@@ -2254,7 +2256,7 @@ Version 6.0.10 - 2011-04-29
   - correct key handling behaviour in Lists
   - prevent wraparound of cursor navigation
 
-Version 6.0.9 - 2011-04-06
+#### XCSoar Version 6.0.9 - 2011-04-06
 * devices
   - work around iPaq Bluetooth driver bug
 * map
@@ -2273,7 +2275,7 @@ Version 6.0.9 - 2011-04-06
   - dead hardware keys fixed
   - implement sound effects
 
-Version 6.0.8 - 2011/03/23
+#### XCSoar Version 6.0.8 - 2011/03/23
 * don't estimate thermal source for skewed thermals
 * devices
   - CAI302: fix task declaration on Android
@@ -2293,7 +2295,7 @@ Version 6.0.8 - 2011/03/23
   - fix bold font rendering
   - case insensitive file name matching
 
-Version 6.0.7 - 2011/03/12
+#### XCSoar Version 6.0.7 - 2011/03/12
 * devices
   - EW microRecorder: timeout during connect
   - EW microRecorder: increase RX timeout
@@ -2315,7 +2317,7 @@ Version 6.0.7 - 2011/03/12
   - dialog keyboard navigation implemented
   - enable keyboard repeat
 
-Version 6.0.6 - 2011/03/04
+#### XCSoar Version 6.0.6 - 2011/03/04
 * devices:
   - fix declaration crash in Volkslogger, EW, CAI302, CAI GPS NAV
   - EW: remove duplicate newline in declaration output
@@ -2334,7 +2336,7 @@ Version 6.0.6 - 2011/03/04
 * Linux
   - implement the serial port
 
-Version 6.0.5 - 2011/02/26
+#### XCSoar Version 6.0.5 - 2011/02/26
 * devices:
   - EWMicroRecorder: fix hang during task declaration
   - FLARM: parse PGRMZ as altitude above 1013.25 hPa
@@ -2356,7 +2358,7 @@ Version 6.0.5 - 2011/02/26
   - fix dialog hot keys
   - task editor: bind F5/F6 to move up/down
 
-Version 6.0.4 - 2011/02/19
+#### XCSoar Version 6.0.4 - 2011/02/19
 * devices
   - EWMicroRecorder: parse PGRMZ as altitude above 1013.25 hPa
   - FlymasterF1: convert pressure to altitude
@@ -2385,7 +2387,7 @@ Version 6.0.4 - 2011/02/19
   - don't process hardware keys twice
   - fix bitmap loading on Android 2.3
 
-Version 6.0.3 - 2011/02/02
+#### XCSoar Version 6.0.3 - 2011/02/02
 * devices
   - EW, Volkslogger: restart I/O thread after declaration failure
   - CAI302: check for I/O errors during declaration
@@ -2411,7 +2413,7 @@ Version 6.0.3 - 2011/02/02
   - show flarm and thermal assistant gauge
   - show text in splash screen
 
-Version 6.0.2 - 2011/01/20
+#### XCSoar Version 6.0.2 - 2011/01/20
 * devices
   - more robust NMEA checksum parser
   - CAI302: restart I/O thread after declaration failure
@@ -2441,7 +2443,7 @@ Version 6.0.2 - 2011/01/20
   - implement check boxes (for enabling "Expert" mode)
   - fix airspace rendering
 
-Version 6.0.1 - 2010/12/26
+#### XCSoar Version 6.0.1 - 2010/12/26
 * map
   - task, glide terrain: fix rendering bugs
 * user interface
@@ -2455,7 +2457,7 @@ Version 6.0.1 - 2010/12/26
 * glide computer
   - new built-in polars: IS28B2 and SZD30
 
-Version 6.0 - 2010/12/19
+#### XCSoar Version 6.0 - 2010/12/19
 * build system
   - compile with gcc / mingw32 / mingw32ce instead of Visual C++
 * data files
