@@ -1,6 +1,7 @@
 set (BIN_FILES
    AUTHORS.gz
    COPYING.gz
+   OpenSoar-News.md.gz
    NEWS.txt.gz
    Data/other/egm96s.dem
 )

@@ -6,6 +6,7 @@ DATA_RESOURCES = \
 	output/data/COPYING.gz \
 	output/data/AUTHORS.gz \
 	output/data/NEWS.txt.gz \
+	output/data/OpenSoar-News.txt.gz \
 	Data/other/egm96s.dem
 DATA_SOURCES += $(foreach file,$(DATA_RESOURCES),$(DATA)/$(notdir $(file)).c)
 

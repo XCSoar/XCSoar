@@ -172,7 +172,8 @@ endif
 
 #######
 
-TEXT_FILES = AUTHORS COPYING NEWS.txt
+# TEXT_FILES = AUTHORS COPYING NEWS.txt
+TEXT_FILES = AUTHORS COPYING OpenSoar-News.md
 
 TEXT_COMPRESSED = $(patsubst %,$(DATA)/%.gz,$(TEXT_FILES))
 $(TEXT_COMPRESSED): $(DATA)/%.gz: % | $(DATA)/dirstamp
