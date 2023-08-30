@@ -120,8 +120,8 @@ ExternalSettings::EliminateRedundant(const ExternalSettings &other,
     ballast_overload_available.Clear();
 
   if (ballast_litres_available &&
-      other.CompareBallastOverload(ballast_litres) &&
-      !last.CompareBallastOverload(ballast_litres))
+      other.CompareBallastLitres(ballast_litres) &&
+      !last.CompareBallastLitres(ballast_litres))
     ballast_litres_available.Clear();
 
   if (wing_loading_available && other.CompareWingLoading(wing_loading) &&
