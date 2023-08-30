@@ -200,19 +200,9 @@ struct TrafficList {
   const FlarmTraffic *FindMaximumAlert() const noexcept;
 
   constexpr unsigned TrafficIndex(const FlarmTraffic *t) const noexcept {
-#if 1 //ndef __MSVC__ // TODO(Augustr2111): make it ok
-    unsigned int i = 0;
-    for (const auto &traffic : list) {
-      if (traffic.id == t->id)
-        return i;
-      i++;
-    }
-     /**/
-    return 0; // TODO(August2111): This is wrong!!!!
-#else
-    auto iter = std::find(list.begin(), list.end(), t);
+    // TODO(August2111): check correctness!
+	auto iter = std::find(list.begin(), list.end(), t);
     return iter - list.begin();
-#endif
   }
 
   /**
