@@ -85,7 +85,17 @@ macro(prepare_3rdparty target_name lib_name)
     string(REPLACE "\\" "/" _PREFIX_DIR  ${${TARGET_CNAME}_PREFIX})
 
     set(${TARGET_CNAME}_LIB  ${_TARGET_LIBS})  ## for internal use
+if (${lib_name} MATCHES "fmt")
+    set(_TARGET_LIBS  "${_INSTALL_DIR}/lib/${TOOLCHAIN}/${LIB_PREFIX}${lib_name}d${LIB_SUFFIX}")  ## D:/Project/link_libs...
+    set(
+      ${TARGET_CNAME}_LIB
+      optimized "${_INSTALL_DIR}/lib/${TOOLCHAIN}/${LIB_PREFIX}${lib_name}${LIB_SUFFIX}"
+      debug "${_INSTALL_DIR}/lib/${TOOLCHAIN}/${LIB_PREFIX}${lib_name}d${LIB_SUFFIX}"
+      PARENT_SCOPE
+    )   ## D:/Project/link_libs...
+else()
     set(${TARGET_CNAME}_LIB  ${_TARGET_LIBS} PARENT_SCOPE)  ## D:/Project/link_libs...
+endif()
     set(${TARGET_CNAME}_TARGET  ${${TARGET_CNAME}_TARGET} PARENT_SCOPE) # f.e. zlib_3rd, sodium_3rd
 
 if (MSVC OR MINGW OR CLANG)
