@@ -22,6 +22,7 @@ add_compile_definitions(WIN32_LEAN_AND_MEAN)
  # warning C4996: 'xxx': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _wcsdup. See online help for details.
  # xxx: wcscpy, wcsdup, strtok, strcpy, strdup, ....
 add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
+add_compile_definitions(_SCL_SECURE_NO_WARNINGS)
 # add_compile_definitions(/std:c++20)
 # add_definitions(/std:c++20)
 add_compile_options(/std:c++20)
