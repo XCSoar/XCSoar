@@ -84,22 +84,20 @@ LoadPath(const ProfileMap &map, DeviceConfig &config, unsigned n)
   bool retvalue = map.Get(buffer, config.path);
   // the usual windows port names has no colon at the end
   if (retvalue && !config.path.empty()) {
-#ifdef _DEBUG  // TODO(August)...
-    if ((config.path[config.path.length() - 1] == TCHAR(':')) &&
-    // ??? if ((config.path.back() == TCHAR(':')) &&
-#else
-    if ((config.path[config.path.length() - 1] == TCHAR(':')) &&
-#endif
-        // (_tcsncmp(config.path, _T("COM"), 3) == 0)) {
+    if ((config.path.back() == TCHAR(':')) &&
+        /* In Windows the value itself should be only have the short */
       config.path.StartsWith(_T("COM"))) {
       /* old-style raw names has a trailing colon (for backwards
        compatibility with older XCSoar versions) */
-       config.path[config.path.length() - 1] = 0;
-      // _tcsncpy(config.path.buffer(), config.path, config.path.length() -1);
+      config.path.Truncate(config.path.length() - 1); 
+      //  write back this (short) value to the profile:
+      ((ProfileMap)map).Set(buffer, config.path);
     } else if (config.path.StartsWith(_T("\\\\.\\COM"))) {
       /* since 7.30 the raw names in the XCSoar config has the UNC style
        (compatibility with this XCSoar versions config) */
-      _tcscpy(config.path.buffer(), config.path + 4);
+      config.path = config.path + 4;
+      // write back this (short) value to the profile:
+      ((ProfileMap)map).Set(buffer, config.path);  // write back to the profile
     }
   }
   return retvalue;
