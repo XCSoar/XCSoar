@@ -25,6 +25,10 @@ private:
 public:
 	StaticSocketAddress() = default;
 
+	explicit StaticSocketAddress(SocketAddress src) noexcept {
+		*this = src;
+	}
+
 	StaticSocketAddress &operator=(SocketAddress other) noexcept;
 
 	constexpr operator SocketAddress() const noexcept {
