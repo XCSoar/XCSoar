@@ -51,7 +51,9 @@
 #include "io/NullDataHandler.hpp"
 
 #include <memory>
-
+#ifdef _DEBUG
+# include <iostream>
+#endif
 static const DeviceConfig dummy_config = DeviceConfig();
 
 /*
@@ -1231,65 +1233,38 @@ TestLarus()
     nmea_info.Reset();
     nmea_info.clock = TimeStamp{FloatDuration{1}};
 
-    // Empty sentence is handled by device driver
-    ok1(device->ParseNMEA("$POV*49", nmea_info));
+    // $PLARA:
+    ok1(device->ParseNMEA("$PLARA,-0.8,7.5,99.3*58", nmea_info));
 
-    // Checksums are validated
-    ok1(!device->ParseNMEA("$POV*48", nmea_info));
+    // $PLARB: battery voltage
+    ok1(device->ParseNMEA("$PLARB,12.20*4E", nmea_info));
+    ok1(nmea_info.voltage_available);
+    ok1(equals(nmea_info.voltage, 12.2));
 
-    // TE vario is read
-    ok1(device->ParseNMEA("$POV,E,2.15*14", nmea_info));
-    ok1(nmea_info.total_energy_vario_available);
-    ok1(equals(nmea_info.total_energy_vario, 2.15));
+    ok1(device->ParseNMEA("$PLARB,12.23*4D", nmea_info));
+    ok1(nmea_info.voltage_available);
+    ok1(equals(nmea_info.voltage, 12.23));
+
+    // $PLARD:
+    ok1(device->ParseNMEA("$PLARD,1214.30,M*2D", nmea_info));
+    // $PLARV:
+    ok1(device->ParseNMEA("$PLARV,-0.11,0.02,141,5*77", nmea_info));
+    // $PLARW: wind, instant. and long time
+    ok1(device->ParseNMEA("$PLARW,98,4,I,A*65", nmea_info));
+    ok1(device->ParseNMEA("$PLARW,89,7,A,A*6E", nmea_info));
+    ok1(nmea_info.external_instantaneous_wind_available);
+    ok1(equals(nmea_info.external_instantaneous_wind.norm * 3.6, 4.0));
+    ok1(equals(nmea_info.external_instantaneous_wind.bearing.AbsoluteDegrees(), 98.0));
+    ok1(nmea_info.external_wind_available);
+    ok1(equals(nmea_info.external_wind.norm * 3.6, 7.0));
+    ok1(equals(nmea_info.external_wind.bearing.AbsoluteDegrees(), 89.0));
+#ifdef _DEBUG
+    std::cout << "Wind: " << nmea_info.external_wind.norm * 3.6 << "km/h, "
+              << nmea_info.external_wind.bearing.AbsoluteDegrees() << std::endl;
+#endif
+    // $HCHDT: true heading
+    ok1(device->ParseNMEA("$HCHDT,99.3,T*1A", nmea_info));
     nmea_info.Reset();
-
-    // Static pressure is read
-    ok1(device->ParseNMEA("$POV,P,1018.35*39", nmea_info));
-    ok1(nmea_info.static_pressure_available);
-    ok1(equals(nmea_info.static_pressure.GetHectoPascal(), 1018.35));
-    nmea_info.Reset();
-
-    // Dynamic pressure is read
-    ok1(device->ParseNMEA("$POV,Q,23.3*04", nmea_info));
-    ok1(nmea_info.dyn_pressure_available);
-    ok1(equals(nmea_info.dyn_pressure.GetPascal(), 23.3));
-    nmea_info.Reset();
-
-    // Total pressure is read
-    ok1(device->ParseNMEA("$POV,R,1025.17*35", nmea_info));
-    ok1(nmea_info.pitot_pressure_available);
-    ok1(equals(nmea_info.pitot_pressure.GetHectoPascal(), 1025.17));
-    nmea_info.Reset();
-
-    // Multiple pressures are read
-    ok1(device->ParseNMEA("$POV,P,1018.35,Q,23.3,R,1025.17*08", nmea_info));
-    ok1(nmea_info.static_pressure_available);
-    ok1(equals(nmea_info.static_pressure.GetHectoPascal(), 1018.35));
-    ok1(nmea_info.dyn_pressure_available);
-    ok1(equals(nmea_info.dyn_pressure.GetPascal(), 23.3));
-    ok1(nmea_info.pitot_pressure_available);
-    ok1(equals(nmea_info.pitot_pressure.GetHectoPascal(), 1025.17));
-    nmea_info.Reset();
-
-    // Airspeed is read
-    ok1(device->ParseNMEA("$POV,S,123.45*05", nmea_info));
-    ok1(nmea_info.airspeed_available);
-    ok1(nmea_info.airspeed_real);
-    ok1(equals(nmea_info.true_airspeed, 123.45 / 3.6));
-    nmea_info.Reset();
-
-    // Temperature is read
-    ok1(device->ParseNMEA("$POV,T,23.52*35", nmea_info));
-    ok1(nmea_info.temperature_available);
-    ok1(equals(nmea_info.temperature.ToKelvin(),
-               Temperature::FromCelsius(23.52).ToKelvin()));
-    nmea_info.Reset();
-
-    // Relative humidity is read
-    ok1(device->ParseNMEA("$POV,H,58.42*24", nmea_info));
-    ok1(nmea_info.humidity_available);
-    ok1(equals(nmea_info.humidity, 58.42));
-
     delete device;
 }
 
@@ -1696,7 +1671,8 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main()
 {
-  plan_tests(843);
+#if 1
+  plan_tests(862);
 
   TestGeneric();
   TestTasman();
@@ -1716,7 +1692,10 @@ int main()
   TestLXV7();
   TestILEC();
   TestOpenVario();
+#endif
+  // plan_tests(13);
   TestLarus();
+#if 1
   TestVega();
   TestWesterboer();
   TestZander();
@@ -1743,6 +1722,7 @@ int main()
   TestFlightList(cai302_driver);
   TestFlightList(lx_driver);
   TestFlightList(imi_driver);
+#endif
 
   return exit_status();
 }
