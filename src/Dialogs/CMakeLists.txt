@@ -57,7 +57,11 @@ add_library(${TARGET_NAME} ${XCSOAR_LIB_TYPE}
     ${HEADER_FILES}
     ${SCRIPT_FILES}
 )
-target_link_libraries(${TARGET_NAME} PUBLIC util Airspace event Form InfoBoxes Widget Screen ui Device Weather Repository Gauge Formatter Task Data Polar)
+target_link_libraries(${TARGET_NAME} PUBLIC 
+    util Airspace event Form InfoBoxes Widget 
+    Screen ui Device Weather Repository Gauge 
+    Formatter Task Data Polar
+)
 # message(FATAL_ERROR "Stop!")
 
 set_target_properties(${TARGET_NAME} PROPERTIES FOLDER FrontEnd)
