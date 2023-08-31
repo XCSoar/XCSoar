@@ -120,8 +120,8 @@ extern "C"
   extern const uint8_t COPYING_gz[];
   extern const size_t COPYING_gz_size;
 
-  extern const uint8_t NEWS_txt_gz[];
-  extern const size_t NEWS_txt_gz_size;
+  extern const uint8_t OpenSoar_News_md_gz[];
+  extern const size_t OpenSoar_News_md_gz_size;
 
   extern const uint8_t AUTHORS_gz[];
   extern const size_t AUTHORS_gz_size;
@@ -135,7 +135,8 @@ dlgCreditsShowModal([[maybe_unused]] UI::SingleWindow &parent)
   const auto authors = InflateToString(AUTHORS_gz, AUTHORS_gz_size);
   const UTF8ToWideConverter authors2(authors.c_str());
 
-  const auto news = InflateToString(NEWS_txt_gz, NEWS_txt_gz_size);
+  const auto news =
+      InflateToString(OpenSoar_News_md_gz, OpenSoar_News_md_gz_size);
   const UTF8ToWideConverter news2(news.c_str());
 
   const auto license = InflateToString(COPYING_gz, COPYING_gz_size);
