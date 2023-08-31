@@ -11,6 +11,8 @@ set(BASIC_SOURCES
     ${SRC}/Asset.cpp
     ${SRC}/BallastDumpManager.cpp
     ${SRC}/BatteryTimer.cpp
+    ${SRC}/BackendComponents.cpp
+    ${SRC}/DataComponents.cpp
     ${SRC}/Components.cpp
     ${SRC}/CommandLine.cpp
     ${SRC}/DataGlobals.cpp
