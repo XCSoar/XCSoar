@@ -65,8 +65,10 @@ TopCanvas::TopCanvas(UI::Display &_display, SDL_Window *_window)
                               width, height);
   if (texture == nullptr)
     throw FmtRuntimeError("SDL_CreateTexture({}, {}, {}, {}, {}) has failed: {}",
-                          (const void *)renderer, SDL_PIXELFORMAT_UNKNOWN,
-                          SDL_TEXTUREACCESS_STREAMING, width, height,
+                          (const void *)renderer,
+                          (unsigned)SDL_PIXELFORMAT_UNKNOWN,
+                          (unsigned)SDL_TEXTUREACCESS_STREAMING,
+                          width, height,
                           ::SDL_GetError());
 #endif
 
