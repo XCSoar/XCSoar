@@ -1120,6 +1120,14 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxContentRPM,
   },
 
+  // e_AAT_dT_or_ETA
+  {
+    N_("AAT dT and task ETA"),
+    N_("AATdeltaOrETA"),
+    N_("Shows AAT delta time and estimated time of arrival in case of AAT task, and estimated time of arrival in case of racing task"),
+    UpdateInfoTaskETAorAATdT,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

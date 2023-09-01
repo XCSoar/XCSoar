@@ -1,6 +1,7 @@
 Version 7.40 - not yet released
-* Flarm Radar
-  - Add 100m zoom option.
+* user interface
+  - Added infobox that combines ETA with AAT dT
+  - FLARM: Add 100m zoom option.
 * Linux
   - fix the /etc/xcsoar data directory
 
