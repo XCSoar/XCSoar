@@ -27,10 +27,10 @@ try {
 
   /* XXX log pilot name, glider, airfield name */
 
-  writer.Format("%04u-%02u-%02uT%02u:%02u:%02u %s\n",
-                date_time.year, date_time.month, date_time.day,
-                date_time.hour, date_time.minute, date_time.second,
-                type);
+  writer.Fmt("{:04}-{:02}-{:02}T{:02}:{:02}:{:02} {}\n",
+             date_time.year, date_time.month, date_time.day,
+             date_time.hour, date_time.minute, date_time.second,
+             type);
 
   writer.Flush();
   file.Commit();
