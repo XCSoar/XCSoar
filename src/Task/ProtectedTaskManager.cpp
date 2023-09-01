@@ -144,7 +144,7 @@ ProtectedTaskManager::SetRoutePlanner(const ProtectedRoutePlanner *_route) noexc
 }
 
 bool
-ReachIntersectionTest::Intersects(const AGeoPoint& destination)
+ReachIntersectionTest::Intersects(const AGeoPoint &destination) const noexcept
 {
   if (!route)
     return false;

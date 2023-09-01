@@ -27,7 +27,7 @@ public:
     route = _route;
   }
 
-  virtual bool Intersects(const AGeoPoint& destination);
+  virtual bool Intersects(const AGeoPoint &destination) const noexcept;
 };
 
 /**
