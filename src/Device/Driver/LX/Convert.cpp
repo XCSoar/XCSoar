@@ -7,6 +7,7 @@
 #include "util/ByteOrder.hxx"
 #include "util/StringCompare.hxx"
 
+#include <algorithm> // for std::find()
 #include <cstdint>
 #include <cstdio>
 
@@ -33,10 +34,11 @@ struct Context {
   }
 };
 
+[[gnu::pure]]
 static bool
-ValidString(const char *p, size_t size)
+ValidString(std::span<const char> s) noexcept
 {
-  return memchr(p, 0, size) != nullptr;
+  return std::find(s.begin(), s.end(), '\0') != s.end();
 }
 
 static void
@@ -189,7 +191,7 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
       if (data > end)
         return false;
 
-      if (!ValidString(packet.serial->serial, sizeof(packet.serial->serial)))
+      if (!ValidString(packet.serial->serial))
         return false;
 
       os.Format("A%sFLIGHT:%u\r\nHFDTE%s\r\n",
@@ -265,8 +267,7 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
       if (data > end)
         return false;
 
-      if (!ValidString(packet.competition_class->class_id,
-                       sizeof(packet.competition_class->class_id)))
+      if (!ValidString(packet.competition_class->class_id))
         return false;
 
       if (context.flight_info.competition_class_id == 7)
@@ -313,7 +314,7 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
           int latitude = (int32_t)FromBE32(packet.task->latitude[i]);
           int longitude = (int32_t)FromBE32(packet.task->longitude[i]);
 
-          if (!ValidString(packet.task->name[i], sizeof(packet.task->name[i])))
+          if (!ValidString(packet.task->name[i]))
             return false;
 
           os.Format("C%02d%05d%c" "%03d%05d%c" "%s\r\n",
@@ -328,8 +329,7 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
 
     case LXN::EVENT:
       data += sizeof(*packet.event);
-      if (data > end ||
-          !ValidString(packet.event->foo, sizeof(packet.event->foo)))
+      if (data > end || !ValidString(packet.event->foo))
         return false;
 
       context.event = *packet.event;
@@ -382,17 +382,12 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
     case LXN::FLIGHT_INFO:
       data += sizeof(*packet.flight_info);
       if (data > end ||
-          !ValidString(packet.flight_info->pilot,
-                       sizeof(packet.flight_info->pilot)) ||
-          !ValidString(packet.flight_info->copilot,
-                       sizeof(packet.flight_info->copilot)) ||
-          !ValidString(packet.flight_info->glider,
-                       sizeof(packet.flight_info->glider)) ||
-          !ValidString(packet.flight_info->registration,
-                       sizeof(packet.flight_info->registration)) ||
-          !ValidString(packet.flight_info->competition_class,
-                       sizeof(packet.flight_info->competition_class)) ||
-          !ValidString(packet.flight_info->gps, sizeof(packet.flight_info->gps)))
+          !ValidString(packet.flight_info->pilot) ||
+          !ValidString(packet.flight_info->copilot) ||
+          !ValidString(packet.flight_info->glider) ||
+          !ValidString(packet.flight_info->registration) ||
+          !ValidString(packet.flight_info->competition_class) ||
+          !ValidString(packet.flight_info->gps))
         return false;
 
       if (packet.flight_info->competition_class_id > 7)
