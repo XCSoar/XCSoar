@@ -16,8 +16,8 @@
 #include "Airspace/AirspaceCircle.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
+#include "lib/fmt/RuntimeError.hxx"
 #include "util/ConvertString.hpp"
-#include "util/RuntimeError.hxx"
 #include "util/StaticString.hxx"
 #include "util/StringCompare.hxx"
 
@@ -950,12 +950,12 @@ ParseAirspaceFile(Airspaces &airspaces,
         ParseLineTNP(airspaces, line_num, input, temp_area, ignore);
       }
     } catch (const TempAirspace::CommitError &e) {
-      throw FormatRuntimeError("Error in airspace at line %u: %s",
-                               temp_area.first_line_number, e.msg);
+      throw FmtRuntimeError("Error in airspace at line {}: {}",
+                            temp_area.first_line_number, e.msg);
     } catch (...) {
       // TODO translate this?
-      std::throw_with_nested(FormatRuntimeError("Error in line %u ('%s')",
-                                                line_num, line));
+      std::throw_with_nested(FmtRuntimeError("Error in line {} ('{}')",
+                                             line_num, WideToUTF8Converter{line}.c_str()));
     }
 
     // Update the ProgressDialog

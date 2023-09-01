@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Init.hpp"
-#include "util/RuntimeError.hxx"
+#include "lib/fmt/RuntimeError.hxx"
 
 #if defined(__clang__) && defined(__arm__)
 /* work around warning: 'register' storage class specifier is
@@ -43,8 +43,8 @@ Load(const char *path)
   FT_Face face;
   FT_Error error = FT_New_Face(ft_library, path, 0, &face);
   if (error)
-    throw FormatRuntimeError("Failed to load font %s: %s",
-                             path, FT_Error_String(error));
+    throw FmtRuntimeError("Failed to load font {}: {}",
+                          path, FT_Error_String(error));
 
   return face;
 }

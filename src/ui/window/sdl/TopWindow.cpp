@@ -4,7 +4,7 @@
 #include "../TopWindow.hpp"
 #include "../Features.hpp"
 #include "ui/canvas/custom/TopCanvas.hpp"
-#include "util/RuntimeError.hxx"
+#include "lib/fmt/RuntimeError.hxx"
 #include "util/UTF8.hpp"
 
 #ifdef UNICODE
@@ -71,11 +71,11 @@ TopWindow::CreateNative(const TCHAR *_text, PixelSize new_size,
                               SDL_WINDOWPOS_UNDEFINED, new_size.width,
                               new_size.height, flags);
   if (window == nullptr)
-    throw FormatRuntimeError("SDL_CreateWindow(%s, %u, %u, %u, %u, %#x) has failed: %s\n",
-                             text, (unsigned) SDL_WINDOWPOS_UNDEFINED,
-                             (unsigned) SDL_WINDOWPOS_UNDEFINED, new_size.width,
-                             new_size.height, (unsigned)flags,
-                             ::SDL_GetError());
+    throw FmtRuntimeError("SDL_CreateWindow('{}', {}, {}, {}, {}, {:#x}) has failed: {}",
+                          text, SDL_WINDOWPOS_UNDEFINED,
+                          SDL_WINDOWPOS_UNDEFINED, new_size.width,
+                          new_size.height, flags,
+                          ::SDL_GetError());
 
 #if defined(__MACOSX__) && __MACOSX__
   SDL_SysWMinfo *wm_info =

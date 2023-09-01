@@ -6,7 +6,7 @@
 #include "Attribute.hpp"
 #include "Globals.hpp"
 #include "ui/dim/Point.hpp"
-#include "util/RuntimeError.hxx"
+#include "lib/fmt/RuntimeError.hxx"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -250,7 +250,7 @@ CompileAttachShader(GLProgram &program, GLenum type, const char *code)
   if (shader.GetCompileStatus() != GL_TRUE) {
     char log[1000];
     shader.GetInfoLog(log, sizeof(log));
-    throw FormatRuntimeError("Shader compiler failed: %s", log);
+    throw FmtRuntimeError("Shader compiler failed: {}", log);
   }
 
   program.AttachShader(shader);
@@ -273,7 +273,7 @@ LinkProgram(GLProgram &program)
   if (program.GetLinkStatus() != GL_TRUE) {
     char log[1000];
     program.GetInfoLog(log, sizeof(log));
-    throw FormatRuntimeError("Shader linker failed: %s", log);
+    throw FmtRuntimeError("Shader linker failed: {}", log);
   }
 }
 

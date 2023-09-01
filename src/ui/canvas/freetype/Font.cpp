@@ -5,9 +5,9 @@
 #include "Screen/Debug.hpp"
 #include "ui/canvas/custom/Files.hpp"
 #include "Look/FontDescription.hpp"
-#include "util/RuntimeError.hxx"
 #include "Init.hpp"
 #include "Asset.hpp"
+#include "lib/fmt/RuntimeError.hxx"
 #include "system/Path.hpp"
 
 #ifndef ENABLE_OPENGL
@@ -146,8 +146,8 @@ Font::LoadFile(const char *file, unsigned ptsize, [[maybe_unused]] bool bold, [[
   FT_Error error = ::FT_Set_Pixel_Sizes(new_face, 0, ptsize);
   if (error) {
     ::FT_Done_Face(new_face);
-    throw FormatRuntimeError("Failed to initialise font %s: %s",
-                             file, FT_Error_String(error));
+    throw FmtRuntimeError("Failed to initialise font {}: {}",
+                          file, FT_Error_String(error));
   }
 
   const FT_Fixed y_scale = new_face->size->metrics.y_scale;

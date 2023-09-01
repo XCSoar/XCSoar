@@ -6,7 +6,6 @@
 #include "ui/display/Display.hpp"
 #include "ui/dim/Size.hpp"
 #include "system/Error.hxx"
-#include "util/RuntimeError.hxx"
 #include "LogFile.hpp"
 
 #ifdef ANDROID
@@ -17,6 +16,7 @@
 #endif
 
 #include <cassert>
+#include <stdexcept>
 
 #include <stdio.h>
 

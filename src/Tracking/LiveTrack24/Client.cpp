@@ -7,9 +7,9 @@
 #include "util/ConvertString.hpp"
 #include "lib/curl/CoRequest.hxx"
 #include "lib/curl/Setup.hxx"
+#include "lib/fmt/RuntimeError.hxx"
 #include "Geo/GeoPoint.hpp"
 #include "co/Task.hxx"
-#include "util/RuntimeError.hxx"
 #include "util/StringCompare.hxx"
 #include "Version.hpp"
 
@@ -156,8 +156,7 @@ Client::SendRequest(CurlEasy easy)
     co_return;
 
   if (SkipPrefix(response, "NOK : "sv) && !response.empty())
-    throw FormatRuntimeError("Error from server: %.*s",
-                             int(response.size()), response.data());
+    throw FmtRuntimeError("Error from server: {}", response);
 
   throw std::runtime_error("Error from server");
 }

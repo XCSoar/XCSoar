@@ -9,12 +9,13 @@
 #include "Operation/Operation.hpp"
 #include "Language/Language.hpp"
 #include "LogFile.hpp"
+#include "lib/fmt/PathFormatter.hpp"
+#include "lib/fmt/RuntimeError.hxx"
 #include "system/Path.hpp"
 #include "io/FileLineReader.hpp"
 #include "io/ZipArchive.hpp"
 #include "io/ZipLineReader.hpp"
 #include "io/MapFile.hpp"
-#include "util/RuntimeError.hxx"
 #include "Profile/Profile.hpp"
 
 #include <string.h>
@@ -29,8 +30,7 @@ try {
     ParseAirspaceFile(airspaces, reader, operation);
   } catch (...) {
     // TODO translate this?
-    std::throw_with_nested(FormatRuntimeError("Error in file %s",
-                                              path.ToUTF8().c_str()));
+    std::throw_with_nested(FmtRuntimeError("Error in file {}", path));
   }
 
   return true;
@@ -51,8 +51,7 @@ try {
     ParseAirspaceFile(airspaces, reader, operation);
   } catch (...) {
     // TODO translate this?
-    std::throw_with_nested(FormatRuntimeError("Error in file %s",
-                                              path));
+    std::throw_with_nested(FmtRuntimeError("Error in file {}", path));
   }
 
   return true;

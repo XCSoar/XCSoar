@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "ConfigChooser.hpp"
-#include "util/RuntimeError.hxx"
+#include "lib/fmt/RuntimeError.hxx"
 
 #ifdef MESA_KMS
 #include "ui/canvas/egl/GBM.hpp"
@@ -156,7 +156,7 @@ ChooseConfig(EGLDisplay display)
   EGLint num_configs;
   if (!eglChooseConfig(display, attributes, configs.data(), configs.size(),
                        &num_configs))
-    throw FormatRuntimeError("eglChooseConfig() failed: %#x", eglGetError());
+    throw FmtRuntimeError("eglChooseConfig() failed: {:#x}", eglGetError());
 
   if (num_configs == 0)
     throw std::runtime_error("eglChooseConfig() failed");

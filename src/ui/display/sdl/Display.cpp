@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Display.hpp"
-#include "util/RuntimeError.hxx"
+#include "lib/fmt/RuntimeError.hxx"
 #include "Asset.hpp"
 
 #include <SDL.h>
@@ -17,7 +17,7 @@ Display::Display()
     flags |= SDL_INIT_AUDIO;
 
   if (::SDL_Init(flags) != 0)
-    throw FormatRuntimeError("SDL_Init() has failed: %s", ::SDL_GetError());
+    throw FmtRuntimeError("SDL_Init() has failed: {}", ::SDL_GetError());
 
 #ifdef ENABLE_OPENGL
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
