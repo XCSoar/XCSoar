@@ -10,13 +10,11 @@
 
 TaskManager::TaskManager(const TaskBehaviour &_task_behaviour,
                          const Waypoints &wps) noexcept
-  :glide_polar(GlidePolar::Invalid()), safety_polar(GlidePolar::Invalid()),
-   task_behaviour(_task_behaviour),
+  :task_behaviour(_task_behaviour),
    ordered_task(std::make_unique<OrderedTask>(task_behaviour)),
    goto_task(std::make_unique<GotoTask>(task_behaviour, wps)),
-   abort_task(std::make_unique<AlternateTask>(task_behaviour, wps)),
-   mode(TaskType::NONE),
-   active_task(NULL) {
+   abort_task(std::make_unique<AlternateTask>(task_behaviour, wps))
+{
   null_stats.reset();
 }
 

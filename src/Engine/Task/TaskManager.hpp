@@ -33,13 +33,13 @@ struct RangeAndRadial;
 class TaskManager: 
   private NonCopyable
 {
-  GlidePolar glide_polar;
+  GlidePolar glide_polar = GlidePolar::Invalid();
 
   /**
    * Same as #glide_polar, but with the "safety" MacCready setting
    * applied.
    */
-  GlidePolar safety_polar;
+  GlidePolar safety_polar = GlidePolar::Invalid();
 
   TaskBehaviour task_behaviour;
 
@@ -47,8 +47,8 @@ class TaskManager:
   const std::unique_ptr<GotoTask> goto_task;
   const std::unique_ptr<AlternateTask> abort_task;
 
-  TaskType mode;
-  AbstractTask* active_task;
+  TaskType mode = TaskType::NONE;
+  AbstractTask* active_task = nullptr;
 
   TaskStats null_stats;
 
