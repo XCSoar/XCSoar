@@ -164,9 +164,9 @@ zlib = ZlibProject(
 )
 
 freetype = MesonProject(
-    'http://download.savannah.gnu.org/releases/freetype/freetype-2.13.1.tar.xz',
-    'http://downloads.sourceforge.net/project/freetype/freetype2/2.13.1/freetype-2.13.1.tar.xz',
-    'ea67e3b019b1104d1667aa274f5dc307d8cbd606b399bc32df308a77f1a564bf',
+    'http://download.savannah.gnu.org/releases/freetype/freetype-2.13.2.tar.xz',
+    'http://downloads.sourceforge.net/project/freetype/freetype2/2.13.2/freetype-2.13.2.tar.xz',
+    '2d8d5917a1983ebd04921f2993a88858d6f72dec',
     'lib/libfreetype.a',
     [
         '-Dbrotli=disabled',
