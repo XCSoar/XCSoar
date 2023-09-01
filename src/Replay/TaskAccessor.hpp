@@ -44,7 +44,8 @@ public:
 
   [[gnu::pure]]
   unsigned size() const noexcept {
-    return task_manager.TaskSize();
+    const TaskInterface *task = task_manager.GetActiveTask();
+    return task != nullptr ? task->TaskSize() : 0;
   }
 
   [[gnu::pure]]

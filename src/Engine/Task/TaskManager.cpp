@@ -377,15 +377,6 @@ TaskManager::Reset() noexcept
   glide_polar.SetCruiseEfficiency(1);
 }
 
-unsigned
-TaskManager::TaskSize() const noexcept
-{
-  if (active_task)
-    return active_task->TaskSize();
-
-  return 0;
-}
-
 GeoPoint
 TaskManager::RandomPointInTask(const unsigned index, const double mag) const noexcept
 {

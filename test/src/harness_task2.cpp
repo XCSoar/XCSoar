@@ -6,6 +6,7 @@
 #include "harness_waypoints.hpp"
 
 #include "Task/Factory/AbstractTaskFactory.hpp"
+#include "Task/Ordered/OrderedTask.hpp"
 #include "Task/Ordered/Points/StartPoint.hpp"
 #include "Task/Ordered/Points/FinishPoint.hpp"
 #include "Task/Ordered/Points/IntermediatePoint.hpp"
@@ -57,7 +58,8 @@ bool test_task_bad(TaskManager& task_manager,
   bfact.UpdateStatsGeometry();
   ok (!IsError(bfact.Validate()), "ok with zero tps (just start and finish)", 0);
 
-  ok (bfact.Remove(task_manager.TaskSize()-1,false),"remove finish manually",0);
+  ok(bfact.Remove(task_manager.GetOrderedTask().TaskSize() - 1, false),
+     "remove finish manually", 0);
   bfact.UpdateStatsGeometry();
   ok (IsError(bfact.Validate()), "aat is invalid (no finish)", 0);
 

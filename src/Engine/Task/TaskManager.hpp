@@ -218,14 +218,6 @@ public:
   }
 
   /**
-   * Size of active task
-   *
-   * @return Number of taskpoints in active task
-   */
-  [[gnu::pure]]
-  unsigned TaskSize() const noexcept;
-
-  /**
    * Check whether ordered task is valid
    *
    * @return True if task is valid
