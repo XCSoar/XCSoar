@@ -13,20 +13,16 @@ WriteAngleDMM(BufferedOutputStream &writer, const Angle angle, bool is_latitude)
   const auto dmm = angle.ToDMM();
 
   // Save them into the buffer string
-  writer.Format(is_latitude ? "%02u%02u.%03u" : "%03u%02u.%03u",
-                dmm.degrees, dmm.minutes, dmm.decimal_minutes);
-
-  // Attach the buffer string to the output
-  if (is_latitude)
-    writer.Write(dmm.positive ? "N" : "S");
-  else
-    writer.Write(dmm.positive ? "E" : "W");
+  writer.Fmt("{:0{}}{:02}.{:03}{}",
+             dmm.degrees, is_latitude ? 2 : 3,
+             dmm.minutes, dmm.decimal_minutes,
+             is_latitude ? (dmm.positive ? "N" : "S") : (dmm.positive ? "E" : "W"));
 }
 
 static void
 WriteAltitude(BufferedOutputStream &writer, double altitude)
 {
-  writer.Format("%dM", (int)altitude);
+  writer.Fmt("{}M", (int)altitude);
 }
 
 static void
@@ -156,7 +152,7 @@ WriteCup(BufferedOutputStream &writer, const Waypoint &wp)
   if ((wp.type == Waypoint::Type::AIRFIELD ||
        wp.type == Waypoint::Type::OUTLANDING) &&
       wp.runway.IsDirectionDefined())
-    writer.Format("%03u", wp.runway.GetDirectionDegrees());
+    writer.Fmt("{:03}", wp.runway.GetDirectionDegrees());
 
   writer.Write(',');
 
@@ -164,14 +160,14 @@ WriteCup(BufferedOutputStream &writer, const Waypoint &wp)
   if ((wp.type == Waypoint::Type::AIRFIELD ||
        wp.type == Waypoint::Type::OUTLANDING) &&
       wp.runway.IsLengthDefined())
-    writer.Format("%03uM", wp.runway.GetLength());
+    writer.Fmt("{:03}M", wp.runway.GetLength());
 
   writer.Write(',');
 
   // Write Airport Frequency
   if (wp.radio_frequency.IsDefined()) {
     const unsigned freq = wp.radio_frequency.GetKiloHertz();
-    writer.Format("\"%u.%03u\"", freq / 1000, freq % 1000);
+    writer.Fmt("\"{}.{:03}\"", freq / 1000, freq % 1000);
   }
 
   writer.Write(',');
