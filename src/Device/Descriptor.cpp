@@ -206,7 +206,8 @@ try {
     const std::lock_guard lock{mutex};
     device = new_device;
 
-    if (driver->HasPassThrough() && config.use_second_device)
+    if (driver->HasPassThrough() && config.use_second_device &&
+        second_driver->CreateOnPort != nullptr)
       second_device = second_driver->CreateOnPort(config, *port);
   } else
     port->StartRxThread();
