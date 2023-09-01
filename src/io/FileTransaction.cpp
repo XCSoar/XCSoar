@@ -2,8 +2,8 @@
 // Copyright The XCSoar Project
 
 #include "FileTransaction.hpp"
-#include "system/ConvertPathName.hpp"
-#include "system/Error.hxx"
+#include "lib/fmt/PathFormatter.hpp"
+#include "lib/fmt/SystemError.hxx"
 #include "system/FileUtil.hpp"
 
 #include <cassert>
@@ -41,10 +41,9 @@ FileTransaction::Commit()
 
   if (!File::Replace(temporary_path, final_path)) {
 #ifdef HAVE_POSIX
-    throw FormatErrno("Failed to commit %s", temporary_path.c_str());
+    throw FmtErrno("Failed to commit %s", temporary_path);
 #else
-    throw FormatLastError("Failed to commit %s",
-                          (const char *)NarrowPathName(temporary_path));
+    throw FmtLastError("Failed to commit {}", temporary_path);
 #endif
   }
 

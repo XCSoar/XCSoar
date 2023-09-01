@@ -3,8 +3,8 @@
 
 #include "WPASupplicant.hpp"
 #include "lib/fmt/ToBuffer.hxx"
+#include "lib/fmt/SystemError.hxx"
 #include "net/AllocatedSocketAddress.hxx"
-#include "system/Error.hxx"
 #include "util/NumberParser.hpp"
 #include "util/StringCompare.hxx"
 
@@ -28,7 +28,7 @@ WPASupplicant::Connect(const char *path)
     throw MakeErrno("Failed to bind socket");
 
   if (!fd.Connect(peer_address))
-    throw FormatErrno("Failed to connect to %s", path);
+    throw FmtErrno("Failed to connect to {}", path);
 }
 
 void
