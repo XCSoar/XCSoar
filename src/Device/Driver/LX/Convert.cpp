@@ -15,25 +15,19 @@
 using std::string_view_literals::operator""sv;
 
 struct Context {
-  uint8_t flight_no;
-  char date[7];
+  uint8_t flight_no = 0;
+  char date[7]{};
   LXN::FlightInfo flight_info;
-  unsigned time, origin_time;
-  int origin_latitude, origin_longitude;
-  bool is_event;
+  unsigned time = 0, origin_time = 0;
+  int origin_latitude = 0, origin_longitude = 0;
+  bool is_event = false;
   LXN::Event event;
   char fix_stat;
-  char vendor[3];
+  char vendor[3]{};
   LXN::ExtensionConfig k_ext, b_ext;
 
-  Context()
-    :flight_no(0),
-     time(0), origin_time(0),
-     origin_latitude(0), origin_longitude(0),
-     is_event(false) {
-    memset(date, 0, sizeof(date));
+  constexpr Context() noexcept {
     flight_info.competition_class_id = 0xff;
-    memset(vendor, 0, sizeof(vendor));
     k_ext.num = 0;
     b_ext.num = 0;
   }
