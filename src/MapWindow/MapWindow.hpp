@@ -97,7 +97,7 @@ protected:
    */
   MapWindowProjection render_projection;
 
-  const Waypoints *waypoints = nullptr;
+  Waypoints *waypoints = nullptr;
   TopographyStore *topography = nullptr;
   CachedTopographyRenderer *topography_renderer = nullptr;
 
@@ -184,7 +184,7 @@ public:
     return follow_mode == FOLLOW_PAN;
   }
 
-  void SetWaypoints(const Waypoints *_waypoints) noexcept {
+  void SetWaypoints(Waypoints *_waypoints) noexcept {
     waypoints = _waypoints;
     waypoint_renderer.SetWaypoints(waypoints);
   }

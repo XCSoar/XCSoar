@@ -5,14 +5,14 @@
 #include "Computer/GlideComputer.hpp"
 #include "Protection.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
-#include "Components.hpp"
 #include "Hardware/CPU.hpp"
 
 /**
  * Constructor of the CalculationThread class
  * @param _glide_computer The GlideComputer used for the CalculationThread
  */
-CalculationThread::CalculationThread(GlideComputer &_glide_computer)
+CalculationThread::CalculationThread(DeviceBlackboard &_device_blackboard,
+                                     GlideComputer &_glide_computer) noexcept
   :WorkerThread("CalcThread",
 #ifdef KOBO
                 /* throttle more on the Kobo, because the EPaper
@@ -24,18 +24,26 @@ CalculationThread::CalculationThread(GlideComputer &_glide_computer)
                 std::chrono::milliseconds{100},
                 std::chrono::milliseconds{50}),
    force(false),
+   device_blackboard(_device_blackboard),
    glide_computer(_glide_computer) {
 }
 
 void
-CalculationThread::SetComputerSettings(const ComputerSettings &new_value)
+CalculationThread::SetComputerSettings(const ComputerSettings &new_value) noexcept
 {
   const std::lock_guard lock{mutex};
   settings_computer = new_value;
 }
 
 void
-CalculationThread::SetScreenDistanceMeters(double new_value)
+CalculationThread::SetPolarSettings(const PolarSettings &new_value) noexcept
+{
+  const std::lock_guard lock{mutex};
+  settings_computer.polar = new_value;
+}
+
+void
+CalculationThread::SetScreenDistanceMeters(double new_value) noexcept
 {
   const std::lock_guard lock{mutex};
   screen_distance_meters = new_value;
@@ -55,12 +63,12 @@ CalculationThread::Tick() noexcept
 
   // update and transfer master info to glide computer
   {
-    const std::lock_guard lock{device_blackboard->mutex};
+    const std::lock_guard lock{device_blackboard.mutex};
 
-    gps_updated = device_blackboard->Basic().location_available.Modified(glide_computer.Basic().location_available);
+    gps_updated = device_blackboard.Basic().location_available.Modified(glide_computer.Basic().location_available);
 
     // Copy data from DeviceBlackboard to GlideComputerBlackboard
-    glide_computer.ReadBlackboard(device_blackboard->Basic());
+    glide_computer.ReadBlackboard(device_blackboard.Basic());
   }
 
   bool force;
@@ -88,8 +96,8 @@ CalculationThread::Tick() noexcept
   // should be changed in DoCalculations, so we only need to write
   // that one back (otherwise we may write over new data)
   {
-    const std::lock_guard lock{device_blackboard->mutex};
-    device_blackboard->ReadBlackboard(glide_computer.Calculated());
+    const std::lock_guard lock{device_blackboard.mutex};
+    device_blackboard.ReadBlackboard(glide_computer.Calculated());
   }
 
   // if (new GPS data)
@@ -104,7 +112,7 @@ CalculationThread::Tick() noexcept
 }
 
 void
-CalculationThread::ForceTrigger()
+CalculationThread::ForceTrigger() noexcept
 {
   {
     const std::lock_guard lock{mutex};

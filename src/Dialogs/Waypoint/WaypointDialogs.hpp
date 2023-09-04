@@ -11,12 +11,12 @@ class Waypoints;
 class OrderedTask;
 
 WaypointPtr
-ShowWaypointListDialog(const GeoPoint &location,
+ShowWaypointListDialog(Waypoints &waypoints, const GeoPoint &location,
                        OrderedTask *ordered_task = nullptr,
                        unsigned ordered_task_index = 0);
 
 void
-dlgConfigWaypointsShowModal();
+dlgConfigWaypointsShowModal(Waypoints &waypoints) noexcept;
 
 enum class WaypointEditResult {
   /** editing was canceled by the user */
@@ -36,11 +36,11 @@ WaypointEditResult
 dlgWaypointEditShowModal(Waypoint &way_point);
 
 void
-dlgWaypointDetailsShowModal(WaypointPtr waypoint,
+dlgWaypointDetailsShowModal(Waypoints *waypoints, WaypointPtr waypoint,
                             bool allow_navigation = true,
                             bool allow_edit = false);
 
 bool
-PopupNearestWaypointDetails(const Waypoints &way_points,
+PopupNearestWaypointDetails(Waypoints &waypoints,
                             const GeoPoint &location,
                             double range);

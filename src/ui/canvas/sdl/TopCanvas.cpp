@@ -4,7 +4,7 @@
 #include "ui/canvas/custom/TopCanvas.hpp"
 #include "ui/canvas/Features.hpp"
 #include "ui/dim/Size.hpp"
-#include "util/RuntimeError.hxx"
+#include "lib/fmt/RuntimeError.hxx"
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
@@ -55,8 +55,8 @@ TopCanvas::TopCanvas(UI::Display &_display, SDL_Window *_window)
 #ifdef USE_MEMORY_CANVAS
   renderer = SDL_CreateRenderer(window, -1, 0);
   if (renderer == nullptr)
-    throw FormatRuntimeError("SDL_CreateRenderer(%p, %d, %d) has failed: %s",
-                             window, -1, 0, ::SDL_GetError());
+    throw FmtRuntimeError("SDL_CreateRenderer({}, {}, {}) has failed: {}",
+                          (const void *)window, -1, 0, ::SDL_GetError());
 
   int width, height;
   SDL_GetRendererOutputSize(renderer, &width, &height);
@@ -64,16 +64,18 @@ TopCanvas::TopCanvas(UI::Display &_display, SDL_Window *_window)
                               SDL_TEXTUREACCESS_STREAMING,
                               width, height);
   if (texture == nullptr)
-    throw FormatRuntimeError("SDL_CreateTexture(%p, %d, %d, %d, %d) has failed: %s",
-                             renderer, (int) SDL_PIXELFORMAT_UNKNOWN,
-                             (int) SDL_TEXTUREACCESS_STREAMING, width, height,
-                             ::SDL_GetError());
+    throw FmtRuntimeError("SDL_CreateTexture({}, {}, {}, {}, {}) has failed: {}",
+                          (const void *)renderer,
+                          (unsigned)SDL_PIXELFORMAT_UNKNOWN,
+                          (unsigned)SDL_TEXTUREACCESS_STREAMING,
+                          width, height,
+                          ::SDL_GetError());
 #endif
 
 #ifdef ENABLE_OPENGL
   if (::SDL_GL_CreateContext(window) == nullptr)
-    throw FormatRuntimeError("SDL_GL_CreateContext(%p) has failed: %s",
-                             window, ::SDL_GetError());
+    throw FmtRuntimeError("SDL_GL_CreateContext({}) has failed: {}",
+                          (const void *)window, ::SDL_GetError());
 
   LogFormat("SDL_GL config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d",
             GetConfigAttrib(SDL_GL_RED_SIZE, 0),

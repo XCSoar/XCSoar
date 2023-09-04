@@ -95,32 +95,24 @@ class StaticCache {
 
 		template<typename K, typename U>
 		void Replace(K &&_key, U &&value) {
-			pair->Replace(std::forward<K>(_key),
-				      std::forward<U>(value));
+			if constexpr (std::is_assignable_v<Data &, decltype(value)>) {
+				/* can replace key and value */
+				pair->Replace(std::forward<K>(_key),
+					      std::forward<U>(value));
+			} else {
+				/* not assignable, fall back to
+				   destruct & construct */
+				Destruct();
+				Construct(std::forward<K>(_key),
+					  std::forward<U>(value));
+			}
 		}
 	};
 
-	struct ItemHash : Hash {
-		using Hash::operator();
-
+	struct ItemGetKey {
 		[[gnu::pure]]
-		std::size_t operator()(const Item &a) const noexcept {
-			return Hash::operator()(a.GetKey());
-		}
-	};
-
-	struct ItemEqual : Equal {
-		using Equal::operator();
-
-		[[gnu::pure]]
-		bool operator()(const Item &a, const Item &b) const noexcept {
-			return Equal::operator()(a.GetKey(), b.GetKey());
-		}
-
-		template<typename A>
-		[[gnu::pure]]
-		bool operator()(A &&a, const Item &b) const noexcept {
-			return Equal::operator()(std::forward<A>(a), b.GetKey());
+		const Key &operator()(const Item &item) const noexcept {
+			return item.GetKey();
 		}
 	};
 
@@ -133,7 +125,10 @@ class StaticCache {
 
 	ItemList chronological_list;
 
-	using KeyMap = IntrusiveHashSet<Item, table_size, ItemHash, ItemEqual>;
+	using KeyMap =
+		IntrusiveHashSet<Item, table_size,
+				 IntrusiveHashSetOperators<Hash, Equal,
+							   ItemGetKey>>;
 
 	KeyMap map;
 
@@ -225,6 +220,15 @@ public:
 	}
 
 	/**
+	 * Obtain a reference to the key of an item that is currently
+	 * in the cache.
+	 */
+	[[gnu::const]]
+	static const Key &KeyOf(const Data &data) noexcept {
+		return Item::Cast(const_cast<Data &>(data)).GetKey();
+	}
+
+	/**
 	 * Look up an item by its key.  Returns nullptr if no such
 	 * item exists.
 	 */
@@ -275,7 +279,16 @@ public:
 			map.insert_commit(position, item);
 			return item.GetData();
 		} else {
-			position->ReplaceData(std::forward<U>(data));
+			if constexpr (std::is_assignable_v<Data &, decltype(data)>) {
+				/* can replace only the value */
+				position->ReplaceData(std::forward<U>(data));
+			} else {
+				/* not assignable, fall back to
+				   destruct & construct */
+				position->Destruct();
+				position->Construct(std::forward<K>(key), std::forward<U>(data));
+			}
+
 			return position->GetData();
 		}
 	}

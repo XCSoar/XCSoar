@@ -8,13 +8,15 @@
 #include "UIGlobals.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
-#include "Device/device.hpp"
+#include "Device/MultipleDevices.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Form/DataField/Float.hpp"
 #include "Form/DataField/Boolean.hpp"
 #include "time/PeriodClock.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 #include "Math/Util.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 static double VegaDemoW = 0;
 static double VegaDemoV = 0;
@@ -33,7 +35,7 @@ VegaWriteDemo()
             iround(VegaDemoV * 10));
 
   PopupOperationEnvironment env;
-  VarioWriteNMEA(dbuf, env);
+  backend_components->devices->VegaWriteNMEA(dbuf, env);
 }
 
 class VegaDemoWidget final
@@ -97,8 +99,8 @@ void
 dlgVegaDemoShowModal()
 {
   PopupOperationEnvironment env;
-  VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"), env);
-  VarioWriteNMEA(_T("PDVSC,S,DemoMode,3"), env);
+  backend_components->devices->VegaWriteNMEA(_T("PDVSC,S,DemoMode,0"), env);
+  backend_components->devices->VegaWriteNMEA(_T("PDVSC,S,DemoMode,3"), env);
 
   const DialogLook &look = UIGlobals::GetDialogLook();
   TWidgetDialog<VegaDemoWidget>
@@ -109,5 +111,5 @@ dlgVegaDemoShowModal()
   dialog.ShowModal();
 
   // deactivate demo.
-  VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"), env);
+  backend_components->devices->VegaWriteNMEA(_T("PDVSC,S,DemoMode,0"), env);
 }

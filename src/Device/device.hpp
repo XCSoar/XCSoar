@@ -3,16 +3,11 @@
 
 #pragma once
 
-#include <tchar.h>
-
-class DeviceDescriptor;
-class OperationEnvironment;
+struct SystemSettings;
+class MultipleDevices;
 
 void
-VarioWriteNMEA(const TCHAR *Text, OperationEnvironment &env);
+devStartup(MultipleDevices &devices, const SystemSettings &settings);
 
-DeviceDescriptor *devVarioFindVega();
-
-void devStartup();
-void devShutdown();
-void devRestart();
+void
+devRestart(MultipleDevices &devices, const SystemSettings &settings);

@@ -4,6 +4,8 @@
 #include "Startup.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
+#include "DataComponents.hpp"
 #include "DataGlobals.hpp"
 #include "ui/canvas/Features.hpp" // for SOFTWARE_ROTATE_DISPLAY
 #include "Profile/Profile.hpp"
@@ -32,6 +34,7 @@
 #include "Waypoint/WaypointDetailsReader.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
+#include "Device/Factory.hpp"
 #include "Device/device.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Topography/TopographyStore.hpp"
@@ -112,6 +115,7 @@ static TaskManager *task_manager;
 static GlideComputerEvents *glide_computer_events;
 static AllMonitors *all_monitors;
 static GlideComputerTaskEvents *task_events;
+static DeviceFactory *device_factory;
 
 static bool
 LoadProfile()
@@ -145,6 +149,8 @@ AfterStartup()
     InputEvents::processGlideComputer(GCE_STARTUP_REAL);
   }
 
+  auto &way_points = *data_components->waypoints;
+
   const auto defaultTask = LoadDefaultTask(CommonInterface::GetComputerSettings().task,
                                            &way_points);
   if (defaultTask) {
@@ -154,7 +160,7 @@ AfterStartup()
       way_points.Optimise();
     }
 
-    protected_task_manager->TaskCommit(*defaultTask);
+    backend_components->protected_task_manager->TaskCommit(*defaultTask);
   }
 
   task_manager->Resume();
@@ -184,7 +190,7 @@ MainWindow::LoadTerrain() noexcept
 
     terrain_loader->Start(file_cache, path, *terrain_loader_env,
                           terrain_loader_notify);
-  } else if (terrain != nullptr) {
+  } else if (data_components->terrain) {
     /* the map file has been disabled - remove the terrain from all
        subsystems and dispose the object */
 
@@ -215,7 +221,8 @@ try {
   DataGlobals::SetTerrain(std::move(new_terrain));
   DataGlobals::UpdateHome(false);
 
-  SetAirspaceGroundLevels(airspace_database, *terrain);
+  SetAirspaceGroundLevels(*data_components->airspaces,
+                          *data_components->terrain);
 } catch (...) {
   LogError(std::current_exception(), "LoadTerrain failed");
 }
@@ -332,43 +339,61 @@ Startup(UI::Display &display)
 
   file_cache = new FileCache(GetCachePath());
 
+  data_components = new DataComponents();
+  backend_components = new BackendComponents();
+
   ReadLanguageFile();
 
   InputEvents::readFile();
 
+  backend_components->igc_logger = std::make_unique<Logger>();
+  backend_components->nmea_logger = std::make_unique<NMEALogger>();
+
   // Initialize DeviceBlackboard
-  device_blackboard = new DeviceBlackboard();
-  devices = new MultipleDevices(*asio_thread, *global_cares_channel);
+  device_factory = new DeviceFactory{
+    *asio_thread, *global_cares_channel,
+#ifdef ANDROID
+    *context, permission_manager,
+    bluetooth_helper, ioio_helper, usb_serial_helper,
+#endif
+  };
+
+  backend_components->devices = std::make_unique<MultipleDevices>(*backend_components->device_blackboard,
+                                                                  backend_components->nmea_logger.get(),
+                                                                  *device_factory);
 
   // Initialize main blackboard data
   task_events = new GlideComputerTaskEvents();
-  task_manager = new TaskManager(computer_settings.task, way_points);
+  task_manager = new TaskManager(computer_settings.task,
+                                 *data_components->waypoints);
   task_manager->SetTaskEvents(*task_events);
   task_manager->Reset();
 
-  protected_task_manager =
-    new ProtectedTaskManager(*task_manager, computer_settings.task);
+  backend_components->protected_task_manager =
+    std::make_unique<ProtectedTaskManager>(*task_manager, computer_settings.task);
 
   // Read the terrain file
   main_window->LoadTerrain();
 
-  logger = new Logger();
-  nmea_logger = new NMEALogger();
+  backend_components->glide_computer =
+    std::make_unique<GlideComputer>(computer_settings,
+                                    *data_components->waypoints,
+                                    *data_components->airspaces,
+                                    *backend_components->protected_task_manager,
+                                    *task_events);
+  backend_components->glide_computer->SetTerrain(data_components->terrain.get());
+  backend_components->glide_computer->SetLogger(backend_components->igc_logger.get());
+  backend_components->glide_computer->Initialise();
 
-  glide_computer = new GlideComputer(computer_settings,
-                                     way_points, airspace_database,
-                                     *protected_task_manager,
-                                     *task_events);
-  glide_computer->SetTerrain(terrain);
-  glide_computer->SetLogger(logger);
-  glide_computer->Initialise();
-
-  replay = new Replay(logger, *protected_task_manager);
+  backend_components->replay =
+    std::make_unique<Replay>(*backend_components->device_blackboard,
+                             backend_components->igc_logger.get(),
+                             *backend_components->protected_task_manager);
 
 #ifdef HAVE_CMDLINE_REPLAY
   if (CommandLine::replay_path != nullptr) {
     try {
-      replay->Start(Path(CommandLine::replay_path));
+      backend_components->replay->Start(Path(CommandLine::replay_path));
     } catch (...) {
       LogError(std::current_exception());
     }
@@ -388,10 +413,10 @@ Startup(UI::Display &display)
   task_manager->SetGlidePolar(gp);
 
   // Read the topography file(s)
-  topography = new TopographyStore();
+  data_components->topography = std::make_unique<TopographyStore>();
   {
     SubOperationEnvironment sub_env(operation, 0, 256);
-    LoadConfiguredTopography(*topography, sub_env);
+    LoadConfiguredTopography(*data_components->topography, sub_env);
   }
 
   // Read the waypoint files
@@ -399,25 +424,29 @@ Startup(UI::Display &display)
   {
     SubOperationEnvironment sub_env(operation, 256, 512);
     sub_env.SetText(_("Loading Waypoints..."));
-    WaypointGlue::LoadWaypoints(way_points, terrain, sub_env);
+    WaypointGlue::LoadWaypoints(*data_components->waypoints,
+                                data_components->terrain.get(),
+                                sub_env);
   }
 
   // Read and parse the airfield info file
   {
     SubOperationEnvironment sub_env(operation, 512, 768);
     sub_env.SetText(_("Loading Airfield Details File..."));
-    WaypointDetails::ReadFileFromProfile(way_points, sub_env);
+    WaypointDetails::ReadFileFromProfile(*data_components->waypoints, sub_env);
   }
 
   // Set the home waypoint
-  WaypointGlue::SetHome(way_points, terrain,
+  WaypointGlue::SetHome(*data_components->waypoints,
+                        data_components->terrain.get(),
                         CommonInterface::SetComputerSettings().poi,
                         CommonInterface::SetComputerSettings().team_code,
-                        device_blackboard, false);
+                        backend_components->device_blackboard.get(),
+                        false);
 
   // ReSynchronise the blackboards here since SetHome touches them
-  device_blackboard->Merge();
-  CommonInterface::ReadBlackboardBasic(device_blackboard->Basic());
+  backend_components->device_blackboard->Merge();
+  CommonInterface::ReadBlackboardBasic(backend_components->device_blackboard->Basic());
 
   // Scan for weather forecast
   LogString("RASP load");
@@ -426,18 +455,20 @@ Startup(UI::Display &display)
   // Reads the airspace files
   {
     SubOperationEnvironment sub_env(operation, 768, 1024);
-    ReadAirspace(airspace_database, computer_settings.pressure,
+    ReadAirspace(*data_components->airspaces,
+                 computer_settings.pressure,
                  sub_env);
   }
 
-  if (terrain != nullptr)
-    SetAirspaceGroundLevels(airspace_database, *terrain);
+  if (data_components->terrain)
+    SetAirspaceGroundLevels(*data_components->airspaces,
+                            *data_components->terrain);
 
   {
     const AircraftState aircraft_state =
-      ToAircraftState(device_blackboard->Basic(),
-                      device_blackboard->Calculated());
-    ProtectedAirspaceWarningManager::ExclusiveLease lease(glide_computer->GetAirspaceWarnings());
+      ToAircraftState(backend_components->device_blackboard->Basic(),
+                      backend_components->device_blackboard->Calculated());
+    ProtectedAirspaceWarningManager::ExclusiveLease lease(backend_components->glide_computer->GetAirspaceWarnings());
     lease->Reset(aircraft_state);
   }
 
@@ -454,8 +485,11 @@ Startup(UI::Display &display)
   AudioVarioGlue::Configure(ui_settings.sound.vario);
 
   // Start the device thread(s)
-  operation.SetText(_("Starting devices"));
-  devStartup();
+  if (backend_components->devices != nullptr) {
+    operation.SetText(_("Starting devices"));
+    devStartup(*backend_components->devices,
+               CommonInterface::GetSystemSettings());
+  }
 
 /*
   -- Reset polar in case devices need the data
@@ -468,14 +502,14 @@ Startup(UI::Display &display)
 
   GlueMapWindow *map_window = main_window->GetMap();
   if (map_window != nullptr) {
-    map_window->SetWaypoints(&way_points);
-    map_window->SetTask(protected_task_manager);
-    map_window->SetRoutePlanner(&glide_computer->GetProtectedRoutePlanner());
-    map_window->SetGlideComputer(glide_computer);
-    map_window->SetAirspaces(&airspace_database);
+    map_window->SetWaypoints(data_components->waypoints.get());
+    map_window->SetTask(backend_components->protected_task_manager.get());
+    map_window->SetRoutePlanner(&backend_components->glide_computer->GetProtectedRoutePlanner());
+    map_window->SetGlideComputer(backend_components->glide_computer.get());
+    map_window->SetAirspaces(data_components->airspaces.get());
 
-    map_window->SetTopography(topography);
-    map_window->SetTerrain(terrain);
+    map_window->SetTopography(data_components->topography.get());
+    map_window->SetTerrain(data_components->terrain.get());
     map_window->SetRasp(rasp);
 
 #ifdef HAVE_NOAA
@@ -508,12 +542,12 @@ Startup(UI::Display &display)
   all_monitors = new AllMonitors();
 
   if (!is_simulator() && computer_settings.logger.enable_flight_logger) {
-    flight_logger = new GlueFlightLogger(live_blackboard);
-    flight_logger->SetPath(LocalPath(_T("flights.log")));
+    backend_components->flight_logger = std::make_unique<GlueFlightLogger>(live_blackboard);
+    backend_components->flight_logger->SetPath(LocalPath(_T("flights.log")));
   }
 
   if (computer_settings.logger.enable_nmea_logger)
-    nmea_logger->Enable();
+    backend_components->nmea_logger->Enable();
 
   LogString("ProgramStarted");
 
@@ -521,8 +555,8 @@ Startup(UI::Display &display)
   main_window->SetDefaultFocus();
 
   // Start calculation thread
-  merge_thread->Start();
-  calculation_thread->Start();
+  backend_components->merge_thread->Start();
+  backend_components->calculation_thread->Start();
 
   PageActions::Update();
 
@@ -577,16 +611,13 @@ Shutdown()
 
   // Stop logger and save igc file
   operation.SetText(_("Shutdown, saving logs..."));
-  if (logger != nullptr) {
+  if (backend_components->igc_logger != nullptr) {
     try {
-      logger->GUIStopLogger(CommonInterface::Basic(), true);
+      backend_components->igc_logger->GUIStopLogger(CommonInterface::Basic(), true);
     } catch (...) {
       LogError(std::current_exception());
     }
   }
-
-  delete flight_logger;
-  flight_logger = nullptr;
 
   delete all_monitors;
   all_monitors = nullptr;
@@ -606,7 +637,10 @@ Shutdown()
   operation.SetText(_("Shutdown, please wait..."));
 
   // Close any device connections
-  devShutdown();
+  if (backend_components->devices != nullptr) {
+    LogString("Stop devices");
+    backend_components->devices->Close();
+  }
 
   // Stop threads
   LogString("Stop threads");
@@ -618,25 +652,23 @@ Shutdown()
     draw_thread->BeginStop();
 #endif
 
-  if (calculation_thread != nullptr)
-    calculation_thread->BeginStop();
+  if (backend_components->calculation_thread)
+    backend_components->calculation_thread->BeginStop();
 
-  if (merge_thread != nullptr)
-    merge_thread->BeginStop();
+  if (backend_components->merge_thread)
+    backend_components->merge_thread->BeginStop();
 
   // Wait for the calculations thread to finish
   LogString("Waiting for calculation thread");
 
-  if (merge_thread != nullptr) {
-    merge_thread->Join();
-    delete merge_thread;
-    merge_thread = nullptr;
+  if (backend_components->merge_thread) {
+    backend_components->merge_thread->Join();
+    backend_components->merge_thread.reset();
   }
 
-  if (calculation_thread != nullptr) {
-    calculation_thread->Join();
-    delete calculation_thread;
-    calculation_thread = nullptr;
+  if (backend_components->calculation_thread) {
+    backend_components->calculation_thread->Join();
+    backend_components->calculation_thread.reset();
   }
 
   //  Wait for the drawing thread to finish
@@ -660,16 +692,13 @@ Shutdown()
   operation.SetText(_("Shutdown, saving task..."));
 
   LogString("Save default task");
-  if (protected_task_manager != nullptr) {
+  if (backend_components->protected_task_manager) {
     try {
-      protected_task_manager->TaskSaveDefault();
+      backend_components->protected_task_manager->TaskSaveDefault();
     } catch (...) {
       LogError(std::current_exception());
     }
   }
-
-  // Clear waypoint database
-  way_points.Clear();
 
   operation.SetText(_("Shutdown, please wait..."));
 
@@ -677,26 +706,16 @@ Shutdown()
 
   delete terrain_loader;
   terrain_loader = nullptr;
-  delete terrain;
-  terrain = nullptr;
-  delete topography;
-  topography = nullptr;
 
-  delete nmea_logger;
-  nmea_logger = nullptr;
+  backend_components->devices.reset();
+  delete device_factory;
+  device_factory = nullptr;
 
-  delete replay;
-  replay = nullptr;
+  backend_components->nmea_logger.reset();
 
-  delete devices;
-  devices = nullptr;
-  delete device_blackboard;
-  device_blackboard = nullptr;
-
-  if (protected_task_manager != nullptr) {
-    protected_task_manager->SetRoutePlanner(nullptr);
-    delete protected_task_manager;
-    protected_task_manager = nullptr;
+  if (backend_components->protected_task_manager) {
+    backend_components->protected_task_manager->SetRoutePlanner(nullptr);
+    backend_components->protected_task_manager.reset();
   }
 
   delete task_manager;
@@ -725,18 +744,17 @@ Shutdown()
   LogString("Close Progress Dialog");
   operation.Hide();
 
-  delete glide_computer;
-  glide_computer = nullptr;
   delete task_events;
   task_events = nullptr;
-  delete logger;
-  logger = nullptr;
-
-  // Clear airspace database
-  airspace_database.Clear();
 
   // Destroy FlarmNet records
   DeinitTrafficGlobals();
+
+  delete backend_components;
+  backend_components = nullptr;
+
+  delete data_components;
+  data_components = nullptr;
 
   delete file_cache;
   file_cache = nullptr;

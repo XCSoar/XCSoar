@@ -9,6 +9,7 @@
 #include "NMEA/MoreData.hpp"
 
 class DeviceBlackboard;
+class MultipleDevices;
 
 /**
  * The MergeThread collects new data from the DeviceBlackboard, merges
@@ -16,6 +17,8 @@ class DeviceBlackboard;
  */
 class MergeThread final : public WorkerThread {
   DeviceBlackboard &device_blackboard;
+
+  MultipleDevices *const devices;
 
   /**
    * The previous values at the time of the last GPS fix (last
@@ -33,13 +36,14 @@ class MergeThread final : public WorkerThread {
   FlarmComputer flarm_computer;
 
 public:
-  MergeThread(DeviceBlackboard &_device_blackboard);
+  MergeThread(DeviceBlackboard &_device_blackboard,
+              MultipleDevices *_devices) noexcept;
 
   /**
    * This method is called during XCSoar startup, for the initial run
    * of the MergeThread.
    */
-  void FirstRun() {
+  void FirstRun() noexcept {
     assert(!IsDefined());
 
     Process();
@@ -54,7 +58,7 @@ public:
   }
 
 private:
-  void Process();
+  void Process() noexcept;
 
 protected:
   void Tick() noexcept override;

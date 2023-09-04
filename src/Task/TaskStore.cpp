@@ -4,7 +4,6 @@
 #include "Task/TaskStore.hpp"
 #include "Task/TaskFile.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Components.hpp"
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
 #include "LocalPath.hpp"
@@ -85,14 +84,15 @@ TaskStore::Scan(bool extra)
 TaskStore::Item::~Item() noexcept = default;
 
 const OrderedTask *
-TaskStore::Item::GetTask(const TaskBehaviour &task_behaviour) noexcept
+TaskStore::Item::GetTask(const TaskBehaviour &task_behaviour,
+                         Waypoints *waypoints) noexcept
 {
   if (task != nullptr)
     return task.get();
 
   if (valid)
     task = TaskFile::GetTask(filename, task_behaviour,
-                             &way_points, task_index);
+                             waypoints, task_index);
 
   if (task == nullptr)
     valid = false;
@@ -115,7 +115,8 @@ TaskStore::GetPath(unsigned index) const
 }
 
 const OrderedTask *
-TaskStore::GetTask(unsigned index, const TaskBehaviour &task_behaviour)
+TaskStore::GetTask(unsigned index, const TaskBehaviour &task_behaviour,
+                   Waypoints *waypoints)
 {
-  return store[index].GetTask(task_behaviour);
+  return store[index].GetTask(task_behaviour, waypoints);
 }

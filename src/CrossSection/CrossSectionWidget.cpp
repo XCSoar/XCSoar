@@ -6,7 +6,7 @@
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Interface.hpp"
-#include "Components.hpp"
+#include "DataComponents.hpp"
 
 #include <algorithm> // for std::clamp()
 
@@ -47,8 +47,8 @@ CrossSectionWidget::Prepare(ContainerWindow &parent,
     std::make_unique<CrossSectionWindow>(look.cross_section,
                                          look.map.airspace,
                                          look.chart, look.info_box);
-  w->SetAirspaces(&airspace_database);
-  w->SetTerrain(terrain);
+  w->SetAirspaces(data_components.airspaces.get());
+  w->SetTerrain(data_components.terrain.get());
   w->Create(parent, rc, style);
 
   SetWindow(std::move(w));

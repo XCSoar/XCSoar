@@ -6,15 +6,18 @@
 #include "AbstractReplay.hpp"
 #include "Replay/DemoReplay.hpp"
 
+class DeviceBlackboard;
 class ProtectedTaskManager;
 
 class DemoReplayGlue
   : public AbstractReplay, private DemoReplay
 {
-  ProtectedTaskManager* task_manager;
+  DeviceBlackboard &device_blackboard;
+  ProtectedTaskManager &task_manager;
 
 public:
-  DemoReplayGlue(ProtectedTaskManager &_task_manager);
+  DemoReplayGlue(DeviceBlackboard &_device_blackboard,
+                 ProtectedTaskManager &_task_manager) noexcept;
 
   bool Update(NMEAInfo &data) override;
 };

@@ -16,11 +16,12 @@
 #include "Units/Units.hpp"
 #include "Protection.hpp"
 #include "UtilsSettings.hpp"
-#include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Audio/VarioGlue.hpp"
 #include "system/Path.hpp"
 #include "util/StringCompare.hxx"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 void
 InputEvents::eventSounds(const TCHAR *misc)
@@ -158,7 +159,7 @@ InputEvents::eventAudioDeadband(const TCHAR *misc)
 void
 InputEvents::eventBugs(const TCHAR *misc)
 {
-  if (protected_task_manager == NULL)
+  if (!backend_components->protected_task_manager)
     return;
 
   PolarSettings &settings = CommonInterface::SetComputerSettings().polar;
@@ -185,7 +186,7 @@ InputEvents::eventBugs(const TCHAR *misc)
 
   if (BUGS != oldBugs) {
     settings.SetBugs(BUGS);
-    protected_task_manager->SetGlidePolar(settings.glide_polar_task);
+    backend_components->SetTaskPolar(settings);
   }
 }
 
@@ -199,11 +200,11 @@ InputEvents::eventBugs(const TCHAR *misc)
 void
 InputEvents::eventBallast(const TCHAR *misc)
 {
-  if (protected_task_manager == NULL)
+  if (!backend_components->protected_task_manager)
     return;
 
-  GlidePolar &polar =
-    CommonInterface::SetComputerSettings().polar.glide_polar_task;
+  auto &settings = CommonInterface::SetComputerSettings().polar;
+  GlidePolar &polar = settings.glide_polar_task;
   auto BALLAST = polar.GetBallast();
   auto oldBallast = BALLAST;
 
@@ -228,7 +229,7 @@ InputEvents::eventBallast(const TCHAR *misc)
 
   if (BALLAST != oldBallast) {
     polar.SetBallast(BALLAST);
-    protected_task_manager->SetGlidePolar(polar);
+    backend_components->SetTaskPolar(settings);
   }
 }
 

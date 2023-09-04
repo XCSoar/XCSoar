@@ -4,12 +4,12 @@
 #include "MergeThread.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Protection.hpp"
-#include "Components.hpp"
 #include "NMEA/MoreData.hpp"
 #include "Audio/VarioGlue.hpp"
 #include "Device/MultipleDevices.hpp"
 
-MergeThread::MergeThread(DeviceBlackboard &_device_blackboard)
+MergeThread::MergeThread(DeviceBlackboard &_device_blackboard,
+                         MultipleDevices *_devices) noexcept
   :WorkerThread("MergeThread",
 #ifdef KOBO
                 /* throttle more on the Kobo, because the EPaper
@@ -21,14 +21,15 @@ MergeThread::MergeThread(DeviceBlackboard &_device_blackboard)
                 std::chrono::milliseconds{20},
 #endif
                 std::chrono::milliseconds{10}),
-   device_blackboard(_device_blackboard)
+   device_blackboard(_device_blackboard),
+   devices(_devices)
 {
   last_fix.Reset();
   last_any.Reset();
 }
 
 void
-MergeThread::Process()
+MergeThread::Process() noexcept
 {
   assert(!IsDefined() || IsInside());
 

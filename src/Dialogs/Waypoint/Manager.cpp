@@ -13,7 +13,6 @@
 #include "UIGlobals.hpp"
 #include "Protection.hpp"
 #include "UtilsSettings.hpp"
-#include "Components.hpp"
 #include "Waypoint/WaypointList.hpp"
 #include "Waypoint/WaypointListBuilder.hpp"
 #include "Waypoint/WaypointFilter.hpp"
@@ -30,16 +29,19 @@
 class WaypointManagerWidget final
   : public ListWidget {
 
+  Waypoints &way_points;
+
   Button *new_button, *edit_button, *save_button, *delete_button;
 
   WaypointList items;
 
   TwoTextRowsRenderer row_renderer;
 
-  bool modified;
+  bool modified = false;
 
 public:
-  WaypointManagerWidget():modified(false) {}
+  explicit WaypointManagerWidget(Waypoints &_waypoints) noexcept
+    :way_points(_waypoints) {}
 
   void CreateButtons(WidgetDialog &dialog);
 
@@ -198,7 +200,7 @@ inline void
 WaypointManagerWidget::OnWaypointImportClicked()
 {
   const auto way_point =
-    ShowWaypointListDialog(CommonInterface::Basic().location);
+    ShowWaypointListDialog(way_points, CommonInterface::Basic().location);
   if (way_point) {
     Waypoint wp_copy = *way_point;
 
@@ -276,14 +278,14 @@ WaypointManagerWidget::OnWaypointDeleteClicked(unsigned i)
 }
 
 void
-dlgConfigWaypointsShowModal()
+dlgConfigWaypointsShowModal(Waypoints &waypoints) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   TWidgetDialog<WaypointManagerWidget>
     dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
            look, _("Waypoints Editor"));
   dialog.AddButton(_("Close"), mrCancel);
-  dialog.SetWidget();
+  dialog.SetWidget(waypoints);
   dialog.GetWidget().CreateButtons(dialog);
   dialog.EnableCursorSelection();
 

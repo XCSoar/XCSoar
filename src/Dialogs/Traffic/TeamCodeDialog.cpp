@@ -23,6 +23,8 @@
 #include "util/StringStrip.hxx"
 #include "util/TruncateString.hpp"
 #include "util/Macros.hpp"
+#include "Components.hpp"
+#include "DataComponents.hpp"
 
 class TeamCodeWidget final
   : public RowFormWidget, NullBlackboardListener {
@@ -132,7 +134,7 @@ inline void
 TeamCodeWidget::OnSetWaypointClicked()
 {
   const auto wp =
-    ShowWaypointListDialog(CommonInterface::Basic().location);
+    ShowWaypointListDialog(*data_components->waypoints, CommonInterface::Basic().location);
   if (wp != nullptr) {
     CommonInterface::SetComputerSettings().team_code.team_code_reference_waypoint = wp->id;
     Profile::Set(ProfileKeys::TeamcodeRefWaypoint, wp->id);

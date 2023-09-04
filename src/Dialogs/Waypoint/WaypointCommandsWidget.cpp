@@ -14,6 +14,8 @@
 #include "Interface.hpp"
 #include "Protection.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
+#include "DataComponents.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Pan.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
@@ -178,16 +180,17 @@ RemoveFromTask(ProtectedTaskManager &task_manager,
 }
 
 static void
-SetHome(const Waypoint &waypoint)
+SetHome(Waypoints *way_points, const Waypoint &waypoint)
 {
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   settings_computer.poi.SetHome(waypoint);
 
   {
     ScopeSuspendAllThreads suspend;
-    WaypointGlue::SetHome(way_points, terrain,
-                          settings_computer.poi, settings_computer.team_code,
-                          device_blackboard, false);
+    if (way_points != nullptr)
+      WaypointGlue::SetHome(*way_points, data_components->terrain.get(),
+                            settings_computer.poi, settings_computer.team_code,
+                            backend_components->device_blackboard.get(), false);
     WaypointGlue::SaveHome(Profile::map,
                            settings_computer.poi, settings_computer.team_code);
   }
@@ -229,7 +232,7 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent,
   }
 
   AddButton(_("Set as New Home"), [this](){
-    SetHome(*waypoint);
+    SetHome(waypoints, *waypoint);
     if (form != nullptr)
       form->SetModalResult(mrOK);
   });
@@ -249,7 +252,7 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent,
                                          waypoint->name.c_str());
   });
 
-  if (allow_edit)
+  if (allow_edit && waypoints != nullptr)
     AddButton(_("Edit"), [this](){
       Waypoint wp_copy = *waypoint;
 
@@ -262,12 +265,12 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent,
 
         {
           ScopeSuspendAllThreads suspend;
-          way_points.Replace(waypoint, std::move(wp_copy));
-          way_points.Optimise();
+          waypoints->Replace(waypoint, std::move(wp_copy));
+          waypoints->Optimise();
         }
 
         try {
-          WaypointGlue::SaveWaypoints(way_points);
+          WaypointGlue::SaveWaypoints(*waypoints);
         } catch (...) {
           ShowError(std::current_exception(), _("Failed to save waypoints"));
         }

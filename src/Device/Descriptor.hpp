@@ -39,9 +39,9 @@
 #include <tchar.h>
 #include <stdio.h>
 
-namespace Cares { class Channel; }
 namespace Java { class GlobalCloseable; }
-class EventLoop;
+class DeviceBlackboard;
+class NMEALogger;
 struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;
@@ -59,6 +59,7 @@ struct RecordedFlightInfo;
 class OperationEnvironment;
 class OpenDeviceJob;
 class DeviceDataEditor;
+class DeviceFactory;
 
 class DeviceDescriptor final
   : PortListener,
@@ -66,15 +67,12 @@ class DeviceDescriptor final
     SensorListener,
 #endif
     PortLineSplitter {
-  /**
-   * The #EventLoop instance used by #Port instances.
-   */
-  EventLoop &event_loop;
 
-  /**
-   * The asynchronous DNS resolver used by #Port instances.
-   */
-  Cares::Channel &cares;
+  DeviceBlackboard &blackboard;
+
+  NMEALogger *const nmea_logger;
+
+  DeviceFactory &factory;
 
   UI::Notify job_finished_notify{[this]{ OnJobFinished(); }};
 
@@ -270,7 +268,9 @@ class DeviceDescriptor final
   bool borrowed = false;
 
 public:
-  DeviceDescriptor(EventLoop &_event_loop, Cares::Channel &_cares,
+  DeviceDescriptor(DeviceBlackboard &_blackboard,
+                   NMEALogger *_nmea_logger,
+                   DeviceFactory &_factory,
                    unsigned index, PortListener *port_listener) noexcept;
   ~DeviceDescriptor() noexcept;
 

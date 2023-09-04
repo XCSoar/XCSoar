@@ -26,28 +26,25 @@ struct IntrusiveHashSetHook {
 };
 
 /**
- * Detect the hook type.
- */
-template<typename U>
-struct IntrusiveHashSetHookDetection {
-	/* TODO can this be simplified somehow, without checking for
-	   all possible enum values? */
-	using type = std::conditional_t<std::is_base_of_v<IntrusiveHashSetHook<IntrusiveHookMode::NORMAL>, U>,
-					IntrusiveHashSetHook<IntrusiveHookMode::NORMAL>,
-					std::conditional_t<std::is_base_of_v<IntrusiveHashSetHook<IntrusiveHookMode::TRACK>, U>,
-							   IntrusiveHashSetHook<IntrusiveHookMode::TRACK>,
-							   std::conditional_t<std::is_base_of_v<IntrusiveHashSetHook<IntrusiveHookMode::AUTO_UNLINK>, U>,
-									      IntrusiveHashSetHook<IntrusiveHookMode::AUTO_UNLINK>,
-									      void>>>;
-};
-
-/**
  * For classes which embed #IntrusiveHashSetHook as base class.
  */
 template<typename T>
 struct IntrusiveHashSetBaseHookTraits {
+	/* a never-called helper function which is used by _Cast() */
+	template<IntrusiveHookMode mode>
+	static constexpr IntrusiveHashSetHook<mode> _Identity(const IntrusiveHashSetHook<mode> &) noexcept;
+
+	/* another never-called helper function which "calls"
+	   _Identity(), implicitly casting the item to the
+	   IntrusiveHashSetHook specialization; we use this to detect
+	   which IntrusiveHashSetHook specialization is used */
 	template<typename U>
-	using Hook = typename IntrusiveHashSetHookDetection<U>::type;
+	static constexpr auto _Cast(const U &u) noexcept {
+		return decltype(_Identity(u))();
+	}
+
+	template<typename U>
+	using Hook = decltype(_Cast(std::declval<U>()));
 
 	static constexpr T *Cast(Hook<T> *node) noexcept {
 		return static_cast<T *>(node);
@@ -79,12 +76,35 @@ struct IntrusiveHashSetMemberHookTraits {
 };
 
 /**
+ * @param GetKey a function object which extracts the "key" part of an
+ * item
+ */
+template<typename Hash, typename Equal,
+	 typename GetKey=std::identity>
+struct IntrusiveHashSetOperators {
+	using hasher = Hash;
+	using key_equal = Equal;
+
+	[[no_unique_address]]
+	Hash hash;
+
+	[[no_unique_address]]
+	Equal equal;
+
+	[[no_unique_address]]
+	GetKey get_key;
+};
+
+/**
  * A hash table implementation which stores pointers to items which
  * have an embedded #IntrusiveHashSetHook.  The actual table is
  * embedded with a compile-time fixed size in this object.
+ *
+ * @param Operators a class which contains functions `hash` and
+ * `equal`
  */
 template<typename T, std::size_t table_size,
-	 typename Hash=typename T::Hash, typename Equal=typename T::Equal,
+	 typename Operators,
 	 typename HookTraits=IntrusiveHashSetBaseHookTraits<T>,
 	 bool constant_time_size=false>
 class IntrusiveHashSet {
@@ -92,10 +112,7 @@ class IntrusiveHashSet {
 	OptionalCounter<constant_time_size> counter;
 
 	[[no_unique_address]]
-	Hash hash;
-
-	[[no_unique_address]]
-	Equal equal;
+	Operators ops;
 
 	struct BucketHookTraits {
 		template<typename U>
@@ -132,20 +149,20 @@ public:
 	using const_pointer = const T *;
 	using size_type = std::size_t;
 
-	using hasher = Hash;
-	using key_equal = Equal;
+	using hasher = typename Operators::hasher;
+	using key_equal = typename Operators::key_equal;
 
 	[[nodiscard]]
 	IntrusiveHashSet() noexcept = default;
 
 	[[nodiscard]]
 	constexpr const hasher &hash_function() const noexcept {
-		return hash;
+		return ops.hash;
 	}
 
 	[[nodiscard]]
 	constexpr const key_equal &key_eq() const noexcept {
-		return equal;
+		return ops.equal;
 	}
 
 	[[nodiscard]]
@@ -182,30 +199,44 @@ public:
 		counter.reset();
 	}
 
-	void remove_and_dispose_if(std::predicate<const_reference> auto pred,
+	/**
+	 * Remove and dispose all items matching the given predicate.
+	 *
+	 * @return the number of removed items
+	 */
+	std::size_t remove_and_dispose_if(std::predicate<const_reference> auto pred,
 				   Disposer<value_type> auto disposer) noexcept {
+		std::size_t n = 0;
 		for (auto &bucket : table)
-			counter -= bucket.remove_and_dispose_if(pred, disposer);
+			n += bucket.remove_and_dispose_if(pred, disposer);
+		counter -= n;
+		return n;
 	}
 
 	/**
 	 * Remove and dispose all items with the specified key.
+	 *
+	 * @return the number of removed items
 	 */
-	constexpr void remove_and_dispose(const auto &key,
-					  Disposer<value_type> auto disposer) noexcept {
+	constexpr std::size_t remove_and_dispose_key(const auto &key,
+						     Disposer<value_type> auto disposer) noexcept {
 		auto &bucket = GetBucket(key);
-		counter -= bucket.remove_and_dispose_if([this, &key](const auto &item){
-			return equal(key, item);
+		std::size_t n = bucket.remove_and_dispose_if([this, &key](const auto &item){
+			return ops.equal(key, ops.get_key(item));
 		}, disposer);
+		counter -= n;
+		return n;
 	}
 
-	constexpr void remove_and_dispose_if(const auto &key,
-					     std::predicate<const_reference> auto pred,
-					     Disposer<value_type> auto disposer) noexcept {
+	constexpr std::size_t remove_and_dispose_key_if(const auto &key,
+							std::predicate<const_reference> auto pred,
+							Disposer<value_type> auto disposer) noexcept {
 		auto &bucket = GetBucket(key);
-		counter -= bucket.remove_and_dispose_if([this, &key, &pred](const auto &item){
-			return equal(key, item) && pred(item);
+		std::size_t n = bucket.remove_and_dispose_if([this, &key, &pred](const auto &item){
+			return ops.equal(key, ops.get_key(item)) && pred(item);
 		}, disposer);
+		counter -= n;
+		return n;
 	}
 
 	[[nodiscard]]
@@ -224,7 +255,7 @@ public:
 	constexpr std::pair<bucket_iterator, bool> insert_check(const auto &key) noexcept {
 		auto &bucket = GetBucket(key);
 		for (auto &i : bucket)
-			if (equal(key, i))
+			if (ops.equal(key, ops.get_key(i)))
 				return {bucket.iterator_to(i), false};
 
 		/* bucket.end() is a pointer to the bucket's list
@@ -244,7 +275,7 @@ public:
 
 		/* using insert_after() so the new item gets inserted
 		   at the front of the bucket list */
-		GetBucket(item).insert_after(bucket, item);
+		GetBucket(ops.get_key(item)).insert_after(bucket, item);
 	}
 
 	/**
@@ -253,12 +284,12 @@ public:
 	 */
 	constexpr void insert(reference item) noexcept {
 		++counter;
-		GetBucket(item).push_front(item);
+		GetBucket(ops.get_key(item)).push_front(item);
 	}
 
 	constexpr bucket_iterator erase(bucket_iterator i) noexcept {
 		--counter;
-		return GetBucket(*i).erase(i);
+		return GetBucket(ops.get_key(*i)).erase(i);
 	}
 
 	constexpr bucket_iterator erase_and_dispose(bucket_iterator i,
@@ -272,7 +303,7 @@ public:
 	constexpr bucket_iterator find(const auto &key) noexcept {
 		auto &bucket = GetBucket(key);
 		for (auto &i : bucket)
-			if (equal(key, i))
+			if (ops.equal(key, ops.get_key(i)))
 				return bucket.iterator_to(i);
 
 		return end();
@@ -282,7 +313,7 @@ public:
 	constexpr const_bucket_iterator find(const auto &key) const noexcept {
 		auto &bucket = GetBucket(key);
 		for (auto &i : bucket)
-			if (equal(key, i))
+			if (ops.equal(key, ops.get_key(i)))
 				return bucket.iterator_to(i);
 
 		return end();
@@ -299,7 +330,7 @@ public:
 					  std::predicate<const_reference> auto pred) noexcept {
 		auto &bucket = GetBucket(key);
 		for (auto &i : bucket)
-			if (equal(key, i) && pred(i))
+			if (ops.equal(key, ops.get_key(i)) && pred(i))
 				return bucket.iterator_to(i);
 
 		return end();
@@ -326,7 +357,7 @@ public:
 		auto &bucket = GetBucket(key);
 
 		for (auto i = bucket.begin(), e = bucket.end(); i != e;) {
-			if (!equal(key, *i))
+			if (!ops.equal(key, ops.get_key(*i)))
 				++i;
 			else if (expired_pred(*i))
 				i = erase_and_dispose(i, disposer);
@@ -364,7 +395,7 @@ private:
 	[[gnu::pure]]
 	[[nodiscard]]
 	constexpr auto &GetBucket(K &&key) noexcept {
-		const auto h = hash(std::forward<K>(key));
+		const auto h = ops.hash(std::forward<K>(key));
 		return table[h % table_size];
 	}
 
@@ -372,7 +403,7 @@ private:
 	[[gnu::pure]]
 	[[nodiscard]]
 	constexpr const auto &GetBucket(K &&key) const noexcept {
-		const auto h = hash(std::forward<K>(key));
+		const auto h = ops.hash(std::forward<K>(key));
 		return table[h % table_size];
 	}
 };

@@ -9,7 +9,6 @@
 #include "Dialogs/CoFunctionDialog.hpp"
 #include "Dialogs/Error.hpp"
 #include "Dialogs/Message.hpp"
-#include "Components.hpp"
 #include "Logger/ExternalLogger.hpp"
 #include "Simulator.hpp"
 #include "Language/Language.hpp"
@@ -22,6 +21,8 @@
 #include "Operation/PluggableOperationEnvironment.hpp"
 #include "net/http/Init.hpp"
 #include "net/client/WeGlide/DownloadTask.hpp"
+#include "Components.hpp"
+#include "DataComponents.hpp"
 
 TaskActionsPanel::TaskActionsPanel(TaskManagerDialog &_dialog,
                                    TaskMiscPanel &_parent,
@@ -84,7 +85,7 @@ TaskActionsPanel::OnDeclareClicked()
 
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
   Declaration decl(settings.logger, settings.plane, active_task.get());
-  ExternalLogger::Declare(decl, way_points.GetHome().get());
+  ExternalLogger::Declare(decl, data_components->waypoints->GetHome().get());
 }
 
 inline void
@@ -99,7 +100,7 @@ try {
                                    WeGlide::DownloadDeclaredTask(*Net::curl,
                                                                  settings.weglide,
                                                                  settings.task,
-                                                                 &way_points,
+                                                                 data_components->waypoints.get(),
                                                                  env),
                                    &env);
   if (!task)

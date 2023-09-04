@@ -139,13 +139,15 @@ namespace InfoBoxFactory
     e_Alternate_2_GR, // Geometric gradient to the arrival height above the ...
     e_HeartRate, // Heart rate in beats per minute.
     // 120.. 
-    e_TransponderCode, /* Transponder code */
+    e_TransponderCode, // Transponder code
 
-    e_EngineCHT,  /* Engine Cylinder Head Temperature */
-    e_EngineEGT,  /* Engine Exhaust Gas Temperature */
-    e_EngineRPM,  /* Engine Revolutions Per Minute */
+    e_EngineCHT,  // Engine Cylinder Head Temperature
+    e_EngineEGT,  // Engine Exhaust Gas Temperature
+    e_EngineRPM,  // Engine Revolutions Per Minute
+    e_AAT_dT_or_ETA,  // Delta time in AAT task and ETA in racing task
 
-    e_NUM_TYPES, /* Last item */
+	// ===============================================================
+    e_NUM_TYPES, //  Last item
     
     e_NUM_AREA_2nd = 500,
     e_DriftAngle = e_NUM_AREA_2nd,
@@ -154,7 +156,7 @@ namespace InfoBoxFactory
     e_InternalWind,
     e_InternalZigZagWind,
 
-    e_NUM_TYPES_2nd /* Last item 2nd area*/
+    e_NUM_TYPES_2nd  // Last item 2nd area
 };
 
   static constexpr Type NUM_TYPES = e_NUM_TYPES;

@@ -8,7 +8,6 @@
 #include "Projection/MapWindowProjection.hpp"
 #include "Language/Language.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
-#include "Components.hpp"
 #include "FLARM/Glue.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
@@ -17,6 +16,8 @@
 #include "Profile/Profile.hpp"
 #include "UIState.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 using namespace CommonInterface;
 
@@ -29,11 +30,12 @@ void
 XCSoarInterface::ReceiveGPS() noexcept
 {
   {
-    const std::lock_guard lock{device_blackboard->mutex};
+    auto &device_blackboard = *backend_components->device_blackboard;
+    const std::lock_guard lock{device_blackboard.mutex};
 
-    ReadBlackboardBasic(device_blackboard->Basic());
+    ReadBlackboardBasic(device_blackboard.Basic());
 
-    const NMEAInfo &real = device_blackboard->RealState();
+    const NMEAInfo &real = device_blackboard.RealState();
     Private::movement_detected = real.alive && real.gps.real &&
       real.MovementDetected();
   }
@@ -49,10 +51,11 @@ void
 XCSoarInterface::ReceiveCalculated() noexcept
 {
   {
-    const std::lock_guard lock{device_blackboard->mutex};
+    auto &device_blackboard = *backend_components->device_blackboard;
+    const std::lock_guard lock{device_blackboard.mutex};
 
-    ReadBlackboardCalculated(device_blackboard->Calculated());
-    device_blackboard->ReadComputerSettings(GetComputerSettings());
+    ReadBlackboardCalculated(device_blackboard.Calculated());
+    device_blackboard.ReadComputerSettings(GetComputerSettings());
   }
 
   BroadcastCalculatedUpdate();
@@ -69,20 +72,20 @@ XCSoarInterface::ExchangeBlackboard() noexcept
 void
 XCSoarInterface::ExchangeDeviceBlackboard() noexcept
 {
-  const std::lock_guard lock{device_blackboard->mutex};
-
-  device_blackboard->ReadComputerSettings(GetComputerSettings());
+  auto &device_blackboard = *backend_components->device_blackboard;
+  const std::lock_guard lock{device_blackboard.mutex};
+  device_blackboard.ReadComputerSettings(GetComputerSettings());
 }
 
 void
 ActionInterface::SendGetComputerSettings() noexcept
 {
-  assert(calculation_thread != nullptr);
+  assert(backend_components->calculation_thread != nullptr);
 
   main_window->SetComputerSettings(GetComputerSettings());
 
-  calculation_thread->SetComputerSettings(GetComputerSettings());
-  calculation_thread->SetScreenDistanceMeters(main_window->GetProjection().GetScreenDistanceMeters());
+  backend_components->calculation_thread->SetComputerSettings(GetComputerSettings());
+  backend_components->calculation_thread->SetScreenDistanceMeters(main_window->GetProjection().GetScreenDistanceMeters());
 }
 
 void
@@ -93,16 +96,10 @@ ActionInterface::SetBallast(double ballast, bool to_devices) noexcept
   polar.SetBallast(ballast);
 
   // send to calculation thread and trigger recalculation
-  if (protected_task_manager != nullptr)
-    protected_task_manager->SetGlidePolar(polar);
-
-  if (calculation_thread != nullptr) {
-    calculation_thread->SetComputerSettings(GetComputerSettings());
-    calculation_thread->ForceTrigger();
-  }
+  backend_components->SetTaskPolar(GetComputerSettings().polar);
 
   // send to external devices
-  if (to_devices) {
+  if (to_devices && backend_components->devices) {
     const Plane &plane = GetComputerSettings().plane;
     if (plane.empty_mass > 0) {
       auto dry_mass = plane.empty_mass + polar.GetCrewMass();
@@ -110,7 +107,7 @@ ActionInterface::SetBallast(double ballast, bool to_devices) noexcept
         dry_mass;
 
       MessageOperationEnvironment env;
-      devices->PutBallast(ballast, overload, env);
+      backend_components->devices->PutBallast(ballast, overload, env);
     }
   }
 }
@@ -120,21 +117,14 @@ ActionInterface::SetBugs(double bugs, bool to_devices) noexcept
 {
   // Write Bugs into settings
   CommonInterface::SetComputerSettings().polar.SetBugs(bugs);
-  GlidePolar &polar = SetComputerSettings().polar.glide_polar_task;
 
   // send to calculation thread and trigger recalculation
-  if (protected_task_manager != nullptr)
-    protected_task_manager->SetGlidePolar(polar);
-
-  if (calculation_thread != nullptr) {
-    calculation_thread->SetComputerSettings(GetComputerSettings());
-    calculation_thread->ForceTrigger();
-  }
+  backend_components->SetTaskPolar(GetComputerSettings().polar);
 
   // send to external devices
-  if (to_devices) {
+  if (to_devices && backend_components->devices) {
     MessageOperationEnvironment env;
-    devices->PutBugs(bugs, env);
+    backend_components->devices->PutBugs(bugs, env);
   }
 }
 
@@ -158,20 +148,13 @@ ActionInterface::SetMacCready(double mc, bool to_devices) noexcept
   InfoBoxManager::SetDirty();
 
   /* send to calculation thread and trigger recalculation */
-
-  if (protected_task_manager != nullptr)
-    protected_task_manager->SetGlidePolar(polar);
-
-  if (calculation_thread != nullptr) {
-    calculation_thread->SetComputerSettings(GetComputerSettings());
-    calculation_thread->ForceTrigger();
-  }
+  backend_components->SetTaskPolar(GetComputerSettings().polar);
 
   /* send to external devices */
 
-  if (to_devices) {
+  if (to_devices && backend_components->devices) {
     MessageOperationEnvironment env;
-    devices->PutMacCready(mc, env);
+    backend_components->devices->PutMacCready(mc, env);
   }
 }
 
@@ -298,9 +281,9 @@ ActionInterface::SetActiveFrequency(const RadioFrequency freq,
 
   /* send to external devices */
 
-  if (to_devices) {
+  if (to_devices && backend_components->devices) {
     MessageOperationEnvironment env;
-    devices->PutActiveFrequency(freq, freq_name, env);
+    backend_components->devices->PutActiveFrequency(freq, freq_name, env);
   }
 }
 
@@ -327,9 +310,9 @@ ActionInterface::SetStandbyFrequency(const RadioFrequency freq,
 
   /* send to external devices */
 
-  if (to_devices) {
+  if (to_devices && backend_components->devices) {
     MessageOperationEnvironment env;
-    devices->PutStandbyFrequency(freq, freq_name, env);
+    backend_components->devices->PutStandbyFrequency(freq, freq_name, env);
   }
 }
 
@@ -386,8 +369,8 @@ ActionInterface::SetTransponderCode(TransponderCode code, bool to_devices) noexc
   InfoBoxManager::SetDirty();
 
   /* send to external devices */
-  if (to_devices) {
+  if (to_devices && backend_components->devices) {
     MessageOperationEnvironment env;
-    devices->PutTransponderCode(code, env);
+    backend_components->devices->PutTransponderCode(code, env);
   }
 }

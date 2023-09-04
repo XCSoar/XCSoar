@@ -16,8 +16,9 @@
 #include <list>
 #include <tchar.h>
 
-namespace Cares { class Channel; }
-class EventLoop;
+class DeviceBlackboard;
+class NMEALogger;
+class DeviceFactory;
 class DeviceDescriptor;
 class DeviceDispatcher;
 struct MoreData;
@@ -38,7 +39,9 @@ class MultipleDevices final : PortListener {
   std::list<PortListener *> listeners;
 
 public:
-  MultipleDevices(EventLoop &event_loop, Cares::Channel &cares) noexcept;
+  MultipleDevices(DeviceBlackboard &blackboard,
+                  NMEALogger *nmea_logger,
+                  DeviceFactory &factory) noexcept;
   ~MultipleDevices() noexcept;
 
   DeviceDescriptor &operator[](unsigned i) const noexcept {
@@ -63,6 +66,12 @@ public:
   void Open(OperationEnvironment &env) noexcept;
   void Close() noexcept;
   void AutoReopen(OperationEnvironment &env) noexcept;
+
+  [[gnu::pure]]
+  bool HasVega() const noexcept;
+
+  void VegaWriteNMEA(const TCHAR *text, OperationEnvironment &env) noexcept;
+
   void PutMacCready(double mac_cready, OperationEnvironment &env) noexcept;
   void PutBugs(double bugs, OperationEnvironment &env) noexcept;
   void PutBallast(double fraction, double overload,

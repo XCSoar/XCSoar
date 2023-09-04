@@ -9,21 +9,19 @@
 #include "Unordered/AlternateTask.hpp"
 
 TaskManager::TaskManager(const TaskBehaviour &_task_behaviour,
-                         const Waypoints &wps)
-  :glide_polar(GlidePolar::Invalid()), safety_polar(GlidePolar::Invalid()),
-   task_behaviour(_task_behaviour),
+                         const Waypoints &wps) noexcept
+  :task_behaviour(_task_behaviour),
    ordered_task(std::make_unique<OrderedTask>(task_behaviour)),
    goto_task(std::make_unique<GotoTask>(task_behaviour, wps)),
-   abort_task(std::make_unique<AlternateTask>(task_behaviour, wps)),
-   mode(TaskType::NONE),
-   active_task(NULL) {
+   abort_task(std::make_unique<AlternateTask>(task_behaviour, wps))
+{
   null_stats.reset();
 }
 
 TaskManager::~TaskManager() noexcept = default;
 
 void
-TaskManager::SetTaskEvents(TaskEvents &_task_events)
+TaskManager::SetTaskEvents(TaskEvents &_task_events) noexcept
 {
   ordered_task->SetTaskEvents(_task_events);
   goto_task->SetTaskEvents(_task_events);
@@ -31,7 +29,7 @@ TaskManager::SetTaskEvents(TaskEvents &_task_events)
 }
 
 void
-TaskManager::SetTaskBehaviour(const TaskBehaviour &behaviour)
+TaskManager::SetTaskBehaviour(const TaskBehaviour &behaviour) noexcept
 {
   task_behaviour = behaviour;
 
@@ -43,13 +41,13 @@ TaskManager::SetTaskBehaviour(const TaskBehaviour &behaviour)
 }
 
 void
-TaskManager::SetOrderedTaskSettings(const OrderedTaskSettings &otb)
+TaskManager::SetOrderedTaskSettings(const OrderedTaskSettings &otb) noexcept
 {
   ordered_task->SetOrderedTaskSettings(otb);
 }
 
 TaskType
-TaskManager::SetMode(const TaskType _mode)
+TaskManager::SetMode(const TaskType _mode) noexcept
 {
   switch(_mode) {
   case TaskType::ABORT:
@@ -82,14 +80,14 @@ TaskManager::SetMode(const TaskType _mode)
 }
 
 void
-TaskManager::SetActiveTaskPoint(unsigned index)
+TaskManager::SetActiveTaskPoint(unsigned index) noexcept
 {
   if (active_task)
     active_task->SetActiveTaskPoint(index);
 }
 
 unsigned
-TaskManager::GetActiveTaskPointIndex() const
+TaskManager::GetActiveTaskPointIndex() const noexcept
 {
   if (active_task)
     return active_task->GetActiveTaskPointIndex();
@@ -98,7 +96,7 @@ TaskManager::GetActiveTaskPointIndex() const
 }
 
 void
-TaskManager::IncrementActiveTaskPoint(int offset)
+TaskManager::IncrementActiveTaskPoint(int offset) noexcept
 {
   if (active_task) {
     unsigned i = GetActiveTaskPointIndex();
@@ -114,7 +112,7 @@ TaskManager::IncrementActiveTaskPoint(int offset)
 }
 
 TaskWaypoint*
-TaskManager::GetActiveTaskPoint() const
+TaskManager::GetActiveTaskPoint() const noexcept
 {
   if (active_task)
     return active_task->GetActiveTaskPoint();
@@ -123,7 +121,7 @@ TaskManager::GetActiveTaskPoint() const
 }
 
 void
-TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
+TaskManager::UpdateCommonStatsTimes(const AircraftState &state) noexcept
 {
   if (ordered_task->TaskSize() > 1) {
     const TaskStats &task_stats = ordered_task->GetStats();
@@ -176,7 +174,7 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
 }
 
 void
-TaskManager::UpdateCommonStatsWaypoints(const AircraftState &state)
+TaskManager::UpdateCommonStatsWaypoints(const AircraftState &state) noexcept
 {
   common_stats.vector_home = state.location.IsValid()
     ? abort_task->GetHomeVector(state)
@@ -186,7 +184,7 @@ TaskManager::UpdateCommonStatsWaypoints(const AircraftState &state)
 }
 
 void
-TaskManager::UpdateCommonStatsTask()
+TaskManager::UpdateCommonStatsTask() noexcept
 {
   common_stats.task_type = mode;
 
@@ -206,7 +204,7 @@ TaskManager::UpdateCommonStatsTask()
 }
 
 void
-TaskManager::UpdateCommonStatsPolar(const AircraftState &state)
+TaskManager::UpdateCommonStatsPolar(const AircraftState &state) noexcept
 {
   if (!state.location.IsValid() || !glide_polar.IsValid())
     return;
@@ -232,7 +230,7 @@ TaskManager::UpdateCommonStatsPolar(const AircraftState &state)
 }
 
 void
-TaskManager::UpdateCommonStats(const AircraftState &state)
+TaskManager::UpdateCommonStats(const AircraftState &state) noexcept
 {
   UpdateCommonStatsTimes(state);
   UpdateCommonStatsTask();
@@ -242,7 +240,7 @@ TaskManager::UpdateCommonStats(const AircraftState &state)
 
 bool
 TaskManager::Update(const AircraftState &state,
-                    const AircraftState &state_last)
+                    const AircraftState &state_last) noexcept
 {
   /* always update ordered task so even if we are temporarily in a
      different mode, so the task stats are still updated.  Otherwise,
@@ -295,7 +293,7 @@ TaskManager::Update(const AircraftState &state,
 }
 
 bool
-TaskManager::UpdateIdle(const AircraftState &state)
+TaskManager::UpdateIdle(const AircraftState &state) noexcept
 {
   bool retval = false;
 
@@ -310,8 +308,8 @@ TaskManager::UpdateIdle(const AircraftState &state)
   return retval;
 }
 
-const TaskStats&
-TaskManager::GetStats() const
+const TaskStats &
+TaskManager::GetStats() const noexcept
 {
   if (active_task)
     return active_task->GetStats();
@@ -320,7 +318,7 @@ TaskManager::GetStats() const
 }
 
 bool
-TaskManager::DoGoto(WaypointPtr &&wp)
+TaskManager::DoGoto(WaypointPtr &&wp) noexcept
 {
   if (goto_task->DoGoto(std::move(wp))) {
     SetMode(TaskType::GOTO);
@@ -331,7 +329,7 @@ TaskManager::DoGoto(WaypointPtr &&wp)
 }
 
 bool
-TaskManager::CheckTask() const
+TaskManager::CheckTask() const noexcept
 {
   if (active_task)
     return !IsError(active_task->CheckTask());
@@ -340,37 +338,37 @@ TaskManager::CheckTask() const
 }
 
 bool
-TaskManager::CheckOrderedTask() const
+TaskManager::CheckOrderedTask() const noexcept
 {
   return !IsError(ordered_task->CheckTask());
 }
 
 AbstractTaskFactory &
-TaskManager::GetFactory() const
+TaskManager::GetFactory() const noexcept
 {
   return ordered_task->GetFactory();
 }
 
 void
-TaskManager::SetFactory(const TaskFactoryType _factory)
+TaskManager::SetFactory(const TaskFactoryType _factory) noexcept
 {
   ordered_task->SetFactory(_factory);
 }
 
 TaskAdvance &
-TaskManager::SetTaskAdvance()
+TaskManager::SetTaskAdvance() noexcept
 {
   return ordered_task->SetTaskAdvance();
 }
 
 const AlternateList &
-TaskManager::GetAlternates() const
+TaskManager::GetAlternates() const noexcept
 {
   return abort_task->GetAlternates();
 }
 
 void
-TaskManager::Reset()
+TaskManager::Reset() noexcept
 {
   ordered_task->Reset();
   goto_task->Reset();
@@ -380,7 +378,7 @@ TaskManager::Reset()
 }
 
 unsigned
-TaskManager::TaskSize() const
+TaskManager::TaskSize() const noexcept
 {
   if (active_task)
     return active_task->TaskSize();
@@ -389,7 +387,7 @@ TaskManager::TaskSize() const
 }
 
 GeoPoint
-TaskManager::RandomPointInTask(const unsigned index, const double mag) const
+TaskManager::RandomPointInTask(const unsigned index, const double mag) const noexcept
 {
   if (active_task == ordered_task.get() && ordered_task->IsValidIndex(index))
     return ordered_task->GetTaskPoint(index).GetRandomPointInSector(mag);
@@ -401,7 +399,7 @@ TaskManager::RandomPointInTask(const unsigned index, const double mag) const
 }
 
 void
-TaskManager::SetGlidePolar(const GlidePolar &_glide_polar)
+TaskManager::SetGlidePolar(const GlidePolar &_glide_polar) noexcept
 {
   glide_polar = _glide_polar;
 
@@ -411,7 +409,7 @@ TaskManager::SetGlidePolar(const GlidePolar &_glide_polar)
 
 bool
 TaskManager::UpdateAutoMC(const AircraftState &state_now,
-                          const double fallback_mc)
+                          const double fallback_mc) noexcept
 {
   if (!state_now.location.IsValid())
     return false;
@@ -432,7 +430,7 @@ TaskManager::UpdateAutoMC(const AircraftState &state_now,
 }
 
 const GeoPoint
-TaskManager::GetLocationTarget(const unsigned index) const
+TaskManager::GetLocationTarget(const unsigned index) const noexcept
 {
   const AATPoint *ap = ordered_task->GetAATTaskPoint(index);
   if (ap)
@@ -441,7 +439,7 @@ TaskManager::GetLocationTarget(const unsigned index) const
   return GeoPoint::Invalid();
 }
 bool
-TaskManager::TargetIsLocked(const unsigned index) const
+TaskManager::TargetIsLocked(const unsigned index) const noexcept
 {
   const AATPoint *ap = ordered_task->GetAATTaskPoint(index);
   if (ap)
@@ -452,7 +450,7 @@ TaskManager::TargetIsLocked(const unsigned index) const
 
 bool
 TaskManager::SetTarget(const unsigned index, const GeoPoint &loc,
-                       const bool override_lock)
+                       const bool override_lock) noexcept
 {
   if (!CheckOrderedTask())
     return false;
@@ -465,7 +463,7 @@ TaskManager::SetTarget(const unsigned index, const GeoPoint &loc,
 }
 
 bool
-TaskManager::SetTarget(const unsigned index, RangeAndRadial rar)
+TaskManager::SetTarget(const unsigned index, RangeAndRadial rar) noexcept
 {
   if (!CheckOrderedTask())
     return false;
@@ -478,7 +476,7 @@ TaskManager::SetTarget(const unsigned index, RangeAndRadial rar)
 }
 
 bool
-TaskManager::TargetLock(const unsigned index, bool do_lock)
+TaskManager::TargetLock(const unsigned index, bool do_lock) noexcept
 {
   if (!CheckOrderedTask())
     return false;
@@ -497,7 +495,7 @@ TaskManager::Clone(const TaskBehaviour &tb) const noexcept
 }
 
 bool
-TaskManager::Commit(const OrderedTask &other)
+TaskManager::Commit(const OrderedTask &other) noexcept
 {
   bool retval = ordered_task->Commit(other);
 
@@ -527,13 +525,13 @@ TaskManager::Commit(const OrderedTask &other)
 }
 
 void
-TaskManager::SetIntersectionTest(AbortIntersectionTest *test)
+TaskManager::SetIntersectionTest(AbortIntersectionTest *test) noexcept
 {
   abort_task->SetIntersectionTest(test);
 }
 
 void
-TaskManager::TakeoffAutotask(const GeoPoint &loc, const double terrain_alt)
+TaskManager::TakeoffAutotask(const GeoPoint &loc, const double terrain_alt) noexcept
 {
   // create a goto task on takeoff
   if (!active_task && goto_task->TakeoffAutotask(loc, terrain_alt))
@@ -541,7 +539,7 @@ TaskManager::TakeoffAutotask(const GeoPoint &loc, const double terrain_alt)
 }
 
 void
-TaskManager::ResetTask()
+TaskManager::ResetTask() noexcept
 {
   if (active_task) {
     active_task->Reset();

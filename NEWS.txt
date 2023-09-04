@@ -1,3 +1,10 @@
+Version 7.40 - not yet released
+* user interface
+  - Added infobox that combines ETA with AAT dT
+  - FLARM: Add 100m zoom option.
+* Linux
+  - fix the /etc/xcsoar data directory
+
 Version 7.39 - 2023/07/28
 * Android
   - fix Bluetooth device list on Android versions older than 12

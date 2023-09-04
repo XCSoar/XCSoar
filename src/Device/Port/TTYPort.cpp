@@ -4,6 +4,7 @@
 #include "TTYPort.hpp"
 #include "Device/Error.hpp"
 #include "Asset.hpp"
+#include "lib/fmt/SystemError.hxx"
 #include "io/UniqueFileDescriptor.hxx"
 #include "system/Error.hxx"
 #include "system/TTYDescriptor.hxx"
@@ -126,7 +127,7 @@ OpenTTY(const char *path, unsigned baud_rate)
 {
   UniqueFileDescriptor fd;
   if (!fd.OpenNonBlocking(path))
-    throw FormatErrno("Failed to open %s", path);
+    throw FmtErrno("Failed to open {}", path);
 
   const TTYDescriptor tty(fd);
   SetBaudrate(tty, baud_rate);
@@ -186,11 +187,11 @@ TTYPort::OpenPseudo()
 
   UniqueFileDescriptor fd;
   if (!fd.OpenNonBlocking(path))
-    throw FormatErrno("Failed to open %s", path);
+    throw FmtErrno("Failed to open {}", path);
 
   const TTYDescriptor tty(fd);
   if (!tty.Unlock())
-    throw FormatErrno("unlockpt('%s') failed", path);
+    throw FmtErrno("unlockpt('{}') failed", path);
 
   socket.Open(fd.Release());
 

@@ -23,6 +23,8 @@
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "util/StringCompare.hxx"
 #include "UIGlobals.hpp"
+#include "Components.hpp" // for way_points
+#include "DataComponents.hpp"
 
 #include <cassert>
 
@@ -130,7 +132,8 @@ TaskListPanel::get_cursor_task()
 
   const OrderedTask *ordered_task =
     task_store.GetTask(cursor_index,
-                       CommonInterface::GetComputerSettings().task);
+                       CommonInterface::GetComputerSettings().task,
+                       data_components->waypoints.get());
 
   if (ordered_task == nullptr)
     return nullptr;

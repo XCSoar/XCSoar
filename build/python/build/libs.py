@@ -11,9 +11,9 @@ from build.lua import LuaProject
 from .musl import MuslProject
 
 binutils = BinutilsProject(
-    'https://ftp.gnu.org/gnu/binutils/binutils-2.40.tar.xz',
-    'https://fossies.org/linux/misc/binutils-2.40.tar.xz',
-    '0f8a4c272d7f17f369ded10a4aca28b8e304828e95526da482b0ccc4dfc9d8e1',
+    'https://ftp.gnu.org/gnu/binutils/binutils-2.41.tar.xz',
+    'https://fossies.org/linux/misc/binutils-2.41.tar.xz',
+    'ae9a5789e23459e59606e6714723f2d3ffc31c03174191ef0d015bdf06007450',
     'bin/as',
     [
         '--with-system-zlib',
@@ -32,9 +32,9 @@ linux_headers = SabotageLinuxHeadersProject(
 )
 
 gcc = GccProject(
-    'https://ftp.gnu.org/gnu/gcc/gcc-13.1.0/gcc-13.1.0.tar.xz',
-    'https://fossies.org/linux/misc/gcc-13.1.0.tar.xz',
-    '61d684f0aa5e76ac6585ad8898a2427aade8979ed5e7f85492286c4dfc13ee86',
+    'https://ftp.gnu.org/gnu/gcc/gcc-13.2.0/gcc-13.2.0.tar.xz',
+    'https://fossies.org/linux/misc/gcc-13.2.0.tar.xz',
+    'e275e76442a6067341a27f04c5c6b83d8613144004c0413528863dc6b5c743da',
     'lib/libstdc++.a',
     [
         # GCC fails to build if we disable the shared libstdc++
@@ -93,9 +93,9 @@ musl = MuslProject(
 )
 
 openssl = OpenSSLProject(
-    'https://www.openssl.org/source/openssl-3.1.1.tar.gz',
-    'https://artfiles.org/openssl.org/source/openssl-3.1.1.tar.gz',
-    'b3aa61334233b852b63ddb048df181177c2c659eb9d4376008118f9c08d07674',
+    'https://www.openssl.org/source/openssl-3.1.2.tar.gz',
+    'https://artfiles.org/openssl.org/source/openssl-3.1.2.tar.gz',
+    'a0ce69b8b97ea6a35b96875235aa453b966ba3cba8af2de23657d8b6767d6539',
     'include/openssl/ossl_typ.h',
 )
 
@@ -157,16 +157,16 @@ libsodium = AutotoolsProject(
 )
 
 zlib = ZlibProject(
-    'http://zlib.net/zlib-1.2.13.tar.xz',
-    'http://downloads.sourceforge.net/project/libpng/zlib/1.2.13/zlib-1.2.13.tar.xz',
-    'd14c38e313afc35a9a8760dadf26042f51ea0f5d154b0630a31da0540107fb98',
+    'http://zlib.net/zlib-1.3.tar.xz',
+    'https://github.com/madler/zlib/releases/download/v1.3/zlib-1.3.tar.xz',
+    '8a9ba2898e1d0d774eca6ba5b4627a11e5588ba85c8851336eb38de4683050a7',
     'lib/libz.a',
 )
 
 freetype = MesonProject(
-    'http://download.savannah.gnu.org/releases/freetype/freetype-2.13.1.tar.xz',
-    'http://downloads.sourceforge.net/project/freetype/freetype2/2.13.1/freetype-2.13.1.tar.xz',
-    'ea67e3b019b1104d1667aa274f5dc307d8cbd606b399bc32df308a77f1a564bf',
+    'http://download.savannah.gnu.org/releases/freetype/freetype-2.13.2.tar.xz',
+    'http://downloads.sourceforge.net/project/freetype/freetype2/2.13.2/freetype-2.13.2.tar.xz',
+    '2d8d5917a1983ebd04921f2993a88858d6f72dec',
     'lib/libfreetype.a',
     [
         '-Dbrotli=disabled',
@@ -191,9 +191,9 @@ cares = CmakeProject(
 )
 
 curl = CmakeProject(
-    'https://curl.se/download/curl-8.1.2.tar.xz',
-    'https://github.com/curl/curl/releases/download/curl-8_1_2/curl-8.1.2.tar.xz',
-    '31b1118eb8bfd43cd95d9a3f146f814ff874f6ed3999b29d94f4d1e7dbac5ef6',
+    'https://curl.se/download/curl-8.2.1.tar.xz',
+    'https://github.com/curl/curl/releases/download/curl-8_2_1/curl-8.2.1.tar.xz',
+    'dd322f6bd0a20e6cebdfd388f69e98c3d183bed792cf4713c8a7ef498cba4894',
     'lib/libcurl.a',
     [
         '-DBUILD_CURL_EXE=OFF',
@@ -281,9 +281,9 @@ libpng = CmakeProject(
 )
 
 libjpeg = CmakeProject(
-    'http://downloads.sourceforge.net/project/libjpeg-turbo/2.1.5.1/libjpeg-turbo-2.1.5.1.tar.gz',
-    'http://sourceforge.mirrorservice.org/l/li/libjpeg-turbo/2.1.5.1/libjpeg-turbo-2.1.5.1.tar.gz',
-    '2fdc3feb6e9deb17adec9bafa3321419aa19f8f4e5dea7bf8486844ca22207bf',
+    'http://downloads.sourceforge.net/project/libjpeg-turbo/3.0.0/libjpeg-turbo-3.0.0.tar.gz',
+    'https://netcologne.dl.sourceforge.net/project/libjpeg-turbo/3.0.0/libjpeg-turbo-3.0.0.tar.gz',
+    'c77c65fcce3d33417b2e90432e7a0eb05f59a7fff884022a9d931775d583bfaa',
     'lib/libjpeg.a',
     [
         '-DENABLE_STATIC=ON',
@@ -371,9 +371,9 @@ libgeotiff = CmakeProject(
 )
 
 sdl2 = CmakeProject(
-    'http://www.libsdl.org/release/SDL2-2.28.1.tar.gz',
-    'https://fossies.org/linux/misc/SDL2-2.28.1.tar.gz',
-    '4977ceba5c0054dbe6c2f114641aced43ce3bf2b41ea64b6a372d6ba129cb15d',
+    'http://www.libsdl.org/release/SDL2-2.28.2.tar.gz',
+    'https://fossies.org/linux/misc/SDL2-2.28.2.tar.gz',
+    '64b1102fa22093515b02ef33dd8739dee1ba57e9dbba6a092942b8bbed1a1c5e',
     'lib/libSDL2.a',
     [
         '-DBUILD_SHARED_LIBS=OFF',

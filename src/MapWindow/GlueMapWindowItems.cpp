@@ -115,6 +115,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   ShowMapItemListDialog(list,
                         UIGlobals::GetDialogLook(), look, traffic_look,
                         final_glide_bar_renderer.GetLook(), settings,
+                        waypoints,
                         glide_computer != nullptr
                         ? &glide_computer->GetAirspaceWarnings() : nullptr);
   return true;

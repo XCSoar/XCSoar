@@ -3,7 +3,7 @@
 
 #include "ui/canvas/custom/TopCanvas.hpp"
 #include "ui/canvas/Canvas.hpp"
-#include "system/Error.hxx"
+#include "lib/fmt/SystemError.hxx"
 
 #ifdef USE_FB
 #include "ui/canvas/memory/Export.hpp"
@@ -85,7 +85,7 @@ TopCanvas::TopCanvas(UI::Display &_display)
   const char *path = "/dev/fb0";
   fd = open(path, O_RDWR | O_NOCTTY | O_CLOEXEC);
   if (fd < 0)
-    throw FormatErrno("Failed to open %s", path);
+    throw FmtErrno("Failed to open {}", path);
 
   struct fb_fix_screeninfo finfo;
   if (ioctl(fd, FBIOGET_FSCREENINFO, &finfo) < 0)

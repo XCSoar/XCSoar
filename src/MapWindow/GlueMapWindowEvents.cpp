@@ -6,13 +6,14 @@
 #include "Screen/Layout.hpp"
 #include "Simulator.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
-#include "Components.hpp"
 #include "Math/FastMath.hpp"
 #include "util/Compiler.h"
 #include "Interface.hpp"
 #include "Pan.hpp"
 #include "Topography/Thread.hpp"
 #include "Asset.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 #ifdef USE_X11
 #include "ui/event/Globals.hpp"
@@ -137,7 +138,7 @@ GlueMapWindow::OnMouseDown(PixelPoint p) noexcept
     /* clicking with Ctrl key held moves the simulator to the click
        location instantly */
     const GeoPoint location = visible_projection.ScreenToGeo(p);
-    device_blackboard->SetSimulatorLocation(location);
+    backend_components->device_blackboard->SetSimulatorLocation(location);
     return true;
   }
 
@@ -247,12 +248,15 @@ GlueMapWindow::OnMouseUp(PixelPoint p) noexcept
       const auto min_speed = 1.1 *
         CommonInterface::GetComputerSettings().polar.glide_polar_task.GetVMin();
       const Angle new_bearing = drag_start_geopoint.Bearing(location);
+
+      auto &device_blackboard = *backend_components->device_blackboard;
+      
       if ((new_bearing - old_bearing).AsDelta().Absolute() < Angle::Degrees(30) ||
           (CommonInterface::Basic().ground_speed < min_speed))
-        device_blackboard->SetSpeed(std::clamp(distance / Layout::FastScale(3),
-                                               min_speed, 100.));
+        device_blackboard.SetSpeed(std::clamp(distance / Layout::FastScale(3),
+                                              min_speed, 100.));
 
-      device_blackboard->SetTrack(new_bearing);
+      device_blackboard.SetTrack(new_bearing);
       // change bearing without changing speed if direction change > 30
       // 20080815 JMW prevent dragging to stop glider
 

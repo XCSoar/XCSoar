@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "ZzipStream.hpp"
-#include "util/RuntimeError.hxx"
+#include "lib/fmt/RuntimeError.hxx"
 
 #include <zzip/util.h>
 
@@ -48,7 +48,7 @@ OpenJasperZzipStream(struct zzip_dir *dir, const char *path)
 {
   const auto f = zzip_open_rb(dir, path);
   if (f == nullptr)
-    throw FormatRuntimeError("Failed to open '%s' from map file", path);
+    throw FmtRuntimeError("Failed to open '{}' from map file", path);
 
   jas_stream_t *stream = jas_stream_create();
   if (stream == nullptr) {

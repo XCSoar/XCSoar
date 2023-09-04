@@ -65,6 +65,11 @@ WrapPort(const DeviceConfig &config, PortListener *listener,
 
 static std::unique_ptr<Port>
 OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
+#ifdef ANDROID
+                 BluetoothHelper *bluetooth_helper,
+                 IOIOHelper *ioio_helper,
+                 UsbSerialHelper *usb_serial_helper,
+#endif
                  const DeviceConfig &config, PortListener *listener,
                  DataHandler &handler)
 {
@@ -94,7 +99,12 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
     if (config.bluetooth_mac.empty())
       throw std::runtime_error("No Bluetooth MAC configured");
 
-    return OpenAndroidBleHm10Port(config.bluetooth_mac, listener, handler);
+    if (bluetooth_helper == nullptr)
+      throw std::runtime_error("Bluetooth not available");
+                         
+    return OpenAndroidBleHm10Port(*bluetooth_helper,
+                                  config.bluetooth_mac,
+                                  listener, handler);
 #else
     throw std::runtime_error("Bluetooth not available");
 #endif
@@ -104,14 +114,21 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
     if (config.bluetooth_mac.empty())
       throw std::runtime_error("No Bluetooth MAC configured");
 
-    return OpenAndroidBluetoothPort(config.bluetooth_mac, listener, handler);
+    if (bluetooth_helper == nullptr)
+      throw std::runtime_error("Bluetooth not available");
+
+    return OpenAndroidBluetoothPort(*bluetooth_helper, config.bluetooth_mac,
+                                    listener, handler);
 #else
     throw std::runtime_error("Bluetooth not available");
 #endif
 
   case DeviceConfig::PortType::RFCOMM_SERVER:
 #ifdef ANDROID
-    return OpenAndroidBluetoothServerPort(listener, handler);
+    if (bluetooth_helper == nullptr)
+      throw std::runtime_error("Bluetooth not available");
+
+    return OpenAndroidBluetoothServerPort(*bluetooth_helper, listener, handler);
 #else
     throw std::runtime_error("Bluetooth not available");
 #endif
@@ -121,7 +138,11 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
     if (config.ioio_uart_id >= AndroidIOIOUartPort::getNumberUarts())
       throw std::runtime_error("No IOIOUart configured in profile");
 
-    return OpenAndroidIOIOUartPort(config.ioio_uart_id, config.baud_rate,
+    if (ioio_helper == nullptr)
+      throw std::runtime_error{"IOIO not available"};
+
+    return OpenAndroidIOIOUartPort(*ioio_helper,
+                                   config.ioio_uart_id, config.baud_rate,
                                    listener, handler);
 #else
     throw std::runtime_error("IOIO driver not available");
@@ -192,7 +213,11 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
     if (config.path.empty())
       throw std::runtime_error("No name configured");
 
-    return OpenAndroidUsbSerialPort(config.path.c_str(), config.baud_rate,
+    if (usb_serial_helper == nullptr)
+      throw std::runtime_error{"USB serial not available"};
+
+    return OpenAndroidUsbSerialPort(*usb_serial_helper,
+                                    config.path.c_str(), config.baud_rate,
                                     listener, handler);
 #else
     throw std::runtime_error("Android USB serial not available");
@@ -213,10 +238,21 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
 
 std::unique_ptr<Port>
 OpenPort(EventLoop &event_loop, Cares::Channel &cares,
+#ifdef ANDROID
+         BluetoothHelper *bluetooth_helper,
+         IOIOHelper *ioio_helper,
+         UsbSerialHelper *usb_serial_helper,
+#endif
          const DeviceConfig &config, PortListener *listener,
          DataHandler &handler)
 {
-  auto port = OpenPortInternal(event_loop, cares, config, listener, handler);
+  auto port = OpenPortInternal(event_loop, cares,
+#ifdef ANDROID
+                               bluetooth_helper,
+                               ioio_helper,
+                               usb_serial_helper,
+#endif
+                               config, listener, handler);
   if (port != nullptr)
     port = WrapPort(config, listener, handler, std::move(port));
   return port;

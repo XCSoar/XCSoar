@@ -14,7 +14,6 @@
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
 #include "LocalPath.hpp"
-#include "Components.hpp"
 #include "Profile/Profile.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "UIGlobals.hpp"
@@ -23,6 +22,8 @@
 #include "Language/Language.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 #include <vector>
 #include <cassert>
@@ -176,8 +177,7 @@ LoadFile(Path path) noexcept
   Profile::SetPath("PlanePath", path);
   PlaneGlue::Synchronize(settings.plane, settings,
                          settings.polar.glide_polar_task);
-  if (protected_task_manager != NULL)
-    protected_task_manager->SetGlidePolar(settings.polar.glide_polar_task);
+  backend_components->SetTaskPolar(settings.polar);
 
   return true;
 }

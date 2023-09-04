@@ -11,6 +11,7 @@
 #include "Components.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
+#include "DataComponents.hpp"
 
 enum Controls {
   WAYPOINT,
@@ -37,7 +38,7 @@ ATCReferencePanel::UpdateValues() noexcept
     CommonInterface::GetComputerSettings().poi.atc_reference;
 
   const auto waypoint = location.IsValid()
-    ? way_points.GetNearest(location, 100)
+    ? data_components->waypoints->GetNearest(location, 100)
     : nullptr;
 
   SetText(WAYPOINT, waypoint != nullptr ? waypoint->name.c_str() : _T("---"));
@@ -65,7 +66,8 @@ ATCReferencePanel::Prepare(ContainerWindow &parent,
 
   AddButton(_("Relocate"), [this](){
     auto &location = CommonInterface::SetComputerSettings().poi.atc_reference;
-    auto waypoint = ShowWaypointListDialog(CommonInterface::Basic().location);
+    auto waypoint = ShowWaypointListDialog(*data_components->waypoints,
+                                           CommonInterface::Basic().location);
     if (waypoint != nullptr) {
       location = waypoint->location;
       UpdateValues();

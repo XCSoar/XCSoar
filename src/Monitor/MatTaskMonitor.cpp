@@ -14,6 +14,8 @@
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
+#include "DataComponents.hpp"
 #include "Interface.hpp"
 
 class MatTaskAddWidget final
@@ -56,7 +58,7 @@ private:
 inline void
 MatTaskAddWidget::OnAdd()
 {
-  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
+  ProtectedTaskManager::ExclusiveLease task_manager{*backend_components->protected_task_manager};
   const OrderedTask &task = task_manager->GetOrderedTask();
   const unsigned idx = task.TaskSize() - 1;
   AbstractTaskFactory &factory = task_manager->GetFactory();
@@ -130,7 +132,7 @@ FindMatTurnpoint()
       !basic.location_available ||
       /* we must be heading finish, and here we may insert new
          points */
-      !FinishIsCurrent(*protected_task_manager))
+      !FinishIsCurrent(*backend_components->protected_task_manager))
     /* we only handle MAT tasks */
     return nullptr;
 
@@ -140,15 +142,15 @@ FindMatTurnpoint()
     return wp.IsTurnpoint();
   };
 
-  auto wp = way_points.GetNearestIf(basic.location,
-                                    CylinderZone::MAT_RADIUS,
-                                    turnpoint_predicate);
+  auto wp = data_components->waypoints->GetNearestIf(basic.location,
+                                                     CylinderZone::MAT_RADIUS,
+                                                     turnpoint_predicate);
 
   if (wp == nullptr)
     /* no nearby turn point */
     return nullptr;
 
-  if (IsInOrderedTask(*protected_task_manager, *wp))
+  if (IsInOrderedTask(*backend_components->protected_task_manager, *wp))
     /* already in task */
     return nullptr;
 

@@ -4,22 +4,19 @@
 #include "AndroidIOIOUartPort.hpp"
 #include "AndroidPort.hpp"
 #include "Android/IOIOHelper.hpp"
-#include "Android/Main.hpp"
 #include "java/Global.hxx"
 
 #include <cassert>
 
 std::unique_ptr<Port>
-OpenAndroidIOIOUartPort(unsigned uart_id, unsigned baud_rate,
+OpenAndroidIOIOUartPort(IOIOHelper &ioio_helper,
+                        unsigned uart_id, unsigned baud_rate,
                         PortListener *listener, DataHandler &handler)
 {
   assert(uart_id < AndroidIOIOUartPort::getNumberUarts());
 
-  if (ioio_helper == nullptr)
-    throw std::runtime_error{"IOIO not available"};
-
-  PortBridge *bridge = ioio_helper->openUart(Java::GetEnv(),
-                                             uart_id, baud_rate);
+  PortBridge *bridge = ioio_helper.openUart(Java::GetEnv(),
+                                            uart_id, baud_rate);
   if (bridge == nullptr)
     return nullptr;
 

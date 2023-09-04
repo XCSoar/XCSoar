@@ -3,7 +3,7 @@
 
 #include "DrmDisplay.hpp"
 #include "Hardware/DisplayDPI.hpp"
-#include "system/Error.hxx"
+#include "lib/fmt/SystemError.hxx"
 
 #include <span>
 
@@ -16,12 +16,12 @@ OpenDriDevice(const char *path)
 {
   UniqueFileDescriptor fd;
   if (!fd.Open(path, O_RDWR))
-    throw FormatErrno("Could not open DRI device %s", path);
+    throw FmtErrno("Could not open DRI device {}", path);
 
   /* check if this card works */
   drmModeRes *resources = drmModeGetResources(fd.Get());
   if (resources == nullptr)
-    throw FormatErrno("drmModeGetResources() for DRI device %s failed", path);
+    throw FmtErrno("drmModeGetResources() for DRI device {} failed", path);
 
   return fd;
 }

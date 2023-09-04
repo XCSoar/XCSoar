@@ -3,7 +3,7 @@
 
 #include "Display.hpp"
 #include "ConfigChooser.hpp"
-#include "util/RuntimeError.hxx"
+#include "lib/fmt/RuntimeError.hxx"
 #include "LogFile.hpp"
 
 #include <cassert>
@@ -100,8 +100,7 @@ Display::CreateContext()
     dummy_surface = eglCreatePbufferSurface(display, chosen_config,
                                             pbuffer_attributes);
     if (dummy_surface == EGL_NO_SURFACE)
-      throw FormatRuntimeError("eglCreatePbufferSurface() failed: %#x",
-                               eglGetError());
+      throw FmtRuntimeError("eglCreatePbufferSurface() failed: {:#x}", eglGetError());
 
     MakeCurrent(dummy_surface);
   }
@@ -113,8 +112,7 @@ Display::CreateWindowSurface(EGLNativeWindowType native_window)
   auto surface = eglCreateWindowSurface(display, chosen_config,
                                         native_window, nullptr);
   if (surface == EGL_NO_SURFACE)
-    throw FormatRuntimeError("eglCreateWindowSurface() failed: %#x",
-                             eglGetError());
+    throw FmtRuntimeError("eglCreateWindowSurface() failed: {:#x}", eglGetError());
 
   return surface;
 }
@@ -126,8 +124,7 @@ Display::MakeCurrent(EGLSurface surface)
     surface = dummy_surface;
 
   if (!eglMakeCurrent(display, surface, surface, context))
-    throw FormatRuntimeError("eglMakeCurrent() failed: %#x",
-                             eglGetError());
+    throw FmtRuntimeError("eglMakeCurrent() failed: {:#x}", eglGetError());
 }
 
 } // namespace EGL

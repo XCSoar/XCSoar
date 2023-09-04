@@ -4,6 +4,7 @@
 #include "AltitudeSetup.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
@@ -37,9 +38,9 @@ AltitudeSetupPanel::OnModified(DataField &_df) noexcept
   settings.pressure = Units::FromUserPressure(df.GetValue());
   settings.pressure_available.Update(CommonInterface::Basic().clock);
 
-  {
+  if (backend_components->devices) {
     MessageOperationEnvironment env;
-    devices->PutQNH(settings.pressure, env);
+    backend_components->devices->PutQNH(settings.pressure, env);
   }
 }
 

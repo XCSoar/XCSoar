@@ -9,6 +9,8 @@
 #include "Gauge/BigTrafficWidget.hpp"
 #include "Computer/Settings.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
+#include "DataComponents.hpp"
 #include "DataGlobals.hpp"
 #include "MapSettings.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -17,7 +19,7 @@
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
-#include "Device/device.hpp"
+#include "Device/MultipleDevices.hpp"
 #include "PageActions.hpp"
 #include "util/DollarExpand.hpp"
 #include "util/Macros.hpp"
@@ -46,12 +48,12 @@ ExpandTaskMacros(tstring_view name,
     return _T("");
   }
 
-  if (protected_task_manager == nullptr) {
+  if (!backend_components->protected_task_manager) {
     invalid = true;
     return nullptr;
   }
 
-  ProtectedTaskManager::Lease task_manager(*protected_task_manager);
+  ProtectedTaskManager::Lease task_manager{*backend_components->protected_task_manager};
 
   const AbstractTask *task = task_manager->GetActiveTask();
   if (task == nullptr || !task_stats.task_valid ||
@@ -245,7 +247,7 @@ static const TCHAR *
 LookupMacro(tstring_view name, bool &invalid) noexcept
 {
   if (name ==_T("CheckAirspace")) {
-    invalid |= airspace_database.IsEmpty();
+    invalid |= data_components->airspaces->IsEmpty();
     return nullptr;
   }
 
@@ -269,13 +271,14 @@ LookupMacro(tstring_view name, bool &invalid) noexcept
     invalid |= !Calculated().circling;
     return nullptr;
   } else if (name == _T("CheckVega")) {
-    invalid |= devVarioFindVega() == nullptr;
+    invalid |= backend_components->devices == nullptr ||
+      !backend_components->devices->HasVega();
     return nullptr;
   } else if (name == _T("CheckReplay")) {
     invalid |= CommonInterface::MovementDetected();
     return nullptr;
   } else if (name == _T("CheckWaypointFile")) {
-    invalid |= way_points.IsEmpty();
+    invalid |= data_components->waypoints->IsEmpty();
     return nullptr;
   } else if (name == _T("CheckLogger")) {
     invalid |= Basic().gps.replay;
@@ -289,7 +292,8 @@ LookupMacro(tstring_view name, bool &invalid) noexcept
     invalid |= !Calculated().terrain_valid;
     return nullptr;
   } else if (name == _T("LoggerActive")) {
-    return logger != nullptr && logger->IsLoggerActive()
+    return backend_components->igc_logger != nullptr &&
+      backend_components->igc_logger->IsLoggerActive()
       ? _("Stop")
       : _("Start");
   } else if (name == _T("SnailTrailToggleName")) {

@@ -6,6 +6,7 @@
 #include "Interface.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 
@@ -27,26 +28,27 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode) noexcept
   if (!CommonInterface::Basic().gps.simulator)
     return false;
 
+  auto &device_blackboard = *backend_components->device_blackboard;
   const double step = Units::ToSysSpeed(10);
   const auto a5 = Angle::Degrees(5);
 
   switch (keycode) {
   case ibkUp:
-    device_blackboard->SetSpeed(
+    device_blackboard.SetSpeed(
         CommonInterface::Basic().ground_speed + step);
     return true;
 
   case ibkDown:
-    device_blackboard->SetSpeed(fdim(CommonInterface::Basic().ground_speed,
+    device_blackboard.SetSpeed(fdim(CommonInterface::Basic().ground_speed,
                                      step));
     return true;
 
   case ibkLeft:
-    device_blackboard->SetTrack(CommonInterface::Basic().track - a5);
+    device_blackboard.SetTrack(CommonInterface::Basic().track - a5);
     return true;
 
   case ibkRight:
-    device_blackboard->SetTrack(CommonInterface::Basic().track + a5);
+    device_blackboard.SetTrack(CommonInterface::Basic().track + a5);
     return true;
   }
 

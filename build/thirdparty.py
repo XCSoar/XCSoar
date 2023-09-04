@@ -47,12 +47,12 @@ if toolchain.is_windows:
     ]
 
     # Some libraries (such as CURL) want to use the min()/max() macros
-    cppflags = cppflags.replace('-DNOMINMAX', '')
+    toolchain.cppflags = cppflags.replace('-DNOMINMAX', '')
 
     # Explicitly disable _FORTIFY_SOURCE because it is broken with
     # mingw.  This prevents some libraries such as libsodium to enable
     # it.
-    cppflags += ' -D_FORTIFY_SOURCE=0'
+    toolchain.cppflags += ' -D_FORTIFY_SOURCE=0'
 elif toolchain.is_darwin:
     thirdparty_libs = [
         zlib,

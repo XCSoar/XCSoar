@@ -31,12 +31,12 @@ public:
   [[gnu::pure]]
   static NearestAirspace
   FindHorizontal(const MoreData &basic,
-                 const ProtectedAirspaceWarningManager &airspace_warnings,
+                 const ProtectedAirspaceWarningManager *airspace_warnings,
                  const Airspaces &airspace_database) noexcept;
 
   static NearestAirspace
   FindVertical(const MoreData &basic,
                const DerivedInfo &calculated,
-               const ProtectedAirspaceWarningManager &airspace_warnings,
+               const ProtectedAirspaceWarningManager *airspace_warnings,
                const Airspaces &airspace_database) noexcept;
 };

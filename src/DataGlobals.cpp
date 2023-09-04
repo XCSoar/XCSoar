@@ -11,6 +11,8 @@
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
+#include "DataComponents.hpp"
 #include "MainWindow.hpp"
 #include "PageActions.hpp"
 #include "Protection.hpp" // for global_running
@@ -25,24 +27,25 @@ DataGlobals::UnsetTerrain() noexcept
   main_window.SetBottomWidget(nullptr);
 
   main_window.SetTerrain(nullptr);
-  glide_computer->SetTerrain(nullptr);
 
-  delete terrain;
-  terrain = nullptr;
+  if (backend_components->glide_computer)
+    backend_components->glide_computer->SetTerrain(nullptr);
+
+  data_components->terrain.reset();
 }
 
 void
 DataGlobals::SetTerrain(std::unique_ptr<RasterTerrain> _terrain) noexcept
 {
-  assert(!terrain);
+  assert(!data_components->terrain);
 
   auto &main_window = *CommonInterface::main_window;
 
-  terrain = _terrain.release();
-  main_window.SetTerrain(terrain);
+  data_components->terrain = std::move(_terrain);
+  main_window.SetTerrain(data_components->terrain.get());
 
-  if (glide_computer != nullptr)
-    glide_computer->SetTerrain(terrain);
+  if (backend_components->glide_computer)
+    backend_components->glide_computer->SetTerrain(data_components->terrain.get());
 
   /* re-create the bottom widget if it was deleted by
      UnsetTerrain() */
@@ -74,11 +77,13 @@ DataGlobals::SetRasp(std::shared_ptr<RaspStore> rasp) noexcept
 void
 DataGlobals::UpdateHome(bool reset) noexcept
 {
-    WaypointGlue::SetHome(way_points, terrain,
-                          CommonInterface::SetComputerSettings().poi,
-                          CommonInterface::SetComputerSettings().team_code,
-                          device_blackboard, reset);
-    WaypointGlue::SaveHome(Profile::map,
-                           CommonInterface::GetComputerSettings().poi,
-                           CommonInterface::GetComputerSettings().team_code);
+  WaypointGlue::SetHome(*data_components->waypoints,
+                        data_components->terrain.get(),
+                        CommonInterface::SetComputerSettings().poi,
+                        CommonInterface::SetComputerSettings().team_code,
+                        backend_components->device_blackboard.get(),
+                        reset);
+  WaypointGlue::SaveHome(Profile::map,
+                         CommonInterface::GetComputerSettings().poi,
+                         CommonInterface::GetComputerSettings().team_code);
 }

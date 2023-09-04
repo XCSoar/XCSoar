@@ -3,7 +3,7 @@
 # distribution was built with libstdc++.
 FMT_HEADER_ONLY ?= n
 
-$(eval $(call pkg-config-library,LIBFMT,fmt))
+$(eval $(call pkg-config-library,LIBFMT,fmt '>=' 7))
 
 FMT_SOURCES = \
 	$(SRC)/lib/fmt/RuntimeError.cxx \

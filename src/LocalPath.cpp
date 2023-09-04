@@ -277,7 +277,7 @@ FindDataPaths() noexcept
 #ifndef __APPLE__
   /* Linux (and others): allow global configuration in /etc/xcsoar */
   if (Directory::Exists(Path{"/etc/xcsoar"}))
-    data_paths.emplace_back(Path{"/etc/xcsoar"});
+    result.emplace_back(Path{"/etc/xcsoar"});
 #endif // !APPLE
 #endif // HAVE_POSIX
 

@@ -9,6 +9,7 @@
 #include "time/Stamp.hpp"
 #include "system/Path.hpp"
 
+class DeviceBlackboard;
 class Logger;
 class ProtectedTaskManager;
 class AbstractReplay;
@@ -17,13 +18,15 @@ class Error;
 
 class Replay final
 {
+  DeviceBlackboard &device_blackboard;
+
   UI::Timer timer{[this]{ OnTimer(); }};
 
-  double time_scale;
+  double time_scale = 1;
 
-  AbstractReplay *replay;
+  AbstractReplay *replay = nullptr;
 
-  Logger *logger;
+  Logger *const logger;
   ProtectedTaskManager &task_manager;
 
   AllocatedPath path = nullptr;
@@ -54,13 +57,13 @@ class Replay final
    */
   NMEAInfo next_data;
 
-  CatmullRomInterpolator *cli;
+  CatmullRomInterpolator *cli = nullptr;
 
 public:
-  Replay(Logger *_logger, ProtectedTaskManager &_task_manager)
-    :time_scale(1), replay(nullptr),
-     logger(_logger), task_manager(_task_manager), cli(nullptr) {
-  }
+  Replay(DeviceBlackboard &_device_blackboard,
+         Logger *_logger, ProtectedTaskManager &_task_manager)
+    :device_blackboard(_device_blackboard),
+     logger(_logger), task_manager(_task_manager) {}
 
   ~Replay() {
     Stop();

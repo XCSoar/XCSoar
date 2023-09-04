@@ -4,6 +4,7 @@
 #include "SystemStatusPanel.hpp"
 #include "Logger/Logger.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Hardware/PowerGlobal.hpp"
@@ -88,7 +89,8 @@ SystemStatusPanel::Refresh() noexcept
 
   SetText(FLARM, Temp);
 
-  SetText(Logger, logger != nullptr && logger->IsLoggerActive()
+  SetText(Logger, backend_components->igc_logger != nullptr &&
+          backend_components->igc_logger->IsLoggerActive()
           ? _("On")
           : _("Off"));
 

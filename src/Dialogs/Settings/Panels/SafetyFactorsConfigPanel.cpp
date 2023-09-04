@@ -8,12 +8,13 @@
 #include "Form/DataField/Float.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
-#include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "UIGlobals.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 enum ControlIndex {
   ArrivalHeight,
@@ -124,8 +125,7 @@ SafetyFactorsConfigPanel::Save(bool &_changed) noexcept
     settings_computer.polar.SetDegradationFactor(1 - degradation / 100);
     Profile::Set(ProfileKeys::PolarDegradation,
                  settings_computer.polar.degradation_factor);
-    if (protected_task_manager != nullptr)
-      protected_task_manager->SetGlidePolar(settings_computer.polar.glide_polar_task);
+    backend_components->SetTaskPolar(settings_computer.polar);
     changed = true;
   }
 

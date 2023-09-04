@@ -7,5 +7,6 @@ struct AGeoPoint;
 
 class AbortIntersectionTest {
 public:
-  virtual bool Intersects(const AGeoPoint &destination) = 0;
+  [[gnu::pure]]
+  virtual bool Intersects(const AGeoPoint &destination) const noexcept = 0;
 };

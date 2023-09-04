@@ -30,6 +30,8 @@
 #include "Widget/VScrollWidget.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "BackendComponents.hpp"
+#include "DataComponents.hpp"
 
 inline
 TaskManagerDialog::TaskManagerDialog(WndForm &_dialog,
@@ -79,7 +81,7 @@ TaskManagerDialog::Initialise(ContainerWindow &parent,
                               const PixelRect &rc) noexcept
 {
   if (!task) {
-    task = protected_task_manager->TaskClone();
+    task = backend_components->protected_task_manager->TaskClone();
     modified = false;
   }
 
@@ -187,14 +189,14 @@ TaskManagerDialog::Commit()
     { // this must be done in thread lock because it potentially changes the
       // waypoints database
       ScopeSuspendAllThreads suspend;
-      task->CheckDuplicateWaypoints(way_points);
-      way_points.Optimise();
+      task->CheckDuplicateWaypoints(*data_components->waypoints);
+      data_components->waypoints->Optimise();
     }
 
-    protected_task_manager->TaskCommit(*task);
+    backend_components->protected_task_manager->TaskCommit(*task);
 
     try {
-      protected_task_manager->TaskSaveDefault();
+      backend_components->protected_task_manager->TaskSaveDefault();
     } catch (...) {
       ShowError(std::current_exception(), _("Failed to save file."));
       return false;
@@ -215,7 +217,7 @@ void
 TaskManagerDialog::Revert()
 {
   // create new task first to guarantee pointers are different
-  task = protected_task_manager->TaskClone();
+  task = backend_components->protected_task_manager->TaskClone();
   /**
    * \todo Having local pointers scattered about is an accident waiting to
    *       happen. Need a semantic that provides the authoritative pointer to
@@ -233,7 +235,7 @@ TaskManagerDialog::Revert()
 void
 dlgTaskManagerShowModal(std::unique_ptr<OrderedTask> task)
 {
-  if (protected_task_manager == nullptr)
+  if (!backend_components->protected_task_manager)
     return;
 
   const DialogLook &look = UIGlobals::GetDialogLook();

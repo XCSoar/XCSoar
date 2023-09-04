@@ -15,7 +15,6 @@
 #include "Screen/Layout.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "Audio/Sound.hpp"
-#include "Components.hpp"
 #include "ProcessTimer.hpp"
 #include "LogFile.hpp"
 #include "Gauge/GaugeFLARM.hpp"
@@ -35,6 +34,8 @@
 #include "UIReceiveBlackboard.hpp"
 #include "UISettings.hpp"
 #include "Interface.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 #ifdef ANDROID
 #include "Android/ReceiveTask.hpp"
@@ -676,7 +677,7 @@ MainWindow::LateInitialise() noexcept
 
   late_initialised = true;
 
-  if (devices != nullptr) {
+  if (backend_components->devices != nullptr) {
     /* this OperationEnvironment instance must be persistent, because
        DeviceDescriptor::Open() is asynchronous */
     static PopupOperationEnvironment env;
@@ -686,7 +687,7 @@ MainWindow::LateInitialise() noexcept
        opening some devices may be intercepted by Android which pauses
        XCSoar in order to ask the user for permission; pausing works
        properly only if the main event loop runs */
-    devices->Open(env);
+    backend_components->devices->Open(env);
   }
 }
 

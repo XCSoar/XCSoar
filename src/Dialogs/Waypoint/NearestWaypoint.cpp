@@ -16,15 +16,15 @@
  * @return True if a waypoint was found
  */
 bool
-PopupNearestWaypointDetails(const Waypoints &way_points,
+PopupNearestWaypointDetails(Waypoints &waypoints,
                             const GeoPoint &location,
                             double range)
 {
-  auto way_point = way_points.LookupLocation(location, range);
+  auto way_point = waypoints.LookupLocation(location, range);
 
   if (way_point) {
     LastUsedWaypoints::Add(*way_point);
-    dlgWaypointDetailsShowModal(way_point, true, true);
+    dlgWaypointDetailsShowModal(&waypoints, way_point, true, true);
     return true;
   }
   return false;

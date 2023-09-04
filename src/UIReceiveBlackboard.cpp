@@ -11,6 +11,7 @@
 #include "Input/TaskEventObserver.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
 
 #if defined(__linux__) && defined(USE_POLL_EVENT) && !defined(KOBO)
 #include "lib/dbus/Connection.hxx"
@@ -77,12 +78,12 @@ UIReceiveCalculatedData()
   ActionInterface::UpdateDisplayMode();
   ActionInterface::SendUIState();
 
-  if (devices != nullptr)
-    devices->NotifyCalculatedUpdate(CommonInterface::Basic(),
-                                    CommonInterface::Calculated());
+  if (backend_components->devices)
+    backend_components->devices->NotifyCalculatedUpdate(CommonInterface::Basic(),
+                                                        CommonInterface::Calculated());
 
-  {
-    const ProtectedTaskManager::Lease lease(*protected_task_manager);
+  if (backend_components->protected_task_manager) {
+    const ProtectedTaskManager::Lease lease{*backend_components->protected_task_manager};
     task_event_observer.Check(lease);
   }
 }

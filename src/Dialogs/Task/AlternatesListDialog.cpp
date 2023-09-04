@@ -10,7 +10,6 @@
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Unordered/AlternateList.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
-#include "Components.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "Look/MapLook.hpp"
@@ -18,6 +17,8 @@
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Language/Language.hpp"
 #include "ActionInterface.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 #include <cassert>
 
@@ -49,7 +50,7 @@ public:
   }
 
   bool Update() {
-    ProtectedTaskManager::Lease lease(*protected_task_manager);
+    ProtectedTaskManager::Lease lease(*backend_components->protected_task_manager);
     alternates = lease->GetAlternates();
     return !alternates.empty();
   }
@@ -100,7 +101,7 @@ void
 AlternatesListWidget::CreateButtons(WidgetDialog &dialog)
 {
   goto_button = dialog.AddButton(_("Goto"), [this](){
-    protected_task_manager->DoGoto(GetSelectedWaypointPtr());
+    backend_components->protected_task_manager->DoGoto(GetSelectedWaypointPtr());
     cancel_button->Click();
   });
 
@@ -139,9 +140,9 @@ AlternatesListWidget::OnActivateItem([[maybe_unused]] unsigned index) noexcept
 }
 
 void
-dlgAlternatesListShowModal()
+dlgAlternatesListShowModal(Waypoints *waypoints) noexcept
 {
-  if (protected_task_manager == nullptr)
+  if (!backend_components->protected_task_manager)
     return;
 
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
@@ -165,5 +166,6 @@ dlgAlternatesListShowModal()
   if (i < 0 || (unsigned)i >= dialog.GetWidget().alternates.size())
     return;
 
-  dlgWaypointDetailsShowModal(dialog.GetWidget().alternates[i].waypoint, true);
+  dlgWaypointDetailsShowModal(waypoints,
+                              dialog.GetWidget().alternates[i].waypoint, true);
 }

@@ -2,32 +2,19 @@
 // Copyright The XCSoar Project
 
 #include "Components.hpp"
-#include "Computer/GlideComputer.hpp"
-#include "Engine/Airspace/Airspaces.hpp"
-#include "Waypoint/Waypoints.hpp"
+#include "Tracking/Features.hpp"
 #include "net/http/Features.hpp"
 #include "thread/Debug.hpp"
 #include "thread/Handle.hpp"
 
+#include <cassert>
+
 FileCache *file_cache;
-TopographyStore *topography;
-RasterTerrain *terrain;
 AsyncTerrainOverviewLoader *terrain_loader;
 
 #ifndef ENABLE_OPENGL
 DrawThread *draw_thread;
 #endif
-
-MultipleDevices *devices;
-DeviceBlackboard *device_blackboard;
-
-MergeThread *merge_thread;
-CalculationThread *calculation_thread;
-
-Logger *logger;
-NMEALogger *nmea_logger;
-GlueFlightLogger *flight_logger;
-Replay *replay;
 
 #ifdef HAVE_TRACKING
 TrackingGlue *tracking;
@@ -36,22 +23,6 @@ TrackingGlue *tracking;
 #ifdef HAVE_HTTP
 TIM::Glue *tim_glue;
 #endif
-
-Waypoints way_points;
-
-ProtectedTaskManager *protected_task_manager;
-
-Airspaces airspace_database;
-
-GlideComputer *glide_computer;
-
-ProtectedAirspaceWarningManager *
-GetAirspaceWarnings()
-{
-  return glide_computer != nullptr
-    ? &glide_computer->GetAirspaceWarnings()
-    : nullptr;
-}
 
 #ifndef NDEBUG
 

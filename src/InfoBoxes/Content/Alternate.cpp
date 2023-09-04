@@ -14,6 +14,8 @@
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Language/Language.hpp"
 #include "Widget/CallbackWidget.hpp"
+#include "BackendComponents.hpp"
+#include "DataComponents.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
@@ -21,7 +23,9 @@
 static std::unique_ptr<Widget>
 LoadAlternatesPanel([[maybe_unused]] unsigned id) noexcept
 {
-  return std::make_unique<CallbackWidget>(dlgAlternatesListShowModal);
+  return std::make_unique<CallbackWidget>([]{
+    dlgAlternatesListShowModal(data_components->waypoints.get());
+  });
 }
 
 static constexpr
@@ -33,12 +37,12 @@ InfoBoxPanel alternate_infobox_panels[] = {
 void
 InfoBoxContentAlternateName::Update(InfoBoxData &data) noexcept
 {
-  if (protected_task_manager == NULL) {
+  if (!backend_components->protected_task_manager) {
     data.SetInvalid();
     return;
   }
 
-  ProtectedTaskManager::Lease lease(*protected_task_manager);
+  ProtectedTaskManager::Lease lease{*backend_components->protected_task_manager};
   const AlternateList &alternates = lease->GetAlternates();
 
   const AlternatePoint *alternate;
@@ -79,12 +83,12 @@ InfoBoxContentAlternateName::GetDialogContent() noexcept
 void
 InfoBoxContentAlternateGR::Update(InfoBoxData &data) noexcept
 {
-  if (protected_task_manager == NULL) {
+  if (!backend_components->protected_task_manager) {
     data.SetInvalid();
     return;
   }
 
-  ProtectedTaskManager::Lease lease(*protected_task_manager);
+  ProtectedTaskManager::Lease lease{*backend_components->protected_task_manager};
   const AlternateList &alternates = lease->GetAlternates();
 
   const AlternatePoint *alternate;

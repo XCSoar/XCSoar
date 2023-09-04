@@ -7,11 +7,9 @@
 #include "Features.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Device/Descriptor.hpp"
-#include "Components.hpp"
 #include "LogFile.hpp"
-#include "Interface.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
-#include "util/Algorithm.hpp"
+#include "SystemSettings.hpp"
 
 static void
 devInitOne(DeviceDescriptor &device, const DeviceConfig &config)
@@ -76,22 +74,20 @@ template<typename I>
 static bool
 DeviceConfigOverlaps(const DeviceConfig &config, I begin, I end)
 {
-  return ExistsIf(begin, end,
-                  [&config](const DeviceDescriptor *d) {
-                    return DeviceConfigOverlaps(config, d->GetConfig());
-                  });
+  return std::any_of(begin, end,
+                     [&config](const DeviceDescriptor *d) {
+                       return DeviceConfigOverlaps(config, d->GetConfig());
+                     });
 }
 
 void
-devStartup()
+devStartup(MultipleDevices &devices, const SystemSettings &settings)
 {
   LogString("Register serial devices");
 
-  const SystemSettings &settings = CommonInterface::GetSystemSettings();
-
   bool none_available = true;
   for (unsigned i = 0; i < NUMDEV; ++i) {
-    DeviceDescriptor &device = (*devices)[i];
+    DeviceDescriptor &device = devices[i];
     const DeviceConfig &config = settings.devices[i];
     if (!config.IsAvailable()) {
       device.ClearConfig();
@@ -100,7 +96,7 @@ devStartup()
 
     none_available = false;
 
-    if (DeviceConfigOverlaps(config, devices->begin(), devices->begin() + i)) {
+    if (DeviceConfigOverlaps(config, devices.begin(), devices.begin() + i)) {
       device.ClearConfig();
       continue;
     }
@@ -118,53 +114,23 @@ devStartup()
     config.Clear();
     config.port_type = DeviceConfig::PortType::INTERNAL;
 
-    DeviceDescriptor &device = (*devices)[0];
+    DeviceDescriptor &device = devices[0];
     devInitOne(device, config);
 #endif
   }
 }
 
 void
-VarioWriteNMEA(const TCHAR *text, OperationEnvironment &env)
-{
-  for (DeviceDescriptor *i : *devices)
-    if (i->IsVega())
-      i->WriteNMEA(text, env);
-}
-
-DeviceDescriptor *
-devVarioFindVega()
-{
-  for (DeviceDescriptor *i : *devices)
-    if (i->IsVega())
-      return i;
-
-  return nullptr;
-}
-
-void
-devShutdown()
-{
-  if (devices == nullptr)
-    return;
-
-  // Stop COM devices
-  LogString("Stop COM devices");
-
-  devices->Close();
-}
-
-void
-devRestart()
+devRestart(MultipleDevices &devices, const SystemSettings &settings)
 {
   LogString("RestartCommPorts");
 
-  devShutdown();
+  devices.Close();
 
-  devStartup();
+  devStartup(devices, settings);
 
   /* this OperationEnvironment instance must be persistent, because
      DeviceDescriptor::Open() is asynchronous */
   static PopupOperationEnvironment env;
-  devices->Open(env);
+  devices.Open(env);
 }

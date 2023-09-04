@@ -2,8 +2,9 @@
 // Copyright The XCSoar Project
 
 #include "ZipArchive.hpp"
+#include "lib/fmt/RuntimeError.hxx"
+#include "lib/fmt/PathFormatter.hpp"
 #include "system/ConvertPathName.hpp"
-#include "util/RuntimeError.hxx"
 
 #include <zzip/zzip.h>
 
@@ -11,8 +12,7 @@ ZipArchive::ZipArchive(Path path)
   :dir(zzip_dir_open(NarrowPathName(path), nullptr))
 {
   if (dir == nullptr)
-    throw FormatRuntimeError("Failed to open ZIP archive %s",
-                             (const char *)NarrowPathName(path));
+    throw FmtRuntimeError("Failed to open ZIP archive {}", path);
 }
 
 ZipArchive::~ZipArchive() noexcept

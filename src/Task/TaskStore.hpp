@@ -11,6 +11,7 @@
 
 struct TaskBehaviour;
 class OrderedTask;
+class Waypoints;
 
 /**
  * Class to load multiple tasks on demand, e.g. for browsing
@@ -49,7 +50,8 @@ public:
       return filename;
     }
 
-    const OrderedTask *GetTask(const TaskBehaviour &task_behaviour) noexcept;
+    const OrderedTask *GetTask(const TaskBehaviour &task_behaviour,
+                               Waypoints *waypoints) noexcept;
 
     [[gnu::pure]]
     bool operator<(const TaskStore::Item &other) const {
@@ -112,5 +114,6 @@ public:
    * @return The task defined by the given index
    */
   const OrderedTask *GetTask(unsigned index,
-                             const TaskBehaviour &task_behaviour);
+                             const TaskBehaviour &task_behaviour,
+                             Waypoints *waypoints);
 };
