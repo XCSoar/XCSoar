@@ -274,6 +274,9 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     return;
   }
 
+  /* Reverse flight list so that most recent flights are shown first */
+  std::reverse(flight_list.begin(),flight_list.end());
+
   const auto logs_path = MakeLocalPath(_T("logs"));
 
   while (true) {
