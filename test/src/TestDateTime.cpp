@@ -75,6 +75,14 @@ TestDate()
   ok1(BrokenDate(2014, 1, 1).DaysSince(BrokenDate(2013, 1, 1)) == 365);
   ok1(BrokenDate(2012, 3, 1).DaysSince(BrokenDate(2012, 2, 28)) == 2);
   ok1(BrokenDate(2013, 1, 1).DaysSince(BrokenDate(2012, 1, 1)) == 366);
+
+  d = BrokenDate::FromJulianDate(2460191);
+  ok1(d == BrokenDate(2023,9,3)); // Sunday
+  ok1(d.day_of_week == 0);
+
+  d = BrokenDate::FromJulianDate(2439230);
+  ok1(d == BrokenDate(1966,4,14)); // Thursday
+  ok1(d.day_of_week == 4);
 }
 
 static void
@@ -169,7 +177,7 @@ TestDateTime()
 
 int main()
 {
-  plan_tests(106);
+  plan_tests(110);
 
   TestDate();
   TestTime();

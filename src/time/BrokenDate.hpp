@@ -100,6 +100,14 @@ struct BrokenDate {
    */
   [[gnu::pure]]
   int DaysSince(const BrokenDate &other) const noexcept;
+
+/**
+ * @brief Creates BrokenDate from julian date
+ * 
+ * @param julian_date as integer (floored)
+ * @return BrokenDate 
+ */
+  static BrokenDate FromJulianDate(uint32_t julian_date) noexcept;
 };
 
 static_assert(std::is_trivial<BrokenDate>::value, "type is not trivial");
