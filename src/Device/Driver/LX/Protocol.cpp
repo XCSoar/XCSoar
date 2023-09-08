@@ -4,6 +4,7 @@
 #include "Protocol.hpp"
 #include "Device/Error.hpp"
 #include "Operation/Operation.hpp"
+#include "util/CRC.hpp"
 
 #include <cassert>
 
@@ -101,25 +102,13 @@ LX::ReceivePacketRetry(Port &port, Command command,
 std::byte
 LX::calc_crc_char(std::byte d, std::byte crc) noexcept
 {
-  constexpr std::byte crcpoly{0x69};
-  int count;
-
-  for (count = 8; --count >= 0; d <<= 1) {
-    std::byte tmp = crc ^ d;
-    crc <<= 1;
-    if ((tmp & std::byte{0x80}) != std::byte{})
-      crc ^= crcpoly;
-  }
-  return crc;
+  return calc_crc(std::span<std::byte>(&d,1),crc);
 }
 
 std::byte
 LX::calc_crc(std::span<const std::byte> src, std::byte crc) noexcept
 {
-  for (const auto i : src)
-    crc = calc_crc_char(i, crc);
-
-  return crc;
+  return std::byte{Calculate8bitCRC(reinterpret_cast<const uint8_t*>(src.data()),src.size(),static_cast<uint8_t>(crc),0x69)};
 }
 
 bool
