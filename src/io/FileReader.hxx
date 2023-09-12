@@ -37,8 +37,8 @@ public:
 		 handle(std::exchange(other.handle, INVALID_HANDLE_VALUE)) {}
 
 	~FileReader() noexcept {
-		if (IsDefined())
-			Close();
+		if (handle != INVALID_HANDLE_VALUE)
+			CloseHandle(handle);
 	}
 #else
 	FileReader(FileReader &&other) noexcept
@@ -62,8 +62,6 @@ public:
 		return fd;
 	}
 #endif
-
-	void Close() noexcept;
 
 	[[gnu::pure]]
 	uint64_t GetSize() const noexcept {

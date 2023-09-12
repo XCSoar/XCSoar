@@ -52,15 +52,6 @@ FileReader::Skip(off_t offset)
 		throw MakeLastError("Failed to seek");
 }
 
-void
-FileReader::Close() noexcept
-{
-	assert(IsDefined());
-
-	CloseHandle(handle);
-	handle = INVALID_HANDLE_VALUE;
-}
-
 #else
 
 FileReader::FileReader(Path _path)
@@ -100,14 +91,6 @@ FileReader::Skip(off_t offset)
 	const bool success = result >= 0;
 	if (!success)
 		throw MakeErrno("Failed to seek");
-}
-
-void
-FileReader::Close() noexcept
-{
-	assert(IsDefined());
-
-	fd.Close();
 }
 
 #endif
