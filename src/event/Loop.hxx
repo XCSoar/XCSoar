@@ -79,8 +79,8 @@ class EventLoop final
 	SocketList sockets;
 
 	/**
-	 * A linked list of #SocketEvent instances which have a
-	 * non-zero "ready_flags" field, and need to be dispatched.
+	 * A list of #SocketEvent instances which have a non-zero
+	 * "ready_flags" field, and need to be dispatched.
 	 */
 	SocketList ready_sockets;
 
