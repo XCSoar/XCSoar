@@ -9,8 +9,7 @@
 #ifdef _WIN32
 
 #include <errhandlingapi.h> // for GetLastError()
-#include <windef.h> // for HWND (needed by winbase.h)
-#include <winbase.h> // for FormatMessageA()
+#include <winerror.h>
 
 /**
  * Returns the error_category to be used to wrap WIN32 GetLastError()
@@ -50,8 +49,6 @@ MakeLastError(const char *msg) noexcept
 #endif /* _WIN32 */
 
 #include <cerrno> // IWYU pragma: export
-
-#include <string.h>
 
 /**
  * Returns the error_category to be used to wrap errno values.  The
