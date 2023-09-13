@@ -1,5 +1,6 @@
 *.o
 
+.vscode
 .stgit*
 .together/*
 .deps
