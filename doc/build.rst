@@ -163,7 +163,7 @@ Compiling for Android
 
 For Android, you need:
 
-- `Android SDK level 32 <http://developer.android.com/sdk/>`__
+- `Android SDK level 33 <http://developer.android.com/sdk/>`__
 
 - `Android NDK r26-beta1 <http://developer.android.com/sdk/ndk/>`__
 
