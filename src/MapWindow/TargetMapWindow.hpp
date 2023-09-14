@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -112,62 +92,62 @@ public:
                   const TaskLook &task_look,
                   const AircraftLook &aircraft_look,
                   const TopographyLook &topography_look,
-                  const OverlayLook &overlay_look);
-  virtual ~TargetMapWindow();
+                  const OverlayLook &overlay_look) noexcept;
+  virtual ~TargetMapWindow() noexcept;
 
-  void Create(ContainerWindow &parent, PixelRect rc, WindowStyle style);
+  void Create(ContainerWindow &parent, PixelRect rc, WindowStyle style) noexcept;
 
-  void SetTerrain(RasterTerrain *terrain);
-  void SetTopograpgy(TopographyStore *topography);
+  void SetTerrain(RasterTerrain *terrain) noexcept;
+  void SetTopograpgy(TopographyStore *topography) noexcept;
 
-  void SetAirspaces(Airspaces *airspace_database) {
+  void SetAirspaces(Airspaces *airspace_database) noexcept {
     airspace_renderer.SetAirspaces(airspace_database);
   }
 
-  void SetWaypoints(const Waypoints *way_points) {
+  void SetWaypoints(const Waypoints *way_points) noexcept {
     way_point_renderer.SetWaypoints(way_points);
   }
 
-  void SetTask(ProtectedTaskManager *_task) {
+  void SetTask(ProtectedTaskManager *_task) noexcept {
     task = _task;
   }
 
-  void SetGlideComputer(const GlideComputer *_gc) {
+  void SetGlideComputer(const GlideComputer *_gc) noexcept {
     glide_computer = _gc;
   }
 
-  void SetTarget(unsigned index);
+  void SetTarget(unsigned index) noexcept;
 
 private:
   /**
    * Renders the terrain background
    * @param canvas The drawing canvas
    */
-  void RenderTerrain(Canvas &canvas);
+  void RenderTerrain(Canvas &canvas) noexcept;
 
   /**
    * Renders the topography
    * @param canvas The drawing canvas
    */
-  void RenderTopography(Canvas &canvas);
+  void RenderTopography(Canvas &canvas) noexcept;
 
   /**
    * Renders the topography labels
    * @param canvas The drawing canvas
    */
-  void RenderTopographyLabels(Canvas &canvas);
+  void RenderTopographyLabels(Canvas &canvas) noexcept;
 
   /**
    * Renders the airspace
    * @param canvas The drawing canvas
    */
-  void RenderAirspace(Canvas &canvas);
+  void RenderAirspace(Canvas &canvas) noexcept;
 
-  void RenderTrail(Canvas &canvas);
+  void RenderTrail(Canvas &canvas) noexcept;
 
-  void DrawWaypoints(Canvas &canvas);
+  void DrawWaypoints(Canvas &canvas) noexcept;
 
-  void DrawTask(Canvas &canvas);
+  void DrawTask(Canvas &canvas) noexcept;
 
 private:
   /**
@@ -177,7 +157,7 @@ private:
    * @param drag_last location of target
    * @param canvas
    */
-  void TargetPaintDrag(Canvas &canvas, PixelPoint last_drag);
+  void TargetPaintDrag(Canvas &canvas, PixelPoint last_drag) noexcept;
 
   /**
    * If PanTarget, tests if target is clicked
@@ -188,7 +168,7 @@ private:
    * @return true if click is near target
    */
   [[gnu::pure]]
-  bool isClickOnTarget(PixelPoint drag_last) const;
+  bool isClickOnTarget(PixelPoint drag_last) const noexcept;
 
   /**
    * If PanTarget, tests if drag destination
@@ -200,7 +180,8 @@ private:
    *
    * @return true if location is in OZ
    */
-  bool isInSector(PixelPoint p);
+  [[gnu::pure]]
+  bool isInSector(PixelPoint p) const noexcept;
 
   /**
    * If PanTarget, updates task with new target
@@ -211,10 +192,10 @@ private:
    *
    * @return true if successful
    */
-  bool TargetDragged(PixelPoint p);
+  bool TargetDragged(PixelPoint p) noexcept;
 
 protected:
-  virtual void OnTaskModified();
+  virtual void OnTaskModified() noexcept;
 
 protected:
   /* virtual methods from class Window */

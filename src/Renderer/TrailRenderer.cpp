@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "TrailRenderer.hpp"
 #include "Look/TrailLook.hpp"
@@ -31,12 +11,11 @@ Copyright_License {
 #include "Projection/WindowProjection.hpp"
 #include "Geo/Math.hpp"
 #include "Engine/Contest/ContestTrace.hpp"
-#include "util/Clamp.hpp"
 
 #include <algorithm>
 
 bool
-TrailRenderer::LoadTrace(const TraceComputer &trace_computer)
+TrailRenderer::LoadTrace(const TraceComputer &trace_computer) noexcept
 {
   trace.clear();
   trace_computer.LockedCopyTo(trace);
@@ -46,7 +25,7 @@ TrailRenderer::LoadTrace(const TraceComputer &trace_computer)
 bool
 TrailRenderer::LoadTrace(const TraceComputer &trace_computer,
                          TimeStamp min_time,
-                         const WindowProjection &projection)
+                         const WindowProjection &projection) noexcept
 {
   trace.clear();
   trace_computer.LockedCopyTo(trace,
@@ -62,27 +41,26 @@ TrailRenderer::LoadTrace(const TraceComputer &trace_computer,
  * @param vario Input value between min_vario and max_vario
  * @return SnailTrail color array index
  */
-[[gnu::const]]
-static unsigned
-GetSnailColorIndex(double vario, double min_vario, double max_vario)
+static constexpr unsigned
+GetSnailColorIndex(double vario, double min_vario, double max_vario) noexcept
 {
   auto cv = vario < 0 ? -vario / min_vario : vario / max_vario;
 
-  return Clamp((int)((cv + 1) / 2 * TrailLook::NUMSNAILCOLORS),
-               0, (int)(TrailLook::NUMSNAILCOLORS - 1));
+  return std::clamp((int)((cv + 1) / 2 * TrailLook::NUMSNAILCOLORS),
+                    0, (int)(TrailLook::NUMSNAILCOLORS - 1));
 }
 
-[[gnu::const]]
-static unsigned
-GetAltitudeColorIndex(double alt, double min_alt, double max_alt)
+static constexpr unsigned
+GetAltitudeColorIndex(double alt, double min_alt, double max_alt) noexcept
 {
   auto relative_altitude = (alt - min_alt) / (max_alt - min_alt);
   int _max = TrailLook::NUMSNAILCOLORS - 1;
-  return Clamp((int)(relative_altitude * _max), 0, _max);
+  return std::clamp((int)(relative_altitude * _max), 0, _max);
 }
 
+[[gnu::pure]]
 static std::pair<double, double>
-GetMinMax(TrailSettings::Type type, const TracePointVector &trace)
+GetMinMax(TrailSettings::Type type, const TracePointVector &trace) noexcept
 {
   double value_min, value_max;
 
@@ -90,17 +68,17 @@ GetMinMax(TrailSettings::Type type, const TracePointVector &trace)
     value_max = 1000;
     value_min = 500;
 
-    for (auto it = trace.begin(); it != trace.end(); ++it) {
-      value_max = std::max(it->GetAltitude(), value_max);
-      value_min = std::min(it->GetAltitude(), value_min);
+    for (const auto &i : trace) {
+      value_max = std::max(i.GetAltitude(), value_max);
+      value_min = std::min(i.GetAltitude(), value_min);
     }
   } else {
     value_max = 0.75;
     value_min = -2.0;
 
-    for (auto it = trace.begin(); it != trace.end(); ++it) {
-      value_max = std::max(it->GetVario(), value_max);
-      value_min = std::min(it->GetVario(), value_min);
+    for (const auto &i : trace) {
+      value_max = std::max(i.GetVario(), value_max);
+      value_min = std::min(i.GetVario(), value_min);
     }
 
     value_max = std::min(7.5, value_max);
@@ -116,7 +94,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                     TimeStamp min_time,
                     bool enable_traildrift, const PixelPoint pos,
                     const NMEAInfo &basic, const DerivedInfo &calculated,
-                    const TrailSettings &settings)
+                    const TrailSettings &settings) noexcept
 {
   if (settings.length == TrailSettings::Length::OFF)
     return;
@@ -124,7 +102,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   if (!LoadTrace(trace_computer, min_time, projection))
     return;
 
-  if (!calculated.wind_available)
+  if (!basic.location_available || !calculated.wind_available)
     enable_traildrift = false;
 
   GeoPoint traildrift;
@@ -146,11 +124,10 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 
   PixelPoint last_point(0, 0);
   bool last_valid = false;
-  for (auto it = trace.begin(), end = trace.end(); it != end; ++it) {
+  for (const auto &i : trace) {
     const GeoPoint gp = enable_traildrift
-      ? it->GetLocation().Parametric(traildrift,
-                                     it->CalculateDrift(basic.time))
-      : it->GetLocation();
+      ? i.GetLocation().Parametric(traildrift, i.CalculateDrift(basic.time))
+      : i.GetLocation();
     if (!bounds.IsInside(gp)) {
       /* the point is outside of the MapWindow; don't paint it */
       last_valid = false;
@@ -161,36 +138,36 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 
     if (last_valid) {
       if (settings.type == TrailSettings::Type::ALTITUDE) {
-        unsigned index = GetAltitudeColorIndex(it->GetAltitude(),
+        unsigned index = GetAltitudeColorIndex(i.GetAltitude(),
                                                value_min, value_max);
         canvas.Select(look.trail_pens[index]);
         canvas.DrawLinePiece(last_point, pt);
       } else {
-        unsigned color_index = GetSnailColorIndex(it->GetVario(),
+        unsigned color_index = GetSnailColorIndex(i.GetVario(),
                                                   value_min, value_max);
-        if (it->GetVario() < 0 &&
+        if (i.GetVario() < 0 &&
             (settings.type == TrailSettings::Type::VARIO_1_DOTS ||
              settings.type == TrailSettings::Type::VARIO_2_DOTS ||
-             settings.type == TrailSettings::Type::VARIO_DOTS_AND_LINES)) {
+             settings.type == TrailSettings::Type::VARIO_DOTS_AND_LINES ||
+             settings.type == TrailSettings::Type::VARIO_EINK)) {
           canvas.SelectNullPen();
           canvas.Select(look.trail_brushes[color_index]);
           canvas.DrawCircle({(pt.x + last_point.x) / 2, (pt.y + last_point.y) / 2},
                             look.trail_widths[color_index]);
         } else {
           // positive vario case
-
-          if (settings.type == TrailSettings::Type::VARIO_DOTS_AND_LINES) {
+          if (settings.type == TrailSettings::Type::VARIO_DOTS_AND_LINES ||
+              settings.type == TrailSettings::Type::VARIO_EINK) {
             canvas.Select(look.trail_brushes[color_index]);
             canvas.Select(look.trail_pens[color_index]); //fixed-width pen
             canvas.DrawCircle({(pt.x + last_point.x) / 2, (pt.y + last_point.y) / 2},
-                              look.trail_widths[color_index]);
+                            look.trail_widths[color_index]);
           } else if (scaled_trail)
             // width scaled to vario
             canvas.Select(look.scaled_trail_pens[color_index]);
           else
             // fixed-width pen
             canvas.Select(look.trail_pens[color_index]);
-
           canvas.DrawLinePiece(last_point, pt);
         }
       }
@@ -204,7 +181,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 }
 
 void
-TrailRenderer::Draw(Canvas &canvas, const WindowProjection &projection)
+TrailRenderer::Draw(Canvas &canvas, const WindowProjection &projection) noexcept
 {
   canvas.Select(look.trace_pen);
   DrawTraceVector(canvas, projection, trace);
@@ -220,14 +197,14 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 }
 
 BulkPixelPoint *
-TrailRenderer::Prepare(unsigned n)
+TrailRenderer::Prepare(unsigned n) noexcept
 {
   points.GrowDiscard(n);
   return points.data();
 }
 
 void
-TrailRenderer::DrawPreparedPolyline(Canvas &canvas, unsigned n)
+TrailRenderer::DrawPreparedPolyline(Canvas &canvas, unsigned n) noexcept
 {
   assert(points.size() >= n);
 
@@ -235,7 +212,7 @@ TrailRenderer::DrawPreparedPolyline(Canvas &canvas, unsigned n)
 }
 
 void
-TrailRenderer::DrawPreparedPolygon(Canvas &canvas, unsigned n)
+TrailRenderer::DrawPreparedPolygon(Canvas &canvas, unsigned n) noexcept
 {
   assert(points.size() >= n);
 
@@ -244,20 +221,20 @@ TrailRenderer::DrawPreparedPolygon(Canvas &canvas, unsigned n)
 
 void
 TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
-                               const ContestTraceVector &trace)
+                               const ContestTraceVector &trace) noexcept
 {
   const unsigned n = trace.size();
-  auto *p = Prepare(n);
 
-  for (const auto &i : trace)
-    *p++ = projection.GeoToScreen(i.GetLocation());
+  std::transform(trace.begin(), trace.end(), Prepare(n), [&projection](const auto &i){
+    return projection.GeoToScreen(i.GetLocation());
+  });
 
   DrawPreparedPolyline(canvas, n);
 }
 
 void
 TrailRenderer::DrawTriangle(Canvas &canvas, const Projection &projection,
-                            const ContestTraceVector &trace)
+                            const ContestTraceVector &trace) noexcept
 {
   assert(trace.size() == 5);
 
@@ -273,13 +250,13 @@ TrailRenderer::DrawTriangle(Canvas &canvas, const Projection &projection,
 
 void
 TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
-                               const TracePointVector &trace)
+                               const TracePointVector &trace) noexcept
 {
   const unsigned n = trace.size();
-  auto *p = Prepare(n);
 
-  for (const auto &i : trace)
-    *p++ = projection.GeoToScreen(i.GetLocation());
+  std::transform(trace.begin(), trace.end(), Prepare(n), [&projection](const auto &i){
+    return projection.GeoToScreen(i.GetLocation());
+  });
 
   DrawPreparedPolyline(canvas, n);
 }

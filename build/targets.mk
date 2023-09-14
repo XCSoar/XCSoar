@@ -54,8 +54,6 @@ HAVE_POSIX := n
 HAVE_WIN32 := y
 HAVE_MSVCRT := y
 
-USE_CROSSTOOL_NG := n
-
 TARGET_ARCH :=
 
 # virtual targets ("flavors")
@@ -209,16 +207,14 @@ ifeq ($(TARGET),KOBO)
   # Experimental target for Kobo Mini
   override TARGET = NEON
   TARGET_IS_KOBO = y
+
+  HOST_TRIPLET = armv7a-kobo-linux-musleabihf
 endif
 
 ifeq ($(TARGET),NEON)
   # Experimental target for generic ARMv7 with NEON on Linux
   override TARGET = UNIX
-  ifeq ($(USE_CROSSTOOL_NG),y)
-    HOST_TRIPLET ?= arm-unknown-linux-gnueabihf
-  else
-    HOST_TRIPLET ?= arm-linux-gnueabihf
-  endif
+  HOST_TRIPLET ?= arm-linux-gnueabihf
   TCPREFIX ?= $(HOST_TRIPLET)-
   ifeq ($(CLANG),n)
     TARGET_ARCH += -mcpu=cortex-a8
@@ -234,7 +230,7 @@ ifeq ($(TARGET),OSX64)
   override TARGET = UNIX
   TARGET_IS_DARWIN = y
   TARGET_IS_OSX = y
-  OSX_MIN_SUPPORTED_VERSION = 10.12
+  OSX_MIN_SUPPORTED_VERSION = 12.0
   HOST_TRIPLET = x86_64-apple-darwin
   LLVM_TARGET = $(HOST_TRIPLET)
   CLANG = y
@@ -317,9 +313,9 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r25c
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r26-beta1
 
-  ANDROID_SDK_PLATFORM = android-30
+  ANDROID_SDK_PLATFORM = android-33
   ANDROID_NDK_API = 21
 
   # The naming of CPU ABIs, architectures, and various NDK directory names is an unholy mess.
@@ -469,26 +465,9 @@ ifeq ($(TARGET_IS_KOBO),y)
     TARGET_ARCH += -fomit-frame-pointer
   endif
 
-  # We are using a GNU toolchain (triplet arm-linux-gnueabihf) by default, but
-  # the actual host triplet is different.
-  ACTUAL_HOST_TRIPLET = armv7a-a8neon-linux-musleabihf
+  TARGET_CXXFLAGS += -Wno-psabi
 
-  ifeq ($(USE_CROSSTOOL_NG),y)
-    HOST_TRIPLET = $(ACTUAL_HOST_TRIPLET)
-    LLVM_TARGET = $(ACTUAL_HOST_TRIPLET)
-    KOBO_TOOLCHAIN = $(HOME)/x-tools/$(HOST_TRIPLET)
-    KOBO_SYSROOT = $(KOBO_TOOLCHAIN)/$(HOST_TRIPLET)/sysroot
-    TCPREFIX = $(KOBO_TOOLCHAIN)/bin/$(HOST_TRIPLET)-
-
-    ifeq ($(CLANG),y)
-      TARGET_CPPFLAGS += -B$(KOBO_TOOLCHAIN)
-      TARGET_CPPFLAGS += --sysroot=$(KOBO_SYSROOT)
-    endif
-  else
-    TARGET_CXXFLAGS += -Wno-psabi
-
-    TCPREFIX = $(abspath $(THIRDPARTY_LIBS_DIR))/bin/$(ACTUAL_HOST_TRIPLET)-
-  endif
+  TCPREFIX = $(abspath $(THIRDPARTY_LIBS_DIR))/bin/$(HOST_TRIPLET)-
 endif
 
 ifeq ($(TARGET),ANDROID)
@@ -561,14 +540,6 @@ ifeq ($(TARGET_IS_KOBO),y)
   # pick up libc.a(pthread_cond_*.o); these linker options force the
   # linker to use them.  This needs a proper solution!
   TARGET_LDFLAGS += -Wl,-u,pthread_cond_signal -Wl,-u,pthread_cond_broadcast -Wl,-u,pthread_cond_wait
-
-  ifeq ($(USE_CROSSTOOL_NG),y)
-    ifeq ($(CLANG),y)
-     TARGET_LDFLAGS += -B$(KOBO_TOOLCHAIN)
-     TARGET_LDFLAGS += -B$(KOBO_TOOLCHAIN)/bin
-     TARGET_LDFLAGS += --sysroot=$(KOBO_SYSROOT)
-    endif
-  endif
 endif
 
 ifeq ($(TARGET),ANDROID)

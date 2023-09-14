@@ -1,39 +1,23 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "MultipleDevices.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Descriptor.hpp"
 #include "Dispatcher.hpp"
 
-MultipleDevices::MultipleDevices(EventLoop &event_loop,
-                                 Cares::Channel &cares) noexcept
+#include <algorithm> // for std::any_of()
+
+MultipleDevices::MultipleDevices(DeviceBlackboard &blackboard,
+                                 NMEALogger *nmea_logger,
+                                 DeviceFactory &factory) noexcept
 {
   for (unsigned i = 0; i < NUMDEV; ++i) {
     DeviceDispatcher *dispatcher = dispatchers[i] =
       new DeviceDispatcher(*this, i);
 
-    devices[i] = new DeviceDescriptor(event_loop, cares, i, this);
+    devices[i] = new DeviceDescriptor(blackboard, nmea_logger,
+                                      factory, i, this);
     devices[i]->SetDispatcher(dispatcher);
   }
 }
@@ -73,6 +57,22 @@ MultipleDevices::AutoReopen(OperationEnvironment &env) noexcept
 {
   for (DeviceDescriptor *i : devices)
     i->AutoReopen(env);
+}
+
+bool
+MultipleDevices::HasVega() const noexcept
+{
+  return std::any_of(devices.begin(), devices.end(),
+                     [](const auto *d) { return d->IsVega(); });
+}
+
+void
+MultipleDevices::VegaWriteNMEA(const TCHAR *text,
+                               OperationEnvironment &env) noexcept
+{
+  for (DeviceDescriptor *i : devices)
+    if (i->IsVega())
+      i->WriteNMEA(text, env);
 }
 
 void
@@ -128,6 +128,14 @@ MultipleDevices::PutStandbyFrequency(RadioFrequency frequency,
 {
   for (DeviceDescriptor *i : devices)
     i->PutStandbyFrequency(frequency, name, env);
+}
+
+void
+MultipleDevices::PutTransponderCode(TransponderCode code,
+                                    OperationEnvironment &env) noexcept
+{
+  for (DeviceDescriptor *i : devices)
+    i->PutTransponderCode(code, env);
 }
 
 void

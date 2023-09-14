@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -52,13 +33,13 @@ struct RangeAndRadial;
 class TaskManager: 
   private NonCopyable
 {
-  GlidePolar glide_polar;
+  GlidePolar glide_polar = GlidePolar::Invalid();
 
   /**
    * Same as #glide_polar, but with the "safety" MacCready setting
    * applied.
    */
-  GlidePolar safety_polar;
+  GlidePolar safety_polar = GlidePolar::Invalid();
 
   TaskBehaviour task_behaviour;
 
@@ -66,8 +47,8 @@ class TaskManager:
   const std::unique_ptr<GotoTask> goto_task;
   const std::unique_ptr<AlternateTask> abort_task;
 
-  TaskType mode;
-  AbstractTask* active_task;
+  TaskType mode = TaskType::NONE;
+  AbstractTask* active_task = nullptr;
 
   TaskStats null_stats;
 
@@ -81,16 +62,16 @@ public:
    *
    * @return Initialised object
    */
-  TaskManager(const TaskBehaviour &task_behaviour, const Waypoints &wps);
+  TaskManager(const TaskBehaviour &task_behaviour, const Waypoints &wps) noexcept;
   ~TaskManager() noexcept;
 
-  void SetTaskEvents(TaskEvents &_task_events);
+  void SetTaskEvents(TaskEvents &_task_events) noexcept;
 
   /**
    * Returns a reference to the OrderedTask instance, even if it is
    * invalid or inactive.
    */
-  const OrderedTask &GetOrderedTask() const {
+  const OrderedTask &GetOrderedTask() const noexcept {
     return *ordered_task;
   }
 
@@ -99,14 +80,14 @@ public:
    *
    * @param offset Offset value
    */
-  void IncrementActiveTaskPoint(int offset);
+  void IncrementActiveTaskPoint(int offset) noexcept;
 
   /**
    * Sets active taskpoint sequence for active task
    *
    * @param index Sequence number of task point
    */
-  void SetActiveTaskPoint(unsigned index);
+  void SetActiveTaskPoint(unsigned index) noexcept;
 
   /**
    * Accessor for active taskpoint sequence for active task
@@ -114,7 +95,7 @@ public:
    * @return Sequence number of task point
    */
   [[gnu::pure]]
-  unsigned GetActiveTaskPointIndex() const;
+  unsigned GetActiveTaskPointIndex() const noexcept;
 
   /**
    * Accessor of current task point of active task
@@ -122,7 +103,7 @@ public:
    * @return TaskPoint of active task point, and 0 if no active task
    */
   [[gnu::pure]]
-  TaskWaypoint* GetActiveTaskPoint() const;
+  TaskWaypoint* GetActiveTaskPoint() const noexcept;
 
   /**
    * Get a random point in the task OZ (for testing simulation route)
@@ -133,7 +114,7 @@ public:
    * @return Location of point
    */
   GeoPoint RandomPointInTask(const unsigned index,
-                             double mag = 1) const;
+                             double mag = 1) const noexcept;
 
   /**
    * Retrieve a copy of the task alternates
@@ -143,13 +124,13 @@ public:
    * @return Vector of alternates
    */
   [[gnu::const]]
-  const AlternateList &GetAlternates() const;
+  const AlternateList &GetAlternates() const noexcept;
 
   /** Reset the tasks (as if never flown) */
-  void Reset();
+  void Reset() noexcept;
 
   /** Set active task to abort mode. */
-  void Abort() {
+  void Abort() noexcept {
     SetMode(TaskType::ABORT);
   }
 
@@ -157,7 +138,7 @@ public:
    * Sets active task to ordered task (or goto if none exists) after
    * goto or aborting.
    */
-  void Resume() {
+  void Resume() noexcept {
     SetMode(TaskType::ORDERED);
   }
 
@@ -167,7 +148,7 @@ public:
    * @param wp Waypoint to go to
    * @return True if successful
    */
-  bool DoGoto(WaypointPtr &&wp);
+  bool DoGoto(WaypointPtr &&wp) noexcept;
 
   /**
    * Updates internal state of task given new aircraft.
@@ -180,7 +161,7 @@ public:
    * @return True if internal state changed
    */
   bool Update(const AircraftState &state_now, 
-              const AircraftState &state_last);
+              const AircraftState &state_last) noexcept;
 
   /**
    * Updates internal state of task to produce
@@ -191,7 +172,7 @@ public:
    *
    * @return True if internal state changed
    */
-  bool UpdateIdle(const AircraftState &state);
+  bool UpdateIdle(const AircraftState &state) noexcept;
 
   /** 
    * Update auto MC.  Internally uses TaskBehaviour to determine settings
@@ -201,7 +182,7 @@ public:
    * 
    * @return True if MC updated
    */
-  bool UpdateAutoMC(const AircraftState& state_now, double fallback_mc);
+  bool UpdateAutoMC(const AircraftState& state_now, double fallback_mc) noexcept;
 
   /**
    * Accessor for statistics of active task
@@ -209,7 +190,7 @@ public:
    * @return Statistics of active task
    */
   [[gnu::pure]]
-  const TaskStats& GetStats() const;
+  const TaskStats &GetStats() const noexcept;
 
   /**
    * Accessor for common statistics
@@ -217,7 +198,7 @@ public:
    * @return Statistics
    */
   [[gnu::pure]]
-  const CommonStats& GetCommonStats() const {
+  const CommonStats &GetCommonStats() const noexcept {
     return common_stats;
   }
 
@@ -227,12 +208,12 @@ public:
    * @return True if stats valid
    */
   [[gnu::pure]]
-  bool StatsValid() const {
+  bool StatsValid() const noexcept {
     return GetStats().task_valid;
   }
 
   [[gnu::pure]]
-  const AbstractTask *GetActiveTask() const {
+  const AbstractTask *GetActiveTask() const noexcept {
     return active_task;
   }
 
@@ -242,7 +223,7 @@ public:
    * @return Number of taskpoints in active task
    */
   [[gnu::pure]]
-  unsigned TaskSize() const;
+  unsigned TaskSize() const noexcept;
 
   /**
    * Check whether ordered task is valid
@@ -250,7 +231,7 @@ public:
    * @return True if task is valid
    */
   [[gnu::pure]]
-  bool CheckOrderedTask() const;
+  bool CheckOrderedTask() const noexcept;
 
   /**
    * Check whether active task is valid
@@ -258,7 +239,7 @@ public:
    * @return True if task is valid
    */
   [[gnu::pure]]
-  bool CheckTask() const;
+  bool CheckTask() const noexcept;
 
   /**
    * Accessor for factory system for constructing tasks
@@ -266,14 +247,14 @@ public:
    * @return Factory
    */
   [[gnu::pure]]
-  AbstractTaskFactory &GetFactory() const;
+  AbstractTaskFactory &GetFactory() const noexcept;
 
   /**
    * Set type of task factory to be used for constructing tasks
    *
    * @param _factory Type of task
    */
-  void SetFactory(const TaskFactoryType _factory);
+  void SetFactory(const TaskFactoryType _factory) noexcept;
 
   /**
    * Create a clone of the task. 
@@ -293,14 +274,14 @@ public:
    * @param that OrderedTask to copy
    * @return True if this task changed
    */
-  bool Commit(const OrderedTask& that);
+  bool Commit(const OrderedTask &that) noexcept;
 
   /**
    * Accessor for task advance system
    *
    * @return Task advance mechanism
    */
-  TaskAdvance &SetTaskAdvance();
+  TaskAdvance &SetTaskAdvance() noexcept;
 
   /**
    * Access active task mode
@@ -308,7 +289,7 @@ public:
    * @return Active task mode
    */
   [[gnu::pure]]
-  TaskType GetMode() const {
+  TaskType GetMode() const noexcept {
     return mode;
   }
 
@@ -320,7 +301,7 @@ public:
    * @return True if modes match
    */
   [[gnu::pure]]
-  bool IsMode(const TaskType _mode) const {
+  bool IsMode(const TaskType _mode) const noexcept {
     return mode == _mode;
   }
 
@@ -330,7 +311,7 @@ public:
    * @return Reference to glide polar
    */
   [[gnu::pure]]
-  const GlidePolar &GetGlidePolar() const {
+  const GlidePolar &GetGlidePolar() const noexcept {
     return glide_polar;
   }
 
@@ -339,7 +320,7 @@ public:
    *
    * @param glide_polar The polar to set to
    */
-  void SetGlidePolar(const GlidePolar& glide_polar);
+  void SetGlidePolar(const GlidePolar &glide_polar) noexcept;
 
   /**
    * Retrieve copy of safety glide polar used by task system
@@ -347,7 +328,7 @@ public:
    * @return Copy of glide polar
    */
   [[gnu::pure]]
-  const GlidePolar &GetSafetyPolar() const {
+  const GlidePolar &GetSafetyPolar() const noexcept {
     return safety_polar;
   }
 
@@ -356,7 +337,7 @@ public:
    * calculations.
    */
   [[gnu::pure]]
-  const GlidePolar &GetReachPolar() const {
+  const GlidePolar &GetReachPolar() const noexcept {
     switch (task_behaviour.route_planner.reach_polar_mode) {
     case RoutePlannerConfig::Polar::TASK:
       return glide_polar;
@@ -377,7 +358,7 @@ public:
    * @return the target location or GeoPoint::Invalid() if that's not
    * a valid AAT point
    */
- const GeoPoint GetLocationTarget(const unsigned index) const;
+ const GeoPoint GetLocationTarget(const unsigned index) const noexcept;
 
   /**
    * Accessor for locked state of target of specified tp
@@ -386,7 +367,7 @@ public:
    *
    * @return True if target is locked or tp location if has no target
    */
- bool TargetIsLocked(const unsigned index) const;
+ bool TargetIsLocked(const unsigned index) const noexcept;
 
   /**
    * Set target location explicitly of specified tp
@@ -396,14 +377,14 @@ public:
    * @param override_lock If false, won't set the target if it is locked
    */
  bool SetTarget(const unsigned index, const GeoPoint &loc,
-                const bool override_lock);
+                const bool override_lock) noexcept;
 
   /**
    * Set target location from a range and radial
    * referenced on the bearing from the previous target
    * used by dlgTarget
    */
- bool SetTarget(const unsigned index, RangeAndRadial rar);
+ bool SetTarget(const unsigned index, RangeAndRadial rar) noexcept;
 
   /**
    * Lock/unlock the target from automatic shifts of specified tp
@@ -411,35 +392,35 @@ public:
    * @param TPindex index of tp in task
    * @param do_lock Whether to lock the target
    */
- bool TargetLock(const unsigned index, bool do_lock);
+ bool TargetLock(const unsigned index, bool do_lock) noexcept;
 
   /** 
    * Copy TaskBehaviour to this task
    * 
    * @param behaviour Value to set
    */
-  void SetTaskBehaviour(const TaskBehaviour& behaviour);
+  void SetTaskBehaviour(const TaskBehaviour& behaviour) noexcept;
 
   /** 
    * Retrieve the #OrderedTaskSettings used by the OrderedTask
    * 
    * @return #OrderedTaskSettings reference
    */
-  void SetOrderedTaskSettings(const OrderedTaskSettings &otb);
+  void SetOrderedTaskSettings(const OrderedTaskSettings &otb) noexcept;
 
   /** 
    * Retrieve task behaviour
    * 
    * @return Reference to task behaviour
    */
-  const TaskBehaviour &GetTaskBehaviour() const {
+  const TaskBehaviour &GetTaskBehaviour() const noexcept {
     return task_behaviour;
   }
 
   /**
    * Set external test function to be used for additional intersection tests
    */
-  void SetIntersectionTest(AbortIntersectionTest *test);
+  void SetIntersectionTest(AbortIntersectionTest *test) noexcept;
 
   /**
    * When called on takeoff, will create a goto task to the nearest waypoint if
@@ -447,17 +428,17 @@ public:
    * Caller is responsible for ensuring the waypoint database already has an
    * appropriate waypoint within 1000m of the takeoff location.
    */
-  void TakeoffAutotask(const GeoPoint &ref, double terrain_alt);
+  void TakeoffAutotask(const GeoPoint &ref, double terrain_alt) noexcept;
 
-  void UpdateCommonStatsTask();
+  void UpdateCommonStatsTask() noexcept;
 
-  void ResetTask();
+  void ResetTask() noexcept;
 
 private:
-  TaskType SetMode(const TaskType mode);
+  TaskType SetMode(const TaskType mode) noexcept;
 
-  void UpdateCommonStats(const AircraftState &state);
-  void UpdateCommonStatsTimes(const AircraftState &state);
-  void UpdateCommonStatsWaypoints(const AircraftState &state);
-  void UpdateCommonStatsPolar(const AircraftState &state);
+  void UpdateCommonStats(const AircraftState &state) noexcept;
+  void UpdateCommonStatsTimes(const AircraftState &state) noexcept;
+  void UpdateCommonStatsWaypoints(const AircraftState &state) noexcept;
+  void UpdateCommonStatsPolar(const AircraftState &state) noexcept;
 };

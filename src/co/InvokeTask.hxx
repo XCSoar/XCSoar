@@ -1,34 +1,6 @@
-/*
- * Copyright 2020-2021 CM4all GmbH
- * All rights reserved.
- *
- * author: Max Kellermann <mk@cm4all.com>
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * - Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- *
- * - Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the
- * distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
- * FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+// SPDX-License-Identifier: BSD-2-Clause
+// Copyright CM4all GmbH
+// author: Max Kellermann <mk@cm4all.com>
 
 #pragma once
 
@@ -50,10 +22,13 @@ public:
 	using Callback = BoundMethod<void(std::exception_ptr error) noexcept>;
 
 	struct promise_type {
+		InvokeTask *task;
+
 		Callback callback;
 
 		std::exception_ptr error;
 
+		[[nodiscard]]
 		auto initial_suspend() noexcept {
 			assert(!error);
 
@@ -61,21 +36,38 @@ public:
 		}
 
 		struct final_awaitable {
+			[[nodiscard]]
 			bool await_ready() const noexcept {
 				return false;
 			}
 
 			template<typename PROMISE>
-			void await_suspend(std::coroutine_handle<PROMISE> coro) noexcept {
+			bool await_suspend(std::coroutine_handle<PROMISE> coro) noexcept {
+				assert(coro);
+				assert(coro.done());
+
 				auto &p = coro.promise();
+				assert(p.task);
+				assert(p.task->coroutine);
 				assert(p.callback);
+
+				/* release the coroutine_handle; it
+				   will be destroyed by our caller */
+				(void)p.task->coroutine.release();
+
 				p.callback(std::move(p.error));
+
+				/* this resumes the original coroutine
+				   which will then destroy the
+				   coroutine_handle */
+				return false;
 			}
 
 			void await_resume() const noexcept {
 			}
 		};
 
+		[[nodiscard]]
 		auto final_suspend() noexcept {
 			return final_awaitable{};
 		}
@@ -84,6 +76,7 @@ public:
 			assert(!error);
 		}
 
+		[[nodiscard]]
 		InvokeTask get_return_object() noexcept {
 			assert(!error);
 
@@ -99,12 +92,14 @@ public:
 private:
 	UniqueHandle<promise_type> coroutine;
 
+	[[nodiscard]]
 	explicit InvokeTask(std::coroutine_handle<promise_type> _coroutine) noexcept
 		:coroutine(_coroutine)
 	{
 	}
 
 public:
+	[[nodiscard]]
 	InvokeTask() noexcept {
 	}
 
@@ -118,6 +113,7 @@ public:
 		assert(!coroutine->done());
 		assert(!coroutine->promise().error);
 
+		coroutine->promise().task = this;
 		coroutine->promise().callback = callback;
 		coroutine->resume();
 	}

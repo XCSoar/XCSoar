@@ -1,54 +1,15 @@
-/*
- * Copyright 2013-2022 Max Kellermann <max.kellermann@gmail.com>
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * - Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- *
- * - Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the
- * distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
- * FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+// SPDX-License-Identifier: BSD-2-Clause
+// author: Max Kellermann <max.kellermann@gmail.com>
 
 #pragma once
 
 #include <system_error> // IWYU pragma: export
 #include <utility>
 
-#include <stdio.h>
-
-template<typename... Args>
-static inline std::system_error
-FormatSystemError(std::error_code code, const char *fmt,
-		  Args&&... args) noexcept
-{
-	char buffer[1024];
-	snprintf(buffer, sizeof(buffer), fmt, std::forward<Args>(args)...);
-	return std::system_error(code, buffer);
-}
-
 #ifdef _WIN32
 
 #include <errhandlingapi.h> // for GetLastError()
-#include <windef.h> // for HWND (needed by winbase.h)
-#include <winbase.h> // for FormatMessageA()
+#include <winerror.h>
 
 /**
  * Returns the error_category to be used to wrap WIN32 GetLastError()
@@ -85,37 +46,9 @@ MakeLastError(const char *msg) noexcept
 	return MakeLastError(GetLastError(), msg);
 }
 
-template<typename... Args>
-static inline std::system_error
-FormatLastError(DWORD code, const char *fmt, Args&&... args) noexcept
-{
-	char buffer[512];
-	const auto end = buffer + sizeof(buffer);
-	size_t length = snprintf(buffer, sizeof(buffer) - 128,
-				 fmt, std::forward<Args>(args)...);
-	char *p = buffer + length;
-	*p++ = ':';
-	*p++ = ' ';
-
-	FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM |
-		       FORMAT_MESSAGE_IGNORE_INSERTS,
-		       nullptr, code, 0, p, end - p, nullptr);
-	return MakeLastError(code, buffer);
-}
-
-template<typename... Args>
-static inline std::system_error
-FormatLastError(const char *fmt, Args&&... args) noexcept
-{
-	return FormatLastError(GetLastError(), fmt,
-			       std::forward<Args>(args)...);
-}
-
 #endif /* _WIN32 */
 
 #include <cerrno> // IWYU pragma: export
-
-#include <string.h>
 
 /**
  * Returns the error_category to be used to wrap errno values.  The
@@ -151,35 +84,6 @@ static inline std::system_error
 MakeErrno(const char *msg) noexcept
 {
 	return MakeErrno(errno, msg);
-}
-
-template<typename... Args>
-static inline std::system_error
-FormatErrno(int code, const char *fmt, Args&&... args) noexcept
-{
-	char buffer[512];
-	snprintf(buffer, sizeof(buffer),
-		 fmt, std::forward<Args>(args)...);
-	return MakeErrno(code, buffer);
-}
-
-template<typename... Args>
-static inline std::system_error
-FormatErrno(const char *fmt, Args&&... args) noexcept
-{
-	return FormatErrno(errno, fmt, std::forward<Args>(args)...);
-}
-
-template<typename... Args>
-static inline std::system_error
-FormatFileNotFound(const char *fmt, Args&&... args) noexcept
-{
-#ifdef _WIN32
-	return FormatLastError(ERROR_FILE_NOT_FOUND, fmt,
-			       std::forward<Args>(args)...);
-#else
-	return FormatErrno(ENOENT, fmt, std::forward<Args>(args)...);
-#endif
 }
 
 [[gnu::pure]]

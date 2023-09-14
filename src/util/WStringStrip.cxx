@@ -1,37 +1,12 @@
-/*
- * Copyright 2009-2021 Max Kellermann <max.kellermann@gmail.com>
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * - Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- *
- * - Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the
- * distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
- * FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+// SPDX-License-Identifier: BSD-2-Clause
+// author: Max Kellermann <max.kellermann@gmail.com>
 
 #include "WStringStrip.hxx"
 #include "WStringAPI.hxx"
 #include "WCharUtil.hxx"
 
-#include <string.h>
+#include <algorithm>
+#include <cstring>
 
 const wchar_t *
 StripLeft(const wchar_t *p) noexcept
@@ -49,6 +24,18 @@ StripLeft(const wchar_t *p, const wchar_t *end) noexcept
 		++p;
 
 	return p;
+}
+
+std::wstring_view
+StripLeft(const std::wstring_view s) noexcept
+{
+	auto i = std::find_if_not(s.begin(), s.end(),
+				  [](auto ch){ return IsWhitespaceOrNull(ch); });
+
+	return {
+		i,
+		s.end(),
+	};
 }
 
 const wchar_t *
@@ -77,10 +64,25 @@ StripRight(wchar_t *p) noexcept
 	p[new_length] = 0;
 }
 
+std::wstring_view
+StripRight(std::wstring_view s) noexcept
+{
+	auto i = std::find_if_not(s.rbegin(), s.rend(),
+				  [](auto ch){ return IsWhitespaceOrNull(ch); });
+
+	return s.substr(0, std::distance(i, s.rend()));
+}
+
 wchar_t *
 Strip(wchar_t *p) noexcept
 {
 	p = StripLeft(p);
 	StripRight(p);
 	return p;
+}
+
+std::wstring_view
+Strip(std::wstring_view s) noexcept
+{
+	return StripRight(StripLeft(s));
 }

@@ -1,35 +1,14 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "TaskActionsPanel.hpp"
 #include "TaskMiscPanel.hpp"
 #include "TaskListPanel.hpp"
 #include "Internal.hpp"
 #include "../dlgTaskHelpers.hpp"
-#include "Dialogs/CoDialog.hpp"
+#include "Dialogs/CoFunctionDialog.hpp"
 #include "Dialogs/Error.hpp"
 #include "Dialogs/Message.hpp"
-#include "Components.hpp"
 #include "Logger/ExternalLogger.hpp"
 #include "Simulator.hpp"
 #include "Language/Language.hpp"
@@ -42,7 +21,8 @@ Copyright_License {
 #include "Operation/PluggableOperationEnvironment.hpp"
 #include "net/http/Init.hpp"
 #include "net/client/WeGlide/DownloadTask.hpp"
-#include "co/InvokeTask.hxx"
+#include "Components.hpp"
+#include "DataComponents.hpp"
 
 TaskActionsPanel::TaskActionsPanel(TaskManagerDialog &_dialog,
                                    TaskMiscPanel &_parent,
@@ -77,7 +57,7 @@ TaskActionsPanel::SaveTask()
 inline void
 TaskActionsPanel::OnBrowseClicked()
 {
-  parent.SetCurrent(1);
+  parent.SetCurrent(parent.PAGE_LIST);
 }
 
 inline void
@@ -105,19 +85,7 @@ TaskActionsPanel::OnDeclareClicked()
 
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
   Declaration decl(settings.logger, settings.plane, active_task.get());
-  ExternalLogger::Declare(decl, way_points.GetHome().get());
-}
-
-static Co::InvokeTask
-DownloadWeGlideTask(std::unique_ptr<OrderedTask> &task,
-                    CurlGlobal &curl, const WeGlideSettings &settings,
-                    const TaskBehaviour &task_behaviour,
-                    const Waypoints *waypoints,
-                    ProgressListener &progress)
-{
-  task = co_await WeGlide::DownloadDeclaredTask(curl, settings,
-                                                task_behaviour, waypoints,
-                                                progress);
+  ExternalLogger::Declare(decl, data_components->waypoints->GetHome().get());
 }
 
 inline void
@@ -125,22 +93,25 @@ TaskActionsPanel::OnDownloadClicked() noexcept
 try {
   const auto &settings = CommonInterface::GetComputerSettings();
 
-  std::unique_ptr<OrderedTask> task;
   PluggableOperationEnvironment env;
-  if (!ShowCoDialog(dialog.GetMainWindow(), GetLook(),
-                    _("Download"),
-                    DownloadWeGlideTask(task, *Net::curl, settings.weglide,
-                                        settings.task,
-                                        &way_points, env),
-                    &env))
+
+  auto task = ShowCoFunctionDialog(dialog.GetMainWindow(), GetLook(),
+                                   _("Download"),
+                                   WeGlide::DownloadDeclaredTask(*Net::curl,
+                                                                 settings.weglide,
+                                                                 settings.task,
+                                                                 data_components->waypoints.get(),
+                                                                 env),
+                                   &env);
+  if (!task)
     return;
 
-  if (!task) {
+  if (!*task) {
     ShowMessageBox(_("No task"), _("Error"), MB_OK|MB_ICONEXCLAMATION);
     return;
   }
 
-  active_task = task->Clone(settings.task);
+  active_task = (*task)->Clone(settings.task);
   *task_modified = true;
   dialog.ResetTaskView();
 
@@ -156,7 +127,7 @@ TaskActionsPanel::ReClick() noexcept
 }
 
 void
-TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
+TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &_parent,
                           [[maybe_unused]] const PixelRect &rc) noexcept
 {
   const auto &settings = CommonInterface::GetComputerSettings();
@@ -169,6 +140,14 @@ TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   if (settings.weglide.pilot_id != 0)
     AddButton(_("Download WeGlide task"),
               [this](){ OnDownloadClicked(); });
+
+  AddButton(_("My WeGlide tasks"), [this](){
+    parent.SetCurrent(parent.PAGE_WEGLIDE_USER);
+  });
+
+  AddButton(_("Public WeGlide tasks"), [this](){
+    parent.SetCurrent(parent.PAGE_WEGLIDE_PUBLIC_DECLARED);
+  });
 
   if (is_simulator())
     /* cannot communicate with real devices in simulator mode */

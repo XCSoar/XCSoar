@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -118,14 +99,14 @@ public:
   }
 
   [[gnu::pure]]
-  const TaskFactoryConstraints &GetFactoryConstraints() const;
+  const TaskFactoryConstraints &GetFactoryConstraints() const noexcept;
 
   /**
    * Set type of task factory to be used for constructing tasks
    *
    * @param _factory Type of task
    */
-  void SetFactory(const TaskFactoryType _factory);
+  void SetFactory(const TaskFactoryType _factory) noexcept;
 
   /**
    * Return list of factory types
@@ -135,20 +116,20 @@ public:
    * @return Vector of factory types
    */
   [[gnu::pure]]
-  std::vector<TaskFactoryType> GetFactoryTypes(bool all = true) const;
+  std::vector<TaskFactoryType> GetFactoryTypes(bool all = true) const noexcept;
 
-  void SetTaskBehaviour(const TaskBehaviour &tb);
+  void SetTaskBehaviour(const TaskBehaviour &tb) noexcept;
 
   /**
    * Removes all task points.
    */
-  void RemoveAllPoints();
+  void RemoveAllPoints() noexcept;
 
   /**
    * Clear all points and restore default ordered task behaviour
    * for the active factory
    */
-  void Clear();
+  void Clear() noexcept;
 
   /**
    * Create a clone of the task.
@@ -168,7 +149,7 @@ public:
    * @param waypoints.  const reference to the waypoint file
    * @return True if this task changed
    */
-  bool Commit(const OrderedTask& other);
+  bool Commit(const OrderedTask& other) noexcept;
 
   /**
    * Retrieves the active task point index.
@@ -176,7 +157,7 @@ public:
    * @return Index of active task point sequence
    */
   [[gnu::pure]]
-  unsigned GetActiveIndex() const {
+  unsigned GetActiveIndex() const noexcept {
     return active_task_point;
   }
 
@@ -188,7 +169,7 @@ public:
    * @return OrderedTaskPoint at index
    */
   [[gnu::pure]]
-  const OrderedTaskPoint &GetTaskPoint(const unsigned index) const {
+  const OrderedTaskPoint &GetTaskPoint(const unsigned index) const noexcept {
     assert(index < task_points.size());
 
     return *task_points[index];
@@ -200,7 +181,7 @@ public:
    * @return True if task has start
    */
   [[gnu::pure]]
-  bool HasStart() const {
+  bool HasStart() const noexcept {
     return taskpoint_start != nullptr;
   }
 
@@ -210,7 +191,7 @@ public:
    * @return True if task has finish
    */
   [[gnu::pure]]
-  bool HasFinish() const {
+  bool HasFinish() const noexcept {
     return taskpoint_finish != nullptr;
   }
 
@@ -218,13 +199,13 @@ public:
    * Cycle through optional start points, replacing actual task start point
    * with top item in optional starts.
    */
-  void RotateOptionalStarts();
+  void RotateOptionalStarts() noexcept;
 
   /**
    * Returns true if there are optional start points.
    */
   [[gnu::pure]]
-  bool HasOptionalStarts() const {
+  bool HasOptionalStarts() const noexcept {
     return !optional_start_points.empty();
   }
 
@@ -239,7 +220,7 @@ public:
    *
    * @return True on success
    */
-  bool Insert(const OrderedTaskPoint &tp, const unsigned position);
+  bool Insert(const OrderedTaskPoint &tp, unsigned position) noexcept;
 
   /**
    * Replace taskpoint.
@@ -252,7 +233,7 @@ public:
    *
    * @return True on success
    */
-  bool Replace(const OrderedTaskPoint &tp, const unsigned position);
+  bool Replace(const OrderedTaskPoint &tp, unsigned position) noexcept;
 
   /**
    * Replace optional start point.
@@ -265,7 +246,7 @@ public:
    *
    * @return True on success
    */
-  bool ReplaceOptionalStart(const OrderedTaskPoint &tp, const unsigned position);
+  bool ReplaceOptionalStart(const OrderedTaskPoint &tp, unsigned position) noexcept;
 
   /**
    * Append taskpoint to end of task.  May fail if the candidate
@@ -277,7 +258,7 @@ public:
    *
    * @return True on success
    */
-  bool Append(const OrderedTaskPoint &tp);
+  bool Append(const OrderedTaskPoint &tp) noexcept;
 
   /**
    * Append optional start point.  May fail if the candidate
@@ -288,7 +269,7 @@ public:
    *
    * @return True on success
    */
-  bool AppendOptionalStart(const OrderedTaskPoint &tp);
+  bool AppendOptionalStart(const OrderedTaskPoint &tp) noexcept;
 
   /**
    * Remove task point at specified position.  Note that
@@ -298,7 +279,7 @@ public:
    *
    * @return True on success
    */
-  bool Remove(const unsigned position);
+  bool Remove(unsigned position) noexcept;
 
   /**
    * Remove optional start point at specified position.
@@ -307,7 +288,7 @@ public:
    *
    * @return True on success
    */
-  bool RemoveOptionalStart(const unsigned position);
+  bool RemoveOptionalStart(unsigned position) noexcept;
 
   /**
    * Change the waypoint of an optional start point
@@ -315,7 +296,7 @@ public:
    * @param waypoint
    * @return true if succeeded
    */
-  bool RelocateOptionalStart(const unsigned position, WaypointPtr &&waypoint);
+  bool RelocateOptionalStart(unsigned position, WaypointPtr &&waypoint) noexcept;
 
   /**
    * Relocate a task point to a new location
@@ -325,7 +306,7 @@ public:
    *
    * @return True on success
    */
-  bool Relocate(const unsigned position, WaypointPtr &&waypoint);
+  bool Relocate(unsigned position, WaypointPtr &&waypoint) noexcept;
 
  /**
   * returns pointer to AATPoint accessed via TPIndex if exist
@@ -334,13 +315,13 @@ public:
   *
   * @return pointer to tp if valid, else nullptr
   */
- AATPoint* GetAATTaskPoint(unsigned index) const;
+ AATPoint* GetAATTaskPoint(unsigned index) const noexcept;
 
   /**
    * Check whether the task point with the specified index exists.
    */
   [[gnu::pure]]
-  bool IsValidIndex(unsigned i) const {
+  bool IsValidIndex(unsigned i) const noexcept {
     return i < task_points.size();
   }
 
@@ -350,7 +331,7 @@ public:
    * @return True if task is full
    */
   [[gnu::pure]]
-  bool IsFull() const;
+  bool IsFull() const noexcept;
 
   /**
    * Accessor for task projection, for use when creating task points
@@ -360,19 +341,18 @@ public:
    * @return Task global projection
    */
   [[gnu::pure]]
-  const TaskProjection&
-  GetTaskProjection() const {
+  const TaskProjection &GetTaskProjection() const noexcept {
     assert(!IsEmpty());
 
     return task_projection;
   }
 
-  void CheckDuplicateWaypoints(Waypoints& waypoints);
+  void CheckDuplicateWaypoints(Waypoints &waypoints) noexcept;
 
   /**
    * Update TaskStats::{task_valid, has_targets, is_mat, has_optional_starts}.
    */
-  void UpdateStatsGeometry();
+  void UpdateStatsGeometry() noexcept;
 
   /**
    * Update internal geometric state of task points.
@@ -382,12 +362,12 @@ public:
    * This also updates planned/nominal distances so clients can use that
    * data during task construction.
    */
-  void UpdateGeometry();
+  void UpdateGeometry() noexcept;
 
   /**
    * Update summary task statistics (progress along path)
    */
-  void UpdateSummary(TaskSummary &summary) const;
+  void UpdateSummary(TaskSummary &summary) const noexcept;
 
 public:
   /**
@@ -398,7 +378,7 @@ public:
    *
    * @return Vector of search point candidates
    */
-  const SearchPointVector &GetPointSearchPoints(unsigned tp) const;
+  const SearchPointVector &GetPointSearchPoints(unsigned tp) const noexcept;
 
 protected:
   /**
@@ -407,7 +387,7 @@ protected:
    * @param tp Index of task point to set min
    * @param sol Search point found to be minimum distance
    */
-  void SetPointSearchMin(unsigned tp, const SearchPoint &sol);
+  void SetPointSearchMin(unsigned tp, const SearchPoint &sol) noexcept;
 
   /**
    * Set task point's maximum distance value (by TaskDijkstra).
@@ -415,7 +395,7 @@ protected:
    * @param tp Index of task point to set max
    * @param sol Search point found to be maximum distance
    */
-  void SetPointSearchMax(unsigned tp, const SearchPoint &sol);
+  void SetPointSearchMax(unsigned tp, const SearchPoint &sol) noexcept;
 
   /**
    * Set task point's minimum distance achieved value
@@ -423,7 +403,7 @@ protected:
    * @param tp Index of task point to set min
    * @param sol Search point found to be minimum distance
    */
-  void set_tp_search_achieved(unsigned tp, const SearchPoint &sol);
+  void set_tp_search_achieved(unsigned tp, const SearchPoint &sol) noexcept;
 
 public:
   /**
@@ -431,24 +411,23 @@ public:
    *
    * @return True if start and finish found
    */
-  bool ScanStartFinish();
+  bool ScanStartFinish() noexcept;
 
 private:
 
   /**
    * @return true if a solution was found (and applied)
    */
-  bool RunDijsktraMin(const GeoPoint &location);
+  bool RunDijsktraMin(const GeoPoint &location) noexcept;
 
-
-  double ScanDistanceMin(const GeoPoint &ref, bool full);
+  double ScanDistanceMin(const GeoPoint &ref, bool full) noexcept;
 
   /**
    * @return true if a solution was found (and applied)
    */
-  bool RunDijsktraMax();
+  bool RunDijsktraMax() noexcept;
 
-  double ScanDistanceMax();
+  double ScanDistanceMax() noexcept;
 
   /**
    * Optimise target ranges (for adjustable tasks) to produce an estimated
@@ -469,31 +448,31 @@ private:
    *
    * @param position Index of task point
    */
-  void SetNeighbours(unsigned position);
+  void SetNeighbours(unsigned position) noexcept;
 
   /**
    * Erase taskpoint in sequence (for internal use)
    *
    * @param i index of task point in sequence
    */
-  void ErasePoint(unsigned i);
+  void ErasePoint(unsigned i) noexcept;
 
   /**
    * Erase optional start point (for internal use)
    *
    * @param i index of optional start point in sequence
    */
-  void EraseOptionalStartPoint(unsigned i);
+  void EraseOptionalStartPoint(unsigned i) noexcept;
 
   void UpdateStartTransition(const AircraftState &state,
-                             OrderedTaskPoint &start);
+                             OrderedTaskPoint &start) noexcept;
 
   [[gnu::pure]]
   bool DistanceIsSignificant(const GeoPoint &location,
-                             const GeoPoint &location_last) const;
+                             const GeoPoint &location_last) const noexcept;
 
   [[gnu::pure]]
-  bool AllowIncrementalBoundaryStats(const AircraftState &state) const;
+  bool AllowIncrementalBoundaryStats(const AircraftState &state) const noexcept;
 
   bool CheckTransitionPoint(OrderedTaskPoint &point,
                             const AircraftState &state_now,
@@ -501,16 +480,14 @@ private:
                             const FlatBoundingBox &bb_now,
                             const FlatBoundingBox &bb_last,
                             bool &transition_enter, bool &transition_exit,
-                            bool &last_started,
-                            const bool is_start);
+                            bool is_start) noexcept;
 
   bool CheckTransitionOptionalStart(const AircraftState &state_now,
                                     const AircraftState &state_last,
                                     const FlatBoundingBox& bb_now,
                                     const FlatBoundingBox& bb_last,
                                     bool &transition_enter,
-                                    bool &transition_exit,
-                                    bool &last_started);
+                                    bool &transition_exit) noexcept;
 
   /**
    * @param waypoints Active waypoint database
@@ -519,9 +496,9 @@ private:
    */
   void CheckDuplicateWaypoints(Waypoints& waypoints,
                                OrderedTaskPointVector& points,
-                               const bool is_task);
+                               bool is_task) noexcept;
 
-  void SelectOptionalStart(unsigned pos);
+  void SelectOptionalStart(unsigned pos) noexcept;
 
 public:
   /**
@@ -529,7 +506,7 @@ public:
    *
    * @return Reference to TaskAdvance used by this task
    */
-  const TaskAdvance &GetTaskAdvance() const {
+  const TaskAdvance &GetTaskAdvance() const noexcept {
     return task_advance;
   }
 
@@ -538,7 +515,7 @@ public:
    *
    * @return Reference to TaskAdvance used by this task
    */
-  TaskAdvance &SetTaskAdvance() {
+  TaskAdvance &SetTaskAdvance() noexcept {
     return task_advance;
   }
 
@@ -547,7 +524,7 @@ public:
    *
    * @return Factory type
    */
-  TaskFactoryType GetFactoryType() const {
+  TaskFactoryType GetFactoryType() const noexcept {
     return factory_mode;
   }
 
@@ -556,7 +533,7 @@ public:
    *
    * @return Read-only #OrderedTaskSettings
    */
-  const OrderedTaskSettings &GetOrderedTaskSettings() const {
+  const OrderedTaskSettings &GetOrderedTaskSettings() const noexcept {
     return ordered_settings;
   }
 
@@ -565,14 +542,14 @@ public:
    *
    * @param ob Value to set
    */
-  void SetOrderedTaskSettings(const OrderedTaskSettings &ob);
+  void SetOrderedTaskSettings(const OrderedTaskSettings &ob) noexcept;
 
 protected:
   /**
    * Propagate a change to the #OrderedTaskSettings to all interested
    * child objects.
    */
-  void PropagateOrderedTaskSettings();
+  void PropagateOrderedTaskSettings() noexcept;
 
 public:
   /**
@@ -585,12 +562,12 @@ public:
     return task_points.empty();
   }
 
-  ConstTaskPointList GetPoints() const {
+  ConstTaskPointList GetPoints() const noexcept {
     return task_points;
   }
 
   [[gnu::pure]]
-  OrderedTaskPoint &GetPoint(const unsigned i) {
+  OrderedTaskPoint &GetPoint(const unsigned i) noexcept {
     assert(i < task_points.size());
     assert(task_points[i] != nullptr);
 
@@ -598,14 +575,14 @@ public:
   }
 
   [[gnu::pure]]
-  const OrderedTaskPoint &GetPoint(const unsigned i) const {
+  const OrderedTaskPoint &GetPoint(const unsigned i) const noexcept {
     assert(i < task_points.size());
     assert(task_points[i] != nullptr);
 
     return *task_points[i];
   }
 
-  ConstTaskPointList GetOptionalStartPoints() const {
+  ConstTaskPointList GetOptionalStartPoints() const noexcept {
     return optional_start_points;
   }
 
@@ -624,7 +601,7 @@ public:
    * @return nullptr if index out of range, else optional start point
    */
   [[gnu::pure]]
-  const OrderedTaskPoint &GetOptionalStartPoint(unsigned i) const {
+  const OrderedTaskPoint &GetOptionalStartPoint(unsigned i) const noexcept {
     assert(i < optional_start_points.size());
 
     return *optional_start_points[i];
@@ -632,29 +609,7 @@ public:
 
   /** Determines whether the task has adjustable targets */
   [[gnu::pure]]
-  bool HasTargets() const;
-
-  /**
-   * Find location of center of task (for rendering purposes)
-   *
-   * @return Location of center of task or GeoPoint::Invalid()
-   */
-  [[gnu::pure]]
-  GeoPoint GetTaskCenter() const noexcept {
-    assert(!IsEmpty());
-    return task_projection.GetCenter();
-  }
-
-  /**
-   * Find approximate radius of task from center to edge (for rendering purposes)
-   *
-   * @return Radius (m) from center to edge of task
-   */
-  [[gnu::pure]]
-  double GetTaskRadius() const noexcept {
-    assert(!IsEmpty());
-    return task_projection.ApproxRadius();
-  }
+  bool HasTargets() const noexcept;
 
   /**
    * returns the index of the highest intermediate TP that has been entered.
@@ -663,10 +618,10 @@ public:
    * Does not consider whether Finish has been achieved
    * @return index of last intermediate point achieved or 0 if none
    */
-  unsigned GetLastIntermediateAchieved() const;
+  unsigned GetLastIntermediateAchieved() const noexcept;
 
   [[gnu::pure]]
-  const StaticString<64> &GetName() const {
+  const StaticString<64> &GetName() const noexcept {
     return name;
   }
 
@@ -675,7 +630,7 @@ public:
     name = std::forward<T>(_name);
   }
 
-  void ClearName() {
+  void ClearName() noexcept {
     name.clear();
   }
 

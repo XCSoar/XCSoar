@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -29,6 +10,7 @@
 #include "Geo/Flat/FlatBoundingBox.hpp"
 
 #include <map>
+#include <utility> // for std::swap()
 
 /**
  * Specialisation of AbstractContest for OLC Triangle (triangle) rules
@@ -94,7 +76,7 @@ private:
   struct ClosingPairs {
     std::map<unsigned, unsigned> closing_pairs;
 
-    bool Insert(const ClosingPair &p) noexcept {
+    bool Insert(const ClosingPair p) noexcept {
       auto found = FindRange(p);
       if (found.first == 0 && found.second == 0) {
         const auto result = closing_pairs.insert(p);
@@ -108,7 +90,7 @@ private:
     }
 
     [[gnu::pure]]
-    ClosingPair FindRange(const ClosingPair &p) const noexcept {
+    ClosingPair FindRange(const ClosingPair p) const noexcept {
       for (const auto &i : closing_pairs) {
         if (i.first > p.first)
           break;
@@ -137,6 +119,20 @@ private:
   };
 
   ClosingPairs closing_pairs;
+
+  struct Candidate {
+    unsigned tp1, tp2, tp3;
+    unsigned distance;
+
+    void Sort() noexcept {
+      if (tp1 > tp2)
+        std::swap(tp1, tp2);
+      if (tp2 > tp3)
+        std::swap(tp2, tp3);
+      if (tp1 > tp2)
+        std::swap(tp1, tp2);
+    }
+  };
 
   /**
    * A bounding box around a range of trace points.
@@ -270,18 +266,16 @@ public:
     incremental = _incremental;
   }
 
-protected:
+private:
   bool FindClosingPairs(unsigned old_size) noexcept;
   void SolveTriangle(bool exhaustive) noexcept;
 
-  std::tuple<unsigned, unsigned, unsigned, unsigned>
-  RunBranchAndBound(unsigned from, unsigned to, unsigned best_d,
-                    bool exhaustive) noexcept;
+  Candidate RunBranchAndBound(unsigned from, unsigned to, unsigned best_d,
+                              bool exhaustive) noexcept;
 
   void UpdateTrace(bool force) noexcept override;
   void ResetBranchAndBound() noexcept;
 
-private:
   void CheckAddCandidate(unsigned worst_d,
                          const OLCTriangleValidator &validator,
                          CandidateSet candidate_set) noexcept {
@@ -305,7 +299,6 @@ public:
 
 protected:
   /* virtual methods from AbstractContest */
-  bool UpdateScore() noexcept override;
-  void CopySolution(ContestTraceVector &vec) const noexcept override;
+  const ContestTraceVector &GetCurrentPath() const noexcept override;
   ContestResult CalculateResult() const noexcept override;
 };

@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "ButtonLabel.hpp"
 #include "MenuBar.hpp"
@@ -35,9 +15,8 @@ Copyright_License {
 /**
  * @return false if there is at least one ASCII letter in the string
  */
-[[gnu::pure]]
-static bool
-LacksAlphaASCII(const TCHAR *s)
+static constexpr bool
+LacksAlphaASCII(const TCHAR *s) noexcept
 {
   for (; *s != 0; ++s)
     if (IsAlphaASCII(*s))
@@ -54,7 +33,7 @@ LacksAlphaASCII(const TCHAR *s)
 [[gnu::pure]]
 static const TCHAR *
 GetTextN(const TCHAR *src, const TCHAR *src_end,
-         TCHAR *buffer, size_t buffer_size)
+         TCHAR *buffer, size_t buffer_size) noexcept
 {
   if (src == src_end)
     /* gettext("") returns the PO header, and thus we need to exclude
@@ -74,7 +53,7 @@ GetTextN(const TCHAR *src, const TCHAR *src_end,
 }
 
 ButtonLabel::Expanded
-ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
+ButtonLabel::Expand(const TCHAR *text, std::span<TCHAR> buffer) noexcept
 {
   Expanded expanded;
   const TCHAR *dollar;
@@ -104,7 +83,7 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
 
       /* concatenate the translated text and the part starting with '\n' */
       try {
-        expanded.text = BuildString(buffer, size, translated, nl);
+        expanded.text = BuildString(buffer, translated, nl);
       } catch (BasicStringBuilder<TCHAR>::Overflow) {
         expanded.text = gettext(text);
       }
@@ -119,7 +98,7 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
     macros = StripRight(text, macros);
 
     TCHAR s[100];
-    expanded.enabled = !ExpandMacros(text, s, ARRAY_SIZE(s));
+    expanded.enabled = !ExpandMacros(text, std::span{s});
     if (s[0] == _T('\0') || s[0] == _T(' ')) {
       expanded.visible = false;
       return expanded;
@@ -139,7 +118,7 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
 
     /* concatenate the translated text and the macro output */
     expanded.visible = true;
-    expanded.text = BuildString(buffer, size, translated, s + (macros - text));
+    expanded.text = BuildString(buffer, translated, s + (macros - text));
     return expanded;
   }
 }

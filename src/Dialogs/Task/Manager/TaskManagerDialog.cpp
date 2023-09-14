@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Internal.hpp"
 #include "TaskMapButtonRenderer.hpp"
@@ -50,10 +30,15 @@ Copyright_License {
 #include "Widget/VScrollWidget.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "BackendComponents.hpp"
+#include "DataComponents.hpp"
 
-TaskManagerDialog::TaskManagerDialog(WndForm &_dialog) noexcept
+inline
+TaskManagerDialog::TaskManagerDialog(WndForm &_dialog,
+                                     std::unique_ptr<OrderedTask> &&_task) noexcept
     :TabWidget(Orientation::AUTO),
-     dialog(_dialog) {}
+     dialog(_dialog),
+     task(std::move(_task)) {}
 
 TaskManagerDialog::~TaskManagerDialog() noexcept = default;
 
@@ -71,7 +56,7 @@ TaskManagerDialog::KeyPress(unsigned key_code) noexcept
 
     if (GetCurrentIndex() != 3) {
       /* switch to "close" page instead of closing the dialog */
-      SetCurrent(3);
+      SetCurrent(CloseTab);
       SetFocus();
       return true;
     }
@@ -95,7 +80,10 @@ void
 TaskManagerDialog::Initialise(ContainerWindow &parent,
                               const PixelRect &rc) noexcept
 {
-  task = protected_task_manager->TaskClone();
+  if (!task) {
+    task = backend_components->protected_task_manager->TaskClone();
+    modified = false;
+  }
 
   /* create the controls */
 
@@ -201,14 +189,14 @@ TaskManagerDialog::Commit()
     { // this must be done in thread lock because it potentially changes the
       // waypoints database
       ScopeSuspendAllThreads suspend;
-      task->CheckDuplicateWaypoints(way_points);
-      way_points.Optimise();
+      task->CheckDuplicateWaypoints(*data_components->waypoints);
+      data_components->waypoints->Optimise();
     }
 
-    protected_task_manager->TaskCommit(*task);
+    backend_components->protected_task_manager->TaskCommit(*task);
 
     try {
-      protected_task_manager->TaskSaveDefault();
+      backend_components->protected_task_manager->TaskSaveDefault();
     } catch (...) {
       ShowError(std::current_exception(), _("Failed to save file."));
       return false;
@@ -229,7 +217,7 @@ void
 TaskManagerDialog::Revert()
 {
   // create new task first to guarantee pointers are different
-  task = protected_task_manager->TaskClone();
+  task = backend_components->protected_task_manager->TaskClone();
   /**
    * \todo Having local pointers scattered about is an accident waiting to
    *       happen. Need a semantic that provides the authoritative pointer to
@@ -245,15 +233,21 @@ TaskManagerDialog::Revert()
 }
 
 void
-dlgTaskManagerShowModal()
+dlgTaskManagerShowModal(std::unique_ptr<OrderedTask> task)
 {
-  if (protected_task_manager == nullptr)
+  if (!backend_components->protected_task_manager)
     return;
 
   const DialogLook &look = UIGlobals::GetDialogLook();
   TWidgetDialog<TaskManagerDialog>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            look, _("Task Manager"));
-  dialog.SetWidget(dialog);
+  dialog.SetWidget(dialog, std::move(task));
   dialog.ShowModal();
+}
+
+void
+dlgTaskManagerShowModal()
+{
+  dlgTaskManagerShowModal({});
 }

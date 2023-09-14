@@ -1,51 +1,33 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "WaypointReaderZander.hpp"
 #include "Waypoint/Waypoints.hpp"
+#include "util/StringStrip.hxx"
 
 #include <stdlib.h>
 
 static bool
-ParseString(const TCHAR* src, tstring& dest, unsigned len)
+ParseString(tstring_view src, tstring &dest, std::size_t len) noexcept
 {
-  if (src[0] == 0)
-    return true;
+  if (src.empty())
+    return false;
 
-  dest.assign(src);
+  src = Strip(src);
+
+  if (src.size() > len)
+    src = src.substr(0, len);
 
   // Cut the string after the first space, tab or null character
-  size_t found = dest.find_first_of(_T("\t\0"));
-  if (found != tstring::npos)
-    dest = dest.substr(0, found);
+  if (auto i = dest.find_first_of(_T("\t\0")); i != dest.npos)
+    src = src.substr(0, i);
 
-  dest = dest.substr(0, len);
-  trim_inplace(dest);
+  dest.assign(src);
   return true;
 }
 
 static bool
-ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
+ParseAngle(const TCHAR* src, Angle& dest, const bool lat) noexcept
 {
   TCHAR *endptr;
 
@@ -78,7 +60,7 @@ ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
 }
 
 static bool
-ParseAltitude(const TCHAR *src, double &dest)
+ParseAltitude(const TCHAR *src, double &dest) noexcept
 {
   // Parse string
   TCHAR *endptr;
@@ -92,7 +74,7 @@ ParseAltitude(const TCHAR *src, double &dest)
 }
 
 static bool
-ParseFlags(const TCHAR* src, Waypoint &dest)
+ParseFlags(const TCHAR *src, Waypoint &dest) noexcept
 {
   // WP = Waypoint
   // HA = Home Field
@@ -132,7 +114,7 @@ ParseFlags(const TCHAR* src, Waypoint &dest)
 }
 
 static bool
-ParseFlagsFromDescription(const TCHAR* src, Waypoint &dest)
+ParseFlagsFromDescription(const TCHAR* src, Waypoint &dest) noexcept
 {
   // If the description starts with 1 the waypoint is an airport
   // (usually the description of an airport is the frequency)
@@ -180,9 +162,10 @@ WaypointReaderZander::ParseLine(const TCHAR* line, Waypoints &way_points)
 
   // Altitude (Characters 30-34 // e.g. 1561 (in meters))
   /// @todo configurable behaviour
-  if (!ParseAltitude(line + 30, new_waypoint.elevation) &&
-      !factory.FallbackElevation(new_waypoint))
-    return false;
+  if (ParseAltitude(line + 30, new_waypoint.elevation))
+    new_waypoint.has_elevation = true;
+  else
+    factory.FallbackElevation(new_waypoint);
 
   // Description (Characters 35-44)
   if (len > 35)

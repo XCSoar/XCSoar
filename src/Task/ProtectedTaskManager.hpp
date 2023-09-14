@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
- */
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -46,7 +27,7 @@ public:
     route = _route;
   }
 
-  virtual bool Intersects(const AGeoPoint& destination);
+  virtual bool Intersects(const AGeoPoint &destination) const noexcept;
 };
 
 /**
@@ -60,27 +41,27 @@ protected:
   ReachIntersectionTest intersection_test;
 
 public:
-  ProtectedTaskManager(TaskManager &_task_manager, const TaskBehaviour &tb);
+  ProtectedTaskManager(TaskManager &_task_manager, const TaskBehaviour &tb) noexcept;
 
-  ~ProtectedTaskManager();
+  ~ProtectedTaskManager() noexcept;
 
   // common accessors for ui and calc clients
-  void SetGlidePolar(const GlidePolar &glide_polar);
+  void SetGlidePolar(const GlidePolar &glide_polar) noexcept;
 
   [[gnu::pure]]
-  const OrderedTaskSettings GetOrderedTaskSettings() const;
+  const OrderedTaskSettings GetOrderedTaskSettings() const noexcept;
 
-  void SetStartTimeSpan(const RoughTimeSpan &open_time_span);
+  void SetStartTimeSpan(const RoughTimeSpan &open_time_span) noexcept;
 
   [[gnu::pure]]
-  WaypointPtr GetActiveWaypoint() const;
+  WaypointPtr GetActiveWaypoint() const noexcept;
 
-  void IncrementActiveTaskPoint(int offset);
-  void IncrementActiveTaskPointArm(int offset);
+  void IncrementActiveTaskPoint(int offset) noexcept;
+  void IncrementActiveTaskPointArm(int offset) noexcept;
 
-  bool DoGoto(WaypointPtr &&wp);
+  bool DoGoto(WaypointPtr &&wp) noexcept;
 
-  bool DoGoto(const WaypointPtr &wp) {
+  bool DoGoto(const WaypointPtr &wp) noexcept {
     return DoGoto(WaypointPtr(wp));
   }
 
@@ -92,7 +73,7 @@ public:
    * @param other OrderedTask to copy
    * @return True if this task changed
    */
-  bool TaskCommit(const OrderedTask& that);
+  bool TaskCommit(const OrderedTask &that) noexcept;
 
   /**
    * Throws std::runtime_error on error.
@@ -105,7 +86,7 @@ public:
   void TaskSaveDefault();
 
   /** Reset the tasks (as if never flown) */
-  void Reset();
+  void Reset() noexcept;
 
   /**
    * Lock/unlock the target from automatic shifts of specified tp
@@ -113,11 +94,12 @@ public:
    * @param index index of tp in task
    * @param do_lock Whether to lock the target
    */
-  bool TargetLock(const unsigned index, bool do_lock);
+  bool TargetLock(const unsigned index, bool do_lock) noexcept;
 
   void SetRoutePlanner(const ProtectedRoutePlanner *_route) noexcept;
 
-  short GetTerrainBase() const;
+  [[gnu::pure]]
+  short GetTerrainBase() const noexcept;
 
-  void ResetTask();
+  void ResetTask() noexcept;
 };

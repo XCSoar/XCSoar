@@ -1,40 +1,12 @@
-/*
- * Copyright 2020-2021 CM4all GmbH
- * All rights reserved.
- *
- * author: Max Kellermann <mk@cm4all.com>
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * - Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- *
- * - Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the
- * distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
- * FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+// SPDX-License-Identifier: BSD-2-Clause
+// Copyright CM4all GmbH
+// author: Max Kellermann <mk@cm4all.com>
 
 #pragma once
 
 #include <utility>
 
-#if defined(_LIBCPP_VERSION) && defined(__clang__) && (__clang_major__ < 14 || defined(ANDROID) || defined(__APPLE__))
+#if defined(_LIBCPP_VERSION) && defined(__clang__) && (__clang_major__ < 14 || defined(__APPLE__))
 /* libc++ until 14 has the coroutine definitions in the
    std::experimental namespace */
 /* the standard header is also missing in the Android NDK and on Apple
@@ -48,16 +20,6 @@ using std::experimental::suspend_never;
 using std::experimental::suspend_always;
 using std::experimental::noop_coroutine;
 }
-
-#ifdef ANDROID
-#if __clang_patchlevel__ >= 6
-/* Android NDK r25 emits the warning "support for
-   std::experimental::coroutine_traits will be removed in LLVM 15; use
-   std::coroutine_traits instead" but std::coroutine_traits is
-   missing; disable the warning until we have a proper solution */
-#pragma GCC diagnostic ignored "-Wdeprecated-experimental-coroutine"
-#endif
-#endif
 
 #else /* not clang */
 

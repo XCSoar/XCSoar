@@ -126,6 +126,8 @@ similar operating systems:
 The following command installs these on Debian::
 
   sudo apt-get install make g++  zlib1g-dev \
+      libfmt-dev \
+      libdbus-1-dev \
       libsodium-dev \
       libfreetype6-dev \
       libpng-dev libjpeg-dev \
@@ -161,9 +163,9 @@ Compiling for Android
 
 For Android, you need:
 
-- `Android SDK level 26 <http://developer.android.com/sdk/>`__
+- `Android SDK level 32 <http://developer.android.com/sdk/>`__
 
-- `Android NDK r25c <http://developer.android.com/sdk/ndk/>`__
+- `Android NDK r26-beta1 <http://developer.android.com/sdk/ndk/>`__
 
 - `Ogg Vorbis <http://www.vorbis.com/>`__
 
@@ -171,22 +173,25 @@ For Android, you need:
 
 On Debian::
   
-  sudo apt-get install default-jdk-headless vorbis-tools adb
+  sudo apt-get install
+      default-jdk-headless \
+      vorbis-tools \
+      adb
 
 The required Android SDK components are:
 
-- Android SDK Build-Tools 28.0.3
+- Android SDK Build-Tools 33.0.2
 
-- SDK Platform 26
+- SDK Platform 33
 
 These can be installed from the Android Studio SDK Manager, or using the
 SDK command line tools:
 
-tools/bin/sdkmanager  "build-tools;28.0.3"  "platforms;android-26"
+tools/bin/sdkmanager  "build-tools;33.0.2"  "platforms;android-33"
 
 The ``Makefile`` assumes that the Android SDK is installed in
 ``~/opt/android-sdk-linux`` and the NDK is installed in
-``~/opt/android-ndk-r25c``. You can use the options ``ANDROID_SDK`` and
+``~/opt/android-ndk-r26-beta1``. You can use the options ``ANDROID_SDK`` and
 ``ANDROID_NDK`` to override these paths.
 
 Load/update the IOIO source code::
@@ -270,8 +275,21 @@ Compiling for macOS (with Homebrew)
 
 Install the required Homebrew packages::
 
-  brew install automake autoconf libtool imagemagick sox \
-      librsvg quilt pkg-config
+  brew install \
+    automake autoconf libtool \
+    pkg-config \
+    quilt \
+    librsvg \
+    imagemagick gettext sox \
+    fmt \
+    sdl2 \
+    libsodium \
+    freetype \
+    libpng libjpeg-turbo \
+    libtiff libgeotiff proj \
+    c-ares \
+    curl \
+    lua
 
 Then compile::
 

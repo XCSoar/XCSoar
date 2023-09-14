@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "ChartRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -36,12 +16,6 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
 #endif
-
-int
-ChartRenderer::Axis::ToScreen(double value) const noexcept
-{
-  return int((value - min) * scale);
-}
 
 ChartRenderer::ChartRenderer(const ChartLook &_look, Canvas &the_canvas,
                              const PixelRect &the_rc,
@@ -219,14 +193,13 @@ ChartRenderer::ScaleXFromValue(const double value) noexcept
 }
 
 void
-ChartRenderer::DrawLabel(const TCHAR *text,
-                         const double xv, const double yv) noexcept
+ChartRenderer::DrawLabel(DoublePoint2D v, const TCHAR *text) noexcept
 {
   canvas.Select(look.label_font);
   canvas.SetBackgroundTransparent();
 
   auto tsize = canvas.CalcTextSize(text);
-  auto pt = ToScreen(xv, yv);
+  auto pt = ToScreen(v);
   canvas.SelectNullPen();
   {
 #ifdef ENABLE_OPENGL
@@ -265,12 +238,9 @@ ChartRenderer::DrawTrend(const LeastSquares &lsdata,
   if (x.unscaled || y.unscaled)
     return;
 
-  auto xmin = x.min;
-  auto xmax = x.max;
-  auto ymin = lsdata.GetYAt(x.min);
-  auto ymax = lsdata.GetYAt(x.max);
-
-  DrawLine(xmin, ymin, xmax, ymax, look.GetPen(style));
+  DrawLine({x.min, lsdata.GetYAt(x.min)},
+           {x.max, lsdata.GetYAt(x.max)},
+           look.GetPen(style));
 }
 
 void
@@ -283,17 +253,13 @@ ChartRenderer::DrawTrendN(const LeastSquares &lsdata,
   if (x.unscaled || y.unscaled)
     return;
 
-  double xmin = 0.5;
-  double xmax = lsdata.GetCount() + 0.5;
-  double ymin = lsdata.GetYAtMinX();
-  double ymax = lsdata.GetYAtMaxX();
-
-  DrawLine(xmin, ymin, xmax, ymax, look.GetPen(style));
+  DrawLine({0.5, lsdata.GetYAtMinX()},
+           {lsdata.GetCount() + 0.5, lsdata.GetYAtMaxX()},
+           look.GetPen(style));
 }
 
 void
-ChartRenderer::DrawLine(const double xmin, const double ymin,
-                        const double xmax, const double ymax,
+ChartRenderer::DrawLine(DoublePoint2D min, DoublePoint2D max,
                         const Pen &pen) noexcept
 {
   if (x.unscaled || y.unscaled)
@@ -301,18 +267,17 @@ ChartRenderer::DrawLine(const double xmin, const double ymin,
 
   assert(pen.IsDefined());
   canvas.Select(pen);
-  canvas.DrawLine(ToScreen(xmin, ymin), ToScreen(xmax, ymax));
+  canvas.DrawLine(ToScreen(min), ToScreen(max));
 }
 
 void 
-ChartRenderer::DrawFilledLine(const double xmin, const double ymin,
-                              const double xmax, const double ymax,
+ChartRenderer::DrawFilledLine(DoublePoint2D min, DoublePoint2D max,
                               const Brush &brush) noexcept
 {
   BulkPixelPoint line[4];
 
-  line[0] = ToScreen(xmin, ymin);
-  line[1] = ToScreen(xmax, ymax);
+  line[0] = ToScreen(min);
+  line[1] = ToScreen(max);
 
   line[2].x = line[1].x;
   line[2].y = ScreenY(0);
@@ -325,11 +290,10 @@ ChartRenderer::DrawFilledLine(const double xmin, const double ymin,
 }
 
 void
-ChartRenderer::DrawLine(const double xmin, const double ymin,
-                        const double xmax, const double ymax,
+ChartRenderer::DrawLine(DoublePoint2D min, DoublePoint2D max,
                         ChartLook::Style style) noexcept
 {
-  DrawLine(xmin, ymin, xmax, ymax, look.GetPen(style));
+  DrawLine(min, max, look.GetPen(style));
 }
 
 void
@@ -362,10 +326,10 @@ PrepareLineGraph(BulkPixelPoint *p, std::span<const T> src,
 {
   if (swap) {
     for (const auto &i : src)
-      *p++ = chart.ToScreen(i.y, i.x);
+      *p++ = chart.ToScreen({i.y, i.x});
   } else {
     for (const auto &i : src)
-      *p++ = chart.ToScreen(i.x, i.y);
+      *p++ = chart.ToScreen(i);
   }
 
   return p;
@@ -626,18 +590,6 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step,
   }
 }
 
-int
-ChartRenderer::ScreenX(double _x) const noexcept
-{
-  return rc_chart.left + x.ToScreen(_x);
-}
-
-int
-ChartRenderer::ScreenY(double _y) const noexcept
-{
-  return rc_chart.bottom - y.ToScreen(_y);
-}
-
 void
 ChartRenderer::DrawFilledY(std::span<const DoublePoint2D> vals,
                            const Brush &brush, const Pen *pen) noexcept
@@ -664,10 +616,10 @@ ChartRenderer::DrawFilledY(std::span<const DoublePoint2D> vals,
 }
 
 void
-ChartRenderer::DrawDot(const double x, const double y,
+ChartRenderer::DrawDot(const DoublePoint2D _p,
                        const unsigned _width) noexcept
 {
-  auto p = ToScreen(x, y);
+  auto p = ToScreen(_p);
 
   const int width = _width;
   const BulkPixelPoint line[4] = {
@@ -681,13 +633,12 @@ ChartRenderer::DrawDot(const double x, const double y,
 }
 
 void
-ChartRenderer::DrawBlankRectangle(double x_min, double y_min,
-                                  double x_max, double y_max) noexcept
+ChartRenderer::DrawBlankRectangle(DoublePoint2D min, DoublePoint2D max) noexcept
 {
   if (x.unscaled || y.unscaled)
     return;
   canvas.Select(look.blank_brush);
-  canvas.DrawRectangle({ScreenX(x_min), ScreenY(y_min), ScreenX(x_max), ScreenY(y_max)});
+  canvas.DrawRectangle({ToScreen(min), ToScreen(max)});
 }
 
 void
@@ -699,8 +650,8 @@ ChartRenderer::DrawImpulseGraph(const XYDataStore &lsdata,
 
   canvas.Select(pen);
   for (const auto &i : slots) {
-    auto pt_base = ToScreen(i.x, y.min);
-    auto pt_top = ToScreen(i.x, i.y);
+    auto pt_base = ToScreen({i.x, y.min});
+    auto pt_top = ToScreen(i);
     canvas.DrawLine(pt_base, pt_top);
   }
 }
@@ -720,8 +671,8 @@ ChartRenderer::DrawWeightBarGraph(const XYDataStore &lsdata) noexcept
   canvas.SelectNullPen();
 
   for (const auto &i : slots) {
-    auto pt_base = ToScreen(i.x, y.min);
-    auto pt_top = ToScreen(i.x+i.weight, i.y);
+    auto pt_base = ToScreen({i.x, y.min});
+    auto pt_top = ToScreen({i.x+i.weight, i.y});
     canvas.DrawRectangle({pt_base.x, pt_base.y, pt_top.x, pt_top.y});
   }
 }

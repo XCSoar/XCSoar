@@ -1,41 +1,23 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
- */
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 #include "ScoredTaskPoint.hpp"
 
-ScoredTaskPoint::ScoredTaskPoint(const GeoPoint &location, bool b_scored)
+ScoredTaskPoint::ScoredTaskPoint(const GeoPoint &location, bool b_scored) noexcept
   :SampledTaskPoint(location, b_scored)
 {
-  Reset();
+  entered_state.ResetTime();
+  exited_state.ResetTime();
 }
 
 bool 
 ScoredTaskPoint::TransitionEnter(const AircraftState &ref_now,
-                                 const AircraftState &ref_last)
+                                 const AircraftState &ref_last) noexcept
 {
   if (!CheckEnterTransition(ref_now, ref_last))
     return false;
 
   if (EntryPrecondition() && (!ScoreFirstEntry() || !HasEntered()))
-    state_entered = ref_now;
+    entered_state = ref_now;
 
   return true;
 }
@@ -43,23 +25,22 @@ ScoredTaskPoint::TransitionEnter(const AircraftState &ref_now,
 bool 
 ScoredTaskPoint::TransitionExit(const AircraftState &ref_now,
                                 const AircraftState &ref_last,
-                                const FlatProjection &projection)
+                                const FlatProjection &projection) noexcept
 {
   if (!CheckExitTransition(ref_now, ref_last))
     return false;
 
   if (ScoreLastExit()) {
     ClearSampleAllButLast(ref_last, projection);
-    state_entered = ref_last;
   }
 
-  has_exited = true;
+  exited_state = ref_last;
 
   return true;
 }
 
 const GeoPoint &
-ScoredTaskPoint::GetLocationScored() const
+ScoredTaskPoint::GetLocationScored() const noexcept
 {
   if (IsBoundaryScored() || !HasEntered())
     return GetLocationMin();
@@ -68,9 +49,9 @@ ScoredTaskPoint::GetLocationScored() const
 }
 
 void 
-ScoredTaskPoint::Reset()
+ScoredTaskPoint::Reset() noexcept
 {
   SampledTaskPoint::Reset();
-  state_entered.ResetTime();
-  has_exited = false;
+  entered_state.ResetTime();
+  exited_state.ResetTime();
 }

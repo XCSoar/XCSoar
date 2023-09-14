@@ -46,4 +46,6 @@ LIBCOMPUTER_SOURCES = \
 	$(SRC)/Computer/AutoQNH.cpp \
 	$(SRC)/Computer/Settings.cpp
 
+LIBCOMPUTER_DEPENDS = AIRSPACE TASK GEO LIBNMEA
+
 $(eval $(call link-library,libcomputer,LIBCOMPUTER))

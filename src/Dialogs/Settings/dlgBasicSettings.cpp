@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/WidgetDialog.hpp"
@@ -33,7 +13,6 @@ Copyright_License {
 #include "Form/DataField/Listener.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
-#include "Components.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -41,6 +20,8 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "ui/event/PeriodicTimer.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 #include <math.h>
 
@@ -88,8 +69,7 @@ public:
   void FlipBallastTimer();
 
   void PublishPolarSettings() {
-    if (protected_task_manager != NULL)
-      protected_task_manager->SetGlidePolar(polar_settings.glide_polar_task);
+    backend_components->SetTaskPolar(polar_settings);
   }
 
   void SetBallastLitres(double ballast_litres) {
@@ -153,7 +133,7 @@ FlightSetupPanel::SetBallast()
   if (wl > 0)
     LoadValue(WingLoading, wl, UnitGroup::WING_LOADING);
 
-  if (devices != nullptr) {
+  if (backend_components->devices != nullptr) {
     const Plane &plane = CommonInterface::GetComputerSettings().plane;
     if (plane.empty_mass > 0) {
       auto dry_mass = plane.empty_mass + polar_settings.glide_polar_task.GetCrewMass();
@@ -162,7 +142,7 @@ FlightSetupPanel::SetBallast()
         dry_mass;
 
       MessageOperationEnvironment env;
-      devices->PutBallast(fraction, overload, env);
+      backend_components->devices->PutBallast(fraction, overload, env);
     }
   }
 }
@@ -219,9 +199,9 @@ FlightSetupPanel::SetBugs(double bugs) {
   polar_settings.SetBugs(bugs);
   PublishPolarSettings();
 
-  if (devices != nullptr) {
+  if (backend_components->devices != nullptr) {
     MessageOperationEnvironment env;
-    devices->PutBugs(bugs, env);
+    backend_components->devices->PutBugs(bugs, env);
   }
 }
 
@@ -234,9 +214,9 @@ FlightSetupPanel::SetQNH(AtmosphericPressure qnh)
   settings_computer.pressure = qnh;
   settings_computer.pressure_available.Update(basic.clock);
 
-  if (devices != nullptr) {
+  if (backend_components->devices != nullptr) {
     MessageOperationEnvironment env;
-    devices->PutQNH(qnh, env);
+    backend_components->devices->PutQNH(qnh, env);
   }
 
   RefreshAltitudeControl();

@@ -1,27 +1,8 @@
-/*
-  Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "DownloadTask.hpp"
+#include "Error.hpp"
 #include "Settings.hpp"
 #include "Task/Ordered/OrderedTask.hpp"
 #include "Task/Deserialiser.hpp"
@@ -32,8 +13,12 @@
 #include "lib/curl/CoStreamRequest.hxx"
 #include "lib/curl/Easy.hxx"
 #include "lib/curl/Setup.hxx"
+#include "lib/fmt/RuntimeError.hxx"
+#include "lib/fmt/ToBuffer.hxx"
 #include "io/StringOutputStream.hxx"
 #include "util/ConvertString.hpp"
+
+#include <boost/json.hpp>
 
 #include <cassert>
 
@@ -41,33 +26,33 @@ using std::string_view_literals::operator""sv;
 
 namespace WeGlide {
 
-Co::Task<std::unique_ptr<OrderedTask>>
-DownloadDeclaredTask(CurlGlobal &curl, const WeGlideSettings &settings,
-                     const TaskBehaviour &task_behaviour,
-                     const Waypoints *waypoints,
-                     ProgressListener &progress)
+static Co::Task<std::unique_ptr<OrderedTask>>
+DownloadTask(CurlGlobal &curl, CurlEasy easy,
+             const TaskBehaviour &task_behaviour,
+             const Waypoints *waypoints,
+             ProgressListener &progress)
 {
-  assert(settings.pilot_id != 0);
-
-  char url[256];
-  snprintf(url, sizeof(url), "%s/task/declaration/%u?cup=false&tsk=true",
-           settings.default_url, settings.pilot_id);
-
-  CurlEasy easy{url};
   Curl::Setup(easy);
   const Net::ProgressAdapter progress_adapter{easy, progress};
-  easy.SetFailOnError();
 
   StringOutputStream sos;
   const auto response =
     co_await Curl::CoStreamRequest(curl, std::move(easy), sos);
 
   if (const auto i = response.headers.find("content-type"sv);
-      i != response.headers.end() && i->second == "application/json"sv)
+      i != response.headers.end() && i->second == "application/json"sv) {
     /* on error, WeGlide returns a JSON document, and if a user does
        not have a declared task (or if the user does not exist), it
        returns a JSON "null" value */
-    co_return nullptr;
+    if (response.status == 200)
+      co_return nullptr;
+
+    throw ResponseToException(response.status,
+                              boost::json::parse(sos.GetValue()));
+  }
+
+  if (response.status != 200)
+    throw FmtRuntimeError("WeGlide status {}", response.status);
 
   /* XCSoar task files are returned with
      "Content-Type:application/octet-stream", and we could verify
@@ -81,6 +66,35 @@ DownloadDeclaredTask(CurlGlobal &curl, const WeGlideSettings &settings,
   auto task = std::make_unique<OrderedTask>(task_behaviour);
   LoadTask(*task, data_node, waypoints);
   co_return task;
+}
+
+Co::Task<std::unique_ptr<OrderedTask>>
+DownloadTask(CurlGlobal &curl, const WeGlideSettings &settings,
+             uint_least64_t task_id,
+             const TaskBehaviour &task_behaviour,
+             const Waypoints *waypoints,
+             ProgressListener &progress)
+{
+  const auto url = FmtBuffer<256>("{}/task/{}?cup=false&tsk=true",
+                                  settings.default_url, task_id);
+  return DownloadTask(curl, CurlEasy{url},
+                      task_behaviour, waypoints,
+                      progress);
+}
+
+Co::Task<std::unique_ptr<OrderedTask>>
+DownloadDeclaredTask(CurlGlobal &curl, const WeGlideSettings &settings,
+                     const TaskBehaviour &task_behaviour,
+                     const Waypoints *waypoints,
+                     ProgressListener &progress)
+{
+  assert(settings.pilot_id != 0);
+
+  const auto url = FmtBuffer<256>("{}/task/declaration/{}?cup=false&tsk=true",
+                                  settings.default_url, settings.pilot_id);
+  return DownloadTask(curl, CurlEasy{url},
+                      task_behaviour, waypoints,
+                      progress);
 }
 
 } // namespace WeGlide

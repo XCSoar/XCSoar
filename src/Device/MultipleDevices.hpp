@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 /** \file
  *
@@ -36,14 +16,16 @@ Copyright_License {
 #include <list>
 #include <tchar.h>
 
-namespace Cares { class Channel; }
-class EventLoop;
+class DeviceBlackboard;
+class NMEALogger;
+class DeviceFactory;
 class DeviceDescriptor;
 class DeviceDispatcher;
 struct MoreData;
 struct DerivedInfo;
 class AtmosphericPressure;
 class RadioFrequency;
+class TransponderCode;
 class OperationEnvironment;
 
 /**
@@ -57,7 +39,9 @@ class MultipleDevices final : PortListener {
   std::list<PortListener *> listeners;
 
 public:
-  MultipleDevices(EventLoop &event_loop, Cares::Channel &cares) noexcept;
+  MultipleDevices(DeviceBlackboard &blackboard,
+                  NMEALogger *nmea_logger,
+                  DeviceFactory &factory) noexcept;
   ~MultipleDevices() noexcept;
 
   DeviceDescriptor &operator[](unsigned i) const noexcept {
@@ -82,6 +66,12 @@ public:
   void Open(OperationEnvironment &env) noexcept;
   void Close() noexcept;
   void AutoReopen(OperationEnvironment &env) noexcept;
+
+  [[gnu::pure]]
+  bool HasVega() const noexcept;
+
+  void VegaWriteNMEA(const TCHAR *text, OperationEnvironment &env) noexcept;
+
   void PutMacCready(double mac_cready, OperationEnvironment &env) noexcept;
   void PutBugs(double bugs, OperationEnvironment &env) noexcept;
   void PutBallast(double fraction, double overload,
@@ -92,6 +82,7 @@ public:
                           OperationEnvironment &env) noexcept;
   void PutStandbyFrequency(RadioFrequency frequency, const TCHAR *name,
                            OperationEnvironment &env) noexcept;
+  void PutTransponderCode(TransponderCode code, OperationEnvironment &env) noexcept;
   void PutQNH(AtmosphericPressure pres, OperationEnvironment &env) noexcept;
   void NotifySensorUpdate(const MoreData &basic) noexcept;
   void NotifyCalculatedUpdate(const MoreData &basic,

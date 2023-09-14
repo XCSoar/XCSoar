@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "VarioHistogramRenderer.hpp"
 #include "ChartRenderer.hpp"
@@ -50,6 +30,7 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   if (fs.vario_cruise_histogram.empty() &&
       fs.vario_circling_histogram.empty()) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 
@@ -104,15 +85,15 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   chart.DrawLineGraph(fs.vario_circling_histogram.GetSlots(), ChartLook::STYLE_RED, true);
 
   // draw current MC setting
-  chart.DrawLine(0, mc, scale, mc, ChartLook::STYLE_REDTHICKDASH);
-  chart.DrawLine(0, s, scale, s, ChartLook::STYLE_BLUETHINDASH);
+  chart.DrawLine({0, mc}, {scale, mc}, ChartLook::STYLE_REDTHICKDASH);
+  chart.DrawLine({0, s}, {scale, s}, ChartLook::STYLE_BLUETHINDASH);
 
   // draw labels and other overlays
   chart.DrawYGrid(Units::ToSysVSpeed(1), 1, ChartRenderer::UnitFormat::NUMERIC);
 
   const double tref = chart.GetXMin()*0.1+chart.GetXMax()*0.9;
-  chart.DrawLabel(_T("MC"), tref, mc);
-  chart.DrawLabel(_T("S cruise"), tref, s);
+  chart.DrawLabel({tref, mc}, _T("MC"));
+  chart.DrawLabel({tref, s}, _T("S cruise"));
 
   chart.Finish();
 }

@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "TaskDialogs.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
@@ -46,7 +26,10 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Blackboard/RateLimitedBlackboardListener.hpp"
 #include "Interface.hpp"
-#include "util/Clamp.hpp"
+#include "BackendComponents.hpp"
+#include "DataComponents.hpp"
+
+#include <algorithm> // for std::clamp()
 
 class TargetWidget;
 
@@ -61,13 +44,13 @@ public:
                         const TaskLook &task_look,
                         const AircraftLook &aircraft_look,
                         const TopographyLook &topography_look,
-                        const OverlayLook &overlay_look)
+                        const OverlayLook &overlay_look) noexcept
     :TargetMapWindow(waypoint_look, airspace_look, trail_look,
                      task_look, aircraft_look, topography_look, overlay_look),
      widget(_widget) {}
 
 protected:
-  void OnTaskModified() override;
+  void OnTaskModified() noexcept override;
 };
 
 class TargetWidget
@@ -133,12 +116,12 @@ public:
      delta_t(dialog_look),
      speed_remaining(dialog_look),
      speed_achieved(dialog_look) {
-    map.SetTerrain(terrain);
-    map.SetTopograpgy(topography);
-    map.SetAirspaces(&airspace_database);
-    map.SetWaypoints(&way_points);
-    map.SetTask(protected_task_manager);
-    map.SetGlideComputer(glide_computer);
+    map.SetTerrain(data_components->terrain.get());
+    map.SetTopograpgy(data_components->topography.get());
+    map.SetAirspaces(data_components->airspaces.get());
+    map.SetWaypoints(data_components->waypoints.get());
+    map.SetTask(backend_components->protected_task_manager.get());
+    map.SetGlideComputer(backend_components->glide_computer.get());
   }
 
   bool GetTaskData();
@@ -447,7 +430,7 @@ TargetWidget::RefreshCalculator()
   FloatDuration aat_time;
 
   {
-    ProtectedTaskManager::Lease lease(*protected_task_manager);
+    ProtectedTaskManager::Lease lease(*backend_components->protected_task_manager);
     const OrderedTask &task = lease->GetOrderedTask();
     const AATPoint *ap = task.GetAATTaskPoint(target_point);
 
@@ -503,7 +486,7 @@ TargetWidget::UpdateNameButton()
   StaticString<80u> buffer;
 
   {
-    ProtectedTaskManager::Lease lease(*protected_task_manager);
+    ProtectedTaskManager::Lease lease(*backend_components->protected_task_manager);
     const OrderedTask &task = lease->GetOrderedTask();
     if (target_point < task.TaskSize()) {
       const OrderedTaskPoint &tp = task.GetTaskPoint(target_point);
@@ -517,7 +500,7 @@ TargetWidget::UpdateNameButton()
 }
 
 void
-TargetDialogMapWindow::OnTaskModified()
+TargetDialogMapWindow::OnTaskModified() noexcept
 {
   TargetMapWindow::OnTaskModified();
   widget.RefreshCalculator();
@@ -527,7 +510,7 @@ void
 TargetWidget::OnOptimized(bool value) noexcept
 {
   is_locked = !value;
-  protected_task_manager->TargetLock(target_point, is_locked);
+  backend_components->protected_task_manager->TargetLock(target_point, is_locked);
   RefreshCalculator();
 }
 
@@ -577,7 +560,7 @@ TargetWidget::OnRangeModified(double new_value)
   range_and_radial.range = new_range;
 
   {
-    ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
+    ProtectedTaskManager::ExclusiveLease lease(*backend_components->protected_task_manager);
     const OrderedTask &task = lease->GetOrderedTask();
     AATPoint *ap = task.GetAATTaskPoint(target_point);
     if (ap == nullptr)
@@ -620,7 +603,7 @@ TargetWidget::OnRadialModified(double new_value)
   range_and_radial.radial = new_radial;
 
   {
-    ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
+    ProtectedTaskManager::ExclusiveLease lease(*backend_components->protected_task_manager);
     const OrderedTask &task = lease->GetOrderedTask();
     AATPoint *ap = task.GetAATTaskPoint(target_point);
     if (ap == nullptr)
@@ -665,7 +648,7 @@ TargetWidget::OnNameClicked()
   WaypointPtr waypoint;
 
   {
-    ProtectedTaskManager::Lease lease(*protected_task_manager);
+    ProtectedTaskManager::Lease lease(*backend_components->protected_task_manager);
     const OrderedTask &task = lease->GetOrderedTask();
     if (target_point >= task.TaskSize())
       return;
@@ -674,13 +657,14 @@ TargetWidget::OnNameClicked()
     waypoint = tp.GetWaypointPtr();
   }
 
-  dlgWaypointDetailsShowModal(waypoint, false);
+  dlgWaypointDetailsShowModal(data_components->waypoints.get(),
+                              waypoint, false);
 }
 
 bool
 TargetWidget::GetTaskData()
 {
-  ProtectedTaskManager::Lease task_manager(*protected_task_manager);
+  ProtectedTaskManager::Lease task_manager(*backend_components->protected_task_manager);
   if (task_manager->GetMode() != TaskType::ORDERED)
     return false;
 
@@ -706,7 +690,7 @@ TargetWidget::InitTargetPoints(int _target_point)
     target_point = initial_active_task_point;
   }
 
-  target_point = Clamp(int(target_point), 0, (int)task_size - 1);
+  target_point = std::clamp(int(target_point), 0, (int)task_size - 1);
   return true;
 }
 
@@ -729,7 +713,7 @@ TargetWidget::KeyPress(unsigned key_code) noexcept
 void
 dlgTargetShowModal(int _target_point)
 {
-  if (protected_task_manager == nullptr)
+  if (!backend_components->protected_task_manager)
     return;
 
   const Look &look = UIGlobals::GetLook();

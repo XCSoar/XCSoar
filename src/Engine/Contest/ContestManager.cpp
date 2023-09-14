@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
- */
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "ContestManager.hpp"
 
@@ -83,6 +64,34 @@ ContestManager::SetPredicted(const TracePoint &predicted) noexcept
   if (dmst_quad.SetPredicted(predicted) &&
       contest == Contest::DMST)
     stats.Reset();
+
+  if (net_coupe.SetPredicted(predicted) && contest == Contest::NET_COUPE)
+    stats.Reset();
+
+  if (weglide_distance.SetPredicted(predicted)) {
+    weglide_fai.Reset();
+    weglide_or.Reset();
+    weglide_free.Reset();
+
+    if (contest == Contest::WEGLIDE_DISTANCE ||
+        contest == Contest::WEGLIDE_FAI ||
+        contest == Contest::WEGLIDE_OR ||
+        contest == Contest::WEGLIDE_FREE)
+      stats.Reset();
+  } else {
+    if (weglide_fai.SetPredicted(predicted) && contest == Contest::WEGLIDE_FAI)
+      stats.Reset();
+    if (weglide_or.SetPredicted(predicted) && contest == Contest::WEGLIDE_OR)
+      stats.Reset();
+  }
+
+  const bool reset_charron_large = charron_large.SetPredicted(predicted);
+  const bool reset_charron_small = charron_small.SetPredicted(predicted);
+  if (reset_charron_large)
+    charron_small.Reset();
+
+  if ((reset_charron_large || reset_charron_small) && contest == Contest::CHARRON)
+      stats.Reset();
 }
 
 void

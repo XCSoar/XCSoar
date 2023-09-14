@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Protocol.hpp"
 #include "Conversion.hpp"
@@ -100,7 +80,7 @@ IMI::Connect(Port &port, OperationEnvironment &env)
     baudRate = 9600;
 
   Send(port, env,
-       MSG_CFG_STARTCONFIG, 0, 0, IMICOMM_BIGPARAM1(baudRate),
+       MSG_CFG_STARTCONFIG, {}, IMICOMM_BIGPARAM1(baudRate),
        IMICOMM_BIGPARAM2(baudRate));
 
   // get device info
@@ -165,7 +145,8 @@ IMI::DeclarationWrite(Port &port, const Declaration &decl,
               imiDecl.wp[size + 1]);
 
   // send declaration for current task
-  SendRet(port, env, MSG_DECLARATION, &imiDecl, sizeof(imiDecl),
+  SendRet(port, env, MSG_DECLARATION,
+          std::as_bytes(std::span{&imiDecl, 1}),
           MSG_ACK_SUCCESS, 0,
           -1, 0, 0,
           std::chrono::seconds{2});
@@ -182,7 +163,7 @@ IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list,
 
   for (;; count++) {
     const auto msg = SendRet(port, env,
-                             MSG_FLIGHT_INFO, nullptr, 0, MSG_FLIGHT_INFO,
+                             MSG_FLIGHT_INFO, {}, MSG_FLIGHT_INFO,
                              -1, totalCount, address, addressStop,
                              std::chrono::seconds{2}, 6);
 
@@ -202,9 +183,12 @@ IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list,
       ifi.start_time = start;
       ifi.end_time = ConvertToDateTime(fi->finish);
       ifi.internal.imi = fi->address;
+
+      if (flight_list.full())
+        break;
     }
 
-    if (msg.payloadSize == 0 || address == 0xFFFF)
+    if (msg.payloadSize == 0 || address == 0xFFFF || flight_list.full())
       return true;
   }
 

@@ -1,32 +1,12 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "UnitsConfigPanel.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsStore.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -45,7 +25,8 @@ enum ControlIndex {
   UnitsMass,
   UnitsWingLoading,
   spacer_2,
-  UnitsLatLon
+  UnitsLatLon,
+  ROTATION,
 };
 
 class UnitsConfigPanel final
@@ -255,6 +236,16 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent,
           units_lat_lon_list,
           (unsigned)coordinate_format);
   SetExpertRow(UnitsLatLon);
+
+  static constexpr StaticEnumChoice rotation_labels_list[] = {
+    { Unit::HZ, _T("Hz") },
+    { Unit::RPM, _T("rpm") },
+    nullptr
+  };
+  AddEnum(_("Rotation"), _("Unit used for rotation."),
+          rotation_labels_list,
+          (unsigned)config.rotation_unit, this);
+  SetExpertRow(ROTATION);
 }
 
 bool
@@ -291,6 +282,9 @@ UnitsConfigPanel::Save(bool &_changed) noexcept
                            config.wing_loading_unit);
 
   changed |= SaveValueEnum(UnitsLatLon, ProfileKeys::LatLonUnits, coordinate_format);
+
+  changed |= SaveValueEnum(ROTATION, ProfileKeys::RotationUnitValue,
+                           config.rotation_unit);
 
   _changed |= changed;
 

@@ -1,29 +1,9 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
-#include "FlarmId.hpp"
+#include "Id.hpp"
 #include "Color.hpp"
 
 #include <map>
@@ -37,17 +17,17 @@ public:
   typedef Map::const_iterator const_iterator;
 
   [[gnu::pure]]
-  const_iterator begin() const {
+  const_iterator begin() const noexcept {
     return data.begin();
   }
 
   [[gnu::pure]]
-  const_iterator end() const {
+  const_iterator end() const noexcept {
     return data.end();
   }
 
   [[gnu::pure]]
-  FlarmColor Get(FlarmId id) const {
+  FlarmColor Get(FlarmId id) const noexcept {
     auto i = data.find(id);
     if (i == data.end())
       return FlarmColor::NONE;
@@ -55,17 +35,14 @@ public:
     return i->second;
   }
 
-  void Set(FlarmId id, FlarmColor color) {
+  void Set(FlarmId id, FlarmColor color) noexcept {
     assert(color != FlarmColor::NONE);
     assert(color != FlarmColor::COUNT);
 
-    auto i = data.insert(std::make_pair(id, color));
-    if (!i.second)
-      /* the id already exists in the map: overwrite the old color */
-      i.first->second = color;
+    data.insert_or_assign(id, color);
   }
 
-  void Remove(FlarmId id) {
+  void Remove(FlarmId id) noexcept {
     data.erase(id);
   }
 };

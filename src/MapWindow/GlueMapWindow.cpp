@@ -1,28 +1,7 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "GlueMapWindow.hpp"
-#include "Components.hpp"
 #include "DrawThread.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Look/Look.hpp"
@@ -31,8 +10,10 @@ Copyright_License {
 #include "ui/event/Idle.hpp"
 #include "Topography/Thread.hpp"
 #include "Terrain/Thread.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
-GlueMapWindow::GlueMapWindow(const Look &look)
+GlueMapWindow::GlueMapWindow(const Look &look) noexcept
   :MapWindow(look.map, look.traffic),
    thermal_band_renderer(look.thermal_band, look.chart),
    final_glide_bar_renderer(look.final_glide_bar, look.map.task),
@@ -41,13 +22,13 @@ GlueMapWindow::GlueMapWindow(const Look &look)
 {
 }
 
-GlueMapWindow::~GlueMapWindow()
+GlueMapWindow::~GlueMapWindow() noexcept
 {
   Destroy();
 }
 
 void
-GlueMapWindow::SetTopography(TopographyStore *_topography)
+GlueMapWindow::SetTopography(TopographyStore *_topography) noexcept
 {
   if (topography_thread != nullptr) {
     topography_thread->LockStop();
@@ -63,7 +44,7 @@ GlueMapWindow::SetTopography(TopographyStore *_topography)
 }
 
 void
-GlueMapWindow::SetTerrain(RasterTerrain *_terrain)
+GlueMapWindow::SetTerrain(RasterTerrain *_terrain) noexcept
 {
   if (terrain_thread != nullptr) {
     terrain_thread->LockStop();
@@ -79,7 +60,7 @@ GlueMapWindow::SetTerrain(RasterTerrain *_terrain)
 }
 
 void
-GlueMapWindow::SetMapSettings(const MapSettings &new_value)
+GlueMapWindow::SetMapSettings(const MapSettings &new_value) noexcept
 {
   AssertThreadOrUndefined();
 
@@ -92,7 +73,7 @@ GlueMapWindow::SetMapSettings(const MapSettings &new_value)
 }
 
 void
-GlueMapWindow::SetComputerSettings(const ComputerSettings &new_value)
+GlueMapWindow::SetComputerSettings(const ComputerSettings &new_value) noexcept
 {
   AssertThreadOrUndefined();
 
@@ -105,7 +86,7 @@ GlueMapWindow::SetComputerSettings(const ComputerSettings &new_value)
 }
 
 void
-GlueMapWindow::SetUIState(const UIState &new_value)
+GlueMapWindow::SetUIState(const UIState &new_value) noexcept
 {
   AssertThreadOrUndefined();
 
@@ -118,14 +99,15 @@ GlueMapWindow::SetUIState(const UIState &new_value)
 }
 
 void
-GlueMapWindow::ExchangeBlackboard()
+GlueMapWindow::ExchangeBlackboard() noexcept
 {
   /* copy device_blackboard to MapWindow */
 
   {
-    const std::lock_guard lock{device_blackboard->mutex};
-    ReadBlackboard(device_blackboard->Basic(),
-                   device_blackboard->Calculated());
+    auto &device_blackboard = *backend_components->device_blackboard;
+    const std::lock_guard lock{device_blackboard.mutex};
+    ReadBlackboard(device_blackboard.Basic(),
+                   device_blackboard.Calculated());
   }
 
 #ifndef ENABLE_OPENGL
@@ -139,7 +121,7 @@ GlueMapWindow::ExchangeBlackboard()
 }
 
 void
-GlueMapWindow::SuspendThreads()
+GlueMapWindow::SuspendThreads() noexcept
 {
 #ifndef ENABLE_OPENGL
   if (draw_thread != nullptr)
@@ -148,7 +130,7 @@ GlueMapWindow::SuspendThreads()
 }
 
 void
-GlueMapWindow::ResumeThreads()
+GlueMapWindow::ResumeThreads() noexcept
 {
 #ifndef ENABLE_OPENGL
   if (draw_thread != nullptr)
@@ -157,7 +139,7 @@ GlueMapWindow::ResumeThreads()
 }
 
 void
-GlueMapWindow::FullRedraw()
+GlueMapWindow::FullRedraw() noexcept
 {
   UpdateDisplayMode();
   UpdateScreenAngle();
@@ -181,7 +163,7 @@ GlueMapWindow::PartialRedraw() noexcept
 }
 
 void
-GlueMapWindow::QuickRedraw()
+GlueMapWindow::QuickRedraw() noexcept
 {
   UpdateScreenAngle();
   UpdateProjection();

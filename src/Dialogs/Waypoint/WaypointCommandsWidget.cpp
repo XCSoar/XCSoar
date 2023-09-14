@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "WaypointCommandsWidget.hpp"
 #include "WaypointDialogs.hpp"
@@ -34,6 +14,8 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Protection.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
+#include "DataComponents.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Pan.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
@@ -198,16 +180,17 @@ RemoveFromTask(ProtectedTaskManager &task_manager,
 }
 
 static void
-SetHome(const Waypoint &waypoint)
+SetHome(Waypoints *way_points, const Waypoint &waypoint)
 {
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   settings_computer.poi.SetHome(waypoint);
 
   {
     ScopeSuspendAllThreads suspend;
-    WaypointGlue::SetHome(way_points, terrain,
-                          settings_computer.poi, settings_computer.team_code,
-                          device_blackboard, false);
+    if (way_points != nullptr)
+      WaypointGlue::SetHome(*way_points, data_components->terrain.get(),
+                            settings_computer.poi, settings_computer.team_code,
+                            backend_components->device_blackboard.get(), false);
     WaypointGlue::SaveHome(Profile::map,
                            settings_computer.poi, settings_computer.team_code);
   }
@@ -249,7 +232,7 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent,
   }
 
   AddButton(_("Set as New Home"), [this](){
-    SetHome(*waypoint);
+    SetHome(waypoints, *waypoint);
     if (form != nullptr)
       form->SetModalResult(mrOK);
   });
@@ -269,7 +252,7 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent,
                                          waypoint->name.c_str());
   });
 
-  if (allow_edit)
+  if (allow_edit && waypoints != nullptr)
     AddButton(_("Edit"), [this](){
       Waypoint wp_copy = *waypoint;
 
@@ -282,12 +265,12 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent,
 
         {
           ScopeSuspendAllThreads suspend;
-          way_points.Replace(waypoint, std::move(wp_copy));
-          way_points.Optimise();
+          waypoints->Replace(waypoint, std::move(wp_copy));
+          waypoints->Optimise();
         }
 
         try {
-          WaypointGlue::SaveWaypoints(way_points);
+          WaypointGlue::SaveWaypoints(*waypoints);
         } catch (...) {
           ShowError(std::current_exception(), _("Failed to save waypoints"));
         }

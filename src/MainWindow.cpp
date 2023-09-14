@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
@@ -35,7 +15,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "Audio/Sound.hpp"
-#include "Components.hpp"
 #include "ProcessTimer.hpp"
 #include "LogFile.hpp"
 #include "Gauge/GaugeFLARM.hpp"
@@ -55,6 +34,16 @@ Copyright_License {
 #include "UIReceiveBlackboard.hpp"
 #include "UISettings.hpp"
 #include "Interface.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
+
+#ifdef ANDROID
+#include "Android/ReceiveTask.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Dialogs/Task/TaskDialogs.hpp"
+#include "ui/event/Globals.hpp"
+#include "ui/event/Queue.hpp"
+#endif
 
 static constexpr unsigned separator_height = 2;
 
@@ -209,13 +198,7 @@ MainWindow::InitialiseConfigured()
   menu_bar = new MenuBar(*this, look->dialog.button);
 
   ReinitialiseLayout_vario(ib_layout);
-
   ReinitialiseLayoutTA(rc, ib_layout);
-
-  WindowStyle hidden_border;
-  hidden_border.Hide();
-  hidden_border.Border();
-
   ReinitialiseLayout_flarm(rc, ib_layout);
 
 #ifdef HAVE_SHOW_MENU_BUTTON
@@ -457,6 +440,51 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
 }
 
 void
+MainWindow::ReinitialiseLook() noexcept
+{
+  const auto &ui_settings = CommonInterface::GetUISettings();
+
+  const InfoBoxLayout::Layout ib_layout =
+    InfoBoxLayout::Calculate(GetClientRect(),
+                             ui_settings.info_boxes.geometry);
+
+  assert(look != nullptr);
+  look->InitialiseConfigured(CommonInterface::GetUISettings(),
+                             Fonts::map, Fonts::map_bold,
+                             ib_layout.control_size.width);
+
+  InfoBoxManager::ScheduleRedraw();
+}
+
+#ifdef ANDROID
+
+void
+MainWindow::OnLook() noexcept
+{
+  ReinitialiseLook();
+}
+
+void
+MainWindow::OnTaskReceived() noexcept
+{
+  if (!IsRunning())
+    /* postpone until XCSoar is running */
+    return;
+
+  if (HasDialog())
+    /* don't intercept an existing modal dialog */
+    return;
+
+  auto task = GetReceivedTask();
+  if (!task)
+    return;
+
+  dlgTaskManagerShowModal(std::move(task));
+}
+
+#endif // ANDROID
+
+void
 MainWindow::Destroy() noexcept
 {
   Deinitialise();
@@ -649,7 +677,7 @@ MainWindow::LateInitialise() noexcept
 
   late_initialised = true;
 
-  if (devices != nullptr) {
+  if (backend_components->devices != nullptr) {
     /* this OperationEnvironment instance must be persistent, because
        DeviceDescriptor::Open() is asynchronous */
     static PopupOperationEnvironment env;
@@ -659,7 +687,7 @@ MainWindow::LateInitialise() noexcept
        opening some devices may be intercepted by Android which pauses
        XCSoar in order to ask the user for permission; pausing works
        properly only if the main event loop runs */
-    devices->Open(env);
+    backend_components->devices->Open(env);
   }
 }
 
@@ -667,6 +695,15 @@ void
 MainWindow::RunTimer() noexcept
 {
   LateInitialise();
+
+#ifdef ANDROID
+  /* if we still havn't processed the task that was received from a QR
+     code, re-post the TASK_RECEIVED event to invoke OnTaskReceived()
+     again; we must not open the task manager dialog here because it
+     would block the timer while the dialog is open */
+  if (IsRunning() && !HasDialog() && HasReceivedTask())
+    UI::event_queue->Inject(UI::Event::TASK_RECEIVED);
+#endif
 
   ProcessTimer();
 
@@ -1077,6 +1114,9 @@ MainWindow::UpdateTrafficGaugeVisibility() noexcept
 
   if (traffic_visible) {
     if (HasDialog())
+      return;
+
+    if (!flarm.traffic.InCloseRange())
       return;
 
     if (!traffic_gauge.IsDefined())

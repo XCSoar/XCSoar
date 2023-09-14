@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "ProtectedTaskManager.hpp"
 #include "ProtectedRoutePlanner.hpp"
@@ -30,26 +10,27 @@ Copyright_License {
 #include "Engine/Route/ReachResult.hpp"
 
 ProtectedTaskManager::ProtectedTaskManager(TaskManager &_task_manager,
-                                           const TaskBehaviour &tb)
+                                           const TaskBehaviour &tb) noexcept
   :Guard<TaskManager>(_task_manager),
    task_behaviour(tb)
 {
 }
 
-ProtectedTaskManager::~ProtectedTaskManager() {
+ProtectedTaskManager::~ProtectedTaskManager() noexcept
+{
   UnprotectedLease lease(*this);
   lease->SetIntersectionTest(nullptr); // de-register
 }
 
 void 
-ProtectedTaskManager::SetGlidePolar(const GlidePolar &glide_polar)
+ProtectedTaskManager::SetGlidePolar(const GlidePolar &glide_polar) noexcept
 {
   ExclusiveLease lease(*this);
   lease->SetGlidePolar(glide_polar);
 }
 
 void
-ProtectedTaskManager::SetStartTimeSpan(const RoughTimeSpan &open_time_span)
+ProtectedTaskManager::SetStartTimeSpan(const RoughTimeSpan &open_time_span) noexcept
 {
   ExclusiveLease lease(*this);
   OrderedTaskSettings otb = lease->GetOrderedTask().GetOrderedTaskSettings();
@@ -58,14 +39,14 @@ ProtectedTaskManager::SetStartTimeSpan(const RoughTimeSpan &open_time_span)
 }
 
 const OrderedTaskSettings
-ProtectedTaskManager::GetOrderedTaskSettings() const
+ProtectedTaskManager::GetOrderedTaskSettings() const noexcept
 {
   Lease lease(*this);
   return lease->GetOrderedTask().GetOrderedTaskSettings();
 }
 
 WaypointPtr
-ProtectedTaskManager::GetActiveWaypoint() const
+ProtectedTaskManager::GetActiveWaypoint() const noexcept
 {
   Lease lease(*this);
   const TaskWaypoint *tp = lease->GetActiveTaskPoint();
@@ -76,21 +57,21 @@ ProtectedTaskManager::GetActiveWaypoint() const
 }
 
 bool
-ProtectedTaskManager::TargetLock(const unsigned index, bool do_lock)
+ProtectedTaskManager::TargetLock(const unsigned index, bool do_lock) noexcept
 {
   ExclusiveLease lease(*this);
   return lease->TargetLock(index, do_lock);
 }
 
 void 
-ProtectedTaskManager::IncrementActiveTaskPoint(int offset)
+ProtectedTaskManager::IncrementActiveTaskPoint(int offset) noexcept
 {
   ExclusiveLease lease(*this);
   lease->IncrementActiveTaskPoint(offset);
 }
 
 void 
-ProtectedTaskManager::IncrementActiveTaskPointArm(int offset)
+ProtectedTaskManager::IncrementActiveTaskPointArm(int offset) noexcept
 {
   ExclusiveLease lease(*this);
   TaskAdvance &advance = lease->SetTaskAdvance();
@@ -127,7 +108,7 @@ ProtectedTaskManager::IncrementActiveTaskPointArm(int offset)
 }
 
 bool 
-ProtectedTaskManager::DoGoto(WaypointPtr &&wp)
+ProtectedTaskManager::DoGoto(WaypointPtr &&wp) noexcept
 {
   ExclusiveLease lease(*this);
   return lease->DoGoto(std::move(wp));
@@ -141,14 +122,14 @@ ProtectedTaskManager::TaskClone() const noexcept
 }
 
 bool
-ProtectedTaskManager::TaskCommit(const OrderedTask& that)
+ProtectedTaskManager::TaskCommit(const OrderedTask &that) noexcept
 {
   ExclusiveLease lease(*this);
   return lease->Commit(that);
 }
 
 void 
-ProtectedTaskManager::Reset()
+ProtectedTaskManager::Reset() noexcept
 {
   ExclusiveLease lease(*this);
   lease->Reset();
@@ -164,7 +145,7 @@ ProtectedTaskManager::SetRoutePlanner(const ProtectedRoutePlanner *_route) noexc
 }
 
 bool
-ReachIntersectionTest::Intersects(const AGeoPoint& destination)
+ReachIntersectionTest::Intersects(const AGeoPoint &destination) const noexcept
 {
   if (!route)
     return false;
@@ -181,7 +162,7 @@ ReachIntersectionTest::Intersects(const AGeoPoint& destination)
 }
 
 void
-ProtectedTaskManager::ResetTask()
+ProtectedTaskManager::ResetTask() noexcept
 {
   ExclusiveLease lease(*this);
   lease->ResetTask();

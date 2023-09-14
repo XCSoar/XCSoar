@@ -1,31 +1,5 @@
-/*
- * Copyright 2020-2022 Max Kellermann <max.kellermann@gmail.com>
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * - Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- *
- * - Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the
- * distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
- * FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+// SPDX-License-Identifier: BSD-2-Clause
+// author: Max Kellermann <max.kellermann@gmail.com>
 
 #pragma once
 
@@ -38,6 +12,18 @@
 #include <iterator>
 #include <type_traits>
 #include <utility>
+
+struct IntrusiveListOptions {
+	bool constant_time_size = false;
+
+	/**
+	 * Initialize the list head with nullptr (all zeroes) which
+	 * adds some code for checking nullptr, but may reduce the
+	 * data section for statically allocated lists.  It's a
+	 * trade-off.
+	 */
+	bool zero_initialized = false;
+};
 
 struct IntrusiveListNode {
 	IntrusiveListNode *next, *prev;
@@ -53,7 +39,7 @@ template<IntrusiveHookMode _mode=IntrusiveHookMode::NORMAL>
 class IntrusiveListHook {
 	template<typename T> friend struct IntrusiveListBaseHookTraits;
 	template<auto member> friend struct IntrusiveListMemberHookTraits;
-	template<typename T, typename HookTraits, bool> friend class IntrusiveList;
+	template<typename T, typename HookTraits, IntrusiveListOptions> friend class IntrusiveList;
 
 protected:
 	IntrusiveListNode siblings;
@@ -104,30 +90,25 @@ using AutoUnlinkIntrusiveListHook =
 	IntrusiveListHook<IntrusiveHookMode::AUTO_UNLINK>;
 
 /**
- * Detect the hook type which is embedded in the given type as a base
- * class.  This is a template to postpone the type checks, to allow
- * forward-declared types.
- */
-template<typename U>
-struct IntrusiveListHookDetection {
-	/* TODO can this be simplified somehow, without checking for
-	   all possible enum values? */
-	using type = std::conditional_t<std::is_base_of_v<IntrusiveListHook<IntrusiveHookMode::NORMAL>, U>,
-					IntrusiveListHook<IntrusiveHookMode::NORMAL>,
-					std::conditional_t<std::is_base_of_v<IntrusiveListHook<IntrusiveHookMode::TRACK>, U>,
-							   IntrusiveListHook<IntrusiveHookMode::TRACK>,
-							   std::conditional_t<std::is_base_of_v<IntrusiveListHook<IntrusiveHookMode::AUTO_UNLINK>, U>,
-									      IntrusiveListHook<IntrusiveHookMode::AUTO_UNLINK>,
-									      void>>>;
-};
-
-/**
  * For classes which embed #IntrusiveListHook as base class.
  */
 template<typename T>
 struct IntrusiveListBaseHookTraits {
+	/* a never-called helper function which is used by _Cast() */
+	template<IntrusiveHookMode mode>
+	static constexpr IntrusiveListHook<mode> _Identity(const IntrusiveListHook<mode> &) noexcept;
+
+	/* another never-called helper function which "calls"
+	   _Identity(), implicitly casting the item to the
+	   IntrusiveListHook specialization; we use this to detect
+	   which IntrusiveListHook specialization is used */
 	template<typename U>
-	using Hook = typename IntrusiveListHookDetection<U>::type;
+	static constexpr auto _Cast(const U &u) noexcept {
+		return decltype(_Identity(u))();
+	}
+
+	template<typename U>
+	using Hook = decltype(_Cast(std::declval<U>()));
 
 	static constexpr T *Cast(IntrusiveListNode *node) noexcept {
 		auto *hook = &Hook<T>::Cast(*node);
@@ -166,9 +147,13 @@ struct IntrusiveListMemberHookTraits {
  */
 template<typename T,
 	 typename HookTraits=IntrusiveListBaseHookTraits<T>,
-	 bool constant_time_size=false>
+	 IntrusiveListOptions options=IntrusiveListOptions{}>
 class IntrusiveList {
-	IntrusiveListNode head{&head, &head};
+	static constexpr bool constant_time_size = options.constant_time_size;
+
+	IntrusiveListNode head = options.zero_initialized
+		? IntrusiveListNode{nullptr, nullptr}
+		: IntrusiveListNode{&head, &head};
 
 	[[no_unique_address]]
 	OptionalCounter<constant_time_size> counter;
@@ -265,6 +250,10 @@ public:
 	}
 
 	constexpr bool empty() const noexcept {
+		if constexpr (options.zero_initialized)
+			if (head.next == nullptr)
+				return true;
+
 		return head.next == &head;
 	}
 
@@ -290,16 +279,14 @@ public:
 
 	void clear_and_dispose(Disposer<value_type> auto disposer) noexcept {
 		while (!empty()) {
-			auto *item = &front();
-			pop_front();
-			disposer(item);
+			disposer(&pop_front());
 		}
 	}
 
 	/**
 	 * @return the number of removed items
 	 */
-	std::size_t remove_and_dispose_if(Predicate<const_reference> auto pred,
+	std::size_t remove_and_dispose_if(std::predicate<const_reference> auto pred,
 					  Disposer<value_type> auto dispose) noexcept {
 		std::size_t result = 0;
 
@@ -328,15 +315,15 @@ public:
 		return *Cast(head.next);
 	}
 
-	void pop_front() noexcept {
-		ToHook(front()).unlink();
-		--counter;
-	}
-
-	void pop_front_and_dispose(Disposer<value_type> auto disposer) noexcept {
+	reference pop_front() noexcept {
 		auto &i = front();
 		ToHook(i).unlink();
 		--counter;
+		return i;
+	}
+
+	void pop_front_and_dispose(Disposer<value_type> auto disposer) noexcept {
+		auto &i = pop_front();
 		disposer(&i);
 	}
 
@@ -345,7 +332,8 @@ public:
 	}
 
 	void pop_back() noexcept {
-		ToHook(back()).unlink();
+		auto &i = back();
+		ToHook(i).unlink();
 		--counter;
 	}
 
@@ -409,6 +397,10 @@ public:
 	};
 
 	constexpr iterator begin() noexcept {
+		if constexpr (options.zero_initialized)
+			if (head.next == nullptr)
+				return end();
+
 		return {head.next};
 	}
 
@@ -480,6 +472,10 @@ public:
 	};
 
 	constexpr const_iterator begin() const noexcept {
+		if constexpr (options.zero_initialized)
+			if (head.next == nullptr)
+				return end();
+
 		return {head.next};
 	}
 
@@ -513,12 +509,22 @@ public:
 		insert(end(), t);
 	}
 
+	/**
+	 * Insert a new item before the given position.
+	 *
+	 * @param p a valid iterator (end() is allowed)for this list
+	 * describing the position where to insert
+	 */
 	void insert(iterator p, reference t) noexcept {
 		static_assert(!constant_time_size ||
 			      GetHookMode() < IntrusiveHookMode::AUTO_UNLINK,
 			      "Can't use auto-unlink hooks with constant_time_size");
 
-		auto &existing_node = ToNode(*p);
+		if constexpr (options.zero_initialized)
+			if (head.next == nullptr)
+				head = {&head, &head};
+
+		auto &existing_node = *p.cursor;
 		auto &new_node = ToNode(t);
 
 		IntrusiveListNode::Connect(*existing_node.prev,
@@ -526,6 +532,17 @@ public:
 		IntrusiveListNode::Connect(new_node, existing_node);
 
 		++counter;
+	}
+
+	/**
+	 * Like insert(), but insert after the given position.
+	 */
+	void insert_after(iterator p, reference t) noexcept {
+		if constexpr (options.zero_initialized)
+			if (head.next == nullptr)
+				head = {&head, &head};
+
+		insert(std::next(p), t);
 	}
 
 	/**
@@ -548,13 +565,17 @@ public:
 		if (_begin == _end)
 			return;
 
-		auto &next_node = ToNode(*position);
-		auto &prev_node = ToNode(*std::prev(position));
+		if constexpr (options.zero_initialized)
+			if (head.next == nullptr)
+				head = {&head, &head};
 
-		auto &first_node = ToNode(*_begin);
-		auto &before_first_node = ToNode(*std::prev(_begin));
-		auto &last_node = ToNode(*std::prev(_end));
-		auto &after_last_node = ToNode(*_end);
+		auto &next_node = *position.cursor;
+		auto &prev_node = *std::prev(position).cursor;
+
+		auto &first_node = *_begin.cursor;
+		auto &before_first_node = *std::prev(_begin).cursor;
+		auto &last_node = *std::prev(_end).cursor;
+		auto &after_last_node = *_end.cursor;
 
 		/* remove from the other list */
 		IntrusiveListNode::Connect(before_first_node, after_last_node);

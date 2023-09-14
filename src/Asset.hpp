@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -43,17 +23,6 @@ IsDebug() noexcept
 #else
   return true;
 #endif
-}
-
-/**
- * Is XCSoar running on ancient and slow hardware?  If yes, then some
- * expensive UI features are disabled.
- */
-constexpr
-static inline bool
-IsAncientHardware() noexcept
-{
-  return false;
 }
 
 /**
@@ -138,17 +107,6 @@ IsEmbedded() noexcept
 }
 
 /**
- * Does this device have little main memory?  On those, some expensive
- * features are disabled.
- */
-constexpr
-static inline bool
-HasLittleMemory() noexcept
-{
-  return IsAncientHardware();
-}
-
-/**
  * Returns whether the application is compiled with IOIOLib
  */
 constexpr
@@ -167,7 +125,7 @@ HasIOIOLib() noexcept
  * @return True if a touch screen or mouse is assumed for the hardware
  * that XCSoar is running on, False if the hardware has only buttons
  */
-#if defined(USE_CONSOLE) && !defined(KOBO)
+#if (defined(USE_CONSOLE) && !defined(KOBO)) || defined(USE_WAYLAND)
 [[gnu::pure]]
 bool
 HasPointer() noexcept;
@@ -185,7 +143,7 @@ HasPointer() noexcept
  * Does this device have a touch screen?  This is useful to know for
  * sizing controls, as a touch screen may require bigger areas.
  */
-#ifdef USE_LIBINPUT
+#if defined(USE_LIBINPUT) || defined(USE_WAYLAND)
 [[gnu::pure]]
 bool
 HasTouchScreen() noexcept;
@@ -203,7 +161,7 @@ HasTouchScreen() noexcept
  * @return True if a keyboard is assumed for the hardware
  * that XCSoar is running on, False if the hardware has no keyboard
  */
-#ifdef USE_LIBINPUT
+#if defined(USE_LIBINPUT) || defined(USE_WAYLAND)
 [[gnu::pure]]
 bool
 HasKeyboard() noexcept;
@@ -240,17 +198,10 @@ HasCursorKeys() noexcept
 /**
  * Does this device have a display with colors?
  */
-#ifdef ANDROID
-[[gnu::const]]
-#else
-constexpr
-#endif
-static inline bool
+static constexpr bool
 HasColors() noexcept
 {
-#ifdef ANDROID
-  return !IsNookSimpleTouch();
-#elif defined(GREYSCALE)
+#if defined(GREYSCALE)
   return false;
 #else
   return !IsKobo();
@@ -260,18 +211,11 @@ HasColors() noexcept
 /**
  * Is dithering black&white used on the display?
  */
-#if defined(ANDROID) && defined(__arm__)
-[[gnu::const]]
-#else
-constexpr
-#endif
-static inline bool
+static constexpr bool
 IsDithered() noexcept
 {
 #ifdef DITHER
   return true;
-#elif defined(ANDROID) && defined(__arm__)
-  return is_dithered;
 #else
   return false;
 #endif
@@ -283,17 +227,8 @@ IsDithered() noexcept
  * and show ghosting.  Animations shall be disabled when this function
  * returns true.
  */
-#if defined(ANDROID) && defined(__arm__)
-[[gnu::const]]
-#else
-constexpr
-#endif
-static inline bool
+static constexpr bool
 HasEPaper() noexcept
 {
-#if defined(ANDROID) && defined(__arm__)
-  return IsNookSimpleTouch();
-#else
   return IsKobo();
-#endif
 }

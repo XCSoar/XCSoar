@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "SystemDialog.hpp"
 #include "Kernel.hpp"
@@ -46,13 +26,17 @@ class SystemWidget final
     SWITCH_OTG_MODE,
     USB_STORAGE,
     INCREASE_BACKLIGHT_BRIGHTNESS,
-    DECREASE_BACKLIGHT_BRIGHTNESS
+    DECREASE_BACKLIGHT_BRIGHTNESS,
+    INCREASE_BACKLIGHT_COLOUR_TEMPERATURE,
+    DECREASE_BACKLIGHT_COLOUR_TEMPERATURE,
   };
 
   Button *switch_otg_mode;
   Button *usb_storage;
   Button *increase_backlight_brightness;
   Button *decrease_backlight_brightness;
+  Button *increase_backlight_colour_temperature;
+  Button *decrease_backlight_colour_temperature;
 
 public:
   SystemWidget(const DialogLook &look):RowFormWidget(look) {}
@@ -63,7 +47,10 @@ private:
   void ExportUSBStorage();
   void IncreaseBacklightBrightness();
   void DecreaseBacklightBrightness();
-  void UpdateBacklightButtons(int percent);
+  void UpdateBacklightBrightnessButtons(int percent);
+  void IncreaseBacklightColourTemperature() noexcept;
+  void DecreaseBacklightColourTemperature() noexcept;
+  void UpdateBacklightColourButtons(unsigned int colour);
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent,
@@ -83,8 +70,22 @@ SystemWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]]
     increase_backlight_brightness = AddButton("Increase Backlight Brightness", [this]() { IncreaseBacklightBrightness(); });
     decrease_backlight_brightness = AddButton("Decrease Backlight Brightness", [this]() { DecreaseBacklightBrightness(); });
     int current_brightness = KoboGetBacklightBrightness();
-    UpdateBacklightButtons(current_brightness);
+    UpdateBacklightBrightnessButtons(current_brightness);
+    if(KoboCanChangeBacklightColour()) {
+      increase_backlight_colour_temperature = AddButton("Increase Backlight Colour Temperature",
+                                                        [this]() { IncreaseBacklightColourTemperature(); });
+      decrease_backlight_colour_temperature = AddButton("Decrease Backlight Colour Temperature",
+                                                        [this]() { DecreaseBacklightColourTemperature(); });
+      unsigned int current_colour = 0;
+      KoboGetBacklightColour(current_colour);
+      UpdateBacklightColourButtons(current_colour);
+    } else {
+      AddDummy();
+      AddDummy();
+    }
   } else {
+    AddDummy();
+    AddDummy();
     AddDummy();
     AddDummy();
   }
@@ -202,7 +203,7 @@ SystemWidget::IncreaseBacklightBrightness()
 {
   int current_brightness = KoboGetBacklightBrightness();
   KoboSetBacklightBrightness(current_brightness + 20);
-  UpdateBacklightButtons(current_brightness + 20);
+  UpdateBacklightBrightnessButtons(current_brightness + 20);
 }
 
 inline void
@@ -210,17 +211,49 @@ SystemWidget::DecreaseBacklightBrightness()
 {
   int current_brightness = KoboGetBacklightBrightness();
   KoboSetBacklightBrightness(current_brightness - 20);
-  UpdateBacklightButtons(current_brightness - 20);
+  UpdateBacklightBrightnessButtons(current_brightness - 20);
 }
 
 inline void
-SystemWidget::UpdateBacklightButtons(int percent)
+SystemWidget::UpdateBacklightBrightnessButtons(int percent)
 {
   if(decrease_backlight_brightness != nullptr) {
     decrease_backlight_brightness->SetEnabled(percent != 0);
   }
   if(increase_backlight_brightness != nullptr) {
     increase_backlight_brightness->SetEnabled(percent < 100);
+  }
+}
+
+inline void
+SystemWidget::IncreaseBacklightColourTemperature() noexcept
+{
+  unsigned int current_colour;
+  if (KoboGetBacklightColour(current_colour)) {
+    KoboSetBacklightColour(current_colour + 2);
+    UpdateBacklightColourButtons(current_colour + 2);
+  }
+}
+
+inline void
+SystemWidget::DecreaseBacklightColourTemperature() noexcept
+{
+  unsigned int current_colour;
+  if (KoboGetBacklightColour(current_colour)) {
+    if (current_colour < 2) current_colour = 2;
+    KoboSetBacklightColour(current_colour - 2);
+    UpdateBacklightColourButtons(current_colour - 2);
+  }
+}
+
+inline void
+SystemWidget::UpdateBacklightColourButtons(unsigned int colour)
+{
+  if(decrease_backlight_colour_temperature != nullptr) {
+    decrease_backlight_colour_temperature->SetEnabled(colour > 0);
+  }
+  if(increase_backlight_colour_temperature != nullptr) {
+    increase_backlight_colour_temperature->SetEnabled(colour < 10);
   }
 }
 

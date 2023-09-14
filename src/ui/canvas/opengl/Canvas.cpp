@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Canvas.hpp"
 #include "Triangulate.hpp"
@@ -27,7 +7,6 @@ Copyright_License {
 #include "Texture.hpp"
 #include "Scope.hpp"
 #include "VertexArray.hpp"
-#include "Shapes.hpp"
 #include "Buffer.hpp"
 #include "VertexPointer.hpp"
 #include "ExactPixelPoint.hpp"
@@ -57,6 +36,23 @@ Copyright_License {
 #include <cassert>
 
 AllocatedArray<BulkPixelPoint> Canvas::vertex_buffer;
+
+static void
+GLDrawRectangle(const PixelRect r) noexcept
+{
+  /* can't use glRecti() with GLSL because it bypasses the vertex
+     shader */
+
+  const BulkPixelPoint vertices[] = {
+    {r.left, r.top},
+    {r.right, r.top},
+    {r.left, r.bottom},
+    {r.right, r.bottom},
+  };
+
+  const ScopeVertexPointer vp{vertices};
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+}
 
 void
 Canvas::InvertRectangle(PixelRect r) noexcept
@@ -106,18 +102,7 @@ Canvas::DrawFilledRectangle(PixelRect r, const Color color) noexcept
 
   color.Bind();
 
-  /* can't use glRecti() with GLSL because it bypasses the vertex
-     shader */
-
-  const BulkPixelPoint vertices[] = {
-    {r.left, r.top},
-    {r.right, r.top},
-    {r.left, r.bottom},
-    {r.right, r.bottom},
-  };
-
-  const ScopeVertexPointer vp(vertices);
-  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+  GLDrawRectangle(r);
 }
 
 void
@@ -396,56 +381,25 @@ Canvas::DrawTwoLinesExact(PixelPoint a, PixelPoint b, PixelPoint c) noexcept
 void
 Canvas::DrawCircle(PixelPoint center, unsigned radius) noexcept
 {
-  OpenGL::solid_shader->Use();
+  if (brush.IsHollow()) {
+    OpenGL::circle_outline_shader->Use();
+    pen.GetColor().Uniform(OpenGL::circle_outline_color);
 
-  if (IsPenOverBrush() && pen.GetWidth() > 2) {
-    ScopeVertexPointer vp;
-    GLDonutVertices vertices(center.x, center.y,
-                             radius - pen.GetWidth() / 2,
-                             radius + pen.GetWidth() / 2);
-    if (!brush.IsHollow()) {
-      vertices.BindInnerCircle(vp);
-      brush.Bind();
-      glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.CIRCLE_SIZE);
-    }
-    vertices.Bind(vp);
-    pen.Bind();
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.SIZE);
-    pen.Unbind();
+    glUniform2f(OpenGL::circle_outline_center, center.x, center.y);
+    glUniform1f(OpenGL::circle_outline_radius2, radius);
+    glUniform1f(OpenGL::circle_outline_radius1, radius - pen.GetWidth());
+
+    GLDrawRectangle(PixelRect{center}.WithMargin(radius));
   } else {
-    auto &buffer = radius < 16
-      ? *OpenGL::small_circle_buffer
-      : *OpenGL::circle_buffer;
-    const unsigned n = radius < 16
-      ? OpenGL::SMALL_CIRCLE_SIZE
-      : OpenGL::CIRCLE_SIZE;
+    OpenGL::filled_circle_shader->Use();
+    pen.GetColor().Uniform(OpenGL::filled_circle_color2);
+    brush.BindUniform(OpenGL::filled_circle_color1);
 
-    buffer.Bind();
-    const auto points = (const FloatPoint2D *)nullptr;
-    const ScopeVertexPointer vp(points);
+    glUniform2f(OpenGL::filled_circle_center, center.x, center.y);
+    glUniform1f(OpenGL::filled_circle_radius2, radius);
+    glUniform1f(OpenGL::filled_circle_radius1, radius - pen.GetWidth());
 
-    glm::mat4 matrix2 = glm::scale(glm::translate(glm::mat4(1),
-                                                  glm::vec3(center.x, center.y, 0)),
-                                   glm::vec3(GLfloat(radius), GLfloat(radius),
-                                             1.));
-    glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
-                       glm::value_ptr(matrix2));
-
-    if (!brush.IsHollow()) {
-      brush.Bind();
-      glDrawArrays(GL_TRIANGLE_FAN, 0, n);
-    }
-
-    if (IsPenOverBrush()) {
-      pen.Bind();
-      glDrawArrays(GL_LINE_LOOP, 0, n);
-      pen.Unbind();
-    }
-
-    glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
-                       glm::value_ptr(glm::mat4(1)));
-
-    buffer.Unbind();
+    GLDrawRectangle(PixelRect{center}.WithMargin(radius));
   }
 }
 

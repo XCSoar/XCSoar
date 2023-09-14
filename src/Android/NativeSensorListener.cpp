@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "NativeSensorListener.hpp"
 #include "Device/SensorListener.hpp"
@@ -201,6 +181,30 @@ Java_org_xcsoar_NativeSensorListener_onI2CbaroSensor(JNIEnv *env, jobject obj,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeSensorListener_onEngineSensors(JNIEnv *env,
+                                                     jobject obj,
+                                                     jboolean has_cht_temp,
+                                                     jint cht_temp,
+                                                     jboolean has_egt_temp,
+                                                     jint egt_temp,
+                                                     jboolean has_ignitions_per_second,
+                                                     jfloat ignitions_per_second)
+{
+  jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
+  if (ptr == 0)
+    return;
+
+  auto &listener = *(SensorListener *)ptr;
+  listener.OnEngineSensors(has_cht_temp,
+                           Temperature::FromKelvin(cht_temp),
+                           has_egt_temp,
+                           Temperature::FromKelvin(egt_temp),
+                           has_ignitions_per_second,
+                           ignitions_per_second);
+}
+
+gcc_visibility_default
+JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeSensorListener_onVarioSensor(JNIEnv *env,
                                                    jobject obj,
                                                    jfloat vario)
@@ -243,11 +247,11 @@ Java_org_xcsoar_NativeSensorListener_onVoltageValues(JNIEnv *env, jobject obj,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_onNunchuckValues(JNIEnv *env, jobject obj,
-                                                      jint joy_x, jint joy_y,
-                                                      jint acc_x, jint acc_y,
-                                                      jint acc_z,
-                                                      jint switches)
+Java_org_xcsoar_NativeSensorListener_onNunchukValues(JNIEnv *env, jobject obj,
+                                                     jint joy_x, jint joy_y,
+                                                     jint acc_x, jint acc_y,
+                                                     jint acc_z,
+                                                     jint switches)
  {
   jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
   if (ptr == 0)
@@ -259,16 +263,16 @@ Java_org_xcsoar_NativeSensorListener_onNunchuckValues(JNIEnv *env, jobject obj,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeSensorListener_setGliderLinkInfo(JNIEnv *env,
-                                                       jobject obj,
-                                                       jlong gid,
-                                                       jstring callsign,
-                                                       jdouble latitude,
-                                                       jdouble longitude,
-                                                       jdouble altitude,
-                                                       jdouble gspeed,
-                                                       jdouble vspeed,
-                                                       jint bearing)
+Java_org_xcsoar_NativeSensorListener_onGliderLinkTraffic(JNIEnv *env,
+                                                         jobject obj,
+                                                         jlong gid,
+                                                         jstring callsign,
+                                                         jdouble latitude,
+                                                         jdouble longitude,
+                                                         jdouble altitude,
+                                                         jdouble gspeed,
+                                                         jdouble vspeed,
+                                                         jint bearing)
 {
   jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
   if (ptr == 0)

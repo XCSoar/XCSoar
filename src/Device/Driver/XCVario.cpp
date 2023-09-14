@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Device/Driver/XCVario.hpp"
 #include "Device/Driver/CAI302/PocketNav.hpp"
@@ -29,9 +9,11 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Device/Port/Port.hpp"
 #include "NMEA/InputLine.hpp"
-#include "util/Clamp.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Operation/Operation.hpp"
+
+#include <algorithm> // for std::clamp()
+
 #include <math.h>
 
 using std::string_view_literals::operator""sv;
@@ -119,7 +101,7 @@ XVCDevice::PXCV(NMEAInputLine &line, NMEAInfo &info)
 
   // Bugs setting as entered in XCVario
   if (line.ReadChecked(value))
-    info.settings.ProvideBugs(1 - Clamp(value, 0., 30.) / 100.,
+    info.settings.ProvideBugs(1 - std::clamp(value, 0., 30.) / 100.,
                               info.clock);
 
   // legacy reading of fractional water ballast in protocol version 1
@@ -254,7 +236,7 @@ XVCDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
   char buffer[32];
   unsigned qnh = uround(pres.GetHectoPascal());
   int msg_len = sprintf(buffer,"!g,q%u\r", std::min(qnh,(unsigned)2000));
-  port.FullWrite(buffer, msg_len, env, std::chrono::seconds(2));
+  port.FullWrite(std::as_bytes(std::span{buffer}.first(msg_len)), env, std::chrono::seconds(2));
   return true;
 }
 
@@ -282,10 +264,10 @@ XVCDevice::PutBallast(double fraction, [[maybe_unused]] double overload,
 {
   /* the XCVario understands CAI302 like command for ballast "!g,b" with
      float precision */
-   char buffer[32];
-   double ballast = fraction * 10.;
-   int msg_len = sprintf(buffer,"!g,b%.3f\r", ballast);
-   port.FullWrite(buffer, msg_len, env, std::chrono::seconds(2));
+  char buffer[32];
+  double ballast = fraction * 10.;
+  int msg_len = sprintf(buffer,"!g,b%.3f\r", ballast);
+  port.FullWrite(std::as_bytes(std::span{buffer}.first(msg_len)), env, std::chrono::seconds(2));
   return true;
 }
 

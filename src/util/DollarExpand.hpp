@@ -1,30 +1,14 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
 #include "StringAPI.hxx"
 #include "TruncateString.hpp"
+#include "tstring_view.hxx"
+
+#include <concepts>
+#include <span>
 
 #include <tchar.h>
 
@@ -33,52 +17,46 @@ Copyright_License {
  * string and copy the result to the destination buffer.  If the
  * buffer is too small, then the output is truncated silently.
  */
-template<typename F>
 void
-DollarExpand(const TCHAR *src, TCHAR *dest, size_t dest_size,
-             F &&lookup_function)
+DollarExpand(const TCHAR *src, std::span<TCHAR> dest,
+             std::invocable<tstring_view> auto lookup_function) noexcept
 {
-  const TCHAR *const dest_end = dest + dest_size;
-
   while (true) {
     auto dollar = StringFind(src, _T("$("));
     if (dollar == nullptr)
       break;
 
-    auto name = dollar + 2;
-    auto closing = StringFind(name, _T(')'));
+    auto name_start = dollar + 2;
+    auto closing = StringFind(name_start, _T(')'));
     if (closing == nullptr)
       break;
 
-    dest_size = dest_end - dest;
-    if (size_t(dollar - src) >= dest_size)
+    const tstring_view name(name_start, closing - name_start);
+
+    const std::size_t prefix_size = dollar - src;
+    if (prefix_size >= dest.size())
       break;
 
     /* copy the portion up to the dollar to the destination buffer */
 
-    dest = std::copy(src, dollar, dest);
+    std::copy(src, dollar, dest.begin());
+    dest = dest.subspan(prefix_size);
     src = closing + 1;
 
-    /* copy the name to the destination buffer so we can
-       null-terminate it for the callback */
+    /* look up the name and copy the result to the destination
+       buffer */
 
-    const size_t name_size = closing - name;
-    dest_size = dest_end - dest;
-    if (name_size >= dest_size)
-      break;
-
-    *std::copy(name, closing, dest) = 0;
-
-    /* look it up and copy the result to the destination buffer */
-
-    const TCHAR *const expansion = lookup_function(dest);
+    const TCHAR *const expansion = lookup_function(name);
     if (expansion != nullptr) {
-      dest_size = dest_end - dest;
-      dest = CopyTruncateString(dest, dest_size, expansion);
+      const tstring_view ex{expansion};
+      if (ex.size() >= dest.size())
+        break;
+
+      std::copy(ex.begin(), ex.end(), dest.begin());
+      dest = dest.subspan(ex.size());
     }
   }
 
   /* copy the remainder */
-  dest_size = dest_end - dest;
-  CopyTruncateString(dest, dest_size, src);
+  CopyTruncateString(dest.data(), dest.size(), src);
 }

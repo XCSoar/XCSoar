@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "../TopWindow.hpp"
 #include "ui/canvas/Features.hpp" // for DRAW_MOUSE_CURSOR
@@ -30,6 +10,8 @@ Copyright_License {
 #include "Hardware/CPU.hpp"
 
 #ifdef ANDROID
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
 #include "ui/event/android/Loop.hpp"
 #include "util/ScopeExit.hxx"
 #elif defined(ENABLE_SDL)
@@ -40,6 +22,10 @@ Copyright_License {
 #include "ui/event/shared/Event.hpp"
 #endif
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Dynamic.hpp" // for GLExt::discard_framebuffer
+#endif
+
 #ifdef DRAW_MOUSE_CURSOR
 #include "Screen/Layout.hpp"
 #endif
@@ -48,6 +34,10 @@ namespace UI {
 
 TopWindow::~TopWindow() noexcept
 {
+#ifdef ANDROID
+  native_view->SetPointer(Java::GetEnv(), nullptr);
+#endif
+
   delete screen;
 }
 
@@ -148,19 +138,36 @@ TopWindow::Expose() noexcept
     OnPaint(canvas);
 
 #ifdef DRAW_MOUSE_CURSOR
-    DrawMouseCursor(canvas);
+    if (std::chrono::steady_clock::now() < cursor_visible_until)
+      DrawMouseCursor(canvas);
 #endif
 
     screen->Unlock();
   }
 
   screen->Flip();
+
+#if defined(ENABLE_OPENGL) && defined(GL_EXT_discard_framebuffer)
+  /* tell the GPU that we won't be needing the frame buffer contents
+     again which can increase rendering performance; see
+     https://registry.khronos.org/OpenGL/extensions/EXT/EXT_discard_framebuffer.txt */
+  if (GLExt::discard_framebuffer != nullptr) {
+    static constexpr GLenum attachments[3] = {
+      GL_COLOR_EXT,
+      GL_DEPTH_EXT,
+      GL_STENCIL_EXT
+    };
+
+    GLExt::discard_framebuffer(GL_FRAMEBUFFER, std::size(attachments),
+                               attachments);
+  }
+#endif
 }
 
 void
 TopWindow::Refresh() noexcept
 {
-  if (!CheckResumeSurface())
+  if (!screen->IsReady())
     /* the application is paused/suspended, and we don't have an
        OpenGL surface - ignore all drawing requests */
     return;

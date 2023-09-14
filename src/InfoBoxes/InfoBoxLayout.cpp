@@ -1,30 +1,11 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Border.hpp"
 #include "util/Macros.hpp"
-#include "util/Clamp.hpp"
+
+#include <algorithm> // for std::clamp()
 
 static constexpr double CONTROLHEIGHTRATIO = 7.4;
 
@@ -179,8 +160,7 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry) noexc
 
     right = layout.vario.left;
 
-    /* fall through */
-    gcc_fallthrough;
+    [[fallthrough]];
 
   case InfoBoxSettings::Geometry::BOTTOM_RIGHT_8:
   case InfoBoxSettings::Geometry::OBSOLETE_BOTTOM_RIGHT_8:
@@ -206,8 +186,7 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry) noexc
 
     right = layout.vario.left;
 
-    /* fall through */
-    gcc_fallthrough;
+    [[fallthrough]];
 
   case InfoBoxSettings::Geometry::TOP_LEFT_8:
   case InfoBoxSettings::Geometry::OBSOLETE_TOP_LEFT_8:
@@ -537,18 +516,18 @@ static constexpr unsigned
 CalculateInfoBoxRowHeight(unsigned screen_height,
                           unsigned control_width) noexcept
 {
-  return Clamp(unsigned(screen_height / CONTROLHEIGHTRATIO),
-               control_width * 5 / 7,
-               control_width);
+  return std::clamp(unsigned(screen_height / CONTROLHEIGHTRATIO),
+                    control_width * 5 / 7,
+                    control_width);
 }
 
 static constexpr unsigned
 CalculateInfoBoxColumnWidth(unsigned screen_width,
                             unsigned control_height) noexcept
 {
-  return Clamp(unsigned(screen_width / CONTROLHEIGHTRATIO * 1.3),
-               control_height,
-               control_height * 7 / 5);
+  return std::clamp(unsigned(screen_width / CONTROLHEIGHTRATIO * 1.3),
+                    control_height,
+                    control_height * 7 / 5);
 }
 
 void

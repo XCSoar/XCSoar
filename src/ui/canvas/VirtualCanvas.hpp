@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -32,30 +12,30 @@ Copyright_License {
  */
 class VirtualCanvas : public Canvas {
 public:
-  VirtualCanvas() = default;
-  VirtualCanvas(PixelSize new_size);
-  VirtualCanvas(const Canvas &canvas, PixelSize new_size);
+  VirtualCanvas() noexcept = default;
+  VirtualCanvas(PixelSize new_size) noexcept;
+  VirtualCanvas(const Canvas &canvas, PixelSize new_size) noexcept;
 
-  ~VirtualCanvas() {
+  ~VirtualCanvas() noexcept {
     Destroy();
   }
 
-  void Create(PixelSize new_size);
+  void Create(PixelSize new_size) noexcept;
 
-  void Create(const Canvas &canvas, PixelSize new_size);
+  void Create(const Canvas &canvas, PixelSize new_size) noexcept;
 
-  void Create(const Canvas &canvas) {
+  void Create(const Canvas &canvas) noexcept {
     Create(canvas, canvas.GetSize());
   }
 
-  void Destroy();
+  void Destroy() noexcept;
 
 #ifdef USE_MEMORY_CANVAS
-  void Resize(PixelSize new_size) {
+  void Resize(PixelSize new_size) noexcept {
     if (new_size != GetSize())
       Create(*this, new_size);
   }
 
-  void Grow(PixelSize new_size);
+  void Grow(PixelSize new_size) noexcept;
 #endif
 };

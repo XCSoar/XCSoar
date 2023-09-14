@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Device/Driver/CaiLNav.hpp"
 #include "Device/Driver.hpp"
@@ -29,37 +9,8 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Units/Units.hpp"
-
-static void
-FormatLatitude(char *buffer, size_t buffer_size, Angle latitude )
-{
-  // Calculate Latitude sign
-  char sign = latitude.IsNegative() ? 'S' : 'N';
-
-  double mlat(latitude.AbsoluteDegrees());
-
-  int dd = (int)mlat;
-  // Calculate minutes
-  double mins = (mlat - dd) * 60.0;
-
-  // Save the string to the buffer
-  snprintf(buffer, buffer_size, "%02d%06.3f,%c", dd, mins, sign);
-}
-
-static void
-FormatLongitude(char *buffer, size_t buffer_size, Angle longitude)
-{
-  // Calculate Longitude sign
-  char sign = longitude.IsNegative() ? 'W' : 'E';
-
-  double mlong(longitude.AbsoluteDegrees());
-
-  int dd = (int)mlong;
-  // Calculate minutes
-  double mins = (mlong - dd) * 60.0;
-  // Save the string to the buffer
-  snprintf(buffer, buffer_size, "%02d%06.3f,%c", dd, mins, sign);
-}
+#include "Formatter/NMEAFormatter.hpp"
+#include "util/SpanCast.hxx"
 
 static void
 PortWriteNMEANoChecksum(Port &port, const char *line,
@@ -68,56 +19,7 @@ PortWriteNMEANoChecksum(Port &port, const char *line,
   // reasonable hard-coded timeout; Copied from ::PortWriteNMEA()
   constexpr auto timeout = std::chrono::seconds(1);
 
-  port.FullWrite(line, strlen(line), env, timeout);
-}
-
-/*
-$GPRMC,<1>,<2>,<3>,<4>,<5>,<6>,<7>,<8>,<9>,<10>,<11>,*hh<CR><LF>
-
-<1>  UTC Time of position fix, hhmmss format
-<2>  Status, A = Valid position, V = NAV receiver warning
-<3>  Latitude,ddmm.mmm format (leading zeros will be transmitted)
-<4>  Latitude hemisphere, N or S
-<5>  Longitude,dddmm.mmm format (leading zeros will be transmitted)
-<6>  Longitude hemisphere, E or W
-<7>  Speed over ground, 0.0 to 999.9 knots
-<8>  Course over ground 000.0 to 359.9 degrees, true
-     (leading zeros will be transmitted)
-<9>  UTC date of position fix, ddmmyy format
-<10> Magnetic variation, 000.0 to 180.0 degrees
-     (leading zeros will be transmitted)
-<11> Magnetic variation direction, E or W
-     (westerly variation adds to true course)
-*/
-static bool
-FormatGPRMC(char *buffer, size_t buffer_size, const MoreData &info)
-{
-  char lat_buffer[20];
-  char long_buffer[20];
-
-  const GeoPoint location = info.location_available
-    ? info.location
-    : GeoPoint::Zero();
-
-  FormatLatitude(lat_buffer, sizeof(lat_buffer), location.latitude);
-  FormatLongitude(long_buffer, sizeof(long_buffer), location.longitude);
-
-  const BrokenDateTime now = info.time_available &&
-    info.date_time_utc.IsDatePlausible()
-    ? info.date_time_utc
-    : BrokenDateTime::NowUTC();
-
-  snprintf(buffer, buffer_size,
-           "GPRMC,%02u%02u%02u,%c,%s,%s,%05.1f,%05.1f,%02u%02u%02u,,",
-           now.hour, now.minute, now.second,
-           info.location.IsValid() ? 'A' : 'V',
-           lat_buffer,
-           long_buffer,
-           (double)Units::ToUserUnit(info.ground_speed, Unit::KNOTS),
-           (double)info.track.Degrees(),
-           now.day, now.month, now.year % 100);
-
-  return true;
+  port.FullWrite(AsBytes(std::string_view{line}), env, timeout);
 }
 
 /*
@@ -220,8 +122,8 @@ CaiLNavDevice::OnCalculatedUpdate(const MoreData &basic,
     AGeoPoint(current_leg.location_remaining,
               current_leg.solution_planned.min_arrival_altitude);
 
-  if (FormatGPRMC(buffer, sizeof(buffer), basic))
-    PortWriteNMEA(port, buffer, env);
+  FormatGPRMC(buffer, sizeof(buffer), basic);
+  PortWriteNMEA(port, buffer, env);
 
   if (FormatGPRMB(buffer, sizeof(buffer), here, destination))
     PortWriteNMEA(port, buffer, env);

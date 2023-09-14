@@ -1,30 +1,9 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Task/TaskStore.hpp"
 #include "Task/TaskFile.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Components.hpp"
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
 #include "LocalPath.hpp"
@@ -105,14 +84,15 @@ TaskStore::Scan(bool extra)
 TaskStore::Item::~Item() noexcept = default;
 
 const OrderedTask *
-TaskStore::Item::GetTask(const TaskBehaviour &task_behaviour) noexcept
+TaskStore::Item::GetTask(const TaskBehaviour &task_behaviour,
+                         Waypoints *waypoints) noexcept
 {
   if (task != nullptr)
     return task.get();
 
   if (valid)
     task = TaskFile::GetTask(filename, task_behaviour,
-                             &way_points, task_index);
+                             waypoints, task_index);
 
   if (task == nullptr)
     valid = false;
@@ -135,7 +115,8 @@ TaskStore::GetPath(unsigned index) const
 }
 
 const OrderedTask *
-TaskStore::GetTask(unsigned index, const TaskBehaviour &task_behaviour)
+TaskStore::GetTask(unsigned index, const TaskBehaviour &task_behaviour,
+                   Waypoints *waypoints)
 {
-  return store[index].GetTask(task_behaviour);
+  return store[index].GetTask(task_behaviour, waypoints);
 }

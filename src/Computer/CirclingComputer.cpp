@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "CirclingComputer.hpp"
 #include "NMEA/MoreData.hpp"
@@ -27,7 +7,9 @@ Copyright_License {
 #include "NMEA/FlyingState.hpp"
 #include "Settings.hpp"
 #include "Math/LowPassFilter.hpp"
-#include "util/Clamp.hpp"
+#include "time/Cast.hxx"
+
+#include <algorithm> // for std::clamp()
 
 static constexpr Angle MIN_TURN_RATE = Angle::Degrees(4);
 
@@ -81,14 +63,14 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
 
   if (dt.count() > 0) {
     circling_info.turn_rate =
-      (basic.track - last_track).AsDelta() / dt.count();
+      (basic.track - last_track).AsDelta() / ToFloatSeconds(dt);
     circling_info.turn_rate_heading =
-      (basic.attitude.heading - last_heading).AsDelta() / dt.count();
+      (basic.attitude.heading - last_heading).AsDelta() / ToFloatSeconds(dt);
 
     // JMW limit rate to 50 deg per second otherwise a big spike
     // will cause spurious lock on circling for a long time
-    Angle turn_rate = Clamp(circling_info.turn_rate,
-                            Angle::Degrees(-50), Angle::Degrees(50));
+    Angle turn_rate = std::clamp(circling_info.turn_rate,
+                                 Angle::Degrees(-50), Angle::Degrees(50));
 
     // Make the turn rate more smooth using the LowPassFilter
     auto smoothed = LowPassFilter(circling_info.turn_rate_smoothed.Native(),
@@ -96,8 +78,8 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
     circling_info.turn_rate_smoothed = Angle::Native(smoothed);
 
     // Makes smoothing of heading turn rate
-    turn_rate = Clamp(circling_info.turn_rate_heading,
-                      Angle::Degrees(-50), Angle::Degrees(50));
+    turn_rate = std::clamp(circling_info.turn_rate_heading,
+                           Angle::Degrees(-50), Angle::Degrees(50));
     // Make the heading turn rate more smooth using the LowPassFilter
     smoothed = LowPassFilter(circling_info.turn_rate_heading_smoothed.Native(),
                              turn_rate.Native(), 0.3);
@@ -256,7 +238,7 @@ CirclingComputer::PercentCircling(const MoreData &basic,
     circling_info.time_circling += dt;
 
     // Add the Vario signal to the total climb height
-    circling_info.total_height_gain += basic.gps_vario * dt.count();
+    circling_info.total_height_gain += basic.gps_vario * ToFloatSeconds(dt);
 
     if (basic.gps_vario>= 0) {
       circling_info.time_climb_circling += dt;

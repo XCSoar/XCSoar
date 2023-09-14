@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 // 20070413:sgi add NmeaOut support, allow nmea chaining an double port platforms
 
@@ -27,11 +7,9 @@ Copyright_License {
 #include "Features.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Device/Descriptor.hpp"
-#include "Components.hpp"
 #include "LogFile.hpp"
-#include "Interface.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
-#include "util/Algorithm.hpp"
+#include "SystemSettings.hpp"
 
 static void
 devInitOne(DeviceDescriptor &device, const DeviceConfig &config)
@@ -96,22 +74,20 @@ template<typename I>
 static bool
 DeviceConfigOverlaps(const DeviceConfig &config, I begin, I end)
 {
-  return ExistsIf(begin, end,
-                  [&config](const DeviceDescriptor *d) {
-                    return DeviceConfigOverlaps(config, d->GetConfig());
-                  });
+  return std::any_of(begin, end,
+                     [&config](const DeviceDescriptor *d) {
+                       return DeviceConfigOverlaps(config, d->GetConfig());
+                     });
 }
 
 void
-devStartup()
+devStartup(MultipleDevices &devices, const SystemSettings &settings)
 {
-  LogFormat("Register serial devices");
-
-  const SystemSettings &settings = CommonInterface::GetSystemSettings();
+  LogString("Register serial devices");
 
   bool none_available = true;
   for (unsigned i = 0; i < NUMDEV; ++i) {
-    DeviceDescriptor &device = (*devices)[i];
+    DeviceDescriptor &device = devices[i];
     const DeviceConfig &config = settings.devices[i];
     if (!config.IsAvailable()) {
       device.ClearConfig();
@@ -120,7 +96,7 @@ devStartup()
 
     none_available = false;
 
-    if (DeviceConfigOverlaps(config, devices->begin(), devices->begin() + i)) {
+    if (DeviceConfigOverlaps(config, devices.begin(), devices.begin() + i)) {
       device.ClearConfig();
       continue;
     }
@@ -132,59 +108,29 @@ devStartup()
 #ifdef HAVE_INTERNAL_GPS
     /* fall back to built-in GPS when no configured device is
        available on this platform */
-    LogFormat("Falling back to built-in GPS");
+    LogString("Falling back to built-in GPS");
 
     DeviceConfig config;
     config.Clear();
     config.port_type = DeviceConfig::PortType::INTERNAL;
 
-    DeviceDescriptor &device = (*devices)[0];
+    DeviceDescriptor &device = devices[0];
     devInitOne(device, config);
 #endif
   }
 }
 
 void
-VarioWriteNMEA(const TCHAR *text, OperationEnvironment &env)
+devRestart(MultipleDevices &devices, const SystemSettings &settings)
 {
-  for (DeviceDescriptor *i : *devices)
-    if (i->IsVega())
-      i->WriteNMEA(text, env);
-}
+  LogString("RestartCommPorts");
 
-DeviceDescriptor *
-devVarioFindVega()
-{
-  for (DeviceDescriptor *i : *devices)
-    if (i->IsVega())
-      return i;
+  devices.Close();
 
-  return nullptr;
-}
-
-void
-devShutdown()
-{
-  if (devices == nullptr)
-    return;
-
-  // Stop COM devices
-  LogFormat("Stop COM devices");
-
-  devices->Close();
-}
-
-void
-devRestart()
-{
-  LogFormat("RestartCommPorts");
-
-  devShutdown();
-
-  devStartup();
+  devStartup(devices, settings);
 
   /* this OperationEnvironment instance must be persistent, because
      DeviceDescriptor::Open() is asynchronous */
   static PopupOperationEnvironment env;
-  devices->Open(env);
+  devices.Open(env);
 }

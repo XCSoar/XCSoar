@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "PlaneDialogs.hpp"
 #include "PolarShapeEditWidget.hpp"
@@ -52,36 +32,36 @@ class PlanePolarWidget final
   Plane plane;
 
 public:
-  PlanePolarWidget(const Plane &_plane, const DialogLook &_look)
+  PlanePolarWidget(const Plane &_plane, const DialogLook &_look) noexcept
     :RowFormWidget(_look), plane(_plane) {}
 
-  const Plane &GetValue() const {
+  const Plane &GetValue() const noexcept {
     return plane;
   }
 
-  void CreateButtons(WidgetDialog &buttons) {
+  void CreateButtons(WidgetDialog &buttons) noexcept {
     buttons.AddButton(_("List"), [this](){ ListClicked(); });
     buttons.AddButton(_("Import"), [this](){ ImportClicked(); });
   }
 
 private:
-  PolarShapeEditWidget &GetShapeEditor() {
+  PolarShapeEditWidget &GetShapeEditor() noexcept {
     return (PolarShapeEditWidget &)GetRowWidget(SHAPE);
   }
 
-  void LoadPolarShape(const PolarShape &shape) {
+  void LoadPolarShape(const PolarShape &shape) noexcept {
     GetShapeEditor().SetPolarShape(shape);
   }
 
-  void UpdatePolarLabel() {
+  void UpdatePolarLabel() noexcept {
     SetText(NAME, plane.polar_name);
   }
 
-  void UpdateInvalidLabel();
-  void Update();
+  void UpdateInvalidLabel() noexcept;
+  void Update() noexcept;
 
-  void ListClicked();
-  void ImportClicked();
+  void ListClicked() noexcept;
+  void ImportClicked() noexcept;
 
   /* virtual methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -93,7 +73,7 @@ private:
 };
 
 void
-PlanePolarWidget::UpdateInvalidLabel()
+PlanePolarWidget::UpdateInvalidLabel() noexcept
 {
   PolarShapeEditWidget &widget = GetShapeEditor();
   bool changed = false;
@@ -111,7 +91,7 @@ PlanePolarWidget::UpdateInvalidLabel()
 }
 
 void
-PlanePolarWidget::Update()
+PlanePolarWidget::Update() noexcept
 {
   LoadPolarShape(plane.polar_shape);
   UpdatePolarLabel();
@@ -162,7 +142,7 @@ PlanePolarWidget::Save(bool &_changed) noexcept
 }
 
 inline void
-PlanePolarWidget::ListClicked()
+PlanePolarWidget::ListClicked() noexcept
 {
   const auto internal_polars = PolarStore::GetAll();
   ComboList list;
@@ -197,7 +177,7 @@ PlanePolarWidget::ListClicked()
 }
 
 inline void
-PlanePolarWidget::ImportClicked()
+PlanePolarWidget::ImportClicked() noexcept
 {
   // let the user select
   const auto path = FilePicker(_("Load Polar From File"), _T("*.plr\0"));
@@ -236,7 +216,7 @@ PlanePolarWidget::OnModified([[maybe_unused]] DataField &df) noexcept
 }
 
 bool
-dlgPlanePolarShowModal(Plane &_plane)
+dlgPlanePolarShowModal(Plane &_plane) noexcept
 {
   StaticString<128> caption;
   caption.Format(_T("%s: %s"), _("Plane Polar"), _plane.registration.c_str());

@@ -1,31 +1,11 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "WPASupplicant.hpp"
+#include "lib/fmt/ToBuffer.hxx"
+#include "lib/fmt/SystemError.hxx"
 #include "net/AllocatedSocketAddress.hxx"
-#include "system/Error.hxx"
 #include "util/NumberParser.hpp"
-#include "util/StaticString.hxx"
 #include "util/StringCompare.hxx"
 
 #include <string.h>
@@ -48,7 +28,7 @@ WPASupplicant::Connect(const char *path)
     throw MakeErrno("Failed to bind socket");
 
   if (!fd.Connect(peer_address))
-    throw FormatErrno("Failed to connect to %s", path);
+    throw FmtErrno("Failed to connect to {}", path);
 }
 
 void
@@ -289,9 +269,7 @@ void
 WPASupplicant::SetNetworkString(unsigned id,
                                 const char *name, const char *value)
 {
-  NarrowString<512> cmd;
-  cmd.Format("SET_NETWORK %u %s \"%s\"", id, name, value);
-  SendCommand(cmd);
+  SendCommand(FmtBuffer<512>("SET_NETWORK {} {} \"{}\"", id, name, value));
   ExpectOK();
 }
 
@@ -299,45 +277,35 @@ void
 WPASupplicant::SetNetworkID(unsigned id,
                                 const char *name, const char *value)
 {
-  NarrowString<512> cmd;
-  cmd.Format("SET_NETWORK %u %s %s", id, name, value);
-  SendCommand(cmd);
+  SendCommand(FmtBuffer<512>("SET_NETWORK {} {} {}", id, name, value));
   ExpectOK();
 }
 
 void
 WPASupplicant::SelectNetwork(unsigned id)
 {
-  NarrowString<64> cmd;
-  cmd.Format("SELECT_NETWORK %u", id);
-  SendCommand(cmd);
+  SendCommand(FmtBuffer<64>("SELECT_NETWORK {}", id));
   ExpectOK();
 }
 
 void
 WPASupplicant::EnableNetwork(unsigned id)
 {
-  NarrowString<64> cmd;
-  cmd.Format("ENABLE_NETWORK %u", id);
-  SendCommand(cmd);
+  SendCommand(FmtBuffer<64>("ENABLE_NETWORK {}", id));
   ExpectOK();
 }
 
 void
 WPASupplicant::DisableNetwork(unsigned id)
 {
-  NarrowString<64> cmd;
-  cmd.Format("DISABLE_NETWORK %u", id);
-  SendCommand(cmd);
+  SendCommand(FmtBuffer<64>("DISABLE_NETWORK {}", id));
   ExpectOK();
 }
 
 void
 WPASupplicant::RemoveNetwork(unsigned id)
 {
-  NarrowString<64> cmd;
-  cmd.Format("REMOVE_NETWORK %u", id);
-  SendCommand(cmd);
+  SendCommand(FmtBuffer<64>("REMOVE_NETWORK {}", id));
   ExpectOK();
 }
 

@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "StartupDialog.hpp"
 #include "Error.hpp"
@@ -64,7 +44,7 @@ public:
     :look(_look), dialog(_dialog) {}
 
 private:
-  PixelRect GetButtonRect(PixelRect rc) {
+  PixelRect GetButtonRect(PixelRect rc) noexcept {
     rc.left = rc.right - Layout::Scale(75);
     rc.bottom = rc.top + Layout::GetMaximumControlHeight();
     return rc;
@@ -122,7 +102,7 @@ class StartupWidget final : public RowFormWidget {
 
 public:
   StartupWidget(const DialogLook &look, WndForm &_dialog,
-                DataField *_df)
+                DataField *_df) noexcept
     :RowFormWidget(look), dialog(_dialog), df(_df) {}
 
   /* virtual methods from class Widget */
@@ -139,7 +119,7 @@ public:
 
 static bool
 SelectProfileCallback([[maybe_unused]] const TCHAR *caption, [[maybe_unused]] DataField &_df,
-                      [[maybe_unused]] const TCHAR *help_text)
+                      [[maybe_unused]] const TCHAR *help_text) noexcept
 {
   FileDataField &df = (FileDataField &)_df;
 
@@ -162,7 +142,7 @@ StartupWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 }
 
 static bool
-SelectProfile(Path path)
+SelectProfile(Path path) noexcept
 {
   try {
     if (!CheckProfilePasswordResult(CheckProfileFilePassword(path)))
@@ -196,9 +176,9 @@ StartupWidget::Save(bool &changed) noexcept
 }
 
 bool
-dlgStartupShowModal()
+dlgStartupShowModal() noexcept
 {
-  LogFormat("Startup dialog");
+  LogString("Startup dialog");
 
   /* scan all profile files */
   auto *dff = new FileDataField();

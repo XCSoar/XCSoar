@@ -1,28 +1,7 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Process.hpp"
-#include "util/Compiler.h"
 
 #ifdef HAVE_POSIX
 
@@ -33,7 +12,7 @@ Copyright_License {
 #include <signal.h>
 
 static bool
-UnblockAllSignals()
+UnblockAllSignals() noexcept
 {
   sigset_t ss;
   sigemptyset(&ss);
@@ -41,7 +20,7 @@ UnblockAllSignals()
 }
 
 static pid_t
-ForkExec(const char *const*argv)
+ForkExec(const char *const*argv) noexcept
 {
   const pid_t pid = fork();
   if (pid == 0) {
@@ -55,7 +34,7 @@ ForkExec(const char *const*argv)
 }
 
 static bool
-Wait(pid_t pid)
+Wait(pid_t pid) noexcept
 {
   assert(pid > 0);
 
@@ -71,11 +50,11 @@ Wait(pid_t pid)
 }
 
 bool
-Start(const char *const*argv)
+Start(const char *const*argv) noexcept
 {
   /* double fork to detach from this process */
   const pid_t pid = fork();
-  if (gcc_unlikely(pid < 0))
+  if (pid < 0) [[unlikely]]
     return false;
 
   if (pid == 0)
@@ -85,7 +64,7 @@ Start(const char *const*argv)
 }
 
 bool
-Run(const char *const*argv)
+Run(const char *const*argv) noexcept
 {
   const pid_t pid = ForkExec(argv);
   return pid > 0 && Wait(pid);

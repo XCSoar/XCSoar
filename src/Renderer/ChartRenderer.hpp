@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -33,7 +13,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct DoublePoint2D;
 class XYDataStore;
 class LeastSquares;
 class Canvas;
@@ -62,8 +41,9 @@ class ChartRenderer
     double scale, min, max;
     bool unscaled = true;
 
-    [[gnu::pure]]
-    int ToScreen(double value) const noexcept;
+    constexpr int ToScreen(double value) const noexcept {
+      return int((value - min) * scale);
+    }
   } x, y;
 
   int x_label_left, y_label_bottom;
@@ -117,17 +97,16 @@ public:
   void DrawLineGraph(const XYDataStore &lsdata, ChartLook::Style style, bool swap=false) noexcept;
   void DrawTrend(const LeastSquares &lsdata, ChartLook::Style style) noexcept;
   void DrawTrendN(const LeastSquares &lsdata, ChartLook::Style style) noexcept;
-  void DrawLine(double xmin, double ymin,
-                double xmax, double ymax, const Pen &pen) noexcept;
-  void DrawLine(double xmin, double ymin,
-                double xmax, double ymax, ChartLook::Style style) noexcept;
-  void DrawFilledLine(double xmin, double ymin,
-                      double xmax, double ymax,
+  void DrawLine(DoublePoint2D min, DoublePoint2D max,
+                const Pen &pen) noexcept;
+  void DrawLine(DoublePoint2D min, DoublePoint2D max,
+                ChartLook::Style style) noexcept;
+  void DrawFilledLine(DoublePoint2D min, DoublePoint2D max,
                       const Brush &brush) noexcept;
   void DrawFilledY(std::span<const DoublePoint2D> vals,
                    const Brush &brush,
                    const Pen *pen=nullptr) noexcept;
-  void DrawDot(double x, double y, const unsigned width) noexcept;
+  void DrawDot(DoublePoint2D p, const unsigned width) noexcept;
   void DrawImpulseGraph(const XYDataStore &lsdata, const Pen &pen) noexcept;
   void DrawImpulseGraph(const XYDataStore &lsdata, ChartLook::Style style) noexcept;
   void DrawWeightBarGraph(const XYDataStore &lsdata) noexcept;
@@ -146,12 +125,11 @@ public:
   void DrawYGrid(double tic_step, double unit_step,
                  UnitFormat units = UnitFormat::NONE) noexcept;
 
-  void DrawLabel(const TCHAR *text, double xv, double yv) noexcept;
+  void DrawLabel(DoublePoint2D v, const TCHAR *text) noexcept;
   void DrawNoData(const TCHAR *text) noexcept;
   void DrawNoData() noexcept;
 
-  void DrawBlankRectangle(double x_min, double y_min,
-                          double x_max, double y_max) noexcept;
+  void DrawBlankRectangle(DoublePoint2D min, DoublePoint2D max) noexcept;
 
   double GetYMin() const noexcept { return y.min; }
   double GetYMax() const noexcept { return y.max; }
@@ -159,14 +137,18 @@ public:
   double GetXMax() const noexcept { return x.max; }
 
   [[gnu::pure]]
-  int ScreenX(double x) const noexcept;
+  int ScreenX(double _x) const noexcept {
+    return rc_chart.left + x.ToScreen(_x);
+  }
 
   [[gnu::pure]]
-  int ScreenY(double y) const noexcept;
+  int ScreenY(double _y) const noexcept {
+    return rc_chart.bottom - y.ToScreen(_y);
+  }
 
   [[gnu::pure]]
-  PixelPoint ToScreen(double x, double y) const noexcept {
-    return PixelPoint{ ScreenX(x), ScreenY(y) };
+  PixelPoint ToScreen(DoublePoint2D p) const noexcept {
+    return {ScreenX(p.x), ScreenY(p.y)};
   }
 
   Canvas &GetCanvas() noexcept { return canvas; }

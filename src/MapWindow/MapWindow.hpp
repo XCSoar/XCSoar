@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -117,7 +97,7 @@ protected:
    */
   MapWindowProjection render_projection;
 
-  const Waypoints *waypoints = nullptr;
+  Waypoints *waypoints = nullptr;
   TopographyStore *topography = nullptr;
   CachedTopographyRenderer *topography_renderer = nullptr;
 
@@ -190,133 +170,133 @@ protected:
 
 public:
   MapWindow(const MapLook &look,
-            const TrafficLook &traffic_look);
-  virtual ~MapWindow();
+            const TrafficLook &traffic_look) noexcept;
+  virtual ~MapWindow() noexcept;
 
   /**
    * Is the rendered map following the user's aircraft (i.e. near it)?
    */
-  bool IsNearSelf() const {
+  bool IsNearSelf() const noexcept {
     return follow_mode == FOLLOW_SELF;
   }
 
-  bool IsPanning() const {
+  bool IsPanning() const noexcept {
     return follow_mode == FOLLOW_PAN;
   }
 
-  void SetWaypoints(const Waypoints *_waypoints) {
+  void SetWaypoints(Waypoints *_waypoints) noexcept {
     waypoints = _waypoints;
     waypoint_renderer.SetWaypoints(waypoints);
   }
 
-  void SetTask(ProtectedTaskManager *_task) {
+  void SetTask(ProtectedTaskManager *_task) noexcept {
     task = _task;
   }
 
-  void SetRoutePlanner(const ProtectedRoutePlanner *_route_planner) {
+  void SetRoutePlanner(const ProtectedRoutePlanner *_route_planner) noexcept {
     route_planner = _route_planner;
   }
 
-  void SetGlideComputer(GlideComputer *_gc);
+  void SetGlideComputer(GlideComputer *_gc) noexcept;
 
-  void SetAirspaces(Airspaces *airspaces) {
+  void SetAirspaces(Airspaces *airspaces) noexcept {
     airspace_renderer.SetAirspaces(airspaces);
     airspace_label_renderer.SetAirspaces(airspaces);
   }
 
-  void SetTopography(TopographyStore *_topography);
-  void SetTerrain(RasterTerrain *_terrain);
+  void SetTopography(TopographyStore *_topography) noexcept;
+  void SetTerrain(RasterTerrain *_terrain) noexcept;
 
-  const std::shared_ptr<RaspStore> &GetRasp() const {
+  const std::shared_ptr<RaspStore> &GetRasp() const noexcept {
     return rasp_store;
   }
 
-  void SetRasp(const std::shared_ptr<RaspStore> &_rasp_store);
+  void SetRasp(const std::shared_ptr<RaspStore> &_rasp_store) noexcept;
 
 #ifdef ENABLE_OPENGL
-  void SetOverlay(std::unique_ptr<MapOverlay> &&_overlay);
+  void SetOverlay(std::unique_ptr<MapOverlay> &&_overlay) noexcept;
 
-  const MapOverlay *GetOverlay() const {
+  const MapOverlay *GetOverlay() const noexcept {
     return overlay.get();
   }
 #endif
 
 #ifdef HAVE_NOAA
-  void SetNOAAStore(NOAAStore *_noaa_store) {
+  void SetNOAAStore(NOAAStore *_noaa_store) noexcept {
     noaa_store = _noaa_store;
   }
 #endif
 
 #ifdef HAVE_SKYLINES_TRACKING
-  void SetSkyLinesData(const SkyLinesTracking::Data *_data) {
+  void SetSkyLinesData(const SkyLinesTracking::Data *_data) noexcept {
     skylines_data = _data;
   }
 #endif
 
 #ifdef HAVE_HTTP
-  void SetThermalInfoMap(const TIM::Glue *_tim) {
+  void SetThermalInfoMap(const TIM::Glue *_tim) noexcept {
     tim_glue = _tim;
   }
 #endif
 
-  void FlushCaches();
+  void FlushCaches() noexcept;
 
   using MapWindowBlackboard::ReadBlackboard;
 
   void ReadBlackboard(const MoreData &nmea_info,
                       const DerivedInfo &derived_info,
                       const ComputerSettings &settings_computer,
-                      const MapSettings &settings_map);
+                      const MapSettings &settings_map) noexcept;
 
-  const MapWindowProjection &VisibleProjection() const {
+  const MapWindowProjection &VisibleProjection() const noexcept {
     return visible_projection;
   }
 
   [[gnu::pure]]
-  GeoPoint GetLocation() const {
+  GeoPoint GetLocation() const noexcept {
     return visible_projection.IsValid()
       ? visible_projection.GetGeoLocation()
       : GeoPoint::Invalid();
   }
 
-  void SetLocation(const GeoPoint location) {
+  void SetLocation(const GeoPoint location) noexcept {
     visible_projection.SetGeoLocation(location);
   }
 
-  void UpdateScreenBounds() {
+  void UpdateScreenBounds() noexcept {
     visible_projection.UpdateScreenBounds();
   }
 
 protected:
-  void DrawBestCruiseTrack(Canvas &canvas, PixelPoint aircraft_pos) const;
+  void DrawBestCruiseTrack(Canvas &canvas, PixelPoint aircraft_pos) const noexcept;
   void DrawTrackBearing(Canvas &canvas,
-                        PixelPoint aircraft_pos, bool circling) const;
-  void DrawCompass(Canvas &canvas, const PixelRect &rc) const;
+                        PixelPoint aircraft_pos, bool circling) const noexcept;
+  void DrawCompass(Canvas &canvas, const PixelRect &rc) const noexcept;
   void DrawWind(Canvas &canvas, const PixelPoint &Orig,
-                           const PixelRect &rc) const;
-  void DrawWaypoints(Canvas &canvas);
+                           const PixelRect &rc) const noexcept;
+  void DrawWaypoints(Canvas &canvas) noexcept;
 
   void DrawTrail(Canvas &canvas, PixelPoint aircraft_pos,
                  TimeStamp min_time, bool enable_traildrift = false) noexcept;
-  virtual void RenderTrail(Canvas &canvas, PixelPoint aircraft_pos);
-  virtual void RenderTrackBearing(Canvas &canvas, PixelPoint aircraft_pos);
+  virtual void RenderTrail(Canvas &canvas, PixelPoint aircraft_pos) noexcept;
+  virtual void RenderTrackBearing(Canvas &canvas, PixelPoint aircraft_pos) noexcept;
 
 #ifdef HAVE_SKYLINES_TRACKING
-  void DrawSkyLinesTraffic(Canvas &canvas) const;
+  void DrawSkyLinesTraffic(Canvas &canvas) const noexcept;
 #endif
 
-  void DrawTeammate(Canvas &canvas) const;
-  void DrawContest(Canvas &canvas);
-  void DrawTask(Canvas &canvas);
-  void DrawRoute(Canvas &canvas);
-  void DrawTaskOffTrackIndicator(Canvas &canvas);
-  void DrawWaves(Canvas &canvas);
-  virtual void DrawThermalEstimate(Canvas &canvas) const;
+  void DrawTeammate(Canvas &canvas) const noexcept;
+  void DrawContest(Canvas &canvas) noexcept;
+  void DrawTask(Canvas &canvas) noexcept;
+  void DrawRoute(Canvas &canvas) noexcept;
+  void DrawTaskOffTrackIndicator(Canvas &canvas) noexcept;
+  void DrawWaves(Canvas &canvas) noexcept;
+  virtual void DrawThermalEstimate(Canvas &canvas) const noexcept;
 
-  void DrawGlideThroughTerrain(Canvas &canvas) const;
-  void DrawTerrainAbove(Canvas &canvas);
-  void DrawFLARMTraffic(Canvas &canvas, PixelPoint aircraft_pos) const;
-  void DrawGLinkTraffic(Canvas &canvas, PixelPoint aircraft_pos) const;
+  void DrawGlideThroughTerrain(Canvas &canvas) const noexcept;
+  void DrawTerrainAbove(Canvas &canvas) noexcept;
+  void DrawFLARMTraffic(Canvas &canvas, PixelPoint aircraft_pos) const noexcept;
+  void DrawGLinkTraffic(Canvas &canvas) const noexcept;
 
   // thread, main functions
   /**
@@ -324,16 +304,16 @@ protected:
    * @param canvas The drawing canvas
    * @param rc The area to draw in
    */
-  virtual void Render(Canvas &canvas, const PixelRect &rc);
+  virtual void Render(Canvas &canvas, const PixelRect &rc) noexcept;
 
-  unsigned UpdateTopography(unsigned max_update=1024);
+  unsigned UpdateTopography(unsigned max_update=1024) noexcept;
 
   /**
    * @return true if UpdateTerrain() should be called again
    */
-  bool UpdateTerrain();
+  bool UpdateTerrain() noexcept;
 
-  void UpdateAll() {
+  void UpdateAll() noexcept {
     UpdateTopography();
     UpdateTerrain();
   }
@@ -356,49 +336,52 @@ private:
    * Renders the terrain background
    * @param canvas The drawing canvas
    */
-  void RenderTerrain(Canvas &canvas);
+  void RenderTerrain(Canvas &canvas) noexcept;
 
-  void RenderRasp(Canvas &canvas);
+  void RenderRasp(Canvas &canvas) noexcept;
 
-  void RenderTerrainAbove(Canvas &canvas, bool working);
+  void RenderTerrainAbove(Canvas &canvas, bool working) noexcept;
 
   /**
    * Renders the topography
    * @param canvas The drawing canvas
    */
-  void RenderTopography(Canvas &canvas);
+  void RenderTopography(Canvas &canvas) noexcept;
+
   /**
    * Renders the topography labels
    * @param canvas The drawing canvas
    */
-  void RenderTopographyLabels(Canvas &canvas);
+  void RenderTopographyLabels(Canvas &canvas) noexcept;
 
-  void RenderOverlays(Canvas &canvas);
+  void RenderOverlays(Canvas &canvas) noexcept;
 
   /**
    * Renders the final glide shading
    * @param canvas The drawing canvas
    */
-  void RenderFinalGlideShading(Canvas &canvas);
+  void RenderFinalGlideShading(Canvas &canvas) noexcept;
+
   /**
    * Renders the airspace
    * @param canvas The drawing canvas
    */
-  void RenderAirspace(Canvas &canvas);
+  void RenderAirspace(Canvas &canvas) noexcept;
 
   /**
    * Renders the NOAA stations
    * @param canvas The drawing canvas
    */
-  void RenderNOAAStations(Canvas &canvas);
+  void RenderNOAAStations(Canvas &canvas) noexcept;
+
   /**
    * Render final glide through terrain marker
    * @param canvas The drawing canvas
    */
-  void RenderGlide(Canvas &canvas);
+  void RenderGlide(Canvas &canvas) noexcept;
 
 public:
-  void SetMapScale(const double x) {
+  void SetMapScale(const double x) noexcept {
     visible_projection.SetMapScale(x);
   }
 };

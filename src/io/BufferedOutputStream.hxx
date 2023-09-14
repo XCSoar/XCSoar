@@ -1,39 +1,20 @@
-/*
- * Copyright 2014-2022 Max Kellermann <max.kellermann@gmail.com>
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * - Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- *
- * - Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the
- * distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
- * FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+// SPDX-License-Identifier: BSD-2-Clause
+// author: Max Kellermann <max.kellermann@gmail.com>
 
 #pragma once
 
 #include "util/Compiler.h"
 #include "util/DynamicFifoBuffer.hxx"
+#include "util/SpanCast.hxx"
+
+#include <fmt/core.h>
+#if FMT_VERSION >= 80000 && FMT_VERSION < 90000
+#include <fmt/format.h>
+#endif
 
 #include <cstddef>
 #include <span>
+#include <string_view>
 
 #ifdef _UNICODE
 #include <wchar.h>
@@ -63,11 +44,7 @@ public:
 	/**
 	 * Write the contents of a buffer.
 	 */
-	void Write(const void *data, std::size_t size);
-
-	void Write(std::span<const std::byte> src) {
-		Write(src.data(), src.size());
-	}
+	void Write(std::span<const std::byte> src);
 
 	/**
 	 * Write the given object.  Note that this is only safe with
@@ -75,7 +52,7 @@ public:
 	 */
 	template<typename T>
 	void WriteT(const T &value) {
-		Write(&value, sizeof(value));
+		Write(std::as_bytes(std::span{&value, 1}));
 	}
 
 	/**
@@ -86,9 +63,11 @@ public:
 	}
 
 	/**
-	 * Write a null-terminated string.
+	 * Write a string.
 	 */
-	void Write(const char *p);
+	void Write(std::string_view src) {
+		Write(AsBytes(src));
+	}
 
 	/**
 	 * Write a printf-style formatted string.
@@ -96,18 +75,34 @@ public:
 	gcc_printf(2,3)
 	void Format(const char *fmt, ...);
 
+	void VFmt(fmt::string_view format_str, fmt::format_args args);
+
+	template<typename S, typename... Args>
+	void Fmt(const S &format_str, Args&&... args) {
+#if FMT_VERSION >= 90000
+		VFmt(format_str,
+		     fmt::make_format_args(args...));
+#else
+		VFmt(fmt::to_string_view(format_str),
+		     fmt::make_args_checked<Args...>(format_str,
+						     args...));
+#endif
+	}
+
 #ifdef _UNICODE
 	/**
-	 * Write one narrow character.
+	 * Write one wide character.
 	 */
 	void Write(const wchar_t &ch) {
-		WriteWideToUTF8(&ch, 1);
+		WriteWideToUTF8({&ch, 1});
 	}
 
 	/**
-	 * Write a null-terminated wide string.
+	 * Write a wide string.
 	 */
-	void Write(const wchar_t *p);
+	void Write(std::wstring_view src) {
+		WriteWideToUTF8(src);
+	}
 #endif
 
 	/**
@@ -133,10 +128,10 @@ public:
 	}
 
 private:
-	bool AppendToBuffer(const void *data, std::size_t size) noexcept;
+	bool AppendToBuffer(std::span<const std::byte> src) noexcept;
 
 #ifdef _UNICODE
-	void WriteWideToUTF8(const wchar_t *p, std::size_t length);
+	void WriteWideToUTF8(std::wstring_view src);
 #endif
 };
 

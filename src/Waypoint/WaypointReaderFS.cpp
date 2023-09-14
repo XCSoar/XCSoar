@@ -1,35 +1,16 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "WaypointReaderFS.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Geo/UTM.hpp"
 #include "io/LineReader.hpp"
+#include "util/StringStrip.hxx"
 
 #include <stdlib.h>
 
 static bool
-ParseAngle(const TCHAR *src, Angle &angle)
+ParseAngle(const TCHAR *src, Angle &angle) noexcept
 {
   bool is_positive;
   if (src[0] == _T('N') || src[0] == _T('n') ||
@@ -67,7 +48,7 @@ ParseAngle(const TCHAR *src, Angle &angle)
 }
 
 static bool
-ParseLocation(const TCHAR *src, GeoPoint &p)
+ParseLocation(const TCHAR *src, GeoPoint &p) noexcept
 {
   Angle lon, lat;
 
@@ -87,7 +68,7 @@ ParseLocation(const TCHAR *src, GeoPoint &p)
 }
 
 static bool
-ParseLocationUTM(const TCHAR *src, GeoPoint &p)
+ParseLocationUTM(const TCHAR *src, GeoPoint &p) noexcept
 {
   TCHAR *endptr;
 
@@ -118,7 +99,7 @@ ParseLocationUTM(const TCHAR *src, GeoPoint &p)
 }
 
 static bool
-ParseAltitude(const TCHAR *src, double &dest)
+ParseAltitude(const TCHAR *src, double &dest) noexcept
 {
   TCHAR *endptr;
   long alt = _tcstol(src, &endptr, 10);
@@ -129,19 +110,11 @@ ParseAltitude(const TCHAR *src, double &dest)
   return true;
 }
 
-static bool
-ParseString(const TCHAR *src, tstring &dest, unsigned len = 0)
+[[nodiscard]] [[gnu::pure]]
+static tstring
+ParseString(tstring_view src) noexcept
 {
-  if (src[0] == 0)
-    return true;
-
-  dest.assign(src);
-  if (len > 0)
-    dest = dest.substr(0, len);
-
-  trim_inplace(dest);
-
-  return true;
+  return tstring{Strip(src)};
 }
 
 bool
@@ -184,16 +157,16 @@ WaypointReaderFS::ParseLine(const TCHAR *line, Waypoints &way_points)
 
   Waypoint new_waypoint = factory.Create(location);
 
-  if (!ParseString(line, new_waypoint.name, 8))
-    return false;
+  new_waypoint.name = ParseString({line, 8});
 
-  if (!ParseAltitude(line + (is_utm ? 32 : 41), new_waypoint.elevation) &&
-      !factory.FallbackElevation(new_waypoint))
-    return false;
+  if (ParseAltitude(line + (is_utm ? 32 : 41), new_waypoint.elevation))
+    new_waypoint.has_elevation = true;
+  else
+    factory.FallbackElevation(new_waypoint);
 
   // Description (Characters 35-44)
   if (len > (is_utm ? 38 : 47))
-    ParseString(line + (is_utm ? 38 : 47), new_waypoint.comment);
+    new_waypoint.comment = ParseString(line + (is_utm ? 38 : 47));
 
   way_points.Append(std::move(new_waypoint));
   return true;

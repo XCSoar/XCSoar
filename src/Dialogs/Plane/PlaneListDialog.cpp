@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "PlaneDialogs.hpp"
 #include "Dialogs/Error.hpp"
@@ -34,7 +14,6 @@ Copyright_License {
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
 #include "LocalPath.hpp"
-#include "Components.hpp"
 #include "Profile/Profile.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "UIGlobals.hpp"
@@ -42,6 +21,9 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "util/StringAPI.hxx"
+#include "util/StringCompare.hxx"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 #include <vector>
 #include <cassert>
@@ -58,10 +40,10 @@ class PlaneListWidget final
     StaticString<32> name;
     AllocatedPath path;
 
-    ListItem(const TCHAR *_name, Path _path)
+    ListItem(tstring_view _name, Path _path) noexcept
       :name(_name), path(_path) {}
 
-    bool operator<(const ListItem &i2) const {
+    bool operator<(const ListItem &i2) const noexcept {
       return StringCollate(name, i2.name) < 0;
     }
   };
@@ -71,32 +53,35 @@ class PlaneListWidget final
     std::vector<ListItem> &list;
 
   public:
-    PlaneFileVisitor(std::vector<ListItem> &_list):list(_list) {}
+    PlaneFileVisitor(std::vector<ListItem> &_list) noexcept:list(_list) {}
 
     void Visit(Path path, Path filename) override {
-      list.emplace_back(filename.c_str(), path);
+      tstring_view name{filename.c_str()};
+      RemoveSuffix(name, tstring_view{_T(".xcp")});
+
+      list.emplace_back(name, path);
     }
   };
 
   WndForm *form;
-  Button *edit_button, *delete_button, *load_button;
+  Button *edit_button, *copy_button, *delete_button, *load_button;
 
   std::vector<ListItem> list;
 
   TwoTextRowsRenderer row_renderer;
 
 public:
-  void CreateButtons(WidgetDialog &dialog);
+  void CreateButtons(WidgetDialog &dialog) noexcept;
 
 private:
-  void UpdateList();
-  bool Load(unsigned i);
-  bool LoadWithDialog(unsigned i);
+  void UpdateList() noexcept;
+  bool Load(unsigned i) noexcept;
+  bool LoadWithDialog(unsigned i) noexcept;
 
-  void LoadClicked();
-  void NewClicked();
-  void EditClicked();
-  void DeleteClicked();
+  void LoadClicked() noexcept;
+  void NewClicked() noexcept;
+  void EditClicked(bool copy) noexcept;
+  void DeleteClicked() noexcept;
 
 public:
   /* virtual methods from class Widget */
@@ -116,7 +101,7 @@ protected:
 };
 
 void
-PlaneListWidget::UpdateList()
+PlaneListWidget::UpdateList() noexcept
 {
   list.clear();
 
@@ -135,16 +120,18 @@ PlaneListWidget::UpdateList()
   const bool empty = list.empty();
   load_button->SetEnabled(!empty);
   edit_button->SetEnabled(!empty);
+  copy_button->SetEnabled(!empty);
   delete_button->SetEnabled(!empty);
 }
 
 void
-PlaneListWidget::CreateButtons(WidgetDialog &dialog)
+PlaneListWidget::CreateButtons(WidgetDialog &dialog) noexcept
 {
   form = &dialog;
 
   dialog.AddButton(_("New"), [this](){ NewClicked(); });
-  edit_button = dialog.AddButton(_("Edit"), [this](){ EditClicked(); });
+  edit_button = dialog.AddButton(_("Edit"), [this](){ EditClicked(false); });
+  copy_button = dialog.AddButton(_("Copy"), [this](){ EditClicked(true); });
   delete_button = dialog.AddButton(_("Delete"), [this](){ DeleteClicked(); });
   load_button = dialog.AddButton(_("Activate"), [this](){ LoadClicked(); });
 }
@@ -172,11 +159,15 @@ PlaneListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   } else
     row_renderer.DrawFirstRow(canvas, rc, list[i].name);
 
-  row_renderer.DrawSecondRow(canvas, rc, list[i].path.c_str());
+  Path path = list[i].path;
+  if (auto relative_path = RelativePath(path); relative_path != nullptr)
+    path = relative_path;
+
+  row_renderer.DrawSecondRow(canvas, rc, path.c_str());
 }
 
 static bool
-LoadFile(Path path)
+LoadFile(Path path) noexcept
 {
   ComputerSettings &settings = CommonInterface::SetComputerSettings();
 
@@ -186,14 +177,13 @@ LoadFile(Path path)
   Profile::SetPath("PlanePath", path);
   PlaneGlue::Synchronize(settings.plane, settings,
                          settings.polar.glide_polar_task);
-  if (protected_task_manager != NULL)
-    protected_task_manager->SetGlidePolar(settings.polar.glide_polar_task);
+  backend_components->SetTaskPolar(settings.polar);
 
   return true;
 }
 
 bool
-PlaneListWidget::Load(unsigned i)
+PlaneListWidget::Load(unsigned i) noexcept
 {
   assert(i < list.size());
 
@@ -201,7 +191,7 @@ PlaneListWidget::Load(unsigned i)
 }
 
 bool
-PlaneListWidget::LoadWithDialog(unsigned i)
+PlaneListWidget::LoadWithDialog(unsigned i) noexcept
 {
   bool result = Load(i);
   if (!result) {
@@ -216,16 +206,16 @@ PlaneListWidget::LoadWithDialog(unsigned i)
 }
 
 inline void
-PlaneListWidget::LoadClicked()
+PlaneListWidget::LoadClicked() noexcept
 {
   if (LoadWithDialog(GetList().GetCursorIndex()))
     form->SetModalResult(mrOK);
 }
 
 inline void
-PlaneListWidget::NewClicked()
+PlaneListWidget::NewClicked() noexcept
 {
-  Plane plane = CommonInterface::GetComputerSettings().plane;
+  Plane plane{};
 
   while (dlgPlaneDetailsShowModal(plane)) {
     if (plane.registration.empty()) {
@@ -260,8 +250,8 @@ PlaneListWidget::NewClicked()
   }
 }
 
-inline void
-PlaneListWidget::EditClicked()
+void
+PlaneListWidget::EditClicked(bool copy) noexcept
 {
   assert(GetList().GetCursorIndex() < list.size());
 
@@ -282,7 +272,7 @@ PlaneListWidget::EditClicked()
     StaticString<42> filename(plane.registration);
     filename += _T(".xcp");
 
-    if (filename != old_filename) {
+    if (copy || filename != old_filename) {
       const auto path = AllocatedPath::Build(old_path.GetParent(),
                                              filename);
 
@@ -295,7 +285,8 @@ PlaneListWidget::EditClicked()
           continue;
       }
 
-      File::Delete(old_path);
+      if (!copy)
+        File::Delete(old_path);
 
       try {
         PlaneGlue::WriteFile(plane, path);
@@ -304,7 +295,7 @@ PlaneListWidget::EditClicked()
         return;
       }
 
-      if (Profile::GetPathIsEqual("PlanePath", old_path)) {
+      if (!copy && Profile::GetPathIsEqual("PlanePath", old_path)) {
         list[index].path = Path(path);
         list[index].name = filename;
         Load(index);
@@ -327,7 +318,7 @@ PlaneListWidget::EditClicked()
 }
 
 inline void
-PlaneListWidget::DeleteClicked()
+PlaneListWidget::DeleteClicked() noexcept
 {
   assert(GetList().GetCursorIndex() < list.size());
 
@@ -359,7 +350,7 @@ PlaneListWidget::OnActivateItem(unsigned i) noexcept
 }
 
 void
-dlgPlanesShowModal()
+dlgPlanesShowModal() noexcept
 {
   TWidgetDialog<PlaneListWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),

@@ -142,7 +142,7 @@ DBFHandle msDBFOpenVirtualFile( struct zzip_file * fp )
 {
   DBFHandle   psDBF;
   uchar   *pabyBuf;
-  int     nFields, nRecords, nHeadLen, nRecLen, iField;
+  int     nFields, nHeadLen, nRecLen, iField;
 
   /* -------------------------------------------------------------------- */
   /*      Open the file.                                                  */
@@ -174,8 +174,10 @@ DBFHandle msDBFOpenVirtualFile( struct zzip_file * fp )
     return( NULL );
   }
 
-  psDBF->nRecords = nRecords =
-                      pabyBuf[4] + pabyBuf[5]*256 + pabyBuf[6]*256*256 + pabyBuf[7]*256*256*256;
+  if( pabyBuf[7] < 128 )
+      psDBF->nRecords = pabyBuf[4] + pabyBuf[5]*256 + pabyBuf[6]*256*256 + pabyBuf[7]*256*256*256;
+  else
+      psDBF->nRecords = 0;
 
   psDBF->nHeaderLength = nHeadLen = pabyBuf[8] + pabyBuf[9]*256;
   psDBF->nRecordLength = nRecLen = pabyBuf[10] + pabyBuf[11]*256;

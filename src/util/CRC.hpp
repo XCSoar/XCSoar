@@ -1,29 +1,7 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
-
-#include "Compiler.h"
 
 #include <cstdint>
 #include <cstddef>
@@ -52,4 +30,27 @@ UpdateCRC16CCITT(const void *data, size_t length, uint16_t crc)
 {
   const uint8_t *p = (const uint8_t *)data, *end = p + length;
   return UpdateCRC16CCITT(p, end, crc);
+}
+
+[[gnu::pure]]
+static inline uint8_t
+Calculate8bitCRC(const uint8_t* msg, const int len, uint8_t crc, const uint8_t poly)
+{
+  for (int byte = 0; byte < len; byte++) {
+    uint8_t d = static_cast<uint8_t>(msg[byte]);
+    for (int count = 8; --count >= 0; d <<= 1) {
+      uint8_t tmp = crc ^ d;
+      crc <<= 1;
+      if ((tmp & 0x80) != 0)
+        crc ^= poly;
+    }
+  }
+
+  return crc;
+}
+
+[[gnu::pure]]
+static inline uint8_t
+Calculate8bitCRC(const std::byte* msg, const int len, uint8_t crc, const uint8_t poly) {
+  return Calculate8bitCRC(reinterpret_cast<const uint8_t*>(msg),len,crc,poly);
 }

@@ -1,34 +1,6 @@
-/*
- * Copyright 2017-2021 CM4all GmbH
- * All rights reserved.
- *
- * author: Max Kellermann <mk@cm4all.com>
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * - Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- *
- * - Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the
- * distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
- * FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+// SPDX-License-Identifier: BSD-2-Clause
+// Copyright CM4all GmbH
+// author: Max Kellermann <mk@cm4all.com>
 
 #include "Channel.hxx"
 #include "Handler.hxx"
@@ -71,19 +43,16 @@ private:
 };
 
 Channel::Channel(EventLoop &event_loop)
-	:defer_process(event_loop, BIND_THIS_METHOD(DeferredProcess)),
+	:defer_update_sockets(event_loop, BIND_THIS_METHOD(UpdateSockets)),
 	 timeout_event(event_loop, BIND_THIS_METHOD(OnTimeout))
 {
 	int code = ares_init(&channel);
 	if (code != 0)
 		throw Error(code, "ares_init() failed");
-
-	UpdateSockets();
 }
 
 Channel::~Channel() noexcept
 {
-	defer_process.Cancel();
 	ares_destroy(channel);
 }
 
@@ -92,25 +61,21 @@ Channel::UpdateSockets() noexcept
 {
 	timeout_event.Cancel();
 	sockets.clear();
-	FD_ZERO(&read_ready);
-	FD_ZERO(&write_ready);
 
-	fd_set rfds, wfds;
-	FD_ZERO(&rfds);
-	FD_ZERO(&wfds);
+	ares_socket_t socks[ARES_GETSOCK_MAXNUM];
+	const auto s = ares_getsock(channel, socks, ARES_GETSOCK_MAXNUM);
 
-	int max = ares_fds(channel, &rfds, &wfds);
-	for (int i = 0; i < max; ++i) {
+	for (unsigned i = 0; i < ARES_GETSOCK_MAXNUM; ++i) {
 		unsigned events = 0;
 
-		if (FD_ISSET(i, &rfds))
+		if (ARES_GETSOCK_READABLE(s, i))
 			events |= SocketEvent::READ;
 
-		if (FD_ISSET(i, &wfds))
+		if (ARES_GETSOCK_WRITABLE(s, i))
 			events |= SocketEvent::WRITE;
 
 		if (events != 0)
-			sockets.emplace_front(*this, SocketDescriptor(i),
+			sockets.emplace_front(*this, SocketDescriptor{socks[i]},
 					      events);
 	}
 
@@ -121,28 +86,29 @@ Channel::UpdateSockets() noexcept
 }
 
 void
-Channel::DeferredProcess() noexcept
-{
-	ares_process(channel, &read_ready, &write_ready);
-	UpdateSockets();
-}
-
-void
 Channel::OnSocket(SocketDescriptor fd, unsigned events) noexcept
 {
+	ares_socket_t read_fd = ARES_SOCKET_BAD, write_fd = ARES_SOCKET_BAD;
+
 	if (events & (SocketEvent::READ|SocketEvent::IMPLICIT_FLAGS))
-		FD_SET(fd.Get(), &read_ready);
+		read_fd = fd.Get();
 
 	if (events & (SocketEvent::WRITE|SocketEvent::IMPLICIT_FLAGS))
-		FD_SET(fd.Get(), &write_ready);
+		write_fd = fd.Get();
 
-	ScheduleProcess();
+	ares_process_fd(channel, read_fd, write_fd);
+
+	ScheduleUpdateSockets();
 }
 
 void
 Channel::OnTimeout() noexcept
 {
-	ScheduleProcess();
+	sockets.clear();
+
+	ares_process_fd(channel, ARES_SOCKET_BAD, ARES_SOCKET_BAD);
+
+	ScheduleUpdateSockets();
 }
 
 template<typename F>
@@ -239,9 +205,9 @@ Channel::Request::HostCallback(int status, struct hostent *he) noexcept
 			success = true;
 
 			for (auto i = he->h_addr_list; *i != nullptr; ++i)
-				AsSocketAddress(*he, *i, [&handler = *handler](SocketAddress address){
-						handler.OnCaresAddress(address);
-					});
+				AsSocketAddress(*he, *i, [&_handler = *handler](SocketAddress address){
+					_handler.OnCaresAddress(address);
+				});
 
 			if (pending == 0)
 				handler->OnCaresSuccess();

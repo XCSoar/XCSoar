@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "TraceHistoryRenderer.hpp"
 #include "ChartRenderer.hpp"
@@ -69,8 +49,7 @@ void
 TraceHistoryRenderer::RenderAxis(ChartRenderer &chart,
                                   const TraceVariableHistory& var) const
 {
-  chart.DrawLine(0, 0,
-                 var.capacity() - 1, 0,
+  chart.DrawLine({0, 0}, {var.capacity() - 1., 0},
                  look.axis_pen);
 }
 
@@ -78,37 +57,33 @@ void
 TraceHistoryRenderer::render_filled_posneg(ChartRenderer &chart,
                                            const TraceVariableHistory& var) const
 {
-  double x_last(0), y_last(0);
+  DoublePoint2D last{0, 0};
   unsigned i=0;
   for (auto it = var.begin(); it != var.end(); ++it, ++i) {
-    double x = i;
-    double y = *it;
+    const DoublePoint2D p{double(i), *it};
     if (i) {
-      if (y * y_last < 0) {
-        if (y_last > 0)
-          chart.DrawFilledLine(x_last, y_last, x_last + 0.5, 0,
+      if (p.y * last.y < 0) {
+        if (last.y > 0)
+          chart.DrawFilledLine(last, {last.x + 0.5, 0},
                                vario_look.lift_brush);
-        else if (y_last < 0)
-          chart.DrawFilledLine(x_last, y_last, x_last + 0.5, 0,
+        else if (last.y < 0)
+          chart.DrawFilledLine(last, {last.x + 0.5, 0},
                                vario_look.sink_brush);
 
-        x_last = x - 0.5;
-        y_last = 0;
-
+        last = {p.x - 0.5, 0};
       }
-      if (y > 0 || y_last > 0)
-        chart.DrawFilledLine(x_last, y_last, x, y, vario_look.lift_brush);
-      else if (y < 0 || y_last < 0)
-        chart.DrawFilledLine(x_last, y_last, x, y, vario_look.sink_brush);
+      if (p.y > 0 || last.y > 0)
+        chart.DrawFilledLine(last, p, vario_look.lift_brush);
+      else if (p.y < 0 || last.y < 0)
+        chart.DrawFilledLine(last, p, vario_look.sink_brush);
     }
-    x_last = x;
-    y_last = y;
+    last = p;
   }
   if (look.inverse)
     chart.GetCanvas().SelectWhiteBrush();
   else
     chart.GetCanvas().SelectBlackBrush();
-  chart.DrawDot(x_last, y_last, Layout::Scale(2));
+  chart.DrawDot(last, Layout::Scale(2));
 }
 
 void
@@ -128,8 +103,8 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
 
   if (mc > 0) {
     canvas.SetBackgroundTransparent();
-    chart.DrawLine(0, mc,
-                   var.capacity() - 1, mc,
+    chart.DrawLine({0, mc},
+                   {var.capacity() - 1., mc},
                    ChartLook::STYLE_GREENDASH);
   }
 

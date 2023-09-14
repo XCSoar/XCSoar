@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Gauge/GaugeVario.hpp"
 #include "Look/VarioLook.hpp"
@@ -29,7 +9,8 @@ Copyright_License {
 #include "Math/FastRotation.hpp"
 #include "Units/Units.hpp"
 #include "Units/Descriptor.hpp"
-#include "util/Clamp.hpp"
+
+#include <algorithm> // for std::clamp()
 
 static constexpr double DELTA_V_STEP = 4.0;
 static constexpr double DELTA_V_LIMIT = 16.0;
@@ -350,8 +331,8 @@ GaugeVario::OnPaintBuffer(Canvas &canvas) noexcept
                false, false);
 
   if (Settings().show_gross) {
-    auto vvaldisplay = Clamp(Units::ToUserVSpeed(vval),
-                              -99.9, 99.9);
+    auto vvaldisplay = std::clamp(Units::ToUserVSpeed(vval),
+                                  -99.9, 99.9);
 
     RenderValue(canvas, geometry.gross, gross_di,
                 vvaldisplay,
@@ -439,7 +420,7 @@ GaugeVario::ValueToNeedlePos(double Value) noexcept
 
 
   i = iround(Value * degrees_per_unit);
-  i = Clamp(i, int(gmin), int(gmax));
+  i = std::clamp(i, int(gmin), int(gmax));
   return i;
 }
 
@@ -600,7 +581,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
   if ((Calculated().flight.flying)
       && (!Basic().gps.simulator || !Calculated().circling)) {
     v_diff = Calculated().V_stf - Basic().indicated_airspeed;
-    v_diff = Clamp(v_diff, -DELTA_V_LIMIT, DELTA_V_LIMIT); // limit it
+    v_diff = std::clamp(v_diff, -DELTA_V_LIMIT, DELTA_V_LIMIT); // limit it
     v_diff = iround(v_diff/DELTA_V_STEP) * DELTA_V_STEP;
   } else
     v_diff = 0;

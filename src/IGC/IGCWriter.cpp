@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "IGC/IGCWriter.hpp"
 #include "IGCString.hpp"
@@ -58,8 +38,8 @@ IGCWriter::WriteLine(const char *line)
   assert(strchr(line, '\r') == NULL);
   assert(strchr(line, '\n') == NULL);
 
-  char *const dest = buffer;
-  char *const end = dest + MAX_IGC_BUFF;
+  char *const dest = buffer.data();
+  char *const end = dest + buffer.size();
 
   char *p = CopyIGCString(dest, end, line);
 
@@ -70,10 +50,10 @@ void
 IGCWriter::WriteLine(const char *a, const TCHAR *b)
 {
   size_t a_length = strlen(a);
-  assert(a_length < MAX_IGC_BUFF);
+  assert(a_length < buffer.size());
 
-  char *const dest = buffer;
-  char *const end = dest + MAX_IGC_BUFF, *p = dest;
+  char *const dest = buffer.data();
+  char *const end = dest + buffer.size(), *p = dest;
 
   p = std::copy_n(a, a_length, p);
   p = CopyIGCString(p, end, b);
@@ -176,8 +156,8 @@ IGCWriter::LoggerNote(const TCHAR *text)
  * Applies range checks to the specified altitude value and converts
  * it to an integer suitable for printing in the IGC file.
  */
-static int
-NormalizeIGCAltitude(int value)
+static constexpr int
+NormalizeIGCAltitude(int value) noexcept
 {
   if (value < -9999)
     /* for negative values, there are only 4 characters left (after

@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "MapWindow.hpp"
 #include "Overlay.hpp"
@@ -37,14 +17,15 @@ Copyright_License {
 #endif
 
 void
-MapWindow::RenderTrackBearing(Canvas &canvas, const PixelPoint aircraft_pos)
+MapWindow::RenderTrackBearing(Canvas &canvas,
+                              const PixelPoint aircraft_pos) noexcept
 {
   // default rendering option assumes circling is off, so ground-relative
   DrawTrackBearing(canvas, aircraft_pos, false);
 }
 
 inline void
-MapWindow::RenderTerrain(Canvas &canvas)
+MapWindow::RenderTerrain(Canvas &canvas) noexcept
 {
   background.SetShadingAngle(render_projection, GetMapSettings().terrain,
                              Calculated());
@@ -52,7 +33,7 @@ MapWindow::RenderTerrain(Canvas &canvas)
 }
 
 inline void
-MapWindow::RenderRasp(Canvas &canvas)
+MapWindow::RenderRasp(Canvas &canvas) noexcept
 {
   if (rasp_store == nullptr)
     return;
@@ -89,21 +70,21 @@ MapWindow::RenderRasp(Canvas &canvas)
 }
 
 inline void
-MapWindow::RenderTopography(Canvas &canvas)
+MapWindow::RenderTopography(Canvas &canvas) noexcept
 {
   if (topography_renderer != nullptr && GetMapSettings().topography_enabled)
     topography_renderer->Draw(canvas, render_projection);
 }
 
 inline void
-MapWindow::RenderTopographyLabels(Canvas &canvas)
+MapWindow::RenderTopographyLabels(Canvas &canvas) noexcept
 {
   if (topography_renderer != nullptr && GetMapSettings().topography_enabled)
     topography_renderer->DrawLabels(canvas, render_projection, label_block);
 }
 
 inline void
-MapWindow::RenderOverlays([[maybe_unused]] Canvas &canvas)
+MapWindow::RenderOverlays([[maybe_unused]] Canvas &canvas) noexcept
 {
 #ifdef ENABLE_OPENGL
   if (overlay)
@@ -112,7 +93,7 @@ MapWindow::RenderOverlays([[maybe_unused]] Canvas &canvas)
 }
 
 inline void
-MapWindow::RenderFinalGlideShading(Canvas &canvas)
+MapWindow::RenderFinalGlideShading(Canvas &canvas) noexcept
 {
   if (terrain != nullptr &&
       Calculated().terrain_valid)
@@ -120,7 +101,7 @@ MapWindow::RenderFinalGlideShading(Canvas &canvas)
 }
 
 inline void
-MapWindow::RenderAirspace(Canvas &canvas)
+MapWindow::RenderAirspace(Canvas &canvas) noexcept
 {
   if (GetMapSettings().airspace.enable) {
     airspace_renderer.Draw(canvas,
@@ -141,7 +122,7 @@ MapWindow::RenderAirspace(Canvas &canvas)
 }
 
 inline void
-MapWindow::RenderNOAAStations(Canvas &canvas)
+MapWindow::RenderNOAAStations(Canvas &canvas) noexcept
 {
 #ifdef HAVE_NOAA
   if (noaa_store == nullptr)
@@ -155,7 +136,7 @@ MapWindow::RenderNOAAStations(Canvas &canvas)
 }
 
 inline void
-MapWindow::DrawWaves(Canvas &canvas)
+MapWindow::DrawWaves(Canvas &canvas) noexcept
 {
   const WaveRenderer renderer(look.wave);
 
@@ -170,7 +151,7 @@ MapWindow::DrawWaves(Canvas &canvas)
 }
 
 inline void
-MapWindow::RenderGlide(Canvas &canvas)
+MapWindow::RenderGlide(Canvas &canvas) noexcept
 {
   // draw red cross on glide through terrain marker
   if (Calculated().terrain_valid)
@@ -178,7 +159,7 @@ MapWindow::RenderGlide(Canvas &canvas)
 }
 
 void
-MapWindow::Render(Canvas &canvas, const PixelRect &rc)
+MapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
 {
   const NMEAInfo &basic = Basic();
 
@@ -246,8 +227,7 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
 
   //////////////////////////////////////////////// aircraft level items
   // Render the snail trail
-  if (basic.location_available)
-    RenderTrail(canvas, aircraft_pos);
+  RenderTrail(canvas, aircraft_pos);
 
   DrawWaves(canvas);
 
@@ -289,13 +269,11 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   DrawSkyLinesTraffic(canvas);
 #endif
 
-  if (basic.location_available)
-      DrawGLinkTraffic(canvas, aircraft_pos);
+  DrawGLinkTraffic(canvas);
 
   DrawTeammate(canvas);
 
-  if (basic.location_available)
-    DrawFLARMTraffic(canvas, aircraft_pos);
+  DrawFLARMTraffic(canvas, aircraft_pos);
 
   //////////////////////////////////////////////// own aircraft
   // Finally, draw you!

@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "System.hpp"
 #include "system/FileUtil.hpp"
@@ -71,13 +51,6 @@ bool
 KoboReboot()
 {
 #ifdef KOBO
-  KoboModel kobo_model = DetectKoboModel();
-  if  (kobo_model == KoboModel::CLARA_HD || kobo_model == KoboModel::CLARA_2E
-      || kobo_model == KoboModel::LIBRA2|| kobo_model == KoboModel::LIBRA_H2O)
-  {
-    /* some models require the -f option for reboot to work */
-    return Run("/sbin/reboot", "-f");
-  }
   return Run("/sbin/reboot");
 #else
   return false;
@@ -366,12 +339,14 @@ KoboCanChangeBacklightBrightness()
 {
 #ifdef KOBO
   switch (DetectKoboModel()) {
-    case KoboModel::GLO_HD:
-    case KoboModel::LIBRA2:
-    case KoboModel::CLARA_2E:
-      return true;
-    default:
-      return false;
+  case KoboModel::GLO_HD:
+  case KoboModel::LIBRA2:
+  case KoboModel::CLARA_2E:
+  case KoboModel::CLARA_HD:
+    return true;
+
+  default:
+    return false;
   }
 #endif
   return false;
@@ -385,20 +360,23 @@ KoboGetBacklightBrightness()
   char line[4];
   int result = 0;
   switch (DetectKoboModel()) {
-    case KoboModel::GLO_HD:
-      if (File::ReadString(Path("/sys/class/backlight/mxc_msp430_fl.0/brightness"), line, sizeof(line))) {
-        result = atoi(line);
-      }
-      break;
-    case KoboModel::LIBRA2:
-    case KoboModel::CLARA_2E:
-      if (File::ReadString(Path("/sys/class/backlight/mxc_msp430.0/brightness"), line, sizeof(line))) {
-        result = atoi(line);
-      }
-      break;
-    default:
-      // nothing to do here...
-      break;
+  case KoboModel::GLO_HD:
+    if (File::ReadString(Path("/sys/class/backlight/mxc_msp430_fl.0/brightness"), line, sizeof(line))) {
+      result = atoi(line);
+    }
+    break;
+
+  case KoboModel::LIBRA2:
+  case KoboModel::CLARA_2E:
+  case KoboModel::CLARA_HD:
+    if (File::ReadString(Path("/sys/class/backlight/mxc_msp430.0/brightness"), line, sizeof(line))) {
+      result = atoi(line);
+    }
+    break;
+
+  default:
+    // nothing to do here...
+    break;
   }
   return result;
 #else
@@ -415,16 +393,124 @@ KoboSetBacklightBrightness([[maybe_unused]] int percent)
   if(percent > 100) { percent = 100; }
 
   switch (DetectKoboModel()) {
-    case KoboModel::GLO_HD:
-      File::WriteExisting(Path("/sys/class/backlight/mxc_msp430_fl.0/brightness"), std::to_string(percent).c_str());
-      break;
-    case KoboModel::LIBRA2:
-    case KoboModel::CLARA_2E:
-      File::WriteExisting(Path("/sys/class/backlight/mxc_msp430.0/brightness"), std::to_string(percent).c_str());
-      break;
-    default:
-      // nothing to do here...
-      break;
+  case KoboModel::GLO_HD:
+    File::WriteExisting(Path("/sys/class/backlight/mxc_msp430_fl.0/brightness"), std::to_string(percent).c_str());
+    break;
+
+  case KoboModel::LIBRA2:
+  case KoboModel::CLARA_2E:
+  case KoboModel::CLARA_HD:
+    File::WriteExisting(Path("/sys/class/backlight/mxc_msp430.0/brightness"), std::to_string(percent).c_str());
+    break;
+
+  default:
+    // nothing to do here...
+    break;
   }
+#endif
+}
+
+/**
+ * Gets the file that contains the background colour
+ * as text of integer 0-10
+ *
+ * Some models have more than one possibility and each
+ * possibility must be checked in a certain order
+ *
+ * @return the file that contains the background colour
+ * code or nullptr if background colour not supported
+ */
+const char *
+KoboGetBacklightColourFile() noexcept
+{
+#ifdef KOBO
+  constexpr const char * colour_files[3] = {
+    "/sys/class/leds/aw99703-bl_FL1/color",
+    "/sys/class/backlight/lm3630a_led/color",
+    "/sys/class/backlight/tlc5947_bl/color"
+  };
+  bool files_to_check[3] = {
+    false,
+    false,
+    false
+  };
+
+  switch (DetectKoboModel()) {
+  case KoboModel::CLARA_2E:
+    files_to_check[0] = true;
+    break;
+
+  case KoboModel::CLARA_HD:
+    files_to_check[1] = true;
+    break;
+
+  case KoboModel::LIBRA2:
+    files_to_check[0] = true;
+    files_to_check[1] = true;
+    files_to_check[2] = true;
+    break;
+
+  default:
+    return nullptr;
+  }
+  if (files_to_check[0] && File::Exists(Path(colour_files[0])))
+    return colour_files[0]; 
+  if (files_to_check[1] && File::Exists(Path(colour_files[1])))
+    return colour_files[1]; 
+  if (files_to_check[2] && File::Exists(Path(colour_files[2])))
+    return colour_files[2]; 
+#endif
+  return nullptr;
+}
+
+bool
+KoboCanChangeBacklightColour() noexcept
+{
+#ifdef KOBO
+  return KoboGetBacklightColourFile() != nullptr;
+#endif
+  return false;
+}
+
+/**
+ * Returns true if successful in fetching the current colour
+ * or false if not
+ *
+ * @param (by ref) colour is set to the current colour
+ * where 0 = cold (yellow) and 10 is hot (white)
+ */
+bool
+KoboGetBacklightColour([[maybe_unused]] unsigned int &colour) noexcept
+{
+#ifdef KOBO
+  char line[4];
+  if (File::ReadString(Path(KoboGetBacklightColourFile()),
+      line,sizeof(line))) {
+    int raw_value = atoi(line);
+    if (raw_value < 0)
+      colour = 0;
+    else
+      colour = raw_value;
+    return true;
+  }
+#endif
+  return false;
+}
+
+/**
+ * Changes the colour of the background lighting
+ *
+ * @param colour desired colour where 0 = cold (yellow)
+ * and 10 is hot (white). Other values are silently ignored
+ */
+void
+KoboSetBacklightColour([[maybe_unused]] int colour) noexcept
+{
+#ifdef KOBO
+
+  if(colour < 0) { colour = 0; }
+  if(colour > 10) { colour = 10; }
+  File::WriteExisting(Path(KoboGetBacklightColourFile()),
+                      std::to_string(colour).c_str());
 #endif
 }

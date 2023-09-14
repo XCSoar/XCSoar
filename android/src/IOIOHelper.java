@@ -1,25 +1,5 @@
-/*
-  Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 package org.xcsoar;
 
@@ -31,10 +11,10 @@ import android.util.Log;
 import android.content.ContextWrapper;
 import ioio.lib.api.IOIO;
 import ioio.lib.api.exception.ConnectionLostException;
-import ioio.lib.util.IOIOConnectionRegistry;
 import ioio.lib.util.android.ContextWrapperDependent;
 import ioio.lib.spi.IOIOConnectionBootstrap;
 import ioio.lib.spi.IOIOConnectionFactory;
+import ioio.lib.spi.NoRuntimeSupportException;
 
 /**
  * A utility class which wraps the Java API into an easier API for the
@@ -43,6 +23,9 @@ import ioio.lib.spi.IOIOConnectionFactory;
 final class IOIOHelper implements IOIOConnectionHolder,
                                   IOIOAgent.Listener {
   private static final String TAG = "XCSoar";
+
+  private static final Collection<IOIOConnectionBootstrap> bootstraps =
+    new LinkedList<IOIOConnectionBootstrap>();
 
   private IOIOMultiAgent agent;
 
@@ -62,31 +45,54 @@ final class IOIOHelper implements IOIOConnectionHolder,
     new LinkedList<IOIOConnectionListener>();
 
   static {
-    final String[] bootstraps = new String[]{
+    final String[] bootstrapClassNames = new String[]{
       "ioio.lib.impl.SocketIOIOConnectionBootstrap",
       "ioio.lib.android.accessory.AccessoryConnectionBootstrap",
       "ioio.lib.android.bluetooth.BluetoothIOIOConnectionBootstrap",
       "ioio.lib.android.device.DeviceConnectionBootstrap",
     };
 
-    IOIOConnectionRegistry.addBootstraps(bootstraps);
+    for (String className : bootstrapClassNames) {
+        try {
+            Class<? extends IOIOConnectionBootstrap> bootstrapClass = Class.forName(className).asSubclass(IOIOConnectionBootstrap.class);
+            bootstraps.add(bootstrapClass.newInstance());
+            Log.d(TAG, "Successfully added bootstrap class: " + className);
+        } catch (ClassNotFoundException e) {
+            Log.d(TAG, "Bootstrap class not found: " + className + ". Not adding.");
+        } catch (NoRuntimeSupportException e) {
+            Log.d(TAG, "No runtime support for: " + className + ". Not adding.");
+        } catch (Throwable e) {
+            Log.e(TAG, "Exception caught while attempting to initialize connection factory", e);
+        }
+    }
   }
 
   static void onCreateContext(ContextWrapper context) {
-    for (IOIOConnectionBootstrap bootstrap : IOIOConnectionRegistry.getBootstraps())
+    for (IOIOConnectionBootstrap bootstrap : bootstraps)
       if (bootstrap instanceof ContextWrapperDependent)
         ((ContextWrapperDependent) bootstrap).onCreate(context);
   }
 
   static void onDestroyContext() {
-    for (IOIOConnectionBootstrap bootstrap : IOIOConnectionRegistry.getBootstraps())
+    for (IOIOConnectionBootstrap bootstrap : bootstraps)
       if (bootstrap instanceof ContextWrapperDependent)
         ((ContextWrapperDependent) bootstrap).onDestroy();
   }
 
+  public static Collection<IOIOConnectionFactory> getConnectionFactories() {
+    Collection<IOIOConnectionFactory> result = new LinkedList<IOIOConnectionFactory>();
+    for (IOIOConnectionBootstrap bootstrap : bootstraps) {
+      try {
+        bootstrap.getFactories(result);
+      } catch (SecurityException e) {
+        Log.e(TAG, "Failed to initialise IOIO bootstrap '" + bootstrap + "': " + e.getMessage());
+      }
+    }
+    return result;
+  }
+
   public IOIOHelper() {
-    agent = new IOIOMultiAgent(IOIOConnectionRegistry.getConnectionFactories(),
-                               this);
+    agent = new IOIOMultiAgent(getConnectionFactories(), this);
   }
 
   private synchronized boolean isOpen() {
@@ -165,7 +171,7 @@ final class IOIOHelper implements IOIOConnectionHolder,
 
     agent.enable();
 
-    for (IOIOConnectionBootstrap bootstrap : IOIOConnectionRegistry.getBootstraps()) {
+    for (IOIOConnectionBootstrap bootstrap : bootstraps) {
       try {
         if (bootstrap instanceof ContextWrapperDependent)
           ((ContextWrapperDependent) bootstrap).open();

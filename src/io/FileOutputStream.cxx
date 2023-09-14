@@ -1,34 +1,10 @@
-/*
- * Copyright 2014-2022 Max Kellermann <max.kellermann@gmail.com>
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * - Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- *
- * - Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the
- * distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
- * FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+// SPDX-License-Identifier: BSD-2-Clause
+// author: Max Kellermann <max.kellermann@gmail.com>
 
 #include "FileOutputStream.hxx"
-#include "system/Error.hxx"
+#include "lib/fmt/PathFormatter.hpp"
+#include "lib/fmt/SystemError.hxx"
+#include "lib/fmt/ToBuffer.hxx"
 
 #ifdef _WIN32
 #include <tchar.h>
@@ -105,8 +81,7 @@ FileOutputStream::OpenCreate(bool visible)
 			    FILE_ATTRIBUTE_NORMAL|FILE_FLAG_WRITE_THROUGH,
 			    nullptr);
 	if (!IsDefined())
-		throw FormatLastError("Failed to create %s",
-				      path.ToUTF8().c_str());
+		throw FmtLastError("Failed to create {}", path);
 }
 
 inline void
@@ -117,14 +92,12 @@ FileOutputStream::OpenAppend(bool create)
 			    FILE_ATTRIBUTE_NORMAL|FILE_FLAG_WRITE_THROUGH,
 			    nullptr);
 	if (!IsDefined())
-		throw FormatLastError("Failed to append to %s",
-				      path.ToUTF8().c_str());
+		throw FmtLastError("Failed to append to {}", path);
 
 	if (!SeekEOF()) {
 		auto code = GetLastError();
 		Close();
-		throw FormatLastError(code, "Failed seek end-of-file of %s",
-				      path.ToUTF8().c_str());
+		throw FmtLastError(code, "Failed seek end-of-file of {}", path);
 	}
 
 }
@@ -141,18 +114,18 @@ FileOutputStream::Tell() const noexcept
 }
 
 void
-FileOutputStream::Write(const void *data, size_t size)
+FileOutputStream::Write(std::span<const std::byte> src)
 {
 	assert(IsDefined());
 
 	DWORD nbytes;
-	if (!WriteFile(handle, data, size, &nbytes, nullptr))
-		throw FormatLastError("Failed to write to %s",
-				      GetPath().c_str());
+	if (!WriteFile(handle, src.data(), src.size(), &nbytes, nullptr))
+		throw FmtLastError("Failed to write to {}", GetPath());
 
-	if (size_t(nbytes) != size)
-		throw FormatLastError(ERROR_DISK_FULL, "Failed to write to %s",
-				      GetPath().c_str());
+	if (size_t(nbytes) != src.size())
+		throw FmtLastError(DWORD{ERROR_DISK_FULL},
+				   "Failed to write to {}",
+				   GetPath());
 }
 
 void
@@ -161,7 +134,7 @@ FileOutputStream::Sync()
 	assert(IsDefined());
 
 	if (!FlushFileBuffers(handle))
-		throw FormatLastError("Failed to sync %s", GetPath().c_str());
+		throw FmtLastError("Failed to sync {}", GetPath());
 }
 
 void
@@ -248,8 +221,7 @@ FileOutputStream::OpenCreate(bool visible)
 		    GetPath().c_str(),
 		    O_WRONLY|O_CREAT|O_TRUNC,
 		    0666))
-		throw FormatErrno("Failed to create %s",
-				  GetPath().c_str());
+		throw FmtErrno("Failed to create {}", GetPath());
 }
 
 inline void
@@ -264,8 +236,7 @@ FileOutputStream::OpenAppend(bool create)
 		     directory_fd,
 #endif
 		     path.c_str(), flags))
-		throw FormatErrno("Failed to append to %s",
-				  path.c_str());
+		throw FmtErrno("Failed to append to {}", path);
 }
 
 uint64_t
@@ -275,16 +246,15 @@ FileOutputStream::Tell() const noexcept
 }
 
 void
-FileOutputStream::Write(const void *data, size_t size)
+FileOutputStream::Write(std::span<const std::byte> src)
 {
 	assert(IsDefined());
 
-	ssize_t nbytes = fd.Write(data, size);
+	ssize_t nbytes = fd.Write(src.data(), src.size());
 	if (nbytes < 0)
-		throw FormatErrno("Failed to write to %s", GetPath().c_str());
-	else if ((size_t)nbytes < size)
-		throw FormatErrno(ENOSPC, "Failed to write to %s",
-				  GetPath().c_str());
+		throw FmtErrno("Failed to write to {}", GetPath());
+	else if ((size_t)nbytes < src.size())
+		throw FmtErrno(ENOSPC, "Failed to write to {}", GetPath());
 }
 
 void
@@ -298,7 +268,7 @@ FileOutputStream::Sync()
 	const bool success = fsync(fd.Get()) == 0;
 #endif
 	if (!success)
-		throw FormatErrno("Failed to sync %s", GetPath().c_str());
+		throw FmtErrno("Failed to sync {}", GetPath());
 }
 
 void
@@ -311,20 +281,16 @@ try {
 		unlinkat(directory_fd.Get(), GetPath().c_str(), 0);
 
 		/* hard-link the temporary file to the final path */
-		char fd_path[64];
-		snprintf(fd_path, sizeof(fd_path), "/proc/self/fd/%d",
-			 fd.Get());
 		if (linkat(AT_FDCWD,
-			   fd_path,
+			   FmtBuffer<64>("/proc/self/fd/{}", fd.Get()),
 			   directory_fd.Get(), path.c_str(),
 			   AT_SYMLINK_FOLLOW) < 0)
-			throw FormatErrno("Failed to commit %s",
-					  path.c_str());
+			throw FmtErrno("Failed to commit {}", path);
 	}
 #endif
 
 	if (!Close()) {
-		throw FormatErrno("Failed to commit %s", path.c_str());
+		throw FmtErrno("Failed to commit {}", path);
 	}
 
 	if (tmp_path != nullptr)
@@ -366,7 +332,8 @@ FileOutputStream::Cancel() noexcept
 }
 
 inline void
-FileOutputStream::RenameOrThrow([[maybe_unused]] Path old_path, [[maybe_unused]] Path new_path) const
+FileOutputStream::RenameOrThrow([[maybe_unused]] Path old_path,
+				[[maybe_unused]] Path new_path) const
 {
 	assert(old_path != nullptr);
 	assert(new_path != nullptr);

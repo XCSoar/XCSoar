@@ -1,25 +1,5 @@
-/*
-  Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -38,8 +18,8 @@ struct RangeAndRadial {
    */
   Angle radial;
 
-  static constexpr RangeAndRadial Zero() {
-    return RangeAndRadial{0., Angle::Zero()};
+  static constexpr RangeAndRadial Zero() noexcept {
+    return {0., Angle::Zero()};
   }
 };
 
@@ -70,7 +50,7 @@ public:
    */
   AATPoint(std::unique_ptr<ObservationZonePoint> &&_oz,
            WaypointPtr &&wp,
-           const TaskBehaviour &tb)
+           const TaskBehaviour &tb) noexcept
     :IntermediateTaskPoint(TaskPointType::AAT, std::move(_oz), std::move(wp),
                            tb, true),
      target_location(GetLocation()),
@@ -83,11 +63,11 @@ public:
    *
    * @param do_lock Whether to lock the target
    */
-  void LockTarget(bool do_lock) {
+  void LockTarget(bool do_lock) noexcept {
     target_locked = do_lock;
   }
 
-  const GeoPoint &GetTarget() const {
+  const GeoPoint &GetTarget() const noexcept {
     return target_location;
   }
 
@@ -97,14 +77,14 @@ public:
    * @param loc Location of new target
    * @param override_lock If false, won't set the target if it is locked
    */
-  void SetTarget(const GeoPoint &loc, const bool override_lock=false);
+  void SetTarget(const GeoPoint &loc, const bool override_lock=false) noexcept;
 
   /**
    * Set target location from a signed range & radial as bearing
    * referenced from the previous target
    * used by dlgTarget
    */
-  void SetTarget(RangeAndRadial rar, const FlatProjection &projection);
+  void SetTarget(RangeAndRadial rar, const FlatProjection &projection) noexcept;
 
   /**
    * returns position of the target in signed range & radial as
@@ -118,14 +98,14 @@ public:
    * the target
    */
   [[gnu::pure]]
-  RangeAndRadial GetTargetRangeRadial(double old_range=0) const;
+  RangeAndRadial GetTargetRangeRadial(double old_range=0) const noexcept;
 
   /**
    * Accessor to get target location
    *
    * @return Target location
    */
-  const GeoPoint &GetTargetLocation() const {
+  const GeoPoint &GetTargetLocation() const noexcept {
     return target_location;
   }
 
@@ -140,7 +120,8 @@ public:
    * threshold of target
    */
   [[gnu::pure]]
-  bool IsCloseToTarget(const AircraftState& state, double threshold=0) const;
+  bool IsCloseToTarget(const AircraftState& state,
+                       double threshold=0) const noexcept;
 
   /**
    * Set target to parametric value between min and max locations.
@@ -153,7 +134,7 @@ public:
    *
    * @return True if target was moved
    */
-  bool SetRange(double p, bool force_if_current);
+  bool SetRange(double p, bool force_if_current) noexcept;
 
   /**
    * If this TaskPoint has the capability to adjust the
@@ -164,7 +145,7 @@ public:
    * @return True if target is locked
    *    or False if target is unlocked or tp has no target
    */
-  bool IsTargetLocked() const {
+  bool IsTargetLocked() const noexcept {
     return target_locked;
   }
 
@@ -179,7 +160,7 @@ private:
    *
    * @return True if target was moved
    */
-  bool CheckTarget(const AircraftState& state, bool known_outside);
+  bool CheckTarget(const AircraftState& state, bool known_outside) noexcept;
 
   /**
    * Check whether target needs to be moved and if so, to
@@ -190,7 +171,7 @@ private:
    *
    * @return True if target was moved
    */
-  bool CheckTargetInside(const AircraftState& state);
+  bool CheckTargetInside(const AircraftState &state) noexcept;
 
   /**
    * Check whether target needs to be moved and if so, to
@@ -201,14 +182,14 @@ private:
    *
    * @return True if target was moved
    */
-  bool CheckTargetOutside(const AircraftState& state);
+  bool CheckTargetOutside(const AircraftState& state) noexcept;
 
 public:
   /* virtual methods from class TaskPoint */
   const GeoPoint &GetLocationRemaining() const noexcept override;
 
   /* virtual methods from class ObservationZoneClient */
-  double ScoreAdjustment() const override {
+  double ScoreAdjustment() const noexcept override {
     return 0;
   }
 

@@ -1,38 +1,20 @@
-/*
- * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * - Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- *
- * - Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the
- * distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
- * FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+// SPDX-License-Identifier: BSD-2-Clause
+// author: Max Kellermann <max.kellermann@gmail.com>
 
 #pragma once
 
 #include "Features.hxx"
+
+#ifndef _WIN32
 #include "io/FileDescriptor.hxx"
+#endif
 
 #include <type_traits>
+#include <utility>
+
+#ifdef _WIN32
+#include <winsock2.h> // for SOCKET, INVALID_SOCKET
+#endif
 
 class SocketAddress;
 class StaticSocketAddress;
@@ -40,24 +22,44 @@ class IPv4Address;
 class IPv6Address;
 
 /**
- * An OO wrapper for a UNIX socket descriptor.
+ * An OO wrapper for a Berkeley or WinSock socket descriptor.
  */
-class SocketDescriptor : protected FileDescriptor {
+class SocketDescriptor
+#ifndef _WIN32
+/* Berkeley sockets are represented as file descriptors */
+	: protected FileDescriptor
+#endif
+{
 protected:
+#ifdef _WIN32
+	/* WinSock sockets are not file descriptors, they are a
+	   special type */
+	SOCKET fd;
+#else // !_WIN32
 	explicit constexpr SocketDescriptor(FileDescriptor _fd) noexcept
 		:FileDescriptor(_fd) {}
+#endif // !_WIN32
 
 public:
 	SocketDescriptor() = default;
 
+#ifdef _WIN32
+	explicit constexpr SocketDescriptor(SOCKET _fd) noexcept
+		:fd(_fd) {}
+#else // !_WIN32
 	explicit constexpr SocketDescriptor(int _fd) noexcept
 		:FileDescriptor(_fd) {}
+#endif // !_WIN32
 
 	constexpr bool operator==(SocketDescriptor other) const noexcept {
 		return fd == other.fd;
 	}
 
-#ifndef _WIN32
+#ifdef _WIN32
+	constexpr bool IsDefined() const noexcept {
+		return fd != INVALID_SOCKET;
+	}
+#else // !_WIN32
 	/**
 	 * Convert a #FileDescriptor to a #SocketDescriptor.  This is only
 	 * possible on operating systems where socket descriptors are the
@@ -77,13 +79,11 @@ public:
 	constexpr const FileDescriptor &ToFileDescriptor() const noexcept {
 		return *this;
 	}
-#endif
 
 	using FileDescriptor::IsDefined;
-#ifndef _WIN32
 	using FileDescriptor::IsValid;
 	using FileDescriptor::IsSocket;
-#endif
+#endif // !_WIN32
 
 	/**
 	 * Determine the socket type, i.e. SOCK_STREAM, SOCK_DGRAM or
@@ -98,25 +98,48 @@ public:
 	[[gnu::pure]]
 	bool IsStream() const noexcept;
 
+	static constexpr SocketDescriptor Undefined() noexcept {
+#ifdef _WIN32
+		return SocketDescriptor{INVALID_SOCKET};
+#else // !_WIN32
+		return SocketDescriptor(FileDescriptor::Undefined());
+#endif // !_WIN32
+	}
+
+#ifndef _WIN32
 	using FileDescriptor::Get;
 	using FileDescriptor::Set;
 	using FileDescriptor::Steal;
 	using FileDescriptor::SetUndefined;
 
-	static constexpr SocketDescriptor Undefined() noexcept {
-		return SocketDescriptor(FileDescriptor::Undefined());
-	}
-
 	using FileDescriptor::EnableCloseOnExec;
 	using FileDescriptor::DisableCloseOnExec;
 
-#ifndef _WIN32
 	using FileDescriptor::SetNonBlocking;
 	using FileDescriptor::SetBlocking;
 	using FileDescriptor::Duplicate;
 	using FileDescriptor::CheckDuplicate;
 	using FileDescriptor::Close;
 #else
+	constexpr SOCKET Get() const noexcept {
+		return fd;
+	}
+
+	constexpr void Set(SOCKET _fd) noexcept {
+		fd = _fd;
+	}
+
+	constexpr void SetUndefined() noexcept {
+		fd = INVALID_SOCKET;
+	}
+
+	constexpr SOCKET Steal() noexcept {
+		return std::exchange(fd, INVALID_SOCKET);
+	}
+
+	void EnableCloseOnExec() const noexcept {}
+	void DisableCloseOnExec() const noexcept {}
+
 	bool SetNonBlocking() const noexcept;
 
 	/**

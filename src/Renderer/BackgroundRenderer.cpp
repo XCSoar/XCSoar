@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "BackgroundRenderer.hpp"
 #include "Terrain/TerrainRenderer.hpp"
@@ -27,20 +7,18 @@ Copyright_License {
 #include "ui/canvas/Canvas.hpp"
 #include "NMEA/Derived.hpp"
 
-const Angle BackgroundRenderer::DEFAULT_SHADING_ANGLE = Angle::Degrees(-45);
-
-BackgroundRenderer::BackgroundRenderer() {}
-BackgroundRenderer::~BackgroundRenderer() {}
+BackgroundRenderer::BackgroundRenderer() noexcept = default;
+BackgroundRenderer::~BackgroundRenderer() noexcept = default;
 
 void
-BackgroundRenderer::Flush()
+BackgroundRenderer::Flush() noexcept
 {
   if (renderer != nullptr)
     renderer->Flush();
 }
 
 void
-BackgroundRenderer::SetTerrain(const RasterTerrain *_terrain)
+BackgroundRenderer::SetTerrain(const RasterTerrain *_terrain) noexcept
 {
   terrain = _terrain;
   renderer.reset();
@@ -49,7 +27,7 @@ BackgroundRenderer::SetTerrain(const RasterTerrain *_terrain)
 void
 BackgroundRenderer::Draw(Canvas& canvas,
                          const WindowProjection& proj,
-                         const TerrainRendererSettings &terrain_settings)
+                         const TerrainRendererSettings &terrain_settings) noexcept
 {
   canvas.ClearWhite();
 
@@ -69,7 +47,7 @@ BackgroundRenderer::Draw(Canvas& canvas,
 void
 BackgroundRenderer::SetShadingAngle(const WindowProjection& projection,
                                     const TerrainRendererSettings &settings,
-                                    const DerivedInfo &calculated)
+                                    const DerivedInfo &calculated) noexcept
 {
   Angle angle;
 
@@ -88,9 +66,9 @@ BackgroundRenderer::SetShadingAngle(const WindowProjection& projection,
   SetShadingAngle(projection, angle);
 }
 
-void
+inline void
 BackgroundRenderer::SetShadingAngle([[maybe_unused]] const WindowProjection& projection,
-                                    Angle angle)
+                                    Angle angle) noexcept
 {
 #ifdef ENABLE_OPENGL
   /* on OpenGL, the texture is rotated to apply the screen angle */

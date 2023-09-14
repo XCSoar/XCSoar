@@ -36,6 +36,6 @@ LOOK_SOURCES := \
 	$(SRC)/Look/WaveLook.cpp \
 	$(SRC)/Look/ClimbPercentLook.cpp
 
-LOOK_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
+LOOK_DEPENDS = SCREEN
 
 $(eval $(call link-library,liblook,LOOK))

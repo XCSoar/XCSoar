@@ -1,26 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "GlideComputerAirData.hpp"
 #include "Settings.hpp"
@@ -379,7 +358,7 @@ GlideComputerAirData::LastThermalStats(const MoreData &basic,
   calculated.last_thermal.end_time = calculated.cruise_start_time;
   calculated.last_thermal.gain = gain;
   calculated.last_thermal.duration = duration;
-  calculated.last_thermal.start_altitude = calculated.climb_start_altitude_te + (basic.nav_altitude-basic.TE_altitude);
+  calculated.last_thermal.start_altitude = calculated.climb_start_altitude_te + basic.energy_height;
   calculated.last_thermal.CalculateLiftRate();
   assert(calculated.last_thermal.lift_rate > 0);
 

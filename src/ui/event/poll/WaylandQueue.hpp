@@ -1,29 +1,10 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
 #include "event/SocketEvent.hxx"
+#include "event/IdleEvent.hxx"
 #include "Math/Point2D.hpp"
 
 #include <cstdint>
@@ -32,8 +13,10 @@ struct wl_display;
 struct wl_compositor;
 struct wl_seat;
 struct wl_pointer;
+struct wl_keyboard;
 struct wl_shell;
 struct wl_registry;
+struct xdg_wm_base;
 
 namespace UI {
 
@@ -52,11 +35,16 @@ class WaylandEventQueue final {
   struct wl_compositor *compositor = nullptr;
   struct wl_seat *seat = nullptr;
   struct wl_pointer *pointer = nullptr;
+  struct wl_keyboard *keyboard = nullptr;
   struct wl_shell *shell = nullptr;
+  struct xdg_wm_base *wm_base = nullptr;
+
+  bool has_touchscreen = false;
 
   IntPoint2D pointer_position = {0, 0};
 
   SocketEvent socket_event;
+  IdleEvent flush_event;
 
 public:
   /**
@@ -65,32 +53,51 @@ public:
    */
   WaylandEventQueue(UI::Display &display, EventQueue &queue);
 
-  struct wl_compositor *GetCompositor() {
+  struct wl_compositor *GetCompositor() const noexcept {
     return compositor;
   }
 
-  struct wl_shell *GetShell() {
+  struct wl_shell *GetShell() const noexcept {
     return shell;
   }
 
-  bool IsVisible() const {
+  struct xdg_wm_base *GetWmBase() const noexcept {
+    return wm_base;
+  }
+
+  bool IsVisible() const noexcept {
     // TODO: implement
     return true;
   }
 
-  bool Generate(Event &event);
+  bool HasPointer() const noexcept {
+    return pointer != nullptr;
+  }
+
+  bool HasTouchScreen() const noexcept {
+    return has_touchscreen;
+  }
+
+  bool HasKeyboard() const noexcept {
+    return keyboard != nullptr;
+  }
+
+  bool Generate(Event &event) noexcept;
 
   void RegistryHandler(struct wl_registry *registry, uint32_t id,
-                       const char *interface);
+                       const char *interface) noexcept;
 
-  void SeatHandleCapabilities(bool pointer, bool keyboard, bool touch);
+  void SeatHandleCapabilities(bool pointer, bool keyboard, bool touch) noexcept;
 
-  void Push(const Event &event);
-  void PointerMotion(IntPoint2D new_pointer_position);
-  void PointerButton(bool pressed);
+  void Push(const Event &event) noexcept;
+  void PointerMotion(IntPoint2D new_pointer_position) noexcept;
+  void PointerButton(bool pressed) noexcept;
+
+  void KeyboardKey(uint32_t key, uint32_t state) noexcept;
 
 private:
   void OnSocketReady(unsigned events) noexcept;
+  void OnFlush() noexcept;
 };
 
 } // namespace UI

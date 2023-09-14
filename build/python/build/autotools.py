@@ -1,30 +1,31 @@
 import os.path, subprocess, sys
+from typing import Collection, Iterable, Optional
 
 from build.makeproject import MakeProject
+from .toolchain import AnyToolchain
 
 class AutotoolsProject(MakeProject):
-    def __init__(self, url, alternative_url, md5, installed, configure_args=[],
-                 autogen=False,
-                 cppflags='',
-                 ldflags='',
-                 libs='',
-                 install_prefix=None,
-                 use_destdir=False,
-                 use_actual_arch=False,
-                 subdirs=None,
+    def __init__(self, url: str, alternative_url: Optional[str], md5: str, installed: str,
+                 configure_args: Iterable[str]=[],
+                 autogen: bool=False,
+                 cppflags: str='',
+                 ldflags: str='',
+                 libs: str='',
+                 install_prefix: Optional[str]=None,
+                 use_destdir: bool=False,
+                 subdirs: Optional[Collection[str]]=None,
                  **kwargs):
         MakeProject.__init__(self, url, alternative_url, md5, installed, **kwargs)
-        self.configure_args = configure_args
+        self.configure_args = list(configure_args)
         self.autogen = autogen
         self.cppflags = cppflags
         self.ldflags = ldflags
         self.libs = libs
         self.install_prefix = install_prefix
         self.use_destdir = use_destdir
-        self.use_actual_arch = use_actual_arch
         self.subdirs = subdirs
 
-    def configure(self, toolchain, src=None, build=None, target_toolchain=None):
+    def configure(self, toolchain: AnyToolchain, src: Optional[str]=None, build: Optional[str]=None, target_toolchain: Optional[AnyToolchain]=None) -> str:
         if src is None:
             src = self.unpack(toolchain)
 
@@ -70,16 +71,14 @@ class AutotoolsProject(MakeProject):
             '--disable-silent-rules',
         ]
 
-        arch = toolchain.actual_arch if self.use_actual_arch else toolchain.toolchain_arch
-        if arch is not None:
-            configure.append('--host=' + arch)
+        if toolchain.host_triplet is not None:
+            configure.append('--host=' + toolchain.host_triplet)
 
         if target_toolchain is not None:
-            arch = target_toolchain.actual_arch if self.use_actual_arch else target_toolchain.toolchain_arch
-            if arch is not None:
-                configure.append('--target=' + arch)
+            if target_toolchain.host_triplet is not None:
+                configure.append('--target=' + target_toolchain.host_triplet)
 
-        configure += self.configure_args
+        configure.extend(self.configure_args)
 
         try:
             print(configure)
@@ -96,16 +95,16 @@ class AutotoolsProject(MakeProject):
 
         return build
 
-    def get_make_args(self, toolchain):
+    def get_make_args(self, toolchain: AnyToolchain) -> list[str]:
         return MakeProject.get_make_args(self, toolchain)
 
-    def get_make_install_args(self, toolchain):
+    def get_make_install_args(self, toolchain: AnyToolchain) -> list[str]:
         args = MakeProject.get_make_install_args(self, toolchain)
         if self.use_destdir:
             args += ['DESTDIR=' + toolchain.install_prefix]
         return args
 
-    def _build(self, toolchain, target_toolchain=None):
+    def _build(self, toolchain: AnyToolchain, target_toolchain: Optional[AnyToolchain]=None) -> None:
         build = self.configure(toolchain, target_toolchain=target_toolchain)
         if self.subdirs is not None:
             for subdir in self.subdirs:

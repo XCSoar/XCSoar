@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 package org.xcsoar;
 
@@ -64,6 +45,8 @@ class NativeView extends SurfaceView
    */
   private long ptr;
 
+  final PermissionManager permissionManager;
+
   final Handler quitHandler, wakelockhandler, fullScreenHandler, errorHandler;
 
   Resources resources;
@@ -81,13 +64,15 @@ class NativeView extends SurfaceView
   public NativeView(Activity context, Handler _quitHandler,
                     Handler _wakeLockHandler,
                     Handler _fullScreenHandler,
-                    Handler _errorHandler) {
+                    Handler _errorHandler,
+                    PermissionManager permissionManager) {
     super(context);
 
     quitHandler = _quitHandler;
     wakelockhandler = _wakeLockHandler;
     fullScreenHandler = _fullScreenHandler;
     errorHandler = _errorHandler;
+    this.permissionManager = permissionManager;
 
     resources = context.getResources();
 
@@ -149,6 +134,7 @@ class NativeView extends SurfaceView
   }
 
   @Override public void surfaceDestroyed(SurfaceHolder holder) {
+    surfaceDestroyedNative();
   }
 
   @Override public void run() {
@@ -160,7 +146,7 @@ class NativeView extends SurfaceView
 
     try {
       try {
-        context.startService(new Intent(context, XCSoar.serviceClass));
+        context.startService(new Intent(context, MyService.class));
       } catch (IllegalStateException e) {
         /* we get crash reports on this all the time, but I don't
            know why - Android docs say "the application is in a
@@ -171,11 +157,12 @@ class NativeView extends SurfaceView
       }
 
       try {
-        runNative(context, r.width(), r.height(),
+        runNative(context, permissionManager,
+                  r.width(), r.height(),
                   (int)metrics.xdpi, (int)metrics.ydpi,
-                  Build.VERSION.SDK_INT, Build.PRODUCT);
+                  Build.PRODUCT);
       } finally {
-        context.stopService(new Intent(context, XCSoar.serviceClass));
+        context.stopService(new Intent(context, MyService.class));
       }
     } catch (Exception e) {
       Log.e(TAG, "Initialisation error", e);
@@ -186,12 +173,22 @@ class NativeView extends SurfaceView
     quitHandler.sendEmptyMessage(0);
   }
 
+  static native void initNative();
+  static native void deinitNative();
+
+  static native void onConfigurationChangedNative(boolean nightMode);
+
+  static native String onReceiveXCTrackTask(String data);
+
   protected native void runNative(Context context,
+                                  PermissionManager permissionManager,
                                   int width, int height,
                                   int xdpi, int ydpi,
-                                  int sdk_version, String product);
+                                  String product);
 
   protected native void resizedNative(int width, int height);
+
+  protected native void surfaceDestroyedNative();
 
   protected native void pauseNative();
   protected native void resumeNative();

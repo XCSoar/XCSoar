@@ -1,25 +1,5 @@
-/*
- Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
- */
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Task/TaskFileSeeYou.hpp"
 #include "util/ExtractParameters.hpp"
@@ -37,7 +17,6 @@
 #include "Engine/Task/Ordered/Points/AATPoint.hpp"
 #include "Engine/Task/Ordered/Points/ASTPoint.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
-#include "Operation/Operation.hpp"
 #include "Units/System.hpp"
 #include "time/BrokenTime.hpp"
 
@@ -433,23 +412,40 @@ CreatePoint(unsigned pos, unsigned n_waypoints, WaypointPtr &&wp,
   return pt;
 }
 
+/**
+ * @return true if the "Related Tasks" line was found, false if the
+ * file contains no task
+ */
+static bool
+ParseSeeYouWaypoints(TLineReader &reader, Waypoints &way_points)
+{
+  const WaypointFactory factory(WaypointOrigin::NONE);
+  WaypointReaderSeeYou waypoint_file(factory);
+
+  while (true) {
+    TCHAR *line = reader.ReadLine();
+    if (line == nullptr)
+      return false;
+
+    if (StringIsEqualIgnoreCase(line, _T("-----Related Tasks-----")))
+      return true;
+
+    waypoint_file.ParseLine(line, way_points);
+  }
+}
+
 static TCHAR *
 AdvanceReaderToTask(TLineReader &reader, const unsigned index)
 {
   // Skip lines until n-th task
   unsigned count = 0;
-  bool in_task_section = false;
   TCHAR *line;
   while ((line = reader.ReadLine()) != nullptr) {
-    if (in_task_section) {
-      if (line[0] == _T('\"') || line[0] == _T(',')) {
-        if (count == index)
-          break;
+    if (line[0] == _T('\"') || line[0] == _T(',')) {
+      if (count == index)
+        break;
 
-        count++;
-      }
-    } else if (StringIsEqualIgnoreCase(line, _T("-----Related Tasks-----"))) {
-      in_task_section = true;
+      count++;
     }
   }
   return line;
@@ -464,15 +460,10 @@ try {
 
   // Read waypoints from the CUP file
   Waypoints file_waypoints;
-  {
-    const WaypointFactory factory(WaypointOrigin::NONE);
-    WaypointReaderSeeYou waypoint_file(factory);
-    NullOperationEnvironment operation;
-    waypoint_file.Parse(file_waypoints, reader, operation);
-  }
-  file_waypoints.Optimise();
+  if (!ParseSeeYouWaypoints(reader, file_waypoints))
+    return nullptr;
 
-  reader.Rewind();
+  file_waypoints.Optimise();
 
   TCHAR *line = AdvanceReaderToTask(reader, index);
   if (line == nullptr)

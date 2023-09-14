@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "HorizonRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -28,7 +8,6 @@ Copyright_License {
 #include "NMEA/Attitude.hpp"
 #include "Math/Constants.hpp"
 #include "Math/Util.hpp"
-#include "util/Clamp.hpp"
 
 #include <algorithm>
 
@@ -62,23 +41,26 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     ? attitude.pitch_angle.Degrees()
     : 0.;
 
-  auto phi = Clamp(bank_degrees, -89., 89.);
-  auto alpha = Angle::acos(Clamp(pitch_degrees / 50,
-                                 -1., 1.));
-  auto sphi = Angle::HalfCircle() - Angle::Degrees(phi);
+  auto cosine_ratio = pitch_degrees / 50;
+  auto alpha = Angle::acos(std::clamp(cosine_ratio, -1., 1.));
+  auto sphi = Angle::HalfCircle() - Angle::Degrees(bank_degrees);
   auto alpha1 = sphi - alpha;
   auto alpha2 = sphi + alpha;
 
   // draw sky part
-  canvas.Select(look.sky_pen);
-  canvas.Select(look.sky_brush);
-  canvas.DrawSegment(center, radius, alpha2, alpha1, true);
+  if (cosine_ratio > -1 ) { // when less than -1 then the sky is not visible
+    canvas.Select(look.sky_pen);
+    canvas.Select(look.sky_brush);
+    canvas.DrawSegment(center, radius, alpha2, alpha1, true);
+  }
 
   // draw ground part
-  canvas.Select(look.terrain_pen);
-  canvas.Select(look.terrain_brush);
-  canvas.DrawSegment(center, radius, alpha1, alpha2, true);
-
+  if (cosine_ratio < 1) { // when greater than 1 then the ground is not visible
+    canvas.Select(look.terrain_pen);
+    canvas.Select(look.terrain_brush);
+    canvas.DrawSegment(center, radius, alpha1, alpha2, true);
+  }
+  
   // draw aircraft symbol
   canvas.Select(look.aircraft_pen);
   canvas.DrawLine({center.x + radius / 2, center.y}, {center.x - radius / 2, center.y});

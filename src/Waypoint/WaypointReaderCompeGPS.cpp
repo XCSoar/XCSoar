@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "WaypointReaderCompeGPS.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -27,7 +7,7 @@ Copyright_License {
 #include "Geo/UTM.hpp"
 
 static bool
-ParseAngle(const TCHAR *&src, Angle &angle)
+ParseAngle(const TCHAR *&src, Angle &angle) noexcept
 {
   // 41.234234N
 
@@ -62,7 +42,7 @@ ParseAngle(const TCHAR *&src, Angle &angle)
 }
 
 static bool
-ParseLocation(const TCHAR *&src, GeoPoint &p)
+ParseLocation(const TCHAR *&src, GeoPoint &p) noexcept
 {
   // A 41.234234N 7.234424W
 
@@ -90,7 +70,7 @@ ParseLocation(const TCHAR *&src, GeoPoint &p)
 }
 
 static bool
-ParseLocationUTM(const TCHAR *&src, GeoPoint &p)
+ParseLocationUTM(const TCHAR *&src, GeoPoint &p) noexcept
 {
   // 31T 318570 4657569
 
@@ -126,7 +106,7 @@ ParseLocationUTM(const TCHAR *&src, GeoPoint &p)
 }
 
 static bool
-ParseAltitude(const TCHAR *&src, double &dest)
+ParseAltitude(const TCHAR *&src, double &dest) noexcept
 {
   TCHAR *endptr;
   double value = _tcstod(src, &endptr);
@@ -188,8 +168,9 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR *line, Waypoints &waypoints)
 
   // Parse location
   GeoPoint location;
-  if ((!is_utm && !ParseLocation(line, location)) ||
-      (is_utm && !ParseLocationUTM(line, location)))
+  if (!(is_utm
+        ? ParseLocationUTM(line, location)
+        : ParseLocation(line, location)))
     return false;
 
   // Skip whitespace
@@ -215,9 +196,10 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR *line, Waypoints &waypoints)
   waypoint.name.assign(name, name_length);
 
   // Parse altitude
-  if (!ParseAltitude(line, waypoint.elevation) &&
-      !factory.FallbackElevation(waypoint))
-    return false;
+  if (ParseAltitude(line, waypoint.elevation))
+    waypoint.has_elevation = true;
+  else
+    factory.FallbackElevation(waypoint);
 
   // Skip whitespace
   while (*line == _T(' '))

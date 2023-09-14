@@ -1,48 +1,42 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Dialogs/DialogSettings.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/ProcessDialog.hpp"
+#include "Dialogs/Error.hpp"
+#include "Widget/DrawWidget.hpp"
 #include "Widget/RowFormWidget.hpp"
+#include "Renderer/FlightListRenderer.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
 #include "../test/src/Fonts.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "ui/window/Init.hpp"
 #include "ui/window/SingleWindow.hpp"
 #include "ui/event/Queue.hpp"
 #include "ui/event/Timer.hpp"
+#include "Logger/FlightParser.hpp"
 #include "Language/Language.hpp"
+#include "lib/dbus/Connection.hxx"
+#include "lib/dbus/ScopeMatch.hxx"
+#include "lib/dbus/Systemd.hxx"
 #include "system/Process.hpp"
+#include "io/FileLineReader.hpp"
+#include "util/PrintException.hxx"
 #include "util/ScopeExit.hxx"
+#include "LocalPath.hpp"
 
 #include <cassert>
+#include <cstdio>
 
 enum Buttons {
   LAUNCH_SHELL = 100,
 };
+
+static bool have_data_path = false;
 
 static DialogSettings dialog_settings;
 static UI::SingleWindow *global_main_window;
@@ -139,29 +133,26 @@ private:
 
 static void
 CalibrateSensors() noexcept
-{
+try {
   /* make sure sensord is stopped while calibrating sensors */
-  static constexpr const char *start_sensord[] = {
-    "/bin/systemctl", "start", "sensord.service", nullptr
-  };
-  static constexpr const char *stop_sensord[] = {
-    "/bin/systemctl", "stop", "sensord.service", nullptr
-  };
+  auto connection = ODBus::Connection::GetSystem();
+  const ODBus::ScopeMatch job_removed_match{connection, Systemd::job_removed_match};
 
-  RunProcessDialog(UIGlobals::GetMainWindow(),
-                   UIGlobals::GetDialogLook(),
-                   "Calibrate Sensors", stop_sensord,
-                   [](int status){
-                     return status == EXIT_SUCCESS ? mrOK : 0;
-                   });
+  bool has_sensord = false;
 
-  AtScopeExit(){
-    RunProcessDialog(UIGlobals::GetMainWindow(),
-                     UIGlobals::GetDialogLook(),
-                     "Calibrate Sensors", start_sensord,
-                     [](int status){
-                       return status == EXIT_SUCCESS ? mrOK : 0;
-                     });
+  if (Systemd::IsUnitActive(connection, "sensord.socket")) {
+    has_sensord = true;
+
+    try {
+      Systemd::StopUnit(connection, "sensord.socket");
+    } catch (...) {
+      std::throw_with_nested(std::runtime_error{"Failed to stop sensord"});
+    }
+  }
+
+  AtScopeExit(&connection, has_sensord){
+    if (has_sensord)
+      Systemd::StartUnit(connection, "sensord.socket");
   };
 
   /* calibrate the sensors */
@@ -211,6 +202,8 @@ CalibrateSensors() noexcept
                        ? RESULT_BOARD_NOT_INITIALISED
                        : 0;
                    });
+} catch (...) {
+  ShowError(std::current_exception(), "Calibrate Sensors");
 }
 
 void
@@ -262,6 +255,7 @@ class MainMenuWidget final
 {
   enum Controls {
     XCSOAR,
+    LOGBOOK,
     FILE,
     SYSTEM,
     SHELL,
@@ -339,6 +333,36 @@ private:
   }
 };
 
+static void
+ShowLogbook() noexcept
+{
+  const auto &look = UIGlobals::GetDialogLook();
+  FlightListRenderer renderer{look.text_font, look.bold_font};
+
+  try {
+    FileLineReaderA file(LocalPath("flights.log"));
+
+    FlightParser parser{file};
+    FlightInfo flight;
+    while (parser.Read(flight))
+      renderer.AddFlight(flight);
+  } catch (...) {
+    ShowError(std::current_exception(), "Logbook");
+    return;
+  }
+
+  TWidgetDialog<DrawWidget>
+    sub_dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+               look, "Logbook");
+
+  sub_dialog.SetWidget([&renderer](Canvas &canvas, const PixelRect &rc){
+    renderer.Draw(canvas, rc);
+  });
+
+  sub_dialog.AddButton(_("Close"), mrOK);
+  sub_dialog.ShowModal();
+}
+
 void
 MainMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 			[[maybe_unused]] const PixelRect &rc) noexcept
@@ -348,12 +372,20 @@ MainMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     StartXCSoar();
   });
 
-  AddButton("File", [this](){
+  if (have_data_path)
+      AddButton("Logbook", [this](){
+        CancelTimer();
+        ShowLogbook();
+      });
+  else
+    AddDummy();
+
+  AddButton("Files", [this](){
     CancelTimer();
 
     TWidgetDialog<FileMenuWidget>
       sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
-                 GetLook(), "OpenVario File");
+                 GetLook(), "OpenVario Files");
     sub_dialog.SetWidget(display, event_queue, GetLook());
     sub_dialog.AddButton(_("Close"), mrOK);
     return sub_dialog.ShowModal();
@@ -413,7 +445,7 @@ Main()
   main_style.Resizable();
 
   UI::SingleWindow main_window{screen_init.GetDisplay()};
-  main_window.Create(_T("XCSoar/KoboMenu"), {600, 800}, main_style);
+  main_window.Create(_T("XCSoar/OpenVarioMenu"), {600, 800}, main_style);
   main_window.Show();
 
   global_dialog_look = &dialog_look;
@@ -430,6 +462,19 @@ Main()
 
 int main()
 {
+  try {
+    InitialiseDataPath();
+    have_data_path = true;
+  } catch (...) {
+    fprintf(stderr, "Failed to locate data path: ");
+    PrintException(std::current_exception());
+  }
+
+  AtScopeExit() {
+    if (have_data_path)
+      DeinitialiseDataPath();
+  };
+
   int action = Main();
 
   switch (action) {

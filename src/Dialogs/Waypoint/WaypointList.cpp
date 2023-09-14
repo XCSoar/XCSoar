@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "WaypointDialogs.hpp"
 #include "Dialogs/WidgetDialog.hpp"
@@ -32,13 +12,12 @@ Copyright_License {
 #include "Form/DataField/Prefix.hpp"
 #include "Profile/Current.hpp"
 #include "Profile/Map.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Waypoint/LastUsed.hpp"
 #include "Waypoint/WaypointList.hpp"
 #include "Waypoint/WaypointListBuilder.hpp"
 #include "Waypoint/WaypointFilter.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "Components.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "util/StringPointer.hxx"
 #include "util/AllocatedString.hxx"
@@ -54,6 +33,8 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 #include "Language/Language.hpp"
+#include "Components.hpp"
+#include "DataComponents.hpp"
 
 #include <algorithm>
 #include <list>
@@ -121,6 +102,8 @@ class WaypointFilterWidget;
 class WaypointListWidget final
   : public ListWidget, public DataFieldListener,
     NullBlackboardListener {
+  Waypoints &way_points;
+
   WndForm &dialog;
 
   WaypointFilterWidget &filter_widget;
@@ -136,12 +119,12 @@ class WaypointListWidget final
   const unsigned ordered_task_index;
 
 public:
-  WaypointListWidget(WndForm &_dialog,
+  WaypointListWidget(Waypoints &_way_points, WndForm &_dialog,
                      WaypointFilterWidget &_filter_widget,
                      GeoPoint _location, Angle _heading,
                      OrderedTask *_ordered_task,
                      unsigned _ordered_task_index)
-    :dialog(_dialog),
+    :way_points(_way_points), dialog(_dialog),
      filter_widget(_filter_widget),
      location(_location), last_heading(_heading),
      ordered_task(_ordered_task),
@@ -333,17 +316,13 @@ WaypointListWidget::Prepare(ContainerWindow &parent,
   UpdateList();
 }
 
-static const TCHAR *
-WaypointNameAllowedCharacters(const TCHAR *prefix)
-{
-  static TCHAR buffer[256];
-  return way_points.SuggestNamePrefix(prefix, buffer, ARRAY_SIZE(buffer));
-}
-
 static DataField *
-CreateNameDataField(DataFieldListener *listener)
+CreateNameDataField(Waypoints &waypoints, DataFieldListener *listener)
 {
-  return new PrefixDataField(_T(""), WaypointNameAllowedCharacters, listener);
+  return new PrefixDataField(_T(""), [&waypoints](const TCHAR *prefix){
+    static TCHAR buffer[256];
+    return waypoints.SuggestNamePrefix(prefix, buffer, ARRAY_SIZE(buffer));
+  }, listener);
 }
 
 static DataField *
@@ -378,7 +357,7 @@ CreateDirectionDataField(DataFieldListener *listener, Angle last_heading)
 
 static void
 ReplaceProfilePathBase(DataFieldEnum &df, unsigned i,
-                       const char *profile_key)
+                       std::string_view profile_key)
 {
   const auto p = Profile::map.GetPathBase(profile_key);
   if (p != nullptr)
@@ -406,7 +385,7 @@ void
 WaypointFilterWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                               [[maybe_unused]] const PixelRect &rc) noexcept
 {
-  Add(_("Name"), nullptr, CreateNameDataField(listener));
+  Add(_("Name"), nullptr, CreateNameDataField(*data_components->waypoints, listener));
   Add(_("Distance"), nullptr, CreateDistanceDataField(listener));
   Add(_("Direction"), nullptr, CreateDirectionDataField(listener, last_heading));
   Add(_("Type"), nullptr, CreateTypeDataField(listener));
@@ -497,7 +476,7 @@ WaypointListWidget::OnGPSUpdate([[maybe_unused]] const MoreData &basic)
 }
 
 WaypointPtr
-ShowWaypointListDialog(const GeoPoint &_location,
+ShowWaypointListDialog(Waypoints &waypoints, const GeoPoint &_location,
                        OrderedTask *_ordered_task, unsigned _ordered_task_index)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
@@ -518,7 +497,7 @@ ShowWaypointListDialog(const GeoPoint &_location,
   auto &buttons_widget = (WaypointListButtons &)left_widget->GetSecond();
 
   auto list_widget =
-    std::make_unique<WaypointListWidget>(dialog, filter_widget,
+    std::make_unique<WaypointListWidget>(waypoints, dialog, filter_widget,
                                          _location, heading,
                                          _ordered_task, _ordered_task_index);
   const auto &list_widget_ = *list_widget;

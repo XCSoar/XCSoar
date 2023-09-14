@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Content/Radio.hpp"
@@ -37,7 +17,7 @@ UpdateInfoBoxFrequency(InfoBoxData &data, const RadioFrequency freq,
                        const TCHAR *freq_name) noexcept
 {
   if(freq.IsDefined()) {
-    data.FormatValue(_T("%u.%03u"), freq.GetKiloHertz() / 1000, freq.GetKiloHertz() % 1000);
+    freq.Format(data.value.data(), data.value.capacity());
   }
   else {
     data.SetValueInvalid();
@@ -50,6 +30,17 @@ UpdateInfoBoxFrequency(InfoBoxData &data, const RadioFrequency freq,
   }
 }
 
+static void
+UpdateInfoBoxTransponderCode(InfoBoxData &data, TransponderCode code) noexcept
+{
+  if(code.IsDefined()) {
+    code.Format(data.value.data(), data.value.capacity());
+  }
+  else {
+    data.SetValueInvalid();
+  }
+}
+
 static constexpr InfoBoxPanel active_frequency_panels[] = {
   { N_("Edit"), LoadActiveRadioFrequencyEditPanel },
   { nullptr, nullptr }
@@ -57,6 +48,10 @@ static constexpr InfoBoxPanel active_frequency_panels[] = {
 
 static constexpr InfoBoxPanel standby_frequency_panels[] = {
   { N_("Edit"), LoadStandbyRadioFrequencyEditPanel },
+  { nullptr, nullptr }
+};
+
+static constexpr InfoBoxPanel transponder_code_panels[] = {
   { nullptr, nullptr }
 };
 
@@ -88,4 +83,18 @@ InfoBoxContentStandbyRadioFrequency::Update(InfoBoxData &data) noexcept
     CommonInterface::GetComputerSettings().radio;
     data.SetValueColor(2);
   UpdateInfoBoxFrequency(data, settings_radio.standby_frequency, settings_radio.standby_name);
+}
+
+void
+InfoBoxContentTransponderCode::Update(InfoBoxData &data) noexcept
+{
+  const auto &settings_transponder =
+    CommonInterface::GetComputerSettings().transponder;
+  UpdateInfoBoxTransponderCode(data, settings_transponder.transponder_code);
+}
+
+const InfoBoxPanel *
+InfoBoxContentTransponderCode::GetDialogContent() noexcept
+{
+  return transponder_code_panels;
 }

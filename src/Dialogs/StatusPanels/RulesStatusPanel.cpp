@@ -1,30 +1,9 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "RulesStatusPanel.hpp"
 #include "util/Macros.hpp"
 #include "util/TruncateString.hpp"
-#include "Components.hpp"
 #include "Interface.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
@@ -33,6 +12,8 @@ Copyright_License {
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 enum Controls {
   ValidStart,
@@ -55,13 +36,13 @@ RulesStatusPanel::Refresh() noexcept
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
 
   /// @todo proper task validity check
-  SetText(ValidStart, start_stats.task_started
+  SetText(ValidStart, start_stats.HasStarted()
           ? _("Yes") : _T("No"));
 
   SetText(ValidFinish, task_stats.task_finished
           ? _("Yes") : _T("No"));
 
-  if (start_stats.task_started) {
+  if (start_stats.HasStarted()) {
     SetText(StartTime,
             FormatLocalTimeHHMM(start_stats.time, settings.utc_offset));
 
@@ -78,8 +59,8 @@ RulesStatusPanel::Refresh() noexcept
   Temp[0] = _T('\0');
   double finish_height(0);
 
-  if (protected_task_manager != nullptr) {
-    ProtectedTaskManager::Lease task_manager(*protected_task_manager);
+  if (backend_components->protected_task_manager) {
+    ProtectedTaskManager::Lease task_manager{*backend_components->protected_task_manager};
     const OrderedTask &task = task_manager->GetOrderedTask();
     const unsigned task_size = task.TaskSize();
 

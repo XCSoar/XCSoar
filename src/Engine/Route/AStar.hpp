@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -67,6 +47,8 @@ struct AStarPriorityValue
  * AStar search algorithm, based on Dijkstra algorithm
  * Modifications by John Wharington to track optimal solution
  * @see http://en.giswiki.net/wiki/Dijkstra%27s_algorithm
+ *
+ * @param m_min Whether this algorithm will search for min or max distance
  */
 template <class Node, class Hash=std::hash<Node>,
           class KeyEqual=std::equal_to<Node>,
@@ -76,12 +58,8 @@ class AStar
   typedef std::unordered_map<Node, AStarPriorityValue, Hash, KeyEqual> node_value_map;
 
   typedef typename node_value_map::iterator node_value_iterator;
-  typedef typename node_value_map::const_iterator node_value_const_iterator;
 
   typedef std::unordered_map<Node, Node, Hash, KeyEqual> node_parent_map;
-
-  typedef typename node_parent_map::iterator node_parent_iterator;
-  typedef typename node_parent_map::const_iterator node_parent_const_iterator;
 
   struct NodeValue {
     AStarPriorityValue priority;
@@ -123,21 +101,13 @@ class AStar
 public:
   static constexpr unsigned DEFAULT_QUEUE_SIZE = 1024;
 
-  /**
-   * Default constructor
-   *
-   * @param is_min Whether this algorithm will search for min or max distance
-   */
   AStar(unsigned reserve_default = DEFAULT_QUEUE_SIZE) noexcept
   {
     Reserve(reserve_default);
   }
 
   /**
-   * Constructor
-   *
-   * @param n Node to start
-   * @param is_min Whether this algorithm will search for min or max distance
+   * @param node Node to start
    */
   AStar(const Node &node,
         unsigned reserve_default = DEFAULT_QUEUE_SIZE) noexcept
@@ -175,16 +145,6 @@ public:
   [[gnu::pure]]
   bool IsEmpty() const noexcept {
     return q.empty();
-  }
-
-  /**
-   * Return size of queue
-   *
-   * @return Queue size in elements
-   */
-  [[gnu::pure]]
-  unsigned QueueSize() const noexcept {
-    return q.size();
   }
 
   /**
@@ -226,7 +186,7 @@ public:
   [[gnu::pure]]
   Node GetPredecessor(const Node &node) const noexcept {
     // Try to find the given node in the node_parent_map
-    node_parent_const_iterator it = node_parents.find(node);
+    const auto it = node_parents.find(node);
     if (it == node_parents.end())
       // first entry
       // If the node wasn't found
@@ -252,7 +212,7 @@ public:
     if (cur->first == node)
       return cur->second;
 
-    node_value_const_iterator it = node_values.find(node);
+    const auto it = node_values.find(node);
     if (it == node_values.end())
       return AStarPriorityValue(0);
 

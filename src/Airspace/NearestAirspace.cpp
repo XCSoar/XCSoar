@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "NearestAirspace.hpp"
 #include "ProtectedAirspaceWarningManager.hpp"
@@ -33,12 +13,13 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 
-[[gnu::pure]]
-__attribute__((always_inline))
+#include <concepts>
+
+[[gnu::pure]] [[gnu::always_inline]]
 static inline NearestAirspace
 CalculateNearestAirspaceHorizontal(const GeoPoint &location,
                                    const FlatProjection &projection,
-                                   const AbstractAirspace &airspace)
+                                   const AbstractAirspace &airspace) noexcept
 {
   const auto closest = airspace.ClosestPoint(location, projection);
   assert(closest.IsValid());
@@ -53,16 +34,14 @@ struct CompareNearestAirspace {
   }
 };
 
-template<typename Predicate>
 [[gnu::pure]]
 static NearestAirspace
 FindHorizontal(const GeoPoint &location,
                const Airspaces &airspace_database,
-               Predicate &&predicate)
+               std::predicate<const AbstractAirspace &> auto predicate) noexcept
 {
   const auto &projection = airspace_database.GetProjection();
-  return FindMinimum(airspace_database, location, 30000,
-                     std::forward<Predicate>(predicate),
+  return FindMinimum(airspace_database, location, 30000, predicate,
                      [&location, &projection](ConstAirspacePtr &&airspace){
                        return CalculateNearestAirspaceHorizontal(location, projection, *airspace);
                      },
@@ -72,8 +51,8 @@ FindHorizontal(const GeoPoint &location,
 [[gnu::pure]]
 NearestAirspace
 NearestAirspace::FindHorizontal(const MoreData &basic,
-                                const ProtectedAirspaceWarningManager &airspace_warnings,
-                                const Airspaces &airspace_database)
+                                const ProtectedAirspaceWarningManager *airspace_warnings,
+                                const Airspaces &airspace_database) noexcept
 {
   if (!basic.location_available)
     /* can't check for airspaces without a GPS fix */
@@ -82,7 +61,7 @@ NearestAirspace::FindHorizontal(const MoreData &basic,
   /* find the nearest airspace */
   //consider only active airspaces
   auto outside_and_active =
-    MakeAndPredicate(ActiveAirspacePredicate(&airspace_warnings),
+    MakeAndPredicate(ActiveAirspacePredicate(airspace_warnings),
                      OutsideAirspacePredicate(AGeoPoint(basic.location, 0)));
 
   //if altitude is available, filter airspaces in same height as airplane
@@ -104,9 +83,9 @@ NearestAirspace::FindHorizontal(const MoreData &basic,
 [[gnu::pure]]
 NearestAirspace
 NearestAirspace::FindVertical(const MoreData &basic,
-                      const DerivedInfo &calculated,
-                      const ProtectedAirspaceWarningManager &airspace_warnings,
-                      const Airspaces &airspace_database)
+                              const DerivedInfo &calculated,
+                              const ProtectedAirspaceWarningManager *airspace_warnings,
+                              const Airspaces &airspace_database) noexcept
 {
   if (!basic.location_available ||
       (!basic.baro_altitude_available && !basic.gps_altitude_available))
@@ -122,7 +101,7 @@ NearestAirspace::FindVertical(const MoreData &basic,
 
   const AbstractAirspace *nearest = nullptr;
   double nearest_delta = 100000;
-  const ActiveAirspacePredicate active_predicate(&airspace_warnings);
+  const ActiveAirspacePredicate active_predicate(airspace_warnings);
 
   for (const auto &i : airspace_database.QueryInside(basic.location)) {
     const AbstractAirspace &airspace = i.GetAirspace();

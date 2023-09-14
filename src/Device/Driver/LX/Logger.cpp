@@ -1,25 +1,5 @@
-/*
-  Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Internal.hpp"
 #include "NanoLogger.hpp"
@@ -124,7 +104,9 @@ ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
   bool success = false;
   while (!flight_list.full()) {
     LX::FlightInfo flight;
-    if (!LX::ReadCRC(port, &flight, sizeof(flight), env,
+    if (!LX::ReadCRC(port,
+                     std::as_writable_bytes(std::span{&flight, 1}),
+                     env,
                      std::chrono::seconds(20),
                      std::chrono::seconds(2),
                      std::chrono::minutes(3)))
@@ -181,12 +163,14 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   LX::SeekMemory seek;
   seek.start_address = flight.internal.lx.start_address;
   seek.end_address = flight.internal.lx.end_address;
-  LX::SendPacket(port, LX::SEEK_MEMORY, &seek, sizeof(seek), env);
+  LX::SendPacket(port, LX::SEEK_MEMORY,
+                 std::as_bytes(std::span{&seek, 1}), env);
   LX::ExpectACK(port, env);
 
   LX::MemorySection memory_section;
   if (!LX::ReceivePacketRetry(port, LX::READ_MEMORY_SECTION,
-                              &memory_section, sizeof(memory_section), env,
+                              std::as_writable_bytes(std::span{&memory_section, 1}),
+                              env,
                               std::chrono::seconds(5),
                               std::chrono::seconds(2),
                               std::chrono::minutes(1), 2))
@@ -201,11 +185,11 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
 
   env.SetProgressRange(total_length);
 
-  const auto data = std::make_unique<uint8_t[]>(total_length);
-  uint8_t *p = data.get();
+  const auto data = std::make_unique<std::byte[]>(total_length);
+  std::byte *p = data.get();
   for (unsigned i = 0; i < LX::MemorySection::N && lengths[i] > 0; ++i) {
     if (!LX::ReceivePacketRetry(port, (LX::Command)(LX::READ_LOGGER_DATA + i),
-                                p, lengths[i], env,
+                                {p, lengths[i]}, env,
                                 std::chrono::seconds(20),
                                 std::chrono::seconds(2),
                                 std::chrono::minutes(5), 2)) {

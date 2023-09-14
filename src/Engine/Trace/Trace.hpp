@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -66,7 +46,8 @@ class Trace : private NonCopyable
      * This is like a modified Douglas-Peuker algorithm
      */
     [[gnu::pure]]
-    static bool DeltaRank(const TraceDelta &x, const TraceDelta &y) {
+    static constexpr bool DeltaRank(const TraceDelta &x,
+                                    const TraceDelta &y) noexcept {
       // distance is king
       if (x.elim_distance < y.elim_distance)
         return true;
@@ -92,8 +73,8 @@ class Trace : private NonCopyable
     }
 
     struct DeltaRankOp {
-      [[gnu::pure]]
-      bool operator()(const TraceDelta &s1, const TraceDelta &s2) const {
+      constexpr bool operator()(const TraceDelta &s1,
+                                const TraceDelta &s2) const noexcept {
         return DeltaRank(s1, s2);
       }
     };
@@ -104,13 +85,13 @@ class Trace : private NonCopyable
     unsigned elim_distance;
     unsigned delta_distance;
 
-    explicit TraceDelta(const TracePoint &p)
+    explicit TraceDelta(const TracePoint &p) noexcept
       :point(p),
        elim_time(null_time), elim_distance(null_delta),
        delta_distance(0) {}
 
     TraceDelta(const TracePoint &p_last, const TracePoint &p,
-               const TracePoint &p_next)
+               const TracePoint &p_next) noexcept
       :point(p),
        elim_time(TimeMetric(p_last, p, p_next)),
        elim_distance(DistanceMetric(p_last, p, p_next)),
@@ -122,11 +103,11 @@ class Trace : private NonCopyable
     /**
      * Is this the first or the last point?
      */
-    bool IsEdge() const {
+    constexpr bool IsEdge() const noexcept {
       return elim_time == null_time;
     }
 
-    void Update(const TracePoint &p_last, const TracePoint &p_next) {
+    void Update(const TracePoint &p_last, const TracePoint &p_next) noexcept {
       elim_time = TimeMetric(p_last, point, p_next);
       elim_distance = DistanceMetric(p_last, point, p_next);
       delta_distance = point.FlatDistanceTo(p_last);
@@ -143,9 +124,10 @@ class Trace : private NonCopyable
      *
      * @return Distance error if this node is thinned
      */
+    [[gnu::pure]]
     static unsigned DistanceMetric(const TracePoint &last,
                                    const TracePoint &node,
-                                   const TracePoint &next) {
+                                   const TracePoint &next) noexcept {
       const int d_this = last.FlatDistanceTo(node) + node.FlatDistanceTo(next);
       const int d_rem = last.FlatDistanceTo(next);
       return abs(d_this - d_rem);
@@ -162,8 +144,9 @@ class Trace : private NonCopyable
      *
      * @return Time delta if this node is thinned
      */
-    static Time TimeMetric(const TracePoint &last, const TracePoint &node,
-                           const TracePoint &next) noexcept {
+    static constexpr Time TimeMetric(const TracePoint &last,
+                                     const TracePoint &node,
+                                     const TracePoint &next) noexcept {
       return next.DeltaTime(last)
         - std::min(next.DeltaTime(node), node.DeltaTime(last));
     }
@@ -237,9 +220,9 @@ public:
    */
   explicit Trace(const Time no_thin_time = {},
                  const Time max_time = null_time,
-                 const unsigned max_size = 1000);
+                 const unsigned max_size = 1000) noexcept;
 
-  ~Trace() {
+  ~Trace() noexcept {
     clear();
   }
 
@@ -264,7 +247,7 @@ protected:
    *
    * @return Iterator to updated item
    */
-  void UpdateDelta(TraceDelta &td);
+  void UpdateDelta(TraceDelta &td) noexcept;
 
   /**
    * Erase a non-edge item from delta list and tree, updating
@@ -274,7 +257,7 @@ protected:
    * @param tree Tree to remove from
    *
    */
-  void EraseInside(DeltaList::iterator it);
+  void EraseInside(DeltaList::iterator it) noexcept;
 
   /**
    * Erase elements based on delta metric until the size is
@@ -313,7 +296,7 @@ protected:
   /**
    * Update start node (and neighbour) after min time pruning
    */
-  void EraseStart(TraceDelta &td_start);
+  void EraseStart(TraceDelta &td_start) noexcept;
 
 public:
   /**
@@ -322,12 +305,12 @@ public:
    *
    * @param a new point; its "flat" (projected) location is ignored
    */
-  void push_back(const TracePoint &point);
+  void push_back(const TracePoint &point) noexcept;
 
   /**
    * Clear the trace store
    */
-  void clear();
+  void clear() noexcept;
 
   void EraseEarlierThan(TimeStamp time) noexcept {
     EraseEarlierThan(time.Cast<Time>());
@@ -337,7 +320,7 @@ public:
     EraseLaterThan(time.Cast<Time>());
   }
 
-  unsigned GetMaxSize() const {
+  unsigned GetMaxSize() const noexcept {
     return max_size;
   }
 
@@ -347,7 +330,7 @@ public:
    *
    * @return Number of traces in tree
    */
-  unsigned size() const {
+  unsigned size() const noexcept {
     return cached_size;
   }
 
@@ -356,7 +339,7 @@ public:
    *
    * @return True if no traces stored
    */
-  bool empty() const {
+  bool empty() const noexcept {
     return cached_size == 0;
   }
 
@@ -368,7 +351,7 @@ public:
    * method useful for checking whether the object is unmodified since
    * the last call.
    */
-  const Serial &GetAppendSerial() const {
+  const Serial &GetAppendSerial() const noexcept {
     return append_serial;
   }
 
@@ -376,7 +359,7 @@ public:
    * Returns a #Serial that gets incremented when iterators get
    * Invalidated (e.g. when the #Trace gets cleared or optimised).
    */
-  const Serial &GetModifySerial() const {
+  const Serial &GetModifySerial() const noexcept {
     return modify_serial;
   }
 
@@ -386,12 +369,12 @@ public:
    * @param iov Vector of trace points (output)
    *
    */
-  void GetPoints(TracePointVector& iov) const;
+  void GetPoints(TracePointVector& iov) const noexcept;
 
   /**
    * Retrieve a vector of trace points sorted by time
    */
-  void GetPoints(TracePointerVector &v) const;
+  void GetPoints(TracePointerVector &v) const noexcept;
 
   /**
    * Update the given #TracePointVector after points were appended to
@@ -400,22 +383,22 @@ public:
    *
    * @return true if new points were added
    */
-  bool SyncPoints(TracePointerVector &v) const;
+  bool SyncPoints(TracePointerVector &v) const noexcept;
 
   /**
    * Fill the vector with trace points, not before #min_time, minimum
    * resolution #min_distance.
    */
   void GetPoints(TracePointVector &v, Time min_time,
-                 const GeoPoint &location, double resolution) const;
+                 const GeoPoint &location, double resolution) const noexcept;
 
-  const TracePoint &front() const {
+  const TracePoint &front() const noexcept {
     assert(!empty());
 
     return chronological_list.front().point;
   }
 
-  const TracePoint &back() const {
+  const TracePoint &back() const noexcept {
     assert(!empty());
 
     return chronological_list.back().point;
@@ -437,21 +420,21 @@ private:
   /**
    * Helper function for Thin().
    */
-  void Thin2();
+  void Thin2() noexcept;
 
   /**
    * Thin the trace: remove old and irrelevant points to make room for
    * more points.
    */
-  void Thin();
+  void Thin() noexcept;
 
-  TraceDelta &GetFront() {
+  TraceDelta &GetFront() noexcept {
     assert(!empty());
 
     return chronological_list.front();
   }
 
-  TraceDelta &GetBack() {
+  TraceDelta &GetBack() noexcept {
     assert(!empty());
 
     return chronological_list.back();
@@ -468,7 +451,7 @@ private:
 public:
   static constexpr auto null_time = TracePoint::INVALID_TIME;
 
-  unsigned GetAverageDeltaDistance() const {
+  unsigned GetAverageDeltaDistance() const noexcept {
     return average_delta_distance;
   }
 
@@ -480,7 +463,7 @@ public:
   class const_iterator : public ChronologicalList::const_iterator {
     friend class Trace;
 
-    const_iterator(ChronologicalList::const_iterator &&_iterator)
+    const_iterator(ChronologicalList::const_iterator &&_iterator) noexcept
       :ChronologicalList::const_iterator(std::move(_iterator)) {}
 
   public:
@@ -492,18 +475,18 @@ public:
 
     const_iterator() = default;
 
-    const TracePoint &operator*() const {
+    const TracePoint &operator*() const noexcept {
       const TraceDelta &td = ChronologicalList::const_iterator::operator*();
       return td.point;
     }
 
-    const TracePoint *operator->() const {
+    const TracePoint *operator->() const noexcept {
       const TraceDelta &td = ChronologicalList::const_iterator::operator*();
       return &td.point;
     }
 
     const_iterator &NextSquareRange(unsigned sq_resolution,
-                                    const const_iterator &end) {
+                                    const const_iterator &end) noexcept {
       const TracePoint &previous = **this;
       while (true) {
         ++*this;
@@ -518,20 +501,20 @@ public:
     }
   };
 
-  const_iterator begin() const {
+  const_iterator begin() const noexcept {
     return chronological_list.begin();
   }
 
-  const_iterator end() const {
+  const_iterator end() const noexcept {
     return chronological_list.end();
   }
 
-  const TaskProjection &GetProjection() const {
+  const TaskProjection &GetProjection() const noexcept {
     return task_projection;
   }
 
   [[gnu::pure]]
-  unsigned ProjectRange(const GeoPoint &location, double distance) const {
+  unsigned ProjectRange(const GeoPoint &location, double distance) const noexcept {
     return task_projection.ProjectRangeInteger(location, distance);
   }
 };

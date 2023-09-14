@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Contest.hpp"
 #include "InfoBoxes/Data.hpp"
@@ -30,6 +10,8 @@ Copyright_License {
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Language/Language.hpp"
 #include "Widget/CallbackWidget.hpp"
+#include "BackendComponents.hpp"
+#include "DataComponents.hpp"
 
 #include <tchar.h>
 
@@ -38,9 +20,11 @@ ShowAnalysis8() noexcept
 {
   dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
                        UIGlobals::GetLook(),
-                       CommonInterface::Full(), *glide_computer,
-                       &airspace_database,
-                       terrain, AnalysisPage::CONTEST);
+                       CommonInterface::Full(),
+                       *backend_components->glide_computer,
+                       data_components->airspaces.get(),
+                       data_components->terrain.get(),
+                       AnalysisPage::CONTEST);
 }
 
 static std::unique_ptr<Widget>
@@ -67,7 +51,8 @@ InfoBoxContentContest::Update(InfoBoxData &data) noexcept
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();
 
-   if (!settings_computer.contest.enable || !protected_task_manager) {
+   if (!settings_computer.contest.enable ||
+       !backend_components->protected_task_manager) {
     data.SetInvalid();
     return;
   }
@@ -86,7 +71,7 @@ InfoBoxContentContest::Update(InfoBoxData &data) noexcept
   // Set Value
   data.SetValueFromDistance(result_contest.distance);
 
-  data.UnsafeFormatComment(_T("%.1f pts"), (double)result_contest.score);
+  data.FmtComment(_T("{:.1f} pts"), result_contest.score);
 }
 
 const InfoBoxPanel *
@@ -101,7 +86,8 @@ InfoBoxContentContestSpeed::Update(InfoBoxData &data) noexcept
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();
 
-  if (!settings_computer.contest.enable || !protected_task_manager) {
+  if (!settings_computer.contest.enable ||
+      !backend_components->protected_task_manager) {
     data.SetInvalid();
     return;
   }
@@ -120,5 +106,5 @@ InfoBoxContentContestSpeed::Update(InfoBoxData &data) noexcept
   // Set Value
   data.SetValueFromTaskSpeed(result_contest.GetSpeed());
 
-  data.UnsafeFormatComment(_T("%.1f pts"), (double)result_contest.score);
+  data.FmtComment(_T("{:.1f} pts"), result_contest.score);
 }

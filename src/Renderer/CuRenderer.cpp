@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "CuRenderer.hpp"
 #include "ChartRenderer.hpp"
@@ -72,6 +52,7 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
 
   if (hmin >= hmax) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 
@@ -97,23 +78,23 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
         cu_sonde.cslevels[i + 1].empty())
       continue;
 
-    auto alt = i * CuSonde::HEIGHT_STEP;
-    auto next_alt = (i + 1) * CuSonde::HEIGHT_STEP;
+    const double alt = i * CuSonde::HEIGHT_STEP;
+    const double next_alt = (i + 1) * CuSonde::HEIGHT_STEP;
 
     ipos++;
 
-    chart.DrawLine(cu_sonde.cslevels[i].dry_temperature.ToUser(), alt,
-                   cu_sonde.cslevels[i + 1].dry_temperature.ToUser(), next_alt,
+    chart.DrawLine({cu_sonde.cslevels[i].dry_temperature.ToUser(), alt},
+                   {cu_sonde.cslevels[i + 1].dry_temperature.ToUser(), next_alt},
                    ChartLook::STYLE_REDTHICKDASH);
 
-    chart.DrawLine(cu_sonde.cslevels[i].air_temperature.ToUser(), alt,
-                   cu_sonde.cslevels[i + 1].air_temperature.ToUser(), next_alt,
+    chart.DrawLine({cu_sonde.cslevels[i].air_temperature.ToUser(), alt},
+                   {cu_sonde.cslevels[i + 1].air_temperature.ToUser(), next_alt},
                    ChartLook::STYLE_BLACK);
 
     if (!cu_sonde.cslevels[i].dewpoint_empty() &&
         !cu_sonde.cslevels[i + 1].dewpoint_empty()) {
-      chart.DrawLine(cu_sonde.cslevels[i].dewpoint.ToUser(), alt,
-                     cu_sonde.cslevels[i + 1].dewpoint.ToUser(), next_alt,
+      chart.DrawLine({cu_sonde.cslevels[i].dewpoint.ToUser(), alt},
+                     {cu_sonde.cslevels[i + 1].dewpoint.ToUser(), next_alt},
                      ChartLook::STYLE_BLUETHINDASH);
                
       has_dewpoint = true;
@@ -121,16 +102,16 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
 
     if (ipos > 2) {
       if (!labelDry) {
-        chart.DrawLabel(_T("DALR"),
-                        cu_sonde.cslevels[i + 1].dry_temperature.ToUser(), alt);
+        chart.DrawLabel({cu_sonde.cslevels[i + 1].dry_temperature.ToUser(), alt},
+                        _T("DALR"));
         labelDry = true;
       } else if (!labelAir) {
-        chart.DrawLabel(_T("Air"),
-                        cu_sonde.cslevels[i + 1].air_temperature.ToUser(), alt);
+        chart.DrawLabel({cu_sonde.cslevels[i + 1].air_temperature.ToUser(), alt},
+                        _T("Air"));
         labelAir = true;
       } else if (!labelDew && has_dewpoint) {
-        chart.DrawLabel(_T("Dew"),
-                        cu_sonde.cslevels[i + 1].dewpoint.ToUser(), alt);
+        chart.DrawLabel({cu_sonde.cslevels[i + 1].dewpoint.ToUser(), alt},
+                        _T("Dew"));
         labelDew = true;
       }
     }

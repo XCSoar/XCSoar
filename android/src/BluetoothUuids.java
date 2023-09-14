@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 package org.xcsoar;
 
@@ -42,6 +23,15 @@ public interface BluetoothUuids {
 
   UUID HEART_RATE_MEASUREMENT_CHARACTERISTIC =
     UUID.fromString("00002A37-0000-1000-8000-00805F9B34FB");
+
+  /**
+   * @see https://sites.google.com/view/ppgmeter/startpage
+   * Engine sensors service and characteristic
+   */
+  UUID ENGINE_SENSORS_SERVICE =
+    UUID.fromString("D2865ECA-2C07-4610-BF03-8AEEBEF047FB");
+  UUID ENGINE_SENSORS_CHARACTERISTIC =
+    UUID.fromString("D2865ECB-2C07-4610-BF03-8AEEBEF047FB");
 
   UUID HM10_SERVICE =
     UUID.fromString("0000FFE0-0000-1000-8000-00805F9B34FB");

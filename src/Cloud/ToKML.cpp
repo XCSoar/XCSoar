@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Data.hpp"
 #include "Serialiser.hpp"
@@ -41,10 +21,10 @@ using std::endl;
 static inline void
 ToKML(BufferedOutputStream &os, const AGeoPoint p)
 {
-  os.Format("<Point><coordinates>%f,%f,%f</coordinates></Point>",
-            p.longitude.Degrees(),
-            p.latitude.Degrees(),
-            p.altitude);
+  os.Fmt("<Point><coordinates>{:f},{:f},{:f}</coordinates></Point>",
+         p.longitude.Degrees(),
+         p.latitude.Degrees(),
+         p.altitude);
 }
 
 [[maybe_unused]]
@@ -57,14 +37,14 @@ ToKML(BufferedOutputStream &os, const GeoPoint p)
 static void
 ToKML(BufferedOutputStream &os, const CloudClient &client)
 {
-  os.Format("<Placemark>\n"
-            "  <name>%u</name>\n"
-            "  <ExtendedData>\n"
-            "    <SchemaData schemaUrl=\"#traffic\">\n"
-            "      <SimpleData name=\"id\">%u</SimpleData>\n"
-            "    </SchemaData>\n"
-            "  </ExtendedData>\n",
-            client.id, client.id);
+  os.Fmt("<Placemark>\n"
+         "  <name>%u</name>\n"
+         "  <ExtendedData>\n"
+         "    <SchemaData schemaUrl=\"#traffic\">\n"
+         "      <SimpleData name=\"id\">%u</SimpleData>\n"
+         "    </SchemaData>\n"
+         "  </ExtendedData>\n",
+         client.id, client.id);
   ToKML(os, AGeoPoint(client.location, client.altitude));
   os.Write("</Placemark>\n");
 }
@@ -95,14 +75,14 @@ ToKML(BufferedOutputStream &os, const CloudClientContainer &clients)
 static void
 ToKML(BufferedOutputStream &os, const CloudThermal &thermal)
 {
-  os.Format("<Placemark>\n"
-            "  <name>%f m/s</name>\n"
-            "  <ExtendedData>\n"
-            "    <SchemaData schemaUrl=\"#thermal\">\n"
-            "      <SimpleData name=\"lift\">%f</SimpleData>\n"
-            "    </SchemaData>\n"
-            "  </ExtendedData>\n",
-            thermal.lift, thermal.lift);
+  os.Fmt("<Placemark>\n"
+         "  <name>{:f} m/s</name>\n"
+         "  <ExtendedData>\n"
+         "    <SchemaData schemaUrl=\"#thermal\">\n"
+         "      <SimpleData name=\"lift\">{:f}</SimpleData>\n"
+         "    </SchemaData>\n"
+         "  </ExtendedData>\n",
+         thermal.lift, thermal.lift);
   ToKML(os, thermal.bottom_location);
   os.Write("</Placemark>\n");
 }

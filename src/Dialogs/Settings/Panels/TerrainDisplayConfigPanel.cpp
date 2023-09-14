@@ -1,28 +1,8 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "TerrainDisplayConfigPanel.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Form/DataField/Enum.hpp"
@@ -32,6 +12,7 @@ Copyright_License {
 #include "Terrain/TerrainRenderer.hpp"
 #include "Projection/MapWindowProjection.hpp"
 #include "Components.hpp"
+#include "DataComponents.hpp"
 #include "Interface.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -81,7 +62,6 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
   void ShowTerrainControls();
-  void OnPreviewPaint(Canvas &canvas);
 
   /* methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -272,12 +252,12 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
   GetDataField(TerrainContours).SetListener(this);
   SetExpertRow(TerrainContours);
 
-  have_terrain_preview = ::terrain != nullptr;
+  have_terrain_preview = data_components->terrain != nullptr;
   if (have_terrain_preview) {
     WindowStyle style;
     style.Border();
 
-    auto preview = std::make_unique<TerrainPreviewWindow>(*::terrain);
+    auto preview = std::make_unique<TerrainPreviewWindow>(*data_components->terrain);
     preview->Create((ContainerWindow &)GetWindow(), {0, 0, 100, 100}, style);
     AddRemaining(std::move(preview));
   }

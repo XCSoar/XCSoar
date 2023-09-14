@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "InputEvents.hpp"
 #include "Language/Language.hpp"
@@ -28,6 +8,8 @@ Copyright_License {
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
 #include "Components.hpp"
+#include "BackendComponents.hpp"
+#include "DataComponents.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
 #include "Engine/Airspace/AirspaceAircraftPerformance.hpp"
@@ -65,7 +47,8 @@ InputEvents::eventAirSpace(const TCHAR *misc)
       Message::AddMessage(_("Show airspace on"));
     return;
   } else if (StringIsEqual(misc, _T("list"))) {
-    ShowAirspaceListDialog(airspace_database, GetAirspaceWarnings());
+    ShowAirspaceListDialog(*data_components->airspaces,
+                           backend_components->GetAirspaceWarnings());
     return;
   }
 
@@ -77,8 +60,7 @@ InputEvents::eventAirSpace(const TCHAR *misc)
 void
 InputEvents::eventClearAirspaceWarnings([[maybe_unused]] const TCHAR *misc)
 {
-  ProtectedAirspaceWarningManager *airspace_warnings = GetAirspaceWarnings();
-  if (airspace_warnings != NULL)
+  if (auto *airspace_warnings = backend_components->GetAirspaceWarnings())
     airspace_warnings->AcknowledgeAll();
 }
 
@@ -97,7 +79,7 @@ InputEvents::eventNearestAirspaceDetails([[maybe_unused]] const TCHAR *misc)
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();
 
-  ProtectedAirspaceWarningManager *airspace_warnings = GetAirspaceWarnings();
+  auto *airspace_warnings = backend_components->GetAirspaceWarnings();
   if (airspace_warnings != nullptr && !airspace_warnings->IsEmpty()) {
     // Prevent the dialog from closing itself without active warning
     // This is relevant if there are only acknowledged airspaces in the list
@@ -115,7 +97,7 @@ InputEvents::eventNearestAirspaceDetails([[maybe_unused]] const TCHAR *misc)
   polar.SetMC(std::max(polar.GetMC(), 1.));
   const AirspaceAircraftPerformance perf(polar);
 
-  const auto as = FindSoonestAirspace(airspace_database, aircraft_state, perf,
+  const auto as = FindSoonestAirspace(*data_components->airspaces, aircraft_state, perf,
                                       std::move(visible),
                                       std::chrono::minutes{30});
   if (!as) {

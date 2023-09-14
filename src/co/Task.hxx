@@ -1,43 +1,15 @@
-/*
- * Copyright 2020-2021 CM4all GmbH
- * All rights reserved.
- *
- * author: Max Kellermann <mk@cm4all.com>
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * - Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- *
- * - Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the
- * distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
- * FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+// SPDX-License-Identifier: BSD-2-Clause
+// Copyright CM4all GmbH
+// author: Max Kellermann <mk@cm4all.com>
 
 #pragma once
 
 #include "UniqueHandle.hxx"
 #include "Compat.hxx"
+#include "util/ReturnValue.hxx"
 
 #include <cassert>
 #include <exception>
-#include <optional>
 #include <utility>
 
 namespace Co {
@@ -46,24 +18,17 @@ namespace detail {
 
 template<typename R>
 class promise_result_manager {
-	std::optional<R> value;
+	ReturnValue<R> value;
 
 public:
 	template<typename U>
 	void return_value(U &&_value) noexcept {
-		assert(!value);
-
-		value.emplace(std::forward<U>(_value));
+		value.Set(std::forward<U>(_value));
 	}
 
+	[[nodiscard]]
 	decltype(auto) GetReturnValue() noexcept {
-		/* this assertion can fail if control flows off the
-		   end of a coroutine without co_return, which is
-		   undefined behavior according to
-		   https://timsong-cpp.github.io/cppwp/n4861/stmt.return.coroutine */
-		assert(value);
-
-		return std::move(*value);
+		return std::move(value).Get();
 	}
 };
 
@@ -81,6 +46,7 @@ class promise final : public detail::promise_result_manager<T> {
 	std::exception_ptr error;
 
 public:
+	[[nodiscard]]
 	auto initial_suspend() noexcept {
 		if constexpr (lazy)
 			return std::suspend_always{};
@@ -89,11 +55,13 @@ public:
 	}
 
 	struct final_awaitable {
+		[[nodiscard]]
 		bool await_ready() const noexcept {
 			return false;
 		}
 
 		template<typename PROMISE>
+		[[nodiscard]]
 		std::coroutine_handle<> await_suspend(std::coroutine_handle<PROMISE> coro) noexcept {
 			const auto &promise = coro.promise();
 
@@ -113,10 +81,12 @@ public:
 		}
 	};
 
+	[[nodiscard]]
 	auto final_suspend() noexcept {
 		return final_awaitable{};
 	}
 
+	[[nodiscard]]
 	auto get_return_object() noexcept {
 		return Task(std::coroutine_handle<promise>::from_promise(*this));
 	}
@@ -144,10 +114,12 @@ public:
 	struct Awaitable final {
 		const std::coroutine_handle<promise> coroutine;
 
+		[[nodiscard]]
 		bool await_ready() const noexcept {
 			return coroutine.done();
 		}
 
+		[[nodiscard]]
 		std::coroutine_handle<> await_suspend(std::coroutine_handle<> _continuation) noexcept {
 			coroutine.promise().SetContinuation(_continuation);
 
@@ -183,14 +155,21 @@ public:
 private:
 	UniqueHandle<promise_type> coroutine;
 
+	[[nodiscard]]
 	explicit EagerTask(std::coroutine_handle<promise_type> _coroutine) noexcept
 		:coroutine(_coroutine)
 	{
 	}
 
 public:
+	[[nodiscard]]
 	EagerTask() = default;
 
+	bool IsDefined() const noexcept {
+		return coroutine;
+	}
+
+	[[nodiscard]]
 	typename promise_type::Awaitable operator co_await() const noexcept {
 		return {coroutine.get()};
 	}
@@ -209,14 +188,21 @@ public:
 private:
 	UniqueHandle<promise_type> coroutine;
 
+	[[nodiscard]]
 	explicit Task(std::coroutine_handle<promise_type> _coroutine) noexcept
 		:coroutine(_coroutine)
 	{
 	}
 
 public:
+	[[nodiscard]]
 	Task() = default;
 
+	bool IsDefined() const noexcept {
+		return coroutine;
+	}
+
+	[[nodiscard]]
 	typename promise_type::Awaitable operator co_await() const noexcept {
 		return {coroutine.get()};
 	}

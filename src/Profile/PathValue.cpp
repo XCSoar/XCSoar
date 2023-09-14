@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Map.hpp"
 #include "LocalPath.hpp"
@@ -28,7 +8,6 @@ Copyright_License {
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
 #include "util/StringPointer.hxx"
-#include "util/Macros.hpp"
 
 #ifdef _UNICODE
 #include "util/AllocatedString.hxx"
@@ -37,10 +16,10 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 AllocatedPath
-ProfileMap::GetPath(const char *key) const noexcept
+ProfileMap::GetPath(std::string_view key) const noexcept
 {
   TCHAR buffer[MAX_PATH];
-  if (!Get(key, buffer, ARRAY_SIZE(buffer)))
+  if (!Get(key, std::span{buffer}))
       return nullptr;
 
   if (StringIsEmpty(buffer))
@@ -50,7 +29,7 @@ ProfileMap::GetPath(const char *key) const noexcept
 }
 
 bool
-ProfileMap::GetPathIsEqual(const char *key, Path value) const noexcept
+ProfileMap::GetPathIsEqual(std::string_view key, Path value) const noexcept
 {
   const auto saved_value = GetPath(key);
   if (saved_value == nullptr)
@@ -75,10 +54,10 @@ BackslashBaseName(const TCHAR *p) noexcept
 #ifdef _UNICODE
 
 BasicAllocatedString<TCHAR>
-ProfileMap::GetPathBase(const char *key) const noexcept
+ProfileMap::GetPathBase(std::string_view key) const noexcept
 {
   TCHAR buffer[MAX_PATH];
-  if (!Get(key, buffer, ARRAY_SIZE(buffer)))
+  if (!Get(key, std::span{buffer}))
       return nullptr;
 
   const TCHAR *base = BackslashBaseName(buffer).c_str();
@@ -91,7 +70,7 @@ ProfileMap::GetPathBase(const char *key) const noexcept
 #else
 
 StringPointer<TCHAR>
-ProfileMap::GetPathBase(const char *key) const noexcept
+ProfileMap::GetPathBase(std::string_view key) const noexcept
 {
   const auto *path = Get(key);
   if (path != nullptr)
@@ -103,7 +82,7 @@ ProfileMap::GetPathBase(const char *key) const noexcept
 #endif
 
 void
-ProfileMap::SetPath(const char *key, Path value) noexcept
+ProfileMap::SetPath(std::string_view key, Path value) noexcept
 {
   if (value == nullptr || StringIsEmpty(value.c_str()))
     Set(key, _T(""));

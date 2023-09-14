@@ -1,16 +1,169 @@
-Version 7.29 - not yet released
+Version 7.40 - not yet released
+* user interface
+  - Added infobox that combines ETA with AAT dT
+  - FLARM: Add 100m zoom option.
+  - hide mouse cursor after 10 seconds of inactivity
+* Linux
+  - fix the /etc/xcsoar data directory
+
+Version 7.39 - 2023/07/28
+* Android
+  - fix Bluetooth device list on Android versions older than 12
+  - do not request permission WRITE_EXTERNAL_STORAGE on Android 11 or newer
+
+Version 7.38 - 2023/07/27
+* WeGlide
+  - fix another crash bug
+* Android
+  - support scanning QR codes with XCTrack tasks
+  - fix location permission request on old Android versions
+  - fix IllegalArgumentException crash on old Android versions
+  - improved error messages for problems opening devices
+  - fix crash on Android 5
+  - fix conflict between "org.xcsoar" and "org.xcsoar.testing" apps
+
+Version 7.37 - 2023/07/21
+* WeGlide
+  - fix crash bug
+* Android
+  - request ACCESS_FINE_LOCATION only when internal GPS is used
+  - request BLUETOOTH_CONNECT and BLUETOOTH_SCAN only when Bluetooth is used
+  - re-enable background location (yet another attempt)
+  - fix crash with disallowed IOIO Accessory connection
+  - remove Nook support
+  - add SoftRF Ham and Midi into 'white list' of USB devices
+
+Version 7.36 - 2023/07/02
+* task
+  - save outer radius and angle of custom keyholes in task files
+* calculations
+  - implement the "predict" option for Netcoupe FFVV, WeGlide, Charron
+* WeGlide
+  - allow downloading all user tasks and public task declarations
+* Lua scripting
+  - add blackboard.altitude_agl
+* Kobo
+  - fix flight durations on power-off screen
+  - fix bogus last entry on power-off screen
+
+Version 7.35 - 2023/06/16
+* user interface
+  - fix crash in plane list
+  - show terrain, topopgraphy and airspaces on task/contest analysis pages
+* calculations
+  - fix bogus "Task Started" after re-entering the start zone
+* fix IGC logger crash with very long turnpoint names
+
+Version 7.34 - 2023/06/06
+* user interface
+  - fix crash with long InfoBox set names
+  - rename "Inverse InfoBoxes" to "Dark mode"
+  - planes: "New" creates an empty plane
+  - planes: add "Copy" button
+* map display
+  - thicker border on disappeared FLARM traffic
+* devices
+  - allow listing up to 512 flights (increased from 128)
+* calculations
+  - fix freeze bug in route planner
+* Android
+  - fix crash with failed IOIO Accessory connection
+  - use the global dark mode setting by default
+* OpenVario
+  - set system clock from GPS if NTP is unavailable
+
+Version 7.33 - 2023/05/26
+* map display
+  - fix crash bug in FLARM traffic renderer
+
+Version 7.32 - 2023/05/25
+* user interface
+  - fix horizon roll, show bank angles greater than 90°
+  - fix horizon pitch, show sky instead of ground when pitch is greater than 50°
+  - improve font scaling in the vario gauge
+  - support hot keys, gestures and double click on Horizon page
+* map display
+  - draw the trail even if there is no GPS fix
+  - keep showing disappeared FLARM traffic for some time
+* data files
+  - support waypoints without elevation data
+* devices
+  - IMI: fix crash when there are more than 128 recorded flights
+  - FLARM: parse AircraftType hex values correctly in PFLAA
+* Linux
+  - Wayland XDG_WM_BASE support
+  - Wayland keyboard support
+* Android
+  - don't disable IOIO completely if Bluetooth permission was not granted
+  - fix crash with initial IOIO connection
+  - fix lockup with IOIO Accessory connection
+
+Version 7.31 - 2023/05/12
+* user interface
+  - fix crash during startup
+* WeGlide
+  - fix crash bug after WeGlide flight upload
+  - show WeGlide error messages
+* Android
+  - fix crash with buggy graphics drivers
+
+Version 7.30 - 2023/05/09
+* fix crash in "ProfileSave" event
+* user interface
+  - reload fonts on window resize
+* Windows
+  - look up serial ports in the registry
+* Android
+  - UsbSerial: fix permission crash bug
+  - UsbSerial: fix null pointer crash bug
+  - negotiate MTU on Bluetooth HM10 devices
+  - fix circle airspace display problems on Adreno GPUs
+
+Version 7.29 - 2023/05/03
 * data files
   - reject implausible runway lengths in CUP files
   - fix crash when arc airspace has no center
   - allow xci files to be downloaded from repository
+  - in OpenAir format use AC as Class and AY as Type (#1118)
+  - show correct line number on airspace file error
+  - add RASP file selection
+* devices
+  - ATR833: read-out active and standby frequencies
+  - AirControlDisplay: Set and readout of transponder code
+  - AirControlDisplay: forward gps data to device
 * Android
   - get rid of not usable USB interfaces in the 'Device -> Port' list
+  - Upgrade targetSdkVersion to 31
+  - fix write errors to Bluetooth HM10 devices
 * Kobo
   - Add support for Libra H2O
   - Add support for Clara 2E
   - fix truncate wifi list if hidden ssid detected
+  - Reboot without -f (force)
+  - Fix OTG mode for newer models
+  - Add an E-ink friendly trail type
+  - Add Brightness control to Clara HD
+  - Support Brightness and Colour for ComfortLight PRO models
+* Windows
+  - show serial port names
+  - support COM10..COM255
 * Polars
   - Add LS-5 polar
+  - Add Silene E78 polar
+  - Add Std Austria S polar
+  - updated handicap factors for 2023
+* fix exchange frequencies crash when no frequency was set
+* user interface
+  - show FLARMGauge only when traffic is within 4Km
+  - redesigned waypoint type icons
+  - align labels in forms on the left side
+  - increased precision in polar edit dialogue
+  - extend QuickMenu to maximum of 64 entries
+  - add PEV,FlarmTraffic,FileManager to joystick QuickMenu
+  - add transponder code infobox
+  - Pan mode fully keyboard / joystick operatable
+  - Pan mode use buttons for zoom and what's here
+  - Slight increase in touch selection on map
 
 Version 7.28 - 2022/10/29
 * data files
@@ -91,10 +244,10 @@ Version 7.24 - 2022/07/22
   - rework menu labels
   - increase popup message timeouts
   - fix missing wind arrow InfoBox updates
-* file handling 
+* file handling
   - guard against file corruption in poweroff situations
 * FLARM
-  - timeouts in flight downloads  
+  - timeouts in flight downloads
 * Linux
   - fix terrain renderer bug
   - allow changing the language at runtime
@@ -110,7 +263,7 @@ Version 7.24 - 2022/07/22
   - new default fonts
   - use 6 devices in serial port list (like all other targets)
 * XCVario/Borgelt
-  - revert cruise/circling mode change 
+  - revert cruise/circling mode change
 * Kobo
   - add ca certificates for https downloads
 
@@ -3364,13 +3517,13 @@ Changes from 4.22 to 4.5
 - Fix waypoint parsing - make it completely bullet proof
 - Package and release fonts (part of standard cab/exe)
 - Button & Event mapping - default and legacy
-  	legacy = same as version 4.22
-	default = changed from 4.22...
-		APP1 = Show button menu (was Full Screen)
-		APP3 = Full Screen (was Vario Sounds Toggle)
-		Take Off = Start logger (was manually)
-		Landing = Stop logger (was manually)
-		Info Box Control = Show labels (were hidden)
+    legacy = same as version 4.22
+    default = changed from 4.22...
+      APP1 = Show button menu (was Full Screen)
+      APP3 = Full Screen (was Vario Sounds Toggle)
+      Take Off = Start logger (was manually)
+      Landing = Stop logger (was manually)
+      Info Box Control = Show labels (were hidden)
 - Allow display of screen mode (Normal, Auxiliary, Full)
 - Fix spelling of MacCready (it was McCready).
   (reference: http://www.achievement.org/autodoc/page/mac0bio-1)

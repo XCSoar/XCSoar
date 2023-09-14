@@ -29,6 +29,7 @@ on:
 
 env:
   DEBUG: y
+  BOOST: boost_1_82_0
 
 jobs:
   build-ubuntu:
@@ -47,13 +48,23 @@ jobs:
           echo "DEBUG=n" >> $GITHUB_ENV
           echo "TARGET_FINAL=xcsoar" >> $GITHUB_ENV
       - id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - id: cache-ccache
         uses: hendrikmuhs/ccache-action@v1
         with:
-          key: ${{ matrix.os }}-${{ matrix.type }}-${{ env.TARGET }}
+          key: ${{ env.TARGET }}
+
+      - name: "Cache Boost"
+        uses: actions/cache@v3
+        with:
+          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
+          path: |
+            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
+            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
+            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
+
       - name: find githash
         run: |
           echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
@@ -69,6 +80,8 @@ jobs:
             librsvg2-bin xsltproc \
             imagemagick gettext sox \
             zlib1g-dev \
+            libfmt-dev \
+            libdbus-1-dev \
             libsodium-dev \
             libfreetype6-dev \
             libpng-dev libjpeg-dev \
@@ -86,7 +99,7 @@ jobs:
           make -j$(nproc) TARGET=${{env.TARGET }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything check
 
       - name: upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}${{ env.TARGET_EXT }}
           path: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}${{ env.TARGET_EXT }}
@@ -116,16 +129,25 @@ jobs:
 
     steps:
       - id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - id: cache-ccache
         uses: hendrikmuhs/ccache-action@v1
         with:
-          key: ${{ matrix.os }}-${{ matrix.type }}-${{ env.TARGET }}-sanitizer
+          key: ${{ env.TARGET }}-sanitizer
       - name: find githash
         run: |
           echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
+
+      - name: "Cache Boost"
+        uses: actions/cache@v3
+        with:
+          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
+          path: |
+            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
+            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
+            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
 
       - name: Install dependencies
         run: |
@@ -138,6 +160,8 @@ jobs:
             librsvg2-bin xsltproc \
             imagemagick gettext sox \
             zlib1g-dev \
+            libfmt-dev \
+            libdbus-1-dev \
             libsodium-dev \
             libfreetype6-dev \
             libpng-dev libjpeg-dev \
@@ -169,17 +193,26 @@ jobs:
           echo "DEBUG=n" >> $GITHUB_ENV
 
       - id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
 
       - id: cache-ccache
         uses: hendrikmuhs/ccache-action@v1
         with:
-          key: ${{ matrix.os }}-${{ matrix.type }}-${{ env.TARGET }}
+          key: ${{ env.TARGET }}
+
+      - name: "Cache Boost"
+        uses: actions/cache@v3
+        with:
+          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
+          path: |
+            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
+            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
+            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
 
       - name: "Cache third-party libraries"
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
           path: |
@@ -216,7 +249,7 @@ jobs:
             output/${{env.TARGET}}/${{ env.TARGET_BIN }}.${{ env.TARGET_EXT }}
 
       - name: upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}.${{ env.TARGET_EXT }}
           path: output/${{env.TARGET}}/${{ env.TARGET_BIN }}.${{ env.TARGET_EXT }}
@@ -243,6 +276,7 @@ jobs:
       TARGET_BIN: XCSoar-debug
       TARGET_FINAL: XCSoar-debug
       TARGET_EXT: apk
+      NDK: r26-beta1
 
     steps:
       - name: set vars for push
@@ -252,17 +286,26 @@ jobs:
           echo "TARGET_FINAL=XCSoar" >> $GITHUB_ENV
 
       - id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
 
       - id: cache-ccache
         uses: hendrikmuhs/ccache-action@v1
         with:
-          key: ${{ matrix.os }}-${{ matrix.type }}-${{ env.TARGET }}
+          key: ${{ env.TARGET }}
+
+      - name: "Cache Boost"
+        uses: actions/cache@v3
+        with:
+          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
+          path: |
+            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
+            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
+            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
 
       - name: "Cache third-party libraries"
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
           path: |
@@ -285,6 +328,15 @@ jobs:
             vorbis-tools \
             cmake ninja-build
 
+      - name: Install Android NDK
+        # We need NDK r26, but the GitHub runner has only r25
+        working-directory: output/download
+        run: |
+          wget --quiet https://dl.google.com/android/repository/android-ndk-${{env.NDK}}-linux.zip
+          unzip -q android-ndk-${{env.NDK}}-linux.zip
+          rm android-ndk-${{env.NDK}}-linux.zip
+          echo ANDROID_NDK_LATEST_HOME=$PWD/android-ndk-${{env.NDK}} >> $GITHUB_ENV
+
       - name: Compile XCSoar
         run: |
           make -j$(nproc) \
@@ -296,7 +348,7 @@ jobs:
             V=2
 
       - name: upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}.${{ env.TARGET_EXT }}
           path: output/ANDROID/bin/${{ env.TARGET_BIN }}.${{ env.TARGET_EXT }}
@@ -331,16 +383,25 @@ jobs:
           echo "DEBUG=n" >> $GITHUB_ENV
           echo "TARGET_FINAL=XCSoar" >> $GITHUB_ENV
       - id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - id: cache-ccache
         uses: hendrikmuhs/ccache-action@v1
         with:
-          key: ${{ matrix.os }}-${{ matrix.type }}-${{ env.TARGET }}
+          key: ${{ env.TARGET }}
+
+      - name: "Cache Boost"
+        uses: actions/cache@v3
+        with:
+          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
+          path: |
+            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
+            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
+            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
 
       - name: "Cache third-party libraries"
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
           path: |
@@ -369,13 +430,13 @@ jobs:
           make -j$(nproc) TARGET=${{env.TARGET }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
 
       - name: upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}${{ env.TARGET_EXT }}
           path: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}${{ env.TARGET_EXT }}
 
       - name: store checks and compile artefacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: xcsoar-${{ env.TARGET }}-artifact
           path: |
@@ -407,9 +468,9 @@ jobs:
     needs: build-windows
     steps:
       - id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: fetch artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: xcsoar-${{ env.TARGET }}-artifact
           path: ${{ github.workspace }}/output/${{ env.TARGET }}
@@ -434,6 +495,15 @@ jobs:
         with:
           key: macos
 
+      - name: "Cache Boost"
+        uses: actions/cache@v3
+        with:
+          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
+          path: |
+            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
+            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
+            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
+
       - name: Install dependencies
         run: |
           brew install \
@@ -441,6 +511,7 @@ jobs:
             quilt \
             librsvg \
             imagemagick gettext sox \
+            fmt \
             sdl2 \
             libsodium \
             freetype \
@@ -455,17 +526,10 @@ jobs:
         # LLVM bug in Apple Xcode which crashes clang with "fatal
         # error: error in backend: Cannot select: intrinsic
         # %llvm.coro.size"
-
-        # This build uses third-party libraries installed via
-        # Homebrew, not built using build/thirdparty.py; to be
-        # compatible with Homebrew's builds, we need
-        # to build with "-mmacosx-version-min=12.0".
         run: |
           gmake -j$(sysctl -n hw.logicalcpu) TARGET=${{env.TARGET }} USE_CCACHE=y \
             OPTIMIZE="-O0" \
-            USE_THIRDPARTY_LIBS=n \
             USE_HOMEBREW=y \
-            OSX_MIN_SUPPORTED_VERSION=12.0 \
             V=2 \
             everything check
 
@@ -496,7 +560,7 @@ jobs:
           submodules: true
 
       - name: "Cache third-party libraries"
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
           path: |
@@ -508,9 +572,19 @@ jobs:
         with:
           key: ios
 
+      - name: "Cache Boost"
+        uses: actions/cache@v3
+        with:
+          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
+          path: |
+            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
+            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
+            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
+
       - name: Install dependencies
         run: |
           brew install \
+            automake autoconf libtool \
             make \
             quilt \
             librsvg \

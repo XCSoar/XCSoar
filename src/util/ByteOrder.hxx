@@ -1,36 +1,7 @@
-/*
- * Copyright 2011-2021 Max Kellermann <max.kellermann@gmail.com>,
- *                    Tobias Bieniek <Tobias.Bieniek@gmx.de>
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * - Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- *
- * - Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the
- * distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
- * FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+// SPDX-License-Identifier: BSD-2-Clause
+// author: Max Kellermann <max.kellermann@gmail.com>
 
 #pragma once
-
-#include "Compiler.h"
 
 #include <cstdint>
 
@@ -108,30 +79,30 @@ GenericByteSwap64(uint64_t value) noexcept
 constexpr uint16_t
 ByteSwap16(uint16_t value) noexcept
 {
-#if CLANG_OR_GCC_VERSION(4,8)
-  return __builtin_bswap16(value);
+#ifdef __GNUC__
+	return __builtin_bswap16(value);
 #else
-  return GenericByteSwap16(value);
+	return GenericByteSwap16(value);
 #endif
 }
 
 constexpr uint32_t
 ByteSwap32(uint32_t value) noexcept
 {
-#if CLANG_OR_GCC_VERSION(4,3)
-  return __builtin_bswap32(value);
+#ifdef __GNUC__
+	return __builtin_bswap32(value);
 #else
-  return GenericByteSwap32(value);
+	return GenericByteSwap32(value);
 #endif
 }
 
 constexpr uint64_t
 ByteSwap64(uint64_t value) noexcept
 {
-#if CLANG_OR_GCC_VERSION(4,3)
-  return __builtin_bswap64(value);
+#ifdef __GNUC__
+	return __builtin_bswap64(value);
 #else
-  return GenericByteSwap64(value);
+	return GenericByteSwap64(value);
 #endif
 }
 
@@ -141,7 +112,7 @@ ByteSwap64(uint64_t value) noexcept
 constexpr uint16_t
 FromBE16(uint16_t value) noexcept
 {
-  return IsBigEndian() ? value : ByteSwap16(value);
+	return IsBigEndian() ? value : ByteSwap16(value);
 }
 
 /**
@@ -150,7 +121,7 @@ FromBE16(uint16_t value) noexcept
 constexpr uint32_t
 FromBE32(uint32_t value) noexcept
 {
-  return IsBigEndian() ? value : ByteSwap32(value);
+	return IsBigEndian() ? value : ByteSwap32(value);
 }
 
 /**
@@ -159,7 +130,7 @@ FromBE32(uint32_t value) noexcept
 constexpr uint64_t
 FromBE64(uint64_t value) noexcept
 {
-  return IsBigEndian() ? value : ByteSwap64(value);
+	return IsBigEndian() ? value : ByteSwap64(value);
 }
 
 /**
@@ -168,7 +139,7 @@ FromBE64(uint64_t value) noexcept
 constexpr uint16_t
 FromLE16(uint16_t value) noexcept
 {
-  return IsLittleEndian() ? value : ByteSwap16(value);
+	return IsLittleEndian() ? value : ByteSwap16(value);
 }
 
 /**
@@ -177,7 +148,7 @@ FromLE16(uint16_t value) noexcept
 constexpr uint32_t
 FromLE32(uint32_t value) noexcept
 {
-  return IsLittleEndian() ? value : ByteSwap32(value);
+	return IsLittleEndian() ? value : ByteSwap32(value);
 }
 
 /**
@@ -186,7 +157,7 @@ FromLE32(uint32_t value) noexcept
 constexpr uint64_t
 FromLE64(uint64_t value) noexcept
 {
-  return IsLittleEndian() ? value : ByteSwap64(value);
+	return IsLittleEndian() ? value : ByteSwap64(value);
 }
 
 /**
@@ -195,7 +166,7 @@ FromLE64(uint64_t value) noexcept
 constexpr uint16_t
 ToBE16(uint16_t value) noexcept
 {
-  return IsBigEndian() ? value : ByteSwap16(value);
+	return IsBigEndian() ? value : ByteSwap16(value);
 }
 
 /**
@@ -204,7 +175,7 @@ ToBE16(uint16_t value) noexcept
 constexpr uint32_t
 ToBE32(uint32_t value) noexcept
 {
-  return IsBigEndian() ? value : ByteSwap32(value);
+	return IsBigEndian() ? value : ByteSwap32(value);
 }
 
 /**
@@ -213,7 +184,7 @@ ToBE32(uint32_t value) noexcept
 constexpr uint64_t
 ToBE64(uint64_t value) noexcept
 {
-  return IsBigEndian() ? value : ByteSwap64(value);
+	return IsBigEndian() ? value : ByteSwap64(value);
 }
 
 /**
@@ -222,7 +193,7 @@ ToBE64(uint64_t value) noexcept
 constexpr uint16_t
 ToLE16(uint16_t value) noexcept
 {
-  return IsLittleEndian() ? value : ByteSwap16(value);
+	return IsLittleEndian() ? value : ByteSwap16(value);
 }
 
 /**
@@ -231,7 +202,7 @@ ToLE16(uint16_t value) noexcept
 constexpr uint32_t
 ToLE32(uint32_t value) noexcept
 {
-  return IsLittleEndian() ? value : ByteSwap32(value);
+	return IsLittleEndian() ? value : ByteSwap32(value);
 }
 
 /**
@@ -240,7 +211,7 @@ ToLE32(uint32_t value) noexcept
 constexpr uint64_t
 ToLE64(uint64_t value) noexcept
 {
-  return IsLittleEndian() ? value : ByteSwap64(value);
+	return IsLittleEndian() ? value : ByteSwap64(value);
 }
 
 /**
@@ -497,3 +468,55 @@ public:
 
 static_assert(sizeof(PackedLE32) == sizeof(uint32_t), "Wrong size");
 static_assert(alignof(PackedLE32) == 1, "Wrong alignment");
+
+/**
+ * A packed little-endian 64 bit integer.
+ */
+class PackedLE64 {
+	uint8_t a, b, c, d, e, f, g, h;
+
+public:
+	PackedLE64() = default;
+
+	constexpr PackedLE64(uint64_t src) noexcept
+		:a(uint8_t(src)),
+		 b(uint8_t(src >> 8)),
+		 c(uint8_t(src >> 16)),
+		 d(uint8_t(src >> 24)),
+		 e(uint8_t(src >> 32)),
+		 f(uint8_t(src >> 40)),
+		 g(uint8_t(src >> 48)),
+		 h(uint8_t(src >> 56)) {}
+
+	/**
+	 * Construct an instance from an integer which is already
+	 * little-endian.
+	 */
+	static constexpr auto FromLE(uint64_t src) noexcept {
+		union {
+			uint64_t in;
+			PackedLE64 out;
+		} u{src};
+		return u.out;
+	}
+
+	constexpr operator uint64_t() const noexcept {
+		return uint64_t(a) | (uint64_t(b) << 8) |
+			(uint64_t(c) << 16) | (uint64_t(d) << 24) |
+			(uint64_t(e) << 32) | (uint64_t(f) << 40) |
+			(uint64_t(g) << 48) | (uint64_t(h) << 56);
+	}
+
+	/**
+	 * Reads the raw, big-endian value.
+	 */
+	constexpr uint64_t raw() const noexcept {
+		uint64_t x = *this;
+		if (IsBigEndian())
+			x = ByteSwap64(x);
+		return x;
+	}
+};
+
+static_assert(sizeof(PackedLE64) == sizeof(uint64_t), "Wrong size");
+static_assert(alignof(PackedLE64) == 1, "Wrong alignment");

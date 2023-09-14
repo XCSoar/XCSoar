@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "GlueMapWindow.hpp"
 #include "Look/MapLook.hpp"
@@ -37,16 +17,15 @@ Copyright_License {
 #include "Renderer/FinalGlideBarRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "util/Macros.hpp"
-#include "util/Clamp.hpp"
 #include "util/StringAPI.hxx"
 #include "Look/GestureLook.hpp"
 #include "Input/InputEvents.hpp"
 #include "Renderer/MapScaleRenderer.hpp"
 
-#include <stdio.h>
+#include <algorithm> // for std::clamp()
 
 void
-GlueMapWindow::DrawGesture(Canvas &canvas) const
+GlueMapWindow::DrawGesture(Canvas &canvas) const noexcept
 {
   if (!gestures.HasPoints())
     return;
@@ -67,7 +46,7 @@ GlueMapWindow::DrawGesture(Canvas &canvas) const
 }
 
 void
-GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
+GlueMapWindow::DrawCrossHairs(Canvas &canvas) const noexcept
 {
   if (!render_projection.IsValid())
     return;
@@ -104,7 +83,7 @@ GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
 }
 
 void
-GlueMapWindow::DrawPanInfo(Canvas &canvas) const
+GlueMapWindow::DrawPanInfo(Canvas &canvas) const noexcept
 {
   if (!render_projection.IsValid())
     return;
@@ -163,7 +142,7 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
 
 void
 GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
-                             const NMEAInfo &info) const
+                             const NMEAInfo &info) const noexcept
 {
   const TCHAR *txt;
   const MaskedIcon *icon;
@@ -194,7 +173,8 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
 }
 
 void
-GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
+GlueMapWindow::DrawFlightMode(Canvas &canvas,
+                              const PixelRect &rc) const noexcept
 {
   int offset = 0;
 
@@ -247,7 +227,8 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
 }
 
 void
-GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
+GlueMapWindow::DrawFinalGlide(Canvas &canvas,
+                              const PixelRect &rc) const noexcept
 {
 
   if (GetMapSettings().final_glide_bar_display_mode==FinalGlideBarDisplayMode::OFF)
@@ -274,7 +255,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
 }
 
 void
-GlueMapWindow::DrawVario(Canvas &canvas, const PixelRect &rc) const
+GlueMapWindow::DrawVario(Canvas &canvas, const PixelRect &rc) const noexcept
 {
   if (!GetMapSettings().vario_bar_enabled)
    return;
@@ -314,7 +295,7 @@ GlueMapWindow::SetBottomMarginFactor(unsigned margin_factor) noexcept
 
 void
 GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
-                            const MapWindowProjection &projection) const
+                            const MapWindowProjection &projection) const noexcept
 {
 
   PixelRect scale_pos(rc.left, rc.top, rc.right, rc.bottom - bottom_margin);
@@ -380,7 +361,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 }
 
 void
-GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const
+GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const noexcept
 {
   if (InCirclingMode() && IsNearSelf()) {
     // in circling mode, draw thermal at actual estimated location
@@ -397,7 +378,8 @@ GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const
 }
 
 void
-GlueMapWindow::RenderTrail(Canvas &canvas, const PixelPoint aircraft_pos)
+GlueMapWindow::RenderTrail(Canvas &canvas,
+                           const PixelPoint aircraft_pos) noexcept
 {
   TimeStamp min_time;
   switch(GetMapSettings().trail.length) {
@@ -420,13 +402,15 @@ GlueMapWindow::RenderTrail(Canvas &canvas, const PixelPoint aircraft_pos)
 }
 
 void
-GlueMapWindow::RenderTrackBearing(Canvas &canvas, const PixelPoint aircraft_pos)
+GlueMapWindow::RenderTrackBearing(Canvas &canvas,
+                                  const PixelPoint aircraft_pos) noexcept
 {
   DrawTrackBearing(canvas, aircraft_pos, InCirclingMode());
 }
 
 void
-GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
+GlueMapWindow::DrawThermalBand(Canvas &canvas,
+                               const PixelRect &rc) const noexcept
 {
   if (Calculated().task_stats.total.solution_remaining.IsOk() &&
       Calculated().task_stats.total.solution_remaining.altitude_difference > 50
@@ -462,11 +446,12 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
 }
 
 void
-GlueMapWindow::DrawStallRatio(Canvas &canvas, const PixelRect &rc) const
+GlueMapWindow::DrawStallRatio(Canvas &canvas,
+                              const PixelRect &rc) const noexcept
 {
   if (Basic().stall_ratio_available) {
     // JMW experimental, display stall sensor
-    auto s = Clamp(Basic().stall_ratio, 0., 1.);
+    auto s = std::clamp(Basic().stall_ratio, 0., 1.);
     int m = rc.GetHeight() * s * s;
 
     const auto p = rc.GetBottomRight();

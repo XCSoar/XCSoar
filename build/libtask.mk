@@ -79,4 +79,6 @@ TASK_SOURCES = \
 	$(TASK_SRC_DIR)/Stats/TaskStats.cpp \
 	$(TASK_SRC_DIR)/Stats/StartStats.cpp \
 
+TASK_DEPENDS = WAYPOINT GEO MATH
+
 $(eval $(call link-library,libtask,TASK))

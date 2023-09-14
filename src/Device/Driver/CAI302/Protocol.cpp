@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Protocol.hpp"
 #include "Device/Port/Port.hpp"
@@ -32,9 +12,9 @@ Copyright_License {
 #include <stdio.h>
 
 void
-CAI302::WriteString(Port &port, const char *p, OperationEnvironment &env)
+CAI302::WriteString(Port &port, std::string_view s, OperationEnvironment &env)
 {
-  port.FullWriteString(p, env, std::chrono::seconds(2));
+  port.FullWrite(s, env, std::chrono::seconds(2));
 }
 
 void
@@ -104,41 +84,38 @@ CAI302::UploadMode(Port &port, OperationEnvironment &env)
 }
 
 int
-CAI302::ReadShortReply(Port &port, void *buffer, unsigned max_size,
+CAI302::ReadShortReply(Port &port, std::span<std::byte> dest,
                        OperationEnvironment &env,
                        std::chrono::steady_clock::duration timeout)
 {
   unsigned char header[3];
-  port.FullRead(header, sizeof(header), env, timeout);
+  port.FullRead(std::as_writable_bytes(std::span{header}), env, timeout);
 
   unsigned size = header[0];
   if (size < sizeof(header))
     return -1;
 
   size -= sizeof(header);
-  if (size > max_size)
-    size = max_size;
+  if (size > dest.size())
+    size = dest.size();
 
-  port.FullRead(buffer, size, env, timeout);
+  port.FullRead(dest.first(size), env, timeout);
 
   // XXX verify the checksum
 
-  if (size < max_size) {
-    /* fill the rest with zeroes */
-    char *p = (char *)buffer;
-    std::fill(p + size, p + max_size, 0);
-  }
+  /* fill the rest with zeroes */
+  std::fill(std::next(dest.begin(), size), dest.end(), std::byte{});
 
   return size;
 }
 
 int
-CAI302::ReadLargeReply(Port &port, void *buffer, unsigned max_size,
+CAI302::ReadLargeReply(Port &port, std::span<std::byte> dest,
                        OperationEnvironment &env,
                        std::chrono::steady_clock::duration timeout)
 {
   unsigned char header[5];
-  port.FullRead(header, sizeof(header), env, timeout);
+  port.FullRead(std::as_writable_bytes(std::span{header}), env, timeout);
 
   if (header[0] == 0x09 && header[1] >= 0x10 &&
       header[3] == 0x0d && header[4] == 0x0a) {
@@ -147,8 +124,9 @@ CAI302::ReadLargeReply(Port &port, void *buffer, unsigned max_size,
        the "up>" prompt */
 
     char prompt[4];
-    if (port.Read(prompt, 4) == 4 && prompt[0] == 0x0a &&
-        prompt[1] == 'u' && prompt[2] == 'p' && prompt[3] == '>')
+    if (port.Read(std::as_writable_bytes(std::span{prompt})) == 4 &&
+        prompt[0] == 0x0a && prompt[1] == 'u' &&
+        prompt[2] == 'p' && prompt[3] == '>')
       return -2;
 
     return -1;
@@ -159,32 +137,29 @@ CAI302::ReadLargeReply(Port &port, void *buffer, unsigned max_size,
     return -1;
 
   size -= sizeof(header);
-  if (size > max_size)
-    size = max_size;
+  if (size > dest.size())
+    size = dest.size();
 
-  port.FullRead(buffer, size, env, timeout);
+  port.FullRead(dest.first(size), env, timeout);
 
   // XXX verify the checksum
 
-  if (size < max_size) {
-    /* fill the rest with zeroes */
-    char *p = (char *)buffer;
-    std::fill(p + size, p + max_size, 0);
-  }
+  /* fill the rest with zeroes */
+  std::fill(std::next(dest.begin(), size), dest.end(), std::byte{});
 
   return size;
 }
 
 int
 CAI302::UploadShort(Port &port, const char *command,
-                    void *response, unsigned max_size,
+                    std::span<std::byte> response,
                     OperationEnvironment &env,
                     std::chrono::steady_clock::duration timeout)
 {
   port.Flush();
   WriteString(port, command, env);
 
-  int nbytes = ReadShortReply(port, response, max_size, env, timeout);
+  int nbytes = ReadShortReply(port, response, env, timeout);
   if (nbytes < 0)
     return nbytes;
 
@@ -194,21 +169,21 @@ CAI302::UploadShort(Port &port, const char *command,
 
 int
 CAI302::UploadLarge(Port &port, const char *command,
-                    void *response, unsigned max_size,
+                    std::span<std::byte> response,
                     OperationEnvironment &env,
                     std::chrono::steady_clock::duration timeout)
 {
   port.Flush();
   WriteString(port, command, env);
 
-  int nbytes = ReadLargeReply(port, response, max_size, env, timeout);
+  int nbytes = ReadLargeReply(port, response, env, timeout);
 
   if (nbytes == -2) {
     /* transmission error - try again */
 
     WriteString(port, command, env);
 
-    nbytes = ReadLargeReply(port, response, max_size, env, timeout);
+    nbytes = ReadLargeReply(port, response, env, timeout);
   }
 
   if (nbytes < 0)
@@ -222,7 +197,9 @@ bool
 CAI302::UploadGeneralInfo(Port &port, GeneralInfo &data,
                           OperationEnvironment &env)
 {
-  return UploadShort(port, "W\r", &data, sizeof(data), env) == sizeof(data);
+  return UploadShort(port, "W\r",
+                     std::as_writable_bytes(std::span{&data, 1}),
+                     env) == sizeof(data);
 }
 
 bool
@@ -233,7 +210,9 @@ CAI302::UploadFileList(Port &port, unsigned i, FileList &data,
 
   char cmd[16];
   snprintf(cmd, sizeof(cmd), "B %u\r", 196 + i);
-  return UploadLarge(port, cmd, &data, sizeof(data), env) == sizeof(data);
+  return UploadLarge(port, cmd,
+                     std::as_writable_bytes(std::span{&data, 1}),
+                     env) == sizeof(data);
 }
 
 bool
@@ -244,7 +223,9 @@ CAI302::UploadFileASCII(Port &port, unsigned i, FileASCII &data,
 
   char cmd[16];
   snprintf(cmd, sizeof(cmd), "B %u\r", 64 + i);
-  return UploadLarge(port, cmd, &data, sizeof(data), env) == sizeof(data);
+  return UploadLarge(port, cmd,
+                     std::as_writable_bytes(std::span{&data, 1}),
+                     env) == sizeof(data);
 }
 
 bool
@@ -255,14 +236,16 @@ CAI302::UploadFileBinary(Port &port, unsigned i, FileBinary &data,
 
   char cmd[16];
   snprintf(cmd, sizeof(cmd), "B %u\r", 256 + i);
-  return UploadLarge(port, cmd, &data, sizeof(data), env) == sizeof(data);
+  return UploadLarge(port, cmd,
+                     std::as_writable_bytes(std::span{&data, 1}),
+                     env) == sizeof(data);
 }
 
 int
-CAI302::UploadFileData(Port &port, bool next, void *data, unsigned length,
+CAI302::UploadFileData(Port &port, bool next, std::span<std::byte> dest,
                        OperationEnvironment &env)
 {
-  return UploadLarge(port, next ? "B N\r" : "B R\r", data, length, env,
+  return UploadLarge(port, next ? "B N\r" : "B R\r", dest, env,
                      std::chrono::seconds(15));
 }
 
@@ -270,32 +253,42 @@ bool
 CAI302::UploadFileSignatureASCII(Port &port, FileSignatureASCII &data,
                                  OperationEnvironment &env)
 {
-  return UploadLarge(port, "B S\r", &data, sizeof(data), env) == sizeof(data);
+  return UploadLarge(port, "B S\r",
+                     std::as_writable_bytes(std::span{&data, 1}),
+                     env) == sizeof(data);
 }
 
 bool
 CAI302::UploadPolarMeta(Port &port, PolarMeta &data, OperationEnvironment &env)
 {
-  return UploadShort(port, "G\r", &data, sizeof(data), env) > 0;
+  return UploadShort(port, "G\r",
+                     std::as_writable_bytes(std::span{&data, 1}),
+                     env) > 0;
 }
 
 bool
 CAI302::UploadPolar(Port &port, Polar &data, OperationEnvironment &env)
 {
-  return UploadShort(port, "G 0\r", &data, sizeof(data), env) > 0;
+  return UploadShort(port, "G 0\r",
+                     std::as_writable_bytes(std::span{&data, 1}),
+                     env) > 0;
 }
 
 bool
 CAI302::UploadPilotMeta(Port &port, PilotMeta &data, OperationEnvironment &env)
 {
-  return UploadShort(port, "O\r", &data, sizeof(data), env) > 0;
+  return UploadShort(port, "O\r",
+                     std::as_writable_bytes(std::span{&data, 1}),
+                     env) > 0;
 }
 
 bool
 CAI302::UploadPilotMetaActive(Port &port, PilotMetaActive &data,
                               OperationEnvironment &env)
 {
-  return UploadShort(port, "O A\r", &data, sizeof(data), env) > 0;
+  return UploadShort(port, "O A\r",
+                     std::as_writable_bytes(std::span{&data, 1}),
+                     env) > 0;
 }
 
 bool
@@ -304,12 +297,14 @@ CAI302::UploadPilot(Port &port, unsigned i, Pilot &data,
 {
   char cmd[16];
   snprintf(cmd, sizeof(cmd), "O %u\r", i);
-  return UploadShort(port, cmd, &data, sizeof(data), env) > 0;
+  return UploadShort(port, cmd,
+                     std::as_writable_bytes(std::span{&data, 1}),
+                     env) > 0;
 }
 
 int
 CAI302::UploadPilotBlock(Port &port, unsigned start, unsigned count,
-                         unsigned record_size, void *buffer,
+                         unsigned record_size, std::byte *buffer,
                          OperationEnvironment &env)
 {
   char cmd[16];
@@ -317,7 +312,7 @@ CAI302::UploadPilotBlock(Port &port, unsigned start, unsigned count,
 
   /* the CAI302 data port user's guide 2.2 says that the "O B"
      response is "large", but this seems wrong */
-  int nbytes = UploadShort(port, cmd, buffer, count * record_size, env);
+  int nbytes = UploadShort(port, cmd, {buffer, count * record_size}, env);
   return nbytes >= 0 && nbytes % record_size == 0
     ? nbytes / record_size
     : -1;
@@ -399,7 +394,9 @@ bool
 CAI302::UploadNavpointMeta(Port &port, NavpointMeta &data,
                            OperationEnvironment &env)
 {
-  return UploadShort(port, "C\r", &data, sizeof(data), env) > 0;
+  return UploadShort(port, "C\r",
+                     std::as_writable_bytes(std::span{&data, 1}),
+                     env) > 0;
 }
 
 bool
@@ -408,7 +405,9 @@ CAI302::UploadNavpoint(Port &port, unsigned i, Navpoint &data,
 {
   char cmd[16];
   snprintf(cmd, sizeof(cmd), "C %u\r", i);
-  return UploadShort(port, cmd, &data, sizeof(data), env) > 0;
+  return UploadShort(port, cmd,
+                     std::as_writable_bytes(std::span{&data, 1}),
+                     env) > 0;
 }
 
 static void

@@ -8,7 +8,6 @@ ASYNC_SOURCES = \
 	$(SRC)/event/Loop.cxx \
 	$(SRC)/event/Call.cxx \
 	$(SRC)/event/DeferEvent.cxx \
-	$(SRC)/event/IdleEvent.cxx \
 	$(SRC)/event/InjectEvent.cxx \
 	$(SRC)/event/SocketEvent.cxx \
 	$(SRC)/event/SignalMonitor.cxx \
@@ -34,7 +33,6 @@ ASYNC_SOURCES += \
 endif
 endif
 
-ASYNC_CPPFLAGS_INTERNAL = $(CARES_CPPFLAGS)
-ASYNC_LDLIBS = $(CARES_LDLIBS)
+ASYNC_DEPENDS = CARES OS
 
 $(eval $(call link-library,async,ASYNC))

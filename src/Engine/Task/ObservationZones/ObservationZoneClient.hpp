@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
- */
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -33,7 +14,7 @@ struct GeoPoint;
  * Class holding an ObzervationZonePoint, directing calls to it
  */
 class ObservationZoneClient {
-  std::unique_ptr<ObservationZonePoint> oz_point;
+  const std::unique_ptr<ObservationZonePoint> oz_point;
 
 public:
   /**
@@ -41,7 +22,10 @@ public:
    *
    * @param _oz The OZ to store
    */
-  explicit ObservationZoneClient(std::unique_ptr<ObservationZonePoint> _oz_point) noexcept;
+  template<typename T>
+  explicit ObservationZoneClient(T &&_oz_point) noexcept
+    :oz_point(std::forward<T>(_oz_point)) {}
+
   ~ObservationZoneClient() noexcept;
 
   /**
@@ -49,30 +33,31 @@ public:
    *
    * @return Observation zone
    */
-  ObservationZonePoint &GetObservationZone() {
+  ObservationZonePoint &GetObservationZone() noexcept {
     return *oz_point;
   }
 
-  const ObservationZonePoint &GetObservationZone() const {
+  const ObservationZonePoint &GetObservationZone() const noexcept {
     return *oz_point;
   }
 
-  bool IsInSector(const GeoPoint &location) const;
+  bool IsInSector(const GeoPoint &location) const noexcept;
 
   [[gnu::pure]]
-  bool CanStartThroughTop() const;
+  bool CanStartThroughTop() const noexcept;
 
   [[gnu::pure]]
   bool TransitionConstraint(const GeoPoint &location,
-                            const GeoPoint &last_location) const;
+                            const GeoPoint &last_location) const noexcept;
 
   [[gnu::pure]]
-  OZBoundary GetBoundary() const;
-
-  virtual double ScoreAdjustment() const;
-
-  void SetLegs(const TaskPoint *previous, const TaskPoint *next);
+  OZBoundary GetBoundary() const noexcept;
 
   [[gnu::pure]]
-  GeoPoint GetRandomPointInSector(double mag) const;
+  virtual double ScoreAdjustment() const noexcept;
+
+  void SetLegs(const TaskPoint *previous, const TaskPoint *next) noexcept;
+
+  [[gnu::pure]]
+  GeoPoint GetRandomPointInSector(double mag) const noexcept;
 };

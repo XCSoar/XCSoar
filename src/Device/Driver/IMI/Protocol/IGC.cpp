@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "IGC.hpp"
 #include "Conversion.hpp"
@@ -52,7 +32,7 @@ IMI::WriteString(BufferedOutputStream &os, const char *buffer, size_t max_length
   if (zero != nullptr)
     length = zero - buffer;
 
-  os.Write(buffer, length);
+  os.Write(std::as_bytes(std::span{buffer, length}));
 }
 
 void
@@ -141,8 +121,8 @@ IMI::WriteHeader(BufferedOutputStream &os, const TDeclaration &decl, IMIBYTE tam
   os.Write("\r\n");
 
   BrokenDate start_date = ConvertToDateTime(decl.header.recStartDateTime);
-  os.Format("HFDTE%02d%02d%02d\r\n",
-            start_date.day, start_date.month, start_date.year % 100);
+  os.Fmt("HFDTE{:02}{:02}{:02}\r\n",
+         start_date.day, start_date.month, start_date.year % 100);
 
   os.Write("HFFXA010\r\n");
 
@@ -151,9 +131,9 @@ IMI::WriteHeader(BufferedOutputStream &os, const TDeclaration &decl, IMIBYTE tam
   os.Write("\r\n");
 
   if (decl.header.db1Day != 0)
-    os.Format("HFDB1PILOTBIRTHDATE:%02d%02d%02d\r\n",
-              decl.header.db1Day + 1, decl.header.db1Month + 1,
-              decl.header.db1Year % 100);
+    os.Fmt("HFDB1PILOTBIRTHDATE:{:02}{:02}{:02}\r\n",
+           decl.header.db1Day + 1, decl.header.db1Month + 1,
+           decl.header.db1Year % 100);
 
   os.Write("HFGTYGLIDERTYPE:");
   WriteString(os, decl.header.gty, sizeof(decl.header.gty));
@@ -165,22 +145,22 @@ IMI::WriteHeader(BufferedOutputStream &os, const TDeclaration &decl, IMIBYTE tam
 
   os.Write("HFDTM100DATUM:WGS-1984\r\n");
 
-  os.Format("HFRFWFIRMWAREVERSION:%d.%d\r\n",
-            (unsigned)(decl.header.swVersion >> 4),
-            (unsigned)(decl.header.swVersion & 0x0F));
+  os.Fmt("HFRFWFIRMWAREVERSION:{}.{}\r\n",
+         decl.header.swVersion >> 4,
+         decl.header.swVersion & 0x0F);
 
-  os.Format("HFRHWHARDWAREVERSION:%d.%d\r\n",
-            (unsigned)(decl.header.hwVersion >> 4),
-            (unsigned)(decl.header.hwVersion & 0x0F));
+  os.Fmt("HFRHWHARDWAREVERSION:{}.{}\r\n",
+         decl.header.hwVersion >> 4,
+         decl.header.hwVersion & 0x0F);
 
-  os.Format("HFFTYFRTYPE:IMI Gliding, %s\r\n",
-            GetDeviceName(decl.header.device));
+  os.Fmt("HFFTYFRTYPE:IMI Gliding, {}\r\n",
+         GetDeviceName(decl.header.device));
 
-  os.Format("HFGPSGPS:%s\r\n",
-            GetGPSName(decl.header.gps));
+  os.Fmt("HFGPSGPS:{}\r\n",
+         GetGPSName(decl.header.gps));
 
-  os.Format("HFPRSPRESSALTSENSOR:%s\r\n",
-            GetSensorName(decl.header.sensor));
+  os.Fmt("HFPRSPRESSALTSENSOR:{}\r\n",
+         GetSensorName(decl.header.sensor));
 
   if (tampered)
     os.Write("HFFRSSECURITYSUSPECTUSEVALIPROGRAM:Tamper detected, FR needs to be reset");
@@ -206,9 +186,9 @@ IMI::WriteHeader(BufferedOutputStream &os, const TDeclaration &decl, IMIBYTE tam
     os.Write("\r\n");
 
     if (decl.header.db2Day != 0)
-      os.Format("HFDB1SECONDCREWBIRTHDATE:%02d%02d%02d\r\n",
-                decl.header.db2Day + 1, decl.header.db2Month + 1,
-                decl.header.db2Year % 100);
+      os.Fmt("HFDB1SECONDCREWBIRTHDATE:{:02}{:02}{:02}\r\n",
+             decl.header.db2Day + 1, decl.header.db2Month + 1,
+             decl.header.db2Year % 100);
   }
 
   if (decl.header.clb[0] != '\0') {
@@ -233,18 +213,17 @@ IMI::WriteHeader(BufferedOutputStream &os, const TDeclaration &decl, IMIBYTE tam
   unsigned count = CountWaypoints(decl.wp);
   if (count >= 2) {
     BrokenDateTime decl_date = ConvertToDateTime(decl.header.date);
-    os.Format("C%02d%02d%02d", decl_date.day, decl_date.month,
-              decl_date.year % 100);
-    os.Format("%02d%02d%02d", decl_date.hour, decl_date.minute,
-              decl_date.second);
+    os.Fmt("C{:02}{:02}{:02}{:02}{:02}{:02}",
+           decl_date.day, decl_date.month, decl_date.year % 100,
+           decl_date.hour, decl_date.minute, decl_date.second);
 
     if (decl.header.tskYear != 0)
-      os.Format("%02d%02d%02d", decl.header.tskDay + 1,
-                decl.header.tskMonth + 1, decl.header.tskYear % 100);
+      os.Fmt("{:02}{:02}{:02}", decl.header.tskDay + 1,
+             decl.header.tskMonth + 1, decl.header.tskYear % 100);
     else
       os.Write("000000");
 
-    os.Format("%04d%02d", decl.header.tskNumber, count - 2);
+    os.Fmt("{:04}{:02}", decl.header.tskNumber, count - 2);
     WriteString(os, decl.header.tskName, sizeof(decl.header.tskName));
     os.Write("\r\n");
 
@@ -252,21 +231,19 @@ IMI::WriteHeader(BufferedOutputStream &os, const TDeclaration &decl, IMIBYTE tam
     for (unsigned i = 0; i < count + 2; i++, wp++) {
       AngleConverter l;
       l.value = wp->lat;
-      os.Format("C%02d%05d%c", l.degrees, l.milliminutes,
-                (l.sign ? 'S' : 'N'));
+      os.Fmt("C{:02}{:05}{}", (unsigned)l.degrees,
+             (unsigned)l.milliminutes, l.sign ? 'S' : 'N');
 
       l.value = wp->lon;
-      os.Format("%03d%05d%c", l.degrees, l.milliminutes,
-                (l.sign ? 'W' : 'E'));
+      os.Fmt("{:03}{:05}{}", (unsigned)l.degrees,
+             (unsigned)l.milliminutes, l.sign ? 'W' : 'E');
 
       WriteString(os, wp->name, sizeof(wp->name));
       os.Write("\r\n");
     }
   }
 
-  os.Write("LIMIFLIGHTOFDAY:");
-  os.Format("%03d", decl.header.flightOfDay);
-  os.Write("\r\n");
+  os.Fmt("LIMIFLIGHTOFDAY:{:03}\r\n", decl.header.flightOfDay);
 
   //first fix must be full
   fixBLastFull.id = 0;
@@ -350,30 +327,27 @@ IMI::WriteFix(BufferedOutputStream &os, const Fix &fix, bool fromB2, int no_enl)
 
     os.Write('B');
     BrokenTime time = ConvertToDateTime(fix.time);
-    os.Format("%02d%02d%02d", time.hour, time.minute, time.second);
+    os.Fmt("{:02}{:02}{:02}", time.hour, time.minute, time.second);
 
     angle.value = (IMIDWORD)fix_b->lat;
-    os.Format("%02d%05d", angle.degrees, angle.milliminutes);
-
-    os.Write(angle.sign ? 'S' : 'N');
+    os.Fmt("{:02}{:05}{}", (unsigned)angle.degrees,
+           (unsigned)angle.milliminutes, angle.sign ? 'S' : 'N');
 
     angle.value = (IMIDWORD)fix_b->lon;
-    os.Format("%03d%05d", angle.degrees, angle.milliminutes);
-
-    os.Write(angle.sign ? 'W' : 'E');
+    os.Fmt("{:03}{:05}{}", (unsigned)angle.degrees,
+           (unsigned)angle.milliminutes, angle.sign ? 'W' : 'E');
 
     os.Write("VA??"[fix_b->fv]);
 
     int alt = (int)fix_b->alt - 1000;
-    os.Format(alt < 0 ? "%04d" : "%05d", alt);
+    os.Fmt(alt < 0 ? "{:04}" : "{:05}", alt);
     int gpsalt = (int)fix_b->gpsalt - 1000;
-    os.Format(alt < 0 ? "%04d" : "%05d", gpsalt);
+    os.Fmt(gpsalt < 0 ? "{:04}" : "{:05}", gpsalt);
 
-    os.Format("%03d", fix_b->fxa);
-    os.Format("%02d", siu);
+    os.Fmt("{:03}{:02}", fix_b->fxa, siu);
 
     if (!no_enl)
-      os.Format("%03d", fix_b->enl);
+      os.Fmt("{:03}", fix_b->enl);
 
     append_line_break = true;
 
@@ -390,10 +364,9 @@ IMI::WriteFix(BufferedOutputStream &os, const Fix &fix, bool fromB2, int no_enl)
 
     os.Write('K');
     BrokenTime time = ConvertToDateTime(fix.time);
-    os.Format("%02d%02d%02d", time.hour, time.minute, time.second);
+    os.Fmt("{:02}{:02}{:02}", time.hour, time.minute, time.second);
 
-    os.Format("%03d", fix_k->hdt);
-    os.Format("%03d", fix_k->gsp);
+    os.Fmt("{:03}{:03}", fix_k->hdt, fix_k->gsp);
     append_line_break = true;
   } else if (fix.id == IMIFIX_ID_E_RECORD) {
     const FixE *fix_e = (const FixE *)&fix;
@@ -401,11 +374,11 @@ IMI::WriteFix(BufferedOutputStream &os, const Fix &fix, bool fromB2, int no_enl)
       siu = 0;
       os.Write('F');
       BrokenTime time = ConvertToDateTime(fix.time);
-      os.Format("%02d%02d%02d", time.hour, time.minute, time.second);
+      os.Fmt("{:02}{:02}{:02}", time.hour, time.minute, time.second);
 
       for (unsigned i = 0; i < sizeof(fix_e->text); i++) {
         if (fix_e->text[i] > 0) {
-          os.Format("%02d", fix_e->text[i]);
+          os.Fmt("{:02}", fix_e->text[i]);
           siu++;
         }
       }
@@ -413,21 +386,21 @@ IMI::WriteFix(BufferedOutputStream &os, const Fix &fix, bool fromB2, int no_enl)
     } else if (fix_e->type == IMIFIX_E_TYPE_COMMENT) {
       os.Write("LIMI");
       BrokenTime time = ConvertToDateTime(fix.time);
-      os.Format("%02d%02d%02d", time.hour, time.minute, time.second);
+      os.Fmt("{:02}{:02}{:02}", time.hour, time.minute, time.second);
       WriteString(os, (const char *)fix_e->text, sizeof(fix_e->text));
 
       append_line_break = true;
     } else if (fix_e->type == IMIFIX_E_TYPE_PEV) {
       os.Write('E');
       BrokenTime time = ConvertToDateTime(fix.time);
-      os.Format("%02d%02d%02d", time.hour, time.minute, time.second);
+      os.Fmt("{:02}{:02}{:02}", time.hour, time.minute, time.second);
       WriteString(os, (const char *)fix_e->text, sizeof(fix_e->text));
 
       append_line_break = true;
     } else if (fix_e->type == IMIFIX_E_TYPE_TASK) {
       os.Write('E');
       BrokenTime time = ConvertToDateTime(fix.time);
-      os.Format("%02d%02d%02d", time.hour, time.minute, time.second);
+      os.Fmt("{:02}{:02}{:02}", time.hour, time.minute, time.second);
 
       if (fix_e->text[0] == 1) {
         os.Write("STA");
@@ -440,7 +413,7 @@ IMI::WriteFix(BufferedOutputStream &os, const Fix &fix, bool fromB2, int no_enl)
         else
           os.Write("TPC");
 
-        os.Format("%02d", fix_e->text[1]);
+        os.Fmt("{:02}", fix_e->text[1]);
         WriteString(os, (const char *)fix_e->text + 2, sizeof(fix_e->text) - 2);
       }
 

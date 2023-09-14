@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 /*
 
@@ -40,7 +20,7 @@ It also covers the configuration side of on screen labels.
 For further information on config file formats see
 
 source/Common/Data/Input/ALL
-doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
+doc/html/advanced/input/ALL  http://xcsoar.sourceforge.net/advanced/input/
 
 */
 
@@ -70,7 +50,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "UIActions.hpp"
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
-#include "Components.hpp"
 #include "Language/Language.hpp"
 #include "Logger/Logger.hpp"
 #include "Logger/NMEALogger.hpp"
@@ -88,6 +67,9 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Form/DataField/File.hpp"
 #include "Dialogs/FilePicker.hpp"
 #include "net/client/WeGlide/UploadIGCFile.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
+#include "DataComponents.hpp"
 
 #include <cassert>
 #include <tchar.h>
@@ -139,6 +121,7 @@ trigger_redraw()
 static WaypointPtr
 SuspendAppendWaypoint(Waypoint &&wp)
 {
+  auto &way_points = *data_components->waypoints;
   ScopeSuspendAllThreads suspend;
   auto ptr = way_points.Append(std::move(wp));
   way_points.Optimise();
@@ -171,7 +154,7 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
 
   if (StringIsEqual(misc, _T("reset"))) {
     ScopeSuspendAllThreads suspend;
-    way_points.EraseUserMarkers();
+    data_components->waypoints->EraseUserMarkers();
   } else {
     const auto location = GetVisibleLocation();
     if (!location.IsValid())
@@ -179,7 +162,8 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
 
     MarkLocation(location, basic.date_time_utc);
 
-    const WaypointFactory factory(WaypointOrigin::USER, terrain);
+    const WaypointFactory factory(WaypointOrigin::USER,
+                                  data_components->terrain.get());
     Waypoint wp = factory.Create(location);
     factory.FallbackElevation(wp);
 
@@ -207,7 +191,7 @@ InputEvents::eventPilotEvent([[maybe_unused]] const TCHAR *misc)
 try {
   // Configure start window
   const OrderedTaskSettings &ots =
-  	protected_task_manager->GetOrderedTaskSettings();
+    backend_components->protected_task_manager->GetOrderedTaskSettings();
   const StartConstraints &start = ots.start_constraints;
 
   const BrokenTime bt = BrokenDateTime::NowUTC();
@@ -228,14 +212,17 @@ try {
   }
   const RoughTimeSpan ts = RoughTimeSpan(new_start, new_end);
 
-  protected_task_manager->SetStartTimeSpan(ts);
+  backend_components->protected_task_manager->SetStartTimeSpan(ts);
 
   // Log pilot event
-  logger->LogPilotEvent(CommonInterface::Basic());
+  if (backend_components->igc_logger)
+    backend_components->igc_logger->LogPilotEvent(CommonInterface::Basic());
 
   // Let devices know the pilot event was pressed
-  MessageOperationEnvironment env;
-  devices->PutPilotEvent(env);
+  if (backend_components->devices) {
+    MessageOperationEnvironment env;
+    backend_components->devices->PutPilotEvent(env);
+  }
 } catch (...) {
   ShowError(std::current_exception(), _("Logger Error"));
 }
@@ -350,9 +337,9 @@ InputEvents::eventAnalysis([[maybe_unused]] const TCHAR *misc)
   dlgAnalysisShowModal(*CommonInterface::main_window,
                        CommonInterface::main_window->GetLook(),
                        CommonInterface::Full(),
-                       *glide_computer,
-                       &airspace_database,
-                       terrain);
+                       *backend_components->glide_computer,
+                       data_components->airspaces.get(),
+                       data_components->terrain.get());
 }
 
 // WaypointDetails
@@ -372,10 +359,10 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
   bool allow_edit = true;
 
   if (StringIsEqual(misc, _T("current"))) {
-    if (protected_task_manager == NULL)
+    if (!backend_components->protected_task_manager)
       return;
 
-    wp = protected_task_manager->GetActiveWaypoint();
+    wp = backend_components->protected_task_manager->GetActiveWaypoint();
     if (!wp) {
       Message::AddMessage(_("No active waypoint!"));
       return;
@@ -388,17 +375,18 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
     allow_navigation = false;
     allow_edit = false;
   } else if (StringIsEqual(misc, _T("select"))) {
-    wp = ShowWaypointListDialog(basic.location);
+    wp = ShowWaypointListDialog(*data_components->waypoints, basic.location);
   }
   if (wp)
-    dlgWaypointDetailsShowModal(std::move(wp),
+    dlgWaypointDetailsShowModal(data_components->waypoints.get(),
+                                std::move(wp),
                                 allow_navigation, allow_edit);
 }
 
 void
 InputEvents::eventWaypointEditor([[maybe_unused]] const TCHAR *misc)
 {
-  dlgConfigWaypointsShowModal();
+  dlgConfigWaypointsShowModal(*data_components->waypoints);
 }
 
 // StatusMessage
@@ -452,6 +440,7 @@ InputEvents::eventAutoLogger(const TCHAR *misc)
 void
 InputEvents::eventLogger(const TCHAR *misc)
 try {
+  auto *logger = backend_components->igc_logger.get();
   if (logger == nullptr)
     return;
 
@@ -464,23 +453,25 @@ try {
 
   if (StringIsEqual(misc, _T("start ask")))
     logger->GUIStartLogger(basic, settings_computer,
-                           protected_task_manager);
+                           backend_components->protected_task_manager.get());
   else if (StringIsEqual(misc, _T("start")))
     logger->GUIStartLogger(basic, settings_computer,
-                           protected_task_manager, true);
+                           backend_components->protected_task_manager.get(),
+                           true);
   else if (StringIsEqual(misc, _T("stop ask")))
     logger->GUIStopLogger(basic);
   else if (StringIsEqual(misc, _T("stop")))
     logger->GUIStopLogger(basic, true);
   else if (StringIsEqual(misc, _T("toggle ask")))
     logger->GUIToggleLogger(basic, settings_computer,
-                            protected_task_manager);
+                            backend_components->protected_task_manager.get());
   else if (StringIsEqual(misc, _T("toggle")))
     logger->GUIToggleLogger(basic, settings_computer,
-                            protected_task_manager, true);
+                            backend_components->protected_task_manager.get(),
+                            true);
   else if (StringIsEqual(misc, _T("nmea"))) {
-    nmea_logger->ToggleEnabled();
-    if (nmea_logger->IsEnabled()) {
+    backend_components->nmea_logger->ToggleEnabled();
+    if (backend_components->nmea_logger->IsEnabled()) {
       Message::AddMessage(_("NMEA log on"));
     } else {
       Message::AddMessage(_("NMEA log off"));
@@ -520,7 +511,7 @@ InputEvents::eventNearestWaypointDetails([[maybe_unused]] const TCHAR *misc)
     return;
 
   // big range..
-  PopupNearestWaypointDetails(way_points, location, 1.0e5);
+  PopupNearestWaypointDetails(*data_components->waypoints, location, 1.0e5);
 }
 
 // NearestMapItems
@@ -532,7 +523,7 @@ InputEvents::eventNearestMapItems([[maybe_unused]] const TCHAR *misc)
   if (!location.IsValid())
     return;
 
-  CommonInterface::main_window->GetMap()->ShowMapItems(location);
+  CommonInterface::main_window->GetMap()->ShowMapItems(location, true, false);
 }
 
 // Null
@@ -577,8 +568,8 @@ InputEvents::eventSetup(const TCHAR *misc)
   else if (StringIsEqual(misc, _T("Weather")))
     ShowWeatherDialog(_T("rasp"));
   else if (StringIsEqual(misc, _T("Replay"))) {
-    if (!CommonInterface::MovementDetected())
-      ShowReplayDialog();
+    if (!CommonInterface::MovementDetected() && backend_components->replay)
+      ShowReplayDialog(*backend_components->replay);
   } else if (StringIsEqual(misc, _T("Switches")))
     dlgSwitchesShowModal();
   else if (StringIsEqual(misc, _T("Teamcode")))
@@ -590,7 +581,7 @@ InputEvents::eventSetup(const TCHAR *misc)
   else if (StringIsEqual(misc, _T("Profile")))
     ProfileListDialog();
   else if (StringIsEqual(misc, _T("Alternates")))
-    dlgAlternatesListShowModal();
+    dlgAlternatesListShowModal(data_components->waypoints.get());
 
   trigger_redraw();
 }
@@ -617,9 +608,12 @@ InputEvents::eventRun(const TCHAR *misc)
   ::CloseHandle(pi.hProcess);
   ::CloseHandle(pi.hThread);
 
-  #elif !defined(__APPLE__) || !TARGET_OS_IPHONE
+#elif defined(__APPLE__) && TARGET_OS_IPHONE
+  // can't execute external programs on iOS
+  (void)misc;
+#else
   if (system(misc)) {;} // Ignore return value
-  #endif
+#endif
 }
 
 void
@@ -657,6 +651,7 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
+  auto &way_points = *data_components->waypoints;
 
   if (StringIsEqual(misc, _T("takeoff"))) {
     if (basic.location_available && calculated.terrain_valid) {
@@ -692,29 +687,30 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
 
 /* Recently done
 
-eventTaskLoad		- Load tasks from a file (misc = filename)
-eventTaskSave		- Save tasks to a file (misc = filename)
-eventProfileLoad		- Load profile from a file (misc = filename)
-eventProfileSave		- Save profile to a file (misc = filename)
+eventTaskLoad         - Load tasks from a file (misc = filename)
+eventTaskSave         - Save tasks to a file (misc = filename)
+eventProfileLoad      - Load profile from a file (misc = filename)
+eventProfileSave      - Save profile to a file (misc = filename)
 
 */
 
 /* TODO feature: - new events
 
-eventPanWaypoint		                - Set pan to a waypoint
+eventPanWaypoint                    - Set pan to a waypoint
 - Waypoint could be "next", "first", "last", "previous", or named
 - Note: wrong name - probably just part of eventPan
-eventPressure		- Increase, Decrease, show, Set pressure value
-eventDeclare			- (JMW separate from internal logger)
-eventAirspaceDisplay	- all, below nnn, below me, auto nnn
-eventAirspaceWarnings- on, off, time nn, ack nn
-eventTerrain			- see map_window.Event_Terrain
-eventCompass			- on, off, cruise on, crusie off, climb on, climb off
-eventVario			- on, off // JMW what does this do?
-eventOrientation		- north, track,  ???
-eventTerrainRange	        - on, off (might be part of eventTerrain)
-eventSounds			- Include Task and Modes sounds along with Vario
-- Include master nn, deadband nn, netto trigger mph/kts/...
+eventPressure         - Increase, Decrease, show, Set pressure value
+eventDeclare          - (JMW separate from internal logger)
+eventAirspaceDisplay  - all, below nnn, below me, auto nnn
+eventAirspaceWarnings - on, off, time nn, ack nn
+eventTerrain          - see map_window.Event_Terrain
+eventCompass          - on, off, cruise on, crusie off, climb on, climb off
+eventVario            - on, off // JMW what does this do?
+eventOrientation      - north, track,  ???
+eventTerrainRange     - on, off (might be part of eventTerrain)
+eventSounds           - Include Task and Modes sounds along with Vario
+                      - Include master nn, deadband nn, netto trigger
+mph/kts/...
 
 */
 

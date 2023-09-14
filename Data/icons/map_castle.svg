@@ -1,7 +1,65 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Svg Vector Icons : http://www.onlinewebfonts.com/icon -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
-<metadata> Svg Vector Icons : http://www.onlinewebfonts.com/icon </metadata>
-<g><g><path d="M928.8,40.6v61.3h-61.3V40.6h-61.3v61.3H745V40.6h-61.2v61.3v122.5l61.2,61.3v245h-61.2v-61.3H561.3v61.3H438.8v-61.3H316.3v61.3H255v-245l61.2-61.3V101.9V40.6H255v61.3h-61.3V40.6h-61.3v61.3H71.3V40.6H10v61.3v122.5l61.3,61.3v245v428.7h306.3V836.9c0-67.7,54.8-122.5,122.5-122.5c67.7,0,122.5,54.8,122.5,122.5v122.5h306.3V530.6v-245l61.2-61.3V101.9V40.6H928.8z M132.5,530.6v-91.9c0-17,13.7-30.6,30.6-30.6c16.9,0,30.6,13.6,30.6,30.6v91.9H132.5z M806.3,530.6v-91.9c0-17,13.7-30.6,30.6-30.6c16.9,0,30.6,13.6,30.6,30.6v91.9H806.3z"/></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   viewBox="0 0 22 22"
+   id="svg2"
+   sodipodi:docname="map_castle.svg"
+   width="22"
+   height="22"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6" />
+  <sodipodi:namedview
+     id="namedview4"
+     pagecolor="#ff00ff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="12.836708"
+     inkscape:cx="-28.083525"
+     inkscape:cy="31.004835"
+     inkscape:window-width="2560"
+     inkscape:window-height="1417"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="Image">
+    <g
+       id="g21961"
+       transform="matrix(0.68742899,0,0,0.68742899,-8.2370627,-56.251025)"
+       style="stroke-width:1.4547">
+      <path
+         style="color:#000000;fill:#000000;stroke-width:1.4547;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:3;-inkscape-stroke:none"
+         d="m 31.767578,94.818359 a 1.25012,1.25012 0 0 0 -1.078125,0.470703 l -6.595703,8.343748 -3.900391,-1.24804 a 1.25012,1.25012 0 0 0 -1.488281,0.60937 l -4.714844,9.00977 a 1.249995,1.249995 0 0 0 0.527344,1.68554 1.249995,1.249995 0 0 0 1.685547,-0.52734 l 4.230469,-8.07617 3.722656,1.19336 a 1.25012,1.25012 0 0 0 1.361328,-0.41602 l 5.978516,-7.562499 8.285156,14.693359 a 1.249995,1.249995 0 0 0 1.701172,0.47656 1.249995,1.249995 0 0 0 0.476562,-1.70312 L 32.757812,95.449219 a 1.25012,1.25012 0 0 0 -0.990234,-0.63086 z"
+         id="path4075-2" />
+      <path
+         style="color:#000000;fill:#000000;stroke-width:1.4547;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:3;-inkscape-stroke:none"
+         d="m 18.5625,81.833984 v 1.25 20.490236 1.25 h 2.5 v -1.25 -20.490236 -1.25 z"
+         id="path4077" />
+      <path
+         style="color:#000000;fill:#000000;stroke-width:1.4547;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:3;-inkscape-stroke:none"
+         d="m 32.857422,81.828125 -2.5,0.01172 0.0059,1.25 0.05664,12.980468 0.0059,1.25 2.5,-0.01172 -0.0059,-1.25 -0.05664,-12.980469 z"
+         id="path4079" />
+      <path
+         style="color:#000000;fill:#000000;stroke-width:1.4547;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:3;-inkscape-stroke:none"
+         d="m 24.462891,81.833984 v 1.25 3.712891 1.25 h 2.5 v -1.25 -3.712891 -1.25 z"
+         id="path4081" />
+      <path
+         style="color:#000000;fill:#000000;stroke-width:1.4547;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:3;-inkscape-stroke:none"
+         d="m 19.8125,85.546875 a 1.249995,1.249995 0 0 0 -1.25,1.25 1.249995,1.249995 0 0 0 1.25,1.25 h 11.828125 a 1.249995,1.249995 0 0 0 1.25,-1.25 1.249995,1.249995 0 0 0 -1.25,-1.25 z"
+         id="path4083" />
+    </g>
+  </g>
 </svg>

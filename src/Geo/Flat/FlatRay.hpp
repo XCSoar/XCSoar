@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
- */
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
  
 #pragma once
 
@@ -44,7 +25,7 @@ public:
    * @param from Origin of ray
    * @param to End point of ray
    */
-  FlatRay(const FlatGeoPoint& from, const FlatGeoPoint& to)
+  constexpr FlatRay(const FlatGeoPoint &from, const FlatGeoPoint &to) noexcept
     :point(from), vector(to - from),
      fx(vector.x != 0 ? 1.0 / vector.x : 0),
      fy(vector.y != 0 ? 1.0 / vector.y : 0) {}
@@ -53,7 +34,7 @@ public:
    * Return the length of the ray.
    */
   [[gnu::pure]]
-  int Magnitude() const;
+  int Magnitude() const noexcept;
 
   /**
    * Test whether two rays intersect
@@ -63,7 +44,7 @@ public:
    * @return Parameter [0,1] of vector on this ray that intersection occurs (or -1 if fail)
    */
   [[gnu::pure]]
-  double Intersects(const FlatRay &that) const;
+  double Intersects(const FlatRay &that) const noexcept;
 
   /**
    * Parametric form of ray
@@ -73,13 +54,13 @@ public:
    * @return Location of end point
    */
   [[gnu::pure]]
-  FlatGeoPoint Parametric(const double t) const;
+  FlatGeoPoint Parametric(double t) const noexcept;
 
   /**
    * Determine if two rays intersect away from their nodes
    */
   [[gnu::pure]]
-  bool IntersectsDistinct(const FlatRay& that) const;
+  bool IntersectsDistinct(const FlatRay &that) const noexcept;
 
   /**
    * Determine if two rays intersect away from their nodes, and return
@@ -87,9 +68,15 @@ public:
    * intersect.
    */
   [[gnu::pure]]
-  double DistinctIntersection(const FlatRay& that) const;
+  double DistinctIntersection(const FlatRay &that) const noexcept;
 
 private:
+  /**
+   * Checks whether two lines intersect or not
+   *
+   * @see http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
+   * adapted from line_line_intersection
+   */
   [[gnu::pure]]
-  std::pair<int, int> IntersectsRatio(const FlatRay &that) const;
+  std::pair<int, int> IntersectsRatio(const FlatRay &that) const noexcept;
 };

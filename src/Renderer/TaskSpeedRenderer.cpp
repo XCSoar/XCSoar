@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "TaskSpeedRenderer.hpp"
 #include "ChartRenderer.hpp"
@@ -70,6 +50,7 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
 
   if (!fs.task_speed.HasResult() || !task.CheckOrderedTask()) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 
@@ -104,21 +85,18 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
   chart.DrawXGrid(0.25, 0.25, ChartRenderer::UnitFormat::TIME);
   chart.DrawYGrid(Units::ToSysTaskSpeed(10), 10, ChartRenderer::UnitFormat::NUMERIC);
 
-  chart.DrawLine(chart.GetXMin(), vref,
-                 chart.GetXMax(), vref,
+  chart.DrawLine({chart.GetXMin(), vref},
+                 {chart.GetXMax(), vref},
                  ChartLook::STYLE_REDTHICKDASH);
 
   chart.DrawLineGraph(fs.task_speed, ChartLook::STYLE_BLACK);
   chart.DrawTrend(fs.task_speed, ChartLook::STYLE_BLUETHINDASH);
 
-  chart.DrawLabel(_T("Vest"),
-                  chart.GetXMin()*0.9+chart.GetXMax()*0.1,
-                  vref);
+  chart.DrawLabel({chart.GetXMin()*0.9+chart.GetXMax()*0.1, vref},
+                  _T("Vest"));
 
   const double tref = chart.GetXMin()*0.5+chart.GetXMax()*0.5;
-  chart.DrawLabel(_T("Vave"),
-                  tref,
-                  fs.task_speed.GetYAt(tref));
+  chart.DrawLabel({tref, fs.task_speed.GetYAt(tref)}, _T("Vave"));
 
   chart.Finish();
 }

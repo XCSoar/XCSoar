@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -46,6 +26,7 @@ struct StaticEnumChoice;
 class Angle;
 class RoughTime;
 class RoughTimeDelta;
+class Path;
 class Button;
 
 /**
@@ -447,12 +428,12 @@ public:
   void AddSpacer() noexcept;
 
   WndProperty *AddFile(const TCHAR *label, const TCHAR *help,
-                       const char *profile_key, const TCHAR *filters,
+                       std::string_view profile_key, const TCHAR *filters,
                        FileType file_type,
                        bool nullable = true) noexcept;
 
   WndProperty *AddFile(const TCHAR *label, const TCHAR *help,
-                       const char *profile_key, const TCHAR *filters,
+                       std::string_view profile_key, const TCHAR *filters,
                        bool nullable = true) noexcept {
     return AddFile(label, help, profile_key, filters, FileType::UNKNOWN,
                    nullable);
@@ -569,7 +550,18 @@ public:
     return &df == &GetDataField(i);
   }
 
+  /**
+   * Load a value into a #DataFieldInteger.
+   */
   void LoadValue(unsigned i, int value) noexcept;
+
+  /**
+   * Load an unsigned value into a #DataFieldInteger.
+   */
+  void LoadValue(unsigned i, unsigned value) noexcept {
+    LoadValue(i, static_cast<int>(value));
+  }
+
   void LoadValue(unsigned i, bool value) noexcept;
   void LoadValueEnum(unsigned i, const TCHAR *text) noexcept;
   void LoadValueEnum(unsigned i, unsigned value) noexcept;
@@ -587,6 +579,8 @@ public:
   void LoadValue(unsigned i, double value, UnitGroup unit_group) noexcept;
 
   void LoadValue(unsigned i, RoughTime value) noexcept;
+
+  void LoadValue(unsigned i, Path value) noexcept;
 
   /**
    * Load a value into a control created by AddDuration().
@@ -635,19 +629,16 @@ public:
   RoughTime GetValueRoughTime(unsigned i) const noexcept;
 
   [[gnu::pure]]
+  Path GetValueFile(unsigned i) const noexcept;
+
+  [[gnu::pure]]
   const TCHAR *GetValueString(unsigned i) const noexcept {
     return GetDataField(i).GetAsString();
   }
 
   bool SaveValue(unsigned i, bool &value, bool negated = false) const noexcept;
 
-#if defined(__clang__) && __clang_major__ < 15
-  // C++20 concepts not implemented in libc++ 14 (Android NDK r25)
-  template<typename T>
-  requires std::is_integral_v<T>
-#else
   template<std::integral T>
-#endif
   bool SaveValueInteger(unsigned i, T &value) const noexcept {
     int new_value = GetValueInteger(i);
 
@@ -686,35 +677,35 @@ public:
     return SaveValue(i, value.data(), value.capacity());
   }
 
-  bool SaveValue(unsigned i, const char *profile_key,
+  bool SaveValue(unsigned i, std::string_view profile_key,
                  TCHAR *string, size_t max_size) const noexcept;
 
   template<size_t max>
-  bool SaveValue(unsigned i, const char *profile_key,
+  bool SaveValue(unsigned i, std::string_view profile_key,
                  BasicStringBuffer<TCHAR, max> &value) const noexcept {
     return SaveValue(i, profile_key, value.data(), value.capacity());
   }
 
-  bool SaveValue(unsigned i, const char *profile_key, bool &value,
+  bool SaveValue(unsigned i, std::string_view profile_key, bool &value,
                  bool negated = false) const noexcept;
 
   template<typename T>
-  bool SaveValueInteger(unsigned i, const char *registry_key,
+  bool SaveValueInteger(unsigned i, std::string_view profile_key,
                         T &value) const noexcept {
     bool result = SaveValueInteger(i, value);
     if (result)
-      SetProfile(registry_key, value);
+      SetProfile(profile_key, value);
 
     return result;
   }
 
-  bool SaveValue(unsigned i, const char *profile_key, double &value) const noexcept;
-  bool SaveValue(unsigned i, const char *profile_key, BrokenDate &value) const noexcept;
-  bool SaveValue(unsigned i, const char *profile_key,
+  bool SaveValue(unsigned i, std::string_view profile_key, double &value) const noexcept;
+  bool SaveValue(unsigned i, std::string_view profile_key, BrokenDate &value) const noexcept;
+  bool SaveValue(unsigned i, std::string_view profile_key,
                  std::chrono::seconds &value) const noexcept;
 
   template<class Rep, class Period>
-  bool SaveValue(unsigned i, const char *profile_key,
+  bool SaveValue(unsigned i, std::string_view profile_key,
                  std::chrono::duration<Rep,Period> &value_r) const noexcept {
     auto value = std::chrono::round<std::chrono::seconds>(value_r);
     if (!SaveValue(i, profile_key, value))
@@ -727,18 +718,12 @@ public:
   bool SaveValue(unsigned i, UnitGroup unit_group, double &value) const noexcept;
 
   bool SaveValue(unsigned i, UnitGroup unit_group,
-                 const char *profile_key, double &value) const noexcept;
+                 std::string_view profile_key, double &value) const noexcept;
 
   bool SaveValue(unsigned i, UnitGroup unit_group,
-                 const char *profile_key, unsigned int &value) const noexcept;
+                 std::string_view profile_key, unsigned int &value) const noexcept;
 
-#if defined(__clang__) && __clang_major__ < 15
-  // C++20 concepts not implemented in libc++ 14 (Android NDK r25)
-  template<typename T>
-  requires std::is_integral_v<T> && std::is_unsigned_v<T>
-#else
   template<std::unsigned_integral T>
-#endif
   bool SaveValueEnum(unsigned i, T &value) const noexcept {
     const auto new_value = static_cast<T>(GetValueEnum(i));
     if (new_value == value)
@@ -755,19 +740,19 @@ public:
   }
 
   template<typename T>
-  bool SaveValueEnum(unsigned i, const char *registry_key,
+  bool SaveValueEnum(unsigned i, std::string_view profile_key,
                      T &value) const noexcept {
     bool result = SaveValueEnum(i, value);
     if (result)
-      SetProfile(registry_key, static_cast<unsigned>(value));
+      SetProfile(profile_key, static_cast<unsigned>(value));
 
     return result;
   }
 
-  bool SaveValueFileReader(unsigned i, const char *profile_key) noexcept;
+  bool SaveValueFileReader(unsigned i, std::string_view profile_key) noexcept;
 
 private:
-  static void SetProfile(const char *registry_key, unsigned value) noexcept;
+  static void SetProfile(std::string_view profile_key, unsigned value) noexcept;
 
 protected:
   [[gnu::pure]]

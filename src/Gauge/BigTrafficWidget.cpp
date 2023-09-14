@@ -1,25 +1,5 @@
-/*
-  Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "BigTrafficWidget.hpp"
 #include "Dialogs/Traffic/TrafficDialogs.hpp"
@@ -51,7 +31,8 @@
 class FlarmTrafficControl : public FlarmTrafficWindow {
 protected:
   bool enable_auto_zoom = true, dragging = false;
-  unsigned zoom = 2;
+  unsigned zoom = 3;
+  static constexpr unsigned num_zoom_options = 5;
   Angle task_direction = Angle::Degrees(-1);
   GestureManager gestures;
 
@@ -96,7 +77,7 @@ public:
   }
 
   bool CanZoomOut() const {
-    return zoom < 4;
+    return zoom < num_zoom_options;
   }
 
   bool CanZoomIn() const {
@@ -159,14 +140,16 @@ FlarmTrafficControl::GetZoomDistance(unsigned zoom)
 {
   switch (zoom) {
   case 0:
-    return 500;
+    return 100;
   case 1:
-    return 1000;
-  case 3:
-    return 5000;
-  case 4:
-    return 10000;
+    return 500;
   case 2:
+    return 1000;
+  case 4:
+    return 5000;
+  case 5:
+    return 10000;
+  case 3:
   default:
     return 2000;
   }
@@ -205,8 +188,8 @@ FlarmTrafficControl::CalcAutoZoom()
   }
 
   double zoom_dist2 = zoom_dist;
-  for (unsigned i = 0; i <= 4; i++) {
-    if (i == 4 || GetZoomDistance(i) >= zoom_dist2) {
+  for (unsigned i = 0; i <= num_zoom_options; i++) {
+    if (i == num_zoom_options || GetZoomDistance(i) >= zoom_dist2) {
       SetZoom(i);
       break;
     }
@@ -241,7 +224,7 @@ FlarmTrafficControl::ZoomOut()
   if (WarningMode())
     return;
 
-  if (zoom < 4)
+  if (zoom < num_zoom_options)
     SetZoom(zoom + 1);
 
   SetAutoZoom(false);

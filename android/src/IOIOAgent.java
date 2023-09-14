@@ -1,34 +1,14 @@
-/*
-  Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 package org.xcsoar;
 
 import android.util.Log;
 import ioio.lib.api.IOIO;
-import ioio.lib.api.IOIOFactory;
 import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.api.exception.IncompatibilityException;
 import ioio.lib.spi.IOIOConnectionFactory;
+import ioio.lib.impl.IOIOImpl;
 
 /**
  * This class attempts to establish a connection to a IOIO through a
@@ -122,7 +102,7 @@ final class IOIOAgent extends Thread {
       if (shutdownFlag || interrupted())
         return null;
 
-      connecting = ioio = IOIOFactory.create(factory.createConnection());
+      connecting = ioio = new IOIOImpl(factory.createConnection());
     }
 
     try {
@@ -157,6 +137,22 @@ final class IOIOAgent extends Thread {
       return null;
     } catch (IncompatibilityException e) {
       Log.e(TAG, "IOIO connection " + getName() + " incompatible");
+      ioio.disconnect();
+      return null;
+    } catch (IllegalArgumentException e) {
+      /* called from AccessoryConnectionBootstrap.tryOpen(),
+         UsbManager.openAccessory() can throw
+         IllegalArgumentException("no accessory attached") which seems
+         like the wrong exception type, and this is a workaround for
+         this Android quirk */
+      Log.e(TAG, "IOIO connection " + getName() + " failed: " + e);
+      ioio.disconnect();
+      return null;
+    } catch (SecurityException e) {
+      /* called from AccessoryConnectionBootstrap.tryOpen(),
+         UsbManager.openAccessory() can throw SecurityException if no
+         permission was given to open the device */
+      Log.e(TAG, "IOIO connection " + getName() + " failed: " + e);
       ioio.disconnect();
       return null;
     } catch (InterruptedException e) {

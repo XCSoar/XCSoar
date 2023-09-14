@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Internal.hpp"
 #include "Protocol.hpp"
@@ -116,7 +96,7 @@ CAI302Device::ReadPilotList(std::vector<CAI302::Pilot> &list,
 
   const unsigned block_count = 8;
 
-  uint8_t buffer[1024];
+  std::byte buffer[1024];
 
   for (unsigned i = 0; i < count; i += block_count) {
     unsigned this_block = std::min(count - i, block_count);
@@ -125,7 +105,7 @@ CAI302Device::ReadPilotList(std::vector<CAI302::Pilot> &list,
     if (n != this_block)
       return false;
 
-    const uint8_t *p = buffer;
+    const std::byte *p = buffer;
     for (unsigned j = 0; j < n; ++j, p += record_size)
       list.push_back(*(const CAI302::Pilot *)p);
   }
@@ -243,7 +223,8 @@ CAI302Device::WriteNavpoint(unsigned id, const Waypoint &wp,
   ToASCII(remark, ARRAY_SIZE(remark), wp.comment.c_str());
 
   try {
-    CAI302::DownloadNavpoint(port, wp.location, (int)wp.elevation, id,
+    CAI302::DownloadNavpoint(port, wp.location, (int)wp.GetElevationOrZero(),
+                             id,
                              wp.IsTurnpoint(), wp.IsAirport(), false,
                              wp.IsLandable(), wp.IsStartpoint(),
                              wp.IsFinishpoint(), wp.flags.home,

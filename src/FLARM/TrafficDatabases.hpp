@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -42,12 +22,11 @@ struct TrafficDatabases {
    */
   FlarmId team_flarm_id;
 
-  TrafficDatabases()
+  TrafficDatabases() noexcept
     :team_flarm_id(FlarmId::Undefined()) {}
 
   [[gnu::pure]]
-  FlarmColor GetColor(FlarmId id) const
-  {
+  FlarmColor GetColor(FlarmId id) const noexcept {
     FlarmColor color = flarm_colors.Get(id);
     if (color == FlarmColor::NONE && id == team_flarm_id)
       /* if no color found but target is teammate, use green */
@@ -57,10 +36,10 @@ struct TrafficDatabases {
   }
 
   [[gnu::pure]]
-  const TCHAR *FindNameById(FlarmId id) const;
+  const TCHAR *FindNameById(FlarmId id) const noexcept;
 
-  [[gnu::pure]] gcc_nonnull_all
-  FlarmId FindIdByName(const TCHAR *name) const;
+  [[gnu::pure]] [[gnu::nonnull]]
+  FlarmId FindIdByName(const TCHAR *name) const noexcept;
 
   /**
    * Look up all records with the specified name.
@@ -68,7 +47,7 @@ struct TrafficDatabases {
    * @param max the maximum size of the given buffer
    * @return the number of items copied to the given buffer
    */
-  gcc_nonnull_all
+  [[gnu::nonnull]]
   unsigned FindIdsByName(const TCHAR *name,
-                         FlarmId *buffer, unsigned max) const;
+                         FlarmId *buffer, unsigned max) const noexcept;
 };

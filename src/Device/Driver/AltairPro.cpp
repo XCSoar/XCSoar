@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Device/Driver/AltairPro.hpp"
 #include "Device/Driver.hpp"
@@ -53,11 +33,11 @@ private:
   void PutTurnPoint(const char *name, const Waypoint *waypoint,
                     OperationEnvironment &env);
   bool PropertySetGet(const char *name, const char *value,
-                      char *Buffer, std::size_t size,
+                      std::span<char> dest,
                       OperationEnvironment &env);
 #ifdef _UNICODE
   bool PropertySetGet(const char *name, const TCHAR *value,
-                      char *Buffer, std::size_t size,
+                      std::span<char> dest,
                       OperationEnvironment &env);
 #endif
 
@@ -151,15 +131,15 @@ AltairProDevice::Declare(const struct Declaration &declaration,
   char Buffer[256];
 
   if (!PropertySetGet("Pilot", declaration.pilot_name.c_str(),
-                      Buffer, ARRAY_SIZE(Buffer), env))
+                      std::span{Buffer}, env))
     return false;
 
   if (!PropertySetGet("GliderID", declaration.aircraft_registration.c_str(),
-                      Buffer, ARRAY_SIZE(Buffer), env))
+                      std::span{Buffer}, env))
     return false;
 
   if (!PropertySetGet("GliderType", declaration.aircraft_type.c_str(),
-                      Buffer, ARRAY_SIZE(Buffer), env))
+                      std::span{Buffer}, env))
     return false;
 
   /* TODO currently not supported by XCSOAR
@@ -192,7 +172,7 @@ AltairProDevice::Declare(const struct Declaration &declaration,
   }
 
   if (!PropertySetGet("DeclAction", "DECLARE",
-                      Buffer, ARRAY_SIZE(Buffer), env))
+                      std::span{Buffer}, env))
     return false;
 
   if (StringIsEqual(&Buffer[9], "LOCKED"))
@@ -210,11 +190,9 @@ AltairProDevice::Declare(const struct Declaration &declaration,
 
 bool
 AltairProDevice::PropertySetGet(const char *name, const char *value,
-                                char *Buffer, std::size_t size,
+                                std::span<char> dest,
                                 OperationEnvironment &env)
 {
-  assert(Buffer != nullptr);
-
   port.Flush();
 
   TimeoutClock timeout(std::chrono::seconds(5));
@@ -223,7 +201,7 @@ AltairProDevice::PropertySetGet(const char *name, const char *value,
   char buffer[1024];
   StringFormat(buffer, std::size(buffer),
                "PDVSC,S,%s,%s", name, value);
-  PortWriteNMEA(port, Buffer, env);
+  PortWriteNMEA(port, buffer, env);
 
   // expect eg $PDVSC,A,FOO,
   port.ExpectString("PDVSC,A,", env, timeout.GetRemainingOrZero());
@@ -231,17 +209,17 @@ AltairProDevice::PropertySetGet(const char *name, const char *value,
   port.ExpectString(",", env, timeout.GetRemainingOrZero());
 
   // read value eg bar
-  while (size > 0) {
-    const size_t nbytes = port.WaitAndRead(Buffer, size, env, timeout);
+  do {
+    const size_t nbytes = port.WaitAndRead(std::as_writable_bytes(dest), env, timeout);
 
-    char *asterisk = (char *)memchr(Buffer, '*', nbytes);
+    char *asterisk = (char *)memchr(dest.data(), '*', nbytes);
     if (asterisk != nullptr) {
       *asterisk = 0;
       return true;
     }
 
-    size -= nbytes;
-  }
+    dest = dest.subspan(nbytes);
+  } while (!dest.empty());
 
   return false;
 }
@@ -249,14 +227,14 @@ AltairProDevice::PropertySetGet(const char *name, const char *value,
 #ifdef _UNICODE
 bool
 AltairProDevice::PropertySetGet(const char *name, const TCHAR *_value,
-                                char *Buffer, std::size_t size,
+                                std::span<char> dest,
                                 OperationEnvironment &env)
 {
   const WideToACPConverter value{_value};
   if (!value.IsValid())
     throw std::runtime_error("Invalid string");
 
-  return PropertySetGet(name, value, Buffer, size, env);
+  return PropertySetGet(name, value, dest, env);
 }
 #endif
 
@@ -269,7 +247,7 @@ AltairProDevice::PutTurnPoint(const char *propertyName,
   char Buffer[DECELWPSIZE*2];
 
   int DegLat, DegLon;
-  double tmp, MinLat, MinLon;
+  double MinLat, MinLon;
   char NoS, EoW;
 
   if (waypoint != nullptr){
@@ -278,7 +256,7 @@ AltairProDevice::PutTurnPoint(const char *propertyName,
     else
       throw std::runtime_error("Invalid string");
 
-    tmp = (double)waypoint->location.latitude.Degrees();
+    double tmp = (double)waypoint->location.latitude.Degrees();
 
     if(tmp < 0){
       NoS = 'S';
@@ -317,7 +295,7 @@ AltairProDevice::PutTurnPoint(const char *propertyName,
                      DegLat, MinLat, NoS, DegLon, MinLon, EoW, Name);
 
   PropertySetGet(propertyName, Buffer,
-                 Buffer, ARRAY_SIZE(Buffer), env);
+                 std::span{Buffer}, env);
 
 }
 

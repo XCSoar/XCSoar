@@ -1,29 +1,10 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
 #include "Height.hpp"
+#include "Math/Point2D.hpp"
 #include "util/AllocatedArray.hxx"
 
 class RasterMap;
@@ -36,18 +17,19 @@ class WindowProjection;
 
 class HeightMatrix {
   AllocatedArray<TerrainHeight> data;
-  unsigned width, height;
+  UnsignedPoint2D size;
 
 public:
-  HeightMatrix():width(0), height(0) {}
+  HeightMatrix() noexcept = default;
 
   HeightMatrix(const HeightMatrix &) = delete;
   HeightMatrix &operator=(const HeightMatrix &) = delete;
 
 protected:
-  void SetSize(size_t _size);
-  void SetSize(unsigned width, unsigned height);
-  void SetSize(unsigned width, unsigned height, unsigned quantisation_pixels);
+  void SetSize(std::size_t _size) noexcept;
+  void SetSize(UnsignedPoint2D _size) noexcept;
+  void SetSize(UnsignedPoint2D _size,
+               unsigned quantisation_pixels) noexcept;
 
 public:
 #ifdef ENABLE_OPENGL
@@ -55,32 +37,28 @@ public:
    * Copy values from the #RasterMap to the buffer, north-up only.
    */
   void Fill(const RasterMap &map, const GeoBounds &bounds,
-            unsigned _width, unsigned _height, bool interpolate);
+            UnsignedPoint2D _size, bool interpolate) noexcept;
 #else
   /**
    * @param interpolate true enables interpolation of sub-pixel values
    */
   void Fill(const RasterMap &map, const WindowProjection &map_projection,
-            unsigned quantisation_pixels, bool interpolate);
+            unsigned quantisation_pixels, bool interpolate) noexcept;
 #endif
 
-  unsigned GetWidth() const {
-    return width;
+  UnsignedPoint2D GetSize() const noexcept {
+    return size;
   }
 
-  unsigned GetHeight() const {
-    return height;
-  }
-
-  const TerrainHeight *GetData() const {
+  const TerrainHeight *GetData() const noexcept {
     return data.data();
   }
 
-  const TerrainHeight *GetRow(unsigned y) const {
-    return GetData() + y * width;
+  const TerrainHeight *GetRow(unsigned y) const noexcept {
+    return GetData() + y * size.x;
   }
 
-  const TerrainHeight *GetDataEnd() const {
-    return GetRow(height);
+  const TerrainHeight *GetDataEnd() const noexcept {
+    return GetRow(size.y);
   }
 };

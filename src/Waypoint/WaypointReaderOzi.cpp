@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "WaypointReaderOzi.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -32,7 +12,7 @@ Copyright_License {
 #include <stdlib.h>
 
 static bool
-ParseAngle(const TCHAR *src, Angle &angle)
+ParseAngle(const TCHAR *src, Angle &angle) noexcept
 {
   TCHAR *endptr;
   double deg = _tcstod(src, &endptr);
@@ -44,7 +24,7 @@ ParseAngle(const TCHAR *src, Angle &angle)
 }
 
 static bool
-ParseNumber(const TCHAR *src, long &dest)
+ParseNumber(const TCHAR *src, long &dest) noexcept
 {
   TCHAR *endptr;
   long temp = _tcstol(src, &endptr, 10);
@@ -56,14 +36,12 @@ ParseNumber(const TCHAR *src, long &dest)
 }
 
 static bool
-ParseString(const TCHAR *src, tstring &dest)
+ParseString(tstring_view src, tstring &dest) noexcept
 {
-  if (src[0] == 0)
-    return true;
+  if (src.empty())
+    return false;
 
-  dest.assign(src);
-  trim_inplace(dest);
-
+  dest.assign(Strip(src));
   return true;
 }
 
@@ -114,10 +92,11 @@ WaypointReaderOzi::ParseLine(const TCHAR *line, Waypoints &way_points)
   if (!ParseString(params[1], new_waypoint.name))
     return false;
 
-  if (ParseNumber(params[14], value) && value != -777)
+  if (ParseNumber(params[14], value) && value != -777) {
     new_waypoint.elevation = Units::ToSysUnit(value, Unit::FEET);
-  else if (!factory.FallbackElevation(new_waypoint))
-    return false;
+    new_waypoint.has_elevation = true;
+  } else
+    factory.FallbackElevation(new_waypoint);
 
   // Description
   ParseString(params[10], new_waypoint.comment);

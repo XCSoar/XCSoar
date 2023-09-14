@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 package org.xcsoar;
 
@@ -44,11 +25,29 @@ public interface SensorListener {
   void onAccelerationSensor(float ddx, float ddy, float ddz);
   void onRotationSensor(float dtheta_x, float dtheta_y, float dtheta_z);
   void onMagneticFieldSensor(float h_x, float h_y, float h_z);
+  /**
+   * @param[in] pressure Atmospheric static pressure in Hecto Pascal.
+   * @param[in] sensor_noise_variance Sensor noise variance for Kalman filtering of pressure.
+   */
   void onBarometricPressureSensor(float pressure, float sensor_noise_variance);
   void onPressureAltitudeSensor(float altitude);
   void onI2CbaroSensor(int index, int sensorType, int pressure);
   void onVarioSensor(float vario);
   void onHeartRateSensor(int bpm);
+  /**
+   * @param[in] has_cht_temp Is the Engine Cylinder Head Temperature sensor present?
+   * @param[in] cht_temp Engine Cylinder Head Temperature.
+   * @param[in] has_egt_temp Is the Engine Exhaust Gas Temperature sensor present?
+   * @param[in] egt_temp Engine Exhaust Gas Temperature.
+   * @param[in] has_ignitions_per_second Is the Engine Ignitions Per Second sensor present?
+   * @param[in] ignitions_per_second Engine Ignitions Per Second, firing of the spark plug per second.
+   */
+  void onEngineSensors(boolean has_cht_temp,
+                       int cht_temp,
+                       boolean has_egt_temp,
+                       int egt_temp,
+                       boolean has_ignitions_per_second,
+                       float ignitions_per_second);
 
   void onVoltageValues(int temp_adc, int voltage_index, int volt_adc);
 
@@ -59,7 +58,7 @@ public interface SensorListener {
   void onGliderLinkTraffic(long gid, String callsign,
                            double longitude, double latitude, double altitude,
                            double gspeed, double vspeed,
-                           double bearing);
+                           int bearing);
 
   void onTemperature(double temperature_kelvin);
 

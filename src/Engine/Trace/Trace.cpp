@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Trace.hpp"
 #include "Vector.hpp"
@@ -29,7 +9,7 @@ Copyright_License {
 #include <iterator>
 
 Trace::Trace(const Time _no_thin_time, const Time max_time,
-             const unsigned max_size)
+             const unsigned max_size) noexcept
   :cached_size(0),
    max_time(max_time),
    no_thin_time(_no_thin_time),
@@ -40,7 +20,7 @@ Trace::Trace(const Time _no_thin_time, const Time max_time,
 }
 
 void
-Trace::clear()
+Trace::clear() noexcept
 {
   assert(cached_size == delta_list.size());
   assert(cached_size == chronological_list.size());
@@ -73,7 +53,7 @@ Trace::GetRecentTime(const Time t) const noexcept
 }
 
 void
-Trace::UpdateDelta(TraceDelta &td)
+Trace::UpdateDelta(TraceDelta &td) noexcept
 {
   assert(cached_size == delta_list.size());
   assert(cached_size == chronological_list.size());
@@ -92,7 +72,7 @@ Trace::UpdateDelta(TraceDelta &td)
 }
 
 void
-Trace::EraseInside(DeltaList::iterator it)
+Trace::EraseInside(DeltaList::iterator it) noexcept
 {
   assert(cached_size > 0);
   assert(cached_size == delta_list.size());
@@ -202,7 +182,7 @@ Trace::EraseLaterThan(const Time min_time) noexcept
  * Update start node (and neighbour) after min time pruning
  */
 void
-Trace::EraseStart(TraceDelta &td)
+Trace::EraseStart(TraceDelta &td) noexcept
 {
   delta_list.erase(delta_list.iterator_to(td));
 
@@ -213,7 +193,7 @@ Trace::EraseStart(TraceDelta &td)
 }
 
 void
-Trace::push_back(const TracePoint &point)
+Trace::push_back(const TracePoint &point) noexcept
 {
   assert(cached_size == delta_list.size());
   assert(cached_size == chronological_list.size());
@@ -322,8 +302,8 @@ Trace::EnforceTimeWindow(const Time latest_time) noexcept
   EraseEarlierThan(latest_time - max_time);
 }
 
-void
-Trace::Thin2()
+inline void
+Trace::Thin2() noexcept
 {
   const unsigned target_size = opt_size;
   assert(size() > target_size);
@@ -341,7 +321,7 @@ Trace::Thin2()
 }
 
 void
-Trace::Thin()
+Trace::Thin() noexcept
 {
   assert(cached_size == delta_list.size());
   assert(cached_size == chronological_list.size());
@@ -359,7 +339,7 @@ Trace::Thin()
 }
 
 void
-Trace::GetPoints(TracePointVector& iov) const
+Trace::GetPoints(TracePointVector& iov) const noexcept
 {
   iov.clear();
   iov.reserve(size());
@@ -378,33 +358,33 @@ public:
   typedef typename I::difference_type difference_type;
 
   PointerIterator() = default;
-  explicit PointerIterator(I _i):i(_i) {}
+  explicit PointerIterator(I _i) noexcept:i(_i) {}
 
-  PointerIterator<I> &operator--() {
+  PointerIterator<I> &operator--() noexcept {
     --i;
     return *this;
   }
 
-  PointerIterator<I> &operator++() {
+  PointerIterator<I> &operator++() noexcept {
     ++i;
     return *this;
   }
 
-  typename I::pointer operator*() {
+  typename I::pointer operator*() noexcept {
     return &*i;
   }
 
-  bool operator==(const PointerIterator<I> &other) const {
+  bool operator==(const PointerIterator<I> &other) const noexcept {
     return i == other.i;
   }
 
-  bool operator!=(const PointerIterator<I> &other) const {
+  bool operator!=(const PointerIterator<I> &other) const noexcept {
     return i != other.i;
   }
 };
 
 void
-Trace::GetPoints(TracePointerVector &v) const
+Trace::GetPoints(TracePointerVector &v) const noexcept
 {
   v.clear();
   v.reserve(size());
@@ -414,7 +394,7 @@ Trace::GetPoints(TracePointerVector &v) const
 }
 
 bool
-Trace::SyncPoints(TracePointerVector &v) const
+Trace::SyncPoints(TracePointerVector &v) const noexcept
 {
   assert(v.size() <= size());
 
@@ -433,7 +413,8 @@ Trace::SyncPoints(TracePointerVector &v) const
 
 void
 Trace::GetPoints(TracePointVector &v, const Time min_time,
-                 const GeoPoint &location, double min_distance) const
+                 const GeoPoint &location,
+                 double min_distance) const noexcept
 {
   /* skip the trace points that are before min_time */
   Trace::const_iterator i = begin(), end = this->end();

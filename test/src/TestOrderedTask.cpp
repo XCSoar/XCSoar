@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Engine/Task/TaskEvents.hpp"
@@ -47,6 +28,7 @@ static Waypoint
 MakeWaypoint(Waypoint wp, double altitude) noexcept
 {
   wp.elevation = altitude;
+  wp.has_elevation = true;
   return wp;
 }
 
@@ -214,7 +196,7 @@ TestFlightToFinish(double aircraft_altitude)
 
   const TaskStats &stats = task.GetStats();
   ok1(stats.task_valid);
-  ok1(!stats.start.task_started);
+  ok1(!stats.start.HasStarted());
   ok1(!stats.task_finished);
   ok1(stats.flight_mode_final_glide == (stats.total.solution_remaining.altitude_difference >= 0));
   ok1(equals(stats.distance_nominal, vector.distance));
@@ -251,7 +233,7 @@ TestSimpleTask()
 
   const TaskStats &stats = task.GetStats();
   ok1(stats.task_valid);
-  ok1(!stats.start.task_started);
+  ok1(!stats.start.HasStarted());
   ok1(!stats.task_finished);
   ok1(!stats.flight_mode_final_glide);
   ok1(equals(stats.distance_nominal, tp1_to_tp2.distance));
@@ -272,6 +254,7 @@ TestHighFinish()
   task.Append(tp1);
   Waypoint wp2b(*wp2);
   wp2b.elevation = 1000;
+  wp2b.has_elevation = true;
   const FinishPoint tp2(std::make_unique<LineSectorZone>(wp2b.location),
                         WaypointPtr(new Waypoint(wp2b)), task_behaviour,
                         ordered_task_settings.finish_constraints, false);
@@ -288,7 +271,7 @@ TestHighFinish()
 
   const TaskStats &stats = task.GetStats();
   ok1(stats.task_valid);
-  ok1(!stats.start.task_started);
+  ok1(!stats.start.HasStarted());
   ok1(!stats.task_finished);
   ok1(!stats.flight_mode_final_glide);
   ok1(equals(stats.distance_nominal, vector.distance));
@@ -328,7 +311,7 @@ TestHighTP()
 
   const TaskStats &stats = task.GetStats();
   ok1(stats.task_valid);
-  ok1(!stats.start.task_started);
+  ok1(!stats.start.HasStarted());
   ok1(!stats.task_finished);
   ok1(!stats.flight_mode_final_glide);
 
@@ -362,7 +345,7 @@ TestHighTPFinal()
 
   const TaskStats &stats = task.GetStats();
   ok1(stats.task_valid);
-  ok1(!stats.start.task_started);
+  ok1(!stats.start.HasStarted());
   ok1(!stats.task_finished);
   ok1(!stats.flight_mode_final_glide);
 
@@ -396,7 +379,7 @@ TestLowTPFinal()
 
   const TaskStats &stats = task.GetStats();
   ok1(stats.task_valid);
-  ok1(!stats.start.task_started);
+  ok1(!stats.start.HasStarted());
   ok1(!stats.task_finished);
   ok1(!stats.flight_mode_final_glide);
 

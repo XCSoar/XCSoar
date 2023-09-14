@@ -1,33 +1,13 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "FlarmNetDatabase.hpp"
-#include "util/StringUtil.hpp"
+#include "util/StringAPI.hxx"
 
 #include <cassert>
 
 void
-FlarmNetDatabase::Insert(const FlarmNetRecord &record)
+FlarmNetDatabase::Insert(const FlarmNetRecord &record) noexcept
 {
   FlarmId id = record.GetId();
   if (!id.IsDefined())
@@ -38,12 +18,11 @@ FlarmNetDatabase::Insert(const FlarmNetRecord &record)
 }
 
 const FlarmNetRecord *
-FlarmNetDatabase::FindFirstRecordByCallSign(const TCHAR *cn) const
+FlarmNetDatabase::FindFirstRecordByCallSign(const TCHAR *cn) const noexcept
 {
-  for (const auto &i : map) {
-    assert(i.first.IsDefined());
+  for (const auto &[id, record] : map) {
+    assert(id.IsDefined());
 
-    const FlarmNetRecord &record = i.second;
     if (StringIsEqual(record.callsign, cn))
       return &record;
   }
@@ -54,14 +33,13 @@ FlarmNetDatabase::FindFirstRecordByCallSign(const TCHAR *cn) const
 unsigned
 FlarmNetDatabase::FindRecordsByCallSign(const TCHAR *cn,
                                         const FlarmNetRecord *array[],
-                                        [[maybe_unused]] unsigned size) const
+                                        [[maybe_unused]] unsigned size) const noexcept
 {
   unsigned count = 0;
 
-  for (const auto &i : map) {
-    assert(i.first.IsDefined());
+  for (const auto &[id, record] : map) {
+    assert(id.IsDefined());
 
-    const FlarmNetRecord &record = i.second;
     if (StringIsEqual(record.callsign, cn))
       array[count++] = &record;
   }
@@ -71,16 +49,15 @@ FlarmNetDatabase::FindRecordsByCallSign(const TCHAR *cn,
 
 unsigned
 FlarmNetDatabase::FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
-                                    [[maybe_unused]] unsigned size) const
+                                    [[maybe_unused]] unsigned size) const noexcept
 {
   unsigned count = 0;
 
-  for (const auto &i : map) {
-    assert(i.first.IsDefined());
+  for (const auto &[id, record] : map) {
+    assert(id.IsDefined());
 
-    const FlarmNetRecord &record = i.second;
     if (StringIsEqual(record.callsign, cn))
-      array[count++] = i.first;
+      array[count++] = id;
   }
 
   return count;

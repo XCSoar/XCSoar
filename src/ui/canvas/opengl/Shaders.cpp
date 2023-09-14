@@ -1,32 +1,12 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Compute5r - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Shaders.hpp"
 #include "Program.hpp"
 #include "Attribute.hpp"
 #include "Globals.hpp"
 #include "ui/dim/Point.hpp"
-#include "util/RuntimeError.hxx"
+#include "lib/fmt/RuntimeError.hxx"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -51,6 +31,16 @@ GLint combine_texture_projection, combine_texture_texture,
 GLProgram *dashed_shader;
 GLint dashed_projection, dashed_translate,
   dashed_resolution, dashed_start, dashed_period, dashed_ratio;
+
+GLProgram *circle_outline_shader;
+GLint circle_outline_projection, circle_outline_translate,
+  circle_outline_center, circle_outline_radius1, circle_outline_radius2,
+  circle_outline_color;
+
+GLProgram *filled_circle_shader;
+GLint filled_circle_projection, filled_circle_translate,
+  filled_circle_center, filled_circle_radius1, filled_circle_radius2,
+  filled_circle_color1, filled_circle_color2;
 
 } // namespace OpenGL
 
@@ -195,6 +185,61 @@ static constexpr char dashed_fragment_shader[] =
     }
 )glsl";
 
+/* using "highp" for "vert_pos" because some (Adreno) GPUs have severe
+   rendering (rounding?) errors with "mediump" */
+static constexpr char circle_vertex_shader[] =
+  GLSL_VERSION
+  GLSL_PRECISION
+  R"glsl(
+    uniform mat4 projection;
+    uniform vec2 translate;
+    attribute vec4 position;
+    varying highp vec2 vert_pos;
+    void main() {
+      vert_pos = position.xy;
+      gl_Position = position;
+      gl_Position.xy += translate;
+      gl_Position = projection * gl_Position;
+    }
+)glsl";
+
+static constexpr char circle_outline_fragment_shader[] =
+  GLSL_VERSION
+  GLSL_PRECISION
+  R"glsl(
+    uniform vec2 center;
+    uniform float radius1;
+    uniform float radius2;
+    uniform vec4 color;
+    varying highp vec2 vert_pos;
+    void main() {
+      float distance = distance(center, vert_pos);
+      if (distance < radius1 || distance > radius2) discard;
+      gl_FragColor = color;
+    }
+)glsl";
+
+static constexpr char filled_circle_fragment_shader[] =
+  GLSL_VERSION
+  GLSL_PRECISION
+  R"glsl(
+    uniform vec2 center;
+    uniform float radius1;
+    uniform float radius2;
+    uniform vec4 color1;
+    uniform vec4 color2;
+    varying highp vec2 vert_pos;
+    void main() {
+      float distance = distance(center, vert_pos);
+      if (distance > radius2) discard;
+
+      if (distance < radius1)
+        gl_FragColor = color1;
+      else
+        gl_FragColor = color2;
+    }
+)glsl";
+
 static void
 CompileAttachShader(GLProgram &program, GLenum type, const char *code)
 {
@@ -205,7 +250,7 @@ CompileAttachShader(GLProgram &program, GLenum type, const char *code)
   if (shader.GetCompileStatus() != GL_TRUE) {
     char log[1000];
     shader.GetInfoLog(log, sizeof(log));
-    throw FormatRuntimeError("Shader compiler failed: %s", log);
+    throw FmtRuntimeError("Shader compiler failed: {}", log);
   }
 
   program.AttachShader(shader);
@@ -228,7 +273,7 @@ LinkProgram(GLProgram &program)
   if (program.GetLinkStatus() != GL_TRUE) {
     char log[1000];
     program.GetInfoLog(log, sizeof(log));
-    throw FormatRuntimeError("Shader linker failed: %s", log);
+    throw FmtRuntimeError("Shader linker failed: {}", log);
   }
 }
 
@@ -315,11 +360,38 @@ OpenGL::InitShaders()
   dashed_start = dashed_shader->GetUniformLocation("start");
   dashed_period = dashed_shader->GetUniformLocation("period");
   dashed_ratio = dashed_shader->GetUniformLocation("ratio");
+
+  circle_outline_shader = CompileProgram(circle_vertex_shader, circle_outline_fragment_shader);
+  circle_outline_shader->BindAttribLocation(Attribute::POSITION, "position");
+  LinkProgram(*circle_outline_shader);
+
+  circle_outline_projection = circle_outline_shader->GetUniformLocation("projection");
+  circle_outline_translate = circle_outline_shader->GetUniformLocation("translate");
+  circle_outline_center = circle_outline_shader->GetUniformLocation("center");
+  circle_outline_radius1 = circle_outline_shader->GetUniformLocation("radius1");
+  circle_outline_radius2 = circle_outline_shader->GetUniformLocation("radius2");
+  circle_outline_color = circle_outline_shader->GetUniformLocation("color");
+
+  filled_circle_shader = CompileProgram(circle_vertex_shader, filled_circle_fragment_shader);
+  filled_circle_shader->BindAttribLocation(Attribute::POSITION, "position");
+  LinkProgram(*filled_circle_shader);
+
+  filled_circle_projection = filled_circle_shader->GetUniformLocation("projection");
+  filled_circle_translate = filled_circle_shader->GetUniformLocation("translate");
+  filled_circle_center = filled_circle_shader->GetUniformLocation("center");
+  filled_circle_radius1 = filled_circle_shader->GetUniformLocation("radius1");
+  filled_circle_radius2 = filled_circle_shader->GetUniformLocation("radius2");
+  filled_circle_color1 = filled_circle_shader->GetUniformLocation("color1");
+  filled_circle_color2 = filled_circle_shader->GetUniformLocation("color2");
 }
 
 void
 OpenGL::DeinitShaders() noexcept
 {
+  delete filled_circle_shader;
+  filled_circle_shader = nullptr;
+  delete circle_outline_shader;
+  circle_outline_shader = nullptr;
   delete dashed_shader;
   dashed_shader = nullptr;
   delete combine_texture_shader;
@@ -361,6 +433,14 @@ OpenGL::UpdateShaderProjectionMatrix() noexcept
   glUniformMatrix4fv(dashed_projection, 1, GL_FALSE,
                      glm::value_ptr(projection_matrix));
   glUniform2f(dashed_resolution, viewport_size.x, viewport_size.y);
+
+  circle_outline_shader->Use();
+  glUniformMatrix4fv(circle_outline_projection, 1, GL_FALSE,
+                     glm::value_ptr(projection_matrix));
+
+  filled_circle_shader->Use();
+  glUniformMatrix4fv(filled_circle_projection, 1, GL_FALSE,
+                     glm::value_ptr(projection_matrix));
 }
 
 void
@@ -385,4 +465,10 @@ OpenGL::UpdateShaderTranslate() noexcept
 
   dashed_shader->Use();
   glUniform2f(dashed_translate, t.x, t.y);
+
+  circle_outline_shader->Use();
+  glUniform2f(circle_outline_translate, t.x, t.y);
+
+  filled_circle_shader->Use();
+  glUniform2f(filled_circle_translate, t.x, t.y);
 }

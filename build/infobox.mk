@@ -5,6 +5,7 @@ LIBINFOBOX_SOURCES = \
 	$(SRC)/InfoBoxes/Content/Altitude.cpp \
 	$(SRC)/InfoBoxes/Content/Direction.cpp \
 	$(SRC)/InfoBoxes/Content/Glide.cpp \
+	$(SRC)/InfoBoxes/Content/Engine.cpp \
 	$(SRC)/InfoBoxes/Content/MacCready.cpp \
 	$(SRC)/InfoBoxes/Content/Other.cpp \
 	$(SRC)/InfoBoxes/Content/Speed.cpp \
@@ -36,6 +37,6 @@ LIBINFOBOX_SOURCES = \
 	$(SRC)/InfoBoxes/Panel/ATCSetup.cpp \
 	$(SRC)/InfoBoxes/Panel/RadioEdit.cpp
 
-LIBINFOBOX_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
+LIBINFOBOX_DEPENDS = SCREEN
 
 $(eval $(call link-library,libinfobox,LIBINFOBOX))

@@ -1,31 +1,12 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
- */
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "GlideResult.hpp"
 #include "GlideState.hpp"
 
 #include <cassert>
 
-GlideResult::GlideResult(const GlideState &task, const double V)
+GlideResult::GlideResult(const GlideState &task, const double V) noexcept
   :head_wind(task.head_wind),
    v_opt(V),
 #ifndef NDEBUG
@@ -43,13 +24,13 @@ GlideResult::GlideResult(const GlideState &task, const double V)
 }
 
 void
-GlideResult::CalcDeferred()
+GlideResult::CalcDeferred() noexcept
 {
   CalcCruiseBearing();
 }
 
-void
-GlideResult::CalcCruiseBearing()
+inline void
+GlideResult::CalcCruiseBearing() noexcept
 {
   if (!IsOk())
     return;
@@ -67,7 +48,7 @@ GlideResult::CalcCruiseBearing()
 }
 
 void
-GlideResult::Add(const GlideResult &s2)
+GlideResult::Add(const GlideResult &s2) noexcept
 {
   if ((unsigned)s2.validity > (unsigned)validity)
     /* downgrade the validity */
@@ -131,7 +112,7 @@ GlideResult::Add(const GlideResult &s2)
 }
 
 double
-GlideResult::GlideAngleGround() const
+GlideResult::GlideAngleGround() const noexcept
 {
   if (vector.distance > 0)
     return pure_glide_height / vector.distance;
@@ -140,7 +121,7 @@ GlideResult::GlideAngleGround() const
 }
 
 double
-GlideResult::DestinationAngleGround() const
+GlideResult::DestinationAngleGround() const noexcept
 {
   if (vector.distance > 0)
     return (altitude_difference + pure_glide_height) / vector.distance;
@@ -149,13 +130,7 @@ GlideResult::DestinationAngleGround() const
 }
 
 bool
-GlideResult::IsFinalGlide() const
+GlideResult::IsFinalGlide() const noexcept
 {
   return IsOk() && altitude_difference >= 0 && height_climb <= 0;
-}
-
-void
-GlideResult::Reset()
-{
-  validity = Validity::NO_SOLUTION;
 }

@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "UTF8.hpp"
 #include "CharUtil.hxx"
@@ -358,9 +338,9 @@ Latin1ToUTF8(const char *gcc_restrict src, char *gcc_restrict buffer,
 char *
 UnicodeToUTF8(unsigned ch, char *q) noexcept
 {
-  if (gcc_likely(ch < 0x80)) {
+  if (ch < 0x80) [[likely]] {
     *q++ = (char)ch;
-  } else if (gcc_likely(ch < 0x800)) {
+  } else if (ch < 0x800) [[likely]] {
     *q++ = MakeLeading1(ch >> 6);
     *q++ = MakeContinuation(ch);
   } else if (ch < 0x10000) {
@@ -518,7 +498,7 @@ std::size_t
 TruncateStringUTF8(const char *p,
                    std::size_t max_chars, std::size_t max_bytes) noexcept
 {
-#if !CLANG_CHECK_VERSION(3,6)
+#ifndef __clang__
   /* disabled on clang due to -Wtautological-pointer-compare */
   assert(p != nullptr);
 #endif

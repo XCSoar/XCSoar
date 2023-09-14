@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
- */
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
  
 #pragma once
 
@@ -58,7 +39,7 @@ private:
   const Shape shape;
 
   /** Airspace class */
-  AirspaceClass type;
+  AirspaceClass asclass;
 
 protected:
   mutable TriState is_convex;
@@ -72,6 +53,9 @@ protected:
 
   /** Airspace name (identifier) */
   tstring name;
+
+  /** Airspace type */
+  tstring astype;
 
   /** Radio frequency (optional) */
   RadioFrequency radio_frequency = RadioFrequency::Null();
@@ -208,15 +192,18 @@ public:
    * Set fundamental properties of airspace
    *
    * @param _Name Name of airspace
-   * @param _Type Type/class
+   * @param _classs Class
+   * @param _type Type
    * @param _base Lower limit
    * @param _top Upper limit
    */
-  void SetProperties(tstring &&_name, const AirspaceClass _Type,
+  void SetProperties(tstring &&_name, const AirspaceClass _class,
+                     tstring &&_type,
                      const AirspaceAltitude &_base,
                      const AirspaceAltitude &_top) noexcept {
     name = std::move(_name);
-    type = _Type;
+    asclass = _class;
+    astype = std::move(_type);
     altitude_base = _base;
     altitude_top = _top;
   }
@@ -240,12 +227,22 @@ public:
   }
 
   /**
-   * Get type of airspace
+   * Get asclass of airspace
    *
-   * @return Type/class of airspace
+   * @return Class of airspace
    */
-  AirspaceClass GetType() const noexcept {
-    return type;
+  AirspaceClass GetClass() const noexcept {
+    return asclass;
+  }
+
+  /**
+   * Get Type of airspace
+   *
+   * @return Type as text of airspace
+   */
+  [[gnu::pure]]
+  const TCHAR *GetType() const noexcept {
+    return astype.c_str();
   }
 
   /**

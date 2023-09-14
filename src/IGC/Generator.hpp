@@ -1,27 +1,9 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
+
+#include <span>
 
 #include <tchar.h>
 
@@ -32,14 +14,14 @@ struct GeoPoint;
  * Generate a task declaration takeoff line according to IGC GNSS
  * specification 3.6.3
  */
-static inline const char *
-IGCMakeTaskTakeoff()
+static constexpr const char *
+IGCMakeTaskTakeoff() noexcept
 {
   return "C0000000N00000000ETAKEOFF";
 }
 
-static inline const char *
-IGCMakeTaskLanding()
+static constexpr const char *
+IGCMakeTaskLanding() noexcept
 {
   return "C0000000N00000000ELANDING";
 }
@@ -49,14 +31,14 @@ IGCMakeTaskLanding()
  */
 void
 FormatIGCTaskTimestamp(char *buffer, const BrokenDateTime &date_time,
-                       unsigned number_of_turnpoints);
+                       unsigned number_of_turnpoints) noexcept;
 
 /**
  * @return a pointer to the end of the buffer
  */
 char *
-FormatIGCLocation(char *buffer, const GeoPoint &location);
+FormatIGCLocation(char *buffer, const GeoPoint &location) noexcept;
 
 void
-FormatIGCTaskTurnPoint(char *buffer, const GeoPoint &location,
-                       const TCHAR *name);
+FormatIGCTaskTurnPoint(std::span<char> dest, const GeoPoint &location,
+                       const TCHAR *name) noexcept;

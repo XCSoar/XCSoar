@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #define ENABLE_DIALOG_LOOK
 
@@ -84,27 +64,27 @@ ChartWindow::DrawChart(ChartRenderer &renderer)
   renderer.ScaleYFromValue(100);
 
   if (chart == 0) {
-    renderer.DrawLine(0, 10, 100, 70,
+    renderer.DrawLine({0, 10}, {100, 70},
                       look.GetPen(ChartLook::STYLE_BLUETHINDASH));
   } else if (chart == 1) {
     renderer.ScaleXFromValue(-50);
     renderer.ScaleXFromValue(110);
     renderer.ScaleYFromValue(110);
 
-    renderer.DrawLine(0, 10, 100, 70,
+    renderer.DrawLine({0, 10}, {100, 70},
                       look.GetPen(ChartLook::STYLE_BLUETHINDASH));
 
-    renderer.DrawLine(0, 10, 100, 80,
+    renderer.DrawLine({0, 10}, {100, 80},
                       look.GetPen(ChartLook::STYLE_GREENDASH));
 
-    renderer.DrawLine(0, 10, 100, 100,
+    renderer.DrawLine({0, 10}, {100, 100},
                       look.GetPen(ChartLook::STYLE_BLACK));
 
     renderer.DrawXGrid(20, 20, ChartRenderer::UnitFormat::NUMERIC);
 
     renderer.DrawYGrid(20, 20, ChartRenderer::UnitFormat::NUMERIC);
 
-    renderer.DrawLabel(_T("hello"), 50, 50);
+    renderer.DrawLabel({50, 50}, _T("hello"));
   }
 
   renderer.Finish();

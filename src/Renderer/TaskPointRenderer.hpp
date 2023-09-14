@@ -1,31 +1,13 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
 #include "Geo/GeoPoint.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
 #include "MapWindow/MapCanvas.hpp"
+
+#include <cstdint>
 
 class Canvas;
 class WindowProjection;
@@ -39,7 +21,7 @@ struct TaskLook;
 class TaskPointRenderer
 {
 public:
-  enum TargetVisibility {
+  enum class TargetVisibility : uint_least8_t {
     ALL,
     ACTIVE,
     NONE,
@@ -52,24 +34,26 @@ private:
   const TaskLook &task_look;
   const FlatProjection &flat_projection;
 
-  const bool draw_bearing;
-  TargetVisibility target_visibility;
-
   GeoPoint last_point;
-  unsigned index;
   OZRenderer &ozv;
-  unsigned active_index;
   const GeoPoint location;
   FlatBoundingBox bb_screen;
-  bool task_finished;
-  bool mode_optional_start;
+
+  unsigned index = 0;
+  unsigned active_index = 0;
+
+  const TargetVisibility target_visibility;
+  const bool draw_bearing;
+
+  bool task_finished = false;
+  bool mode_optional_start = false;
 
 public:
-  enum Layer {
-    LAYER_OZ_SHADE,
-    LAYER_LEG,
-    LAYER_OZ_OUTLINE,
-    LAYER_SYMBOLS,
+  enum class Layer : uint_least8_t {
+    OZ_SHADE,
+    LEG,
+    OZ_OUTLINE,
+    SYMBOLS,
   };
 
   /**
@@ -83,53 +67,53 @@ public:
                     OZRenderer &_ozv,
                     bool _draw_bearing,
                     TargetVisibility _target_visibility,
-                    const GeoPoint &aircraft_location);
+                    const GeoPoint &aircraft_location) noexcept;
 
-  void ResetIndex() {
+  void ResetIndex() noexcept {
     index = 0;
   }
 
-  void SetActiveIndex(unsigned _active_index) {
+  void SetActiveIndex(unsigned _active_index) noexcept {
     active_index = _active_index;
   }
 
-  void SetBoundingBox(const FlatBoundingBox &bb) {
+  void SetBoundingBox(const FlatBoundingBox &bb) noexcept {
     bb_screen = bb;
   }
 
-  void SetTaskFinished(bool _task_finished) {
+  void SetTaskFinished(bool _task_finished) noexcept {
     task_finished = _task_finished;
   }
 
-  void SetModeOptional(const bool mode) {
+  void SetModeOptional(const bool mode) noexcept {
     mode_optional_start = mode;
   }
 
-  void Draw(const TaskPoint &tp, Layer layer);
+  void Draw(const TaskPoint &tp, Layer layer) noexcept;
 
 private:
-  void DrawOrdered(const OrderedTaskPoint &tp, Layer layer);
+  void DrawOrdered(const OrderedTaskPoint &tp, Layer layer) noexcept;
 
-  bool LegActive() const {
+  bool LegActive() const noexcept {
     return index >= active_index;
   }
 
-  bool PointPast() const {
+  bool PointPast() const noexcept {
     return index < active_index;
   }
 
-  bool PointCurrent() const {
+  bool PointCurrent() const noexcept {
     return index == active_index;
   }
 
   [[gnu::pure]]
-  bool IsTargetVisible(const TaskPoint &tp) const;
+  bool IsTargetVisible(const TaskPoint &tp) const noexcept;
 
-  void DrawBearing(const TaskPoint &tp);
-  void DrawTarget(const TaskPoint &tp);
-  void DrawTaskLine(const GeoPoint &start, const GeoPoint &end);
-  void DrawIsoline(const AATPoint &tp);
+  void DrawBearing(const TaskPoint &tp) noexcept;
+  void DrawTarget(const TaskPoint &tp) noexcept;
+  void DrawTaskLine(const GeoPoint &start, const GeoPoint &end) noexcept;
+  void DrawIsoline(const AATPoint &tp) noexcept;
   void DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp,
-                        int offset);
-  void DrawOZForeground(const OrderedTaskPoint &tp, int offset);
+                        int offset) noexcept;
+  void DrawOZForeground(const OrderedTaskPoint &tp, int offset) noexcept;
 };

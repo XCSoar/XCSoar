@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Dialogs/MapItemListDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
@@ -37,11 +17,12 @@ Copyright_License {
 #include "Widget/ListWidget.hpp"
 #include "Form/Button.hpp"
 #include "Weather/Features.hpp"
-#include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 #ifdef HAVE_NOAA
 #include "Dialogs/Weather/NOAADetails.hpp"
@@ -138,7 +119,7 @@ public:
   }
 
   static bool CanGotoItem(const MapItem &item) noexcept {
-    return protected_task_manager != NULL &&
+    return backend_components->protected_task_manager &&
       item.type == MapItem::Type::WAYPOINT;
   }
 
@@ -150,8 +131,8 @@ public:
     const AirspaceMapItem &as_item = (const AirspaceMapItem &)item;
 
     return item.type == MapItem::Type::AIRSPACE &&
-      GetAirspaceWarnings() != nullptr &&
-      !GetAirspaceWarnings()->GetAckDay(*as_item.airspace);
+      backend_components->GetAirspaceWarnings() != nullptr &&
+      !backend_components->GetAirspaceWarnings()->GetAckDay(*as_item.airspace);
   }
 
   void OnActivateItem(unsigned index) noexcept override;
@@ -222,7 +203,7 @@ MapItemListWidget::OnActivateItem([[maybe_unused]] unsigned index) noexcept
 inline void
 MapItemListWidget::OnGotoClicked()
 {
-  if (protected_task_manager == NULL)
+  if (!backend_components->protected_task_manager)
     return;
 
   unsigned index = GetCursorIndex();
@@ -231,7 +212,7 @@ MapItemListWidget::OnGotoClicked()
   assert(item.type == MapItem::Type::WAYPOINT);
 
   auto waypoint = ((const WaypointMapItem &)item).waypoint;
-  protected_task_manager->DoGoto(std::move(waypoint));
+  backend_components->protected_task_manager->DoGoto(std::move(waypoint));
   cancel_button->Click();
 }
 
@@ -240,7 +221,7 @@ MapItemListWidget::OnAckClicked()
 {
   const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
     list[GetCursorIndex()];
-  GetAirspaceWarnings()->AcknowledgeDay(as_item.airspace);
+  backend_components->GetAirspaceWarnings()->AcknowledgeDay(as_item.airspace);
   UpdateButtons();
 }
 
@@ -267,6 +248,7 @@ ShowMapItemListDialog(const MapItemList &list,
 
 static void
 ShowMapItemDialog(const MapItem &item,
+                  Waypoints *waypoints,
                   ProtectedAirspaceWarningManager *airspace_warnings)
 {
   switch (item.type) {
@@ -284,7 +266,8 @@ ShowMapItemDialog(const MapItem &item,
                        airspace_warnings);
     break;
   case MapItem::Type::WAYPOINT:
-    dlgWaypointDetailsShowModal(((const WaypointMapItem &)item).waypoint,
+    dlgWaypointDetailsShowModal(waypoints,
+                                ((const WaypointMapItem &)item).waypoint,
                                 true, true);
     break;
   case MapItem::Type::TASK_OZ:
@@ -317,6 +300,7 @@ ShowMapItemListDialog(const MapItemList &list,
                       const TrafficLook &traffic_look,
                       const FinalGlideBarLook &final_glide_look,
                       const MapSettings &settings,
+                      Waypoints *waypoints,
                       ProtectedAirspaceWarningManager *airspace_warnings)
 {
   switch (list.size()) {
@@ -326,7 +310,7 @@ ShowMapItemListDialog(const MapItemList &list,
 
   case 1:
     /* only one map item, show it */
-    ShowMapItemDialog(*list[0], airspace_warnings);
+    ShowMapItemDialog(*list[0], waypoints, airspace_warnings);
     break;
 
   default:
@@ -336,6 +320,6 @@ ShowMapItemListDialog(const MapItemList &list,
                                   traffic_look, final_glide_look, settings);
     assert(i >= -1 && i < (int)list.size());
     if (i >= 0)
-      ShowMapItemDialog(*list[i], airspace_warnings);
+      ShowMapItemDialog(*list[i], waypoints, airspace_warnings);
   }
 }

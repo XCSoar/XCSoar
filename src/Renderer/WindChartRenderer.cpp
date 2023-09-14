@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "WindChartRenderer.hpp"
 #include "ChartRenderer.hpp"
@@ -67,10 +47,17 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   chart.SetYLabel(_T("h"), Units::GetAltitudeName());
   chart.Begin();
 
+  if (fs.altitude_base.IsEmpty() || fs.altitude_ceiling.IsEmpty()) {
+    chart.DrawNoData();
+    chart.Finish();
+    return;
+  }
+
   const auto height =
     fs.altitude_ceiling.GetMaxY() - fs.altitude_ceiling.GetMinY();
   if (height <= 10) {
     chart.DrawNoData();
+    chart.Finish();
     return;
   }
 
@@ -104,9 +91,8 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   // draw direction vectors
   const auto x_max = std::max(windstats_mag.GetMaxX(),
                               1.); // prevent /0 problems
-  double hfact;
   for (unsigned i = 0; i < numsteps; i++) {
-    hfact = double(i + 1) / (numsteps + 1);
+    double hfact = double(i + 1) / (numsteps + 1);
     auto h = height * hfact + fs.altitude_base.GetMinY();
 
     Vector wind = wind_store.GetWind(nmea_info.time, h, found);
@@ -118,7 +104,7 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
 
     Angle angle = Angle::FromXY(wind.y, -wind.x);
 
-    auto point = chart.ToScreen((chart.GetXMin() + chart.GetXMax()) / 2, h);
+    auto point = chart.ToScreen({(chart.GetXMin() + chart.GetXMax()) / 2, h});
 
     DrawArrow(canvas, point, mag * WINDVECTORMAG, angle);
   }

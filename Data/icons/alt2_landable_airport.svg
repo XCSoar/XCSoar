@@ -1,83 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   width="11"
-   height="11"
-   id="svg2816"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="alt2_landable_airport.svg">
-  <metadata
-     id="metadata9">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
+   viewBox="0 0 22 22"
+   id="svg2"
+   sodipodi:docname="alt2_landable_airport.svg"
+   width="22"
+   height="22"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6" />
   <sodipodi:namedview
+     id="namedview4"
      pagecolor="#ff00ff"
      bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
      inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1454"
-     inkscape:window-height="988"
-     id="namedview7"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
      showgrid="false"
-     inkscape:zoom="33.37544"
-     inkscape:cx="-6.0100726"
-     inkscape:cy="6.8988416"
+     inkscape:zoom="12.836708"
+     inkscape:cx="-36.263191"
+     inkscape:cy="20.020709"
+     inkscape:window-width="2560"
+     inkscape:window-height="1417"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer2" />
-  <defs
-     id="defs2818" />
+     inkscape:current-layer="layer1" />
   <g
      inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="MASK_Image"
-     transform="translate(0,-8)">
-    <path
-       d="m 10.999854,13.500146 a 5.5,5.5 0 0 1 -10.99999956,0 5.5,5.5 0 1 1 10.99999956,0 z"
-       id="path2830-4-5"
-       style="opacity:0.98999999000000005;fill:#ff0000;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-  </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer4"
-     inkscape:label="NOAA_Image"
-     transform="translate(0,-8)">
-    <rect
-       style="fill:#000000;fill-opacity:1;stroke:none"
-       id="rect2831"
-       width="11"
-       height="5"
-       x="-11.15706"
-       y="10.935029"
-       rx="0.42372882"
-       ry="0.41666663"
-       transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)" />
-    <path
-       style="fill:none;stroke:#cccccc;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 1.6107671,17.389233 9.388941,9.6110584"
-       id="path2833"
-       sodipodi:nodetypes="cc" />
+     id="layer1"
+     inkscape:label="Image">
+    <g
+       id="g1859"
+       transform="scale(0.6875)"
+       style="stroke-width:1.45455">
+      <path
+         d="M 32,16 A 16,16 0 0 1 0,16 16,16 0 1 1 32,16 Z"
+         fill="#ffffff"
+         fill-rule="evenodd"
+         opacity="0.99"
+         id="path2"
+         style="fill:#ff0000;stroke-width:2.1157" />
+      <rect
+         transform="rotate(-45)"
+         x="-16.000025"
+         y="15.355024"
+         width="32"
+         height="14.545"
+         rx="1.7930182"
+         ry="1.7630546"
+         id="rect4"
+         style="stroke-width:1.45455" />
+      <path
+         style="color:#000000;fill:#cccccc;stroke-width:1.45455;-inkscape-stroke:none"
+         d="M 26.251953,3.6269531 3.625,26.253906 5.7460937,28.375 28.373047,5.7480469 Z"
+         id="path6" />
+    </g>
   </g>
 </svg>

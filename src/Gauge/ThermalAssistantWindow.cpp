@@ -1,25 +1,5 @@
-/*
-  Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "ThermalAssistantWindow.hpp"
 #include "Look/ThermalAssistantLook.hpp"
@@ -31,7 +11,7 @@
 
 ThermalAssistantWindow::ThermalAssistantWindow(const ThermalAssistantLook &_look,
                                                unsigned _padding, bool _small,
-                                               [[maybe_unused]] bool _transparent)
+                                               [[maybe_unused]] bool _transparent) noexcept
   :renderer(_look, _padding, _small)
 #ifdef ENABLE_OPENGL
   , transparent(_transparent)
@@ -40,7 +20,7 @@ ThermalAssistantWindow::ThermalAssistantWindow(const ThermalAssistantLook &_look
 
 void
 ThermalAssistantWindow::Update(const AttitudeState &attitude,
-                               const DerivedInfo &derived)
+                               const DerivedInfo &derived) noexcept
 {
   renderer.Update(attitude, derived);
   Invalidate();
@@ -55,7 +35,7 @@ ThermalAssistantWindow::OnResize(PixelSize new_size) noexcept
 }
 
 void
-ThermalAssistantWindow::DrawCircle(Canvas &canvas)
+ThermalAssistantWindow::DrawCircle(Canvas &canvas) noexcept
 {
   canvas.DrawCircle(renderer.GetMiddle(), renderer.GetRadius());
 }

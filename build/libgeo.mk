@@ -32,4 +32,6 @@ GEO_SOURCES := \
 	$(GEO_SRC_DIR)/GeoEllipse.cpp \
 	$(GEO_SRC_DIR)/UTM.cpp
 
+GEO_DEPENDS = MATH
+
 $(eval $(call link-library,libgeo,GEO))

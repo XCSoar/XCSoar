@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
- */
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -96,8 +77,20 @@ public:
                         const AGeoPoint &destination) const noexcept;
 
 protected:
-  std::optional<RoutePoint> CheckClearance(const RouteLink &e) const noexcept override;
+  bool IsClear(const RouteLink &e) const noexcept override;
   void AddNearby(const RouteLink &e) noexcept override;
+
+  /**
+   * Check a second category of obstacle clearance.  This allows compound
+   * obstacle categories by subclasses.
+   *
+   * @param e Link to attempt
+   *
+   * @return True if path is clear
+   */
+  virtual bool CheckSecondary([[maybe_unused]] const RouteLink &e) noexcept {
+    return true;
+  }
 
 private:
   /**
@@ -123,17 +116,4 @@ private:
    * @param e Link that was attempted
    */
   void AddNearbyTerrain(const RoutePoint &inx, const RouteLink &e) noexcept;
-
-  /**
-   * Check whether a desired link may be flown without intersecting with
-   * terrain.  If it does, find also the first location that is clear to
-   * the destination.
-   *
-   * @param e Link to attempt
-   *
-   * @return std::nullopt if path is clear or clearance point if
-   * intersection occurs
-   */
-  [[gnu::pure]]
-  std::optional<RoutePoint> CheckClearanceTerrain(const RouteLink &e) const noexcept;
 };

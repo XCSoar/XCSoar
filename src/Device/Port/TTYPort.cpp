@@ -1,29 +1,10 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "TTYPort.hpp"
 #include "Device/Error.hpp"
 #include "Asset.hpp"
+#include "lib/fmt/SystemError.hxx"
 #include "io/UniqueFileDescriptor.hxx"
 #include "system/Error.hxx"
 #include "system/TTYDescriptor.hxx"
@@ -146,7 +127,7 @@ OpenTTY(const char *path, unsigned baud_rate)
 {
   UniqueFileDescriptor fd;
   if (!fd.OpenNonBlocking(path))
-    throw FormatErrno("Failed to open %s", path);
+    throw FmtErrno("Failed to open {}", path);
 
   const TTYDescriptor tty(fd);
   SetBaudrate(tty, baud_rate);
@@ -185,16 +166,6 @@ TTYPort::Drain()
 void
 TTYPort::Open(const TCHAR *path, unsigned baud_rate)
 {
-#ifndef __APPLE__
-  if (IsAndroid() && File::IsCharDev(Path(path))) {
-    /* attempt to give the XCSoar process permissions to access the
-       USB serial adapter; this is mostly relevant to the Nook */
-    TCHAR command[MAX_PATH];
-    StringFormat(command, MAX_PATH, "su -c 'chmod 666 %s'", path);
-    if(system(command)) {;} // Ignore return value
-  }
-#endif
-
   auto fd = OpenTTY(path, baud_rate);
   ::SetBaudrate(TTYDescriptor(fd), baud_rate);
 
@@ -216,11 +187,11 @@ TTYPort::OpenPseudo()
 
   UniqueFileDescriptor fd;
   if (!fd.OpenNonBlocking(path))
-    throw FormatErrno("Failed to open %s", path);
+    throw FmtErrno("Failed to open {}", path);
 
   const TTYDescriptor tty(fd);
   if (!tty.Unlock())
-    throw FormatErrno("unlockpt('%s') failed", path);
+    throw FmtErrno("unlockpt('{}') failed", path);
 
   socket.Open(fd.Release());
 
@@ -266,7 +237,7 @@ TTYPort::WaitWrite(unsigned timeout_ms)
 }
 
 std::size_t
-TTYPort::Write(const void *data, std::size_t length)
+TTYPort::Write(std::span<const std::byte> src)
 {
   assert(socket.IsDefined());
 
@@ -274,14 +245,14 @@ TTYPort::Write(const void *data, std::size_t length)
     throw std::runtime_error("Port is closed");
 
   TTYDescriptor fd(socket.GetFileDescriptor());
-  auto nbytes = fd.Write(data, length);
+  auto nbytes = fd.Write(src.data(), src.size());
   if (nbytes < 0) {
     if (errno != EAGAIN)
       /* the output fifo is full; wait until we can write (or until
          the timeout expires) */
       WaitWrite(5000);
 
-    nbytes = fd.Write(data, length);
+    nbytes = fd.Write(src.data(), src.size());
     if (nbytes < 0)
       throw MakeErrno("Port write failed");
   }

@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "BluetoothHelper.hpp"
 #include "Context.hpp"
@@ -58,7 +38,9 @@ BluetoothHelper::Initialise(JNIEnv *env) noexcept
 
 
   ctor = env->GetMethodID(cls, "<init>",
-                          "(Landroid/content/Context;)V");
+                          "(Landroid/content/Context;"
+                          "Lorg/xcsoar/PermissionManager;"
+                          ")V");
   if (Java::DiscardException(env)) {
     /* need to check for Java exceptions again because the first
        method lookup initializes the Java class */
@@ -98,9 +80,11 @@ BluetoothHelper::Deinitialise(JNIEnv *env) noexcept
   cls.ClearOptional(env);
 }
 
-BluetoothHelper::BluetoothHelper(JNIEnv *env, Context &context)
+BluetoothHelper::BluetoothHelper(JNIEnv *env, Context &context,
+                                 jobject permission_manager)
   :Java::GlobalObject(env,
-                      Java::NewObjectRethrow(env, cls, ctor, context.Get()))
+                      Java::NewObjectRethrow(env, cls, ctor, context.Get(),
+                                             permission_manager))
 {
 }
 
@@ -130,8 +114,7 @@ BluetoothHelper::GetNameFromAddress(JNIEnv *env,
 
   std::string name = Java::String(env, j_name).ToString();
 
-  auto j = address_to_name.insert(std::make_pair(x_address,
-                                                 std::move(name)));
+  auto j = address_to_name.emplace(x_address, std::move(name));
   return j.first->second.c_str();
 }
 

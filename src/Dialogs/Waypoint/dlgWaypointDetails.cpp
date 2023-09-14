@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "WaypointDialogs.hpp"
 #include "WaypointInfoWidget.hpp"
@@ -50,13 +30,14 @@ Copyright_License {
 #include "Waypoint/LastUsed.hpp"
 #include "Profile/Current.hpp"
 #include "Profile/Map.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "system/RunFile.hpp"
 #include "system/Path.hpp"
 #include "system/ConvertPathName.hpp"
 #include "LogFile.hpp"
 #include "util/StringPointer.hxx"
 #include "util/AllocatedString.hxx"
+#include "BackendComponents.hpp"
 
 #ifdef ANDROID
 #include "Android/NativeView.hpp"
@@ -169,12 +150,13 @@ class WaypointDetailsWidget final
   int zoom = 0;
 
 public:
-  WaypointDetailsWidget(WidgetDialog &_dialog, WaypointPtr _waypoint,
+  WaypointDetailsWidget(WidgetDialog &_dialog,
+                        Waypoints *waypoints, WaypointPtr _waypoint,
                         ProtectedTaskManager *_task_manager, bool allow_edit) noexcept
     :dialog(_dialog),
      waypoint(std::move(_waypoint)),
      task_manager(_task_manager),
-     commands_widget(new WaypointCommandsWidget(look, &dialog, waypoint,
+     commands_widget(new WaypointCommandsWidget(look, &dialog, waypoints, waypoint,
                                                 task_manager, allow_edit)) {}
 
   void UpdatePage() noexcept;
@@ -633,7 +615,7 @@ UpdateCaption(WndForm *form, const Waypoint &waypoint)
   StaticString<256> buffer;
   buffer.Format(_T("%s: %s"), _("Waypoint"), waypoint.name.c_str());
 
-  const char *key = nullptr;
+  std::string_view key{};
   const TCHAR *name = nullptr;
 
   switch (waypoint.origin) {
@@ -661,7 +643,7 @@ UpdateCaption(WndForm *form, const Waypoint &waypoint)
     break;
   }
 
-  if (key != nullptr) {
+  if (!key.empty()) {
     const auto filename = Profile::map.GetPathBase(key);
     if (filename != nullptr)
       buffer.AppendFormat(_T(" (%s)"), filename.c_str());
@@ -672,7 +654,7 @@ UpdateCaption(WndForm *form, const Waypoint &waypoint)
 }
 
 void
-dlgWaypointDetailsShowModal(WaypointPtr _waypoint,
+dlgWaypointDetailsShowModal(Waypoints *waypoints, WaypointPtr _waypoint,
                             bool allow_navigation, bool allow_edit)
 {
   LastUsedWaypoints::Add(*_waypoint);
@@ -681,8 +663,8 @@ dlgWaypointDetailsShowModal(WaypointPtr _waypoint,
   TWidgetDialog<WaypointDetailsWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            look, nullptr);
-  dialog.SetWidget(dialog, _waypoint,
-                   allow_navigation ? protected_task_manager : nullptr,
+  dialog.SetWidget(dialog, waypoints, _waypoint,
+                   allow_navigation ? backend_components->protected_task_manager.get() : nullptr,
                    allow_edit);
 
   UpdateCaption(&dialog, *_waypoint);

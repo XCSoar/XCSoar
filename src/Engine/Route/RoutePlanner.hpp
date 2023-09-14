@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
- */
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -73,17 +54,26 @@ class GlidePolar;
  */
 class RoutePlanner {
   struct RoutePointHasher {
-    [[gnu::const]]
-    std::size_t operator()(const RoutePoint &p) const noexcept {
+    constexpr std::size_t operator()(const RoutePoint &p) const noexcept {
       return p.x * std::size_t(104729) + p.y;
     }
   };
 
   struct RouteLinkBaseHasher {
-    [[gnu::const]]
-    std::size_t operator()(const RouteLinkBase &l) const noexcept {
+    constexpr std::size_t operator()(const RouteLinkBase &l) const noexcept {
       RoutePointHasher p;
       return p(l.first) * std::size_t(27644437) + p(l.second);
+    }
+  };
+
+  struct RouteLinkBaseEqual {
+    constexpr bool operator()(const RouteLinkBase &a,
+                              const RouteLinkBase &b) const noexcept {
+      /* by casting the AFlatGeoPoint to FlatGeoPoint, we ignore the
+         AFlatGeoPoint::altitude field which is not relevant for
+         #unique_links */
+      return (FlatGeoPoint)a.first == (FlatGeoPoint)b.first &&
+        (FlatGeoPoint)a.second == (FlatGeoPoint)b.second;
     }
   };
 
@@ -111,7 +101,8 @@ private:
    */
   SearchPointVector search_hull;
 
-  typedef std::unordered_set<RouteLinkBase, RouteLinkBaseHasher> RouteLinkSet;
+  typedef std::unordered_set<RouteLinkBase, RouteLinkBaseHasher,
+                             RouteLinkBaseEqual> RouteLinkSet;
 
   /** Links that have been visited during solution */
   RouteLinkSet unique_links{50000};
@@ -127,14 +118,8 @@ private:
   /** Destination at last call to solve() */
   AFlatGeoPoint destination_last;
 
-  mutable unsigned long count_dij;
-  mutable unsigned long count_unique;
-  mutable unsigned long count_supressed;
-
 protected:
   RoutePoint astar_goal;
-  mutable unsigned long count_airspace;
-  mutable unsigned long count_terrain;
 
 public:
   friend class PrintHelper;
@@ -245,30 +230,15 @@ protected:
 
 protected:
   /**
-   * Check a second category of obstacle clearance.  This allows compound
-   * obstacle categories by subclasses.
-   *
-   * @param e Link to attempt
-   *
-   * @return True if path is clear
-   */
-  [[gnu::pure]]
-  virtual bool CheckSecondary([[maybe_unused]] const RouteLink &e) noexcept {
-    return true;
-  }
-
-  /**
    * Check whether a desired link may be flown without intersecting with
-   * any obstacle.  If it does, find also the first location that is clear to
-   * the destination.
+   * any obstacle.
    *
    * @param e Link to attempt
    *
-   * @return std::nullopt if path is clear or clearance point if
-   * intersection occurs
+   * @return true if path is clear
    */
   [[gnu::pure]]
-  virtual std::optional<RoutePoint> CheckClearance(const RouteLink &e) const noexcept = 0;
+  virtual bool IsClear(const RouteLink &e) const noexcept = 0;
 
   /**
    * Given a desired path e, and a clearance point, generate candidates directly

@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 package org.xcsoar;
 
@@ -31,14 +12,18 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.Manifest;
 
 /**
  * Code to support the internal GPS receiver via #LocationManager.
  */
 public class InternalGPS
-  implements LocationListener, Runnable, AndroidSensor
+  implements LocationListener, Runnable, AndroidSensor,
+  PermissionManager.PermissionHandler
 {
+  private final Context context;
   private final Handler handler;
+  private final PermissionManager permissionManager;
 
   private final SensorListener listener;
 
@@ -52,27 +37,19 @@ public class InternalGPS
 
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
-  InternalGPS(Context context, SensorListener listener) {
+  InternalGPS(Context context, PermissionManager permissionManager,
+              SensorListener listener) {
+    this.context = context;
     handler = new Handler(context.getMainLooper());
+    this.permissionManager = permissionManager;
     this.listener = listener;
 
     locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-    if (locationManager == null ||
-        locationManager.getProvider(locationProvider) == null) {
-      /* on the Nook Simple Touch, LocationManager.isProviderEnabled()
-         can crash, but LocationManager.getProvider() appears to be
-         safe, therefore we're first checking the latter; if the
-         device does have a GPS, it returns non-null even when the
-         user has disabled GPS */
-      return;
-    } else if (!locationManager.isProviderEnabled(locationProvider) &&
-        !queriedLocationSettings) {
-      // Let user turn on GPS, XCSoar is not allowed to.
-      Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-      context.startActivity(myIntent);
-      queriedLocationSettings = true;
-    }
+    if (locationManager == null)
+      /* can this really happen? */
+      throw new IllegalStateException("No LocationManager");
 
+    // schedule a run() call in the MainLooper thread
     handler.post(this);
   }
 
@@ -81,7 +58,25 @@ public class InternalGPS
    * LocationManager subscription inside the main thread.
    */
   @Override public void run() {
+    if (!permissionManager.requestPermission(Manifest.permission.ACCESS_FINE_LOCATION,
+                                             this))
+      /* permission is requested asynchronously,
+         onRequestPermissionsResult() will be called later */
+      return;
+
+    if (android.os.Build.VERSION.SDK_INT >= 29)
+      permissionManager.requestPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                                          null);
+
     try {
+      if (!locationManager.isProviderEnabled(locationProvider) &&
+          !queriedLocationSettings) {
+        // Let user turn on GPS, XCSoar is not allowed to.
+        Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        context.startActivity(myIntent);
+        queriedLocationSettings = true;
+      }
+
       locationManager.requestLocationUpdates(locationProvider,
                                              1000, 0, this);
     } catch (SecurityException e) {
@@ -93,8 +88,19 @@ public class InternalGPS
   }
 
   @Override
+  public void onRequestPermissionsResult(boolean granted) {
+    if (granted)
+      /* try again */
+      handler.post(this);
+    else
+      submitError("Permission denied by user");
+  }
+
+  @Override
   public void close() {
     safeDestruct.beginShutdown();
+
+    permissionManager.cancelRequestPermission(InternalGPS.this);
 
     handler.removeCallbacks(this);
     handler.post(new Runnable() {

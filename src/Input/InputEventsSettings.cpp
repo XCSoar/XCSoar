@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "InputEvents.hpp"
 #include "Dialogs/Error.hpp"
@@ -28,7 +8,7 @@ Copyright_License {
 #include "ActionInterface.hpp"
 #include "Message.hpp"
 #include "Profile/Profile.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Profile/Settings.hpp"
 #include "Profile/Current.hpp"
 #include "util/Macros.hpp"
@@ -36,11 +16,12 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Protection.hpp"
 #include "UtilsSettings.hpp"
-#include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Audio/VarioGlue.hpp"
 #include "system/Path.hpp"
 #include "util/StringCompare.hxx"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 void
 InputEvents::eventSounds(const TCHAR *misc)
@@ -178,7 +159,7 @@ InputEvents::eventAudioDeadband(const TCHAR *misc)
 void
 InputEvents::eventBugs(const TCHAR *misc)
 {
-  if (protected_task_manager == NULL)
+  if (!backend_components->protected_task_manager)
     return;
 
   PolarSettings &settings = CommonInterface::SetComputerSettings().polar;
@@ -205,7 +186,7 @@ InputEvents::eventBugs(const TCHAR *misc)
 
   if (BUGS != oldBugs) {
     settings.SetBugs(BUGS);
-    protected_task_manager->SetGlidePolar(settings.glide_polar_task);
+    backend_components->SetTaskPolar(settings);
   }
 }
 
@@ -219,11 +200,11 @@ InputEvents::eventBugs(const TCHAR *misc)
 void
 InputEvents::eventBallast(const TCHAR *misc)
 {
-  if (protected_task_manager == NULL)
+  if (!backend_components->protected_task_manager)
     return;
 
-  GlidePolar &polar =
-    CommonInterface::SetComputerSettings().polar.glide_polar_task;
+  auto &settings = CommonInterface::SetComputerSettings().polar;
+  GlidePolar &polar = settings.glide_polar_task;
   auto BALLAST = polar.GetBallast();
   auto oldBallast = BALLAST;
 
@@ -248,7 +229,7 @@ InputEvents::eventBallast(const TCHAR *misc)
 
   if (BALLAST != oldBallast) {
     polar.SetBallast(BALLAST);
-    protected_task_manager->SetGlidePolar(polar);
+    backend_components->SetTaskPolar(settings);
   }
 }
 

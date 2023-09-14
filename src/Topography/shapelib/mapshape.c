@@ -249,10 +249,26 @@ SHPHandle msSHPOpenVirtualFile( struct zzip_file * fpSHP, struct zzip_file * fpS
     return( NULL );
   }
 
-  psSHP->nFileSize = (pabyBuf[24] * 256 * 256 * 256
-                      + pabyBuf[25] * 256 * 256
-                      + pabyBuf[26] * 256
-                      + pabyBuf[27]) * 2;
+  if( !bBigEndian ) SwapWord( 4, pabyBuf+24 );
+  memcpy(&psSHP->nFileSize, pabyBuf+24, 4);
+  if( psSHP->nFileSize < 0 || psSHP->nFileSize > INT_MAX / 2 ) {
+#ifdef SHAPELIB_DISABLED
+      msDebug("Invalid / unsupported nFileSize = %d value. Got it from actual file length", psSHP->nFileSize);
+      VSIFSeekL( psSHP->fpSHP, 0, SEEK_END );
+      vsi_l_offset nSize = VSIFTellL( psSHP->fpSHP );
+      if( nSize > (vsi_l_offset)INT_MAX ) {
+          msDebug("Actual .shp size is larger than 2 GB. Not suported. Invalidating nFileSize");
+#endif /* SHAPELIB_DISABLED */
+          psSHP->nFileSize = 0;
+#ifdef SHAPELIB_DISABLED
+      }
+      else
+          psSHP->nFileSize = (int)nSize;
+#endif /* SHAPELIB_DISABLED */
+  }
+  else {
+      psSHP->nFileSize *= 2;
+  }
 
   /* -------------------------------------------------------------------- */
   /*  Read SHX file Header info                                           */
@@ -267,7 +283,7 @@ SHPHandle msSHPOpenVirtualFile( struct zzip_file * fpSHP, struct zzip_file * fpS
   }
 
   if( pabyBuf[0] != 0 || pabyBuf[1] != 0 || pabyBuf[2] != 0x27  || (pabyBuf[3] != 0x0a && pabyBuf[3] != 0x0d) ) {
-    msSetError(MS_SHPERR, "Corrupted .shp file", "msSHPOpen()");
+    msSetError(MS_SHPERR, "Corrupted .shx file", "msSHPOpen()");
     zzip_close( psSHP->fpSHP );
     zzip_close( psSHP->fpSHX );
     free( psSHP );
@@ -276,12 +292,16 @@ SHPHandle msSHPOpenVirtualFile( struct zzip_file * fpSHP, struct zzip_file * fpS
     return( NULL );
   }
 
-  psSHP->nRecords = pabyBuf[27] + pabyBuf[26] * 256 + pabyBuf[25] * 256 * 256 + pabyBuf[24] * 256 * 256 * 256;
-  if (psSHP->nRecords != 0)
-    psSHP->nRecords = (psSHP->nRecords*2 - 100) / 8;
+  int nSHXHalfFileSize;
+  if( !bBigEndian ) SwapWord( 4, pabyBuf+24 );
+  memcpy(&nSHXHalfFileSize, pabyBuf+24, 4);
+  if (nSHXHalfFileSize >= 50)
+    psSHP->nRecords = (nSHXHalfFileSize - 50) / 4;   // (nSHXFileSize - 100) / 8
+  else
+    psSHP->nRecords = -1;
 
   if( psSHP->nRecords < 0 || psSHP->nRecords > 256000000 ) {
-    msSetError(MS_SHPERR, "Corrupted .shp file : nRecords = %d.", "msSHPOpen()",
+    msSetError(MS_SHPERR, "Corrupted .shx file : nRecords = %d.", "msSHPOpen()",
                psSHP->nRecords);
     zzip_close( psSHP->fpSHP );
     zzip_close( psSHP->fpSHX );
@@ -629,6 +649,7 @@ int msSHPWritePoint(SHPHandle psSHP, pointObj *point )
   ms_int32  i32, nPoints, nParts;
 
   if( psSHP->nShapeType != SHP_POINT) return(-1);
+  if( psSHP->nFileSize == 0 ) return -1;
 
   psSHP->bUpdated = MS_TRUE;
 
@@ -723,6 +744,9 @@ int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
   int nShapeType;
 
   ms_int32  i32, nPoints, nParts;
+
+  if( psSHP->nFileSize == 0 ) return -1;
+
   psSHP->bUpdated = MS_TRUE;
 
   /* Fill the SHX buffer if it is not already full. */
@@ -1021,7 +1045,7 @@ static uchar *msSHPReadAllocateBuffer( SHPHandle psSHP, int hEntity, const char*
 {
 
   int nEntitySize = msSHXReadSize(psSHP, hEntity);
-  if( nEntitySize < 0 || nEntitySize > INT_MAX - 8 ) {
+  if( nEntitySize <= 0 || nEntitySize > INT_MAX - 8 ) {
       msSetError(MS_MEMERR, "Out of memory. Cannot allocate %d bytes. Probably broken shapefile at feature %d",
                  pszCallingFunction, nEntitySize, hEntity);
       return NULL;
@@ -1096,7 +1120,8 @@ int msSHPReadPoint( SHPHandle psSHP, int hEntity, pointObj *point )
   /* -------------------------------------------------------------------- */
   /*      Read the record.                                                */
   /* -------------------------------------------------------------------- */
-  if( 0 != VSIFSeekL( psSHP->fpSHP, msSHXReadOffset( psSHP, hEntity), 0 )) {
+  const int offset = msSHXReadOffset( psSHP, hEntity);
+  if( offset <= 0 || 0 != VSIFSeekL( psSHP->fpSHP, offset, 0 )) {
     msSetError(MS_IOERR, "failed to seek offset", "msSHPReadPoint()");
     return(MS_FAILURE);
   }
@@ -1127,7 +1152,7 @@ int msSHPReadPoint( SHPHandle psSHP, int hEntity, pointObj *point )
 ** successive accesses during the reading cycle (first bounds are read,
 ** then entire shapes). Each time we read a page, we mark it as read.
 */
-static int msSHXLoadPage( SHPHandle psSHP, int shxBufferPage )
+static bool msSHXLoadPage( SHPHandle psSHP, int shxBufferPage )
 {
   int i;
 
@@ -1138,20 +1163,23 @@ static int msSHXLoadPage( SHPHandle psSHP, int shxBufferPage )
   if( shxBufferPage < 0  )
     return(MS_FAILURE);
 
-  if( SHX_BUFFER_PAGE * 8 != zzip_pread(psSHP->fpSHX, buffer, 8 * SHX_BUFFER_PAGE, 100 + shxBufferPage * SHX_BUFFER_PAGE * 8)) {
-    /*
-     * msSetError(MS_IOERR, "failed to fread SHX record", "msSHXLoadPage()");
-     * return(MS_FAILURE);
-     */
+  const int nShapesToCache =
+      shxBufferPage < psSHP->nRecords / SHX_BUFFER_PAGE ? SHX_BUFFER_PAGE :
+      psSHP->nRecords - shxBufferPage * SHX_BUFFER_PAGE;
+
+  if( (size_t)nShapesToCache * 8 != zzip_pread(psSHP->fpSHX, buffer, nShapesToCache * 8, 100 + shxBufferPage * SHX_BUFFER_PAGE * 8)) {
+    memset(psSHP->panRecOffset + shxBufferPage * SHX_BUFFER_PAGE, 0,
+           nShapesToCache * sizeof(psSHP->panRecOffset[0]));
+    memset(psSHP->panRecSize + shxBufferPage * SHX_BUFFER_PAGE, 0,
+           nShapesToCache * sizeof(psSHP->panRecSize[0]));
+    msSetBit(psSHP->panRecLoaded, shxBufferPage, 1);
+    msSetError(MS_IOERR, "failed to fread SHX record", "msSHXLoadPage()");
+    return false;
   }
 
   /* Copy the buffer contents out into the working arrays. */
-  for( i = 0; i < SHX_BUFFER_PAGE; i++ ) {
+  for( i = 0; i < nShapesToCache; i++ ) {
     int tmpOffset, tmpSize;
-
-    /* Don't write information past the end of the arrays, please. */
-    if(psSHP->nRecords <= (shxBufferPage * SHX_BUFFER_PAGE + i) )
-      break;
 
     memcpy( &tmpOffset, (buffer + (8*i)), 4);
     memcpy( &tmpSize, (buffer + (8*i) + 4), 4);
@@ -1165,8 +1193,15 @@ static int msSHXLoadPage( SHPHandle psSHP, int shxBufferPage )
 
     /* SHX stores the offsets in 2 byte units, so we double them to get */
     /* an offset in bytes. */
-    tmpOffset = tmpOffset * 2;
-    tmpSize = tmpSize * 2;
+    if( tmpOffset > 0 && tmpOffset < INT_MAX / 2 )
+        tmpOffset = tmpOffset * 2;
+    else
+        tmpOffset = 0;
+
+    if( tmpSize > 0 && tmpSize < INT_MAX / 2 )
+        tmpSize = tmpSize * 2;
+    else
+        tmpSize = 0;
 
     /* Write the answer into the working arrays on the SHPHandle */
     psSHP->panRecOffset[shxBufferPage * SHX_BUFFER_PAGE + i] = tmpOffset;
@@ -1186,7 +1221,12 @@ static int msSHXLoadAll( SHPHandle psSHP )
   int i;
   uchar *pabyBuf;
 
-  pabyBuf = (uchar *) msSmallMalloc(8 * psSHP->nRecords );
+  pabyBuf = (uchar *) malloc(8 * psSHP->nRecords );
+  if( pabyBuf == NULL )
+  {
+    msSetError(MS_IOERR, "failed to allocate memory for SHX buffer", "msSHXLoadAll()");
+    return MS_FAILURE;
+  }
   if((zzip_size_t)psSHP->nRecords != zzip_fread( pabyBuf, 8, psSHP->nRecords, psSHP->fpSHX )) {
     msSetError(MS_IOERR, "failed to read shx records", "msSHXLoadAll()");
     free(pabyBuf);
@@ -1203,8 +1243,20 @@ static int msSHXLoadAll( SHPHandle psSHP )
       nLength = SWAP_FOUR_BYTES( nLength );
     }
 
-    psSHP->panRecOffset[i] = nOffset*2;
-    psSHP->panRecSize[i] = nLength*2;
+    /* SHX stores the offsets in 2 byte units, so we double them to get */
+    /* an offset in bytes. */
+    if( nOffset > 0 && nOffset < INT_MAX / 2 )
+        nOffset = nOffset * 2;
+    else
+        nOffset = 0;
+
+    if( nLength > 0 && nLength < INT_MAX / 2 )
+        nLength = nLength * 2;
+    else
+        nLength = 0;
+
+    psSHP->panRecOffset[i] = nOffset;
+    psSHP->panRecSize[i] = nLength;
   }
   free(pabyBuf);
   psSHP->panRecAllLoaded = 1;
@@ -1222,7 +1274,7 @@ static int msSHXReadOffset( SHPHandle psSHP, int hEntity )
 
   /*  Validate the record/entity number. */
   if( hEntity < 0 || hEntity >= psSHP->nRecords )
-    return(MS_FAILURE);
+    return 0;
 
   if( ! (psSHP->panRecAllLoaded || msGetBit(psSHP->panRecLoaded, shxBufferPage)) ) {
     msSHXLoadPage( psSHP, shxBufferPage );
@@ -1239,7 +1291,7 @@ static int msSHXReadSize( SHPHandle psSHP, int hEntity )
 
   /*  Validate the record/entity number. */
   if( hEntity < 0 || hEntity >= psSHP->nRecords )
-    return(MS_FAILURE);
+    return 0;
 
   if( ! (psSHP->panRecAllLoaded || msGetBit(psSHP->panRecLoaded, shxBufferPage)) ) {
     msSHXLoadPage( psSHP, shxBufferPage );
@@ -1280,8 +1332,16 @@ void msSHPReadShape( SHPHandle psSHP, int hEntity, shapeObj *shape )
   if( hEntity < 0 || hEntity >= psSHP->nRecords )
     return;
 
-  nEntitySize = msSHXReadSize(psSHP, hEntity) + 8;
+  nEntitySize = msSHXReadSize(psSHP, hEntity);
+  if( nEntitySize < 4 || nEntitySize > INT_MAX - 8 )
+  {
+      shape->type = MS_SHAPE_NULL;
+      msSetError(MS_SHPERR, "Corrupted feature encountered.  hEntity = %d, nEntitySize=%d", "msSHPReadShape()",
+                 hEntity, nEntitySize);
+      return;
+  }
 
+  nEntitySize += 8;
   if( nEntitySize == 12 ) {
     shape->type = MS_SHAPE_NULL;
     return;
@@ -1296,7 +1356,8 @@ void msSHPReadShape( SHPHandle psSHP, int hEntity, shapeObj *shape )
   /* -------------------------------------------------------------------- */
   /*      Read the record.                                                */
   /* -------------------------------------------------------------------- */
-  if ((zzip_size_t)nEntitySize != zzip_pread(psSHP->fpSHP, pabyRec, nEntitySize, msSHXReadOffset(psSHP, hEntity))) {
+  const int offset = msSHXReadOffset( psSHP, hEntity);
+  if ((zzip_size_t)nEntitySize != zzip_pread(psSHP->fpSHP, pabyRec, nEntitySize, offset)) {
     msSetError(MS_IOERR, "failed to fread record", "msSHPReadPoint()");
     shape->type = MS_SHAPE_NULL;
     return;
@@ -1397,11 +1458,12 @@ void msSHPReadShape( SHPHandle psSHP, int hEntity, shapeObj *shape )
       const ms_int32 end = i == nParts - 1
         ? nPoints
         : psSHP->panParts[i+1];
-      shape->line[i].numpoints = end - psSHP->panParts[i];
       if (psSHP->panParts[i] < 0 || end < 0 || end > nPoints ||
           psSHP->panParts[i] >= end) {
-        msSetError(MS_SHPERR, "Corrupted .shp file : shape %d, shape->line[%d].numpoints=%d", "msSHPReadShape()",
-                   hEntity, i, shape->line[i].numpoints);
+        msSetError(MS_SHPERR, "Corrupted .shp file : shape %d, shape->line[%d].start=%d, shape->line[%d].end=%d", "msSHPReadShape()",
+                   hEntity,
+                   i, psSHP->panParts[i],
+                   i, end);
         while(--i >= 0)
           free(shape->line[i].point);
         free(shape->line);
@@ -1411,6 +1473,7 @@ void msSHPReadShape( SHPHandle psSHP, int hEntity, shapeObj *shape )
         return;
       }
 
+      shape->line[i].numpoints = end - psSHP->panParts[i];
       if( (shape->line[i].point = (pointObj *)malloc(sizeof(pointObj)*shape->line[i].numpoints)) == NULL ) {
         while(--i >= 0)
           free(shape->line[i].point);
@@ -1652,13 +1715,19 @@ int msSHPReadBounds( SHPHandle psSHP, int hEntity, rectObj *padBounds)
     padBounds->maxy = psSHP->adBoundsMax[1];
   } else {
 
-    if( msSHXReadSize(psSHP, hEntity) == 4 ) { /* NULL shape */
+    if( msSHXReadSize(psSHP, hEntity) <= 4 ) { /* NULL shape */
       padBounds->minx = padBounds->miny = padBounds->maxx = padBounds->maxy = 0.0;
       return MS_FAILURE;
     }
 
+    const int offset = msSHXReadOffset( psSHP, hEntity);
+    if( offset <= 0 || offset >= INT_MAX - 12) {
+      msSetError(MS_IOERR, "failed to seek offset", "msSHPReadBounds()");
+      return(MS_FAILURE);
+    }
+
     if( psSHP->nShapeType != SHP_POINT && psSHP->nShapeType != SHP_POINTZ && psSHP->nShapeType != SHP_POINTM) {
-      if (sizeof(double) * 4 != zzip_pread(psSHP->fpSHP, padBounds, sizeof(double) * 4, msSHXReadOffset(psSHP, hEntity) + 12)) {
+      if (sizeof(double) * 4 != zzip_pread(psSHP->fpSHP, padBounds, sizeof(double) * 4, offset + 12)) {
         msSetError(MS_IOERR, "failed to fread record", "msSHPReadBounds()");
         return(MS_FAILURE);
       }
@@ -1679,8 +1748,7 @@ int msSHPReadBounds( SHPHandle psSHP, int hEntity, rectObj *padBounds)
       /*      For points we fetch the point, and duplicate it as the          */
       /*      minimum and maximum bound.                                      */
       /* -------------------------------------------------------------------- */
-
-      if (sizeof(double) * 2 != zzip_pread(psSHP->fpSHP, padBounds, sizeof(double) * 2, msSHXReadOffset(psSHP, hEntity) + 12)) {
+      if (sizeof(double) * 2 != zzip_pread(psSHP->fpSHP, padBounds, sizeof(double) * 2, offset + 12)) {
         msSetError(MS_IOERR, "failed to fread record", "msSHPReadBounds()");
         return(MS_FAILURE);
       }

@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "DumpPort.hpp"
 #include "Device/Error.hpp"
@@ -69,24 +49,24 @@ DumpPort::WaitConnected(OperationEnvironment &env)
 }
 
 std::size_t
-DumpPort::Write(const void *data, std::size_t length)
+DumpPort::Write(std::span<const std::byte> src)
 {
   const bool enabled = CheckEnabled();
   if (enabled)
-    LogFormat("Write(%u)", (unsigned)length);
+    LogFmt("Write({})", src.size());
 
   std::size_t nbytes;
   try {
-    nbytes = port->Write(data, length);
+    nbytes = port->Write(src);
   } catch (...) {
     if (enabled)
-      LogFormat("Write(%u)=error", (unsigned)length);
+      LogFmt("Write({})=error", src.size());
     throw;
   }
 
   if (enabled) {
-    LogFormat("Write(%u)=%u", (unsigned)length, (unsigned)nbytes);
-    HexDump("W ", data, nbytes);
+    LogFmt("Write({})={}", src.size(), nbytes);
+    HexDump("W ", src.first(nbytes));
   }
 
   return nbytes;
@@ -96,7 +76,7 @@ bool
 DumpPort::Drain()
 {
   if (CheckEnabled())
-    LogFormat("Drain");
+    LogString("Drain");
 
   return port->Drain();
 }
@@ -105,7 +85,7 @@ void
 DumpPort::Flush()
 {
   if (CheckEnabled())
-    LogFormat("Flush");
+    LogString("Flush");
 
   port->Flush();
 }
@@ -120,7 +100,7 @@ void
 DumpPort::SetBaudrate(unsigned baud_rate)
 {
   if (CheckEnabled())
-    LogFormat("SetBaudrate %u", baud_rate);
+    LogFmt("SetBaudrate {}", baud_rate);
 
   port->SetBaudrate(baud_rate);
 }
@@ -129,7 +109,7 @@ bool
 DumpPort::StopRxThread()
 {
   if (CheckEnabled())
-    LogFormat("StopRxThread");
+    LogString("StopRxThread");
 
   return port->StopRxThread();
 }
@@ -138,24 +118,24 @@ bool
 DumpPort::StartRxThread()
 {
   if (CheckEnabled())
-    LogFormat("StartRxThread");
+    LogString("StartRxThread");
 
   return port->StartRxThread();
 }
 
 std::size_t
-DumpPort::Read(void *buffer, std::size_t size)
+DumpPort::Read(std::span<std::byte> dest)
 {
   const bool enabled = CheckEnabled();
   if (enabled)
-    LogFormat("Read(%u)", (unsigned)size);
+    LogFmt("Read({})", dest.size());
 
-  auto nbytes = port->Read(buffer, size);
+  auto nbytes = port->Read(dest);
 
   if (enabled) {
-    LogFormat("Read(%u)=%u", (unsigned)size, (unsigned)nbytes);
+    LogFmt("Read({})={}", dest.size(), nbytes);
     if (nbytes > 0)
-      HexDump("R ", buffer, nbytes);
+      HexDump("R ", dest.first(nbytes));
   }
 
   return nbytes;
@@ -166,17 +146,17 @@ DumpPort::WaitRead(std::chrono::steady_clock::duration timeout)
 {
   const bool enabled = CheckEnabled();
   if (enabled)
-    LogFormat("WaitRead %lu", (unsigned long)timeout.count());
+    LogFmt("WaitRead {}", timeout.count());
 
   try {
     port->WaitRead(timeout);
   } catch (const DeviceTimeout &) {
     if (enabled)
-      LogFormat("WaitRead %lu = timeout", (unsigned long)timeout.count());
+      LogFmt("WaitRead {} = timeout", timeout.count());
     throw;
   } catch (...) {
     if (enabled)
-      LogFormat("WaitRead %lu = error", (unsigned long)timeout.count());
+      LogFmt("WaitRead {} = error", timeout.count());
     throw;
   }
 }

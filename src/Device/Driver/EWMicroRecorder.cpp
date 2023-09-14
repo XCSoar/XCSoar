@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 
 // ToDo
@@ -65,7 +45,7 @@ public:
 bool
 EWMicroRecorderDevice::EnableNMEA(OperationEnvironment &env)
 {
-  port.FullWrite("!!\r\n", 4, env, std::chrono::milliseconds(500));
+  port.FullWrite("!!\r\n", env, std::chrono::milliseconds(500));
   return true;
 }
 
@@ -123,8 +103,7 @@ TryConnect(Port &port, char *user_data, size_t max_user_data,
   TimeoutClock timeout(std::chrono::seconds(8));
 
   while (true) {
-    const size_t nbytes = port.WaitAndRead(user_data + user_size,
-                                           max_user_data - user_size,
+    const size_t nbytes = port.WaitAndRead(std::as_writable_bytes(std::span{user_data + user_size, max_user_data - user_size}),
                                            env, timeout);
     if (nbytes == 0)
       return false;
@@ -209,14 +188,14 @@ WriteCleanString(Port &port, const TCHAR *p,
 
   CleanString(buffer.buffer());
 
-  port.FullWriteString(buffer, env, timeout);
+  port.FullWrite(buffer, env, timeout);
 }
 
 static void
 WriteLabel(Port &port, const char *name, OperationEnvironment &env)
 {
-  port.FullWriteString(name, env, std::chrono::seconds(1));
-  port.FullWrite(": ", 2, env, std::chrono::milliseconds(500));
+  port.FullWrite(name, env, std::chrono::seconds(1));
+  port.FullWrite(": ", env, std::chrono::milliseconds(500));
 }
 
 /**
@@ -228,7 +207,7 @@ WritePair(Port &port, const char *name, const TCHAR *value,
 {
   WriteLabel(port, name, env);
   WriteCleanString(port, value, env, std::chrono::seconds(1));
-  port.FullWrite("\r\n", 2, env, std::chrono::milliseconds(500));
+  port.FullWrite("\r\n", env, std::chrono::milliseconds(500));
 }
 
 static void
@@ -267,7 +246,7 @@ WriteGeoPoint(Port &port, const GeoPoint &value, OperationEnvironment &env)
           DegLat, (int)MinLat, NoS,
           DegLon, (int)MinLon, EoW);
 
-  port.FullWriteString(buffer, env, std::chrono::seconds(1));
+  port.FullWrite(buffer, env, std::chrono::seconds(1));
 }
 
 static void
@@ -280,7 +259,7 @@ EWMicroRecorderWriteWaypoint(Port &port, const char *type,
   port.Write(' ');
   WriteCleanString(port, way_point.name.c_str(),
                    env, std::chrono::seconds(1));
-  port.FullWrite("\r\n", 2, env, std::chrono::milliseconds(500));
+  port.FullWrite("\r\n", env, std::chrono::milliseconds(500));
 }
 
 static bool
@@ -301,9 +280,9 @@ DeclareInner(Port &port, const Declaration &declaration,
 
   port.Write('\x18');         // start to upload file
 
-  port.FullWriteString(user_data, env, std::chrono::seconds(5));
-  port.FullWriteString("USER DETAILS\r\n--------------\r\n\r\n",
-                       env, std::chrono::seconds(1));
+  port.FullWrite(user_data, env, std::chrono::seconds(5));
+  port.FullWrite("USER DETAILS\r\n--------------\r\n\r\n",
+                 env, std::chrono::seconds(1));
 
   WritePair(port, "Pilot Name", declaration.pilot_name.c_str(), env);
   WritePair(port, "Competition ID", declaration.competition_id.c_str(), env);
@@ -311,15 +290,15 @@ DeclareInner(Port &port, const Declaration &declaration,
   WritePair(port,  "Aircraft ID",
             declaration.aircraft_registration.c_str(), env);
 
-  port.FullWriteString("\r\nFLIGHT DECLARATION\r\n-------------------\r\n\r\n",
-                       env, std::chrono::seconds(1));
+  port.FullWrite("\r\nFLIGHT DECLARATION\r\n-------------------\r\n\r\n",
+                 env, std::chrono::seconds(1));
 
   WritePair(port, "Description", _T("XCSoar task declaration"), env);
 
   for (unsigned i = 0; i < 11; i++) {
     if (i+1>= declaration.Size()) {
-      port.FullWriteString("TP LatLon: 0000000N00000000E TURN POINT\r\n",
-                           env, std::chrono::seconds(1));
+      port.FullWrite("TP LatLon: 0000000N00000000E TURN POINT\r\n",
+                     env, std::chrono::seconds(1));
     } else {
       const Waypoint &wp = declaration.GetWaypoint(i);
       if (i == 0) {

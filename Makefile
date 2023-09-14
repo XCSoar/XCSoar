@@ -98,11 +98,12 @@ include $(topdir)/build/glx.mk
 include $(topdir)/build/opengl.mk
 endif
 
+include $(topdir)/build/compile.mk
+include $(topdir)/build/host.mk
 include $(topdir)/build/flags.mk
 include $(topdir)/build/charset.mk
 include $(topdir)/build/warnings.mk
-include $(topdir)/build/host.mk
-include $(topdir)/build/compile.mk
+include $(topdir)/build/depends.mk
 include $(topdir)/build/link.mk
 include $(topdir)/build/resource.mk
 include $(topdir)/build/libdata.mk
@@ -126,6 +127,8 @@ include $(topdir)/build/libjson.mk
 
 ifeq ($(FAT_BINARY),n)
 # Create libraries for zzip, jasper and compatibility stuff
+include $(topdir)/build/libfmt.mk
+include $(topdir)/build/libdbus.mk
 include $(topdir)/build/libresource.mk
 include $(topdir)/build/liblook.mk
 include $(topdir)/build/libstdcxx.mk
@@ -155,6 +158,8 @@ include $(topdir)/build/shapelib.mk
 include $(topdir)/build/libwaypoint.mk
 include $(topdir)/build/libairspace.mk
 include $(topdir)/build/libtask.mk
+include $(topdir)/build/libxml.mk
+include $(topdir)/build/libtaskfile.mk
 include $(topdir)/build/libroute.mk
 include $(topdir)/build/libcontest.mk
 include $(topdir)/build/libglide.mk

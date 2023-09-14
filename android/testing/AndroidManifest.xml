@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.xcsoar.testing"
           android:installLocation="auto"
-          android:versionCode="155"
-          android:versionName="7.29">
+          android:versionCode="166"
+          android:versionName="7.40">
   <application
       android:requestLegacyExternalStorage="true"
       android:preserveLegacyExternalStorage="true"
@@ -11,7 +11,8 @@
       android:appCategory="maps"
       android:icon="@drawable/icon"
       android:label="@string/app_name">
-    <activity android:name=".XCSoar"
+    <activity android:name="org.xcsoar.XCSoar"
+              android:exported="true"
               android:label="@string/app_name_testing"
               android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale"
               android:launchMode="singleInstance">
@@ -29,29 +30,43 @@
       </intent-filter>
 
       <intent-filter>
-	<action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+        <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
       </intent-filter>
       <intent-filter>
         <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
       </intent-filter>
       <meta-data android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
-		 android:resource="@xml/accessory_filter" />
+                 android:resource="@xml/accessory_filter" />
       <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                  android:resource="@xml/usb_device_filter" />
       <meta-data android:name="android.max_aspect"
                  android:value="2.1"/>
     </activity>
 
-    <service android:name=".MyService" android:foregroundServiceType="location"/>
+    <service android:name="org.xcsoar.MyService" android:foregroundServiceType="location"/>
+
+    <!-- this Activity receives scanned QR codes -->
+    <activity android:name="org.xcsoar.ReceiveTaskActivity"
+              android:exported="true">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+
+        <!-- URI scheme for XCTrack v2 tasks, see
+             https://xctrack.org/Competition_Interfaces.html -->
+        <data android:scheme="xctsk" />
+      </intent-filter>
+    </activity>
 
     <provider android:name="org.xcsoar.FileProvider"
-              android:authorities="org.xcsoar"
+              android:authorities="org.xcsoar.testing"
               android:exported="false"
               android:grantUriPermissions="true"/>
 
     <provider
         android:name="org.xcsoar.AllFilesDocumentsProvider"
-        android:authorities="org.xcsoar.allfiles"
+        android:authorities="org.xcsoar.testing.allfiles"
         android:exported="true"
         android:grantUriPermissions="true"
         android:permission="android.permission.MANAGE_DOCUMENTS">
@@ -61,15 +76,24 @@
     </provider>
   </application>
 
-  <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30"/>
-  <uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
-  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"></uses-permission>
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+  <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="31"/>
+
+  <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
+                   android:usesPermissionFlags="neverForLocation"/>
+  <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
   <uses-permission android:name="android.permission.WAKE_LOCK"/>
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
+
+  <!-- legacy Bluetooth permission, required on older Android versions -->
+  <uses-permission android:name="android.permission.BLUETOOTH"
+                   android:maxSdkVersion="30"/>
+  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"
+                   android:maxSdkVersion="30"/>
 
   <!-- required since Android 9 / targetSdkVersion 28 -->
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>

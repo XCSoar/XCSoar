@@ -1,34 +1,15 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "MapProfile.hpp"
 #include "Current.hpp"
 #include "TerrainConfig.hpp"
 #include "AirspaceConfig.hpp"
 #include "Map.hpp"
-#include "ProfileKeys.hpp"
+#include "Keys.hpp"
 #include "MapSettings.hpp"
-#include "util/Clamp.hpp"
+
+#include <algorithm> // for std::clamp()
 
 static bool
 IsValidMapOrientation(unsigned value)
@@ -81,16 +62,17 @@ Profile::Load(const ProfileMap &map, MapSettings &settings)
 
   bool orientation_found = false;
 
-  unsigned Temp = (unsigned)MapOrientation::NORTH_UP;
-  if (map.Get(ProfileKeys::OrientationCircling, Temp)) {
+  if (unsigned Temp = (unsigned)MapOrientation::NORTH_UP;
+      map.Get(ProfileKeys::OrientationCircling, Temp)) {
     orientation_found = true;
 
     if (IsValidMapOrientation(Temp))
       settings.circling_orientation = (MapOrientation)Temp;
   }
 
-  Temp = (unsigned)MapOrientation::NORTH_UP;
-  if (map.Get(ProfileKeys::OrientationCruise, Temp)) {
+  
+  if (unsigned Temp = (unsigned)MapOrientation::NORTH_UP;
+      map.Get(ProfileKeys::OrientationCruise, Temp)) {
     orientation_found = true;
 
     if (IsValidMapOrientation(Temp))
@@ -98,7 +80,7 @@ Profile::Load(const ProfileMap &map, MapSettings &settings)
   }
 
   if (!orientation_found) {
-    Temp = 1;
+    unsigned Temp = 1;
     map.Get(ProfileKeys::DisplayUpValue, Temp);
     switch (Temp) {
     case 0:
@@ -124,15 +106,15 @@ Profile::Load(const ProfileMap &map, MapSettings &settings)
     }
   }
 
-  double tmp;
-  if (map.Get(ProfileKeys::ClimbMapScale, tmp))
-    settings.circling_scale = Clamp(tmp / 10000, 0.0003, 10.);
+  if (double tmp; map.Get(ProfileKeys::ClimbMapScale, tmp))
+    settings.circling_scale = std::clamp(tmp / 10000, 0.0003, 10.);
 
-  if (map.Get(ProfileKeys::CruiseMapScale, tmp))
-    settings.cruise_scale = Clamp(tmp / 10000, 0.0003, 10.);
+  if (double tmp; map.Get(ProfileKeys::CruiseMapScale, tmp))
+    settings.cruise_scale = std::clamp(tmp / 10000, 0.0003, 10.);
 
   map.GetEnum(ProfileKeys::MapShiftBias, settings.map_shift_bias);
   map.Get(ProfileKeys::EnableFLARMMap, settings.show_flarm_on_map);
+  map.Get(ProfileKeys::FadeTraffic, settings.fade_traffic);
 
   map.Get(ProfileKeys::EnableThermalProfile, settings.show_thermal_profile);
   map.Get(ProfileKeys::EnableFinalGlideBarMC0,

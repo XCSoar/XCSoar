@@ -1,29 +1,9 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Display.hpp"
 #include "ConfigChooser.hpp"
-#include "util/RuntimeError.hxx"
+#include "lib/fmt/RuntimeError.hxx"
 #include "LogFile.hpp"
 
 #include <cassert>
@@ -120,8 +100,7 @@ Display::CreateContext()
     dummy_surface = eglCreatePbufferSurface(display, chosen_config,
                                             pbuffer_attributes);
     if (dummy_surface == EGL_NO_SURFACE)
-      throw FormatRuntimeError("eglCreatePbufferSurface() failed: %#x",
-                               eglGetError());
+      throw FmtRuntimeError("eglCreatePbufferSurface() failed: {:#x}", eglGetError());
 
     MakeCurrent(dummy_surface);
   }
@@ -133,8 +112,7 @@ Display::CreateWindowSurface(EGLNativeWindowType native_window)
   auto surface = eglCreateWindowSurface(display, chosen_config,
                                         native_window, nullptr);
   if (surface == EGL_NO_SURFACE)
-    throw FormatRuntimeError("eglCreateWindowSurface() failed: %#x",
-                             eglGetError());
+    throw FmtRuntimeError("eglCreateWindowSurface() failed: {:#x}", eglGetError());
 
   return surface;
 }
@@ -146,8 +124,7 @@ Display::MakeCurrent(EGLSurface surface)
     surface = dummy_surface;
 
   if (!eglMakeCurrent(display, surface, surface, context))
-    throw FormatRuntimeError("eglMakeCurrent() failed: %#x",
-                             eglGetError());
+    throw FmtRuntimeError("eglMakeCurrent() failed: {:#x}", eglGetError());
 }
 
 } // namespace EGL

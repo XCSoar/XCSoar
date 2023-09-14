@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Descriptor.hpp"
 #include "DataEditor.hpp"
@@ -304,6 +284,49 @@ DeviceDescriptor::OnHeartRateSensor(unsigned bpm) noexcept
   basic.heart_rate = bpm;
   basic.heart_rate_available.Update(basic.clock);
 
+  e.Commit();
+}
+
+void
+DeviceDescriptor::OnEngineSensors(bool has_cht,
+                                  Temperature cht,
+                                  bool has_egt,
+                                  Temperature egt,
+                                  bool has_ignitions_per_second,
+                                  float ignitions_per_second) noexcept
+{
+  const auto e = BeginEdit();
+  NMEAInfo &basic = *e;
+  basic.UpdateClock();
+  basic.alive.Update(basic.clock);
+
+  if (has_ignitions_per_second) {
+    basic.engine.ignitions_per_second = ignitions_per_second;
+    basic.engine.ignitions_per_second_available.Update(basic.clock);
+
+    if (config.engine_type != DeviceConfig::EngineType::NONE) {
+      basic.engine.revolutions_per_second = ignitions_per_second *
+        config.ignitions_to_revolutions_factors[static_cast<unsigned>(config.engine_type)];
+      basic.engine.revolutions_per_second_available.Update(basic.clock);
+    } else
+      basic.engine.revolutions_per_second_available.Clear();
+  } else {
+    basic.engine.ignitions_per_second_available.Clear();
+    basic.engine.revolutions_per_second_available.Clear();
+  }
+
+  if(has_cht){
+    basic.engine.cht_temperature = cht;
+    basic.engine.cht_temperature_available.Update(basic.clock);
+  }else{
+    basic.engine.cht_temperature_available.Clear();
+  }
+  if(has_egt){
+    basic.engine.egt_temperature = egt;
+    basic.engine.egt_temperature_available.Update(basic.clock);
+  }else{
+    basic.engine.egt_temperature_available.Clear();
+  }
   e.Commit();
 }
 

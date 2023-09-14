@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -190,6 +170,37 @@ struct DeviceConfig {
   double sensor_factor;
 
   /**
+   * User choices of engine types supported.
+   * Depending on the engine used (2-stroke, 4-stroke etc.),
+   * ignitions per second have to be scaled to revolutions per second.
+   */
+  enum class EngineType : uint_least8_t{
+    NONE = 0,
+    TWO_STROKE_1_IGN,
+    TWO_STROKE_2_IGN,
+    FOUR_STROKE_1_IGN,
+
+    /**
+     * A dummy entry that is used for validating profile values.
+     */
+    MAX
+  } engine_type;
+
+  /**
+   *  Based on user choice of engine type, the measured ignitions of the
+   *  engine used, get scaled to revolutions per second. engine_type[0]
+   *  maps to ignitions_to_revolutions_factors[0] etc.
+   */
+  static constexpr float ignitions_to_revolutions_factors[] = {
+    0.0f,
+    1.0f,
+    0.5f,
+    2.0f,
+  };
+
+  static_assert(std::size(ignitions_to_revolutions_factors) == (std::size_t)EngineType::MAX);
+
+  /**
    * Name of the driver.
    */
   StaticString<32> driver_name;
@@ -275,6 +286,35 @@ struct DeviceConfig {
    */
   [[gnu::pure]]
   bool ShouldReopenOnTimeout() const noexcept;
+
+  constexpr bool IsAndroidBluetooth() const noexcept {
+    switch (port_type) {
+    case PortType::BLE_SENSOR:
+    case PortType::BLE_HM10:
+    case PortType::RFCOMM:
+    case PortType::RFCOMM_SERVER:
+      return true;
+
+    case PortType::DISABLED:
+    case PortType::GLIDER_LINK:
+    case PortType::DROIDSOAR_V2:
+    case PortType::NUNCHUCK:
+    case PortType::I2CPRESSURESENSOR:
+    case PortType::IOIOVOLTAGE:
+    case PortType::INTERNAL:
+    case PortType::SERIAL:
+    case PortType::AUTO:
+    case PortType::TCP_LISTENER:
+    case PortType::TCP_CLIENT:
+    case PortType::IOIOUART:
+    case PortType::PTY:
+    case PortType::UDP_LISTENER:
+    case PortType::ANDROID_USB_SERIAL:
+      break;
+    }
+
+    return false;
+  }
 
   [[gnu::pure]]
   static bool MaybeBluetooth(PortType port_type, const TCHAR *path) noexcept;

@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -63,7 +44,7 @@ public:
   /**
    * Constructor.  Takes local copy of taskpoint data used in internal computations
    */
-  TaskLeg(OrderedTaskPoint &_destination)
+  TaskLeg(OrderedTaskPoint &_destination) noexcept
     :destination(_destination) {}
 
   /**
@@ -73,7 +54,7 @@ public:
    * @return Distance (m) of nominal task
    */
   [[gnu::pure]]
-  double ScanDistanceNominal() const;
+  double ScanDistanceNominal() const noexcept;
 
   /**
    * Calculate distance of planned task (sum of distances from each leg's
@@ -83,7 +64,7 @@ public:
    * @return Distance (m) of planned task
    */
   [[gnu::pure]]
-  double ScanDistancePlanned();
+  double ScanDistancePlanned() noexcept;
 
   /**
    * Calculate distance of maximum achievable task (sum of distances from
@@ -93,7 +74,7 @@ public:
    * @return Distance (m) of maximum achievable task
    */
   [[gnu::pure]]
-  double ScanDistanceMax() const;
+  double ScanDistanceMax() const noexcept;
 
   /**
    * Calculate distance of minimum achievable task (sum of distances from
@@ -102,7 +83,7 @@ public:
    *
    * @return Distance (m) of minimum achievable task
    */
-  double ScanDistanceMin() const;
+  double ScanDistanceMin() const noexcept;
 
   /**
    * Calculate distance of planned task (sum of distances from aircraft to
@@ -113,7 +94,7 @@ public:
    *
    * @return Distance (m) remaining in the planned task
    */
-  double ScanDistanceRemaining(const GeoPoint &ref);
+  double ScanDistanceRemaining(const GeoPoint &ref) noexcept;
 
   /**
    * Calculate scored distance of achieved part of task.
@@ -122,7 +103,7 @@ public:
    *
    * @return Distance (m) achieved adjusted for scoring
    */
-  double ScanDistanceScored(const GeoPoint &ref) const;
+  double ScanDistanceScored(const GeoPoint &ref) const noexcept;
 
   /**
    * Calculate distance of achieved part of task.
@@ -134,7 +115,7 @@ public:
    *
    * @return Distance (m) achieved
    */
-  double ScanDistanceTravelled(const GeoPoint &ref);
+  double ScanDistanceTravelled(const GeoPoint &ref) noexcept;
 
   /**
    * Retrieve maximum possible leg distance
@@ -142,7 +123,7 @@ public:
    * @return Distance (m)
    */
   [[gnu::pure]]
-  double GetMaximumLegDistance() const;
+  double GetMaximumLegDistance() const noexcept;
   
   /**
    * Retrieve min possible leg distance
@@ -150,7 +131,7 @@ public:
    * @return Distance (m)
    */
   [[gnu::pure]]
-  double GetMinimumLegDistance() const;
+  double GetMinimumLegDistance() const noexcept;
 
   /**
    * Retrieve nominal leg distance
@@ -158,53 +139,53 @@ public:
    * @return Distance (m)
    */
   [[gnu::pure]]
-  double GetNominalLegDistance() const {
+  double GetNominalLegDistance() const noexcept {
     return GetNominalLegVector().distance;
   }
 
   [[gnu::pure]]
-  GeoVector GetNominalLegVector() const;
+  GeoVector GetNominalLegVector() const noexcept;
 
   /**
    * Calculate vector from aircraft to destination
    */
-  const GeoVector &GetVectorRemaining() const {
+  const GeoVector &GetVectorRemaining() const noexcept {
     return vector_remaining;
   }
 
   /**
    * Calculate vector from aircraft to destination
    */
-  const GeoVector &GetVectorPlanned() const {
+  const GeoVector &GetVectorPlanned() const noexcept {
     return vector_planned;
   }
 
   /**
    * Calculate vector travelled along this leg
    */
-  const GeoVector &GetVectorTravelled() const {
+  const GeoVector &GetVectorTravelled() const noexcept {
     return vector_travelled;
   }
 
 private:
   [[gnu::pure]]
-  GeoVector GetPlannedVector() const;
+  GeoVector GetPlannedVector() const noexcept;
   
   [[gnu::pure]]
-  GeoVector GetTravelledVector(const GeoPoint &ref) const;
+  GeoVector GetTravelledVector(const GeoPoint &ref) const noexcept;
   
   [[gnu::pure]]
-  GeoVector GetRemainingVector(const GeoPoint &ref) const;
+  GeoVector GetRemainingVector(const GeoPoint &ref) const noexcept;
 
   [[gnu::pure]]
-  double GetScoredDistance(const GeoPoint &ref) const;
+  double GetScoredDistance(const GeoPoint &ref) const noexcept;
 
   [[gnu::pure]]
-  const OrderedTaskPoint *GetOrigin() const;
+  const OrderedTaskPoint *GetOrigin() const noexcept;
 
   [[gnu::pure]]
-  const OrderedTaskPoint *GetNext() const;
+  const OrderedTaskPoint *GetNext() const noexcept;
 
   [[gnu::pure]]
-  OrderedTaskPoint *GetNext();
+  OrderedTaskPoint *GetNext() noexcept;
 };

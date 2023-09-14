@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "TrackLineRenderer.hpp"
 #include "Look/MapLook.hpp"
@@ -37,7 +17,7 @@ static constexpr Angle MIN_RATE = Angle::Degrees(1.0); // degrees/s
 
 void
 TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
-                        const Angle track_angle, const PixelPoint pos)
+                        const Angle track_angle, const PixelPoint pos) noexcept
 {
   const auto sc = (track_angle - screen_angle).SinCos();
   const auto x = sc.first, y = sc.second;
@@ -56,7 +36,7 @@ TrackLineRenderer::Draw(Canvas &canvas,
                         const PixelPoint pos, const NMEAInfo &basic,
                         const DerivedInfo &calculated,
                         const MapSettings &settings,
-                        bool wind_relative)
+                        bool wind_relative) noexcept
 {
   if (!basic.track_available || !basic.attitude.heading_available)
     return;
@@ -78,13 +58,13 @@ TrackLineRenderer::Draw(Canvas &canvas,
   TrackLineRenderer::Draw(canvas, projection.GetScreenAngle(), basic.track, pos);
 }
 
-void
+inline void
 TrackLineRenderer::DrawProjected(Canvas &canvas,
                                  const WindowProjection &projection,
                                  const NMEAInfo &basic,
                                  const DerivedInfo &calculated,
                                  [[maybe_unused]] const MapSettings &settings,
-                                 bool wind_relative)
+                                 bool wind_relative) noexcept
 {
   // projection.GetMapScale() <= 6000;
 

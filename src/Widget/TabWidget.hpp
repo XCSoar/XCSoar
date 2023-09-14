@@ -1,29 +1,10 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
 #include "PagerWidget.hpp"
+#include "Form/TabHandler.hpp"
 
 #include <cassert>
 #include <memory>
@@ -35,7 +16,7 @@ class TabDisplay;
 /**
  * A #PagerWidget that navigates with a #TabDisplay.
  */
-class TabWidget : public PagerWidget {
+class TabWidget : public PagerWidget, TabHandler {
 public:
   enum class Orientation {
     AUTO,
@@ -49,10 +30,11 @@ private:
 
     bool vertical;
 
+    [[nodiscard]]
     Layout(Orientation orientation, PixelRect rc,
-           const TabDisplay &td, const Widget *e);
+           const TabDisplay &td, const Widget *e) noexcept;
 
-    static bool IsVertical(Orientation orientation, PixelRect rc) {
+    static constexpr bool IsVertical(Orientation orientation, PixelRect rc) noexcept {
       switch (orientation) {
       case Orientation::AUTO:
         break;
@@ -101,7 +83,7 @@ public:
     large_extra = false;
   }
 
-  Widget &GetExtra() {
+  Widget &GetExtra() noexcept {
     assert(extra != nullptr);
 
     return *extra;
@@ -110,9 +92,9 @@ public:
   /**
    * Make the "extra" Widget large, as if it were a page.
    */
-  void LargeExtra();
+  void LargeExtra() noexcept;
 
-  const PixelRect &GetEffectiveExtraPosition() const {
+  const PixelRect &GetEffectiveExtraPosition() const noexcept {
     assert(extra != nullptr);
 
     return large_extra
@@ -123,9 +105,9 @@ public:
   /**
    * Restore the "extra" widget to regular size.
    */
-  void RestoreExtra();
+  void RestoreExtra() noexcept;
 
-  void ToggleLargeExtra() {
+  void ToggleLargeExtra() noexcept {
     if (large_extra)
       RestoreExtra();
     else
@@ -133,15 +115,12 @@ public:
   }
 
   void AddTab(std::unique_ptr<Widget> widget, const TCHAR *caption,
-              const MaskedIcon *icon=nullptr);
+              const MaskedIcon *icon=nullptr) noexcept;
 
   [[gnu::pure]]
-  const TCHAR *GetButtonCaption(unsigned i) const;
+  const TCHAR *GetButtonCaption(unsigned i) const noexcept;
 
-  bool ClickPage(unsigned i);
-  bool NextPage();
-  bool PreviousPage();
-
+public:
   /* virtual methods from class Widget */
   PixelSize GetMinimumSize() const noexcept override;
   PixelSize GetMaximumSize() const noexcept override;
@@ -158,4 +137,10 @@ public:
 protected:
   /* virtual methods from class PagerWidget */
   void OnPageFlipped() noexcept override;
+
+private:
+  /* virtual methods from class TabHandler */
+  bool ClickPage(unsigned i) noexcept override;
+  bool NextPage() noexcept override;
+  bool PreviousPage() noexcept override;
 };

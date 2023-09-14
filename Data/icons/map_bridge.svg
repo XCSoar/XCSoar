@@ -1,81 +1,53 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   width="6"
-   height="6"
-   id="svg2816"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="map_bridge.svg">
-  <metadata
-     id="metadata9">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
+   viewBox="0 0 22 22"
+   id="svg2"
+   sodipodi:docname="map_bridge.svg"
+   width="22"
+   height="22"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6" />
   <sodipodi:namedview
+     id="namedview4"
      pagecolor="#ff00ff"
      bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
      inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1432"
-     inkscape:window-height="988"
-     id="namedview7"
-     showgrid="true"
-     inkscape:zoom="33.552217"
-     inkscape:cx="-3.3795401"
-     inkscape:cy="0.43908607"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="4.5384614"
+     inkscape:cx="-90.008477"
+     inkscape:cy="2.4237289"
+     inkscape:window-width="2560"
+     inkscape:window-height="1417"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer5">
-    <inkscape:grid
-       type="xygrid"
-       id="grid4698"
-       empspacing="5"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true" />
-  </sodipodi:namedview>
-  <defs
-     id="defs2818" />
-  <g
-     transform="translate(-6.9470643,-2.0097858)"
-     id="layer1" />
+     inkscape:current-layer="layer1" />
   <g
      inkscape:groupmode="layer"
-     id="layer5"
-     inkscape:label="NOAA_Image"
-     transform="translate(0.05293565,-12.009785)">
-    <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:square;stroke-linejoin:round;stroke-opacity:1"
-       d="m 2.4470643,2.509785 0,-0.5 2.5,-2.5 0.5,0"
-       id="path2827"
-       sodipodi:nodetypes="cccc"
-       transform="translate(0,15)" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:square;stroke-linejoin:round;stroke-opacity:1"
-       d="m 0.44706435,0.509785 0.5,0 2.49999995,-2.5 0,-0.5"
-       id="path2829"
-       sodipodi:nodetypes="cccc"
-       transform="translate(0,15)" />
+     id="layer1"
+     inkscape:label="Image">
+    <g
+       id="g20489"
+       transform="matrix(0.67602926,0,0,0.67600351,-242.36837,-66.554238)"
+       style="stroke-width:3.69813">
+      <path
+         style="color:#000000;fill:#000000;stroke-width:3.69813;stroke-linecap:round;stroke-linejoin:round;-inkscape-stroke:none"
+         d="m 386.58398,108.69922 a 1.2713371,1.2713371 0 0 0 -0.90234,0.375 l -16.02734,16.10742 a 1.2713371,1.2713371 0 0 0 -0.36914,0.89649 v 3.2207 a 1.27121,1.27121 0 0 0 1.27148,1.27148 1.27121,1.27121 0 0 0 1.27148,-1.27148 v -2.69531 l 15.28321,-15.36133 h 2.67773 a 1.27121,1.27121 0 0 0 1.27149,-1.27149 1.27121,1.27121 0 0 0 -1.27149,-1.27148 z"
+         id="path4045" />
+      <path
+         style="color:#000000;fill:#000000;stroke-width:3.69813;stroke-linecap:round;stroke-linejoin:round;-inkscape-stroke:none"
+         d="M 379.02148,98.878906 A 1.27121,1.27121 0 0 0 377.75,100.15039 v 2.69727 l -15.2832,15.36132 h -2.67774 a 1.27121,1.27121 0 0 0 -1.27148,1.27149 1.27121,1.27121 0 0 0 1.27148,1.26953 h 3.20508 a 1.2713371,1.2713371 0 0 0 0.90234,-0.37305 l 16.02735,-16.10742 a 1.2713371,1.2713371 0 0 0 0.36914,-0.89648 v -3.22266 a 1.27121,1.27121 0 0 0 -1.27149,-1.271484 z"
+         id="path4047" />
+    </g>
   </g>
 </svg>

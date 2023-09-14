@@ -1,39 +1,20 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "PlaneGlue.hpp"
 #include "PlaneFileGlue.hpp"
 #include "Plane.hpp"
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Profile/Map.hpp"
 #include "Polar/Polar.hpp"
 #include "Polar/PolarGlue.hpp"
 #include "Computer/Settings.hpp"
 #include "system/Path.hpp"
-#include "util/Clamp.hpp"
+
+#include <algorithm> // for std::clamp()
 
 void
-PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile)
+PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile) noexcept
 {
   {
     auto plane_path = profile.GetPath("PlanePath");
@@ -75,7 +56,7 @@ PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile)
 
 void
 PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
-                       GlidePolar &gp)
+                       GlidePolar &gp) noexcept
 {
   settings.contest.handicap = plane.handicap;
 
@@ -101,7 +82,7 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
 
   // set VMax from settings but assure the range [VMin, VMax] is reasonable
   if (plane.max_speed > 0)
-    gp.SetVMax(Clamp(plane.max_speed, gp.GetVMin() + 10, 75.));
+    gp.SetVMax(std::clamp(plane.max_speed, gp.GetVMin() + 10, 75.));
 
   settings.plane.competition_id = plane.competition_id;
   settings.plane.registration = plane.registration;

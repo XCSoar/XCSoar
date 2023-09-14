@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 package org.xcsoar;
 
@@ -53,18 +34,9 @@ public class MyService extends Service {
 
   private static final String NOTIFICATION_CHANNEL_ID = "xcsoar";
 
-  /**
-   * Hack: this is set by onCreate(), to support the "testing"
-   * package.
-   */
-  protected static Class<?> mainActivityClass;
-
   private NotificationManager notificationManager;
 
   @Override public void onCreate() {
-    if (mainActivityClass == null)
-      mainActivityClass = XCSoar.class;
-
     super.onCreate();
 
     notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
@@ -81,43 +53,34 @@ public class MyService extends Service {
     }
   }
 
+  private static Notification.Builder createNotificationBuilder(Context context) {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+      ? new Notification.Builder(context, NOTIFICATION_CHANNEL_ID)
+      : new Notification.Builder(context);
+  }
+
   private static Notification createNotification(Context context, PendingIntent intent) {
-    Notification.Builder builder = new Notification.Builder(context)
+    Notification.Builder builder = createNotificationBuilder(context)
       .setOngoing(true)
       .setContentIntent(intent)
       .setContentTitle("XCSoar")
       .setContentText("XCSoar is running")
       .setSmallIcon(R.drawable.notification_icon);
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-      builder.setChannelId(NOTIFICATION_CHANNEL_ID);
-
     return builder.build();
   }
 
-  private void onStart() {
+  @Override public int onStartCommand(Intent intent, int flags, int startId) {
     /* add an icon to the notification area while XCSoar runs, to
        remind the user that we're sucking his battery empty */
-    Intent intent2 = new Intent(this, mainActivityClass);
+    Intent intent2 = new Intent(this, XCSoar.class);
     PendingIntent contentIntent =
-      PendingIntent.getActivity(this, 0, intent2, 0);
+      PendingIntent.getActivity(this, 0, intent2, PendingIntent.FLAG_IMMUTABLE);
     Notification notification = createNotification(this, contentIntent);
 
     notificationManager.notify(1, notification);
 
     startForeground(1, notification);
-  }
-
-  @Override public void onStart(Intent intent, int startId) {
-    /* used by API level 4 (Android 1.6) */
-
-    onStart();
-  }
-
-  @Override public int onStartCommand(Intent intent, int flags, int startId) {
-    /* used by API level 5 (Android 2.0 and newer) */
-
-    onStart();
 
     /* We want this service to continue running until it is explicitly
        stopped, so return sticky */

@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "GlueMapWindow.hpp"
 #include "Items/List.hpp"
@@ -41,7 +21,8 @@ Copyright_License {
 
 bool
 GlueMapWindow::ShowMapItems(const GeoPoint &location,
-                            bool show_empty_message) const
+                            bool show_empty_message,
+                            bool pointer_in_use) const noexcept
 {
   /* not using MapWindowBlackboard here because this method is called
      by the main thread */
@@ -51,7 +32,12 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   const MoreData &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
-  auto range = visible_projection.DistancePixelsToMeters(Layout::GetHitRadius());
+  int range;
+  if (pointer_in_use)
+    range = visible_projection.DistancePixelsToMeters(Layout::GetHitRadius());
+  else
+    /* FastScale 29 is the radius of the shortest point in the cross hair */
+    range = visible_projection.DistancePixelsToMeters(Layout::FastScale(29));
 
   MapItemList list;
   MapItemListBuilder builder(list, location, range);
@@ -80,8 +66,10 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   if (visible_projection.GetMapScale() <= 4000) {
     builder.AddThermals(calculated.thermal_locator, basic, calculated);
 
-    if (tim_glue != nullptr && computer_settings.weather.enable_tim)
+    if (tim_glue != nullptr && computer_settings.weather.enable_tim) {
+      const auto lock = tim_glue->Lock();
       builder.AddThermals(tim_glue->Get());
+    }
   }
 
   if (waypoints)
@@ -127,6 +115,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   ShowMapItemListDialog(list,
                         UIGlobals::GetDialogLook(), look, traffic_look,
                         final_glide_bar_renderer.GetLook(), settings,
+                        waypoints,
                         glide_computer != nullptr
                         ? &glide_computer->GetAirspaceWarnings() : nullptr);
   return true;

@@ -1,26 +1,10 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 package org.xcsoar;
+
+import java.util.Map;
+import java.util.TreeMap;
 
 import android.Manifest;
 import android.app.Activity;
@@ -28,6 +12,8 @@ import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.MotionEvent;
 import android.view.KeyEvent;
 import android.view.Window;
@@ -46,19 +32,16 @@ import android.content.BroadcastReceiver;
 import android.content.ServiceConnection;
 import android.content.ComponentName;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.util.Log;
 import android.provider.Settings;
 
-public class XCSoar extends Activity {
+public class XCSoar extends Activity implements PermissionManager {
   private static final String TAG = "XCSoar";
 
-  /**
-   * Hack: this is set by onCreate(), to support the "testing"
-   * package.
-   */
-  public static Class<?> serviceClass;
-
   private static NativeView nativeView;
+
+  private Handler mainHandler;
 
   PowerManager.WakeLock wakeLock;
 
@@ -73,9 +56,6 @@ public class XCSoar extends Activity {
   boolean fullScreen = false;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
-    if (serviceClass == null)
-      serviceClass = MyService.class;
-
     super.onCreate(savedInstanceState);
 
     Log.d(TAG, "ABI=" + Build.CPU_ABI);
@@ -98,6 +78,10 @@ public class XCSoar extends Activity {
       return;
     }
 
+    mainHandler = new Handler(getMainLooper());
+
+    NativeView.initNative();
+
     NetUtil.initialise(this);
 
     IOIOHelper.onCreateContext(this);
@@ -114,15 +98,17 @@ public class XCSoar extends Activity {
        WindowUtil.leaveFullScreenMode() to avoid clearing those */
     initialWindowFlags = window.getAttributes().flags;
 
+    submitConfiguration(getResources().getConfiguration());
+
     batteryReceiver = new BatteryReceiver();
     registerReceiver(batteryReceiver,
                      new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
-    /* TODO: this sure is the wrong place to request permissions -
-       we should request permissions when we need them, but
-       implementing that is complicated, so for now, we do it
-       here to give users a quick solution for the problem */
-    requestAllPermissions();
+    /* WRITE_EXTERNAL_STORAGE has no effect on Build.VERSION_CODES.R
+       (Android 11 or newer); we request it on older versions so users
+       can keep using /sdcard/XCSoarData */
+    if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.R)
+      requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, null);
   }
 
   private void quit() {
@@ -218,7 +204,8 @@ public class XCSoar extends Activity {
 
     nativeView = new NativeView(this, quitHandler,
                                 wakeLockHandler, fullScreenHandler,
-                                errorHandler);
+                                errorHandler,
+                                this);
     setContentView(nativeView);
     // Receive keyboard events
     nativeView.setFocusableInTouchMode(true);
@@ -244,49 +231,6 @@ public class XCSoar extends Activity {
 
     if (nativeView != null)
       nativeView.setHapticFeedback(hapticFeedbackEnabled);
-  }
-
-  private static final String[] NEEDED_PERMISSIONS = new String[] {
-    Manifest.permission.ACCESS_FINE_LOCATION,
-    Manifest.permission.WRITE_EXTERNAL_STORAGE
-  };
-
-  private boolean hasAllPermissions() {
-    for (String p : NEEDED_PERMISSIONS) {
-      if (checkSelfPermission(p) != PackageManager.PERMISSION_GRANTED) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  private void requestAllPermissions() {
-    if (android.os.Build.VERSION.SDK_INT < 23)
-      /* we don't need to request permissions on this old Android
-         version */
-      return;
-
-    /* starting with Android 6.0, we need to explicitly request all
-       permissions before using them; mentioning them in the manifest
-       is not enough */
-
-    if (!hasAllPermissions()) {
-      new AlertDialog.Builder(this)
-        .setTitle("Location Permission")
-        .setMessage("XCSoar needs to collect location data to enable live navigation calculation and IGC logger, even when the app is in the background")
-        .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-              try {
-                XCSoar.this.requestPermissions(NEEDED_PERMISSIONS, 0);
-              } catch (IllegalArgumentException e) {
-                Log.e(TAG, "could not request permissions: " + String.join(", ", NEEDED_PERMISSIONS), e);
-              }
-            }
-        })
-        .show();
-    }
   }
 
   @Override protected void onResume() {
@@ -323,6 +267,8 @@ public class XCSoar extends Activity {
     }
 
     IOIOHelper.onDestroyContext();
+
+    NativeView.deinitNative();
 
     super.onDestroy();
     System.exit(0);
@@ -366,5 +312,158 @@ public class XCSoar extends Activity {
       return true;
     } else
       return super.dispatchTouchEvent(ev);
+  }
+
+  private void submitConfiguration(Configuration config) {
+    final boolean nightMode = (config.uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+    NativeView.onConfigurationChangedNative(nightMode);
+  }
+
+  @Override public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    submitConfiguration(newConfig);
+  }
+
+  @Override
+  public synchronized void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                                      int[] grantResults) {
+    PermissionHandler handler = permissionHandlers.remove(requestCode);
+    if (handler != null)
+      // grantResults is empty when user cancels
+      handler.onRequestPermissionsResult(grantResults.length > 0 &&
+                                         grantResults[0] == PackageManager.PERMISSION_GRANTED);
+  }
+
+  private static String getPermissionRationale(String permission) {
+    if (permission == Manifest.permission.ACCESS_FINE_LOCATION)
+      return "XCSoar needs permission to access your GPS location - obviously, because XCSoar's purpose is to help you navigate an aircraft.";
+    else if (permission == Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+      return "Several optional features (e.g. flight logging and score calculation) benefit from location access while XCSoar is in background. " +
+        "If you choose not to allow this, calculation results may be incomplete.";
+    else if (permission == Manifest.permission.BLUETOOTH_CONNECT ||
+             permission == Manifest.permission.BLUETOOTH_SCAN)
+      return "If you want XCSoar to connect to Bluetooth sensors, it needs your permission.";
+    else
+      return null;
+  }
+
+  private void showRequestPermissionRationale(final String permission,
+                                              final String rationale,
+                                              final PermissionHandler handler) {
+    /* using HTML so the privacy policy link is clickable */
+    final String html = "<p>" +
+      "XCSoar is free software developed by volunteers just for fun. " +
+      "The project is non-profit - you don't pay for XCSoar, and we don't sell your data (or anything else). " +
+      "</p>" +
+      "<p><big>" +
+      rationale +
+      "</big></p>" +
+      "<p>" +
+      "All those accesses are only in your own interest; we don't collect your data and we don't track you (unless you explicitly ask XCSoar to). " +
+      "</p>" +
+      "<p>" +
+      "More details can be found in the <a href=\"https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md\">Privacy policy</a>. " +
+      "</p>";
+
+    final TextView tv  = new TextView(this);
+    tv.setMovementMethod(LinkMovementMethod.getInstance());
+    tv.setText(Html.fromHtml(html));
+
+    new AlertDialog.Builder(this)
+      .setTitle("Requesting your permission")
+      .setView(tv)
+      .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            doRequestPermission(permission, handler);
+          }
+        })
+      .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            if (handler != null)
+              handler.onRequestPermissionsResult(false);
+          }
+        })
+      .setOnCancelListener(new DialogInterface.OnCancelListener() {
+          @Override
+          public void onCancel(DialogInterface dialog) {
+            if (handler != null)
+              handler.onRequestPermissionsResult(false);
+          }
+        })
+      .setOnDismissListener(new DialogInterface.OnDismissListener() {
+          @Override
+          public void onDismiss(DialogInterface dialog) {
+            if (handler != null)
+              handler.onRequestPermissionsResult(false);
+          }
+        })
+      .show();
+  }
+
+  /**
+   * @return true if an alert is being displayed (and an asynchronous
+   * callback will then actually request the permission), false if no
+   * rationale was displayed (and no permission was requested)
+   */
+  private boolean showRequestPermissionRationaleIndirect(final String permission,
+                                                         final PermissionHandler handler) {
+    final String rationale = getPermissionRationale(permission);
+    if (rationale == null)
+      return false;
+
+    mainHandler.post(new Runnable() {
+        @Override public void run() {
+          showRequestPermissionRationale(permission, rationale, handler);
+        }
+      });
+
+    return true;
+  }
+
+  private synchronized int addPermissionHandler(PermissionHandler handler) {
+    final int id = nextPermissionHandlerId++;
+
+    if (handler != null)
+      permissionHandlers.put(id, handler);
+
+    return id;
+  }
+
+  private void doRequestPermission(String permission,
+                                   PermissionHandler handler) {
+    requestPermissions(new String[]{permission},
+                       addPermissionHandler(handler));
+  }
+
+  /* virtual methods from PermissionManager */
+
+  private final Map<Integer, PermissionHandler> permissionHandlers =
+    new TreeMap<Integer, PermissionHandler>();
+  private int nextPermissionHandlerId = 0;
+
+  @Override
+  public boolean requestPermission(String permission, PermissionHandler handler) {
+    if (android.os.Build.VERSION.SDK_INT < 23)
+      /* we don't need to request permissions on this old Android
+         version */
+      return true;
+
+    if (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED)
+      /* we already have the permission */
+      return true;
+
+    if (shouldShowRequestPermissionRationale(permission) &&
+        showRequestPermissionRationaleIndirect(permission, handler))
+      return false;
+
+    doRequestPermission(permission, handler);
+    return false;
+  }
+
+  @Override
+  public synchronized void cancelRequestPermission(PermissionHandler handler) {
+    permissionHandlers.values().remove(handler);
   }
 }

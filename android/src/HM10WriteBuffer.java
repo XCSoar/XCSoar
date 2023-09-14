@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 package org.xcsoar;
 
@@ -26,6 +7,8 @@ import java.util.Arrays;
 
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothStatusCodes;
+import android.os.Build;
 import android.util.Log;
 
 /**
@@ -35,40 +18,86 @@ import android.util.Log;
 final class HM10WriteBuffer {
   private static final String TAG = "XCSoar";
 
-  private static final int MAX_WRITE_CHUNK_SIZE = 20;
+  private static final int BUFFER_SIZE = 256;
 
-  private byte[][] pendingWriteChunks = null;
-  private int nextWriteChunkIdx;
+  /**
+   * The current mtu.  May be updated by
+   * BluetoothGattCallback.onMtuChanged() (via class HM10Port).
+   */
+  private int mtu = 20;
+
+  private final byte[] buffer = new byte[BUFFER_SIZE];
+  private int head, tail;
+
   private boolean lastChunkWriteError;
+
+  /**
+   * Is the BluetoothGatt object currently busy, i.e. did we call
+   * readCharacteristic() or writeCharacteristic() and are we waiting
+   * for a beginWriteNextChunk() call from HM10Port?
+   *
+   * We need to track this because only one pending
+   * readCharacteristic()/writeCharacteristic() operation is allowed,
+   * and the second one will fail with
+   * BluetoothStatusCodes.ERROR_GATT_WRITE_REQUEST_BUSY.
+   */
+  private boolean gattBusy = false;
+
+  void setMtu(int _mtu) {
+    mtu = _mtu;
+  }
+
+  synchronized void reset() {
+    lastChunkWriteError = false;
+    gattBusy = false;
+    clear();
+  }
 
   synchronized boolean beginWriteNextChunk(BluetoothGatt gatt,
                                            BluetoothGattCharacteristic dataCharacteristic) {
-    if (pendingWriteChunks == null)
+    gattBusy = false;
+
+    if (head == tail)
       return false;
 
-    dataCharacteristic.setValue(pendingWriteChunks[nextWriteChunkIdx]);
-    if (!gatt.writeCharacteristic(dataCharacteristic)) {
+    final int nbytes = Math.min(tail - head, mtu);
+    final byte[] chunk = Arrays.copyOfRange(buffer, head, head + nbytes);
+    head += nbytes;
+
+    boolean success;
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      int result = gatt.writeCharacteristic(dataCharacteristic, chunk,
+                                            dataCharacteristic.WRITE_TYPE_NO_RESPONSE);
+      success = result == BluetoothStatusCodes.SUCCESS;
+    } else {
+      dataCharacteristic.setValue(chunk);
+      success = gatt.writeCharacteristic(dataCharacteristic);
+    }
+
+    if (!success) {
       Log.e(TAG, "GATT characteristic write request failed");
       setError();
       return false;
     }
 
-    ++nextWriteChunkIdx;
-    if (nextWriteChunkIdx >= pendingWriteChunks.length) {
-      /* writing is done */
-      clear();
-    }
+    gattBusy = true;
+
+    /* wake up write() or drain() telling them some space in the
+       buffer has been freed */
+    notifyAll();
 
     return true;
   }
 
-  synchronized void clear() {
-    pendingWriteChunks = null;
+  private synchronized void clear() {
+    head = tail = 0;
     notifyAll();
   }
 
   synchronized void setError() {
     lastChunkWriteError = true;
+    gattBusy = false;
     clear();
   }
 
@@ -76,7 +105,45 @@ final class HM10WriteBuffer {
     final long TIMEOUT = 5000;
     final long waitUntil = System.currentTimeMillis() + TIMEOUT;
 
-    while (pendingWriteChunks != null) {
+    if (lastChunkWriteError) {
+      /* the last write() failed asynchronously; throw this error now
+         so the caller knows something went wrong */
+      lastChunkWriteError = false;
+      return false;
+    }
+
+    while (head != tail) {
+      final long timeToWait = waitUntil - System.currentTimeMillis();
+      if (timeToWait <= 0)
+        return false;
+
+      try {
+        wait(timeToWait);
+      } catch (InterruptedException e) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * Wait until there is some free space in the buffer.
+   *
+   * @return false on error
+   */
+  synchronized boolean drainSome() {
+    final long TIMEOUT = 5000;
+    final long waitUntil = System.currentTimeMillis() + TIMEOUT;
+
+    if (lastChunkWriteError) {
+      /* the last write() failed asynchronously; throw this error now
+         so the caller knows something went wrong */
+      lastChunkWriteError = false;
+      return false;
+    }
+
+    while (head == 0 && tail == BUFFER_SIZE) {
       final long timeToWait = waitUntil - System.currentTimeMillis();
       if (timeToWait <= 0)
         return false;
@@ -95,55 +162,40 @@ final class HM10WriteBuffer {
                          BluetoothGattCharacteristic dataCharacteristic,
                          BluetoothGattCharacteristic deviceNameCharacteristic,
                          byte[] data, int length) {
-    final long TIMEOUT = 5000;
+    assert(dataCharacteristic != null);
+    assert(deviceNameCharacteristic != null);
+    assert(length > 0);
 
-    if (0 == length)
+    if (!drainSome())
       return 0;
 
-    if (!drain())
-      return 0;
+    if (head > 0) {
+      /* shift the buffer contents to the beginning to make room at
+         the end */
+      System.arraycopy(buffer, head, buffer, 0, tail - head);
+      tail -= head;
+      head = 0;
+    }
 
-    if ((dataCharacteristic == null) || (deviceNameCharacteristic == null))
-      return 0;
+    final int nbytes = Math.min(length, BUFFER_SIZE - tail);
+    System.arraycopy(data, 0, buffer, tail, nbytes);
+    tail += nbytes;
 
     /* Workaround: To avoid a race condition when data is sent and received
        at the same time, we place a read request for the device name
        characteristic here. This way, we can place the actual write
        operation in the read callback so that the write operation is performed
        int the GATT event handling thread. */
-    if (!gatt.readCharacteristic(deviceNameCharacteristic)) {
-      Log.e(TAG, "GATT characteristic read request failed");
-      return 0;
+    if (!gattBusy) {
+      if (!gatt.readCharacteristic(deviceNameCharacteristic)) {
+        Log.e(TAG, "GATT characteristic read request failed");
+        clear();
+        return 0;
+      }
+
+      gattBusy = true;
     }
 
-    /* Write data in 20 byte large chunks at maximun. Most GATT devices do
-       not support characteristic values which are larger than 20 bytes. */
-    int writeChunksCount = (length + MAX_WRITE_CHUNK_SIZE - 1)
-      / MAX_WRITE_CHUNK_SIZE;
-    pendingWriteChunks = new byte[writeChunksCount][];
-    nextWriteChunkIdx = 0;
-    lastChunkWriteError = false;
-    for (int i = 0; i < writeChunksCount; ++i) {
-      pendingWriteChunks[i] = Arrays.copyOfRange(data,
-                                                 i * MAX_WRITE_CHUNK_SIZE,
-                                                 Math.min((i + 1) * MAX_WRITE_CHUNK_SIZE,
-                                                          length));
-    }
-
-    try {
-      wait(TIMEOUT);
-    } catch (InterruptedException e) {
-      /* cancel the write on interruption */
-      pendingWriteChunks = null;
-      return 0;
-    }
-
-    if (pendingWriteChunks != null && nextWriteChunkIdx == 0) {
-      /* timeout */
-      pendingWriteChunks = null;
-      return 0;
-    }
-
-    return lastChunkWriteError ? 0 : length;
+    return nbytes;
   }
 }

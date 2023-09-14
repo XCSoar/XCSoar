@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -99,50 +79,49 @@ public:
    */
   explicit TracePoint(const AircraftState &state);
 
-  [[gnu::const]]
-  static TracePoint Invalid() {
+  static constexpr TracePoint Invalid() noexcept {
     TracePoint point;
     point.Clear();
     ((SearchPoint &)point).SetInvalid();
     return point;
   }
 
-  void Clear() {
+  constexpr void Clear() noexcept {
     time = INVALID_TIME;
   }
 
-  bool IsDefined() const {
+  constexpr bool IsDefined() const noexcept {
     return time != INVALID_TIME;
   }
 
-  Time GetTime() const noexcept {
+  constexpr Time GetTime() const noexcept {
     return time;
   }
 
-  bool IsOlderThan(const TracePoint &other) const {
+  constexpr bool IsOlderThan(const TracePoint &other) const noexcept {
     return time < other.time;
   }
 
-  bool IsNewerThan(const TracePoint &other) const {
+  constexpr bool IsNewerThan(const TracePoint &other) const noexcept {
     return time > other.time;
   }
 
-  Time DeltaTime(const TracePoint &previous) const {
+  constexpr Time DeltaTime(const TracePoint &previous) const noexcept {
     assert(!IsOlderThan(previous));
 
     return time - previous.time;
   }
 
-  double CalculateDrift(TimeStamp now) const noexcept {
+  constexpr double CalculateDrift(TimeStamp now) const noexcept {
     const double dt = (now.ToDuration() - std::chrono::duration_cast<FloatDuration>(time)).count();
     return dt * drift_factor / 256;
   }
 
-  double GetAltitude() const {
+  constexpr double GetAltitude() const {
     return altitude;
   }
 
-  unsigned GetEngineNoiseLevel() const {
+  constexpr unsigned GetEngineNoiseLevel() const {
     return engine_noise_level;
   }
 
@@ -150,11 +129,11 @@ public:
    * Returns the altitude as an integer.  Some calculations may not
    * need the fractional part.
    */
-  int GetIntegerAltitude() const {
+  constexpr int GetIntegerAltitude() const noexcept {
     return (int)altitude;
   }
 
-  double GetVario() const {
+  constexpr double GetVario() const noexcept {
     return vario;
   }
 };

@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "RasterTileCache.hpp"
 #include "Math/Angle.hpp"
@@ -286,25 +266,25 @@ RasterTileCache::SaveCache(BufferedOutputStream &os) const
   header.num_marker_segments = segments.size();
   header.bounds = bounds;
 
-  os.Write(&header, sizeof(header));
-  os.Write(segments.begin(), sizeof(*segments.begin()) * segments.size());
+  os.Write(std::as_bytes(std::span{&header, 1}));
+  os.Write(std::as_bytes(std::span{segments}));
 
   /* save tiles */
   unsigned i;
   for (i = 0; i < tiles.GetSize(); ++i) {
     const auto &tile = tiles.GetLinear(i);
     if (tile.IsDefined()) {
-      os.Write(&i, sizeof(i));
+      os.Write(std::as_bytes(std::span{&i, 1}));
       tile.SaveCache(os);
     }
   }
 
   i = -1;
-  os.Write(&i, sizeof(i));
+  os.Write(std::as_bytes(std::span{&i, 1}));
 
   /* save overview */
   size_t overview_size = overview.GetSize().Area();
-  os.Write(overview.GetData(), sizeof(*overview.GetData()) * overview_size);
+  os.Write(std::as_bytes(std::span{overview.GetData(), overview_size}));
 }
 
 void

@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "TaskLeg.hpp"
 #include "Task/Ordered/Points/OrderedTaskPoint.hpp"
@@ -27,25 +8,25 @@
 #include <cassert>
 
 inline const OrderedTaskPoint *
-TaskLeg::GetOrigin() const
+TaskLeg::GetOrigin() const noexcept
 {
   return destination.GetPrevious();
 }
 
 inline const OrderedTaskPoint *
-TaskLeg::GetNext() const
+TaskLeg::GetNext() const noexcept
 {
   return destination.GetNext();
 }
 
 inline OrderedTaskPoint *
-TaskLeg::GetNext()
+TaskLeg::GetNext() noexcept
 {
   return destination.GetNext();
 }
 
 inline GeoVector
-TaskLeg::GetPlannedVector() const
+TaskLeg::GetPlannedVector() const noexcept
 {
   if (!GetOrigin()) {
     return GeoVector::Zero();
@@ -56,7 +37,7 @@ TaskLeg::GetPlannedVector() const
 }
 
 inline GeoVector
-TaskLeg::GetRemainingVector(const GeoPoint &ref) const
+TaskLeg::GetRemainingVector(const GeoPoint &ref) const noexcept
 {
   switch (destination.GetActiveState()) {
   case OrderedTaskPoint::AFTER_ACTIVE:
@@ -87,7 +68,7 @@ TaskLeg::GetRemainingVector(const GeoPoint &ref) const
 }
 
 inline GeoVector
-TaskLeg::GetTravelledVector(const GeoPoint &ref) const
+TaskLeg::GetTravelledVector(const GeoPoint &ref) const noexcept
 {
   switch (destination.GetActiveState()) {
   case OrderedTaskPoint::BEFORE_ACTIVE:
@@ -134,7 +115,7 @@ TaskLeg::GetTravelledVector(const GeoPoint &ref) const
 }
 
 inline double
-TaskLeg::GetScoredDistance(const GeoPoint &ref) const
+TaskLeg::GetScoredDistance(const GeoPoint &ref) const noexcept
 {
   if (!GetOrigin())
     return 0;
@@ -174,7 +155,7 @@ TaskLeg::GetScoredDistance(const GeoPoint &ref) const
 }
 
 GeoVector
-TaskLeg::GetNominalLegVector() const
+TaskLeg::GetNominalLegVector() const noexcept
 {
   if (!GetOrigin()) {
     return GeoVector::Zero();
@@ -185,7 +166,7 @@ TaskLeg::GetNominalLegVector() const
 }
 
 inline double
-TaskLeg::GetMaximumLegDistance() const
+TaskLeg::GetMaximumLegDistance() const noexcept
 {
   if (GetOrigin())
     return memo_max.Distance(GetOrigin()->GetLocationMax(),
@@ -194,7 +175,7 @@ TaskLeg::GetMaximumLegDistance() const
 }
 
 inline double
-TaskLeg::GetMinimumLegDistance() const
+TaskLeg::GetMinimumLegDistance() const noexcept
 {
   if (GetOrigin())
     return memo_min.Distance(GetOrigin()->GetLocationMin(),
@@ -203,7 +184,7 @@ TaskLeg::GetMinimumLegDistance() const
 }
 
 double
-TaskLeg::ScanDistanceTravelled(const GeoPoint &ref)
+TaskLeg::ScanDistanceTravelled(const GeoPoint &ref) noexcept
 {
   vector_travelled = GetTravelledVector(ref);
   return vector_travelled.distance +
@@ -211,7 +192,7 @@ TaskLeg::ScanDistanceTravelled(const GeoPoint &ref)
 }
 
 double
-TaskLeg::ScanDistanceRemaining(const GeoPoint &ref)
+TaskLeg::ScanDistanceRemaining(const GeoPoint &ref) noexcept
 {
   vector_remaining = GetRemainingVector(ref);
   return vector_remaining.distance +
@@ -219,7 +200,7 @@ TaskLeg::ScanDistanceRemaining(const GeoPoint &ref)
 }
 
 double
-TaskLeg::ScanDistancePlanned()
+TaskLeg::ScanDistancePlanned() noexcept
 {
   vector_planned = GetPlannedVector();
   return vector_planned.distance +
@@ -227,28 +208,28 @@ TaskLeg::ScanDistancePlanned()
 }
 
 double
-TaskLeg::ScanDistanceMax() const
+TaskLeg::ScanDistanceMax() const noexcept
 {
   return GetMaximumLegDistance() +
     (GetNext() ? GetNext()->ScanDistanceMax() : 0);
 }
 
 double
-TaskLeg::ScanDistanceMin() const
+TaskLeg::ScanDistanceMin() const noexcept
 {
   return GetMinimumLegDistance() +
     (GetNext() ? GetNext()->ScanDistanceMin() : 0);
 }
 
 double
-TaskLeg::ScanDistanceNominal() const
+TaskLeg::ScanDistanceNominal() const noexcept
 {
   return GetNominalLegDistance() +
     (GetNext() ? GetNext()->ScanDistanceNominal() : 0);
 }
 
 double
-TaskLeg::ScanDistanceScored(const GeoPoint &ref) const
+TaskLeg::ScanDistanceScored(const GeoPoint &ref) const noexcept
 {
   return GetScoredDistance(ref) +
     (GetNext() ? GetNext()->ScanDistanceScored(ref) : 0);

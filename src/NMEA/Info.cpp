@@ -1,32 +1,12 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "NMEA/Info.hpp"
 #include "Atmosphere/AirDensity.hpp"
 #include "time/Cast.hxx"
 
 void
-NMEAInfo::UpdateClock()
+NMEAInfo::UpdateClock() noexcept
 {
   clock = TimeStamp{std::chrono::steady_clock::now().time_since_epoch()};
 }
@@ -56,7 +36,7 @@ NMEAInfo::ProvideTime(TimeStamp _time) noexcept
 }
 
 void
-NMEAInfo::ProvideDate(const BrokenDate &date)
+NMEAInfo::ProvideDate(const BrokenDate &date) noexcept
 {
   assert(date.IsPlausible());
 
@@ -64,7 +44,7 @@ NMEAInfo::ProvideDate(const BrokenDate &date)
 }
 
 void
-NMEAInfo::ProvideTrueAirspeedWithAltitude(double tas, double altitude)
+NMEAInfo::ProvideTrueAirspeedWithAltitude(double tas, double altitude) noexcept
 {
   true_airspeed = tas;
   indicated_airspeed = true_airspeed / AirDensityRatio(altitude);
@@ -73,7 +53,8 @@ NMEAInfo::ProvideTrueAirspeedWithAltitude(double tas, double altitude)
 }
 
 void
-NMEAInfo::ProvideIndicatedAirspeedWithAltitude(double ias, double altitude)
+NMEAInfo::ProvideIndicatedAirspeedWithAltitude(double ias,
+                                               double altitude) noexcept
 {
   indicated_airspeed = ias;
   true_airspeed = indicated_airspeed * AirDensityRatio(altitude);
@@ -82,7 +63,7 @@ NMEAInfo::ProvideIndicatedAirspeedWithAltitude(double ias, double altitude)
 }
 
 void
-NMEAInfo::ProvideTrueAirspeed(double tas)
+NMEAInfo::ProvideTrueAirspeed(double tas) noexcept
 {
   auto any_altitude = GetAnyAltitude();
 
@@ -94,7 +75,7 @@ NMEAInfo::ProvideTrueAirspeed(double tas)
 }
 
 void
-NMEAInfo::ProvideIndicatedAirspeed(double ias)
+NMEAInfo::ProvideIndicatedAirspeed(double ias) noexcept
 {
   auto any_altitude = GetAnyAltitude();
 
@@ -106,7 +87,7 @@ NMEAInfo::ProvideIndicatedAirspeed(double ias)
 }
 
 void
-NMEAInfo::Reset()
+NMEAInfo::Reset() noexcept
 {
   UpdateClock();
 
@@ -174,13 +155,15 @@ NMEAInfo::Reset()
   secondary_device.Clear();
   flarm.Clear();
 
+  engine.Reset();
+
 #ifdef ANDROID
   glink_data.Clear();
 #endif
 }
 
 void
-NMEAInfo::ExpireWallClock()
+NMEAInfo::ExpireWallClock() noexcept
 {
   if (!alive)
     return;
@@ -208,7 +191,7 @@ NMEAInfo::ExpireWallClock()
 }
 
 void
-NMEAInfo::Expire()
+NMEAInfo::Expire() noexcept
 {
   if (location_available.Expire(clock, std::chrono::seconds(10)))
     /* if the location expires, then GPSState should expire as well,
@@ -241,6 +224,7 @@ NMEAInfo::Expire()
   voltage_available.Expire(clock, std::chrono::minutes(5));
   battery_level_available.Expire(clock, std::chrono::minutes(5));
   flarm.Expire(clock);
+  engine.Expire(clock);
 #ifdef ANDROID
   glink_data.Expire(clock);
 #endif
@@ -248,7 +232,7 @@ NMEAInfo::Expire()
 }
 
 void
-NMEAInfo::Complement(const NMEAInfo &add)
+NMEAInfo::Complement(const NMEAInfo &add) noexcept
 {
   if (!add.alive)
     /* if there is no heartbeat on the other object, there cannot be
@@ -359,6 +343,8 @@ NMEAInfo::Complement(const NMEAInfo &add)
     stall_ratio = add.stall_ratio;
 
   flarm.Complement(add.flarm);
+
+  engine.Complement(add.engine);
 
 #ifdef ANDROID
   glink_data.Complement(add.glink_data);

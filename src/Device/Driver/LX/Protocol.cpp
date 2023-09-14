@@ -1,29 +1,10 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Protocol.hpp"
 #include "Device/Error.hpp"
 #include "Operation/Operation.hpp"
+#include "util/CRC.hpp"
 
 #include <cassert>
 
@@ -69,19 +50,19 @@ LX::CommandModeQuick(Port &port, OperationEnvironment &env)
 
 void
 LX::SendPacket(Port &port, Command command,
-               const void *data, size_t length,
+               std::span<const std::byte> payload,
                OperationEnvironment &env,
                std::chrono::steady_clock::duration timeout)
 {
   SendCommand(port, command);
 
-  port.FullWrite(data, length, env, timeout);
-  port.Write(calc_crc(data, length, 0xff));
+  port.FullWrite(payload, env, timeout);
+  port.Write(calc_crc(payload, std::byte{0xff}));
 }
 
 bool
 LX::ReceivePacket(Port &port, Command command,
-                  void *data, size_t length, OperationEnvironment &env,
+                  std::span<std::byte> dest, OperationEnvironment &env,
                   std::chrono::steady_clock::duration first_timeout,
                   std::chrono::steady_clock::duration subsequent_timeout,
                   std::chrono::steady_clock::duration total_timeout)
@@ -89,13 +70,13 @@ LX::ReceivePacket(Port &port, Command command,
   port.Flush();
   SendCommand(port, command);
   return
-    ReadCRC(port, data, length, env,
+    ReadCRC(port, dest, env,
             first_timeout, subsequent_timeout, total_timeout);
 }
 
 bool
 LX::ReceivePacketRetry(Port &port, Command command,
-                       void *data, size_t length, OperationEnvironment &env,
+                       std::span<std::byte> dest, OperationEnvironment &env,
                        std::chrono::steady_clock::duration first_timeout,
                        std::chrono::steady_clock::duration subsequent_timeout,
                        std::chrono::steady_clock::duration total_timeout,
@@ -104,7 +85,7 @@ LX::ReceivePacketRetry(Port &port, Command command,
   assert(n_retries > 0);
 
   while (true) {
-    if (ReceivePacket(port, command, data, length, env,
+    if (ReceivePacket(port, command, dest, env,
                       first_timeout, subsequent_timeout,
                       total_timeout))
       return true;
@@ -118,48 +99,32 @@ LX::ReceivePacketRetry(Port &port, Command command,
   }
 }
 
-uint8_t
-LX::calc_crc_char(uint8_t d, uint8_t crc)
+std::byte
+LX::calc_crc_char(std::byte d, std::byte crc) noexcept
 {
-  uint8_t tmp;
-  const uint8_t crcpoly = 0x69;
-  int count;
-
-  for (count = 8; --count >= 0; d <<= 1) {
-    tmp = crc ^ d;
-    crc <<= 1;
-    if (tmp & 0x80)
-      crc ^= crcpoly;
-  }
-  return crc;
+  return calc_crc(std::span<std::byte>(&d,1),crc);
 }
 
-uint8_t
-LX::calc_crc(const void *p0, size_t len, uint8_t crc)
+std::byte
+LX::calc_crc(std::span<const std::byte> src, std::byte crc) noexcept
 {
-  const uint8_t *p = (const uint8_t *)p0;
-  size_t i;
-
-  for (i = 0; i < len; i++)
-    crc = calc_crc_char(p[i], crc);
-
-  return crc;
+  return std::byte{Calculate8bitCRC(reinterpret_cast<const uint8_t*>(src.data()),src.size(),static_cast<uint8_t>(crc),0x69)};
 }
 
 bool
-LX::ReadCRC(Port &port, void *buffer, size_t length, OperationEnvironment &env,
+LX::ReadCRC(Port &port, std::span<std::byte> dest, OperationEnvironment &env,
             std::chrono::steady_clock::duration first_timeout,
             std::chrono::steady_clock::duration subsequent_timeout,
             std::chrono::steady_clock::duration total_timeout)
 {
-  uint8_t crc;
-
-  port.FullRead(buffer, length, env,
+  port.FullRead(dest, env,
                 first_timeout, subsequent_timeout,
                 total_timeout);
-  port.FullRead(&crc, sizeof(crc), env,
+
+  std::byte crc;
+  port.FullRead(std::span{&crc, 1}, env,
                 subsequent_timeout, subsequent_timeout,
                 subsequent_timeout);
 
-  return calc_crc(buffer, length, 0xff) == crc;
+  return calc_crc(dest, std::byte{0xff}) == crc;
 }

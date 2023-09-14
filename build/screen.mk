@@ -101,8 +101,12 @@ endif
 
 ifeq ($(USE_WAYLAND),y)
 SCREEN_SOURCES += \
+	$(WAYLAND_GENERATED)/xdg-shell-public.c \
 	$(SRC)/ui/display/wayland/Display.cpp \
 	$(WINDOW_SRC_DIR)/wayland/TopWindow.cpp
+
+$(call SRC_TO_OBJ,$(SRC)/ui/window/wayland/TopWindow.cpp): $(WAYLAND_GENERATED)/xdg-shell-client-protocol.h
+$(call SRC_TO_OBJ,$(SRC)/ui/event/poll/WaylandQueue.cpp): $(WAYLAND_GENERATED)/xdg-shell-client-protocol.h
 endif
 
 ifeq ($(OPENGL),y)
@@ -110,7 +114,6 @@ SCREEN_SOURCES += \
 	$(SRC)/ui/display/opengl/Display.cpp \
 	$(CANVAS_SRC_DIR)/custom/Cache.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Init.cpp \
-	$(CANVAS_SRC_DIR)/opengl/Dynamic.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Rotate.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Geo.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Globals.cpp \
@@ -126,7 +129,6 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/opengl/Texture.cpp \
 	$(CANVAS_SRC_DIR)/opengl/UncompressedImage.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Buffer.cpp \
-	$(CANVAS_SRC_DIR)/opengl/Shapes.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Shaders.cpp \
 	$(CANVAS_SRC_DIR)/opengl/CanvasRotateShift.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Triangulate.cpp
@@ -242,13 +244,6 @@ SCREEN_SOURCES += \
 MEMORY_CANVAS_CPPFLAGS = -DUSE_MEMORY_CANVAS
 endif
 
-SCREEN_CPPFLAGS_INTERNAL = \
-	$(FREETYPE_CPPFLAGS) \
-	$(LIBPNG_CPPFLAGS) \
-	$(LIBJPEG_CPPFLAGS) \
-	$(LIBTIFF_CPPFLAGS) \
-	$(COREGRAPHICS_CPPFLAGS)
-
 SCREEN_CPPFLAGS = \
 	$(LINUX_INPUT_CPPFLAGS) \
 	$(LIBINPUT_CPPFLAGS) \
@@ -266,28 +261,14 @@ SCREEN_CPPFLAGS = \
 	$(POLL_EVENT_CPPFLAGS) \
 	$(CONSOLE_CPPFLAGS) $(FB_CPPFLAGS) $(VFB_CPPFLAGS)
 
-SCREEN_LDLIBS = \
-	$(SDL_LDLIBS) \
-	$(GDI_LDLIBS) \
-	$(OPENGL_LDLIBS) \
-	$(FREETYPE_LDLIBS) \
-	$(LIBPNG_LDLIBS) $(LIBJPEG_LDLIBS) \
-	$(LIBTIFF_LDLIBS) \
-	$(WAYLAND_LDLIBS) \
-	$(EGL_LDLIBS) \
-	$(GLX_LDLIBS) \
-	$(FB_LDLIBS) \
-	$(COREGRAPHICS_LDLIBS) \
-	$(APPKIT_LDLIBS) \
-	$(UIKIT_LDLIBS)
+SCREEN_DEPENDS = SDL FB FREETYPE LIBPNG LIBJPEG LIBTIFF COREGRAPHICS GDI OPENGL WAYLAND EGL GLX APPKIT UIKIT
+
+ifeq ($(LIBPNG),y)
+# LibPNG.cpp uses class FileMapping
+SCREEN_DEPENDS += IO
+endif
 
 $(eval $(call link-library,screen,SCREEN))
-
-SCREEN_LDADD += \
-	$(SDL_LDADD) \
-	$(FB_LDADD) \
-	$(FREETYPE_LDADD) \
-	$(LIBPNG_LDADD) $(LIBJPEG_LDADD)
 
 ifeq ($(USE_FB)$(VFB),yy)
 $(error USE_FB and VFB are mutually exclusive)

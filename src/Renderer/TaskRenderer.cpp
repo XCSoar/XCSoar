@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "TaskRenderer.hpp"
 #include "Engine/Task/Unordered/GotoTask.hpp"
@@ -28,11 +8,8 @@ Copyright_License {
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "TaskPointRenderer.hpp"
 
-TaskRenderer::TaskRenderer(TaskPointRenderer &_tpv, GeoBounds _screen_bounds)
-  :tpv(_tpv), screen_bounds(_screen_bounds) {}
-
 void 
-TaskRenderer::Draw(const AbortTask &task)
+TaskRenderer::Draw(const AbortTask &task) noexcept
 {
   tpv.SetActiveIndex(task.GetActiveIndex());
   tpv.SetModeOptional(false);
@@ -46,15 +23,16 @@ TaskRenderer::Draw(const AbortTask &task)
 }
 
 void 
-TaskRenderer::Draw(const OrderedTask &task)
+TaskRenderer::Draw(const OrderedTask &task) noexcept
 {
   tpv.SetBoundingBox(task.GetTaskProjection().Project(screen_bounds));
   tpv.SetActiveIndex(task.GetActiveIndex());
   for (unsigned i = 0; i < 4; i++) {
     tpv.ResetIndex();
 
-    if (i != TaskPointRenderer::LAYER_SYMBOLS &&
-        i != TaskPointRenderer::LAYER_LEG) {
+    const auto layer = static_cast<TaskPointRenderer::Layer>(i);
+    if (layer != TaskPointRenderer::Layer::SYMBOLS &&
+        layer != TaskPointRenderer::Layer::LEG) {
       tpv.SetModeOptional(true);
 
       for (const auto &tp : task.GetOptionalStartPoints())
@@ -63,12 +41,12 @@ TaskRenderer::Draw(const OrderedTask &task)
 
     tpv.SetModeOptional(false);
     for (const auto &tp : task.GetPoints())
-      tpv.Draw(tp, (TaskPointRenderer::Layer)i);
+      tpv.Draw(tp, layer);
   }
 }
 
 void 
-TaskRenderer::Draw(const GotoTask &task)
+TaskRenderer::Draw(const GotoTask &task) noexcept
 {
   tpv.SetActiveIndex(0);
   tpv.SetModeOptional(false);
@@ -81,7 +59,7 @@ TaskRenderer::Draw(const GotoTask &task)
 }
 
 void
-TaskRenderer::Draw(const TaskInterface &task)
+TaskRenderer::Draw(const TaskInterface &task) noexcept
 {
   switch (task.GetType()) {
   case TaskType::NONE:

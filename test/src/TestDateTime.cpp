@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "time/BrokenDateTime.hpp"
 #include "TestUtil.hpp"
@@ -94,6 +75,14 @@ TestDate()
   ok1(BrokenDate(2014, 1, 1).DaysSince(BrokenDate(2013, 1, 1)) == 365);
   ok1(BrokenDate(2012, 3, 1).DaysSince(BrokenDate(2012, 2, 28)) == 2);
   ok1(BrokenDate(2013, 1, 1).DaysSince(BrokenDate(2012, 1, 1)) == 366);
+
+  d = BrokenDate::FromJulianDate(2460191);
+  ok1(d == BrokenDate(2023,9,3)); // Sunday
+  ok1(d.day_of_week == 0);
+
+  d = BrokenDate::FromJulianDate(2439230);
+  ok1(d == BrokenDate(1966,4,14)); // Thursday
+  ok1(d.day_of_week == 4);
 }
 
 static void
@@ -188,7 +177,7 @@ TestDateTime()
 
 int main()
 {
-  plan_tests(106);
+  plan_tests(110);
 
   TestDate();
   TestTime();

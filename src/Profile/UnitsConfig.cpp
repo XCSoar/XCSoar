@@ -1,28 +1,8 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "UnitsConfig.hpp"
-#include "ProfileKeys.hpp"
+#include "Keys.hpp"
 #include "Map.hpp"
 #include "Units/Settings.hpp"
 #include "Units/UnitsGlue.hpp"
@@ -59,7 +39,7 @@ ImportSpeedUnit(unsigned tmp) noexcept
 }
 
 static bool
-GetLegacySpeedUnit(const ProfileMap &map, const char *key, Unit &value)
+GetLegacySpeedUnit(const ProfileMap &map, std::string_view key, Unit &value)
 {
   unsigned tmp;
   return map.Get(key, tmp) && ApplyUnit(value, ImportSpeedUnit(tmp));
@@ -74,7 +54,8 @@ ValidSpeedUnit(Unit unit) noexcept
 }
 
 static bool
-GetSpeedUnit(const ProfileMap &map, const char *key, const char *legacy_key,
+GetSpeedUnit(const ProfileMap &map, std::string_view key,
+             std::string_view legacy_key,
              Unit &value_r)
 {
   Unit tmp;
@@ -111,14 +92,15 @@ ImportVerticalSpeedUnit(unsigned tmp) noexcept
 }
 
 static bool
-GetLegacyVerticalSpeedUnit(const ProfileMap &map, const char *key, Unit &value)
+GetLegacyVerticalSpeedUnit(const ProfileMap &map, std::string_view key,
+                           Unit &value)
 {
   unsigned tmp;
   return map.Get(key, tmp) && ApplyUnit(value, ImportVerticalSpeedUnit(tmp));
 }
 
 static bool
-GetVerticalSpeedUnit(const ProfileMap &map, const char *key,
+GetVerticalSpeedUnit(const ProfileMap &map, std::string_view key,
                      const char *legacy_key, Unit &value_r)
 {
   Unit tmp;
@@ -155,7 +137,7 @@ ImportDistanceUnit(unsigned tmp) noexcept
 }
 
 static bool
-GetLegacyDistanceUnit(const ProfileMap &map, const char *key, Unit &value)
+GetLegacyDistanceUnit(const ProfileMap &map, std::string_view key, Unit &value)
 {
   unsigned tmp;
   return map.Get(key, tmp) && ApplyUnit(value, ImportDistanceUnit(tmp));
@@ -170,7 +152,8 @@ ValidDistanceUnit(Unit unit) noexcept
 }
 
 static bool
-GetDistanceUnit(const ProfileMap &map, const char *key, const char *legacy_key,
+GetDistanceUnit(const ProfileMap &map, std::string_view key,
+                std::string_view legacy_key,
                 Unit &value_r)
 {
   Unit tmp;
@@ -204,14 +187,14 @@ ImportAltitudeUnit(unsigned tmp) noexcept
 }
 
 static bool
-GetLegacyAltitudeUnit(const ProfileMap &map, const char *key, Unit &value)
+GetLegacyAltitudeUnit(const ProfileMap &map, std::string_view key, Unit &value)
 {
   unsigned tmp;
   return map.Get(key, tmp) && ApplyUnit(value, ImportAltitudeUnit(tmp));
 }
 
 static bool
-GetAltitudeUnit(const ProfileMap &map, const char *key, const char *legacy_key,
+GetAltitudeUnit(const ProfileMap &map, std::string_view key, const char *legacy_key,
                 Unit &value_r)
 {
   Unit tmp;
@@ -245,7 +228,8 @@ ImportTemperatureUnit(unsigned tmp) noexcept
 }
 
 static bool
-GetLegacyTemperatureUnit(const ProfileMap &map, const char *key, Unit &value)
+GetLegacyTemperatureUnit(const ProfileMap &map, std::string_view key,
+                         Unit &value)
 {
   unsigned tmp;
   return map.Get(key, tmp) &&
@@ -260,7 +244,7 @@ ValidTemperatureUnit(Unit unit) noexcept
 }
 
 static bool
-GetTemperatureUnit(const ProfileMap &map, const char *key,
+GetTemperatureUnit(const ProfileMap &map, std::string_view key,
                    const char *legacy_key, Unit &value_r)
 {
   Unit tmp;
@@ -283,7 +267,7 @@ ValidPressureUnit(Unit unit) noexcept
 }
 
 static bool
-GetPressureUnit(const ProfileMap &map, const char *key, Unit &value)
+GetPressureUnit(const ProfileMap &map, std::string_view key, Unit &value)
 {
   Unit tmp;
   if (!map.GetEnum(key, tmp) || !ValidPressureUnit(tmp))
@@ -300,7 +284,7 @@ ValidWingLoadingUnit(Unit unit)
 }
 
 static bool
-GetWingLoadingUnit(const ProfileMap &map, const char *key, Unit &value)
+GetWingLoadingUnit(const ProfileMap &map, std::string_view key, Unit &value)
 {
   Unit tmp;
   if (!map.GetEnum(key, tmp) || !ValidWingLoadingUnit(tmp))
@@ -317,10 +301,27 @@ ValidMassUnit(Unit unit)
 }
 
 static bool
-GetMassUnit(const ProfileMap &map, const char *key, Unit &value)
+GetMassUnit(const ProfileMap &map, std::string_view key, Unit &value)
 {
   Unit tmp;
   if (!map.GetEnum(key, tmp) || !ValidMassUnit(tmp))
+    return false;
+
+  value = tmp;
+  return true;
+}
+
+static constexpr bool
+ValidRotationUnit(Unit unit) noexcept
+{
+  return unit == Unit::HZ || unit == Unit::RPM;
+}
+
+static bool
+GetRotationUnit(const ProfileMap &map, std::string_view key, Unit &value)
+{
+  Unit tmp;
+  if (!map.GetEnum(key, tmp) || !ValidRotationUnit(tmp))
     return false;
 
   value = tmp;
@@ -348,4 +349,5 @@ Profile::LoadUnits(const ProfileMap &map, UnitSetting &config)
   GetWingLoadingUnit(map, ProfileKeys::WingLoadingUnitValue,
                      config.wing_loading_unit);
   GetMassUnit(map, ProfileKeys::MassUnitValue, config.mass_unit);
+  GetRotationUnit(map, ProfileKeys::RotationUnitValue, config.rotation_unit);
 }

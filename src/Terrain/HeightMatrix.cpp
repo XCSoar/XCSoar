@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "HeightMatrix.hpp"
 #include "RasterMap.hpp"
@@ -33,7 +13,7 @@ Copyright_License {
 #include <cassert>
 
 void
-HeightMatrix::SetSize(size_t _size)
+HeightMatrix::SetSize(std::size_t _size) noexcept
 {
   assert(_size > 0);
 
@@ -41,37 +21,40 @@ HeightMatrix::SetSize(size_t _size)
 }
 
 void
-HeightMatrix::SetSize(unsigned _width, unsigned _height)
+HeightMatrix::SetSize(UnsignedPoint2D _size) noexcept
 {
-  width = _width;
-  height = _height;
+  size = _size;
 
-  SetSize(width * height);
+  SetSize(size.Area());
 }
 
 void
-HeightMatrix::SetSize(unsigned width, unsigned height,
-                      unsigned quantisation_pixels)
+HeightMatrix::SetSize(UnsignedPoint2D _size,
+                      unsigned quantisation_pixels) noexcept
 {
-  SetSize((width + quantisation_pixels - 1) / quantisation_pixels,
-          (height + quantisation_pixels - 1) / quantisation_pixels);
+  const UnsignedPoint2D round_up{
+    quantisation_pixels - 1,
+    quantisation_pixels - 1,
+  };
+
+  SetSize((_size + round_up) / quantisation_pixels);
 }
 
 #ifdef ENABLE_OPENGL
 
 void
 HeightMatrix::Fill(const RasterMap &map, const GeoBounds &bounds,
-                   unsigned width, unsigned height, bool interpolate)
+                   const UnsignedPoint2D _size, bool interpolate) noexcept
 {
-  SetSize(width, height);
+  SetSize(_size);
 
-  const Angle delta_y = bounds.GetHeight() / height;
+  const Angle delta_y = bounds.GetHeight() / _size.y;
   Angle latitude = bounds.GetNorth();
-  for (auto p = data.data(), end = p + width * height;
-       p != end; p += width, latitude -= delta_y) {
+  for (auto p = data.data(), end = p + _size.Area();
+       p != end; p += _size.x, latitude -= delta_y) {
     map.ScanLine(GeoPoint(bounds.GetWest(), latitude),
                  GeoPoint(bounds.GetEast(), latitude),
-                 p, width, interpolate);
+                 p, _size.x, interpolate);
   }
 }
 
@@ -79,19 +62,18 @@ HeightMatrix::Fill(const RasterMap &map, const GeoBounds &bounds,
 
 void
 HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
-                   unsigned quantisation_pixels, bool interpolate)
+                   unsigned quantisation_pixels, bool interpolate) noexcept
 {
   const auto screen_size = projection.GetScreenSize();
 
-  SetSize((screen_size.width + quantisation_pixels - 1) / quantisation_pixels,
-          (screen_size.height + quantisation_pixels - 1) / quantisation_pixels);
+  SetSize((UnsignedPoint2D)screen_size, quantisation_pixels);
 
   auto p = data.data();
   for (unsigned y = 0; y < screen_size.height;
-       y += quantisation_pixels, p += width) {
+       y += quantisation_pixels, p += size.x) {
     map.ScanLine(projection.ScreenToGeo({0, (int)y}),
                  projection.ScreenToGeo({(int)screen_size.width, (int)y}),
-                 p, width, interpolate);
+                 p, size.x, interpolate);
   }
 }
 

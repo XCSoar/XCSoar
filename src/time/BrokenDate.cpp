@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "BrokenDate.hpp"
 #include "BrokenDateTime.hpp"
@@ -89,4 +69,40 @@ BrokenDate::DaysSince(const BrokenDate &other) const noexcept
   const auto b = BrokenDateTime(other, midnight).ToTimePoint();
   const auto delta = a - b;
   return int(delta / one_day);
+}
+
+BrokenDate
+BrokenDate::FromJulianDate(uint32_t julian_date) noexcept
+{
+  // Convert Julian date BrokenDate
+  BrokenDate bd;
+  int a = julian_date + 32044;
+  int b = (4 * a + 3) / 146097;
+  int c = a - (146097 * b) / 4;
+  int d = (4 * c + 3) / 1461;
+  int e = c - (1461 * d) / 4;
+  int m = (5 * e + 2) / 153;
+
+  bd.day = e - (153 * m + 2) / 5 + 1;
+  bd.month = m + 3 - 12 * (m / 10);
+  bd.year = 100 * b + d - 4800 + (m / 10);
+
+  // Calculate day-of-week using Zeller's Congruence algorithm
+  m = bd.month;
+  int y = bd.year;
+  if (m < 3) {
+    m += 12;
+    y -= 1;
+  }
+
+  int k = y % 100;
+  int j = y / 100;
+
+  int dayOfWeek =
+    (bd.day + (13 * (m + 1)) / 5 + k + (k / 4) + (j / 4) - 2 * j) % 7;
+
+  // Adjust the result to match the day of the week format (0=Saturday)
+  bd.day_of_week = (dayOfWeek + 6) % 7;
+
+  return bd;
 }

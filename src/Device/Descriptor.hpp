@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #pragma once
 
@@ -30,6 +10,7 @@ Copyright_License {
 #include "Port/Listener.hpp"
 #include "Device/Parser.hpp"
 #include "RadioFrequency.hpp"
+#include "TransponderCode.hpp"
 #include "NMEA/ExternalSettings.hpp"
 #include "time/PeriodClock.hpp"
 #include "Job/Async.hpp"
@@ -58,9 +39,9 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-namespace Cares { class Channel; }
 namespace Java { class GlobalCloseable; }
-class EventLoop;
+class DeviceBlackboard;
+class NMEALogger;
 struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;
@@ -78,6 +59,7 @@ struct RecordedFlightInfo;
 class OperationEnvironment;
 class OpenDeviceJob;
 class DeviceDataEditor;
+class DeviceFactory;
 
 class DeviceDescriptor final
   : PortListener,
@@ -85,15 +67,12 @@ class DeviceDescriptor final
     SensorListener,
 #endif
     PortLineSplitter {
-  /**
-   * The #EventLoop instance used by #Port instances.
-   */
-  EventLoop &event_loop;
 
-  /**
-   * The asynchronous DNS resolver used by #Port instances.
-   */
-  Cares::Channel &cares;
+  DeviceBlackboard &blackboard;
+
+  NMEALogger *const nmea_logger;
+
+  DeviceFactory &factory;
 
   UI::Notify job_finished_notify{[this]{ OnJobFinished(); }};
 
@@ -289,7 +268,9 @@ class DeviceDescriptor final
   bool borrowed = false;
 
 public:
-  DeviceDescriptor(EventLoop &_event_loop, Cares::Channel &_cares,
+  DeviceDescriptor(DeviceBlackboard &_blackboard,
+                   NMEALogger *_nmea_logger,
+                   DeviceFactory &_factory,
                    unsigned index, PortListener *port_listener) noexcept;
   ~DeviceDescriptor() noexcept;
 
@@ -383,7 +364,6 @@ private:
    *
    * Throws on error.
    */
-  gcc_nonnull_all
   bool OpenOnPort(std::unique_ptr<DumpPort> &&port, OperationEnvironment &env);
 
   bool OpenInternalSensors();
@@ -565,6 +545,7 @@ public:
   bool PutStandbyFrequency(RadioFrequency frequency,
                            const TCHAR *name,
                            OperationEnvironment &env) noexcept;
+  bool PutTransponderCode(TransponderCode code, OperationEnvironment &env) noexcept;
   bool PutQNH(AtmosphericPressure pres,
               OperationEnvironment &env) noexcept;
 
@@ -600,6 +581,11 @@ public:
                           const DerivedInfo &calculated) noexcept;
 
 private:
+  void LockSetErrorMessage(const TCHAR *msg) noexcept;
+#ifdef _UNICODE
+  void LockSetErrorMessage(const char *msg) noexcept;
+#endif
+
   void OnJobFinished() noexcept;
 
   /* virtual methods from class PortListener */
@@ -638,6 +624,12 @@ private:
                        AtmosphericPressure pressure) noexcept override;
   void OnVarioSensor(float vario) noexcept override;
   void OnHeartRateSensor(unsigned bpm) noexcept override;
+  void OnEngineSensors(bool has_cht,
+                       Temperature cht,
+                       bool has_egt,
+                       Temperature egt,
+                       bool has_ignitions_per_second,
+                       float ignitions_per_second) noexcept override;
   void OnVoltageValues(int temp_adc, unsigned voltage_index,
                        int volt_adc) noexcept override;
   void OnNunchukValues(int joy_x, int joy_y,

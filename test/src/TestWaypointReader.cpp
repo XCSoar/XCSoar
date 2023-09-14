@@ -1,24 +1,5 @@
-/* Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Waypoint/WaypointReader.hpp"
 #include "Waypoint/WaypointReaderBase.hpp"
@@ -29,6 +10,7 @@
 #include "system/Path.hpp"
 #include "util/tstring.hpp"
 #include "util/StringAPI.hxx"
+#include "util/StringStrip.hxx"
 #include "util/ExtractParameters.hpp"
 #include "Operation/Operation.hpp"
 
@@ -209,6 +191,8 @@ GetWaypoint(const Waypoint org_wp, const Waypoints &way_points)
   }
   if(!ok1(wp->location.Distance(org_wp.location) <= 1000))
     printf("%f %f\n", (double)wp->location.latitude.Degrees(), (double)wp->location.longitude.Degrees());
+  ok1(org_wp.has_elevation);
+  ok1(wp->has_elevation);
   ok1(fabs(wp->elevation - org_wp.elevation) < 0.5);
 
   return wp;
@@ -334,6 +318,16 @@ TestZanderWaypoint(const Waypoint org_wp, const Waypoint *wp)
 }
 
 static void
+TruncateStrip(tstring &s, std::size_t max_length) noexcept
+{
+  tstring_view v = s;
+  if (v.size() > max_length)
+    v = v.substr(0, max_length);
+  v = Strip(v);
+  s.assign(v);
+}
+
+static void
 TestZander(wp_vector org_wp)
 {
   Waypoints way_points;
@@ -345,9 +339,7 @@ TestZander(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    if (it->name.length() > 12)
-      it->name = it->name.erase(12);
-    trim_inplace(it->name);
+    TruncateStrip(it->name, 12);
     const auto wp = GetWaypoint(*it, way_points);
     TestZanderWaypoint(*it, wp.get());
   }
@@ -365,9 +357,7 @@ TestFS(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    if (it->name.length() > 8)
-      it->name = it->name.erase(8);
-    trim_inplace(it->name);
+    TruncateStrip(it->name, 8);
     GetWaypoint(*it, way_points);
   }
 }
@@ -384,9 +374,7 @@ TestFS_UTM(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    if (it->name.length() > 8)
-      it->name = it->name.erase(8);
-    trim_inplace(it->name);
+    TruncateStrip(it->name, 8);
     GetWaypoint(*it, way_points);
   }
 }
@@ -403,7 +391,7 @@ TestOzi(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    trim_inplace(it->name);
+    it->name = tstring{Strip(it->name)};
     GetWaypoint(*it, way_points);
   }
 }
@@ -424,10 +412,7 @@ TestCompeGPS(wp_vector org_wp)
     while ((pos = it->name.find_first_of(_T(' '))) != tstring::npos)
       it->name.erase(pos, 1);
 
-    if (it->name.length() > 6)
-      it->name = it->name.erase(6);
-
-    trim_inplace(it->name);
+    TruncateStrip(it->name, 6);
     const auto wp = GetWaypoint(*it, way_points);
     ok1(wp->comment == it->comment);
   }
@@ -449,10 +434,7 @@ TestCompeGPS_UTM(wp_vector org_wp)
     while ((pos = it->name.find_first_of(_T(' '))) != tstring::npos)
       it->name.erase(pos, 1);
 
-    if (it->name.length() > 6)
-      it->name = it->name.erase(6);
-
-    trim_inplace(it->name);
+    TruncateStrip(it->name, 6);
     const auto wp = GetWaypoint(*it, way_points);
     ok1(wp->comment == it->comment);
   }
@@ -471,6 +453,7 @@ CreateOriginalWaypoints()
 
   Waypoint wp(loc);
   wp.elevation = 488;
+  wp.has_elevation = true;
   wp.name = _T("Bergneustadt");
   wp.comment = _T("Rabbit holes, 20\" ditch south end of rwy");
   wp.runway.SetDirection(Angle::Degrees(40));
@@ -489,6 +472,7 @@ CreateOriginalWaypoints()
 
   Waypoint wp2(loc);
   wp2.elevation = 6962;
+  wp2.has_elevation = true;
   wp2.name = _T("Aconcagua");
   wp2.comment = _T("Highest mountain in south-america");
 
@@ -505,6 +489,7 @@ CreateOriginalWaypoints()
 
   Waypoint wp3(loc);
   wp3.elevation = 227;
+  wp3.has_elevation = true;
   wp3.name = _T("Golden Gate Bridge");
   wp3.comment = _T("");
 
@@ -521,6 +506,7 @@ CreateOriginalWaypoints()
 
   Waypoint wp4(loc);
   wp4.elevation = 123;
+  wp4.has_elevation = true;
   wp4.name = _T("Red Square");
   wp4.runway.SetDirection(Angle::Degrees(90));
   wp4.runway.SetLength((unsigned)Units::ToSysUnit(0.01, Unit::STATUTE_MILES));
@@ -538,6 +524,7 @@ CreateOriginalWaypoints()
 
   Waypoint wp5(loc);
   wp5.elevation = 5;
+  wp5.has_elevation = true;
   wp5.name = _T("Sydney Opera");
   wp5.comment = _T("");
 
@@ -555,7 +542,7 @@ int main()
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(413);
+  plan_tests(513);
 
   TestExtractParameters();
 

@@ -1,0 +1,475 @@
+Index: boost_1_82_0/boost/geometry/util/math.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/util/math.hpp
++++ boost_1_82_0/boost/geometry/util/math.hpp
+@@ -22,14 +22,14 @@
+ #ifndef BOOST_GEOMETRY_UTIL_MATH_HPP
+ #define BOOST_GEOMETRY_UTIL_MATH_HPP
+ 
++#include "Math/Constants.hpp"
++
+ #include <cmath>
+ #include <limits>
+ #include <type_traits>
+ 
+ #include <boost/core/ignore_unused.hpp>
+ 
+-#include <boost/math/constants/constants.hpp>
+-#include <boost/math/special_functions/fpclassify.hpp>
+ //#include <boost/math/special_functions/round.hpp>
+ #include <boost/numeric/conversion/cast.hpp>
+ 
+@@ -187,7 +187,7 @@ struct equals<Type, true>
+             return true;
+         }
+ 
+-        if (boost::math::isfinite(a) && boost::math::isfinite(b))
++        if (std::isfinite(a) && std::isfinite(b))
+         {
+             // If a is INF and b is e.g. 0, the expression below returns true
+             // but the values are obviously not equal, hence the condition
+@@ -302,11 +302,11 @@ struct square_root_for_fundamental_fp
+         // For those platforms we need to define the macro
+         // BOOST_GEOMETRY_SQRT_CHECK_FINITENESS so that the argument
+         // to std::sqrt is checked appropriately before passed to std::sqrt
+-        if (boost::math::isfinite(value))
++        if (std::isfinite(value))
+         {
+             return std::sqrt(value);
+         }
+-        else if (boost::math::isinf(value) && value < 0)
++        else if (std::isinf(value) && value < 0)
+         {
+             return -std::numeric_limits<FundamentalFP>::quiet_NaN();
+         }
+@@ -423,7 +423,7 @@ struct define_pi
+     static inline T apply()
+     {
+         // Default calls Boost.Math
+-        return boost::math::constants::pi<T>();
++        return M_PI;
+     }
+ };
+ 
+@@ -433,7 +433,7 @@ struct define_two_pi
+     static inline T apply()
+     {
+         // Default calls Boost.Math
+-        return boost::math::constants::two_pi<T>();
++        return M_2PI;
+     }
+ };
+ 
+@@ -443,7 +443,7 @@ struct define_half_pi
+     static inline T apply()
+     {
+         // Default calls Boost.Math
+-        return boost::math::constants::half_pi<T>();
++        return M_PI_2;
+     }
+ };
+ 
+Index: boost_1_82_0/boost/geometry/formulas/thomas_direct.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/formulas/thomas_direct.hpp
++++ boost_1_82_0/boost/geometry/formulas/thomas_direct.hpp
+@@ -13,8 +13,6 @@
+ #define BOOST_GEOMETRY_FORMULAS_THOMAS_DIRECT_HPP
+ 
+ 
+-#include <boost/math/constants/constants.hpp>
+-
+ #include <boost/geometry/core/assert.hpp>
+ #include <boost/geometry/core/radius.hpp>
+ 
+Index: boost_1_82_0/boost/geometry/formulas/thomas_inverse.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/formulas/thomas_inverse.hpp
++++ boost_1_82_0/boost/geometry/formulas/thomas_inverse.hpp
+@@ -13,8 +13,6 @@
+ #define BOOST_GEOMETRY_FORMULAS_THOMAS_INVERSE_HPP
+ 
+ 
+-#include <boost/math/constants/constants.hpp>
+-
+ #include <boost/geometry/core/radius.hpp>
+ 
+ #include <boost/geometry/util/condition.hpp>
+Index: boost_1_82_0/boost/geometry/util/normalize_spheroidal_coordinates.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/util/normalize_spheroidal_coordinates.hpp
++++ boost_1_82_0/boost/geometry/util/normalize_spheroidal_coordinates.hpp
+@@ -414,7 +414,7 @@ formulas/vertex_longitude.hpp
+ template<typename ValueType>
+ inline void normalize_unit_vector(ValueType& x, ValueType& y)
+ {
+-    ValueType h = boost::math::hypot(x, y);
++    ValueType h = std::hypot(x, y);
+ 
+     BOOST_GEOMETRY_ASSERT(h > 0);
+ 
+Index: boost_1_82_0/boost/geometry/formulas/vincenty_direct.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/formulas/vincenty_direct.hpp
++++ boost_1_82_0/boost/geometry/formulas/vincenty_direct.hpp
+@@ -15,8 +15,6 @@
+ #define BOOST_GEOMETRY_FORMULAS_VINCENTY_DIRECT_HPP
+ 
+ 
+-#include <boost/math/constants/constants.hpp>
+-
+ #include <boost/geometry/core/radius.hpp>
+ 
+ #include <boost/geometry/util/condition.hpp>
+Index: boost_1_82_0/boost/geometry/formulas/vincenty_inverse.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/formulas/vincenty_inverse.hpp
++++ boost_1_82_0/boost/geometry/formulas/vincenty_inverse.hpp
+@@ -16,8 +16,6 @@
+ #define BOOST_GEOMETRY_FORMULAS_VINCENTY_INVERSE_HPP
+ 
+ 
+-#include <boost/math/constants/constants.hpp>
+-
+ #include <boost/geometry/core/radius.hpp>
+ 
+ #include <boost/geometry/util/condition.hpp>
+Index: boost_1_82_0/boost/geometry/formulas/karney_direct.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/formulas/karney_direct.hpp
++++ boost_1_82_0/boost/geometry/formulas/karney_direct.hpp
+@@ -33,9 +33,6 @@
+ 
+ #include <boost/array.hpp>
+ 
+-#include <boost/math/constants/constants.hpp>
+-#include <boost/math/special_functions/hypot.hpp>
+-
+ #include <boost/geometry/formulas/flattening.hpp>
+ #include <boost/geometry/formulas/result_direct.hpp>
+ 
+@@ -116,7 +113,7 @@ public:
+ 
+         // Obtain alpha 0 by solving the spherical triangle.
+         CT const sin_alpha0 = sin_alpha1 * cos_beta1;
+-        CT const cos_alpha0 = boost::math::hypot(cos_alpha1, sin_alpha1 * sin_beta1);
++        CT const cos_alpha0 = std::hypot(cos_alpha1, sin_alpha1 * sin_beta1);
+ 
+         CT const k2 = math::sqr(cos_alpha0) * ep2;
+ 
+@@ -175,7 +172,7 @@ public:
+         {
+             // Find the latitude at the second point.
+             CT const sin_beta2 = cos_alpha0 * sin_sigma2;
+-            CT const cos_beta2 = boost::math::hypot(sin_alpha0, cos_alpha0 * cos_sigma2);
++            CT const cos_beta2 = std::hypot(sin_alpha0, cos_alpha0 * cos_sigma2);
+ 
+             result.lat2 = atan2(sin_beta2, one_minus_f * cos_beta2);
+ 
+Index: boost_1_82_0/boost/geometry/formulas/karney_inverse.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/formulas/karney_inverse.hpp
++++ boost_1_82_0/boost/geometry/formulas/karney_inverse.hpp
+@@ -31,9 +31,6 @@
+ #define BOOST_GEOMETRY_FORMULAS_KARNEY_INVERSE_HPP
+ 
+ 
+-#include <boost/math/constants/constants.hpp>
+-#include <boost/math/special_functions/hypot.hpp>
+-
+ #include <boost/geometry/util/condition.hpp>
+ #include <boost/geometry/util/math.hpp>
+ #include <boost/geometry/util/precise_math.hpp>
+@@ -641,7 +638,7 @@ public:
+             sin_beta12 + cos_beta2 * sin_beta1 * math::sqr(sin_omega12) / (c1 + cos_omega12) :
+             sin_beta12a - cos_beta2 * sin_beta1 * math::sqr(sin_omega12) / (c1 - cos_omega12);
+ 
+-        CT sin_sigma12 = boost::math::hypot(sin_alpha1, cos_alpha1);
++        CT sin_sigma12 = std::hypot(sin_alpha1, cos_alpha1);
+         CT cos_sigma12 = sin_beta1 * sin_beta2 + cos_beta1 * cos_beta2 * cos_omega12;
+ 
+         if (shortline && sin_sigma12 < etol2)
+@@ -864,7 +861,7 @@ public:
+ 
+ 
+         CT sin_alpha0 = sin_alpha1 * cos_beta1;
+-        CT cos_alpha0 = boost::math::hypot(cos_alpha1, sin_alpha1 * sin_beta1);
++        CT cos_alpha0 = std::hypot(cos_alpha1, sin_alpha1 * sin_beta1);
+ 
+         CT sin_omega1, cos_omega1;
+         CT sin_omega2, cos_omega2;
+Index: boost_1_82_0/boost/geometry/strategies/cartesian/centroid_bashein_detmer.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/strategies/cartesian/centroid_bashein_detmer.hpp
++++ boost_1_82_0/boost/geometry/strategies/cartesian/centroid_bashein_detmer.hpp
+@@ -21,7 +21,6 @@
+ 
+ #include <cstddef>
+ 
+-#include <boost/math/special_functions/fpclassify.hpp>
+ #include <boost/numeric/conversion/cast.hpp>
+ 
+ #include <boost/geometry/arithmetic/determinant.hpp>
+@@ -219,7 +218,7 @@ public :
+                 >::type coordinate_type;
+ 
+             // Prevent NaN centroid coordinates
+-            if (boost::math::isfinite(a3))
++            if (std::isfinite(a3))
+             {
+                 // NOTE: above calculation_type is checked, not the centroid coordinate_type
+                 // which means that the centroid can still be filled with INF
+Index: boost_1_82_0/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp
++++ boost_1_82_0/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp
+@@ -18,7 +18,6 @@
+ #ifndef BOOST_GEOMETRY_STRATEGIES_CARTESIAN_CENTROID_WEIGHTED_LENGTH_HPP
+ #define BOOST_GEOMETRY_STRATEGIES_CARTESIAN_CENTROID_WEIGHTED_LENGTH_HPP
+ 
+-#include <boost/math/special_functions/fpclassify.hpp>
+ #include <boost/numeric/conversion/cast.hpp>
+ 
+ #include <boost/geometry/arithmetic/arithmetic.hpp>
+@@ -120,7 +119,7 @@ public :
+ 
+         distance_type const zero = distance_type();
+         if (! geometry::math::equals(state.length, zero)
+-            && boost::math::isfinite(state.length)) // Prevent NaN centroid coordinates
++            && std::isfinite(state.length)) // Prevent NaN centroid coordinates
+         {
+             // NOTE: above distance_type is checked, not the centroid coordinate_type
+             // which means that the centroid can still be filled with INF
+Index: boost_1_82_0/boost/geometry/formulas/meridian_segment.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/formulas/meridian_segment.hpp
++++ boost_1_82_0/boost/geometry/formulas/meridian_segment.hpp
+@@ -12,8 +12,6 @@
+ #ifndef BOOST_GEOMETRY_FORMULAS_MERIDIAN_SEGMENT_HPP
+ #define BOOST_GEOMETRY_FORMULAS_MERIDIAN_SEGMENT_HPP
+ 
+-#include <boost/math/constants/constants.hpp>
+-
+ #include <boost/geometry/core/radius.hpp>
+ 
+ #include <boost/geometry/util/condition.hpp>
+Index: boost_1_82_0/boost/geometry/formulas/vertex_longitude.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/formulas/vertex_longitude.hpp
++++ boost_1_82_0/boost/geometry/formulas/vertex_longitude.hpp
+@@ -17,8 +17,6 @@
+ #include <boost/geometry/formulas/spherical.hpp>
+ #include <boost/geometry/formulas/flattening.hpp>
+ 
+-#include <boost/math/special_functions/hypot.hpp>
+-
+ namespace boost { namespace geometry { namespace formula
+ {
+ 
+@@ -58,7 +56,7 @@ class vertex_longitude_on_spheroid
+     template<typename T>
+     static inline void normalize(T& x, T& y)
+     {
+-        T h = boost::math::hypot(x, y);
++        T h = std::hypot(x, y);
+         x /= h;
+         y /= h;
+     }
+Index: boost_1_82_0/boost/geometry/formulas/area_formulas.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/formulas/area_formulas.hpp
++++ boost_1_82_0/boost/geometry/formulas/area_formulas.hpp
+@@ -17,7 +17,6 @@
+ #include <boost/geometry/formulas/mean_radius.hpp>
+ #include <boost/geometry/formulas/karney_inverse.hpp>
+ #include <boost/geometry/util/math.hpp>
+-#include <boost/math/special_functions/hypot.hpp>
+ 
+ namespace boost { namespace geometry { namespace formula
+ {
+@@ -92,7 +91,7 @@ public:
+     template<typename T>
+     static inline void normalize(T& x, T& y)
+     {
+-        T h = boost::math::hypot(x, y);
++        T h = std::hypot(x, y);
+         x /= h;
+         y /= h;
+     }
+Index: boost_1_82_0/boost/geometry/util/has_nan_coordinate.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/util/has_nan_coordinate.hpp
++++ boost_1_82_0/boost/geometry/util/has_nan_coordinate.hpp
+@@ -19,8 +19,6 @@
+ #include <boost/geometry/core/coordinate_dimension.hpp>
+ #include <boost/geometry/core/coordinate_type.hpp>
+ 
+-#include <boost/math/special_functions/fpclassify.hpp>
+-
+ 
+ namespace boost { namespace geometry
+ {
+@@ -34,7 +32,7 @@ struct isnan
+     template <typename T>
+     static inline bool apply(T const& t)
+     {
+-        return boost::math::isnan(t);
++        return std::isnan(t);
+     }
+ };
+ 
+Index: boost_1_82_0/boost/geometry/policies/robustness/get_rescale_policy.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/policies/robustness/get_rescale_policy.hpp
++++ boost_1_82_0/boost/geometry/policies/robustness/get_rescale_policy.hpp
+@@ -75,7 +75,7 @@ inline void scale_box_to_integer_range(B
+     num_type const half = 0.5;
+     if (math::equals(diff, num_type())
+         || diff >= range
+-        || ! boost::math::isfinite(diff))
++        || ! std::isfinite(diff))
+     {
+         factor = 1;
+     }
+Index: boost_1_82_0/boost/geometry/formulas/sjoberg_intersection.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/formulas/sjoberg_intersection.hpp
++++ boost_1_82_0/boost/geometry/formulas/sjoberg_intersection.hpp
+@@ -12,8 +12,6 @@
+ #define BOOST_GEOMETRY_FORMULAS_SJOBERG_INTERSECTION_HPP
+ 
+ 
+-#include <boost/math/constants/constants.hpp>
+-
+ #include <boost/geometry/core/radius.hpp>
+ 
+ #include <boost/geometry/util/condition.hpp>
+Index: boost_1_82_0/boost/geometry/formulas/authalic_radius_sqr.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/formulas/authalic_radius_sqr.hpp
++++ boost_1_82_0/boost/geometry/formulas/authalic_radius_sqr.hpp
+@@ -21,8 +21,6 @@
+ 
+ #include <boost/geometry/algorithms/not_implemented.hpp>
+ 
+-#include <boost/math/special_functions/atanh.hpp>
+-
+ namespace boost { namespace geometry
+ {
+ 
+@@ -71,7 +69,7 @@ struct authalic_radius_sqr<ResultType, G
+         //return a2 / c2 + b2 * boost::math::atanh(e) / (c2 * e);
+ 
+         ResultType const c1 = 1;
+-        return (a2 / c2) * ( c1 + (c1 - e2) * boost::math::atanh(e) / e );
++        return (a2 / c2) * ( c1 + (c1 - e2) * std::atanh(e) / e );
+     }
+ };
+ 
+Index: boost_1_82_0/boost/geometry/formulas/meridian_inverse.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/formulas/meridian_inverse.hpp
++++ boost_1_82_0/boost/geometry/formulas/meridian_inverse.hpp
+@@ -11,7 +11,7 @@
+ #ifndef BOOST_GEOMETRY_FORMULAS_MERIDIAN_INVERSE_HPP
+ #define BOOST_GEOMETRY_FORMULAS_MERIDIAN_INVERSE_HPP
+ 
+-#include <boost/math/constants/constants.hpp>
++#include "Math/Constants.hpp"
+ 
+ #include <boost/geometry/core/radius.hpp>
+ 
+@@ -49,14 +49,14 @@ public :
+     template <typename T>
+     static bool meridian_not_crossing_pole(T lat1, T lat2, CT diff)
+     {
+-        CT half_pi = math::pi<CT>()/CT(2);
++        CT half_pi = M_PI/CT(2);
+         return math::equals(diff, CT(0)) ||
+                     (math::equals(lat2, half_pi) && math::equals(lat1, -half_pi));
+     }
+ 
+     static bool meridian_crossing_pole(CT diff)
+     {
+-        return math::equals(math::abs(diff), math::pi<CT>());
++        return math::equals(math::abs(diff), M_PI);
+     }
+ 
+ 
+@@ -70,7 +70,7 @@ public :
+     static CT meridian_crossing_pole_dist(T lat1, T lat2, Spheroid const& spheroid)
+     {
+         CT c0 = 0;
+-        CT half_pi = math::pi<CT>()/CT(2);
++        CT half_pi = M_PI/CT(2);
+         CT lat_sign = 1;
+         if (lat1+lat2 < c0)
+         {
+Index: boost_1_82_0/boost/geometry/strategies/cartesian/buffer_side_straight.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/strategies/cartesian/buffer_side_straight.hpp
++++ boost_1_82_0/boost/geometry/strategies/cartesian/buffer_side_straight.hpp
+@@ -9,8 +9,6 @@
+ 
+ #include <cstddef>
+ 
+-#include <boost/math/special_functions/fpclassify.hpp>
+-
+ #include <boost/geometry/core/coordinate_type.hpp>
+ #include <boost/geometry/core/access.hpp>
+ #include <boost/geometry/util/math.hpp>
+@@ -80,9 +78,9 @@ public :
+         promoted_type const dy = get<1>(input_p2) - get<1>(input_p1);
+ 
+         // For normalization [0,1] (=dot product d.d, sqrt)
+-        promoted_type const length = geometry::math::sqrt(dx * dx + dy * dy);
++        promoted_type const length = std::sqrt(dx * dx + dy * dy);
+ 
+-        if (! boost::math::isfinite(length))
++        if (! std::isfinite(length))
+         {
+             // In case of coordinates differences of e.g. 1e300, length
+             // will overflow and we should not generate output
+Index: boost_1_82_0/boost/geometry/formulas/andoyer_inverse.hpp
+===================================================================
+--- boost_1_82_0.orig/boost/geometry/formulas/andoyer_inverse.hpp
++++ boost_1_82_0/boost/geometry/formulas/andoyer_inverse.hpp
+@@ -13,10 +13,7 @@
+ #ifndef BOOST_GEOMETRY_FORMULAS_ANDOYER_INVERSE_HPP
+ #define BOOST_GEOMETRY_FORMULAS_ANDOYER_INVERSE_HPP
+ 
+-
+-#include <boost/math/constants/constants.hpp>
+-
+-#include <boost/geometry/core/radius.hpp>
++#include "Math/Constants.hpp"
+ 
+ #include <boost/geometry/util/condition.hpp>
+ #include <boost/geometry/util/math.hpp>
+@@ -74,7 +71,7 @@ public:
+ 
+         CT const c0 = CT(0);
+         CT const c1 = CT(1);
+-        CT const pi = math::pi<CT>();
++        CT const pi = M_PI;
+         CT const f = formula::flattening<CT>(spheroid);
+ 
+         CT const dlon = lon2 - lon1;
+@@ -259,7 +256,7 @@ private:
+             }
+             else // dA < 0, A altered towards pi
+             {
+-                CT const pi = math::pi<CT>();
++                CT const pi = M_PI;
+                 if (azimuth > pi)
+                 {
+                     azimuth = pi;
+@@ -277,7 +274,7 @@ private:
+             }
+             else // dA > 0, A altered towards -pi
+             {
+-                CT const minus_pi = -math::pi<CT>();
++                CT const minus_pi = -M_PI;
+                 if (azimuth < minus_pi)
+                 {
+                     azimuth = minus_pi;

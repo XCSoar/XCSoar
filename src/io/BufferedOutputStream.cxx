@@ -1,34 +1,11 @@
-/*
- * Copyright 2014-2022 Max Kellermann <max.kellermann@gmail.com>
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * - Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- *
- * - Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the
- * distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
- * FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+// SPDX-License-Identifier: BSD-2-Clause
+// author: Max Kellermann <max.kellermann@gmail.com>
 
 #include "BufferedOutputStream.hxx"
 #include "OutputStream.hxx"
+#include "util/SpanCast.hxx"
+
+#include <fmt/format.h>
 
 #include <cstdarg>
 
@@ -41,39 +18,33 @@
 #endif
 
 bool
-BufferedOutputStream::AppendToBuffer(const void *data, std::size_t size) noexcept
+BufferedOutputStream::AppendToBuffer(std::span<const std::byte> src) noexcept
 {
-	auto r = buffer.Write();
-	if (r.size() < size)
+	auto w = buffer.Write();
+	if (w.size() < src.size())
 		return false;
 
-	memcpy(r.data(), data, size);
-	buffer.Append(size);
+	std::copy(src.begin(), src.end(), w.begin());
+	buffer.Append(src.size());
 	return true;
 }
 
 void
-BufferedOutputStream::Write(const void *data, std::size_t size)
+BufferedOutputStream::Write(std::span<const std::byte> src)
 {
 	/* try to append to the current buffer */
-	if (AppendToBuffer(data, size))
+	if (AppendToBuffer(src))
 		return;
 
 	/* not enough room in the buffer - flush it */
 	Flush();
 
 	/* see if there's now enough room */
-	if (AppendToBuffer(data, size))
+	if (AppendToBuffer(src))
 		return;
 
 	/* too large for the buffer: direct write */
-	os.Write(data, size);
-}
-
-void
-BufferedOutputStream::Write(const char *p)
-{
-	Write(p, strlen(p));
+	os.Write(src);
 }
 
 void
@@ -91,7 +62,7 @@ BufferedOutputStream::Format(const char *fmt, ...)
 	std::size_t size = vsnprintf((char *)r.data(), r.size(), fmt, ap);
 	va_end(ap);
 
-	if (gcc_unlikely(size >= r.size())) {
+	if (size >= r.size()) [[unlikely]] {
 		/* buffer was not large enough; flush it and try
 		   again */
 
@@ -99,7 +70,7 @@ BufferedOutputStream::Format(const char *fmt, ...)
 
 		r = buffer.Write();
 
-		if (gcc_unlikely(size >= r.size())) {
+		if (size >= r.size()) [[unlikely]] {
 			/* still not enough space: grow the buffer and
 			   try again */
 			++size;
@@ -118,19 +89,26 @@ BufferedOutputStream::Format(const char *fmt, ...)
 	buffer.Append(size);
 }
 
+void
+BufferedOutputStream::VFmt(fmt::string_view format_str, fmt::format_args args)
+{
+	/* TODO format into this object's buffer instead of allocating
+	   a new one */
+	fmt::memory_buffer b;
+#if FMT_VERSION >= 80000
+	fmt::vformat_to(std::back_inserter(b), format_str, args);
+#else
+	fmt::vformat_to(b, format_str, args);
+#endif
+	return Write(std::as_bytes(std::span{b.data(), b.size()}));
+}
+
 #ifdef _UNICODE
 
 void
-BufferedOutputStream::Write(const wchar_t *p)
+BufferedOutputStream::WriteWideToUTF8(std::wstring_view src)
 {
-	WriteWideToUTF8(p, wcslen(p));
-}
-
-void
-BufferedOutputStream::WriteWideToUTF8(const wchar_t *src,
-				      std::size_t src_length)
-{
-	if (src_length == 0)
+	if (src.empty())
 		return;
 
 	auto r = buffer.Write();
@@ -139,7 +117,7 @@ BufferedOutputStream::WriteWideToUTF8(const wchar_t *src,
 		r = buffer.Write();
 	}
 
-	int length = WideCharToMultiByte(CP_UTF8, 0, src, src_length,
+	int length = WideCharToMultiByte(CP_UTF8, 0, src.data(), src.size(),
 					 (char *)r.data(), r.size(),
 					 nullptr, nullptr);
 	if (length <= 0) {
@@ -148,13 +126,13 @@ BufferedOutputStream::WriteWideToUTF8(const wchar_t *src,
 			throw MakeLastError(error, "UTF-8 conversion failed");
 
 		/* how much buffer do we need? */
-		length = WideCharToMultiByte(CP_UTF8, 0, src, src_length,
+		length = WideCharToMultiByte(CP_UTF8, 0, src.data(), src.size(),
 					     nullptr, 0, nullptr, nullptr);
 		if (length <= 0)
 			throw MakeLastError(error, "UTF-8 conversion failed");
 
 		/* grow the buffer and try again */
-		length = WideCharToMultiByte(CP_UTF8, 0, src, src_length,
+		length = WideCharToMultiByte(CP_UTF8, 0, src.data(), src.size(),
 					     (char *)buffer.Write(length), length,
 					     nullptr, nullptr);
 		if (length <= 0)
@@ -173,6 +151,6 @@ BufferedOutputStream::Flush()
 	if (r.empty())
 		return;
 
-	os.Write(r.data(), r.size());
+	os.Write(r);
 	buffer.Consume(r.size());
 }

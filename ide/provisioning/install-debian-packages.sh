@@ -33,6 +33,8 @@ echo
 echo Installing dependencies for the Linux target...
 apt-get install ${APTOPTS[*]} make g++ \
   zlib1g-dev \
+  libfmt-dev \
+  libdbus-1-dev \
   libsodium-dev \
   libfreetype6-dev \
   libpng-dev libjpeg-dev \
@@ -51,6 +53,11 @@ apt-get install ${APTOPTS[*]} make g++ \
   xz-utils
 echo
 
+echo Installing dependencies for the Wayland target...
+apt-get install ${APTOPTS[*]} wayland-protocols \
+ libwayland-bin
+echo
+
 echo Installing dependencies for creating Debian package
 apt-get install ${APTOPTS[*]} dpkg-dev \
   debhelper \
@@ -60,7 +67,7 @@ apt-get install ${APTOPTS[*]} dpkg-dev \
 echo
 
 echo Installing dependencies for compiling with LLVM / Clang...
-apt-get install ${APTOPTS[*]} llvm clang libc++-dev
+apt-get install ${APTOPTS[*]} llvm clang libc++-dev libc++abi-dev
 echo
 
 echo Installing dependencies for compiling targets which need libinput or GBM...
@@ -86,7 +93,8 @@ apt-get install ${APTOPTS[*]} \
 echo
 
 echo Installing dependencies for the Android target, not including SDK / NDK...
-apt-get install ${APTOPTS[*]} openjdk-11-jdk-headless vorbis-tools adb libtool unzip
+apt-get install ${APTOPTS[*]} openjdk-11-jdk-headless vorbis-tools adb libtool \
+    unzip
 echo
 
 echo Clean up downloaded resources in order to free space

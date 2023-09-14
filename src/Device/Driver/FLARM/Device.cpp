@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
@@ -30,6 +10,8 @@ Copyright_License {
 #include "util/NumberParser.hpp"
 #include "util/StringCompare.hxx"
 #include "NMEA/Checksum.hpp"
+
+#include <fmt/format.h>
 
 void
 FlarmDevice::LinkTimeout()
@@ -86,9 +68,7 @@ FlarmDevice::GetRange(unsigned &range, OperationEnvironment &env)
 bool
 FlarmDevice::SetRange(unsigned range, OperationEnvironment &env)
 {
-  NarrowString<32> buffer;
-  buffer.Format("%d", range);
-  return SetConfig("RANGE", buffer, env);
+  return SetConfig("RANGE", fmt::format_int{range}.c_str(), env);
 }
 
 bool
@@ -110,9 +90,7 @@ FlarmDevice::GetBaudRate(unsigned &baud_id, OperationEnvironment &env)
 bool
 FlarmDevice::SetBaudRate(unsigned baud_id, OperationEnvironment &env)
 {
-  NarrowString<32> buffer;
-  buffer.Format("%u", baud_id);
-  return SetConfig("BAUD", buffer, env);
+  return SetConfig("BAUD", fmt::format_int{baud_id}.c_str(), env);
 }
 
 bool
@@ -219,7 +197,8 @@ static bool
 ExpectChecksum(Port &port, uint8_t checksum, OperationEnvironment &env)
 {
   char data[4];
-  port.FullRead(data, 3, env, std::chrono::milliseconds(500));
+  port.FullRead(std::as_writable_bytes(std::span{data, 3}),
+                env, std::chrono::milliseconds(500));
   if (data[0] != '*')
     return false;
 

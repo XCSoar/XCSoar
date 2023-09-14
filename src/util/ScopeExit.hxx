@@ -1,31 +1,5 @@
-/*
- * Copyright (C) 2015 Max Kellermann <max.kellermann@gmail.com>
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * - Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- *
- * - Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the
- * distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
- * FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+// SPDX-License-Identifier: BSD-2-Clause
+// author: Max Kellermann <max.kellermann@gmail.com>
 
 #pragma once
 
@@ -35,20 +9,27 @@
  * Internal class.  Do not use directly.
  */
 template<typename F>
-class ScopeExitGuard : F {
+class ScopeExitGuard {
+	[[no_unique_address]]
+	F function;
+
 	bool enabled = true;
 
 public:
-	explicit ScopeExitGuard(F &&f):F(std::forward<F>(f)) {}
+	explicit ScopeExitGuard(F &&f) noexcept
+		:function(std::forward<F>(f)) {}
 
-	ScopeExitGuard(ScopeExitGuard &&src)
-		:F(std::move(src)), enabled(src.enabled) {
-		src.enabled = false;
-	}
+	ScopeExitGuard(ScopeExitGuard &&src) noexcept
+		:function(std::move(src.function)),
+		 enabled(std::exchange(src.enabled, false)) {}
 
-	~ScopeExitGuard() {
+	/* destructors are "noexcept" by default; this explicit
+	   "noexcept" declaration allows the destructor to throw if
+	   the function can throw; without this, a throwing function
+	   would std::terminate() */
+	~ScopeExitGuard() noexcept(noexcept(std::declval<F>()())) {
 		if (enabled)
-			F::operator()();
+			function();
 	}
 
 	ScopeExitGuard(const ScopeExitGuard &) = delete;
@@ -63,7 +44,7 @@ struct ScopeExitTag {
 	   parantheses at the end of the expression AtScopeExit()
 	   call */
 	template<typename F>
-	ScopeExitGuard<F> operator+(F &&f) {
+	ScopeExitGuard<F> operator+(F &&f) noexcept {
 		return ScopeExitGuard<F>(std::forward<F>(f));
 	}
 };

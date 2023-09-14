@@ -1,3 +1,9 @@
 ublas_no_serialization.patch
 no_math_throw
 no_multiprecision
+no_iostream
+geometry_no_backward_compatibility
+geometry_std_math
+variant_no_type
+json_no_hash
+geometry_std_array

@@ -1,29 +1,9 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "LayoutConfigPanel.hpp"
 #include "ui/canvas/Features.hpp" // for DRAW_MOUSE_CURSOR
-#include "Profile/ProfileKeys.hpp"
+#include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Hardware/RotateDisplay.hpp"
@@ -53,11 +33,11 @@ enum ControlIndex {
   FullScreen,
 #endif
   MapOrientation,
+  DarkMode,
   AppInfoBoxGeom,
   AppFlarmLocation,
   TabDialogStyle,
   AppStatusMessageAlignment,
-  AppInverseInfoBox,
   AppInfoBoxColors,
   AppInfoBoxBorder,
 #ifdef KOBO
@@ -175,6 +155,16 @@ static constexpr StaticEnumChoice infobox_border_list[] = {
   nullptr
 };
 
+static constexpr StaticEnumChoice dark_mode_list[] = {
+  { UISettings::DarkMode::AUTO, N_("Auto"),
+    N_("Use the system-wide setting") },
+  { UISettings::DarkMode::OFF, N_("Off"),
+    N_("Black text on white background") },
+  { UISettings::DarkMode::ON, N_("On"),
+    N_("White text on black background") },
+  nullptr
+};
+
 class LayoutConfigPanel final : public RowFormWidget {
 public:
   LayoutConfigPanel()
@@ -204,6 +194,10 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
   else
     AddDummy();
 
+  AddEnum(_("Dark mode"), nullptr, dark_mode_list,
+          (unsigned)ui_settings.dark_mode);
+  SetExpertRow(DarkMode);
+
   AddEnum(_("InfoBox geometry"),
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
           info_box_geometry_list, (unsigned)ui_settings.info_boxes.geometry);
@@ -220,10 +214,6 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
           popup_msg_position_list,
           (unsigned)ui_settings.popup_message_position);
   SetExpertRow(AppStatusMessageAlignment);
-
-  AddBoolean(_("Inverse InfoBoxes"), _("If true, the InfoBoxes are white on black, otherwise black on white."),
-             ui_settings.info_boxes.inverse);
-  SetExpertRow(AppInverseInfoBox);
 
   if (HasColors()) {
     AddBoolean(_("Colored InfoBoxes"),
@@ -274,6 +264,9 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
     changed |= orientation_changed;
   }
 
+  changed |= SaveValueEnum(DarkMode, ProfileKeys::DarkMode,
+                           ui_settings.dark_mode);
+
   bool info_box_geometry_changed = false;
 
   info_box_geometry_changed |=
@@ -292,14 +285,9 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValueEnum(AppInfoBoxBorder, ProfileKeys::AppInfoBoxBorder,
                            ui_settings.info_boxes.border_style);
 
-  if (SaveValue(AppInverseInfoBox, ProfileKeys::AppInverseInfoBox,
-                ui_settings.info_boxes.inverse))
-    require_restart = changed = true;
-
-  if (HasColors() &&
-      SaveValue(AppInfoBoxColors, ProfileKeys::AppInfoBoxColors,
-                ui_settings.info_boxes.use_colors))
-    require_restart = changed = true;
+  if (HasColors())
+    changed |= SaveValue(AppInfoBoxColors, ProfileKeys::AppInfoBoxColors,
+                         ui_settings.info_boxes.use_colors);
 
 #ifdef KOBO
   if (SaveValue(ShowMenuButton, ProfileKeys::ShowMenuButton,ui_settings.show_menu_button))
@@ -325,7 +313,7 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
       Display::RotateRestore();
     else {
       if (!Display::Rotate(ui_settings.display.orientation))
-        LogFormat("Display rotation failed");
+        LogString("Display rotation failed");
     }
 
 #ifdef USE_POLL_EVENT

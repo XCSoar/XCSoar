@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 #include "Triangulate.hpp"
 #include "ui/dim/Point.hpp"
@@ -176,8 +156,6 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
         heat = 0;
       }
     }
-    //LogDebug(_T("polygon thinning (%u) removed %u of %u vertices"),
-    //         min_distance, orig_num_points-num_points, orig_num_points);
   }
 
   // triangulation
@@ -251,7 +229,6 @@ _PolygonToTriangles(const PT *points, unsigned num_points,
 
     if (heat++ > num_points) {
       // if polygon edges overlap we may loop endlessly
-      //LogDebug(_T("polygon_to_triangle: bad polygon"));
       delete[] next;
       return 0;
     }
@@ -442,10 +419,6 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
 
   // copy strip over triangles
   std::copy(triangle_strip, strip, triangles);
-
-  //LogDebug(_T("triangle_to_strip: indices=%u strip indices=%u (%u%%)"),
-  //         index_count, strip - triangle_strip,
-  //         (strip - triangle_strip)*100/index_count);
 
   delete[] triangle_strip;
   delete[] vcount;

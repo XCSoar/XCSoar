@@ -1,31 +1,5 @@
-/*
- * Copyright 2022 Max Kellermann <max.kellermann@gmail.com>
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * - Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- *
- * - Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the
- * distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
- * FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
- * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+// SPDX-License-Identifier: BSD-2-Clause
+// author: Max Kellermann <max.kellermann@gmail.com>
 
 #pragma once
 
@@ -35,6 +9,15 @@
 #include <algorithm> // for std::all_of()
 #include <array>
 #include <numeric> // for std::accumulate()
+
+struct IntrusiveHashSetOptions {
+	bool constant_time_size = false;
+
+	/**
+	 * @see IntrusiveListOptions::zero_initialized
+	 */
+	bool zero_initialized = false;
+};
 
 template<IntrusiveHookMode mode=IntrusiveHookMode::NORMAL>
 struct IntrusiveHashSetHook {
@@ -52,28 +35,25 @@ struct IntrusiveHashSetHook {
 };
 
 /**
- * Detect the hook type.
- */
-template<typename U>
-struct IntrusiveHashSetHookDetection {
-	/* TODO can this be simplified somehow, without checking for
-	   all possible enum values? */
-	using type = std::conditional_t<std::is_base_of_v<IntrusiveHashSetHook<IntrusiveHookMode::NORMAL>, U>,
-					IntrusiveHashSetHook<IntrusiveHookMode::NORMAL>,
-					std::conditional_t<std::is_base_of_v<IntrusiveHashSetHook<IntrusiveHookMode::TRACK>, U>,
-							   IntrusiveHashSetHook<IntrusiveHookMode::TRACK>,
-							   std::conditional_t<std::is_base_of_v<IntrusiveHashSetHook<IntrusiveHookMode::AUTO_UNLINK>, U>,
-									      IntrusiveHashSetHook<IntrusiveHookMode::AUTO_UNLINK>,
-									      void>>>;
-};
-
-/**
  * For classes which embed #IntrusiveHashSetHook as base class.
  */
 template<typename T>
 struct IntrusiveHashSetBaseHookTraits {
+	/* a never-called helper function which is used by _Cast() */
+	template<IntrusiveHookMode mode>
+	static constexpr IntrusiveHashSetHook<mode> _Identity(const IntrusiveHashSetHook<mode> &) noexcept;
+
+	/* another never-called helper function which "calls"
+	   _Identity(), implicitly casting the item to the
+	   IntrusiveHashSetHook specialization; we use this to detect
+	   which IntrusiveHashSetHook specialization is used */
 	template<typename U>
-	using Hook = typename IntrusiveHashSetHookDetection<U>::type;
+	static constexpr auto _Cast(const U &u) noexcept {
+		return decltype(_Identity(u))();
+	}
+
+	template<typename U>
+	using Hook = decltype(_Cast(std::declval<U>()));
 
 	static constexpr T *Cast(Hook<T> *node) noexcept {
 		return static_cast<T *>(node);
@@ -105,23 +85,45 @@ struct IntrusiveHashSetMemberHookTraits {
 };
 
 /**
- * A hash table implementation which stores pointers to items which
- * have an embedded #IntrusiveHashSetHook.  The actual table is
- * embedded with a compile-time fixed size in this object.
+ * @param GetKey a function object which extracts the "key" part of an
+ * item
  */
-template<typename T, std::size_t table_size,
-	 typename Hash=typename T::Hash, typename Equal=typename T::Equal,
-	 typename HookTraits=IntrusiveHashSetBaseHookTraits<T>,
-	 bool constant_time_size=false>
-class IntrusiveHashSet {
-	[[no_unique_address]]
-	OptionalCounter<constant_time_size> counter;
+template<typename Hash, typename Equal,
+	 typename GetKey=std::identity>
+struct IntrusiveHashSetOperators {
+	using hasher = Hash;
+	using key_equal = Equal;
 
 	[[no_unique_address]]
 	Hash hash;
 
 	[[no_unique_address]]
 	Equal equal;
+
+	[[no_unique_address]]
+	GetKey get_key;
+};
+
+/**
+ * A hash table implementation which stores pointers to items which
+ * have an embedded #IntrusiveHashSetHook.  The actual table is
+ * embedded with a compile-time fixed size in this object.
+ *
+ * @param Operators a class which contains functions `hash` and
+ * `equal`
+ */
+template<typename T, std::size_t table_size,
+	 typename Operators,
+	 typename HookTraits=IntrusiveHashSetBaseHookTraits<T>,
+	 IntrusiveHashSetOptions options=IntrusiveHashSetOptions{}>
+class IntrusiveHashSet {
+	static constexpr bool constant_time_size = options.constant_time_size;
+
+	[[no_unique_address]]
+	OptionalCounter<constant_time_size> counter;
+
+	[[no_unique_address]]
+	Operators ops;
 
 	struct BucketHookTraits {
 		template<typename U>
@@ -144,7 +146,7 @@ class IntrusiveHashSet {
 		}
 	};
 
-	using Bucket = IntrusiveList<T, BucketHookTraits>;
+	using Bucket = IntrusiveList<T, BucketHookTraits, IntrusiveListOptions{.zero_initialized = options.zero_initialized}>;
 	std::array<Bucket, table_size> table;
 
 	using bucket_iterator = typename Bucket::iterator;
@@ -158,20 +160,20 @@ public:
 	using const_pointer = const T *;
 	using size_type = std::size_t;
 
-	using hasher = Hash;
-	using key_equal = Equal;
+	using hasher = typename Operators::hasher;
+	using key_equal = typename Operators::key_equal;
 
 	[[nodiscard]]
 	IntrusiveHashSet() noexcept = default;
 
 	[[nodiscard]]
 	constexpr const hasher &hash_function() const noexcept {
-		return hash;
+		return ops.hash;
 	}
 
 	[[nodiscard]]
 	constexpr const key_equal &key_eq() const noexcept {
-		return equal;
+		return ops.equal;
 	}
 
 	[[nodiscard]]
@@ -208,19 +210,44 @@ public:
 		counter.reset();
 	}
 
-	void remove_and_dispose_if(Predicate<const_reference> auto pred,
+	/**
+	 * Remove and dispose all items matching the given predicate.
+	 *
+	 * @return the number of removed items
+	 */
+	std::size_t remove_and_dispose_if(std::predicate<const_reference> auto pred,
 				   Disposer<value_type> auto disposer) noexcept {
+		std::size_t n = 0;
 		for (auto &bucket : table)
-			counter -= bucket.remove_and_dispose_if(pred, disposer);
+			n += bucket.remove_and_dispose_if(pred, disposer);
+		counter -= n;
+		return n;
 	}
 
-	constexpr void remove_and_dispose_if(const auto &key,
-					     Predicate<const_reference> auto pred,
-					     Disposer<value_type> auto disposer) noexcept {
+	/**
+	 * Remove and dispose all items with the specified key.
+	 *
+	 * @return the number of removed items
+	 */
+	constexpr std::size_t remove_and_dispose_key(const auto &key,
+						     Disposer<value_type> auto disposer) noexcept {
 		auto &bucket = GetBucket(key);
-		counter -= bucket.remove_and_dispose_if([this, &key, &pred](const auto &item){
-			return equal(key, item) && pred(item);
+		std::size_t n = bucket.remove_and_dispose_if([this, &key](const auto &item){
+			return ops.equal(key, ops.get_key(item));
 		}, disposer);
+		counter -= n;
+		return n;
+	}
+
+	constexpr std::size_t remove_and_dispose_key_if(const auto &key,
+							std::predicate<const_reference> auto pred,
+							Disposer<value_type> auto disposer) noexcept {
+		auto &bucket = GetBucket(key);
+		std::size_t n = bucket.remove_and_dispose_if([this, &key, &pred](const auto &item){
+			return ops.equal(key, ops.get_key(item)) && pred(item);
+		}, disposer);
+		counter -= n;
+		return n;
 	}
 
 	[[nodiscard]]
@@ -228,29 +255,71 @@ public:
 		return Bucket::iterator_to(item);
 	}
 
+	/**
+	 * Prepare insertion of a new item.  If the key already
+	 * exists, return an iterator to the existing item and
+	 * `false`.  If the key does not exist, return an iterator to
+	 * the bucket where the new item may be inserted using
+	 * insert() and `true`.
+	 */
 	[[nodiscard]] [[gnu::pure]]
 	constexpr std::pair<bucket_iterator, bool> insert_check(const auto &key) noexcept {
 		auto &bucket = GetBucket(key);
 		for (auto &i : bucket)
-			if (equal(key, i))
+			if (ops.equal(key, ops.get_key(i)))
 				return {bucket.iterator_to(i), false};
 
-		return {bucket.begin(), true};
+		/* bucket.end() is a pointer to the bucket's list
+		   head, a stable value that is guaranteed to be still
+		   valid when insert_commit() gets called
+		   eventually */
+		return {bucket.end(), true};
 	}
 
-	constexpr void insert(bucket_iterator bucket, reference item) noexcept {
+	/**
+	 * Like insert_check(), but existing items are only considered
+	 * conflicting if they match the given predicate.
+	 */
+	[[nodiscard]] [[gnu::pure]]
+	constexpr std::pair<bucket_iterator, bool> insert_check_if(const auto &key,
+								   std::predicate<const_reference> auto pred) noexcept {
+		auto &bucket = GetBucket(key);
+		for (auto &i : bucket)
+			if (ops.equal(key, ops.get_key(i)) && pred(i))
+				return {bucket.iterator_to(i), false};
+
+		/* bucket.end() is a pointer to the bucket's list
+		   head, a stable value that is guaranteed to be still
+		   valid when insert_commit() gets called
+		   eventually */
+		return {bucket.end(), true};
+	}
+
+	/**
+	 * Finish the insertion if insert_check() has returned true.
+	 *
+	 * @param bucket the bucket returned by insert_check()
+	 */
+	constexpr void insert_commit(bucket_iterator bucket, reference item) noexcept {
 		++counter;
-		GetBucket(item).insert(bucket, item);
+
+		/* using insert_after() so the new item gets inserted
+		   at the front of the bucket list */
+		GetBucket(ops.get_key(item)).insert_after(bucket, item);
 	}
 
+	/**
+	 * Insert a new item without checking whether the key already
+	 * exists.
+	 */
 	constexpr void insert(reference item) noexcept {
 		++counter;
-		GetBucket(item).push_front(item);
+		GetBucket(ops.get_key(item)).push_front(item);
 	}
 
 	constexpr bucket_iterator erase(bucket_iterator i) noexcept {
 		--counter;
-		return GetBucket(*i).erase(i);
+		return GetBucket(ops.get_key(*i)).erase(i);
 	}
 
 	constexpr bucket_iterator erase_and_dispose(bucket_iterator i,
@@ -264,7 +333,7 @@ public:
 	constexpr bucket_iterator find(const auto &key) noexcept {
 		auto &bucket = GetBucket(key);
 		for (auto &i : bucket)
-			if (equal(key, i))
+			if (ops.equal(key, ops.get_key(i)))
 				return bucket.iterator_to(i);
 
 		return end();
@@ -274,7 +343,7 @@ public:
 	constexpr const_bucket_iterator find(const auto &key) const noexcept {
 		auto &bucket = GetBucket(key);
 		for (auto &i : bucket)
-			if (equal(key, i))
+			if (ops.equal(key, ops.get_key(i)))
 				return bucket.iterator_to(i);
 
 		return end();
@@ -288,10 +357,10 @@ public:
 	 */
 	[[nodiscard]] [[gnu::pure]]
 	constexpr bucket_iterator find_if(const auto &key,
-					  Predicate<const_reference> auto pred) noexcept {
+					  std::predicate<const_reference> auto pred) noexcept {
 		auto &bucket = GetBucket(key);
 		for (auto &i : bucket)
-			if (equal(key, i) && pred(i))
+			if (ops.equal(key, ops.get_key(i)) && pred(i))
 				return bucket.iterator_to(i);
 
 		return end();
@@ -312,13 +381,13 @@ public:
 	 */
 	[[nodiscard]] [[gnu::pure]]
 	constexpr bucket_iterator expire_find_if(const auto &key,
-						 Predicate<const_reference> auto expired_pred,
+						 std::predicate<const_reference> auto expired_pred,
 						 Disposer<value_type> auto disposer,
-						 Predicate<const_reference> auto match_pred) noexcept {
+						 std::predicate<const_reference> auto match_pred) noexcept {
 		auto &bucket = GetBucket(key);
 
 		for (auto i = bucket.begin(), e = bucket.end(); i != e;) {
-			if (!equal(key, *i))
+			if (!ops.equal(key, ops.get_key(*i)))
 				++i;
 			else if (expired_pred(*i))
 				i = erase_and_dispose(i, disposer);
@@ -356,7 +425,7 @@ private:
 	[[gnu::pure]]
 	[[nodiscard]]
 	constexpr auto &GetBucket(K &&key) noexcept {
-		const auto h = hash(std::forward<K>(key));
+		const auto h = ops.hash(std::forward<K>(key));
 		return table[h % table_size];
 	}
 
@@ -364,7 +433,7 @@ private:
 	[[gnu::pure]]
 	[[nodiscard]]
 	constexpr const auto &GetBucket(K &&key) const noexcept {
-		const auto h = hash(std::forward<K>(key));
+		const auto h = ops.hash(std::forward<K>(key));
 		return table[h % table_size];
 	}
 };

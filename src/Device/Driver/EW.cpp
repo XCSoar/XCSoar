@@ -1,25 +1,5 @@
-/*
-Copyright_License {
-
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2022 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
 
 
 // ToDo
@@ -76,11 +56,11 @@ public:
 static void
 WriteWithChecksum(Port &port, const char *String, OperationEnvironment &env)
 {
-  port.FullWriteString(String, env, std::chrono::seconds{1});
+  port.FullWrite(String, env, std::chrono::seconds{1});
 
   char sTmp[8];
   sprintf(sTmp, "%02X\r\n", ::NMEAChecksum(String));
-  port.FullWriteString(sTmp, env, std::chrono::seconds{1});
+  port.FullWrite(sTmp, env, std::chrono::seconds{1});
 }
 
 bool
@@ -90,7 +70,7 @@ EWDevice::TryConnect(OperationEnvironment &env)
   while (--retries) {
 
     // send IO Mode command
-    port.FullWriteString("##\r\n", env, std::chrono::seconds{1});
+    port.FullWrite("##\r\n", env, std::chrono::seconds{1});
 
     try {
       port.ExpectString("IO Mode.\r", env);
@@ -148,7 +128,7 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
   sprintf(sTmp, "%-12s%-8s%-8s%-12s%-12s%-6s\r", sPilot, sGliderType, sGliderID,
           "" /* GPS Model */, "" /* GPS Serial No. */, "" /* Flight Date */
           /* format unknown, left blank (GPS has a RTC) */);
-  port.FullWriteString(sTmp, env, std::chrono::seconds{1});
+  port.FullWrite(sTmp, env, std::chrono::seconds{1});
 
   port.ExpectString("OK\r", env);
 
@@ -156,7 +136,7 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
   sprintf(sTmp, "#SUI%02d", 0);           // send pilot name
   WriteWithChecksum(port, sTmp, env);
   env.Sleep(50);
-  port.FullWriteString(PilotsName, env, std::chrono::seconds{1});
+  port.FullWrite(PilotsName, env, std::chrono::seconds{1});
   port.Write('\r');
 
   port.ExpectString("OK\r");
@@ -164,7 +144,7 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
   sprintf(sTmp, "#SUI%02d", 1);           // send type of aircraft
   WriteWithChecksum(port, sTmp, env);
   env.Sleep(50);
-  port.FullWriteString(Class, env, std::chrono::seconds{1});
+  port.FullWrite(Class, env, std::chrono::seconds{1});
   port.Write('\r');
 
   port.ExpectString("OK\r");
@@ -172,7 +152,7 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
   sprintf(sTmp, "#SUI%02d", 2);           // send aircraft ID
   WriteWithChecksum(port, sTmp, env);
   env.Sleep(50);
-  port.FullWriteString(ID, env, std::chrono::seconds{1});
+  port.FullWrite(ID, env, std::chrono::seconds{1});
   port.Write('\r');
 
   port.ExpectString("OK\r");
@@ -215,7 +195,7 @@ EWDevice::Declare(const struct Declaration &declaration,
   bool success = DeclareInner(declaration, env);
 
   // switch to NMEA mode
-  port.FullWriteString("NMEA\r\n", env, std::chrono::seconds{1});
+  port.FullWrite("NMEA\r\n", env, std::chrono::seconds{1});
 
   return success;
 }
