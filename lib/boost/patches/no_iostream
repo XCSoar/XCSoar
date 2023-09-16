@@ -66,7 +66,7 @@ Index: boost_1_83_0/boost/json/impl/serialize.ipp
 ===================================================================
 --- boost_1_83_0.orig/boost/json/impl/serialize.ipp
 +++ boost_1_83_0/boost/json/impl/serialize.ipp
-@@ -12,7 +12,9 @@
+@@ -12,11 +12,15 @@
  
  #include <boost/json/serialize.hpp>
  #include <boost/json/serializer.hpp>
@@ -76,7 +76,22 @@ Index: boost_1_83_0/boost/json/impl/serialize.ipp
  
  namespace boost {
  namespace json {
-@@ -173,6 +175,8 @@ serialize(
+ 
++#ifdef ENABLE_IOSTREAM
++
+ namespace {
+ 
+ int serialize_xalloc = std::ios::xalloc();
+@@ -50,6 +54,8 @@ get_stream_flags( std::ostream& os )
+ 
+ } // namespace
+ 
++#endif // ENABLE_IOSTREAM
++
+ static
+ void
+ serialize_impl(
+@@ -173,6 +179,8 @@ serialize(
  
  //----------------------------------------------------------
  
@@ -85,7 +100,7 @@ Index: boost_1_83_0/boost/json/impl/serialize.ipp
  //[example_operator_lt__lt_
  // Serialize a value into an output stream
  
-@@ -253,6 +257,8 @@ operator<<( std::ostream& os, serialize_
+@@ -253,6 +261,8 @@ operator<<( std::ostream& os, serialize_
      return os;
  }
  
