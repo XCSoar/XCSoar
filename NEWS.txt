@@ -5,6 +5,8 @@ Version 7.40 - not yet released
   - hide mouse cursor after 10 seconds of inactivity
 * Linux
   - fix the /etc/xcsoar data directory
+* Android
+  - raise targetSdkVersion to 33
 
 Version 7.39 - 2023/07/28
 * Android
