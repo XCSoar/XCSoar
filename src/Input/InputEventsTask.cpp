@@ -101,7 +101,12 @@ InputEvents::eventGotoLookup([[maybe_unused]] const TCHAR *misc)
   if (!backend_components->protected_task_manager)
     return;
 
-  auto wp = ShowWaypointListDialog(*data_components->waypoints, basic.location);
+  WaypointPtr wp;
+  if (StringIsEmpty(misc)) {
+    wp = ShowWaypointListDialog(*data_components->waypoints, basic.location);
+  } else {
+    wp = data_components->waypoints->LookupName(misc);
+  }
   if (wp != NULL) {
     backend_components->protected_task_manager->DoGoto(std::move(wp));
     trigger_redraw();

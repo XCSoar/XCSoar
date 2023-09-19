@@ -1,3 +1,7 @@
+Version 7.44 - not yet released
+* user interface
+ - add events for navigating to a temporary Goto waypoint
+
 Version 7.43 - not yet released
 * windows
  - black text color in airspace list like all other systems
