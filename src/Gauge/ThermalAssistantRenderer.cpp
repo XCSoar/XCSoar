@@ -98,11 +98,13 @@ DrawCircleLabelVSpeed(Canvas &canvas, PixelPoint p, double value) noexcept
 }
 
 void
-ThermalAssistantRenderer::PaintRadarPlane(Canvas &canvas) const
+ThermalAssistantRenderer::PaintRadarPlane(Canvas &canvas, double max_lift) const
 {
+  int normalised_average = NormalizeLift(vario.average, max_lift) * radius;
+
   canvas.Select(look.plane_pen);
 
-  PixelPoint p = mid.At(circling.TurningLeft() ? (int)radius : (int)-radius,
+  PixelPoint p = mid.At(circling.TurningLeft() ? normalised_average : -normalised_average,
                         0);
 
   canvas.DrawLine(p.At(+Layout::FastScale(small ? 5 : 10),
@@ -199,5 +201,5 @@ ThermalAssistantRenderer::Paint(Canvas &canvas)
   PaintPoints(canvas, lift_points);
   PaintAdvisor(canvas, lift_points);
 
-  PaintRadarPlane(canvas);
+  PaintRadarPlane(canvas,max_lift);
 }
