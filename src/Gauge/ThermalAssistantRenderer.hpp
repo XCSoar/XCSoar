@@ -80,7 +80,7 @@ protected:
 
   void CalculateLiftPoints(LiftPoints &lift_points, double max_lift) const;
   double CalculateMaxLift() const;
-  void PaintRadarPlane(Canvas &canvas) const;
+  void PaintRadarPlane(Canvas &canvas, double max_lift) const;
   void PaintRadarBackground(Canvas &canvas, double max_lift) const;
   void PaintPoints(Canvas &canvas, const LiftPoints &lift_points) const;
   void PaintAdvisor(Canvas &canvas, const LiftPoints &lift_points) const;

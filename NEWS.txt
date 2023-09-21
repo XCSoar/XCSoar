@@ -3,6 +3,7 @@ Version 7.40 - not yet released
   - Added infobox that combines ETA with AAT dT
   - FLARM: Add 100m zoom option.
   - hide mouse cursor after 10 seconds of inactivity
+  - Move glider icon on thermal assist according to 30s average.
 * Linux
   - fix the /etc/xcsoar data directory
 * Android
