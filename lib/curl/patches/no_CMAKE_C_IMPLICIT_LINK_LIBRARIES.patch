@@ -1,8 +1,8 @@
-Index: curl-7.85.0/CMakeLists.txt
+Index: curl-8.4.0/CMakeLists.txt
 ===================================================================
---- curl-7.85.0.orig/CMakeLists.txt
-+++ curl-7.85.0/CMakeLists.txt
-@@ -1504,7 +1504,7 @@ set(includedir              "\${prefix}/
+--- curl-8.4.0.orig/CMakeLists.txt
++++ curl-8.4.0/CMakeLists.txt
+@@ -1623,7 +1623,7 @@ set(includedir              "\${prefix}/
  set(LDFLAGS                 "${CMAKE_SHARED_LINKER_FLAGS}")
  set(LIBCURL_LIBS            "")
  set(libdir                  "${CMAKE_INSTALL_PREFIX}/lib")
