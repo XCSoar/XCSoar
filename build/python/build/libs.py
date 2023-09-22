@@ -144,13 +144,18 @@ libfmt = CmakeProject(
 )
 
 libsodium = AutotoolsProject(
-    'https://download.libsodium.org/libsodium/releases/libsodium-1.0.18.tar.gz',
-    "https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz",
-    '6f504490b342a4f8a4c4a02fc9b866cbef8622d5df4e5452b46be121e46636c1',
+    'https://download.libsodium.org/libsodium/releases/libsodium-1.0.19.tar.gz',
+    'https://github.com/jedisct1/libsodium/releases/download/1.0.19-RELEASE/libsodium-1.0.19.tar.gz',
+    '018d79fe0a045cca07331d37bd0cb57b2e838c51bc48fd837a1472e50068bbea',
     'include/sodium/crypto_hash_sha256.h',
     [
         '--disable-shared', '--enable-static',
     ],
+
+    # libsodium-1.0.19.tar.gz contains a weirdly named top-level directory
+    base='libsodium-stable',
+    name='libsodium',
+    version='1.0.19',
 
     # suppress "visibility default" from sodium/export.h
     cppflags='-DSODIUM_STATIC'
