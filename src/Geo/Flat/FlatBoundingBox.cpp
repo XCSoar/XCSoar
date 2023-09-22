@@ -91,8 +91,7 @@ FlatGeoPoint
 FlatBoundingBox::GetCenter() const noexcept
 {
   /// @todo This will break if overlaps 360/0
-  return FlatGeoPoint((lower_left.x + upper_right.x) / 2,
-                      (lower_left.y + upper_right.y) / 2);
+  return (lower_left + upper_right) / 2;
 }
 
 bool
