@@ -17,7 +17,7 @@ struct BulkPixelPoint : Point2D<GLvalue, int> {
     :Point2D(_x, _y) {}
 
   constexpr BulkPixelPoint(PixelPoint src) noexcept
-    :Point2D(src.x, src.y) {}
+    :Point2D(src) {}
 
   constexpr operator PixelPoint() const noexcept {
     return PixelPoint(x, y);
