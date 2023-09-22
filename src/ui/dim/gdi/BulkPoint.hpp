@@ -10,25 +10,26 @@
  * A point structure to be used in arrays.
  */
 struct BulkPixelPoint : public tagPOINT {
-  BulkPixelPoint() = default;
+  constexpr BulkPixelPoint() noexcept = default;
 
-  constexpr BulkPixelPoint(LONG _x, LONG _y)
+  constexpr BulkPixelPoint(LONG _x, LONG _y) noexcept
     :tagPOINT({_x, _y}) {}
 
-  explicit constexpr BulkPixelPoint(const POINT &other):tagPOINT(other) {}
+  explicit constexpr BulkPixelPoint(const POINT &other) noexcept
+    :tagPOINT(other) {}
 
-  constexpr BulkPixelPoint(PixelPoint src)
+  constexpr BulkPixelPoint(PixelPoint src) noexcept
     :tagPOINT({src.x, src.y}) {}
 
-  constexpr operator PixelPoint() const {
+  constexpr operator PixelPoint() const noexcept {
     return PixelPoint(x, y);
   }
 
-  constexpr BulkPixelPoint operator+(BulkPixelPoint other) const {
+  constexpr BulkPixelPoint operator+(BulkPixelPoint other) const noexcept {
     return { x + other.x, y + other.y };
   }
 
-  constexpr BulkPixelPoint operator-(BulkPixelPoint other) const {
+  constexpr BulkPixelPoint operator-(BulkPixelPoint other) const noexcept {
     return { x - other.x, y - other.y };
   }
 

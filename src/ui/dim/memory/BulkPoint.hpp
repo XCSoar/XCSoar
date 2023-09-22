@@ -12,6 +12,6 @@ struct BulkPixelPoint : PixelPoint {
   BulkPixelPoint() = default;
 
   template<typename... Args>
-  constexpr BulkPixelPoint(Args&&... args)
+  constexpr BulkPixelPoint(Args&&... args) noexcept
     :PixelPoint(args...) {}
 };
