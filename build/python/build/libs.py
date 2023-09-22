@@ -152,6 +152,11 @@ libsodium = AutotoolsProject(
         '--disable-shared', '--enable-static',
     ],
 
+    per_arch_cflags = {
+        # workaround for https://github.com/jedisct1/libsodium/issues/1314
+        'aarch64-linux-android': '-march=armv8-a+crypto',
+    },
+
     # libsodium-1.0.19.tar.gz contains a weirdly named top-level directory
     base='libsodium-stable',
     name='libsodium',
