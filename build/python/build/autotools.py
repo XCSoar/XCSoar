@@ -1,5 +1,6 @@
 import os.path, subprocess, sys
 from typing import Collection, Iterable, Optional
+from collections.abc import Mapping
 
 from build.makeproject import MakeProject
 from .toolchain import AnyToolchain
@@ -8,6 +9,7 @@ class AutotoolsProject(MakeProject):
     def __init__(self, url: str, alternative_url: Optional[str], md5: str, installed: str,
                  configure_args: Iterable[str]=[],
                  autogen: bool=False,
+                 per_arch_cflags: Optional[Mapping[str, str]]=None,
                  cppflags: str='',
                  ldflags: str='',
                  libs: str='',
@@ -18,6 +20,7 @@ class AutotoolsProject(MakeProject):
         MakeProject.__init__(self, url, alternative_url, md5, installed, **kwargs)
         self.configure_args = list(configure_args)
         self.autogen = autogen
+        self.per_arch_cflags = per_arch_cflags
         self.cppflags = cppflags
         self.ldflags = ldflags
         self.libs = libs
@@ -54,12 +57,16 @@ class AutotoolsProject(MakeProject):
         if install_prefix is None:
             install_prefix = toolchain.install_prefix
 
+        arch_cflags = ''
+        if self.per_arch_cflags is not None and toolchain.host_triplet is not None:
+            arch_cflags = self.per_arch_cflags.get(toolchain.host_triplet, '')
+
         configure = [
             os.path.join(src, 'configure'),
             'CC=' + toolchain.cc,
             'CXX=' + toolchain.cxx,
-            'CFLAGS=' + toolchain.cflags,
-            'CXXFLAGS=' + toolchain.cxxflags,
+            'CFLAGS=' + toolchain.cflags + ' ' + arch_cflags,
+            'CXXFLAGS=' + toolchain.cxxflags + ' ' + arch_cflags,
             'CPPFLAGS=' + cppflags + ' ' + self.cppflags,
             'LDFLAGS=' + toolchain.ldflags + ' ' + self.ldflags,
             'LIBS=' + toolchain.libs + ' ' + self.libs,
