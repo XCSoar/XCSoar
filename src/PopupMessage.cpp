@@ -134,27 +134,13 @@ PopupMessage::CalculateWidth() const noexcept
 }
 
 PixelRect
-PopupMessage::GetRect(unsigned width, unsigned height) const noexcept
+PopupMessage::GetRect(PixelSize size) const noexcept
 {
-  PixelRect rthis;
-
   if (settings.popup_message_position == UISettings::PopupMessagePosition::TOP_LEFT) {
-    rthis.top = 0;
-    rthis.left = 0;
-    rthis.bottom = height;
-    rthis.right = width;
+    return PixelRect{size};
   } else {
-    const int midx = (rc.right + rc.left) / 2;
-    const int midy = (rc.bottom + rc.top) / 2;
-    const int h1 = height / 2;
-    const int h2 = height - h1;
-    rthis.left = midx-width/2;
-    rthis.right = midx+width/2;
-    rthis.top = midy-h1;
-    rthis.bottom = midy+h2;
+    return PixelRect::Centered(rc.GetCenter(), size);
   }
-
-  return rthis;
 }
 
 PixelRect
@@ -164,7 +150,7 @@ PopupMessage::GetRect() const noexcept
   const unsigned height = renderer.GetHeight(look.text_font, width, text)
     + 2 * Layout::GetTextPadding();
 
-  return GetRect(width, height);
+  return GetRect({width, height});
 }
 
 void
