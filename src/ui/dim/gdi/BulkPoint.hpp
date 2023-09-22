@@ -31,4 +31,8 @@ struct BulkPixelPoint : public tagPOINT {
   constexpr BulkPixelPoint operator-(BulkPixelPoint other) const {
     return { x - other.x, y - other.y };
   }
+
+  constexpr BulkPixelPoint operator-() const noexcept {
+    return { -x, -y };
+  }
 };

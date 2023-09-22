@@ -43,6 +43,11 @@ struct Point2D {
     return { scalar_type(x - other.x), scalar_type(y - other.y) };
   }
 
+  constexpr Point2D<T, PT> operator-() const noexcept
+    requires(std::is_signed_v<T>) {
+    return { static_cast<T>(-x), static_cast<T>(-y) };
+  }
+
   Point2D<T, PT> &operator+=(Point2D<T, PT> other) noexcept {
     x += other.x;
     y += other.y;
