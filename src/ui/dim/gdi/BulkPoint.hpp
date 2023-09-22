@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
+
 #pragma once
 
 #include "ui/dim/Point.hpp"
@@ -35,5 +36,17 @@ struct BulkPixelPoint : public tagPOINT {
 
   constexpr BulkPixelPoint operator-() const noexcept {
     return { -x, -y };
+  }
+
+  constexpr BulkPixelPoint &operator+=(BulkPixelPoint other) noexcept {
+    x += other.x;
+    y += other.y;
+    return *this;
+  }
+
+  constexpr BulkPixelPoint &operator-=(BulkPixelPoint other) noexcept {
+    x -= other.x;
+    y -= other.y;
+    return *this;
   }
 };
