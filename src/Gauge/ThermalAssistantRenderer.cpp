@@ -58,16 +58,15 @@ ThermalAssistantRenderer::CalculateLiftPoints(LiftPoints &lift_points,
     auto sincos = angle.SinCos();
     double scale = NormalizeLift(vario.lift_database[i], max_lift) * radius;
 
-    lift_points[i].x = (int)(sincos.second * scale);
-    lift_points[i].y = (int)(sincos.first * scale);
+    lift_points[i] = {
+      (int)(sincos.second * scale),
+      (int)(sincos.first * scale),
+    };
 
-    if (!circling.TurningLeft()) {
-      lift_points[i].x *= -1;
-      lift_points[i].y *= -1;
-    }
+    if (!circling.TurningLeft())
+      lift_points[i] = -lift_points[i];
 
-    lift_points[i].x += mid.x;
-    lift_points[i].y += mid.y;
+    lift_points[i] += BulkPixelPoint{mid};
   }
 }
 
