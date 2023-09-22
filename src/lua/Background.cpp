@@ -21,19 +21,21 @@ class BackgroundLua final
   Lua::StatePtr state;
 
 public:
-  explicit BackgroundLua(Lua::StatePtr &&_state):state(std::move(_state)) {
+  explicit BackgroundLua(Lua::StatePtr &&_state) noexcept
+    :state(std::move(_state))
+  {
     Lua::SetRegistry(state.get(), background_lua_key, Lua::LightUserData(this));
     Lua::SetPersistentCallback(state.get(), PersistentCallback);
   }
 
-  ~BackgroundLua() {
+  ~BackgroundLua() noexcept {
     Lua::SetRegistry(state.get(), background_lua_key, nullptr);
   }
 
 private:
-  void PersistentCallback();
+  void PersistentCallback() noexcept;
 
-  static void PersistentCallback(lua_State *L) {
+  static void PersistentCallback(lua_State *L) noexcept {
     auto *b = (BackgroundLua *)
       Lua::GetRegistryLightUserData(L, background_lua_key);
     if (b != nullptr) {
@@ -49,8 +51,8 @@ static IntrusiveList<BackgroundLua> background;
 
 }
 
-void
-BackgroundLua::PersistentCallback()
+inline void
+BackgroundLua::PersistentCallback() noexcept
 {
   Lua::SetRegistry(state.get(), background_lua_key, nullptr);
   Lua::background.erase_and_dispose(Lua::background.iterator_to(*this),
@@ -58,14 +60,14 @@ BackgroundLua::PersistentCallback()
 }
 
 void
-Lua::AddBackground(StatePtr &&state)
+Lua::AddBackground(StatePtr &&state) noexcept
 {
   auto *b = new BackgroundLua(std::move(state));
   background.push_front(*b);
 }
 
 void
-Lua::StopAllBackground()
+Lua::StopAllBackground() noexcept
 {
   background.clear_and_dispose(DeleteDisposer());
 }
