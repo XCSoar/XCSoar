@@ -26,7 +26,7 @@ OZPreviewRenderer::Draw(Canvas &canvas, const ObservationZonePoint &oz,
 
   WindowProjection projection;
   projection.SetScreenSize({radius * 2, radius * 2});
-  projection.SetScreenOrigin(pt.x, pt.y);
+  projection.SetScreenOrigin(pt);
   projection.SetGeoLocation(center);
   projection.SetScale(scale);
   projection.SetScreenAngle(Angle::Zero());
