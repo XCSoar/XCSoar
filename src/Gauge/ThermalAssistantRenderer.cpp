@@ -61,7 +61,7 @@ ThermalAssistantRenderer::CalculateLiftPoints(LiftPoints &lift_points,
                                               double max_lift) const
 {
   Angle angle = -direction;
-  constexpr Angle delta = Angle::FullCircle() / unsigned(std::tuple_size<LiftDatabase>());
+  constexpr Angle delta = Angle::FullCircle() / std::tuple_size<LiftDatabase>();
 
   for (unsigned i = 0; i < lift_points.size(); i++, angle += delta) {
     auto sincos = angle.SinCos();
