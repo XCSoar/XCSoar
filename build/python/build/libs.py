@@ -93,9 +93,9 @@ musl = MuslProject(
 )
 
 openssl = OpenSSLProject(
-    'https://www.openssl.org/source/openssl-3.1.2.tar.gz',
-    'https://artfiles.org/openssl.org/source/openssl-3.1.2.tar.gz',
-    'a0ce69b8b97ea6a35b96875235aa453b966ba3cba8af2de23657d8b6767d6539',
+    'https://www.openssl.org/source/openssl-3.1.3.tar.gz',
+    'https://artfiles.org/openssl.org/source/openssl-3.1.3.tar.gz',
+    'f0316a2ebd89e7f2352976445458689f80302093788c466692fb2a188b2eacf6',
     'include/openssl/ossl_typ.h',
 )
 
@@ -323,7 +323,7 @@ simple_usbmodeswitch = AutotoolsProject(
 libtiff = CmakeProject(
     'http://download.osgeo.org/libtiff/tiff-4.6.0.tar.xz',
     'https://fossies.org/linux/misc/tiff-4.6.0.tar.xz',
-    '3c080867114c26edab3129644a63b708028a90514b7fe3126e38e11d24f9f88a',
+    'e178649607d1e22b51cf361dd20a3753f244f022eefab1f2f218fc62ebaf87d2',
     'lib/libtiff.a',
     [
         '-DBUILD_SHARED_LIBS=OFF',
