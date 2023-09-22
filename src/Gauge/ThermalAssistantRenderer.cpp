@@ -15,21 +15,12 @@
 #endif
 
 #include <algorithm> // for std::clamp()
+#include <numeric> // for std::accumulate()
 
 PixelPoint
 ThermalAssistantRenderer::LiftPoints::GetAverage() const
 {
-  PixelPoint avg(0, 0);
-
-  for (auto it = begin(), it_end = end(); it != it_end; ++it) {
-    avg.x += it->x;
-    avg.y += it->y;
-  }
-
-  avg.x /= size();
-  avg.y /= size();
-
-  return avg;
+  return std::accumulate(begin(), end(), PixelPoint{}) / size();
 }
 
 ThermalAssistantRenderer::ThermalAssistantRenderer(const ThermalAssistantLook &_look,
