@@ -243,9 +243,9 @@ sqlite3 = AutotoolsProject(
 )
 
 proj = CmakeProject(
-    'http://download.osgeo.org/proj/proj-9.2.1.tar.gz',
-    'https://fossies.org/linux/privat/proj-9.2.1.tar.gz',
-    '15ebf4afa8744b9e6fccb5d571fc9f338dc3adcf99907d9e62d1af815d4971a1',
+    'http://download.osgeo.org/proj/proj-9.3.0.tar.gz',
+    'https://fossies.org/linux/privat/proj-9.3.0.tar.gz',
+    'f1d70cb8873bb4429a03c437c65c41c4',
     'lib/libproj.a',
     [
         '-DBUILD_TESTING=OFF',
