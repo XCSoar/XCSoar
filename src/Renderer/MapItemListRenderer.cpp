@@ -128,8 +128,7 @@ Draw(Canvas &canvas, PixelRect rc,
     int relative_arrival_altitude =
       item.reach.direct - item.elevation;
 
-    FormatRelativeUserAltitude(relative_arrival_altitude,
-                               altitude_buffer, ARRAY_SIZE(altitude_buffer));
+    FormatRelativeUserAltitude(relative_arrival_altitude, altitude_buffer);
 
     buffer.AppendFormat(_T("%s %s, "), altitude_buffer, _("AGL"));
   }
@@ -152,7 +151,7 @@ Draw(Canvas &canvas, PixelRect rc,
           item.reach.terrain - item.elevation;
 
       FormatRelativeUserAltitude(relative_arrival_altitude,
-                                 altitude_buffer, ARRAY_SIZE(altitude_buffer));
+                                 altitude_buffer);
 
      buffer.AppendFormat(_T("%s %s, "), altitude_buffer, _("AGL"));
     }
@@ -251,7 +250,7 @@ Draw(Canvas &canvas, PixelRect rc,
 
   StaticString<256> buffer;
   TCHAR lift_buffer[32];
-  FormatUserVerticalSpeed(thermal.lift_rate, lift_buffer, 32);
+  FormatUserVerticalSpeed(thermal.lift_rate, lift_buffer);
 
   auto timespan = TimeStamp{BrokenDateTime::NowUTC().DurationSinceMidnight()} - thermal.time;
   if (timespan.count() < 0)
@@ -356,7 +355,7 @@ Draw(Canvas &canvas, PixelRect rc,
 
     if (traffic->climb_rate_avg30s_available) {
       TCHAR tmp[15];
-      FormatUserVerticalSpeed(traffic->climb_rate_avg30s, tmp, 15);
+      FormatUserVerticalSpeed(traffic->climb_rate_avg30s, tmp);
       info_string.AppendFormat(_T(", %s: %s"), _("Vario"), tmp);
     }
   }

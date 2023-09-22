@@ -141,8 +141,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
     const GeoVector vector = basic.location.DistanceBearing(waypoint->location);
 
     TCHAR distance_buffer[32];
-    FormatUserDistanceSmart(vector.distance, distance_buffer,
-                                   ARRAY_SIZE(distance_buffer));
+    FormatUserDistanceSmart(vector.distance, distance_buffer);
 
     FormatBearing(buffer.buffer(), buffer.capacity(),
                   vector.bearing, distance_buffer);

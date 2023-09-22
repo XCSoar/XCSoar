@@ -2,7 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "ThermalAssistantRenderer.hpp"
-#include "util/Macros.hpp"
 #include "NMEA/Attitude.hpp"
 #include "NMEA/Derived.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -123,7 +122,7 @@ static void
 DrawCircleLabelVSpeed(Canvas &canvas, PixelPoint p, double value) noexcept
 {
   TCHAR buffer[10];
-  FormatUserVerticalSpeed(value, buffer, ARRAY_SIZE(buffer));
+  FormatUserVerticalSpeed(value, buffer);
   DrawCircleLabel(canvas, p, buffer);
 }
 

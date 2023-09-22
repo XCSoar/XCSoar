@@ -655,12 +655,10 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const noexcept
   canvas.SetBackgroundColor(look.background_color);
 
   TCHAR distance_string[10];
-  FormatUserDistanceSmart(distance, distance_string,
-                          ARRAY_SIZE(distance_string), 1000);
+  FormatUserDistanceSmart(distance, distance_string, true, 1000);
   DrawCircleLabel(canvas, radar_mid + PixelSize{0u, radius}, distance_string);
 
-  FormatUserDistanceSmart(distance / 2, distance_string,
-                          ARRAY_SIZE(distance_string), 1000);
+  FormatUserDistanceSmart(distance / 2, distance_string, true, 1000);
   DrawCircleLabel(canvas, radar_mid + PixelSize{0u, radius / 2},
                   distance_string);
 
