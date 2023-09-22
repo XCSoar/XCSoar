@@ -17,8 +17,8 @@
 #include <algorithm> // for std::clamp()
 #include <numeric> // for std::accumulate()
 
-PixelPoint
-ThermalAssistantRenderer::LiftPoints::GetAverage() const
+inline PixelPoint
+ThermalAssistantRenderer::LiftPoints::GetAverage() const noexcept
 {
   return std::accumulate(begin(), end(), PixelPoint{}) / size();
 }
@@ -71,8 +71,8 @@ ThermalAssistantRenderer::CalculateLiftPoints(LiftPoints &lift_points,
   }
 }
 
-double
-ThermalAssistantRenderer::NormalizeLift(double lift, double max_lift)
+inline constexpr double
+ThermalAssistantRenderer::NormalizeLift(double lift, double max_lift) noexcept
 {
   lift = (lift + max_lift) / (2 * max_lift);
   return std::clamp(lift, 0., 1.);

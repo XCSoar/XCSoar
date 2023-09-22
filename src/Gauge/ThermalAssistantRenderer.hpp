@@ -22,7 +22,8 @@ class ThermalAssistantRenderer
                                       std::tuple_size<LiftDatabase>::value>
   {
   public:
-    PixelPoint GetAverage() const;
+    [[gnu::pure]]
+    PixelPoint GetAverage() const noexcept;
   };
 
 protected:
@@ -76,7 +77,7 @@ protected:
    * 0.5: lift = zero lift
    * 1.0: lift = max_lift
    */
-  static double NormalizeLift(double lift, double max_lift);
+  static constexpr double NormalizeLift(double lift, double max_lift) noexcept;
 
   void CalculateLiftPoints(LiftPoints &lift_points, double max_lift) const;
   double CalculateMaxLift() const;
