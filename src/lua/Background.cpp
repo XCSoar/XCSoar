@@ -5,19 +5,18 @@
 #include "Util.hxx"
 #include "Persistent.hpp"
 #include "util/DeleteDisposer.hxx"
+#include "util/IntrusiveList.hxx"
 
 extern "C" {
 #include <lua.h>
 }
-
-#include <boost/intrusive/list.hpp>
 
 #include <cassert>
 
 static constexpr char background_lua_key[] = "xcsoar.background";
 
 class BackgroundLua final
-  : public boost::intrusive::list_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>>
+  : public IntrusiveListHook<IntrusiveHookMode::NORMAL>
 {
   Lua::StatePtr state;
 
@@ -46,8 +45,7 @@ private:
 
 namespace Lua {
 
-static boost::intrusive::list<BackgroundLua,
-                              boost::intrusive::constant_time_size<false>> background;
+static IntrusiveList<BackgroundLua> background;
 
 }
 
