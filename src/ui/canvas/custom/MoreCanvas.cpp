@@ -10,6 +10,8 @@
 
 #include <algorithm>
 #include <cassert>
+
+#include <limits.h>
 #include <string.h>
 #include <winuser.h>
 
@@ -46,8 +48,9 @@ Canvas::DrawFormattedText(PixelRect r, tstring_view text,
     return 0;
 
   unsigned skip = font->GetLineSpacing();
-  unsigned max_lines = (format & DT_CALCRECT) ? -1 :
-    (r.GetHeight() + skip - 1) / skip;
+  unsigned max_lines = (format & DT_CALCRECT)
+    ? UINT_MAX
+    : (r.GetHeight() + skip - 1) / skip;
 
   TCHAR *duplicated = new TCHAR[text.size() + 1], *p = duplicated;
   unsigned lines = 1;
