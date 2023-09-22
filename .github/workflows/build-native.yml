@@ -330,8 +330,9 @@ jobs:
 
       - name: Install Android NDK
         # We need NDK r26, but the GitHub runner has only r25
-        working-directory: output/download
         run: |
+          mkdir -p output/download
+          cd output/download
           wget --quiet https://dl.google.com/android/repository/android-ndk-${{env.NDK}}-linux.zip
           unzip -q android-ndk-${{env.NDK}}-linux.zip
           rm android-ndk-${{env.NDK}}-linux.zip
