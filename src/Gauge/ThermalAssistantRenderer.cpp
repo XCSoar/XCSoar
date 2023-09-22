@@ -88,6 +88,25 @@ ThermalAssistantRenderer::NormalizeLift(double lift, double max_lift)
   return std::clamp(lift, 0., 1.);
 }
 
+static void
+DrawCircleLabel(Canvas &canvas, PixelPoint p,
+                tstring_view text) noexcept
+{
+  const auto size = canvas.CalcTextSize(text);
+  p.x -= size.width / 2;
+  p.y -= size.height * 3 / 4;
+
+  canvas.DrawText(p, text);
+}
+
+static void
+DrawCircleLabelVSpeed(Canvas &canvas, PixelPoint p, double value) noexcept
+{
+  TCHAR buffer[10];
+  FormatUserVerticalSpeed(value, buffer, ARRAY_SIZE(buffer));
+  DrawCircleLabel(canvas, p, buffer);
+}
+
 void
 ThermalAssistantRenderer::PaintRadarPlane(Canvas &canvas) const
 {
@@ -106,25 +125,6 @@ ThermalAssistantRenderer::PaintRadarPlane(Canvas &canvas) const
                        +Layout::FastScale(small ? 2 : 4)),
                   p.At(-Layout::FastScale(small ? 2 : 4),
                        +Layout::FastScale(small ? 2 : 4)));
-}
-
-static void
-DrawCircleLabel(Canvas &canvas, PixelPoint p,
-                tstring_view text) noexcept
-{
-  const auto size = canvas.CalcTextSize(text);
-  p.x -= size.width / 2;
-  p.y -= size.height * 3 / 4;
-
-  canvas.DrawText(p, text);
-}
-
-static void
-DrawCircleLabelVSpeed(Canvas &canvas, PixelPoint p, double value) noexcept
-{
-  TCHAR buffer[10];
-  FormatUserVerticalSpeed(value, buffer, ARRAY_SIZE(buffer));
-  DrawCircleLabel(canvas, p, buffer);
 }
 
 void
