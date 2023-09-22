@@ -331,11 +331,8 @@ CreateDistanceDataField(DataFieldListener *listener)
   DataFieldEnum *df = new DataFieldEnum(listener);
   df->addEnumText(_T("*"));
 
-  TCHAR buffer[22];
   for (unsigned i = 1; i < ARRAY_SIZE(distance_filter_items); i++) {
-    FormatUserDistance(Units::ToSysDistance(distance_filter_items[i]),
-                       buffer);
-    df->addEnumText(buffer);
+    df->addEnumText(FormatUserDistance(Units::ToSysDistance(distance_filter_items[i])));
   }
 
   df->SetValue(dialog_state.distance_index);

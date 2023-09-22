@@ -82,6 +82,16 @@ void
 FormatUserDistance(double value, TCHAR *buffer,
                    bool include_unit = true, int precision = 0) noexcept;
 
+[[gnu::const]]
+static inline auto
+FormatUserDistance(double value,
+                   bool include_unit = true, int precision = 0) noexcept
+{
+  BasicStringBuffer<TCHAR, 32> buffer;
+  FormatUserDistance(value, buffer.data(), include_unit, precision);
+  return buffer;
+}
+
 /**
  * Converts a distance into a formatted string using the smaller version
  * of the user-defined distance unit (km -> m, nm -> ft, sm -> ft)
@@ -110,10 +120,13 @@ FormatUserDistanceSmart(double value, TCHAR *buffer,
 
 [[gnu::const]]
 static inline auto
-FormatUserDistanceSmart(double value) noexcept
+FormatUserDistanceSmart(double value, bool include_unit = true,
+                        double small_unit_threshold = 0,
+                        double precision_threshold = 100) noexcept
 {
   BasicStringBuffer<TCHAR, 32> buffer;
-  FormatUserDistanceSmart(value, buffer.data());
+  FormatUserDistanceSmart(value, buffer.data(), include_unit,
+                          small_unit_threshold, precision_threshold);
   return buffer;
 }
 
@@ -151,6 +164,15 @@ FormatUserSpeed(double value, bool precision=true) noexcept
 void
 FormatUserWindSpeed(double value, TCHAR *buffer,
                     bool include_unit = true, bool Precision = true) noexcept;
+
+[[gnu::const]]
+static inline auto
+FormatUserWindSpeed(double value, bool include_unit = true, bool precision=true) noexcept
+{
+  BasicStringBuffer<TCHAR, 32> buffer;
+  FormatUserWindSpeed(value, buffer.data(), include_unit, precision);
+  return buffer;
+}
 
 /**
  * Convert a speed [m/s] to the user's task speed and format it into
@@ -199,6 +221,15 @@ GetUserVerticalSpeedStep() noexcept;
 void
 FormatUserVerticalSpeed(double value, TCHAR *buffer,
                         bool include_unit = true, bool include_sign = true) noexcept;
+
+[[gnu::const]]
+static inline auto
+FormatUserVerticalSpeed(double value, bool include_unit = true, bool include_sign = true) noexcept
+{
+  BasicStringBuffer<TCHAR, 32> buffer;
+  FormatUserVerticalSpeed(value, buffer.data(), include_unit, include_sign);
+  return buffer;
+}
 
 /**
  * Converts a temperature into a formatted string

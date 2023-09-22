@@ -145,9 +145,7 @@ InputEvents::eventMacCready(const TCHAR *misc)
       Message::AddMessage(_("Auto. MacCready off"));
     }
   } else if (StringIsEqual(misc, _T("show"))) {
-    TCHAR Temp[100];
-    FormatUserVerticalSpeed(mc, Temp, false);
-    Message::AddMessage(_("MacCready "), Temp);
+    Message::AddMessage(_("MacCready "), FormatUserVerticalSpeed(mc, false));
   }
 }
 

@@ -238,8 +238,8 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   if (show_leg_info) {
     // Draw leg distance
-    FormatUserDistanceSmart(leg.distance, buffer, true);
-    const int x1 = row_renderer.DrawRightFirstRow(canvas, rc, buffer);
+    const int x1 = row_renderer.DrawRightFirstRow(canvas, rc,
+                                                  FormatUserDistanceSmart(leg.distance));
 
     // Draw leg bearing
     FormatBearing(buffer, ARRAY_SIZE(buffer), leg.bearing);

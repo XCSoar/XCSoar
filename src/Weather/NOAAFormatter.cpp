@@ -78,11 +78,9 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
       buffer.Format(_T("%s: "), _("Wind"));
       buffer.append({value, value_length});
     } else {
-      TCHAR wind_speed_buffer[16];
-      FormatUserWindSpeed(parsed.wind.norm, wind_speed_buffer);
-
       buffer.Format(_T("%s: %.0f" DEG " %s"), _("Wind"),
-                    (double)parsed.wind.bearing.Degrees(), wind_speed_buffer);
+                    (double)parsed.wind.bearing.Degrees(),
+                    FormatUserWindSpeed(parsed.wind.norm).c_str());
     }
     output += buffer;
     output += '\n';

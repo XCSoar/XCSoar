@@ -249,15 +249,14 @@ Draw(Canvas &canvas, PixelRect rc,
   row_renderer.DrawFirstRow(canvas, rc, _("Thermal"));
 
   StaticString<256> buffer;
-  TCHAR lift_buffer[32];
-  FormatUserVerticalSpeed(thermal.lift_rate, lift_buffer);
 
   auto timespan = TimeStamp{BrokenDateTime::NowUTC().DurationSinceMidnight()} - thermal.time;
   if (timespan.count() < 0)
     timespan += hours{24};
 
   buffer.Format(_T("%s: %s - left %s ago (%s)"),
-                _("Avg. lift"), lift_buffer,
+                _("Avg. lift"),
+                FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
                 FormatTimespanSmart(timespan).c_str(),
                 FormatLocalTimeHHMM(thermal.time, utc_offset).c_str());
   row_renderer.DrawSecondRow(canvas, rc, buffer);
@@ -354,9 +353,8 @@ Draw(Canvas &canvas, PixelRect rc,
                                FormatUserAltitude(traffic->altitude).c_str());
 
     if (traffic->climb_rate_avg30s_available) {
-      TCHAR tmp[15];
-      FormatUserVerticalSpeed(traffic->climb_rate_avg30s, tmp);
-      info_string.AppendFormat(_T(", %s: %s"), _("Vario"), tmp);
+      info_string.AppendFormat(_T(", %s: %s"), _("Vario"),
+                               FormatUserVerticalSpeed(traffic->climb_rate_avg30s).c_str());
     }
   }
 
