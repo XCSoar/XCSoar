@@ -12,6 +12,7 @@
 #include "Formatter/AngleFormatter.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/dim/Rect.hpp"
+#include "Renderer/RadarRenderer.hpp"
 #include "Renderer/WindArrowRenderer.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
@@ -194,19 +195,14 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas,
 
   const auto &info = CommonInterface::Calculated();
 
-  const auto pt = rc.GetCenter();
-
   const unsigned scale = Layout::Scale(100U);
 
-  const unsigned padding = Layout::FastScale(10u);
-  unsigned size = std::min(rc.GetWidth(), rc.GetHeight());
-
-  if (size > padding)
-    size -= padding;
+  RadarRenderer radar_renderer{Layout::FastScale(10u)};
+  radar_renderer.UpdateLayout(rc);
 
   // Normalize the size because the Layout::Scale is applied
   // by the DrawArrow() function again
-  size = size * 100 / scale;
+  const unsigned size = radar_renderer.GetRadius() * 100 / scale;
 
   auto angle = info.wind.bearing - CommonInterface::Basic().attitude.heading;
 
@@ -218,7 +214,7 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas,
   auto style = CommonInterface::GetMapSettings().wind_arrow_style;
 
   WindArrowRenderer renderer(UIGlobals::GetLook().wind_arrow_info_box);
-  renderer.DrawArrow(canvas, pt, angle,
+  renderer.DrawArrow(canvas, radar_renderer.GetCenter(), angle,
                      arrow_width, length, arrow_tail_length,
                      style, offset, scale);
 }

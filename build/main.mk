@@ -206,6 +206,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/ThermalBandRenderer.cpp \
 	$(SRC)/Renderer/TaskProgressRenderer.cpp \
 	$(SRC)/Renderer/ClimbPercentRenderer.cpp \
+	$(SRC)/Renderer/RadarRenderer.cpp \
 	\
 	$(SRC)/Airspace/AirspaceGlue.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \

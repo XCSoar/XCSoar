@@ -3,9 +3,9 @@
 
 #pragma once
 
+#include "Renderer/RadarRenderer.hpp"
 #include "NMEA/CirclingInfo.hpp"
 #include "NMEA/VarioInfo.hpp"
-#include "ui/dim/Point.hpp"
 #include "ui/dim/BulkPoint.hpp"
 
 #include <array>
@@ -29,18 +29,7 @@ class ThermalAssistantRenderer
 protected:
   const ThermalAssistantLook &look;
 
-  PixelPoint mid;
-
-  /**
-   * The minimum distance between the window boundary and the biggest
-   * circle in pixels.
-   */
-  unsigned padding;
-
-  /**
-   * The radius of the biggest circle in pixels.
-   */
-  unsigned radius;
+  RadarRenderer radar_renderer;
 
   bool small;
 
@@ -54,16 +43,19 @@ public:
 
 public:
   const PixelPoint &GetMiddle() const {
-    return mid;
+    return radar_renderer.GetCenter();
   }
 
   unsigned GetRadius() const{
-    return radius;
+    return radar_renderer.GetRadius();
   }
 
   void Update(const AttitudeState &attitude, const DerivedInfo &_derived);
 
-  void UpdateLayout(const PixelRect &rc);
+  void UpdateLayout(const PixelRect &rc) noexcept {
+    radar_renderer.UpdateLayout(rc);
+  }
+
   void Paint(Canvas &canvas);
 
   const ThermalAssistantLook &GetLook() {

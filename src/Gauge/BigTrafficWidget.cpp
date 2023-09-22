@@ -260,13 +260,13 @@ FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
 
   BulkPixelPoint triangle[3];
   triangle[0].x = 0;
-  triangle[0].y = -radius / Layout::FastScale(1) + 15;
+  triangle[0].y = -(int)radar_renderer.GetRadius() / Layout::FastScale(1) + 15;
   triangle[1].x = 7;
   triangle[1].y = triangle[0].y + 30;
   triangle[2].x = -triangle[1].x;
   triangle[2].y = triangle[1].y;
 
-  PolygonRotateShift(triangle, radar_mid,
+  PolygonRotateShift(triangle, radar_renderer.GetCenter(),
                      task_direction - (enable_north_up ?
                                        Angle::Zero() : heading),
                      Layout::FastScale(100u));

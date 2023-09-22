@@ -4,6 +4,7 @@
 #pragma once
 
 #include "ui/window/PaintWindow.hpp"
+#include "Renderer/RadarRenderer.hpp"
 #include "FLARM/List.hpp"
 #include "TeamCode/Settings.hpp"
 #include "Math/FastRotation.hpp"
@@ -21,6 +22,8 @@ class FlarmTrafficWindow : public PaintWindow {
 protected:
   const FlarmTrafficLook &look;
 
+  RadarRenderer radar_renderer;
+
   /**
    * The distance of the biggest circle in meters.
    */
@@ -28,18 +31,6 @@ protected:
 
   int selection = -1;
   int warning = -1;
-  PixelPoint radar_mid;
-
-  /**
-   * The minimum distance between the window boundary and the biggest
-   * circle in pixels.
-   */
-  const unsigned h_padding, v_padding;
-
-  /**
-   * The radius of the biggest circle in pixels.
-   */
-  unsigned radius;
 
   const bool small;
 

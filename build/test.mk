@@ -2028,6 +2028,7 @@ RUN_HORIZON_RENDERER_SOURCES = \
 	$(SRC)/Look/HorizonLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Renderer/HorizonRenderer.cpp \
+	$(SRC)/Renderer/RadarRenderer.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/RunHorizonRenderer.cpp
