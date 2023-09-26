@@ -18,7 +18,7 @@ class AutotoolsProject(MakeProject):
                  subdirs: Optional[Collection[str]]=None,
                  **kwargs):
         MakeProject.__init__(self, url, md5, installed, **kwargs)
-        self.configure_args = list(configure_args)
+        self.configure_args = configure_args
         self.autogen = autogen
         self.per_arch_cflags = per_arch_cflags
         self.cppflags = cppflags
