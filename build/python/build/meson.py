@@ -19,13 +19,13 @@ def make_cross_file(toolchain: Toolchain) -> str:
         system = 'linux'
         windres = ''
 
-    if toolchain.host_triplet.startswith('arm'):
+    if toolchain.is_arm:
         cpu_family = 'arm'
-        if toolchain.host_triplet.startswith('armv7'):
+        if toolchain.is_armv7:
             cpu = 'armv7'
         else:
             cpu = 'armv6'
-    elif toolchain.host_triplet.startswith('aarch64'):
+    elif toolchain.is_aarch64:
         cpu_family = 'aarch64'
         cpu = 'arm64-v8a'
     else:
