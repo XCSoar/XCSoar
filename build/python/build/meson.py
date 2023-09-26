@@ -89,8 +89,8 @@ endian = '{endian}'
 
 def configure(toolchain: AnyToolchain, src: str, build: str, args: list[str]=[]) -> None:
     configure = [
-        'meson',
-        src, build,
+        'meson', 'setup',
+        build, src,
 
         '--prefix', toolchain.install_prefix,
 
