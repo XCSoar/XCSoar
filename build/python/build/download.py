@@ -1,10 +1,11 @@
 from typing import Optional
-from build.verify import verify_file_digest
-from .lockfile import lockfile
 import os
 from tempfile import NamedTemporaryFile
 import urllib.request
 import sys
+
+from .verify import verify_file_digest
+from .lockfile import lockfile
 
 def __download(url: str, alternative_url: Optional[str], path: str) -> None:
     print("download", url)
