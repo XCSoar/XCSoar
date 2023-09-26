@@ -12,4 +12,4 @@ if len(sys.argv) != 5:
     print("Usage: download.py URL ALTERNATIVE_URL MD5 DIRECTORY", file=sys.stderr)
     sys.exit(1)
 
-download_and_verify(*sys.argv[1:])
+download_and_verify(sys.argv[1:3], sys.argv[3], sys.argv[4])

@@ -1,14 +1,14 @@
 import os.path, subprocess, shutil
-from typing import Optional
+from typing import Optional, Sequence, Union
 
 from build.makeproject import MakeProject
 from build.quilt import push_all
 from .toolchain import AnyToolchain
 
 class LuaProject(MakeProject):
-    def __init__(self, url: str, alternative_url: Optional[str], md5: str, installed: str,
+    def __init__(self, url: Union[str, Sequence[str]], md5: str, installed: str,
                  **kwargs):
-        MakeProject.__init__(self, url, alternative_url, md5, installed, **kwargs)
+        MakeProject.__init__(self, url, md5, installed, **kwargs)
 
     def get_make_args(self, toolchain: AnyToolchain) -> list[str]:
         cflags = toolchain.cflags + ' ' + toolchain.cppflags
