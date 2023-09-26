@@ -9,6 +9,7 @@ class AutotoolsProject(MakeProject):
     def __init__(self, url: Union[str, Sequence[str]], md5: str, installed: str,
                  configure_args: Iterable[str]=[],
                  autogen: bool=False,
+                 autoreconf: bool=False,
                  per_arch_cflags: Optional[Mapping[str, str]]=None,
                  cppflags: str='',
                  ldflags: str='',
@@ -20,6 +21,7 @@ class AutotoolsProject(MakeProject):
         MakeProject.__init__(self, url, md5, installed, **kwargs)
         self.configure_args = configure_args
         self.autogen = autogen
+        self.autoreconf = autoreconf
         self.per_arch_cflags = per_arch_cflags
         self.cppflags = cppflags
         self.ldflags = ldflags
@@ -43,6 +45,8 @@ class AutotoolsProject(MakeProject):
             subprocess.check_call(['aclocal'], cwd=src)
             subprocess.check_call(['automake', '--add-missing', '--force-missing', '--foreign'], cwd=src)
             subprocess.check_call(['autoconf'], cwd=src)
+        if self.autoreconf:
+            subprocess.check_call(['autoreconf', '-vif'], cwd=src)
 
         cppflags = toolchain.cppflags
         if self.name == 'glibc':
