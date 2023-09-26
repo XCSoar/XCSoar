@@ -6,7 +6,7 @@ from build.makeproject import MakeProject
 from .toolchain import AnyToolchain
 
 class AutotoolsProject(MakeProject):
-    def __init__(self, urls: Union[str, Sequence[str]], md5: str, installed: str,
+    def __init__(self, url: Union[str, Sequence[str]], md5: str, installed: str,
                  configure_args: Iterable[str]=[],
                  autogen: bool=False,
                  per_arch_cflags: Optional[Mapping[str, str]]=None,
@@ -17,7 +17,7 @@ class AutotoolsProject(MakeProject):
                  use_destdir: bool=False,
                  subdirs: Optional[Collection[str]]=None,
                  **kwargs):
-        MakeProject.__init__(self, urls, md5, installed, **kwargs)
+        MakeProject.__init__(self, url, md5, installed, **kwargs)
         self.configure_args = list(configure_args)
         self.autogen = autogen
         self.per_arch_cflags = per_arch_cflags
