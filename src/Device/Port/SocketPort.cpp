@@ -58,7 +58,7 @@ SocketPort::Write(std::span<const std::byte> src)
   if (!socket.IsDefined())
     throw std::runtime_error("Port is closed");
 
-  ssize_t nbytes = socket.GetSocket().Write(src.data(), src.size());
+  ssize_t nbytes = socket.GetSocket().Write(src);
   if (nbytes < 0)
     // TODO check EAGAIN?
     throw MakeSocketError("Failed to send");
@@ -70,7 +70,7 @@ inline void
 SocketPort::OnSocketReady(unsigned) noexcept
 try {
   std::byte input[4096];
-  ssize_t nbytes = socket.GetSocket().Read(input, sizeof(input));
+  ssize_t nbytes = socket.GetSocket().Read(input);
   if (nbytes < 0)
     throw MakeSocketError("Failed to receive");
 

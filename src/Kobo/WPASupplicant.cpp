@@ -8,6 +8,7 @@
 #include "util/IterableSplitString.hxx"
 #include "util/NumberParser.hpp"
 #include "util/NumberParser.hxx"
+#include "util/SpanCast.hxx"
 #include "util/StringCompare.hxx"
 #include "util/StringSplit.hxx"
 
@@ -50,7 +51,7 @@ WPASupplicant::SendCommand(std::string_view cmd)
      receive queue, maybe because the last command failed */
   ReadDiscard();
 
-  const ssize_t nbytes = fd.Write(cmd.data(), cmd.size());
+  const ssize_t nbytes = fd.Write(AsBytes(cmd));
   if (nbytes < 0)
     throw MakeErrno("Failed to send command to wpa_supplicant");
 
@@ -64,7 +65,7 @@ WPASupplicant::ExpectResponse(std::string_view expected)
   char buffer[4096];
   assert(expected.size() <= sizeof(buffer));
 
-  std::size_t nbytes = ReadTimeout(buffer, sizeof(buffer));
+  std::size_t nbytes = ReadTimeout(std::as_writable_bytes(std::span{buffer}));
   if (nbytes != expected.size() ||
       memcmp(buffer, expected.data(), expected.size()) != 0)
     throw std::runtime_error{"Unexpected wpa_supplicant response"};
@@ -101,7 +102,7 @@ WPASupplicant::Status(WifiStatus &status)
   SendCommand("STATUS");
 
   char buffer[4096];
-  const std::size_t nbytes = ReadTimeout(buffer, sizeof(buffer));
+  const std::size_t nbytes = ReadTimeout(std::as_writable_bytes(std::span{buffer}));
   if (nbytes == 0)
     throw std::runtime_error{"wpa_supplicant closed the socket"};
 
@@ -195,7 +196,7 @@ WPASupplicant::ScanResults(WifiVisibleNetwork *dest, unsigned max)
   SendCommand("SCAN_RESULTS");
 
   char buffer[4096];
-  const std::size_t nbytes = ReadTimeout(buffer, sizeof(buffer));
+  const std::size_t nbytes = ReadTimeout(std::as_writable_bytes(std::span{buffer}));
   if (nbytes == 0)
     throw std::runtime_error{"wpa_supplicant closed the socket"};
 
@@ -208,7 +209,6 @@ WPASupplicant::AddNetwork()
   SendCommand("ADD_NETWORK");
 
   char buffer[4096];
-
   const char *line = ExpectLineTimeout(buffer);
 
   char *endptr;
@@ -318,7 +318,7 @@ WPASupplicant::ListNetworks(WifiConfiguredNetworkInfo *dest, std::size_t max)
   SendCommand("LIST_NETWORKS");
 
   char buffer[4096];
-  const std::size_t nbytes = ReadTimeout(buffer, sizeof(buffer));
+  const std::size_t nbytes = ReadTimeout(std::as_writable_bytes(std::span{buffer}));
   if (nbytes <= 5)
     throw std::runtime_error{"Malformed wpa_supplicant response"};
 
@@ -330,17 +330,17 @@ WPASupplicant::ReadDiscard() noexcept
 {
   std::byte buffer[4096];
 
-  while (fd.Read(buffer, sizeof(buffer)) > 0) {}
+  while (fd.ReadNoWait(buffer) > 0) {}
 }
 
 std::size_t
-WPASupplicant::ReadTimeout(void *buffer, size_t length, int timeout_ms)
+WPASupplicant::ReadTimeout(std::span<std::byte> dest, int timeout_ms)
 {
   /* TODO: this is a kludge, because SocketDescriptor::Read()
      hard-codes MSG_DONTWAIT; we would be better off moving all of
      this into an IOLoop/IOThread */
 
-  ssize_t nbytes = fd.Read(buffer, length);
+  ssize_t nbytes = fd.ReadNoWait(dest);
   if (nbytes < 0) {
     const int e = errno;
     if (e != EAGAIN)
@@ -353,7 +353,7 @@ WPASupplicant::ReadTimeout(void *buffer, size_t length, int timeout_ms)
     if (r == 0)
       throw std::runtime_error{"Timeout waiting for wpa_supplicant response"};
 
-    nbytes = fd.Read(buffer, length);
+    nbytes = fd.Read(dest);
   }
 
   if (nbytes < 0)
@@ -370,7 +370,7 @@ WPASupplicant::ReadTimeout(void *buffer, size_t length, int timeout_ms)
 const char *
 WPASupplicant::ExpectLineTimeout(std::span<char> buffer, int timeout_ms)
 {
-  std::size_t nbytes = ReadTimeout(buffer.data(), buffer.size(), timeout_ms);
+  std::size_t nbytes = ReadTimeout(std::as_writable_bytes(buffer), timeout_ms);
   if (nbytes == 0 || buffer[nbytes - 1] != '\n')
     throw std::runtime_error{"Unexpected wpa_supplicant response"};
 

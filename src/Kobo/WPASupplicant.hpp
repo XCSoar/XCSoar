@@ -6,6 +6,8 @@
 #include "util/StaticString.hxx"
 #include "net/SocketDescriptor.hxx"
 
+#include <cstddef>
+#include <span>
 #include <string_view>
 
 enum WifiSecurity {
@@ -125,7 +127,7 @@ public:
 private:
   void ReadDiscard() noexcept;
 
-  std::size_t ReadTimeout(void *buffer, size_t length, int timeout_ms=2000);
+  std::size_t ReadTimeout(std::span<std::byte> dest, int timeout_ms=2000);
 
   const char *ExpectLineTimeout(std::span<char> buffer, int timeout_ms=2000);
 };
