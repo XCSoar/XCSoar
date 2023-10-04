@@ -126,4 +126,6 @@ private:
   void ReadDiscard() noexcept;
 
   std::size_t ReadTimeout(void *buffer, size_t length, int timeout_ms=2000);
+
+  const char *ExpectLineTimeout(std::span<char> buffer, int timeout_ms=2000);
 };

@@ -249,15 +249,12 @@ WPASupplicant::AddNetwork()
   SendCommand("ADD_NETWORK");
 
   char buffer[4096];
-  ssize_t nbytes = ReadTimeout(buffer, sizeof(buffer));
-  if (nbytes < 2 || buffer[nbytes - 1] != '\n')
-    throw std::runtime_error{"Unexpected wpa_supplicant response"};
 
-  buffer[nbytes - 1] = 0;
+  const char *line = ExpectLineTimeout(buffer);
 
   char *endptr;
-  unsigned id = ParseUnsigned(buffer, &endptr);
-  if (endptr == buffer || *endptr != 0)
+  unsigned id = ParseUnsigned(line, &endptr);
+  if (endptr == line || *endptr != 0)
     throw std::runtime_error{"Malformed wpa_supplicant response"};
 
   return id;
@@ -424,4 +421,15 @@ WPASupplicant::ReadTimeout(void *buffer, size_t length, int timeout_ms)
   }
 
   return nbytes;
+}
+
+const char *
+WPASupplicant::ExpectLineTimeout(std::span<char> buffer, int timeout_ms)
+{
+  std::size_t nbytes = ReadTimeout(buffer.data(), buffer.size(), timeout_ms);
+  if (nbytes == 0 || buffer[nbytes - 1] != '\n')
+    throw std::runtime_error{"Unexpected wpa_supplicant response"};
+
+  buffer[nbytes - 1] = 0;
+  return buffer.data();
 }
