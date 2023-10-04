@@ -6,6 +6,8 @@
 #include "util/StaticString.hxx"
 #include "net/SocketDescriptor.hxx"
 
+#include <string_view>
+
 enum WifiSecurity {
   WPA_SECURITY,
   WEP_SECURITY,
@@ -66,7 +68,7 @@ public:
 
   void Close() noexcept;
 
-  void SendCommand(const char *cmd);
+  void SendCommand(std::string_view cmd);
 
   void ExpectResponse(const char *expected);
 

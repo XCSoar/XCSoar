@@ -39,18 +39,17 @@ WPASupplicant::Close() noexcept
 }
 
 void
-WPASupplicant::SendCommand(const char *cmd)
+WPASupplicant::SendCommand(std::string_view cmd)
 {
   /* discard any previous responses that may be left in the socket's
      receive queue, maybe because the last command failed */
   ReadDiscard();
 
-  const size_t length = strlen(cmd);
-  const ssize_t nbytes = fd.Write(cmd, length);
+  const ssize_t nbytes = fd.Write(cmd.data(), cmd.size());
   if (nbytes < 0)
     throw MakeErrno("Failed to send command to wpa_supplicant");
 
-  if (std::size_t(nbytes) != length)
+  if (std::size_t(nbytes) != cmd.size())
     throw std::runtime_error("Short send to wpa_supplicant");
 }
 
@@ -269,7 +268,7 @@ void
 WPASupplicant::SetNetworkString(unsigned id,
                                 const char *name, const char *value)
 {
-  SendCommand(FmtBuffer<512>("SET_NETWORK {} {} \"{}\"", id, name, value));
+  SendCommand(FmtBuffer<512>("SET_NETWORK {} {} \"{}\"", id, name, value).c_str());
   ExpectOK();
 }
 
@@ -277,35 +276,35 @@ void
 WPASupplicant::SetNetworkID(unsigned id,
                                 const char *name, const char *value)
 {
-  SendCommand(FmtBuffer<512>("SET_NETWORK {} {} {}", id, name, value));
+  SendCommand(FmtBuffer<512>("SET_NETWORK {} {} {}", id, name, value).c_str());
   ExpectOK();
 }
 
 void
 WPASupplicant::SelectNetwork(unsigned id)
 {
-  SendCommand(FmtBuffer<64>("SELECT_NETWORK {}", id));
+  SendCommand(FmtBuffer<64>("SELECT_NETWORK {}", id).c_str());
   ExpectOK();
 }
 
 void
 WPASupplicant::EnableNetwork(unsigned id)
 {
-  SendCommand(FmtBuffer<64>("ENABLE_NETWORK {}", id));
+  SendCommand(FmtBuffer<64>("ENABLE_NETWORK {}", id).c_str());
   ExpectOK();
 }
 
 void
 WPASupplicant::DisableNetwork(unsigned id)
 {
-  SendCommand(FmtBuffer<64>("DISABLE_NETWORK {}", id));
+  SendCommand(FmtBuffer<64>("DISABLE_NETWORK {}", id).c_str());
   ExpectOK();
 }
 
 void
 WPASupplicant::RemoveNetwork(unsigned id)
 {
-  SendCommand(FmtBuffer<64>("REMOVE_NETWORK {}", id));
+  SendCommand(FmtBuffer<64>("REMOVE_NETWORK {}", id).c_str());
   ExpectOK();
 }
 
