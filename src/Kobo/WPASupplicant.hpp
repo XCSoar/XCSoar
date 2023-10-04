@@ -131,5 +131,5 @@ private:
 
   std::string_view ReadStringTimeout(std::span<char> buffer, int timeout_ms=2000);
 
-  const char *ExpectLineTimeout(std::span<char> buffer, int timeout_ms=2000);
+  std::string_view ExpectLineTimeout(std::span<char> buffer, int timeout_ms=2000);
 };

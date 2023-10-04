@@ -6,7 +6,6 @@
 #include "lib/fmt/SystemError.hxx"
 #include "net/AllocatedSocketAddress.hxx"
 #include "util/IterableSplitString.hxx"
-#include "util/NumberParser.hpp"
 #include "util/NumberParser.hxx"
 #include "util/SpanCast.hxx"
 #include "util/StringSplit.hxx"
@@ -205,14 +204,12 @@ WPASupplicant::AddNetwork()
   SendCommand("ADD_NETWORK");
 
   char buffer[4096];
-  const char *line = ExpectLineTimeout(buffer);
+  const auto line = ExpectLineTimeout(buffer);
 
-  char *endptr;
-  unsigned id = ParseUnsigned(line, &endptr);
-  if (endptr == line || *endptr != 0)
-    throw std::runtime_error{"Malformed wpa_supplicant response"};
+  if (auto id = ParseInteger<unsigned>(line))
+    return *id;
 
-  return id;
+  throw std::runtime_error{"Malformed wpa_supplicant response"};
 }
 
 void
@@ -370,13 +367,13 @@ WPASupplicant::ReadStringTimeout(std::span<char> buffer, int timeout_ms)
   return ToStringView(buffer.first(nbytes));
 }
 
-const char *
+std::string_view
 WPASupplicant::ExpectLineTimeout(std::span<char> buffer, int timeout_ms)
 {
-  std::size_t nbytes = ReadTimeout(std::as_writable_bytes(buffer), timeout_ms);
-  if (nbytes == 0 || buffer[nbytes - 1] != '\n')
+  std::string_view result = ReadStringTimeout(buffer, timeout_ms);
+  if (!result.ends_with('\n'))
     throw std::runtime_error{"Unexpected wpa_supplicant response"};
 
-  buffer[nbytes - 1] = 0;
-  return buffer.data();
+  result.remove_suffix(1);
+  return result;
 }
