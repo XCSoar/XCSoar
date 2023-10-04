@@ -5,13 +5,17 @@
 #include "lib/fmt/ToBuffer.hxx"
 #include "lib/fmt/SystemError.hxx"
 #include "net/AllocatedSocketAddress.hxx"
+#include "util/IterableSplitString.hxx"
 #include "util/NumberParser.hpp"
 #include "util/StringCompare.hxx"
+#include "util/StringSplit.hxx"
 
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <time.h>
+
+using std::string_view_literals::operator""sv;
 
 void
 WPASupplicant::Connect(const char *path)
@@ -66,39 +70,26 @@ WPASupplicant::ExpectResponse(std::string_view expected)
 }
 
 static bool
-ParseStatusLine(WifiStatus &status, char *src)
+ParseStatusLine(WifiStatus &status, std::string_view src) noexcept
 {
-  char *value = strchr(src, '=');
-  if (value == nullptr)
+  const auto [name, value] = Split(src, '=');
+  if (value.data() == nullptr)
     return false;
 
-  *value++ = 0;
-
-  if (StringIsEqual(src, "bssid"))
+  if (src == "bssid"sv)
     status.bssid = value;
-  else if (StringIsEqual(src, "ssid"))
+  else if (src == "ssid"sv)
     status.ssid = value;
   return true;
 }
 
 static bool
-ParseStatus(WifiStatus &status, char *src)
+ParseStatus(WifiStatus &status, std::string_view src) noexcept
 {
   status.Clear();
 
-  while (true) {
-    char *eol = strchr(src, '\n');
-    if (eol != nullptr)
-      *eol = 0;
-
-    if (!ParseStatusLine(status, src))
-      break;
-
-    if (eol == nullptr)
-      break;
-
-    src = eol + 1;
-  }
+  for (const auto line : IterableSplitString(src, '\n'))
+    ParseStatusLine(status, line);
 
   return true;
 }
@@ -109,13 +100,11 @@ WPASupplicant::Status(WifiStatus &status)
   SendCommand("STATUS");
 
   char buffer[4096];
-  const std::size_t nbytes = ReadTimeout(buffer, sizeof(buffer) - 1);
+  const std::size_t nbytes = ReadTimeout(buffer, sizeof(buffer));
   if (nbytes == 0)
     throw std::runtime_error{"wpa_supplicant closed the socket"};
 
-  buffer[nbytes] = 0;
-
-  return ParseStatus(status, buffer);
+  return ParseStatus(status, {buffer, nbytes});
 }
 
 /*
