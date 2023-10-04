@@ -54,15 +54,14 @@ WPASupplicant::SendCommand(std::string_view cmd)
 }
 
 void
-WPASupplicant::ExpectResponse(const char *expected)
+WPASupplicant::ExpectResponse(std::string_view expected)
 {
-  const size_t length = strlen(expected);
   char buffer[4096];
-  assert(length <= sizeof(buffer));
+  assert(expected.size() <= sizeof(buffer));
 
   std::size_t nbytes = ReadTimeout(buffer, sizeof(buffer));
-  if (nbytes != length ||
-      memcmp(buffer, expected, length) != 0)
+  if (nbytes != expected.size() ||
+      memcmp(buffer, expected.data(), expected.size()) != 0)
     throw std::runtime_error{"Unexpected wpa_supplicant response"};
 }
 

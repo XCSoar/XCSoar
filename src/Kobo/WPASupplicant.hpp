@@ -70,7 +70,7 @@ public:
 
   void SendCommand(std::string_view cmd);
 
-  void ExpectResponse(const char *expected);
+  void ExpectResponse(std::string_view expected);
 
   void ExpectOK() {
     ExpectResponse("OK\n");
