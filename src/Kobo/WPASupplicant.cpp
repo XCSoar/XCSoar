@@ -7,6 +7,7 @@
 #include "net/AllocatedSocketAddress.hxx"
 #include "util/IterableSplitString.hxx"
 #include "util/NumberParser.hpp"
+#include "util/NumberParser.hxx"
 #include "util/StringCompare.hxx"
 #include "util/StringSplit.hxx"
 
@@ -126,90 +127,61 @@ WPASupplicant::Status(WifiStatus &status)
  * - ssid ascii ssid. ssid could be empty if ssid broadcast is disabled.
  */
 static bool
-ParseScanResultsLine(WifiVisibleNetwork &dest, char *src)
+ParseScanResultsLine(WifiVisibleNetwork &dest, std::string_view line) noexcept
 {
-  char *tab = strchr(src, '\t'); // seek "frequency"
-  if (tab == nullptr)
+  const auto [bssid, rest1] = Split(line, '\t');
+  const auto [frequency, rest2] = Split(rest1, '\t');
+  const auto [signal_level, rest3] = Split(rest2, '\t');
+  const auto [flags, rest4] = Split(rest3, '\t');
+  const auto [ssid, _] = Split(rest4, '\t');
+
+  if (bssid.empty() || frequency.empty() || signal_level.empty() || ssid.empty())
     return false;
 
-  *tab = 0;
-  dest.bssid = src;
+  dest.bssid = bssid;
 
-  src = tab + 1;
-
-  src = strchr(src + 1, '\t'); // seek "signal level"
-  if (src == nullptr)
+  if (const auto value = ParseInteger<unsigned>(signal_level))
+    dest.signal_level = *value;
+  else
     return false;
 
-  ++src;
-
-  char *endptr;
-  dest.signal_level = ParseUnsigned(src, &endptr);
-  if (endptr == src || *endptr != '\t')
-    return false;
-
-  src = endptr + 1;
-
-  tab = strchr(src, '\t'); // seek "ssid"
-  if (tab == nullptr)
-    return false;
-
-  *tab = 0;
-
-  // src points to the flags.
-  if (strstr(src, "WPA") != NULL)
+  if (flags.find("WPA"sv) != flags.npos)
     dest.security = WPA_SECURITY;
-  else if (strstr(src, "WEP") != NULL)
+  else if (flags.find("WEP"sv) != flags.npos)
     dest.security = WEP_SECURITY;
   else
     dest.security = OPEN_SECURITY;
 
-  src = tab + 1;
-
-  tab = strchr(src, '\t');
-  if (tab != nullptr)
-    *tab = 0;
-
-  // src points to ssid or if empty we assume a hidden ssid.
-  if (StringIsEmpty(src)) {
-    dest.ssid.clear();
-    return true;
-  }
-
-  dest.ssid = src;
+  dest.ssid = ssid;
   return true;
 }
 
 static std::size_t
-ParseScanResults(WifiVisibleNetwork *dest, std::size_t max, char *src)
+ParseScanResults(WifiVisibleNetwork *dest, std::size_t max, std::string_view src)
 {
-  if (memcmp(src, "bssid", 5) != 0)
+  if (!src.starts_with("bssid"sv))
     throw std::runtime_error{"Malformed wpa_supplicant response"};
 
-  src = strchr(src, '\n');
-  if (src == nullptr)
+  src = Split(src, '\n').second;
+  if (src.data() == nullptr)
     throw std::runtime_error{"Malformed wpa_supplicant response"};
-
-  ++src;
 
   std::size_t n = 0;
-  do {
-    char *eol = strchr(src, '\n');
-    if (eol != nullptr)
-      *eol = 0;
+  for (const auto line : IterableSplitString(src, '\n')) {
+    if (line.empty())
+      break;
 
-    if (!ParseScanResultsLine(dest[n], src))
+    if (!ParseScanResultsLine(dest[n], line))
       break;
 
     // skip hidden ssid
-    if (!dest[n].ssid.empty())
+    if (!dest[n].ssid.empty()) {
       ++n;
 
-    if (eol == nullptr)
-      break;
-
-    src = eol + 1;
-  } while (n < max);
+      if (n >= max)
+        break;
+    }
+  }
 
   return n;
 }
@@ -223,13 +195,11 @@ WPASupplicant::ScanResults(WifiVisibleNetwork *dest, unsigned max)
   SendCommand("SCAN_RESULTS");
 
   char buffer[4096];
-  ssize_t nbytes = ReadTimeout(buffer, sizeof(buffer) - 1);
-  if (nbytes <= 5)
-    throw std::runtime_error{"Unexpected wpa_supplicant response"};
+  const std::size_t nbytes = ReadTimeout(buffer, sizeof(buffer));
+  if (nbytes == 0)
+    throw std::runtime_error{"wpa_supplicant closed the socket"};
 
-  buffer[nbytes] = 0;
-
-  return ParseScanResults(dest, max, buffer);
+  return ParseScanResults(dest, max, {buffer, nbytes});
 }
 
 unsigned
