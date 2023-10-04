@@ -9,10 +9,8 @@
 #include "util/NumberParser.hpp"
 #include "util/NumberParser.hxx"
 #include "util/SpanCast.hxx"
-#include "util/StringCompare.hxx"
 #include "util/StringSplit.hxx"
 
-#include <string.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <time.h>
@@ -65,9 +63,7 @@ WPASupplicant::ExpectResponse(std::string_view expected)
   char buffer[4096];
   assert(expected.size() <= sizeof(buffer));
 
-  std::size_t nbytes = ReadTimeout(std::as_writable_bytes(std::span{buffer}));
-  if (nbytes != expected.size() ||
-      memcmp(buffer, expected.data(), expected.size()) != 0)
+  if (ReadStringTimeout(buffer) != expected)
     throw std::runtime_error{"Unexpected wpa_supplicant response"};
 }
 
@@ -102,11 +98,11 @@ WPASupplicant::Status(WifiStatus &status)
   SendCommand("STATUS");
 
   char buffer[4096];
-  const std::size_t nbytes = ReadTimeout(std::as_writable_bytes(std::span{buffer}));
-  if (nbytes == 0)
+  const auto src = ReadStringTimeout(buffer);
+  if (src.empty())
     throw std::runtime_error{"wpa_supplicant closed the socket"};
 
-  return ParseStatus(status, {buffer, nbytes});
+  return ParseStatus(status, src);
 }
 
 /*
@@ -196,11 +192,11 @@ WPASupplicant::ScanResults(WifiVisibleNetwork *dest, unsigned max)
   SendCommand("SCAN_RESULTS");
 
   char buffer[4096];
-  const std::size_t nbytes = ReadTimeout(std::as_writable_bytes(std::span{buffer}));
-  if (nbytes == 0)
+  const auto src = ReadStringTimeout(buffer);
+  if (src.empty())
     throw std::runtime_error{"wpa_supplicant closed the socket"};
 
-  return ParseScanResults(dest, max, {buffer, nbytes});
+  return ParseScanResults(dest, max, src);
 }
 
 unsigned
@@ -318,11 +314,11 @@ WPASupplicant::ListNetworks(WifiConfiguredNetworkInfo *dest, std::size_t max)
   SendCommand("LIST_NETWORKS");
 
   char buffer[4096];
-  const std::size_t nbytes = ReadTimeout(std::as_writable_bytes(std::span{buffer}));
-  if (nbytes <= 5)
+  const auto src = ReadStringTimeout(buffer);
+  if (src.empty())
     throw std::runtime_error{"Malformed wpa_supplicant response"};
 
-  return ParseListResults(dest, max, {buffer, nbytes});
+  return ParseListResults(dest, max, src);
 }
 
 void
@@ -365,6 +361,13 @@ WPASupplicant::ReadTimeout(std::span<std::byte> dest, int timeout_ms)
   }
 
   return nbytes;
+}
+
+std::string_view
+WPASupplicant::ReadStringTimeout(std::span<char> buffer, int timeout_ms)
+{
+  std::size_t nbytes = ReadTimeout(std::as_writable_bytes(buffer), timeout_ms);
+  return ToStringView(buffer.first(nbytes));
 }
 
 const char *

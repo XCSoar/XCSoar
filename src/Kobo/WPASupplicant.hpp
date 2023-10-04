@@ -129,5 +129,7 @@ private:
 
   std::size_t ReadTimeout(std::span<std::byte> dest, int timeout_ms=2000);
 
+  std::string_view ReadStringTimeout(std::span<char> buffer, int timeout_ms=2000);
+
   const char *ExpectLineTimeout(std::span<char> buffer, int timeout_ms=2000);
 };
