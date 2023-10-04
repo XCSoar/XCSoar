@@ -264,60 +264,47 @@ WPASupplicant::RemoveNetwork(unsigned id)
 }
 
 static bool
-ParseListResultsLine(WifiConfiguredNetworkInfo &dest, char *src)
+ParseListResultsLine(WifiConfiguredNetworkInfo &dest, std::string_view line)
 {
-  char *endptr;
-  dest.id = ParseUnsigned(src, &endptr);
-  if (endptr == src || *endptr != '\t')
+  const auto [id, rest1] = Split(line, '\t');
+  const auto [ssid, rest2] = Split(rest1, '\t');
+  const auto [bssid, _] = Split(rest2, '\t');
+
+  if (ssid.data() == nullptr || bssid.data() == nullptr)
     return false;
 
-  src = endptr + 1;
-
-  char *tab = strchr(src, '\t');
-  if (tab == nullptr)
+  if (const auto value = ParseInteger<unsigned>(id))
+    dest.id = *value;
+  else
     return false;
 
-  *tab = 0;
-  dest.ssid = src;
-
-  src = tab + 1;
-
-  tab = strchr(src, '\t');
-  if (tab != nullptr)
-    *tab = 0;
-
-  dest.bssid = src;
+  dest.ssid = ssid;
+  dest.bssid = bssid;
   return true;
 }
 
 static std::size_t
-ParseListResults(WifiConfiguredNetworkInfo *dest, std::size_t max, char *src)
+ParseListResults(WifiConfiguredNetworkInfo *dest, std::size_t max, std::string_view src)
 {
-  if (memcmp(src, "network id", 10) != 0)
+  if (!src.starts_with("network id"sv))
     throw std::runtime_error{"Malformed wpa_supplicant response"};
 
-  src = strchr(src, '\n');
-  if (src == nullptr)
+  src = Split(src, '\n').second;
+  if (src.data() == nullptr)
     throw std::runtime_error{"Malformed wpa_supplicant response"};
-
-  ++src;
 
   std::size_t n = 0;
-  do {
-    char *eol = strchr(src, '\n');
-    if (eol != nullptr)
-      *eol = 0;
+  for (const auto line : IterableSplitString(src, '\n')) {
+    if (line.empty())
+      break;
 
-    if (!ParseListResultsLine(dest[n], src))
+    if (!ParseListResultsLine(dest[n], line))
       break;
 
     ++n;
-
-    if (eol == nullptr)
+    if (n >= max)
       break;
-
-    src = eol + 1;
-  } while (n < max);
+  }
 
   return n;
 }
@@ -331,13 +318,11 @@ WPASupplicant::ListNetworks(WifiConfiguredNetworkInfo *dest, std::size_t max)
   SendCommand("LIST_NETWORKS");
 
   char buffer[4096];
-  ssize_t nbytes = ReadTimeout(buffer, sizeof(buffer) - 1);
+  const std::size_t nbytes = ReadTimeout(buffer, sizeof(buffer));
   if (nbytes <= 5)
     throw std::runtime_error{"Malformed wpa_supplicant response"};
 
-  buffer[nbytes] = 0;
-
-  return ParseListResults(dest, max, buffer);
+  return ParseListResults(dest, max, {buffer, nbytes});
 }
 
 void
