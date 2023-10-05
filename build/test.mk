@@ -103,7 +103,7 @@ TEST_NAMES = \
 	TestMETARParser \
 	TestIGCParser \
 	TestStrings TestUTF8 \
-	TestCRC16 \
+	TestCRC16 TestCRC8 \
 	TestUnitsFormatter \
 	TestGeoPointFormatter \
 	TestHexColorFormatter \
@@ -135,6 +135,11 @@ TEST_CRC16_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestCRC16.cpp
 $(eval $(call link-program,TestCRC16,TEST_CRC16))
+
+TEST_CRC8_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestCRC8.cpp
+$(eval $(call link-program,TestCRC8,TEST_CRC8))
 
 TEST_LEASTSQUARES_SOURCES = \
 	$(SRC)/Math/LeastSquares.cpp \

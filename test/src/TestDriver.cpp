@@ -1036,15 +1036,6 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
     ok1(equals(nmea_info.settings.qnh.GetHectoPascal(), 1015));
   }
 
-  uint8_t msg[] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09};
-  auto crc = LX::calc_crc(std::span<std::byte>(reinterpret_cast<std::byte*>(msg),sizeof(msg)),std::byte{0xFF});
-  ok1(crc == std::byte{0x6A});
-
-  crc = LX::calc_crc_char(std::byte{0x01},std::byte{0xFF});
-  crc = LX::calc_crc_char(std::byte{0x02},crc);
-  crc = LX::calc_crc_char(std::byte{0x03},crc);
-  ok1(crc == std::byte{0x6C});
-
   delete device;
 }
 
@@ -1631,7 +1622,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main()
 {
-  plan_tests(847);
+  plan_tests(843);
 
   TestGeneric();
   TestTasman();
