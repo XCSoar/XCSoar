@@ -8,7 +8,7 @@
 #include "util/ByteOrder.hxx"
 #include "net/SocketError.hxx"
 #include "net/UniqueSocketDescriptor.hxx"
-#include "util/CRC.hpp"
+#include "util/CRC16CCITT.hpp"
 
 static UniqueSocketDescriptor
 CreateBindUDP(SocketAddress address)

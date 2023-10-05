@@ -6,7 +6,7 @@
 #include "Protocol.hpp"
 #include "NMEA/Info.hpp"
 #include "util/ByteOrder.hxx"
-#include "util/CRC.hpp"
+#include "util/CRC16CCITT.hpp"
 
 using namespace std::chrono;
 

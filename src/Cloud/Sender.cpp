@@ -4,7 +4,7 @@
 #include "Sender.hpp"
 #include "Tracking/SkyLines/Export.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "util/CRC.hpp"
+#include "util/CRC16CCITT.hpp"
 
 void
 TrafficResponseSender::Add(uint32_t pilot_id, uint32_t time,

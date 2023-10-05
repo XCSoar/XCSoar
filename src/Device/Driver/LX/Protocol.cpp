@@ -4,7 +4,7 @@
 #include "Protocol.hpp"
 #include "Device/Error.hpp"
 #include "Operation/Operation.hpp"
-#include "util/CRC.hpp"
+#include "util/CRC8.hpp"
 
 #include <cassert>
 

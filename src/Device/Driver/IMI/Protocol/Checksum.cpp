@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Checksum.hpp"
-#include "util/CRC.hpp"
+#include "util/CRC16CCITT.hpp"
 
 IMI::IMIWORD IMI::CRC16Checksum(const void *message, unsigned bytes)
 {

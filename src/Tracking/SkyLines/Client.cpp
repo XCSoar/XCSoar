@@ -9,10 +9,10 @@
 #include "util/ByteOrder.hxx"
 #include "Math/Angle.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "util/CRC.hpp"
 #include "event/Call.hxx"
 #include "net/StaticSocketAddress.hxx"
 #include "net/UniqueSocketDescriptor.hxx"
+#include "util/CRC16CCITT.hpp"
 #include "util/UTF8.hpp"
 #include "util/ConvertString.hpp"
 

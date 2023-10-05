@@ -9,7 +9,7 @@
 #include "Device/Port/Port.hpp"
 #include "time/TimeoutClock.hpp"
 #include "util/ByteOrder.hxx"
-#include "util/CRC.hpp"
+#include "util/CRC16CCITT.hpp"
 
 #include <stdexcept>
 
