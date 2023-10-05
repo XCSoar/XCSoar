@@ -9,8 +9,10 @@
 #include <span>
 
 constexpr uint8_t
-Calculate8bitCRC(std::span<const uint8_t> src, uint8_t crc, const uint8_t poly) noexcept
+Calculate8bitCRC(std::span<const uint8_t> src, uint8_t crc) noexcept
 {
+  constexpr uint8_t poly = 0x69;
+
   for (uint8_t d : src) {
     for (int count = 8; --count >= 0; d <<= 1) {
       uint8_t tmp = crc ^ d;
@@ -24,7 +26,7 @@ Calculate8bitCRC(std::span<const uint8_t> src, uint8_t crc, const uint8_t poly) 
 }
 
 constexpr uint8_t
-Calculate8bitCRC(std::span<const std::byte> src, uint8_t crc, const uint8_t poly) noexcept
+Calculate8bitCRC(std::span<const std::byte> src, uint8_t crc) noexcept
 {
-  return Calculate8bitCRC(FromBytesStrict<const uint8_t>(src), crc, poly);
+  return Calculate8bitCRC(FromBytesStrict<const uint8_t>(src), crc);
 }
