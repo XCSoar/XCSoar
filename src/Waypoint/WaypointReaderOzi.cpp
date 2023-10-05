@@ -3,7 +3,6 @@
 
 #include "WaypointReaderOzi.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "io/LineReader.hpp"
 #include "Units/System.hpp"
 #include "util/Macros.hpp"
 #include "util/ExtractParameters.hpp"

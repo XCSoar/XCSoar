@@ -4,7 +4,6 @@
 #include "WaypointReaderFS.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Geo/UTM.hpp"
-#include "io/LineReader.hpp"
 #include "util/StringStrip.hxx"
 
 #include <stdlib.h>

@@ -3,7 +3,6 @@
 
 #include "WaypointReaderCompeGPS.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "io/LineReader.hpp"
 #include "Geo/UTM.hpp"
 #include "util/StringSplit.hxx"
 
