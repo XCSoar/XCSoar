@@ -102,7 +102,7 @@ LX::ReceivePacketRetry(Port &port, Command command,
 std::byte
 LX::calc_crc_char(std::byte d, std::byte crc) noexcept
 {
-  return calc_crc(std::span<std::byte>(&d,1),crc);
+  return UpdateCRC8(d, crc);
 }
 
 std::byte
