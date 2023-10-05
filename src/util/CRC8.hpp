@@ -3,14 +3,16 @@
 
 #pragma once
 
+#include "SpanCast.hxx"
+
 #include <cstdint>
+#include <span>
 
 [[gnu::pure]]
 static inline uint8_t
-Calculate8bitCRC(const uint8_t* msg, const int len, uint8_t crc, const uint8_t poly)
+Calculate8bitCRC(std::span<const uint8_t> src, uint8_t crc, const uint8_t poly)
 {
-  for (int byte = 0; byte < len; byte++) {
-    uint8_t d = static_cast<uint8_t>(msg[byte]);
+  for (uint8_t d : src) {
     for (int count = 8; --count >= 0; d <<= 1) {
       uint8_t tmp = crc ^ d;
       crc <<= 1;
@@ -24,6 +26,7 @@ Calculate8bitCRC(const uint8_t* msg, const int len, uint8_t crc, const uint8_t p
 
 [[gnu::pure]]
 static inline uint8_t
-Calculate8bitCRC(const std::byte* msg, const int len, uint8_t crc, const uint8_t poly) {
-  return Calculate8bitCRC(reinterpret_cast<const uint8_t*>(msg),len,crc,poly);
+Calculate8bitCRC(std::span<const std::byte> src, uint8_t crc, const uint8_t poly)
+{
+  return Calculate8bitCRC(FromBytesStrict<const uint8_t>(src), crc, poly);
 }
