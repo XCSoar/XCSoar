@@ -5,6 +5,8 @@
 
 #include "WaypointReaderBase.hpp"
 
+#include <string_view>
+
 class WaypointReaderCompeGPS final : public WaypointReaderBase {
   bool is_utm = false;
 
@@ -12,7 +14,8 @@ public:
   explicit WaypointReaderCompeGPS(WaypointFactory _factory)
     :WaypointReaderBase(_factory) {}
 
-  static bool VerifyFormat(TLineReader &reader);
+  [[gnu::pure]]
+  static bool VerifyFormat(std::string_view contents) noexcept;
 
 protected:
   /* virtual methods from class WaypointReaderBase */

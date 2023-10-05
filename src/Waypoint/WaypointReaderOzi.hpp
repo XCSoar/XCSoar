@@ -5,6 +5,8 @@
 
 #include "WaypointReaderBase.hpp"
 
+#include <string_view>
+
 class WaypointReaderOzi final : public WaypointReaderBase {
   /* ignore the first 4 lines */
   unsigned ignore_lines = 4;
@@ -13,7 +15,8 @@ public:
   explicit WaypointReaderOzi(WaypointFactory _factory)
     :WaypointReaderBase(_factory) {}
 
-  static bool VerifyFormat(TLineReader &reader);
+  [[gnu::pure]]
+  static bool VerifyFormat(std::string_view contents) noexcept;
 
 protected:
   /* virtual methods from class WaypointReaderBase */

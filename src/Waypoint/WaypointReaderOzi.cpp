@@ -106,11 +106,7 @@ WaypointReaderOzi::ParseLine(const TCHAR *line, Waypoints &way_points)
 }
 
 bool
-WaypointReaderOzi::VerifyFormat(TLineReader &reader)
+WaypointReaderOzi::VerifyFormat(std::string_view contents) noexcept
 {
-  const TCHAR *line = reader.ReadLine();
-  if (line == nullptr)
-    return false;
-
-  return StringStartsWith(StripLeft(line), _T("OziExplorer Waypoint File"));
+  return contents.starts_with("OziExplorer Waypoint File");
 }

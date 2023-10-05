@@ -7,20 +7,7 @@
 #include "WaypointReaderOzi.hpp"
 #include "WaypointReaderCompeGPS.hpp"
 #include "system/Path.hpp"
-#include "io/FileLineReader.hpp"
-
-#include <stdexcept>
-
-template<class R>
-[[gnu::pure]]
-static bool
-VerifyFormat(Path path) noexcept
-try {
-  FileLineReader reader(path, Charset::UTF8);
-  return R::VerifyFormat(reader);
-} catch (const std::runtime_error &) {
-  return false;
-}
+#include "io/FileReader.hxx"
 
 WaypointFileType
 DetermineWaypointFileType(Path path) noexcept
@@ -40,14 +27,24 @@ DetermineWaypointFileType(Path path) noexcept
 
   // If FS waypoint file -> save type and return true
   if (path.EndsWithIgnoreCase(_T(".wpt"))) {
-    if (VerifyFormat<WaypointReaderFS>(path))
-      return WaypointFileType::FS;
+    try {
+      FileReader r{path};
+      char buffer[4096];
+      const std::size_t length = r.Read(std::as_writable_bytes(std::span{buffer}));
+      const std::string_view contents{buffer, length};
 
-    if (VerifyFormat<WaypointReaderOzi>(path))
-      return WaypointFileType::OZI_EXPLORER;
+      if (WaypointReaderFS::VerifyFormat(contents))
+        return WaypointFileType::FS;
 
-    if (VerifyFormat<WaypointReaderCompeGPS>(path))
-      return WaypointFileType::COMPE_GPS;
+      if (WaypointReaderOzi::VerifyFormat(contents))
+        return WaypointFileType::OZI_EXPLORER;
+
+      if (WaypointReaderCompeGPS::VerifyFormat(contents))
+        return WaypointFileType::COMPE_GPS;
+    } catch (...) {
+    }
+
+    return WaypointFileType::UNKNOWN;
   }
 
   return WaypointFileType::UNKNOWN;

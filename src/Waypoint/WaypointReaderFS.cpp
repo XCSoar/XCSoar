@@ -173,12 +173,8 @@ WaypointReaderFS::ParseLine(const TCHAR *line, Waypoints &way_points)
 }
 
 bool
-WaypointReaderFS::VerifyFormat(TLineReader &reader)
+WaypointReaderFS::VerifyFormat(std::string_view contents) noexcept
 {
-  const TCHAR *line = reader.ReadLine();
-  if (line == nullptr)
-    return false;
-
-  return StringStartsWith(line, _T("$FormatUTM")) ||
-         StringStartsWith(line, _T("$FormatGEO"));
+  return contents.starts_with("$FormatUTM") ||
+    contents.starts_with("$FormatGEO");
 }

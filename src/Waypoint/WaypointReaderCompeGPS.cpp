@@ -5,6 +5,7 @@
 #include "Waypoint/Waypoints.hpp"
 #include "io/LineReader.hpp"
 #include "Geo/UTM.hpp"
+#include "util/StringSplit.hxx"
 
 static bool
 ParseAngle(const TCHAR *&src, Angle &angle) noexcept
@@ -213,16 +214,11 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR *line, Waypoints &waypoints)
 }
 
 bool
-WaypointReaderCompeGPS::VerifyFormat(TLineReader &reader)
+WaypointReaderCompeGPS::VerifyFormat(std::string_view contents) noexcept
 {
-  const TCHAR *line = reader.ReadLine();
-  if (line == nullptr)
-    return false;
-
   // Ignore optional line with encoding information
-  if (StringStartsWith(line, _T("B ")))
-    if ((line = reader.ReadLine()) == nullptr)
-      return false;
+  if (contents.starts_with("B "))
+    contents = Split(contents, '\n').second;
 
-  return StringStartsWith(line, _T("G  WGS 84"));
+  return contents.starts_with("G  WGS 84");
 }
