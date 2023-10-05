@@ -7,6 +7,7 @@ IO_SOURCES = \
 	$(SRC)/lib/zlib/GunzipReader.cxx \
 	$(IO_SRC_DIR)/CopyFile.cxx \
 	$(IO_SRC_DIR)/Open.cxx \
+	$(IO_SRC_DIR)/Reader.cxx \
 	$(IO_SRC_DIR)/MemoryReader.cxx \
 	$(IO_SRC_DIR)/BufferedReader.cxx \
 	$(IO_SRC_DIR)/BufferedLineReader.cpp \
