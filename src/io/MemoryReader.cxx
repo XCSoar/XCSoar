@@ -3,15 +3,16 @@
 
 #include "MemoryReader.hxx"
 
-#include <string.h>
+#include <algorithm>
 
 std::size_t
-MemoryReader::Read(void *data, std::size_t size)
+MemoryReader::Read(std::span<std::byte> dest)
 {
-	if (size > buffer.size())
-		size = buffer.size();
+	auto src = buffer;
+	if (src.size() > dest.size())
+		src = src.first(dest.size());
+	buffer = buffer.subspan(src.size());
 
-	memcpy(data, buffer.data(), size);
-	buffer = buffer.subspan(size);
-	return size;
+	std::copy(src.begin(), src.end(), dest.begin());
+	return src.size();
 }

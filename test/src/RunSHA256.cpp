@@ -13,11 +13,11 @@ Feed(Reader &r, SHA256State &state)
 {
   while (true) {
     std::byte buffer[65536];
-    size_t nbytes = r.Read(buffer, sizeof(buffer));
+    size_t nbytes = r.Read(buffer);
     if (nbytes == 0)
       break;
 
-    state.Update(std::span<const std::byte>{buffer, nbytes});
+    state.Update(std::span{buffer}.first(nbytes));
   }
 }
 

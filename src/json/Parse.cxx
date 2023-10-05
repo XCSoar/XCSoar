@@ -25,8 +25,7 @@ Parse(Reader &r)
 		   proposed upstream fix */
 		char buffer[BOOST_JSON_STACK_BUFFER_SIZE + 1];
 
-		const std::size_t nbytes = r.Read(buffer,
-						  BOOST_JSON_STACK_BUFFER_SIZE);
+		const std::size_t nbytes = r.Read(std::as_writable_bytes(std::span{buffer}.first(BOOST_JSON_STACK_BUFFER_SIZE)));
 		if (nbytes == 0)
 			break;
 

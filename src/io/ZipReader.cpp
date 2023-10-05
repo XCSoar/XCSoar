@@ -44,9 +44,9 @@ ZipReader::GetPosition() const
 }
 
 std::size_t
-ZipReader::Read(void *data, std::size_t size)
+ZipReader::Read(std::span<std::byte> dest)
 {
-  zzip_ssize_t nbytes = zzip_file_read(file, data, size);
+  zzip_ssize_t nbytes = zzip_file_read(file, dest.data(), dest.size());
   if (nbytes < 0)
     throw std::runtime_error("Failed to read from ZIP file");
   return nbytes;
