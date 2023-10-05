@@ -51,6 +51,10 @@ SequenceLengthUTF8(const char *p) noexcept;
 const char *
 Latin1ToUTF8(const char *src, std::span<char> buffer) noexcept;
 
+[[gnu::pure]]
+std::string_view
+Latin1ToUTF8(std::string_view src, std::span<char> buffer) noexcept;
+
 /**
  * Convert the specified character from ISO-8859-1 to UTF-8 and write
  * it to the buffer.  buffer must have a length of at least 2!

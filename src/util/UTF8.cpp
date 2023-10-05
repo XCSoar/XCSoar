@@ -335,6 +335,54 @@ Latin1ToUTF8(const char *gcc_restrict src,
   return buffer.data();
 }
 
+static const char *
+FindNonASCII(std::string_view p) noexcept
+{
+  for (const auto &i : p)
+    if (!IsASCII(i))
+      return &i;
+  return nullptr;
+}
+
+std::string_view
+Latin1ToUTF8(std::string_view src,
+             std::span<char> buffer) noexcept
+{
+  const char *p = FindNonASCII(src);
+  if (p == nullptr)
+    /* everything is plain ASCII, we don't need to convert anything */
+    return src;
+
+  if ((std::size_t)(p - src.data()) > buffer.size())
+    /* buffer too small */
+    return {};
+
+  const char *const end = buffer.data() + buffer.size();
+  char *q = std::copy(src.data(), p, buffer.data());
+
+  const char *const src_end = src.data() + src.size();
+  while (p < src_end) {
+    unsigned char ch = *p++;
+
+    if (IsASCII(ch)) {
+      *q++ = ch;
+
+      if (q >= end)
+        /* buffer too small */
+        return {};
+    } else {
+      if (q + 2 >= end)
+        /* buffer too small */
+        return {};
+
+      *q++ = MakeLeading1(ch >> 6);
+      *q++ = MakeContinuation(ch);
+    }
+  }
+
+  return {buffer.data(), std::size_t(q - buffer.data())};
+}
+
 char *
 UnicodeToUTF8(unsigned ch, char *q) noexcept
 {
