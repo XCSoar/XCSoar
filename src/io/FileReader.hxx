@@ -62,7 +62,7 @@ public:
 #endif
 
 	[[gnu::pure]]
-	uint64_t GetSize() const noexcept {
+	uint_least64_t GetSize() const noexcept {
 #ifdef _WIN32
 		LARGE_INTEGER size;
 		return GetFileSizeEx(handle, &size)
@@ -74,7 +74,7 @@ public:
 	}
 
 	[[gnu::pure]]
-	uint64_t GetPosition() const noexcept {
+	uint_least64_t GetPosition() const noexcept {
 #ifdef _WIN32
 		LARGE_INTEGER zero;
 		zero.QuadPart = 0;
