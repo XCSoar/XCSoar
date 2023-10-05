@@ -17,6 +17,7 @@ public:
   };
 
 private:
+  alignas(uint64_t)
   std::array<std::byte, 64> buff512bits;
   State state;
   uint64_t message_length;
