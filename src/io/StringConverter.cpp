@@ -17,12 +17,12 @@
 
 #ifdef _UNICODE
 
-static constexpr void
+static constexpr TCHAR *
 iso_latin_1_to_tchar(TCHAR *dest, std::string_view src) noexcept
 {
   for (unsigned char ch : src)
     *dest++ = ch;
-  *dest = _T('\0');
+  return dest;
 }
 
 #endif
@@ -67,7 +67,7 @@ StringConverter::Convert(char *narrow)
 
   switch (charset) {
   case Charset::ISO_LATIN_1:
-    iso_latin_1_to_tchar(t, src);
+    *iso_latin_1_to_tchar(t, src) = _T('\0');
     break;
 
   default:
