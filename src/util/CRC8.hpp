@@ -3,30 +3,22 @@
 
 #pragma once
 
-#include "SpanCast.hxx"
-
 #include <cstdint>
 #include <span>
 
-constexpr uint8_t
-Calculate8bitCRC(std::span<const uint8_t> src, uint8_t crc) noexcept
+constexpr std::byte
+Calculate8bitCRC(std::span<const std::byte> src, std::byte crc) noexcept
 {
-  constexpr uint8_t poly = 0x69;
+  constexpr std::byte poly{0x69};
 
-  for (uint8_t d : src) {
+  for (std::byte d : src) {
     for (int count = 8; --count >= 0; d <<= 1) {
-      uint8_t tmp = crc ^ d;
+      std::byte tmp = crc ^ d;
       crc <<= 1;
-      if ((tmp & 0x80) != 0)
+      if ((tmp & std::byte{0x80}) != std::byte{})
         crc ^= poly;
     }
   }
 
   return crc;
-}
-
-constexpr uint8_t
-Calculate8bitCRC(std::span<const std::byte> src, uint8_t crc) noexcept
-{
-  return Calculate8bitCRC(FromBytesStrict<const uint8_t>(src), crc);
 }
