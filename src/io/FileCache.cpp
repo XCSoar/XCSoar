@@ -106,8 +106,8 @@ FileCache::Load(const TCHAR *name, Path original_path) noexcept
     unsigned magic;
     struct FileInfo old_info;
 
-    r->Read(&magic, sizeof(magic));
-    r->Read(&old_info, sizeof(old_info));
+    r->ReadT(magic);
+    r->ReadT(old_info);
 
     if (magic == FILE_CACHE_MAGIC &&
         old_info == original_info)

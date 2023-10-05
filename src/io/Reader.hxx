@@ -4,6 +4,7 @@
 #pragma once
 
 #include <cstddef>
+#include <type_traits>
 
 /**
  * An interface that can read bytes from a stream until the stream
@@ -27,4 +28,11 @@ public:
 	 */
 	[[gnu::nonnull]]
 	virtual std::size_t Read(void *data, std::size_t size) = 0;
+
+	template<typename T>
+	requires std::is_standard_layout_v<T> && std::is_trivially_copyable_v<T>
+	void ReadT(T &dest) {
+		// TODO check return value
+		Read(&dest, sizeof(dest));
+	}
 };
