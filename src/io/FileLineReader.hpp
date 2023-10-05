@@ -6,6 +6,7 @@
 #include "FileReader.hxx"
 #include "BufferedReader.hxx"
 #include "ConvertLineReader.hpp"
+#include "system/Path.hpp"
 
 /**
  * Glue class which combines FileReader and BufferedReader, and provides
