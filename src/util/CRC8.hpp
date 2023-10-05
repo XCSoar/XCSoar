@@ -7,7 +7,7 @@
 #include <span>
 
 constexpr std::byte
-Calculate8bitCRC(std::span<const std::byte> src, std::byte crc) noexcept
+UpdateCRC8(std::span<const std::byte> src, std::byte crc) noexcept
 {
   constexpr std::byte poly{0x69};
 

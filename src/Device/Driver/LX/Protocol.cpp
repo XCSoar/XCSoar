@@ -108,7 +108,7 @@ LX::calc_crc_char(std::byte d, std::byte crc) noexcept
 std::byte
 LX::calc_crc(std::span<const std::byte> src, std::byte crc) noexcept
 {
-  return Calculate8bitCRC(src, crc);
+  return UpdateCRC8(src, crc);
 }
 
 bool
