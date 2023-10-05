@@ -6,6 +6,7 @@
 #include <array>
 #include <cstdint>
 #include <cstddef>
+#include <span>
 
 class MD5
 {
@@ -39,7 +40,7 @@ public:
   void Initialise() noexcept;
 
   void Append(std::byte ch) noexcept;
-  void Append(const void *data, size_t length) noexcept;
+  void Append(std::span<const std::byte> src) noexcept;
 
   void Finalize() noexcept;
 

@@ -109,12 +109,10 @@ MD5::Append(std::byte ch) noexcept
 }
 
 void
-MD5::Append(const void *data, size_t length) noexcept
+MD5::Append(std::span<const std::byte> src) noexcept
 {
-  const std::byte *i = (const std::byte *)data, *const end = i + length;
-
-  while (i != end)
-    Append(*i++);
+  for (std::byte i : src)
+    Append(i);
 }
 
 /**

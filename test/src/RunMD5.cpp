@@ -17,7 +17,7 @@ Feed(Reader &r, MD5 &state)
     if (nbytes == 0)
       break;
 
-    state.Append(buffer, nbytes);
+    state.Append(std::span{buffer}.first(nbytes));
   }
 }
 
