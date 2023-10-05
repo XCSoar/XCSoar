@@ -10,7 +10,7 @@
 
 [[gnu::pure]]
 static inline uint8_t
-Calculate8bitCRC(std::span<const uint8_t> src, uint8_t crc, const uint8_t poly)
+Calculate8bitCRC(std::span<const uint8_t> src, uint8_t crc, const uint8_t poly) noexcept
 {
   for (uint8_t d : src) {
     for (int count = 8; --count >= 0; d <<= 1) {
@@ -26,7 +26,7 @@ Calculate8bitCRC(std::span<const uint8_t> src, uint8_t crc, const uint8_t poly)
 
 [[gnu::pure]]
 static inline uint8_t
-Calculate8bitCRC(std::span<const std::byte> src, uint8_t crc, const uint8_t poly)
+Calculate8bitCRC(std::span<const std::byte> src, uint8_t crc, const uint8_t poly) noexcept
 {
   return Calculate8bitCRC(FromBytesStrict<const uint8_t>(src), crc, poly);
 }
