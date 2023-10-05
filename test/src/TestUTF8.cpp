@@ -120,7 +120,7 @@ TestTruncateString()
 {
   for (const auto &t : truncate_string_tests) {
     char buffer[1024];
-    CopyTruncateStringUTF8(buffer, t.dest_size, t.src, t.truncate);
+    CopyTruncateStringUTF8({buffer, t.dest_size}, t.src, t.truncate);
     ok1(strcmp(buffer, t.expected_result) == 0);
   }
 }

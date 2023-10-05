@@ -89,7 +89,7 @@ StringConverter::Convert(char *narrow)
 
   case Charset::ISO_LATIN_1:
     buffer_size = strlen(narrow) * 2 + 1;
-    utf8 = Latin1ToUTF8(narrow, tbuffer.get(buffer_size), buffer_size);
+    utf8 = Latin1ToUTF8(narrow, {tbuffer.get(buffer_size), buffer_size});
     if (utf8 == nullptr)
       throw std::runtime_error("Latin-1 to UTF-8 conversion failed");
 

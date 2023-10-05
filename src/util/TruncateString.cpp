@@ -59,6 +59,6 @@ CopyTruncateString(TCHAR *dest, size_t dest_size,
   *p = _T('\0');
   return p;
 #else
-  return CopyTruncateStringUTF8(dest, dest_size, src, truncate);
+  return CopyTruncateStringUTF8({dest, dest_size}, src, truncate);
 #endif
 }
