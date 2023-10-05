@@ -5,6 +5,7 @@
 
 #include "Device/Port/Port.hpp"
 #include "util/Compiler.h"
+#include "util/CRC8.hpp"
 
 #include <cstddef>
 #include <cstdint>
@@ -194,14 +195,6 @@ ReceivePacketRetry(Port &port, Command command,
                    std::chrono::steady_clock::duration total_timeout,
                    unsigned n_retries);
 
-[[gnu::const]]
-std::byte
-calc_crc_char(std::byte d, std::byte crc) noexcept;
-
-[[gnu::pure]]
-std::byte
-calc_crc(std::span<const std::byte> src, std::byte crc) noexcept;
-
 bool
 ReadCRC(Port &port, std::span<std::byte> dest, OperationEnvironment &env,
         std::chrono::steady_clock::duration first_timeout,
@@ -220,13 +213,13 @@ public:
              std::chrono::steady_clock::duration timeout=std::chrono::seconds(5)) {
     port.FullWrite(src, env, timeout);
 
-    crc = calc_crc(src, crc);
+    crc = UpdateCRC8(src, crc);
     return true;
   }
 
   void Write(std::byte value) {
     port.Write(value);
-    crc = calc_crc_char(value, crc);
+    crc = UpdateCRC8(value, crc);
   }
 
   /**
