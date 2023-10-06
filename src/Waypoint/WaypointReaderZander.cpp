@@ -19,7 +19,7 @@ ParseString(tstring_view src, tstring &dest, std::size_t len) noexcept
     src = src.substr(0, len);
 
   // Cut the string after the first space, tab or null character
-  if (auto i = dest.find_first_of(_T("\t\0")); i != dest.npos)
+  if (auto i = src.find_first_of(_T("\t\0")); i != src.npos)
     src = src.substr(0, i);
 
   dest.assign(src);
