@@ -3,6 +3,7 @@
 UTIL_SRC_DIR = $(SRC)/util
 
 UTIL_SOURCES = \
+	$(UTIL_SRC_DIR)/DecimalParser.cxx \
 	$(UTIL_SRC_DIR)/Exception.cxx \
 	$(UTIL_SRC_DIR)/PrintException.cxx \
 	$(UTIL_SRC_DIR)/CRC16CCITT.cpp \
