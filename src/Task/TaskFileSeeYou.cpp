@@ -2,7 +2,8 @@
 // Copyright The XCSoar Project
 
 #include "Task/TaskFileSeeYou.hpp"
-#include "io/FileLineReader.hpp"
+#include "io/BufferedReader.hxx"
+#include "io/FileReader.hxx"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Waypoint/CupParser.hpp"
 #include "Waypoint/WaypointReaderSeeYou.hpp"
@@ -199,7 +200,7 @@ ParseOZs(SeeYouTurnpointInformation &tp_info, std::string_view src) noexcept
  * @param turnpoint_infos Loads this with CU task tp info
  */
 static void
-ParseCUTaskDetails(NLineReader &reader, SeeYouTaskInformation &task_info,
+ParseCUTaskDetails(BufferedReader &reader, SeeYouTaskInformation &task_info,
                    SeeYouTurnpointInformation turnpoint_infos[])
 {
   // Read options/observation zones
@@ -421,7 +422,7 @@ CreatePoint(unsigned pos, unsigned n_waypoints, WaypointPtr &&wp,
  * file contains no task
  */
 static bool
-ParseSeeYouWaypoints(NLineReader &reader, Waypoints &way_points)
+ParseSeeYouWaypoints(BufferedReader &reader, Waypoints &way_points)
 {
   const WaypointFactory factory(WaypointOrigin::NONE);
   WaypointReaderSeeYou waypoint_file(factory);
@@ -439,7 +440,7 @@ ParseSeeYouWaypoints(NLineReader &reader, Waypoints &way_points)
 }
 
 static char *
-AdvanceReaderToTask(NLineReader &reader, const unsigned index)
+AdvanceReaderToTask(BufferedReader &reader, const unsigned index)
 {
   // Skip lines until n-th task
   unsigned count = 0;
@@ -460,7 +461,8 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
                         const Waypoints *waypoints, unsigned index) const
 try {
   // Create FileReader for reading the task
-  FileLineReaderA reader{path};
+  FileReader file_reader{path};
+  BufferedReader reader{file_reader};
   StringConverter string_converter;
 
   // Read waypoints from the CUP file
@@ -573,7 +575,8 @@ TaskFileSeeYou::GetList() const
   std::vector<tstring> result;
 
   // Open the CUP file
-  FileLineReaderA reader{path};
+  FileReader file_reader{path};
+  BufferedReader reader{file_reader};
   StringConverter string_converter;
 
   bool in_task_section = false;
