@@ -6,8 +6,7 @@
 #include "Factory.hpp"
 
 class Waypoints;
-class NLineReader;
-class ProgressListener;
+class BufferedReader;
 
 class WaypointReaderBase
 {
@@ -26,8 +25,7 @@ public:
    * @param way_points The waypoint list to fill
    * @return True if the waypoint file parsing was okay, False otherwise
    */
-  void Parse(Waypoints &way_points, NLineReader &reader,
-             ProgressListener &progress);
+  void Parse(Waypoints &way_points, BufferedReader &reader);
 
 protected:
   /**
