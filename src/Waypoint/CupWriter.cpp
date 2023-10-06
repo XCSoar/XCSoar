@@ -122,13 +122,13 @@ WriteCup(BufferedOutputStream &writer, const Waypoint &wp)
 {
   // Write Title
   writer.Write('"');
-  writer.Write(wp.name.c_str());
+  writer.Write(wp.name);
   writer.Write('"');
   writer.Write(',');
 
   // Write Code / Short Name
   writer.Write('"');
-  writer.Write(wp.shortname.c_str());
+  writer.Write(wp.shortname);
   writer.Write('"');
   writer.Write(',');
 
@@ -178,7 +178,7 @@ WriteCup(BufferedOutputStream &writer, const Waypoint &wp)
 
   // Write Description
   writer.Write('"');
-  writer.Write(wp.comment.c_str());
+  writer.Write(wp.comment);
   writer.Write('"');
   writer.Write('\n');
 }
