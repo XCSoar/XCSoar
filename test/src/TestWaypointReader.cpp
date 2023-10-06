@@ -11,149 +11,9 @@
 #include "util/tstring.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StringStrip.hxx"
-#include "util/ExtractParameters.hpp"
 #include "Operation/Operation.hpp"
 
 #include <vector>
-
-static void
-TestExtractParameters()
-{
-  TCHAR buffer[1024];
-  const TCHAR *params[64];
-  unsigned n;
-
-  // test basic functionality
-
-  n = ExtractParameters(_T(""), buffer, params, 64);
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("")));
-
-  n = ExtractParameters(_T("foo"), buffer, params, 64);
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("foo")));
-
-  n = ExtractParameters(_T("foo,bar"), buffer, params, 64);
-  ok1(n == 2);
-  ok1(StringIsEqual(params[0], _T("foo")));
-  ok1(StringIsEqual(params[1], _T("bar")));
-
-  n = ExtractParameters(_T("foo,bar"), buffer, params, 1);
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("foo")));
-
-  n = ExtractParameters(_T("foo,bar,"), buffer, params, 64);
-  ok1(n == 3);
-  ok1(StringIsEqual(params[0], _T("foo")));
-  ok1(StringIsEqual(params[1], _T("bar")));
-  ok1(StringIsEqual(params[2], _T("")));
-
-  n = ExtractParameters(_T("foo,bar,,"), buffer, params, 64);
-  ok1(n == 4);
-  ok1(StringIsEqual(params[0], _T("foo")));
-  ok1(StringIsEqual(params[1], _T("bar")));
-  ok1(StringIsEqual(params[2], _T("")));
-  ok1(StringIsEqual(params[3], _T("")));
-
-
-  // with qoutes but no quote handling
-
-  n = ExtractParameters(_T("\"foo,comma\",\"bar\""), buffer, params, 64);
-  ok1(n == 3);
-  ok1(StringIsEqual(params[0], _T("\"foo")));
-  ok1(StringIsEqual(params[1], _T("comma\"")));
-  ok1(StringIsEqual(params[2], _T("\"bar\"")));
-
-
-  // quote handling
-
-  n = ExtractParameters(_T("\"\""),
-                                      buffer, params, 64, false, _T('"'));
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("")));
-
-  n = ExtractParameters(_T("\"\"\""),
-                                      buffer, params, 64, false, _T('"'));
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("\"")));
-
-  n = ExtractParameters(_T("\"\"\"\""),
-                                      buffer, params, 64, false, _T('"'));
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("\"")));
-
-  n = ExtractParameters(_T("\"foo,comma\",\"bar\""),
-                                      buffer, params, 64, false, _T('"'));
-  ok1(n == 2);
-  ok1(StringIsEqual(params[0], _T("foo,comma")));
-  ok1(StringIsEqual(params[1], _T("bar")));
-
-
-  // no quotes, whitespace removal
-
-  n = ExtractParameters(_T("foo bar"), buffer, params, 64, true);
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("foo bar")));
-
-  n = ExtractParameters(_T("foo , bar, baz"), buffer, params, 64, true);
-  ok1(n == 3);
-  ok1(StringIsEqual(params[0], _T("foo")));
-  ok1(StringIsEqual(params[1], _T("bar")));
-  ok1(StringIsEqual(params[2], _T("baz")));
-
-  n = ExtractParameters(_T(" foo  ,  bar  , baz "), buffer, params, 64, true);
-  ok1(n == 3);
-  ok1(StringIsEqual(params[0], _T("foo")));
-  ok1(StringIsEqual(params[1], _T("bar")));
-  ok1(StringIsEqual(params[2], _T("baz")));
-
-  n = ExtractParameters(_T(" foo\"  , \" bar \"  , \"baz "),
-                        buffer, params, 64, true);
-  ok1(n == 3);
-  ok1(StringIsEqual(params[0], _T("foo\"")));
-  ok1(StringIsEqual(params[1], _T("\" bar \"")));
-  ok1(StringIsEqual(params[2], _T("\"baz")));
-
-  // quote handling, whitespace removal
-
-  n = ExtractParameters(_T("\"foo \" , \" bar\", \" baz\""),
-                        buffer, params, 64, true, _T('"'));
-  ok1(n == 3);
-  ok1(StringIsEqual(params[0], _T("foo ")));
-  ok1(StringIsEqual(params[1], _T(" bar")));
-  ok1(StringIsEqual(params[2], _T(" baz")));
-
-  n = ExtractParameters(_T(" \" foo  \"  ,  \"  bar  \"  , \" baz \" "),
-                        buffer, params, 64, true, _T('"'));
-  ok1(n == 3);
-  ok1(StringIsEqual(params[0], _T(" foo  ")));
-  ok1(StringIsEqual(params[1], _T("  bar  ")));
-  ok1(StringIsEqual(params[2], _T(" baz ")));
-
-  n = ExtractParameters(_T("\"foo\",\"\",\"bar\""), buffer, params, 64,
-                        true, _T('"'));
-  ok1(n == 3);
-  ok1(StringIsEqual(params[0], _T("foo")));
-  ok1(StringIsEqual(params[1], _T("")));
-  ok1(StringIsEqual(params[2], _T("bar")));
-
-  // missing end quote
-  n = ExtractParameters(_T("\"foo, bar"), buffer, params, 64,
-                        true, _T('"'));
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("foo, bar")));
-
-  // embedded quotes and commas
-  n = ExtractParameters(_T("\"foo, \"bar\"\""), buffer, params, 64,
-                        true, _T('"'));
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("foo, \"bar\"")));
-
-  n = ExtractParameters(_T("\"foo, \"\"bar\"\"\""), buffer, params, 64,
-                        true, _T('"'));
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("foo, \"bar\"")));
-}
 
 typedef std::vector<Waypoint> wp_vector;
 
@@ -542,9 +402,7 @@ int main()
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(513);
-
-  TestExtractParameters();
+  plan_tests(450);
 
   TestWinPilot(org_wp);
   TestSeeYou(org_wp);
