@@ -205,10 +205,8 @@ WaypointReaderSeeYou::ParseLine(const char *line, Waypoints &waypoints)
     return true;
 
   // Get fields
-  std::string_view rest{line};
   std::array<std::string_view, 20> params;
-  for (auto &i : params)
-    i = CupNextColumn(rest);
+  CupSplitColumns(line, params);
 
   if (first) {
     first = false;

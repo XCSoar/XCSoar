@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <span>
 #include <string_view>
 
 /**
@@ -11,3 +12,7 @@
  */
 std::string_view
 CupNextColumn(std::string_view &line) noexcept;
+
+void
+CupSplitColumns(std::string_view line,
+                std::span<std::string_view> columns) noexcept;

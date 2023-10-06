@@ -33,3 +33,11 @@ CupNextColumn(std::string_view &line) noexcept
     return StripRight(value);
   }
 }
+
+void
+CupSplitColumns(std::string_view line,
+                std::span<std::string_view> columns) noexcept
+{
+  for (auto &i : columns)
+    i = CupNextColumn(line);
+}
