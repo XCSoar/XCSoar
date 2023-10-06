@@ -4,6 +4,7 @@
 #include "DecimalParser.hxx"
 
 #include <charconv> // std::from_chars()
+#include <cstdint>
 
 #include <math.h> // for pow()
 
