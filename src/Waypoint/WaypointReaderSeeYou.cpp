@@ -2,45 +2,16 @@
 // Copyright The XCSoar Project
 
 #include "WaypointReaderSeeYou.hpp"
+#include "CupParser.hpp"
 #include "Units/System.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "util/DecimalParser.hxx"
 #include "util/IterableSplitString.hxx"
 #include "util/NumberParser.hxx"
-#include "util/StringStrip.hxx"
 
 #include <stdlib.h>
 
 using std::string_view_literals::operator""sv;
-
-static std::string_view
-NextColumn(std::string_view &line) noexcept
-{
-  line = StripLeft(line);
-
-  if (line.starts_with('"')) {
-    /* quoted: the value ends at the closing double quote */
-    line.remove_prefix(1);
-
-    auto [value, rest1] = Split(line, '"');
-
-    auto [more, rest2] = Split(rest1, ',');
-
-    /* ... unless there is another double quote ... */
-    auto another_quote = more.rfind('"');
-    if (another_quote != more.npos)
-      /* ... which is a syntax error, but XCSoar supported this
-         syntax, so let's emulate it */
-      value = line.substr(0, &more[another_quote] - line.data());
-
-    line = rest2;
-    return value;
-  } else {
-    auto [value, rest] = Split(line, ',');
-    line = rest;
-    return StripRight(value);
-  }
-}
 
 static bool
 ParseAngle(std::string_view src, Angle &dest, const bool lat) noexcept
@@ -237,7 +208,7 @@ WaypointReaderSeeYou::ParseLine(const char *line, Waypoints &waypoints)
   std::string_view rest{line};
   std::array<std::string_view, 20> params;
   for (auto &i : params)
-    i = NextColumn(rest);
+    i = CupNextColumn(rest);
 
   if (first) {
     first = false;
