@@ -159,6 +159,7 @@ include $(topdir)/build/libwaypoint.mk
 include $(topdir)/build/libairspace.mk
 include $(topdir)/build/libtask.mk
 include $(topdir)/build/libxml.mk
+include $(topdir)/build/libwaypointfile.mk
 include $(topdir)/build/libtaskfile.mk
 include $(topdir)/build/libroute.mk
 include $(topdir)/build/libcontest.mk

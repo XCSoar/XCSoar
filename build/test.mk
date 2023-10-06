@@ -684,21 +684,12 @@ $(eval $(call link-program,TestDriver,TEST_DRIVER))
 TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Waypoint/WaypointFileType.cpp \
-	$(SRC)/Waypoint/WaypointReaderBase.cpp \
-	$(SRC)/Waypoint/WaypointReader.cpp \
-	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
-	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
-	$(SRC)/Waypoint/WaypointReaderZander.cpp \
-	$(SRC)/Waypoint/WaypointReaderFS.cpp \
-	$(SRC)/Waypoint/WaypointReaderOzi.cpp \
-	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestWaypointReader.cpp
-TEST_WAY_POINT_FILE_DEPENDS = WAYPOINT OPERATION GEO MATH IO ZZIP OS THREAD UTIL
+TEST_WAY_POINT_FILE_DEPENDS = WAYPOINTFILE OPERATION GEO MATH IO ZZIP OS THREAD UTIL
 $(eval $(call link-program,TestWaypointReader,TEST_WAY_POINT_FILE))
 
 TEST_TRACE_SOURCES = \
@@ -1164,15 +1155,6 @@ RUN_INPUT_PARSER_DEPENDS = IO OS UTIL
 $(eval $(call link-program,RunInputParser,RUN_INPUT_PARSER))
 
 RUN_WAY_POINT_PARSER_SOURCES = \
-	$(SRC)/Waypoint/WaypointFileType.cpp \
-	$(SRC)/Waypoint/WaypointReaderBase.cpp \
-	$(SRC)/Waypoint/WaypointReader.cpp \
-	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
-	$(SRC)/Waypoint/WaypointReaderFS.cpp \
-	$(SRC)/Waypoint/WaypointReaderOzi.cpp \
-	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
-	$(SRC)/Waypoint/WaypointReaderZander.cpp \
-	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
@@ -1182,19 +1164,10 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/RunWaypointParser.cpp
 RUN_WAY_POINT_PARSER_LDADD = $(FAKE_LIBS)
-RUN_WAY_POINT_PARSER_DEPENDS = WAYPOINT OPERATION IO OS THREAD ZZIP GEO MATH UTIL
+RUN_WAY_POINT_PARSER_DEPENDS = WAYPOINTFILE OPERATION IO OS THREAD ZZIP GEO MATH UTIL
 $(eval $(call link-program,RunWaypointParser,RUN_WAY_POINT_PARSER))
 
 NEAREST_WAYPOINTS_SOURCES = \
-	$(SRC)/Waypoint/WaypointFileType.cpp \
-	$(SRC)/Waypoint/WaypointReaderBase.cpp \
-	$(SRC)/Waypoint/WaypointReader.cpp \
-	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
-	$(SRC)/Waypoint/WaypointReaderFS.cpp \
-	$(SRC)/Waypoint/WaypointReaderOzi.cpp \
-	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
-	$(SRC)/Waypoint/WaypointReaderZander.cpp \
-	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
@@ -1204,7 +1177,7 @@ NEAREST_WAYPOINTS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/NearestWaypoints.cpp
 NEAREST_WAYPOINTS_LDADD = $(FAKE_LIBS)
-NEAREST_WAYPOINTS_DEPENDS = WAYPOINT OPERATION IO OS THREAD ZZIP GEO MATH UTIL
+NEAREST_WAYPOINTS_DEPENDS = WAYPOINTFILE OPERATION IO OS THREAD ZZIP GEO MATH UTIL
 $(eval $(call link-program,NearestWaypoints,NEAREST_WAYPOINTS))
 
 RUN_FLIGHT_PARSER_SOURCES = \
@@ -1576,8 +1549,6 @@ RUN_TASK_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
-	$(SRC)/Waypoint/WaypointReaderBase.cpp \
-	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/TransponderCode.cpp \
@@ -1585,7 +1556,7 @@ RUN_TASK_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/RunTask.cpp
-RUN_TASK_DEPENDS = $(DEBUG_REPLAY_DEPENDS) TASKFILE WAYPOINT GLIDE GEO MATH UTIL IO TIME
+RUN_TASK_DEPENDS = $(DEBUG_REPLAY_DEPENDS) TASKFILE WAYPOINTFILE GLIDE GEO MATH UTIL IO TIME
 $(eval $(call link-program,RunTask,RUN_TASK))
 
 RUN_TRACE_SOURCES = \
@@ -1795,16 +1766,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Profile/FlarmProfile.cpp \
 	$(SRC)/Waypoint/HomeGlue.cpp \
 	$(SRC)/Waypoint/LastUsed.cpp \
-	$(SRC)/Waypoint/WaypointFileType.cpp \
 	$(SRC)/Waypoint/WaypointGlue.cpp \
-	$(SRC)/Waypoint/WaypointReader.cpp \
-	$(SRC)/Waypoint/WaypointReaderBase.cpp \
-	$(SRC)/Waypoint/WaypointReaderOzi.cpp \
-	$(SRC)/Waypoint/WaypointReaderFS.cpp \
-	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
-	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
-	$(SRC)/Waypoint/WaypointReaderZander.cpp \
-	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/RadioFrequency.cpp \
@@ -1833,7 +1795,7 @@ RUN_MAP_WINDOW_DEPENDS = \
 	RESOURCE \
 	OPERATION \
 	ASYNC OS IO THREAD \
-	TASK ROUTE GLIDE WAYPOINT AIRSPACE \
+	TASK ROUTE GLIDE WAYPOINT WAYPOINTFILE AIRSPACE \
 	JASPER ZZIP LIBNMEA GEO MATH TIME UTIL
 $(eval $(call link-program,RunMapWindow,RUN_MAP_WINDOW))
 
@@ -2135,8 +2097,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Task/ProtectedRoutePlanner.cpp \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
-	$(SRC)/Waypoint/WaypointReaderBase.cpp \
-	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/Math/Screen.cpp \
@@ -2244,7 +2204,9 @@ RUN_ANALYSIS_DEPENDS = \
 	OPERATION \
 	SCREEN EVENT RESOURCE LIBCOMPUTER LIBNMEA ASYNC IO DATA_FIELD \
 	OS THREAD \
-	CONTEST TASKFILE ROUTE GLIDE WAYPOINT ROUTE AIRSPACE ZZIP UTIL GEO MATH TIME
+	CONTEST TASKFILE ROUTE GLIDE \
+	WAYPOINT WAYPOINTFILE \
+	ROUTE AIRSPACE ZZIP UTIL GEO MATH TIME
 $(eval $(call link-program,RunAnalysis,RUN_ANALYSIS))
 
 RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
@@ -2363,16 +2325,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Formatter/Units.cpp \
-	$(SRC)/Waypoint/WaypointFileType.cpp \
 	$(SRC)/Waypoint/WaypointGlue.cpp \
-	$(SRC)/Waypoint/WaypointReaderBase.cpp \
-	$(SRC)/Waypoint/WaypointReader.cpp \
-	$(SRC)/Waypoint/WaypointReaderOzi.cpp \
-	$(SRC)/Waypoint/WaypointReaderFS.cpp \
-	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
-	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
-	$(SRC)/Waypoint/WaypointReaderZander.cpp \
-	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
@@ -2382,7 +2335,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/RunTaskEditorDialog.cpp
 RUN_TASK_EDITOR_DIALOG_LDADD = $(FAKE_LIBS)
-RUN_TASK_EDITOR_DIALOG_DEPENDS = TASKFILE OPERATION FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE IO OS THREAD ZZIP UTIL GEO
+RUN_TASK_EDITOR_DIALOG_DEPENDS = WAYPOINTFILE TASKFILE OPERATION FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE IO OS THREAD ZZIP UTIL GEO
 $(eval $(call link-program,RunTaskEditorDialog,RUN_TASK_EDITOR_DIALOG))
 
 TEST_NOTIFY_SOURCES = \
@@ -2466,14 +2419,12 @@ DUMP_TASK_FILE_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
-	$(SRC)/Waypoint/WaypointReaderBase.cpp \
-	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/Engine/Route/Config.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/DumpTaskFile.cpp
-DUMP_TASK_FILE_DEPENDS = TASKFILE GLIDE WAYPOINT OPERATION IO OS THREAD ZZIP GEO TIME MATH UTIL
+DUMP_TASK_FILE_DEPENDS = TASKFILE GLIDE WAYPOINT WAYPOINTFILE OPERATION IO OS THREAD ZZIP GEO TIME MATH UTIL
 $(eval $(call link-program,DumpTaskFile,DUMP_TASK_FILE))
 
 DUMP_FLARM_NET_SOURCES = \
@@ -2501,18 +2452,9 @@ TEST_REPLAY_RETROSPECTIVE_SOURCES = \
 	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Waypoint/WaypointFileType.cpp \
-	$(SRC)/Waypoint/WaypointReaderBase.cpp \
-	$(SRC)/Waypoint/WaypointReader.cpp \
-	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
-	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
-	$(SRC)/Waypoint/WaypointReaderZander.cpp \
-	$(SRC)/Waypoint/WaypointReaderFS.cpp \
-	$(SRC)/Waypoint/WaypointReaderOzi.cpp \
-	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/test_replay_retrospective.cpp
-TEST_REPLAY_RETROSPECTIVE_DEPENDS = $(TEST1_DEPENDS) OPERATION
+TEST_REPLAY_RETROSPECTIVE_DEPENDS = $(TEST1_DEPENDS) OPERATION WAYPOINTFILE
 $(eval $(call link-program,test_replay_retrospective,TEST_REPLAY_RETROSPECTIVE))
