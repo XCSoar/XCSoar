@@ -100,7 +100,7 @@ LoadFiles(PlacesOfInterestSettings &poi_settings,
   ConsoleOperationEnvironment operation;
 
   topography = new TopographyStore();
-  LoadConfiguredTopography(*topography, operation);
+  LoadConfiguredTopography(*topography);
 
   terrain = RasterTerrain::OpenTerrain(nullptr, operation).release();
 

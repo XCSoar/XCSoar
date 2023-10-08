@@ -66,7 +66,7 @@ TopographyStore::LoadAll() noexcept
 }
 
 void
-TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
+TopographyStore::Load(NLineReader &reader,
                       Path directory, struct zzip_dir *zdir) noexcept
 {
   Reset();
@@ -82,12 +82,6 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     shape_filename[0] = 0;
 
   char *shape_filename_end = shape_filename + strlen(shape_filename);
-
-  // Read file size to have a rough progress estimate for the progress bar
-  const long filesize = std::max(reader.GetSize(), 1l);
-
-  // Set progress bar to 100 steps
-  operation.SetProgressRange(100);
 
   // Iterate through shape files in the "topology.tpl" file until
   // end or max. file number reached
@@ -118,9 +112,6 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     } catch (...) {
       LogError(std::current_exception());
     }
-
-    // Update progress bar
-    operation.SetProgressPosition((reader.Tell() * 100) / filesize);
   }
 }
 

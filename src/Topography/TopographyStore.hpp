@@ -11,7 +11,6 @@
 class Path;
 class WindowProjection;
 class NLineReader;
-class OperationEnvironment;
 struct zzip_dir;
 
 /**
@@ -65,7 +64,7 @@ public:
    */
   void LoadAll() noexcept;
 
-  void Load(OperationEnvironment &operation, NLineReader &reader,
+  void Load(NLineReader &reader,
             Path directory, struct zzip_dir *zdir = nullptr) noexcept;
   void Reset() noexcept;
 };

@@ -4,8 +4,6 @@
 #pragma once
 
 class TopographyStore;
-class OperationEnvironment;
 
 bool
-LoadConfiguredTopography(TopographyStore &store,
-                         OperationEnvironment &operation);
+LoadConfiguredTopography(TopographyStore &store);

@@ -6,7 +6,6 @@
 #include "Language/Language.hpp"
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
-#include "Operation/Operation.hpp"
 #include "io/MapFile.hpp"
 #include "io/ZipArchive.hpp"
 #include "io/ZipLineReader.hpp"
@@ -17,15 +16,14 @@
  * the same ZIP file.
  */
 static bool
-LoadConfiguredTopographyZip(TopographyStore &store,
-                            OperationEnvironment &operation)
+LoadConfiguredTopographyZip(TopographyStore &store)
 try {
   auto archive = OpenMapFile();
   if (!archive)
     return false;
 
   ZipLineReaderA reader(archive->get(), "topology.tpl");
-  store.Load(operation, reader, nullptr, archive->get());
+  store.Load(reader, nullptr, archive->get());
   return true;
 } catch (...) {
   LogError(std::current_exception(), "No topography in map file");
@@ -33,11 +31,7 @@ try {
 }
 
 bool
-LoadConfiguredTopography(TopographyStore &store,
-                         OperationEnvironment &operation)
+LoadConfiguredTopography(TopographyStore &store)
 {
-  LogString("Loading Topography File...");
-  operation.SetText(_("Loading Topography File..."));
-
-  return LoadConfiguredTopographyZip(store, operation);
+  return LoadConfiguredTopographyZip(store);
 }

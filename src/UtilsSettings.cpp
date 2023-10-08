@@ -143,7 +143,7 @@ SettingsLeave(const UISettings &old_ui_settings)
 
     auto &topography = *data_components->topography;
     topography.Reset();
-    LoadConfiguredTopography(topography, operation);
+    LoadConfiguredTopography(topography);
     main_window.SetTopography(&topography);
   }
 

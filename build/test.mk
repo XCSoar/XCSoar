@@ -1082,7 +1082,6 @@ $(eval $(call link-program,KeyCodeDumper,KEY_CODE_DUMPER))
 LOAD_TOPOGRAPHY_SOURCES = \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
-	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/system/Path.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/LoadTopography.cpp
@@ -1090,7 +1089,7 @@ ifeq ($(OPENGL),y)
 LOAD_TOPOGRAPHY_SOURCES += \
 	$(CANVAS_SRC_DIR)/opengl/Triangulate.cpp
 endif
-LOAD_TOPOGRAPHY_DEPENDS = OPERATION TOPO RESOURCE GEO MATH THREAD IO SYSTEM UTIL ZZIP
+LOAD_TOPOGRAPHY_DEPENDS = TOPO RESOURCE GEO MATH THREAD IO SYSTEM UTIL ZZIP
 LOAD_TOPOGRAPHY_CPPFLAGS = $(SCREEN_CPPFLAGS)
 $(eval $(call link-program,LoadTopography,LOAD_TOPOGRAPHY))
 
