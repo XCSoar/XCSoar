@@ -228,7 +228,6 @@ static NextToken
 GetNextToken(Parser *pXML)
 {
   NextToken result;
-  const char *lpXML;
   char ch;
   char temp_ch;
   size_t size;
@@ -243,8 +242,7 @@ GetNextToken(Parser *pXML)
     return {{}, TokenType::ERROR};
 
   // Cache the current string pointer
-  lpXML = pXML->lpXML;
-  const char *const pStr = &lpXML[pXML->nIndex - 1];
+  const char *const pStr = &pXML->lpXML[pXML->nIndex - 1];
 
   switch (ch) {
     // Check for quotes
