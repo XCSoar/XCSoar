@@ -43,16 +43,22 @@
 
 namespace XML {
 
-/** Main structure used for parsing XML. */
-struct Parser {
-  StringConverter string_converter;
+struct Input {
   const char *lpXML;
   std::size_t nIndex = 0;
+
+  explicit Input(const char *_src) noexcept
+    :lpXML(_src) {}
+};
+
+/** Main structure used for parsing XML. */
+struct Parser : Input {
+  StringConverter string_converter;
   std::string_view end_tag{};
   bool nFirst = true;
 
   explicit Parser(const char *_xml) noexcept
-    :lpXML(_xml) {}
+    :Input(_xml) {}
 };
 
 /** Enumeration used to decipher what type a token is. */
