@@ -13,7 +13,7 @@ class ZipArchive;
  *
  * Throws on error.
  *
- * @return std::nullopt if no mpa file is configured
+ * @return std::nullopt if no map file is configured
  */
 std::optional<ZipArchive>
 OpenMapFile();
