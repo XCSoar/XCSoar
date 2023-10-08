@@ -31,8 +31,8 @@ ConstDataNode::List
 ConstDataNodeXML::ListChildren() const noexcept
 {
   List list;
-  for (auto i = node.begin(), end = node.end(); i != end; ++i)
-    list.emplace_back(new ConstDataNodeXML(*i));
+  for (const auto &i : node)
+    list.emplace_back(new ConstDataNodeXML(i));
   return list;
 }
 
@@ -40,9 +40,9 @@ ConstDataNode::List
 ConstDataNodeXML::ListChildrenNamed(const char *name) const noexcept
 {
   List list;
-  for (auto i = node.begin(), end = node.end(); i != end; ++i)
-    if (StringIsEqualIgnoreCase(i->GetName(), name))
-      list.emplace_back(new ConstDataNodeXML(*i));
+  for (const auto &i : node)
+    if (StringIsEqualIgnoreCase(i.GetName(), name))
+      list.emplace_back(new ConstDataNodeXML(i));
   return list;
 }
 
