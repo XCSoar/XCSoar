@@ -91,16 +91,13 @@ XMLNode::Serialise(const Data &data, BufferedOutputStream &os, int format)
     os.Write(data.name);
 
     // Enumerate attributes and add them to the string
-    for (auto i = data.attributes.begin(), end = data.attributes.end();
-         i != end; ++i) {
-      const Data::Attribute *pAttr = &*i;
+    for (const auto &i : data.attributes) {
       os.Write(' ');
-      os.Write(pAttr->name);
+      os.Write(i.name);
       os.Write('=');
       os.Write('"');
-      WriteXMLString(os, pAttr->value);
+      WriteXMLString(os, i.value);
       os.Write('"');
-      pAttr++;
     }
 
     has_children = data.HasChildren();
@@ -129,8 +126,8 @@ XMLNode::Serialise(const Data &data, BufferedOutputStream &os, int format)
   }
 
   /* write the child elements */
-  for (auto i = data.begin(), end = data.end(); i != end; ++i)
-    Serialise(*i->d, os, child_format);
+  for (const auto &i : data.children)
+    Serialise(*i.d, os, child_format);
 
   /* write the text */
   if (!data.text.empty()) {
