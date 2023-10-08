@@ -715,6 +715,21 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
   }
 }
 
+static XMLNode *
+GetRootElement(XMLNode &n) noexcept
+{
+  assert(n.IsNull());
+
+  XMLNode *result = n.GetFirstChild();
+
+  // If the new main node is the xml declaration
+  // -> try to take the first childnode again
+  if (result != nullptr && result->IsDeclaration())
+    result = result->GetFirstChild();
+
+  return result;
+}
+
 /**
  * Parses the given XML String and returns the main XMLNode
  * @param xml_string XML String
@@ -732,28 +747,11 @@ ParseString(std::string_view xml_string)
   // note: xnode is now the document node, not the main XMLNode
   ParseXMLElement(xnode, &xml);
 
-  // If the document node does not have childnodes
-  XMLNode *child = xnode.GetFirstChild();
-  if (child == nullptr)
+  auto *root_element = GetRootElement(xnode);
+  if (root_element == nullptr)
     throw std::runtime_error("No elements found");
 
-  // Set the document's first childnode as new main node
-  xnode = std::move(*child);
-
-  // If the new main node is the xml declaration
-  // -> try to take the first childnode again
-  if (xnode.IsDeclaration()) {
-    // If the declaration does not have childnodes
-    child = xnode.GetFirstChild();
-    if (child == nullptr)
-      throw std::runtime_error("No elements found");
-
-    // Set the declaration's first childnode as new main node
-    xnode = std::move(*child);
-  }
-
-  // Return the node (empty, main or child of main that equals tag)
-  return xnode;
+  return std::move(*root_element);
 }
 
 static std::unique_ptr<char[]>
