@@ -35,66 +35,33 @@
 #include <string>
 #include <string_view>
 
-#include <cassert>
-
 class BufferedOutputStream;
 
 class XMLNode {
-  /**
-   * To allow shallow copy and "intelligent/smart" pointers (automatic
-   * delete).
-   */
-  struct Data : private NonCopyable {
-    /** Structure for XML attribute. */
-    struct Attribute : private NonCopyable {
-      std::string name;
-      std::string value;
-
-      template<typename N, typename V>
-      Attribute(N &&name, V &&value) noexcept
-        :name(std::forward<N>(name)), value(std::forward<V>(value)) {}
-    };
-
-    /** Element name (=nullptr if root) */
+  /** Structure for XML attribute. */
+  struct Attribute : private NonCopyable {
     std::string name;
-
-    /** Whether node is an XML declaration - '<?xml ?>' */
-    bool is_declaration;
-
-    /** Array of child nodes */
-    std::list<XMLNode> children;
-
-    /** A concatentation of all text nodes */
-    std::string text;
-
-    /** Array of attributes */
-    std::forward_list<Attribute> attributes;
-
-    Data(std::string_view _name, bool _is_declaration) noexcept
-      :name(_name),
-       is_declaration(_is_declaration) {}
-
-    bool HasChildren() const noexcept {
-      return !children.empty() || !text.empty();
-    }
+    std::string value;
 
     template<typename N, typename V>
-    void AddAttribute(N &&name, V &&value) noexcept {
-      attributes.emplace_front(std::forward<N>(name), std::forward<V>(value));
-    }
-
-    typedef std::list<XMLNode>::const_iterator const_iterator;
-
-    const_iterator begin() const noexcept {
-      return children.begin();
-    }
-
-    const_iterator end() const noexcept {
-      return children.end();
-    }
+    Attribute(N &&name, V &&value) noexcept
+      :name(std::forward<N>(name)), value(std::forward<V>(value)) {}
   };
 
-  Data *d;
+  /** Element name (=nullptr if root) */
+  std::string name;
+
+  /** Whether node is an XML declaration - '<?xml ?>' */
+  bool is_declaration;
+
+  /** Array of child nodes */
+  std::list<XMLNode> children;
+
+  /** A concatentation of all text nodes */
+  std::string text;
+
+  /** Array of attributes */
+  std::forward_list<Attribute> attributes;
 
   /**
    * Protected constructor: use "parse" functions to get your first
@@ -111,26 +78,28 @@ public:
   static XMLNode CreateRoot(const char *name) noexcept;
 
   bool IsNull() const noexcept {
-    return d->name.empty();
+    return name.empty();
   }
 
   /**
    * name of the node
    */
   const char *GetName() const noexcept {
-    assert(d != nullptr);
-
-    return d->name.c_str();
+    return name.c_str();
   }
 
-  typedef Data::const_iterator const_iterator;
+  using const_iterator = std::list<XMLNode>::const_iterator;
 
   const_iterator begin() const noexcept {
-    return d->begin();
+    return children.begin();
   }
 
   const_iterator end() const noexcept {
-    return d->end();
+    return children.end();
+  }
+
+  bool HasChildren() const noexcept {
+    return !children.empty() || !text.empty();
   }
 
   /**
@@ -138,8 +107,8 @@ public:
    */
   [[gnu::pure]]
   const XMLNode *GetFirstChild() const noexcept {
-    return d != nullptr && !d->children.empty()
-      ? &d->children.front()
+    return !children.empty()
+      ? &children.front()
       : nullptr;
   }
 
@@ -148,8 +117,8 @@ public:
    */
   [[gnu::pure]]
   XMLNode *GetFirstChild() noexcept {
-    return d != nullptr && !d->children.empty()
-      ? &d->children.front()
+    return !children.empty()
+      ? &children.front()
       : nullptr;
   }
 
@@ -180,40 +149,19 @@ public:
 
   [[gnu::pure]]
   bool IsDeclaration() const noexcept {
-    assert(d != nullptr);
-
-    return d->is_declaration;
-  }
-
-  // to allow shallow copy:
-  ~XMLNode() noexcept {
-    delete d;
+    return is_declaration;
   }
 
   XMLNode(const XMLNode &A) = delete;
 
-  XMLNode(XMLNode &&other) noexcept
-    :d(other.d) {
-    other.d = nullptr;
-  }
+  XMLNode(XMLNode &&other) noexcept = default;
 
   /**
    * Shallow copy.
    */
   XMLNode &operator=(const XMLNode& A) = delete;
 
-  XMLNode &operator=(XMLNode &&other) noexcept {
-    Data *old = d;
-    d = other.d;
-    other.d = nullptr;
-
-    delete old;
-
-    return *this;
-  }
-
-  constexpr XMLNode() noexcept
-    :d(nullptr) {}
+  XMLNode &operator=(XMLNode &&other) noexcept = default;
 
   // The strings given as parameters for these 4 methods will be free'd by the XMLNode class:
 
@@ -228,14 +176,14 @@ public:
    */
   template<typename N, typename V>
   void AddAttribute(N &&name, V &&value) noexcept {
-    d->AddAttribute(std::forward<N>(name), std::forward<V>(value));
+    attributes.emplace_front(std::forward<N>(name), std::forward<V>(value));
   }
 
   /**
    * Add text to the element.
    */
   void AddText(std::string_view value) noexcept {
-    d->text.append(value);
+    text.append(value);
   }
 
 private:
@@ -246,6 +194,5 @@ private:
    * This recurses through all subnodes then adds contents of the
    * nodes to the string.
    */
-  static void Serialise(const Data &data, BufferedOutputStream &os,
-                        int format);
+  void SerialiseInner(BufferedOutputStream &os, int format) const;
 };

@@ -75,23 +75,23 @@ WriteIndent(BufferedOutputStream &os, unsigned n)
 }
 
 void
-XMLNode::Serialise(const Data &data, BufferedOutputStream &os, int format)
+XMLNode::SerialiseInner(BufferedOutputStream &os, int format) const
 {
   bool has_children = false;
 
   // If the element has no name then assume this is the head node.
-  if (!data.name.empty()) {
+  if (!name.empty()) {
     // "<elementname "
     const unsigned cb = format == -1 ? 0 : format;
 
     WriteIndent(os, cb);
     os.Write('<');
-    if (data.is_declaration)
+    if (is_declaration)
       os.Write('?');
-    os.Write(data.name);
+    os.Write(name);
 
     // Enumerate attributes and add them to the string
-    for (const auto &i : data.attributes) {
+    for (const auto &i : attributes) {
       os.Write(' ');
       os.Write(i.name);
       os.Write('=');
@@ -100,8 +100,8 @@ XMLNode::Serialise(const Data &data, BufferedOutputStream &os, int format)
       os.Write('"');
     }
 
-    has_children = data.HasChildren();
-    if (data.is_declaration) {
+    has_children = HasChildren();
+    if (is_declaration) {
       os.Write('?');
       os.Write('>');
       if (format != -1)
@@ -119,28 +119,28 @@ XMLNode::Serialise(const Data &data, BufferedOutputStream &os, int format)
   // determine the number of spaces used for prefixes.
   int child_format = -1;
   if (format != -1) {
-    if (!data.name.empty())
+    if (!name.empty())
       child_format = format + 1;
     else
       child_format = format;
   }
 
   /* write the child elements */
-  for (const auto &i : data.children)
-    Serialise(*i.d, os, child_format);
+  for (const auto &i : children)
+    i.SerialiseInner(os, child_format);
 
   /* write the text */
-  if (!data.text.empty()) {
+  if (!text.empty()) {
     if (format != -1) {
       WriteIndent(os, format + 1);
-      WriteXMLString(os, data.text);
+      WriteXMLString(os, text);
       os.Write('\n');
     } else {
-      WriteXMLString(os, data.text);
+      WriteXMLString(os, text);
     }
   }
 
-  if (!data.name.empty() && !data.is_declaration) {
+  if (!name.empty() && !is_declaration) {
     // If we have child entries we need to use long XML notation for
     // closing the element - "<elementname>blah blah blah</elementname>"
     if (has_children) {
@@ -149,7 +149,7 @@ XMLNode::Serialise(const Data &data, BufferedOutputStream &os, int format)
         WriteIndent(os, format);
 
       os.Write("</");
-      os.Write(data.name);
+      os.Write(name);
 
       os.Write('>');
     } else {
@@ -167,5 +167,5 @@ XMLNode::Serialise(const Data &data, BufferedOutputStream &os, int format)
 void
 XMLNode::Serialise(BufferedOutputStream &os, bool format) const
 {
-  Serialise(*d, os, format ? 0 : -1);
+  SerialiseInner(os, format ? 0 : -1);
 }

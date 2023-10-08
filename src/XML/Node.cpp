@@ -37,28 +37,25 @@ XMLNode::CreateRoot(const char *name) noexcept
   return XMLNode(name, false);
 }
 
-XMLNode::XMLNode(std::string_view name,
-                 bool is_declaration) noexcept
-  :d(new Data(name, is_declaration))
+XMLNode::XMLNode(std::string_view _name,
+                 bool _is_declaration) noexcept
+  :name(_name),
+   is_declaration(_is_declaration)
 {
-  assert(d);
 }
 
 XMLNode &
-XMLNode::AddChild(const std::string_view name,
-                  bool is_declaration) noexcept
+XMLNode::AddChild(const std::string_view _name,
+                  bool _is_declaration) noexcept
 {
-  d->children.push_back(XMLNode(name, is_declaration));
-  return d->children.back();
+  children.push_back(XMLNode(_name, _is_declaration));
+  return children.back();
 }
 
 const XMLNode *
 XMLNode::GetChildNode(const char *name) const noexcept
 {
-  if (!d)
-    return nullptr;
-
-  for (const auto &i : d->children) {
+  for (const auto &i : children) {
     if (StringIsEqualIgnoreCase(i.GetName(), name))
       return &i;
   }
@@ -69,10 +66,7 @@ XMLNode::GetChildNode(const char *name) const noexcept
 const char *
 XMLNode::GetAttribute(const char *name) const noexcept
 {
-  if (!d)
-    return nullptr;
-
-  for (const auto &i : d->attributes)
+  for (const auto &i : attributes)
     if (StringIsEqualIgnoreCase(i.name.c_str(), name))
       return i.value.c_str();
 
