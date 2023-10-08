@@ -3,6 +3,7 @@
 
 #include "ConfiguredFile.hpp"
 #include "MapFile.hpp"
+#include "FileReader.hxx"
 #include "FileLineReader.hpp"
 #include "ZipArchive.hpp"
 #include "ZipLineReader.hpp"
@@ -13,6 +14,16 @@
 #include <zzip/zzip.h>
 
 #include <cassert>
+
+std::unique_ptr<FileReader>
+OpenConfiguredFile(std::string_view profile_key)
+{
+  const auto path = Profile::GetPath(profile_key);
+  if (path == nullptr)
+    return nullptr;
+
+  return std::make_unique<FileReader>(path);
+}
 
 std::unique_ptr<NLineReader>
 OpenConfiguredTextFileA(std::string_view profile_key)
