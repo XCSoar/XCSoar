@@ -29,6 +29,7 @@
 #include "Node.hpp"
 #include "io/BufferedOutputStream.hxx"
 #include "util/CharUtil.hxx"
+#include "util/tstring_view.hxx"
 
 #define INDENTCHAR '\t'
 
@@ -61,7 +62,7 @@ WriteXMLChar(BufferedOutputStream &os, TCHAR ch)
 }
 
 static void
-WriteXMLString(BufferedOutputStream &os, const tstring &source)
+WriteXMLString(BufferedOutputStream &os, const tstring_view source)
 {
   for (auto ch : source)
     WriteXMLChar(os, ch);
