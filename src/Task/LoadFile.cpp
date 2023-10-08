@@ -24,7 +24,7 @@ LoadTask(Path path, const TaskBehaviour &task_behaviour,
   const ConstDataNodeXML root(xml_root);
 
   // Check if root node is a <Task> node
-  if (!StringIsEqual(root.GetName(), _T("Task")))
+  if (!StringIsEqual(root.GetName(), "Task"))
     throw std::runtime_error("Invalid task file");
 
   // Create a blank task

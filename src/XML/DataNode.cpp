@@ -12,7 +12,7 @@ ConstDataNode::~ConstDataNode() noexcept
 }
 
 bool
-ConstDataNode::GetAttribute(const TCHAR *name, Angle &value) const noexcept
+ConstDataNode::GetAttribute(const char *name, Angle &value) const noexcept
 {
   double v;
   if (GetAttribute(name, v)) {
@@ -23,7 +23,7 @@ ConstDataNode::GetAttribute(const TCHAR *name, Angle &value) const noexcept
 }
 
 bool
-ConstDataNode::GetAttribute(const TCHAR *name, FloatDuration &value) const noexcept
+ConstDataNode::GetAttribute(const char *name, FloatDuration &value) const noexcept
 {
   double v;
   if (GetAttribute(name, v)) {
@@ -34,7 +34,7 @@ ConstDataNode::GetAttribute(const TCHAR *name, FloatDuration &value) const noexc
 }
 
 bool
-ConstDataNode::GetAttribute(const TCHAR *name,
+ConstDataNode::GetAttribute(const char *name,
                             std::chrono::duration<unsigned> &value) const noexcept
 {
   unsigned v;
@@ -46,7 +46,7 @@ ConstDataNode::GetAttribute(const TCHAR *name,
 }
 
 bool
-ConstDataNode::GetAttribute(const TCHAR *name, double &value) const noexcept
+ConstDataNode::GetAttribute(const char *name, double &value) const noexcept
 {
   const TCHAR *val = GetAttribute(name);
   if (val == nullptr)
@@ -57,7 +57,7 @@ ConstDataNode::GetAttribute(const TCHAR *name, double &value) const noexcept
 }
 
 bool
-ConstDataNode::GetAttribute(const TCHAR *name, int &value) const noexcept
+ConstDataNode::GetAttribute(const char *name, int &value) const noexcept
 {
   const TCHAR *val = GetAttribute(name);
   if (val == nullptr)
@@ -68,7 +68,7 @@ ConstDataNode::GetAttribute(const TCHAR *name, int &value) const noexcept
 }
 
 bool
-ConstDataNode::GetAttribute(const TCHAR *name, unsigned &value) const noexcept
+ConstDataNode::GetAttribute(const char *name, unsigned &value) const noexcept
 {
   const TCHAR *val = GetAttribute(name);
   if (val == nullptr)
@@ -79,7 +79,7 @@ ConstDataNode::GetAttribute(const TCHAR *name, unsigned &value) const noexcept
 }
 
 bool
-ConstDataNode::GetAttribute(const TCHAR *name, bool &value) const noexcept
+ConstDataNode::GetAttribute(const char *name, bool &value) const noexcept
 {
   const TCHAR *val = GetAttribute(name);
   if (val == nullptr)
@@ -90,7 +90,7 @@ ConstDataNode::GetAttribute(const TCHAR *name, bool &value) const noexcept
 }
 
 RoughTime
-ConstDataNode::GetAttributeRoughTime(const TCHAR *name) const noexcept
+ConstDataNode::GetAttributeRoughTime(const char *name) const noexcept
 {
   const TCHAR *p = GetAttribute(name);
   if (p == nullptr)
@@ -110,8 +110,8 @@ ConstDataNode::GetAttributeRoughTime(const TCHAR *name) const noexcept
 }
 
 RoughTimeSpan
-ConstDataNode::GetAttributeRoughTimeSpan(const TCHAR *start_name,
-                                         const TCHAR *end_name) const noexcept
+ConstDataNode::GetAttributeRoughTimeSpan(const char *start_name,
+                                         const char *end_name) const noexcept
 {
   return RoughTimeSpan(GetAttributeRoughTime(start_name),
                        GetAttributeRoughTime(end_name));
@@ -122,13 +122,13 @@ WritableDataNode::~WritableDataNode() noexcept
 }
 
 void
-WritableDataNode::SetAttribute(const TCHAR *name, Angle value) noexcept
+WritableDataNode::SetAttribute(const char *name, Angle value) noexcept
 {
   SetAttribute(name, value.Degrees());
 }
 
 void
-WritableDataNode::SetAttribute(const TCHAR *name, double value) noexcept
+WritableDataNode::SetAttribute(const char *name, double value) noexcept
 {
   StaticString<48> buf;
   buf.UnsafeFormat(_T("%g"), (double)value);
@@ -136,7 +136,7 @@ WritableDataNode::SetAttribute(const TCHAR *name, double value) noexcept
 }
 
 void
-WritableDataNode::SetAttribute(const TCHAR *name, int value) noexcept
+WritableDataNode::SetAttribute(const char *name, int value) noexcept
 {
   StaticString<24> buf;
   buf.UnsafeFormat(_T("%d"), value);
@@ -144,7 +144,7 @@ WritableDataNode::SetAttribute(const TCHAR *name, int value) noexcept
 }
 
 void
-WritableDataNode::SetAttribute(const TCHAR *name, unsigned value) noexcept
+WritableDataNode::SetAttribute(const char *name, unsigned value) noexcept
 {
   StaticString<24> buf;
   buf.UnsafeFormat(_T("%d"), value);
@@ -152,7 +152,7 @@ WritableDataNode::SetAttribute(const TCHAR *name, unsigned value) noexcept
 }
 
 void
-WritableDataNode::SetAttribute(const TCHAR *name, bool value) noexcept
+WritableDataNode::SetAttribute(const char *name, bool value) noexcept
 {
   StaticString<4> buf;
   buf.UnsafeFormat(_T("%d"), (int)value);
@@ -160,7 +160,7 @@ WritableDataNode::SetAttribute(const TCHAR *name, bool value) noexcept
 }
 
 void
-WritableDataNode::SetAttribute(const TCHAR *name, RoughTime value) noexcept
+WritableDataNode::SetAttribute(const char *name, RoughTime value) noexcept
 {
   if (!value.IsValid())
     /* no-op */

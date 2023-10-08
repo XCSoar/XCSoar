@@ -37,7 +37,7 @@ struct Instance : CoInstance {
 static void
 PrintTask(const OrderedTask &task)
 {
-  auto xml_node = XMLNode::CreateRoot(_T("Task"));
+  auto xml_node = XMLNode::CreateRoot("Task");
   WritableDataNodeXML data_node{xml_node};
 
   SaveTask(data_node, task);

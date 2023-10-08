@@ -35,6 +35,7 @@
 
 #include <list>
 #include <forward_list>
+#include <string>
 #include <string_view>
 
 #include <cassert>
@@ -50,7 +51,8 @@ class XMLNode {
   struct Data : private NonCopyable {
     /** Structure for XML attribute. */
     struct Attribute : private NonCopyable {
-      tstring name, value;
+      std::string name;
+      tstring value;
 
       template<typename N, typename V>
       Attribute(N &&name, V &&value) noexcept
@@ -58,7 +60,7 @@ class XMLNode {
     };
 
     /** Element name (=nullptr if root) */
-    tstring name;
+    std::string name;
 
     /** Whether node is an XML declaration - '<?xml ?>' */
     bool is_declaration;
@@ -72,7 +74,7 @@ class XMLNode {
     /** Array of attributes */
     std::forward_list<Attribute> attributes;
 
-    Data(tstring_view _name, bool _is_declaration) noexcept
+    Data(std::string_view _name, bool _is_declaration) noexcept
       :name(_name),
        is_declaration(_is_declaration) {}
 
@@ -102,15 +104,15 @@ class XMLNode {
    * Protected constructor: use "parse" functions to get your first
    * instance of XMLNode.
    */
-  XMLNode(tstring_view name,
+  XMLNode(std::string_view name,
           bool is_declaration) noexcept;
 
 public:
   static inline XMLNode Null() noexcept {
-    return XMLNode(_T(""), false);
+    return XMLNode({}, false);
   }
 
-  static XMLNode CreateRoot(const TCHAR *name) noexcept;
+  static XMLNode CreateRoot(const char *name) noexcept;
 
   bool IsNull() const noexcept {
     return d->name.empty();
@@ -119,7 +121,7 @@ public:
   /**
    * name of the node
    */
-  const TCHAR *GetName() const noexcept {
+  const char *GetName() const noexcept {
     assert(d != nullptr);
 
     return d->name.c_str();
@@ -161,14 +163,14 @@ public:
    * if failing)
    */
   [[gnu::pure]]
-  const XMLNode *GetChildNode(const TCHAR *name) const noexcept;
+  const XMLNode *GetChildNode(const char *name) const noexcept;
 
   /**
    * @return ith attribute content with specific name (return a nullptr
    * if failing)
    */
   [[gnu::pure]]
-  const TCHAR *GetAttribute(const TCHAR *name) const noexcept;
+  const TCHAR *GetAttribute(const char *name) const noexcept;
 
   /**
    * Create an XML file from the head element.
@@ -222,7 +224,7 @@ public:
   /**
    * Add a child node to the given element.
    */
-  XMLNode &AddChild(const tstring_view name,
+  XMLNode &AddChild(const std::string_view name,
                     bool is_declaration=false) noexcept;
 
   /**

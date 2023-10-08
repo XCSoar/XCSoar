@@ -30,6 +30,7 @@
 #include "Node.hpp"
 #include "util/AllocatedString.hxx"
 #include "util/CharUtil.hxx"
+#include "util/ConvertString.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StringStrip.hxx"
 #include "util/NumberParser.hpp"
@@ -414,7 +415,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
   Attrib attrib = Attrib::NAME;
 
   /* the name of the attribute that is currently being */
-  tstring attribute_name;
+  std::string attribute_name;
 
   assert(pXML);
 
@@ -475,7 +476,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
         // If the name of the new element differs from the name of
         // the current element we need to add the new element to
         // the current one and recurse
-        pNew = &node.AddChild(token.text, is_declaration);
+        pNew = &node.AddChild(WideToUTF8Converter{tstring{token.text}.c_str()}.c_str(), is_declaration);
 
         while (true) {
           // Callself to process the new node.  If we return
@@ -500,7 +501,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
             // element then we only need to unwind
             // once more...
 
-            if (CompareTagName(node.GetName(), pXML->end_tag.data())) {
+            if (CompareTagName(UTF8ToWideConverter{node.GetName()}, pXML->end_tag.data())) {
               pXML->end_tag = {};
             }
 
@@ -540,7 +541,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
         // We need to return to the previous caller.  If the name
         // of the tag cannot be found we need to keep returning to
         // caller until we find a match
-        if (!CompareTagName(node.GetName(), token.text.data())) {
+        if (!CompareTagName(UTF8ToWideConverter{node.GetName()}, token.text.data())) {
           pXML->end_tag = token.text;
         }
 
@@ -570,7 +571,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
         case TokenType::TEXT:
           // Cache the token then indicate that we are next to
           // look for the equals
-          attribute_name = token.text;
+          attribute_name = WideToUTF8Converter{tstring{token.text}.c_str()};
           attrib = Attrib::EQUALS;
           break;
 
@@ -609,7 +610,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
           node.AddAttribute(std::move(attribute_name), tstring_view{});
           // Cache the token then indicate.  We are next to
           // look for the equals attribute
-          attribute_name = token.text;
+          attribute_name = WideToUTF8Converter{tstring{token.text}.c_str()};
           break;
 
           // If we found a closing tag 'Attribute >' or a short hand
