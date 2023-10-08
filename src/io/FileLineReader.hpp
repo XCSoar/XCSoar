@@ -34,6 +34,4 @@ public:
 public:
   /* virtual methods from class NLineReader */
   char *ReadLine() override;
-  long GetSize() const override;
-  long Tell() const override;
 };

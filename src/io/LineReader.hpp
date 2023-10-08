@@ -18,24 +18,6 @@ public:
    * Throws on error.
    */
   virtual T *ReadLine() = 0;
-
-  /**
-   * Determins the size of the file.  Returns -1 if the size is
-   * unknown.
-   */
-  [[gnu::pure]]
-  virtual long GetSize() const {
-    return -1;
-  }
-
-  /**
-   * Determins the current position within the file.  Returns -1 if
-   * this is unknown.
-   */
-  [[gnu::pure]]
-  virtual long Tell() const {
-    return -1;
-  }
 };
 
 class NLineReader : public LineReader<char> {};

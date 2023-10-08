@@ -22,9 +22,4 @@ class ZipLineReaderA : WithZipReader, public BufferedLineReader {
 public:
   ZipLineReaderA(struct zzip_dir *dir, const char *path)
     :WithZipReader(dir, path), BufferedLineReader(zip) {}
-
-public:
-  /* virtual methods from class NLineReader */
-  long GetSize() const override;
-  long Tell() const override;
 };
