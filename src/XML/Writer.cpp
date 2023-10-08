@@ -130,14 +130,14 @@ XMLNode::Serialise(const Data &data, BufferedOutputStream &os, int format)
     os.Write('<');
     if (data.is_declaration)
       os.Write('?');
-    os.Write(data.name.c_str());
+    os.Write(data.name);
 
     // Enumerate attributes and add them to the string
     for (auto i = data.attributes.begin(), end = data.attributes.end();
          i != end; ++i) {
       const Data::Attribute *pAttr = &*i;
       os.Write(' ');
-      os.Write(pAttr->name.c_str());
+      os.Write(pAttr->name);
       os.Write('=');
       os.Write('"');
       WriteXMLString(os, pAttr->value);
@@ -194,7 +194,7 @@ XMLNode::Serialise(const Data &data, BufferedOutputStream &os, int format)
         WriteIndent(os, format);
 
       os.Write("</");
-      os.Write(data.name.c_str());
+      os.Write(data.name);
 
       os.Write('>');
     } else {
