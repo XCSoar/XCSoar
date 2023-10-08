@@ -5,7 +5,8 @@
 #include "InputConfig.hpp"
 #include "InputKeys.hpp"
 #include "InputLookup.hpp"
-#include "io/LineReader.hpp"
+#include "io/BufferedReader.hxx"
+#include "io/StringConverter.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StaticString.hxx"
 #include "util/StringSplit.hxx"
@@ -19,9 +20,9 @@
 #include <stdio.h>
 
 static bool
-parse_assignment(TCHAR *buffer, const TCHAR *&key, const TCHAR *&value)
+parse_assignment(char *buffer, const char *&key, const char *&value)
 {
-  TCHAR *separator = StringFind(buffer, '=');
+  char *separator = StringFind(buffer, '=');
   if (separator == NULL || separator == buffer)
     return false;
 
@@ -145,9 +146,10 @@ struct EventBuilder {
 };
 
 void
-ParseInputFile(InputConfig &config, TLineReader &reader)
+ParseInputFile(InputConfig &config, BufferedReader &reader)
 {
   // TODO code - Safer sizes, strings etc - use C++
+  StringConverter string_converter{Charset::UTF8};
 
   // Multiple modes (so large string)
   EventBuilder current;
@@ -156,18 +158,18 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
   int line = 0;
 
   // Read from the file
-  TCHAR *buffer;
-  while ((buffer = reader.ReadLine()) != NULL) {
+  char *buffer;
+  while ((buffer = reader.ReadLine()) != nullptr) {
     StripRight(buffer);
     line++;
 
-    const TCHAR *key, *value;
+    const char *key, *value;
 
     // experimental: if the first line is "#CLEAR" then the whole default config is cleared
     //               and can be overwritten by file
-    if (line == 1 && StringIsEqual(buffer, _T("#CLEAR"))) {
+    if (line == 1 && StringIsEqual(buffer, "#CLEAR")) {
       config.SetDefaults();
-    } else if (buffer[0] == _T('\0')) {
+    } else if (buffer[0] == '\0') {
       // Check valid line? If not valid, assume next record (primative, but works ok!)
       // General checks before continue...
       current.commit(config, line);
@@ -175,20 +177,20 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
       // Clear all data.
       current.clear();
 
-    } else if (StringIsEmpty(buffer) || buffer[0] == _T('#')) {
+    } else if (StringIsEmpty(buffer) || buffer[0] == '#') {
       // Do nothing - we probably just have a comment line
       // NOTE: Do NOT display buffer to user as it may contain an invalid stirng !
 
     } else if (parse_assignment(buffer, key, value)) {
-      if (StringIsEqual(key, _T("mode"))) {
-        current.mode = value;
-      } else if (StringIsEqual(key, _T("type"))) {
-        current.type = value;
-      } else if (StringIsEqual(key, _T("data"))) {
-        current.data = value;
-      } else if (StringIsEqual(key, _T("event"))) {
-        const tstring_view v{value};
-        const auto [d_event, d_misc] = Split(v, _T(' '));
+      if (StringIsEqual(key, "mode")) {
+        current.mode = string_converter.Convert(value);
+      } else if (StringIsEqual(key, "type")) {
+        current.type = string_converter.Convert(value);
+      } else if (StringIsEqual(key, "data")) {
+        current.data = string_converter.Convert(value);
+      } else if (StringIsEqual(key, "event")) {
+        const std::string_view v{value};
+        const auto [d_event, d_misc] = Split(v, ' ');
 
         if (d_event.empty()) {
           LogFormat("Invalid event type at %i", line);
@@ -197,14 +199,14 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
 
         // TODO code: Consider reusing existing identical events
 
-        pt2Event event = InputEvents::findEvent(d_event);
+        pt2Event event = InputEvents::findEvent(string_converter.Convert(d_event));
         if (!event) {
-          LogFormat(_T("Invalid event type: %.*s at %i"),
-                    int(d_event.size()), d_event.data(), line);
+          LogFmt("Invalid event type: {} at {}",
+                 d_event, line);
           continue;
         }
 
-        TCHAR *allocated = UnescapeBackslash(d_misc);
+        TCHAR *allocated = UnescapeBackslash(string_converter.Convert(d_misc));
         current.event_id = config.AppendEvent(event, allocated,
                                               current.event_id);
 
@@ -216,13 +218,13 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
            don't have to duplicate the hard-coded defaults,
            which saves some memory */
         //free(allocated);
-      } else if (StringIsEqual(key, _T("label"))) {
-        current.label = value;
-      } else if (StringIsEqual(key, _T("location"))) {
+      } else if (StringIsEqual(key, "label")) {
+        current.label = string_converter.Convert(value);
+      } else if (StringIsEqual(key, "location")) {
         current.location = ParseUnsigned(value);
 
       } else {
-        LogFormat(_T("Invalid key/value pair %s=%s at %i"), key, value, line);
+        LogFmt("Invalid key/value pair {}={} at {}", key, value, line);
       }
     } else  {
       LogFormat("Invalid line at %i", line);

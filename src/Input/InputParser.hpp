@@ -4,10 +4,10 @@
 #pragma once
 
 struct InputConfig;
-class TLineReader;
+class BufferedReader;
 
 /**
  * Parses the contents of a *.xci file into the #InputConfig object.
  */
 void
-ParseInputFile(InputConfig &config, TLineReader &reader);
+ParseInputFile(InputConfig &config, BufferedReader &reader);

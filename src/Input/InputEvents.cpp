@@ -34,7 +34,8 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Profile/Keys.hpp"
 #include "Menu/MenuData.hpp"
 #include "io/ConfiguredFile.hpp"
-#include "io/LineReader.hpp"
+#include "io/FileReader.hxx"
+#include "io/BufferedReader.hxx"
 #include "Pan.hpp"
 #include "Dialogs/LockScreen.hpp"
 #include "Menu/MenuBar.hpp"
@@ -108,9 +109,11 @@ InputEvents::readFile()
   LoadDefaults(input_config);
 
   // Read in user defined configuration file
-  auto reader = OpenConfiguredTextFile(ProfileKeys::InputFile);
-  if (reader)
-    ::ParseInputFile(input_config, *reader);
+  auto reader = OpenConfiguredFile(ProfileKeys::InputFile);
+  if (reader) {
+    BufferedReader buffered_reader{*reader};
+    ::ParseInputFile(input_config, buffered_reader);
+  }
 }
 
 void
