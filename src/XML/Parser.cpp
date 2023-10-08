@@ -525,11 +525,13 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
         // If we have node text then add this to the element
         if (text != nullptr) {
           const std::string_view unstripped_text(text, token.text.data() - text);
-          const auto text2 = FromXMLString(StripRight(unstripped_text));
-          if (text2 == nullptr)
+
+          if (const auto text2 = FromXMLString(StripRight(unstripped_text));
+              text2 != nullptr)
+            node.AddText(text2);
+          else
             throw std::runtime_error("Unexpected token found");
 
-          node.AddText(text2);
           text = nullptr;
         }
 
@@ -685,13 +687,10 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
 
           assert(!attribute_name.empty());
 
-          {
-            const auto value = FromXMLString(token.text);
-            if (value == nullptr)
-              throw std::runtime_error("Unexpected token found");
-
+          if (const auto value = FromXMLString(token.text); value != nullptr)
             node.AddAttribute(attribute_name, value);
-          }
+          else
+            throw std::runtime_error("Unexpected token found");
 
           // Indicate we are searching for a new attribute
           attrib = Attrib::NAME;
