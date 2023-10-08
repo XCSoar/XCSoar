@@ -28,6 +28,7 @@
 
 #include "Parser.hpp"
 #include "Node.hpp"
+#include "util/AllocatedString.hxx"
 #include "util/CharUtil.hxx"
 #include "util/StringAPI.hxx"
 #include "util/StringStrip.hxx"
@@ -103,7 +104,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML);
  * @param lo length of string
  * @return new allocated string converted from xml
  */
-static TCHAR *
+static BasicAllocatedString<TCHAR>
 FromXMLString(tstring_view src) noexcept
 {
   const TCHAR *ss = src.data();
@@ -112,9 +113,8 @@ FromXMLString(tstring_view src) noexcept
   /* allocate a buffer with the size of the input string; we know for
      sure that this is enough, because resolving entities can only
      shrink the string, but never grows */
-  TCHAR *d = (TCHAR *)malloc((src.size() + 1) * sizeof(*d));
-  assert(d);
-  TCHAR *result = d;
+  auto result = BasicAllocatedString<TCHAR>::Donate(new TCHAR[src.size() + 1]);
+  TCHAR *d = result.data();
   while (ss < end && *ss) {
     if (*ss == _T('&')) {
       ss++;
@@ -141,7 +141,6 @@ FromXMLString(tstring_view src) noexcept
         TCHAR *endptr;
         unsigned i = ParseUnsigned(ss, &endptr, 10);
         if (endptr == ss || endptr >= end || *endptr != ';') {
-          free(result);
           return nullptr;
         }
 
@@ -153,7 +152,6 @@ FromXMLString(tstring_view src) noexcept
         *d++ = ch;
         ss = endptr + 1;
       } else {
-        free(result);
         return nullptr;
       }
     } else {
@@ -165,11 +163,7 @@ FromXMLString(tstring_view src) noexcept
 
   /* shrink the memory allocation just in case we allocated too
      much */
-  d = (TCHAR *)realloc(result, (d + 1 - result) * sizeof(*d));
-  if (d != nullptr)
-    result = d;
-
-  return result;
+  return BasicAllocatedString<TCHAR>{result};
 }
 
 [[gnu::pure]]
@@ -524,12 +518,11 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
         // If we have node text then add this to the element
         if (text != nullptr) {
           size_t length = StripRight(text, token.text.data() - text);
-          TCHAR *text2 = FromXMLString({text, length});
+          const auto text2 = FromXMLString({text, length});
           if (text2 == nullptr)
             throw std::runtime_error("Unexpected token found");
 
           node.AddText(text2);
-          free(text2);
           text = nullptr;
         }
 
@@ -686,12 +679,11 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
           assert(!attribute_name.empty());
 
           {
-            TCHAR *value = FromXMLString(token.text);
+            const auto value = FromXMLString(token.text);
             if (value == nullptr)
               throw std::runtime_error("Unexpected token found");
 
             node.AddAttribute(std::move(attribute_name), value);
-            free(value);
           }
 
           // Indicate we are searching for a new attribute
