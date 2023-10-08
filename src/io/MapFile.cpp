@@ -3,6 +3,7 @@
 
 #include "MapFile.hpp"
 #include "ZipArchive.hpp"
+#include "ZipReader.hpp"
 #include "Profile/Profile.hpp"
 #include "system/ConvertPathName.hpp"
 #include "system/Path.hpp"
@@ -15,4 +16,14 @@ OpenMapFile()
     return std::nullopt;
 
   return ZipArchive{path};
+}
+
+std::optional<ZipReader>
+OpenInMapFile(const char *filename)
+{
+  auto archive = OpenMapFile();
+  if (!archive)
+    return std::nullopt;
+
+  return std::optional<ZipReader>{std::in_place, archive->get(), filename};
 }
