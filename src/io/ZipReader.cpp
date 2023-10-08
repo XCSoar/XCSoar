@@ -28,7 +28,7 @@ ZipReader::~ZipReader()
     zzip_close(file);
 }
 
-uint64_t
+uint_least64_t
 ZipReader::GetSize() const
 {
   ZZIP_STAT st;
@@ -37,7 +37,7 @@ ZipReader::GetSize() const
     : 0;
 }
 
-uint64_t
+uint_least64_t
 ZipReader::GetPosition() const
 {
   return zzip_tell(file);
