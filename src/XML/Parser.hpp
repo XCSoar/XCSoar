@@ -28,6 +28,8 @@
 
 #pragma once
 
+#include <string_view>
+
 class XMLNode;
 class Path;
 
@@ -37,7 +39,7 @@ namespace XML {
  * Throws on error.
  */
 XMLNode
-ParseString(const char *xml_string);
+ParseString(std::string_view xml_string);
 
 /**
  * Throws on error.

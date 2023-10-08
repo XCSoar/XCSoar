@@ -44,30 +44,33 @@
 namespace XML {
 
 struct Input {
-  const char *lpXML;
-  std::size_t nIndex = 0;
+  const std::string_view src;
+  std::size_t position = 0;
 
-  explicit Input(const char *_src) noexcept
-    :lpXML(_src) {}
+  explicit Input(std::string_view _src) noexcept
+    :src(_src) {}
 
   std::string_view substr(std::size_t pos, std::size_t count) const noexcept {
-    assert(pos + count <= strlen(lpXML));
+    assert(pos + count <= src.size());
 
-    return {lpXML + pos, count};
+    return src.substr(pos, count);
   }
 
   char PeekChar() const noexcept {
-    return lpXML[nIndex];
+    if (position >= src.size())
+      return 0;
+
+    return src[position];
   }
 
   /**
    * Obtain the next character from the string.
    */
   char GetNextChar() noexcept {
-      char ch = lpXML[nIndex];
-      if (ch != 0)
-        nIndex++;
-      return ch;
+    if (position >= src.size())
+      return 0;
+
+    return src[position++];
   }
 
   /**
@@ -91,8 +94,8 @@ struct Parser : Input {
   std::string_view end_tag{};
   bool nFirst = true;
 
-  explicit Parser(const char *_xml) noexcept
-    :Input(_xml) {}
+  explicit Parser(std::string_view _src) noexcept
+    :Input(_src) {}
 };
 
 /** Enumeration used to decipher what type a token is. */
@@ -249,7 +252,7 @@ GetNextToken(Parser *pXML)
     return {{}, TokenType::ERROR};
 
   // Cache the current string pointer
-  const std::size_t start = pXML->nIndex - 1;
+  const std::size_t start = pXML->position - 1;
 
   switch (ch) {
     // Check for quotes
@@ -258,7 +261,7 @@ GetNextToken(Parser *pXML)
     // Type of token
     result.type = TokenType::QUOTED_TEXT;
     temp_ch = ch;
-    n = pXML->nIndex;
+    n = pXML->position;
 
     // Set the size
     size = 1;
@@ -277,14 +280,14 @@ GetNextToken(Parser *pXML)
 
     // If we failed to find a matching quote
     if (!found_match) {
-      pXML->nIndex = n;
+      pXML->position = n;
       is_text = true;
       break;
     }
 
     //  4.02.2002
     if (pXML->FindNonWhiteSpace()) {
-      pXML->nIndex--;
+      pXML->position--;
     }
 
     break;
@@ -378,7 +381,7 @@ GetNextToken(Parser *pXML)
 
         // If we found a short hand end tag then we need to exit the loop
         if (temp_ch == '>') {
-          pXML->nIndex--; //  03.02.2002
+          --pXML->position; //  03.02.2002
           nExit = true;
         } else {
           size++;
@@ -391,7 +394,7 @@ GetNextToken(Parser *pXML)
       case '<':
       case '>':
       case '=':
-        pXML->nIndex--;
+        --pXML->position;
       nExit = true;
       break;
 
@@ -722,10 +725,8 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
  * @return The main XMLNode or empty XMLNode on error
  */
 XMLNode
-ParseString(const char *xml_string)
+ParseString(std::string_view xml_string)
 {
-  assert(xml_string != nullptr);
-
   XMLNode xnode = XMLNode::Null();
   Parser xml{xml_string};
 
