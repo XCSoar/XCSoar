@@ -71,16 +71,16 @@ TestWriter()
 
   Profile::SaveFile(Path(_T("output/TestProfileWriter.prf")));
 
-  FileLineReader reader(Path(_T("output/TestProfileWriter.prf")));
+  FileLineReaderA reader(Path(_T("output/TestProfileWriter.prf")));
 
   unsigned count = 0;
   bool found1 = false, found2 = false;
 
-  TCHAR *line;
+  char *line;
   while ((line = reader.ReadLine()) != NULL) {
-    if (StringIsEqual(line, _T("key1=\"4\"")))
+    if (StringIsEqual(line, "key1=\"4\""))
       found1 = true;
-    if (StringIsEqual(line, _T("key2=\"value2\"")))
+    if (StringIsEqual(line, "key2=\"value2\""))
       found2 = true;
 
     count++;
