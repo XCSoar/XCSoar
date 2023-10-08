@@ -8,8 +8,6 @@
 #include <list>
 #include <memory>
 
-#include <tchar.h>
-
 class Angle;
 class RoughTime;
 class RoughTimeSpan;

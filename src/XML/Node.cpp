@@ -52,12 +52,6 @@ XMLNode::AddChild(const std::string_view name,
   return d->children.back();
 }
 
-void
-XMLNode::AddText(tstring_view value) noexcept
-{
-  d->text.append(value);
-}
-
 const XMLNode *
 XMLNode::GetChildNode(const char *name) const noexcept
 {

@@ -29,9 +29,6 @@
 #pragma once
 
 #include "util/NonCopyable.hpp"
-#include "util/tstring.hpp"
-#include "util/tstring_view.hxx"
-#include "util/Compiler.h"
 
 #include <list>
 #include <forward_list>
@@ -68,7 +65,7 @@ class XMLNode {
     std::list<XMLNode> children;
 
     /** A concatentation of all text nodes */
-    tstring text;
+    std::string text;
 
     /** Array of attributes */
     std::forward_list<Attribute> attributes;
@@ -237,7 +234,9 @@ public:
   /**
    * Add text to the element.
    */
-  void AddText(tstring_view value) noexcept;
+  void AddText(std::string_view value) noexcept {
+    d->text.append(value);
+  }
 
 private:
   /**

@@ -30,7 +30,6 @@
 #include "Node.hpp"
 #include "system/Path.hpp"
 #include "io/FileReader.hxx"
-#include "io/StringConverter.hpp"
 #include "util/AllocatedString.hxx"
 #include "util/CharUtil.hxx"
 #include "util/StringAPI.hxx"
@@ -90,7 +89,6 @@ struct Input {
 
 /** Main structure used for parsing XML. */
 struct Parser : Input {
-  StringConverter string_converter;
   std::string_view end_tag{};
   bool nFirst = true;
 
@@ -220,7 +218,7 @@ CompareTagName(const char *cclose, const char *copen)
   if (!StringIsEqualIgnoreCase(cclose, copen, l))
     return false;
 
-  const TCHAR c = copen[l];
+  const char c = copen[l];
   if (IsWhitespaceOrNull(c) ||
       (c == '/') ||
       (c == '<') ||
@@ -471,7 +469,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
         // If we have node text then add this to the element
         if (text != nullptr) {
           size_t length = StripRight(text, token.text.data() - text);
-          node.AddText(pXML->string_converter.Convert(std::string_view{text, length}));
+          node.AddText(std::string_view{text, length});
           text = nullptr;
         }
 
@@ -533,7 +531,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
           if (text2 == nullptr)
             throw std::runtime_error("Unexpected token found");
 
-          node.AddText(pXML->string_converter.Convert(text2));
+          node.AddText(text2);
           text = nullptr;
         }
 
