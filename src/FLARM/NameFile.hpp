@@ -4,11 +4,11 @@
 #pragma once
 
 class FlarmNameDatabase;
-class TLineReader;
+class BufferedReader;
 class BufferedOutputStream;
 
 void
-LoadFlarmNameFile(TLineReader &reader, FlarmNameDatabase &db);
+LoadFlarmNameFile(BufferedReader &reader, FlarmNameDatabase &db);
 
 void
 SaveFlarmNameFile(BufferedOutputStream &writer, FlarmNameDatabase &db);
