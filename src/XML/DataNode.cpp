@@ -7,6 +7,8 @@
 #include "util/NumberParser.hpp"
 #include "time/RoughTime.hpp"
 
+#include <fmt/format.h>
+
 ConstDataNode::~ConstDataNode() noexcept
 {
 }
@@ -48,7 +50,7 @@ ConstDataNode::GetAttribute(const char *name,
 bool
 ConstDataNode::GetAttribute(const char *name, double &value) const noexcept
 {
-  const TCHAR *val = GetAttribute(name);
+  const char *val = GetAttribute(name);
   if (val == nullptr)
     return false;
 
@@ -59,7 +61,7 @@ ConstDataNode::GetAttribute(const char *name, double &value) const noexcept
 bool
 ConstDataNode::GetAttribute(const char *name, int &value) const noexcept
 {
-  const TCHAR *val = GetAttribute(name);
+  const char *val = GetAttribute(name);
   if (val == nullptr)
     return false;
 
@@ -70,7 +72,7 @@ ConstDataNode::GetAttribute(const char *name, int &value) const noexcept
 bool
 ConstDataNode::GetAttribute(const char *name, unsigned &value) const noexcept
 {
-  const TCHAR *val = GetAttribute(name);
+  const char *val = GetAttribute(name);
   if (val == nullptr)
     return false;
 
@@ -81,7 +83,7 @@ ConstDataNode::GetAttribute(const char *name, unsigned &value) const noexcept
 bool
 ConstDataNode::GetAttribute(const char *name, bool &value) const noexcept
 {
-  const TCHAR *val = GetAttribute(name);
+  const char *val = GetAttribute(name);
   if (val == nullptr)
     return false;
 
@@ -92,11 +94,11 @@ ConstDataNode::GetAttribute(const char *name, bool &value) const noexcept
 RoughTime
 ConstDataNode::GetAttributeRoughTime(const char *name) const noexcept
 {
-  const TCHAR *p = GetAttribute(name);
+  const char *p = GetAttribute(name);
   if (p == nullptr)
     return RoughTime::Invalid();
 
-  TCHAR *endptr;
+  char *endptr;
   unsigned hours = ParseUnsigned(p, &endptr, 10);
   if (endptr == p || *endptr != ':' || hours >= 24)
     return RoughTime::Invalid();
@@ -130,33 +132,27 @@ WritableDataNode::SetAttribute(const char *name, Angle value) noexcept
 void
 WritableDataNode::SetAttribute(const char *name, double value) noexcept
 {
-  StaticString<48> buf;
-  buf.UnsafeFormat(_T("%g"), (double)value);
+  NarrowString<48> buf;
+  buf.UnsafeFormat("%g", value);
   SetAttribute(name, buf);
 }
 
 void
 WritableDataNode::SetAttribute(const char *name, int value) noexcept
 {
-  StaticString<24> buf;
-  buf.UnsafeFormat(_T("%d"), value);
-  SetAttribute(name, buf);
+  SetAttribute(name, fmt::format_int{value}.c_str());
 }
 
 void
 WritableDataNode::SetAttribute(const char *name, unsigned value) noexcept
 {
-  StaticString<24> buf;
-  buf.UnsafeFormat(_T("%d"), value);
-  SetAttribute(name, buf);
+  SetAttribute(name, fmt::format_int{value}.c_str());
 }
 
 void
 WritableDataNode::SetAttribute(const char *name, bool value) noexcept
 {
-  StaticString<4> buf;
-  buf.UnsafeFormat(_T("%d"), (int)value);
-  SetAttribute(name, buf);
+  SetAttribute(name, fmt::format_int{(int)value}.c_str());
 }
 
 void
@@ -166,7 +162,7 @@ WritableDataNode::SetAttribute(const char *name, RoughTime value) noexcept
     /* no-op */
     return;
 
-  StaticString<8> buffer;
-  buffer.UnsafeFormat(_T("%02u:%02u"), value.GetHour(), value.GetMinute());
+  NarrowString<8> buffer;
+  buffer.UnsafeFormat("%02u:%02u", value.GetHour(), value.GetMinute());
   SetAttribute(name, buffer);
 }

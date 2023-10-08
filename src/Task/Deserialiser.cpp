@@ -14,6 +14,7 @@
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "XML/DataNode.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "util/ConvertString.hpp"
 
 #include <memory>
 
@@ -34,14 +35,16 @@ DeserialiseWaypoint(const ConstDataNode &node, const Waypoints *waypoints)
   GeoPoint loc;
   Deserialise(loc, *loc_node);
 
-  const TCHAR *name = node.GetAttribute("name");
-  if (name == nullptr)
+  const char *_name = node.GetAttribute("name");
+  if (_name == nullptr)
     // Turnpoints need names
     return nullptr;
 
+  const UTF8ToWideConverter name{_name};
+
   if (waypoints != nullptr) {
     // Try to find waypoint by name
-    auto from_database = waypoints->LookupName(name);
+    auto from_database = waypoints->LookupName(name.c_str());
 
     // If waypoint by name found and closer than 10m to the original
     if (from_database != nullptr &&
@@ -65,9 +68,9 @@ DeserialiseWaypoint(const ConstDataNode &node, const Waypoints *waypoints)
 
   node.GetAttribute("id", wp->id);
 
-  const TCHAR *comment = node.GetAttribute("comment");
+  const char *comment = node.GetAttribute("comment");
   if (comment != nullptr)
-    wp->comment.assign(comment);
+    wp->comment = UTF8ToWideConverter{comment};
 
   if (node.GetAttribute("altitude", wp->elevation))
     wp->has_elevation = true;
@@ -78,11 +81,11 @@ DeserialiseWaypoint(const ConstDataNode &node, const Waypoints *waypoints)
 static std::unique_ptr<ObservationZonePoint>
 DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
 {
-  const TCHAR *type = node.GetAttribute("type");
+  const char *type = node.GetAttribute("type");
   if (type == nullptr)
     return nullptr;
 
-  if (StringIsEqual(type, _T("Line"))) {
+  if (StringIsEqual(type, "Line")) {
     auto ls = std::make_unique<LineSectorZone>(wp.location);
 
     double length;
@@ -90,7 +93,7 @@ DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
       ls->SetLength(length);
 
     return ls;
-  } else if (StringIsEqual(type, _T("Cylinder"))) {
+  } else if (StringIsEqual(type, "Cylinder")) {
     auto ls = std::make_unique<CylinderZone>(wp.location);
 
     double radius;
@@ -98,9 +101,9 @@ DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
       ls->SetRadius(radius);
 
     return ls;
-  } else if (StringIsEqual(type, _T("MatCylinder"))) {
+  } else if (StringIsEqual(type, "MatCylinder")) {
     return CylinderZone::CreateMatCylinderZone(wp.location);
-  } else if (StringIsEqual(type, _T("Sector"))) {
+  } else if (StringIsEqual(type, "Sector")) {
 
     double radius, inner_radius;
     Angle start, end;
@@ -121,16 +124,16 @@ DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
       ls->SetEndRadial(end);
 
     return ls;
-  } else if (StringIsEqual(type, _T("FAISector")))
+  } else if (StringIsEqual(type, "FAISector"))
     return SymmetricSectorZone::CreateFAISectorZone(wp.location, is_turnpoint);
-  else if (StringIsEqual(type, _T("SymmetricQuadrant"))) {
+  else if (StringIsEqual(type, "SymmetricQuadrant")) {
     double radius = 10000;
     node.GetAttribute("radius", radius);
 
     return std::make_unique<SymmetricSectorZone>(wp.location, radius);
-  } else if (StringIsEqual(type, _T("Keyhole")))
+  } else if (StringIsEqual(type, "Keyhole"))
     return KeyholeZone::CreateDAeCKeyholeZone(wp.location);
-  else if (StringIsEqual(type, _T("CustomKeyhole"))) {
+  else if (StringIsEqual(type, "CustomKeyhole")) {
     double radius = 10000, inner_radius = 500;
     Angle angle = Angle::QuarterCircle();
 
@@ -142,11 +145,11 @@ DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
       KeyholeZone::CreateCustomKeyholeZone(wp.location, radius, angle);
     keyhole->SetInnerRadius(inner_radius);
     return keyhole;
-  } else if (StringIsEqual(type, _T("BGAStartSector")))
+  } else if (StringIsEqual(type, "BGAStartSector"))
     return KeyholeZone::CreateBGAStartSectorZone(wp.location);
-  else if (StringIsEqual(type, _T("BGAFixedCourse")))
+  else if (StringIsEqual(type, "BGAFixedCourse"))
     return KeyholeZone::CreateBGAFixedCourseZone(wp.location);
-  else if (StringIsEqual(type, _T("BGAEnhancedOption")))
+  else if (StringIsEqual(type, "BGAEnhancedOption"))
     return KeyholeZone::CreateBGAEnhancedOptionZone(wp.location);
 
   return nullptr;
@@ -156,7 +159,7 @@ static void
 DeserialiseTaskpoint(AbstractTaskFactory &fact, const ConstDataNode &node,
                      const Waypoints *waypoints)
 {
-  const TCHAR *type = node.GetAttribute("type");
+  const char *type = node.GetAttribute("type");
   if (type == nullptr)
     return;
 
@@ -172,18 +175,18 @@ DeserialiseTaskpoint(AbstractTaskFactory &fact, const ConstDataNode &node,
   std::unique_ptr<OrderedTaskPoint> pt;
 
   if (auto oz_node = node.GetChildNamed("ObservationZone")) {
-    bool is_turnpoint = StringIsEqual(type, _T("Turn")) ||
-      StringIsEqual(type, _T("Area"));
+    bool is_turnpoint = StringIsEqual(type, "Turn") ||
+      StringIsEqual(type, "Area");
 
     oz = DeserialiseOZ(*wp, *oz_node, is_turnpoint);
   }
 
-  if (StringIsEqual(type, _T("Start"))) {
+  if (StringIsEqual(type, "Start")) {
     pt = oz != nullptr
       ? fact.CreateStart(std::move(oz), std::move(wp))
       : fact.CreateStart(std::move(wp));
 
-  } else if (StringIsEqual(type, _T("OptionalStart"))) {
+  } else if (StringIsEqual(type, "OptionalStart")) {
     pt = oz != nullptr
       ? fact.CreateStart(std::move(oz), std::move(wp))
       : fact.CreateStart(std::move(wp));
@@ -192,17 +195,17 @@ DeserialiseTaskpoint(AbstractTaskFactory &fact, const ConstDataNode &node,
     // don't let generic code below add it
     pt.reset();
 
-  } else if (StringIsEqual(type, _T("Turn"))) {
+  } else if (StringIsEqual(type, "Turn")) {
     pt = oz != nullptr
       ? fact.CreateASTPoint(std::move(oz), std::move(wp))
       : fact.CreateIntermediate(std::move(wp));
 
-  } else if (StringIsEqual(type, _T("Area"))) {
+  } else if (StringIsEqual(type, "Area")) {
     pt = oz != nullptr
       ? fact.CreateAATPoint(std::move(oz), std::move(wp))
       : fact.CreateIntermediate(std::move(wp));
 
-  } else if (StringIsEqual(type, _T("Finish"))) {
+  } else if (StringIsEqual(type, "Finish")) {
     pt = oz != nullptr
       ? fact.CreateFinish(std::move(oz), std::move(wp))
       : fact.CreateFinish(std::move(wp));
@@ -225,11 +228,11 @@ static bool
 GetHeightRef(const ConstDataNode &node, const char *nodename,
              AltitudeReference &value) noexcept
 {
-  const TCHAR *type = node.GetAttribute(nodename);
+  const char *type = node.GetAttribute(nodename);
   if (type == nullptr) {
     return false;
   }
-  if (StringIsEqual(type, _T("MSL"))) {
+  if (StringIsEqual(type, "MSL")) {
     value = AltitudeReference::MSL;
   } else {
     value = AltitudeReference::AGL;
@@ -269,27 +272,27 @@ Deserialise(OrderedTaskSettings &data, const ConstDataNode &node)
 static TaskFactoryType
 GetTaskFactoryType(const ConstDataNode &node)
 {
-  const TCHAR *type = node.GetAttribute("type");
+  const char *type = node.GetAttribute("type");
   if (type == nullptr)
     return TaskFactoryType::FAI_GENERAL;
 
-  if (StringIsEqual(type, _T("FAIGeneral")))
+  if (StringIsEqual(type, "FAIGeneral"))
     return TaskFactoryType::FAI_GENERAL;
-  else if (StringIsEqual(type, _T("FAITriangle")))
+  else if (StringIsEqual(type, "FAITriangle"))
     return TaskFactoryType::FAI_TRIANGLE;
-  else if (StringIsEqual(type, _T("FAIOR")))
+  else if (StringIsEqual(type, "FAIOR"))
     return TaskFactoryType::FAI_OR;
-  else if (StringIsEqual(type, _T("FAIGoal")))
+  else if (StringIsEqual(type, "FAIGoal"))
     return TaskFactoryType::FAI_GOAL;
-  else if (StringIsEqual(type, _T("RT")))
+  else if (StringIsEqual(type, "RT"))
     return TaskFactoryType::RACING;
-  else if (StringIsEqual(type, _T("AAT")))
+  else if (StringIsEqual(type, "AAT"))
     return TaskFactoryType::AAT;
-  else if (StringIsEqual(type, _T("MAT")))
+  else if (StringIsEqual(type, "MAT"))
     return TaskFactoryType::MAT;
-  else if (StringIsEqual(type, _T("Mixed")))
+  else if (StringIsEqual(type, "Mixed"))
     return TaskFactoryType::MIXED;
-  else if (StringIsEqual(type, _T("Touring")))
+  else if (StringIsEqual(type, "Touring"))
     return TaskFactoryType::TOURING;
 
   return TaskFactoryType::FAI_GENERAL;

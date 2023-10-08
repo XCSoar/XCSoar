@@ -29,7 +29,7 @@ public:
   std::unique_ptr<ConstDataNode> GetChildNamed(const char *name) const noexcept override;
   List ListChildren() const noexcept override;
   List ListChildrenNamed(const char *name) const noexcept override;
-  const TCHAR *GetAttribute(const char *name) const noexcept override;
+  const char *GetAttribute(const char *name) const noexcept override;
 };
 
 /**
@@ -51,5 +51,5 @@ public:
 
   /* virtual methods from WritableDataNode */
   std::unique_ptr<WritableDataNode> AppendChild(const char *name) noexcept override;
-  void SetAttribute(const char *name, const TCHAR *value) noexcept override;
+  void SetAttribute(const char *name, const char *value) noexcept override;
 };

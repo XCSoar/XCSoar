@@ -39,7 +39,6 @@
 #include <string_view>
 
 #include <cassert>
-#include <tchar.h>
 
 class BufferedOutputStream;
 
@@ -52,7 +51,7 @@ class XMLNode {
     /** Structure for XML attribute. */
     struct Attribute : private NonCopyable {
       std::string name;
-      tstring value;
+      std::string value;
 
       template<typename N, typename V>
       Attribute(N &&name, V &&value) noexcept
@@ -170,7 +169,7 @@ public:
    * if failing)
    */
   [[gnu::pure]]
-  const TCHAR *GetAttribute(const char *name) const noexcept;
+  const char *GetAttribute(const char *name) const noexcept;
 
   /**
    * Create an XML file from the head element.

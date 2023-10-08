@@ -47,12 +47,12 @@ ConstDataNodeXML::ListChildrenNamed(const char *name) const noexcept
 }
 
 void
-WritableDataNodeXML::SetAttribute(const char *name, const TCHAR *value) noexcept
+WritableDataNodeXML::SetAttribute(const char *name, const char *value) noexcept
 {
   node.AddAttribute(name, value);
 }
 
-const TCHAR *
+const char *
 ConstDataNodeXML::GetAttribute(const char *name) const noexcept
 {
   return node.GetAttribute(name);

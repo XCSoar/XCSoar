@@ -65,7 +65,7 @@ public:
    *
    * @return the value or nullptr if it does not exist
    */
-  virtual const TCHAR *GetAttribute(const char *name) const noexcept = 0;
+  virtual const char *GetAttribute(const char *name) const noexcept = 0;
 
   /**
    * Retrieve named attribute value, with numeric conversion
@@ -148,7 +148,7 @@ public:
    * @param name Name of attribute
    * @param value Value of attribute
    */
-  virtual void SetAttribute(const char *name, const TCHAR *value) noexcept = 0;
+  virtual void SetAttribute(const char *name, const char *value) noexcept = 0;
 
   /**
    * Set named attribute value, with numeric to text conversion

@@ -617,7 +617,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
           // Eg.  'Attribute AnotherAttribute'
         case TokenType::TEXT:
           // Add the unvalued attribute to the list
-          node.AddAttribute(std::move(attribute_name), tstring_view{});
+          node.AddAttribute(std::move(attribute_name), std::string_view{});
           // Cache the token then indicate.  We are next to
           // look for the equals attribute
           attribute_name = token.text;
@@ -637,7 +637,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
 
           if (!attribute_name.empty())
             // Add the unvalued attribute to the list
-            node.AddAttribute(std::move(attribute_name), tstring_view{});
+            node.AddAttribute(std::move(attribute_name), std::string_view{});
 
           // If this is the end of the tag then return to the caller
           if (token.type == TokenType::SHORT_HAND_CLOSE)
@@ -694,7 +694,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
             if (value == nullptr)
               throw std::runtime_error("Unexpected token found");
 
-            node.AddAttribute(attribute_name, pXML->string_converter.Convert(value));
+            node.AddAttribute(attribute_name, value);
           }
 
           // Indicate we are searching for a new attribute

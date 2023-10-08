@@ -73,7 +73,7 @@ XMLNode::GetChildNode(const char *name) const noexcept
   return nullptr;
 }
 
-const TCHAR *
+const char *
 XMLNode::GetAttribute(const char *name) const noexcept
 {
   if (!d)

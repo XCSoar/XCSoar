@@ -31,7 +31,46 @@
 #include "util/CharUtil.hxx"
 #include "util/tstring_view.hxx"
 
+#include <tchar.h>
+
 #define INDENTCHAR '\t'
+
+static void
+WriteXMLChar(BufferedOutputStream &os, char ch)
+{
+  switch (ch) {
+  case '<':
+    os.Write("&lt;");
+    break;
+  case '>':
+    os.Write("&gt;");
+    break;
+  case '&':
+    os.Write("&amp;");
+    break;
+  case '\'':
+    os.Write("&apos;");
+    break;
+  case '"':
+    os.Write("&quot;");
+    break;
+  default:
+    if (IsWhitespaceOrNull(ch))
+      ch = ' ';
+
+    os.Write(ch);
+    break;
+  }
+}
+
+static void
+WriteXMLString(BufferedOutputStream &os, const std::string_view &source)
+{
+  for (auto ch : source)
+    WriteXMLChar(os, ch);
+}
+
+#ifdef _UNICODE
 
 static void
 WriteXMLChar(BufferedOutputStream &os, TCHAR ch)
@@ -67,6 +106,8 @@ WriteXMLString(BufferedOutputStream &os, const tstring_view source)
   for (auto ch : source)
     WriteXMLChar(os, ch);
 }
+
+#endif
 
 static void
 WriteIndent(BufferedOutputStream &os, unsigned n)
