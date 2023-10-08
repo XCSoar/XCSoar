@@ -49,6 +49,30 @@ struct Input {
 
   explicit Input(const char *_src) noexcept
     :lpXML(_src) {}
+
+  /**
+   * Obtain the next character from the string.
+   */
+  char GetNextChar() noexcept {
+      char ch = lpXML[nIndex];
+      if (ch != 0)
+        nIndex++;
+      return ch;
+  }
+
+  /**
+   * Find next non-white space character.
+   */
+  char FindNonWhiteSpace() noexcept {
+    // Iterate through characters in the string until we find a NULL or a
+    // non-white space character
+    char ch;
+    while ((ch = GetNextChar()) != 0) {
+      if (!IsWhitespaceOrNull(ch))
+        return ch;
+    }
+    return 0;
+  }
 };
 
 /** Main structure used for parsing XML. */
@@ -95,9 +119,6 @@ enum class Status {
   INSIDE_TAG,
   OUTSIDE_TAG
 };
-
-static NextToken
-GetNextToken(Parser *pXML);
 
 static void
 ParseXMLElement(XMLNode &node, Parser *pXML);
@@ -198,36 +219,6 @@ CompareTagName(const char *cclose, const char *copen)
 }
 
 /**
- * Obtain the next character from the string.
- */
-static inline char
-GetNextChar(Parser *pXML)
-{
-  char ch = pXML->lpXML[pXML->nIndex];
-  if (ch != 0)
-    pXML->nIndex++;
-  return ch;
-}
-
-/**
- * Find next non-white space character.
- */
-static char
-FindNonWhiteSpace(Parser *pXML)
-{
-  assert(pXML);
-
-    // Iterate through characters in the string until we find a NULL or a
-  // non-white space character
-  char ch;
-  while ((ch = GetNextChar(pXML)) != 0) {
-    if (!IsWhitespaceOrNull(ch))
-      return ch;
-  }
-  return 0;
-}
-
-/**
  * Find the next token in a string.
  */
 static NextToken
@@ -242,7 +233,7 @@ GetNextToken(Parser *pXML)
   bool is_text = false;
 
   // Find next non-white space character
-  ch = FindNonWhiteSpace(pXML);
+  ch = pXML->FindNonWhiteSpace();
   if (ch == 0) [[unlikely]]
     // If we failed to obtain a valid character
     return {{}, TokenType::ERROR};
@@ -264,7 +255,7 @@ GetNextToken(Parser *pXML)
     found_match = false;
 
     // Search through the string to find a matching quote
-    while (((ch = GetNextChar(pXML))) != 0) {
+    while (((ch = pXML->GetNextChar())) != 0) {
       size++;
       if (ch == temp_ch) {
         found_match = true;
@@ -282,7 +273,7 @@ GetNextToken(Parser *pXML)
     }
 
     //  4.02.2002
-    if (FindNonWhiteSpace(pXML)) {
+    if (pXML->FindNonWhiteSpace()) {
       pXML->nIndex--;
     }
 
@@ -310,7 +301,7 @@ GetNextToken(Parser *pXML)
     // If we have a tag end...
     if (temp_ch == '/') {
       // Set the type and ensure we point at the next character
-      GetNextChar(pXML);
+      pXML->GetNextChar();
       result.type = TokenType::TAG_END;
       size = 2;
     }
@@ -319,7 +310,7 @@ GetNextToken(Parser *pXML)
     else if (temp_ch == '?') {
 
       // Set the type and ensure we point at the next character
-      GetNextChar(pXML);
+      pXML->GetNextChar();
       result.type = TokenType::DECLARATION;
       size = 2;
     }
@@ -340,7 +331,7 @@ GetNextToken(Parser *pXML)
     // If we have a short hand end tag...
     if (temp_ch == '>') {
       // Set the type and ensure we point at the next character
-      GetNextChar(pXML);
+      pXML->GetNextChar();
       result.type = TokenType::SHORT_HAND_CLOSE;
       size = 2;
       break;
@@ -363,7 +354,7 @@ GetNextToken(Parser *pXML)
     size = 1;
     bool nExit = false;
 
-    while (!nExit && ((ch = GetNextChar(pXML)) != 0)) {
+    while (!nExit && ((ch = pXML->GetNextChar()) != 0)) {
       if (IsWhitespaceOrNull(ch))
         // Break when we find white space
         break;
