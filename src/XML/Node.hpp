@@ -76,7 +76,7 @@ class XMLNode {
       :name(_name),
        is_declaration(_is_declaration) {}
 
-    bool HasChildren() const {
+    bool HasChildren() const noexcept {
       return !children.empty() || !text.empty();
     }
 
@@ -87,11 +87,11 @@ class XMLNode {
 
     typedef std::list<XMLNode>::const_iterator const_iterator;
 
-    const_iterator begin() const {
+    const_iterator begin() const noexcept {
       return children.begin();
     }
 
-    const_iterator end() const {
+    const_iterator end() const noexcept {
       return children.end();
     }
   };
@@ -106,16 +106,16 @@ class XMLNode {
           bool is_declaration) noexcept;
 
 public:
-  static inline XMLNode Null() {
+  static inline XMLNode Null() noexcept {
     return XMLNode(_T(""), false);
   }
 
-  static XMLNode CreateRoot(const TCHAR *name);
+  static XMLNode CreateRoot(const TCHAR *name) noexcept;
 
   /**
    * name of the node
    */
-  const TCHAR *GetName() const {
+  const TCHAR *GetName() const noexcept {
     assert(d != nullptr);
 
     return d->name.c_str();
@@ -123,11 +123,11 @@ public:
 
   typedef Data::const_iterator const_iterator;
 
-  const_iterator begin() const {
+  const_iterator begin() const noexcept {
     return d->begin();
   }
 
-  const_iterator end() const {
+  const_iterator end() const noexcept {
     return d->end();
   }
 
@@ -135,7 +135,7 @@ public:
    * @return the first child node, or nullptr if there is none
    */
   [[gnu::pure]]
-  const XMLNode *GetFirstChild() const {
+  const XMLNode *GetFirstChild() const noexcept {
     return d != nullptr && !d->children.empty()
       ? &d->children.front()
       : nullptr;
@@ -145,7 +145,7 @@ public:
    * @return the first child node, or nullptr if there is none
    */
   [[gnu::pure]]
-  XMLNode *GetFirstChild() {
+  XMLNode *GetFirstChild() noexcept {
     return d != nullptr && !d->children.empty()
       ? &d->children.front()
       : nullptr;
@@ -157,14 +157,14 @@ public:
    * if failing)
    */
   [[gnu::pure]]
-  const XMLNode *GetChildNode(const TCHAR *name) const;
+  const XMLNode *GetChildNode(const TCHAR *name) const noexcept;
 
   /**
    * @return ith attribute content with specific name (return a nullptr
    * if failing)
    */
   [[gnu::pure]]
-  const TCHAR *GetAttribute(const TCHAR *name) const;
+  const TCHAR *GetAttribute(const TCHAR *name) const noexcept;
 
   /**
    * Create an XML file from the head element.
@@ -177,20 +177,20 @@ public:
   void Serialise(BufferedOutputStream &os, bool format) const;
 
   [[gnu::pure]]
-  bool IsDeclaration() const {
+  bool IsDeclaration() const noexcept {
     assert(d != nullptr);
 
     return d->is_declaration;
   }
 
   // to allow shallow copy:
-  ~XMLNode() {
+  ~XMLNode() noexcept {
     delete d;
   }
 
   XMLNode(const XMLNode &A) = delete;
 
-  XMLNode(XMLNode &&other)
+  XMLNode(XMLNode &&other) noexcept
     :d(other.d) {
     other.d = nullptr;
   }
@@ -200,7 +200,7 @@ public:
    */
   XMLNode &operator=(const XMLNode& A) = delete;
 
-  XMLNode &operator=(XMLNode &&other) {
+  XMLNode &operator=(XMLNode &&other) noexcept {
     Data *old = d;
     d = other.d;
     other.d = nullptr;
@@ -210,8 +210,8 @@ public:
     return *this;
   }
 
-  constexpr
-  XMLNode(): d(nullptr) {}
+  constexpr XMLNode() noexcept
+    :d(nullptr) {}
 
   // The strings given as parameters for these 4 methods will be free'd by the XMLNode class:
 

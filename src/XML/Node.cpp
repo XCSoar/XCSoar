@@ -32,7 +32,7 @@
 #include <cassert>
 
 XMLNode
-XMLNode::CreateRoot(const TCHAR *name)
+XMLNode::CreateRoot(const TCHAR *name) noexcept
 {
   return XMLNode(name, false);
 }
@@ -59,7 +59,7 @@ XMLNode::AddText(tstring_view value) noexcept
 }
 
 const XMLNode *
-XMLNode::GetChildNode(const TCHAR *name) const
+XMLNode::GetChildNode(const TCHAR *name) const noexcept
 {
   if (!d)
     return nullptr;
@@ -74,7 +74,7 @@ XMLNode::GetChildNode(const TCHAR *name) const
 }
 
 const TCHAR *
-XMLNode::GetAttribute(const TCHAR *name) const
+XMLNode::GetAttribute(const TCHAR *name) const noexcept
 {
   if (!d)
     return nullptr;
