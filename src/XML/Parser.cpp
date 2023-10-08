@@ -202,9 +202,7 @@ FromXMLString(std::string_view src) noexcept
   }
   *d = 0;
 
-  /* shrink the memory allocation just in case we allocated too
-     much */
-  return AllocatedString{result};
+  return result;
 }
 
 [[gnu::pure]]
