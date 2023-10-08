@@ -4,13 +4,11 @@
 #pragma once
 
 class Airspaces;
-class TLineReader;
-class ProgressListener;
+class BufferedReader;
 
 /**
  * Throws on error.
  */
 void
 ParseAirspaceFile(Airspaces &airspaces,
-                  TLineReader &reader,
-                  ProgressListener &progress);
+                  BufferedReader &reader);

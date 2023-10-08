@@ -11,19 +11,20 @@
 #include "util/StringParser.hxx"
 #include "util/Macros.hpp"
 #include "Geo/Math.hpp"
-#include "io/LineReader.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
 #include "lib/fmt/RuntimeError.hxx"
+#include "io/BufferedReader.hxx"
+#include "io/StringConverter.hpp"
 #include "util/ConvertString.hpp"
 #include "util/StaticString.hxx"
 #include "util/StringCompare.hxx"
 
 #include <stdexcept>
 
-#include <tchar.h>
+using std::string_view_literals::operator""sv;
 
 enum class AirspaceFileType {
   UNKNOWN,
@@ -33,67 +34,67 @@ enum class AirspaceFileType {
 
 struct AirspaceClassCharCouple
 {
-  const TCHAR character;
+  const char character;
   AirspaceClass asclass;
 };
 
 struct AirspaceClassStringCouple
 {
-  const TCHAR *string;
+  const char *string;
   AirspaceClass asclass;
 };
 
 static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
-  { _T("R"), RESTRICT },
-  { _T("Q"), DANGER },
-  { _T("P"), PROHIBITED },
-  { _T("CTR"), CTR },
-  { _T("A"), CLASSA },
-  { _T("B"), CLASSB },
-  { _T("C"), CLASSC },
-  { _T("D"), CLASSD },
-  { _T("GP"), NOGLIDER },
-  { _T("W"), WAVE },
-  { _T("E"), CLASSE },
-  { _T("F"), CLASSF },
-  { _T("TMZ"), TMZ },
-  { _T("G"), CLASSG },
-  { _T("RMZ"), RMZ },
-  { _T("MATZ"), MATZ },
-  { _T("GSEC"), WAVE },
+  { "R", RESTRICT },
+  { "Q", DANGER },
+  { "P", PROHIBITED },
+  { "CTR", CTR },
+  { "A", CLASSA },
+  { "B", CLASSB },
+  { "C", CLASSC },
+  { "D", CLASSD },
+  { "GP", NOGLIDER },
+  { "W", WAVE },
+  { "E", CLASSE },
+  { "F", CLASSF },
+  { "TMZ", TMZ },
+  { "G", CLASSG },
+  { "RMZ", RMZ },
+  { "MATZ", MATZ },
+  { "GSEC", WAVE },
 };
 
 static constexpr AirspaceClassCharCouple airspace_tnp_class_chars[] = {
-  { _T('A'), CLASSA },
-  { _T('B'), CLASSB },
-  { _T('C'), CLASSC },
-  { _T('D'), CLASSD },
-  { _T('E'), CLASSE },
-  { _T('F'), CLASSF },
-  { _T('G'), CLASSG },
+  { 'A', CLASSA },
+  { 'B', CLASSB },
+  { 'C', CLASSC },
+  { 'D', CLASSD },
+  { 'E', CLASSE },
+  { 'F', CLASSF },
+  { 'G', CLASSG },
 };
 
 static constexpr AirspaceClassStringCouple airspace_tnp_type_strings[] = {
-  { _T("C"), CTR },
-  { _T("CTA"), CTR },
-  { _T("CTR"), CTR },
-  { _T("CTA/CTR"), CTR },
-  { _T("CTR/CTA"), CTR },
-  { _T("R"), RESTRICT },
-  { _T("RESTRICTED"), RESTRICT },
-  { _T("P"), PROHIBITED },
-  { _T("PROHIBITED"), PROHIBITED },
-  { _T("D"), DANGER },
-  { _T("DANGER"), DANGER },
-  { _T("G"), WAVE },
-  { _T("GSEC"), WAVE },
-  { _T("T"), TMZ },
-  { _T("TMZ"), TMZ },
-  { _T("CYR"), RESTRICT },
-  { _T("CYD"), DANGER },
-  { _T("CYA"), CLASSF },
-  { _T("MATZ"), MATZ },
-  { _T("RMZ"), RMZ },
+  { "C", CTR },
+  { "CTA", CTR },
+  { "CTR", CTR },
+  { "CTA/CTR", CTR },
+  { "CTR/CTA", CTR },
+  { "R", RESTRICT },
+  { "RESTRICTED", RESTRICT },
+  { "P", PROHIBITED },
+  { "PROHIBITED", PROHIBITED },
+  { "D", DANGER },
+  { "DANGER", DANGER },
+  { "G", WAVE },
+  { "GSEC", WAVE },
+  { "T", TMZ },
+  { "TMZ", TMZ },
+  { "CYR", RESTRICT },
+  { "CYD", DANGER },
+  { "CYA", CLASSF },
+  { "MATZ", MATZ },
+  { "RMZ", RMZ },
 };
 
 // this can now be called multiple times to load several airspaces.
@@ -334,7 +335,7 @@ struct TempAirspace
 
 [[nodiscard]]
 static AirspaceAltitude
-ReadAltitude(StringParser<TCHAR> &input)
+ReadAltitude(StringParser<> &input)
 {
   auto unit = Unit::FEET;
   enum { MSL, AGL, SFC, FL, STD, UNLIMITED } type = MSL;
@@ -346,23 +347,23 @@ ReadAltitude(StringParser<TCHAR> &input)
     if (IsDigitASCII(input.front())) {
       if (auto x = input.ReadDouble())
         value = *x;
-    } else if (input.SkipMatchIgnoreCase(_T("GND"), 3) ||
-               input.SkipMatchIgnoreCase(_T("AGL"), 3)) {
+    } else if (input.SkipMatchIgnoreCase("GND", 3) ||
+               input.SkipMatchIgnoreCase("AGL", 3)) {
       type = AGL;
-    } else if (input.SkipMatchIgnoreCase(_T("SFC"), 3)) {
+    } else if (input.SkipMatchIgnoreCase("SFC", 3)) {
       type = SFC;
-    } else if (input.SkipMatchIgnoreCase(_T("FL"), 2)) {
+    } else if (input.SkipMatchIgnoreCase("FL", 2)) {
       type = FL;
-    } else if (input.SkipMatchIgnoreCase(_T("FT"), 2)) {
+    } else if (input.SkipMatchIgnoreCase("FT", 2)) {
       unit = Unit::FEET;
-    } else if (input.SkipMatchIgnoreCase(_T("MSL"), 3)) {
+    } else if (input.SkipMatchIgnoreCase("MSL", 3)) {
       type = MSL;
-    } else if (input.front() == _T('M') || input.front() == _T('m')) {
+    } else if (input.front() == 'M' || input.front() == 'm') {
       unit = Unit::METER;
       input.Skip();
-    } else if (input.SkipMatchIgnoreCase(_T("STD"), 3)) {
+    } else if (input.SkipMatchIgnoreCase("STD", 3)) {
       type = STD;
-    } else if (input.SkipMatchIgnoreCase(_T("UNL"), 3)) {
+    } else if (input.SkipMatchIgnoreCase("UNL", 3)) {
       type = UNLIMITED;
     } else if (input.IsEmpty())
       break;
@@ -433,7 +434,7 @@ ReadAltitude(StringParser<TCHAR> &input)
  * Throws on error.
  */
 static Angle
-ReadNonNegativeAngle(StringParser<TCHAR> &input, double max_degrees)
+ReadNonNegativeAngle(StringParser<> &input, double max_degrees)
 {
   double degrees;
 
@@ -465,7 +466,7 @@ ReadNonNegativeAngle(StringParser<TCHAR> &input, double max_degrees)
  * Throws on error.
  */
 static GeoPoint
-ReadCoords(StringParser<TCHAR> &input)
+ReadCoords(StringParser<> &input)
 {
   // Format: 53:20:41 N 010:24:41 E
   // Alternative Format: 53:20.68 N 010:24.68 E
@@ -495,7 +496,7 @@ ReadCoords(StringParser<TCHAR> &input)
  * Throws on error.
  */
 static Angle
-ParseBearingDegrees(StringParser<TCHAR> &input)
+ParseBearingDegrees(StringParser<> &input)
 {
   if (auto value = input.ReadDouble(); value && *value >= 0 && *value <= 361)
     return Angle::Degrees(*value).AsBearing();
@@ -504,7 +505,7 @@ ParseBearingDegrees(StringParser<TCHAR> &input)
 }
 
 static double
-ParseRadiusNM(StringParser<TCHAR> &input)
+ParseRadiusNM(StringParser<> &input)
 {
   if (auto radius = input.ReadDouble();
       radius && *radius > 0 && *radius <= 1000)
@@ -517,7 +518,7 @@ ParseRadiusNM(StringParser<TCHAR> &input)
  * Throws on error.
  */
 static void
-ParseArcBearings(StringParser<TCHAR> &input, TempAirspace &temp_area)
+ParseArcBearings(StringParser<> &input, TempAirspace &temp_area)
 {
   // Determine radius and start/end bearing
 
@@ -542,7 +543,7 @@ ParseArcBearings(StringParser<TCHAR> &input, TempAirspace &temp_area)
  * Throws on error.
  */
 static void
-ParseArcPoints(StringParser<TCHAR> &input, TempAirspace &temp_area)
+ParseArcPoints(StringParser<> &input, TempAirspace &temp_area)
 {
   // Read start coordinates
   GeoPoint start = ReadCoords(input);
@@ -560,7 +561,7 @@ ParseArcPoints(StringParser<TCHAR> &input, TempAirspace &temp_area)
 
 [[gnu::pure]]
 static AirspaceClass
-ParseType(const TCHAR *buffer) noexcept
+ParseType(const char *buffer) noexcept
 {
   for (unsigned i = 0; i < ARRAY_SIZE(airspace_class_strings); i++)
     if (StringIsEqualIgnoreCase(buffer, airspace_class_strings[i].string))
@@ -574,58 +575,59 @@ ParseType(const TCHAR *buffer) noexcept
  */
 static void
 ParseLine(Airspaces &airspace_database, unsigned line_number,
-          StringParser<TCHAR> &&input,
+          StringParser<> &&input,
+          StringConverter &string_converter,
           TempAirspace &temp_area)
 {
   // Only return expected lines
   switch (input.pop_front()) {
-  case _T('D'):
-  case _T('d'):
+  case 'D':
+  case 'd':
     switch (input.pop_front()) {
-    case _T('P'):
-    case _T('p'):
+    case 'P':
+    case 'p':
       if (!input.SkipWhitespace())
         break;
 
       temp_area.points.push_back(ReadCoords(input));
       break;
 
-    case _T('C'):
-    case _T('c'):
+    case 'C':
+    case 'c':
       temp_area.radius = ParseRadiusNM(input);
       temp_area.AddCircle(airspace_database);
       temp_area.Reset(line_number);
       break;
 
-    case _T('A'):
-    case _T('a'):
+    case 'A':
+    case 'a':
       ParseArcBearings(input, temp_area);
       break;
 
-    case _T('B'):
-    case _T('b'):
+    case 'B':
+    case 'b':
       ParseArcPoints(input, temp_area);
       break;
     }
     break;
 
-  case _T('V'):
-  case _T('v'):
+  case 'V':
+  case 'v':
     input.Strip();
-    if (input.SkipMatchIgnoreCase(_T("X="), 2)) {
+    if (input.SkipMatchIgnoreCase("X=", 2)) {
       temp_area.center = ReadCoords(input);
-    } else if (input.SkipMatchIgnoreCase(_T("D=-"), 3)) {
+    } else if (input.SkipMatchIgnoreCase("D=-", 3)) {
       temp_area.rotation = -1;
-    } else if (input.SkipMatchIgnoreCase(_T("D=+"), 3)) {
+    } else if (input.SkipMatchIgnoreCase("D=+", 3)) {
       temp_area.rotation = +1;
     }
     break;
 
-  case _T('A'):
-  case _T('a'):
+  case 'A':
+  case 'a':
     switch (input.pop_front()) {
-    case _T('C'):
-    case _T('c'):
+    case 'C':
+    case 'c':
       if (!input.SkipWhitespace())
         break;
 
@@ -635,35 +637,35 @@ ParseLine(Airspaces &airspace_database, unsigned line_number,
       temp_area.asclass = ParseType(input.c_str());
       break;
 
-    case _T('N'):
-    case _T('n'):
+    case 'N':
+    case 'n':
       if (input.SkipWhitespace())
-        temp_area.name = input.c_str();
+        temp_area.name = string_converter.Convert(input.c_str());
       break;
 
-    case _T('L'):
-    case _T('l'):
+    case 'L':
+    case 'l':
       if (input.SkipWhitespace())
         temp_area.base = ReadAltitude(input);
       break;
 
-    case _T('H'):
-    case _T('h'):
+    case 'H':
+    case 'h':
       if (input.SkipWhitespace())
         temp_area.top = ReadAltitude(input);
       break;
 
-    case _T('Y'):
-    case _T('y'):
+    case 'Y':
+    case 'y':
       if (input.SkipWhitespace())
-        temp_area.astype = input.c_str();
+        temp_area.astype = string_converter.Convert(input.c_str());
       break;
 
     /** 'AR 999.999 or 'AF 999.999' in accordance with the Naviter change proposed in 2018 - (Find 'Additional OpenAir fields' here) http://www.winpilot.com/UsersGuide/UserAirspace.asp **/
-    case _T('R'):
-    case _T('r'):
-    case _T('F'):
-    case _T('f'):
+    case 'R':
+    case 'r':
+    case 'F':
+    case 'f':
       if (input.SkipWhitespace())
         temp_area.radio_frequency = RadioFrequency::Parse(input.c_str());
       break;
@@ -677,21 +679,23 @@ ParseLine(Airspaces &airspace_database, unsigned line_number,
  * Throws on error.
  */
 static void
-ParseLine(Airspaces &airspace_database, unsigned line_number, TCHAR *line,
+ParseLine(Airspaces &airspace_database, unsigned line_number, char *line,
+          StringConverter &string_converter,
           TempAirspace &temp_area)
 {
   // Strip comments
-  auto *comment = StringFind(line, _T('*'));
+  auto *comment = StringFind(line, '*');
   if (comment != nullptr)
-    *comment = _T('\0');
+    *comment = '\0';
 
-  ParseLine(airspace_database, line_number, StringParser<TCHAR>(line),
+  ParseLine(airspace_database, line_number, StringParser<>{line},
+            string_converter,
             temp_area);
 }
 
 [[gnu::pure]]
 static AirspaceClass
-ParseClassTNP(const TCHAR *buffer) noexcept
+ParseClassTNP(const char *buffer) noexcept
 {
   for (unsigned i = 0; i < ARRAY_SIZE(airspace_tnp_class_chars); i++)
     if (buffer[0] == airspace_tnp_class_chars[i].character)
@@ -702,10 +706,10 @@ ParseClassTNP(const TCHAR *buffer) noexcept
 
 [[gnu::pure]]
 static AirspaceClass
-ParseTypeTNP(const TCHAR *buffer) noexcept
+ParseTypeTNP(const char *buffer) noexcept
 {
   // Handle e.g. "CLASS=CLASS C" properly
-  const TCHAR *asclass = StringAfterPrefixIgnoreCase(buffer, _T("CLASS "));
+  const char *asclass = StringAfterPrefixIgnoreCase(buffer, "CLASS "sv);
   if (asclass) {
     AirspaceClass _class = ParseClassTNP(asclass);
     if (_class != OTHER)
@@ -725,7 +729,7 @@ ParseTypeTNP(const TCHAR *buffer) noexcept
  * Throws on error.
  */
 static Angle
-ReadNonNegativeAngleTNP(StringParser<TCHAR> &input, unsigned max_degrees)
+ReadNonNegativeAngleTNP(StringParser<> &input, unsigned max_degrees)
 {
   unsigned deg, min, sec;
 
@@ -748,7 +752,7 @@ ReadNonNegativeAngleTNP(StringParser<TCHAR> &input, unsigned max_degrees)
  * Throws on error.
  */
 static GeoPoint
-ParseCoordsTNP(StringParser<TCHAR> &input)
+ParseCoordsTNP(StringParser<> &input)
 {
   GeoPoint point;
   // Format: N542500 E0105000
@@ -786,7 +790,7 @@ ParseCoordsTNP(StringParser<TCHAR> &input)
  * Throws on error.
  */
 static void
-ParseArcTNP(StringParser<TCHAR> &input, TempAirspace &temp_area)
+ParseArcTNP(StringParser<> &input, TempAirspace &temp_area)
 {
   if (temp_area.points.empty())
     throw std::runtime_error("Arc on empty airspace");
@@ -799,12 +803,12 @@ ParseArcTNP(StringParser<TCHAR> &input, TempAirspace &temp_area)
   if (!input.SkipWord())
     throw std::runtime_error("Arc syntax error");
 
-  if (!input.SkipMatchIgnoreCase(_T("CENTRE="), 7))
+  if (!input.SkipMatchIgnoreCase("CENTRE=", 7))
     throw std::runtime_error("CENTRE=... expected");
 
   temp_area.center = ParseCoordsTNP(input);
 
-  if (!input.SkipMatchIgnoreCase(_T(" TO="), 4))
+  if (!input.SkipMatchIgnoreCase(" TO=", 4))
     throw std::runtime_error("TO=... expected");
 
   GeoPoint to = ParseCoordsTNP(input);
@@ -816,16 +820,16 @@ ParseArcTNP(StringParser<TCHAR> &input, TempAirspace &temp_area)
  * Throws on error.
  */
 static void
-ParseCircleTNP(StringParser<TCHAR> &input, TempAirspace &temp_area)
+ParseCircleTNP(StringParser<> &input, TempAirspace &temp_area)
 {
   // CIRCLE RADIUS=17.00 CENTRE=N533813 E0095943
 
-  if (!input.SkipMatchIgnoreCase(_T("RADIUS="), 7))
+  if (!input.SkipMatchIgnoreCase("RADIUS=", 7))
     throw std::runtime_error("RADIUS=... expected");
 
   temp_area.radius = ParseRadiusNM(input);
 
-  if (!input.SkipMatchIgnoreCase(_T(" CENTRE="), 8))
+  if (!input.SkipMatchIgnoreCase(" CENTRE=", 8))
     throw std::runtime_error("CENTRE=... expected");
 
   temp_area.center = ParseCoordsTNP(input);
@@ -836,16 +840,17 @@ ParseCircleTNP(StringParser<TCHAR> &input, TempAirspace &temp_area)
  */
 static void
 ParseLineTNP(Airspaces &airspace_database, unsigned line_number,
-             StringParser<TCHAR> &input,
+             StringParser<> &input,
+             StringConverter &string_converter,
              TempAirspace &temp_area, bool &ignore)
 {
   if (input.Match('#'))
     return;
 
-  if (input.SkipMatchIgnoreCase(_T("INCLUDE="), 8)) {
-    if (input.MatchIgnoreCase(_T("YES"), 3))
+  if (input.SkipMatchIgnoreCase("INCLUDE=", 8)) {
+    if (input.MatchIgnoreCase("YES", 3))
       ignore = false;
-    else if (input.MatchIgnoreCase(_T("NO"), 2))
+    else if (input.MatchIgnoreCase("NO", 2))
       ignore = true;
 
     return;
@@ -854,57 +859,57 @@ ParseLineTNP(Airspaces &airspace_database, unsigned line_number,
   if (ignore)
     return;
 
-  if (input.SkipMatchIgnoreCase(_T("POINT="), 6)) {
+  if (input.SkipMatchIgnoreCase("POINT=", 6)) {
     temp_area.points.push_back(ParseCoordsTNP(input));
-  } else if (input.SkipMatchIgnoreCase(_T("CIRCLE "), 7)) {
+  } else if (input.SkipMatchIgnoreCase("CIRCLE ", 7)) {
     ParseCircleTNP(input, temp_area);
 
     temp_area.AddCircle(airspace_database);
     temp_area.ResetTNP(line_number);
-  } else if (input.SkipMatchIgnoreCase(_T("CLOCKWISE "), 10)) {
+  } else if (input.SkipMatchIgnoreCase("CLOCKWISE ", 10)) {
     temp_area.rotation = 1;
     ParseArcTNP(input, temp_area);
-  } else if (input.SkipMatchIgnoreCase(_T("ANTI-CLOCKWISE "), 15)) {
+  } else if (input.SkipMatchIgnoreCase("ANTI-CLOCKWISE ", 15)) {
     temp_area.rotation = -1;
     ParseArcTNP(input, temp_area);
-  } else if (input.SkipMatchIgnoreCase(_T("TITLE="), 6)) {
+  } else if (input.SkipMatchIgnoreCase("TITLE=", 6)) {
     if (temp_area.Commit(airspace_database))
       temp_area.ResetTNP(line_number);
 
-    temp_area.name = input.c_str();
-  } else if (input.SkipMatchIgnoreCase(_T("TYPE="), 5)) {
+    temp_area.name = string_converter.Convert(input.c_str());
+  } else if (input.SkipMatchIgnoreCase("TYPE=", 5)) {
     if (temp_area.Commit(airspace_database))
       temp_area.ResetTNP(line_number);
 
     temp_area.asclass = ParseTypeTNP(input.c_str());
-  } else if (input.SkipMatchIgnoreCase(_T("CLASS="), 6)) {
+  } else if (input.SkipMatchIgnoreCase("CLASS=", 6)) {
     temp_area.asclass = ParseClassTNP(input.c_str());
-  } else if (input.SkipMatchIgnoreCase(_T("TOPS="), 5)) {
+  } else if (input.SkipMatchIgnoreCase("TOPS=", 5)) {
     temp_area.top = ReadAltitude(input);
-  } else if (input.SkipMatchIgnoreCase(_T("BASE="), 5)) {
+  } else if (input.SkipMatchIgnoreCase("BASE=", 5)) {
     temp_area.base = ReadAltitude(input);
-  } else if (input.SkipMatchIgnoreCase(_T("RADIO="), 6)) {
+  } else if (input.SkipMatchIgnoreCase("RADIO=", 6)) {
     temp_area.radio_frequency = RadioFrequency::Parse(input.c_str());
-  } else if (input.SkipMatchIgnoreCase(_T("ACTIVE="), 7)) {
-    if (input.MatchAllIgnoreCase(_T("WEEKEND")))
+  } else if (input.SkipMatchIgnoreCase("ACTIVE=", 7)) {
+    if (input.MatchAllIgnoreCase("WEEKEND"))
       temp_area.days_of_operation.SetWeekend();
-    else if (input.MatchAllIgnoreCase(_T("WEEKDAY")))
+    else if (input.MatchAllIgnoreCase("WEEKDAY"))
       temp_area.days_of_operation.SetWeekdays();
-    else if (input.MatchAllIgnoreCase(_T("EVERYDAY")))
+    else if (input.MatchAllIgnoreCase("EVERYDAY"))
       temp_area.days_of_operation.SetAll();
   }
 }
 
 static AirspaceFileType
-DetectFileType(const TCHAR *line)
+DetectFileType(const char *line) noexcept
 {
-  if (StringStartsWithIgnoreCase(line, _T("INCLUDE=")) ||
-      StringStartsWithIgnoreCase(line, _T("TYPE=")) ||
-      StringStartsWithIgnoreCase(line, _T("TITLE=")))
+  if (StringStartsWithIgnoreCase(line, "INCLUDE=") ||
+      StringStartsWithIgnoreCase(line, "TYPE=") ||
+      StringStartsWithIgnoreCase(line, "TITLE="))
     return AirspaceFileType::TNP;
 
-  const TCHAR *p = StringAfterPrefixIgnoreCase(line, _T("AC"));
-  if (p != nullptr && (StringIsEmpty(p) || *p == _T(' ')))
+  const char *p = StringAfterPrefixIgnoreCase(line, "AC"sv);
+  if (p != nullptr && (StringIsEmpty(p) || *p == ' '))
     return AirspaceFileType::OPENAIR;
 
   return AirspaceFileType::UNKNOWN;
@@ -912,23 +917,19 @@ DetectFileType(const TCHAR *line)
 
 void
 ParseAirspaceFile(Airspaces &airspaces,
-                  TLineReader &reader,
-                  ProgressListener &progress)
+                  BufferedReader &reader)
 {
+  StringConverter string_converter;
+
   bool ignore = false;
-
-  // Create and init ProgressDialog
-  progress.SetProgressRange(1024);
-
-  const long file_size = reader.GetSize();
 
   TempAirspace temp_area;
   AirspaceFileType filetype = AirspaceFileType::UNKNOWN;
 
-  TCHAR *line;
+  char *line;
 
   // Iterate through the lines
-  for (unsigned line_num = 1; (line = reader.ReadLine()) != nullptr; line_num++) {
+  while ((line = reader.ReadLine()) != nullptr) {
     StripRight(line);
 
     // Skip empty line
@@ -944,10 +945,12 @@ ParseAirspaceFile(Airspaces &airspaces,
     // Parse the line
     try {
       if (filetype == AirspaceFileType::OPENAIR)
-        ParseLine(airspaces, line_num, line, temp_area);
+        ParseLine(airspaces, reader.GetLineNumber(), line,
+                  string_converter, temp_area);
       if (filetype == AirspaceFileType::TNP) {
-        StringParser<TCHAR> input(line);
-        ParseLineTNP(airspaces, line_num, input, temp_area, ignore);
+        StringParser<> input(line);
+        ParseLineTNP(airspaces, reader.GetLineNumber(), input, string_converter,
+                     temp_area, ignore);
       }
     } catch (const TempAirspace::CommitError &e) {
       throw FmtRuntimeError("Error in airspace at line {}: {}",
@@ -955,12 +958,9 @@ ParseAirspaceFile(Airspaces &airspaces,
     } catch (...) {
       // TODO translate this?
       std::throw_with_nested(FmtRuntimeError("Error in line {} ('{}')",
-                                             line_num, WideToUTF8Converter{line}.c_str()));
+                                             reader.GetLineNumber(),
+                                             line));
     }
-
-    // Update the ProgressDialog
-    if ((line_num & 0xff) == 0)
-      progress.SetProgressPosition(reader.Tell() * 1024 / file_size);
   }
 
   if (filetype == AirspaceFileType::UNKNOWN)
