@@ -40,7 +40,7 @@ SaveFlarmNameFile(BufferedOutputStream &writer, FlarmNameDatabase &db)
 
     writer.Write(i.id.Format(id));
     writer.Write('=');
-    writer.Write(i.name.c_str());
+    writer.Write(i.name);
     writer.Write('\n');
   }
 }
