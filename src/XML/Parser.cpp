@@ -50,6 +50,16 @@ struct Input {
   explicit Input(const char *_src) noexcept
     :lpXML(_src) {}
 
+  std::string_view substr(std::size_t pos, std::size_t count) const noexcept {
+    assert(pos + count <= strlen(lpXML));
+
+    return {lpXML + pos, count};
+  }
+
+  char PeekChar() const noexcept {
+    return lpXML[nIndex];
+  }
+
   /**
    * Obtain the next character from the string.
    */
@@ -239,7 +249,7 @@ GetNextToken(Parser *pXML)
     return {{}, TokenType::ERROR};
 
   // Cache the current string pointer
-  const char *const pStr = &pXML->lpXML[pXML->nIndex - 1];
+  const std::size_t start = pXML->nIndex - 1;
 
   switch (ch) {
     // Check for quotes
@@ -296,7 +306,7 @@ GetNextToken(Parser *pXML)
 
     // Peek at the next character to see if we have an end tag '</',
     // or an xml declaration '<?'
-    temp_ch = pXML->lpXML[pXML->nIndex];
+    temp_ch = pXML->PeekChar();
 
     // If we have a tag end...
     if (temp_ch == '/') {
@@ -326,7 +336,7 @@ GetNextToken(Parser *pXML)
   case '/':
 
     // Peek at the next character to see if we have a short end tag '/>'
-    temp_ch = pXML->lpXML[pXML->nIndex];
+    temp_ch = pXML->PeekChar();
 
     // If we have a short hand end tag...
     if (temp_ch == '>') {
@@ -364,7 +374,7 @@ GetNextToken(Parser *pXML)
       case '/':
 
         // Peek at the next character to see it we have short hand end tag
-        temp_ch = pXML->lpXML[pXML->nIndex];
+        temp_ch = pXML->PeekChar();
 
         // If we found a short hand end tag then we need to exit the loop
         if (temp_ch == '>') {
@@ -394,8 +404,8 @@ GetNextToken(Parser *pXML)
       }
     }
   }
-  result.text = {pStr, size};
 
+  result.text = pXML->substr(start, size);
   return result;
 }
 
