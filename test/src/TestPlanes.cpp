@@ -12,6 +12,7 @@
 #include "util/PrintException.hxx"
 
 #include <stdlib.h>
+#include <tchar.h>
 
 static void
 TestReader()

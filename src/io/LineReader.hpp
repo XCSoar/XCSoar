@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <tchar.h>
-
 template<class T>
 class LineReader {
 public:
@@ -40,10 +38,4 @@ public:
   }
 };
 
-class TLineReader : public LineReader<TCHAR> {};
-
-#ifdef _UNICODE
 class NLineReader : public LineReader<char> {};
-#else
-class NLineReader : public TLineReader {};
-#endif

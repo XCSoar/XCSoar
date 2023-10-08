@@ -16,6 +16,8 @@
 #include <cassert>
 #include <cstdio>
 
+#include <tchar.h>
+
 using namespace std::chrono;
 
 static void

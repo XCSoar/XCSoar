@@ -702,7 +702,7 @@ DEBUG_PROGRAM_NAMES = \
 	FlightTable \
 	BenchmarkProjection \
 	BenchmarkFAITriangleSector \
-	DumpTextFile DumpTextZip DumpTextInflate \
+	DumpTextInflate \
 	DumpHexColor \
 	RunXMLParser \
 	ReadMO \
@@ -882,11 +882,6 @@ ARC_APPROX_SOURCES = \
 	$(TEST_SRC_DIR)/ArcApprox.cpp
 ARC_APPROX_DEPENDS = UTIL GEO MATH
 $(eval $(call link-program,ArcApprox,ARC_APPROX))
-
-DUMP_TEXT_ZIP_SOURCES = \
-	$(TEST_SRC_DIR)/DumpTextZip.cpp
-DUMP_TEXT_ZIP_DEPENDS = IO ZZIP UTIL
-$(eval $(call link-program,DumpTextZip,DUMP_TEXT_ZIP))
 
 DUMP_TEXT_INFLATE_SOURCES = \
 	$(TEST_SRC_DIR)/DumpTextInflate.cpp
