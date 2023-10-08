@@ -29,8 +29,6 @@
 #include "Node.hpp"
 #include "util/StringAPI.hxx"
 
-#include <cassert>
-
 XMLNode
 XMLNode::CreateRoot(const char *name) noexcept
 {

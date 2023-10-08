@@ -28,8 +28,6 @@
 
 #pragma once
 
-#include "util/NonCopyable.hpp"
-
 #include <list>
 #include <forward_list>
 #include <string>
@@ -39,7 +37,7 @@ class BufferedOutputStream;
 
 class XMLNode {
   /** Structure for XML attribute. */
-  struct Attribute : private NonCopyable {
+  struct Attribute {
     std::string name;
     std::string value;
 
