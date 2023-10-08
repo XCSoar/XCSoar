@@ -112,6 +112,10 @@ public:
 
   static XMLNode CreateRoot(const TCHAR *name) noexcept;
 
+  bool IsNull() const noexcept {
+    return d->name.empty();
+  }
+
   /**
    * name of the node
    */

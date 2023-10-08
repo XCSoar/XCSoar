@@ -493,7 +493,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
           if (!pXML->end_tag.empty()) {
             // If we are back at the root node then we
             // have an unmatched end tag
-            if (node.GetName() == nullptr)
+            if (node.IsNull())
               throw std::runtime_error("Unmatched end tag");
 
             // If the end tag matches the name of this
