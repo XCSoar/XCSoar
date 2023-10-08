@@ -466,8 +466,8 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
 
         // If we have node text then add this to the element
         if (text != nullptr) {
-          size_t length = StripRight(text, token.text.data() - text);
-          node.AddText(std::string_view{text, length});
+          const std::string_view unstripped_text(text, token.text.data() - text);
+          node.AddText(StripRight(unstripped_text));
           text = nullptr;
         }
 
@@ -524,8 +524,8 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
 
         // If we have node text then add this to the element
         if (text != nullptr) {
-          size_t length = StripRight(text, token.text.data() - text);
-          const auto text2 = FromXMLString({text, length});
+          const std::string_view unstripped_text(text, token.text.data() - text);
+          const auto text2 = FromXMLString(StripRight(unstripped_text));
           if (text2 == nullptr)
             throw std::runtime_error("Unexpected token found");
 
