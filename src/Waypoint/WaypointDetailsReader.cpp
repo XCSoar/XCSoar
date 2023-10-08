@@ -114,9 +114,6 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
     builder.Commit(way_points);
 }
 
-/**
- * Opens the airfield details file and parses it
- */
 void
 ReadFile(TLineReader &reader, Waypoints &way_points,
          ProgressListener &progress)

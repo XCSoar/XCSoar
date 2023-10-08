@@ -8,25 +8,20 @@
 #include "ZipLineReader.hpp"
 #include "ConvertLineReader.hpp"
 #include "Profile/Profile.hpp"
-#include "LogFile.hpp"
 #include "system/Path.hpp"
 
 #include <zzip/zzip.h>
 
 #include <cassert>
-#include <string.h>
 
 std::unique_ptr<NLineReader>
 OpenConfiguredTextFileA(std::string_view profile_key)
-try {
+{
   const auto path = Profile::GetPath(profile_key);
   if (path == nullptr)
     return nullptr;
 
   return std::make_unique<FileLineReaderA>(path);
-} catch (...) {
-  LogError(std::current_exception());
-  return nullptr;
 }
 
 std::unique_ptr<TLineReader>
@@ -41,7 +36,7 @@ OpenConfiguredTextFile(std::string_view profile_key, Charset cs)
 
 static std::unique_ptr<NLineReader>
 OpenMapTextFileA(const char *in_map_file)
-try {
+{
   assert(in_map_file != nullptr);
 
   auto archive = OpenMapFile();
@@ -49,9 +44,6 @@ try {
     return nullptr;
 
   return std::make_unique<ZipLineReaderA>(archive->get(), in_map_file);
-} catch (...) {
-  LogError(std::current_exception());
-  return nullptr;
 }
 
 static std::unique_ptr<TLineReader>

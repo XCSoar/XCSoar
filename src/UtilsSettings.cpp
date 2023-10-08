@@ -110,7 +110,12 @@ SettingsLeave(const UISettings &old_ui_settings)
     // re-load waypoints
     WaypointGlue::LoadWaypoints(way_points, data_components->terrain.get(),
                                 operation);
-    WaypointDetails::ReadFileFromProfile(way_points, operation);
+
+    try {
+      WaypointDetails::ReadFileFromProfile(way_points, operation);
+    } catch (...) {
+      LogError(std::current_exception());
+    }
   }
 
   if (WaypointFileChanged &&

@@ -38,6 +38,9 @@ GetMenu(const TCHAR *mode) noexcept;
  */
 void LoadDefaults(InputConfig &input_config);
 
+/**
+ * Throws on error.
+ */
 void readFile();
 
 void
