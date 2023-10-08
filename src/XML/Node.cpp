@@ -58,10 +58,9 @@ XMLNode::GetChildNode(const char *name) const noexcept
   if (!d)
     return nullptr;
 
-  for (auto i = d->begin(), end = d->end(); i != end; ++i) {
-    const XMLNode &node = *i;
-    if (StringIsEqualIgnoreCase(node.d->name.c_str(), name))
-      return &node;
+  for (const auto &i : d->children) {
+    if (StringIsEqualIgnoreCase(i.GetName(), name))
+      return &i;
   }
 
   return nullptr;
@@ -73,10 +72,9 @@ XMLNode::GetAttribute(const char *name) const noexcept
   if (!d)
     return nullptr;
 
-  for (auto i = d->attributes.begin(), end = d->attributes.end();
-       i != end; ++i)
-    if (StringIsEqualIgnoreCase(i->name.c_str(), name))
-      return i->value.c_str();
+  for (const auto &i : d->attributes)
+    if (StringIsEqualIgnoreCase(i.name.c_str(), name))
+      return i.value.c_str();
 
   return nullptr;
 }
