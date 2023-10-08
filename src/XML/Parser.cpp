@@ -47,7 +47,7 @@ namespace XML {
 struct Parser {
   StringConverter string_converter;
   const char *lpXML;
-  unsigned nIndex = 0;
+  std::size_t nIndex = 0;
   std::string_view end_tag{};
   bool nFirst = true;
 
@@ -231,7 +231,7 @@ GetNextToken(Parser *pXML)
   char ch;
   char temp_ch;
   size_t size;
-  unsigned n;
+  std::size_t n;
   bool found_match;
   bool is_text = false;
 
