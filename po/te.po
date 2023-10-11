@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2019-08-11 09:23+0000\n"
-"Last-Translator: sai sushanth <nsaisushanth@gmail.com>\n"
+"PO-Revision-Date: 2023-10-13 04:06+0000\n"
+"Last-Translator: SUGGULA Eshwar Durga prasad <durgaprasadeshwar@gmail.com>\n"
 "Language-Team: Telugu <https://hosted.weblate.org/projects/xcsoar/"
 "translations/te/>\n"
 "Language: te\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.8-dev\n"
+"X-Generator: Weblate 5.1-dev\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -84,6 +84,9 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
+"FAI నియమాలు, బ్యాడ్జ్‌లు మరియు రికార్డ్‌ల కోసం FAI ప్రారంభం, ముగింపు మరియు "
+"టర్న్ పాయింట్ రకాలను మాత్రమే అనుమతిస్తుంది. చివరి గ్లైడ్ లెక్కింపు కోసం FAI "
+"ముగింపు ఎత్తును ప్రారంభిస్తుంది."
 
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
@@ -98,7 +101,7 @@ msgstr "ఫ్ ఏ ఐ నియమాలు,ప్రారంభించి�
 #: src/Task/TypeStrings.cpp:56
 #, no-c-format
 msgid "FAI rules, path from start to a goal destination."
-msgstr ""
+msgstr "FAI నియమాలు, ప్రారంభం నుండి లక్ష్య గమ్యానికి మార్గం."
 
 #: src/Task/TypeStrings.cpp:57
 #, no-c-format
@@ -106,6 +109,8 @@ msgid ""
 "Racing task around turn points.  Can also be used for FAI badge and record "
 "tasks.  Allows all shapes of observation zones."
 msgstr ""
+"టర్న్ పాయింట్ల చుట్టూ రేసింగ్ టాస్క్. FAI బ్యాడ్జ్ మరియు రికార్డ్ టాస్క్‌ల "
+"కోసం కూడా ఉపయోగించవచ్చు. పరిశీలన మండలాల యొక్క అన్ని ఆకృతులను అనుమతిస్తుంది."
 
 #: src/Task/TypeStrings.cpp:59
 #, no-c-format
@@ -113,6 +118,8 @@ msgid ""
 "Task through assigned areas, minimum task time applies.  Restricted to "
 "cylinder and sector observation zones."
 msgstr ""
+"కేటాయించిన ప్రాంతాల ద్వారా పని, కనీస పని సమయం వర్తిస్తుంది. సిలిండర్ మరియు "
+"సెక్టార్ అబ్జర్వేషన్ జోన్‌లకు పరిమితం చేయబడింది."
 
 #: src/Task/TypeStrings.cpp:61
 #, no-c-format
@@ -121,6 +128,9 @@ msgid ""
 "mile cylinder.  Pilot can add additional points as needed.  Minimum task "
 "time applies."
 msgstr ""
+"సవరించిన ప్రాంతం విధి. ప్రారంభం, ముగింపు మరియు కనీసం ఒక ముందే నిర్వచించిన "
+"1-మైలు సిలిండర్‌తో టాస్క్. పైలట్ అవసరమైతే అదనపు పాయింట్లను జోడించవచ్చు. కనీస "
+"పని సమయం వర్తిస్తుంది."
 
 #: src/Task/TypeStrings.cpp:62
 #, no-c-format
@@ -128,6 +138,8 @@ msgid ""
 "Racing task with a mix of assigned areas and turn points, minimum task time "
 "applies."
 msgstr ""
+"కేటాయించిన ప్రాంతాలు మరియు టర్న్ పాయింట్ల మిశ్రమంతో రేసింగ్ టాస్క్, కనీస పని "
+"సమయం వర్తిస్తుంది."
 
 #: src/Task/TypeStrings.cpp:63
 #, no-c-format
@@ -135,6 +147,8 @@ msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
 msgstr ""
+"క్యాజువల్ టూరింగ్ టాస్క్, ప్రారంభ మరియు ముగింపు సిలిండర్‌లు మరియు FAI "
+"సెక్టార్ టర్న్ పాయింట్‌లను ఉపయోగిస్తుంది."
 
 #: src/Task/TypeStrings.cpp:76
 #, no-c-format
@@ -142,17 +156,21 @@ msgid ""
 "A 90 degree sector with 1km radius. Cross corner edge from inside area to "
 "start."
 msgstr ""
+"1km వ్యాసార్థంతో 90 డిగ్రీల సెక్టార్. ప్రారంభించడానికి లోపలి ప్రాంతం నుండి "
+"క్రాస్ కార్నర్ అంచు."
 
 #: src/Task/TypeStrings.cpp:77
 #, no-c-format
 msgid ""
 "A straight line start gate.  Cross start gate from inside area to start."
 msgstr ""
+"సరళ రేఖ ప్రారంభ ద్వారం. ప్రారంభించడానికి లోపలి ప్రాంతం నుండి ప్రారంభ ద్వారం "
+"దాటండి."
 
 #: src/Task/TypeStrings.cpp:78
 #, no-c-format
 msgid "A cylinder.  Exit area to start."
-msgstr ""
+msgstr "ఒక సిలిండర్. ప్రారంభించడానికి ప్రాంతం నుండి నిష్క్రమించండి."
 
 #: src/Task/TypeStrings.cpp:79
 #, no-c-format
@@ -160,11 +178,13 @@ msgid ""
 "A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
 "from corner point."
 msgstr ""
+"'అనంతమైన' పొడవు వైపులా 90 డిగ్రీల సెక్టార్. ఏదైనా అంచుని దాటండి, కార్నర్ "
+"పాయింట్ నుండి స్కోర్ చేయండి."
 
 #: src/Task/TypeStrings.cpp:81
 #, no-c-format
 msgid "A keyhole.  Scored from center."
-msgstr ""
+msgstr "ఒక కీహోల్. కేంద్రం నుండి స్కోర్ చేయబడింది."
 
 #: src/Task/TypeStrings.cpp:82
 #, no-c-format
@@ -172,6 +192,8 @@ msgid ""
 "(German rules) Any point within 1/2 km of center or 10km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
+"(జర్మన్ నియమాలు) మధ్యలో 1/2 కిమీ లేదా 90 డిగ్రీల సెక్టార్‌లో 10కిమీ లోపల "
+"ఏదైనా పాయింట్. కేంద్రం నుండి స్కోర్ చేయబడింది."
 
 #: src/Task/TypeStrings.cpp:84
 #, no-c-format
@@ -179,6 +201,8 @@ msgid ""
 "(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
+"(బ్రిటీష్ నియమాలు) మధ్యలో 1/2 కిమీ లేదా 90 డిగ్రీల సెక్టార్‌లో 20కిమీ లోపల "
+"ఏదైనా పాయింట్. కేంద్రం నుండి స్కోర్ చేయబడింది."
 
 #: src/Task/TypeStrings.cpp:86
 #, no-c-format
@@ -186,21 +210,24 @@ msgid ""
 "(British rules) Any point within 1/2 km of center or 10km of a 180 degree "
 "sector.  Scored from center."
 msgstr ""
+"(బ్రిటీష్ నియమాలు) మధ్యలో 1/2 కి.మీ లేదా 180 డిగ్రీల సెక్టార్‌లో 10కి.మీ లో"
+"పల ఏదైనా పాయింట్. కేంద్రం నుండి స్కోర్ చేయబడింది."
 
 #: src/Task/TypeStrings.cpp:88
 #, no-c-format
 msgid "A cylinder.  Any point within area scored from center."
-msgstr ""
+msgstr "ఒక సిలిండర్. ఏరియాలోని ఏదైనా పాయింట్ కేంద్రం నుండి స్కోర్ చేయబడింది."
 
 #: src/Task/TypeStrings.cpp:89
 #, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
 msgstr ""
+"1 మైలు సిలిండర్. విస్తీర్ణంలో చేరిన సుదూర పాయింట్ ద్వారా స్కోర్ చేయబడింది."
 
 #: src/Task/TypeStrings.cpp:90
 #, no-c-format
 msgid "A cylinder.  Scored by farthest point reached in area."
-msgstr ""
+msgstr "ఒక సిలిండర్. విస్తీర్ణంలో చేరిన సుదూర పాయింట్ ద్వారా స్కోర్ చేయబడింది."
 
 #: src/Task/TypeStrings.cpp:91
 #, no-c-format
@@ -208,27 +235,31 @@ msgid ""
 "A sector that can vary in angle and radius.  Scored by farthest point "
 "reached inside area."
 msgstr ""
+"కోణం మరియు వ్యాసార్థంలో మారగల రంగం. లోపలి ప్రాంతానికి చేరుకున్న సుదూర "
+"పాయింట్‌తో స్కోర్ చేయబడింది."
 
 #: src/Task/TypeStrings.cpp:93
 #, no-c-format
 msgid "A 90 degree sector with 1km radius.  Cross edge to finish."
-msgstr ""
+msgstr "1km వ్యాసార్థంతో 90 డిగ్రీల సెక్టార్. పూర్తి చేయడానికి అంచుని దాటండి."
 
 #: src/Task/TypeStrings.cpp:94
 #, no-c-format
 msgid "Cross finish gate line into area to finish."
-msgstr ""
+msgstr "పూర్తి చేయడానికి ప్రాంతంలోకి ముగింపు గేట్ లైన్‌ను దాటండి."
 
 #: src/Task/TypeStrings.cpp:95
 #, no-c-format
 msgid "Enter cylinder to finish."
-msgstr ""
+msgstr "పూర్తి చేయడానికి సిలిండర్‌ని నమోదు చేయండి."
 
 #: src/Task/TypeStrings.cpp:96
 #, no-c-format
 msgid ""
 "A 180 degree sector with 5km radius.  Exit area in any direction to start."
 msgstr ""
+"5km వ్యాసార్థంతో 180 డిగ్రీల సెక్టార్. ప్రారంభించడానికి ఏ దిశలోనైనా ప్రాంతం "
+"నుండి నిష్క్రమించండి."
 
 #: src/Task/TypeStrings.cpp:97
 #, no-c-format
@@ -236,96 +267,98 @@ msgid ""
 "A sector that can vary in angle, inner and outer radius.  Scored by farthest "
 "point reached inside area."
 msgstr ""
+"కోణం, లోపలి మరియు బయటి వ్యాసార్థంలో మారగల రంగం. లోపలి ప్రాంతానికి చేరుకున్న "
+"సుదూర పాయింట్‌తో స్కోర్ చేయబడింది."
 
 #: src/Task/TypeStrings.cpp:99
 #, no-c-format
 msgid "A symmetric quadrant with a custom radius."
-msgstr ""
+msgstr "కస్టమ్ వ్యాసార్థంతో ఒక సిమెట్రిక్ క్వాడ్రంట్."
 
 #: src/Task/TypeStrings.cpp:100
 #, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
-msgstr ""
+msgstr "ఒక కీహోల్. విస్తీర్ణంలో చేరిన సుదూర పాయింట్ ద్వారా స్కోర్ చేయబడింది."
 
 #: src/Task/TypeStrings.cpp:113
 #, no-c-format
 msgid "FAI start quadrant"
-msgstr ""
+msgstr "FAI ప్రారంభ క్వాడ్రంట్"
 
 #: src/Task/TypeStrings.cpp:114
 #, no-c-format
 msgid "Start line"
-msgstr ""
+msgstr "ప్రారంభ పంక్తి"
 
 #: src/Task/TypeStrings.cpp:115
 #, no-c-format
 msgid "Start cylinder"
-msgstr ""
+msgstr "సిలిండర్‌ను ప్రారంభించండి"
 
 #: src/Task/TypeStrings.cpp:116 src/Dialogs/Task/dlgTaskHelpers.cpp:180
 #, no-c-format
 msgid "FAI quadrant"
-msgstr ""
+msgstr "FAI క్వాడ్రంట్"
 
 #: src/Task/TypeStrings.cpp:117
 #, no-c-format
 msgid "Keyhole sector"
-msgstr ""
+msgstr "కీహోల్ రంగం"
 
 #: src/Task/TypeStrings.cpp:118
 #, no-c-format
 msgid "Keyhole sector (DAeC)"
-msgstr ""
+msgstr "కీహోల్ సెక్టార్ (DAeC)"
 
 #: src/Task/TypeStrings.cpp:119
 #, no-c-format
 msgid "BGA Fixed Course sector"
-msgstr ""
+msgstr "BGA ఫిక్స్‌డ్ కోర్స్ సెక్టార్"
 
 #: src/Task/TypeStrings.cpp:120
 #, no-c-format
 msgid "BGA Enhanced Option Fixed Course sector"
-msgstr ""
+msgstr "BGA మెరుగైన ఎంపిక స్థిర కోర్సు రంగం"
 
 #: src/Task/TypeStrings.cpp:121
 #, no-c-format
 msgid "Turn point cylinder"
-msgstr ""
+msgstr "టర్న్ పాయింట్ సిలిండర్"
 
 #: src/Task/TypeStrings.cpp:122
 #, no-c-format
 msgid "Cylinder with 1 mile radius."
-msgstr ""
+msgstr "1 మైలు వ్యాసార్థం కలిగిన సిలిండర్."
 
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
 msgid "Area cylinder"
-msgstr ""
+msgstr "ప్రాంతం సిలిండర్"
 
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
 msgid "Area sector"
-msgstr ""
+msgstr "ప్రాంత రంగం"
 
 #: src/Task/TypeStrings.cpp:125
 #, no-c-format
 msgid "FAI finish quadrant"
-msgstr ""
+msgstr "FAI ముగింపు క్వాడ్రంట్"
 
 #: src/Task/TypeStrings.cpp:126
 #, no-c-format
 msgid "Finish line"
-msgstr ""
+msgstr "ముగింపు గీత"
 
 #: src/Task/TypeStrings.cpp:127
 #, no-c-format
 msgid "Finish cylinder"
-msgstr ""
+msgstr "పూర్తి సిలిండర్"
 
 #: src/Task/TypeStrings.cpp:128
 #, no-c-format
 msgid "BGA start sector"
-msgstr ""
+msgstr "BGA ప్రారంభ రంగం"
 
 #: src/Task/TypeStrings.cpp:129
 #, no-c-format
@@ -2303,7 +2336,7 @@ msgstr ""
 #: src/InfoBoxes/InfoBoxSettings.cpp:79
 #, no-c-format
 msgid "Circling"
-msgstr ""
+msgstr "ప్రదక్షిణ"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:112
 msgid "This forces the variometer into circling or cruise mode"
@@ -9132,7 +9165,7 @@ msgstr ""
 #: src/InfoBoxes/InfoBoxSettings.cpp:80
 #, no-c-format
 msgid "Cruise"
-msgstr ""
+msgstr "క్రూజ్"
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:81
 #, no-c-format
