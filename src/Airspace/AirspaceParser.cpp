@@ -347,23 +347,23 @@ ReadAltitude(StringParser<> &input)
     if (IsDigitASCII(input.front())) {
       if (auto x = input.ReadDouble())
         value = *x;
-    } else if (input.SkipMatchIgnoreCase("GND", 3) ||
-               input.SkipMatchIgnoreCase("AGL", 3)) {
+    } else if (input.SkipMatchIgnoreCase("GND"sv) ||
+               input.SkipMatchIgnoreCase("AGL"sv)) {
       type = AGL;
-    } else if (input.SkipMatchIgnoreCase("SFC", 3)) {
+    } else if (input.SkipMatchIgnoreCase("SFC"sv)) {
       type = SFC;
-    } else if (input.SkipMatchIgnoreCase("FL", 2)) {
+    } else if (input.SkipMatchIgnoreCase("FL"sv)) {
       type = FL;
-    } else if (input.SkipMatchIgnoreCase("FT", 2)) {
+    } else if (input.SkipMatchIgnoreCase("FT"sv)) {
       unit = Unit::FEET;
-    } else if (input.SkipMatchIgnoreCase("MSL", 3)) {
+    } else if (input.SkipMatchIgnoreCase("MSL"sv)) {
       type = MSL;
     } else if (input.front() == 'M' || input.front() == 'm') {
       unit = Unit::METER;
       input.Skip();
-    } else if (input.SkipMatchIgnoreCase("STD", 3)) {
+    } else if (input.SkipMatchIgnoreCase("STD"sv)) {
       type = STD;
-    } else if (input.SkipMatchIgnoreCase("UNL", 3)) {
+    } else if (input.SkipMatchIgnoreCase("UNL"sv)) {
       type = UNLIMITED;
     } else if (input.IsEmpty())
       break;
@@ -614,11 +614,11 @@ ParseLine(Airspaces &airspace_database, unsigned line_number,
   case 'V':
   case 'v':
     input.Strip();
-    if (input.SkipMatchIgnoreCase("X=", 2)) {
+    if (input.SkipMatchIgnoreCase("X="sv)) {
       temp_area.center = ReadCoords(input);
-    } else if (input.SkipMatchIgnoreCase("D=-", 3)) {
+    } else if (input.SkipMatchIgnoreCase("D=-"sv)) {
       temp_area.rotation = -1;
-    } else if (input.SkipMatchIgnoreCase("D=+", 3)) {
+    } else if (input.SkipMatchIgnoreCase("D=+"sv)) {
       temp_area.rotation = +1;
     }
     break;
@@ -803,12 +803,12 @@ ParseArcTNP(StringParser<> &input, TempAirspace &temp_area)
   if (!input.SkipWord())
     throw std::runtime_error("Arc syntax error");
 
-  if (!input.SkipMatchIgnoreCase("CENTRE=", 7))
+  if (!input.SkipMatchIgnoreCase("CENTRE="sv))
     throw std::runtime_error("CENTRE=... expected");
 
   temp_area.center = ParseCoordsTNP(input);
 
-  if (!input.SkipMatchIgnoreCase(" TO=", 4))
+  if (!input.SkipMatchIgnoreCase(" TO="sv))
     throw std::runtime_error("TO=... expected");
 
   GeoPoint to = ParseCoordsTNP(input);
@@ -824,12 +824,12 @@ ParseCircleTNP(StringParser<> &input, TempAirspace &temp_area)
 {
   // CIRCLE RADIUS=17.00 CENTRE=N533813 E0095943
 
-  if (!input.SkipMatchIgnoreCase("RADIUS=", 7))
+  if (!input.SkipMatchIgnoreCase("RADIUS="sv))
     throw std::runtime_error("RADIUS=... expected");
 
   temp_area.radius = ParseRadiusNM(input);
 
-  if (!input.SkipMatchIgnoreCase(" CENTRE=", 8))
+  if (!input.SkipMatchIgnoreCase(" CENTRE="sv))
     throw std::runtime_error("CENTRE=... expected");
 
   temp_area.center = ParseCoordsTNP(input);
@@ -847,10 +847,10 @@ ParseLineTNP(Airspaces &airspace_database, unsigned line_number,
   if (input.Match('#'))
     return;
 
-  if (input.SkipMatchIgnoreCase("INCLUDE=", 8)) {
-    if (input.MatchIgnoreCase("YES", 3))
+  if (input.SkipMatchIgnoreCase("INCLUDE="sv)) {
+    if (input.MatchIgnoreCase("YES"sv))
       ignore = false;
-    else if (input.MatchIgnoreCase("NO", 2))
+    else if (input.MatchIgnoreCase("NO"sv))
       ignore = true;
 
     return;
@@ -859,38 +859,38 @@ ParseLineTNP(Airspaces &airspace_database, unsigned line_number,
   if (ignore)
     return;
 
-  if (input.SkipMatchIgnoreCase("POINT=", 6)) {
+  if (input.SkipMatchIgnoreCase("POINT="sv)) {
     temp_area.points.push_back(ParseCoordsTNP(input));
-  } else if (input.SkipMatchIgnoreCase("CIRCLE ", 7)) {
+  } else if (input.SkipMatchIgnoreCase("CIRCLE "sv)) {
     ParseCircleTNP(input, temp_area);
 
     temp_area.AddCircle(airspace_database);
     temp_area.ResetTNP(line_number);
-  } else if (input.SkipMatchIgnoreCase("CLOCKWISE ", 10)) {
+  } else if (input.SkipMatchIgnoreCase("CLOCKWISE "sv)) {
     temp_area.rotation = 1;
     ParseArcTNP(input, temp_area);
-  } else if (input.SkipMatchIgnoreCase("ANTI-CLOCKWISE ", 15)) {
+  } else if (input.SkipMatchIgnoreCase("ANTI-CLOCKWISE "sv)) {
     temp_area.rotation = -1;
     ParseArcTNP(input, temp_area);
-  } else if (input.SkipMatchIgnoreCase("TITLE=", 6)) {
+  } else if (input.SkipMatchIgnoreCase("TITLE="sv)) {
     if (temp_area.Commit(airspace_database))
       temp_area.ResetTNP(line_number);
 
     temp_area.name = string_converter.Convert(input.c_str());
-  } else if (input.SkipMatchIgnoreCase("TYPE=", 5)) {
+  } else if (input.SkipMatchIgnoreCase("TYPE="sv)) {
     if (temp_area.Commit(airspace_database))
       temp_area.ResetTNP(line_number);
 
     temp_area.asclass = ParseTypeTNP(input.c_str());
-  } else if (input.SkipMatchIgnoreCase("CLASS=", 6)) {
+  } else if (input.SkipMatchIgnoreCase("CLASS="sv)) {
     temp_area.asclass = ParseClassTNP(input.c_str());
-  } else if (input.SkipMatchIgnoreCase("TOPS=", 5)) {
+  } else if (input.SkipMatchIgnoreCase("TOPS="sv)) {
     temp_area.top = ReadAltitude(input);
-  } else if (input.SkipMatchIgnoreCase("BASE=", 5)) {
+  } else if (input.SkipMatchIgnoreCase("BASE="sv)) {
     temp_area.base = ReadAltitude(input);
-  } else if (input.SkipMatchIgnoreCase("RADIO=", 6)) {
+  } else if (input.SkipMatchIgnoreCase("RADIO="sv)) {
     temp_area.radio_frequency = RadioFrequency::Parse(input.c_str());
-  } else if (input.SkipMatchIgnoreCase("ACTIVE=", 7)) {
+  } else if (input.SkipMatchIgnoreCase("ACTIVE="sv)) {
     if (input.MatchAllIgnoreCase("WEEKEND"))
       temp_area.days_of_operation.SetWeekend();
     else if (input.MatchAllIgnoreCase("WEEKDAY"))
