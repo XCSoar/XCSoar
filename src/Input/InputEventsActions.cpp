@@ -70,6 +70,7 @@ doc/html/advanced/input/ALL  http://xcsoar.sourceforge.net/advanced/input/
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
+#include "Terrain/RasterTerrain.hpp"
 
 #include <cassert>
 #include <tchar.h>
@@ -656,9 +657,26 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
   if (StringIsEqual(misc, _T("takeoff"))) {
     if (basic.location_available && calculated.terrain_valid) {
       ScopeSuspendAllThreads suspend;
-      way_points.AddTakeoffPoint(basic.location, calculated.terrain_altitude);
+      way_points.AddTempPoint(basic.location, calculated.terrain_altitude,
+                              _T("(takeoff)"));
       way_points.Optimise();
     }
+  } else if (StringIsEqual(misc, _T("goto"))) {
+    const auto location = GetVisibleLocation();
+    if (!location.IsValid())
+      return;
+
+    double elevation = 0;
+    if (data_components->terrain != nullptr) {
+      const auto h = data_components->terrain->GetTerrainHeight(location);
+      if (!h.IsSpecial()) {
+        elevation = h.GetValue();
+      }
+    }
+
+    ScopeSuspendAllThreads suspend;
+    way_points.AddTempPoint(location, elevation, _T("(goto)"));
+    way_points.Optimise();
   } else {
     Waypoint edit_waypoint = way_points.Create(basic.location);
     edit_waypoint.elevation = calculated.terrain_altitude;

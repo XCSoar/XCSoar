@@ -342,30 +342,34 @@ Waypoints::CheckExistsOrAppend(WaypointPtr waypoint) noexcept
 }
 
 Waypoint
-Waypoints::GenerateTakeoffPoint(const GeoPoint& location,
-                                const double terrain_alt) const noexcept
+Waypoints::GenerateTempPoint(const GeoPoint& location, const double terrain_alt,
+                             const TCHAR *name) const noexcept
 {
   // fallback: create a takeoff point
   Waypoint to_point(location);
   to_point.elevation = terrain_alt;
   to_point.has_elevation = true;
-  to_point.name = _T("(takeoff)");
-  to_point.type = Waypoint::Type::OUTLANDING;
+  to_point.name = name;
+  if (StringIsEqual(name, _T("(takeoff)")))
+    to_point.type = Waypoint::Type::OUTLANDING;
+  else
+    to_point.type = Waypoint::Type::NORMAL;
   return to_point;
 }
 
 void
-Waypoints::AddTakeoffPoint(const GeoPoint& location,
-                           const double terrain_alt) noexcept
+Waypoints::AddTempPoint(const GeoPoint& location, const double terrain_alt,
+                        const TCHAR *name) noexcept
 {
   // remove old one first
-  WaypointPtr old_takeoff_point = LookupName(_T("(takeoff)"));
-  if (old_takeoff_point != nullptr)
-    Erase(std::move(old_takeoff_point));
+  WaypointPtr old_point = LookupName(name);
+  if (old_point != nullptr)
+    Erase(std::move(old_point));
 
-  if (!GetNearestLandable(location, 5000)) {
+  if ((StringIsEqual(name, _T("(takeoff)")) && !GetNearestLandable(location, 5000))
+      || (!StringIsEqual(name, _T("(takeoff)")))) {
     // now add new and update database
-    Waypoint new_waypoint = GenerateTakeoffPoint(location, terrain_alt);
+    Waypoint new_waypoint = GenerateTempPoint(location, terrain_alt, name);
     Append(std::move(new_waypoint));
   }
 
