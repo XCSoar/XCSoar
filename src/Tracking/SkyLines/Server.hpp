@@ -5,6 +5,7 @@
 
 #include "event/SocketEvent.hxx"
 #include "net/StaticSocketAddress.hxx"
+#include "util/SpanCast.hxx"
 
 #include <chrono>
 #include <cstdint>
@@ -54,7 +55,7 @@ public:
 
   template<typename P>
   void SendPacket(SocketAddress address, const P &packet) noexcept {
-    SendBuffer(address, std::as_bytes(std::span{&packet, 1}));
+    SendBuffer(address, ReferenceAsBytes(packet));
   }
 
 private:

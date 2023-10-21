@@ -7,6 +7,7 @@
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 #include "util/Macros.hpp"
+#include "util/SpanCast.hxx"
 #include "util/StaticString.hxx"
 
 #include <stdio.h>
@@ -104,11 +105,11 @@ FLARMEmulator::SendACK(uint16_t sequence_number) noexcept
   uint16_t payload = ToLE16(sequence_number);
   FLARM::FrameHeader header =
     FLARM::PrepareFrameHeader(sequence_number, FLARM::MessageType::ACK,
-                              std::as_bytes(std::span{&payload, 1}));
+                              ReferenceAsBytes(payload));
   port->Write(FLARM::START_FRAME);
-  FLARM::SendEscaped(*port, std::as_bytes(std::span{&header, 1}), *env,
+  FLARM::SendEscaped(*port, ReferenceAsBytes(header), *env,
                      std::chrono::seconds(2));
-  FLARM::SendEscaped(*port, std::as_bytes(std::span{&payload, 1}), *env,
+  FLARM::SendEscaped(*port, ReferenceAsBytes(payload), *env,
                      std::chrono::seconds(2));
 }
 

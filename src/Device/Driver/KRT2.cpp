@@ -9,8 +9,8 @@
 #include "thread/Cond.hxx"
 #include "thread/Mutex.hxx"
 #include "util/CharUtil.hxx"
+#include "util/SpanCast.hxx"
 #include "util/StaticFifoBuffer.hxx"
-#include "util/Compiler.h"
 
 #include <cstdint>
 
@@ -387,7 +387,7 @@ KRT2Device::PutFrequency(std::byte cmd,
   GetStationName(msg.station, name);
   msg.checksum = msg.mhz ^ msg.khz;
 
-  return Send(std::as_bytes(std::span{&msg, 1}), env);
+  return Send(ReferenceAsBytes(msg), env);
 }
 
 bool

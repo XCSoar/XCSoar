@@ -13,6 +13,7 @@
 #include "io/BufferedOutputStream.hxx"
 #include "io/FileOutputStream.hxx"
 #include "util/ScopeExit.hxx"
+#include "util/SpanCast.hxx"
 
 #include <memory>
 
@@ -163,8 +164,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   LX::SeekMemory seek;
   seek.start_address = flight.internal.lx.start_address;
   seek.end_address = flight.internal.lx.end_address;
-  LX::SendPacket(port, LX::SEEK_MEMORY,
-                 std::as_bytes(std::span{&seek, 1}), env);
+  LX::SendPacket(port, LX::SEEK_MEMORY, ReferenceAsBytes(seek), env);
   LX::ExpectACK(port, env);
 
   LX::MemorySection memory_section;

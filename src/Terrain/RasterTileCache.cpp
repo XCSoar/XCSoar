@@ -5,6 +5,7 @@
 #include "Math/Angle.hpp"
 #include "io/BufferedOutputStream.hxx"
 #include "io/BufferedReader.hxx"
+#include "util/SpanCast.hxx"
 
 extern "C" {
 #include "jasper/jas_seq.h"
@@ -266,7 +267,7 @@ RasterTileCache::SaveCache(BufferedOutputStream &os) const
   header.num_marker_segments = segments.size();
   header.bounds = bounds;
 
-  os.Write(std::as_bytes(std::span{&header, 1}));
+  os.Write(ReferenceAsBytes(header));
   os.Write(std::as_bytes(std::span{segments}));
 
   /* save tiles */
@@ -274,13 +275,13 @@ RasterTileCache::SaveCache(BufferedOutputStream &os) const
   for (i = 0; i < tiles.GetSize(); ++i) {
     const auto &tile = tiles.GetLinear(i);
     if (tile.IsDefined()) {
-      os.Write(std::as_bytes(std::span{&i, 1}));
+      os.Write(ReferenceAsBytes(i));
       tile.SaveCache(os);
     }
   }
 
   i = -1;
-  os.Write(std::as_bytes(std::span{&i, 1}));
+  os.Write(ReferenceAsBytes(i));
 
   /* save overview */
   size_t overview_size = overview.GetSize().Area();

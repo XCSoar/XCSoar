@@ -52,7 +52,7 @@ public:
 	 */
 	template<typename T>
 	void WriteT(const T &value) {
-		Write(std::as_bytes(std::span{&value, 1}));
+		Write(ReferenceAsBytes(value));
 	}
 
 	/**
