@@ -224,6 +224,7 @@ curl = CmakeProject(
         '-DCURL_DISABLE_IMAP=ON',
         '-DCMAKE_USE_LIBSSH2=OFF',
         '-DBUILD_TESTING=OFF',
+        '-DHAVE_FSEEKO=0',
     ],
     windows_configure_args=[
         '-DCURL_USE_SCHANNEL=ON',
