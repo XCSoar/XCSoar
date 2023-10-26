@@ -10,6 +10,7 @@
 #include <string_view>
 
 using SHA256Digest = std::array<std::byte, crypto_hash_sha256_BYTES>;
+using SHA256DigestView = std::span<const std::byte, crypto_hash_sha256_BYTES>;
 
 class SHA256State {
 	crypto_hash_sha256_state state;
