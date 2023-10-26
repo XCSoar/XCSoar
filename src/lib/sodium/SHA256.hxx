@@ -9,7 +9,7 @@
 #include <span>
 #include <string_view>
 
-using SHA256Digest = std::array<std::byte, crypto_hash_sha256_BYTES>;
+using SHA256DigestBuffer = std::array<std::byte, crypto_hash_sha256_BYTES>;
 using SHA256DigestView = std::span<const std::byte, crypto_hash_sha256_BYTES>;
 
 class SHA256State {
@@ -47,7 +47,7 @@ public:
 	}
 
 	auto Final() noexcept {
-		SHA256Digest out;
+		SHA256DigestBuffer out;
 		Final(out);
 		return out;
 	}
@@ -57,7 +57,7 @@ public:
 inline auto
 SHA256(std::span<const std::byte> src) noexcept
 {
-	SHA256Digest out;
+	SHA256DigestBuffer out;
 	crypto_hash_sha256(reinterpret_cast<unsigned char *>(out.data()),
 			   reinterpret_cast<const unsigned char *>(src.data()),
 			   src.size());
