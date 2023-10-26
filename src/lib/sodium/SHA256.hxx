@@ -40,14 +40,14 @@ public:
 		Update(span);
 	}
 
-	void Final(void *out) noexcept {
+	void Final(std::span<std::byte, crypto_hash_sha256_BYTES> out) noexcept {
 		crypto_hash_sha256_final(&state,
-					 reinterpret_cast<unsigned char *>(out));
+					 reinterpret_cast<unsigned char *>(out.data()));
 	}
 
 	auto Final() noexcept {
 		SHA256Digest out;
-		Final(&out);
+		Final(out);
 		return out;
 	}
 };

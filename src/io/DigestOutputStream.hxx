@@ -20,7 +20,8 @@ public:
 	explicit DigestOutputStream(OutputStream &_next) noexcept
 		:next(_next) {}
 
-	void Final(void *dest) noexcept {
+	template<std::size_t size>
+	void Final(std::span<std::byte, size> dest) noexcept {
 		state.Final(dest);
 	}
 
