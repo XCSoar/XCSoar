@@ -21,7 +21,7 @@ public:
 
 	void Update(std::span<const std::byte> p) noexcept {
 		crypto_hash_sha256_update(&state,
-					  (const unsigned char *)p.data(),
+					  reinterpret_cast<const unsigned char *>(p.data()),
 					  p.size());
 	}
 
@@ -41,7 +41,8 @@ public:
 	}
 
 	void Final(void *out) noexcept {
-		crypto_hash_sha256_final(&state, (unsigned char *)out);
+		crypto_hash_sha256_final(&state,
+					 reinterpret_cast<unsigned char *>(out));
 	}
 
 	auto Final() noexcept {
@@ -57,7 +58,7 @@ SHA256(std::span<const std::byte> src) noexcept
 {
 	SHA256Digest out;
 	crypto_hash_sha256(reinterpret_cast<unsigned char *>(out.data()),
-			   (const unsigned char *)src.data(),
+			   reinterpret_cast<const unsigned char *>(src.data()),
 			   src.size());
 	return out;
 }
