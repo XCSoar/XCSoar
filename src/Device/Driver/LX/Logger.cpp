@@ -106,7 +106,7 @@ ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
   while (!flight_list.full()) {
     LX::FlightInfo flight;
     if (!LX::ReadCRC(port,
-                     std::as_writable_bytes(std::span{&flight, 1}),
+                     ReferenceAsWritableBytes(flight),
                      env,
                      std::chrono::seconds(20),
                      std::chrono::seconds(2),
@@ -169,7 +169,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
 
   LX::MemorySection memory_section;
   if (!LX::ReceivePacketRetry(port, LX::READ_MEMORY_SECTION,
-                              std::as_writable_bytes(std::span{&memory_section, 1}),
+                              ReferenceAsWritableBytes(memory_section),
                               env,
                               std::chrono::seconds(5),
                               std::chrono::seconds(2),

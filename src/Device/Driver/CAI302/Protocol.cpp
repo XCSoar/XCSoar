@@ -3,8 +3,9 @@
 
 #include "Protocol.hpp"
 #include "Device/Port/Port.hpp"
-#include "util/ByteOrder.hxx"
 #include "Geo/GeoPoint.hpp"
+#include "util/ByteOrder.hxx"
+#include "util/SpanCast.hxx"
 
 #include <algorithm>
 #include <cassert>
@@ -198,7 +199,7 @@ CAI302::UploadGeneralInfo(Port &port, GeneralInfo &data,
                           OperationEnvironment &env)
 {
   return UploadShort(port, "W\r",
-                     std::as_writable_bytes(std::span{&data, 1}),
+                     ReferenceAsWritableBytes(data),
                      env) == sizeof(data);
 }
 
@@ -211,7 +212,7 @@ CAI302::UploadFileList(Port &port, unsigned i, FileList &data,
   char cmd[16];
   snprintf(cmd, sizeof(cmd), "B %u\r", 196 + i);
   return UploadLarge(port, cmd,
-                     std::as_writable_bytes(std::span{&data, 1}),
+                     ReferenceAsWritableBytes(data),
                      env) == sizeof(data);
 }
 
@@ -224,7 +225,7 @@ CAI302::UploadFileASCII(Port &port, unsigned i, FileASCII &data,
   char cmd[16];
   snprintf(cmd, sizeof(cmd), "B %u\r", 64 + i);
   return UploadLarge(port, cmd,
-                     std::as_writable_bytes(std::span{&data, 1}),
+                     ReferenceAsWritableBytes(data),
                      env) == sizeof(data);
 }
 
@@ -237,7 +238,7 @@ CAI302::UploadFileBinary(Port &port, unsigned i, FileBinary &data,
   char cmd[16];
   snprintf(cmd, sizeof(cmd), "B %u\r", 256 + i);
   return UploadLarge(port, cmd,
-                     std::as_writable_bytes(std::span{&data, 1}),
+                     ReferenceAsWritableBytes(data),
                      env) == sizeof(data);
 }
 
@@ -254,7 +255,7 @@ CAI302::UploadFileSignatureASCII(Port &port, FileSignatureASCII &data,
                                  OperationEnvironment &env)
 {
   return UploadLarge(port, "B S\r",
-                     std::as_writable_bytes(std::span{&data, 1}),
+                     ReferenceAsWritableBytes(data),
                      env) == sizeof(data);
 }
 
@@ -262,7 +263,7 @@ bool
 CAI302::UploadPolarMeta(Port &port, PolarMeta &data, OperationEnvironment &env)
 {
   return UploadShort(port, "G\r",
-                     std::as_writable_bytes(std::span{&data, 1}),
+                     ReferenceAsWritableBytes(data),
                      env) > 0;
 }
 
@@ -270,7 +271,7 @@ bool
 CAI302::UploadPolar(Port &port, Polar &data, OperationEnvironment &env)
 {
   return UploadShort(port, "G 0\r",
-                     std::as_writable_bytes(std::span{&data, 1}),
+                     ReferenceAsWritableBytes(data),
                      env) > 0;
 }
 
@@ -278,7 +279,7 @@ bool
 CAI302::UploadPilotMeta(Port &port, PilotMeta &data, OperationEnvironment &env)
 {
   return UploadShort(port, "O\r",
-                     std::as_writable_bytes(std::span{&data, 1}),
+                     ReferenceAsWritableBytes(data),
                      env) > 0;
 }
 
@@ -287,7 +288,7 @@ CAI302::UploadPilotMetaActive(Port &port, PilotMetaActive &data,
                               OperationEnvironment &env)
 {
   return UploadShort(port, "O A\r",
-                     std::as_writable_bytes(std::span{&data, 1}),
+                     ReferenceAsWritableBytes(data),
                      env) > 0;
 }
 
@@ -298,7 +299,7 @@ CAI302::UploadPilot(Port &port, unsigned i, Pilot &data,
   char cmd[16];
   snprintf(cmd, sizeof(cmd), "O %u\r", i);
   return UploadShort(port, cmd,
-                     std::as_writable_bytes(std::span{&data, 1}),
+                     ReferenceAsWritableBytes(data),
                      env) > 0;
 }
 
@@ -395,7 +396,7 @@ CAI302::UploadNavpointMeta(Port &port, NavpointMeta &data,
                            OperationEnvironment &env)
 {
   return UploadShort(port, "C\r",
-                     std::as_writable_bytes(std::span{&data, 1}),
+                     ReferenceAsWritableBytes(data),
                      env) > 0;
 }
 
@@ -406,7 +407,7 @@ CAI302::UploadNavpoint(Port &port, unsigned i, Navpoint &data,
   char cmd[16];
   snprintf(cmd, sizeof(cmd), "C %u\r", i);
   return UploadShort(port, cmd,
-                     std::as_writable_bytes(std::span{&data, 1}),
+                     ReferenceAsWritableBytes(data),
                      env) > 0;
 }
 

@@ -187,7 +187,7 @@ FlarmDevice::ReceiveFrameHeader(FLARM::FrameHeader &header,
                                 OperationEnvironment &env,
                                 std::chrono::steady_clock::duration timeout)
 {
-  return ReceiveEscaped(std::as_writable_bytes(std::span{&header, 1}),
+  return ReceiveEscaped(ReferenceAsWritableBytes(header),
                         env, timeout);
 }
 
