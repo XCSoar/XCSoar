@@ -23,6 +23,8 @@
 
 #define MAX_HEIGHT_DEGREES 40.f
 
+char buffer[3];
+
 int HorizonRenderer::lines_intersect(PixelPoint p1, PixelPoint p2, 
                     PixelPoint p3, PixelPoint p4, 
                     PixelPoint &intersect){
@@ -229,6 +231,7 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     PixelPoint m1 = {- radius + Layout::Scale(2),0};
     PixelPoint m2 = {- radius + Layout::Scale(12),0};
     
+    //  bank marks
     rotate(m1, center, Angle::Degrees(0 - bank_degrees), p1);
     rotate(m2, center, Angle::Degrees(0 - bank_degrees), p2);
     canvas.DrawLine(p1,p2);
@@ -278,19 +281,37 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     BulkPixelPoint zero_mark[3] = {p1, p2, p3};
     canvas.DrawPolygon(zero_mark, 3);
 
-    for (int k=-20; k<=20; k+=10){
-      m1 = {-radius/5, int(h/2.f*(pitch_degrees+k)/MAX_HEIGHT_DEGREES)};
-      m2 = {+radius/5, int(h/2.f*(pitch_degrees+k)/MAX_HEIGHT_DEGREES)};
+    // pitch marks
+    int pitch_10 = (int(pitch_degrees) / 10) * 10;
+    for (int k=pitch_10-20; k<=pitch_10+20; k+=10){
+      if (k==0) continue;
+      m1 = {-radius/5, int(h/2.f*(pitch_degrees-k)/MAX_HEIGHT_DEGREES)};
+      m2 = {+radius/5, int(h/2.f*(pitch_degrees-k)/MAX_HEIGHT_DEGREES)};
       rotate(m1, center, Angle::Degrees(- bank_degrees), p1);
       rotate(m2, center, Angle::Degrees(- bank_degrees), p2);
       canvas.DrawLine(p1,p2);
+
+
+      canvas.Select(look.mark_font);
+      canvas.SetBackgroundTransparent();
+      canvas.SetTextColor( COLOR_WHITE);
+      char buffer[4];
+      sprintf(buffer, "%+3d", k);
+      canvas.DrawText(p2, buffer);
     }
-    for (int k=-25; k<=25; k+=10){
-      m1 = {-radius/10, int(h/2.f*(pitch_degrees+k)/MAX_HEIGHT_DEGREES)};
-      m2 = {+radius/10, int(h/2.f*(pitch_degrees+k)/MAX_HEIGHT_DEGREES)};
+    for (int k=pitch_10-25; k<=pitch_10+25; k+=10){
+      m1 = {-radius/10, int(h/2.f*(pitch_degrees-k)/MAX_HEIGHT_DEGREES)};
+      m2 = {+radius/10, int(h/2.f*(pitch_degrees-k)/MAX_HEIGHT_DEGREES)};
       rotate(m1, center, Angle::Degrees(- bank_degrees), p1);
       rotate(m2, center, Angle::Degrees(- bank_degrees), p2);
       canvas.DrawLine(p1,p2);
+
+      canvas.Select(look.mark_font);
+      canvas.SetBackgroundTransparent();
+      canvas.SetTextColor( COLOR_WHITE);
+      char buffer[4];
+      sprintf(buffer, "%+3d", k);
+      canvas.DrawText(p2, buffer);
     }
   }
 

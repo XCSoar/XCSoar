@@ -5,6 +5,7 @@
 
 #include "ui/canvas/Pen.hpp"
 #include "ui/canvas/Brush.hpp"
+#include "ui/canvas/Font.hpp"
 
 struct HorizonLook {
 
@@ -22,6 +23,7 @@ struct HorizonLook {
 
   Pen mark_pen;
   Brush mark_brush;
+  Font mark_font;
 
   Pen horizon_pen;
 
