@@ -9,6 +9,7 @@
 #include "NMEA/Attitude.hpp"
 #include "Math/Constants.hpp"
 #include "Math/Util.hpp"
+#include "LogFile.hpp"
 
 #include <algorithm>
 
@@ -20,6 +21,7 @@
 #define TOP 1
 #define RIGHT 2
 #define BOTTOM 3
+#define NONE 4
 
 #define MAX_HEIGHT_DEGREES 40.f
 
@@ -142,21 +144,35 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   BulkPixelPoint corners[] = {k21, k11, k12, k22, k21};
   PixelPoint intersect_left = {0, 0};
   PixelPoint intersect_right = {0, 0};
-  for (i=0; i < 4; i++){
+  for (i=0; i <= 4; i++){
     int res = lines_intersect(p1, p3, corners[i], 
                               corners[i+1], intersect_left);
     if (res == DO_INTERSECT) break;
-    if (i==3) return;
-  }
+  }  // if no intersection, i == NONE at end of loop
   for (j=0; j < 4; j++){
     int res = lines_intersect(p3, p2, corners[j], 
                               corners[j+1], intersect_right);
     if (res == DO_INTERSECT) break;
-    if (j==3) return;
+  }  // if no intersection, j == NONE at end of loop
+
+  bool invert = false;
+  if (intersect_left.x > intersect_right.x){
+    PixelPoint tmp = intersect_left;
+    intersect_left = intersect_right;
+    intersect_right = tmp;
+    int t = i;
+    i = j;
+    j = t;
+    invert = true;
   }
 
-  canvas.Select(look.sky_pen);
-  canvas.Select(look.sky_brush);
+  if (!invert){
+    canvas.Select(look.sky_pen);
+    canvas.Select(look.sky_brush);
+  } else {
+    canvas.Select(look.terrain_pen);
+    canvas.Select(look.terrain_brush);
+  }
   if (i==LEFT){
     if (j==TOP) {
       BulkPixelPoint sky[3] = {intersect_left, k11, intersect_right};
@@ -188,8 +204,13 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     }
   }
 
-  canvas.Select(look.terrain_pen);
-  canvas.Select(look.terrain_brush);
+  if (!invert){
+    canvas.Select(look.terrain_pen);
+    canvas.Select(look.terrain_brush);
+  } else {
+    canvas.Select(look.sky_pen);
+    canvas.Select(look.sky_brush);
+  }
   if (i==LEFT){
     if (j==TOP) {
       BulkPixelPoint terrain[5] = {intersect_left, k21, k22, k12, intersect_right};
@@ -219,8 +240,22 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     }
   }
 
-  canvas.Select(look.horizon_pen);
-  canvas.DrawLine(intersect_left, intersect_right);
+  // draw horizon line
+  if (i != NONE && j != NONE){
+    canvas.Select(look.horizon_pen);
+    canvas.DrawLine(intersect_left, intersect_right);
+  } else { // draw full terrain/sky
+    if (pitch_degrees <  0){
+      canvas.Select(look.terrain_pen);
+      canvas.Select(look.terrain_brush);
+    } else {
+      canvas.Select(look.sky_pen);
+      canvas.Select(look.sky_brush);
+    }
+    BulkPixelPoint square[4] = {k21, k11, k12, k22};
+    canvas.DrawPolygon(square, 4);
+  }
+
 
   if (radius > 100) {
 
@@ -297,6 +332,10 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
       canvas.SetTextColor( COLOR_WHITE);
       char buffer[4];
       sprintf(buffer, "%+3d", k);
+      PixelSize ts = canvas.CalcTextSize(buffer);
+      m2 = {+radius/5+int(ts.height/2), 
+            int(h/2.f*(pitch_degrees-k)/MAX_HEIGHT_DEGREES)-int(ts.height/2)};
+      rotate(m2, center, Angle::Degrees(- bank_degrees), p2);
       canvas.DrawText(p2, buffer);
     }
     for (int k=pitch_10-25; k<=pitch_10+25; k+=10){
@@ -305,13 +344,6 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
       rotate(m1, center, Angle::Degrees(- bank_degrees), p1);
       rotate(m2, center, Angle::Degrees(- bank_degrees), p2);
       canvas.DrawLine(p1,p2);
-
-      canvas.Select(look.mark_font);
-      canvas.SetBackgroundTransparent();
-      canvas.SetTextColor( COLOR_WHITE);
-      char buffer[4];
-      sprintf(buffer, "%+3d", k);
-      canvas.DrawText(p2, buffer);
     }
   }
 
