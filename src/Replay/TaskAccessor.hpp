@@ -7,7 +7,7 @@
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 
-class TaskAccessor {
+class TaskAccessor final {
   TaskManager &task_manager;
   const double floor_alt;
 
@@ -22,7 +22,7 @@ public:
   }
 
   [[gnu::pure]]
-  virtual bool IsEmpty() const noexcept {
+  bool IsEmpty() const noexcept {
     const TaskInterface *task = task_manager.GetActiveTask();
     return task == nullptr || task->TaskSize() == 0;
   }
