@@ -18,7 +18,7 @@ WriteAngleDMM(BufferedOutputStream &writer, const Angle angle, bool is_latitude)
   writer.Fmt("{:0{}}{:02}.{:03}{}",
              dmm.degrees, is_latitude ? 2 : 3,
              dmm.minutes, dmm.decimal_minutes,
-             is_latitude ? (dmm.positive ? "N" : "S") : (dmm.positive ? "E" : "W"));
+             is_latitude ? (dmm.positive ? 'N' : 'S') : (dmm.positive ? 'E' : 'W'));
 }
 
 static void
