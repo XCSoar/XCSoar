@@ -87,10 +87,9 @@ TestWinPilot(wp_vector org_wp)
     return;
   }
 
-  wp_vector::iterator it;
-  for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    const auto wp = GetWaypoint(*it, way_points);
-    TestWinPilotWaypoint(*it, wp.get());
+  for (const auto &i : org_wp) {
+    const auto wp = GetWaypoint(i, way_points);
+    TestWinPilotWaypoint(i, wp.get());
   }
 }
 
@@ -126,10 +125,9 @@ TestSeeYou(wp_vector org_wp)
                         org_wp.size())) {
     skip(9 * org_wp.size(), 0, "opening waypoints.cup failed");
   } else {
-    wp_vector::iterator it;
-    for (it = org_wp.begin(); it < org_wp.end(); it++) {
-      const auto wp = GetWaypoint(*it, way_points);
-      TestSeeYouWaypoint(*it, wp.get());
+    for (const auto &i : org_wp) {
+      const auto wp = GetWaypoint(i, way_points);
+      TestSeeYouWaypoint(i, wp.get());
     }
   }
 
@@ -141,10 +139,9 @@ TestSeeYou(wp_vector org_wp)
     return;
   }
 
-  wp_vector::iterator it2;
-  for (it2 = org_wp.begin(); it2 < org_wp.end(); it2++) {
-    const auto wp2 = GetWaypoint(*it2, way_points2);
-    TestSeeYouWaypoint(*it2, wp2.get());
+  for (const auto &i : org_wp) {
+    const auto wp2 = GetWaypoint(i, way_points2);
+    TestSeeYouWaypoint(i, wp2.get());
   }
   // Test a SeeYou waypoint file with useradata and pics fields:
   Waypoints way_points3;
@@ -154,10 +151,9 @@ TestSeeYou(wp_vector org_wp)
     return;
   }
 
-  wp_vector::iterator it3;
-  for (it3 = org_wp.begin(); it3 < org_wp.end(); it3++) {
-    const auto wp3 = GetWaypoint(*it3, way_points3);
-    TestSeeYouWaypoint(*it3, wp3.get());
+  for (const auto &i : org_wp) {
+    const auto wp3 = GetWaypoint(i, way_points3);
+    TestSeeYouWaypoint(i, wp3.get());
   }
 }
 
@@ -197,11 +193,10 @@ TestZander(wp_vector org_wp)
     return;
   }
 
-  wp_vector::iterator it;
-  for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    TruncateStrip(it->name, 12);
-    const auto wp = GetWaypoint(*it, way_points);
-    TestZanderWaypoint(*it, wp.get());
+  for (auto i : org_wp) {
+    TruncateStrip(i.name, 12);
+    const auto wp = GetWaypoint(i, way_points);
+    TestZanderWaypoint(i, wp.get());
   }
 }
 
@@ -215,10 +210,9 @@ TestFS(wp_vector org_wp)
     return;
   }
 
-  wp_vector::iterator it;
-  for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    TruncateStrip(it->name, 8);
-    GetWaypoint(*it, way_points);
+  for (auto i : org_wp) {
+    TruncateStrip(i.name, 8);
+    GetWaypoint(i, way_points);
   }
 }
 
@@ -232,10 +226,9 @@ TestFS_UTM(wp_vector org_wp)
     return;
   }
 
-  wp_vector::iterator it;
-  for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    TruncateStrip(it->name, 8);
-    GetWaypoint(*it, way_points);
+  for (auto i : org_wp) {
+    TruncateStrip(i.name, 8);
+    GetWaypoint(i, way_points);
   }
 }
 
@@ -249,10 +242,9 @@ TestOzi(wp_vector org_wp)
     return;
   }
 
-  wp_vector::iterator it;
-  for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    it->name = tstring{Strip(it->name)};
-    GetWaypoint(*it, way_points);
+  for (auto i : org_wp) {
+    i.name = tstring{Strip(i.name)};
+    GetWaypoint(i, way_points);
   }
 }
 
@@ -266,15 +258,14 @@ TestCompeGPS(wp_vector org_wp)
     return;
   }
 
-  wp_vector::iterator it;
-  for (it = org_wp.begin(); it < org_wp.end(); it++) {
+  for (auto i : org_wp) {
     size_t pos;
-    while ((pos = it->name.find_first_of(_T(' '))) != tstring::npos)
-      it->name.erase(pos, 1);
+    while ((pos = i.name.find_first_of(_T(' '))) != tstring::npos)
+      i.name.erase(pos, 1);
 
-    TruncateStrip(it->name, 6);
-    const auto wp = GetWaypoint(*it, way_points);
-    ok1(wp->comment == it->comment);
+    TruncateStrip(i.name, 6);
+    const auto wp = GetWaypoint(i, way_points);
+    ok1(wp->comment == i.comment);
   }
 }
 
@@ -288,15 +279,14 @@ TestCompeGPS_UTM(wp_vector org_wp)
     return;
   }
 
-  wp_vector::iterator it;
-  for (it = org_wp.begin(); it < org_wp.end(); it++) {
+  for (auto i : org_wp) {
     size_t pos;
-    while ((pos = it->name.find_first_of(_T(' '))) != tstring::npos)
-      it->name.erase(pos, 1);
+    while ((pos = i.name.find_first_of(_T(' '))) != tstring::npos)
+      i.name.erase(pos, 1);
 
-    TruncateStrip(it->name, 6);
-    const auto wp = GetWaypoint(*it, way_points);
-    ok1(wp->comment == it->comment);
+    TruncateStrip(i.name, 6);
+    const auto wp = GetWaypoint(i, way_points);
+    ok1(wp->comment == i.comment);
   }
 }
 
