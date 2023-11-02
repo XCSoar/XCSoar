@@ -1,4 +1,4 @@
-Version 7.40 - not yet released
+Version 7.40 - 2023/11/02
 * user interface
   - Added infobox that combines ETA with AAT dT
   - FLARM: Add 100m zoom option.
