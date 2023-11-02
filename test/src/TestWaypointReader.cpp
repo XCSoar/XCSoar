@@ -78,7 +78,7 @@ TestWinPilotWaypoint(const Waypoint org_wp, const Waypoint *wp)
 }
 
 static void
-TestWinPilot(wp_vector org_wp)
+TestWinPilot(const wp_vector &org_wp)
 {
   Waypoints way_points;
   if (!TestWaypointFile(Path(_T("test/data/waypoints.dat")), way_points,
@@ -117,7 +117,7 @@ TestSeeYouWaypoint(const Waypoint org_wp, const Waypoint *wp)
 }
 
 static void
-TestSeeYou(wp_vector org_wp)
+TestSeeYou(const wp_vector &org_wp)
 {
   // Test a SeeYou waypoint file with no runway width field:
   Waypoints way_points;
@@ -184,7 +184,7 @@ TruncateStrip(tstring &s, std::size_t max_length) noexcept
 }
 
 static void
-TestZander(wp_vector org_wp)
+TestZander(const wp_vector &org_wp)
 {
   Waypoints way_points;
   if (!TestWaypointFile(Path(_T("test/data/waypoints.wpz")), way_points,
@@ -201,7 +201,7 @@ TestZander(wp_vector org_wp)
 }
 
 static void
-TestFS(wp_vector org_wp)
+TestFS(const wp_vector &org_wp)
 {
   Waypoints way_points;
   if (!TestWaypointFile(Path(_T("test/data/waypoints_geo.wpt")), way_points,
@@ -217,7 +217,7 @@ TestFS(wp_vector org_wp)
 }
 
 static void
-TestFS_UTM(wp_vector org_wp)
+TestFS_UTM(const wp_vector &org_wp)
 {
   Waypoints way_points;
   if (!TestWaypointFile(Path(_T("test/data/waypoints_utm.wpt")), way_points,
@@ -233,7 +233,7 @@ TestFS_UTM(wp_vector org_wp)
 }
 
 static void
-TestOzi(wp_vector org_wp)
+TestOzi(const wp_vector &org_wp)
 {
   Waypoints way_points;
   if (!TestWaypointFile(Path(_T("test/data/waypoints_ozi.wpt")), way_points,
@@ -249,7 +249,7 @@ TestOzi(wp_vector org_wp)
 }
 
 static void
-TestCompeGPS(wp_vector org_wp)
+TestCompeGPS(const wp_vector &org_wp)
 {
   Waypoints way_points;
   if (!TestWaypointFile(Path(_T("test/data/waypoints_compe_geo.wpt")), way_points,
@@ -270,7 +270,7 @@ TestCompeGPS(wp_vector org_wp)
 }
 
 static void
-TestCompeGPS_UTM(wp_vector org_wp)
+TestCompeGPS_UTM(const wp_vector &org_wp)
 {
   Waypoints way_points;
   if (!TestWaypointFile(Path(_T("test/data/waypoints_compe_utm.wpt")), way_points,
