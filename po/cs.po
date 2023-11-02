@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-20 21:13+0200\n"
-"PO-Revision-Date: 2023-11-02 22:48+0000\n"
+"PO-Revision-Date: 2023-11-02 22:58+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -750,7 +750,7 @@ msgstr "Vário"
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:162
 #: src/Dialogs/Task/TargetDialog.cpp:375
 msgid "Distance"
-msgstr ">>>"
+msgstr "Vzdál."
 
 #: src/Gauge/BigTrafficWidget.cpp:425 src/Gauge/BigTrafficWidget.cpp:427
 msgid "Rel. Alt."
@@ -1592,7 +1592,7 @@ msgstr "AAT čas do cíle"
 #: src/Renderer/FlightStatisticsRenderer.cpp:355
 #: src/Dialogs/dlgAnalysis.cpp:243
 msgid "Distance to go"
-msgstr ">>> do cíle"
+msgstr "Vzdál. do cíle"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:336
 #: src/Renderer/FlightStatisticsRenderer.cpp:347
@@ -7277,7 +7277,7 @@ msgstr "min."
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:142
 msgid "dist."
-msgstr ">>>"
+msgstr "vzdál."
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:185
 msgid "Sector"
