@@ -3,17 +3,22 @@
 
 #include "Waypoint/WaypointReader.hpp"
 #include "Waypoint/WaypointReaderBase.hpp"
+#include "Waypoint/CupWriter.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Units/System.hpp"
 #include "TestUtil.hpp"
 #include "system/Path.hpp"
+#include "io/BufferedOutputStream.hxx"
+#include "io/StringOutputStream.hxx"
 #include "util/tstring.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StringStrip.hxx"
 #include "Operation/Operation.hpp"
 
 #include <vector>
+
+using std::string_view_literals::operator""sv;
 
 typedef std::vector<Waypoint> wp_vector;
 
@@ -290,6 +295,29 @@ TestCompeGPS_UTM(const wp_vector &org_wp)
   }
 }
 
+static std::string
+WriteCupToString(const wp_vector &org_wp)
+{
+  StringOutputStream sos;
+  WithBufferedOutputStream(sos, [&](BufferedOutputStream &bos){
+    for (const auto &i : org_wp)
+      WriteCup(bos, i);
+  });
+  return std::move(sos).GetValue();
+}
+
+static void
+TestCupWriter(const wp_vector &org_wp)
+{
+  const auto s = WriteCupToString(org_wp);
+  ok1(s == R"cup("Bergneustadt","",,5103.117N,00742.367E,488M,4,040,590M,,"Rabbit holes, 20" ditch south end of rwy"
+"Aconcagua","",,3239.200S,07000.700W,6962M,7,,,,"Highest mountain in south-america"
+"Golden Gate Bridge","",,3749.050N,12228.700W,227M,14,,,,""
+"Red Square","",,5545.250N,03737.200E,123M,3,090,016M,,""
+"Sydney Opera","",,3351.417S,15112.917E,5M,1,,,,""
+)cup"sv);
+}
+
 static wp_vector
 CreateOriginalWaypoints()
 {
@@ -392,7 +420,7 @@ int main()
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(450);
+  plan_tests(451);
 
   TestWinPilot(org_wp);
   TestSeeYou(org_wp);
@@ -402,6 +430,7 @@ int main()
   TestOzi(org_wp);
   TestCompeGPS(org_wp);
   TestCompeGPS_UTM(org_wp);
+  TestCupWriter(org_wp);
 
   return exit_status();
 }
