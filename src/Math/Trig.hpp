@@ -10,11 +10,6 @@
 [[gnu::const]]
 static inline std::pair<double, double>
 sin_cos(const double thetha) noexcept {
-////   aug: not used: #if __cplusplus >= 201703
-////   aug: not used: sin_cos(const double thetha) noexcept {
-////   aug: not used: #else
-////   aug: not used: sin_cos(const double thetha) {
-////   aug: not used: #endif
   double s, c;
 #ifdef __APPLE__
   __sincos(thetha, &s, &c);
