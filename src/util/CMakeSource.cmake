@@ -1,10 +1,9 @@
 set(_SOURCES
         util/ASCII.cxx
         util/ConvertString.cpp
-        util/CRC.cpp
+        util/CRC16CCITT.cpp
         util/EscapeBackslash.cpp
         util/Exception.cxx
-        util/ExtractParameters.cpp
         util/PrintException.cxx
         util/StaticString.cxx
         util/StringBuilder.cxx
@@ -15,6 +14,7 @@ set(_SOURCES
         # removed 7.36: util/tstring.cpp
         util/UTF8.cpp
         util/MD5.cpp  # new with 6.8.14
+        util/DecimalParser.cxx  # new with 7.40
 )
 if(WIN32)
   list(APPEND _SOURCES

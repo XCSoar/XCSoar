@@ -7,7 +7,6 @@ set(_SOURCES
         io/BufferedReader.cxx
         io/BufferedLineReader.cpp
         io/ConfiguredFile.cpp
-        io/ConvertLineReader.cpp
         io/CSVLine.cpp
         io/DataFile.cpp
         io/FileCache.cpp
@@ -22,8 +21,8 @@ set(_SOURCES
         io/MapFile.cpp
         io/StringConverter.cpp
         io/ZipArchive.cpp
-        io/ZipLineReader.cpp
         io/ZipReader.cpp
+        io/Reader.cxx
 )
 # if(UNIX)
 #   list(APPEND _SOURCES

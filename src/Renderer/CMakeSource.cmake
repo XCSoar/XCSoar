@@ -68,6 +68,7 @@ set(_SOURCES
         Renderer/WindChartRenderer.cpp
 
         Renderer/ProgressBarRenderer.cpp
+        Renderer/RadarRenderer.cpp
 )
 
 set(SCRIPT_FILES

@@ -19,9 +19,7 @@ set(TEST_LIST
 # ${SRC_DIR}/DumpFlarmNet.cpp
 # ${SRC_DIR}/DumpHexColor.cpp
 # ${SRC_DIR}/DumpTaskFile.cpp
-# ${SRC_DIR}/DumpTextFile.cpp
 # ${SRC_DIR}/DumpTextInflate.cpp
-# ${SRC_DIR}/DumpTextZip.cpp
 # ${SRC_DIR}/DumpVario.cpp
 # ${SRC_DIR}/EmulateDevice.cpp
 # ${SRC_DIR}/EnumeratePorts.cpp
@@ -128,7 +126,8 @@ ${SRC_DIR}/TestAirspaceParser.cpp
 ${SRC_DIR}/TestAllocatedGrid.cpp
 ${SRC_DIR}/TestAngle.cpp
 ${SRC_DIR}/TestByteSizeFormatter.cpp
-${SRC_DIR}/TestCRC.cpp
+${SRC_DIR}/TestCRC8.cpp
+${SRC_DIR}/TestCRC16.cpp
 ${SRC_DIR}/TestCSVLine.cpp
 ${SRC_DIR}/TestClimbAvCalc.cpp
 ${SRC_DIR}/TestColorRamp.cpp

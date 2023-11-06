@@ -11,7 +11,12 @@
 std::optional<double>
 ParseDecimal(std::string_view src) noexcept
 {
-	const char *first = src.begin(), *const last = first + src.size();
+#if __MSVC__
+  // MSVC cannot (change) the iterator to const char* automatically?
+  const char *first = src.data(), *const last = first + src.size();
+#else
+  const char *first = src.begin(), *const last = first + src.size();
+#endif
 	if (first == last)
 		return std::nullopt;
 

@@ -1,5 +1,6 @@
 set(_SOURCES
         Waypoint/CupWriter.cpp
+        Waypoint/CupParser.cpp
         Waypoint/Factory.cpp
         Waypoint/HomeGlue.cpp
         Waypoint/LastUsed.cpp
