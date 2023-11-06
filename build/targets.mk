@@ -3,10 +3,21 @@ TARGETS = PC WIN64 \
 	WAYLAND \
 	FUZZER \
 	PI PI2 CUBIE KOBO NEON \
+    OPENVARIO_CB2 \
 	ANDROID ANDROID7 ANDROID86 \
 	ANDROIDAARCH64 ANDROIDX64 \
 	ANDROIDFAT \
 	OSX64 IOS32 IOS64
+
+ifeq ($(TARGET),OPENVARIO_CB2)
+  # the OpenVario is a linux target
+  # but has special functions, menus,...
+  override TARGET=
+  TARGET_IS_OPENVARIO = y
+else
+  TARGET_IS_OPENVARIO = n
+endif
+
 
 ifeq ($(TARGET),)
   ifeq ($(HOST_IS_UNIX),y)
@@ -419,6 +430,10 @@ endif
 ifeq ($(HAVE_POSIX),y)
   TARGET_CPPFLAGS += -DHAVE_POSIX
   TARGET_CPPFLAGS += -DHAVE_VASPRINTF
+endif
+
+ifeq ($(TARGET_IS_OPENVARIO),y)
+  TARGET_CPPFLAGS += -DIS_OPENVARIO
 endif
 
 ifeq ($(HAVE_MSVCRT),y)
