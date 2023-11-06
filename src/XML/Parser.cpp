@@ -28,27 +28,72 @@
 
 #include "Parser.hpp"
 #include "Node.hpp"
+#include "system/Path.hpp"
+#include "io/FileReader.hxx"
+#include "util/AllocatedString.hxx"
 #include "util/CharUtil.hxx"
 #include "util/StringAPI.hxx"
 #include "util/StringStrip.hxx"
 #include "util/NumberParser.hpp"
-#include "io/FileLineReader.hpp"
-
-#include <stdexcept>
 
 #include <cassert>
+#include <memory>
+#include <stdexcept>
 
 namespace XML {
 
+struct Input {
+  const std::string_view src;
+  std::size_t position = 0;
+
+  explicit Input(std::string_view _src) noexcept
+    :src(_src) {}
+
+  std::string_view substr(std::size_t pos, std::size_t count) const noexcept {
+    assert(pos + count <= src.size());
+
+    return src.substr(pos, count);
+  }
+
+  char PeekChar() const noexcept {
+    if (position >= src.size())
+      return 0;
+
+    return src[position];
+  }
+
+  /**
+   * Obtain the next character from the string.
+   */
+  char GetNextChar() noexcept {
+    if (position >= src.size())
+      return 0;
+
+    return src[position++];
+  }
+
+  /**
+   * Find next non-white space character.
+   */
+  char FindNonWhiteSpace() noexcept {
+    // Iterate through characters in the string until we find a NULL or a
+    // non-white space character
+    char ch;
+    while ((ch = GetNextChar()) != 0) {
+      if (!IsWhitespaceOrNull(ch))
+        return ch;
+    }
+    return 0;
+  }
+};
+
 /** Main structure used for parsing XML. */
-struct Parser {
-  const TCHAR *lpXML;
-  unsigned nIndex = 0;
-  tstring_view end_tag{};
+struct Parser : Input {
+  std::string_view end_tag{};
   bool nFirst = true;
 
-  explicit constexpr Parser(const TCHAR *_xml) noexcept
-    :lpXML(_xml) {}
+  explicit Parser(std::string_view _src) noexcept
+    :Input(_src) {}
 };
 
 /** Enumeration used to decipher what type a token is. */
@@ -65,7 +110,7 @@ enum class TokenType {
 };
 
 struct NextToken {
-  tstring_view text;
+  std::string_view text;
 
   TokenType type;
 };
@@ -86,9 +131,6 @@ enum class Status {
   OUTSIDE_TAG
 };
 
-static NextToken
-GetNextToken(Parser *pXML);
-
 static void
 ParseXMLElement(XMLNode &node, Parser *pXML);
 
@@ -103,57 +145,54 @@ ParseXMLElement(XMLNode &node, Parser *pXML);
  * @param lo length of string
  * @return new allocated string converted from xml
  */
-static TCHAR *
-FromXMLString(tstring_view src) noexcept
+static AllocatedString
+FromXMLString(std::string_view src) noexcept
 {
-  const TCHAR *ss = src.data();
-  const TCHAR *end = ss + src.size();
+  const char *ss = src.data();
+  const char *end = ss + src.size();
 
   /* allocate a buffer with the size of the input string; we know for
      sure that this is enough, because resolving entities can only
      shrink the string, but never grows */
-  TCHAR *d = (TCHAR *)malloc((src.size() + 1) * sizeof(*d));
-  assert(d);
-  TCHAR *result = d;
+  auto result = AllocatedString::Donate(new char[src.size() + 1]);
+  char *d = result.data();
   while (ss < end && *ss) {
-    if (*ss == _T('&')) {
+    if (*ss == '&') {
       ss++;
-      if (StringIsEqualIgnoreCase(ss, _T("lt;" ), 3)) {
-        *(d++) = _T('<' );
+      if (StringIsEqualIgnoreCase(ss, "lt;" , 3)) {
+        *(d++) = '<' ;
         ss += 3;
-      } else if (StringIsEqualIgnoreCase(ss, _T("gt;" ), 3)) {
-        *(d++) = _T('>' );
+      } else if (StringIsEqualIgnoreCase(ss, "gt;" , 3)) {
+        *(d++) = '>' ;
         ss += 3;
-      } else if (StringIsEqualIgnoreCase(ss, _T("amp;" ), 4)) {
-        *(d++) = _T('&' );
+      } else if (StringIsEqualIgnoreCase(ss, "amp;" , 4)) {
+        *(d++) = '&' ;
         ss += 4;
-      } else if (StringIsEqualIgnoreCase(ss, _T("apos;"), 5)) {
-        *(d++) = _T('\'');
+      } else if (StringIsEqualIgnoreCase(ss, "apos;", 5)) {
+        *(d++) = '\'';
         ss += 5;
-      } else if (StringIsEqualIgnoreCase(ss, _T("quot;"), 5)) {
-        *(d++) = _T('"' );
+      } else if (StringIsEqualIgnoreCase(ss, "quot;", 5)) {
+        *(d++) = '"' ;
         ss += 5;
       } else if (*ss == '#') {
         /* number entity */
 
         ++ss;
 
-        TCHAR *endptr;
+        char *endptr;
         unsigned i = ParseUnsigned(ss, &endptr, 10);
         if (endptr == ss || endptr >= end || *endptr != ';') {
-          free(result);
           return nullptr;
         }
 
         // XXX convert to UTF-8 if !_UNICODE
-        TCHAR ch = (TCHAR)i;
+        char ch = (char)i;
         if (ch == 0)
           ch = ' ';
 
         *d++ = ch;
         ss = endptr + 1;
       } else {
-        free(result);
         return nullptr;
       }
     } else {
@@ -163,65 +202,29 @@ FromXMLString(tstring_view src) noexcept
   }
   *d = 0;
 
-  /* shrink the memory allocation just in case we allocated too
-     much */
-  d = (TCHAR *)realloc(result, (d + 1 - result) * sizeof(*d));
-  if (d != nullptr)
-    result = d;
-
   return result;
 }
 
 [[gnu::pure]]
 static bool
-CompareTagName(const TCHAR *cclose, const TCHAR *copen)
+CompareTagName(const char *cclose, const char *copen)
 {
   assert(cclose != nullptr);
   assert(copen != nullptr);
 
-  size_t l = _tcslen(cclose);
+  size_t l = strlen(cclose);
   if (!StringIsEqualIgnoreCase(cclose, copen, l))
     return false;
 
-  const TCHAR c = copen[l];
+  const char c = copen[l];
   if (IsWhitespaceOrNull(c) ||
-      (c == _T('/')) ||
-      (c == _T('<')) ||
-      (c == _T('>')) ||
-      (c == _T('=')))
+      (c == '/') ||
+      (c == '<') ||
+      (c == '>') ||
+      (c == '='))
     return true;
 
   return false;
-}
-
-/**
- * Obtain the next character from the string.
- */
-static inline TCHAR
-GetNextChar(Parser *pXML)
-{
-  TCHAR ch = pXML->lpXML[pXML->nIndex];
-  if (ch != 0)
-    pXML->nIndex++;
-  return ch;
-}
-
-/**
- * Find next non-white space character.
- */
-static TCHAR
-FindNonWhiteSpace(Parser *pXML)
-{
-  assert(pXML);
-
-    // Iterate through characters in the string until we find a NULL or a
-  // non-white space character
-  TCHAR ch;
-  while ((ch = GetNextChar(pXML)) != 0) {
-    if (!IsWhitespaceOrNull(ch))
-      return ch;
-  }
-  return 0;
 }
 
 /**
@@ -231,94 +234,92 @@ static NextToken
 GetNextToken(Parser *pXML)
 {
   NextToken result;
-  const TCHAR *lpXML;
-  TCHAR ch;
-  TCHAR temp_ch;
+  char ch;
+  char temp_ch;
   size_t size;
-  unsigned n;
+  std::size_t n;
   bool found_match;
   bool is_text = false;
 
   // Find next non-white space character
-  ch = FindNonWhiteSpace(pXML);
+  ch = pXML->FindNonWhiteSpace();
   if (ch == 0) [[unlikely]]
     // If we failed to obtain a valid character
     return {{}, TokenType::ERROR};
 
   // Cache the current string pointer
-  lpXML = pXML->lpXML;
-  const TCHAR *const pStr = &lpXML[pXML->nIndex - 1];
+  const std::size_t start = pXML->position - 1;
 
   switch (ch) {
     // Check for quotes
-  case _T('\''):
-  case _T('\"'):
+  case '\'':
+  case '\"':
     // Type of token
     result.type = TokenType::QUOTED_TEXT;
     temp_ch = ch;
-    n = pXML->nIndex;
+    n = pXML->position;
 
     // Set the size
     size = 1;
     found_match = false;
 
     // Search through the string to find a matching quote
-    while (((ch = GetNextChar(pXML))) != 0) {
+    while (((ch = pXML->GetNextChar())) != 0) {
       size++;
       if (ch == temp_ch) {
         found_match = true;
         break;
       }
-      if (ch == _T('<'))
+      if (ch == '<')
         break;
     }
 
     // If we failed to find a matching quote
     if (!found_match) {
-      pXML->nIndex = n;
+      pXML->position = n;
       is_text = true;
       break;
     }
 
     //  4.02.2002
-    if (FindNonWhiteSpace(pXML)) {
-      pXML->nIndex--;
+    if (pXML->FindNonWhiteSpace()) {
+      pXML->position--;
     }
 
     break;
 
     // Equals (used with attribute values)
-  case _T('='):
+  case '=':
     size = 1;
     result.type = TokenType::EQUALS;
     break;
 
     // Close tag
-  case _T('>'):
+  case '>':
     size = 1;
     result.type = TokenType::CLOSE_TAG;
     break;
 
     // Check for tag start and tag end
-  case _T('<'):
+  case '<':
 
     // Peek at the next character to see if we have an end tag '</',
     // or an xml declaration '<?'
-    temp_ch = pXML->lpXML[pXML->nIndex];
+    temp_ch = pXML->PeekChar();
 
     // If we have a tag end...
-    if (temp_ch == _T('/')) {
+    if (temp_ch == '/') {
       // Set the type and ensure we point at the next character
-      GetNextChar(pXML);
+      pXML->GetNextChar();
       result.type = TokenType::TAG_END;
       size = 2;
     }
 
     // If we have an XML declaration tag
-    else if (temp_ch == _T('?')) {
+    else if (temp_ch == '?') {
 
       // Set the type and ensure we point at the next character
-      GetNextChar(pXML);
+      pXML->GetNextChar();
       result.type = TokenType::DECLARATION;
       size = 2;
     }
@@ -331,15 +332,15 @@ GetNextToken(Parser *pXML)
     break;
 
     // Check to see if we have a short hand type end tag ('/>').
-  case _T('/'):
+  case '/':
 
     // Peek at the next character to see if we have a short end tag '/>'
-    temp_ch = pXML->lpXML[pXML->nIndex];
+    temp_ch = pXML->PeekChar();
 
     // If we have a short hand end tag...
-    if (temp_ch == _T('>')) {
+    if (temp_ch == '>') {
       // Set the type and ensure we point at the next character
-      GetNextChar(pXML);
+      pXML->GetNextChar();
       result.type = TokenType::SHORT_HAND_CLOSE;
       size = 2;
       break;
@@ -362,21 +363,21 @@ GetNextToken(Parser *pXML)
     size = 1;
     bool nExit = false;
 
-    while (!nExit && ((ch = GetNextChar(pXML)) != 0)) {
+    while (!nExit && ((ch = pXML->GetNextChar()) != 0)) {
       if (IsWhitespaceOrNull(ch))
         // Break when we find white space
         break;
 
       switch (ch) {
       // If we find a slash then this maybe text or a short hand end tag.
-      case _T('/'):
+      case '/':
 
         // Peek at the next character to see it we have short hand end tag
-        temp_ch = pXML->lpXML[pXML->nIndex];
+        temp_ch = pXML->PeekChar();
 
         // If we found a short hand end tag then we need to exit the loop
-        if (temp_ch == _T('>')) {
-          pXML->nIndex--; //  03.02.2002
+        if (temp_ch == '>') {
+          --pXML->position; //  03.02.2002
           nExit = true;
         } else {
           size++;
@@ -386,10 +387,10 @@ GetNextToken(Parser *pXML)
         // Break when we find a terminator and decrement the index and
         // column count so that we are pointing at the right character
         // the next time we are called.
-      case _T('<'):
-      case _T('>'):
-      case _T('='):
-        pXML->nIndex--;
+      case '<':
+      case '>':
+      case '=':
+        --pXML->position;
       nExit = true;
       break;
 
@@ -402,8 +403,8 @@ GetNextToken(Parser *pXML)
       }
     }
   }
-  result.text = {pStr, size};
 
+  result.text = pXML->substr(start, size);
   return result;
 }
 
@@ -414,13 +415,13 @@ static void
 ParseXMLElement(XMLNode &node, Parser *pXML)
 {
   bool is_declaration;
-  const TCHAR *text = nullptr;
+  const char *text = nullptr;
   XMLNode *pNew;
   Status status; // inside or outside a tag
   Attrib attrib = Attrib::NAME;
 
   /* the name of the attribute that is currently being */
-  tstring attribute_name;
+  std::string attribute_name;
 
   assert(pXML);
 
@@ -465,8 +466,8 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
 
         // If we have node text then add this to the element
         if (text != nullptr) {
-          size_t length = StripRight(text, token.text.data() - text);
-          node.AddText({text, length});
+          const std::string_view unstripped_text(text, token.text.data() - text);
+          node.AddText(StripRight(unstripped_text));
           text = nullptr;
         }
 
@@ -499,7 +500,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
           if (!pXML->end_tag.empty()) {
             // If we are back at the root node then we
             // have an unmatched end tag
-            if (node.GetName() == nullptr)
+            if (node.IsNull())
               throw std::runtime_error("Unmatched end tag");
 
             // If the end tag matches the name of this
@@ -523,13 +524,14 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
 
         // If we have node text then add this to the element
         if (text != nullptr) {
-          size_t length = StripRight(text, token.text.data() - text);
-          TCHAR *text2 = FromXMLString({text, length});
-          if (text2 == nullptr)
+          const std::string_view unstripped_text(text, token.text.data() - text);
+
+          if (const auto text2 = FromXMLString(StripRight(unstripped_text));
+              text2 != nullptr)
+            node.AddText(text2);
+          else
             throw std::runtime_error("Unexpected token found");
 
-          node.AddText(text2);
-          free(text2);
           text = nullptr;
         }
 
@@ -613,7 +615,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
           // Eg.  'Attribute AnotherAttribute'
         case TokenType::TEXT:
           // Add the unvalued attribute to the list
-          node.AddAttribute(std::move(attribute_name), tstring_view{});
+          node.AddAttribute(std::move(attribute_name), std::string_view{});
           // Cache the token then indicate.  We are next to
           // look for the equals attribute
           attribute_name = token.text;
@@ -627,13 +629,13 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
 
           // If we are a declaration element '<?' then we need
           // to remove extra closing '?' if it exists
-          if (node.IsDeclaration() && attribute_name.back() == _T('?')) {
+          if (node.IsDeclaration() && attribute_name.back() == '?') {
             attribute_name.pop_back();
           }
 
           if (!attribute_name.empty())
             // Add the unvalued attribute to the list
-            node.AddAttribute(std::move(attribute_name), tstring_view{});
+            node.AddAttribute(std::move(attribute_name), std::string_view{});
 
           // If this is the end of the tag then return to the caller
           if (token.type == TokenType::SHORT_HAND_CLOSE)
@@ -673,7 +675,7 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
         case TokenType::QUOTED_TEXT:
           // If we are a declaration element '<?' then we need
           // to remove extra closing '?' if it exists
-          if (node.IsDeclaration() && token.text.ends_with(_T('?'))) {
+          if (node.IsDeclaration() && token.text.ends_with('?')) {
             token.text.remove_suffix(1);
           }
 
@@ -685,14 +687,10 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
 
           assert(!attribute_name.empty());
 
-          {
-            TCHAR *value = FromXMLString(token.text);
-            if (value == nullptr)
-              throw std::runtime_error("Unexpected token found");
-
-            node.AddAttribute(std::move(attribute_name), value);
-            free(value);
-          }
+          if (const auto value = FromXMLString(token.text); value != nullptr)
+            node.AddAttribute(attribute_name, value);
+          else
+            throw std::runtime_error("Unexpected token found");
 
           // Indicate we are searching for a new attribute
           attrib = Attrib::NAME;
@@ -714,6 +712,21 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
   }
 }
 
+static XMLNode *
+GetRootElement(XMLNode &n) noexcept
+{
+  assert(n.IsNull());
+
+  XMLNode *result = n.GetFirstChild();
+
+  // If the new main node is the xml declaration
+  // -> try to take the first childnode again
+  if (result != nullptr && result->IsDeclaration())
+    result = result->GetFirstChild();
+
+  return result;
+}
+
 /**
  * Parses the given XML String and returns the main XMLNode
  * @param xml_string XML String
@@ -722,10 +735,8 @@ ParseXMLElement(XMLNode &node, Parser *pXML)
  * @return The main XMLNode or empty XMLNode on error
  */
 XMLNode
-ParseString(const TCHAR *xml_string)
+ParseString(std::string_view xml_string)
 {
-  assert(xml_string != nullptr);
-
   XMLNode xnode = XMLNode::Null();
   Parser xml{xml_string};
 
@@ -733,55 +744,28 @@ ParseString(const TCHAR *xml_string)
   // note: xnode is now the document node, not the main XMLNode
   ParseXMLElement(xnode, &xml);
 
-  // If the document node does not have childnodes
-  XMLNode *child = xnode.GetFirstChild();
-  if (child == nullptr)
+  auto *root_element = GetRootElement(xnode);
+  if (root_element == nullptr)
     throw std::runtime_error("No elements found");
 
-  // Set the document's first childnode as new main node
-  xnode = std::move(*child);
-
-  // If the new main node is the xml declaration
-  // -> try to take the first childnode again
-  if (xnode.IsDeclaration()) {
-    // If the declaration does not have childnodes
-    child = xnode.GetFirstChild();
-    if (child == nullptr)
-      throw std::runtime_error("No elements found");
-
-    // Set the declaration's first childnode as new main node
-    xnode = std::move(*child);
-  }
-
-  // Return the node (empty, main or child of main that equals tag)
-  return xnode;
+  return std::move(*root_element);
 }
 
-static tstring
+static std::unique_ptr<char[]>
 ReadTextFile(Path path)
 {
-  /* auto-detect the character encoding, to be able to parse XCSoar
-     6.0 task files */
-  FileLineReader reader(path, Charset::AUTO);
+  FileReader reader{path};
 
-  long size = reader.GetSize();
+  const auto size = reader.GetSize();
   if (size > 65536)
     throw std::runtime_error("File is too large");
-  else if (size < 0)
-    size = 4096;
 
-  tstring buffer;
-  buffer.reserve(size);
+  std::unique_ptr<char[]> buffer{new char[size + 1]};
+  const auto nbytes = reader.Read(std::as_writable_bytes(std::span{buffer.get(), static_cast<std::size_t>(size)}));
+  if (nbytes != size)
+    throw std::runtime_error{"Short read"};
 
-  const TCHAR *line;
-  while ((line = reader.ReadLine()) != nullptr) {
-    if (buffer.length() > 65536)
-      /* too long */
-      std::runtime_error("File is too large");
-
-    buffer.append(line);
-    buffer.append(_T("\n"));
-  }
+  buffer[nbytes] = '\0';
 
   return buffer;
 }
@@ -797,7 +781,7 @@ XMLNode
 ParseFile(Path filename)
 {
   const auto buffer = ReadTextFile(filename);
-  return ParseString(buffer.c_str());
+  return ParseString(buffer.get());
 }
 
 } // namespace XML

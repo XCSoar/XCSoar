@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "util/Compiler.h"
 #include "util/DynamicFifoBuffer.hxx"
 #include "util/SpanCast.hxx"
 
@@ -52,7 +51,7 @@ public:
 	 */
 	template<typename T>
 	void WriteT(const T &value) {
-		Write(std::as_bytes(std::span{&value, 1}));
+		Write(ReferenceAsBytes(value));
 	}
 
 	/**
@@ -68,12 +67,6 @@ public:
 	void Write(std::string_view src) {
 		Write(AsBytes(src));
 	}
-
-	/**
-	 * Write a printf-style formatted string.
-	 */
-	gcc_printf(2,3)
-	void Format(const char *fmt, ...);
 
 	void VFmt(fmt::string_view format_str, fmt::format_args args);
 

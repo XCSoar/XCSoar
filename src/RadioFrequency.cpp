@@ -4,6 +4,7 @@
 #include "RadioFrequency.hpp"
 #include "Math/Util.hpp"
 #include "util/CharUtil.hxx"
+#include "util/DecimalParser.hxx"
 #include "util/StringFormat.hpp"
 #include "util/NumberParser.hpp"
 
@@ -34,4 +35,20 @@ RadioFrequency::Parse(const TCHAR *p) noexcept
   else
     frequency.Clear();
   return frequency;
+}
+
+RadioFrequency
+RadioFrequency::Parse(std::string_view src) noexcept
+{
+  double mhz;
+
+  if (auto value = ParseDecimal(src))
+    mhz = *value;
+  else
+    return Null();
+
+  if (mhz < MIN_KHZ / 1000. && mhz > MAX_KHZ / 1000.)
+    return Null();
+
+  return FromKiloHertz(uround(mhz * 1000));
 }

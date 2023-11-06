@@ -20,10 +20,9 @@ LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 
   try {
     MemoryReader mr{{(const std::byte *)data, size}};
-    BufferedLineReader lr(mr);
-    NullOperationEnvironment operation;
+    BufferedReader br{mr};
 
-    ParseAirspaceFile(airspaces, lr, operation);
+    ParseAirspaceFile(airspaces, br);
   } catch (...) {
     return EXIT_FAILURE;
   }

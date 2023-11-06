@@ -28,116 +28,85 @@
 
 #pragma once
 
-#include "util/NonCopyable.hpp"
-#include "util/tstring.hpp"
-#include "util/tstring_view.hxx"
-#include "util/Compiler.h"
-
 #include <list>
 #include <forward_list>
+#include <string>
 #include <string_view>
-
-#include <cassert>
-#include <tchar.h>
 
 class BufferedOutputStream;
 
 class XMLNode {
-  /**
-   * To allow shallow copy and "intelligent/smart" pointers (automatic
-   * delete).
-   */
-  struct Data : private NonCopyable {
-    /** Structure for XML attribute. */
-    struct Attribute : private NonCopyable {
-      tstring name, value;
-
-      template<typename N, typename V>
-      Attribute(N &&name, V &&value) noexcept
-        :name(std::forward<N>(name)), value(std::forward<V>(value)) {}
-    };
-
-    /** Element name (=nullptr if root) */
-    tstring name;
-
-    /** Whether node is an XML declaration - '<?xml ?>' */
-    bool is_declaration;
-
-    /** Array of child nodes */
-    std::list<XMLNode> children;
-
-    /** A concatentation of all text nodes */
-    tstring text;
-
-    /** Array of attributes */
-    std::forward_list<Attribute> attributes;
-
-    Data(tstring_view _name, bool _is_declaration) noexcept
-      :name(_name),
-       is_declaration(_is_declaration) {}
-
-    bool HasChildren() const {
-      return !children.empty() || !text.empty();
-    }
+  /** Structure for XML attribute. */
+  struct Attribute {
+    std::string name;
+    std::string value;
 
     template<typename N, typename V>
-    void AddAttribute(N &&name, V &&value) noexcept {
-      attributes.emplace_front(std::forward<N>(name), std::forward<V>(value));
-    }
-
-    typedef std::list<XMLNode>::const_iterator const_iterator;
-
-    const_iterator begin() const {
-      return children.begin();
-    }
-
-    const_iterator end() const {
-      return children.end();
-    }
+    Attribute(N &&name, V &&value) noexcept
+      :name(std::forward<N>(name)), value(std::forward<V>(value)) {}
   };
 
-  Data *d;
+  /** Element name (=nullptr if root) */
+  std::string name;
+
+  /** Whether node is an XML declaration - '<?xml ?>' */
+  bool is_declaration;
+
+  /** Array of child nodes */
+  std::list<XMLNode> children;
+
+  /** A concatentation of all text nodes */
+  std::string text;
+
+  /** Array of attributes */
+  std::forward_list<Attribute> attributes;
 
   /**
    * Protected constructor: use "parse" functions to get your first
    * instance of XMLNode.
    */
-  XMLNode(tstring_view name,
+  XMLNode(std::string_view name,
           bool is_declaration) noexcept;
 
 public:
-  static inline XMLNode Null() {
-    return XMLNode(_T(""), false);
+  static inline XMLNode Null() noexcept {
+    return XMLNode({}, false);
   }
 
-  static XMLNode CreateRoot(const TCHAR *name);
+  static XMLNode CreateRoot(const char *name) noexcept;
+
+  bool IsNull() const noexcept {
+    return name.empty();
+  }
 
   /**
    * name of the node
    */
-  const TCHAR *GetName() const {
-    assert(d != nullptr);
-
-    return d->name.c_str();
+  const char *GetName() const noexcept {
+    return name.c_str();
   }
 
-  typedef Data::const_iterator const_iterator;
+  using const_iterator = std::list<XMLNode>::const_iterator;
 
-  const_iterator begin() const {
-    return d->begin();
+  const_iterator begin() const noexcept {
+    return children.begin();
   }
 
-  const_iterator end() const {
-    return d->end();
+  const_iterator end() const noexcept {
+    return children.end();
+  }
+
+  bool HasChildren() const noexcept {
+    return !children.empty() || !text.empty();
   }
 
   /**
    * @return the first child node, or nullptr if there is none
    */
   [[gnu::pure]]
-  const XMLNode *GetFirstChild() const {
-    return d != nullptr && !d->children.empty()
-      ? &d->children.front()
+  const XMLNode *GetFirstChild() const noexcept {
+    return !children.empty()
+      ? &children.front()
       : nullptr;
   }
 
@@ -145,9 +114,9 @@ public:
    * @return the first child node, or nullptr if there is none
    */
   [[gnu::pure]]
-  XMLNode *GetFirstChild() {
-    return d != nullptr && !d->children.empty()
-      ? &d->children.front()
+  XMLNode *GetFirstChild() noexcept {
+    return !children.empty()
+      ? &children.front()
       : nullptr;
   }
 
@@ -157,14 +126,14 @@ public:
    * if failing)
    */
   [[gnu::pure]]
-  const XMLNode *GetChildNode(const TCHAR *name) const;
+  const XMLNode *GetChildNode(const char *name) const noexcept;
 
   /**
    * @return ith attribute content with specific name (return a nullptr
    * if failing)
    */
   [[gnu::pure]]
-  const TCHAR *GetAttribute(const TCHAR *name) const;
+  const char *GetAttribute(const char *name) const noexcept;
 
   /**
    * Create an XML file from the head element.
@@ -177,48 +146,25 @@ public:
   void Serialise(BufferedOutputStream &os, bool format) const;
 
   [[gnu::pure]]
-  bool IsDeclaration() const {
-    assert(d != nullptr);
-
-    return d->is_declaration;
-  }
-
-  // to allow shallow copy:
-  ~XMLNode() {
-    delete d;
+  bool IsDeclaration() const noexcept {
+    return is_declaration;
   }
 
   XMLNode(const XMLNode &A) = delete;
 
-  XMLNode(XMLNode &&other)
-    :d(other.d) {
-    other.d = nullptr;
-  }
+  XMLNode(XMLNode &&other) noexcept = default;
 
   /**
    * Shallow copy.
    */
   XMLNode &operator=(const XMLNode& A) = delete;
 
-  XMLNode &operator=(XMLNode &&other) {
-    Data *old = d;
-    d = other.d;
-    other.d = nullptr;
-
-    delete old;
-
-    return *this;
-  }
-
-  constexpr
-  XMLNode(): d(nullptr) {}
-
-  // The strings given as parameters for these 4 methods will be free'd by the XMLNode class:
+  XMLNode &operator=(XMLNode &&other) noexcept = default;
 
   /**
    * Add a child node to the given element.
    */
-  XMLNode &AddChild(const tstring_view name,
+  XMLNode &AddChild(const std::string_view name,
                     bool is_declaration=false) noexcept;
 
   /**
@@ -226,13 +172,15 @@ public:
    */
   template<typename N, typename V>
   void AddAttribute(N &&name, V &&value) noexcept {
-    d->AddAttribute(std::forward<N>(name), std::forward<V>(value));
+    attributes.emplace_front(std::forward<N>(name), std::forward<V>(value));
   }
 
   /**
    * Add text to the element.
    */
-  void AddText(tstring_view value) noexcept;
+  void AddText(std::string_view value) noexcept {
+    text.append(value);
+  }
 
 private:
   /**
@@ -242,6 +190,5 @@ private:
    * This recurses through all subnodes then adds contents of the
    * nodes to the string.
    */
-  static void Serialise(const Data &data, BufferedOutputStream &os,
-                        int format);
+  void SerialiseInner(BufferedOutputStream &os, int format) const;
 };

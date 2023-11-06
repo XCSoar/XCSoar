@@ -9,6 +9,7 @@
 #include <span>
 #include <utility>
 
+#include <wtypesbase.h> // for LPSECURITY_ATTRIBUTES, needed by winreg.h
 #include <winreg.h>
 #include <tchar.h>
 

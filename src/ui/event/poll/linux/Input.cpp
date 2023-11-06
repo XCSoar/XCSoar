@@ -123,7 +123,7 @@ LinuxInputDevice::Read() noexcept
   FileDescriptor fd = event.GetFileDescriptor();
 
   struct input_event buffer[64];
-  const auto nbytes = fd.Read(buffer, sizeof(buffer));
+  const auto nbytes = fd.Read(std::as_writable_bytes(std::span{buffer}));
   if (nbytes < 0) {
     /* device has failed or was unplugged - bail out */
     if (errno != EAGAIN && errno != EINTR)

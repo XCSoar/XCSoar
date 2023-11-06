@@ -1,7 +1,7 @@
 import os
 import subprocess
 import platform
-from typing import Optional
+from typing import Optional, Sequence, Union
 
 from build.project import Project
 from .toolchain import AnyToolchain, Toolchain
@@ -19,13 +19,13 @@ def make_cross_file(toolchain: Toolchain) -> str:
         system = 'linux'
         windres = ''
 
-    if toolchain.host_triplet.startswith('arm'):
+    if toolchain.is_arm:
         cpu_family = 'arm'
-        if toolchain.host_triplet.startswith('armv7'):
+        if toolchain.is_armv7:
             cpu = 'armv7'
         else:
             cpu = 'armv6'
-    elif toolchain.host_triplet.startswith('aarch64'):
+    elif toolchain.is_aarch64:
         cpu_family = 'aarch64'
         cpu = 'arm64-v8a'
     else:
@@ -61,19 +61,21 @@ pkgconfig = '{toolchain.pkg_config}'
         f.write(f"""
 [properties]
 root = '{toolchain.install_prefix}'
-
-[built-in options]
-c_args = {repr((toolchain.cppflags + ' ' + toolchain.cflags).split())}
-c_link_args = {repr(toolchain.ldflags.split() + toolchain.libs.split())}
-
-cpp_args = {repr((toolchain.cppflags + ' ' + toolchain.cxxflags).split())}
-cpp_link_args = {repr(toolchain.ldflags.split() + toolchain.libs.split())}
 """)
 
         if toolchain.is_android:
             f.write("""
 # Keep Meson from executing Android-x86 test binariees
 needs_exe_wrapper = true
+""")
+
+        f.write(f"""
+[built-in options]
+c_args = {repr((toolchain.cppflags + ' ' + toolchain.cflags).split())}
+c_link_args = {repr(toolchain.ldflags.split() + toolchain.libs.split())}
+
+cpp_args = {repr((toolchain.cppflags + ' ' + toolchain.cxxflags).split())}
+cpp_link_args = {repr(toolchain.ldflags.split() + toolchain.libs.split())}
 """)
 
         f.write(f"""
@@ -87,8 +89,8 @@ endian = '{endian}'
 
 def configure(toolchain: AnyToolchain, src: str, build: str, args: list[str]=[]) -> None:
     configure = [
-        'meson',
-        src, build,
+        'meson', 'setup',
+        build, src,
 
         '--prefix', toolchain.install_prefix,
 
@@ -110,10 +112,10 @@ def configure(toolchain: AnyToolchain, src: str, build: str, args: list[str]=[])
     subprocess.check_call(configure, env=env)
 
 class MesonProject(Project):
-    def __init__(self, url: str, alternative_url: Optional[str], md5: str, installed: str,
+    def __init__(self, url: Union[str, Sequence[str]], md5: str, installed: str,
                  configure_args: list[str]=[],
                  **kwargs):
-        Project.__init__(self, url, alternative_url, md5, installed, **kwargs)
+        Project.__init__(self, url, md5, installed, **kwargs)
         self.configure_args = configure_args
 
     def configure(self, toolchain: AnyToolchain) -> str:

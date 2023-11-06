@@ -11,6 +11,6 @@ TASKFILE_SOURCES = \
 	$(SRC)/Task/SaveFile.cpp \
 	$(SRC)/Task/LoadFile.cpp
 
-TASKFILE_DEPENDS = TASK XML JSON
+TASKFILE_DEPENDS = TASK XML JSON CUPFILE
 
 $(eval $(call link-library,libtaskfile,TASKFILE))

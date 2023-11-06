@@ -5,13 +5,16 @@
 #include "lib/fmt/ToBuffer.hxx"
 #include "lib/fmt/SystemError.hxx"
 #include "net/AllocatedSocketAddress.hxx"
-#include "util/NumberParser.hpp"
-#include "util/StringCompare.hxx"
+#include "util/IterableSplitString.hxx"
+#include "util/NumberParser.hxx"
+#include "util/SpanCast.hxx"
+#include "util/StringSplit.hxx"
 
-#include <string.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <time.h>
+
+using std::string_view_literals::operator""sv;
 
 void
 WPASupplicant::Connect(const char *path)
@@ -39,68 +42,51 @@ WPASupplicant::Close() noexcept
 }
 
 void
-WPASupplicant::SendCommand(const char *cmd)
+WPASupplicant::SendCommand(std::string_view cmd)
 {
   /* discard any previous responses that may be left in the socket's
      receive queue, maybe because the last command failed */
   ReadDiscard();
 
-  const size_t length = strlen(cmd);
-  const ssize_t nbytes = fd.Write(cmd, length);
+  const ssize_t nbytes = fd.Write(AsBytes(cmd));
   if (nbytes < 0)
     throw MakeErrno("Failed to send command to wpa_supplicant");
 
-  if (std::size_t(nbytes) != length)
+  if (std::size_t(nbytes) != cmd.size())
     throw std::runtime_error("Short send to wpa_supplicant");
 }
 
 void
-WPASupplicant::ExpectResponse(const char *expected)
+WPASupplicant::ExpectResponse(std::string_view expected)
 {
-  const size_t length = strlen(expected);
   char buffer[4096];
-  assert(length <= sizeof(buffer));
+  assert(expected.size() <= sizeof(buffer));
 
-  std::size_t nbytes = ReadTimeout(buffer, sizeof(buffer));
-  if (nbytes != length ||
-      memcmp(buffer, expected, length) != 0)
+  if (ReadStringTimeout(buffer) != expected)
     throw std::runtime_error{"Unexpected wpa_supplicant response"};
 }
 
 static bool
-ParseStatusLine(WifiStatus &status, char *src)
+ParseStatusLine(WifiStatus &status, std::string_view src) noexcept
 {
-  char *value = strchr(src, '=');
-  if (value == nullptr)
+  const auto [name, value] = Split(src, '=');
+  if (value.data() == nullptr)
     return false;
 
-  *value++ = 0;
-
-  if (StringIsEqual(src, "bssid"))
+  if (src == "bssid"sv)
     status.bssid = value;
-  else if (StringIsEqual(src, "ssid"))
+  else if (src == "ssid"sv)
     status.ssid = value;
   return true;
 }
 
 static bool
-ParseStatus(WifiStatus &status, char *src)
+ParseStatus(WifiStatus &status, std::string_view src) noexcept
 {
   status.Clear();
 
-  while (true) {
-    char *eol = strchr(src, '\n');
-    if (eol != nullptr)
-      *eol = 0;
-
-    if (!ParseStatusLine(status, src))
-      break;
-
-    if (eol == nullptr)
-      break;
-
-    src = eol + 1;
-  }
+  for (const auto line : IterableSplitString(src, '\n'))
+    ParseStatusLine(status, line);
 
   return true;
 }
@@ -111,13 +97,11 @@ WPASupplicant::Status(WifiStatus &status)
   SendCommand("STATUS");
 
   char buffer[4096];
-  const std::size_t nbytes = ReadTimeout(buffer, sizeof(buffer) - 1);
-  if (nbytes == 0)
+  const auto src = ReadStringTimeout(buffer);
+  if (src.empty())
     throw std::runtime_error{"wpa_supplicant closed the socket"};
 
-  buffer[nbytes] = 0;
-
-  return ParseStatus(status, buffer);
+  return ParseStatus(status, src);
 }
 
 /*
@@ -139,90 +123,61 @@ WPASupplicant::Status(WifiStatus &status)
  * - ssid ascii ssid. ssid could be empty if ssid broadcast is disabled.
  */
 static bool
-ParseScanResultsLine(WifiVisibleNetwork &dest, char *src)
+ParseScanResultsLine(WifiVisibleNetwork &dest, std::string_view line) noexcept
 {
-  char *tab = strchr(src, '\t'); // seek "frequency"
-  if (tab == nullptr)
+  const auto [bssid, rest1] = Split(line, '\t');
+  const auto [frequency, rest2] = Split(rest1, '\t');
+  const auto [signal_level, rest3] = Split(rest2, '\t');
+  const auto [flags, rest4] = Split(rest3, '\t');
+  const auto [ssid, _] = Split(rest4, '\t');
+
+  if (bssid.empty() || frequency.empty() || signal_level.empty() || ssid.empty())
     return false;
 
-  *tab = 0;
-  dest.bssid = src;
+  dest.bssid = bssid;
 
-  src = tab + 1;
-
-  src = strchr(src + 1, '\t'); // seek "signal level"
-  if (src == nullptr)
+  if (const auto value = ParseInteger<unsigned>(signal_level))
+    dest.signal_level = *value;
+  else
     return false;
 
-  ++src;
-
-  char *endptr;
-  dest.signal_level = ParseUnsigned(src, &endptr);
-  if (endptr == src || *endptr != '\t')
-    return false;
-
-  src = endptr + 1;
-
-  tab = strchr(src, '\t'); // seek "ssid"
-  if (tab == nullptr)
-    return false;
-
-  *tab = 0;
-
-  // src points to the flags.
-  if (strstr(src, "WPA") != NULL)
+  if (flags.find("WPA"sv) != flags.npos)
     dest.security = WPA_SECURITY;
-  else if (strstr(src, "WEP") != NULL)
+  else if (flags.find("WEP"sv) != flags.npos)
     dest.security = WEP_SECURITY;
   else
     dest.security = OPEN_SECURITY;
 
-  src = tab + 1;
-
-  tab = strchr(src, '\t');
-  if (tab != nullptr)
-    *tab = 0;
-
-  // src points to ssid or if empty we assume a hidden ssid.
-  if (StringIsEmpty(src)) {
-    dest.ssid.clear();
-    return true;
-  }
-
-  dest.ssid = src;
+  dest.ssid = ssid;
   return true;
 }
 
 static std::size_t
-ParseScanResults(WifiVisibleNetwork *dest, std::size_t max, char *src)
+ParseScanResults(WifiVisibleNetwork *dest, std::size_t max, std::string_view src)
 {
-  if (memcmp(src, "bssid", 5) != 0)
+  if (!src.starts_with("bssid"sv))
     throw std::runtime_error{"Malformed wpa_supplicant response"};
 
-  src = strchr(src, '\n');
-  if (src == nullptr)
+  src = Split(src, '\n').second;
+  if (src.data() == nullptr)
     throw std::runtime_error{"Malformed wpa_supplicant response"};
-
-  ++src;
 
   std::size_t n = 0;
-  do {
-    char *eol = strchr(src, '\n');
-    if (eol != nullptr)
-      *eol = 0;
+  for (const auto line : IterableSplitString(src, '\n')) {
+    if (line.empty())
+      break;
 
-    if (!ParseScanResultsLine(dest[n], src))
+    if (!ParseScanResultsLine(dest[n], line))
       break;
 
     // skip hidden ssid
-    if (!dest[n].ssid.empty())
+    if (!dest[n].ssid.empty()) {
       ++n;
 
-    if (eol == nullptr)
-      break;
-
-    src = eol + 1;
-  } while (n < max);
+      if (n >= max)
+        break;
+    }
+  }
 
   return n;
 }
@@ -236,13 +191,11 @@ WPASupplicant::ScanResults(WifiVisibleNetwork *dest, unsigned max)
   SendCommand("SCAN_RESULTS");
 
   char buffer[4096];
-  ssize_t nbytes = ReadTimeout(buffer, sizeof(buffer) - 1);
-  if (nbytes <= 5)
-    throw std::runtime_error{"Unexpected wpa_supplicant response"};
+  const auto src = ReadStringTimeout(buffer);
+  if (src.empty())
+    throw std::runtime_error{"wpa_supplicant closed the socket"};
 
-  buffer[nbytes] = 0;
-
-  return ParseScanResults(dest, max, buffer);
+  return ParseScanResults(dest, max, src);
 }
 
 unsigned
@@ -251,25 +204,19 @@ WPASupplicant::AddNetwork()
   SendCommand("ADD_NETWORK");
 
   char buffer[4096];
-  ssize_t nbytes = ReadTimeout(buffer, sizeof(buffer));
-  if (nbytes < 2 || buffer[nbytes - 1] != '\n')
-    throw std::runtime_error{"Unexpected wpa_supplicant response"};
+  const auto line = ExpectLineTimeout(buffer);
 
-  buffer[nbytes - 1] = 0;
+  if (auto id = ParseInteger<unsigned>(line))
+    return *id;
 
-  char *endptr;
-  unsigned id = ParseUnsigned(buffer, &endptr);
-  if (endptr == buffer || *endptr != 0)
-    throw std::runtime_error{"Malformed wpa_supplicant response"};
-
-  return id;
+  throw std::runtime_error{"Malformed wpa_supplicant response"};
 }
 
 void
 WPASupplicant::SetNetworkString(unsigned id,
                                 const char *name, const char *value)
 {
-  SendCommand(FmtBuffer<512>("SET_NETWORK {} {} \"{}\"", id, name, value));
+  SendCommand(FmtBuffer<512>("SET_NETWORK {} {} \"{}\"", id, name, value).c_str());
   ExpectOK();
 }
 
@@ -277,93 +224,80 @@ void
 WPASupplicant::SetNetworkID(unsigned id,
                                 const char *name, const char *value)
 {
-  SendCommand(FmtBuffer<512>("SET_NETWORK {} {} {}", id, name, value));
+  SendCommand(FmtBuffer<512>("SET_NETWORK {} {} {}", id, name, value).c_str());
   ExpectOK();
 }
 
 void
 WPASupplicant::SelectNetwork(unsigned id)
 {
-  SendCommand(FmtBuffer<64>("SELECT_NETWORK {}", id));
+  SendCommand(FmtBuffer<64>("SELECT_NETWORK {}", id).c_str());
   ExpectOK();
 }
 
 void
 WPASupplicant::EnableNetwork(unsigned id)
 {
-  SendCommand(FmtBuffer<64>("ENABLE_NETWORK {}", id));
+  SendCommand(FmtBuffer<64>("ENABLE_NETWORK {}", id).c_str());
   ExpectOK();
 }
 
 void
 WPASupplicant::DisableNetwork(unsigned id)
 {
-  SendCommand(FmtBuffer<64>("DISABLE_NETWORK {}", id));
+  SendCommand(FmtBuffer<64>("DISABLE_NETWORK {}", id).c_str());
   ExpectOK();
 }
 
 void
 WPASupplicant::RemoveNetwork(unsigned id)
 {
-  SendCommand(FmtBuffer<64>("REMOVE_NETWORK {}", id));
+  SendCommand(FmtBuffer<64>("REMOVE_NETWORK {}", id).c_str());
   ExpectOK();
 }
 
 static bool
-ParseListResultsLine(WifiConfiguredNetworkInfo &dest, char *src)
+ParseListResultsLine(WifiConfiguredNetworkInfo &dest, std::string_view line)
 {
-  char *endptr;
-  dest.id = ParseUnsigned(src, &endptr);
-  if (endptr == src || *endptr != '\t')
+  const auto [id, rest1] = Split(line, '\t');
+  const auto [ssid, rest2] = Split(rest1, '\t');
+  const auto [bssid, _] = Split(rest2, '\t');
+
+  if (ssid.data() == nullptr || bssid.data() == nullptr)
     return false;
 
-  src = endptr + 1;
-
-  char *tab = strchr(src, '\t');
-  if (tab == nullptr)
+  if (const auto value = ParseInteger<unsigned>(id))
+    dest.id = *value;
+  else
     return false;
 
-  *tab = 0;
-  dest.ssid = src;
-
-  src = tab + 1;
-
-  tab = strchr(src, '\t');
-  if (tab != nullptr)
-    *tab = 0;
-
-  dest.bssid = src;
+  dest.ssid = ssid;
+  dest.bssid = bssid;
   return true;
 }
 
 static std::size_t
-ParseListResults(WifiConfiguredNetworkInfo *dest, std::size_t max, char *src)
+ParseListResults(WifiConfiguredNetworkInfo *dest, std::size_t max, std::string_view src)
 {
-  if (memcmp(src, "network id", 10) != 0)
+  if (!src.starts_with("network id"sv))
     throw std::runtime_error{"Malformed wpa_supplicant response"};
 
-  src = strchr(src, '\n');
-  if (src == nullptr)
+  src = Split(src, '\n').second;
+  if (src.data() == nullptr)
     throw std::runtime_error{"Malformed wpa_supplicant response"};
-
-  ++src;
 
   std::size_t n = 0;
-  do {
-    char *eol = strchr(src, '\n');
-    if (eol != nullptr)
-      *eol = 0;
+  for (const auto line : IterableSplitString(src, '\n')) {
+    if (line.empty())
+      break;
 
-    if (!ParseListResultsLine(dest[n], src))
+    if (!ParseListResultsLine(dest[n], line))
       break;
 
     ++n;
-
-    if (eol == nullptr)
+    if (n >= max)
       break;
-
-    src = eol + 1;
-  } while (n < max);
+  }
 
   return n;
 }
@@ -377,13 +311,11 @@ WPASupplicant::ListNetworks(WifiConfiguredNetworkInfo *dest, std::size_t max)
   SendCommand("LIST_NETWORKS");
 
   char buffer[4096];
-  ssize_t nbytes = ReadTimeout(buffer, sizeof(buffer) - 1);
-  if (nbytes <= 5)
+  const auto src = ReadStringTimeout(buffer);
+  if (src.empty())
     throw std::runtime_error{"Malformed wpa_supplicant response"};
 
-  buffer[nbytes] = 0;
-
-  return ParseListResults(dest, max, buffer);
+  return ParseListResults(dest, max, src);
 }
 
 void
@@ -391,17 +323,17 @@ WPASupplicant::ReadDiscard() noexcept
 {
   std::byte buffer[4096];
 
-  while (fd.Read(buffer, sizeof(buffer)) > 0) {}
+  while (fd.ReadNoWait(buffer) > 0) {}
 }
 
 std::size_t
-WPASupplicant::ReadTimeout(void *buffer, size_t length, int timeout_ms)
+WPASupplicant::ReadTimeout(std::span<std::byte> dest, int timeout_ms)
 {
   /* TODO: this is a kludge, because SocketDescriptor::Read()
      hard-codes MSG_DONTWAIT; we would be better off moving all of
      this into an IOLoop/IOThread */
 
-  ssize_t nbytes = fd.Read(buffer, length);
+  ssize_t nbytes = fd.ReadNoWait(dest);
   if (nbytes < 0) {
     const int e = errno;
     if (e != EAGAIN)
@@ -414,7 +346,7 @@ WPASupplicant::ReadTimeout(void *buffer, size_t length, int timeout_ms)
     if (r == 0)
       throw std::runtime_error{"Timeout waiting for wpa_supplicant response"};
 
-    nbytes = fd.Read(buffer, length);
+    nbytes = fd.Read(dest);
   }
 
   if (nbytes < 0)
@@ -426,4 +358,22 @@ WPASupplicant::ReadTimeout(void *buffer, size_t length, int timeout_ms)
   }
 
   return nbytes;
+}
+
+std::string_view
+WPASupplicant::ReadStringTimeout(std::span<char> buffer, int timeout_ms)
+{
+  std::size_t nbytes = ReadTimeout(std::as_writable_bytes(buffer), timeout_ms);
+  return ToStringView(buffer.first(nbytes));
+}
+
+std::string_view
+WPASupplicant::ExpectLineTimeout(std::span<char> buffer, int timeout_ms)
+{
+  std::string_view result = ReadStringTimeout(buffer, timeout_ms);
+  if (!result.ends_with('\n'))
+    throw std::runtime_error{"Unexpected wpa_supplicant response"};
+
+  result.remove_suffix(1);
+  return result;
 }

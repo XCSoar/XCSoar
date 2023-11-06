@@ -5,6 +5,7 @@
 #include "FileReader.hxx"
 #include "FileOutputStream.hxx"
 #include "system/FileUtil.hpp"
+#include "util/SpanCast.hxx"
 
 #ifdef _WIN32
 #include "time/FileTime.hxx"
@@ -106,8 +107,8 @@ FileCache::Load(const TCHAR *name, Path original_path) noexcept
     unsigned magic;
     struct FileInfo old_info;
 
-    r->Read(&magic, sizeof(magic));
-    r->Read(&old_info, sizeof(old_info));
+    r->ReadT(magic);
+    r->ReadT(old_info);
 
     if (magic == FILE_CACHE_MAGIC &&
         old_info == original_info)
@@ -134,7 +135,7 @@ FileCache::Save(const TCHAR *name, Path original_path)
   File::Delete(path);
 
   auto os = std::make_unique<FileOutputStream>(path);
-  os->Write(std::as_bytes(std::span{&FILE_CACHE_MAGIC, 1}));
-  os->Write(std::as_bytes(std::span{&original_info, 1}));
+  os->Write(ReferenceAsBytes(FILE_CACHE_MAGIC));
+  os->Write(ReferenceAsBytes(original_info));
   return os;
 }

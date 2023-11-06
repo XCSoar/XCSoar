@@ -33,6 +33,6 @@ ChartProjection::Set(const PixelRect &rc, const GeoPoint &center,
   SetMapRect(rc);
   SetScaleFromRadius(radius);
   SetGeoLocation(center);
-  SetScreenOrigin((rc.left + rc.right) / 2, (rc.bottom + rc.top) / 2);
+  SetScreenOrigin(rc.GetCenter());
   UpdateScreenBounds();
 }

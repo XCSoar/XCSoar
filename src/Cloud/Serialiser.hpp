@@ -6,6 +6,7 @@
 #include "io/BufferedOutputStream.hxx"
 #include "io/BufferedReader.hxx"
 #include "util/ByteOrder.hxx"
+#include "util/SpanCast.hxx"
 
 #include <string>
 #include <chrono>
@@ -22,7 +23,7 @@ public:
 
   template<typename T>
   void WriteT(const T &value) {
-    Write(std::as_bytes(std::span{&value, 1}));
+    Write(ReferenceAsBytes(value));
   }
 
   void Write8(uint8_t value) {

@@ -5,9 +5,10 @@
 #include "NanoDeclare.hpp"
 #include "Protocol.hpp"
 #include "Device/Declaration.hpp"
-#include "util/ByteOrder.hxx"
 #include "Operation/Operation.hpp"
 #include "time/BrokenDate.hpp"
+#include "util/ByteOrder.hxx"
+#include "util/SpanCast.hxx"
 
 /**
  * fills dest with src and appends spaces to end
@@ -160,16 +161,16 @@ DeclareInner(Port &port, const Declaration &declaration,
   LX::SendCommand(port, LX::WRITE_FLIGHT_INFO); // start declaration
 
   LX::CRCWriter writer(port);
-  writer.Write(std::as_bytes(std::span{&pilot, 1}), env);
+  writer.Write(ReferenceAsBytes(pilot), env);
   env.SetProgressPosition(3);
 
-  writer.Write(std::as_bytes(std::span{&lx_driver_Declaration, 1}), env);
+  writer.Write(ReferenceAsBytes(lx_driver_Declaration), env);
   writer.Flush();
   LX::ExpectACK(port, env);
 
   env.SetProgressPosition(4);
   LX::SendCommand(port, LX::WRITE_CONTEST_CLASS);
-  writer.Write(std::as_bytes(std::span{&contest_class, 1}), env);
+  writer.Write(ReferenceAsBytes(contest_class), env);
   env.SetProgressPosition(5);
 
   writer.Flush();

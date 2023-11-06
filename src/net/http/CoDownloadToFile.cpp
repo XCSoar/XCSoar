@@ -45,7 +45,7 @@ CoDownloadToFile(CurlGlobal &curl, const char *url,
   file.Commit();
 
   if (sha256 != nullptr)
-    digest->Final(sha256);
+    digest->Final(std::span{*sha256});
 
   co_return response;
 }

@@ -6,6 +6,7 @@
 #include <array>
 #include <cstdint>
 #include <cstddef>
+#include <span>
 
 class MD5
 {
@@ -17,7 +18,8 @@ public:
   };
 
 private:
-  std::array<uint8_t, 64> buff512bits;
+  alignas(uint64_t)
+  std::array<std::byte, 64> buff512bits;
   State state;
   uint64_t message_length;
 
@@ -37,8 +39,8 @@ public:
    */
   void Initialise() noexcept;
 
-  void Append(uint8_t ch) noexcept;
-  void Append(const void *data, size_t length) noexcept;
+  void Append(std::byte ch) noexcept;
+  void Append(std::span<const std::byte> src) noexcept;
 
   void Finalize() noexcept;
 

@@ -9,7 +9,8 @@
 #include "Device/Port/Port.hpp"
 #include "time/TimeoutClock.hpp"
 #include "util/ByteOrder.hxx"
-#include "util/CRC.hpp"
+#include "util/CRC16CCITT.hpp"
+#include "util/SpanCast.hxx"
 
 #include <stdexcept>
 
@@ -28,7 +29,7 @@ IMI::Send(Port &port, OperationEnvironment &env,
   Sync sync;
   sync.syncChar1 = IMICOMM_SYNC_CHAR1;
   sync.syncChar2 = IMICOMM_SYNC_CHAR2;
-  port.FullWrite(std::as_bytes(std::span{&sync, 1}), env, std::chrono::seconds{1});
+  port.FullWrite(ReferenceAsBytes(sync), env, std::chrono::seconds{1});
 
   Header header;
   header.sn = _serialNumber;
@@ -41,7 +42,7 @@ IMI::Send(Port &port, OperationEnvironment &env,
   IMIWORD crc = 0xffff;
   crc = UpdateCRC16CCITT(&header, sizeof(header), crc);
 
-  port.FullWrite(std::as_bytes(std::span{&header, 1}), env, std::chrono::seconds{1});
+  port.FullWrite(ReferenceAsBytes(header), env, std::chrono::seconds{1});
 
   if (!payload.empty()) {
     port.FullWrite(payload, env, std::chrono::seconds{2});
@@ -49,7 +50,7 @@ IMI::Send(Port &port, OperationEnvironment &env,
   }
 
   crc = ToBE16(crc);
-  port.FullWrite(std::as_bytes(std::span{&crc, 1}), env,
+  port.FullWrite(ReferenceAsBytes(crc), env,
                  std::chrono::seconds{1});
 }
 

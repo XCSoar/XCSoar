@@ -136,7 +136,7 @@ private:
   unsigned CalculateWidth() const noexcept;
 
   [[gnu::pure]]
-  PixelRect GetRect(unsigned width, unsigned height) const noexcept;
+  PixelRect GetRect(PixelSize size) const noexcept;
 
   [[gnu::pure]]
   PixelRect GetRect() const noexcept;

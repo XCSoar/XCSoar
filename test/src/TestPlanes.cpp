@@ -12,6 +12,7 @@
 #include "util/PrintException.hxx"
 
 #include <stdlib.h>
+#include <tchar.h>
 
 static void
 TestReader()
@@ -73,7 +74,7 @@ TestWriter()
 
   PlaneGlue::WriteFile(plane, Path(_T("output/D-4449.xcp")));
 
-  FileLineReader reader(Path(_T("output/D-4449.xcp")));
+  FileLineReaderA reader(Path(_T("output/D-4449.xcp")));
 
   unsigned count = 0;
   bool found1 = false, found2 = false, found3 = false, found4 = false;
@@ -81,35 +82,35 @@ TestWriter()
   bool found9 = false, found10 = false, found11 = false, found12 = false;
   bool found13 = false, found14 = false;
 
-  TCHAR *line;
+  char *line;
   while ((line = reader.ReadLine()) != NULL) {
-    if (StringIsEqual(line, _T("Registration=\"D-4449\"")))
+    if (StringIsEqual(line, "Registration=\"D-4449\""))
       found1 = true;
-    if (StringIsEqual(line, _T("CompetitionID=\"TH\"")))
+    if (StringIsEqual(line, "CompetitionID=\"TH\""))
       found2 = true;
-    if (StringIsEqual(line, _T("Type=\"Hornet\"")))
+    if (StringIsEqual(line, "Type=\"Hornet\""))
       found3 = true;
-    if (StringIsEqual(line, _T("Handicap=\"100\"")))
+    if (StringIsEqual(line, "Handicap=\"100\""))
       found4 = true;
-    if (StringIsEqual(line, _T("PolarName=\"Hornet\"")))
+    if (StringIsEqual(line, "PolarName=\"Hornet\""))
       found5 = true;
-    if (StringIsEqual(line, _T("PolarInformation=\"80.000,-0.606,120.000,-0.990,160.000,-1.918\"")))
+    if (StringIsEqual(line, "PolarInformation=\"80.000,-0.606,120.000,-0.990,160.000,-1.918\""))
       found6 = true;
-    if (StringIsEqual(line, _T("PolarReferenceMass=\"318.000000\"")))
+    if (StringIsEqual(line, "PolarReferenceMass=\"318.000000\""))
       found7 = true;
-    if (StringIsEqual(line, _T("PlaneEmptyMass=\"212.000000\"")))
+    if (StringIsEqual(line, "PlaneEmptyMass=\"212.000000\""))
       found8 = true;
-    if (StringIsEqual(line, _T("MaxBallast=\"100.000000\"")))
+    if (StringIsEqual(line, "MaxBallast=\"100.000000\""))
       found9 = true;
-    if (StringIsEqual(line, _T("DumpTime=\"90.000000\"")))
+    if (StringIsEqual(line, "DumpTime=\"90.000000\""))
       found10 = true;
-    if (StringIsEqual(line, _T("MaxSpeed=\"41.666000\"")))
+    if (StringIsEqual(line, "MaxSpeed=\"41.666000\""))
       found11 = true;
-    if (StringIsEqual(line, _T("WingArea=\"9.800000\"")))
+    if (StringIsEqual(line, "WingArea=\"9.800000\""))
       found12 = true;
-    if (StringIsEqual(line, _T("WeGlideAircraftType=\"160\"")))
+    if (StringIsEqual(line, "WeGlideAircraftType=\"160\""))
       found13 = true;
-    if (StringIsEqual(line, _T("PolarDryMass=\"302.000000\"")))
+    if (StringIsEqual(line, "PolarDryMass=\"302.000000\""))
       found14 = true;
 
     count++;

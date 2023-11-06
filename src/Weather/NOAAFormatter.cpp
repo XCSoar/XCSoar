@@ -78,12 +78,9 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
       buffer.Format(_T("%s: "), _("Wind"));
       buffer.append({value, value_length});
     } else {
-      TCHAR wind_speed_buffer[16];
-      FormatUserWindSpeed(parsed.wind.norm, wind_speed_buffer,
-                                 ARRAY_SIZE(wind_speed_buffer));
-
       buffer.Format(_T("%s: %.0f" DEG " %s"), _("Wind"),
-                    (double)parsed.wind.bearing.Degrees(), wind_speed_buffer);
+                    (double)parsed.wind.bearing.Degrees(),
+                    FormatUserWindSpeed(parsed.wind.norm).c_str());
     }
     output += buffer;
     output += '\n';
@@ -98,8 +95,7 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
       buffer.append({value, value_length});
     } else {
       TCHAR temperature_buffer[16];
-      FormatUserTemperature(parsed.temperature, temperature_buffer,
-                                   ARRAY_SIZE(temperature_buffer));
+      FormatUserTemperature(parsed.temperature, temperature_buffer);
 
       buffer.Format(_T("%s: %s"), _("Temperature"), temperature_buffer);
     }
@@ -116,8 +112,7 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
       buffer.append({value, value_length});
     } else {
       TCHAR temperature_buffer[16];
-      FormatUserTemperature(parsed.dew_point, temperature_buffer,
-                                   ARRAY_SIZE(temperature_buffer));
+      FormatUserTemperature(parsed.dew_point, temperature_buffer);
 
       buffer.Format(_T("%s: %s"), _("Dew Point"), temperature_buffer);
     }
@@ -134,7 +129,7 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
       buffer.append({value, value_length});
     } else {
       TCHAR qnh_buffer[16];
-      FormatUserPressure(parsed.qnh, qnh_buffer, ARRAY_SIZE(qnh_buffer));
+      FormatUserPressure(parsed.qnh, qnh_buffer);
 
       buffer.Format(_T("%s: %s"), _("Pressure"), qnh_buffer);
     }

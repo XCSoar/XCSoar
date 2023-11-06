@@ -28,7 +28,7 @@
 
 #pragma once
 
-#include <tchar.h>
+#include <string_view>
 
 class XMLNode;
 class Path;
@@ -38,7 +38,8 @@ namespace XML {
 /**
  * Throws on error.
  */
-XMLNode ParseString(const TCHAR *xml_string);
+XMLNode
+ParseString(std::string_view xml_string);
 
 /**
  * Throws on error.

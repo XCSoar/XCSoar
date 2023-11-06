@@ -7,6 +7,7 @@ IO_SOURCES = \
 	$(SRC)/lib/zlib/GunzipReader.cxx \
 	$(IO_SRC_DIR)/CopyFile.cxx \
 	$(IO_SRC_DIR)/Open.cxx \
+	$(IO_SRC_DIR)/Reader.cxx \
 	$(IO_SRC_DIR)/MemoryReader.cxx \
 	$(IO_SRC_DIR)/BufferedReader.cxx \
 	$(IO_SRC_DIR)/BufferedLineReader.cpp \
@@ -20,11 +21,9 @@ IO_SOURCES = \
 	$(IO_SRC_DIR)/ZipArchive.cpp \
 	$(IO_SRC_DIR)/ZipReader.cpp \
 	$(IO_SRC_DIR)/StringConverter.cpp \
-	$(IO_SRC_DIR)/ConvertLineReader.cpp \
 	$(IO_SRC_DIR)/FileLineReader.cpp \
 	$(IO_SRC_DIR)/KeyValueFileReader.cpp \
 	$(IO_SRC_DIR)/KeyValueFileWriter.cpp \
-	$(IO_SRC_DIR)/ZipLineReader.cpp \
 	$(IO_SRC_DIR)/CSVLine.cpp
 
 IO_DEPENDS = OS ZLIB FMT UTIL

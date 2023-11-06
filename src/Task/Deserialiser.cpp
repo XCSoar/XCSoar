@@ -14,34 +14,37 @@
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "XML/DataNode.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "util/ConvertString.hpp"
 
 #include <memory>
 
 static void
 Deserialise(GeoPoint &data, const ConstDataNode &node)
 {
-  node.GetAttribute(_T("longitude"), data.longitude);
-  node.GetAttribute(_T("latitude"), data.latitude);
+  node.GetAttribute("longitude", data.longitude);
+  node.GetAttribute("latitude", data.latitude);
 }
 
 static WaypointPtr
 DeserialiseWaypoint(const ConstDataNode &node, const Waypoints *waypoints)
 {
-  auto loc_node = node.GetChildNamed(_T("Location"));
+  auto loc_node = node.GetChildNamed("Location");
   if (!loc_node)
     return nullptr;
 
   GeoPoint loc;
   Deserialise(loc, *loc_node);
 
-  const TCHAR *name = node.GetAttribute(_T("name"));
-  if (name == nullptr)
+  const char *_name = node.GetAttribute("name");
+  if (_name == nullptr)
     // Turnpoints need names
     return nullptr;
 
+  const UTF8ToWideConverter name{_name};
+
   if (waypoints != nullptr) {
     // Try to find waypoint by name
-    auto from_database = waypoints->LookupName(name);
+    auto from_database = waypoints->LookupName(name.c_str());
 
     // If waypoint by name found and closer than 10m to the original
     if (from_database != nullptr &&
@@ -63,13 +66,13 @@ DeserialiseWaypoint(const ConstDataNode &node, const Waypoints *waypoints)
   Waypoint *wp = new Waypoint(loc);
   wp->name = name;
 
-  node.GetAttribute(_T("id"), wp->id);
+  node.GetAttribute("id", wp->id);
 
-  const TCHAR *comment = node.GetAttribute(_T("comment"));
+  const char *comment = node.GetAttribute("comment");
   if (comment != nullptr)
-    wp->comment.assign(comment);
+    wp->comment = UTF8ToWideConverter{comment};
 
-  if (node.GetAttribute(_T("altitude"), wp->elevation))
+  if (node.GetAttribute("altitude", wp->elevation))
     wp->has_elevation = true;
 
   return WaypointPtr(wp);
@@ -78,75 +81,75 @@ DeserialiseWaypoint(const ConstDataNode &node, const Waypoints *waypoints)
 static std::unique_ptr<ObservationZonePoint>
 DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
 {
-  const TCHAR *type = node.GetAttribute(_T("type"));
+  const char *type = node.GetAttribute("type");
   if (type == nullptr)
     return nullptr;
 
-  if (StringIsEqual(type, _T("Line"))) {
+  if (StringIsEqual(type, "Line")) {
     auto ls = std::make_unique<LineSectorZone>(wp.location);
 
     double length;
-    if (node.GetAttribute(_T("length"), length) && length > 0)
+    if (node.GetAttribute("length", length) && length > 0)
       ls->SetLength(length);
 
     return ls;
-  } else if (StringIsEqual(type, _T("Cylinder"))) {
+  } else if (StringIsEqual(type, "Cylinder")) {
     auto ls = std::make_unique<CylinderZone>(wp.location);
 
     double radius;
-    if (node.GetAttribute(_T("radius"), radius) && radius > 0)
+    if (node.GetAttribute("radius", radius) && radius > 0)
       ls->SetRadius(radius);
 
     return ls;
-  } else if (StringIsEqual(type, _T("MatCylinder"))) {
+  } else if (StringIsEqual(type, "MatCylinder")) {
     return CylinderZone::CreateMatCylinderZone(wp.location);
-  } else if (StringIsEqual(type, _T("Sector"))) {
+  } else if (StringIsEqual(type, "Sector")) {
 
     double radius, inner_radius;
     Angle start, end;
     std::unique_ptr<SectorZone> ls;
 
-    if (node.GetAttribute(_T("inner_radius"), inner_radius)) {
+    if (node.GetAttribute("inner_radius", inner_radius)) {
       auto als = std::make_unique<AnnularSectorZone>(wp.location);
       als->SetInnerRadius(inner_radius);
       ls = std::move(als);
     } else
       ls = std::make_unique<SectorZone>(wp.location);
 
-    if (node.GetAttribute(_T("radius"), radius) && radius > 0)
+    if (node.GetAttribute("radius", radius) && radius > 0)
       ls->SetRadius(radius);
-    if (node.GetAttribute(_T("start_radial"), start))
+    if (node.GetAttribute("start_radial", start))
       ls->SetStartRadial(start);
-    if (node.GetAttribute(_T("end_radial"), end))
+    if (node.GetAttribute("end_radial", end))
       ls->SetEndRadial(end);
 
     return ls;
-  } else if (StringIsEqual(type, _T("FAISector")))
+  } else if (StringIsEqual(type, "FAISector"))
     return SymmetricSectorZone::CreateFAISectorZone(wp.location, is_turnpoint);
-  else if (StringIsEqual(type, _T("SymmetricQuadrant"))) {
+  else if (StringIsEqual(type, "SymmetricQuadrant")) {
     double radius = 10000;
-    node.GetAttribute(_T("radius"), radius);
+    node.GetAttribute("radius", radius);
 
     return std::make_unique<SymmetricSectorZone>(wp.location, radius);
-  } else if (StringIsEqual(type, _T("Keyhole")))
+  } else if (StringIsEqual(type, "Keyhole"))
     return KeyholeZone::CreateDAeCKeyholeZone(wp.location);
-  else if (StringIsEqual(type, _T("CustomKeyhole"))) {
+  else if (StringIsEqual(type, "CustomKeyhole")) {
     double radius = 10000, inner_radius = 500;
     Angle angle = Angle::QuarterCircle();
 
-    node.GetAttribute(_T("radius"), radius);
-    node.GetAttribute(_T("inner_radius"), inner_radius);
-    node.GetAttribute(_T("angle"), angle);
+    node.GetAttribute("radius", radius);
+    node.GetAttribute("inner_radius", inner_radius);
+    node.GetAttribute("angle", angle);
 
     auto keyhole =
       KeyholeZone::CreateCustomKeyholeZone(wp.location, radius, angle);
     keyhole->SetInnerRadius(inner_radius);
     return keyhole;
-  } else if (StringIsEqual(type, _T("BGAStartSector")))
+  } else if (StringIsEqual(type, "BGAStartSector"))
     return KeyholeZone::CreateBGAStartSectorZone(wp.location);
-  else if (StringIsEqual(type, _T("BGAFixedCourse")))
+  else if (StringIsEqual(type, "BGAFixedCourse"))
     return KeyholeZone::CreateBGAFixedCourseZone(wp.location);
-  else if (StringIsEqual(type, _T("BGAEnhancedOption")))
+  else if (StringIsEqual(type, "BGAEnhancedOption"))
     return KeyholeZone::CreateBGAEnhancedOptionZone(wp.location);
 
   return nullptr;
@@ -156,11 +159,11 @@ static void
 DeserialiseTaskpoint(AbstractTaskFactory &fact, const ConstDataNode &node,
                      const Waypoints *waypoints)
 {
-  const TCHAR *type = node.GetAttribute(_T("type"));
+  const char *type = node.GetAttribute("type");
   if (type == nullptr)
     return;
 
-  auto wp_node = node.GetChildNamed(_T("Waypoint"));
+  auto wp_node = node.GetChildNamed("Waypoint");
   if (!wp_node)
     return;
 
@@ -171,19 +174,19 @@ DeserialiseTaskpoint(AbstractTaskFactory &fact, const ConstDataNode &node,
   std::unique_ptr<ObservationZonePoint> oz;
   std::unique_ptr<OrderedTaskPoint> pt;
 
-  if (auto oz_node = node.GetChildNamed(_T("ObservationZone"))) {
-    bool is_turnpoint = StringIsEqual(type, _T("Turn")) ||
-      StringIsEqual(type, _T("Area"));
+  if (auto oz_node = node.GetChildNamed("ObservationZone")) {
+    bool is_turnpoint = StringIsEqual(type, "Turn") ||
+      StringIsEqual(type, "Area");
 
     oz = DeserialiseOZ(*wp, *oz_node, is_turnpoint);
   }
 
-  if (StringIsEqual(type, _T("Start"))) {
+  if (StringIsEqual(type, "Start")) {
     pt = oz != nullptr
       ? fact.CreateStart(std::move(oz), std::move(wp))
       : fact.CreateStart(std::move(wp));
 
-  } else if (StringIsEqual(type, _T("OptionalStart"))) {
+  } else if (StringIsEqual(type, "OptionalStart")) {
     pt = oz != nullptr
       ? fact.CreateStart(std::move(oz), std::move(wp))
       : fact.CreateStart(std::move(wp));
@@ -192,17 +195,17 @@ DeserialiseTaskpoint(AbstractTaskFactory &fact, const ConstDataNode &node,
     // don't let generic code below add it
     pt.reset();
 
-  } else if (StringIsEqual(type, _T("Turn"))) {
+  } else if (StringIsEqual(type, "Turn")) {
     pt = oz != nullptr
       ? fact.CreateASTPoint(std::move(oz), std::move(wp))
       : fact.CreateIntermediate(std::move(wp));
 
-  } else if (StringIsEqual(type, _T("Area"))) {
+  } else if (StringIsEqual(type, "Area")) {
     pt = oz != nullptr
       ? fact.CreateAATPoint(std::move(oz), std::move(wp))
       : fact.CreateIntermediate(std::move(wp));
 
-  } else if (StringIsEqual(type, _T("Finish"))) {
+  } else if (StringIsEqual(type, "Finish")) {
     pt = oz != nullptr
       ? fact.CreateFinish(std::move(oz), std::move(wp))
       : fact.CreateFinish(std::move(wp));
@@ -214,7 +217,7 @@ DeserialiseTaskpoint(AbstractTaskFactory &fact, const ConstDataNode &node,
   if (pt->GetType() == TaskPointType::AST) {
     ASTPoint &ast = (ASTPoint &)*pt;
     bool score_exit = false;
-    if (node.GetAttribute(_T("score_exit"), score_exit))
+    if (node.GetAttribute("score_exit", score_exit))
       ast.SetScoreExit(score_exit);
   }
 
@@ -222,14 +225,14 @@ DeserialiseTaskpoint(AbstractTaskFactory &fact, const ConstDataNode &node,
 }
 
 static bool
-GetHeightRef(const ConstDataNode &node, const TCHAR *nodename,
-             AltitudeReference &value)
+GetHeightRef(const ConstDataNode &node, const char *nodename,
+             AltitudeReference &value) noexcept
 {
-  const TCHAR *type = node.GetAttribute(nodename);
+  const char *type = node.GetAttribute(nodename);
   if (type == nullptr) {
     return false;
   }
-  if (StringIsEqual(type, _T("MSL"))) {
+  if (StringIsEqual(type, "MSL")) {
     value = AltitudeReference::MSL;
   } else {
     value = AltitudeReference::AGL;
@@ -240,28 +243,28 @@ GetHeightRef(const ConstDataNode &node, const TCHAR *nodename,
 static void
 Deserialise(OrderedTaskSettings &data, const ConstDataNode &node)
 {
-  node.GetAttribute(_T("aat_min_time"), data.aat_min_time);
-  node.GetAttribute(_T("start_requires_arm"),
+  node.GetAttribute("aat_min_time", data.aat_min_time);
+  node.GetAttribute("start_requires_arm",
                     data.start_constraints.require_arm);
-  node.GetAttribute(_T("start_score_exit"),
+  node.GetAttribute("start_score_exit",
                     data.start_constraints.score_exit);
-  node.GetAttribute(_T("start_max_speed"), data.start_constraints.max_speed);
-  node.GetAttribute(_T("start_max_height"), data.start_constraints.max_height);
-  GetHeightRef(node, _T("start_max_height_ref"),
+  node.GetAttribute("start_max_speed", data.start_constraints.max_speed);
+  node.GetAttribute("start_max_height", data.start_constraints.max_height);
+  GetHeightRef(node, "start_max_height_ref",
                data.start_constraints.max_height_ref);
   data.start_constraints.open_time_span =
-    node.GetAttributeRoughTimeSpan(_T("start_open_time"),
-                                   _T("start_close_time"));
-  node.GetAttribute(_T("finish_min_height"),
+    node.GetAttributeRoughTimeSpan("start_open_time",
+                                   "start_close_time");
+  node.GetAttribute("finish_min_height",
                     data.finish_constraints.min_height);
 
-  GetHeightRef(node, _T("finish_min_height_ref"),
+  GetHeightRef(node, "finish_min_height_ref",
                data.finish_constraints.min_height_ref);
-  node.GetAttribute(_T("fai_finish"), data.finish_constraints.fai_finish);
+  node.GetAttribute("fai_finish", data.finish_constraints.fai_finish);
   data.start_constraints.fai_finish = data.finish_constraints.fai_finish;
-  node.GetAttribute(_T("pev_start_wait_time"),
+  node.GetAttribute("pev_start_wait_time",
                     data.start_constraints.pev_start_wait_time);
-  node.GetAttribute(_T("pev_start_window"),
+  node.GetAttribute("pev_start_window",
                     data.start_constraints.pev_start_window);
 
 }
@@ -269,27 +272,27 @@ Deserialise(OrderedTaskSettings &data, const ConstDataNode &node)
 static TaskFactoryType
 GetTaskFactoryType(const ConstDataNode &node)
 {
-  const TCHAR *type = node.GetAttribute(_T("type"));
+  const char *type = node.GetAttribute("type");
   if (type == nullptr)
     return TaskFactoryType::FAI_GENERAL;
 
-  if (StringIsEqual(type, _T("FAIGeneral")))
+  if (StringIsEqual(type, "FAIGeneral"))
     return TaskFactoryType::FAI_GENERAL;
-  else if (StringIsEqual(type, _T("FAITriangle")))
+  else if (StringIsEqual(type, "FAITriangle"))
     return TaskFactoryType::FAI_TRIANGLE;
-  else if (StringIsEqual(type, _T("FAIOR")))
+  else if (StringIsEqual(type, "FAIOR"))
     return TaskFactoryType::FAI_OR;
-  else if (StringIsEqual(type, _T("FAIGoal")))
+  else if (StringIsEqual(type, "FAIGoal"))
     return TaskFactoryType::FAI_GOAL;
-  else if (StringIsEqual(type, _T("RT")))
+  else if (StringIsEqual(type, "RT"))
     return TaskFactoryType::RACING;
-  else if (StringIsEqual(type, _T("AAT")))
+  else if (StringIsEqual(type, "AAT"))
     return TaskFactoryType::AAT;
-  else if (StringIsEqual(type, _T("MAT")))
+  else if (StringIsEqual(type, "MAT"))
     return TaskFactoryType::MAT;
-  else if (StringIsEqual(type, _T("Mixed")))
+  else if (StringIsEqual(type, "Mixed"))
     return TaskFactoryType::MIXED;
-  else if (StringIsEqual(type, _T("Touring")))
+  else if (StringIsEqual(type, "Touring"))
     return TaskFactoryType::TOURING;
 
   return TaskFactoryType::FAI_GENERAL;
@@ -309,7 +312,7 @@ LoadTask(OrderedTask &task, const ConstDataNode &node,
 
   auto &fact = task.GetFactory();
 
-  const auto children = node.ListChildrenNamed(_T("Point"));
+  const auto children = node.ListChildrenNamed("Point");
   for (const auto &i : children) {
     DeserialiseTaskpoint(fact, *i, waypoints);
   }

@@ -29,60 +29,44 @@
 #include "Node.hpp"
 #include "util/StringAPI.hxx"
 
-#include <cassert>
-
 XMLNode
-XMLNode::CreateRoot(const TCHAR *name)
+XMLNode::CreateRoot(const char *name) noexcept
 {
   return XMLNode(name, false);
 }
 
-XMLNode::XMLNode(tstring_view name,
-                 bool is_declaration) noexcept
-  :d(new Data(name, is_declaration))
+XMLNode::XMLNode(std::string_view _name,
+                 bool _is_declaration) noexcept
+  :name(_name),
+   is_declaration(_is_declaration)
 {
-  assert(d);
 }
 
 XMLNode &
-XMLNode::AddChild(const tstring_view name,
-                  bool is_declaration) noexcept
+XMLNode::AddChild(const std::string_view _name,
+                  bool _is_declaration) noexcept
 {
-  d->children.push_back(XMLNode(name, is_declaration));
-  return d->children.back();
-}
-
-void
-XMLNode::AddText(tstring_view value) noexcept
-{
-  d->text.append(value);
+  children.push_back(XMLNode(_name, _is_declaration));
+  return children.back();
 }
 
 const XMLNode *
-XMLNode::GetChildNode(const TCHAR *name) const
+XMLNode::GetChildNode(const char *name) const noexcept
 {
-  if (!d)
-    return nullptr;
-
-  for (auto i = d->begin(), end = d->end(); i != end; ++i) {
-    const XMLNode &node = *i;
-    if (StringIsEqualIgnoreCase(node.d->name.c_str(), name))
-      return &node;
+  for (const auto &i : children) {
+    if (StringIsEqualIgnoreCase(i.GetName(), name))
+      return &i;
   }
 
   return nullptr;
 }
 
-const TCHAR *
-XMLNode::GetAttribute(const TCHAR *name) const
+const char *
+XMLNode::GetAttribute(const char *name) const noexcept
 {
-  if (!d)
-    return nullptr;
-
-  for (auto i = d->attributes.begin(), end = d->attributes.end();
-       i != end; ++i)
-    if (StringIsEqualIgnoreCase(i->name.c_str(), name))
-      return i->value.c_str();
+  for (const auto &i : attributes)
+    if (StringIsEqualIgnoreCase(i.name.c_str(), name))
+      return i.value.c_str();
 
   return nullptr;
 }

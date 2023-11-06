@@ -5,6 +5,7 @@
 #include "jasper/jas_seq.h"
 #include "io/BufferedOutputStream.hxx"
 #include "io/BufferedReader.hxx"
+#include "util/SpanCast.hxx"
 
 #include <algorithm>
 
@@ -17,7 +18,7 @@ RasterTile::SaveCache(BufferedOutputStream &os) const
   data.start = start;
   data.end = end;
 
-  os.Write(std::as_bytes(std::span{&data, 1}));
+  os.Write(ReferenceAsBytes(data));
 }
 
 void

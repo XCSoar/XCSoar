@@ -49,11 +49,14 @@ try {
   const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  FileLineReader reader(path);
-
   InputConfig config;
   config.SetDefaults();
-  ParseInputFile(config, reader);
+
+  {
+    FileReader file_reader{path};
+    BufferedReader reader{file_reader};
+    ParseInputFile(config, reader);
+  }
 
   for (unsigned mode = 0; mode < config.modes.size(); ++mode) {
     _tprintf(_T("Mode '%s'\n"), config.modes[mode].c_str());

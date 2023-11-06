@@ -3,157 +3,22 @@
 
 #include "Waypoint/WaypointReader.hpp"
 #include "Waypoint/WaypointReaderBase.hpp"
+#include "Waypoint/CupWriter.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Units/System.hpp"
 #include "TestUtil.hpp"
 #include "system/Path.hpp"
+#include "io/BufferedOutputStream.hxx"
+#include "io/StringOutputStream.hxx"
 #include "util/tstring.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StringStrip.hxx"
-#include "util/ExtractParameters.hpp"
 #include "Operation/Operation.hpp"
 
 #include <vector>
 
-static void
-TestExtractParameters()
-{
-  TCHAR buffer[1024];
-  const TCHAR *params[64];
-  unsigned n;
-
-  // test basic functionality
-
-  n = ExtractParameters(_T(""), buffer, params, 64);
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("")));
-
-  n = ExtractParameters(_T("foo"), buffer, params, 64);
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("foo")));
-
-  n = ExtractParameters(_T("foo,bar"), buffer, params, 64);
-  ok1(n == 2);
-  ok1(StringIsEqual(params[0], _T("foo")));
-  ok1(StringIsEqual(params[1], _T("bar")));
-
-  n = ExtractParameters(_T("foo,bar"), buffer, params, 1);
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("foo")));
-
-  n = ExtractParameters(_T("foo,bar,"), buffer, params, 64);
-  ok1(n == 3);
-  ok1(StringIsEqual(params[0], _T("foo")));
-  ok1(StringIsEqual(params[1], _T("bar")));
-  ok1(StringIsEqual(params[2], _T("")));
-
-  n = ExtractParameters(_T("foo,bar,,"), buffer, params, 64);
-  ok1(n == 4);
-  ok1(StringIsEqual(params[0], _T("foo")));
-  ok1(StringIsEqual(params[1], _T("bar")));
-  ok1(StringIsEqual(params[2], _T("")));
-  ok1(StringIsEqual(params[3], _T("")));
-
-
-  // with qoutes but no quote handling
-
-  n = ExtractParameters(_T("\"foo,comma\",\"bar\""), buffer, params, 64);
-  ok1(n == 3);
-  ok1(StringIsEqual(params[0], _T("\"foo")));
-  ok1(StringIsEqual(params[1], _T("comma\"")));
-  ok1(StringIsEqual(params[2], _T("\"bar\"")));
-
-
-  // quote handling
-
-  n = ExtractParameters(_T("\"\""),
-                                      buffer, params, 64, false, _T('"'));
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("")));
-
-  n = ExtractParameters(_T("\"\"\""),
-                                      buffer, params, 64, false, _T('"'));
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("\"")));
-
-  n = ExtractParameters(_T("\"\"\"\""),
-                                      buffer, params, 64, false, _T('"'));
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("\"")));
-
-  n = ExtractParameters(_T("\"foo,comma\",\"bar\""),
-                                      buffer, params, 64, false, _T('"'));
-  ok1(n == 2);
-  ok1(StringIsEqual(params[0], _T("foo,comma")));
-  ok1(StringIsEqual(params[1], _T("bar")));
-
-
-  // no quotes, whitespace removal
-
-  n = ExtractParameters(_T("foo bar"), buffer, params, 64, true);
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("foo bar")));
-
-  n = ExtractParameters(_T("foo , bar, baz"), buffer, params, 64, true);
-  ok1(n == 3);
-  ok1(StringIsEqual(params[0], _T("foo")));
-  ok1(StringIsEqual(params[1], _T("bar")));
-  ok1(StringIsEqual(params[2], _T("baz")));
-
-  n = ExtractParameters(_T(" foo  ,  bar  , baz "), buffer, params, 64, true);
-  ok1(n == 3);
-  ok1(StringIsEqual(params[0], _T("foo")));
-  ok1(StringIsEqual(params[1], _T("bar")));
-  ok1(StringIsEqual(params[2], _T("baz")));
-
-  n = ExtractParameters(_T(" foo\"  , \" bar \"  , \"baz "),
-                        buffer, params, 64, true);
-  ok1(n == 3);
-  ok1(StringIsEqual(params[0], _T("foo\"")));
-  ok1(StringIsEqual(params[1], _T("\" bar \"")));
-  ok1(StringIsEqual(params[2], _T("\"baz")));
-
-  // quote handling, whitespace removal
-
-  n = ExtractParameters(_T("\"foo \" , \" bar\", \" baz\""),
-                        buffer, params, 64, true, _T('"'));
-  ok1(n == 3);
-  ok1(StringIsEqual(params[0], _T("foo ")));
-  ok1(StringIsEqual(params[1], _T(" bar")));
-  ok1(StringIsEqual(params[2], _T(" baz")));
-
-  n = ExtractParameters(_T(" \" foo  \"  ,  \"  bar  \"  , \" baz \" "),
-                        buffer, params, 64, true, _T('"'));
-  ok1(n == 3);
-  ok1(StringIsEqual(params[0], _T(" foo  ")));
-  ok1(StringIsEqual(params[1], _T("  bar  ")));
-  ok1(StringIsEqual(params[2], _T(" baz ")));
-
-  n = ExtractParameters(_T("\"foo\",\"\",\"bar\""), buffer, params, 64,
-                        true, _T('"'));
-  ok1(n == 3);
-  ok1(StringIsEqual(params[0], _T("foo")));
-  ok1(StringIsEqual(params[1], _T("")));
-  ok1(StringIsEqual(params[2], _T("bar")));
-
-  // missing end quote
-  n = ExtractParameters(_T("\"foo, bar"), buffer, params, 64,
-                        true, _T('"'));
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("foo, bar")));
-
-  // embedded quotes and commas
-  n = ExtractParameters(_T("\"foo, \"bar\"\""), buffer, params, 64,
-                        true, _T('"'));
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("foo, \"bar\"")));
-
-  n = ExtractParameters(_T("\"foo, \"\"bar\"\"\""), buffer, params, 64,
-                        true, _T('"'));
-  ok1(n == 1);
-  ok1(StringIsEqual(params[0], _T("foo, \"bar\"")));
-}
+using std::string_view_literals::operator""sv;
 
 typedef std::vector<Waypoint> wp_vector;
 
@@ -218,7 +83,7 @@ TestWinPilotWaypoint(const Waypoint org_wp, const Waypoint *wp)
 }
 
 static void
-TestWinPilot(wp_vector org_wp)
+TestWinPilot(const wp_vector &org_wp)
 {
   Waypoints way_points;
   if (!TestWaypointFile(Path(_T("test/data/waypoints.dat")), way_points,
@@ -227,10 +92,9 @@ TestWinPilot(wp_vector org_wp)
     return;
   }
 
-  wp_vector::iterator it;
-  for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    const auto wp = GetWaypoint(*it, way_points);
-    TestWinPilotWaypoint(*it, wp.get());
+  for (const auto &i : org_wp) {
+    const auto wp = GetWaypoint(i, way_points);
+    TestWinPilotWaypoint(i, wp.get());
   }
 }
 
@@ -258,7 +122,7 @@ TestSeeYouWaypoint(const Waypoint org_wp, const Waypoint *wp)
 }
 
 static void
-TestSeeYou(wp_vector org_wp)
+TestSeeYou(const wp_vector &org_wp)
 {
   // Test a SeeYou waypoint file with no runway width field:
   Waypoints way_points;
@@ -266,10 +130,9 @@ TestSeeYou(wp_vector org_wp)
                         org_wp.size())) {
     skip(9 * org_wp.size(), 0, "opening waypoints.cup failed");
   } else {
-    wp_vector::iterator it;
-    for (it = org_wp.begin(); it < org_wp.end(); it++) {
-      const auto wp = GetWaypoint(*it, way_points);
-      TestSeeYouWaypoint(*it, wp.get());
+    for (const auto &i : org_wp) {
+      const auto wp = GetWaypoint(i, way_points);
+      TestSeeYouWaypoint(i, wp.get());
     }
   }
 
@@ -281,10 +144,9 @@ TestSeeYou(wp_vector org_wp)
     return;
   }
 
-  wp_vector::iterator it2;
-  for (it2 = org_wp.begin(); it2 < org_wp.end(); it2++) {
-    const auto wp2 = GetWaypoint(*it2, way_points2);
-    TestSeeYouWaypoint(*it2, wp2.get());
+  for (const auto &i : org_wp) {
+    const auto wp2 = GetWaypoint(i, way_points2);
+    TestSeeYouWaypoint(i, wp2.get());
   }
   // Test a SeeYou waypoint file with useradata and pics fields:
   Waypoints way_points3;
@@ -294,10 +156,9 @@ TestSeeYou(wp_vector org_wp)
     return;
   }
 
-  wp_vector::iterator it3;
-  for (it3 = org_wp.begin(); it3 < org_wp.end(); it3++) {
-    const auto wp3 = GetWaypoint(*it3, way_points3);
-    TestSeeYouWaypoint(*it3, wp3.get());
+  for (const auto &i : org_wp) {
+    const auto wp3 = GetWaypoint(i, way_points3);
+    TestSeeYouWaypoint(i, wp3.get());
   }
 }
 
@@ -328,7 +189,7 @@ TruncateStrip(tstring &s, std::size_t max_length) noexcept
 }
 
 static void
-TestZander(wp_vector org_wp)
+TestZander(const wp_vector &org_wp)
 {
   Waypoints way_points;
   if (!TestWaypointFile(Path(_T("test/data/waypoints.wpz")), way_points,
@@ -337,16 +198,15 @@ TestZander(wp_vector org_wp)
     return;
   }
 
-  wp_vector::iterator it;
-  for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    TruncateStrip(it->name, 12);
-    const auto wp = GetWaypoint(*it, way_points);
-    TestZanderWaypoint(*it, wp.get());
+  for (auto i : org_wp) {
+    TruncateStrip(i.name, 12);
+    const auto wp = GetWaypoint(i, way_points);
+    TestZanderWaypoint(i, wp.get());
   }
 }
 
 static void
-TestFS(wp_vector org_wp)
+TestFS(const wp_vector &org_wp)
 {
   Waypoints way_points;
   if (!TestWaypointFile(Path(_T("test/data/waypoints_geo.wpt")), way_points,
@@ -355,15 +215,14 @@ TestFS(wp_vector org_wp)
     return;
   }
 
-  wp_vector::iterator it;
-  for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    TruncateStrip(it->name, 8);
-    GetWaypoint(*it, way_points);
+  for (auto i : org_wp) {
+    TruncateStrip(i.name, 8);
+    GetWaypoint(i, way_points);
   }
 }
 
 static void
-TestFS_UTM(wp_vector org_wp)
+TestFS_UTM(const wp_vector &org_wp)
 {
   Waypoints way_points;
   if (!TestWaypointFile(Path(_T("test/data/waypoints_utm.wpt")), way_points,
@@ -372,15 +231,14 @@ TestFS_UTM(wp_vector org_wp)
     return;
   }
 
-  wp_vector::iterator it;
-  for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    TruncateStrip(it->name, 8);
-    GetWaypoint(*it, way_points);
+  for (auto i : org_wp) {
+    TruncateStrip(i.name, 8);
+    GetWaypoint(i, way_points);
   }
 }
 
 static void
-TestOzi(wp_vector org_wp)
+TestOzi(const wp_vector &org_wp)
 {
   Waypoints way_points;
   if (!TestWaypointFile(Path(_T("test/data/waypoints_ozi.wpt")), way_points,
@@ -389,15 +247,14 @@ TestOzi(wp_vector org_wp)
     return;
   }
 
-  wp_vector::iterator it;
-  for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    it->name = tstring{Strip(it->name)};
-    GetWaypoint(*it, way_points);
+  for (auto i : org_wp) {
+    i.name = tstring{Strip(i.name)};
+    GetWaypoint(i, way_points);
   }
 }
 
 static void
-TestCompeGPS(wp_vector org_wp)
+TestCompeGPS(const wp_vector &org_wp)
 {
   Waypoints way_points;
   if (!TestWaypointFile(Path(_T("test/data/waypoints_compe_geo.wpt")), way_points,
@@ -406,20 +263,19 @@ TestCompeGPS(wp_vector org_wp)
     return;
   }
 
-  wp_vector::iterator it;
-  for (it = org_wp.begin(); it < org_wp.end(); it++) {
+  for (auto i : org_wp) {
     size_t pos;
-    while ((pos = it->name.find_first_of(_T(' '))) != tstring::npos)
-      it->name.erase(pos, 1);
+    while ((pos = i.name.find_first_of(_T(' '))) != tstring::npos)
+      i.name.erase(pos, 1);
 
-    TruncateStrip(it->name, 6);
-    const auto wp = GetWaypoint(*it, way_points);
-    ok1(wp->comment == it->comment);
+    TruncateStrip(i.name, 6);
+    const auto wp = GetWaypoint(i, way_points);
+    ok1(wp->comment == i.comment);
   }
 }
 
 static void
-TestCompeGPS_UTM(wp_vector org_wp)
+TestCompeGPS_UTM(const wp_vector &org_wp)
 {
   Waypoints way_points;
   if (!TestWaypointFile(Path(_T("test/data/waypoints_compe_utm.wpt")), way_points,
@@ -428,16 +284,38 @@ TestCompeGPS_UTM(wp_vector org_wp)
     return;
   }
 
-  wp_vector::iterator it;
-  for (it = org_wp.begin(); it < org_wp.end(); it++) {
+  for (auto i : org_wp) {
     size_t pos;
-    while ((pos = it->name.find_first_of(_T(' '))) != tstring::npos)
-      it->name.erase(pos, 1);
+    while ((pos = i.name.find_first_of(_T(' '))) != tstring::npos)
+      i.name.erase(pos, 1);
 
-    TruncateStrip(it->name, 6);
-    const auto wp = GetWaypoint(*it, way_points);
-    ok1(wp->comment == it->comment);
+    TruncateStrip(i.name, 6);
+    const auto wp = GetWaypoint(i, way_points);
+    ok1(wp->comment == i.comment);
   }
+}
+
+static std::string
+WriteCupToString(const wp_vector &org_wp)
+{
+  StringOutputStream sos;
+  WithBufferedOutputStream(sos, [&](BufferedOutputStream &bos){
+    for (const auto &i : org_wp)
+      WriteCup(bos, i);
+  });
+  return std::move(sos).GetValue();
+}
+
+static void
+TestCupWriter(const wp_vector &org_wp)
+{
+  const auto s = WriteCupToString(org_wp);
+  ok1(s == R"cup("Bergneustadt","",,5103.117N,00742.367E,488M,4,040,590M,,"Rabbit holes, 20" ditch south end of rwy"
+"Aconcagua","",,3239.200S,07000.700W,6962M,7,,,,"Highest mountain in south-america"
+"Golden Gate Bridge","",,3749.050N,12228.700W,227M,14,,,,""
+"Red Square","",,5545.250N,03737.200E,123M,3,090,016M,,""
+"Sydney Opera","",,3351.417S,15112.917E,5M,1,,,,""
+)cup"sv);
 }
 
 static wp_vector
@@ -542,9 +420,7 @@ int main()
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(513);
-
-  TestExtractParameters();
+  plan_tests(451);
 
   TestWinPilot(org_wp);
   TestSeeYou(org_wp);
@@ -554,6 +430,7 @@ int main()
   TestOzi(org_wp);
   TestCompeGPS(org_wp);
   TestCompeGPS_UTM(org_wp);
+  TestCupWriter(org_wp);
 
   return exit_status();
 }

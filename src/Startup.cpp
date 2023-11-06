@@ -344,7 +344,12 @@ Startup(UI::Display &display)
 
   ReadLanguageFile();
 
-  InputEvents::readFile();
+  try {
+    LogString("Loading input events file");
+    InputEvents::readFile();
+  } catch (...) {
+    LogError(std::current_exception());
+  }
 
   backend_components->igc_logger = std::make_unique<Logger>();
   backend_components->nmea_logger = std::make_unique<NMEALogger>();
@@ -415,8 +420,10 @@ Startup(UI::Display &display)
   // Read the topography file(s)
   data_components->topography = std::make_unique<TopographyStore>();
   {
-    SubOperationEnvironment sub_env(operation, 0, 256);
-    LoadConfiguredTopography(*data_components->topography, sub_env);
+    LogString("Loading Topography File...");
+    operation.SetText(_("Loading Topography File..."));
+    LoadConfiguredTopography(*data_components->topography);
+    operation.SetProgressPosition(256);
   }
 
   // Read the waypoint files
@@ -430,10 +437,12 @@ Startup(UI::Display &display)
   }
 
   // Read and parse the airfield info file
-  {
+  try {
     SubOperationEnvironment sub_env(operation, 512, 768);
     sub_env.SetText(_("Loading Airfield Details File..."));
     WaypointDetails::ReadFileFromProfile(*data_components->waypoints, sub_env);
+  } catch (...) {
+    LogError(std::current_exception());
   }
 
   // Set the home waypoint

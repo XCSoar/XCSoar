@@ -16,7 +16,6 @@
 #include "lib/fmt/RuntimeError.hxx"
 #include "lib/fmt/ToBuffer.hxx"
 #include "io/StringOutputStream.hxx"
-#include "util/ConvertString.hpp"
 
 #include <boost/json.hpp>
 
@@ -60,7 +59,7 @@ DownloadTask(CurlGlobal &curl, CurlEasy easy,
      eventually, so let's just ignore the Content-Type for now and
      hope the XML parser catches syntax errors */
 
-  const auto xml_node = XML::ParseString(UTF8ToWideConverter{sos.GetValue().c_str()});
+  const auto xml_node = XML::ParseString(sos.GetValue());
   const ConstDataNodeXML data_node{xml_node};
 
   auto task = std::make_unique<OrderedTask>(task_behaviour);

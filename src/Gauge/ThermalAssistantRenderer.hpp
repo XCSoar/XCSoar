@@ -3,9 +3,9 @@
 
 #pragma once
 
+#include "Renderer/RadarRenderer.hpp"
 #include "NMEA/CirclingInfo.hpp"
 #include "NMEA/VarioInfo.hpp"
-#include "ui/dim/Point.hpp"
 #include "ui/dim/BulkPoint.hpp"
 
 #include <array>
@@ -22,24 +22,14 @@ class ThermalAssistantRenderer
                                       std::tuple_size<LiftDatabase>::value>
   {
   public:
-    PixelPoint GetAverage() const;
+    [[gnu::pure]]
+    PixelPoint GetAverage() const noexcept;
   };
 
 protected:
   const ThermalAssistantLook &look;
 
-  PixelPoint mid;
-
-  /**
-   * The minimum distance between the window boundary and the biggest
-   * circle in pixels.
-   */
-  unsigned padding;
-
-  /**
-   * The radius of the biggest circle in pixels.
-   */
-  unsigned radius;
+  RadarRenderer radar_renderer;
 
   bool small;
 
@@ -53,16 +43,19 @@ public:
 
 public:
   const PixelPoint &GetMiddle() const {
-    return mid;
+    return radar_renderer.GetCenter();
   }
 
   unsigned GetRadius() const{
-    return radius;
+    return radar_renderer.GetRadius();
   }
 
   void Update(const AttitudeState &attitude, const DerivedInfo &_derived);
 
-  void UpdateLayout(const PixelRect &rc);
+  void UpdateLayout(const PixelRect &rc) noexcept {
+    radar_renderer.UpdateLayout(rc);
+  }
+
   void Paint(Canvas &canvas);
 
   const ThermalAssistantLook &GetLook() {
@@ -76,11 +69,11 @@ protected:
    * 0.5: lift = zero lift
    * 1.0: lift = max_lift
    */
-  static double NormalizeLift(double lift, double max_lift);
+  static constexpr double NormalizeLift(double lift, double max_lift) noexcept;
 
   void CalculateLiftPoints(LiftPoints &lift_points, double max_lift) const;
   double CalculateMaxLift() const;
-  void PaintRadarPlane(Canvas &canvas) const;
+  void PaintRadarPlane(Canvas &canvas, double max_lift) const;
   void PaintRadarBackground(Canvas &canvas, double max_lift) const;
   void PaintPoints(Canvas &canvas, const LiftPoints &lift_points) const;
   void PaintAdvisor(Canvas &canvas, const LiftPoints &lift_points) const;

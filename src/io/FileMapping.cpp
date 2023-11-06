@@ -15,6 +15,8 @@
 #include <sys/stat.h>
 #else
 #include <fileapi.h>
+#include <handleapi.h> // for INVALID_HANDLE_VALUE
+#include <winbase.h> // for CreateFileMapping(), UnmapViewOfFile()
 #endif
 
 FileMapping::FileMapping(Path path)

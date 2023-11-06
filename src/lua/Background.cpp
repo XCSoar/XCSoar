@@ -5,12 +5,11 @@
 #include "Util.hxx"
 #include "Persistent.hpp"
 #include "util/DeleteDisposer.hxx"
+#include "util/IntrusiveList.hxx"
 
 extern "C" {
 #include <lua.h>
 }
-
-#include <boost/intrusive/list.hpp>
 
 #include <cassert>
 
@@ -18,24 +17,26 @@ extern "C" {
 static constexpr char background_lua_key[] = PROGRAM_NAME_LC ".background";
 
 class BackgroundLua final
-  : public boost::intrusive::list_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>>
+  : public IntrusiveListHook<IntrusiveHookMode::NORMAL>
 {
   Lua::StatePtr state;
 
 public:
-  explicit BackgroundLua(Lua::StatePtr &&_state):state(std::move(_state)) {
+  explicit BackgroundLua(Lua::StatePtr &&_state) noexcept
+    :state(std::move(_state))
+  {
     Lua::SetRegistry(state.get(), background_lua_key, Lua::LightUserData(this));
     Lua::SetPersistentCallback(state.get(), PersistentCallback);
   }
 
-  ~BackgroundLua() {
+  ~BackgroundLua() noexcept {
     Lua::SetRegistry(state.get(), background_lua_key, nullptr);
   }
 
 private:
-  void PersistentCallback();
+  void PersistentCallback() noexcept;
 
-  static void PersistentCallback(lua_State *L) {
+  static void PersistentCallback(lua_State *L) noexcept {
     auto *b = (BackgroundLua *)
       Lua::GetRegistryLightUserData(L, background_lua_key);
     if (b != nullptr) {
@@ -47,13 +48,12 @@ private:
 
 namespace Lua {
 
-static boost::intrusive::list<BackgroundLua,
-                              boost::intrusive::constant_time_size<false>> background;
+static IntrusiveList<BackgroundLua> background;
 
 }
 
-void
-BackgroundLua::PersistentCallback()
+inline void
+BackgroundLua::PersistentCallback() noexcept
 {
   Lua::SetRegistry(state.get(), background_lua_key, nullptr);
   Lua::background.erase_and_dispose(Lua::background.iterator_to(*this),
@@ -61,14 +61,14 @@ BackgroundLua::PersistentCallback()
 }
 
 void
-Lua::AddBackground(StatePtr &&state)
+Lua::AddBackground(StatePtr &&state) noexcept
 {
   auto *b = new BackgroundLua(std::move(state));
   background.push_front(*b);
 }
 
 void
-Lua::StopAllBackground()
+Lua::StopAllBackground() noexcept
 {
   background.clear_and_dispose(DeleteDisposer());
 }

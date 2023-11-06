@@ -1,35 +1,55 @@
-from typing import Optional
-from build.verify import verify_file_digest
-from .lockfile import lockfile
+from typing import Sequence, Union
 import os
 from tempfile import NamedTemporaryFile
 import urllib.request
 import sys
 
-def __download(url: str, alternative_url: Optional[str], path: str) -> None:
-    print("download", url)
-    try:
-        urllib.request.urlretrieve(url, path)
-    except:
-        if alternative_url is None:
-          raise
-        print("download error:", sys.exc_info()[0])
-        print("download (alternative location)", alternative_url)
-        urllib.request.urlretrieve(alternative_url, path)
+from .verify import verify_file_digest
+from .lockfile import lockfile
 
-def __download_and_verify_to(url: str, alternative_url: Optional[str], md5: str, path: str) -> None:
-    __download(url, alternative_url, path)
+def __to_string_sequence(x: Union[str, Sequence[str]]) -> Sequence[str]:
+    if isinstance(x, str):
+        return (x,)
+    else:
+        return x
+
+def __get_any(x: Union[str, Sequence[str]]) -> str:
+    if isinstance(x, str):
+        return x
+    else:
+        return x[0]
+
+def __download_one(url: str, path: str) -> None:
+    print("download", url)
+    urllib.request.urlretrieve(url, path)
+
+def __download(urls: Sequence[str], path: str) -> None:
+    for url in urls[:-1]:
+        try:
+            __download_one(url, path)
+            return
+        except:
+            print("download error:", sys.exc_info()[0])
+    __download_one(urls[-1], path)
+
+def __download_and_verify_to(urls: Sequence[str], md5: str, path: str) -> None:
+    __download(urls, path)
     if not verify_file_digest(path, md5):
         raise RuntimeError("Digest mismatch")
 
-def download_and_verify(url: str, alternative_url: Optional[str], md5: str, parent_path: str) -> str:
+def download_basename(urls: Union[str, Sequence[str]]) -> str:
+    return os.path.basename(__get_any(urls))
+
+def download_and_verify(urls: Union[str, Sequence[str]], md5: str, parent_path: str) -> str:
     """Download a file, verify its MD5 checksum and return the local path."""
 
+    base = download_basename(urls)
+
     os.makedirs(parent_path, exist_ok=True)
-    path = os.path.join(parent_path, os.path.basename(url))
+    path = os.path.join(parent_path, base)
 
     # protect concurrent builds by holding an exclusive lock
-    with lockfile(os.path.join(parent_path, 'lock.' + os.path.basename(url))):
+    with lockfile(os.path.join(parent_path, 'lock.' + base)):
         try:
             if verify_file_digest(path, md5): return path
             os.unlink(path)
@@ -37,7 +57,7 @@ def download_and_verify(url: str, alternative_url: Optional[str], md5: str, pare
             pass
 
         with NamedTemporaryFile(dir=parent_path) as tmp:
-            __download_and_verify_to(url, alternative_url, md5, tmp.name)
+            __download_and_verify_to(__to_string_sequence(urls), md5, tmp.name)
             os.link(tmp.name, path)
 
         return path

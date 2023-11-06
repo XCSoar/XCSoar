@@ -12,7 +12,9 @@
 #include "lib/fmt/PathFormatter.hpp"
 #include "lib/fmt/RuntimeError.hxx"
 #include "system/Path.hpp"
-#include "io/FileLineReader.hpp"
+#include "io/FileReader.hxx"
+#include "io/ProgressReader.hpp"
+#include "io/BufferedReader.hxx"
 #include "io/ZipArchive.hpp"
 #include "io/ZipLineReader.hpp"
 #include "io/MapFile.hpp"
@@ -22,12 +24,14 @@
 
 static bool
 ParseAirspaceFile(Airspaces &airspaces, Path path,
-                  OperationEnvironment &operation)
+                  OperationEnvironment &operation) noexcept
 try {
-  FileLineReader reader(path, Charset::AUTO);
+  FileReader file_reader{path};
+  ProgressReader progress_reader{file_reader, file_reader.GetSize(), operation};
+  BufferedReader buffered_reader{progress_reader};
 
   try {
-    ParseAirspaceFile(airspaces, reader, operation);
+    ParseAirspaceFile(airspaces, buffered_reader);
   } catch (...) {
     // TODO translate this?
     std::throw_with_nested(FmtRuntimeError("Error in file {}", path));
@@ -45,10 +49,12 @@ ParseAirspaceFile(Airspaces &airspaces,
                   struct zzip_dir *dir, const char *path,
                   OperationEnvironment &operation)
 try {
-  ZipLineReader reader(dir, path, Charset::AUTO);
+  ZipReader zip_reader{dir, path};
+  ProgressReader progress_reader{zip_reader, zip_reader.GetSize(), operation};
+  BufferedReader buffered_reader{progress_reader};
 
   try {
-    ParseAirspaceFile(airspaces, reader, operation);
+    ParseAirspaceFile(airspaces, buffered_reader);
   } catch (...) {
     // TODO translate this?
     std::throw_with_nested(FmtRuntimeError("Error in file {}", path));

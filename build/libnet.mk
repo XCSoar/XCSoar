@@ -14,4 +14,6 @@ LIBNET_SOURCES = \
 	$(SRC)/net/SocketAddress.cxx \
 	$(SRC)/net/SocketDescriptor.cxx
 
+LIBNET_DEPENDS = FMT
+
 $(eval $(call link-library,libnet,LIBNET))

@@ -6,6 +6,8 @@
 #include "io/BufferedOutputStream.hxx"
 #include "Engine/Waypoint/Runway.hpp"
 
+using std::string_view_literals::operator""sv;
+
 static void
 WriteAngleDMM(BufferedOutputStream &writer, const Angle angle, bool is_latitude)
 {
@@ -13,108 +15,88 @@ WriteAngleDMM(BufferedOutputStream &writer, const Angle angle, bool is_latitude)
   const auto dmm = angle.ToDMM();
 
   // Save them into the buffer string
-  writer.Format(is_latitude ? "%02u%02u.%03u" : "%03u%02u.%03u",
-                dmm.degrees, dmm.minutes, dmm.decimal_minutes);
-
-  // Attach the buffer string to the output
-  if (is_latitude)
-    writer.Write(dmm.positive ? "N" : "S");
-  else
-    writer.Write(dmm.positive ? "E" : "W");
+  writer.Fmt("{:0{}}{:02}.{:03}{}",
+             dmm.degrees, is_latitude ? 2 : 3,
+             dmm.minutes, dmm.decimal_minutes,
+             is_latitude ? (dmm.positive ? 'N' : 'S') : (dmm.positive ? 'E' : 'W'));
 }
 
 static void
 WriteAltitude(BufferedOutputStream &writer, double altitude)
 {
-  writer.Format("%dM", (int)altitude);
+  writer.Fmt("{}M", (int)altitude);
 }
 
-static void
-WriteSeeYouFlags(BufferedOutputStream &writer, const Waypoint &wp)
+[[gnu::pure]]
+static std::string_view
+GetSeeYouFlags(const Waypoint &wp) noexcept
 {
   switch (wp.type) {
   case Waypoint::Type::NORMAL:
-    writer.Write('1');
-    break;
+    return "1"sv;
 
   case Waypoint::Type::OUTLANDING:
-    writer.Write('3');
-    break;
+    return "3"sv;
 
   case Waypoint::Type::AIRFIELD:
-    if (wp.flags.home)
-      writer.Write('4');
-    else // 2 or 5 no rule for this!
-      writer.Write('2');
-    break;
+    return wp.flags.home
+      ? "4"sv
+      // 2 or 5 no rule for this!
+      : "2"sv;
 
   case Waypoint::Type::MOUNTAIN_PASS:
-    writer.Write('6');
-    break;
+    return "6"sv;
 
   case Waypoint::Type::MOUNTAIN_TOP:
-    writer.Write('7');
-    break;
+    return "7"sv;
 
   case Waypoint::Type::OBSTACLE:
-    writer.Write('8');
-    break;
+    return "8"sv;
 
   case Waypoint::Type::VOR:
-    writer.Write('9');
-    break;
+    return "9"sv;
 
   case Waypoint::Type::NDB:
-    writer.Write("10");
-    break;
+    return "10"sv;
 
   case Waypoint::Type::TOWER:
-    writer.Write("11");
-    break;
+    return "11"sv;
 
   case Waypoint::Type::DAM:
-    writer.Write("12");
-    break;
+    return "12"sv;
 
   case Waypoint::Type::TUNNEL:
-    writer.Write("13");
-    break;
+    return "13"sv;
 
   case Waypoint::Type::BRIDGE:
-    writer.Write("14");
-    break;
+    return "14"sv;
 
   case Waypoint::Type::POWERPLANT:
-    writer.Write("15");
-    break;
+    return "15"sv;
 
   case Waypoint::Type::CASTLE:
-    writer.Write("16");
-    break;
+    return "16"sv;
 
   case Waypoint::Type::INTERSECTION:
-    writer.Write("17");
-    break;
+    return "17"sv;
 
   case Waypoint::Type::MARKER:
-    writer.Write("18");
-    break;
+    return "18"sv;
 
   case Waypoint::Type::REPORTING_POINT:
-    writer.Write("19");
-    break;
+    return "19"sv;
 
   case Waypoint::Type::PGTAKEOFF:
-    writer.Write("20");
-    break;
+    return "20"sv;
 
   case Waypoint::Type::PGLANDING:
-    writer.Write("21");
-    break;
+    return "21"sv;
 
   case Waypoint::Type::THERMAL_HOTSPOT:
     break;
   }
+
+  return {};
 }
 
 void
@@ -122,13 +104,13 @@ WriteCup(BufferedOutputStream &writer, const Waypoint &wp)
 {
   // Write Title
   writer.Write('"');
-  writer.Write(wp.name.c_str());
+  writer.Write(wp.name);
   writer.Write('"');
   writer.Write(',');
 
   // Write Code / Short Name
   writer.Write('"');
-  writer.Write(wp.shortname.c_str());
+  writer.Write(wp.shortname);
   writer.Write('"');
   writer.Write(',');
 
@@ -149,14 +131,14 @@ WriteCup(BufferedOutputStream &writer, const Waypoint &wp)
   writer.Write(',');
 
   // Write Style
-  WriteSeeYouFlags(writer, wp);
+  writer.Write(GetSeeYouFlags(wp));
   writer.Write(',');
 
   // Write Runway Direction
   if ((wp.type == Waypoint::Type::AIRFIELD ||
        wp.type == Waypoint::Type::OUTLANDING) &&
       wp.runway.IsDirectionDefined())
-    writer.Format("%03u", wp.runway.GetDirectionDegrees());
+    writer.Fmt("{:03}", wp.runway.GetDirectionDegrees());
 
   writer.Write(',');
 
@@ -164,21 +146,21 @@ WriteCup(BufferedOutputStream &writer, const Waypoint &wp)
   if ((wp.type == Waypoint::Type::AIRFIELD ||
        wp.type == Waypoint::Type::OUTLANDING) &&
       wp.runway.IsLengthDefined())
-    writer.Format("%03uM", wp.runway.GetLength());
+    writer.Fmt("{:03}M", wp.runway.GetLength());
 
   writer.Write(',');
 
   // Write Airport Frequency
   if (wp.radio_frequency.IsDefined()) {
     const unsigned freq = wp.radio_frequency.GetKiloHertz();
-    writer.Format("\"%u.%03u\"", freq / 1000, freq % 1000);
+    writer.Fmt("\"{}.{:03}\"", freq / 1000, freq % 1000);
   }
 
   writer.Write(',');
 
   // Write Description
   writer.Write('"');
-  writer.Write(wp.comment.c_str());
+  writer.Write(wp.comment);
   writer.Write('"');
   writer.Write('\n');
 }

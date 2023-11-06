@@ -5,6 +5,7 @@
 
 #include "Charset.hpp"
 #include "util/ReusableArray.hpp"
+#include "util/tstring_view.hxx"
 
 #include <tchar.h>
 
@@ -36,6 +37,9 @@ public:
   [[gnu::pure]]
   char *DetectStrip(char *src) noexcept;
 
+  [[gnu::pure]]
+  std::string_view DetectStrip(std::string_view src) noexcept;
+
   /**
    * Convert the given string.  The returned pointer may be the given
    * pointer or owned by this class and will be invalidated by the
@@ -44,4 +48,6 @@ public:
    * Throws on error.
    */
   TCHAR *Convert(char *src);
+
+  tstring_view Convert(std::string_view src);
 };

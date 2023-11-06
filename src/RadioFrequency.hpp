@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <compare>
 #include <cstddef>
+#include <string_view>
 
 #include <tchar.h>
 
@@ -98,4 +99,7 @@ public:
 
   [[gnu::pure]]
   static RadioFrequency Parse(const TCHAR *p) noexcept;
+
+  [[gnu::pure]]
+  static RadioFrequency Parse(std::string_view src) noexcept;
 };

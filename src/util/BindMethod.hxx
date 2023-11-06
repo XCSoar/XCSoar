@@ -22,11 +22,11 @@ class BoundMethod;
 
 template<typename R,
 #ifndef _MSC_VER
-	bool NoExcept,
+	 bool NoExcept,
 #endif  // _MSCVER
-	typename... Args>
+	 typename... Args>
 class BoundMethod<R(Args...) noexcept(NoExcept)> {
-	typedef R (*function_pointer)(void *instance, Args... args) noexcept(NoExcept);
+	using function_pointer = R (*)(void *, Args...) noexcept(NoExcept);
 
 	void *instance_;
 	function_pointer function;
@@ -35,7 +35,7 @@ public:
 	/**
 	 * Non-initializing trivial constructor
 	 */
-	BoundMethod() = default;
+	constexpr BoundMethod() = default;
 
 	constexpr
 	BoundMethod(void *_instance, function_pointer _function) noexcept
@@ -45,16 +45,16 @@ public:
 	 * Construct an "undefined" object.  It must not be called,
 	 * and its "bool" operator returns false.
 	 */
-	BoundMethod(std::nullptr_t) noexcept:function(nullptr) {}
+	constexpr BoundMethod(std::nullptr_t) noexcept:function(nullptr) {}
 
 	/**
 	 * Was this object initialized with a valid function pointer?
 	 */
-	operator bool() const noexcept {
+	constexpr operator bool() const noexcept {
 		return function != nullptr;
 	}
 
-	R operator()(Args... args) const {
+	R operator()(Args... args) const noexcept(NoExcept) {
 		return function(instance_, std::forward<Args>(args)...);
 	}
 };
@@ -78,16 +78,15 @@ struct SignatureHelper<R (T::*)(Args...) noexcept(NoExcept)> {
 	/**
 	 * The class which contains the given method (signature).
 	 */
-	typedef T class_type;
+	using class_type = T;
 
 	/**
 	 * A function type which describes the "plain" function
 	 * signature.
 	 */
-	typedef R plain_signature(Args...) noexcept(NoExcept);
+	using plain_signature = R (Args...) noexcept(NoExcept);
 
-	typedef R (*function_pointer)(void *instance,
-				      Args...) noexcept(NoExcept);
+	using function_pointer = R (*)(void *, Args...) noexcept(NoExcept);
 };
 
 template<typename R,
@@ -96,10 +95,9 @@ template<typename R,
 #endif // _MSCVER
 	typename... Args>
 struct SignatureHelper<R (*)(Args...) noexcept(NoExcept)> {
-	typedef R plain_signature(Args...) noexcept(NoExcept);
+	using plain_signature = R (Args...) noexcept(NoExcept);
 
-	typedef R (*function_pointer)(void *instance,
-				      Args...) noexcept(NoExcept);
+	using function_pointer = R (*)(void *, Args...) noexcept(NoExcept);
 };
 
 /**
@@ -149,12 +147,10 @@ MakeWrapperFunction() noexcept
  * @param instance the instance of #T to be bound
  */
 template<auto method>
-constexpr auto
+constexpr BoundMethod<typename BindMethodDetail::SignatureHelper<decltype(method)>::plain_signature>
 BindMethod(typename BindMethodDetail::SignatureHelper<decltype(method)>::class_type &instance) noexcept
 {
-	using H = BindMethodDetail::SignatureHelper<decltype(method)>;
-	using plain_signature = typename H::plain_signature;
-	return BoundMethod<plain_signature>{
+	return {
 		&instance,
 		BindMethodDetail::MakeWrapperFunction<method>(),
 	};
@@ -179,12 +175,10 @@ BindMethod(typename BindMethodDetail::SignatureHelper<decltype(method)>::class_t
  * @param function the function pointer
  */
 template<auto function>
-constexpr auto
+constexpr BoundMethod<typename BindMethodDetail::SignatureHelper<decltype(function)>::plain_signature>
 BindFunction() noexcept
 {
-	using H = BindMethodDetail::SignatureHelper<decltype(function)>;
-	using plain_signature = typename H::plain_signature;
-	return BoundMethod<plain_signature>{
+	return {
 		nullptr,
 		BindMethodDetail::MakeWrapperFunction<function>(),
 	};

@@ -8,6 +8,7 @@
 #include "StringStrip.hxx"
 
 #include <optional>
+#include <string_view>
 
 /**
  * Parse a string incrementally.
@@ -87,13 +88,13 @@ public:
 	}
 
 	[[gnu::pure]]
-	bool Match(const_pointer value, size_t size) {
-		return StringIsEqual(p, value, size);
+	bool Match(std::string_view other) {
+		return StringIsEqual(p, other.data(), other.size());
 	}
 
 	[[gnu::pure]]
-	bool MatchIgnoreCase(const_pointer value, size_t size) {
-		return StringIsEqualIgnoreCase(p, value, size);
+	bool MatchIgnoreCase(std::string_view other) {
+		return StringIsEqualIgnoreCase(p, other.data(), other.size());
 	}
 
 	void Skip(size_t n=1) {
@@ -114,17 +115,17 @@ public:
 		return match;
 	}
 
-	bool SkipMatch(const_pointer value, size_t size) {
-		bool match = Match(value, size);
+	bool SkipMatch(std::string_view other) {
+		bool match = Match(other);
 		if (match)
-			Skip(size);
+			Skip(other.size());
 		return match;
 	}
 
-	bool SkipMatchIgnoreCase(const_pointer value, size_t size) {
-		bool match = MatchIgnoreCase(value, size);
+	bool SkipMatchIgnoreCase(std::string_view other) {
+		bool match = MatchIgnoreCase(other);
 		if (match)
-			Skip(size);
+			Skip(other.size());
 		return match;
 	}
 

@@ -14,7 +14,7 @@
 void
 SaveTask(Path path, const OrderedTask &task)
 {
-  XMLNode root_node = XMLNode::CreateRoot(_T("Task"));
+  XMLNode root_node = XMLNode::CreateRoot("Task");
 
   {
     WritableDataNodeXML root(root_node);

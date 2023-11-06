@@ -14,13 +14,13 @@ namespace Lua {
  * be invoked eventually.  See Lua::IsPersistent().
  */
 void
-AddBackground(StatePtr &&state);
+AddBackground(StatePtr &&state) noexcept;
 
 /**
  * Stop all background scripts.  Call this before shutting down
  * XCSoar.
  */
 void
-StopAllBackground();
+StopAllBackground() noexcept;
 
 }

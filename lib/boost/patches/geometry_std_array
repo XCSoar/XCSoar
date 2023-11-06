@@ -1,0 +1,67 @@
+Index: boost_1_83_0/boost/geometry/util/series_expansion.hpp
+===================================================================
+--- boost_1_83_0.orig/boost/geometry/util/series_expansion.hpp
++++ boost_1_83_0/boost/geometry/util/series_expansion.hpp
+@@ -33,6 +33,8 @@
+ #include <boost/geometry/core/assert.hpp>
+ #include <boost/geometry/util/math.hpp>
+ 
++#include <array>
++
+ namespace boost { namespace geometry { namespace series_expansion {
+ 
+     /*
+@@ -698,7 +700,7 @@ namespace boost { namespace geometry { n
+      These structs allow the caller to only know the series order.
+     */
+     template <size_t SeriesOrder, typename CT>
+-    struct coeffs_C1 : boost::array<CT, SeriesOrder + 1>
++    struct coeffs_C1 : std::array<CT, SeriesOrder + 1>
+     {
+         coeffs_C1(CT const& epsilon)
+         {
+@@ -707,7 +709,7 @@ namespace boost { namespace geometry { n
+     };
+ 
+     template <size_t SeriesOrder, typename CT>
+-    struct coeffs_C1p : boost::array<CT, SeriesOrder + 1>
++    struct coeffs_C1p : std::array<CT, SeriesOrder + 1>
+     {
+         coeffs_C1p(CT const& epsilon)
+         {
+@@ -716,7 +718,7 @@ namespace boost { namespace geometry { n
+     };
+ 
+     template <size_t SeriesOrder, typename CT>
+-    struct coeffs_C2 : boost::array<CT, SeriesOrder + 1>
++    struct coeffs_C2 : std::array<CT, SeriesOrder + 1>
+     {
+         coeffs_C2(CT const& epsilon)
+         {
+@@ -725,7 +727,7 @@ namespace boost { namespace geometry { n
+     };
+ 
+     template <size_t SeriesOrder, typename CT>
+-    struct coeffs_C3x : boost::array<CT, (SeriesOrder * (SeriesOrder - 1)) / 2>
++    struct coeffs_C3x : std::array<CT, (SeriesOrder * (SeriesOrder - 1)) / 2>
+     {
+         coeffs_C3x(CT const& n)
+         {
+@@ -734,7 +736,7 @@ namespace boost { namespace geometry { n
+     };
+ 
+     template <size_t SeriesOrder, typename CT>
+-    struct coeffs_C3 : boost::array<CT, SeriesOrder>
++    struct coeffs_C3 : std::array<CT, SeriesOrder>
+     {
+         coeffs_C3(CT const& n, CT const& epsilon)
+         {
+@@ -745,7 +747,7 @@ namespace boost { namespace geometry { n
+     };
+ 
+     template <size_t SeriesOrder, typename CT>
+-    struct coeffs_A3 : boost::array<CT, SeriesOrder>
++    struct coeffs_A3 : std::array<CT, SeriesOrder>
+     {
+         coeffs_A3(CT const& n)
+         {

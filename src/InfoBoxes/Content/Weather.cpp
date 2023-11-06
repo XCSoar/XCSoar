@@ -12,6 +12,7 @@
 #include "Formatter/AngleFormatter.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/dim/Rect.hpp"
+#include "Renderer/RadarRenderer.hpp"
 #include "Renderer/WindArrowRenderer.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
@@ -226,27 +227,30 @@ PaintWindArrow(Canvas &canvas, const PixelRect &rc,
   constexpr unsigned arrow_width = 6;
   constexpr unsigned arrow_tail_length = 3;
 
-  const auto pt = rc.GetCenter();
+  const auto &info = CommonInterface::Calculated();
 
   const unsigned scale = Layout::Scale(100U);
 
-  const unsigned padding = Layout::FastScale(10u);
-  unsigned size = std::min(rc.GetWidth(), rc.GetHeight());
-
-  if (size > padding)
-    size -= padding;
+  RadarRenderer radar_renderer{Layout::FastScale(10u)};
+  radar_renderer.UpdateLayout(rc);
 
   // Normalize the size because the Layout::Scale is applied
   // by the DrawArrow() function again
-  const int length = std::min(size, std::max(10u, uround(4 * wind.norm)));
+  const unsigned size = radar_renderer.GetRadius() * 100 / scale;
+
+  auto angle = info.wind.bearing - CommonInterface::Basic().attitude.heading;
+
+  const int length =
+    std::min(size, std::max(10u, uround(4 * info.wind.norm)));
 
   const int offset = -length / 2;
 
   const auto style = CommonInterface::GetMapSettings().wind_arrow_style;
 
   WindArrowRenderer renderer(UIGlobals::GetLook().wind_arrow_info_box);
-  renderer.DrawArrow(canvas, pt, wind.bearing, arrow_width, length,
-                     arrow_tail_length, style, offset, scale, brush);
+  renderer.DrawArrow(canvas, radar_renderer.GetCenter(), angle,
+                     arrow_width, length, arrow_tail_length,
+                     style, offset, scale, brush);
 }
 
 void
@@ -259,6 +263,7 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas,
   auto rel_wind = info.wind;
   const auto &look = UIGlobals::GetLook().wind_arrow_info_box;
   rel_wind.bearing -= basic.attitude.heading;
+
   PaintWindArrow(canvas, rc, rel_wind,
                  info.wind_source == DerivedInfo::WindSource::EXTERNAL ?
                  look.arrow_brush_extern : look.arrow_brush);

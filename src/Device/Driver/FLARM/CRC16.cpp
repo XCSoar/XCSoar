@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "CRC16.hpp"
-#include "util/CRC.hpp"
+#include "util/CRC16CCITT.hpp"
 
 #include <cassert>
 

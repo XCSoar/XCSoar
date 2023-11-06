@@ -17,12 +17,12 @@ try {
   const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  FileLineReader reader(path, Charset::AUTO);
+  FileReader file_reader{path};
+  BufferedReader buffered_reader{file_reader};
 
   Airspaces airspaces;
 
-  ConsoleOperationEnvironment operation;
-  ParseAirspaceFile(airspaces, reader, operation);
+  ParseAirspaceFile(airspaces, buffered_reader);
 
   airspaces.Optimise();
 

@@ -295,7 +295,7 @@ GlueMapWindow::UpdateProjection() noexcept
   const auto center = rc.GetCenter();
 
   if (circling || !IsNearSelf())
-    visible_projection.SetScreenOrigin(center.x, center.y);
+    visible_projection.SetScreenOrigin(center);
   else if (settings_map.cruise_orientation == MapOrientation::NORTH_UP ||
            settings_map.cruise_orientation == MapOrientation::WIND_UP) {
     PixelPoint offset{0, 0};
@@ -329,7 +329,7 @@ GlueMapWindow::UpdateProjection() noexcept
       offset_history.Add(offset);
       offset = offset_history.GetAverage();
     }
-    visible_projection.SetScreenOrigin(center.x + offset.x, center.y + offset.y);
+    visible_projection.SetScreenOrigin(center + offset);
   } else
     visible_projection.SetScreenOrigin(center.x,
         ((rc.top - rc.bottom) * settings_map.glider_screen_position / 100) + rc.bottom);

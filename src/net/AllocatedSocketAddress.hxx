@@ -182,6 +182,11 @@ public:
 	}
 #endif
 
+	[[gnu::pure]]
+	std::span<const std::byte> GetSteadyPart() const noexcept {
+		return SocketAddress{*this}.GetSteadyPart();
+	}
+
 private:
 	void SetSize(size_type new_size) noexcept;
 };

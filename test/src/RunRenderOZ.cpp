@@ -144,7 +144,7 @@ protected:
   void OnResize(PixelSize new_size) noexcept override {
     PaintWindow::OnResize(new_size);
     projection.SetScale(new_size.width / 21000.);
-    projection.SetScreenOrigin(new_size.width / 2, new_size.height / 2);
+    projection.SetScreenOrigin(PixelRect{new_size}.GetCenter());
   }
 };
 

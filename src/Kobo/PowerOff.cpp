@@ -93,7 +93,7 @@ DrawUserText(Canvas &canvas, PixelRect &rc) noexcept
   std::string_view text;
 
   if (UniqueFileDescriptor fd; fd.OpenReadOnly("/mnt/onboard/XCSoarData/kobo/poweroff.txt")) {
-    ssize_t nbytes = fd.Read(buffer.data(), buffer.size());
+    ssize_t nbytes = fd.Read(std::as_writable_bytes(std::span{buffer}));
     if (nbytes <= 0)
       return;
 

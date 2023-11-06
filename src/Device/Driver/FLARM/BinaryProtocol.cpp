@@ -6,6 +6,7 @@
 #include "Device/Error.hpp"
 #include "Device/Port/Port.hpp"
 #include "time/TimeoutClock.hpp"
+#include "util/SpanCast.hxx"
 
 #include <algorithm> // for std::find_if()
 
@@ -178,7 +179,7 @@ FlarmDevice::SendFrameHeader(const FLARM::FrameHeader &header,
                              OperationEnvironment &env,
                              std::chrono::steady_clock::duration timeout)
 {
-  SendEscaped(std::as_bytes(std::span{&header, 1}), env, timeout);
+  SendEscaped(ReferenceAsBytes(header), env, timeout);
 }
 
 bool
@@ -186,7 +187,7 @@ FlarmDevice::ReceiveFrameHeader(FLARM::FrameHeader &header,
                                 OperationEnvironment &env,
                                 std::chrono::steady_clock::duration timeout)
 {
-  return ReceiveEscaped(std::as_writable_bytes(std::span{&header, 1}),
+  return ReceiveEscaped(ReferenceAsWritableBytes(header),
                         env, timeout);
 }
 

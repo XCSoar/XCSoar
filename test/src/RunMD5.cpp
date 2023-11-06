@@ -12,12 +12,12 @@ static void
 Feed(Reader &r, MD5 &state)
 {
   while (true) {
-    char buffer[65536];
-    size_t nbytes = r.Read(buffer, sizeof(buffer));
+    std::byte buffer[65536];
+    size_t nbytes = r.Read(buffer);
     if (nbytes == 0)
       break;
 
-    state.Append(buffer, nbytes);
+    state.Append(std::span{buffer}.first(nbytes));
   }
 }
 

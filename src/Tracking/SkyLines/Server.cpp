@@ -8,7 +8,7 @@
 #include "util/ByteOrder.hxx"
 #include "net/SocketError.hxx"
 #include "net/UniqueSocketDescriptor.hxx"
-#include "util/CRC.hpp"
+#include "util/CRC16CCITT.hpp"
 
 static UniqueSocketDescriptor
 CreateBindUDP(SocketAddress address)
@@ -43,7 +43,7 @@ Server::SendBuffer(SocketAddress address,
                    std::span<const std::byte> buffer) noexcept
 {
   try {
-    ssize_t nbytes = socket.GetSocket().Write(buffer.data(), buffer.size());
+    ssize_t nbytes = socket.GetSocket().WriteNoWait(buffer);
     if (nbytes < 0)
       throw MakeSocketError("Failed to send");
   } catch (...) {

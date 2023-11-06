@@ -78,8 +78,7 @@ AirspaceDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
       airspace->ClosestPoint(basic.location, warnings->GetProjection());
     const auto distance = closest.Distance(basic.location);
 
-    FormatUserDistance(distance, buffer.data());
-    AddReadOnly(_("Distance"), nullptr, buffer);
+    AddReadOnly(_("Distance"), nullptr, FormatUserDistance(distance));
   }
 }
 

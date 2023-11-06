@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <tchar.h>
-
 template<class T>
 class LineReader {
 public:
@@ -20,30 +18,6 @@ public:
    * Throws on error.
    */
   virtual T *ReadLine() = 0;
-
-  /**
-   * Determins the size of the file.  Returns -1 if the size is
-   * unknown.
-   */
-  [[gnu::pure]]
-  virtual long GetSize() const {
-    return -1;
-  }
-
-  /**
-   * Determins the current position within the file.  Returns -1 if
-   * this is unknown.
-   */
-  [[gnu::pure]]
-  virtual long Tell() const {
-    return -1;
-  }
 };
 
-class TLineReader : public LineReader<TCHAR> {};
-
-#ifdef _UNICODE
 class NLineReader : public LineReader<char> {};
-#else
-class NLineReader : public TLineReader {};
-#endif

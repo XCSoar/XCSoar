@@ -4,6 +4,7 @@
 #include "FileOutputStream.hxx"
 #include "lib/fmt/PathFormatter.hpp"
 #include "lib/fmt/SystemError.hxx"
+#include "lib/fmt/ToBuffer.hxx"
 
 #ifdef _WIN32
 #include <tchar.h>
@@ -122,7 +123,8 @@ FileOutputStream::Write(std::span<const std::byte> src)
 		throw FmtLastError("Failed to write to {}", GetPath());
 
 	if (size_t(nbytes) != src.size())
-		throw FmtLastError((DWORD)ERROR_DISK_FULL, "Failed to write to {}",
+		throw FmtLastError(DWORD{ERROR_DISK_FULL},
+				   "Failed to write to {}",
 				   GetPath());
 }
 
@@ -279,11 +281,8 @@ try {
 		unlinkat(directory_fd.Get(), GetPath().c_str(), 0);
 
 		/* hard-link the temporary file to the final path */
-		char fd_path[64];
-		snprintf(fd_path, sizeof(fd_path), "/proc/self/fd/%d",
-			 fd.Get());
-		if (linkat(AT_FDCWD,
-			   fd_path,
+		if (linkat(-1,
+			   FmtBuffer<64>("/proc/self/fd/{}", fd.Get()),
 			   directory_fd.Get(), path.c_str(),
 			   AT_SYMLINK_FOLLOW) < 0)
 			throw FmtErrno("Failed to commit {}", path);
@@ -333,7 +332,8 @@ FileOutputStream::Cancel() noexcept
 }
 
 inline void
-FileOutputStream::RenameOrThrow([[maybe_unused]] Path old_path, [[maybe_unused]] Path new_path) const
+FileOutputStream::RenameOrThrow([[maybe_unused]] Path old_path,
+				[[maybe_unused]] Path new_path) const
 {
 	assert(old_path != nullptr);
 	assert(new_path != nullptr);

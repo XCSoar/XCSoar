@@ -4,13 +4,12 @@
 #include "WaypointReaderFS.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Geo/UTM.hpp"
-#include "io/LineReader.hpp"
 #include "util/StringStrip.hxx"
 
 #include <stdlib.h>
 
 static bool
-ParseAngle(const TCHAR *src, Angle &angle) noexcept
+ParseAngle(const char *src, Angle &angle) noexcept
 {
   bool is_positive;
   if (src[0] == _T('N') || src[0] == _T('n') ||
@@ -22,20 +21,20 @@ ParseAngle(const TCHAR *src, Angle &angle) noexcept
   else
     return false;
 
-  TCHAR *endptr;
+  char *endptr;
 
   src++;
-  long deg = _tcstol(src, &endptr, 10);
+  long deg = strtol(src, &endptr, 10);
   if (endptr == src || *endptr != _T(' '))
     return false;
 
   src = endptr;
-  long min = _tcstol(src, &endptr, 10);
+  long min = strtol(src, &endptr, 10);
   if (endptr == src || *endptr != _T(' '))
     return false;
 
   src = endptr;
-  double sec = _tcstod(src, &endptr);
+  double sec = strtod(src, &endptr);
   if (endptr == src || *endptr != _T(' '))
     return false;
 
@@ -48,7 +47,7 @@ ParseAngle(const TCHAR *src, Angle &angle) noexcept
 }
 
 static bool
-ParseLocation(const TCHAR *src, GeoPoint &p) noexcept
+ParseLocation(const char *src, GeoPoint &p) noexcept
 {
   Angle lon, lat;
 
@@ -68,11 +67,11 @@ ParseLocation(const TCHAR *src, GeoPoint &p) noexcept
 }
 
 static bool
-ParseLocationUTM(const TCHAR *src, GeoPoint &p) noexcept
+ParseLocationUTM(const char *src, GeoPoint &p) noexcept
 {
-  TCHAR *endptr;
+  char *endptr;
 
-  long zone_number = _tcstol(src, &endptr, 10);
+  long zone_number = strtol(src, &endptr, 10);
   if (endptr == src)
     return false;
 
@@ -80,12 +79,12 @@ ParseLocationUTM(const TCHAR *src, GeoPoint &p) noexcept
   char zone_letter = src[0];
 
   src++;
-  long easting = _tcstol(src, &endptr, 10);
+  long easting = strtol(src, &endptr, 10);
   if (endptr == src || *endptr != _T(' '))
     return false;
 
   src = endptr;
-  long northing = _tcstol(src, &endptr, 10);
+  long northing = strtol(src, &endptr, 10);
   if (endptr == src || *endptr != _T(' '))
     return false;
 
@@ -99,10 +98,10 @@ ParseLocationUTM(const TCHAR *src, GeoPoint &p) noexcept
 }
 
 static bool
-ParseAltitude(const TCHAR *src, double &dest) noexcept
+ParseAltitude(const char *src, double &dest) noexcept
 {
-  TCHAR *endptr;
-  long alt = _tcstol(src, &endptr, 10);
+  char *endptr;
+  long alt = strtol(src, &endptr, 10);
   if (endptr == src)
     return false;
 
@@ -110,15 +109,8 @@ ParseAltitude(const TCHAR *src, double &dest) noexcept
   return true;
 }
 
-[[nodiscard]] [[gnu::pure]]
-static tstring
-ParseString(tstring_view src) noexcept
-{
-  return tstring{Strip(src)};
-}
-
 bool
-WaypointReaderFS::ParseLine(const TCHAR *line, Waypoints &way_points)
+WaypointReaderFS::ParseLine(const char *line, Waypoints &way_points)
 {
   //$FormatGEO
   //ACONCAGU  S 32 39 12.00    W 070 00 42.00  6962  Aconcagua
@@ -137,14 +129,14 @@ WaypointReaderFS::ParseLine(const TCHAR *line, Waypoints &way_points)
   if (line[0] == '\0')
     return true;
 
-  if (line[0] == _T('$')) {
-    if (StringStartsWith(line, _T("$FormatUTM")))
+  if (line[0] == '$') {
+    if (StringStartsWith(line, "$FormatUTM"))
       is_utm = true;
     return true;
   }
 
   // Determine the length of the line
-  size_t len = _tcslen(line);
+  size_t len = strlen(line);
   // If less then 27 characters -> something is wrong -> cancel
   if (len < (is_utm ? 39 : 47))
     return false;
@@ -157,7 +149,7 @@ WaypointReaderFS::ParseLine(const TCHAR *line, Waypoints &way_points)
 
   Waypoint new_waypoint = factory.Create(location);
 
-  new_waypoint.name = ParseString({line, 8});
+  new_waypoint.name = tstring{string_converter.Convert({line, 8})};
 
   if (ParseAltitude(line + (is_utm ? 32 : 41), new_waypoint.elevation))
     new_waypoint.has_elevation = true;
@@ -166,19 +158,15 @@ WaypointReaderFS::ParseLine(const TCHAR *line, Waypoints &way_points)
 
   // Description (Characters 35-44)
   if (len > (is_utm ? 38 : 47))
-    new_waypoint.comment = ParseString(line + (is_utm ? 38 : 47));
+    new_waypoint.comment = tstring{string_converter.Convert(line + (is_utm ? 38 : 47))};
 
   way_points.Append(std::move(new_waypoint));
   return true;
 }
 
 bool
-WaypointReaderFS::VerifyFormat(TLineReader &reader)
+WaypointReaderFS::VerifyFormat(std::string_view contents) noexcept
 {
-  const TCHAR *line = reader.ReadLine();
-  if (line == nullptr)
-    return false;
-
-  return StringStartsWith(line, _T("$FormatUTM")) ||
-         StringStartsWith(line, _T("$FormatGEO"));
+  return contents.starts_with("$FormatUTM") ||
+    contents.starts_with("$FormatGEO");
 }

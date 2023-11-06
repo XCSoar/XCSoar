@@ -2,11 +2,10 @@
 // Copyright The XCSoar Project
 
 #include "Task/TaskFileSeeYou.hpp"
-#include "util/ExtractParameters.hpp"
-#include "util/StringAPI.hxx"
-#include "util/Macros.hpp"
-#include "io/FileLineReader.hpp"
+#include "io/BufferedReader.hxx"
+#include "io/FileReader.hxx"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "Waypoint/CupParser.hpp"
 #include "Waypoint/WaypointReaderSeeYou.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
@@ -19,8 +18,13 @@
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Units/System.hpp"
 #include "time/BrokenTime.hpp"
+#include "util/DecimalParser.hxx"
+#include "util/IterableSplitString.hxx"
+#include "util/NumberParser.hxx"
 
 #include <stdlib.h>
+
+using std::string_view_literals::operator""sv;
 
 static constexpr std::size_t CUP_MAX_TPS = 30;
 
@@ -52,69 +56,91 @@ struct SeeYouTurnpointInformation {
   Angle angle1{}, angle2{}, angle12{};
 };
 
+[[gnu::pure]]
 static std::chrono::duration<unsigned>
-ParseTaskTime(const TCHAR* str)
+ParseTaskTime(std::string_view src) noexcept
 {
-  int hh = 0, mm = 0, ss = 0;
-  TCHAR* end;
-  hh = _tcstol(str, &end, 10);
-  if (str != end && _tcslen(str) > 3 && str[2] == _T(':')) {
-    mm = _tcstol(str + 3, &end, 10);
-    if (str != end && _tcslen(str + 3) > 3 && str[5] == _T(':'))
-      ss = _tcstol(str + 6, nullptr, 10);
+  unsigned hh, mm = 0, ss = 0;
+
+  if (src.size() < 2)
+    return {};
+
+  if (auto value = ParseInteger<unsigned>(src.substr(0, 2)))
+    hh = *value;
+  else
+    return {};
+
+  if (src.size() > 2) {
+    if (src[2] != ':' || src.size() < 5)
+      return {};
+
+    if (auto value = ParseInteger<unsigned>(src.substr(3, 2)))
+      mm = *value;
+    else
+      return {};
+
+    if (src.size() > 5) {
+      if (src[5] != ':' || src.size() != 8)
+        return {};
+
+      if (auto value = ParseInteger<unsigned>(src.substr(6, 2)))
+        ss = *value;
+      else
+        return {};
+    }
   }
+
   return BrokenTime(hh, mm, ss).DurationSinceMidnight();
 }
 
+[[gnu::pure]]
 static SeeYouTurnpointInformation::Style
-ParseStyle(const TCHAR* str)
+ParseStyle(std::string_view src) noexcept
 {
-  int style = 1;
-  TCHAR* end;
-  style = _tcstol(str, &end, 10);
-  if (str == end)
-    style = 1;
+  if (auto value = ParseInteger<unsigned>(src))
+    return static_cast<SeeYouTurnpointInformation::Style>(*value);
 
-  return (SeeYouTurnpointInformation::Style)style;
+  return SeeYouTurnpointInformation::Style::SYMMETRICAL;
 }
 
+[[gnu::pure]]
 static Angle
-ParseAngle(const TCHAR* str)
+ParseAngle(std::string_view src) noexcept
 {
-  int angle = 0;
-  TCHAR* end;
-  angle = _tcstol(str, &end, 10);
-  if (str == end)
-    angle = 0;
+  if (auto value = ParseInteger<unsigned>(src))
+    return Angle::Degrees(*value);
 
-  return Angle::Degrees(angle);
+  return Angle::Zero();
 }
 
+[[gnu::pure]]
 static double
-ParseRadius(const TCHAR* str)
+ParseRadius(std::string_view src) noexcept
 {
-  int radius = 500;
-  TCHAR* end;
-  radius = _tcstol(str, &end, 10);
-  if (str == end)
-    radius = 500;
+  if (src.ends_with('m'))
+    src.remove_suffix(1);
 
-  return radius;
+  if (auto value = ParseInteger<unsigned>(src))
+    return *value;
+
+  return 500;
 }
 
+[[gnu::pure]]
 static double
-ParseMaxAlt(const TCHAR* str)
+ParseMaxAlt(std::string_view src) noexcept
 {
-  double maxalt = 0;
-  TCHAR* end;
-  maxalt = _tcstod(str, &end);
-  if (str == end)
-    return 0;
+  Unit unit = Unit::METER;
 
-  if (_tcslen(end) >= 2 && end[0] == _T('f') && end[1] == _T('t'))
-    maxalt = Units::ToSysUnit(maxalt, Unit::FEET);
+  if (RemoveSuffix(src, "ft"sv))
+    unit = Unit::FEET;
+  else
+    RemoveSuffix(src, "m"sv);
 
-  return maxalt;
+  if (auto value = ParseDecimal(src))
+    return Units::ToSysUnit(*value, unit);
+
+  return 0;
 }
 
 /**
@@ -124,19 +150,14 @@ ParseMaxAlt(const TCHAR* str)
  * @param n_params number parameters in the line
  */
 static void
-ParseOptions(SeeYouTaskInformation *task_info, const TCHAR *params[],
-             const size_t n_params)
+ParseOptions(SeeYouTaskInformation &task_info, std::string_view src) noexcept
 {
-  // Iterate through available task options
-  for (unsigned i = 1; i < n_params; i++) {
-    if (auto wp_dis = StringAfterPrefix(params[i], _T("WpDis="))) {
-      // Parse WpDis option
-      if (StringIsEqual(wp_dis, _T("False")))
-        task_info->wp_dis = false;
-    } else if (auto task_time = StringAfterPrefix(params[i], _T("TaskTime="))) {
-      // Parse TaskTime option
-      if (!StringIsEmpty(task_time))
-        task_info->task_time = ParseTaskTime(task_time);
+  for (std::string_view i : IterableSplitString(src, ',')) {
+    if (SkipPrefix(i, "WpDis="sv)) {
+      if (i == "False"sv)
+        task_info.wp_dis = false;
+    } else if (SkipPrefix(i, "TaskTime="sv)) {
+      task_info.task_time = ParseTaskTime(i);
     }
   }
 }
@@ -146,42 +167,29 @@ ParseOptions(SeeYouTaskInformation *task_info, const TCHAR *params[],
  * @param n_params Number parameters in the line
  */
 static void
-ParseOZs(SeeYouTurnpointInformation &tp_info, const TCHAR *params[],
-         unsigned n_params)
+ParseOZs(SeeYouTurnpointInformation &tp_info, std::string_view src) noexcept
 {
   tp_info.valid = true;
-  // Iterate through available OZ options
-  for (unsigned i = 0; i < n_params; i++) {
-    const TCHAR *pair = params[i];
 
-    if (auto style = StringAfterPrefix(pair, _T("Style="))) {
-      if (!StringIsEmpty(style))
-        tp_info.style = ParseStyle(style);
-    } else if (auto r1 = StringAfterPrefix(pair, _T("R1="))) {
-      if (!StringIsEmpty(r1))
-        tp_info.radius1 = ParseRadius(r1);
-    } else if (auto a1 = StringAfterPrefix(pair, _T("A1="))) {
-      if (!StringIsEmpty(a1))
-        tp_info.angle1 = ParseAngle(a1);
-    } else if (auto r2 = StringAfterPrefix(pair, _T("R2="))) {
-      if (!StringIsEmpty(r2))
-        tp_info.radius2 = ParseRadius(r2);
-    } else if (auto a2 = StringAfterPrefix(pair, _T("A2="))) {
-      if (!StringIsEmpty(a2))
-        tp_info.angle2 = ParseAngle(a2);
-    } else if (auto a12 = StringAfterPrefix(pair, _T("A12="))) {
-      if (!StringIsEmpty(a12))
-        tp_info.angle12 = ParseAngle(a12);
-    } else if (auto max_altitude = StringAfterPrefix(pair, _T("MaxAlt="))) {
-      if (!StringIsEmpty(max_altitude))
-        tp_info.max_altitude = ParseMaxAlt(max_altitude);
-    } else if (auto line = StringAfterPrefix(pair, _T("Line="))) {
-      if (*line == _T('1'))
-        tp_info.is_line = true;
-    } else if (auto reduce = StringAfterPrefix(pair, _T("Reduce="))) {
-      if (*reduce == _T('1'))
-        tp_info.reduce = true;
-    }
+  for (std::string_view i : IterableSplitString(src, ',')) {
+    if (SkipPrefix(i, "Style="sv))
+      tp_info.style = ParseStyle(i);
+    else if (SkipPrefix(i, "R1="sv))
+      tp_info.radius1 = ParseRadius(i);
+    else if (SkipPrefix(i, "A1="sv))
+      tp_info.angle1 = ParseAngle(i);
+    else if (SkipPrefix(i, "R2="sv))
+      tp_info.radius2 = ParseRadius(i);
+    else if (SkipPrefix(i, "A2="sv))
+      tp_info.angle2 = ParseAngle(i);
+    else if (SkipPrefix(i, "A12="sv))
+      tp_info.angle12 = ParseAngle(i);
+    else if (SkipPrefix(i, "MaxAlt="sv))
+      tp_info.max_altitude = ParseMaxAlt(i);
+    else if (SkipPrefix(i, "Line="sv))
+      tp_info.is_line = i.starts_with('1');
+    else if (SkipPrefix(i, "Reduce="sv))
+      tp_info.reduce = i.starts_with('1');
   }
 }
 
@@ -192,36 +200,33 @@ ParseOZs(SeeYouTurnpointInformation &tp_info, const TCHAR *params[],
  * @param turnpoint_infos Loads this with CU task tp info
  */
 static void
-ParseCUTaskDetails(TLineReader &reader, SeeYouTaskInformation *task_info,
+ParseCUTaskDetails(BufferedReader &reader, SeeYouTaskInformation &task_info,
                    SeeYouTurnpointInformation turnpoint_infos[])
 {
   // Read options/observation zones
-  TCHAR params_buffer[1024];
-  const TCHAR *params[20];
-  TCHAR *line;
-  const unsigned int max_params = ARRAY_SIZE(params);
+  char *line;
   while ((line = reader.ReadLine()) != nullptr &&
-         line[0] != _T('\"') && line[0] != _T(',')) {
-    const size_t n_params = ExtractParameters(line, params_buffer,
-                                              params, max_params, true);
+         line[0] != '\"' && line[0] != ',') {
+    std::string_view src{line};
 
-    if (StringIsEqual(params[0], _T("Options"))) {
-      // Options line found
-      ParseOptions(task_info, params, n_params);
+    if (SkipPrefix(src, "Options,"sv)) {
+      ParseOptions(task_info, src);
 
-    } else if (auto obs_zone = StringAfterPrefix(params[0], _T("ObsZone="))) {
-      // Observation zone line found
-      if (StringIsEmpty(obs_zone))
+    } else if (SkipPrefix(src, "ObsZone="sv)) {
+      auto [index_string, rest] = Split(src, ',');
+
+      std::size_t index;
+      if (auto value = ParseInteger<std::size_t>(index_string))
+        index = *value;
+      else
         continue;
 
-      TCHAR *end;
-      const std::size_t TPIndex = _tcstol(obs_zone, &end, 10);
-      if (end == obs_zone || TPIndex >= CUP_MAX_TPS)
+      if (index >= CUP_MAX_TPS)
         continue;
 
-      ParseOZs(turnpoint_infos[TPIndex], params + 1, n_params - 1);
-      if (TPIndex == 0)
-        task_info->max_start_altitude = turnpoint_infos[TPIndex].max_altitude;
+      ParseOZs(turnpoint_infos[index], rest);
+      if (index == 0)
+        task_info.max_start_altitude = turnpoint_infos[index].max_altitude;
     }
   } // end while
 }
@@ -417,31 +422,31 @@ CreatePoint(unsigned pos, unsigned n_waypoints, WaypointPtr &&wp,
  * file contains no task
  */
 static bool
-ParseSeeYouWaypoints(TLineReader &reader, Waypoints &way_points)
+ParseSeeYouWaypoints(BufferedReader &reader, Waypoints &way_points)
 {
   const WaypointFactory factory(WaypointOrigin::NONE);
   WaypointReaderSeeYou waypoint_file(factory);
 
   while (true) {
-    TCHAR *line = reader.ReadLine();
+    char *line = reader.ReadLine();
     if (line == nullptr)
       return false;
 
-    if (StringIsEqualIgnoreCase(line, _T("-----Related Tasks-----")))
+    if (StringIsEqualIgnoreCase(line, "-----Related Tasks-----"))
       return true;
 
     waypoint_file.ParseLine(line, way_points);
   }
 }
 
-static TCHAR *
-AdvanceReaderToTask(TLineReader &reader, const unsigned index)
+static char *
+AdvanceReaderToTask(BufferedReader &reader, const unsigned index)
 {
   // Skip lines until n-th task
   unsigned count = 0;
-  TCHAR *line;
+  char *line;
   while ((line = reader.ReadLine()) != nullptr) {
-    if (line[0] == _T('\"') || line[0] == _T(',')) {
+    if (line[0] == '\"' || line[0] == ',') {
       if (count == index)
         break;
 
@@ -456,7 +461,9 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
                         const Waypoints *waypoints, unsigned index) const
 try {
   // Create FileReader for reading the task
-  FileLineReader reader(path, Charset::AUTO);
+  FileReader file_reader{path};
+  BufferedReader reader{file_reader};
+  StringConverter string_converter;
 
   // Read waypoints from the CUP file
   Waypoints file_waypoints;
@@ -465,22 +472,20 @@ try {
 
   file_waypoints.Optimise();
 
-  TCHAR *line = AdvanceReaderToTask(reader, index);
+  char *line = AdvanceReaderToTask(reader, index);
   if (line == nullptr)
     return nullptr;
 
   // Read waypoint list
   // e.g. "Club day 4 Racing task","085PRI","083BOJ","170D_K","065SKY","0844YY", "0844YY"
   //       TASK NAME              , TAKEOFF, START  , TP1    , TP2    , FINISH ,  LANDING
-  TCHAR waypoints_buffer[1024];
-  const TCHAR *wps[CUP_MAX_TPS];
-  size_t n_waypoints = ExtractParameters(line, waypoints_buffer, wps, CUP_MAX_TPS,
-                                         true, _T('"'));
+  std::array<std::string_view, CUP_MAX_TPS> wps;
+  CupSplitColumns(line, wps);
 
-  // Some versions of StrePla append a trailing ',' without a following
-  // WP name resulting an empty last entry. Remove it from the results
-  if (n_waypoints > 0 && wps[n_waypoints - 1][0] == _T('\0'))
-    n_waypoints --;
+  std::size_t n_waypoints = 0;
+  for (std::size_t i = 0; i < wps.size(); ++i)
+    if (!wps[i].empty())
+      n_waypoints = i + 1;
 
   // At least taskname and takeoff, start, finish and landing points are needed
   if (n_waypoints < 5)
@@ -493,7 +498,7 @@ try {
   SeeYouTurnpointInformation turnpoint_infos[CUP_MAX_TPS];
   WaypointPtr waypoints_in_task[CUP_MAX_TPS];
 
-  ParseCUTaskDetails(reader, &task_info, turnpoint_infos);
+  ParseCUTaskDetails(reader, task_info, turnpoint_infos);
 
   auto task = std::make_unique<OrderedTask>(task_behaviour);
   task->SetFactory(task_info.wp_dis ?
@@ -514,7 +519,7 @@ try {
 
   // mark task waypoints.  Skip takeoff and landing point
   for (unsigned i = 0; i < n_waypoints; i++) {
-    auto file_wp = file_waypoints.LookupName(wps[i + 2]);
+    auto file_wp = file_waypoints.LookupName(string_converter.Convert(wps[i + 2]));
     if (file_wp == nullptr)
       return nullptr;
 
@@ -570,36 +575,29 @@ TaskFileSeeYou::GetList() const
   std::vector<tstring> result;
 
   // Open the CUP file
-  FileLineReader reader(path, Charset::AUTO);
+  FileReader file_reader{path};
+  BufferedReader reader{file_reader};
+  StringConverter string_converter;
 
   bool in_task_section = false;
-  TCHAR *line;
+  char *line;
   while ((line = reader.ReadLine()) != nullptr) {
     if (in_task_section) {
       // If the line starts with a string or "nothing" followed
       // by a comma it is a new task definition line
-      if (line[0] == _T('\"') || line[0] == _T(',')) {
+      if (line[0] == '\"' || line[0] == ',') {
         // If the task doesn't have a name inside the file
-        if (line[0] == _T(','))
+        if (line[0] == ',')
           result.emplace_back();
         else {
-          // Ignore starting quote (")
-          line++;
-
-          // Save pointer to first character
-          TCHAR *name = line;
-          // Skip characters until next quote (") or end of string
-          while (line[0] != _T('\"') && line[0] != _T('\0'))
-            line++;
-
-          // Replace quote (") by end of string (null)
-          line[0] = _T('\0');
+          std::string_view rest{line};
+          const std::string_view task_name = CupNextColumn(rest);
 
           // Append task name to the list
-          result.emplace_back(name);
+          result.emplace_back(string_converter.Convert(task_name));
         }
       }
-    } else if (StringIsEqualIgnoreCase(line, _T("-----Related Tasks-----"))) {
+    } else if (StringIsEqualIgnoreCase(line, "-----Related Tasks-----")) {
       // Found the marker -> all following lines are task lines
       in_task_section = true;
     }

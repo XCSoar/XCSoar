@@ -16,7 +16,6 @@
 #include "Look/Look.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
-#include "util/Macros.hpp"
 #include "Language/Language.hpp"
 #include "Widget/CallbackWidget.hpp"
 #include "Components.hpp"
@@ -118,8 +117,7 @@ InfoBoxContentBarogram::Update(InfoBoxData &data) noexcept
   TCHAR sTmp[32];
 
   if (basic.NavAltitudeAvailable()) {
-    FormatUserAltitude(basic.nav_altitude, sTmp,
-                       ARRAY_SIZE(sTmp));
+    FormatUserAltitude(basic.nav_altitude, sTmp);
     data.SetComment(sTmp);
   } else
     data.SetCommentInvalid();

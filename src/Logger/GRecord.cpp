@@ -62,7 +62,7 @@ AppendIGCString(MD5 &md5, std::string_view s, bool ignore_comma) noexcept
       continue;
 
     if (IsValidIGCChar(ch))
-      md5.Append(ch);
+      md5.Append(static_cast<std::byte>(ch));
   }
 }
 

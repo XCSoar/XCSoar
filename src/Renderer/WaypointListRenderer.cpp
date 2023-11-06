@@ -57,12 +57,12 @@ Draw(Canvas &canvas, PixelRect rc,
 
   if (vector) {
     // Draw leg distance
-    FormatUserDistanceSmart(vector->distance, buffer.buffer(), true);
-    const int distance_x = row_renderer.DrawRightFirstRow(canvas, rc, buffer);
+    const int distance_x = row_renderer.DrawRightFirstRow(canvas, rc,
+                                                          FormatUserDistanceSmart(vector->distance, true));
 
     // Draw leg bearing
-    FormatBearing(buffer.buffer(), buffer.capacity(), vector->bearing);
-    const int bearing_x = row_renderer.DrawRightSecondRow(canvas, rc, buffer);
+    const int bearing_x = row_renderer.DrawRightSecondRow(canvas, rc,
+                                                          FormatBearing(vector->bearing));
 
     rc.right = std::min(distance_x, bearing_x);
   }

@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Protocol.hpp"
-#include "util/CRC.hpp"
+#include "util/CRC16CCITT.hpp"
 #include "Device/Error.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"

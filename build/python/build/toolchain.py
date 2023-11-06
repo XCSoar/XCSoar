@@ -1,5 +1,6 @@
 import sys
 import os
+import platform
 from typing import Union
 
 class NativeToolchain:
@@ -14,6 +15,11 @@ class NativeToolchain:
         self.build_path = other.build_path
         self.install_prefix = lib_path
         self.host_triplet = None
+
+        machine = platform.machine()
+        self.is_arm = machine.startswith('arm')
+        self.is_armv7 = machine.startswith('armv7')
+        self.is_aarch64 = machine.startswith('aarch64')
         self.is_windows = False
         self.is_android = False
         self.is_darwin = sys.platform == 'darwin'
@@ -47,6 +53,10 @@ class Toolchain:
         self.build_path = build_path
         self.install_prefix = install_prefix
         self.host_triplet = host_triplet
+
+        self.is_arm = host_triplet.startswith('arm')
+        self.is_armv7 = host_triplet.startswith('armv7')
+        self.is_aarch64 = host_triplet.startswith('aarch64')
         self.is_windows = 'mingw32' in host_triplet
         self.is_android = '-android' in host_triplet
         self.is_darwin = '-darwin' in host_triplet

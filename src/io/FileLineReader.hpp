@@ -4,8 +4,9 @@
 #pragma once
 
 #include "FileReader.hxx"
+#include "LineReader.hpp"
 #include "BufferedReader.hxx"
-#include "ConvertLineReader.hpp"
+#include "system/Path.hpp"
 
 /**
  * Glue class which combines FileReader and BufferedReader, and provides
@@ -33,22 +34,4 @@ public:
 public:
   /* virtual methods from class NLineReader */
   char *ReadLine() override;
-  long GetSize() const override;
-  long Tell() const override;
-};
-
-class FileLineReader : public ConvertLineReader {
-public:
-  /**
-   * Throws std::runtime_errror on error.
-   */
-  FileLineReader(Path path, Charset cs=Charset::UTF8)
-    :ConvertLineReader(std::make_unique<FileLineReaderA>(path), cs) {}
-
-  /**
-   * Rewind the file to the beginning.
-   */
-  void Rewind() {
-    ((FileLineReaderA &)GetSource()).Rewind();
-  }
 };

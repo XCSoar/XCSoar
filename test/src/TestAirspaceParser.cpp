@@ -25,12 +25,11 @@ struct AirspaceClassTestCouple
 static bool
 ParseFile(Path path, Airspaces &airspaces)
 {
-  FileLineReader reader(path, Charset::AUTO);
-
-  NullOperationEnvironment operation;
+  FileReader file_reader{path};
+  BufferedReader buffered_reader{file_reader};
 
   try {
-    ParseAirspaceFile(airspaces, reader, operation);
+    ParseAirspaceFile(airspaces, buffered_reader);
     ok1(true);
   } catch (...) {
     ok1(false);

@@ -8,15 +8,3 @@ FileLineReaderA::ReadLine()
 {
   return buffered.ReadLine();
 }
-
-long
-FileLineReaderA::GetSize() const
-{
-  return file.GetSize();
-}
-
-long
-FileLineReaderA::Tell() const
-{
-  return file.GetPosition();
-}

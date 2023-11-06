@@ -51,15 +51,14 @@ DrawFlarmTraffic(Canvas &canvas, const WindowProjection &projection,
 
     if (!fading && traffic.climb_rate_avg30s >= 0.1) {
       // If average climb data available draw it to the canvas
-      TCHAR label_avg[100];
-      FormatUserVerticalSpeed(traffic.climb_rate_avg30s,
-                              label_avg, false);
 
       // Draw the average climb value above the icon
       auto sc_av = sc;
       sc_av.y += Layout::Scale(5);
 
-      TextInBox(canvas, label_avg, sc_av, mode,
+      TextInBox(canvas,
+                FormatUserVerticalSpeed(traffic.climb_rate_avg30s, false),
+                sc_av, mode,
                 projection.GetScreenRect());
     }
   }
@@ -169,9 +168,6 @@ MapWindow::DrawGLinkTraffic([[maybe_unused]] Canvas &canvas) const noexcept
     if (traf.climb_rate_received) {
 
       // If average climb data available draw it to the canvas
-      TCHAR label_avg[100];
-      FormatUserVerticalSpeed(traf.climb_rate,
-                                     label_avg, false);
       mode.align = TextInBoxMode::Alignment::LEFT;
 
       // Draw the average climb to the right of the icon
@@ -179,7 +175,9 @@ MapWindow::DrawGLinkTraffic([[maybe_unused]] Canvas &canvas) const noexcept
       sc_av.x += Layout::Scale(10);
       sc_av.y -= Layout::Scale(8);
 
-      TextInBox(canvas, label_avg, sc_av, mode, GetClientRect());
+      TextInBox(canvas,
+                FormatUserVerticalSpeed(traf.climb_rate, false),
+                sc_av, mode, GetClientRect());
     }
 
     // use GPS altitude to be consistent with GliderLink

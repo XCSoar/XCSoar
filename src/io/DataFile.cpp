@@ -3,8 +3,6 @@
 
 #include "DataFile.hpp"
 #include "FileReader.hxx"
-#include "FileLineReader.hpp"
-#include "ConvertLineReader.hpp"
 #include "LocalPath.hpp"
 #include "system/Path.hpp"
 #include "util/StringCompare.hxx"
@@ -19,20 +17,4 @@ OpenDataFile(const TCHAR *name)
 
   const auto path = LocalPath(name);
   return std::make_unique<FileReader>(path);
-}
-
-std::unique_ptr<TLineReader>
-OpenDataTextFile(const TCHAR *name, Charset cs)
-{
-  return std::make_unique<ConvertLineReader>(OpenDataTextFileA(name), cs);
-}
-
-std::unique_ptr<NLineReader>
-OpenDataTextFileA(const TCHAR *name)
-{
-  assert(name != nullptr);
-  assert(!StringIsEmpty(name));
-
-  const auto path = LocalPath(name);
-  return std::make_unique<FileLineReaderA>(path);
 }

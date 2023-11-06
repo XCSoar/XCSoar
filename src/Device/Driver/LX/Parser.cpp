@@ -75,8 +75,8 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
-static void
-LXWP1(NMEAInputLine &line, DeviceInfo &device)
+void
+LXDevice::LXWP1(NMEAInputLine &line, DeviceInfo &device)
 {
   /*
    * $LXWP1,
@@ -226,7 +226,7 @@ PLXVC(NMEAInputLine &line, DeviceInfo &device,
 
     const auto name = line.ReadView();
     if (name == "LXWP1"sv) {
-      LXWP1(line, secondary_device);
+      LXDevice::LXWP1(line, secondary_device);
     } else if (name == "INFO"sv) {
       const auto type2 = line.ReadView();
       if (type2.starts_with('A'))

@@ -100,7 +100,7 @@ MD5::Initialise() noexcept
 }
 
 void
-MD5::Append(uint8_t ch) noexcept
+MD5::Append(std::byte ch) noexcept
 {
   unsigned position = unsigned(message_length++) % buff512bits.size();
   buff512bits[position++] = ch;
@@ -109,12 +109,10 @@ MD5::Append(uint8_t ch) noexcept
 }
 
 void
-MD5::Append(const void *data, size_t length) noexcept
+MD5::Append(std::span<const std::byte> src) noexcept
 {
-  const uint8_t *i = (const uint8_t *)data, *const end = i + length;
-
-  while (i != end)
-    Append(*i++);
+  for (std::byte i : src)
+    Append(i);
 }
 
 /**
@@ -135,11 +133,11 @@ MD5::Finalize() noexcept
 
   if (buffer_left_over < (64 - 8)) {
     // append "1" bit to end of buffer
-    buff512bits[buffer_left_over] = 0x80;
+    buff512bits[buffer_left_over] = std::byte{0x80};
 
     // pad with 56 - len to get exactly
     std::fill(std::next(buff512bits.begin(), buffer_left_over + 1),
-              buff512bits.end(), 0);
+              buff512bits.end(), std::byte{});
 
     // exactly 64 bits left for message size bits
 
@@ -148,16 +146,16 @@ MD5::Finalize() noexcept
     // >= 56 bits already in buffer
 
     // append "1" bit to end of buffer
-    buff512bits[buffer_left_over] = 0x80;
+    buff512bits[buffer_left_over] = std::byte{0x80};
 
     // fill buffer w/ 0's and process
     std::fill(std::next(buff512bits.begin(), buffer_left_over + 1),
-              buff512bits.end(), 0);
+              buff512bits.end(), std::byte{});
 
     Process512();
 
     // now  load 1st 56 bytes of buffer w/ all 0's,
-    std::fill(buff512bits.begin(), buff512bits.end(), 0);
+    std::fill(buff512bits.begin(), buff512bits.end(), std::byte{});
 
     // ready to append message length
   }

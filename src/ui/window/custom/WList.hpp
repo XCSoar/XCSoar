@@ -4,8 +4,7 @@
 #pragma once
 
 #include "../Window.hpp"
-
-#include <boost/intrusive/list.hpp>
+#include "util/IntrusiveList.hxx"
 
 #include <cassert>
 
@@ -18,11 +17,8 @@ class Canvas;
  * #ContainerWindow implementation to manage its children.
  */
 class WindowList {
-  typedef boost::intrusive::list<Window,
-                                 boost::intrusive::member_hook<Window,
-                                                               Window::SiblingsHook,
-                                                               &Window::siblings>,
-                                 boost::intrusive::constant_time_size<false>> List;
+  using List = IntrusiveList<Window,
+                             IntrusiveListMemberHookTraits<&Window::siblings>>;
 
   List list;
 

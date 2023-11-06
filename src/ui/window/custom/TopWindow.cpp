@@ -138,7 +138,8 @@ TopWindow::Expose() noexcept
     OnPaint(canvas);
 
 #ifdef DRAW_MOUSE_CURSOR
-    DrawMouseCursor(canvas);
+    if (std::chrono::steady_clock::now() < cursor_visible_until)
+      DrawMouseCursor(canvas);
 #endif
 
     screen->Unlock();

@@ -56,7 +56,7 @@ LX::SendPacket(Port &port, Command command,
   SendCommand(port, command);
 
   port.FullWrite(payload, env, timeout);
-  port.Write(calc_crc(payload, std::byte{0xff}));
+  port.Write(UpdateCRC8(payload, std::byte{0xff}));
 }
 
 bool
@@ -98,30 +98,6 @@ LX::ReceivePacketRetry(Port &port, Command command,
   }
 }
 
-std::byte
-LX::calc_crc_char(std::byte d, std::byte crc) noexcept
-{
-  constexpr std::byte crcpoly{0x69};
-  int count;
-
-  for (count = 8; --count >= 0; d <<= 1) {
-    std::byte tmp = crc ^ d;
-    crc <<= 1;
-    if ((tmp & std::byte{0x80}) != std::byte{})
-      crc ^= crcpoly;
-  }
-  return crc;
-}
-
-std::byte
-LX::calc_crc(std::span<const std::byte> src, std::byte crc) noexcept
-{
-  for (const auto i : src)
-    crc = calc_crc_char(i, crc);
-
-  return crc;
-}
-
 bool
 LX::ReadCRC(Port &port, std::span<std::byte> dest, OperationEnvironment &env,
             std::chrono::steady_clock::duration first_timeout,
@@ -137,5 +113,5 @@ LX::ReadCRC(Port &port, std::span<std::byte> dest, OperationEnvironment &env,
                 subsequent_timeout, subsequent_timeout,
                 subsequent_timeout);
 
-  return calc_crc(dest, std::byte{0xff}) == crc;
+  return UpdateCRC8(dest, std::byte{0xff}) == crc;
 }

@@ -156,7 +156,7 @@ FlarmTrafficDetailsWidget::UpdateChanging(const MoreData &basic)
 
   // Fill distance/direction field
   if (target_ok) {
-    FormatUserDistanceSmart(target->distance, tmp, 20, 1000);
+    FormatUserDistanceSmart(target->distance, tmp, true, 20, 1000);
     TCHAR *p = tmp + _tcslen(tmp);
     *p++ = _T(' ');
     FormatAngleDelta(p, 20, target->Bearing() - basic.track);
@@ -170,7 +170,7 @@ FlarmTrafficDetailsWidget::UpdateChanging(const MoreData &basic)
   if (target_ok) {
     TCHAR *p = tmp;
     if (target->altitude_available) {
-      FormatUserAltitude(target->altitude, p, 20);
+      FormatUserAltitude(target->altitude, p);
       p += _tcslen(p);
       *p++ = _T(' ');
     }
@@ -186,7 +186,7 @@ FlarmTrafficDetailsWidget::UpdateChanging(const MoreData &basic)
 
   // Fill climb speed field
   if (target_ok && target->climb_rate_avg30s_available) {
-    FormatUserVerticalSpeed(target->climb_rate_avg30s, tmp, 20);
+    FormatUserVerticalSpeed(target->climb_rate_avg30s, tmp);
     value = tmp;
   } else
     value = _T("--");

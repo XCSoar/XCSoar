@@ -8,6 +8,8 @@
 #include "Device/SettingsMap.hpp"
 #include "thread/Mutex.hxx"
 #include "util/StaticString.hxx"
+#include "NMEA/InputLine.hpp"
+#include "NMEA/Info.hpp"
 
 #include <atomic>
 #include <cstdint>
@@ -238,6 +240,10 @@ protected:
   bool EnableLoggerNMEA(OperationEnvironment &env);
 
   bool EnableCommandMode(OperationEnvironment &env);
+
+public:
+  // These methods are reused by the LX Eos driver
+  static void LXWP1(NMEAInputLine &line, DeviceInfo &device);
 
 public:
   /* virtual methods from class Device */

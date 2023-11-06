@@ -30,12 +30,12 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "Protection.hpp"
-#include "LogFile.hpp"
 #include "Menu/ButtonLabel.hpp"
 #include "Profile/Keys.hpp"
 #include "Menu/MenuData.hpp"
 #include "io/ConfiguredFile.hpp"
-#include "io/LineReader.hpp"
+#include "io/FileReader.hxx"
+#include "io/BufferedReader.hxx"
 #include "Pan.hpp"
 #include "Dialogs/LockScreen.hpp"
 #include "Menu/MenuBar.hpp"
@@ -103,17 +103,17 @@ static InputConfig input_config;
 void
 InputEvents::readFile()
 {
-  LogString("Loading input events file");
-
   // clear the GCE and NMEA queues
   ClearQueues();
 
   LoadDefaults(input_config);
 
   // Read in user defined configuration file
-  auto reader = OpenConfiguredTextFile(ProfileKeys::InputFile);
-  if (reader)
-    ::ParseInputFile(input_config, *reader);
+  auto reader = OpenConfiguredFile(ProfileKeys::InputFile);
+  if (reader) {
+    BufferedReader buffered_reader{*reader};
+    ::ParseInputFile(input_config, buffered_reader);
+  }
 }
 
 void

@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "HorizonRenderer.hpp"
+#include "RadarRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/HorizonLook.hpp"
@@ -28,10 +29,11 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   is the case or not.
   */
 
-  const auto center = rc.GetCenter();
+  RadarRenderer radar_renderer{Layout::Scale(1U)};
+  radar_renderer.UpdateLayout(rc);
 
-  const int radius = std::min(rc.GetWidth(), rc.GetHeight()) / 2
-    - Layout::Scale(1);
+  const auto center = radar_renderer.GetCenter();
+  const int radius = radar_renderer.GetRadius();
 
   auto bank_degrees = attitude.bank_angle_available
     ? attitude.bank_angle.Degrees()

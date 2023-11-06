@@ -2,41 +2,50 @@
 // Copyright The XCSoar Project
 
 #include "WaypointReaderSeeYou.hpp"
+#include "CupParser.hpp"
 #include "Units/System.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "util/ExtractParameters.hpp"
-#include "util/Macros.hpp"
+#include "util/DecimalParser.hxx"
 #include "util/IterableSplitString.hxx"
+#include "util/NumberParser.hxx"
 
 #include <stdlib.h>
 
-static bool
-ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
-{
-  TCHAR *endptr;
+using std::string_view_literals::operator""sv;
 
-  long min = _tcstol(src, &endptr, 10);
-  if (endptr == src || *endptr != _T('.') || min < 0)
+static bool
+ParseAngle(std::string_view src, Angle &dest, const bool lat) noexcept
+{
+  bool negative = false;
+  if (src.ends_with(lat ? 'S' : 'W'))
+    negative = true;
+  else if (!src.ends_with(lat ? 'N' : 'E'))
     return false;
 
-  src = endptr + 1;
+  src.remove_suffix(1);
 
-  long deg = min / 100;
-  min = min % 100;
-  if (min >= 60)
+  const auto [degrees_minutes_string, fraction_string] = Split(src, '.');
+  if (fraction_string.size() != 3)
+    return false;
+
+  unsigned degrees_minutes, fraction;
+
+  if (auto value = ParseInteger<unsigned>(degrees_minutes_string))
+    degrees_minutes = *value;
+  else
     return false;
 
   // Limit angle to +/- 90 degrees for Latitude or +/- 180 degrees for Longitude
-  deg = std::min(deg, lat ? 90L : 180L);
+  const unsigned degrees = std::min(degrees_minutes / 100, lat ? 90U : 180U);
+  const unsigned minutes = degrees_minutes % 100;
 
-  long l = _tcstol(src, &endptr, 10);
-  if (endptr != src + 3 || l < 0 || l >= 1000)
+  if (auto value = ParseInteger<unsigned>(fraction_string))
+    fraction = *value;
+  else
     return false;
 
-  auto value = deg + min / 60. + l / 60000.;
-
-  TCHAR sign = *endptr;
-  if (sign == 'W' || sign == 'w' || sign == 'S' || sign == 's')
+  auto value = static_cast<double>(degrees) + minutes / 60. + fraction / 60000.;
+  if (negative)
     value = -value;
 
   // Save angle
@@ -45,51 +54,51 @@ ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
 }
 
 static bool
-ParseAltitude(const TCHAR *src, double &dest)
+ParseAltitude(std::string_view src, double &dest) noexcept
 {
-  // Parse string
-  TCHAR *endptr;
-  double value = _tcstod(src, &endptr);
-  if (endptr == src)
+  Unit unit = Unit::METER;
+  if (src.ends_with('f') || src.ends_with('F'))
+    unit = Unit::FEET;
+  else if (!src.ends_with('m') && !src.ends_with('M'))
     return false;
 
-  dest = value;
+  src.remove_suffix(1);
+
+  // Parse string
+  const auto value = ParseDecimal(src);
+  if (!value)
+    return false;
 
   // Convert to system unit if necessary
-  TCHAR unit = *endptr;
-  if (unit == 'F' || unit == 'f')
-    dest = Units::ToSysUnit(dest, Unit::FEET);
-
-  // Save altitude
+  dest = Units::ToSysUnit(*value, unit);
   return true;
 }
 
 static bool
-ParseDistance(const TCHAR *src, double &dest)
+ParseDistance(std::string_view src, double &dest)
 {
-  // Parse string
-  TCHAR *endptr;
-  double value = _tcstod(src, &endptr);
-  if (endptr == src)
+  Unit unit = Unit::METER;
+  if (RemoveSuffix(src, "ml"sv) || RemoveSuffix(src, "ML"sv))
+    unit = Unit::STATUTE_MILES;
+  else if (RemoveSuffix(src, "nm"sv) || RemoveSuffix(src, "NM"sv))
+    unit = Unit::NAUTICAL_MILES;
+  else if (RemoveSuffix(src, "ft"sv) || RemoveSuffix(src, "FT"sv))
+    unit = Unit::FEET;
+  else if (!RemoveSuffix(src, "m"sv) && !RemoveSuffix(src, "M"sv))
     return false;
 
-  dest = value;
+  // Parse string
+  const auto value = ParseDecimal(src);
+  if (!value)
+    return false;
 
-  // Convert to system unit if necessary, assume m as default
-  TCHAR* unit = endptr;
-  if (StringIsEqualIgnoreCase(unit, _T("ml")))
-    dest = Units::ToSysUnit(dest, Unit::STATUTE_MILES);
-  else if (StringIsEqualIgnoreCase(unit, _T("nm")))
-    dest = Units::ToSysUnit(dest, Unit::NAUTICAL_MILES);
-  else if (StringIsEqualIgnoreCase(unit, _T("ft")))
-    dest = Units::ToSysUnit(dest, Unit::FEET);
-
-  // Save distance
+  // Convert to system unit if necessary
+  dest = Units::ToSysUnit(*value, unit);
   return true;
 }
 
 static bool
-ParseStyle(const TCHAR* src, Waypoint::Type &type)
+ParseStyle(std::string_view src, Waypoint::Type &type)
 {
   // 1 - Normal
   // 2 - AirfieldGrass
@@ -98,9 +107,11 @@ ParseStyle(const TCHAR* src, Waypoint::Type &type)
   // 5 - AirfieldSolid ...
 
   // Parse string
-  TCHAR *endptr;
-  long style = _tcstol(src, &endptr, 10);
-  if (endptr == src)
+  unsigned style;
+
+  if (auto value = ParseInteger<unsigned>(src))
+    style = *value;
+  else
     return false;
 
   // Update flags
@@ -166,7 +177,7 @@ ParseStyle(const TCHAR* src, Waypoint::Type &type)
 }
 
 bool
-WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
+WaypointReaderSeeYou::ParseLine(const char *line, Waypoints &waypoints)
 {
   enum {
     iName = 0,
@@ -183,36 +194,28 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
   };
 
   // If (end-of-file or comment)
-  if (StringIsEmpty(line) ||
-      StringStartsWith(line, _T("*")))
+  if (StringIsEmpty(line) || *line == '*')
     // -> return without error condition
     return true;
 
-  TCHAR ctemp[4096];
-  if (_tcslen(line) >= ARRAY_SIZE(ctemp))
-    /* line too long for buffer */
-    return false;
-
   // If task marker is reached ignore all following lines
-  if (StringStartsWith(line, _T("-----Related Tasks-----")))
+  if (StringStartsWith(line, "-----Related Tasks-----"))
     ignore_following = true;
   if (ignore_following)
     return true;
 
   // Get fields
-  const TCHAR *params[20];
-  size_t n_params = ExtractParameters(line, ctemp, params,
-                                      ARRAY_SIZE(params), true, _T('"'));
+  std::array<std::string_view, 20> params;
+  CupSplitColumns(line, params);
 
   if (first) {
     first = false;
-    if (line[0] != _T('\"')) {
+    if (line[0] != '"') {
       /*
        * If the first line doesn't begin with a quotation mark, it
        * doesn't describe a waypoint. It probably contains field names.
        */
-      if (iRWWidth < n_params &&
-          StringIsEqual(params[iRWWidth], _T("rwwidth"))) {
+      if (params[iRWWidth] == "rwwidth"sv) {
         /*
          * The name of the 10th field is "rwwidth" (runway width).
          * This field doesn't exist in "typical" SeeYou (*.cup) waypoint
@@ -231,7 +234,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
   }
 
   // Check if the basic fields are provided
-  if (n_params <= iLatitude)
+  if (params[iLatitude].data() == nullptr)
     return false;
 
   GeoPoint location;
@@ -249,73 +252,67 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
   Waypoint new_waypoint = factory.Create(location);
 
   // Name (e.g. "Some Turnpoint")
-  if (*params[iName] == _T('\0'))
+  if (params[iName].empty())
     return false;
-  new_waypoint.name = params[iName];
+  new_waypoint.name.assign(string_converter.Convert(params[iName]));
 
   // Elevation (e.g. 458.0m)
   /// @todo configurable behaviour
-  if (iElevation < n_params) {
-    if (ParseAltitude(params[iElevation], new_waypoint.elevation))
-      new_waypoint.has_elevation = true;
-    else
-      factory.FallbackElevation(new_waypoint);
-  }
+  if (!params[iElevation].empty() &&
+      ParseAltitude(params[iElevation], new_waypoint.elevation))
+    new_waypoint.has_elevation = true;
+  else
+    factory.FallbackElevation(new_waypoint);
 
   // Style (e.g. 5)
-  if (iStyle < n_params)
+  if (!params[iStyle].empty())
     ParseStyle(params[iStyle], new_waypoint.type);
 
   new_waypoint.flags.turn_point = true;
 
   // Short name (code) of waypoint 
-  if (iShortname < n_params)
-    new_waypoint.shortname = params[iShortname];
+  new_waypoint.shortname.assign(string_converter.Convert(params[iShortname]));
 
   // Frequency & runway direction/length (for airports and landables)
   // and description (e.g. "Some Description")
   if (new_waypoint.IsLandable()) {
-    if (iFrequency < n_params)
+    if (!params[iFrequency].empty())
       new_waypoint.radio_frequency = RadioFrequency::Parse(params[iFrequency]);
 
     // Runway length (e.g. 546.0m)
     double rwlen = -1;
-    if (iRWLen < n_params && ParseDistance(params[iRWLen], rwlen) &&
+    if (!params[iRWLen].empty() && ParseDistance(params[iRWLen], rwlen) &&
         rwlen > 0 && rwlen <= 30000)
       new_waypoint.runway.SetLength(uround(rwlen));
 
-    if (iRWDir < n_params && *params[iRWDir]) {
-      TCHAR *end;
-      int direction =_tcstol(params[iRWDir], &end, 10);
-      if (end == params[iRWDir] || direction < 0 || direction > 360 ||
-          (direction == 0 && rwlen <= 0))
-        direction = -1;
-      else if (direction == 360)
-        direction = 0;
-      if (direction >= 0)
-        new_waypoint.runway.SetDirectionDegrees(direction);
+    if (!params[iRWDir].empty()) {
+      if (auto value = ParseInteger<unsigned>(params[iRWDir])) {
+        unsigned direction = *value;
+
+        if (direction <= 360) {
+          if (direction == 360)
+            direction = 0;
+
+          new_waypoint.runway.SetDirectionDegrees(direction);
+        }
+      }
     }
   }
 
-  if (iDescription < n_params) {
-    /*
-     * This convention was introduced by the OpenAIP
-     * project (http://www.openaip.net/), since no waypoint type
-     * exists for thermal hotspots.
-     */
-    if (StringStartsWith(params[iDescription], _T("Hotspot")))
-      new_waypoint.type = Waypoint::Type::THERMAL_HOTSPOT;
+  /*
+   * This convention was introduced by the OpenAIP project
+   * (http://www.openaip.net/), since no waypoint type exists for
+   * thermal hotspots.
+   */
+  if (params[iDescription].starts_with("Hotspot"sv))
+    new_waypoint.type = Waypoint::Type::THERMAL_HOTSPOT;
 
-    new_waypoint.comment = params[iDescription];
-  }
+  new_waypoint.comment.assign(string_converter.Convert(params[iDescription]));
+  new_waypoint.details.assign(string_converter.Convert(params[iUserData]));
 
-  if (iUserData < n_params) {
-    new_waypoint.details = params[iUserData];
-  }
-
-  if (iPics < n_params) {
-    for (const auto i : TIterableSplitString(params[iPics], _T(';'))) {
-      new_waypoint.files_embed.emplace_front(i);
+  if (!params[iPics].empty()) {
+    for (const auto i : IterableSplitString(params[iPics], ';')) {
+      new_waypoint.files_embed.emplace_front(string_converter.Convert(i));
     }
   }
   waypoints.Append(std::move(new_waypoint));

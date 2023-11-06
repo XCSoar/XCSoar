@@ -24,7 +24,8 @@
 #include "Engine/Airspace/Airspaces.hpp"
 #include "LogFile.hpp"
 #include "io/ConfiguredFile.hpp"
-#include "io/LineReader.hpp"
+#include "io/FileReader.hxx"
+#include "io/BufferedReader.hxx"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "thread/Debug.hpp"
 
@@ -99,7 +100,7 @@ LoadFiles(PlacesOfInterestSettings &poi_settings,
   ConsoleOperationEnvironment operation;
 
   topography = new TopographyStore();
-  LoadConfiguredTopography(*topography, operation);
+  LoadConfiguredTopography(*topography);
 
   terrain = RasterTerrain::OpenTerrain(nullptr, operation).release();
 
@@ -107,10 +108,10 @@ LoadFiles(PlacesOfInterestSettings &poi_settings,
   WaypointGlue::SetHome(way_points, terrain, poi_settings, team_code_settings,
                         NULL, false);
 
-  auto reader = OpenConfiguredTextFile(ProfileKeys::AirspaceFile,
-                                       Charset::AUTO);
+  auto reader = OpenConfiguredFile(ProfileKeys::AirspaceFile);
   if (reader) {
-    ParseAirspaceFile(airspace_database, *reader, operation);
+    BufferedReader buffered_reader{*reader};
+    ParseAirspaceFile(airspace_database, buffered_reader);
     airspace_database.Optimise();
   }
 }

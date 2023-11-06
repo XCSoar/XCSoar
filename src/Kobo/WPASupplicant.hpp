@@ -6,6 +6,10 @@
 #include "util/StaticString.hxx"
 #include "net/SocketDescriptor.hxx"
 
+#include <cstddef>
+#include <span>
+#include <string_view>
+
 enum WifiSecurity {
   WPA_SECURITY,
   WEP_SECURITY,
@@ -66,9 +70,9 @@ public:
 
   void Close() noexcept;
 
-  void SendCommand(const char *cmd);
+  void SendCommand(std::string_view cmd);
 
-  void ExpectResponse(const char *expected);
+  void ExpectResponse(std::string_view expected);
 
   void ExpectOK() {
     ExpectResponse("OK\n");
@@ -123,5 +127,9 @@ public:
 private:
   void ReadDiscard() noexcept;
 
-  std::size_t ReadTimeout(void *buffer, size_t length, int timeout_ms=2000);
+  std::size_t ReadTimeout(std::span<std::byte> dest, int timeout_ms=2000);
+
+  std::string_view ReadStringTimeout(std::span<char> buffer, int timeout_ms=2000);
+
+  std::string_view ExpectLineTimeout(std::span<char> buffer, int timeout_ms=2000);
 };

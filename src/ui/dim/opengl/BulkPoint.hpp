@@ -11,15 +11,18 @@
  * A point structure to be used in arrays.
  */
 struct BulkPixelPoint : Point2D<GLvalue, int> {
-  BulkPixelPoint() = default;
+  constexpr BulkPixelPoint() noexcept = default;
 
   constexpr BulkPixelPoint(int _x, int _y) noexcept
     :Point2D(_x, _y) {}
 
-  constexpr BulkPixelPoint(PixelPoint src)
-    :Point2D(src.x, src.y) {}
+  constexpr BulkPixelPoint(PixelPoint src) noexcept
+    :Point2D(src) {}
 
-  constexpr operator PixelPoint() const {
+  constexpr BulkPixelPoint(Point2D<GLvalue, int> src) noexcept
+    :Point2D(src) {}
+
+  constexpr operator PixelPoint() const noexcept {
     return PixelPoint(x, y);
   }
 };

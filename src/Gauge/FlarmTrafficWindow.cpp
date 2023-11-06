@@ -28,7 +28,7 @@ FlarmTrafficWindow::FlarmTrafficWindow(const FlarmTrafficLook &_look,
                                        unsigned _v_padding,
                                        bool _small) noexcept
   :look(_look),
-   h_padding(_h_padding), v_padding(_v_padding),
+   radar_renderer(_h_padding, _v_padding),
    small(_small)
 {
   data.Clear();
@@ -49,13 +49,7 @@ FlarmTrafficWindow::OnResize(PixelSize new_size) noexcept
 {
   PaintWindow::OnResize(new_size);
 
-  const unsigned half_width = new_size.width / 2;
-  const unsigned half_height = new_size.height / 2;
-
-  // Calculate Radar size
-  radius = std::min(half_width - h_padding, half_height - v_padding);
-  radar_mid.x = half_width;
-  radar_mid.y = half_height;
+  radar_renderer.UpdateLayout(PixelRect{new_size});
 }
 
 void
@@ -138,7 +132,7 @@ FlarmTrafficWindow::UpdateSelector(const FlarmId id,
   // on the internal list
   if (selection < 0 && (
       pt.x < 0 || pt.y < 0 ||
-      !SelectNearTarget(pt, radius * 2)) )
+      !SelectNearTarget(pt, radar_renderer.GetRadius() * 2)) )
     NextTarget();
 }
 
@@ -199,7 +193,7 @@ double
 FlarmTrafficWindow::RangeScale(double d) const noexcept
 {
   d /= distance;
-  return std::min(d, 1.) * radius;
+  return std::min(d, 1.) * radar_renderer.GetRadius();
 }
 
 /**
@@ -216,7 +210,7 @@ FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const noexcept
   canvas.Select(look.no_traffic_font);
   PixelSize ts = canvas.CalcTextSize(str);
   canvas.SetTextColor(look.default_color);
-  canvas.DrawText(radar_mid - PixelSize{ts.width / 2, radius / 2}, str);
+  canvas.DrawText(radar_renderer.GetCenter() - PixelSize{ts.width / 2, radar_renderer.GetRadius() / 2}, str);
 }
 
 [[gnu::const]]
@@ -263,7 +257,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   double scale = RangeScale(traffic.distance);
 
   // Don't display distracting, far away targets in WarningMode
-  if (WarningMode() && !traffic.HasAlarm() && scale == radius)
+  if (WarningMode() && !traffic.HasAlarm() && scale == radar_renderer.GetRadius())
     return;
 
   // x and y are not between 0 and 1 (distance will be handled via scale)
@@ -281,6 +275,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   }
 
   // Calculate screen coordinates
+  const auto radar_mid = radar_renderer.GetCenter();
   sc[i].x = radar_mid.x + iround(p.x * scale);
   sc[i].y = radar_mid.y + iround(p.y * scale);
 
@@ -551,6 +546,8 @@ FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas) noexcept
 void
 FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const noexcept
 {
+  const auto radar_mid = radar_renderer.GetCenter();
+
   canvas.Select(look.plane_pen);
 
   PixelPoint p1(Layout::FastScale(small ? 5 : 10),
@@ -611,7 +608,8 @@ FlarmTrafficWindow::PaintNorth(Canvas &canvas) const noexcept
   canvas.SetBackgroundTransparent();
   canvas.Select(look.label_font);
 
-  const PixelPoint q = radar_mid + iround(p * radius);
+  const auto radar_mid = radar_renderer.GetCenter();
+  const PixelPoint q = radar_mid + iround(p * radar_renderer.GetRadius());
 
   PixelSize s = canvas.CalcTextSize(_T("N"));
   canvas.DrawCircle(q, s.height * 0.65);
@@ -641,8 +639,9 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const noexcept
   canvas.SetTextColor(look.radar_color);
 
   // Paint circles
-  canvas.DrawCircle(radar_mid, radius);
-  canvas.DrawCircle(radar_mid, radius / 2);
+  const unsigned radius = radar_renderer.GetRadius();
+  radar_renderer.DrawCircle(canvas, radius);
+  radar_renderer.DrawCircle(canvas, radius / 2);
 
   PaintRadarPlane(canvas);
 
@@ -654,15 +653,13 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const noexcept
   canvas.SetBackgroundOpaque();
   canvas.SetBackgroundColor(look.background_color);
 
-  TCHAR distance_string[10];
-  FormatUserDistanceSmart(distance, distance_string,
-                          ARRAY_SIZE(distance_string), 1000);
-  DrawCircleLabel(canvas, radar_mid + PixelSize{0u, radius}, distance_string);
+  const auto radar_mid = radar_renderer.GetCenter();
 
-  FormatUserDistanceSmart(distance / 2, distance_string,
-                          ARRAY_SIZE(distance_string), 1000);
+  DrawCircleLabel(canvas, radar_mid + PixelSize{0u, radius},
+                  FormatUserDistanceSmart(distance, true, 1000).c_str());
+
   DrawCircleLabel(canvas, radar_mid + PixelSize{0u, radius / 2},
-                  distance_string);
+                  FormatUserDistanceSmart(distance / 2, true, 1000).c_str());
 
   canvas.SetBackgroundTransparent();
 
@@ -699,7 +696,7 @@ FlarmTrafficWindow::OnPaint(Canvas &canvas) noexcept
 
     canvas.SelectBlackPen();
     canvas.Select(Brush(look.background_color.WithAlpha(0xd0)));
-    canvas.DrawCircle(radar_mid, radius);
+    radar_renderer.DrawCircle(canvas, radar_renderer.GetRadius());
 
   } else
 #endif

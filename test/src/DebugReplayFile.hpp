@@ -18,12 +18,4 @@ public:
   ~DebugReplayFile() {
     delete reader;
   }
-
-  long Size() const {
-    return reader->GetSize();
-  }
-
-  long Tell() const {
-    return reader->Tell();
-  }
 };

@@ -27,7 +27,7 @@ GetPolygonPoints(std::vector<BulkPixelPoint> &pts,
 
   WindowProjection projection;
   projection.SetScreenSize({radius * 2, radius * 2});
-  projection.SetScreenOrigin(pt.x, pt.y);
+  projection.SetScreenOrigin(pt);
   projection.SetGeoLocation(center);
   projection.SetScale(radius * 2 / geo_size);
   projection.SetScreenAngle(Angle::Zero());

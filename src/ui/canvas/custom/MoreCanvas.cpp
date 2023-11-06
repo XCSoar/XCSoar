@@ -10,6 +10,8 @@
 
 #include <algorithm>
 #include <cassert>
+
+#include <limits.h>
 #include <string.h>
 #include <winuser.h>
 
@@ -35,8 +37,8 @@ Canvas::DrawRaisedEdge(PixelRect &rc) noexcept
 }
 
 unsigned
-Canvas::DrawFormattedText(PixelRect r, tstring_view text,
-                          unsigned format) noexcept
+Canvas::DrawFormattedText(const PixelRect r, const tstring_view text,
+                          const unsigned format) noexcept
 {
 #ifndef UNICODE
   assert(ValidateUTF8(text));
@@ -45,11 +47,12 @@ Canvas::DrawFormattedText(PixelRect r, tstring_view text,
   if (font == nullptr)
     return 0;
 
-  unsigned skip = font->GetLineSpacing();
-  unsigned max_lines = (format & DT_CALCRECT) ? -1 :
-    (r.GetHeight() + skip - 1) / skip;
+  const unsigned skip = font->GetLineSpacing();
+  const unsigned max_lines = (format & DT_CALCRECT)
+    ? UINT_MAX
+    : (r.GetHeight() + skip - 1) / skip;
 
-  TCHAR *duplicated = new TCHAR[text.size() + 1], *p = duplicated;
+  TCHAR *const duplicated = new TCHAR[text.size() + 1], *p = duplicated;
   unsigned lines = 1;
   for (TCHAR ch : text) {
     if (ch == _T('\n')) {

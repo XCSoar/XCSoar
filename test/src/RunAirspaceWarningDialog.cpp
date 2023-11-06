@@ -17,11 +17,11 @@
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "ResourceLoader.hpp"
-#include "io/FileLineReader.hpp"
+#include "io/FileReader.hxx"
+#include "io/BufferedReader.hxx"
 #include "io/ConfiguredFile.hpp"
 #include "LocalPath.hpp"
 #include "Components.hpp"
-#include "Operation/ConsoleOperationEnvironment.hpp"
 
 #include <memory>
 #include <tchar.h>
@@ -50,12 +50,10 @@ ActionInterface::SetActiveFrequency([[maybe_unused]] const RadioFrequency freq,
 static void
 LoadFiles(Airspaces &airspace_database)
 {
-  ConsoleOperationEnvironment operation;
-
-  auto reader = OpenConfiguredTextFile(ProfileKeys::AirspaceFile,
-                                       Charset::AUTO);
+  auto reader = OpenConfiguredFile(ProfileKeys::AirspaceFile);
   if (reader) {
-    ParseAirspaceFile(airspace_database, *reader, operation);
+    BufferedReader buffered_reader{*reader};
+    ParseAirspaceFile(airspace_database, buffered_reader);
     airspace_database.Optimise();
   }
 }

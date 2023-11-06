@@ -6,6 +6,8 @@
 #include "SocketAddress.hxx"
 #include "IPv4Address.hxx"
 
+#include <fmt/core.h>
+
 #include <algorithm>
 #include <cassert>
 #include <cstring>
@@ -26,22 +28,17 @@
 #ifdef HAVE_UN
 
 static std::string
-LocalAddressToString(const struct sockaddr_un &s_un, size_t size) noexcept
+LocalAddressToString(std::string_view raw) noexcept
 {
-	const auto prefix_size = (size_t)
-		((struct sockaddr_un *)nullptr)->sun_path;
-	assert(size >= prefix_size);
-
-	size_t result_length = size - prefix_size;
-
-	/* remove the trailing null terminator */
-	if (result_length > 0 && s_un.sun_path[result_length - 1] == 0)
-		--result_length;
-
-	if (result_length == 0)
+	if (raw.empty())
 		return "local";
 
-	std::string result(s_un.sun_path, result_length);
+	if (raw.front() != '\0' && raw.back() == '\0')
+		/* don't convert the null terminator of a non-abstract socket
+		   to a '@' */
+		raw.remove_suffix(1);
+
+	std::string result{raw};
 
 	/* replace all null bytes with '@'; this also handles abstract
 	   addresses (Linux specific) */
@@ -55,11 +52,13 @@ LocalAddressToString(const struct sockaddr_un &s_un, size_t size) noexcept
 std::string
 ToString(SocketAddress address) noexcept
 {
+	if (address.IsNull() || address.GetSize() == 0)
+		return "null";
+
 #ifdef HAVE_UN
 	if (address.GetFamily() == AF_LOCAL)
 		/* return path of local socket */
-		return LocalAddressToString(address.CastTo<struct sockaddr_un>(),
-					    address.GetSize());
+		return LocalAddressToString(address.GetLocalRaw());
 #endif
 
 #if defined(HAVE_IPV6) && defined(IN6_IS_ADDR_V4MAPPED)
@@ -71,37 +70,33 @@ ToString(SocketAddress address) noexcept
 	char host[NI_MAXHOST], serv[NI_MAXSERV];
 	int ret = getnameinfo(address.GetAddress(), address.GetSize(),
 			      host, sizeof(host), serv, sizeof(serv),
-			      NI_NUMERICHOST|NI_NUMERICSERV);
+			      NI_NUMERICHOST | NI_NUMERICSERV);
 	if (ret != 0)
 		return "unknown";
 
+	if (serv[0] != 0 && (serv[0] != '0' || serv[1] != 0)) {
 #ifdef HAVE_IPV6
-	if (std::strchr(host, ':') != nullptr) {
-		std::string result("[");
-		result.append(host);
-		result.append("]:");
-		result.append(serv);
-		return result;
-	}
+		if (address.GetFamily() == AF_INET6) {
+			return fmt::format("[{}]:{}", host, serv);
+		}
 #endif
 
-	std::string result(host);
-	result.push_back(':');
-	result.append(serv);
-	return result;
+		return fmt::format("{}:{}", host, serv);
+	}
+
+	return host;
 }
 
 std::string
 HostToString(SocketAddress address) noexcept
 {
-	if (address.IsNull())
+	if (address.IsNull() || address.GetSize() == 0)
 		return "null";
 
 #ifdef HAVE_UN
 	if (address.GetFamily() == AF_LOCAL)
 		/* return path of local socket */
-		return LocalAddressToString(address.CastTo<struct sockaddr_un>(),
-					    address.GetSize());
+		return LocalAddressToString(address.GetLocalRaw());
 #endif
 
 #if defined(HAVE_IPV6) && defined(IN6_IS_ADDR_V4MAPPED)

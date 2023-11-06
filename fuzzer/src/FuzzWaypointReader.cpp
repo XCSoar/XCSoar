@@ -5,7 +5,7 @@
 #include "Waypoint/Factory.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "io/MemoryReader.hxx"
-#include "io/BufferedLineReader.hpp"
+#include "io/BufferedReader.hxx"
 #include "system/Args.hpp"
 #include "Operation/Operation.hpp"
 
@@ -22,9 +22,8 @@ LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
   try {
     WaypointReaderSeeYou wr{WaypointFactory{WaypointOrigin::NONE}};
     MemoryReader mr{{(const std::byte *)data, size}};
-    BufferedLineReader lr(mr);
-    NullOperationEnvironment operation;
-    wr.Parse(way_points, lr, operation);
+    BufferedReader br(mr);
+    wr.Parse(way_points, br);
   } catch (...) {
     return EXIT_FAILURE;
   }

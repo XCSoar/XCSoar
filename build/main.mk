@@ -209,6 +209,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/ThermalBandRenderer.cpp \
 	$(SRC)/Renderer/TaskProgressRenderer.cpp \
 	$(SRC)/Renderer/ClimbPercentRenderer.cpp \
+	$(SRC)/Renderer/RadarRenderer.cpp \
 	\
 	$(SRC)/Airspace/AirspaceGlue.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
@@ -273,15 +274,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Waypoint/SaveGlue.cpp \
 	$(SRC)/Waypoint/LastUsed.cpp \
 	$(SRC)/Waypoint/HomeGlue.cpp \
-	$(SRC)/Waypoint/WaypointFileType.cpp \
-	$(SRC)/Waypoint/WaypointReader.cpp \
-	$(SRC)/Waypoint/WaypointReaderBase.cpp \
-	$(SRC)/Waypoint/WaypointReaderOzi.cpp \
-	$(SRC)/Waypoint/WaypointReaderFS.cpp \
-	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
-	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
-	$(SRC)/Waypoint/WaypointReaderZander.cpp \
-	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Waypoint/CupWriter.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
 	\
@@ -461,8 +453,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/Formatter/AirspaceFormatter.cpp \
 	$(SRC)/Formatter/AirspaceUserUnitsFormatter.cpp \
-	$(SRC)/Units/Descriptor.cpp \
-	$(SRC)/Units/System.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Temperature.cpp \
 	$(SRC)/Formatter/AngleFormatter.cpp \
@@ -676,6 +666,7 @@ XCSOAR_DEPENDS = \
 	LIBCOMPUTER \
 	LIBNMEA \
 	LIBHTTP CO IO ASYNC \
+	WAYPOINTFILE \
 	TASKFILE CONTEST ROUTE GLIDE \
 	WAYPOINT AIRSPACE \
 	LUA \

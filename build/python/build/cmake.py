@@ -1,7 +1,7 @@
 import os
 import re
 import subprocess
-from typing import Optional, TextIO
+from typing import cast, Optional, Sequence, TextIO, Union
 from collections.abc import Mapping
 
 from build.project import Project
@@ -75,7 +75,7 @@ def configure(toolchain: AnyToolchain, src: str, build: str, args: list[str]=[],
     cross_args: list[str] = []
 
     if toolchain.is_windows:
-        cross_args.append('-DCMAKE_RC_COMPILER=' + toolchain.windres)
+        cross_args.append('-DCMAKE_RC_COMPILER=' + cast(str, toolchain.windres))
 
     configure = [
         'cmake',
@@ -118,12 +118,12 @@ def configure(toolchain: AnyToolchain, src: str, build: str, args: list[str]=[],
     subprocess.check_call(configure, env=env, cwd=build)
 
 class CmakeProject(Project):
-    def __init__(self, url: str, alternative_url: Optional[str], md5: str, installed: str,
+    def __init__(self, url: Union[str, Sequence[str]], md5: str, installed: str,
                  configure_args: list[str]=[],
                  windows_configure_args: list[str]=[],
                  env: Optional[Mapping[str, str]]=None,
                  **kwargs):
-        Project.__init__(self, url, alternative_url, md5, installed, **kwargs)
+        Project.__init__(self, url, md5, installed, **kwargs)
         self.configure_args = configure_args
         self.windows_configure_args = windows_configure_args
         self.env = env

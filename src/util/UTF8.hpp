@@ -4,6 +4,7 @@
 #pragma once
 
 #include <cstddef>
+#include <span>
 #include <string_view>
 #include <utility>
 
@@ -46,9 +47,13 @@ SequenceLengthUTF8(const char *p) noexcept;
  * there are no non-ASCII characters; returns nullptr if the destination
  * buffer is too small
  */
-[[gnu::pure]]  [[gnu::nonnull]]
+[[gnu::pure]] [[gnu::nonnull]]
 const char *
-Latin1ToUTF8(const char *src, char *buffer, std::size_t buffer_size) noexcept;
+Latin1ToUTF8(const char *src, std::span<char> buffer) noexcept;
+
+[[gnu::pure]]
+std::string_view
+Latin1ToUTF8(std::string_view src, std::span<char> buffer) noexcept;
 
 /**
  * Convert the specified character from ISO-8859-1 to UTF-8 and write
@@ -127,7 +132,7 @@ TruncateStringUTF8(const char *p,
  * @return a pointer to the end of the destination string
  */
 char *
-CopyTruncateStringUTF8(char *dest, std::size_t dest_size,
+CopyTruncateStringUTF8(std::span<char> dest,
                        const char *src, std::size_t truncate) noexcept;
 
 /**

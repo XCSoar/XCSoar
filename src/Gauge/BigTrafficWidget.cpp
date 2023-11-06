@@ -260,13 +260,13 @@ FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
 
   BulkPixelPoint triangle[3];
   triangle[0].x = 0;
-  triangle[0].y = -radius / Layout::FastScale(1) + 15;
+  triangle[0].y = -(int)radar_renderer.GetRadius() / Layout::FastScale(1) + 15;
   triangle[1].x = 7;
   triangle[1].y = triangle[0].y + 30;
   triangle[2].x = -triangle[1].x;
   triangle[2].y = triangle[1].y;
 
-  PolygonRotateShift(triangle, radar_mid,
+  PolygonRotateShift(triangle, radar_renderer.GetCenter(),
                      task_direction - (enable_north_up ?
                                        Angle::Zero() : heading),
                      Layout::FastScale(100u));
@@ -285,9 +285,8 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
   canvas.DrawText(rc.GetTopRight().At(-(int)label_width, 0), _("Vario"));
 
   // Format climb rate
-  TCHAR buffer[20];
   Unit unit = Units::GetUserVerticalSpeedUnit();
-  FormatUserVerticalSpeed(climb_rate, buffer, false);
+  const auto buffer = FormatUserVerticalSpeed(climb_rate, false);
 
   // Calculate unit size
   canvas.Select(look.info_units_font);
@@ -300,7 +299,7 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
   // Calculate value size
   canvas.Select(look.info_values_font);
   const unsigned value_height = look.info_values_font.GetAscentHeight();
-  const unsigned value_width = canvas.CalcTextSize(buffer).width;
+  const unsigned value_width = canvas.CalcTextSize(buffer.c_str()).width;
 
   // Calculate positions
   const int max_height = std::max(unit_height, value_height);
@@ -313,7 +312,7 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
   const int value_y = y - value_height;
 
   // Paint value
-  canvas.DrawText({value_x, value_y}, buffer);
+  canvas.DrawText({value_x, value_y}, buffer.c_str());
 
   // Paint unit
   canvas.Select(look.info_units_font);

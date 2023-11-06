@@ -129,7 +129,7 @@ inline void
 ProcessWidget::OnPipeReady(unsigned) noexcept
 {
   char buffer[4096];
-  ssize_t nbytes = fd.GetFileDescriptor().Read(buffer, sizeof(buffer));
+  ssize_t nbytes = fd.GetFileDescriptor().Read(std::as_writable_bytes(std::span{buffer}));
   if (nbytes < 0) {
     const int e = errno;
     fd.Close();

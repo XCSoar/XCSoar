@@ -39,7 +39,7 @@ WriteLine(OutputStream &os, std::string_view text)
   os.Write(AsBytes(text));
 
   static constexpr char newline = '\n';
-  os.Write(std::as_bytes(std::span{&newline, 1}));
+  os.Write(ReferenceAsBytes(newline));
 }
 
 void
