@@ -50,6 +50,8 @@
 #include "Units/System.hpp"
 #include "io/NullDataHandler.hpp"
 
+#include "FLARM/List.hpp"
+
 #include <memory>
 #ifdef _DEBUG
 # include <iostream>
@@ -169,25 +171,25 @@ TestFLARM()
 
   FlarmId id = FlarmId::Parse("DDA85C", NULL);
 
-  FlarmTraffic *traffic = nmea_info.flarm.traffic.FindTraffic(id);
-  if (ok1(traffic != NULL)) {
-    ok1(traffic->valid);
-    ok1(traffic->alarm_level == FlarmTraffic::AlarmType::NONE);
-    ok1(equals(traffic->relative_north, 100));
-    ok1(equals(traffic->relative_east, -150));
-    ok1(equals(traffic->relative_altitude, 10));
-    ok1(equals(traffic->track, 123));
-    ok1(traffic->track_received);
-    ok1(equals(traffic->turn_rate, 13));
-    ok1(traffic->turn_rate_received);
-    ok1(equals(traffic->speed, 24));
-    ok1(traffic->speed_received);
-    ok1(equals(traffic->climb_rate, 1.4));
-    ok1(traffic->climb_rate_received);
-    ok1(traffic->type == FlarmTraffic::AircraftType::TOW_PLANE);
-    ok1(!traffic->stealth);
+  FlarmTraffic *traffic1 = nmea_info.flarm.traffic.FindTraffic(id);
+  if (ok1(traffic1 != NULL)) {
+    ok1(traffic1->valid);
+    ok1(traffic1->alarm_level == FlarmTraffic::AlarmType::NONE);
+    ok1(equals(traffic1->relative_north, 100));
+    ok1(equals(traffic1->relative_east, -150));
+    ok1(equals(traffic1->relative_altitude, 10));
+    ok1(equals(traffic1->track, 123));
+    ok1(traffic1->track_received);
+    ok1(equals(traffic1->turn_rate, 13));
+    ok1(traffic1->turn_rate_received);
+    ok1(equals(traffic1->speed, 24));
+    ok1(traffic1->speed_received);
+    ok1(equals(traffic1->climb_rate, 1.4));
+    ok1(traffic1->climb_rate_received);
+    ok1(traffic1->type == FlarmTraffic::AircraftType::TOW_PLANE);
+    ok1(!traffic1->stealth);
   } else {
-    skip(16, 0, "traffic == NULL");
+    skip(16, 0, "traffic1 == NULL");
   }
 
   ok1(parser.ParseLine("$PFLAA,2,20,10,24,2,DEADFF,,,,,1*46",
@@ -195,21 +197,21 @@ TestFLARM()
   ok1(nmea_info.flarm.traffic.GetActiveTrafficCount() == 2);
 
   id = FlarmId::Parse("DEADFF", NULL);
-  traffic = nmea_info.flarm.traffic.FindTraffic(id);
-  if (ok1(traffic != NULL)) {
-    ok1(traffic->valid);
-    ok1(traffic->alarm_level == FlarmTraffic::AlarmType::IMPORTANT);
-    ok1(equals(traffic->relative_north, 20));
-    ok1(equals(traffic->relative_east, 10));
-    ok1(equals(traffic->relative_altitude, 24));
-    ok1(!traffic->track_received);
-    ok1(!traffic->turn_rate_received);
-    ok1(!traffic->speed_received);
-    ok1(!traffic->climb_rate_received);
-    ok1(traffic->type == FlarmTraffic::AircraftType::GLIDER);
-    ok1(traffic->stealth);
+  FlarmTraffic *traffic2 = nmea_info.flarm.traffic.FindTraffic(id);
+  if (ok1(traffic2 != NULL)) {
+    ok1(traffic2->valid);
+    ok1(traffic2->alarm_level == FlarmTraffic::AlarmType::IMPORTANT);
+    ok1(equals(traffic2->relative_north, 20));
+    ok1(equals(traffic2->relative_east, 10));
+    ok1(equals(traffic2->relative_altitude, 24));
+    ok1(!traffic2->track_received);
+    ok1(!traffic2->turn_rate_received);
+    ok1(!traffic2->speed_received);
+    ok1(!traffic2->climb_rate_received);
+    ok1(traffic2->type == FlarmTraffic::AircraftType::GLIDER);
+    ok1(traffic2->stealth);
   } else {
-    skip(12, 0, "traffic == NULL");
+    skip(12, 0, "traffic2 == NULL");
   }
 
   ok1(parser.ParseLine("$PFLAA,0,1206,574,21,2,DDAED5,196,,32,1.0,C*62",
@@ -217,25 +219,42 @@ TestFLARM()
   ok1(nmea_info.flarm.traffic.GetActiveTrafficCount() == 3);
 
   id = FlarmId::Parse("DDAED5", NULL);
-  traffic = nmea_info.flarm.traffic.FindTraffic(id);
-  if (ok1(traffic != NULL)) {
-    ok1(traffic->valid);
-    ok1(traffic->alarm_level == FlarmTraffic::AlarmType::NONE);
-    ok1(equals(traffic->relative_north, 1206));
-    ok1(equals(traffic->relative_east, 574));
-    ok1(equals(traffic->relative_altitude, 21));
-    ok1(equals(traffic->track, 196));
-    ok1(traffic->track_received);
-    ok1(!traffic->turn_rate_received);
-    ok1(equals(traffic->speed, 32));
-    ok1(traffic->speed_received);
-    ok1(equals(traffic->climb_rate, 1.0));
-    ok1(traffic->climb_rate_received);
-    ok1(traffic->type == FlarmTraffic::AircraftType::AIRSHIP);
-    ok1(!traffic->stealth);
+  FlarmTraffic *traffic3 = nmea_info.flarm.traffic.FindTraffic(id);
+  if (ok1(traffic3 != NULL)) {
+    ok1(traffic3->valid);
+    ok1(traffic3->alarm_level == FlarmTraffic::AlarmType::NONE);
+    ok1(equals(traffic3->relative_north, 1206));
+    ok1(equals(traffic3->relative_east, 574));
+    ok1(equals(traffic3->relative_altitude, 21));
+    ok1(equals(traffic3->track, 196));
+    ok1(traffic3->track_received);
+    ok1(!traffic3->turn_rate_received);
+    ok1(equals(traffic3->speed, 32));
+    ok1(traffic3->speed_received);
+    ok1(equals(traffic3->climb_rate, 1.0));
+    ok1(traffic3->climb_rate_received);
+    ok1(traffic3->type == FlarmTraffic::AircraftType::AIRSHIP);
+    ok1(!traffic3->stealth);
+
+    std::cout << nmea_info.flarm.traffic.TrafficIndex(traffic1) << std::endl;
+    std::cout << nmea_info.flarm.traffic.TrafficIndex(traffic2) << std::endl;
+    std::cout << nmea_info.flarm.traffic.TrafficIndex(traffic3) << std::endl;
+
+    std::cout << traffic1->distance << std::endl;
+    std::cout << nmea_info.flarm.traffic.NextTraffic(traffic1)->distance << std::endl;
+    std::cout << nmea_info.flarm.traffic.NextTraffic(traffic2)->distance << std::endl;
+    std::cout << nmea_info.flarm.traffic.NextTraffic(traffic3) << std::endl;
+
+    ok1(equals(nmea_info.flarm.traffic.TrafficIndex(traffic1), 0));
+    ok1(equals(nmea_info.flarm.traffic.TrafficIndex(traffic2), 1));
+    ok1(equals(nmea_info.flarm.traffic.TrafficIndex(traffic3), 2));
   } else {
-    skip(15, 0, "traffic == NULL");
+    skip(15, 0, "traffic3 == NULL");
   }
+
+#ifdef __MSVC__
+  exit(1);
+#endif
 }
 
 static void
