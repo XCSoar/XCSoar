@@ -200,19 +200,22 @@ struct TrafficList {
   const FlarmTraffic *FindMaximumAlert() const noexcept;
 
   constexpr unsigned TrafficIndex(const FlarmTraffic *t) const noexcept {
-#if 1 //ndef __MSVC__ // TODO(Augustr2111): make it ok
+#ifdef __MSVC__ // TODO(Augustr2111): make it ok
+  #if 0
     unsigned int i = 0;
     for (const auto &traffic : list) {
-      if (traffic.id == t->id)
+      if (traffic == t)
         return i;
       i++;
     }
-     /**/
     return 0; // TODO(August2111): This is wrong!!!!
-#else
+  #else  // 0 vs. 1
     auto iter = std::find(list.begin(), list.end(), t);
     return iter - list.begin();
-#endif
+  #endif  // 0 vs. 1 
+#else // __MSVC__
+    return t - list.begin();
+#endif  // __MSVC__
   }
 
   /**
@@ -221,6 +224,8 @@ struct TrafficList {
   bool InCloseRange() const noexcept;
 };
 
+
+#ifdef __MSVC__
 constexpr bool
 operator==(const FlarmTraffic &t1,
            const FlarmTraffic &t2) noexcept
@@ -235,19 +240,12 @@ operator==(const FlarmTraffic t1,
   return t1 == *t2;
 }
 
-// constexpr bool
-// operator==(const FlarmTraffic &t1,
-//            const FlarmTraffic *t2) noexcept
-// {
-//   return t1 == *t2;
-// }
-
 constexpr bool
 operator==(const FlarmTraffic *t1,
            const FlarmTraffic &t2) noexcept
 {
   return *t1 == t2;
 }
-
+#endif
 
 static_assert(std::is_trivial<TrafficList>::value, "type is not trivial");
