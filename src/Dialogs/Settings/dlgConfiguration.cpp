@@ -138,6 +138,13 @@ static constexpr TabMenuPage setup_pages[] = {
   { nullptr, nullptr }
 };
 
+
+static constexpr TabMenuPage setup_openvario[] = {
+  { N_("Logger"), CreateLoggerConfigPanel },
+  { N_("Units"), CreateUnitsConfigPanel },
+  { nullptr, nullptr }
+};
+
 static constexpr TabMenuGroup main_menu_captions[] = {
   { N_("Site Files"), files_pages },
   { N_("Map Display"), map_pages },
@@ -146,6 +153,9 @@ static constexpr TabMenuGroup main_menu_captions[] = {
   { N_("Task Defaults"), task_pages },
   { N_("Look"), look_pages },
   { N_("Setup"), setup_pages },
+#ifdef IS_OPENVARIO
+    {N_("OpenVario"), setup_openvario},
+#endif
 };
 
 static void
