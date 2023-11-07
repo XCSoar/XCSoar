@@ -12,8 +12,6 @@ TARGETS = PC WIN64 \
 ifeq ($(TARGET),OPENVARIO_CB2)
   # the OpenVario is a linux target
   # but has special functions, menus,...
-  TARGET ?= UNIX
-  TARGET = UNIX
   override TARGET = UNIX
   TARGET_IS_OPENVARIO = y
 else

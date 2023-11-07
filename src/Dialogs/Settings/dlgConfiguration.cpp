@@ -139,11 +139,12 @@ static constexpr TabMenuPage setup_pages[] = {
 };
 
 
-static constexpr TabMenuPage setup_openvario[] = {
+#ifdef IS_OPENVARIO
+static constexpr TabMenuPage openvario_pages[] = {
   { N_("Logger"), CreateLoggerConfigPanel },
-  { N_("Units"), CreateUnitsConfigPanel },
   { nullptr, nullptr }
 };
+#endif
 
 static constexpr TabMenuGroup main_menu_captions[] = {
   { N_("Site Files"), files_pages },
@@ -154,7 +155,7 @@ static constexpr TabMenuGroup main_menu_captions[] = {
   { N_("Look"), look_pages },
   { N_("Setup"), setup_pages },
 #ifdef IS_OPENVARIO
-    {N_("OpenVario"), setup_openvario},
+    {N_("OpenVario"), openvario_pages},
 #endif
 };
 
