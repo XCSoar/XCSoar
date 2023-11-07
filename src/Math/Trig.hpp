@@ -13,7 +13,7 @@ sin_cos(const double thetha) noexcept {
   double s, c;
 #ifdef __APPLE__
   __sincos(thetha, &s, &c);
-#elif defined(_MSC_VER)
+#elif defined(__MSVC__)
   // STL and MSVC have no sincos...
   s = sin(thetha);
   c = cos(thetha);
