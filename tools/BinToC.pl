@@ -18,7 +18,8 @@ my($input_file_name, $input_file_dir, $input_file_ext)
   = fileparse $input_file_path;
 
 my $array_name = "${input_file_name}${input_file_ext}";
-$array_name =~ s,\.,_,g;
+$array_name =~ s/\./_/g;
+$array_name =~ s/-/_/g;
 
 open my $output_src_fh, '>', $output_src_file_path
   or die "Could not source open output file $output_src_file_path!\n";
