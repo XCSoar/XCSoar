@@ -94,6 +94,7 @@ set(_SOURCES
         Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp
         Dialogs/Settings/Panels/WeatherConfigPanel.cpp
         Dialogs/Settings/Panels/WindConfigPanel.cpp
+        Dialogs/Settings/Panels/OpenVarioConfigPanel.cpp
         Dialogs/Settings/WindSettingsDialog.cpp
         Dialogs/Settings/WindSettingsPanel.cpp
 

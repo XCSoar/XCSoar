@@ -38,6 +38,7 @@
 #include "Panels/TaskDefaultsConfigPanel.hpp"
 #include "Panels/ScoringConfigPanel.hpp"
 #include "Panels/InfoBoxesConfigPanel.hpp"
+#include "Panels/OpenVarioConfigPanel.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Audio/Features.hpp"
@@ -141,7 +142,7 @@ static constexpr TabMenuPage setup_pages[] = {
 
 #ifdef IS_OPENVARIO
 static constexpr TabMenuPage openvario_pages[] = {
-  { N_("Logger"), CreateLoggerConfigPanel },
+  { N_("Logger"), CreateOpenVarioConfigPanel },
   { nullptr, nullptr }
 };
 #endif
