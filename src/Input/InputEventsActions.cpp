@@ -622,9 +622,20 @@ InputEvents::eventBrightness([[maybe_unused]] const TCHAR *misc)
   // not implemented (was only implemented on Altair)
 }
 
-void
+void 
 InputEvents::eventExit([[maybe_unused]] const TCHAR *misc)
 {
+#ifdef IS_OPENVARIO
+  if (UI::TopWindow::GetExitValue() == 0) {
+    if (StringIsEqual(misc, _T("system"))) {
+      UI::TopWindow::SetExitValue(20000);
+    } else if (StringIsEqual(misc, _T("reboot"))) {
+      UI::TopWindow::SetExitValue(20001);
+    } else if (StringIsEqual(misc, _T("shutdown"))) {
+      UI::TopWindow::SetExitValue(20002);
+    }
+  }
+#endif
   UIActions::SignalShutdown(false);
 }
 

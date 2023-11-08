@@ -169,6 +169,11 @@ try {
   exit(ret);
 #endif
 
+#ifdef IS_OPENVARIO
+  if (ret == 0)
+    ret = UI::TopWindow::GetExitValue();
+#endif
+
   return ret;
 } catch (...) {
   PrintException(std::current_exception());

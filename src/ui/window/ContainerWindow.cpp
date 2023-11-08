@@ -3,6 +3,10 @@
 
 #include "ContainerWindow.hpp"
 
+#ifdef IS_OPENVARIO
+  unsigned ContainerWindow::exit_value = 0;
+#endif
+
 void
 ContainerWindow::ScrollTo(const PixelRect &rc) noexcept
 {
