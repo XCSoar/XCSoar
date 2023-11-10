@@ -62,12 +62,15 @@ OpenVarioConfigPanel::Prepare(ContainerWindow &parent,
   bool bTest = false;
   unsigned iTest = 0;
 
+  // void AddReadOnly(label, help,text;
+  auto version = _("3.2.20");
+  AddReadOnly(_("OV-Firmware-Version"), _("Current firmware version of OpenVario"), version);
   AddBoolean(
-      _("Enable"),
+      _("Boolean Test"),
       _("Boolean Test."),
       bTest, this);
 
-   AddInteger(_("iTest"),
+   AddInteger(_("Integer Test"),
              _("Integer Test."),
              _T("%d"), _T("%d"), 1, 99999, 1, iTest);
 
