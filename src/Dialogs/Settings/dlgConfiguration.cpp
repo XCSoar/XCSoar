@@ -142,7 +142,7 @@ static constexpr TabMenuPage setup_pages[] = {
 
 #ifdef IS_OPENVARIO
 static constexpr TabMenuPage openvario_pages[] = {
-  { N_("Logger"), CreateOpenVarioConfigPanel },
+  { N_("OpenVario Device"), CreateOpenVarioConfigPanel },
   { nullptr, nullptr }
 };
 #endif
