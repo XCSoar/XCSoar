@@ -2,12 +2,13 @@
 // Copyright The XCSoar Project
 
 #include "WaypointReaderSeeYou.hpp"
-#include "CupParser.hpp"
 #include "Units/System.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "util/DecimalParser.hxx"
 #include "util/IterableSplitString.hxx"
 #include "util/NumberParser.hxx"
+#include "io/StringConverter.hpp"
+#include "io/BufferedCsvReader.hpp"
 
 #include <stdlib.h>
 
@@ -176,9 +177,11 @@ ParseStyle(std::string_view src, Waypoint::Type &type)
   return true;
 }
 
-bool
-WaypointReaderSeeYou::ParseLine(const char *line, Waypoints &waypoints)
-{
+bool ParseSeeYou(WaypointFactory factory, Waypoints &waypoints, BufferedReader &reader) {
+  StringConverter string_converter;
+
+  // 2018: name, code, country, lat, lon, elev, style, rwydir, rwylen, freq, desc
+  // 2022: name, code, country, lat, lon, elev, style, rwdir, rwlen, rwwidth, freq, desc, userdata, pics
   enum {
     iName = 0,
     iShortname = 1,
@@ -192,129 +195,143 @@ WaypointReaderSeeYou::ParseLine(const char *line, Waypoints &waypoints)
     iUserData = 12,
     iPics = 13
   };
+  unsigned iFrequency = 9;
+  unsigned iDescription = 10;
 
-  // If (end-of-file or comment)
-  if (StringIsEmpty(line) || *line == '*')
-    // -> return without error condition
-    return true;
+  size_t params_num;
+  std::array<std::string_view,14> params;
 
-  // If task marker is reached ignore all following lines
-  if (StringStartsWith(line, "-----Related Tasks-----"))
-    ignore_following = true;
-  if (ignore_following)
-    return true;
+  bool tasks { false };
 
-  // Get fields
-  std::array<std::string_view, 20> params;
-  CupSplitColumns(line, params);
+  // Headers
+  {
+    params_num = ReadCsvRecord(reader, params);
 
-  if (first) {
-    first = false;
-    if (line[0] != '"') {
-      /*
-       * If the first line doesn't begin with a quotation mark, it
-       * doesn't describe a waypoint. It probably contains field names.
-       */
-      if (params[iRWWidth] == "rwwidth"sv) {
-        /*
-         * The name of the 10th field is "rwwidth" (runway width).
-         * This field doesn't exist in "typical" SeeYou (*.cup) waypoint
-         * files but is in files saved by at least some versions of
-         * SeeYou Mobile. If the rwwidth field exists, the frequency and
-         * description fields are shifted one position to the right.
-         */
-        iFrequency = 10;
-        iDescription = 11;
-      } else {
-        iFrequency = 9;
-        iDescription = 10;
-      }
-      return true;
+    // Empty file
+    if (params_num == 0)
+      return false;
+
+    // Newer cup/cupx specification adds rwwidth, shifts freq and desc right, and adds userdata, and pics
+    if ( params_num > iRWWidth &&
+         params[iRWWidth] == "rwwidth"sv ) {
+      iFrequency = 10;
+      iDescription = 11;
     }
   }
 
-  // Check if the basic fields are provided
-  if (params[iLatitude].data() == nullptr)
-    return false;
+  // Waypoints
+  while ( true ) {
+    params_num = ReadCsvRecord(reader, params);
 
-  GeoPoint location;
+    // Tasks section
+    tasks = params_num == 1 &&
+      StringIsEqualIgnoreCase(params[0],"-----Related Tasks-----"sv);
 
-  // Latitude (e.g. 5115.900N)
-  if (!ParseAngle(params[iLatitude], location.latitude, true))
-    return false;
+    // End of file or start of task section
+    if ( !params_num || tasks )
+      break;
 
-  // Longitude (e.g. 00715.900W)
-  if (!ParseAngle(params[iLongitude], location.longitude, false))
-    return false;
+    // Skip blank lines and comments (comments are an extension)
+    if ( (params_num == 1 && params[0].empty()) ||
+         params[0].starts_with('*') )
+      continue;
 
-  location.Normalize(); // ensure longitude is within -180:180
+    // Latitude (e.g. 5115.900N)
+    GeoPoint location;
 
-  Waypoint new_waypoint = factory.Create(location);
+    if ( params_num <= iLatitude ||
+         !ParseAngle(params[iLatitude], location.latitude, true))
+      continue;
 
-  // Name (e.g. "Some Turnpoint")
-  if (params[iName].empty())
-    return false;
-  new_waypoint.name.assign(string_converter.Convert(params[iName]));
+    // Longitude (e.g. 00715.900W)
+    if ( params_num <= iLongitude ||
+         !ParseAngle(params[iLongitude], location.longitude, false))
+      continue;
 
-  // Elevation (e.g. 458.0m)
-  /// @todo configurable behaviour
-  if (!params[iElevation].empty() &&
-      ParseAltitude(params[iElevation], new_waypoint.elevation))
-    new_waypoint.has_elevation = true;
-  else
-    factory.FallbackElevation(new_waypoint);
+    location.Normalize(); // ensure longitude is within -180:180
 
-  // Style (e.g. 5)
-  if (!params[iStyle].empty())
-    ParseStyle(params[iStyle], new_waypoint.type);
+    Waypoint new_waypoint = factory.Create(location);
 
-  new_waypoint.flags.turn_point = true;
+    // Name (e.g. "Some Turnpoint")
+    if ( params_num <= iName ||
+         params[iName].empty() )
+      continue;
+    new_waypoint.name.assign(string_converter.Convert(params[iName]));
 
-  // Short name (code) of waypoint 
-  new_waypoint.shortname.assign(string_converter.Convert(params[iShortname]));
+    // Elevation (e.g. 458.0m)
+    /// @todo configurable behaviour
+    if ( params_num > iElevation &&
+         !params[iElevation].empty() &&
+         ParseAltitude(params[iElevation], new_waypoint.elevation) )
+      new_waypoint.has_elevation = true;
+    else
+      factory.FallbackElevation(new_waypoint);
 
-  // Frequency & runway direction/length (for airports and landables)
-  // and description (e.g. "Some Description")
-  if (new_waypoint.IsLandable()) {
-    if (!params[iFrequency].empty())
-      new_waypoint.radio_frequency = RadioFrequency::Parse(params[iFrequency]);
+    // Style (e.g. 5)
+    if ( params_num > iStyle &&
+         !params[iStyle].empty())
+      ParseStyle(params[iStyle], new_waypoint.type);
 
-    // Runway length (e.g. 546.0m)
-    double rwlen = -1;
-    if (!params[iRWLen].empty() && ParseDistance(params[iRWLen], rwlen) &&
-        rwlen > 0 && rwlen <= 30000)
-      new_waypoint.runway.SetLength(uround(rwlen));
+    new_waypoint.flags.turn_point = true;
 
-    if (!params[iRWDir].empty()) {
-      if (auto value = ParseInteger<unsigned>(params[iRWDir])) {
-        unsigned direction = *value;
+    // Short name (code) of waypoint
+    if ( params_num <= iShortname )
+      continue;
+    new_waypoint.shortname.assign(string_converter.Convert(params[iShortname]));
 
-        if (direction <= 360) {
-          if (direction == 360)
-            direction = 0;
+    // Frequency & runway direction/length (for airports and landables)
+    // and description (e.g. "Some Description")
+    if ( new_waypoint.IsLandable() ) {
+      if ( params_num > iFrequency &&
+           !params[iFrequency].empty() )
+        new_waypoint.radio_frequency = RadioFrequency::Parse(params[iFrequency]);
 
-          new_waypoint.runway.SetDirectionDegrees(direction);
+      // Runway length (e.g. 546.0m)
+      double rwlen = -1;
+      if ( params_num > iRWLen &&
+           !params[iRWLen].empty() &&
+           ParseDistance(params[iRWLen], rwlen) &&
+           rwlen > 0 && rwlen <= 30000)
+        new_waypoint.runway.SetLength(uround(rwlen));
+
+      if ( params_num > iRWLen &&
+           !params[iRWDir].empty()) {
+        if (auto value = ParseInteger<unsigned>(params[iRWDir])) {
+          unsigned direction = *value;
+
+          if (direction <= 360) {
+            if (direction == 360)
+              direction = 0;
+
+            new_waypoint.runway.SetDirectionDegrees(direction);
+          }
         }
       }
     }
-  }
 
-  /*
-   * This convention was introduced by the OpenAIP project
-   * (http://www.openaip.net/), since no waypoint type exists for
-   * thermal hotspots.
-   */
-  if (params[iDescription].starts_with("Hotspot"sv))
-    new_waypoint.type = Waypoint::Type::THERMAL_HOTSPOT;
+    /*
+     * This convention was introduced by the OpenAIP project
+     * (http://www.openaip.net/), since no waypoint type exists for
+     * thermal hotspots.
+     */
+    if ( params_num > iDescription &&
+         params[iDescription].starts_with("Hotspot"sv) )
+      new_waypoint.type = Waypoint::Type::THERMAL_HOTSPOT;
 
-  new_waypoint.comment.assign(string_converter.Convert(params[iDescription]));
-  new_waypoint.details.assign(string_converter.Convert(params[iUserData]));
+    if ( params_num > iDescription )
+      new_waypoint.comment.assign(string_converter.Convert(params[iDescription]));
 
-  if (!params[iPics].empty()) {
-    for (const auto i : IterableSplitString(params[iPics], ';')) {
-      new_waypoint.files_embed.emplace_front(string_converter.Convert(i));
+    if ( params_num > iUserData )
+      new_waypoint.details.assign(string_converter.Convert(params[iUserData]));
+
+    if ( params_num > iPics &&
+         !params[iPics].empty() ) {
+      for (const auto i : IterableSplitString(params[iPics], ';')) {
+        new_waypoint.files_embed.emplace_front(string_converter.Convert(i));
+      }
     }
+    waypoints.Append(std::move(new_waypoint));
   }
-  waypoints.Append(std::move(new_waypoint));
-  return true;
+
+  return tasks;
 }

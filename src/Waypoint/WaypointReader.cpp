@@ -28,7 +28,7 @@ CreateWaypointReader(WaypointFileType type, WaypointFactory factory)
     return new WaypointReaderWinPilot(factory);
 
   case WaypointFileType::SEEYOU:
-    return new WaypointReaderSeeYou(factory);
+    break;
 
   case WaypointFileType::ZANDER:
     return new WaypointReaderZander(factory);
@@ -56,6 +56,9 @@ ReadWaypointFile(Reader &file_reader, WaypointFileType file_type,
   BufferedReader buffered_reader{progress_reader};
 
   switch (file_type) {
+  case WaypointFileType::SEEYOU:
+    ParseSeeYou(factory, way_points, buffered_reader);
+    break;
   default:
     std::unique_ptr<WaypointReaderBase> reader { CreateWaypointReader(file_type,
                                                                       factory) };
