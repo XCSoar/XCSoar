@@ -4,7 +4,9 @@ set(LIB_PREFIX "" )  # "lib")
 set(LIB_SUFFIX ".lib")    # "a")
 # ??? add_compile_definitions(PROJECT_OUTPUT_FOLDER=${OUTPUT_FOLDER})
 
-add_definitions(-DIS_OPENVARIO)  # add special OpenVario functions
+# only in DEBUG-Version---
+#add_definitions(-DIS_OPENVARIO)  # add special OpenVario functions
+#-------------------------------
 add_compile_definitions(__MSVC__)
 #********************************************************************************
 set(AUGUST_SPECIAL ON)
