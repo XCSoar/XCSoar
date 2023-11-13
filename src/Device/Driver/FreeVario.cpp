@@ -219,7 +219,7 @@ FreeVarioDevice::ParseNMEA(const char *_line, NMEAInfo &info)
   if (VerifyNMEAChecksum(_line)) {
     NMEAInputLine line(_line);
     const auto type = line.ReadView();
-    if (type == "$PFA"sv) {
+    if (type == "$PFV"sv) {
         return PFVParser(line, info, port);
     } else if (type == "$POV"sv) {
         return POVParserAndForward(line);  // no info and port necessary
@@ -241,6 +241,11 @@ FreeVarioDevice::OnSensorUpdate(const MoreData &basic)
 
    if (basic.total_energy_vario_available.IsValid()){
      sprintf(nmeaOutbuffer,"PFV,VAR,%f", basic.total_energy_vario);
+     PortWriteNMEA(port, nmeaOutbuffer, env);
+   }
+
+   if (basic.netto_vario_available.IsValid()){
+     sprintf(nmeaOutbuffer,"PFV,VAN,%f", basic.netto_vario);
      PortWriteNMEA(port, nmeaOutbuffer, env);
    }
 }
