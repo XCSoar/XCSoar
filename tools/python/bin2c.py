@@ -11,7 +11,7 @@ if len(sys.argv) > 2:
 
 
 bin_name_file = os.path.basename(filename)
-bin_name = bin_name_file.replace('.', '_')
+bin_name = bin_name_file.replace('.', '_').replace('-', '_')
 # bin_name = os.path.splitext(bin_name_file)[0]
 
 
