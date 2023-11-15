@@ -16,7 +16,9 @@
 
 #ifdef _WIN32
 #include <winsock2.h> // for SOCKET, INVALID_SOCKET
-typedef SSIZE_T ssize_t;
+# ifdef __MSVC__  // not defined in MSVC only
+  typedef SSIZE_T ssize_t;
+# endif
 #endif
 
 class SocketAddress;
