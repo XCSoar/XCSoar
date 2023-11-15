@@ -73,9 +73,9 @@ ParseStatusLine(WifiStatus &status, std::string_view src) noexcept
   if (value.data() == nullptr)
     return false;
 
-  if (src == "bssid"sv)
+  if (name == "bssid"sv)
     status.bssid = value;
-  else if (src == "ssid"sv)
+  else if (name == "ssid"sv)
     status.ssid = value;
   return true;
 }

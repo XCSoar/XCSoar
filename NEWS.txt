@@ -1,4 +1,6 @@
 Version 7.41 - not yet released
+* Kobo
+  - fix Wifi setup (7.40 breakage)
 
 Version 7.40 - 2023/11/02
 * user interface
