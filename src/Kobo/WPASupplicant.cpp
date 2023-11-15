@@ -136,8 +136,9 @@ ParseScanResultsLine(WifiVisibleNetwork &dest, std::string_view line) noexcept
 
   dest.bssid = bssid;
 
-  if (const auto value = ParseInteger<unsigned>(signal_level))
-    dest.signal_level = *value;
+  if (const auto value = ParseInteger<signed>(signal_level))
+    // TODO: The signal level is in decibels (dBm), we should treat it that way
+    dest.signal_level = std::abs(*value);
   else
     return false;
 
