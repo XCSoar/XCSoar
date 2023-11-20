@@ -14,80 +14,94 @@
 
 namespace Co {
 
+namespace detail {
+
+template<typename Task>
+class InvokePromise {
+	friend Task;
+
+	using Callback = BoundMethod<void(std::exception_ptr error) noexcept>;
+
+	Task *task;
+
+	Callback callback;
+
+	std::exception_ptr error;
+
+public:
+	[[nodiscard]]
+	auto initial_suspend() noexcept {
+		assert(!error);
+
+		return std::suspend_always{};
+	}
+
+private:
+	struct final_awaitable {
+		[[nodiscard]]
+		bool await_ready() const noexcept {
+			return false;
+		}
+
+		template<typename PROMISE>
+		bool await_suspend(std::coroutine_handle<PROMISE> coro) noexcept {
+			assert(coro);
+			assert(coro.done());
+
+			auto &p = coro.promise();
+			assert(p.task);
+			assert(p.task->coroutine);
+			assert(p.callback);
+
+			/* release the coroutine_handle; it will be
+			   destroyed by our caller */
+			(void)p.task->coroutine.release();
+
+			p.callback(std::move(p.error));
+
+			/* this resumes the original coroutine which
+			   will then destroy the coroutine_handle */
+			return false;
+		}
+
+		void await_resume() const noexcept {
+		}
+	};
+
+public:
+	[[nodiscard]]
+	auto final_suspend() noexcept {
+		return final_awaitable{};
+	}
+
+	void return_void() noexcept {
+		assert(!error);
+	}
+
+	[[nodiscard]]
+	Task get_return_object() noexcept {
+		assert(!error);
+
+		return Task{std::coroutine_handle<InvokePromise>::from_promise(*this)};
+	}
+
+	void unhandled_exception() noexcept {
+		assert(!error);
+		error = std::current_exception();
+	}
+};
+
+} // namespace detail
+
 /**
  * A helper task which invokes a coroutine from synchronous code.
  */
 class InvokeTask {
 public:
-	using Callback = BoundMethod<void(std::exception_ptr error) noexcept>;
+	using promise_type = detail::InvokePromise<InvokeTask>;
+	friend promise_type;
 
-	struct promise_type {
-		InvokeTask *task;
-
-		Callback callback;
-
-		std::exception_ptr error;
-
-		[[nodiscard]]
-		auto initial_suspend() noexcept {
-			assert(!error);
-
-			return std::suspend_always{};
-		}
-
-		struct final_awaitable {
-			[[nodiscard]]
-			bool await_ready() const noexcept {
-				return false;
-			}
-
-			template<typename PROMISE>
-			bool await_suspend(std::coroutine_handle<PROMISE> coro) noexcept {
-				assert(coro);
-				assert(coro.done());
-
-				auto &p = coro.promise();
-				assert(p.task);
-				assert(p.task->coroutine);
-				assert(p.callback);
-
-				/* release the coroutine_handle; it
-				   will be destroyed by our caller */
-				(void)p.task->coroutine.release();
-
-				p.callback(std::move(p.error));
-
-				/* this resumes the original coroutine
-				   which will then destroy the
-				   coroutine_handle */
-				return false;
-			}
-
-			void await_resume() const noexcept {
-			}
-		};
-
-		[[nodiscard]]
-		auto final_suspend() noexcept {
-			return final_awaitable{};
-		}
-
-		void return_void() noexcept {
-			assert(!error);
-		}
-
-		[[nodiscard]]
-		InvokeTask get_return_object() noexcept {
-			assert(!error);
-
-			return InvokeTask(std::coroutine_handle<promise_type>::from_promise(*this));
-		}
-
-		void unhandled_exception() noexcept {
-			assert(!error);
-			error = std::current_exception();
-		}
-	};
+	using Callback = promise_type::Callback;
 
 private:
 	UniqueHandle<promise_type> coroutine;
