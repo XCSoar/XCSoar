@@ -100,6 +100,13 @@ public:
 	[[gnu::pure]]
 	bool IsStream() const noexcept;
 
+	/**
+	 * Determine the socket protocol (SO_PROTOCOL),
+	 * e.g. IPPROTO_SCTP.  Returns -1 on error.
+	 */
+	[[gnu::pure]]
+	int GetProtocol() const noexcept;
+
 	static constexpr SocketDescriptor Undefined() noexcept {
 #ifdef _WIN32
 		return SocketDescriptor{INVALID_SOCKET};
