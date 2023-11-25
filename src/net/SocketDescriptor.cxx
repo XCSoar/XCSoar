@@ -32,11 +32,15 @@ SocketDescriptor::IsStream() const noexcept
 	return GetType() == SOCK_STREAM;
 }
 
+#ifdef  __linux__
+
 int
 SocketDescriptor::GetProtocol() const noexcept
 {
 	return GetIntOption(SOL_SOCKET, SO_PROTOCOL, -1);
 }
+
+#endif // __linux__
 
 #ifdef _WIN32
 
