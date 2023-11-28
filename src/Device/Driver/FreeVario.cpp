@@ -239,15 +239,16 @@ FreeVarioDevice::OnSensorUpdate(const MoreData &basic)
    NullOperationEnvironment env;
    char nmeaOutbuffer[80];
 
-   if (basic.total_energy_vario_available.IsValid()){
+   if (basic.total_energy_vario_available.IsValid()) {
      sprintf(nmeaOutbuffer,"PFV,VAR,%f", basic.total_energy_vario);
      PortWriteNMEA(port, nmeaOutbuffer, env);
    }
 
-   if (basic.netto_vario_available.IsValid()){
+   // TODO(August2111): basic.netto_variable has no timestamp unfortunately?
+   // if (basic.netto_vario_available.IsValid()) {
      sprintf(nmeaOutbuffer,"PFV,VAN,%f", basic.netto_vario);
      PortWriteNMEA(port, nmeaOutbuffer, env);
-   }
+   // }
 }
 
 
