@@ -1,6 +1,16 @@
-OpenSoar Version 7.39.20 - not yet released
+OpenSoar Version 7.40.21 - not yet released
 ---------------
 
+OpenSoar Version 7.40.20.1 - 2023/11/28
+---------------
+* Driver
+  - FreeVario: rework to fullfill requierements of Blaubart
+* OpenVario
+  - create a OpenVario target for a better behaviour on this hardware
+  - add a ShutDown and a Reboot event, so a jump over the shell menu is possible
+
+#### XCSoar Version 7.40 - 2023/11/02
+* merge xcsoar commit  '1164801f' from 2023/11/02
 * merge xcsoar commit  '32147e1e' from 2023/08/24
 
 OpenSoar Version 7.39.19 - 2023/08/13
