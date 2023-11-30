@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#ifdef IS_OPENVARIO
+// don't use (and compile) this code outside an OpenVario project!
+
 #include "Profile/Keys.hpp"
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -31,24 +34,26 @@ private:
 };
 
 void
-OpenVarioConfigPanel::SetEnabled(bool enabled) noexcept
+OpenVarioConfigPanel::SetEnabled([[maybe_unused]] bool enabled) noexcept
 {
-  /*/
+#ifdef OPENVARIO_CONFIG
+  // out commented currently:
   SetRowEnabled(WeGlideAutomaticUpload, enabled);
   SetRowEnabled(WeGlidePilotBirthDate, enabled);
   SetRowEnabled(WeGlidePilotID, enabled);
-  /***/
+#endif
 }
 
 void
-OpenVarioConfigPanel::OnModified(DataField &df) noexcept
+OpenVarioConfigPanel::OnModified([[maybe_unused]] DataField &df) noexcept
 {
-  /*/
+#ifdef OPENVARIO_CONFIG
+// out commented currently:
   if (IsDataField(WeGlideEnabled, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
     SetEnabled(dfb.GetValue());
   }
-  /**/
+#endif
 }
 
 void
@@ -78,11 +83,11 @@ OpenVarioConfigPanel::Prepare(ContainerWindow &parent,
 }
 
 bool
-OpenVarioConfigPanel::Save(bool &_changed) noexcept
+OpenVarioConfigPanel::Save([[maybe_unused]] bool &_changed) noexcept
 {
+#ifdef OPENVARIO_CONFIG
+  // out commented currently:
   bool changed = false;
-
-/*
 
   auto &weglide = CommonInterface::SetComputerSettings().weglide;
 
@@ -101,8 +106,8 @@ OpenVarioConfigPanel::Save(bool &_changed) noexcept
                        weglide.enabled);
 
   _changed |= changed;
-  */
-
+ 
+  #endif
   return true;
 }
 
@@ -111,3 +116,4 @@ CreateOpenVarioConfigPanel() noexcept
 {
   return std::make_unique<OpenVarioConfigPanel>();
 }
+#endif

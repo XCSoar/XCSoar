@@ -3,9 +3,13 @@
 
 #pragma once
 
+#ifdef IS_OPENVARIO
+
 #include <memory>
 
 class Widget;
 
 std::unique_ptr<Widget>
 CreateOpenVarioConfigPanel();
+
+#endif

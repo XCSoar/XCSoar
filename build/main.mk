@@ -118,7 +118,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/CloudConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/WeatherConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp \
-	$(SRC)/Dialogs/Settings/Panels/OpenVarioConfigPanel.cpp \
 	\
 	$(SRC)/Dialogs/Task/Widgets/ObservationZoneEditWidget.cpp \
 	$(SRC)/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp \
@@ -154,6 +153,11 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Weather/RASPDialog.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
 	$(SRC)/Dialogs/dlgQuickMenu.cpp \
+
+ifeq ($(TARGET_IS_OPENVARIO),y)
+DIALOG_SOURCES += \
+	$(SRC)/Dialogs/Settings/Panels/OpenVarioConfigPanel.cpp
+endif
 
 ifeq ($(HAVE_PCM_PLAYER),y)
 DIALOG_SOURCES += \
