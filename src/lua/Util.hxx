@@ -101,39 +101,39 @@ SetGlobal(lua_State *L, const char *name, V &&value) noexcept
 
 template<typename I, typename K>
 void
-GetTable(lua_State *L, I idx, K &&key) noexcept
+GetTable(lua_State *L, I table_idx, K &&key) noexcept
 {
 	ScopeCheckStack check_stack{L};
 
 	Push(L, std::forward<K>(key));
-	StackPushed(idx);
-	lua_gettable(L, StackIndex{idx}.idx);
+	StackPushed(table_idx);
+	lua_gettable(L, StackIndex{table_idx}.idx);
 
 	++check_stack;
 }
 
 template<typename I, typename K, typename V>
 void
-SetTable(lua_State *L, I idx, K &&key, V &&value) noexcept
+SetTable(lua_State *L, I table_idx, K &&key, V &&value) noexcept
 {
 	const ScopeCheckStack check_stack(L);
 
 	Push(L, std::forward<K>(key));
 	StackPushed(value);
 	Push(L, std::forward<V>(value));
-	StackPushed(idx, 2);
-	lua_settable(L, StackIndex{idx}.idx);
+	StackPushed(table_idx, 2);
+	lua_settable(L, StackIndex{table_idx}.idx);
 }
 
 template<typename I, typename V>
 void
-SetField(lua_State *L, I idx, const char *name, V &&value) noexcept
+SetField(lua_State *L, I table_idx, const char *name, V &&value) noexcept
 {
 	const ScopeCheckStack check_stack(L);
 
 	Push(L, std::forward<V>(value));
-	StackPushed(idx);
-	lua_setfield(L, StackIndex{idx}.idx, name);
+	StackPushed(table_idx);
+	lua_setfield(L, StackIndex{table_idx}.idx, name);
 }
 
 template<typename V>
