@@ -112,6 +112,16 @@ GetTable(lua_State *L, AnyStackIndex auto table_idx, K &&key) noexcept
 	++check_stack;
 }
 
+inline void
+GetTable(lua_State *L, AnyStackIndex auto table_idx, const char *key) noexcept
+{
+	ScopeCheckStack check_stack{L};
+
+	lua_getfield(L, StackIndex{table_idx}.idx, key);
+
+	++check_stack;
+}
+
 template<typename K, typename V>
 void
 SetTable(lua_State *L, AnyStackIndex auto table_idx,
@@ -136,6 +146,14 @@ SetField(lua_State *L, AnyStackIndex auto table_idx,
 	Push(L, std::forward<V>(value));
 	StackPushed(table_idx);
 	lua_setfield(L, StackIndex{table_idx}.idx, name);
+}
+
+template<typename V>
+inline void
+SetTable(lua_State *L, AnyStackIndex auto table_idx,
+	 const char *key, V &&value) noexcept
+{
+	SetField(L, table_idx, key, std::forward<V>(value));
 }
 
 template<typename V>
