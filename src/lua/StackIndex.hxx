@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <concepts>
+
 namespace Lua {
 
 /**
@@ -39,5 +41,12 @@ StackPushed(RelativeStackIndex &idx, int n=1) noexcept
 {
 	idx.idx -= n;
 }
+
+/**
+ * Types satisfying this concept can be used as Lua stack index.
+ */
+template<class T>
+concept AnyStackIndex = std::convertible_to<T, StackIndex> ||
+	std::is_same_v<T, int>;
 
 } // namespace Lua
