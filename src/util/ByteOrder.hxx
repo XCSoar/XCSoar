@@ -266,7 +266,7 @@ public:
 			x = ByteSwap16(x);
 		return x;
 	}
-};
+} __attribute__((packed));
 
 static_assert(sizeof(PackedBE16) == sizeof(uint16_t), "Wrong size");
 static_assert(alignof(PackedBE16) == 1, "Wrong alignment");
@@ -312,7 +312,7 @@ public:
 			x = ByteSwap32(x);
 		return x;
 	}
-};
+} __attribute__((packed));
 
 static_assert(sizeof(PackedBE32) == sizeof(uint32_t), "Wrong size");
 static_assert(alignof(PackedBE32) == 1, "Wrong alignment");
@@ -364,7 +364,7 @@ public:
 			x = ByteSwap64(x);
 		return x;
 	}
-};
+} __attribute__((packed));
 
 static_assert(sizeof(PackedBE64) == sizeof(uint64_t), "Wrong size");
 static_assert(alignof(PackedBE64) == 1, "Wrong alignment");
@@ -413,7 +413,7 @@ public:
 			x = ByteSwap16(x);
 		return x;
 	}
-};
+} __attribute__((packed));
 
 static_assert(sizeof(PackedLE16) == sizeof(uint16_t), "Wrong size");
 static_assert(alignof(PackedLE16) == 1, "Wrong alignment");
@@ -467,7 +467,7 @@ public:
 			x = ByteSwap32(x);
 		return x;
 	}
-};
+} __attribute__((packed));
 
 static_assert(sizeof(PackedLE32) == sizeof(uint32_t), "Wrong size");
 static_assert(alignof(PackedLE32) == 1, "Wrong alignment");
@@ -519,7 +519,7 @@ public:
 			x = ByteSwap64(x);
 		return x;
 	}
-};
+} __attribute__((packed));
 
 static_assert(sizeof(PackedLE64) == sizeof(uint64_t), "Wrong size");
 static_assert(alignof(PackedLE64) == 1, "Wrong alignment");
@@ -549,7 +549,7 @@ public:
 		std::swap(value[1],value[2]);
 	}
   }
-};
+} __attribute__((packed));
 
 static_assert(sizeof(PackedFloatLE) == sizeof(float), "Wrong size");
 static_assert(alignof(PackedFloatLE) == 1, "Wrong alignment");
@@ -574,7 +574,7 @@ public:
 		std::swap(value[1],value[2]);
 	}
   }
-};
+} __attribute__((packed));
 
 static_assert(sizeof(PackedFloatLE) == sizeof(float), "Wrong size");
 static_assert(alignof(PackedFloatLE) == 1, "Wrong alignment");
