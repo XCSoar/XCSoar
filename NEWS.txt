@@ -1,4 +1,6 @@
 Version 7.41 - not yet released
+* devices
+  - added driver for LX Navigation Eos57 variometer
 
 Version 7.40 - 2023/11/02
 * user interface
