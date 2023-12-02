@@ -4,6 +4,9 @@
 #pragma once
 
 #include <cstdint>
+#include <limits>
+#include <cstring>
+#include <utility>
 
 #if defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
 /* well-known little-endian */
@@ -520,3 +523,58 @@ public:
 
 static_assert(sizeof(PackedLE64) == sizeof(uint64_t), "Wrong size");
 static_assert(alignof(PackedLE64) == 1, "Wrong alignment");
+
+/**
+ * Classes for floats rely on assumption that float type is 32bit and that the
+ * platform uses IEEE754 floating point representation (aso known as IEC559)
+ */
+static_assert(std::numeric_limits<float>::is_iec559);
+static_assert(sizeof(float) == 4);
+
+/**
+ * Float represented by IEEE754 standard. With bytes swapped (little-endian)
+ */
+class PackedFloatLE
+{
+  uint8_t value[4];
+
+public:
+  PackedFloatLE() = default;
+
+  constexpr PackedFloatLE(float f)
+  {
+    memcpy(value,&f,4);
+	if(IsBigEndian()) {
+		std::swap(value[0],value[3]);
+		std::swap(value[1],value[2]);
+	}
+  }
+};
+
+static_assert(sizeof(PackedFloatLE) == sizeof(float), "Wrong size");
+static_assert(alignof(PackedFloatLE) == 1, "Wrong alignment");
+
+/**
+ * Float represented by IEEE754 standard. Bytes are not swapped (big-endian)
+ */
+class PackedFloatBE
+{
+  uint8_t value[4];
+
+public:
+  PackedFloatBE() = default;
+
+  // There is no way of doing this as constexpr 
+  // (would be possible only with std::bit_cast in C++20)
+  PackedFloatBE(float f)
+  {
+    std::memcpy(value,&f,4);
+	if(IsLittleEndian()) {
+		std::swap(value[0],value[3]);
+		std::swap(value[1],value[2]);
+	}
+  }
+};
+
+static_assert(sizeof(PackedFloatLE) == sizeof(float), "Wrong size");
+static_assert(alignof(PackedFloatLE) == 1, "Wrong alignment");
