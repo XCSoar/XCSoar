@@ -125,6 +125,22 @@ struct Class {
 		return *(pointer)luaL_checkudata(L, idx, name);
 	}
 
+	/**
+	 * Generate a wrapper function which invokes Cast() and calls
+	 * the specified method.
+	 */
+	template<auto method>
+	static constexpr lua_CFunction WrapMethod() noexcept
+		requires std::is_class_v<T> &&
+		std::is_member_function_pointer_v<decltype(method)> {
+		static_assert(std::is_same_v<decltype(method), int (T::*)(lua_State *)>);
+
+		return [](lua_State *L) {
+			reference object = Cast(L, 1);
+			return (object.*method)(L);
+		};
+	}
+
 private:
 	static int l_gc(lua_State *L) {
 		const ScopeCheckStack check_stack(L);
