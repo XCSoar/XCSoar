@@ -227,8 +227,6 @@ PaintWindArrow(Canvas &canvas, const PixelRect &rc,
   constexpr unsigned arrow_width = 6;
   constexpr unsigned arrow_tail_length = 3;
 
-  const auto &info = CommonInterface::Calculated();
-
   const unsigned scale = Layout::Scale(100U);
 
   RadarRenderer radar_renderer{Layout::FastScale(10u)};
@@ -238,10 +236,10 @@ PaintWindArrow(Canvas &canvas, const PixelRect &rc,
   // by the DrawArrow() function again
   const unsigned size = radar_renderer.GetRadius() * 100 / scale;
 
-  auto angle = info.wind.bearing - CommonInterface::Basic().attitude.heading;
+  auto angle = wind.bearing - CommonInterface::Basic().attitude.heading;
 
   const int length =
-    std::min(size, std::max(10u, uround(4 * info.wind.norm)));
+    std::min(size, std::max(10u, uround(4 * wind.norm)));
 
   const int offset = -length / 2;
 
