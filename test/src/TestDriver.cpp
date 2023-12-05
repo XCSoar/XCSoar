@@ -1693,7 +1693,7 @@ TestFlightList(const struct DeviceRegister &driver)
 int main()
 {
 #if 1
-  plan_tests(862);
+  plan_tests(865);
 
   TestGeneric();
   TestTasman();
