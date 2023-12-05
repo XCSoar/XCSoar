@@ -15,8 +15,6 @@ include(CMakeSource.cmake)
 ### message(FATAL_ERROR "### Stop !!!!")
 
 foreach(source_file ${TEST_LIST})
-#    string(REPLACE "${TARGET_NAME}/" "" source_file ${source_file})
-#    list(APPEND SOURCE_FILES ${source_file})
      message(STATUS "+++ Add Test-Project to test: ${source_file} ")
 
     add_compile_definitions("__STDC_VERSION__= 199901L") # ?
@@ -25,19 +23,44 @@ foreach(source_file ${TEST_LIST})
 
     list(APPEND source_file ${SRC_DIR}/DebugPort.cpp)
     list(APPEND source_file ${PROJECTGROUP_SOURCE_DIR}/src/Operation/ConsoleOperationEnvironment.cpp)
-    #xxx list(APPEND source_file ${PROJECTGROUP_SOURCE_DIR}/temp/data/memory_fields.c)
     add_executable(${test}  ${source_file} 
       ${test_path}/tap.c 
       ${SCRIPT_FILES}
     )
     set_target_properties(${test} PROPERTIES 
-                FOLDER _Test
+                FOLDER _ConsoleTest
                 EXCLUDE_FROM_ALL TRUE
     )
-
     target_link_libraries(${test} PUBLIC ${XCSOAR_LINK_LIBRARIES})
 
     add_dependencies(${test} util libOpenSoar)
 
 #     message(STATUS "### ${test_path}  --- ${test}")
+endforeach()
+
+foreach(source_file ${GUI_TEST_LIST})
+    message(STATUS "+++ Add (Gui-)Test-Project to test: ${source_file} ")
+
+    add_compile_definitions("__STDC_VERSION__= 199901L") # ?
+    get_filename_component(test ${source_file} NAME_WE)
+    get_filename_component(test_path ${source_file} DIRECTORY)
+
+    list(APPEND source_file ${SRC_DIR}/DebugPort.cpp)
+    list(APPEND source_file ${PROJECTGROUP_SOURCE_DIR}/src/Operation/ConsoleOperationEnvironment.cpp)
+    list(APPEND source_file ${SRC_DIR}/Fonts.cpp)
+    add_executable(${test}  ${source_file} 
+      ${test_path}/tap.c 
+      ${SCRIPT_FILES}
+    )
+    set_target_properties(${test} PROPERTIES 
+                FOLDER _GuiTest
+                EXCLUDE_FROM_ALL TRUE
+    )
+    if(MSVC)
+        target_link_options(${test} PUBLIC "/SUBSYSTEM:WINDOWS")
+    endif()
+    target_link_libraries(${test} PUBLIC ${XCSOAR_LINK_LIBRARIES})
+
+    add_dependencies(${test} util libOpenSoar)
+
 endforeach()
