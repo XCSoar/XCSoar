@@ -210,7 +210,7 @@ SkyLinesTracking::MakeThermalRequest(uint64_t key)
 
 SkyLinesTracking::TrafficRequestPacket
 SkyLinesTracking::MakeTrafficRequest(uint64_t key, bool followees, bool club,
-                                     bool near)
+                                     bool _near)
 {
   assert(key != 0);
 
@@ -221,7 +221,7 @@ SkyLinesTracking::MakeTrafficRequest(uint64_t key, bool followees, bool club,
   packet.header.key = ToBE64(key);
   packet.flags = ToBE32((followees ? packet.FLAG_FOLLOWEES : 0)
                         | (club ? packet.FLAG_CLUB : 0)
-                        | (near ? packet.FLAG_NEAR : 0));
+                        | (_near ? packet.FLAG_NEAR : 0));
   packet.reserved = 0;
 
   packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
