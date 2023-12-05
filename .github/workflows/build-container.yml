@@ -7,11 +7,11 @@ on:
       - '.github/workflows/build-container.yml'
 
 jobs:
- xcsoar-docker-env:
+ opensoar-docker-env:
     runs-on: ubuntu-latest
     env:
       REGISTRY: ghcr.io
-      IMAGENAME: xcsoar-build
+      IMAGENAME: opensoar-build
     steps:
       - uses: actions/checkout@v3
         with:
@@ -32,8 +32,8 @@ jobs:
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
           context: ./ide
           file: ./ide/docker/Dockerfile
-          tags: ghcr.io/${{ steps.string.outputs.lowercase }}/xcsoar-build:latest
-          cache-from: type=registry,ref=ghcr.io/${{ steps.string.outputs.lowercase }}/xcsoar-build:latest
+          tags: ghcr.io/${{ steps.string.outputs.lowercase }}/opensoar-build:latest
+          cache-from: type=registry,ref=ghcr.io/${{ steps.string.outputs.lowercase }}/opensoar-build:latest
           cache-to: type=inline
           secrets: |
             GIT_AUTH_TOKEN=${{ github.token }}
