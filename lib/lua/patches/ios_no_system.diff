@@ -1,7 +1,7 @@
-Index: lua-5.4.4/src/loslib.c
+Index: lua-5.4.6/src/loslib.c
 ===================================================================
---- lua-5.4.4.orig/src/loslib.c
-+++ lua-5.4.4/src/loslib.c
+--- lua-5.4.6.orig/src/loslib.c
++++ lua-5.4.6/src/loslib.c
 @@ -21,6 +21,9 @@
  #include "lauxlib.h"
  #include "lualib.h"
@@ -13,7 +13,7 @@ Index: lua-5.4.4/src/loslib.c
  /*
  ** {==================================================================
 @@ -139,6 +142,7 @@
- 
+ #endif
  
  
 +#if !defined(__APPLE__) || !TARGET_OS_IPHONE
@@ -28,7 +28,7 @@ Index: lua-5.4.4/src/loslib.c
  
  
  static int os_remove (lua_State *L) {
-@@ -408,7 +413,9 @@ static const luaL_Reg syslib[] = {
+@@ -406,7 +411,9 @@ static const luaL_Reg syslib[] = {
    {"clock",     os_clock},
    {"date",      os_date},
    {"difftime",  os_difftime},
@@ -38,7 +38,7 @@ Index: lua-5.4.4/src/loslib.c
    {"exit",      os_exit},
    {"getenv",    os_getenv},
    {"remove",    os_remove},
-@@ -427,4 +434,3 @@ LUAMOD_API int luaopen_os (lua_State *L)
+@@ -425,4 +432,3 @@ LUAMOD_API int luaopen_os (lua_State *L)
    luaL_newlib(L, syslib);
    return 1;
  }
