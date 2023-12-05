@@ -236,6 +236,7 @@ TestFLARM()
     ok1(traffic3->type == FlarmTraffic::AircraftType::AIRSHIP);
     ok1(!traffic3->stealth);
 
+#ifdef _DEBUG
     std::cout << nmea_info.flarm.traffic.TrafficIndex(traffic1) << std::endl;
     std::cout << nmea_info.flarm.traffic.TrafficIndex(traffic2) << std::endl;
     std::cout << nmea_info.flarm.traffic.TrafficIndex(traffic3) << std::endl;
@@ -244,6 +245,7 @@ TestFLARM()
     std::cout << nmea_info.flarm.traffic.NextTraffic(traffic1)->distance << std::endl;
     std::cout << nmea_info.flarm.traffic.NextTraffic(traffic2)->distance << std::endl;
     std::cout << nmea_info.flarm.traffic.NextTraffic(traffic3) << std::endl;
+#endif
 
     ok1(equals(nmea_info.flarm.traffic.TrafficIndex(traffic1), 0));
     ok1(equals(nmea_info.flarm.traffic.TrafficIndex(traffic2), 1));
