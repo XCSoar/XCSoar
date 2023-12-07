@@ -668,7 +668,13 @@ ParseLine(Airspaces &airspace_database, unsigned line_number,
     case 'F':
     case 'f':
       if (input.SkipWhitespace())
-        temp_area.radio_frequency = RadioFrequency::Parse(input.c_str());
+        if (auto mhz = input.ReadDouble()) {
+          if (input.SkipMatchIgnoreCase("MHz"sv))
+                *mhz *= 1.0;
+          else if (input.SkipMatchIgnoreCase("kHz"sv))
+                *mhz /= 1000.0;
+          temp_area.radio_frequency = RadioFrequency::Convert(*mhz);
+      }
       break;
     }
 
@@ -890,7 +896,13 @@ ParseLineTNP(Airspaces &airspace_database, unsigned line_number,
   } else if (input.SkipMatchIgnoreCase("BASE="sv)) {
     temp_area.base = ReadAltitude(input);
   } else if (input.SkipMatchIgnoreCase("RADIO="sv)) {
-    temp_area.radio_frequency = RadioFrequency::Parse(input.c_str());
+    if (auto mhz = input.ReadDouble()) {
+      if (input.SkipMatchIgnoreCase("MHz"sv))
+        *mhz *= 1.0;
+      else if (input.SkipMatchIgnoreCase("kHz"sv))
+        *mhz /= 1000.0;
+      temp_area.radio_frequency = RadioFrequency::Convert(*mhz);
+    }
   } else if (input.SkipMatchIgnoreCase("ACTIVE="sv)) {
     if (input.MatchAllIgnoreCase("WEEKEND"))
       temp_area.days_of_operation.SetWeekend();
