@@ -53,6 +53,12 @@ public:
     return f;
   }
 
+  static constexpr RadioFrequency Convert(double mhz) noexcept {
+    RadioFrequency f;
+    f.SetKiloHertz(mhz * 1000.0 + 0.49);  // for a correct truncation
+    return f;
+  }
+
   friend constexpr auto operator<=>(RadioFrequency,
                                     RadioFrequency) noexcept = default;
 
