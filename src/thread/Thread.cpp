@@ -12,9 +12,9 @@
 
 #include <cassert>
 
-#ifndef HAVE_POSIX  // = _WIN32? <<<<<<< 2021-12-26
+#ifdef __MSVC__
 # include "LogFile.hpp"
-#endif  // >>>>>>> 2021-12-26
+#endif
 
 void
 Thread::SetIdlePriority() noexcept
@@ -80,7 +80,10 @@ Thread::Join() noexcept
 #else
   DWORD result = ::WaitForSingleObject(handle, 1000);
   if (result != WAIT_OBJECT_0) {  // TODO(August2111): Too much? INFINITE);
-      LogFormat("WaitForSingleObject with error %lu", result);
+# ifdef __MSVC__
+    // TODO(August2111) commented out for PC and WIN64:
+    LogFormat((const char*)"WaitForSingleObject with error %lu", result);
+# endif
   }
   ::CloseHandle(handle);
   handle = nullptr;
