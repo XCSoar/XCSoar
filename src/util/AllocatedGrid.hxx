@@ -140,13 +140,14 @@ public:
 			const unsigned delta_w = _width - width;
 			const auto end = array.begin();
 
-			for (auto in = array.begin() + (h - 1) * width,
-				     out = array.begin() + (h - 1) * _width + width;
-			     in > end; in -= width, out -= delta_w) {
-				out = std::move_backward(in, in + width, out);
-				std::fill(out - delta_w, out, fill);
-			}
-
+			if (h > 0) {
+				for (auto in = array.begin() + (h - 1) * width,
+					     out = array.begin() + (h - 1) * _width + width;
+				     in > end; in -= width, out -= delta_w) {
+					out = std::move_backward(in, in + width, out);
+					std::fill(out - delta_w, out, fill);
+				}
+      }
 			width = _width;
 		}
 
