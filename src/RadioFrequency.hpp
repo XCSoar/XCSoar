@@ -3,6 +3,9 @@
 
 #pragma once
 
+#include "util/StringAPI.hxx"
+#include "util/StringParser.hxx"
+
 #include <cassert>
 #include <cstdint>
 #include <compare>
@@ -108,4 +111,7 @@ public:
 
   [[gnu::pure]]
   static RadioFrequency Parse(std::string_view src) noexcept;
+
+  [[gnu::pure]] 
+  static RadioFrequency Parse(StringParser<> &src) noexcept;
 };
