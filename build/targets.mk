@@ -504,6 +504,7 @@ ifeq ($(HAVE_WIN32),y)
 endif
 
 ifeq ($(TARGET),PC)
+  TARGET_CXXFLAGS += -Wno-builtin-macro-redefined
   TARGET_ARCH += -mwindows -mms-bitfields
 endif
 
