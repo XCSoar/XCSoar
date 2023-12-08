@@ -181,8 +181,8 @@ static void
 TestGetNearest(const Waypoints &waypoints, const GeoPoint &center)
 {
   WaypointPtr waypoint;
-  GeoPoint near = GeoVector(250, Angle::Degrees(15)).EndPoint(center);
-  GeoPoint far = GeoVector(750, Angle::Degrees(15)).EndPoint(center);
+  GeoPoint _near = GeoVector(250, Angle::Degrees(15)).EndPoint(center);
+  GeoPoint _far = GeoVector(750, Angle::Degrees(15)).EndPoint(center);
   GeoPoint further = GeoVector(4200, Angle::Degrees(48)).EndPoint(center);
 
   ok1((waypoint = waypoints.GetNearest(center, 1)) != NULL);
@@ -191,14 +191,14 @@ TestGetNearest(const Waypoints &waypoints, const GeoPoint &center)
   ok1((waypoint = waypoints.GetNearest(center, 10000)) != NULL);
   ok1(waypoint->original_id == 0);
 
-  ok1((waypoint = waypoints.GetNearest(near, 1)) == NULL);
+  ok1((waypoint = waypoints.GetNearest(_near, 1)) == NULL);
 
-  ok1((waypoint = waypoints.GetNearest(near, 10000)) != NULL);
+  ok1((waypoint = waypoints.GetNearest(_near, 10000)) != NULL);
   ok1(waypoint->original_id == 0);
 
-  ok1((waypoint = waypoints.GetNearest(far, 1)) == NULL);
+  ok1((waypoint = waypoints.GetNearest(_far, 1)) == NULL);
 
-  ok1((waypoint = waypoints.GetNearest(far, 10000)) != NULL);
+  ok1((waypoint = waypoints.GetNearest(_far, 10000)) != NULL);
   ok1(waypoint->original_id == 1);
 
   ok1((waypoint = waypoints.GetNearestLandable(center, 1)) != NULL);
