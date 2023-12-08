@@ -11,6 +11,7 @@
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
 #include "Operation/Operation.hpp"
+// #include "Operation/PopupOperationEnvironment.hpp"
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "CalculationThread.hpp"
@@ -52,7 +53,7 @@ public:
   explicit FreeVarioDevice(Port &_port):port(_port){}
   bool ParseNMEA(const char *line,NMEAInfo &info) override;
   static bool PFVParser(NMEAInputLine &line, NMEAInfo &info, Port &port);
-  static bool POVParserAndForward(NMEAInputLine &line);
+  bool POVParserAndForward(NMEAInputLine &line);
   bool SendCmd(double value, const char *cmd, OperationEnvironment &env);
   bool PutMacCready(double mc, OperationEnvironment &env) override;
   bool PutBugs(double bugs, OperationEnvironment &env) override;
@@ -71,16 +72,31 @@ bool
 FreeVarioDevice::POVParserAndForward(NMEAInputLine &line)
 {
   NullOperationEnvironment env;
+  // PopupOperationEnvironment env;
   bool messageValid = false;
 
   while (!line.IsEmpty() ) {
-    StaticString<4> bufferAsString;
     char command = line.ReadOneChar();
     char buff[4] ;
 
     line.Read(buff,4);
+    // TODO(August2111): I don't know, why this command should be
+    // mirrored in the driver to the eventSendNMEAPort(1) and (2)
+    // what is the sense for this
+    // From FreeVario device is coming a '$POV,C,XXX command
+
+    if (command == 'C') {
+      char buffer[64];
+      sprintf(buffer, "POV,C,%s", buff);
+      PortWriteNMEA(port, buffer, env);
+    }
+#ifdef FREEVARIO_EVENT
+    // TODO(August2111): in the moment this output is not allowed
+    // with build-native it shows ' error: undefined reference to
+    // 'InputEvents::eventXXX(char const*)', but I don't know why yet
+    // info.switch_state.flight_mode = SwitchState::FlightMode::CIRCLING;
+    StaticString<4> bufferAsString;
     bufferAsString.SetUTF8(buff);
-     
     if ('C' == command && bufferAsString == _T("STF")) {
       messageValid = true;
       InputEvents::eventSendNMEAPort1(_T("POV,C,STF*4B"));
@@ -93,6 +109,7 @@ FreeVarioDevice::POVParserAndForward(NMEAInputLine &line)
       InputEvents::eventSendNMEAPort2(_T("POV,C,VAR*4F"));
       InputEvents::eventStatusMessage(_T("Vario Mode"));
     }
+#endif
   }
   return messageValid;
 }
