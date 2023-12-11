@@ -186,9 +186,15 @@ freetype = MesonProject(
     ],
 )
 
+# 'https://c-ares.haxx.se/download/c-ares-1.18.1.tar.gz', '1a7d52a8a84a9fbffb1be9133c0f6e17217d91ea5a6fa61f6b4729cda78ebbcf',
+# 'https://c-ares.haxx.se/download/c-ares-1.19.1.tar.gz', '321700399b72ed0e037d0074c629e7741f6b2ec2dda92956abe3e9671d3e268e',
+# 'https://c-ares.haxx.se/download/c-ares-1.20.1.tar.gz', 'de24a314844cb157909730828560628704f4f896d167dd7da0fa2fb93ea18b10',
+# 'https://c-ares.haxx.se/download/c-ares-1.21.0.tar.gz', 'cd7aa3af1d3ee780d6437039a7ddb7f1ec029f9c4f7aabb0197e384eb5bc2f2d',
+# 'https://c-ares.haxx.se/download/c-ares-1.22.0.tar.gz', 'ad2e205088083317147c9f9eab5f24b82c3d50927c381a7c963deeb1182dbc21',
+# 'https://c-ares.haxx.se/download/c-ares-1.23.0.tar.gz', 'cb614ecf78b477d35963ebffcf486fc9d55cc3d3216f00700e71b7d4868f79f5',
 cares = CmakeProject(
-    'https://c-ares.haxx.se/download/c-ares-1.18.1.tar.gz',
-    '1a7d52a8a84a9fbffb1be9133c0f6e17217d91ea5a6fa61f6b4729cda78ebbcf',
+    'https://c-ares.haxx.se/download/c-ares-1.21.0.tar.gz',
+    'cd7aa3af1d3ee780d6437039a7ddb7f1ec029f9c4f7aabb0197e384eb5bc2f2d',
     'lib/libcares.a',
     [
         '-DCARES_STATIC=ON',
