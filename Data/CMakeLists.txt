@@ -97,12 +97,12 @@ add_custom_command(OUTPUT ${_TEMP_OUTPUT}/title.svg
   COMMENT "Replace Strings!"
   COMMAND ${CMAKE_COMMAND} -E make_directory ${_TEMP_OUTPUT}
   COMMAND ${PYTHON_APP} ${PROJECTGROUP_SOURCE_DIR}/tools/python/replace.py 
-          ${PROJECTGROUP_SOURCE_DIR}/${PROGRAM_NAME}.config
+          ${PROJECTGROUP_SOURCE_DIR}/OpenSoar.config
           ${_DATA_INPUT}/graphics/title.svg
           ${_TEMP_OUTPUT}/title.svg
           ${_INCLUDE_OUTPUT}/ProgramVersion.h
   DEPENDS ${_DATA_INPUT}/graphics/title.svg
-          ${PROJECTGROUP_SOURCE_DIR}/${PROGRAM_NAME}.config
+          ${PROJECTGROUP_SOURCE_DIR}/OpenSoar.config
           ${PROJECTGROUP_BINARY_DIR}/VERSION.txt
           ${PROJECTGROUP_SOURCE_DIR}/tools/python/replace.py 
   WORKING_DIRECTORY ${PROJECTGROUP_SOURCE_DIR}

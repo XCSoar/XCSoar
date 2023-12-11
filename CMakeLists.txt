@@ -22,7 +22,7 @@ string(TOLOWER  ${PROGRAM_NAME} PROGRAM_NAME_LC) # lowercase
 
 ### file(READ "VERSION.txt" PROGRAM_VERSION)
 # add version string to OpenSoar:
-file(READ ${PROGRAM_NAME}.config _config_file)
+file(READ OpenSoar.config _config_file)
 # put the complete string in a list of lines
 string(REPLACE "\n" ";" _config_file ${_config_file})
 foreach(_line ${_config_file})
