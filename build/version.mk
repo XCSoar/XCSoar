@@ -1,9 +1,9 @@
-CONFIG = $(topdir)/$(PROGRAM_NAME).config
+CONFIG = $(topdir)/OpenSoar.config
 include $(CONFIG)
 
 # w/o VERSION.txt:
 ifeq ($(PROGRAM_VERSION),"")
-PROGRAM_VERSION = $(strip $(shell cat $(topdir)/VERSION.txt))
+	PROGRAM_VERSION = $(strip $(shell cat $(topdir)/VERSION.txt))
 endif
 
 ### echo "$(PROGRAM_VERSION)"
@@ -23,19 +23,3 @@ endif
 $(call SRC_TO_OBJ,$(SRC)/Version.cpp): $(topdir)/VERSION.txt
 $(call SRC_TO_OBJ,$(SRC)/Version.cpp): CPPFLAGS += $(VERSION_CPPFLAGS)
 $(call SRC_TO_OBJ,$(SRC)/Dialogs/dlgCredits.cpp): CPPFLAGS += $(VERSION_CPPFLAGS)
-
-# August2111-Start
-# ======================================================================
-# CONFIG = $(topdir)/$(PROGRAM_NAME).config
-# include $(CONFIG)
-$(topdir)/output/include/ProgramVersion.h: $(topdir)/$(PROGRAM_NAME).config
-	@$(NQ)echo "  VERSION:   $< == $@"
-	$(Q)python3 $(topdir)/tools/python/replace.py  $(topdir)/$(PROGRAM_NAME).config $< $@ $(OUT)/include/ProgramVersion.h
-
-# Version.o need the new PROGRAM_VERSION if it is available:
-$(ABI_OUTPUT_DIR)/src/Version.o: $(topdir)/src/Version.cpp $(topdir)/$(PROGRAM_NAME).config $(topdir)/output/include/ProgramVersion.h
-	@$(NQ)echo "  CPP     $@"
-	$(Q)$(WRAPPED_CXX) $< -c -o $@ $(cxx-flags)
-# ======================================================================
-# August2111-End
-

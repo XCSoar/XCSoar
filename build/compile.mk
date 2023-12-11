@@ -1,5 +1,18 @@
 ######## tools
 
+# August2111: This part is for OpenSoar only:
+#============================================
+# with changed .config a new ProgramVersion (and a new title.svg) is needed
+output/include/ProgramVersion.h: OpenSoar.config
+	@$(NQ)echo "  VERSION:   $< ==> $@ "
+	$(Q)python3 $(topdir)/tools/python/replace.py $< Data/graphics/title.svg $(DATA)/temp/graphics/title.svg $@
+
+# Version.o need the new PROGRAM_VERSION if it is available:
+Version.o: %.cpp ProgramVersion.h
+	@$(NQ)echo "  CPP     $@"
+	$(Q)$(WRAPPED_CXX) $< -c -o $@ $(cxx-flags)
+#================================================
+
 CCACHE := 
 ifeq ($(USE_CCACHE),y)
   CCACHE := ccache$(EXE)

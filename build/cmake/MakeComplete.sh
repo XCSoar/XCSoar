@@ -3,8 +3,8 @@
 echo "Make Complete"
 echo "============="
 
-if [ "$GIT_REPOSITORY" == "" ]; then GIT_REPOSITORY=august ; fi
-if [ "$GIT_BRANCH" == "" ]; then GIT_BRANCH=opensoar-dev ; fi
+if [ "$GIT_REPOSITORY" == "" ]; then GIT_REPOSITORY=OpenSoaring ; fi
+if [ "$GIT_BRANCH" == "" ]; then GIT_BRANCH=master ; fi
 #  or origin ; fi
 
 git fetch ${GIT_REPOSITORY}
