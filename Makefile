@@ -63,6 +63,56 @@
 #   USE_CCACHE  "y" to build with ccache
 #
 
+# ============================================================
+# Make Caller Info:
+RUN_ARGS := $(wordlist 1,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+
+ifneq ($(TARGET),)
+  ARGS := $(ARGS) TARGET=$(TARGET)
+  $(info  *  TARGET =       $(TARGET))
+endif 
+ifneq ($(DEBUG),)
+  ARGS := $(ARGS) DEBUG=$(DEBUG)
+  $(info  *  DEBUG =        $(DEBUG))
+endif 
+ifneq ($(ANDROID_SDK),)
+  ARGS := $(ARGS) ANDROID_NDK=$(ANDROID_SDK)
+  $(info  *  ANDROID_SDK =  $(ANDROID_SDK))
+endif 
+ifneq ($(ANDROID_NDK),)
+  ARGS := $(ARGS) ANDROID_NDK=$(ANDROID_NDK)
+  $(info  *  ANDROID_NDK =  $(ANDROID_NDK))
+endif 
+ifneq ($(NDK),)
+  ARGS := $(ARGS) ANDROID_NDK=$(NDK)
+  $(info  *  NDK =          $(NDK))
+endif 
+ifneq ($(USE_CCACHE),)
+  ARGS := $(ARGS) USE_CCACHE=$(USE_CCACHE)
+  $(info  *  USE_CCACHE =   $(USE_CCACHE))
+endif 
+ifneq ($(V),)
+  ARGS := $(ARGS) V=$(V)
+  $(info  *  V =            $(V))
+endif 
+
+ifneq ($(USE_HOMEBREW),)
+  ARGS := $(ARGS) USE_HOMEBREW=$(USE_HOMEBREW)
+  $(info  *  USE_HOMEBREW = $(USE_HOMEBREW))
+endif 
+ifneq ($(OPTIMIZE),)
+  ARGS := $(ARGS) OPTIMIZE=$(OPTIMIZE)
+  $(info  *  OPTIMIZE =     $(OPTIMIZE))
+endif 
+ifneq ($(XXX),)
+  ARGS := $(ARGS) XXX=$(XXX)
+  $(info  *  XXX =         $(XXX))
+endif 
+ifneq ($(RUN_ARGS),)
+  $(info  *  RUN_ARGS =   $(RUN_ARGS))
+endif 
+# ============================================================
+
 PROGRAM_NAME_LC = opensoar
 PROGRAM_NAME_CC = OpenSoar
 
