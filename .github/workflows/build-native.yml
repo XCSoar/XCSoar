@@ -31,7 +31,7 @@ on:
 
 env:
   DEBUG: y
-  BOOST: boost_1_82_0
+  BOOST: boost_1_83_0
 
 jobs:
   build-ubuntu:
