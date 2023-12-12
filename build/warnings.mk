@@ -2,10 +2,12 @@ WARNINGS = -Wall -Wextra
 WARNINGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
 WARNINGS += -Wundef
 WARNINGS += -Wmissing-declarations
-WARNINGS += -Wredundant-decls
 
 ifeq ($(TARGET),PC)
   WARNINGS += -Wno-builtin-macro-redefined
+  WARNINGS += -Wno-redundant-decls
+else
+  WARNINGS += -Wredundant-decls
 endif
 
 CXX_WARNINGS = $(WARNINGS)
