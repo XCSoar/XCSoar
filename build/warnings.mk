@@ -4,6 +4,10 @@ WARNINGS += -Wundef
 WARNINGS += -Wmissing-declarations
 WARNINGS += -Wredundant-decls
 
+ifeq ($(TARGET),PC)
+  WARNINGS += -Wno-builtin-macro-redefined
+endif
+
 CXX_WARNINGS = $(WARNINGS)
 CXX_WARNINGS += -Wmissing-noreturn
 CXX_WARNINGS += -Wvla
