@@ -82,7 +82,7 @@ Thread::Join() noexcept
   if (result != WAIT_OBJECT_0) {  // TODO(August2111): Too much? INFINITE);
 # ifdef __MSVC__
     // TODO(August2111) commented out for PC and WIN64:
-    LogFormat((const char*)"WaitForSingleObject with error %lu", result);
+    LogFormat("WaitForSingleObject with error %lu", result);
 # endif
   }
   ::CloseHandle(handle);
