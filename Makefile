@@ -96,6 +96,8 @@ include $(topdir)/build/abi.mk
 include $(topdir)/build/coverage.mk
 include $(topdir)/build/libintl.mk
 
+include $(topdir)/build/version.mk
+
 ifeq ($(HEADLESS),y)
 else
 include $(topdir)/build/libglm.mk
@@ -120,7 +122,6 @@ include $(topdir)/build/java.mk
 include $(topdir)/build/android.mk
 include $(topdir)/build/llvm.mk
 include $(topdir)/build/tools.mk
-include $(topdir)/build/version.mk
 include $(topdir)/build/darwin.mk
 include $(topdir)/build/ios.mk
 include $(topdir)/build/osx.mk
