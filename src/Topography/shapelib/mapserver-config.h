@@ -9,7 +9,9 @@
 #define HAVE_STRCASESTR 1
 #define HAVE_STRDUP 1
 
-#if !defined(_WIN32)
+#if !( (defined(__GLIBC__) && ((__GLIBC__ < 2) || \
+     ((__GLIBC__ == 2) && (__GLIBC_MINOR__ < 38)))) || \
+     defined(_WIN32))
 #define HAVE_STRLCAT 1
 #define HAVE_STRLCPY 1
 #endif
