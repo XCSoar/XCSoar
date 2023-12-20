@@ -253,7 +253,7 @@ FillList(WaypointList &list, const Waypoints &src,
          GeoPoint location, Angle heading, const WaypointListDialogState &state,
          OrderedTask *ordered_task, unsigned ordered_task_index)
 {
-  if (!state.IsDefined() && src.size() >= 500)
+  if (!state.IsDefined() && src.size() >= 1000)
     return;
 
   WaypointFilter filter;

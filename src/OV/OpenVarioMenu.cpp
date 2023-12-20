@@ -5,18 +5,28 @@
 #include "Dialogs/Message.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/ProcessDialog.hpp"
+#include "Dialogs/Error.hpp"
+#include "Widget/DrawWidget.hpp"
 #include "Widget/RowFormWidget.hpp"
+#include "Renderer/FlightListRenderer.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
 #include "../test/src/Fonts.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "ui/window/Init.hpp"
 #include "ui/window/SingleWindow.hpp"
 #include "ui/event/Queue.hpp"
 #include "ui/event/Timer.hpp"
 #include "ui/event/KeyCode.hpp"
+#include "Logger/FlightParser.hpp"
 #include "Language/Language.hpp"
+#include "lib/dbus/Connection.hxx"
+#include "lib/dbus/ScopeMatch.hxx"
+#include "lib/dbus/Systemd.hxx"
 #include "system/Process.hpp"
+#include "io/FileLineReader.hpp"
+#include "util/PrintException.hxx"
 #include "util/ScopeExit.hxx"
 #include "system/FileUtil.hpp"
 #include "Profile/File.hpp"
@@ -71,10 +81,16 @@ static void ChangeConfigString(const string &keyvalue, T value, const string &pa
   configuration.Set(keyvalue.c_str(), value);
   Profile::SaveFile(configuration, ConfigPath);
 }
+#include "LocalPath.hpp"
+
+#include <cassert>
+#include <cstdio>
 
 enum Buttons {
   LAUNCH_SHELL = 100,
 };
+
+static bool have_data_path = false;
 
 static DialogSettings dialog_settings;
 static UI::SingleWindow *global_main_window;
@@ -237,7 +253,7 @@ ScreenRotationWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
  AddButton("Portrait (270°)", [this](){
    SaveRotation("3");
    Display::Rotate(DisplayOrientation::PORTRAIT);
- });  
+ });
 }
 
 class ScreenBrightnessWidget final
@@ -520,8 +536,8 @@ ScreenTimeoutWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddButton("immediately", [this](){
     SaveTimeout(0);
         static constexpr const char *argv[] = {
-      "/bin/sh", "-c", 
-      "echo Automatic timeout was set to 0s", 
+      "/bin/sh", "-c",
+      "echo Automatic timeout was set to 0s",
       nullptr
     };
 
@@ -533,8 +549,8 @@ ScreenTimeoutWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddButton("1s", [this](){
     SaveTimeout(1);
     static constexpr const char *argv[] = {
-      "/bin/sh", "-c", 
-      "echo Automatic timeout was set to 1s", 
+      "/bin/sh", "-c",
+      "echo Automatic timeout was set to 1s",
       nullptr
     };
 
@@ -546,8 +562,8 @@ ScreenTimeoutWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddButton("3s", [this](){
     SaveTimeout(3);
     static constexpr const char *argv[] = {
-      "/bin/sh", "-c", 
-      "echo Automatic timeout was set to 3s", 
+      "/bin/sh", "-c",
+      "echo Automatic timeout was set to 3s",
       nullptr
     };
 
@@ -559,8 +575,8 @@ ScreenTimeoutWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddButton("5s", [this](){
     SaveTimeout(5);
     static constexpr const char *argv[] = {
-      "/bin/sh", "-c", 
-      "echo Automatic timeout was set to 5s", 
+      "/bin/sh", "-c",
+      "echo Automatic timeout was set to 5s",
       nullptr
     };
 
@@ -572,8 +588,8 @@ ScreenTimeoutWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddButton("10s", [this](){
     SaveTimeout(10);
     static constexpr const char *argv[] = {
-      "/bin/sh", "-c", 
-      "echo Automatic timeout was set to 10s", 
+      "/bin/sh", "-c",
+      "echo Automatic timeout was set to 10s",
       nullptr
     };
 
@@ -585,8 +601,8 @@ ScreenTimeoutWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddButton("30s", [this](){
     SaveTimeout(30);
     static constexpr const char *argv[] = {
-      "/bin/sh", "-c", 
-      "echo Automatic timeout was set to 30s", 
+      "/bin/sh", "-c",
+      "echo Automatic timeout was set to 30s",
       nullptr
     };
 
@@ -620,9 +636,9 @@ ScreenSSHWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 {
   AddButton("Enable", [](){
     static constexpr const char *argv[] = {
-      "/bin/sh", "-c", 
-      "systemctl enable dropbear.socket && printf '\nSSH has been enabled'", 
-      
+      "/bin/sh", "-c",
+      "systemctl enable dropbear.socket && printf '\nSSH has been enabled'",
+
       nullptr
     };
 
@@ -633,8 +649,8 @@ ScreenSSHWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 
   AddButton("Disable", [](){
     static constexpr const char *argv[] = {
-      "/bin/sh", "-c", 
-      "systemctl disable dropbear.socket && printf '\nSSH has been disabled'", 
+      "/bin/sh", "-c",
+      "systemctl disable dropbear.socket && printf '\nSSH has been disabled'",
       nullptr
     };
 
@@ -668,8 +684,8 @@ ScreenVariodWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 {
   AddButton("Enable", [](){
     static constexpr const char *argv[] = {
-      "/bin/sh", "-c", 
-      "systemctl enable variod && printf '\nvariod has been enabled'", 
+      "/bin/sh", "-c",
+      "systemctl enable variod && printf '\nvariod has been enabled'",
       nullptr
     };
 
@@ -680,8 +696,8 @@ ScreenVariodWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 
   AddButton("Disable", [](){
     static constexpr const char *argv[] = {
-      "/bin/sh", "-c", 
-      "systemctl disable variod && printf '\nvariod has been disabled'", 
+      "/bin/sh", "-c",
+      "systemctl disable variod && printf '\nvariod has been disabled'",
       nullptr
     };
 
@@ -715,8 +731,8 @@ ScreenSensordWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 {
   AddButton("Enable", [](){
     static constexpr const char *argv[] = {
-      "/bin/sh", "-c", 
-      "systemctl enable sensord && printf '\nsensord has been enabled'", 
+      "/bin/sh", "-c",
+      "systemctl enable sensord && printf '\nsensord has been enabled'",
       nullptr
     };
 
@@ -727,8 +743,8 @@ ScreenSensordWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 
   AddButton("Disable", [](){
     static constexpr const char *argv[] = {
-      "/bin/sh", "-c", 
-      "systemctl disable sensord && printf '\nsensord has been disabled'", 
+      "/bin/sh", "-c",
+      "systemctl disable sensord && printf '\nsensord has been disabled'",
       nullptr
     };
 
@@ -748,7 +764,7 @@ class SystemSettingsWidget final
 
 public:
   SystemSettingsWidget(UI::Display &_display, UI::EventQueue &_event_queue,
-                 WndForm &_dialog) noexcept 
+                 WndForm &_dialog) noexcept
     :RowFormWidget(_dialog.GetLook()),
      display(_display), event_queue(_event_queue),
      dialog(_dialog) {}
@@ -850,29 +866,26 @@ private:
 
 static void
 CalibrateSensors() noexcept
-{
+try {
   /* make sure sensord is stopped while calibrating sensors */
-  static constexpr const char *start_sensord[] = {
-    "/bin/systemctl", "start", "sensord.service", nullptr
-  };
-  static constexpr const char *stop_sensord[] = {
-    "/bin/systemctl", "stop", "sensord.service", nullptr
-  };
+  auto connection = ODBus::Connection::GetSystem();
+  const ODBus::ScopeMatch job_removed_match{connection, Systemd::job_removed_match};
 
-  RunProcessDialog(UIGlobals::GetMainWindow(),
-                   UIGlobals::GetDialogLook(),
-                   "Calibrate Sensors", stop_sensord,
-                   [](int status){
-                     return status == EXIT_SUCCESS ? mrOK : 0;
-                   });
+  bool has_sensord = false;
 
-  AtScopeExit(){
-    RunProcessDialog(UIGlobals::GetMainWindow(),
-                     UIGlobals::GetDialogLook(),
-                     "Calibrate Sensors", start_sensord,
-                     [](int status){
-                       return status == EXIT_SUCCESS ? mrOK : 0;
-                     });
+  if (Systemd::IsUnitActive(connection, "sensord.socket")) {
+    has_sensord = true;
+
+    try {
+      Systemd::StopUnit(connection, "sensord.socket");
+    } catch (...) {
+      std::throw_with_nested(std::runtime_error{"Failed to stop sensord"});
+    }
+  }
+
+  AtScopeExit(&connection, has_sensord){
+    if (has_sensord)
+      Systemd::StartUnit(connection, "sensord.socket");
   };
 
   /* calibrate the sensors */
@@ -922,6 +935,8 @@ CalibrateSensors() noexcept
                        ? RESULT_BOARD_NOT_INITIALISED
                        : 0;
                    });
+} catch (...) {
+  ShowError(std::current_exception(), "Calibrate Sensors");
 }
 
 void
@@ -930,8 +945,8 @@ SystemMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 {
   AddButton("WiFi Settings", [](){
     static constexpr const char *argv[] = {
-      "/bin/sh", "-c", 
-      "printf '\nWiFi-Settings are not implemented, yet!! \n\nIf you are interessted to help with this, write me an email: dirk@freevario.de'", 
+      "/bin/sh", "-c",
+      "printf '\nWiFi-Settings are not implemented, yet!! \n\nIf you are interessted to help with this, write me an email: dirk@freevario.de'",
       nullptr
     };
 
@@ -958,14 +973,14 @@ SystemMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   });
 
   AddButton("System Settings", [this](){
-      
+
     TWidgetDialog<SystemSettingsWidget>
       sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
                  GetLook(), "OpenVario System Settings");
-    sub_dialog.SetWidget(display, event_queue, sub_dialog); 
+    sub_dialog.SetWidget(display, event_queue, sub_dialog);
     sub_dialog.AddButton(_("Close"), mrOK);
     return sub_dialog.ShowModal();
-  });  
+  });
 
   AddButton("System Info", [](){
     static constexpr const char *argv[] = {
@@ -985,6 +1000,7 @@ class MainMenuWidget final
 
   enum Controls {
     XCSOAR,
+    LOGBOOK,
     FILE,
     SYSTEM,
     SHELL,
@@ -1074,6 +1090,36 @@ private:
   }
 };
 
+static void
+ShowLogbook() noexcept
+{
+  const auto &look = UIGlobals::GetDialogLook();
+  FlightListRenderer renderer{look.text_font, look.bold_font};
+
+  try {
+    FileLineReaderA file(LocalPath("flights.log"));
+
+    FlightParser parser{file};
+    FlightInfo flight;
+    while (parser.Read(flight))
+      renderer.AddFlight(flight);
+  } catch (...) {
+    ShowError(std::current_exception(), "Logbook");
+    return;
+  }
+
+  TWidgetDialog<DrawWidget>
+    sub_dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+               look, "Logbook");
+
+  sub_dialog.SetWidget([&renderer](Canvas &canvas, const PixelRect &rc){
+    renderer.Draw(canvas, rc);
+  });
+
+  sub_dialog.AddButton(_("Close"), mrOK);
+  sub_dialog.ShowModal();
+}
+
 void
 MainMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 			[[maybe_unused]] const PixelRect &rc) noexcept
@@ -1082,6 +1128,14 @@ MainMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     CancelTimer();
     StartXCSoar();
   });
+
+  if (have_data_path)
+      AddButton("Logbook", [this](){
+        CancelTimer();
+        ShowLogbook();
+      });
+  else
+    AddDummy();
 
   AddButton("Files", [this](){
     CancelTimer();
@@ -1100,7 +1154,7 @@ MainMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     TWidgetDialog<SystemMenuWidget>
       sub_dialog(WidgetDialog::Full{}, dialog.GetMainWindow(),
                  GetLook(), "OpenVario System Settings");
-    sub_dialog.SetWidget(display, event_queue, sub_dialog); 
+    sub_dialog.SetWidget(display, event_queue, sub_dialog);
     sub_dialog.AddButton(_("Close"), mrOK);
     return sub_dialog.ShowModal();
   });
@@ -1149,7 +1203,7 @@ Main()
   main_style.InitialOrientation(Display::DetectInitialOrientation());
 
   UI::SingleWindow main_window{screen_init.GetDisplay()};
-  main_window.Create(_T("XCSoar/KoboMenu"), {600, 800}, main_style);
+  main_window.Create(_T("XCSoar/OpenVarioMenu"), {600, 800}, main_style);
   main_window.Show();
 
   global_dialog_look = &dialog_look;
@@ -1173,6 +1227,19 @@ int main()
   {
     //I'm just waiting ;-)
   }
+
+  try {
+    InitialiseDataPath();
+    have_data_path = true;
+  } catch (...) {
+    fprintf(stderr, "Failed to locate data path: ");
+    PrintException(std::current_exception());
+  }
+
+  AtScopeExit() {
+    if (have_data_path)
+      DeinitialiseDataPath();
+  };
 
   int action = Main();
 
