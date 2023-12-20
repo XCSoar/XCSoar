@@ -62,10 +62,6 @@ protected:
   virtual void OnPaint([[maybe_unused]] Canvas &canvas) noexcept {}
 #endif
 
-#ifdef IS_OPENVARIO
-  static unsigned exit_value;
-#endif
-
 public:
 #ifndef USE_WINUSER
   void AddChild(Window &child) noexcept;
@@ -164,13 +160,4 @@ public:
    * rectangle visible in the view port.
    */
   virtual void ScrollTo(const PixelRect &rc) noexcept;
-
-#ifdef IS_OPENVARIO
-  static void SetExitValue(unsigned value) {
-    exit_value = value;
-  }
-  static unsigned GetExitValue(void) {
-    return exit_value;
-  }
-#endif
 };

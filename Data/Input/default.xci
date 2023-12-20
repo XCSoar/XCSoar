@@ -1271,30 +1271,3 @@ data=0
 event=AirSpace toggle
 label=Airspace\n$(AirspaceToggleActionName)
 location=34
-
-# OpenVario only:
-mode=RemoteStick
-type=key
-data=0
-event=Exit reboot
-event=Mode default
-label=Reboot
-location=61
-
-# OpenVario only:
-mode=RemoteStick
-type=key
-data=0
-event=Exit shutdown
-event=Mode default
-label=Shutdown
-location=62
-
-mode=RemoteStick
-type=key
-data=0
-event=Exit system
-event=Mode default
-label=Quit
-location=63
-
