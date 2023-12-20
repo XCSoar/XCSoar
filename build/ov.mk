@@ -1,13 +1,12 @@
 OV_MENU_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/Asset.cpp \
-	$(SRC)/LocalPath.cpp \
-	$(SRC)/FlightInfo.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Hardware/CPU.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
+	$(SRC)/Hardware/DisplayGlue.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ui/control/TerminalWindow.cpp \
 	$(SRC)/Look/TerminalLook.cpp \
@@ -15,8 +14,6 @@ OV_MENU_SOURCES = \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Renderer/TwoTextRowsRenderer.cpp \
-	$(SRC)/Renderer/FlightListRenderer.cpp \
-	$(SRC)/Logger/FlightParser.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
@@ -27,14 +24,15 @@ OV_MENU_SOURCES = \
 	$(SRC)/Dialogs/KnobTextEntry.cpp \
 	$(SRC)/Dialogs/TouchTextEntry.cpp \
 	$(SRC)/Dialogs/ProcessDialog.cpp \
-	$(SRC)/Dialogs/Error.cpp \
+	$(SRC)/Profile/Map.cpp \
+	$(SRC)/Profile/File.cpp \
+	$(SRC)/Profile/NumericValue.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(SRC)/Kobo/FakeSymbols.cpp \
-	$(SRC)/OV/System.cpp \
 	$(SRC)/OV/OpenVarioMenu.cpp
-OV_MENU_DEPENDS = DBUS WIDGET FORM DATA_FIELD SCREEN EVENT RESOURCE ASYNC LIBNET OS IO THREAD TIME MATH UTIL
+OV_MENU_DEPENDS = WIDGET FORM DATA_FIELD SCREEN EVENT RESOURCE ASYNC LIBNET OS IO THREAD TIME MATH UTIL
 OV_MENU_STRIP = y
 
 $(eval $(call link-program,OpenVarioMenu,OV_MENU))
