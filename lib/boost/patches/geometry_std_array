@@ -1,8 +1,8 @@
-Index: boost_1_83_0/boost/geometry/util/series_expansion.hpp
+Index: boost_1_84_0/boost/geometry/util/series_expansion.hpp
 ===================================================================
---- boost_1_83_0.orig/boost/geometry/util/series_expansion.hpp
-+++ boost_1_83_0/boost/geometry/util/series_expansion.hpp
-@@ -33,6 +33,8 @@
+--- boost_1_84_0.orig/boost/geometry/util/series_expansion.hpp
++++ boost_1_84_0/boost/geometry/util/series_expansion.hpp
+@@ -34,6 +34,8 @@
  #include <boost/geometry/core/assert.hpp>
  #include <boost/geometry/util/math.hpp>
  
@@ -11,7 +11,7 @@ Index: boost_1_83_0/boost/geometry/util/series_expansion.hpp
  namespace boost { namespace geometry { namespace series_expansion {
  
      /*
-@@ -698,7 +700,7 @@ namespace boost { namespace geometry { n
+@@ -699,7 +701,7 @@ namespace boost { namespace geometry { n
       These structs allow the caller to only know the series order.
      */
      template <size_t SeriesOrder, typename CT>
@@ -20,7 +20,7 @@ Index: boost_1_83_0/boost/geometry/util/series_expansion.hpp
      {
          coeffs_C1(CT const& epsilon)
          {
-@@ -707,7 +709,7 @@ namespace boost { namespace geometry { n
+@@ -708,7 +710,7 @@ namespace boost { namespace geometry { n
      };
  
      template <size_t SeriesOrder, typename CT>
@@ -29,7 +29,7 @@ Index: boost_1_83_0/boost/geometry/util/series_expansion.hpp
      {
          coeffs_C1p(CT const& epsilon)
          {
-@@ -716,7 +718,7 @@ namespace boost { namespace geometry { n
+@@ -717,7 +719,7 @@ namespace boost { namespace geometry { n
      };
  
      template <size_t SeriesOrder, typename CT>
@@ -38,7 +38,7 @@ Index: boost_1_83_0/boost/geometry/util/series_expansion.hpp
      {
          coeffs_C2(CT const& epsilon)
          {
-@@ -725,7 +727,7 @@ namespace boost { namespace geometry { n
+@@ -726,7 +728,7 @@ namespace boost { namespace geometry { n
      };
  
      template <size_t SeriesOrder, typename CT>
@@ -47,7 +47,7 @@ Index: boost_1_83_0/boost/geometry/util/series_expansion.hpp
      {
          coeffs_C3x(CT const& n)
          {
-@@ -734,7 +736,7 @@ namespace boost { namespace geometry { n
+@@ -735,7 +737,7 @@ namespace boost { namespace geometry { n
      };
  
      template <size_t SeriesOrder, typename CT>
@@ -56,7 +56,7 @@ Index: boost_1_83_0/boost/geometry/util/series_expansion.hpp
      {
          coeffs_C3(CT const& n, CT const& epsilon)
          {
-@@ -745,7 +747,7 @@ namespace boost { namespace geometry { n
+@@ -746,7 +748,7 @@ namespace boost { namespace geometry { n
      };
  
      template <size_t SeriesOrder, typename CT>

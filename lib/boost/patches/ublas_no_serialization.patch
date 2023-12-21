@@ -1,7 +1,7 @@
-Index: boost_1_81_0/boost/numeric/ublas/matrix.hpp
+Index: boost_1_84_0/boost/numeric/ublas/matrix.hpp
 ===================================================================
---- boost_1_81_0.orig/boost/numeric/ublas/matrix.hpp
-+++ boost_1_81_0/boost/numeric/ublas/matrix.hpp
+--- boost_1_84_0.orig/boost/numeric/ublas/matrix.hpp
++++ boost_1_84_0/boost/numeric/ublas/matrix.hpp
 @@ -18,9 +18,11 @@
  #include <boost/numeric/ublas/vector.hpp>
  #include <boost/numeric/ublas/matrix_expression.hpp>
@@ -124,10 +124,10 @@ Index: boost_1_81_0/boost/numeric/ublas/matrix.hpp
  
      private:
          size_type size1_;
-Index: boost_1_81_0/boost/numeric/ublas/vector.hpp
+Index: boost_1_84_0/boost/numeric/ublas/vector.hpp
 ===================================================================
---- boost_1_81_0.orig/boost/numeric/ublas/vector.hpp
-+++ boost_1_81_0/boost/numeric/ublas/vector.hpp
+--- boost_1_84_0.orig/boost/numeric/ublas/vector.hpp
++++ boost_1_84_0/boost/numeric/ublas/vector.hpp
 @@ -21,8 +21,10 @@
  #include <boost/numeric/ublas/storage.hpp>
  #include <boost/numeric/ublas/vector_expression.hpp>
@@ -235,10 +235,10 @@ Index: boost_1_81_0/boost/numeric/ublas/vector.hpp
  
  	 private:
  	     size_type size_;
-Index: boost_1_81_0/boost/numeric/ublas/storage.hpp
+Index: boost_1_84_0/boost/numeric/ublas/storage.hpp
 ===================================================================
---- boost_1_81_0.orig/boost/numeric/ublas/storage.hpp
-+++ boost_1_81_0/boost/numeric/ublas/storage.hpp
+--- boost_1_84_0.orig/boost/numeric/ublas/storage.hpp
++++ boost_1_84_0/boost/numeric/ublas/storage.hpp
 @@ -19,9 +19,11 @@
  #endif
  
