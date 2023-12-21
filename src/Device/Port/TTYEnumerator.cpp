@@ -21,7 +21,8 @@ CheckTTYName(const char *name) noexcept
 
     /* ignore virtual internal ports on Mac OS X (and probably other
        BSDs) */
-    if (*t >= 'p' && *t <= 'w')
+    if ((*t >= 'p' && *t <= 'w') &&
+        IsLowerHexDigit(t[1]) && t[2] == 0)
       return false;
 
     /* filter out "/dev/tty0", ... (valid integer after "tty") */
