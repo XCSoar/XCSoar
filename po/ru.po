@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-12 17:17+0200\n"
+"POT-Creation-Date: 2023-12-21 15:38+0100\n"
 "PO-Revision-Date: 2021-06-21 14:34+0000\n"
 "Last-Translator: Artem <KovalevArtem.ru@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/xcsoar/"
@@ -23,11 +23,11 @@ msgstr ""
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
-#: src/Task/TaskStore.cpp:50 src/Menu/ExpandMacros.cpp:351
-#: src/Input/InputEventsSettings.cpp:295 src/Dialogs/dlgAnalysis.cpp:532
-#: src/Dialogs/dlgStatus.cpp:76
+#: src/Task/TaskStore.cpp:49 src/Menu/ExpandMacros.cpp:355
+#: src/Input/InputEventsSettings.cpp:296 src/Dialogs/dlgAnalysis.cpp:535
+#: src/Dialogs/dlgStatus.cpp:77
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:128
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:61
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:62
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:160
 #: Data/Input/default.xci:430 Data/Input/default.xci:1010
 #: Data/Input/default.xci:1048
@@ -436,7 +436,7 @@ msgstr "Поворотные точки (не MAT)"
 msgid "Wrong shape"
 msgstr ""
 
-#: src/Airspace/AirspaceGlue.cpp:71
+#: src/Airspace/AirspaceGlue.cpp:76
 msgid "Loading Airspace File..."
 msgstr "Загрузка файла воздушного пространства ..."
 
@@ -473,27 +473,28 @@ msgstr "Соревновательный ID"
 msgid "WeGlide Upload"
 msgstr "Тип транспортного средства"
 
-#: src/net/client/WeGlide/UploadIGCFile.cpp:120
+#: src/net/client/WeGlide/UploadIGCFile.cpp:110
 #, fuzzy
 msgid "Upload Flight"
 msgstr "Скачать полет"
 
-#: src/net/client/WeGlide/UploadIGCFile.cpp:141 src/Dialogs/FileManager.cpp:448
-#: src/Dialogs/FileManager.cpp:735 src/Dialogs/Device/DeviceListDialog.cpp:454
+#: src/net/client/WeGlide/UploadIGCFile.cpp:132 src/Dialogs/FileManager.cpp:448
+#: src/Dialogs/FileManager.cpp:735 src/Dialogs/Device/DeviceListDialog.cpp:475
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:72
 #: src/Dialogs/Plane/PlaneListDialog.cpp:198
 #: src/Dialogs/Plane/PlaneListDialog.cpp:223
 #: src/Dialogs/Plane/PlaneListDialog.cpp:268
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:40
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:50
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:78
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:84
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:118
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:124
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:158
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:168
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:119
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:223
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:42
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:52
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:80
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:86
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:120
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:126
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:160
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:170
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:110
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:226
+#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:210
 #: src/Dialogs/Weather/NOAAList.cpp:167 src/Dialogs/Weather/NOAAList.cpp:173
 #: src/Dialogs/Weather/NOAADetails.cpp:137
 #: src/Dialogs/DownloadFilePicker.cpp:307
@@ -523,13 +524,13 @@ msgstr "Неустранимая проблема"
 
 #. valid but unknown number of sats
 #: src/FLARM/Error.cpp:21 src/FLARM/Error.cpp:51
-#: src/Renderer/MapItemListRenderer.cpp:349
+#: src/Renderer/MapItemListRenderer.cpp:347
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:15
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:24
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:32
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:111
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:41
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:72
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:42
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:73
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:40
 #, no-c-format
 msgid "Unknown"
@@ -603,20 +604,20 @@ msgstr "Начать запись"
 msgid "Stop Logger"
 msgstr "Остановить запись."
 
-#: src/Logger/ExternalLogger.cpp:65
+#: src/Logger/ExternalLogger.cpp:66
 msgid "Declare task?"
 msgstr "Установить задание?"
 
-#: src/Logger/ExternalLogger.cpp:77 src/Logger/ExternalLogger.cpp:122
+#: src/Logger/ExternalLogger.cpp:78 src/Logger/ExternalLogger.cpp:123
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
 msgid "Declare task"
 msgstr "Установить задание"
 
-#: src/Logger/ExternalLogger.cpp:83
+#: src/Logger/ExternalLogger.cpp:84
 msgid "Task declared!"
 msgstr "Задача установлена!"
 
-#: src/Logger/ExternalLogger.cpp:88 src/Logger/ExternalLogger.cpp:100
+#: src/Logger/ExternalLogger.cpp:89 src/Logger/ExternalLogger.cpp:101
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
@@ -624,41 +625,41 @@ msgstr ""
 "Произошла ошибка,\n"
 "задача не установлена!"
 
-#: src/Logger/ExternalLogger.cpp:121
+#: src/Logger/ExternalLogger.cpp:122
 msgid "No logger connected"
 msgstr "Нет соединения с логгером."
 
-#: src/Logger/ExternalLogger.cpp:253 src/Logger/ExternalLogger.cpp:263
+#: src/Logger/ExternalLogger.cpp:254 src/Logger/ExternalLogger.cpp:264
 msgid "Failed to download flight list."
 msgstr "Ошибка загрузки листа полетов"
 
-#: src/Logger/ExternalLogger.cpp:254 src/Logger/ExternalLogger.cpp:265
-#: src/Logger/ExternalLogger.cpp:272 src/Logger/ExternalLogger.cpp:295
-#: src/Logger/ExternalLogger.cpp:306 src/Logger/ExternalLogger.cpp:328
-#: src/Logger/ExternalLogger.cpp:343
+#: src/Logger/ExternalLogger.cpp:255 src/Logger/ExternalLogger.cpp:266
+#: src/Logger/ExternalLogger.cpp:273 src/Logger/ExternalLogger.cpp:296
+#: src/Logger/ExternalLogger.cpp:307 src/Logger/ExternalLogger.cpp:329
+#: src/Logger/ExternalLogger.cpp:344
 msgid "Download flight"
 msgstr "Скачать полет"
 
-#: src/Logger/ExternalLogger.cpp:271
+#: src/Logger/ExternalLogger.cpp:272
 msgid "Logger is empty."
 msgstr "Данные отсутствуют"
 
-#: src/Logger/ExternalLogger.cpp:294 src/Logger/ExternalLogger.cpp:304
+#: src/Logger/ExternalLogger.cpp:295 src/Logger/ExternalLogger.cpp:305
 msgid "Failed to download flight."
 msgstr "Ошибка загрузки полета"
 
 #. ask whether this IGC should be uploaded to WeGlide
-#: src/Logger/ExternalLogger.cpp:336
+#: src/Logger/ExternalLogger.cpp:337
 #, fuzzy
 msgid "Do you want to upload this flight to WeGlide?"
 msgstr "Хотите загрузить другой полет?"
 
-#: src/Logger/ExternalLogger.cpp:337
+#: src/Logger/ExternalLogger.cpp:338
 #, fuzzy
 msgid "Upload flight"
 msgstr "Скачать полет"
 
-#: src/Logger/ExternalLogger.cpp:342
+#: src/Logger/ExternalLogger.cpp:343
 msgid "Do you want to download another flight?"
 msgstr "Хотите загрузить другой полет?"
 
@@ -667,14 +668,14 @@ msgstr "Хотите загрузить другой полет?"
 msgid "Not moving"
 msgstr "Без движения"
 
-#: src/Gauge/ThermalAssistantRenderer.cpp:182
+#: src/Gauge/ThermalAssistantRenderer.cpp:180
 #, fuzzy
 msgid "Not Circling"
 msgstr "Не в спирали"
 
 #: src/Gauge/BigThermalAssistantWidget.cpp:56
-#: src/Gauge/BigTrafficWidget.cpp:581 src/Dialogs/FileManager.cpp:745
-#: src/Dialogs/Device/DeviceListDialog.cpp:722
+#: src/Gauge/BigTrafficWidget.cpp:583 src/Dialogs/FileManager.cpp:745
+#: src/Dialogs/Device/DeviceListDialog.cpp:766
 #: src/Dialogs/Device/PortMonitor.cpp:166
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:139
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:85
@@ -682,42 +683,42 @@ msgstr "Не в спирали"
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:87
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:75
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:64
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:107
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:109
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:136
-#: src/Dialogs/MapItemListDialog.cpp:157
+#: src/Dialogs/MapItemListDialog.cpp:158
 #: src/Dialogs/Airspace/dlgAirspace.cpp:144
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:106
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:105
 #: src/Dialogs/Airspace/AirspaceList.cpp:134
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:470
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:21
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:254
-#: src/Dialogs/Traffic/TrafficList.cpp:345
+#: src/Dialogs/Traffic/TrafficList.cpp:347
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:329
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:205 src/Dialogs/dlgAnalysis.cpp:288
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:207 src/Dialogs/dlgAnalysis.cpp:290
 #: src/Dialogs/ProfileListDialog.cpp:316
 #: src/Dialogs/Plane/PlaneListDialog.cpp:360 src/Dialogs/HelpDialog.cpp:30
-#: src/Dialogs/dlgInfoBoxAccess.cpp:95 src/Dialogs/ReplayDialog.cpp:95
-#: src/Dialogs/dlgStatus.cpp:41 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:423
-#: src/Dialogs/Waypoint/Manager.cpp:285
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:109
+#: src/Dialogs/dlgInfoBoxAccess.cpp:95 src/Dialogs/ReplayDialog.cpp:97
+#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:425
+#: src/Dialogs/Waypoint/Manager.cpp:287
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:117
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:69
-#: src/Dialogs/Task/OptionalStartsDialog.cpp:41
-#: src/Dialogs/Task/TaskPointDialog.cpp:511
-#: src/Dialogs/Task/TargetDialog.cpp:393
-#: src/Dialogs/Task/AlternatesListDialog.cpp:121
+#: src/Dialogs/Task/OptionalStartsDialog.cpp:42
+#: src/Dialogs/Task/TaskPointDialog.cpp:514
+#: src/Dialogs/Task/TargetDialog.cpp:395
+#: src/Dialogs/Task/AlternatesListDialog.cpp:122
 #: src/Dialogs/KnobTextEntry.cpp:225 src/Dialogs/Weather/WeatherDialog.cpp:41
 #: src/Dialogs/Weather/PCMetDialog.cpp:36
 #: src/Dialogs/Weather/NOAADetails.cpp:123
 msgid "Close"
 msgstr "Закрыть"
 
-#: src/Gauge/FlarmTrafficWindow.cpp:215
+#: src/Gauge/FlarmTrafficWindow.cpp:209
 msgid "No Traffic"
 msgstr "Нет трафика"
 
-#: src/Gauge/BigTrafficWidget.cpp:281 src/Gauge/BigTrafficWidget.cpp:282
-#: src/Renderer/MapItemListRenderer.cpp:360
-#: src/Dialogs/Device/DeviceListDialog.cpp:396
+#: src/Gauge/BigTrafficWidget.cpp:284 src/Gauge/BigTrafficWidget.cpp:285
+#: src/Renderer/MapItemListRenderer.cpp:356
+#: src/Dialogs/Device/DeviceListDialog.cpp:421
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:18
 #: src/Dialogs/Settings/dlgConfiguration.cpp:99
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:117
@@ -726,92 +727,92 @@ msgstr "Нет трафика"
 msgid "Vario"
 msgstr "Варио"
 
-#: src/Gauge/BigTrafficWidget.cpp:361 src/Renderer/MapItemListRenderer.cpp:59
+#: src/Gauge/BigTrafficWidget.cpp:363 src/Renderer/MapItemListRenderer.cpp:59
 #: src/Renderer/MapItemListRenderer.cpp:65
 #: src/Renderer/WaypointListRenderer.cpp:134
-#: src/Renderer/FlightStatisticsRenderer.cpp:188
-#: src/Renderer/FlightStatisticsRenderer.cpp:207
-#: src/Renderer/FlightStatisticsRenderer.cpp:234
+#: src/Renderer/FlightStatisticsRenderer.cpp:208
+#: src/Renderer/FlightStatisticsRenderer.cpp:227
+#: src/Renderer/FlightStatisticsRenderer.cpp:254
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:51
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:82
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:81
 #: src/Dialogs/Airspace/AirspaceList.cpp:402
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:115
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:75
-#: src/Dialogs/Waypoint/WaypointList.cpp:390
+#: src/Dialogs/Waypoint/WaypointList.cpp:386
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:143
-#: src/Dialogs/Task/TargetDialog.cpp:356
+#: src/Dialogs/Task/TargetDialog.cpp:358
 msgid "Distance"
 msgstr "Дистанция"
 
-#: src/Gauge/BigTrafficWidget.cpp:405 src/Gauge/BigTrafficWidget.cpp:407
+#: src/Gauge/BigTrafficWidget.cpp:407 src/Gauge/BigTrafficWidget.cpp:409
 msgid "Rel. Alt."
 msgstr "Отн. Выс."
 
-#: src/Gauge/BigTrafficWidget.cpp:578 src/Dialogs/MapItemListDialog.cpp:143
+#: src/Gauge/BigTrafficWidget.cpp:580 src/Dialogs/MapItemListDialog.cpp:144
 #: src/Dialogs/Airspace/AirspaceList.cpp:130
-#: src/Dialogs/Traffic/TrafficList.cpp:343
-#: src/Dialogs/Task/TaskPointDialog.cpp:219
-#: src/Dialogs/Task/AlternatesListDialog.cpp:107
-#: src/Dialogs/Weather/NOAAList.cpp:97 src/InfoBoxes/Content/Task.cpp:47
+#: src/Dialogs/Traffic/TrafficList.cpp:345
+#: src/Dialogs/Task/TaskPointDialog.cpp:220
+#: src/Dialogs/Task/AlternatesListDialog.cpp:108
+#: src/Dialogs/Weather/NOAAList.cpp:97 src/InfoBoxes/Content/Task.cpp:50
 #, no-c-format
 msgid "Details"
 msgstr "Подробн."
 
-#: src/Menu/ExpandMacros.cpp:63 src/Menu/ExpandMacros.cpp:96
-#: src/Menu/ExpandMacros.cpp:118
+#: src/Menu/ExpandMacros.cpp:65 src/Menu/ExpandMacros.cpp:98
+#: src/Menu/ExpandMacros.cpp:120
 msgid "Next Turnpoint"
 msgstr "Следующий поворотный пункт"
 
-#: src/Menu/ExpandMacros.cpp:67 src/Menu/ExpandMacros.cpp:104
-#: src/Menu/ExpandMacros.cpp:141
+#: src/Menu/ExpandMacros.cpp:69 src/Menu/ExpandMacros.cpp:106
+#: src/Menu/ExpandMacros.cpp:143
 msgid "Previous Turnpoint"
 msgstr "Предыдущий поворотный пункт"
 
-#: src/Menu/ExpandMacros.cpp:74
+#: src/Menu/ExpandMacros.cpp:76
 msgid "Furthest Landpoint"
 msgstr "Максимально удаленное место посадки"
 
-#: src/Menu/ExpandMacros.cpp:75
+#: src/Menu/ExpandMacros.cpp:77
 msgid "Next Landpoint"
 msgstr "Следующее место посадки"
 
-#: src/Menu/ExpandMacros.cpp:81
+#: src/Menu/ExpandMacros.cpp:83
 msgid "Closest Landpoint"
 msgstr "Ближайшее место посадки"
 
-#: src/Menu/ExpandMacros.cpp:82
+#: src/Menu/ExpandMacros.cpp:84
 msgid "Previous Landpoint"
 msgstr "Предидушее место посадки"
 
-#: src/Menu/ExpandMacros.cpp:95 src/Menu/ExpandMacros.cpp:117
+#: src/Menu/ExpandMacros.cpp:97 src/Menu/ExpandMacros.cpp:119
 msgid "Finish Turnpoint"
 msgstr "Финишная поворотная точка"
 
-#: src/Menu/ExpandMacros.cpp:99 src/Menu/ExpandMacros.cpp:136
+#: src/Menu/ExpandMacros.cpp:101 src/Menu/ExpandMacros.cpp:138
 msgid "Next Startpoint"
 msgstr "Следующая стартовая точка"
 
-#: src/Menu/ExpandMacros.cpp:103 src/Menu/ExpandMacros.cpp:140
+#: src/Menu/ExpandMacros.cpp:105 src/Menu/ExpandMacros.cpp:142
 msgid "Start Turnpoint"
 msgstr "Стартовая поворотная точка"
 
-#: src/Menu/ExpandMacros.cpp:121
+#: src/Menu/ExpandMacros.cpp:123
 msgid "Arm start"
 msgstr "Ручной старт"
 
-#: src/Menu/ExpandMacros.cpp:124
+#: src/Menu/ExpandMacros.cpp:126
 msgid "Arm turn"
 msgstr "Ручной поворот"
 
-#: src/Menu/ExpandMacros.cpp:145
+#: src/Menu/ExpandMacros.cpp:147
 msgid "Disarm start"
 msgstr "Обезвредить начало"
 
-#: src/Menu/ExpandMacros.cpp:148
+#: src/Menu/ExpandMacros.cpp:150
 msgid "Disarm turn"
 msgstr "Обезвредить очередь"
 
-#: src/Menu/ExpandMacros.cpp:157
+#: src/Menu/ExpandMacros.cpp:159
 msgid ""
 "Advance\n"
 "(manual)"
@@ -819,7 +820,7 @@ msgstr ""
 "Расширенный\n"
 "(вручную)"
 
-#: src/Menu/ExpandMacros.cpp:161
+#: src/Menu/ExpandMacros.cpp:163
 msgid ""
 "Advance\n"
 "(auto)"
@@ -827,7 +828,7 @@ msgstr ""
 "Расширенный\n"
 "(авто)"
 
-#: src/Menu/ExpandMacros.cpp:164
+#: src/Menu/ExpandMacros.cpp:166
 msgid ""
 "Abort\n"
 "Start"
@@ -835,7 +836,7 @@ msgstr ""
 "Отмена\n"
 "Старт"
 
-#: src/Menu/ExpandMacros.cpp:167
+#: src/Menu/ExpandMacros.cpp:169
 msgid ""
 "Arm\n"
 "Start"
@@ -843,7 +844,7 @@ msgstr ""
 "Приготовиться\n"
 "Старт"
 
-#: src/Menu/ExpandMacros.cpp:170
+#: src/Menu/ExpandMacros.cpp:172
 msgid ""
 "Abort\n"
 "Turn"
@@ -851,7 +852,7 @@ msgstr ""
 "Отменить\n"
 "поворот"
 
-#: src/Menu/ExpandMacros.cpp:173
+#: src/Menu/ExpandMacros.cpp:175
 msgid ""
 "Arm\n"
 "Turn"
@@ -859,24 +860,24 @@ msgstr ""
 "Вручную\n"
 "Поворот"
 
-#: src/Menu/ExpandMacros.cpp:182 src/Menu/ExpandMacros.cpp:186
+#: src/Menu/ExpandMacros.cpp:184 src/Menu/ExpandMacros.cpp:188
 #: src/Dialogs/Device/PortMonitor.cpp:145
 msgid "Resume"
 msgstr "Продолжить"
 
-#: src/Menu/ExpandMacros.cpp:183 src/Menu/ExpandMacros.cpp:187
+#: src/Menu/ExpandMacros.cpp:185 src/Menu/ExpandMacros.cpp:189
 #: src/Dialogs/Message.cpp:100
 msgid "Abort"
 msgstr "Отменить"
 
-#: src/Menu/ExpandMacros.cpp:207 src/Menu/ExpandMacros.cpp:339
-#: src/Menu/ExpandMacros.cpp:360 src/Menu/ExpandMacros.cpp:410
+#: src/Menu/ExpandMacros.cpp:209 src/Menu/ExpandMacros.cpp:343
+#: src/Menu/ExpandMacros.cpp:364 src/Menu/ExpandMacros.cpp:414
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:176
 msgid "Manual"
 msgstr "Вручную"
 
-#: src/Menu/ExpandMacros.cpp:207 src/Menu/ExpandMacros.cpp:339
-#: src/Menu/ExpandMacros.cpp:360 src/Menu/ExpandMacros.cpp:410
+#: src/Menu/ExpandMacros.cpp:209 src/Menu/ExpandMacros.cpp:343
+#: src/Menu/ExpandMacros.cpp:364 src/Menu/ExpandMacros.cpp:414
 #: src/PageSettings.cpp:50 src/PageSettings.cpp:53
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:42
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:29
@@ -890,55 +891,55 @@ msgstr "Вручную"
 msgid "Auto"
 msgstr "Автоматически"
 
-#: src/Menu/ExpandMacros.cpp:209
+#: src/Menu/ExpandMacros.cpp:211
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:24
 #, no-c-format
 msgid "Track up"
 msgstr "По треку"
 
-#: src/Menu/ExpandMacros.cpp:209
+#: src/Menu/ExpandMacros.cpp:211
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:28
 #, no-c-format
 msgid "North up"
 msgstr "На север"
 
-#: src/Menu/ExpandMacros.cpp:293 src/Dialogs/Settings/dlgBasicSettings.cpp:120
-#: src/Dialogs/ReplayDialog.cpp:28
+#: src/Menu/ExpandMacros.cpp:297 src/Dialogs/Settings/dlgBasicSettings.cpp:120
+#: src/Dialogs/ReplayDialog.cpp:30
 msgid "Stop"
 msgstr "Стоп"
 
-#: src/Menu/ExpandMacros.cpp:294 src/Dialogs/ReplayDialog.cpp:27
+#: src/Menu/ExpandMacros.cpp:298 src/Dialogs/ReplayDialog.cpp:29
 msgid "Start"
 msgstr "Старт"
 
-#: src/Menu/ExpandMacros.cpp:298
+#: src/Menu/ExpandMacros.cpp:302
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:73
 #, no-c-format
 msgid "Long"
 msgstr "Длинный"
 
-#: src/Menu/ExpandMacros.cpp:301
+#: src/Menu/ExpandMacros.cpp:305
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:74
 #, no-c-format
 msgid "Short"
 msgstr "Короткий"
 
-#: src/Menu/ExpandMacros.cpp:304
+#: src/Menu/ExpandMacros.cpp:308
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:75
 #, no-c-format
 msgid "Full"
 msgstr "Полный"
 
-#: src/Menu/ExpandMacros.cpp:307 src/Menu/ExpandMacros.cpp:312
-#: src/Menu/ExpandMacros.cpp:337 src/Menu/ExpandMacros.cpp:362
-#: src/Menu/ExpandMacros.cpp:408 src/Input/InputEventsSettings.cpp:438
-#: src/Input/InputEventsSettings.cpp:441
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:93
+#: src/Menu/ExpandMacros.cpp:311 src/Menu/ExpandMacros.cpp:316
+#: src/Menu/ExpandMacros.cpp:341 src/Menu/ExpandMacros.cpp:366
+#: src/Menu/ExpandMacros.cpp:412 src/Input/InputEventsSettings.cpp:439
+#: src/Input/InputEventsSettings.cpp:442
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:95
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:25
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:36
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:172
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:161
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:43
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:44
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:111
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:141
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:65
@@ -952,14 +953,14 @@ msgstr "Полный"
 msgid "Off"
 msgstr "Откл."
 
-#: src/Menu/ExpandMacros.cpp:312 src/Menu/ExpandMacros.cpp:337
-#: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:408
-#: src/Input/InputEventsSettings.cpp:436 src/Input/InputEventsSettings.cpp:441
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:92
+#: src/Menu/ExpandMacros.cpp:316 src/Menu/ExpandMacros.cpp:341
+#: src/Menu/ExpandMacros.cpp:366 src/Menu/ExpandMacros.cpp:412
+#: src/Input/InputEventsSettings.cpp:437 src/Input/InputEventsSettings.cpp:442
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:94
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:27
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:173
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:163
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:41
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:42
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:66
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:245
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:12
@@ -967,46 +968,46 @@ msgstr "Откл."
 msgid "On"
 msgstr "Вкл."
 
-#: src/Menu/ExpandMacros.cpp:323
+#: src/Menu/ExpandMacros.cpp:327
 msgid "Topography On"
 msgstr "Топография Вкл"
 
-#: src/Menu/ExpandMacros.cpp:326
+#: src/Menu/ExpandMacros.cpp:330
 msgid "Terrain On"
 msgstr "Цветной рельеф Вкл"
 
-#: src/Menu/ExpandMacros.cpp:329
+#: src/Menu/ExpandMacros.cpp:333
 msgid "Terrain + Topography"
 msgstr "Ландшафт + Топография"
 
-#: src/Menu/ExpandMacros.cpp:332
+#: src/Menu/ExpandMacros.cpp:336
 msgid "Terrain Off"
 msgstr "Ландшафт выкл"
 
-#: src/Menu/ExpandMacros.cpp:342 src/Menu/ExpandMacros.cpp:344
-#: src/Menu/ExpandMacros.cpp:346
+#: src/Menu/ExpandMacros.cpp:346 src/Menu/ExpandMacros.cpp:348
+#: src/Menu/ExpandMacros.cpp:350
 #, fuzzy
 msgid "Hide"
 msgstr "Спрятать информацию"
 
-#: src/Menu/ExpandMacros.cpp:342 src/Menu/ExpandMacros.cpp:344
-#: src/Menu/ExpandMacros.cpp:346
+#: src/Menu/ExpandMacros.cpp:346 src/Menu/ExpandMacros.cpp:348
+#: src/Menu/ExpandMacros.cpp:350
 msgid "Show"
 msgstr ""
 
-#: src/Menu/ExpandMacros.cpp:349 src/Input/InputEventsSettings.cpp:293
+#: src/Menu/ExpandMacros.cpp:353 src/Input/InputEventsSettings.cpp:294
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:65
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:128
 #, no-c-format
 msgid "All"
 msgstr "Всё"
 
-#: src/Menu/ExpandMacros.cpp:350 src/Input/InputEventsSettings.cpp:294
+#: src/Menu/ExpandMacros.cpp:354 src/Input/InputEventsSettings.cpp:295
 #, no-c-format
 msgid "Task & Landables"
 msgstr "Задачи и Посадки"
 
-#: src/Menu/ExpandMacros.cpp:352 src/Input/InputEventsSettings.cpp:296
+#: src/Menu/ExpandMacros.cpp:356 src/Input/InputEventsSettings.cpp:297
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:172
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:63
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:38
@@ -1020,51 +1021,51 @@ msgstr "Задачи и Посадки"
 msgid "None"
 msgstr "Нет"
 
-#: src/Menu/ExpandMacros.cpp:353 src/Input/InputEventsSettings.cpp:297
+#: src/Menu/ExpandMacros.cpp:357 src/Input/InputEventsSettings.cpp:298
 #, no-c-format
 msgid "Task & Airfields"
 msgstr "Задания и аэродромы"
 
-#: src/Input/InputEventsActions.cpp:136
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:272
-#: src/Dialogs/Waypoint/Manager.cpp:247
+#: src/Input/InputEventsActions.cpp:139
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:275
+#: src/Dialogs/Waypoint/Manager.cpp:249
 #, fuzzy
 msgid "Failed to save waypoints"
 msgstr "Не удалось удалить путевые точки."
 
-#: src/Input/InputEventsActions.cpp:220 src/Input/InputEventsActions.cpp:478
+#: src/Input/InputEventsActions.cpp:227 src/Input/InputEventsActions.cpp:489
 msgid "Logger Error"
 msgstr "Ошибка записи"
 
-#: src/Input/InputEventsActions.cpp:249
+#: src/Input/InputEventsActions.cpp:256
 msgid "Screen Mode Full"
 msgstr "Полноэкранный режим"
 
-#: src/Input/InputEventsActions.cpp:251
+#: src/Input/InputEventsActions.cpp:258
 msgid "Auxiliary InfoBoxes"
 msgstr "Вспомогательные ИнфоБоксы"
 
-#: src/Input/InputEventsActions.cpp:253
+#: src/Input/InputEventsActions.cpp:260
 msgid "Default InfoBoxes"
 msgstr "ИнфоБоксы по умолчанию"
 
-#: src/Input/InputEventsActions.cpp:360
+#: src/Input/InputEventsActions.cpp:367
 msgid "No active waypoint!"
 msgstr "Нет активной путевой точки!"
 
-#: src/Input/InputEventsActions.cpp:464
+#: src/Input/InputEventsActions.cpp:475
 msgid "NMEA log on"
 msgstr "NMEA"
 
-#: src/Input/InputEventsActions.cpp:466
+#: src/Input/InputEventsActions.cpp:477
 msgid "NMEA log off"
 msgstr "ЗАПИСЬ ТРЕКА NMEA ВЫКЛЮЧЕНА"
 
-#: src/Input/InputEventsActions.cpp:470
+#: src/Input/InputEventsActions.cpp:481
 msgid "Logger on"
 msgstr "ЗАПИСЬ ТРЕКА ВКЛЮЧЕНА"
 
-#: src/Input/InputEventsActions.cpp:472
+#: src/Input/InputEventsActions.cpp:483
 msgid "Logger off"
 msgstr "ЗАПИСЬ ТРЕКА ВЫКЛЮЧЕНА"
 
@@ -1084,43 +1085,43 @@ msgstr "Зум в спирали вкл"
 msgid "Circling zoom off"
 msgstr "Зум в спирали выкл"
 
-#: src/Input/InputEventsAirspace.cpp:43
+#: src/Input/InputEventsAirspace.cpp:45
 msgid "Show airspace off"
 msgstr "Вык Зоны воздушного пространства"
 
-#: src/Input/InputEventsAirspace.cpp:45
+#: src/Input/InputEventsAirspace.cpp:47
 msgid "Show airspace on"
 msgstr "Вкл Зоны воздушного пространства"
 
-#: src/Input/InputEventsTask.cpp:60
+#: src/Input/InputEventsTask.cpp:62
 msgid "Advance manually"
 msgstr ""
 
-#: src/Input/InputEventsTask.cpp:63
+#: src/Input/InputEventsTask.cpp:65
 msgid "Advance automatically"
 msgstr ""
 
-#: src/Input/InputEventsTask.cpp:66
+#: src/Input/InputEventsTask.cpp:68
 msgid "Ready to start"
 msgstr "Готов к старту"
 
-#: src/Input/InputEventsTask.cpp:69
+#: src/Input/InputEventsTask.cpp:71
 msgid "Hold start"
 msgstr "Задержать старт"
 
-#: src/Input/InputEventsTask.cpp:72
+#: src/Input/InputEventsTask.cpp:74
 msgid "Ready to turn"
 msgstr "Готов повернуть"
 
-#: src/Input/InputEventsTask.cpp:75
+#: src/Input/InputEventsTask.cpp:77
 msgid "Hold turn"
 msgstr "Задержать поворот"
 
-#: src/Input/InputEventsTask.cpp:141
+#: src/Input/InputEventsTask.cpp:143
 msgid "Auto. MacCready on"
 msgstr "Авто.Маккреди"
 
-#: src/Input/InputEventsTask.cpp:143
+#: src/Input/InputEventsTask.cpp:145
 msgid "Auto. MacCready off"
 msgstr "Авто.Маккреди выкл"
 
@@ -1128,25 +1129,26 @@ msgstr "Авто.Маккреди выкл"
 msgid "MacCready "
 msgstr "Маккреди "
 
-#: src/Input/InputEventsTask.cpp:209
+#: src/Input/InputEventsTask.cpp:210
 msgid "Task aborted"
 msgstr "Задание прервано"
 
-#: src/Input/InputEventsTask.cpp:212
+#: src/Input/InputEventsTask.cpp:213
 msgid "Go to target"
 msgstr "Идти на цель"
 
-#: src/Input/InputEventsTask.cpp:215
+#: src/Input/InputEventsTask.cpp:216
 msgid "Ordered task"
 msgstr ""
 
-#: src/Input/InputEventsTask.cpp:218
-#: src/Renderer/FlightStatisticsRenderer.cpp:302
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:119
+#: src/Input/InputEventsTask.cpp:219
+#: src/Renderer/FlightStatisticsRenderer.cpp:346
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:110
+#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:210
 msgid "No task"
 msgstr "задач нет"
 
-#: src/Input/InputEventsTask.cpp:301 src/Renderer/MapItemListRenderer.cpp:354
+#: src/Input/InputEventsTask.cpp:304 src/Renderer/MapItemListRenderer.cpp:352
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:26
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:308
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:116
@@ -1158,10 +1160,10 @@ msgstr "задач нет"
 msgid "Altitude"
 msgstr "Высота"
 
-#: src/Input/InputEventsTask.cpp:303
-#: src/Renderer/FlightStatisticsRenderer.cpp:194
-#: src/Renderer/FlightStatisticsRenderer.cpp:213
-#: src/Renderer/FlightStatisticsRenderer.cpp:239
+#: src/Input/InputEventsTask.cpp:306
+#: src/Renderer/FlightStatisticsRenderer.cpp:214
+#: src/Renderer/FlightStatisticsRenderer.cpp:233
+#: src/Renderer/FlightStatisticsRenderer.cpp:259
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:60
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:67
 msgid "Speed"
@@ -1170,85 +1172,85 @@ msgstr "Скорость"
 #. Important: all pages after Units in this list must not have data fields that are
 #. unit-dependent because they will be saved after their units may have changed.
 #. ToDo: implement API that controls order in which pages are saved
-#: src/Input/InputEventsTask.cpp:305
-#: src/Renderer/FlightStatisticsRenderer.cpp:192
-#: src/Renderer/FlightStatisticsRenderer.cpp:211
-#: src/Renderer/FlightStatisticsRenderer.cpp:237
+#: src/Input/InputEventsTask.cpp:308
+#: src/Renderer/FlightStatisticsRenderer.cpp:212
+#: src/Renderer/FlightStatisticsRenderer.cpp:231
+#: src/Renderer/FlightStatisticsRenderer.cpp:257
 #: src/Dialogs/Settings/dlgConfiguration.cpp:126
 #: src/Dialogs/Weather/RASPDialog.cpp:129
 #, no-c-format
 msgid "Time"
 msgstr "Время"
 
-#: src/Input/InputEventsTask.cpp:308
+#: src/Input/InputEventsTask.cpp:311
 msgid "Task start"
 msgstr "Задание начато"
 
-#: src/Input/InputEventsTask.cpp:310
+#: src/Input/InputEventsTask.cpp:313
 msgid "Next turnpoint"
 msgstr "Следующий поворотный"
 
-#: src/Input/InputEventsTask.cpp:312
+#: src/Input/InputEventsTask.cpp:315
 msgid "Task finished"
 msgstr "Задание окончено"
 
-#: src/Input/InputEventsSettings.cpp:39
+#: src/Input/InputEventsSettings.cpp:40
 msgid "Vario sounds on"
 msgstr "Вкл звук Варио"
 
-#: src/Input/InputEventsSettings.cpp:41
+#: src/Input/InputEventsSettings.cpp:42
 msgid "Vario sounds off"
 msgstr "Выкл звук Варио"
 
-#: src/Input/InputEventsSettings.cpp:69
+#: src/Input/InputEventsSettings.cpp:70
 msgid "Snail trail off"
 msgstr "Выкл отображение пути в спирали"
 
-#: src/Input/InputEventsSettings.cpp:73
+#: src/Input/InputEventsSettings.cpp:74
 msgid "Long snail trail"
 msgstr "Вкл отображение пути в спирали"
 
-#: src/Input/InputEventsSettings.cpp:77
+#: src/Input/InputEventsSettings.cpp:78
 msgid "Short snail trail"
 msgstr "Малый отрезок"
 
-#: src/Input/InputEventsSettings.cpp:81
+#: src/Input/InputEventsSettings.cpp:82
 msgid "Full snail trail"
 msgstr "Весь  отрезок"
 
-#: src/Input/InputEventsSettings.cpp:183
+#: src/Input/InputEventsSettings.cpp:184
 msgid "Bugs performance"
 msgstr ""
 
-#: src/Input/InputEventsSettings.cpp:226
+#: src/Input/InputEventsSettings.cpp:227
 #, no-c-format
 msgid "Ballast %"
 msgstr "Балласт %"
 
-#: src/Input/InputEventsSettings.cpp:262 src/Dialogs/ProfileListDialog.cpp:211
+#: src/Input/InputEventsSettings.cpp:263 src/Dialogs/ProfileListDialog.cpp:211
 #: src/Dialogs/ProfileListDialog.cpp:256
 #: src/Dialogs/Plane/PlaneListDialog.cpp:244
 #: src/Dialogs/Plane/PlaneListDialog.cpp:294
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:33
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:71
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:111
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:151
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:193
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:35
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:73
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:113
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:153
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:201
 #, fuzzy
 msgid "Failed to save file."
 msgstr "Не удалось загрузить файл."
 
-#: src/Input/InputEventsSettings.cpp:285 src/InfoBoxes/Content/Factory.cpp:528
+#: src/Input/InputEventsSettings.cpp:286 src/InfoBoxes/Content/Factory.cpp:528
 #, no-c-format
 msgid "Forecast temperature"
 msgstr "Прогнозируемая температура"
 
-#: src/Input/InputEventsSettings.cpp:316
+#: src/Input/InputEventsSettings.cpp:317
 msgid "Waypoint labels"
 msgstr "Метка маршрутной точки"
 
-#: src/Input/InputEventsSettings.cpp:443
+#: src/Input/InputEventsSettings.cpp:444
 msgid "Topography/Terrain"
 msgstr "Топография/Рельеф"
 
@@ -1301,8 +1303,8 @@ msgstr "Спрятать информацию"
 msgid "Map (Full screen)"
 msgstr "Карта (полноэкранный режим)"
 
-#: src/Renderer/ChartRenderer.cpp:235
-#: src/Dialogs/Device/DeviceListDialog.cpp:436
+#: src/Renderer/ChartRenderer.cpp:228
+#: src/Dialogs/Device/DeviceListDialog.cpp:461
 msgid "No data"
 msgstr "Нет данных"
 
@@ -1310,7 +1312,7 @@ msgstr "Нет данных"
 #: src/Renderer/MapItemListRenderer.cpp:65
 #: src/Dialogs/Airspace/AirspaceList.cpp:403
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:79
-#: src/Dialogs/Waypoint/WaypointList.cpp:391
+#: src/Dialogs/Waypoint/WaypointList.cpp:387
 msgid "Direction"
 msgstr "Курс"
 
@@ -1322,54 +1324,54 @@ msgstr "Курс"
 msgid "Elevation"
 msgstr "Высота"
 
-#: src/Renderer/MapItemListRenderer.cpp:134
-#: src/Renderer/MapItemListRenderer.cpp:157
+#: src/Renderer/MapItemListRenderer.cpp:133
+#: src/Renderer/MapItemListRenderer.cpp:156
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:76
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:240
 #, no-c-format
 msgid "AGL"
 msgstr ""
 
-#: src/Renderer/MapItemListRenderer.cpp:139
-#: src/Renderer/MapItemListRenderer.cpp:162
+#: src/Renderer/MapItemListRenderer.cpp:138
+#: src/Renderer/MapItemListRenderer.cpp:161
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:78
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:242
 #, no-c-format
 msgid "MSL"
 msgstr ""
 
-#: src/Renderer/MapItemListRenderer.cpp:148
+#: src/Renderer/MapItemListRenderer.cpp:147
 msgid "around terrain"
 msgstr ""
 
-#: src/Renderer/MapItemListRenderer.cpp:166
+#: src/Renderer/MapItemListRenderer.cpp:165
 msgid "Unreachable due to terrain."
 msgstr ""
 
-#: src/Renderer/MapItemListRenderer.cpp:171
+#: src/Renderer/MapItemListRenderer.cpp:170
 msgid "Arrival altitude"
 msgstr "Высота прибытия, включая высоту безопасности"
 
-#: src/Renderer/MapItemListRenderer.cpp:193
+#: src/Renderer/MapItemListRenderer.cpp:192
 msgid "Your Position"
 msgstr "Ваша позиция"
 
-#: src/Renderer/MapItemListRenderer.cpp:250
+#: src/Renderer/MapItemListRenderer.cpp:249
 #: src/InfoBoxes/Content/Factory.cpp:927
 #, no-c-format
 msgid "Thermal"
 msgstr "Термо-поток"
 
-#: src/Renderer/MapItemListRenderer.cpp:261
+#: src/Renderer/MapItemListRenderer.cpp:258
 msgid "Avg. lift"
 msgstr "Сред. подъем"
 
-#: src/Renderer/MapItemListRenderer.cpp:332
+#: src/Renderer/MapItemListRenderer.cpp:330
 msgid "FLARM Traffic"
 msgstr "FLARM траффик"
 
-#: src/Renderer/MapItemListRenderer.cpp:406
-#: src/Dialogs/Traffic/TrafficList.cpp:671
+#: src/Renderer/MapItemListRenderer.cpp:403
+#: src/Dialogs/Traffic/TrafficList.cpp:675
 #, c-format
 msgid "%u minutes ago"
 msgstr ""
@@ -1523,39 +1525,39 @@ msgstr ""
 msgid "blcwbase"
 msgstr ""
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:191
-#: src/Renderer/FlightStatisticsRenderer.cpp:210
-#: src/Renderer/FlightStatisticsRenderer.cpp:236
+#: src/Renderer/FlightStatisticsRenderer.cpp:211
+#: src/Renderer/FlightStatisticsRenderer.cpp:230
+#: src/Renderer/FlightStatisticsRenderer.cpp:256
 msgid "Score"
 msgstr "Очки"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:191
-#: src/Renderer/FlightStatisticsRenderer.cpp:210
-#: src/Renderer/FlightStatisticsRenderer.cpp:236
+#: src/Renderer/FlightStatisticsRenderer.cpp:211
+#: src/Renderer/FlightStatisticsRenderer.cpp:230
+#: src/Renderer/FlightStatisticsRenderer.cpp:256
 msgid "pts"
 msgstr ""
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:312
-#: src/Renderer/FlightStatisticsRenderer.cpp:322
-#: src/Renderer/FlightStatisticsRenderer.cpp:333
+#: src/Renderer/FlightStatisticsRenderer.cpp:356
+#: src/Renderer/FlightStatisticsRenderer.cpp:366
+#: src/Renderer/FlightStatisticsRenderer.cpp:377
 msgid "Task to go"
 msgstr "Время до"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:313
-#: src/Renderer/FlightStatisticsRenderer.cpp:323
+#: src/Renderer/FlightStatisticsRenderer.cpp:357
+#: src/Renderer/FlightStatisticsRenderer.cpp:367
 msgid "AAT to go"
 msgstr ""
 
 #. landscape: info above buttons
-#: src/Renderer/FlightStatisticsRenderer.cpp:314
-#: src/Renderer/FlightStatisticsRenderer.cpp:324
-#: src/Renderer/FlightStatisticsRenderer.cpp:335
-#: src/Dialogs/dlgAnalysis.cpp:223
+#: src/Renderer/FlightStatisticsRenderer.cpp:358
+#: src/Renderer/FlightStatisticsRenderer.cpp:368
+#: src/Renderer/FlightStatisticsRenderer.cpp:379
+#: src/Dialogs/dlgAnalysis.cpp:225
 msgid "Distance to go"
 msgstr ""
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:316
-#: src/Renderer/FlightStatisticsRenderer.cpp:327
+#: src/Renderer/FlightStatisticsRenderer.cpp:360
+#: src/Renderer/FlightStatisticsRenderer.cpp:371
 msgid "Target speed"
 msgstr "Заданная скорость"
 
@@ -1584,7 +1586,7 @@ msgstr ""
 msgid "Min. sink"
 msgstr "Мин сниж"
 
-#: src/Renderer/GlidePolarInfoRenderer.cpp:30 src/Dialogs/dlgAnalysis.cpp:494
+#: src/Renderer/GlidePolarInfoRenderer.cpp:30 src/Dialogs/dlgAnalysis.cpp:497
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:209
 msgid "Mass"
 msgstr "Масса"
@@ -1595,11 +1597,11 @@ msgstr "Масса"
 msgid "Wing loading"
 msgstr "Загрузка крыла"
 
-#: src/Renderer/CuRenderer.cpp:126
+#: src/Renderer/CuRenderer.cpp:127
 msgid "Thermal height"
 msgstr "Высота потока"
 
-#: src/Renderer/CuRenderer.cpp:129
+#: src/Renderer/CuRenderer.cpp:130
 msgid "Cloud base"
 msgstr "База"
 
@@ -1657,24 +1659,27 @@ msgstr "Внимание"
 msgid "Battery low"
 msgstr "Низкий заряд батареи"
 
-#: src/Startup.cpp:178
+#: src/Startup.cpp:185
 msgid "Loading Terrain File..."
 msgstr "Загружаю файл Местности"
 
-#: src/Startup.cpp:311
+#: src/Startup.cpp:319
 msgid "Initialising"
 msgstr "Инициализация"
 
-#: src/Startup.cpp:397 src/Dialogs/Device/CAI302/WaypointUploader.cpp:17
+#: src/Startup.cpp:421
+msgid "Loading Topography File..."
+msgstr "Загрузка файла Топографии"
+
+#: src/Startup.cpp:430 src/Dialogs/Device/CAI302/WaypointUploader.cpp:17
 msgid "Loading Waypoints..."
 msgstr "Загрузка путевых точек..."
 
-#: src/Startup.cpp:404
+#: src/Startup.cpp:439
 msgid "Loading Airfield Details File..."
 msgstr "Загрузка файла с подробной информацией о аэродроме..."
 
-#. Start the device thread(s)
-#: src/Startup.cpp:453
+#: src/Startup.cpp:495
 msgid "Starting devices"
 msgstr "Включение устройства"
 
@@ -1684,48 +1689,46 @@ msgstr "Включение устройства"
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Startup.cpp:463
+#: src/Startup.cpp:507
 msgid "Initialising display"
 msgstr "Инициализация дисплея"
 
 #. Show progress dialog
-#: src/Startup.cpp:562 src/Startup.cpp:602 src/Startup.cpp:670
+#: src/Startup.cpp:602 src/Startup.cpp:640 src/Startup.cpp:708
 msgid "Shutdown, please wait..."
 msgstr "Завершение работы, пожалуйста, подождите ..."
 
-#. Stop logger and save igc file
-#: src/Startup.cpp:575
+#: src/Startup.cpp:616
 msgid "Shutdown, saving logs..."
 msgstr "Завершение работы, сохраняю записи..."
 
 #. Save settings to profile
-#: src/Startup.cpp:599
+#: src/Startup.cpp:637
 msgid "Shutdown, saving profile..."
 msgstr "Завершение работы, сохраняю настройки ..."
 
-#. Save the task for the next time
-#: src/Startup.cpp:656
+#: src/Startup.cpp:698
 msgid "Shutdown, saving task..."
 msgstr "Завершение работы, сохраняю упражнения..."
 
-#: src/Device/Descriptor.cpp:463 src/Device/Descriptor.cpp:475
+#: src/Device/Descriptor.cpp:400 src/Device/Descriptor.cpp:413
 msgid "Unable to open port"
 msgstr "Ошибка открытия порта"
 
-#: src/Device/Descriptor.cpp:1123 src/Device/Descriptor.cpp:1129
+#: src/Device/Descriptor.cpp:1068 src/Device/Descriptor.cpp:1074
 msgid "Sending declaration"
 msgstr "Отправка заявления"
 
-#: src/Device/Descriptor.cpp:1176 src/Device/Descriptor.cpp:1183
+#: src/Device/Descriptor.cpp:1121 src/Device/Descriptor.cpp:1128
 msgid "Reading flight list"
 msgstr "Чтение полетного списка"
 
-#: src/Device/Descriptor.cpp:1207 src/Device/Descriptor.cpp:1214
+#: src/Device/Descriptor.cpp:1152 src/Device/Descriptor.cpp:1159
 msgid "Downloading flight log"
 msgstr "Загружаю историю полета"
 
 #: src/Device/Config.cpp:197 src/Dialogs/Device/PortDataField.cpp:32
-#: src/Dialogs/Device/DeviceListDialog.cpp:432
+#: src/Dialogs/Device/DeviceListDialog.cpp:457
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:19
 #, no-c-format
 msgid "Disabled"
@@ -1777,8 +1780,8 @@ msgstr ""
 msgid "OK"
 msgstr "OK"
 
-#: src/Dialogs/Message.cpp:82 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:39
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:42
+#: src/Dialogs/Message.cpp:82 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:40
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:43
 msgid "Yes"
 msgstr "Да"
 
@@ -1797,12 +1800,12 @@ msgstr "Повтор"
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:114
 #: src/Dialogs/MapItemListSettingsDialog.cpp:18
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:18
-#: src/Dialogs/Traffic/TrafficList.cpp:776
+#: src/Dialogs/Traffic/TrafficList.cpp:780
 #: src/Dialogs/ProfileListDialog.cpp:333
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:183
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:228
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:131
-#: src/Dialogs/Waypoint/WaypointList.cpp:212 src/Dialogs/NumberEntry.cpp:40
+#: src/Dialogs/Waypoint/WaypointList.cpp:215 src/Dialogs/NumberEntry.cpp:40
 #: src/Dialogs/NumberEntry.cpp:82 src/Dialogs/NumberEntry.cpp:122
 #: src/Dialogs/TouchTextEntry.cpp:187 src/Dialogs/TimeEntry.cpp:46
 #: src/Dialogs/DateEntry.cpp:42 src/Dialogs/GeoPointEntry.cpp:57
@@ -1818,9 +1821,9 @@ msgid "Ignore"
 msgstr "Игнорировать"
 
 #: src/Dialogs/ListPicker.cpp:153 src/Dialogs/Device/PortPicker.cpp:293
-#: src/Dialogs/Traffic/TrafficList.cpp:775
+#: src/Dialogs/Traffic/TrafficList.cpp:779
 #: src/Dialogs/ProfileListDialog.cpp:331
-#: src/Dialogs/Waypoint/WaypointList.cpp:208
+#: src/Dialogs/Waypoint/WaypointList.cpp:211
 msgid "Select"
 msgstr "Выбор"
 
@@ -1829,12 +1832,14 @@ msgid "Help"
 msgstr "Справка"
 
 #: src/Dialogs/FileManager.cpp:399 src/Dialogs/FilePicker.cpp:30
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:111
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:129
-#: src/Dialogs/Weather/PCMetDialog.cpp:59 src/Dialogs/Weather/NOAAList.cpp:182
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:99
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:120
+#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:198
+#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:220
+#: src/Dialogs/Weather/PCMetDialog.cpp:51 src/Dialogs/Weather/NOAAList.cpp:182
 #: src/Dialogs/Weather/NOAAList.cpp:198 src/Dialogs/Weather/NOAADetails.cpp:88
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:365
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:397
+#: src/Dialogs/Weather/MapOverlayWidget.cpp:355
+#: src/Dialogs/Weather/MapOverlayWidget.cpp:390
 #: src/Dialogs/DownloadFilePicker.cpp:118
 #: src/Dialogs/DownloadFilePicker.cpp:277
 #: src/Dialogs/DownloadFilePicker.cpp:386
@@ -1843,7 +1848,7 @@ msgstr "Загрузить"
 
 #: src/Dialogs/FileManager.cpp:400
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:92
-#: src/Dialogs/Weather/NOAAList.cpp:98 src/Monitor/MatTaskMonitor.cpp:38
+#: src/Dialogs/Weather/NOAAList.cpp:98 src/Monitor/MatTaskMonitor.cpp:40
 msgid "Add"
 msgstr "Добавить"
 
@@ -2035,105 +2040,105 @@ msgstr ""
 msgid "Whether you use a K6Bt to connect the device."
 msgstr "Включите если вы используете K6Bt для подсоединения устройства"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:270
-#: src/Dialogs/Plane/PlaneListDialog.cpp:132
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:253
-#: src/Dialogs/Waypoint/Manager.cpp:99 src/InfoBoxes/Content/MacCready.cpp:30
-#: src/InfoBoxes/Content/Weather.cpp:86 src/InfoBoxes/Content/Radio.cpp:45
+#: src/Dialogs/Device/DeviceListDialog.cpp:295
+#: src/Dialogs/Plane/PlaneListDialog.cpp:133
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:256
+#: src/Dialogs/Waypoint/Manager.cpp:101 src/InfoBoxes/Content/MacCready.cpp:30
+#: src/InfoBoxes/Content/Weather.cpp:87 src/InfoBoxes/Content/Radio.cpp:45
 #: src/InfoBoxes/Content/Radio.cpp:50
 #, no-c-format
 msgid "Edit"
 msgstr "Изменить"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:274
+#: src/Dialogs/Device/DeviceListDialog.cpp:299
 msgid "Flight download"
 msgstr "Скачать полёт"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:278
-#: src/Dialogs/Device/DeviceListDialog.cpp:549
-#: src/Dialogs/Device/DeviceListDialog.cpp:555
-#: src/Dialogs/Device/DeviceListDialog.cpp:623
-#: src/Dialogs/Device/DeviceListDialog.cpp:629
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:103
+#: src/Dialogs/Device/DeviceListDialog.cpp:303
+#: src/Dialogs/Device/DeviceListDialog.cpp:580
+#: src/Dialogs/Device/DeviceListDialog.cpp:586
+#: src/Dialogs/Device/DeviceListDialog.cpp:661
+#: src/Dialogs/Device/DeviceListDialog.cpp:667
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:111
 msgid "Manage"
 msgstr "Настроить"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:282
+#: src/Dialogs/Device/DeviceListDialog.cpp:307
 msgid "Monitor"
 msgstr "Монитор"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:286
-#: src/Dialogs/Device/DeviceListDialog.cpp:518
-#: src/Dialogs/Device/DeviceListDialog.cpp:526
+#: src/Dialogs/Device/DeviceListDialog.cpp:311
+#: src/Dialogs/Device/DeviceListDialog.cpp:546
+#: src/Dialogs/Device/DeviceListDialog.cpp:554
 #: src/Dialogs/Device/PortMonitor.cpp:120
 #: src/Dialogs/Device/PortMonitor.cpp:128
 msgid "Reconnect"
 msgstr "Повторить подключение"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:290
-#: src/Dialogs/Device/DeviceListDialog.cpp:309
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:211
+#: src/Dialogs/Device/DeviceListDialog.cpp:315
+#: src/Dialogs/Device/DeviceListDialog.cpp:334
+#: src/Dialogs/Weather/MapOverlayWidget.cpp:210
 msgid "Disable"
 msgstr "Отключить"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:294
-#: src/Dialogs/Device/DeviceListDialog.cpp:421
-#: src/Dialogs/Device/DeviceListDialog.cpp:440
-#: src/Dialogs/Device/DeviceListDialog.cpp:706
+#: src/Dialogs/Device/DeviceListDialog.cpp:319
+#: src/Dialogs/Device/DeviceListDialog.cpp:446
+#: src/Dialogs/Device/DeviceListDialog.cpp:465
+#: src/Dialogs/Device/DeviceListDialog.cpp:750
 msgid "Debug"
 msgstr "Отладка"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:309
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:111
+#: src/Dialogs/Device/DeviceListDialog.cpp:334
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:110
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:68
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:69
 msgid "Enable"
 msgstr "Включить"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:357
+#: src/Dialogs/Device/DeviceListDialog.cpp:382
 #, c-format
 msgid "%s on %s"
 msgstr ""
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:371
+#: src/Dialogs/Device/DeviceListDialog.cpp:396
 msgid "GPS fix"
 msgstr "Фикс GPS"
 
 #. device sends GPGGA, but no valid location
-#: src/Dialogs/Device/DeviceListDialog.cpp:374
+#: src/Dialogs/Device/DeviceListDialog.cpp:399
 msgid "Bad GPS"
 msgstr "Плохой сигнал GPS"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:376
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:43
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:75
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:78
+#: src/Dialogs/Device/DeviceListDialog.cpp:401
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:44
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:76
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:79
 #, no-c-format
 msgid "Connected"
 msgstr "Соединение установлено"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:381
+#: src/Dialogs/Device/DeviceListDialog.cpp:406
 msgid "Baro"
 msgstr "Барометр"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:386
+#: src/Dialogs/Device/DeviceListDialog.cpp:411
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:108
 #, fuzzy
 msgid "Pitot"
 msgstr "Порт Пито"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:391
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:86
+#: src/Dialogs/Device/DeviceListDialog.cpp:416
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:88
 msgid "Airspeed"
 msgstr "Воздушная скорость"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:426
+#: src/Dialogs/Device/DeviceListDialog.cpp:451
 #: src/InfoBoxes/Content/Factory.cpp:649
 #, no-c-format
 msgid "Battery"
 msgstr "Батарея"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:434
+#: src/Dialogs/Device/DeviceListDialog.cpp:459
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:41
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:45
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:49
@@ -2141,42 +2146,42 @@ msgstr "Батарея"
 msgid "N/A"
 msgstr "Недоступен"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:448
-#: src/Dialogs/Device/DeviceListDialog.cpp:518
+#: src/Dialogs/Device/DeviceListDialog.cpp:470
+#: src/Dialogs/Device/DeviceListDialog.cpp:546
 msgid "Bluetooth is disabled"
 msgstr "Bluetooth отключён"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:451
+#: src/Dialogs/Device/DeviceListDialog.cpp:472
 msgid "Duplicate"
 msgstr "Дублировать"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:458
+#: src/Dialogs/Device/DeviceListDialog.cpp:479
 msgid "Not connected"
 msgstr "Нет соединения"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:526
-#: src/Dialogs/Device/DeviceListDialog.cpp:555
-#: src/Dialogs/Device/DeviceListDialog.cpp:629
+#: src/Dialogs/Device/DeviceListDialog.cpp:554
+#: src/Dialogs/Device/DeviceListDialog.cpp:586
+#: src/Dialogs/Device/DeviceListDialog.cpp:667
 #: src/Dialogs/Device/PortMonitor.cpp:128
 msgid "Device is occupied"
 msgstr "Устройство занято"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:549
-#: src/Dialogs/Device/DeviceListDialog.cpp:623
+#: src/Dialogs/Device/DeviceListDialog.cpp:580
+#: src/Dialogs/Device/DeviceListDialog.cpp:661
 msgid "Device is not connected"
 msgstr "Устройство не подключено"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:577
+#: src/Dialogs/Device/DeviceListDialog.cpp:608
 msgid "Edit device"
 msgstr "Редактировать устройство"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:704
+#: src/Dialogs/Device/DeviceListDialog.cpp:748
 #, c-format
 msgid "Communication with this device will be logged for the next %u minutes."
 msgstr ""
 "Связь с этим устройством будет установлена в течение следующих %u минут."
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:721 Data/Input/default.xci:588
+#: src/Dialogs/Device/DeviceListDialog.cpp:765 Data/Input/default.xci:588
 #: Data/Input/default.xci:1184
 msgid "Devices"
 msgstr "Устройства"
@@ -2187,7 +2192,7 @@ msgstr "Устройства"
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:104
 #: src/Dialogs/TouchTextEntry.cpp:192 src/Dialogs/TimeEntry.cpp:55
 #: src/Dialogs/DateEntry.cpp:49 src/Dialogs/GeoPointEntry.cpp:60
-#: src/InfoBoxes/Panel/ATCReference.cpp:75
+#: src/InfoBoxes/Panel/ATCReference.cpp:77
 msgid "Clear"
 msgstr "Очистить"
 
@@ -2233,7 +2238,7 @@ msgstr "Перезагрузка"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:34
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:176
-#: src/Weather/NOAAFormatter.cpp:97 src/Weather/NOAAFormatter.cpp:104
+#: src/Weather/NOAAFormatter.cpp:94 src/Weather/NOAAFormatter.cpp:100
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:47
 #, no-c-format
 msgid "Temperature"
@@ -2242,7 +2247,7 @@ msgstr "Температура"
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:42
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:109
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:199
-#: src/Weather/NOAAFormatter.cpp:133 src/Weather/NOAAFormatter.cpp:139
+#: src/Weather/NOAAFormatter.cpp:128 src/Weather/NOAAFormatter.cpp:134
 msgid "Pressure"
 msgstr "Давление"
 
@@ -2304,8 +2309,8 @@ msgstr "Режим маршрута"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:50
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:102
-#: src/Dialogs/Waypoint/Manager.cpp:103
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:147
+#: src/Dialogs/Waypoint/Manager.cpp:105
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:138
 msgid "Save"
 msgstr "Сохранить"
 
@@ -2375,35 +2380,35 @@ msgstr "Установить новые звуковые схемы? Стары�
 msgid "Vario Configuration"
 msgstr "Конфигурация варио"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:79
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:81
 msgid "TE vario"
 msgstr "TE варио"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:80
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:82
 msgid ""
 "This produces a fake TE vario gross vertical velocity.  It can be used when "
 "in circling mode to demonstrate the lift tones.  When not in circling mode, "
 "set this to a realistic negative value so speed command tones are produced."
 msgstr ""
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:87
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:89
 msgid ""
 "This produces a fake airspeed.  It can be used when not in circling mode to "
 "demonstrate the speed command tones."
 msgstr ""
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:91
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:93
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:180
 #: src/InfoBoxes/InfoBoxSettings.cpp:58
 #, no-c-format
 msgid "Circling"
 msgstr "Спираль"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:92
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:94
 msgid "This forces the variometer into circling or cruise mode"
 msgstr ""
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:106
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:108
 msgid "Vario Demo"
 msgstr ""
 
@@ -2497,7 +2502,7 @@ msgid "Threshold"
 msgstr "Пороговое значение"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:108
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:75
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:77
 msgid "Range"
 msgstr "Диапазон"
 
@@ -2579,7 +2584,7 @@ msgstr "Статический объект"
 #: src/Dialogs/Airspace/AirspaceList.cpp:404
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:95
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:86
-#: src/Dialogs/Waypoint/WaypointList.cpp:392
+#: src/Dialogs/Waypoint/WaypointList.cpp:388
 msgid "Type"
 msgstr "Тип"
 
@@ -2593,24 +2598,24 @@ msgstr "Интервал записи (логгирования)"
 msgid "No tracking mode"
 msgstr ""
 
-#: src/Dialogs/MapItemListDialog.cpp:145
-#: src/Dialogs/Task/AlternatesListDialog.cpp:102
+#: src/Dialogs/MapItemListDialog.cpp:146
+#: src/Dialogs/Task/AlternatesListDialog.cpp:103
 msgid "Goto"
 msgstr "Лететь к"
 
-#: src/Dialogs/MapItemListDialog.cpp:149
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:111
+#: src/Dialogs/MapItemListDialog.cpp:150
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:110
 msgid "Ack Day"
 msgstr "ACK День"
 
-#: src/Dialogs/MapItemListDialog.cpp:153 src/Dialogs/dlgAnalysis.cpp:455
-#: src/Dialogs/dlgAnalysis.cpp:499 src/Dialogs/dlgAnalysis.cpp:508
-#: src/Dialogs/dlgAnalysis.cpp:517
+#: src/Dialogs/MapItemListDialog.cpp:154 src/Dialogs/dlgAnalysis.cpp:458
+#: src/Dialogs/dlgAnalysis.cpp:502 src/Dialogs/dlgAnalysis.cpp:511
+#: src/Dialogs/dlgAnalysis.cpp:520
 msgid "Settings"
 msgstr "Настройки"
 
-#: src/Dialogs/MapItemListDialog.cpp:236
-#: src/MapWindow/GlueMapWindowItems.cpp:108
+#: src/Dialogs/MapItemListDialog.cpp:237
+#: src/MapWindow/GlueMapWindowItems.cpp:110
 msgid "Map elements at this location"
 msgstr "Элементы карты в этой местности."
 
@@ -2657,7 +2662,7 @@ msgid "Warn"
 msgstr "Предупредить"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:143
-#: src/Dialogs/Settings/dlgConfiguration.cpp:84 src/Dialogs/dlgAnalysis.cpp:551
+#: src/Dialogs/Settings/dlgConfiguration.cpp:84 src/Dialogs/dlgAnalysis.cpp:554
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:87
 #: Data/Input/default.xci:554 Data/Input/default.xci:1272
 #, no-c-format
@@ -2674,15 +2679,15 @@ msgid "Radio"
 msgstr "Радио"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:56
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:242
-#: src/Dialogs/Task/AlternatesListDialog.cpp:109
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:245
+#: src/Dialogs/Task/AlternatesListDialog.cpp:110
 #, fuzzy
 msgid "Set Active Frequency"
 msgstr "Мин. частота"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:61
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:247
-#: src/Dialogs/Task/AlternatesListDialog.cpp:115
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:250
+#: src/Dialogs/Task/AlternatesListDialog.cpp:116
 #, fuzzy
 msgid "Set Standby Frequency"
 msgstr "Мин. частота"
@@ -2700,12 +2705,12 @@ msgstr "Верх"
 msgid "Base"
 msgstr "Основные"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:105
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:104
 msgid "Airspace Details"
 msgstr "Подробн. Возд.простр."
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:284
-#: src/Dialogs/Waypoint/WaypointList.cpp:432
+#: src/Dialogs/Waypoint/WaypointList.cpp:428
 msgid "No Match!"
 msgstr "Нет совпадений!"
 
@@ -2717,7 +2722,7 @@ msgstr "По полету"
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:216
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:106
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
-#: src/Dialogs/Waypoint/WaypointList.cpp:389
+#: src/Dialogs/Waypoint/WaypointList.cpp:385
 msgid "Name"
 msgstr "Название"
 
@@ -2778,13 +2783,13 @@ msgid "Defines how the airspace is filled with the configured color."
 msgstr "Определяет, как воздушное пространство заполняется настроенным цветом."
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:66
-#: src/Monitor/AirspaceWarningMonitor.cpp:54
+#: src/Monitor/AirspaceWarningMonitor.cpp:55
 #, fuzzy
 msgid "ACK"
 msgstr "ACK День"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:67
-#: src/Monitor/AirspaceWarningMonitor.cpp:63
+#: src/Monitor/AirspaceWarningMonitor.cpp:64
 msgid "ACK Day"
 msgstr "ACK День"
 
@@ -2904,12 +2909,12 @@ msgstr ""
 "планера удваивается."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:295
-#: src/InfoBoxes/Panel/AltitudeSetup.cpp:54
+#: src/InfoBoxes/Panel/AltitudeSetup.cpp:55
 msgid "QNH"
 msgstr "Давление на уровне моря (QNH)"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:296
-#: src/InfoBoxes/Panel/AltitudeSetup.cpp:55
+#: src/InfoBoxes/Panel/AltitudeSetup.cpp:56
 msgid ""
 "Area pressure for barometric altimeter calibration.  This is set "
 "automatically if Vega connected."
@@ -2970,7 +2975,7 @@ msgstr "Полетный компьютер"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:91
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:217
-#: src/Weather/NOAAFormatter.cpp:78 src/Weather/NOAAFormatter.cpp:85
+#: src/Weather/NOAAFormatter.cpp:78 src/Weather/NOAAFormatter.cpp:81
 #: src/InfoBoxes/Content/Factory.cpp:323 src/InfoBoxes/Content/Factory.cpp:332
 #: src/InfoBoxes/Content/Factory.cpp:920 Data/Input/default.xci:604
 #, no-c-format
@@ -3028,7 +3033,7 @@ msgid "InfoBox Sets"
 msgstr "Настройки ИнфоБоксов"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:121
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:120
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:122
 #: Data/Input/default.xci:664 Data/Input/default.xci:1169
 #, no-c-format
 msgid "Logger"
@@ -3041,8 +3046,8 @@ msgstr "Трекинг"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:132
 #: src/Dialogs/Weather/WeatherDialog.cpp:26
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:321
-#: src/Weather/NOAAFormatter.cpp:180 Data/Input/default.xci:800
+#: src/Dialogs/Weather/MapOverlayWidget.cpp:320
+#: src/Weather/NOAAFormatter.cpp:175 Data/Input/default.xci:800
 #: Data/Input/default.xci:1207
 #, no-c-format
 msgid "Weather"
@@ -3100,7 +3105,7 @@ msgstr "Содержимое"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:250
 #: src/Dialogs/ProfileListDialog.cpp:154
-#: src/Dialogs/Plane/PlaneListDialog.cpp:133
+#: src/Dialogs/Plane/PlaneListDialog.cpp:134
 msgid "Copy"
 msgstr "Копировать"
 
@@ -3121,19 +3126,19 @@ msgstr "Вставить ИнфоБлок"
 msgid "Invalid"
 msgstr "Неверный"
 
-#: src/Dialogs/Traffic/TrafficList.cpp:325
+#: src/Dialogs/Traffic/TrafficList.cpp:327
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:301
 msgid "Competition ID"
 msgstr "Соревновательный номер"
 
-#: src/Dialogs/Traffic/TrafficList.cpp:344
+#: src/Dialogs/Traffic/TrafficList.cpp:346
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:174
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:347
 #, no-c-format
 msgid "Map"
 msgstr "Карта"
 
-#: src/Dialogs/Traffic/TrafficList.cpp:736
+#: src/Dialogs/Traffic/TrafficList.cpp:740
 msgid "Traffic"
 msgstr "Трафик"
 
@@ -3181,141 +3186,141 @@ msgstr ""
 msgid "New Teammate"
 msgstr "Новый участник команды"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:64
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:66
 msgid "Set code"
 msgstr "Установите код"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:65
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:67
 msgid "Set WP"
 msgstr "Уст. МТ"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:66
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:68
 msgid "Flarm Lock"
 msgstr "Flarm блокировка"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:73
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:75
 msgid "Own code"
 msgstr "Собственный код"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:74
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:76
 msgid "Mate code"
 msgstr ""
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:76
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:78
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:74
 #: src/InfoBoxes/Content/Factory.cpp:143
 #, no-c-format
 msgid "Bearing"
 msgstr "Азимут"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:77
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:79
 msgid "Rel. bearing"
 msgstr "Отн. направление"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:78
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:80
 msgid "Flarm lock"
 msgstr "Блокировка Flarm"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:186
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:188
 msgid "Unknown Competition Number"
 msgstr "Неизвестный соревновательный номер"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:187
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:189
 msgid "Not Found"
 msgstr "Не найдено"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:191
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:193
 msgid "Set new teammate"
 msgstr "Установить нового участника команды"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:204
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:206
 #: src/InfoBoxes/Content/Factory.cpp:569 src/InfoBoxes/Content/Team.cpp:30
 #: Data/Input/default.xci:850
 #, no-c-format
 msgid "Team Code"
 msgstr "Код команды"
 
-#: src/Dialogs/dlgAnalysis.cpp:226 src/Dialogs/dlgAnalysis.cpp:464
-#: src/Dialogs/dlgAnalysis.cpp:527 src/Dialogs/dlgAnalysis.cpp:536
+#: src/Dialogs/dlgAnalysis.cpp:228 src/Dialogs/dlgAnalysis.cpp:467
+#: src/Dialogs/dlgAnalysis.cpp:530 src/Dialogs/dlgAnalysis.cpp:539
 msgid "Task Calc"
 msgstr "Расч зад"
 
-#: src/Dialogs/dlgAnalysis.cpp:450 src/Dialogs/dlgAnalysis.cpp:459
-#: src/Dialogs/dlgAnalysis.cpp:468 src/Dialogs/dlgAnalysis.cpp:477
-#: src/Dialogs/dlgAnalysis.cpp:485 src/Dialogs/dlgAnalysis.cpp:493
-#: src/Dialogs/dlgAnalysis.cpp:503 src/Dialogs/dlgAnalysis.cpp:512
-#: src/Dialogs/dlgAnalysis.cpp:521 src/Dialogs/dlgAnalysis.cpp:531
-#: src/Dialogs/dlgAnalysis.cpp:540 src/Dialogs/dlgAnalysis.cpp:550
-#: src/Dialogs/dlgAnalysis.cpp:699 src/InfoBoxes/Content/Contest.cpp:34
-#: src/InfoBoxes/Content/Trace.cpp:163 Data/Input/default.xci:824
+#: src/Dialogs/dlgAnalysis.cpp:453 src/Dialogs/dlgAnalysis.cpp:462
+#: src/Dialogs/dlgAnalysis.cpp:471 src/Dialogs/dlgAnalysis.cpp:480
+#: src/Dialogs/dlgAnalysis.cpp:488 src/Dialogs/dlgAnalysis.cpp:496
+#: src/Dialogs/dlgAnalysis.cpp:506 src/Dialogs/dlgAnalysis.cpp:515
+#: src/Dialogs/dlgAnalysis.cpp:524 src/Dialogs/dlgAnalysis.cpp:534
+#: src/Dialogs/dlgAnalysis.cpp:543 src/Dialogs/dlgAnalysis.cpp:553
+#: src/Dialogs/dlgAnalysis.cpp:702 src/InfoBoxes/Content/Contest.cpp:38
+#: src/InfoBoxes/Content/Trace.cpp:166 Data/Input/default.xci:824
 #: Data/Input/default.xci:1231
 #, no-c-format
 msgid "Analysis"
 msgstr "Анализ"
 
-#: src/Dialogs/dlgAnalysis.cpp:451
+#: src/Dialogs/dlgAnalysis.cpp:454
 msgid "Barograph"
 msgstr "Барограмма"
 
-#: src/Dialogs/dlgAnalysis.cpp:460
+#: src/Dialogs/dlgAnalysis.cpp:463
 msgid "Climb"
 msgstr "Подъем"
 
-#: src/Dialogs/dlgAnalysis.cpp:469
+#: src/Dialogs/dlgAnalysis.cpp:472
 msgid "Thermal Band"
 msgstr ""
 
-#: src/Dialogs/dlgAnalysis.cpp:478
+#: src/Dialogs/dlgAnalysis.cpp:481
 #, fuzzy
 msgid "Vario Histogram"
 msgstr "Трэк вариометра"
 
-#: src/Dialogs/dlgAnalysis.cpp:486
+#: src/Dialogs/dlgAnalysis.cpp:489
 msgid "Wind at Altitude"
 msgstr "Ветер по высотам"
 
-#: src/Dialogs/dlgAnalysis.cpp:489
+#: src/Dialogs/dlgAnalysis.cpp:492
 msgid "Set Wind"
 msgstr "Уст. ветра"
 
-#: src/Dialogs/dlgAnalysis.cpp:494
+#: src/Dialogs/dlgAnalysis.cpp:497
 msgid "Glide Polar"
 msgstr "Поляра планера"
 
-#: src/Dialogs/dlgAnalysis.cpp:504
+#: src/Dialogs/dlgAnalysis.cpp:507
 #, fuzzy
 msgid "MacCready Speeds"
 msgstr "Маккреди "
 
-#: src/Dialogs/dlgAnalysis.cpp:513
+#: src/Dialogs/dlgAnalysis.cpp:516
 msgid "Temperature Trace"
 msgstr "График температуры"
 
-#: src/Dialogs/dlgAnalysis.cpp:522
+#: src/Dialogs/dlgAnalysis.cpp:525
 msgid "Task Speed"
 msgstr "Достигн скорость в задаче"
 
-#: src/Dialogs/dlgAnalysis.cpp:554
+#: src/Dialogs/dlgAnalysis.cpp:557
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:177
 msgid "Warnings"
 msgstr "Предупреждения"
 
-#: src/Dialogs/dlgChecklist.cpp:36 src/Dialogs/dlgChecklist.cpp:100
+#: src/Dialogs/dlgChecklist.cpp:38 src/Dialogs/dlgChecklist.cpp:104
 #: Data/Input/default.xci:816 Data/Input/default.xci:1223
 msgid "Checklist"
 msgstr "Перечень"
 
-#: src/Dialogs/dlgChecklist.cpp:93
+#: src/Dialogs/dlgChecklist.cpp:97
 msgid "No checklist loaded"
 msgstr "Перечень не загружен"
 
-#: src/Dialogs/dlgChecklist.cpp:94
+#: src/Dialogs/dlgChecklist.cpp:98
 msgid "Create xcsoar-checklist.txt"
 msgstr "Создать перечень xcsoar.txt"
 
 #: src/Dialogs/ProfileListDialog.cpp:152
-#: src/Dialogs/Plane/PlaneListDialog.cpp:131
-#: src/Dialogs/Waypoint/Manager.cpp:91
+#: src/Dialogs/Plane/PlaneListDialog.cpp:132
+#: src/Dialogs/Waypoint/Manager.cpp:93
 msgid "New"
 msgstr "Новая"
 
@@ -3326,11 +3331,11 @@ msgid "Password"
 msgstr "Пароль"
 
 #: src/Dialogs/ProfileListDialog.cpp:155 src/Dialogs/ProfileListDialog.cpp:274
-#: src/Dialogs/Plane/PlaneListDialog.cpp:134
+#: src/Dialogs/Plane/PlaneListDialog.cpp:135
 #: src/Dialogs/Plane/PlaneListDialog.cpp:332
-#: src/Dialogs/Waypoint/Manager.cpp:107
+#: src/Dialogs/Waypoint/Manager.cpp:109
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:102
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:79
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:81
 msgid "Delete"
 msgstr "Удалить"
 
@@ -3362,11 +3367,11 @@ msgstr "Профиль"
 msgid "Select profile"
 msgstr "Выберите файл"
 
-#: src/Dialogs/Plane/PlaneListDialog.cpp:135
+#: src/Dialogs/Plane/PlaneListDialog.cpp:136
 msgid "Activate"
 msgstr "Активировать"
 
-#: src/Dialogs/Plane/PlaneListDialog.cpp:156
+#: src/Dialogs/Plane/PlaneListDialog.cpp:157
 msgid "Active"
 msgstr "АКТИВНО"
 
@@ -3454,7 +3459,7 @@ msgid "List"
 msgstr "Список"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:44
-#: src/Dialogs/Waypoint/Manager.cpp:95
+#: src/Dialogs/Waypoint/Manager.cpp:97
 msgid "Import"
 msgstr "Импортировать"
 
@@ -3492,11 +3497,11 @@ msgstr ""
 msgid "Switch InfoBox"
 msgstr "Перейти в ИнфоБокс"
 
-#: src/Dialogs/ReplayDialog.cpp:47 src/Dialogs/Weather/RASPDialog.cpp:109
+#: src/Dialogs/ReplayDialog.cpp:49 src/Dialogs/Weather/RASPDialog.cpp:109
 msgid "File"
 msgstr "Файл"
 
-#: src/Dialogs/ReplayDialog.cpp:48
+#: src/Dialogs/ReplayDialog.cpp:50
 msgid ""
 "Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (."
 "nmea), or if blank, runs the demo."
@@ -3504,11 +3509,11 @@ msgstr ""
 "Имя файла для проигрывания. Может быть файл IGC (. IGC), лог-файл  NMEA (. "
 "NMEA), или если пустой, запустится демо."
 
-#: src/Dialogs/ReplayDialog.cpp:54
+#: src/Dialogs/ReplayDialog.cpp:56
 msgid "Rate"
 msgstr "Скор."
 
-#: src/Dialogs/ReplayDialog.cpp:55
+#: src/Dialogs/ReplayDialog.cpp:57
 msgid ""
 "Time acceleration of replay. Set to 0 for pause, 1 for normal real-time "
 "replay."
@@ -3516,7 +3521,7 @@ msgstr ""
 "Время ускорения воспроизведения. Введите 0 для паузы, 1 для нормального "
 "воспроизведения в реальном времени."
 
-#: src/Dialogs/ReplayDialog.cpp:77 src/Dialogs/ReplayDialog.cpp:93
+#: src/Dialogs/ReplayDialog.cpp:79 src/Dialogs/ReplayDialog.cpp:95
 #: Data/Input/default.xci:646
 msgid "Replay"
 msgstr "Повтор"
@@ -3551,33 +3556,33 @@ msgstr "Пароль"
 msgid "Enter a new password"
 msgstr ""
 
-#: src/Dialogs/dlgStatus.cpp:27 src/Dialogs/dlgStatus.cpp:38
+#: src/Dialogs/dlgStatus.cpp:28 src/Dialogs/dlgStatus.cpp:39
 #: src/Dialogs/Weather/WeatherDialog.cpp:38 Data/Input/default.xci:842
 #: Data/Input/default.xci:1239
 msgid "Status"
 msgstr "Статус"
 
-#: src/Dialogs/dlgStatus.cpp:70 Data/Input/default.xci:596
+#: src/Dialogs/dlgStatus.cpp:71 Data/Input/default.xci:596
 msgid "Flight"
 msgstr "Полёт"
 
-#: src/Dialogs/dlgStatus.cpp:73 Data/Input/default.xci:572
+#: src/Dialogs/dlgStatus.cpp:74 Data/Input/default.xci:572
 msgid "System"
 msgstr "СИСТЕМА"
 
-#: src/Dialogs/dlgStatus.cpp:79
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:106
+#: src/Dialogs/dlgStatus.cpp:80
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:114
 msgid "Rules"
 msgstr "Правила"
 
-#: src/Dialogs/dlgStatus.cpp:82
+#: src/Dialogs/dlgStatus.cpp:83
 msgid "Times"
 msgstr "Время"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:70
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:119
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:78
-#: src/InfoBoxes/Panel/ATCReference.cpp:64
+#: src/InfoBoxes/Panel/ATCReference.cpp:65
 msgid "Location"
 msgstr "Местоположение"
 
@@ -3593,91 +3598,91 @@ msgstr "Ближняя точка"
 msgid "Share"
 msgstr ""
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:31
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:42
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:75
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:79
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:32
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:43
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:76
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:80
 #: src/InfoBoxes/Content/Other.cpp:169
 #, no-c-format
 msgid "Disconnected"
 msgstr "Отключено"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:33
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:34
 #: src/InfoBoxes/Content/Other.cpp:171
 #, no-c-format
 msgid "Fix invalid"
 msgstr "Полож. ошибочно"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:35
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:36
 #: src/InfoBoxes/Content/Other.cpp:173
 #, no-c-format
 msgid "2D fix"
 msgstr "Фикс 2D"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:37
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:38
 #: src/InfoBoxes/Content/Other.cpp:175
 #, no-c-format
 msgid "3D fix"
 msgstr "3D позиция"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:44
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:45
 #, no-c-format
 msgid "Roaming"
 msgstr ""
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:116
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:118
 msgid "GPS lock"
 msgstr "GPS блок."
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:117
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:119
 msgid "Satellites in view"
 msgstr "Видимые спутн."
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:118
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:120
 msgid "Variometer"
 msgstr "Вариометр"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:121
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:123
 msgid "Supply voltage"
 msgstr "Батарея"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:122
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:124
 msgid "Network"
 msgstr ""
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:120
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:121
 msgid "Assigned task time"
 msgstr "Время задачи"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:121
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:122
 msgid "Estimated task time"
 msgstr "Расч. время задачи"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:122
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:123
 msgid "Remaining time"
 msgstr "Оставшееся время"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:123
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:124
 msgid "Task distance"
 msgstr "Расстояние до финиша"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:124
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:125
 msgid "Remaining distance"
 msgstr "Оставш. расстояние"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:125
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:126
 msgid "Speed estimated"
 msgstr "Расчетная скорость"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:126
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:127
 msgid "Speed average"
 msgstr "Средняя скорость"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:128
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:129
 msgid "Set MacCready"
 msgstr "Установить MC"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:129
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:130
 msgid ""
 "Adjusts MC value used in the calculator.  Use this to determine the effect "
 "on estimated task time due to changes in conditions.  This value will not "
@@ -3689,11 +3694,11 @@ msgstr ""
 "Это значение не будет влиять на главные настройки компьютера, если выйти с "
 "диалога через клавишу \"Отменить\"."
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:139
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:140
 msgid "AAT range"
 msgstr ""
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:141
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:142
 #, no-c-format
 msgid ""
 "For AAT tasks, this value tells you how far based on the targets of your "
@@ -3702,24 +3707,24 @@ msgid ""
 "is maximum AAT distance."
 msgstr ""
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:144
-#: src/Dialogs/Task/TargetDialog.cpp:380
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:145
+#: src/Dialogs/Task/TargetDialog.cpp:382
 msgid "Speed remaining"
 msgstr "Расчетная скорость"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:147
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:148
 msgid "Achieved MacCready"
 msgstr "Достигнутый MC"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:152
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:153
 msgid "Achieved speed"
 msgstr "Достигнутая скорость"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:155
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:156
 msgid "Cruise efficiency"
 msgstr "Качество"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:156
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:157
 msgid ""
 "Efficiency of cruise.  100 indicates perfect MacCready performance, greater "
 "than 100 indicates better than MacCready performance is achieved through "
@@ -3734,33 +3739,33 @@ msgstr ""
 "величина оценивает эффективность полёта на переходе в соответствии с текущей "
 "историей полёта с выбранным МС. Расчёт начинается после старта задания."
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:82
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:83
 msgid "Valid start"
 msgstr "Подтв. старта"
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:83
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:84
 msgid "Start time"
 msgstr "Время старта"
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:84
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:85
 msgid "Start alt."
 msgstr "Высота старта"
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:85
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:86
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:126
-#: src/Dialogs/Task/TaskPointDialog.cpp:333
+#: src/Dialogs/Task/TaskPointDialog.cpp:334
 msgid "Start point"
 msgstr "Точка старта"
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:86
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:87
 msgid "Start speed"
 msgstr "Старт. скорость"
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:87
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:88
 msgid "Finish min. alt."
 msgstr "Минимальная финишная высота"
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:88
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:89
 msgid "Valid finish"
 msgstr "Подтв. финиша"
 
@@ -3813,122 +3818,122 @@ msgstr "Взлётно-посадочная полоса"
 msgid "Short Name"
 msgstr "Короткий"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:149
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:146
 msgid "Bearing and Distance"
 msgstr "Азимут и расстояние"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:162
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:159
 msgid "Alt. diff. MC 0"
 msgstr ""
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:166
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:163
 msgid "Alt. diff. MC safety"
 msgstr ""
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:171
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:168
 msgid "Alt. diff. MC current"
 msgstr ""
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:190
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:187
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:104
 #, no-c-format
 msgid "Required glide ratio"
 msgstr "Требуемый отношение глайдирования"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:40
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:78
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:118
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:158
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:42
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:80
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:120
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:160
 msgid "No task defined."
 msgstr "Задание не установлено"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:45
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:47
 msgid "No active task point."
 msgstr "Нет активных путевых точек задания"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:45
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:47
 msgid "Replace in task"
 msgstr "Заменить в задаче"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:50
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:84
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:124
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:168
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:52
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:86
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:126
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:170
 msgid "Task would not be valid after the change."
 msgstr "Задание не будет действительным после изменения."
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:89
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:129
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:91
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:131
 msgid "Created Goto Task."
 msgstr ""
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:89
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:94
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:129
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:134
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:91
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:96
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:131
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:136
 msgid "Success"
 msgstr "Успешно"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:94
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:134
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:96
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:136
 msgid "Created 2-point task from Goto Task."
 msgstr ""
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:163
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:165
 msgid "Waypoint not in task."
 msgstr "Точка не в зачаче."
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:163
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:165
 msgid "Remove from task"
 msgstr "Удалить из задачи"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:209
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:212
 msgid "Replace in Task"
 msgstr "Заменить в задаче"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:214
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:217
 msgid "Insert in Task"
 msgstr "Вставить в задачу"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:219
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:222
 msgid "Append to Task"
 msgstr "Добавить к задаче"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:225
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:228
 msgid "Remove from Task"
 msgstr "Удалить из задачи"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:231
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:234
 msgid "Set as New Home"
 msgstr "Устан как Дом"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:237
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:240
 msgid "Pan to Waypoint"
 msgstr "Перейти к точке"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:403 Data/Input/default.xci:1056
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:405 Data/Input/default.xci:1056
 msgid "GoTo"
 msgstr "Лететь к"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:614
-#: src/Dialogs/Task/TaskPointDialog.cpp:508
-#: src/InfoBoxes/Panel/ATCReference.cpp:63
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:616
+#: src/Dialogs/Task/TaskPointDialog.cpp:511
+#: src/InfoBoxes/Panel/ATCReference.cpp:64
 msgid "Waypoint"
 msgstr "Точка"
 
-#: src/Dialogs/Waypoint/Manager.cpp:264
+#: src/Dialogs/Waypoint/Manager.cpp:266
 msgid "Delete waypoint?"
 msgstr "Удалить путевую точку?"
 
-#: src/Dialogs/Waypoint/Manager.cpp:284
+#: src/Dialogs/Waypoint/Manager.cpp:286
 msgid "Waypoints Editor"
 msgstr "Редактор маршрутных точек"
 
-#: src/Dialogs/Waypoint/Manager.cpp:293
+#: src/Dialogs/Waypoint/Manager.cpp:295
 msgid "Save changes to waypoint file?"
 msgstr "Сохранить изменения в файле точек?"
 
-#: src/Dialogs/Waypoint/Manager.cpp:293
+#: src/Dialogs/Waypoint/Manager.cpp:295
 msgid "Waypoints edited"
 msgstr "Редактор Точек"
 
@@ -4039,11 +4044,11 @@ msgstr ""
 msgid "Waypoint Editor"
 msgstr "Редактор точки"
 
-#: src/Dialogs/Waypoint/WaypointList.cpp:433
+#: src/Dialogs/Waypoint/WaypointList.cpp:429
 msgid "Choose a filter or click here"
 msgstr "Выберите фильтр или нажмите здесь"
 
-#: src/Dialogs/Waypoint/WaypointList.cpp:490
+#: src/Dialogs/Waypoint/WaypointList.cpp:486
 msgid "Select Waypoint"
 msgstr "Выбор точки"
 
@@ -5072,53 +5077,53 @@ msgstr ""
 msgid "Enable black cursor"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:42
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:43
 #, no-c-format
 msgid "Start only"
 msgstr "Только старт"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:55
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:56
 msgid "Pilot name"
 msgstr "Имя лётчика"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:57
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:58
 #, fuzzy
 msgid "CoPilot name"
 msgstr "Имя лётчика"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:59
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:60
 msgid "Crew weight default"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:60
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:61
 msgid ""
 "Default for all weight loaded to the glider beyond the empty weight and "
 "besides the water ballast."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:66
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:67
 msgid "Time step cruise"
 msgstr "Шаг времени Полета"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:67
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:68
 msgid "This is the time interval between logged points when not circling."
 msgstr ""
 "Это промежуток времени между сохраняемыми точками, когда Вы не находились в "
 "спирали."
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:71
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:72
 msgid "Time step circling"
 msgstr "Шаг времени Вращения"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:72
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:73
 msgid "This is the time interval between logged points when circling."
 msgstr "Интервал сохранения точек в спирали."
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:76
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:77
 msgid "Auto. logger"
 msgstr "Автоматический логгер"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:77
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:78
 msgid ""
 "Enables the automatic starting and stopping of logger on takeoff and landing "
 "respectively. Disable when flying paragliders."
@@ -5126,11 +5131,11 @@ msgstr ""
 "Позволяет автоматически запускать и останавливать логгер при взлёте и "
 "посадке соответственно. Отключите при полете на параплане."
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:82
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:83
 msgid "NMEA logger"
 msgstr "NMEA логгер"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:83
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:84
 msgid ""
 "Enable the NMEA logger on startup? If this option is disabled, the NMEA "
 "logger can still be started manually."
@@ -5138,15 +5143,15 @@ msgstr ""
 "Включить NMEA регистратор при запуске? Если эта опция отключена, NMEA логгер "
 "может быть запущен вручную."
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:88
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:89
 msgid "Log book"
 msgstr "Лог журнал"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:88
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:89
 msgid "Logs each start and landing."
 msgstr "Логи при каждом старте и посадке"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:92
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:93
 msgid "Logger ID"
 msgstr "CIVL ID"
 
@@ -5225,7 +5230,7 @@ msgid "Use a recent average of the ground track as basis."
 msgstr "Взять за основу недавнюю среднюю наземного трека."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:41
-#: src/Dialogs/Task/TargetDialog.cpp:719
+#: src/Dialogs/Task/TargetDialog.cpp:722
 #, no-c-format
 msgid "Target"
 msgstr "Цель"
@@ -5464,7 +5469,7 @@ msgid "Uses task glide polar."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:130
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:86
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:87
 #, no-c-format
 msgid "Safety MC"
 msgstr "Безопасное MС"
@@ -5546,35 +5551,35 @@ msgstr "Рисует пунктирную линию досягаемости."
 msgid "Reach display"
 msgstr "Дисплей досягаемости"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:46
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:47
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:112
 msgid "Arrival height"
 msgstr "Высота прибытия на финиш"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:47
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:48
 msgid ""
 "The height above terrain that the glider should arrive at for a safe landing."
 msgstr ""
 "Высота над местностью, на которой планер должен прийти для безопасной "
 "посадки."
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:52
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:53
 msgid "Terrain height"
 msgstr "Высота над рельефом"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:53
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:54
 msgid "The height above terrain that the glider must clear during final glide."
 msgstr ""
 "Высота над местностью, которую планер должны сбросить в течение финишного "
 "глайда."
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:59
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:60
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:101
 #, no-c-format
 msgid "Simple"
 msgstr "Простой"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:60
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:61
 #, no-c-format
 msgid ""
 "The alternates will only be sorted by waypoint type (airport/outlanding "
@@ -5583,18 +5588,18 @@ msgstr ""
 "Запасные будут отсортированы только по типам путевых точек (аэропорт/"
 "площадка для посадки) и по высоте прибытия."
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:62
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:63
 #, no-c-format
 msgid "The sorting will also take the current task direction into account."
 msgstr ""
 "При сортировке будет также учтено текущее направление выполнения задания."
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:63
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:64
 #, no-c-format
 msgid "Home"
 msgstr "Дом"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:64
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:65
 #, no-c-format
 msgid ""
 "The sorting will try to find landing options in the current direction to the "
@@ -5603,22 +5608,22 @@ msgstr ""
 "Сортировка постарается найти варианты посадки в текущем направлении к "
 "настроенное путевой точке."
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:68
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:69
 msgid "Alternates mode"
 msgstr "Режим запасных"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:69
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:70
 msgid ""
 "Determines sorting of alternates in the alternates dialog and in abort mode."
 msgstr ""
 "Определяет метод сортировки запасных в диалоге \"Запасные\" и в режиме "
 "прерывания задания."
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:72
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:73
 msgid "Polar degradation"
 msgstr "Деградация поляры"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:73
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:74
 #, no-c-format
 msgid ""
 "A permanent polar degradation. 0% means no degradation, 50% indicates the "
@@ -5627,18 +5632,18 @@ msgstr ""
 "Постоянная деградация поляры. 0% означает отсутствие деградации, 50% "
 "указывает, что скорость снижения планера удваивается."
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:81
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:82
 msgid "Auto bugs"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:82
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:83
 #, no-c-format
 msgid ""
 "If enabled, adds 1% to the bugs setting after each full hour while flying."
 msgstr ""
 "Если применено, добавляет 1% к настройкам\"bugs\" через каждый час полёта."
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:87
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:88
 msgid ""
 "The MacCready setting used, when safety MC is enabled for reach "
 "calculations, in task abort mode and for determining arrival altitude at "
@@ -5648,11 +5653,11 @@ msgstr ""
 "досягаемости, в режиме прерывания задания и для определения высоты прибытия "
 "на аэродром."
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:95
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:96
 msgid "STF risk factor"
 msgstr "StF фактор риска"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:96
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:97
 msgid ""
 "The STF risk factor reduces the MacCready setting used to calculate speed to "
 "fly as the glider gets low, in order to compensate for risk. Set to 0.0 for "
@@ -6194,7 +6199,7 @@ msgid "Default radius or gate width of the start zone for new tasks."
 msgstr "Радиус или ширина ворот зоны старта по умолчанию для новой задачи"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:138
-#: src/Dialogs/Task/TaskPointDialog.cpp:348
+#: src/Dialogs/Task/TaskPointDialog.cpp:349
 msgid "Finish point"
 msgstr "Точка финиша"
 
@@ -7077,23 +7082,23 @@ msgstr "Внутренний радиус сектора OZ."
 msgid "Angle"
 msgstr "Угол"
 
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:101
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:109
 msgid "Turn Points"
 msgstr "Точка поворота"
 
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:126
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:129
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:205
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:236
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:134
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:137
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:213
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:244
 #: Data/Input/default.xci:381
 msgid "Task Manager"
 msgstr "Диспетчер задач"
 
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:202
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:210
 msgid "Validation Errors"
 msgstr "Ошибки валидации"
 
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:204
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:212
 msgid ""
 "Task not valid. Changes will be lost.\n"
 "Continue?"
@@ -7113,31 +7118,31 @@ msgstr "Задача не изменена"
 msgid "Revert Changes"
 msgstr "Отменить изменения"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:109
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:111
 msgid "Edit Point"
 msgstr "Редактировать точку"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:111
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:113
 msgid "Make Finish"
 msgstr "Обозначьте финиш"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:117
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:119
 msgid "Reverse"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:119
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:121
 msgid "Clear All"
 msgstr "Очистить всё"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:203
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:205
 msgid "Clear all points?"
 msgstr "Удалить все точки?"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:203
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:205
 msgid "Task edit"
 msgstr "Редактировать Задачу"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:226
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:228
 msgid "Add Turnpoint"
 msgstr "Добавить точку"
 
@@ -7200,116 +7205,131 @@ msgstr "Создать новую задачу?"
 msgid "Task New"
 msgstr "Новая Задача"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:144
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:135
 msgid "New Task"
 msgstr "Новое задание"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:145
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:136
 msgid "Declare"
 msgstr "Заявить"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:146
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:137
 msgid "Browse"
 msgstr "Просмотр"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:150
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:141
 #, fuzzy
 msgid "Download WeGlide task"
 msgstr "Скачать полет"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:77
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:144
+#, fuzzy
+msgid "My WeGlide tasks"
+msgstr "Скачать полет"
+
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:148
+#, fuzzy
+msgid "Public WeGlide tasks"
+msgstr "Скачать полет"
+
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:79
+#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:83
 msgid "Load"
 msgstr "Загрузить"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:78
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:80
 msgid "Rename"
 msgstr "Переимен."
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:80
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:295
-#: src/Monitor/AirspaceWarningMonitor.cpp:69
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:82
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:298
+#: src/Monitor/AirspaceWarningMonitor.cpp:70
 msgid "More"
 msgstr "Подробнее"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:190
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:193
 msgid "Load the selected task?"
 msgstr "Загрузить выбранную Задачу?"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:198
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:232
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:201
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:235
 msgid "Task Browser"
 msgstr "Обозреватель Задач"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:223
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:226
 msgid "Can't delete .CUP files"
 msgstr "Не могу удалить .CUP файлы"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:231
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:234
 msgid "Delete the selected task?"
 msgstr "Удалить выбранную Задачу?"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:269
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:272
 msgid "Can't rename .CUP files"
 msgstr "Не могу переименовать  .CUP файлы"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:269
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:272
 msgid "Rename Error"
 msgstr "Ошибка переименования"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:295
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:298
 msgid "Less"
 msgstr "Меньше"
 
-#: src/Dialogs/Task/OptionalStartsDialog.cpp:33
-#: src/Dialogs/Task/TaskPointDialog.cpp:225
-#: src/InfoBoxes/Panel/ATCReference.cpp:66
+#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:84
+msgid "Refresh"
+msgstr ""
+
+#: src/Dialogs/Task/OptionalStartsDialog.cpp:34
+#: src/Dialogs/Task/TaskPointDialog.cpp:226
+#: src/InfoBoxes/Panel/ATCReference.cpp:67
 msgid "Relocate"
 msgstr "Переместить"
 
-#: src/Dialogs/Task/OptionalStartsDialog.cpp:37
-#: src/Dialogs/Task/TaskPointDialog.cpp:222
+#: src/Dialogs/Task/OptionalStartsDialog.cpp:38
+#: src/Dialogs/Task/TaskPointDialog.cpp:223
 #: src/Dialogs/Weather/NOAAList.cpp:100 src/Dialogs/Weather/NOAAList.cpp:213
 #: src/Dialogs/Weather/NOAADetails.cpp:49
 #: src/Dialogs/Weather/NOAADetails.cpp:100
 msgid "Remove"
 msgstr "Удалить"
 
-#: src/Dialogs/Task/OptionalStartsDialog.cpp:116
+#: src/Dialogs/Task/OptionalStartsDialog.cpp:117
 msgid "(Add Alternate Start)"
 msgstr "(Добавить альтернативный старт)"
 
-#: src/Dialogs/Task/OptionalStartsDialog.cpp:179
+#: src/Dialogs/Task/OptionalStartsDialog.cpp:180
 msgid "Alternate Start Points"
 msgstr "Альтерн. старт. точки"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:195
-#: src/Dialogs/Task/TaskPointDialog.cpp:232
+#: src/Dialogs/Task/TaskPointDialog.cpp:196
+#: src/Dialogs/Task/TaskPointDialog.cpp:233
 msgid "Change Type"
 msgstr "Изменить Тип"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:241
-#: src/Dialogs/Task/TaskPointDialog.cpp:314
+#: src/Dialogs/Task/TaskPointDialog.cpp:242
+#: src/Dialogs/Task/TaskPointDialog.cpp:315
 msgid "Enable Alternate Starts"
 msgstr "Включить альтернативный старт"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:244
+#: src/Dialogs/Task/TaskPointDialog.cpp:245
 msgid "Score exit"
 msgstr ""
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:317
+#: src/Dialogs/Task/TaskPointDialog.cpp:318
 msgid "Edit Alternates"
 msgstr "Редактировать запасные"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:338
-#: src/Dialogs/Task/TaskPointDialog.cpp:409
+#: src/Dialogs/Task/TaskPointDialog.cpp:339
+#: src/Dialogs/Task/TaskPointDialog.cpp:410
 msgid "Task point"
 msgstr "Точка задания"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:343
+#: src/Dialogs/Task/TaskPointDialog.cpp:344
 msgid "Assigned area point"
 msgstr ""
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:409
+#: src/Dialogs/Task/TaskPointDialog.cpp:410
 msgid "Remove task point?"
 msgstr "Удалить \"задачную\" точку?"
 
@@ -7399,7 +7419,7 @@ msgstr "Стартовый сектор BGA"
 msgid "Enter a task name"
 msgstr "Введите имя задания"
 
-#: src/Dialogs/Task/TargetDialog.cpp:358
+#: src/Dialogs/Task/TargetDialog.cpp:360
 msgid ""
 "For AAT tasks, this setting can be used to adjust the target points within "
 "the AAT sectors.  Larger values move the target points to produce larger "
@@ -7410,12 +7430,12 @@ msgstr ""
 "сектора ААТ. Большая величина перемещает цели ААТ на большее расстояние, "
 "меньшая - приближает цели и снижает дальность задания ААТ."
 
-#: src/Dialogs/Task/TargetDialog.cpp:363 src/InfoBoxes/Content/Factory.cpp:948
+#: src/Dialogs/Task/TargetDialog.cpp:365 src/InfoBoxes/Content/Factory.cpp:948
 #, no-c-format
 msgid "Radial"
 msgstr "ОТстарта"
 
-#: src/Dialogs/Task/TargetDialog.cpp:365
+#: src/Dialogs/Task/TargetDialog.cpp:367
 msgid ""
 "For AAT tasks, this setting can be used to adjust the target points within "
 "the AAT sectors.  Positive values rotate the range line clockwise, negative "
@@ -7425,19 +7445,19 @@ msgstr ""
 "секторов ААТ. Положительные величины поворачивают линию дальности по часовой "
 "стрелке, негативные - против часовой стрелки"
 
-#: src/Dialogs/Task/TargetDialog.cpp:370
+#: src/Dialogs/Task/TargetDialog.cpp:372
 msgid "ETE"
 msgstr "Время"
 
-#: src/Dialogs/Task/TargetDialog.cpp:372
+#: src/Dialogs/Task/TargetDialog.cpp:374
 msgid "Estimated time en-route to the next AAT target."
 msgstr "Ожидаемое время на маршруте до следующей цели ААТ."
 
-#: src/Dialogs/Task/TargetDialog.cpp:374
+#: src/Dialogs/Task/TargetDialog.cpp:376
 msgid "Delta T"
 msgstr "Дельта Т"
 
-#: src/Dialogs/Task/TargetDialog.cpp:376
+#: src/Dialogs/Task/TargetDialog.cpp:378
 msgid ""
 "AAT Delta Time - Difference between estimated task time and AAT minimum "
 "time. Colored red if negative (expected arrival too early), or blue if in "
@@ -7445,15 +7465,15 @@ msgid ""
 "plus 5 minutes."
 msgstr ""
 
-#: src/Dialogs/Task/TargetDialog.cpp:378
+#: src/Dialogs/Task/TargetDialog.cpp:380
 msgid "V rem."
 msgstr ""
 
-#: src/Dialogs/Task/TargetDialog.cpp:382
+#: src/Dialogs/Task/TargetDialog.cpp:384
 msgid "V ach"
 msgstr ""
 
-#: src/Dialogs/Task/TargetDialog.cpp:384
+#: src/Dialogs/Task/TargetDialog.cpp:386
 #, fuzzy
 msgid ""
 "AA Speed - Assigned Area Task average speed achievable around target points "
@@ -7463,12 +7483,12 @@ msgstr ""
 "дистанции через назначенные пункты\r\n"
 " в минимальное назначенное время."
 
-#: src/Dialogs/Task/TargetDialog.cpp:389
+#: src/Dialogs/Task/TargetDialog.cpp:391
 msgid "Optimized"
 msgstr ""
 
-#: src/Dialogs/Task/AlternatesListDialog.cpp:156
-#: src/InfoBoxes/Content/Alternate.cpp:29 Data/Input/default.xci:411
+#: src/Dialogs/Task/AlternatesListDialog.cpp:157
+#: src/InfoBoxes/Content/Alternate.cpp:33 Data/Input/default.xci:411
 #: Data/Input/default.xci:1040
 #, no-c-format
 msgid "Alternates"
@@ -7585,7 +7605,7 @@ msgid "Master Volume"
 msgstr "Объем"
 
 #: src/Dialogs/Weather/NOAAList.cpp:99 src/Dialogs/Weather/NOAADetails.cpp:48
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:212
+#: src/Dialogs/Weather/MapOverlayWidget.cpp:211
 msgid "Update"
 msgstr "Обновить"
 
@@ -7613,39 +7633,39 @@ msgstr "Вы хотите удалить станцию %s?"
 msgid "This function is not available on your platform yet."
 msgstr "Эта функция ещэ не доступна на Вашей платформе."
 
-#: src/Monitor/AirspaceWarningMonitor.cpp:36
+#: src/Monitor/AirspaceWarningMonitor.cpp:37
 #, fuzzy
 msgid "Inside airspace"
 msgstr "Дополнительное воздушное пространство"
 
-#: src/Monitor/AirspaceWarningMonitor.cpp:38
+#: src/Monitor/AirspaceWarningMonitor.cpp:39
 #, fuzzy
 msgid "Near airspace"
 msgstr ""
 "Ближайшее\n"
 "Воздушное пространство"
 
-#: src/Monitor/TaskConstraintsMonitor.cpp:37
+#: src/Monitor/TaskConstraintsMonitor.cpp:38
 msgid "Maximum start speed exceeded"
 msgstr ""
 
-#: src/Monitor/TaskAdvanceMonitor.cpp:21
+#: src/Monitor/TaskAdvanceMonitor.cpp:22
 msgid "In sector, arm advance when ready"
 msgstr "В секторе отметки, укажите когда будете готовы"
 
-#: src/Monitor/TaskAdvanceMonitor.cpp:23
+#: src/Monitor/TaskAdvanceMonitor.cpp:24
 msgid "Arm"
 msgstr ""
 
-#: src/Monitor/TaskAdvanceMonitor.cpp:33 src/Monitor/MatTaskMonitor.cpp:42
+#: src/Monitor/TaskAdvanceMonitor.cpp:34 src/Monitor/MatTaskMonitor.cpp:44
 msgid "Dismiss"
 msgstr ""
 
-#: src/Monitor/MatTaskMonitor.cpp:30
+#: src/Monitor/MatTaskMonitor.cpp:32
 msgid "Add this turn point?"
 msgstr "Добавить эту поворотную точку?"
 
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:207
+#: src/Dialogs/Weather/MapOverlayWidget.cpp:206
 msgid "Use"
 msgstr ""
 
@@ -7653,33 +7673,33 @@ msgstr ""
 msgid "No METAR available"
 msgstr "Данные METAR не доступны"
 
-#: src/Weather/NOAAFormatter.cpp:115 src/Weather/NOAAFormatter.cpp:122
+#: src/Weather/NOAAFormatter.cpp:111 src/Weather/NOAAFormatter.cpp:117
 msgid "Dew Point"
 msgstr "Точка росы"
 
-#: src/Weather/NOAAFormatter.cpp:149
+#: src/Weather/NOAAFormatter.cpp:144
 msgid "Visibility"
 msgstr "Видимость"
 
-#: src/Weather/NOAAFormatter.cpp:154
+#: src/Weather/NOAAFormatter.cpp:149
 #, c-format
 msgid "more than %s"
 msgstr "более %s"
 
-#: src/Weather/NOAAFormatter.cpp:166
+#: src/Weather/NOAAFormatter.cpp:161
 msgid "Sky Conditions"
 msgstr ""
 
-#: src/Weather/NOAAFormatter.cpp:229
+#: src/Weather/NOAAFormatter.cpp:224
 #, c-format
 msgid "METAR for %s:"
 msgstr "METAR для %s:"
 
-#: src/Weather/NOAAFormatter.cpp:255
+#: src/Weather/NOAAFormatter.cpp:250
 msgid "No METAR available!"
 msgstr "Данные METAR не доступны!"
 
-#: src/Weather/NOAAFormatter.cpp:269
+#: src/Weather/NOAAFormatter.cpp:264
 msgid "No TAF available!"
 msgstr "Данные TAF не доступны!"
 
@@ -7902,7 +7922,7 @@ msgstr ""
 msgid "Next distance"
 msgstr "Следующая дистанция"
 
-#: src/InfoBoxes/Content/Factory.cpp:208 src/InfoBoxes/Content/Task.cpp:162
+#: src/InfoBoxes/Content/Factory.cpp:208 src/InfoBoxes/Content/Task.cpp:165
 #, no-c-format
 msgid "WP Dist"
 msgstr "МТ дист."
@@ -9600,7 +9620,7 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1009
-#: src/InfoBoxes/Content/Factory.cpp:1010 src/InfoBoxes/Content/Task.cpp:883
+#: src/InfoBoxes/Content/Factory.cpp:1010 src/InfoBoxes/Content/Task.cpp:886
 #, fuzzy, no-c-format
 msgid "Next arrow"
 msgstr "Следующая стартовая точка"
@@ -9825,7 +9845,24 @@ msgstr ""
 msgid "Engine Revolutions Per Minute."
 msgstr ""
 
-#: src/InfoBoxes/Content/Alternate.cpp:54
+#: src/InfoBoxes/Content/Factory.cpp:1125
+#, no-c-format
+msgid "AAT dT and task ETA"
+msgstr ""
+
+#: src/InfoBoxes/Content/Factory.cpp:1126
+#, no-c-format
+msgid "AATdeltaOrETA"
+msgstr ""
+
+#: src/InfoBoxes/Content/Factory.cpp:1127
+#, no-c-format
+msgid ""
+"Shows AAT delta time and estimated time of arrival in case of AAT task, and "
+"estimated time of arrival in case of racing task"
+msgstr ""
+
+#: src/InfoBoxes/Content/Alternate.cpp:58
 msgid "Altn {}"
 msgstr ""
 
@@ -9866,31 +9903,31 @@ msgstr "AC включён"
 msgid "No GPS"
 msgstr "Высота GPS"
 
-#: src/InfoBoxes/Content/Speed.cpp:96
+#: src/InfoBoxes/Content/Speed.cpp:98
 msgid "BLOCK"
 msgstr "БЛОК"
 
-#: src/InfoBoxes/Content/Speed.cpp:98
+#: src/InfoBoxes/Content/Speed.cpp:100
 msgid "DOLPHIN"
 msgstr "ДЕЛЬФИН"
 
-#: src/InfoBoxes/Content/Task.cpp:112
+#: src/InfoBoxes/Content/Task.cpp:115
 msgid "Next"
 msgstr "Следующий"
 
-#: src/InfoBoxes/Content/Task.cpp:671
+#: src/InfoBoxes/Content/Task.cpp:674
 msgid "Time Below"
 msgstr "Время вышло"
 
-#: src/InfoBoxes/Content/Task.cpp:799 src/InfoBoxes/Content/Task.cpp:844
+#: src/InfoBoxes/Content/Task.cpp:802 src/InfoBoxes/Content/Task.cpp:847
 msgid "Closed"
 msgstr "ЗАКРЫТО"
 
-#: src/InfoBoxes/Content/Task.cpp:808 src/InfoBoxes/Content/Task.cpp:853
+#: src/InfoBoxes/Content/Task.cpp:811 src/InfoBoxes/Content/Task.cpp:856
 msgid "Open"
 msgstr "Открыт"
 
-#: src/InfoBoxes/Content/Task.cpp:813 src/InfoBoxes/Content/Task.cpp:858
+#: src/InfoBoxes/Content/Task.cpp:816 src/InfoBoxes/Content/Task.cpp:861
 msgid "Waiting"
 msgstr "Ожидание"
 
@@ -9920,7 +9957,7 @@ msgid ""
 "are W declination, positive is E."
 msgstr ""
 
-#: src/MapWindow/GlueMapWindowItems.cpp:107
+#: src/MapWindow/GlueMapWindowItems.cpp:109
 msgid "There is nothing interesting near this location."
 msgstr "Нет ничего интересного вблизи этой местности."
 
@@ -10826,9 +10863,6 @@ msgstr ""
 
 #~ msgid "This allows switching on or off the automatic wind algorithm."
 #~ msgstr "Позволяет включать или выключать автоматический алгоритм ветра."
-
-#~ msgid "Loading Topography File..."
-#~ msgstr "Загрузка файла Топографии"
 
 #, no-c-format
 #~ msgid "Unkown"

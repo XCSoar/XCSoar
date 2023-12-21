@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-12 17:17+0200\n"
+"POT-Creation-Date: 2023-12-21 15:38+0100\n"
 "PO-Revision-Date: 2021-07-20 10:35+0000\n"
 "Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -21,11 +21,11 @@ msgstr ""
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
-#: src/Task/TaskStore.cpp:50 src/Menu/ExpandMacros.cpp:351
-#: src/Input/InputEventsSettings.cpp:295 src/Dialogs/dlgAnalysis.cpp:532
-#: src/Dialogs/dlgStatus.cpp:76
+#: src/Task/TaskStore.cpp:49 src/Menu/ExpandMacros.cpp:355
+#: src/Input/InputEventsSettings.cpp:296 src/Dialogs/dlgAnalysis.cpp:535
+#: src/Dialogs/dlgStatus.cpp:77
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:128
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:61
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:62
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:160
 #: Data/Input/default.xci:430 Data/Input/default.xci:1010
 #: Data/Input/default.xci:1048
@@ -407,7 +407,7 @@ msgstr "非MAT轉彎點"
 msgid "Wrong shape"
 msgstr ""
 
-#: src/Airspace/AirspaceGlue.cpp:71
+#: src/Airspace/AirspaceGlue.cpp:76
 msgid "Loading Airspace File..."
 msgstr "載入空域檔。。。"
 
@@ -444,27 +444,28 @@ msgstr "競賽ID"
 msgid "WeGlide Upload"
 msgstr "交通工具類型"
 
-#: src/net/client/WeGlide/UploadIGCFile.cpp:120
+#: src/net/client/WeGlide/UploadIGCFile.cpp:110
 #, fuzzy
 msgid "Upload Flight"
 msgstr "下載飛行"
 
-#: src/net/client/WeGlide/UploadIGCFile.cpp:141 src/Dialogs/FileManager.cpp:448
-#: src/Dialogs/FileManager.cpp:735 src/Dialogs/Device/DeviceListDialog.cpp:454
+#: src/net/client/WeGlide/UploadIGCFile.cpp:132 src/Dialogs/FileManager.cpp:448
+#: src/Dialogs/FileManager.cpp:735 src/Dialogs/Device/DeviceListDialog.cpp:475
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:72
 #: src/Dialogs/Plane/PlaneListDialog.cpp:198
 #: src/Dialogs/Plane/PlaneListDialog.cpp:223
 #: src/Dialogs/Plane/PlaneListDialog.cpp:268
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:40
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:50
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:78
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:84
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:118
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:124
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:158
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:168
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:119
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:223
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:42
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:52
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:80
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:86
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:120
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:126
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:160
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:170
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:110
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:226
+#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:210
 #: src/Dialogs/Weather/NOAAList.cpp:167 src/Dialogs/Weather/NOAAList.cpp:173
 #: src/Dialogs/Weather/NOAADetails.cpp:137
 #: src/Dialogs/DownloadFilePicker.cpp:307
@@ -494,13 +495,13 @@ msgstr "致命問題"
 
 #. valid but unknown number of sats
 #: src/FLARM/Error.cpp:21 src/FLARM/Error.cpp:51
-#: src/Renderer/MapItemListRenderer.cpp:349
+#: src/Renderer/MapItemListRenderer.cpp:347
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:15
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:24
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:32
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:111
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:41
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:72
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:42
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:73
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:40
 #, no-c-format
 msgid "Unknown"
@@ -574,20 +575,20 @@ msgstr "開始記錄"
 msgid "Stop Logger"
 msgstr "停止記錄"
 
-#: src/Logger/ExternalLogger.cpp:65
+#: src/Logger/ExternalLogger.cpp:66
 msgid "Declare task?"
 msgstr "申報任務？"
 
-#: src/Logger/ExternalLogger.cpp:77 src/Logger/ExternalLogger.cpp:122
+#: src/Logger/ExternalLogger.cpp:78 src/Logger/ExternalLogger.cpp:123
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
 msgid "Declare task"
 msgstr "申報任務"
 
-#: src/Logger/ExternalLogger.cpp:83
+#: src/Logger/ExternalLogger.cpp:84
 msgid "Task declared!"
 msgstr "任務已申報！"
 
-#: src/Logger/ExternalLogger.cpp:88 src/Logger/ExternalLogger.cpp:100
+#: src/Logger/ExternalLogger.cpp:89 src/Logger/ExternalLogger.cpp:101
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
@@ -595,41 +596,41 @@ msgstr ""
 "發生錯誤,\n"
 "任務未申報!"
 
-#: src/Logger/ExternalLogger.cpp:121
+#: src/Logger/ExternalLogger.cpp:122
 msgid "No logger connected"
 msgstr "記錄器未連接"
 
-#: src/Logger/ExternalLogger.cpp:253 src/Logger/ExternalLogger.cpp:263
+#: src/Logger/ExternalLogger.cpp:254 src/Logger/ExternalLogger.cpp:264
 msgid "Failed to download flight list."
 msgstr "下載飛行列表失敗。"
 
-#: src/Logger/ExternalLogger.cpp:254 src/Logger/ExternalLogger.cpp:265
-#: src/Logger/ExternalLogger.cpp:272 src/Logger/ExternalLogger.cpp:295
-#: src/Logger/ExternalLogger.cpp:306 src/Logger/ExternalLogger.cpp:328
-#: src/Logger/ExternalLogger.cpp:343
+#: src/Logger/ExternalLogger.cpp:255 src/Logger/ExternalLogger.cpp:266
+#: src/Logger/ExternalLogger.cpp:273 src/Logger/ExternalLogger.cpp:296
+#: src/Logger/ExternalLogger.cpp:307 src/Logger/ExternalLogger.cpp:329
+#: src/Logger/ExternalLogger.cpp:344
 msgid "Download flight"
 msgstr "下載飛行"
 
-#: src/Logger/ExternalLogger.cpp:271
+#: src/Logger/ExternalLogger.cpp:272
 msgid "Logger is empty."
 msgstr "記錄器空。"
 
-#: src/Logger/ExternalLogger.cpp:294 src/Logger/ExternalLogger.cpp:304
+#: src/Logger/ExternalLogger.cpp:295 src/Logger/ExternalLogger.cpp:305
 msgid "Failed to download flight."
 msgstr "下載飛行失敗。"
 
 #. ask whether this IGC should be uploaded to WeGlide
-#: src/Logger/ExternalLogger.cpp:336
+#: src/Logger/ExternalLogger.cpp:337
 #, fuzzy
 msgid "Do you want to upload this flight to WeGlide?"
 msgstr "您想下載另一個飛行？"
 
-#: src/Logger/ExternalLogger.cpp:337
+#: src/Logger/ExternalLogger.cpp:338
 #, fuzzy
 msgid "Upload flight"
 msgstr "下載飛行"
 
-#: src/Logger/ExternalLogger.cpp:342
+#: src/Logger/ExternalLogger.cpp:343
 msgid "Do you want to download another flight?"
 msgstr "您想下載另一個飛行？"
 
@@ -637,13 +638,13 @@ msgstr "您想下載另一個飛行？"
 msgid "Not moving"
 msgstr "不移動"
 
-#: src/Gauge/ThermalAssistantRenderer.cpp:182
+#: src/Gauge/ThermalAssistantRenderer.cpp:180
 msgid "Not Circling"
 msgstr "不盤轉"
 
 #: src/Gauge/BigThermalAssistantWidget.cpp:56
-#: src/Gauge/BigTrafficWidget.cpp:581 src/Dialogs/FileManager.cpp:745
-#: src/Dialogs/Device/DeviceListDialog.cpp:722
+#: src/Gauge/BigTrafficWidget.cpp:583 src/Dialogs/FileManager.cpp:745
+#: src/Dialogs/Device/DeviceListDialog.cpp:766
 #: src/Dialogs/Device/PortMonitor.cpp:166
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:139
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:85
@@ -651,42 +652,42 @@ msgstr "不盤轉"
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:87
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:75
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:64
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:107
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:109
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:136
-#: src/Dialogs/MapItemListDialog.cpp:157
+#: src/Dialogs/MapItemListDialog.cpp:158
 #: src/Dialogs/Airspace/dlgAirspace.cpp:144
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:106
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:105
 #: src/Dialogs/Airspace/AirspaceList.cpp:134
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:470
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:21
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:254
-#: src/Dialogs/Traffic/TrafficList.cpp:345
+#: src/Dialogs/Traffic/TrafficList.cpp:347
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:329
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:205 src/Dialogs/dlgAnalysis.cpp:288
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:207 src/Dialogs/dlgAnalysis.cpp:290
 #: src/Dialogs/ProfileListDialog.cpp:316
 #: src/Dialogs/Plane/PlaneListDialog.cpp:360 src/Dialogs/HelpDialog.cpp:30
-#: src/Dialogs/dlgInfoBoxAccess.cpp:95 src/Dialogs/ReplayDialog.cpp:95
-#: src/Dialogs/dlgStatus.cpp:41 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:423
-#: src/Dialogs/Waypoint/Manager.cpp:285
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:109
+#: src/Dialogs/dlgInfoBoxAccess.cpp:95 src/Dialogs/ReplayDialog.cpp:97
+#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:425
+#: src/Dialogs/Waypoint/Manager.cpp:287
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:117
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:69
-#: src/Dialogs/Task/OptionalStartsDialog.cpp:41
-#: src/Dialogs/Task/TaskPointDialog.cpp:511
-#: src/Dialogs/Task/TargetDialog.cpp:393
-#: src/Dialogs/Task/AlternatesListDialog.cpp:121
+#: src/Dialogs/Task/OptionalStartsDialog.cpp:42
+#: src/Dialogs/Task/TaskPointDialog.cpp:514
+#: src/Dialogs/Task/TargetDialog.cpp:395
+#: src/Dialogs/Task/AlternatesListDialog.cpp:122
 #: src/Dialogs/KnobTextEntry.cpp:225 src/Dialogs/Weather/WeatherDialog.cpp:41
 #: src/Dialogs/Weather/PCMetDialog.cpp:36
 #: src/Dialogs/Weather/NOAADetails.cpp:123
 msgid "Close"
 msgstr "關閉"
 
-#: src/Gauge/FlarmTrafficWindow.cpp:215
+#: src/Gauge/FlarmTrafficWindow.cpp:209
 msgid "No Traffic"
 msgstr "沒有交通"
 
-#: src/Gauge/BigTrafficWidget.cpp:281 src/Gauge/BigTrafficWidget.cpp:282
-#: src/Renderer/MapItemListRenderer.cpp:360
-#: src/Dialogs/Device/DeviceListDialog.cpp:396
+#: src/Gauge/BigTrafficWidget.cpp:284 src/Gauge/BigTrafficWidget.cpp:285
+#: src/Renderer/MapItemListRenderer.cpp:356
+#: src/Dialogs/Device/DeviceListDialog.cpp:421
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:18
 #: src/Dialogs/Settings/dlgConfiguration.cpp:99
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:117
@@ -695,92 +696,92 @@ msgstr "沒有交通"
 msgid "Vario"
 msgstr "高度計"
 
-#: src/Gauge/BigTrafficWidget.cpp:361 src/Renderer/MapItemListRenderer.cpp:59
+#: src/Gauge/BigTrafficWidget.cpp:363 src/Renderer/MapItemListRenderer.cpp:59
 #: src/Renderer/MapItemListRenderer.cpp:65
 #: src/Renderer/WaypointListRenderer.cpp:134
-#: src/Renderer/FlightStatisticsRenderer.cpp:188
-#: src/Renderer/FlightStatisticsRenderer.cpp:207
-#: src/Renderer/FlightStatisticsRenderer.cpp:234
+#: src/Renderer/FlightStatisticsRenderer.cpp:208
+#: src/Renderer/FlightStatisticsRenderer.cpp:227
+#: src/Renderer/FlightStatisticsRenderer.cpp:254
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:51
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:82
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:81
 #: src/Dialogs/Airspace/AirspaceList.cpp:402
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:115
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:75
-#: src/Dialogs/Waypoint/WaypointList.cpp:390
+#: src/Dialogs/Waypoint/WaypointList.cpp:386
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:143
-#: src/Dialogs/Task/TargetDialog.cpp:356
+#: src/Dialogs/Task/TargetDialog.cpp:358
 msgid "Distance"
 msgstr "距離"
 
-#: src/Gauge/BigTrafficWidget.cpp:405 src/Gauge/BigTrafficWidget.cpp:407
+#: src/Gauge/BigTrafficWidget.cpp:407 src/Gauge/BigTrafficWidget.cpp:409
 msgid "Rel. Alt."
 msgstr "真實高度。"
 
-#: src/Gauge/BigTrafficWidget.cpp:578 src/Dialogs/MapItemListDialog.cpp:143
+#: src/Gauge/BigTrafficWidget.cpp:580 src/Dialogs/MapItemListDialog.cpp:144
 #: src/Dialogs/Airspace/AirspaceList.cpp:130
-#: src/Dialogs/Traffic/TrafficList.cpp:343
-#: src/Dialogs/Task/TaskPointDialog.cpp:219
-#: src/Dialogs/Task/AlternatesListDialog.cpp:107
-#: src/Dialogs/Weather/NOAAList.cpp:97 src/InfoBoxes/Content/Task.cpp:47
+#: src/Dialogs/Traffic/TrafficList.cpp:345
+#: src/Dialogs/Task/TaskPointDialog.cpp:220
+#: src/Dialogs/Task/AlternatesListDialog.cpp:108
+#: src/Dialogs/Weather/NOAAList.cpp:97 src/InfoBoxes/Content/Task.cpp:50
 #, no-c-format
 msgid "Details"
 msgstr "詳細"
 
-#: src/Menu/ExpandMacros.cpp:63 src/Menu/ExpandMacros.cpp:96
-#: src/Menu/ExpandMacros.cpp:118
+#: src/Menu/ExpandMacros.cpp:65 src/Menu/ExpandMacros.cpp:98
+#: src/Menu/ExpandMacros.cpp:120
 msgid "Next Turnpoint"
 msgstr "下一轉彎點"
 
-#: src/Menu/ExpandMacros.cpp:67 src/Menu/ExpandMacros.cpp:104
-#: src/Menu/ExpandMacros.cpp:141
+#: src/Menu/ExpandMacros.cpp:69 src/Menu/ExpandMacros.cpp:106
+#: src/Menu/ExpandMacros.cpp:143
 msgid "Previous Turnpoint"
 msgstr "上一轉彎點"
 
-#: src/Menu/ExpandMacros.cpp:74
+#: src/Menu/ExpandMacros.cpp:76
 msgid "Furthest Landpoint"
 msgstr "最遠著陸點"
 
-#: src/Menu/ExpandMacros.cpp:75
+#: src/Menu/ExpandMacros.cpp:77
 msgid "Next Landpoint"
 msgstr "下一著陸點"
 
-#: src/Menu/ExpandMacros.cpp:81
+#: src/Menu/ExpandMacros.cpp:83
 msgid "Closest Landpoint"
 msgstr "最近著陸點"
 
-#: src/Menu/ExpandMacros.cpp:82
+#: src/Menu/ExpandMacros.cpp:84
 msgid "Previous Landpoint"
 msgstr "前一著陸點"
 
-#: src/Menu/ExpandMacros.cpp:95 src/Menu/ExpandMacros.cpp:117
+#: src/Menu/ExpandMacros.cpp:97 src/Menu/ExpandMacros.cpp:119
 msgid "Finish Turnpoint"
 msgstr "完成轉彎點"
 
-#: src/Menu/ExpandMacros.cpp:99 src/Menu/ExpandMacros.cpp:136
+#: src/Menu/ExpandMacros.cpp:101 src/Menu/ExpandMacros.cpp:138
 msgid "Next Startpoint"
 msgstr "下一開始點"
 
-#: src/Menu/ExpandMacros.cpp:103 src/Menu/ExpandMacros.cpp:140
+#: src/Menu/ExpandMacros.cpp:105 src/Menu/ExpandMacros.cpp:142
 msgid "Start Turnpoint"
 msgstr "開始轉彎點"
 
-#: src/Menu/ExpandMacros.cpp:121
+#: src/Menu/ExpandMacros.cpp:123
 msgid "Arm start"
 msgstr "開始準備"
 
-#: src/Menu/ExpandMacros.cpp:124
+#: src/Menu/ExpandMacros.cpp:126
 msgid "Arm turn"
 msgstr "轉彎準備"
 
-#: src/Menu/ExpandMacros.cpp:145
+#: src/Menu/ExpandMacros.cpp:147
 msgid "Disarm start"
 msgstr "解除開始準備"
 
-#: src/Menu/ExpandMacros.cpp:148
+#: src/Menu/ExpandMacros.cpp:150
 msgid "Disarm turn"
 msgstr "解除轉彎"
 
-#: src/Menu/ExpandMacros.cpp:157
+#: src/Menu/ExpandMacros.cpp:159
 msgid ""
 "Advance\n"
 "(manual)"
@@ -788,7 +789,7 @@ msgstr ""
 "高級\n"
 "(手冊)"
 
-#: src/Menu/ExpandMacros.cpp:161
+#: src/Menu/ExpandMacros.cpp:163
 msgid ""
 "Advance\n"
 "(auto)"
@@ -796,7 +797,7 @@ msgstr ""
 "高級\n"
 "(自動)"
 
-#: src/Menu/ExpandMacros.cpp:164
+#: src/Menu/ExpandMacros.cpp:166
 msgid ""
 "Abort\n"
 "Start"
@@ -804,7 +805,7 @@ msgstr ""
 "終止\n"
 "開始"
 
-#: src/Menu/ExpandMacros.cpp:167
+#: src/Menu/ExpandMacros.cpp:169
 msgid ""
 "Arm\n"
 "Start"
@@ -812,7 +813,7 @@ msgstr ""
 "準備\n"
 "開始"
 
-#: src/Menu/ExpandMacros.cpp:170
+#: src/Menu/ExpandMacros.cpp:172
 msgid ""
 "Abort\n"
 "Turn"
@@ -820,7 +821,7 @@ msgstr ""
 "終止\n"
 "轉彎"
 
-#: src/Menu/ExpandMacros.cpp:173
+#: src/Menu/ExpandMacros.cpp:175
 msgid ""
 "Arm\n"
 "Turn"
@@ -828,24 +829,24 @@ msgstr ""
 "準備\n"
 "轉彎"
 
-#: src/Menu/ExpandMacros.cpp:182 src/Menu/ExpandMacros.cpp:186
+#: src/Menu/ExpandMacros.cpp:184 src/Menu/ExpandMacros.cpp:188
 #: src/Dialogs/Device/PortMonitor.cpp:145
 msgid "Resume"
 msgstr "摘要"
 
-#: src/Menu/ExpandMacros.cpp:183 src/Menu/ExpandMacros.cpp:187
+#: src/Menu/ExpandMacros.cpp:185 src/Menu/ExpandMacros.cpp:189
 #: src/Dialogs/Message.cpp:100
 msgid "Abort"
 msgstr "終止"
 
-#: src/Menu/ExpandMacros.cpp:207 src/Menu/ExpandMacros.cpp:339
-#: src/Menu/ExpandMacros.cpp:360 src/Menu/ExpandMacros.cpp:410
+#: src/Menu/ExpandMacros.cpp:209 src/Menu/ExpandMacros.cpp:343
+#: src/Menu/ExpandMacros.cpp:364 src/Menu/ExpandMacros.cpp:414
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:176
 msgid "Manual"
 msgstr "手冊"
 
-#: src/Menu/ExpandMacros.cpp:207 src/Menu/ExpandMacros.cpp:339
-#: src/Menu/ExpandMacros.cpp:360 src/Menu/ExpandMacros.cpp:410
+#: src/Menu/ExpandMacros.cpp:209 src/Menu/ExpandMacros.cpp:343
+#: src/Menu/ExpandMacros.cpp:364 src/Menu/ExpandMacros.cpp:414
 #: src/PageSettings.cpp:50 src/PageSettings.cpp:53
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:42
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:29
@@ -859,55 +860,55 @@ msgstr "手冊"
 msgid "Auto"
 msgstr "自動"
 
-#: src/Menu/ExpandMacros.cpp:209
+#: src/Menu/ExpandMacros.cpp:211
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:24
 #, no-c-format
 msgid "Track up"
 msgstr "追蹤"
 
-#: src/Menu/ExpandMacros.cpp:209
+#: src/Menu/ExpandMacros.cpp:211
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:28
 #, no-c-format
 msgid "North up"
 msgstr "北為上"
 
-#: src/Menu/ExpandMacros.cpp:293 src/Dialogs/Settings/dlgBasicSettings.cpp:120
-#: src/Dialogs/ReplayDialog.cpp:28
+#: src/Menu/ExpandMacros.cpp:297 src/Dialogs/Settings/dlgBasicSettings.cpp:120
+#: src/Dialogs/ReplayDialog.cpp:30
 msgid "Stop"
 msgstr "停止"
 
-#: src/Menu/ExpandMacros.cpp:294 src/Dialogs/ReplayDialog.cpp:27
+#: src/Menu/ExpandMacros.cpp:298 src/Dialogs/ReplayDialog.cpp:29
 msgid "Start"
 msgstr "開始"
 
-#: src/Menu/ExpandMacros.cpp:298
+#: src/Menu/ExpandMacros.cpp:302
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:73
 #, no-c-format
 msgid "Long"
 msgstr "長"
 
-#: src/Menu/ExpandMacros.cpp:301
+#: src/Menu/ExpandMacros.cpp:305
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:74
 #, no-c-format
 msgid "Short"
 msgstr "短"
 
-#: src/Menu/ExpandMacros.cpp:304
+#: src/Menu/ExpandMacros.cpp:308
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:75
 #, no-c-format
 msgid "Full"
 msgstr "完全"
 
-#: src/Menu/ExpandMacros.cpp:307 src/Menu/ExpandMacros.cpp:312
-#: src/Menu/ExpandMacros.cpp:337 src/Menu/ExpandMacros.cpp:362
-#: src/Menu/ExpandMacros.cpp:408 src/Input/InputEventsSettings.cpp:438
-#: src/Input/InputEventsSettings.cpp:441
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:93
+#: src/Menu/ExpandMacros.cpp:311 src/Menu/ExpandMacros.cpp:316
+#: src/Menu/ExpandMacros.cpp:341 src/Menu/ExpandMacros.cpp:366
+#: src/Menu/ExpandMacros.cpp:412 src/Input/InputEventsSettings.cpp:439
+#: src/Input/InputEventsSettings.cpp:442
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:95
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:25
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:36
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:172
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:161
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:43
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:44
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:111
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:141
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:65
@@ -921,14 +922,14 @@ msgstr "完全"
 msgid "Off"
 msgstr "關"
 
-#: src/Menu/ExpandMacros.cpp:312 src/Menu/ExpandMacros.cpp:337
-#: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:408
-#: src/Input/InputEventsSettings.cpp:436 src/Input/InputEventsSettings.cpp:441
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:92
+#: src/Menu/ExpandMacros.cpp:316 src/Menu/ExpandMacros.cpp:341
+#: src/Menu/ExpandMacros.cpp:366 src/Menu/ExpandMacros.cpp:412
+#: src/Input/InputEventsSettings.cpp:437 src/Input/InputEventsSettings.cpp:442
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:94
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:27
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:173
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:163
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:41
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:42
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:66
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:245
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:12
@@ -936,47 +937,47 @@ msgstr "關"
 msgid "On"
 msgstr "開"
 
-#: src/Menu/ExpandMacros.cpp:323
+#: src/Menu/ExpandMacros.cpp:327
 msgid "Topography On"
 msgstr "打開地貌"
 
-#: src/Menu/ExpandMacros.cpp:326
+#: src/Menu/ExpandMacros.cpp:330
 msgid "Terrain On"
 msgstr "打開地形"
 
-#: src/Menu/ExpandMacros.cpp:329
+#: src/Menu/ExpandMacros.cpp:333
 msgid "Terrain + Topography"
 msgstr "地形+地貌"
 
-#: src/Menu/ExpandMacros.cpp:332
+#: src/Menu/ExpandMacros.cpp:336
 msgid "Terrain Off"
 msgstr "關閉地形"
 
-#: src/Menu/ExpandMacros.cpp:342 src/Menu/ExpandMacros.cpp:344
-#: src/Menu/ExpandMacros.cpp:346
+#: src/Menu/ExpandMacros.cpp:346 src/Menu/ExpandMacros.cpp:348
+#: src/Menu/ExpandMacros.cpp:350
 #, fuzzy
 msgid "Hide"
 msgstr "隱藏信息"
 
-#: src/Menu/ExpandMacros.cpp:342 src/Menu/ExpandMacros.cpp:344
-#: src/Menu/ExpandMacros.cpp:346
+#: src/Menu/ExpandMacros.cpp:346 src/Menu/ExpandMacros.cpp:348
+#: src/Menu/ExpandMacros.cpp:350
 #, fuzzy
 msgid "Show"
 msgstr "顯示錯誤"
 
-#: src/Menu/ExpandMacros.cpp:349 src/Input/InputEventsSettings.cpp:293
+#: src/Menu/ExpandMacros.cpp:353 src/Input/InputEventsSettings.cpp:294
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:65
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:128
 #, no-c-format
 msgid "All"
 msgstr "所有"
 
-#: src/Menu/ExpandMacros.cpp:350 src/Input/InputEventsSettings.cpp:294
+#: src/Menu/ExpandMacros.cpp:354 src/Input/InputEventsSettings.cpp:295
 #, no-c-format
 msgid "Task & Landables"
 msgstr "任務和可著陸區"
 
-#: src/Menu/ExpandMacros.cpp:352 src/Input/InputEventsSettings.cpp:296
+#: src/Menu/ExpandMacros.cpp:356 src/Input/InputEventsSettings.cpp:297
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:172
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:63
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:38
@@ -990,50 +991,50 @@ msgstr "任務和可著陸區"
 msgid "None"
 msgstr "沒有"
 
-#: src/Menu/ExpandMacros.cpp:353 src/Input/InputEventsSettings.cpp:297
+#: src/Menu/ExpandMacros.cpp:357 src/Input/InputEventsSettings.cpp:298
 #, no-c-format
 msgid "Task & Airfields"
 msgstr "任務和機場"
 
-#: src/Input/InputEventsActions.cpp:136
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:272
-#: src/Dialogs/Waypoint/Manager.cpp:247
+#: src/Input/InputEventsActions.cpp:139
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:275
+#: src/Dialogs/Waypoint/Manager.cpp:249
 msgid "Failed to save waypoints"
 msgstr "保存航點失敗"
 
-#: src/Input/InputEventsActions.cpp:220 src/Input/InputEventsActions.cpp:478
+#: src/Input/InputEventsActions.cpp:227 src/Input/InputEventsActions.cpp:489
 msgid "Logger Error"
 msgstr "記錄器錯誤"
 
-#: src/Input/InputEventsActions.cpp:249
+#: src/Input/InputEventsActions.cpp:256
 msgid "Screen Mode Full"
 msgstr "全屏模式"
 
-#: src/Input/InputEventsActions.cpp:251
+#: src/Input/InputEventsActions.cpp:258
 msgid "Auxiliary InfoBoxes"
 msgstr "輔助資訊框"
 
-#: src/Input/InputEventsActions.cpp:253
+#: src/Input/InputEventsActions.cpp:260
 msgid "Default InfoBoxes"
 msgstr "缺省信息框"
 
-#: src/Input/InputEventsActions.cpp:360
+#: src/Input/InputEventsActions.cpp:367
 msgid "No active waypoint!"
 msgstr "沒有啟動航點！"
 
-#: src/Input/InputEventsActions.cpp:464
+#: src/Input/InputEventsActions.cpp:475
 msgid "NMEA log on"
 msgstr "打開NMEA記錄"
 
-#: src/Input/InputEventsActions.cpp:466
+#: src/Input/InputEventsActions.cpp:477
 msgid "NMEA log off"
 msgstr "關閉NMEA記錄"
 
-#: src/Input/InputEventsActions.cpp:470
+#: src/Input/InputEventsActions.cpp:481
 msgid "Logger on"
 msgstr "打開記錄器"
 
-#: src/Input/InputEventsActions.cpp:472
+#: src/Input/InputEventsActions.cpp:483
 msgid "Logger off"
 msgstr "關閉記錄器"
 
@@ -1053,43 +1054,43 @@ msgstr "盤轉時放大"
 msgid "Circling zoom off"
 msgstr "盤轉時縮小"
 
-#: src/Input/InputEventsAirspace.cpp:43
+#: src/Input/InputEventsAirspace.cpp:45
 msgid "Show airspace off"
 msgstr "關閉空域顯示"
 
-#: src/Input/InputEventsAirspace.cpp:45
+#: src/Input/InputEventsAirspace.cpp:47
 msgid "Show airspace on"
 msgstr "打開空域顯示"
 
-#: src/Input/InputEventsTask.cpp:60
+#: src/Input/InputEventsTask.cpp:62
 msgid "Advance manually"
 msgstr "手動提前"
 
-#: src/Input/InputEventsTask.cpp:63
+#: src/Input/InputEventsTask.cpp:65
 msgid "Advance automatically"
 msgstr "自動提前"
 
-#: src/Input/InputEventsTask.cpp:66
+#: src/Input/InputEventsTask.cpp:68
 msgid "Ready to start"
 msgstr "準備開始"
 
-#: src/Input/InputEventsTask.cpp:69
+#: src/Input/InputEventsTask.cpp:71
 msgid "Hold start"
 msgstr "保持起動"
 
-#: src/Input/InputEventsTask.cpp:72
+#: src/Input/InputEventsTask.cpp:74
 msgid "Ready to turn"
 msgstr "準備轉彎"
 
-#: src/Input/InputEventsTask.cpp:75
+#: src/Input/InputEventsTask.cpp:77
 msgid "Hold turn"
 msgstr "保持轉彎"
 
-#: src/Input/InputEventsTask.cpp:141
+#: src/Input/InputEventsTask.cpp:143
 msgid "Auto. MacCready on"
 msgstr "MacCready自動打開"
 
-#: src/Input/InputEventsTask.cpp:143
+#: src/Input/InputEventsTask.cpp:145
 msgid "Auto. MacCready off"
 msgstr "MacCready自動關閉"
 
@@ -1097,25 +1098,26 @@ msgstr "MacCready自動關閉"
 msgid "MacCready "
 msgstr "MacCready參數 "
 
-#: src/Input/InputEventsTask.cpp:209
+#: src/Input/InputEventsTask.cpp:210
 msgid "Task aborted"
 msgstr "任務中止"
 
-#: src/Input/InputEventsTask.cpp:212
+#: src/Input/InputEventsTask.cpp:213
 msgid "Go to target"
 msgstr "進入目標"
 
-#: src/Input/InputEventsTask.cpp:215
+#: src/Input/InputEventsTask.cpp:216
 msgid "Ordered task"
 msgstr "安排好的任務"
 
-#: src/Input/InputEventsTask.cpp:218
-#: src/Renderer/FlightStatisticsRenderer.cpp:302
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:119
+#: src/Input/InputEventsTask.cpp:219
+#: src/Renderer/FlightStatisticsRenderer.cpp:346
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:110
+#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:210
 msgid "No task"
 msgstr "沒有任務"
 
-#: src/Input/InputEventsTask.cpp:301 src/Renderer/MapItemListRenderer.cpp:354
+#: src/Input/InputEventsTask.cpp:304 src/Renderer/MapItemListRenderer.cpp:352
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:26
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:308
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:116
@@ -1127,10 +1129,10 @@ msgstr "沒有任務"
 msgid "Altitude"
 msgstr "高度"
 
-#: src/Input/InputEventsTask.cpp:303
-#: src/Renderer/FlightStatisticsRenderer.cpp:194
-#: src/Renderer/FlightStatisticsRenderer.cpp:213
-#: src/Renderer/FlightStatisticsRenderer.cpp:239
+#: src/Input/InputEventsTask.cpp:306
+#: src/Renderer/FlightStatisticsRenderer.cpp:214
+#: src/Renderer/FlightStatisticsRenderer.cpp:233
+#: src/Renderer/FlightStatisticsRenderer.cpp:259
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:60
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:67
 msgid "Speed"
@@ -1139,84 +1141,84 @@ msgstr "速度"
 #. Important: all pages after Units in this list must not have data fields that are
 #. unit-dependent because they will be saved after their units may have changed.
 #. ToDo: implement API that controls order in which pages are saved
-#: src/Input/InputEventsTask.cpp:305
-#: src/Renderer/FlightStatisticsRenderer.cpp:192
-#: src/Renderer/FlightStatisticsRenderer.cpp:211
-#: src/Renderer/FlightStatisticsRenderer.cpp:237
+#: src/Input/InputEventsTask.cpp:308
+#: src/Renderer/FlightStatisticsRenderer.cpp:212
+#: src/Renderer/FlightStatisticsRenderer.cpp:231
+#: src/Renderer/FlightStatisticsRenderer.cpp:257
 #: src/Dialogs/Settings/dlgConfiguration.cpp:126
 #: src/Dialogs/Weather/RASPDialog.cpp:129
 #, no-c-format
 msgid "Time"
 msgstr "時間"
 
-#: src/Input/InputEventsTask.cpp:308
+#: src/Input/InputEventsTask.cpp:311
 msgid "Task start"
 msgstr "任務開始"
 
-#: src/Input/InputEventsTask.cpp:310
+#: src/Input/InputEventsTask.cpp:313
 msgid "Next turnpoint"
 msgstr "下一轉彎點"
 
-#: src/Input/InputEventsTask.cpp:312
+#: src/Input/InputEventsTask.cpp:315
 msgid "Task finished"
 msgstr "完成任務"
 
-#: src/Input/InputEventsSettings.cpp:39
+#: src/Input/InputEventsSettings.cpp:40
 msgid "Vario sounds on"
 msgstr "打開高度計聲音"
 
-#: src/Input/InputEventsSettings.cpp:41
+#: src/Input/InputEventsSettings.cpp:42
 msgid "Vario sounds off"
 msgstr "關閉高度計聲音"
 
-#: src/Input/InputEventsSettings.cpp:69
+#: src/Input/InputEventsSettings.cpp:70
 msgid "Snail trail off"
 msgstr "關閉尾跡"
 
-#: src/Input/InputEventsSettings.cpp:73
+#: src/Input/InputEventsSettings.cpp:74
 msgid "Long snail trail"
 msgstr "長尾跡"
 
-#: src/Input/InputEventsSettings.cpp:77
+#: src/Input/InputEventsSettings.cpp:78
 msgid "Short snail trail"
 msgstr "短尾跡"
 
-#: src/Input/InputEventsSettings.cpp:81
+#: src/Input/InputEventsSettings.cpp:82
 msgid "Full snail trail"
 msgstr "全尾跡"
 
-#: src/Input/InputEventsSettings.cpp:183
+#: src/Input/InputEventsSettings.cpp:184
 msgid "Bugs performance"
 msgstr "錯誤性能"
 
-#: src/Input/InputEventsSettings.cpp:226
+#: src/Input/InputEventsSettings.cpp:227
 #, no-c-format
 msgid "Ballast %"
 msgstr "配重%"
 
-#: src/Input/InputEventsSettings.cpp:262 src/Dialogs/ProfileListDialog.cpp:211
+#: src/Input/InputEventsSettings.cpp:263 src/Dialogs/ProfileListDialog.cpp:211
 #: src/Dialogs/ProfileListDialog.cpp:256
 #: src/Dialogs/Plane/PlaneListDialog.cpp:244
 #: src/Dialogs/Plane/PlaneListDialog.cpp:294
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:33
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:71
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:111
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:151
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:193
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:35
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:73
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:113
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:153
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:201
 msgid "Failed to save file."
 msgstr "保存檔失敗。"
 
-#: src/Input/InputEventsSettings.cpp:285 src/InfoBoxes/Content/Factory.cpp:528
+#: src/Input/InputEventsSettings.cpp:286 src/InfoBoxes/Content/Factory.cpp:528
 #, no-c-format
 msgid "Forecast temperature"
 msgstr "預報溫度"
 
-#: src/Input/InputEventsSettings.cpp:316
+#: src/Input/InputEventsSettings.cpp:317
 msgid "Waypoint labels"
 msgstr "航點標識"
 
-#: src/Input/InputEventsSettings.cpp:443
+#: src/Input/InputEventsSettings.cpp:444
 msgid "Topography/Terrain"
 msgstr "地貌/地形"
 
@@ -1268,8 +1270,8 @@ msgstr "隱藏信息"
 msgid "Map (Full screen)"
 msgstr "地圖（全屏）"
 
-#: src/Renderer/ChartRenderer.cpp:235
-#: src/Dialogs/Device/DeviceListDialog.cpp:436
+#: src/Renderer/ChartRenderer.cpp:228
+#: src/Dialogs/Device/DeviceListDialog.cpp:461
 msgid "No data"
 msgstr "無數據"
 
@@ -1277,7 +1279,7 @@ msgstr "無數據"
 #: src/Renderer/MapItemListRenderer.cpp:65
 #: src/Dialogs/Airspace/AirspaceList.cpp:403
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:79
-#: src/Dialogs/Waypoint/WaypointList.cpp:391
+#: src/Dialogs/Waypoint/WaypointList.cpp:387
 msgid "Direction"
 msgstr "方向"
 
@@ -1289,54 +1291,54 @@ msgstr "方向"
 msgid "Elevation"
 msgstr "高程"
 
-#: src/Renderer/MapItemListRenderer.cpp:134
-#: src/Renderer/MapItemListRenderer.cpp:157
+#: src/Renderer/MapItemListRenderer.cpp:133
+#: src/Renderer/MapItemListRenderer.cpp:156
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:76
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:240
 #, no-c-format
 msgid "AGL"
 msgstr "真實高度"
 
-#: src/Renderer/MapItemListRenderer.cpp:139
-#: src/Renderer/MapItemListRenderer.cpp:162
+#: src/Renderer/MapItemListRenderer.cpp:138
+#: src/Renderer/MapItemListRenderer.cpp:161
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:78
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:242
 #, no-c-format
 msgid "MSL"
 msgstr "海平面"
 
-#: src/Renderer/MapItemListRenderer.cpp:148
+#: src/Renderer/MapItemListRenderer.cpp:147
 msgid "around terrain"
 msgstr "地形周圍"
 
-#: src/Renderer/MapItemListRenderer.cpp:166
+#: src/Renderer/MapItemListRenderer.cpp:165
 msgid "Unreachable due to terrain."
 msgstr "由於地形無法到達。"
 
-#: src/Renderer/MapItemListRenderer.cpp:171
+#: src/Renderer/MapItemListRenderer.cpp:170
 msgid "Arrival altitude"
 msgstr "到達高度"
 
-#: src/Renderer/MapItemListRenderer.cpp:193
+#: src/Renderer/MapItemListRenderer.cpp:192
 msgid "Your Position"
 msgstr "你的位置"
 
-#: src/Renderer/MapItemListRenderer.cpp:250
+#: src/Renderer/MapItemListRenderer.cpp:249
 #: src/InfoBoxes/Content/Factory.cpp:927
 #, no-c-format
 msgid "Thermal"
 msgstr "熱氣流"
 
-#: src/Renderer/MapItemListRenderer.cpp:261
+#: src/Renderer/MapItemListRenderer.cpp:258
 msgid "Avg. lift"
 msgstr "平均上升率"
 
-#: src/Renderer/MapItemListRenderer.cpp:332
+#: src/Renderer/MapItemListRenderer.cpp:330
 msgid "FLARM Traffic"
 msgstr "FLARM交通"
 
-#: src/Renderer/MapItemListRenderer.cpp:406
-#: src/Dialogs/Traffic/TrafficList.cpp:671
+#: src/Renderer/MapItemListRenderer.cpp:403
+#: src/Dialogs/Traffic/TrafficList.cpp:675
 #, c-format
 msgid "%u minutes ago"
 msgstr "%u 分鐘前"
@@ -1507,39 +1509,39 @@ msgstr ""
 msgid "blcwbase"
 msgstr "blcwbase參數"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:191
-#: src/Renderer/FlightStatisticsRenderer.cpp:210
-#: src/Renderer/FlightStatisticsRenderer.cpp:236
+#: src/Renderer/FlightStatisticsRenderer.cpp:211
+#: src/Renderer/FlightStatisticsRenderer.cpp:230
+#: src/Renderer/FlightStatisticsRenderer.cpp:256
 msgid "Score"
 msgstr "分數"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:191
-#: src/Renderer/FlightStatisticsRenderer.cpp:210
-#: src/Renderer/FlightStatisticsRenderer.cpp:236
+#: src/Renderer/FlightStatisticsRenderer.cpp:211
+#: src/Renderer/FlightStatisticsRenderer.cpp:230
+#: src/Renderer/FlightStatisticsRenderer.cpp:256
 msgid "pts"
 msgstr "pts參數"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:312
-#: src/Renderer/FlightStatisticsRenderer.cpp:322
-#: src/Renderer/FlightStatisticsRenderer.cpp:333
+#: src/Renderer/FlightStatisticsRenderer.cpp:356
+#: src/Renderer/FlightStatisticsRenderer.cpp:366
+#: src/Renderer/FlightStatisticsRenderer.cpp:377
 msgid "Task to go"
 msgstr "任務出發"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:313
-#: src/Renderer/FlightStatisticsRenderer.cpp:323
+#: src/Renderer/FlightStatisticsRenderer.cpp:357
+#: src/Renderer/FlightStatisticsRenderer.cpp:367
 msgid "AAT to go"
 msgstr "指定區域任務出發"
 
 #. landscape: info above buttons
-#: src/Renderer/FlightStatisticsRenderer.cpp:314
-#: src/Renderer/FlightStatisticsRenderer.cpp:324
-#: src/Renderer/FlightStatisticsRenderer.cpp:335
-#: src/Dialogs/dlgAnalysis.cpp:223
+#: src/Renderer/FlightStatisticsRenderer.cpp:358
+#: src/Renderer/FlightStatisticsRenderer.cpp:368
+#: src/Renderer/FlightStatisticsRenderer.cpp:379
+#: src/Dialogs/dlgAnalysis.cpp:225
 msgid "Distance to go"
 msgstr "距離"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:316
-#: src/Renderer/FlightStatisticsRenderer.cpp:327
+#: src/Renderer/FlightStatisticsRenderer.cpp:360
+#: src/Renderer/FlightStatisticsRenderer.cpp:371
 msgid "Target speed"
 msgstr "目標速度"
 
@@ -1568,7 +1570,7 @@ msgstr "滑翔比"
 msgid "Min. sink"
 msgstr "最小下沉率"
 
-#: src/Renderer/GlidePolarInfoRenderer.cpp:30 src/Dialogs/dlgAnalysis.cpp:494
+#: src/Renderer/GlidePolarInfoRenderer.cpp:30 src/Dialogs/dlgAnalysis.cpp:497
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:209
 msgid "Mass"
 msgstr "品質"
@@ -1579,11 +1581,11 @@ msgstr "品質"
 msgid "Wing loading"
 msgstr "傘翼負載"
 
-#: src/Renderer/CuRenderer.cpp:126
+#: src/Renderer/CuRenderer.cpp:127
 msgid "Thermal height"
 msgstr "熱氣流高度"
 
-#: src/Renderer/CuRenderer.cpp:129
+#: src/Renderer/CuRenderer.cpp:130
 msgid "Cloud base"
 msgstr "雲底"
 
@@ -1641,24 +1643,27 @@ msgstr "告警"
 msgid "Battery low"
 msgstr "電池電量低"
 
-#: src/Startup.cpp:178
+#: src/Startup.cpp:185
 msgid "Loading Terrain File..."
 msgstr "載入地形檔..."
 
-#: src/Startup.cpp:311
+#: src/Startup.cpp:319
 msgid "Initialising"
 msgstr "初始化"
 
-#: src/Startup.cpp:397 src/Dialogs/Device/CAI302/WaypointUploader.cpp:17
+#: src/Startup.cpp:421
+msgid "Loading Topography File..."
+msgstr "載入地貌檔..."
+
+#: src/Startup.cpp:430 src/Dialogs/Device/CAI302/WaypointUploader.cpp:17
 msgid "Loading Waypoints..."
 msgstr "載入航點..."
 
-#: src/Startup.cpp:404
+#: src/Startup.cpp:439
 msgid "Loading Airfield Details File..."
 msgstr "載入空域詳細檔..."
 
-#. Start the device thread(s)
-#: src/Startup.cpp:453
+#: src/Startup.cpp:495
 msgid "Starting devices"
 msgstr "設備啟動中"
 
@@ -1668,48 +1673,46 @@ msgstr "設備啟動中"
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Startup.cpp:463
+#: src/Startup.cpp:507
 msgid "Initialising display"
 msgstr "初始化顯示中"
 
 #. Show progress dialog
-#: src/Startup.cpp:562 src/Startup.cpp:602 src/Startup.cpp:670
+#: src/Startup.cpp:602 src/Startup.cpp:640 src/Startup.cpp:708
 msgid "Shutdown, please wait..."
 msgstr "關機，請等待..."
 
-#. Stop logger and save igc file
-#: src/Startup.cpp:575
+#: src/Startup.cpp:616
 msgid "Shutdown, saving logs..."
 msgstr "關機，保存記錄..."
 
 #. Save settings to profile
-#: src/Startup.cpp:599
+#: src/Startup.cpp:637
 msgid "Shutdown, saving profile..."
 msgstr "關機，保存設定檔..."
 
-#. Save the task for the next time
-#: src/Startup.cpp:656
+#: src/Startup.cpp:698
 msgid "Shutdown, saving task..."
 msgstr "關機，保存任務..."
 
-#: src/Device/Descriptor.cpp:463 src/Device/Descriptor.cpp:475
+#: src/Device/Descriptor.cpp:400 src/Device/Descriptor.cpp:413
 msgid "Unable to open port"
 msgstr "埠不能打開"
 
-#: src/Device/Descriptor.cpp:1123 src/Device/Descriptor.cpp:1129
+#: src/Device/Descriptor.cpp:1068 src/Device/Descriptor.cpp:1074
 msgid "Sending declaration"
 msgstr "發送申報中"
 
-#: src/Device/Descriptor.cpp:1176 src/Device/Descriptor.cpp:1183
+#: src/Device/Descriptor.cpp:1121 src/Device/Descriptor.cpp:1128
 msgid "Reading flight list"
 msgstr "讀取飛行列表中"
 
-#: src/Device/Descriptor.cpp:1207 src/Device/Descriptor.cpp:1214
+#: src/Device/Descriptor.cpp:1152 src/Device/Descriptor.cpp:1159
 msgid "Downloading flight log"
 msgstr "下載飛行記錄中"
 
 #: src/Device/Config.cpp:197 src/Dialogs/Device/PortDataField.cpp:32
-#: src/Dialogs/Device/DeviceListDialog.cpp:432
+#: src/Dialogs/Device/DeviceListDialog.cpp:457
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:19
 #, no-c-format
 msgid "Disabled"
@@ -1762,8 +1765,8 @@ msgstr "串列"
 msgid "OK"
 msgstr "OK"
 
-#: src/Dialogs/Message.cpp:82 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:39
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:42
+#: src/Dialogs/Message.cpp:82 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:40
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:43
 msgid "Yes"
 msgstr "是"
 
@@ -1782,12 +1785,12 @@ msgstr "重試"
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:114
 #: src/Dialogs/MapItemListSettingsDialog.cpp:18
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:18
-#: src/Dialogs/Traffic/TrafficList.cpp:776
+#: src/Dialogs/Traffic/TrafficList.cpp:780
 #: src/Dialogs/ProfileListDialog.cpp:333
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:183
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:228
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:131
-#: src/Dialogs/Waypoint/WaypointList.cpp:212 src/Dialogs/NumberEntry.cpp:40
+#: src/Dialogs/Waypoint/WaypointList.cpp:215 src/Dialogs/NumberEntry.cpp:40
 #: src/Dialogs/NumberEntry.cpp:82 src/Dialogs/NumberEntry.cpp:122
 #: src/Dialogs/TouchTextEntry.cpp:187 src/Dialogs/TimeEntry.cpp:46
 #: src/Dialogs/DateEntry.cpp:42 src/Dialogs/GeoPointEntry.cpp:57
@@ -1803,9 +1806,9 @@ msgid "Ignore"
 msgstr "忽略"
 
 #: src/Dialogs/ListPicker.cpp:153 src/Dialogs/Device/PortPicker.cpp:293
-#: src/Dialogs/Traffic/TrafficList.cpp:775
+#: src/Dialogs/Traffic/TrafficList.cpp:779
 #: src/Dialogs/ProfileListDialog.cpp:331
-#: src/Dialogs/Waypoint/WaypointList.cpp:208
+#: src/Dialogs/Waypoint/WaypointList.cpp:211
 msgid "Select"
 msgstr "選擇"
 
@@ -1814,12 +1817,14 @@ msgid "Help"
 msgstr "幫助"
 
 #: src/Dialogs/FileManager.cpp:399 src/Dialogs/FilePicker.cpp:30
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:111
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:129
-#: src/Dialogs/Weather/PCMetDialog.cpp:59 src/Dialogs/Weather/NOAAList.cpp:182
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:99
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:120
+#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:198
+#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:220
+#: src/Dialogs/Weather/PCMetDialog.cpp:51 src/Dialogs/Weather/NOAAList.cpp:182
 #: src/Dialogs/Weather/NOAAList.cpp:198 src/Dialogs/Weather/NOAADetails.cpp:88
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:365
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:397
+#: src/Dialogs/Weather/MapOverlayWidget.cpp:355
+#: src/Dialogs/Weather/MapOverlayWidget.cpp:390
 #: src/Dialogs/DownloadFilePicker.cpp:118
 #: src/Dialogs/DownloadFilePicker.cpp:277
 #: src/Dialogs/DownloadFilePicker.cpp:386
@@ -1828,7 +1833,7 @@ msgstr "下載"
 
 #: src/Dialogs/FileManager.cpp:400
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:92
-#: src/Dialogs/Weather/NOAAList.cpp:98 src/Monitor/MatTaskMonitor.cpp:38
+#: src/Dialogs/Weather/NOAAList.cpp:98 src/Monitor/MatTaskMonitor.cpp:40
 msgid "Add"
 msgstr "加"
 
@@ -2011,105 +2016,105 @@ msgstr ""
 msgid "Whether you use a K6Bt to connect the device."
 msgstr "如果您使用K6BT連接該設備，請啟用此操作。"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:270
-#: src/Dialogs/Plane/PlaneListDialog.cpp:132
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:253
-#: src/Dialogs/Waypoint/Manager.cpp:99 src/InfoBoxes/Content/MacCready.cpp:30
-#: src/InfoBoxes/Content/Weather.cpp:86 src/InfoBoxes/Content/Radio.cpp:45
+#: src/Dialogs/Device/DeviceListDialog.cpp:295
+#: src/Dialogs/Plane/PlaneListDialog.cpp:133
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:256
+#: src/Dialogs/Waypoint/Manager.cpp:101 src/InfoBoxes/Content/MacCready.cpp:30
+#: src/InfoBoxes/Content/Weather.cpp:87 src/InfoBoxes/Content/Radio.cpp:45
 #: src/InfoBoxes/Content/Radio.cpp:50
 #, no-c-format
 msgid "Edit"
 msgstr "編輯"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:274
+#: src/Dialogs/Device/DeviceListDialog.cpp:299
 msgid "Flight download"
 msgstr "下載飛行"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:278
-#: src/Dialogs/Device/DeviceListDialog.cpp:549
-#: src/Dialogs/Device/DeviceListDialog.cpp:555
-#: src/Dialogs/Device/DeviceListDialog.cpp:623
-#: src/Dialogs/Device/DeviceListDialog.cpp:629
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:103
+#: src/Dialogs/Device/DeviceListDialog.cpp:303
+#: src/Dialogs/Device/DeviceListDialog.cpp:580
+#: src/Dialogs/Device/DeviceListDialog.cpp:586
+#: src/Dialogs/Device/DeviceListDialog.cpp:661
+#: src/Dialogs/Device/DeviceListDialog.cpp:667
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:111
 msgid "Manage"
 msgstr "管理"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:282
+#: src/Dialogs/Device/DeviceListDialog.cpp:307
 msgid "Monitor"
 msgstr "監測器"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:286
-#: src/Dialogs/Device/DeviceListDialog.cpp:518
-#: src/Dialogs/Device/DeviceListDialog.cpp:526
+#: src/Dialogs/Device/DeviceListDialog.cpp:311
+#: src/Dialogs/Device/DeviceListDialog.cpp:546
+#: src/Dialogs/Device/DeviceListDialog.cpp:554
 #: src/Dialogs/Device/PortMonitor.cpp:120
 #: src/Dialogs/Device/PortMonitor.cpp:128
 msgid "Reconnect"
 msgstr "重新連接"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:290
-#: src/Dialogs/Device/DeviceListDialog.cpp:309
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:211
+#: src/Dialogs/Device/DeviceListDialog.cpp:315
+#: src/Dialogs/Device/DeviceListDialog.cpp:334
+#: src/Dialogs/Weather/MapOverlayWidget.cpp:210
 msgid "Disable"
 msgstr "禁用"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:294
-#: src/Dialogs/Device/DeviceListDialog.cpp:421
-#: src/Dialogs/Device/DeviceListDialog.cpp:440
-#: src/Dialogs/Device/DeviceListDialog.cpp:706
+#: src/Dialogs/Device/DeviceListDialog.cpp:319
+#: src/Dialogs/Device/DeviceListDialog.cpp:446
+#: src/Dialogs/Device/DeviceListDialog.cpp:465
+#: src/Dialogs/Device/DeviceListDialog.cpp:750
 msgid "Debug"
 msgstr "調試"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:309
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:111
+#: src/Dialogs/Device/DeviceListDialog.cpp:334
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:110
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:68
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:69
 msgid "Enable"
 msgstr "准許"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:357
+#: src/Dialogs/Device/DeviceListDialog.cpp:382
 #, c-format
 msgid "%s on %s"
 msgstr "%s on %s"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:371
+#: src/Dialogs/Device/DeviceListDialog.cpp:396
 msgid "GPS fix"
 msgstr "GPS定位"
 
 #. device sends GPGGA, but no valid location
-#: src/Dialogs/Device/DeviceListDialog.cpp:374
+#: src/Dialogs/Device/DeviceListDialog.cpp:399
 msgid "Bad GPS"
 msgstr "GPS不好"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:376
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:43
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:75
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:78
+#: src/Dialogs/Device/DeviceListDialog.cpp:401
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:44
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:76
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:79
 #, no-c-format
 msgid "Connected"
 msgstr "已連接"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:381
+#: src/Dialogs/Device/DeviceListDialog.cpp:406
 msgid "Baro"
 msgstr "氣壓"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:386
+#: src/Dialogs/Device/DeviceListDialog.cpp:411
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:108
 #, fuzzy
 msgid "Pitot"
 msgstr "Pitot埠"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:391
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:86
+#: src/Dialogs/Device/DeviceListDialog.cpp:416
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:88
 msgid "Airspeed"
 msgstr "空速"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:426
+#: src/Dialogs/Device/DeviceListDialog.cpp:451
 #: src/InfoBoxes/Content/Factory.cpp:649
 #, no-c-format
 msgid "Battery"
 msgstr "電量"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:434
+#: src/Dialogs/Device/DeviceListDialog.cpp:459
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:41
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:45
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:49
@@ -2117,41 +2122,41 @@ msgstr "電量"
 msgid "N/A"
 msgstr "不適用"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:448
-#: src/Dialogs/Device/DeviceListDialog.cpp:518
+#: src/Dialogs/Device/DeviceListDialog.cpp:470
+#: src/Dialogs/Device/DeviceListDialog.cpp:546
 msgid "Bluetooth is disabled"
 msgstr "禁用藍牙"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:451
+#: src/Dialogs/Device/DeviceListDialog.cpp:472
 msgid "Duplicate"
 msgstr "複製"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:458
+#: src/Dialogs/Device/DeviceListDialog.cpp:479
 msgid "Not connected"
 msgstr "未連接"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:526
-#: src/Dialogs/Device/DeviceListDialog.cpp:555
-#: src/Dialogs/Device/DeviceListDialog.cpp:629
+#: src/Dialogs/Device/DeviceListDialog.cpp:554
+#: src/Dialogs/Device/DeviceListDialog.cpp:586
+#: src/Dialogs/Device/DeviceListDialog.cpp:667
 #: src/Dialogs/Device/PortMonitor.cpp:128
 msgid "Device is occupied"
 msgstr "設備已佔用"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:549
-#: src/Dialogs/Device/DeviceListDialog.cpp:623
+#: src/Dialogs/Device/DeviceListDialog.cpp:580
+#: src/Dialogs/Device/DeviceListDialog.cpp:661
 msgid "Device is not connected"
 msgstr "設備未連接"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:577
+#: src/Dialogs/Device/DeviceListDialog.cpp:608
 msgid "Edit device"
 msgstr "編輯設備"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:704
+#: src/Dialogs/Device/DeviceListDialog.cpp:748
 #, c-format
 msgid "Communication with this device will be logged for the next %u minutes."
 msgstr "與該設備的通信將被記錄到下一%u分鐘。"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:721 Data/Input/default.xci:588
+#: src/Dialogs/Device/DeviceListDialog.cpp:765 Data/Input/default.xci:588
 #: Data/Input/default.xci:1184
 msgid "Devices"
 msgstr "設備"
@@ -2162,7 +2167,7 @@ msgstr "設備"
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:104
 #: src/Dialogs/TouchTextEntry.cpp:192 src/Dialogs/TimeEntry.cpp:55
 #: src/Dialogs/DateEntry.cpp:49 src/Dialogs/GeoPointEntry.cpp:60
-#: src/InfoBoxes/Panel/ATCReference.cpp:75
+#: src/InfoBoxes/Panel/ATCReference.cpp:77
 msgid "Clear"
 msgstr "清除"
 
@@ -2208,7 +2213,7 @@ msgstr "重啟"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:34
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:176
-#: src/Weather/NOAAFormatter.cpp:97 src/Weather/NOAAFormatter.cpp:104
+#: src/Weather/NOAAFormatter.cpp:94 src/Weather/NOAAFormatter.cpp:100
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:47
 #, no-c-format
 msgid "Temperature"
@@ -2217,7 +2222,7 @@ msgstr "溫度"
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:42
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:109
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:199
-#: src/Weather/NOAAFormatter.cpp:133 src/Weather/NOAAFormatter.cpp:139
+#: src/Weather/NOAAFormatter.cpp:128 src/Weather/NOAAFormatter.cpp:134
 msgid "Pressure"
 msgstr "壓力"
 
@@ -2278,8 +2283,8 @@ msgstr "輸出模式"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:50
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:102
-#: src/Dialogs/Waypoint/Manager.cpp:103
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:147
+#: src/Dialogs/Waypoint/Manager.cpp:105
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:138
 msgid "Save"
 msgstr "保存"
 
@@ -2349,11 +2354,11 @@ msgstr "設置新的音訊方案？舊值將會丟失。"
 msgid "Vario Configuration"
 msgstr "Vario配置"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:79
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:81
 msgid "TE vario"
 msgstr "高度表總能量"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:80
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:82
 msgid ""
 "This produces a fake TE vario gross vertical velocity.  It can be used when "
 "in circling mode to demonstrate the lift tones.  When not in circling mode, "
@@ -2363,24 +2368,24 @@ msgstr ""
 "調。當不處於迴圈模式時，把這個設定成一個真實的負值，這樣就產生了速度指令音"
 "調。"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:87
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:89
 msgid ""
 "This produces a fake airspeed.  It can be used when not in circling mode to "
 "demonstrate the speed command tones."
 msgstr "這會產生偽造的空速。不在迴圈模式下能被使用演示速度命令音調。"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:91
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:93
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:180
 #: src/InfoBoxes/InfoBoxSettings.cpp:58
 #, no-c-format
 msgid "Circling"
 msgstr "盤轉"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:92
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:94
 msgid "This forces the variometer into circling or cruise mode"
 msgstr "這迫使高度計進入盤旋或巡航模式"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:106
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:108
 msgid "Vario Demo"
 msgstr "高度計演示"
 
@@ -2474,7 +2479,7 @@ msgid "Threshold"
 msgstr "閾值"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:108
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:75
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:77
 msgid "Range"
 msgstr "範圍"
 
@@ -2556,7 +2561,7 @@ msgstr "靜態物件"
 #: src/Dialogs/Airspace/AirspaceList.cpp:404
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:95
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:86
-#: src/Dialogs/Waypoint/WaypointList.cpp:392
+#: src/Dialogs/Waypoint/WaypointList.cpp:388
 msgid "Type"
 msgstr "類型"
 
@@ -2570,24 +2575,24 @@ msgstr "記錄器間隔"
 msgid "No tracking mode"
 msgstr "無跟蹤模式"
 
-#: src/Dialogs/MapItemListDialog.cpp:145
-#: src/Dialogs/Task/AlternatesListDialog.cpp:102
+#: src/Dialogs/MapItemListDialog.cpp:146
+#: src/Dialogs/Task/AlternatesListDialog.cpp:103
 msgid "Goto"
 msgstr "轉到"
 
-#: src/Dialogs/MapItemListDialog.cpp:149
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:111
+#: src/Dialogs/MapItemListDialog.cpp:150
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:110
 msgid "Ack Day"
 msgstr "確認日"
 
-#: src/Dialogs/MapItemListDialog.cpp:153 src/Dialogs/dlgAnalysis.cpp:455
-#: src/Dialogs/dlgAnalysis.cpp:499 src/Dialogs/dlgAnalysis.cpp:508
-#: src/Dialogs/dlgAnalysis.cpp:517
+#: src/Dialogs/MapItemListDialog.cpp:154 src/Dialogs/dlgAnalysis.cpp:458
+#: src/Dialogs/dlgAnalysis.cpp:502 src/Dialogs/dlgAnalysis.cpp:511
+#: src/Dialogs/dlgAnalysis.cpp:520
 msgid "Settings"
 msgstr "設置中"
 
-#: src/Dialogs/MapItemListDialog.cpp:236
-#: src/MapWindow/GlueMapWindowItems.cpp:108
+#: src/Dialogs/MapItemListDialog.cpp:237
+#: src/MapWindow/GlueMapWindowItems.cpp:110
 msgid "Map elements at this location"
 msgstr "在這個位置的地圖要素"
 
@@ -2630,7 +2635,7 @@ msgid "Warn"
 msgstr "警告"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:143
-#: src/Dialogs/Settings/dlgConfiguration.cpp:84 src/Dialogs/dlgAnalysis.cpp:551
+#: src/Dialogs/Settings/dlgConfiguration.cpp:84 src/Dialogs/dlgAnalysis.cpp:554
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:87
 #: Data/Input/default.xci:554 Data/Input/default.xci:1272
 #, no-c-format
@@ -2647,14 +2652,14 @@ msgid "Radio"
 msgstr "無線電"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:56
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:242
-#: src/Dialogs/Task/AlternatesListDialog.cpp:109
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:245
+#: src/Dialogs/Task/AlternatesListDialog.cpp:110
 msgid "Set Active Frequency"
 msgstr "設置有效頻率"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:61
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:247
-#: src/Dialogs/Task/AlternatesListDialog.cpp:115
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:250
+#: src/Dialogs/Task/AlternatesListDialog.cpp:116
 msgid "Set Standby Frequency"
 msgstr "設置待機頻率"
 
@@ -2671,12 +2676,12 @@ msgstr "頂部"
 msgid "Base"
 msgstr "底部"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:105
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:104
 msgid "Airspace Details"
 msgstr "詳細空域"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:284
-#: src/Dialogs/Waypoint/WaypointList.cpp:432
+#: src/Dialogs/Waypoint/WaypointList.cpp:428
 msgid "No Match!"
 msgstr "不匹配！"
 
@@ -2688,7 +2693,7 @@ msgstr "航向"
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:216
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:106
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
-#: src/Dialogs/Waypoint/WaypointList.cpp:389
+#: src/Dialogs/Waypoint/WaypointList.cpp:385
 msgid "Name"
 msgstr "名字"
 
@@ -2747,12 +2752,12 @@ msgid "Defines how the airspace is filled with the configured color."
 msgstr "定義空域如何填充配置的顏色。"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:66
-#: src/Monitor/AirspaceWarningMonitor.cpp:54
+#: src/Monitor/AirspaceWarningMonitor.cpp:55
 msgid "ACK"
 msgstr "ACK"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:67
-#: src/Monitor/AirspaceWarningMonitor.cpp:63
+#: src/Monitor/AirspaceWarningMonitor.cpp:64
 msgid "ACK Day"
 msgstr "確認日"
 
@@ -2873,12 +2878,12 @@ msgstr ""
 "沉率增加了一倍。"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:295
-#: src/InfoBoxes/Panel/AltitudeSetup.cpp:54
+#: src/InfoBoxes/Panel/AltitudeSetup.cpp:55
 msgid "QNH"
 msgstr "絕對高度"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:296
-#: src/InfoBoxes/Panel/AltitudeSetup.cpp:55
+#: src/InfoBoxes/Panel/AltitudeSetup.cpp:56
 msgid ""
 "Area pressure for barometric altimeter calibration.  This is set "
 "automatically if Vega connected."
@@ -2935,7 +2940,7 @@ msgstr "滑翔電腦"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:91
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:217
-#: src/Weather/NOAAFormatter.cpp:78 src/Weather/NOAAFormatter.cpp:85
+#: src/Weather/NOAAFormatter.cpp:78 src/Weather/NOAAFormatter.cpp:81
 #: src/InfoBoxes/Content/Factory.cpp:323 src/InfoBoxes/Content/Factory.cpp:332
 #: src/InfoBoxes/Content/Factory.cpp:920 Data/Input/default.xci:604
 #, no-c-format
@@ -2993,7 +2998,7 @@ msgid "InfoBox Sets"
 msgstr "資訊框設置"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:121
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:120
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:122
 #: Data/Input/default.xci:664 Data/Input/default.xci:1169
 #, no-c-format
 msgid "Logger"
@@ -3006,8 +3011,8 @@ msgstr "跟蹤"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:132
 #: src/Dialogs/Weather/WeatherDialog.cpp:26
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:321
-#: src/Weather/NOAAFormatter.cpp:180 Data/Input/default.xci:800
+#: src/Dialogs/Weather/MapOverlayWidget.cpp:320
+#: src/Weather/NOAAFormatter.cpp:175 Data/Input/default.xci:800
 #: Data/Input/default.xci:1207
 #, no-c-format
 msgid "Weather"
@@ -3063,7 +3068,7 @@ msgstr "內容"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:250
 #: src/Dialogs/ProfileListDialog.cpp:154
-#: src/Dialogs/Plane/PlaneListDialog.cpp:133
+#: src/Dialogs/Plane/PlaneListDialog.cpp:134
 msgid "Copy"
 msgstr "複製"
 
@@ -3084,19 +3089,19 @@ msgstr "信息框粘貼"
 msgid "Invalid"
 msgstr "無效"
 
-#: src/Dialogs/Traffic/TrafficList.cpp:325
+#: src/Dialogs/Traffic/TrafficList.cpp:327
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:301
 msgid "Competition ID"
 msgstr "競賽ID"
 
-#: src/Dialogs/Traffic/TrafficList.cpp:344
+#: src/Dialogs/Traffic/TrafficList.cpp:346
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:174
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:347
 #, no-c-format
 msgid "Map"
 msgstr "地圖"
 
-#: src/Dialogs/Traffic/TrafficList.cpp:736
+#: src/Dialogs/Traffic/TrafficList.cpp:740
 msgid "Traffic"
 msgstr "交通"
 
@@ -3142,139 +3147,139 @@ msgstr "你想設置這個FLARM連絡人作為你的新隊友嗎？"
 msgid "New Teammate"
 msgstr "新隊友"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:64
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:66
 msgid "Set code"
 msgstr "設置代碼"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:65
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:67
 msgid "Set WP"
 msgstr "設置航點"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:66
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:68
 msgid "Flarm Lock"
 msgstr "Flarm鎖定"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:73
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:75
 msgid "Own code"
 msgstr "自身代碼"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:74
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:76
 msgid "Mate code"
 msgstr "配對代碼"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:76
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:78
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:74
 #: src/InfoBoxes/Content/Factory.cpp:143
 #, no-c-format
 msgid "Bearing"
 msgstr "方位"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:77
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:79
 msgid "Rel. bearing"
 msgstr "相對方向"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:78
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:80
 msgid "Flarm lock"
 msgstr "Flarm鎖定"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:186
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:188
 msgid "Unknown Competition Number"
 msgstr "未知競賽數"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:187
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:189
 msgid "Not Found"
 msgstr "未發現"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:191
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:193
 msgid "Set new teammate"
 msgstr "設置新隊友"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:204
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:206
 #: src/InfoBoxes/Content/Factory.cpp:569 src/InfoBoxes/Content/Team.cpp:30
 #: Data/Input/default.xci:850
 #, no-c-format
 msgid "Team Code"
 msgstr "團隊代碼"
 
-#: src/Dialogs/dlgAnalysis.cpp:226 src/Dialogs/dlgAnalysis.cpp:464
-#: src/Dialogs/dlgAnalysis.cpp:527 src/Dialogs/dlgAnalysis.cpp:536
+#: src/Dialogs/dlgAnalysis.cpp:228 src/Dialogs/dlgAnalysis.cpp:467
+#: src/Dialogs/dlgAnalysis.cpp:530 src/Dialogs/dlgAnalysis.cpp:539
 msgid "Task Calc"
 msgstr "任務計算"
 
-#: src/Dialogs/dlgAnalysis.cpp:450 src/Dialogs/dlgAnalysis.cpp:459
-#: src/Dialogs/dlgAnalysis.cpp:468 src/Dialogs/dlgAnalysis.cpp:477
-#: src/Dialogs/dlgAnalysis.cpp:485 src/Dialogs/dlgAnalysis.cpp:493
-#: src/Dialogs/dlgAnalysis.cpp:503 src/Dialogs/dlgAnalysis.cpp:512
-#: src/Dialogs/dlgAnalysis.cpp:521 src/Dialogs/dlgAnalysis.cpp:531
-#: src/Dialogs/dlgAnalysis.cpp:540 src/Dialogs/dlgAnalysis.cpp:550
-#: src/Dialogs/dlgAnalysis.cpp:699 src/InfoBoxes/Content/Contest.cpp:34
-#: src/InfoBoxes/Content/Trace.cpp:163 Data/Input/default.xci:824
+#: src/Dialogs/dlgAnalysis.cpp:453 src/Dialogs/dlgAnalysis.cpp:462
+#: src/Dialogs/dlgAnalysis.cpp:471 src/Dialogs/dlgAnalysis.cpp:480
+#: src/Dialogs/dlgAnalysis.cpp:488 src/Dialogs/dlgAnalysis.cpp:496
+#: src/Dialogs/dlgAnalysis.cpp:506 src/Dialogs/dlgAnalysis.cpp:515
+#: src/Dialogs/dlgAnalysis.cpp:524 src/Dialogs/dlgAnalysis.cpp:534
+#: src/Dialogs/dlgAnalysis.cpp:543 src/Dialogs/dlgAnalysis.cpp:553
+#: src/Dialogs/dlgAnalysis.cpp:702 src/InfoBoxes/Content/Contest.cpp:38
+#: src/InfoBoxes/Content/Trace.cpp:166 Data/Input/default.xci:824
 #: Data/Input/default.xci:1231
 #, no-c-format
 msgid "Analysis"
 msgstr "分析"
 
-#: src/Dialogs/dlgAnalysis.cpp:451
+#: src/Dialogs/dlgAnalysis.cpp:454
 msgid "Barograph"
 msgstr "氣壓計"
 
-#: src/Dialogs/dlgAnalysis.cpp:460
+#: src/Dialogs/dlgAnalysis.cpp:463
 msgid "Climb"
 msgstr "爬升"
 
-#: src/Dialogs/dlgAnalysis.cpp:469
+#: src/Dialogs/dlgAnalysis.cpp:472
 msgid "Thermal Band"
 msgstr "熱氣流帶"
 
-#: src/Dialogs/dlgAnalysis.cpp:478
+#: src/Dialogs/dlgAnalysis.cpp:481
 msgid "Vario Histogram"
 msgstr "高度長條圖"
 
-#: src/Dialogs/dlgAnalysis.cpp:486
+#: src/Dialogs/dlgAnalysis.cpp:489
 msgid "Wind at Altitude"
 msgstr "此高度風況"
 
-#: src/Dialogs/dlgAnalysis.cpp:489
+#: src/Dialogs/dlgAnalysis.cpp:492
 msgid "Set Wind"
 msgstr "設置風況"
 
-#: src/Dialogs/dlgAnalysis.cpp:494
+#: src/Dialogs/dlgAnalysis.cpp:497
 msgid "Glide Polar"
 msgstr "滑翔極曲線"
 
-#: src/Dialogs/dlgAnalysis.cpp:504
+#: src/Dialogs/dlgAnalysis.cpp:507
 msgid "MacCready Speeds"
 msgstr "MacCready速度"
 
-#: src/Dialogs/dlgAnalysis.cpp:513
+#: src/Dialogs/dlgAnalysis.cpp:516
 msgid "Temperature Trace"
 msgstr "溫度軌跡"
 
-#: src/Dialogs/dlgAnalysis.cpp:522
+#: src/Dialogs/dlgAnalysis.cpp:525
 msgid "Task Speed"
 msgstr "任務速度"
 
-#: src/Dialogs/dlgAnalysis.cpp:554
+#: src/Dialogs/dlgAnalysis.cpp:557
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:177
 msgid "Warnings"
 msgstr "告警"
 
-#: src/Dialogs/dlgChecklist.cpp:36 src/Dialogs/dlgChecklist.cpp:100
+#: src/Dialogs/dlgChecklist.cpp:38 src/Dialogs/dlgChecklist.cpp:104
 #: Data/Input/default.xci:816 Data/Input/default.xci:1223
 msgid "Checklist"
 msgstr "檢查表"
 
-#: src/Dialogs/dlgChecklist.cpp:93
+#: src/Dialogs/dlgChecklist.cpp:97
 msgid "No checklist loaded"
 msgstr "未裝載檢查表"
 
-#: src/Dialogs/dlgChecklist.cpp:94
+#: src/Dialogs/dlgChecklist.cpp:98
 msgid "Create xcsoar-checklist.txt"
 msgstr "創建xcsoar-checklist.txt"
 
 #: src/Dialogs/ProfileListDialog.cpp:152
-#: src/Dialogs/Plane/PlaneListDialog.cpp:131
-#: src/Dialogs/Waypoint/Manager.cpp:91
+#: src/Dialogs/Plane/PlaneListDialog.cpp:132
+#: src/Dialogs/Waypoint/Manager.cpp:93
 msgid "New"
 msgstr "新建"
 
@@ -3285,11 +3290,11 @@ msgid "Password"
 msgstr "密碼"
 
 #: src/Dialogs/ProfileListDialog.cpp:155 src/Dialogs/ProfileListDialog.cpp:274
-#: src/Dialogs/Plane/PlaneListDialog.cpp:134
+#: src/Dialogs/Plane/PlaneListDialog.cpp:135
 #: src/Dialogs/Plane/PlaneListDialog.cpp:332
-#: src/Dialogs/Waypoint/Manager.cpp:107
+#: src/Dialogs/Waypoint/Manager.cpp:109
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:102
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:79
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:81
 msgid "Delete"
 msgstr "刪除"
 
@@ -3318,11 +3323,11 @@ msgstr "設定檔"
 msgid "Select profile"
 msgstr "選擇設定檔"
 
-#: src/Dialogs/Plane/PlaneListDialog.cpp:135
+#: src/Dialogs/Plane/PlaneListDialog.cpp:136
 msgid "Activate"
 msgstr "啟動"
 
-#: src/Dialogs/Plane/PlaneListDialog.cpp:156
+#: src/Dialogs/Plane/PlaneListDialog.cpp:157
 msgid "Active"
 msgstr "啟動"
 
@@ -3411,7 +3416,7 @@ msgid "List"
 msgstr "列表"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:44
-#: src/Dialogs/Waypoint/Manager.cpp:95
+#: src/Dialogs/Waypoint/Manager.cpp:97
 msgid "Import"
 msgstr "導入"
 
@@ -3450,11 +3455,11 @@ msgstr "極曲線 W"
 msgid "Switch InfoBox"
 msgstr "變換資訊框"
 
-#: src/Dialogs/ReplayDialog.cpp:47 src/Dialogs/Weather/RASPDialog.cpp:109
+#: src/Dialogs/ReplayDialog.cpp:49 src/Dialogs/Weather/RASPDialog.cpp:109
 msgid "File"
 msgstr "文件"
 
-#: src/Dialogs/ReplayDialog.cpp:48
+#: src/Dialogs/ReplayDialog.cpp:50
 msgid ""
 "Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (."
 "nmea), or if blank, runs the demo."
@@ -3462,17 +3467,17 @@ msgstr ""
 "要重放的檔案名。可以是一個IGC檔（.IGC），一個原始NMEA日誌檔（.NMEA），或者如"
 "果是空白的，運行演示。"
 
-#: src/Dialogs/ReplayDialog.cpp:54
+#: src/Dialogs/ReplayDialog.cpp:56
 msgid "Rate"
 msgstr "比率"
 
-#: src/Dialogs/ReplayDialog.cpp:55
+#: src/Dialogs/ReplayDialog.cpp:57
 msgid ""
 "Time acceleration of replay. Set to 0 for pause, 1 for normal real-time "
 "replay."
 msgstr "重放的時間加速。暫停設置為0，正常即時重放設置為1。"
 
-#: src/Dialogs/ReplayDialog.cpp:77 src/Dialogs/ReplayDialog.cpp:93
+#: src/Dialogs/ReplayDialog.cpp:79 src/Dialogs/ReplayDialog.cpp:95
 #: Data/Input/default.xci:646
 msgid "Replay"
 msgstr "重放"
@@ -3506,33 +3511,33 @@ msgstr "密碼錯誤。"
 msgid "Enter a new password"
 msgstr "輸入新密碼"
 
-#: src/Dialogs/dlgStatus.cpp:27 src/Dialogs/dlgStatus.cpp:38
+#: src/Dialogs/dlgStatus.cpp:28 src/Dialogs/dlgStatus.cpp:39
 #: src/Dialogs/Weather/WeatherDialog.cpp:38 Data/Input/default.xci:842
 #: Data/Input/default.xci:1239
 msgid "Status"
 msgstr "狀態"
 
-#: src/Dialogs/dlgStatus.cpp:70 Data/Input/default.xci:596
+#: src/Dialogs/dlgStatus.cpp:71 Data/Input/default.xci:596
 msgid "Flight"
 msgstr "飛行"
 
-#: src/Dialogs/dlgStatus.cpp:73 Data/Input/default.xci:572
+#: src/Dialogs/dlgStatus.cpp:74 Data/Input/default.xci:572
 msgid "System"
 msgstr "系統"
 
-#: src/Dialogs/dlgStatus.cpp:79
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:106
+#: src/Dialogs/dlgStatus.cpp:80
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:114
 msgid "Rules"
 msgstr "規則"
 
-#: src/Dialogs/dlgStatus.cpp:82
+#: src/Dialogs/dlgStatus.cpp:83
 msgid "Times"
 msgstr "時間"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:70
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:119
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:78
-#: src/InfoBoxes/Panel/ATCReference.cpp:64
+#: src/InfoBoxes/Panel/ATCReference.cpp:65
 msgid "Location"
 msgstr "定位"
 
@@ -3548,91 +3553,91 @@ msgstr "靠近"
 msgid "Share"
 msgstr ""
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:31
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:42
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:75
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:79
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:32
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:43
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:76
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:80
 #: src/InfoBoxes/Content/Other.cpp:169
 #, no-c-format
 msgid "Disconnected"
 msgstr "斷開連接"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:33
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:34
 #: src/InfoBoxes/Content/Other.cpp:171
 #, no-c-format
 msgid "Fix invalid"
 msgstr "定位無效"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:35
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:36
 #: src/InfoBoxes/Content/Other.cpp:173
 #, no-c-format
 msgid "2D fix"
 msgstr "二維定位"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:37
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:38
 #: src/InfoBoxes/Content/Other.cpp:175
 #, no-c-format
 msgid "3D fix"
 msgstr "三維定位"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:44
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:45
 #, no-c-format
 msgid "Roaming"
 msgstr "漫遊"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:116
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:118
 msgid "GPS lock"
 msgstr "GPS鎖定"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:117
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:119
 msgid "Satellites in view"
 msgstr "視圖中的衛星"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:118
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:120
 msgid "Variometer"
 msgstr "高度計"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:121
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:123
 msgid "Supply voltage"
 msgstr "電源電壓"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:122
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:124
 msgid "Network"
 msgstr "網路"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:120
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:121
 msgid "Assigned task time"
 msgstr "指定任務時間"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:121
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:122
 msgid "Estimated task time"
 msgstr "估算任務時間"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:122
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:123
 msgid "Remaining time"
 msgstr "剩餘時間"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:123
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:124
 msgid "Task distance"
 msgstr "任務距離"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:124
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:125
 msgid "Remaining distance"
 msgstr "剩餘距離"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:125
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:126
 msgid "Speed estimated"
 msgstr "估算速度"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:126
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:127
 msgid "Speed average"
 msgstr "平均速度"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:128
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:129
 msgid "Set MacCready"
 msgstr "設置MacCready"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:129
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:130
 msgid ""
 "Adjusts MC value used in the calculator.  Use this to determine the effect "
 "on estimated task time due to changes in conditions.  This value will not "
@@ -3642,11 +3647,11 @@ msgstr ""
 "調整電腦中使用的MC值。使用此來確定由於條件的變化對估計任務時間的影響。如果對"
 "話方塊用取消按鈕退出，這個值不會影響主機電腦的設置。"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:139
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:140
 msgid "AAT range"
 msgstr "AAT區域"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:141
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:142
 #, no-c-format
 msgid ""
 "For AAT tasks, this value tells you how far based on the targets of your "
@@ -3658,24 +3663,24 @@ msgstr ""
 "的距離有多遠。-100%表示最小的AAT距離。0%是標稱AAT距離。+ 100%是最大的AAT距"
 "離。"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:144
-#: src/Dialogs/Task/TargetDialog.cpp:380
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:145
+#: src/Dialogs/Task/TargetDialog.cpp:382
 msgid "Speed remaining"
 msgstr "剩餘速度"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:147
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:148
 msgid "Achieved MacCready"
 msgstr "完成MacCready"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:152
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:153
 msgid "Achieved speed"
 msgstr "完成速度"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:155
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:156
 msgid "Cruise efficiency"
 msgstr "巡航效率"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:156
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:157
 msgid ""
 "Efficiency of cruise.  100 indicates perfect MacCready performance, greater "
 "than 100 indicates better than MacCready performance is achieved through "
@@ -3688,33 +3693,33 @@ msgstr ""
 "街上飛行來實現的。如果你飛得太遠，不到100是合適的。此值根據當前飛行歷史與設定"
 "的MC值估算巡航效率。計算在任務啟動後開始。"
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:82
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:83
 msgid "Valid start"
 msgstr "開始有效"
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:83
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:84
 msgid "Start time"
 msgstr "開始時間"
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:84
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:85
 msgid "Start alt."
 msgstr "開始高度。"
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:85
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:86
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:126
-#: src/Dialogs/Task/TaskPointDialog.cpp:333
+#: src/Dialogs/Task/TaskPointDialog.cpp:334
 msgid "Start point"
 msgstr "開始點"
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:86
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:87
 msgid "Start speed"
 msgstr "開始速度"
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:87
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:88
 msgid "Finish min. alt."
 msgstr "完成最小高度。"
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:88
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:89
 msgid "Valid finish"
 msgstr "完成有效"
 
@@ -3767,122 +3772,122 @@ msgstr "跑道"
 msgid "Short Name"
 msgstr "短"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:149
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:146
 msgid "Bearing and Distance"
 msgstr "方位和距離"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:162
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:159
 msgid "Alt. diff. MC 0"
 msgstr "MC設置為0的高差"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:166
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:163
 msgid "Alt. diff. MC safety"
 msgstr "MC設置為安全高度的高車"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:171
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:168
 msgid "Alt. diff. MC current"
 msgstr "當前MC的高差"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:190
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:187
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:104
 #, no-c-format
 msgid "Required glide ratio"
 msgstr "所需滑翔比"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:40
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:78
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:118
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:158
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:42
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:80
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:120
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:160
 msgid "No task defined."
 msgstr "無定義任務。"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:45
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:47
 msgid "No active task point."
 msgstr "無啟動任務點。"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:45
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:47
 msgid "Replace in task"
 msgstr "替換任務"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:50
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:84
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:124
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:168
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:52
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:86
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:126
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:170
 msgid "Task would not be valid after the change."
 msgstr "任務更改無效。"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:89
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:129
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:91
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:131
 msgid "Created Goto Task."
 msgstr "創建Goto任務。"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:89
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:94
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:129
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:134
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:91
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:96
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:131
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:136
 msgid "Success"
 msgstr "成功"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:94
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:134
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:96
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:136
 msgid "Created 2-point task from Goto Task."
 msgstr "從Goto任務創建2點任務。"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:163
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:165
 msgid "Waypoint not in task."
 msgstr "航點不在任務中。"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:163
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:165
 msgid "Remove from task"
 msgstr "從任務中移除"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:209
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:212
 msgid "Replace in Task"
 msgstr "在任務中替換"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:214
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:217
 msgid "Insert in Task"
 msgstr "插入任務中"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:219
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:222
 msgid "Append to Task"
 msgstr "附加到任務"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:225
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:228
 msgid "Remove from Task"
 msgstr "從任務中移除"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:231
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:234
 msgid "Set as New Home"
 msgstr "設置為新家"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:237
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:240
 msgid "Pan to Waypoint"
 msgstr "Pan to 航點"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:403 Data/Input/default.xci:1056
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:405 Data/Input/default.xci:1056
 msgid "GoTo"
 msgstr "GoTo轉到"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:614
-#: src/Dialogs/Task/TaskPointDialog.cpp:508
-#: src/InfoBoxes/Panel/ATCReference.cpp:63
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:616
+#: src/Dialogs/Task/TaskPointDialog.cpp:511
+#: src/InfoBoxes/Panel/ATCReference.cpp:64
 msgid "Waypoint"
 msgstr "航點"
 
-#: src/Dialogs/Waypoint/Manager.cpp:264
+#: src/Dialogs/Waypoint/Manager.cpp:266
 msgid "Delete waypoint?"
 msgstr "刪除航點？"
 
-#: src/Dialogs/Waypoint/Manager.cpp:284
+#: src/Dialogs/Waypoint/Manager.cpp:286
 msgid "Waypoints Editor"
 msgstr "航點編輯器"
 
-#: src/Dialogs/Waypoint/Manager.cpp:293
+#: src/Dialogs/Waypoint/Manager.cpp:295
 msgid "Save changes to waypoint file?"
 msgstr "保存更改到航點檔？"
 
-#: src/Dialogs/Waypoint/Manager.cpp:293
+#: src/Dialogs/Waypoint/Manager.cpp:295
 msgid "Waypoints edited"
 msgstr "編輯航點"
 
@@ -3993,11 +3998,11 @@ msgstr "對不起，航點編輯器還不能提供UTM座標格式。"
 msgid "Waypoint Editor"
 msgstr "航點編輯器"
 
-#: src/Dialogs/Waypoint/WaypointList.cpp:433
+#: src/Dialogs/Waypoint/WaypointList.cpp:429
 msgid "Choose a filter or click here"
 msgstr "選擇一個篩檢程式或點擊這裡"
 
-#: src/Dialogs/Waypoint/WaypointList.cpp:490
+#: src/Dialogs/Waypoint/WaypointList.cpp:486
 msgid "Select Waypoint"
 msgstr "選擇航點"
 
@@ -5008,75 +5013,75 @@ msgstr ""
 msgid "Enable black cursor"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:42
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:43
 #, no-c-format
 msgid "Start only"
 msgstr "僅開始"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:55
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:56
 msgid "Pilot name"
 msgstr "飛行員姓名"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:57
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:58
 #, fuzzy
 msgid "CoPilot name"
 msgstr "飛行員姓名"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:59
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:60
 msgid "Crew weight default"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:60
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:61
 msgid ""
 "Default for all weight loaded to the glider beyond the empty weight and "
 "besides the water ballast."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:66
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:67
 msgid "Time step cruise"
 msgstr "巡航時間步調"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:67
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:68
 msgid "This is the time interval between logged points when not circling."
 msgstr "這是在不盤轉時記錄點之間的時間間隔。"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:71
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:72
 msgid "Time step circling"
 msgstr "盤轉時間步調"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:72
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:73
 msgid "This is the time interval between logged points when circling."
 msgstr "這是在盤轉時記錄點之間的時間間隔。"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:76
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:77
 msgid "Auto. logger"
 msgstr "自動記錄器"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:77
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:78
 msgid ""
 "Enables the automatic starting and stopping of logger on takeoff and landing "
 "respectively. Disable when flying paragliders."
 msgstr "在起飛和著陸時分別實現記錄儀的自動啟動和停止。滑翔傘飛行時禁用。"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:82
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:83
 msgid "NMEA logger"
 msgstr "NMEA記錄器"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:83
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:84
 msgid ""
 "Enable the NMEA logger on startup? If this option is disabled, the NMEA "
 "logger can still be started manually."
 msgstr "啟動時啟用NMEA記錄器嗎？如果該選項被禁用，NMEA記錄器仍然可以手動啟動。"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:88
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:89
 msgid "Log book"
 msgstr "航行日誌"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:88
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:89
 msgid "Logs each start and landing."
 msgstr "記錄每個開始和著陸。"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:92
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:93
 msgid "Logger ID"
 msgstr "記錄器ID"
 
@@ -5146,7 +5151,7 @@ msgid "Use a recent average of the ground track as basis."
 msgstr "以最近的平均地面軌跡為基礎。"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:41
-#: src/Dialogs/Task/TargetDialog.cpp:719
+#: src/Dialogs/Task/TargetDialog.cpp:722
 #, no-c-format
 msgid "Target"
 msgstr "目標"
@@ -5377,7 +5382,7 @@ msgid "Uses task glide polar."
 msgstr "使用任務滑動極曲線。"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:130
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:86
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:87
 #, no-c-format
 msgid "Safety MC"
 msgstr "MC安全值"
@@ -5456,85 +5461,85 @@ msgstr "在可到達、和地形陰影，滑翔機到達處繪製虛線。"
 msgid "Reach display"
 msgstr "顯示到達"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:46
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:47
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:112
 msgid "Arrival height"
 msgstr "到達高度"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:47
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:48
 msgid ""
 "The height above terrain that the glider should arrive at for a safe landing."
 msgstr "滑翔機到達安全著陸地以上的高度。"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:52
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:53
 msgid "Terrain height"
 msgstr "地形高度"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:53
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:54
 msgid "The height above terrain that the glider must clear during final glide."
 msgstr "滑翔機最後滑翔時必須清除的地形高度。"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:59
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:60
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:101
 #, no-c-format
 msgid "Simple"
 msgstr "簡單"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:60
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:61
 #, no-c-format
 msgid ""
 "The alternates will only be sorted by waypoint type (airport/outlanding "
 "field) and arrival height."
 msgstr "備用地將僅由航點類型（機場/外場著陸區域）和到達高度排序。"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:62
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:63
 #, no-c-format
 msgid "The sorting will also take the current task direction into account."
 msgstr "排序也將考慮當前的任務方向。"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:63
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:64
 #, no-c-format
 msgid "Home"
 msgstr "本場"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:64
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:65
 #, no-c-format
 msgid ""
 "The sorting will try to find landing options in the current direction to the "
 "configured home waypoint."
 msgstr "排序將嘗試尋找當前配置的本場航點方向的著陸選項。"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:68
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:69
 msgid "Alternates mode"
 msgstr "備用模式"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:69
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:70
 msgid ""
 "Determines sorting of alternates in the alternates dialog and in abort mode."
 msgstr "在備用地對話方塊和中止模式中確定備用地的排序。"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:72
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:73
 msgid "Polar degradation"
 msgstr "極曲線降級"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:73
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:74
 #, no-c-format
 msgid ""
 "A permanent polar degradation. 0% means no degradation, 50% indicates the "
 "glider's sink rate is doubled."
 msgstr "極曲線永久性降級。0%意味著沒有降級，50%表示滑翔機的下沉率增加了一倍。"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:81
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:82
 msgid "Auto bugs"
 msgstr "自動錯誤"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:82
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:83
 #, no-c-format
 msgid ""
 "If enabled, adds 1% to the bugs setting after each full hour while flying."
 msgstr "如果啟用，則在飛行的每一個小時後向bug設置增加1%。"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:87
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:88
 msgid ""
 "The MacCready setting used, when safety MC is enabled for reach "
 "calculations, in task abort mode and for determining arrival altitude at "
@@ -5543,11 +5548,11 @@ msgstr ""
 "當啟用MC安全到達計算時使用MacCready設置，在任務中止模式下用於確定機場的到達高"
 "度。"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:95
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:96
 msgid "STF risk factor"
 msgstr "STF風險因數"
 
-#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:96
+#: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:97
 msgid ""
 "The STF risk factor reduces the MacCready setting used to calculate speed to "
 "fly as the glider gets low, in order to compensate for risk. Set to 0.0 for "
@@ -6051,7 +6056,7 @@ msgid "Default radius or gate width of the start zone for new tasks."
 msgstr "新任務的開始區域的預設半徑或閘寬度。"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:138
-#: src/Dialogs/Task/TaskPointDialog.cpp:348
+#: src/Dialogs/Task/TaskPointDialog.cpp:349
 msgid "Finish point"
 msgstr "終止點"
 
@@ -6895,23 +6900,23 @@ msgstr "OZ磁區的內側半徑。"
 msgid "Angle"
 msgstr "角度"
 
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:101
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:109
 msgid "Turn Points"
 msgstr "轉彎點"
 
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:126
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:129
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:205
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:236
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:134
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:137
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:213
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:244
 #: Data/Input/default.xci:381
 msgid "Task Manager"
 msgstr "管理任務"
 
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:202
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:210
 msgid "Validation Errors"
 msgstr "錯誤確認"
 
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:204
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:212
 msgid ""
 "Task not valid. Changes will be lost.\n"
 "Continue?"
@@ -6931,31 +6936,31 @@ msgstr "任務無更改"
 msgid "Revert Changes"
 msgstr "恢復更改"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:109
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:111
 msgid "Edit Point"
 msgstr "編輯點"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:111
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:113
 msgid "Make Finish"
 msgstr "完成"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:117
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:119
 msgid "Reverse"
 msgstr "反向"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:119
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:121
 msgid "Clear All"
 msgstr "清除所有"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:203
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:205
 msgid "Clear all points?"
 msgstr "清除所有航點？"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:203
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:205
 msgid "Task edit"
 msgstr "編輯任務"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:226
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:228
 msgid "Add Turnpoint"
 msgstr "增加轉彎點"
 
@@ -7017,116 +7022,131 @@ msgstr "創建新任務？"
 msgid "Task New"
 msgstr "新任務"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:144
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:135
 msgid "New Task"
 msgstr "新任務"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:145
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:136
 msgid "Declare"
 msgstr "申報"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:146
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:137
 msgid "Browse"
 msgstr "流覽"
 
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:150
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:141
 #, fuzzy
 msgid "Download WeGlide task"
 msgstr "下載飛行"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:77
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:144
+#, fuzzy
+msgid "My WeGlide tasks"
+msgstr "下載飛行"
+
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:148
+#, fuzzy
+msgid "Public WeGlide tasks"
+msgstr "下載飛行"
+
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:79
+#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:83
 msgid "Load"
 msgstr "載入"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:78
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:80
 msgid "Rename"
 msgstr "重命名"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:80
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:295
-#: src/Monitor/AirspaceWarningMonitor.cpp:69
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:82
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:298
+#: src/Monitor/AirspaceWarningMonitor.cpp:70
 msgid "More"
 msgstr "更多"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:190
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:193
 msgid "Load the selected task?"
 msgstr "載入選擇的任務？"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:198
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:232
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:201
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:235
 msgid "Task Browser"
 msgstr "流覽任務"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:223
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:226
 msgid "Can't delete .CUP files"
 msgstr "不能刪除.CUP文件"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:231
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:234
 msgid "Delete the selected task?"
 msgstr "刪除選擇的任務？"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:269
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:272
 msgid "Can't rename .CUP files"
 msgstr "不能重命名.CUP文件"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:269
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:272
 msgid "Rename Error"
 msgstr "重命名錯誤"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:295
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:298
 msgid "Less"
 msgstr "較少"
 
-#: src/Dialogs/Task/OptionalStartsDialog.cpp:33
-#: src/Dialogs/Task/TaskPointDialog.cpp:225
-#: src/InfoBoxes/Panel/ATCReference.cpp:66
+#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:84
+msgid "Refresh"
+msgstr ""
+
+#: src/Dialogs/Task/OptionalStartsDialog.cpp:34
+#: src/Dialogs/Task/TaskPointDialog.cpp:226
+#: src/InfoBoxes/Panel/ATCReference.cpp:67
 msgid "Relocate"
 msgstr "重定位"
 
-#: src/Dialogs/Task/OptionalStartsDialog.cpp:37
-#: src/Dialogs/Task/TaskPointDialog.cpp:222
+#: src/Dialogs/Task/OptionalStartsDialog.cpp:38
+#: src/Dialogs/Task/TaskPointDialog.cpp:223
 #: src/Dialogs/Weather/NOAAList.cpp:100 src/Dialogs/Weather/NOAAList.cpp:213
 #: src/Dialogs/Weather/NOAADetails.cpp:49
 #: src/Dialogs/Weather/NOAADetails.cpp:100
 msgid "Remove"
 msgstr "移除"
 
-#: src/Dialogs/Task/OptionalStartsDialog.cpp:116
+#: src/Dialogs/Task/OptionalStartsDialog.cpp:117
 msgid "(Add Alternate Start)"
 msgstr "（添加備用開始）"
 
-#: src/Dialogs/Task/OptionalStartsDialog.cpp:179
+#: src/Dialogs/Task/OptionalStartsDialog.cpp:180
 msgid "Alternate Start Points"
 msgstr "備用開始點"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:195
-#: src/Dialogs/Task/TaskPointDialog.cpp:232
+#: src/Dialogs/Task/TaskPointDialog.cpp:196
+#: src/Dialogs/Task/TaskPointDialog.cpp:233
 msgid "Change Type"
 msgstr "更改類型"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:241
-#: src/Dialogs/Task/TaskPointDialog.cpp:314
+#: src/Dialogs/Task/TaskPointDialog.cpp:242
+#: src/Dialogs/Task/TaskPointDialog.cpp:315
 msgid "Enable Alternate Starts"
 msgstr "開始啟用備用地"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:244
+#: src/Dialogs/Task/TaskPointDialog.cpp:245
 msgid "Score exit"
 msgstr "得分退出"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:317
+#: src/Dialogs/Task/TaskPointDialog.cpp:318
 msgid "Edit Alternates"
 msgstr "編輯備用地"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:338
-#: src/Dialogs/Task/TaskPointDialog.cpp:409
+#: src/Dialogs/Task/TaskPointDialog.cpp:339
+#: src/Dialogs/Task/TaskPointDialog.cpp:410
 msgid "Task point"
 msgstr "任務點"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:343
+#: src/Dialogs/Task/TaskPointDialog.cpp:344
 msgid "Assigned area point"
 msgstr "指定區域點"
 
-#: src/Dialogs/Task/TaskPointDialog.cpp:409
+#: src/Dialogs/Task/TaskPointDialog.cpp:410
 msgid "Remove task point?"
 msgstr "移除任務點？"
 
@@ -7216,7 +7236,7 @@ msgstr "BGA開始磁區"
 msgid "Enter a task name"
 msgstr "輸入任務名稱"
 
-#: src/Dialogs/Task/TargetDialog.cpp:358
+#: src/Dialogs/Task/TargetDialog.cpp:360
 msgid ""
 "For AAT tasks, this setting can be used to adjust the target points within "
 "the AAT sectors.  Larger values move the target points to produce larger "
@@ -7226,12 +7246,12 @@ msgstr ""
 "對於AAT任務，此設置可用於調整AAT磁區內的目標點。較大的值移動目標點以產生較大"
 "的任務距離，較小的值移動目標點以產生較小的任務距離。"
 
-#: src/Dialogs/Task/TargetDialog.cpp:363 src/InfoBoxes/Content/Factory.cpp:948
+#: src/Dialogs/Task/TargetDialog.cpp:365 src/InfoBoxes/Content/Factory.cpp:948
 #, no-c-format
 msgid "Radial"
 msgstr "徑向"
 
-#: src/Dialogs/Task/TargetDialog.cpp:365
+#: src/Dialogs/Task/TargetDialog.cpp:367
 msgid ""
 "For AAT tasks, this setting can be used to adjust the target points within "
 "the AAT sectors.  Positive values rotate the range line clockwise, negative "
@@ -7240,19 +7260,19 @@ msgstr ""
 "對於AAT任務，此設置可用於調整AAT磁區內的目標點。正值順時針旋轉範圍線，負值逆"
 "時針旋轉範圍線。"
 
-#: src/Dialogs/Task/TargetDialog.cpp:370
+#: src/Dialogs/Task/TargetDialog.cpp:372
 msgid "ETE"
 msgstr "估計在途時間"
 
-#: src/Dialogs/Task/TargetDialog.cpp:372
+#: src/Dialogs/Task/TargetDialog.cpp:374
 msgid "Estimated time en-route to the next AAT target."
 msgstr "估計到下一個AAT目標的時間。"
 
-#: src/Dialogs/Task/TargetDialog.cpp:374
+#: src/Dialogs/Task/TargetDialog.cpp:376
 msgid "Delta T"
 msgstr "Delta T"
 
-#: src/Dialogs/Task/TargetDialog.cpp:376
+#: src/Dialogs/Task/TargetDialog.cpp:378
 msgid ""
 "AAT Delta Time - Difference between estimated task time and AAT minimum "
 "time. Colored red if negative (expected arrival too early), or blue if in "
@@ -7262,26 +7282,26 @@ msgstr ""
 "AAT Delta時間---估計任務時間和AAT最小時間差。如果是負值為紅色（預期到達太"
 "早），或如果在磁區估計到達時間大於AAT時間加上5分鐘則變為藍色。"
 
-#: src/Dialogs/Task/TargetDialog.cpp:378
+#: src/Dialogs/Task/TargetDialog.cpp:380
 msgid "V rem."
 msgstr "推薦速度。"
 
-#: src/Dialogs/Task/TargetDialog.cpp:382
+#: src/Dialogs/Task/TargetDialog.cpp:384
 msgid "V ach"
 msgstr "實際速度"
 
-#: src/Dialogs/Task/TargetDialog.cpp:384
+#: src/Dialogs/Task/TargetDialog.cpp:386
 msgid ""
 "AA Speed - Assigned Area Task average speed achievable around target points "
 "remaining in minimum AAT time."
 msgstr "AA速度---指定區域任務剩餘最小AAT時間到達目標附近的平均速度。"
 
-#: src/Dialogs/Task/TargetDialog.cpp:389
+#: src/Dialogs/Task/TargetDialog.cpp:391
 msgid "Optimized"
 msgstr "優化"
 
-#: src/Dialogs/Task/AlternatesListDialog.cpp:156
-#: src/InfoBoxes/Content/Alternate.cpp:29 Data/Input/default.xci:411
+#: src/Dialogs/Task/AlternatesListDialog.cpp:157
+#: src/InfoBoxes/Content/Alternate.cpp:33 Data/Input/default.xci:411
 #: Data/Input/default.xci:1040
 #, no-c-format
 msgid "Alternates"
@@ -7392,7 +7412,7 @@ msgid "Master Volume"
 msgstr "主音量"
 
 #: src/Dialogs/Weather/NOAAList.cpp:99 src/Dialogs/Weather/NOAADetails.cpp:48
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:212
+#: src/Dialogs/Weather/MapOverlayWidget.cpp:211
 msgid "Update"
 msgstr "更新"
 
@@ -7419,35 +7439,35 @@ msgstr "您要刪除網站 %s 嗎？"
 msgid "This function is not available on your platform yet."
 msgstr "此功能在您的平臺上尚未可用。"
 
-#: src/Monitor/AirspaceWarningMonitor.cpp:36
+#: src/Monitor/AirspaceWarningMonitor.cpp:37
 msgid "Inside airspace"
 msgstr "進入空域"
 
-#: src/Monitor/AirspaceWarningMonitor.cpp:38
+#: src/Monitor/AirspaceWarningMonitor.cpp:39
 msgid "Near airspace"
 msgstr "靠近空域"
 
-#: src/Monitor/TaskConstraintsMonitor.cpp:37
+#: src/Monitor/TaskConstraintsMonitor.cpp:38
 msgid "Maximum start speed exceeded"
 msgstr "超過最大開始速度"
 
-#: src/Monitor/TaskAdvanceMonitor.cpp:21
+#: src/Monitor/TaskAdvanceMonitor.cpp:22
 msgid "In sector, arm advance when ready"
 msgstr "在磁區，arm準備前進"
 
-#: src/Monitor/TaskAdvanceMonitor.cpp:23
+#: src/Monitor/TaskAdvanceMonitor.cpp:24
 msgid "Arm"
 msgstr "Arm"
 
-#: src/Monitor/TaskAdvanceMonitor.cpp:33 src/Monitor/MatTaskMonitor.cpp:42
+#: src/Monitor/TaskAdvanceMonitor.cpp:34 src/Monitor/MatTaskMonitor.cpp:44
 msgid "Dismiss"
 msgstr "解散"
 
-#: src/Monitor/MatTaskMonitor.cpp:30
+#: src/Monitor/MatTaskMonitor.cpp:32
 msgid "Add this turn point?"
 msgstr "增加這個轉彎點？"
 
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:207
+#: src/Dialogs/Weather/MapOverlayWidget.cpp:206
 msgid "Use"
 msgstr "使用"
 
@@ -7455,33 +7475,33 @@ msgstr "使用"
 msgid "No METAR available"
 msgstr "無METAR可用"
 
-#: src/Weather/NOAAFormatter.cpp:115 src/Weather/NOAAFormatter.cpp:122
+#: src/Weather/NOAAFormatter.cpp:111 src/Weather/NOAAFormatter.cpp:117
 msgid "Dew Point"
 msgstr "露點"
 
-#: src/Weather/NOAAFormatter.cpp:149
+#: src/Weather/NOAAFormatter.cpp:144
 msgid "Visibility"
 msgstr "能見度"
 
-#: src/Weather/NOAAFormatter.cpp:154
+#: src/Weather/NOAAFormatter.cpp:149
 #, c-format
 msgid "more than %s"
 msgstr "超過 %s"
 
-#: src/Weather/NOAAFormatter.cpp:166
+#: src/Weather/NOAAFormatter.cpp:161
 msgid "Sky Conditions"
 msgstr "天空條件"
 
-#: src/Weather/NOAAFormatter.cpp:229
+#: src/Weather/NOAAFormatter.cpp:224
 #, c-format
 msgid "METAR for %s:"
 msgstr "METAR %s:"
 
-#: src/Weather/NOAAFormatter.cpp:255
+#: src/Weather/NOAAFormatter.cpp:250
 msgid "No METAR available!"
 msgstr "沒有METAR可用！"
 
-#: src/Weather/NOAAFormatter.cpp:269
+#: src/Weather/NOAAFormatter.cpp:264
 msgid "No TAF available!"
 msgstr "無TAF可用！"
 
@@ -7690,7 +7710,7 @@ msgstr ""
 msgid "Next distance"
 msgstr "下一目標距離"
 
-#: src/InfoBoxes/Content/Factory.cpp:208 src/InfoBoxes/Content/Task.cpp:162
+#: src/InfoBoxes/Content/Factory.cpp:208 src/InfoBoxes/Content/Task.cpp:165
 #, no-c-format
 msgid "WP Dist"
 msgstr "航點距離"
@@ -9274,7 +9294,7 @@ msgid ""
 msgstr "到達終點的到達高度與MC設置為0的相對安全到達高度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:1009
-#: src/InfoBoxes/Content/Factory.cpp:1010 src/InfoBoxes/Content/Task.cpp:883
+#: src/InfoBoxes/Content/Factory.cpp:1010 src/InfoBoxes/Content/Task.cpp:886
 #, no-c-format
 msgid "Next arrow"
 msgstr "下一箭頭"
@@ -9495,7 +9515,24 @@ msgstr ""
 msgid "Engine Revolutions Per Minute."
 msgstr ""
 
-#: src/InfoBoxes/Content/Alternate.cpp:54
+#: src/InfoBoxes/Content/Factory.cpp:1125
+#, no-c-format
+msgid "AAT dT and task ETA"
+msgstr ""
+
+#: src/InfoBoxes/Content/Factory.cpp:1126
+#, no-c-format
+msgid "AATdeltaOrETA"
+msgstr ""
+
+#: src/InfoBoxes/Content/Factory.cpp:1127
+#, no-c-format
+msgid ""
+"Shows AAT delta time and estimated time of arrival in case of AAT task, and "
+"estimated time of arrival in case of racing task"
+msgstr ""
+
+#: src/InfoBoxes/Content/Alternate.cpp:58
 #, fuzzy
 msgid "Altn {}"
 msgstr "備用1"
@@ -9536,31 +9573,31 @@ msgstr "接通交流電"
 msgid "No GPS"
 msgstr "無GPS"
 
-#: src/InfoBoxes/Content/Speed.cpp:96
+#: src/InfoBoxes/Content/Speed.cpp:98
 msgid "BLOCK"
 msgstr "阻擋"
 
-#: src/InfoBoxes/Content/Speed.cpp:98
+#: src/InfoBoxes/Content/Speed.cpp:100
 msgid "DOLPHIN"
 msgstr "海豚飛行"
 
-#: src/InfoBoxes/Content/Task.cpp:112
+#: src/InfoBoxes/Content/Task.cpp:115
 msgid "Next"
 msgstr "下一個"
 
-#: src/InfoBoxes/Content/Task.cpp:671
+#: src/InfoBoxes/Content/Task.cpp:674
 msgid "Time Below"
 msgstr "以下時間"
 
-#: src/InfoBoxes/Content/Task.cpp:799 src/InfoBoxes/Content/Task.cpp:844
+#: src/InfoBoxes/Content/Task.cpp:802 src/InfoBoxes/Content/Task.cpp:847
 msgid "Closed"
 msgstr "關閉"
 
-#: src/InfoBoxes/Content/Task.cpp:808 src/InfoBoxes/Content/Task.cpp:853
+#: src/InfoBoxes/Content/Task.cpp:811 src/InfoBoxes/Content/Task.cpp:856
 msgid "Open"
 msgstr "打開"
 
-#: src/InfoBoxes/Content/Task.cpp:813 src/InfoBoxes/Content/Task.cpp:858
+#: src/InfoBoxes/Content/Task.cpp:816 src/InfoBoxes/Content/Task.cpp:861
 msgid "Waiting"
 msgstr "等待"
 
@@ -9590,7 +9627,7 @@ msgid ""
 "are W declination, positive is E."
 msgstr ""
 
-#: src/MapWindow/GlueMapWindowItems.cpp:107
+#: src/MapWindow/GlueMapWindowItems.cpp:109
 msgid "There is nothing interesting near this location."
 msgstr "這個地方附近沒有什麼有趣的東西。"
 
@@ -10475,9 +10512,6 @@ msgstr ""
 
 #~ msgid "This allows switching on or off the automatic wind algorithm."
 #~ msgstr "允許打開或關閉自動風況演算法。"
-
-#~ msgid "Loading Topography File..."
-#~ msgstr "載入地貌檔..."
 
 #, no-c-format
 #~ msgid "Unkown"
