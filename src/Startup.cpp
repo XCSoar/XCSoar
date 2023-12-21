@@ -615,8 +615,9 @@ Shutdown()
   global_running = false;
 
   // Stop logger and save igc file
-  operation.SetText(_("Shutdown, saving logs..."));
-  if (backend_components->igc_logger != nullptr) {
+  if (backend_components != nullptr && backend_components->igc_logger != nullptr) {
+    operation.SetText(_("Shutdown, saving logs..."));
+
     try {
       backend_components->igc_logger->GUIStopLogger(CommonInterface::Basic(), true);
     } catch (...) {
@@ -642,7 +643,7 @@ Shutdown()
   operation.SetText(_("Shutdown, please wait..."));
 
   // Close any device connections
-  if (backend_components->devices != nullptr) {
+  if (backend_components != nullptr && backend_components->devices != nullptr) {
     LogString("Stop devices");
     backend_components->devices->Close();
   }
@@ -657,23 +658,25 @@ Shutdown()
     draw_thread->BeginStop();
 #endif
 
-  if (backend_components->calculation_thread)
-    backend_components->calculation_thread->BeginStop();
+  if (backend_components != nullptr) {
+    if (backend_components->calculation_thread)
+      backend_components->calculation_thread->BeginStop();
 
-  if (backend_components->merge_thread)
-    backend_components->merge_thread->BeginStop();
+    if (backend_components->merge_thread)
+      backend_components->merge_thread->BeginStop();
 
-  // Wait for the calculations thread to finish
-  LogString("Waiting for calculation thread");
+    // Wait for the calculations thread to finish
+    LogString("Waiting for calculation thread");
 
-  if (backend_components->merge_thread) {
-    backend_components->merge_thread->Join();
-    backend_components->merge_thread.reset();
-  }
+    if (backend_components->merge_thread) {
+      backend_components->merge_thread->Join();
+      backend_components->merge_thread.reset();
+    }
 
-  if (backend_components->calculation_thread) {
-    backend_components->calculation_thread->Join();
-    backend_components->calculation_thread.reset();
+    if (backend_components->calculation_thread) {
+      backend_components->calculation_thread->Join();
+      backend_components->calculation_thread.reset();
+    }
   }
 
   //  Wait for the drawing thread to finish
@@ -694,10 +697,10 @@ Shutdown()
   AudioVarioGlue::Deinitialise();
 
   // Save the task for the next time
-  operation.SetText(_("Shutdown, saving task..."));
+  if (backend_components != nullptr && backend_components->protected_task_manager) {
+    operation.SetText(_("Shutdown, saving task..."));
+    LogString("Save default task");
 
-  LogString("Save default task");
-  if (backend_components->protected_task_manager) {
     try {
       backend_components->protected_task_manager->TaskSaveDefault();
     } catch (...) {
@@ -712,15 +715,19 @@ Shutdown()
   delete terrain_loader;
   terrain_loader = nullptr;
 
-  backend_components->devices.reset();
+  if (backend_components != nullptr)
+    backend_components->devices.reset();
+
   delete device_factory;
   device_factory = nullptr;
 
-  backend_components->nmea_logger.reset();
+  if (backend_components != nullptr) {
+    backend_components->nmea_logger.reset();
 
-  if (backend_components->protected_task_manager) {
-    backend_components->protected_task_manager->SetRoutePlanner(nullptr);
-    backend_components->protected_task_manager.reset();
+    if (backend_components->protected_task_manager) {
+      backend_components->protected_task_manager->SetRoutePlanner(nullptr);
+      backend_components->protected_task_manager.reset();
+    }
   }
 
   delete task_manager;
