@@ -1,6 +1,8 @@
 Version 7.41 - not yet released
 * data files
   - fix crash with empty user.cup
+* Android
+  - fix BLE/HM10 data corruption
 * Kobo
   - fix Wifi setup (7.40 breakage)
 

@@ -181,8 +181,14 @@ public class HM10Port
   public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
     super.onMtuChanged(gatt, mtu, status);
 
-    if (status == BluetoothGatt.GATT_SUCCESS && mtu > 0)
-      writeBuffer.setMtu(mtu);
+    /* the MTU reported by the Android APIs is the ATT MTU, not the
+       data MTU; from this reported MTU value, we have to subtract the
+       ATT header size (1 byte opcode, 2 bytes handle) to get the data
+       MTU */
+    final int ATT_HEADER_SIZE = 3;
+
+    if (status == BluetoothGatt.GATT_SUCCESS && mtu > ATT_HEADER_SIZE)
+      writeBuffer.setMtu(mtu - ATT_HEADER_SIZE);
 
     if (setupCharacteristicsPending) {
       setupCharacteristicsPending = false;
