@@ -3,6 +3,7 @@ Version 7.41 - not yet released
   - fix crash with empty user.cup
 * Android
   - fix BLE/HM10 data corruption
+  - fix crash if IOIO connect was canceled quickly
   - fix crash if not allowed to start service in foreground
 * Kobo
   - fix Wifi setup (7.40 breakage)

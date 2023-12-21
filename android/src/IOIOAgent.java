@@ -148,6 +148,12 @@ final class IOIOAgent extends Thread {
       Log.e(TAG, "IOIO connection " + getName() + " failed: " + e);
       ioio.disconnect();
       return null;
+    } catch (IllegalStateException e) {
+      /* thrown by
+         AccessoryConnectionBootstrap$Connection.waitForConnect() if
+         disconnect() was called from another thread before
+         waitForConnect() was entered */
+      return null;
     } catch (SecurityException e) {
       /* called from AccessoryConnectionBootstrap.tryOpen(),
          UsbManager.openAccessory() can throw SecurityException if no
