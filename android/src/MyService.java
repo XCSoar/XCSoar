@@ -80,7 +80,11 @@ public class MyService extends Service {
 
     notificationManager.notify(1, notification);
 
-    startForeground(1, notification);
+    try {
+      startForeground(1, notification);
+    } catch (Exception e) {
+      Log.e(TAG, "Service.startForeground() failed", e);
+    }
 
     /* We want this service to continue running until it is explicitly
        stopped, so return sticky */
