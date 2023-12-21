@@ -4,6 +4,7 @@
 #include "Startup.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
+#include "NetComponents.hpp"
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 #include "DataGlobals.hpp"
@@ -565,20 +566,16 @@ Startup(UI::Display &display)
 
   PageActions::Update();
 
-#ifdef HAVE_TRACKING
-  tracking = new TrackingGlue(*asio_thread, *Net::curl);
-  tracking->SetSettings(computer_settings.tracking);
-
+  net_components = new NetComponents(*asio_thread, *Net::curl,
+                                     computer_settings.tracking);
 #ifdef HAVE_SKYLINES_TRACKING
   if (map_window != nullptr)
-    map_window->SetSkyLinesData(&tracking->GetSkyLinesData());
-#endif
+    map_window->SetSkyLinesData(&net_components->tracking->GetSkyLinesData());
 #endif
 
 #ifdef HAVE_HTTP
-  tim_glue = new TIM::Glue(*Net::curl);
   if (map_window != nullptr)
-    map_window->SetThermalInfoMap(tim_glue);
+    map_window->SetThermalInfoMap(net_components->tim.get());
 #endif
 
   assert(!global_running);
@@ -738,15 +735,8 @@ Shutdown()
   noaa_store = nullptr;
 #endif
 
-#ifdef HAVE_HTTP
-  delete tim_glue;
-  tim_glue = nullptr;
-#endif
-
-#ifdef HAVE_TRACKING
-  delete tracking;
-  tracking = nullptr;
-#endif
+  delete net_components;
+  net_components = nullptr;
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   Net::DownloadManager::Deinitialise();

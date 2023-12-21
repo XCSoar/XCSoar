@@ -22,6 +22,7 @@
 #include "ui/event/Idle.hpp"
 #include "Dialogs/Tracking/CloudEnableDialog.hpp"
 #include "Components.hpp"
+#include "NetComponents.hpp"
 #include "BackendComponents.hpp"
 
 static void
@@ -244,16 +245,18 @@ ProcessTimer() noexcept
       m_clock.Update();
   }
 
+  if (net_components != nullptr) {
 #ifdef HAVE_TRACKING
-  if (tracking != nullptr) {
-    tracking->SetSettings(CommonInterface::GetComputerSettings().tracking);
-    tracking->OnTimer(CommonInterface::Basic(), CommonInterface::Calculated());
-  }
+    if (net_components->tracking) {
+      net_components->tracking->SetSettings(CommonInterface::GetComputerSettings().tracking);
+      net_components->tracking->OnTimer(CommonInterface::Basic(), CommonInterface::Calculated());
+    }
 #endif
 
 #ifdef HAVE_HTTP
-  if (tim_glue != nullptr &&
-    CommonInterface::GetComputerSettings().weather.enable_tim)
-    tim_glue->OnTimer(CommonInterface::Basic());
+    if (net_components->tim != nullptr &&
+        CommonInterface::GetComputerSettings().weather.enable_tim)
+      net_components->tim->OnTimer(CommonInterface::Basic());
 #endif
+  }
 }

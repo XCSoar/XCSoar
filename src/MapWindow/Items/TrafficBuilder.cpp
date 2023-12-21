@@ -9,6 +9,7 @@
 #include "Tracking/SkyLines/Data.hpp"
 #include "Tracking/TrackingGlue.hpp"
 #include "Components.hpp"
+#include "NetComponents.hpp"
 
 void
 MapItemListBuilder::AddTraffic(const TrafficList &flarm)
@@ -28,7 +29,10 @@ void
 MapItemListBuilder::AddSkyLinesTraffic()
 {
 #ifdef HAVE_SKYLINES_TRACKING
-  const auto &data = tracking->GetSkyLinesData();
+  if (net_components == nullptr || !net_components->tracking)
+    return;
+
+  const auto &data = net_components->tracking->GetSkyLinesData();
   const std::lock_guard lock{data.mutex};
 
   StaticString<32> buffer;

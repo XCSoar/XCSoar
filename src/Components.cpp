@@ -2,8 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "Components.hpp"
-#include "Tracking/Features.hpp"
-#include "net/http/Features.hpp"
 #include "thread/Debug.hpp"
 #include "thread/Handle.hpp"
 
@@ -14,14 +12,6 @@ AsyncTerrainOverviewLoader *terrain_loader;
 
 #ifndef ENABLE_OPENGL
 DrawThread *draw_thread;
-#endif
-
-#ifdef HAVE_TRACKING
-TrackingGlue *tracking;
-#endif
-
-#ifdef HAVE_HTTP
-TIM::Glue *tim_glue;
 #endif
 
 #ifndef NDEBUG

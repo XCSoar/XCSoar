@@ -6,10 +6,8 @@
 class FileCache;
 class AsyncTerrainOverviewLoader;
 class DrawThread;
-class ProtectedAirspaceWarningManager;
-class TrackingGlue;
-namespace TIM { class Glue; }
 
+inline struct NetComponents *net_components;
 inline struct DataComponents *data_components;
 inline struct BackendComponents *backend_components;
 
@@ -19,6 +17,3 @@ extern AsyncTerrainOverviewLoader *terrain_loader;
 #ifndef ENABLE_OPENGL
 extern DrawThread *draw_thread;
 #endif
-
-extern TrackingGlue *tracking;
-extern TIM::Glue *tim_glue;
