@@ -194,6 +194,7 @@ cares = CmakeProject(
         '-DCARES_SHARED=OFF',
         '-DCARES_STATIC_PIC=ON',
         '-DCARES_BUILD_TOOLS=OFF',
+        '-DCARES_THREADS=OFF',
     ],
     patches=abspath('lib/c-ares/patches'),
 )
