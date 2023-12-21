@@ -97,7 +97,7 @@ MapTaskManager::AppendToTask(WaypointPtr &&waypoint)
     case TaskType::GOTO:
     {
       auto task = task_manager->Clone(GetTaskBehaviour());
-      const TaskWaypoint *OldGotoTWP = task_manager->GetActiveTaskPoint();
+      const TaskWaypoint *OldGotoTWP = task_manager->GetActiveTask()->GetActiveTaskPoint();
       if (!OldGotoTWP)
         break;
 
@@ -168,7 +168,7 @@ MapTaskManager::InsertInTask(WaypointPtr &&waypoint)
     case TaskType::GOTO:
     {
       auto task = task_manager->Clone(GetTaskBehaviour());
-      const auto OldGotoTWP = task_manager->GetActiveTaskPoint();
+      const auto OldGotoTWP = task_manager->GetActiveTask()->GetActiveTaskPoint();
       if (!OldGotoTWP)
         break;
       auto OldGotoWp = OldGotoTWP->GetWaypointPtr();

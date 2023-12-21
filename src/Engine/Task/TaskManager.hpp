@@ -98,14 +98,6 @@ public:
   unsigned GetActiveTaskPointIndex() const noexcept;
 
   /**
-   * Accessor of current task point of active task
-   *
-   * @return TaskPoint of active task point, and 0 if no active task
-   */
-  [[gnu::pure]]
-  TaskWaypoint* GetActiveTaskPoint() const noexcept;
-
-  /**
    * Get a random point in the task OZ (for testing simulation route)
    *
    * @param index Index sequence of task point

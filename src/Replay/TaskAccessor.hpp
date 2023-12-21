@@ -50,7 +50,11 @@ public:
 
   [[gnu::pure]]
   GeoPoint GetActiveTaskPointLocation() const noexcept {
-    return task_manager.GetActiveTaskPoint()->GetLocation();
+    const TaskInterface *task = task_manager.GetActiveTask();
+    const auto *point = task != nullptr
+      ? task->GetActiveTaskPoint()
+      : nullptr;
+    return point != nullptr ? point->GetLocation() : GeoPoint::Invalid();
   }
 
   [[gnu::pure]]
@@ -71,11 +75,14 @@ public:
 
   [[gnu::pure]]
   double GetTargetHeight() const noexcept {
-    if (task_manager.GetActiveTaskPoint())
-      return std::max(floor_alt,
-                      task_manager.GetActiveTaskPoint()->GetElevation());
-    else
-      return floor_alt;
+    const TaskInterface *task = task_manager.GetActiveTask();
+    if (task != nullptr) {
+      const auto *point = task->GetActiveTaskPoint();
+      if (point != nullptr)
+        return std::max(floor_alt, point->GetElevation());
+    }
+
+    return floor_alt;
   }
 
   [[gnu::pure]]

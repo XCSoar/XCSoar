@@ -92,12 +92,15 @@ TaskAutoPilot::HasTarget([[maybe_unused]] const TaskAccessor& task) const
 GeoPoint
 TaskAutoPilot::GetTarget(const TaskAccessor& task) const
 {
-  if (HasTarget(task))
+  if (HasTarget(task)) {
     // in this mode, we go directly to the target
-    return task.GetActiveTaskPointLocation();
-  else
-    // head towards the rough location
-    return w[0];
+    const auto p = task.GetActiveTaskPointLocation();
+    if (p.IsValid())
+      return p;
+  }
+
+  // head towards the rough location
+  return w[0];
 }
 
 

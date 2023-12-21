@@ -49,7 +49,11 @@ WaypointPtr
 ProtectedTaskManager::GetActiveWaypoint() const noexcept
 {
   Lease lease(*this);
-  const TaskWaypoint *tp = lease->GetActiveTaskPoint();
+  const auto *task = lease->GetActiveTask();
+  if (task == nullptr)
+    return nullptr;
+
+  const TaskWaypoint *tp = task->GetActiveTaskPoint();
   if (tp)
     return tp->GetWaypointPtr();
 
@@ -77,11 +81,13 @@ ProtectedTaskManager::IncrementActiveTaskPointArm(int offset) noexcept
   TaskAdvance &advance = lease->SetTaskAdvance();
   OrderedTaskPoint *nextwp = nullptr;
 
+  const auto &ordered_task = lease->GetOrderedTask();
+
   switch (advance.GetState()) {
   case TaskAdvance::MANUAL:
   case TaskAdvance::AUTO:
     lease->IncrementActiveTaskPoint(offset);
-    nextwp = dynamic_cast<OrderedTaskPoint *>(lease->GetActiveTaskPoint());
+    nextwp = static_cast<OrderedTaskPoint *>(ordered_task.GetActiveTaskPoint());
     break;
   case TaskAdvance::START_DISARMED:
   case TaskAdvance::TURN_DISARMED:
@@ -89,14 +95,14 @@ ProtectedTaskManager::IncrementActiveTaskPointArm(int offset) noexcept
       advance.SetArmed(true);
     } else {
       lease->IncrementActiveTaskPoint(offset);
-      nextwp = dynamic_cast<OrderedTaskPoint *>(lease->GetActiveTaskPoint());
+      nextwp = static_cast<OrderedTaskPoint *>(ordered_task.GetActiveTaskPoint());
     }
     break;
   case TaskAdvance::START_ARMED:
   case TaskAdvance::TURN_ARMED:
     if (offset>0) {
       lease->IncrementActiveTaskPoint(offset);
-      nextwp = dynamic_cast<OrderedTaskPoint *>(lease->GetActiveTaskPoint());
+      nextwp = static_cast<OrderedTaskPoint *>(ordered_task.GetActiveTaskPoint());
     } else {
       advance.SetArmed(false);
     }
