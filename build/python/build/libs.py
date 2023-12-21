@@ -128,9 +128,8 @@ openssh = AutotoolsProject(
 )
 
 libfmt = CmakeProject(
-    ('https://github.com/fmtlib/fmt/archive/10.0.0.tar.gz',
-     'https://github.com/fmtlib/fmt/archive/10.0.0.tar.gz'),
-    'ede1b6b42188163a3f2e0f25ad5c0637eca564bd8df74d02e31a311dd6b37ad8',
+    'https://github.com/fmtlib/fmt/archive/10.1.1.tar.gz',
+    '78b8c0a72b1c35e4443a7e308df52498252d1cefc2b08c9a97bc9ee6cfe61f8b',
     'lib/libfmt.a',
     [
         '-DBUILD_SHARED_LIBS=OFF',
@@ -138,8 +137,8 @@ libfmt = CmakeProject(
         '-DFMT_TEST=OFF',
     ],
     name='fmt',
-    version='10.0.0',
-    base='fmt-10.0.0',
+    version='10.1.1',
+    base='fmt-10.1.1',
 )
 
 libsodium = AutotoolsProject(
