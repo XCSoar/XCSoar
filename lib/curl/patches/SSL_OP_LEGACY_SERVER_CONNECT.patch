@@ -1,8 +1,8 @@
-Index: curl-8.4.0/lib/vtls/openssl.c
+Index: curl-8.5.0/lib/vtls/openssl.c
 ===================================================================
---- curl-8.4.0.orig/lib/vtls/openssl.c
-+++ curl-8.4.0/lib/vtls/openssl.c
-@@ -3570,6 +3570,7 @@ static CURLcode ossl_connect_step1(struc
+--- curl-8.5.0.orig/lib/vtls/openssl.c
++++ curl-8.5.0/lib/vtls/openssl.c
+@@ -3569,6 +3569,7 @@ static CURLcode ossl_connect_step1(struc
    */
  
    ctx_options = SSL_OP_ALL;

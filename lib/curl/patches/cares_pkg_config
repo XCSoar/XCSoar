@@ -1,7 +1,7 @@
-Index: curl-8.4.0/CMake/FindCARES.cmake
+Index: curl-8.5.0/CMake/FindCARES.cmake
 ===================================================================
---- curl-8.4.0.orig/CMake/FindCARES.cmake
-+++ curl-8.4.0/CMake/FindCARES.cmake
+--- curl-8.5.0.orig/CMake/FindCARES.cmake
++++ curl-8.5.0/CMake/FindCARES.cmake
 @@ -30,16 +30,12 @@
  # also defined, but not for general use are
  # CARES_LIBRARY, where to find the c-ares library.
