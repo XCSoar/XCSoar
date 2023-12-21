@@ -1,3 +1,5 @@
+Version 7.42 - not yet released
+
 Version 7.41 - 2023/12/21
 * data files
   - fix crash with empty user.cup
