@@ -186,8 +186,8 @@ freetype = MesonProject(
 )
 
 cares = CmakeProject(
-    'https://c-ares.haxx.se/download/c-ares-1.18.1.tar.gz',
-    '1a7d52a8a84a9fbffb1be9133c0f6e17217d91ea5a6fa61f6b4729cda78ebbcf',
+    'https://c-ares.haxx.se/download/c-ares-1.24.0.tar.gz',
+    'c517de6d5ac9cd55a9b72c1541c3e25b84588421817b5f092850ac09a8df5103',
     'lib/libcares.a',
     [
         '-DCARES_STATIC=ON',
@@ -195,6 +195,7 @@ cares = CmakeProject(
         '-DCARES_STATIC_PIC=ON',
         '-DCARES_BUILD_TOOLS=OFF',
     ],
+    patches=abspath('lib/c-ares/patches'),
 )
 
 curl = CmakeProject(
