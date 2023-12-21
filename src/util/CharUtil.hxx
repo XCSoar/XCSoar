@@ -127,9 +127,15 @@ ToLowerASCII(char ch) noexcept
 }
 
 constexpr bool
-IsHexDigit(char ch) noexcept
+IsLowerHexDigit(char ch) noexcept
 {
 	return IsDigitASCII(ch) ||
-		(ch >= 'a' && ch <= 'f') ||
+		(ch >= 'a' && ch <= 'f');
+}
+
+constexpr bool
+IsHexDigit(char ch) noexcept
+{
+	return IsLowerHexDigit(ch) ||
 		(ch >= 'A' && ch <= 'F');
 }
