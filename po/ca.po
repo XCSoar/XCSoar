@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-12 17:17+0200\n"
-"PO-Revision-Date: 2022-12-11 21:51+0000\n"
+"PO-Revision-Date: 2023-09-14 19:50+0000\n"
 "Last-Translator: Jaume Prats <prats.jaume@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ca/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 5.0.1-dev\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -2420,7 +2420,7 @@ msgstr ""
 #: src/InfoBoxes/InfoBoxSettings.cpp:58
 #, no-c-format
 msgid "Circling"
-msgstr ""
+msgstr "Voltant"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:92
 msgid "This forces the variometer into circling or cruise mode"
@@ -9416,7 +9416,7 @@ msgstr ""
 #: src/InfoBoxes/InfoBoxSettings.cpp:59
 #, no-c-format
 msgid "Cruise"
-msgstr ""
+msgstr "Transició"
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:60
 #, no-c-format
