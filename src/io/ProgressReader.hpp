@@ -36,7 +36,8 @@ public:
     position += nbytes;
 
     // TODO rate-limit SetProgressRange() calls?
-    progress_listener.SetProgressPosition(1024 * position / total);
+    if (nbytes > 0 && total > 0)
+      progress_listener.SetProgressPosition(1024 * position / total);
 
     return nbytes;
   }
