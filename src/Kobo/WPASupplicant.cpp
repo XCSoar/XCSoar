@@ -105,7 +105,7 @@ WPASupplicant::Status(WifiStatus &status)
 }
 
 /*
- * Scan Results look like:
+ * Scan Results look like for a Kobo Mini:
  * bssid                   frequency     signal_level  flags                                                   ssid
  * bc:14:01:e1:d6:78       2412          178           [WPA-PSK-TKIP+CCMP][WPA2-PSK-TKIP+CCMP][WPS][ESS]       FunnyMaple
  * 00:22:a4:b8:f3:31       2437          185           [WEP][ESS]                                              BELL778
@@ -121,6 +121,18 @@ WPASupplicant::Status(WifiStatus &status)
  * - network type. A wireless router may support one or all of WEP, WPA, and WPA2.
  *                 WPA and WPA2 are handled the same. WPA/WPA2 are preferred over WEP.
  * - ssid ascii ssid. ssid could be empty if ssid broadcast is disabled.
+ *
+ *
+ * Scan Results look like for newer Kobos, for example Libra 2:
+ * bssid / frequency / signal level / flags / ssid
+ * b4:ee:b4:c9:27:cb	5500	-29	[WPA-PSK-CCMP+TKIP][WPA2-PSK-CCMP+TKIP][WPS][ESS]	LANCOM2
+ * b4:ee:b4:c9:27:c6	2437	-29	[WPA-PSK-CCMP+TKIP][WPA2-PSK-CCMP+TKIP][WPS][ESS]	LANCOM2
+ * 74:42:7f:2e:96:95	5580	-78	[WPA2-PSK-CCMP][WPS][ESS]	Quickline-33980
+ * 88:41:fc:50:ea:f1	5500	-77	[WPA2-PSK-CCMP][WPS-AUTH][ESS]
+ * a0:64:8f:24:dc:e0	2462	-82	[WPA2-PSK-CCMP][WPS][ESS]	gpb-95570
+ *
+ * - signal_level values like this: -99, -98, -97, ..., -2, -1, 0, +1, +2, +3,  bigger is better.
+
  */
 static bool
 ParseScanResultsLine(WifiVisibleNetwork &dest, std::string_view line) noexcept
@@ -136,7 +148,7 @@ ParseScanResultsLine(WifiVisibleNetwork &dest, std::string_view line) noexcept
 
   dest.bssid = bssid;
 
-  if (const auto value = ParseInteger<unsigned>(signal_level))
+  if (const auto value = ParseInteger<signed>(signal_level))
     dest.signal_level = *value;
   else
     return false;

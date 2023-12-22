@@ -29,7 +29,7 @@ struct WifiStatus {
 struct WifiVisibleNetwork {
   StaticString<32> bssid;
   StaticString<256> ssid;
-  unsigned signal_level;
+  signed signal_level;  // decibels (dBm) or other unknown unit of measurement, >=0
   enum WifiSecurity security;
 };
 

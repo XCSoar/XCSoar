@@ -1,4 +1,6 @@
 Version 7.42 - not yet released
+* Kobo
+  - Wifi setup, display signal level in dBm for new models
 
 Version 7.41 - 2023/12/21
 * data files
