@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "util/ByteOrder.hxx"
+#include "util/PackedLittleEndian.hxx"
 
 #include <chrono>
 #include <cstdint>
