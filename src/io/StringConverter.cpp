@@ -135,11 +135,10 @@ tstring_view
 StringConverter::Convert(std::string_view src)
 {
   src = DetectStrip(src);
-
-#ifdef _UNICODE
   if (src.empty())
     return {};
 
+#ifdef _UNICODE
   TCHAR *t = tbuffer.get(src.size());
   assert(t != nullptr);
 
