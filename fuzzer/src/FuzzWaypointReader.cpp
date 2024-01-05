@@ -20,10 +20,9 @@ LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
   Waypoints way_points;
 
   try {
-    WaypointReaderSeeYou wr{WaypointFactory{WaypointOrigin::NONE}};
     MemoryReader mr{{(const std::byte *)data, size}};
     BufferedReader br(mr);
-    wr.Parse(way_points, br);
+    ParseSeeYou(WaypointFactory{WaypointOrigin::NONE}, way_points, br);
   } catch (...) {
     return EXIT_FAILURE;
   }

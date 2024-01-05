@@ -9,6 +9,6 @@ WAYPOINTFILE_SOURCES = \
 	$(SRC)/Waypoint/WaypointFileType.cpp \
 	$(SRC)/Waypoint/WaypointReader.cpp
 
-WAYPOINTFILE_DEPENDS = WAYPOINT CUPFILE UNITS
+WAYPOINTFILE_DEPENDS = WAYPOINT CUPFILE UNITS IO
 
 $(eval $(call link-library,libwaypointfile,WAYPOINTFILE))

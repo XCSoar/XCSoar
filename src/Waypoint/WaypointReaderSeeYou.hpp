@@ -3,30 +3,15 @@
 
 #pragma once
 
-#include "WaypointReaderBase.hpp"
-#include "io/StringConverter.hpp"
+#include "Factory.hpp"
+
+class Waypoints;
+class BufferedReader;
 
 /**
- * Parses a SeeYou waypoint file.
+ * @return true if the "Related Tasks" line was found, false if the
+ * file contains no task
  *
- * @see http://data.naviter.si/docs/cup_format.pdf
+ * Throws on error.
  */
-class WaypointReaderSeeYou final : public WaypointReaderBase {
-  StringConverter string_converter;
-
-  bool first = true;
-
-  bool ignore_following = false;
-
-private:
-  /* field positions for typical SeeYou *.cup waypoint file */
-  unsigned iFrequency = 9;
-  unsigned iDescription = 10;
-
-public:
-  explicit WaypointReaderSeeYou(WaypointFactory _factory)
-    :WaypointReaderBase(_factory) {}
-
-  /* virtual methods from class WaypointReaderBase */
-  bool ParseLine(const char *line, Waypoints &way_points) override;
-};
+bool ParseSeeYou(WaypointFactory factory, Waypoints &waypoints, BufferedReader &reader);

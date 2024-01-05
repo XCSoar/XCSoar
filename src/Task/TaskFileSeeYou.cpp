@@ -3,7 +3,9 @@
 
 #include "Task/TaskFileSeeYou.hpp"
 #include "io/BufferedReader.hxx"
+#include "io/BufferedCsvReader.hpp"
 #include "io/FileReader.hxx"
+#include "io/StringConverter.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Waypoint/CupParser.hpp"
 #include "Waypoint/WaypointReaderSeeYou.hpp"
@@ -425,18 +427,8 @@ static bool
 ParseSeeYouWaypoints(BufferedReader &reader, Waypoints &way_points)
 {
   const WaypointFactory factory(WaypointOrigin::NONE);
-  WaypointReaderSeeYou waypoint_file(factory);
 
-  while (true) {
-    char *line = reader.ReadLine();
-    if (line == nullptr)
-      return false;
-
-    if (StringIsEqualIgnoreCase(line, "-----Related Tasks-----"))
-      return true;
-
-    waypoint_file.ParseLine(line, way_points);
-  }
+  return ParseSeeYou(factory, way_points, reader);
 }
 
 static char *
