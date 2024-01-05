@@ -5,7 +5,7 @@
 #include "Map.hpp"
 #include "Keys.hpp"
 #include "Tracking/TrackingSettings.hpp"
-#include "util/NumberParser.hpp"
+#include "util/NumberParser.hxx"
 
 #ifdef HAVE_TRACKING
 
@@ -21,7 +21,7 @@ static void Load(const ProfileMap &map,
 
   const char *key = map.Get(ProfileKeys::CloudKey);
   if (key != nullptr)
-    settings.key = ParseUint64(key, nullptr, 16);
+    ParseIntegerTo(key, settings.key, 16);
 }
 
 static void Load(const ProfileMap &map,
@@ -33,8 +33,8 @@ static void Load(const ProfileMap &map,
   map.Get(ProfileKeys::SkyLinesNearTrafficEnabled, settings.near_traffic_enabled);
 
   const char *key = map.Get(ProfileKeys::SkyLinesTrackingKey);
-  if (key != NULL)
-    settings.key = ParseUint64(key, NULL, 16);
+  if (key != nullptr)
+    ParseIntegerTo(key, settings.key, 16);
 
   Load(map, settings.cloud);
 }
