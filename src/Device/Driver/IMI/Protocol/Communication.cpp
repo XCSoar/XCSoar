@@ -40,13 +40,13 @@ IMI::Send(Port &port, OperationEnvironment &env,
   header.payloadSize = payload.size();
 
   IMIWORD crc = 0xffff;
-  crc = UpdateCRC16CCITT(&header, sizeof(header), crc);
+  crc = UpdateCRC16CCITT(ReferenceAsBytes(header), crc);
 
   port.FullWrite(ReferenceAsBytes(header), env, std::chrono::seconds{1});
 
   if (!payload.empty()) {
     port.FullWrite(payload, env, std::chrono::seconds{2});
-    crc = UpdateCRC16CCITT(payload.data(), payload.size(), crc);
+    crc = UpdateCRC16CCITT(payload, crc);
   }
 
   crc = ToBE16(crc);
