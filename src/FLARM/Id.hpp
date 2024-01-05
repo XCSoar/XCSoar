@@ -18,11 +18,11 @@ class FlarmId {
 
   uint32_t value;
 
-  constexpr
-  FlarmId(uint32_t _value):value(_value) {}
+  constexpr FlarmId(uint32_t _value) noexcept
+    :value(_value) {}
 
 public:
-  FlarmId() = default;
+  constexpr FlarmId() noexcept = default;
 
   static constexpr FlarmId Undefined() noexcept {
     return FlarmId(UNDEFINED_VALUE);
