@@ -23,7 +23,7 @@ private:
 	struct sockaddr_storage address;
 
 public:
-	StaticSocketAddress() = default;
+	constexpr StaticSocketAddress() noexcept = default;
 
 	explicit StaticSocketAddress(SocketAddress src) noexcept {
 		*this = src;
@@ -60,11 +60,11 @@ public:
 		return sizeof(address);
 	}
 
-	size_type GetSize() const noexcept {
+	constexpr size_type GetSize() const noexcept {
 		return size;
 	}
 
-	void SetSize(size_type _size) noexcept {
+	constexpr void SetSize(size_type _size) noexcept {
 		assert(_size > 0);
 		assert(size_t(_size) <= sizeof(address));
 
@@ -74,19 +74,19 @@ public:
 	/**
 	 * Set the size to the maximum value for this class.
 	 */
-	void SetMaxSize() {
+	constexpr void SetMaxSize() {
 		SetSize(GetCapacity());
 	}
 
-	int GetFamily() const noexcept {
+	constexpr int GetFamily() const noexcept {
 		return address.ss_family;
 	}
 
-	bool IsDefined() const noexcept {
+	constexpr bool IsDefined() const noexcept {
 		return GetFamily() != AF_UNSPEC;
 	}
 
-	void Clear() noexcept {
+	constexpr void Clear() noexcept {
 		size = sizeof(address.ss_family);
 		address.ss_family = AF_UNSPEC;
 	}
