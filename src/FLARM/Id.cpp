@@ -3,8 +3,13 @@
 
 #include "Id.hpp"
 
+#include <fmt/core.h>
+
+#ifdef _UNICODE
+#include <fmt/xchar.h>
+#endif
+
 #include <stdlib.h>
-#include <stdio.h>
 
 FlarmId
 FlarmId::Parse(const char *input, char **endptr_r) noexcept
@@ -23,7 +28,7 @@ FlarmId::Parse(const TCHAR *input, TCHAR **endptr_r) noexcept
 const char *
 FlarmId::Format(char *buffer) const noexcept
 {
-  sprintf(buffer, "%lX", (unsigned long)value);
+  *fmt::format_to(buffer, "{:X}", value) = 0;
   return buffer;
 }
 
@@ -31,7 +36,7 @@ FlarmId::Format(char *buffer) const noexcept
 const TCHAR *
 FlarmId::Format(TCHAR *buffer) const noexcept
 {
-  _stprintf(buffer, _T("%lX"), (unsigned long)value);
+  *fmt::format_to(buffer, _T("{:X}"), value) = 0;
   return buffer;
 }
 #endif
