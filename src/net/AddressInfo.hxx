@@ -44,6 +44,14 @@ public:
 		return ai_protocol;
 	}
 
+	constexpr bool IsInet() const noexcept {
+		return ai_family == AF_INET || ai_family == AF_INET6;
+	}
+
+	constexpr bool IsTCP() const noexcept {
+		return IsInet() && GetType() == SOCK_STREAM;
+	}
+
 	constexpr operator SocketAddress() const noexcept {
 		return {ai_addr, (SocketAddress::size_type)ai_addrlen};
 	}
