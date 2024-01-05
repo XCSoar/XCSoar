@@ -84,7 +84,7 @@ SendWithCRC(Port &port, std::span<const std::byte> src,
 {
   port.FullWrite(src, env, std::chrono::seconds(2));
 
-  uint16_t crc16 = UpdateCRC16CCITT(src.data(), src.size(), 0);
+  uint16_t crc16 = UpdateCRC16CCITT(src, 0);
   port.Write(crc16 >> 8);
   port.Write(crc16 & 0xff);
 }
