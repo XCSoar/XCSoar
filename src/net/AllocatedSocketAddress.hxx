@@ -116,6 +116,10 @@ public:
 		size = 0;
 	}
 
+	bool IsInet() const noexcept {
+		return GetFamily() == AF_INET || GetFamily() == AF_INET6;
+	}
+
 #ifdef HAVE_UN
 	/**
 	 * @see SocketAddress::GetLocalRaw()
