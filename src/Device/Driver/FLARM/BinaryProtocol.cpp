@@ -162,7 +162,7 @@ FLARM::PrepareFrameHeader(unsigned sequence_number, MessageType message_type,
   header.version = 0;
   header.sequence_number = sequence_number++;
   header.type = message_type;
-  header.crc = CalculateCRC(header, payload.data(), payload.size());
+  header.crc = CalculateCRC(header, payload);
   return header;
 }
 
@@ -224,7 +224,7 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
       continue;
 
     // Verify CRC
-    if (header.crc != FLARM::CalculateCRC(header, data.data(), length))
+    if (header.crc != FLARM::CalculateCRC(header, {data.data(), length}))
       continue;
 
     // Check message type
