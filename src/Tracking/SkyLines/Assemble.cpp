@@ -7,6 +7,7 @@
 #include "NMEA/Info.hpp"
 #include "util/ByteOrder.hxx"
 #include "util/CRC16CCITT.hpp"
+#include "util/SpanCast.hxx"
 
 using namespace std::chrono;
 
@@ -24,7 +25,7 @@ SkyLinesTracking::MakePing(uint64_t key, uint16_t id)
   packet.reserved = 0;
   packet.reserved2 = 0;
 
-  packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
+  packet.header.crc = ToBE16(UpdateCRC16CCITT(ReferenceAsBytes(packet), 0));
   return packet;
 }
 
@@ -42,7 +43,7 @@ SkyLinesTracking::MakeAck(uint64_t key, uint16_t id, uint32_t flags)
   packet.reserved = 0;
   packet.flags = ToBE32(flags);
 
-  packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
+  packet.header.crc = ToBE16(UpdateCRC16CCITT(ReferenceAsBytes(packet), 0));
   return packet;
 }
 
@@ -77,7 +78,7 @@ SkyLinesTracking::MakeFix(uint64_t key, uint32_t flags, uint32_t time,
   packet.vario = ToBE16(int(vario * 256));
   packet.engine_noise_level = ToBE16(enl);
 
-  packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
+  packet.header.crc = ToBE16(UpdateCRC16CCITT(ReferenceAsBytes(packet), 0));
   return packet;
 }
 
@@ -148,7 +149,7 @@ SkyLinesTracking::ToFix(uint64_t key, const NMEAInfo &basic)
   } else
     packet.engine_noise_level = 0;
 
-  packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
+  packet.header.crc = ToBE16(UpdateCRC16CCITT(ReferenceAsBytes(packet), 0));
   return packet;
 }
 
@@ -187,7 +188,7 @@ SkyLinesTracking::MakeThermalSubmit(uint64_t key, uint32_t time,
   packet.header.key = ToBE64(key);
   packet.thermal = MakeThermal(time, bottom_location, bottom_altitude,
                                top_location, top_altitude, lift);
-  packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
+  packet.header.crc = ToBE16(UpdateCRC16CCITT(ReferenceAsBytes(packet), 0));
   return packet;
 }
 
@@ -204,7 +205,7 @@ SkyLinesTracking::MakeThermalRequest(uint64_t key)
   packet.flags = 0;
   packet.reserved1 = 0;
 
-  packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
+  packet.header.crc = ToBE16(UpdateCRC16CCITT(ReferenceAsBytes(packet), 0));
   return packet;
 }
 
@@ -224,7 +225,7 @@ SkyLinesTracking::MakeTrafficRequest(uint64_t key, bool followees, bool club,
                         | (near ? packet.FLAG_NEAR : 0));
   packet.reserved = 0;
 
-  packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
+  packet.header.crc = ToBE16(UpdateCRC16CCITT(ReferenceAsBytes(packet), 0));
   return packet;
 }
 
@@ -241,6 +242,6 @@ SkyLinesTracking::MakeUserNameRequest(uint64_t key, uint32_t user_id)
   packet.user_id = ToBE32(user_id);
   packet.reserved = 0;
 
-  packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
+  packet.header.crc = ToBE16(UpdateCRC16CCITT(ReferenceAsBytes(packet), 0));
   return packet;
 }
