@@ -46,8 +46,7 @@ WaypointReaderOzi::ParseLine(const char *line, Waypoints &way_points)
 
   // Field 1 : Number
   unsigned number = 0;
-  if (const auto value = ParseInteger<unsigned>(NextColumn(rest)))
-    number = *value;
+  ParseIntegerTo(NextColumn(rest), number);
 
   // Field 2 : Name
   tstring name{string_converter.Convert(NextColumn(rest))};

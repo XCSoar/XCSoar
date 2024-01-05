@@ -67,27 +67,21 @@ ParseTaskTime(std::string_view src) noexcept
   if (src.size() < 2)
     return {};
 
-  if (auto value = ParseInteger<unsigned>(src.substr(0, 2)))
-    hh = *value;
-  else
+  if (!ParseIntegerTo(src.substr(0, 2), hh))
     return {};
 
   if (src.size() > 2) {
     if (src[2] != ':' || src.size() < 5)
       return {};
 
-    if (auto value = ParseInteger<unsigned>(src.substr(3, 2)))
-      mm = *value;
-    else
+    if (!ParseIntegerTo(src.substr(3, 2), mm))
       return {};
 
     if (src.size() > 5) {
       if (src[5] != ':' || src.size() != 8)
         return {};
 
-      if (auto value = ParseInteger<unsigned>(src.substr(6, 2)))
-        ss = *value;
-      else
+      if (!ParseIntegerTo(src.substr(6, 2), ss))
         return {};
     }
   }
@@ -218,9 +212,7 @@ ParseCUTaskDetails(BufferedReader &reader, SeeYouTaskInformation &task_info,
       auto [index_string, rest] = Split(src, ',');
 
       std::size_t index;
-      if (auto value = ParseInteger<std::size_t>(index_string))
-        index = *value;
-      else
+      if (!ParseIntegerTo(index_string, index))
         continue;
 
       if (index >= CUP_MAX_TPS)

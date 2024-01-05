@@ -148,9 +148,7 @@ ParseScanResultsLine(WifiVisibleNetwork &dest, std::string_view line) noexcept
 
   dest.bssid = bssid;
 
-  if (const auto value = ParseInteger<signed>(signal_level))
-    dest.signal_level = *value;
-  else
+  if (ParseIntegerTo(signal_level, dest.signal_level))
     return false;
 
   if (flags.find("WPA"sv) != flags.npos)
@@ -278,9 +276,7 @@ ParseListResultsLine(WifiConfiguredNetworkInfo &dest, std::string_view line)
   if (ssid.data() == nullptr || bssid.data() == nullptr)
     return false;
 
-  if (const auto value = ParseInteger<unsigned>(id))
-    dest.id = *value;
-  else
+  if (!ParseIntegerTo(id, dest.id))
     return false;
 
   dest.ssid = ssid;

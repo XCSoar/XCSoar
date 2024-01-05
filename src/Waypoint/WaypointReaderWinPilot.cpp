@@ -45,9 +45,7 @@ ParseAngle(std::string_view src, Angle &dest, const bool lat)
 
   const auto minutes_string = rest1.substr(0, 2);
   unsigned minutes;
-  if (auto value = ParseInteger<unsigned>(minutes_string))
-    minutes = *value;
-  else
+  if (!ParseIntegerTo(minutes_string, minutes))
     return false;
 
   if (minutes >= 60)
