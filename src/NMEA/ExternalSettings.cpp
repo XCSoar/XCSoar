@@ -188,7 +188,7 @@ ExternalSettings::ProvideBallastFraction(double value, TimeStamp time) noexcept
 bool
 ExternalSettings::ProvideBallastOverload(double value, TimeStamp time) noexcept
 {
-  if (value < 1 || value > 5)
+  if (value < 0.8 || value > 5)
     /* failed sanity check */
     return false;
 
