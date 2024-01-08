@@ -33,14 +33,14 @@ ReadCsvRecord(BufferedReader &reader, std::span<std::string_view> views) {
 
     if ( input.data() != input_data_prev ) {
       if ( field_start )
-        field_start = &input[field_start - input_data_prev];
+        field_start = input.data() + (field_start - input_data_prev);
 
       if ( field_end )
-        field_end = &input[field_end - input_data_prev];
+        field_end = input.data() + (field_end - input_data_prev);
 
       for ( auto &view : views.subspan(0,fields_parsed) )
         view = std::string_view(reinterpret_cast<const char*>
-                                (&input[reinterpret_cast<const std::byte*>(view.data()) - input_data_prev]),
+                                (input.data() + (reinterpret_cast<const std::byte*>(view.data()) - input_data_prev)),
                                 view.size());
 
       input_data_prev = input.data();
@@ -56,10 +56,10 @@ ReadCsvRecord(BufferedReader &reader, std::span<std::string_view> views) {
       if ( input_shift )
         input[input_offset-input_shift] = input[input_offset];
 
-      // Start tagging (set prior_quote so starting quote can't double quote)
+      // Start tagging (set prior_quote so starting quote can't double quote, may be one past end)
       if ( !field_start && input_char != ' ' ) {
         field_quoted = prior_quote = input_char == '"';
-        field_start = &input[input_offset - input_shift + field_quoted];
+        field_start = input.data() + input_offset - input_shift + field_quoted;
       }
 
       // End tagging
@@ -68,7 +68,7 @@ ReadCsvRecord(BufferedReader &reader, std::span<std::string_view> views) {
                                   input_char == '\n' ) ) ||
              ( field_quoted  && !prior_quote && input_char == '"' ) ) )
         // Maybe end
-        field_end = &input[input_offset - input_shift];
+        field_end = input.data() + input_offset - input_shift;
 
       else if ( field_end && ( input_char != ' '  && input_char != ','  &&
                                input_char != '\r' && input_char != '\n' ) )
@@ -107,11 +107,11 @@ ReadCsvRecord(BufferedReader &reader, std::span<std::string_view> views) {
       if ( field_quoted && !field_end )
         throw std::runtime_error{"CSV file ended in middle of quoted field"};
 
-      // Start tagging (use input.data() as length may be 0)
+      // Start tagging (length may be 0)
       if ( !field_start )
         field_start = input.data() + (input_offset - input_shift);
 
-      // End tagging (use input.data() as length may be 0)
+      // End tagging (length may be 0)
       if ( !field_end )
         field_end = input.data() + (input_offset - input_shift);
 
