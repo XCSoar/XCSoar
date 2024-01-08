@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-21 15:38+0100\n"
-"PO-Revision-Date: 2024-01-02 13:07+0000\n"
-"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
+"PO-Revision-Date: 2024-01-09 11:06+0000\n"
+"Last-Translator: l diaz <ldiazz@yahoo.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
 "Language: es\n"
@@ -399,7 +399,7 @@ msgstr "Tarea no terminada"
 #: src/Task/ValidationErrorStrings.cpp:15
 #, no-c-format
 msgid "All turnpoints not the same type"
-msgstr "Todos los puntos de viraje no son del mismo tipo"
+msgstr "No todos los puntos de viraje son del mismo tipo"
 
 #: src/Task/ValidationErrorStrings.cpp:16
 #, no-c-format
@@ -1496,7 +1496,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:58
 #, no-c-format
 msgid "Sfc temp"
-msgstr "Sfc temp"
+msgstr "Temp Ter"
 
 #: src/Weather/Rasp/RaspStore.cpp:59
 #, no-c-format
@@ -1656,7 +1656,7 @@ msgstr "Onda"
 
 #: src/Renderer/TaskSpeedRenderer.cpp:32
 msgid "Vest"
-msgstr "Chaleco"
+msgstr "Vest"
 
 #: src/UIActions.cpp:32
 msgid "Quit program?"
@@ -8136,7 +8136,7 @@ msgstr "Diferencia de altitud final"
 #: src/InfoBoxes/Content/Factory.cpp:243
 #, no-c-format
 msgid "Fin AltD"
-msgstr "Fin AltD"
+msgstr "AltD Fin"
 
 #: src/InfoBoxes/Content/Factory.cpp:244
 #, no-c-format
@@ -8187,7 +8187,7 @@ msgstr "Distancia final"
 #: src/InfoBoxes/Content/Factory.cpp:267
 #, no-c-format
 msgid "Fin Dist"
-msgstr "Fin Dist"
+msgstr "Dist Fin"
 
 #: src/InfoBoxes/Content/Factory.cpp:268
 #, no-c-format
@@ -8551,7 +8551,7 @@ msgstr "Tiempo de tarea restante"
 #: src/InfoBoxes/Content/Factory.cpp:455
 #, no-c-format
 msgid "Fin ETE"
-msgstr "Fin ETE"
+msgstr "ETE Fin"
 
 #: src/InfoBoxes/Content/Factory.cpp:456
 #, no-c-format
@@ -8637,7 +8637,7 @@ msgstr "Hora de llegada de la tarea"
 #: src/InfoBoxes/Content/Factory.cpp:488
 #, no-c-format
 msgid "Fin ETA"
-msgstr "Fin ETA"
+msgstr "ETA Fin"
 
 #: src/InfoBoxes/Content/Factory.cpp:489
 #, no-c-format
@@ -9379,7 +9379,7 @@ msgstr "Tiempo de tarea para comenzar (velocidad sobre el terreno)"
 #: src/InfoBoxes/Content/Factory.cpp:820
 #, no-c-format
 msgid "Fin ETE VMG"
-msgstr "Fin ETE VMG"
+msgstr "ETE VMG Fin"
 
 #: src/InfoBoxes/Content/Factory.cpp:821
 #, no-c-format
@@ -9467,7 +9467,7 @@ msgstr "Siguiente diferencia de altitud MC0"
 #: src/InfoBoxes/Content/Factory.cpp:861
 #, no-c-format
 msgid "WP MC0 AltD"
-msgstr "WP MC0 AltD"
+msgstr "AltD WP MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:862
 #, no-c-format
@@ -10028,7 +10028,7 @@ msgstr "AAT dT y ETA de la tarea"
 #: src/InfoBoxes/Content/Factory.cpp:1126
 #, no-c-format
 msgid "AATdeltaOrETA"
-msgstr "AATdeltaOrETA"
+msgstr "AATdeltaoETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:1127
 #, no-c-format
