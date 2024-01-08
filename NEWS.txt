@@ -38,6 +38,7 @@ Version 7.44 - not yet released
   - Flarm: parse flarm error messages (PFLAE) and display them
   - LXNAV: Overload formula, use reference mass instead of dry mass
   - OpenVario: Overload formula, use reference mass instead of dry mass
+  - Vaulter: use fraction instead of overload for ballast
 
 Version 7.43 - 2024-08-12
 * calculations
