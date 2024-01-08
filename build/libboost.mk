@@ -1,4 +1,4 @@
-BOOST_URL = https://boostorg.jfrog.io/artifactory/main/release/1.84.0/source/boost_1_84_0.tar.bz2
+BOOST_URL = https://fossies.org/linux/misc/boost_1_84_0.tar.bz2
 BOOST_ALTERNATIVE_URL = https://sourceforge.net/projects/boost/files/boost/1.84.0/boost_1_84_0.tar.bz2/download
 BOOST_MD5 = cc4b893acf645c9d4b698e9a0f08ca8846aa5d6c68275c14c3e7949c24109454
 
