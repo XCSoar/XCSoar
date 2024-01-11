@@ -10,6 +10,7 @@
 #include "net/State.hpp"
 #include "io/async/GlobalAsioThread.hpp"
 #include "util/ByteOrder.hxx"
+#include "util/Compiler.h"
 
 #include <cassert>
 

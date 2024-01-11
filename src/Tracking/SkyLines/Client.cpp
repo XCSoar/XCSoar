@@ -263,11 +263,11 @@ SkyLinesTracking::Client::OnDatagramReceived(void *data, size_t length)
 void
 SkyLinesTracking::Client::OnSocketReady(unsigned) noexcept
 {
-  uint8_t buffer[4096];
+  std::byte buffer[4096];
   ssize_t nbytes;
   StaticSocketAddress source_address;
 
-  while ((nbytes = GetSocket().Read(buffer, sizeof(buffer), source_address)) > 0)
+  while ((nbytes = GetSocket().ReadNoWait(std::span{buffer}, source_address)) > 0)
     if (source_address == address)
       OnDatagramReceived(buffer, nbytes);
 

@@ -8,7 +8,7 @@
 #include "event/net/cares/SimpleResolver.hxx"
 #include "thread/Mutex.hxx"
 #include "util/Cancellable.hxx"
-#include "util/Compiler.h"
+#include "util/SpanCast.hxx"
 
 #include <cstdint>
 #include <optional>
@@ -90,7 +90,7 @@ public:
   template<typename P>
   bool SendPacket(const P &packet) {
     const std::lock_guard lock{mutex};
-    return GetSocket().Write(&packet, sizeof(packet), address) == sizeof(packet);
+    return GetSocket().WriteNoWait(ReferenceAsBytes(packet), address) == sizeof(packet);
   }
 
   void SendFix(const NMEAInfo &basic);
