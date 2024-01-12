@@ -18,6 +18,8 @@
 #include <winsock2.h> // for SOCKET, INVALID_SOCKET
 #endif
 
+struct msghdr;
+struct iovec;
 class SocketAddress;
 class StaticSocketAddress;
 class IPv4Address;
@@ -308,6 +310,12 @@ public:
 	ssize_t Receive(struct msghdr &msg, int flags=0) const noexcept;
 
 	/**
+	 * Wrapper for recvmsg().
+	 */
+	[[nodiscard]]
+	ssize_t Receive(std::span<const struct iovec> v, int flags=0) const noexcept;
+
+	/**
 	 * Wrapper for send().
 	 *
 	 * MSG_NOSIGNAL is implicitly added (if available).
@@ -322,6 +330,14 @@ public:
 	 */
 	[[nodiscard]]
 	ssize_t Send(const struct msghdr &msg, int flags=0) const noexcept;
+
+	/**
+	 * Wrapper for sendmsg().
+	 *
+	 * MSG_NOSIGNAL is implicitly added (if available).
+	 */
+	[[nodiscard]]
+	ssize_t Send(std::span<const struct iovec> v, int flags=0) const noexcept;
 
 	[[nodiscard]]
 	ssize_t Read(std::span<std::byte> dest) const noexcept {
