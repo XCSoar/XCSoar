@@ -97,6 +97,12 @@ IsAlphaNumericASCII(char ch) noexcept
 }
 
 constexpr bool
+IsUpperAlphaNumericASCII(char ch) noexcept
+{
+	return IsUpperAlphaASCII(ch) || IsDigitASCII(ch);
+}
+
+constexpr bool
 IsLowerAlphaNumericASCII(char ch) noexcept
 {
 	return IsLowerAlphaASCII(ch) || IsDigitASCII(ch);
