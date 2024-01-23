@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-21 15:38+0100\n"
-"PO-Revision-Date: 2023-12-23 14:09+0000\n"
+"PO-Revision-Date: 2024-01-24 14:01+0000\n"
 "Last-Translator: Cloud Esp <Frederic.Darboux@inrae.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
@@ -1962,9 +1962,8 @@ msgid "Port"
 msgstr "Port"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:252
-#, fuzzy
 msgid "Engine Type"
-msgstr "Modifier le type"
+msgstr "Type de moteur"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:257
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:77
@@ -2728,9 +2727,8 @@ msgid "Set Standby Frequency"
 msgstr "Sélectionner la fréquence Standby"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:67
-#, fuzzy
 msgid "Class"
-msgstr "Vitré"
+msgstr "Classe"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:71
 msgid "Top"
@@ -4039,9 +4037,9 @@ msgid "Castle"
 msgstr "Château"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:64
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Intersection"
-msgstr "Intervalle avert."
+msgstr "Intersection"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:65
 #, no-c-format
@@ -4049,9 +4047,9 @@ msgid "Marker"
 msgstr "Marqueur"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:66
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Control Point"
-msgstr "Dist Conc"
+msgstr "Point de contrôle"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:67
 #, fuzzy, no-c-format
@@ -4059,9 +4057,9 @@ msgid "PG Take Off"
 msgstr "Décollage"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:68
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "PG Landing Zone"
-msgstr "Heure d'atterrissage"
+msgstr "Zone d'atterrissage"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:77
 msgid "Comment"
@@ -5075,9 +5073,8 @@ msgid "Rotate the display on devices that support it."
 msgstr "Rotation de l'écran sur les appareils qui le supportent."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:197
-#, fuzzy
 msgid "Dark mode"
-msgstr "Mode de la zone atteignable"
+msgstr "Mode sombre"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:201
 msgid "InfoBox geometry"
@@ -5919,9 +5916,9 @@ msgstr ""
 "foncé : descente. Vario nul : ligne jaune."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:95
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Vario E-ink"
-msgstr "Val. vario muet"
+msgstr "Vario E-ink"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:95
 #, no-c-format
@@ -6053,9 +6050,8 @@ msgid "This enables the display of FLARM traffic on the map window."
 msgstr "Permet l'affichage des trafics FLARM sur la carte."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
-#, fuzzy
 msgid "Fade traffic"
-msgstr "Trafic FLARM"
+msgstr "Masquer trafic"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 msgid "Keep showing traffic for a while after it has disappeared."
@@ -6745,14 +6741,12 @@ msgid "Units used for latitude and longitude."
 msgstr "Unités de latitude et longitude."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:245
-#, fuzzy
 msgid "Rotation"
-msgstr "Localisation"
+msgstr "Rotation"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:245
-#, fuzzy
 msgid "Unit used for rotation."
-msgstr "Unité de charge alaire."
+msgstr "Unité utilisée pour la rotation."
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:65
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:12
@@ -7349,14 +7343,12 @@ msgid "Download WeGlide task"
 msgstr "Télécharger le circuit WeGlide"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:144
-#, fuzzy
 msgid "My WeGlide tasks"
-msgstr "Télécharger le circuit WeGlide"
+msgstr "Mes circuits WeGlide"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:148
-#, fuzzy
 msgid "Public WeGlide tasks"
-msgstr "Télécharger le circuit WeGlide"
+msgstr "Circuits publics WeGlide"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:79
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:83
@@ -9659,14 +9651,16 @@ msgid "ATC radial"
 msgstr "Radiale ATC"
 
 #: src/InfoBoxes/Content/Factory.cpp:957
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Bearing from the selected reference location to your position. The distance "
 "is displayed in nautical miles for communication with ATC. If declination is "
 "entered, magnetic bearing is given to match VOR radials."
 msgstr ""
-"Relèvement vrai de la référence de position choisie vers votre position. La "
-"distance est affichée en miles nautiques afin de communiquer avec l'ATC."
+"Cap de la position choisie comme référence vers votre position. La distance "
+"est affichée en miles nautiques afin de communiquer avec l'ATC. Si la "
+"déclinaison est entrée, le cap magnétique est donné afin de correspondre aux "
+"radiaux du VOR."
 
 #: src/InfoBoxes/Content/Factory.cpp:963
 #, no-c-format
@@ -9955,9 +9949,9 @@ msgid "Heart rate in beats per minute."
 msgstr "Fréquence cardiaque en battements par minute."
 
 #: src/InfoBoxes/Content/Factory.cpp:1093
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Transponder Code"
-msgstr "Récepteur transpondeur"
+msgstr "Code Transpondeur"
 
 #: src/InfoBoxes/Content/Factory.cpp:1094
 #, no-c-format
@@ -9965,9 +9959,9 @@ msgid "XPDR Code"
 msgstr "Code Transpondeur"
 
 #: src/InfoBoxes/Content/Factory.cpp:1095
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The currently set Transponder code"
-msgstr "La fréquence radio standby actuelle"
+msgstr "Le code Transpondeur paramétré"
 
 #: src/InfoBoxes/Content/Factory.cpp:1101
 #, no-c-format
@@ -9990,9 +9984,9 @@ msgid "Engine EGT"
 msgstr "T° échap."
 
 #: src/InfoBoxes/Content/Factory.cpp:1110
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "EGT"
-msgstr "ETA"
+msgstr "EGT"
 
 #: src/InfoBoxes/Content/Factory.cpp:1111
 #, no-c-format
@@ -10035,9 +10029,8 @@ msgstr ""
 "compétition"
 
 #: src/InfoBoxes/Content/Alternate.cpp:58
-#, fuzzy
 msgid "Altn {}"
-msgstr "Dgmt 1"
+msgstr "Dgmt {}"
 
 #: src/InfoBoxes/Content/Altitude.cpp:26
 #: src/MapWindow/GlueMapWindowOverlays.cpp:333
@@ -10118,9 +10111,8 @@ msgid "FinalGlide"
 msgstr "Arrivée"
 
 #: src/InfoBoxes/Panel/ATCSetup.cpp:35
-#, fuzzy
 msgid "Mag declination"
-msgstr "Envoi de la déclaration"
+msgstr "Déclinaison magnétique"
 
 #: src/InfoBoxes/Panel/ATCSetup.cpp:36
 msgid ""
