@@ -5,6 +5,8 @@ Version 7.42 - not yet released
   - ignore unit for radio frequency in airspace files
 * Kobo
   - Wifi setup, display signal level in dBm for new models
+* user interface
+  - new mountain pass and bridge icons
 
 Version 7.41 - 2023/12/21
 * data files
