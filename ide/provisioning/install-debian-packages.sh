@@ -93,7 +93,7 @@ apt-get install ${APTOPTS[*]} \
 echo
 
 echo Installing dependencies for the Android target, not including SDK / NDK...
-apt-get install ${APTOPTS[*]} openjdk-11-jdk-headless vorbis-tools adb libtool \
+apt-get install ${APTOPTS[*]} default-jdk-headless vorbis-tools adb libtool \
     unzip
 echo
 
