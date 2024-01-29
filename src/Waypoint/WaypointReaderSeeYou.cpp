@@ -58,12 +58,10 @@ static bool
 ParseAltitude(std::string_view src, double &dest) noexcept
 {
   Unit unit = Unit::METER;
-  if (src.ends_with('f') || src.ends_with('F'))
+  if (RemoveSuffix(src, "ft"sv) || RemoveSuffix(src, "FT"sv))
     unit = Unit::FEET;
-  else if (!src.ends_with('m') && !src.ends_with('M'))
+  else if (!RemoveSuffix(src, "m"sv) && !RemoveSuffix(src, "M"sv))
     return false;
-
-  src.remove_suffix(1);
 
   // Parse string
   const auto value = ParseDecimal(src);
