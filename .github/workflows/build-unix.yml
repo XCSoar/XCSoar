@@ -65,7 +65,7 @@ jobs:
             cd /opt/xcsoar
             xcsoar-compile ${{ env.TARGET }} V=2 check DEBUG=${{ env.DEBUG }}
       - name: upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}${{ env.TARGET_EXT }}
           path: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}${{ env.TARGET_EXT }}
