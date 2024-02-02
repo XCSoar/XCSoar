@@ -57,7 +57,7 @@ jobs:
           key: ${{ env.TARGET }}
 
       - name: "Cache Boost"
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
           path: |
@@ -141,7 +141,7 @@ jobs:
           echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
 
       - name: "Cache Boost"
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
           path: |
@@ -203,7 +203,7 @@ jobs:
           key: ${{ env.TARGET }}
 
       - name: "Cache Boost"
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
           path: |
@@ -296,7 +296,7 @@ jobs:
           key: ${{ env.TARGET }}
 
       - name: "Cache Boost"
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
           path: |
