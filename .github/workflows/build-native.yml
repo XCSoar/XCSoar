@@ -471,7 +471,7 @@ jobs:
       - id: checkout
         uses: actions/checkout@v3
       - name: fetch artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: xcsoar-${{ env.TARGET }}-artifact
           path: ${{ github.workspace }}/output/${{ env.TARGET }}
