@@ -562,7 +562,7 @@ ParseArcPoints(StringParser<> &input, TempAirspace &temp_area)
 
 [[gnu::pure]]
 static AirspaceClass
-ParseType(const char *buffer) noexcept
+ParseClass(const char *buffer) noexcept
 {
   for (unsigned i = 0; i < ARRAY_SIZE(airspace_class_strings); i++)
     if (StringIsEqualIgnoreCase(buffer, airspace_class_strings[i].string))
@@ -643,7 +643,7 @@ ParseLine(Airspaces &airspace_database, unsigned line_number,
       if (temp_area.Commit(airspace_database))
         temp_area.Reset(line_number);
 
-      temp_area.asclass = ParseType(input.c_str());
+      temp_area.asclass = ParseClass(input.c_str());
       break;
 
     case 'N':
