@@ -289,6 +289,7 @@ try {
 
   TestOpenAir();
   TestTNP();
+  // todo -- test more AY tags!!
   TestOpenAirExtended();
 
   return exit_status();
