@@ -370,6 +370,8 @@ jobs:
 
   build-windows:
     runs-on: ubuntu-22.04
+    container:
+      image: debian:bookworm-slim
 
     env:
       TARGET: WIN64
@@ -383,10 +385,22 @@ jobs:
         run: |
           echo "DEBUG=n" >> $GITHUB_ENV
           echo "TARGET_FINAL=XCSoar" >> $GITHUB_ENV
+
+      - name: Install build dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            git \
+            ccache \
+            xz-utils \
+            pkgconf \
+            ca-certificates
+
       - id: checkout
         uses: actions/checkout@v4
         with:
           submodules: true
+
       - id: cache-ccache
         uses: hendrikmuhs/ccache-action@v1
         with:
@@ -415,8 +429,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
+          apt-get update
+          apt-get install -y --no-install-recommends \
             make \
             quilt \
             g++ \
