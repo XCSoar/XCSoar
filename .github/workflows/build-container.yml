@@ -23,7 +23,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ github.token }}
-      - id: string
+      - id: lc_repository_name
         uses: ASzc/change-string-case-action@v6
         with:
           string: ${{ github.repository }}
@@ -33,7 +33,7 @@ jobs:
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
           context: ./ide
           file: ./ide/docker/Dockerfile
-          tags: ghcr.io/${{ steps.string.outputs.lowercase }}/xcsoar-build:latest
+          tags: ghcr.io/${{ steps.lc_repository_name.outputs.lowercase }}/xcsoar-build:latest
           cache-from: type=registry,ref=ghcr.io/${{ steps.string.outputs.lowercase }}/xcsoar-build:latest
           cache-to: type=inline
           secrets: |
