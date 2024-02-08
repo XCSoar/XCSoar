@@ -1,3 +1,4 @@
+---
 on:
   workflow_dispatch:
   push:
@@ -7,7 +8,7 @@ on:
       - '.github/workflows/build-container.yml'
 
 jobs:
- xcsoar-docker-env:
+  xcsoar-docker-env:
     runs-on: ubuntu-latest
     env:
       REGISTRY: ghcr.io
@@ -15,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: True
+          submodules: true
       - name: Login to Registry
         uses: docker/login-action@v1
         with:
