@@ -55,7 +55,7 @@ protected:
   tstring name;
 
   /** Airspace type */
-  tstring astype;
+  AirspaceClass astype;
 
   /** Radio frequency (optional) */
   RadioFrequency radio_frequency = RadioFrequency::Null();
@@ -198,12 +198,12 @@ public:
    * @param _top Upper limit
    */
   void SetProperties(tstring &&_name, const AirspaceClass _class,
-                     tstring &&_type,
+                     const AirspaceClass _type,
                      const AirspaceAltitude &_base,
                      const AirspaceAltitude &_top) noexcept {
     name = std::move(_name);
     asclass = _class;
-    astype = std::move(_type);
+    astype = _type;
     altitude_base = _base;
     altitude_top = _top;
   }
@@ -238,11 +238,10 @@ public:
   /**
    * Get Type of airspace
    *
-   * @return Type as text of airspace
+   * @return Type of airspace
    */
-  [[gnu::pure]]
-  const TCHAR *GetType() const noexcept {
-    return astype.c_str();
+  AirspaceClass GetType() const noexcept {
+    return astype;
   }
 
   /**

@@ -126,6 +126,10 @@ static constexpr AirspaceClassStringCouple airspace_tnp_type_strings[] = {
   { "RMZ", RMZ },
 };
 
+static constexpr AirspaceClass airspace_ICAO_and_Unclassified[] = {
+  AirspaceClass::CLASSA, AirspaceClass::CLASSB, AirspaceClass::CLASSC, AirspaceClass::CLASSD,
+  AirspaceClass::CLASSE, AirspaceClass::CLASSF, AirspaceClass::CLASSG, AirspaceClass::UNCLASSIFIED};
+
 // this can now be called multiple times to load several airspaces.
 
 struct TempAirspace
@@ -152,7 +156,7 @@ struct TempAirspace
   tstring name;
   RadioFrequency radio_frequency;
   AirspaceClass asclass;
-  tstring astype;
+  AirspaceClass astype;
   std::optional<AirspaceAltitude> base;
   std::optional<AirspaceAltitude> top;
   AirspaceActivity days_of_operation;
@@ -179,7 +183,7 @@ struct TempAirspace
     name.clear();
     radio_frequency = RadioFrequency::Null();
     asclass = OTHER;
-    astype.clear();
+    astype = OTHER; // the default if no AY tag parsed (i.e. AC tag is not a ICAO or not UNCLASSIFIED)
     base.reset();
     top.reset();
     points.clear();
@@ -238,7 +242,7 @@ struct TempAirspace
       throw CommitError{"No top altitude"};
 
     auto as = std::make_shared<AirspacePolygon>(points);
-    as->SetProperties(std::move(name), asclass, std::move(astype), *base, *top);
+    as->SetProperties(std::move(name), asclass, astype, *base, *top);
     as->SetRadioFrequency(radio_frequency);
     as->SetDays(days_of_operation);
     airspace_database.Add(std::move(as));
@@ -600,6 +604,26 @@ ParseClass(const char *buffer) noexcept
 }
 
 [[gnu::pure]]
+static AirspaceClass
+ParseType(const char *buffer) noexcept
+{
+  for (unsigned i = 0; i < ARRAY_SIZE(airspace_class_strings); i++)
+    if (StringIsEqualIgnoreCase(buffer, airspace_class_strings[i].string))
+      return airspace_class_strings[i].asclass;
+
+  return OTHER;
+}
+
+[[gnu::pure]]
+static bool
+IsICAOClassOrUnclassified(AirspaceClass asclass) noexcept
+{
+  auto it = std::find(std::begin(airspace_ICAO_and_Unclassified),
+                      std::end(airspace_ICAO_and_Unclassified), asclass);
+  return  it != std::end(airspace_ICAO_and_Unclassified);
+}
+
+[[gnu::pure]]
 static std::string_view
 ReadRadioFrequency(const std::string_view line) noexcept
 {
@@ -695,7 +719,8 @@ ParseLine(Airspaces &airspace_database, unsigned line_number,
     case 'Y':
     case 'y':
       if (input.SkipWhitespace())
-        temp_area.astype = string_converter.Convert(input.c_str());
+        if (IsICAOClassOrUnclassified(temp_area.asclass))
+          temp_area.astype = ParseType(input.c_str());
       break;
 
     /** 'AR 999.999 or 'AF 999.999' in accordance with the Naviter change proposed in 2018 - (Find 'Additional OpenAir fields' here) http://www.winpilot.com/UsersGuide/UserAirspace.asp **/
