@@ -1,4 +1,4 @@
-* Airspace to test 1 airspace type
+* Airspace to test 1 airspace type TMA
 AC E
 AY TMA
 AN Type-TMA-Test
@@ -13,7 +13,7 @@ DP 47:24:44 N 007:22:28 E
 DP 47:22:60 N 007:39:30 E
 DP 47:25:52 N 007:46:41 E
 
-* Airspace to test 2 airspace type
+* Airspace to test 2 airspace type GLIDING_SECTOR
 AC UNCLASSIFIED
 AY GLIDING_SECTOR
 AN Type-GLIDING_SECTOR-Test
@@ -32,3 +32,16 @@ DP 46:55:13 N 007:26:43 E
 DP 46:55:14 N 007:25:46 E
 DP 46:54:08 N 007:21:20 E
 DP 46:52:00 N 007:23:50 E
+
+* Airspace to test 3 airspace with no type
+AC A
+AN NO-Type-Test
+AL 5200ft MSL
+AH 5700ft MSL
+AL 1000 ft
+AH 2000 ft
+V X=01:00:00 N 001:00:00 E
+V D=-
+DA 15, 185, 155
+V D=+
+DA 25, 155, 185

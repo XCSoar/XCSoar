@@ -104,7 +104,7 @@ AirspaceRendererSettings::SetDefaults()
   classes[MATZ].SetColors(RGB8_MAGENTA.Darken());
   classes[RMZ].SetColors(RGB8_MAGENTA.Darken());
   classes[UNCLASSIFIED].SetColors(RGB8_MAGENTA.Darken());
-  classes[RESTRICTED].SetColors(RGB8_RED); // Assuming RGB8_RED is defined somewhere
+  classes[RESTRICTED].SetColors(RGB8_RED);
   classes[TMA].SetColors(RGB8_MAGENTA.Darken());
   classes[TRA].SetColors(RGB8_MAGENTA.Darken());
   classes[TSA].SetColors(RGB8_MAGENTA.Darken());
@@ -115,10 +115,10 @@ AirspaceRendererSettings::SetDefaults()
   classes[AWY].SetColors(RGB8_MAGENTA.Darken());
   classes[MTR].SetColors(RGB8_MAGENTA.Darken());
   classes[ALERT].SetColors(RGB8_MAGENTA.Darken());
-  classes[WARNING].SetColors(RGB8_MAGENTA.Darken());
-  classes[PROTECTED].SetColors(RGB8_MAGENTA.Darken());
-  classes[HTZ].SetColors(RGB8_MAGENTA.Darken());
-  classes[GLIDING_SECTOR].SetColors(RGB8_MAGENTA.Darken());
+  classes[WARNING].SetColors(RGB8_GREEN.Darken());
+  classes[PROTECTED].SetColors(RGB8_GREEN.Darken());
+  classes[HTZ].SetColors(RGB8_GREEN.Darken());
+  classes[GLIDING_SECTOR].SetColors(RGB8_GREEN.Darken());
   classes[TRP].SetColors(RGB8_MAGENTA.Darken());
   classes[TIZ].SetColors(RGB8_MAGENTA.Darken());
   classes[TIA].SetColors(RGB8_MAGENTA.Darken());
