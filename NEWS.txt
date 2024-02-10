@@ -21,6 +21,7 @@ Version 7.43 - not yet released
   - fix oversized icons
 * airspace
   - add classes according the OpenAir extended format AY tag
+  - coloring is done according to the AC tag, or if present and allowed, according to the AY tag
 
 Version 7.42 - 2024/03/01
 * ui
