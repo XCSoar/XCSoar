@@ -24,21 +24,6 @@ RadioFrequency::Format(TCHAR *buffer, size_t max_size) const noexcept
 }
 
 RadioFrequency
-RadioFrequency::Parse(const TCHAR *p) noexcept
-{
-  TCHAR *endptr;
-  double mhz = ParseDouble(p, &endptr);
-
-  RadioFrequency frequency;
-  if (mhz >= MIN_KHZ / 1000. && mhz <= MAX_KHZ / 1000. &&
-      IsWhitespaceOrNull(*endptr))
-    frequency.SetKiloHertz(uround(mhz * 1000));
-  else
-    frequency.Clear();
-  return frequency;
-}
-
-RadioFrequency
 RadioFrequency::Parse(std::string_view src) noexcept
 {
   double mhz;
