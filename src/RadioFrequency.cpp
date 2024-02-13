@@ -7,6 +7,7 @@
 #include "util/DecimalParser.hxx"
 #include "util/StringFormat.hpp"
 #include "util/NumberParser.hpp"
+#include "util/StringSplit.hxx"
 
 TCHAR *
 RadioFrequency::Format(TCHAR *buffer, size_t max_size) const noexcept
@@ -41,8 +42,9 @@ RadioFrequency
 RadioFrequency::Parse(std::string_view src) noexcept
 {
   double mhz;
+  const auto [val, _] = Split(src, ' ');
 
-  if (auto value = ParseDecimal(src))
+  if (auto value = ParseDecimal(val))
     mhz = *value;
   else
     return Null();

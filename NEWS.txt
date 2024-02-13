@@ -3,6 +3,8 @@ Version 7.42 - not yet released
   - fix bogus "Latin-1 to UTF-8 conversion failed" error
 * Kobo
   - Wifi setup, display signal level in dBm for new models
+* Windows
+  - fix reading of radio frequency with MHz in the openAir file
 
 Version 7.41 - 2023/12/21
 * data files
