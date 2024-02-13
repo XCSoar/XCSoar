@@ -552,7 +552,7 @@ public:
   }
 
   /** Sets the ideal polar coefficients */
-  void SetCoefficients(PolarCoefficients coeff, bool update=true) noexcept {
+  void SetCoefficients(const PolarCoefficients &coeff, bool update=true) noexcept {
     reference_polar = coeff;
 
     if (update)
