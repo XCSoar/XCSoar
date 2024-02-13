@@ -36,7 +36,7 @@ public:
     return obj.bounds;
   }
 
-  int WhichShapes(struct zzip_dir *dir, rectObj rect) noexcept {
+  int WhichShapes(struct zzip_dir *dir, const rectObj &rect) noexcept {
     return msShapefileWhichShapes(&obj, dir, rect, 0);
   }
 

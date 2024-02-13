@@ -5,9 +5,7 @@
 
 #include "shapelib/mapprimitive.h"
 
-constexpr GeoBounds
-ImportRect(const rectObj r)
-{
+constexpr GeoBounds ImportRect(const rectObj &r) {
   return GeoBounds(GeoPoint(Angle::Degrees(r.minx),
                             Angle::Degrees(r.maxy)),
                    GeoPoint(Angle::Degrees(r.maxx),
