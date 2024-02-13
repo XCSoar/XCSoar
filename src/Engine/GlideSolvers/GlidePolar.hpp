@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
- 
+
 #pragma once
 
 #include "PolarCoefficients.hpp"
@@ -17,17 +17,17 @@ struct SpeedVector;
 
 /**
  * Class implementing basic glide polar performance model
- * 
+ *
  * Implements aircraft-specific glide performance, including
  * bugs/ballast, MacCready setting and cruise efficiency.
  *
- * Cruise efficiency is the ratio of actual cruise speed to 
+ * Cruise efficiency is the ratio of actual cruise speed to
  * target to the classical MacCready speed.
  * Cruise efficiency is stored in this class for convenience,
  * it is used in MacCready class.
- * 
+ *
  * The MacCready class uses this GlidePolar data to calculate
- * specific GlideSolutions. 
+ * specific GlideSolutions.
  *
  * This uses a parabolic glide polar:
  * \f[ w = a.V^2+b.V+c \f]
@@ -254,7 +254,7 @@ public:
   void SetBugs(const double clean) noexcept;
 
   /**
-   * Retrieve bugs 
+   * Retrieve bugs
    * @return Cleanliness of glider (0-1]
    */
   constexpr double GetBugs() const noexcept {
@@ -275,7 +275,7 @@ public:
   void SetBallastLitres(const double litres) noexcept;
 
   /**
-   * Retrieve ballast 
+   * Retrieve ballast
    * @return Proportion of possible ballast [0-1]
    */
   constexpr double GetBallast() const noexcept {
@@ -504,12 +504,12 @@ public:
   constexpr double GetDryMass() const noexcept {
     return empty_mass + crew_mass;
   }
-  
+
   /** Returns the empty mass in kg */
   constexpr double GetEmptyMass() const noexcept {
     return empty_mass;
   }
-  
+
   /** Sets the empty mass in kg */
   void SetEmptyMass(double _empty_mass, bool update=true) noexcept {
     empty_mass = _empty_mass;
@@ -517,7 +517,7 @@ public:
     if (update)
       Update();
   }
-  
+
   /** Sets the crew mass in kg */
   void SetCrewMass(double _crew_mass, bool update=true) noexcept {
     crew_mass = _crew_mass;
@@ -525,12 +525,12 @@ public:
     if (update)
       Update();
   }
-  
+
   /** Returns the crew mass in kg */
   constexpr double GetCrewMass() const noexcept {
     return crew_mass;
   }
-  
+
   /** Returns the ballast ratio */
   constexpr double GetBallastRatio() const noexcept {
     return ballast_ratio;
@@ -552,7 +552,8 @@ public:
   }
 
   /** Sets the ideal polar coefficients */
-  void SetCoefficients(const PolarCoefficients &coeff, bool update=true) noexcept {
+  void SetCoefficients(const PolarCoefficients &coeff,
+                       bool update = true) noexcept {
     reference_polar = coeff;
 
     if (update)
