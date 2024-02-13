@@ -109,7 +109,7 @@ private:
         if (it->second < last)
           it = closing_pairs.erase(it);
         else
-          it++;
+          ++it;
       }
     }
 
