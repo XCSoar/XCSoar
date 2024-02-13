@@ -106,7 +106,7 @@ public:
     }
   };
 
-  constexpr Angle(DMS dms) noexcept:Angle(Degrees(dms.ToFloat())) {}
+  constexpr Angle(const DMS &dms) noexcept : Angle(Degrees(dms.ToFloat())) {}
 
   static constexpr Angle FromDMS(unsigned d, unsigned m=0, unsigned s=0,
                                  bool n=false) noexcept {
