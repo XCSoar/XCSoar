@@ -159,7 +159,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
   UpdateArrayBuffer();
   array_buffer->Bind();
-  const ShapePoint *const buffer = nullptr;
+  const ShapePoint *const buffer = 0;
 
   pen.Bind();
 
