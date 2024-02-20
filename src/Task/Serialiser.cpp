@@ -12,6 +12,7 @@
 #include "Task/ObservationZones/SymmetricSectorZone.hpp"
 #include "XML/DataNode.hpp"
 #include "util/Compiler.h"
+#include "util/ConvertString.hpp"
 
 #include <cassert>
 #include <tchar.h>
@@ -57,9 +58,9 @@ Serialise(WritableDataNode &node, const GeoPoint &data)
 static void
 Serialise(WritableDataNode &node, const Waypoint &data)
 {
-  node.SetAttribute("name", data.name.c_str());
+  node.SetAttribute("name", WideToUTF8Converter(data.name.c_str()));
   node.SetAttribute("id", data.id);
-  node.SetAttribute("comment", data.comment.c_str());
+  node.SetAttribute("comment", WideToUTF8Converter(data.comment.c_str()));
   if (data.has_elevation)
     node.SetAttribute("altitude", data.elevation);
 
@@ -69,7 +70,7 @@ Serialise(WritableDataNode &node, const Waypoint &data)
 static void
 Visit(WritableDataNode &node, const SectorZone &data)
 {
-  node.SetAttribute("type", _T("Sector"));
+  node.SetAttribute("type", "Sector");
   node.SetAttribute("radius", data.GetRadius());
   node.SetAttribute("start_radial", data.GetStartRadial());
   node.SetAttribute("end_radial", data.GetEndRadial());
@@ -78,7 +79,7 @@ Visit(WritableDataNode &node, const SectorZone &data)
 static void
 Visit(WritableDataNode &node, const SymmetricSectorZone &data)
 {
-  node.SetAttribute("type", _T("SymmetricQuadrant"));
+  node.SetAttribute("type", "SymmetricQuadrant");
   node.SetAttribute("radius", data.GetRadius());
   node.SetAttribute("angle", data.GetSectorAngle());
 }
@@ -93,14 +94,14 @@ Visit(WritableDataNode &node, const AnnularSectorZone &data)
 static void
 Visit(WritableDataNode &node, const LineSectorZone &data)
 {
-  node.SetAttribute("type", _T("Line"));
+  node.SetAttribute("type", "Line");
   node.SetAttribute("length", data.GetLength());
 }
 
 static void
 Visit(WritableDataNode &node, const CylinderZone &data)
 {
-  node.SetAttribute("type", _T("Cylinder"));
+  node.SetAttribute("type", "Cylinder");
   node.SetAttribute("radius", data.GetRadius());
 }
 
@@ -109,7 +110,7 @@ Serialise(WritableDataNode &node, const ObservationZonePoint &data)
 {
   switch (data.GetShape()) {
   case ObservationZone::Shape::FAI_SECTOR:
-    node.SetAttribute("type", _T("FAISector"));
+    node.SetAttribute("type", "FAISector");
     break;
 
   case ObservationZone::Shape::SECTOR:
@@ -121,7 +122,7 @@ Serialise(WritableDataNode &node, const ObservationZonePoint &data)
     break;
 
   case ObservationZone::Shape::MAT_CYLINDER:
-    node.SetAttribute("type", _T("MatCylinder"));
+    node.SetAttribute("type", "MatCylinder");
     break;
 
   case ObservationZone::Shape::CYLINDER:
@@ -130,7 +131,7 @@ Serialise(WritableDataNode &node, const ObservationZonePoint &data)
 
   case ObservationZone::Shape::CUSTOM_KEYHOLE: {
     const KeyholeZone &keyhole = (const KeyholeZone &)data;
-    node.SetAttribute("type", _T("CustomKeyhole"));
+    node.SetAttribute("type", "CustomKeyhole");
     node.SetAttribute("angle", keyhole.GetSectorAngle());
     node.SetAttribute("radius", keyhole.GetRadius());
     node.SetAttribute("inner_radius", keyhole.GetInnerRadius());
@@ -138,19 +139,19 @@ Serialise(WritableDataNode &node, const ObservationZonePoint &data)
   }
 
   case ObservationZone::Shape::DAEC_KEYHOLE:
-    node.SetAttribute("type", _T("Keyhole"));
+    node.SetAttribute("type", "Keyhole");
     break;
 
   case ObservationZone::Shape::BGAFIXEDCOURSE:
-    node.SetAttribute("type", _T("BGAFixedCourse"));
+    node.SetAttribute("type", "BGAFixedCourse");
     break;
 
   case ObservationZone::Shape::BGAENHANCEDOPTION:
-    node.SetAttribute("type", _T("BGAEnhancedOption"));
+    node.SetAttribute("type", "BGAEnhancedOption");
     break;
 
   case ObservationZone::Shape::BGA_START:
-    node.SetAttribute("type", _T("BGAStartSector"));
+    node.SetAttribute("type", "BGAStartSector");
     break;
 
   case ObservationZone::Shape::ANNULAR_SECTOR:
@@ -169,7 +170,7 @@ Serialise(WritableDataNode &node, const OrderedTaskPoint &data,
 {
   // do nothing
   auto child = node.AppendChild("Point");
-  child->SetAttribute("type", name);
+  child->SetAttribute("type", WideToUTF8Converter(name));
 
   Serialise(*child->AppendChild("Waypoint"), data.GetWaypoint());
   Serialise(*child->AppendChild("ObservationZone"),
@@ -192,14 +193,14 @@ Serialise(WritableDataNode &node, const OrderedTaskPoint &tp,
 }
 
 [[gnu::const]]
-static const TCHAR *
+static const char *
 GetHeightRef(AltitudeReference height_ref)
 {
   switch(height_ref) {
   case AltitudeReference::AGL:
-    return _T("AGL");
+    return ("AGL");
   case AltitudeReference::MSL:
-    return _T("MSL");
+    return ("MSL");
 
   case AltitudeReference::STD:
     /* not applicable here */
@@ -268,7 +269,7 @@ Serialise(WritableDataNode &node, const OrderedTaskSettings &data)
 void
 SaveTask(WritableDataNode &node, const OrderedTask &task)
 {
-  node.SetAttribute("type", GetTaskFactoryType(task.GetFactoryType()));
+  node.SetAttribute("type", WideToUTF8Converter(GetTaskFactoryType(task.GetFactoryType())));
   Serialise(node, task.GetOrderedTaskSettings());
 
   for (const auto &tp : task.GetPoints())
