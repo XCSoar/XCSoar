@@ -4,8 +4,6 @@ Version 7.42 - not yet released
   - parse elevations in feet correctly in cup files
 * Kobo
   - Wifi setup, display signal level in dBm for new models
-* Windows
-  - fix reading of radio frequency with MHz in the openAir file
 
 Version 7.41 - 2023/12/21
 * data files
