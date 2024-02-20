@@ -21,6 +21,7 @@
 #include "util/ConvertString.hpp"
 #include "util/StaticString.hxx"
 #include "util/StringCompare.hxx"
+#include "util/StringSplit.hxx"
 
 #include <stdexcept>
 
@@ -570,6 +571,14 @@ ParseType(const char *buffer) noexcept
   return OTHER;
 }
 
+[[gnu::pure]]
+static std::string_view
+ReadRadioFrequency(const std::string_view line) noexcept
+{
+  const auto [frq, _] = Split(line, ' ');
+  return frq;
+}
+
 /**
  * Throws on error.
  */
@@ -667,7 +676,7 @@ ParseLine(Airspaces &airspace_database, unsigned line_number,
     case 'F':
     case 'f':
       if (input.SkipWhitespace())
-        temp_area.radio_frequency = RadioFrequency::Parse(input.c_str());
+        temp_area.radio_frequency = RadioFrequency::Parse(ReadRadioFrequency(input.c_str()));
       break;
     }
 
@@ -889,7 +898,7 @@ ParseLineTNP(Airspaces &airspace_database, unsigned line_number,
   } else if (input.SkipMatchIgnoreCase("BASE="sv)) {
     temp_area.base = ReadAltitude(input);
   } else if (input.SkipMatchIgnoreCase("RADIO="sv)) {
-    temp_area.radio_frequency = RadioFrequency::Parse(input.c_str());
+    temp_area.radio_frequency = RadioFrequency::Parse(ReadRadioFrequency(input.c_str()));
   } else if (input.SkipMatchIgnoreCase("ACTIVE="sv)) {
     if (input.MatchAllIgnoreCase("WEEKEND"))
       temp_area.days_of_operation.SetWeekend();
