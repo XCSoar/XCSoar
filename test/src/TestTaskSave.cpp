@@ -9,12 +9,13 @@
 #include "system/Path.hpp"
 #include "Task/SaveFile.hpp"
 #include "Task/LoadFile.hpp"
+#include "system/FileUtil.hpp"
 
 #include "TestUtil.hpp"
 
 static TaskBehaviour task_behaviour;
 static OrderedTaskSettings ordered_task_settings;
-static constexpr Path task_path{_T("test/data/Test-Task.tsk")};
+static constexpr Path task_path{_T("output/results/Test-Task.tsk")};
 
 static constexpr GeoPoint
 MakeGeoPoint(double longitude, double latitude) noexcept
@@ -82,6 +83,8 @@ TestAll()
 
 int main()
 {
+  Directory::Create(Path{_T("output/results")});
+
   plan_tests(4);
   task_behaviour.SetDefaults();
   ordered_task_settings.SetDefaults();
