@@ -47,7 +47,7 @@ WindStore::GetWind(TimeStamp Time, double h,
   return windlist.getWind(Time, h, found);
 }
 
-void
+inline void
 WindStore::recalculateWind(const MoreData &info, DerivedInfo &derived) const
 {
   bool found;
@@ -57,7 +57,7 @@ WindStore::recalculateWind(const MoreData &info, DerivedInfo &derived) const
   }
 }
 
-void
+inline void
 WindStore::NewWind(DerivedInfo &derived,
                    const Vector &wind) const
 {
