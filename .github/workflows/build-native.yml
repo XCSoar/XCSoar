@@ -440,6 +440,9 @@ jobs:
             imagemagick gettext sox \
             cmake ninja-build
 
+      - name: Patch mingw intrin.h (mingw64 v8 bug workaround)
+        run: sed -i -e '/extern.* __builtin/d' /usr/share/mingw-w64/include/intrin.h
+
       - name: Compile XCSoar
         run: |
           make -j$(nproc) TARGET=${{env.TARGET }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
