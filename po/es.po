@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-21 15:38+0100\n"
-"PO-Revision-Date: 2022-09-21 08:21+0000\n"
+"PO-Revision-Date: 2024-01-09 11:06+0000\n"
 "Last-Translator: l diaz <ldiazz@yahoo.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -399,7 +399,7 @@ msgstr "Tarea no terminada"
 #: src/Task/ValidationErrorStrings.cpp:15
 #, no-c-format
 msgid "All turnpoints not the same type"
-msgstr "Todos los puntos de viraje no son del mismo tipo"
+msgstr "No todos los puntos de viraje son del mismo tipo"
 
 #: src/Task/ValidationErrorStrings.cpp:16
 #, no-c-format
@@ -1496,7 +1496,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:58
 #, no-c-format
 msgid "Sfc temp"
-msgstr "Sfc temp"
+msgstr "Temp Ter"
 
 #: src/Weather/Rasp/RaspStore.cpp:59
 #, no-c-format
@@ -1656,7 +1656,7 @@ msgstr "Onda"
 
 #: src/Renderer/TaskSpeedRenderer.cpp:32
 msgid "Vest"
-msgstr "Chaleco"
+msgstr "Vest"
 
 #: src/UIActions.cpp:32
 msgid "Quit program?"
@@ -1960,9 +1960,8 @@ msgid "Port"
 msgstr "Puerto"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:252
-#, fuzzy
 msgid "Engine Type"
-msgstr "Cambiar Tipo"
+msgstr "Tipo de motor"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:257
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:77
@@ -2724,9 +2723,8 @@ msgid "Set Standby Frequency"
 msgstr "Establecer frecuencia alternativa"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:67
-#, fuzzy
 msgid "Class"
-msgstr "Cristal"
+msgstr "Clase"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:71
 msgid "Top"
@@ -4016,27 +4014,27 @@ msgstr "Central eléctrica"
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:60
 #, no-c-format
 msgid "VOR"
-msgstr ""
+msgstr "VOR"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:61
 #, no-c-format
 msgid "NDB"
-msgstr ""
+msgstr "NDB"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:62
 #, no-c-format
 msgid "Dam"
-msgstr ""
+msgstr "Presa"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
 #, no-c-format
 msgid "Castle"
-msgstr ""
+msgstr "Castillo"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:64
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Intersection"
-msgstr "Intervalo; precaución"
+msgstr "Intersección"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:65
 #, no-c-format
@@ -4044,19 +4042,19 @@ msgid "Marker"
 msgstr "Marcador"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:66
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Control Point"
-msgstr "Dist Comp"
+msgstr "Punto de control"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:67
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "PG Take Off"
-msgstr "Despegue"
+msgstr "Despegue del PG"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:68
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "PG Landing Zone"
-msgstr "Hora de aterrizaje"
+msgstr "Zona de desembarque PG"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:77
 msgid "Comment"
@@ -5053,17 +5051,17 @@ msgstr "Cristal"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:160
 #, no-c-format
 msgid "Use the system-wide setting"
-msgstr ""
+msgstr "Utilizar la configuración de todo el sistema"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:162
 #, no-c-format
 msgid "Black text on white background"
-msgstr ""
+msgstr "Texto negro sobre fondo blanco"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:164
 #, no-c-format
 msgid "White text on black background"
-msgstr ""
+msgstr "Texto blanco sobre fondo negro"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:187
 msgid "Full screen"
@@ -5082,9 +5080,8 @@ msgid "Rotate the display on devices that support it."
 msgstr "Gire la pantalla en los dispositivos que lo admiten."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:197
-#, fuzzy
 msgid "Dark mode"
-msgstr "Tipo de alcance"
+msgstr "Modo oscuro"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:201
 msgid "InfoBox geometry"
@@ -5934,9 +5931,9 @@ msgstr ""
 "línea amarilla."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:95
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Vario E-ink"
-msgstr "Silenciando ell Vario"
+msgstr "Varias tintas electrónicas"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:95
 #, no-c-format
@@ -5944,6 +5941,9 @@ msgid ""
 "E-ink friendly color scheme, lighter and thicker dots means lift while "
 "darker and thinner means sink."
 msgstr ""
+"La combinación de colores compatible con la tinta electrónica, los puntos "
+"más claros y gruesos significan elevación, mientras que los puntos más "
+"oscuros y delgados significan descenso."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:96
 #, no-c-format
@@ -6064,13 +6064,14 @@ msgid "This enables the display of FLARM traffic on the map window."
 msgstr "Permite la visualización del tráfico FLARM en la ventana del mapa."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
-#, fuzzy
 msgid "Fade traffic"
-msgstr "Tráfico FLARM"
+msgstr "Difuminar el tráfico"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 msgid "Keep showing traffic for a while after it has disappeared."
 msgstr ""
+"Seguir mostrando el tráfico durante un tiempo después de que haya "
+"desaparecido."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:144
 msgid "Trail length"
@@ -6751,14 +6752,12 @@ msgid "Units used for latitude and longitude."
 msgstr "Unidades utilizadas para la latitud y la longitud."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:245
-#, fuzzy
 msgid "Rotation"
-msgstr "Posición"
+msgstr "Rotación"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:245
-#, fuzzy
 msgid "Unit used for rotation."
-msgstr "Unidades usadas para la carga alar."
+msgstr "Unidad de rotación."
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:65
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:12
@@ -7148,6 +7147,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:70
 msgid "Allow download of declared tasks from Weglide in the Task Manager."
 msgstr ""
+"Permitir la descarga de tareas desde Weglide en el administrador de tareas."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:73
 msgid "Automatic Upload"
@@ -7158,6 +7158,8 @@ msgid ""
 "Asks whether to upload flight to Weglide, after flight is downloaded from "
 "external logger."
 msgstr ""
+"Pregunta si se debe cargar el vuelo en Weglide, después de descargar el "
+"vuelo desde un registrador externo."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:79
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
@@ -7349,14 +7351,12 @@ msgid "Download WeGlide task"
 msgstr "Descargar tarea de WeGlide"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:144
-#, fuzzy
 msgid "My WeGlide tasks"
-msgstr "Descargar tarea de WeGlide"
+msgstr "Mis tareas con WeGlide"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:148
-#, fuzzy
 msgid "Public WeGlide tasks"
-msgstr "Descargar tarea de WeGlide"
+msgstr "Tareas públicas en WeGlide"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:79
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:83
@@ -7404,7 +7404,7 @@ msgstr "Menos"
 
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:84
 msgid "Refresh"
-msgstr ""
+msgstr "Actualizar"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:34
 #: src/Dialogs/Task/TaskPointDialog.cpp:226
@@ -8136,7 +8136,7 @@ msgstr "Diferencia de altitud final"
 #: src/InfoBoxes/Content/Factory.cpp:243
 #, no-c-format
 msgid "Fin AltD"
-msgstr "Fin AltD"
+msgstr "AltD Fin"
 
 #: src/InfoBoxes/Content/Factory.cpp:244
 #, no-c-format
@@ -8187,7 +8187,7 @@ msgstr "Distancia final"
 #: src/InfoBoxes/Content/Factory.cpp:267
 #, no-c-format
 msgid "Fin Dist"
-msgstr "Fin Dist"
+msgstr "Dist Fin"
 
 #: src/InfoBoxes/Content/Factory.cpp:268
 #, no-c-format
@@ -8551,7 +8551,7 @@ msgstr "Tiempo de tarea restante"
 #: src/InfoBoxes/Content/Factory.cpp:455
 #, no-c-format
 msgid "Fin ETE"
-msgstr "Fin ETE"
+msgstr "ETE Fin"
 
 #: src/InfoBoxes/Content/Factory.cpp:456
 #, no-c-format
@@ -8637,7 +8637,7 @@ msgstr "Hora de llegada de la tarea"
 #: src/InfoBoxes/Content/Factory.cpp:488
 #, no-c-format
 msgid "Fin ETA"
-msgstr "Fin ETA"
+msgstr "ETA Fin"
 
 #: src/InfoBoxes/Content/Factory.cpp:489
 #, no-c-format
@@ -9379,7 +9379,7 @@ msgstr "Tiempo de tarea para comenzar (velocidad sobre el terreno)"
 #: src/InfoBoxes/Content/Factory.cpp:820
 #, no-c-format
 msgid "Fin ETE VMG"
-msgstr "Fin ETE VMG"
+msgstr "ETE VMG Fin"
 
 #: src/InfoBoxes/Content/Factory.cpp:821
 #, no-c-format
@@ -9467,7 +9467,7 @@ msgstr "Siguiente diferencia de altitud MC0"
 #: src/InfoBoxes/Content/Factory.cpp:861
 #, no-c-format
 msgid "WP MC0 AltD"
-msgstr "WP MC0 AltD"
+msgstr "AltD WP MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:862
 #, no-c-format
@@ -9666,14 +9666,16 @@ msgid "ATC radial"
 msgstr "Radial ATC"
 
 #: src/InfoBoxes/Content/Factory.cpp:957
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Bearing from the selected reference location to your position. The distance "
 "is displayed in nautical miles for communication with ATC. If declination is "
 "entered, magnetic bearing is given to match VOR radials."
 msgstr ""
-"Rumbo verdadero desde la posición de referencia seleccionado a su posición. "
-"La distancia se muestra en millas marinas para la comunicación con el ATC."
+"Rumbo desde la posición de referencia seleccionada hasta su posición. La "
+"distancia se muestra en millas náuticas para la comunicación con ATC. Si se "
+"introduce la declinación, se indica el rumbo magnético para que coincida con "
+"los radiales VOR."
 
 #: src/InfoBoxes/Content/Factory.cpp:963
 #, no-c-format
@@ -9959,74 +9961,74 @@ msgid "Heart rate in beats per minute."
 msgstr "Ritmo cardiaco en latidos por minuto."
 
 #: src/InfoBoxes/Content/Factory.cpp:1093
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Transponder Code"
-msgstr "Receptor transpondedor"
+msgstr "Código del transpondedor"
 
 #: src/InfoBoxes/Content/Factory.cpp:1094
 #, no-c-format
 msgid "XPDR Code"
-msgstr ""
+msgstr "Código XPDR"
 
 #: src/InfoBoxes/Content/Factory.cpp:1095
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The currently set Transponder code"
-msgstr "Frecuencia de radio alternativa actual"
+msgstr "El código de transpondedor ajustado actualmente"
 
 #: src/InfoBoxes/Content/Factory.cpp:1101
 #, no-c-format
 msgid "Engine CHT"
-msgstr ""
+msgstr "CHT del motor"
 
 #: src/InfoBoxes/Content/Factory.cpp:1102
 #, no-c-format
 msgid "CHT"
-msgstr ""
+msgstr "CHT"
 
 #: src/InfoBoxes/Content/Factory.cpp:1103
 #, no-c-format
 msgid "Engine Cylinder Head Temperature"
-msgstr ""
+msgstr "Temperatura de la culata del motor"
 
 #: src/InfoBoxes/Content/Factory.cpp:1109
 #, no-c-format
 msgid "Engine EGT"
-msgstr ""
+msgstr "EGT del motor"
 
 #: src/InfoBoxes/Content/Factory.cpp:1110
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "EGT"
-msgstr "ETE"
+msgstr "EGT"
 
 #: src/InfoBoxes/Content/Factory.cpp:1111
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Engine Exhaust Gas Temperature"
-msgstr "Temperatura prevista"
+msgstr "Temperatura de los gases de escape del motor"
 
 #: src/InfoBoxes/Content/Factory.cpp:1117
 #, no-c-format
 msgid "Engine Revolutions Per Minute"
-msgstr ""
+msgstr "Revoluciones por minuto del motor"
 
 #: src/InfoBoxes/Content/Factory.cpp:1118
 #, no-c-format
 msgid "RPM"
-msgstr ""
+msgstr "RPM"
 
 #: src/InfoBoxes/Content/Factory.cpp:1119
 #, no-c-format
 msgid "Engine Revolutions Per Minute."
-msgstr ""
+msgstr "Revoluciones por minuto del motor."
 
 #: src/InfoBoxes/Content/Factory.cpp:1125
 #, no-c-format
 msgid "AAT dT and task ETA"
-msgstr ""
+msgstr "AAT dT y ETA de la tarea"
 
 #: src/InfoBoxes/Content/Factory.cpp:1126
 #, no-c-format
 msgid "AATdeltaOrETA"
-msgstr ""
+msgstr "AATdeltaoETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:1127
 #, no-c-format
@@ -10034,11 +10036,12 @@ msgid ""
 "Shows AAT delta time and estimated time of arrival in case of AAT task, and "
 "estimated time of arrival in case of racing task"
 msgstr ""
+"Muestra el tiempo delta de AAT y la hora estimada de llegada en caso de "
+"tarea de AAT, y la hora estimada de llegada en caso de tarea de carrera"
 
 #: src/InfoBoxes/Content/Alternate.cpp:58
-#, fuzzy
 msgid "Altn {}"
-msgstr "Altn 1"
+msgstr "Altn {}"
 
 #: src/InfoBoxes/Content/Altitude.cpp:26
 #: src/MapWindow/GlueMapWindowOverlays.cpp:333
@@ -10119,15 +10122,16 @@ msgid "FinalGlide"
 msgstr "Planeo final"
 
 #: src/InfoBoxes/Panel/ATCSetup.cpp:35
-#, fuzzy
 msgid "Mag declination"
-msgstr "Enviando declaración"
+msgstr "Declinación magnética"
 
 #: src/InfoBoxes/Panel/ATCSetup.cpp:36
 msgid ""
 "Magnetic declination used to calculate radial to reference. Negative values "
 "are W declination, positive is E."
 msgstr ""
+"Declinación magnética utilizada para calcular el radio de referencia. Los "
+"valores negativos corresponden a la declinación W, los positivos a la E."
 
 #: src/MapWindow/GlueMapWindowItems.cpp:109
 msgid "There is nothing interesting near this location."

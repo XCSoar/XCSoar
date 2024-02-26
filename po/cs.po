@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-21 15:38+0100\n"
-"PO-Revision-Date: 2023-11-02 22:58+0000\n"
+"PO-Revision-Date: 2023-12-23 14:09+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -1946,9 +1946,8 @@ msgid "Port"
 msgstr "Port"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:252
-#, fuzzy
 msgid "Engine Type"
-msgstr "Jiný typ"
+msgstr "Typ motoru"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:257
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:77
@@ -2703,9 +2702,8 @@ msgid "Set Standby Frequency"
 msgstr "Na záložní frekvenci"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:67
-#, fuzzy
 msgid "Class"
-msgstr "Sklo"
+msgstr "Třída"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:71
 msgid "Top"
@@ -3708,7 +3706,7 @@ msgid ""
 "is maximum AAT distance."
 msgstr ""
 "Pro AAT úlohy. Hodnota ukáže, jakou vzdálenost proletíte na základě "
-"nastavených otočných bodu relativně vůči minimální a maximální možné "
+"nastavených otočných bodů, relativně vůči minimální a maximální možné "
 "vzdálenosti. -100% značí minimální AAT vzdálenost. 0% nominální AAT "
 "vzdálenost. +100% je maximální AAT vzdálenost."
 
@@ -3990,27 +3988,27 @@ msgstr "Elektrárna"
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:60
 #, no-c-format
 msgid "VOR"
-msgstr ""
+msgstr "VOR"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:61
 #, no-c-format
 msgid "NDB"
-msgstr ""
+msgstr "NDB"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:62
 #, no-c-format
 msgid "Dam"
-msgstr ""
+msgstr "Přehrada"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
 #, no-c-format
 msgid "Castle"
-msgstr ""
+msgstr "Hrad"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:64
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Intersection"
-msgstr "Interval; upozornění"
+msgstr "Křižovatka"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:65
 #, no-c-format
@@ -4018,19 +4016,19 @@ msgid "Marker"
 msgstr "Značka"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:66
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Control Point"
-msgstr "Cont vzdál"
+msgstr "Kontrolní bod"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:67
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "PG Take Off"
-msgstr "Vzlet"
+msgstr "Vzlet PG"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:68
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "PG Landing Zone"
-msgstr "Čas přistání"
+msgstr "Přistání PG"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:77
 msgid "Comment"
@@ -4362,7 +4360,7 @@ msgid ""
 "Setting this to \"On\" will automatically close the FLARM dialog if there is "
 "no traffic. \"Off\" will keep the dialog open even without current traffic."
 msgstr ""
-"Zapnutím této volby se automaticky zavře FLARM obrazovka, pokud není v okolí "
+"Zapnutím této volby se FLARM obrazovka automaticky zavře, pokud není v okolí "
 "žádný provoz. Vypnutím zůstane FLARM obrazovka aktivní i pokud nic "
 "nedetekuje."
 
@@ -4998,17 +4996,17 @@ msgstr "Sklo"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:160
 #, no-c-format
 msgid "Use the system-wide setting"
-msgstr ""
+msgstr "Použije nastavení systému"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:162
 #, no-c-format
 msgid "Black text on white background"
-msgstr ""
+msgstr "Černý text na bílém pozadí"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:164
 #, no-c-format
 msgid "White text on black background"
-msgstr ""
+msgstr "Bílý text na tmavém pozadí"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:187
 msgid "Full screen"
@@ -5024,12 +5022,11 @@ msgstr "Orientace displeje"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:192
 msgid "Rotate the display on devices that support it."
-msgstr "Otočení displeje na zařízení, jež to podporují."
+msgstr "Otočení displeje na zařízení, které to podporují."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:197
-#, fuzzy
 msgid "Dark mode"
-msgstr "Výpočet akčního rádiusu"
+msgstr "Tmavý mód"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:201
 msgid "InfoBox geometry"
@@ -5860,9 +5857,9 @@ msgstr ""
 "modrou. Nulové stoupání je vyznačeno žlutou čarou."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:95
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Vario E-ink"
-msgstr "Ztlumení vária"
+msgstr "Vário e-ink"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:95
 #, no-c-format
@@ -5870,6 +5867,8 @@ msgid ""
 "E-ink friendly color scheme, lighter and thicker dots means lift while "
 "darker and thinner means sink."
 msgstr ""
+"Barevné schéma přátelské k e-ink. Světlejší a silnější body značí stoupání, "
+"zatímco tmavší a tenčí body klesání."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:96
 #, no-c-format
@@ -5988,13 +5987,13 @@ msgid "This enables the display of FLARM traffic on the map window."
 msgstr "Tato volba zobrazí FLARM provoz na mapě."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
-#, fuzzy
 msgid "Fade traffic"
-msgstr "FLARM provoz"
+msgstr "Blednutí provozu"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 msgid "Keep showing traffic for a while after it has disappeared."
 msgstr ""
+"Po určitou dobu pokračuje v zobrazení symbolu provozu i když není detekován."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:144
 msgid "Trail length"
@@ -6600,15 +6599,15 @@ msgid ""
 "Units used for airspeed and ground speed.  A separate unit is available for "
 "task speeds."
 msgstr ""
-"Jednotky pro vzdušnou rychlost a rychlost vůči zemi. Pro rychlost v úloze je "
-"k dispozici separátní nastavení."
+"Jednotky použité pro vzdušnou rychlost a rychlost vůči zemi. Pro rychlost v "
+"úloze je k dispozici separátní nastavení."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:144
 msgid ""
 "Units used for horizontal distances e.g. range to waypoint, distance to go."
 msgstr ""
-"Jednotky pro horizontální vzdálenosti, např. vzdálenost k otočnému bodu, "
-"vzdálenost do cíle."
+"Jednotky použité pro horizontální vzdálenosti, např. vzdálenost k otočnému "
+"bodu, zbývající vzdálenost do cíle, aj."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:156
 msgid "Lift"
@@ -6616,7 +6615,7 @@ msgstr "Stoupání"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:156
 msgid "Units used for vertical speeds (variometer)."
-msgstr "Jednotky pro vertikální rychlost (variometr)."
+msgstr "Jednotky použité pro vertikální rychlosti (variometr)."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:162
 #, no-c-format
@@ -6630,11 +6629,11 @@ msgstr "metry"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:166
 msgid "Units used for altitude and heights."
-msgstr "Jednotky pro výšku."
+msgstr "Jednotky použité pro výšku."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:176
 msgid "Units used for temperature."
-msgstr "Jednotky pro teplotu."
+msgstr "Jednotky použité pro teplotu."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:188
 msgid "Task speed"
@@ -6642,15 +6641,15 @@ msgstr "Rychlost úlohy"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:188
 msgid "Units used for task speeds."
-msgstr "Jednotky rychlosti úlohy."
+msgstr "Jednotky použité pro rychlosti úlohy."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:199
 msgid "Units used for pressures."
-msgstr "Jednotky pro tlak."
+msgstr "Jednotky použité pro tlaky."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:209
 msgid "Units used for mass."
-msgstr "Jednotky užívané pro hmotnost."
+msgstr "Jednotky použité pro hmotnost."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:219
 msgid "Units used for wing loading."
@@ -6665,14 +6664,12 @@ msgid "Units used for latitude and longitude."
 msgstr "Jednotky použité pro zeměpisnou šířku a délku."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:245
-#, fuzzy
 msgid "Rotation"
-msgstr "Poloha"
+msgstr "Otáčky"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:245
-#, fuzzy
 msgid "Unit used for rotation."
-msgstr "Jednotky použité pro plošné zatížení."
+msgstr "Jednotky použité pro otáčky."
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:65
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:12
@@ -6702,7 +6699,7 @@ msgid ""
 msgstr ""
 "Pokud je zapnuto, nastaví hodiny zažízení na GPS čas, jakmile získá fix. "
 "Tato volba je potřebná pouze pokud vaše zařízení nemá vlastní hodiny "
-"zálohované baterií, často se vybíjí, nebo jinak ztrácí správný čas."
+"zálohované baterií, zařízení se často vybíjí, nebo jinak ztrácí správný čas."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:67
 #, no-c-format
@@ -7027,7 +7024,7 @@ msgid ""
 "thermal/wave locations and other weather data to our test server."
 msgstr ""
 "Účastníte se testu XCSoar cloudu? Toto nastavení vysílá polohu, pozici "
-"stoupavých proudů/vlnových prostorů a další meteorologická data na náš "
+"stoupavých proudů/vlnových rozruchů a další meteorologická data na náš "
 "testovací server."
 
 #: src/Dialogs/Settings/Panels/CloudConfigPanel.cpp:69
@@ -7044,7 +7041,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:70
 msgid "Allow download of declared tasks from Weglide in the Task Manager."
-msgstr ""
+msgstr "Ve Správci úloh umožňuje stažení deklarovaných úloh z WeGlide."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:73
 msgid "Automatic Upload"
@@ -7055,10 +7052,11 @@ msgid ""
 "Asks whether to upload flight to Weglide, after flight is downloaded from "
 "external logger."
 msgstr ""
+"Po stažení letu z externího loggeru se zeptá, zda nahrát let na WeGlide."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:79
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
-msgstr "Použijte údaje ze svého účtu WeGlide. Pokud není použito, zadejte 0."
+msgstr "Použijte údaje ze svého účtu WeGlide. Pokud nepoužíváte, zadejte 0."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:82
 msgid "Pilot date of birth"
@@ -7231,7 +7229,7 @@ msgstr "Nová úloha"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:135
 msgid "New Task"
-msgstr "Nový úkol"
+msgstr "Nová úloha"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:136
 msgid "Declare"
@@ -7246,14 +7244,12 @@ msgid "Download WeGlide task"
 msgstr "Stáhni úlohu z WeGlide"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:144
-#, fuzzy
 msgid "My WeGlide tasks"
-msgstr "Stáhni úlohu z WeGlide"
+msgstr "Moje WeGlide úlohy"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:148
-#, fuzzy
 msgid "Public WeGlide tasks"
-msgstr "Stáhni úlohu z WeGlide"
+msgstr "Veřejné WeGlide úlohy"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:79
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:83
@@ -7449,9 +7445,9 @@ msgid ""
 "task distances, smaller values move the target points to produce smaller "
 "task distances."
 msgstr ""
-"Pro AAT úlohy může být toto nastavení použito pro úpravu bodů uvnitř AAT "
-"oblastí. Vyšší číslo posouvá cílové body tak, aby došlo k prodloužení trati, "
-"menší číslo posouvá cílové body tak, aby celkovou trať zkrátilo."
+"Pro AAT úlohy. Tato volba upravuje cílové body uvnitř AAT oblastí. Vyšší "
+"hodnota posouvá cílové body tak, aby došlo k prodloužení trati, nižší "
+"hodnota posouvá cílové body tak, aby celkovou trať zkrátilo."
 
 #: src/Dialogs/Task/TargetDialog.cpp:365 src/InfoBoxes/Content/Factory.cpp:948
 #, no-c-format
@@ -7488,9 +7484,9 @@ msgid ""
 "plus 5 minutes."
 msgstr ""
 "AAT rozdílový čas. Rozdíl mezi předpokládaným časem úlohy a AAT minimálním "
-"časem. Zbarvený červeně pokud je předpokládaný přílet předčasný, nebo modře, "
-"pokud jste v AAT oblasti a můžete provést obrat s předpokládaným časem "
-"příletu v AAT minimálním čase plus 5 minut."
+"časem. Hodnota je zbarvená červeně pokud je předpokládaný předčasný přílet, "
+"nebo modře, pokud jste v AAT oblasti a můžete provést obrat s předpokládaným "
+"časem příletu v AAT minimálním čase plus 5 minut."
 
 #: src/Dialogs/Task/TargetDialog.cpp:380
 msgid "V rem."
@@ -9508,14 +9504,15 @@ msgid "ATC radial"
 msgstr "ATC radiála"
 
 #: src/InfoBoxes/Content/Factory.cpp:957
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Bearing from the selected reference location to your position. The distance "
 "is displayed in nautical miles for communication with ATC. If declination is "
 "entered, magnetic bearing is given to match VOR radials."
 msgstr ""
-"Skutečný směr z vybraného referenčního bodu k vaší pozici. Vzdálenost je "
-"zobrazena v námořních mílích pro komunikaci s ATC."
+"Azimut z vybraného referenčního bodu k vaší pozici. Vzdálenost je zobrazena "
+"v námořních mílích pro komunikaci s ATC. Pokud je zadána deklinace, "
+"magnetický azimut odpovídá VOR radiálám."
 
 #: src/InfoBoxes/Content/Factory.cpp:963
 #, no-c-format
@@ -9801,74 +9798,74 @@ msgid "Heart rate in beats per minute."
 msgstr "Srdeční tep v úderech za minutu."
 
 #: src/InfoBoxes/Content/Factory.cpp:1093
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Transponder Code"
-msgstr "Příjímač odpovídače"
+msgstr "Kód odpovídače"
 
 #: src/InfoBoxes/Content/Factory.cpp:1094
 #, no-c-format
 msgid "XPDR Code"
-msgstr ""
+msgstr "XPDR kód"
 
 #: src/InfoBoxes/Content/Factory.cpp:1095
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The currently set Transponder code"
-msgstr "Záložní radiofrekvence"
+msgstr "Nastavený kód odpovídače"
 
 #: src/InfoBoxes/Content/Factory.cpp:1101
 #, no-c-format
 msgid "Engine CHT"
-msgstr ""
+msgstr "Teplota ECHT"
 
 #: src/InfoBoxes/Content/Factory.cpp:1102
 #, no-c-format
 msgid "CHT"
-msgstr ""
+msgstr "CHT"
 
 #: src/InfoBoxes/Content/Factory.cpp:1103
 #, no-c-format
 msgid "Engine Cylinder Head Temperature"
-msgstr ""
+msgstr "Teplota hlav válců motoru"
 
 #: src/InfoBoxes/Content/Factory.cpp:1109
 #, no-c-format
 msgid "Engine EGT"
-msgstr ""
+msgstr "Teplota EGT"
 
 #: src/InfoBoxes/Content/Factory.cpp:1110
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "EGT"
-msgstr "ETE"
+msgstr "EGT"
 
 #: src/InfoBoxes/Content/Factory.cpp:1111
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Engine Exhaust Gas Temperature"
-msgstr "Teplota dle předpovědi"
+msgstr "Teplota výfukových plynů motoru"
 
 #: src/InfoBoxes/Content/Factory.cpp:1117
 #, no-c-format
 msgid "Engine Revolutions Per Minute"
-msgstr ""
+msgstr "Počet otáček motoru za minutu"
 
 #: src/InfoBoxes/Content/Factory.cpp:1118
 #, no-c-format
 msgid "RPM"
-msgstr ""
+msgstr "RPM"
 
 #: src/InfoBoxes/Content/Factory.cpp:1119
 #, no-c-format
 msgid "Engine Revolutions Per Minute."
-msgstr ""
+msgstr "Počet otáček motoru za minutu."
 
 #: src/InfoBoxes/Content/Factory.cpp:1125
 #, no-c-format
 msgid "AAT dT and task ETA"
-msgstr ""
+msgstr "AAT Δčasů a ETA úlohy"
 
 #: src/InfoBoxes/Content/Factory.cpp:1126
 #, no-c-format
 msgid "AATdeltaOrETA"
-msgstr ""
+msgstr "AAT Δčasů/ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:1127
 #, no-c-format
@@ -9876,11 +9873,12 @@ msgid ""
 "Shows AAT delta time and estimated time of arrival in case of AAT task, and "
 "estimated time of arrival in case of racing task"
 msgstr ""
+"Zobrazuje delta čas AAT + odhadovaný čas příletu v případě úlohy AAT a "
+"odhadovaný čas příletu v případě rychlostní úlohy."
 
 #: src/InfoBoxes/Content/Alternate.cpp:58
-#, fuzzy
 msgid "Altn {}"
-msgstr "Altn 1"
+msgstr "Altn {}"
 
 #: src/InfoBoxes/Content/Altitude.cpp:26
 #: src/MapWindow/GlueMapWindowOverlays.cpp:333
@@ -9961,15 +9959,16 @@ msgid "FinalGlide"
 msgstr "Dokluz"
 
 #: src/InfoBoxes/Panel/ATCSetup.cpp:35
-#, fuzzy
 msgid "Mag declination"
-msgstr "Zasílám deklaraci"
+msgstr "Mag deklinace"
 
 #: src/InfoBoxes/Panel/ATCSetup.cpp:36
 msgid ""
 "Magnetic declination used to calculate radial to reference. Negative values "
 "are W declination, positive is E."
 msgstr ""
+"Magnetická deklinace používaná k výpočtu radiály k referenci. Záporné "
+"hodnoty jsou západní deklinace (W), kladné je východní (E)."
 
 #: src/MapWindow/GlueMapWindowItems.cpp:109
 msgid "There is nothing interesting near this location."
