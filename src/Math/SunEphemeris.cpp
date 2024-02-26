@@ -35,8 +35,9 @@ FNday(const BrokenDateTime date_time) noexcept
 {
   assert(date_time.IsPlausible());
 
-  int_fast32_t luku = -7 * (date_time.year + (date_time.month + 9) / 12) / 4 +
-                  275 * date_time.month / 9 + date_time.day +
+  const int_fast32_t luku =
+    -7 * static_cast<int_fast32_t>(date_time.year + (date_time.month + 9) / 12) / 4 +
+    static_cast<int_fast32_t>(275 * date_time.month / 9 + date_time.day) +
     static_cast<int_fast32_t>(date_time.year) * 367;
 
   return double(luku) - 730531.5 + (date_time.hour % 24) / 24.;
