@@ -1,4 +1,6 @@
 Version 7.42 - not yet released
+* ui
+  - new terrain ramp High Contrast
 * data files
   - fix bogus "Latin-1 to UTF-8 conversion failed" error
   - parse elevations in feet correctly in cup files
