@@ -54,7 +54,7 @@ struct TopoInput {
 
     auto fd = OpenWriteOnly(paths.front().c_str(), O_CREAT|O_EXCL);
     if (!segment.empty())
-      fd.Write(segment.data(), segment.size());
+      (void)fd.Write(segment.data(), segment.size());
   }
 };
 
