@@ -92,9 +92,9 @@ musl = MuslProject(
 )
 
 openssl = OpenSSLProject(
-    ('https://www.openssl.org/source/openssl-3.1.4.tar.gz',
-     'https://artfiles.org/openssl.org/source/openssl-3.1.4.tar.gz'),
-    '840af5366ab9b522bde525826be3ef0fb0af81c6a9ebd84caa600fea1731eee3',
+    ('https://www.openssl.org/source/openssl-3.1.5.tar.gz',
+     'https://artfiles.org/openssl.org/source/openssl-3.1.5.tar.gz'),
+    '6ae015467dabf0469b139ada93319327be24b98251ffaeceda0221848dc09262',
     'include/openssl/ossl_typ.h',
 )
 
