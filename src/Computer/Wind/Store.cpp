@@ -11,7 +11,7 @@
 #include <math.h>
 
 void
-WindStore::reset()
+WindStore::reset() noexcept
 {
   windlist.Reset();
   update_clock = {};
@@ -20,7 +20,7 @@ WindStore::reset()
 
 void
 WindStore::SlotMeasurement(const MoreData &info,
-                           const SpeedVector &windvector, unsigned quality)
+                           const SpeedVector &windvector, unsigned quality) noexcept
 {
   updated = true;
   windlist.addMeasurement(info.time, windvector,
@@ -29,7 +29,7 @@ WindStore::SlotMeasurement(const MoreData &info,
 }
 
 void
-WindStore::SlotAltitude(const MoreData &info, DerivedInfo &derived)
+WindStore::SlotAltitude(const MoreData &info, DerivedInfo &derived) noexcept
 {
   if (updated || (fabs(info.nav_altitude - _lastAltitude) > 100)) {
     //only recalculate if there is a significant change
@@ -48,7 +48,7 @@ WindStore::GetWind(TimeStamp Time, double h,
 }
 
 inline void
-WindStore::recalculateWind(const MoreData &info, DerivedInfo &derived) const
+WindStore::recalculateWind(const MoreData &info, DerivedInfo &derived) const noexcept
 {
   bool found;
   Vector CurWind = windlist.getWind(info.time, info.nav_altitude, found);
@@ -59,7 +59,7 @@ WindStore::recalculateWind(const MoreData &info, DerivedInfo &derived) const
 
 inline void
 WindStore::NewWind(DerivedInfo &derived,
-                   const Vector &wind) const
+                   const Vector &wind) const noexcept
 {
   auto mag = wind.Magnitude();
   Angle bearing;
