@@ -28,9 +28,9 @@ ParsePITV3(NMEAInputLine &line, NMEAInfo &info)
   }
 
   // heading [degrees]
-  if (line.ReadChecked(value)) {
+  if (Angle heading; line.ReadBearing(heading)) {
     info.attitude.heading_available.Update(info.clock);
-    info.attitude.heading = Angle::Degrees(value);
+    info.attitude.heading = heading;
   }
 
   // IAS [m/s]
@@ -63,14 +63,15 @@ static bool
 ParsePITV5(NMEAInputLine &line, NMEAInfo &info)
 {
   double value;
-  double norm, bearing;
+  double norm;
+  Angle bearing;
 
   // wind speed [m/s]
   bool norm_valid = line.ReadChecked(norm);
   // wind dir [degrees]
-  bool bearing_valid = line.ReadChecked(bearing);
+  bool bearing_valid = line.ReadBearing(bearing);
   if (norm_valid && bearing_valid) {
-    SpeedVector wind(Angle::Degrees(bearing), norm);
+    SpeedVector wind(bearing, norm);
     info.ProvideExternalWind(wind);
   }
 

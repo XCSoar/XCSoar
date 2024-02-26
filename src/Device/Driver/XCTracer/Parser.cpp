@@ -101,8 +101,8 @@ XCTracerDevice::LXWP0(NMEAInputLine &line, NMEAInfo &info)
   line.Skip(5);
 
   /* read course */
-  if (line.ReadChecked(value)) {
-    info.track = Angle::Degrees(value);
+  if (Angle track; line.ReadBearing(track)) {
+    info.track = track;
     info.track_available.Update(info.clock);
   }
 
@@ -208,10 +208,10 @@ XCTracerDevice::XCTRC(NMEAInputLine &line, NMEAInfo &info)
   }
 
   /* read course*/
-  if (line.ReadChecked(value)) {
+  if (Angle track; line.ReadBearing(track)) {
     /* update only if we're moving .. */
     if (info.MovementDetected()) {
-      info.track = Angle::Degrees(value);
+      info.track = track;
       info.track_available.Update(info.clock);
     }
     valid_fields++;

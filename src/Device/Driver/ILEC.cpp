@@ -19,14 +19,15 @@ public:
 static bool
 ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
-  double norm, bearing;
+  Angle bearing;
+  double norm;
 
-  bool bearing_valid = line.ReadChecked(bearing);
+  bool bearing_valid = line.ReadBearing(bearing);
   bool norm_valid = line.ReadChecked(norm);
 
   if (bearing_valid && norm_valid) {
     value_r.norm = Units::ToSysUnit(norm, Unit::KILOMETER_PER_HOUR);
-    value_r.bearing = Angle::Degrees(bearing);
+    value_r.bearing = bearing;
     return true;
   } else
     return false;

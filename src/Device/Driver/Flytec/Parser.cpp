@@ -126,9 +126,8 @@ FlytecDevice::ParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
     }
 
     //  Track (xxx Deg),   3 Digits
-    double track;
-    if (line.ReadChecked(track)) {
-      info.track = Angle::Degrees(track);
+    if (Angle track; line.ReadBearing(track)) {
+      info.track = track;
       info.track_available.Update(info.clock);
     }
 

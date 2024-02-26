@@ -5,6 +5,8 @@ Version 7.42 - not yet released
   - fix bogus "Latin-1 to UTF-8 conversion failed" error
   - parse elevations in feet correctly in cup files
   - ignore unit for radio frequency in airspace files
+* devices
+  - validate wind direction
 * Kobo
   - Wifi setup, display signal level in dBm for new models
 * user interface

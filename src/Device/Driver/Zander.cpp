@@ -52,8 +52,9 @@ PZAN3(NMEAInputLine &line, NMEAInfo &info)
 
   line.Skip(3);
 
-  int direction, speed;
-  if (!line.ReadChecked(direction) || !line.ReadChecked(speed))
+  Angle direction;
+  int speed;
+  if (!line.ReadBearing(direction) || !line.ReadChecked(speed))
     return false;
 
   char okay = line.ReadFirstChar();
@@ -69,8 +70,7 @@ PZAN3(NMEAInputLine &line, NMEAInfo &info)
   }
 
   if (okay == 'A') {
-    SpeedVector wind(Angle::Degrees(direction),
-                     Units::ToSysUnit(speed, Unit::KILOMETER_PER_HOUR));
+    SpeedVector wind{direction, Units::ToSysUnit(speed, Unit::KILOMETER_PER_HOUR)};
     info.ProvideExternalWind(wind);
   }
 

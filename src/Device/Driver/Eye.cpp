@@ -127,8 +127,8 @@ EyeDevice::PEYI(NMEAInputLine &line, NMEAInfo &info)
   line.Skip();
 
   // Bear to true North [°] (0° – 359°) (i.e. 248)
-  if (line.ReadChecked(value)) {
-    info.attitude.heading = Angle::Degrees(value);
+  if (Angle heading; line.ReadBearing(heading)) {
+    info.attitude.heading = heading;
     info.attitude.heading_available.Update(info.clock);
   }
 
@@ -141,13 +141,14 @@ EyeDevice::PEYI(NMEAInputLine &line, NMEAInfo &info)
 inline bool
 EyeDevice::ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
-  double bearing, norm;
+  Angle bearing;
+  double norm;
 
-  bool bearing_valid = line.ReadChecked(bearing);
+  bool bearing_valid = line.ReadBearing(bearing);
   bool norm_valid = line.ReadChecked(norm);
 
   if (bearing_valid && norm_valid) {
-    value_r.bearing = Angle::Degrees(bearing);
+    value_r.bearing = bearing;
     value_r.norm = Units::ToSysUnit(norm, Unit::KILOMETER_PER_HOUR);
     return true;
   } else
