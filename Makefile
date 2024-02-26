@@ -135,6 +135,7 @@ include $(topdir)/build/libstdcxx.mk
 include $(topdir)/build/libutil.mk
 include $(topdir)/build/libmath.mk
 include $(topdir)/build/libgeo.mk
+include $(topdir)/build/libunits.mk
 include $(topdir)/build/libnmea.mk
 include $(topdir)/build/libcomputer.mk
 include $(topdir)/build/libos.mk
@@ -155,7 +156,6 @@ include $(topdir)/build/libport.mk
 include $(topdir)/build/driver.mk
 include $(topdir)/build/libio.mk
 include $(topdir)/build/shapelib.mk
-include $(topdir)/build/libunits.mk
 include $(topdir)/build/libwaypoint.mk
 include $(topdir)/build/libairspace.mk
 include $(topdir)/build/libtask.mk

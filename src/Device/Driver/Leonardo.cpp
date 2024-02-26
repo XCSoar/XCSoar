@@ -15,23 +15,6 @@ public:
   bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 };
 
-static bool
-ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
-{
-  Angle bearing;
-  double norm;
-
-  bool norm_valid = line.ReadChecked(norm);
-  bool bearing_valid = line.ReadBearing(bearing);
-
-  if (bearing_valid && norm_valid) {
-    value_r.norm = Units::ToSysUnit(norm, Unit::KILOMETER_PER_HOUR);
-    value_r.bearing = bearing;
-    return true;
-  } else
-    return false;
-}
-
 /**
  * Parse a "$C" sentence.
  *
@@ -73,8 +56,7 @@ LeonardoParseC(NMEAInputLine &line, NMEAInfo &info)
 
   // 10 = wind speed [km/h]
   // 11 = wind direction [degrees]
-  SpeedVector wind;
-  if (ReadSpeedVector(line, wind))
+  if (SpeedVector wind; line.ReadSwappedSpeedVectorKPH(wind))
     info.ProvideExternalWind(wind);
 
   return true;
@@ -168,8 +150,7 @@ PDGFTL1(NMEAInputLine &line, NMEAInfo &info)
 
   //  Wind Speed  28       km/h         28 km/h
   //  Wind Direction  65       degree       65 degree
-  SpeedVector wind;
-  if (ReadSpeedVector(line, wind))
+  if (SpeedVector wind; line.ReadSwappedSpeedVectorKPH(wind))
     info.ProvideExternalWind(wind);
 
   //  Main Lithium Battery Voltage   382      0.01 volts   3,82 volts

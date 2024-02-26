@@ -22,7 +22,6 @@ public:
 
 protected:
   static bool ReadAcceleration(NMEAInputLine &line, AccelerationState &value_r);
-  static bool ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r);
 };
 
 bool
@@ -65,8 +64,7 @@ EyeDevice::PEYA(NMEAInputLine &line, NMEAInfo &info)
 
   // Direction from were the wind blows [°] (0 - 359)
   // Wind speed [km/h]
-  SpeedVector wind;
-  if (ReadSpeedVector(line, wind))
+  if (SpeedVector wind; line.ReadSpeedVectorKPH(wind))
     info.ProvideExternalWind(wind);
 
   // True air speed [km/h] (i.e. 183)
@@ -136,23 +134,6 @@ EyeDevice::PEYI(NMEAInputLine &line, NMEAInfo &info)
   // Local declination [°] (i.e. +02.3)
 
   return true;
-}
-
-inline bool
-EyeDevice::ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
-{
-  Angle bearing;
-  double norm;
-
-  bool bearing_valid = line.ReadBearing(bearing);
-  bool norm_valid = line.ReadChecked(norm);
-
-  if (bearing_valid && norm_valid) {
-    value_r.bearing = bearing;
-    value_r.norm = Units::ToSysUnit(norm, Unit::KILOMETER_PER_HOUR);
-    return true;
-  } else
-    return false;
 }
 
 inline bool

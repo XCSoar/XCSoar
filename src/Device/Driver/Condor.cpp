@@ -17,27 +17,6 @@ public:
 };
 
 static bool
-ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
-{
-  Angle bearing;
-  double norm;
-
-  bool bearing_valid = line.ReadBearing(bearing);
-  bool norm_valid = line.ReadChecked(norm);
-
-  if (bearing_valid && norm_valid) {
-    // Condor 1.1.4 outputs the direction that the wind is going to,
-    // _not_ the direction it is coming from !!
-    //
-    // This seems to differ from the output that the LX devices are giving !!
-    value_r.bearing = bearing.Reciprocal();
-    value_r.norm = Units::ToSysUnit(norm, Unit::KILOMETER_PER_HOUR);
-    return true;
-  } else
-    return false;
-}
-
-static bool
 cLXWP0(NMEAInputLine &line, NMEAInfo &info)
 {
   /*
@@ -71,9 +50,12 @@ cLXWP0(NMEAInputLine &line, NMEAInfo &info)
 
   line.Skip(6);
 
-  SpeedVector wind;
-  if (ReadSpeedVector(line, wind))
-    info.ProvideExternalWind(wind);
+  if (SpeedVector wind; line.ReadSpeedVectorKPH(wind))
+    // Condor 1.1.4 outputs the direction that the wind is going to,
+    // _not_ the direction it is coming from !!
+    //
+    // This seems to differ from the output that the LX devices are giving !!
+    info.ProvideExternalWind(wind.Reciprocal());
 
   return true;
 }
