@@ -63,7 +63,8 @@ Run(DebugReplay &replay, FlightTimeResult &result)
   replay.SetCalculated().Reset();
   replay.SetFlyingComputer().Reset();
 
-  while (replay.Next()) {
+  bool had_next;
+  while ((had_next = replay.Next())) {
     const MoreData &basic = replay.Basic();
 
     Update(basic, replay.Calculated(), result);
@@ -115,7 +116,7 @@ Run(DebugReplay &replay, FlightTimeResult &result)
   Finish(replay.Basic(), result);
 
   // landing detected or eof?
-  if (replay.Tell() != replay.Size())
+  if (had_next)
     return false;
   else
     return true;
