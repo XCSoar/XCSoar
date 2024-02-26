@@ -21,7 +21,7 @@ NMEAInputLine::ReadBearing(Angle &value_r) noexcept
   if (!ReadChecked(value))
     return false;
 
-  if (value < 0 || value > 360)
+  if (value <= -1 || value >= 361)
     return false;
 
   value_r = Angle::Degrees(value).AsBearing();
