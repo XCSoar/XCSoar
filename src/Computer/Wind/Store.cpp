@@ -59,7 +59,7 @@ WindStore::recalculateWind(const MoreData &info, DerivedInfo &derived) const
 
 void
 WindStore::NewWind(DerivedInfo &derived,
-                   Vector &wind) const
+                   const Vector &wind) const
 {
   auto mag = wind.Magnitude();
   Angle bearing;
