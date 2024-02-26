@@ -391,10 +391,18 @@ jobs:
           apt-get update
           apt-get install -y --no-install-recommends \
             git \
+            quilt \
+            make \
+            g++ \
+            g++-mingw-w64 \
             ccache \
             xz-utils \
             pkgconf \
-            ca-certificates
+            ca-certificates \
+            python3 \
+            librsvg2-bin xsltproc \
+            imagemagick gettext sox \
+            cmake ninja-build
 
       - id: checkout
         uses: actions/checkout@v4
@@ -426,19 +434,6 @@ jobs:
       - name: find githash
         run: |
           echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
-
-      - name: Install dependencies
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends \
-            make \
-            quilt \
-            g++ \
-            g++-mingw-w64 \
-            python3 \
-            librsvg2-bin xsltproc \
-            imagemagick gettext sox \
-            cmake ninja-build
 
       - name: Patch mingw intrin.h (mingw64 v8 bug workaround)
         run: sed -i -e '/extern.* __builtin/d' /usr/share/mingw-w64/include/intrin.h
