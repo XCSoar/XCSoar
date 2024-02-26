@@ -53,12 +53,12 @@ WindStore::recalculateWind(const MoreData &info, DerivedInfo &derived) const
   bool found;
   Vector CurWind = windlist.getWind(info.time, info.nav_altitude, found);
   if (found) {
-    NewWind(info, derived, CurWind);
+    NewWind(derived, CurWind);
   }
 }
 
 void
-WindStore::NewWind([[maybe_unused]] const NMEAInfo &info, DerivedInfo &derived,
+WindStore::NewWind(DerivedInfo &derived,
                    Vector &wind) const
 {
   auto mag = wind.Magnitude();

@@ -54,7 +54,7 @@ private:
    * Send if a new wind vector has been established. This may happen as
    * new measurements flow in, but also if the altitude changes.
    */
-  void NewWind(const NMEAInfo &info, DerivedInfo &derived, Vector& wind) const;
+  void NewWind(DerivedInfo &derived, Vector& wind) const;
 
   /**
    * Recalculates the wind from the stored measurements.
