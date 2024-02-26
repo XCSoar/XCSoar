@@ -117,23 +117,6 @@ NAVWarn(char c)
 }
 
 /**
- * Parses non-negative floating-point angle value in degrees.
- */
-static bool
-ReadBearing(NMEAInputLine &line, Angle &value_r)
-{
-  double value;
-  if (!line.ReadChecked(value))
-    return false;
-
-  if (value < 0 || value > 360)
-    return false;
-
-  value_r = Angle::Degrees(value).AsBearing();
-  return true;
-}
-
-/**
  * Parses an angle in the form "DDDMM.SSS".  Minutes are 0..59, and
  * seconds are 0..999.
  */
@@ -460,7 +443,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
   bool ground_speed_available = line.ReadChecked(speed);
 
   Angle track;
-  bool track_available = ReadBearing(line, track);
+  bool track_available = line.ReadBearing(track);
 
   // JMW get date info first so TimeModify is accurate
   ReadDate(line, info.date_time_utc);
@@ -520,7 +503,7 @@ NMEAParser::HDM(NMEAInputLine &line, NMEAInfo &info)
    *  3) Checksum
    */
   Angle heading;
-  bool heading_available = ReadBearing(line, heading);
+  bool heading_available = line.ReadBearing(heading);
 
   if (!heading_available)
     info.attitude.heading_available.Clear();
@@ -745,7 +728,7 @@ NMEAParser::MWV(NMEAInputLine &line, NMEAInfo &info)
     */
 
   Angle winddir;
-  if (!ReadBearing(line, winddir))
+  if (!line.ReadBearing(winddir))
     return false;
 
   char ch = line.ReadOneChar();
