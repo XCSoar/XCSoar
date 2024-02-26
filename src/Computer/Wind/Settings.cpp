@@ -4,7 +4,7 @@
 #include "Settings.hpp"
 
 void
-WindSettings::SetDefaults()
+WindSettings::SetDefaults() noexcept
 {
   circling_wind = true;
   zig_zag_wind = true;
