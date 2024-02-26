@@ -14,7 +14,7 @@
 
 static TaskBehaviour task_behaviour;
 static OrderedTaskSettings ordered_task_settings;
-static AllocatedPath task_path = Path(_T("test/data/Test-Task.tsk"));
+static constexpr Path task_path{_T("test/data/Test-Task.tsk")};
 
 static constexpr GeoPoint
 MakeGeoPoint(double longitude, double latitude) noexcept
