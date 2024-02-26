@@ -8,21 +8,6 @@
 
 #include <type_traits>
 
-// control of calculations, these only changed by user interface
-// but are used read-only by calculations
-
-/** AutoWindMode (not in use) */
-enum AutoWindModeBits
-{
-  /** 0: Manual */
-  AUTOWIND_NONE = 0,
-  /** 1: Circling */
-  AUTOWIND_CIRCLING,
-  /** 2: ZigZag */
-  AUTOWIND_ZIGZAG,
-  /** 3: Both */
-};
-
 /**
  * Wind calculator settings
  */
