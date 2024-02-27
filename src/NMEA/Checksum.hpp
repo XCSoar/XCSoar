@@ -12,7 +12,7 @@
  * @param p a NULL terminated string
  */
 [[nodiscard]] [[gnu::pure]]
-static inline uint8_t
+static constexpr uint8_t
 NMEAChecksum(const char *p) noexcept
 {
   uint8_t checksum = 0;
@@ -36,7 +36,7 @@ NMEAChecksum(const char *p) noexcept
  * @param length the number of characters in the string
  */
 [[nodiscard]] [[gnu::pure]]
-static inline uint8_t
+static constexpr uint8_t
 NMEAChecksum(const char *p, unsigned length) noexcept
 {
   uint8_t checksum = 0;
