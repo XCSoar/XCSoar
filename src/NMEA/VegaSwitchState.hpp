@@ -4,8 +4,6 @@
 #pragma once
 
 struct VegaSwitchState {
-  static constexpr unsigned INVALID = -1;
-
   enum InputBits {
     INPUT_FLAP_POSITIVE = 0,
     INPUT_FLAP_ZERO = 1,
