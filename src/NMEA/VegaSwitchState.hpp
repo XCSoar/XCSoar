@@ -44,72 +44,72 @@ struct VegaSwitchState {
 
   unsigned inputs, outputs;
 
-  constexpr bool IsDefined() const {
+  constexpr bool IsDefined() const noexcept {
     return inputs != 0 || outputs != 0;
   }
 
-  void Reset() {
+  constexpr void Reset() noexcept {
     inputs = outputs = 0;
   }
 
-  void Complement(const VegaSwitchState &add) {
+  constexpr void Complement(const VegaSwitchState &add) noexcept {
     if (!IsDefined())
       *this = add;
   }
 
-  constexpr bool GetFlapPositive() const {
+  constexpr bool GetFlapPositive() const noexcept {
     return inputs & INPUT_MASK_FLAP_POSITIVE;
   }
 
-  constexpr bool GetFlapZero() const {
+  constexpr bool GetFlapZero() const noexcept {
     return inputs & INPUT_MASK_FLAP_ZERO;
   }
 
-  constexpr bool GetFlapNegative() const {
+  constexpr bool GetFlapNegative() const noexcept {
     return inputs & INPUT_MASK_FLAP_NEGATIVE;
   }
 
-  constexpr bool GetSpeedCommand() const {
+  constexpr bool GetSpeedCommand() const noexcept {
     return inputs & INPUT_MASK_SC;
   }
 
-  constexpr bool GetGearExtended() const {
+  constexpr bool GetGearExtended() const noexcept {
     return inputs & INPUT_MASK_GEAR_EXTENDED;
   }
 
-  constexpr bool GetAirbrakeNotLocked() const {
+  constexpr bool GetAirbrakeNotLocked() const noexcept {
     return inputs & INPUT_MASK_AIRBRAKE_NOT_LOCKED;
   }
 
-  constexpr bool GetAcknowledge() const {
+  constexpr bool GetAcknowledge() const noexcept {
     return inputs & INPUT_MASK_ACK;
   }
 
-  constexpr bool GetRepeat() const {
+  constexpr bool GetRepeat() const noexcept {
     return inputs & INPUT_MASK_REP;
   }
 
-  constexpr bool GetAirbrakeLocked() const {
+  constexpr bool GetAirbrakeLocked() const noexcept {
     return inputs & INPUT_MASK_AIRBRAKE_LOCKED;
   }
 
-  constexpr bool GetUserSwitchUp() const {
+  constexpr bool GetUserSwitchUp() const noexcept {
     return inputs & INPUT_MASK_USER_SWITCH_UP;
   }
 
-  constexpr bool GetUserSwitchMiddle() const {
+  constexpr bool GetUserSwitchMiddle() const noexcept {
     return inputs & INPUT_MASK_USER_SWITCH_MIDDLE;
   }
 
-  constexpr bool GetUserSwitchDown() const {
+  constexpr bool GetUserSwitchDown() const noexcept {
     return inputs & INPUT_MASK_USER_SWITCH_DOWN;
   }
 
-  constexpr bool GetCircling() const {
+  constexpr bool GetCircling() const noexcept {
     return outputs & OUTPUT_MASK_CIRCLING;
   }
 
-  constexpr bool GetFlapLanding() const {
+  constexpr bool GetFlapLanding() const noexcept {
     return outputs & OUTPUT_MASK_FLAP_LANDING;
   }
 };
