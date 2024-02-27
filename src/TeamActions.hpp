@@ -8,8 +8,11 @@
 class FlarmId;
 
 namespace TeamActions {
-  /**
-   * Track the specified FLARM peer.
-   */
-  void TrackFlarm(FlarmId id, const TCHAR *callsign=nullptr);
+
+/**
+ * Track the specified FLARM peer.
+ */
+void
+TrackFlarm(FlarmId id, const TCHAR *callsign=nullptr);
+
 };
