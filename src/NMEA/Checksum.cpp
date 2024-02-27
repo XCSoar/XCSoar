@@ -35,5 +35,7 @@ AppendNMEAChecksum(char *p) noexcept
 {
   assert(p != nullptr);
 
-  sprintf(p + strlen(p), "*%02X", NMEAChecksum(p));
+  const std::size_t length = strlen(p);
+
+  sprintf(p + length, "*%02X", NMEAChecksum({p, length}));
 }
