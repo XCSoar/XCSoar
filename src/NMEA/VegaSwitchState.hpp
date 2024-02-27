@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 struct VegaSwitchState {
   enum InputBits {
     INPUT_FLAP_POSITIVE = 0,
@@ -25,22 +27,22 @@ struct VegaSwitchState {
     OUTPUT_FLAP_LANDING = 7,
   };
 
-  static constexpr unsigned INPUT_MASK_FLAP_POSITIVE = 1 << INPUT_FLAP_POSITIVE;
-  static constexpr unsigned INPUT_MASK_FLAP_ZERO = 1 << INPUT_FLAP_ZERO;
-  static constexpr unsigned INPUT_MASK_FLAP_NEGATIVE = 1 << INPUT_FLAP_NEGATIVE;
-  static constexpr unsigned INPUT_MASK_SC = 1 << INPUT_SPEED_COMMAND;
-  static constexpr unsigned INPUT_MASK_GEAR_EXTENDED = 1 << INPUT_GEAR_EXTENDED;
-  static constexpr unsigned INPUT_MASK_AIRBRAKE_NOT_LOCKED = 1 << INPUT_AIRBRAKE_NOT_LOCKED;
-  static constexpr unsigned INPUT_MASK_ACK = 1 << INPUT_ACKNOWLEDGE;
-  static constexpr unsigned INPUT_MASK_REP = 1 << INPUT_REPEAT;
-  static constexpr unsigned INPUT_MASK_AIRBRAKE_LOCKED = 1 << INPUT_AIRBRAKE_LOCKED;
-  static constexpr unsigned INPUT_MASK_USER_SWITCH_UP = 1 << INPUT_USER_SWITCH_UP;
-  static constexpr unsigned INPUT_MASK_USER_SWITCH_MIDDLE = 1 << INPUT_USER_SWITCH_MIDDLE;
-  static constexpr unsigned INPUT_MASK_USER_SWITCH_DOWN = 1 << INPUT_USER_SWITCH_DOWN;
-  static constexpr unsigned OUTPUT_MASK_CIRCLING = 1 << OUTPUT_CIRCLING;
-  static constexpr unsigned OUTPUT_MASK_FLAP_LANDING = 1 << OUTPUT_FLAP_LANDING;
+  static constexpr uint_least32_t INPUT_MASK_FLAP_POSITIVE = 1 << INPUT_FLAP_POSITIVE;
+  static constexpr uint_least32_t INPUT_MASK_FLAP_ZERO = 1 << INPUT_FLAP_ZERO;
+  static constexpr uint_least32_t INPUT_MASK_FLAP_NEGATIVE = 1 << INPUT_FLAP_NEGATIVE;
+  static constexpr uint_least32_t INPUT_MASK_SC = 1 << INPUT_SPEED_COMMAND;
+  static constexpr uint_least32_t INPUT_MASK_GEAR_EXTENDED = 1 << INPUT_GEAR_EXTENDED;
+  static constexpr uint_least32_t INPUT_MASK_AIRBRAKE_NOT_LOCKED = 1 << INPUT_AIRBRAKE_NOT_LOCKED;
+  static constexpr uint_least32_t INPUT_MASK_ACK = 1 << INPUT_ACKNOWLEDGE;
+  static constexpr uint_least32_t INPUT_MASK_REP = 1 << INPUT_REPEAT;
+  static constexpr uint_least32_t INPUT_MASK_AIRBRAKE_LOCKED = 1 << INPUT_AIRBRAKE_LOCKED;
+  static constexpr uint_least32_t INPUT_MASK_USER_SWITCH_UP = 1 << INPUT_USER_SWITCH_UP;
+  static constexpr uint_least32_t INPUT_MASK_USER_SWITCH_MIDDLE = 1 << INPUT_USER_SWITCH_MIDDLE;
+  static constexpr uint_least32_t INPUT_MASK_USER_SWITCH_DOWN = 1 << INPUT_USER_SWITCH_DOWN;
+  static constexpr uint_least32_t OUTPUT_MASK_CIRCLING = 1 << OUTPUT_CIRCLING;
+  static constexpr uint_least32_t OUTPUT_MASK_FLAP_LANDING = 1 << OUTPUT_FLAP_LANDING;
 
-  unsigned inputs, outputs;
+  uint_least32_t inputs, outputs;
 
   constexpr bool IsDefined() const noexcept {
     return inputs != 0 || outputs != 0;
