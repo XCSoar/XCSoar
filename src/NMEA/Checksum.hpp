@@ -11,9 +11,9 @@
  *
  * @param p a NULL terminated string
  */
-[[gnu::pure]]
+[[nodiscard]] [[gnu::pure]]
 static inline uint8_t
-NMEAChecksum(const char *p)
+NMEAChecksum(const char *p) noexcept
 {
   uint8_t checksum = 0;
 
@@ -35,9 +35,9 @@ NMEAChecksum(const char *p)
  * @param p a string
  * @param length the number of characters in the string
  */
-[[gnu::pure]]
+[[nodiscard]] [[gnu::pure]]
 static inline uint8_t
-NMEAChecksum(const char *p, unsigned length)
+NMEAChecksum(const char *p, unsigned length) noexcept
 {
   uint8_t checksum = 0;
 
@@ -60,13 +60,13 @@ NMEAChecksum(const char *p, unsigned length)
  * Verify the NMEA checksum at the end of the specified string,
  * separated with an asterisk ('*').
  */
-[[gnu::pure]]
+[[nodiscard]] [[gnu::pure]]
 bool
-VerifyNMEAChecksum(const char *p);
+VerifyNMEAChecksum(const char *p) noexcept;
 
 /**
  * Caclulates the checksum of the specified string, and appends it at
  * the end, preceded by an asterisk ('*').
  */
 void
-AppendNMEAChecksum(char *p);
+AppendNMEAChecksum(char *p) noexcept;

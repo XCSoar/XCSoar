@@ -10,7 +10,7 @@
 #include <cstdint>
 
 bool
-VerifyNMEAChecksum(const char *p)
+VerifyNMEAChecksum(const char *p) noexcept
 {
   assert(p != NULL);
 
@@ -31,7 +31,7 @@ VerifyNMEAChecksum(const char *p)
 }
 
 void
-AppendNMEAChecksum(char *p)
+AppendNMEAChecksum(char *p) noexcept
 {
   assert(p != NULL);
 
