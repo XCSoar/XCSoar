@@ -12,10 +12,10 @@
 bool
 VerifyNMEAChecksum(const char *p) noexcept
 {
-  assert(p != NULL);
+  assert(p != nullptr);
 
   const char *asterisk = strrchr(p, '*');
-  if (asterisk == NULL)
+  if (asterisk == nullptr)
     return false;
 
   const char *checksum_string = asterisk + 1;
@@ -33,7 +33,7 @@ VerifyNMEAChecksum(const char *p) noexcept
 void
 AppendNMEAChecksum(char *p) noexcept
 {
-  assert(p != NULL);
+  assert(p != nullptr);
 
   sprintf(p + strlen(p), "*%02X", NMEAChecksum(p));
 }
