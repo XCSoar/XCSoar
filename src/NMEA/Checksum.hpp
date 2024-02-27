@@ -23,7 +23,7 @@ NMEAChecksum(const char *p) noexcept
     ++p;
 
   while (*p != 0)
-    checksum ^= *p++;
+    checksum ^= static_cast<uint8_t>(*p++);
 
   return checksum;
 }
@@ -51,7 +51,7 @@ NMEAChecksum(const char *p, unsigned length) noexcept
   }
 
   for (; i < length; ++i)
-    checksum ^= *p++;
+    checksum ^= static_cast<uint8_t>(*p++);
 
   return checksum;
 }
