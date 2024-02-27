@@ -25,7 +25,7 @@ VerifyNMEAChecksum(const char *p) noexcept
     return false;
 
   uint8_t ReadCheckSum = (unsigned char)ReadCheckSum2;
-  uint8_t CalcCheckSum = NMEAChecksum(p, asterisk - p);
+  uint8_t CalcCheckSum = NMEAChecksum({p, asterisk});
 
   return CalcCheckSum == ReadCheckSum;
 }

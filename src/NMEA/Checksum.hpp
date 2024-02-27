@@ -4,6 +4,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string_view>
 
 /**
  * Calculates the checksum for the specified line (without the
@@ -13,8 +14,10 @@
  */
 [[nodiscard]] [[gnu::pure]]
 static constexpr uint8_t
-NMEAChecksum(const char *p) noexcept
+NMEAChecksum(std::convertible_to<const char *> auto &&_src) noexcept
 {
+  const char *p = _src;
+
   uint8_t checksum = 0;
 
   /* skip the dollar sign at the beginning (the exclamation mark is
@@ -37,21 +40,17 @@ NMEAChecksum(const char *p) noexcept
  */
 [[nodiscard]] [[gnu::pure]]
 static constexpr uint8_t
-NMEAChecksum(const char *p, unsigned length) noexcept
+NMEAChecksum(std::string_view src) noexcept
 {
   uint8_t checksum = 0;
 
-  unsigned i = 0;
-
   /* skip the dollar sign at the beginning (the exclamation mark is
      used by CAI302 */
-  if (length > 0 && (*p == '$' || *p == '!')) {
-    ++i;
-    ++p;
-  }
+  if (!src.empty() && (src.front() == '$' || src.front() == '!'))
+    src.remove_prefix(1);
 
-  for (; i < length; ++i)
-    checksum ^= static_cast<uint8_t>(*p++);
+  for (char ch : src)
+    checksum ^= static_cast<uint8_t>(ch);
 
   return checksum;
 }

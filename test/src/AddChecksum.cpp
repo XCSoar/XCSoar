@@ -26,7 +26,7 @@ int main()
     }
 
     printf("%.*s*%02x\n", (int)(end - buffer), buffer,
-           NMEAChecksum(start, end - start));
+           NMEAChecksum({start, end}));
   }
 
   return 0;

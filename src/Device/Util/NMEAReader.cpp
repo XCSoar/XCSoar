@@ -50,7 +50,7 @@ PortNMEAReader::GetLine()
 
   /* verify the checksum following the asterisk (two hex digits) */
 
-  const uint8_t calculated_checksum = NMEAChecksum(start, asterisk - start);
+  const uint8_t calculated_checksum = NMEAChecksum({start, asterisk});
 
   const char checksum_buffer[3] = { asterisk[1], asterisk[2], 0 };
   char *endptr;
