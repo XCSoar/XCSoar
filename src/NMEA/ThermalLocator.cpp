@@ -8,7 +8,7 @@
 #include <algorithm>
 
 void
-ThermalLocatorInfo::Clear()
+ThermalLocatorInfo::Clear() noexcept
 {
   estimate_valid = false;
 
@@ -16,14 +16,14 @@ ThermalLocatorInfo::Clear()
   sources.clear();
 }
 
-static inline bool
-CompareTime(const ThermalSource &a, const ThermalSource &b)
+static constexpr bool
+CompareTime(const ThermalSource &a, const ThermalSource &b) noexcept
 {
   return a.time < b.time;
 }
 
 ThermalSource &
-ThermalLocatorInfo::AllocateSource()
+ThermalLocatorInfo::AllocateSource() noexcept
 {
   if (!sources.full())
     return sources.append();
@@ -36,7 +36,7 @@ ThermalLocatorInfo::AllocateSource()
 
 GeoPoint
 ThermalSource::CalculateAdjustedLocation(double altitude,
-                                         const SpeedVector &wind) const
+                                         const SpeedVector &wind) const noexcept
 {
   auto dh = altitude - ground_height;
   auto t = dh / lift_rate;

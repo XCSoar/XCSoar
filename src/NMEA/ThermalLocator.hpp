@@ -19,8 +19,9 @@ struct ThermalSource
   double lift_rate;
   TimeStamp time;
 
+  [[nodiscard]] [[gnu::pure]]
   GeoPoint CalculateAdjustedLocation(double altitude,
-                                     const SpeedVector &wind) const;
+                                     const SpeedVector &wind) const noexcept;
 };
 
 /** Structure for current thermal estimate from ThermalLocator */
@@ -36,13 +37,14 @@ struct ThermalLocatorInfo
   /** Position and data of the last thermal sources */
   TrivialArray<ThermalSource, MAX_SOURCES> sources;
 
-  void Clear();
+  void Clear() noexcept;
 
   /**
    * Allocate a new #THERMAL_SOURCE_INFO slot; discard the oldest one
    * if the list is full.
    */
-  ThermalSource &AllocateSource();
+  [[nodiscard]]
+  ThermalSource &AllocateSource() noexcept;
 };
 
 static_assert(std::is_trivial<ThermalLocatorInfo>::value,
