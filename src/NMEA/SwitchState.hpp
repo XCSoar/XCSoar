@@ -46,7 +46,7 @@ struct SwitchState
 
   VegaSwitchState vega;
 
-  void Reset();
+  void Reset() noexcept;
 
-  void Complement(const SwitchState &add);
+  void Complement(const SwitchState &add) noexcept;
 };

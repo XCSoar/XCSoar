@@ -4,7 +4,7 @@
 #include "SwitchState.hpp"
 
 void
-SwitchState::Reset()
+SwitchState::Reset() noexcept
 {
   flight_mode = FlightMode::UNKNOWN;
   flap_position = FlapPosition::UNKNOWN;
@@ -14,7 +14,7 @@ SwitchState::Reset()
 }
 
 void
-SwitchState::Complement(const SwitchState &add)
+SwitchState::Complement(const SwitchState &add) noexcept
 {
   if (flight_mode == FlightMode::UNKNOWN)
     flight_mode = add.flight_mode;
