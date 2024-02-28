@@ -384,10 +384,12 @@ GaugeVario::RenderClimb(Canvas &canvas) noexcept
   if (!dirty)
     return;
 
+  const PixelSize dest_size{Layout::VptScale(9)};
+
   if (Basic().switch_state.flight_mode == SwitchState::FlightMode::CIRCLING)
-    canvas.ScaleCopy({x, y}, look.climb_bitmap, {12, 0}, {12, 12});
+    canvas.Stretch({x, y}, dest_size, look.climb_bitmap, {12, 0}, {12, 12});
   else if (IsPersistent())
-    canvas.DrawFilledRectangle(PixelRect{{x, y}, PixelSize{Layout::Scale(12u)}},
+    canvas.DrawFilledRectangle(PixelRect{{x, y}, dest_size},
                                look.background_color);
 }
 
