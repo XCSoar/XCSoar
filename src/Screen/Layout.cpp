@@ -11,18 +11,18 @@
 
 namespace Layout
 {
-  bool landscape = false;
-  unsigned min_screen_pixels = 512;
-  unsigned scale = 1;
-  unsigned scale_1024 = 1024;
-  unsigned pen_width_scale = 1024;
-  unsigned fine_pen_width_scale = 1024;
-  unsigned pt_scale = 1024;
-  unsigned vpt_scale = 1024;
-  unsigned font_scale = 1024;
-  unsigned text_padding = 2;
-  unsigned minimum_control_height = 20, maximum_control_height = 44;
-  unsigned hit_radius = 10;
+bool landscape = false;
+unsigned min_screen_pixels = 512;
+unsigned scale = 1;
+unsigned scale_1024 = 1024;
+unsigned pen_width_scale = 1024;
+unsigned fine_pen_width_scale = 1024;
+unsigned pt_scale = 1024;
+unsigned vpt_scale = 1024;
+unsigned font_scale = 1024;
+unsigned text_padding = 2;
+unsigned minimum_control_height = 20, maximum_control_height = 44;
+unsigned hit_radius = 10;
 }
 
 /**
