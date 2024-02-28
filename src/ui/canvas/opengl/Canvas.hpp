@@ -366,10 +366,6 @@ public:
                    PixelPoint src_position, PixelSize src_size,
                    Color fg_color, Color bg_color) noexcept;
 
-  void ScaleCopy(PixelPoint dest_position,
-                 const Bitmap &src,
-                 PixelPoint src_position, PixelSize src_size) noexcept;
-
   /**
    * Copy pixels from this object to a texture.  The texture must be
    * initialised already.  Note that the texture will be flipped

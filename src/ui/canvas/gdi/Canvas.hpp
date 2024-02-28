@@ -556,8 +556,4 @@ public:
                const Bitmap &src, PixelPoint src_position) noexcept {
     Copy(dest_position, dest_size, src, src_position, SRCAND);
   }
-
-  void ScaleCopy(PixelPoint dest_position,
-                 const Bitmap &src,
-                 PixelPoint src_position, PixelSize src_size) noexcept;
 };

@@ -396,10 +396,6 @@ public:
 
   void CopyAnd(const Bitmap &src);
 
-  void ScaleCopy(PixelPoint dest_position,
-                 const Bitmap &src,
-                 PixelPoint src_position, PixelSize src_size) noexcept;
-
   void AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
                   ConstImageBuffer src,
                   PixelPoint src_position, PixelSize src_size,

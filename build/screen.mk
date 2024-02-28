@@ -15,7 +15,6 @@ SCREEN_SOURCES = \
 	$(CANVAS_SRC_DIR)/Ramp.cpp \
 	$(CANVAS_SRC_DIR)/Util.cpp \
 	$(CANVAS_SRC_DIR)/Icon.cpp \
-	$(CANVAS_SRC_DIR)/Canvas.cpp \
 	$(CANVAS_SRC_DIR)/Color.cpp \
 	$(CANVAS_SRC_DIR)/BufferCanvas.cpp \
 	$(WINDOW_SRC_DIR)/Window.cpp \
