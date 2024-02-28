@@ -17,6 +17,6 @@ SubCanvas::SubCanvas(Canvas &canvas,
 {
   buffer = canvas.buffer;
   buffer.data = buffer.At(_offset.x, _offset.y);
-  buffer.width = ClipMax(buffer.width, _offset.x, _size.width);
-  buffer.height = ClipMax(buffer.height, _offset.y, _size.height);
+  buffer.size.width = ClipMax(buffer.size.width, _offset.x, _size.width);
+  buffer.size.height = ClipMax(buffer.size.height, _offset.y, _size.height);
 }

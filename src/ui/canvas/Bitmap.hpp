@@ -116,16 +116,16 @@ public:
     return flipped;
   }
 #elif defined(USE_MEMORY_CANVAS)
-  PixelSize GetSize() const noexcept {
-    return { buffer.width, buffer.height };
+  const PixelSize &GetSize() const noexcept {
+    return buffer.size;
   }
 
   unsigned GetWidth() const noexcept {
-    return buffer.width;
+    return buffer.size.width;
   }
 
   unsigned GetHeight() const noexcept {
-    return buffer.height;
+    return buffer.size.height;
   }
 #else
   [[gnu::pure]]

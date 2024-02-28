@@ -93,7 +93,7 @@ TopCanvas::TopCanvas(UI::Display &_display, SDL_Window *_window)
 #endif
 
 #ifdef GREYSCALE
-  buffer.Allocate(width, height);
+  buffer.Allocate(PixelSize(width, height));
 #endif
 }
 
@@ -158,7 +158,7 @@ TopCanvas::OnResize(PixelSize new_size) noexcept
 
 #ifdef GREYSCALE
   buffer.Free();
-  buffer.Allocate(new_size.width, new_size.height);
+  buffer.Allocate(new_size);
 #endif
 }
 
@@ -193,8 +193,6 @@ CopyFromGreyscale(
 
   const uint8_t *src_pixels = reinterpret_cast<const uint8_t *>(src.data);
 
-  const unsigned width = src.width, height = src.height;
-
   const unsigned dest_pitch = (unsigned) pitch_as_int;
 
 #ifdef DITHER
@@ -202,10 +200,10 @@ CopyFromGreyscale(
   dither.DitherGreyscale(src_pixels, src.pitch,
                          dest_pixels,
                          dest_pitch / bytes_per_pixel,
-                         width, height);
+                         src.size.width, src.size.height);
   if (bytes_per_pixel == 4) {
     const unsigned n_pixels = (dest_pitch / bytes_per_pixel)
-      * height;
+      * src.size.height;
     int32_t *d = (int32_t *)dest_pixels + n_pixels;
     const int8_t *end = (int8_t *)dest_pixels;
     const int8_t *s = end + n_pixels;
@@ -219,15 +217,15 @@ CopyFromGreyscale(
   const unsigned src_pitch = src.pitch;
 
   if (bytes_per_pixel == 2) {
-    for (unsigned row = height; row > 0;
+    for (unsigned row = src.size.height; row > 0;
          --row, src_pixels += src_pitch, dest_pixels += dest_pitch)
       CopyGreyscaleToRGB565((RGB565Color *)dest_pixels,
-                            (const Luminosity8 *)src_pixels, width);
+                            (const Luminosity8 *)src_pixels, src.size.width);
   } else {
-    for (unsigned row = height; row > 0;
+    for (unsigned row = src.size.height; row > 0;
          --row, src_pixels += src_pitch, dest_pixels += dest_pitch)
       CopyGreyscaleToRGB8((uint32_t *)dest_pixels,
-                           (const Luminosity8 *)src_pixels, width);
+                           (const Luminosity8 *)src_pixels, src.size.width);
   }
 
 #endif
@@ -255,8 +253,7 @@ TopCanvas::Lock()
     return Canvas();
   buffer.data = (ActivePixelTraits::pointer)pixels;
   buffer.pitch = (unsigned) pitch;
-  buffer.width = (unsigned) width;
-  buffer.height = (unsigned) height;
+  buffer.size = PixelSize(width, height);
 #endif
 
   return Canvas(buffer);

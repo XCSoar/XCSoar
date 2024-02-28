@@ -20,7 +20,7 @@ RawBitmap::StretchTo(PixelSize src_size,
   ConstImageBuffer<ActivePixelTraits> src{
     ActivePixelTraits::const_pointer(GetBuffer()),
     size.width * sizeof(*GetBuffer()),
-    size.width, size.height,
+    size,
   };
 
   if (transparent_white)

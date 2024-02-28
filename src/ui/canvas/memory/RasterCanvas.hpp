@@ -64,8 +64,8 @@ protected:
   }
 
   pointer At(unsigned x, unsigned y) noexcept {
-    assert(x < buffer.width);
-    assert(y < buffer.height);
+    assert(x < buffer.size.width);
+    assert(y < buffer.size.height);
 
     return buffer.At(x, y);
   }
@@ -139,7 +139,7 @@ protected:
 
   [[gnu::pure]]
   unsigned ClipEncodeX(int x) const noexcept {
-    if (unsigned(x)< buffer.width)
+    if (unsigned(x) < buffer.size.width)
       return 0;
     if (x<0)
       return CLIP_LEFT_EDGE;
@@ -148,7 +148,7 @@ protected:
 
   [[gnu::pure]]
   unsigned ClipEncodeY(int y) const noexcept {
-    if (unsigned(y)< buffer.height)
+    if (unsigned(y) < buffer.size.height)
       return 0;
     if (y<0)
       return CLIP_TOP_EDGE;
@@ -196,21 +196,21 @@ protected:
       } else if (code1 & CLIP_RIGHT_EDGE) {
         if ((y2 != y1) && (x1 != x2)) {
           const float m = float(y2 - y1) / float(x2 - x1);
-          y1 -= int((x1 - (buffer.width - 1)) * m);
+          y1 -= int((x1 - (buffer.size.width - 1)) * m);
           code1 = ClipEncodeY(y1);
         } else {
           code1 &= ~CLIP_RIGHT_EDGE;
         }
-        x1 = buffer.width - 1;
+        x1 = buffer.size.width - 1;
       } else if (code1 & CLIP_BOTTOM_EDGE) {
         if ((y2 != y1) && (x1 != x2)) {
           const float m = float(x2 - x1) / float(y2 - y1);
-          x1 -= int((y1 - (buffer.height - 1)) * m);
+          x1 -= int((y1 - (buffer.size.height - 1)) * m);
           code1 = ClipEncodeX(x1);
         } else {
           code1 &= ~CLIP_BOTTOM_EDGE;
         }
-        y1 = buffer.height - 1;
+        y1 = buffer.size.height - 1;
       } else if (code1 & CLIP_TOP_EDGE) {
         if ((y2 != y1) && (x1 != x2)) {
           const float m = float(x2 - x1) / float(y2 - y1);
@@ -251,11 +251,11 @@ public:
     if (y1 < 0)
       y1 = 0;
 
-    if (x2 > int(buffer.width))
-      x2 = buffer.width;
+    if (x2 > int(buffer.size.width))
+      x2 = buffer.size.width;
 
-    if (y2 > int(buffer.height))
-      y2 = buffer.height;
+    if (y2 > int(buffer.size.height))
+      y2 = buffer.size.height;
 
     if (x1 >= x2 || y1 >= y2)
       return;
@@ -275,14 +275,14 @@ public:
   template<AnyFillPixelOperation PixelOperations>
   void DrawHLine(int x1, int x2, int y, color_type c,
                  PixelOperations operations) noexcept {
-    if (y < 0 || unsigned(y) >= buffer.height)
+    if (y < 0 || unsigned(y) >= buffer.size.height)
       return;
 
     if (x1 < 0)
       x1 = 0;
 
-    if (x2 > int(buffer.width))
-      x2 = buffer.width;
+    if (x2 > int(buffer.size.width))
+      x2 = buffer.size.width;
 
     if (x1 >= x2)
       return;
@@ -299,14 +299,14 @@ public:
   template<AnyWritePixelOperation PixelOperations>
   void DrawVLine(int x, int y1, int y2, color_type c,
                  PixelOperations operations) noexcept {
-    if (x < 0 || unsigned(x) >= buffer.width)
+    if (x < 0 || unsigned(x) >= buffer.size.width)
       return;
 
     if (y1 < 0)
       y1 = 0;
 
-    if (y2 > int(buffer.height))
-      y2 = buffer.height;
+    if (y2 > int(buffer.size.height))
+      y2 = buffer.size.height;
 
     if (y1 >= y2)
       return;
@@ -645,7 +645,7 @@ public:
       return;
 
     const int x1 = x - rad;
-    if (x1 >= int(buffer.width))
+    if (x1 >= int(buffer.size.width))
       return;
 
     const int y2 = y + rad;
@@ -653,7 +653,7 @@ public:
       return;
 
     const int y1 = y - rad;
-    if (y1 >= int(buffer.height))
+    if (y1 >= int(buffer.size.height))
       return;
 
     // draw
@@ -727,7 +727,7 @@ public:
       return;
 
     const int x1 = x - rad;
-    if (x1 >= int(buffer.width))
+    if (x1 >= int(buffer.size.width))
       return;
 
     const int y2 = y + rad;
@@ -735,7 +735,7 @@ public:
       return;
 
     const int y1 = y - rad;
-    if (y1 >= int(buffer.height))
+    if (y1 >= int(buffer.size.height))
       return;
 
     // draw
@@ -803,8 +803,8 @@ public:
                      typename SPT::const_rpointer src, unsigned src_pitch,
                      PixelOperations operations) noexcept {
     unsigned src_x = 0, src_y = 0;
-    if (!ClipAxis(x, w, buffer.width, src_x) ||
-        !ClipAxis(y, h, buffer.height, src_y))
+    if (!ClipAxis(x, w, buffer.size.width, src_x) ||
+        !ClipAxis(y, h, buffer.size.height, src_y))
       return;
 
     src = SPT::At(src, src_pitch, src_x, src_y);
@@ -859,8 +859,8 @@ public:
                       PixelSize src_size,
                       PixelOperations operations) noexcept {
     unsigned src_x = 0, src_y = 0;
-    if (!ClipScaleAxis(dest_position.x, dest_size.width, buffer.width, src_x, src_size.width) ||
-        !ClipScaleAxis(dest_position.y, dest_size.height, buffer.height, src_y, src_size.height))
+    if (!ClipScaleAxis(dest_position.x, dest_size.width, buffer.size.width, src_x, src_size.width) ||
+        !ClipScaleAxis(dest_position.y, dest_size.height, buffer.size.height, src_y, src_size.height))
       return;
 
     src = SPT::At(src, src_pitch, src_x, src_y);

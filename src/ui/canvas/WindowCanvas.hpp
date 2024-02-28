@@ -15,10 +15,8 @@ class PaintWindow;
 class WindowCanvas : public Canvas {
 #ifdef USE_MEMORY_CANVAS
 public:
-  explicit WindowCanvas(Window &window) {
-    const auto window_size = window.GetSize();
-    buffer.width = window_size.width;
-    buffer.height = window_size.height;
+  explicit WindowCanvas(Window &window) noexcept {
+    buffer.size = window.GetSize();
   }
 
 #else /* !USE_MEMORY_CANVAS */

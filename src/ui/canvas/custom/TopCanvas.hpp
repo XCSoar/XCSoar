@@ -215,8 +215,8 @@ public:
 #endif
 
 #if defined(USE_MEMORY_CANVAS) && (defined(GREYSCALE) || !defined(ENABLE_SDL))
-  PixelSize GetSize() const noexcept {
-    return PixelSize(buffer.width, buffer.height);
+  const PixelSize &GetSize() const noexcept {
+    return buffer.size;
   }
 #else
   [[gnu::pure]]

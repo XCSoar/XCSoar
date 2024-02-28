@@ -392,7 +392,7 @@ Canvas::Copy(const Bitmap &_src)
 {
   ConstImageBuffer src = _src.GetNative();
 
-  Copy({0, 0}, {src.width, src.height}, src, {0, 0});
+  Copy({0, 0}, src.size, src, {0, 0});
 }
 
 void
@@ -445,7 +445,7 @@ Canvas::StretchNot(const Bitmap &_src)
 
   canvas.ScaleRectangle({dest_x, dest_y}, dest_size,
                         src.At(src_x, src_y),
-                        src.pitch, {src.width, src.height},
+                        src.pitch, src.size,
                         operations);
 }
 
@@ -498,7 +498,7 @@ Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
 
   ConstImageBuffer src = _src.GetNative();
   Stretch(dest_position, dest_size,
-          src, {0, 0}, {src.width, src.height});
+          src, {0, 0}, src.size);
 }
 
 void

@@ -174,7 +174,7 @@ TopCanvas::TopCanvas(UI::Display &_display)
     Display::ProvideSizeMM(new_size.width, new_size.height,
                            vinfo.width, vinfo.height);
 
-  buffer.Allocate(new_size.width, new_size.height);
+  buffer.Allocate(new_size);
 }
 
 inline PixelSize
@@ -196,7 +196,7 @@ TopCanvas::CheckResize() noexcept
 TopCanvas::TopCanvas(UI::Display &_display, PixelSize new_size)
   :display(_display)
 {
-  buffer.Allocate(new_size.width, new_size.height);
+  buffer.Allocate(new_size);
 
   // suppress -Wunused
   (void)display;
@@ -224,7 +224,7 @@ TopCanvas::CheckResize(const PixelSize new_native_size) noexcept
 #endif
 
   buffer.Free();
-  buffer.Allocate(new_size.width, new_size.height);
+  buffer.Allocate(new_size);
   return true;
 }
 
@@ -268,7 +268,7 @@ TopCanvas::Flip()
   KoboModel kobo_model = DetectKoboModel();
   struct mxcfb_update_data epd_update_data = {
     {
-      0, 0, buffer.width, buffer.height
+      0, 0, buffer.size.width, buffer.size.height
     },
 
     uint32_t(enable_dither &&

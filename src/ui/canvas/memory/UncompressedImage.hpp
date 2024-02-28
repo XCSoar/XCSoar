@@ -44,14 +44,14 @@ ConvertImage(WritableImageBuffer<PixelTraits> buffer,
   typename PixelTraits::rpointer dest = buffer.data;
 
   if (flipped) {
-    src += src_pitch * (buffer.height - 1);
+    src += src_pitch * (buffer.size.height - 1);
     src_pitch = -src_pitch;
   }
 
-  for (unsigned i = 0; i < buffer.height; ++i,
+  for (unsigned i = 0; i < buffer.size.height; ++i,
          dest = PixelTraits::NextRow(dest, buffer.pitch, 1),
          src += src_pitch)
-    ConvertLine<PixelTraits>(dest, Format{src}, buffer.width);
+    ConvertLine<PixelTraits>(dest, Format{src}, buffer.size.width);
 }
 
 /**
@@ -64,7 +64,7 @@ static inline void
 ImportSurface(WritableImageBuffer<PixelTraits> &buffer,
               const UncompressedImage &uncompressed) noexcept
 {
-  buffer.Allocate(uncompressed.GetWidth(), uncompressed.GetHeight());
+  buffer.Allocate(uncompressed.GetSize());
 
   switch (uncompressed.GetFormat()) {
   case UncompressedImage::Format::INVALID:

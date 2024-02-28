@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Concepts.hpp"
+#include "ui/dim/Size.hpp"
 
 #include <cstddef>
 
@@ -23,18 +24,17 @@ struct WritableImageBuffer {
 
   std::size_t pitch;
 
-  unsigned width, height;
+  PixelSize size;
 
   static constexpr WritableImageBuffer<PixelTraits> Empty() noexcept {
-    return { nullptr, 0, 0, 0 };
+    return { nullptr, 0, {} };
   }
 
-  void Allocate(unsigned _width, unsigned _height) noexcept {
-    const std::size_t i = PixelTraits::CalcIncrement(_width);
-    data = new typename PixelTraits::color_type[i * _height];
+  void Allocate(PixelSize _size) noexcept {
+    const std::size_t i = PixelTraits::CalcIncrement(_size.width);
+    data = new typename PixelTraits::color_type[i * _size.height];
     pitch = i * sizeof(typename PixelTraits::color_type);
-    width = _width;
-    height = _height;
+    size = _size;
   }
 
   void Free() noexcept {
@@ -43,7 +43,7 @@ struct WritableImageBuffer {
   }
 
   constexpr bool Check(unsigned x, unsigned y) const noexcept {
-    return x < width && y < height;
+    return x < size.width && y < size.height;
   }
 
   constexpr pointer At(unsigned x, unsigned y) noexcept {
@@ -68,24 +68,23 @@ struct ConstImageBuffer {
   rpointer data;
 
   std::size_t pitch;
-  unsigned width, height;
+  PixelSize size;
 
   ConstImageBuffer() noexcept = default;
 
   constexpr ConstImageBuffer(rpointer _data, std::size_t _pitch,
-                             unsigned _width, unsigned _height) noexcept
-    :data(_data), pitch(_pitch), width(_width), height(_height) {}
+                             PixelSize _size) noexcept
+    :data(_data), pitch(_pitch), size(_size) {}
 
   constexpr ConstImageBuffer(WritableImageBuffer<PixelTraits> other) noexcept
-    :data(other.data), pitch(other.pitch),
-     width(other.width), height(other.height) {}
+    :data(other.data), pitch(other.pitch), size(other.size) {}
 
   static constexpr WritableImageBuffer<PixelTraits> Empty() noexcept {
     return { nullptr, 0, 0, 0 };
   }
 
   constexpr bool Check(unsigned x, unsigned y) const noexcept {
-    return x < width && y < height;
+    return x < size.width && y < size.height;
   }
 
   constexpr pointer At(unsigned x, unsigned y) const noexcept {

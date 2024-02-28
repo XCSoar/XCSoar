@@ -73,16 +73,16 @@ public:
     return buffer.data != nullptr;
   }
 
-  PixelSize GetSize() const {
-    return { buffer.width, buffer.height };
+  const PixelSize &GetSize() const noexcept {
+    return buffer.size;
   }
 
   unsigned GetWidth() const {
-    return buffer.width;
+    return buffer.size.width;
   }
 
   unsigned GetHeight() const {
-    return buffer.height;
+    return buffer.size.height;
   }
 
   [[gnu::pure]]
@@ -293,7 +293,7 @@ public:
             ConstImageBuffer src, PixelPoint src_position) noexcept;
 
   void Copy(PixelPoint dest_position, ConstImageBuffer src) noexcept {
-    Copy(dest_position, {src.width, src.height}, src, {0, 0});
+    Copy(dest_position, src.size, src, {0, 0});
   }
 
   void Copy(PixelPoint dest_position, PixelSize dest_size,
@@ -324,7 +324,7 @@ public:
 
   void Stretch(ConstImageBuffer src) {
     Stretch({0, 0}, GetSize(),
-            src, {0, 0}, {src.width, src.height});
+            src, {0, 0}, src.size);
   }
 
   void Stretch(PixelPoint dest_position, PixelSize dest_size,
@@ -344,7 +344,7 @@ public:
                const Bitmap &src);
 
   void Stretch(const Bitmap &src) {
-    Stretch({0, 0}, {buffer.width, buffer.height}, src);
+    Stretch({0, 0}, buffer.size, src);
   }
 
   void StretchMono(PixelPoint dest_position, PixelSize dest_size,

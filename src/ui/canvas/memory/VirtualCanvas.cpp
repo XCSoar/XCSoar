@@ -21,7 +21,7 @@ VirtualCanvas::Create(PixelSize new_size) noexcept
 {
   Destroy();
 
-  buffer.Allocate(new_size.width, new_size.height);
+  buffer.Allocate(new_size);
 }
 
 void
