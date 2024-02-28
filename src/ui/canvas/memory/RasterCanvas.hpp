@@ -64,8 +64,7 @@ protected:
   }
 
   pointer At(unsigned x, unsigned y) noexcept {
-    assert(x < buffer.size.width);
-    assert(y < buffer.size.height);
+    assert(buffer.Check(x, y));
 
     return buffer.At(x, y);
   }
