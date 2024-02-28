@@ -11,6 +11,7 @@
 #include "util/OffsetPointer.hxx"
 
 #include <algorithm>
+#include <concepts>
 #include <string.h>
 
 /**
@@ -71,26 +72,26 @@ struct GreyscalePixelTraits {
    * work with arithmetics such as "add", because it may overflow one
    * channel and bleed to the next.
    */
-  template<typename F>
-  static color_type TransformInteger(color_type c, F f) {
+  static constexpr color_type TransformInteger(color_type c,
+                                               std::invocable<integer_type> auto f) noexcept {
     return f(c.GetLuminosity());
   }
 
-  template<typename F>
-  static color_type TransformInteger(color_type a, color_type b, F f) {
+  static constexpr color_type TransformInteger(color_type a, color_type b,
+                                               std::invocable<integer_type, integer_type> auto f) noexcept {
     return f(a.GetLuminosity(), b.GetLuminosity());
   }
 
   /**
    * Transform a color by calling the given function for each channel.
    */
-  template<typename F>
-  static color_type TransformChannels(color_type c, F f) {
+  static constexpr color_type TransformChannels(color_type c,
+                                                std::invocable<channel_type> auto f) noexcept {
     return f(c.GetLuminosity());
   }
 
-  template<typename F>
-  static color_type TransformChannels(color_type a, color_type b, F f) {
+  static constexpr color_type TransformChannels(color_type a, color_type b,
+                                                std::invocable<channel_type, channel_type> auto f) noexcept {
     return f(a.GetLuminosity(), b.GetLuminosity());
   }
 
@@ -192,17 +193,16 @@ struct GreyscalePixelTraits {
    * Call the given function for the next #n pixels in the current
    * row.  Pass the pointer to each pixel.
    */
-  template<typename F>
   [[gnu::hot]]
-  static void ForHorizontal(pointer p, unsigned n, F f) {
+  static constexpr void ForHorizontal(pointer p, unsigned n,
+                                      std::invocable<pointer> auto f) noexcept {
     for (unsigned i = 0; i < n; ++i)
       f(Next(p, i));
   }
 
-  template<typename F>
   [[gnu::hot]]
-  static void ForHorizontal(rpointer p, const_rpointer q,
-                            unsigned n, F f) {
+  static constexpr void ForHorizontal(rpointer p, const_rpointer q, unsigned n,
+                                      std::invocable<pointer> auto f) noexcept {
     for (unsigned i = 0; i < n; ++i)
       f(Next(p, i), Next(q, i));
   }
@@ -211,10 +211,9 @@ struct GreyscalePixelTraits {
    * Call the given function for the next #n pixels in the current
    * column.  Pass the pointer to each pixel.
    */
-  template<typename F>
   [[gnu::hot]]
-  static void ForVertical(pointer p, std::size_t pitch,
-                          unsigned n, F f) noexcept {
+  static constexpr void ForVertical(pointer p, std::size_t pitch, unsigned n,
+                                    std::invocable<pointer> auto f) noexcept {
     for (; n > 0; --n, p = NextByte(p, pitch))
       f(p);
   }
@@ -227,11 +226,11 @@ struct GreyscalePixelTraits {
    */
   template<AnyPixelTraits SPT>
   struct Mixed {
-    template<typename F>
     [[gnu::hot]]
-    static void ForHorizontal(pointer p,
-                              typename SPT::const_pointer q,
-                              unsigned n, F f) {
+    static constexpr void ForHorizontal(pointer p,
+                                        typename SPT::const_pointer q,
+                                        unsigned n,
+                                        std::invocable<pointer, typename SPT::const_pointer> auto f) noexcept {
       for (unsigned i = 0; i < n; ++i)
         f(Next(p, i), SPT::Next(q, i));
     }
@@ -274,23 +273,23 @@ struct BGRAPixelTraits {
     return U(i).c;
   }
 
-  template<typename F>
-  static color_type TransformInteger(color_type c, F f) {
+  static constexpr color_type TransformInteger(color_type c,
+                                               std::invocable<integer_type> auto f) noexcept {
     return FromInteger(f(ToInteger(c)));
   }
 
-  template<typename F>
-  static color_type TransformInteger(color_type a, color_type b, F f) {
+  static constexpr color_type TransformInteger(color_type a, color_type b,
+                                               std::invocable<integer_type, integer_type> auto f) noexcept {
     return FromInteger(f(ToInteger(a), ToInteger(b)));
   }
 
-  template<typename F>
-  static color_type TransformChannels(color_type c, F f) {
+  static constexpr color_type TransformChannels(color_type c,
+                                                std::invocable<channel_type> auto f) noexcept {
     return BGRA8Color(f(c.Red()), f(c.Green()), f(c.Blue()), c.Alpha());
   }
 
-  template<typename F>
-  static color_type TransformChannels(color_type a, color_type b, F f) {
+  static constexpr color_type TransformChannels(color_type a, color_type b,
+                                                std::invocable<channel_type, channel_type> auto f) noexcept {
     return BGRA8Color(f(a.Red(), b.Red()),
                       f(a.Green(), b.Green()),
                       f(a.Blue(), b.Blue()),
@@ -396,22 +395,23 @@ struct BGRAPixelTraits {
     std::copy_n(src, n, p);
   }
 
-  template<typename F>
-  static void ForHorizontal(pointer p, unsigned n, F f) {
+  [[gnu::hot]]
+  static constexpr void ForHorizontal(pointer p, unsigned n,
+                                      std::invocable<pointer> auto f) noexcept {
     for (unsigned i = 0; i < n; ++i)
       f(Next(p, i));
   }
 
-  template<typename F>
-  static void ForHorizontal(rpointer p, const_rpointer q,
-                            unsigned n, F f) {
+  [[gnu::hot]]
+  static constexpr void ForHorizontal(rpointer p, const_rpointer q, unsigned n,
+                                      std::invocable<pointer> auto f) noexcept {
     for (unsigned i = 0; i < n; ++i)
       f(Next(p, i), Next(q, i));
   }
 
-  template<typename F>
-  static void ForVertical(pointer p, std::size_t pitch,
-                          unsigned n, F f) noexcept {
+  [[gnu::hot]]
+  static constexpr void ForVertical(pointer p, std::size_t pitch, unsigned n,
+                                    std::invocable<pointer> auto f) noexcept {
     for (; n > 0; --n, p = NextByte(p, pitch))
       f(p);
   }
