@@ -10,6 +10,7 @@ Version 7.42 - not yet released
   - validate wind direction
 * Kobo
   - Wifi setup, display signal level in dBm for new models
+  - scale icons on hi-dpi displays (e.g. Clara HD)
 * user interface
   - new mountain pass and bridge icons
 * Android

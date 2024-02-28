@@ -21,6 +21,8 @@
    -1-0b10100       DDOT
  */
 
+template<typename PT> struct PixelTraitsOperations;
+
 /**
  * A software renderer for various primitives.
  *
