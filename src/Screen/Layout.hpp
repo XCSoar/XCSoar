@@ -78,16 +78,6 @@ ScaleSupported() noexcept
   return true;
 }
 
-/**
- * Is scaling enabled currently?
- */
-[[gnu::const]]
-static inline bool
-ScaleEnabled() noexcept
-{
-  return ScaleSupported() && scale_1024 > 1024;
-}
-
 [[gnu::const]]
 static inline int
 Scale(int x) noexcept
