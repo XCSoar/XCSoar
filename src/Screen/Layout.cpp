@@ -76,7 +76,7 @@ Layout::Initialise(const UI::Display &display, PixelSize new_size,
   landscape = width > height;
   const bool square = width == height;
 
-  if (!ScaleSupported())
+  if constexpr (!ScaleSupported())
     return;
 
   const auto dpi = Display::GetDPI(display, custom_dpi);
