@@ -382,7 +382,7 @@ libgeotiff = CmakeProject(
 sdl2 = CmakeProject(
     ('http://www.libsdl.org/release/SDL2-2.30.0.tar.gz',
      'https://fossies.org/linux/misc/SDL2-2.3.0.tar.gz'),
-    'SDL2-2.30.0.tar.gz',
+    '36e2e41557e0fa4a1519315c0f5958a87ccb27e25c51776beb6f1239526447b0',
     'lib/libSDL2.a',
     [
         '-DBUILD_SHARED_LIBS=OFF',
