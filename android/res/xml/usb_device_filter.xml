@@ -8,6 +8,8 @@
   <usb-device vendor-id="1027" product-id="24597"/> <!-- Digifly AIR (FT X-Series)-->
   <usb-device vendor-id="1155" product-id="22336"/> <!-- SoftRF Dongle -->
   <usb-device vendor-id="9114" product-id="32809"/> <!-- SoftRF Badge -->
+  <usb-device vendor-id="9025" product-id="105"/> <!-- SoftRF Academy -->
+  <usb-device vendor-id="9025" product-id="4098"/> <!-- SoftRF Academy -->
   <usb-device vendor-id="9025" product-id="32845"/> <!-- SoftRF Academy -->
   <usb-device vendor-id="7504" product-id="24713"/> <!-- SoftRF ES -->
   <usb-device vendor-id="11914" product-id="10"/> <!-- SoftRF Lego -->
