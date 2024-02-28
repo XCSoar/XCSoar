@@ -30,6 +30,7 @@
 #include <algorithm>
 
 #include <cassert>
+#include <concepts>
 #include <cstdint>
 
 #ifndef ENABLE_OPENGL
@@ -209,9 +210,8 @@ Font::Destroy() noexcept
   face = nullptr;
 }
 
-template<typename F>
 static void
-ForEachChar(tstring_view text, F &&f)
+ForEachChar(tstring_view text, std::invocable<unsigned> auto f)
 {
 #ifndef _UNICODE
   assert(ValidateUTF8(text));
@@ -223,10 +223,10 @@ ForEachChar(tstring_view text, F &&f)
   }
 }
 
-template<typename T, typename F>
+template<typename T>
 static void
 ForEachGlyph(const FT_Face face, unsigned ascent_height, T &&text,
-             F &&f) noexcept
+             std::invocable<int, int, FT_GlyphSlot> auto f) noexcept
 {
   const bool use_kerning = FT_HAS_KERNING(face);
 
