@@ -9,8 +9,8 @@
 
 #include <algorithm>
 
-namespace Layout
-{
+namespace Layout {
+
 bool landscape = false;
 unsigned min_screen_pixels = 512;
 unsigned scale = 1;
@@ -23,7 +23,6 @@ unsigned font_scale = 1024;
 unsigned text_padding = 2;
 unsigned minimum_control_height = 20, maximum_control_height = 44;
 unsigned hit_radius = 10;
-}
 
 /**
  * Is the given pixel size smaller than 5 inch?
@@ -67,8 +66,8 @@ GetDisplaySize([[maybe_unused]] const UI::Display &display, [[maybe_unused]] Pix
 }
 
 void
-Layout::Initialise(const UI::Display &display, PixelSize new_size,
-                   unsigned ui_scale, unsigned custom_dpi) noexcept
+Initialise(const UI::Display &display, PixelSize new_size,
+           unsigned ui_scale, unsigned custom_dpi) noexcept
 {
   const unsigned width = new_size.width, height = new_size.height;
 
@@ -121,3 +120,5 @@ Layout::Initialise(const UI::Display &display, PixelSize new_size,
 
   hit_radius = PtScale(HasTouchScreen() ? 28 : 6);
 }
+
+} // namespace Layout
