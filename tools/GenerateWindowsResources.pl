@@ -14,6 +14,8 @@ while (<>) {
     } elsif (/^bitmap_icon_scaled\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         print "BITMAP_ICON($1, \"$2\")\n";
         print "BITMAP_ICON($1_HD, \"$2_160\")\n";
+    } elsif (/^app_icon\s+([\w_]+)\s+"([^"]+)"\s*$/) {
+        print qq|$1 ICON DISCARDABLE "bitmaps/$2.ico"\n|;
     } elsif (/^sound\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         print "SOUND($1, \"$2\")\n";
     } else {

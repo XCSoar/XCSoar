@@ -22,7 +22,7 @@ while (<>) {
     if (/^(?:bitmap_bitmap|bitmap_graphic)\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         die unless exists $ids{$1};
         print qq|  { $ids{$1}, "$2" },\n|;
-    } elsif (/^hatch_bitmap\s+([\w_]+)\s+"([^"]+)"\s*$/) {
+    } elsif (/^(?:app_icon|hatch_bitmap)\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         # only used on Windows
     } elsif (/^bitmap_icon_scaled\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         die unless exists $ids{$1};

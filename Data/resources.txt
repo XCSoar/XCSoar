@@ -2,6 +2,10 @@
    Various Perl scripts convert it to a C header and target-specific
    files (e.g. the Windows RC format). */
 
+// Application Icons
+
+app_icon IDI_XCSOAR "xcsoarswift"
+
 // Bitmaps
 
 bitmap_icon_scaled IDB_ABORT "mode_abort"

@@ -36,7 +36,7 @@ while (<>) {
     } elsif (/^bitmap_graphic\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         die unless exists $ids{$1};
         add_to_src("output/data/graphics2/$2.png", "resource_$ids{$1}");
-    } elsif (/^hatch_bitmap\s+([\w_]+)\s+"([^"]+)"\s*$/) {
+    } elsif (/^(?:app_icon|hatch_bitmap)\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         # only used on Windows
     } elsif (/^bitmap_icon_scaled\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         die unless exists $ids{$1};

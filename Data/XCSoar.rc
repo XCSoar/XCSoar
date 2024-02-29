@@ -9,7 +9,3 @@
 #define HATCH_BITMAP(name, file) BITMAP_BITMAP(name, file)
 
 #define SOUND(name, file) name WAVE DISCARDABLE "sound/" file ".wav"
-
-// --- Icons ---
-
-IDI_XCSOAR              ICON    DISCARDABLE     "bitmaps/xcsoarswift.ico"

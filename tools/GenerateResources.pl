@@ -17,7 +17,7 @@ my @named;
 while (<>) {
     next if /^\s*(?:#.*)?$/;
 
-    if (/^(?:bitmap_bitmap|bitmap_graphic|hatch_bitmap|bitmap_icon_scaled)\s+([\w_]+)\s+"([^"]+)"\s*$/) {
+    if (/^(?:app_icon|bitmap_bitmap|bitmap_graphic|hatch_bitmap|bitmap_icon_scaled)\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         # only sounds used here
     } elsif (/^sound\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         push @named, [ $1, -s "output/data/sound/$2.raw" ];
