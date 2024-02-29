@@ -3,14 +3,15 @@
 
 #pragma once
 
+#include <concepts>
+
 /**
  * A constexpr wrapper for std::isfinite().  This uses the
  * non-standard __builtin_isfinite() function (specific to GCC and
  * clang) because the C++ standard library is not "constexpr".
  */
-template<typename T>
 constexpr bool
-IsFinite(T value) noexcept
+IsFinite(std::floating_point auto value) noexcept
 {
   return __builtin_isfinite(value);
 }
