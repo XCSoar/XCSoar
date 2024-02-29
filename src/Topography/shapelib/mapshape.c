@@ -1695,6 +1695,11 @@ void msSHPReadShape( SHPHandle psSHP, int hEntity, shapeObj *shape )
   return;
 }
 
+#if defined(__clang__) && __clang_major__ >= 18
+/* suppress clang 18 warning for using isnan() due to -ffast-math */
+#pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
+#endif
+
 int msSHPReadBounds( SHPHandle psSHP, int hEntity, rectObj *padBounds)
 {
   /* -------------------------------------------------------------------- */
