@@ -168,15 +168,9 @@ $(TEXT_COMPRESSED): $(DATA)/%.gz: % | $(DATA)/dirstamp
 	$(Q)gzip --best <$< >$@.tmp
 	$(Q)mv $@.tmp $@
 
-RESOURCE_FILES = $(TEXT_COMPRESSED)
+RESOURCE_FILES =
 
-ifeq ($(TARGET),ANDROID)
-RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))
-else
-
-ifeq ($(TARGET_IS_KOBO),y)
-RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))
-endif
+ifeq ($(TARGET_IS_ANDROID),n)
 
 ifeq ($(USE_WIN32_RESOURCES),y)
 RESOURCE_FILES += $(BMP_BITMAPS)
@@ -217,7 +211,6 @@ ifeq ($(USE_WIN32_RESOURCES),y)
 RESOURCE_TEXT = Data/XCSoar.rc
 
 RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/$(notdir $(RESOURCE_TEXT:.rc=.rsc))
-RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))
 
 $(RESOURCE_BINARY): $(RESOURCE_TEXT) $(OUT)/include/resource.h $(RESOURCE_FILES) | $(TARGET_OUTPUT_DIR)/%/../dirstamp $(compile-depends)
 	@$(NQ)echo "  WINDRES $@"
