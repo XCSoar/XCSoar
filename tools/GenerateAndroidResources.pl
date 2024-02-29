@@ -3,9 +3,9 @@
 use strict;
 
 my %ids;
-open IDS, "output/include/resource.h" or die $!;
+open IDS, "output/ANDROID/include/MakeResource.hpp" or die $!;
 while (<IDS>) {
-    $ids{$1} = $2 if /^#define (\S+) (\d+)/;
+    $ids{$1} = $2 if /^MAKE_RESOURCE\((\S+), (\d+)\);/;
 }
 close IDS;
 

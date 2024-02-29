@@ -89,7 +89,7 @@ generate:: $(TARGET_OUTPUT_DIR)/include/resource_data.h
 else # TARGET_IS_ANDROID
 
 $(TARGET_OUTPUT_DIR)/include/android_drawable.h: $(TARGET_OUTPUT_DIR)/resources.txt \
-	$(OUT)/include/resource.h \
+	$(TARGET_OUTPUT_DIR)/include/MakeResource.hpp \
 	tools/GenerateAndroidResources.pl | $(TARGET_OUTPUT_DIR)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) tools/GenerateAndroidResources.pl $< >$@.tmp

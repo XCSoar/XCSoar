@@ -98,6 +98,10 @@ include $(topdir)/build/glx.mk
 include $(topdir)/build/opengl.mk
 endif
 
+# this line should be in build/resource.mk but that file depends on
+# link.mk and compile-depends must be set before including compile.mk
+compile-depends += $(TARGET_OUTPUT_DIR)/include/MakeResource.hpp
+
 include $(topdir)/build/compile.mk
 include $(topdir)/build/host.mk
 include $(topdir)/build/flags.mk

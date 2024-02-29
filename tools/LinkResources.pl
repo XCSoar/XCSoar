@@ -15,15 +15,16 @@ sub add_to_src($$) {
 
 my $enable_opengl = $ENV{ENABLE_OPENGL} eq 'y';
 my $target_is_android = $ENV{TARGET_IS_ANDROID} eq 'y';
+my $target_output_dir = $ENV{TARGET_OUTPUT_DIR};
 
 my $icons_dir = $enable_opengl
   ? 'output/data/icons'
   : 'output/data/icons2';
 
 my %ids;
-open IDS, "output/include/resource.h" or die $!;
+open IDS, "$target_output_dir/include/MakeResource.hpp" or die $!;
 while (<IDS>) {
-    $ids{$1} = $2 if /^#define (\S+) (\d+)/;
+    $ids{$1} = $2 if /^MAKE_RESOURCE\((\S+), (\d+)\);/;
 }
 close IDS;
 
