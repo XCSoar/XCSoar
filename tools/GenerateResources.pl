@@ -2,8 +2,8 @@
 
 use strict;
 
-sub generate_blob($$) {
-    my ($var, $path) = @_;
+sub generate_blob($) {
+    my ($var) = @_;
 
     print "extern const std::byte ${var}\[\];\n";
     print "extern const std::byte ${var}_end\[\];\n";
@@ -20,10 +20,9 @@ while (<>) {
 
     if (/^\s*([.\w]+)\s+WAVE\s+DISCARDABLE\s+"(.*?)"\s*$/) {
         push @named, [ $1, -s "Data/$2" ];
-        my $path = $2;
         my $variable = "resource_$1";
         $variable =~ s,\.,_,g;
-        generate_blob($variable, "Data/$path");
+        generate_blob($variable);
     }
 }
 
