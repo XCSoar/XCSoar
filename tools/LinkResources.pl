@@ -3,7 +3,6 @@
 use strict;
 use lib './tools';
 use BinToC;
-use vars qw($as $ar);
 
 sub add_to_src($$) {
     my ($input, $name) = @_;

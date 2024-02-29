@@ -9,7 +9,8 @@ sub generate_blob($$) {
     print "extern const std::byte ${var}_end\[\];\n";
 }
 
-print "#include <stdint.h>\n";
+print "#include <cstddef>\n";
+print "#include <span>\n";
 
 my @named;
 
