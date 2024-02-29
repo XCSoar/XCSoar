@@ -201,7 +201,7 @@ endif
 
 endif
 
-$(TARGET_OUTPUT_DIR)/resources.txt: Data/resources.txt | $(TARGET_OUTPUT_DIR)/dirstamp $(compile-depends)
+$(TARGET_OUTPUT_DIR)/resources.txt: Data/resources.txt | $(TARGET_OUTPUT_DIR)/dirstamp $(BUILD_TOOLCHAIN_TARGET)
 	@$(NQ)echo "  CPP     $@"
 	$(Q)cat $< |$(CC) -E -o $@ -I$(OUT)/include $(TARGET_CPPFLAGS) $(OPENGL_CPPFLAGS) -
 
@@ -226,7 +226,7 @@ ifeq ($(USE_WIN32_RESOURCES),y)
 
 RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/XCSoar.rsc
 
-$(TARGET_OUTPUT_DIR)/XCSoar.rsc: %.rsc: %.rc $(OUT)/include/resource.h $(RESOURCE_FILES) | $(TARGET_OUTPUT_DIR)/%/../dirstamp $(compile-depends)
+$(TARGET_OUTPUT_DIR)/XCSoar.rsc: %.rsc: %.rc $(OUT)/include/resource.h $(RESOURCE_FILES) | $(TARGET_OUTPUT_DIR)/%/../dirstamp $(BUILD_TOOLCHAIN_TARGET)
 	@$(NQ)echo "  WINDRES $@"
 	$(Q)$(WINDRES) $(WINDRESFLAGS) --include-dir output/data --include-dir Data -o $@ $<
 

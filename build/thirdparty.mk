@@ -38,4 +38,11 @@ endif
 
 endif
 
+ifeq ($(TARGET_IS_KOBO),y)
+  # we build a toolchain as part of the thirdparty-library build
+  BUILD_TOOLCHAIN_TARGET = $(THIRDPARTY_LIBS_DIR)/stamp
+else
+  BUILD_TOOLCHAIN_TARGET =
+endif
+
 compile-depends += boost
