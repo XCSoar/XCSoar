@@ -227,7 +227,8 @@ else
 
 $(TARGET_OUTPUT_DIR)/resources.c: $(TARGET_OUTPUT_DIR)/XCSoar.rc $(OUT)/include/resource.h $(RESOURCE_FILES) tools/LinkResources.pl tools/BinToC.pm | $(TARGET_OUTPUT_DIR)/resources/dirstamp
 	@$(NQ)echo "  GEN     $@"
-	$(Q)$(PERL) tools/LinkResources.pl $< $@
+	$(Q)$(PERL) tools/LinkResources.pl <$< >$@.tmp
+	$(Q)mv $@.tmp $@
 
 RESOURCES_SOURCES = $(TARGET_OUTPUT_DIR)/resources.c
 $(eval $(call link-library,resources,RESOURCES))
