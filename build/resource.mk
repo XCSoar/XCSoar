@@ -221,7 +221,7 @@ RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))
 
 $(RESOURCE_BINARY): $(RESOURCE_TEXT) $(OUT)/include/resource.h $(RESOURCE_FILES) | $(TARGET_OUTPUT_DIR)/%/../dirstamp $(compile-depends)
 	@$(NQ)echo "  WINDRES $@"
-	$(Q)$(WINDRES) --preprocessor $(PERL) --preprocessor-arg tools/ResourceProcessor.pl --preprocessor-arg "$(CC)" --preprocessor-arg "-E" --preprocessor-arg "-xc-header" $(WINDRESFLAGS) -o $@ $<
+	$(Q)$(WINDRES) --preprocessor $(PERL) --preprocessor-arg tools/ResourceProcessor.pl --preprocessor-arg "$(CC)" --preprocessor-arg "-E" --preprocessor-arg "-xc-header" $(WINDRESFLAGS) --include-dir output/data -o $@ $<
 
 else
 
