@@ -206,6 +206,8 @@ $(OUT)/include/resource.h: src/Resources.hpp | $(OUT)/include/dirstamp
 	$(Q)$(PERL) -ne 'print "#define $$1 $$2\n" if /^MAKE_RESOURCE\((\w+), (\d+)\);/;' $< >$@.tmp
 	$(Q)mv $@.tmp $@
 
+ifeq ($(TARGET_IS_ANDROID),n)
+
 ifeq ($(USE_WIN32_RESOURCES),y)
 
 RESOURCE_TEXT = Data/XCSoar.rc
@@ -228,3 +230,5 @@ $(eval $(call link-library,resources,RESOURCES))
 RESOURCE_BINARY = $(RESOURCES_BIN)
 
 endif
+
+endif # !TARGET_IS_ANDROID

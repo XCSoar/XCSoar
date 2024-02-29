@@ -1,11 +1,6 @@
 #include "resource.h"
 
-#if !defined(ANDROID) || defined(ANDROID_DRAWABLE)
 #define BITMAP(name, path) name BITMAP DISCARDABLE path
-#else
-/* on Android, these are included as drawable resources (PNG) */
-#define BITMAP(name, path)
-#endif
 
 #ifdef WIN32
 #define BITMAP_BITMAP(name, file) BITMAP(name, "bitmaps/" file ".bmp")
@@ -36,9 +31,6 @@
 
 #ifdef WIN32
 #define SOUND(name, file) name WAVE DISCARDABLE "sound/" file ".wav"
-#elif defined(ANDROID)
-/* included as Android resources */
-#define SOUND(name, file)
 #else
 #define SOUND(name, file) name WAVE DISCARDABLE "../output/data/sound/" file ".raw"
 #endif

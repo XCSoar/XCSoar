@@ -77,6 +77,8 @@ $(TARGET_OUTPUT_DIR)/XCSoar.rc: Data/XCSoar.rc $(OUT)/include/resource.h | $(TAR
 	@$(NQ)echo "  CPP     $@"
 	$(Q)cat $< | $(PERL) tools/ResourceProcessor.pl $(CC) -E -I$(OUT)/include $(TARGET_CPPFLAGS) $(OPENGL_CPPFLAGS) - >$@
 
+ifeq ($(TARGET_IS_ANDROID),n)
+
 $(TARGET_OUTPUT_DIR)/include/resource_data.h: $(TARGET_OUTPUT_DIR)/XCSoar.rc \
 	$(RESOURCE_FILES) \
 	tools/GenerateResources.pl | $(TARGET_OUTPUT_DIR)/include/dirstamp
@@ -84,24 +86,23 @@ $(TARGET_OUTPUT_DIR)/include/resource_data.h: $(TARGET_OUTPUT_DIR)/XCSoar.rc \
 	$(Q)$(PERL) tools/GenerateResources.pl $< >$@.tmp
 	@mv $@.tmp $@
 
-$(TARGET_OUTPUT_DIR)/XCSoar-drawable.rc: Data/XCSoar.rc $(OUT)/include/resource.h | $(TARGET_OUTPUT_DIR)/dirstamp $(compile-depends)
-	@$(NQ)echo "  CPP     $@"
-	$(Q)cat $< | $(PERL) tools/ResourceProcessor.pl $(CC) -E $< -I$(OUT)/include $(TARGET_CPPFLAGS) -DANDROID_DRAWABLE - >$@
+$(call SRC_TO_OBJ,$(SRC)/ResourceLoader.cpp): $(TARGET_OUTPUT_DIR)/include/resource_data.h
 
-$(TARGET_OUTPUT_DIR)/include/android_drawable.h: $(TARGET_OUTPUT_DIR)/XCSoar-drawable.rc \
+generate:: $(TARGET_OUTPUT_DIR)/include/resource_data.h
+
+else # TARGET_IS_ANDROID
+
+$(TARGET_OUTPUT_DIR)/include/android_drawable.h: $(TARGET_OUTPUT_DIR)/XCSoar.rc \
 	$(RESOURCE_FILES) \
 	tools/GenerateAndroidResources.pl | $(TARGET_OUTPUT_DIR)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) tools/GenerateAndroidResources.pl $< >$@.tmp
 	@mv $@.tmp $@
 
-$(call SRC_TO_OBJ,$(SRC)/ResourceLoader.cpp): $(TARGET_OUTPUT_DIR)/include/resource_data.h
-
-generate:: $(TARGET_OUTPUT_DIR)/include/resource_data.h
-
-ifeq ($(TARGET),ANDROID)
 $(call SRC_TO_OBJ,$(SRC)/ui/canvas/android/Bitmap.cpp): $(TARGET_OUTPUT_DIR)/include/android_drawable.h
+
 generate:: $(TARGET_OUTPUT_DIR)/include/android_drawable.h
-endif
+
+endif # TARGET_IS_ANDROID
 
 endif
