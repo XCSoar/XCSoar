@@ -86,19 +86,6 @@ $(call SRC_TO_OBJ,$(SRC)/ResourceLoader.cpp): $(TARGET_OUTPUT_DIR)/include/resou
 
 generate:: $(TARGET_OUTPUT_DIR)/include/resource_data.h
 
-else # TARGET_IS_ANDROID
-
-$(TARGET_OUTPUT_DIR)/include/android_drawable.h: $(TARGET_OUTPUT_DIR)/resources.txt \
-	$(TARGET_OUTPUT_DIR)/include/MakeResource.hpp \
-	tools/GenerateAndroidResources.pl | $(TARGET_OUTPUT_DIR)/include/dirstamp
-	@$(NQ)echo "  GEN     $@"
-	$(Q)$(PERL) tools/GenerateAndroidResources.pl $< >$@.tmp
-	@mv $@.tmp $@
-
-$(call SRC_TO_OBJ,$(SRC)/ui/canvas/android/Bitmap.cpp): $(TARGET_OUTPUT_DIR)/include/android_drawable.h
-
-generate:: $(TARGET_OUTPUT_DIR)/include/android_drawable.h
-
-endif # TARGET_IS_ANDROID
+endif # !TARGET_IS_ANDROID
 
 endif

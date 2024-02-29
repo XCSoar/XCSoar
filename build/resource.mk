@@ -222,7 +222,7 @@ $(TARGET_OUTPUT_DIR)/XCSoar.rc: $(TARGET_OUTPUT_DIR)/resources.txt Data/XCSoar.r
 
 $(TARGET_OUTPUT_DIR)/include/resource.h: $(TARGET_OUTPUT_DIR)/include/MakeResource.hpp | $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
-	$(Q)$(PERL) -ne 'print "#define $$1 $$2\n" if /^MAKE_RESOURCE\((\w+), (\d+)\);/;' $< >$@.tmp
+	$(Q)$(PERL) -ne 'print "#define $$1 $$2\n" if /^MAKE_RESOURCE\((\w+), \S+, (\d+)\);/;' $< >$@.tmp
 	$(Q)mv $@.tmp $@
 
 RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/XCSoar.rsc

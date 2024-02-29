@@ -3,16 +3,21 @@
 
 #include "ResourceId.hpp"
 
-#if defined(USE_GDI) || defined(ANDROID)
+#ifdef USE_WIN32_RESOURCES
 
-#define MAKE_RESOURCE(name, id) \
+#define MAKE_RESOURCE(name, file, id) \
   static constexpr ResourceId name(id);
+
+#elif defined(ANDROID)
+
+#define MAKE_RESOURCE(name, file, id) \
+  static constexpr ResourceId name{#file};
 
 #else
 
 #include <cstddef>
 
-#define MAKE_RESOURCE(name, id) \
+#define MAKE_RESOURCE(name, file, id) \
   extern "C" std::byte resource_ ## id[]; \
   extern "C" const size_t resource_ ## id ## _size; \
   static constexpr ResourceId name(resource_ ##id, &resource_ ## id ## _size);

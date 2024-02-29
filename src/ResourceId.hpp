@@ -10,8 +10,10 @@
  * ResourceLoader::Load() or other resource-loading functions.
  */
 class ResourceId {
-#if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
+#ifdef USE_WIN32_RESOURCES
   unsigned id;
+#elif defined(ANDROID)
+  const char *name;
 #else
   const std::byte *begin;
   const size_t *size_ptr;
@@ -20,9 +22,12 @@ class ResourceId {
 public:
   ResourceId() = default;
 
-#if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
+#ifdef USE_WIN32_RESOURCES
   constexpr explicit ResourceId(unsigned _id) noexcept
     :id(_id) {}
+#elif defined(ANDROID)
+  constexpr explicit ResourceId(const char *_name) noexcept
+    :name(_name) {}
 #else
   constexpr explicit ResourceId(const std::byte *_begin,
                                 const size_t *_size_ptr) noexcept
@@ -38,16 +43,22 @@ public:
   }
 
   constexpr bool IsDefined() const noexcept {
-#if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
+#ifdef USE_WIN32_RESOURCES
     return id != 0;
+#elif defined(ANDROID)
+    return name != nullptr;
 #else
     return begin != nullptr;
 #endif
   }
 
-#if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
+#ifdef USE_WIN32_RESOURCES
   constexpr explicit operator unsigned() const noexcept {
     return id;
+  }
+#elif defined(ANDROID)
+  constexpr explicit operator const char *() const noexcept {
+    return name;
   }
 #else
   [[gnu::pure]]
@@ -56,8 +67,10 @@ public:
   }
 #endif
 
+#ifndef ANDROID
+
   constexpr bool operator==(ResourceId other) const noexcept {
-#if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
+#ifdef USE_WIN32_RESOURCES
     return id == other.id;
 #else
     return begin == other.begin;
@@ -65,10 +78,12 @@ public:
   }
 
   constexpr bool operator!=(ResourceId other) const noexcept {
-#if defined(USE_WIN32_RESOURCES) || defined(ANDROID)
+#ifdef USE_WIN32_RESOURCES
     return id != other.id;
 #else
     return begin != other.begin;
 #endif
   }
+
+#endif // !ANDROID
 };

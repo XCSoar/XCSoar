@@ -8,31 +8,17 @@
 #include "Android/Main.hpp"
 #include "system/Path.hpp"
 #include "ResourceId.hpp"
-#include "android_drawable.h"
 
 Bitmap::Bitmap(ResourceId id)
 {
   Load(id);
 }
 
-static const char *
-find_resource_name(unsigned id) noexcept
-{
-  for (unsigned i = 0; DrawableNames[i].name != nullptr; ++i)
-    if (DrawableNames[i].id == id)
-      return DrawableNames[i].name;
-
-  return nullptr;
-}
-
 static Java::LocalObject
 LoadResourceBitmap(ResourceId id)
 {
-  const char *name = find_resource_name((unsigned)id);
-  if (name == nullptr)
-    return nullptr;
-
-  return native_view->LoadResourceBitmap(Java::GetEnv(), name);
+  return native_view->LoadResourceBitmap(Java::GetEnv(),
+                                         static_cast<const char *>(id));
 }
 
 bool

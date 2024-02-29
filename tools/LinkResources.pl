@@ -24,7 +24,7 @@ my $icons_dir = $enable_opengl
 my %ids;
 open IDS, "$target_output_dir/include/MakeResource.hpp" or die $!;
 while (<IDS>) {
-    $ids{$1} = $2 if /^MAKE_RESOURCE\((\S+), (\d+)\);/;
+    $ids{$1} = $2 if /^MAKE_RESOURCE\((\S+), \S+, (\d+)\);/;
 }
 close IDS;
 
