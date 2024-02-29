@@ -201,6 +201,20 @@ endif
 
 endif
 
+$(TARGET_OUTPUT_DIR)/resources.txt: Data/resources.txt | $(TARGET_OUTPUT_DIR)/dirstamp $(compile-depends)
+	@$(NQ)echo "  CPP     $@"
+	$(Q)cat $< |$(CC) -E -o $@ -I$(OUT)/include $(TARGET_CPPFLAGS) $(OPENGL_CPPFLAGS) -
+
+ifeq ($(USE_WIN32_RESOURCES),y)
+
+$(TARGET_OUTPUT_DIR)/XCSoar.rc: $(TARGET_OUTPUT_DIR)/resources.txt Data/XCSoar.rc tools/GenerateWindowsResources.pl
+	@$(NQ)echo "  GEN     $@"
+	$(Q)cp Data/XCSoar.rc $@.tmp
+	$(Q)$(PERL) tools/GenerateWindowsResources.pl $< >>$@.tmp
+	$(Q)mv $@.tmp $@
+
+endif
+
 $(OUT)/include/resource.h: src/Resources.hpp | $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) -ne 'print "#define $$1 $$2\n" if /^MAKE_RESOURCE\((\w+), (\d+)\);/;' $< >$@.tmp
@@ -210,17 +224,17 @@ ifeq ($(TARGET_IS_ANDROID),n)
 
 ifeq ($(USE_WIN32_RESOURCES),y)
 
-RESOURCE_TEXT = Data/XCSoar.rc
+RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/XCSoar.rsc
 
-RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/$(notdir $(RESOURCE_TEXT:.rc=.rsc))
-
-$(RESOURCE_BINARY): $(RESOURCE_TEXT) $(OUT)/include/resource.h $(RESOURCE_FILES) | $(TARGET_OUTPUT_DIR)/%/../dirstamp $(compile-depends)
+$(TARGET_OUTPUT_DIR)/XCSoar.rsc: %.rsc: %.rc $(OUT)/include/resource.h $(RESOURCE_FILES) | $(TARGET_OUTPUT_DIR)/%/../dirstamp $(compile-depends)
 	@$(NQ)echo "  WINDRES $@"
-	$(Q)$(WINDRES) --preprocessor $(PERL) --preprocessor-arg tools/ResourceProcessor.pl --preprocessor-arg "$(CC)" --preprocessor-arg "-E" --preprocessor-arg "-xc-header" $(WINDRESFLAGS) --include-dir output/data -o $@ $<
+	$(Q)$(WINDRES) $(WINDRESFLAGS) --include-dir output/data --include-dir Data -o $@ $<
 
-else
+else # USE_WIN32_RESOURCES
 
-$(TARGET_OUTPUT_DIR)/resources.c: $(TARGET_OUTPUT_DIR)/XCSoar.rc $(OUT)/include/resource.h $(RESOURCE_FILES) tools/LinkResources.pl tools/BinToC.pm | $(TARGET_OUTPUT_DIR)/resources/dirstamp
+$(TARGET_OUTPUT_DIR)/resources.c: export TARGET_IS_ANDROID:=$(TARGET_IS_ANDROID)
+$(TARGET_OUTPUT_DIR)/resources.c: export ENABLE_OPENGL:=$(OPENGL)
+$(TARGET_OUTPUT_DIR)/resources.c: $(TARGET_OUTPUT_DIR)/resources.txt $(OUT)/include/resource.h $(RESOURCE_FILES) tools/LinkResources.pl tools/BinToC.pm | $(TARGET_OUTPUT_DIR)/resources/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) tools/LinkResources.pl <$< >$@.tmp
 	$(Q)mv $@.tmp $@

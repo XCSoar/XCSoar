@@ -73,13 +73,9 @@ generate:: $(OUT)/include/MathTables.h $(XCI_HEADERS) \
 
 ifeq ($(USE_WIN32_RESOURCES),n)
 
-$(TARGET_OUTPUT_DIR)/XCSoar.rc: Data/XCSoar.rc $(OUT)/include/resource.h | $(TARGET_OUTPUT_DIR)/dirstamp $(compile-depends)
-	@$(NQ)echo "  CPP     $@"
-	$(Q)cat $< | $(PERL) tools/ResourceProcessor.pl $(CC) -E -I$(OUT)/include $(TARGET_CPPFLAGS) $(OPENGL_CPPFLAGS) - >$@
-
 ifeq ($(TARGET_IS_ANDROID),n)
 
-$(TARGET_OUTPUT_DIR)/include/resource_data.h: $(TARGET_OUTPUT_DIR)/XCSoar.rc \
+$(TARGET_OUTPUT_DIR)/include/resource_data.h: $(TARGET_OUTPUT_DIR)/resources.txt \
 	$(RESOURCE_FILES) \
 	tools/GenerateResources.pl | $(TARGET_OUTPUT_DIR)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
@@ -92,7 +88,8 @@ generate:: $(TARGET_OUTPUT_DIR)/include/resource_data.h
 
 else # TARGET_IS_ANDROID
 
-$(TARGET_OUTPUT_DIR)/include/android_drawable.h: $(TARGET_OUTPUT_DIR)/XCSoar.rc \
+$(TARGET_OUTPUT_DIR)/include/android_drawable.h: $(TARGET_OUTPUT_DIR)/resources.txt \
+	$(OUT)/include/resource.h \
 	tools/GenerateAndroidResources.pl | $(TARGET_OUTPUT_DIR)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) tools/GenerateAndroidResources.pl $< >$@.tmp

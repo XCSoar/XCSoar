@@ -1,0 +1,126 @@
+/* This file contains definitions of all resources used by XCSoar.
+   Various Perl scripts convert it to a C header and target-specific
+   files (e.g. the Windows RC format). */
+
+// Bitmaps
+
+bitmap_icon_scaled IDB_ABORT "mode_abort"
+
+hatch_bitmap IDB_ABOVETERRAIN "aboveterrain"
+
+bitmap_icon_scaled IDB_AIRPORT_REACHABLE "alt_reachable_airport"
+bitmap_icon_scaled IDB_AIRPORT_MARGINAL "alt_marginal_airport"
+bitmap_icon_scaled IDB_AIRPORT_UNREACHABLE "alt_landable_airport"
+bitmap_icon_scaled IDB_AIRPORT_MARGINAL2 "alt2_marginal_airport"
+bitmap_icon_scaled IDB_AIRPORT_UNREACHABLE2 "alt2_landable_airport"
+
+hatch_bitmap IDB_AIRSPACE0 "airspace0"
+hatch_bitmap IDB_AIRSPACE1 "airspace1"
+hatch_bitmap IDB_AIRSPACE2 "airspace2"
+hatch_bitmap IDB_AIRSPACE3 "airspace3"
+hatch_bitmap IDB_AIRSPACE4 "airspace4"
+hatch_bitmap IDB_AIRSPACE5 "airspace5"
+hatch_bitmap IDB_AIRSPACE6 "airspace6"
+hatch_bitmap IDB_AIRSPACE7 "airspace7"
+
+bitmap_icon_scaled IDB_AIRSPACEI "airspace_intercept"
+bitmap_icon_scaled IDB_CRUISE "mode_cruise"
+bitmap_icon_scaled IDB_CLIMB "mode_climb"
+bitmap_bitmap IDB_CLIMBSMALL "climb_12"
+bitmap_bitmap IDB_CLIMBSMALLINV "climb_12inv"
+bitmap_icon_scaled IDB_FOLDER "folder"
+bitmap_icon_scaled IDB_SETTINGS "settings"
+bitmap_icon_scaled IDB_TASK "task"
+bitmap_icon_scaled IDB_CALCULATOR "calculator"
+bitmap_icon_scaled IDB_WRENCH "wrench"
+bitmap_icon_scaled IDB_GLOBE "globe"
+bitmap_icon_scaled IDB_DEVICE "device"
+bitmap_icon_scaled IDB_RULES "rules"
+bitmap_icon_scaled IDB_CLOCK "clock"
+
+#ifdef EYE_CANDY
+#ifdef XCSOAR_TESTING
+bitmap_graphic IDB_DIALOGTITLE "dialog_title_red"
+#else
+bitmap_graphic IDB_DIALOGTITLE "dialog_title"
+#endif
+#endif
+bitmap_icon_scaled IDB_FINALGLIDE "mode_finalglide"
+bitmap_icon_scaled IDB_TRAFFIC_SAFE "flarm_traffic"
+bitmap_icon_scaled IDB_TRAFFIC_WARNING "flarm_warning"
+bitmap_icon_scaled IDB_TRAFFIC_ALARM "flarm_alarm"
+bitmap_icon_scaled IDB_GPSSTATUS1 "gps_acquiring"
+bitmap_icon_scaled IDB_GPSSTATUS2 "gps_disconnected"
+bitmap_icon_scaled IDB_LANDABLE "winpilot_landable"
+#ifdef XCSOAR_TESTING
+bitmap_graphic IDB_LAUNCHER1 "launcher_red_640_1"
+bitmap_graphic IDB_LAUNCHER2 "launcher_red_640_2"
+#else
+bitmap_graphic IDB_LAUNCHER1 "launcher_640_1"
+bitmap_graphic IDB_LAUNCHER2 "launcher_640_2"
+#endif
+bitmap_icon_scaled IDB_MAPSCALE_LEFT "scalearrow_left"
+bitmap_icon_scaled IDB_MAPSCALE_RIGHT "scalearrow_right"
+bitmap_icon_scaled IDB_MARK "map_flag"
+bitmap_icon_scaled IDB_OBSTACLE "map_obstacle"
+bitmap_icon_scaled IDB_OUTFIELD_REACHABLE "alt_reachable_field"
+bitmap_icon_scaled IDB_OUTFIELD_MARGINAL "alt_marginal_field"
+bitmap_icon_scaled IDB_OUTFIELD_UNREACHABLE "alt_landable_field"
+bitmap_icon_scaled IDB_OUTFIELD_MARGINAL2 "alt2_marginal_field"
+bitmap_icon_scaled IDB_OUTFIELD_UNREACHABLE2 "alt2_landable_field"
+bitmap_icon_scaled IDB_MOUNTAIN_PASS "map_pass"
+#ifdef XCSOAR_TESTING
+bitmap_graphic IDB_PROGRESSBORDER "progress_border_red"
+#else
+bitmap_graphic IDB_PROGRESSBORDER "progress_border"
+#endif
+bitmap_icon_scaled IDB_REACHABLE "winpilot_reachable"
+bitmap_icon_scaled IDB_MARGINAL "winpilot_marginal"
+bitmap_icon_scaled IDB_SMALL "map_small"
+#ifdef XCSOAR_TESTING
+bitmap_graphic IDB_LOGO_HD "logo_red_160"
+bitmap_graphic IDB_LOGO "logo_red_80"
+#else
+bitmap_graphic IDB_LOGO_HD "logo_160"
+bitmap_graphic IDB_LOGO "logo_80"
+#endif
+bitmap_icon_scaled IDB_TARGET "map_target"
+bitmap_icon_scaled IDB_TEAMMATE_POS "map_teammate"
+bitmap_icon_scaled IDB_TERRAINWARNING "map_terrainw"
+bitmap_icon_scaled IDB_THERMALSOURCE "map_thermal_source"
+bitmap_icon_scaled IDB_TOWN "map_town"
+bitmap_icon_scaled IDB_TURNPOINT "map_turnpoint"
+bitmap_icon_scaled IDB_TASKTURNPOINT "map_taskturnpoint"
+bitmap_icon_scaled IDB_MOUNTAIN_TOP "map_mountain_top"
+bitmap_icon_scaled IDB_BRIDGE "map_bridge"
+bitmap_icon_scaled IDB_TUNNEL "map_tunnel"
+bitmap_icon_scaled IDB_TOWER "map_tower"
+bitmap_icon_scaled IDB_POWER_PLANT "map_power_plant"
+bitmap_icon_scaled IDB_THERMAL_HOTSPOT "map_thermal_hotspot"
+bitmap_icon_scaled IDB_VOR "map_vor"
+bitmap_icon_scaled IDB_NDB "map_ndb"
+bitmap_icon_scaled IDB_DAM "map_dam"
+bitmap_icon_scaled IDB_CASTLE "map_castle"
+bitmap_icon_scaled IDB_INTERSECTION "map_intersection"
+bitmap_icon_scaled IDB_REPORTING_POINT "map_reporting_point"
+bitmap_icon_scaled IDB_PGTAKEOFF "map_pgtakeoff"
+bitmap_icon_scaled IDB_PGLANDING "map_pglanding"
+
+#ifdef XCSOAR_TESTING
+bitmap_graphic IDB_TITLE "title_red_110"
+bitmap_graphic IDB_TITLE_HD "title_red_320"
+#else
+bitmap_graphic IDB_TITLE "title_110"
+bitmap_graphic IDB_TITLE_HD "title_320"
+#endif
+bitmap_icon_scaled IDB_WEATHER_STATION "map_weather_station"
+
+// Audio
+
+sound IDR_FAIL "fail"
+sound IDR_INSERT "insert"
+sound IDR_REMOVE "remove"
+
+sound IDR_WAV_BEEPBWEEP "beep_bweep"
+sound IDR_WAV_CLEAR "beep_clear"
+sound IDR_WAV_DRIP "beep_drip"

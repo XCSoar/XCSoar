@@ -15,14 +15,17 @@ print "#include <span>\n";
 my @named;
 
 while (<>) {
-    # merge adjacent strings
-    while (s/"([^"]*)"\s+"([^"]*)"\s*$/"$1$2"/) {}
+    next if /^\s*(?:#.*)?$/;
 
-    if (/^\s*([.\w]+)\s+WAVE\s+DISCARDABLE\s+"(.*?)"\s*$/) {
-        push @named, [ $1, -s "Data/$2" ];
+    if (/^(?:bitmap_bitmap|bitmap_graphic|hatch_bitmap|bitmap_icon_scaled)\s+([\w_]+)\s+"([^"]+)"\s*$/) {
+        # only sounds used here
+    } elsif (/^sound\s+([\w_]+)\s+"([^"]+)"\s*$/) {
+        push @named, [ $1, -s "output/data/sound/$2.raw" ];
         my $variable = "resource_$1";
         $variable =~ s,\.,_,g;
         generate_blob($variable);
+    } else {
+        die "Syntax error: $_";
     }
 }
 

@@ -242,13 +242,12 @@ To add your own images to the list of icons:
    into ``xcsoar/Data/icons``. For Android, the name must be
    lowercase.
 
-#. Insert two (for normal and high-res) lines into
-   :file:`xcsoar/Data/XCSoar.rc`, (e.g.)
+#. Insert a line into
+   :file:`xcsoar/Data/resources.txt`, (e.g.)
 
    ::
 
-      BITMAP_ICON(IDB_MAST, "mast")
-      BITMAP_ICON(IDB_MAST_HD, "mast_160")
+      bitmap_icon_scaled IDB_MAST "mast"
 
 #. Insert two lines into :file:`xcsoar/src/Resources.hpp` (e.g.)
 
