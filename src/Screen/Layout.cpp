@@ -82,6 +82,14 @@ Initialise(const UI::Display &display, PixelSize new_size,
   const bool is_small_screen = IsSmallScreen(GetDisplaySize(display, new_size),
                                              dpi);
 
+  const auto SmallScreenAdjust = [is_small_screen](unsigned value) constexpr noexcept {
+    if (is_small_screen)
+      /* small screens (on portable devices) use a smaller font because
+         the viewing distance is usually smaller */
+      value =  value * 2 / 3;
+    return value;
+  };
+
   // always start w/ shortest dimension
   // square should be shrunk
   scale_1024 = std::max(1024U, min_screen_pixels * 1024 / (square ? 320 : 240));
@@ -92,17 +100,9 @@ Initialise(const UI::Display &display, PixelSize new_size,
 
   pt_scale = 1024 * dpi.y / 72;
 
-  vpt_scale = pt_scale;
-  if (is_small_screen)
-    /* small screens (on portable devices) use a smaller font because
-       the viewing distance is usually smaller */
-    vpt_scale = vpt_scale * 2 / 3;
+  vpt_scale = SmallScreenAdjust(pt_scale);
 
-  font_scale = 1024 * dpi.y * ui_scale / 72 / 100;
-  if (is_small_screen)
-    /* small screens (on portable devices) use a smaller font because
-       the viewing distance is usually smaller */
-    font_scale = font_scale * 2 / 3;
+  font_scale = SmallScreenAdjust(1024 * dpi.y * ui_scale / 72 / 100);
 
   text_padding = VptScale(2);
 
