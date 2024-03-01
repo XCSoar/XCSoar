@@ -7,5 +7,5 @@
 void
 NOAALook::Initialise()
 {
-  icon.LoadResource(IDB_WEATHER_STATION, IDB_WEATHER_STATION_HD);
+  icon.LoadResource(IDB_WEATHER_STATION_ALL);
 }

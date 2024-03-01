@@ -70,7 +70,7 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings,
 
   thick_pen.Create(Layout::ScalePenWidth(10), COLOR_BLACK);
 
-  intercept_icon.LoadResource(IDB_AIRSPACEI, IDB_AIRSPACEI_HD);
+  intercept_icon.LoadResource(IDB_AIRSPACEI_ALL);
 
   // labels
   label_pen.Create(1, COLOR_BLUE);

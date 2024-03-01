@@ -37,7 +37,7 @@ TaskLook::Initialise()
 
   highlight_pen.Create(Layout::ScalePenWidth(4), COLOR_BLACK);
 
-  target_icon.LoadResource(IDB_TARGET, IDB_TARGET_HD);
+  target_icon.LoadResource(IDB_TARGET_ALL);
 
   hbGray.Create(COLOR_GRAY);
   hbGreen.Create(COLOR_GREEN);

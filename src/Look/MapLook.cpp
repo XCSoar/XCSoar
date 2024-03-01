@@ -30,7 +30,7 @@ MapLook::Initialise(const MapSettings &settings,
   above_terrain_brush.Create(above_terrain_bitmap);
 #endif
 
-  terrain_warning_icon.LoadResource(IDB_TERRAINWARNING, IDB_TERRAINWARNING_HD);
+  terrain_warning_icon.LoadResource(IDB_TERRAINWARNING_ALL);
 
   compass_brush.Create(IsDithered() ? COLOR_WHITE : ColorWithAlpha(Color(207, 207, 207), alpha));
   compass_pen.Create(Layout::ScalePenWidth(1),
@@ -41,9 +41,9 @@ MapLook::Initialise(const MapSettings &settings,
   compass_triangle_pen.Create(Layout::ScalePenWidth(1),
                               HasColors() ? COLOR_GRAY : COLOR_BLACK);
 
-  traffic_safe_icon.LoadResource(IDB_TRAFFIC_SAFE, IDB_TRAFFIC_SAFE_HD, false);
-  traffic_warning_icon.LoadResource(IDB_TRAFFIC_WARNING, IDB_TRAFFIC_WARNING_HD, false);
-  traffic_alarm_icon.LoadResource(IDB_TRAFFIC_ALARM, IDB_TRAFFIC_ALARM_HD, false);
+  traffic_safe_icon.LoadResource(IDB_TRAFFIC_SAFE_ALL, false);
+  traffic_warning_icon.LoadResource(IDB_TRAFFIC_WARNING_ALL, false);
+  traffic_alarm_icon.LoadResource(IDB_TRAFFIC_ALARM_ALL, false);
 
   static constexpr Color clrSepia(0x78,0x31,0x18);
   reach_terrain_pen.Create(Pen::DASH3, Layout::ScalePenWidth(1), clrSepia);
@@ -59,19 +59,19 @@ MapLook::Initialise(const MapSettings &settings,
   contest_pens[1].Create(Layout::ScalePenWidth(1) + 1, COLOR_ORANGE);
   contest_pens[2].Create(Layout::ScalePenWidth(1), COLOR_BLUE);
 
-  thermal_source_icon.LoadResource(IDB_THERMALSOURCE, IDB_THERMALSOURCE_HD);
+  thermal_source_icon.LoadResource(IDB_THERMALSOURCE_ALL);
 
-  traffic_safe_icon.LoadResource(IDB_TRAFFIC_SAFE, IDB_TRAFFIC_SAFE_HD, false);
-  traffic_warning_icon.LoadResource(IDB_TRAFFIC_WARNING, IDB_TRAFFIC_WARNING_HD, false);
-  traffic_alarm_icon.LoadResource(IDB_TRAFFIC_ALARM, IDB_TRAFFIC_ALARM_HD, false);
+  traffic_safe_icon.LoadResource(IDB_TRAFFIC_SAFE_ALL, false);
+  traffic_warning_icon.LoadResource(IDB_TRAFFIC_WARNING_ALL, false);
+  traffic_alarm_icon.LoadResource(IDB_TRAFFIC_ALARM_ALL, false);
 
-  cruise_mode_icon.LoadResource(IDB_CRUISE, IDB_CRUISE_HD, false);
-  climb_mode_icon.LoadResource(IDB_CLIMB, IDB_CLIMB_HD, false);
-  final_glide_mode_icon.LoadResource(IDB_FINALGLIDE, IDB_FINALGLIDE_HD, false);
-  abort_mode_icon.LoadResource(IDB_ABORT, IDB_ABORT_HD, false);
+  cruise_mode_icon.LoadResource(IDB_CRUISE_ALL, false);
+  climb_mode_icon.LoadResource(IDB_CLIMB_ALL, false);
+  final_glide_mode_icon.LoadResource(IDB_FINALGLIDE_ALL, false);
+  abort_mode_icon.LoadResource(IDB_ABORT_ALL, false);
 
-  waiting_for_fix_icon.LoadResource(IDB_GPSSTATUS1, IDB_GPSSTATUS1_HD, false);
-  no_gps_icon.LoadResource(IDB_GPSSTATUS2, IDB_GPSSTATUS2_HD, false);
+  waiting_for_fix_icon.LoadResource(IDB_GPSSTATUS1_ALL, false);
+  no_gps_icon.LoadResource(IDB_GPSSTATUS2_ALL, false);
 
   topography.Initialise();
   airspace.Initialise(settings.airspace, topography.important_label_font);
