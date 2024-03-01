@@ -18,9 +18,9 @@
 #include <cstddef>
 
 #define MAKE_RESOURCE(name, file, id) \
-  extern "C" std::byte resource_ ## id[]; \
-  extern "C" const size_t resource_ ## id ## _size; \
-  static constexpr ResourceId name(resource_ ##id, &resource_ ## id ## _size);
+  extern "C" std::byte resource_ ## name[]; \
+  extern "C" const size_t resource_ ## name ## _size; \
+  static constexpr ResourceId name(resource_ ## name, &resource_ ## name ## _size);
 
 #endif
 
