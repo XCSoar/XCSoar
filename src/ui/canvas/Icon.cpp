@@ -44,8 +44,8 @@ MaskedIcon::LoadResource(ResourceId id, ResourceId big_id, bool center)
   unsigned stretch = 1024;
 #endif
 
-  if (Layout::VptScale(10) >= 13) {
-    /* switch to larger 160dpi icons at ~ 145dpi */
+  if (Layout::vdpi >= 120) {
+    /* switch to larger 160dpi icons at 120dpi */
 
     unsigned source_dpi = 96;
     if (big_id.IsDefined()) {
