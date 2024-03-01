@@ -32,6 +32,8 @@ BMP_ICONS_96 = $(PNG_ICONS_96:.png=.bmp)
 PNG_ICONS_160 = $(patsubst Data/icons/%.svg,$(DATA)/icons/%_160.png,$(SVG_ICONS))
 BMP_ICONS_160 = $(PNG_ICONS_160:.png=.bmp)
 
+BMP_ICONS_ALL = $(BMP_ICONS_96) $(BMP_ICONS_160)
+
 # modify working copy of SVG to improve rendering
 $(SVG_NOALIAS_ICONS): $(DATA)/icons/%.svg: build/svg_preprocess.xsl Data/icons/%.svg | $(DATA)/icons/dirstamp
 	@$(NQ)echo "  XSLT    $@"
@@ -45,7 +47,7 @@ $(eval $(call rsvg-convert,$(PNG_ICONS_96),$(DATA)/icons/%_96.png,$(DATA)/icons/
 $(eval $(call rsvg-convert,$(PNG_ICONS_160),$(DATA)/icons/%_160.png,$(DATA)/icons/%.svg,--x-zoom=1.6316 --y-zoom=1.6316))
 
 # convert to uncompressed 8-bit BMP
-$(eval $(call convert-to-bmp,$(BMP_ICONS_96) $(BMP_ICONS_160),%.bmp,%_tile.png))
+$(eval $(call convert-to-bmp,$(BMP_ICONS_ALL),%.bmp,%_tile.png))
 
 ####### splash logo
 
@@ -187,7 +189,7 @@ else
 RESOURCE_FILES += $(PNG_BITMAPS)
 endif
 
-RESOURCE_FILES += $(BMP_ICONS_96) $(BMP_ICONS_160) 
+RESOURCE_FILES += $(BMP_ICONS_ALL)
 RESOURCE_FILES += $(BMP_SPLASH_160) $(BMP_SPLASH_80)
 RESOURCE_FILES += $(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER)
 RESOURCE_FILES += $(BMP_TITLE_320) $(BMP_TITLE_110)
