@@ -1,3 +1,5 @@
+Version 7.43 - not yet released
+
 Version 7.42 - 2024/03/01
 * ui
   - new terrain ramp High Contrast
