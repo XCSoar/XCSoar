@@ -27,24 +27,26 @@ $(PNG_BITMAPS): $(DATA)/bitmaps/%.png: Data/bitmaps/%.bmp | $(DATA)/bitmaps/dirs
 
 SVG_ICONS = $(wildcard Data/icons/*.svg)
 SVG_NOALIAS_ICONS = $(patsubst Data/icons/%.svg,$(DATA)/icons/%.svg,$(SVG_ICONS))
-PNG_ICONS_96 = $(patsubst Data/icons/%.svg,$(DATA)/icons/%_96.png,$(SVG_ICONS))
-BMP_ICONS_96 = $(PNG_ICONS_96:.png=.bmp)
-PNG_ICONS_160 = $(patsubst Data/icons/%.svg,$(DATA)/icons/%_160.png,$(SVG_ICONS))
-BMP_ICONS_160 = $(PNG_ICONS_160:.png=.bmp)
 
-BMP_ICONS_ALL = $(BMP_ICONS_96) $(BMP_ICONS_160)
+BMP_ICONS_ALL =
+
+define generate-icon-scale
+PNG_ICONS_$(1) = $$(patsubst Data/icons/%.svg,$$(DATA)/icons/%_$(1).png,$$(SVG_ICONS))
+BMP_ICONS_$(1) = $$(PNG_ICONS_$(1):.png=.bmp)
+BMP_ICONS_ALL += $$(BMP_ICONS_$(1))
+$$(eval $$(call rsvg-convert,$$(PNG_ICONS_$(1)),$$(DATA)/icons/%_$(1).png,$$(DATA)/icons/%.svg,--x-zoom=$2 --y-zoom=$2))
+endef
+
+# Default 100PPI (eg 320x240 4" display)
+$(eval $(call generate-icon-scale,96,1.0))
+
+#160PPI (eg 640x480 5" display)
+$(eval $(call generate-icon-scale,160,1.6316))
 
 # modify working copy of SVG to improve rendering
 $(SVG_NOALIAS_ICONS): $(DATA)/icons/%.svg: build/svg_preprocess.xsl Data/icons/%.svg | $(DATA)/icons/dirstamp
 	@$(NQ)echo "  XSLT    $@"
 	$(Q)xsltproc --nonet --stringparam DisableAA_Select "MASK_NOAA_" --output $@ $^
-
-# render from SVG to PNG
-# Default 100PPI (eg 320x240 4" display)
-$(eval $(call rsvg-convert,$(PNG_ICONS_96),$(DATA)/icons/%_96.png,$(DATA)/icons/%.svg,--x-zoom=1.0 --y-zoom=1.0))
-
-#160PPI (eg 640x480 5" display)
-$(eval $(call rsvg-convert,$(PNG_ICONS_160),$(DATA)/icons/%_160.png,$(DATA)/icons/%.svg,--x-zoom=1.6316 --y-zoom=1.6316))
 
 # convert to uncompressed 8-bit BMP
 $(eval $(call convert-to-bmp,$(BMP_ICONS_ALL),%.bmp,%_tile.png))
