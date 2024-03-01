@@ -32,6 +32,7 @@ public:
   }
 
   void LoadResource(ResourceId id, ResourceId big_id = ResourceId::Null(),
+                    ResourceId ultra_id = ResourceId::Null(),
                     bool center=true);
 
   void Reset() noexcept {

@@ -49,7 +49,7 @@ class TopographyFile {
 
   const int label_field;
 
-  const ResourceId icon, big_icon;
+  const ResourceId icon, big_icon, ultra_icon;
 
   const unsigned pen_width;
 
@@ -141,6 +141,7 @@ public:
                  int label_field=-1,
                  ResourceId icon=ResourceId::Null(),
                  ResourceId big_icon=ResourceId::Null(),
+                 ResourceId ultra_icon=ResourceId::Null(),
                  unsigned pen_width=1);
 
   TopographyFile(const TopographyFile &) = delete;
@@ -198,6 +199,10 @@ public:
 
   ResourceId GetBigIcon() const noexcept {
     return big_icon;
+  }
+
+  ResourceId GetUltraIcon() const noexcept {
+    return ultra_icon;
   }
 
   const auto &GetColor() const noexcept {

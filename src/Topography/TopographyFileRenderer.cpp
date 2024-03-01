@@ -42,7 +42,7 @@ TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file,
 {
   ResourceId icon_ID = file.GetIcon();
   if (icon_ID.IsDefined())
-    icon.LoadResource(icon_ID, file.GetBigIcon());
+    icon.LoadResource(icon_ID, file.GetBigIcon(), file.GetUltraIcon());
 }
 
 TopographyFileRenderer::~TopographyFileRenderer() noexcept = default;

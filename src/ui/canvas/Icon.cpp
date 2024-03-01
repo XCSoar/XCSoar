@@ -38,7 +38,9 @@ IconStretchInteger(unsigned source_dpi) noexcept
 #endif
 
 void
-MaskedIcon::LoadResource(ResourceId id, ResourceId big_id, bool center)
+MaskedIcon::LoadResource(ResourceId id, ResourceId big_id,
+                         ResourceId ultra_id,
+                         bool center)
 {
 #ifdef ENABLE_OPENGL
   unsigned stretch = 1024;
@@ -48,7 +50,10 @@ MaskedIcon::LoadResource(ResourceId id, ResourceId big_id, bool center)
     /* switch to larger 160dpi icons at 120dpi */
 
     unsigned source_dpi = 96;
-    if (big_id.IsDefined()) {
+    if (Layout::vdpi >= 220 && ultra_id.IsDefined()) {
+      id = ultra_id;
+      source_dpi = 300;
+    } else if (big_id.IsDefined()) {
       id = big_id;
       source_dpi = 192;
     }

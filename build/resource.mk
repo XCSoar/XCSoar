@@ -43,6 +43,9 @@ $(eval $(call generate-icon-scale,96,1.0))
 #160PPI (eg 640x480 5" display)
 $(eval $(call generate-icon-scale,160,1.6316))
 
+# 300dpi
+$(eval $(call generate-icon-scale,300,3.0))
+
 # modify working copy of SVG to improve rendering
 $(SVG_NOALIAS_ICONS): $(DATA)/icons/%.svg: build/svg_preprocess.xsl Data/icons/%.svg | $(DATA)/icons/dirstamp
 	@$(NQ)echo "  XSLT    $@"

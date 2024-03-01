@@ -17,8 +17,11 @@ while (<>) {
         $id = $next_id++;
         print qq|MAKE_RESOURCE($1_HD, $2_160, $id);\n|;
 
+        $id = $next_id++;
+        print qq|MAKE_RESOURCE($1_UHD, $2_300, $id);\n|;
+
         # this macro can be passed to MaskedIcon::LoadResource()
-        print qq|#define $1_ALL $1, $1_HD\n|;
+        print qq|#define $1_ALL $1, $1_HD, $1_UHD\n|;
     } elsif (/^sound\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         # not used here
     } else {

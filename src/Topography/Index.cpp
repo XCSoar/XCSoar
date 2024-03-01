@@ -11,7 +11,7 @@
 
 typedef struct {
   const char *name;
-  ResourceId resource_id, big_resource_id;
+  ResourceId resource_id, big_resource_id, ultra_resource_id;
 } LOOKUP_ICON;
 
 static constexpr LOOKUP_ICON icon_list[] = {
@@ -103,6 +103,7 @@ ParseTopographyIndexLine(const char *line) noexcept
         if (icon_name == ip->name) {
           entry.icon = ip->resource_id;
           entry.big_icon = ip->big_resource_id;
+          entry.ultra_icon = ip->ultra_resource_id;
           break;
         }
         ip++;
