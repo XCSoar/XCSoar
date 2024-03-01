@@ -10,7 +10,9 @@ app_icon IDI_XCSOAR "xcsoarswift"
 
 bitmap_icon_scaled IDB_ABORT "mode_abort"
 
+#ifdef USE_GDI
 hatch_bitmap IDB_ABOVETERRAIN "aboveterrain"
+#endif
 
 bitmap_icon_scaled IDB_AIRPORT_REACHABLE "alt_reachable_airport"
 bitmap_icon_scaled IDB_AIRPORT_MARGINAL "alt_marginal_airport"
@@ -18,6 +20,7 @@ bitmap_icon_scaled IDB_AIRPORT_UNREACHABLE "alt_landable_airport"
 bitmap_icon_scaled IDB_AIRPORT_MARGINAL2 "alt2_marginal_airport"
 bitmap_icon_scaled IDB_AIRPORT_UNREACHABLE2 "alt2_landable_airport"
 
+#ifdef USE_GDI
 hatch_bitmap IDB_AIRSPACE0 "airspace0"
 hatch_bitmap IDB_AIRSPACE1 "airspace1"
 hatch_bitmap IDB_AIRSPACE2 "airspace2"
@@ -26,6 +29,7 @@ hatch_bitmap IDB_AIRSPACE4 "airspace4"
 hatch_bitmap IDB_AIRSPACE5 "airspace5"
 hatch_bitmap IDB_AIRSPACE6 "airspace6"
 hatch_bitmap IDB_AIRSPACE7 "airspace7"
+#endif
 
 bitmap_icon_scaled IDB_AIRSPACEI "airspace_intercept"
 bitmap_icon_scaled IDB_CRUISE "mode_cruise"

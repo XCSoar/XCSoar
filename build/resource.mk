@@ -203,7 +203,7 @@ endif
 
 $(TARGET_OUTPUT_DIR)/resources.txt: Data/resources.txt | $(TARGET_OUTPUT_DIR)/dirstamp $(BUILD_TOOLCHAIN_TARGET)
 	@$(NQ)echo "  CPP     $@"
-	$(Q)cat $< |$(CC) -E -o $@ -I$(OUT)/include $(TARGET_CPPFLAGS) $(OPENGL_CPPFLAGS) -
+	$(Q)cat $< |$(CC) -E -o $@ -I$(OUT)/include $(TARGET_CPPFLAGS) $(OPENGL_CPPFLAGS) $(GDI_CPPFLAGS) -
 
 ifeq ($(USE_WIN32_RESOURCES),y)
 
