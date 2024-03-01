@@ -1,4 +1,4 @@
-Version 7.42 - not yet released
+Version 7.42 - 2024/03/01
 * ui
   - new terrain ramp High Contrast
   - fix unreadable icons in task manager and status dialog
