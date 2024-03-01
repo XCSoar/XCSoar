@@ -249,13 +249,6 @@ To add your own images to the list of icons:
 
       bitmap_icon_scaled IDB_MAST "mast"
 
-#. Insert two lines into :file:`xcsoar/src/Resources.hpp` (e.g.)
-
-   ::
-
-      MAKE_RESOURCE(IDB_MAST, 500);
-      MAKE_RESOURCE(IDB_MAST_HD, 5500);
-
 #. Add a corresponding line into the ``icon_list`` table in
    :file:`xcsoar/src/Topography/TopographyStore.cpp`
 
