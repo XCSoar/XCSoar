@@ -148,7 +148,7 @@ ParseScanResultsLine(WifiVisibleNetwork &dest, std::string_view line) noexcept
 
   dest.bssid = bssid;
 
-  if (ParseIntegerTo(signal_level, dest.signal_level))
+  if (!ParseIntegerTo(signal_level, dest.signal_level))
     return false;
 
   if (flags.find("WPA"sv) != flags.npos)
