@@ -1,57 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   version="1.1"
-   viewBox="0 0 22 22"
-   id="svg2"
-   sodipodi:docname="map_target.svg"
-   width="22"
-   height="22"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs6" />
-  <sodipodi:namedview
-     id="namedview4"
-     pagecolor="#ff00ff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="true"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     inkscape:zoom="12.836707"
-     inkscape:cx="-16.943598"
-     inkscape:cy="11.139928"
-     inkscape:window-width="2560"
-     inkscape:window-height="1417"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="Image">
-    <g
-       transform="matrix(2.2,0,0,2.2,0,-19.8)"
-       fill-rule="evenodd"
-       id="g4894"
-       style="stroke-width:0.454545">
-      <path
-         d="M 10,14 A 5,5 0 0 1 0,14 5,5 0 1 1 10,14 Z"
-         opacity="0.99"
-         id="path21834"
-         style="stroke-width:0.142045" />
-      <path
-         d="m 5,18 c 2.0944,0 4,-1.9056 4,-4 H 5 m -4,0 c 5e-7,-2.0944 1.9056,-4 4,-4 l 0.035337,4.0074"
-         fill="#ffffff"
-         opacity="0.99"
-         id="path21831"
-         style="stroke-width:0.142045" />
-    </g>
-  </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+ <g transform="matrix(1.4,0,0,1.4,0,-12.6)" fill-rule="evenodd" stroke-width=".22321">
+  <path d="m10 14a5 5 0 0 1-10 0 5 5 0 1 1 10 0z" opacity=".99"/>
+  <path d="m5 18c2.0944 0 4-1.9056 4-4h-4m-4 0c5e-7 -2.0944 1.9056-4 4-4l0.035337 4.0074" fill="#fff" opacity=".99"/>
+ </g>
 </svg>

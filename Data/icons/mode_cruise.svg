@@ -1,62 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   version="1.1"
-   viewBox="0 0 32 32"
-   id="svg2"
-   sodipodi:docname="mode_cruise.svg"
-   width="32"
-   height="32"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs6" />
-  <sodipodi:namedview
-     id="namedview4"
-     pagecolor="#ff00ff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="true"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     inkscape:zoom="18.153845"
-     inkscape:cx="-21.069917"
-     inkscape:cy="7.4915259"
-     inkscape:window-width="2560"
-     inkscape:window-height="1417"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="Image">
-    <g
-       transform="matrix(1.288173,0,0,1.288173,-0.8155205,-17.495438)"
-       stroke-width="0.776265"
-       id="g3073">
-      <circle
-         cx="13.053775"
-         cy="26.002283"
-         r="12.420691"
-         fill="#ffffff"
-         opacity="0.99"
-         stroke-width="0.739201"
-         id="circle3065" />
-      <path
-         d="m 3.273587,29.691811 a 10.45953,10.45953 0 0 0 19.558912,0.0088 z"
-         opacity="0.99"
-         stroke-width="0.739189"
-         id="path3067" />
-      <path
-         d="m 10.667292,21.419646 c -0.524338,0 -0.9465114,0.301004 -0.9465114,0.674848 0,0.373858 0.4221734,0.674862 0.9465114,0.674862 h 1.747257 v 1.973167 H 2.5318739 a 0.73205,0.73205 0 0 0 -0.73205,0.73205 0.73205,0.73205 0 0 0 0.73205,0.73205 h 9.8826751 v 0.162999 c 0,0.43472 0.300477,0.783513 0.674862,0.783513 0.374385,0 0.674848,-0.348793 0.674848,-0.783513 v -0.168723 l 9.891313,0.0059 a 0.73205,0.73205 0 0 0 0.73205,-0.73205 0.73205,0.73205 0 0 0 -0.73205,-0.73205 l -9.891313,-0.0059 v -1.967458 h 1.770097 c 0.524338,0 0.946511,-0.301004 0.946511,-0.674862 0,-0.373843 -0.422173,-0.674848 -0.946511,-0.674848 h -2.444901 z"
-         stroke-width="0"
-         id="path3069" />
-    </g>
-  </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+ <g transform="matrix(.88562 0 0 .88562 -.56067 -12.028)">
+  <circle cx="13.054" cy="26.002" r="12.421" fill="#fff" opacity=".99" stroke-width="1.0752"/>
+  <path d="m3.2736 29.692a10.46 10.46 0 0 0 19.559 0.0088z" opacity=".99" stroke-width="1.0752"/>
+  <path d="m10.667 21.42c-0.52434 0-0.94651 0.301-0.94651 0.67485 0 0.37386 0.42217 0.67486 0.94651 0.67486h1.7473v1.9732h-9.8827a0.73205 0.73205 0 0 0-0.73205 0.73205 0.73205 0.73205 0 0 0 0.73205 0.73205h9.8827v0.163c0 0.43472 0.30048 0.78351 0.67486 0.78351s0.67485-0.34879 0.67485-0.78351v-0.16872l9.8913 0.0059a0.73205 0.73205 0 0 0 0.73205-0.73205 0.73205 0.73205 0 0 0-0.73205-0.73205l-9.8913-0.0059v-1.9675h1.7701c0.52434 0 0.94651-0.301 0.94651-0.67486 0-0.37384-0.42217-0.67485-0.94651-0.67485h-2.4449z" stroke-width="0"/>
+ </g>
 </svg>

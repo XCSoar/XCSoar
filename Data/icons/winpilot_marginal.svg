@@ -1,61 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   version="1.1"
-   viewBox="0 0 22 22"
-   id="svg2"
-   sodipodi:docname="winpilot_marginal.svg"
-   width="22"
-   height="22"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs6" />
-  <sodipodi:namedview
-     id="namedview4"
-     pagecolor="#ff00ff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="true"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     inkscape:zoom="9.0769226"
-     inkscape:cx="-28.699154"
-     inkscape:cy="7.4915258"
-     inkscape:window-width="2560"
-     inkscape:window-height="1417"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="Image">
-    <g
-       id="g11448"
-       transform="scale(1.1578947)"
-       style="stroke-width:0.863636">
-      <path
-         d="m 19,9.5 a 9.5,9.5 0 1 1 -19,0 9.5,9.5 0 1 1 19,0 z"
-         id="path12923"
-         style="opacity:0.99;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.820454" />
-      <path
-         d="m 18,9.5 a 8.5,8.5 0 1 1 -17,0 8.5,8.5 0 1 1 17,0 z"
-         id="path12920"
-         style="opacity:0.99;fill:#e04040;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.73409" />
-      <path
-         d="m 15,9.5 a 5.5,5.5 0 1 1 -11,0 5.5,5.5 0 1 1 11,0 z"
-         id="path12917"
-         style="opacity:0.99;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.474999" />
-      <path
-         d="m 14,9.5 a 4.5,4.5 0 1 1 -9,0 4.5,4.5 0 1 1 9,0 z"
-         id="path12914"
-         style="opacity:0.99;fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.388637" />
-    </g>
-  </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+ <g transform="scale(.73684)" fill-rule="evenodd" stroke-width="1.3571">
+  <path d="m19 9.5a9.5 9.5 0 1 1-19 0 9.5 9.5 0 1 1 19 0z" opacity=".99"/>
+  <path d="m18 9.5a8.5 8.5 0 1 1-17 0 8.5 8.5 0 1 1 17 0z" fill="#e04040" opacity=".99"/>
+  <path d="m15 9.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 1 1 11 0z" opacity=".99"/>
+  <path d="m14 9.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 1 1 9 0z" fill="#f0f" opacity=".99"/>
+ </g>
 </svg>
