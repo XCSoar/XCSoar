@@ -1,66 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   version="1.1"
-   viewBox="0 0 22 22"
-   id="svg2"
-   sodipodi:docname="alt2_landable_airport.svg"
-   width="22"
-   height="22"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs6" />
-  <sodipodi:namedview
-     id="namedview4"
-     pagecolor="#ff00ff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="true"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     inkscape:zoom="12.836708"
-     inkscape:cx="-36.263191"
-     inkscape:cy="20.020709"
-     inkscape:window-width="2560"
-     inkscape:window-height="1417"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="Image">
-    <g
-       id="g1859"
-       transform="scale(0.6875)"
-       style="stroke-width:1.45455">
-      <path
-         d="M 32,16 A 16,16 0 0 1 0,16 16,16 0 1 1 32,16 Z"
-         fill="#ffffff"
-         fill-rule="evenodd"
-         opacity="0.99"
-         id="path2"
-         style="fill:#ff0000;stroke-width:2.1157" />
-      <rect
-         transform="rotate(-45)"
-         x="-16.000025"
-         y="15.355024"
-         width="32"
-         height="14.545"
-         rx="1.7930182"
-         ry="1.7630546"
-         id="rect4"
-         style="stroke-width:1.45455" />
-      <path
-         style="color:#000000;fill:#cccccc;stroke-width:1.45455;-inkscape-stroke:none"
-         d="M 26.251953,3.6269531 3.625,26.253906 5.7460937,28.375 28.373047,5.7480469 Z"
-         id="path6" />
-    </g>
-  </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+ <g transform="scale(.4375)">
+  <path d="m32 16a16 16 0 0 1-32 0 16 16 0 1 1 32 0z" fill="#f00" fill-rule="evenodd" opacity=".99" stroke-width="3.3247"/>
+  <rect transform="rotate(-45)" x="-16" y="15.355" width="32" height="14.545" rx="2.8176" ry="2.7705" stroke-width="2.2857"/>
+  <path d="m26.252 3.627-22.627 22.627 2.1211 2.1211 22.627-22.627z" color="#000000" fill="#ccc" stroke-width="2.2857" style="-inkscape-stroke:none"/>
+ </g>
 </svg>

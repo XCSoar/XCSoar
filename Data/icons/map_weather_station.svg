@@ -1,68 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   version="1.1"
-   viewBox="0 0 22 22"
-   id="svg2"
-   sodipodi:docname="map_weather_station.svg"
-   width="22"
-   height="22"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs6" />
-  <sodipodi:namedview
-     id="namedview4"
-     pagecolor="#ff00ff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="true"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     inkscape:zoom="6.4183535"
-     inkscape:cx="-35.133621"
-     inkscape:cy="-7.7901599"
-     inkscape:window-width="2560"
-     inkscape:window-height="1417"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="Image">
-    <g
-       transform="matrix(1.361093,0,0,1.3045982,-6.6941273,-2.0068302)"
-       id="g143"
-       style="stroke-width:1.12566;stroke-dasharray:none">
-      <path
-         d="m 9.899955,4.6514 v 3.584 H 12.11423 V 4.9713616 Z"
-         fill="#ff0000"
-         id="path131"
-         style="stroke-width:1.12566;stroke-dasharray:none" />
-      <path
-         d="M 12.11423,4.9713616 V 8.2354 h 1.77142 V 5.228424 Z"
-         fill="#ffffff"
-         id="path133"
-         style="stroke-width:1.12566;stroke-dasharray:none" />
-      <path
-         d="M 13.88565,5.228424 V 8.2354 h 2.214275 v -2.688 z"
-         fill="#ff0000"
-         id="path135"
-         style="stroke-width:1.12566;stroke-dasharray:none" />
-      <path
-         d="m 9.899955,15.8514 v -11.2 l 6.19997,0.896 v 2.688 h -6.19997"
-         fill="none"
-         stroke="#000000"
-         stroke-linejoin="round"
-         stroke-width="0.740576"
-         id="path139"
-         style="stroke-width:1.12566;stroke-dasharray:none" />
-    </g>
-  </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+ <g transform="matrix(.9074 0 0 .86974 -4.7962 -1.6711)" stroke-width="1.6885">
+  <path d="m9.9 4.6514v3.584h2.2143v-3.264z" fill="#f00"/>
+  <path d="m12.114 4.9714v3.264h1.7714v-3.007z" fill="#fff"/>
+  <path d="m13.886 5.2284v3.007h2.2143v-2.688z" fill="#f00"/>
+  <path d="m9.9805 4.0938a0.56289 0.56289 0 0 0-0.64258 0.55859v11.199h1.125v-7.0527h5.6367a0.56289 0.56289 0 0 0 0.5625-0.5625v-2.6895a0.56289 0.56289 0 0 0-0.48242-0.55664zm0.48242 1.209 5.0742 0.73242v1.6367h-5.0742z" color="#000000" stroke-linejoin="round" style="-inkscape-stroke:none"/>
+ </g>
 </svg>

@@ -1,719 +1,107 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   version="1.1"
-   viewBox="0 0 22 22"
-   id="svg2"
-   sodipodi:docname="map_ndb.svg"
-   width="22"
-   height="22"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs6">
-    <filter
-       style="color-interpolation-filters:sRGB"
-       inkscape:label="Drop Shadow"
-       id="filter4574-5">
-      <feFlood
-         flood-opacity="0.498039"
-         flood-color="rgb(0,0,0)"
-         result="flood"
-         id="feFlood4564-0" />
-      <feComposite
-         in="flood"
-         in2="SourceGraphic"
-         operator="in"
-         result="composite1"
-         id="feComposite4566-4" />
-      <feGaussianBlur
-         in="composite1"
-         stdDeviation="2.9965578e-05"
-         result="blur"
-         id="feGaussianBlur4568-7" />
-      <feOffset
-         dx="6"
-         dy="6"
-         result="offset"
-         id="feOffset4570-9" />
-      <feComposite
-         in="SourceGraphic"
-         in2="offset"
-         operator="over"
-         result="composite2"
-         id="feComposite4572-5" />
-    </filter>
-    <filter
-       style="color-interpolation-filters:sRGB"
-       inkscape:label="Drop Shadow"
-       id="filter4562-0">
-      <feFlood
-         flood-opacity="0.498039"
-         flood-color="rgb(0,0,0)"
-         result="flood"
-         id="feFlood4552-3" />
-      <feComposite
-         in="flood"
-         in2="SourceGraphic"
-         operator="in"
-         result="composite1"
-         id="feComposite4554-7" />
-      <feGaussianBlur
-         in="composite1"
-         stdDeviation="2.9965578e-05"
-         result="blur"
-         id="feGaussianBlur4556-1" />
-      <feOffset
-         dx="6"
-         dy="6"
-         result="offset"
-         id="feOffset4558-1" />
-      <feComposite
-         in="SourceGraphic"
-         in2="offset"
-         operator="over"
-         result="composite2"
-         id="feComposite4560-1" />
-    </filter>
-  </defs>
-  <sodipodi:namedview
-     id="namedview4"
-     pagecolor="#ff00ff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="true"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     inkscape:zoom="12.836707"
-     inkscape:cx="-16.164582"
-     inkscape:cy="32.64077"
-     inkscape:window-width="2560"
-     inkscape:window-height="1417"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1"
-     showguides="true" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="Image">
-    <g
-       id="g24509"
-       transform="matrix(0.68750034,0,0,0.68750034,-6.0226227e-6,-5.2318803e-6)"
-       style="stroke-width:1.45454">
-      <circle
-         id="path3157"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         transform="rotate(4.6641137)"
-         cx="17.248013"
-         cy="14.773535"
-         r="1.393791" />
-      <path
-         style="color:#000000;fill:#2c5aa0;stroke-width:1.45454;stroke-linecap:round;-inkscape-stroke:none"
-         d="m 17.248047,8.3828125 c -3.514479,0 -6.390625,2.8761465 -6.390625,6.3906255 0,3.514478 2.876146,6.390624 6.390625,6.390624 3.514479,0 6.390625,-2.876146 6.390625,-6.390624 0,-3.514479 -2.876146,-6.3906255 -6.390625,-6.3906255 z m 0,2.5000005 c 2.16338,0 3.890625,1.727245 3.890625,3.890625 0,2.163379 -1.727245,3.890625 -3.890625,3.890624 -2.16338,0 -3.890625,-1.727245 -3.890625,-3.890624 0,-2.16338 1.727245,-3.890626 3.890625,-3.890625 z"
-         id="path3159"
-         transform="rotate(4.6641242)" />
-      <circle
-         id="path3174"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-y="-137.14285"
-         transform="rotate(-85.335886)"
-         cx="-7.0159235"
-         cy="17.248022"
-         r="1.393791" />
-      <circle
-         id="path3307"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-x="-137.14285"
-         transform="rotate(4.6641137)"
-         cx="24.893702"
-         cy="14.662033"
-         r="1.393791" />
-      <circle
-         id="path3309"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-y="137.14285"
-         transform="rotate(94.664114)"
-         cx="22.307823"
-         cy="-17.24815"
-         r="1.393791" />
-      <circle
-         id="path3311"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-x="137.14285"
-         transform="rotate(-175.33589)"
-         cx="-9.6018019"
-         cy="-14.661715"
-         r="1.393791" />
-      <circle
-         id="path3313"
-         style="fill:#2c5aa0;stroke-width:0.410228"
-         inkscape:transform-center-x="-68.413669"
-         inkscape:transform-center-y="-118.86012"
-         transform="rotate(-55.412145)"
-         cx="3.5425293"
-         cy="22.262894"
-         r="1.3937966" />
-      <circle
-         id="path3315"
-         style="fill:#2c5aa0;stroke-width:0.410228"
-         inkscape:transform-center-x="-118.86012"
-         inkscape:transform-center-y="68.413665"
-         transform="rotate(34.587855)"
-         cx="29.908867"
-         cy="4.103539"
-         r="1.3937966" />
-      <circle
-         id="path3317"
-         style="fill:#2c5aa0;stroke-width:0.410228"
-         inkscape:transform-center-x="68.413665"
-         inkscape:transform-center-y="118.86013"
-         transform="rotate(124.58785)"
-         cx="11.749417"
-         cy="-22.262745"
-         r="1.3937966" />
-      <circle
-         id="path3319"
-         style="fill:#2c5aa0;stroke-width:0.410228"
-         inkscape:transform-center-x="118.86012"
-         inkscape:transform-center-y="-68.413667"
-         transform="rotate(-145.41215)"
-         cx="-14.616817"
-         cy="-4.1033211"
-         r="1.3937966" />
-      <circle
-         id="path3321"
-         style="fill:#2c5aa0;stroke-width:0.410222"
-         inkscape:transform-center-x="-120.96985"
-         inkscape:transform-center-y="-64.610005"
-         transform="rotate(-23.442448)"
-         cx="15.952201"
-         cy="21.058842"
-         r="1.393778" />
-      <circle
-         id="path3323"
-         style="fill:#2c5aa0;stroke-width:0.410222"
-         inkscape:transform-center-x="-64.610004"
-         inkscape:transform-center-y="120.96984"
-         transform="rotate(66.557552)"
-         cx="28.704567"
-         cy="-8.3065071"
-         r="1.393778" />
-      <circle
-         id="path3325"
-         style="fill:#2c5aa0;stroke-width:0.410222"
-         inkscape:transform-center-x="120.96984"
-         inkscape:transform-center-y="64.61001"
-         transform="rotate(156.55755)"
-         cx="-0.66078204"
-         cy="-21.058872"
-         r="1.393778" />
-      <circle
-         id="path3327"
-         style="fill:#2c5aa0;stroke-width:0.410222"
-         inkscape:transform-center-x="64.610005"
-         inkscape:transform-center-y="-120.96985"
-         transform="rotate(-113.44245)"
-         cx="-13.41259"
-         cy="8.3066149"
-         r="1.393778" />
-      <circle
-         id="path3329"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-y="-137.14285"
-         transform="rotate(-85.335886)"
-         cx="-7.0159235"
-         cy="17.248022"
-         r="1.393791" />
-      <circle
-         id="path3331"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-x="-137.14285"
-         transform="rotate(4.6641137)"
-         cx="24.893702"
-         cy="14.662033"
-         r="1.393791" />
-      <circle
-         id="path3333"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-y="137.14285"
-         transform="rotate(94.664114)"
-         cx="22.307823"
-         cy="-17.24815"
-         r="1.393791" />
-      <circle
-         id="path3335"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-x="137.14285"
-         transform="rotate(-175.33589)"
-         cx="-9.6018019"
-         cy="-14.661715"
-         r="1.393791" />
-      <circle
-         id="path3337"
-         style="fill:#2c5aa0;stroke-width:0.410228"
-         inkscape:transform-center-x="-68.413669"
-         inkscape:transform-center-y="-118.86012"
-         transform="rotate(-55.412145)"
-         cx="3.5425293"
-         cy="22.262894"
-         r="1.3937966" />
-      <circle
-         id="path3339"
-         style="fill:#2c5aa0;stroke-width:0.410228"
-         inkscape:transform-center-x="-118.86012"
-         inkscape:transform-center-y="68.413665"
-         transform="rotate(34.587855)"
-         cx="29.908867"
-         cy="4.103539"
-         r="1.3937966" />
-      <circle
-         id="path3341"
-         style="fill:#2c5aa0;stroke-width:0.410228"
-         inkscape:transform-center-x="68.413665"
-         inkscape:transform-center-y="118.86013"
-         transform="rotate(124.58785)"
-         cx="11.749417"
-         cy="-22.262745"
-         r="1.3937966" />
-      <circle
-         id="path3343"
-         style="fill:#2c5aa0;stroke-width:0.410228"
-         inkscape:transform-center-x="118.86012"
-         inkscape:transform-center-y="-68.413667"
-         transform="rotate(-145.41215)"
-         cx="-14.616817"
-         cy="-4.1033211"
-         r="1.3937966" />
-      <circle
-         id="path3345"
-         style="fill:#2c5aa0;stroke-width:0.410222"
-         inkscape:transform-center-x="-120.96985"
-         inkscape:transform-center-y="-64.610005"
-         transform="rotate(-23.442448)"
-         cx="15.952201"
-         cy="21.058842"
-         r="1.393778" />
-      <circle
-         id="path3347"
-         style="fill:#2c5aa0;stroke-width:0.410222"
-         inkscape:transform-center-x="-64.610004"
-         inkscape:transform-center-y="120.96984"
-         transform="rotate(66.557552)"
-         cx="28.704567"
-         cy="-8.3065071"
-         r="1.393778" />
-      <circle
-         id="path3349"
-         style="fill:#2c5aa0;stroke-width:0.410222"
-         inkscape:transform-center-x="120.96984"
-         inkscape:transform-center-y="64.61001"
-         transform="rotate(156.55755)"
-         cx="-0.66078204"
-         cy="-21.058872"
-         r="1.393778" />
-      <circle
-         id="path3351"
-         style="fill:#2c5aa0;stroke-width:0.410222"
-         inkscape:transform-center-x="64.610005"
-         inkscape:transform-center-y="-120.96985"
-         transform="rotate(-113.44245)"
-         cx="-13.41259"
-         cy="8.3066149"
-         r="1.393778" />
-      <circle
-         id="path3353"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-y="-199.99999"
-         transform="rotate(-85.335886)"
-         cx="-3.4478357"
-         cy="17.248022"
-         r="1.393791" />
-      <circle
-         id="path3355"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-x="-199.99999"
-         transform="rotate(4.6641137)"
-         cx="28.398233"
-         cy="14.598476"
-         r="1.393791" />
-      <circle
-         id="path3357"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-y="199.99999"
-         transform="rotate(94.664114)"
-         cx="25.748798"
-         cy="-17.24815"
-         r="1.393791" />
-      <circle
-         id="path3359"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-x="199.99999"
-         transform="rotate(-175.33589)"
-         cx="-6.0977159"
-         cy="-14.598157"
-         r="1.393791" />
-      <circle
-         id="path3361"
-         style="fill:#2c5aa0;stroke-width:0.410224"
-         inkscape:transform-center-x="-64.997785"
-         inkscape:transform-center-y="-189.14353"
-         transform="rotate(-66.371313)"
-         cx="2.9500148"
-         cy="21.055912"
-         r="1.3937854" />
-      <circle
-         id="path3363"
-         style="fill:#2c5aa0;stroke-width:0.410224"
-         inkscape:transform-center-x="-189.14353"
-         inkscape:transform-center-y="64.997789"
-         transform="rotate(23.628687)"
-         cx="32.206448"
-         cy="8.2008448"
-         r="1.3937854" />
-      <circle
-         id="path3365"
-         style="fill:#2c5aa0;stroke-width:0.410224"
-         inkscape:transform-center-x="64.997789"
-         inkscape:transform-center-y="189.14353"
-         transform="rotate(113.62869)"
-         cx="19.350672"
-         cy="-21.055933"
-         r="1.3937854" />
-      <circle
-         id="path3367"
-         style="fill:#2c5aa0;stroke-width:0.410224"
-         inkscape:transform-center-x="189.14353"
-         inkscape:transform-center-y="-64.99778"
-         transform="rotate(-156.37131)"
-         cx="-9.9055805"
-         cy="-8.2003374"
-         r="1.3937854" />
-      <circle
-         id="path3369"
-         style="fill:#2c5aa0;stroke-width:0.410221"
-         inkscape:transform-center-x="-129.27734"
-         inkscape:transform-center-y="-152.60192"
-         transform="rotate(-45.066333)"
-         cx="11.160307"
-         cy="22.596626"
-         r="1.3937708" />
-      <circle
-         id="path3371"
-         style="fill:#2c5aa0;stroke-width:0.410221"
-         inkscape:transform-center-x="-152.60192"
-         inkscape:transform-center-y="129.27735"
-         transform="rotate(44.933667)"
-         cx="33.74675"
-         cy="-0.010511295"
-         r="1.3937708" />
-      <circle
-         id="path3373"
-         style="fill:#2c5aa0;stroke-width:0.410221"
-         inkscape:transform-center-x="129.27735"
-         inkscape:transform-center-y="152.60192"
-         transform="rotate(134.93367)"
-         cx="11.13997"
-         cy="-22.596527"
-         r="1.3937708" />
-      <circle
-         id="path3375"
-         style="fill:#2c5aa0;stroke-width:0.410221"
-         inkscape:transform-center-x="152.60193"
-         inkscape:transform-center-y="-129.27734"
-         transform="rotate(-135.06633)"
-         cx="-11.446088"
-         cy="0.010286482"
-         r="1.3937708" />
-      <circle
-         id="path3377"
-         style="fill:#2c5aa0;stroke-width:0.410224"
-         inkscape:transform-center-x="-168.35612"
-         inkscape:transform-center-y="-107.96388"
-         transform="rotate(-28.007228)"
-         cx="17.788975"
-         cy="21.599207"
-         r="1.3937811" />
-      <circle
-         id="path3379"
-         style="fill:#2c5aa0;stroke-width:0.410224"
-         inkscape:transform-center-x="-107.96387"
-         inkscape:transform-center-y="168.35613"
-         transform="rotate(61.992772)"
-         cx="32.749386"
-         cy="-6.638721"
-         r="1.3937811" />
-      <circle
-         id="path3381"
-         style="fill:#2c5aa0;stroke-width:0.410224"
-         inkscape:transform-center-x="168.35613"
-         inkscape:transform-center-y="107.96387"
-         transform="rotate(151.99277)"
-         cx="4.5117588"
-         cy="-21.599602"
-         r="1.3937811" />
-      <circle
-         id="path3383"
-         style="fill:#2c5aa0;stroke-width:0.410224"
-         inkscape:transform-center-x="107.96388"
-         inkscape:transform-center-y="-168.35612"
-         transform="rotate(-118.00723)"
-         cx="-10.448894"
-         cy="6.6387029"
-         r="1.3937811" />
-      <circle
-         id="path3385"
-         style="fill:#2c5aa0;stroke-width:0.410225"
-         inkscape:transform-center-x="-192.15481"
-         inkscape:transform-center-y="-55.466354"
-         transform="rotate(-11.437079)"
-         cx="23.672943"
-         cy="18.809061"
-         r="1.3937871" />
-      <circle
-         id="path3387"
-         style="fill:#2c5aa0;stroke-width:0.410225"
-         inkscape:transform-center-x="-55.466343"
-         inkscape:transform-center-y="192.15481"
-         transform="rotate(78.562921)"
-         cx="29.959455"
-         cy="-12.522574"
-         r="1.3937871" />
-      <circle
-         id="path3389"
-         style="fill:#2c5aa0;stroke-width:0.410225"
-         inkscape:transform-center-x="192.15481"
-         inkscape:transform-center-y="55.466342"
-         transform="rotate(168.56292)"
-         cx="-1.3727154"
-         cy="-18.80924"
-         r="1.3937871" />
-      <circle
-         id="path3391"
-         style="fill:#2c5aa0;stroke-width:0.410225"
-         inkscape:transform-center-x="55.466354"
-         inkscape:transform-center-y="-192.15481"
-         transform="rotate(-101.43708)"
-         cx="-7.6587772"
-         cy="12.522843"
-         r="1.3937871" />
-      <circle
-         id="path3393"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-y="-262.85713"
-         transform="rotate(-85.335886)"
-         cx="0.0087499395"
-         cy="17.248024"
-         r="1.393791" />
-      <circle
-         id="path3395"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-x="-262.85713"
-         transform="rotate(4.6641137)"
-         cx="31.902765"
-         cy="14.645865"
-         r="1.393791" />
-      <circle
-         id="path3397"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-y="262.85713"
-         transform="rotate(94.664114)"
-         cx="29.300718"
-         cy="-17.248148"
-         r="1.393791" />
-      <circle
-         id="path3399"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-x="262.85713"
-         transform="rotate(-175.33589)"
-         cx="-2.5933237"
-         cy="-14.646103"
-         r="1.393791" />
-      <circle
-         id="path3401"
-         style="fill:#2c5aa0;stroke-width:0.410221"
-         inkscape:transform-center-x="-65.102932"
-         inkscape:transform-center-y="-254.66739"
-         transform="rotate(-70.995689)"
-         cx="4.7368917"
-         cy="20.337971"
-         r="1.3937718" />
-      <circle
-         id="path3403"
-         style="fill:#2c5aa0;stroke-width:0.410221"
-         inkscape:transform-center-x="-254.66739"
-         inkscape:transform-center-y="65.102929"
-         transform="rotate(19.004311)"
-         cx="34.992702"
-         cy="9.9175825"
-         r="1.3937718" />
-      <circle
-         id="path3405"
-         style="fill:#2c5aa0;stroke-width:0.410221"
-         inkscape:transform-center-x="65.102929"
-         inkscape:transform-center-y="254.66739"
-         transform="rotate(109.00431)"
-         cx="24.57226"
-         cy="-20.338215"
-         r="1.3937718" />
-      <circle
-         id="path3407"
-         style="fill:#2c5aa0;stroke-width:0.410221"
-         inkscape:transform-center-x="254.66738"
-         inkscape:transform-center-y="-65.10293"
-         transform="rotate(-160.99569)"
-         cx="-5.6834831"
-         cy="-9.9177856"
-         r="1.3937718" />
-      <circle
-         id="path3409"
-         style="fill:#2c5aa0;stroke-width:0.410225"
-         inkscape:transform-center-x="-254.33139"
-         inkscape:transform-center-y="-66.403466"
-         transform="rotate(-9.9683877)"
-         cx="27.643209"
-         cy="18.528076"
-         r="1.3937894" />
-      <circle
-         id="path3411"
-         style="fill:#2c5aa0;stroke-width:0.410225"
-         inkscape:transform-center-x="-66.403465"
-         inkscape:transform-center-y="254.3314"
-         transform="rotate(80.031612)"
-         cx="33.182568"
-         cy="-12.988813"
-         r="1.3937894" />
-      <circle
-         id="path3413"
-         style="fill:#2c5aa0;stroke-width:0.410225"
-         inkscape:transform-center-x="254.33139"
-         inkscape:transform-center-y="66.40347"
-         transform="rotate(170.03161)"
-         cx="1.6658947"
-         cy="-18.528116"
-         r="1.3937894" />
-      <circle
-         id="path3415"
-         style="fill:#2c5aa0;stroke-width:0.410225"
-         inkscape:transform-center-x="66.403459"
-         inkscape:transform-center-y="-254.33139"
-         transform="rotate(-99.968388)"
-         cx="-3.8736665"
-         cy="12.988663"
-         r="1.3937894" />
-      <circle
-         id="path3417"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-x="-231.06238"
-         inkscape:transform-center-y="-125.31579"
-         transform="rotate(-23.809266)"
-         cx="22.833992"
-         cy="21.097479"
-         r="1.3937936" />
-      <circle
-         id="path3419"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-x="-125.31579"
-         inkscape:transform-center-y="231.06239"
-         transform="rotate(66.190734)"
-         cx="35.752178"
-         cy="-8.179122"
-         r="1.3937936" />
-      <circle
-         id="path3421"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-x="231.06238"
-         inkscape:transform-center-y="125.3158"
-         transform="rotate(156.19073)"
-         cx="6.4755769"
-         cy="-21.097307"
-         r="1.3937936" />
-      <circle
-         id="path3423"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-x="125.31579"
-         inkscape:transform-center-y="-231.06238"
-         transform="rotate(-113.80927)"
-         cx="-6.4426079"
-         cy="8.1792927"
-         r="1.3937936" />
-      <circle
-         id="path3425"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-x="-232.77005"
-         inkscape:transform-center-y="122.1146"
-         transform="rotate(32.346061)"
-         cx="36.732227"
-         cy="4.9568858"
-         r="1.3937917" />
-      <circle
-         id="path3427"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-x="122.11461"
-         inkscape:transform-center-y="232.77005"
-         transform="rotate(122.34606)"
-         cx="19.611725"
-         cy="-22.077986"
-         r="1.3937917" />
-      <circle
-         id="path3429"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-x="232.77005"
-         inkscape:transform-center-y="-122.1146"
-         transform="rotate(-147.65394)"
-         cx="-7.4231339"
-         cy="-4.9568601"
-         r="1.3937917" />
-      <circle
-         id="path3431"
-         style="fill:#2c5aa0;stroke-width:0.410227"
-         inkscape:transform-center-x="-122.11461"
-         inkscape:transform-center-y="-232.77005"
-         transform="rotate(-57.653939)"
-         cx="9.6976166"
-         cy="22.077883"
-         r="1.3937917" />
-      <circle
-         id="path3433"
-         style="fill:#2c5aa0;stroke-width:0.41023"
-         inkscape:transform-center-x="-184.88919"
-         inkscape:transform-center-y="186.84182"
-         transform="rotate(49.964978)"
-         cx="37.197327"
-         cy="-1.9582154"
-         r="1.3938026" />
-      <circle
-         id="path3435"
-         style="fill:#2c5aa0;stroke-width:0.41023"
-         inkscape:transform-center-x="186.84184"
-         inkscape:transform-center-y="184.88919"
-         transform="rotate(139.96498)"
-         cx="12.696502"
-         cy="-22.542395"
-         r="1.3938026" />
-      <circle
-         id="path3437"
-         style="fill:#2c5aa0;stroke-width:0.41023"
-         inkscape:transform-center-x="184.88919"
-         inkscape:transform-center-y="-186.84182"
-         transform="rotate(-130.03502)"
-         cx="-7.8877158"
-         cy="1.9584701"
-         r="1.3938026" />
-      <circle
-         id="path3439"
-         style="fill:#2c5aa0;stroke-width:0.41023"
-         inkscape:transform-center-x="-186.84183"
-         inkscape:transform-center-y="-184.88919"
-         transform="rotate(-40.035022)"
-         cx="16.613148"
-         cy="22.542608"
-         r="1.3938026" />
-    </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+ <g transform="scale(.4375)" fill="#2c5aa0">
+  <path transform="rotate(4.6641)" d="m18.642 14.774a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z" stroke-width=".64464"/>
+  <path transform="rotate(4.6641)" d="m17.248 8.3828c-3.5145 0-6.3906 2.8761-6.3906 6.3906 0 3.5145 2.8761 6.3906 6.3906 6.3906s6.3906-2.8761 6.3906-6.3906c0-3.5145-2.8761-6.3906-6.3906-6.3906zm0 2.5c2.1634 0 3.8906 1.7272 3.8906 3.8906 0 2.1634-1.7272 3.8906-3.8906 3.8906-2.1634 0-3.8906-1.7272-3.8906-3.8906 0-2.1634 1.7272-3.8906 3.8906-3.8906z" color="#000000" stroke-linecap="round" stroke-width="2.2857" style="-inkscape-stroke:none"/>
+  <g stroke-width=".64464">
+   <path transform="rotate(-85.336)" d="m-5.6221 17.248a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(4.6641)" d="m26.287 14.662a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(94.664)" d="m23.702-17.248a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(184.66)" d="m-8.208-14.662a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
   </g>
+  <g stroke-width=".64464">
+   <path transform="rotate(-55.412)" d="m4.9363 22.263a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(34.588)" d="m31.303 4.1035a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(124.59)" d="m13.143-22.263a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(214.59)" d="m-13.223-4.1033a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+  </g>
+  <g stroke-width=".64464">
+   <path transform="rotate(-23.442)" d="m17.346 21.059a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(66.558)" d="m30.098-8.3065a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(156.56)" d="m0.733-21.059a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(246.56)" d="m-12.019 8.3066a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+  </g>
+  <g stroke-width=".64464">
+   <path transform="rotate(-85.336)" d="m-5.6221 17.248a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(4.6641)" d="m26.287 14.662a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(94.664)" d="m23.702-17.248a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(184.66)" d="m-8.208-14.662a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+  </g>
+  <g stroke-width=".64464">
+   <path transform="rotate(-55.412)" d="m4.9363 22.263a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(34.588)" d="m31.303 4.1035a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(124.59)" d="m13.143-22.263a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(214.59)" d="m-13.223-4.1033a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+  </g>
+  <g stroke-width=".64464">
+   <path transform="rotate(-23.442)" d="m17.346 21.059a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(66.558)" d="m30.098-8.3065a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(156.56)" d="m0.733-21.059a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(246.56)" d="m-12.019 8.3066a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+  </g>
+  <g stroke-width=".64464">
+   <path transform="rotate(-85.336)" d="m-2.054 17.248a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(4.6641)" d="m29.792 14.598a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(94.664)" d="m27.143-17.248a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(184.66)" d="m-4.7039-14.598a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+  </g>
+  <g stroke-width=".64464">
+   <path transform="rotate(-66.371)" d="m4.3438 21.056a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(23.629)" d="m33.6 8.2008a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(113.63)" d="m20.744-21.056a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(203.63)" d="m-8.5118-8.2003a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+  </g>
+  <g stroke-width=".64463">
+   <path transform="rotate(-45.066)" d="m12.554 22.597a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(44.934)" d="m35.141-0.010511a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(134.93)" d="m12.534-22.597a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(224.93)" d="m-10.052 0.010286a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+  </g>
+  <g stroke-width=".64464">
+   <path transform="rotate(-28.007)" d="m19.183 21.599a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(61.993)" d="m34.143-6.6387a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(151.99)" d="m5.9055-21.6a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(241.99)" d="m-9.0551 6.6387a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+  </g>
+  <g stroke-width=".64464">
+   <path transform="rotate(-11.437)" d="m25.067 18.809a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(78.563)" d="m31.353-12.523a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(168.56)" d="m0.021072-18.809a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(258.56)" d="m-6.265 12.523a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+  </g>
+  <g stroke-width=".64464">
+   <path transform="rotate(-85.336)" d="m1.4025 17.248a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(4.6641)" d="m33.297 14.646a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(94.664)" d="m30.695-17.248a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(184.66)" d="m-1.1995-14.646a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+  </g>
+  <g stroke-width=".64463">
+   <path transform="rotate(-70.996)" d="m6.1307 20.338a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(19.004)" d="m36.386 9.9176a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(109)" d="m25.966-20.338a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(199)" d="m-4.2897-9.9178a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+  </g>
+  <g stroke-width=".64464">
+   <path transform="rotate(-9.9684)" d="m29.037 18.528a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(80.032)" d="m34.576-12.989a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(170.03)" d="m3.0597-18.528a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(260.03)" d="m-2.4799 12.989a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+  </g>
+  <g stroke-width=".64464">
+   <path transform="rotate(-23.809)" d="m24.228 21.097a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(66.191)" d="m37.146-8.1791a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(156.19)" d="m7.8694-21.097a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(246.19)" d="m-5.0488 8.1793a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(32.346)" d="m38.126 4.9569a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(122.35)" d="m21.006-22.078a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(212.35)" d="m-6.0293-4.9569a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(-57.654)" d="m11.091 22.078a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+  </g>
+  <g stroke-width=".64465">
+   <path transform="rotate(49.965)" d="m38.591-1.9582a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(139.96)" d="m14.09-22.542a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(229.96)" d="m-6.4939 1.9585a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+   <path transform="rotate(-40.035)" d="m18.007 22.543a1.3938 1.3938 0 0 1-1.3938 1.3938 1.3938 1.3938 0 0 1-1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938-1.3938 1.3938 1.3938 0 0 1 1.3938 1.3938z"/>
+  </g>
+ </g>
 </svg>

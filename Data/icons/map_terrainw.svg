@@ -1,53 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   version="1.1"
-   viewBox="0 0 22 22"
-   id="svg2"
-   sodipodi:docname="map_terrainw.svg"
-   width="22"
-   height="22"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs6" />
-  <sodipodi:namedview
-     id="namedview4"
-     pagecolor="#ff00ff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="true"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     inkscape:zoom="12.836707"
-     inkscape:cx="-31.277492"
-     inkscape:cy="28.589887"
-     inkscape:window-width="2560"
-     inkscape:window-height="1417"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="Image">
-    <g
-       id="g237"
-       transform="scale(0.6875)"
-       style="stroke-width:1.45455">
-      <path
-         style="color:#000000;fill:#fe8438;stroke-width:1.45455;stroke-linejoin:bevel;-inkscape-stroke:none"
-         d="M 28.464844,0 0,28.464844 3.5351563,32 32,3.5351563 Z"
-         id="path12145" />
-      <path
-         style="color:#000000;fill:#fe8438;stroke-width:1.45455;stroke-linejoin:bevel;-inkscape-stroke:none"
-         d="M 3.8886719,0 0,3.8886719 28.111328,32 32,28.111328 Z"
-         id="path12147" />
-    </g>
-  </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+ <g transform="scale(.4375)" fill="#fe8438" stroke-linejoin="bevel" stroke-width="2.2857">
+  <path d="m28.465 0-28.465 28.465 3.5352 3.5352 28.465-28.465z" color="#000000" style="-inkscape-stroke:none"/>
+  <path d="m3.8887 0-3.8887 3.8887 28.111 28.111 3.8887-3.8887z" color="#000000" style="-inkscape-stroke:none"/>
+ </g>
 </svg>

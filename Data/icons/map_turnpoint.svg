@@ -1,73 +1,16 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   version="1.1"
-   viewBox="0 0 22 22"
-   id="svg2"
-   sodipodi:docname="map_turnpoint.svg"
-   width="22"
-   height="22"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs6" />
-  <sodipodi:namedview
-     id="namedview4"
-     pagecolor="#ff00ff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="true"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     inkscape:zoom="18.153845"
-     inkscape:cx="-21.235171"
-     inkscape:cy="9.1440685"
-     inkscape:window-width="2560"
-     inkscape:window-height="1417"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="Image">
-    <g
-       id="g4170"
-       transform="scale(0.6875)"
-       style="stroke-width:1.45455">
-      <path
-         style="color:#000000;fill:#000000;stroke-width:1.45455;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:3;-inkscape-stroke:none;paint-order:stroke fill markers"
-         d="M 16,2.1308594 C 8.3520668,2.1308594 2.1308594,8.3520668 2.1308594,16 2.1308594,23.647933 8.3520668,29.869141 16,29.869141 23.647933,29.869141 29.869141,23.647933 29.869141,16 29.869141,8.3520668 23.647933,2.1308594 16,2.1308594 Z m 0,2 C 22.567054,4.1308594 27.869141,9.432946 27.869141,16 27.869141,22.567054 22.567054,27.869141 16,27.869141 9.432946,27.869141 4.1308594,22.567054 4.1308594,16 4.1308594,9.432946 9.432946,4.1308594 16,4.1308594 Z"
-         id="path1199" />
-      <path
-         style="color:#000000;fill:#000000;stroke-width:1.45455;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:3;-inkscape-stroke:none;paint-order:stroke fill markers"
-         d="m 16,11.318359 c -2.570882,0 -4.681641,2.110759 -4.681641,4.681641 0,2.570882 2.110759,4.681641 4.681641,4.681641 2.570882,0 4.681641,-2.110759 4.681641,-4.681641 0,-2.570882 -2.110759,-4.681641 -4.681641,-4.681641 z m 0,2.5 c 1.219784,0 2.181641,0.961859 2.181641,2.181641 0,1.219782 -0.961857,2.181641 -2.181641,2.181641 -1.219784,0 -2.181641,-0.961859 -2.181641,-2.181641 0,-1.219782 0.961857,-2.181641 2.181641,-2.181641 z"
-         id="path7623" />
-      <path
-         style="color:#000000;fill:#000000;stroke-width:3.63636;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:3;-inkscape-stroke:none;paint-order:stroke fill markers"
-         d="m 19.431945,16.000017 a 3.4318073,3.4318056 0 0 1 -3.431808,3.431806 3.4318073,3.4318056 0 0 1 -3.431807,-3.431806 3.4318073,3.4318056 0 0 1 3.431807,-3.431805 3.4318073,3.4318056 0 0 1 3.431808,3.431805 z"
-         id="path7625" />
-      <path
-         style="color:#000000;fill:#000000;stroke-width:1.45455;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:3;-inkscape-stroke:none;paint-order:stroke fill markers"
-         d="m 25.306641,14.75 a 1.25,1.25 0 0 0 -1.25,1.25 1.25,1.25 0 0 0 1.25,1.25 H 30.75 A 1.25,1.25 0 0 0 32,16 1.25,1.25 0 0 0 30.75,14.75 Z"
-         id="path1823" />
-      <path
-         style="color:#000000;fill:#000000;stroke-width:1.45455;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:3;-inkscape-stroke:none;paint-order:stroke fill markers"
-         d="m 16,0 a 1.25,1.25 0 0 0 -1.25,1.25 v 5.4433594 a 1.25,1.25 0 0 0 1.25,1.25 1.25,1.25 0 0 0 1.25,-1.25 V 1.25 A 1.25,1.25 0 0 0 16,0 Z"
-         id="path1923" />
-      <path
-         style="color:#000000;fill:#000000;stroke-width:1.45455;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:3;-inkscape-stroke:none;paint-order:stroke fill markers"
-         d="M 1.25,14.75 A 1.25,1.25 0 0 0 0,16 1.25,1.25 0 0 0 1.25,17.25 h 5.4433594 a 1.25,1.25 0 0 0 1.25,-1.25 1.25,1.25 0 0 0 -1.25,-1.25 z"
-         id="path1931" />
-      <path
-         style="color:#000000;fill:#000000;stroke-width:1.45455;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:3;-inkscape-stroke:none;paint-order:stroke fill markers"
-         d="m 16,24.056641 a 1.25,1.25 0 0 0 -1.25,1.25 V 30.75 A 1.25,1.25 0 0 0 16,32 1.25,1.25 0 0 0 17.25,30.75 v -5.443359 a 1.25,1.25 0 0 0 -1.25,-1.25 z"
-         id="path1937" />
-    </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+ <g transform="matrix(.34375 0 0 .34375 1.5001 1.5001)" stroke-linejoin="round" stroke-miterlimit="3" stroke-width="2.9091">
+  <g stroke-linecap="square">
+   <path d="m16 2.1309c-7.6479 0-13.869 6.2212-13.869 13.869 0 7.6479 6.2212 13.869 13.869 13.869 7.6479 0 13.869-6.2212 13.869-13.869 0-7.6479-6.2212-13.869-13.869-13.869zm0 2c6.5671 0 11.869 5.3021 11.869 11.869s-5.3021 11.869-11.869 11.869-11.869-5.3021-11.869-11.869 5.3021-11.869 11.869-11.869z" color="#000000" stroke-width="2.9091" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
+   <path d="m16 11.318c-2.5709 0-4.6816 2.1108-4.6816 4.6816s2.1108 4.6816 4.6816 4.6816 4.6816-2.1108 4.6816-4.6816-2.1108-4.6816-4.6816-4.6816zm0 2.5c1.2198 0 2.1816 0.96186 2.1816 2.1816s-0.96186 2.1816-2.1816 2.1816-2.1816-0.96186-2.1816-2.1816 0.96186-2.1816 2.1816-2.1816z" color="#000000" stroke-width="2.9091" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
+   <path d="m19.432 16a3.4318 3.4318 0 0 1-3.4318 3.4318 3.4318 3.4318 0 0 1-3.4318-3.4318 3.4318 3.4318 0 0 1 3.4318-3.4318 3.4318 3.4318 0 0 1 3.4318 3.4318z" color="#000000" stroke-width="7.2728" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
   </g>
+  <g stroke-linecap="round">
+   <path d="m25.307 14.75a1.25 1.25 0 0 0-1.25 1.25 1.25 1.25 0 0 0 1.25 1.25h5.4434a1.25 1.25 0 0 0 1.25-1.25 1.25 1.25 0 0 0-1.25-1.25z" color="#000000" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
+   <path d="m16 0a1.25 1.25 0 0 0-1.25 1.25v5.4434a1.25 1.25 0 0 0 1.25 1.25 1.25 1.25 0 0 0 1.25-1.25v-5.4434a1.25 1.25 0 0 0-1.25-1.25z" color="#000000" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
+   <path d="m1.25 14.75a1.25 1.25 0 0 0-1.25 1.25 1.25 1.25 0 0 0 1.25 1.25h5.4434a1.25 1.25 0 0 0 1.25-1.25 1.25 1.25 0 0 0-1.25-1.25z" color="#000000" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
+   <path d="m16 24.057a1.25 1.25 0 0 0-1.25 1.25v5.4434a1.25 1.25 0 0 0 1.25 1.25 1.25 1.25 0 0 0 1.25-1.25v-5.4434a1.25 1.25 0 0 0-1.25-1.25z" color="#000000" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
+  </g>
+ </g>
 </svg>

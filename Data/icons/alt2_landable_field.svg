@@ -1,53 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   version="1.1"
-   viewBox="0 0 22 22"
-   id="svg2"
-   sodipodi:docname="alt2_landable_field.svg"
-   width="22"
-   height="22"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs6" />
-  <sodipodi:namedview
-     id="namedview4"
-     pagecolor="#ff00ff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="true"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     inkscape:zoom="6.4183538"
-     inkscape:cx="-15.969827"
-     inkscape:cy="50.168627"
-     inkscape:window-width="2560"
-     inkscape:window-height="1417"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="Image">
-    <g
-       id="g1851"
-       transform="scale(0.6875)"
-       style="stroke-width:1.45455">
-      <path
-         d="M 32,16.001265 A 16,16 0 0 1 9.9999998e-8,16.001265 16,16 0 1 1 32,16.001265 Z"
-         id="path2830-4-5"
-         style="opacity:0.99;fill:#ff0000;fill-rule:evenodd;stroke-width:1.45455" />
-      <path
-         style="color:#000000;fill:#000000;stroke-width:1.45455;stroke-linecap:square;-inkscape-stroke:none"
-         d="M 27.314453,2.5644531 26.253906,3.625 3.625,26.253906 2.5644531,27.314453 4.6855469,29.435547 5.7460937,28.375 28.375,5.7460937 29.435547,4.6855469 Z"
-         id="path2833" />
-    </g>
-  </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+ <g transform="scale(.4375)" stroke-width="2.2857">
+  <path d="m32 16.001a16 16 0 0 1-32 0 16 16 0 1 1 32 0z" fill="#f00" fill-rule="evenodd" opacity=".99"/>
+  <path d="m27.314 2.5645-24.75 24.75 2.1211 2.1211 24.75-24.75z" color="#000000" stroke-linecap="square" style="-inkscape-stroke:none"/>
+ </g>
 </svg>

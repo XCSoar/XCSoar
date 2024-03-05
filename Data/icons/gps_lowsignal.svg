@@ -1,77 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   version="1.1"
-   viewBox="0 0 32 32"
-   id="svg2"
-   sodipodi:docname="gps_lowsignal.svg"
-   width="32"
-   height="32"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs6" />
-  <sodipodi:namedview
-     id="namedview4"
-     pagecolor="#ff00ff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="true"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     inkscape:zoom="18.153847"
-     inkscape:cx="1.7902542"
-     inkscape:cy="26.275423"
-     inkscape:window-width="2560"
-     inkscape:window-height="1417"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="Image">
-    <g
-       id="g6569">
-      <circle
-         style="display:inline;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1.77644"
-         id="ellipse12480"
-         cx="16"
-         cy="16"
-         r="16" />
-      <ellipse
-         style="display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.40245"
-         id="ellipse12482"
-         cx="16"
-         cy="15.999998"
-         rx="12.631579"
-         ry="12.631578" />
-      <rect
-         y="16.842104"
-         x="6.7368426"
-         height="3.3684211"
-         width="5.0526314"
-         id="rect12488"
-         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:1" />
-      <rect
-         y="13.473683"
-         x="13.473685"
-         height="6.7368422"
-         width="5.0526314"
-         id="rect12490"
-         style="display:inline;fill:#cccccc;fill-opacity:1;stroke:none;stroke-width:1" />
-      <rect
-         y="10.105263"
-         x="20.210527"
-         height="10.105263"
-         width="5.0526314"
-         id="rect12494"
-         style="display:inline;fill:#cccccc;fill-opacity:1;stroke:none;stroke-width:1" />
-    </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+ <g transform="scale(.6875)">
+  <path d="m32 16a16 16 0 0 1-16 16 16 16 0 0 1-16-16 16 16 0 0 1 16-16 16 16 0 0 1 16 16z" fill="#f00" stroke-width="2.5839"/>
+  <path d="m28.632 16a12.632 12.632 0 0 1-12.632 12.632 12.632 12.632 0 0 1-12.632-12.632 12.632 12.632 0 0 1 12.632-12.632 12.632 12.632 0 0 1 12.632 12.632z" fill="#fff" stroke-width="2.0399"/>
+  <g stroke-width="1.4546">
+   <path d="m6.7368 16.842h5.0526v3.3684h-5.0526z"/>
+   <path d="m13.474 13.474h5.0526v6.7368h-5.0526z" fill="#ccc"/>
+   <path d="m20.211 10.105h5.0526v10.105h-5.0526z" fill="#ccc"/>
   </g>
+ </g>
 </svg>

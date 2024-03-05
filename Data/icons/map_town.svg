@@ -1,58 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   version="1.1"
-   viewBox="0 0 22 22"
-   id="svg2"
-   sodipodi:docname="map_town.svg"
-   width="22"
-   height="22"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs6" />
-  <sodipodi:namedview
-     id="namedview4"
-     pagecolor="#ff00ff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="true"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     inkscape:zoom="1.6045884"
-     inkscape:cx="-236.50925"
-     inkscape:cy="20.566022"
-     inkscape:window-width="2560"
-     inkscape:window-height="1417"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="Image">
-    <g
-       transform="matrix(0.99692305,0,0,0.99692305,-1.9599996,-11.92923)"
-       id="g4379"
-       style="stroke-width:1.30401;stroke-dasharray:none">
-      <circle
-         cx="13"
-         cy="23"
-         r="4.5"
-         id="circle4375"
-         style="stroke-width:1.30401;stroke-dasharray:none" />
-      <circle
-         cx="13"
-         cy="23"
-         r="3.5"
-         fill="#ffff00"
-         id="circle4377"
-         style="stroke-width:1.30401;stroke-dasharray:none" />
-    </g>
-  </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+ <g transform="matrix(.66462 0 0 .66462 -1.64 -8.2862)" stroke-width="1.956">
+  <circle cx="13" cy="23" r="4.5"/>
+  <circle cx="13" cy="23" r="3.5" fill="#ff0"/>
+ </g>
 </svg>
