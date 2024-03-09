@@ -84,6 +84,7 @@ AirspacePreviewRenderer::UnprepareFill([[maybe_unused]] Canvas &canvas)
 #ifdef ENABLE_OPENGL
   ::glDisable(GL_BLEND);
 #elif defined(USE_GDI)
+  canvas.SetTextColor(COLOR_BLACK);
   canvas.SetMixCopy();
 #endif
 }

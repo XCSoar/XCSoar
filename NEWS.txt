@@ -1,4 +1,6 @@
 Version 7.43 - not yet released
+* windows
+ - black text color in airspace list like all other systems
 * Kobo
   - fix Wifi configuration
   - fix oversized icons
