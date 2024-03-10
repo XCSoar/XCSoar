@@ -1,5 +1,8 @@
 version: 2
 
+build:
+  os: ubuntu-lts-latest
+
 python:
   install:
     - requirements: doc/requirements.txt
