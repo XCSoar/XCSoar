@@ -54,3 +54,25 @@ FormatVerticalAngleDelta(TCHAR *buffer, size_t size, Angle value)
   else
     _tcscpy(buffer, _T("--"));
 }
+
+void
+FormatBearingCompass(TCHAR *buffer, size_t size, unsigned angle, int level)
+{
+  assert(buffer != NULL);
+  assert (size >= 4 );
+
+  const TCHAR* table[3][16]={
+                            {"N","E","S","W"},
+                            {"N","NE","E","SE","S","SW","W","NW"},
+                            {"N","NNE","NE","ENE","E","ESE","SE","SSE",
+		             "S","SSW","SW","WSW","W","WNW","NW","NNW"}};
+
+_tcscpy(buffer, table[level][(int) (fmod((angle + 45/pow(2,level)),360 ) / 
+			                             (90/pow(2,level)))]);
+}
+
+void
+FormatBearingCompass(TCHAR *buffer, size_t size, Angle angle, int level)
+{
+  FormatBearingCompass(buffer, size, angle.AsBearing().Degrees(),level);
+}
