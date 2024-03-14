@@ -37,5 +37,5 @@ RadarRenderer::At(Angle angle, unsigned radius) const noexcept
 void
 RadarRenderer::DrawCircle(Canvas &canvas, unsigned circle_radius) const noexcept
 {
-  canvas.DrawCircle(center, circle_radius / 2);
+  canvas.DrawCircle(center, circle_radius);
 }
