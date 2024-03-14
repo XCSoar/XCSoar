@@ -210,7 +210,11 @@ FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const noexcept
   canvas.Select(look.no_traffic_font);
   PixelSize ts = canvas.CalcTextSize(str);
   canvas.SetTextColor(look.default_color);
-  canvas.DrawText(radar_renderer.GetCenter() - PixelSize{ts.width / 2, radar_renderer.GetRadius() / 2}, str);
+  canvas.DrawText(
+      radar_renderer.GetCenter() -
+          PixelSize{ts.width / 2, radar_renderer.GetRadius() -
+                                      radar_renderer.GetRadius() / 4},
+      str);
 }
 
 [[gnu::const]]
