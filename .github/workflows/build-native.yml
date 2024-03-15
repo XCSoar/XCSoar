@@ -175,6 +175,9 @@ jobs:
             libxml-parser-perl \
             libasound2-dev
 
+      - name: workaround random bits value in github actions
+        run: sudo sysctl --write vm.mmap_rnd_bits=28
+
       - name: Compile XCSoar
         run: |
           make -j$(nproc) TARGET=${{env.TARGET }} DEBUG=${{ env.DEBUG }} VFB=y SANITIZE=y DEBUG_GLIBCXX=y USE_CCACHE=y V=2 everything check

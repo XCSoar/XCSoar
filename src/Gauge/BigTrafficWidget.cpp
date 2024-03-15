@@ -39,7 +39,7 @@ protected:
 public:
   FlarmTrafficControl(const FlarmTrafficLook &look)
     :FlarmTrafficWindow(look, Layout::Scale(10),
-                        Layout::GetMinimumControlHeight() + Layout::Scale(2)) {}
+                        Layout::GetMinimumControlHeight() + Layout::Scale(10)) {}
 
 protected:
   void CalcAutoZoom();
