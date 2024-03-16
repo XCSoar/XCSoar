@@ -24,6 +24,33 @@ static const TCHAR *const airspace_class_names[] = {
   _T("Class G"),
   _T("Military Aerodrome Traffic Zone"),
   _T("Radio Mandatory Zone"),
+  _T("Unclassified"),
+  _T("Restricted"),
+  _T("TMA"),
+  _T("Temporary Reserved Airspace"),
+  _T("Temporary Segregated Area"),
+  _T("Flight Information Region"),
+  _T("Upper Flight Information Region"),
+  _T("Air Defense Identification Zone"),
+  _T("Aerodrome Traffic Zone"),
+  _T("Airway"),
+  _T("Military Training Route"),
+  _T("Alert Area"),
+  _T("Warning Area"),
+  _T("Protected Area"),
+  _T("Hazardous Area"),
+  _T("Gliding Sector"),
+  _T("Temporary Reserved Prohibited Area"),
+  _T("Terminal Information Zone"),
+  _T("Terminal Instrument Approach Procedure Area"),
+  _T("Military Training Area"),
+  _T("Control Area"),
+  _T("Area Control Center Sector"),
+  _T("Aerial Sporting Recreational"),
+  _T("Overflight Restriction"),
+  _T("Military Restricted Area"),
+  _T("Temporary Flight Restriction"),
+  _T("Visual Flight Rules Sector"),
 };
 
 static_assert(ARRAY_SIZE(airspace_class_names) ==
@@ -50,6 +77,33 @@ static const TCHAR *const airspace_class_short_names[] = {
   _T("G"),
   _T("MATZ"),
   _T("RMZ"),
+  _T("Unclassified"),
+  _T("Rest"),
+  _T("TMA"),
+  _T("TTRA"),
+  _T("TSA"),
+  _T("FIR"),
+  _T("UIR"),
+  _T("ADIZ"),
+  _T("AATZ"),
+  _T("AWY"),
+  _T("MTR"),
+  _T("Alert"),
+  _T("Warning"),
+  _T("Protected"),
+  _T("HTZ"),
+  _T("Gld_Sec"),
+  _T("TRP"),
+  _T("TIZ"),
+  _T("TIA"),
+  _T("MTA"),
+  _T("CTA"),
+  _T("ACC_Sec"),
+  _T("ASR"),
+  _T("OverFl_Restr"),
+  _T("MRT"),
+  _T("TFR"),
+  _T("VFR_Sec"),
 };
 
 static_assert(ARRAY_SIZE(airspace_class_short_names) ==
@@ -90,5 +144,5 @@ AirspaceFormatter::GetClassShort(const AbstractAirspace &airspace)
 const TCHAR *
 AirspaceFormatter::GetType(const AbstractAirspace &airspace)
 {
-  return airspace.GetType();
+  return GetClass(airspace.GetType());
 }

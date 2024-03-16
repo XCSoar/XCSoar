@@ -137,10 +137,16 @@ aktualisiert:
 \end{center}
 
 Hier sind ebenfalls die exakten Daten der deutschen Grenze sowie aller deutschen Fallschirmsprungzonen
-erhältlich. Folgende Lufträume werden von \xc bislang unterstützt und demgemäß zur Auswahl angeboten:
+erhältlich. Folgende Lufträume werden von \xc~bislang unterstützt und demgemäß zur Auswahl angeboten:
 
-Klasse A-G, Sperrgebiete, Gefahrengebiete, AAT-Gebiete, Segelflugsektoren, Wellenfenster, TMZ, und
-''andere''.  Alle anderen Gebiete werden als ''andere'' dargestellt.
+ICAO-Klasse A bis G, Eingeschränktes-Gebiet, Verbots-Gebiet, Gefahren-Gebiet, Keine-Segelflugzeug, Kontrollzone,
+AAT-Gebiet, Segelflugsektor, Wellenfenster, TMZ und
+''andere''.
+
+Für das OpenAir erweiterte Format (siehe \url{https://www.openaip.net/docs}) wird, falls im AC-Tag die ICAO-Klasse
+A bis G oder UNCLASSIFIED ist, der 'AY'-Tag als Klasse interpretiert und entsprechend dargestellt.
+
+Alle anderen Gebiete werden als ''andere'' dargestellt.
 
 Neben dem OpenAir-Standard wird zur Festlegung der Funkfrequenz der Befehl 'AF' oder 'AR' verwendet.
 Notiz. Seit 2018 bietet Naviter diesen Zusatz 'AF 999.999' an (suchen Sie hier 'Additional OpenAir fields' - \url{http://www.winpilot.com/UsersGuide/UserAirspace.asp})

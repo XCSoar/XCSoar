@@ -138,7 +138,7 @@ public:
 
 private:
   bool SetupOutline(const AbstractAirspace &airspace) {
-    AirspaceClass type = airspace.GetClass();
+    AirspaceClass type = airspace.GetType() == AirspaceClass::OTHER ? airspace.GetClass() : airspace.GetType();
 
     if (settings.black_outline)
       canvas.SelectBlackPen();
@@ -258,7 +258,7 @@ public:
 
 private:
   bool SetupOutline(const AbstractAirspace &airspace) {
-    AirspaceClass type = airspace.GetClass();
+    AirspaceClass type = airspace.GetType() == AirspaceClass::OTHER ? airspace.GetClass() : airspace.GetType();
 
     if (settings.black_outline)
       canvas.SelectBlackPen();
