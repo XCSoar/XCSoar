@@ -4,6 +4,7 @@
 #include "AngleFormatter.hpp"
 #include "Math/Angle.hpp"
 #include "util/StringFormat.hpp"
+#include "Language/Language.hpp"
 
 #include <cassert>
 #include <string.h>
@@ -62,13 +63,13 @@ FormatBearingCompass(TCHAR *buffer, size_t size, unsigned angle, int level)
   assert (size >= 4 );
 
   const TCHAR* table[3][16]={
-                            {"N","E","S","W"},
-                            {"N","NE","E","SE","S","SW","W","NW"},
-                            {"N","NNE","NE","ENE","E","ESE","SE","SSE",
-		             "S","SSW","SW","WSW","W","WNW","NW","NNW"}};
+                      {N_("N"),N_("E"),N_("S"),N_("W")},
+                      {"N",N_("NE"),"E",N_("SE"),"S",N_("SW"),"W",N_("NW")},
+                      {"N",N_("NNE"),"NE",N_("ENE"),"E",N_("ESE"),"SE",N_("SSE"),
+		       "S",N_("SSW"),"SW",N_("WSW"),"W",N_("WNW"),"NW",N_("NNW")}};
 
-_tcscpy(buffer, table[level][(int) (fmod((angle + 45/pow(2,level)),360 ) / 
-			                             (90/pow(2,level)))]);
+_tcscpy(buffer, _(table[level][(int) (fmod((angle + 45/pow(2,level)),360 ) / 
+			                             (90/pow(2,level)))]));
 }
 
 void
