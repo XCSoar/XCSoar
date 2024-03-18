@@ -26,10 +26,11 @@ BallastProcessTimer() noexcept
   last_fraction = settings.ballast_fraction_available;
 
   if (settings.ballast_overload_available.Modified(last_overload) &&
-      settings.ballast_overload >= 1 &&
-      plane.max_ballast > 0) {
-    auto fraction = ((settings.ballast_overload - 1) *
-                     (plane.empty_mass + polar.GetCrewMass())) / plane.max_ballast;
+      settings.ballast_overload >= 0.8 && plane.max_ballast > 0) {
+    auto fraction =
+        ((settings.ballast_overload * plane.polar_shape.reference_mass) -
+         polar.GetCrewMass() - plane.empty_mass) /
+        plane.max_ballast;
     ActionInterface::SetBallast(fraction, false);
     modified = true;
   }

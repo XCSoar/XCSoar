@@ -63,7 +63,7 @@ public:
     PublishPolarSettings();
     SetBallast();
   }
-  
+
   void SetBallast();
   void SetBallastTimer(bool active);
   void FlipBallastTimer();
@@ -139,7 +139,7 @@ FlightSetupPanel::SetBallast()
       auto dry_mass = plane.empty_mass + polar_settings.glide_polar_task.GetCrewMass();
       auto fraction = polar_settings.glide_polar_task.GetBallast();
       auto overload = (dry_mass + fraction * plane.max_ballast) /
-        dry_mass;
+                      plane.polar_shape.reference_mass;
 
       MessageOperationEnvironment env;
       backend_components->devices->PutBallast(fraction, overload, env);
@@ -268,7 +268,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent,
            0, 300, 5, false, UnitGroup::MASS,
            polar_settings.glide_polar_task.GetCrewMass(),
            this);
-  
+
   const double db = 5;
   AddFloat(_("Ballast"),
            _("Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."),
