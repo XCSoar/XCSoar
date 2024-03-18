@@ -90,8 +90,9 @@ GotoTask::TakeoffAutotask(const GeoPoint& location, const double terrain_alt)
 
   auto wp = waypoints.GetNearestLandable(location, 5000);
   if (!wp)
-    wp = std::make_unique<Waypoint>(waypoints.GenerateTakeoffPoint(location,
-                                                                   terrain_alt));
+    wp = std::make_unique<Waypoint>(waypoints.GenerateTempPoint(location,
+                                                                terrain_alt,
+                                                              _T("(takeoff)")));
 
   return DoGoto(std::move(wp));
 }
