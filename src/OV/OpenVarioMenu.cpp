@@ -28,9 +28,11 @@
 #include "util/PrintException.hxx"
 #include "util/ScopeExit.hxx"
 #include "LocalPath.hpp"
+#include "System.hpp"
 
 #include <cassert>
 #include <cstdio>
+#include <thread>
 
 enum Buttons {
   LAUNCH_SHELL = 100,
@@ -444,6 +446,12 @@ Main()
   UI::TopWindowStyle main_style;
   main_style.Resizable();
 
+  DisplayOrientation orientation = DisplayOrientation::DEFAULT;
+  try {
+    orientation = OpenvarioGetRotation();
+  } catch (...) {}
+  main_style.InitialOrientation(orientation);
+
   UI::SingleWindow main_window{screen_init.GetDisplay()};
   main_window.Create(_T("XCSoar/OpenVarioMenu"), {600, 800}, main_style);
   main_window.Show();
@@ -462,6 +470,9 @@ Main()
 
 int main()
 {
+  /*the x-menu is waiting a second to solve timing problem with display rotation */
+  std::this_thread::sleep_for(std::chrono::seconds(1));
+
   try {
     InitialiseDataPath();
     have_data_path = true;
