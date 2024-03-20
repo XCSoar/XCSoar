@@ -10,6 +10,8 @@
 
 #ifdef _UNICODE
 #include "system/ConvertPathName.hpp"
+#else
+#include <tchar.h>
 #endif
 
 #include <list>
