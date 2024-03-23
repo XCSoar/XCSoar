@@ -223,6 +223,8 @@ constexpr std::string_view FlarmSideData = "FlarmRadarSideData";
 constexpr std::string_view FlarmAutoZoom = "FlarmRadarAutoZoom";
 constexpr std::string_view FlarmNorthUp = "FlarmRadarNorthUp";
 
+constexpr std::string_view NavigatorHeight = "NavigatorHeight";
+
 constexpr std::string_view IgnoreNMEAChecksum = "IgnoreNMEAChecksum";
 constexpr std::string_view MapOrientation = "DisplayOrientation";
 
