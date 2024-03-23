@@ -52,6 +52,10 @@ public:
     return FromMinuteOfDay(std::chrono::duration_cast<std::chrono::minutes>(since_midnight).count());
   }
 
+  static constexpr RoughTime FromSinceMidnight(const TimeStamp &since_midnight) noexcept {
+    return RoughTime(std::chrono::floor<std::chrono::minutes>(since_midnight.ToDuration()));
+  }
+
   static constexpr RoughTime FromMinuteOfDayChecked(int mod) noexcept {
     while (mod < 0)
       mod += MAX.count();
@@ -142,6 +146,10 @@ public:
 
     value = (value + MAX - Duration{1}) % MAX;
     return *this;
+  }
+
+  constexpr Duration operator -(RoughTime other) const noexcept {
+    return value - other.value;
   }
 
   constexpr operator TimeStamp() const noexcept {
