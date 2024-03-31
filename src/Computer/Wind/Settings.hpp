@@ -16,6 +16,8 @@ struct WindSettings {
    * Use the circling algorithm to calculate the wind?
    */
   bool circling_wind;
+  // new algorithm, under validation
+  bool circling_wind_new;
 
   /**
    * Use the EKF algorithm to calculate the wind? (formerly known as
@@ -40,6 +42,10 @@ struct WindSettings {
 
   constexpr bool CirclingWindEnabled() const noexcept {
     return circling_wind;
+  }
+
+  constexpr bool CirclingWind2Enabled() const noexcept {
+    return circling_wind_new;
   }
 
   constexpr bool ZigZagWindEnabled() const noexcept {

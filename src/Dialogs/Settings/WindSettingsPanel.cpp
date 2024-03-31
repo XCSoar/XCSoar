@@ -37,6 +37,10 @@ WindSettingsPanel::Prepare(ContainerWindow &parent,
   const WindSettings &settings = CommonInterface::GetComputerSettings().wind;
   const MapSettings &map_settings = CommonInterface::GetMapSettings();
 
+  AddBoolean(_("new Circling wind"),
+             _("Estimate the wind vector while circling.  Requires a GPS. Improves with airspeed sensor."),
+             settings.circling_wind_new);
+
   AddBoolean(_("Circling wind"),
              _("Estimate the wind vector while circling.  Requires only a GPS."),
              settings.circling_wind);
@@ -118,6 +122,7 @@ WindSettingsPanel::Save(bool &_changed) noexcept
   bool changed = false;
 
   bool auto_wind_changed = SaveValue(CIRCLING_WIND, settings.circling_wind);
+  auto_wind_changed |= SaveValue(CIRCLING_WIND, settings.circling_wind_new);
   auto_wind_changed |= SaveValue(ZIG_ZAG_WIND, settings.zig_zag_wind);
 
   if (auto_wind_changed) {
