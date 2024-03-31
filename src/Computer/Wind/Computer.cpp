@@ -10,6 +10,7 @@ void
 WindComputer::Reset()
 {
   circling_wind.Reset();
+  circling_wind2.Reset();
   wind_ekf.Reset();
   wind_store.reset();
   ekf_active = false;
@@ -41,6 +42,12 @@ WindComputer::Compute(const WindSettings &settings,
 
   if (settings.CirclingWindEnabled()) {
     CirclingWind::Result result = circling_wind.NewSample(basic, calculated);
+    if (result.IsValid())
+      wind_store.SlotMeasurement(basic, result.wind, result.quality);
+  }
+
+  if (settings.CirclingWind2Enabled()) {
+    CirclingWind2::Result result = circling_wind2.NewSample(basic, calculated);
     if (result.IsValid())
       wind_store.SlotMeasurement(basic, result.wind, result.quality);
   }

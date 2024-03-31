@@ -4,6 +4,7 @@
 #pragma once
 
 #include "CirclingWind.hpp"
+#include "CirclingWind2.hpp"
 #include "WindEKFGlue.hpp"
 #include "Store.hpp"
 
@@ -20,6 +21,7 @@ struct DerivedInfo;
  */
 class WindComputer {
   CirclingWind circling_wind;
+  CirclingWind2 circling_wind2;
   WindEKFGlue wind_ekf;
 
   // TODO: protect with a Mutex
