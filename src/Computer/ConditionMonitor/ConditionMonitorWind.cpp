@@ -27,7 +27,7 @@ ConditionMonitorWind::CheckCondition([[maybe_unused]] const NMEAInfo &basic,
   // monitor wind vector
   const BrokenDateTime t = basic.date_time_utc;
   char log_buf[200];
-  sprintf (log_buf,"MonitorWind,%d,%d,%1.1f,%1.1f,%d",
+  snprintf (log_buf,sizeof(log_buf),"MonitorWind,%d,%d,%1.1f,%1.1f,%d",
       (t.hour * 60 + t.minute) * 60 + t.second,calculated.circling,
       Units::ToUserWindSpeed(wind.norm),wind.bearing.Degrees(),(int)basic.baro_altitude);
   LogString(log_buf);
