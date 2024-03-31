@@ -169,8 +169,8 @@ CirclingWind2::CalcWind(double quality_metric, const size_t n_samples, [[ maybe_
     wind_speed += abs(samples[i].ground_speed - samples[i].tas - speed_offset);
   }
   // TO DO: subtract the ammount exceeding the full circle
-  wind_speed /= n_samples;
-  wind_speed *= 0.6366; // the ratio of the average over integral over the sine 
+  wind_speed /= n_samples; // average
+  wind_speed *= 1.5708; // the ratio of the average to the amplitude of a sine curve
 
   if (wind_speed >= 30)
     // limit to reasonable values (30 m/s), reject otherwise
