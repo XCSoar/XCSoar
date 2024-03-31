@@ -228,8 +228,6 @@ CirclingWind2::CalcWind(double quality_metric, const size_t n_samples, [[ maybe_
   quality = std::max(std::min(quality,5),0);
 
   SpeedVector wind(wind_dir.AsBearing(), wind_speed);
-  printf("CalcWind2 circling: %1.1f°, %1.1f km/h, Q=%d, QM=%1.2f, fit=%1.1f\n",
-    wind_dir.AsBearing().Degrees(),wind_speed,quality,quality_metric,min_fit_metric);
   return Result(quality, wind);
 }
 
