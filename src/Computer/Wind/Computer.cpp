@@ -13,6 +13,7 @@ WindComputer::Reset()
   wind_ekf.Reset();
   wind_store.reset();
   ekf_active = false;
+  use_circling_wind_experimental = (getenv("CIRCLING_WIND_EXPERIMENTAL"));
 }
 
 [[gnu::pure]]
@@ -40,9 +41,15 @@ WindComputer::Compute(const WindSettings &settings,
     return;
 
   if (settings.CirclingWindEnabled()) {
-    CirclingWind::Result result = circling_wind.NewSample(basic, calculated);
-    if (result.IsValid())
-      wind_store.SlotMeasurement(basic, result.wind, result.quality);
+    if (use_circling_wind_experimental) {
+      CirclingWind2::Result result = circling_wind2.NewSample(basic, calculated);
+      if (result.IsValid())
+        wind_store.SlotMeasurement(basic, result.wind, result.quality);
+    } else {
+      CirclingWind::Result result = circling_wind.NewSample(basic, calculated);
+      if (result.IsValid())
+        wind_store.SlotMeasurement(basic, result.wind, result.quality);
+    }
   }
 
   if (settings.ZigZagWindEnabled() &&
