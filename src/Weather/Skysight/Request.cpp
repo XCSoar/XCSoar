@@ -14,6 +14,7 @@
 #include "LogFile.hpp"
 #include "util/StaticString.hxx"
 #include "lib/curl/Slist.hxx"
+#include "Version.hpp"
 
 void
 SkysightRequest::FileHandler::OnData(std::span<const std::byte> data)
@@ -216,7 +217,7 @@ SkysightAsyncRequest::Done()
 bool
 SkysightRequest::RequestToFile()
 {
-  LogFormat("Connecting to %s for %s with key %s", args.url.c_str(), args.path.c_str(), key.c_str());
+  LogFormat("Connecting to %s for %s with key:%s user-agent:%s", args.url.c_str(), args.path.c_str(), key.c_str(), XCSoar_ProductToken);
 
   Path final_path = Path(args.path.c_str());
   AllocatedPath temp_path = final_path.WithSuffix(".dltemp");
@@ -232,8 +233,11 @@ SkysightRequest::RequestToFile()
   FileHandler handler(file);
   CurlRequest request(*Net::curl, args.url.c_str(), handler);
   CurlSlist request_headers;
+
   char api_key_buffer[4096];
   snprintf(api_key_buffer, sizeof(api_key_buffer), "%s: %s", "X-API-Key", key.c_str());
+  request_headers.Append(api_key_buffer);
+  snprintf(api_key_buffer, sizeof(api_key_buffer), "%s: %s", "User-Agent", XCSoar_ProductToken);
   request_headers.Append(api_key_buffer);
 
   tstring pBody;
@@ -278,7 +282,7 @@ SkysightRequest::RequestToFile()
 bool
 SkysightRequest::RequestToBuffer(tstring &response)
 {
-  LogFormat("Connecting to %s with key %s", args.url.c_str(), key.c_str());
+  LogFormat("Connecting to %s for %s with key:%s user-agent:%s", args.url.c_str(), args.path.c_str(), key.c_str(), XCSoar_ProductToken);
 
   bool success = true;
 
@@ -286,8 +290,11 @@ SkysightRequest::RequestToBuffer(tstring &response)
   BufferHandler handler(buffer, sizeof(buffer));
   CurlRequest request(*Net::curl, args.url.c_str(), handler);
   CurlSlist request_headers;
+
   char api_key_buffer[4096];
   snprintf(api_key_buffer, sizeof(api_key_buffer), "%s: %s", "X-API-Key", key.c_str());
+  request_headers.Append(api_key_buffer);
+  snprintf(api_key_buffer, sizeof(api_key_buffer), "%s: %s", "User-Agent", XCSoar_ProductToken);
   request_headers.Append(api_key_buffer);
 
   tstring pBody;
