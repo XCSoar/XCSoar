@@ -186,7 +186,7 @@ CirclingWind2::CalcWind(double quality_metric, const size_t n_samples, [[ maybe_
   Angle search_step_width = circle.Absolute() / search_steps;
   search_steps += 1;
   Angle probe_point;
-  double fit_metric = 0;
+  double fit_metric;
   // initialize to a large number
   double min_fit_metric = INITIAL_min_fit_metric;
 
@@ -195,7 +195,8 @@ CirclingWind2::CalcWind(double quality_metric, const size_t n_samples, [[ maybe_
   // attempt to fit to cosine curve
   do {
     // make sure we don't loop forever
-    assert(max_iterations-- > 0);
+    assert(max_iterations > 0); 
+    max_iterations -= 1;
 
     probe_point = search_midpoint - (search_step_width * ((double)search_steps/2.0));
 
@@ -216,7 +217,7 @@ CirclingWind2::CalcWind(double quality_metric, const size_t n_samples, [[ maybe_
 
   if (min_fit_metric > (INITIAL_min_fit_metric - 1)) {
     LogString("CirclingWind2 doesn't converge");
-    Result(0); // it doesn't converge
+    return Result(0); // it doesn't converge
   }
 
   // TO DO: iterate over wind_speed?
@@ -241,12 +242,11 @@ CirclingWind2::FitCosine(const size_t n_samples, const double amplitude, const d
 // fit the measured speed data to a cosine
 // uses the "sum of squares" algorithm
 {
-  double net_speed_diff = 0;
   double sum_of_squares_of_deltas = 0;
 
   for (size_t i = 0; i < n_samples; i++) {
     const double cosine_curve = fastcosine((samples[i].track + phase).Radians());
-    net_speed_diff = samples[i].ground_speed - samples[i].tas - offset;
+    double net_speed_diff = samples[i].ground_speed - samples[i].tas - offset;
     // to make the fit metric (somewhat) independent of the amplitude
     if (amplitude > 1.0) net_speed_diff /= amplitude;
     sum_of_squares_of_deltas += Square(cosine_curve-net_speed_diff);
