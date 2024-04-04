@@ -1,7 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
- <g transform="matrix(.43747 0 0 .43747 .00042201 -8.9048)" stroke-linecap="round" stroke-linejoin="round">
-  <path d="m16 20.355a1.2501 1.2501 0 0 0-1.2051 0.92188l-8.0508 29.5a1.25 1.25 0 0 0 0.87695 1.5352 1.25 1.25 0 0 0 1.5352-0.87695l6.8438-25.084 6.8438 25.084a1.25 1.25 0 0 0 1.5352 0.87695 1.25 1.25 0 0 0 0.87695-1.5352l-8.0508-29.5a1.2501 1.2501 0 0 0-1.2051-0.92188z" color="#000000" stroke-miterlimit="3" stroke-width="2.2858" style="-inkscape-stroke:none"/>
-  <ellipse cx="16" cy="49.26" rx="2.228" ry="2.1881" stroke-miterlimit="5.3" stroke-width="5.7146"/>
- </g>
+<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="path-1-outside-1_17_139" maskUnits="userSpaceOnUse" x="0" y="-0.5" width="14" height="20" fill="black">
+<rect fill="white" y="-0.5" width="14" height="20"/>
+<path d="M7 3.5L2 18H3.86279L7 7.78101L10.1376 18H12L7 3.5Z"/>
+</mask>
+<path d="M7 3.5L2 18H3.86279L7 7.78101L10.1376 18H12L7 3.5Z" fill="#444444"/>
+<path d="M7 3.5L2 18H3.86279L7 7.78101L10.1376 18H12L7 3.5Z" stroke="white" stroke-width="2" mask="url(#path-1-outside-1_17_139)"/>
+<mask id="path-2-outside-2_17_139" maskUnits="userSpaceOnUse" x="5" y="16" width="4" height="4" fill="black">
+<rect fill="white" x="5" y="16" width="4" height="4"/>
+<path d="M8 18C8 18.5523 7.55228 19 7 19C6.44772 19 6 18.5523 6 18C6 17.4477 6.44772 17 7 17C7.55228 17 8 17.4477 8 18Z"/>
+</mask>
+<path d="M8 18C8 18.5523 7.55228 19 7 19C6.44772 19 6 18.5523 6 18C6 17.4477 6.44772 17 7 17C7.55228 17 8 17.4477 8 18Z" fill="#444444"/>
+<path d="M8 18C8 18.5523 7.55228 19 7 19C6.44772 19 6 18.5523 6 18C6 17.4477 6.44772 17 7 17C7.55228 17 8 17.4477 8 18Z" stroke="white" stroke-width="2" mask="url(#path-2-outside-2_17_139)"/>
 </svg>

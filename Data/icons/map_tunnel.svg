@@ -1,7 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
- <g transform="matrix(.46292 0 0 .46292 -77.962 -111.1)" stroke-linejoin="round" stroke-miterlimit="3">
-  <path d="m183.54 240.73c-7.6033-1e-5 -13.729 6.4982-13.729 14.402v13.15a1.25 1.25 0 0 0 1.25 1.25 1.25 1.25 0 0 0 1.25-1.25v-13.15c0-6.6222 5.0492-11.902 11.229-11.902 6.1793 1e-5 11.229 5.2802 11.229 11.902v13.15a1.25 1.25 0 0 0 1.25 1.25 1.25 1.25 0 0 0 1.25-1.25v-13.15c0-7.9041-6.1252-14.402-13.729-14.402z" color="#000000" stroke-linecap="round" stroke-width="2.1602" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
-  <path d="m188.93 264.07h-10.796v-5.6862c0-3.1404 2.4167-5.6862 5.3979-5.6862 2.9811 0 5.3979 2.5458 5.3979 5.6862z" stroke-linecap="square" stroke-width="5.4005" style="paint-order:stroke fill markers"/>
- </g>
+<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="path-1-outside-1_16_655" maskUnits="userSpaceOnUse" x="0" y="3" width="14" height="14" fill="black">
+<rect fill="white" y="3" width="14" height="14"/>
+<path d="M1 10C1 6.68629 3.68629 4 7 4C10.3137 4 13 6.68629 13 10V16H1V10Z"/>
+</mask>
+<path d="M1 10C1 6.68629 3.68629 4 7 4C10.3137 4 13 6.68629 13 10V16H1V10Z" fill="#444444"/>
+<path d="M1 10C1 6.68629 3.68629 4 7 4C10.3137 4 13 6.68629 13 10V16H1V10Z" stroke="white" stroke-width="2" mask="url(#path-1-outside-1_16_655)"/>
+<line x1="9.86089" y1="13.0154" x2="12.6844" y2="16.5448" stroke="white"/>
+<line x1="6.91222" y1="13.0459" x2="1.26516" y2="16.5753" stroke="white"/>
+<path d="M6.14282 11.2857C6.14282 10.1023 7.10221 9.14286 8.28568 9.14286C9.46915 9.14286 10.4285 10.1023 10.4285 11.2857V13.4286H6.14282V11.2857Z" fill="white"/>
 </svg>
