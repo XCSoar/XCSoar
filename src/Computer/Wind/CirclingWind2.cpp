@@ -61,7 +61,7 @@ CirclingWind2::NewSample(const MoreData &info, const CirclingInfo &circling)
     active = true;
 
     const auto real_tas = info.airspeed_real && info.airspeed_available.IsValid();
-    if (useable_tas && !real_tas) LogString("CirclingWind2: TAS not usable!\n");
+    if (useable_tas && !real_tas) LogString("CirclingWind2: TAS not usable!");
     useable_tas = real_tas;
 
     current_circle = Angle::Zero();
@@ -152,8 +152,18 @@ CirclingWind2::CalcWind(double quality_metric, const size_t n_samples, [[ maybe_
 
   // reject if average time step greater than 2.0 seconds
   const auto measure_time = (samples[0].time - samples[n_samples-1].time);
-  if ((measure_time / n_samples) > std::chrono::seconds{2})
+  const auto avg_step_width = measure_time / n_samples;
+  if (avg_step_width > std::chrono::seconds{2})
     return Result(0);
+
+  // reject if step width is't sufficiently uniform
+  for (size_t i = 1; i < n_samples; i++)
+    // if (abs(samples[i].time - samples[i-1].time) > std::chrono::milliseconds{100})
+    if ((samples[i].time - samples[i-1].time) > (avg_step_width * 0.05))
+      {
+      LogString("CirclingWind2: step width not sufficiently uniform");
+      return Result(0);
+      }
 
   // find average to determine wind speed
   // this tolerates TAS == 0 if airspeed in't available
@@ -170,7 +180,7 @@ CirclingWind2::CalcWind(double quality_metric, const size_t n_samples, [[ maybe_
   }
   // TO DO: subtract the ammount exceeding the full circle
   wind_speed /= n_samples; // average
-  wind_speed *= 1.5708; // the ratio of the average to the amplitude of a sine curve
+  wind_speed *= M_PI_2; // the ratio of the average to the amplitude of a sine curve
 
   if (wind_speed >= 30)
     // limit to reasonable values (30 m/s), reject otherwise
@@ -239,17 +249,18 @@ CirclingWind2::CalcWind(double quality_metric, const size_t n_samples, [[ maybe_
 
 double
 CirclingWind2::FitCosine(const size_t n_samples, const double amplitude, const double offset, const Angle phase)
-// fit the measured speed data to a cosine
+// fit the measured speed data to an inverse cosine
 // uses the "sum of squares" algorithm
 {
   double sum_of_squares_of_deltas = 0;
 
   for (size_t i = 0; i < n_samples; i++) {
-    const double cosine_curve = fastcosine((samples[i].track + phase).Radians());
+    const double a = (samples[i].track - phase).AsBearing().Radians();
     double net_speed_diff = samples[i].ground_speed - samples[i].tas - offset;
     // to make the fit metric (somewhat) independent of the amplitude
+    // wind speeds less than 1 m/s are not interesting anyways
     if (amplitude > 1.0) net_speed_diff /= amplitude;
-    sum_of_squares_of_deltas += Square(cosine_curve-net_speed_diff);
+    sum_of_squares_of_deltas += Square(-fastcosine(a)-net_speed_diff);
   }
   return sum_of_squares_of_deltas;
 }

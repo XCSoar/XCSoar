@@ -17,9 +17,6 @@ struct CirclingInfo;
  */
 class CirclingWind2
 {
-  // TO DO: find the typedef if it already exists
-  typedef std::chrono::milliseconds ms;
-
   /**
    * The windanalyser analyses the list of flightsamples looking for
    * windspeed and direction.
