@@ -141,7 +141,7 @@ GaugeVario::Geometry::Geometry(const VarioLook &look, const PixelRect &rc) noexc
 
   const PixelSize value_offset{0u, LabelValueGeometry::GetHeight(look)};
 
-  const PixelPoint gross_position = offset + value_offset / 2u;
+  const PixelPoint gross_position = offset - value_offset / 2u;
   gross = {look, gross_position};
   average = {look, gross_position - value_offset};
   mc = {look, gross_position + value_offset};
