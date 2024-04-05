@@ -10,6 +10,14 @@
 
 #include <algorithm>
 
+#include "UTF8Win.hpp"
+
+static bool UTF8TextOut(HDC hdc, const PixelPoint &p, unsigned options, const RECT *r,
+            std::string_view _text, const int *lpDx) {
+  auto text = UTF8ToWide(_text);
+  return ::ExtTextOutW(hdc, p.x, p.y, options, r, text.c_str(), text.size(), lpDx);
+}
+
 void
 Canvas::DrawLine(int ax, int ay, int bx, int by)
 {
@@ -87,12 +95,13 @@ Canvas::DrawArc(PixelPoint center, unsigned radius,
 }
 
 const PixelSize
-Canvas::CalcTextSize(tstring_view text) const noexcept
+Canvas::CalcTextSize(std::string_view _text) const noexcept
 {
   assert(IsDefined());
 
+  auto text = UTF8ToWide(_text);
   SIZE size;
-  ::GetTextExtentPoint(dc, text.data(), text.size(), &size);
+  ::GetTextExtentPointW(dc, text.c_str(), text.size(), &size);
   return PixelSize(size.cx, size.cy);
 }
 
@@ -107,46 +116,43 @@ Canvas::GetFontHeight() const
 }
 
 void
-Canvas::DrawText(PixelPoint p, tstring_view text) noexcept
+Canvas::DrawText(PixelPoint p, std::string_view text) noexcept
 {
   assert(IsDefined());
 
-  ::ExtTextOut(dc, p.x, p.y, 0, nullptr, text.data(), text.size(), nullptr);
+  UTF8TextOut(dc, p, 0, nullptr, text, nullptr);
 }
 
 void
 Canvas::DrawOpaqueText(PixelPoint p, const PixelRect &_rc,
-                       tstring_view text) noexcept
+                       std::string_view text) noexcept
 {
   assert(IsDefined());
 
   RECT rc = _rc;
-  ::ExtTextOut(dc, p.x, p.y, ETO_OPAQUE, &rc,
-               text.data(), text.size(), nullptr);
+  UTF8TextOut(dc, p, ETO_OPAQUE, &rc, text, nullptr);
 }
 
 void
 Canvas::DrawClippedText(PixelPoint p, const PixelRect &_rc,
-                        tstring_view text) noexcept
+                        std::string_view text) noexcept
 {
   assert(IsDefined());
 
   RECT rc = _rc;
-  ::ExtTextOut(dc, p.x, p.y, ETO_CLIPPED, &rc,
-               text.data(), text.size(), nullptr);
+  UTF8TextOut(dc, p, ETO_CLIPPED, &rc, text, nullptr);
 }
 
 void
 Canvas::DrawClippedText(PixelPoint p, unsigned width,
-                        tstring_view text) noexcept
+                        std::string_view text) noexcept
 {
   const PixelSize size = CalcTextSize(text);
 
   RECT rc;
   ::SetRect(&rc, p.x, p.y,
             p.x + std::min(width, size.width), p.y + size.height);
-  ::ExtTextOut(dc, p.x, p.y, ETO_CLIPPED, &rc,
-               text.data(), text.size(), nullptr);
+  UTF8TextOut(dc, p, ETO_CLIPPED, &rc, text, nullptr);
 }
 
 void
@@ -324,3 +330,13 @@ Canvas::AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
 }
 
 #endif
+
+unsigned 
+Canvas::DrawFormattedText(RECT rc, std::string_view _text, unsigned format) {
+  format |= DT_NOPREFIX | DT_WORDBREAK;
+  auto text = UTF8ToWide(_text);
+  const int height = ::DrawTextW(dc, text.data(),
+                                 static_cast<int>(text.size()),
+                                 &rc, format);
+  return height > 0 ? static_cast<unsigned>(height) : 0;
+}
