@@ -9,12 +9,10 @@
 #include "ui/canvas/Pen.hpp"
 #include "ui/dim/Rect.hpp"
 #include "ui/dim/BulkPoint.hpp"
-#include "util/tstring_view.hxx"
-
+#include <string_view>
 #include <cassert>
 
 #include <handleapi.h> // for INVALID_HANDLE_VALUE
-#include <tchar.h>
 #include <wingdi.h>
 #include <winuser.h>
 
@@ -227,9 +225,10 @@ public:
     const RECT rc = _rc;
 
     /* this hack allows filling a rectangle with a solid color,
-       without the need to create a HBRUSH */
+    * without the need to create a HBRUSH 
+    * Here is no need to use UTF8TextOut - because all strings are empty */
     ::SetBkColor(dc, color);
-    ::ExtTextOut(dc, rc.left, rc.top, ETO_OPAQUE, &rc, _T(""), 0, nullptr);
+    ::ExtTextOut(dc, rc.left, rc.top, ETO_OPAQUE, &rc, "", 0, nullptr);
   }
 
   void DrawFilledRectangle(const PixelRect &rc, const Color color) {
@@ -358,37 +357,33 @@ public:
   }
 
   [[gnu::pure]]
-  const PixelSize CalcTextSize(tstring_view text) const noexcept;
+  const PixelSize CalcTextSize(std::string_view text) const noexcept;
 
   [[gnu::pure]]
-  unsigned CalcTextWidth(tstring_view text) const {
+  unsigned CalcTextWidth(std::string_view text) const {
     return CalcTextSize(text).width;
   }
 
   [[gnu::pure]]
   unsigned GetFontHeight() const;
 
-  void DrawText(PixelPoint p, tstring_view text) noexcept;
+  void DrawText(PixelPoint p, std::string_view text) noexcept;
   void DrawOpaqueText(PixelPoint p, const PixelRect &rc,
-                      tstring_view text) noexcept;
+                      std::string_view text) noexcept;
 
   void DrawClippedText(PixelPoint p, const PixelRect &rc,
-                       tstring_view text) noexcept;
+                       std::string_view text) noexcept;
   void DrawClippedText(PixelPoint p, unsigned width,
-                       tstring_view text) noexcept;
+                       std::string_view text) noexcept;
 
   /**
    * Render text, clip it within the bounds of this Canvas.
    */
-  void TextAutoClipped(PixelPoint p, tstring_view t) noexcept {
-    DrawText(p, t);
+  void TextAutoClipped(PixelPoint p, std::string_view text) noexcept {
+    DrawText(p, text);
   }
 
-  unsigned DrawFormattedText(RECT rc, tstring_view text, unsigned format) {
-    format |= DT_NOPREFIX | DT_WORDBREAK;
-    ::DrawText(dc, text.data(), text.size(), &rc, format);
-    return rc.bottom - rc.top;
-  }
+  unsigned DrawFormattedText(RECT rc, std::string_view text, unsigned format);
 
   void Copy(PixelPoint dest_position, PixelSize dest_size,
             HDC src, PixelPoint src_position,
