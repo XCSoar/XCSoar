@@ -2,10 +2,11 @@
 // Copyright The XCSoar Project
 
 #include "VarioLook.hpp"
+#include "AutoFont.hpp"
 #include "FontDescription.hpp"
+#include "Resources.hpp"
 #include "Screen/Layout.hpp"
 #include "Units/Units.hpp"
-#include "Resources.hpp"
 #include "ui/canvas/Features.hpp" // for HAVE_TEXT_CACHE
 
 #ifdef HAVE_TEXT_CACHE
@@ -56,18 +57,22 @@ VarioLook::Initialise(bool _inverse, bool _colors,
 void
 VarioLook::ReinitialiseLayout(unsigned width)
 {
-  /* Layout::FontScale() applies the configured UI scale, and
-     additionally we limit font sizes if the vario gauge is small */
+  FontDescription arc_label_font_d(8);
+  AutoSizeFont(arc_label_font_d, width / 10, _T("-5"));
+  arc_label_font.Load(arc_label_font_d);
 
-  const unsigned arc_label_font_height = std::min(Layout::FontScale(14), width / 5);
-  arc_label_font.Load(FontDescription{arc_label_font_height, true});
+  FontDescription value_font_d(14);
+  AutoSizeFont(value_font_d, width / 1.5, _T("-00.0m"));
+  value_font.Load(value_font_d);
 
-  const unsigned value_font_height = std::min(Layout::FontScale(10), width / 6);
-  value_font.Load(FontDescription(value_font_height, false, false, true));
-
-  unsigned unit_font_height = std::max(value_font_height * 2u / 5u, 7u);
-  unit_font.Load(FontDescription(unit_font_height));
+  FontDescription unit_font_d(8);
+  AutoSizeFont(unit_font_d, width / 4.22, _T("00.0m"));
+  unit_font.Load(unit_font_d);
   unit_fraction_pen.Create(1, COLOR_GRAY);
+
+  FontDescription label_font_d(8);
+  AutoSizeFont(label_font_d, width / 2, _T("Auto MC"));
+  label_font.Load(label_font_d);
 
 #ifdef HAVE_TEXT_CACHE
   TextCache::Flush();

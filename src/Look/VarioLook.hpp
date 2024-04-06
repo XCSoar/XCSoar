@@ -33,6 +33,8 @@ struct VarioLook {
   Font unit_font;
   Pen unit_fraction_pen;
 
+  Font label_font;
+
   void Initialise(bool inverse, bool colors,
                   unsigned width,
                   const Font &text_font);
