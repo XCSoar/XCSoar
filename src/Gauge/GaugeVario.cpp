@@ -219,9 +219,9 @@ GaugeVario::RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept
 
   const int tick_length = Layout::GetTextPadding() * 4;
 
-  const IntPoint2D tick_start{1 - x_radius, 0};
-  const IntPoint2D tick_end{-tick_length - x_radius, 0};
-  const IntPoint2D label_center{-x_radius - arc_padding / 2 - tick_length, 0};
+  const IntPoint2D tick_start{-x_radius, 0};
+  const IntPoint2D tick_end{tick_length - x_radius, 0};
+  const IntPoint2D label_center{-x_radius + arc_padding / 2 + tick_length, 0};
 
   for (int i = -n_ticks; i < n_ticks; ++i) {
     Angle angle = tick_angle_step * i;
