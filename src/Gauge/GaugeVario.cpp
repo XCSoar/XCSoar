@@ -138,6 +138,7 @@ GaugeVario::Geometry::Geometry(const VarioLook &look, const PixelRect &rc) noexc
   nline = Layout::Scale(8);
 
   offset = rc.GetMiddleRight();
+  offset.x -= Layout::GetTextPadding();
 
   const PixelSize value_offset{0u, LabelValueGeometry::GetHeight(look)};
 
