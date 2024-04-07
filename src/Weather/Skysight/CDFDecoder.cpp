@@ -4,7 +4,7 @@
 #include "CDFDecoder.hpp"
 
 #include "util/AllocatedArray.hxx"
-
+#if defined(WIN_SKYSIGHT) || !defined(_WIN32)
 
 #ifdef ANDROID
 #include <netcdfcpp.h>
@@ -237,3 +237,4 @@ void CDFDecoder::MakeCallback(bool result)
             data_varname.c_str(), time_index);
   }
 }
+#endif  // defined(WIN_SKYSIGHT) || !defined(_WIN32)
