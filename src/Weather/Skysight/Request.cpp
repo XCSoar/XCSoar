@@ -248,12 +248,12 @@ SkysightRequest::RequestToFile()
     NarrowString<1024> creds;
     creds.Format("{\"username\":\"%s\",\"password\":\"%s\"}", username.c_str(), password.c_str());
     pBody = creds.c_str();
-    request.SetRequestBody(pBody.c_str(), pBody.length());
-    request.SetFailOnError(false);
+    request.GetEasy().SetRequestBody(pBody.c_str(), pBody.length());
+    request.GetEasy().SetFailOnError(false);
   }
 
-  request.SetRequestHeaders(request_headers.Get());
-  request.SetVerifyPeer(false);
+  request.GetEasy().SetRequestHeaders(request_headers.Get());
+  request.GetEasy().SetVerifyPeer(false);
 
   try {
     request.StartIndirect();
@@ -304,14 +304,14 @@ SkysightRequest::RequestToBuffer(tstring &response)
     request_headers.Append(content_type_buffer);
     NarrowString<1024> creds;
     creds.Format("{\"username\":\"%s\",\"password\":\"%s\"}",
-     username.c_str(), password.c_str());
+		                 username.c_str(), password.c_str());
     pBody = creds.c_str();
-    request.SetRequestBody(pBody.c_str(), pBody.length());
-    request.SetFailOnError(false);
+    request.GetEasy().SetRequestBody(pBody.c_str(), pBody.length());
+    request.GetEasy().SetFailOnError(false);
   }
 
-  request.SetRequestHeaders(request_headers.Get());
-  request.SetVerifyPeer(false);
+  request.GetEasy().SetRequestHeaders(request_headers.Get());
+  request.GetEasy().SetVerifyPeer(false);
 
   try {
     request.StartIndirect();
