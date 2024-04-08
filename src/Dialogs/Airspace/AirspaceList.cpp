@@ -160,12 +160,23 @@ static constexpr StaticEnumChoice type_filter_list[] = {
   { NOGLIDER, _T("No gliders") },
   { CTR, _T("CTR") },
   { WAVE, _T("Wave") },
+  { AATASK, _T("Task Area") },
   { CLASSE, _T("Class E") },
   { CLASSF, _T("Class F") },
   { TMZ, _T("TMZ") },
+  { CLASSG, _T("Class G") },
   { MATZ, _T("MATZ") },
+  { RMZ, _T("RMZ") },
   nullptr
 };
+
+/* Remove two from type_filter list, as WILDCARD and nullptr are not
+AirSpaceClasses */
+static_assert(
+    ARRAY_SIZE(type_filter_list) - 2 ==
+        (size_t)AirspaceClass::AIRSPACECLASSCOUNT,
+    "number of airspace class filter entries, does not match number of "
+    "airspace classes");
 
 struct AirspaceListWidgetState
 {
@@ -434,4 +445,3 @@ ShowAirspaceListDialog(const Airspaces &_airspaces,
                                           std::move(list_widget), false));
   dialog.ShowModal();
 }
-
