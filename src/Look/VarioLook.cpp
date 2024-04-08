@@ -40,14 +40,11 @@ VarioLook::Initialise(bool _inverse, bool _colors,
   sink_brush.Create(sink_color);
   lift_brush.Create(lift_color);
 
-  arc_pen.Create(Layout::ScalePenWidth(2), text_color);
   tick_pen.Create(Layout::ScalePenWidth(1), text_color);
 
   thick_background_pen.Create(Layout::Scale(5), background_color);
   thick_sink_pen.Create(Layout::Scale(5), sink_color);
   thick_lift_pen.Create(Layout::Scale(5), lift_color);
-
-  climb_bitmap.Load(inverse ? IDB_CLIMBSMALLINV : IDB_CLIMBSMALL);
 
   text_font = &_text_font;
 
@@ -57,20 +54,20 @@ VarioLook::Initialise(bool _inverse, bool _colors,
 void
 VarioLook::ReinitialiseLayout(unsigned width)
 {
-  FontDescription arc_label_font_d(8);
+  FontDescription arc_label_font_d(8, true);
   AutoSizeFont(arc_label_font_d, width / 10, _T("-5"));
   arc_label_font.Load(arc_label_font_d);
 
-  FontDescription value_font_d(14);
+  FontDescription value_font_d(14, true);
   AutoSizeFont(value_font_d, width / 1.5, _T("-00.0m"));
   value_font.Load(value_font_d);
 
-  FontDescription unit_font_d(8);
+  FontDescription unit_font_d(8, true);
   AutoSizeFont(unit_font_d, width / 4.22, _T("00.0m"));
   unit_font.Load(unit_font_d);
-  unit_fraction_pen.Create(1, COLOR_GRAY);
+  unit_fraction_pen.Create(1, dimmed_text_color);
 
-  FontDescription label_font_d(8);
+  FontDescription label_font_d(8, true);
   AutoSizeFont(label_font_d, width / 2, _T("Auto MC"));
   label_font.Load(label_font_d);
 
