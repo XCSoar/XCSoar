@@ -191,8 +191,6 @@ GaugeVario::RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept
     arc[i] = geometry.offset + delta;
   }
 
-  canvas.DrawPolyline(arc.data(), arc.size());
-
   canvas.Select(look.tick_pen);
   canvas.Select(look.arc_label_font);
   canvas.SetTextColor(look.dimmed_text_color);
