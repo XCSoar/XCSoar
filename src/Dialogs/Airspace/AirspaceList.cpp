@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Airspace.hpp"
+#include "Airspace/AirspaceParser.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Airspace/AirspaceSorter.hpp"
 #include "Widget/ListWidget.hpp"
@@ -160,12 +161,20 @@ static constexpr StaticEnumChoice type_filter_list[] = {
   { NOGLIDER, _T("No gliders") },
   { CTR, _T("CTR") },
   { WAVE, _T("Wave") },
+  { AATASK, _T("Task Area") },
   { CLASSE, _T("Class E") },
   { CLASSF, _T("Class F") },
   { TMZ, _T("TMZ") },
+  { CLASSG, _T("Class G") },
   { MATZ, _T("MATZ") },
+  { RMZ, _T("RMZ") },
   nullptr
 };
+
+static_assert(ARRAY_SIZE(type_filter_list) ==
+              (size_t)AirspaceClass::AIRSPACECLASSCOUNT + 2,
+              "number of airspace class names does not match number of "
+              "airspace classes");
 
 struct AirspaceListWidgetState
 {
