@@ -1,38 +1,38 @@
 <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="8" cy="2" r="1.5" fill="#444444" stroke="white"/>
-<circle cx="11" cy="3" r="1.5" fill="#444444" stroke="white"/>
-<circle cx="13" cy="5" r="1.5" fill="#444444" stroke="white"/>
-<circle cx="14" cy="8" r="1.5" fill="#444444" stroke="white"/>
-<circle cx="13" cy="11" r="1.5" fill="#444444" stroke="white"/>
-<circle cx="11" cy="13" r="1.5" fill="#444444" stroke="white"/>
-<circle cx="8" cy="14" r="1.5" fill="#444444" stroke="white"/>
-<circle cx="5" cy="13" r="1.5" fill="#444444" stroke="white"/>
-<circle cx="3" cy="11" r="1.5" fill="#444444" stroke="white"/>
-<circle cx="2" cy="8" r="1.5" fill="#444444" stroke="white"/>
-<circle cx="3" cy="5" r="1.5" fill="#444444" stroke="white"/>
-<circle cx="5" cy="3" r="1.5" fill="#444444" stroke="white"/>
+<circle cx="8" cy="2" r="1.5" fill="#1C5C8C" stroke="white"/>
+<circle cx="11" cy="3" r="1.5" fill="#1C5C8C" stroke="white"/>
+<circle cx="13" cy="5" r="1.5" fill="#1C5C8C" stroke="white"/>
+<circle cx="14" cy="8" r="1.5" fill="#1C5C8C" stroke="white"/>
+<circle cx="13" cy="11" r="1.5" fill="#1C5C8C" stroke="white"/>
+<circle cx="11" cy="13" r="1.5" fill="#1C5C8C" stroke="white"/>
+<circle cx="8" cy="14" r="1.5" fill="#1C5C8C" stroke="white"/>
+<circle cx="5" cy="13" r="1.5" fill="#1C5C8C" stroke="white"/>
+<circle cx="3" cy="11" r="1.5" fill="#1C5C8C" stroke="white"/>
+<circle cx="2" cy="8" r="1.5" fill="#1C5C8C" stroke="white"/>
+<circle cx="3" cy="5" r="1.5" fill="#1C5C8C" stroke="white"/>
+<circle cx="5" cy="3" r="1.5" fill="#1C5C8C" stroke="white"/>
 <mask id="path-13-outside-1_40_341" maskUnits="userSpaceOnUse" x="3" y="3" width="10" height="10" fill="black">
 <rect fill="white" x="3" y="3" width="10" height="10"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M8 11C9.65685 11 11 9.65685 11 8C11 6.34315 9.65685 5 8 5C6.34315 5 5 6.34315 5 8C5 9.65685 6.34315 11 8 11ZM8 12C10.2091 12 12 10.2091 12 8C12 5.79086 10.2091 4 8 4C5.79086 4 4 5.79086 4 8C4 10.2091 5.79086 12 8 12Z"/>
 </mask>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M8 11C9.65685 11 11 9.65685 11 8C11 6.34315 9.65685 5 8 5C6.34315 5 5 6.34315 5 8C5 9.65685 6.34315 11 8 11ZM8 12C10.2091 12 12 10.2091 12 8C12 5.79086 10.2091 4 8 4C5.79086 4 4 5.79086 4 8C4 10.2091 5.79086 12 8 12Z" fill="#444444"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M8 11C9.65685 11 11 9.65685 11 8C11 6.34315 9.65685 5 8 5C6.34315 5 5 6.34315 5 8C5 9.65685 6.34315 11 8 11ZM8 12C10.2091 12 12 10.2091 12 8C12 5.79086 10.2091 4 8 4C5.79086 4 4 5.79086 4 8C4 10.2091 5.79086 12 8 12Z" fill="#1C5C8C"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M8 11C9.65685 11 11 9.65685 11 8C11 6.34315 9.65685 5 8 5C6.34315 5 5 6.34315 5 8C5 9.65685 6.34315 11 8 11ZM8 12C10.2091 12 12 10.2091 12 8C12 5.79086 10.2091 4 8 4C5.79086 4 4 5.79086 4 8C4 10.2091 5.79086 12 8 12Z" stroke="white" stroke-width="2" mask="url(#path-13-outside-1_40_341)"/>
-<circle cx="8" cy="2" r="1" fill="#444444"/>
-<circle cx="11" cy="3" r="1" fill="#444444"/>
-<circle cx="13" cy="5" r="1" fill="#444444"/>
-<circle cx="14" cy="8" r="1" fill="#444444"/>
-<circle cx="13" cy="11" r="1" fill="#444444"/>
-<circle cx="11" cy="13" r="1" fill="#444444"/>
-<circle cx="8" cy="14" r="1" fill="#444444"/>
-<circle cx="5" cy="13" r="1" fill="#444444"/>
-<circle cx="3" cy="11" r="1" fill="#444444"/>
-<circle cx="2" cy="8" r="1" fill="#444444"/>
-<circle cx="3" cy="5" r="1" fill="#444444"/>
-<circle cx="5" cy="3" r="1" fill="#444444"/>
+<circle cx="8" cy="2" r="1" fill="#1C5C8C"/>
+<circle cx="11" cy="3" r="1" fill="#1C5C8C"/>
+<circle cx="13" cy="5" r="1" fill="#1C5C8C"/>
+<circle cx="14" cy="8" r="1" fill="#1C5C8C"/>
+<circle cx="13" cy="11" r="1" fill="#1C5C8C"/>
+<circle cx="11" cy="13" r="1" fill="#1C5C8C"/>
+<circle cx="8" cy="14" r="1" fill="#1C5C8C"/>
+<circle cx="5" cy="13" r="1" fill="#1C5C8C"/>
+<circle cx="3" cy="11" r="1" fill="#1C5C8C"/>
+<circle cx="2" cy="8" r="1" fill="#1C5C8C"/>
+<circle cx="3" cy="5" r="1" fill="#1C5C8C"/>
+<circle cx="5" cy="3" r="1" fill="#1C5C8C"/>
 <mask id="path-26-outside-2_40_341" maskUnits="userSpaceOnUse" x="6" y="6" width="4" height="4" fill="black">
 <rect fill="white" x="6" y="6" width="4" height="4"/>
 <path d="M9 8C9 8.55228 8.55228 9 8 9C7.44772 9 7 8.55228 7 8C7 7.44772 7.44772 7 8 7C8.55228 7 9 7.44772 9 8Z"/>
 </mask>
-<path d="M9 8C9 8.55228 8.55228 9 8 9C7.44772 9 7 8.55228 7 8C7 7.44772 7.44772 7 8 7C8.55228 7 9 7.44772 9 8Z" fill="#444444"/>
+<path d="M9 8C9 8.55228 8.55228 9 8 9C7.44772 9 7 8.55228 7 8C7 7.44772 7.44772 7 8 7C8.55228 7 9 7.44772 9 8Z" fill="#1C5C8C"/>
 <path d="M9 8C9 8.55228 8.55228 9 8 9C7.44772 9 7 8.55228 7 8C7 7.44772 7.44772 7 8 7C8.55228 7 9 7.44772 9 8Z" stroke="white" stroke-width="2" mask="url(#path-26-outside-2_40_341)"/>
 </svg>

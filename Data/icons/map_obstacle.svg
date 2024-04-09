@@ -1,14 +1,14 @@
 <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-<mask id="path-1-outside-1_17_139" maskUnits="userSpaceOnUse" x="0" y="-0.5" width="14" height="20" fill="black">
-<rect fill="white" y="-0.5" width="14" height="20"/>
-<path d="M7 3.5L2 18H3.86279L7 7.78101L10.1376 18H12L7 3.5Z"/>
+<mask id="path-1-outside-1_17_139" maskUnits="userSpaceOnUse" x="2" y="0" width="14" height="16" fill="black">
+<rect fill="white" x="2" width="14" height="16"/>
+<path d="M9.09417 1.26369C9.06257 1.1752 8.93743 1.1752 8.90583 1.26369L4 15H6L9 6L12 15H14L9.09417 1.26369Z"/>
 </mask>
-<path d="M7 3.5L2 18H3.86279L7 7.78101L10.1376 18H12L7 3.5Z" fill="#444444"/>
-<path d="M7 3.5L2 18H3.86279L7 7.78101L10.1376 18H12L7 3.5Z" stroke="white" stroke-width="2" mask="url(#path-1-outside-1_17_139)"/>
-<mask id="path-2-outside-2_17_139" maskUnits="userSpaceOnUse" x="5" y="16" width="4" height="4" fill="black">
-<rect fill="white" x="5" y="16" width="4" height="4"/>
-<path d="M8 18C8 18.5523 7.55228 19 7 19C6.44772 19 6 18.5523 6 18C6 17.4477 6.44772 17 7 17C7.55228 17 8 17.4477 8 18Z"/>
+<path d="M9.09417 1.26369C9.06257 1.1752 8.93743 1.1752 8.90583 1.26369L4 15H6L9 6L12 15H14L9.09417 1.26369Z" fill="#C2463A"/>
+<path d="M9.09417 1.26369C9.06257 1.1752 8.93743 1.1752 8.90583 1.26369L4 15H6L9 6L12 15H14L9.09417 1.26369Z" stroke="white" stroke-width="2" mask="url(#path-1-outside-1_17_139)"/>
+<mask id="path-2-outside-2_17_139" maskUnits="userSpaceOnUse" x="7" y="13" width="4" height="4" fill="black">
+<rect fill="white" x="7" y="13" width="4" height="4"/>
+<path d="M10 15C10 15.5523 9.55228 16 9 16C8.44772 16 8 15.5523 8 15C8 14.4477 8.44772 14 9 14C9.55228 14 10 14.4477 10 15Z"/>
 </mask>
-<path d="M8 18C8 18.5523 7.55228 19 7 19C6.44772 19 6 18.5523 6 18C6 17.4477 6.44772 17 7 17C7.55228 17 8 17.4477 8 18Z" fill="#444444"/>
-<path d="M8 18C8 18.5523 7.55228 19 7 19C6.44772 19 6 18.5523 6 18C6 17.4477 6.44772 17 7 17C7.55228 17 8 17.4477 8 18Z" stroke="white" stroke-width="2" mask="url(#path-2-outside-2_17_139)"/>
+<path d="M10 15C10 15.5523 9.55228 16 9 16C8.44772 16 8 15.5523 8 15C8 14.4477 8.44772 14 9 14C9.55228 14 10 14.4477 10 15Z" fill="#C2463A"/>
+<path d="M10 15C10 15.5523 9.55228 16 9 16C8.44772 16 8 15.5523 8 15C8 14.4477 8.44772 14 9 14C9.55228 14 10 14.4477 10 15Z" stroke="white" stroke-width="2" mask="url(#path-2-outside-2_17_139)"/>
 </svg>
