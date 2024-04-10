@@ -1,11 +1,11 @@
 <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-<mask id="path-1-outside-1_16_655" maskUnits="userSpaceOnUse" x="0" y="3" width="14" height="14" fill="black">
-<rect fill="white" y="3" width="14" height="14"/>
-<path d="M1 10C1 6.68629 3.68629 4 7 4C10.3137 4 13 6.68629 13 10V16H1V10Z"/>
+<mask id="path-1-outside-1_63_133" maskUnits="userSpaceOnUse" x="0" y="4" width="13" height="13" fill="black">
+<rect fill="white" y="4" width="13" height="13"/>
+<path d="M1 10.5C1 7.46243 3.46243 5 6.5 5C9.53757 5 12 7.46243 12 10.5V16H1V10.5Z"/>
 </mask>
-<path d="M1 10C1 6.68629 3.68629 4 7 4C10.3137 4 13 6.68629 13 10V16H1V10Z" fill="#444444"/>
-<path d="M1 10C1 6.68629 3.68629 4 7 4C10.3137 4 13 6.68629 13 10V16H1V10Z" stroke="white" stroke-width="2" mask="url(#path-1-outside-1_16_655)"/>
-<line x1="9.86089" y1="13.0154" x2="12.6844" y2="16.5448" stroke="white"/>
-<line x1="6.91222" y1="13.0459" x2="1.26516" y2="16.5753" stroke="white"/>
-<path d="M6.14282 11.2857C6.14282 10.1023 7.10221 9.14286 8.28568 9.14286C9.46915 9.14286 10.4285 10.1023 10.4285 11.2857V13.4286H6.14282V11.2857Z" fill="white"/>
+<path d="M1 10.5C1 7.46243 3.46243 5 6.5 5C9.53757 5 12 7.46243 12 10.5V16H1V10.5Z" fill="#444444"/>
+<path d="M1 10.5C1 7.46243 3.46243 5 6.5 5C9.53757 5 12 7.46243 12 10.5V16H1V10.5Z" stroke="white" stroke-width="2" mask="url(#path-1-outside-1_63_133)"/>
+<path d="M9.5 12.5L11.9998 16.5" stroke="white"/>
+<path d="M6.5 12.5L1.00005 16.5" stroke="white"/>
+<path d="M6 11C6 9.89543 6.89543 9 8 9C9.10457 9 10 9.89543 10 11V13H6V11Z" fill="white"/>
 </svg>
