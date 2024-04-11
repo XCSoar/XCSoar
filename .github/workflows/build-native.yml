@@ -281,7 +281,7 @@ jobs:
       TARGET_BIN: XCSoar-debug
       TARGET_FINAL: XCSoar-debug
       TARGET_EXT: apk
-      NDK: r26c
+      NDK: r26d
 
     steps:
       - name: set vars for push
