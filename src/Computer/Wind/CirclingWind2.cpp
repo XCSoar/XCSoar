@@ -152,14 +152,13 @@ CirclingWind2::CalcWind(double quality_metric, const size_t n_samples, [[ maybe_
 
   // reject if average time step greater than 2.0 seconds
   const auto measure_time = (samples[0].time - samples[n_samples-1].time);
-  const auto avg_step_width = measure_time / n_samples;
+  const auto avg_step_width = measure_time / (n_samples-1);
   if (avg_step_width > std::chrono::seconds{2})
     return Result(0);
 
   // reject if step width is't sufficiently uniform
   for (size_t i = 1; i < n_samples; i++)
-    // if (abs(samples[i].time - samples[i-1].time) > std::chrono::milliseconds{100})
-    if ((samples[i].time - samples[i-1].time) > (avg_step_width * 0.05))
+    if (abs(samples[i-1].time - samples[i].time - avg_step_width) > (avg_step_width * 0.05))
       {
       LogString("CirclingWind2: step width not sufficiently uniform");
       return Result(0);
