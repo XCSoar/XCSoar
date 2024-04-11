@@ -2,6 +2,7 @@ Version 7.43 - not yet released
 * ui
   - TC 30s Infobox shows now climb rate since start of thermal
   - TL Gain Infobox shows now the overall climb rate of last thermal
+  - add missing airspace to Select Airspace filter
 * windows
  - black text color in airspace list like all other systems
 * Kobo
