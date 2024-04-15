@@ -227,7 +227,9 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/gdi/RawBitmap.cpp \
 	$(CANVAS_SRC_DIR)/gdi/Canvas.cpp \
 	$(CANVAS_SRC_DIR)/gdi/BufferCanvas.cpp \
-	$(CANVAS_SRC_DIR)/gdi/PaintCanvas.cpp
+	$(CANVAS_SRC_DIR)/gdi/PaintCanvas.cpp \
+	$(CANVAS_SRC_DIR)/gdi/UTF8Win.cpp \
+
 GDI_CPPFLAGS = -DUSE_GDI
 WINUSER_CPPFLAGS = -DUSE_WINUSER
 GDI_LDLIBS = -luser32 -lgdi32 -lmsimg32 -lgdiplus
