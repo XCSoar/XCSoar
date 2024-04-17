@@ -120,17 +120,18 @@ CirclingWind2::NewSample(const MoreData &info, const CirclingInfo &circling)
       for (size_t i=1; i < n_samples;i++) {
         const Angle v = (samples[i-1].track - samples[i].track).AsDelta() - turnrate_avg;
         // v = samples[i].turn_rate - turnrate_avg; // TO DO: use this if IMU is available
-        max_turnrate_deviation = std::max(v.AbsoluteDegrees(),max_turnrate_deviation);
+        max_turnrate_deviation = std::max(abs(v.Degrees()),max_turnrate_deviation);
       }
 
       // this should be small (< 0.3) for a good enough circle
-      const double circle_quality_metric = max_turnrate_deviation / turnrate_avg.Degrees();
+      const double circle_quality_metric = abs(max_turnrate_deviation / turnrate_avg.Degrees());
 
-      if (circle_quality_metric < 0.6) {
+      if (circle_quality_metric < 0.8) {
         result = CalcWind(circle_quality_metric,n_samples,current_circle);
 
         // now that we've seen a good circle, wait for 1/4 circle before calculating the next
-        suspend = n_samples / 4;
+        if (result.quality) suspend = n_samples / 4;
+        else suspend = 0;
       }
     }
   }
@@ -142,13 +143,6 @@ CirclingWind2::CalcWind(double quality_metric, const size_t n_samples, [[ maybe_
 {
   assert(n_samples > 1);
   assert(!samples.empty());
-
-  int quality = 5; // top quality, perfect circle
-  if (quality_metric > 0.2) quality = 4;
-  if (quality_metric > 0.3) quality = 3;
-  if (quality_metric > 0.4) quality = 2;
-  if (quality_metric > 0.5) quality = 1;
-  if (quality_metric > 0.7) return Result(0);
 
   // reject if average time step greater than 2.0 seconds
   const auto measure_time = (samples[0].time - samples[n_samples-1].time);
@@ -177,7 +171,6 @@ CirclingWind2::CalcWind(double quality_metric, const size_t n_samples, [[ maybe_
   for (size_t i = 0; i < n_samples; i++) {
     wind_speed += abs(samples[i].ground_speed - samples[i].tas - speed_offset);
   }
-  // TO DO: subtract the ammount exceeding the full circle
   wind_speed /= n_samples; // average
   wind_speed *= M_PI_2; // the ratio of the average to the amplitude of a sine curve
 
@@ -190,7 +183,6 @@ CirclingWind2::CalcWind(double quality_metric, const size_t n_samples, [[ maybe_
   Angle wind_dir = Angle::Degrees(0);
   Angle search_midpoint = Angle::Degrees(180);
   int search_steps = 6;
-  // Angle search_step_width = Angle::FullCircle() / search_steps;
   // cover more that a full circle
   Angle search_step_width = circle.Absolute() / search_steps;
   search_steps += 1;
@@ -229,21 +221,49 @@ CirclingWind2::CalcWind(double quality_metric, const size_t n_samples, [[ maybe_
     return Result(0); // it doesn't converge
   }
 
-  // TO DO: iterate over wind_speed?
-
-  // fine tune the quality number to reflect the quality of the fit
-  if (min_fit_metric > 10) quality -= 1; // penalty for bad fit
-  if (min_fit_metric < 5)  quality += 1; // bonus for good fit
-  if (min_fit_metric < 1)  quality += 1; // extra bonus for very good fit
-  quality = std::max(std::min(quality,5),0);
-
   SpeedVector wind(wind_dir.AsBearing(), wind_speed);
-  char line_buf[200];
-  snprintf(line_buf,sizeof(line_buf),"CalcWind2 circling: %1.1f°, %1.1f km/h, Q=%d, QM=%1.2f, fit=%1.1f",
-    wind_dir.AsBearing().Degrees(),wind_speed*3.6,quality,quality_metric,min_fit_metric);
-  LogString(line_buf);
+  const auto quality = EstimateQuality(quality_metric,min_fit_metric,wind_speed);
+
+#define  RESULT_EVALUATION
+#ifdef  RESULT_EVALUATION
+  if (quality) {
+    char line_buf[200];
+    snprintf(line_buf,sizeof(line_buf),"CalcWind2 circling: %1.1f°, %1.1f km/h, Q=%d, QM=%1.2f, fit=%1.1f",
+      wind_dir.AsBearing().Degrees(),wind_speed*3.6,quality,quality_metric,min_fit_metric);
+    LogString(line_buf);
+  }
+#endif //  RESULT_EVALUATION
 
   return Result(quality, wind);
+}
+
+unsigned int
+CirclingWind2::EstimateQuality(const double circle_quality, const double fitCosine_quality,  const double wind_speed)
+// the return value matches the quality number of WindStore::SlotMeasurement
+{
+  // perfect circles are skewed (if GPS-track is the criteria) with higher winds,
+  // hence allow some margine for this
+  double roundness_skew;
+  if (wind_speed > 10.0) {
+    roundness_skew = 0.1;
+  } else {
+    roundness_skew = 0;
+  }
+
+  int quality = 5; // top quality, perfect circle
+  if (circle_quality > (0.2 + roundness_skew)) quality = 4;
+  if (circle_quality > (0.3 + roundness_skew)) quality = 3;
+  if (circle_quality > (0.4 + roundness_skew)) quality = 2;
+  if (circle_quality > (0.5 + roundness_skew)) quality = 1;
+  if (circle_quality > (0.7 + roundness_skew)) return 0;
+
+  // fine tune the quality number to reflect the quality of the fit to the cosine
+  if (fitCosine_quality > 10) quality -= 1; // penalty for bad fit
+  if (fitCosine_quality < 5)  quality += 1; // bonus for good fit
+  if (fitCosine_quality < 1)  quality += 1; // extra bonus for very good fit
+  quality = std::max(std::min(quality,5),0);
+
+  return quality;
 }
 
 double
@@ -261,5 +281,7 @@ CirclingWind2::FitCosine(const size_t n_samples, const double amplitude, const d
     if (amplitude > 1.0) net_speed_diff /= amplitude;
     sum_of_squares_of_deltas += Square(-fastcosine(a)-net_speed_diff);
   }
+  // tighter circles getting a smaller result, that is intended.
+  // Because wider circles tend to be search circles, hence not so round
   return sum_of_squares_of_deltas;
 }

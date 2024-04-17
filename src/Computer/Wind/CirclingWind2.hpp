@@ -79,6 +79,7 @@ public:
   Result NewSample(const MoreData &info, const CirclingInfo &circling);
 
 private:
+  unsigned int EstimateQuality(const double circle_quality, const double fitCosine_quality, const double wind_speed);
   Result CalcWind(const double quality_metric, const size_t n_samples, const Angle circle);
   double FitCosine(const size_t n_samples, const double amplitude, const double offset, const Angle phase);
 };
