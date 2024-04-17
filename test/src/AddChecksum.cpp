@@ -26,7 +26,12 @@ int main()
     }
 
     printf("%.*s*%02x\n", (int)(end - buffer), buffer,
+#if defined(__APPLE__) && (!defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE)
+           // MacOS workaround
+           NMEAChecksum(start));
+#else  // MacOS
            NMEAChecksum({start, end}));
+#endif // MacOS
   }
 
   return 0;
