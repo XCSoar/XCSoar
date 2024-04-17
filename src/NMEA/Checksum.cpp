@@ -25,7 +25,11 @@ VerifyNMEAChecksum(const char *p) noexcept
     return false;
 
   uint8_t ReadCheckSum = (unsigned char)ReadCheckSum2;
+#if defined(__APPLE__) && (!defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE)
+  uint8_t CalcCheckSum = NMEAChecksum(p);
+#else
   uint8_t CalcCheckSum = NMEAChecksum({p, asterisk});
+#endif
 
   return CalcCheckSum == ReadCheckSum;
 }
@@ -37,5 +41,9 @@ AppendNMEAChecksum(char *p) noexcept
 
   const std::size_t length = strlen(p);
 
+#if defined(__APPLE__) && (!defined(TARGET_OS_IPHONE) || !TARGET_OS_IPHONE)
+  sprintf(p + length, "*%02X", NMEAChecksum(p));
+#else
   sprintf(p + length, "*%02X", NMEAChecksum({p, length}));
+#endif
 }
