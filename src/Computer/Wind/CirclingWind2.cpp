@@ -4,6 +4,7 @@
 /* This library was originally imported from Cumulus
    http://kflog.org/cumulus/ */
 
+#define HIGHER_ACCURACY
 #define INITIAL_min_fit_metric        10000
 
 #include "CirclingWind2.hpp"
@@ -139,7 +140,7 @@ CirclingWind2::NewSample(const MoreData &info, const CirclingInfo &circling)
 }
 
 CirclingWind2::Result
-CirclingWind2::CalcWind(double quality_metric, const size_t n_samples, [[ maybe_unused ]] const Angle circle)
+CirclingWind2::CalcWind(double quality_metric, const size_t n_samples, const Angle circle)
 {
   assert(n_samples > 1);
   assert(!samples.empty());
@@ -158,6 +159,42 @@ CirclingWind2::CalcWind(double quality_metric, const size_t n_samples, [[ maybe_
       return Result(0);
       }
 
+#ifdef  HIGHER_ACCURACY
+  // calculate the fraction of the last step to be removed form the sum over the full circle
+  const auto last_track_change = (samples[n_samples-2].track - samples[n_samples-1].track).AsDelta();
+  const auto excess_circle = (circle - Angle::FullCircle()).AsDelta();
+  const double last_step_fraction_excess = 1.0 - (last_track_change - excess_circle) / last_track_change;
+  if ((last_step_fraction_excess > 1) || (last_step_fraction_excess < 0)) {
+    char line_buf[200];
+    snprintf (line_buf,sizeof(line_buf),"Fract,%1.2f,%1.2f,%1.2f,%1.2f",
+      circle.Degrees(),last_track_change.Degrees(),excess_circle.Degrees(),last_step_fraction_excess);
+    LogString(line_buf);
+  }
+  assert ((last_step_fraction_excess >= 0) && (last_step_fraction_excess <= 1));
+  double last_val = 0;
+
+  // find average to determine wind speed
+  // this tolerates TAS == 0 if airspeed in't available
+  double speed_offset = 0;
+  for (size_t i = 0; i < n_samples; i++) {
+    last_val = (samples[i].ground_speed - samples[i].tas);
+    speed_offset += last_val;
+  }
+  speed_offset -= (last_val * last_step_fraction_excess);
+  speed_offset /= ((double)n_samples - last_step_fraction_excess); // average
+
+  // estimate wind speed by amplitude of wind speed data
+  double wind_speed = 0;
+  for (size_t i = 0; i < n_samples; i++) {
+    last_val = abs(samples[i].ground_speed - samples[i].tas - speed_offset);
+    wind_speed += last_val;
+  }
+  wind_speed -= (last_val * last_step_fraction_excess);
+  wind_speed /= ((double)n_samples - last_step_fraction_excess); // average
+  wind_speed *= M_PI_2; // the ratio of the average to the amplitude of a sine curve
+
+#else // HIGHER_ACCURACY
+
   // find average to determine wind speed
   // this tolerates TAS == 0 if airspeed in't available
   double speed_offset = 0;
@@ -174,14 +211,16 @@ CirclingWind2::CalcWind(double quality_metric, const size_t n_samples, [[ maybe_
   wind_speed /= n_samples; // average
   wind_speed *= M_PI_2; // the ratio of the average to the amplitude of a sine curve
 
+#endif // HIGHER_ACCURACY
+
   if (wind_speed >= 30)
     // limit to reasonable values (30 m/s), reject otherwise
     return Result(0);
 
   // determine bearing of the wind
   // prepare for the iterative search
-  Angle wind_dir = Angle::Degrees(0);
-  Angle search_midpoint = Angle::Degrees(180);
+  Angle wind_dir = Angle::Zero();
+  Angle search_midpoint = Angle::HalfCircle();
   int search_steps = 6;
   // cover more that a full circle
   Angle search_step_width = circle.Absolute() / search_steps;

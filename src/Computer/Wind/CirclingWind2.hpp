@@ -59,7 +59,7 @@ public:
     SpeedVector wind;
 
     Result() {}
-    Result(unsigned _quality):quality(_quality) {}
+    explicit Result(unsigned _quality):quality(_quality) {}
     Result(unsigned _quality, SpeedVector _wind)
       :quality(_quality), wind(_wind) {}
 
