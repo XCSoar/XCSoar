@@ -267,7 +267,7 @@ CirclingWind2::CalcWind(double quality_metric, const size_t n_samples, const Ang
 #ifdef  RESULT_EVALUATION
   if (quality) {
     char line_buf[200];
-    snprintf(line_buf,sizeof(line_buf),"CalcWind2 circling: %1.1f°, %1.1f km/h, Q=%d, QM=%1.2f, fit=%1.1f",
+    snprintf(line_buf,sizeof(line_buf),"CalcWind2 circling: %1.1f°, %1.1f km/h, Q=%u, QM=%1.2f, fit=%1.1f",
       wind_dir.AsBearing().Degrees(),wind_speed*3.6,quality,quality_metric,min_fit_metric);
     LogString(line_buf);
   }
