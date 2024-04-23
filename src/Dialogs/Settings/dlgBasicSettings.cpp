@@ -63,7 +63,7 @@ public:
     PublishPolarSettings();
     SetBallast();
   }
-  
+
   void SetBallast();
   void SetBallastTimer(bool active);
   void FlipBallastTimer();
@@ -268,7 +268,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent,
            0, 300, 5, false, UnitGroup::MASS,
            polar_settings.glide_polar_task.GetCrewMass(),
            this);
-  
+
   const double db = 5;
   AddFloat(_("Ballast"),
            _("Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."),
