@@ -247,9 +247,9 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
   button_style.TabStop();
 
   const auto &button_look = GetLook().button;
-  copy_button.Create(parent, button_look, _("Copy"), layout.copy_button,
+  copy_button.Create(parent, button_look, _("Copy Set"), layout.copy_button,
                      button_style, [this](){ OnCopy(); });
-  paste_button.Create(parent, button_look, _("Paste"), layout.paste_button,
+  paste_button.Create(parent, button_look, _("Paste Set"), layout.paste_button,
                       button_style, [this](){ OnPaste(); });
   close_button.Create(parent, button_look, _("Close"), layout.close_button,
                       button_style, dialog.MakeModalResultCallback(mrOK));
