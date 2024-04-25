@@ -39,6 +39,8 @@ Version 7.44 - not yet released
   - LXNAV: Overload formula, use reference mass instead of dry mass
   - OpenVario: Overload formula, use reference mass instead of dry mass
   - Vaulter: use fraction instead of overload for ballast
+* Polar:
+  - LS8-15m: default polar, set to values according to flight manual
 
 Version 7.43 - 2024-08-12
 * calculations
