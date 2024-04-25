@@ -73,8 +73,8 @@ class GlidePolar
   /** coefficients of glide polar at bug/ballast */
   PolarCoefficients polar;
 
-  /** Ratio of mass of ballast to glider empty weight */
-  double ballast_ratio;
+  /** Maximum water ballast, l*/
+  double max_ballast;
   /** Reference mass of reference_polar, kg */
   double reference_mass;
   /** Plain rigged/unballasted mass of glider, kg */
@@ -279,7 +279,7 @@ public:
    * @return Proportion of possible ballast [0-1]
    */
   constexpr double GetBallast() const noexcept {
-    return ballast / (ballast_ratio * reference_mass);
+    return ( ballast / max_ballast );
   }
 
   /**
@@ -303,7 +303,7 @@ public:
    * @return True if glider can carry ballast
    */
   constexpr bool IsBallastable() const noexcept {
-    return ballast_ratio > 0;
+    return max_ballast > 0;
   }
 
   /**
@@ -531,14 +531,24 @@ public:
     return crew_mass;
   }
   
+  /** Returns the maximum ballast in kg */
+  constexpr double GetMaxBallast() const noexcept {
+    return max_ballast;
+  }
+
+  /** Sets the maximum ballast in kg */
+  constexpr void SetMaxBallast(double _max_ballast) noexcept {
+    max_ballast = _max_ballast;
+  }
+
   /** Returns the ballast ratio */
   constexpr double GetBallastRatio() const noexcept {
-    return ballast_ratio;
+    return ballast / max_ballast;
   }
 
   /** Sets the ballast ratio */
   constexpr void SetBallastRatio(double _ballast_ratio) noexcept {
-    ballast_ratio = _ballast_ratio;
+    ballast = _ballast_ratio * max_ballast;
   }
 
   /** Returns the ideal polar coefficients */
