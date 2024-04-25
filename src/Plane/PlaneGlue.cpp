@@ -71,7 +71,7 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
   gp.SetEmptyMass(plane.empty_mass, false);
 
   // Ballast weight
-  gp.SetBallastRatio(plane.max_ballast / plane.polar_shape.reference_mass);
+  gp.SetMaxBallast(plane.max_ballast);
 
   gp.SetWingArea(plane.wing_area);
 
