@@ -129,12 +129,12 @@ TaskEditPanel::UpdateButtons()
 {
   const unsigned index = GetList().GetCursorIndex();
 
-  mutate_button->SetVisible(index > 0 &&
+  mutate_button->SetEnabled(index > 0 &&
                             (index == ordered_task->TaskSize() - 1) &&
                             !ordered_task->HasFinish());
-  down_button->SetVisible((int)index < ((int)(ordered_task->TaskSize()) - 1));
-  up_button->SetVisible(index > 0 && index < ordered_task->TaskSize());
-  reverse_button->SetVisible(ordered_task->TaskSize() >= 2);
+  down_button->SetEnabled((int)index < ((int)(ordered_task->TaskSize()) - 1));
+  up_button->SetEnabled(index > 0 && index < ordered_task->TaskSize());
+  reverse_button->SetEnabled(ordered_task->TaskSize() >= 2);
 }
 
 void
