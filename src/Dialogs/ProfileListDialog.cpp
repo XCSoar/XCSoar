@@ -313,9 +313,9 @@ ProfileListDialog()
   TWidgetDialog<ProfileListWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            UIGlobals::GetDialogLook(), _("Profiles"));
-  dialog.AddButton(_("Close"), mrOK);
   dialog.SetWidget(false);
   dialog.GetWidget().CreateButtons(dialog);
+  dialog.AddButton(_("Close"), mrOK);
   dialog.EnableCursorSelection();
 
   dialog.ShowModal();
