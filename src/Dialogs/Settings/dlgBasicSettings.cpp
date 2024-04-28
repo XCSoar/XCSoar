@@ -353,7 +353,7 @@ dlgBasicSettingsShowModal()
     instance->FlipBallastTimer();
   }));
 
-  dialog.AddButton(_("OK"), mrOK);
+  dialog.AddButton(_("Close"), mrOK);
 
   dialog.ShowModal();
 }
