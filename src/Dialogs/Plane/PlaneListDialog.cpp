@@ -357,8 +357,8 @@ dlgPlanesShowModal() noexcept
            UIGlobals::GetDialogLook(),
            _("Planes"));
   dialog.SetWidget();
-  dialog.AddButton(_("Close"), mrOK);
   dialog.GetWidget().CreateButtons(dialog);
+  dialog.AddButton(_("Close"), mrOK);
   dialog.EnableCursorSelection();
 
   dialog.ShowModal();
