@@ -204,8 +204,8 @@ dlgTeamCodeShowModal()
   TWidgetDialog<TeamCodeWidget>
     dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
            look, _("Team Code"));
-  dialog.AddButton(_("Close"), mrOK);
   dialog.SetWidget(look);
   dialog.GetWidget().CreateButtons(dialog);
+  dialog.AddButton(_("Close"), mrOK);
   dialog.ShowModal();
 }
