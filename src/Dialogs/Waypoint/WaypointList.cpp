@@ -208,11 +208,11 @@ public:
 
   /* virtual methods from class Widget */
   void Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept override {
-    AddButton(_("Select"), [this](){
+    AddButton(_("Details"), [this](){
       list->OnWaypointListEnter();
     });
 
-    AddButton(_("Cancel"), dialog.MakeModalResultCallback(mrCancel));
+    AddButton(_("Close"), dialog.MakeModalResultCallback(mrCancel));
   }
 };
 
