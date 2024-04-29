@@ -199,9 +199,9 @@ WindSettingsPanel::UpdateVector() noexcept
 
   const bool visible = settings.manual_wind_available;
   if (clear_manual_button)
-    SetRowVisible(CLEAR_MANUAL_BUTTON, visible);
+    SetRowEnabled(CLEAR_MANUAL_BUTTON, visible);
   else if (clear_manual_window != nullptr)
-    clear_manual_window->SetVisible(visible);
+    clear_manual_window->SetEnabled(visible);
 }
 
 void
