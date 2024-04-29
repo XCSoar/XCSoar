@@ -284,9 +284,9 @@ dlgConfigWaypointsShowModal(Waypoints &waypoints) noexcept
   TWidgetDialog<WaypointManagerWidget>
     dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
            look, _("Waypoints Editor"));
-  dialog.AddButton(_("Close"), mrCancel);
   dialog.SetWidget(waypoints);
   dialog.GetWidget().CreateButtons(dialog);
+  dialog.AddButton(_("Close"), mrCancel);
   dialog.EnableCursorSelection();
 
   dialog.ShowModal();
