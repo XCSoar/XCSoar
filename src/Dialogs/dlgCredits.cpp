@@ -91,7 +91,7 @@ LogoPageWindow::OnPaint(Canvas &canvas) noexcept
 #endif
 
   y += Layout::FastScale(8);
-  const TCHAR *visit = _T("Vist us at:");
+  const TCHAR *visit = _T("Visit us at:");
   const TCHAR *url = _T("https://xcsoar.org");
   ts = canvas.CalcTextSize(visit);
   ts2 = canvas.CalcTextSize(url);
