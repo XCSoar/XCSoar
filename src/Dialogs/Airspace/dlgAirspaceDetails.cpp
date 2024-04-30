@@ -102,7 +102,6 @@ dlgAirspaceDetails(ConstAirspacePtr airspace,
   WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
                       UIGlobals::GetDialogLook(),
                       _("Airspace Details"), widget);
-  dialog.AddButton(_("Close"), mrOK);
 
   if (warnings != nullptr) {
     widget->dialog = &dialog;
@@ -110,6 +109,7 @@ dlgAirspaceDetails(ConstAirspacePtr airspace,
                      ? _("Enable") : _("Ack Day"),
                      [widget](){ widget->AckDayOrEnable(); });
   }
+  dialog.AddButton(_("Close"), mrOK);
 
   dialog.ShowModal();
 }

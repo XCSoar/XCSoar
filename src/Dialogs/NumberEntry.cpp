@@ -33,6 +33,7 @@ NumberEntryDialog(const TCHAR *caption,
                       length, 0);
   entry->Resize(entry->GetRecommendedSize());
   entry->SetValue(value);
+  entry->SetCallback(dialog.MakeModalResultCallback(mrOK));
 
   /* create buttons */
 
@@ -75,6 +76,7 @@ NumberEntryDialog(const TCHAR *caption,
                         length, 0);
   entry->Resize(entry->GetRecommendedSize());
   entry->SetValue(value);
+  entry->SetCallback(dialog.MakeModalResultCallback(mrOK));
 
   /* create buttons */
 
@@ -115,6 +117,7 @@ AngleEntryDialog(const TCHAR *caption, Angle &value)
   entry->CreateAngle(client_area, client_area.GetClientRect(), control_style);
   entry->Resize(entry->GetRecommendedSize());
   entry->SetValue(value);
+  entry->SetCallback(dialog.MakeModalResultCallback(mrOK));
 
   /* create buttons */
 

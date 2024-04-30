@@ -508,8 +508,8 @@ TrafficListWidget::UpdateButtons()
   bool flarm_cursor = valid_cursor && items[cursor].IsFlarm();
   bool valid_location = valid_cursor && items[cursor].location.IsValid();
 
-  buttons->SetRowVisible(DETAILS, flarm_cursor);
-  buttons->SetRowVisible(MAP, valid_location);
+  buttons->SetRowEnabled(DETAILS, flarm_cursor);
+  buttons->SetRowEnabled(MAP, valid_location);
 }
 
 void

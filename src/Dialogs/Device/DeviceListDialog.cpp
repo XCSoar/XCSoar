@@ -763,10 +763,10 @@ ShowDeviceList(DeviceBlackboard &device_blackboard, MultipleDevices *devices)
   TWidgetDialog<DeviceListWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            UIGlobals::GetDialogLook(), _("Devices"));
-  dialog.AddButton(_("Close"), mrOK);
   dialog.SetWidget(device_blackboard, devices,
                    UIGlobals::GetDialogLook());
   dialog.GetWidget().CreateButtons(dialog);
+  dialog.AddButton(_("Close"), mrOK);
   dialog.EnableCursorSelection();
 
   dialog.ShowModal();
