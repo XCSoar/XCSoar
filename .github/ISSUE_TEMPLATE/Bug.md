@@ -17,14 +17,19 @@ Thanks for understanding, and for contributing to the project!
 -->
 
 
-XCSoar versions having and not having the problem
+XCSoar versions having the problem
 -------------------------------------------------
 
 <!--
 Which XCSoar version are you using when seeing the problem?
-Which XCSoar version is the last one you know that did not show the problem?
 -->
 
+XCSoar versions not having the problem
+-------------------------------------------------
+
+<!--
+Which XCSoar version is the last one you know that did not show the problem?
+-->
 
 System information
 ------------------
