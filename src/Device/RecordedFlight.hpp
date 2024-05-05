@@ -33,6 +33,14 @@ struct RecordedFlightInfo : FlightInfo {
       uint8_t start_address[3];
       uint8_t end_address[3];
     } lx;
+    /**
+     * filename and filesize used by the Fenix driver.
+     */
+    struct {
+      char filename[30];
+      uint32_t filesize;
+    } fenix;
+
 
     /**
      * Flight number, used by the FLARM driver.
