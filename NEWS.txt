@@ -25,6 +25,8 @@ Version 7.43 - not yet released
   - coloring is done according to the AC tag, or if present and allowed, according to the AY tag
 * Lua scripting
   - allow HTTPs client connections by setting project-wide Curl options
+* Android
+  - EGL graphics driver initialzation improvment for old android versions
 
 Version 7.42 - 2024/03/01
 * ui
