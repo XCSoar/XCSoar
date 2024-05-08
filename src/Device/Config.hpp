@@ -129,6 +129,11 @@ struct DeviceConfig {
   StaticString<64> path;
 
   /**
+   * The path name of the bluetooth port, e.g. "COM15 (Larus1234)".
+   */
+  StaticString<128> port_name;
+
+  /**
    * The Bluetooth MAC address of the peer.
    */
   StaticString<32> bluetooth_mac;

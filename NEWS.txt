@@ -6,6 +6,8 @@ Version 7.43 - not yet released
   - NumberEntry dialog value can now be accepted by enter
   - Vario center gross label
   - Vario use AutoFonts for lables and values
+* devices
+  - add Larus driver
 * windows
  - black text color in airspace list like all other systems
 * Kobo
