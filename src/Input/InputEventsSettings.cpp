@@ -399,6 +399,26 @@ InputEvents::eventOrientationCruise(const TCHAR *misc)
   ActionInterface::SendMapSettings(true);  
 }
 
+void
+InputEvents::eventOrientationCircling(const TCHAR *misc)
+{
+  MapSettings &settings_map = CommonInterface::SetMapSettings();
+
+  if (StringIsEqual(misc, _T("northup"))) {
+    settings_map.circling_orientation = MapOrientation::NORTH_UP;
+  } else if (StringIsEqual(misc, _T("trackup"))) {
+	settings_map.circling_orientation = MapOrientation::TRACK_UP;
+  } else if (StringIsEqual(misc, _T("headingup"))) {
+    settings_map.circling_orientation = MapOrientation::HEADING_UP;
+  } else if (StringIsEqual(misc, _T("targetup"))) {
+	settings_map.circling_orientation = MapOrientation::TARGET_UP;
+  } else if (StringIsEqual(misc, _T("windup"))) {
+	settings_map.circling_orientation = MapOrientation::WIND_UP;
+  }
+  
+  ActionInterface::SendMapSettings(true);  
+}
+
 /* Event_TerrainToplogy Changes
    0       Show
    1       Topography = ON
