@@ -706,7 +706,6 @@ eventAirspaceWarnings - on, off, time nn, ack nn
 eventTerrain          - see map_window.Event_Terrain
 eventCompass          - on, off, cruise on, crusie off, climb on, climb off
 eventVario            - on, off // JMW what does this do?
-eventOrientation      - north, track,  ???
 eventTerrainRange     - on, off (might be part of eventTerrain)
 eventSounds           - Include Task and Modes sounds along with Vario
                       - Include master nn, deadband nn, netto trigger
