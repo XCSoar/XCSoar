@@ -30,7 +30,7 @@ Deinitialise(JNIEnv *env) noexcept
 }
 
 AllocatedPath
-GetExternalStoragePublicDirectory(JNIEnv *env, const char *type) noexcept
+GetStoragePublicDirectory(JNIEnv *env, const char *type) noexcept
 {
   Java::String type2(env, type);
   Java::File file(env, env->CallStaticObjectMethod(cls,

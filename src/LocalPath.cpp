@@ -208,14 +208,14 @@ FindDataPaths() noexcept
 #ifdef ANDROID
     const auto env = Java::GetEnv();
 
-    for (auto &path : context->GetExternalFilesDirs(env)) {
+    for (auto &path : context->GetFilesDirs(env)) {
       __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
                           "Context.getExternalFilesDirs()='%s'",
                           path.c_str());
       result.emplace_back(std::move(path));
     }
 
-    if (auto path = Environment::GetExternalStoragePublicDirectory(env,
+    if (auto path = Environment::GetStoragePublicDirectory(env,
                                                                    "XCSoarData");
         path != nullptr) {
       const bool writable = access(path.c_str(), W_OK) == 0;
@@ -314,7 +314,7 @@ InitialiseDataPath()
     throw std::runtime_error("No data path found");
 
 #ifdef ANDROID
-  cache_path = context->GetExternalCacheDir(Java::GetEnv());
+  cache_path = context->GetCacheDir(Java::GetEnv());
   if (cache_path == nullptr)
     throw std::runtime_error("No Android cache directory");
 
