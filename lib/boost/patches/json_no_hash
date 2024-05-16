@@ -1,7 +1,7 @@
-Index: boost_1_84_0/boost/json/impl/array.ipp
+Index: boost_1_85_0/boost/json/impl/array.ipp
 ===================================================================
---- boost_1_84_0.orig/boost/json/impl/array.ipp
-+++ boost_1_84_0/boost/json/impl/array.ipp
+--- boost_1_85_0.orig/boost/json/impl/array.ipp
++++ boost_1_85_0/boost/json/impl/array.ipp
 @@ -10,7 +10,9 @@
  #ifndef BOOST_JSON_IMPL_ARRAY_IPP
  #define BOOST_JSON_IMPL_ARRAY_IPP
@@ -30,10 +30,10 @@ Index: boost_1_84_0/boost/json/impl/array.ipp
  //----------------------------------------------------------
  
  #endif
-Index: boost_1_84_0/boost/json/impl/object.ipp
+Index: boost_1_85_0/boost/json/impl/object.ipp
 ===================================================================
---- boost_1_84_0.orig/boost/json/impl/object.ipp
-+++ boost_1_84_0/boost/json/impl/object.ipp
+--- boost_1_85_0.orig/boost/json/impl/object.ipp
++++ boost_1_85_0/boost/json/impl/object.ipp
 @@ -10,7 +10,9 @@
  #ifndef BOOST_JSON_IMPL_OBJECT_IPP
  #define BOOST_JSON_IMPL_OBJECT_IPP
@@ -62,10 +62,10 @@ Index: boost_1_84_0/boost/json/impl/object.ipp
  //----------------------------------------------------------
  
  
-Index: boost_1_84_0/boost/json/impl/string.ipp
+Index: boost_1_85_0/boost/json/impl/string.ipp
 ===================================================================
---- boost_1_84_0.orig/boost/json/impl/string.ipp
-+++ boost_1_84_0/boost/json/impl/string.ipp
+--- boost_1_85_0.orig/boost/json/impl/string.ipp
++++ boost_1_85_0/boost/json/impl/string.ipp
 @@ -423,6 +423,8 @@ reserve_impl(size_type new_cap)
  
  //----------------------------------------------------------
@@ -82,10 +82,10 @@ Index: boost_1_84_0/boost/json/impl/string.ipp
 +#endif // ENABLE_HASH
 +
  #endif
-Index: boost_1_84_0/boost/json/impl/value.ipp
+Index: boost_1_85_0/boost/json/impl/value.ipp
 ===================================================================
---- boost_1_84_0.orig/boost/json/impl/value.ipp
-+++ boost_1_84_0/boost/json/impl/value.ipp
+--- boost_1_85_0.orig/boost/json/impl/value.ipp
++++ boost_1_85_0/boost/json/impl/value.ipp
 @@ -10,7 +10,9 @@
  #ifndef BOOST_JSON_IMPL_VALUE_IPP
  #define BOOST_JSON_IMPL_VALUE_IPP
