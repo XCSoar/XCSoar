@@ -1128,6 +1128,14 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoTaskETAorAATdT,
   },
 
+  // e_SpeedTaskEst
+  {
+    N_("Speed task estimated"),
+    N_("V Task Est"),
+    N_("Estimated average cross-country speed for current task as of task completion, assuming performance of ideal MacCready cruise/climb cycle."),
+    UpdateInfoBoxTaskSpeedEst,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

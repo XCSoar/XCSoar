@@ -84,6 +84,9 @@ void
 UpdateInfoBoxTaskSpeedHour(InfoBoxData &data) noexcept;
 
 void
+UpdateInfoBoxTaskSpeedEst(InfoBoxData &data) noexcept;
+
+void
 UpdateInfoBoxTaskAATime(InfoBoxData &data) noexcept;
 
 void

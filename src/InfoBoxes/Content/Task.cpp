@@ -497,6 +497,20 @@ UpdateInfoBoxTaskSpeedHour(InfoBoxData &data) noexcept
 }
 
 void
+UpdateInfoBoxTaskSpeedEst(InfoBoxData &data) noexcept
+{
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  if (!task_stats.task_valid || !task_stats.total.planned.IsDefined() ||
+      !task_stats.total.IsAchievable()) {
+    data.SetInvalid();
+    return;
+  }
+
+  // Set Value and unit
+  data.SetValueFromTaskSpeed(task_stats.total.planned.GetSpeed());
+}
+
+void
 UpdateInfoBoxFinalGR(InfoBoxData &data) noexcept
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
