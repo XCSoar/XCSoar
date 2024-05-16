@@ -159,7 +159,7 @@ namespace InfoBoxFactory
     e_EngineRPM,  /* Engine Revolutions Per Minute */
 
     e_AAT_dT_or_ETA, /* Delta time in AAT task and ETA in racing task */
-
+    e_SpeedTaskEst, /* Estimated (predicted) whole-task average cross-country speed for current task. Affected by MC setting. */
     e_NUM_TYPES /* Last item */
   };
 
