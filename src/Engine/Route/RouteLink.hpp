@@ -69,6 +69,7 @@ struct RouteLinkBase {
     return o.GetDelta().CrossProduct(GetDelta());
   }
 
+private:
   constexpr FlatGeoPoint GetDelta() const noexcept {
     return FlatGeoPoint(second) - FlatGeoPoint(first);
   }

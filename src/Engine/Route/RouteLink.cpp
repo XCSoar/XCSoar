@@ -42,16 +42,18 @@ RouteLink::RouteLink(const RoutePoint& _destination, const RoutePoint& _origin,
 void
 RouteLink::CalcSpeedups(const FlatProjection &proj) noexcept
 {
-  const auto delta = GetDelta();
-  if (delta.x == 0 && delta.y == 0) {
+  const auto scale = proj.GetApproximateScale();
+  const auto dx = first.x - second.x;
+  const auto dy = first.y - second.y;
+  if (dx == 0 && dy == 0) {
     d = 0;
     inv_d = 0;
     polar_index = 0;
     return;
   }
 
-  polar_index = XYToIndex(delta.x, delta.y);
-  d = hypot(delta.x, delta.y) * proj.GetApproximateScale();
+  polar_index = XYToIndex(dx, dy);
+  d = hypot(dx, dy) * scale;
   inv_d = 1. / d;
 }
 
