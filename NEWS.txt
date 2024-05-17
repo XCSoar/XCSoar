@@ -1,4 +1,6 @@
 Version 7.43 - not yet released
+* map
+  - reachable map labels show correct altitude with head wind #1424
 * ui
   - TC 30s Infobox shows now climb rate since start of thermal
   - TL Gain Infobox shows now the overall climb rate of last thermal
