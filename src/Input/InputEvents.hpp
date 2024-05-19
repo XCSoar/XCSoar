@@ -180,7 +180,6 @@ void eventAirspaceDisplayMode(const TCHAR *misc);
 void eventAutoLogger(const TCHAR *misc);
 void eventGotoLookup(const TCHAR *misc);
 void eventAddWaypoint(const TCHAR *misc);
-void eventOrientation(const TCHAR *misc);
 void eventTraffic(const TCHAR *misc);
 void eventFlarmTraffic(const TCHAR *misc);
 void eventFlarmDetails(const TCHAR *misc);
@@ -193,6 +192,8 @@ void eventResetTask(const TCHAR *misc);
 void eventLockScreen(const TCHAR *misc);
 void eventExchangeFrequencies(const TCHAR *misc);
 void eventUploadIGCFile(const TCHAR *misc);
+void eventOrientationCruise(const TCHAR *misc);
+void eventOrientationCircling(const TCHAR *misc);
 // -------
 
 } // namespace InputEvents

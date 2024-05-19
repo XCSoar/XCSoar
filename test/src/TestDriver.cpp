@@ -16,6 +16,7 @@
 #include "Device/Driver/FlymasterF1.hpp"
 #include "Device/Driver/FlyNet.hpp"
 #include "Device/Driver/Flytec.hpp"
+#include "Device/Driver/Larus.hpp"
 #include "Device/Driver/LevilAHRS_G.hpp"
 #include "Device/Driver/Leonardo.hpp"
 #include "Device/Driver/LX.hpp"
@@ -711,6 +712,63 @@ TestFlytec()
   ok1(nmea_info.temperature_available);
   ok1(equals(nmea_info.temperature.ToKelvin(),
              Temperature::FromCelsius(17).ToKelvin()));
+
+  delete device;
+}
+
+static void
+TestLarus()
+{
+  NullPort null;
+  Device *device = larus_driver.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+
+  // $PLARA attitude
+  ok1(device->ParseNMEA("$PLARA,42.1,5.6,335.5*78", nmea_info));
+  ok1(nmea_info.attitude.bank_angle_available);
+  ok1(equals(nmea_info.attitude.bank_angle, 42.1));
+  ok1(nmea_info.attitude.pitch_angle_available);
+  ok1(equals(nmea_info.attitude.pitch_angle, 5.6));
+  ok1(nmea_info.attitude.heading_available);
+  ok1(equals(nmea_info.attitude.heading, 335.5));
+
+  // $PLARB battery voltage
+  ok1(device->ParseNMEA("$PLARB,13.00*4D", nmea_info));
+  ok1(nmea_info.voltage_available);
+  ok1(equals(nmea_info.voltage, 13.0));
+
+  // $PLARV tek vario, av_vario, baro height and speed (tas)
+  ok1(device->ParseNMEA("$PLARV,1.90,1.96,1284,94*5D", nmea_info));
+  ok1(nmea_info.total_energy_vario_available);
+  ok1(equals(nmea_info.total_energy_vario, 1.9));
+  ok1(nmea_info.pressure_altitude_available);
+  ok1(equals(nmea_info.pressure_altitude, 1284.0));
+  ok1(nmea_info.airspeed_available);
+  ok1(equals(nmea_info.true_airspeed, Units::ToSysUnit(94, Unit::KILOMETER_PER_HOUR)));
+
+  // $PLARW wind
+  ok1(device->ParseNMEA("$PLARW,73,23,A,A*5D", nmea_info));
+  ok1(nmea_info.external_wind_available);
+  ok1(equals(nmea_info.external_wind.bearing, 73.0));
+  ok1(equals(nmea_info.external_wind.norm, Units::ToSysUnit(23, Unit::KILOMETER_PER_HOUR)));
+
+  // $PLARS water ballast, bugs, mc, qnh
+  ok1(device->ParseNMEA("$PLARS,L,BAL,0.331*5C", nmea_info));
+  ok1(nmea_info.settings.ballast_fraction_available);
+  ok1(equals(nmea_info.settings.ballast_fraction, 0.331));
+  ok1(device->ParseNMEA("$PLARS,L,BUGS,8*07", nmea_info));
+  ok1(nmea_info.settings.bugs_available);
+  ok1(equals(nmea_info.settings.bugs, 0.92));
+  ok1(device->ParseNMEA("$PLARS,L,MC,1.8*15", nmea_info));
+  ok1(nmea_info.settings.mac_cready_available);
+  ok1(equals(nmea_info.settings.mac_cready, 1.8));
+  ok1(device->ParseNMEA("$PLARS,L,QNH,1015.0*70", nmea_info));
+  ok1(nmea_info.settings.qnh_available);
+  ok1(equals(nmea_info.settings.qnh.GetHectoPascal(), 1015));
 
   delete device;
 }
@@ -1622,7 +1680,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main()
 {
-  plan_tests(843);
+  plan_tests(877);
 
   TestGeneric();
   TestTasman();
@@ -1635,6 +1693,7 @@ int main()
   TestEye();
   TestFlymasterF1();
   TestFlytec();
+  TestLarus();
   TestLeonardo();
   TestLevilAHRS();
   TestLX(lx_driver);
