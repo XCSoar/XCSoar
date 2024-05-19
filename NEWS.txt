@@ -10,6 +10,7 @@ Version 7.43 - not yet released
   - Vario center gross label
   - Vario use AutoFonts for lables and values
   - Replace eventOrientation by two new events: eventOrientationCruise and eventOrientationCircling
+  - New artificial horizon
 * devices
   - add Larus driver
 * windows
