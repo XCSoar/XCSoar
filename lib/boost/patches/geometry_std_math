@@ -1,7 +1,7 @@
-Index: boost_1_84_0/boost/geometry/util/math.hpp
+Index: boost_1_85_0/boost/geometry/util/math.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/util/math.hpp
-+++ boost_1_84_0/boost/geometry/util/math.hpp
+--- boost_1_85_0.orig/boost/geometry/util/math.hpp
++++ boost_1_85_0/boost/geometry/util/math.hpp
 @@ -22,14 +22,14 @@
  #ifndef BOOST_GEOMETRY_UTIL_MATH_HPP
  #define BOOST_GEOMETRY_UTIL_MATH_HPP
@@ -69,10 +69,10 @@ Index: boost_1_84_0/boost/geometry/util/math.hpp
      }
  };
  
-Index: boost_1_84_0/boost/geometry/formulas/thomas_direct.hpp
+Index: boost_1_85_0/boost/geometry/formulas/thomas_direct.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/formulas/thomas_direct.hpp
-+++ boost_1_84_0/boost/geometry/formulas/thomas_direct.hpp
+--- boost_1_85_0.orig/boost/geometry/formulas/thomas_direct.hpp
++++ boost_1_85_0/boost/geometry/formulas/thomas_direct.hpp
 @@ -13,8 +13,6 @@
  #define BOOST_GEOMETRY_FORMULAS_THOMAS_DIRECT_HPP
  
@@ -82,10 +82,10 @@ Index: boost_1_84_0/boost/geometry/formulas/thomas_direct.hpp
  #include <boost/geometry/core/assert.hpp>
  #include <boost/geometry/core/radius.hpp>
  
-Index: boost_1_84_0/boost/geometry/formulas/thomas_inverse.hpp
+Index: boost_1_85_0/boost/geometry/formulas/thomas_inverse.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/formulas/thomas_inverse.hpp
-+++ boost_1_84_0/boost/geometry/formulas/thomas_inverse.hpp
+--- boost_1_85_0.orig/boost/geometry/formulas/thomas_inverse.hpp
++++ boost_1_85_0/boost/geometry/formulas/thomas_inverse.hpp
 @@ -13,8 +13,6 @@
  #define BOOST_GEOMETRY_FORMULAS_THOMAS_INVERSE_HPP
  
@@ -95,10 +95,10 @@ Index: boost_1_84_0/boost/geometry/formulas/thomas_inverse.hpp
  #include <boost/geometry/core/radius.hpp>
  
  #include <boost/geometry/util/condition.hpp>
-Index: boost_1_84_0/boost/geometry/util/normalize_spheroidal_coordinates.hpp
+Index: boost_1_85_0/boost/geometry/util/normalize_spheroidal_coordinates.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/util/normalize_spheroidal_coordinates.hpp
-+++ boost_1_84_0/boost/geometry/util/normalize_spheroidal_coordinates.hpp
+--- boost_1_85_0.orig/boost/geometry/util/normalize_spheroidal_coordinates.hpp
++++ boost_1_85_0/boost/geometry/util/normalize_spheroidal_coordinates.hpp
 @@ -414,7 +414,7 @@ formulas/vertex_longitude.hpp
  template<typename ValueType>
  inline void normalize_unit_vector(ValueType& x, ValueType& y)
@@ -108,10 +108,10 @@ Index: boost_1_84_0/boost/geometry/util/normalize_spheroidal_coordinates.hpp
  
      BOOST_GEOMETRY_ASSERT(h > 0);
  
-Index: boost_1_84_0/boost/geometry/formulas/vincenty_direct.hpp
+Index: boost_1_85_0/boost/geometry/formulas/vincenty_direct.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/formulas/vincenty_direct.hpp
-+++ boost_1_84_0/boost/geometry/formulas/vincenty_direct.hpp
+--- boost_1_85_0.orig/boost/geometry/formulas/vincenty_direct.hpp
++++ boost_1_85_0/boost/geometry/formulas/vincenty_direct.hpp
 @@ -15,8 +15,6 @@
  #define BOOST_GEOMETRY_FORMULAS_VINCENTY_DIRECT_HPP
  
@@ -121,10 +121,10 @@ Index: boost_1_84_0/boost/geometry/formulas/vincenty_direct.hpp
  #include <boost/geometry/core/radius.hpp>
  
  #include <boost/geometry/util/condition.hpp>
-Index: boost_1_84_0/boost/geometry/formulas/vincenty_inverse.hpp
+Index: boost_1_85_0/boost/geometry/formulas/vincenty_inverse.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/formulas/vincenty_inverse.hpp
-+++ boost_1_84_0/boost/geometry/formulas/vincenty_inverse.hpp
+--- boost_1_85_0.orig/boost/geometry/formulas/vincenty_inverse.hpp
++++ boost_1_85_0/boost/geometry/formulas/vincenty_inverse.hpp
 @@ -16,8 +16,6 @@
  #define BOOST_GEOMETRY_FORMULAS_VINCENTY_INVERSE_HPP
  
@@ -134,10 +134,10 @@ Index: boost_1_84_0/boost/geometry/formulas/vincenty_inverse.hpp
  #include <boost/geometry/core/radius.hpp>
  
  #include <boost/geometry/util/condition.hpp>
-Index: boost_1_84_0/boost/geometry/formulas/karney_direct.hpp
+Index: boost_1_85_0/boost/geometry/formulas/karney_direct.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/formulas/karney_direct.hpp
-+++ boost_1_84_0/boost/geometry/formulas/karney_direct.hpp
+--- boost_1_85_0.orig/boost/geometry/formulas/karney_direct.hpp
++++ boost_1_85_0/boost/geometry/formulas/karney_direct.hpp
 @@ -32,9 +32,6 @@
  #define BOOST_GEOMETRY_FORMULAS_KARNEY_DIRECT_HPP
  
@@ -166,10 +166,10 @@ Index: boost_1_84_0/boost/geometry/formulas/karney_direct.hpp
  
              result.lat2 = atan2(sin_beta2, one_minus_f * cos_beta2);
  
-Index: boost_1_84_0/boost/geometry/formulas/karney_inverse.hpp
+Index: boost_1_85_0/boost/geometry/formulas/karney_inverse.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/formulas/karney_inverse.hpp
-+++ boost_1_84_0/boost/geometry/formulas/karney_inverse.hpp
+--- boost_1_85_0.orig/boost/geometry/formulas/karney_inverse.hpp
++++ boost_1_85_0/boost/geometry/formulas/karney_inverse.hpp
 @@ -33,8 +33,6 @@
  
  
@@ -197,41 +197,42 @@ Index: boost_1_84_0/boost/geometry/formulas/karney_inverse.hpp
  
          CT sin_omega1, cos_omega1;
          CT sin_omega2, cos_omega2;
-Index: boost_1_84_0/boost/geometry/strategies/cartesian/centroid_bashein_detmer.hpp
+Index: boost_1_85_0/boost/geometry/strategies/cartesian/centroid_bashein_detmer.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/strategies/cartesian/centroid_bashein_detmer.hpp
-+++ boost_1_84_0/boost/geometry/strategies/cartesian/centroid_bashein_detmer.hpp
+--- boost_1_85_0.orig/boost/geometry/strategies/cartesian/centroid_bashein_detmer.hpp
++++ boost_1_85_0/boost/geometry/strategies/cartesian/centroid_bashein_detmer.hpp
 @@ -21,7 +21,6 @@
- 
+
  #include <cstddef>
- 
+
 -#include <boost/math/special_functions/fpclassify.hpp>
- #include <boost/numeric/conversion/cast.hpp>
- 
+
  #include <boost/geometry/arithmetic/determinant.hpp>
+ #include <boost/geometry/core/coordinate_type.hpp>
 @@ -219,7 +218,7 @@ public :
                  >::type coordinate_type;
- 
+
              // Prevent NaN centroid coordinates
 -            if (boost::math::isfinite(a3))
 +            if (std::isfinite(a3))
              {
                  // NOTE: above calculation_type is checked, not the centroid coordinate_type
                  // which means that the centroid can still be filled with INF
-Index: boost_1_84_0/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp
+Index: boost_1_85_0/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp
-+++ boost_1_84_0/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp
-@@ -18,7 +18,6 @@
+--- boost_1_85_0.orig/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp
++++ boost_1_85_0/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp
+@@ -18,7 +18,7 @@
  #ifndef BOOST_GEOMETRY_STRATEGIES_CARTESIAN_CENTROID_WEIGHTED_LENGTH_HPP
  #define BOOST_GEOMETRY_STRATEGIES_CARTESIAN_CENTROID_WEIGHTED_LENGTH_HPP
- 
+
 -#include <boost/math/special_functions/fpclassify.hpp>
- #include <boost/numeric/conversion/cast.hpp>
- 
++#include <boost/numeric/conversion/cast.hpp>
+
  #include <boost/geometry/algorithms/assign.hpp>
-@@ -122,7 +121,7 @@ public :
- 
+
+@@ -122,7 +122,7 @@ public :
+
          distance_type const zero = distance_type();
          if (! geometry::math::equals(state.length, zero)
 -            && boost::math::isfinite(state.length)) // Prevent NaN centroid coordinates
@@ -239,10 +240,11 @@ Index: boost_1_84_0/boost/geometry/strategies/cartesian/centroid_weighted_length
          {
              // NOTE: above distance_type is checked, not the centroid coordinate_type
              // which means that the centroid can still be filled with INF
-Index: boost_1_84_0/boost/geometry/formulas/meridian_segment.hpp
+
+Index: boost_1_85_0/boost/geometry/formulas/meridian_segment.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/formulas/meridian_segment.hpp
-+++ boost_1_84_0/boost/geometry/formulas/meridian_segment.hpp
+--- boost_1_85_0.orig/boost/geometry/formulas/meridian_segment.hpp
++++ boost_1_85_0/boost/geometry/formulas/meridian_segment.hpp
 @@ -12,8 +12,6 @@
  #ifndef BOOST_GEOMETRY_FORMULAS_MERIDIAN_SEGMENT_HPP
  #define BOOST_GEOMETRY_FORMULAS_MERIDIAN_SEGMENT_HPP
@@ -252,10 +254,10 @@ Index: boost_1_84_0/boost/geometry/formulas/meridian_segment.hpp
  #include <boost/geometry/core/radius.hpp>
  
  #include <boost/geometry/util/condition.hpp>
-Index: boost_1_84_0/boost/geometry/formulas/vertex_longitude.hpp
+Index: boost_1_85_0/boost/geometry/formulas/vertex_longitude.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/formulas/vertex_longitude.hpp
-+++ boost_1_84_0/boost/geometry/formulas/vertex_longitude.hpp
+--- boost_1_85_0.orig/boost/geometry/formulas/vertex_longitude.hpp
++++ boost_1_85_0/boost/geometry/formulas/vertex_longitude.hpp
 @@ -17,8 +17,6 @@
  #include <boost/geometry/formulas/spherical.hpp>
  #include <boost/geometry/formulas/flattening.hpp>
@@ -274,10 +276,10 @@ Index: boost_1_84_0/boost/geometry/formulas/vertex_longitude.hpp
          x /= h;
          y /= h;
      }
-Index: boost_1_84_0/boost/geometry/formulas/area_formulas.hpp
+Index: boost_1_85_0/boost/geometry/formulas/area_formulas.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/formulas/area_formulas.hpp
-+++ boost_1_84_0/boost/geometry/formulas/area_formulas.hpp
+--- boost_1_85_0.orig/boost/geometry/formulas/area_formulas.hpp
++++ boost_1_85_0/boost/geometry/formulas/area_formulas.hpp
 @@ -18,7 +18,6 @@
  #include <boost/geometry/formulas/mean_radius.hpp>
  #include <boost/geometry/formulas/karney_inverse.hpp>
@@ -295,10 +297,10 @@ Index: boost_1_84_0/boost/geometry/formulas/area_formulas.hpp
          x /= h;
          y /= h;
      }
-Index: boost_1_84_0/boost/geometry/util/has_nan_coordinate.hpp
+Index: boost_1_85_0/boost/geometry/util/has_nan_coordinate.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/util/has_nan_coordinate.hpp
-+++ boost_1_84_0/boost/geometry/util/has_nan_coordinate.hpp
+--- boost_1_85_0.orig/boost/geometry/util/has_nan_coordinate.hpp
++++ boost_1_85_0/boost/geometry/util/has_nan_coordinate.hpp
 @@ -19,8 +19,6 @@
  #include <boost/geometry/core/coordinate_dimension.hpp>
  #include <boost/geometry/core/coordinate_type.hpp>
@@ -317,10 +319,10 @@ Index: boost_1_84_0/boost/geometry/util/has_nan_coordinate.hpp
      }
  };
  
-Index: boost_1_84_0/boost/geometry/policies/robustness/get_rescale_policy.hpp
+Index: boost_1_85_0/boost/geometry/policies/robustness/get_rescale_policy.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/policies/robustness/get_rescale_policy.hpp
-+++ boost_1_84_0/boost/geometry/policies/robustness/get_rescale_policy.hpp
+--- boost_1_85_0.orig/boost/geometry/policies/robustness/get_rescale_policy.hpp
++++ boost_1_85_0/boost/geometry/policies/robustness/get_rescale_policy.hpp
 @@ -75,7 +75,7 @@ inline void scale_box_to_integer_range(B
      num_type const half = 0.5;
      if (math::equals(diff, num_type())
@@ -330,10 +332,10 @@ Index: boost_1_84_0/boost/geometry/policies/robustness/get_rescale_policy.hpp
      {
          factor = 1;
      }
-Index: boost_1_84_0/boost/geometry/formulas/sjoberg_intersection.hpp
+Index: boost_1_85_0/boost/geometry/formulas/sjoberg_intersection.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/formulas/sjoberg_intersection.hpp
-+++ boost_1_84_0/boost/geometry/formulas/sjoberg_intersection.hpp
+--- boost_1_85_0.orig/boost/geometry/formulas/sjoberg_intersection.hpp
++++ boost_1_85_0/boost/geometry/formulas/sjoberg_intersection.hpp
 @@ -13,8 +13,6 @@
  #define BOOST_GEOMETRY_FORMULAS_SJOBERG_INTERSECTION_HPP
  
@@ -343,10 +345,10 @@ Index: boost_1_84_0/boost/geometry/formulas/sjoberg_intersection.hpp
  #include <boost/geometry/core/radius.hpp>
  
  #include <boost/geometry/util/condition.hpp>
-Index: boost_1_84_0/boost/geometry/formulas/authalic_radius_sqr.hpp
+Index: boost_1_85_0/boost/geometry/formulas/authalic_radius_sqr.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/formulas/authalic_radius_sqr.hpp
-+++ boost_1_84_0/boost/geometry/formulas/authalic_radius_sqr.hpp
+--- boost_1_85_0.orig/boost/geometry/formulas/authalic_radius_sqr.hpp
++++ boost_1_85_0/boost/geometry/formulas/authalic_radius_sqr.hpp
 @@ -21,8 +21,6 @@
  
  #include <boost/geometry/algorithms/not_implemented.hpp>
@@ -365,10 +367,10 @@ Index: boost_1_84_0/boost/geometry/formulas/authalic_radius_sqr.hpp
      }
  };
  
-Index: boost_1_84_0/boost/geometry/formulas/meridian_inverse.hpp
+Index: boost_1_85_0/boost/geometry/formulas/meridian_inverse.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/formulas/meridian_inverse.hpp
-+++ boost_1_84_0/boost/geometry/formulas/meridian_inverse.hpp
+--- boost_1_85_0.orig/boost/geometry/formulas/meridian_inverse.hpp
++++ boost_1_85_0/boost/geometry/formulas/meridian_inverse.hpp
 @@ -12,7 +12,7 @@
  #ifndef BOOST_GEOMETRY_FORMULAS_MERIDIAN_INVERSE_HPP
  #define BOOST_GEOMETRY_FORMULAS_MERIDIAN_INVERSE_HPP
@@ -404,10 +406,10 @@ Index: boost_1_84_0/boost/geometry/formulas/meridian_inverse.hpp
          CT lat_sign = 1;
          if (lat1+lat2 < c0)
          {
-Index: boost_1_84_0/boost/geometry/strategies/cartesian/buffer_side_straight.hpp
+Index: boost_1_85_0/boost/geometry/strategies/cartesian/buffer_side_straight.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/strategies/cartesian/buffer_side_straight.hpp
-+++ boost_1_84_0/boost/geometry/strategies/cartesian/buffer_side_straight.hpp
+--- boost_1_85_0.orig/boost/geometry/strategies/cartesian/buffer_side_straight.hpp
++++ boost_1_85_0/boost/geometry/strategies/cartesian/buffer_side_straight.hpp
 @@ -9,8 +9,6 @@
  
  #include <cstddef>
@@ -429,10 +431,10 @@ Index: boost_1_84_0/boost/geometry/strategies/cartesian/buffer_side_straight.hpp
          {
              // In case of coordinates differences of e.g. 1e300, length
              // will overflow and we should not generate output
-Index: boost_1_84_0/boost/geometry/formulas/andoyer_inverse.hpp
+Index: boost_1_85_0/boost/geometry/formulas/andoyer_inverse.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/formulas/andoyer_inverse.hpp
-+++ boost_1_84_0/boost/geometry/formulas/andoyer_inverse.hpp
+--- boost_1_85_0.orig/boost/geometry/formulas/andoyer_inverse.hpp
++++ boost_1_85_0/boost/geometry/formulas/andoyer_inverse.hpp
 @@ -13,10 +13,7 @@
  #ifndef BOOST_GEOMETRY_FORMULAS_ANDOYER_INVERSE_HPP
  #define BOOST_GEOMETRY_FORMULAS_ANDOYER_INVERSE_HPP

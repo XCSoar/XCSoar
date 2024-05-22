@@ -1,0 +1,22 @@
+BasedOnStyle: LLVM
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+ColumnLimit: 79
+
+# Indent namespace blocks by zero spaces
+NamespaceIndentation: None
+
+# CamelCase for class/function names
+# Lower case with underscores for attributes/variables
+# All upper case for constants/enums
+Standard: Cpp03
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignAfterOpenBracket: Align
+AlwaysBreakAfterReturnType: TopLevelDefinitions
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+BraceWrapping:
+  BeforeElse: false
+  AfterControlStatement: MultiLine
+BreakBeforeBraces: Allman

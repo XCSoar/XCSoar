@@ -257,7 +257,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Speed task average"),
     N_("V Task Avg"),
-    N_("Average cross country speed while on current task, not compensated for altitude."),
+    N_("Average cross-country speed while on current task, not compensated for altitude."),
     UpdateInfoBoxTaskSpeed,
   },
 
@@ -599,7 +599,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Speed task instantaneous"),
     N_("V Task Inst"),
-    N_("Instantaneous cross country speed while on current task, compensated for altitude. Equivalent to instantaneous Pirker cross-country speed."),
+    N_("Instantaneous cross-country speed while on current task, compensated for altitude. Equivalent to instantaneous Pirker cross-country speed."),
     UpdateInfoBoxTaskSpeedInstant,
   },
 
@@ -615,7 +615,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Speed task achieved"),
     N_("V Task Ach"),
-    N_("Achieved cross country speed while on current task, compensated for altitude.  Equivalent to Pirker cross-country speed remaining."),
+    N_("Achieved cross-country speed while on current task, compensated for altitude.  Equivalent to Pirker cross-country speed remaining."),
     UpdateInfoBoxTaskSpeedAchieved,
   },
 
@@ -962,7 +962,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Speed task last hour"),
     N_("V Task H"),
-    N_("Average cross country speed while on current task over the last hour, not compensated for altitude."),
+    N_("Average cross-country speed while on current task over the last hour, not compensated for altitude."),
     UpdateInfoBoxTaskSpeedHour,
   },
 
@@ -1126,6 +1126,14 @@ static constexpr MetaData meta_data[] = {
     N_("AATdeltaOrETA"),
     N_("Shows AAT delta time and estimated time of arrival in case of AAT task, and estimated time of arrival in case of racing task"),
     UpdateInfoTaskETAorAATdT,
+  },
+
+  // e_SpeedTaskEst
+  {
+    N_("Speed task estimated"),
+    N_("V Task Est"),
+    N_("Estimated average cross-country speed for current task as of task completion, assuming performance of ideal MacCready cruise/climb cycle."),
+    UpdateInfoBoxTaskSpeedEst,
   },
 
 };

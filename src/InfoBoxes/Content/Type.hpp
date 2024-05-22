@@ -116,50 +116,35 @@ namespace InfoBoxFactory
     CruiseEfficiency,
     WIND_ARROW,
     THERMAL_ASSISTANT,
-
+    /* 100..109 */
     START_OPEN_TIME,
     START_OPEN_ARRIVAL_TIME,
-
     NEXT_RADIAL,
     ATC_RADIAL,
-
     TASK_SPEED_HOUR,
     WP_NOMINAL_DIST, /* The nominal distance to the currently selected waypoint. For AAT tasks, this is the distance to the origin of the AAT sector */
-
     CIRCLE_DIAMETER,
-
     TAKEOFF_DISTANCE,
     CONTEST_SPEED,
-
     FIN_MC0_ALTD,
-
     /* 110..119 */
     NEXT_ARROW,
     e_WP_ETA_VMG, /* Estimated arrival time at next waypoint assuming current speed is maintained*/
-
     e_NonCircling_Climb_Perc,
-
     e_Climb_Perc_Chart,
-
     e_NbrSat, /* Number of used Sat by GPS module */
-
     e_ActiveRadio, /* Active Radio Frequency */
-
     e_StandbyRadio, /* Standby Radio Frequency */
     e_Thermal_Time, /* Time in Thermal*/
-
     e_Alternate_2_GR, /* Geometric gradient to the arrival height above the second alternate. This is not adjusted for total energy */
-
     e_HeartRate,
-
+    /* 120..126 */
     e_TransponderCode, /* Transponder code */
-
     e_EngineCHT,  /* Engine Cylinder Head Temperature */
     e_EngineEGT,  /* Engine Exhaust Gas Temperature */
     e_EngineRPM,  /* Engine Revolutions Per Minute */
-
     e_AAT_dT_or_ETA, /* Delta time in AAT task and ETA in racing task */
-
+    e_SpeedTaskEst, /* Estimated (predicted) whole-task average cross-country speed for current task. Affected by MC setting. */
     e_NUM_TYPES /* Last item */
   };
 

@@ -352,31 +352,43 @@ InputEvents::eventAirspaceDisplayMode(const TCHAR *misc)
 }
 
 void
-InputEvents::eventOrientation(const TCHAR *misc)
+InputEvents::eventOrientationCruise(const TCHAR *misc)
 {
   MapSettings &settings_map = CommonInterface::SetMapSettings();
 
   if (StringIsEqual(misc, _T("northup"))) {
     settings_map.cruise_orientation = MapOrientation::NORTH_UP;
-    settings_map.circling_orientation = MapOrientation::NORTH_UP;
-  } else if (StringIsEqual(misc, _T("northcircle"))) {
-    settings_map.cruise_orientation = MapOrientation::TRACK_UP;
-    settings_map.circling_orientation = MapOrientation::NORTH_UP;
-  } else if (StringIsEqual(misc, _T("trackcircle"))) {
-    settings_map.cruise_orientation = MapOrientation::NORTH_UP;
-    settings_map.circling_orientation = MapOrientation::TRACK_UP;
   } else if (StringIsEqual(misc, _T("trackup"))) {
-    settings_map.cruise_orientation = MapOrientation::TRACK_UP;
-    settings_map.circling_orientation = MapOrientation::TRACK_UP;
-  } else if (StringIsEqual(misc, _T("northtrack"))) {
-    settings_map.cruise_orientation = MapOrientation::TRACK_UP;
-    settings_map.circling_orientation = MapOrientation::TARGET_UP;
+	settings_map.cruise_orientation = MapOrientation::TRACK_UP;
+  } else if (StringIsEqual(misc, _T("headingup"))) {
+    settings_map.cruise_orientation = MapOrientation::HEADING_UP;
   } else if (StringIsEqual(misc, _T("targetup"))) {
-    settings_map.cruise_orientation = MapOrientation::TARGET_UP;
-    settings_map.circling_orientation = MapOrientation::TARGET_UP;
+	settings_map.cruise_orientation = MapOrientation::TARGET_UP;
+  } else if (StringIsEqual(misc, _T("windup"))) {
+	settings_map.cruise_orientation = MapOrientation::WIND_UP;
   }
+  
+  ActionInterface::SendMapSettings(true);  
+}
 
-  ActionInterface::SendMapSettings(true);
+void
+InputEvents::eventOrientationCircling(const TCHAR *misc)
+{
+  MapSettings &settings_map = CommonInterface::SetMapSettings();
+
+  if (StringIsEqual(misc, _T("northup"))) {
+    settings_map.circling_orientation = MapOrientation::NORTH_UP;
+  } else if (StringIsEqual(misc, _T("trackup"))) {
+	settings_map.circling_orientation = MapOrientation::TRACK_UP;
+  } else if (StringIsEqual(misc, _T("headingup"))) {
+    settings_map.circling_orientation = MapOrientation::HEADING_UP;
+  } else if (StringIsEqual(misc, _T("targetup"))) {
+	settings_map.circling_orientation = MapOrientation::TARGET_UP;
+  } else if (StringIsEqual(misc, _T("windup"))) {
+	settings_map.circling_orientation = MapOrientation::WIND_UP;
+  }
+  
+  ActionInterface::SendMapSettings(true);  
 }
 
 /* Event_TerrainToplogy Changes
