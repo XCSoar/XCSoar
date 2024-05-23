@@ -5,6 +5,7 @@ Version 7.43 - not yet released
   - TC 30s Infobox shows now climb rate since start of thermal
   - TL Gain Infobox shows now the overall climb rate of last thermal
   - add new Infobox V Task Est (Speed task estimated)
+  - Status-Task panel “Speed estimated” now blank if MC>0 & can't finish task
   - add missing airspace to Select Airspace filter
   - NumberEntry dialog value can now be accepted by enter
   - Vario center gross label
