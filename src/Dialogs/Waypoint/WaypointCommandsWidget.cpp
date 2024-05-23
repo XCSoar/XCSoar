@@ -225,25 +225,25 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent,
 
   RowFormWidget::Prepare(parent, rc);
   
-    replace_button = AddButton(_("Replace in Task"), [this](){
-      if (ReplaceInTask(*task_manager, waypoint) && form != nullptr)
-        form->SetModalResult(mrOK);
-    });
+  replace_button = AddButton(_("Replace in Task"), [this](){
+    if (ReplaceInTask(*task_manager, waypoint) && form != nullptr)
+      form->SetModalResult(mrOK);
+  });
 
-    insert_button = AddButton(_("Insert in Task"), [this](){
-      if (InsertInTask(*task_manager, waypoint) && form != nullptr)
-        form->SetModalResult(mrOK);
-    });
+  insert_button = AddButton(_("Insert in Task"), [this](){
+    if (InsertInTask(*task_manager, waypoint) && form != nullptr)
+      form->SetModalResult(mrOK);
+  });
 
-    append_button = AddButton(_("Append to Task"), [this](){
-      if (AppendToTask(*task_manager, waypoint) && form != nullptr)
-        form->SetModalResult(mrOK);
-    });
+  append_button = AddButton(_("Append to Task"), [this](){
+    if (AppendToTask(*task_manager, waypoint) && form != nullptr)
+      form->SetModalResult(mrOK);
+  });
     
-      remove_button = AddButton(_("Remove from Task"), [this](){
-          if (RemoveFromTask(*task_manager, *waypoint) && form != nullptr)
-            form->SetModalResult(mrOK);
-        });
+  remove_button = AddButton(_("Remove from Task"), [this](){
+      if (RemoveFromTask(*task_manager, *waypoint) && form != nullptr)
+        form->SetModalResult(mrOK);
+    });
   
   home_button = AddButton(_("Set as New Home"), [this](){
     SetHome(waypoints, *waypoint);
@@ -267,28 +267,28 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent,
                                          waypoint->name.c_str());
   });
   
-    edit_button = AddButton(_("Edit"), [this](){
-      Waypoint wp_copy = *waypoint;
+  edit_button = AddButton(_("Edit"), [this](){
+    Waypoint wp_copy = *waypoint;
 
-      /* move to user.cup */
-      wp_copy.origin = WaypointOrigin::USER;
+  /* move to user.cup */
+  wp_copy.origin = WaypointOrigin::USER;
 
-      if (dlgWaypointEditShowModal(wp_copy) == WaypointEditResult::MODIFIED) {
-        // TODO: refresh data instead of closing dialog?
-        form->SetModalResult(mrOK);
+  if (dlgWaypointEditShowModal(wp_copy) == WaypointEditResult::MODIFIED) {
+    // TODO: refresh data instead of closing dialog?
+    form->SetModalResult(mrOK);
 
-        {
-          ScopeSuspendAllThreads suspend;
-          waypoints->Replace(waypoint, std::move(wp_copy));
-          waypoints->Optimise();
-        }
+    {
+      ScopeSuspendAllThreads suspend;
+      waypoints->Replace(waypoint, std::move(wp_copy));
+      waypoints->Optimise();
+    }
 
-        try {
-          WaypointGlue::SaveWaypoints(*waypoints);
-        } catch (...) {
-          ShowError(std::current_exception(), _("Failed to save waypoints"));
-        }
-      }
-    });
+    try {
+      WaypointGlue::SaveWaypoints(*waypoints);
+    } catch (...) {
+      ShowError(std::current_exception(), _("Failed to save waypoints"));
+    }
+    }
+  });
   UpdateButtons();
 }
