@@ -44,7 +44,7 @@ TaskClosePanel::RefreshStatus() noexcept
   message.SetText(*task_modified ?
                   _("Task has been modified") : _("Task unchanged"));
 
-  revert_button.SetVisible(*task_modified);
+  revert_button.SetEnabled(*task_modified);
 }
 
 void
