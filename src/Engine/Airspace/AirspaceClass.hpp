@@ -65,6 +65,7 @@ enum AirspaceClass : uint8_t
   MTR,
   ALERT,
   WARNING,
+  DANGER2,
   PROTECTED,
   HTZ,
   GLIDING_SECTOR,
@@ -77,7 +78,7 @@ enum AirspaceClass : uint8_t
   AERIAL_SPORTING_RECREATIONAL,
   OVERFLIGHT_RESTRICTION,
   MRT,
-  TFR ,
+  TFR,
   VFR_SECTOR,
   AIRSPACECLASSCOUNT
 };
