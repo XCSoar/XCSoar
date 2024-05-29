@@ -103,7 +103,6 @@ AirspaceRendererSettings::SetDefaults()
   classes[CLASSG].SetColors(RGB8_GRAYISH_VIOLET);
   classes[MATZ].SetColors(RGB8_GRAYISH_VIOLET);
   classes[RMZ].SetColors(RGB8_GRAYISH_VIOLET);
-  //
   classes[UNCLASSIFIED].SetColors(RGB8_MAGENTA.Darken());
   classes[RESTRICTED].SetColors(RGB8_RED.Darken());
   classes[TMA].SetColors(RGB8_BLUE);
@@ -117,6 +116,7 @@ AirspaceRendererSettings::SetDefaults()
   classes[MTR].SetColors(RGB8_LIGHT_GRAY);
   classes[ALERT].SetColors(RGB8_DARK_GRAY);
   classes[WARNING].SetColors(RGB8_DARK_GRAY);
+  classes[DANGER2].SetColors(RGB8_RED.Darken());
   classes[PROTECTED].SetColors(RGB8_GREEN.Darken());
   classes[HTZ].SetColors(RGB8_GREEN.Darken());
   classes[GLIDING_SECTOR].SetColors(RGB8_GREEN.Darken());
