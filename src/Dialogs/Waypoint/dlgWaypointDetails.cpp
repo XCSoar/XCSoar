@@ -197,8 +197,7 @@ public:
 #endif
                         *waypoint);
 
-    
-      goto_button.MoveAndShow(layout.goto_button);
+    goto_button.MoveAndShow(layout.goto_button);
 
     if (!images.empty()) {
       magnify_button.MoveAndShow(layout.magnify_button);
@@ -227,8 +226,7 @@ public:
   }
 
   void Hide() noexcept override {
-    
-      goto_button.Hide();
+    goto_button.Hide();
 
     if (!images.empty()) {
       magnify_button.Hide();
@@ -256,8 +254,7 @@ public:
 #endif
                         *waypoint);
 
-    
-      goto_button.Move(layout.goto_button);
+    goto_button.Move(layout.goto_button);
 
     if (!images.empty()) {
       magnify_button.Move(layout.magnify_button);
@@ -283,9 +280,8 @@ public:
   }
 
   bool SetFocus() noexcept override {
-    
-      goto_button.SetFocus();
-      return true;
+    goto_button.SetFocus();
+    return true;
   }
 
   bool HasFocus() const noexcept override {
