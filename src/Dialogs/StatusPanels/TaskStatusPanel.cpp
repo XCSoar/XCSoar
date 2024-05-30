@@ -70,7 +70,7 @@ TaskStatusPanel::Refresh() noexcept
     SetText(RemainingDistance,
             FormatUserDistanceSmart(task_stats.total.remaining.GetDistance()));
 
-  if (task_stats.total.planned.IsDefined())
+  if (task_stats.total.remaining_effective.IsDefined())
     SetText(EstimatedSpeed,
             FormatUserTaskSpeed(task_stats.total.planned.GetSpeed()));
   else
