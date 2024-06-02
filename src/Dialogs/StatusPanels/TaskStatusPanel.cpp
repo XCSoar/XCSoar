@@ -54,14 +54,24 @@ TaskStatusPanel::Refresh() noexcept
     SetText(TaskTime,
             FormatTimeHHMM(backend_components->protected_task_manager->GetOrderedTaskSettings().aat_min_time));
 
+  /**
+   * Make these fields blank if MC>0 and the combination of strong wind and
+   * low MacCready setting is such that the task can't be finished.
+   */
   if (task_stats.total.remaining_effective.IsDefined()) {
     SetText(ETETime,
             FormatSignedTimeHHMM(task_stats.GetEstimatedTotalTime()));
     SetText(RemainingTime,
             FormatSignedTimeHHMM(task_stats.total.time_remaining_now));
+    SetText(EstimatedSpeed,
+            FormatUserTaskSpeed(task_stats.total.planned.GetSpeed()));
+    LoadValue(SPEED_REMAINING, task_stats.total.remaining_effective.GetSpeed(),
+              UnitGroup::TASK_SPEED);
   } else {
     ClearText(ETETime);
     ClearText(RemainingTime);
+    ClearText(EstimatedSpeed);
+    ClearValue(SPEED_REMAINING);
   }
 
   if (task_stats.total.planned.IsDefined())
@@ -73,12 +83,6 @@ TaskStatusPanel::Refresh() noexcept
   if (task_stats.total.remaining.IsDefined())
     SetText(RemainingDistance,
             FormatUserDistanceSmart(task_stats.total.remaining.GetDistance()));
-
-  if (task_stats.total.remaining_effective.IsDefined())
-    SetText(EstimatedSpeed,
-            FormatUserTaskSpeed(task_stats.total.planned.GetSpeed()));
-  else
-    ClearText(EstimatedSpeed);
 
   if (task_stats.total.travelled.IsDefined())
     SetText(AverageSpeed,
@@ -101,12 +105,6 @@ TaskStatusPanel::Refresh() noexcept
       ClearValue(RANGE);
   } else
     ClearValue(RANGE);
-
-  if (task_stats.total.remaining_effective.IsDefined())
-    LoadValue(SPEED_REMAINING, task_stats.total.remaining_effective.GetSpeed(),
-              UnitGroup::TASK_SPEED);
-  else
-    ClearValue(SPEED_REMAINING);
 
   LoadValue(EFFECTIVE_MC, task_stats.effective_mc, UnitGroup::VERTICAL_SPEED);
 
