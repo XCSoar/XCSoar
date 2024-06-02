@@ -18,6 +18,10 @@ Version 7.44 - not yet released
   - infoboxen: new setting, allow scaling of title/comment font
   - Radar / Thermalassistant Gauges: Placement to avoid InfoBoxen and Overlap
   - add helpers on infoboxes for Argentinean contests 95% distance rule
+  - Status-Task panel: "Estimated task time", "Remaining time", and "Speed
+    estimated" now blank if MC>0 & can't finish task
+  - Status-Task panel: "Remaining time", "Remaining distance", "Speed
+    estimated", and "Speed remaining" now blank after task is finished
 * Android
   - fix crash on startup when loading icons on ldpi screens
 
@@ -41,10 +45,6 @@ Version 7.43 - 2024-08-12
   - TC 30s Infobox shows now climb rate since start of thermal
   - TL Gain Infobox shows now the overall climb rate of last thermal
   - add new Infobox V Task Est (Speed task estimated)
-  - Status-Task panel: "Estimated task time", "Remaining time", and "Speed
-    estimated" now blank if MC>0 & can't finish task
-  - Status-Task panel: "Remaining time", "Remaining distance", "Speed
-    estimated", and "Speed remaining" now blank after task is finished
   - add missing airspace to Select Airspace filter
   - NumberEntry dialog value can now be accepted by enter
   - Vario center gross label
