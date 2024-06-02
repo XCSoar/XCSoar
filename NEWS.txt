@@ -1,17 +1,22 @@
-Version 7.43 - not yet released
+Version 7.43-rc0 - 2024-06-02
 * map
   - reachable map labels show correct altitude with head wind #1424
 * ui
   - TC 30s Infobox shows now climb rate since start of thermal
   - TL Gain Infobox shows now the overall climb rate of last thermal
   - add new Infobox V Task Est (Speed task estimated)
-  - Status-Task panel “Speed estimated” now blank if MC>0 & can't finish task
+  - Status-Task panel: "Estimated task time", "Remaining time", and "Speed
+    estimated" now blank if MC>0 & can't finish task
   - add missing airspace to Select Airspace filter
   - NumberEntry dialog value can now be accepted by enter
   - Vario center gross label
   - Vario use AutoFonts for lables and values
   - Replace eventOrientation by two new events: eventOrientationCruise and eventOrientationCircling
   - New artificial horizon
+  - Flarm gauge fix radar size
+  - infobox management page rename buttons for copying sets
+  - consistent naming of ok/close buttons and placement
+  - add PanTo button to waypoints dialog if opened from task related infoboxen
 * devices
   - add Larus driver
 * windows
@@ -22,6 +27,10 @@ Version 7.43 - not yet released
 * airspace
   - add classes according the OpenAir extended format AY tag
   - coloring is done according to the AC tag, or if present and allowed, according to the AY tag
+* Lua scripting
+  - allow HTTPs client connections by setting project-wide Curl options
+* Android
+  - EGL graphics driver initialzation improvment for old android versions
 
 Version 7.42 - 2024/03/01
 * ui
