@@ -23,6 +23,8 @@ Version 7.43-rc0 - 2024-06-02
   - add new Infobox V Task Est (Speed task estimated)
   - Status-Task panel: "Estimated task time", "Remaining time", and "Speed
     estimated" now blank if MC>0 & can't finish task
+  - Status-Task panel: "Remaining time", "Remaining distance", "Speed
+    estimated", and "Speed remaining" now blank after task is finished
   - add missing airspace to Select Airspace filter
   - NumberEntry dialog value can now be accepted by enter
   - Vario center gross label
