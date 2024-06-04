@@ -33,6 +33,9 @@ Version 7.43-rc0 - 2024-06-02
   - infobox management page rename buttons for copying sets
   - consistent naming of ok/close buttons and placement
   - add PanTo button to waypoints dialog if opened from task related infoboxen
+* data files
+  - fix loss of "home" waypoint designation in certain situations for a 
+    non-airport home waypoint
 * devices
   - add Larus driver
 * windows
