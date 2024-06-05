@@ -338,8 +338,9 @@ The following attributes are provided by ``xcsoar.task``:
    - Estimated time required to reach next waypoint, assuming
      performance of ideal MacCready cruise/climb cycle [s].
  * - ``next_eta``
-   - Estimated arrival local time at next waypoint,
-     assuming performance of ideal MacCready cruise/climb cycle.
+   - Estimated arrival local time, since midnight of the day of arrival,
+     at next waypoint, assuming performance of ideal MacCready cruise/climb
+     cycle [s].
  * - ``next_altitude_diff``
    - Arrival altitude at the next waypoint relative to the safety
      arrival height [m].
@@ -361,8 +362,9 @@ The following attributes are provided by ``xcsoar.task``:
    - Estimated time required to complete task, assuming performance of
      ideal MacCready cruise/climb cycle [s].
  * - ``final_eta``
-   - Estimated arrival local time at task completion, assuming
-     performance of ideal MacCready cruise/climb cycle.
+   - Estimated arrival local time, since midnight of the day of arrival,
+     at task completion, assuming performance of ideal MacCready cruise/climb
+     cycle [s].
  * - ``final_altitude_diff``
    - Arrival altitude at the final task turn point relative to the
      safety arrival height [m].
