@@ -350,7 +350,7 @@ OrderedTask::ScanDistanceMinMax(const GeoPoint &location, bool force,
 }
 
 double
-OrderedTask::ScanDistanceNominal() noexcept
+OrderedTask::ScanDistanceNominal() const noexcept
 {
   if (task_points.empty())
     return 0;
