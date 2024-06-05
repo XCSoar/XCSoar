@@ -263,7 +263,7 @@ protected:
    *
    * @return Distance (m) of nominal task
    */
-  virtual double ScanDistanceNominal() noexcept = 0;
+  virtual double ScanDistanceNominal() const noexcept = 0;
 
   /**
    * Calculate distance of planned task (sum of distances from each leg's

@@ -31,7 +31,7 @@ public:
   double CalcGradient(const AircraftState &state_now) const noexcept override;
   TimeStamp ScanTotalStartTime() noexcept override;
   TimeStamp ScanLegStartTime() noexcept override;
-  double ScanDistanceNominal() noexcept override;
+  double ScanDistanceNominal() const noexcept override;
   double ScanDistancePlanned() noexcept override;
   double ScanDistanceRemaining(const GeoPoint &ref) noexcept override;
   double ScanDistanceScored(const GeoPoint &ref) noexcept override;
