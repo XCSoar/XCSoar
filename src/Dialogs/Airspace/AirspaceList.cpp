@@ -34,7 +34,7 @@ enum Controls {
   NAME,
   DISTANCE,
   DIRECTION,
-  TYPE,
+  CLASS_AND_TYPE,
 };
 
 class AirspaceFilterWidget;
@@ -210,10 +210,10 @@ struct AirspaceListWidgetState
 {
   double distance;
   unsigned direction;
-  unsigned type;
+  unsigned class_and_type;
 
   AirspaceListWidgetState()
-    :distance(-1), direction(WILDCARD), type(WILDCARD) {}
+    :distance(-1), direction(WILDCARD), class_and_type(WILDCARD) {}
 };
 
 static AirspaceListWidgetState dialog_state;
@@ -242,8 +242,8 @@ AirspaceListWidget::UpdateList()
 {
   AirspaceFilterData data;
 
-  if (dialog_state.type != WILDCARD)
-    data.cls = (AirspaceClass)dialog_state.type;
+  if (dialog_state.class_and_type != WILDCARD)
+    data.cls = (AirspaceClass)dialog_state.class_and_type;
 
   const TCHAR *name_filter = filter_widget.GetValueString(NAME);
   if (!StringIsEmpty(name_filter))
@@ -304,9 +304,9 @@ AirspaceListWidget::OnModified(DataField &df) noexcept
     DataFieldEnum &dfe = (DataFieldEnum &)df;
     dialog_state.direction = dfe.GetValue();
 
-  } else if (filter_widget.IsDataField(TYPE, df)) {
+  } else if (filter_widget.IsDataField(CLASS_AND_TYPE, df)) {
     DataFieldEnum &dfe = (DataFieldEnum &)df;
-    dialog_state.type = dfe.GetValue();
+    dialog_state.class_and_type = dfe.GetValue();
   }
 
   FilterMode(filter_widget.IsDataField(NAME, df));
@@ -440,7 +440,7 @@ AirspaceFilterWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   Add(_("Name"), nullptr, CreateNameDataField(listener));
   Add(_("Distance"), nullptr, CreateDistanceDataField(listener));
   Add(_("Direction"), nullptr, CreateDirectionDataField(listener));
-  AddEnum(_("Type"), nullptr, type_filter_list, WILDCARD, listener);
+  AddEnum(_("Class/Type"), nullptr, type_filter_list, WILDCARD, listener);
 }
 
 void
