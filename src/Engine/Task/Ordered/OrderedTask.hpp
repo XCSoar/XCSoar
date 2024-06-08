@@ -425,7 +425,7 @@ private:
   /**
    * @return true if a solution was found (and applied)
    */
-  bool RunDijsktraMax() noexcept;
+  bool RunDijsktraMax(TaskDijkstraMax &dijkstra) noexcept;
 
   double ScanDistanceMax() noexcept;
 
