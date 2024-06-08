@@ -256,25 +256,21 @@ OrderedTask::ScanDistanceMin(const GeoPoint &location, bool full) noexcept
 }
 
 inline bool
-OrderedTask::RunDijsktraMax() noexcept
+OrderedTask::RunDijsktraMax(TaskDijkstraMax &dijkstra) noexcept
 {
   const unsigned task_size = TaskSize();
   if (task_size < 2)
     return false;
-
-  if (dijkstra_max == nullptr)
-    dijkstra_max = std::make_unique<TaskDijkstraMax>();
-  TaskDijkstraMax &dijkstra = *dijkstra_max;
+  dijkstra.SetTaskSize(task_size);
 
   const unsigned active_index = GetActiveIndex();
-  dijkstra.SetTaskSize(task_size);
   for (unsigned i = 0; i != task_size; ++i) {
     const SearchPointVector &boundary = i == active_index
       /* since one can still travel further in the current sector, use
          the full boundary here */
       ? task_points[i]->GetBoundaryPoints()
       : task_points[i]->GetSearchPoints();
-    dijkstra_max->SetBoundary(i, boundary);
+    dijkstra.SetBoundary(i, boundary);
   }
 
   double start_radius(-1), finish_radius(-1);
@@ -294,7 +290,7 @@ OrderedTask::RunDijsktraMax() noexcept
       dijkstra.SetBoundary(task_size - 1, finish.GetNominalPoints());
   }
 
-  if (!dijkstra_max->DistanceMax())
+  if (!dijkstra.DistanceMax())
     return false;
 
   for (unsigned i = 0; i != task_size; ++i) {
@@ -334,7 +330,9 @@ OrderedTask::ScanDistanceMax() noexcept
 
   assert(active_task_point < task_points.size());
 
-  RunDijsktraMax();
+  if (dijkstra_max == nullptr)
+    dijkstra_max = std::make_unique<TaskDijkstraMax>();
+  RunDijsktraMax(*dijkstra_max);
 
   return task_points.front()->ScanDistanceMax();
 }
