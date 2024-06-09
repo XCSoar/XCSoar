@@ -166,6 +166,15 @@ TaskLeg::GetNominalLegVector() const noexcept
 }
 
 inline double
+TaskLeg::GetMaximumTotalLegDistance() const noexcept
+{
+  if (GetOrigin())
+    return memo_max_total.Distance(GetOrigin()->GetLocationMaxTotal(),
+                                   destination.GetLocationMaxTotal());
+  return 0;
+}
+
+inline double
 TaskLeg::GetMaximumLegDistance() const noexcept
 {
   if (GetOrigin())
@@ -205,6 +214,13 @@ TaskLeg::ScanDistancePlanned() noexcept
   vector_planned = GetPlannedVector();
   return vector_planned.distance +
     (GetNext() ? GetNext()->ScanDistancePlanned() : 0);
+}
+
+double
+TaskLeg::ScanDistanceMaxTotal() const noexcept
+{
+  return GetMaximumTotalLegDistance() +
+         (GetNext() ? GetNext()->ScanDistanceMaxTotal() : 0);
 }
 
 double
