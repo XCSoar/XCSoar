@@ -31,6 +31,7 @@ class TaskLeg {
   /** Saved vector for current leg's planned route */
   GeoVector vector_planned;
 
+  DistanceMemento memo_max_total;
   DistanceMemento memo_max;
   DistanceMemento memo_min;
   GeoVectorMemento memo_nominal;
@@ -65,6 +66,15 @@ public:
    */
   [[gnu::pure]]
   double ScanDistancePlanned() noexcept;
+
+  /**
+   * Calculate maximum task distance, irrespective of path flown
+   * (sum of distances from legs between all maximum distance points)
+   *
+   * @return Distance (m) of task's maximum distance
+   */
+  [[gnu::pure]]
+  double ScanDistanceMaxTotal() const noexcept;
 
   /**
    * Calculate distance of maximum achievable task (sum of distances from
@@ -118,13 +128,21 @@ public:
   double ScanDistanceTravelled(const GeoPoint &ref) noexcept;
 
   /**
+   * Retrieve maximum distance for the task leg
+   *
+   * @return Distance (m)
+   */
+  [[gnu::pure]]
+  double GetMaximumTotalLegDistance() const noexcept;
+  
+  /**
    * Retrieve maximum possible leg distance
    *
    * @return Distance (m)
    */
   [[gnu::pure]]
   double GetMaximumLegDistance() const noexcept;
-  
+
   /**
    * Retrieve min possible leg distance
    *

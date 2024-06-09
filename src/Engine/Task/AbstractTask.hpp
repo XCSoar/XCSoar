@@ -319,6 +319,12 @@ protected:
                                   double *dmin, double *dmax) noexcept = 0;
 
   /**
+   * Calculate total maximum distance for task, disregarding any path flown
+   */
+  virtual double ScanDistanceMaxTotal() noexcept = 0;
+
+
+  /**
    * Calculate glide result for remainder of task
    *
    * @param state_now Aircraft state

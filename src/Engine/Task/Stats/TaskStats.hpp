@@ -34,6 +34,8 @@ public:
 
   /** Nominal task distance (m) */
   double distance_nominal;
+  /** Maximum task distance (m) */
+  double distance_max_total;
   /** Maximum achievable task distance (m) */
   double distance_max;
   /** Minimum achievable task distance (m) */

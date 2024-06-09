@@ -37,6 +37,7 @@ class SampledTaskPoint {
   SearchPointVector nominal_points;
   SearchPointVector sampled_points;
   SearchPointVector boundary_points;
+  SearchPoint search_max_total;
   SearchPoint search_max;
   SearchPoint search_min;
 
@@ -61,8 +62,21 @@ public:
   }
 
   /**
+   * Accessor to retrieve location of the boundary polygon node
+   * that produces the task's maximum distance.
+   *
+   * @return Location of max distance node
+   */
+  [[gnu::pure]]
+  const GeoPoint &GetLocationMaxTotal() const noexcept {
+    assert(search_max_total.IsValid());
+
+    return search_max_total.GetLocation();
+  };
+
+  /**
    * Accessor to retrieve location of the sample/boundary polygon node
-   * that produces the maximum task distance.
+   * that produces the current maximum achievable task distance.
    *
    * @return Location of max distance node
    */
@@ -75,7 +89,7 @@ public:
 
   /**
    * Accessor to retrieve location of the sample/boundary polygon
-   * node that produces the minimum task distance.
+   * node that produces the current minimum achievable task distance.
    *
    * @return Location of minimum distance node
    */
@@ -185,8 +199,20 @@ public:
   const SearchPointVector &GetSearchPoints() const noexcept;
 
   /**
+   * Set the location of the boundary polygon node
+   * that produces the task's maximum distance.
+   *
+   * @param locmax Location of max distance node
+   */
+  void SetSearchMaxTotal(const SearchPoint &locmax) noexcept {
+    assert(locmax.IsValid());
+
+    search_max_total = locmax;
+  }
+  
+  /**
    * Set the location of the sample/boundary polygon node
-   * that produces the maximum task distance.
+   * that produces the current maximum achievable task distance.
    *
    * @param locmax Location of max distance node
    */
@@ -198,7 +224,7 @@ public:
 
   /**
    * Set the location of the sample/boundary polygon node
-   * that produces the minimum task distance.
+   * that produces the current minimum achievable task distance.
    *
    * @param locmin Location of min distance node
    */
