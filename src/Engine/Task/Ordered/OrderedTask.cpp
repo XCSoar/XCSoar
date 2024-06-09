@@ -256,7 +256,7 @@ OrderedTask::ScanDistanceMin(const GeoPoint &location, bool full) noexcept
 }
 
 inline bool
-OrderedTask::RunDijsktraMax(TaskDijkstraMax &dijkstra) noexcept
+OrderedTask::RunDijsktraMax(TaskDijkstraMax &dijkstra, SearchPointVector &results) const noexcept
 {
   const unsigned task_size = TaskSize();
   if (task_size < 2)
@@ -293,8 +293,8 @@ OrderedTask::RunDijsktraMax(TaskDijkstraMax &dijkstra) noexcept
   if (!dijkstra.DistanceMax())
     return false;
 
-  for (unsigned i = 0; i != task_size; ++i) {
-    SearchPoint solution = dijkstra.GetSolution(i);
+  for (unsigned i = 0; i != results.size(); ++i) {
+    results[i] = dijkstra.GetSolution(i);
 
     if (i == 0 && start_radius > 0) {
       /* subtract start cylinder radius by finding the intersection
@@ -302,7 +302,7 @@ OrderedTask::RunDijsktraMax(TaskDijkstraMax &dijkstra) noexcept
       const GeoPoint &current = task_points.front()->GetLocation();
       const GeoPoint &neighbour = dijkstra.GetSolution(i + 1).GetLocation();
       GeoPoint gp = current.IntermediatePoint(neighbour, start_radius);
-      solution = SearchPoint(gp, task_projection);
+      results[i] = SearchPoint(gp, task_projection);
     }
 
     if (i == task_size - 1 && finish_radius > 0) {
@@ -311,12 +311,8 @@ OrderedTask::RunDijsktraMax(TaskDijkstraMax &dijkstra) noexcept
       const GeoPoint &current = task_points.back()->GetLocation();
       const GeoPoint &neighbour = dijkstra.GetSolution(i - 1).GetLocation();
       GeoPoint gp = current.IntermediatePoint(neighbour, finish_radius);
-      solution = SearchPoint(gp, task_projection);
+      results[i] = SearchPoint(gp, task_projection);
     }
-
-    SetPointSearchMax(i, solution);
-    if (i <= active_index)
-      set_tp_search_achieved(i, solution);
   }
 
   return true;
@@ -328,11 +324,22 @@ OrderedTask::ScanDistanceMax() noexcept
   if (task_points.empty()) // nothing to do!
     return 0;
 
-  assert(active_task_point < task_points.size());
+  const unsigned task_size = TaskSize();
+  assert(active_task_point < task_size);
 
   if (dijkstra_max == nullptr)
     dijkstra_max = std::make_unique<TaskDijkstraMax>();
-  RunDijsktraMax(*dijkstra_max);
+
+  SearchPointVector maxDistancePoints(task_size); 
+  bool updated = RunDijsktraMax(*dijkstra_max, maxDistancePoints);
+
+  if (updated) {
+    for (unsigned i = 0; i < maxDistancePoints.size(); ++i) {
+      SetPointSearchMax(i, maxDistancePoints[i]);
+      if (i <= GetActiveIndex() )
+        set_tp_search_achieved(i, maxDistancePoints[i]);
+    }
+  }
 
   return task_points.front()->ScanDistanceMax();
 }
