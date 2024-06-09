@@ -423,10 +423,20 @@ private:
   double ScanDistanceMin(const GeoPoint &ref, bool full) noexcept;
 
   /**
-   * @return true if a solution was found (and applied)
+   * Search the points that give the maximum flyable distance
+   * 
+   * @param dijkstra Calculator object to use (its state will be updated)
+   * @param results Vector of SearchPoints where the resulting points are returned
+   * 
+   * @return true if a solution was found
    */
-  bool RunDijsktraMax(TaskDijkstraMax &dijkstra) noexcept;
+  bool RunDijsktraMax(TaskDijkstraMax &dijkstra, SearchPointVector &results) const noexcept;
 
+  /**
+   * Update the maximum flyable distance points with the TaskDijkstraMax calcualtor 
+   * 
+   * @return the maximum distance value
+   */
   double ScanDistanceMax() noexcept;
 
   /**
