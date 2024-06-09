@@ -127,8 +127,10 @@ AbstractTask::UpdateStatsDistances(const GeoPoint &location,
     stats.current_leg.next_leg_vector = GeoVector::Invalid();
   }
 
-  if (full_update)
+  if (full_update) {
     stats.distance_nominal = ScanDistanceNominal();
+    stats.distance_max_total = ScanDistanceMaxTotal();
+  }
 
   ScanDistanceMinMax(location, full_update,
                        &stats.distance_min, &stats.distance_max);
