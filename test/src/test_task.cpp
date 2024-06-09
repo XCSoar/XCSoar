@@ -10,23 +10,30 @@ extern "C" {
 #include "tap.h"
 }
 
+static bool
+distance_is_equal(double actual, double expected) {
+  constexpr double TOLERANCE_PERCENT = 0.5;
+  return std::abs(actual/expected - 1.0) < TOLERANCE_PERCENT/100;
+}
+
 static void
 assert_distances(const TaskManager &task_manager,
                  double expected_max,
                  double expected_min) 
 {
-  constexpr double TOLERANCE_PERCENT = 0.5;
-
   auto stats = task_manager.GetStats();
-  double error_max = stats.distance_max/expected_max - 1.0;
-  ok( std::abs( error_max ) < TOLERANCE_PERCENT/100, 
+  ok( distance_is_equal( stats.distance_max, expected_max ),
       "task distance max: got %.2f, expected %.2f",
       stats.distance_max, expected_max );
 
-  double error_min = stats.distance_min/expected_min - 1.0;
-  ok( std::abs( error_min ) < TOLERANCE_PERCENT/100, 
+  ok( distance_is_equal( stats.distance_min, expected_min ),
       "task distance min: got %.2f, expected %.2f",
       stats.distance_min, expected_min );
+
+  // before starting to fly the task, flyable maximum and total maximum are the same
+  ok( distance_is_equal( stats.distance_max_total, stats.distance_max ),
+      "task distance max total: got %.2f, expected %.2f",
+      stats.distance_max_total, stats.distance_max_total );
 }
 
 /**
@@ -75,7 +82,7 @@ int main(int argc, char** argv)
 
   static constexpr unsigned NUM_RANDOM = 50;
   static constexpr unsigned NUM_TYPE_MANIPS = 50;
-  plan_tests(8+NUM_TYPE_MANIPS+NUM_TASKS+2+4+NUM_RANDOM);
+  plan_tests(8+NUM_TYPE_MANIPS+NUM_TASKS+2+6+NUM_RANDOM);
   
   GlidePolar glide_polar(2);
 

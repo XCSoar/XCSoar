@@ -142,6 +142,12 @@ UnorderedTask::ScanDistanceMinMax([[maybe_unused]] const GeoPoint &location, [[m
   *dmin = *dmax = ScanDistanceNominal();
 }
 
+double 
+UnorderedTask::ScanDistanceMaxTotal() noexcept
+{
+  return ScanDistanceNominal();
+}
+
 double
 UnorderedTask::ScanDistanceNominal() const noexcept
 {
