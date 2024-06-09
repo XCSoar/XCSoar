@@ -106,7 +106,7 @@ OrderedTaskSummary(const OrderedTask *task, TCHAR *text, bool linebreaks)
                          Units::GetDistanceName(),
                          linebreak,
                          _("max."),
-                         (double)Units::ToUserDistance(stats.distance_max),
+                         (double)Units::ToUserDistance(stats.distance_max_total),
                          Units::GetDistanceName(),
                          linebreak,
                          _("min."),

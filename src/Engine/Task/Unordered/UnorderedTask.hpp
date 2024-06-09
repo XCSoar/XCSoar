@@ -38,6 +38,7 @@ public:
   double ScanDistanceTravelled(const GeoPoint &ref) noexcept override;
   void ScanDistanceMinMax(const GeoPoint &ref, bool full,
                           double *dmin, double *dmax) noexcept override;
+  double ScanDistanceMaxTotal() noexcept override;
   void GlideSolutionRemaining(const AircraftState &state_now,
                               const GlidePolar &polar,
                               GlideResult &total, GlideResult &leg) noexcept override;

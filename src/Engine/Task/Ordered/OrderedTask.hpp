@@ -71,6 +71,7 @@ private:
   SmartTaskAdvance task_advance;
   std::unique_ptr<TaskDijkstraMin> dijkstra_min;
   std::unique_ptr<TaskDijkstraMax> dijkstra_max;
+  std::unique_ptr<TaskDijkstraMax> dijkstra_max_total;
 
   StaticString<64> name;
 
@@ -390,12 +391,21 @@ protected:
   void SetPointSearchMin(unsigned tp, const SearchPoint &sol) noexcept;
 
   /**
-   * Set task point's maximum distance value (by TaskDijkstra).
+   * Set task point's maximum flyable distance value (by TaskDijkstra).
    *
    * @param tp Index of task point to set max
    * @param sol Search point found to be maximum distance
    */
   void SetPointSearchMax(unsigned tp, const SearchPoint &sol) noexcept;
+
+/**
+   * Set task point's total maximum distance point, irrespective of 
+   * currently flown track (by TaskDijkstra).
+   *
+   * @param tp Index of task point to set max
+   * @param sol Search point found to be maximum distance
+   */
+  void SetPointSearchMaxTotal(unsigned tp, const SearchPoint &sol) noexcept;
 
   /**
    * Set task point's minimum distance achieved value
@@ -423,14 +433,17 @@ private:
   double ScanDistanceMin(const GeoPoint &ref, bool full) noexcept;
 
   /**
-   * Search the points that give the maximum flyable distance
+   * Search the points that give the maximum distance
    * 
    * @param dijkstra Calculator object to use (its state will be updated)
    * @param results Vector of SearchPoints where the resulting points are returned
+   * @param ignoreSampledPoints Run the algorithm only on TP boundaries, ignoring flown path
    * 
    * @return true if a solution was found
    */
-  bool RunDijsktraMax(TaskDijkstraMax &dijkstra, SearchPointVector &results) const noexcept;
+  bool RunDijsktraMax(TaskDijkstraMax &dijkstra, 
+                      SearchPointVector &results, 
+                      bool ignoreSampledPoints) const noexcept;
 
   /**
    * Update the maximum flyable distance points with the TaskDijkstraMax calcualtor 
@@ -689,6 +702,7 @@ protected:
   double ScanDistanceTravelled(const GeoPoint &ref) noexcept override;
   void ScanDistanceMinMax(const GeoPoint &ref, bool full,
                           double *dmin, double *dmax) noexcept override;
+  double ScanDistanceMaxTotal() noexcept override;
   void GlideSolutionRemaining(const AircraftState &state_now,
                               const GlidePolar &polar,
                               GlideResult &total, GlideResult &leg) noexcept override;
