@@ -39,7 +39,7 @@ LXEosDevice::EnableNMEA(OperationEnvironment& env)
    * - LXWP2 every 5 seconds (MC, Bugs, Ballast settings)
    * - LXWP3 every 3 seconds (used for alt_offset (QNH) )
    *
-   * It seems that LXWP3 does not get sent if it is to be sent at the same 
+   * It seems that LXWP3 does not get sent if it is to be sent at the same
    * time as LXWP2, so choosing odd numbers to reduce overlaps
    *
    * LXWP2 is also sent automatically whenever vario settings are changed by
@@ -144,24 +144,56 @@ LXEosDevice::SendNewSettings(OperationEnvironment& env)
     return false;
 }
 
+void
+LXEosDevice::WriteAndWaitForACK(const std::span<const std::byte> &message,
+                                OperationEnvironment &env)
+{
+  port.FullFlush(env, std::chrono::milliseconds(50),
+                 std::chrono::milliseconds(200));
+  port.FullWrite(message, env, communication_timeout);
+  port.WaitForByte(ACK, env, communication_timeout);
+}
+
+void
+LXEosDevice::CopyStringSpacePadded(char dest[], const TCHAR src[],
+                                   const size_t len)
+{
+  bool src_end_reached = false;
+  for (uint8_t i = 0; i < (len - 1); i++) {
+    if (!src_end_reached)
+      if (src[i] == 0) src_end_reached = true;
+    dest[i] = src_end_reached ? '\x20' : src[i];
+  }
+
+  dest[len - 1] = 0;
+}
+
+PackedBE32
+LXEosDevice::ConvertCoord(Angle coord)
+{
+  int32_t value = static_cast<int32_t>(coord.Degrees() * 60000.0);
+  return *reinterpret_cast<uint32_t *>(&value);
+}
+
 bool
 LXEosDevice::HasReliableAltOffset(DeviceInfo device)
 {
-  /* 
+  /*
    * The altitude offset is considered to be reliable (gets updated if QNH
-   * is changed in-flight) on LX Eos device with firmware version >= 1.7. 
+   * is changed in-flight) on LX Eos device with firmware version >= 1.7.
    * LX Era is known to have the issue on recent version.
-   * It is unknown whether older versions on Eos have the issue 
+   * It is unknown whether older versions on Eos have the issue
    *
-   * If the altitude offset is considered reliable, the true altitude provided 
-   * by device is converted into standard altitude and then passed to XCSoar. 
-   * Otherwise, the altitude is passed as-is using the ProvideBaroAltitudeTrue. 
+   * If the altitude offset is considered reliable, the true altitude provided
+   * by device is converted into standard altitude and then passed to XCSoar.
+   * Otherwise, the altitude is passed as-is using the ProvideBaroAltitudeTrue.
    * Correctness of XCSoar's standard altitude will then depend on correctness
-   * of QNH setting in XCSoar. The altitude offset is used to set XCsoar's QNH 
-   * in both cases. 
-   * 
-   * The "Era bug" manifests as an inability to synchronize QNH change in flight.
-   * Altitudes will still be correct if the QNH is changed manually in XCSoar. 
+   * of QNH setting in XCSoar. The altitude offset is used to set XCsoar's QNH
+   * in both cases.
+   *
+   * The "Era bug" manifests as an inability to synchronize QNH change in
+   * flight. Altitudes will still be correct if the QNH is changed manually in
+   * XCSoar.
    */
 
   if (device.product == "LX Eos"sv) {
@@ -189,7 +221,7 @@ LXEosDevice::CalculateDevicePolarReferenceMass(VarioSettings& settings)
 
   auto xcs_polar = settings.xcsoar_polar.GetCoefficients();
 
-  /* 
+  /*
    * Calculate and compare best LD velocities to get reference mass of device's
    * polar v2/v1 = sqrt(m2/m1) -> m2 = m1 * (v2/v1)^2
    */
@@ -199,16 +231,17 @@ LXEosDevice::CalculateDevicePolarReferenceMass(VarioSettings& settings)
   settings.device_reference_mass =
     settings.xcsoar_polar.GetReferenceMass() * v_ratio * v_ratio;
 
-  /* 
-   * The calculation won't give precise result. If the calculated reference mass is
-   * higher than the actual value, it causes trouble: When the ballast in XCSoar is
-   * set to zero, the corresponding ballast in vario would have negative mass.
-   * Such value gets ignored by the vario (it keeps previous value) rather than 
-   * clipping it to zero. To ensure that this problem won't arise, the calculated
-   * reference mass is slightly decreased so that the inaccuracy will cause the 
-   * ballast weight on the vario to be slightly higher than in XCSoar. 
+  /*
+   * The calculation won't give precise result. If the calculated reference
+   * mass is higher than the actual value, it causes trouble: When the ballast
+   * in XCSoar is set to zero, the corresponding ballast in vario would have
+   * negative mass. Such value gets ignored by the vario (it keeps previous
+   * value) rather than clipping it to zero. To ensure that this problem won't
+   * arise, the calculated reference mass is slightly decreased so that the
+   * inaccuracy will cause the ballast weight on the vario to be slightly
+   * higher than in XCSoar.
    */
-  
+
   // Decrease by 5% and floor to nearest multiple of 10
   settings.device_reference_mass *= 0.95f;
   settings.device_reference_mass = 10.0f * floor(settings.device_reference_mass / 10.0f);
