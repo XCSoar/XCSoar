@@ -13,6 +13,97 @@
 #include "NMEA/DeviceInfo.hpp"
 #include "NMEA/InputLine.hpp"
 #include "thread/Mutex.hxx"
+#include "time/BrokenDate.hpp"
+#include "util/AllocatedArray.hxx"
+#include "util/ByteOrder.hxx"
+#include "util/PackedLittleEndian.hxx"
+#include "util/PackedBigEndian.hxx"
+#include "util/PackedFloat.hxx"
+
+struct EosDeclarationStruct
+{
+  const uint8_t syn = 0x02;
+  const uint8_t cmd = 0xCA;
+  const uint8_t flag = 0;   // Not used
+  const PackedLE16 oo_id = 0; // Not used
+  char pilot[19];           // "Name Surname"
+  char glider[12];          // Polar name
+  char reg_num[8];          // Glider registration number
+  char cmp_num[4];          // Competition id
+
+  // 0=STANDARD, 1=15-METER, 2=OPEN, 3=18-METER,
+  // 4=WORLD, 5=DOUBLE, 6=MOTOR_GL
+  uint8_t byClass;
+  char observer[10];              // Not used
+  const uint8_t gpsdatum = 0;     // Not used
+  const uint8_t fix_accuracy = 0; // Not used
+  char gps[60];                   // Not used
+
+  /* auto defined */
+  const uint8_t flag2 = 0;      // Not used
+  const PackedLE32 input_time = 0; // Not used
+  const uint8_t di = 0;         // Not used
+  const uint8_t mi = 0;         // Not used
+  const uint8_t yi = 0;         // Not used
+  /* user defined */
+  const uint8_t fd = 0;     // Not used
+  const uint8_t fm = 0;     // Not used
+  const uint8_t fy = 0;     // Not used
+  const PackedLE16 taskid = 0; // Not used
+
+  // Number of TP without Takeoff, Start, Finish and Landing.
+  char num_of_tp;
+
+  // 1=Turnpoint (also Start and Finish), 2=Landing, 3=Takeoff
+  uint8_t prg[12];
+
+  // TP Longitude in degrees multiplied by 60000.0f
+  PackedBE32 lon[12];
+
+  // TP Latitude in degrees multiplied by 60000.0f
+  PackedBE32 lat[12];
+
+  char name[12][9]; //< TP Name
+
+  std::byte crc;
+};
+static_assert(sizeof(EosDeclarationStruct) == 352);
+static_assert(alignof(EosDeclarationStruct) == 1);
+
+struct EosObsZoneStruct
+{
+  const uint8_t syn = 0x02;
+  const uint8_t cmd = 0xF4;
+
+  // TP number 1=Start, 2 = TP1, 3=TP2, 4=Finish
+  uint8_t uiTpNr;
+
+  // direction 0= Symmetric, 1=Fixed, 2=Next, 3=Previous
+  uint8_t uiDirection;
+
+  uint8_t bAutoNext = 1;    // Is this auto next TP or AAT TP
+  uint8_t bIsLine = 0;      // Is this line flag
+  PackedFloatLE fA1 = 0;    // Angle A1 in radians
+  PackedFloatLE fA2 = 0;    // Angle A2 in radians
+  PackedFloatLE fA21 = 0;   // Angle A21 in radians
+  PackedLE32 uiR1 = 0;      // Radius R1 in meters
+  PackedLE32 uiR2 = 0;      // Radius R2 in meters
+  PackedFloatLE fElevation; // Turnpoint elevation
+
+  std::byte crc;
+};
+static_assert(sizeof(EosObsZoneStruct) == 31);
+static_assert(alignof(EosObsZoneStruct) == 1);
+
+struct EosClassStruct
+{
+  const uint8_t syn = 0x02;
+  const uint8_t cmd = 0xD0;
+  char name[9]; // Competition class
+  std::byte crc;
+};
+static_assert(sizeof(EosClassStruct) == 12);
+static_assert(alignof(EosClassStruct) == 1);
 
 /**
  * @brief Struct to hold last known settings of the device
@@ -109,6 +200,71 @@ private:
    */
   bool SendNewSettings(OperationEnvironment& env);
 
+  /**
+   * @brief Fills destination buffer of given length by characters of string
+   * followed by spaces and ended by 0x00
+   *
+   * @param dest destination buffer
+   * @param src source buffer (0x00 terminated string)
+   * @param len length of destination buffer
+   */
+  static void CopyStringSpacePadded(char dest[],
+                                    const TCHAR src[],
+                                    const size_t len);
+
+  /**
+   * @brief Converts coordinate to value used in declaration
+   *
+   * @param coord coordinate (longitude or latitude)
+   * @note value is in milli angle minutes (x60000)
+   */
+  static PackedBE32 ConvertCoord(Angle coord);
+
+  /**
+   * @brief Send declaration (pilot, glider, and waypoints) to Eos
+   *
+   * @param declaration
+   * @param home (unused)
+   * @param env
+   */
+  void SendDeclaration(const Declaration& declaration,
+                       const Waypoint* home,
+                       OperationEnvironment& env);
+
+  /**
+   * @brief
+   *
+   * @param tp_nr turnpoint number (counted from 1 = Start)
+   * @param declaration
+   * @param env
+   */
+  void SendObsZone(uint8_t tp_nr,
+                   const Declaration& declaration,
+                   OperationEnvironment& env);
+
+  /**
+   * @brief Send competition class string (currently an empty string, as there
+   * is no class info in the XCSoar declaration)
+   *
+   * @param declaration
+   * @param env
+   */
+  void SendCompetitionClass(const Declaration& declaration,
+                            OperationEnvironment& env);
+  /**
+   * @brief Transmit data and wait for ACK response, will throw if
+   * ACK is not received within timeout duration
+   *
+   * @param message Data to be transmitted
+   * @param env OperationEnvironment
+   */
+  void WriteAndWaitForACK(const std::span<const std::byte>& message,
+                          OperationEnvironment& env);
+
+  const std::byte ACK{ 0x06 };
+  const std::chrono::steady_clock::duration communication_timeout =
+    std::chrono::milliseconds(3000);
+
 public:
   /* virtual methods from class Device */
   void LinkTimeout() override;
@@ -121,4 +277,7 @@ public:
                   OperationEnvironment& env) override;
   void OnCalculatedUpdate(const MoreData& basic,
                           const DerivedInfo& calculated) override;
+  bool Declare(const Declaration& declaration,
+               const Waypoint* home,
+               OperationEnvironment& env) override;
 };

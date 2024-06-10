@@ -143,6 +143,39 @@ LXEosDevice::SendNewSettings(OperationEnvironment& env)
     return false;
 }
 
+void
+LXEosDevice::WriteAndWaitForACK(const std::span<const std::byte>& message,
+                                OperationEnvironment& env)
+{
+  port.FullFlush(
+    env, std::chrono::milliseconds(50), std::chrono::milliseconds(200));
+  port.FullWrite(message, env, communication_timeout);
+  port.WaitForByte(ACK, env, communication_timeout);
+}
+
+void
+LXEosDevice::CopyStringSpacePadded(char dest[],
+                                   const TCHAR src[],
+                                   const size_t len)
+{
+  bool src_end_reached = false;
+  for (uint8_t i = 0; i < (len - 1); i++) {
+    if (!src_end_reached)
+      if (src[i] == 0)
+        src_end_reached = true;
+    dest[i] = src_end_reached ? '\x20' : src[i];
+  }
+
+  dest[len - 1] = 0;
+}
+
+PackedBE32
+LXEosDevice::ConvertCoord(Angle coord)
+{
+  int32_t value = static_cast<int32_t>(coord.Degrees() * 60000.0);
+  return *reinterpret_cast<uint32_t*>(&value);
+}
+
 bool
 LXEosDevice::HasReliableAltOffset(DeviceInfo device)
 {

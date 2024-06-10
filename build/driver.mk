@@ -54,7 +54,8 @@ LX_EOS_SOURCES = \
 	$(DRIVER_SRC_DIR)/LX_EOS/LXEosDevice.cpp \
 	$(DRIVER_SRC_DIR)/LX_EOS/LXEosRegister.cpp \
 	$(DRIVER_SRC_DIR)/LX_EOS/LXEosParser.cpp \
-	
+	$(DRIVER_SRC_DIR)/LX_EOS/LXEosDeclare.cpp
+
 FLARM_SOURCES = \
 	$(DRIVER_SRC_DIR)/FLARM/Device.cpp \
 	$(DRIVER_SRC_DIR)/FLARM/Register.cpp \
