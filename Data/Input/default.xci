@@ -1030,6 +1030,11 @@ event=Mode default
 label=Quick Guide
 location=9
 
+event=Frequencies
+event=Mode default
+label=Frequencies
+location=8
+
 # -------------
 # mode=Menu
 # -------------
@@ -1447,6 +1452,13 @@ event=Exit
 label=Quit XCSoar
 location=41
 
+mode=RemoteStick
+type=key
+data=0
+event=Frequencies
+label=Frequencies
+location=36
+
 # -------------
 # Define gesture to open Quickmenu without keyboard or remote
 # ("Draw a button on the screen")
@@ -1455,4 +1467,3 @@ location=41
 mode=default
 type=gesture
 data=ULDR
-event=QuickMenu
