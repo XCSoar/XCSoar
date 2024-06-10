@@ -105,6 +105,86 @@ struct EosClassStruct
 static_assert(sizeof(EosClassStruct) == 12);
 static_assert(alignof(EosClassStruct) == 1);
 
+struct EosGetNumOfFlights
+{
+  // This command has all bytes constant
+  const uint8_t syn = 0x02;
+  const uint8_t cmd = 0xF2;
+  const uint8_t crc = 0x1F;
+};
+static_assert(sizeof(EosGetNumOfFlights) == 3);
+static_assert(alignof(EosGetNumOfFlights) == 1);
+
+struct EosNumOfFlightsResponse
+{
+  const uint8_t ack = 0x06;
+  uint8_t number_of_flights;
+  std::byte crc;
+};
+static_assert(sizeof(EosNumOfFlightsResponse) == 3);
+static_assert(alignof(EosNumOfFlightsResponse) == 1);
+
+struct EosRequestFlightInfo
+{
+  const uint8_t syn = 0x02;
+  const uint8_t cmd = 0xF0;
+  uint8_t flight_id; // First is 1 (newest), only one byte in case of Eos
+  std::byte crc;     // CRC
+};
+static_assert(sizeof(EosRequestFlightInfo) == 4);
+static_assert(alignof(EosRequestFlightInfo) == 1);
+
+struct EosFlightInfoResponse
+{
+  const uint8_t ack = 0x06;
+  PackedLE16 uiFlightID; // Flight id (not used, index is used for downloading!)
+  char acIGCFileName[10]; // IGC file name (not used)
+  PackedLE32 uiDate;      // Date (Julian day)
+  PackedLE32 uiTakeOff;   // Takeoff time (seconds after midnight)
+  PackedLE32 uiLanding;   // Landing time (seconds after midnight)
+  char acName[12];        // Pilot name (not used)
+  char acSurname[12];     // Pilot surname (not used)
+  char acRegNr[8];        // Registration number (not used)
+  char acCompId[8];       // Competition ID (not used)
+  int8_t iMinGforce; // Minimum G-force (need to be divided by 10), (not used)
+  int8_t iMaxGforce; // Maximum G-force (need to be divided by 10), (not used)
+  PackedLE16 uiMaxALT; // Maximum altitude (not used)
+  PackedLE16 uiMaxIAS; // Maximum indicated air speed (not used)
+  uint8_t reserved[16]; // Unused
+  uint8_t reserved2[2]; // Unused, undocumented
+  PackedLE32 size;      // IGC file size
+  std::byte crc;
+};
+static_assert(sizeof(EosFlightInfoResponse) == 94);
+static_assert(alignof(EosFlightInfoResponse) == 1);
+
+struct EosRequestFlightBlock
+{
+  const uint8_t syn = 0x02;
+  const uint8_t cmd = 0xF1;
+
+  /**
+   * Flight ID is the index (1 = newest), not the ID from FlightInfo,
+   * Only the first byte is used, as the Eos cannot give flight info for more
+   * that 255 flights
+   */
+  PackedLE16 flight_id;
+
+  PackedLE16 block_id; // First is 0
+  std::byte crc;       // CRC
+};
+static_assert(sizeof(EosRequestFlightBlock) == 7);
+static_assert(alignof(EosRequestFlightBlock) == 1);
+
+struct EosFlightBlockResponseHeader
+{
+  const uint8_t ack = 0x06;
+  PackedLE16 block_size; // In bytes
+  PackedLE16 block_id;   // First is 0
+};
+static_assert(sizeof(EosFlightBlockResponseHeader) == 5);
+static_assert(alignof(EosFlightBlockResponseHeader) == 1);
+
 /**
  * @brief Struct to hold last known settings of the device
  *
@@ -265,6 +345,36 @@ private:
   const std::chrono::steady_clock::duration communication_timeout =
     std::chrono::milliseconds(3000);
 
+  /**
+   * @brief Get the Number Of Flights in logger. Maximum number that can be
+   * read is 0xFF
+   *
+   * @param env
+   */
+  uint8_t GetNumberOfFlights(OperationEnvironment& env);
+
+  /**
+   * @brief Get the Flight Info
+   *
+   * @param index 1 = newest, maximum is the flight count read by
+   * GetNumberOfFlights
+   * @param env
+   */
+  RecordedFlightInfo GetFlightInfo(const uint8_t index,
+                                   OperationEnvironment& env);
+
+  /**
+   * @brief Get the Flight Log Block
+   *
+   * @param flight_id Flight ID from FlightInfo
+   * @param block_id First is 0
+   * @param env
+   * @return
+   */
+  AllocatedArray<std::byte> GetFlightLogBlock(uint16_t flight_id,
+                                              uint16_t block_id,
+                                              OperationEnvironment& env);
+
 public:
   /* virtual methods from class Device */
   void LinkTimeout() override;
@@ -280,4 +390,9 @@ public:
   bool Declare(const Declaration& declaration,
                const Waypoint* home,
                OperationEnvironment& env) override;
+  bool ReadFlightList(RecordedFlightList& flight_list,
+                      OperationEnvironment& env) override;
+  bool DownloadFlight(const RecordedFlightInfo& flight,
+                      Path path,
+                      OperationEnvironment& env) override;
 };
