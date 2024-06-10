@@ -3,43 +3,64 @@
 
 #include "RadioEdit.hpp"
 #include "Look/DialogLook.hpp"
-#include "Widget/OffsetButtonsWidget.hpp"
+#include "Widget/RadioEditWidget.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "ActionInterface.hpp"
 #include "UIGlobals.hpp"
+#include "Dialogs/Frequency/dlgUserFrequencyList.hpp"
 
-class RadioOffsetButtons final : public OffsetButtonsWidget {
+class RadioEdit final : public RadioEditWidget
+{
 public:
-  RadioOffsetButtons(bool active_freq) noexcept
-    :OffsetButtonsWidget(UIGlobals::GetDialogLook().button, _T("%.0f kHz"), 5, 1000),set_active_freq(active_freq) {}
+  explicit RadioEdit(bool active_freq) noexcept
+      : RadioEditWidget(UIGlobals::GetDialogLook()), set_active_freq(active_freq) {}
 
 protected:
   /* virtual methods from OffsetButtonsWidget */
-  void OnOffset(double offset) noexcept override;
+  void OnFrequencyChanged(RadioFrequency new_freq) noexcept override;
+  void OnOpenList() noexcept override;
+  RadioFrequency GetCurrentFrequency() const noexcept override;
 
 private:
-  bool set_active_freq;
+  const bool set_active_freq;
 };
-
-void
-RadioOffsetButtons::OnOffset(double offset) noexcept
-{
-  if(set_active_freq) {
-    ActionInterface::OffsetActiveFrequency(offset, true);
-  } else {
-    ActionInterface::OffsetStandbyFrequency(offset, true);
-  }
-
-}
 
 std::unique_ptr<Widget>
 LoadActiveRadioFrequencyEditPanel([[maybe_unused]] unsigned id)
 {
-  return std::make_unique<RadioOffsetButtons>(true);
+  return std::make_unique<RadioEdit>(true);
 }
 
 std::unique_ptr<Widget>
 LoadStandbyRadioFrequencyEditPanel([[maybe_unused]] unsigned id)
 {
-  return std::make_unique<RadioOffsetButtons>(false);
+  return std::make_unique<RadioEdit>(false);
+}
+
+void RadioEdit::OnFrequencyChanged(RadioFrequency new_freq) noexcept
+{
+  if (set_active_freq)
+    ActionInterface::SetActiveFrequency(new_freq, _T(""));
+  else
+    ActionInterface::SetStandbyFrequency(new_freq, _T(""));
+}
+
+RadioFrequency RadioEdit::GetCurrentFrequency() const noexcept
+{
+  ComputerSettings &settings =
+      CommonInterface::SetComputerSettings();
+  if (set_active_freq)
+    return settings.radio.active_frequency;
+  else
+    return settings.radio.standby_frequency;
+}
+
+void RadioEdit::OnOpenList() noexcept
+{
+  auto mode = UserFrequencyListWidget::DialogMode::SELECT_ACTIVE;
+  if (!set_active_freq)
+    mode = UserFrequencyListWidget::DialogMode::SELECT_STANDBY;
+  dlgUserFrequencyListWidgetShowModal(mode);
+
+  UpdateFrequencyField(GetCurrentFrequency());
 }
