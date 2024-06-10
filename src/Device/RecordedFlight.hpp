@@ -48,6 +48,15 @@ struct RecordedFlightInfo : FlightInfo {
      * Flight number, used by the Flytec driver.
      */
     unsigned flytec;
+
+    /**
+     * Flight id and igc file size, used by the LX Eos driver.
+     */
+    struct {
+      uint16_t flight_id;
+      uint32_t file_size;
+    } lx_eos;
+    
   } internal;
 };
 
