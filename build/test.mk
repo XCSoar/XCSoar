@@ -115,7 +115,8 @@ TEST_NAMES = \
 	TestLeastSquares \
 	TestHexString \
 	TestThermalBand \
-	TestPackedFloat
+	TestPackedFloat \
+	TestVersionNumber
 
 ifeq ($(TARGET_IS_ANDROID),n)
 # These programs are broken on Android because they require Java code
@@ -2405,3 +2406,9 @@ TEST_PACKED_FLOAT_SOURCES = \
 	$(TEST_SRC_DIR)/TestPackedFloat.cpp
 TEST_PACKED_FLOAT_DEPENDS = MATH
 $(eval $(call link-program,TestPackedFloat,TEST_PACKED_FLOAT))
+
+TEST_VERSION_NUMBER_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestVersionNumber.cpp
+TEST_VERSION_NUMBER_DEPENDS = MATH UTILS
+$(eval $(call link-program,TestVersionNumber,TEST_VERSION_NUMBER))
