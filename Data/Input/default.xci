@@ -951,6 +951,14 @@ location=5
 mode=Info2
 type=key
 data=8
+event=Frequencies
+event=Mode default
+label=Frequencies
+location=6
+
+mode=Info2
+type=key
+data=8
 event=Setup Teamcode
 event=Mode default
 label=Team Code
