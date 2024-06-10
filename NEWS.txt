@@ -18,7 +18,8 @@ Version 7.43-rc0 - 2024-06-02
   - consistent naming of ok/close buttons and placement
   - add PanTo button to waypoints dialog if opened from task related infoboxen
 * devices
-  - add Larus driver
+  - add Larus driver  
+  - added driver for LX Navigation Eos57 variometer
 * windows
  - black text color in airspace list like all other systems
 * Kobo
