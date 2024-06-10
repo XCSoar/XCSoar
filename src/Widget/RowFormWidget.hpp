@@ -10,6 +10,7 @@
 #include "time/FloatDuration.hxx"
 #include "Repository/FileType.hpp"
 #include "Units/Group.hpp"
+#include "RadioFrequency.hpp"
 
 #include <boost/container/static_vector.hpp>
 
@@ -366,6 +367,10 @@ public:
                         double value,
                         DataFieldListener *listener=nullptr) noexcept;
 
+  WndProperty *AddFrequency(const TCHAR *label, const TCHAR *help, 
+                        RadioFrequency value, 
+                        DataFieldListener *listener) noexcept;
+
   WndProperty *AddFloat(const TCHAR *label, const TCHAR *help,
                         const TCHAR *display_format,
                         const TCHAR *edit_format,
@@ -612,6 +617,9 @@ public:
 
   [[gnu::pure]]
   double GetValueFloat(unsigned i) const noexcept;
+
+  [[gnu::pure]]
+  RadioFrequency GetValueRadioFrequency(unsigned i) const noexcept;
 
   [[gnu::pure]]
   Angle GetValueAngle(unsigned i) const noexcept;
