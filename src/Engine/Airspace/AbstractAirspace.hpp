@@ -245,6 +245,16 @@ public:
   }
 
   /**
+    * Returns the airspace class type. If GetType() is AirspaceClass::OTHER,
+    * returns GetClass(), otherwise returns GetType()
+    *
+    * @return  AirspaceClass - The determined airspace class type
+    */
+  AirspaceClass GetClassType() const noexcept {
+    return GetType() == AirspaceClass::OTHER ? GetClass() : GetType();
+  }
+
+  /**
    * Test whether base is at terrain level
    *
    * @return True if base is 0 AGL
