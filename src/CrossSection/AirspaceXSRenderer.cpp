@@ -122,7 +122,7 @@ AirspaceIntersectionVisitorSlice::RenderBox(const PixelRect rc,
 inline void
 AirspaceIntersectionVisitorSlice::Render(const AbstractAirspace &as) const
 {
-  AirspaceClass asclass = as.GetType() == AirspaceClass::OTHER ? as.GetClass() : as.GetType();
+  AirspaceClass asclass = as.GetClassType();
 
   // No intersections for this airspace
   if (intersections.empty())
