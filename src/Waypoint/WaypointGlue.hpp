@@ -93,7 +93,8 @@ LoadWaypoints(Waypoints &way_points,
               ProgressListener &progress);
 
 /**
- * Append one waypoint to the file "user.cup".
+ * Recreate the file "user.cup", putting in it each waypoint in
+ * way_points that is flagged to be saved to "user.cup".
  *
  * Throws std::runtime_error on error;
  */
