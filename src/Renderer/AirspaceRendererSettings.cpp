@@ -38,7 +38,7 @@ AirspaceRendererSettings::SetDefaults()
 
 #ifdef HAVE_HATCHED_BRUSH
   classes[OTHER].brush = 2;
-  classes[RESTRICT].brush = 3;
+  classes[RESTRICTED].brush = 3;
   classes[PROHIBITED].brush = 3;
   classes[DANGER].brush = 3;
   classes[CLASSA].brush = 3;
@@ -56,7 +56,6 @@ AirspaceRendererSettings::SetDefaults()
   classes[MATZ].brush = 3;
   classes[RMZ].brush = 3;
   classes[UNCLASSIFIED].brush = 3;
-  classes[RESTRICTED].brush = 3;
   classes[TMA].brush = 3;
   classes[TRA].brush = 3;
   classes[TSA].brush = 3;
@@ -89,7 +88,7 @@ AirspaceRendererSettings::SetDefaults()
 #endif
 
   classes[OTHER].SetColors(RGB8_MAGENTA);
-  classes[RESTRICT].SetColors(RGB8_RED);
+  classes[RESTRICTED].SetColors(RGB8_RED);
   classes[PROHIBITED].SetColors(RGB8_RED);
   classes[DANGER].SetColors(RGB8_RED);
   classes[CLASSA].SetColors(RGB8_RED);
@@ -107,7 +106,6 @@ AirspaceRendererSettings::SetDefaults()
   classes[MATZ].SetColors(RGB8_GRAYISH_VIOLET);
   classes[RMZ].SetColors(RGB8_GRAYISH_VIOLET);
   classes[UNCLASSIFIED].SetColors(RGB8_MAGENTA.Darken());
-  classes[RESTRICTED].SetColors(RGB8_RED.Darken());
   classes[TMA].SetColors(RGB8_BLUE);
   classes[TRA].SetColors(RGB8_RED);
   classes[TSA].SetColors(RGB8_RED);
