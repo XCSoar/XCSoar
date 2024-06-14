@@ -53,7 +53,6 @@ enum AirspaceClass : uint8_t
    *    "
    */
   UNCLASSIFIED,
-  RESTRICTED,
   TMA,
   TRA,
   TSA,
@@ -65,7 +64,6 @@ enum AirspaceClass : uint8_t
   MTR,
   ALERT,
   WARNING,
-  DANGER2,
   PROTECTED,
   HTZ,
   GLIDING_SECTOR,

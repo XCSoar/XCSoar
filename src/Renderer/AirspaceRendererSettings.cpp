@@ -117,7 +117,6 @@ AirspaceRendererSettings::SetDefaults()
   classes[MTR].SetColors(RGB8_LIGHT_GRAY);
   classes[ALERT].SetColors(RGB8_DARK_GRAY);
   classes[WARNING].SetColors(RGB8_DARK_GRAY);
-  classes[DANGER2].SetColors(RGB8_RED.Darken());
   classes[PROTECTED].SetColors(RGB8_GREEN.Darken());
   classes[HTZ].SetColors(RGB8_GREEN.Darken());
   classes[GLIDING_SECTOR].SetColors(RGB8_GREEN.Darken());
