@@ -34,7 +34,6 @@ struct PageLayout
     }
 
     constexpr bool operator==(const InfoBoxConfig &other) const noexcept = default;
-    constexpr bool operator!=(const InfoBoxConfig &other) const noexcept = default;
   };
 
   bool valid;
