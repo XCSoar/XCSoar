@@ -32,7 +32,7 @@ static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
   { "CLASSG", CLASSG },
   { "CTR", CTR },
   { "TMZ", TMZ },
-  { "RESTRICT", RESTRICT },
+  { "RESTRICTED", RESTRICTED },
   { "PROHIBITED", PROHIBITED },
   { "DANGER", DANGER },
   { "NOGLIDER", NOGLIDER },
