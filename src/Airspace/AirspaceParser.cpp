@@ -76,7 +76,7 @@ static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
   { "MTR", MTR },
   { "ALERT", ALERT },
   { "WARNING", WARNING },
-  { "DANGER", DANGER2 },
+  { "DANGER", DANGER },
   { "PROTECTED", PROTECTED },
   { "HTZ", HTZ },
   { "GLIDING_SECTOR", GLIDING_SECTOR },
