@@ -50,7 +50,7 @@ TestOpenAir()
   }
 
   static constexpr AirspaceClassTestCouple classes[] = {
-    { _T("Class-R-Test"), RESTRICT },
+    { _T("Class-R-Test"), RESTRICTED },
     { _T("Class-Q-Test"), DANGER },
     { _T("Class-P-Test"), PROHIBITED },
     { _T("Class-CTR-Test"), CTR },
@@ -166,7 +166,7 @@ TestTNP()
   }
 
   static constexpr AirspaceClassTestCouple classes[] = {
-    { _T("Class-R-Test"), RESTRICT },
+    { _T("Class-R-Test"), RESTRICTED },
     { _T("Class-Q-Test"), DANGER },
     { _T("Class-P-Test"), PROHIBITED },
     { _T("Class-CTR-Test"), CTR },
