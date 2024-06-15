@@ -195,6 +195,9 @@ static constexpr StaticEnumChoice type_filter_list[] = {
   { MRT, _T("MRT") },
   { TFR, _T("TFR") },
   { VFR_SECTOR, _T("VFR Sector") },
+  { FIS_SECTOR, _T("FIS Sector") },
+  { LTA, _T("Lower Traffic Area") },
+  { UTA, _T("Upper Traffic Area") },
    nullptr
 };
 
