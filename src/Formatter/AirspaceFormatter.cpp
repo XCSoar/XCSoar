@@ -52,6 +52,9 @@ static const TCHAR *const airspace_class_names[] = {
   _T("Military Restricted Area"),
   _T("Temporary Flight Restriction"),
   _T("Visual Flight Rules Sector"),
+  _T("Flight Information Sector"),
+  _T("Lower Traffic Area"),
+  _T("Upper Traffic Area"),
 };
 
 static_assert(ARRAY_SIZE(airspace_class_names) ==
@@ -106,6 +109,9 @@ static const TCHAR *const airspace_class_short_names[] = {
   _T("MRT"),
   _T("TFR"),
   _T("VFR_Sec"),
+  _T("FIS_Sec"),
+  _T("LTA"),
+  _T("UTA"),
 };
 
 static_assert(ARRAY_SIZE(airspace_class_short_names) ==
