@@ -91,6 +91,9 @@ static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
   { "MRT", MRT },
   { "TFR", TFR },
   { "VFR_SECTOR", VFR_SECTOR },
+  { "FIS_SECTOR", FIS_SECTOR },
+  { "LTA", LTA },
+  { "UTA", UTA },
   { "AIRSPACECLASSCOUNT", AIRSPACECLASSCOUNT }
 };
 
