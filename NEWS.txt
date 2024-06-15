@@ -1,4 +1,16 @@
 Version 7.43-rc1 - not yet released
+* Windows
+  - use cleartype font rendering
+  - rework application icon
+* calculations
+  - fix reachability calculation with older compilers (OpenVario,..)
+* ui
+  - Airspace filter list can filter by type
+* data files
+  - reworked sgs-233 polar
+  - new topology available from mapgen (incl rivers)
+* documentation
+  - clarify task speed calculation section
 
 Version 7.43-rc0 - 2024-06-02
 * map
