@@ -306,9 +306,8 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
     canvas.SetTextColor(COLOR_GRAY);
 
   { // name, altitude info
-    StringFormat(buffer, ARRAY_SIZE(buffer), _T("%s %s"),
-                 airspace.GetName(),
-                 AirspaceFormatter::GetClass(airspace));
+    StringFormat(buffer, ARRAY_SIZE(buffer), _T("%s %s"), airspace.GetName(),
+                 AirspaceFormatter::GetClassOrType(airspace));
 
     row_renderer.DrawFirstRow(canvas, text_rc, buffer);
 
