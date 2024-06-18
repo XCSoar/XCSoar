@@ -255,6 +255,16 @@ public:
   }
 
   /**
+    * Returns the airspace type. If GetClass() is AirspaceClass::UNCLASSIFIED,
+    * returns GetType(), otherwise returns GetClass()
+    *
+    * @return  AirspaceClass - The determined airspace class or type
+    */
+  AirspaceClass GetClassOrType() const noexcept {
+    return GetClass() == AirspaceClass::UNCLASSIFIED ? GetType() : GetClass();
+  }
+
+  /**
    * Test whether base is at terrain level
    *
    * @return True if base is 0 AGL
