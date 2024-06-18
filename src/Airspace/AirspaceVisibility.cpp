@@ -10,7 +10,7 @@ bool
 IsAirspaceTypeVisible(const AbstractAirspace &airspace,
                       const AirspaceRendererSettings &renderer_settings)
 {
-  return renderer_settings.classes[airspace.GetClass()].display;
+  return renderer_settings.classes[airspace.GetClassOrType()].display;
 }
 
 bool
