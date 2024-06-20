@@ -138,7 +138,6 @@ struct PageLayout
                          const bool concise=false) const noexcept;
 
   constexpr bool operator==(const PageLayout &other) const noexcept = default;
-  constexpr bool operator!=(const PageLayout &other) const noexcept = default;
 };
 
 struct PageSettings {
