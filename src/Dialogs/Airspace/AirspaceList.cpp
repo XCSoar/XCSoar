@@ -150,7 +150,7 @@ static Angle last_heading;
 static constexpr StaticEnumChoice type_filter_list[] = {
   { WILDCARD, _T("*") },
   { OTHER, _T("Other") },
-  { RESTRICT, _T("Restricted areas") },
+  { RESTRICTED, _T("Restricted areas") },
   { PROHIBITED, _T("Prohibited areas") },
   { DANGER, _T("Danger areas") },
   { CLASSA, _T("Class A") },
@@ -168,7 +168,6 @@ static constexpr StaticEnumChoice type_filter_list[] = {
   { MATZ, _T("MATZ") },
   { RMZ, _T("RMZ") },
   { UNCLASSIFIED, _T("UNCLASSIFIED") },
-  { RESTRICTED, _T("RESTRICTED") },
   { TMA, _T("TMA") },
   { TRA, _T("TRA") },
   { TSA, _T("TSA") },
@@ -180,7 +179,6 @@ static constexpr StaticEnumChoice type_filter_list[] = {
   { MTR, _T("MTR") },
   { ALERT, _T("ALERT") },
   { WARNING, _T("WARNING") },
-  { DANGER2, _T("DANGER") },
   { PROTECTED, _T("PROTECTED") },
   { HTZ, _T("HTZ") },
   { GLIDING_SECTOR, _T("Gliding Sector") },
@@ -195,6 +193,9 @@ static constexpr StaticEnumChoice type_filter_list[] = {
   { MRT, _T("MRT") },
   { TFR, _T("TFR") },
   { VFR_SECTOR, _T("VFR Sector") },
+  { FIS_SECTOR, _T("FIS Sector") },
+  { LTA, _T("Lower Traffic Area") },
+  { UTA, _T("Upper Traffic Area") },
    nullptr
 };
 

@@ -38,7 +38,7 @@ AirspaceRendererSettings::SetDefaults()
 
 #ifdef HAVE_HATCHED_BRUSH
   classes[OTHER].brush = 2;
-  classes[RESTRICT].brush = 3;
+  classes[RESTRICTED].brush = 3;
   classes[PROHIBITED].brush = 3;
   classes[DANGER].brush = 3;
   classes[CLASSA].brush = 3;
@@ -56,7 +56,6 @@ AirspaceRendererSettings::SetDefaults()
   classes[MATZ].brush = 3;
   classes[RMZ].brush = 3;
   classes[UNCLASSIFIED].brush = 3;
-  classes[RESTRICTED].brush = 3;
   classes[TMA].brush = 3;
   classes[TRA].brush = 3;
   classes[TSA].brush = 3;
@@ -82,11 +81,14 @@ AirspaceRendererSettings::SetDefaults()
   classes[MRT].brush = 3;
   classes[TFR].brush = 3;
   classes[VFR_SECTOR].brush = 3;
+  classes[FIS_SECTOR].brush = 2;
+  classes[LTA].brush = 3;
+  classes[UTA].brush = 3;
   classes[AIRSPACECLASSCOUNT].brush = 3;
 #endif
 
   classes[OTHER].SetColors(RGB8_MAGENTA);
-  classes[RESTRICT].SetColors(RGB8_RED);
+  classes[RESTRICTED].SetColors(RGB8_RED);
   classes[PROHIBITED].SetColors(RGB8_RED);
   classes[DANGER].SetColors(RGB8_RED);
   classes[CLASSA].SetColors(RGB8_RED);
@@ -104,7 +106,6 @@ AirspaceRendererSettings::SetDefaults()
   classes[MATZ].SetColors(RGB8_GRAYISH_VIOLET);
   classes[RMZ].SetColors(RGB8_GRAYISH_VIOLET);
   classes[UNCLASSIFIED].SetColors(RGB8_MAGENTA.Darken());
-  classes[RESTRICTED].SetColors(RGB8_RED.Darken());
   classes[TMA].SetColors(RGB8_BLUE);
   classes[TRA].SetColors(RGB8_RED);
   classes[TSA].SetColors(RGB8_RED);
@@ -116,7 +117,6 @@ AirspaceRendererSettings::SetDefaults()
   classes[MTR].SetColors(RGB8_LIGHT_GRAY);
   classes[ALERT].SetColors(RGB8_DARK_GRAY);
   classes[WARNING].SetColors(RGB8_DARK_GRAY);
-  classes[DANGER2].SetColors(RGB8_RED.Darken());
   classes[PROTECTED].SetColors(RGB8_GREEN.Darken());
   classes[HTZ].SetColors(RGB8_GREEN.Darken());
   classes[GLIDING_SECTOR].SetColors(RGB8_GREEN.Darken());
@@ -131,5 +131,8 @@ AirspaceRendererSettings::SetDefaults()
   classes[MRT].SetColors(RGB8_RED);
   classes[TFR].SetColors(RGB8_RED);
   classes[VFR_SECTOR].SetColors(RGB8_BLUE);
+  classes[FIS_SECTOR].SetColors(RGB8_BLUE);
+  classes[LTA].SetColors(RGB8_BLUE);
+  classes[UTA].SetColors(RGB8_BLUE);
   classes[AIRSPACECLASSCOUNT].SetColors(RGB8_MAGENTA);
 }

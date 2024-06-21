@@ -46,7 +46,7 @@ struct AirspaceClassStringCouple
 };
 
 static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
-  { "R", RESTRICT },
+  { "R", RESTRICTED },
   { "Q", DANGER },
   { "P", PROHIBITED },
   { "CTR", CTR },
@@ -76,7 +76,8 @@ static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
   { "MTR", MTR },
   { "ALERT", ALERT },
   { "WARNING", WARNING },
-  { "DANGER", DANGER2 },
+  { "DANGER", DANGER },
+  { "PROHIBITED", PROHIBITED },
   { "PROTECTED", PROTECTED },
   { "HTZ", HTZ },
   { "GLIDING_SECTOR", GLIDING_SECTOR },
@@ -91,6 +92,9 @@ static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
   { "MRT", MRT },
   { "TFR", TFR },
   { "VFR_SECTOR", VFR_SECTOR },
+  { "FIS_SECTOR", FIS_SECTOR },
+  { "LTA", LTA },
+  { "UTA", UTA },
   { "AIRSPACECLASSCOUNT", AIRSPACECLASSCOUNT }
 };
 
@@ -110,8 +114,8 @@ static constexpr AirspaceClassStringCouple airspace_tnp_type_strings[] = {
   { "CTR", CTR },
   { "CTA/CTR", CTR },
   { "CTR/CTA", CTR },
-  { "R", RESTRICT },
-  { "RESTRICTED", RESTRICT },
+  { "R", RESTRICTED },
+  { "RESTRICTED", RESTRICTED },
   { "P", PROHIBITED },
   { "PROHIBITED", PROHIBITED },
   { "D", DANGER },
@@ -120,7 +124,7 @@ static constexpr AirspaceClassStringCouple airspace_tnp_type_strings[] = {
   { "GSEC", WAVE },
   { "T", TMZ },
   { "TMZ", TMZ },
-  { "CYR", RESTRICT },
+  { "CYR", RESTRICTED },
   { "CYD", DANGER },
   { "CYA", CLASSF },
   { "MATZ", MATZ },

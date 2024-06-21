@@ -8,7 +8,7 @@
 enum AirspaceClass : uint8_t
 {
   OTHER = 0,
-  RESTRICT,
+  RESTRICTED,
   PROHIBITED,
   DANGER,
   CLASSA,
@@ -46,14 +46,13 @@ enum AirspaceClass : uint8_t
    *    This OpenAIR file does contain non-standard AY values. The following list shows all AY types that may be used within this file:
    *      UNCLASSIFIED, RESTRICTED, DANGER, PROHIBITED, CTR, TMZ, RMZ, TMA, TRA, TSA, FIR, UIR, ADIZ, ATZ, MATZ, AWY, MTR,
    *      ALERT, WARNING, PROTECTED, HTZ, GLIDING_SECTOR, TRP, TIZ, TIA, MTA, CTA, ACC_SECTOR, AERIAL_SPORTING_RECREATIONAL,
-   *      OVERFLIGHT_RESTRICTION, MRT, TFR, VFR_SECTOR
+   *      OVERFLIGHT_RESTRICTION, MRT, TFR, VFR_SECTOR, FIS_SECTOR, LTA, UTA
    *
    *    This OpenAIR file does contain non-standard AC values. The following list shows all AC types that may be used within this file:
    *      A, B, C, D, E, F, G, UNCLASSIFIED
    *    "
    */
   UNCLASSIFIED,
-  RESTRICTED,
   TMA,
   TRA,
   TSA,
@@ -65,7 +64,6 @@ enum AirspaceClass : uint8_t
   MTR,
   ALERT,
   WARNING,
-  DANGER2,
   PROTECTED,
   HTZ,
   GLIDING_SECTOR,
@@ -80,5 +78,8 @@ enum AirspaceClass : uint8_t
   MRT,
   TFR,
   VFR_SECTOR,
+  FIS_SECTOR,
+  LTA,
+  UTA,
   AIRSPACECLASSCOUNT
 };
