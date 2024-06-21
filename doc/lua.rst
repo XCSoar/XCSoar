@@ -5,9 +5,9 @@ Lua Scripting
 Starting with version 7.0, XCSoar can be extended using `Lua
 <http://www.lua.org/>`__ scripts.
 
-Lua is a language that is easy to learn, powerful enough for XCSoar
-and light: the interpreter library weighs just 200 kB. Lua is a common
-language choice for integrated scripting languages.
+Lua is a language that is easy to learn, powerful enough for XCSoar,
+and lightweight; the interpreter library weighs just 200 kB. Lua is a common
+choice for integrated scripting languages.
 
 
 Learning Lua
@@ -79,7 +79,7 @@ As long as a Lua script runs, the XCSoar user interface is blocked. Be careful
 not to write scripts that loop forever.
 
 Once the Lua script finishes, the Lua interpreter is shut down –
-unless the script has registered a callback (e.g. a ``timer``).  In
+unless the script has registered a callback (e.g. a ``timer``). In
 that case, the Lua script stays resident until it unregisters all
 callbacks (or until XCSoar quits or the user stops the script
 explicitly).
@@ -95,7 +95,7 @@ command-line tool, e.g.::
 
 Most libraries are missing here (everything specific to a full
 XCSoar), but some very basic things can be tested here, for example
-the HTTP client and the geo library (class ``GeoPoint``).  Being a
+the HTTP client and the geo library (class ``GeoPoint``). Being a
 small non-interactive command-line program, it is also easy to debug
 with :program:`gdb` and :program:`valgrind`.
 
@@ -119,10 +119,10 @@ Lua’s ``print()`` function writes to the XCSoar log file
 The ``error()`` function aborts the Lua script and reports the specified
 error message to the user.
 
-XCSoar adds another function to the root namespace: ``alert()``.  It
+XCSoar adds another function to the root namespace: ``alert()``. It
 shows a dialog with the specified message, and returns as soon as the
-user has closed the dialog.  This function is experimental, and may
-disappear or be renamed at any time.  Most importantly: do not abuse
+user has closed the dialog. This function is experimental, and may
+disappear or be renamed at any time. Most importantly: do not abuse
 it, as it may annoy the user.
 
 XCSoar's Lua API
@@ -142,31 +142,35 @@ contains the following names:
  * - ``GeoPoint``
    - A class which describes a geodetic location on earth's surface.
  * - ``blackboard``
-   - Access to sensor data.  See :ref:`lua.blackboard`.
+   - Access to sensor data. See :ref:`lua.blackboard`.
  * - ``map``
-   - The map view.  See :ref:`lua.map`.
+   - The map view. See :ref:`lua.map`.
  * - ``airspace``
-   - Access to airspace data.  See :ref:`lua.airspace`.
+   - Access to airspace data. See :ref:`lua.airspace`.
+ * - ``task``
+   - Access to task data. See :ref:`lua.task`.
+ * - ``settings``
+   - Access to XCSoar's settings. See :ref:`lua.settings`.
  * - ``wind``
-   - Access to wind data and settings.  See :ref:`lua.wind`.
+   - Access to wind data and settings. See :ref:`lua.wind`.
  * - ``logger``
-   - Access to logger settings.  See :ref:`lua.logger`.
- * - ``replay``
-   - Access to replay system.  See :ref:`lua.replay`.
+   - Access to logger settings. See :ref:`lua.logger`.
  * - ``tracking``
-   - Access to tracking settings.  See :ref:`lua.tracking`.
+   - Access to tracking settings. See :ref:`lua.tracking`.
+ * - ``replay``
+   - Access to replay system. See :ref:`lua.replay`.
  * - ``timer``
-   - Class for scheduling periodic callbacks.  See :ref:`lua.timer`.
+   - Class for scheduling periodic callbacks. See :ref:`lua.timer`.
  * - ``http``
-   - HTTP client.  See :ref:`lua.http`.
+   - HTTP client. See :ref:`lua.http`.
  * - ``share_text(text)``
    - Deliver plain text data to somebody; the user will be asked to
      pick a recipient (Android only).
 
 .. _lua.blackboard:
 
-The Blackboard
---------------
+Blackboard
+----------
 
 The blackboard provides access to sensor data, such as GPS location.
 
@@ -182,11 +186,11 @@ The following attributes are provided by ``xcsoar.blackboard``:
    - A monotonic wall clock time [s], with an undefined reference.
  * - ``time``
    - A wall clock time [s], since midnight (UTC) of the day the flight
-     started.  Not strictly monotonic (can warp under certain
+     started. Not strictly monotonic (can warp under certain
      circumstances).
  * - ``date_time_utc``
    - A `date table <https://www.lua.org/pil/22.1.html>`__ describing
-     the current date and time (UTC), preferably from the GPS.  Not
+     the current date and time (UTC), preferably from the GPS. Not
      strictly monotonic (can warp under certain circumstances).
  * - ``location``
    - The current location (table with keys ``longitude`` and
@@ -208,7 +212,7 @@ The following attributes are provided by ``xcsoar.blackboard``:
  * - ``heading``
    - The current magnetic heading in [°].
  * - ``g_load``
-   - The current g-load.
+   - The current g-load [:math:`kg/m^2`].
  * - ``static_pressure``
    - The static pressure [Pascal].
  * - ``pitot_pressure``
@@ -216,13 +220,13 @@ The following attributes are provided by ``xcsoar.blackboard``:
  * - ``dynamic_pressure``
    - The dynamic pressure [Pascal].
  * - ``temperature``
-   - The current temperature.
+   - The current temperature [Kelvin].
  * - ``humidity``
-   - The current humidity.
+   - The current relative humidity [%].
  * - ``voltage``
    - The external battery voltage [V].
  * - ``battery_level``
-   - The internal battery-level [percent].
+   - The internal battery-level [%].
  * - ``noncomp_vario``
    - The non-compensated vertical speed [:math:`m/s`].
  * - ``total_energy_vario``
@@ -235,8 +239,8 @@ known, e.g. if there is no GPS fix.
 
 .. _lua.map:
 
-The Map
--------
+Map
+---
 
 The map provides access to XCSoar’s map view.
 
@@ -262,7 +266,7 @@ The following attributes are provided by ``xcsoar.map``:
  * - ``panto(latitude, longitude)``
    - Pans to the given location.
  * - ``pancursor(dx, dy)``
-   - Pans the cursor by dx and dy.
+   - Pans the cursor by ``dx`` and ``dy``.
  * - ``zoom(factor)``
    - Zooms the map, factor -2 to 2.
  * - ``next()``
@@ -325,108 +329,108 @@ The following attributes are provided by ``xcsoar.task``:
    - The true bearing from the next waypoint to your
      position. [°].
  * - ``next_distance``
-   - The distance to the currently selected waypoint [m].  For AAT
+   - The distance to the currently selected waypoint [m]. For AAT
      tasks, this is the distance to the target within the AAT sector.
  * - ``next_distance_nominal``
-   - The distance to the currently selected waypoint [m].  For AAT
+   - The distance to the currently selected waypoint [m]. For AAT
      tasks, this is the distance to the origin of the AAT sector.
  * - ``next_ete``
-   - Estimated time [s] required to reach next waypoint, assuming
-     performance of ideal MacCready cruise/climb cycle.
+   - Estimated time required to reach next waypoint, assuming
+     performance of ideal MacCready cruise/climb cycle [s].
  * - ``next_eta``
    - Estimated arrival local time at next waypoint,
      assuming performance of ideal MacCready cruise/climb cycle.
  * - ``next_altitude_diff``
    - Arrival altitude at the next waypoint relative to the safety
-     arrival height.
+     arrival height [m].
  * - ``nextmc0_altitude_diff``
    - Arrival altitude at the next waypoint with MC 0 setting, relative
-     to the safety arrival height.
+     to the safety arrival height [m].
  * - ``next_altitude_require``
    - Additional altitude required to reach the next
-     turnpoint.
+     turnpoint [m].
  * - ``next_altitude_arrival``
-   - Absolute arrival height at the next waypoint in final glide.
+   - Absolute arrival height at the next waypoint in final glide [m].
  * - ``next_gr``
    - The required glide ratio over ground to reach the next waypoint,
      given by the distance to the next waypoint divided by the height
      required to arrive at the safety arrival height.
  * - ``final_distance``
-   - Distance to finish around remaining turn points.
+   - Distance to finish around remaining turn points [m].
  * - ``final_ete``
    - Estimated time required to complete task, assuming performance of
-     ideal MacCready cruise/climb cycle.
+     ideal MacCready cruise/climb cycle [s].
  * - ``final_eta``
    - Estimated arrival local time at task completion, assuming
      performance of ideal MacCready cruise/climb cycle.
  * - ``final_altitude_diff``
    - Arrival altitude at the final task turn point relative to the
-     safety arrival height.
+     safety arrival height [m].
  * - ``finalmc0_altitude_diff``
    - Arrival altitude at the final task turn point, with MC 0 setting,
-     relative to the safety arrival height.
+     relative to the safety arrival height [m].
  * - ``final_altitude_require``
    - Additional altitude required to finish
-     the task.
+     the task [m].
  * - ``task_speed``
    - Average cross country speed while on the current task, not
-     compensated for altitude.
+     compensated for altitude [:math:`m/s`].
  * - ``task_speed_achieved``
    - Achieved cross country speed while on the current task,
      compensated for altitude. Equivalent to Pirker cross country
-     speed remaining.
+     speed remaining [:math:`m/s`].
  * - ``task_speed_instant``
    - Instantaneous cross country speed while on the current task,
      compensated for altitude. Equivalent to instantaneous Pirker
-     cross country speed.
+     cross country speed [:math:`m/s`].
  * - ``task_speed_hour``
    - Average cross country speed while on the current task over the
-     last hour, not compensated for altitude.
+     last hour, not compensated for altitude [:math:`m/s`].
  * - ``final_gr``
    - The required glide ratio over the ground to finish the task,
      given by the distance to go divided by the height required to
      arrive at the safety arrival height.
  * - ``aat_time``
-   - Assigned Area Task time remaining.
+   - Assigned Area Task time remaining [s].
  * - ``aat_time_delta``
    - Difference between estimated task time and
-     AAT miminum time.
+     AAT miminum time [s].
  * - ``aat_distance``
    - Assigned Area Task distance around target points
-     for remainder of task.
+     for remainder of task [m].
  * - ``aat_distance_max``
    - Assigned Area Task maximum distance possible for remainder of
-     task.
+     task [m].
  * - ``aat_distance_min``
    - Assigned Area Task minimum distance possible
-     for remainder of task
+     for remainder of task [m].
  * - ``aat_speed``
    - Assigned Area Task average speed achievable around
-     target points remaining in minimum AAT time.
+     target points remaining in minimum AAT time [:math:`m/s`].
  * - ``aat_speed_max``
    - Assigned Area Task average speed achievable if flying maximum
-     possible distance remaining in minimum AAT time.
+     possible distance remaining in minimum AAT time [:math:`m/s`].
  * - ``aat_speed_min``
    - Assigned Area Task average spped achievable if flying minimum
-     possible distance remaining in minimum AAT time.
+     possible distance remaining in minimum AAT time [:math:`m/s`].
  * - ``time_under_max_height``
    - The contiguous period the plane has been below the task start
-     max. height.
+     max. height [s].
  * - ``next_etevmg``
    - Estimated time required to reach next waypoint, assuming current
-     ground speed is maintained.
+     ground speed is maintained [s].
  * - ``final_etevmg``
    - Estimated time required to complete task,
-     assuming current ground speed is maintained.
+     assuming current ground speed is maintained [s].
  * - ``cruise_efficiency``
-   - Efficiency of cruse, 1 indicates perfect MacCready performance.
+   - Efficiency of cruise. 1 indicates perfect MacCready performance.
 
 .. _lua.settings:
 
 Settings
 --------
 
-The Settings provides access to xcsoar settings, such as MC value.
+The Settings provides access to XCSoar's settings, such as MC value.
 
 The following attributes are provided by ``xcsoar.settings``:
 
@@ -440,8 +444,9 @@ The following attributes are provided by ``xcsoar.settings``:
    - The current set MacCready Value [:math:`m/s`].
  * - ``bugs``
    - The current used bug settings in terms of polar degradation.
+     1 means "clean".
  * - ``wingload``
-   - The current wingload.
+   - The current wingload [:math:`kg/m^2`].
  * - ``ballast``
    - Ballast of the glider. 0 means no ballst, 0.3 means 30% of the
      maximum ballast the glider can carry.
@@ -452,7 +457,7 @@ The following attributes are provided by ``xcsoar.settings``:
  * - ``safetymc``
    - The MacCready setting used, when safety MC is enabled for reach
      calculations, in task abort mode and for determining arrival
-     altitude at airfields.
+     altitude at airfields [:math:`m/s`].
  * - ``riskfactor``
    - The STF risk factor reduces the MacCready setting used to
      calculate speed to fly as the glider gets low, in order to
@@ -462,12 +467,12 @@ The following attributes are provided by ``xcsoar.settings``:
      indicates the glider's sink rate is doubled.
  * - ``arrivalheight``
    - The height above terrain that the glider should arrive at for a
-     safe landing.
+     safe landing [m].
  * - ``terrainheight``
    - The height above trerrain that the glider must clear during final
-     glide.
+     glide [m].
  * - ``setmc(value)``
-   - Sets the MacCready value.
+   - Sets the MacCready value [:math:`m/s`].
  * - ``setbugs(value)``
    - Sets the bugs, 1.0 means no bugs, 0.5 means 50% polar degradation.
  * - ``setqnh(float value)``
@@ -482,7 +487,7 @@ The following attributes are provided by ``xcsoar.settings``:
 Wind
 ----
 
-The Settings provides access to xcsoar wind data and settings.
+The Settings provides access to XCSoar's wind data and settings.
 
 The following attributes are provided by ``xcsoar.wind``:
 
@@ -520,7 +525,7 @@ The following attributes are provided by ``xcsoar.wind``:
 Logger
 ------
 
-The Settings provides access to xcsoar Logger data and settings.
+The Settings provides access to XCSoar's Logger data and settings.
 
 The following attributes are provided by ``xcsoar.logger``:
 
@@ -536,14 +541,14 @@ The following attributes are provided by ``xcsoar.logger``:
    - Sets the pilot name.
  * - ``time_step_cruise``
    - The time interval between logged points when not circling
-     [seconds].
+     [s].
  * - ``set_time_step_cruise(time)``
    - Sets time interval between logged points when not circling
-     [seconds].
+     [s].
  * - ``time_step_circling``
-   - The time interval between logged points when circling [seconds].
- * - ``set_time_step_circling(int time)``
-   - Sets time interval between logged points when circling [seconds].
+   - The time interval between logged points when circling [s].
+ * - ``set_time_step_circling(time)``
+   - Sets time interval between logged points when circling [s].
  * - ``auto_logger``
    - Status of the auto-logger; 0 = On, 1 = Take off only, 2 = Off.
  * - ``set_autologger(mode)``
@@ -562,15 +567,15 @@ The following attributes are provided by ``xcsoar.logger``:
    - Disables the logbook.
  * - ``logger_id``
    - The current set logger-id.
- * - ``set_logger_id(char* id)``
-   - Sets the logger-id.
+ * - ``set_logger_id(id)``
+   - Sets the logger ID where ``id`` is a string.
 
 .. _lua.tracking:
 
 Tracking
 --------
 
-The Settings provides access to xcsoar Tracking settings.
+The Settings provides access to XCSoar's Tracking settings.
 
 The following attributes are provided by ``xcsoar.tracking``:
 
@@ -589,9 +594,9 @@ The following attributes are provided by ``xcsoar.tracking``:
  * - ``skylines_roaming``
    - States if skylines roaming is enabled.
  * - ``skylines_interval``
-   - The skylines tracking interval [seconds].
+   - The skylines tracking interval [s].
  * - ``set_skylines_interval(interval)``
-   - Sets the tracking interval [seconds].
+   - Sets the tracking interval [s].
  * - ``skylines_traffic_enabled``
    - If enabled, shows friends on the map, download the position of
      your friends live from the SkyLines server.
@@ -612,20 +617,20 @@ The following attributes are provided by ``xcsoar.tracking``:
  * - ``disable_livetrack24()``
    - Disables livetrack24.
  * - ``livetrack24_interval``
-   - Livetrack24 tracking interval [seconds].
+   - Livetrack24 tracking interval [s].
  * - ``set_livetrack24_interval(interval)``
-   - Sets the tracking interval [seconds].
+   - Sets the tracking interval [s].
  * - ``livetrack24_vehicle_name``
    - Get current vehicle name.
  * - ``set_livetrack24_vehiclename(name)``
-   - Sets the livetrack24 vehiclename.
+   - Sets the livetrack24 vehicle name.
 
 .. _lua.replay:
 
 Replay
 ------
 
-The Settings provides access to xcsoar Replay system.
+The Settings provides access to XCSoar's Replay system.
 
 The following attributes are provided by ``xcsoar.replay``:
 
@@ -640,18 +645,18 @@ The following attributes are provided by ``xcsoar.replay``:
  * - ``stop()``
    - Stops replay.
  * - ``fast_forward(dt)``
-   - Fast forwards ``dt`` [seconds].
+   - Fast forwards ``dt`` [s].
  * - ``set_time_scale(r)``
    - Sets replay clock rate to ``r``.
  * - ``time_scale``
    - Gets replay clock rate.
  * - ``virtual_time``
-   - Gets replay virtual time [in seconds].
+   - Gets replay virtual time [s].
 
 .. _lua.timer:
 
-Timers
-------
+Timer
+-----
 
 The class ``xcsoar.timer`` implements a timer that calls a given Lua
 function periodically.
@@ -673,7 +678,7 @@ The following methods are available in ``xcsoar.timer``:
    - Description
  * - ``new(period, function)``
    - Create a new instance and schedule it.
-     The period is a numeric value in seconds.
+     ``period`` is a numeric value in seconds.
  * - ``cancel()``
    - Cancel the timer.
  * - ``schedule(period)``
@@ -706,9 +711,9 @@ The ``xcsoar.http.Request`` interface:
  * - Name
    - Description
  * - ``new(URL)``
-   - Creates a new instance.  One instance can only be used once.
+   - Creates a new instance. One instance can only be used once.
  * - ``perform()``
-   - Sends the request and waits for the response.  Returns a response
+   - Sends the request and waits for the response. Returns a response
      object.
 
 The response interface:
@@ -740,5 +745,3 @@ example:
 
  xcsoar.fire_legacy_event("Setup", "basic")
  xcsoar.fire_legacy_event("Zoom", "basic")
-
-This function will be removed before the final 7.0 release.
