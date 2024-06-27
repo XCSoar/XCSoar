@@ -22,6 +22,7 @@ Version 7.44 - not yet released
     estimated" now blank if MC>0 & can't finish task
   - Status-Task panel: "Remaining time", "Remaining distance", "Speed
     estimated", and "Speed remaining" now blank after task is finished
+  - add new Infobox “Home altitude difference” (Home AltD)
 * Android
   - fix crash on startup when loading icons on ldpi screens
 
