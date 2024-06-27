@@ -95,6 +95,16 @@ struct PlacesOfInterestSettings {
   GeoPoint atc_reference;
   Angle magnetic_declination;
 
+  /**
+   * elevation of home waypoint is available
+   */
+  bool home_elevation_available;
+
+  /**
+   * elevation (if available) of home waypoint
+   */
+  double home_elevation;
+
   void SetDefaults() {
     ClearHome();
     atc_reference.SetInvalid();
