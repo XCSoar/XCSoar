@@ -17,7 +17,7 @@ void
 Deinitialise(JNIEnv *env) noexcept;
 
 AllocatedPath
-GetExternalStoragePublicDirectory(JNIEnv *env,
+GetStoragePublicDirectory(JNIEnv *env,
                                   const char *type) noexcept;
 
 } // namespace Environment

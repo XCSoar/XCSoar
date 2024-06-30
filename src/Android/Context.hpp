@@ -20,10 +20,10 @@ public:
 
   using Java::GlobalObject::GlobalObject;
 
-  AllocatedPath GetExternalFilesDir(JNIEnv *env) noexcept;
-  std::forward_list<AllocatedPath> GetExternalFilesDirs(JNIEnv *env) const noexcept;
+  AllocatedPath GetFilesDir(JNIEnv *env) noexcept;
+  std::forward_list<AllocatedPath> GetFilesDirs(JNIEnv *env) const noexcept;
 
-  AllocatedPath GetExternalCacheDir(JNIEnv *env) noexcept;
+  AllocatedPath GetCacheDir(JNIEnv *env) noexcept;
 
   Java::LocalObject GetSystemService(JNIEnv *env, jstring name);
   Java::LocalObject GetSystemService(JNIEnv *env, const char *name);

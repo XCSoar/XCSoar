@@ -36,14 +36,14 @@ Context::Deinitialise(JNIEnv *env) noexcept
 }
 
 AllocatedPath
-Context::GetExternalFilesDir(JNIEnv *env) noexcept
+Context::GetFilesDir(JNIEnv *env) noexcept
 {
   Java::File dir{env, env->CallObjectMethod(Get(), getExternalFilesDir_method, nullptr)};
   return ToPathChecked(dir.GetAbsolutePathChecked());
 }
 
 std::forward_list<AllocatedPath>
-Context::GetExternalFilesDirs(JNIEnv *env) const noexcept
+Context::GetFilesDirs(JNIEnv *env) const noexcept
 {
   assert(env != nullptr);
 
@@ -70,7 +70,7 @@ Context::GetExternalFilesDirs(JNIEnv *env) const noexcept
 }
 
 AllocatedPath
-Context::GetExternalCacheDir(JNIEnv *env) noexcept
+Context::GetCacheDir(JNIEnv *env) noexcept
 {
   Java::File dir{env, env->CallObjectMethod(Get(), getExternalCacheDir_method)};
   return ToPathChecked(dir.GetAbsolutePathChecked());
