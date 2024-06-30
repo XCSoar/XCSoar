@@ -263,7 +263,7 @@ protected:
    *
    * @return Distance (m) of nominal task
    */
-  virtual double ScanDistanceNominal() noexcept = 0;
+  virtual double ScanDistanceNominal() const noexcept = 0;
 
   /**
    * Calculate distance of planned task (sum of distances from each leg's
@@ -317,6 +317,12 @@ protected:
    */
   virtual void ScanDistanceMinMax(const GeoPoint &ref, bool full,
                                   double *dmin, double *dmax) noexcept = 0;
+
+  /**
+   * Calculate total maximum distance for task, disregarding any path flown
+   */
+  virtual double ScanDistanceMaxTotal() noexcept = 0;
+
 
   /**
    * Calculate glide result for remainder of task

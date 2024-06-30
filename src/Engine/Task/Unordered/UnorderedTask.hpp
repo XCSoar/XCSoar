@@ -31,13 +31,14 @@ public:
   double CalcGradient(const AircraftState &state_now) const noexcept override;
   TimeStamp ScanTotalStartTime() noexcept override;
   TimeStamp ScanLegStartTime() noexcept override;
-  double ScanDistanceNominal() noexcept override;
+  double ScanDistanceNominal() const noexcept override;
   double ScanDistancePlanned() noexcept override;
   double ScanDistanceRemaining(const GeoPoint &ref) noexcept override;
   double ScanDistanceScored(const GeoPoint &ref) noexcept override;
   double ScanDistanceTravelled(const GeoPoint &ref) noexcept override;
   void ScanDistanceMinMax(const GeoPoint &ref, bool full,
                           double *dmin, double *dmax) noexcept override;
+  double ScanDistanceMaxTotal() noexcept override;
   void GlideSolutionRemaining(const AircraftState &state_now,
                               const GlidePolar &polar,
                               GlideResult &total, GlideResult &leg) noexcept override;
