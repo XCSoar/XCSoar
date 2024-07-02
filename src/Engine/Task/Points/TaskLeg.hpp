@@ -116,25 +116,13 @@ public:
   double ScanDistanceScored(const GeoPoint &ref) const noexcept;
 
   /**
-   * Calculate distance of achieved part of task.
-   * For previous taskpoints, the sum of distances of maximum distance
-   * points; for current, the distance from previous max distance point to
-   * the aircraft.
-   *
-   * @param ref Location of aircraft
-   *
-   * @return Distance (m) achieved
-   */
-  double ScanDistanceTravelled(const GeoPoint &ref) noexcept;
-
-  /**
    * Retrieve maximum distance for the task leg
    *
    * @return Distance (m)
    */
   [[gnu::pure]]
   double GetMaximumTotalLegDistance() const noexcept;
-  
+
   /**
    * Retrieve maximum possible leg distance
    *
@@ -188,10 +176,7 @@ public:
 private:
   [[gnu::pure]]
   GeoVector GetPlannedVector() const noexcept;
-  
-  [[gnu::pure]]
-  GeoVector GetTravelledVector(const GeoPoint &ref) const noexcept;
-  
+
   [[gnu::pure]]
   GeoVector GetRemainingVector(const GeoPoint &ref) const noexcept;
 
