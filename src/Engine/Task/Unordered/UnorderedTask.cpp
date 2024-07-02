@@ -169,7 +169,7 @@ UnorderedTask::ScanDistanceScored([[maybe_unused]] const GeoPoint &location) noe
 }
 
 double
-UnorderedTask::ScanDistanceTravelled([[maybe_unused]] const GeoPoint &location) noexcept
+UnorderedTask::ScanDistanceTravelled() noexcept
 {
   return 0;
 }
