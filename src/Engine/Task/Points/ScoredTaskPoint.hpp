@@ -113,15 +113,6 @@ public:
   [[gnu::pure]]
   const GeoPoint &GetLocationScored() const noexcept;
 
-  /**
-   * Retrieve location to be used for the task already travelled.
-   * This is always the scored best location for prior-active task points.
-   */
-  [[gnu::pure]]
-  const GeoPoint &GetLocationTravelled() const noexcept {
-    return GetLocationMin();
-  }
-
 protected:
   /**
    * Check if aircraft has transitioned to inside sector

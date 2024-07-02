@@ -676,7 +676,7 @@ protected:
   double ScanDistancePlanned() noexcept override;
   double ScanDistanceRemaining(const GeoPoint &ref) noexcept override;
   double ScanDistanceScored(const GeoPoint &ref) noexcept override;
-  double ScanDistanceTravelled(const GeoPoint &ref) noexcept override;
+  double ScanDistanceTravelled() noexcept override;
   void ScanDistanceMinMax(const GeoPoint &ref, bool full,
                           double *dmin, double *dmax) noexcept override;
   void GlideSolutionRemaining(const AircraftState &state_now,

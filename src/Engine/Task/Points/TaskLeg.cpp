@@ -67,53 +67,6 @@ TaskLeg::GetRemainingVector(const GeoPoint &ref) const noexcept
   return GeoVector::Invalid();
 }
 
-inline GeoVector
-TaskLeg::GetTravelledVector(const GeoPoint &ref) const noexcept
-{
-  switch (destination.GetActiveState()) {
-  case OrderedTaskPoint::BEFORE_ACTIVE:
-    if (!GetOrigin())
-      return GeoVector::Zero();
-
-    // this leg totally included
-    return memo_travelled.calc(GetOrigin()->GetLocationTravelled(),
-                               destination.GetLocationTravelled());
-
-  case OrderedTaskPoint::CURRENT_ACTIVE:
-    // this leg partially included
-    if (!GetOrigin())
-      return GeoVector(0,
-                       ref.IsValid()
-                       ? ref.Bearing(destination.GetLocationRemaining())
-                       : Angle::Zero());
-
-    if (destination.HasEntered())
-      return memo_travelled.calc(GetOrigin()->GetLocationTravelled(),
-                                 destination.GetLocationTravelled());
-    else if (!ref.IsValid())
-      return GeoVector::Zero();
-    else
-      return memo_travelled.calc(GetOrigin()->GetLocationTravelled(), ref);
-
-  case OrderedTaskPoint::AFTER_ACTIVE:
-    if (!GetOrigin())
-      return GeoVector::Zero();
-
-    // this leg may be partially included
-    if (GetOrigin()->HasEntered())
-      return memo_travelled.calc(GetOrigin()->GetLocationTravelled(),
-                                 ref.IsValid()
-                                 ? ref
-                                 : destination.GetLocationTravelled());
-
-    return GeoVector::Zero();
-  }
-
-  gcc_unreachable();
-  assert(false);
-  return GeoVector::Invalid();
-}
-
 inline double
 TaskLeg::GetScoredDistance(const GeoPoint &ref) const noexcept
 {
@@ -181,14 +134,6 @@ TaskLeg::GetMinimumLegDistance() const noexcept
     return memo_min.Distance(GetOrigin()->GetLocationMin(),
                              destination.GetLocationMin());
   return 0;
-}
-
-double
-TaskLeg::ScanDistanceTravelled(const GeoPoint &ref) noexcept
-{
-  vector_travelled = GetTravelledVector(ref);
-  return vector_travelled.distance +
-    (GetNext() ? GetNext()->ScanDistanceTravelled(ref) : 0);
 }
 
 double

@@ -133,8 +133,8 @@ AbstractTask::UpdateStatsDistances(const GeoPoint &location,
   ScanDistanceMinMax(location, full_update,
                        &stats.distance_min, &stats.distance_max);
 
-  stats.total.travelled.SetDistance(ScanDistanceTravelled(location));
   stats.total.planned.SetDistance(ScanDistancePlanned());
+  stats.total.travelled.SetDistance(ScanDistanceTravelled());
 
   if (IsScored()) {
     if (!stats.start.HasStarted())
