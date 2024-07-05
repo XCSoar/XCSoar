@@ -15,6 +15,7 @@ enum ControlIndex {
   DISPLAY_TRACK_BEARING,
   ENABLE_FLARM_MAP,
   FADE_TRAFFIC,
+  COLORFUL_TRAFFIC,
   TRAIL_LENGTH,
   TRAIL_DRIFT,
   TRAIL_TYPE,
@@ -141,6 +142,10 @@ SymbolsConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddBoolean(_("Fade traffic"), _("Keep showing traffic for a while after it has disappeared."),
              settings_map.fade_traffic);
 
+  AddBoolean(_("Colourful traffic"), _("Show traffic in different colours depending on the climb rate and relative altitude"),
+             settings_map.use_detailed_flarm_colours);
+  SetExpertRow(COLORFUL_TRAFFIC);
+
   AddEnum(_("Trail length"),
           _("Determines whether and how long a snail trail is drawn behind the glider."),
           trail_length_list,
@@ -200,6 +205,9 @@ SymbolsConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValue(FADE_TRAFFIC, ProfileKeys::FadeTraffic,
                        settings_map.fade_traffic);
+  
+  changed |= SaveValue(COLORFUL_TRAFFIC, ProfileKeys::ColorfulTraffic,
+                       settings_map.use_detailed_flarm_colours);
 
   changed |= SaveValueEnum(TRAIL_LENGTH, ProfileKeys::SnailTrail, settings_map.trail.length);
 
