@@ -2,13 +2,15 @@
 // Copyright The XCSoar Project
 
 #include "InfoBoxes/Content/Speed.hpp"
-#include "InfoBoxes/Data.hpp"
-#include "Interface.hpp"
+#include "BackendComponents.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
-#include "BackendComponents.hpp"
+#include "Formatter/UserUnits.hpp"
+#include "InfoBoxes/Data.hpp"
+#include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
+#include <stdlib.h>
 
 void
 InfoBoxContentSpeedGround::Update(InfoBoxData &data) noexcept
@@ -20,6 +22,16 @@ InfoBoxContentSpeedGround::Update(InfoBoxData &data) noexcept
   }
 
   data.SetValueFromSpeed(basic.ground_speed);
+
+  const DerivedInfo &info = CommonInterface::Calculated();
+  if (!info.head_wind_available) {
+    data.SetCommentInvalid();
+    return;
+  }
+
+  TCHAR buffer[16];
+  FormatUserWindSpeed(-info.head_wind, buffer, true, false);
+  data.SetComment(buffer);
 }
 
 bool
