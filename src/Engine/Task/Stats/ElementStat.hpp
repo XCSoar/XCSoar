@@ -52,8 +52,8 @@ struct ElementStat
   FloatDuration time_remaining_now;
 
   /**
-   * Time (s) remaining to element completion, counted from the start
-   * of the task.
+   * Time (s) remaining to element completion from now, excluding the
+   * time to reach the start point (if task was not yet started).
    */
   FloatDuration time_remaining_start;
 
