@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-21 15:38+0100\n"
-"PO-Revision-Date: 2024-07-17 22:09+0000\n"
+"PO-Revision-Date: 2024-07-20 08:09+0000\n"
 "Last-Translator: Веско <v.jeliazkov@jeliazkov.net>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/bg/>\n"
@@ -445,7 +445,7 @@ msgstr "Непознат тип файл за въздушно простран�
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:91
 msgid "Date"
-msgstr "Дата"
+msgstr "дата"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:92
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:230
@@ -2335,7 +2335,6 @@ msgid "Calibrate"
 msgstr "Калибриране"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:110
-#, fuzzy
 msgid "Offset"
 msgstr "Часови пояс"
 
@@ -2823,7 +2822,6 @@ msgid "Airspace Warnings"
 msgstr "Предупреждения за ВП"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:40
-#, fuzzy
 msgid "Circling wind"
 msgstr "Въртене"
 
@@ -2832,7 +2830,6 @@ msgid "Estimate the wind vector while circling.  Requires only a GPS."
 msgstr "Определяне на посоката на вятъра при въртене. Нужна е само ГПС."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:44
-#, fuzzy
 msgid "ZigZag wind"
 msgstr "Зигзаг"
 
@@ -4005,7 +4002,7 @@ msgstr "Електроцентрала"
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:60
 #, no-c-format
 msgid "VOR"
-msgstr "VOR"
+msgstr "Радиофар"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:61
 #, no-c-format
@@ -4040,7 +4037,7 @@ msgstr "Контролна точка"
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:67
 #, no-c-format
 msgid "PG Take Off"
-msgstr "ПП старт"
+msgstr "Излитане"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:68
 #, no-c-format
@@ -7094,7 +7091,6 @@ msgid "Allow download of declared tasks from Weglide in the Task Manager."
 msgstr "Позволяване зареждането на задачи от WeGlide."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:73
-#, fuzzy
 msgid "Automatic Upload"
 msgstr "Автоматично"
 
@@ -9103,7 +9099,7 @@ msgid "Cont Dist"
 msgstr "OLC разст."
 
 #: src/InfoBoxes/Content/Factory.cpp:715
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown distance according to the configured "
 "Contest rule set."
@@ -9416,7 +9412,7 @@ msgstr ""
 "се използва целта в сектора."
 
 #: src/InfoBoxes/Content/Factory.cpp:869
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind, head component"
 msgstr "Компонента на насрещен вятър"
 
@@ -9496,7 +9492,7 @@ msgstr ""
 "на термика с Мак Рейди настройка за текущото прелитане."
 
 #: src/InfoBoxes/Content/Factory.cpp:902
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind, head component (simplified)"
 msgstr "Насрещна компонента на вятъра (опростена)"
 
@@ -9597,14 +9593,16 @@ msgid "ATC radial"
 msgstr "Азимут КВД"
 
 #: src/InfoBoxes/Content/Factory.cpp:957
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Bearing from the selected reference location to your position. The distance "
 "is displayed in nautical miles for communication with ATC. If declination is "
 "entered, magnetic bearing is given to match VOR radials."
 msgstr ""
-"Истински азимут от избрана отправна точки към текущата позиция. Разстоянието "
-"се показва в морски мили за комуникация с КВД (контрол въздушно движение)."
+"Пеленг - ъгълът между северния меридиан, позицията на самолета и даден "
+"обект. Разстоянието се показва в морски мили за комуникация с КВД (контрол "
+"въздушно движение). Ако е въведена деклинация магнитния пеленг съответства "
+"на лъчите от УКВ радиофара."
 
 #: src/InfoBoxes/Content/Factory.cpp:963
 #, no-c-format
@@ -9869,18 +9867,18 @@ msgid "Altn2 GR"
 msgstr "Качество за Рез. 2"
 
 #: src/InfoBoxes/Content/Factory.cpp:1079
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Geometric gradient to the arrival height above the second alternate. This is "
 "not adjusted for total energy."
 msgstr ""
-"Необходимо качество на полета за долитане на безопасна височина над най-"
-"доброто резервно летище, некомпесирано с обща енергия."
+"Необходимо качество за долитане на безопасна височина над резервно летище, "
+"некомпесирано с обща енергия."
 
 #: src/InfoBoxes/Content/Factory.cpp:1085
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Heart Rate"
-msgstr "Време на старта"
+msgstr "Пулс на сърцето"
 
 #: src/InfoBoxes/Content/Factory.cpp:1086
 #, no-c-format
@@ -9893,9 +9891,9 @@ msgid "Heart rate in beats per minute."
 msgstr "Пулс на сърцето в удари в минута."
 
 #: src/InfoBoxes/Content/Factory.cpp:1093
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Transponder Code"
-msgstr "Приемник на транспондер"
+msgstr "Код на транспондер"
 
 #: src/InfoBoxes/Content/Factory.cpp:1094
 #, no-c-format
@@ -9903,9 +9901,9 @@ msgid "XPDR Code"
 msgstr "Код на транспондер"
 
 #: src/InfoBoxes/Content/Factory.cpp:1095
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The currently set Transponder code"
-msgstr "Резервната радиочестота."
+msgstr "Резервна радиочестота."
 
 #: src/InfoBoxes/Content/Factory.cpp:1101
 #, no-c-format
@@ -9915,7 +9913,7 @@ msgstr "Температура на мотора"
 #: src/InfoBoxes/Content/Factory.cpp:1102
 #, no-c-format
 msgid "CHT"
-msgstr "Температура на мотора"
+msgstr "t° мотор"
 
 #: src/InfoBoxes/Content/Factory.cpp:1103
 #, no-c-format
@@ -9928,14 +9926,14 @@ msgid "Engine EGT"
 msgstr "температура на мотора"
 
 #: src/InfoBoxes/Content/Factory.cpp:1110
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "EGT"
-msgstr "t разчетно"
+msgstr "t двигател"
 
 #: src/InfoBoxes/Content/Factory.cpp:1111
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Engine Exhaust Gas Temperature"
-msgstr "Прогнозна температура"
+msgstr "Температура на газовете"
 
 #: src/InfoBoxes/Content/Factory.cpp:1117
 #, no-c-format
@@ -9973,7 +9971,6 @@ msgstr ""
 "състезателна задача"
 
 #: src/InfoBoxes/Content/Alternate.cpp:58
-#, fuzzy
 msgid "Altn {}"
 msgstr "Резерва 1"
 
@@ -9989,9 +9986,8 @@ msgid "no QNH"
 msgstr "Няма QNH"
 
 #: src/InfoBoxes/Content/Altitude.cpp:128
-#, fuzzy
 msgid "Not flying"
-msgstr "Не се кръжи"
+msgstr "Нелетящ"
 
 #: src/InfoBoxes/Content/MacCready.cpp:51
 msgid "MC AUTO"
@@ -10057,9 +10053,8 @@ msgid "FinalGlide"
 msgstr "Долитане"
 
 #: src/InfoBoxes/Panel/ATCSetup.cpp:35
-#, fuzzy
 msgid "Mag declination"
-msgstr "Изпращане на декларация"
+msgstr "Магнитно отклонение"
 
 #: src/InfoBoxes/Panel/ATCSetup.cpp:36
 msgid ""
@@ -10715,7 +10710,6 @@ msgid "Pilot Event Announce"
 msgstr "Събитие"
 
 #: Data/Input/default.xci:458 Data/Input/default.xci:1064
-#, fuzzy
 msgid "Target Show"
 msgstr "Цел"
 
@@ -10804,10 +10798,9 @@ msgid "Vario ASI zeroed"
 msgstr "Нула IAS скорост"
 
 #: Data/Input/default.xci:745
-#, fuzzy
 msgid "ASI Zero"
 msgstr ""
-"V възд. получ.\n"
+"Възд. скорост\n"
 "нула"
 
 #: Data/Input/default.xci:751
@@ -10815,7 +10808,6 @@ msgid "Accelerometer leveled"
 msgstr "Нулиране на акселерометъра"
 
 #: Data/Input/default.xci:752
-#, fuzzy
 msgid "Accel Zero"
 msgstr ""
 "Ускор.\n"
@@ -10830,14 +10822,10 @@ msgid "Store"
 msgstr "Запазване"
 
 #: Data/Input/default.xci:767
-#, fuzzy
 msgid "Cruise Demo"
-msgstr ""
-"Прелитане\n"
-"демо"
+msgstr "Полет демо"
 
 #: Data/Input/default.xci:774
-#, fuzzy
 msgid "Climb Demo"
 msgstr ""
 "Качване\n"
@@ -10872,7 +10860,6 @@ msgid "Thermal Assistant"
 msgstr "Помощник за термики"
 
 #: Data/Input/default.xci:900
-#, fuzzy
 msgid "Message Repeat"
 msgstr ""
 "Съобщение\n"
@@ -10895,21 +10882,18 @@ msgid "AVG/ALT"
 msgstr "Сред/Височ"
 
 #: Data/Input/default.xci:1145
-#, fuzzy
 msgid "Setup Wind"
 msgstr ""
 "Настройки\n"
 "вятър"
 
 #: Data/Input/default.xci:1153
-#, fuzzy
 msgid "Setup System"
 msgstr ""
 "Системни\n"
 "настройки"
 
 #: Data/Input/default.xci:1161
-#, fuzzy
 msgid "Settings Airspace"
 msgstr ""
 "Настройки\n"
@@ -10920,7 +10904,6 @@ msgid "Setup Plane"
 msgstr "Настройки на планера"
 
 #: Data/Input/default.xci:1215
-#, fuzzy
 msgid "Nearest Airspace"
 msgstr ""
 "Най-близко\n"
