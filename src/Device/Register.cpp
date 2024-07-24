@@ -40,6 +40,7 @@
 #include "Device/Driver/ATR833/Register.hpp"
 #include "Device/Driver/XCTracer.hpp"
 #include "Device/Driver/KRT2.hpp"
+#include "Device/Driver/Fenix.hpp"
 #include "util/Macros.hpp"
 #include "util/StringAPI.hxx"
 
@@ -85,6 +86,7 @@ static const struct DeviceRegister *const driver_list[] = {
   &xctracer_driver,
   &thermalexpress_driver,
   &acd_driver,
+  &fenix_driver,
   nullptr
 };
 

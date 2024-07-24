@@ -37,6 +37,9 @@ IMI_SOURCES = \
 	$(DRIVER_SRC_DIR)/IMI/Logger.cpp \
 	$(DRIVER_SRC_DIR)/IMI/Register.cpp
 
+FENIX_SOURCES = \
+	$(DRIVER_SRC_DIR)/Fenix/FenixDevice.cpp \
+	$(DRIVER_SRC_DIR)/Fenix/Register.cpp
 LX_SOURCES = \
 	$(DRIVER_SRC_DIR)/LX/NanoLogger.cpp \
 	$(DRIVER_SRC_DIR)/LX/NanoDeclare.cpp \
@@ -95,6 +98,7 @@ DRIVER_SOURCES = \
 	$(CAI302_SOURCES) \
 	$(IMI_SOURCES) \
 	$(LX_SOURCES) \
+	$(FENIX_SOURCES) \
 	$(FLARM_SOURCES) \
 	$(FLYTEC_SOURCES) \
 	$(VEGA_SOURCES) \
