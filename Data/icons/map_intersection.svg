@@ -1,8 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
- <g transform="matrix(.42744 0 0 .42425 .16103 .21212)" stroke-width="2.3483">
-  <path d="m16-0.5a1.2501 1.2501 0 0 0-0.88672 0.36914l-15.127 15.25a1.2501 1.2501 0 0 0 0 1.7617l15.127 15.25a1.2501 1.2501 0 0 0 1.7734 0l15.127-15.25a1.2501 1.2501 0 0 0 0-1.7617l-15.127-15.25a1.2501 1.2501 0 0 0-0.88672-0.36914zm0 3.0254 13.365 13.475-13.365 13.475-13.365-13.475z" color="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
-  <path d="m14.75 7.5527v16.895h2.5v-16.895z" color="#000000" stroke-linejoin="bevel" stroke-miterlimit="5.3" style="-inkscape-stroke:none"/>
-  <path d="m7.5527 14.75v2.5h16.895v-2.5z" color="#000000" stroke-linejoin="bevel" stroke-miterlimit="5.3" style="-inkscape-stroke:none"/>
- </g>
+<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="path-1-outside-1_34_162" maskUnits="userSpaceOnUse" x="2.8392" y="2.30394" width="13.435" height="13.435" fill="black">
+<rect fill="white" x="2.8392" y="2.30394" width="13.435" height="13.435"/>
+<path d="M13.4458 3.71815L14.3529 4.62526L5.62486 13.3533L4.71775 12.4462L13.4458 3.71815Z"/>
+</mask>
+<path d="M13.4458 3.71815L14.3529 4.62526L5.62486 13.3533L4.71775 12.4462L13.4458 3.71815Z" fill="#444444"/>
+<path d="M13.4458 3.71815L14.3529 4.62526L5.62486 13.3533L4.71775 12.4462L13.4458 3.71815Z" stroke="white" stroke-width="2" mask="url(#path-1-outside-1_34_162)"/>
+<mask id="path-2-outside-2_34_162" maskUnits="userSpaceOnUse" x="3.30356" y="1.79683" width="13.435" height="13.435" fill="black">
+<rect fill="white" x="3.30356" y="1.79683" width="13.435" height="13.435"/>
+<path d="M4.71777 4.62526L5.62488 3.71815L14.3529 12.4462L13.4458 13.3533L4.71777 4.62526Z"/>
+</mask>
+<path d="M4.71777 4.62526L5.62488 3.71815L14.3529 12.4462L13.4458 13.3533L4.71777 4.62526Z" fill="#444444"/>
+<path d="M4.71777 4.62526L5.62488 3.71815L14.3529 12.4462L13.4458 13.3533L4.71777 4.62526Z" stroke="white" stroke-width="2" mask="url(#path-2-outside-2_34_162)"/>
+<path d="M13.4458 3.71815L14.3529 4.62526L5.62486 13.3533L4.71775 12.4462L13.4458 3.71815Z" fill="#444444"/>
 </svg>
