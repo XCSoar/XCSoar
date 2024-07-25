@@ -9,6 +9,8 @@
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Formatter/Units.hpp"
+#include "Engine/GlideSolvers/GlideState.hpp"
+#include "Engine/GlideSolvers/MacCready.hpp"
 
 void
 UpdateInfoBoxHomeDistance(InfoBoxData &data) noexcept
@@ -29,6 +31,42 @@ UpdateInfoBoxHomeDistance(InfoBoxData &data) noexcept
     data.SetCommentFromBearingDifference(bd);
   } else
     data.SetCommentInvalid();
+}
+
+void
+UpdateInfoBoxHomeAltitudeDiff(InfoBoxData &data) noexcept
+{
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
+  const MoreData &more_data = CommonInterface::Basic();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
+
+  if (!basic.location_available ||
+      !more_data.NavAltitudeAvailable() ||
+      !settings.polar.glide_polar_task.IsValid() ||
+      !common_stats.vector_home.IsValid() ||
+      !settings.poi.home_location_available ||
+      !settings.poi.home_elevation_available) {
+    data.SetInvalid();
+    data.SetCommentInvalid();
+    return;
+  }
+
+  const GlideState glide_state(
+    basic.location.DistanceBearing(settings.poi.home_location),
+    settings.poi.home_elevation + settings.task.safety_height_arrival,
+    more_data.nav_altitude,
+    calculated.GetWindOrZero());
+
+  const GlideResult &result =
+    MacCready::Solve(settings.task.glide,
+                     settings.polar.glide_polar_task,
+                     glide_state);
+
+  // Display altitude difference and distance.
+  data.SetValueFromArrival(result.pure_glide_altitude_difference);
+  data.SetCommentFromDistance(common_stats.vector_home.distance);
 }
 
 void
