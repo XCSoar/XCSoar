@@ -11,6 +11,8 @@ Version 7.43-rc1 - not yet released
   - new topology available from mapgen (incl rivers)
 * documentation
   - clarify task speed calculation section
+* Android
+  - add SoftRF Eco, Ink and Card into 'white list' of USB devices
 
 Version 7.43-rc0 - 2024-06-02
 * map
