@@ -1,7 +1,7 @@
-Index: boost_1_84_0/boost/json/impl/parse.ipp
+Index: boost_1_85_0/boost/json/impl/parse.ipp
 ===================================================================
---- boost_1_84_0.orig/boost/json/impl/parse.ipp
-+++ boost_1_84_0/boost/json/impl/parse.ipp
+--- boost_1_85_0.orig/boost/json/impl/parse.ipp
++++ boost_1_85_0/boost/json/impl/parse.ipp
 @@ -15,7 +15,9 @@
  #include <boost/json/parser.hpp>
  #include <boost/json/detail/except.hpp>
@@ -30,10 +30,10 @@ Index: boost_1_84_0/boost/json/impl/parse.ipp
  } // namespace json
  } // namespace boost
  
-Index: boost_1_84_0/boost/json/impl/value.ipp
+Index: boost_1_85_0/boost/json/impl/value.ipp
 ===================================================================
---- boost_1_84_0.orig/boost/json/impl/value.ipp
-+++ boost_1_84_0/boost/json/impl/value.ipp
+--- boost_1_85_0.orig/boost/json/impl/value.ipp
++++ boost_1_85_0/boost/json/impl/value.ipp
 @@ -14,7 +14,9 @@
  #include <boost/json/value.hpp>
  #include <boost/json/parser.hpp>
@@ -62,10 +62,10 @@ Index: boost_1_84_0/boost/json/impl/value.ipp
  //----------------------------------------------------------
  //
  // private
-Index: boost_1_84_0/boost/json/impl/serialize.ipp
+Index: boost_1_85_0/boost/json/impl/serialize.ipp
 ===================================================================
---- boost_1_84_0.orig/boost/json/impl/serialize.ipp
-+++ boost_1_84_0/boost/json/impl/serialize.ipp
+--- boost_1_85_0.orig/boost/json/impl/serialize.ipp
++++ boost_1_85_0/boost/json/impl/serialize.ipp
 @@ -12,11 +12,15 @@
  
  #include <boost/json/serialize.hpp>
@@ -109,10 +109,10 @@ Index: boost_1_84_0/boost/json/impl/serialize.ipp
  } // namespace json
  } // namespace boost
  
-Index: boost_1_84_0/boost/json/impl/kind.ipp
+Index: boost_1_85_0/boost/json/impl/kind.ipp
 ===================================================================
---- boost_1_84_0.orig/boost/json/impl/kind.ipp
-+++ boost_1_84_0/boost/json/impl/kind.ipp
+--- boost_1_85_0.orig/boost/json/impl/kind.ipp
++++ boost_1_85_0/boost/json/impl/kind.ipp
 @@ -11,7 +11,9 @@
  #define BOOST_JSON_IMPL_KIND_IPP
  
@@ -141,10 +141,10 @@ Index: boost_1_84_0/boost/json/impl/kind.ipp
  } // namespace json
  } // namespace boost
  
-Index: boost_1_84_0/boost/json/impl/string.ipp
+Index: boost_1_85_0/boost/json/impl/string.ipp
 ===================================================================
---- boost_1_84_0.orig/boost/json/impl/string.ipp
-+++ boost_1_84_0/boost/json/impl/string.ipp
+--- boost_1_85_0.orig/boost/json/impl/string.ipp
++++ boost_1_85_0/boost/json/impl/string.ipp
 @@ -13,7 +13,9 @@
  #include <boost/json/detail/except.hpp>
  #include <algorithm>
@@ -155,10 +155,10 @@ Index: boost_1_84_0/boost/json/impl/string.ipp
  #include <stdexcept>
  #include <string>
  #include <utility>
-Index: boost_1_84_0/boost/system/detail/error_code.hpp
+Index: boost_1_85_0/boost/system/detail/error_code.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/system/detail/error_code.hpp
-+++ boost_1_84_0/boost/system/detail/error_code.hpp
+--- boost_1_85_0.orig/boost/system/detail/error_code.hpp
++++ boost_1_85_0/boost/system/detail/error_code.hpp
 @@ -30,7 +30,9 @@
  #include <boost/cstdint.hpp>
  #include <boost/config.hpp>
@@ -184,10 +184,10 @@ Index: boost_1_84_0/boost/system/detail/error_code.hpp
  
      std::string what() const
      {
-Index: boost_1_84_0/boost/geometry/views/identity_view.hpp
+Index: boost_1_85_0/boost/geometry/views/identity_view.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/geometry/views/identity_view.hpp
-+++ boost_1_84_0/boost/geometry/views/identity_view.hpp
+--- boost_1_85_0.orig/boost/geometry/views/identity_view.hpp
++++ boost_1_85_0/boost/geometry/views/identity_view.hpp
 @@ -18,7 +18,7 @@
  #ifndef BOOST_GEOMETRY_VIEWS_IDENTITY_VIEW_HPP
  #define BOOST_GEOMETRY_VIEWS_IDENTITY_VIEW_HPP
@@ -197,10 +197,10 @@ Index: boost_1_84_0/boost/geometry/views/identity_view.hpp
  
  #include <boost/range/begin.hpp>
  #include <boost/range/end.hpp>
-Index: boost_1_84_0/boost/range/adaptor/reversed.hpp
+Index: boost_1_85_0/boost/range/adaptor/reversed.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/range/adaptor/reversed.hpp
-+++ boost_1_84_0/boost/range/adaptor/reversed.hpp
+--- boost_1_85_0.orig/boost/range/adaptor/reversed.hpp
++++ boost_1_85_0/boost/range/adaptor/reversed.hpp
 @@ -11,7 +11,7 @@
  #ifndef BOOST_RANGE_ADAPTOR_REVERSED_HPP
  #define BOOST_RANGE_ADAPTOR_REVERSED_HPP
@@ -210,10 +210,10 @@ Index: boost_1_84_0/boost/range/adaptor/reversed.hpp
  #include <boost/range/concepts.hpp>
  #include <boost/iterator/reverse_iterator.hpp>
  
-Index: boost_1_84_0/boost/range/detail/range_return.hpp
+Index: boost_1_85_0/boost/range/detail/range_return.hpp
 ===================================================================
---- boost_1_84_0.orig/boost/range/detail/range_return.hpp
-+++ boost_1_84_0/boost/range/detail/range_return.hpp
+--- boost_1_85_0.orig/boost/range/detail/range_return.hpp
++++ boost_1_85_0/boost/range/detail/range_return.hpp
 @@ -11,7 +11,7 @@
  
  #include <boost/range/begin.hpp>
@@ -223,10 +223,10 @@ Index: boost_1_84_0/boost/range/detail/range_return.hpp
  #include <boost/next_prior.hpp>
  
  namespace boost
-Index: boost_1_84_0/boost/json/impl/serializer.ipp
+Index: boost_1_85_0/boost/json/impl/serializer.ipp
 ===================================================================
---- boost_1_84_0.orig/boost/json/impl/serializer.ipp
-+++ boost_1_84_0/boost/json/impl/serializer.ipp
+--- boost_1_85_0.orig/boost/json/impl/serializer.ipp
++++ boost_1_85_0/boost/json/impl/serializer.ipp
 @@ -13,7 +13,7 @@
  #include <boost/json/serializer.hpp>
  #include <boost/json/detail/format.hpp>

@@ -132,6 +132,7 @@ ChooseConfig(EGLDisplay display)
     EGL_RED_SIZE, 4,
     EGL_GREEN_SIZE, 4,
     EGL_BLUE_SIZE, 4,
+    EGL_ALPHA_SIZE, 4,
 
 #else //  !ANDROID
 

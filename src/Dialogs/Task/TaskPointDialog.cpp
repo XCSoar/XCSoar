@@ -511,8 +511,8 @@ dlgTaskPointShowModal(OrderedTask &task,
            look, _("Waypoint"));
 
   dialog.SetWidget(dialog, task, index);
-  dialog.AddButton(_("Close"), mrOK);
   dialog.GetWidget().CreateButtons();
+  dialog.AddButton(_("Close"), mrOK);
   dialog.ShowModal();
 
   return dialog.GetWidget().IsModified();

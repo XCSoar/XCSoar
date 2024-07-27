@@ -9,7 +9,7 @@
 #include "ui/canvas/Features.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
 
-static constexpr unsigned NUMAIRSPACECOLORS = 16;
+static constexpr unsigned NUMAIRSPACECOLORS = 18;
 static constexpr unsigned NUMAIRSPACEBRUSHES = 8;
 
 struct AirspaceRendererSettings;

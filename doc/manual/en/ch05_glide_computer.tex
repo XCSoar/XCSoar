@@ -564,15 +564,19 @@ for altitude differences from the task start altitude.
 for altitude required to complete the task.
 \item[Task speed remaining]  This is the task speed estimated for the
   remainder of the task according to MacCready theory.
+\item[Task speed estimated]  This is the task speed estimated for the entire 
+task, start to finish, assuming flying the remainder of the task according 
+to MacCready theory.
 \item[Task speed instantaneous]  This is the instantaneous estimated speed 
-along the task.  When climbing at the MacCready setting, this number
-will be similar to the estimated task speed.  When climbing slowly or
-flying off-course, this number will be lower than the estimated task
-speed.  In cruise at the optimum speed in zero lift, this number will
-be similar to the estimated task speed.
+along the task.  When climbing at a rate equal to the MacCready setting, this 
+number will be similar to \emph{Task speed remaining}.  When climbing more slowly 
+than this or cruising in a direction other than directly toward the active 
+waypoint, this number will be lower than \emph{Task speed remaining}.  In cruise 
+at the optimum speed directly toward the active waypoint in air that has no 
+vertical motion, this number will be similar to \emph{Task speed remaining}.
 
-This measure, available as an {\InfoBox} is useful as a continuous
-indicator of the cross-country performance.  It is not used in any
+This measure, available as an {\InfoBox}, is useful as a continuous
+indicator of cross-country performance.  It is not used in any
 internal calculations.
 \end{description}
 

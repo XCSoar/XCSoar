@@ -124,10 +124,10 @@ AirspaceWarningListWidget::UpdateButtons()
 {
   auto &airspace = selected_airspace;
   if (airspace == NULL) {
-    ack_button->SetVisible(false);
-    ack_day_button->SetVisible(false);
-    enable_button->SetVisible(false);
-    radio_button->SetVisible(false);
+    ack_button->SetEnabled(false);
+    ack_day_button->SetEnabled(false);
+    enable_button->SetEnabled(false);
+    radio_button->SetEnabled(false);
     return;
   }
 
@@ -140,10 +140,10 @@ AirspaceWarningListWidget::UpdateButtons()
     ack_day = warning.GetAckDay();
   }
 
-  ack_button->SetVisible(ack_expired);
-  ack_day_button->SetVisible(!ack_day);
-  enable_button->SetVisible(!ack_expired);
-  radio_button->SetVisible(airspace->GetRadioFrequency().IsDefined());
+  ack_button->SetEnabled(ack_expired);
+  ack_day_button->SetEnabled(!ack_day);
+  enable_button->SetEnabled(!ack_expired);
+  radio_button->SetEnabled(airspace->GetRadioFrequency().IsDefined());
 }
 
 void

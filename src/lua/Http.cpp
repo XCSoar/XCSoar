@@ -7,6 +7,7 @@
 #include "Class.hxx"
 #include "Error.hxx"
 #include "lib/curl/Easy.hxx"
+#include "lib/curl/Setup.hxx"
 #include "lib/curl/Adapter.hxx"
 #include "lib/curl/Handler.hxx"
 #include "util/SpanCast.hxx"
@@ -34,6 +35,7 @@ public:
   explicit LuaHttpRequest(const char *url)
     :easy(url), adapter(*this)
   {
+    Curl::Setup(easy);
     adapter.Install(easy);
   }
 

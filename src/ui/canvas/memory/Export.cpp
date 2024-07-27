@@ -104,7 +104,7 @@ CopyFromBGRA(void *_dest_pixels, unsigned _dest_pitch, unsigned dest_bpp,
     RGB565Color *dest_pixels = reinterpret_cast<RGB565Color *>(_dest_pixels);
     const BGRA8Color *src_pixels = src.data;
 
-    for (unsigned row = src.height; row > 0;
+    for (unsigned row = src.size.height; row > 0;
          --row, src_pixels += src_pitch, dest_pixels += dest_pitch)
       BGRAToRGB565((RGB565Color *)dest_pixels,
                    (const BGRA8Color *)src_pixels,
