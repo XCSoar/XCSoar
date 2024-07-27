@@ -46,7 +46,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          submodules: True
+          submodules: true
 
       - name: Parse changelog
         if: startsWith(github.ref, 'refs/tags/v')
@@ -70,8 +70,9 @@ jobs:
       - name: get XCSoar Version
         run: |
           VERSION=$(cat VERSION.txt)
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "::set-output name=VERSION::$VERSION"
+          echo "$VERSION"
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "::set-output name=VERSION::${VERSION}"
 
       - name: Create release
         id: create_release
