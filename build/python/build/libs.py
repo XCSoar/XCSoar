@@ -154,10 +154,10 @@ libfmt = CmakeProject(
 
 libsodium = AutotoolsProject(
     (
-        "https://download.libsodium.org/libsodium/releases/libsodium-1.0.19.tar.gz",
-        "https://github.com/jedisct1/libsodium/releases/download/1.0.19-RELEASE/libsodium-1.0.19.tar.gz",
+        "https://download.libsodium.org/libsodium/releases/libsodium-1.0.20.tar.gz",
+        "https://github.com/jedisct1/libsodium/releases/download/1.0.20-RELEASE/libsodium-1.0.20.tar.gz",
     ),
-    "018d79fe0a045cca07331d37bd0cb57b2e838c51bc48fd837a1472e50068bbea",
+    "ebb65ef6ca439333c2bb41a0c1990587288da07f6c7fd07cb3a18cc18d30ce19",
     "include/sodium/crypto_hash_sha256.h",
     [
         "--disable-shared",
@@ -167,10 +167,8 @@ libsodium = AutotoolsProject(
         # workaround for https://github.com/jedisct1/libsodium/issues/1314
         "aarch64-linux-android": "-march=armv8-a+crypto",
     },
-    # libsodium-1.0.19.tar.gz contains a weirdly named top-level directory
-    base="libsodium-stable",
     name="libsodium",
-    version="1.0.19",
+    version="1.0.20",
     # suppress "visibility default" from sodium/export.h
     cppflags="-DSODIUM_STATIC",
 )
