@@ -42,6 +42,7 @@ jobs:
       contents: write
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
+      version: ${{ steps.get_version.outputs.VERSION }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -68,6 +69,7 @@ jobs:
         id: changelogentry
 
       - name: get XCSoar Version
+        id: get_version
         run: |
           VERSION=$(cat VERSION.txt)
           echo "$VERSION"
@@ -96,7 +98,7 @@ jobs:
         include:
           - os: ubuntu-22.04
             target: UNIX
-            target_bin: xcsoar_${{ needs.release.outputs.VERSION }}_amd64
+            target_bin: xcsoar_${{ needs.release.outputs.version }}_amd64
             target_bin_path: DPKG
             target_final: xcsoar_
             target_ext: .deb
