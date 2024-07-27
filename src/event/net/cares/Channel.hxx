@@ -23,50 +23,49 @@ class Handler;
  * C++ wrapper for #ares_channel with #EventLoop integration.
  */
 class Channel {
-	Init init;
+  Init init;
 
-	ares_channel channel;
+  ares_channel channel;
 
-	DeferEvent defer_update_sockets;
-	CoarseTimerEvent timeout_event;
+  DeferEvent defer_update_sockets;
+  CoarseTimerEvent timeout_event;
 
-	class Socket;
+  class Socket;
 
-	std::forward_list<Socket> sockets;
+  std::forward_list<Socket> sockets;
 
-	class Request;
+  class Request;
 
 public:
-	explicit Channel(EventLoop &event_loop);
-	~Channel() noexcept;
+  explicit Channel(EventLoop &event_loop);
+  ~Channel() noexcept;
 
-	EventLoop &GetEventLoop() const noexcept {
-		return defer_update_sockets.GetEventLoop();
-	}
+  EventLoop &GetEventLoop() const noexcept
+  {
+    return defer_update_sockets.GetEventLoop();
+  }
 
-	/**
-	 * Look up a host name and call a #Handler method upon
-	 * completion.
-	 */
-	void Lookup(const char *name, int family, Handler &handler,
-		    CancellablePointer &cancel_ptr) noexcept;
+  /**
+   * Look up a host name and call a #Handler method upon
+   * completion.
+   */
+  void Lookup(const char *name, int family, Handler &handler,
+              CancellablePointer &cancel_ptr) noexcept;
 
-	/**
-	 * This overload submits two queries: AF_INET and AF_INET6 and
-	 * returns both results to the handler.
-	 */
-	void Lookup(const char *name, Handler &handler,
-		    CancellablePointer &cancel_ptr) noexcept;
+  /**
+   * This overload submits two queries: AF_INET and AF_INET6 and
+   * returns both results to the handler.
+   */
+  void Lookup(const char *name, Handler &handler,
+              CancellablePointer &cancel_ptr) noexcept;
 
 private:
-	void UpdateSockets() noexcept;
+  void UpdateSockets() noexcept;
 
-	void ScheduleUpdateSockets() noexcept {
-		defer_update_sockets.Schedule();
-	}
+  void ScheduleUpdateSockets() noexcept { defer_update_sockets.Schedule(); }
 
-	void OnSocket(SocketDescriptor fd, unsigned events) noexcept;
-	void OnTimeout() noexcept;
+  void OnSocket(SocketDescriptor fd, unsigned events) noexcept;
+  void OnTimeout() noexcept;
 };
 
 } // namespace Cares

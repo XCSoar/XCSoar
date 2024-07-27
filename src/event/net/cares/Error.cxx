@@ -10,8 +10,9 @@
 namespace Cares {
 
 Error::Error(int _code, const char *msg) noexcept
-	:std::runtime_error(FmtRuntimeError("{}: {}",
-					    msg, ares_strerror(_code))),
-	 code(_code) {}
+    : std::runtime_error(FmtRuntimeError("{}: {}", msg, ares_strerror(_code))),
+      code(_code)
+{
+}
 
 } // namespace Cares
