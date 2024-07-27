@@ -7,15 +7,15 @@
 namespace Cares {
 
 SimpleResolver::SimpleResolver(SimpleHandler &_handler,
-			       unsigned _port) noexcept
-	:handler(_handler), port(_port)
+                               unsigned _port) noexcept : handler(_handler),
+                                                          port(_port)
 {
 }
 
 void
 SimpleResolver::Start(Channel &channel, const char *name) noexcept
 {
-	channel.Lookup(name, *this, cancel_ptr);
+  channel.Lookup(name, *this, cancel_ptr);
 }
 
 } // namespace Cares
