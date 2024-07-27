@@ -114,7 +114,7 @@ jobs:
             target_container: debian:bookworm-slim
           - os: ubuntu-22.04
             target: ANDROID
-            target_bin: XCSoar-debug
+            target_bin: XCSoar
             target_bin_path: bin
             target_final: XCSoar
             target_ext: .apk
@@ -232,28 +232,42 @@ jobs:
           fi
           echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
 
+      - name: Prepare signing key
+        shell: bash
+        if: ${{ matrix.target == 'ANDROID' }}
+        run: |
+          echo "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_BASE64 }}" | base64 -d > signing-key.jks
+          md5sum signing-key.jks
+
       - name: Compile XCSoar
         run: |
           if [ ${{ matrix.target }} = "ANDROID" ]; then
-            make -j$(nproc) TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2
+            if [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }}" ] && [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}" ]; then
+              ANDROID_KEYSTORE_PASS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }} \
+              make -j$(nproc) TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
+              ANDROID_KEYSTORE=signing-key.jks ANDROID_KEY_ALIAS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }} \
+              output/ANDROID/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
+            else
+              make -j$(nproc) TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
+              output/ANDROID/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
+            fi
           elif [ ${{ matrix.target }} = "WIN64" ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
           elif [ ${{ matrix.target }} = "PC" ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
           elif [ ${{ matrix.target }} = "KOBO" ]; then
-            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
+            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target_bin }}${{ matrix.target_ext }}
           elif [ ${{ matrix.target }} = "OSX64" ]; then
-            gmake -j$(nproc) TARGET=${{ matrix.TARGET }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
           fi
 
       - name: Create UNIX dpkg
+        if: ${{ matrix.target == 'UNIX' }}
         run: |
-          if [ ${{ matrix.target }} = "UNIX" ]; then
-            mkdir -p output/UNIX/DPKG
-            rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
-            cd output/UNIX/DPKG
-            dpkg-buildpackage --jobs-force=$(nproc) --no-sign
-          fi
+          mkdir -p output/UNIX/DPKG
+          rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
+          cd output/UNIX/DPKG
+          dpkg-buildpackage --jobs-force=$(nproc) --no-sign
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
