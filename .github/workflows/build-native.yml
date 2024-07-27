@@ -99,7 +99,7 @@ jobs:
           - os: ubuntu-22.04
             target: UNIX
             target_bin: xcsoar_${{ needs.release.outputs.version }}_amd64
-            target_bin_path: DPKG
+            target_bin_path: ''
             target_final: xcsoar_
             target_ext: .deb
             target_upload: true
