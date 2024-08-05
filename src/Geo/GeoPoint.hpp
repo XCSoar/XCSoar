@@ -264,7 +264,6 @@ struct GeoPoint {
   GeoPoint Middle(const GeoPoint &other) const noexcept;
 
   constexpr bool operator==(const GeoPoint &) const noexcept = default;
-  constexpr bool operator!=(const GeoPoint &) const noexcept = default;
 };
 
 static_assert(std::is_trivial<GeoPoint>::value, "type is not trivial");

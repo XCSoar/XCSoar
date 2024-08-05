@@ -46,7 +46,7 @@ struct AirspaceClassStringCouple
 };
 
 static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
-  { "R", RESTRICT },
+  { "R", RESTRICTED },
   { "Q", DANGER },
   { "P", PROHIBITED },
   { "CTR", CTR },
@@ -63,6 +63,39 @@ static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
   { "RMZ", RMZ },
   { "MATZ", MATZ },
   { "GSEC", WAVE },
+  { "UNCLASSIFIED", UNCLASSIFIED },
+  { "RESTRICTED", RESTRICTED },
+  { "TMA", TMA },
+  { "TRA", TRA },
+  { "TSA", TSA },
+  { "FIR", FIR },
+  { "UIR", UIR },
+  { "ADIZ", ADIZ },
+  { "ATZ", ATZ },
+  { "AWY", AWY },
+  { "MTR", MTR },
+  { "ALERT", ALERT },
+  { "WARNING", WARNING },
+  { "DANGER", DANGER },
+  { "PROHIBITED", PROHIBITED },
+  { "PROTECTED", PROTECTED },
+  { "HTZ", HTZ },
+  { "GLIDING_SECTOR", GLIDING_SECTOR },
+  { "TRP", TRP },
+  { "TIZ", TIZ },
+  { "TIA", TIA },
+  { "MTA", MTA },
+  { "CTA", CTA },
+  { "ACC_SECTOR", ACC_SECTOR },
+  { "AERIAL_SPORTING_RECREATIONAL", AERIAL_SPORTING_RECREATIONAL },
+  { "OVERFLIGHT_RESTRICTION", OVERFLIGHT_RESTRICTION },
+  { "MRT", MRT },
+  { "TFR", TFR },
+  { "VFR_SECTOR", VFR_SECTOR },
+  { "FIS_SECTOR", FIS_SECTOR },
+  { "LTA", LTA },
+  { "UTA", UTA },
+  { "AIRSPACECLASSCOUNT", AIRSPACECLASSCOUNT }
 };
 
 static constexpr AirspaceClassCharCouple airspace_tnp_class_chars[] = {
@@ -81,8 +114,8 @@ static constexpr AirspaceClassStringCouple airspace_tnp_type_strings[] = {
   { "CTR", CTR },
   { "CTA/CTR", CTR },
   { "CTR/CTA", CTR },
-  { "R", RESTRICT },
-  { "RESTRICTED", RESTRICT },
+  { "R", RESTRICTED },
+  { "RESTRICTED", RESTRICTED },
   { "P", PROHIBITED },
   { "PROHIBITED", PROHIBITED },
   { "D", DANGER },
@@ -91,12 +124,16 @@ static constexpr AirspaceClassStringCouple airspace_tnp_type_strings[] = {
   { "GSEC", WAVE },
   { "T", TMZ },
   { "TMZ", TMZ },
-  { "CYR", RESTRICT },
+  { "CYR", RESTRICTED },
   { "CYD", DANGER },
   { "CYA", CLASSF },
   { "MATZ", MATZ },
   { "RMZ", RMZ },
 };
+
+static constexpr AirspaceClass airspace_ICAO_and_Unclassified[] = {
+  AirspaceClass::CLASSA, AirspaceClass::CLASSB, AirspaceClass::CLASSC, AirspaceClass::CLASSD,
+  AirspaceClass::CLASSE, AirspaceClass::CLASSF, AirspaceClass::CLASSG, AirspaceClass::UNCLASSIFIED};
 
 // this can now be called multiple times to load several airspaces.
 
@@ -124,7 +161,7 @@ struct TempAirspace
   tstring name;
   RadioFrequency radio_frequency;
   AirspaceClass asclass;
-  tstring astype;
+  AirspaceClass astype;
   std::optional<AirspaceAltitude> base;
   std::optional<AirspaceAltitude> top;
   AirspaceActivity days_of_operation;
@@ -151,7 +188,7 @@ struct TempAirspace
     name.clear();
     radio_frequency = RadioFrequency::Null();
     asclass = OTHER;
-    astype.clear();
+    astype = OTHER; // the default if no AY tag parsed (i.e. AC tag is not a ICAO or not UNCLASSIFIED)
     base.reset();
     top.reset();
     points.clear();
@@ -210,7 +247,7 @@ struct TempAirspace
       throw CommitError{"No top altitude"};
 
     auto as = std::make_shared<AirspacePolygon>(points);
-    as->SetProperties(std::move(name), asclass, std::move(astype), *base, *top);
+    as->SetProperties(std::move(name), asclass, astype, *base, *top);
     as->SetRadioFrequency(radio_frequency);
     as->SetDays(days_of_operation);
     airspace_database.Add(std::move(as));
@@ -562,6 +599,17 @@ ParseArcPoints(StringParser<> &input, TempAirspace &temp_area)
 
 [[gnu::pure]]
 static AirspaceClass
+ParseClass(const char *buffer) noexcept
+{
+  for (unsigned i = 0; i < ARRAY_SIZE(airspace_class_strings); i++)
+    if (StringIsEqualIgnoreCase(buffer, airspace_class_strings[i].string))
+      return airspace_class_strings[i].asclass;
+
+  return OTHER;
+}
+
+[[gnu::pure]]
+static AirspaceClass
 ParseType(const char *buffer) noexcept
 {
   for (unsigned i = 0; i < ARRAY_SIZE(airspace_class_strings); i++)
@@ -569,6 +617,15 @@ ParseType(const char *buffer) noexcept
       return airspace_class_strings[i].asclass;
 
   return OTHER;
+}
+
+[[gnu::pure]]
+static bool
+IsICAOClassOrUnclassified(AirspaceClass asclass) noexcept
+{
+  auto it = std::find(std::begin(airspace_ICAO_and_Unclassified),
+                      std::end(airspace_ICAO_and_Unclassified), asclass);
+  return  it != std::end(airspace_ICAO_and_Unclassified);
 }
 
 [[gnu::pure]]
@@ -643,7 +700,7 @@ ParseLine(Airspaces &airspace_database, unsigned line_number,
       if (temp_area.Commit(airspace_database))
         temp_area.Reset(line_number);
 
-      temp_area.asclass = ParseType(input.c_str());
+      temp_area.asclass = ParseClass(input.c_str());
       break;
 
     case 'N':
@@ -667,7 +724,8 @@ ParseLine(Airspaces &airspace_database, unsigned line_number,
     case 'Y':
     case 'y':
       if (input.SkipWhitespace())
-        temp_area.astype = string_converter.Convert(input.c_str());
+        if (IsICAOClassOrUnclassified(temp_area.asclass))
+          temp_area.astype = ParseType(input.c_str());
       break;
 
     /** 'AR 999.999 or 'AF 999.999' in accordance with the Naviter change proposed in 2018 - (Find 'Additional OpenAir fields' here) http://www.winpilot.com/UsersGuide/UserAirspace.asp **/

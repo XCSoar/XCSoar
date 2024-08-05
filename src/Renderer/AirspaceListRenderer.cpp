@@ -57,7 +57,7 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const AirspaceLook &look,
                            const AirspaceRendererSettings &renderer_settings)
 {
-  ::Draw(canvas, rc, airspace, AirspaceFormatter::GetClass(airspace),
+  ::Draw(canvas, rc, airspace, AirspaceFormatter::GetClassOrType(airspace),
          row_renderer, look, renderer_settings);
 }
 
@@ -69,7 +69,7 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const AirspaceLook &look,
                            const AirspaceRendererSettings &renderer_settings)
 {
-  StaticString<256> comment(AirspaceFormatter::GetClass(airspace));
+  StaticString<256> comment(AirspaceFormatter::GetClassOrType(airspace));
 
   comment.AppendFormat(_T(" - %s - %s"),
                        FormatUserDistanceSmart(vector.distance).c_str(),

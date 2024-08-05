@@ -34,7 +34,6 @@ struct PageLayout
     }
 
     constexpr bool operator==(const InfoBoxConfig &other) const noexcept = default;
-    constexpr bool operator!=(const InfoBoxConfig &other) const noexcept = default;
   };
 
   bool valid;
@@ -139,7 +138,6 @@ struct PageLayout
                          const bool concise=false) const noexcept;
 
   constexpr bool operator==(const PageLayout &other) const noexcept = default;
-  constexpr bool operator!=(const PageLayout &other) const noexcept = default;
 };
 
 struct PageSettings {

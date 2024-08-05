@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-21 15:38+0100\n"
-"PO-Revision-Date: 2022-11-15 19:48+0000\n"
+"PO-Revision-Date: 2024-06-02 21:16+0000\n"
 "Last-Translator: Philipp Wollschlegel <folken@kabelsalat.ch>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/xcsoar/"
 "translations/de/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -2849,7 +2849,7 @@ msgstr "beim Kreisen"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:41
 msgid "Estimate the wind vector while circling.  Requires only a GPS."
-msgstr ""
+msgstr "Schätze den Windvektor während des Kreisflugs. -- Benötigt nur ein GPS."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:44
 #, fuzzy
@@ -2914,13 +2914,15 @@ msgstr "Ablassen"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:265
 msgid "Crew"
-msgstr ""
+msgstr "Besatzung"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:266
 msgid ""
 "All masses loaded to the glider beyond the empty weight including pilot and "
 "copilot, but not water ballast."
 msgstr ""
+"Alle Massen, die über das Leergewicht hinaus in den Segelflieger geladen "
+"werden, einschließlich Pilot und Copilot, aber ohne Wasserballast."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:273
 msgid "Ballast"
@@ -3631,7 +3633,7 @@ msgstr "Nahe"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:78
 msgid "Share"
-msgstr ""
+msgstr "Teilen"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:32
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:43
@@ -4027,22 +4029,22 @@ msgstr "Kraftwerk"
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:60
 #, no-c-format
 msgid "VOR"
-msgstr ""
+msgstr "VOR"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:61
 #, no-c-format
 msgid "NDB"
-msgstr ""
+msgstr "NDB"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:62
 #, no-c-format
 msgid "Dam"
-msgstr ""
+msgstr "Damm"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
 #, no-c-format
 msgid "Castle"
-msgstr ""
+msgstr "Schloss"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:64
 #, fuzzy, no-c-format
@@ -5048,17 +5050,17 @@ msgstr "Glas"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:160
 #, no-c-format
 msgid "Use the system-wide setting"
-msgstr ""
+msgstr "Verwenden die Systemweite Einstellung."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:162
 #, no-c-format
 msgid "Black text on white background"
-msgstr ""
+msgstr "Schwarzer Text auf weißem Hintergrund"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:164
 #, no-c-format
 msgid "White text on black background"
-msgstr ""
+msgstr "Weißer Text auf schwarzem Hintergrund"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:187
 msgid "Full screen"
@@ -5164,13 +5166,15 @@ msgstr "Co-Pilotenname"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:60
 msgid "Crew weight default"
-msgstr ""
+msgstr "Standardmäßiges Besatzungsgewicht"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:61
 msgid ""
 "Default for all weight loaded to the glider beyond the empty weight and "
 "besides the water ballast."
 msgstr ""
+"Standard für alle Massen, die über das Leergewicht hinaus in den "
+"Segelflieger geladen werden, außer Wasserballast."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:67
 msgid "Time step cruise"
@@ -5930,6 +5934,8 @@ msgid ""
 "E-ink friendly color scheme, lighter and thicker dots means lift while "
 "darker and thinner means sink."
 msgstr ""
+"E-Ink-freundliches Farbschema: hellere und dickere Punkte bedeuten Auftrieb, "
+"dunklere und dünnere bedeuten Sinkflug."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:96
 #, no-c-format
@@ -6056,7 +6062,7 @@ msgstr "FLARM Flugverkehr"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 msgid "Keep showing traffic for a while after it has disappeared."
-msgstr ""
+msgstr "Verkehr weiterhin anzeigen, auch nachdem er verschwunden ist."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:144
 msgid "Trail length"
@@ -6437,6 +6443,8 @@ msgid ""
 "LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance "
 "is 20km, 5 points per km."
 msgstr ""
+"LVZC Charron.online, 5 Etappen unter 200 km, 6 Etappen darüber. "
+"Mindestetappendistanz beträgt 20 km, 5 Punkte pro km."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:109
 msgid "Contest"
@@ -7110,10 +7118,14 @@ msgid ""
 "Show thermal locations downloaded from Thermal Information Map (thermalmap."
 "info)."
 msgstr ""
+"Zeige Thermik-Standorte, die von der Thermal Information Map (thermalmap."
+"info) heruntergeladen wurden."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:70
 msgid "Allow download of declared tasks from Weglide in the Task Manager."
 msgstr ""
+"Erlaube den Download von deklarierten Aufgaben von Weglide im "
+"Aufgabenmanager."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:73
 msgid "Automatic Upload"
@@ -7124,6 +7136,8 @@ msgid ""
 "Asks whether to upload flight to Weglide, after flight is downloaded from "
 "external logger."
 msgstr ""
+"Fragt, ob der Flug nach Weglide hochgeladen werden soll, nachdem der Flug "
+"von einem externen Logger heruntergeladen wurde."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:79
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
@@ -7372,7 +7386,7 @@ msgstr "Weniger"
 
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:84
 msgid "Refresh"
-msgstr ""
+msgstr "Aktualisieren"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:34
 #: src/Dialogs/Task/TaskPointDialog.cpp:226
@@ -9929,7 +9943,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1103
 #, no-c-format
 msgid "Engine Cylinder Head Temperature"
-msgstr ""
+msgstr "Motor Zylinderkopftemperatur"
 
 #: src/InfoBoxes/Content/Factory.cpp:1109
 #, no-c-format
@@ -9949,7 +9963,7 @@ msgstr "Temperaturprognose"
 #: src/InfoBoxes/Content/Factory.cpp:1117
 #, no-c-format
 msgid "Engine Revolutions Per Minute"
-msgstr ""
+msgstr "Motordrehzahl"
 
 #: src/InfoBoxes/Content/Factory.cpp:1118
 #, no-c-format
@@ -9959,7 +9973,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1119
 #, no-c-format
 msgid "Engine Revolutions Per Minute."
-msgstr ""
+msgstr "Motordrehzahl (Umdrehungen pro Minute)."
 
 #: src/InfoBoxes/Content/Factory.cpp:1125
 #, no-c-format
@@ -9977,6 +9991,8 @@ msgid ""
 "Shows AAT delta time and estimated time of arrival in case of AAT task, and "
 "estimated time of arrival in case of racing task"
 msgstr ""
+"Zeigt AAT-Delta-Zeit und geschätzte Ankunftszeit bei einer AAT-Aufgabe sowie "
+"die geschätzte Ankunftszeit bei einer Racing-Aufgabe an."
 
 #: src/InfoBoxes/Content/Alternate.cpp:58
 #, fuzzy
@@ -10071,6 +10087,9 @@ msgid ""
 "Magnetic declination used to calculate radial to reference. Negative values "
 "are W declination, positive is E."
 msgstr ""
+"Magnetische Deklination, die zur Berechnung des Radials zum Referenzpunkt "
+"verwendet wird. Negative Werte sind westliche Deklination, positive Werte "
+"sind östliche Deklination."
 
 #: src/MapWindow/GlueMapWindowItems.cpp:109
 msgid "There is nothing interesting near this location."
@@ -10690,7 +10709,7 @@ msgstr ""
 msgid ""
 "Nav\n"
 "Page 2/2"
-msgstr ""
+msgstr "Seite 2/2"
 
 #: Data/Input/default.xci:403 Data/Input/default.xci:1032
 #, fuzzy
@@ -10738,7 +10757,7 @@ msgstr "Seite"
 
 #: Data/Input/default.xci:506 Data/Input/default.xci:1090
 msgid "Pan Mode"
-msgstr ""
+msgstr "Pan Modus"
 
 #: Data/Input/default.xci:525 Data/Input/default.xci:1098
 msgid "Labels"
@@ -10757,12 +10776,16 @@ msgid ""
 "Config\n"
 "Page 2/3"
 msgstr ""
+"Config\n"
+"Seite 2/3"
 
 #: Data/Input/default.xci:614
 msgid ""
 "Config\n"
 "Page 3/3"
 msgstr ""
+"Config\n"
+"Seite 3/3"
 
 #: Data/Input/default.xci:671 Data/Input/default.xci:1176
 msgid "Raw Logger"
@@ -10781,6 +10804,8 @@ msgid ""
 "Vega\n"
 "Page 2/2"
 msgstr ""
+"Vega\n"
+"Seite 2/2"
 
 #: Data/Input/default.xci:705
 #, fuzzy

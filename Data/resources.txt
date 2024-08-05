@@ -3,8 +3,9 @@
    files (e.g. the Windows RC format). */
 
 // Application Icons
-
+#ifdef USE_GDI
 app_icon IDI_XCSOAR "xcsoarswift"
+#endif
 
 // Bitmaps
 

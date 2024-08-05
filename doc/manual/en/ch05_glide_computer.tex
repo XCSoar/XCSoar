@@ -564,41 +564,49 @@ for altitude differences from the task start altitude.
 for altitude required to complete the task.
 \item[Task speed remaining]  This is the task speed estimated for the
   remainder of the task according to MacCready theory.
+\item[Task speed estimated]  This is the task speed estimated for the entire 
+task, start to finish, assuming flying the remainder of the task according 
+to MacCready theory.
 \item[Task speed instantaneous]  This is the instantaneous estimated speed 
-along the task.  When climbing at the MacCready setting, this number
-will be similar to the estimated task speed.  When climbing slowly or
-flying off-course, this number will be lower than the estimated task
-speed.  In cruise at the optimum speed in zero lift, this number will
-be similar to the estimated task speed.
+along the task.  When climbing at a rate equal to the MacCready setting, this 
+number will be similar to \emph{Task speed remaining}.  When climbing more slowly 
+than this or cruising in a direction other than directly toward the active 
+waypoint, this number will be lower than \emph{Task speed remaining}.  In cruise 
+at the optimum speed directly toward the active waypoint in air that has no 
+vertical motion, this number will be similar to \emph{Task speed remaining}.
 
-This measure, available as an {\InfoBox} is useful as a continuous
-indicator of the cross-country performance.  It is not used in any
+This measure, available as an {\InfoBox}, is useful as a continuous
+indicator of cross-country performance.  It is not used in any
 internal calculations.
 \end{description}
 
-For assigned area tasks at the same time a new task time estimation is
-calculated the target position is optimised. \tip{} the AAT will be completed not
-more than five minutes after the given task time.
+\tip{}For an assigned area task (AAT), the positions of any remaining targets 
+with the \emph{Optimized} box checked are automatically adjusted (if room for 
+such adjustment is available) to give an estimated total task time of five 
+minutes more than the task's \emph{AAT min. time}.
 
-In addition, a measure called \emph{achieved MacCready} is calculated.
+Also, a measure called \emph{Achieved MacCready} is calculated.
 This is computed by finding the MacCready setting that under classical
 MacCready flight would produce the same task speed as has been
-achieved.  This value is higher than the actual MacCready setting when
-the glider has climbed faster than the MacCready setting or when the
-glider has flown in cloud streets etc.  The achieved MacCready is used
-in the task calculator dialogue.
+achieved so far.  This value is higher than the actual MacCready setting when
+the glider has climbed faster than the actual MacCready setting or when the
+glider has flown in cloud streets, for example.  \emph{Achieved MacCready} is 
+shown in the \emph{Status} dialogue's \emph{Task} tab but is not available as 
+an InfoBox.
 
-Task speed estimates for achieved speed are compensated for altitude
-variations, such that the effects of climbs are taken into account in
-calculating the average task speed.  Considering two gliders A and B
-flying the same task.  Glider A has cruised faster, trading off altitude
-for speed.  Glider B is behind A but higher and will save time later
-since it has less climbing to do to complete the task.
+An "achieved" task speed includes compensation for the glider's net change in 
+altitude so far.  For example, two gliders flying the same task can have
+different "achieved" task speeds even if they have both flown the exact same
+distance in the exact same amount of time.  The higher-altitude glider will
+have a greater "achieved" task speed.  In fact, a glider that has flown 
+\emph{less} distance in the same amount of time could have a greater 
+"achieved" task speed if its altitude is enough higher than that of the
+farther-ahead glider.
 
-While flying AAT tasks, the task speed measures may change when the
-glider is inside an AAT area or when the AAT range or targets are
-adjusted by the pilot.  This is due to the task distance achieved and
-remaining when such events occur.
+While flying an AAT, task speed measures may change relatively quickly when 
+the glider is inside a turn area or when AAT range or target location is
+adjusted by the pilot.  This is due to changes in \emph{task distance 
+achieved} and \emph{task distance remaining} when such events occur.
 
 
 \section{Optimal cruise track}
