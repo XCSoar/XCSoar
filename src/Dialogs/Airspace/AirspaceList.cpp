@@ -34,7 +34,7 @@ enum Controls {
   NAME,
   DISTANCE,
   DIRECTION,
-  TYPE,
+  CLASS_AND_TYPE,
 };
 
 class AirspaceFilterWidget;
@@ -150,7 +150,7 @@ static Angle last_heading;
 static constexpr StaticEnumChoice type_filter_list[] = {
   { WILDCARD, _T("*") },
   { OTHER, _T("Other") },
-  { RESTRICT, _T("Restricted areas") },
+  { RESTRICTED, _T("Restricted areas") },
   { PROHIBITED, _T("Prohibited areas") },
   { DANGER, _T("Danger areas") },
   { CLASSA, _T("Class A") },
@@ -167,7 +167,36 @@ static constexpr StaticEnumChoice type_filter_list[] = {
   { CLASSG, _T("Class G") },
   { MATZ, _T("MATZ") },
   { RMZ, _T("RMZ") },
-  nullptr
+  { UNCLASSIFIED, _T("UNCLASSIFIED") },
+  { TMA, _T("TMA") },
+  { TRA, _T("TRA") },
+  { TSA, _T("TSA") },
+  { FIR, _T("FIR") },
+  { UIR, _T("UIR") },
+  { ADIZ, _T("ADIZ") },
+  { ATZ, _T("ATZ") },
+  { AWY, _T("AWY") },
+  { MTR, _T("MTR") },
+  { ALERT, _T("ALERT") },
+  { WARNING, _T("WARNING") },
+  { PROTECTED, _T("PROTECTED") },
+  { HTZ, _T("HTZ") },
+  { GLIDING_SECTOR, _T("Gliding Sector") },
+  { TRP, _T("TRP") },
+  { TIZ, _T("TIZ") },
+  { TIA, _T("TIA") },
+  { MTA, _T("MTA") },
+  { CTA, _T("CTA") },
+  { ACC_SECTOR, _T("ACC Sector") },
+  { AERIAL_SPORTING_RECREATIONAL, _T("Aerial Sporting Recreational") },
+  { OVERFLIGHT_RESTRICTION, _T("Overflight Restriction") },
+  { MRT, _T("MRT") },
+  { TFR, _T("TFR") },
+  { VFR_SECTOR, _T("VFR Sector") },
+  { FIS_SECTOR, _T("FIS Sector") },
+  { LTA, _T("Lower Traffic Area") },
+  { UTA, _T("Upper Traffic Area") },
+   nullptr
 };
 
 /* Remove two from type_filter list, as WILDCARD and nullptr are not
@@ -182,10 +211,10 @@ struct AirspaceListWidgetState
 {
   double distance;
   unsigned direction;
-  unsigned type;
+  unsigned class_and_type;
 
   AirspaceListWidgetState()
-    :distance(-1), direction(WILDCARD), type(WILDCARD) {}
+    :distance(-1), direction(WILDCARD), class_and_type(WILDCARD) {}
 };
 
 static AirspaceListWidgetState dialog_state;
@@ -214,8 +243,8 @@ AirspaceListWidget::UpdateList()
 {
   AirspaceFilterData data;
 
-  if (dialog_state.type != WILDCARD)
-    data.cls = (AirspaceClass)dialog_state.type;
+  if (dialog_state.class_and_type != WILDCARD)
+    data.cls = (AirspaceClass)dialog_state.class_and_type;
 
   const TCHAR *name_filter = filter_widget.GetValueString(NAME);
   if (!StringIsEmpty(name_filter))
@@ -276,9 +305,9 @@ AirspaceListWidget::OnModified(DataField &df) noexcept
     DataFieldEnum &dfe = (DataFieldEnum &)df;
     dialog_state.direction = dfe.GetValue();
 
-  } else if (filter_widget.IsDataField(TYPE, df)) {
+  } else if (filter_widget.IsDataField(CLASS_AND_TYPE, df)) {
     DataFieldEnum &dfe = (DataFieldEnum &)df;
-    dialog_state.type = dfe.GetValue();
+    dialog_state.class_and_type = dfe.GetValue();
   }
 
   FilterMode(filter_widget.IsDataField(NAME, df));
@@ -412,7 +441,7 @@ AirspaceFilterWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   Add(_("Name"), nullptr, CreateNameDataField(listener));
   Add(_("Distance"), nullptr, CreateDistanceDataField(listener));
   Add(_("Direction"), nullptr, CreateDirectionDataField(listener));
-  AddEnum(_("Type"), nullptr, type_filter_list, WILDCARD, listener);
+  AddEnum(_("Class/Type"), nullptr, type_filter_list, WILDCARD, listener);
 }
 
 void

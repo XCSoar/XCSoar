@@ -33,7 +33,6 @@ struct Point2D {
      y(static_cast<scalar_type>(src.y)) {}
 
   constexpr bool operator==(const Point2D<T, PT> &) const noexcept = default;
-  constexpr bool operator!=(const Point2D<T, PT> &) const noexcept = default;
 
   constexpr Point2D<T, PT> operator+(Point2D<T, PT> other) const noexcept {
     return { scalar_type(x + other.x), scalar_type(y + other.y) };

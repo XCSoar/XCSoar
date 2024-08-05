@@ -38,11 +38,18 @@
 #include "util/StringPointer.hxx"
 #include "util/AllocatedString.hxx"
 #include "BackendComponents.hpp"
+#include "Pan.hpp"
 
 #ifdef ANDROID
 #include "Android/NativeView.hpp"
 #include "Android/Main.hpp"
 #endif
+
+static bool
+ActivatePan(const Waypoint &waypoint)
+{
+  return PanTo(waypoint.location);
+}
 
 #ifdef HAVE_RUN_FILE
 
@@ -190,8 +197,7 @@ public:
 #endif
                         *waypoint);
 
-    if (task_manager != nullptr)
-      goto_button.MoveAndShow(layout.goto_button);
+    goto_button.MoveAndShow(layout.goto_button);
 
     if (!images.empty()) {
       magnify_button.MoveAndShow(layout.magnify_button);
@@ -220,8 +226,7 @@ public:
   }
 
   void Hide() noexcept override {
-    if (task_manager != nullptr)
-      goto_button.Hide();
+    goto_button.Hide();
 
     if (!images.empty()) {
       magnify_button.Hide();
@@ -249,8 +254,7 @@ public:
 #endif
                         *waypoint);
 
-    if (task_manager != nullptr)
-      goto_button.Move(layout.goto_button);
+    goto_button.Move(layout.goto_button);
 
     if (!images.empty()) {
       magnify_button.Move(layout.magnify_button);
@@ -276,11 +280,8 @@ public:
   }
 
   bool SetFocus() noexcept override {
-    if (task_manager != nullptr) {
-      goto_button.SetFocus();
-      return true;
-    } else
-      return false;
+    goto_button.SetFocus();
+    return true;
   }
 
   bool HasFocus() const noexcept override {
@@ -404,6 +405,13 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
   if (task_manager != nullptr)
     goto_button.Create(parent, look.button, _("GoTo"), layout.goto_button,
                        button_style, [this](){ OnGotoClicked(); });
+  else {
+	goto_button.Create(parent, look.button, _("Pan To"), layout.goto_button,
+                       button_style, [this](){
+    if (ActivatePan(*waypoint))
+      dialog.SetModalResult(mrOK);
+  });  
+  }
 
   if (!images.empty()) {
     magnify_button.Create(parent, layout.magnify_button, button_style,

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-21 15:38+0100\n"
-"PO-Revision-Date: 2023-01-18 11:50+0000\n"
+"PO-Revision-Date: 2024-04-01 10:30+0000\n"
 "Last-Translator: Веско <v.jeliazkov@jeliazkov.net>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/xcsoar/"
 "translations/bg/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -472,9 +472,8 @@ msgid "WeGlide Upload"
 msgstr "Изпращане в WeGlide"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:110
-#, fuzzy
 msgid "Upload Flight"
-msgstr "Изтегляне на полет"
+msgstr "Прехвърляне на полет"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:132 src/Dialogs/FileManager.cpp:448
 #: src/Dialogs/FileManager.cpp:735 src/Dialogs/Device/DeviceListDialog.cpp:475
@@ -652,9 +651,8 @@ msgid "Do you want to upload this flight to WeGlide?"
 msgstr "Желаете ли да изпратите този полет до WeGlide?"
 
 #: src/Logger/ExternalLogger.cpp:338
-#, fuzzy
 msgid "Upload flight"
-msgstr "Изтегляне на полет"
+msgstr "Прехвърляне на полет"
 
 #: src/Logger/ExternalLogger.cpp:343
 msgid "Do you want to download another flight?"
@@ -1372,8 +1370,9 @@ msgid "Arrival Alt"
 msgstr "Височина на долитане"
 
 #: src/Renderer/WaypointListRenderer.cpp:148
+#, fuzzy
 msgid " ("
-msgstr ""
+msgstr " ("
 
 #: src/Weather/Rasp/RaspStore.cpp:28 src/Weather/Rasp/RaspStore.cpp:33
 #, no-c-format
@@ -2431,7 +2430,7 @@ msgstr ""
 #: src/InfoBoxes/InfoBoxSettings.cpp:58
 #, no-c-format
 msgid "Circling"
-msgstr "Въртене"
+msgstr "въртене"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:94
 msgid "This forces the variometer into circling or cruise mode"
@@ -10061,7 +10060,7 @@ msgstr "Връзка"
 #: src/InfoBoxes/InfoBoxSettings.cpp:59
 #, no-c-format
 msgid "Cruise"
-msgstr "Планиране"
+msgstr "планиране"
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:60
 #, no-c-format

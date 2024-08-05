@@ -25,7 +25,7 @@ airspace_random_properties(AbstractAirspace& as)
   AirspaceAltitude top;
   base.altitude = rand()%4000;
   top.altitude = base.altitude+rand()%3000;
-  as.SetProperties(_T("hello"), asclass, _T("E"), base, top);
+  as.SetProperties(_T("hello"), asclass, AirspaceClass::CLASSE, base, top);
 }
 
 
