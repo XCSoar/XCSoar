@@ -15,13 +15,13 @@ namespace Cares {
  */
 class Handler {
 public:
-	/**
-	 * Called once for each address.  If there are no more
-	 * addresses, OnCaresSuccess() gets called.
-	 */
-	virtual void OnCaresAddress(SocketAddress address) noexcept = 0;
-	virtual void OnCaresSuccess() noexcept = 0;
-	virtual void OnCaresError(std::exception_ptr e) noexcept = 0;
+  /**
+   * Called once for each address.  If there are no more
+   * addresses, OnCaresSuccess() gets called.
+   */
+  virtual void OnCaresAddress(SocketAddress address) noexcept = 0;
+  virtual void OnCaresSuccess() noexcept = 0;
+  virtual void OnCaresError(std::exception_ptr e) noexcept = 0;
 };
 
 } // namespace Cares
