@@ -14,6 +14,7 @@
 #include "Form/DataField/Date.hpp"
 #include "Form/DataField/Time.hpp"
 #include "Form/DataField/RoughTime.hpp"
+#include "Form/DataField/Frequency.hpp"
 #include "time/RoughTime.hpp"
 #include "time/BrokenDate.hpp"
 #include "Language/Language.hpp"
@@ -135,6 +136,17 @@ RowFormWidget::AddFloat(const TCHAR *label, const TCHAR *help,
   DataFieldFloat *df = new DataFieldFloat(edit_format, display_format,
                                           min_value, max_value,
                                           value, step, fine, listener);
+  edit->SetDataField(df);
+  return edit;
+}
+
+WndProperty *
+RowFormWidget::AddFrequency(const TCHAR *label, const TCHAR *help,
+                        RadioFrequency value,
+                        DataFieldListener *listener) noexcept
+{
+  WndProperty *edit = Add(label, help);
+  RadioFrequencyDataField *df = new RadioFrequencyDataField(value, listener);
   edit->SetDataField(df);
   return edit;
 }
@@ -356,6 +368,16 @@ RowFormWidget::GetValueFloat(unsigned i) const noexcept
   const DataFieldFloat &df =
     (const DataFieldFloat &)GetDataField(i);
   assert(df.GetType() == DataField::Type::REAL);
+  return df.GetValue();
+}
+
+RadioFrequency RowFormWidget::GetValueRadioFrequency(unsigned i) const noexcept
+{
+  const RadioFrequencyDataField &df =
+    (const RadioFrequencyDataField &)GetDataField(i);
+  assert(df.GetType() == DataField::Type::RADIO_FREQUENCY);
+  if(df.GetType() != DataField::Type::RADIO_FREQUENCY)
+    return RadioFrequency::Null();
   return df.GetValue();
 }
 

@@ -900,6 +900,14 @@ event=RepeatStatusMessage
 label=Message Repeat
 location=7
 
+mode=Info3
+type=key
+data=9
+event=Frequencies
+event=Mode default
+label=Frequencies
+location=8
+
 # -------------
 # mode=Menu
 # -------------
@@ -1271,3 +1279,10 @@ data=0
 event=AirSpace toggle
 label=Airspace\n$(AirspaceToggleActionName)
 location=34
+
+mode=RemoteStick
+type=key
+data=0
+event=Frequencies
+label=Frequencies
+location=35

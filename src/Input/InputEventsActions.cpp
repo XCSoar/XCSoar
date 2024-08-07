@@ -70,6 +70,7 @@ doc/html/advanced/input/ALL  http://xcsoar.sourceforge.net/advanced/input/
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
+#include "Dialogs/Frequency/dlgUserFrequencyList.hpp"
 
 #include <cassert>
 #include <tchar.h>
@@ -304,6 +305,13 @@ void
 InputEvents::eventChecklist([[maybe_unused]] const TCHAR *misc)
 {
   dlgChecklistShowModal();
+}
+
+// User Frequencies List
+void
+InputEvents::eventFrequencies([[maybe_unused]] const TCHAR *misc)
+{
+  dlgUserFrequencyListWidgetShowModal(UserFrequencyListWidget::DialogMode::BROWSE);
 }
 
 // Status

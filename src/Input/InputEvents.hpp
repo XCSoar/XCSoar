@@ -131,6 +131,7 @@ void eventBallast(const TCHAR *misc);
 void eventBugs(const TCHAR *misc);
 void eventCalculator(const TCHAR *misc);
 void eventChecklist(const TCHAR *misc);
+void eventFrequencies(const TCHAR *misc);
 void eventClearAirspaceWarnings(const TCHAR *misc);
 void eventClearStatusMessages(const TCHAR *misc);
 void eventLogger(const TCHAR *misc);
