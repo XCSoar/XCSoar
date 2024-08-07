@@ -197,6 +197,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/TextRowRenderer.cpp \
 	$(SRC)/Renderer/TwoTextRowsRenderer.cpp \
 	$(SRC)/Renderer/HorizonRenderer.cpp \
+	$(SRC)/Renderer/NavigatorRenderer.cpp \
 	$(SRC)/Renderer/GradientRenderer.cpp \
 	$(SRC)/Renderer/GlassRenderer.cpp \
 	$(SRC)/Renderer/TransparentRendererCache.cpp \
@@ -286,6 +287,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Gauge/BigThermalAssistantWidget.cpp \
 	$(SRC)/Gauge/FlarmTrafficWindow.cpp \
 	$(SRC)/Gauge/BigTrafficWidget.cpp \
+	$(SRC)/Gauge/NavigatorWidget.cpp \
+	$(SRC)/Gauge/NavigatorSettings.cpp \
 	$(SRC)/Gauge/GaugeFLARM.cpp \
 	$(SRC)/Gauge/GaugeThermalAssistant.cpp \
 	$(SRC)/Gauge/VarioSettings.cpp \
