@@ -138,15 +138,15 @@ public:
 
 private:
   bool SetupOutline(const AbstractAirspace &airspace) {
-    AirspaceClass type = airspace.GetTypeOrClass();
+    AirspaceClass as_type_or_class = airspace.GetTypeOrClass();
 
     if (settings.black_outline)
       canvas.SelectBlackPen();
-    else if (settings.classes[type].border_width == 0)
+    else if (settings.classes[as_type_or_class].border_width == 0)
       // Don't draw outlines if border_width == 0
       return false;
     else
-      canvas.Select(look.classes[type].border_pen);
+      canvas.Select(look.classes[as_type_or_class].border_pen);
 
     canvas.SelectHollowBrush();
 
@@ -258,15 +258,15 @@ public:
 
 private:
   bool SetupOutline(const AbstractAirspace &airspace) {
-    AirspaceClass type = airspace.GetTypeOrClass();
+    AirspaceClass as_type_or_class = airspace.GetTypeOrClass();
 
     if (settings.black_outline)
       canvas.SelectBlackPen();
-    else if (settings.classes[type].border_width == 0)
+    else if (settings.classes[as_type_or_class].border_width == 0)
       // Don't draw outlines if border_width == 0
       return false;
     else
-      canvas.Select(look.classes[type].border_pen);
+      canvas.Select(look.classes[as_type_or_class].border_pen);
 
     canvas.SelectHollowBrush();
 
