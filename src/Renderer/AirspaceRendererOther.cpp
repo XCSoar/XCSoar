@@ -67,9 +67,9 @@ public:
     if (warnings.IsAcked(airspace))
       return;
 
-    AirspaceClass airspace_class = airspace.GetTypeOrClass();
+    AirspaceClass as_type_or_class = airspace.GetTypeOrClass();
     if (settings.fill_mode == AirspaceRendererSettings::FillMode::NONE ||
-        settings.classes[airspace_class].fill_mode ==
+        settings.classes[as_type_or_class].fill_mode ==
         AirspaceClassRendererSettings::FillMode::NONE)
       return;
 
@@ -89,22 +89,22 @@ public:
 
 private:
   void SetBufferPens(const AbstractAirspace &airspace) {
-    AirspaceClass airspace_class = airspace.GetTypeOrClass();
+    AirspaceClass as_type_or_class = airspace.GetTypeOrClass();
 
 #ifndef HAVE_HATCHED_BRUSH
-    buffer.Select(look.classes[airspace_class].solid_brush);
+    buffer.Select(look.classes[as_type_or_class].solid_brush);
 #else /* HAVE_HATCHED_BRUSH */
 
 #ifdef HAVE_ALPHA_BLEND
     if (settings.transparency) {
-      buffer.Select(look.classes[airspace_class].solid_brush);
+      buffer.Select(look.classes[as_type_or_class].solid_brush);
     } else {
 #endif
       // this color is used as the black bit
-      buffer.SetTextColor(LightColor(look.classes[airspace_class].fill_color));
+      buffer.SetTextColor(LightColor(look.classes[as_type_or_class].fill_color));
 
       // get brush, can be solid or a 1bpp bitmap
-      buffer.Select(look.brushes[settings.classes[airspace_class].brush]);
+      buffer.Select(look.brushes[settings.classes[as_type_or_class].brush]);
 
       buffer.SetBackgroundOpaque();
       buffer.SetBackgroundColor(COLOR_WHITE);
@@ -117,7 +117,7 @@ private:
 
     if (use_stencil) {
       if (warnings.HasWarning(airspace) || warnings.IsInside(airspace) ||
-          settings.classes[airspace_class].fill_mode ==
+          settings.classes[as_type_or_class].fill_mode ==
           AirspaceClassRendererSettings::FillMode::ALL) {
         stencil.SelectBlackBrush();
         stencil.SelectNullPen();
@@ -153,12 +153,12 @@ protected:
     if (settings.black_outline)
       return true;
 
-    AirspaceClass type = airspace.GetTypeOrClass();
-    if (settings.classes[type].border_width == 0)
+    AirspaceClass as_type_or_class = airspace.GetTypeOrClass();
+    if (settings.classes[as_type_or_class].border_width == 0)
       // Don't draw outlines if border_width == 0
       return false;
 
-    canvas.Select(look.classes[type].border_pen);
+    canvas.Select(look.classes[as_type_or_class].border_pen);
 
     return true;
   }
