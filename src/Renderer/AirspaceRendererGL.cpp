@@ -43,9 +43,10 @@ public:
 
 private:
   void VisitCircle(const AirspaceCircle &airspace) {
+	AirspaceClass as_type_or_class = airspace.GetTypeOrClass();
     const AirspaceClassRendererSettings &class_settings =
-      settings.classes[airspace.GetClass()];
-    const AirspaceClassLook &class_look = look.classes[airspace.GetClass()];
+      settings.classes[as_type_or_class];
+    const AirspaceClassLook &class_look = look.classes[as_type_or_class];
 
     auto screen_center = projection.GeoToScreen(airspace.GetReferenceLocation());
     unsigned screen_radius = projection.GeoToScreenDistance(airspace.GetRadius());
@@ -80,11 +81,12 @@ private:
   }
 
   void VisitPolygon(const AirspacePolygon &airspace) {
+	AirspaceClass as_type_or_class = airspace.GetTypeOrClass();
     if (!PreparePolygon(airspace.GetPoints()))
       return;
 
     const AirspaceClassRendererSettings &class_settings =
-      settings.classes[airspace.GetClass()];
+      settings.classes[as_type_or_class];
 
     bool fill_airspace = warning_manager.HasWarning(airspace) ||
       warning_manager.IsInside(airspace) ||
@@ -160,7 +162,8 @@ private:
 
   void SetupInterior(const AbstractAirspace &airspace,
                      bool check_fillstencil = false) {
-    const AirspaceClassLook &class_look = look.classes[airspace.GetClass()];
+	AirspaceClass as_type_or_class = airspace.GetTypeOrClass();
+    const AirspaceClassLook &class_look = look.classes[as_type_or_class];
 
     // restrict drawing area and don't paint over previously drawn outlines
     if (check_fillstencil)
@@ -274,10 +277,11 @@ private:
   }
 
   bool SetupInterior(const AbstractAirspace &airspace) {
+	AirspaceClass as_type_or_class = airspace.GetTypeOrClass();
     if (settings.fill_mode == AirspaceRendererSettings::FillMode::NONE)
       return false;
 
-    const AirspaceClassLook &class_look = look.classes[airspace.GetClass()];
+    const AirspaceClassLook &class_look = look.classes[as_type_or_class];
 
     canvas.Select(Brush(class_look.fill_color.WithAlpha(48)));
     canvas.SelectNullPen();
