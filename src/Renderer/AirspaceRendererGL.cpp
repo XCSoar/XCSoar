@@ -43,7 +43,7 @@ public:
 
 private:
   void VisitCircle(const AirspaceCircle &airspace) {
-	AirspaceClass as_type_or_class = airspace.GetTypeOrClass();
+	AirspaceClass as_type_or_class = settings.classes[airspace.GetTypeOrClass()].display ? airspace.GetTypeOrClass() : airspace.GetClass();
     const AirspaceClassRendererSettings &class_settings =
       settings.classes[as_type_or_class];
     const AirspaceClassLook &class_look = look.classes[as_type_or_class];
@@ -81,7 +81,7 @@ private:
   }
 
   void VisitPolygon(const AirspacePolygon &airspace) {
-	AirspaceClass as_type_or_class = airspace.GetTypeOrClass();
+	AirspaceClass as_type_or_class = settings.classes[airspace.GetTypeOrClass()].display ? airspace.GetTypeOrClass() : airspace.GetClass();
     if (!PreparePolygon(airspace.GetPoints()))
       return;
 
@@ -140,7 +140,7 @@ public:
 
 private:
   bool SetupOutline(const AbstractAirspace &airspace) {
-    AirspaceClass as_type_or_class = airspace.GetTypeOrClass();
+    AirspaceClass as_type_or_class = settings.classes[airspace.GetTypeOrClass()].display ? airspace.GetTypeOrClass() : airspace.GetClass();
 
     if (settings.black_outline)
       canvas.SelectBlackPen();
@@ -162,7 +162,7 @@ private:
 
   void SetupInterior(const AbstractAirspace &airspace,
                      bool check_fillstencil = false) {
-	AirspaceClass as_type_or_class = airspace.GetTypeOrClass();
+	AirspaceClass as_type_or_class = settings.classes[airspace.GetTypeOrClass()].display ? airspace.GetTypeOrClass() : airspace.GetClass();
     const AirspaceClassLook &class_look = look.classes[as_type_or_class];
 
     // restrict drawing area and don't paint over previously drawn outlines
@@ -261,7 +261,7 @@ public:
 
 private:
   bool SetupOutline(const AbstractAirspace &airspace) {
-    AirspaceClass as_type_or_class = airspace.GetTypeOrClass();
+    AirspaceClass as_type_or_class = settings.classes[airspace.GetTypeOrClass()].display ? airspace.GetTypeOrClass() : airspace.GetClass();
 
     if (settings.black_outline)
       canvas.SelectBlackPen();
@@ -277,7 +277,7 @@ private:
   }
 
   bool SetupInterior(const AbstractAirspace &airspace) {
-	AirspaceClass as_type_or_class = airspace.GetTypeOrClass();
+	AirspaceClass as_type_or_class = settings.classes[airspace.GetTypeOrClass()].display ? airspace.GetTypeOrClass() : airspace.GetClass();
     if (settings.fill_mode == AirspaceRendererSettings::FillMode::NONE)
       return false;
 
