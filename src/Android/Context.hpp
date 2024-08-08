@@ -22,6 +22,7 @@ public:
 
   AllocatedPath GetExternalFilesDir(JNIEnv *env) noexcept;
   std::forward_list<AllocatedPath> GetExternalFilesDirs(JNIEnv *env) const noexcept;
+  std::forward_list<AllocatedPath> GetExternalMediaDirs(JNIEnv *env) const noexcept;
 
   AllocatedPath GetExternalCacheDir(JNIEnv *env) noexcept;
 
