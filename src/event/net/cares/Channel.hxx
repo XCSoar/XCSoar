@@ -32,7 +32,6 @@ class Channel {
 
   class Socket;
 
-  std::forward_list<Socket> sockets;
 
   class Request;
 
