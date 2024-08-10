@@ -32,6 +32,7 @@ class Channel {
 
   class Socket;
 
+  std::forward_list<Socket> sockets;
 
   class Request;
 
@@ -60,11 +61,11 @@ public:
 
 private:
   void UpdateSockets() noexcept;
-
   void ScheduleUpdateSockets() noexcept { defer_update_sockets.Schedule(); }
-
   void OnSocket(SocketDescriptor fd, unsigned events) noexcept;
   void OnTimeout() noexcept;
+  static void sock_state_cb(void *data, ares_socket_t socket_fd, int readable, int writable);
+
 };
 
 } // namespace Cares
