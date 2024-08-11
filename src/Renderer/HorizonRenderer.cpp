@@ -47,9 +47,9 @@ int
 HorizonRenderer::lines_intersect(PixelPoint p1, PixelPoint p2, PixelPoint p3,
                                  PixelPoint p4, PixelPoint &intersect)
 {
-  long a1, a2, b1, b2, c1, c2; /* Coefficients of line eqns. */
-  long r1, r2, r3, r4;         /* 'Sign' values */
-  long denom, offset, num;     /* Intermediate values */
+  int64_t a1, a2, b1, b2, c1, c2; /* Coefficients of line eqns. */
+  int64_t r1, r2, r3, r4;         /* 'Sign' values */
+  int64_t denom, offset, num;     /* Intermediate values */
 
   /* Compute a1, b1, c1, where line joining points 1 and 2
    * is "a1 x  +  b1 y  +  c1  =  0".
