@@ -1,4 +1,3 @@
----
 on:
   workflow_dispatch:
   push:
@@ -14,6 +13,8 @@ on:
       - '.readthedocs.yaml'
     branches:
       - master
+    tags:
+      - 'v*'
 
   pull_request:
     paths-ignore:
@@ -31,32 +32,146 @@ on:
 
 env:
   DEBUG: y
-  BOOST: boost_1_85_0
+  BOOST: boost_1_84_0
 
 jobs:
-  build-ubuntu:
+  release:
+    name: "Create Release"
     runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      version: ${{ steps.get_version.outputs.VERSION }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
 
-    env:
-      TARGET: UNIX
-      TARGET_BIN: xcsoar
-      TARGET_FINAL: xcsoar-debug
-      TARGET_EXT: ''
+      - name: Parse changelog
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          TAG=$(echo "${{ github.ref }}" | cut -f3 -d '/')
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "::set-output name=TAG::$TAG"
+          echo 'CHANGELOGENTRY<<EOF' >> $GITHUB_ENV
+          ./tools/changelog.sh "$TAG" >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+          case "$TAG" in
+            *-rc*)
+              echo "PRERELEASE=true" >> $GITHUB_ENV
+              ;;
+            *)
+              echo "PRERELEASE=false" >> $GITHUB_ENV
+              ;;
+          esac
+        id: changelogentry
+
+      - name: get XCSoar Version
+        id: get_version
+        run: |
+          VERSION=$(cat VERSION.txt)
+          echo "$VERSION"
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "::set-output name=VERSION::${VERSION}"
+
+      - name: Create release
+        id: create_release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: ncipollo/release-action@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          allowUpdates: true
+          name: Version ${{ github.ref_name }}
+          body: ${{ env.CHANGELOGENTRY }}
+          prerelease: ${{ env.PRERELEASE }}
+
+  build:
+    runs-on: ${{ matrix.os }}
+    needs: release
+    container: ${{ matrix.target_container }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            target: UNIX
+            target_bin: xcsoar_${{ needs.release.outputs.version }}_amd64
+            target_bin_path: ''
+            target_final: xcsoar_
+            target_ext: .deb
+            target_upload: true
+            target_container: debian:bookworm-slim
+          - os: ubuntu-22.04
+            target: KOBO
+            target_bin: KoboRoot
+            target_bin_path: ''
+            target_final: KoboRoot
+            target_ext: .tgz
+            target_upload: true
+            target_container: debian:bookworm-slim
+          - os: ubuntu-22.04
+            target: ANDROID
+            target_bin: XCSoar
+            target_bin_path: bin
+            target_final: XCSoar
+            target_ext: .apk
+            target_upload: true
+            ndk: r26d
+            target_container: debian:bookworm-slim
+          - os: ubuntu-22.04
+            target: WIN64
+            target_bin: XCSoar
+            target_bin_path: bin
+            target_final: XCSoar
+            target_ext: .exe
+            target_upload: true
+            target_container: debian:bookworm-slim
+          - os: ubuntu-22.04
+            target: PC
+            target_bin: XCSoar
+            target_bin_path: bin
+            target_final: XCSoar
+            target_ext: .exe
+            target_upload: true
+            target_container: debian:bookworm-slim
+          - os: macos-12
+            target: OSX64
+            target_bin: XCSoar
+            target_bin_path: bin
+            target_final: XCSoar
+            target_ext: ''
+            target_upload: false
+            target_container: ''
 
     steps:
-      - name: set vars for push
-        if: github.event_name == 'push'
+      - name: Install checkout dependencies
+        run: |
+          if [ "${{ matrix.os }}" = 'ubuntu-22.04' ]; then
+            apt-get update
+            apt-get install -y --no-install-recommends git \
+            ca-certificates rsync
+          fi
+
+      - name: Set vars for release
+        if: startsWith(github.ref, 'refs/tags/v')
         run: |
           echo "DEBUG=n" >> $GITHUB_ENV
-          echo "TARGET_FINAL=xcsoar" >> $GITHUB_ENV
-      - id: checkout
+          if [ ${{ matrix.target }} = "xcsoar" ]; then
+            echo "TARGET_FINAL=xcsoar" >> $GITHUB_ENV
+          fi
+
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           submodules: true
-      - id: cache-ccache
+
+      - name: Cache ccache
         uses: hendrikmuhs/ccache-action@v1
         with:
-          key: ${{ env.TARGET }}
+          key: ${{ matrix.target }}-ccache
 
       - name: "Cache Boost"
         uses: actions/cache@v4
@@ -67,567 +182,131 @@ jobs:
             ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
             ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
 
-      - name: find githash
+      - name: Install dependencies
         run: |
+          if [ ${{ matrix.os }} = 'ubuntu-22.04' ]; then
+            ./ide/provisioning/install-debian-packages.sh UPDATE
+            ./ide/provisioning/install-debian-packages.sh BASE
+            if [ ${{ matrix.target }} = 'UNIX' ]; then
+              ./ide/provisioning/install-debian-packages.sh LINUX
+              ./ide/provisioning/install-debian-packages.sh LIBINPUT_GBM
+              ./ide/provisioning/install-debian-packages.sh DEBIAN
+            fi
+            if [ ${{ matrix.target }} = 'KOBO' ]; then
+              ./ide/provisioning/install-debian-packages.sh LINUX
+              ./ide/provisioning/install-debian-packages.sh ARM
+              ./ide/provisioning/install-debian-packages.sh KOBO
+            fi
+            if [ ${{ matrix.target }} = 'WIN64' ]; then
+              ./ide/provisioning/install-debian-packages.sh LINUX
+              ./ide/provisioning/install-debian-packages.sh WIN
+            fi
+            if [ ${{ matrix.target }} = 'PC' ]; then
+              ./ide/provisioning/install-debian-packages.sh LINUX
+              ./ide/provisioning/install-debian-packages.sh WIN
+            fi
+            if [ ${{ matrix.target }} = 'ANDROID' ]; then
+              ./ide/provisioning/install-debian-packages.sh LINUX
+              ./ide/provisioning/install-debian-packages.sh ARM
+              ./ide/provisioning/install-debian-packages.sh LLVM
+              ./ide/provisioning/install-debian-packages.sh ANDROID
+              ./ide/provisioning/install-android-tools.sh NDK
+              ./ide/provisioning/install-android-tools.sh SDK
+            fi
+            ./ide/provisioning/install-debian-packages.sh CLEAN
+          elif [ ${{ matrix.os }} = 'macos-12' ]; then
+            brew install \
+              make \
+              quilt \
+              librsvg \
+              imagemagick gettext sox \
+              fmt \
+              sdl2 \
+              libsodium \
+              freetype \
+              libpng libjpeg-turbo \
+              libtiff libgeotiff proj \
+              c-ares \
+              curl \
+              lua
+          fi
           echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
 
-      - name: Install dependencies
+      - name: Prepare signing key
+        shell: bash
+        if: ${{ matrix.target == 'ANDROID' }}
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            make \
-            quilt \
-            g++ \
-            python3 \
-            librsvg2-bin xsltproc \
-            imagemagick gettext sox \
-            zlib1g-dev \
-            libfmt-dev \
-            libdbus-1-dev \
-            libsodium-dev \
-            libfreetype6-dev \
-            libpng-dev libjpeg-dev \
-            libtiff5-dev libgeotiff-dev \
-            libc-ares-dev \
-            libcurl4-gnutls-dev \
-            libc-ares-dev \
-            liblua5.4-dev \
-            libxml-parser-perl \
-            libasound2-dev \
-            libgles2-mesa-dev libegl1-mesa-dev
+          if [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_BASE64 }}" ]; then
+            echo "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_BASE64 }}" | base64 -d > signing-key.jks
+            md5sum signing-key.jks
+          fi
 
       - name: Compile XCSoar
         run: |
-          make -j$(nproc) TARGET=${{env.TARGET }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything check
+          if [ ${{ matrix.target }} = "ANDROID" ]; then
+            if [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }}" ] && [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}" ]; then
+              ANDROID_KEYSTORE_PASS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }} \
+              ANDROID_KEYSTORE=signing-key.jks ANDROID_KEY_ALIAS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }} \
+              make -j$(nproc) TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
+              output/ANDROID/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
+            else
+              make -j$(nproc) TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
+              output/ANDROID/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
+            fi
+          elif [ ${{ matrix.target }} = "WIN64" ]; then
+            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
+          elif [ ${{ matrix.target }} = "PC" ]; then
+            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
+          elif [ ${{ matrix.target }} = "KOBO" ]; then
+            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
+          elif [ ${{ matrix.target }} = "OSX64" ]; then
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
+          fi
 
-      - name: upload artifact
+      - name: Create UNIX dpkg
+        if: ${{ matrix.target == 'UNIX' }}
+        run: |
+          mkdir -p output/UNIX/DPKG
+          rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
+          cd output/UNIX/DPKG
+          dpkg-buildpackage --jobs-force=$(nproc) --no-sign
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}${{ env.TARGET_EXT }}
-          path: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}${{ env.TARGET_EXT }}
+          name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}${{ matrix.target_ext }}
+          path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
 
-      - name: Deploy to Staging server
-        if: |
-          github.repository == 'XCSoar/XCSoar' &&
-          github.ref == 'ref/heads/master' &&
-          github.event == 'push'
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        if: ${{ startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == 'true' && needs.release.outputs.upload_url }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
+          asset_name: ${{ matrix.target_final }}-${{ matrix.target }}${{ matrix.target_ext }}
+          asset_content_type: application/zip
+
+      - name: Deploy to Download server - testing
+        if: ${{ github.repository == 'XCSoar/XCSoar' && github.ref == 'refs/heads/master' && github.event_name == 'push' }}
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
           ARGS: "-rltgoDzvO"
-          SOURCE: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}.${{ env.TARGET_EXT }}
+          SOURCE: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
-          TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ env.TARGET }}/
+          TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}/
 
-  build-sanitizer:
-    # Build with AddressSanitizer and all libstdc++ debugging features
-    # enabled.
-
-    runs-on: ubuntu-22.04
-
-    env:
-      TARGET: UNIX
-
-    steps:
-      - id: checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-      - id: cache-ccache
-        uses: hendrikmuhs/ccache-action@v1
-        with:
-          key: ${{ env.TARGET }}-sanitizer
-      - name: find githash
-        run: |
-          echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
-
-      - name: "Cache Boost"
-        uses: actions/cache@v4
-        with:
-          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
-          path: |
-            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
-            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
-            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            make \
-            quilt \
-            g++ \
-            python3 \
-            librsvg2-bin xsltproc \
-            imagemagick gettext sox \
-            zlib1g-dev \
-            libfmt-dev \
-            libdbus-1-dev \
-            libsodium-dev \
-            libfreetype6-dev \
-            libpng-dev libjpeg-dev \
-            libtiff5-dev libgeotiff-dev \
-            libc-ares-dev \
-            libcurl4-gnutls-dev \
-            libc-ares-dev \
-            liblua5.4-dev \
-            libxml-parser-perl \
-            libasound2-dev
-
-      - name: workaround random bits value in github actions
-        run: sudo sysctl --write vm.mmap_rnd_bits=28
-
-      - name: Compile XCSoar
-        run: |
-          make -j$(nproc) TARGET=${{env.TARGET }} DEBUG=${{ env.DEBUG }} VFB=y SANITIZE=y DEBUG_GLIBCXX=y USE_CCACHE=y V=2 everything check
-
-  build-kobo:
-    runs-on: ubuntu-22.04
-
-    env:
-      TARGET: KOBO
-      TARGET_BIN: KoboRoot
-      TARGET_FINAL: KoboRoot
-      TARGET_EXT: tgz
-
-    steps:
-      - name: set vars for push
-        if: github.event_name == 'push'
-        run: |
-          echo "DEBUG=n" >> $GITHUB_ENV
-
-      - id: checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      - id: cache-ccache
-        uses: hendrikmuhs/ccache-action@v1
-        with:
-          key: ${{ env.TARGET }}
-
-      - name: "Cache Boost"
-        uses: actions/cache@v4
-        with:
-          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
-          path: |
-            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
-            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
-            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
-
-      - name: "Cache third-party libraries"
-        uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
-          path: |
-            ${{ github.workspace }}/output/${{ env.TARGET }}/lib
-            !${{ github.workspace }}/output/${{ env.TARGET }}/lib/build
-
-      - name: find githash
-        run: |
-          echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
-
-      - name: Install dependencies
-        # texinfo appears to be necessary for building binutils, but
-        # that seems to be a binutils 2.38 bug.
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            make \
-            quilt \
-            g++ \
-            libmpc-dev \
-            texinfo \
-            librsvg2-bin xsltproc \
-            imagemagick gettext sox \
-            cmake meson ninja-build \
-            ttf-bitstream-vera
-
-      - name: Compile XCSoar
-        run: |
-          make -j$(nproc) \
-            TARGET=${{env.TARGET}} \
-            DEBUG=${{env.DEBUG}} \
-            USE_CCACHE=y \
-            V=2 \
-            output/${{env.TARGET}}/${{ env.TARGET_BIN }}.${{ env.TARGET_EXT }}
-
-      - name: upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}.${{ env.TARGET_EXT }}
-          path: output/${{env.TARGET}}/${{ env.TARGET_BIN }}.${{ env.TARGET_EXT }}
-
-      - name: Deploy to Staging server
-        if: |
-          github.repository == 'XCSoar/XCSoar' &&
-          github.ref == 'ref/heads/master' &&
-          github.event == 'push'
+      - name: Deploy to Download server - release
+        if: ${{ github.repository == 'XCSoar/XCSoar' && startsWith(github.ref, 'refs/tags/v') && github.event_name == 'push' && matrix.target_upload == 'true' }}
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
           ARGS: "-rltgoDzvO"
-          SOURCE: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}.${{ env.TARGET_EXT }}
+          SOURCE: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
-          TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ env.TARGET }}/
-
-  build-android:
-    runs-on: ubuntu-22.04
-
-    env:
-      TARGET: ANDROIDFAT
-      TARGET_BIN: XCSoar-debug
-      TARGET_FINAL: XCSoar-debug
-      TARGET_EXT: apk
-      NDK: r26d
-
-    steps:
-      - name: set vars for push
-        if: github.event_name == 'push'
-        run: |
-          echo "DEBUG=n" >> $GITHUB_ENV
-          echo "TARGET_FINAL=XCSoar" >> $GITHUB_ENV
-
-      - id: checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      - id: cache-ccache
-        uses: hendrikmuhs/ccache-action@v1
-        with:
-          key: ${{ env.TARGET }}
-
-      - name: "Cache Boost"
-        uses: actions/cache@v4
-        with:
-          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
-          path: |
-            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
-            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
-            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
-
-      - name: "Cache third-party libraries"
-        uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
-          path: |
-            ${{ github.workspace }}/output/ANDROID/*/lib
-            !${{ github.workspace }}/output/ANDROID/*/lib/build
-
-      - name: find githash
-        run: |
-          echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            make \
-            quilt \
-            g++ \
-            librsvg2-bin xsltproc \
-            imagemagick gettext sox \
-            vorbis-tools \
-            cmake ninja-build
-
-      - name: Install Android NDK
-        # We need NDK r26, but the GitHub runner has only r25
-        run: |
-          mkdir -p output/download
-          cd output/download
-          wget --quiet https://dl.google.com/android/repository/android-ndk-${{env.NDK}}-linux.zip
-          unzip -q android-ndk-${{env.NDK}}-linux.zip
-          rm android-ndk-${{env.NDK}}-linux.zip
-          echo ANDROID_NDK_LATEST_HOME=$PWD/android-ndk-${{env.NDK}} >> $GITHUB_ENV
-
-      - name: Compile XCSoar
-        run: |
-          make -j$(nproc) \
-            TARGET=${{env.TARGET}} \
-            ANDROID_NDK=${ANDROID_NDK_LATEST_HOME} \
-            ANDROID_SDK=${ANDROID_HOME} \
-            DEBUG=${{env.DEBUG}} \
-            USE_CCACHE=y \
-            V=2
-
-      - name: upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}.${{ env.TARGET_EXT }}
-          path: output/ANDROID/bin/${{ env.TARGET_BIN }}.${{ env.TARGET_EXT }}
-
-      - name: Deploy to Staging server
-        if: |
-          github.repository == 'XCSoar/XCSoar' &&
-          github.ref == 'ref/heads/master' &&
-          github.event == 'push'
-        uses: easingthemes/ssh-deploy@main
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
-          ARGS: "-rltgoDzvO"
-          SOURCE: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}.${{ env.TARGET_EXT }}
-          REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
-          REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
-          TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ env.TARGET }}/
-
-  build-windows:
-    runs-on: ubuntu-22.04
-    container:
-      image: debian:bookworm-slim
-
-    env:
-      TARGET: WIN64
-      TARGET_BIN: XCSoar
-      TARGET_FINAL: XCSoar-debug
-      TARGET_EXT: .exe
-
-    steps:
-      - name: set vars for push
-        if: github.event_name == 'push'
-        run: |
-          echo "DEBUG=n" >> $GITHUB_ENV
-          echo "TARGET_FINAL=XCSoar" >> $GITHUB_ENV
-
-      - name: Install build dependencies
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends \
-            git \
-            quilt \
-            make \
-            g++ \
-            g++-mingw-w64 \
-            ccache \
-            xz-utils \
-            pkgconf \
-            ca-certificates \
-            python3 \
-            librsvg2-bin xsltproc \
-            imagemagick gettext sox \
-            cmake ninja-build
-
-      - id: checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      - id: cache-ccache
-        uses: hendrikmuhs/ccache-action@v1
-        with:
-          key: ${{ env.TARGET }}
-
-      - name: "Cache Boost"
-        uses: actions/cache@v4
-        with:
-          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
-          path: |
-            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
-            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
-            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
-
-      - name: "Cache third-party libraries"
-        uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
-          path: |
-            ${{ github.workspace }}/output/${{ env.TARGET }}/lib
-            !${{ github.workspace }}/output/${{ env.TARGET }}/lib/build
-
-      - name: find githash
-        run: |
-          echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
-
-      - name: Patch mingw intrin.h (mingw64 v8 bug workaround)
-        run: sed -i -e '/extern.* __builtin/d' /usr/share/mingw-w64/include/intrin.h
-
-      - name: Compile XCSoar
-        run: |
-          make -j$(nproc) TARGET=${{env.TARGET }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
-
-      - name: upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}${{ env.TARGET_EXT }}
-          path: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}${{ env.TARGET_EXT }}
-
-      - name: store checks and compile artefacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: xcsoar-${{ env.TARGET }}-artifact
-          path: |
-            ${{ github.workspace }}/output/${{ env.TARGET }}
-            !${{ github.workspace }}/output/${{ env.TARGET }}/lib/build
-            !**.d
-          retention-days: 1
-
-      - name: Deploy to Staging server
-        if: |
-          github.repository == 'XCSoar/XCSoar' &&
-          github.ref == 'ref/heads/master' &&
-          github.event == 'push'
-        uses: easingthemes/ssh-deploy@main
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
-          ARGS: "-rltgoDzvO"
-          SOURCE: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}.${{ env.TARGET_EXT }}
-          REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
-          REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
-          TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ env.TARGET }}/
-
-  test-windows:
-    runs-on: windows-latest
-
-    env:
-      TARGET: WIN64
-
-    needs: build-windows
-    steps:
-      - id: checkout
-        uses: actions/checkout@v4
-      - name: fetch artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: xcsoar-${{ env.TARGET }}-artifact
-          path: ${{ github.workspace }}/output/${{ env.TARGET }}
-      - name: XCSoar run checks on ${{ env.TARGET }}
-        run: make check-no-build
-        working-directory: ${{ github.workspace }}
-
-  build-macos:
-    runs-on: macos-12
-
-    env:
-      TARGET: OSX64
-
-    steps:
-      - id: checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      - id: cache-ccache
-        uses: hendrikmuhs/ccache-action@v1
-        with:
-          key: macos
-
-      - name: "Cache Boost"
-        uses: actions/cache@v4
-        with:
-          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
-          path: |
-            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
-            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
-            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
-
-      - name: Install dependencies
-        run: |
-          brew install \
-            make \
-            quilt \
-            librsvg \
-            imagemagick gettext sox \
-            fmt \
-            sdl2 \
-            libsodium \
-            freetype \
-            libpng libjpeg-turbo \
-            libtiff libgeotiff proj \
-            c-ares \
-            curl \
-            lua
-
-      - name: Compile XCSoar
-        # We use "-O0" instead of the default "-Og" to work around a
-        # LLVM bug in Apple Xcode which crashes clang with "fatal
-        # error: error in backend: Cannot select: intrinsic
-        # %llvm.coro.size"
-        run: |
-          gmake -j$(sysctl -n hw.logicalcpu) TARGET=${{env.TARGET }} USE_CCACHE=y \
-            OPTIMIZE="-O0" \
-            USE_HOMEBREW=y \
-            V=2 \
-            everything check
-
-      - name: Deploy to Staging server
-        if: |
-          github.repository == 'XCSoar/XCSoar' &&
-          github.ref == 'ref/heads/master' &&
-          github.event == 'push'
-        uses: easingthemes/ssh-deploy@main
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
-          ARGS: "-rltgoDzvO"
-          SOURCE: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}.${{ env.TARGET_EXT }}
-          REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
-          REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
-          TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ env.TARGET }}/
-
-  build-ios:
-    runs-on: macos-12
-
-    env:
-      TARGET: IOS64
-
-    steps:
-      - id: checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      - name: "Cache third-party libraries"
-        uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-libs-${{ env.TARGET }}-${{ hashFiles('build/**') }}
-          path: |
-            ${{ github.workspace }}/output/${{ env.TARGET }}/lib
-            !${{ github.workspace }}/output/${{ env.TARGET }}/lib/build
-
-      - id: cache-ccache
-        uses: hendrikmuhs/ccache-action@v1
-        with:
-          key: ios
-
-      - name: "Cache Boost"
-        uses: actions/cache@v4
-        with:
-          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
-          path: |
-            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
-            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
-            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
-
-      - name: Install dependencies
-        run: |
-          brew install \
-            automake autoconf libtool \
-            make \
-            quilt \
-            librsvg \
-            imagemagick gettext sox \
-            cmake ninja
-
-      - name: Compile XCSoar
-        # TODO: remove the "||true" as soon as the remaining SDL2
-        # linker failure ("Undefined symbols: _SDL_IsIPad, _main") is
-        # fixed.
-        run: |
-          gmake -j$(sysctl -n hw.logicalcpu) TARGET=${{env.TARGET }} USE_CCACHE=y \
-            OPTIMIZE="-O0" \
-            V=2 ||true
-
-      - name: Deploy to Staging server
-        if: |
-          github.repository == 'XCSoar/XCSoar' &&
-          github.ref == 'ref/heads/master' &&
-          github.event == 'push'
-        uses: easingthemes/ssh-deploy@main
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
-          ARGS: "-rltgoDzvO"
-          SOURCE: output/${{ env.TARGET }}/bin/${{ env.TARGET_BIN }}.${{ env.TARGET_EXT }}
-          REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
-          REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
-          TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ env.TARGET }}/
+          TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}/
