@@ -54,15 +54,17 @@ TaskStatusPanel::Refresh() noexcept
     SetText(TaskTime,
             FormatTimeHHMM(backend_components->protected_task_manager->GetOrderedTaskSettings().aat_min_time));
 
-  if (task_stats.total.remaining_effective.IsDefined()) {
+  if (task_stats.total.remaining_effective.IsDefined())
     SetText(ETETime,
             FormatSignedTimeHHMM(task_stats.GetEstimatedTotalTime()));
+  else
+    ClearText(ETETime);
+
+  if (task_stats.total.remaining_effective.IsDefined() && !task_stats.task_finished)
     SetText(RemainingTime,
             FormatSignedTimeHHMM(task_stats.total.time_remaining_now));
-  } else {
-    ClearText(ETETime);
+  else
     ClearText(RemainingTime);
-  }
 
   if (task_stats.total.planned.IsDefined())
     SetText(TaskDistance,
@@ -70,11 +72,13 @@ TaskStatusPanel::Refresh() noexcept
   else
     ClearText(TaskDistance);
 
-  if (task_stats.total.remaining.IsDefined())
+  if (task_stats.total.remaining.IsDefined() && !task_stats.task_finished)
     SetText(RemainingDistance,
             FormatUserDistanceSmart(task_stats.total.remaining.GetDistance()));
+  else
+    ClearText(RemainingDistance);
 
-  if (task_stats.total.remaining_effective.IsDefined())
+  if (task_stats.total.remaining_effective.IsDefined() && !task_stats.task_finished)
     SetText(EstimatedSpeed,
             FormatUserTaskSpeed(task_stats.total.planned.GetSpeed()));
   else
@@ -102,7 +106,7 @@ TaskStatusPanel::Refresh() noexcept
   } else
     ClearValue(RANGE);
 
-  if (task_stats.total.remaining_effective.IsDefined())
+  if (task_stats.total.remaining_effective.IsDefined() && !task_stats.task_finished)
     LoadValue(SPEED_REMAINING, task_stats.total.remaining_effective.GetSpeed(),
               UnitGroup::TASK_SPEED);
   else
