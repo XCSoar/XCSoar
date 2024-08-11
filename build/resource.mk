@@ -21,7 +21,7 @@ BMP_BITMAPS = $(wildcard Data/bitmaps/*.bmp)
 PNG_BITMAPS = $(patsubst Data/bitmaps/%.bmp,$(DATA)/bitmaps/%.png,$(BMP_BITMAPS))
 
 $(PNG_BITMAPS): $(DATA)/bitmaps/%.png: Data/bitmaps/%.bmp | $(DATA)/bitmaps/dirstamp
-	$(Q)$(IM_PREFIX)convert +dither -type GrayScale -define png:color-type=0 $< $@
+	$(Q)$(IM_PREFIX)magick +dither -type GrayScale -define png:color-type=0 $< $@
 
 ####### icons
 
@@ -148,7 +148,7 @@ $(BMP_LAUNCH_DLL_SIM_640): $(BMP_LAUNCH_DLL_FLY_640)
 
 PNG_LAUNCH_ALL = $(patsubst %.bmp,%.png,$(BMP_LAUNCH_ALL))
 $(PNG_LAUNCH_ALL): %.png: %.bmp
-	$(Q)$(IM_PREFIX)convert $< $@
+	$(Q)$(IM_PREFIX)magick $< $@
 
 ####### sounds
 
@@ -207,10 +207,10 @@ RESOURCE_FILES += $(RAW_SOUNDS)
 ifeq ($(USE_WIN32_RESOURCES),n)
 
 $(patsubst $(DATA)/icons/%.bmp,$(DATA)/icons2/%.png,$(filter $(DATA)/icons/%.bmp,$(RESOURCE_FILES))): $(DATA)/icons2/%.png: $(DATA)/icons/%.bmp | $(DATA)/icons2/dirstamp
-	$(Q)$(IM_PREFIX)convert $< $@
+	$(Q)$(IM_PREFIX)magick $< $@
 
 $(patsubst $(DATA)/graphics/%.bmp,$(DATA)/graphics2/%.png,$(filter $(DATA)/graphics/%.bmp,$(RESOURCE_FILES))): $(DATA)/graphics2/%.png: $(DATA)/graphics/%.bmp | $(DATA)/graphics2/dirstamp
-	$(Q)$(IM_PREFIX)convert $< $@
+	$(Q)$(IM_PREFIX)magick $< $@
 
 RESOURCE_FILES := $(patsubst $(DATA)/graphics/%.bmp,$(DATA)/graphics2/%.png,$(RESOURCE_FILES))
 RESOURCE_FILES := $(patsubst $(DATA)/icons/%.bmp,$(DATA)/icons2/%.png,$(RESOURCE_FILES))
