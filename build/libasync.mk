@@ -33,6 +33,6 @@ ASYNC_SOURCES += \
 endif
 endif
 
-ASYNC_DEPENDS = CARES OS
+ASYNC_DEPENDS = CARES OS FMT
 
 $(eval $(call link-library,async,ASYNC))
