@@ -8,12 +8,14 @@
 #include "Form/DataField/Prefix.hpp"
 #include "Form/DataField/Date.hpp"
 #include "Form/DataField/Integer.hpp"
+#include "Form/DataField/Frequency.hpp"
 #include "ComboPicker.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/TimeEntry.hpp"
 #include "Dialogs/GeoPointEntry.hpp"
 #include "Dialogs/DateEntry.hpp"
 #include "Dialogs/NumberEntry.hpp"
+#include "Dialogs/RadioFrequencyEntry.hpp"
 
 #ifdef ANDROID
 #include "java/Global.hxx"
@@ -116,6 +118,14 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
       return false;
 
     sdf.ModifyValue(buffer);
+    return true;
+  } else if (type == DataField::Type::RADIO_FREQUENCY) {
+    RadioFrequencyDataField &fdf = (RadioFrequencyDataField &)df;
+    RadioFrequency value = fdf.GetValue();
+    if (!RadioFrequencyEntryDialog(caption, value, false))
+      return false;
+
+    fdf.ModifyValue(value);
     return true;
   } else
     // don't know how to edit this

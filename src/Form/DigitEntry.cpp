@@ -16,6 +16,7 @@
 #include "Renderer/SymbolRenderer.hpp"
 #include "Geo/CoordinateFormat.hpp"
 #include "Formatter/TimeFormatter.hpp"
+#include "RadioFrequency.hpp"
 #include "Asset.hpp"
 
 #include <algorithm>
@@ -201,6 +202,19 @@ DigitEntry::CreateLongitude(ContainerWindow &parent, const PixelRect &rc,
     break;
   }
 
+  cursor = 0;
+
+  CalculateLayout();
+}
+
+void DigitEntry::CreateRadioFrequency(ContainerWindow &parent, const PixelRect &rc, const WindowStyle style)
+{
+  Create(parent, rc, style, 4);
+  columns[0].type = Column::Type::RADIO_FREQURENCY_MHZ_OFFSET;
+  columns[1].type = Column::Type::DECIMAL_POINT;
+  columns[2].type = Column::Type::DIGIT;
+  columns[3].type = Column::Type::RADIO_FREQURENCY_KHZ_SCALED;
+  
   cursor = 0;
 
   CalculateLayout();
@@ -442,6 +456,19 @@ DigitEntry::SetValue(BrokenDate value)
   columns[4].value = value.day - 1;
 
   Invalidate();
+}
+
+void DigitEntry::SetValue(RadioFrequency value)
+{
+  assert(length == 4);
+  assert(columns[0].type == Column::Type::RADIO_FREQURENCY_MHZ_OFFSET);
+  assert(columns[1].type == Column::Type::DECIMAL_POINT);
+  assert(columns[2].type == Column::Type::DIGIT);
+  assert(columns[3].type == Column::Type::RADIO_FREQURENCY_KHZ_SCALED);
+
+  columns[0].value = (value.GetKiloHertz() / 1000) - 118;
+  columns[2].value = value.GetKiloHertz() % 1000 / 100;
+  columns[3].value = value.GetKiloHertz() % 100 / 5;
 }
 
 unsigned
@@ -783,6 +810,21 @@ DigitEntry::GetLongitude(CoordinateFormat format) const
   return GetGeoAngle(format);
 }
 
+RadioFrequency 
+DigitEntry::GetRadioFrequency() const
+{
+  assert(length == 4);
+  assert(columns[0].type == Column::Type::RADIO_FREQURENCY_MHZ_OFFSET);
+  assert(columns[1].type == Column::Type::DECIMAL_POINT);
+  assert(columns[2].type == Column::Type::DIGIT);
+  assert(columns[3].type == Column::Type::RADIO_FREQURENCY_KHZ_SCALED);
+
+  unsigned int megaHertz = 118 + columns[0].value;
+  unsigned int kiloHertz = columns[2].value * 100 + columns[3].value * 5;
+
+  return RadioFrequency::FromMegaKiloHertz(megaHertz, kiloHertz);
+}
+
 void
 DigitEntry::IncrementColumn(unsigned i)
 {
@@ -1032,6 +1074,16 @@ DigitEntry::OnPaint(Canvas &canvas) noexcept
     case Column::Type::DIGIT19:
       assert(c.value < 19);
       _stprintf(buffer, _T("%02u"), c.value);
+      break;
+
+    case Column::Type::RADIO_FREQURENCY_MHZ_OFFSET:
+      assert(c.value <= 19);
+      _stprintf(buffer, _T("%03u"), c.value + 118);
+      break;
+
+    case Column::Type::RADIO_FREQURENCY_KHZ_SCALED:
+      assert(c.value <= 19);
+      _stprintf(buffer, _T("%02u"), c.value * 5);
       break;
 
     case Column::Type::SIGN:

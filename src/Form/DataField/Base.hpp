@@ -36,6 +36,7 @@ public:
     PREFIX,
     GEOPOINT,
     DATE,
+    RADIO_FREQUENCY,
   };
 
   using ModifiedCallback = std::function<void()>;

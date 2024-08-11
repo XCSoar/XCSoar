@@ -16,6 +16,7 @@ class Angle;
 struct BrokenDate;
 class ContainerWindow;
 struct DialogLook;
+class RadioFrequency;
 
 /**
  * A control that allows entering numbers or other data types digit by
@@ -43,6 +44,8 @@ class DigitEntry : public PaintWindow {
       DAY,
       MONTH,
       YEAR,
+      RADIO_FREQURENCY_MHZ_OFFSET, // Actual value minus 118
+      RADIO_FREQURENCY_KHZ_SCALED, // Last 2 digits divided by 5
     };
 
     Type type;
@@ -68,7 +71,9 @@ class DigitEntry : public PaintWindow {
         type == Type::HOUR ||
         type == Type::DAY ||
         type == Type::MONTH ||
-        type == Type::YEAR;
+        type == Type::YEAR ||
+        type == Type::RADIO_FREQURENCY_MHZ_OFFSET ||
+        type == Type::RADIO_FREQURENCY_KHZ_SCALED;
     }
 
     constexpr bool NoOverflow() const {
@@ -98,8 +103,14 @@ class DigitEntry : public PaintWindow {
       case Type::DIGIT19:
         return 18;
 
+      case Type::RADIO_FREQURENCY_MHZ_OFFSET:
+        return 18;
+
+      case Type::RADIO_FREQURENCY_KHZ_SCALED:
+        return 19;
+
       case Type::DIGIT36:
-        return 35;
+        return 35;   
 
       default:
         return 9;
@@ -200,6 +211,9 @@ public:
   void CreateLongitude(ContainerWindow &parent, const PixelRect &rc,
                        const WindowStyle style, CoordinateFormat format);
 
+  void CreateRadioFrequency(ContainerWindow &parent, const PixelRect &rc,
+                             const WindowStyle style);
+
   void CalculateLayout();
 
   [[gnu::pure]]
@@ -225,6 +239,7 @@ public:
   void SetValue(RoughTime value);
   void SetValue(Angle value);
   void SetValue(BrokenDate value);
+  void SetValue(RadioFrequency value);
 
   [[gnu::pure]]
   int GetIntegerValue() const;
@@ -255,6 +270,9 @@ public:
 
   [[gnu::pure]]
   Angle GetLongitude(CoordinateFormat format) const;
+  
+  [[gnu::pure]]
+  RadioFrequency GetRadioFrequency() const;
 
 protected:
   [[gnu::pure]]

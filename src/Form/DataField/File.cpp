@@ -31,6 +31,7 @@ IsInternalFile(const TCHAR *str) noexcept
     _T("xcsoar.log"),
     _T("xcsoar-rasp.dat"),
     _T("user.cup"),
+    _T("user.freq"),
     nullptr
   };
 

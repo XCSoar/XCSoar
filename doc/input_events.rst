@@ -202,6 +202,8 @@ Event list
    - Clear event warnings
  * - ``Checklist``
    - Displays the checklist dialog
+    ``Frequencies``
+   - Displays the frequency dialog
  * - ``Status``
    - Displays one of the three status dialogs given as an argument: ``system``, ``aircraft``, ``task``
  * - ``Analysis``
