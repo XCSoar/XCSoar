@@ -10,4 +10,6 @@ PROFILE_SOURCES = \
 	$(SRC)/Profile/GeoValue.cpp \
 	$(SRC)/Profile/ProfileMap.cpp
 
+PROFILE_DEPENDS = FMT
+
 $(eval $(call link-library,profile,PROFILE))
