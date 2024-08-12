@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#ifndef WEATHER_SKYSIGHT_METRICS_HPP
-#define WEATHER_SKYSIGHT_METRICS_HPP
+#pragma once
 
 #include "util/tstring.hpp"
 #include "time/BrokenDateTime.hpp"
@@ -75,5 +74,3 @@ struct DisplayedMetric {
       std::chrono::system_clock::to_time_t(t.ToTimePoint()));
   }
 };
-
-#endif

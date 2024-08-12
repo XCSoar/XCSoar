@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#ifndef WEATHER_SKYSIGHTAPIGLUE_HPP
-#define WEATHER_SKYSIGHTAPIGLUE_HPP
+#pragma once
 
 #include "util/tstring.hpp"
 #include "Operation/Operation.hpp"
@@ -42,4 +41,3 @@ struct SkysightRequestArgs {
     url(_url), path(_path), to_file(_to_file), calltype(_ct),
     region(_region), layer(_layer), from(_from), to(_to), cb(_cb) {};
 };
-#endif

@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#ifndef WEATHER_SKYSIGHTAPI_QUEUE_HPP
-#define WEATHER_SKYSIGHTAPI_QUEUE_HPP
+#pragma once
 
 #include "Request.hpp"
 #include "CDFDecoder.hpp"
@@ -36,5 +35,3 @@ public:
   void Clear(const tstring msg);
   void DoClearingQueue();
 };
-
-#endif

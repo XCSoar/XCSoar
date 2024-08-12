@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#ifndef WEATHER_SKYSIGHT_HPP
-#define WEATHER_SKYSIGHT_HPP
+#pragma once
 
 #include "util/StaticString.hxx"
 #include "system/Path.hpp"
@@ -130,5 +129,3 @@ private:
   std::vector<SkysightImageFile> ScanFolder(tstring search_pattern);
   void CleanupFiles();
 };
-
-#endif

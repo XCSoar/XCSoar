@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#ifndef WEATHER_SKYSIGHTCDFDEC_HPP
-#define WEATHER_SKYSIGHTCDFDEC_HPP
-
+#pragma once
 
 #include "APIGlue.hpp"
 #include "thread/StandbyThread.hpp"
@@ -44,5 +42,3 @@ public:
   void Done();
   Status GetStatus();
 };
-
-#endif

@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#ifndef XCSOAR_WEATHER_SKYSIGHT_SETTINGS_HPP
-#define XCSOAR_WEATHER_SKYSIGHT_SETTINGS_HPP
+#pragma once
 
 #include "util/StaticString.hxx"
 
@@ -22,6 +21,3 @@ struct SkysightSettings {
   }
 
 };
-
-#endif
-

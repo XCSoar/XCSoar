@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
-#ifndef WEATHER_SKYSIGHTAPI_HPP
-#define WEATHER_SKYSIGHTAPI_HPP
+
+#pragma once
+
 
 #include "Request.hpp"
 #include "APIGlue.hpp"
@@ -110,5 +111,3 @@ protected:
   bool Login(const SkysightCallback cb = nullptr);
 
 };
-
-#endif
