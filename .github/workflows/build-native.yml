@@ -1,3 +1,4 @@
+---
 on:
   workflow_dispatch:
   push:
@@ -32,7 +33,7 @@ on:
 
 env:
   DEBUG: y
-  BOOST: boost_1_84_0
+  BOOST: boost_1_85_0
 
 jobs:
   release:
@@ -152,7 +153,7 @@ jobs:
           if [ "${{ matrix.os }}" = 'ubuntu-22.04' ]; then
             apt-get update
             apt-get install -y --no-install-recommends git \
-            ca-certificates rsync
+            ca-certificates rsync openssh-client
           fi
 
       - name: Set vars for release
@@ -234,21 +235,44 @@ jobs:
 
       - name: Prepare signing key
         shell: bash
-        if: ${{ matrix.target == 'ANDROID' }}
+        if: ${{ matrix.target == 'ANDROID' && startsWith(github.ref, 'refs/tags/v') }}
         run: |
           if [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_BASE64 }}" ]; then
-            echo "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_BASE64 }}" | base64 -d > signing-key.jks
-            md5sum signing-key.jks
+            mkdir -p ~/.android/
+            echo "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_BASE64 }}" | base64 -d > ~/.android/signing-key.jks
+            md5sum ~/.android/signing-key.jks
           fi
 
-      - name: Compile XCSoar
+      - name: Compile XCSoar - PR
+        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
         run: |
-          if [ ${{ matrix.target }} = "ANDROID" ]; then
+          if [ ${{ matrix.target }} = 'ANDROID' ]; then
+            make -j$(nproc) TARGET=ANDROID DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
+            output/ANDROID/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }}
+          elif [ ${{ matrix.target }} = "WIN64" ]; then
+            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
+          elif [ ${{ matrix.target }} = "KOBO" ]; then
+            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
+          elif [ ${{ matrix.target }} = "OSX64" ]; then
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
+          fi
+
+      - name: Compile XCSoar - Sanitizer Check
+        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+        run: |
+          if [ ${{ matrix.target }} = "UNIX" ]; then
+            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything check VFB=y SANITIZE=y DEBUG_GLIBCXX=y
+          fi
+
+      - name: Compile XCSoar - Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          if [ ${{ matrix.target }} = 'ANDROID' ]; then
             if [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }}" ] && [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}" ]; then
               ANDROID_KEYSTORE_PASS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }} \
-              ANDROID_KEYSTORE=signing-key.jks ANDROID_KEY_ALIAS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }} \
               make -j$(nproc) TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
-              output/ANDROID/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
+              output/ANDROID/bin/${{ matrix.target_bin }}${{ matrix.target_ext }} \
+              ANDROID_KEYSTORE=~/.android/signing-key.jks ANDROID_KEY_ALIAS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}
             else
               make -j$(nproc) TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
               output/ANDROID/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
@@ -264,12 +288,13 @@ jobs:
           fi
 
       - name: Create UNIX dpkg
-        if: ${{ matrix.target == 'UNIX' }}
+        if: ${{ matrix.target == 'UNIX' &&  startsWith(github.ref, 'refs/tags/v') }}
         run: |
           mkdir -p output/UNIX/DPKG
           rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
           cd output/UNIX/DPKG
           dpkg-buildpackage --jobs-force=$(nproc) --no-sign
+          cp *.dpkg ../
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -280,7 +305,7 @@ jobs:
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
-        if: ${{ startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == 'true' && needs.release.outputs.upload_url }}
+        if: ${{ startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == true && needs.release.outputs.upload_url != '' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -290,7 +315,7 @@ jobs:
           asset_content_type: application/zip
 
       - name: Deploy to Download server - testing
-        if: ${{ github.repository == 'XCSoar/XCSoar' && github.ref == 'refs/heads/master' && github.event_name == 'push' }}
+        if: ${{ github.repository == 'XCSoar/XCSoar' && github.ref == 'refs/heads/master' }}
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
@@ -301,7 +326,7 @@ jobs:
           TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}/
 
       - name: Deploy to Download server - release
-        if: ${{ github.repository == 'XCSoar/XCSoar' && startsWith(github.ref, 'refs/tags/v') && github.event_name == 'push' && matrix.target_upload == 'true' }}
+        if: ${{ github.repository == 'XCSoar/XCSoar' && startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == true }}
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
@@ -309,4 +334,4 @@ jobs:
           SOURCE: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
-          TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}/
+          TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
