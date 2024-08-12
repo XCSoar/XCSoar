@@ -81,7 +81,7 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   }
 
   // draw these after shaded regions, so they overlay
-  chart.DrawLineGraph(fs.vario_cruise_histogram.GetSlots(), ChartLook::STYLE_GREEN, true);
+  chart.DrawLineGraph(fs.vario_cruise_histogram.GetSlots(), ChartLook::STYLE_BLUE, true);
   chart.DrawLineGraph(fs.vario_circling_histogram.GetSlots(), ChartLook::STYLE_RED, true);
 
   // draw current MC setting
