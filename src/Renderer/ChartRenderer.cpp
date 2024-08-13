@@ -673,6 +673,9 @@ ChartRenderer::DrawWeightBarGraph(const XYDataStore &lsdata) noexcept
   for (const auto &i : slots) {
     auto pt_base = ToScreen({i.x, y.min});
     auto pt_top = ToScreen({i.x+i.weight, i.y});
-    canvas.DrawRectangle({pt_base.x, pt_base.y, pt_top.x, pt_top.y});
+    auto screen_base = ToScreen({x.min, y.min});
+    if (pt_top.x > screen_base.x){
+      canvas.DrawRectangle({std::max(pt_base.x, screen_base.x), pt_base.y, pt_top.x, pt_top.y});
+    }
   }
 }
