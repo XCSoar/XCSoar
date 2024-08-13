@@ -37,6 +37,9 @@
 #include <android/log.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <filesystem>
+#include <vector>
+namespace fs = std::filesystem;
 #endif
 
 #define XCSDATADIR "XCSoarData"
@@ -232,6 +235,10 @@ FindDataPaths() noexcept
            can use it */
         result.emplace_back(std::move(path));
     }
+
+    // Move files from GetExternalFilesDirs to GetExternalMediaDirs
+    MoveFilesToMediaDirs(env);
+
 #endif
 
     return result;
@@ -334,4 +341,32 @@ void
 CreateDataPath()
 {
   Directory::Create(GetPrimaryDataPath());
+}
+
+void MoveFilesToMediaDirs(JNIEnv* env) {
+    // Define source and destination directories
+    std::vector<fs::path> oldDirs = { "/storage/emulated/0/Android/data/org.xcsoar/files" };
+    std::vector<fs::path> newDirs = { "/storage/emulated/0/Android/media/org.xcsoar" };
+
+    for (const auto& oldDir : oldDirs) {
+        for (const auto& newDir : newDirs) {
+            try {
+                // Iterate over all files in the old directory
+                for (const auto& entry : fs::directory_iterator(oldDir)) {
+                    fs::path src = entry.path();
+                    fs::path dst = newDir / src.filename();
+
+                    // Copy file to new location
+                    fs::copy(src, dst, fs::copy_options::overwrite_existing);
+
+                    // Remove original file
+                    fs::remove(src);
+                }
+            } catch (const std::filesystem::filesystem_error& e) {
+                __android_log_print(ANDROID_LOG_ERROR, "XCSoar", "Exception: %s", e.what());
+            } catch (const std::exception& e) {
+                __android_log_print(ANDROID_LOG_ERROR, "XCSoar", "Exception: %s", e.what());
+            }
+        }
+    }
 }
