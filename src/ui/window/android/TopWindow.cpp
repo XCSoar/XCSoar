@@ -95,8 +95,7 @@ TopWindow::RefreshSize() noexcept
     return;
   }
 
-  if (screen->CheckResize(new_size_copy))
-    Resize(new_size_copy);
+  Resize(new_size_copy);
 }
 
 inline void
