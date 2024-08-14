@@ -47,8 +47,8 @@ ThermalAssistantWindow::OnPaintBuffer(Canvas &canvas) noexcept
   if (transparent) {
     const ScopeAlphaBlend alpha_blend;
 
-    canvas.SelectBlackPen();
-    canvas.Select(Brush(COLOR_WHITE.WithAlpha(0xd0)));
+    canvas.Select(renderer.GetLook().inner_circle_pen);
+    canvas.Select(Brush(renderer.GetLook().background_color.WithAlpha(0xd0)));
     DrawCircle(canvas);
   } else
 #endif
