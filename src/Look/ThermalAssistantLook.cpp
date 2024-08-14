@@ -6,8 +6,10 @@
 #include "Screen/Layout.hpp"
 
 void
-ThermalAssistantLook::Initialise(bool small, [[maybe_unused]] bool inverse)
+ThermalAssistantLook::Initialise(bool small, bool inverse)
 {
+  background_color = inverse? COLOR_BLACK: COLOR_WHITE;
+  text_color = inverse? COLOR_WHITE: COLOR_BLACK;
 #ifdef ENABLE_OPENGL
   polygon_brush.Create(polygon_fill_color.WithAlpha(128));
 #else /* !OPENGL */
@@ -22,7 +24,7 @@ ThermalAssistantLook::Initialise(bool small, [[maybe_unused]] bool inverse)
 #endif /* !OPENGL */
   inner_circle_pen.Create(1, circle_color);
   outer_circle_pen.Create(Pen::DASH2, 1, circle_color);
-  plane_pen.Create(width, COLOR_BLACK);
+  plane_pen.Create(width, inverse? COLOR_WHITE: COLOR_BLACK);
 
   overlay_font.Load(FontDescription(Layout::FontScale(22)));
   circle_label_font.Load(FontDescription(Layout::FontScale(10)));
