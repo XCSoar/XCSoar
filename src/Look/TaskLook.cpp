@@ -12,7 +12,7 @@ TaskLook::Initialise()
 {
   // Magenta ICAO color is 0x65,0x23,0x1c
   const Color task_color = Color(0x62, 0x4e, 0x90);
-  const Color bearing_color = Color(0x3e, 0x30, 0x5f);
+  const Color bearing_color = COLOR_MAGENTA;
   const Color isoline_color = bearing_color;
 
   oz_current_pen.Create(Pen::SOLID, Layout::ScalePenWidth(2), task_color);
