@@ -5,14 +5,14 @@
 
 class Canvas;
 class Angle;
-struct WindArrowLook;
+struct NextArrowLook;
 struct PixelRect;
 
 class NextArrowRenderer {
-  const WindArrowLook &look;
+  const NextArrowLook &look;
 
 public:
-  NextArrowRenderer(const WindArrowLook &_look):look(_look) {}
+  NextArrowRenderer(const NextArrowLook &_look):look(_look) {}
 
   void DrawArrow(Canvas &canvas, const PixelRect &rc, Angle angle);
 };

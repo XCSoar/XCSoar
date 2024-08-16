@@ -978,7 +978,7 @@ InfoBoxContentNextArrow::OnCustomPaint(Canvas &canvas,
 
   Angle bd = vector_remaining.bearing - basic.track;
 
-  NextArrowRenderer renderer(UIGlobals::GetLook().wind_arrow_info_box);
+  NextArrowRenderer renderer(UIGlobals::GetLook().next_arrow_info_box);
   renderer.DrawArrow(canvas, rc, bd);
 }
 
