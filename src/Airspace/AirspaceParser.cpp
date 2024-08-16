@@ -613,8 +613,13 @@ static AirspaceClass
 ParseType(const char *buffer) noexcept
 {
   for (unsigned i = 0; i < ARRAY_SIZE(airspace_class_strings); i++)
-    if (StringIsEqualIgnoreCase(buffer, airspace_class_strings[i].string))
-      return airspace_class_strings[i].asclass;
+    if (StringIsEqualIgnoreCase(buffer, airspace_class_strings[i].string)) {
+      if (StringIsEqualIgnoreCase(buffer, "UNCLASSIFIED")) {
+        return OTHER;
+      } else {
+        return airspace_class_strings[i].asclass;
+      }
+    }
 
   return OTHER;
 }
