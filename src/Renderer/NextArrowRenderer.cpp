@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "NextArrowRenderer.hpp"
-#include "Look/WindArrowLook.hpp"
+#include "Look/NextArrowLook.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Screen.hpp"
