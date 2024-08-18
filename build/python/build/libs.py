@@ -422,7 +422,7 @@ sdl2 = CmakeProject(
         "-DSDL_TEST=OFF",
         # subsystems
         "-DSDL_RENDER=OFF",
-        "-DSDL_JOYSTICK=OFF",
+        "-DSDL_JOYSTICK=ON", # won't compile for iOS without SDL_JOYSTICK
         "-DSDL_HAPTIC=OFF",
         "-DSDL_HIDAPI=OFF",
         "-DSDL_POWER=OFF",
