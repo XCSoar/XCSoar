@@ -7,9 +7,9 @@
         <key>CFBundleExecutable</key>
         <string>XCSoar</string>
         <key>CFBundleIdentifier</key>
-        <string>IOS_APP_BUNDLE_INENTIFIER_PLACEHOLDER</string>
+        <string>IOS_APP_BUNDLE_IDENTIFIER_PLACEHOLDER</string>
         <key>CFBundleName</key>
-        <string>IOS_APP_BUNDLE_INENTIFIER_PLACEHOLDER</string>
+        <string>IOS_APP_BUNDLE_IDENTIFIER_PLACEHOLDER</string>
         <key>CFBundlePackageType</key>
         <string>APPL</string>
         <key>CFBundleSignature</key>
