@@ -147,6 +147,14 @@ jobs:
             target_upload: false
             target_container: ''
           - os: macos-14
+            target: MACOS
+            target_bin: XCSoar
+            target_bin_path: bin
+            target_final: XCSoar
+            target_ext: ''
+            target_upload: false
+            target_container: ''
+          - os: macos-14
             target: IOS64
             target_bin: XCSoar
             target_bin_path: bin
@@ -223,29 +231,48 @@ jobs:
               ./ide/provisioning/install-android-tools.sh SDK
             fi
             ./ide/provisioning/install-debian-packages.sh CLEAN
-          elif [ ${{ matrix.os }} = 'macos-12' ]; then
-            brew install \
-              make \
-              quilt \
-              librsvg \
-              imagemagick gettext sox \
-              fmt \
-              sdl2 \
-              libsodium \
-              freetype \
-              libpng libjpeg-turbo \
-              libtiff libgeotiff proj \
-              c-ares \
-              curl \
-              lua
-          elif [ ${{ matrix.os }} = 'macos-14' ]; then
-            brew install \
-              automake autoconf libtool \
-              make \
-              quilt \
-              librsvg \
-              imagemagick gettext sox \
-              cmake ninja
+          elif [ ${{ matrix.os }} = 'macos-12' ] ; then
+            if [ ${{ matrix.target }} = 'OSX64' ]; then
+              brew install \
+                make \
+                quilt \
+                librsvg \
+                imagemagick gettext sox \
+                fmt \
+                sdl2 \
+                libsodium \
+                freetype \
+                libpng libjpeg-turbo \
+                libtiff libgeotiff proj \
+                c-ares \
+                curl \
+                lua
+            fi
+          elif [ ${{ matrix.os }} = 'macos-14' ] ; then
+            if [ ${{ matrix.target }} = 'MACOS' ]; then
+              brew install \
+                make \
+                quilt \
+                librsvg \
+                imagemagick gettext sox \
+                fmt \
+                sdl2 \
+                libsodium \
+                freetype \
+                libpng libjpeg-turbo \
+                libtiff libgeotiff proj \
+                c-ares \
+                curl \
+                lua
+            elif [ ${{ matrix.target }} = 'IOS64' ]; then
+              brew install \
+                automake autoconf libtool \
+                make \
+                quilt \
+                librsvg \
+                imagemagick gettext sox \
+                cmake ninja
+            fi
           fi
           echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
 
@@ -270,6 +297,8 @@ jobs:
           elif [ ${{ matrix.target }} = "KOBO" ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           elif [ ${{ matrix.target }} = "OSX64" ]; then
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
+          elif [ ${{ matrix.target }} = "MACOS" ]; then
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
           elif [ ${{ matrix.target }} = "IOS64" ]; then
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
