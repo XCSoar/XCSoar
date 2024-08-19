@@ -14,6 +14,7 @@ PYTHON_SOURCES = \
         $(SRC)/Computer/Wind/WindEKF.cpp \
         $(SRC)/Computer/Wind/WindEKFGlue.cpp \
         $(SRC)/Computer/Wind/CirclingWind.cpp \
+        $(SRC)/Computer/Wind/CirclingWind2.cpp \
         $(SRC)/Computer/Wind/Computer.cpp \
         $(SRC)/Computer/Wind/MeasurementList.cpp \
         $(SRC)/Computer/Wind/Store.cpp \
