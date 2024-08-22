@@ -110,20 +110,20 @@ static constexpr StaticEnumChoice info_box_geometry_list[] = {
 };
 
 static constexpr StaticEnumChoice flarm_display_location_list[] = {
-  { TrafficSettings::GaugeLocation::Auto,
+  { TrafficSettings::GaugeLocation::AUTO,
     N_("Auto (follow infoboxes)") },
-  { TrafficSettings::GaugeLocation::TopLeft,
+  { TrafficSettings::GaugeLocation::TOP_LEFT,
     N_("Top Left") },
-  { TrafficSettings::GaugeLocation::TopRight,
+  { TrafficSettings::GaugeLocation::TOP_RIGHT,
     N_("Top Right") },
-  { TrafficSettings::GaugeLocation::BottomLeft,
+  { TrafficSettings::GaugeLocation::BOTTOM_LEFT,
     N_("Bottom Left") },
-  { TrafficSettings::GaugeLocation::BottomRight,
+  { TrafficSettings::GaugeLocation::BOTTOM_RIGHT,
     N_("Bottom Right") },
-  { TrafficSettings::GaugeLocation::CentreTop,
-    N_("Centre Top") },
-  { TrafficSettings::GaugeLocation::CentreBottom,
-    N_("Centre Bottom") },
+  { TrafficSettings::GaugeLocation::CENTER_TOP,
+    N_("Center Top") },
+  { TrafficSettings::GaugeLocation::CENTER_BOTTOM,
+    N_("Center Bottom") },
   nullptr
 };
 

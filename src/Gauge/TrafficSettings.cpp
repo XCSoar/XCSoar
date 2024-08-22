@@ -10,5 +10,5 @@ TrafficSettings::SetDefaults() noexcept
   auto_close_dialog = false;
   auto_zoom = true;
   north_up = false;
-  gauge_location = GaugeLocation::Auto;
+  gauge_location = GaugeLocation::AUTO;
 }

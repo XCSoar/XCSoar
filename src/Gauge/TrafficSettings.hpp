@@ -18,13 +18,13 @@ struct TrafficSettings {
 
   /** Location of Flarm radar */
   enum class GaugeLocation : uint8_t {
-    Auto,
-    TopLeft,
-    TopRight,
-    BottomLeft,
-    BottomRight,
-    CentreTop,
-    CentreBottom,
+    AUTO,
+    TOP_LEFT,
+    TOP_RIGHT,
+    BOTTOM_LEFT,
+    BOTTOM_RIGHT,
+    CENTER_TOP,
+    CENTER_BOTTOM,
   } gauge_location;
 
   void SetDefaults() noexcept;
