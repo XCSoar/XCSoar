@@ -232,46 +232,16 @@ jobs:
             fi
             ./ide/provisioning/install-debian-packages.sh CLEAN
           elif [ ${{ matrix.os }} = 'macos-12' ] ; then
+            ./ide/provisioning/install-darwin-packages.sh BASE
             if [ ${{ matrix.target }} = 'OSX64' ]; then
-              brew install \
-                make \
-                quilt \
-                librsvg \
-                imagemagick gettext sox \
-                fmt \
-                sdl2 \
-                libsodium \
-                freetype \
-                libpng libjpeg-turbo \
-                libtiff libgeotiff proj \
-                c-ares \
-                curl \
-                lua
+              ./ide/provisioning/install-darwin-packages.sh OSX64
             fi
           elif [ ${{ matrix.os }} = 'macos-14' ] ; then
+            ./ide/provisioning/install-darwin-packages.sh BASE
             if [ ${{ matrix.target }} = 'MACOS' ]; then
-              brew install \
-                make \
-                quilt \
-                librsvg \
-                imagemagick gettext sox \
-                fmt \
-                sdl2 \
-                libsodium \
-                freetype \
-                libpng libjpeg-turbo \
-                libtiff libgeotiff proj \
-                c-ares \
-                curl \
-                lua
+              ./ide/provisioning/install-darwin-packages.sh MACOS
             elif [ ${{ matrix.target }} = 'IOS64' ]; then
-              brew install \
-                automake autoconf libtool \
-                make \
-                quilt \
-                librsvg \
-                imagemagick gettext sox \
-                cmake ninja
+              ./ide/provisioning/install-darwin-packages.sh IOS
             fi
           fi
           echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
