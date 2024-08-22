@@ -124,6 +124,18 @@ static constexpr StaticEnumChoice flarm_display_location_list[] = {
     N_("Center Top") },
   { TrafficSettings::GaugeLocation::CENTER_BOTTOM,
     N_("Center Bottom") },
+  { TrafficSettings::GaugeLocation::TOP_LEFT_AVOID_IB,
+    N_("Top Left (Avoid Infoboxes)") },
+  { TrafficSettings::GaugeLocation::TOP_RIGHT_AVOID_IB,
+    N_("Top Right (Avoid Infoboxes)") },
+  { TrafficSettings::GaugeLocation::BOTTOM_LEFT_AVOID_IB,
+    N_("Bottom Left (Avoid Infoboxes)") },
+  { TrafficSettings::GaugeLocation::BOTTOM_RIGHT_AVOID_IB,
+    N_("Bottom Right (Avoid Infoboxes)") },
+  { TrafficSettings::GaugeLocation::CENTER_TOP_AVOID_IB,
+    N_("Center Top (Avoid Infoboxes)") },
+  { TrafficSettings::GaugeLocation::CENTER_BOTTOM_AVOID_IB,
+    N_("Center Bottom (Avoid Infoboxes)") },
   nullptr
 };
 

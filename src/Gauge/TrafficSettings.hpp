@@ -25,6 +25,12 @@ struct TrafficSettings {
     BOTTOM_RIGHT,
     CENTER_TOP,
     CENTER_BOTTOM,
+    TOP_LEFT_AVOID_IB,
+    TOP_RIGHT_AVOID_IB,
+    BOTTOM_LEFT_AVOID_IB,
+    BOTTOM_RIGHT_AVOID_IB,
+    CENTER_TOP_AVOID_IB,
+    CENTER_BOTTOM_AVOID_IB,
   } gauge_location;
 
   void SetDefaults() noexcept;
