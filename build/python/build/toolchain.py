@@ -44,8 +44,8 @@ class NativeToolchain:
 class Toolchain:
     def __init__(self, top_path: str, lib_path: str,
                  tarball_path: str, src_path: str, build_path: str, install_prefix: str,
-                 host_triplet: str, arch_cflags: str, cppflags: str,
-                 arch_ldflags: str,
+                 host_triplet: str, target_is_ios: bool,
+                 arch_cflags: str, cppflags: str, arch_ldflags: str, 
                  cc: str, cxx: str, ar: str, arflags: str,
                  ranlib: str, strip: str, windres: str):
         self.tarball_path = tarball_path
@@ -60,6 +60,8 @@ class Toolchain:
         self.is_windows = 'mingw32' in host_triplet
         self.is_android = '-android' in host_triplet
         self.is_darwin = '-darwin' in host_triplet
+        
+        self.is_target_ios = target_is_ios
 
         self.cc = cc
         self.cxx = cxx
