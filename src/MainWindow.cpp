@@ -381,18 +381,18 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
     CommonInterface::GetUISettings().traffic.gauge_location;
 
   // Automatic mode - follow info boxes
-  if (val == TrafficSettings::GaugeLocation::Auto) {
+  if (val == TrafficSettings::GaugeLocation::AUTO) {
     switch (InfoBoxManager::layout.geometry) {
     case InfoBoxSettings::Geometry::TOP_LEFT_8:
     case InfoBoxSettings::Geometry::TOP_LEFT_12:
       if (InfoBoxManager::layout.landscape)
-        val = TrafficSettings::GaugeLocation::BottomLeft;
+        val = TrafficSettings::GaugeLocation::BOTTOM_LEFT;
       else
-        val = TrafficSettings::GaugeLocation::TopRight;
+        val = TrafficSettings::GaugeLocation::TOP_RIGHT;
       break;
 
     default:
-      val = TrafficSettings::GaugeLocation::BottomRight;    // Assume bottom right unles...
+      val = TrafficSettings::GaugeLocation::BOTTOM_RIGHT;    // Assume bottom right unles...
       break;
     }
   }
@@ -401,28 +401,28 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
   unsigned height = ib_layout.control_size.height * 2;
 
   switch (val) {
-  case TrafficSettings::GaugeLocation::TopLeft:
+  case TrafficSettings::GaugeLocation::TOP_LEFT:
     rc.right = rc.left + width;
     rc.bottom = rc.top + height;
     break;
 
-  case TrafficSettings::GaugeLocation::TopRight:
+  case TrafficSettings::GaugeLocation::TOP_RIGHT:
     rc.left = rc.right - width;
     rc.bottom = rc.top + height;
     break;
 
-  case TrafficSettings::GaugeLocation::BottomLeft:
+  case TrafficSettings::GaugeLocation::BOTTOM_LEFT:
     rc.right = rc.left + width;
     rc.top = rc.bottom - height;
     break;
 
-  case TrafficSettings::GaugeLocation::CentreTop:
+  case TrafficSettings::GaugeLocation::CENTER_TOP:
     rc.left = (rc.left + rc.right) / 2 - width - 1;
     rc.right = rc.left + width;
     rc.bottom = rc.top + height;
     break;
 
-  case TrafficSettings::GaugeLocation::CentreBottom:
+  case TrafficSettings::GaugeLocation::CENTER_BOTTOM:
     rc.left = (rc.left + rc.right) / 2 - width - 1;
     rc.right = rc.left + width;
     rc.top = rc.bottom - height;
