@@ -10,7 +10,6 @@ Look::Initialise(const Font &map_font)
 {
   dialog.Initialise();
   traffic.Initialise(map_font);
-  flarm_dialog.Initialise(traffic, false);
   gesture.Initialise();
   chart.Initialise();
 }
@@ -56,6 +55,7 @@ Look::InitialiseConfigured(const UISettings &settings,
                    info_box.title_font);
   wind_arrow_info_box.Initialise(map_bold_font, dark_mode);
   flarm_gauge.Initialise(traffic, true, dark_mode);
+  flarm_dialog.Initialise(traffic, false, dark_mode);
   thermal_assistant_dialog.Initialise(false, dark_mode);
   thermal_assistant_gauge.Initialise(true, dark_mode);
   final_glide_bar.Initialise(map_bold_font);
