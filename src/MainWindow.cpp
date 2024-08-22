@@ -397,45 +397,45 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
     }
   }
 
+  unsigned width = ib_layout.control_size.width * 2;
+  unsigned height = ib_layout.control_size.height * 2;
+
   switch (val) {
   case TrafficSettings::GaugeLocation::TopLeft:
-    rc.right = rc.left + ib_layout.control_size.width * 2;
-    ++rc.left;
-    rc.bottom = rc.top + ib_layout.control_size.height * 2;
-    ++rc.top;
+    rc.right = rc.left + width;
+    rc.bottom = rc.top + height;
     break;
 
   case TrafficSettings::GaugeLocation::TopRight:
-    rc.left = rc.right - ib_layout.control_size.width * 2 + 1;
-    rc.bottom = rc.top + ib_layout.control_size.height * 2;
-    ++rc.top;
+    rc.left = rc.right - width;
+    rc.bottom = rc.top + height;
     break;
 
   case TrafficSettings::GaugeLocation::BottomLeft:
-    rc.right = rc.left + ib_layout.control_size.width * 2;
-    ++rc.left;
-    rc.top = rc.bottom - ib_layout.control_size.height * 2 + 1;
+    rc.right = rc.left + width;
+    rc.top = rc.bottom - height;
     break;
 
   case TrafficSettings::GaugeLocation::CentreTop:
-    rc.left = (rc.left + rc.right) / 2 - ib_layout.control_size.width;
-    rc.right = rc.left + ib_layout.control_size.width * 2 - 1;
-    rc.bottom = rc.top + ib_layout.control_size.height * 2;
-    ++rc.top;
+    rc.left = (rc.left + rc.right) / 2 - width - 1;
+    rc.right = rc.left + width;
+    rc.bottom = rc.top + height;
     break;
 
   case TrafficSettings::GaugeLocation::CentreBottom:
-    rc.left = (rc.left + rc.right) / 2 - ib_layout.control_size.width;
-    rc.right = rc.left + ib_layout.control_size.width * 2 - 1;
-    rc.top = rc.bottom - ib_layout.control_size.height * 2 + 1;
+    rc.left = (rc.left + rc.right) / 2 - width - 1;
+    rc.right = rc.left + width;
+    rc.top = rc.bottom - height;
     break;
 
   default:    // aka flBottomRight
-    rc.left = rc.right - ib_layout.control_size.width * 2 + 1;
-    rc.top = rc.bottom - ib_layout.control_size.height * 2 + 1;
+    rc.left = rc.right - width;
+    rc.top = rc.bottom - height;
     break;
   }
 
+  ++rc.top;
+  ++rc.left;
   traffic_gauge.Move(rc);
 }
 
