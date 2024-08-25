@@ -12,6 +12,8 @@ Version 7.44 - not yet released
   - apply dark mode to large flarm radar
   - add options to avoid infoboxes to flarm radar widget
   - changed location of setting for flarm radar position
+  - add new gesture ULDR to access quick menu
+  - add quick menu page buttons in case of touch screen
 * Android
   - fix crash on startup when loading icons on ldpi screens
 
