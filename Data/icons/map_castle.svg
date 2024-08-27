@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
- <g transform="translate(-37.667 -225.87)" stroke-miterlimit="3">
+ <g transform="translate(-37.18 -225.87)" stroke-miterlimit="3">
   <g stroke-linecap="square" stroke-linejoin="round">
    <path d="m40.769 226.94v9.3392h1.0937v-9.3392z" color="#000000" style="-inkscape-stroke:none"/>
    <path d="m47.022 226.93-1.0937 5e-3 3e-3 0.54684 0.0248 5.6784 3e-3 0.54684 1.0937-5e-3 -3e-3 -0.54684-0.0248-5.6784z" color="#000000" style="-inkscape-stroke:none"/>
    <path d="m43.35 226.94v2.718h1.0937v-2.718z" color="#000000" style="-inkscape-stroke:none"/>
   </g>
   <path d="m41.316 228.56a0.54684 0.54684 0 0 0-0.54684 0.54683 0.54684 0.54684 0 0 0 0.54684 0.54684h5.1744a0.54684 0.54684 0 0 0 0.54684-0.54684 0.54684 0.54684 0 0 0-0.54684-0.54683z" color="#000000" stroke-linecap="round" stroke-linejoin="round" style="-inkscape-stroke:none"/>
-  <path d="m39.96 238.23 1.3557-1.9564 5.1749-3.0596 2.8827 4.4857" fill="none" stroke="#1a1a1a" stroke-dashoffset="2.1" stroke-linecap="round" stroke-width="1.1339" style="paint-order:stroke markers fill"/>
+  <path d="m39.96 238.23 1.3557-1.9564 5.1749-3.0596 1.9104 4.7951" fill="none" stroke="#1a1a1a" stroke-dashoffset="2.1" stroke-linecap="round" stroke-width="1.1339" style="paint-order:stroke markers fill"/>
  </g>
 </svg>
