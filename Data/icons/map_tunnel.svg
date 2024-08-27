@@ -1,7 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
- <g transform="matrix(.46292 0 0 .46292 -77.962 -111.1)" stroke-linejoin="round" stroke-miterlimit="3">
-  <path d="m183.54 240.73c-7.6033-1e-5 -13.729 6.4982-13.729 14.402v13.15a1.25 1.25 0 0 0 1.25 1.25 1.25 1.25 0 0 0 1.25-1.25v-13.15c0-6.6222 5.0492-11.902 11.229-11.902 6.1793 1e-5 11.229 5.2802 11.229 11.902v13.15a1.25 1.25 0 0 0 1.25 1.25 1.25 1.25 0 0 0 1.25-1.25v-13.15c0-7.9041-6.1252-14.402-13.729-14.402z" color="#000000" stroke-linecap="round" stroke-width="2.1602" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
-  <path d="m188.93 264.07h-10.796v-5.6862c0-3.1404 2.4167-5.6862 5.3979-5.6862 2.9811 0 5.3979 2.5458 5.3979 5.6862z" stroke-linecap="square" stroke-width="5.4005" style="paint-order:stroke fill markers"/>
- </g>
+<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="path-1-outside-1_63_133" maskUnits="userSpaceOnUse" x="0" y="4" width="13" height="13" fill="black">
+<rect fill="white" y="4" width="13" height="13"/>
+<path d="M1 10.5C1 7.46243 3.46243 5 6.5 5C9.53757 5 12 7.46243 12 10.5V16H1V10.5Z"/>
+</mask>
+<path d="M1 10.5C1 7.46243 3.46243 5 6.5 5C9.53757 5 12 7.46243 12 10.5V16H1V10.5Z" fill="#444444"/>
+<path d="M1 10.5C1 7.46243 3.46243 5 6.5 5C9.53757 5 12 7.46243 12 10.5V16H1V10.5Z" stroke="white" stroke-width="2" mask="url(#path-1-outside-1_63_133)"/>
+<path d="M9.5 12.5L11.9998 16.5" stroke="white"/>
+<path d="M6.5 12.5L1.00005 16.5" stroke="white"/>
+<path d="M6 11C6 9.89543 6.89543 9 8 9C9.10457 9 10 9.89543 10 11V13H6V11Z" fill="white"/>
 </svg>

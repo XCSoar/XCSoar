@@ -1,4 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
- <path d="m3.1786 0.046269a0.54691 0.54691 0 0 0-0.32811 0.50072v13.453h1.0937v-6.2316h6.658a0.54691 0.54691 0 0 0 0.37169-0.94846l-7.2048-6.6742a0.54691 0.54691 0 0 0-0.59044-0.099118zm0.7656 1.7525 5.2635 4.8756h-5.2635z" color="#000000" stroke-linejoin="round" style="-inkscape-stroke:none"/>
+<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="path-1-outside-1_38_321" maskUnits="userSpaceOnUse" x="10" y="3" width="7" height="6" fill="black">
+<rect fill="white" x="10" y="3" width="7" height="6"/>
+<path d="M11 4H16V6V8H11V4Z"/>
+</mask>
+<path d="M11 4H16V6V8H11V4Z" fill="white"/>
+<path d="M11 4H16V6V8H11V4Z" stroke="white" stroke-width="2" mask="url(#path-1-outside-1_38_321)"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M9 2.2C9 2.08954 9.08954 2 9.2 2H11.8C11.9105 2 12 2.08954 12 2.2L12 16H9L9 2.2ZM11 15H10V3H11L11 15Z" fill="white"/>
+<path d="M10 3.2C10 3.08954 10.0895 3 10.2 3L10.8 3C10.9105 3 11 3.08954 11 3.2L11 15H10L10 3.2Z" fill="#444444"/>
+<mask id="path-4-inside-2_38_321" fill="white">
+<path d="M11 4H16V6V8H11V4Z"/>
+</mask>
+<path d="M11 4H16V6V8H11V4Z" fill="#444444" stroke="#444444" stroke-width="2" mask="url(#path-4-inside-2_38_321)"/>
 </svg>
