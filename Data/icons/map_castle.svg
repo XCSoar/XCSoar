@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
- <g transform="matrix(.43747 0 0 .43747 -5.2422 -35.798)" stroke-linejoin="round" stroke-miterlimit="3" stroke-width="2.2859">
-  <path d="m31.768 94.818a1.2501 1.2501 0 0 0-1.0781 0.4707l-6.5957 8.3437-3.9004-1.248a1.2501 1.2501 0 0 0-1.4883 0.60937l-4.7148 9.0098a1.25 1.25 0 0 0 0.52734 1.6855 1.25 1.25 0 0 0 1.6855-0.52734l4.2305-8.0762 3.7227 1.1934a1.2501 1.2501 0 0 0 1.3613-0.41602l5.9785-7.5625 8.2852 14.693a1.25 1.25 0 0 0 1.7012 0.47656 1.25 1.25 0 0 0 0.47656-1.7031l-9.2012-16.318a1.2501 1.2501 0 0 0-0.99023-0.63086z" color="#000000" stroke-linecap="round" style="-inkscape-stroke:none"/>
-  <g stroke-linecap="square">
-   <path d="m18.562 81.834v22.99h2.5v-22.99z" color="#000000" style="-inkscape-stroke:none"/>
-   <path d="m32.857 81.828-2.5 0.01172 0.0059 1.25 0.05664 12.98 0.0059 1.25 2.5-0.01172-0.0059-1.25-0.05664-12.98z" color="#000000" style="-inkscape-stroke:none"/>
-   <path d="m24.463 81.834v6.2129h2.5v-6.2129z" color="#000000" style="-inkscape-stroke:none"/>
+ <g transform="translate(-37.667 -225.87)" stroke-miterlimit="3">
+  <g stroke-linecap="square" stroke-linejoin="round">
+   <path d="m40.769 226.94v9.3392h1.0937v-9.3392z" color="#000000" style="-inkscape-stroke:none"/>
+   <path d="m47.022 226.93-1.0937 5e-3 3e-3 0.54684 0.0248 5.6784 3e-3 0.54684 1.0937-5e-3 -3e-3 -0.54684-0.0248-5.6784z" color="#000000" style="-inkscape-stroke:none"/>
+   <path d="m43.35 226.94v2.718h1.0937v-2.718z" color="#000000" style="-inkscape-stroke:none"/>
   </g>
-  <path d="m19.812 85.547a1.25 1.25 0 0 0-1.25 1.25 1.25 1.25 0 0 0 1.25 1.25h11.828a1.25 1.25 0 0 0 1.25-1.25 1.25 1.25 0 0 0-1.25-1.25z" color="#000000" stroke-linecap="round" style="-inkscape-stroke:none"/>
+  <path d="m41.316 228.56a0.54684 0.54684 0 0 0-0.54684 0.54683 0.54684 0.54684 0 0 0 0.54684 0.54684h5.1744a0.54684 0.54684 0 0 0 0.54684-0.54684 0.54684 0.54684 0 0 0-0.54684-0.54683z" color="#000000" stroke-linecap="round" stroke-linejoin="round" style="-inkscape-stroke:none"/>
+  <path d="m39.96 238.23 1.3557-1.9564 5.1749-3.0596 2.8827 4.4857" fill="none" stroke="#1a1a1a" stroke-dashoffset="2.1" stroke-linecap="round" stroke-width="1.1339" style="paint-order:stroke markers fill"/>
  </g>
 </svg>

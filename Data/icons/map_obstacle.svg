@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
- <g transform="matrix(.43747 0 0 .43747 .00042201 -8.9048)" stroke-linecap="round" stroke-linejoin="round">
+ <g transform="matrix(.43747 0 0 .43747 .00045813 -8.9045)" fill="#d40000" stroke-linecap="round" stroke-linejoin="round">
   <path d="m16 20.355a1.2501 1.2501 0 0 0-1.2051 0.92188l-8.0508 29.5a1.25 1.25 0 0 0 0.87695 1.5352 1.25 1.25 0 0 0 1.5352-0.87695l6.8438-25.084 6.8438 25.084a1.25 1.25 0 0 0 1.5352 0.87695 1.25 1.25 0 0 0 0.87695-1.5352l-8.0508-29.5a1.2501 1.2501 0 0 0-1.2051-0.92188z" color="#000000" stroke-miterlimit="3" stroke-width="2.2858" style="-inkscape-stroke:none"/>
   <ellipse cx="16" cy="49.26" rx="2.228" ry="2.1881" stroke-miterlimit="5.3" stroke-width="5.7146"/>
  </g>

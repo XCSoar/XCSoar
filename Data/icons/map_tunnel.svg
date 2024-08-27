@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
- <g transform="matrix(.46292 0 0 .46292 -77.962 -111.1)" stroke-linejoin="round" stroke-miterlimit="3">
-  <path d="m183.54 240.73c-7.6033-1e-5 -13.729 6.4982-13.729 14.402v13.15a1.25 1.25 0 0 0 1.25 1.25 1.25 1.25 0 0 0 1.25-1.25v-13.15c0-6.6222 5.0492-11.902 11.229-11.902 6.1793 1e-5 11.229 5.2802 11.229 11.902v13.15a1.25 1.25 0 0 0 1.25 1.25 1.25 1.25 0 0 0 1.25-1.25v-13.15c0-7.9041-6.1252-14.402-13.729-14.402z" color="#000000" stroke-linecap="round" stroke-width="2.1602" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
-  <path d="m188.93 264.07h-10.796v-5.6862c0-3.1404 2.4167-5.6862 5.3979-5.6862 2.9811 0 5.3979 2.5458 5.3979 5.6862z" stroke-linecap="square" stroke-width="5.4005" style="paint-order:stroke fill markers"/>
+ <g transform="translate(-18.517 -11.963)" stroke-miterlimit="3">
+  <path d="m28.016 24.667h-4.9977v-2.6322c0-1.4538 1.1187-2.6323 2.4988-2.6323 1.38 0 2.4988 1.1785 2.4988 2.6323z" stroke-linecap="square" stroke-linejoin="round" stroke-width="2.5" style="paint-order:stroke fill markers"/>
+  <g fill="none" stroke="#000" stroke-dashoffset="2.1" stroke-width="1.1339">
+   <path transform="scale(1,-1)" d="m30.468-18.575a4.9505 5.0085 0 0 1-2.4752 4.3375 4.9505 5.0085 0 0 1-4.9505 0 4.9505 5.0085 0 0 1-2.4752-4.3375" stroke-linecap="round" style="paint-order:stroke markers fill"/>
+   <path d="m20.567 18.575-1e-6 5.7851" stroke-linecap="square" style="paint-order:stroke markers fill"/>
+   <path d="m30.468 18.575v5.7851" stroke-linecap="square" style="paint-order:stroke markers fill"/>
+  </g>
  </g>
 </svg>
