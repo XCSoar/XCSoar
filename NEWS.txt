@@ -1,4 +1,8 @@
 Version 7.44 - not yet released
+* data files
+  - fix problem (introduced in v7.42) of first waypoint in user.cup waypoint
+    file being ignored or being overwritten by any Waypoint Editor dialog
+    function.
 
 Version 7.43 - 2024-08-12
 * calculations
