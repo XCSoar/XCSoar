@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
- <g transform="translate(4.0024 -18.954)">
-  <g transform="translate(-138.42 -109.8)">
-   <g transform="translate(97.404 -97.114)" stroke-miterlimit="3">
-    <g stroke-linecap="square" stroke-linejoin="round">
-     <path d="m40.769 226.94v9.3392h1.0937v-9.3392z" color="#000000" style="-inkscape-stroke:none"/>
-     <path d="m47.022 226.93-1.0937 5e-3 3e-3 0.54684 0.0248 5.6784 3e-3 0.54684 1.0937-5e-3 -3e-3 -0.54684-0.0248-5.6784z" color="#000000" style="-inkscape-stroke:none"/>
-     <path d="m43.35 226.94v2.718h1.0937v-2.718z" color="#000000" style="-inkscape-stroke:none"/>
-    </g>
-    <path d="m41.316 228.56a0.54684 0.54684 0 0 0-0.54684 0.54683 0.54684 0.54684 0 0 0 0.54684 0.54684h5.1744a0.54684 0.54684 0 0 0 0.54684-0.54684 0.54684 0.54684 0 0 0-0.54684-0.54683z" color="#000000" stroke-linecap="round" stroke-linejoin="round" style="-inkscape-stroke:none"/>
-    <path d="m39.96 238.23 1.3557-1.9564 5.1749-3.0596 1.5702 4.7357" fill="none" stroke="#1a1a1a" stroke-dashoffset="2.1" stroke-linecap="round" stroke-width="1.1339" style="paint-order:stroke markers fill"/>
-   </g>
+ <g transform="translate(-136.09 -128.76)">
+  <g transform="translate(97.404 -97.114)">
+   <path d="m47.023 226.93-1.0938 6e-3 0.0059 1.6211h-1.4903v-1.625h-1.0938v1.625h-1.4883v-1.625h-1.0938v10.305c-7.85e-4 0.31346 0.23342 0.56795 0.54688 0.56824 0.31346-2.9e-4 0.56719-0.25489 0.56641-0.56835v-7.5859h4.0586l0.01758 4.0566 3.5039 2e-3v4.5274c-7.85e-4 0.31346 0.25295 0.56806 0.56641 0.56835 0.31346-2.9e-4 0.56719-0.25489 0.56641-0.56835v-5.6621h-3.5469z" stroke-linecap="square" stroke-linejoin="round" stroke-miterlimit="3" style="-inkscape-stroke:none"/>
   </g>
  </g>
 </svg>
