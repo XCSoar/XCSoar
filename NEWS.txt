@@ -11,6 +11,9 @@ Version 7.44 - not yet released
   - apply dark mode to large flarm radar
   - add options to avoid infoboxes to flarm radar widget
   - changed location of setting for flarm radar position
+* Android
+  - fix crash on startup when loading icons on ldpi screens
+
 Version 7.43 - 2024-08-12
 * calculations
   - CRITICAL: reachable map labels show correct altitude with head wind #1424

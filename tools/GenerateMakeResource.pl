@@ -12,7 +12,7 @@ while (<>) {
         print qq|MAKE_RESOURCE($1, $2, $id);\n|;
     } elsif (/^bitmap_icon_scaled\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         my $id = $next_id++;
-        print qq|MAKE_RESOURCE($1, $2, $id);\n|;
+        print qq|MAKE_RESOURCE($1, $2_96, $id);\n|;
 
         $id = $next_id++;
         print qq|MAKE_RESOURCE($1_HD, $2_160, $id);\n|;
