@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
- <g transform="translate(-136.09 -128.76)">
-  <g transform="translate(97.404 -97.114)">
-   <path d="m47.023 226.93-1.0938 6e-3 0.0059 1.6211h-1.4903v-1.625h-1.0938v1.625h-1.4883v-1.625h-1.0938v10.305c-7.85e-4 0.31346 0.23342 0.56795 0.54688 0.56824 0.31346-2.9e-4 0.56719-0.25489 0.56641-0.56835v-7.5859h4.0586l0.01758 4.0566 3.5039 2e-3v4.5274c-7.85e-4 0.31346 0.25295 0.56806 0.56641 0.56835 0.31346-2.9e-4 0.56719-0.25489 0.56641-0.56835v-5.6621h-3.5469z" stroke-linecap="square" stroke-linejoin="round" stroke-miterlimit="3" style="-inkscape-stroke:none"/>
-  </g>
- </g>
+ <path d="m5.1896 1.0977-3.0898 2.8301v8.9746h1.1348v-8.4746l1.9609-1.7969 1.9863 1.7988v4.1816h3.5762l-0.01 4.281 1.1348 0.01 0.0176-5.4236h-3.584v-3.5527z" color="#000000" stroke-miterlimit="3" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
 </svg>
