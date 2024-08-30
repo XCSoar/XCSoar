@@ -30,8 +30,8 @@ Version 7.43 - 2024-08-12
 * data files
   - new topology available from mapgen (including airport runways and rivers)
   - fix loss of "home" waypoint designation in certain situations for a
-  - reworked sgs-233 polar
     non-airport home waypoint
+  - reworked sgs-233 polar
 * documentation
   - clarify task speed calculation section
   - lua reference updated
