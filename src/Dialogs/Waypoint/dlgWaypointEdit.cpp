@@ -53,7 +53,7 @@ static constexpr StaticEnumChoice waypoint_types[] = {
   { Waypoint::Type::MOUNTAIN_PASS, N_("Mountain Pass") },
   { Waypoint::Type::MOUNTAIN_TOP, N_("Mountain Top") },
   { Waypoint::Type::OBSTACLE, N_("Transmitter Mast") },
-  { Waypoint::Type::TOWER, N_("Cooling Tower") },
+  { Waypoint::Type::TOWER, N_("Tower") },
   { Waypoint::Type::TUNNEL, N_("Tunnel") },
   { Waypoint::Type::BRIDGE, N_("Bridge") },
   { Waypoint::Type::POWERPLANT, N_("Power Plant") },
