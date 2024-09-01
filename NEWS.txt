@@ -1,4 +1,6 @@
 Version 7.44 - not yet released
+* ui
+  - streamlined, and optimized icons
 * data files
   - fix problem (introduced in v7.42) of first waypoint in user.cup waypoint
     file being ignored or being overwritten by any Waypoint Editor dialog
