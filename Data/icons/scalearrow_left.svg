@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
- <g transform="matrix(.68749 0 0 .49982 .0001375 .00019228)">
-  <path d="m3.0682 4.153e-4c-1.6998 0-3.0684 1.3382-3.0684 3.0006v16.006c0 1.6623 1.3685 3.0006 3.0684 3.0006h28.932v-22.008h-4.7349z" fill="#fff" stroke-miterlimit="3" stroke-width="0" style="paint-order:stroke markers fill"/>
+ <g transform="matrix(.68749 0 0 .49982 .00033009 .00023498)">
+  <path d="m-2.6182e-4 4.2044e-4v44.015l32 1.2e-5 2.9e-5 -44.016z" fill="#fff" stroke-miterlimit="3" stroke-width="0" style="paint-order:stroke markers fill"/>
   <path d="m4.118 2.2848v17.438h1.7002v-7.7188h22.364v-2.0004h-22.364v-7.7188z" color="#000000" fill-rule="evenodd" stroke-width="1.3861" style="-inkscape-stroke:none"/>
  </g>
 </svg>

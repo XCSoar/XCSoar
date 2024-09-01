@@ -1,16 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
- <g transform="matrix(.34375 0 0 .34375 1.5001 1.5001)" stroke-linejoin="round" stroke-miterlimit="3" stroke-width="2.9091">
-  <g stroke-linecap="square">
-   <path d="m16 2.1309c-7.6479 0-13.869 6.2212-13.869 13.869 0 7.6479 6.2212 13.869 13.869 13.869 7.6479 0 13.869-6.2212 13.869-13.869 0-7.6479-6.2212-13.869-13.869-13.869zm0 2c6.5671 0 11.869 5.3021 11.869 11.869s-5.3021 11.869-11.869 11.869-11.869-5.3021-11.869-11.869 5.3021-11.869 11.869-11.869z" color="#000000" stroke-width="2.9091" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
-   <path d="m16 11.318c-2.5709 0-4.6816 2.1108-4.6816 4.6816s2.1108 4.6816 4.6816 4.6816 4.6816-2.1108 4.6816-4.6816-2.1108-4.6816-4.6816-4.6816zm0 2.5c1.2198 0 2.1816 0.96186 2.1816 2.1816s-0.96186 2.1816-2.1816 2.1816-2.1816-0.96186-2.1816-2.1816 0.96186-2.1816 2.1816-2.1816z" color="#000000" stroke-width="2.9091" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
-   <path d="m19.432 16a3.4318 3.4318 0 0 1-3.4318 3.4318 3.4318 3.4318 0 0 1-3.4318-3.4318 3.4318 3.4318 0 0 1 3.4318-3.4318 3.4318 3.4318 0 0 1 3.4318 3.4318z" color="#000000" stroke-width="7.2728" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
-  </g>
-  <g stroke-linecap="round">
-   <path d="m25.307 14.75a1.25 1.25 0 0 0-1.25 1.25 1.25 1.25 0 0 0 1.25 1.25h5.4434a1.25 1.25 0 0 0 1.25-1.25 1.25 1.25 0 0 0-1.25-1.25z" color="#000000" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
-   <path d="m16 0a1.25 1.25 0 0 0-1.25 1.25v5.4434a1.25 1.25 0 0 0 1.25 1.25 1.25 1.25 0 0 0 1.25-1.25v-5.4434a1.25 1.25 0 0 0-1.25-1.25z" color="#000000" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
-   <path d="m1.25 14.75a1.25 1.25 0 0 0-1.25 1.25 1.25 1.25 0 0 0 1.25 1.25h5.4434a1.25 1.25 0 0 0 1.25-1.25 1.25 1.25 0 0 0-1.25-1.25z" color="#000000" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
-   <path d="m16 24.057a1.25 1.25 0 0 0-1.25 1.25v5.4434a1.25 1.25 0 0 0 1.25 1.25 1.25 1.25 0 0 0 1.25-1.25v-5.4434a1.25 1.25 0 0 0-1.25-1.25z" color="#000000" style="-inkscape-stroke:none;paint-order:stroke fill markers"/>
-  </g>
- </g>
+ <path d="m8.8704 7a1.8701 1.8703 0 0 1-1.8701 1.8704 1.8701 1.8703 0 0 1-1.8701-1.8704 1.8701 1.8703 0 0 1 1.8701-1.8703 1.8701 1.8703 0 0 1 1.8701 1.8703zm-1.8704 5.3998c0.78116-3.3126 2.0878-4.6186 5.4-5.3999-3.3122-0.78119-4.6188-2.0873-5.4-5.3998-0.78116 3.3125-2.0878 4.6186-5.4 5.3998 3.3122 0.78124 4.6188 2.0874 5.4 5.3999z" stroke-dashoffset="2.1" stroke-miterlimit="3" stroke-width="3.8" style="paint-order:stroke markers fill"/>
 </svg>
