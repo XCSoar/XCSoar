@@ -1,71 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   version="1.1"
-   viewBox="0 0 22 22"
-   id="svg4"
-   sodipodi:docname="wrench.svg"
-   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs4" />
-  <sodipodi:namedview
-     id="namedview4"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="37.894495"
-     inkscape:cx="10.806319"
-     inkscape:cy="11.835492"
-     inkscape:window-width="2560"
-     inkscape:window-height="1417"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg4" />
-  <g
-     id="g4"
-     transform="translate(-19.48154,-15.689013)">
-    <g
-       id="path1-342"
-       transform="translate(-367.12501,-384.01368)">
-      <path
-         id="path94"
-         style="color:#000000;fill:#000000;-inkscape-stroke:none"
-         d="m 389.39845,400.01368 c -1.33668,0 -2.27344,1.23922 -2.27344,2.57031 v 0.002 l 0.008,12.42968 c 7.1e-4,1.16481 0.90298,2.18555 2.08203,2.18555 h 16.79102 c 1.17907,0 2.08203,-1.02235 2.08203,-2.1875 v -11.72266 c 0,-1.16509 -0.90297,-2.1875 -2.08203,-2.1875 h -9.33399 c -0.37703,-0.58493 -0.93665,-1.08984 -1.71679,-1.08984 z m 0,1.76758 h 5.55664 c 0.14253,0 0.34021,0.11216 0.45117,0.46875 l 0.19336,0.62305 h 10.40429 c 0.14848,0 0.31446,0.11684 0.31446,0.41601 v 11.72461 c 0,0.29916 -0.16598,0.41797 -0.31446,0.41797 h -16.78906 c -0.14849,0 -0.3143,-0.11939 -0.31445,-0.41797 l -0.008,-12.42969 c 0,-0.55358 0.33533,-0.80273 0.50586,-0.80273 z" />
-    </g>
-    <g
-       id="g92"
-       transform="rotate(-45,-220.10072,707.64006)">
-      <path
-         d="m 440.40603,404.12812 2.29377,-2.30084 v -3.98158 l -3.04474,-2.9415 -0.54958,-0.0226 -10e-6,4.37735 -0.49153,0.54527 -1.43582,-10e-4 -0.49046,-0.5442 1e-5,-4.37735 -0.52486,-0.002 -3.06956,2.96632 v 3.98157 l 2.29377,2.30085 -0.001,11.10473 1.54448,1.54446 1.93493,-0.003 1.54116,-1.54116 z"
-         color="#000000"
-         color-rendering="auto"
-         dominant-baseline="auto"
-         image-rendering="auto"
-         solid-color="#000000"
-         stop-color="#000000"
-         style="font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;text-transform:none;text-orientation:mixed;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;isolation:auto;mix-blend-mode:normal;stroke-width:0.8095;shape-rendering:auto"
-         id="path2-54-2"
-         sodipodi:nodetypes="ccccccccccccccccccc" />
-      <path
-         d="m 436.1454,395.6589 -2.50209,2.41992 -10e-6,3.52572 2.29327,2.30033 v 11.12452 l 1.20838,1.20838 1.5127,-0.002 1.20613,-1.20673 v -11.12452 l 2.29396,-2.29961 -10e-6,-3.52573 -2.50204,-2.41988 v 3.81017 l -0.7955,0.88219 -1.91948,-10e-6 -0.79548,-0.88218 z m -0.15515,0.36808 10e-6,3.50292 0.88073,0.97648 h 2.05947 l 0.88073,-0.97648 v -3.50292 l 2.19179,2.11883 v 3.39492 l -2.29396,2.29961 10e-6,11.13083 -1.12502,1.12502 -1.3847,-0.0177 -1.10728,-1.10727 v -11.13083 l -2.29325,-2.30032 v -3.39491 z"
-         color="#000000"
-         color-rendering="auto"
-         dominant-baseline="auto"
-         fill="#ffffff"
-         image-rendering="auto"
-         solid-color="#000000"
-         stop-color="#000000"
-         style="font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;text-transform:none;text-orientation:mixed;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;isolation:auto;mix-blend-mode:normal;stroke-width:0.8095;shape-rendering:auto"
-         id="path4-37-4"
-         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccc" />
-    </g>
-  </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+ <g transform="translate(-386.61 -399.7)">
+  <path d="m389.4 400.01c-1.3367 0-2.2734 1.2392-2.2734 2.5703v2e-3l8e-3 12.43c7.1e-4 1.1648 0.90298 2.1856 2.082 2.1856h10.355l4.1894 4.1914h2.1856l1.3652-1.3711v-2.1797l-0.72852-0.72852c0.88439-0.26826 1.5059-1.1334 1.5059-2.0996v-11.723c0-1.1651-0.90297-2.1875-2.082-2.1875h-9.334c-0.37703-0.58493-0.93665-1.0898-1.7168-1.0898zm0 1.7676h5.5566c0.14253 0 0.34021 0.11216 0.45117 0.46875l0.19336 0.62305h10.404c0.14848 0 0.31446 0.11684 0.31446 0.41601v11.725c0 0.29916-0.16598 0.41797-0.31446 0.41797h-1.1035l-5.4434-5.4414-4e-3 -3.25-2.8164-2.8144-4.2324 0.0723-0.40429 0.37304 3.0957 3.0957 0.0371 0.73242-1.0156 1.0156-0.73243-0.0391-3.0938-3.0957-0.37304 0.37109-0.0742 4.2676 2.8164 2.8144 3.248 6e-3 1.8926 1.8926h-8.5859c-0.14849 0-0.3143-0.11939-0.31445-0.41797l-8e-3 -12.43c0-0.55358 0.33533-0.80273 0.50586-0.80273z" color="#000000" style="-inkscape-stroke:none"/>
+  <path d="m390.46 407.01-0.0581 3.4804 2.4931 2.4931 3.2482 5e-3 7.8662 7.8662h1.7089l1.0682-1.071-4.2e-4 -1.7062-7.8662-7.8662-4e-3 -3.2481-2.4931-2.4931-3.4803 0.0581 2.6942 2.6942 0.0613 1.1863-1.3573 1.3573-1.1863-0.0613zm0.15056 0.36998 2.477 2.4769 1.3132 0.0677 1.4563-1.4563-0.0677-1.3132-2.4769-2.4769 3.0481-0.0516 2.4006 2.4006 4e-3 3.2481 7.8707 7.8707v1.591l-0.99164 0.96662h-1.5659l-7.8707-7.8707-3.2482-5e-3 -2.4006-2.4006z" color="#000000" color-rendering="auto" dominant-baseline="auto" fill="#fff" image-rendering="auto" shape-rendering="auto" solid-color="#000000" stop-color="#000000" stroke-width=".8095" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
+ </g>
 </svg>
