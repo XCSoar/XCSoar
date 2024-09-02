@@ -5,6 +5,7 @@ Version 7.44 - not yet released
   - fix problem (introduced in v7.42) of first waypoint in user.cup waypoint
     file being ignored or being overwritten by any Waypoint Editor dialog
     function.
+  - read PG landing waypoint type correctly in cup files
 * ui
   - streamlined, and optimized icons
   - apply dark mode settings to thermal assistant
