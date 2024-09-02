@@ -342,7 +342,9 @@ jobs:
           SOURCE: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
-          TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}/
+          TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
+          SCRIPT_BEFORE: |
+            rm ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
 
       - name: Deploy to Download server - release
         if: ${{ github.repository == 'XCSoar/XCSoar' && startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == true }}
