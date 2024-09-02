@@ -168,7 +168,7 @@ ParseStyle(std::string_view src, Waypoint::Type &type)
   case 20:
     type = Waypoint::Type::PGTAKEOFF;
     break;
-  case 22:
+  case 21:
     type = Waypoint::Type::PGLANDING;
     break;
   }
