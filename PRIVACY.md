@@ -63,7 +63,7 @@ registered / enabled and configured explicitly:
 
 - [skylines](https://skylines.aero)
 - [livetrack24](https://livetrack24.com)
-- [cloud.xcsoar.net](https://cloud.xcsoar.net)
+- [cloud.xcsoar.org](https://cloud.xcsoar.org)
 
 For information on their Privacy policy please see the respective service.
 
