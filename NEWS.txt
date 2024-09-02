@@ -1,12 +1,13 @@
 Version 7.44 - not yet released
-* ui
-  - streamlined, and optimized icons
+* tracking
+  - xcsoar-cloud-service: rebuild service, new domain cloud.xcsoar.org
 * data files
   - fix problem (introduced in v7.42) of first waypoint in user.cup waypoint
     file being ignored or being overwritten by any Waypoint Editor dialog
     function.
 * ui
-  - apply dark mode settings to thermal assistant 
+  - streamlined, and optimized icons
+  - apply dark mode settings to thermal assistant
   - apply dark mode to large flarm radar
   - add options to avoid infoboxes to flarm radar widget
   - changed location of setting for flarm radar position
