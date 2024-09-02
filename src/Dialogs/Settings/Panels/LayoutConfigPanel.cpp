@@ -35,7 +35,6 @@ enum ControlIndex {
   MapOrientation,
   DarkMode,
   AppInfoBoxGeom,
-  AppFlarmLocation,
   TabDialogStyle,
   AppStatusMessageAlignment,
   AppInfoBoxColors,
@@ -106,36 +105,6 @@ static constexpr StaticEnumChoice info_box_geometry_list[] = {
     N_("4 Top or Left") },
   { InfoBoxSettings::Geometry::BOTTOM_RIGHT_4,
     N_("4 Bottom or Right") },
-  nullptr
-};
-
-static constexpr StaticEnumChoice flarm_display_location_list[] = {
-  { TrafficSettings::GaugeLocation::AUTO,
-    N_("Auto (follow infoboxes)") },
-  { TrafficSettings::GaugeLocation::TOP_LEFT,
-    N_("Top Left") },
-  { TrafficSettings::GaugeLocation::TOP_RIGHT,
-    N_("Top Right") },
-  { TrafficSettings::GaugeLocation::BOTTOM_LEFT,
-    N_("Bottom Left") },
-  { TrafficSettings::GaugeLocation::BOTTOM_RIGHT,
-    N_("Bottom Right") },
-  { TrafficSettings::GaugeLocation::CENTER_TOP,
-    N_("Center Top") },
-  { TrafficSettings::GaugeLocation::CENTER_BOTTOM,
-    N_("Center Bottom") },
-  { TrafficSettings::GaugeLocation::TOP_LEFT_AVOID_IB,
-    N_("Top Left (Avoid Infoboxes)") },
-  { TrafficSettings::GaugeLocation::TOP_RIGHT_AVOID_IB,
-    N_("Top Right (Avoid Infoboxes)") },
-  { TrafficSettings::GaugeLocation::BOTTOM_LEFT_AVOID_IB,
-    N_("Bottom Left (Avoid Infoboxes)") },
-  { TrafficSettings::GaugeLocation::BOTTOM_RIGHT_AVOID_IB,
-    N_("Bottom Right (Avoid Infoboxes)") },
-  { TrafficSettings::GaugeLocation::CENTER_TOP_AVOID_IB,
-    N_("Center Top (Avoid Infoboxes)") },
-  { TrafficSettings::GaugeLocation::CENTER_BOTTOM_AVOID_IB,
-    N_("Center Bottom (Avoid Infoboxes)") },
   nullptr
 };
 
@@ -214,11 +183,6 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
           info_box_geometry_list, (unsigned)ui_settings.info_boxes.geometry);
 
-  AddEnum(_("FLARM display"), _("Choose a location for the FLARM display."),
-          flarm_display_location_list,
-          (unsigned)ui_settings.traffic.gauge_location);
-  SetExpertRow(AppFlarmLocation);
-
   AddEnum(_("Tab dialog style"), nullptr,
           tabdialog_style_list, (unsigned)ui_settings.dialog.tab_style);
 
@@ -284,10 +248,6 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
   info_box_geometry_changed |=
     SaveValueEnum(AppInfoBoxGeom, ProfileKeys::InfoBoxGeometry,
                   ui_settings.info_boxes.geometry);
-
-  info_box_geometry_changed |=
-    SaveValueEnum(AppFlarmLocation, ProfileKeys::FlarmLocation,
-                  ui_settings.traffic.gauge_location);
 
   changed |= info_box_geometry_changed;
 
