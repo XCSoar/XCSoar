@@ -387,11 +387,9 @@ OrderedTask::ScanDistanceRemaining(const GeoPoint &location) noexcept
 }
 
 double
-OrderedTask::ScanDistanceTravelled(const GeoPoint &location) noexcept
+OrderedTask::ScanDistanceTravelled() noexcept
 {
-  return task_points.empty()
-    ? 0
-    : task_points.front()->ScanDistanceTravelled(location);
+  return stats.total.planned.GetDistance() - stats.total.remaining.GetDistance();
 }
 
 double
