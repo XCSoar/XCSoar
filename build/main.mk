@@ -673,7 +673,7 @@ XCSOAR_DEPENDS = \
 	UTIL GEO MATH
 
 ifeq ($(TARGET_IS_DARWIN),y)
-XCSOAR_LDLIBS += -framework CoreLocation
+XCSOAR_LDLIBS += -framework CoreLocation -lSDL2main # include SDL2main for main() on MacOS and iOS (otherwise linking fails)
 endif
 
 XCSOAR_STRIP = y

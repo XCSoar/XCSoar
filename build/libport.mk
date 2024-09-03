@@ -20,6 +20,8 @@ endif
 
 PORT_SOURCES += $(SRC)/Device/Port/TCPClientPort.cpp
 
+PORT_DEPENDS = FMT
+
 $(eval $(call link-library,port,PORT))
 
 ifeq ($(TARGET),ANDROID)

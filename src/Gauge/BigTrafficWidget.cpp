@@ -521,7 +521,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
 void
 FlarmTrafficControl::OnPaint(Canvas &canvas) noexcept
 {
-  canvas.ClearWhite();
+  canvas.Clear(look.background_color);
 
   PaintTaskDirection(canvas);
   FlarmTrafficWindow::Paint(canvas);

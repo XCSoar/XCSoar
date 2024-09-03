@@ -35,7 +35,6 @@ enum ControlIndex {
   MapOrientation,
   DarkMode,
   AppInfoBoxGeom,
-  AppFlarmLocation,
   TabDialogStyle,
   AppStatusMessageAlignment,
   AppInfoBoxColors,
@@ -106,24 +105,6 @@ static constexpr StaticEnumChoice info_box_geometry_list[] = {
     N_("4 Top or Left") },
   { InfoBoxSettings::Geometry::BOTTOM_RIGHT_4,
     N_("4 Bottom or Right") },
-  nullptr
-};
-
-static constexpr StaticEnumChoice flarm_display_location_list[] = {
-  { TrafficSettings::GaugeLocation::Auto,
-    N_("Auto (follow infoboxes)") },
-  { TrafficSettings::GaugeLocation::TopLeft,
-    N_("Top Left") },
-  { TrafficSettings::GaugeLocation::TopRight,
-    N_("Top Right") },
-  { TrafficSettings::GaugeLocation::BottomLeft,
-    N_("Bottom Left") },
-  { TrafficSettings::GaugeLocation::BottomRight,
-    N_("Bottom Right") },
-  { TrafficSettings::GaugeLocation::CentreTop,
-    N_("Centre Top") },
-  { TrafficSettings::GaugeLocation::CentreBottom,
-    N_("Centre Bottom") },
   nullptr
 };
 
@@ -202,11 +183,6 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
           info_box_geometry_list, (unsigned)ui_settings.info_boxes.geometry);
 
-  AddEnum(_("FLARM display"), _("Choose a location for the FLARM display."),
-          flarm_display_location_list,
-          (unsigned)ui_settings.traffic.gauge_location);
-  SetExpertRow(AppFlarmLocation);
-
   AddEnum(_("Tab dialog style"), nullptr,
           tabdialog_style_list, (unsigned)ui_settings.dialog.tab_style);
 
@@ -272,10 +248,6 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
   info_box_geometry_changed |=
     SaveValueEnum(AppInfoBoxGeom, ProfileKeys::InfoBoxGeometry,
                   ui_settings.info_boxes.geometry);
-
-  info_box_geometry_changed |=
-    SaveValueEnum(AppFlarmLocation, ProfileKeys::FlarmLocation,
-                  ui_settings.traffic.gauge_location);
 
   changed |= info_box_geometry_changed;
 

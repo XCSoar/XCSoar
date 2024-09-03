@@ -242,7 +242,7 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
 
   if (!is_map) {
     chart.DrawXGrid(Units::ToSysVSpeed(1), 1, ChartRenderer::UnitFormat::NUMERIC);
-    chart.DrawYGrid(Units::ToSysAltitude(1000), 1000, ChartRenderer::UnitFormat::NUMERIC);
+    chart.DrawYGrid(Units::ToSysAltitude(250), 250, ChartRenderer::UnitFormat::NUMERIC);
   }
 
   chart.Finish();

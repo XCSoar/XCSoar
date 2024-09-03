@@ -93,7 +93,9 @@ LoadWaypoints(Waypoints &way_points,
               ProgressListener &progress);
 
 /**
- * Append one waypoint to the file "user.cup".
+ * Create the file user.cup (replacing it if it already exists) and write to
+ * this new file every waypoint from way_points that has an origin of USER
+ * (i.e., every waypoint in memory designated for inclusion in user.cup).
  *
  * Throws std::runtime_error on error;
  */

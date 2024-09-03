@@ -39,7 +39,7 @@ FindHomeLocation(Waypoints &waypoints,
     return nullptr;
 
   auto wp = waypoints.LookupLocation(settings.home_location, 100);
-  if (wp == nullptr || !wp->IsAirport()) {
+  if (wp == nullptr) {
     settings.home_location_available = false;
     return nullptr;
   }

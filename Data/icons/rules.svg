@@ -1,39 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
- <g transform="matrix(.6875 0 0 .6875 -.24755 -5.5116)" stroke-miterlimit="3" stroke-width="1.4546">
-  <g stroke-linejoin="round">
-   <g stroke-width=".90857">
-    <path d="m16.568 10.615c1.1773 0.64152 2.3477 1.2695 3.5686 1.7317l-0.44578 1.1732c-1.3243-0.50126-2.5426-1.1595-3.723-1.8027z" color="#000000" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-    <path d="m22.734 17.609 1.2075 0.34291-1.1512 4.0634-1.2075-0.34291z" color="#000000" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-    <path d="m13.115 22.809c1.1768 0.6412 2.3458 1.2696 3.5663 1.7317l-0.44333 1.1732c-1.3235-0.50108-2.5431-1.1598-3.723-1.8027z" color="#000000" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-   </g>
-   <path d="m19.915 12.934c1.4008 0.53025 2.8971 0.86379 4.5743 0.7818l-1.1513 4.0632c-1.6763 0.08218-3.1719-0.25096-4.5749-0.77494z" color="#000000" stroke-width="1.4502" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-  </g>
-  <path d="m19.915 12.934c1.4008 0.53025 2.8971 0.86379 4.5743 0.7818l-1.1513 4.0632c-1.6763 0.08218-3.1719-0.25096-4.5749-0.77494z" color="#000000" stroke-width="0" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-  <path d="m16.46 25.126 1.1553-4.0574c1.3998 0.527 2.8896 0.85685 4.5649 0.77448l-1.1455 4.0648c-1.6774 0.082-3.1739-0.25168-4.5746-0.78195z" color="#000000" stroke-linejoin="round" stroke-width="1.4502" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-  <path d="m16.46 25.126 1.1553-4.0574c1.3998 0.527 2.8896 0.85685 4.5649 0.77448l-1.1455 4.0648c-1.6774 0.082-3.1739-0.25168-4.5746-0.78195z" color="#000000" stroke-width="0" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-  <g stroke-linejoin="round" stroke-width="1.4502">
-   <path d="m7.9895 8.0709c1.8707-0.2025 3.5467 0.186 5.0921 0.80827l-0.47027 1.1634c-1.3001-0.52349-2.629-0.79257-4.0831-0.71031l-1.0189 3.598-1.2075-0.34291 1.1512-4.0634a0.62709 0.62709 0 0 1 0.53641-0.45313z" color="#000000" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-   <path d="m5.1428 16.653 1.2075 0.34045-0.92828 3.3017c1.5055-0.01332 2.9117 0.25541 4.2006 0.77399l-0.46782 1.1634c-1.425-0.57331-2.8629-0.8981-4.4847-0.72255a0.62709 0.62709 0 0 1-0.67112-0.79358z" color="#000000" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-   <path d="m11.694 13.53 1.1531-4.0679c1.1658 0.46943 2.2871 1.0864 3.4188 1.7149l-1.1497 4.0568c-1.1323-0.62129-2.2534-1.2381-3.4222-1.7039z" color="#000000" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-  </g>
-  <path d="m11.694 13.53 1.1531-4.0679c1.1658 0.46943 2.2871 1.0864 3.4188 1.7149l-1.1497 4.0568c-1.1323-0.62129-2.2534-1.2381-3.4222-1.7039z" color="#000000" stroke-width="0" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-  <path d="m13.965 19.302c-1.1352-0.62097-2.2604-1.2408-3.4269-1.71l-1.1478 4.0599c1.1666 0.46935 2.2896 1.0873 3.4224 1.7165z" color="#000000" stroke-linejoin="round" stroke-width="1.4502" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-  <path d="m13.965 19.302c-1.1352-0.62097-2.2604-1.2408-3.4269-1.71l-1.1478 4.0599c1.1666 0.46935 2.2896 1.0873 3.4224 1.7165z" color="#000000" stroke-width="0" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-  <path d="m6.9045 12.759c1.7478-0.18944 3.306 0.16831 4.7892 0.77076l-1.1569 4.063c-1.4902-0.6009-3.0485-0.95871-4.7872-0.76844z" color="#000000" stroke-linejoin="round" stroke-width="1.4502" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-  <path d="m6.9045 12.759c1.7478-0.18944 3.306 0.16831 4.7892 0.77076l-1.1569 4.063c-1.4902-0.6009-3.0485-0.95871-4.7872-0.76844z" color="#000000" stroke-width="0" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-  <path d="m15.118 15.232c0.66314 0.35991 1.3302 0.7213 2.0131 1.0541 0.30566 0.14894 0.61453 0.29217 0.92763 0.42707 0.23312 0.10044 0.46856 0.19626 0.70395 0.29219l-1.1476 4.0644c-1.2704-0.47931-2.4662-1.1236-3.6482-1.7668z" color="#000000" stroke-linejoin="round" stroke-width="1.4502" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-  <path d="m15.118 15.232c0.66314 0.35991 1.3302 0.7213 2.0131 1.0541 0.30566 0.14894 0.61453 0.29217 0.92763 0.42707 0.23312 0.10044 0.46856 0.19626 0.70395 0.29219l-1.1476 4.0644c-1.2704-0.47931-2.4662-1.1236-3.6482-1.7668z" color="#000000" stroke-width="0" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-  <g stroke-linejoin="round">
-   <path d="m13.081 8.8798c1.2132 0.48849 2.3547 1.1195 3.4878 1.7488l-0.60744 1.0948c-1.1302-0.62773-2.2322-1.2299-3.3507-1.6802z" color="#000000" stroke-width="1.4502" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-   <path d="m9.6222 21.07c1.2141 0.48848 2.3585 1.1213 3.4928 1.7513l-0.60744 1.0948c-1.1314-0.62839-2.2341-1.2325-3.3531-1.6827z" color="#000000" stroke-width="1.4502" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-   <g stroke-width=".90857">
-    <path d="m6.3013 12.588 1.2075 0.34291-1.1561 4.0659-1.2051-0.34291z" color="#000000" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-    <path d="m5.7495 16.824 1.155-4.0653" color="#000000" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-    <path d="m20.138 12.347c1.344 0.50873 2.7445 0.8192 4.3206 0.74215a0.62709 0.62709 0 0 1 0.63437 0.79848l-1.1512 4.0634-1.2075-0.34291 0.96503-3.4045c-1.4243-0.047077-2.7972-0.22538-4.0071-0.68336z" color="#000000" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-    <path d="m21.578 21.674 1.2051 0.338-1.1438 4.0659a0.62709 0.62709 0 0 1-0.57314 0.45557c-1.7784 0.08694-3.3701-0.26873-4.8276-0.82052l0.44333-1.1732c1.2121 0.45887 2.5073 0.67128 3.8993 0.66866z" color="#000000" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
-    <path d="m27.824 12.229a1.254 1.254 0 0 1 0.87686 1.5406l-6.934 25.326a1.254 1.254 0 0 1-1.5406 0.87686 1.254 1.254 0 0 1-0.8793-1.5406l6.9365-25.326a1.254 1.254 0 0 1 1.5406-0.87686z" color="#000000" stroke-linecap="round" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
+<svg version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+ <g transform="translate(-.32588 -441.19)" stroke-linejoin="round" stroke-miterlimit="3">
+  <g transform="matrix(.6875 0 0 .6875 -126.29 432.44)" stroke-width="1.4546">
+   <g transform="translate(186.68 5.524)" stroke-width=".90857">
+    <path d="m8.7509 7.3096c-0.40313 0.00754-0.82197 0.03245-1.2585 0.079545l-0.48864 0.053978-4.2244 14.952 1.0426-0.085228c3.5022-0.28399 4.4587 0.09051 6.9744 1.4773 2.5488 1.405 3.8025 2.0847 5.1847 2.608 1.5539 0.58829 2.9112 0.8159 4.0142 0.86648l-3.9801 13.983 2.642 0.75284 8.4432-29.668-2.642-0.75-0.22443 0.78977c-1.2827-0.0017-2.552-0.29186-3.8523-0.71307-1.1572-0.43917-2.2972-1.0422-3.4659-1.679l-0.58239-0.31818-0.02557 0.036932c-2.8334-1.5366-4.9285-2.4355-7.5568-2.3864zm0.27841 2.0085c1.3671-0.00463 2.5521 0.29801 3.6506 0.7358l-0.9858 3.4773c1.1688 0.4658 2.291 1.0804 3.4233 1.7017l0.98011-3.4545c1.4381 0.78275 2.4926 1.324 3.5966 1.7415 0.01676 0.0063 0.03432 0.01083 0.05114 0.01705l-0.98012 3.4659c1.2178 0.45481 2.5055 0.76648 3.9205 0.78693l-1.1534 4.0653c-1.4153-0.01896-2.6981-0.32889-3.9148-0.78693l-0.98296 3.4517c-1.0465-0.40035-2.0984-0.94222-3.642-1.7841l0.97443-3.4347c-1.1352-0.62096-2.2597-1.241-3.4261-1.7102l-0.97443 3.4403c-1.1858-0.45232-2.5005-0.75032-4.142-0.7358l0.99716-3.517c1.4734-0.04598 2.8201 0.2926 4.1165 0.81534l1.1562-4.0625c-1.292-0.52478-2.6406-0.86469-4.1222-0.81818l0.95739-3.3807c0.16967-0.0096 0.33567-0.013648 0.5-0.014204z" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
    </g>
   </g>
+  <g transform="matrix(.6875 0 0 .6875 -108.61 432.83)" stroke-width="1.4546"></g>
+  <path d="m12.448 446.71c0.45591 0.24744 0.91451 0.49589 1.384 0.72469 0.21014 0.1024 0.42249 0.20087 0.63775 0.29361 0.16027 0.0691 0.32213 0.13493 0.48396 0.20089l-0.78897 2.7943c-0.8734-0.32953-1.6955-0.77248-2.5081-1.2147z" color="#000000" stroke-width=".99701" style="-inkscape-stroke:none;paint-order:stroke markers fill"/>
  </g>
 </svg>

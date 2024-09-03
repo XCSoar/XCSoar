@@ -134,7 +134,7 @@ ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, double max_lift) 
   if (small)
     return;
 
-  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetTextColor(look.text_color);
   canvas.Select(look.circle_label_font);
   canvas.SetBackgroundColor(look.background_color);
   canvas.SetBackgroundOpaque();

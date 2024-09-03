@@ -199,7 +199,8 @@ public:
     if (!airspace.IsActive())
       return; // ignore inactive airspaces completely
 
-    if (!warning_manager.GetConfig().IsClassEnabled(airspace.GetClassOrType()) ||
+    if (!(warning_manager.GetConfig().IsClassEnabled(airspace.GetClassOrType()) || 
+	      warning_manager.GetConfig().IsClassEnabled(airspace.GetTypeOrClass())) ||
         ExcludeAltitude(airspace))
       return;
 
@@ -384,7 +385,7 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
     const AltitudeState &altitude = state;
     if (// ignore inactive airspaces
         !airspace->IsActive() ||
-        !config.IsClassEnabled(airspace->GetClassOrType()) ||
+        !(config.IsClassEnabled(airspace->GetClassOrType()) || config.IsClassEnabled(airspace->GetTypeOrClass())) ||
         !airspace->Inside(altitude))
       continue;
 
@@ -447,7 +448,7 @@ AirspaceWarningManager::GetAckDay(const AbstractAirspace &airspace) const noexce
 bool
 AirspaceWarningManager::IsActive(const AbstractAirspace &airspace) const noexcept
 {
-  return airspace.IsActive() && config.IsClassEnabled(airspace.GetClassOrType()) &&
+  return airspace.IsActive() && (config.IsClassEnabled(airspace.GetClassOrType()) || config.IsClassEnabled(airspace.GetTypeOrClass())) &&
     !GetAckDay(airspace);
 }
 

@@ -283,7 +283,7 @@ dlgConfigWaypointsShowModal(Waypoints &waypoints) noexcept
   const DialogLook &look = UIGlobals::GetDialogLook();
   TWidgetDialog<WaypointManagerWidget>
     dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-           look, _("Waypoints Editor"));
+           look, _("Waypoint Editor"));
   dialog.SetWidget(waypoints);
   dialog.GetWidget().CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrCancel);

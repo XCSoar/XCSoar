@@ -15,9 +15,12 @@
   <usb-device vendor-id="11914" product-id="10"/> <!-- SoftRF Lego -->
   <usb-device vendor-id="11914" product-id="61450"/> <!-- SoftRF Lego -->
   <usb-device vendor-id="5562" product-id="68"/> <!-- SoftRF Balkan -->
+  <usb-device vendor-id="12346" product-id="4097"/> <!-- SoftRF Eco -->
   <usb-device vendor-id="12346" product-id="33075"/> <!-- SoftRF Prime Mk3 -->
   <usb-device vendor-id="12346" product-id="33167"/> <!-- SoftRF Ham -->
   <usb-device vendor-id="12346" product-id="33184"/> <!-- SoftRF Midi -->
+  <usb-device vendor-id="12346" product-id="33290"/> <!-- SoftRF Ink -->
+  <usb-device vendor-id="10374" product-id="87"/> <!-- SoftRF Card -->
 
   <usb-device vendor-id="1027" product-id="24577"/> <!-- FT232AM, FT232BM, FT232R FT245R -->
   <usb-device vendor-id="1027" product-id="24592"/> <!-- FT2232D, FT2232H -->

@@ -250,7 +250,7 @@ public:
     *
     * @return  AirspaceClass - The determined airspace class type
     */
-  AirspaceClass GetClassType() const noexcept {
+  AirspaceClass GetTypeOrClass() const noexcept {
     return GetType() == AirspaceClass::OTHER ? GetClass() : GetType();
   }
 

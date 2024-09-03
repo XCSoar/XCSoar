@@ -43,9 +43,10 @@ public:
 
 private:
   void VisitCircle(const AirspaceCircle &airspace) {
+	AirspaceClass as_type_or_class = settings.classes[airspace.GetTypeOrClass()].display ? airspace.GetTypeOrClass() : airspace.GetClass();
     const AirspaceClassRendererSettings &class_settings =
-      settings.classes[airspace.GetClass()];
-    const AirspaceClassLook &class_look = look.classes[airspace.GetClass()];
+      settings.classes[as_type_or_class];
+    const AirspaceClassLook &class_look = look.classes[as_type_or_class];
 
     auto screen_center = projection.GeoToScreen(airspace.GetReferenceLocation());
     unsigned screen_radius = projection.GeoToScreenDistance(airspace.GetRadius());
@@ -80,11 +81,12 @@ private:
   }
 
   void VisitPolygon(const AirspacePolygon &airspace) {
+	AirspaceClass as_type_or_class = settings.classes[airspace.GetTypeOrClass()].display ? airspace.GetTypeOrClass() : airspace.GetClass();
     if (!PreparePolygon(airspace.GetPoints()))
       return;
 
     const AirspaceClassRendererSettings &class_settings =
-      settings.classes[airspace.GetClass()];
+      settings.classes[as_type_or_class];
 
     bool fill_airspace = warning_manager.HasWarning(airspace) ||
       warning_manager.IsInside(airspace) ||
@@ -138,15 +140,15 @@ public:
 
 private:
   bool SetupOutline(const AbstractAirspace &airspace) {
-    AirspaceClass type = airspace.GetClassType();
+    AirspaceClass as_type_or_class = settings.classes[airspace.GetTypeOrClass()].display ? airspace.GetTypeOrClass() : airspace.GetClass();
 
     if (settings.black_outline)
       canvas.SelectBlackPen();
-    else if (settings.classes[type].border_width == 0)
+    else if (settings.classes[as_type_or_class].border_width == 0)
       // Don't draw outlines if border_width == 0
       return false;
     else
-      canvas.Select(look.classes[type].border_pen);
+      canvas.Select(look.classes[as_type_or_class].border_pen);
 
     canvas.SelectHollowBrush();
 
@@ -160,7 +162,8 @@ private:
 
   void SetupInterior(const AbstractAirspace &airspace,
                      bool check_fillstencil = false) {
-    const AirspaceClassLook &class_look = look.classes[airspace.GetClass()];
+	AirspaceClass as_type_or_class = settings.classes[airspace.GetTypeOrClass()].display ? airspace.GetTypeOrClass() : airspace.GetClass();
+    const AirspaceClassLook &class_look = look.classes[as_type_or_class];
 
     // restrict drawing area and don't paint over previously drawn outlines
     if (check_fillstencil)
@@ -258,15 +261,15 @@ public:
 
 private:
   bool SetupOutline(const AbstractAirspace &airspace) {
-    AirspaceClass type = airspace.GetClassType();
+    AirspaceClass as_type_or_class = settings.classes[airspace.GetTypeOrClass()].display ? airspace.GetTypeOrClass() : airspace.GetClass();
 
     if (settings.black_outline)
       canvas.SelectBlackPen();
-    else if (settings.classes[type].border_width == 0)
+    else if (settings.classes[as_type_or_class].border_width == 0)
       // Don't draw outlines if border_width == 0
       return false;
     else
-      canvas.Select(look.classes[type].border_pen);
+      canvas.Select(look.classes[as_type_or_class].border_pen);
 
     canvas.SelectHollowBrush();
 
@@ -274,10 +277,11 @@ private:
   }
 
   bool SetupInterior(const AbstractAirspace &airspace) {
+	AirspaceClass as_type_or_class = settings.classes[airspace.GetTypeOrClass()].display ? airspace.GetTypeOrClass() : airspace.GetClass();
     if (settings.fill_mode == AirspaceRendererSettings::FillMode::NONE)
       return false;
 
-    const AirspaceClassLook &class_look = look.classes[airspace.GetClass()];
+    const AirspaceClassLook &class_look = look.classes[as_type_or_class];
 
     canvas.Select(Brush(class_look.fill_color.WithAlpha(48)));
     canvas.SelectNullPen();

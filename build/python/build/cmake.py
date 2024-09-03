@@ -14,14 +14,7 @@ def __write_cmake_compiler(f: TextIO, language: str, compiler: str) -> None:
         compiler = s[1]
     print(f'set(CMAKE_{language}_COMPILER {compiler})', file=f)
 
-def __write_cmake_toolchain_file(f: TextIO, toolchain: Toolchain, no_isystem: bool) -> None:
-    if toolchain.is_darwin:
-        cmake_system_name = 'Darwin'
-    elif toolchain.is_windows:
-        cmake_system_name = 'Windows'
-    else:
-        cmake_system_name = 'Linux'
-
+def __write_cmake_toolchain_file(f: TextIO, toolchain: Toolchain, no_isystem: bool, cmake_system_name: str) -> None:
     cppflags = toolchain.cppflags
     if no_isystem:
         cppflags = re.sub(r'\s*-isystem\s+\S+\s*', ' ', cppflags)
@@ -103,9 +96,19 @@ def configure(toolchain: AnyToolchain, src: str, build: str, args: list[str]=[],
             # because "#include_next" ceases to work
             no_isystem = True
 
+        cmake_system_name = 'Linux'
+        if toolchain.is_darwin:
+            cmake_system_name = 'Darwin'
+            if toolchain.is_target_ios and 'SDL2' in src:
+                # SDL2 needs CMAKE_SYSTEM_NAME set to iOS, otherwise it will build for macOS
+                # but OpenSSL needs CMAKE_SYSTEM_NAME set to Darwin, otherwise it will fail to build
+                cmake_system_name = 'iOS'
+        elif toolchain.is_windows:
+            cmake_system_name = 'Windows'
+
         cmake_toolchain_file = os.path.join(build, 'cmake_toolchain_file')
         with open(cmake_toolchain_file, 'w') as f:
-            __write_cmake_toolchain_file(f, toolchain, no_isystem)
+            __write_cmake_toolchain_file(f, toolchain, no_isystem, cmake_system_name)
 
         configure.append('-DCMAKE_TOOLCHAIN_FILE=' + cmake_toolchain_file)
 

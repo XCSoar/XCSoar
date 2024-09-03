@@ -87,9 +87,8 @@ l_task_index(lua_State *L)
 
       const BrokenTime t = now_local +
         duration_cast<seconds>(task_stats.current_leg.solution_remaining.time_elapsed);
-      float time = t.hour + (float)(t.second/60);
 
-      Lua::Push(L, time);
+      Lua::Push(L, t.DurationSinceMidnight());
   } else if (StringIsEqual(name, "next_altitude_diff")) {    
       const auto &task_stats = CommonInterface::Calculated().task_stats;
       const auto &next_solution = task_stats.current_leg.solution_remaining;
@@ -166,8 +165,7 @@ l_task_index(lua_State *L)
       const BrokenTime t = now_local +
         duration_cast<seconds>(task_stats.total.solution_remaining.time_elapsed);
 
-      float time = t.hour + (float)(t.minute/60);
-      Lua::Push(L, time);
+      Lua::Push(L, t.DurationSinceMidnight());
   } else if (StringIsEqual(name, "final_altitude_diff")) {
       const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
       const auto &settings = CommonInterface::GetComputerSettings();
