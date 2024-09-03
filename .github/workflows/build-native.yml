@@ -274,6 +274,12 @@ jobs:
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
           elif [ ${{ matrix.target }} = "IOS64" ]; then
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
+          elif [ ${{ matrix.target }} = "UNIX" ]; then
+            mkdir -p output/UNIX/DPKG
+            rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
+            cd output/UNIX/DPKG
+            DEB_BUILD_OPTIONS=ccache,noopt dpkg-buildpackage --jobs-force=$(nproc) --no-sign
+            cp *.deb ../
           fi
 
       - name: Compile XCSoar - Sanitizer Check
@@ -304,16 +310,13 @@ jobs:
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           elif [ ${{ matrix.target }} = "OSX64" ]; then
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
+          elif [ ${{ matrix.target }} = "UNIX" ]; then
+            mkdir -p output/UNIX/DPKG
+            rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
+            cd output/UNIX/DPKG
+            DEB_BUILD_OPTIONS=ccache dpkg-buildpackage --jobs-force=$(nproc) --no-sign
+            cp *.deb ../
           fi
-
-      - name: Create UNIX dpkg
-        if: ${{ matrix.target == 'UNIX' &&  startsWith(github.ref, 'refs/tags/v') }}
-        run: |
-          mkdir -p output/UNIX/DPKG
-          rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
-          cd output/UNIX/DPKG
-          dpkg-buildpackage --jobs-force=$(nproc) --no-sign
-          cp *.dpkg ../
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
