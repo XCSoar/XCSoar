@@ -1,7 +1,7 @@
 Source: xcsoar
 Section: misc
 Priority: extra
-Maintainer: Max Kellermann <max.kellermann@gmail.com>
+Maintainer: XCSoar Project <maintainer@xcsoar.org>
 Build-Depends: debhelper (>= 12~),
  g++ (>= 4:10),
  libfmt-dev (>= 7),
