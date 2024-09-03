@@ -260,7 +260,7 @@ jobs:
         if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
         run: |
           if [ ${{ matrix.target }} = 'ANDROID' ]; then
-            make -j$(nproc) TARGET=ANDROID DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
+            make -j$(nproc) TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
             output/ANDROID/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }}
             mv output/ANDROID/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }} \
             output/ANDROID/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
@@ -343,8 +343,6 @@ jobs:
           REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
           TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
-          SCRIPT_BEFORE: |
-            rm ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
 
       - name: Deploy to Download server - release
         if: ${{ github.repository == 'XCSoar/XCSoar' && startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == true }}
