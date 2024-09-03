@@ -14,6 +14,7 @@ Version 7.44 - not yet released
   - changed location of setting for flarm radar position
   - add new gesture ULDR to access quick menu
   - add quick menu page buttons in case of touch screen
+  - add quit button to quick menu
 * Android
   - fix crash on startup when loading icons on ldpi screens
 
