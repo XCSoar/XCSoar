@@ -32,7 +32,6 @@ static bool
 HasDetails(const MapItem &item)
 {
   switch (item.type) {
-  case MapItem::Type::LOCATION:
   case MapItem::Type::ARRIVAL_ALTITUDE:
   case MapItem::Type::SELF:
   case MapItem::Type::THERMAL:
@@ -41,6 +40,7 @@ HasDetails(const MapItem &item)
 #endif
     return false;
 
+  case MapItem::Type::LOCATION:
   case MapItem::Type::AIRSPACE:
   case MapItem::Type::WAYPOINT:
   case MapItem::Type::TASK_OZ:
@@ -120,7 +120,8 @@ public:
 
   static bool CanGotoItem(const MapItem &item) noexcept {
     return backend_components->protected_task_manager &&
-      item.type == MapItem::Type::WAYPOINT;
+           (item.type == MapItem::Type::WAYPOINT ||
+            item.type == MapItem::Type::LOCATION);
   }
 
   bool CanAckItem(unsigned index) const noexcept {
@@ -209,7 +210,8 @@ MapItemListWidget::OnGotoClicked()
   unsigned index = GetCursorIndex();
   auto const &item = *list[index];
 
-  assert(item.type == MapItem::Type::WAYPOINT);
+  assert(item.type == MapItem::Type::WAYPOINT ||
+         item.type == MapItem::Type::LOCATION);
 
   auto waypoint = ((const WaypointMapItem &)item).waypoint;
   backend_components->protected_task_manager->DoGoto(std::move(waypoint));
@@ -252,7 +254,6 @@ ShowMapItemDialog(const MapItem &item,
                   ProtectedAirspaceWarningManager *airspace_warnings)
 {
   switch (item.type) {
-  case MapItem::Type::LOCATION:
   case MapItem::Type::ARRIVAL_ALTITUDE:
   case MapItem::Type::SELF:
   case MapItem::Type::THERMAL:
@@ -265,6 +266,7 @@ ShowMapItemDialog(const MapItem &item,
     dlgAirspaceDetails(((const AirspaceMapItem &)item).airspace,
                        airspace_warnings);
     break;
+  case MapItem::Type::LOCATION:
   case MapItem::Type::WAYPOINT:
     dlgWaypointDetailsShowModal(waypoints,
                                 ((const WaypointMapItem &)item).waypoint,
