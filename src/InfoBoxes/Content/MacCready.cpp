@@ -49,7 +49,7 @@ InfoBoxContentMacCready::Update(InfoBoxData &data) noexcept
     CommonInterface::GetComputerSettings();
 
   data.SetTitle(settings_computer.task.auto_mc ? _("MC AUTO") : _("MC MANUAL"));
-  data.SetValueColor(settings_computer.task.auto_mc ? (0): (3));
+  data.SetValueColor(settings_computer.task.auto_mc ? (2) : (3));
 
   SetVSpeed(data, settings_computer.polar.glide_polar_task.GetMC());
 
