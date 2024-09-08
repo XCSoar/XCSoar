@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-21 15:38+0100\n"
-"PO-Revision-Date: 2023-12-23 14:09+0000\n"
+"PO-Revision-Date: 2024-09-09 08:09+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -8203,7 +8203,7 @@ msgstr "AAT Dmax"
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
-msgstr "Maximální vzdálenost, dosažitelná ve zbývající AAT úloze."
+msgstr "Maximální vzdálenost, dosažitelná ve zbývající části AAT úlohy."
 
 #: src/InfoBoxes/Content/Factory.cpp:356
 #, no-c-format
@@ -8218,7 +8218,7 @@ msgstr "AAT Dmin"
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
-msgstr "Minimální vzdálenost, dosažitelná ve zbývající AAT úloze."
+msgstr "Minimální vzdálenost, dosažitelná ve zbývající části AAT úlohy."
 
 #: src/InfoBoxes/Content/Factory.cpp:364
 #, no-c-format
@@ -9726,7 +9726,7 @@ msgstr "Aktivní radiofrekvence"
 #: src/InfoBoxes/Content/Factory.cpp:1055
 #, no-c-format
 msgid "Act Freq"
-msgstr "Akt frekv"
+msgstr "Akt freq"
 
 #: src/InfoBoxes/Content/Factory.cpp:1056
 #, no-c-format
@@ -9741,7 +9741,7 @@ msgstr "Záložní radiofrekvence"
 #: src/InfoBoxes/Content/Factory.cpp:1062
 #, no-c-format
 msgid "Stby Freq"
-msgstr "Zál frekv"
+msgstr "Zál freq"
 
 #: src/InfoBoxes/Content/Factory.cpp:1063
 #, no-c-format
@@ -9865,7 +9865,7 @@ msgstr "AAT Δčasů a ETA úlohy"
 #: src/InfoBoxes/Content/Factory.cpp:1126
 #, no-c-format
 msgid "AATdeltaOrETA"
-msgstr "AAT Δčasů/ETA"
+msgstr "AAT Δt/ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:1127
 #, no-c-format
@@ -9873,7 +9873,7 @@ msgid ""
 "Shows AAT delta time and estimated time of arrival in case of AAT task, and "
 "estimated time of arrival in case of racing task"
 msgstr ""
-"Zobrazuje delta čas AAT + odhadovaný čas příletu v případě úlohy AAT a "
+"Zobrazuje delta čas AAT + odhadovaný čas příletu v případě úlohy AAT nebo "
 "odhadovaný čas příletu v případě rychlostní úlohy."
 
 #: src/InfoBoxes/Content/Alternate.cpp:58
