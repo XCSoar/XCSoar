@@ -281,7 +281,6 @@ jobs:
             rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
             cd output/UNIX/DPKG
             DEB_BUILD_OPTIONS=ccache,noopt dpkg-buildpackage --jobs-force=$(nproc) --no-sign
-            cp *.deb ../
           fi
 
       - name: Compile XCSoar - Sanitizer Check
