@@ -10,10 +10,11 @@
 template<>
 struct fmt::formatter<Path> : formatter<string_view>
 {
-	template<typename FormatContext>
-	auto format(Path path, FormatContext &ctx) {
-		return formatter<string_view>::format(path.ToUTF8(), ctx);
-	}
+  template <typename FormatContext>
+  auto format(Path path, FormatContext &ctx) const
+  {
+    return formatter<string_view>::format(path.ToUTF8(), ctx);
+  }
 };
 
 template<>
