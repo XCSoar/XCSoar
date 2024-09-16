@@ -1271,3 +1271,20 @@ data=0
 event=AirSpace toggle
 label=Airspace\n$(AirspaceToggleActionName)
 location=34
+
+mode=RemoteStick
+type=key
+data=0
+event=Exit
+label=Quit XCSoar
+location=35
+
+# -------------
+# Define gesture to open Quickmenu without keyboard or remote
+# ("Draw a button on the screen")
+# -------------
+
+mode=default
+type=gesture
+data=ULDR
+event=QuickMenu
