@@ -13,6 +13,7 @@
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "Units/Group.hpp"
+#include "Units/Units.hpp"
 
 using namespace std::chrono;
 
@@ -61,7 +62,7 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent,
             _("Default for all weight loaded to the glider beyond the empty weight and besides "
                 "the water ballast."),
             _T("%.0f %s"), _T("%.0f"),
-            0, 300, 5, false, UnitGroup::MASS,
+            0, Units::ToUserMass(300), 5, false, UnitGroup::MASS,
             logger.crew_mass_template);
 
   AddDuration(_("Time step cruise"),
