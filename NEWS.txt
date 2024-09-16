@@ -79,6 +79,7 @@ Version 7.43-rc1 - not yet released
   - fix reachability calculation with older compilers (OpenVario,..)
 * ui
   - Airspace filter list can filter by type
+  - Add head wind component to V GND Infobox #1439
 * data files
   - reworked sgs-233 polar
   - new topology available from mapgen (incl rivers)
