@@ -265,7 +265,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent,
   AddFloat(_("Crew"),
            _("All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."),
            _T("%.0f %s"), _T("%.0f"),
-           0, 300, 5, false, UnitGroup::MASS,
+           0, Units::ToUserMass(300), 5, false, UnitGroup::MASS,
            polar_settings.glide_polar_task.GetCrewMass(),
            this);
 
