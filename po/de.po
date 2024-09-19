@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-21 15:38+0100\n"
-"PO-Revision-Date: 2024-09-19 22:10+0000\n"
-"Last-Translator: Frederik Junker <frederik@junker-home.de>\n"
+"PO-Revision-Date: 2024-09-19 22:50+0000\n"
+"Last-Translator: Jörg Schuon <schuongf@hotmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/xcsoar/"
 "translations/de/>\n"
 "Language: de\n"
@@ -2932,7 +2932,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:286
 msgid "Bugs"
-msgstr "Insekten"
+msgstr "Mücken"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:287
 #, no-c-format
@@ -2979,7 +2979,7 @@ msgstr "Flug Einstellungen"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:142
 #, no-c-format
 msgid "Site Files"
-msgstr "Standortdatei"
+msgstr "Standortdateien"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:80
 #, no-c-format
@@ -3128,8 +3128,8 @@ msgstr "Einstellung"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:353
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr ""
-"Änderungen an der Konfiguration gespeichert. XCSoar neustarten um Änderungen "
-"zu übernehmen."
+"Änderungen an der Konfiguration gespeichert. \n"
+"XCSoar neustarten um Änderungen zu übernehmen."
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:227
 #: src/InfoBoxes/InfoBoxManager.cpp:201
@@ -3156,7 +3156,7 @@ msgstr "Überschreiben?"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:317
 msgid "InfoBox paste"
-msgstr "infoBox Einfügen"
+msgstr "InfoBox einfügen"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:386
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:88
@@ -3766,10 +3766,10 @@ msgid ""
 msgstr ""
 "Effizienz beim Überlandflug. 100 entspricht der perfekten MacCready "
 "Leistung, mehr als 100 bedeutet mehr als die MacCready Leistung und kann "
-"unter Wolkenstraßen erreicht werden. Weniger als 100 zeigt das Du um einiges "
-"neben der idealen Spur fliegst. Die ENTER-Taste in diesem Dialog startet die "
-"Abschätzung der Überlandeffizienz aus dem bisherigen Flug mit dem "
-"eingestellten MC Wert."
+"unter Wolkenstraßen erreicht werden. Weniger als 100 zeigt dass Du um "
+"einiges neben der idealen Spur fliegst. Die ENTER-Taste in diesem Dialog "
+"startet die Abschätzung der Überlandeffizienz aus dem bisherigen Flug mit "
+"dem eingestellten MC Wert."
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:83
 msgid "Valid start"
@@ -4865,7 +4865,7 @@ msgstr "8 Unten + Vario (Hochformat)"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:82
 #, no-c-format
 msgid "8 Top or Left"
-msgstr "8 Oben oder Unten"
+msgstr "8 Oben oder Links"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:84
 #, no-c-format
@@ -6106,7 +6106,7 @@ msgstr "Flugzeugsymbol"
 #: src/InfoBoxes/Content/Factory.cpp:919
 #, no-c-format
 msgid "Wind arrow"
-msgstr "Wind - Pfeil"
+msgstr "Wind-Pfeil"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:177
 msgid "Determines the way the wind arrow is drawn on the map."
@@ -6159,7 +6159,7 @@ msgid ""
 "Maximum height based on start height reference (AGL or MSL) while starting "
 "the task.  Set to 0 for no limit."
 msgstr ""
-"Maximale Höhe über der Abflugreferenzhöhe (GND oder MSL) beim Abflug. Setzte "
+"Maximale Höhe über der Abflugreferenzhöhe (GND oder MSL) beim Abflug. Setze "
 "auf 0 für kein Limit."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:69
@@ -6231,8 +6231,8 @@ msgid ""
 "Wait time in minutes after Pilot Event and before start gate opens. 0 means "
 "start opens immediately."
 msgstr ""
-"Wartezeit in Minuten nach Pilotenevent und bevor das Starttor öffnet. 0 "
-"bedeutet, das Starttor öffnet sofort."
+"Wartezeit in Minuten nach Pilotenevent und bevor das Starttor öffnet. \n"
+"0 bedeutet, das Starttor öffnet sofort."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:115
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:264
@@ -6310,7 +6310,7 @@ msgstr "AAT min. Zeit"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:177
 msgid "Default AAT min. time for new AAT tasks."
-msgstr "Standard AAT min. Zeit für Aufgaben."
+msgstr "Standard AAT min. Zeit für neue Aufgaben."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:181
 msgid "Optimisation margin"
@@ -7110,7 +7110,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:70
 msgid "Allow download of declared tasks from Weglide in the Task Manager."
 msgstr ""
-"Erlaube den Download von deklarierten Aufgaben von Weglide im "
+"Erlaube den Download von deklarierten Aufgaben von WeGlide im "
 "Aufgabenmanager."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:73
@@ -7122,7 +7122,7 @@ msgid ""
 "Asks whether to upload flight to Weglide, after flight is downloaded from "
 "external logger."
 msgstr ""
-"Fragt, ob der Flug nach Weglide hochgeladen werden soll, nachdem der Flug "
+"Fragt, ob der Flug nach WeGlide hochgeladen werden soll, nachdem der Flug "
 "von einem externen Logger heruntergeladen wurde."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:79
@@ -7476,7 +7476,7 @@ msgstr "Sektor"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:171
 msgid "Line"
-msgstr "Grenzlinie"
+msgstr "Linie"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:177
 msgid "Cylinder"
@@ -7563,11 +7563,11 @@ msgstr ""
 
 #: src/Dialogs/Task/TargetDialog.cpp:380
 msgid "V rem."
-msgstr "V verbleib."
+msgstr "V verbleibend"
 
 #: src/Dialogs/Task/TargetDialog.cpp:384
 msgid "V ach"
-msgstr "V ach"
+msgstr "V erreicht"
 
 #: src/Dialogs/Task/TargetDialog.cpp:386
 msgid ""
@@ -8199,7 +8199,7 @@ msgstr "Thermik - Höhengewinn"
 #: src/InfoBoxes/Content/Factory.cpp:299
 #, no-c-format
 msgid "TC Gain"
-msgstr "Steig H Gewinn"
+msgstr "Thermik H Gewinn"
 
 #: src/InfoBoxes/Content/Factory.cpp:300
 #, no-c-format
@@ -8698,9 +8698,9 @@ msgid ""
 msgstr ""
 "Vorhersage der Bodentemperatur am Heimatflugplatz, verwendet zur Abschätzung "
 "der Konvektionshöhe und der Wolkenuntergrenze in Verbindung mit der "
-"Aussenlufttemperatur und der Sonde für relative Feuchte. (Nur Touchscreen/PC)"
-" Durch Drücken der oben/unten Cursor-Tasten wird diese Vorhersagetemperatur "
-"angepasst."
+"Aussenlufttemperatur und der Sonde für relative Feuchte. \n"
+"(Nur Touchscreen/PC) Durch Drücken der oben/unten Cursor-Tasten wird diese "
+"Vorhersagetemperatur angepasst."
 
 #: src/InfoBoxes/Content/Factory.cpp:536
 #, no-c-format
@@ -9728,7 +9728,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1010 src/InfoBoxes/Content/Task.cpp:886
 #, no-c-format
 msgid "Next arrow"
-msgstr "Nächster Wendepunkt - Pfeil"
+msgstr "Nächster Wendepunkt-Pfeil"
 
 #: src/InfoBoxes/Content/Factory.cpp:1011
 #, no-c-format
