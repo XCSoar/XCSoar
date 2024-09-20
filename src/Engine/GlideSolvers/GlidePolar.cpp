@@ -29,7 +29,7 @@ GlidePolar::GlidePolar(const double _mc, const double _bugs,
    empty_mass(reference_mass),
    crew_mass(90.),
    wing_area(0),
-   altitude(_altitude),
+   altitude(_altitude)
 {
   Update();
 
