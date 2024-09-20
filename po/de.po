@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-21 15:38+0100\n"
-"PO-Revision-Date: 2024-09-19 22:50+0000\n"
+"PO-Revision-Date: 2024-09-21 11:40+0000\n"
 "Last-Translator: Jörg Schuon <schuongf@hotmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/xcsoar/"
 "translations/de/>\n"
@@ -1961,9 +1961,8 @@ msgid "Port"
 msgstr "Anschluss"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:252
-#, fuzzy
 msgid "Engine Type"
-msgstr "Ändere Typ"
+msgstr "Motor Typ (2Takt, 4Takt)"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:257
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:77
@@ -2436,7 +2435,7 @@ msgstr ""
 #: src/InfoBoxes/InfoBoxSettings.cpp:58
 #, no-c-format
 msgid "Circling"
-msgstr "beim Kreisen"
+msgstr "Kreisen"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:94
 msgid "This forces the variometer into circling or cruise mode"
@@ -7262,9 +7261,8 @@ msgid "Configure whether the start must be armed manually or automatically."
 msgstr "Legt fest, ob der Abflug manuell oder automatisch aktiviert wird."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:220
-#, fuzzy
 msgid "Score start exit"
-msgstr "Wertungsstand"
+msgstr "Abflug werten"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:224
 msgid "Start open time"
