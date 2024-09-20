@@ -8,13 +8,14 @@
 #include "Math/Quadratic.hpp"
 #include "Math/Util.hpp"
 #include "Navigation/Aircraft.hpp"
+#include "Atmosphere/AirDensity.hpp"
 
 #include <algorithm>
 
 #include <cassert>
 
 GlidePolar::GlidePolar(const double _mc, const double _bugs,
-                       const double _ballast) noexcept
+                       const double _ballast, const double _altitude) noexcept
   :mc(_mc),
    bugs(_bugs),
    ballast(_ballast),
@@ -27,7 +28,8 @@ GlidePolar::GlidePolar(const double _mc, const double _bugs,
    reference_mass(300),
    empty_mass(reference_mass),
    crew_mass(90.),
-   wing_area(0)
+   wing_area(0),
+   altitude(_altitude)
 {
   Update();
 
@@ -46,11 +48,12 @@ GlidePolar::Update() noexcept
   }
 
   const auto loading_factor = sqrt(GetTotalMass() / reference_mass);
+  const auto density_factor = sqrt(AirDensityRatio(altitude));
   const auto inv_bugs = 1. / bugs;
 
-  polar.a = inv_bugs * reference_polar.a / loading_factor;
+  polar.a = inv_bugs * reference_polar.a / loading_factor / density_factor;
   polar.b = inv_bugs * reference_polar.b;
-  polar.c = inv_bugs * reference_polar.c * loading_factor;
+  polar.c = inv_bugs * reference_polar.c * loading_factor * density_factor;
 
   assert(polar.IsValid());
 
@@ -86,6 +89,13 @@ GlidePolar::SetBallastLitres(const double litres) noexcept
 {
   assert(litres >= 0);
   ballast = litres;
+  Update();
+}
+
+void
+GlidePolar::SetAltitude(const double altitude) noexcept
+{
+  assert(altitude >= 0);
   Update();
 }
 
