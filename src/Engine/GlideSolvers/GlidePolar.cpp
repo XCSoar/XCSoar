@@ -48,7 +48,7 @@ GlidePolar::Update() noexcept
   }
 
   const auto loading_factor = sqrt(GetTotalMass() / reference_mass);
-  const auto density_factor = sqrt(AirDensityRatio(const double altitude));
+  const auto density_factor = sqrt(AirDensityRatio(double altitude));
   const auto inv_bugs = 1. / bugs;
 
   polar.a = inv_bugs * reference_polar.a / loading_factor / density_factor;
