@@ -282,7 +282,7 @@ public:
    *
    * @param altitude The new altitude setting (to update the polar by its altitude dependency)
    */
-  void SetBallast(const double ratio) noexcept;
+  void SetAltitude(const double altitude) noexcept;
 
   /**
    * Retrieve ballast 
