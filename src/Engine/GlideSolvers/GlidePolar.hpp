@@ -100,6 +100,7 @@ public:
    * @param _mc MacCready value at construction
    * @param _bugs Bugs (clean) ratio (default clean)
    * @param _ballast Ballast ratio (default empty)
+   * @param _altitude Altitude for polar correction (default 0)
    */
   GlidePolar(const double _mc, const double _bugs=1,
              const double _ballast=0,
