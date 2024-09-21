@@ -93,6 +93,13 @@ GlidePolar::SetBallastLitres(const double litres) noexcept
 }
 
 void
+GlidePolar::SetAltitude(const double altitude) noexcept
+{
+  assert(altitude >= 0);
+  Update();
+}
+
+void
 GlidePolar::SetMC(const double _mc) noexcept
 {
   mc = _mc;
