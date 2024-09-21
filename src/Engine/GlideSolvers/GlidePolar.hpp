@@ -44,7 +44,7 @@ class GlidePolar
   /** Inverse of MC setting (s/m) */
   double inv_mc;
   /** Altitude */
-  double altitude
+  double altitude;
 
   /** Clean ratio (1=clean, 0=100% bugs) */
   double bugs;
