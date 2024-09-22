@@ -215,7 +215,7 @@ try {
   InitialiseDataPath();
   AtScopeExit() { DeinitialiseDataPath(); };
 
-  LogFormat(_T("Starting XCSoar %s"), XCSoar_ProductToken);
+  LogFormat(_T("Starting %s"), XCSoar_ProductToken);
 
   TextUtil::Initialise(env);
   AtScopeExit(env) { TextUtil::Deinitialise(env); };

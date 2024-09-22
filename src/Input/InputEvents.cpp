@@ -20,7 +20,8 @@ It also covers the configuration side of on screen labels.
 For further information on config file formats see
 
 source/Common/Data/Input/ALL
-doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
+doc/html/advanced/input/ALL
+https://xcsoar.readthedocs.io/en/latest/input_events.html
 
 */
 
@@ -204,13 +205,17 @@ InputEvents::drawButtons(Mode mode, bool full) noexcept
   CommonInterface::main_window->ShowMenu(menu, overlay_menu, full);
 
   GlueMapWindow *map = CommonInterface::main_window->GetMapIfActive();
-  if (map != nullptr){
-      if (mode != MODE_DEFAULT){
-          // Set margin so that GlueMapWindow doesn't draw HUD underneath buttons
-          map->SetBottomMarginFactor(menubar_height_scale_factor);
-      } else {
-          map->SetBottomMarginFactor(0);
-      }
+  if (map != nullptr)
+  {
+    if (mode != MODE_DEFAULT)
+    {
+      /* Adjust the margin to ensure that GlueMapWindow elements,
+       * such as the scale, are not overdraw by the buttons
+       * when in Pan mode. */
+      map->SetBottomMarginFactor(menubar_height_scale_factor);
+    } else {
+      map->SetBottomMarginFactor(0);
+    }
   }
 }
 
@@ -470,11 +475,9 @@ InputEvents::ShowMenu() noexcept
 Menu *
 InputEvents::GetMenu(const TCHAR *mode) noexcept
 {
- int m = input_config.LookupMode(mode);
- if (m >= 0)
-   return &input_config.menus[m];
- else
-   return NULL;
+  int m = input_config.LookupMode(mode);
+  if (m >= 0) return &input_config.menus[m];
+  else return NULL;
 }
 
 void

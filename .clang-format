@@ -18,5 +18,6 @@ AlwaysBreakAfterReturnType: TopLevelDefinitions
 AllowShortIfStatementsOnASingleLine: AllIfsAndElse
 BraceWrapping:
   BeforeElse: false
-  AfterControlStatement: MultiLine
-BreakBeforeBraces: Allman
+  AfterControlStatement: false
+  AfterFunction: true
+BreakBeforeBraces: Custom

@@ -20,7 +20,8 @@ It also covers the configuration side of on screen labels.
 For further information on config file formats see
 
 source/Common/Data/Input/ALL
-doc/html/advanced/input/ALL  http://xcsoar.sourceforge.net/advanced/input/
+doc/html/advanced/input/ALL
+https://xcsoar.readthedocs.io/en/latest/input_events.html
 
 */
 
