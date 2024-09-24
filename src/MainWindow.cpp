@@ -417,51 +417,55 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
     break;
 
   case TrafficSettings::GaugeLocation::CENTER_TOP:
-    rc.left = (rc.left + rc.right) / 2 - width - 1;
+    rc.left = (rc.left + rc.right - width) / 2 - 1;
     rc.right = rc.left + width;
     rc.bottom = rc.top + height;
     break;
 
   case TrafficSettings::GaugeLocation::CENTER_BOTTOM:
-    rc.left = (rc.left + rc.right) / 2 - width - 1;
+    rc.left = (rc.left + rc.right - width) / 2 - 1;
     rc.right = rc.left + width;
     rc.top = rc.bottom - height;
     break;
 
   case TrafficSettings::GaugeLocation::TOP_LEFT_AVOID_IB:
     rc.top = GetMainRect().top;
+    rc.left = GetMainRect().left; 
     rc.right = rc.left + width;
     rc.bottom = rc.top + height;
     break;
 
   case TrafficSettings::GaugeLocation::TOP_RIGHT_AVOID_IB:
     rc.top = GetMainRect().top;
+    rc.right = GetMainRect().right;
     rc.left = rc.right - width;
     rc.bottom = rc.top + height;
     break;
 
   case TrafficSettings::GaugeLocation::BOTTOM_LEFT_AVOID_IB:
     rc.bottom = GetMainRect().bottom;
+    rc.left = GetMainRect().left;
     rc.right = rc.left + width;
     rc.top = rc.bottom - height;
     break;
 
   case TrafficSettings::GaugeLocation::CENTER_TOP_AVOID_IB:
     rc.top = GetMainRect().top;
-    rc.left = (rc.left + rc.right) / 2 - width - 1;
+    rc.left = (GetMainRect().left + GetMainRect().right - width) / 2 - 1;
     rc.right = rc.left + width;
     rc.bottom = rc.top + height;
     break;
 
   case TrafficSettings::GaugeLocation::CENTER_BOTTOM_AVOID_IB:
     rc.bottom = GetMainRect().bottom;
-    rc.left = (rc.left + rc.right) / 2 - width - 1;
+    rc.left = (GetMainRect().left + GetMainRect().right - width) / 2 - 1;
     rc.right = rc.left + width;
     rc.top = rc.bottom - height;
     break;
 
   case TrafficSettings::GaugeLocation::BOTTOM_RIGHT_AVOID_IB:
     rc.bottom = GetMainRect().bottom;
+    rc.right = GetMainRect().right;
     rc.left = rc.right - width;
     rc.top = rc.bottom - height;
     break;
