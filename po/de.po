@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-21 15:38+0100\n"
-"PO-Revision-Date: 2024-09-21 11:40+0000\n"
+"PO-Revision-Date: 2024-09-25 08:15+0000\n"
 "Last-Translator: Jörg Schuon <schuongf@hotmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/xcsoar/"
 "translations/de/>\n"
@@ -9768,7 +9768,7 @@ msgstr "Steigfluganteil Geradeausflug"
 #: src/InfoBoxes/Content/Factory.cpp:1031
 #, no-c-format
 msgid "% Str Climb"
-msgstr "% Steigen im Geradeausflug"
+msgstr "% Steigen geradeaus"
 
 #: src/InfoBoxes/Content/Factory.cpp:1032
 #, no-c-format
