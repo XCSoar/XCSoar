@@ -46,9 +46,8 @@ Look::InitialiseConfigured(const UISettings &settings,
   thermal_band.Initialise(dark_mode,
                           cross_section.sky_color);
   trace_history.Initialise(dark_mode);
-  info_box.Initialise(dark_mode,
-                      settings.info_boxes.use_colors,
-                      infobox_width);
+  info_box.Initialise(dark_mode, settings.info_boxes.use_colors, infobox_width,
+                      settings.info_boxes.scale_title_font);
   vario.Initialise(dark_mode,
                    settings.info_boxes.use_colors,
                    infobox_width,
@@ -66,12 +65,12 @@ Look::InitialiseConfigured(const UISettings &settings,
 }
 
 void
-Look::ReinitialiseLayout(unsigned infobox_width)
+Look::ReinitialiseLayout(unsigned infobox_width, unsigned scale_title_font)
 {
   /* dialog fonts have an upper bound depending on the window size,
      and thus they might need to be reloaded */
   dialog.LoadFonts();
 
-  info_box.ReinitialiseLayout(infobox_width);
+  info_box.ReinitialiseLayout(infobox_width, scale_title_font);
   vario.ReinitialiseLayout(infobox_width);
 }
