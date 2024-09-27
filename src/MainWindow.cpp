@@ -178,7 +178,7 @@ MainWindow::InitialiseConfigured()
 {
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
-  if (ui_settings.scale != 100)
+  if ((ui_settings.scale != 100) || (ui_settings.info_boxes.scale_title_font != 100))
     /* call Initialise() again to reload fonts with the new scale */
     Initialise();
 
@@ -323,7 +323,7 @@ MainWindow::ReinitialiseLayout() noexcept
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
 
-  look->ReinitialiseLayout(ib_layout.control_size.width);
+  look->ReinitialiseLayout(ib_layout.control_size.width, ui_settings.info_boxes.scale_title_font);
 
   InfoBoxManager::Create(*this, ib_layout, look->info_box);
   InfoBoxManager::ProcessTimer();
