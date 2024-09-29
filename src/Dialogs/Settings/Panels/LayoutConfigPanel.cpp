@@ -35,6 +35,7 @@ enum ControlIndex {
   MapOrientation,
   DarkMode,
   AppInfoBoxGeom,
+  InfoBoxTitleScale,
   TabDialogStyle,
   AppStatusMessageAlignment,
   AppInfoBoxColors,
@@ -183,6 +184,11 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
           info_box_geometry_list, (unsigned)ui_settings.info_boxes.geometry);
 
+  AddInteger(_("InfoBox title size"), _("Zoom factor for InfoBox title and comment text"),
+             _T("%d %%"), _T("%d"), 80, 150, 5,
+             ui_settings.info_boxes.scale_title_font);
+  SetExpertRow(InfoBoxTitleScale);
+
   AddEnum(_("Tab dialog style"), nullptr,
           tabdialog_style_list, (unsigned)ui_settings.dialog.tab_style);
 
@@ -248,6 +254,9 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
   info_box_geometry_changed |=
     SaveValueEnum(AppInfoBoxGeom, ProfileKeys::InfoBoxGeometry,
                   ui_settings.info_boxes.geometry);
+  info_box_geometry_changed |=
+    SaveValueInteger(InfoBoxTitleScale, ProfileKeys::InfoBoxTitleScale,
+                  ui_settings.info_boxes.scale_title_font);
 
   changed |= info_box_geometry_changed;
 

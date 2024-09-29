@@ -15,6 +15,7 @@ Version 7.44 - not yet released
   - add new gesture ULDR to access quick menu
   - add quick menu page buttons in case of touch screen
   - add quit button to quick menu
+  - infoboxen: new setting, allow scaling of title/comment font
 * Android
   - fix crash on startup when loading icons on ldpi screens
 

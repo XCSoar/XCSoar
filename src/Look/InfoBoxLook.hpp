@@ -41,9 +41,9 @@ struct InfoBoxLook {
   Color colors[6];
 
   void Initialise(bool inverse, bool use_colors,
-                  unsigned width);
+                  unsigned width, unsigned scale_title_font);
 
-  void ReinitialiseLayout(unsigned width);
+  void ReinitialiseLayout(unsigned width, unsigned scale_title_font);
 
   Color GetColor(int i, Color default_color) const {
     if (i < 0)
