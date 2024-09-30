@@ -10,6 +10,7 @@
 #include "Engine/Task/Ordered/Points/ASTPoint.hpp"
 #include "Engine/Task/Ordered/Points/AATPoint.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
+#include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/SymmetricSectorZone.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
@@ -37,12 +38,11 @@ public:
     printf("# annular sector zone\n");
   }
   void Visit([[maybe_unused]] const LineSectorZone& oz) {
-    printf("# line zone\n");
+    printf("# line zone, length = %f\n", oz.GetLength());
   }
   void Visit([[maybe_unused]] const CylinderZone& oz) {
-    printf("# cylinder zone\n");
+    printf("# cylinder zone, radius = %f\n", oz.GetRadius());
   }
-
   void Visit([[maybe_unused]] const SymmetricSectorZone &oz) {
     printf("# symmetric quadrant\n");
   }
