@@ -10,6 +10,63 @@ extern "C" {
 #include "tap.h"
 }
 
+static void
+assert_distances(const TaskManager &task_manager,
+                 double expected_max,
+                 double expected_min) 
+{
+  constexpr double TOLERANCE_PERCENT = 0.5;
+
+  auto stats = task_manager.GetStats();
+  double error_max = stats.distance_max/expected_max - 1.0;
+  ok( std::abs( error_max ) < TOLERANCE_PERCENT/100, 
+      "task distance max: got %.2f, expected %.2f",
+      stats.distance_max, expected_max );
+
+  double error_min = stats.distance_min/expected_min - 1.0;
+  ok( std::abs( error_min ) < TOLERANCE_PERCENT/100, 
+      "task distance min: got %.2f, expected %.2f",
+      stats.distance_min, expected_min );
+}
+
+/**
+ * Check AAT min & max distance algorithm. Compare to values calculated
+ * in an external application for independent reference. 
+ * Test task:
+ *   - Start:  lat 0°, long 0°, cyl radius 1 km
+ *   - TP 1:   lat 1°, long 0°, cyl radius 30 km
+ *   - TP 2:   lat 1°, long 1°, cyl radius 40 km
+ *   - Finish: lat 0°, long 0°, cyl radius 1 km  
+*/
+static void 
+assert_aat_distances(const TaskManager &task_manager) 
+{
+  constexpr double EXPECTED_MAX_DIST = 496300.0;
+  constexpr double EXPECTED_MIN_DIST = 265100.0;
+
+  assert_distances(task_manager, EXPECTED_MAX_DIST, EXPECTED_MIN_DIST);
+}
+
+/**
+ * Check AAT min & max distance algorithm. Compare to values calculated
+ * in an external application for independent reference. 
+ * Test task:
+ *   - Start:  lat 0°   long 0°,   line length 1 km
+ *   - TP 1:   lat 1°   long 0°,   AST cylinder radius 500 m
+ *   - TP 2:   lat 1°   long 1°,   cyl radius 30 km
+ *   - TP 3:   lat 0.5° long 0.8°  cyl radius 500 m
+ *   - TP 4:   lat 0°   long 1°    cyl radius 30 km
+ *   - Finish: lat 0°   long 0°    line lenght 1 km
+*/
+static void 
+assert_mixed_task_distances(const TaskManager &task_manager) 
+{
+  constexpr double EXPECTED_MAX_DIST = 559300;
+  constexpr double EXPECTED_MIN_DIST = 364000;
+
+  assert_distances(task_manager, EXPECTED_MAX_DIST, EXPECTED_MIN_DIST);
+}
+
 int main(int argc, char** argv)
 {
   if (!ParseArgs(argc,argv)) {
@@ -18,8 +75,8 @@ int main(int argc, char** argv)
 
   static constexpr unsigned NUM_RANDOM = 50;
   static constexpr unsigned NUM_TYPE_MANIPS = 50;
-  plan_tests(NUM_TASKS+2+NUM_RANDOM+8+NUM_TYPE_MANIPS);
-
+  plan_tests(8+NUM_TYPE_MANIPS+NUM_TASKS+2+4+NUM_RANDOM);
+  
   GlidePolar glide_polar(2);
 
   TaskBehaviour task_behaviour;
@@ -45,6 +102,11 @@ int main(int argc, char** argv)
     TaskManager task_manager(task_behaviour, waypoints);
     task_manager.SetGlidePolar(glide_polar);
     ok(test_task(task_manager, waypoints, i),GetTestName("construction",i,0),0);
+
+    if( i==0 )
+      assert_mixed_task_distances(task_manager);
+    if( i==2 )
+      assert_aat_distances(task_manager);
   }
 
   for (unsigned i=0; i<NUM_RANDOM; i++) {
