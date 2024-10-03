@@ -16,6 +16,7 @@ Version 7.44 - not yet released
   - add quick menu page buttons in case of touch screen
   - add quit button to quick menu
   - infoboxen: new setting, allow scaling of title/comment font
+  - Radar / Thermalassistant Gauges: Placement to avoid InfoBoxen and Overlap
 * Android
   - fix crash on startup when loading icons on ldpi screens
 
