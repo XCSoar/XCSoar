@@ -20,6 +20,7 @@ PlacesOfInterestSettings::ClearHome()
 {
   home_waypoint = -1;
   home_location_available = false;
+  home_elevation_available = false;
 }
 
 void
@@ -28,6 +29,11 @@ PlacesOfInterestSettings::SetHome(const Waypoint &wp)
   home_waypoint = wp.id;
   home_location = wp.location;
   home_location_available = true;
+  if (wp.has_elevation) {
+    home_elevation = wp.elevation;
+    home_elevation_available = true;
+  } else
+    home_elevation_available = false;
 }
 
 void
