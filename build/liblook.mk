@@ -22,6 +22,7 @@ LOOK_SOURCES := \
 	$(SRC)/Look/CrossSectionLook.cpp \
 	$(SRC)/Look/GestureLook.cpp \
 	$(SRC)/Look/HorizonLook.cpp \
+	$(SRC)/Look/NavigatorLook.cpp \
 	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/Look/TrafficLook.cpp \
 	$(SRC)/Look/InfoBoxLook.cpp \
