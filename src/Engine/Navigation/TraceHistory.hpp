@@ -17,6 +17,9 @@ public:
   TraceVariableHistory BruttoVario;
   TraceVariableHistory NettoVario;
   TraceVariableHistory CirclingAverage;
+  TraceVariableHistory TurnAverage;
+
+  int turn_time;
 
   /**
    * Just time stamps describing when the fields above were last
