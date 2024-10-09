@@ -55,17 +55,19 @@ RenderTaskLegs(ChartRenderer &chart,
     if (dt.count() >= 0) {
       const double x = dt / std::chrono::hours{1};
       if (y>=0) {
-        if (i==0) {
+        if (i==0 && x>chart.GetXMin()) {
           chart.DrawBlankRectangle({chart.GetXMin(), chart.GetYMin()},
                                    {x, chart.GetYMax()});
         } else if (i+1 == task.TaskSize()) {
-          chart.DrawBlankRectangle({x, chart.GetYMin()},
+          chart.DrawBlankRectangle({std::max(x,chart.GetXMin()), chart.GetYMin()},
                                    {chart.GetXMax(), chart.GetYMax()});
         }
-        chart.DrawLine({x, chart.GetYMin()}, {x, chart.GetYMax()},
-                       ChartLook::STYLE_GRIDZERO);
+        if (x>chart.GetXMin()){
+          chart.DrawLine({x, chart.GetYMin()}, {x, chart.GetYMax()},
+                          ChartLook::STYLE_GRIDZERO);
+        }
       }
-      if (y>=0) {
+      if (y>=0 && x>chart.GetXMin()) {
         StringFormatUnsafe(sTmp, _T("%d"), i);
         chart.DrawLabel({x, chart.GetYMax()*y + chart.GetYMin()*(1-y)},
                         sTmp);
