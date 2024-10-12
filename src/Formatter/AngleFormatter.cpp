@@ -4,6 +4,7 @@
 #include "AngleFormatter.hpp"
 #include "Math/Angle.hpp"
 #include "util/StringFormat.hpp"
+#include "Language/Language.hpp"
 
 #include <cassert>
 #include <string.h>
@@ -53,4 +54,26 @@ FormatVerticalAngleDelta(TCHAR *buffer, size_t size, Angle value)
     StringFormat(buffer, size, _T("%+d°"), int(degrees));
   else
     _tcscpy(buffer, _T("--"));
+}
+
+void
+FormatBearingCompass(TCHAR *buffer, size_t size, unsigned angle, int level)
+{
+  assert(buffer != NULL);
+  assert (size >= 4 );
+
+  const TCHAR* table[3][16]={
+                      {N_("N"),N_("E"),N_("S"),N_("W")},
+                      {_T("N"),N_("NE"),_T("E"),N_("SE"),_T("S"),N_("SW"),_T("W"),N_("NW")},
+                      {_T("N"),N_("NNE"),_T("NE"),N_("ENE"),_T("E"),N_("ESE"),_T("SE"),N_("SSE"),
+		       _T("S"),N_("SSW"),_T("SW"),N_("WSW"),_T("W"),N_("WNW"),_T("NW"),N_("NNW")}};
+
+_tcscpy(buffer, gettext( table[level][(int) (fmod((angle + 45/pow(2,level)),360 ) /
+			                             (90/pow(2,level)))] ));
+}
+
+void
+FormatBearingCompass(TCHAR *buffer, size_t size, Angle angle, int level)
+{
+  FormatBearingCompass(buffer, size, angle.AsBearing().Degrees(),level);
 }
