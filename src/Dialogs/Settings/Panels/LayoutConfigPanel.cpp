@@ -185,7 +185,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
           info_box_geometry_list, (unsigned)ui_settings.info_boxes.geometry);
 
   AddInteger(_("InfoBox title size"), _("Zoom factor for InfoBox title and comment text"),
-             _T("%d %%"), _T("%d"), 80, 150, 5,
+             _T("%d %%"), _T("%d"), 50, 150, 5,
              ui_settings.info_boxes.scale_title_font);
   SetExpertRow(InfoBoxTitleScale);
 
