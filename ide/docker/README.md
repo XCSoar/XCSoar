@@ -54,3 +54,8 @@ Compile and run the binary (UNIX-SDL target):
 xcsoar-compile UNIX-SDL
 ./output/UNIX/bin/xcsoar
 ```
+
+### Using ccache
+
+Just add `USE_CCACHE=y` to the `xcsoar-compile` or `make` command (as you would do if compiling locally).
+ccache will store its db into `./.ccache/`, so the cache will be shared across all container instances.

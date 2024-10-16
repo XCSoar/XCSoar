@@ -35,3 +35,4 @@ build/local-config.mk
 .*.swp
 
 .idea
+.ccache
