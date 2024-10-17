@@ -21,6 +21,8 @@ Version 7.44 - not yet released
 * Android
   - fix crash on startup when loading icons on ldpi screens
   - update 'white list' of USB devices with one more VID/PID pair for SoftRF Academy
+* Windows
+  - Popupmessages are now shown with full text again
 
 Version 7.43 - 2024-08-12
 * calculations
