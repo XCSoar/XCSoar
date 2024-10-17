@@ -180,7 +180,7 @@ InputEvents::eventBugs(const TCHAR *misc)
     BUGS = 0.5;
   else if (StringIsEqual(misc, _T("show"))) {
     TCHAR Temp[100];
-    _stprintf(Temp, _T("%d"), (int)(BUGS * 100));
+    StringFormatUnsafe(Temp, _T("%d"), (int)(BUGS * 100));
     Message::AddMessage(_("Bugs performance"), Temp);
   }
 
@@ -222,7 +222,7 @@ InputEvents::eventBallast(const TCHAR *misc)
     BALLAST = 0;
   else if (StringIsEqual(misc, _T("show"))) {
     TCHAR Temp[100];
-    _stprintf(Temp, _T("%d"), (int)(BALLAST * 100));
+    StringFormatUnsafe(Temp, _T("%d"), (int)(BALLAST * 100));
     /* xgettext:no-c-format */
     Message::AddMessage(_("Ballast %"), Temp);
   }
@@ -282,7 +282,7 @@ InputEvents::eventAdjustForecastTemperature(const TCHAR *misc)
     auto temperature =
       CommonInterface::GetComputerSettings().forecast_temperature;
     TCHAR Temp[100];
-    _stprintf(Temp, _T("%f"), temperature.ToUser());
+    StringFormatUnsafe(Temp, _T("%f"), temperature.ToUser());
     Message::AddMessage(_("Forecast temperature"), Temp);
   }
 }
@@ -314,8 +314,8 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
     Profile::Set(ProfileKeys::WaypointLabelSelection, (int)wls);
   } else if (StringIsEqual(misc, _T("show"))) {
     TCHAR tbuf[64];
-    _stprintf(tbuf, _T("%s: %s"), _("Waypoint labels"),
-              gettext(msg[(unsigned)wls]));
+    StringFormatUnsafe(tbuf, _("%s: %s"), _("Waypoint labels"),
+                       gettext(msg[(unsigned)wls]));
     Message::AddMessage(tbuf);
   }
   else {
@@ -446,9 +446,9 @@ InputEvents::sub_TerrainTopography(int vswitch)
     TCHAR buf[128];
 
     if (settings_map.topography_enabled)
-      _stprintf(buf, _T("\r\n%s / "), _("On"));
+      StringFormatUnsafe(buf, _T("\r\n%s / "), _("On"));
     else
-      _stprintf(buf, _T("\r\n%s / "), _("Off"));
+      StringFormatUnsafe(buf, _T("\r\n%s / "), _("Off"));
 
     _tcscat(buf, settings_map.terrain.enable
             ? _("On") : _("Off"));
