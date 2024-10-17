@@ -359,16 +359,16 @@ InputEvents::eventOrientationCruise(const TCHAR *misc)
   if (StringIsEqual(misc, _T("northup"))) {
     settings_map.cruise_orientation = MapOrientation::NORTH_UP;
   } else if (StringIsEqual(misc, _T("trackup"))) {
-	settings_map.cruise_orientation = MapOrientation::TRACK_UP;
+    settings_map.cruise_orientation = MapOrientation::TRACK_UP;
   } else if (StringIsEqual(misc, _T("headingup"))) {
     settings_map.cruise_orientation = MapOrientation::HEADING_UP;
   } else if (StringIsEqual(misc, _T("targetup"))) {
-	settings_map.cruise_orientation = MapOrientation::TARGET_UP;
+    settings_map.cruise_orientation = MapOrientation::TARGET_UP;
   } else if (StringIsEqual(misc, _T("windup"))) {
-	settings_map.cruise_orientation = MapOrientation::WIND_UP;
+    settings_map.cruise_orientation = MapOrientation::WIND_UP;
   }
-  
-  ActionInterface::SendMapSettings(true);  
+
+  ActionInterface::SendMapSettings(true);
 }
 
 void
@@ -379,16 +379,16 @@ InputEvents::eventOrientationCircling(const TCHAR *misc)
   if (StringIsEqual(misc, _T("northup"))) {
     settings_map.circling_orientation = MapOrientation::NORTH_UP;
   } else if (StringIsEqual(misc, _T("trackup"))) {
-	settings_map.circling_orientation = MapOrientation::TRACK_UP;
+    settings_map.circling_orientation = MapOrientation::TRACK_UP;
   } else if (StringIsEqual(misc, _T("headingup"))) {
     settings_map.circling_orientation = MapOrientation::HEADING_UP;
   } else if (StringIsEqual(misc, _T("targetup"))) {
-	settings_map.circling_orientation = MapOrientation::TARGET_UP;
+    settings_map.circling_orientation = MapOrientation::TARGET_UP;
   } else if (StringIsEqual(misc, _T("windup"))) {
-	settings_map.circling_orientation = MapOrientation::WIND_UP;
+    settings_map.circling_orientation = MapOrientation::WIND_UP;
   }
-  
-  ActionInterface::SendMapSettings(true);  
+
+  ActionInterface::SendMapSettings(true);
 }
 
 /* Event_TerrainToplogy Changes
@@ -447,8 +447,7 @@ InputEvents::sub_TerrainTopography(int vswitch)
 
     if (settings_map.topography_enabled)
       StringFormatUnsafe(buf, _T("\r\n%s / "), _("On"));
-    else
-      StringFormatUnsafe(buf, _T("\r\n%s / "), _("Off"));
+    else StringFormatUnsafe(buf, _T("\r\n%s / "), _("Off"));
 
     _tcscat(buf, settings_map.terrain.enable
             ? _("On") : _("Off"));
