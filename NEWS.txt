@@ -20,6 +20,7 @@ Version 7.44 - not yet released
   - Add new Infobox “Home altitude difference” (Home AltD)
 * Android
   - fix crash on startup when loading icons on ldpi screens
+  - update 'white list' of USB devices with one more VID/PID pair for SoftRF Academy
 
 Version 7.43 - 2024-08-12
 * calculations
