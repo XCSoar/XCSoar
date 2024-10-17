@@ -16,6 +16,7 @@ Version 7.44 - not yet released
   - add quick menu page buttons in case of touch screen
   - add quit button to quick menu
   - infoboxen: new setting, allow scaling of title/comment font
+  - add helpers on infoboxes for Argentinean contests 95% distance rule
   - Radar / Thermalassistant Gauges: Placement to avoid InfoBoxen and Overlap
   - Add new Infobox “Home altitude difference” (Home AltD)
 * Android
