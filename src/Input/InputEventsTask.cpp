@@ -300,14 +300,13 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
       return;
 
     TCHAR TempAll[120];
-    _stprintf(TempAll, _T("\r\n%s: %s\r\n%s:%s\r\n%s: %s"),
-              _("Altitude"),
-              FormatUserAltitude(start_stats.altitude).c_str(),
-              _("Speed"),
-              FormatUserSpeed(start_stats.ground_speed, true).c_str(),
-              _("Time"),
-              FormatLocalTimeHHMM(start_stats.time,
-                                  CommonInterface::GetComputerSettings().utc_offset).c_str());
+    StringFormatUnsafe(
+        TempAll, _T("\r\n%s: %s\r\n%s:%s\r\n%s: %s"), _("Altitude"),
+        FormatUserAltitude(start_stats.altitude).c_str(), _("Speed"),
+        FormatUserSpeed(start_stats.ground_speed, true).c_str(), _("Time"),
+        FormatLocalTimeHHMM(start_stats.time,
+                            CommonInterface::GetComputerSettings().utc_offset)
+            .c_str());
     Message::AddMessage(_("Task start"), TempAll);
   } else if (StringIsEqual(misc, _T("next"))) {
     Message::AddMessage(_("Next turnpoint"));
