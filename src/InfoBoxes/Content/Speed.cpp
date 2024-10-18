@@ -9,6 +9,7 @@
 #include "BackendComponents.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
+#include <stdlib.h>
 
 void
 InfoBoxContentSpeedGround::Update(InfoBoxData &data) noexcept
@@ -20,6 +21,20 @@ InfoBoxContentSpeedGround::Update(InfoBoxData &data) noexcept
   }
 
   data.SetValueFromSpeed(basic.ground_speed);
+ 
+  const DerivedInfo &info = CommonInterface::Calculated();
+  if (!info.head_wind_available) {
+    data.SetCommentInvalid();
+    return;
+  }
+
+  data.FmtComment(_T("{} {:2.0f}"),
+  #ifdef ANDROID
+                  (info.head_wind > 0) ? "⩔" : "⩓",
+  #else
+                  (info.head_wind > 0) ? "head" : "tail",
+  #endif
+                  Units::ToUserWindSpeed(abs(info.head_wind)));
 }
 
 bool
