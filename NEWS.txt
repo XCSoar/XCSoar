@@ -17,8 +17,12 @@ Version 7.44 - not yet released
   - add quit button to quick menu
   - infoboxen: new setting, allow scaling of title/comment font
   - Radar / Thermalassistant Gauges: Placement to avoid InfoBoxen and Overlap
+  - Add new Infobox “Home altitude difference” (Home AltD)
 * Android
   - fix crash on startup when loading icons on ldpi screens
+  - update 'white list' of USB devices with one more VID/PID pair for SoftRF Academy
+* Windows
+  - Popupmessages are now shown with full text again
 
 Version 7.43 - 2024-08-12
 * calculations
@@ -30,8 +34,8 @@ Version 7.43 - 2024-08-12
 * data files
   - new topology available from mapgen (including airport runways and rivers)
   - fix loss of "home" waypoint designation in certain situations for a
-  - reworked sgs-233 polar
     non-airport home waypoint
+  - reworked sgs-233 polar
 * documentation
   - clarify task speed calculation section
   - lua reference updated
