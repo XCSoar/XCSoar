@@ -123,7 +123,8 @@ install_kobo() {
       texinfo \
       fakeroot \
       python3-setuptools \
-      ttf-bitstream-vera
+      ttf-bitstream-vera \
+      fonts-roboto-unhinted
   echo
 }
 
