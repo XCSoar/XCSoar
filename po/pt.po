@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-21 15:38+0100\n"
-"PO-Revision-Date: 2023-08-05 16:49+0000\n"
-"Last-Translator: Daniel Ventura Martins <danvmartins@hotmail.com>\n"
+"PO-Revision-Date: 2024-10-08 02:00+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/xcsoar/"
 "translations/pt/>\n"
 "Language: pt\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Launchpad-Export-Date: 2012-12-05 23:28+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -446,7 +446,7 @@ msgstr "Tipo de ficheiro desconhecido"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:91
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:92
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:230
@@ -984,15 +984,13 @@ msgstr "Mapa desligado"
 
 #: src/Menu/ExpandMacros.cpp:346 src/Menu/ExpandMacros.cpp:348
 #: src/Menu/ExpandMacros.cpp:350
-#, fuzzy
 msgid "Hide"
-msgstr "Info oculto"
+msgstr "Ocultar"
 
 #: src/Menu/ExpandMacros.cpp:346 src/Menu/ExpandMacros.cpp:348
 #: src/Menu/ExpandMacros.cpp:350
-#, fuzzy
 msgid "Show"
-msgstr "Mostrar erros"
+msgstr "Mostrar"
 
 #: src/Menu/ExpandMacros.cpp:353 src/Input/InputEventsSettings.cpp:294
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:65
@@ -1801,9 +1799,8 @@ msgid "GliderLink traffic receiver"
 msgstr ""
 
 #: src/Device/Config.cpp:296 src/Dialogs/Device/PortPicker.cpp:59
-#, fuzzy
 msgid "USB serial"
-msgstr "Serial"
+msgstr "USB serial"
 
 #. create buttons
 #: src/Dialogs/Message.cpp:76 src/Dialogs/WidgetDialog.cpp:244
@@ -2719,7 +2716,7 @@ msgstr "Definido frequência de espera"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:67
 msgid "Class"
-msgstr ""
+msgstr "Classe"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:71
 msgid "Top"
@@ -2844,9 +2841,8 @@ msgid "Estimate the wind vector during glides.  Requires an airspeed sensor."
 msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:48
-#, fuzzy
 msgid "External wind"
-msgstr "Externo"
+msgstr "Vento externo"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:49
 msgid "Should XCSoar accept wind estimates from other instruments?"
@@ -3843,9 +3839,9 @@ msgstr "Pista"
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:115
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:76
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:81
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Short Name"
-msgstr "Curto"
+msgstr "Nome curto"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:146
 msgid "Bearing and Distance"
@@ -3992,19 +3988,19 @@ msgid "Transmitter Mast"
 msgstr ""
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:56
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Tower"
-msgstr "Ligar/Desligar"
+msgstr "Torre"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:57
 #, no-c-format
 msgid "Tunnel"
-msgstr ""
+msgstr "Túnel"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:58
 #, no-c-format
 msgid "Bridge"
-msgstr ""
+msgstr "Ponte"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:59
 #, fuzzy, no-c-format
@@ -4029,7 +4025,7 @@ msgstr ""
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
 #, no-c-format
 msgid "Castle"
-msgstr ""
+msgstr "Castelo"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:64
 #, fuzzy, no-c-format
@@ -6625,9 +6621,9 @@ msgid "feet"
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:163
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "meters"
-msgstr "Metros"
+msgstr "metros"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:166
 msgid "Units used for altitude and heights."
@@ -6666,9 +6662,8 @@ msgid "Units used for latitude and longitude."
 msgstr "Unidades usadas para latitude e longitude."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:245
-#, fuzzy
 msgid "Rotation"
-msgstr "Localização"
+msgstr "Rotação"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:245
 #, fuzzy
@@ -7046,9 +7041,8 @@ msgid "Allow download of declared tasks from Weglide in the Task Manager."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:73
-#, fuzzy
 msgid "Automatic Upload"
-msgstr "Automático"
+msgstr "Envio automático"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:74
 msgid ""
@@ -7684,7 +7678,7 @@ msgstr "Prox. turnpoint"
 
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:206
 msgid "Use"
-msgstr ""
+msgstr "Usar"
 
 #: src/Renderer/NOAAListRenderer.cpp:26
 msgid "No METAR available"
@@ -9743,7 +9737,7 @@ msgstr "Hora Start"
 #: src/InfoBoxes/Content/Factory.cpp:1086
 #, no-c-format
 msgid "Heart"
-msgstr ""
+msgstr "Coração"
 
 #: src/InfoBoxes/Content/Factory.cpp:1087
 #, no-c-format
@@ -9989,7 +9983,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:11
 #, no-c-format
 msgid "Step"
-msgstr ""
+msgstr "Passo"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:12
 #, no-c-format
