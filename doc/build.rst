@@ -172,7 +172,7 @@ For Android, you need:
 - Java JDK
 
 On Debian::
-  
+
   sudo apt-get install
       default-jdk-headless \
       vorbis-tools \
@@ -351,7 +351,8 @@ Debian packages::
   sudo apt-get install \
       fakeroot \
       python3-setuptools \
-      ttf-bitstream-vera
+      ttf-bitstream-vera \
+      fonts-roboto-unhinted
 
 Then compile using this command::
 
