@@ -10295,10 +10295,6 @@ msgstr ""
 msgid "Traffic List"
 msgstr ""
 
-#: Data/Input/default.xci:866 Data/Input/default.xci:1247
-#msgid "Thermal Assistant"
-#msgstr ""
-
 #: Data/Input/default.xci:900
 msgid "Message Repeat"
 msgstr ""
