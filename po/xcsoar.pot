@@ -1340,6 +1340,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:176
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:355
 #: src/InfoBoxes/Content/Factory.cpp:926
+#: Data/Input/default.xci:866 Data/Input/default.xci:1247
 #, no-c-format
 msgid "Thermal assistant"
 msgstr ""
@@ -10295,8 +10296,8 @@ msgid "Traffic List"
 msgstr ""
 
 #: Data/Input/default.xci:866 Data/Input/default.xci:1247
-msgid "Thermal Assistant"
-msgstr ""
+#msgid "Thermal Assistant"
+#msgstr ""
 
 #: Data/Input/default.xci:900
 msgid "Message Repeat"
@@ -10336,4 +10337,8 @@ msgstr ""
 
 #: Data/Input/default.xci:1215
 msgid "Nearest Airspace"
+msgstr ""
+
+#: Data/Input/default.xci:1279
+msgid "Quit XCSoar"
 msgstr ""
