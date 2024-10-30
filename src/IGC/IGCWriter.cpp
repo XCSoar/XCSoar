@@ -2,8 +2,9 @@
 // Copyright The XCSoar Project
 
 #include "IGC/IGCWriter.hpp"
-#include "IGCString.hpp"
 #include "Generator.hpp"
+#include "Geo/Geoid.hpp"
+#include "IGCString.hpp"
 #include "NMEA/Info.hpp"
 #include "Version.hpp"
 #include "system/Path.hpp"
@@ -185,10 +186,13 @@ IGCWriter::LogPoint(const IGCFix &fix, int epe, int satellites)
 
   p = FormatIGCLocation(p, fix.location);
 
-  sprintf(p, "%c%05d%05d%03d%02d",
-          fix.gps_valid ? 'A' : 'V',
+  // B-records require WGS 84 altitude
+  double geoid_separation = EGM96::LookupSeparation(fix.location);
+
+  sprintf(p, "%c%05d%05d%03d%02d", fix.gps_valid ? 'A' : 'V',
           NormalizeIGCAltitude(fix.pressure_altitude),
-          NormalizeIGCAltitude(fix.gps_altitude),
+          NormalizeIGCAltitude(fix.gps_altitude +
+                               static_cast<int>(geoid_separation)),
           epe, satellites);
 
   WriteLine(b_record);
