@@ -67,6 +67,7 @@ IgcReplay::Update(NMEAInfo &basic)
 
   if (fix.gps_altitude != 0) {
     basic.gps_altitude = fix.gps_altitude;
+    basic.gps_ellipsoid_altitude = fix.gps_ellipsoid_altitude;
     basic.gps_altitude_available.Update(basic.clock);
   } else
     basic.gps_altitude_available.Clear();
