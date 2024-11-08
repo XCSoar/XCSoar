@@ -23,9 +23,13 @@ IGCFix::Apply(const NMEAInfo &basic) noexcept
 
   time = basic.date_time_utc;
 
-  gps_altitude = basic.gps_altitude_available
-    ? (int)basic.gps_altitude
-    : 0;
+  if (basic.gps_altitude_available) {
+    gps_altitude = (int)basic.gps_altitude;
+    gps_ellipsoid_altitude = (int)basic.gps_ellipsoid_altitude;
+  } else {
+    gps_altitude = 0;
+    gps_ellipsoid_altitude = 0;  
+  }
 
   pressure_altitude = basic.pressure_altitude_available
     ? (int)basic.pressure_altitude
