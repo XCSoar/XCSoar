@@ -4,6 +4,7 @@
 #include "IGC/IGCWriter.hpp"
 #include "Generator.hpp"
 #include "IGCString.hpp"
+#include "Geo/Geoid.hpp"
 #include "NMEA/Info.hpp"
 #include "Version.hpp"
 #include "system/Path.hpp"
@@ -185,10 +186,15 @@ IGCWriter::LogPoint(const IGCFix &fix, int epe, int satellites)
 
   p = FormatIGCLocation(p, fix.location);
 
+  // B-records require WGS 84 ellipsoid altitude
+  if (fix.gps_ellipsoid_altitude == 0) {   // not carried from GNSS source
+    double geoid_separation = EGM96::LookupSeparation(fix.location);
+    fix.gps_ellipsoid_altitude = fix.gps_altitude + static_cast<int>(geoid_separation);
+  }
+
   sprintf(p, "%c%05d%05d%03d%02d",
           fix.gps_valid ? 'A' : 'V',
           NormalizeIGCAltitude(fix.pressure_altitude),
-          // B-records require WGS 84 ellipsoid altitude
           NormalizeIGCAltitude(fix.gps_ellipsoid_altitude),
           epe, satellites);
 
