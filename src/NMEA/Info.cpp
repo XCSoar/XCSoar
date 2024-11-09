@@ -275,7 +275,8 @@ NMEAInfo::Complement(const NMEAInfo &add) noexcept
 
   if (gps_altitude_available.Complement(add.gps_altitude_available)) {
     gps_altitude = add.gps_altitude;
-    gps_ellipsoid_altitude = add.gps_ellipsoid_altitude;
+    if (add.gps_ellipsoid_altitude != 0)
+      gps_ellipsoid_altitude = add.gps_ellipsoid_altitude;
   }
 
   if (static_pressure_available.Complement(add.static_pressure_available))
