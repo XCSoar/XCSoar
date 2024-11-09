@@ -2,8 +2,8 @@
 // Copyright The XCSoar Project
 
 #include "IGC/IGCWriter.hpp"
-#include "IGCString.hpp"
 #include "Generator.hpp"
+#include "IGCString.hpp"
 #include "NMEA/Info.hpp"
 #include "Version.hpp"
 #include "system/Path.hpp"
@@ -188,7 +188,8 @@ IGCWriter::LogPoint(const IGCFix &fix, int epe, int satellites)
   sprintf(p, "%c%05d%05d%03d%02d",
           fix.gps_valid ? 'A' : 'V',
           NormalizeIGCAltitude(fix.pressure_altitude),
-          NormalizeIGCAltitude(fix.gps_altitude),
+          // B-records require WGS 84 ellipsoid altitude
+          NormalizeIGCAltitude(fix.gps_ellipsoid_altitude),
           epe, satellites);
 
   WriteLine(b_record);
