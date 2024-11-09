@@ -69,10 +69,15 @@ DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
   basic.location_available.Update(basic.clock);
 
   if (hasAltitude) {
-    auto GeoidSeparation = geoid_altitude
-      ? 0.
-      : EGM96::LookupSeparation(basic.location);
-    basic.gps_altitude = altitude - GeoidSeparation;
+    if (geoid_altitude) {   // sensor reports AMSL altitude
+      basic.gps_altitude = altitude;
+      basic.gps_ellipsoid_altitude = 0;
+      // - will be computed before writing B-record in IGC file
+    } else {                // assume it is WGS84 ellipsoid altitude
+      auto GeoidSeparation = EGM96::LookupSeparation(location);
+      basic.gps_altitude = altitude - GeoidSeparation;
+      basic.gps_ellipsoid_altitude = altitude;
+    }
     basic.gps_altitude_available.Update(basic.clock);
   } else
     basic.gps_altitude_available.Clear();
