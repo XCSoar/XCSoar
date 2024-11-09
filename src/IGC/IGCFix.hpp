@@ -16,7 +16,7 @@ struct IGCFix
 
   bool gps_valid;
 
-  int gps_altitude, pressure_altitude;
+  int gps_altitude, gps_ellipsoid_altitude, pressure_altitude;
 
   /* extensions follow */
 
