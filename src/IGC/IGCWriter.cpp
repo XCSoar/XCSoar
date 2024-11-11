@@ -187,15 +187,16 @@ IGCWriter::LogPoint(const IGCFix &fix, int epe, int satellites)
   p = FormatIGCLocation(p, fix.location);
 
   // B-records require WGS 84 ellipsoid altitude
-  if (fix.gps_ellipsoid_altitude == 0) {   // not carried from GNSS source
+  int ellipsoid_altitude = fix.gps_ellipsoid_altitude;
+  if (ellipsoid_altitude == 0) {            // not carried from GNSS source
     double geoid_separation = EGM96::LookupSeparation(fix.location);
-    fix.gps_ellipsoid_altitude = fix.gps_altitude + static_cast<int>(geoid_separation);
+    ellipsoid_altitude = fix.gps_altitude + static_cast<int>(geoid_separation);
   }
 
   sprintf(p, "%c%05d%05d%03d%02d",
           fix.gps_valid ? 'A' : 'V',
           NormalizeIGCAltitude(fix.pressure_altitude),
-          NormalizeIGCAltitude(fix.gps_ellipsoid_altitude),
+          NormalizeIGCAltitude(ellipsoid_altitude),
           epe, satellites);
 
   WriteLine(b_record);
