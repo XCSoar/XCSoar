@@ -36,6 +36,12 @@ JPEG compression parameters and algorithms are used which do not
 generate artefacts at the coastlines due to the potentially big jump in
 elevation value.
 
+Airspace
+---------
+
+A map database file can contain airspace. They reside in the
+``airspace.txt`` file, which is in openair format.
+
 Waypoints
 ---------
 
@@ -88,9 +94,9 @@ XCSoar v6.7 and later will display at most 30 topography layers.
 
       ============================ =========== ===========
       Column name                  Data type   Valid range
-      filename                     string      
+      filename                     string
       range                        double (nm)
-      icon                         string      
+      icon                         string
       label index                  int         0-1
       color (red component)        int         0-255
       color (green component)      int         0-255
@@ -268,4 +274,3 @@ icon to the Shapefile using the icon name. (e.g.)
 Note that unless these changes are merged into the main XCSoar
 repository, then only your specific build of XCSoar will be able to
 display your icon image.
-
