@@ -23,6 +23,8 @@ Version 7.44 - not yet released
   - update 'white list' of USB devices with one more VID/PID pair for SoftRF Academy
 * Windows
   - Popupmessages are now shown with full text again
+* devices
+  - Add driver for Condor 3
 
 Version 7.43 - 2024-08-12
 * calculations

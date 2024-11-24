@@ -4,3 +4,4 @@
 #pragma once
 
 extern const struct DeviceRegister condor_driver;
+extern const struct DeviceRegister condor3_driver;
