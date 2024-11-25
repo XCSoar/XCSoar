@@ -26,6 +26,7 @@ Version 7.44 - not yet released
   - Popupmessages are now shown with full text again
 * devices
   - Add driver for Condor 3
+  - Add driver for LX Navigation Eos / Era variometers
 
 Version 7.43 - 2024-08-12
 * calculations
@@ -121,7 +122,7 @@ Version 7.43-rc0 - 2024-06-02
   - fix loss of "home" waypoint designation in certain situations for a
     non-airport home waypoint
 * devices
-  - add Larus driver  
+  - add Larus driver
   - added driver for LX Navigation Eos57 variometer
 * windows
  - black text color in airspace list like all other systems
