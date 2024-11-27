@@ -906,7 +906,7 @@ TestLevilAHRS()
 
 
 static void
-TestLX(const struct DeviceRegister &driver, bool condor=false)
+TestLX(const struct DeviceRegister &driver, bool condor=false, bool reciprocal_wind=false)
 {
   NullPort null;
   Device *device = driver.CreateOnPort(dummy_config, null);
@@ -935,6 +935,7 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
     ok1(!nmea_info.pressure_altitude_available);
     ok1(nmea_info.baro_altitude_available);
     ok1(equals(nmea_info.baro_altitude, 1266.5));
+    ok1(equals(nmea_info.external_wind.bearing, reciprocal_wind ? 68 : 248));
   } else {
     ok1(nmea_info.pressure_altitude_available);
     ok1(!nmea_info.baro_altitude_available);
@@ -946,8 +947,6 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
 
   ok1(nmea_info.external_wind_available);
   ok1(equals(nmea_info.external_wind.norm, 23.1 / 3.6));
-  ok1(equals(nmea_info.external_wind.bearing, condor ? 68 : 248));
-
 
   nmea_info.Reset();
   nmea_info.clock = TimeStamp{FloatDuration{1}};
@@ -966,7 +965,7 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
 
   ok1(nmea_info.external_wind_available);
   ok1(equals(nmea_info.external_wind.norm, 10.1 / 3.6));
-  ok1(equals(nmea_info.external_wind.bearing, condor ? 354 : 174));
+  ok1(equals(nmea_info.external_wind.bearing, reciprocal_wind ? 354 : 174));
 
 
   nmea_info.Reset();
@@ -1680,7 +1679,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main()
 {
-  plan_tests(877);
+  plan_tests(909);
 
   TestGeneric();
   TestTasman();
@@ -1697,7 +1696,8 @@ int main()
   TestLeonardo();
   TestLevilAHRS();
   TestLX(lx_driver);
-  TestLX(condor_driver, true);
+  TestLX(condor_driver, true, true);
+  TestLX(condor3_driver, true, false);
   TestLXV7();
   TestILEC();
   TestOpenVario();

@@ -85,6 +85,7 @@ static const struct DeviceRegister *const driver_list[] = {
   &xctracer_driver,
   &thermalexpress_driver,
   &acd_driver,
+  &condor3_driver,
   nullptr
 };
 

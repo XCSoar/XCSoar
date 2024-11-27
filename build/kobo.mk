@@ -76,6 +76,13 @@ fi)
 BITSTREAM_VERA_NAMES = Vera VeraBd VeraIt VeraBI VeraMono
 BITSTREAM_VERA_FILES = $(patsubst %,$(BITSTREAM_VERA_DIR)/%.ttf,$(BITSTREAM_VERA_NAMES))
 
+ROBOTO_DIR ?= $(shell \
+if [ -d /usr/share/fonts/truetype/roboto/unhinted/RobotoTTF ]; then \
+	echo /usr/share/fonts/truetype/roboto/unhinted/RobotoTTF; \
+fi)
+ROBOTO_NAMES = Roboto-Regular Roboto-Bold Roboto-Italic Roboto-BoldItalic
+ROBOTO_FILES = $(patsubst %,$(ROBOTO_DIR)/%.ttf,$(ROBOTO_NAMES))
+
 THIRDPARTY_TOOL_NAMES = simple_usbmodeswitch
 THIRDPARTY_TOOL_FILES = $(addprefix $(THIRDPARTY_LIBS_ROOT)/bin/,$(THIRDPARTY_TOOL_NAMES))
 
@@ -148,6 +155,7 @@ $(CLARAHD_DRIVERS_DOWNLOAD): | $(DOWNLOAD_DIR)/dirstamp
 $(TARGET_OUTPUT_DIR)/KoboRoot.tgz: $(XCSOAR_BIN) \
 	$(KOBO_MENU_BIN) $(KOBO_POWER_OFF_BIN) \
 	$(BITSTREAM_VERA_FILES) \
+	$(ROBOTO_FILES) \
 	$(topdir)/kobo/inittab $(topdir)/kobo/rcS $(topdir)/kobo/udev.rules \
 	$(KOBO_KERNEL_DOWNLOAD) $(KOBOOTG_KERNEL_DOWNLOAD) \
 	$(GLOHD_KERNEL_DOWNLOAD) $(GLOHDOTG_KERNEL_DOWNLOAD) \
@@ -168,6 +176,7 @@ $(TARGET_OUTPUT_DIR)/KoboRoot.tgz: $(XCSOAR_BIN) \
 	$(Q)install -m 0644 $(topdir)/kobo/inittab $(@D)/KoboRoot/etc
 	$(Q)install -m 0644 $(topdir)/kobo/udev.rules $(@D)/KoboRoot/etc/udev/rules.d/99-xcsoar.rules
 	$(Q)install -m 0644 $(BITSTREAM_VERA_FILES) $(@D)/KoboRoot/opt/xcsoar/share/fonts
+	$(Q)install -m 0644 $(ROBOTO_FILES) $(@D)/KoboRoot/opt/xcsoar/share/fonts
 	$(Q)fakeroot tar czfC $@ $(@D)/KoboRoot .
 
 endif

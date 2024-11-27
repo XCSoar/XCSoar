@@ -11,6 +11,7 @@ on:
       - 'python/**'
       - '.github/workflows/build-container.yml'
       - '.github/workflows/build-unix.yml'
+      - '.github/workflows/build-translation.yml'
       - '.readthedocs.yaml'
     branches:
       - master
@@ -27,6 +28,7 @@ on:
       - 'python/**'
       - '.github/workflows/build-container.yml'
       - '.github/workflows/build-unix.yml'
+      - '.github/workflows/build-translation.yml'
       - '.readthedocs.yaml'
     branches:
       - master

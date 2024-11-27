@@ -11,13 +11,17 @@
 using std::string_view_literals::operator""sv;
 
 class CondorDevice : public AbstractDevice {
+private:
+  bool reciprocal_wind;
+
 public:
+  explicit CondorDevice(bool reciprocal = true) : reciprocal_wind(reciprocal) {}
   /* virtual methods from class Device */
   bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 };
 
 static bool
-cLXWP0(NMEAInputLine &line, NMEAInfo &info)
+cLXWP0(NMEAInputLine &line, NMEAInfo &info, bool reciprocal_wind)
 {
   /*
   $LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1
@@ -50,13 +54,18 @@ cLXWP0(NMEAInputLine &line, NMEAInfo &info)
 
   line.Skip(6);
 
-  if (SpeedVector wind; line.ReadSpeedVectorKPH(wind))
-    // Condor 1.1.4 outputs the direction that the wind is going to,
-    // _not_ the direction it is coming from !!
-    //
-    // This seems to differ from the output that the LX devices are giving !!
-    info.ProvideExternalWind(wind.Reciprocal());
-
+  if (SpeedVector wind; line.ReadSpeedVectorKPH(wind)) {
+    if (reciprocal_wind) {
+      /* Condor 1.1.4 and Condor 2 outputs the direction that the wind is going
+       * to, _not_ the direction it is coming from !! This seems to differ from
+       * the output that the LX devices are giving !!
+       */
+      info.ProvideExternalWind(wind.Reciprocal());
+    } else {
+      /* Condor3 outputs the direction the wind is coming from. */
+      info.ProvideExternalWind(wind);
+    };
+  };
   return true;
 }
 
@@ -69,8 +78,7 @@ CondorDevice::ParseNMEA(const char *String, NMEAInfo &info)
   NMEAInputLine line(String);
 
   const auto type = line.ReadView();
-  if (type == "$LXWP0"sv)
-    return cLXWP0(line, info);
+  if (type == "$LXWP0"sv) return cLXWP0(line, info, reciprocal_wind);
   else
     return false;
 }
@@ -78,7 +86,7 @@ CondorDevice::ParseNMEA(const char *String, NMEAInfo &info)
 static Device *
 CondorCreateOnPort([[maybe_unused]] const DeviceConfig &config, [[maybe_unused]] Port &com_port)
 {
-  return new CondorDevice();
+  return new CondorDevice(true); // Reciprocal wind enabled
 }
 
 const struct DeviceRegister condor_driver = {
@@ -86,4 +94,18 @@ const struct DeviceRegister condor_driver = {
   _T("Condor Soaring Simulator"),
   0,
   CondorCreateOnPort,
+};
+
+static Device *
+Condor3CreateOnPort([[maybe_unused]] const DeviceConfig &config,
+                    [[maybe_unused]] Port &com_port)
+{
+  return new CondorDevice(false); // Reciprocal wind disabled
+}
+
+const struct DeviceRegister condor3_driver = {
+    _T("Condor3"),
+    _T("Condor Soaring Simulator 3"),
+    0,
+    Condor3CreateOnPort,
 };
