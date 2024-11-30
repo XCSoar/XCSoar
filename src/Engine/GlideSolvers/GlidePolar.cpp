@@ -23,11 +23,11 @@ GlidePolar::GlidePolar(const double _mc, const double _bugs,
    Vmax(75),
    Vmin(0),
    reference_polar(0.00157, -0.0734, 1.48),
-   ballast_ratio(0.3),
-   reference_mass(300),
-   empty_mass(reference_mass),
-   crew_mass(90.),
-   wing_area(0)
+   max_ballast(198),
+   reference_mass(320),
+   empty_mass(240),
+   crew_mass(90),
+   wing_area(10.5)
 {
   Update();
 
@@ -78,7 +78,7 @@ void
 GlidePolar::SetBallast(const double bal) noexcept
 {
   assert(bal >= 0);
-  SetBallastLitres(bal * ballast_ratio * reference_mass);
+  SetBallastLitres(bal * max_ballast);
 }
 
 void
