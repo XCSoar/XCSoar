@@ -99,6 +99,11 @@ Version 7.43-rc1 - not yet released
 Version 7.43-rc0 - 2024-06-02
 * map
   - reachable map labels show correct altitude with head wind #1424
+* calculations
+  - Fix calculation of achieved task distance (making it total planned task
+    distance minus task distance remaining), thus fixing the values "Speed
+    task achieved", "Speed task average", and "Speed task last hour" shown in
+    infoboxes and/or Status-Task panel fields.
 * ui
   - TC 30s Infobox shows now climb rate since start of thermal
   - TL Gain Infobox shows now the overall climb rate of last thermal
