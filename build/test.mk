@@ -114,7 +114,9 @@ TEST_NAMES = \
 	TestLXNToIGC \
 	TestLeastSquares \
 	TestHexString \
-	TestThermalBand
+	TestThermalBand \
+	TestPackedFloat \
+	TestVersionNumber
 
 ifeq ($(TARGET_IS_ANDROID),n)
 # These programs are broken on Android because they require Java code
@@ -2398,3 +2400,15 @@ TEST_REPLAY_RETROSPECTIVE_SOURCES = \
 	$(TEST_SRC_DIR)/test_replay_retrospective.cpp
 TEST_REPLAY_RETROSPECTIVE_DEPENDS = $(TEST1_DEPENDS) OPERATION WAYPOINTFILE
 $(eval $(call link-program,test_replay_retrospective,TEST_REPLAY_RETROSPECTIVE))
+
+TEST_PACKED_FLOAT_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestPackedFloat.cpp
+TEST_PACKED_FLOAT_DEPENDS = MATH
+$(eval $(call link-program,TestPackedFloat,TEST_PACKED_FLOAT))
+
+TEST_VERSION_NUMBER_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestVersionNumber.cpp
+TEST_VERSION_NUMBER_DEPENDS = MATH UTILS
+$(eval $(call link-program,TestVersionNumber,TEST_VERSION_NUMBER))
