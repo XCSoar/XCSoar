@@ -8,10 +8,13 @@ ifeq ($(CLANG),n)
   CXX_FEATURES += -fcoroutines
   CXX_FEATURES += -fconserve-space -fno-operator-names
 else
-  ifeq ($(shell expr $(CXX_MAJOR_VERSION) \< 17), 1)
+  ifeq ($(shell expr $(CXX_MAJOR_VERSION) \< 16), 1)
     # The "-fcoroutines-ts" option is only necessary in clang versions
-    # older than 17
+    # older than 16, in 16 it was deprecated and removed
     CXX_FEATURES += -fcoroutines-ts
+  else 
+    # However, c++20 is required for standard C++ coroutines clang 16
+    HOST_CXX_FEATURES := -std=c++20
   endif
 endif
 
