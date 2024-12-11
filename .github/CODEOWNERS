@@ -7,4 +7,4 @@ kobo/* @XCSoar/kobo-team
 src/Kobo/* @XCSoar/kobo-team
 
 # LX Navigation Devices
-src/Device/Driver/LX_EOS/* @XCSoar/LXEOS-team
+src/Device/Driver/LX_EOS/* @XCSoar/lxeos-team
