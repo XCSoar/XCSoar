@@ -52,4 +52,6 @@ jobs:
           commit_message: "Autocommit translation sources"
           file_pattern: "*.pot *.po"
           create_branch: true
+          branch: translationupdates
+          push_options: '--force'
         if: steps.check_test.outputs.do_update == 'true'
