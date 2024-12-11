@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-21 15:38+0100\n"
+"POT-Creation-Date: 2024-12-11 17:31+0000\n"
 "PO-Revision-Date: 2021-07-20 10:35+0000\n"
 "Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/xcsoar/"
@@ -444,7 +444,7 @@ msgstr ""
 msgid "Loading Airspace File..."
 msgstr "Wczytywanie pliku stref przestrzeni..."
 
-#: src/Airspace/AirspaceParser.cpp:967
+#: src/Airspace/AirspaceParser.cpp:1039
 msgid "Unknown airspace filetype"
 msgstr "Nieznany typ pliku stref"
 
@@ -488,14 +488,14 @@ msgstr "Pobierz lot"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:198
 #: src/Dialogs/Plane/PlaneListDialog.cpp:223
 #: src/Dialogs/Plane/PlaneListDialog.cpp:268
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:42
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:52
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:80
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:86
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:120
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:126
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:160
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:170
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:43
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:53
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:81
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:87
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:121
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:127
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:161
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:171
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:110
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:226
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:210
@@ -527,7 +527,7 @@ msgid "Fatal problem"
 msgstr "Poważny problem"
 
 #. valid but unknown number of sats
-#: src/FLARM/Error.cpp:21 src/FLARM/Error.cpp:51
+#: src/FLARM/Error.cpp:21 src/FLARM/Error.cpp:74
 #: src/Renderer/MapItemListRenderer.cpp:347
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:15
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:24
@@ -541,61 +541,182 @@ msgid "Unknown"
 msgstr "Nieznany"
 
 #: src/FLARM/Error.cpp:28
-#, no-c-format
-msgid "Firmware timeout"
+#, fuzzy, no-c-format
+msgid "Firmware expired"
 msgstr "Przekroczono limit czasu Firmware"
 
 #: src/FLARM/Error.cpp:29
-#, no-c-format
-msgid "Power"
-msgstr "Zasilanie"
+#, fuzzy, no-c-format
+msgid "Firmware update error"
+msgstr "Przekroczono limit czasu Firmware"
 
 #: src/FLARM/Error.cpp:30
+#, fuzzy, no-c-format
+msgid "Voltage Low"
+msgstr "Strona"
+
+#: src/FLARM/Error.cpp:31
+#, fuzzy, no-c-format
+msgid "UI error"
+msgstr "Brak błędu"
+
+#: src/FLARM/Error.cpp:32
+#, fuzzy, no-c-format
+msgid "Audio error"
+msgstr "Brak błędu"
+
+#: src/FLARM/Error.cpp:33
+#, fuzzy, no-c-format
+msgid "ADC error"
+msgstr "Brak błędu"
+
+#: src/FLARM/Error.cpp:34
+#, fuzzy, no-c-format
+msgid "SDCARD error"
+msgstr "Brak błędu"
+
+#: src/FLARM/Error.cpp:35
+#, fuzzy, no-c-format
+msgid "LED error"
+msgstr "Błąd"
+
+#: src/FLARM/Error.cpp:36
+#, fuzzy, no-c-format
+msgid "EEPROM error"
+msgstr "Brak błędu"
+
+#: src/FLARM/Error.cpp:37
+#, fuzzy, no-c-format
+msgid "GPIO error"
+msgstr "Brak błędu"
+
+#: src/FLARM/Error.cpp:38
+#, no-c-format
+msgid "General hardware error"
+msgstr ""
+
+#: src/FLARM/Error.cpp:39
+#, no-c-format
+msgid "Transponder receiver Mode-C/S/ADS-B unserviceable"
+msgstr ""
+
+#: src/FLARM/Error.cpp:40
 #, no-c-format
 msgid "GPS communication"
 msgstr "Komunikacja GPS"
 
-#: src/FLARM/Error.cpp:31
-#, no-c-format
-msgid "GPS configuration"
-msgstr "Konfiguracja GPSu"
+#: src/FLARM/Error.cpp:41
+#, fuzzy, no-c-format
+msgid "Configuration of GPS module"
+msgstr "Menu konfiguracyjne"
 
-#: src/FLARM/Error.cpp:32
+#: src/FLARM/Error.cpp:42
+#, no-c-format
+msgid "GPS antenna"
+msgstr ""
+
+#: src/FLARM/Error.cpp:43
 #, no-c-format
 msgid "RF communication"
 msgstr "Komunikacja radiowa"
 
-#: src/FLARM/Error.cpp:33
+#: src/FLARM/Error.cpp:44
+#, no-c-format
+msgid "Another FLARM device with the same radio ID is being received"
+msgstr ""
+
+#: src/FLARM/Error.cpp:45
+#, no-c-format
+msgid "Wrong ICAO 24-bit address or radio ID"
+msgstr ""
+
+#: src/FLARM/Error.cpp:46
 #, no-c-format
 msgid "Communication"
 msgstr "Komunikacja"
 
-#: src/FLARM/Error.cpp:34
+#: src/FLARM/Error.cpp:47
 #, no-c-format
 msgid "Flash memory"
 msgstr "Pamięć Flash"
 
-#: src/FLARM/Error.cpp:35
+#: src/FLARM/Error.cpp:48
 #, no-c-format
 msgid "Pressure sensor"
 msgstr "Czujniki ciśnienia"
 
-#: src/FLARM/Error.cpp:36 src/Dialogs/Device/ManageFlarmDialog.cpp:56
-#, no-c-format
-msgid "Obstacle database"
+#: src/FLARM/Error.cpp:49
+#, fuzzy, no-c-format
+msgid "Obstacle database expired"
 msgstr "Lista przeszkód"
 
-#: src/FLARM/Error.cpp:37
+#: src/FLARM/Error.cpp:50
 #, no-c-format
 msgid "Flight recorder"
 msgstr "Rejestrator lotu"
 
-#: src/FLARM/Error.cpp:39
+#: src/FLARM/Error.cpp:51
 #, no-c-format
-msgid "Transponder receiver"
-msgstr "Odbiornik Transpondera"
+msgid "Engine-noise recording not possible"
+msgstr ""
 
-#: src/FLARM/Error.cpp:40
+#: src/FLARM/Error.cpp:52
+#, fuzzy, no-c-format
+msgid "Invalid obstacle database license"
+msgstr "Lista przeszkód"
+
+#: src/FLARM/Error.cpp:53
+#, no-c-format
+msgid "Invalid IGC feature license"
+msgstr ""
+
+#: src/FLARM/Error.cpp:54
+#, no-c-format
+msgid "Invalid AUD feature license"
+msgstr ""
+
+#: src/FLARM/Error.cpp:55
+#, no-c-format
+msgid "Invalid ENL feature license"
+msgstr ""
+
+#: src/FLARM/Error.cpp:56
+#, no-c-format
+msgid "Invalid RFB feature license"
+msgstr ""
+
+#: src/FLARM/Error.cpp:57
+#, no-c-format
+msgid "Invalid TIS feature license"
+msgstr ""
+
+#: src/FLARM/Error.cpp:58
+#, fuzzy, no-c-format
+msgid "Generic error"
+msgstr "Standardowe"
+
+#: src/FLARM/Error.cpp:59
+#, no-c-format
+msgid "Flash File System error"
+msgstr ""
+
+#: src/FLARM/Error.cpp:60
+#, no-c-format
+msgid "Failure updating firmware of external display"
+msgstr ""
+
+#: src/FLARM/Error.cpp:61
+#, no-c-format
+msgid ""
+"Device is operated outside the designated region. The device does not work."
+msgstr ""
+
+#: src/FLARM/Error.cpp:62
+#, no-c-format
+msgid "Range analyzer"
+msgstr ""
+
+#: src/FLARM/Error.cpp:63
 #, no-c-format
 msgid "Other"
 msgstr "Inne"
@@ -676,8 +797,8 @@ msgid "Not Circling"
 msgstr "Nie krążysz"
 
 #: src/Gauge/BigThermalAssistantWidget.cpp:56
-#: src/Gauge/BigTrafficWidget.cpp:583 src/Dialogs/FileManager.cpp:745
-#: src/Dialogs/Device/DeviceListDialog.cpp:766
+#: src/Gauge/BigTrafficWidget.cpp:583 src/Dialogs/FileManager.cpp:747
+#: src/Dialogs/Device/DeviceListDialog.cpp:769
 #: src/Dialogs/Device/PortMonitor.cpp:166
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:139
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:85
@@ -689,28 +810,30 @@ msgstr "Nie krążysz"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:136
 #: src/Dialogs/MapItemListDialog.cpp:158
 #: src/Dialogs/Airspace/dlgAirspace.cpp:144
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:105
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:112
 #: src/Dialogs/Airspace/AirspaceList.cpp:134
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:470
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:469
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:21
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:356
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:254
 #: src/Dialogs/Traffic/TrafficList.cpp:347
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:329
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:207 src/Dialogs/dlgAnalysis.cpp:290
-#: src/Dialogs/ProfileListDialog.cpp:316
-#: src/Dialogs/Plane/PlaneListDialog.cpp:360 src/Dialogs/HelpDialog.cpp:30
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:209 src/Dialogs/dlgAnalysis.cpp:290
+#: src/Dialogs/ProfileListDialog.cpp:318
+#: src/Dialogs/Plane/PlaneListDialog.cpp:361 src/Dialogs/HelpDialog.cpp:30
 #: src/Dialogs/dlgInfoBoxAccess.cpp:95 src/Dialogs/ReplayDialog.cpp:97
-#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:425
-#: src/Dialogs/Waypoint/Manager.cpp:287
+#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:433
+#: src/Dialogs/Waypoint/Manager.cpp:289
+#: src/Dialogs/Waypoint/WaypointList.cpp:215
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:117
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:69
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:42
-#: src/Dialogs/Task/TaskPointDialog.cpp:514
+#: src/Dialogs/Task/TaskPointDialog.cpp:515
 #: src/Dialogs/Task/TargetDialog.cpp:395
 #: src/Dialogs/Task/AlternatesListDialog.cpp:122
 #: src/Dialogs/KnobTextEntry.cpp:225 src/Dialogs/Weather/WeatherDialog.cpp:41
 #: src/Dialogs/Weather/PCMetDialog.cpp:36
-#: src/Dialogs/Weather/NOAADetails.cpp:123
+#: src/Dialogs/Weather/NOAADetails.cpp:125
 msgid "Close"
 msgstr "Zamknij"
 
@@ -737,7 +860,7 @@ msgstr "Wariometr"
 #: src/Renderer/FlightStatisticsRenderer.cpp:254
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:51
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:81
-#: src/Dialogs/Airspace/AirspaceList.cpp:402
+#: src/Dialogs/Airspace/AirspaceList.cpp:442
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:115
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:75
 #: src/Dialogs/Waypoint/WaypointList.cpp:386
@@ -753,6 +876,7 @@ msgstr "Wys. wzgl."
 #: src/Gauge/BigTrafficWidget.cpp:580 src/Dialogs/MapItemListDialog.cpp:144
 #: src/Dialogs/Airspace/AirspaceList.cpp:130
 #: src/Dialogs/Traffic/TrafficList.cpp:345
+#: src/Dialogs/Waypoint/WaypointList.cpp:211
 #: src/Dialogs/Task/TaskPointDialog.cpp:220
 #: src/Dialogs/Task/AlternatesListDialog.cpp:108
 #: src/Dialogs/Weather/NOAAList.cpp:97 src/InfoBoxes/Content/Task.cpp:50
@@ -872,7 +996,7 @@ msgid "Resume"
 msgstr "Wznów"
 
 #: src/Menu/ExpandMacros.cpp:185 src/Menu/ExpandMacros.cpp:189
-#: src/Dialogs/Message.cpp:100
+#: src/Dialogs/Message.cpp:100 src/Dialogs/FileManager.cpp:401
 msgid "Abort"
 msgstr "Przerwij"
 
@@ -886,8 +1010,8 @@ msgstr "Ręcznie"
 #: src/Menu/ExpandMacros.cpp:364 src/Menu/ExpandMacros.cpp:414
 #: src/PageSettings.cpp:50 src/PageSettings.cpp:53
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:42
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:29
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:159
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:30
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:141
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:186
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:374
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:67
@@ -938,22 +1062,22 @@ msgstr "Pełny"
 
 #: src/Menu/ExpandMacros.cpp:311 src/Menu/ExpandMacros.cpp:316
 #: src/Menu/ExpandMacros.cpp:341 src/Menu/ExpandMacros.cpp:366
-#: src/Menu/ExpandMacros.cpp:412 src/Input/InputEventsSettings.cpp:439
-#: src/Input/InputEventsSettings.cpp:442
+#: src/Menu/ExpandMacros.cpp:412 src/Input/InputEventsSettings.cpp:450
+#: src/Input/InputEventsSettings.cpp:453
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:95
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:25
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:36
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:26
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:67
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:172
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:161
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:44
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:143
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:45
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:111
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:141
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:65
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:72
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:115
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:122
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:214
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:244
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:215
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:245
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:11
 #, no-c-format
 msgid "Off"
@@ -961,14 +1085,14 @@ msgstr "Nie"
 
 #: src/Menu/ExpandMacros.cpp:316 src/Menu/ExpandMacros.cpp:341
 #: src/Menu/ExpandMacros.cpp:366 src/Menu/ExpandMacros.cpp:412
-#: src/Input/InputEventsSettings.cpp:437 src/Input/InputEventsSettings.cpp:442
+#: src/Input/InputEventsSettings.cpp:449 src/Input/InputEventsSettings.cpp:453
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:94
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:27
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:28
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:173
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:163
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:42
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:145
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:43
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:66
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:245
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:246
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:12
 #, no-c-format
 msgid "On"
@@ -1033,45 +1157,45 @@ msgstr "Brak"
 msgid "Task & Airfields"
 msgstr "PT i Lotn."
 
-#: src/Input/InputEventsActions.cpp:139
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:275
+#: src/Input/InputEventsActions.cpp:140
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:289
 #: src/Dialogs/Waypoint/Manager.cpp:249
 msgid "Failed to save waypoints"
 msgstr "Nie zachowano PT"
 
-#: src/Input/InputEventsActions.cpp:227 src/Input/InputEventsActions.cpp:489
+#: src/Input/InputEventsActions.cpp:228 src/Input/InputEventsActions.cpp:490
 msgid "Logger Error"
 msgstr "Błąd Rejestratora"
 
-#: src/Input/InputEventsActions.cpp:256
+#: src/Input/InputEventsActions.cpp:257
 msgid "Screen Mode Full"
 msgstr "Tryb pełnoekranowy"
 
-#: src/Input/InputEventsActions.cpp:258
+#: src/Input/InputEventsActions.cpp:259
 msgid "Auxiliary InfoBoxes"
 msgstr "Pomocnicze InfoBox'y"
 
-#: src/Input/InputEventsActions.cpp:260
+#: src/Input/InputEventsActions.cpp:261
 msgid "Default InfoBoxes"
 msgstr "Domyślne InfoBox'y"
 
-#: src/Input/InputEventsActions.cpp:367
+#: src/Input/InputEventsActions.cpp:368
 msgid "No active waypoint!"
 msgstr "Brak aktywnych PZ!"
 
-#: src/Input/InputEventsActions.cpp:475
+#: src/Input/InputEventsActions.cpp:476
 msgid "NMEA log on"
 msgstr "Loger NMEA WŁĄCZONY"
 
-#: src/Input/InputEventsActions.cpp:477
+#: src/Input/InputEventsActions.cpp:478
 msgid "NMEA log off"
 msgstr "Loger NMEA WYŁĄCZONY"
 
-#: src/Input/InputEventsActions.cpp:481
+#: src/Input/InputEventsActions.cpp:482
 msgid "Logger on"
 msgstr "Loger WŁĄCZONY"
 
-#: src/Input/InputEventsActions.cpp:483
+#: src/Input/InputEventsActions.cpp:484
 msgid "Logger off"
 msgstr "Loger WYŁĄCZONY"
 
@@ -1166,7 +1290,7 @@ msgstr "Brak trasy"
 msgid "Altitude"
 msgstr "Wysokość nawig."
 
-#: src/Input/InputEventsTask.cpp:306
+#: src/Input/InputEventsTask.cpp:305
 #: src/Renderer/FlightStatisticsRenderer.cpp:214
 #: src/Renderer/FlightStatisticsRenderer.cpp:233
 #: src/Renderer/FlightStatisticsRenderer.cpp:259
@@ -1178,7 +1302,7 @@ msgstr "Prędkość"
 #. Important: all pages after Units in this list must not have data fields that are
 #. unit-dependent because they will be saved after their units may have changed.
 #. ToDo: implement API that controls order in which pages are saved
-#: src/Input/InputEventsTask.cpp:308
+#: src/Input/InputEventsTask.cpp:306
 #: src/Renderer/FlightStatisticsRenderer.cpp:212
 #: src/Renderer/FlightStatisticsRenderer.cpp:231
 #: src/Renderer/FlightStatisticsRenderer.cpp:257
@@ -1188,15 +1312,15 @@ msgstr "Prędkość"
 msgid "Time"
 msgstr "Czas"
 
-#: src/Input/InputEventsTask.cpp:311
+#: src/Input/InputEventsTask.cpp:310
 msgid "Task start"
 msgstr "Start zadania"
 
-#: src/Input/InputEventsTask.cpp:313
+#: src/Input/InputEventsTask.cpp:312
 msgid "Next turnpoint"
 msgstr "Następny punkt"
 
-#: src/Input/InputEventsTask.cpp:315
+#: src/Input/InputEventsTask.cpp:314
 msgid "Task finished"
 msgstr "Zadanie zakończone."
 
@@ -1238,10 +1362,10 @@ msgstr "Balast %"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:244
 #: src/Dialogs/Plane/PlaneListDialog.cpp:294
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:35
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:73
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:113
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:153
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:36
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:74
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:114
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:154
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:201
 msgid "Failed to save file."
 msgstr "Błąd zapisu pliku"
@@ -1252,10 +1376,15 @@ msgid "Forecast temperature"
 msgstr "TempMaks: Maksymalna prognozowana temperatura"
 
 #: src/Input/InputEventsSettings.cpp:317
+#, c-format
+msgid "%s: %s"
+msgstr ""
+
+#: src/Input/InputEventsSettings.cpp:317
 msgid "Waypoint labels"
 msgstr "Opisy punktów"
 
-#: src/Input/InputEventsSettings.cpp:444
+#: src/Input/InputEventsSettings.cpp:455
 msgid "Topography/Terrain"
 msgstr "Topografia/Teren"
 
@@ -1267,14 +1396,16 @@ msgstr "Nie znaleziono"
 msgid "Select a file"
 msgstr "Wybierz plik"
 
-#: src/PageSettings.cpp:24 src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:86
+#: src/PageSettings.cpp:24
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:117
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:175
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:351
 #, no-c-format
 msgid "FLARM radar"
 msgstr "Radar FLARM"
 
-#: src/PageSettings.cpp:27 src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:95
+#: src/PageSettings.cpp:27
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:131
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:176
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:355
 #: src/InfoBoxes/Content/Factory.cpp:926
@@ -1314,7 +1445,7 @@ msgstr "Brak danych"
 
 #: src/Renderer/MapItemListRenderer.cpp:61
 #: src/Renderer/MapItemListRenderer.cpp:65
-#: src/Dialogs/Airspace/AirspaceList.cpp:403
+#: src/Dialogs/Airspace/AirspaceList.cpp:443
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:79
 #: src/Dialogs/Waypoint/WaypointList.cpp:387
 msgid "Direction"
@@ -1814,11 +1945,10 @@ msgstr "Nr ser."
 #: src/Dialogs/WidgetDialog.cpp:260
 #: src/Dialogs/MapItemListSettingsDialog.cpp:17
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:17
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:356
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:182
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:227
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:130 src/Dialogs/NumberEntry.cpp:39
-#: src/Dialogs/NumberEntry.cpp:81 src/Dialogs/NumberEntry.cpp:121
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:130 src/Dialogs/NumberEntry.cpp:40
+#: src/Dialogs/NumberEntry.cpp:83 src/Dialogs/NumberEntry.cpp:124
 #: src/Dialogs/TouchTextEntry.cpp:183 src/Dialogs/TimeEntry.cpp:45
 #: src/Dialogs/DateEntry.cpp:41 src/Dialogs/GeoPointEntry.cpp:56
 msgid "OK"
@@ -1839,8 +1969,7 @@ msgstr "Ponów"
 
 #: src/Dialogs/Message.cpp:96 src/Dialogs/ListPicker.cpp:163
 #: src/Dialogs/ProgressDialog.cpp:37 src/Dialogs/WidgetDialog.cpp:245
-#: src/Dialogs/WidgetDialog.cpp:261 src/Dialogs/FileManager.cpp:401
-#: src/Dialogs/Device/PortPicker.cpp:294
+#: src/Dialogs/WidgetDialog.cpp:261 src/Dialogs/Device/PortPicker.cpp:294
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:114
 #: src/Dialogs/MapItemListSettingsDialog.cpp:18
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:18
@@ -1848,9 +1977,8 @@ msgstr "Ponów"
 #: src/Dialogs/ProfileListDialog.cpp:333
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:183
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:228
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:131
-#: src/Dialogs/Waypoint/WaypointList.cpp:215 src/Dialogs/NumberEntry.cpp:40
-#: src/Dialogs/NumberEntry.cpp:82 src/Dialogs/NumberEntry.cpp:122
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:131 src/Dialogs/NumberEntry.cpp:41
+#: src/Dialogs/NumberEntry.cpp:84 src/Dialogs/NumberEntry.cpp:125
 #: src/Dialogs/TouchTextEntry.cpp:187 src/Dialogs/TimeEntry.cpp:46
 #: src/Dialogs/DateEntry.cpp:42 src/Dialogs/GeoPointEntry.cpp:57
 #: src/Dialogs/DownloadFilePicker.cpp:387 Data/Input/default.xci:121
@@ -1867,7 +1995,6 @@ msgstr "Zignoruj"
 #: src/Dialogs/ListPicker.cpp:153 src/Dialogs/Device/PortPicker.cpp:293
 #: src/Dialogs/Traffic/TrafficList.cpp:779
 #: src/Dialogs/ProfileListDialog.cpp:331
-#: src/Dialogs/Waypoint/WaypointList.cpp:211
 msgid "Select"
 msgstr "Wybierz"
 
@@ -1875,20 +2002,11 @@ msgstr "Wybierz"
 msgid "Help"
 msgstr "Pomoc"
 
-#: src/Dialogs/FileManager.cpp:399 src/Dialogs/FilePicker.cpp:30
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:99
-#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:120
-#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:198
-#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:220
-#: src/Dialogs/Weather/PCMetDialog.cpp:51 src/Dialogs/Weather/NOAAList.cpp:182
-#: src/Dialogs/Weather/NOAAList.cpp:198 src/Dialogs/Weather/NOAADetails.cpp:88
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:355
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:390
-#: src/Dialogs/DownloadFilePicker.cpp:118
-#: src/Dialogs/DownloadFilePicker.cpp:277
-#: src/Dialogs/DownloadFilePicker.cpp:386
-msgid "Download"
-msgstr "Pobierz"
+#: src/Dialogs/FileManager.cpp:399 src/Dialogs/Weather/NOAAList.cpp:99
+#: src/Dialogs/Weather/NOAADetails.cpp:48
+#: src/Dialogs/Weather/MapOverlayWidget.cpp:211
+msgid "Update"
+msgstr "Aktualizuj"
 
 #: src/Dialogs/FileManager.cpp:400
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:92
@@ -2087,7 +2205,7 @@ msgstr "Włącz to jeśli używasz K6Bt aby połączyć się z urządzeniem."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:295
 #: src/Dialogs/Plane/PlaneListDialog.cpp:133
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:256
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:270
 #: src/Dialogs/Waypoint/Manager.cpp:101 src/InfoBoxes/Content/MacCready.cpp:30
 #: src/InfoBoxes/Content/Weather.cpp:87 src/InfoBoxes/Content/Radio.cpp:45
 #: src/InfoBoxes/Content/Radio.cpp:50
@@ -2134,7 +2252,7 @@ msgid "Debug"
 msgstr "Diagnostyka"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:334
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:110
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:109
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:68
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:69
 msgid "Enable"
@@ -2331,12 +2449,16 @@ msgstr "Wersja sprzętu"
 msgid "Firmware version"
 msgstr "Wersja firmware"
 
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:56
+msgid "Obstacle database"
+msgstr "Lista przeszkód"
+
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:60
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:61
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:60
 #: src/Dialogs/Settings/dlgConfiguration.cpp:148
 #: src/InfoBoxes/Content/Altitude.cpp:28 src/InfoBoxes/Content/MacCready.cpp:31
-#: src/InfoBoxes/Content/Places.cpp:61
+#: src/InfoBoxes/Content/Places.cpp:99
 #, no-c-format
 msgid "Setup"
 msgstr "Ustaw"
@@ -2632,7 +2754,6 @@ msgstr "Obiekt statyczny"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:129
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:68
-#: src/Dialogs/Airspace/AirspaceList.cpp:404
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:95
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:86
 #: src/Dialogs/Waypoint/WaypointList.cpp:388
@@ -2655,7 +2776,7 @@ msgid "Goto"
 msgstr "Leć do"
 
 #: src/Dialogs/MapItemListDialog.cpp:150
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:110
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:109
 msgid "Ack Day"
 msgstr "Dziś OK"
 
@@ -2730,13 +2851,13 @@ msgid "Radio"
 msgstr "Radio"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:56
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:245
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:260
 #: src/Dialogs/Task/AlternatesListDialog.cpp:110
 msgid "Set Active Frequency"
 msgstr "Ustaw używaną częstotliwość"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:61
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:250
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:265
 #: src/Dialogs/Task/AlternatesListDialog.cpp:116
 msgid "Set Standby Frequency"
 msgstr "Ustaw częstotliwość oczekującą"
@@ -2758,16 +2879,16 @@ msgstr "Wys.min."
 msgid "Airspace Details"
 msgstr "Informacje o Strefie Przestrzeni Pow."
 
-#: src/Dialogs/Airspace/AirspaceList.cpp:284
+#: src/Dialogs/Airspace/AirspaceList.cpp:324
 #: src/Dialogs/Waypoint/WaypointList.cpp:428
 msgid "No Match!"
 msgstr "Nie znaleziono!"
 
-#: src/Dialogs/Airspace/AirspaceList.cpp:307
+#: src/Dialogs/Airspace/AirspaceList.cpp:347
 msgid "Heading"
 msgstr "Kurs"
 
-#: src/Dialogs/Airspace/AirspaceList.cpp:401
+#: src/Dialogs/Airspace/AirspaceList.cpp:441
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:216
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:106
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
@@ -2775,7 +2896,12 @@ msgstr "Kurs"
 msgid "Name"
 msgstr "Nazwa"
 
-#: src/Dialogs/Airspace/AirspaceList.cpp:418
+#: src/Dialogs/Airspace/AirspaceList.cpp:444
+#, fuzzy
+msgid "Class/Type"
+msgstr "Szkło"
+
+#: src/Dialogs/Airspace/AirspaceList.cpp:458
 msgid "Select Airspace"
 msgstr "Wybierz Strefę"
 
@@ -2848,7 +2974,7 @@ msgstr "ZATW dziś"
 msgid "No Warnings"
 msgstr "Brak ostrzeżeń"
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:468
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:467
 msgid "Airspace Warnings"
 msgstr "Ostrzeżenia o naruszeniu stref"
 
@@ -3031,7 +3157,7 @@ msgid "Glide Computer"
 msgstr "Komputer"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:91
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:217
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:218
 #: src/Weather/NOAAFormatter.cpp:78 src/Weather/NOAAFormatter.cpp:81
 #: src/InfoBoxes/Content/Factory.cpp:323 src/InfoBoxes/Content/Factory.cpp:332
 #: src/InfoBoxes/Content/Factory.cpp:920 Data/Input/default.xci:604
@@ -3160,21 +3286,22 @@ msgid "Content"
 msgstr "Zawartość"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:250
-#: src/Dialogs/ProfileListDialog.cpp:154
-#: src/Dialogs/Plane/PlaneListDialog.cpp:134
-msgid "Copy"
+#, fuzzy
+msgid "Copy Set"
 msgstr "Kopiuj"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:252
-msgid "Paste"
+#, fuzzy
+msgid "Paste Set"
 msgstr "Wklej"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:317
-msgid "Overwrite?"
-msgstr "Zastąpić?"
+msgid "Overwrite all infoboxes in this set?"
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:317
-msgid "InfoBox paste"
+#, fuzzy
+msgid "InfoBox paste set"
 msgstr "Wklej InfoBox"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:386
@@ -3382,6 +3509,11 @@ msgstr "Nowy"
 msgid "Password"
 msgstr "Hasło"
 
+#: src/Dialogs/ProfileListDialog.cpp:154
+#: src/Dialogs/Plane/PlaneListDialog.cpp:134
+msgid "Copy"
+msgstr "Kopiuj"
+
 #: src/Dialogs/ProfileListDialog.cpp:155 src/Dialogs/ProfileListDialog.cpp:274
 #: src/Dialogs/Plane/PlaneListDialog.cpp:135
 #: src/Dialogs/Plane/PlaneListDialog.cpp:332
@@ -3544,6 +3676,21 @@ msgstr "Prędkość"
 msgid "Polar W"
 msgstr "Opadanie"
 
+#: src/Dialogs/FilePicker.cpp:30
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:99
+#: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:120
+#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:198
+#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:220
+#: src/Dialogs/Weather/PCMetDialog.cpp:51 src/Dialogs/Weather/NOAAList.cpp:182
+#: src/Dialogs/Weather/NOAAList.cpp:198 src/Dialogs/Weather/NOAADetails.cpp:88
+#: src/Dialogs/Weather/MapOverlayWidget.cpp:355
+#: src/Dialogs/Weather/MapOverlayWidget.cpp:390
+#: src/Dialogs/DownloadFilePicker.cpp:118
+#: src/Dialogs/DownloadFilePicker.cpp:277
+#: src/Dialogs/DownloadFilePicker.cpp:386
+msgid "Download"
+msgstr "Pobierz"
+
 #: src/Dialogs/dlgInfoBoxAccess.cpp:75 src/Dialogs/dlgInfoBoxAccess.cpp:91
 msgid "Switch InfoBox"
 msgstr "Zmień InfoBox"
@@ -3702,39 +3849,39 @@ msgstr "Napięcie zasilania"
 msgid "Network"
 msgstr "Sieć"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:121
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:129
 msgid "Assigned task time"
 msgstr "Limit czasu min."
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:122
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:130
 msgid "Estimated task time"
 msgstr "Szacowany czas"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:123
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:131
 msgid "Remaining time"
 msgstr "Pozostały czas"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:124
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:132
 msgid "Task distance"
 msgstr "Długość trasy"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:125
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:133
 msgid "Remaining distance"
 msgstr "Pozostała odległość"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:126
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:134
 msgid "Speed estimated"
 msgstr "Szacowana prędkość"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:127
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:135
 msgid "Speed average"
 msgstr "Średnia prędkość"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:129
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:137
 msgid "Set MacCready"
 msgstr "Ustaw MacCready"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:130
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:138
 msgid ""
 "Adjusts MC value used in the calculator.  Use this to determine the effect "
 "on estimated task time due to changes in conditions.  This value will not "
@@ -3745,11 +3892,11 @@ msgstr ""
 "warunków na przewidywany czas zadania. Jeżeli zakończych kliknięciem Anuluj, "
 "to ustawienie nie wpłynie na główne ustawienia kalkulatora przelotowego."
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:140
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:148
 msgid "AAT range"
 msgstr "Długość obszarówki  AAT"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:142
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:150
 #, no-c-format
 msgid ""
 "For AAT tasks, this value tells you how far based on the targets of your "
@@ -3762,24 +3909,24 @@ msgstr ""
 "minimalną długość zadania AAT. 0% - nominalna długość AAT. +100% jest to "
 "maksymalna długość zadania."
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:145
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:153
 #: src/Dialogs/Task/TargetDialog.cpp:382
 msgid "Speed remaining"
 msgstr "Prędkość przewidywana"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:148
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:156
 msgid "Achieved MacCready"
 msgstr "Uzysk.wartość MacCready"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:153
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:161
 msgid "Achieved speed"
 msgstr "Prędkość osiągnięta"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:156
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:164
 msgid "Cruise efficiency"
 msgstr "Efektywność MacCready'ego"
 
-#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:157
+#: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:165
 msgid ""
 "Efficiency of cruise.  100 indicates perfect MacCready performance, greater "
 "than 100 indicates better than MacCready performance is achieved through "
@@ -3898,82 +4045,87 @@ msgstr "Różn.H dla MC bież"
 msgid "Required glide ratio"
 msgstr "Wymagana doskonałość"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:42
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:80
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:120
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:160
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:43
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:81
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:121
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:161
 msgid "No task defined."
 msgstr "Nie zdef. zadania."
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:47
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:48
 msgid "No active task point."
 msgstr "Brak aktywnego PT"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:47
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:48
 msgid "Replace in task"
 msgstr "Zastąp w trasie"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:52
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:86
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:126
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:170
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:53
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:87
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:127
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:171
 msgid "Task would not be valid after the change."
 msgstr "Zadanie nie będzie poprawne po zmianach."
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:91
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:131
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:92
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:132
 msgid "Created Goto Task."
 msgstr "Utworzono zadanie 'docel-powrót'"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:91
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:96
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:131
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:136
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:92
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:97
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:132
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:137
 msgid "Success"
 msgstr "Sukces"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:96
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:136
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:97
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:137
 msgid "Created 2-point task from Goto Task."
 msgstr "Utworzono zadanie dwupunktowe z zadania 'docel-powrót'."
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:165
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:166
 msgid "Waypoint not in task."
 msgstr "Punkt trasy poza zadaniem"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:165
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:166
 msgid "Remove from task"
 msgstr "Usuń z trasy"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:212
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:228
 msgid "Replace in Task"
 msgstr "Zamień w Zadaniu"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:217
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:233
 msgid "Insert in Task"
 msgstr "Wstaw do Zadania"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:222
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:238
 msgid "Append to Task"
 msgstr "Dołącz do Zadania"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:228
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:243
 msgid "Remove from Task"
 msgstr "Usuń z Zadania"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:234
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:248
 msgid "Set as New Home"
 msgstr "Ustaw jako Dom"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:240
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:254
 msgid "Pan to Waypoint"
 msgstr "Przesuń do PT"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:405 Data/Input/default.xci:1056
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:406 Data/Input/default.xci:1056
 msgid "GoTo"
 msgstr "Leć do"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:616
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:409
+#, fuzzy
+msgid "Pan To"
+msgstr "Włącz tryb ręcznego przesuwania"
+
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:624
 #: src/Dialogs/Task/TaskPointDialog.cpp:511
 #: src/InfoBoxes/Panel/ATCReference.cpp:64
 msgid "Waypoint"
@@ -3984,8 +4136,10 @@ msgid "Delete waypoint?"
 msgstr "Czy usunąć Punkt Trasy?"
 
 #: src/Dialogs/Waypoint/Manager.cpp:286
-msgid "Waypoints Editor"
-msgstr "Edytor punktów zwrotnych"
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:122
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:129 Data/Input/default.xci:630
+msgid "Waypoint Editor"
+msgstr "Edytor PTrasy"
 
 #: src/Dialogs/Waypoint/Manager.cpp:295
 msgid "Save changes to waypoint file?"
@@ -4096,11 +4250,6 @@ msgid ""
 msgstr ""
 "Przepraszamy, edytor punktów zwrotnych nie jest jeszcze dostępny dla formatu "
 "współrzędnych UTM."
-
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:122
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:129 Data/Input/default.xci:630
-msgid "Waypoint Editor"
-msgstr "Edytor PTrasy"
 
 #: src/Dialogs/Waypoint/WaypointList.cpp:429
 msgid "Choose a filter or click here"
@@ -4333,70 +4482,119 @@ msgstr "Przeźroczystość wypełn."
 msgid "If enabled, then airspaces are filled transparently."
 msgstr "Jeśli włączone to wypełnienie strefy będzie półprzezroczyste."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:26
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:27
 #, no-c-format
 msgid "Disable final glide bar."
 msgstr "Wyłącz pasek Dolotu"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:28
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:29
 #, no-c-format
 msgid "Always show final glide bar."
 msgstr "Zawsze pokazuj pasek Dolotu"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:30
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:31
 #, no-c-format
 msgid "Show final glide bar if approaching final glide range."
 msgstr "Pokazuj pasek Dolotu gdy blisko uzyskania zasięgu."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:37
-#, fuzzy, no-c-format
-msgid "Disable thermal assistant."
-msgstr "Asystent krążenia"
+#, no-c-format
+msgid "Auto (follow infoboxes)"
+msgstr "Auto (dostosuj infoboxy)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:39
+#, fuzzy, no-c-format
+msgid "Top left"
+msgstr "Górny lewy róg"
+
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:41
+#, fuzzy, no-c-format
+msgid "Top right"
+msgstr "Prawy górny róg"
+
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:43
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:70
 #, fuzzy, no-c-format
 msgid "Bottom left"
 msgstr "Lewy dolny róg"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:40
-#, no-c-format
-msgid "Show thermal assistant in bottom left."
-msgstr ""
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:45
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:76
+#, fuzzy, no-c-format
+msgid "Bottom right"
+msgstr "Prawy dolny róg"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:42
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:47
+#, fuzzy, no-c-format
+msgid "Center top"
+msgstr "Centralnie na górze"
+
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:49
+#, fuzzy, no-c-format
+msgid "Center bottom"
+msgstr "Centralnie na dole"
+
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:51
+#, fuzzy, no-c-format
+msgid "Top left (avoid infoboxes)"
+msgstr "Auto (dostosuj infoboxy)"
+
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:53
+#, fuzzy, no-c-format
+msgid "Top right (avoid infoboxes)"
+msgstr "Auto (dostosuj infoboxy)"
+
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:55
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:73
 #, fuzzy, no-c-format
 msgid "Bottom left (avoid infoboxes)"
 msgstr "Auto (dostosuj infoboxy)"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:43
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:57
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:79
+#, fuzzy, no-c-format
+msgid "Bottom right (avoid infoboxes)"
+msgstr "Auto (dostosuj infoboxy)"
+
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:59
+#, fuzzy, no-c-format
+msgid "Center top (avoid infoboxes)"
+msgstr "Auto (dostosuj infoboxy)"
+
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:61
+#, fuzzy, no-c-format
+msgid "Center bottom (avoid infoboxes)"
+msgstr "Auto (dostosuj infoboxy)"
+
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
+#, fuzzy, no-c-format
+msgid "Disable thermal assistant."
+msgstr "Asystent krążenia"
+
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:71
+#, no-c-format
+msgid "Show thermal assistant in bottom left."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:74
 #, no-c-format
 msgid ""
 "Show thermal assistant in bottom left, above/to right of infoboxes (if "
 "there)."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:45
-#, fuzzy, no-c-format
-msgid "Bottom right"
-msgstr "Prawy dolny róg"
-
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:46
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:77
 #, no-c-format
 msgid "Show thermal assistant in bottom right."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:48
-#, fuzzy, no-c-format
-msgid "Bottom right (avoid infoboxes)"
-msgstr "Auto (dostosuj infoboxy)"
-
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:49
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:80
 #, no-c-format
 msgid ""
 "Show thermal assistant in bottom right above/to left of infoboxes (if there)."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:87
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:118
 msgid ""
 "This enables the display of the FLARM radar gauge. The track bearing of the "
 "target relative to the track bearing of the aircraft is displayed as an "
@@ -4409,11 +4607,11 @@ msgstr ""
 "wskazujący w górę lub w dół pokazuje względną wysokość Celu wzgl. Twojej "
 "wysokości. We wszystkich trybach kolor Celu podkreślna stopień zagrożenia."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:90
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:121
 msgid "Auto close FLARM"
 msgstr "Auto-zamykanie FLARM."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:91
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:122
 msgid ""
 "Setting this to \"On\" will automatically close the FLARM dialog if there is "
 "no traffic. \"Off\" will keep the dialog open even without current traffic."
@@ -4422,17 +4620,25 @@ msgstr ""
 "ruchu. OFF sprawi że okno dialogowe będzie otwarte również wtedy gdy nie ma "
 "ruchu."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:96
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:126
+msgid "FLARM display"
+msgstr "Wyświetlacz FLARM."
+
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:126
+msgid "Choose a location for the FLARM display."
+msgstr "Wybierz pozycję dla wyświetlacza FLARM"
+
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:132
 msgid ""
 "Enable and select the position of the thermal assistant when overlayed on "
 "the main screen."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:101
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:137
 msgid "Thermal band"
 msgstr "Pion.profil komina"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:102
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:138
 msgid ""
 "This enables the display of the thermal profile (climb band) display on the "
 "map."
@@ -4440,11 +4646,11 @@ msgstr ""
 "Opcja włącza wyświetlanie na ekranie, w obszarze mapy, pionowego profilu "
 "komina termicznego - rozkład wielkości noszenia w funkcji wysokości."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:105
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:141
 msgid "Final glide bar"
 msgstr "Wskaźnik Dolotu"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:142
 msgid ""
 "If set to \"On\" the final glide will always be shown, if set to \"Auto\" it "
 "will be shown when approaching the final glide possibility."
@@ -4452,11 +4658,11 @@ msgstr ""
 "Jeżeli opcja jest Włączona, pasek wysokości dolotu będzie zawsze widoczny. W "
 "przypadku Auto - będzie wyświetlany gdy wchodzimy w zasięg możliwego Dolotu."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:112
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:148
 msgid "Final glide bar MC0"
 msgstr "Pasek dolotu dla MC0"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:113
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:149
 msgid ""
 "If set to ON the final glide bar will show a second arrow indicating the "
 "required height to reach the final waypoint at MC zero."
@@ -4464,11 +4670,11 @@ msgstr ""
 "Jeżeli opcja jest Włączona, pasek wysokości dolotu będzie zawierał drugi "
 "wskaźnik, pokazujący wysokość wymaganą na Dolot przy nastawie MCready = 0."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:122
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:158
 msgid "Vario bar"
 msgstr "Wskaźnik wariometru"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:123
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:159
 msgid "If set to ON the vario bar will be shown"
 msgstr "Jeżeli Włączono, to będzie wyświetlany wskaźnik wariometru"
 
@@ -4951,153 +5157,118 @@ msgstr "4 góra/po lewej"
 msgid "4 Bottom or Right"
 msgstr "4 dół/po prawej"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:114
-#, no-c-format
-msgid "Auto (follow infoboxes)"
-msgstr "Auto (dostosuj infoboxy)"
-
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:116
-#, no-c-format
-msgid "Top Left"
-msgstr "Lewy górny róg"
-
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:118
-#, no-c-format
-msgid "Top Right"
-msgstr "Prawy górny róg"
-
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:120
-#, no-c-format
-msgid "Bottom Left"
-msgstr "Lewy dolny róg"
-
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:122
-#, no-c-format
-msgid "Bottom Right"
-msgstr "Prawy dolny róg"
-
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:124
-#, no-c-format
-msgid "Centre Top"
-msgstr "Centralnie na górze"
-
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:126
-#, no-c-format
-msgid "Centre Bottom"
-msgstr "Centralnie na dole"
-
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:131
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:113
 #, no-c-format
 msgid "Text"
 msgstr "Tekst"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:132
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:114
 #, no-c-format
 msgid "Show text on tabbed dialogs."
 msgstr "Teksty w oknach z zakładkami."
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:133
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:115
 #, no-c-format
 msgid "Icons"
 msgstr "Ikony"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:134
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:116
 #, no-c-format
 msgid "Show icons on tabbed dialogs."
 msgstr "Ikony w oknach z zakładkami."
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:139
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:121
 #, no-c-format
 msgid "Center"
 msgstr "Na środku"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:140
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:122
 #, no-c-format
 msgid "Center the status message boxes."
 msgstr "Wycentruj prostokąty wiadomości statusu."
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:141
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:123
 #, no-c-format
 msgid "Topleft"
 msgstr "Górny lewy róg"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:142
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:124
 #, no-c-format
 msgid "Show status message boxes ina the top left corner."
 msgstr "Komunikaty w lewym górnym rogu."
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:148
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:130
 #, no-c-format
 msgid "Box"
 msgstr "Pole"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:148
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:130
 #, no-c-format
 msgid "Draws boxes around each InfoBox."
 msgstr "Rysuje prostokąty wokół każdego InfoBox'a."
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:150
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:132
 #, no-c-format
 msgid "Tab"
 msgstr "Zakładka"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:150
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:132
 #, no-c-format
 msgid "Draws a tab at the top of the InfoBox across the title."
 msgstr "Rysuje zakładkę na górze InfoBox'a wzdłuż tytułu."
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:152
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:134
 #, no-c-format
 msgid "Shaded"
 msgstr "Cieniowanie"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:154
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:136
 #, no-c-format
 msgid "Glass"
 msgstr "Szkło"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:160
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:142
 #, no-c-format
 msgid "Use the system-wide setting"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:162
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:144
 #, no-c-format
 msgid "Black text on white background"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:164
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:146
 #, no-c-format
 msgid "White text on black background"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:187
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:169
 #, fuzzy
 msgid "Full screen"
 msgstr "Mapa (Pełny ekran)"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:187
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:169
 msgid "Run XCSoar in full screen mode"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:192
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:174
 msgid "Display orientation"
 msgstr "Orientacja wyświetlacza."
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:192
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:174
 msgid "Rotate the display on devices that support it."
 msgstr "Obraca ekran na urządzeniach, które to obsługują"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:197
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:179
 #, fuzzy
 msgid "Dark mode"
 msgstr "Tryb obliczania zasięgu"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:201
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:183
 msgid "InfoBox geometry"
 msgstr "Rozmiar okna inform."
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:202
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:184
 msgid ""
 "A list of possible InfoBox layouts. Do some trials to find the best for your "
 "screen size."
@@ -5105,27 +5276,28 @@ msgstr ""
 "Lista możliwych układów InfoBox'ów. Zrób kilka prób aby znaleźć najlepsze "
 "dla rozmiaru Twojego ekranu."
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:205
-msgid "FLARM display"
-msgstr "Wyświetlacz FLARM."
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:187
+#, fuzzy
+msgid "InfoBox title size"
+msgstr "Tytuły InfoBox'ów"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:205
-msgid "Choose a location for the FLARM display."
-msgstr "Wybierz pozycję dla wyświetlacza FLARM"
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:187
+msgid "Zoom factor for InfoBox title and comment text"
+msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:210
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:192
 msgid "Tab dialog style"
 msgstr "Styl okna z zakładkami."
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:213
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:195
 msgid "Message display"
 msgstr "Wyświetlacz wiadomości."
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:219
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:201
 msgid "Colored InfoBoxes"
 msgstr "Kolorowe InfoBox'ów."
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:220
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:202
 msgid ""
 "If true, certain InfoBoxes will have coloured text.  For example, the active "
 "waypoint InfoBox will be blue when the glider is above final glide."
@@ -5134,81 +5306,81 @@ msgstr ""
 "przykład : InfoBox aktywnego punktu trasy będzie niebieski kiedy szybowiec "
 "jest powyżej wysokości dolotu."
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:227
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:209
 msgid "InfoBox border"
 msgstr "Ramka InfoBox"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:232
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:214
 msgid "Show Menubutton"
 msgstr "Pokaż guzik menu"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:232
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:214
 msgid "Show the Menubutton"
 msgstr "Pokazywanie guzika menu"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:238
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:220
 #, fuzzy
 msgid "Cursor zoom"
 msgstr "Autozoom"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:238
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:220
 msgid "Cursor zoom factor"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:240
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:222
 msgid "Invert cursor color"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:240
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:222
 msgid "Enable black cursor"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:43
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:44
 #, no-c-format
 msgid "Start only"
 msgstr "Tylko START"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:56
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:57
 msgid "Pilot name"
 msgstr "Imię i nazwisko pilota"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:58
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:59
 #, fuzzy
 msgid "CoPilot name"
 msgstr "Imię i nazwisko pilota"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:60
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:61
 msgid "Crew weight default"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:61
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:62
 msgid ""
 "Default for all weight loaded to the glider beyond the empty weight and "
 "besides the water ballast."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:67
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:68
 msgid "Time step cruise"
 msgstr "Krok czasowy w przelocie"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:68
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:69
 msgid "This is the time interval between logged points when not circling."
 msgstr "Jest to przedział czasowy pomiędzy logowanymi punktami poza krążeniem."
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:72
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:73
 msgid "Time step circling"
 msgstr "Odstęp czasu w krążeniu"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:73
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:74
 msgid "This is the time interval between logged points when circling."
 msgstr ""
 "To jest interwał czasowy pomiędzy zarejestrowanymi punktami podczas krążenia."
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:77
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:78
 msgid "Auto. logger"
 msgstr "Auto.logger"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:78
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:79
 msgid ""
 "Enables the automatic starting and stopping of logger on takeoff and landing "
 "respectively. Disable when flying paragliders."
@@ -5216,11 +5388,11 @@ msgstr ""
 "Włącza automatyczne uruchamianie i zatrzymywanie logger'a odpowiednio po "
 "starcie i po lądowaniu. Wyłącz kiedy latasz na paralotni."
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:83
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:84
 msgid "NMEA logger"
 msgstr "Logger NMEA"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:84
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:85
 msgid ""
 "Enable the NMEA logger on startup? If this option is disabled, the NMEA "
 "logger can still be started manually."
@@ -5228,15 +5400,15 @@ msgstr ""
 "Włączyć logger NMEA przy uruchamianiu? Gdy opcja jest wyłączona, logger "
 "można włączyć ręcznie."
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:89
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:90
 msgid "Log book"
 msgstr "Książka lotów"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:89
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:90
 msgid "Logs each start and landing."
 msgstr "Zapisuje każdy start i lądowanie."
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:93
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:94
 msgid "Logger ID"
 msgstr "Nr ser. rejestratora"
 
@@ -6559,29 +6731,34 @@ msgstr "Mapy niemieckie DFS VFR"
 msgid "French SIA VFR Chart"
 msgstr "Mapy francuskie SIA VFR"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:208
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:205
+#, fuzzy, no-c-format
+msgid "High Contrast"
+msgstr "Rzeźba terenu"
+
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:209
 msgid "Terrain colors"
 msgstr "Kolory terenu"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:209
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:210
 msgid "Defines the color ramp used in terrain rendering."
 msgstr "Określa zakres barw użytych do kolorowania terenu."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:215
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:216
 #, no-c-format
 msgid "Fixed"
 msgstr "Stałe"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:216
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:217
 #, no-c-format
 msgid "Sun"
 msgstr "Słońce"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:221
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:222
 msgid "Slope shading"
 msgstr "Cieniowanie zboczy"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:222
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:223
 msgid ""
 "The terrain can be shaded among slopes to indicate either wind direction, "
 "sun position or a fixed shading from North-West."
@@ -6589,11 +6766,11 @@ msgstr ""
 "Teren może być cieniowany między zboczami w celu zaznaczenia kierunku "
 "wiatru, pozycji słońca lub na stałe od strony Pn-Zach."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:227
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:228
 msgid "Terrain contrast"
 msgstr "Rzeźba terenu"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:228
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:229
 msgid ""
 "Defines the amount of Phong shading in the terrain rendering.  Use large "
 "values to emphasise terrain slope, smaller values if flying in steep "
@@ -6602,22 +6779,22 @@ msgstr ""
 "Definiuje intensywność cieniowania Phonga w kolorach terenu. Duże wartości "
 "podkreślą nachylenie zboczy, małe wartości są odpowiednie dla stromych gór."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:234
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:235
 msgid "Terrain brightness"
 msgstr "Jasność terenu"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:235
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:236
 msgid ""
 "Defines the brightness (whiteness) of the terrain rendering.  This controls "
 "the average illumination of the terrain."
 msgstr ""
 "Określa jasność renderowania terenu.  To steruje średnim oświetleniem terenu."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:249
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:250
 msgid "Contours"
 msgstr "Warstwice"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:250
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:251
 msgid "If enabled, draws contour lines on the terrain."
 msgstr "Rysowanie warstwic na mapie terenu."
 
@@ -7681,11 +7858,6 @@ msgstr ""
 msgid "Master Volume"
 msgstr "Głośność podstawowa"
 
-#: src/Dialogs/Weather/NOAAList.cpp:99 src/Dialogs/Weather/NOAADetails.cpp:48
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:211
-msgid "Update"
-msgstr "Aktualizuj"
-
 #: src/Dialogs/Weather/NOAAList.cpp:162
 msgid "Airport ICAO code"
 msgstr "Kod ICAO dla lotniska"
@@ -7833,10 +8005,11 @@ msgid "TC 30s"
 msgstr "WAR 30s"
 
 #: src/InfoBoxes/Content/Factory.cpp:136
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "A 30 second rolling average climb rate based of the reported GPS altitude, "
-"or vario if available."
+"or vario if available. The number in smaller font reflects the climb rate "
+"for the current thermal since circling started."
 msgstr ""
 "WAR 30s: średnie noszenie w okresie ostatnich 30 sekund, na podstawie GPS "
 "lub wariometru, jeśli jest podłączony."
@@ -7951,9 +8124,13 @@ msgid "TL Gain"
 msgstr "KOM dH"
 
 #: src/InfoBoxes/Content/Factory.cpp:185
-#, no-c-format
-msgid "Total altitude gain/loss in the last thermal."
-msgstr "KOM dH: Łączna zmiana wysokości w ostatnim kominie."
+#, fuzzy, no-c-format
+msgid ""
+"Total altitude gain/loss in the last thermal. The number in smaller font "
+"reflects the overall climb rate for the last thermal."
+msgstr ""
+"KOM wzn: Średnie noszenie w ostatnim kominie obliczone jako iloraz zmiany "
+"wysokości i czasu krążenia."
 
 #: src/InfoBoxes/Content/Factory.cpp:191
 #, no-c-format
@@ -8117,9 +8294,9 @@ msgid "V Task Avg"
 msgstr "WprzŚr"
 
 #: src/InfoBoxes/Content/Factory.cpp:260
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Average cross country speed while on current task, not compensated for "
+"Average cross-country speed while on current task, not compensated for "
 "altitude."
 msgstr ""
 "WprzŚr: Średnia prędkość na bieżącej trasie bez uwzględnienia różnic "
@@ -8864,9 +9041,9 @@ msgid "V Task Inst"
 msgstr "WchwPirk"
 
 #: src/InfoBoxes/Content/Factory.cpp:602
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Instantaneous cross country speed while on current task, compensated for "
+"Instantaneous cross-country speed while on current task, compensated for "
 "altitude. Equivalent to instantaneous Pirker cross-country speed."
 msgstr ""
 "WchwPirk: Chwilowa prędkość przelotowa bież.zadania, skompensowana "
@@ -8900,9 +9077,9 @@ msgid "V Task Ach"
 msgstr "WprzPirk"
 
 #: src/InfoBoxes/Content/Factory.cpp:618
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Achieved cross country speed while on current task, compensated for "
+"Achieved cross-country speed while on current task, compensated for "
 "altitude.  Equivalent to Pirker cross-country speed remaining."
 msgstr ""
 "WprzPirk: Dotychczasowa V średnia z komp.wysokości. Odpowiada prędkości "
@@ -9644,9 +9821,9 @@ msgid "V Task H"
 msgstr "Wprz1g"
 
 #: src/InfoBoxes/Content/Factory.cpp:965
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Average cross country speed while on current task over the last hour, not "
+"Average cross-country speed while on current task over the last hour, not "
 "compensated for altitude."
 msgstr ""
 "Wprz1g: Średnia prędkość przelotowa aktualnego zadania w ciągu ostatniej "
@@ -9746,7 +9923,7 @@ msgstr ""
 "bezpiecznej."
 
 #: src/InfoBoxes/Content/Factory.cpp:1009
-#: src/InfoBoxes/Content/Factory.cpp:1010 src/InfoBoxes/Content/Task.cpp:886
+#: src/InfoBoxes/Content/Factory.cpp:1010 src/InfoBoxes/Content/Task.cpp:900
 #, no-c-format
 msgid "Next arrow"
 msgstr "Następna strzałka"
@@ -9996,6 +10173,43 @@ msgid ""
 "estimated time of arrival in case of racing task"
 msgstr ""
 
+#: src/InfoBoxes/Content/Factory.cpp:1133
+#, fuzzy, no-c-format
+msgid "Speed task estimated"
+msgstr "Szacowana prędkość"
+
+#: src/InfoBoxes/Content/Factory.cpp:1134
+#, fuzzy, no-c-format
+msgid "V Task Est"
+msgstr "WchwPirk"
+
+#: src/InfoBoxes/Content/Factory.cpp:1135
+#, fuzzy, no-c-format
+msgid ""
+"Estimated average cross-country speed for current task as of task "
+"completion, assuming performance of ideal MacCready cruise/climb cycle."
+msgstr ""
+"DOL Godz: Szacowana godzina przylotu na metę w czasie lokalnym przy "
+"założeniu idealnego cyklu wznoszenia/przelotu wg MacCready."
+
+#: src/InfoBoxes/Content/Factory.cpp:1141
+#, fuzzy, no-c-format
+msgid "Home altitude difference"
+msgstr "PTdHMcU: różnica wysok. H GPS i przyl. PT Hprzyl dla MC Ustaw"
+
+#: src/InfoBoxes/Content/Factory.cpp:1142
+#, fuzzy, no-c-format
+msgid "Home AltD"
+msgstr "Odl. do bazowego"
+
+#: src/InfoBoxes/Content/Factory.cpp:1143
+#, fuzzy, no-c-format
+msgid ""
+"Arrival altitude at the home waypoint relative to the safety arrival height."
+msgstr ""
+"Wysokość przybycia do następnego punktu względem bezpiecznej wysokości nad "
+"punktem."
+
 #: src/InfoBoxes/Content/Alternate.cpp:58
 #, fuzzy
 msgid "Altn {}"
@@ -10049,23 +10263,23 @@ msgstr "LOT DELFINA"
 msgid "Next"
 msgstr "NAST."
 
-#: src/InfoBoxes/Content/Task.cpp:674
+#: src/InfoBoxes/Content/Task.cpp:688
 msgid "Time Below"
 msgstr "Czas poniżej"
 
-#: src/InfoBoxes/Content/Task.cpp:802 src/InfoBoxes/Content/Task.cpp:847
+#: src/InfoBoxes/Content/Task.cpp:816 src/InfoBoxes/Content/Task.cpp:861
 msgid "Closed"
 msgstr "Zamkn."
 
-#: src/InfoBoxes/Content/Task.cpp:811 src/InfoBoxes/Content/Task.cpp:856
+#: src/InfoBoxes/Content/Task.cpp:825 src/InfoBoxes/Content/Task.cpp:870
 msgid "Open"
 msgstr "Otw."
 
-#: src/InfoBoxes/Content/Task.cpp:816 src/InfoBoxes/Content/Task.cpp:861
+#: src/InfoBoxes/Content/Task.cpp:830 src/InfoBoxes/Content/Task.cpp:875
 msgid "Waiting"
 msgstr "Oczek."
 
-#: src/InfoBoxes/Content/Places.cpp:60
+#: src/InfoBoxes/Content/Places.cpp:98
 #, no-c-format
 msgid "Reference"
 msgstr "Odniesienie"
@@ -10955,6 +11169,45 @@ msgstr ""
 "Najbliższa\n"
 "Strefa"
 
+#: Data/Input/default.xci:1279
+#, fuzzy
+msgid "Quit XCSoar"
+msgstr "XCSoar"
+
+#, no-c-format
+#~ msgid "Power"
+#~ msgstr "Zasilanie"
+
+#, no-c-format
+#~ msgid "GPS configuration"
+#~ msgstr "Konfiguracja GPSu"
+
+#, no-c-format
+#~ msgid "Transponder receiver"
+#~ msgstr "Odbiornik Transpondera"
+
+#~ msgid "Overwrite?"
+#~ msgstr "Zastąpić?"
+
+#~ msgid "Waypoints Editor"
+#~ msgstr "Edytor punktów zwrotnych"
+
+#, no-c-format
+#~ msgid "Top Left"
+#~ msgstr "Lewy górny róg"
+
+#, no-c-format
+#~ msgid "Bottom Left"
+#~ msgstr "Lewy dolny róg"
+
+#, no-c-format
+#~ msgid "Bottom Right"
+#~ msgstr "Prawy dolny róg"
+
+#, no-c-format
+#~ msgid "Total altitude gain/loss in the last thermal."
+#~ msgstr "KOM dH: Łączna zmiana wysokości w ostatnim kominie."
+
 #~ msgid "Inverse InfoBoxes"
 #~ msgstr "InfoBox'y w negatywie"
 
@@ -11191,9 +11444,6 @@ msgstr ""
 
 #~ msgid "Could not open IGC file!"
 #~ msgstr "Nie można otworzyć pliku IGC!"
-
-#~ msgid "Generic"
-#~ msgstr "Standardowe"
 
 #~ msgid "Device model"
 #~ msgstr "Model urządzenia"
@@ -11492,9 +11742,6 @@ msgstr ""
 #~ msgid "Return"
 #~ msgstr "Powrót"
 
-#~ msgid "InfoBox titles"
-#~ msgstr "Tytuły InfoBox'ów"
-
 #~ msgid "The time in seconds to dump full ballast."
 #~ msgstr "Czas w sekundach potrzebny na zrzucenie całego balastu"
 
@@ -11503,12 +11750,6 @@ msgstr ""
 
 #~ msgid "Export"
 #~ msgstr "Eksportuj"
-
-#~ msgid "Configuration Menu"
-#~ msgstr "Menu konfiguracyjne"
-
-#~ msgid "XCSoar"
-#~ msgstr "XCSoar"
 
 #~ msgid "Gate Width"
 #~ msgstr "Szerokość bramki"
@@ -12769,13 +13010,6 @@ msgstr ""
 #~ msgstr "V przel."
 
 #~ msgid ""
-#~ "Arrival altitude at the next waypoint relative to the safety arrival "
-#~ "altitude."
-#~ msgstr ""
-#~ "Wysokość przybycia do następnego punktu względem bezpiecznej wysokości "
-#~ "nad punktem."
-
-#~ msgid ""
 #~ "The current MacCready setting. This infobox also shows whether MacCready "
 #~ "is manual or auto. (Touchscreen/PC only) Also used to adjust the "
 #~ "MacCready Setting if the infobox is active, by using the up/down cursor "
@@ -12938,9 +13172,6 @@ msgstr ""
 
 #~ msgid "TeamCode"
 #~ msgstr "Kod drużynowy"
-
-#~ msgid "Home Dis"
-#~ msgstr "Odl. do bazowego"
 
 #~ msgid "Team Dis"
 #~ msgstr "Odl. drużyny"
