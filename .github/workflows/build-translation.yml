@@ -51,4 +51,5 @@ jobs:
         with:
           commit_message: "Autocommit translation sources"
           file_pattern: "*.pot *.po"
+          create_branch: true
         if: steps.check_test.outputs.do_update == 'true'
