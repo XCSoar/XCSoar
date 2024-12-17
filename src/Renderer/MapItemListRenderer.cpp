@@ -14,6 +14,7 @@
 #include "Renderer/WaypointListRenderer.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Formatter/UserUnits.hpp"
+#include "Formatter/Units.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
@@ -55,11 +56,13 @@ Draw(Canvas &canvas, const PixelRect rc,
 {
   TCHAR info_buffer[256];
   if (item.vector.IsValid())
-    StringFormatUnsafe(info_buffer, _T("%s: %s, %s: %s"),
+    StringFormatUnsafe(info_buffer, _T("%s: %s (%s), %s: %s (%s)"),
                        _("Distance"),
                        FormatUserDistanceSmart(item.vector.distance).c_str(),
+                       FormatDistance(item.vector.distance,Unit::NAUTICAL_MILES).c_str(),
                        _("Direction"),
-                       FormatBearing(item.vector.bearing).c_str());
+                       FormatBearing(item.vector.bearing).c_str(),
+                       FormatBearingCompass(item.vector.bearing,2).c_str());
   else
     StringFormatUnsafe(info_buffer, _T("%s: %s, %s: %s"),
                        _("Distance"), _T("???"), _("Direction"), _T("???"));
