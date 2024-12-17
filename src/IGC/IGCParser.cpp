@@ -5,6 +5,7 @@
 #include "IGCHeader.hpp"
 #include "IGCFix.hpp"
 #include "IGCExtensions.hpp"
+#include "Geo/Geoid.hpp"
 #include "IGCDeclaration.hpp"
 #include "time/BrokenDate.hpp"
 #include "time/BrokenTime.hpp"
@@ -232,11 +233,15 @@ IGCParseFix(const char *buffer, const IGCExtensions &extensions, IGCFix &fix)
   else
     return false;
 
-  fix.gps_altitude = gps_altitude;
-  fix.pressure_altitude = pressure_altitude;
-
   if (!IGCParseLocation(buffer + 7, fix.location))
     return false;
+
+  // B-records report WGS 84 ellipsoid altitude, convert to AMSL
+  fix.gps_ellipsoid_altitude = gps_altitude;
+  double geoid_separation = EGM96::LookupSeparation(fix.location);
+  fix.gps_altitude = gps_altitude - static_cast<int>(geoid_separation);
+
+  fix.pressure_altitude = pressure_altitude;
 
   fix.time = time;
 
