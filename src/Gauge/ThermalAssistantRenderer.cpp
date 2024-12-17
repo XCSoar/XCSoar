@@ -156,7 +156,7 @@ ThermalAssistantRenderer::PaintPoints(Canvas &canvas,
 #ifdef ENABLE_OPENGL
   const ScopeAlphaBlend alpha_blend;
 #elif defined(USE_GDI)
-  canvas.SetMixMask();
+  canvas.SetMixCopy();
 #endif /* GDI */
 
   canvas.Select(look.polygon_brush);

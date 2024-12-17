@@ -139,13 +139,17 @@ void
 UnorderedTask::ScanDistanceMinMax([[maybe_unused]] const GeoPoint &location, [[maybe_unused]] bool full,
                                   double *dmin, double *dmax) noexcept
 {
-  *dmin = *dmax = stats.total.remaining.IsDefined()
-    ? stats.total.remaining.GetDistance()
-    : 0;
+  *dmin = *dmax = ScanDistanceNominal();
+}
+
+double 
+UnorderedTask::ScanDistanceMaxTotal() noexcept
+{
+  return ScanDistanceNominal();
 }
 
 double
-UnorderedTask::ScanDistanceNominal() noexcept
+UnorderedTask::ScanDistanceNominal() const noexcept
 {
   return stats.total.remaining.IsDefined()
     ? stats.total.remaining.GetDistance()
@@ -155,9 +159,7 @@ UnorderedTask::ScanDistanceNominal() noexcept
 double
 UnorderedTask::ScanDistancePlanned() noexcept
 {
-  return stats.total.remaining.IsDefined()
-    ? stats.total.remaining.GetDistance()
-    : 0;
+  return ScanDistanceNominal();
 }
 
 double
