@@ -40,7 +40,6 @@ class MainWindow : public UI::SingleWindow {
   static constexpr const TCHAR *title = _T("XCSoar");
 
   Look *look = nullptr;
-
   MenuBar *menu_bar = nullptr;
 
 #ifdef HAVE_SHOW_MENU_BUTTON
@@ -145,7 +144,11 @@ protected:
   void KillWidget() noexcept;
 
   bool HaveTopWidget() const noexcept {
-    return top_widget != nullptr;
+    /* currently, the top widget is only visible above the map, but
+       not above a custom main widget */
+    /* TODO: eliminate this limitation; don't forget to remove the
+       "widget==nullptr" check from MainWindow::KillTopWidget() */
+    return top_widget != nullptr && widget == nullptr;
   }
 
   /**
