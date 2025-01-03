@@ -5,6 +5,7 @@ package org.xcsoar;
 
 import java.util.UUID;
 import java.util.Set;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.LinkedList;
@@ -20,6 +21,8 @@ import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanRecord;
+import android.bluetooth.le.ScanFilter;
+import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.Manifest;
@@ -166,11 +169,31 @@ final class BluetoothHelper
   private synchronized void startLeScan() {
     if (scanner != null || detectListeners.isEmpty())
       return;
+    /**
+     * Build ScanFilters for SERVICE UUIDs, only
+     * devices providing the services will be found
+     * by the scanner. So later onServicesDiscovered() will
+     * just trigger for supported services.
+     * */ 
+    List<ScanFilter> filters = new ArrayList<>();
+    for (UUID uuid : BluetoothUuids.getAllServiceUuids()) {
+        ScanFilter filter = new ScanFilter.Builder()
+                .setServiceUuid(new ParcelUuid(uuid))
+                .build();
+        filters.add(filter);
+        Log.d(TAG, "Filter for known BLE services: " + uuid.toString());
+    }
 
+    // Create ScanSettings, quick scan for the supported services.
+    ScanSettings settings = new ScanSettings.Builder()
+            .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+            .build();
+
+    // Start scanning with filters and settings.
     try {
       scanner = adapter.getBluetoothLeScanner();
       if (scanner != null)
-        scanner.startScan(this);
+        scanner.startScan(filters, settings, this);
     } catch (Exception e) {
       Log.e(TAG, "Bluetooth LE scan failed", e);
       scanner = null;
