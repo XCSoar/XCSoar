@@ -601,7 +601,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
     info.gps_altitude_available.Clear();
 
   double geoid_separation;
-  if (ReadAltitude(line, geoid_separation)) {
+  if (ReadAltitude(line, geoid_separation) && (geoid_separation != 0)) {
     // No real need to parse this value,
     // but we do assume that no correction is required in this case
 
@@ -611,16 +611,19 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
          column.  That sucks! */
       info.gps_altitude = geoid_separation;
       info.gps_altitude_available.Update(info.clock);
+      if (use_geoid && info.location_available)
+          geoid_separation = EGM96::LookupSeparation(info.location);
+      else
+          geoid_separation = 0;
     }
+    info.gps_ellipsoid_altitude = info.gps_altitude + geoid_separation;
   } else {
-    // need to estimate Geoid Separation internally (optional)
-    // FLARM uses MSL altitude
-    //
-    // Some others don't.
-    //
+    // FLARM reports MSL altitude & geoid separation in GGA sentence.
+    // Some others don't, or always report zero.
     // If the separation doesn't appear in the sentence,
-    // we can assume the GPS unit is giving ellipsoid height
-    //
+    // we can assume the GPS unit is giving ellipsoid height.
+    // Need to estimate Geoid Separation internally.
+    info.gps_ellipsoid_altitude = info.gps_altitude;
     if (use_geoid && info.location_available) {
       // JMW TODO really need to know the actual device..
       geoid_separation = EGM96::LookupSeparation(info.location);
