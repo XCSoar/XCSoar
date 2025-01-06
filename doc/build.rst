@@ -289,7 +289,9 @@ Install the required Homebrew packages::
     libtiff libgeotiff proj \
     c-ares \
     curl \
-    lua
+    lua \
+    libicns \
+    cdrtools
 
 Then compile::
 
