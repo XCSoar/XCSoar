@@ -30,7 +30,8 @@ install_macOS() {
     libpng libjpeg-turbo \
     libtiff libgeotiff \
     proj c-ares \
-    curl lua
+    curl lua \
+    libicns cdrtools
   echo
 }
 
