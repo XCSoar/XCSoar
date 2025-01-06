@@ -35,7 +35,7 @@ on:
 
 env:
   DEBUG: y
-  BOOST: boost_1_85_0
+  BOOST: boost_1_87_0
 
 jobs:
   release:

@@ -1,7 +1,7 @@
-Index: boost_1_85_0/boost/geometry/core/coordinate_promotion.hpp
+Index: boost_1_87_0/boost/geometry/core/coordinate_promotion.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/core/coordinate_promotion.hpp
-+++ boost_1_85_0/boost/geometry/core/coordinate_promotion.hpp
+--- boost_1_87_0.orig/boost/geometry/core/coordinate_promotion.hpp
++++ boost_1_87_0/boost/geometry/core/coordinate_promotion.hpp
 @@ -11,10 +11,12 @@
  
  #include <boost/geometry/core/coordinate_type.hpp>
