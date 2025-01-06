@@ -266,6 +266,10 @@ To compile for iOS / ARMv7, run::
 
   make TARGET=IOS32 ipa
 
+To compile for macOS / ARM64, run::
+
+  make TARGET=MACOS dmg
+
 To compile for macOS / x86_64, run::
 
   make TARGET=OSX64 dmg
