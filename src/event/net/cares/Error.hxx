@@ -9,12 +9,14 @@
 namespace Cares {
 
 class Error : public std::runtime_error {
-  int code;
+	int code;
 
 public:
-  Error(int _code, const char *msg) noexcept;
+	Error(int _code, const char *msg) noexcept;
 
-  int GetCode() const noexcept { return code; }
+	int GetCode() const noexcept {
+		return code;
+	}
 };
 
 } // namespace Cares

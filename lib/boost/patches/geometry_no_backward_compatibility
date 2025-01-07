@@ -1,7 +1,7 @@
-Index: boost_1_85_0/boost/geometry/algorithms/is_empty.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/is_empty.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/is_empty.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/is_empty.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/is_empty.hpp
++++ boost_1_87_0/boost/geometry/algorithms/is_empty.hpp
 @@ -25,7 +25,6 @@
  #include <boost/geometry/core/tags.hpp>
  #include <boost/geometry/core/visit.hpp>
@@ -10,10 +10,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/is_empty.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  #include <boost/geometry/util/type_traits_std.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/detail/distance/interface.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/detail/distance/interface.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/detail/distance/interface.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/detail/distance/interface.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/detail/distance/interface.hpp
++++ boost_1_87_0/boost/geometry/algorithms/detail/distance/interface.hpp
 @@ -29,7 +29,6 @@
  #include <boost/geometry/core/point_type.hpp>
  #include <boost/geometry/core/visit.hpp>
@@ -22,10 +22,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/detail/distance/interface.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  // TODO: move these to algorithms
-Index: boost_1_85_0/boost/geometry/algorithms/detail/comparable_distance/interface.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/detail/comparable_distance/interface.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/detail/comparable_distance/interface.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/detail/comparable_distance/interface.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/detail/comparable_distance/interface.hpp
++++ boost_1_87_0/boost/geometry/algorithms/detail/comparable_distance/interface.hpp
 @@ -24,7 +24,6 @@
  
  #include <boost/geometry/algorithms/detail/distance/interface.hpp>
@@ -34,10 +34,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/detail/comparable_distance/interfa
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  #include <boost/geometry/strategies/comparable_distance_result.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/detail/is_valid/interface.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/detail/is_valid/interface.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/detail/is_valid/interface.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/detail/is_valid/interface.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/detail/is_valid/interface.hpp
++++ boost_1_87_0/boost/geometry/algorithms/detail/is_valid/interface.hpp
 @@ -18,7 +18,6 @@
  #include <boost/geometry/algorithms/dispatch/is_valid.hpp>
  #include <boost/geometry/core/cs.hpp>
@@ -46,10 +46,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/detail/is_valid/interface.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  #include <boost/geometry/policies/is_valid/default_policy.hpp>
  #include <boost/geometry/policies/is_valid/failing_reason_policy.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/area.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/area.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/area.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/area.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/area.hpp
++++ boost_1_87_0/boost/geometry/algorithms/area.hpp
 @@ -44,7 +44,6 @@
  #include <boost/geometry/algorithms/area_result.hpp>
  #include <boost/geometry/algorithms/default_area_result.hpp>
@@ -58,10 +58,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/area.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  #include <boost/geometry/strategies/area/services.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/centroid.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/centroid.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/centroid.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/centroid.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/centroid.hpp
++++ boost_1_87_0/boost/geometry/algorithms/centroid.hpp
 @@ -43,7 +43,6 @@
  #include <boost/geometry/algorithms/is_empty.hpp>
  #include <boost/geometry/algorithms/not_implemented.hpp>
@@ -70,10 +70,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/centroid.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  #include <boost/geometry/strategies/centroid/cartesian.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/densify.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/densify.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/densify.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/densify.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/densify.hpp
++++ boost_1_87_0/boost/geometry/algorithms/densify.hpp
 @@ -27,7 +27,6 @@
  #include <boost/geometry/core/tag.hpp>
  #include <boost/geometry/core/tags.hpp>
@@ -82,10 +82,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/densify.hpp
  #include <boost/geometry/strategies/default_strategy.hpp>
  #include <boost/geometry/strategies/densify/cartesian.hpp>
  #include <boost/geometry/strategies/densify/geographic.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/is_convex.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/is_convex.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/is_convex.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/is_convex.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/is_convex.hpp
++++ boost_1_87_0/boost/geometry/algorithms/is_convex.hpp
 @@ -25,7 +25,6 @@
  #include <boost/geometry/core/exterior_ring.hpp>
  #include <boost/geometry/core/interior_rings.hpp>
@@ -94,10 +94,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/is_convex.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  #include <boost/geometry/iterators/ever_circling_iterator.hpp>
  #include <boost/geometry/strategies/default_strategy.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/simplify.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/simplify.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/simplify.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/simplify.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/simplify.hpp
++++ boost_1_87_0/boost/geometry/algorithms/simplify.hpp
 @@ -51,7 +51,6 @@
  #include <boost/geometry/core/tags.hpp>
  #include <boost/geometry/core/visit.hpp>
@@ -106,10 +106,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/simplify.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  #include <boost/geometry/strategies/default_strategy.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/append.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/append.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/append.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/append.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/append.hpp
++++ boost_1_87_0/boost/geometry/algorithms/append.hpp
 @@ -32,7 +32,6 @@
  #include <boost/geometry/core/point_type.hpp>
  #include <boost/geometry/core/tags.hpp>
@@ -118,10 +118,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/append.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  #include <boost/geometry/util/range.hpp>
  
-Index: boost_1_85_0/boost/geometry/algorithms/clear.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/clear.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/clear.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/clear.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/clear.hpp
++++ boost_1_87_0/boost/geometry/algorithms/clear.hpp
 @@ -29,7 +29,6 @@
  #include <boost/geometry/core/tag_cast.hpp>
  #include <boost/geometry/core/tags.hpp>
@@ -130,10 +130,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/clear.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  
-Index: boost_1_85_0/boost/geometry/algorithms/correct.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/correct.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/correct.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/correct.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/correct.hpp
++++ boost_1_87_0/boost/geometry/algorithms/correct.hpp
 @@ -37,7 +37,6 @@
  #include <boost/geometry/core/tags.hpp>
  #include <boost/geometry/core/visit.hpp>
@@ -142,10 +142,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/correct.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  #include <boost/geometry/strategies/area/cartesian.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/length.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/length.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/length.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/length.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/length.hpp
++++ boost_1_87_0/boost/geometry/algorithms/length.hpp
 @@ -36,7 +36,6 @@
  #include <boost/geometry/core/tags.hpp>
  #include <boost/geometry/core/visit.hpp>
@@ -154,10 +154,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/length.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  #include <boost/geometry/strategies/default_strategy.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/num_points.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/num_points.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/num_points.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/num_points.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/num_points.hpp
++++ boost_1_87_0/boost/geometry/algorithms/num_points.hpp
 @@ -36,7 +36,6 @@
  #include <boost/geometry/core/tags.hpp>
  #include <boost/geometry/core/visit.hpp>
@@ -166,10 +166,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/num_points.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  #include <boost/geometry/util/type_traits_std.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/num_segments.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/num_segments.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/num_segments.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/num_segments.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/num_segments.hpp
++++ boost_1_87_0/boost/geometry/algorithms/num_segments.hpp
 @@ -26,7 +26,6 @@
  #include <boost/geometry/core/tags.hpp>
  #include <boost/geometry/core/visit.hpp>
@@ -178,10 +178,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/num_segments.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  namespace boost { namespace geometry
-Index: boost_1_85_0/boost/geometry/algorithms/perimeter.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/perimeter.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/perimeter.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/perimeter.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/perimeter.hpp
++++ boost_1_87_0/boost/geometry/algorithms/perimeter.hpp
 @@ -33,7 +33,6 @@
  #include <boost/geometry/core/tags.hpp>
  #include <boost/geometry/core/visit.hpp>
@@ -190,10 +190,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/perimeter.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  #include <boost/geometry/strategies/default_length_result.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/reverse.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/reverse.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/reverse.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/reverse.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/reverse.hpp
++++ boost_1_87_0/boost/geometry/algorithms/reverse.hpp
 @@ -30,7 +30,6 @@
  #include <boost/geometry/core/interior_rings.hpp>
  #include <boost/geometry/core/tags.hpp>
@@ -202,10 +202,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/reverse.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  
-Index: boost_1_85_0/boost/geometry/algorithms/detail/within/interface.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/detail/within/interface.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/detail/within/interface.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/detail/within/interface.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/detail/within/interface.hpp
++++ boost_1_87_0/boost/geometry/algorithms/detail/within/interface.hpp
 @@ -26,7 +26,6 @@
  #include <boost/geometry/core/tag.hpp>
  #include <boost/geometry/core/tag_cast.hpp>
@@ -214,10 +214,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/detail/within/interface.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  #include <boost/geometry/strategies/concepts/within_concept.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/detail/convex_hull/interface.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/detail/convex_hull/interface.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/detail/convex_hull/interface.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/detail/convex_hull/interface.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/detail/convex_hull/interface.hpp
++++ boost_1_87_0/boost/geometry/algorithms/detail/convex_hull/interface.hpp
 @@ -44,7 +44,6 @@
  #include <boost/geometry/core/tags.hpp>
  #include <boost/geometry/core/visit.hpp>
@@ -226,10 +226,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/detail/convex_hull/interface.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  #include <boost/geometry/geometries/ring.hpp>
  
-Index: boost_1_85_0/boost/geometry/algorithms/detail/disjoint/interface.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/detail/disjoint/interface.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/detail/disjoint/interface.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/detail/disjoint/interface.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/detail/disjoint/interface.hpp
++++ boost_1_87_0/boost/geometry/algorithms/detail/disjoint/interface.hpp
 @@ -27,7 +27,6 @@
  #include <boost/geometry/algorithms/detail/visit.hpp>
  #include <boost/geometry/algorithms/dispatch/disjoint.hpp>
@@ -238,10 +238,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/detail/disjoint/interface.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  #include <boost/geometry/strategies/default_strategy.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/detail/relate/interface.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/detail/relate/interface.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/detail/relate/interface.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/detail/relate/interface.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/detail/relate/interface.hpp
++++ boost_1_87_0/boost/geometry/algorithms/detail/relate/interface.hpp
 @@ -23,7 +23,6 @@
  #include <boost/geometry/core/tag.hpp>
  #include <boost/geometry/core/tags.hpp>
@@ -250,10 +250,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/detail/relate/interface.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  #include <boost/geometry/strategies/default_strategy.hpp>
  #include <boost/geometry/strategies/detail.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/detail/equals/interface.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/detail/equals/interface.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/detail/equals/interface.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/detail/equals/interface.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/detail/equals/interface.hpp
++++ boost_1_87_0/boost/geometry/algorithms/detail/equals/interface.hpp
 @@ -28,7 +28,6 @@
  #include <boost/geometry/core/tag.hpp>
  #include <boost/geometry/core/tag_cast.hpp>
@@ -262,10 +262,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/detail/equals/interface.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  #include <boost/geometry/algorithms/not_implemented.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/detail/overlaps/interface.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/detail/overlaps/interface.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/detail/overlaps/interface.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/detail/overlaps/interface.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/detail/overlaps/interface.hpp
++++ boost_1_87_0/boost/geometry/algorithms/detail/overlaps/interface.hpp
 @@ -24,7 +24,6 @@
  
  #include <boost/geometry/algorithms/not_implemented.hpp>
@@ -274,10 +274,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/detail/overlaps/interface.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  #include <boost/geometry/algorithms/detail/relate/relate_impl.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/detail/touches/interface.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/detail/touches/interface.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/detail/touches/interface.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/detail/touches/interface.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/detail/touches/interface.hpp
++++ boost_1_87_0/boost/geometry/algorithms/detail/touches/interface.hpp
 @@ -29,7 +29,6 @@
  #include <boost/geometry/core/tags.hpp>
  #include <boost/geometry/core/visit.hpp>
@@ -286,10 +286,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/detail/touches/interface.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  #include <boost/geometry/strategies/default_strategy.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/detail/expand/interface.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/detail/expand/interface.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/detail/expand/interface.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/detail/expand/interface.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/detail/expand/interface.hpp
++++ boost_1_87_0/boost/geometry/algorithms/detail/expand/interface.hpp
 @@ -30,7 +30,6 @@
  #include <boost/geometry/core/tags.hpp>
  #include <boost/geometry/core/visit.hpp>
@@ -298,10 +298,10 @@ Index: boost_1_85_0/boost/geometry/algorithms/detail/expand/interface.hpp
  #include <boost/geometry/geometries/concepts/check.hpp>
  
  #include <boost/geometry/strategies/default_strategy.hpp>
-Index: boost_1_85_0/boost/geometry/algorithms/detail/envelope/interface.hpp
+Index: boost_1_87_0/boost/geometry/algorithms/detail/envelope/interface.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/algorithms/detail/envelope/interface.hpp
-+++ boost_1_85_0/boost/geometry/algorithms/detail/envelope/interface.hpp
+--- boost_1_87_0.orig/boost/geometry/algorithms/detail/envelope/interface.hpp
++++ boost_1_87_0/boost/geometry/algorithms/detail/envelope/interface.hpp
 @@ -29,7 +29,6 @@
  #include <boost/geometry/core/tags.hpp>
  #include <boost/geometry/core/visit.hpp>

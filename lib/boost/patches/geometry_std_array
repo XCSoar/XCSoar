@@ -1,7 +1,7 @@
-Index: boost_1_85_0/boost/geometry/util/series_expansion.hpp
+Index: boost_1_87_0/boost/geometry/util/series_expansion.hpp
 ===================================================================
---- boost_1_85_0.orig/boost/geometry/util/series_expansion.hpp
-+++ boost_1_85_0/boost/geometry/util/series_expansion.hpp
+--- boost_1_87_0.orig/boost/geometry/util/series_expansion.hpp
++++ boost_1_87_0/boost/geometry/util/series_expansion.hpp
 @@ -34,6 +34,8 @@
  #include <boost/geometry/core/assert.hpp>
  #include <boost/geometry/util/math.hpp>
