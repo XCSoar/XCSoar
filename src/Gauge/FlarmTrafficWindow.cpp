@@ -12,6 +12,7 @@
 #include "Language/Language.hpp"
 #include "util/Macros.hpp"
 #include "Look/FlarmTrafficLook.hpp"
+#include "Renderer/TextInBox.hpp"
 
 #include <algorithm>
 
@@ -427,9 +428,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   };
 
   // Draw vertical speed shadow
-  canvas.SetTextColor(COLOR_WHITE);
-  canvas.DrawText({tp.x + 1, tp.y + 1}, tmp);
-  canvas.DrawText({tp.y - 1, tp.y - 1}, tmp);
+  RenderShadowedText(canvas, tmp, tp, false);
 
   // Select color
   canvas.SetTextColor(*text_color);
