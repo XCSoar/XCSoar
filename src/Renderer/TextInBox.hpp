@@ -12,6 +12,10 @@ struct PixelSize;
 struct PixelRect;
 class Canvas;
 class LabelBlock;
+void
+RenderShadowedText(Canvas &canvas, const TCHAR *text,
+                   PixelPoint p,
+                   bool inverted) noexcept;
 
 struct TextInBoxMode {
   enum Alignment : uint8_t {
