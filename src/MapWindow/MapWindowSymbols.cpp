@@ -34,6 +34,7 @@ void
 MapWindow::DrawBestCruiseTrack(Canvas &canvas,
                                const PixelPoint aircraft_pos) const noexcept
 {
+  return;
   if (Basic().location_available)
     BestCruiseArrowRenderer::Draw(canvas, look.task,
                                   render_projection.GetScreenAngle(),

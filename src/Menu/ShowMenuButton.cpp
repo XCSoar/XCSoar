@@ -8,6 +8,8 @@
 #include "Screen/Layout.hpp"
 #include "Input/InputEvents.hpp"
 #include "util/Macros.hpp"
+#include "UISettings.hpp"
+#include "Interface.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
@@ -21,6 +23,7 @@ public:
 
   void DrawButton(Canvas &canvas, const PixelRect &rc,
                   ButtonState state) const noexcept override;
+  UISettings settings = CommonInterface::GetUISettings();
 };
 
 void
@@ -42,6 +45,7 @@ void
 ShowMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
                                    ButtonState state) const noexcept
 {
+  if (!settings.show_menu_button) return;
   const unsigned pen_width = Layout::ScalePenWidth(2);
   const unsigned padding = Layout::GetTextPadding() + pen_width;
 
