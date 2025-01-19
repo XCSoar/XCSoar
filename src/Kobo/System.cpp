@@ -255,7 +255,7 @@ KoboWifiOn()
 
   Start("/sbin/udhcpc", "-S", "-i", interface,
         "-s", "/etc/udhcpc.d/default.script",
-        "-t15", "-T10", "-A3", "-f", "-q");
+        "-t15", "-T10", "-A3", "-f");
 
   return true;
 #else
@@ -309,6 +309,9 @@ KoboRunXCSoar([[maybe_unused]] const char *mode)
   if (!SiblingPath("xcsoar", buffer, sizeof(buffer)))
     cmd = "/mnt/onboard/XCSoar/xcsoar";
 
+  if (!strcmp(mode,"-fly"))
+    KoboWifiOn();
+
   Run(cmd, mode);
 #endif
 }
@@ -343,7 +346,7 @@ KoboCanChangeBacklightBrightness()
   case KoboModel::LIBRA2:
   case KoboModel::CLARA_2E:
   case KoboModel::CLARA_HD:
-    return true;
+    return false;
 
   default:
     return false;
@@ -454,11 +457,11 @@ KoboGetBacklightColourFile() noexcept
     return nullptr;
   }
   if (files_to_check[0] && File::Exists(Path(colour_files[0])))
-    return colour_files[0]; 
+    return colour_files[0];
   if (files_to_check[1] && File::Exists(Path(colour_files[1])))
-    return colour_files[1]; 
+    return colour_files[1];
   if (files_to_check[2] && File::Exists(Path(colour_files[2])))
-    return colour_files[2]; 
+    return colour_files[2];
 #endif
   return nullptr;
 }

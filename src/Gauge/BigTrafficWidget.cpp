@@ -133,6 +133,8 @@ FlarmTrafficControl::OnCreate() noexcept
   Profile::GetEnum(ProfileKeys::FlarmSideData, side_display_type);
   enable_auto_zoom = settings.auto_zoom;
   enable_north_up = settings.north_up;
+  SetAutoZoom(true);
+  CalcAutoZoom();
 }
 
 unsigned
@@ -177,14 +179,14 @@ void
 FlarmTrafficControl::CalcAutoZoom()
 {
   bool warning_mode = WarningMode();
-  RoughDistance zoom_dist = 0;
+  RoughDistance zoom_dist = 20000;
 
   for (auto it = data.list.begin(), end = data.list.end();
       it != end; ++it) {
     if (warning_mode && !it->HasAlarm())
       continue;
 
-    zoom_dist = std::max(it->distance, zoom_dist);
+    zoom_dist = std::min(it->distance, zoom_dist);
   }
 
   double zoom_dist2 = zoom_dist;

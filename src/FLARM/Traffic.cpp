@@ -37,4 +37,5 @@ FlarmTraffic::Update(const FlarmTraffic &other) noexcept
   climb_rate_received = other.climb_rate_received;
   stealth = other.stealth;
   type = other.type;
+  name = other.name;
 }
