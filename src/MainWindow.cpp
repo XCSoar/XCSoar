@@ -202,8 +202,11 @@ MainWindow::InitialiseConfigured()
   ReinitialiseLayout_flarm(rc, ib_layout);
 
 #ifdef HAVE_SHOW_MENU_BUTTON
+  const UISettings &settings = CommonInterface::GetUISettings();
+  if (settings.show_menu_button){
     show_menu_button = new ShowMenuButton();
     show_menu_button->Create(*this, GetShowMenuButtonRect(map_rect));
+  }
 #endif
 
   map = new GlueMapWindow(*look);
@@ -271,7 +274,7 @@ MainWindow::ReinitialiseLayoutTA(PixelRect rc,
 {
   unsigned sz = std::min(layout.control_size.height,
                          layout.control_size.width) * 2;
-  unsigned mw = std::min((GetMainRect().bottom - GetMainRect().top),
+  unsigned mw = std::min((GetMainRect().bottom - GetMainRect().top), 
                          (GetMainRect().right - GetMainRect().left));
   unsigned dia = std::min(sz, mw / 2);
 
@@ -433,7 +436,7 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
 
   case TrafficSettings::GaugeLocation::TOP_LEFT_AVOID_IB:
     rc.top = GetMainRect().top;
-    rc.left = GetMainRect().left;
+    rc.left = GetMainRect().left; 
     rc.right = rc.left + dia;
     rc.bottom = rc.top + dia;
     break;

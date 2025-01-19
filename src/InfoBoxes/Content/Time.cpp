@@ -6,7 +6,6 @@
 #include "Interface.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
-#include "Math/SunEphemeris.hpp"
 
 #include <tchar.h>
 
@@ -25,15 +24,7 @@ UpdateInfoBoxTimeLocal(InfoBoxData &data) noexcept
   FormatLocalTimeHHMM(data.value.buffer(), basic.time, settings.utc_offset);
 
   // Set Comment
-
-  SunEphemeris::Result sun =
-    SunEphemeris::CalcSunTimes(basic.location, basic.date_time_utc,
-                               settings.utc_offset);
-
-  const unsigned sunsethours = (int)sun.time_of_sunset;
-  const unsigned sunsetmins = (int)((sun.time_of_sunset - sunsethours) * 60);
-
-  data.FmtComment(_T("{:02}:{:02}"), sunsethours, sunsetmins);
+  data.FmtComment(_T("{:02}"), basic.date_time_utc.second);
 }
 
 void

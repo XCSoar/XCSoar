@@ -41,9 +41,6 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "Dialogs/LockScreen.hpp"
 #include "Menu/MenuBar.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
-#include <fcntl.h>
-#include "Message.hpp"
-#include "Formatter/TimeFormatter.hpp"
 
 #ifdef KOBO
 #include "ui/event/KeyCode.hpp"
@@ -361,11 +358,6 @@ InputEvents::ProcessKey(Mode mode, unsigned key_code) noexcept
 bool
 InputEvents::processKey(unsigned key_code) noexcept
 {
-#ifdef KOBO
-  if (key_code == KEY_POWER) {
-      InputEvents::KoboScreenshot();
-  }
-#endif
   return ProcessKey(getModeID(), key_code);
 }
 
@@ -515,22 +507,4 @@ void
 InputEvents::eventLockScreen([[maybe_unused]] const TCHAR *mode)
 {
   ShowLockBox();
-}
-
-void
-InputEvents::KoboScreenshot() noexcept
-{
-  char date_buffer[32];
-  char time_buffer[32];
-  char outFileName[128];
-  char cmdfbgrab[256];
-
-  FormatISO8601(date_buffer,BrokenDate::TodayUTC());
-  BrokenTime time = BrokenDateTime::NowUTC();
-  sprintf(time_buffer,"%02u-%02u-%02u",time.hour,time.minute,time.second);
-  sprintf(&outFileName[0],"/mnt/onboard/%s-%s-screen.png",date_buffer,time_buffer);
-
-  sprintf(&cmdfbgrab[0],"/opt/xcsoar/bin/fb2png -s 10 %s&",outFileName);
-  system(cmdfbgrab);
-  Message::AddMessage("Screenshot in 10 seconds");
 }

@@ -73,6 +73,9 @@ public:
 void
 KoboMenuWidget::CreateButtons(WidgetDialog &buttons)
 {
+  buttons.AddButton(("Nickel"), dialog.MakeModalResultCallback(LAUNCH_NICKEL))
+      ->SetEnabled(!IsKoboCustomKernel());
+  buttons.AddButton(("Tools"), [](){ ShowToolsDialog(); });
   buttons.AddButton(_("Network"), [](){ ShowNetworkDialog(); });
   buttons.AddButton("System", [](){ ShowSystemDialog(); });
   buttons.AddButton(("Poweroff"), dialog.MakeModalResultCallback(POWEROFF));

@@ -20,7 +20,6 @@ MapCanvas::DrawLine(GeoPoint a, GeoPoint b) noexcept
 void
 MapCanvas::DrawLineWithOffset(GeoPoint a, GeoPoint b) noexcept
 {
-  return;
   if (!clip.ClipLine(a, b))
     return;
 

@@ -61,7 +61,10 @@ void
 SystemWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept
 {
   AddButton("Reboot", [](){ KoboReboot(); });
+  switch_otg_mode = AddButton(IsKoboOTGHostMode() ? "Disable USB-OTG" : "Enable USB-OTG",
+            [this](){ SwitchOTGMode(); });
   usb_storage = AddButton("Export USB storage", [this](){ ExportUSBStorage(); });
+  SetRowEnabled(USB_STORAGE, !IsKoboOTGHostMode());
 
   if(KoboCanChangeBacklightBrightness()) {
     increase_backlight_brightness = AddButton("Increase Backlight Brightness", [this]() { IncreaseBacklightBrightness(); });
