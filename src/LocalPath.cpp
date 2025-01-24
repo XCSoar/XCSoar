@@ -256,7 +256,7 @@ FindDataPaths() noexcept
   /* on Unix, use ~/.xcsoar */
   if (const char *home = getenv("HOME"); home != nullptr) {
 #ifdef __APPLE__
-    /* Mac OS X users are not used to dot-files in their home
+    /* macOS users are not used to dot-files in their home
        directory - make it a little bit easier for them to find the
        files.  If target is an iOS device, use the already existing
        "Documents" folder inside the application's sandbox.  This
