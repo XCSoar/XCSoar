@@ -29,7 +29,7 @@
 #include "util/PrintException.hxx"
 
 #ifdef ENABLE_SDL
-/* this is necessary on Mac OS X, to let libSDL bootstrap Quartz
+/* this is necessary on macOS, to let libSDL bootstrap Quartz
    before entering our main() */
 #include <SDL_main.h>
 #endif

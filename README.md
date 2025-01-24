@@ -4,7 +4,7 @@
 [![.github/workflows/build-container.yml](https://github.com/XCSoar/XCSoar/actions/workflows/build-container.yml/badge.svg)](https://github.com/XCSoar/XCSoar/actions/workflows/build-container.yml)
 [![.github/workflows/build-docs.yml](https://github.com/XCSoar/XCSoar/actions/workflows/build-docs.yml/badge.svg)](https://github.com/XCSoar/XCSoar/actions/workflows/build-docs.yml)
 
-XCSoar is a tactical glide computer for Android, Linux, Mac OS X,
+XCSoar is a tactical glide computer for Android, Linux, macOS,
 and Windows.
 
 This file is aimed at developers.  Developers should [read the

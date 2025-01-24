@@ -40,7 +40,7 @@ IsAndroid() noexcept
 }
 
 /**
- * Returns whether the application is running on an apple device
+ * Returns whether the application is running on an Apple device
  */
 constexpr
 static inline bool
@@ -54,7 +54,7 @@ IsApple() noexcept
 }
 
 /**
- * Returns whether the application is running on a Mac OS X device
+ * Returns whether the application is running on a macOS device
  */
 constexpr
 static inline bool

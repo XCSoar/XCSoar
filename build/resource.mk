@@ -75,7 +75,7 @@ $(eval $(call rsvg-convert,$(PNG_SPLASH_1024),$(DATA)/graphics/%_1024.png,Data/g
 # convert to uncompressed 8-bit BMP
 $(eval $(call convert-to-bmp-white,$(BMP_SPLASH_160) $(BMP_SPLASH_80),%.bmp,%.png))
 
-# convert to icns (mac os x icon)
+# convert to icns (macOS icon)
 $(ICNS_SPLASH_1024): %.icns: %.png
 	@$(NQ)echo "  ICNS    $@"
 	$(Q)$(IM_PREFIX)png2icns $@ $<
