@@ -92,12 +92,22 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock) noexcept
     return;
   traffic.relative_altitude = value;
 
+  if ((hypot(traffic.relative_north, traffic.relative_east) > (RoughDistance)20000) ||
+    (abs((int)traffic.relative_altitude) > 2000))
+    // object outside cylinder (radius 20km, height +-2000m)
+    return;
+
   line.Skip(); /* id type */
 
   // 5 id, 6 digit hex
   char id_string[16];
   line.Read(id_string, 16);
   traffic.id = FlarmId::Parse(id_string, nullptr);
+
+  traffic.name.clear();
+  char *ptr = strchr(&id_string[0], '!');
+  if (ptr)
+    traffic.name = ptr + 1;
 
   Angle track;
   traffic.track_received = line.ReadBearing(track);
@@ -138,16 +148,6 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock) noexcept
     traffic.type = FlarmTraffic::AircraftType::UNKNOWN;
   else
     traffic.type = (FlarmTraffic::AircraftType)type;
-
-  if ((hypot(traffic.relative_north, traffic.relative_east) > (RoughDistance)20000) ||
-    (abs((int)traffic.relative_altitude) > 2000))
-    // object outside cylinder (radius 20km, height +-2000m)
-    return;
-
-  traffic.name.clear();
-  char *ptr = strchr(&id_string[0], '!');
-  if (ptr)
-    traffic.name = ptr + 1;
 
   FlarmTraffic *flarm_slot = flarm.FindTraffic(traffic.id);
   if (flarm_slot == nullptr) {
