@@ -139,6 +139,11 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock) noexcept
   else
     traffic.type = (FlarmTraffic::AircraftType)type;
 
+  if ((hypot(traffic.relative_north, traffic.relative_east) > (RoughDistance)20000) ||
+    (abs((int)traffic.relative_altitude) > 2000))
+    // object outside cylinder (radius 20km, height +-2000m)
+    return;
+
   traffic.name.clear();
   char *ptr = strchr(&id_string[0], '!');
   if (ptr)
@@ -147,10 +152,8 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock) noexcept
   FlarmTraffic *flarm_slot = flarm.FindTraffic(traffic.id);
   if (flarm_slot == nullptr) {
     flarm_slot = flarm.AllocateTraffic();
-    if ((flarm_slot == nullptr) ||
-    (hypot(traffic.relative_north, traffic.relative_east) > (RoughDistance)20000) ||
-    (abs((int)traffic.relative_altitude) > 2000))
-      // no more slots available or data outside cylinder (radius 20km, height +-2000m)
+    if (flarm_slot == nullptr)
+      // no more slots available
       return;
 
     flarm_slot->Clear();
