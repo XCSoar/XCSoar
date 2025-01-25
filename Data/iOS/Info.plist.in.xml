@@ -18,6 +18,8 @@
         <string>6.0</string>
         <key>CFBundleVersion</key>
         <string>VERSION_PLACEHOLDER</string>
+        <key>CFBundleShortVersionString</key>
+        <string>VERSION_PLACEHOLDER</string>
         <key>LSRequiresIPhoneOS</key>
         <true />
         <key>UIRequiredDeviceCapabilities</key>

@@ -14,6 +14,7 @@ IOS_SPLASH_BASE_IMG=$(DATA)/graphics/logo_red_320.png
 IOS_GRAPHICS_DIR=$(DATA)/ios-graphics-testing
 else
 IPA_NAME = xcsoar.ipa
+IOS_APP_VERSION = 1.0.0
 IOS_APP_DIR_NAME = XCSoar.app
 IOS_APP_BUNDLE_IDENTIFIER = XCSoar
 IOS_APP_DISPLAY_NAME = XCSoar
