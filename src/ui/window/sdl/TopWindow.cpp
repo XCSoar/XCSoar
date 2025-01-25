@@ -219,8 +219,12 @@ TopWindow::OnEvent(const SDL_Event &event)
           h = real_h;
 #endif
 #ifdef ENABLE_OPENGL
+#if defined __APPLE__
+            Resize(screen->GetSize());
+#else
           if (screen->CheckResize(PixelSize(w, h)))
             Resize(screen->GetSize());
+#endif
 #else
           Resize({w, h});
 #endif
