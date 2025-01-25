@@ -39,6 +39,10 @@
 #include <unistd.h>
 #endif
 
+#ifdef __APPLE__
+#import <Foundation/Foundation.h>
+#endif
+
 #define XCSDATADIR "XCSoarData"
 
 /**
@@ -263,7 +267,7 @@ FindDataPaths() noexcept
        folder can also be accessed via iTunes, if
        UIFileSharingEnabled is set to YES in Info.plist */
 #if (TARGET_OS_IPHONE)
-    constexpr const char *in_home = "Documents" XCSDATADIR;
+    constexpr const char *in_home = "Documents/" XCSDATADIR;
 #else
     constexpr const char *in_home = XCSDATADIR;
 #endif
@@ -278,6 +282,11 @@ FindDataPaths() noexcept
   /* Linux (and others): allow global configuration in /etc/xcsoar */
   if (Directory::Exists(Path{"/etc/xcsoar"}))
     result.emplace_back(Path{"/etc/xcsoar"});
+#else
+  if (!Directory::Exists(Path{result.back()})) {
+    id fileManager = [NSFileManager defaultManager];
+      [fileManager createDirectoryAtPath:[NSString stringWithCString:result.back().c_str()] withIntermediateDirectories:YES attributes:nil error:nil];
+  }
 #endif // !APPLE
 #endif // HAVE_POSIX
 
