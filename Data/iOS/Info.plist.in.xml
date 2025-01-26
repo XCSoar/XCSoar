@@ -12,16 +12,18 @@
         <string>IOS_APP_BUNDLE_IDENTIFIER_PLACEHOLDER</string>
         <key>CFBundlePackageType</key>
         <string>APPL</string>
-        <key>CFBundleSignature</key>
-        <string>????</string>
         <key>CFBundleInfoDictionaryVersion</key>
         <string>6.0</string>
         <key>CFBundleVersion</key>
-        <string>VERSION_PLACEHOLDER</string>
+        <string>BUILD_NUMBER_PLACEHOLDER</string>
         <key>CFBundleShortVersionString</key>
-        <string>VERSION_PLACEHOLDER</string>
+        <string>XCSOAR_VERSION_PLACEHOLDER</string>
         <key>LSRequiresIPhoneOS</key>
         <true />
+        <key>CFBundleSupportedPlatforms</key>
+        <array>
+            <string>iPhoneOS</string>
+        </array>
         <key>UIRequiredDeviceCapabilities</key>
         <dict>
             <key>IOS_ARCH_PLACEHOLDER</key>
@@ -46,10 +48,35 @@
         <string>5.1.1</string>
         <key>UIDeviceFamily</key>
         <array>
-            <string>1</string>
-            <string>2</string>
+            <integer>1</integer>
+            <integer>2</integer>
         </array>
-        <key>CFBundleIconFile</key>
+        <key>CFBundleIcons</key>
+        <dict>
+            <key>CFBundlePrimaryIcon</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>AppIcon60x60</string>
+                </array>
+                <key>CFBundleIconName</key>
+                <string>AppIcon</string>
+            </dict>
+	    </dict>
+        <key>CFBundleIcons~ipad</key>
+        <dict>
+            <key>CFBundlePrimaryIcon</key>
+            <dict>
+                <key>CFBundleIconFiles</key>
+                <array>
+                    <string>AppIcon60x60</string>
+                    <string>AppIcon76x76</string>
+                </array>
+                <key>CFBundleIconName</key>
+                <string>AppIcon</string>
+            </dict>
+        </dict>
+        <key>CFBundleIconFiles</key>
         <array>
             <string>Icon.png</string>
             <string>Icon@2x.png</string>
@@ -64,7 +91,27 @@
         <key>NSAppTransportSecurity</key>
         <dict>
             <key>NSAllowsArbitraryLoads</key>
-        <true/>
+            <true/>
         </dict>
+        <key>CFBundleDevelopmentRegion</key>
+        <string>en</string>
+        <key>BuildMachineOSBuild</key>
+        <string>BUILD_MACHINE_OS_BUILD_PLACEHOLDER</string>
+        <key>DTSDKName</key>
+        <string>SDK_NAME_PLACEHOLDER</string>
+        <key>DTPlatformVersion</key>
+        <string>PLATFORM_VERSION_PLACEHOLDER</string>
+        <key>DTXcode</key>
+        <string>XCODE_VERSION_PLACEHOLDER</string>
+        <key>DTSDKBuild</key>
+        <string>SDK_BUILD_PLACEHOLDER</string>
+        <key>DTPlatformName</key>
+        <string>iphoneos</string>
+        <key>DTCompiler</key>
+        <string>com.apple.compilers.llvm.clang.1_0</string>
+        <key>DTXcodeBuild</key>
+        <string>XCODE_BUILD_PLACEHOLDER</string>
+        <key>DTPlatformBuild</key>
+        <string>SDK_BUILD_PLACEHOLDER</string>
     </dict>
 </plist>
