@@ -25,7 +25,8 @@ public:
   }
 
   static void Unbind() noexcept {
-    FBO::BindFramebuffer(FBO::FRAMEBUFFER, 0);
+
+    FBO::BindFramebuffer(FBO::FRAMEBUFFER, GL_UNBIND_FRAMEBUFFER);
   }
 
 protected:

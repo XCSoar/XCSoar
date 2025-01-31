@@ -5,6 +5,14 @@
 
 #include "ui/opengl/SystemExt.hpp"
 
+#if (defined(__APPLE__) && defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
+#define GL_UNBIND_FRAMEBUFFER 1
+#define GL_UNBIND_RENDERBUFFER 1
+#else 
+#define GL_UNBIND_FRAMEBUFFER 0
+#define GL_UNBIND_RENDERBUFFER 0
+#endif
+
 /**
  * Support for OpenGL framebuffer objects (GL_*_framebuffer_object).
  */
