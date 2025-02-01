@@ -330,9 +330,9 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
       target_pen = &look.radar_pen;
       arrow_brush = &look.default_brush;
 
-      if (traffic.relative_altitude > (const RoughAltitude)50) {
+      if (traffic.relative_altitude > (const RoughAltitude)100) {
         target_brush = &look.safe_above_brush;
-      } else if (traffic.relative_altitude > (const RoughAltitude)-50) {
+      } else if (traffic.relative_altitude > (const RoughAltitude)-100) {
         target_brush = &look.warning_in_altitude_range_brush;
       } else {
         target_brush = &look.safe_below_brush;
