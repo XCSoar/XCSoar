@@ -128,7 +128,7 @@ PopupMessage::CalculateWidth() const noexcept
 {
   if (settings.popup_message_position == UISettings::PopupMessagePosition::TOP_LEFT)
     // TODO code: this shouldn't be hard-coded
-    return Layout::FastScale(206);
+    return rc.GetWidth();
   else
     return unsigned(rc.GetWidth() * 0.9);
 }
@@ -137,7 +137,9 @@ PixelRect
 PopupMessage::GetRect(PixelSize size) const noexcept
 {
   if (settings.popup_message_position == UISettings::PopupMessagePosition::TOP_LEFT) {
-    return PixelRect{size};
+    return PixelRect{rc.left, rc.top,
+                     static_cast<int>(rc.left) + static_cast<int>(size.width),
+                     static_cast<int>(rc.top) + static_cast<int>(size.height)};
   } else {
     return PixelRect::Centered(rc.GetCenter(), size);
   }
@@ -295,15 +297,17 @@ PopupMessage::Acknowledge(Type type) noexcept
 // DoMessage is designed to delegate what to do for a message
 // The "what to do" can be defined in a configuration file
 // Defaults for each message include:
-//	- Text to display (including multiple languages)
-//	- Text to display extra - NOT multiple language
-//		(eg: If Airspace Warning - what details - airfield name is in data file, already
-//		covers multiple languages).
-//	- ShowStatusMessage - including font size and delay
-//	- Sound to play - What sound to play
-//	- Log - Keep the message on the log/history window (goes to log file and history)
+//  - Text to display (including multiple languages)
+//  - Text to display extra - NOT multiple language
+//    (eg: If Airspace Warning - what details - airfield name is in data file,
+//    already covers multiple languages).
+//  - ShowStatusMessage - including font size and delay
+//  - Sound to play - What sound to play
+//  - Log - Keep the message on the log/history window (goes to log file and
+//  history)
 //
-// TODO code: (need to discuss) Consider moving almost all this functionality into AddMessage ?
+// TODO code: (need to discuss) Consider moving almost all this functionality
+// into AddMessage ?
 
 void
 PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data) noexcept

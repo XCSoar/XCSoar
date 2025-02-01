@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
-
 #include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "PopupMessage.hpp"
@@ -216,7 +215,7 @@ MainWindow::InitialiseConfigured()
   map->Create(*this, map_rect);
 
   popup = new PopupMessage(*this, look->dialog, ui_settings);
-  popup->Create(rc);
+  popup->Create(map_rect);
 }
 
 void
@@ -274,7 +273,7 @@ MainWindow::ReinitialiseLayoutTA(PixelRect rc,
 {
   unsigned sz = std::min(layout.control_size.height,
                          layout.control_size.width) * 2;
-  unsigned mw = std::min((GetMainRect().bottom - GetMainRect().top), 
+  unsigned mw = std::min((GetMainRect().bottom - GetMainRect().top),
                          (GetMainRect().right - GetMainRect().left));
   unsigned dia = std::min(sz, mw / 2);
 
@@ -332,7 +331,7 @@ MainWindow::ReinitialiseLayout() noexcept
   InfoBoxManager::ProcessTimer();
   map_rect = ib_layout.remaining;
 
-  popup->UpdateLayout(rc);
+  popup->UpdateLayout(map_rect);
 
   ReinitialiseLayout_vario(ib_layout);
 
@@ -436,7 +435,7 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
 
   case TrafficSettings::GaugeLocation::TOP_LEFT_AVOID_IB:
     rc.top = GetMainRect().top;
-    rc.left = GetMainRect().left; 
+    rc.left = GetMainRect().left;
     rc.right = rc.left + dia;
     rc.bottom = rc.top + dia;
     break;
