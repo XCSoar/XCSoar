@@ -325,22 +325,21 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
         // unnecessary - prevents "may be used uninitialized" compiler warning
         circle_pen = &look.default_pen;
       }
+      // same colours of FLARM targets as in map display
+      text_color = &look.default_color;
+      target_pen = &look.radar_pen;
+      arrow_brush = &look.default_brush;
 
-      if (!small && static_cast<unsigned> (selection) == i) {
-        text_color = &look.selection_color;
-        target_brush = arrow_brush = &look.selection_brush;
-        target_pen = &look.selection_pen;
+      if (traffic.relative_altitude > (const RoughAltitude)50) {
+        target_brush = &look.safe_above_brush;
+      } else if (traffic.relative_altitude > (const RoughAltitude)-50) {
+        target_brush = &look.warning_in_altitude_range_brush;
       } else {
-        if (traffic.IsPassive()) {
-          text_color = &look.passive_color;
-          target_pen = &look.passive_pen;
-          arrow_brush = &look.passive_brush;
-        } else {
-          text_color = &look.default_color;
-          target_pen = &look.default_pen;
-          arrow_brush = &look.default_brush;
-        }
+        target_brush = &look.safe_below_brush;
       }
+
+      if (!small && static_cast<unsigned> (selection) == i)
+        target_pen = &look.default_pen;
     }
     break;
   }
@@ -388,8 +387,15 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   else
     canvas.Select(*target_brush);
 
-  // Draw the polygon
-  canvas.DrawPolygon(Arrow, 4);
+  if (!traffic.relative_east) {
+    // Draw circle (Mode-S Transponder)
+    if (small)
+      canvas.DrawCircle(sc[i],10);
+    else
+      canvas.DrawCircle(sc[i],18);
+  } else
+    // Draw the polygon
+    canvas.DrawPolygon(Arrow, 4);
 
   if (small) {
     if (!WarningMode() || traffic.HasAlarm())
@@ -426,9 +432,6 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     sc[i].x + int(Layout::FastScale(11u)),
     sc[i].y - int(sz.height / 2),
   };
-
-  // Draw vertical speed shadow
-  RenderShadowedText(canvas, tmp, tp, false);
 
   // Select color
   canvas.SetTextColor(*text_color);
