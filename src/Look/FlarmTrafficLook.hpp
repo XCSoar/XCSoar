@@ -18,6 +18,9 @@ struct FlarmTrafficLook {
   Color selection_color;
   Color background_color;
   Color radar_color;
+  Color safe_above_color;
+  Color safe_below_color;
+  Color warning_in_altitude_range_color;
 
   Brush warning_brush;
   Brush alarm_brush;
@@ -29,6 +32,9 @@ struct FlarmTrafficLook {
   Brush team_brush_blue;
   Brush team_brush_yellow;
   Brush team_brush_magenta;
+  Brush safe_above_brush;
+  Brush safe_below_brush;
+  Brush warning_in_altitude_range_brush;
 
   Pen warning_pen;
   Pen alarm_pen;

@@ -23,7 +23,7 @@ Setup(CurlEasy &easy)
 	easy.SetConnectTimeout(10);
 	easy.SetOption(CURLOPT_HTTPAUTH, (long) CURLAUTH_ANY);
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(__APPLE__)
 	/* this is disabled until we figure out how to use Android's
 	   CA certificates with libcurl */
 	easy.SetVerifyHost(false);

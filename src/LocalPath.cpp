@@ -39,6 +39,10 @@
 #include <unistd.h>
 #endif
 
+#ifdef __APPLE__
+#import <Foundation/Foundation.h>
+#endif
+
 #define XCSDATADIR "XCSoarData"
 
 /**
@@ -256,14 +260,14 @@ FindDataPaths() noexcept
   /* on Unix, use ~/.xcsoar */
   if (const char *home = getenv("HOME"); home != nullptr) {
 #ifdef __APPLE__
-    /* Mac OS X users are not used to dot-files in their home
+    /* macOS users are not used to dot-files in their home
        directory - make it a little bit easier for them to find the
        files.  If target is an iOS device, use the already existing
        "Documents" folder inside the application's sandbox.  This
        folder can also be accessed via iTunes, if
        UIFileSharingEnabled is set to YES in Info.plist */
 #if (TARGET_OS_IPHONE)
-    constexpr const char *in_home = "Documents" XCSDATADIR;
+    constexpr const char *in_home = "Documents/" XCSDATADIR;
 #else
     constexpr const char *in_home = XCSDATADIR;
 #endif
@@ -278,6 +282,11 @@ FindDataPaths() noexcept
   /* Linux (and others): allow global configuration in /etc/xcsoar */
   if (Directory::Exists(Path{"/etc/xcsoar"}))
     result.emplace_back(Path{"/etc/xcsoar"});
+#else
+  if (!Directory::Exists(Path{result.back()})) {
+    id fileManager = [NSFileManager defaultManager];
+      [fileManager createDirectoryAtPath:[NSString stringWithCString:result.back().c_str()] withIntermediateDirectories:YES attributes:nil error:nil];
+  }
 #endif // !APPLE
 #endif // HAVE_POSIX
 

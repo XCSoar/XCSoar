@@ -461,6 +461,7 @@ FlarmTrafficControl::PaintID(Canvas &canvas, PixelRect rc,
     }
   }
 
+  canvas.SetTextColor(look.default_color);
   canvas.DrawText(rc.GetTopLeft(), buffer);
 }
 

@@ -6,7 +6,7 @@ TARGETS = PC WIN64 \
 	ANDROID ANDROID7 ANDROID86 \
 	ANDROIDAARCH64 ANDROIDX64 \
 	ANDROIDFAT \
-	OSX64 MACOS IOS32 IOS64
+	OSX64 MACOS IOS32 IOS64 IOS64SIM
 
 ifeq ($(TARGET),)
   ifeq ($(HOST_IS_UNIX),y)
@@ -279,6 +279,21 @@ ifeq ($(TARGET),IOS64)
   ASFLAGS += -arch arm64
 endif
 
+ifeq ($(TARGET),IOS64SIM)
+  override TARGET = UNIX
+  TARGET_IS_DARWIN = y
+  TARGET_IS_IOS = y
+  IOS_MIN_SUPPORTED_VERSION = 10.0
+  HOST_TRIPLET = aarch64-apple-darwin
+  LLVM_TARGET = $(HOST_TRIPLET)
+  ifeq ($(HOST_IS_DARWIN),y)
+    DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk
+  endif
+  CLANG = y
+  TARGET_ARCH += -mios-simulator-version-min=$(IOS_MIN_SUPPORTED_VERSION) -arch arm64
+  ASFLAGS += -arch arm64
+endif
+
 ifeq ($(TARGET),UNIX)
   ifeq ($(HOST_IS_LINUX)$(TARGET_IS_DARWIN),yn)
     TARGET_IS_LINUX := y
@@ -486,7 +501,8 @@ endif
 ifeq ($(TARGET),ANDROID)
   TARGET_CPPFLAGS += -DANDROID
   CXXFLAGS += -D__STDC_VERSION__=199901L
-
+  # disable pretty printer embedding
+  CXXFLAGS += -DBOOST_ALL_NO_EMBEDDED_GDB_SCRIPTS
   ifeq ($(X86),y)
     # On NDK r6, the macro _BYTE_ORDER never gets defined - workaround:
     TARGET_CPPFLAGS += -D_BYTE_ORDER=_LITTLE_ENDIAN

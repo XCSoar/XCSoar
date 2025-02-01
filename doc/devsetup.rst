@@ -23,7 +23,7 @@ To download the XCSoar source code, make sure you have git installed::
 Download the source code of XCSoar by executing ``git`` in the
 following way in your project directory::
 
- git clone --recursive https://github.com/XCSoar/XCSoar
+ git clone --recurse-submodules https://github.com/XCSoar/XCSoar
 
 Use provisioning scripts
 ========================

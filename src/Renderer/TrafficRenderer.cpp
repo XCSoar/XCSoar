@@ -59,9 +59,9 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
       canvas.Select(traffic_look.alarm_brush);
       break;
     case FlarmTraffic::AlarmType::NONE:
-      if (traffic.relative_altitude > (const RoughAltitude)50) {
+      if (traffic.relative_altitude > (const RoughAltitude)100) {
         canvas.Select(traffic_look.safe_above_brush);
-      } else if (traffic.relative_altitude > (const RoughAltitude)-50) {
+      } else if (traffic.relative_altitude > (const RoughAltitude)-100) {
         canvas.Select(traffic_look.warning_in_altitude_range_brush);
       } else {
         canvas.Select(traffic_look.safe_below_brush);

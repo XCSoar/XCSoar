@@ -1,6 +1,6 @@
 ifneq ($(HAVE_WIN32)$(TARGET_IS_DARWIN)$(TARGET_IS_ANDROID)$(TARGET_IS_KOBO),nnnn)
 # Windows uses GDI
-# Mac OS X and iOS use SDL
+# macOS and iOS use SDL
 # Android uses Java-EGL
 # Kobo uses software renderer on /dev/fb0
 GLX = n

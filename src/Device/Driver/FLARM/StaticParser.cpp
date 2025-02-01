@@ -82,10 +82,12 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock) noexcept
     return;
   traffic.relative_north = value;
 
-  if (!line.ReadChecked(value))
-    // Relative East is required !
-    return;
-  traffic.relative_east = value;
+  if (line.ReadChecked(value))
+    // Relative East
+    traffic.relative_east = value;
+  else
+    // Mode-S Transponder
+    traffic.relative_east = 0;
 
   if (!line.ReadChecked(value))
     // Relative Altitude is required !
