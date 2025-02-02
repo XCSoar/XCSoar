@@ -44,8 +44,10 @@
           <string>UIInterfaceOrientationLandscapeLeft</string>
           <string>UIInterfaceOrientationLandscapeRight</string>
         </array>
+        <key>MinimumOSVersion</key>
+        <string>IOS_MIN_SUPPORTED_VERSION_PLACEHOLDER</string>
         <key>LSMinimumSystemVersion</key>
-        <string>5.1.1</string>
+        <string>MACOS_MIN_SUPPORTED_VERSION_PLACEHOLDER</string>
         <key>UIDeviceFamily</key>
         <array>
             <integer>1</integer>
