@@ -13,9 +13,12 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small, bool inverse)
   warning_color = other.warning_color;
   alarm_color = other.alarm_color;
   default_color = inverse ? COLOR_WHITE : COLOR_BLACK;
-  selection_color = COLOR_BLUE;
+  selection_color = default_color;
   background_color = inverse ? COLOR_BLACK : COLOR_WHITE;
   radar_color = COLOR_GRAY;
+  safe_above_color = Color(0x1d,0x9b,0xc5);
+  safe_below_color = Color(0x1d,0xc5,0x10);
+  warning_in_altitude_range_color = Color(0xff,0x00,0xff);
 
   warning_brush.Create(warning_color);
   alarm_brush.Create(alarm_color);
@@ -27,6 +30,10 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small, bool inverse)
   team_brush_blue.Create(other.team_color_blue);
   team_brush_yellow.Create(other.team_color_yellow);
   team_brush_magenta.Create(other.team_color_magenta);
+  safe_above_brush.Create(safe_above_color);
+  safe_below_brush.Create(safe_below_color);
+  warning_in_altitude_range_brush.Create(warning_in_altitude_range_color);
+
 
   unsigned width = Layout::FastScale(small ? 1u : 2u);
   warning_pen.Create(width, warning_color);
