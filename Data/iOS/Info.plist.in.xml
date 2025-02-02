@@ -90,6 +90,8 @@
         <string>Navigation and flight logging with the in-built GPS sensor.</string>
         <key>UIFileSharingEnabled</key>
         <true/>
+        <key>LSSupportsOpeningDocumentsInPlace</key>
+        <true/>
         <key>UIRequiresFullScreen</key>
         <true/>
         <key>NSAppTransportSecurity</key>
