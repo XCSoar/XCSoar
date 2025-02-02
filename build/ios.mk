@@ -7,7 +7,7 @@ IPA_TMPDIR = $(TARGET_OUTPUT_DIR)/ipa
 ifeq ($(TESTING),y)
 IPA_NAME = xcsoar-testing.ipa
 IOS_APP_DIR_NAME = XCSoar.testing.app
-IOS_APP_BUNDLE_IDENTIFIER = XCSoar-testing
+IOS_APP_BUNDLE_IDENTIFIER ?= XCSoar-testing
 IOS_APP_DISPLAY_NAME = XCSoar Testing
 IOS_ICON_SVG = $(topdir)/Data/iOS/iOS-Icon_red.svg
 IOS_SPLASH_BASE_IMG=$(DATA)/graphics/logo_red_320.png
@@ -15,7 +15,7 @@ IOS_GRAPHICS_DIR=$(DATA)/ios-graphics-testing
 else
 IPA_NAME = xcsoar.ipa
 IOS_APP_DIR_NAME = XCSoar.app
-IOS_APP_BUNDLE_IDENTIFIER = XCSoar
+IOS_APP_BUNDLE_IDENTIFIER ?= XCSoar
 IOS_APP_DISPLAY_NAME = XCSoar
 IOS_ICON_SVG = $(topdir)/Data/iOS/iOS-Icon.svg
 IOS_SPLASH_BASE_IMG=$(DATA)/graphics/logo_320.png
@@ -115,12 +115,14 @@ XCODE_VERSION = $(shell xcodebuild -version | grep Xcode | cut -d ' ' -f 2)
 XCODE_VERSION_FORMATTED = $(shell printf "%02.2f" $(XCODE_VERSION) | tr -d '.')
 SDK_BUILD_VERSION = $(shell /usr/libexec/PlistBuddy -c 'print ProductBuildVersion' $(DARWIN_SDK)/System/Library/CoreServices/SystemVersion.plist)
 XCODE_BUILD = $(shell /usr/libexec/PlistBuddy -c 'print ProductBuildVersion' $(shell xcode-select --print-path)/../version.plist)
+OSX_MIN_SUPPORTED_VERSION ?= 11.0
 
 
 $(TARGET_OUTPUT_DIR)/Info.plist.xml: $(topdir)/Data/iOS/Info.plist.in.xml | $(TARGET_OUTPUT_DIR)/dirstamp
 	$(Q)sed -e 's/IOS_APP_DISPLAY_NAME_PLACEHOLDER/$(IOS_APP_DISPLAY_NAME)/g' \
 		-e 's/IOS_APP_BUNDLE_IDENTIFIER_PLACEHOLDER/$(IOS_APP_BUNDLE_IDENTIFIER)/g' \
 		-e 's/IOS_MIN_SUPPORTED_VERSION_PLACEHOLDER/$(IOS_MIN_SUPPORTED_VERSION)/g' \
+		-e 's/MACOS_MIN_SUPPORTED_VERSION_PLACEHOLDER/$(OSX_MIN_SUPPORTED_VERSION)/g' \
 		-e 's/XCSOAR_VERSION_PLACEHOLDER/$(IOS_APP_VERSION)/g' \
 		-e 's/BUILD_NUMBER_PLACEHOLDER/$(IOS_APP_BUILD_NUMBER)/g' \
 		-e 's/IOS_ARCH_PLACEHOLDER/$(IOS_INFO_PLIST_ARCH_PLACEHOLDER)/g' \
