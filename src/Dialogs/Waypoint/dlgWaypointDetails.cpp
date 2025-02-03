@@ -104,7 +104,7 @@ WaypointExternalFileListHandler::OnPaintItem(Canvas &canvas,
 }
 #endif
 
-class DrawPanFrame : public WndOwnerDrawFrame {
+class DrawPanFrame final : public WndOwnerDrawFrame {
   protected:
     PixelPoint last_mouse_pos, img_pos, offset;
     bool is_dragging = false;
@@ -128,6 +128,8 @@ class DrawPanFrame : public WndOwnerDrawFrame {
     bool OnMouseDown(PixelPoint p) noexcept override;
     bool OnMouseUp(PixelPoint p) noexcept override;
 
+    bool OnKeyCheck(unsigned key_code) const noexcept override;
+    bool OnKeyDown(unsigned key_code) noexcept override;
 
   void
   OnPaint(Canvas &canvas) noexcept override
@@ -136,6 +138,7 @@ class DrawPanFrame : public WndOwnerDrawFrame {
       return;
 
     mOnPaintCallback2(canvas, GetClientRect(), offset, img_pos);
+    SetFocus();
   }
 };
 
@@ -580,20 +583,29 @@ WaypointDetailsWidget::OnShrinkClicked()
 bool
 WaypointDetailsWidget::KeyPress(unsigned key_code) noexcept
 {
+  if (zoom > 0) {
+    if (key_code == KEY_ESCAPE) {
+      OnShrinkClicked();
+      return true;
+    }
+    return false;
+  }
   switch (key_code) {
-  case KEY_LEFT:
-    previous_button.SetFocus();
-    NextPage(-1);
-    return true;
-
-  case KEY_RIGHT:
-    next_button.SetFocus();
-    NextPage(+1);
-    return true;
-
+    case KEY_DOWN:  OnMagnifyClicked(); break;
+    case KEY_UP:    OnShrinkClicked(); break;
+    case KEY_LEFT:  previous_button.SetFocus(); NextPage(-1); break;
+    case KEY_RIGHT: next_button.SetFocus(); NextPage(+1); break;
+    case KEY_ESCAPE:
+    // allow return from first zoom level
+    if (zoom == 0) {
+      zoom = -1;
+      return true;
+    }
+    return false;
   default:
     return false;
   }
+  return true;
 }
 
 void
@@ -610,7 +622,8 @@ WaypointDetailsWidget::OnGotoClicked()
 
 void
 WaypointDetailsWidget::OnImagePaint(Canvas &canvas, [[maybe_unused]] const PixelRect &rc,
-                  [[maybe_unused]] PixelPoint &offset, [[maybe_unused]] PixelPoint &img_pos) {
+                  PixelPoint &offset, PixelPoint &img_pos)
+{
   canvas.ClearWhite();
 
   if (page < 3 || page >= 3 + static_cast<int>(images.size())) {
@@ -683,6 +696,49 @@ bool
 DrawPanFrame::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 {
   is_dragging = false;
+  return true;
+}
+
+bool
+DrawPanFrame::OnKeyCheck(unsigned key_code) const noexcept
+{
+  switch (key_code) {
+    case KEY_LEFT:
+    case KEY_RIGHT:
+    case KEY_UP:
+    case KEY_DOWN:
+    case KEY_ESCAPE:
+    return true;
+
+  default:
+    return false;
+  }
+}
+
+bool
+DrawPanFrame::OnKeyDown(unsigned key_code) noexcept
+{
+  switch (key_code) {
+    case KEY_LEFT: {
+      offset = {-50, 0};
+      break;
+    }
+    case KEY_RIGHT: {
+      offset = {50, 0};
+      break;
+    }
+    case KEY_UP: {
+      offset = {0, -50};
+      break;
+    }
+    case KEY_DOWN: {
+      offset = {0, 50};
+      break;
+    }
+    default:
+      return false;
+  }
+  Invalidate();
   return true;
 }
 
