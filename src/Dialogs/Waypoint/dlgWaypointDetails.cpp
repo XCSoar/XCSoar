@@ -104,7 +104,7 @@ WaypointExternalFileListHandler::OnPaintItem(Canvas &canvas,
 }
 #endif
 
-class DrawPanFrame : public WndOwnerDrawFrame {
+class DrawPanFrame final : public WndOwnerDrawFrame {
   protected:
     PixelPoint last_mouse_pos, img_pos, offset;
     bool is_dragging = false;
@@ -128,6 +128,8 @@ class DrawPanFrame : public WndOwnerDrawFrame {
     bool OnMouseDown(PixelPoint p) noexcept override;
     bool OnMouseUp(PixelPoint p) noexcept override;
 
+    bool OnKeyCheck(unsigned key_code) const noexcept override;
+    bool OnKeyDown(unsigned key_code) noexcept override;
 
   void
   OnPaint(Canvas &canvas) noexcept override
@@ -578,22 +580,64 @@ WaypointDetailsWidget::OnShrinkClicked()
 }
 
 bool
-WaypointDetailsWidget::KeyPress(unsigned key_code) noexcept
-{
+WaypointDetailsWidget::KeyPress(unsigned key_code) noexcept {
   switch (key_code) {
-  case KEY_LEFT:
-    previous_button.SetFocus();
-    NextPage(-1);
-    return true;
+    case KEY_F1:
+      if (image_window.IsVisible()) {
+        magnify_button.SetFocus();
+        magnify_button.Click();
+        image_window.Invalidate();
+        image_window.SetFocus();
+        return true;
+      }
+      return false;
 
-  case KEY_RIGHT:
-    next_button.SetFocus();
-    NextPage(+1);
-    return true;
+    case KEY_F2:
+      if (image_window.IsVisible()) {
+        shrink_button.SetFocus();
+        shrink_button.Click();
+        if (zoom == 0) {
+          next_button.SetFocus();
+        } else {
+          image_window.Invalidate();
+          image_window.SetFocus();
+        }
+        return true;
+      }
+      return false;
 
-  default:
-    return false;
-  }
+    case KEY_LEFT:
+      if (zoom == 0) {
+        previous_button.SetFocus();
+        image_window.Invalidate();
+        NextPage(-1);
+      }
+      return false;
+
+    case KEY_RIGHT:
+      if (zoom == 0) {
+        next_button.SetFocus();
+        image_window.Invalidate();
+        NextPage(+1);
+        return true;
+      }
+      return false;
+
+    case KEY_ESCAPE:
+      zoom = 0;
+      image_window.Invalidate();
+      goto_button.SetFocus();
+      return true;
+
+    case KEY_UP:
+      return zoom == 0 && goto_button.HasFocus();
+
+    case KEY_DOWN:
+      return zoom == 0 && close_button.HasFocus();
+
+    default:
+      return false;
+    }
 }
 
 void
@@ -610,7 +654,8 @@ WaypointDetailsWidget::OnGotoClicked()
 
 void
 WaypointDetailsWidget::OnImagePaint(Canvas &canvas, [[maybe_unused]] const PixelRect &rc,
-                  [[maybe_unused]] PixelPoint &offset, [[maybe_unused]] PixelPoint &img_pos) {
+                  PixelPoint &offset, PixelPoint &img_pos)
+{
   canvas.ClearWhite();
 
   if (page < 3 || page >= 3 + static_cast<int>(images.size())) {
@@ -683,6 +728,51 @@ bool
 DrawPanFrame::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 {
   is_dragging = false;
+  return true;
+}
+
+bool
+DrawPanFrame::OnKeyCheck(unsigned key_code) const noexcept
+{
+  switch (key_code) {
+    case KEY_LEFT:
+    case KEY_RIGHT:
+    case KEY_UP:
+    case KEY_DOWN:
+    case KEY_ESCAPE:
+    case KEY_F1:
+    case KEY_F2:
+    return true;
+
+  default:
+    return false;
+  }
+}
+
+bool
+DrawPanFrame::OnKeyDown(unsigned key_code) noexcept
+{
+  switch (key_code) {
+    case KEY_LEFT: {
+      offset = {-50, 0};
+      break;
+    }
+    case KEY_RIGHT: {
+      offset = {50, 0};
+      break;
+    }
+    case KEY_UP: {
+      offset = {0, -50};
+      break;
+    }
+    case KEY_DOWN: {
+      offset = {0, 50};
+      break;
+    }
+    default:
+      return false;
+  }
+  Invalidate();
   return true;
 }
 
