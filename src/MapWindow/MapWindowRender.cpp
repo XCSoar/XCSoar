@@ -153,6 +153,7 @@ MapWindow::DrawWaves(Canvas &canvas) noexcept
 inline void
 MapWindow::RenderGlide(Canvas &canvas) noexcept
 {
+  return;
   // draw red cross on glide through terrain marker
   if (Calculated().terrain_valid)
     DrawGlideThroughTerrain(canvas);

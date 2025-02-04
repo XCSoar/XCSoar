@@ -423,7 +423,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   TCHAR tmp[10];
 
   if (side_display_type == SideInfoType::VARIO)
-    FormatUserVerticalSpeed(traffic.climb_rate_avg30s, tmp, false);
+    tmp[0] = '\0';
   else
     FormatRelativeUserAltitude(traffic.relative_altitude, tmp, true);
 
