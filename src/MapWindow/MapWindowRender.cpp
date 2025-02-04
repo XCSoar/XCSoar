@@ -239,6 +239,15 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
   draw_sw.Mark("RenderTopographyLabels");
   RenderTopographyLabels(canvas);
 
+  //////////////////////////////////////////////// navigation overlays
+  // Render glide through terrain range
+  draw_sw.Mark("RenderGlide");
+  RenderGlide(canvas);
+
+  draw_sw.Mark("RenderMisc1");
+  // Render weather/terrain max/min values
+  DrawTaskOffTrackIndicator(canvas);
+
   // Render track bearing (projected track ground/air relative)
   draw_sw.Mark("DrawTrackBearing");
   RenderTrackBearing(canvas, aircraft_pos);
