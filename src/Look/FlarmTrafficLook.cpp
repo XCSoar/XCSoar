@@ -13,7 +13,7 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small, bool inverse)
   warning_color = other.warning_color;
   alarm_color = other.alarm_color;
   default_color = inverse ? COLOR_WHITE : COLOR_BLACK;
-  selection_color = COLOR_BLUE;
+  selection_color = default_color;
   background_color = inverse ? COLOR_BLACK : COLOR_WHITE;
   radar_color = COLOR_GRAY;
   safe_above_color = Color(0x1d,0x9b,0xc5);
