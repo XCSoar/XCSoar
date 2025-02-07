@@ -18,7 +18,7 @@ UISettings::SetDefaults() noexcept
 
   enable_airspace_warning_dialog = true;
 
-  popup_message_position = PopupMessagePosition::CENTER;
+  popup_message_position = PopupMessagePosition::TOP_LEFT;
 
   haptic_feedback = HapticFeedback::DEFAULT;
 
