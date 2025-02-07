@@ -20,6 +20,7 @@ Version 7.44 - not yet released
   - Radar / Thermalassistant Gauges: Placement to avoid InfoBoxen and Overlap
   - Add new Infobox “Home altitude difference” (Home AltD)
   - add helpers on infoboxes for Argentinean contests 95% distance rule
+  - Popup messages now appear at the top of the map
 * Android
   - fix crash on startup when loading icons on ldpi screens
   - update 'white list' of USB devices with one more VID/PID pair for SoftRF Academy
