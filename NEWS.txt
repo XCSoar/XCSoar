@@ -25,6 +25,8 @@ Version 7.44 - not yet released
   - fix crash on startup when loading icons on ldpi screens
   - update 'white list' of USB devices with one more VID/PID pair for SoftRF Academy
   - make xcsoar accessible from lock screen
+  - battery: use scale for charge percent calculation
+  - battery: prevent shutdown on devices without battery
 * Windows
   - Popupmessages are now shown with full text again
 * devices
