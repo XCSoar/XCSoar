@@ -65,7 +65,7 @@ The following is needed for all targets:
 -  GNU make
 
 -  GNU compiler collection (``gcc``), version 10 or later or clang/LLVM
-   10 (with "make CLANG=y")
+   12 (with "make CLANG=y")
 
 -  GNU gettext
 
