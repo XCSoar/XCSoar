@@ -18,4 +18,4 @@ FLARM - DATA PORT INTERFACE CONTROL DOCUMENT (ICD)
 
 available on the FLARM.com website:
 
-https://flarm.com/support/manuals-documents/
+https://www.flarm.com/en/support/downloads/
