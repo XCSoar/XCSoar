@@ -19,3 +19,8 @@ FLARM - DATA PORT INTERFACE CONTROL DOCUMENT (ICD)
 available on the FLARM.com website:
 
 https://www.flarm.com/en/support/downloads/
+
+Real-Life traffic data
+-----------------------
+
+rl-traffic.nmea contains a real-life scenario with multiple targets.
