@@ -12,6 +12,7 @@ XCSoar
    input_events
    lua
    mapfile
+   debugging
 
 
 Indices and tables
