@@ -100,19 +100,19 @@ musl = MuslProject(
 
 openssl = OpenSSLProject(
     (
-        "https://www.openssl.org/source/openssl-3.1.6.tar.gz",
-        "https://artfiles.org/openssl.org/source/openssl-3.1.6.tar.gz",
+        "https://www.openssl.org/source/openssl-3.1.7.tar.gz",
+        "https://artfiles.org/openssl.org/source/openssl-3.1.7.tar.gz",
     ),
-    "5d2be4036b478ef3cb0a854ca9b353072c3a0e26d8a56f8f0ab9fb6ed32d38d7",
+    "053a31fa80cf4aebe1068c987d2ef1e44ce418881427c4464751ae800c31d06c",
     "include/openssl/ossl_typ.h",
 )
 
 openssh = AutotoolsProject(
     (
-        "http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-7.2p2.tar.gz",
-        "http://ftp.nluug.nl/security/OpenSSH/openssh-7.2p2.tar.gz",
+        "http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-7.9p1.tar.gz",
+        "http://ftp.nluug.nl/security/OpenSSH/openssh-7.9p1.tar.gz",
     ),
-    "13009a9156510d8f27e752659075cced",
+    "6b4b3ba2253d84ed3771c8050728d597c91cfce898713beb7b64a305b6f11aad",
     "opt/openssh/sbin/sshd",
     [
         "--disable-etc-default-login",
