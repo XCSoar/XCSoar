@@ -111,7 +111,7 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
   }
 
   map.Get(ProfileKeys::InfoBoxTitleScale, settings.scale_title_font);
-  if ((settings.scale_title_font < 80) || (settings.scale_title_font > 150))
+  if ((settings.scale_title_font < 50) || (settings.scale_title_font > 150))
     settings.scale_title_font = 100;
 
   map.Get(ProfileKeys::AppInfoBoxColors, settings.use_colors);
