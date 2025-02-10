@@ -69,9 +69,9 @@ The following is needed for all targets:
 
 -  GNU gettext
 
--  `rsvg <http://librsvg.sourceforge.net/)>`__
+-  `rsvg <https://librsvg.sourceforge.net/>`__
 
--  `ImageMagick 6.4 <http://www.imagemagick.org/>`__
+-  `ImageMagick 6.4 <https://www.imagemagick.org/>`__
 
 -  `xsltproc <http://xmlsoft.org/XSLT/xsltproc2.html>`__
 
@@ -98,24 +98,24 @@ Compiling for Linux/UNIX
 The following additional packages are needed to build for Linux and
 similar operating systems:
 
--  `zlib <http://www.zlib.net/>`__
+-  `zlib <https://www.zlib.net/>`__
 
-- `c-ares <https://c-ares.haxx.se/`__
+-  `c-ares <https://c-ares.org/>`__
 
--  `CURL <http://curl.haxx.se/>`__
+-  `CURL <https://curl.se/>`__
 
--  `Lua <http://www.lua.org/>`__
+-  `Lua <https://www.lua.org/>`__
 
 -  `libinput <https://www.freedesktop.org/wiki/Software/libinput/>`__
    (not required when using Wayland or on the KOBO)
 
--  `SDL <http://www.libsdl.org/>`__
+-  `SDL <https://www.libsdl.org/>`__
 
--  `SDL_ttf <http://www.libsdl.org/projects/SDL_ttf/>`__
+-  `SDL_ttf <https://github.com/libsdl-org/SDL_ttf>`__
 
--  `libpng <http://www.libpng.org/>`__
+-  `libpng <http://www.libpng.org/pub/png/libpng.html>`__
 
--  `libjpeg <http://libjpeg.sourceforge.net/>`__
+-  `libjpeg <https://libjpeg.sourceforge.net/>`__
 
 -  OpenGL (Mesa)
 
