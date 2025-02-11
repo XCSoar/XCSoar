@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
- <g transform="matrix(.68749 0 0 .49982 .00033009 .00023498)">
-  <path d="m-2.6182e-4 4.2044e-4v44.015l32 1.2e-5 2.9e-5 -44.016z" fill="#fff" stroke-miterlimit="3" stroke-width="0" style="paint-order:stroke markers fill"/>
-  <path d="m4.118 2.2848v17.438h1.7002v-7.7188h22.364v-2.0004h-22.364v-7.7188z" color="#000000" fill-rule="evenodd" stroke-width="1.3861" style="-inkscape-stroke:none"/>
+ <g transform="rotate(180 15.5 6.993)">
+  <g transform="matrix(.34374 0 0 .34374 8.9989 3)" fill-rule="evenodd">
+   <path d="m20.228 15.98c-0.0043-1.1101-0.42724-2.2188-1.2688-3.0664l-11.558-11.635c-0.7935-0.79767-1.841-1.2352-2.9177-1.2714v-0.0072601l-4.4798 2.601e-4 8.68e-6 31.96 4.4798-0.0012v-0.0058c1.0767-0.03619 2.1242-0.47373 2.9177-1.2714l11.558-11.635c0.84157-0.84756 1.2659-1.9563 1.2688-3.0664" fill="#fff" style="-inkscape-stroke:none"/>
+   <path d="m5.358 3.3367-2.0429 2.0573 10.543 10.606-10.543 10.606 2.0429 2.0573 12.58-12.663z" style="-inkscape-stroke:none"/>
+  </g>
  </g>
 </svg>
+
