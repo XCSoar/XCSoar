@@ -24,6 +24,11 @@ ifneq (,$(findstring ccache,$(DEB_BUILD_OPTIONS)))
   OPTIONS += USE_CCACHE=y
 endif
 
+ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+  NUMJOBS = $(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+  OPTIONS += -j$(NUMJOBS)
+endif
+
 %:
 	dh $@
 
