@@ -129,7 +129,7 @@ The following command installs these on Debian::
       libfmt-dev \
       libdbus-1-dev \
       libsodium-dev \
-      libfreetype6-dev \
+      libfreetype-dev \
       libpng-dev libjpeg-dev \
       libtiff5-dev libgeotiff-dev \
       libc-ares-dev \
