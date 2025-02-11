@@ -44,9 +44,9 @@ OLCSprint::FindStart() const noexcept
 
   unsigned start_index = 0;
   const auto end_time = TraceManager::GetPoint(n_points - 1).GetTime();
-  if (end_time > std::chrono::minutes{150}) {
+  if (end_time > std::chrono::minutes{120}) {
     // fast forward to 2.5 hours before finish
-    const auto start_time = end_time - std::chrono::minutes{150};
+    const auto start_time = end_time - std::chrono::minutes{120};
     assert(start_index < n_points);
     while (TraceManager::GetPoint(start_index).GetTime() < start_time) {
       ++start_index;

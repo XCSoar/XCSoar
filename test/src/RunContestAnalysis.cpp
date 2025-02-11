@@ -18,11 +18,11 @@ using namespace std::chrono;
 #ifdef BENCHMARK_LK8000
 static Trace full_trace({}, Trace::null_time, 100);
 static Trace triangle_trace({}, Trace::null_time, 100);
-static Trace sprint_trace({}, minutes{150}, 50);
+static Trace sprint_trace({}, minutes{120}, 50);
 #else
 static Trace full_trace({}, Trace::null_time, 512);
 static Trace triangle_trace({}, Trace::null_time, 1024);
-static Trace sprint_trace({}, minutes{150}, 128);
+static Trace sprint_trace({}, minutes{120}, 128);
 #endif
 
 static ContestManager olc_classic(Contest::OLC_CLASSIC,
