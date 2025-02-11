@@ -1,4 +1,6 @@
 Version 7.44 - not yet released
+* calculations
+  - update sprint/league time window to 2 hours (as per OLC and DMSt rules)
 * tracking
   - xcsoar-cloud-service: rebuild service, new domain cloud.xcsoar.org
 * data files
