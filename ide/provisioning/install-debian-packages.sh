@@ -93,7 +93,7 @@ install_debian() {
 
 install_llvm() {
   echo Installing dependencies for compiling with LLVM / Clang...
-  apt-get install ${APTOPTS[*]} llvm clang libc++-dev libc++abi-dev
+  apt-get install ${APTOPTS[*]} llvm clang libc++-dev libc++abi-dev lld
   echo
 }
 
