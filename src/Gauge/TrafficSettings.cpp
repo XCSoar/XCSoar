@@ -10,5 +10,6 @@ TrafficSettings::SetDefaults() noexcept
   auto_close_dialog = false;
   auto_zoom = true;
   north_up = false;
+  radar_zoom = 4;
   gauge_location = GaugeLocation::BOTTOM_RIGHT_AVOID_IB;
 }
