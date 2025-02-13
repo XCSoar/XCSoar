@@ -115,6 +115,9 @@ struct NMEAInfo {
   /** GPS altitude AMSL (m) */
   double gps_altitude;
 
+  /** GPS altitude above WGS84 ellipsoid (m) */
+  double gps_ellipsoid_altitude;
+
   /**
    * Static pressure value [Pa].
    */
