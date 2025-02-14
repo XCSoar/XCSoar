@@ -46,7 +46,6 @@
 
 static constexpr unsigned separator_height = 2;
 
-#ifdef HAVE_SHOW_MENU_BUTTON
 [[gnu::pure]]
 static PixelRect
 GetShowMenuButtonRect(const PixelRect rc) noexcept
@@ -60,7 +59,6 @@ GetShowMenuButtonRect(const PixelRect rc) noexcept
 
   return PixelRect(left, top, right, bottom);
 }
-#endif
 
 [[gnu::pure]]
 static PixelRect
@@ -200,13 +198,11 @@ MainWindow::InitialiseConfigured()
   ReinitialiseLayoutTA(rc, ib_layout);
   ReinitialiseLayout_flarm(rc, ib_layout);
 
-#ifdef HAVE_SHOW_MENU_BUTTON
   const UISettings &settings = CommonInterface::GetUISettings();
   if (settings.show_menu_button){
     show_menu_button = new ShowMenuButton();
     show_menu_button->Create(*this, GetShowMenuButtonRect(map_rect));
   }
-#endif
 
   map = new GlueMapWindow(*look);
   map->SetComputerSettings(CommonInterface::GetComputerSettings());
@@ -236,10 +232,8 @@ MainWindow::Deinitialise() noexcept
   map = nullptr;
   delete temp_map;
 
-#ifdef HAVE_SHOW_MENU_BUTTON
   delete show_menu_button;
   show_menu_button = nullptr;
-#endif
 
   vario.Clear();
   traffic_gauge.Clear();
@@ -366,10 +360,8 @@ MainWindow::ReinitialiseLayout() noexcept
   if (widget != nullptr)
     widget->Move(GetMainRect(rc));
 
-#ifdef HAVE_SHOW_MENU_BUTTON
   if (show_menu_button != nullptr)
     show_menu_button->Move(GetShowMenuButtonRect(GetMainRect()));
-#endif
 
   if (map != nullptr)
     map->BringToBottom();

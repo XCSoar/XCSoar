@@ -40,9 +40,7 @@ enum ControlIndex {
   AppStatusMessageAlignment,
   AppInfoBoxColors,
   AppInfoBoxBorder,
-#ifdef KOBO
   ShowMenuButton,
-#endif
 #ifdef DRAW_MOUSE_CURSOR
   CursorSize,
   CursorInverted,
@@ -210,11 +208,9 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
           unsigned(ui_settings.info_boxes.border_style));
   SetExpertRow(AppInfoBoxBorder);
 
-#ifdef KOBO
   AddBoolean(_("Show Menubutton"), _("Show the Menubutton"),
              ui_settings.show_menu_button);
   SetExpertRow(ShowMenuButton);
-#endif
 
 #ifdef DRAW_MOUSE_CURSOR
   AddInteger(_("Cursor zoom"), _("Cursor zoom factor"), _T("%d x"), _T("%d x"), 1, 10, 1,
@@ -270,10 +266,8 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
     changed |= SaveValue(AppInfoBoxColors, ProfileKeys::AppInfoBoxColors,
                          ui_settings.info_boxes.use_colors);
 
-#ifdef KOBO
   if (SaveValue(ShowMenuButton, ProfileKeys::ShowMenuButton,ui_settings.show_menu_button))
     require_restart = changed = true;
-#endif
 
   DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;
   changed |= SaveValueEnum(TabDialogStyle, ProfileKeys::AppDialogTabStyle, dialog_settings.tab_style);
