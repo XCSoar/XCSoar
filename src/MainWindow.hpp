@@ -13,10 +13,7 @@
 #include <cstdint>
 #include <cassert>
 
-#ifdef KOBO
-#define HAVE_SHOW_MENU_BUTTON
 #include "Menu/ShowMenuButton.hpp"
-#endif
 
 struct ComputerSettings;
 struct MapSettings;
@@ -43,9 +40,7 @@ class MainWindow : public UI::SingleWindow {
 
   MenuBar *menu_bar = nullptr;
 
-#ifdef HAVE_SHOW_MENU_BUTTON
   ShowMenuButton *show_menu_button = nullptr;
-#endif
 
   GlueMapWindow *map = nullptr;
 
