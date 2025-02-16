@@ -95,6 +95,9 @@ XCTRACER_SOURCES = \
 THERMALEXPRESS_SOURCES = \
 	$(DRIVER_SRC_DIR)/ThermalExpress/Driver.cpp
 
+STRATUX_SOURCES = \
+	$(DRIVER_SRC_DIR)/Stratux/Driver.cpp
+
 DRIVER_SOURCES = \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
@@ -109,6 +112,7 @@ DRIVER_SOURCES = \
 	$(BLUEFLY_SOURCES) \
 	$(XCTRACER_SOURCES) \
 	$(THERMALEXPRESS_SOURCES) \
+	$(STRATUX_SOURCES) \
 	$(DRIVER_SRC_DIR)/AltairPro.cpp \
 	$(DRIVER_SRC_DIR)/BorgeltB50.cpp \
 	$(DRIVER_SRC_DIR)/XCVario.cpp \
