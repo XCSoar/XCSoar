@@ -25,6 +25,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Device/CAI302/WaypointUploader.cpp \
 	$(SRC)/Dialogs/Device/ManageFlarmDialog.cpp \
 	$(SRC)/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp \
+	$(SRC)/Dialogs/Device/Stratux/ConfigurationDialog.cpp \
 	$(SRC)/Dialogs/Device/ManageI2CPitotDialog.cpp \
 	$(SRC)/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp \
 	$(SRC)/Dialogs/Device/LX/LXNAVVarioConfigWidget.cpp \
