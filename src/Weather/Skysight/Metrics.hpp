@@ -41,7 +41,7 @@ struct SkysightActiveMetric {
 
 public:
   SkysightActiveMetric(SkysightMetric *_metric, uint64_t _from,
-		       uint64_t _to, uint64_t _mtime): 
+           uint64_t _to, uint64_t _mtime): 
     metric(_metric), from(_from), to(_to), mtime(_mtime) {}
   SkysightActiveMetric(const SkysightActiveMetric &m):
     metric(m.metric), from(m.from), to(m.to), mtime(m.mtime),

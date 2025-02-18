@@ -123,7 +123,7 @@ private:
                                   const DerivedInfo &calculated) override;
 
   bool SetDisplayedMetric(const TCHAR *const id,
-			  BrokenDateTime forecast_time = BrokenDateTime());
+        BrokenDateTime forecast_time = BrokenDateTime());
   BrokenDateTime GetForecastTime(BrokenDateTime curr_time);
   std::vector<SkysightActiveMetric> active_metrics;
 

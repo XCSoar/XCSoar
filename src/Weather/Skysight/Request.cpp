@@ -118,7 +118,7 @@ SkysightRequest::GetType()
 
 void
 SkysightRequest::SetCredentials(const TCHAR *_key, const TCHAR *_username, 
-				const TCHAR *_password)
+        const TCHAR *_password)
 {
   key = _key;
   if(_username != nullptr)
@@ -137,8 +137,8 @@ SkysightAsyncRequest::GetType()
 
 void
 SkysightAsyncRequest::SetCredentials(const TCHAR *_key,
-				     const TCHAR *_username,
-				     const TCHAR *_password)
+             const TCHAR *_username,
+             const TCHAR *_password)
 {
   std::lock_guard<Mutex> lock(mutex);
   SkysightRequest::SetCredentials(_key, _username, _password);
@@ -200,7 +200,7 @@ SkysightAsyncRequest::Tick() noexcept
     SkysightAPI::ParseResponse(resultStr.c_str(), result, args);
   } else {
     SkysightAPI::ParseResponse(_T("Could not fetch data from Skysight server."),
-			       result, args);
+             result, args);
   }
 
   mutex.lock();
@@ -297,7 +297,7 @@ SkysightRequest::RequestToBuffer(tstring &response)
     request_headers.Append(content_type_buffer);
     NarrowString<1024> creds;
     creds.Format("{\"username\":\"%s\",\"password\":\"%s\"}",
-		 username.c_str(), password.c_str());
+     username.c_str(), password.c_str());
     pBody = creds.c_str();
     request.SetRequestBody(pBody.c_str(), pBody.length());
     request.SetFailOnError(false);
@@ -314,6 +314,6 @@ SkysightRequest::RequestToBuffer(tstring &response)
   }
 
   response = tstring(buffer,
-		     buffer + handler.GetReceived() / sizeof(buffer[0]));
+         buffer + handler.GetReceived() / sizeof(buffer[0]));
   return success;
 }

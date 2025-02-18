@@ -375,7 +375,7 @@ Skysight::ScanFolder(tstring search_string = "*.tif")
   } visitor(file_list);
 
   Directory::VisitSpecificFiles(GetLocalPath(), _T(search_string.c_str()),
-				visitor);
+        visitor);
   return file_list;
 }
 
@@ -389,7 +389,7 @@ Skysight::CleanupFiles()
       if (filename.EndsWithIgnoreCase(".tif")) {
         SkysightImageFile img_file = SkysightImageFile(filename, path);
         if ((img_file.mtime <= (to - (60*60*24*5))) ||
-	    (img_file.datetime < (to - (60*60*24))) ) {
+      (img_file.datetime < (to - (60*60*24))) ) {
           File::Delete(path);
         }
       }
@@ -418,10 +418,10 @@ Skysight::Render(bool force_update)
     //Request next images
     BrokenDateTime now = Skysight::GetNow(force_update);
     if (force_update ||
-	(!update_flag && displayed_metric < GetForecastTime(now))) {
+  (!update_flag && displayed_metric < GetForecastTime(now))) {
       //TODO: use const char in metric rather than string/cstr
       api->GetImageAt(displayed_metric.metric->id.c_str(), now, now + std::chrono::seconds(60*60),
-		     DownloadComplete);
+         DownloadComplete);
     }
   }
 }
@@ -447,7 +447,7 @@ Skysight::GetForecastTime(BrokenDateTime curr_time)
 
 bool
 Skysight::SetDisplayedMetric(const TCHAR *const id,
-			     BrokenDateTime forecast_time)
+           BrokenDateTime forecast_time)
 {
   if (!IsActiveMetric(id))
     return false;
@@ -480,7 +480,7 @@ Skysight::DownloadActiveMetric(tstring id = "*")
     for (auto &i: active_metrics) {
       SetActveMetricUpdateState(i.metric->id, true);
       api->GetImageAt(i.metric->id.c_str(), now, now + std::chrono::seconds(60*60*24),
-		     DownloadComplete);
+         DownloadComplete);
     }
   } else {
     SetActveMetricUpdateState(id, true);
@@ -491,7 +491,7 @@ Skysight::DownloadActiveMetric(tstring id = "*")
 
 void
 Skysight::OnCalculatedUpdate(const MoreData &basic,
-			     __attribute__((unused)) const DerivedInfo &calculated)
+           __attribute__((unused)) const DerivedInfo &calculated)
 {
   // maintain current time -- for use in replays etc.
   // Cannot be accessed directly from chid threads
@@ -552,12 +552,12 @@ Skysight::DisplayActiveMetric(const TCHAR *const id)
             bdt.day, bdt.hour, bdt.minute);
 
       if (File::Exists(AllocatedPath::Build(GetLocalPath(),
-					    filename.c_str()))) {
+              filename.c_str()))) {
         found = true;
         break;
       }
       if (offset == 0)
-	break;
+  break;
     }
     if (!found)
       offset += (60*30);
@@ -577,8 +577,8 @@ Skysight::DisplayActiveMetric(const TCHAR *const id)
   auto path = AllocatedPath::Build(Skysight::GetLocalPath(), filename.c_str());
   StaticString<256> desc;
   desc.Format("Skysight: %s (%04u-%02u-%02u %02u:%02u)",
-	      displayed_metric.metric->name.c_str(), bdt.year, bdt.month, 
-	      bdt.day, bdt.hour, bdt.minute);
+        displayed_metric.metric->name.c_str(), bdt.year, bdt.month, 
+        bdt.day, bdt.hour, bdt.minute);
   tstring label = desc.c_str();
 
   auto *map = UIGlobals::GetMap();
