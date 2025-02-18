@@ -1183,6 +1183,8 @@ TestLXV7()
   ok1(equals(basic.indicated_airspeed, 90.2));
   ok1(basic.pressure_altitude_available);
   ok1(equals(basic.pressure_altitude, 244.3));
+  ok1(basic.acceleration.available);
+  ok1(equals(basic.acceleration.g_load, 1.331));
 
   ok1(device->ParseNMEA("$PLXVS,23.1,0,12.3,*71", basic));
   ok1(basic.temperature_available);
@@ -1745,7 +1747,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main()
 {
-  plan_tests(946);
+  plan_tests(948);
   TestGeneric();
   TestTasman();
   TestFLARM();
