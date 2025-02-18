@@ -234,6 +234,6 @@ void CDFDecoder::MakeCallback(bool result)
 {
   if (callback) {
     SkysightAPI::MakeCallback(callback, output_path.c_str(), result,
-			      data_varname.c_str(), time_index);
+            data_varname.c_str(), time_index);
   }
 }

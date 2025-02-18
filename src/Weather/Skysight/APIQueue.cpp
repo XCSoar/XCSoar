@@ -13,13 +13,13 @@
 #include <vector>
 
 SkysightAPIQueue::~SkysightAPIQueue() {
-	LogFormat("SkysightAPIQueue::~SkysightAPIQueue %d", timer.IsActive());
+  LogFormat("SkysightAPIQueue::~SkysightAPIQueue %d", timer.IsActive());
   timer.Cancel();
 }
 
 void
 SkysightAPIQueue::AddRequest(std::unique_ptr<SkysightAsyncRequest> request,
-			     bool append_end)
+           bool append_end)
 {
   if (!append_end) {
     //Login requests jump to the front of the queue
@@ -62,7 +62,7 @@ void SkysightAPIQueue::Process()
       }
 
       if (!timer.IsActive())
-	      timer.Schedule(std::chrono::milliseconds(300));
+        timer.Schedule(std::chrono::milliseconds(300));
       break;
     case SkysightRequest::Status::Complete:
     case SkysightRequest::Status::Error:
@@ -80,7 +80,7 @@ void SkysightAPIQueue::Process()
     case CDFDecoder::Status::Idle:
       (*decode_job)->DecodeAsync();
       if (!timer.IsActive())
-	      timer.Schedule(std::chrono::milliseconds(300));
+        timer.Schedule(std::chrono::milliseconds(300));
       break;
     case CDFDecoder::Status::Complete:
     case CDFDecoder::Status::Error:
@@ -107,7 +107,7 @@ SkysightAPIQueue::Clear(const tstring msg)
 
 void
 SkysightAPIQueue::SetCredentials(const tstring _email,
-				 const tstring _pass)
+         const tstring _pass)
 {
   password = _pass;
   email = _email;
@@ -115,7 +115,7 @@ SkysightAPIQueue::SetCredentials(const tstring _email,
 
 void
 SkysightAPIQueue::SetKey(const tstring _key,
-			 const uint64_t _key_expiry_time)
+       const uint64_t _key_expiry_time)
 {
   key = _key;
   key_expiry_time = _key_expiry_time;

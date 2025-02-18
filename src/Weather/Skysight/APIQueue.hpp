@@ -31,7 +31,7 @@ public:
   void SetKey(const tstring _key, const uint64_t _key_expiry_time);
   bool IsLoggedIn();
   void AddRequest(std::unique_ptr<SkysightAsyncRequest> request,
-		  bool append_end = true);
+      bool append_end = true);
   void AddDecodeJob(std::unique_ptr<CDFDecoder> &&job);
   void Clear(const tstring msg);
   void DoClearingQueue();

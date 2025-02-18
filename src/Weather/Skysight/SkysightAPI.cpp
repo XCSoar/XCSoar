@@ -104,12 +104,12 @@ SkysightAPI::GetUrl(SkysightCallType type, const char *const layer,
     break;
   case SkysightCallType::LastUpdates:
     url.Format(SKYSIGHTAPI_BASE_URL "/data/last_updated?region_id=%s",
-	       region.c_str());
+        region.c_str());
     break;
   case SkysightCallType::DataDetails:
     url.Format(SKYSIGHTAPI_BASE_URL
-	       "/data?region_id=%s&layer_ids=%s&from_time=%llu",
-	       region.c_str(), layer, from);
+        "/data?region_id=%s&layer_ids=%s&from_time=%llu",
+        region.c_str(), layer, from);
     break;
   case SkysightCallType::Data:
   case SkysightCallType::Image:
@@ -141,13 +141,13 @@ SkysightAPI::GetPath(SkysightCallType type, const char *const layer,
   case SkysightCallType::DataDetails:
     fc = FromUnixTime(fctime);
     filename.Format("%s-datafiles-%s-%04d%02d%02d%02d%02d.json",
-		    region.c_str(), layer, fc.year, fc.month, fc.day,
-		    fc.hour, fc.minute);
+        region.c_str(), layer, fc.year, fc.month, fc.day,
+        fc.hour, fc.minute);
       break;
   case SkysightCallType::Data:
     fc = FromUnixTime(fctime);
     filename.Format("%s-%s-%04d%02d%02d%02d%02d.nc", region.c_str(), layer, 
-		    fc.year, fc.month, fc.day, fc.hour, fc.minute);
+        fc.year, fc.month, fc.day, fc.hour, fc.minute);
     break;
   case SkysightCallType::Image:
     return GetPath(SkysightCallType::Data, layer, fctime).WithSuffix(".tif");
@@ -173,7 +173,7 @@ SkysightAPI::FromUnixTime(uint64_t t)
 }
 
 SkysightAPI::SkysightAPI(tstring email, tstring password, tstring _region,
-			 SkysightCallback cb)
+      SkysightCallback cb)
        :
   cache_path(MakeLocalPath(_T("skysight")))
 {
@@ -208,7 +208,7 @@ SkysightAPI::IsInited()
 
 void
 SkysightAPI::ParseResponse(const tstring &&result, const bool success,
-			   const SkysightRequestArgs &req)
+        const SkysightRequestArgs &req)
 {
   if (!self)
     return;
@@ -218,7 +218,7 @@ SkysightAPI::ParseResponse(const tstring &&result, const bool success,
       self->queue.Clear(_T("Login error"));
     } else {
       self->MakeCallback(req.cb, result.c_str() , false, req.layer.c_str(),
-			 req.from);
+      req.from);
     }
     return;
   }
@@ -250,7 +250,7 @@ SkysightAPI::ParseResponse(const tstring &&result, const bool success,
 
 bool
 SkysightAPI::ParseRegions(const SkysightRequestArgs &args,
-			  const tstring &result)
+        const tstring &result)
 {
   boost::property_tree::ptree details;
   
@@ -269,7 +269,7 @@ SkysightAPI::ParseRegions(const SkysightRequestArgs &args,
     auto name = node.find("name");
     if (id != node.not_found()) {
       regions.insert(std::pair<tstring, tstring>(id->second.data(),
-						 name->second.data()));
+            name->second.data()));
       success = true;
     }
   }
@@ -310,7 +310,7 @@ SkysightAPI::LoadDefaultRegions()
 
 bool
 SkysightAPI::ParseLayers(const SkysightRequestArgs &args,
-			 const tstring &result)
+      const tstring &result)
 {
   boost::property_tree::ptree details;
 
@@ -370,7 +370,7 @@ SkysightAPI::ParseLayers(const SkysightRequestArgs &args,
 
 bool
 SkysightAPI::ParseLastUpdates(const SkysightRequestArgs &args,
-			      const tstring &result)
+            const tstring &result)
 {
   boost::property_tree::ptree details;
   if (!GetResult(args, result.c_str(), details)) {
@@ -399,7 +399,7 @@ SkysightAPI::ParseLastUpdates(const SkysightRequestArgs &args,
 
 bool
 SkysightAPI::ParseDataDetails(const SkysightRequestArgs &args,
-			      const tstring &result)
+            const tstring &result)
 {
   boost::property_tree::ptree details;
   if (!GetResult(args, result.c_str(), details)) {
@@ -423,8 +423,8 @@ SkysightAPI::ParseDataDetails(const SkysightRequestArgs &args,
       }
 
       success = GetData(SkysightCallType::Data, args.layer.c_str(),
-			time_index, args.to, link->second.data().c_str(),
-			args.cb);
+      time_index, args.to, link->second.data().c_str(),
+      args.cb);
 
       if (!success)
         return false;
@@ -449,8 +449,8 @@ SkysightAPI::ParseLogin(const SkysightRequestArgs &args, const tstring &result)
 
   if ((key != details.not_found()) && (valid_until != details.not_found())) {
     queue.SetKey(key->second.data().c_str(),
-		 static_cast<uint64_t>
-		 (std::strtoull(valid_until->second.data().c_str(), NULL, 0)));
+    static_cast<uint64_t>
+    (std::strtoull(valid_until->second.data().c_str(), NULL, 0)));
     success = true;
     LogFormat("SkysightAPI::ParseLogin success with key %s", key->second.data().c_str());
 
@@ -466,7 +466,7 @@ bool
 SkysightAPI::ParseData(const SkysightRequestArgs &args, __attribute__((unused)) const tstring &result)
 {
   auto output_img = GetPath(SkysightCallType::Image, args.layer.c_str(),
-			    args.from);
+          args.from);
   queue.AddDecodeJob(std::make_unique<CDFDecoder>(args.path.c_str(), output_img.c_str(),
                                         args.layer.c_str(), args.from, 
                                         GetMetric(args.layer.c_str())->legend, args.cb));
@@ -475,17 +475,17 @@ SkysightAPI::ParseData(const SkysightRequestArgs &args, __attribute__((unused)) 
 
 bool
 SkysightAPI::GetData(SkysightCallType t, const TCHAR *const layer,
-		     const uint64_t from, const uint64_t to,
-		     const TCHAR *const link, SkysightCallback cb,
-		     bool force_recache)
+        const uint64_t from, const uint64_t to,
+        const TCHAR *const link, SkysightCallback cb,
+        bool force_recache)
 {
   const tstring url = link ? link : GetUrl(t, layer,  from);
 
   const auto path = GetPath(t,  layer,  from);
 
   bool to_file = !(t == SkysightCallType::DataDetails ||
-		   t == SkysightCallType::Login ||
-		   t == SkysightCallType::LastUpdates);
+      t == SkysightCallType::Login ||
+      t == SkysightCallType::LastUpdates);
 
   SkysightRequestArgs ra(
     url.c_str(),
@@ -516,7 +516,7 @@ SkysightAPI::GetData(SkysightCallType t, const TCHAR *const layer,
 
 bool
 SkysightAPI::CacheAvailable(Path path, SkysightCallType calltype,
-			    const TCHAR *const layer)
+          const TCHAR *const layer)
 {
   uint64_t layer_updated = 0;
   if (layer) {
@@ -558,7 +558,7 @@ SkysightAPI::CacheAvailable(Path path, SkysightCallType calltype,
 
 bool
 SkysightAPI::GetResult(const SkysightRequestArgs &args, const tstring result,
-		       boost::property_tree::ptree &output)
+          boost::property_tree::ptree &output)
 {
   try {
     if (args.to_file) {
@@ -575,8 +575,8 @@ SkysightAPI::GetResult(const SkysightRequestArgs &args, const tstring result,
 
 bool
 SkysightAPI::GetImageAt(const TCHAR *const layer, BrokenDateTime fctime,
-			BrokenDateTime maxtime,
-			SkysightCallback cb)
+      BrokenDateTime maxtime,
+      SkysightCallback cb)
 {
   // round time to nearest 30-min forecast slot
   if ((fctime.minute >= 15) && (fctime.minute < 45)) fctime.minute = 30;
@@ -620,8 +620,8 @@ SkysightAPI::GenerateLoginRequest()
 
 void
 SkysightAPI::MakeCallback(SkysightCallback cb, const tstring &&details,
-			  const bool success, const tstring &&layer,
-			  const uint64_t time_index)
+        const bool success, const tstring &&layer,
+        const uint64_t time_index)
 {
   if (cb)
     cb(details.c_str(), success, layer.c_str(), time_index);
