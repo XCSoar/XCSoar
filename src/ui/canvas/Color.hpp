@@ -31,6 +31,12 @@ static constexpr Color COLOR_MAGENTA = Color(0xff, 0x00, 0xff);
 static constexpr Color COLOR_ORANGE = Color(0xff, 0xa2, 0x00);
 static constexpr Color COLOR_BROWN = Color(0xb7, 0x64, 0x1e);
 
+static constexpr Color COLOR_INVERSE_RED = Color(0xff, 0x70, 0x70);
+static constexpr Color COLOR_INVERSE_BLUE = Color(0x90, 0x90, 0xff);
+static constexpr Color COLOR_INVERSE_YELLOW = COLOR_YELLOW;
+static constexpr Color COLOR_INVERSE_GREEN = COLOR_GREEN;
+static constexpr Color COLOR_INVERSE_MAGENTA = COLOR_MAGENTA;
+
 constexpr uint8_t
 LightColor(uint8_t c) noexcept
 {

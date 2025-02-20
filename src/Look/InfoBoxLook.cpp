@@ -8,6 +8,7 @@
 #include "Screen/Layout.hpp"
 #include "AutoFont.hpp"
 #include "Asset.hpp"
+#include "ui/canvas/Color.hpp"
 
 #ifdef HAVE_TEXT_CACHE
 #include "ui/canvas/custom/Cache.hpp"
@@ -15,11 +16,6 @@
 
 #include <algorithm>
 
-#define COLOR_INVERSE_RED Color(0xff, 0x70, 0x70)
-#define COLOR_INVERSE_BLUE Color(0x90, 0x90, 0xff)
-#define COLOR_INVERSE_YELLOW COLOR_YELLOW
-#define COLOR_INVERSE_GREEN COLOR_GREEN
-#define COLOR_INVERSE_MAGENTA COLOR_MAGENTA
 
 void
 InfoBoxLook::Initialise(bool _inverse, bool use_colors,
