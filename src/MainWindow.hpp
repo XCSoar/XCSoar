@@ -397,6 +397,7 @@ protected:
   bool OnMouseDouble(PixelPoint p) noexcept override;
   bool OnKeyDown(unsigned key_code) noexcept override;
   void OnPaint(Canvas &canvas) noexcept override;
+  PixelRect GetShowMenuButtonRect(const PixelRect rc) noexcept;
   PixelRect GetShowZoomOutButtonRect(const PixelRect rc) noexcept;
 
   /* virtual methods from class TopWindow */
