@@ -223,14 +223,24 @@ PLXVC(NMEAInputLine &line, DeviceInfo &device,
  *
  * $PLXVF,time ,AccX,AccY,AccZ,Vario,IAS,PressAlt*CS<CR><LF>
  *
- * Example: $PLXVF,1.00,0.87,-0.12,-0.25,90.2,244.3,*CS<CR><LF>
+ * Example: $PLXVF,,1.00,0.87,-0.12,-0.25,90.2,244.3,*CS<CR><LF>
  *
  * @see http://www.xcsoar.org/trac/raw-attachment/ticket/1666/V7%20dataport%20specification%201.97.pdf
  */
 static bool
 PLXVF(NMEAInputLine &line, NMEAInfo &info)
 {
-  line.Skip(4);
+  line.Skip();
+
+  double a[3];
+  bool a_available = line.ReadChecked(a[0]);
+  if (!line.ReadChecked(a[1]))
+    a_available = false;
+  if (!line.ReadChecked(a[2]))
+    a_available = false;
+
+  if (a_available)
+    info.acceleration.ProvideGLoad(SpaceDiagonal(a[0], a[1], a[2]));
 
   double vario;
   if (line.ReadChecked(vario))
