@@ -27,6 +27,7 @@ UISettings::SetDefaults() noexcept
 #else
   show_menu_button = false;
 #endif
+  show_zoom_button = false;
 
   dark_mode = DarkMode::AUTO;
 

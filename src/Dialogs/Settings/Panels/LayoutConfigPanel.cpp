@@ -15,7 +15,7 @@
 #include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"
 #include "Asset.hpp"
-#include "Menu/ShowMenuButton.hpp"
+#include "Menu/ShowButton.hpp"
 #include "ActionInterface.hpp"
 
 #ifdef ANDROID
@@ -41,6 +41,7 @@ enum ControlIndex {
   AppInfoBoxColors,
   AppInfoBoxBorder,
   ShowMenuButton,
+  ShowZoomButton,
 #ifdef DRAW_MOUSE_CURSOR
   CursorSize,
   CursorInverted,
@@ -211,6 +212,9 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
   AddBoolean(_("Show Menubutton"), _("Show the Menubutton"),
              ui_settings.show_menu_button);
   SetExpertRow(ShowMenuButton);
+  AddBoolean(_("Show Zoombutton"), _("Show the Zoombutton"),
+             ui_settings.show_zoom_button);
+  SetExpertRow(ShowZoomButton);
 
 #ifdef DRAW_MOUSE_CURSOR
   AddInteger(_("Cursor zoom"), _("Cursor zoom factor"), _T("%d x"), _T("%d x"), 1, 10, 1,
@@ -267,6 +271,9 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
                          ui_settings.info_boxes.use_colors);
 
   if (SaveValue(ShowMenuButton, ProfileKeys::ShowMenuButton,ui_settings.show_menu_button))
+    require_restart = changed = true;
+  if (SaveValue(ShowZoomButton, ProfileKeys::ShowZoomButton,
+		ui_settings.show_zoom_button))
     require_restart = changed = true;
 
   DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;

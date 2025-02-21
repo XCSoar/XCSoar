@@ -131,6 +131,7 @@ Profile::Load(const ProfileMap &map, UISettings &settings)
   map.GetEnum(ProfileKeys::HapticFeedback, settings.haptic_feedback);
 
   map.Get(ProfileKeys::ShowMenuButton, settings.show_menu_button);
+  map.Get(ProfileKeys::ShowZoomButton, settings.show_zoom_button);
 
   if (!map.GetEnum(ProfileKeys::DarkMode, settings.dark_mode)) {
     /* migrate the old AppInverseInfoBox setting */

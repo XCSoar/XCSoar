@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <cassert>
 
-#include "Menu/ShowMenuButton.hpp"
+#include "Menu/ShowButton.hpp"
 
 struct ComputerSettings;
 struct MapSettings;
@@ -41,6 +41,7 @@ class MainWindow : public UI::SingleWindow {
   MenuBar *menu_bar = nullptr;
 
   ShowMenuButton *show_menu_button = nullptr;
+  ShowZoomOutButton *show_zoom_out_button = nullptr;
 
   GlueMapWindow *map = nullptr;
 
@@ -396,6 +397,7 @@ protected:
   bool OnMouseDouble(PixelPoint p) noexcept override;
   bool OnKeyDown(unsigned key_code) noexcept override;
   void OnPaint(Canvas &canvas) noexcept override;
+  PixelRect GetShowZoomOutButtonRect(const PixelRect rc) noexcept;
 
   /* virtual methods from class TopWindow */
   bool OnClose() noexcept override;

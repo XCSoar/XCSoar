@@ -5,7 +5,19 @@
 
 #include "Form/Button.hpp"
 
+/* "M" menu button */
 class ShowMenuButton : public Button {
+public:
+  void Create(ContainerWindow &parent, const PixelRect &rc,
+              WindowStyle style=WindowStyle()) noexcept;
+
+protected:
+  /* virtual methods from class ButtonWindow */
+  bool OnClicked() noexcept override;
+};
+
+/* zoom out button */
+class ShowZoomOutButton : public Button {
 public:
   void Create(ContainerWindow &parent, const PixelRect &rc,
               WindowStyle style=WindowStyle()) noexcept;
