@@ -45,6 +45,7 @@ struct UISettings {
 
   /** Show Menubutton */
   bool show_menu_button;
+  bool show_zoom_button;
 
   enum class PopupMessagePosition : uint8_t {
     CENTER,
