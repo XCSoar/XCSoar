@@ -518,7 +518,9 @@ Skysight::DisplayActiveMetric(const TCHAR *const id)
     if (map == nullptr)
       return false;
 
+#if defined(HAVE_SKYSIGHT)
     map->SetOverlay(nullptr);
+#endif
     Profile::Set(ProfileKeys::SkysightDisplayedMetric, "");
     return true;
   }
@@ -585,6 +587,7 @@ Skysight::DisplayActiveMetric(const TCHAR *const id)
   if (map == nullptr)
     return false;
 
+#if defined(HAVE_SKYSIGHT)
   LogFormat("Skysight::DisplayActiveMetric %s", path.c_str());
   std::unique_ptr<MapOverlayBitmap> bmp;
   try {
@@ -598,4 +601,7 @@ Skysight::DisplayActiveMetric(const TCHAR *const id)
   bmp->SetLabel(label);
   map->SetOverlay(std::move(bmp));
   return true;
+#else
+  return false;
+#endif
 }
