@@ -47,15 +47,28 @@
 static constexpr unsigned separator_height = 2;
 
 [[gnu::pure]]
-static PixelRect
-GetShowMenuButtonRect(const PixelRect rc) noexcept
+PixelRect
+MainWindow::GetShowMenuButtonRect(const PixelRect rc) noexcept
 {
   const unsigned padding = Layout::GetTextPadding();
   const unsigned size = Layout::GetMaximumControlHeight();
   const int right = rc.right - padding;
   const int left = right - size;
-  const int top = rc.top + padding;
-  const int bottom = top + size;
+  int top, bottom;
+  const UISettings &settings = CommonInterface::GetUISettings();
+  /*
+    locate bottom right and above status icon(mode_icon)
+    when the zoom buttons are displayed(settings.show_zoom_button)
+    as Tophat.
+  */
+  if (settings.show_zoom_button) {
+    bottom = rc.bottom - padding -
+      GetLook().map.cruise_mode_icon.GetSize().height - padding;
+    top = bottom - size;
+  } else {
+    top = rc.top + padding;
+    bottom = top + size;
+  }
 
   return PixelRect(left, top, right, bottom);
 }
