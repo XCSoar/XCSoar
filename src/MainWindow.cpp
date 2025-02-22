@@ -46,21 +46,63 @@
 
 static constexpr unsigned separator_height = 2;
 
-#ifdef HAVE_SHOW_MENU_BUTTON
 [[gnu::pure]]
-static PixelRect
-GetShowMenuButtonRect(const PixelRect rc) noexcept
+PixelRect
+MainWindow::GetShowMenuButtonRect(const PixelRect rc) noexcept
 {
   const unsigned padding = Layout::GetTextPadding();
   const unsigned size = Layout::GetMaximumControlHeight();
   const int right = rc.right - padding;
   const int left = right - size;
-  const int top = rc.top + padding;
-  const int bottom = top + size;
+  int top, bottom;
+  const UISettings &settings = CommonInterface::GetUISettings();
+  /*
+    locate bottom right and above status icon(mode_icon)
+    when the zoom buttons are displayed(settings.show_zoom_button)
+    as Tophat.
+  */
+  if (settings.show_zoom_button) {
+    bottom = rc.bottom - padding -
+      GetLook().map.cruise_mode_icon.GetSize().height - padding;
+    top = bottom - size;
+  } else {
+    top = rc.top + padding;
+    bottom = top + size;
+  }
 
   return PixelRect(left, top, right, bottom);
 }
-#endif
+
+[[gnu::pure]]
+PixelRect
+MainWindow::GetShowZoomOutButtonRect(const PixelRect rc) noexcept
+{
+  const unsigned padding = Layout::GetTextPadding();
+  const unsigned size = Layout::GetMaximumControlHeight();
+  const int left = rc.left + padding;
+  const int right = left + size;
+  const int bottom = rc.bottom -
+    GetLook().map.overlay.map_scale_left_icon.GetSize().height;
+  const int top = bottom - size;
+
+  return PixelRect(left, top, right, bottom);
+}
+
+[[gnu::pure]]
+PixelRect
+MainWindow::GetShowZoomInButtonRect(const PixelRect rc) noexcept
+{
+  const unsigned padding = Layout::GetTextPadding();
+  const unsigned size = Layout::GetMaximumControlHeight();
+  const int left = rc.left + padding;
+  const int right = left + size;
+  const int bottom = rc.bottom -
+    GetLook().map.overlay.map_scale_left_icon.GetSize().height -
+    size;
+  const int top = bottom - size;
+
+  return PixelRect(left, top, right, bottom);
+}
 
 [[gnu::pure]]
 static PixelRect
@@ -200,13 +242,17 @@ MainWindow::InitialiseConfigured()
   ReinitialiseLayoutTA(rc, ib_layout);
   ReinitialiseLayout_flarm(rc, ib_layout);
 
-#ifdef HAVE_SHOW_MENU_BUTTON
   const UISettings &settings = CommonInterface::GetUISettings();
   if (settings.show_menu_button){
     show_menu_button = new ShowMenuButton();
     show_menu_button->Create(*this, GetShowMenuButtonRect(map_rect));
   }
-#endif
+  if (settings.show_zoom_button) {
+    show_zoom_out_button = new ShowZoomOutButton();
+    show_zoom_out_button->Create(*this, GetShowZoomOutButtonRect(map_rect));
+    show_zoom_in_button = new ShowZoomInButton();
+    show_zoom_in_button->Create(*this, GetShowZoomInButtonRect(map_rect));
+  }
 
   map = new GlueMapWindow(*look);
   map->SetComputerSettings(CommonInterface::GetComputerSettings());
@@ -236,10 +282,10 @@ MainWindow::Deinitialise() noexcept
   map = nullptr;
   delete temp_map;
 
-#ifdef HAVE_SHOW_MENU_BUTTON
   delete show_menu_button;
   show_menu_button = nullptr;
-#endif
+  delete show_zoom_out_button;
+  show_zoom_out_button = nullptr;
 
   vario.Clear();
   traffic_gauge.Clear();
@@ -366,10 +412,12 @@ MainWindow::ReinitialiseLayout() noexcept
   if (widget != nullptr)
     widget->Move(GetMainRect(rc));
 
-#ifdef HAVE_SHOW_MENU_BUTTON
   if (show_menu_button != nullptr)
     show_menu_button->Move(GetShowMenuButtonRect(GetMainRect()));
-#endif
+  if (show_zoom_out_button != nullptr)
+    show_zoom_out_button->Move(GetShowZoomOutButtonRect(GetMainRect()));
+  if (show_zoom_in_button != nullptr)
+    show_zoom_in_button->Move(GetShowZoomInButtonRect(GetMainRect()));
 
   if (map != nullptr)
     map->BringToBottom();
