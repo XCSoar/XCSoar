@@ -4,24 +4,26 @@
 #include "ConfigurationDialog.hpp"
 #include "Device/Driver/Stratux/Driver.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/Message.hpp"
 #include "Dialogs/Error.hpp"
-#include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
 #include "Operation/Cancelled.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 #include "UIGlobals.hpp"
 #include "Widget/RowFormWidget.hpp"
+#include "Profile/Profile.hpp"
 
 class StratuxConfigurationWidget final
   : public RowFormWidget {
+
   enum StratuxWidgets {
     HRANGE,
     VRANGE,
-    SAVE,
   };
 
   WidgetDialog &dialog;
   StratuxDevice &device;
+  StratuxDevice::StratuxSettings settings;
 
 public:
   StratuxConfigurationWidget(const DialogLook &look, WidgetDialog &_dialog,
@@ -31,19 +33,30 @@ public:
   /* virtual methods from Widget */
   void Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept override {
 
-  AddInteger(_("Horizontal Range [m]"), nullptr, _T("%d m"), _T("%d"), 0, 20000, 1000, true, 0);
-  AddInteger(_("Vertical Range [m]"), nullptr, _T("%d m"), _T("%d"), 0, 15000, 1000, true, 0);
+    Profile::Get(ProfileKeys::StratuxHorizontalRange,settings.hrange);
+    Profile::Get(ProfileKeys::StratuxVerticalRange,settings.vrange);
 
-      AddButton(_("Save"), [this](){
-        bool _changed = false;
-        dialog.GetWidget().Save(_changed);
-      });
+    AddInteger(_("Horizontal Range"), nullptr, _T("%d m"), _T("%d"), 4000, 20000, 1000, settings.hrange);
+    AddInteger(_("Vertical Range"), nullptr, _T("%d m"), _T("%d"), 1000, 4000, 1000, settings.vrange);
   }
-};
 
-/**
- * Request all parameter values from the Stratux Vario.
- */
+  bool Save(bool &_changed) noexcept override {
+    PopupOperationEnvironment env;
+    bool changed = false;
+
+    changed |= SaveValueInteger(HRANGE, settings.hrange);
+    changed |= SaveValueInteger(VRANGE, settings.vrange);
+
+    Profile::Set(ProfileKeys::StratuxHorizontalRange, settings.hrange);
+    Profile::Set(ProfileKeys::StratuxVerticalRange, settings.vrange);
+
+    _changed |= changed;
+    if (_changed) ShowMessageBox(_("Changes to configuration saved.  Restart XCSoar to apply changes."),
+                    _T(""), MB_OK);
+    return true;
+  }
+
+};
 
 void
 ManageStratuxDialog(Device &_device)
@@ -54,9 +67,9 @@ ManageStratuxDialog(Device &_device)
 
   WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
                       look,
-                      _T("Stratux"),
+                      _T("Stratux Setup"),
                       new StratuxConfigurationWidget(look, dialog, device));
 
-  dialog.AddButton(_("Cancel"), mrCancel);
+  dialog.AddButton(_("Close"), mrOK);
   dialog.ShowModal();
 }

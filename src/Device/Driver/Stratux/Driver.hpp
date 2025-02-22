@@ -15,10 +15,16 @@ struct TrafficList;
 
 class StratuxDevice : public AbstractDevice {
 
-void
-ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock) noexcept;
+  void
+    ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock) noexcept;
 
-public:
-  bool ParseNMEA(const char *line, NMEAInfo &info) override;
+  public:
 
-};
+    struct StratuxSettings {
+      int hrange=20000;     // default horizontal range
+      int vrange=2000;      // default vertical range
+    };
+
+    bool ParseNMEA(const char *line, NMEAInfo &info) override;
+ };
+

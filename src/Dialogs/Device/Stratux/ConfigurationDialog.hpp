@@ -5,5 +5,4 @@
 
 class Device;
 
-void
-ManageStratuxDialog(Device &device);
+void ManageStratuxDialog(Device &device);

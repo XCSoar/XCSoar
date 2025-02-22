@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "Device/Driver/Stratux/Driver.hpp"
+#include "Driver.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Info.hpp"
+#include "Interface.hpp"
+#include "Profile/Profile.hpp"
 
 #include "FLARM/Error.hpp"
 #include "FLARM/Version.hpp"
@@ -11,6 +13,8 @@
 #include "FLARM/List.hpp"
 #include "util/Macros.hpp"
 #include "util/StringAPI.hxx"
+
+StratuxDevice::StratuxSettings settings;
 
 using std::string_view_literals::operator""sv;
 
@@ -33,21 +37,19 @@ StratuxDevice::ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clo
     return;
   traffic.relative_north = value;
 
-  if (line.ReadChecked(value))
-    // Relative East
-    traffic.relative_east = value;
-  else
-    // Mode-S Transponder
-    traffic.relative_east = 0;
+  if (!line.ReadChecked(value))
+    // Relative East is required !
+    return;
+  traffic.relative_east = value;
 
   if (!line.ReadChecked(value))
     // Relative Altitude is required !
     return;
   traffic.relative_altitude = value;
 
-  if ((hypot(traffic.relative_north, traffic.relative_east) > (RoughDistance)20000) ||
-    (abs((int)traffic.relative_altitude) > 2000))
-    // object outside cylinder (radius 20km, height +-2000m)
+  if ((hypot(traffic.relative_north, traffic.relative_east) > (RoughDistance)settings.hrange) ||
+    (abs((int)traffic.relative_altitude) > settings.vrange))
+    // object outside cylinder (stratux devive settings)
     return;
 
   line.Skip(); /* id type */
@@ -56,11 +58,6 @@ StratuxDevice::ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clo
   char id_string[16];
   line.Read(id_string, 16);
   traffic.id = FlarmId::Parse(id_string, nullptr);
-
-  traffic.name.clear();
-  char *ptr = strchr(&id_string[0], '!');
-  if (ptr)
-    traffic.name = ptr + 1;
 
   Angle track;
   traffic.track_received = line.ReadBearing(track);
@@ -137,6 +134,9 @@ StratuxDevice::ParseNMEA(const char *line, NMEAInfo &info)
 static Device *
 StratuxCreateOnPort([[maybe_unused]] const DeviceConfig &config, [[maybe_unused]] Port &com_port)
 {
+  Profile::Get(ProfileKeys::StratuxHorizontalRange,settings.hrange);
+  Profile::Get(ProfileKeys::StratuxVerticalRange,settings.vrange);
+
   return new StratuxDevice();
 }
 
