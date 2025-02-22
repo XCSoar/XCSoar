@@ -89,6 +89,22 @@ MainWindow::GetShowZoomOutButtonRect(const PixelRect rc) noexcept
 }
 
 [[gnu::pure]]
+PixelRect
+MainWindow::GetShowZoomInButtonRect(const PixelRect rc) noexcept
+{
+  const unsigned padding = Layout::GetTextPadding();
+  const unsigned size = Layout::GetMaximumControlHeight();
+  const int left = rc.left + padding;
+  const int right = left + size;
+  const int bottom = rc.bottom -
+    GetLook().map.overlay.map_scale_left_icon.GetSize().height -
+    size;
+  const int top = bottom - size;
+
+  return PixelRect(left, top, right, bottom);
+}
+
+[[gnu::pure]]
 static PixelRect
 GetTopWidgetRect(const PixelRect &rc, const Widget *top_widget) noexcept
 {
@@ -234,6 +250,8 @@ MainWindow::InitialiseConfigured()
   if (settings.show_zoom_button) {
     show_zoom_out_button = new ShowZoomOutButton();
     show_zoom_out_button->Create(*this, GetShowZoomOutButtonRect(map_rect));
+    show_zoom_in_button = new ShowZoomInButton();
+    show_zoom_in_button->Create(*this, GetShowZoomInButtonRect(map_rect));
   }
 
   map = new GlueMapWindow(*look);
@@ -398,6 +416,8 @@ MainWindow::ReinitialiseLayout() noexcept
     show_menu_button->Move(GetShowMenuButtonRect(GetMainRect()));
   if (show_zoom_out_button != nullptr)
     show_zoom_out_button->Move(GetShowZoomOutButtonRect(GetMainRect()));
+  if (show_zoom_in_button != nullptr)
+    show_zoom_in_button->Move(GetShowZoomInButtonRect(GetMainRect()));
 
   if (map != nullptr)
     map->BringToBottom();

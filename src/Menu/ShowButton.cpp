@@ -122,3 +122,62 @@ ShowZoomOutButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
 #endif
   }
 }
+
+/* zoom in button */
+class ShowZoomInButtonRenderer : public ButtonRenderer {
+public:
+  unsigned GetMinimumButtonWidth() const noexcept override {
+    return Layout::GetMinimumControlHeight();
+  }
+
+  void DrawButton(Canvas &canvas, const PixelRect &rc,
+                  ButtonState state) const noexcept override;
+};
+
+void
+ShowZoomInButton::Create(ContainerWindow &parent, const PixelRect &rc,
+                       WindowStyle style) noexcept
+{
+  Button::Create(parent, rc, style,
+                 std::make_unique<ShowZoomInButtonRenderer>());
+}
+
+bool
+ShowZoomInButton::OnClicked() noexcept
+{
+  InputEvents::eventZoom(_T("in"));
+  return true;
+}
+
+void
+ShowZoomInButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
+                                   ButtonState state) const noexcept
+{
+  const unsigned padding = Layout::GetTextPadding() + Layout::ScalePenWidth(5);
+
+  canvas.Select(Pen(Layout::ScalePenWidth(1), COLOR_BLACK));
+  canvas.DrawRoundRectangle({rc.left, rc.top, rc.right - 1, rc.bottom - 1},
+                            PixelSize{Layout::VptScale(8u)});
+
+  canvas.Select(Pen(Layout::ScalePenWidth(2), COLOR_BLACK));
+  const BulkPixelPoint horizontal[] = {
+    BulkPixelPoint(rc.left + padding, (rc.top + rc.bottom) / 2),
+    BulkPixelPoint(rc.right - padding, (rc.top + rc.bottom) / 2),
+  };
+  canvas.DrawPolyline(horizontal, ARRAY_SIZE(horizontal));
+
+  const BulkPixelPoint vertical[] = {
+    BulkPixelPoint((rc.left + rc.right) / 2, rc.top + padding),
+    BulkPixelPoint((rc.left + rc.right) / 2, rc.bottom - padding),
+  };
+  canvas.DrawPolyline(vertical, ARRAY_SIZE(vertical));
+
+  if (state == ButtonState::PRESSED) {
+#ifdef ENABLE_OPENGL
+    const ScopeAlphaBlend alpha_blend;
+    canvas.DrawFilledRectangle(rc, COLOR_YELLOW.WithAlpha(80));
+#else
+    canvas.InvertRectangle(rc);
+#endif
+  }
+}
