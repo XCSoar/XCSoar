@@ -42,6 +42,7 @@ class MainWindow : public UI::SingleWindow {
 
   ShowMenuButton *show_menu_button = nullptr;
   ShowZoomOutButton *show_zoom_out_button = nullptr;
+  ShowZoomInButton *show_zoom_in_button = nullptr;
 
   GlueMapWindow *map = nullptr;
 
@@ -399,6 +400,7 @@ protected:
   void OnPaint(Canvas &canvas) noexcept override;
   PixelRect GetShowMenuButtonRect(const PixelRect rc) noexcept;
   PixelRect GetShowZoomOutButtonRect(const PixelRect rc) noexcept;
+  PixelRect GetShowZoomInButtonRect(const PixelRect rc) noexcept;
 
   /* virtual methods from class TopWindow */
   bool OnClose() noexcept override;

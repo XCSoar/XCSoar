@@ -26,3 +26,14 @@ protected:
   /* virtual methods from class ButtonWindow */
   bool OnClicked() noexcept override;
 };
+
+/* zoom in button */
+class ShowZoomInButton : public Button {
+public:
+  void Create(ContainerWindow &parent, const PixelRect &rc,
+              WindowStyle style=WindowStyle()) noexcept;
+
+protected:
+  /* virtual methods from class ButtonWindow */
+  bool OnClicked() noexcept override;
+};
