@@ -353,7 +353,8 @@ OLC league:
 - Sprint arrival height is the altitude at the sprint end point.
 - The average speed (points) of each individual flight is the sum of
   the distances from sprint start, around up to three turnpoints, to the
-  sprint end divided DAeC index increased by 100, multiplied by 200 and
-  divided by 2.5h: [formula: Points = km / 2,5 * 200 / (Index+100)
+  sprint end divided by weighted (75%) DAeC index increased by 100, multiplied by 100 and
+  divided by 2h: [formula: Points = (km / 2.0) * 100 / ((Index-100) * 0.75 + 100)
 
+  https://www.onlinecontest.org/olc-3.0/segelflugszene/cms.html?url=rules_overview/b5_de
 */

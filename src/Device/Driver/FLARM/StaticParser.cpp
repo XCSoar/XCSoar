@@ -2,11 +2,13 @@
 // Copyright The XCSoar Project
 
 #include "StaticParser.hpp"
-#include "NMEA/InputLine.hpp"
 #include "FLARM/Error.hpp"
-#include "FLARM/Version.hpp"
-#include "FLARM/Status.hpp"
 #include "FLARM/List.hpp"
+#include "FLARM/Status.hpp"
+#include "FLARM/Version.hpp"
+#include "Language/Language.hpp"
+#include "Message.hpp"
+#include "NMEA/InputLine.hpp"
 #include "util/Macros.hpp"
 #include "util/StringAPI.hxx"
 
@@ -22,6 +24,11 @@ ParsePFLAE(NMEAInputLine &line, FlarmError &error, TimeStamp clock) noexcept
   error.severity = (FlarmError::Severity)
     line.Read((int)FlarmError::Severity::NO_ERROR);
   error.code = (FlarmError::Code)line.ReadHex(0);
+  TCHAR buffer[100];
+  StringFormatUnsafe(buffer, _T("%s - %s"),
+                     FlarmError::ToString(error.severity),
+                     FlarmError::ToString(error.code));
+  Message::AddMessage(_T("FLARM: "), buffer);
 
   error.available.Update(clock);
 }

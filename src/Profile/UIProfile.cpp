@@ -57,6 +57,7 @@ Profile::Load(const ProfileMap &map, TrafficSettings &settings)
   map.Get(ProfileKeys::FlarmAutoZoom, settings.auto_zoom);
   map.Get(ProfileKeys::FlarmNorthUp, settings.north_up);
   map.GetEnum(ProfileKeys::FlarmLocation, settings.gauge_location);
+  map.Get(ProfileKeys::FlarmRadarZoom, settings.radar_zoom);
 }
 
 void

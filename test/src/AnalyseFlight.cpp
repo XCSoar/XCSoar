@@ -359,7 +359,7 @@ int main(int argc, char **argv)
 
   static Trace full_trace({}, Trace::null_time, full_max_points);
   static Trace triangle_trace({}, Trace::null_time, triangle_max_points);
-  static Trace sprint_trace({}, minutes{150}, sprint_max_points);
+  static Trace sprint_trace({}, minutes{120}, sprint_max_points);
 
   Result result;
   Run(*replay, result, full_trace, triangle_trace, sprint_trace);

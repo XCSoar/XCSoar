@@ -16,6 +16,8 @@ struct TrafficSettings {
 
   bool north_up;
 
+  unsigned radar_zoom;
+
   /** Location of Flarm radar */
   enum class GaugeLocation : uint8_t {
     AUTO,

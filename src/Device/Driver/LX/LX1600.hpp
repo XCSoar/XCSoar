@@ -80,7 +80,7 @@ namespace LX1600 {
   static inline void
   SetBallast(Port &port, OperationEnvironment &env, double overload)
   {
-    assert(overload >= 1.0 && overload <= 1.5);
+    assert(overload >= 0.8 && overload <= 5);
 
     // This is a copy of the routine done in LK8000 for LX MiniMap, realized
     // by Lx developers.
