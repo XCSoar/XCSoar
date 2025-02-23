@@ -7,6 +7,7 @@
 #include "Blackboard/LiveBlackboard.hpp"
 #include "Computer/Settings.hpp"
 #include "PageActions.hpp"
+#include "Interface.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
@@ -95,8 +96,11 @@ SmallTrafficWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 
     ReleaseCapture();
 
-    if (was_pressed)
+    if (was_pressed) {
+      TrafficSettings &settings = CommonInterface::SetUISettings().traffic;
+      settings.radar_zoom = 4;
       PageActions::ShowTrafficRadar();
+    }
 
     return true;
   }

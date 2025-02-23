@@ -1,4 +1,7 @@
 Version 7.44 - not yet released
+* calculations
+  - update sprint/league time window to 2 hours (as per OLC and DMSt rules)
+  - update OLC League calculation to latest ruleset
 * tracking
   - xcsoar-cloud-service: rebuild service, new domain cloud.xcsoar.org
 * data files
@@ -22,6 +25,8 @@ Version 7.44 - not yet released
   - add helpers on infoboxes for Argentinean contests 95% distance rule
   - Popup messages now appear at the top of the map
   - FlarmTrafficWindow: align colors of FlarmTraffic with map for consistency
+  - BigTrafficWidget: Save/Restore FLARM radar zoom on page change
+  - BigTrafficWidget: zoom range to 5km when opening big radar via the FlarmGauge
 * Android
   - fix crash on startup when loading icons on ldpi screens
   - update 'white list' of USB devices with one more VID/PID pair for SoftRF Academy
@@ -33,6 +38,12 @@ Version 7.44 - not yet released
 * devices
   - Add driver for Condor 3
   - Add driver for LX Navigation Eos / Era variometers
+  - Flarm: parse flarm error messages (PFLAE) and display them
+  - LXNAV: Overload formula, use reference mass instead of dry mass
+  - OpenVario: Overload formula, use reference mass instead of dry mass
+  - Vaulter: use fraction instead of overload for ballast
+* Polar:
+  - LS8-15m: default polar, set to values according to flight manual
 
 Version 7.43 - 2024-08-12
 * calculations

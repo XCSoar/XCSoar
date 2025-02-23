@@ -5,6 +5,10 @@
 #include "Trace/Trace.hpp"
 #include "Cast.hpp"
 
+
+/**
+ * Ruleset: https://www.onlinecontest.org/olc-3.0/segelflugszene/cms.html?url=rules_overview/b5_de
+ */
 OLCLeague::OLCLeague(const Trace &_trace) noexcept
   :AbstractContest(0), trace(_trace)
 {
@@ -81,6 +85,6 @@ OLCLeague::CalculateResult() const noexcept
   result.distance = 0;
   for (unsigned i = 0; i < 4; ++i)
     result.distance += solution[i].DistanceTo(solution[i + 1].GetLocation());
-  result.score = ApplyShiftedHandicap(result.distance / 2500);
+  result.score = ApplyShiftedHandicap(result.distance / 2000);
   return result;
 }

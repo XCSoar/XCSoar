@@ -15,7 +15,7 @@ static constexpr auto full_trace_no_thin_time = std::chrono::minutes{2};
 TraceComputer::TraceComputer()
  :full(full_trace_no_thin_time, Trace::null_time, full_trace_size),
   contest({}, Trace::null_time, contest_trace_size),
-  sprint({}, std::chrono::minutes{150}, sprint_trace_size)
+  sprint({}, std::chrono::minutes{120}, sprint_trace_size)
 {
 }
 
