@@ -128,14 +128,12 @@ VaulterDevice::PutMacCready(double mc, OperationEnvironment &env)
 }
 
 bool
-VaulterDevice::PutBallast(double fraction, [[maybe_unused]] double overload, OperationEnvironment &env)
+VaulterDevice::PutBallast([[maybe_unused]] double fraction, double overload, OperationEnvironment &env)
 {
   if (!EnableNMEA(env))
     return false;
   char buffer[30];
-  // vaulter defines the wing loading factor as ratio of no-ballast to weight
-  fraction = fraction + 1;
-  sprintf(buffer,"PITV1,WL=%0.2f", fraction);
+  sprintf(buffer,"PITV1,WL=%0.2f", overload);
   PortWriteNMEA(port, buffer, env);
   return true;
 }

@@ -139,7 +139,7 @@ FlightSetupPanel::SetBallast()
       auto dry_mass = polar_settings.glide_polar_task.GetDryMass();
       auto fraction = polar_settings.glide_polar_task.GetBallast();
       auto overload = (dry_mass + fraction * plane.max_ballast) /
-                      plane.polar_shape.reference_mass;
+        dry_mass;
 
       MessageOperationEnvironment env;
       backend_components->devices->PutBallast(fraction, overload, env);
