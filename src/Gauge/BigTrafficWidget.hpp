@@ -38,6 +38,7 @@ public:
   bool GetAutoZoom() const noexcept;
   void SetAutoZoom(bool value) noexcept;
   void ToggleAutoZoom() noexcept;
+  void SaveZoom(unsigned value) noexcept;
 
   [[gnu::pure]]
   bool GetNorthUp() const noexcept;

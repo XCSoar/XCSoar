@@ -157,7 +157,7 @@ void AnalyseFlight(DebugReplay &replay,
 {
   Trace full_trace({}, Trace::null_time, full_points);
   Trace triangle_trace({}, Trace::null_time, triangle_points);
-  Trace sprint_trace({}, minutes{150}, sprint_points);
+  Trace sprint_trace({}, minutes{120}, sprint_points);
   FlightPhaseDetector flight_phase_detector;
 
   Run(replay, flight_phase_detector, wind_list,

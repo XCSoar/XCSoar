@@ -104,7 +104,7 @@ ActionInterface::SetBallast(double ballast, bool to_devices) noexcept
     if (plane.empty_mass > 0) {
       auto dry_mass = plane.empty_mass + polar.GetCrewMass();
       auto overload = (dry_mass + ballast * plane.max_ballast) /
-        dry_mass;
+                      plane.polar_shape.reference_mass;
 
       MessageOperationEnvironment env;
       backend_components->devices->PutBallast(ballast, overload, env);
