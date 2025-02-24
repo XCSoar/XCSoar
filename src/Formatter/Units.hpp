@@ -4,6 +4,8 @@
 #pragma once
 
 #include "Units/Unit.hpp"
+#include "util/StringBuffer.hxx"
+
 
 #include <tchar.h>
 
@@ -69,6 +71,16 @@ FormatRelativeAltitude(TCHAR *buffer, double value, Unit unit,
 void
 FormatDistance(TCHAR *buffer, double value, const Unit unit,
                bool include_unit = true, int precision = 0);
+
+[[gnu::const]]
+static inline auto
+FormatDistance(double value,  const Unit unit,
+               bool include_unit = true, int precision = 0) noexcept
+{
+  BasicStringBuffer<TCHAR, 32> buffer;
+  FormatDistance(buffer.data(),value, unit, include_unit, precision);
+  return buffer;
+}
 
 /**
  * Converts a distance into a formatted string using the smaller version
