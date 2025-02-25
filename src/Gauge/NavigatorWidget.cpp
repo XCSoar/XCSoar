@@ -12,13 +12,16 @@
 #include "Engine/Task/TaskManager.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Input/InputEvents.hpp"
+#include "Renderer/NavigatorRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "UIGlobals.hpp"
 
-NavigatorWindow::NavigatorWindow(const TaskLook &_look_task,
+NavigatorWindow::NavigatorWindow(const NavigatorLook &_look_nav,
+                                 const TaskLook &_look_task,
                                  const InfoBoxLook &_look_infobox) noexcept
-    : look_task(_look_task),
+    : look_nav(_look_nav),
+      look_task(_look_task),
       look_infobox(_look_infobox),
       dragging(false)
 {
@@ -33,7 +36,10 @@ NavigatorWindow::ReadBlackboard(const AttitudeState &_attitude) noexcept
 void
 NavigatorWindow::OnPaint(Canvas &canvas) noexcept
 {
-  canvas.Clear(COLOR_BLACK);
+  if (look_nav.inverse)
+    canvas.Clear(COLOR_BLACK);
+  else
+    canvas.ClearWhite();
 
   TaskType tp{TaskType::NONE};
   WaypointPtr wp_before;
@@ -68,12 +74,18 @@ NavigatorWindow::OnPaint(Canvas &canvas) noexcept
     }
   }
 
+  const PixelRect frame_navigator =
+      canvas.GetRect().WithPadding(Layout::Scale(1));
+
   const int fnw_height = canvas.GetHeight();
   const int fnw_width = canvas.GetWidth();
 
   PixelPoint pt_origin{fnw_width * 18 / 100, fnw_height * 1 / 10};
   PixelSize frame_size{fnw_width * 8 / 10, fnw_height * 55 / 100};
   PixelRect frame_navigator_waypoint{pt_origin, frame_size};
+
+  NavigatorRenderer::DrawFrame(canvas, frame_navigator, look_nav);
+  NavigatorRenderer::DrawFrame(canvas, frame_navigator_waypoint, look_nav);
 }
 
 void
@@ -227,6 +239,7 @@ NavigatorWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   style.Disable();
 
   navigator_window = std::make_unique<NavigatorWindow>(
+      look.navigator,
       look.map.task, look.info_box);
   navigator_window->Create(parent, rc, style);
   navigator_window->Move(rc);

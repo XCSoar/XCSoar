@@ -6,6 +6,7 @@
 #include "Blackboard/BlackboardListener.hpp"
 #include "Interface.hpp"
 #include "Look/Look.hpp"
+#include "Look/NavigatorLook.hpp"
 #include "MainWindow.hpp"
 #include "UIUtil/GestureManager.hpp"
 #include "Widget/WindowWidget.hpp"
@@ -14,7 +15,7 @@
  * A Window which renders a Navigator
  */
 class NavigatorWindow : public PaintWindow {
-
+  const NavigatorLook &look_nav;
   const TaskLook &look_task;
   const InfoBoxLook &look_infobox;
 
@@ -30,7 +31,7 @@ public:
   /**
    * Constructor. Initializes most class members.
    */
-  NavigatorWindow(const TaskLook &_look_task,
+  NavigatorWindow(const NavigatorLook &_look_nav, const TaskLook &_look_task,
                   const InfoBoxLook &_look_infobox) noexcept;
 
   void ReadBlackboard(const AttitudeState &_attitude) noexcept;
