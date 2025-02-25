@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "PageActions.hpp"
+#include "Gauge/NavigatorWidget.hpp"
 #include "UIActions.hpp"
 #include "UIState.hpp"
 #include "Interface.hpp"
@@ -13,6 +14,12 @@
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Components.hpp"
+
+#include "Widget/ButtonWidget.hpp"
+#include "Input/InputEvents.hpp"
+#include "Look/DialogLook.hpp"
+#include "Language/Language.hpp"
+#include "Dialogs/FileManager.hpp"
 
 #if defined(ENABLE_SDL) && defined(main)
 /* on some platforms, SDL wraps the main() function and clutters our
@@ -224,6 +231,9 @@ LoadTop(PageLayout::Top top)
   switch (top) {
   case PageLayout::Top::NOTHING:
     CommonInterface::main_window->SetTopWidget(nullptr);
+    break;
+  case PageLayout::Top::NAVIGATOR:
+    CommonInterface::main_window->SetTopWidget(new NavigatorWidget());
     break;
   case PageLayout::Top::CUSTOM:
     /* don't touch */

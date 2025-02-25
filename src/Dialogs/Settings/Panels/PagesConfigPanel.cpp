@@ -227,6 +227,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
 
   static constexpr StaticEnumChoice top_list[] = {
     { PageLayout::Top::NOTHING, N_("Nothing") },
+    { PageLayout::Top::NAVIGATOR, N_("Navigator") },
     nullptr
   };
   AddEnum(_("Top area"),
@@ -404,6 +405,10 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   switch (value.top) {
   case PageLayout::Top::NOTHING:
   case PageLayout::Top::CUSTOM:
+    break;
+
+  case PageLayout::Top::NAVIGATOR:
+    buffer.AppendFormat(_T(", %s"), _("Navigator"));
     break;
 
   case PageLayout::Top::MAX:

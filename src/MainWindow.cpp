@@ -19,6 +19,7 @@
 #include "Gauge/GaugeFLARM.hpp"
 #include "Gauge/GaugeThermalAssistant.hpp"
 #include "Gauge/GlueGaugeVario.hpp"
+#include "Gauge/NavigatorWidget.hpp"
 #include "Form/Form.hpp"
 #include "Widget/Widget.hpp"
 #include "Look/GlobalFonts.hpp"
@@ -648,6 +649,12 @@ MainWindow::StopDragging() noexcept
 void
 MainWindow::OnCancelMode() noexcept
 {
+  if (HaveTopWidget()) {
+    auto nav = dynamic_cast<NavigatorWidget *>(top_widget);
+    if (nav != nullptr)
+      nav->GetWindow()->OnCancelMode();
+  }
+
   SingleWindow::OnCancelMode();
   StopDragging();
 }
@@ -655,6 +662,19 @@ MainWindow::OnCancelMode() noexcept
 bool
 MainWindow::OnMouseDown(PixelPoint p) noexcept
 {
+  PixelRect rc_main = GetClientRect();
+  PixelRect rc_remaining = GetMainRect();
+  PixelRect top_rect = GetTopWidgetRect(rc_main, rc_remaining, top_widget);
+
+  if (HaveTopWidget() && top_rect.Contains(p) && !HasDialog() &&
+      InputEvents::IsDefault()) {
+    auto nav = dynamic_cast<NavigatorWidget *>(top_widget);
+    if (nav != nullptr) {
+      nav->GetWindow()->OnMouseDown(p);
+      return true;
+    }
+  }
+
   if (SingleWindow::OnMouseDown(p))
     return true;
 
@@ -670,6 +690,19 @@ MainWindow::OnMouseDown(PixelPoint p) noexcept
 bool
 MainWindow::OnMouseUp(PixelPoint p) noexcept
 {
+  PixelRect rc_main = GetClientRect();
+  PixelRect rc_remaining = GetMainRect();
+  PixelRect top_rect = GetTopWidgetRect(rc_main, rc_remaining, top_widget);
+
+  if (HaveTopWidget() && top_rect.Contains(p) && !HasDialog() &&
+      InputEvents::IsDefault()) {
+    auto nav = dynamic_cast<NavigatorWidget *>(top_widget);
+    if (nav != nullptr) {
+      nav->GetWindow()->OnMouseUp(p);
+      return true;
+    }
+  }
+
   if (SingleWindow::OnMouseUp(p))
     return true;
 
@@ -687,6 +720,19 @@ MainWindow::OnMouseUp(PixelPoint p) noexcept
 bool
 MainWindow::OnMouseDouble(PixelPoint p) noexcept
 {
+  PixelRect rc_main = GetClientRect();
+  PixelRect rc_remaining = GetMainRect();
+  PixelRect top_rect = GetTopWidgetRect(rc_main, rc_remaining, top_widget);
+
+  if (HaveTopWidget() && top_rect.Contains(p) && !HasDialog() &&
+      InputEvents::IsDefault()) {
+    auto nav = dynamic_cast<NavigatorWidget *>(top_widget);
+    if (nav != nullptr) {
+      nav->GetWindow()->OnMouseDouble(p);
+      return true;
+    }
+  }
+
   if (SingleWindow::OnMouseDouble(p))
     return true;
 
@@ -700,6 +746,19 @@ MainWindow::OnMouseDouble(PixelPoint p) noexcept
 bool
 MainWindow::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
+  PixelRect rc_main = GetClientRect();
+  PixelRect rc_remaining = GetMainRect();
+  PixelRect top_rect = GetTopWidgetRect(rc_main, rc_remaining, top_widget);
+
+  if (HaveTopWidget() && top_rect.Contains(p) && !HasDialog() &&
+      InputEvents::IsDefault()) {
+    auto nav = dynamic_cast<NavigatorWidget *>(top_widget);
+    if (nav != nullptr) {
+      nav->GetWindow()->OnMouseMove(p, keys);
+      return true;
+    }
+  }
+
   if (SingleWindow::OnMouseMove(p, keys))
     return true;
 
