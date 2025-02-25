@@ -1704,6 +1704,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Gauge/VarioSettings.cpp \
 	$(SRC)/Gauge/TrafficSettings.cpp \
+	$(SRC)/Gauge/NavigatorSettings.cpp \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/Computer/Settings.cpp \
 	$(SRC)/Computer/Wind/Settings.cpp \
@@ -2131,6 +2132,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
 	$(SRC)/Gauge/VarioSettings.cpp \
 	$(SRC)/Gauge/TrafficSettings.cpp \
+  $(SRC)/Gauge/NavigatorSettings.cpp \
 	$(SRC)/TeamCode/TeamCode.cpp \
 	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/Logger/Settings.cpp \

@@ -8,6 +8,7 @@
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Gauge/VarioSettings.hpp"
 #include "Gauge/TrafficSettings.hpp"
+#include "Gauge/NavigatorSettings.hpp"
 #include "PageSettings.hpp"
 #include "Dialogs/DialogSettings.hpp"
 #include "DisplaySettings.hpp"
@@ -68,6 +69,7 @@ struct UISettings {
   MapSettings map;
   InfoBoxSettings info_boxes;
   VarioSettings vario;
+  NavigatorSettings navigator;
   TrafficSettings traffic;
   PageSettings pages;
   DialogSettings dialog;
