@@ -88,6 +88,11 @@ struct PageLayout
     NOTHING,
 
     /**
+     * Show a Navigator menu above the map.
+     */
+    NAVIGATOR,
+
+    /**
      * A custom #Widget is being displayed.  This is not a
      * user-accessible option, it's only used for runtime state.
      */
