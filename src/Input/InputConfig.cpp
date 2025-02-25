@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "InputConfig.hpp"
+#include "util/CharUtil.hxx"
 #include "util/Macros.hpp"
 
 #ifdef ENABLE_SDL
@@ -45,8 +46,14 @@ InputConfig::GetKeyEvent(unsigned mode, unsigned key_code) const noexcept
 {
   assert(mode < MAX_MODE);
 
+  // Convert lowercase letters to uppercase before lookup
+  if (key_code >= 'a' && key_code <= 'z') {
+    key_code = ToUpperASCII(static_cast<char>(key_code));
+  }
+
   unsigned key_code_idx = key_code;
   auto key_2_event = Key2Event;
+
 #ifdef ENABLE_SDL
   if (key_code & SDLK_SCANCODE_MASK) {
     key_code_idx = key_code & ~SDLK_SCANCODE_MASK;
