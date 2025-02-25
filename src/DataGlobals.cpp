@@ -25,7 +25,7 @@ DataGlobals::UnsetTerrain() noexcept
   /* just in case the bottom widget uses the old terrain object
      (e.g. the cross section) */
   main_window.SetBottomWidget(nullptr);
-
+  main_window.SetTopWidget(nullptr);
   main_window.SetTerrain(nullptr);
 
   if (backend_components->glide_computer)

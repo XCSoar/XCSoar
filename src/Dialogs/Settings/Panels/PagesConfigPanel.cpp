@@ -37,6 +37,7 @@ private:
     MAIN,
     INFO_BOX_PANEL,
     BOTTOM,
+    TOP,
   };
 
   static constexpr unsigned IBP_NONE = 0x7000;
@@ -223,6 +224,15 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
           _("Specifies what should be displayed below the main area."),
           bottom_list,
           (unsigned)PageLayout::Bottom::NOTHING, this);
+
+  static constexpr StaticEnumChoice top_list[] = {
+    { PageLayout::Top::NOTHING, N_("Nothing") },
+    nullptr
+  };
+  AddEnum(_("Top area"),
+          _("Specifies what should be displayed above the main area."),
+          top_list,
+          (unsigned)PageLayout::Top::NOTHING, this);
 }
 
 void
@@ -232,6 +242,7 @@ PageLayoutEditWidget::SetValue(const PageLayout &_value)
 
   LoadValueEnum(MAIN, value.main);
   LoadValueEnum(BOTTOM, value.bottom);
+  LoadValueEnum(TOP, value.top);
 
   unsigned ib = IBP_NONE;
   if (value.infobox_config.enabled) {
@@ -270,6 +281,9 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
   } else if (&df == &GetDataField(BOTTOM)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     value.bottom = (PageLayout::Bottom)dfe.GetValue();
+  } else if (&df == &GetDataField(TOP)) {
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+    value.top = (PageLayout::Top)dfe.GetValue();
   } else {
     gcc_unreachable();
   }
@@ -386,6 +400,16 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   case PageLayout::Bottom::MAX:
     gcc_unreachable();
   }
+
+  switch (value.top) {
+  case PageLayout::Top::NOTHING:
+  case PageLayout::Top::CUSTOM:
+    break;
+
+  case PageLayout::Top::MAX:
+    gcc_unreachable();
+  }
+
 
   row_renderer.DrawTextRow(canvas, rc, buffer);
 }
