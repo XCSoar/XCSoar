@@ -64,6 +64,171 @@ NavigatorRenderer::DrawFrame(Canvas &canvas, const PixelRect &rc,
 }
 
 void
+NavigatorRenderer::DrawTaskText(
+    Canvas &canvas, TaskType tp, [[maybe_unused]] const Waypoint &wp_current,
+    const PixelRect &rc, [[maybe_unused]] const NavigatorLook &look_nav,
+    [[maybe_unused]] const InfoBoxLook &look_infobox) noexcept
+{
+  const auto &basic = CommonInterface::Basic();
+  const auto &calculated = CommonInterface::Calculated();
+
+  bool has_started = calculated.ordered_task_stats.start.HasStarted();
+
+  const int rc_width = rc.GetWidth();
+  const int rc_height = rc.GetHeight();
+
+  // e_WP_Distance
+  static StaticString<20> waypoint_distance_s;
+  auto precision_waypoint_distance{0};
+  auto waypoint_distance{.0};
+  if (tp == TaskType::ORDERED) {
+    waypoint_distance =
+        calculated.ordered_task_stats.current_leg.vector_remaining.distance;
+  } else {
+    waypoint_distance =
+        calculated.task_stats.current_leg.vector_remaining.distance;
+  }
+
+  if (waypoint_distance < 5000.0) precision_waypoint_distance = 1;
+
+  FormatUserDistance(waypoint_distance, waypoint_distance_s.data(), false,
+                     precision_waypoint_distance);
+
+  // e_WP_AltReq
+  /// TODO: or e_WP_H ?
+  static StaticString<20> waypoint_altitude_diff_s;
+  auto waypoint_altitude_diff{.0};
+  if (tp == TaskType::ORDERED) {
+    waypoint_altitude_diff = calculated.ordered_task_stats.current_leg
+                                 .solution_remaining.GetRequiredAltitude();
+  } else {
+    waypoint_altitude_diff = calculated.task_stats.current_leg
+                                 .solution_remaining.GetRequiredAltitude();
+  }
+  FormatAltitude(waypoint_altitude_diff_s.data(), waypoint_altitude_diff,
+                 Units::GetUserAltitudeUnit(), false);
+
+  // e_SpeedTaskAvg
+  static StaticString<20> waypoint_average_speed_s;
+  if (tp == TaskType::ORDERED && has_started)
+    FormatUserSpeed(calculated.task_stats.total.travelled.GetSpeed(),
+                    waypoint_average_speed_s.data(), false, 0);
+  else
+    waypoint_average_speed_s.Format(_T("%s"), _T("---"));
+
+  // e_WP_GR
+  static StaticString<20> waypoint_direction_s;
+  static StaticString<20> waypoint_GR_s;
+  auto waypoint_GR{0};
+  if (tp == TaskType::ORDERED)
+    waypoint_GR =
+      std::round(calculated.ordered_task_stats.current_leg.gradient);
+  else
+    waypoint_GR =
+      std::round(calculated.task_stats.current_leg.gradient);
+  waypoint_GR_s.Format(_T("%d"), waypoint_GR);
+
+  // e_Speed_GPS
+  static StaticString<20> current_speed_s;
+  FormatUserSpeed(basic.ground_speed, current_speed_s.data(), false, 0);
+
+  static StaticString<100> infos_next_waypoint_s;
+  if (canvas.GetWidth() > canvas.GetHeight() * 6.1)
+    infos_next_waypoint_s.Format(
+        _T("%s   %s  %s  %s"), waypoint_distance_s.c_str(),
+        waypoint_altitude_diff_s.c_str(), waypoint_GR_s.c_str(),
+        waypoint_direction_s.c_str());
+  else if (canvas.GetWidth() > canvas.GetHeight() * 2.9)
+    infos_next_waypoint_s.Format(
+        _T("%s   %s  %s"), waypoint_distance_s.c_str(),
+        waypoint_altitude_diff_s.c_str(), waypoint_GR_s.c_str());
+  else
+    infos_next_waypoint_s.Format(_T("%s   %s"), waypoint_distance_s.c_str(),
+                                 waypoint_altitude_diff_s.c_str());
+
+  static StaticString<60> infos_next_waypoint_unit_alt_s;
+  infos_next_waypoint_unit_alt_s.Format(_T("%s   %s"),
+                                        waypoint_distance_s.c_str(),
+                                        waypoint_altitude_diff_s.c_str());
+
+  static StaticString<60> infos_next_waypoint_unit_GR_s;
+  infos_next_waypoint_unit_GR_s.Format(
+      _T("%s   %s  %s"), waypoint_distance_s.c_str(),
+      waypoint_altitude_diff_s.c_str(), waypoint_GR_s.c_str());
+
+  canvas.SetBackgroundTransparent();
+  if (!look_nav.inverse)
+    canvas.SetTextColor(COLOR_BLACK);
+  else
+    canvas.SetTextColor(COLOR_WHITE);
+
+  // ---- Draw Waypoint informations: distance, altitude, glide ratio
+  Font font;
+  double ratio_dpi = 1.0 / Layout::vdpi * 100;
+  unsigned int font_height{};
+  if (canvas.GetWidth() > canvas.GetHeight() * 3.7)
+    font_height = rc_height * 35 / 200;
+  else
+    font_height = rc_height * 26 / 200;
+  PixelPoint pxpt_pos_infos_next_waypoint {
+    static_cast<int>(rc_width * 40 / 200),
+    static_cast<int>(rc_height * 10 / 100)
+  };
+  font.Load(FontDescription(Layout::VptScale(font_height * ratio_dpi)));
+  canvas.Select(font);
+
+  PixelPoint ppOrigin{0, 0};
+  PixelSize psSize{static_cast<int>(rc_width * 2 / 3),
+                   static_cast<int>(rc_height)};
+  PixelRect prRect{ppOrigin, psSize};
+  canvas.DrawClippedText(pxpt_pos_infos_next_waypoint, prRect,
+                         infos_next_waypoint_s);
+
+  // Draw Waypoint units
+  PixelSize size_text{};
+  unsigned int unit_height{};
+  unsigned int ascent_height{};
+  PixelPoint unit_p{};
+  Unit unit{Unit::KILOMETER};
+  unit = Units::GetUserDistanceUnit();
+  unit_height = static_cast<unsigned int>(font_height * 4 / 10);
+  size_text = canvas.CalcTextSize(waypoint_distance_s.c_str());
+  font.Load(FontDescription(Layout::VptScale(unit_height * ratio_dpi)));
+  ascent_height = UnitSymbolRenderer::GetAscentHeight(font, unit);
+  unit_p = pxpt_pos_infos_next_waypoint.At(
+      size_text.width, size_text.height - ascent_height * 1.6);
+  canvas.Select(font);
+  UnitSymbolRenderer::Draw(canvas, unit_p, unit,
+                           look_infobox.unit_fraction_pen);
+
+  // Draw Waypoint units
+  unit = Units::GetUserAltitudeUnit();
+  font.Load(FontDescription(Layout::VptScale(font_height * ratio_dpi)));
+  size_text = canvas.CalcTextSize(infos_next_waypoint_unit_alt_s.c_str());
+  font.Load(FontDescription(Layout::VptScale(unit_height * ratio_dpi)));
+  ascent_height = UnitSymbolRenderer::GetAscentHeight(font, unit);
+  unit_p = pxpt_pos_infos_next_waypoint.At(
+      size_text.width, size_text.height - ascent_height * 1.6);
+  canvas.Select(font);
+  UnitSymbolRenderer::Draw(canvas, unit_p, unit,
+                           look_infobox.unit_fraction_pen);
+
+  // Draw GR units
+  if (canvas.GetWidth() > canvas.GetHeight() * 2.9) {
+    unit = Unit::GRADIENT;
+    font.Load(FontDescription(Layout::VptScale(font_height * ratio_dpi)));
+    size_text = canvas.CalcTextSize(infos_next_waypoint_unit_GR_s.c_str());
+    font.Load(FontDescription(Layout::VptScale(unit_height * ratio_dpi)));
+    ascent_height = UnitSymbolRenderer::GetAscentHeight(font, unit);
+    unit_p = pxpt_pos_infos_next_waypoint.At(
+        size_text.width, size_text.height - ascent_height * 1.6);
+    canvas.Select(font);
+    UnitSymbolRenderer::Draw(canvas, unit_p, unit,
+                             look_infobox.unit_fraction_pen);
+  }
+}
+
+void
 NavigatorRenderer::DrawProgressTask(const TaskSummary &summary, Canvas &canvas,
                                     const PixelRect &rc,
                                     const NavigatorLook &look_nav,
