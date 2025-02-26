@@ -77,6 +77,10 @@ NavigatorRenderer::DrawTaskText(
   const int rc_width = rc.GetWidth();
   const int rc_height = rc.GetHeight();
 
+  // e_WP_Name
+  static StaticString<50> waypoint_name_s;
+  waypoint_name_s.Format(_T("%s"), wp_current.name.c_str());
+
   // e_WP_Distance
   static StaticString<20> waypoint_distance_s;
   auto precision_waypoint_distance{0};
@@ -258,13 +262,38 @@ NavigatorRenderer::DrawTaskText(
     pos_x_speed_altitude =
         rc_width * 103 / 100 - size_text.width - rc_height * 29 / 100;
 
+  // ---- Next waypoint's name
+  int font_height_waypoint{};
+  int font_width_waypoint{};
+  unsigned int pos_x_at_end_of_waypoint{};
+  const int pos_x_text_waypoint{static_cast<int>(rc_width * 40 / 200)};
+
+  if (canvas.GetWidth() > canvas.GetHeight() * 3.7)
+    font_height_waypoint = rc_height * 42 / 200;
+  else
+    font_height_waypoint = rc_height * 30 / 200;
+  font.Load(
+      FontDescription(Layout::VptScale(font_height_waypoint * ratio_dpi)));
+  canvas.Select(font);
+  font_width_waypoint = canvas.CalcTextSize(waypoint_name_s.c_str()).width;
+  pos_x_at_end_of_waypoint = font_width_waypoint + pos_x_text_waypoint;
+  ppOrigin = {0, 0};
+  psSize = {static_cast<int>(rc_height) / 2 + pos_x_speed_altitude -
+      static_cast<int>(rc_height),
+            static_cast<int>(rc_height)};
+  prRect = {ppOrigin, psSize};
+  canvas.DrawClippedText(
+      {pos_x_text_waypoint, static_cast<int>(rc_height * 31 / 100)}, prRect,
+      waypoint_name_s);
+
   // -- Draw direction arrow / North direction
   int pos_x_arrow{pos_x_speed_altitude -
                   static_cast<int>(rc_height * 77 / 100)};
   const int pos_y_annulus{static_cast<int>(rc_height * 75 / 200)};
   const int height_little_frame{static_cast<int>(rc_height) * 26 / 100};
   const int max_sz_waypoint_text{static_cast<int>(
-      sz_waypoint_s + pxpt_pos_infos_next_waypoint.x)};
+      std::max(pos_x_at_end_of_waypoint,
+               sz_waypoint_s + pxpt_pos_infos_next_waypoint.x))};
 
   if (max_sz_waypoint_text < pos_x_speed_altitude - height_little_frame * 2 &&
       canvas.GetWidth() > canvas.GetHeight() * 4.2)
