@@ -29,6 +29,15 @@ void
 DrawFrame(Canvas &canvas, const PixelRect &rc, const NavigatorLook &look_nav) noexcept;
 
 /**
+* Draw information texts about the current task (ordered task) or 
+* the current target (unordered task) 
+* e.g. waypoint distance, start time, planned duration time, ...
+*/
+void
+DrawTaskText(Canvas &canvas, TaskType tp, const Waypoint &wp_current, const PixelRect &rc,
+         const NavigatorLook &look_nav, const InfoBoxLook &iblook) noexcept;
+
+/**
 * Draw the progress of the current task with presntation of each taskpoint
 */
 void
