@@ -286,6 +286,29 @@ NavigatorRenderer::DrawTaskText(
       {pos_x_text_waypoint, static_cast<int>(rc_height * 31 / 100)}, prRect,
       waypoint_name_s);
 
+  // -- Task informations: average speed
+  if (canvas.GetWidth() > canvas.GetHeight() * 3.4)
+    font_height = rc_height * 35 / 200;
+  else
+    font_height = rc_height * 24 / 200;
+  font.Load(FontDescription(Layout::VptScale(font_height * ratio_dpi)));
+  size_text = canvas.CalcTextSize(waypoint_average_speed_s.c_str());
+  PixelPoint pxpt_pos_average_speed{static_cast<int>(rc_width * 5 / 200 + 6),
+                                    static_cast<int>(rc_height * 8 / 100)};
+  canvas.Select(font);
+  ppOrigin = {0, 0};
+  psSize = {static_cast<int>(rc_width), static_cast<int>(rc_height)};
+  prRect = {ppOrigin, psSize};
+  canvas.DrawClippedText(pxpt_pos_average_speed, prRect,
+                         waypoint_average_speed_s);
+  // Draw average speed unit
+  unit = Units::GetUserTaskSpeedUnit();
+  unit_height = static_cast<unsigned int>(font_height * 0.5);
+  font.Load(FontDescription(Layout::VptScale(unit_height * ratio_dpi)));
+  unit_p = pxpt_pos_average_speed.At(size_text.width, size_text.height / 10);
+  UnitSymbolRenderer::Draw(canvas, unit_p, unit,
+                           look_infobox.unit_fraction_pen);
+
   // -- Draw direction arrow / North direction
   int pos_x_arrow{pos_x_speed_altitude -
                   static_cast<int>(rc_height * 77 / 100)};
