@@ -13,6 +13,7 @@
 #include "MapLook.hpp"
 #include "CrossSectionLook.hpp"
 #include "HorizonLook.hpp"
+#include "NavigatorLook.hpp"
 #include "TrafficLook.hpp"
 #include "FlarmTrafficLook.hpp"
 #include "InfoBoxLook.hpp"
@@ -36,6 +37,7 @@ struct Look {
   MapLook map;
   CrossSectionLook cross_section;
   HorizonLook horizon;
+  NavigatorLook navigator;
   TrafficLook traffic;
   FlarmTrafficLook flarm_gauge;
   FlarmTrafficLook flarm_dialog;
