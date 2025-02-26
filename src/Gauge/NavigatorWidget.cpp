@@ -86,6 +86,11 @@ NavigatorWindow::OnPaint(Canvas &canvas) noexcept
 
   NavigatorRenderer::DrawFrame(canvas, frame_navigator, look_nav);
   NavigatorRenderer::DrawFrame(canvas, frame_navigator_waypoint, look_nav);
+
+  if (tp == TaskType::ORDERED)
+    NavigatorRenderer::DrawProgressTask(
+        CommonInterface::Calculated().common_stats.ordered_summary, canvas,
+        canvas.GetRect(), look_nav, look_task);
 }
 
 void
