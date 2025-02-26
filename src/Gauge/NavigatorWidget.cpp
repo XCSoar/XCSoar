@@ -96,6 +96,10 @@ NavigatorWindow::OnPaint(Canvas &canvas) noexcept
         CommonInterface::Calculated().common_stats.ordered_summary, canvas,
         canvas.GetRect(), look_nav, look_task);
 
+  if (wp_current != nullptr)
+    NavigatorRenderer::DrawTaskText(canvas, tp, *wp_current, canvas.GetRect(),
+                                    look_nav, look_infobox);
+
   NavigatorRenderer::DrawWaypointsIconsTitle(canvas, wp_before, wp_current,
                                              task_size, look_nav);
 }
