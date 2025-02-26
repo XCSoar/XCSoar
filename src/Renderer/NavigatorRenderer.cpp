@@ -5,6 +5,7 @@
 #include "BackendComponents.hpp"
 #include "Components.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Formatter/LocalTimeFormatter.hpp"
 #include "Formatter/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Interface.hpp"
@@ -25,6 +26,8 @@
 #include "WaypointIconRenderer.hpp"
 #include "WaypointRenderer.hpp"
 #include "WindArrowRenderer.hpp"
+#include "time/RoughTime.hpp"
+#include "time/Stamp.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Color.hpp"
 #include "util/StaticString.hxx"
@@ -76,6 +79,68 @@ NavigatorRenderer::DrawTaskText(
 
   const int rc_width = rc.GetWidth();
   const int rc_height = rc.GetHeight();
+
+  // PREPARE TEXTS
+  const RoughTimeDelta utc_offset1{
+      CommonInterface::GetComputerSettings().utc_offset};
+  const RoughTimeDelta utc_no_offset{};
+
+  static StaticString<8> time_elapsed_s;
+  if (tp == TaskType::ORDERED && has_started && basic.time_available) {
+    const auto time_elapsed = TimeStamp{
+        FloatDuration{calculated.ordered_task_stats.total.time_elapsed}};
+    const BasicStringBuffer<TCHAR, 8> time_elapsed_s_tmp =
+        FormatLocalTimeHHMM(time_elapsed, utc_no_offset);
+    time_elapsed_s.Format(_T("%s"), time_elapsed_s_tmp.c_str());
+  } else
+    time_elapsed_s.Format(_T("%s"), _T("--:--"));
+
+  static StaticString<8> time_start_s;
+  const auto time_start = calculated.ordered_task_stats.start.time;
+  if (tp == TaskType::ORDERED && has_started && basic.time_available)
+    time_start_s.Format(_T("%s"),
+                        FormatLocalTimeHHMM(time_start, utc_offset1).c_str());
+  else
+    time_start_s.Format(_T("%s"), _T("--:--"));
+
+  static StaticString<8> time_local_s;
+  time_local_s.clear();
+  if (basic.time_available) {
+    const BasicStringBuffer<TCHAR, 8> time =
+        FormatLocalTimeHHMM(basic.time, utc_offset1);
+    time_local_s.AppendFormat(_T("%s"), time.c_str());
+  } else
+    time_local_s.Format(_T("%s"), _T("--:--"));
+
+  static StaticString<8> time_planned_s;
+  TimeStamp time_planned{};
+  if (tp == TaskType::ORDERED && has_started && basic.time_available) {
+    time_planned = TimeStamp{
+        FloatDuration{calculated.ordered_task_stats.total.time_planned}};
+    time_planned_s.Format(
+        _T("%s"), FormatLocalTimeHHMM(time_planned, utc_no_offset).c_str());
+  } else if (tp != TaskType::ORDERED && basic.time_available) {
+    time_planned =
+        TimeStamp{FloatDuration{calculated.task_stats.total.time_planned}};
+    time_planned_s.Format(
+        _T("%s"), FormatLocalTimeHHMM(time_planned, utc_no_offset).c_str());
+  } else
+    time_planned_s.Format(_T("%s"), _T("--:--"));
+
+  static StaticString<8> arrival_planned_s;
+  TimeStamp arrival_planned{};
+  if ((tp == TaskType::ORDERED && has_started) && basic.time_available) {
+    arrival_planned = TimeStamp{
+        FloatDuration{time_start.ToDuration() + time_planned.ToDuration()}};
+    arrival_planned_s.Format(
+        _T("%s"), FormatLocalTimeHHMM(arrival_planned, utc_offset1).c_str());
+  } else if (tp != TaskType::ORDERED && basic.time_available) {
+    arrival_planned = TimeStamp{
+        FloatDuration{basic.time.ToDuration() + time_planned.ToDuration()}};
+    arrival_planned_s.Format(
+        _T("%s"), FormatLocalTimeHHMM(arrival_planned, utc_offset1).c_str());
+  } else
+    arrival_planned_s.Format(_T("%s"), _T("--:--"));
 
   // e_WP_Name
   static StaticString<50> waypoint_name_s;
@@ -178,6 +243,17 @@ NavigatorRenderer::DrawTaskText(
   infos_next_waypoint_unit_GR_s.Format(
       _T("%s   %s  %s"), waypoint_distance_s.c_str(),
       waypoint_altitude_diff_s.c_str(), waypoint_GR_s.c_str());
+
+  static StaticString<20> times_local_elapsed_s;
+  times_local_elapsed_s.Format(_T("%s (%s)"), time_local_s.c_str(),
+                               time_elapsed_s.c_str());
+
+  static StaticString<20> times_arrival_planned_s;
+  if (canvas.GetWidth() > canvas.GetHeight() * 2.8)
+    times_arrival_planned_s.Format(_T("%s (%s)"), arrival_planned_s.c_str(),
+                                   time_planned_s.c_str());
+  else
+    times_arrival_planned_s.Format(_T("%s"), arrival_planned_s.c_str());
 
   canvas.SetBackgroundTransparent();
   if (!look_nav.inverse)
@@ -368,6 +444,49 @@ NavigatorRenderer::DrawTaskText(
   unit_p = pxpt_pos_average_speed.At(size_text.width, size_text.height / 10);
   UnitSymbolRenderer::Draw(canvas, unit_p, unit,
                            look_infobox.unit_fraction_pen);
+
+  // ---- Draw texts relative to start / current / elapsed / planned times
+  // int pos_y_text_times{};
+  if (canvas.GetWidth() > canvas.GetHeight() * 3.6)
+    font.Load(
+        FontDescription(Layout::VptScale(rc_height * ratio_dpi * 32 / 200)));
+  else
+    font.Load(
+        FontDescription(Layout::VptScale(rc_height * ratio_dpi * 24 / 200)));
+
+  size_text = canvas.CalcTextSize(times_local_elapsed_s.c_str());
+  const int pos_y_text_times{
+      static_cast<int>(rc_height * 183 / 200 - size_text.height)};
+  const PixelRect pxrect_sz_time_start_s{rc.BottomAligned(rc_width)};
+
+  // -- Draw text start time
+  const PixelPoint pxpt_pos_time_start_s{
+      static_cast<int>(rc_width * 5 / 200 + 8), pos_y_text_times};
+  canvas.DrawClippedText(pxpt_pos_time_start_s, pxrect_sz_time_start_s,
+                         time_start_s);
+
+  // -- Draw text current time / elapsed time
+  const PixelRect pxlrect_sz_time_elapsed_s{rc.BottomAligned(rc_width)};
+  int size_text_tmp{};
+  if (canvas.GetWidth() > canvas.GetHeight() * 2.8)
+    size_text_tmp = size_text.width * 3 / 4;
+  else
+    size_text_tmp = size_text.width / 2;
+  const PixelPoint pxpt_pos_time_elapsed_s{
+      static_cast<int>(rc_width * 100 / 200 - size_text_tmp),
+      pos_y_text_times};
+  canvas.DrawClippedText(pxpt_pos_time_elapsed_s, pxlrect_sz_time_elapsed_s,
+                         times_local_elapsed_s);
+
+  // -- Draw text planned time
+  size_text = canvas.CalcTextSize(times_arrival_planned_s.c_str());
+  const PixelRect pxlrect_sz_arrival_planned_s{rc.BottomAligned(rc_width)};
+  const PixelPoint pxpt_times_pos_arrival_planned_s{
+      static_cast<int>(rc_width - (rc_width * 5 / 200 + 8) - size_text.width),
+      pos_y_text_times};
+  canvas.DrawClippedText(pxpt_times_pos_arrival_planned_s,
+                         pxlrect_sz_arrival_planned_s,
+                         times_arrival_planned_s);
 
   // -- Draw direction arrow / North direction
   int pos_x_arrow{pos_x_speed_altitude -
