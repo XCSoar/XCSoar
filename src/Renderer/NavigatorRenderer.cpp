@@ -155,3 +155,40 @@ NavigatorRenderer::DrawProgressTask(const TaskSummary &summary, Canvas &canvas,
     canvas.DrawRectangle(PixelRect{position_waypoint}.WithMargin(w));
   }
 }
+
+void
+NavigatorRenderer::DrawWaypointsIconsTitle(
+    Canvas &canvas, WaypointPtr waypoint_before, WaypointPtr waypoint_current,
+    unsigned task_size, [[maybe_unused]] const NavigatorLook &look) noexcept
+{
+  const int rc_height = canvas.GetHeight();
+  const int rc_width = canvas.GetWidth();
+
+  const WaypointRendererSettings &waypoint_settings =
+      CommonInterface::GetMapSettings().waypoint;
+  const WaypointLook &waypoint_look = UIGlobals::GetMapLook().waypoint;
+
+  WaypointIconRenderer waypoint_icon_renderer{waypoint_settings, waypoint_look,
+                                              canvas};
+  const PixelPoint position_waypoint_left{rc_width * 7 / 200,
+                                          rc_height * 1 / 2};
+  // const PixelPoint position_waypoint_centered{rc_width*42/200,
+  // rc_height*1/2};
+  const PixelPoint position_waypoint_right{
+      rc_width * 98 / 100 - rc_height * 15 / 100, rc_height * 38 / 100};
+
+  // CALCULATE REACHABILITY
+  WaypointReachability wr_before{WaypointReachability::UNREACHABLE};
+  WaypointReachability wr_current{WaypointReachability::UNREACHABLE};
+
+  auto *protected_task_manager =
+      backend_components->protected_task_manager.get();
+  if (protected_task_manager != nullptr && task_size > 1) {
+    if (waypoint_before != nullptr)
+      waypoint_icon_renderer.Draw(*waypoint_before, position_waypoint_left,
+                                  wr_before, true);
+    if (waypoint_current != nullptr)
+      waypoint_icon_renderer.Draw(*waypoint_current, position_waypoint_right,
+                                  wr_current, true);
+  }
+}

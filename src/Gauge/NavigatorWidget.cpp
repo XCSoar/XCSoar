@@ -45,6 +45,8 @@ NavigatorWindow::OnPaint(Canvas &canvas) noexcept
   WaypointPtr wp_before;
   WaypointPtr wp_current;
 
+  unsigned task_size{};
+
   auto *protected_task_manager =
       backend_components->protected_task_manager.get();
   if (protected_task_manager != nullptr) {
@@ -57,6 +59,8 @@ NavigatorWindow::OnPaint(Canvas &canvas) noexcept
       if (tp == TaskType::ORDERED) {
 
         const OrderedTask &task = lease->GetOrderedTask();
+
+        task_size = task.TaskSize();
 
         wp_current = task.GetActiveTaskPoint()->GetWaypointPtr();
 
@@ -91,6 +95,9 @@ NavigatorWindow::OnPaint(Canvas &canvas) noexcept
     NavigatorRenderer::DrawProgressTask(
         CommonInterface::Calculated().common_stats.ordered_summary, canvas,
         canvas.GetRect(), look_nav, look_task);
+
+  NavigatorRenderer::DrawWaypointsIconsTitle(canvas, wp_before, wp_current,
+                                             task_size, look_nav);
 }
 
 void
