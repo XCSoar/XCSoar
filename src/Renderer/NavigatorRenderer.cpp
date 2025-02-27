@@ -132,6 +132,21 @@ NavigatorRenderer::DrawTaskText(
   static StaticString<20> current_speed_s;
   FormatUserSpeed(basic.ground_speed, current_speed_s.data(), false, 0);
 
+  // e_WP_BearingDiff
+  Angle bearing_diff{};
+  if (!basic.track_available)
+    bearing_diff.Zero();
+  else if (tp == TaskType::ORDERED)
+    bearing_diff =
+      calculated.ordered_task_stats.current_leg.vector_remaining.bearing -
+      basic.track;
+  else
+    bearing_diff =
+      calculated.task_stats.current_leg.vector_remaining.bearing -
+      basic.track;
+  const int waypoint_direction = std::round(bearing_diff.AsDelta().Degrees());
+  waypoint_direction_s.Format(_T("%d°"), waypoint_direction);
+
   static StaticString<100> infos_next_waypoint_s;
   if (canvas.GetWidth() > canvas.GetHeight() * 6.1)
     infos_next_waypoint_s.Format(
@@ -176,6 +191,8 @@ NavigatorRenderer::DrawTaskText(
   };
   font.Load(FontDescription(Layout::VptScale(font_height * ratio_dpi)));
   canvas.Select(font);
+  const unsigned int sz_waypoint_s{
+      canvas.CalcTextSize(infos_next_waypoint_s.c_str()).width};
 
   PixelPoint ppOrigin{0, 0};
   PixelSize psSize{static_cast<int>(rc_width * 2 / 3),
@@ -226,6 +243,52 @@ NavigatorRenderer::DrawTaskText(
     UnitSymbolRenderer::Draw(canvas, unit_p, unit,
                              look_infobox.unit_fraction_pen);
   }
+
+  // ---- Draw Current speed / Current Altitude
+  if (canvas.GetWidth() > canvas.GetHeight() * 3.2)
+    font_height = rc_height * 40 / 200;
+  else
+    font_height = rc_height * 30 / 200;
+
+  int pos_x_speed_altitude{};
+  if (canvas.GetWidth() > canvas.GetHeight() * 3.2)
+    pos_x_speed_altitude =
+        rc_width * 96 / 100 - size_text.width - rc_height * 16 / 100;
+  else
+    pos_x_speed_altitude =
+        rc_width * 103 / 100 - size_text.width - rc_height * 29 / 100;
+
+  // -- Draw direction arrow / North direction
+  int pos_x_arrow{pos_x_speed_altitude -
+                  static_cast<int>(rc_height * 77 / 100)};
+  const int pos_y_annulus{static_cast<int>(rc_height * 75 / 200)};
+  const int height_little_frame{static_cast<int>(rc_height) * 26 / 100};
+  const int max_sz_waypoint_text{static_cast<int>(
+      sz_waypoint_s + pxpt_pos_infos_next_waypoint.x)};
+
+  if (max_sz_waypoint_text < pos_x_speed_altitude - height_little_frame * 2 &&
+      canvas.GetWidth() > canvas.GetHeight() * 4.2)
+    pos_x_arrow = (pos_x_speed_altitude + max_sz_waypoint_text) / 2 -
+                  2 * height_little_frame;
+
+  NextArrowRenderer next_arrow{UIGlobals::GetLook().wind_arrow_info_box};
+
+  ppOrigin = {0, -static_cast<int>(rc_height / 4)};
+  psSize = {static_cast<int>(rc_height), static_cast<int>(rc_height)};
+  PixelRect pixelrect_next_arrow{ppOrigin, psSize};
+  pixelrect_next_arrow.Offset(pos_x_arrow, rc_height * 1.3 / 10);
+
+  canvas.DrawAnnulus(
+      {static_cast<int>(rc_height) / 2 + pos_x_arrow, pos_y_annulus},
+      static_cast<int>(rc_height) * 18 / 100, height_little_frame,
+      -basic.track + Angle::Degrees(50), -basic.track + Angle::Degrees(310));
+
+  canvas.DrawAnnulus(
+      {static_cast<int>(rc_height) / 2 + pos_x_arrow, pos_y_annulus},
+      static_cast<int>(rc_height) * 18 / 100, height_little_frame,
+      -basic.track - Angle::Degrees(8), -basic.track + Angle::Degrees(8));
+
+  next_arrow.DrawArrowScale(canvas, pixelrect_next_arrow, bearing_diff, 21);
 }
 
 void
