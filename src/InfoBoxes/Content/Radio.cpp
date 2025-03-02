@@ -37,6 +37,14 @@ UpdateInfoBoxTransponderCode(InfoBoxData &data,
 {
   if(code.IsDefined()) {
     code.Format(data.value.data(), data.value.capacity());
+
+    if (data.value.equals(_T("7500")) ||
+        data.value.equals(_T("7600")) ||
+        data.value.equals(_T("7700"))) {
+      data.SetValueColor(1);
+    } else {
+      data.SetValueColor(0);
+    }
   }
   else {
     data.SetValueInvalid();
