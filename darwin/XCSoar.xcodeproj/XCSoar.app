@@ -1,0 +1,1 @@
+output/IOS64SIM/ipa/Payload/XCSoar.app

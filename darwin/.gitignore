@@ -1,0 +1,6 @@
+# Xcode
+xcuserdata
+DerivedData/
+build/
+XCSoarExecutable
+
