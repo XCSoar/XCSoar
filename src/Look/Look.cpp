@@ -2,8 +2,8 @@
 // Copyright The XCSoar Project
 
 #include "Look.hpp"
-#include "UISettings.hpp"
 #include "GlobalSettings.hpp"
+#include "UISettings.hpp"
 
 void
 Look::Initialise(const Font &map_font)
@@ -14,8 +14,7 @@ Look::Initialise(const Font &map_font)
   chart.Initialise();
 }
 
-[[gnu::pure]]
-static bool
+[[gnu::pure]] static bool
 GetDarkMode(const UISettings &settings) noexcept
 {
   switch (settings.dark_mode) {
@@ -33,24 +32,21 @@ GetDarkMode(const UISettings &settings) noexcept
 }
 
 void
-Look::InitialiseConfigured(const UISettings &settings,
-                           const Font &map_font, const Font &map_bold_font,
-                           unsigned infobox_width)
+Look::InitialiseConfigured(const UISettings &settings, const Font &map_font,
+                           const Font &map_bold_font, unsigned infobox_width)
 {
   const bool dark_mode = GetDarkMode(settings);
 
   dialog.Initialise();
   terminal.Initialise();
   cross_section.Initialise(map_font);
+  navigator.Initialise(dark_mode);
   horizon.Initialise();
-  thermal_band.Initialise(dark_mode,
-                          cross_section.sky_color);
+  thermal_band.Initialise(dark_mode, cross_section.sky_color);
   trace_history.Initialise(dark_mode);
   info_box.Initialise(dark_mode, settings.info_boxes.use_colors, infobox_width,
                       settings.info_boxes.scale_title_font);
-  vario.Initialise(dark_mode,
-                   settings.info_boxes.use_colors,
-                   infobox_width,
+  vario.Initialise(dark_mode, settings.info_boxes.use_colors, infobox_width,
                    info_box.title_font);
   wind_arrow_info_box.Initialise(map_bold_font, dark_mode);
   flarm_gauge.Initialise(traffic, true, dark_mode);
@@ -73,4 +69,5 @@ Look::ReinitialiseLayout(unsigned infobox_width, unsigned scale_title_font)
 
   info_box.ReinitialiseLayout(infobox_width, scale_title_font);
   vario.ReinitialiseLayout(infobox_width);
+  // navigator.ReinitialiseLayout(infobox_width, scale_title_font);
 }
