@@ -31,13 +31,30 @@ UpdateInfoBoxFrequency(InfoBoxData &data, const RadioFrequency freq,
 }
 
 static void
-UpdateInfoBoxTransponderCode(InfoBoxData &data, TransponderCode code) noexcept
+UpdateInfoBoxTransponderCode(InfoBoxData &data, 
+                             TransponderCode code,
+                             TransponderMode mode) noexcept
 {
   if(code.IsDefined()) {
     code.Format(data.value.data(), data.value.capacity());
   }
   else {
     data.SetValueInvalid();
+  }
+
+  if(mode.IsDefined()) {
+    data.SetComment(mode.GetModeString());
+
+    if (mode.mode == TransponderMode::IDENT) {
+      data.SetCommentColor(5);
+    } else if (mode.mode == TransponderMode::ALT) {
+      data.SetCommentColor(3);
+    } else {
+      data.SetCommentColor(0);
+    }
+  }
+  else {
+    data.SetCommentInvalid();
   }
 }
 
@@ -90,7 +107,9 @@ InfoBoxContentTransponderCode::Update(InfoBoxData &data) noexcept
 {
   const auto &settings_transponder =
     CommonInterface::GetComputerSettings().transponder;
-  UpdateInfoBoxTransponderCode(data, settings_transponder.transponder_code);
+  UpdateInfoBoxTransponderCode(data, 
+                               settings_transponder.transponder_code,
+                               settings_transponder.transponder_mode);
 }
 
 const InfoBoxPanel *
