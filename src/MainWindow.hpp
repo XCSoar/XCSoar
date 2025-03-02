@@ -13,10 +13,7 @@
 #include <cstdint>
 #include <cassert>
 
-#ifdef KOBO
-#define HAVE_SHOW_MENU_BUTTON
-#include "Menu/ShowMenuButton.hpp"
-#endif
+#include "Menu/ShowButton.hpp"
 
 struct ComputerSettings;
 struct MapSettings;
@@ -43,9 +40,9 @@ class MainWindow : public UI::SingleWindow {
 
   MenuBar *menu_bar = nullptr;
 
-#ifdef HAVE_SHOW_MENU_BUTTON
   ShowMenuButton *show_menu_button = nullptr;
-#endif
+  ShowZoomOutButton *show_zoom_out_button = nullptr;
+  ShowZoomInButton *show_zoom_in_button = nullptr;
 
   GlueMapWindow *map = nullptr;
 
@@ -401,6 +398,9 @@ protected:
   bool OnMouseDouble(PixelPoint p) noexcept override;
   bool OnKeyDown(unsigned key_code) noexcept override;
   void OnPaint(Canvas &canvas) noexcept override;
+  PixelRect GetShowMenuButtonRect(const PixelRect rc) noexcept;
+  PixelRect GetShowZoomOutButtonRect(const PixelRect rc) noexcept;
+  PixelRect GetShowZoomInButtonRect(const PixelRect rc) noexcept;
 
   /* virtual methods from class TopWindow */
   bool OnClose() noexcept override;
