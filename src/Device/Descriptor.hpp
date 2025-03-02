@@ -11,6 +11,7 @@
 #include "Device/Parser.hpp"
 #include "RadioFrequency.hpp"
 #include "TransponderCode.hpp"
+#include "TransponderMode.hpp"
 #include "NMEA/ExternalSettings.hpp"
 #include "time/PeriodClock.hpp"
 #include "Job/Async.hpp"

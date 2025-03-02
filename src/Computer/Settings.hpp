@@ -20,6 +20,7 @@
 #include "WaveSettings.hpp"
 #include "RadioFrequency.hpp"
 #include "TransponderCode.hpp"
+#include "TransponderMode.hpp"
 #include "net/client/WeGlide/Settings.hpp"
 
 #include <cstdint>
@@ -138,9 +139,11 @@ struct RadioSettings {
  */
 struct TransponderSettings {
   TransponderCode transponder_code;
+  TransponderMode transponder_mode;
 
   void SetDefaults() {
     transponder_code.Clear();
+    transponder_mode.Clear();
   }
 };
 
