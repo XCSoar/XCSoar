@@ -7,6 +7,7 @@
 #include "Atmosphere/Pressure.hpp"
 #include "RadioFrequency.hpp"
 #include "TransponderCode.hpp"
+#include "TransponderMode.hpp"
 #include "util/StaticString.hxx"
 
 #include <stdlib.h>
@@ -76,6 +77,8 @@ struct ExternalSettings {
   /** transponder */
   Validity has_transponder_code;
   TransponderCode transponder_code;
+  Validity has_transponder_mode;
+  TransponderMode transponder_mode;
 
   void Clear();
   void Expire(TimeStamp time) noexcept;
