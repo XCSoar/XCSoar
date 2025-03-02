@@ -22,6 +22,7 @@ Version 7.44 - not yet released
   - infoboxen: new setting, allow scaling of title/comment font
   - Radar / Thermalassistant Gauges: Placement to avoid InfoBoxen and Overlap
   - Add new Infobox “Home altitude difference” (Home AltD)
+  - Show transponder mode (if available) in transponder code InfoBox
   - add helpers on infoboxes for Argentinean contests 95% distance rule
   - Popup messages now appear at the top of the map
   - FlarmTrafficWindow: align colors of FlarmTraffic with map for consistency
@@ -44,6 +45,7 @@ Version 7.44 - not yet released
   - OpenVario: Overload formula, use reference mass instead of dry mass
   - Vaulter: use fraction instead of overload for ballast
   - Devices: Switch to manual MC when set via external Device
+  - AirControlDisplay: Read-out transponder mode
 * Polar:
   - LS8-15m: default polar, set to values according to flight manual
 
