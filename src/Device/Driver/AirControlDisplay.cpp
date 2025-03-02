@@ -10,6 +10,7 @@
 #include "Atmosphere/Pressure.hpp"
 #include "RadioFrequency.hpp"
 #include "TransponderCode.hpp"
+#include "TransponderMode.hpp"
 #include "Units/System.hpp"
 #include "Math/Util.hpp"
 #include "util/StaticString.hxx"
@@ -77,7 +78,7 @@ ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
       info.settings.ProvideVolume(volume, info.clock);
   } else if (type == "XPDR"sv) {
     /*
-    $PAAVS,XPDR,<SQUAWK>,<ACTIVE>,<ALTINH>
+    $PAAVS,XPDR,<SQUAWK>,<ACTIVE>,<ALTINH>,<ALT>,<SPI>,<ALLCALLSINH>
     <SQUAWK> Squawk code value;
              Octal unsigned integer value between 0000 and 7777 (digits 0–7).
     <ACTIVE> Active flag;
@@ -87,6 +88,14 @@ ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
     <ALTINH> Altitude inhibit flag;
              0: transmit altitude ("ALT" mode if active)
              1: do not transmit altitude ("ON" mode if active)
+    <ALT>    Transmitted altitude in FL (integer value)
+    <SPI>    Special Position Ident flag
+             0: not set
+             1: set ("IDENT")
+    <ALLCALLSINH> 
+             Allcalls inhibit flag
+             0: not set
+             1: set ("GND Mode")
      */
     unsigned code_value;
     if (line.ReadChecked(code_value)) {
@@ -99,6 +108,37 @@ ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
 
       info.settings.transponder_code = parsed_code;
       info.settings.has_transponder_code.Update(info.clock);
+    }
+
+    unsigned active = 0;
+    unsigned altitude_inhibit = 0;
+    unsigned special_position_ident = 0;
+    unsigned allcalls_inhibit = 0;
+
+    bool has_active = line.ReadChecked(active);
+    bool has_altitude_inhibit = line.ReadChecked(altitude_inhibit);
+    line.Skip();
+    bool has_special_position_ident = line.ReadChecked(special_position_ident);
+    bool has_allcalls_inhibit = line.ReadChecked(allcalls_inhibit);
+
+    if (has_active &&
+        has_altitude_inhibit &&
+        has_special_position_ident &&
+        has_allcalls_inhibit) {
+      if (special_position_ident == 1) {
+        info.settings.transponder_mode.mode = TransponderMode::IDENT;
+      } else if (active == 0) {
+          info.settings.transponder_mode.mode = TransponderMode::SBY;
+      } else if (allcalls_inhibit == 1) {
+        info.settings.transponder_mode.mode = TransponderMode::GND;
+      } else if (active == 1 && altitude_inhibit == 1) {
+        info.settings.transponder_mode.mode = TransponderMode::ON;
+      } else if (active == 1 && altitude_inhibit == 0) {
+        info.settings.transponder_mode.mode = TransponderMode::ALT;
+      } else {
+        info.settings.transponder_mode.mode = TransponderMode::UNDEFINED;
+      }
+      info.settings.has_transponder_mode.Update(info.clock);
     }
   } else {
     return false;
