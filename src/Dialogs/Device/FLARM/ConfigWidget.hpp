@@ -6,6 +6,7 @@
 #include "Widget/RowFormWidget.hpp"
 
 class FlarmDevice;
+struct FlarmHardware;
 
 class FLARMConfigWidget final : public RowFormWidget {
   enum Controls {
@@ -13,20 +14,26 @@ class FLARMConfigWidget final : public RowFormWidget {
     Priv,
     Thre,
     Range,
+    VRange,
+    PCASRange,
+    PCASVRange,
+    ADSBRange,
+    ADSBVrange,
     Acft,
     LogInt,
     NoTrack,
   };
 
   FlarmDevice &device;
+  FlarmHardware &hardware;
 
-  unsigned baud, thre, range, acft, log_int;
+  unsigned baud, thre, range, vrange, pcas_range, pcas_vrange, adsb_range, adsb_vrange, acft, log_int;
 
   bool priv, notrack;
 
 public:
-  FLARMConfigWidget(const DialogLook &look, FlarmDevice &_device)
-    :RowFormWidget(look), device(_device) {}
+  FLARMConfigWidget(const DialogLook &look, FlarmDevice &_device, FlarmHardware &_hardware)
+    :RowFormWidget(look), device(_device), hardware(_hardware) {}
 
   /* virtual methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
