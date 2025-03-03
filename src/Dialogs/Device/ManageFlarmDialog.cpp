@@ -89,7 +89,7 @@ ManageFLARMWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   }
 
   AddButton(_("Setup"), [this](){
-    FLARMConfigWidget widget(GetLook(), device);
+    FLARMConfigWidget widget(GetLook(), device, hardware);
     DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
                         _T("FLARM"), widget);
   });
