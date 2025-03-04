@@ -134,8 +134,8 @@ StratuxDevice::ParseNMEA(const char *line, NMEAInfo &info)
 static Device *
 StratuxCreateOnPort([[maybe_unused]] const DeviceConfig &config, [[maybe_unused]] Port &com_port)
 {
-  Profile::Get(ProfileKeys::StratuxHorizontalRange,settings.hrange);
-  Profile::Get(ProfileKeys::StratuxVerticalRange,settings.vrange);
+  settings.hrange = std::stoi(Profile::Get(ProfileKeys::StratuxHorizontalRange));
+  settings.vrange = std::stoi(Profile::Get(ProfileKeys::StratuxVerticalRange));
 
   return new StratuxDevice();
 }

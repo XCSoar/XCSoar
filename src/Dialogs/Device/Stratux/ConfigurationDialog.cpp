@@ -33,8 +33,8 @@ public:
   /* virtual methods from Widget */
   void Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept override {
 
-    Profile::Get(ProfileKeys::StratuxHorizontalRange,settings.hrange);
-    Profile::Get(ProfileKeys::StratuxVerticalRange,settings.vrange);
+    settings.hrange = std::stoi(Profile::Get(ProfileKeys::StratuxHorizontalRange));
+    settings.vrange = std::stoi(Profile::Get(ProfileKeys::StratuxVerticalRange));
 
     AddInteger(_("Horizontal Range"), nullptr, _T("%d m"), _T("%d"), 4000, 20000, 1000, settings.hrange);
     AddInteger(_("Vertical Range"), nullptr, _T("%d m"), _T("%d"), 1000, 4000, 1000, settings.vrange);
