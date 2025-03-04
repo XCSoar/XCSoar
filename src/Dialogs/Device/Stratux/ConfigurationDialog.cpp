@@ -47,8 +47,8 @@ public:
     changed |= SaveValueInteger(HRANGE, settings.hrange);
     changed |= SaveValueInteger(VRANGE, settings.vrange);
 
-    Profile::Set(ProfileKeys::StratuxHorizontalRange, settings.hrange);
-    Profile::Set(ProfileKeys::StratuxVerticalRange, settings.vrange);
+    settings.hrange = std::stoi(Profile::Get(ProfileKeys::StratuxHorizontalRange));
+    settings.vrange = std::stoi(Profile::Get(ProfileKeys::StratuxVerticalRange));
 
     _changed |= changed;
     if (_changed) ShowMessageBox(_("Changes to configuration saved.  Restart XCSoar to apply changes."),
