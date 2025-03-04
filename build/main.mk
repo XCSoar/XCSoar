@@ -183,6 +183,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/TransponderCode.cpp \
+	$(SRC)/TransponderMode.cpp \
 	\
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(SRC)/Engine/Navigation/Aircraft.cpp \

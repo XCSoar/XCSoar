@@ -358,12 +358,16 @@ ActionInterface::ExchangeRadioFrequencies(bool to_devices) noexcept
 }
 
 void
-ActionInterface::SetTransponderCode(TransponderCode code, bool to_devices) noexcept
+ActionInterface::SetTransponderCode(TransponderCode code,
+                                    TransponderMode mode,
+                                    bool to_devices) noexcept
 {
   assert(code.IsDefined());
+  assert(mode.IsDefined());
 
   /* update interface settings */
   SetComputerSettings().transponder.transponder_code = code;
+  SetComputerSettings().transponder.transponder_mode = mode;
 
   /* update InfoBoxes (that might show the code setting) */
   InfoBoxManager::SetDirty();

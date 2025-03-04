@@ -1183,6 +1183,8 @@ TestLXV7()
   ok1(equals(basic.indicated_airspeed, 90.2));
   ok1(basic.pressure_altitude_available);
   ok1(equals(basic.pressure_altitude, 244.3));
+  ok1(basic.acceleration.available);
+  ok1(equals(basic.acceleration.g_load, 1.331));
 
   ok1(device->ParseNMEA("$PLXVS,23.1,0,12.3,*71", basic));
   ok1(basic.temperature_available);
@@ -1620,8 +1622,15 @@ TestACD()
   /* test XPDR response */
   ok1(device->ParseNMEA("$PAAVS,XPDR,7000,1,0,1697,0,0*68",nmea_info));
   ok1(nmea_info.settings.has_transponder_code);
+  ok1(nmea_info.settings.has_transponder_mode);
   ok1(equals(nmea_info.settings.transponder_code.GetCode(), 
              TransponderCode{07000}.GetCode()));
+  ok1(StringIsEqual(nmea_info.settings.transponder_mode.GetModeString(), 
+             _T("ALT")));
+  ok1(equals(nmea_info.settings.transponder_mode.mode, TransponderMode::Mode::ALT));
+
+  ok1(device->ParseNMEA("$PAAVS,XPDR,7260,1,0,1762,1,0*66",nmea_info));
+  ok1(equals(nmea_info.settings.transponder_mode.mode, TransponderMode::Mode::IDENT));
 
   nmea_info.Reset();
   nmea_info.clock = TimeStamp{FloatDuration{1}};
@@ -1745,7 +1754,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main()
 {
-  plan_tests(946);
+  plan_tests(953);
   TestGeneric();
   TestTasman();
   TestFLARM();
