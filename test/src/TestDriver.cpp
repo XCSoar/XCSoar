@@ -1635,8 +1635,9 @@ TestACD()
   nmea_info.Reset();
   nmea_info.clock = TimeStamp{FloatDuration{1}};
 
-  ok1(!(device->ParseNMEA("$PAAVS,XPDR,9999,1,0,1697,0,0*6F",nmea_info)));
+  ok1(!(device->ParseNMEA("$PAAVS,XPDR,9999,,,1697,,*6E",nmea_info)));
   ok1(!(nmea_info.settings.transponder_code.IsDefined()));
+  ok1(!(nmea_info.settings.transponder_mode.IsDefined()));
 
   nmea_info.Reset();
   nmea_info.clock = TimeStamp{FloatDuration{1}};
@@ -1754,7 +1755,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main()
 {
-  plan_tests(953);
+  plan_tests(954);
   TestGeneric();
   TestTasman();
   TestFLARM();
