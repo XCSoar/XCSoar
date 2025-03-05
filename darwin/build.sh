@@ -20,8 +20,10 @@ case "$TARGET_PLATFORM_NAME" in
     ;;
   iphoneos)
     export TARGET="IOS64"
+    rm -rf "$(pwd)"/output/IOS64/ipa "$(pwd)"/output/IOS64/xcsoar.ipa "$(pwd)"/output/IOS64/Info.plist*
+    # export IOS_APP_BUNDLE_IDENTIFIER="de.yorickreum.XCSoar"
     rm "$(pwd)"/darwin/XCSoarExecutable
-    ln -s "$(pwd)"/output/IOS64/ipa/Payload/XCSoar.app "$(pwd)"/darwin/XCSoarExecutable
+    ln -s "$(pwd)"/output/IOS64/xcsoar.ipa "$(pwd)"/darwin/XCSoarExecutable
     ;;
   macosx)
     export TARGET="MACOS"
@@ -41,3 +43,7 @@ if [ "$TARGET" = "MACOS" ]; then
 fi
 export PATH=/opt/homebrew/bin:"$PATH" # for gmake to be in path
 gmake -j"$(nproc)" USE_CCACHE=y V=2 OPTIMIZE='-O0' DEBUG=$DEBUG TARGET=$TARGET $IPA_TARGET
+
+if [ "$TARGET" = "IOS64" ]; then
+  "$(pwd)"/darwin/sign.sh
+fi
