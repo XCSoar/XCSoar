@@ -22,7 +22,12 @@ UISettings::SetDefaults() noexcept
 
   haptic_feedback = HapticFeedback::DEFAULT;
 
+#ifdef KOBO
   show_menu_button = true;
+#else
+  show_menu_button = false;
+#endif
+  show_zoom_button = false;
 
   dark_mode = DarkMode::AUTO;
 
