@@ -41,6 +41,7 @@
 #include "Device/Driver/ATR833/Register.hpp"
 #include "Device/Driver/XCTracer.hpp"
 #include "Device/Driver/KRT2.hpp"
+#include "Device/Driver/Stratux.hpp"
 #include "util/Macros.hpp"
 #include "util/StringAPI.hxx"
 
@@ -88,6 +89,7 @@ static const struct DeviceRegister *const driver_list[] = {
   &acd_driver,
   &condor3_driver,
   &lx_eos_driver,
+  &stratux_driver,
   nullptr
 };
 
