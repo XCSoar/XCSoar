@@ -13,6 +13,8 @@
 #include "Widget/RowFormWidget.hpp"
 #include "Profile/Profile.hpp"
 
+#include <cstdint>
+
 class StratuxConfigurationWidget final
   : public RowFormWidget {
 
@@ -25,15 +27,6 @@ class StratuxConfigurationWidget final
   StratuxDevice &device [[maybe_unused]];
   StratuxDevice::StratuxSettings settings;
 
-void
-LoadFromProfile() noexcept
-{
-  using namespace Profile;
-
-  settings.hrange = std::atoi(Profile::Get(ProfileKeys::StratuxHorizontalRange));
-  settings.vrange = std::atoi(Profile::Get(ProfileKeys::StratuxVerticalRange));
-}
-
 public:
   StratuxConfigurationWidget(const DialogLook &look, WidgetDialog &_dialog,
                              StratuxDevice &_device)
@@ -42,7 +35,7 @@ public:
   /* virtual methods from Widget */
   void Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept override {
 
-    LoadFromProfile();
+    LoadFromProfile(settings);
 
     AddInteger(_("Horizontal Range"), nullptr, _T("%d m"), _T("%d"), 4000, 20000, 1000, settings.hrange);
     AddInteger(_("Vertical Range"), nullptr, _T("%d m"), _T("%d"), 1000, 4000, 1000, settings.vrange);
