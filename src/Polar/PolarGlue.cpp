@@ -31,6 +31,7 @@ PolarGlue::LoadFromProfile(PolarInfo &polar) noexcept
     return true;
   }
 
+
   return false;
 }
 
