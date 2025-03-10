@@ -10,10 +10,11 @@
 
 StratuxDevice::StratuxSettings settings;
 
+using namespace Profile;
+
 void
 LoadFromProfile(StratuxDevice::StratuxSettings &settings) noexcept
 {
-  using namespace Profile;
 
   const char *hrange = Profile::Get(ProfileKeys::StratuxHorizontalRange);
   if (hrange != nullptr && !StringIsEmpty(hrange)) {
@@ -28,6 +29,13 @@ LoadFromProfile(StratuxDevice::StratuxSettings &settings) noexcept
   } else {
     settings.vrange = 2000;
   }
+}
+
+void
+SaveToProfile(StratuxDevice::StratuxSettings &settings) noexcept
+{
+    Profile::Set(ProfileKeys::StratuxHorizontalRange, settings.hrange);
+    Profile::Set(ProfileKeys::StratuxVerticalRange, settings.vrange);
 }
 
 using std::string_view_literals::operator""sv;

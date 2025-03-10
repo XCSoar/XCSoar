@@ -11,9 +11,6 @@
 #include "Operation/PopupOperationEnvironment.hpp"
 #include "UIGlobals.hpp"
 #include "Widget/RowFormWidget.hpp"
-#include "Profile/Profile.hpp"
-
-#include <cstdint>
 
 class StratuxConfigurationWidget final
   : public RowFormWidget {
@@ -48,15 +45,13 @@ public:
     changed |= SaveValueInteger(HRANGE, settings.hrange);
     changed |= SaveValueInteger(VRANGE, settings.vrange);
 
-    Profile::Set(ProfileKeys::StratuxHorizontalRange, settings.hrange);
-    Profile::Set(ProfileKeys::StratuxVerticalRange, settings.vrange);
+    SaveToProfile(settings);
 
     _changed |= changed;
     if (_changed) ShowMessageBox(_("Changes to configuration saved.  Restart XCSoar to apply changes."),
                     _T(""), MB_OK);
     return true;
   }
-
 };
 
 void
