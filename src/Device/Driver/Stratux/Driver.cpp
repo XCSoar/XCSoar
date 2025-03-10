@@ -6,8 +6,7 @@
 #include "NMEA/Info.hpp"
 #include "Interface.hpp"
 #include "Profile/Profile.hpp"
-
-#include <cstdint>
+#include "util/StringCompare.hxx"
 
 StratuxDevice::StratuxSettings settings;
 
@@ -16,13 +15,17 @@ LoadFromProfile(StratuxDevice::StratuxSettings &settings) noexcept
 {
   using namespace Profile;
 
-  bool ok=false;
-
-  ok |= Profile::Get(ProfileKeys::StratuxHorizontalRange, settings.hrange);
-  ok |= Profile::Get(ProfileKeys::StratuxVerticalRange, settings.vrange);
-
-  if (!ok) {
+  const char *hrange = Profile::Get(ProfileKeys::StratuxHorizontalRange);
+  if (hrange != nullptr && !StringIsEmpty(hrange)) {
+    settings.hrange = std::stoi(hrange);
+  } else {
     settings.hrange = 20000;
+  }
+
+  const char *vrange = Profile::Get(ProfileKeys::StratuxVerticalRange);
+  if (vrange != nullptr && !StringIsEmpty(vrange)) {
+    settings.vrange = std::stoi(vrange);
+  } else {
     settings.vrange = 2000;
   }
 }
