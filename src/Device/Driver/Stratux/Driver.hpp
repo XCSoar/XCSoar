@@ -21,8 +21,8 @@ class StratuxDevice : public AbstractDevice {
   public:
 
     struct StratuxSettings {
-      int hrange;
-      int vrange;
+      uint16_t hrange;
+      uint16_t vrange;
     };
 
     bool ParseNMEA(const char *line, NMEAInfo &info) override;

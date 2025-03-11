@@ -4,31 +4,22 @@
 #include "Driver.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Info.hpp"
-#include "Interface.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/ProfileMap.hpp"
-#include "util/StringCompare.hxx"
 
 StratuxDevice::StratuxSettings settings;
-
-using namespace Profile;
 
 void
 LoadFromProfile(StratuxDevice::StratuxSettings &settings) noexcept
 {
+  bool ok=false;
 
-  const char *hrange = Profile::Get(ProfileKeys::StratuxHorizontalRange);
-  if (hrange != nullptr && !StringIsEmpty(hrange)) {
-    settings.hrange = std::atoi(hrange);
-  } else {
-    settings.hrange = 20000; // default
-  }
+  ok |= Profile::Get(ProfileKeys::StratuxHorizontalRange,settings.hrange);
+  ok |= Profile::Get(ProfileKeys::StratuxVerticalRange,settings.vrange);
 
-  const char *vrange = Profile::Get(ProfileKeys::StratuxVerticalRange);
-  if (vrange != nullptr && !StringIsEmpty(vrange)) {
-    settings.vrange = std::atoi(vrange);
-  } else {
-    settings.vrange = 2000; // default
+  if (!ok) {
+    settings.hrange = 20000;
+    settings.vrange = 2000;
   }
 }
 
