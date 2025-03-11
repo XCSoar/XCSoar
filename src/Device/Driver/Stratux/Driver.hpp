@@ -29,3 +29,5 @@ class StratuxDevice : public AbstractDevice {
 };
 
 void LoadFromProfile(StratuxDevice::StratuxSettings &settings) noexcept;
+
+void SaveToProfile(StratuxDevice::StratuxSettings &settings) noexcept;

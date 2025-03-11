@@ -5,26 +5,38 @@
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Info.hpp"
 #include "Interface.hpp"
-#include "Profile/Profile.hpp"
-
-#include <cstdint>
+#include "Profile/Keys.hpp"
+#include "Profile/ProfileMap.hpp"
+#include "util/StringCompare.hxx"
 
 StratuxDevice::StratuxSettings settings;
+
+using namespace Profile;
 
 void
 LoadFromProfile(StratuxDevice::StratuxSettings &settings) noexcept
 {
-  using namespace Profile;
 
-  bool ok=false;
-
-  ok |= Profile::Get(ProfileKeys::StratuxHorizontalRange, settings.hrange);
-  ok |= Profile::Get(ProfileKeys::StratuxVerticalRange, settings.vrange);
-
-  if (!ok) {
-    settings.hrange = 20000;
-    settings.vrange = 2000;
+  const char *hrange = Profile::Get(ProfileKeys::StratuxHorizontalRange);
+  if (hrange != nullptr && !StringIsEmpty(hrange)) {
+    settings.hrange = std::atoi(hrange);
+  } else {
+    settings.hrange = 20000; // default
   }
+
+  const char *vrange = Profile::Get(ProfileKeys::StratuxVerticalRange);
+  if (vrange != nullptr && !StringIsEmpty(vrange)) {
+    settings.vrange = std::atoi(vrange);
+  } else {
+    settings.vrange = 2000; // default
+  }
+}
+
+void
+SaveToProfile(StratuxDevice::StratuxSettings &settings) noexcept
+{
+    Profile::Set(ProfileKeys::StratuxHorizontalRange, settings.hrange);
+    Profile::Set(ProfileKeys::StratuxVerticalRange, settings.vrange);
 }
 
 using std::string_view_literals::operator""sv;
