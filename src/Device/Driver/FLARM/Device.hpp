@@ -51,6 +51,13 @@ public:
                    OperationEnvironment &env);
 
   /**
+   * Request an array of settings from FLARM.
+   * 
+   * @return true if successful.
+   */
+  bool RequestAllSettings(const char* const* settings, OperationEnvironment &env);
+
+  /**
    * Request a setting from the FLARM.  The FLARM will send the value,
    * but this method will not wait for that.
    *
