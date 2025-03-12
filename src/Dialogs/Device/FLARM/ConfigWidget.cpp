@@ -15,11 +15,11 @@ FlarmHardware hardware;
 
 static const char *const flarm_setting_names[] = {
   "BAUD",
-  "PRIV",
   "THRE",
   "RANGE",
   "ACFT",
   "LOGINT",
+  "PRIV",
   "NOTRACK",
   NULL
 };
@@ -63,7 +63,6 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     device.RequestAllSettings(adsb_setting_names, env);
 
   baud = GetUnsignedValue(device, "BAUD", 2);
-  priv = GetUnsignedValue(device, "PRIV", 0) == 1;
   thre = GetUnsignedValue(device, "THRE", 2);
   range = GetUnsignedValue(device, "RANGE", 3000);
   vrange = GetUnsignedValue(device, "VRANGE", 500);
@@ -73,6 +72,7 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   adsb_vrange = GetUnsignedValue(device, "ADSBVRANGE", 65535);
   acft = GetUnsignedValue(device, "ACFT", 0);
   log_int = GetUnsignedValue(device, "LOGINT", 2);
+  priv = GetUnsignedValue(device, "PRIV", 0) == 1;
   notrack = GetUnsignedValue(device, "NOTRACK", 0) == 1;
 
   static constexpr StaticEnumChoice baud_list[] = {
@@ -85,7 +85,6 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   };
 
   AddEnum(_("Baud rate"), NULL, baud_list, baud);
-  AddBoolean(_("Stealth mode"), NULL, priv);
   AddInteger(_("Threshold"), NULL, _T("%d m/s"), _T("%d"), 1, 10, 1, thre);
   AddInteger(_("Range"), NULL, _T("%d m"), _T("%d"), 2000, 25500, 250, range);
 
@@ -121,6 +120,7 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddEnum(_("Type"), NULL, acft_list, acft);
   AddInteger(_("Logger interval"), NULL, _T("%d s"), _T("%d"),
              1, 8, 1, log_int);
+  AddBoolean(_("Stealth mode"), NULL, priv);
   AddBoolean(_("No tracking mode"), NULL, notrack);
 
 }
@@ -135,12 +135,6 @@ try {
   if (SaveValueEnum(Baud, baud)) {
     buffer.UnsafeFormat("%u", baud);
     device.SendSetting("BAUD", buffer, env);
-    changed = true;
-  }
-
-  if (SaveValue(Priv, priv)) {
-    buffer.UnsafeFormat("%u", priv);
-    device.SendSetting("PRIV", buffer, env);
     changed = true;
   }
 
@@ -195,6 +189,12 @@ try {
   if (SaveValueInteger(LogInt, log_int)) {
     buffer.UnsafeFormat("%u", log_int);
     device.SendSetting("LOGINT", buffer, env);
+    changed = true;
+  }
+
+  if (SaveValue(Priv, priv)) {
+    buffer.UnsafeFormat("%u", priv);
+    device.SendSetting("PRIV", buffer, env);
     changed = true;
   }
 
