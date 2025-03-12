@@ -9,7 +9,6 @@
 #include "Language/Language.hpp"
 #include "Operation/Cancelled.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
-#include "system/Sleep.h"
 
 static const char *const flarm_setting_names[] = {
   "BAUD",
@@ -22,28 +21,6 @@ static const char *const flarm_setting_names[] = {
   NULL
 };
 
-[[gnu::pure]]
-static bool
-SettingExists(FlarmDevice &device, const char *name) noexcept
-{
-  return (bool)device.GetSetting(name);
-}
-
-/**
- * Wait for a setting to be received from the FLARM.
- */
-static bool
-WaitForSetting(FlarmDevice &device, const char *name, unsigned timeout_ms)
-{
-  for (unsigned i = 0; i < timeout_ms / 100; ++i) {
-    if (SettingExists(device, name))
-      return true;
-    Sleep(100);
-  }
-
-  return false;
-}
-
 static bool
 RequestAllSettings(FlarmDevice &device)
 {
@@ -54,7 +31,7 @@ RequestAllSettings(FlarmDevice &device)
       device.RequestSetting(*i, env);
 
     for (auto i = flarm_setting_names; *i != NULL; ++i)
-      WaitForSetting(device, *i, 500);
+      device.WaitForSetting(*i, 500);
   } catch (OperationCancelled) {
     return false;
   } catch (...) {
