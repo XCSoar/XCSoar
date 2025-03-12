@@ -680,6 +680,7 @@ DeviceListWidget::ManageCurrent()
     ManageCAI302Dialog(UIGlobals::GetMainWindow(), look, *device);
   else if (descriptor.IsDriver(_T("FLARM"))) {
     FlarmVersion version;
+    FlarmHardware hardware;
 
     {
       const std::lock_guard lock{device_blackboard.mutex};
@@ -687,7 +688,7 @@ DeviceListWidget::ManageCurrent()
       version = basic.flarm.version;
     }
 
-    ManageFlarmDialog(*device, version);
+    ManageFlarmDialog(*device, version, hardware);
   } else if (descriptor.IsDriver(_T("LX"))) {
     DeviceInfo info, secondary_info;
 
