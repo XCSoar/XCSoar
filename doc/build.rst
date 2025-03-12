@@ -244,27 +244,35 @@ Use one of the following targets:
 ``WIN64`` Windows x64 (amd64 / x86-64)
 ========= ============================
 
-Compiling for iOS and macOS
+Compiling for iOS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On macOS, the following tools are required:
+To compile for iOS, you need a Mac with Xcode (at least the Command Line Tools) installed.
 
-- png2icns from `libicns <http://icns.sourceforge.net>`__ to build for
-  macOS
+Install the required Homebrew packages via the provisioning script::
 
-- `dpkg <https://alioth.debian.org/projects/dpkg>`__ to build the iOS
-  IPA package
+  ./ide/provisioning/install-darwin-packages.sh BASE IOS
 
-- `mkisofs <http://cdrecord.org/private/cdrecord.html>`__ to build the
-  macOS DMG package
+Note that you always need to install the BASE packages and the specific IOS or MACOS packages.
 
 To compile for iOS / AArch64, run::
 
   make TARGET=IOS64 ipa
 
+To compile with the iOS simulator SDK, run::
+
+  make TARGET=IOS64SIM ipa
+
 To compile for iOS / ARMv7, run::
 
   make TARGET=IOS32 ipa
+
+Compiling for macOS (with Homebrew)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Install the required Homebrew packages via the provisioning script::
+
+  ./ide/provisioning/install-darwin-packages.sh MACOS
 
 To compile for macOS / ARM64, run::
 
@@ -274,32 +282,17 @@ To compile for macOS / x86_64, run::
 
   make TARGET=OSX64 dmg
 
-Compiling for macOS (with Homebrew)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Debugging for iOS and macOS
 
-Install the required Homebrew packages::
-
-  brew install \
-    automake autoconf libtool \
-    pkg-config \
-    quilt \
-    librsvg \
-    imagemagick gettext sox \
-    fmt \
-    sdl2 \
-    libsodium \
-    freetype \
-    libpng libjpeg-turbo \
-    libtiff libgeotiff proj \
-    c-ares \
-    curl \
-    lua \
-    libicns \
-    cdrtools
-
-Then compile::
-
-  make dmg
+Debugging under iOS and macOS is possible using the LLDB debugger.
+To make this convenient, Xcode or Visual Studio can be used.
+An example Xcode project is provided in `darwin/XCSoar.xcodeproj`. 
+It includes one target for iOS and macOS and will automatically build 
+the XCSoar binary for the selected device target, using the build
+helper script `darwin/build.sh`.
+For iOS debugging with Visual Studio Code, the `iOS Debug`
+extension (https://github.com/nisargjhaveri/vscode-ios-debug) can be used.
+Note that this also requires an Xcode installation.
 
 Compiling on the Raspberry Pi 4
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
