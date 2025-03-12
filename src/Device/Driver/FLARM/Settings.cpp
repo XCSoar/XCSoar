@@ -25,6 +25,26 @@ FlarmDevice::SendSetting(const char *name, const char *value,
   Send(buffer, env);
 }
 
+bool
+FlarmDevice::RequestAllSettings(const char* const* settings, 
+                                OperationEnvironment &env)
+{
+  try {
+    for (auto i = settings; *i != NULL; ++i)
+      FlarmDevice::RequestSetting(*i, env);
+
+    for (auto i = settings; *i != NULL; ++i)
+      FlarmDevice::WaitForSetting(*i, 500);
+  } catch (OperationCancelled) {
+    return false;
+  } catch (...) {
+    env.SetError(std::current_exception());
+    return false;
+  }
+
+  return true;
+}
+
 void
 FlarmDevice::RequestSetting(const char *name, OperationEnvironment &env)
 {

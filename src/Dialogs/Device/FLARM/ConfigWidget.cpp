@@ -21,27 +21,6 @@ static const char *const flarm_setting_names[] = {
   NULL
 };
 
-static bool
-RequestAllSettings(FlarmDevice &device, const char* const* settings)
-{
-  PopupOperationEnvironment env;
-
-  try {
-    for (auto i = settings; *i != NULL; ++i)
-      device.RequestSetting(*i, env);
-
-    for (auto i = settings; *i != NULL; ++i)
-      device.WaitForSetting(*i, 500);
-  } catch (OperationCancelled) {
-    return false;
-  } catch (...) {
-    env.SetError(std::current_exception());
-    return false;
-  }
-
-  return true;
-}
-
 static unsigned
 GetUnsignedValue(const FlarmDevice &device, const char *name,
                  unsigned default_value)
@@ -60,7 +39,8 @@ void
 FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                            [[maybe_unused]] const PixelRect &rc) noexcept
 {
-  RequestAllSettings(device, flarm_setting_names);
+  PopupOperationEnvironment env; 
+  device.RequestAllSettings(flarm_setting_names, env);
 
   baud = GetUnsignedValue(device, "BAUD", 2);
   priv = GetUnsignedValue(device, "PRIV", 0) == 1;
