@@ -11,7 +11,6 @@ struct FlarmHardware;
 class FLARMConfigWidget final : public RowFormWidget {
   enum Controls {
     Baud,
-    Priv,
     Thre,
     Range,
     VRange,
@@ -21,6 +20,7 @@ class FLARMConfigWidget final : public RowFormWidget {
     ADSBVrange,
     Acft,
     LogInt,
+    Priv,
     NoTrack,
   };
 
