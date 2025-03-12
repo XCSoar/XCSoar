@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "ConfigWidget.hpp"
+#include "RangeConfigWidget.hpp"
 #include "Dialogs/Error.hpp"
 #include "Device/Driver/FLARM/Device.hpp"
 #include "FLARM/Traffic.hpp"
@@ -10,30 +11,18 @@
 #include "Operation/Cancelled.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 #include "FLARM/Hardware.hpp"
+#include "UIGlobals.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 
 FlarmHardware hardware;
 
 static const char *const flarm_setting_names[] = {
   "BAUD",
   "THRE",
-  "RANGE",
   "ACFT",
   "LOGINT",
   "PRIV",
   "NOTRACK",
-  NULL
-};
-
-static const char *const pf_setting_names[] = {
-  "VRANGE",
-  NULL
-};
-
-static const char *const adsb_setting_names[] = {
-  "PCASRANGE",
-  "PCASVRANGE",
-  "ADSBRANGE",
-  "ADSBVRANGE",
   NULL
 };
 
@@ -43,15 +32,9 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 {
   PopupOperationEnvironment env; 
   device.RequestAllSettings(flarm_setting_names, env);
-  if (hardware.isPowerFlarm())
-    device.RequestAllSettings(pf_setting_names, env);
-  if (hardware.hasADSB())
-    device.RequestAllSettings(adsb_setting_names, env);
 
   baud = device.GetUnsignedValue("BAUD", 2);
   thre = device.GetUnsignedValue("THRE", 2);
-  unsigned max_range = hardware.isPowerFlarm() ? 65535 : 25500;
-  range = device.GetUnsignedValue("RANGE", max_range);
   acft = device.GetUnsignedValue("ACFT", 0);
   log_int = device.GetUnsignedValue("LOGINT", 2);
   priv = device.GetUnsignedValue("PRIV", 0) == 1;
@@ -68,22 +51,6 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 
   AddEnum(_("Baud rate"), NULL, baud_list, baud);
   AddInteger(_("Threshold"), NULL, _T("%d m/s"), _T("%d"), 1, 10, 1, thre);
-  AddInteger(_("Range"), NULL, _T("%d m"), _T("%d"), 2000, max_range, 250, range);
-
-  if (hardware.isPowerFlarm()) {
-    vrange = device.GetUnsignedValue("VRANGE", 500);
-    AddInteger(_("Vertical range"), NULL, _T("%d m"), _T("%d"), 100, 2000, 100, vrange);
-  }
-  if (hardware.hasADSB()) {
-    pcas_range = device.GetUnsignedValue("PCASRANGE", 7408);
-    pcas_vrange = device.GetUnsignedValue("PCASVRANGE", 610);
-    adsb_range = device.GetUnsignedValue("ADSBRANGE", 65535);
-    adsb_vrange = device.GetUnsignedValue("ASBVRANGE", 65535);
-    AddInteger(_("PCAS range"), NULL, _T("%d m"), _T("%d"), 500, 9260, 500, pcas_range);
-    AddInteger(_("PCAS vertical range"), NULL, _T("%d m"), _T("%d"), 250, 65535, 250, pcas_vrange);
-    AddInteger(_("ADSB range"), NULL, _T("%d m"), _T("%d"), 500, 65535, 500, adsb_range);
-    AddInteger(_("ADSB vertical range"), NULL, _T("%d m"), _T("%d"), 250, 65535, 250, adsb_vrange);
-  }
 
   static constexpr StaticEnumChoice acft_list[] = {
     { FlarmTraffic::AircraftType::UNKNOWN, N_("Unknown") },
@@ -110,6 +77,11 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddBoolean(_("Stealth mode"), NULL, priv);
   AddBoolean(_("No tracking mode"), NULL, notrack);
 
+  AddButton(_("Range setup"), [this](){
+    FLARMRangeConfigWidget widget(GetLook(), device, hardware);
+    DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
+                        _T("FLARM range setup"), widget);
+  });
 }
 
 bool
@@ -129,46 +101,6 @@ try {
     buffer.UnsafeFormat("%u", thre);
     device.SendSetting("THRE", buffer, env);
     changed = true;
-  }
-
-  if (SaveValueInteger(Range, range)) {
-    buffer.UnsafeFormat("%u", range);
-    device.SendSetting("RANGE", buffer, env);
-    changed = true;
-  }
-
-  if (hardware.hasADSB()) {
-    if (SaveValueInteger(VRange, vrange)) {
-      buffer.UnsafeFormat("%u", vrange);
-      device.SendSetting("VRANGE", buffer, env);
-      changed = true;
-    }
-  }
-
-  if (hardware.hasADSB()) {
-    if (SaveValueInteger(PCASRange, pcas_range)) {
-      buffer.UnsafeFormat("%u", pcas_range);
-      device.SendSetting("PCASRANGE", buffer, env);
-      changed = true;
-    }
-
-    if (SaveValueInteger(PCASVRange, pcas_vrange)) {
-      buffer.UnsafeFormat("%u", pcas_vrange);
-      device.SendSetting("PCASVRANGE", buffer, env);
-      changed = true;
-    }
-
-    if (SaveValueInteger(ADSBRange, adsb_range)) {
-      buffer.UnsafeFormat("%u", adsb_range);
-      device.SendSetting("ADSBRANGE", buffer, env);
-      changed = true;
-    }
-
-    if (SaveValueInteger(ADSBVrange, adsb_vrange)) {
-      buffer.UnsafeFormat("%u", adsb_vrange);
-      device.SendSetting("ADSBVRANGE", buffer, env);
-      changed = true;
-    }
   }
 
   if (SaveValueEnum(Acft, acft)) {
