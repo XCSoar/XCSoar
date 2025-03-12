@@ -8,6 +8,8 @@
 #include <forward_list>
 #include <cassert>
 
+#include "Apple/Helpers.hpp"
+
 class WndForm;
 
 namespace UI {
@@ -90,6 +92,15 @@ public:
    */
   [[gnu::pure]]
   bool FilterEvent(const Event &event, Window *allowed) const noexcept;
+  
+  [[gnu::pure]]
+  const PixelRect GetClientRect() const noexcept override {
+    PixelRect size = ContainerWindow::GetClientRect();
+    SafeAreaInsets safeAreaInsets = getSafeAreaInsets();
+    size.top += safeAreaInsets.top;
+    size.bottom -= safeAreaInsets.bottom;
+    return size;
+  }
 
 protected:
   bool OnClose() noexcept override;
