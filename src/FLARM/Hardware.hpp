@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "FLARM/Id.hpp"
 #include "NMEA/Validity.hpp"
 #include "util/StaticString.hxx"
 
@@ -16,6 +17,7 @@ struct FlarmHardware {
 
   NarrowString<32> device_type;
   NarrowString<64> capabilities;
+  FlarmId radio_id;
 
   bool isPowerFlarm() noexcept {
     return device_type.Contains("PowerFLARM");
