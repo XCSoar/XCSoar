@@ -22,15 +22,15 @@ static const char *const flarm_setting_names[] = {
 };
 
 static bool
-RequestAllSettings(FlarmDevice &device)
+RequestAllSettings(FlarmDevice &device, const char* const* settings)
 {
   PopupOperationEnvironment env;
 
   try {
-    for (auto i = flarm_setting_names; *i != NULL; ++i)
+    for (auto i = settings; *i != NULL; ++i)
       device.RequestSetting(*i, env);
 
-    for (auto i = flarm_setting_names; *i != NULL; ++i)
+    for (auto i = settings; *i != NULL; ++i)
       device.WaitForSetting(*i, 500);
   } catch (OperationCancelled) {
     return false;
@@ -60,7 +60,7 @@ void
 FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                            [[maybe_unused]] const PixelRect &rc) noexcept
 {
-  RequestAllSettings(device);
+  RequestAllSettings(device, flarm_setting_names);
 
   baud = GetUnsignedValue(device, "BAUD", 2);
   priv = GetUnsignedValue(device, "PRIV", 0) == 1;
