@@ -53,6 +53,7 @@ Look::InitialiseConfigured(const UISettings &settings,
                    infobox_width,
                    info_box.title_font);
   wind_arrow_info_box.Initialise(map_bold_font, dark_mode);
+  next_arrow_info_box.Initialise(map_bold_font, settings.info_boxes.use_colors, dark_mode);
   flarm_gauge.Initialise(traffic, true, dark_mode);
   flarm_dialog.Initialise(traffic, false, dark_mode);
   thermal_assistant_dialog.Initialise(false, dark_mode);
