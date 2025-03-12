@@ -60,6 +60,21 @@ public:
   void RequestSetting(const char *name, OperationEnvironment &env);
 
   /**
+   * Wait for FLARM to send a setting.
+   * @timeout the timeout in milliseconds.
+   *
+   * @return true if the settings were received, false if a timeout occured.
+   */
+  bool WaitForSetting(const char *name, unsigned int timeout_ms);
+
+  /**
+   * Check if setting exists
+   * 
+   * @return true if setting exists
+   */
+  bool SettingExists(const char *name) noexcept;
+
+  /**
    * Look up the given setting in the table of received values.  The
    * first element is a "found" flag, and if that is true, the second
    * element is the value.
