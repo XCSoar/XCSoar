@@ -32,15 +32,15 @@ endif
 
 IOS_GRAPHICS = \
 	$(IOS_GRAPHICS_DIR)/Assets.car \
-	$(IOS_GRAPHICS_DIR)/AppIcon60x60@2x.png \
-	$(IOS_GRAPHICS_DIR)/AppIcon76x76@2x~ipad.png \
 	$(IOS_GRAPHICS_DIR)/LaunchScreen.storyboardc
 
 $(IOS_GRAPHICS_DIR)/Assets.car: $(topdir)/Data/iOS/Assets.xcassets
 # will also generate $(IOS_GRAPHICS_DIR)/AppIcon%.png, but can't combine implicit and explicit rules
+	mkdir -p $(IOS_GRAPHICS_DIR)
 	xcrun actool $< --compile $(dir $@) --platform iphoneos --minimum-deployment-target 8.0 --app-icon AppIcon --output-partial-info-plist $(IOS_GRAPHICS_DIR)/assets-partial.plist
 
 $(IOS_GRAPHICS_DIR)/LaunchScreen.storyboardc: $(topdir)/Data/iOS/LaunchScreen.storyboard
+	mkdir -p $(IOS_GRAPHICS_DIR)
 	ibtool $< --compile $@
 
 HOST_MACOS_VERSION = $(shell sw_vers -buildVersion)
@@ -83,7 +83,7 @@ $(TARGET_OUTPUT_DIR)/$(IPA_NAME): $(TARGET_BIN_DIR)/xcsoar $(TARGET_OUTPUT_DIR)/
 	$(Q)$(MKDIR) -p $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
 	$(Q)cp $(TARGET_BIN_DIR)/xcsoar $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)/XCSoar
 	$(Q)cp $(TARGET_OUTPUT_DIR)/Info.plist $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
-	$(Q)cp -r $(IOS_GRAPHICS) $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
+	$(Q)cp -r $(IOS_GRAPHICS_DIR)/. $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
 	$(Q)cd $(IPA_TMPDIR) && $(ZIP) -r ../$(IPA_NAME) ./*
 
 ipa: $(TARGET_OUTPUT_DIR)/$(IPA_NAME)
