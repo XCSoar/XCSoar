@@ -8,25 +8,23 @@
 class FlarmDevice;
 struct FlarmHardware;
 
-class FLARMConfigWidget final : public RowFormWidget {
+class FLARMRangeConfigWidget final : public RowFormWidget {
   enum Controls {
-    Baud,
-    Thre,
-    Acft,
-    LogInt,
-    Priv,
-    NoTrack,
+    Range,
+    VRange,
+    PCASRange,
+    PCASVRange,
+    ADSBRange,
+    ADSBVrange,
   };
 
   FlarmDevice &device;
   FlarmHardware &hardware;
 
-  unsigned baud, thre, acft, log_int;
-
-  bool priv, notrack;
+  unsigned range, vrange, pcas_range, pcas_vrange, adsb_range, adsb_vrange;
 
 public:
-  FLARMConfigWidget(const DialogLook &look, FlarmDevice &_device, FlarmHardware &_hardware)
+  FLARMRangeConfigWidget(const DialogLook &look, FlarmDevice &_device, FlarmHardware &_hardware)
     :RowFormWidget(look), device(_device), hardware(_hardware) {}
 
   /* virtual methods from Widget */
