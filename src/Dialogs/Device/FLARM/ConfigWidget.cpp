@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "ConfigWidget.hpp"
+#include "RangeConfigWidget.hpp"
 #include "Dialogs/Error.hpp"
 #include "Device/Driver/FLARM/Device.hpp"
 #include "FLARM/Traffic.hpp"
@@ -9,61 +10,21 @@
 #include "Language/Language.hpp"
 #include "Operation/Cancelled.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
-#include "system/Sleep.h"
+#include "FLARM/Hardware.hpp"
+#include "UIGlobals.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+
+FlarmHardware hardware;
 
 static const char *const flarm_setting_names[] = {
   "BAUD",
-  "PRIV",
   "THRE",
-  "RANGE",
   "ACFT",
   "LOGINT",
+  "PRIV",
   "NOTRACK",
   NULL
 };
-
-[[gnu::pure]]
-static bool
-SettingExists(FlarmDevice &device, const char *name) noexcept
-{
-  return (bool)device.GetSetting(name);
-}
-
-/**
- * Wait for a setting to be received from the FLARM.
- */
-static bool
-WaitForSetting(FlarmDevice &device, const char *name, unsigned timeout_ms)
-{
-  for (unsigned i = 0; i < timeout_ms / 100; ++i) {
-    if (SettingExists(device, name))
-      return true;
-    Sleep(100);
-  }
-
-  return false;
-}
-
-static bool
-RequestAllSettings(FlarmDevice &device)
-{
-  PopupOperationEnvironment env;
-
-  try {
-    for (auto i = flarm_setting_names; *i != NULL; ++i)
-      device.RequestSetting(*i, env);
-
-    for (auto i = flarm_setting_names; *i != NULL; ++i)
-      WaitForSetting(device, *i, 500);
-  } catch (OperationCancelled) {
-    return false;
-  } catch (...) {
-    env.SetError(std::current_exception());
-    return false;
-  }
-
-  return true;
-}
 
 static unsigned
 GetUnsignedValue(const FlarmDevice &device, const char *name,
@@ -83,14 +44,14 @@ void
 FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                            [[maybe_unused]] const PixelRect &rc) noexcept
 {
-  RequestAllSettings(device);
+  PopupOperationEnvironment env; 
+  device.RequestAllSettings(flarm_setting_names, env);
 
   baud = GetUnsignedValue(device, "BAUD", 2);
-  priv = GetUnsignedValue(device, "PRIV", 0) == 1;
   thre = GetUnsignedValue(device, "THRE", 2);
-  range = GetUnsignedValue(device, "RANGE", 3000);
   acft = GetUnsignedValue(device, "ACFT", 0);
   log_int = GetUnsignedValue(device, "LOGINT", 2);
+  priv = GetUnsignedValue(device, "PRIV", 0) == 1;
   notrack = GetUnsignedValue(device, "NOTRACK", 0) == 1;
 
   static constexpr StaticEnumChoice baud_list[] = {
@@ -103,9 +64,7 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   };
 
   AddEnum(_("Baud rate"), NULL, baud_list, baud);
-  AddBoolean(_("Stealth mode"), NULL, priv);
   AddInteger(_("Threshold"), NULL, _T("%d m/s"), _T("%d"), 1, 10, 1, thre);
-  AddInteger(_("Range"), NULL, _T("%d m"), _T("%d"), 2000, 25500, 250, range);
 
   static constexpr StaticEnumChoice acft_list[] = {
     { FlarmTraffic::AircraftType::UNKNOWN, N_("Unknown") },
@@ -129,8 +88,14 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddEnum(_("Type"), NULL, acft_list, acft);
   AddInteger(_("Logger interval"), NULL, _T("%d s"), _T("%d"),
              1, 8, 1, log_int);
+  AddBoolean(_("Stealth mode"), NULL, priv);
   AddBoolean(_("No tracking mode"), NULL, notrack);
 
+  AddButton(_("Range setup"), [this](){
+    FLARMRangeConfigWidget widget(GetLook(), device, hardware);
+    DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
+                        _T("FLARM range setup"), widget);
+  });
 }
 
 bool
@@ -146,21 +111,9 @@ try {
     changed = true;
   }
 
-  if (SaveValue(Priv, priv)) {
-    buffer.UnsafeFormat("%u", priv);
-    device.SendSetting("PRIV", buffer, env);
-    changed = true;
-  }
-
   if (SaveValueInteger(Thre, thre)) {
     buffer.UnsafeFormat("%u", thre);
     device.SendSetting("THRE", buffer, env);
-    changed = true;
-  }
-
-  if (SaveValueInteger(Range, range)) {
-    buffer.UnsafeFormat("%u", range);
-    device.SendSetting("RANGE", buffer, env);
     changed = true;
   }
 
@@ -173,6 +126,12 @@ try {
   if (SaveValueInteger(LogInt, log_int)) {
     buffer.UnsafeFormat("%u", log_int);
     device.SendSetting("LOGINT", buffer, env);
+    changed = true;
+  }
+
+  if (SaveValue(Priv, priv)) {
+    buffer.UnsafeFormat("%u", priv);
+    device.SendSetting("PRIV", buffer, env);
     changed = true;
   }
 

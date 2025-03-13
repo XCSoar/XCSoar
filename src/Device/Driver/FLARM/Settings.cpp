@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Device.hpp"
+#include "system/Sleep.h"
 
 #include <stdio.h>
 
@@ -24,12 +25,51 @@ FlarmDevice::SendSetting(const char *name, const char *value,
   Send(buffer, env);
 }
 
+bool
+FlarmDevice::RequestAllSettings(const char* const* settings, 
+                                OperationEnvironment &env)
+{
+  try {
+    for (auto i = settings; *i != NULL; ++i)
+      FlarmDevice::RequestSetting(*i, env);
+
+    for (auto i = settings; *i != NULL; ++i)
+      FlarmDevice::WaitForSetting(*i, 500);
+  } catch (OperationCancelled) {
+    return false;
+  } catch (...) {
+    env.SetError(std::current_exception());
+    return false;
+  }
+
+  return true;
+}
+
 void
 FlarmDevice::RequestSetting(const char *name, OperationEnvironment &env)
 {
   char buffer[64];
   sprintf(buffer, "PFLAC,R,%s", name);
   Send(buffer, env);
+}
+
+bool
+FlarmDevice::WaitForSetting(const char *name, unsigned timeout_ms)
+{
+  for (unsigned i = 0; i < timeout_ms / 100; ++i) {
+    if (FlarmDevice::SettingExists(name))
+      return true;
+    Sleep(100);
+  }
+
+  return false;
+}
+
+[[gnu::pure]]
+bool
+FlarmDevice::SettingExists(const char *name) noexcept
+{
+  return (bool)FlarmDevice::GetSetting(name);
 }
 
 std::optional<std::string>
