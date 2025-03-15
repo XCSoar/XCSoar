@@ -19,7 +19,9 @@ enum ControlIndex {
   EnableThermalProfile,
   FinalGlideBarDisplayModeControl,
   EnableFinalGlideBarMC0,
-  EnableVarioBar
+  EnableVarioBar,
+  SPACER,
+  NavigatorWidgetHeight
 };
 
 static constexpr StaticEnumChoice final_glide_bar_display_mode_list[] = {
@@ -160,6 +162,19 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent,
              map_settings.vario_bar_enabled);
 
   SetExpertRow(EnableVarioBar);
+
+  AddSpacer();
+  SetExpertRow(SPACER);
+
+  AddInteger(
+    _("Navigator Widget Height"),
+    _("Select the height of the navigator topwidget (percentage of the main window).\n"
+      "This widget is set under the settings menu: Look / Pages / Top Area\n"
+      "Warning: an unsuitable height of the navigator widget could lead to a bad presentation of its included flight informations (e.g. name of waypoint, times, ...).\n"
+      "to be setted accordingly to the size of the screen device.\n"),
+    _T("%u %%"), _T("%u"), 1, 40, 1,
+    (unsigned)ui_settings.navigator.navigator_height); //settings.min_frequency
+  SetExpertRow(NavigatorWidgetHeight);
 }
 
 bool
@@ -194,6 +209,11 @@ GaugesConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValue(EnableVarioBar, ProfileKeys::EnableVarioBar,
                        map_settings.vario_bar_enabled);
+
+  if ((changed |= SaveValueInteger(NavigatorWidgetHeight, ProfileKeys::NavigatorHeight,
+                                   ui_settings.navigator.navigator_height)))
+    CommonInterface::main_window->ReinitialiseLayout();
+
   _changed |= changed;
 
   return true;
