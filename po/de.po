@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-11 17:31+0000\n"
+"POT-Creation-Date: 2025-03-21 20:58+0000\n"
 "PO-Revision-Date: 2024-09-25 08:15+0000\n"
 "Last-Translator: Jörg Schuon <schuongf@hotmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/xcsoar/"
@@ -798,7 +798,7 @@ msgid "Not Circling"
 msgstr "Kein Kreisflug"
 
 #: src/Gauge/BigThermalAssistantWidget.cpp:56
-#: src/Gauge/BigTrafficWidget.cpp:583 src/Dialogs/FileManager.cpp:747
+#: src/Gauge/BigTrafficWidget.cpp:614 src/Dialogs/FileManager.cpp:747
 #: src/Dialogs/Device/DeviceListDialog.cpp:769
 #: src/Dialogs/Device/PortMonitor.cpp:166
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:139
@@ -838,11 +838,11 @@ msgstr "Kein Kreisflug"
 msgid "Close"
 msgstr "Schließen"
 
-#: src/Gauge/FlarmTrafficWindow.cpp:209
+#: src/Gauge/FlarmTrafficWindow.cpp:210
 msgid "No Traffic"
 msgstr "Kein Verkehr"
 
-#: src/Gauge/BigTrafficWidget.cpp:284 src/Gauge/BigTrafficWidget.cpp:285
+#: src/Gauge/BigTrafficWidget.cpp:315 src/Gauge/BigTrafficWidget.cpp:316
 #: src/Renderer/MapItemListRenderer.cpp:356
 #: src/Dialogs/Device/DeviceListDialog.cpp:421
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:18
@@ -853,7 +853,7 @@ msgstr "Kein Verkehr"
 msgid "Vario"
 msgstr "Vario"
 
-#: src/Gauge/BigTrafficWidget.cpp:363 src/Renderer/MapItemListRenderer.cpp:59
+#: src/Gauge/BigTrafficWidget.cpp:394 src/Renderer/MapItemListRenderer.cpp:59
 #: src/Renderer/MapItemListRenderer.cpp:65
 #: src/Renderer/WaypointListRenderer.cpp:134
 #: src/Renderer/FlightStatisticsRenderer.cpp:208
@@ -870,17 +870,17 @@ msgstr "Vario"
 msgid "Distance"
 msgstr "Distanz"
 
-#: src/Gauge/BigTrafficWidget.cpp:407 src/Gauge/BigTrafficWidget.cpp:409
+#: src/Gauge/BigTrafficWidget.cpp:438 src/Gauge/BigTrafficWidget.cpp:440
 msgid "Rel. Alt."
 msgstr "rel. Höhe."
 
-#: src/Gauge/BigTrafficWidget.cpp:580 src/Dialogs/MapItemListDialog.cpp:144
+#: src/Gauge/BigTrafficWidget.cpp:611 src/Dialogs/MapItemListDialog.cpp:144
 #: src/Dialogs/Airspace/AirspaceList.cpp:130
 #: src/Dialogs/Traffic/TrafficList.cpp:345
 #: src/Dialogs/Waypoint/WaypointList.cpp:211
 #: src/Dialogs/Task/TaskPointDialog.cpp:220
 #: src/Dialogs/Task/AlternatesListDialog.cpp:108
-#: src/Dialogs/Weather/NOAAList.cpp:97 src/InfoBoxes/Content/Task.cpp:50
+#: src/Dialogs/Weather/NOAAList.cpp:97 src/InfoBoxes/Content/Task.cpp:51
 #, no-c-format
 msgid "Details"
 msgstr "Details"
@@ -1827,7 +1827,7 @@ msgid "Warning"
 msgstr "Warnung"
 
 #. TODO feature: Show the user what the batt status is.
-#: src/BatteryTimer.cpp:49
+#: src/BatteryTimer.cpp:53
 msgid "Battery low"
 msgstr "Batteriestand niedrig"
 
@@ -2191,8 +2191,8 @@ msgstr "Aktiviere dies, wenn Du ein K6Bt angeschlossen hast."
 #: src/Dialogs/Plane/PlaneListDialog.cpp:133
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:270
 #: src/Dialogs/Waypoint/Manager.cpp:101 src/InfoBoxes/Content/MacCready.cpp:30
-#: src/InfoBoxes/Content/Weather.cpp:87 src/InfoBoxes/Content/Radio.cpp:45
-#: src/InfoBoxes/Content/Radio.cpp:50
+#: src/InfoBoxes/Content/Weather.cpp:87 src/InfoBoxes/Content/Radio.cpp:70
+#: src/InfoBoxes/Content/Radio.cpp:75
 #, no-c-format
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -6495,12 +6495,12 @@ msgstr ""
 "versucht die Aufgabe in der vorgegebenen Mininimum-Zeit plus dieser "
 "Zusatzzeit zu beenden."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:73
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:75
 #, no-c-format
 msgid "Disable contest calculations"
 msgstr "Contest Berechnungen abschalten"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:75
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:77
 #, no-c-format
 msgid ""
 "Conforms to FAI triangle rules. Three turns and common start and finish. No "
@@ -6512,7 +6512,7 @@ msgstr ""
 "mit Ausnahme bei Aufgaben über 500km: Es darf kein Schenkel kleiner 25%, "
 "oder größer als 45% sein."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:78
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:80
 #, no-c-format
 msgid ""
 "Up to seven points including start and finish, finish height must not be "
@@ -6521,12 +6521,12 @@ msgstr ""
 "Bis zu sieben Punkte einschließlich Abflug und Ziel, die Ankunftshöhe darf "
 "nicht mehr als 1000 Meter unter der Abflughöhe liegen."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:81
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:83
 #, no-c-format
 msgid "The most recent contest with Sprint task rules."
 msgstr "Der aktuellste Contest mit Sprint Wettbewerbsregeln."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:83
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:85
 #, no-c-format
 msgid ""
 "A combination of Classic and FAI rules. 30% of the FAI score are added to "
@@ -6535,7 +6535,7 @@ msgstr ""
 "eine Kombination aus Classic und FAI Regeln. 30% der FAI Punkte werden zur "
 "Classic Wertung dazu gezählt."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:88
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:90
 #, no-c-format
 msgid ""
 "PG online contest with different track values: Free flight - 1 km = 1.0 "
@@ -6544,7 +6544,7 @@ msgstr ""
 "Gleitschirm-Contest mit anderer Wertung pro 1 km: Freier Flug = 1 Punkt; "
 "Dreieck = 1.2 Punkte; FAI Dreieck = 1,4 Punkte."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:91
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:93
 #, no-c-format
 msgid ""
 "European PG online contest of the DHV organization. Pretty much the same as "
@@ -6554,7 +6554,7 @@ msgstr ""
 "DHV-XC -OLC mit folgender Wertung pro 1 km: Freie Strecke - 1.5 Punkte, "
 "flaches Dreieck - 1,75 Punkte, FAI -Dreieck 2 Punkte."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:94
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:96
 #, no-c-format
 msgid ""
 "Austrian online glider contest. Tracks around max. six waypoints are scored. "
@@ -6565,12 +6565,12 @@ msgstr ""
 "Wegpunkte werden gewertet. Das umschreibende Rechteck mit 1 km = 1.0 Punkten "
 "und den zusätzlichen Zick-Zack Anteil mit 1 km = 0.5 Punkten."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:97
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:99
 #, no-c-format
 msgid "The FFVV NetCoupe \"libre\" competiton."
 msgstr "Der FFVV NetCoupe \"libre\" Wettbewerb."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:99
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:101
 #, no-c-format
 msgid ""
 "WeGlide combines multiple scoring systems in the WeGlide Free contest. The "
@@ -6585,7 +6585,7 @@ msgstr ""
 "grösste FAI-Dreieck und die grösste Out & Return-Distanz, die in die "
 "Flugroute eingebaut werden kann."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:103
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:105
 #, no-c-format
 msgid ""
 "A start point, one turn point and a finish point are chosen from the flight "
@@ -6595,7 +6595,7 @@ msgstr ""
 "Aus der Flugbahn werden ein Startpunkt, ein Wendepunkt und ein Zielpunkt "
 "gewählt so dass der Abstand zwischen Startpunkt und Wendepunkt maximiert wird"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:108
 #, no-c-format
 msgid ""
 "LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance "
@@ -6604,19 +6604,19 @@ msgstr ""
 "LVZC Charron.online, 5 Etappen unter 200 km, 6 Etappen darüber. "
 "Mindestetappendistanz beträgt 20 km, 5 Punkte pro km."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:109
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:111
 msgid "Contest"
 msgstr "Contest"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:110
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:112
 msgid "Select the rules used for calculating optimal points for a contest."
 msgstr "Wähle die Regeln für die Contest Punkteoptimierung."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:113
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:115
 msgid "Predict Contest"
 msgstr "Wertungs-Vorhersage"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:114
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:116
 msgid ""
 "If enabled, then the next task point is included in the score calculation, "
 "assuming that you will reach it."
@@ -6624,21 +6624,33 @@ msgstr ""
 "Wenn aktiviert wird der nächste Wegpunkt in die Punkteberechnung mit "
 "eingeschlossen und angenommen er wird erreicht."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:121
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:123
 msgid "FAI triangle areas"
 msgstr "FAI-Dreieck Gebiete"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:122
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:124
 msgid "Show FAI triangle areas on the map."
 msgstr "Zeige FAI-Dreieck Gebiete auf der Karte."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:126
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:128
 msgid "FAI triangle threshold"
 msgstr "FAI Dreieck - Grenzwert"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:127
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:129
 msgid "Specifies which threshold is used for \"large\" FAI triangles."
 msgstr "Grenzwert für große FAI Dreiecke."
+
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
+#, c-format
+msgid "95% dist. rule helpers"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:138
+msgid ""
+"Show helpers for Argentinean Federation \"95% distance\" rule.The AAT "
+"Distance Around Target infobox will show projected distance vs max. and "
+"change colors as you approach 95%."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:180
 msgid "Terrain display"
@@ -8187,7 +8199,7 @@ msgstr ""
 msgid "Next distance"
 msgstr "Nächster Wegpunkt - Distanz"
 
-#: src/InfoBoxes/Content/Factory.cpp:208 src/InfoBoxes/Content/Task.cpp:165
+#: src/InfoBoxes/Content/Factory.cpp:208 src/InfoBoxes/Content/Task.cpp:166
 #, no-c-format
 msgid "WP Dist"
 msgstr "WP Distanz"
@@ -9899,7 +9911,7 @@ msgstr ""
 "Ankunftshöhe am Endanflug Wegpunkt bei MC0 relativ zur sicheren Ankunftshöhe."
 
 #: src/InfoBoxes/Content/Factory.cpp:1009
-#: src/InfoBoxes/Content/Factory.cpp:1010 src/InfoBoxes/Content/Task.cpp:900
+#: src/InfoBoxes/Content/Factory.cpp:1010 src/InfoBoxes/Content/Task.cpp:929
 #, no-c-format
 msgid "Next arrow"
 msgstr "Nächster Wendepunkt-Pfeil"
@@ -10235,23 +10247,23 @@ msgstr "Block"
 msgid "DOLPHIN"
 msgstr "Delphin"
 
-#: src/InfoBoxes/Content/Task.cpp:115
+#: src/InfoBoxes/Content/Task.cpp:116
 msgid "Next"
 msgstr "WP nächst"
 
-#: src/InfoBoxes/Content/Task.cpp:688
+#: src/InfoBoxes/Content/Task.cpp:717
 msgid "Time Below"
 msgstr "Zeit unter"
 
-#: src/InfoBoxes/Content/Task.cpp:816 src/InfoBoxes/Content/Task.cpp:861
+#: src/InfoBoxes/Content/Task.cpp:845 src/InfoBoxes/Content/Task.cpp:890
 msgid "Closed"
 msgstr "Geschlossen"
 
-#: src/InfoBoxes/Content/Task.cpp:825 src/InfoBoxes/Content/Task.cpp:870
+#: src/InfoBoxes/Content/Task.cpp:854 src/InfoBoxes/Content/Task.cpp:899
 msgid "Open"
 msgstr "Freigegeben"
 
-#: src/InfoBoxes/Content/Task.cpp:830 src/InfoBoxes/Content/Task.cpp:875
+#: src/InfoBoxes/Content/Task.cpp:859 src/InfoBoxes/Content/Task.cpp:904
 msgid "Waiting"
 msgstr "Warte"
 
