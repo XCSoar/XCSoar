@@ -36,6 +36,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Device/Vega/VegaDemoDialog.cpp \
 	$(SRC)/Dialogs/Device/Vega/SwitchesDialog.cpp \
 	$(SRC)/Dialogs/Device/FLARM/ConfigWidget.cpp \
+	$(SRC)/Dialogs/Device/FLARM/RangeConfigWidget.cpp \
 	$(SRC)/Dialogs/MapItemListDialog.cpp \
 	$(SRC)/Dialogs/MapItemListSettingsDialog.cpp \
 	$(SRC)/Dialogs/MapItemListSettingsPanel.cpp \
