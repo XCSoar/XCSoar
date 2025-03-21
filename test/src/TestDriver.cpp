@@ -739,12 +739,19 @@ TestLarus()
   ok1(nmea_info.attitude.heading_available);
   ok1(equals(nmea_info.attitude.heading, 335.5));
 
-  // $PLARB battery voltage
+  // $PLARB battery voltage (version < 0.1.4)
   ok1(device->ParseNMEA("$PLARB,13.00*4D", nmea_info));
   ok1(nmea_info.voltage_available);
   ok1(equals(nmea_info.voltage, 13.0));
 
-  // $PLARV tek vario, av_vario, baro height and speed (tas)
+  // $PLARB battery voltage and temperature (version >= 0.1.4)
+  ok1(device->ParseNMEA("$PLARB,12.33,-23.8*5A", nmea_info));
+  ok1(nmea_info.voltage_available);
+  ok1(equals(nmea_info.voltage, 12.33));
+  ok1(nmea_info.temperature_available);
+  ok1(equals(nmea_info.temperature.ToCelsius(), -23.8));
+
+  // $PLARV tek vario, av_vario, baro height and tas (version < 0.1.4)
   ok1(device->ParseNMEA("$PLARV,1.90,1.96,1284,94*5D", nmea_info));
   ok1(nmea_info.total_energy_vario_available);
   ok1(equals(nmea_info.total_energy_vario, 1.9));
@@ -753,13 +760,24 @@ TestLarus()
   ok1(nmea_info.airspeed_available);
   ok1(equals(nmea_info.true_airspeed, Units::ToSysUnit(94, Unit::KILOMETER_PER_HOUR)));
 
+  // $PLARV tek vario, av_vario, baro height, tas and gload (version >= 0.1.4)
+  ok1(device->ParseNMEA("$PLARV,1.46,2.98,2608,90,002.23*6D", nmea_info));
+  ok1(nmea_info.total_energy_vario_available);
+  ok1(equals(nmea_info.total_energy_vario, 1.46));
+  ok1(nmea_info.pressure_altitude_available);
+  ok1(equals(nmea_info.pressure_altitude, 2608.0));
+  ok1(nmea_info.airspeed_available);
+  ok1(equals(nmea_info.true_airspeed, Units::ToSysUnit(90, Unit::KILOMETER_PER_HOUR)));
+  ok1(nmea_info.acceleration.available);
+  ok1(equals(nmea_info.acceleration.g_load, 2.23));
+
   // $PLARW wind
   ok1(device->ParseNMEA("$PLARW,73,23,A,A*5D", nmea_info));
   ok1(nmea_info.external_wind_available);
   ok1(equals(nmea_info.external_wind.bearing, 73.0));
   ok1(equals(nmea_info.external_wind.norm, Units::ToSysUnit(23, Unit::KILOMETER_PER_HOUR)));
 
-  // $PLARS water ballast, bugs, mc, qnh
+  // $PLARS water ballast, bugs, mc, qnh, cir
   ok1(device->ParseNMEA("$PLARS,L,BAL,0.331*5C", nmea_info));
   ok1(nmea_info.settings.ballast_fraction_available);
   ok1(equals(nmea_info.settings.ballast_fraction, 0.331));
@@ -772,6 +790,10 @@ TestLarus()
   ok1(device->ParseNMEA("$PLARS,L,QNH,1015.0*70", nmea_info));
   ok1(nmea_info.settings.qnh_available);
   ok1(equals(nmea_info.settings.qnh.GetHectoPascal(), 1015));
+  ok1(device->ParseNMEA("$PLARS,L,CIR,1*55", nmea_info));
+  ok1(nmea_info.switch_state.flight_mode == SwitchState::FlightMode::CIRCLING);
+  ok1(device->ParseNMEA("$PLARS,L,CIR,0*54", nmea_info));
+  ok1(nmea_info.switch_state.flight_mode == SwitchState::FlightMode::CRUISE);
 
   delete device;
 }
@@ -1755,7 +1777,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main()
 {
-  plan_tests(954);
+  plan_tests(972);
   TestGeneric();
   TestTasman();
   TestFLARM();

@@ -171,7 +171,7 @@ LarusDevice::PLARA(NMEAInputLine &line, NMEAInfo &info)
       info.attitude.heading_available.Update(info.clock);
     }
   }
-    return true;
+  return true;
 }
 
 bool
@@ -180,13 +180,14 @@ LarusDevice::PLARB(NMEAInputLine &line, NMEAInfo &info)
     /*
      * Battery voltage sentence
      *
-     *        1     2
-     *        |     |
-     * $PLARB,xx.xx*hh<CR><LF>
+     *        1     2     3
+     *        |     |     |
+     * $PLARB,xx.xx,xxx.x*hh<CR><LF>
      * 
      * Field Number:
      * 1)  battery voltage in Volt
-     * 2)  Checksum
+     * 2)  Outside Temperature in Celsius (new in v0.1.4)
+     * 3)  Checksum
     */
   double value;
   if (line.ReadChecked(value)) {
@@ -195,6 +196,10 @@ LarusDevice::PLARB(NMEAInputLine &line, NMEAInfo &info)
       info.voltage_available.Update(info.clock);
     }
   }
+  // Outside air temperature (OAT)
+  info.temperature_available = line.ReadChecked(value);
+  if (info.temperature_available)
+    info.temperature = Temperature::FromCelsius(value);
   return true;
 }
 
@@ -202,7 +207,7 @@ bool
 LarusDevice::PLARD([[maybe_unused]] NMEAInputLine &line, [[maybe_unused]] NMEAInfo &info)
 {
    /*
-   * Instant air density sentence
+     * Instant air density sentence
      *
      *        1      2 3
      *        |      | |
@@ -225,17 +230,21 @@ bool
 LarusDevice::PLARV(NMEAInputLine &line, NMEAInfo &info)
 {
   /*
-    * $PLARV,x.x,x.x,x,x.x*hh
+    *        1    2    3    4  5      6
+    *        |    |    |    |  |      |
+    * $PLARV,x.xx,x.xx,xxxx,xx,xxx.xx*hh<CR><LF>
+
     *
-    * Vario Data: TEK vario, average vario, height (std pressure)
-    *             and speed (tas)
+    * Vario Data: TEK vario, average vario, height (std pressure), (tas)
+    * and GLoad
     * 
     * Field Number:
     *  1) Total Energy Variometer (TEK vario)
     *  2) Average Climb Rate over one circle
     *  3) Pressure Height
     *  4) True Air Speed (TAS)
-    *  5) Checksum
+    *  5) GLoad (new in v0.1.4)
+    *  6) Checksum
     */
 
   double value;
@@ -259,6 +268,10 @@ LarusDevice::PLARV(NMEAInputLine &line, NMEAInfo &info)
     info.ProvideTrueAirspeedWithAltitude(
       Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR), altitude
     );
+
+  // parse GLoad, if available
+  if (line.ReadChecked(value))
+    info.acceleration.ProvideGLoad(value);
 
   return true;
 }
@@ -300,60 +313,88 @@ LarusDevice::PLARW(NMEAInputLine &line, NMEAInfo &info)
 /*
 $PLARS Settings parameters bidirectional
 
-       1 2 3   4
-       | | |   |
-$PLARS,a,a,xxx*hh<CR><LF>
+           1 2 3   4
+           | | |   |
+    $PLARS,a,a,xxx*hh<CR><LF>
+    
+    Examples:
+    $PLARS,L,MC,1.3*1E
+    $PLARS,L,BAL,0.752*6B
+    $PLARS,L,BUGS,15*3B
+    $PLARS,L,QNH,1013.2*74
+    $PLARS,L,CIR,1*55
 
-Examples:
-$PLARS,L,MC,1.3*1E
-$PLARS,L,BAL,1.00*6B
-$PLARS,L,BUGS,15*3B
-$PLARS,L,QNH,1013.2*74
+    $PLARS,H,MC,2.1*1B
+    $PLARS,H,BAL,1.000*68
+    $PLARS,H,BUGS,0*0B
+    $PLARS,H,QNH,1031.4*76
+    $PLARS,H,CIR,0*50
 
-$PLARS,H,MC,2.1*1B
-$PLARS,H,BAL,1.00*68
-$PLARS,H,BUGS,0*0B
-$PLARS,H,QNH,1031.4*76
 
-The $PLARS record is intended for exchanging setting values between Larus and a host system such as 
-XCSoar. The record can be used in both directions: from host to Larus or from Larus to host.
+The $PLARS record is intended for exchanging setting values between Larus and 
+a host system such as XCSoar. The record can be used in both directions: from 
+host to Larus or from Larus to host.
 
-These records should not be sent cyclically, but only when needed during initialization and when 
-changes are made.
+These records should not be sent cyclically, but only when needed during 
+initialization and when changes are made.
 
-    Data source (L: Larus, H: Host)
-    Settings parameter
-        MC MacCready (0.0 - 9.9)
-        BAL Ballast (0.00 - 1.00)
-        BUGS Bugs in % (0 - 50)
-        QNH QNH in hPa
-    Value (format depends on settings parameter, see examples)
-    Checksum
+  1) Data source (L: Larus, H: Host)
+  2) Settings parameter
+     - MC MacCready m/s (0.0 - 9.9)
+     - BAL Ballast (fraction of water ballast 0.000 - 1.000)
+     - BUGS Bugs in % (0 - 50)
+     - QNH QNH in hPa
+     - CIR CIR (Circling 1, Cruise 0. XCSoar supports only reception. 
+       New in v0.1.4)
+  3) Value (format depends on settings parameter, see examples)
+  4) Checksum
 */
 bool
 LarusDevice::PLARS(NMEAInputLine &line, NMEAInfo &info)
 { // the line starts with the host indicator
   if (line.ReadOneChar() == 'L') {
-    double value;
     auto field = line.ReadView();
-    if (line.ReadChecked(value)) {
-      if (field == "MC"sv) {
-        // - value is MacCReady in m/s [0.0 - 9.9]
+
+    if (field == "MC"sv) {
+      // - value is MacCReady in m/s [0.0 - 9.9]
+      double value;
+      if (line.ReadChecked(value))
         return info.settings.ProvideMacCready(value, info.clock);
-      } else if (field == "BUGS"sv) {
-        // - value is bugs in % [0 - 50]
+
+    } else if (field == "BUGS"sv) {
+      // - value is bugs in % [0 - 50]
+      double value;
+      if (line.ReadChecked(value))
         return info.settings.ProvideBugs(1.0 - value/100.0, info.clock);
-      } else if (field == "BAL"sv) {
-        // - value is ballast fraction [0.00 - 1.00]
+
+    } else if (field == "BAL"sv) {
+      // - value is ballast fraction [0.00 - 1.00]
+      double value;
+      if (line.ReadChecked(value))
         return info.settings.ProvideBallastFraction(value, info.clock);
-      } else if (field == "QNH"sv) {
-        // - value is pressure in hPa
+
+    } else if (field == "QNH"sv) {
+      // - value is pressure in hPa
+      double value;
+      if (line.ReadChecked(value))
         return info.settings.ProvideQNH(AtmosphericPressure::HectoPascal(value), info.clock);
+
+    } else if (field == "CIR"sv) {
+      // - value is 1: Circling, 0: Cruise
+      int value;
+      if (line.ReadChecked(value)) {
+        if (value == 1) {
+          info.switch_state.flight_mode = SwitchState::FlightMode::CIRCLING;
+        } else {
+          info.switch_state.flight_mode = SwitchState::FlightMode::CRUISE;
+        }
+        return true;
       }
     }
   }
   return false;
 }
+
 
 bool
 LarusDevice::PutBugs(double bugs, OperationEnvironment &env)

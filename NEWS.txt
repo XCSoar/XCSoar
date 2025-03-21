@@ -46,6 +46,7 @@ Version 7.44 - not yet released
   - Vaulter: use fraction instead of overload for ballast
   - Devices: Switch to manual MC when set via external Device
   - AirControlDisplay: Read-out transponder mode
+  - Larus: Protocol 0.1.4 add OAT,GLoad,Circling/Cruise
 * Polar:
   - LS8-15m: default polar, set to values according to flight manual
 
