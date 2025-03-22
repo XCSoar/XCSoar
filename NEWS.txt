@@ -28,6 +28,7 @@ Version 7.44 - not yet released
   - FlarmTrafficWindow: align colors of FlarmTraffic with map for consistency
   - BigTrafficWidget: Save/Restore FLARM radar zoom on page change
   - BigTrafficWidget: zoom range to 5km when opening big radar via the FlarmGauge
+  - terrain: added 2 new terrain ramps for use in very flat countries
 * Android
   - fix crash on startup when loading icons on ldpi screens
   - update 'white list' of USB devices with one more VID/PID pair for SoftRF Academy

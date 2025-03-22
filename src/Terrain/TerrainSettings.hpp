@@ -19,7 +19,7 @@ enum class Contours: uint8_t {
 
 struct TerrainRendererSettings {
   /** Number of available color ramps */
-  static constexpr unsigned NUM_RAMPS = 16;
+  static constexpr unsigned NUM_RAMPS = 18;
 
   /** Map will show terrain */
   bool enable;
