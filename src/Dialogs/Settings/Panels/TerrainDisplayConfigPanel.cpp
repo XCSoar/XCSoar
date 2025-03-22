@@ -203,6 +203,8 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
     {13, N_("German DFS VFR Chart"), },
     {14, N_("French SIA VFR Chart"), },
     {15, N_("High Contrast"), },
+    {16, N_("High Contrast low lands"), },
+    {17, N_("Very low lands"), },
     nullptr
   };
 
