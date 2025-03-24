@@ -10,7 +10,8 @@ struct FlarmHardware;
 
 class FLARMConfigWidget final : public RowFormWidget {
   enum Controls {
-    Baud,
+    Baud1,
+    Baud2,
     Thre,
     Acft,
     LogInt,
@@ -21,7 +22,7 @@ class FLARMConfigWidget final : public RowFormWidget {
   FlarmDevice &device;
   FlarmHardware &hardware;
 
-  unsigned baud, thre, acft, log_int;
+  unsigned baud, baud1, baud2, thre, acft, log_int;
 
   bool priv, notrack;
 
