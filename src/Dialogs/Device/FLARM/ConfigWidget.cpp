@@ -34,7 +34,8 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   device.RequestAllSettings(flarm_setting_names, env);
 
   baud = device.GetUnsignedValue("BAUD", 2);
-  thre = device.GetUnsignedValue("THRE", 1);
+  unsigned thre_default = hardware.isPowerFlarm() ? 255 : 1;
+  thre = device.GetUnsignedValue("THRE", thre_default);
   acft = device.GetUnsignedValue("ACFT", 0);
   log_int = device.GetUnsignedValue("LOGINT", 2);
   priv = device.GetUnsignedValue("PRIV", 0) == 1;
