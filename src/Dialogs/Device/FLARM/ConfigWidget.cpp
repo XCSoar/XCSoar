@@ -21,20 +21,6 @@ static const char *const flarm_setting_names[] = {
   NULL
 };
 
-static unsigned
-GetUnsignedValue(const FlarmDevice &device, const char *name,
-                 unsigned default_value)
-{
-  if (const auto x = device.GetSetting(name)) {
-    char *endptr;
-    unsigned long y = strtoul(x->c_str(), &endptr, 10);
-    if (endptr > x->c_str() && *endptr == 0)
-      return (unsigned)y;
-  }
-
-  return default_value;
-}
-
 void
 FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                            [[maybe_unused]] const PixelRect &rc) noexcept
@@ -42,13 +28,13 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   PopupOperationEnvironment env; 
   device.RequestAllSettings(flarm_setting_names, env);
 
-  baud = GetUnsignedValue(device, "BAUD", 2);
-  priv = GetUnsignedValue(device, "PRIV", 0) == 1;
-  thre = GetUnsignedValue(device, "THRE", 2);
-  range = GetUnsignedValue(device, "RANGE", 3000);
-  acft = GetUnsignedValue(device, "ACFT", 0);
-  log_int = GetUnsignedValue(device, "LOGINT", 2);
-  notrack = GetUnsignedValue(device, "NOTRACK", 0) == 1;
+  baud = device.GetUnsignedValue("BAUD", 2);
+  priv = device.GetUnsignedValue("PRIV", 0) == 1;
+  thre = device.GetUnsignedValue("THRE", 2);
+  range = device.GetUnsignedValue("RANGE", 3000);
+  acft = device.GetUnsignedValue("ACFT", 0);
+  log_int = device.GetUnsignedValue("LOGINT", 2);
+  notrack = device.GetUnsignedValue("NOTRACK", 0) == 1;
 
   static constexpr StaticEnumChoice baud_list[] = {
     { 0, _T("4800") },

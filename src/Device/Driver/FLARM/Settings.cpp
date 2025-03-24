@@ -82,3 +82,16 @@ FlarmDevice::GetSetting(const char *name) const noexcept
 
   return *i;
 }
+
+unsigned
+FlarmDevice::GetUnsignedValue(const char *name, unsigned default_value)
+{
+  if (const auto x = FlarmDevice::GetSetting(name)) {
+    char *endptr;
+    unsigned long y = strtoul(x->c_str(), &endptr, 10);
+    if (endptr > x->c_str() && *endptr == 0)
+      return (unsigned)y;
+  }
+
+  return default_value;
+}

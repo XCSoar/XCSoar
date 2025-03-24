@@ -89,6 +89,11 @@ public:
   [[gnu::pure]]
   std::optional<std::string> GetSetting(const char *name) const noexcept;
 
+  /**
+   * Get unsigned value from setting string.
+   */
+  unsigned GetUnsignedValue(const char *name, unsigned default_value);
+
 protected:
   bool TextMode(OperationEnvironment &env);
   bool BinaryMode(OperationEnvironment &env);
