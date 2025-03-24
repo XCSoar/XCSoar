@@ -13,6 +13,7 @@
 #include "FLARM/Hardware.hpp"
 #include "UIGlobals.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "lib/fmt/ToBuffer.hxx"
 
 FlarmHardware hardware;
 
@@ -51,7 +52,22 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   };
 
   AddEnum(_("Baud rate"), NULL, baud_list, baud);
-  AddInteger(_("Threshold"), NULL, _T("%d m/s"), _T("%d"), 1, 10, 1, thre);
+
+  WndProperty *wp_threshold = AddEnum(_("Threshold"),
+                                      _("Select a speed threshold."));
+  if (wp_threshold != nullptr) {
+    DataFieldEnum &df = *(DataFieldEnum *)wp_threshold->GetDataField();
+    if (hardware.isPowerFlarm()) {
+      df.AddChoice(255, _T("Automatic"));
+    }
+    TCHAR buffer[64];
+    for (unsigned i = 0; i <= 20; ++i) {
+      StringFormatUnsafe(buffer, _T("%u m/s"), i);
+      df.AddChoice(i, buffer);
+    }
+    df.SetValue(thre);
+    wp_threshold->RefreshDisplay();
+  }
 
   static constexpr StaticEnumChoice acft_list[] = {
     { FlarmTraffic::AircraftType::UNKNOWN, N_("Unknown") },
@@ -98,7 +114,7 @@ try {
     changed = true;
   }
 
-  if (SaveValueInteger(Thre, thre)) {
+  if (SaveValueEnum(Thre, thre)) {
     buffer.UnsafeFormat("%u", thre);
     device.SendSetting("THRE", buffer, env);
     changed = true;
