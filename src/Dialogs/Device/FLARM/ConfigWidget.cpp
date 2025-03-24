@@ -15,6 +15,8 @@
 #include "Dialogs/WidgetDialog.hpp"
 #include "lib/fmt/ToBuffer.hxx"
 
+#include <fmt/format.h>
+
 FlarmHardware hardware;
 
 static const char *const flarm_setting_names[] = {
@@ -106,41 +108,34 @@ FLARMConfigWidget::Save(bool &_changed) noexcept
 try {
   PopupOperationEnvironment env;
   bool changed = false;
-  NarrowString<32> buffer;
 
   if (SaveValueEnum(Baud, baud)) {
-    buffer.UnsafeFormat("%u", baud);
-    device.SendSetting("BAUD", buffer, env);
+    device.SendSetting("BAUD", fmt::format_int{baud}.c_str(), env);
     changed = true;
   }
 
   if (SaveValueEnum(Thre, thre)) {
-    buffer.UnsafeFormat("%u", thre);
-    device.SendSetting("THRE", buffer, env);
+    device.SendSetting("THRE", fmt::format_int{thre}.c_str(), env);
     changed = true;
   }
 
   if (SaveValueEnum(Acft, acft)) {
-    buffer.UnsafeFormat("%u", acft);
-    device.SendSetting("ACFT", buffer, env);
+    device.SendSetting("ACFT",  fmt::format_int{acft}.c_str(), env);
     changed = true;
   }
 
   if (SaveValueInteger(LogInt, log_int)) {
-    buffer.UnsafeFormat("%u", log_int);
-    device.SendSetting("LOGINT", buffer, env);
+    device.SendSetting("LOGINT", fmt::format_int{log_int}.c_str(), env);
     changed = true;
   }
 
   if (SaveValue(Priv, priv)) {
-    buffer.UnsafeFormat("%u", priv);
-    device.SendSetting("PRIV", buffer, env);
+    device.SendSetting("PRIV", fmt::format_int{priv}.c_str(), env);
     changed = true;
   }
 
   if (SaveValue(NoTrack, notrack)) {
-    buffer.UnsafeFormat("%u", notrack);
-    device.SendSetting("NOTRACK", buffer, env);
+    device.SendSetting("NOTRACK", fmt::format_int{notrack}.c_str(), env);
     changed = true;
   }
 

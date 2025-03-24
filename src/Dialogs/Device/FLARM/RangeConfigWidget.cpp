@@ -13,6 +13,8 @@
 #include "UIGlobals.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 
+#include <fmt/format.h>
+
 static const char *const flarm_setting_names[] = {
   "RANGE",
   NULL
@@ -82,43 +84,36 @@ FLARMRangeConfigWidget::Save(bool &_changed) noexcept
 try {
   PopupOperationEnvironment env;
   bool changed = false;
-  NarrowString<32> buffer;
 
   if (SaveValueInteger(Range, range)) {
-    buffer.UnsafeFormat("%u", range);
-    device.SendSetting("RANGE", buffer, env);
+    device.SendSetting("RANGE", fmt::format_int{range}.c_str(), env);
     changed = true;
   }
   if (hardware.hasADSB()) {
     if (SaveValueInteger(VRange, vrange)) {
-      buffer.UnsafeFormat("%u", vrange);
-      device.SendSetting("VRANGE", buffer, env);
+      device.SendSetting("VRANGE", fmt::format_int{vrange}.c_str(), env);
       changed = true;
     }
   }
 
   if (hardware.hasADSB()) {
     if (SaveValueInteger(PCASRange, pcas_range)) {
-      buffer.UnsafeFormat("%u", pcas_range);
-      device.SendSetting("PCASRANGE", buffer, env);
+      device.SendSetting("PCASRANGE", fmt::format_int{pcas_range}.c_str(), env);
       changed = true;
     }
 
     if (SaveValueInteger(PCASVRange, pcas_vrange)) {
-      buffer.UnsafeFormat("%u", pcas_vrange);
-      device.SendSetting("PCASVRANGE", buffer, env);
+      device.SendSetting("PCASVRANGE", fmt::format_int{pcas_vrange}.c_str(), env);
       changed = true;
     }
 
     if (SaveValueInteger(ADSBRange, adsb_range)) {
-      buffer.UnsafeFormat("%u", adsb_range);
-      device.SendSetting("ADSBRANGE", buffer, env);
+      device.SendSetting("ADSBRANGE", fmt::format_int{adsb_range}.c_str(), env);
       changed = true;
     }
 
     if (SaveValueInteger(ADSBVrange, adsb_vrange)) {
-      buffer.UnsafeFormat("%u", adsb_vrange);
-      device.SendSetting("ADSBVRANGE", buffer, env);
+      device.SendSetting("ADSBVRANGE", fmt::format_int{adsb_vrange}.c_str(), env);
       changed = true;
     }
   }
