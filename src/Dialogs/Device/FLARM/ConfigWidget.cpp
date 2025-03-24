@@ -31,7 +31,8 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   baud = device.GetUnsignedValue("BAUD", 2);
   priv = device.GetUnsignedValue("PRIV", 0) == 1;
   thre = device.GetUnsignedValue("THRE", 2);
-  range = device.GetUnsignedValue("RANGE", 3000);
+  unsigned max_range = hardware.isPowerFlarm() ? 65535 : 25500;
+  range = device.GetUnsignedValue("RANGE", max_range);
   acft = device.GetUnsignedValue("ACFT", 0);
   log_int = device.GetUnsignedValue("LOGINT", 2);
   notrack = device.GetUnsignedValue("NOTRACK", 0) == 1;
@@ -48,7 +49,7 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddEnum(_("Baud rate"), NULL, baud_list, baud);
   AddBoolean(_("Stealth mode"), NULL, priv);
   AddInteger(_("Threshold"), NULL, _T("%d m/s"), _T("%d"), 1, 10, 1, thre);
-  AddInteger(_("Range"), NULL, _T("%d m"), _T("%d"), 2000, 25500, 250, range);
+  AddInteger(_("Range"), NULL, _T("%d m"), _T("%d"), 2000, max_range, 250, range);
 
   static constexpr StaticEnumChoice acft_list[] = {
     { FlarmTraffic::AircraftType::UNKNOWN, N_("Unknown") },
