@@ -29,14 +29,26 @@ static const char *const flarm_setting_names[] = {
   NULL
 };
 
+static const char *const pf_setting_names[] = {
+  "BAUD1",
+  "BAUD2",
+  NULL
+};
+
 void
 FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                            [[maybe_unused]] const PixelRect &rc) noexcept
 {
   PopupOperationEnvironment env; 
   device.RequestAllSettings(flarm_setting_names, env);
+  if (hardware.isPowerFlarm()) {
+    device.RequestAllSettings(pf_setting_names, env);
+    baud1 = device.GetUnsignedValue("BAUD1", 2);
+    baud2 = device.GetUnsignedValue("BAUD2", 2);
+  } else {
+    baud = device.GetUnsignedValue("BAUD", 2);
+  }
 
-  baud = device.GetUnsignedValue("BAUD", 2);
   unsigned thre_default = hardware.isPowerFlarm() ? 255 : 1;
   thre = device.GetUnsignedValue("THRE", thre_default);
   acft = device.GetUnsignedValue("ACFT", 0);
@@ -53,7 +65,13 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     nullptr
   };
 
-  AddEnum(_("Baud rate"), NULL, baud_list, baud);
+  if (hardware.isPowerFlarm()) {
+    AddEnum(_("Baud rate port 1"), NULL, baud_list, baud1);
+    AddEnum(_("Baud rate port 2"), NULL, baud_list, baud2);
+  } else {
+    AddEnum(_("Baud rate"), NULL, baud_list, baud);
+    AddDummy();
+  }
 
   WndProperty *wp_threshold = AddEnum(_("Threshold"),
                                       _("Select a speed threshold."));
@@ -109,9 +127,20 @@ try {
   PopupOperationEnvironment env;
   bool changed = false;
 
-  if (SaveValueEnum(Baud, baud)) {
-    device.SendSetting("BAUD", fmt::format_int{baud}.c_str(), env);
-    changed = true;
+  if (hardware.isPowerFlarm()) {
+    if (SaveValueEnum(Baud1, baud1)) {
+      device.SendSetting("BAUD1", fmt::format_int{baud1}.c_str(), env);
+      changed = true;
+    }
+    if (SaveValueEnum(Baud2, baud2)) {
+      device.SendSetting("BAUD2", fmt::format_int{baud2}.c_str(), env);
+      changed = true;
+    }
+  } else {
+    if (SaveValueEnum(Baud1, baud)) {
+      device.SendSetting("BAUD", fmt::format_int{baud}.c_str(), env);
+      changed = true;
+    }
   }
 
   if (SaveValueEnum(Thre, thre)) {
