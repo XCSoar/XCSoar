@@ -4,11 +4,23 @@
 #include "FLARM/Traffic.hpp"
 
 static constexpr const TCHAR *acTypes[] = {
-  _T("Unknown"), _T("Glider"), _T("TowPlane"),
-    _T("Helicopter"), _T("Parachute"), _T("DropPlane"), _T("HangGlider"),
-    _T("ParaGlider"), _T("PoweredAircraft"), _T("JetAircraft"),
-    _T("FlyingSaucer"), _T("Balloon"), _T("Airship"), _T("UAV"),
-    _T("Unknown"), _T("StaticObject") };
+  _T("Unknown"),
+  _T("Glider"),
+  _T("TowPlane"),
+  _T("Helicopter"),
+  _T("Parachute"),
+  _T("DropPlane"),
+  _T("HangGlider"),
+  _T("ParaGlider"),
+  _T("PoweredAircraft"),
+  _T("JetAircraft"),
+  _T("FlyingSaucer"),
+  _T("Balloon"),
+  _T("Airship"),
+  _T("UAV"),
+  _T("Unknown"),
+  _T("StaticObject") 
+};
 
 const TCHAR *
 FlarmTraffic::GetTypeString(AircraftType type) noexcept
