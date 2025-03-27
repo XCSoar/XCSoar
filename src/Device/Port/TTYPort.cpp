@@ -53,6 +53,9 @@ speed_t_to_baud_rate(speed_t speed) noexcept
   case B115200:
     return 115200;
 
+  case B230400:
+    return 230400;
+
   default:
     return 0;
   }
@@ -89,6 +92,9 @@ baud_rate_to_speed_t(unsigned baud_rate) noexcept
 
   case 115200:
     return B115200;
+
+  case 230400:
+    return B230400;
 
   default:
     return B0;

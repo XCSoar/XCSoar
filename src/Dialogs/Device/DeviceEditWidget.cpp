@@ -35,6 +35,7 @@ FillBaudRates(DataFieldEnum &dfe) noexcept
   dfe.addEnumText(_T("38400"), 38400);
   dfe.addEnumText(_T("57600"), 57600);
   dfe.addEnumText(_T("115200"), 115200);
+  dfe.addEnumText(_T("230400"), 230400);
 }
 
 static void
