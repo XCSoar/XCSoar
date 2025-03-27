@@ -65,9 +65,21 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     nullptr
   };
 
+  static constexpr StaticEnumChoice baud_list_pf[] = {
+    { 0, _T("4800") },
+    { 1, _T("9600") },
+    { 2, _T("19200") },
+    { 4, _T("38400") },
+    { 5, _T("57600") },
+    { 6, _T("115200") },
+    { 7, _T("230400") },
+    nullptr
+  };
+
+
   if (hardware.isPowerFlarm()) {
-    AddEnum(_("Baud rate port 1"), NULL, baud_list, baud1);
-    AddEnum(_("Baud rate port 2"), NULL, baud_list, baud2);
+    AddEnum(_("Baud rate port 1"), NULL, baud_list_pf, baud1);
+    AddEnum(_("Baud rate port 2"), NULL, baud_list_pf, baud2);
   } else {
     AddEnum(_("Baud rate"), NULL, baud_list, baud);
     AddDummy();
