@@ -23,13 +23,13 @@ CSVLine::CSVLine(const char *line) noexcept
 std::string_view
 CSVLine::ReadView() noexcept
 {
-  const char* _seperator = strchr(data, ',');
+  const char* _separator = strchr(data, ',');
 
   const char *s = data;
   std::size_t length;
-  if (_seperator != nullptr && _seperator < end) {
-    length = _seperator - data;
-    data = _seperator + 1;
+  if (_separator != nullptr && _separator < end) {
+    length = _separator - data;
+    data = _separator + 1;
   } else {
     length = end - data;
     data = end;
