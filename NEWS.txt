@@ -40,6 +40,9 @@ Version 7.44 - not yet released
   - Add driver for Condor 3
   - Add driver for LX Navigation Eos / Era variometers
   - Flarm: parse flarm error messages (PFLAE) and display them
+  - Flarm: add support for PowerFlarm configuration
+  - PowerFlarm: make range / vrange configurable for adbs and pcas
+  - PowerFlarm: support additional higher baud rates
   - LXNAV: parse acceleration/g-load from PLXVF sentence
   - LXNAV: Overload formula, use reference mass instead of dry mass
   - OpenVario: Overload formula, use reference mass instead of dry mass
@@ -47,6 +50,7 @@ Version 7.44 - not yet released
   - Devices: Switch to manual MC when set via external Device
   - AirControlDisplay: Read-out transponder mode
   - Larus: Protocol 0.1.4 add OAT,GLoad,Circling/Cruise
+  - SerialPorts: add 230400 baud support
 * Polar:
   - LS8-15m: default polar, set to values according to flight manual
 
