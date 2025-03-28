@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "NextArrowRenderer.hpp"
-#include "Look/WindArrowLook.hpp"
+#include "Look/NextArrowLook.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Screen.hpp"
@@ -63,7 +63,7 @@ NextArrowRenderer::DrawArrow(Canvas &canvas, const PixelRect &rc,
                      size);
 
   // Draw the arrow.
-  canvas.Select(look.arrow_pen);
-  canvas.Select(look.arrow_brush);
+  canvas.Select(look.next_arrow_pen);
+  canvas.Select(look.next_arrow_brush);
   canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
 }
