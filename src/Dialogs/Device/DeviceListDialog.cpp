@@ -5,6 +5,7 @@
 #include "DeviceEditWidget.hpp"
 #include "Vega/VegaDialogs.hpp"
 #include "BlueFly/BlueFlyDialogs.hpp"
+#include "Stratux/ConfigurationDialog.hpp"
 #include "ManageI2CPitotDialog.hpp"
 #include "ManageCAI302Dialog.hpp"
 #include "ManageFlarmDialog.hpp"
@@ -112,7 +113,7 @@ class DeviceListWidget final
       temperature = basic.temperature_available;
       humidity = basic.humidity_available;
       debug = device != nullptr && device->IsDumpEnabled();
-      radio = basic.settings.has_active_frequency || 
+      radio = basic.settings.has_active_frequency ||
         basic.settings.has_standby_frequency;
       transponder = basic.settings.has_transponder_code;
       engine = basic.engine.IsAnyDefined();
@@ -678,6 +679,8 @@ DeviceListWidget::ManageCurrent()
 
   if (descriptor.IsDriver(_T("CAI 302")))
     ManageCAI302Dialog(UIGlobals::GetMainWindow(), look, *device);
+  else if (descriptor.IsDriver(_T("Stratux")))
+    ManageStratuxDialog(*device);
   else if (descriptor.IsDriver(_T("FLARM"))) {
     FlarmVersion version;
     FlarmHardware hardware;
