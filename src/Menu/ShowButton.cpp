@@ -8,6 +8,8 @@
 #include "Screen/Layout.hpp"
 #include "Input/InputEvents.hpp"
 #include "util/Macros.hpp"
+#include "Interface.hpp"
+#include "UIState.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
@@ -45,6 +47,10 @@ ShowMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
 {
   const unsigned pen_width = Layout::ScalePenWidth(2);
   const unsigned padding = Layout::GetTextPadding() + pen_width;
+
+  const PagesState &_state = CommonInterface::GetUIState().pages;
+  if (_state.special_page.IsDefined())
+    return;
 
   canvas.Select(Pen(pen_width, COLOR_BLACK));
   canvas.DrawRoundRectangle({rc.left, rc.top, rc.right - 1, rc.bottom - 1},
@@ -102,6 +108,10 @@ ShowZoomOutButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
 {
   const unsigned padding = Layout::GetTextPadding() + Layout::ScalePenWidth(5);
 
+  const PagesState &_state = CommonInterface::GetUIState().pages;
+  if (_state.special_page.IsDefined())
+    return;
+
   canvas.Select(Pen(Layout::ScalePenWidth(1), COLOR_BLACK));
   canvas.DrawRoundRectangle({rc.left, rc.top, rc.right - 1, rc.bottom - 1},
                             PixelSize{Layout::VptScale(8u)});
@@ -154,6 +164,10 @@ ShowZoomInButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
                                    ButtonState state) const noexcept
 {
   const unsigned padding = Layout::GetTextPadding() + Layout::ScalePenWidth(5);
+
+  const PagesState &_state = CommonInterface::GetUIState().pages;
+  if (_state.special_page.IsDefined())
+    return;
 
   canvas.Select(Pen(Layout::ScalePenWidth(1), COLOR_BLACK));
   canvas.DrawRoundRectangle({rc.left, rc.top, rc.right - 1, rc.bottom - 1},
