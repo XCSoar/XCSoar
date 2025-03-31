@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-28 05:34+0000\n"
+"POT-Creation-Date: 2025-03-31 20:13+0000\n"
 "PO-Revision-Date: 2021-07-20 10:35+0000\n"
 "Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/xcsoar/"
@@ -822,7 +822,7 @@ msgstr "Sirkler ikke"
 #: src/Dialogs/ProfileListDialog.cpp:318
 #: src/Dialogs/Plane/PlaneListDialog.cpp:361 src/Dialogs/HelpDialog.cpp:30
 #: src/Dialogs/dlgInfoBoxAccess.cpp:95 src/Dialogs/ReplayDialog.cpp:97
-#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:433
+#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:471
 #: src/Dialogs/Waypoint/Manager.cpp:289
 #: src/Dialogs/Waypoint/WaypointList.cpp:215
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:117
@@ -4131,15 +4131,15 @@ msgstr "Sett Som Nytt Hjemsted"
 msgid "Pan to Waypoint"
 msgstr "Flytt Kart Til Vendepunkt"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:406 Data/Input/default.xci:1056
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:444 Data/Input/default.xci:1056
 msgid "GoTo"
 msgstr "Gå til"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:409
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:447
 msgid "Pan To"
 msgstr ""
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:624
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:791
 #: src/Dialogs/Task/TaskPointDialog.cpp:511
 #: src/InfoBoxes/Panel/ATCReference.cpp:64
 msgid "Waypoint"
@@ -8028,11 +8028,12 @@ msgid "V GND"
 msgstr "V GND"
 
 #: src/InfoBoxes/Content/Factory.cpp:169
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Ground speed measured by the GPS. If this InfoBox is active in simulation "
-"mode, pressing the up and down arrows adjusts the speed, and left and right "
-"turn the glider."
+"Ground speed measured by the GPS. The small value shows the head or tail "
+"wind difference to TAS for the current vector. If this InfoBox is active in "
+"simulation mode, pressing the up and down arrows adjusts the speed, and left "
+"and right turn the glider."
 msgstr ""
 "Bakkehastighet målt av GPS. Berøringsskjerm/PC: Hvis InfoBoks er aktiv i "
 "simuleringsmodus, kan hastigheten justeres med opp/ned piltastene, venstre/"
@@ -9733,7 +9734,7 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1009
-#: src/InfoBoxes/Content/Factory.cpp:1010 src/InfoBoxes/Content/Task.cpp:929
+#: src/InfoBoxes/Content/Factory.cpp:1010 src/InfoBoxes/Content/Task.cpp:940
 #, no-c-format
 msgid "Next arrow"
 msgstr "Neste pil"
@@ -10052,11 +10053,11 @@ msgstr "AC På"
 msgid "No GPS"
 msgstr "H GPS"
 
-#: src/InfoBoxes/Content/Speed.cpp:98
+#: src/InfoBoxes/Content/Speed.cpp:110
 msgid "BLOCK"
 msgstr "BLOKKER"
 
-#: src/InfoBoxes/Content/Speed.cpp:100
+#: src/InfoBoxes/Content/Speed.cpp:112
 msgid "DOLPHIN"
 msgstr "DELFIN"
 
@@ -10064,19 +10065,19 @@ msgstr "DELFIN"
 msgid "Next"
 msgstr "Neste"
 
-#: src/InfoBoxes/Content/Task.cpp:717
+#: src/InfoBoxes/Content/Task.cpp:725
 msgid "Time Below"
 msgstr "Tid Under"
 
-#: src/InfoBoxes/Content/Task.cpp:845 src/InfoBoxes/Content/Task.cpp:890
+#: src/InfoBoxes/Content/Task.cpp:856 src/InfoBoxes/Content/Task.cpp:901
 msgid "Closed"
 msgstr ""
 
-#: src/InfoBoxes/Content/Task.cpp:854 src/InfoBoxes/Content/Task.cpp:899
+#: src/InfoBoxes/Content/Task.cpp:865 src/InfoBoxes/Content/Task.cpp:910
 msgid "Open"
 msgstr ""
 
-#: src/InfoBoxes/Content/Task.cpp:859 src/InfoBoxes/Content/Task.cpp:904
+#: src/InfoBoxes/Content/Task.cpp:870 src/InfoBoxes/Content/Task.cpp:915
 msgid "Waiting"
 msgstr ""
 
