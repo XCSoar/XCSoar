@@ -166,7 +166,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Speed ground"),
     N_("V GND"),
-    N_("Ground speed measured by the GPS. If this InfoBox is active in simulation mode, pressing the up and down arrows adjusts the speed, and left and right turn the glider."),
+    N_("Ground speed measured by the GPS. The small value shows the head or tail wind difference to TAS for the current vector. If this InfoBox is active in simulation mode, pressing the up and down arrows adjusts the speed, and left and right turn the glider."),
     IBFHelper<InfoBoxContentSpeedGround>::Create,
   },
 
