@@ -559,7 +559,8 @@ endif
 ifeq ($(TARGET_IS_DARWIN),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Device/AndroidSensors.cpp \
-	$(SRC)/Apple/InternalSensors.cpp
+	$(SRC)/Apple/InternalSensors.cpp \
+	$(SRC)/Apple/Helpers.cpp
 endif
 
 ifeq ($(TARGET),ANDROID)
