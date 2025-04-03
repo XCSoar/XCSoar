@@ -298,7 +298,7 @@ FlarmTrafficDetailsWidget::OnCallsignClicked()
 {
   StaticString<21> newName;
   newName.clear();
-  if (TextEntryDialog(newName, _("Competition ID")) &&
+  if (TextEntryDialog(newName, _("Callsign")) &&
       FlarmDetails::AddSecondaryItem(target_id, newName))
     SaveFlarmNames();
 
