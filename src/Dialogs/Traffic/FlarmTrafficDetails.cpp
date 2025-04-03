@@ -223,8 +223,11 @@ FlarmTrafficDetailsWidget::Update()
     value = freq != nullptr ? UnsafeBuildString(tmp, freq, _T(" MHz")) : _T("--");
     SetText(RADIO, value);
 
-    // Fill the home airfield field
-    SetText(AIRPORT, record->airfield);
+    // Fill the home airfield field if it is not equal to registration, which can happen in recent flarmnet datafiles
+    if (!record->airfield.equals(record->registration))
+      SetText(AIRPORT, record->airfield);
+    else
+      SetText(AIRPORT, _T("--"));
 
     // Fill the plane type field
     SetText(PLANE, record->plane_type);
