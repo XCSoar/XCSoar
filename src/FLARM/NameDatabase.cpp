@@ -76,7 +76,7 @@ FlarmNameDatabase::Set(FlarmId id, const TCHAR *name) noexcept
       data[i].name = name;
     else
       /* remove record if empty */
-      data.remove(i);
+      Remove(id);
 
     return true;
   } else if (!data.full()) {
@@ -86,4 +86,18 @@ FlarmNameDatabase::Set(FlarmId id, const TCHAR *name) noexcept
   } else
     /* error: database is full */
     return false;
+}
+
+bool
+FlarmNameDatabase::Remove(FlarmId id) noexcept
+{
+  assert(id.IsDefined());
+
+  int i = Find(id);
+  if (i >= 0) {
+    data.remove(i);
+    return true;
+  }
+
+  return false;
 }
