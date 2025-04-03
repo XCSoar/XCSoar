@@ -119,7 +119,7 @@ FlarmTrafficDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddReadOnly(_("Pilot"));
   AddReadOnly(_("Airport"));
   AddReadOnly(_("Radio frequency"));
-  AddReadOnly(_("Plane"));
+  AddReadOnly(_("Plane type"));
 
   Update();
 }
