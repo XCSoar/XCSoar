@@ -11,14 +11,16 @@
 #include "FLARM/Friends.hpp"
 #include "Tracking/SkyLines/Data.hpp"
 #include "util/StringCompare.hxx"
+#include "FLARM/TrafficClimbAltIndicators.hpp"
 
 #include <cassert>
 
 static void
 DrawFlarmTraffic(Canvas &canvas, const WindowProjection &projection,
-                 const TrafficLook &look, bool fading,
+                 const TrafficLook &look, bool fading, bool colorful_traffic,
                  const PixelPoint aircraft_pos,
-                 const FlarmTraffic &traffic) noexcept
+                 const FlarmTraffic &traffic, const double set_mc,
+                 const double current_30s_vario) noexcept
 {
   assert(traffic.location_available);
 
@@ -63,11 +65,13 @@ DrawFlarmTraffic(Canvas &canvas, const WindowProjection &projection,
     }
   }
 
+  TrafficClimbAltIndicators indicators = TrafficClimbAltIndicators::GetClimbAltIndicators(traffic, set_mc, current_30s_vario);
+
   auto color = FlarmFriends::GetFriendColor(traffic.id);
 
-  TrafficRenderer::Draw(canvas, look, fading, traffic,
+  TrafficRenderer::Draw(canvas, look, fading, colorful_traffic, traffic,
                         traffic.track - projection.GetScreenAngle(),
-                        color, sc);
+                        color, sc, indicators);
 }
 
 /**
@@ -95,21 +99,25 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
   canvas.Select(*traffic_look.font);
 
+  bool colorful_traffic =  GetMapSettings().use_detailed_flarm_colours;
+  double set_mc = GetComputerSettings().polar.glide_polar_task.GetMC();
+  double current_30s_vario = Calculated().average;
+
   // Circle through the FLARM targets
   for (const auto &traffic : flarm.list) {
     if (!traffic.location_available)
       continue;
 
-    DrawFlarmTraffic(canvas, projection, traffic_look, false,
-                     aircraft_pos, traffic);
+    DrawFlarmTraffic(canvas, projection, traffic_look, false, colorful_traffic,
+                     aircraft_pos, traffic, set_mc, current_30s_vario);
   }
 
   if (const auto &fading = GetFadingFlarmTraffic(); !fading.empty()) {
     for (const auto &[id, traffic] : fading) {
       assert(traffic.location_available);
 
-      DrawFlarmTraffic(canvas, projection, traffic_look, true,
-                       aircraft_pos, traffic);
+      DrawFlarmTraffic(canvas, projection, traffic_look, true, colorful_traffic,
+                       aircraft_pos, traffic, set_mc, current_30s_vario);
     }
   }
 }
