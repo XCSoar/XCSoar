@@ -11,18 +11,18 @@
 #include <cstdint>
 
 /**
- * This data type stores a time of day with minute granularity.
+ * Data type to define a time of day with parameterized granularity.
  */
+template <typename Duration>
 class TimeSinceMidnight {
-  using Duration = std::chrono::duration<uint16_t,
-                                         std::chrono::minutes::period>;
 
   static constexpr auto INVALID = Duration::max();
   static constexpr Duration MAX = std::chrono::hours{24};
 
   /**
-   * Minute of day.  Must be smaller than 24*60.  The only exception
-   * is the special value #INVALID.
+   * std::chrono::duration since midnight.  
+   * Must be smaller than the equivalet of 24 hours.
+   * The only exception is the special value #INVALID.
    */
   Duration value;
 
@@ -39,10 +39,11 @@ public:
   }
 
   static constexpr TimeSinceMidnight FromMinuteOfDayChecked(int mod) noexcept {
+    constexpr auto MAX_MINUTES = std::chrono::duration_cast<std::chrono::minutes>(MAX).count();
     while (mod < 0)
-      mod += MAX.count();
+      mod += MAX_MINUTES;
 
-    return TimeSinceMidnight(std::chrono::minutes{(unsigned)mod % MAX.count()});
+    return TimeSinceMidnight(std::chrono::minutes{mod % MAX_MINUTES});
   }
 
   explicit constexpr TimeSinceMidnight(TimeStamp t) noexcept {
@@ -98,11 +99,11 @@ public:
   }
 
   constexpr unsigned GetMinute() const noexcept {
-    return value.count() % 60;
+    return std::chrono::duration_cast<std::chrono::minutes>(value).count() % 60;
   }
 
   constexpr unsigned GetMinuteOfDay() const noexcept {
-    return value.count();
+    return std::chrono::duration_cast<std::chrono::minutes>(value).count();
   }
 
   TimeSinceMidnight &operator++() noexcept {
