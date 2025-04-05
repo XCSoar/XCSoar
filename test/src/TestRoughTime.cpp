@@ -4,10 +4,10 @@
 #include "time/RoughTime.hpp"
 #include "TestUtil.hpp"
 
-int main()
-{
-  plan_tests(77);
+using namespace std::chrono_literals;
 
+static void test_rough_time()
+{
   RoughTime a = RoughTime::Invalid();
   ok1(!a.IsValid());
 
@@ -41,6 +41,54 @@ int main()
   ok1(b < a);
   ok1(!(b > a));
 
+  /* test factory functions */
+  ok1(RoughTime::FromMinuteOfDay(12*60+1) == RoughTime(12,1) );
+  ok1(RoughTime::FromMinuteOfDayChecked((unsigned)(12*60+1)) == RoughTime(12,1) );
+  ok1(RoughTime::FromMinuteOfDayChecked((unsigned)(12*60+1+24*60)) == RoughTime(12,1) );
+  ok1(RoughTime::FromMinuteOfDayChecked((int)(12*60+1)) == RoughTime(12,1) );
+  ok1(RoughTime::FromMinuteOfDayChecked((int)(12*60+1+24*60)) == RoughTime(12,1) );
+  ok1(RoughTime::FromMinuteOfDayChecked((int)(12*60+1-24*60)) == RoughTime(12,1) );
+
+  ok1(RoughTime::FromSecondOfDayChecked(12*3600+1*60) == RoughTime(12,1) );
+  ok1(RoughTime::FromSecondOfDayChecked(12*3600+1*60-1) == RoughTime(12,0) );
+  ok1(RoughTime::FromSecondOfDayChecked(12*3600+1*60+24*3600) == RoughTime(12,1) );
+  
+  ok1(RoughTime::FromSinceMidnight(12h) == RoughTime(12,0) );
+  ok1(RoughTime::FromSinceMidnight(12h+1min) == RoughTime(12,1) );
+  ok1(RoughTime::FromSinceMidnight(12h+1s) == RoughTime(12,0) );
+  ok1(RoughTime::FromSinceMidnightChecked(12h+1min) == RoughTime(12,1) );
+  ok1(RoughTime::FromSinceMidnightChecked(12h+1min+24h) == RoughTime(12,1) );
+  ok1(RoughTime::FromSinceMidnightChecked(12h+1min-24h) == RoughTime(12,1) );
+  
+  ok1(RoughTime( TimeStamp(12h) ) == RoughTime(12,0) );
+  ok1(RoughTime( TimeStamp(12h+1min) ) == RoughTime(12,1) );
+  ok1(RoughTime( TimeStamp(12h+1s) ) == RoughTime(12,0) );
+  ok1(RoughTime( TimeStamp(12h+1min+24h) ) == RoughTime(12,1) );
+  ok1(RoughTime( TimeStamp(12h+1min-24h) ) == RoughTime(12,1) );
+
+  /* test midnight wraparound */
+  a = RoughTime(0, 0);
+  b = RoughTime(23, 59);
+  ok1(b.IsValid());
+  ok1(a != b);
+  ok1(!(a == b));
+  ok1(!(a <= b));
+  ok1(a >= b);
+  ok1(!(a < b));
+  ok1(a > b);
+  ok1(b != a);
+  ok1(!(b == a));
+  ok1(b <= a);
+  ok1(!(b >= a));
+  ok1(b < a);
+  ok1(!(b > a));
+}
+
+static void test_rough_time_span()
+{
+  RoughTime a(12, 1);
+  RoughTime b(11, 59);
+
   /* test RoughTimeSpan::IsInside() */
   RoughTimeSpan s = RoughTimeSpan::Invalid();
   ok1(!s.IsDefined());
@@ -70,20 +118,6 @@ int main()
   /* test midnight wraparound */
   a = RoughTime(0, 0);
   b = RoughTime(23, 59);
-  ok1(b.IsValid());
-  ok1(a != b);
-  ok1(!(a == b));
-  ok1(!(a <= b));
-  ok1(a >= b);
-  ok1(!(a < b));
-  ok1(a > b);
-  ok1(b != a);
-  ok1(!(b == a));
-  ok1(b <= a);
-  ok1(!(b >= a));
-  ok1(b < a);
-  ok1(!(b > a));
-
   RoughTime c(22, 0);
   RoughTime d(2, 0);
   s = RoughTimeSpan(RoughTime(23, 0), RoughTime::Invalid());
@@ -106,7 +140,10 @@ int main()
   ok1(s.IsInside(b));
   ok1(!s.IsInside(c));
   ok1(!s.IsInside(d));
+}
 
+static void test_rough_time_delta()
+{
   /* test operator+(RoughTime, RoughTimeDelta) */
   ok1(RoughTime(0, 0) + RoughTimeDelta::FromMinutes(0) == RoughTime(0, 0));
   ok1(RoughTime(0, 0) + RoughTimeDelta::FromMinutes(1) == RoughTime(0, 1));
@@ -119,6 +156,15 @@ int main()
   ok1(RoughTime(0, 0) - RoughTimeDelta::FromMinutes(60) == RoughTime(23, 0));
   ok1(RoughTime(0, 0) - RoughTimeDelta::FromHours(24) == RoughTime(0, 0));
   ok1(RoughTime(0, 0) - RoughTimeDelta::FromHours(25) == RoughTime(23, 0));
+}
+
+int main()
+{
+  plan_tests(97);
+
+  test_rough_time();
+  test_rough_time_span();
+  test_rough_time_delta();
 
   return exit_status();
 }
