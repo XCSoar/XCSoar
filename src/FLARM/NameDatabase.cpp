@@ -71,8 +71,13 @@ FlarmNameDatabase::Set(FlarmId id, const TCHAR *name) noexcept
 
   int i = Find(id);
   if (i >= 0) {
-    /* update existing record */
-    data[i].name = name;
+    if (!StringIsEqual(name, _T("")))
+      /* update existing record */
+      data[i].name = name;
+    else
+      /* remove record if empty */
+      Remove(id);
+
     return true;
   } else if (!data.full()) {
     /* create new record */
@@ -81,4 +86,18 @@ FlarmNameDatabase::Set(FlarmId id, const TCHAR *name) noexcept
   } else
     /* error: database is full */
     return false;
+}
+
+bool
+FlarmNameDatabase::Remove(FlarmId id) noexcept
+{
+  assert(id.IsDefined());
+
+  int i = Find(id);
+  if (i >= 0) {
+    data.remove(i);
+    return true;
+  }
+
+  return false;
 }

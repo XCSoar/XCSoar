@@ -119,7 +119,7 @@ FlarmTrafficDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddReadOnly(_("Pilot"));
   AddReadOnly(_("Airport"));
   AddReadOnly(_("Radio frequency"));
-  AddReadOnly(_("Plane"));
+  AddReadOnly(_("Plane type"));
 
   Update();
 }
@@ -298,7 +298,13 @@ FlarmTrafficDetailsWidget::OnCallsignClicked()
 {
   StaticString<21> newName;
   newName.clear();
-  if (TextEntryDialog(newName, _("Competition ID")) &&
+
+  // pre-fill the callsign from flarmnet database or userfile
+  const TCHAR* cs = FlarmDetails::LookupCallsign(target_id);
+  if (cs != nullptr && cs[0] != 0)
+    newName = cs;
+
+  if (TextEntryDialog(newName, _("Callsign")) &&
       FlarmDetails::AddSecondaryItem(target_id, newName))
     SaveFlarmNames();
 
