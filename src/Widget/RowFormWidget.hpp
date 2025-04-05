@@ -8,6 +8,7 @@
 #include "Form/DataField/Base.hpp"
 #include "time/BrokenDate.hpp"
 #include "time/FloatDuration.hxx"
+#include "time/RoughTimeDecl.hpp"
 #include "Repository/FileType.hpp"
 #include "Units/Group.hpp"
 
@@ -24,7 +25,6 @@
 struct DialogLook;
 struct StaticEnumChoice;
 class Angle;
-class RoughTime;
 class RoughTimeDelta;
 class Path;
 class Button;
