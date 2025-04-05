@@ -6,18 +6,19 @@
 
 using namespace std::chrono_literals;
 
-static void test_rough_time()
+template <typename TimeType>
+static void test_time()
 {
-  RoughTime a = RoughTime::Invalid();
+  TimeType a = TimeType::Invalid();
   ok1(!a.IsValid());
 
-  a = RoughTime(12, 1);
+  a = TimeType(12, 1);
   ok1(a.IsValid());
   ok1(a.GetHour() == 12);
   ok1(a.GetMinute() == 1);
   ok1(a.GetMinuteOfDay() == 12 * 60 + 1);
 
-  /* compare a RoughTime with itself */
+  /* compare with itself */
   ok1(a == a);
   ok1(!(a != a));
   ok1(a <= a);
@@ -25,8 +26,8 @@ static void test_rough_time()
   ok1(!(a < a));
   ok1(!(a > a));
 
-  /* compare a RoughTime with another one */
-  RoughTime b(11, 59);
+  /* compare with another one */
+  TimeType b(11, 59);
   ok1(b.IsValid());
   ok1(a != b);
   ok1(!(a == b));
@@ -42,19 +43,19 @@ static void test_rough_time()
   ok1(!(b > a));
 
   /* test factory functions */
-  ok1(RoughTime::FromMinuteOfDayChecked((int)(12*60+1)) == RoughTime(12,1) );
-  ok1(RoughTime::FromMinuteOfDayChecked((int)(12*60+1+24*60)) == RoughTime(12,1) );
-  ok1(RoughTime::FromMinuteOfDayChecked((int)(12*60+1-24*60)) == RoughTime(12,1) );
-  
-  ok1(RoughTime( TimeStamp(12h) ) == RoughTime(12,0) );
-  ok1(RoughTime( TimeStamp(12h+1min) ) == RoughTime(12,1) );
-  ok1(RoughTime( TimeStamp(12h+1s) ) == RoughTime(12,0) );
-  ok1(RoughTime( TimeStamp(12h+1min+24h) ) == RoughTime(12,1) );
-  ok1(RoughTime( TimeStamp(12h+1min-24h) ) == RoughTime(12,1) );
+  ok1(TimeType::FromMinuteOfDayChecked((int)(12*60+1)) == TimeType(12,1) );
+  ok1(TimeType::FromMinuteOfDayChecked((int)(12*60+1+24*60)) == TimeType(12,1) );
+  ok1(TimeType::FromMinuteOfDayChecked((int)(12*60+1-24*60)) == TimeType(12,1) );
+
+  ok1(TimeType( TimeStamp(12h) ) == TimeType(12,0) );
+  ok1(TimeType( TimeStamp(12h+1min) ) == TimeType(12,1) );
+  ok1(TimeType( TimeStamp(12h+1s) ) == TimeType(12,0) );
+  ok1(TimeType( TimeStamp(12h+1min+24h) ) == TimeType(12,1) );
+  ok1(TimeType( TimeStamp(12h+1min-24h) ) == TimeType(12,1) );
 
   /* test midnight wraparound */
-  a = RoughTime(0, 0);
-  b = RoughTime(23, 59);
+  a = TimeType(0, 0);
+  b = TimeType(23, 59);
   ok1(b.IsValid());
   ok1(a != b);
   ok1(!(a == b));
@@ -148,7 +149,7 @@ int main()
 {
   plan_tests(85);
 
-  test_rough_time();
+  test_time<RoughTime>();
   test_rough_time_span();
   test_rough_time_delta();
 
