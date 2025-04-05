@@ -4,12 +4,12 @@
 #pragma once
 
 #include "time/FloatDuration.hxx"
+#include "time/RoughTimeDecl.hpp"
 
 #include <list>
 #include <memory>
 
 class Angle;
-class RoughTime;
 class RoughTimeSpan;
 
 /**
