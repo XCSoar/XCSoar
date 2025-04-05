@@ -5,7 +5,8 @@
 
 #include <tchar.h>
 
-class RoughTime;
+#include "time/RoughTimeDecl.hpp"
+
 class RoughTimeDelta;
 
 bool

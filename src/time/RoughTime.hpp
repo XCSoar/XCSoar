@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Stamp.hpp"
+#include "RoughTimeDecl.hpp"
 
 #include <cassert>
 #include <chrono>
@@ -12,7 +13,7 @@
 /**
  * This data type stores a time of day with minute granularity.
  */
-class RoughTime {
+class TimeSinceMidnight {
   using Duration = std::chrono::duration<uint16_t,
                                          std::chrono::minutes::period>;
 
@@ -25,26 +26,26 @@ class RoughTime {
    */
   Duration value;
 
-  constexpr RoughTime(Duration _value) noexcept
+  constexpr TimeSinceMidnight(Duration _value) noexcept
     :value(_value) {}
 
 public:
-  RoughTime() noexcept = default;
+  TimeSinceMidnight() noexcept = default;
 
-  constexpr RoughTime(unsigned hour, unsigned minute) noexcept
+  constexpr TimeSinceMidnight(unsigned hour, unsigned minute) noexcept
     :value(std::chrono::duration_cast<Duration>(std::chrono::hours{hour}) +
            std::chrono::duration_cast<Duration>(std::chrono::minutes{minute}))
   {
   }
 
-  static constexpr RoughTime FromMinuteOfDayChecked(int mod) noexcept {
+  static constexpr TimeSinceMidnight FromMinuteOfDayChecked(int mod) noexcept {
     while (mod < 0)
       mod += MAX.count();
 
-    return RoughTime(std::chrono::minutes{(unsigned)mod % MAX.count()});
+    return TimeSinceMidnight(std::chrono::minutes{(unsigned)mod % MAX.count()});
   }
 
-  explicit constexpr RoughTime(TimeStamp t) noexcept {
+  explicit constexpr TimeSinceMidnight(TimeStamp t) noexcept {
     constexpr auto MAX_FLOAT = std::chrono::duration_cast<FloatDuration>(MAX);
     
     FloatDuration since_midnight = t.ToDuration();
@@ -55,8 +56,8 @@ public:
     value = std::chrono::duration_cast<Duration>(since_midnight);
   }
 
-  static constexpr RoughTime Invalid() noexcept {
-    return RoughTime(INVALID);
+  static constexpr TimeSinceMidnight Invalid() noexcept {
+    return TimeSinceMidnight(INVALID);
   }
 
   void SetInvalid() noexcept {
@@ -67,28 +68,28 @@ public:
     return value != INVALID;
   }
 
-  constexpr bool operator ==(RoughTime other) const noexcept {
+  constexpr bool operator ==(TimeSinceMidnight other) const noexcept {
     return value == other.value;
   }
 
-  constexpr bool operator !=(RoughTime other) const noexcept {
+  constexpr bool operator !=(TimeSinceMidnight other) const noexcept {
     return value != other.value;
   }
 
-  constexpr bool operator <(RoughTime other) const noexcept {
+  constexpr bool operator <(TimeSinceMidnight other) const noexcept {
     /* this formula supports midnight wraparound */
     return (MAX - Duration{1} + other.value - value) % MAX < MAX / 2;
   }
 
-  constexpr bool operator >(RoughTime other) const noexcept {
+  constexpr bool operator >(TimeSinceMidnight other) const noexcept {
     return other < *this;
   }
 
-  constexpr bool operator <=(RoughTime other) const noexcept {
+  constexpr bool operator <=(TimeSinceMidnight other) const noexcept {
     return !(*this > other);
   }
 
-  constexpr bool operator >=(RoughTime other) const noexcept {
+  constexpr bool operator >=(TimeSinceMidnight other) const noexcept {
     return !(*this < other);
   }
 
@@ -104,7 +105,7 @@ public:
     return value.count();
   }
 
-  RoughTime &operator++() noexcept {
+  TimeSinceMidnight &operator++() noexcept {
     assert(IsValid());
     assert(value < MAX);
 
@@ -112,7 +113,7 @@ public:
     return *this;
   }
 
-  RoughTime &operator--() noexcept {
+  TimeSinceMidnight &operator--() noexcept {
     assert(IsValid());
     assert(value < MAX);
 
