@@ -3,8 +3,14 @@
 
 #pragma once
 
+#include <chrono>
+
+template <typename Duration>
+class TimeSinceMidnight;
+
 /**
  * This data type stores a time of day with minute granularity.
  */
-class TimeSinceMidnight;
-using RoughTime = TimeSinceMidnight;
+using UnsignedMinutes = std::chrono::duration<uint16_t,std::chrono::minutes::period>;
+using RoughTime = TimeSinceMidnight<UnsignedMinutes>;
+
