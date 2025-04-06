@@ -42,21 +42,15 @@ static void test_rough_time()
   ok1(!(b > a));
 
   /* test factory functions */
-  ok1(RoughTime::FromMinuteOfDay(12*60+1) == RoughTime(12,1) );
   ok1(RoughTime::FromMinuteOfDayChecked((unsigned)(12*60+1)) == RoughTime(12,1) );
   ok1(RoughTime::FromMinuteOfDayChecked((unsigned)(12*60+1+24*60)) == RoughTime(12,1) );
   ok1(RoughTime::FromMinuteOfDayChecked((int)(12*60+1)) == RoughTime(12,1) );
   ok1(RoughTime::FromMinuteOfDayChecked((int)(12*60+1+24*60)) == RoughTime(12,1) );
   ok1(RoughTime::FromMinuteOfDayChecked((int)(12*60+1-24*60)) == RoughTime(12,1) );
 
-  ok1(RoughTime::FromSecondOfDayChecked(12*3600+1*60) == RoughTime(12,1) );
-  ok1(RoughTime::FromSecondOfDayChecked(12*3600+1*60-1) == RoughTime(12,0) );
-  ok1(RoughTime::FromSecondOfDayChecked(12*3600+1*60+24*3600) == RoughTime(12,1) );
-  
-  ok1(RoughTime::FromSinceMidnight(12h) == RoughTime(12,0) );
-  ok1(RoughTime::FromSinceMidnight(12h+1min) == RoughTime(12,1) );
-  ok1(RoughTime::FromSinceMidnight(12h+1s) == RoughTime(12,0) );
+  ok1(RoughTime::FromSinceMidnightChecked(12h) == RoughTime(12,0) );
   ok1(RoughTime::FromSinceMidnightChecked(12h+1min) == RoughTime(12,1) );
+  ok1(RoughTime::FromSinceMidnightChecked(12h+1s) == RoughTime(12,0) );
   ok1(RoughTime::FromSinceMidnightChecked(12h+1min+24h) == RoughTime(12,1) );
   ok1(RoughTime::FromSinceMidnightChecked(12h+1min-24h) == RoughTime(12,1) );
   
@@ -160,7 +154,7 @@ static void test_rough_time_delta()
 
 int main()
 {
-  plan_tests(97);
+  plan_tests(92);
 
   test_rough_time();
   test_rough_time_span();
