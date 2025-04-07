@@ -20,7 +20,7 @@ FlarmDevice::ParsePFLAC(NMEAInputLine &line)
     // ignore error responses...
     return true;
 
-  const auto value = line.ReadView();
+  const auto value = line.Rest();
 
   const std::lock_guard<Mutex> lock(settings);
   settings.Set(std::string{name}, value);

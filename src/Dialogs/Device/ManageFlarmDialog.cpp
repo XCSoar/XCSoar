@@ -38,6 +38,7 @@ public:
 static const char *const flarm_config_names[] = {
   "DEVTYPE",
   "CAP",
+  "RADIOID",
   NULL
 };
 
@@ -53,6 +54,12 @@ ManageFLARMWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     if (const auto x = device.GetSetting("CAP"))
       hardware.capabilities = *x;
 
+    if (const auto x = device.GetSetting("RADIOID")) {
+      if (const char *id = strchr(x->c_str(), ',')) {
+        hardware.radio_id = FlarmId::Parse(id + 1, nullptr);
+      }
+    }
+
     hardware.available.Update(TimeStamp{FloatDuration{1}});
   }
 
@@ -63,6 +70,13 @@ ManageFLARMWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
       buffer.clear();
       buffer.UnsafeAppendASCII(hardware.device_type.c_str());
       AddReadOnly(_("Hardware type"), NULL, buffer.c_str());
+    }
+
+    if (hardware.radio_id.IsDefined()) {
+      char tmp_id[10];    
+      buffer.clear();
+      buffer.UnsafeAppendASCII(hardware.radio_id.Format(tmp_id));
+      AddReadOnly(_("Flarm ID"), NULL, buffer.c_str());
     }
   }
 
