@@ -56,6 +56,8 @@ EventQueue::Wait(Event &event) noexcept
 
   if (quit)
     return false;
+    
+  FlushClockCaches();
 
   while (true) {
     if (Generate(event))
