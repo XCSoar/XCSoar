@@ -29,6 +29,23 @@ class TimeSinceMidnight {
   constexpr TimeSinceMidnight(Duration _value) noexcept
     :value(_value) {}
 
+  /**
+   * Normalizes any duration since midnight into interval [0, 24h)
+   */
+  template <typename D>
+  static constexpr D NormalizedDuration(D since_midnight) noexcept {
+    constexpr D _24H = std::chrono::duration_cast<D>(MAX);
+    while (since_midnight < D(0) )
+      since_midnight += _24H;
+
+    if constexpr (std::is_floating_point_v<typename D::rep>)
+      since_midnight= D( std::fmod(since_midnight.count(), _24H.count()) );
+    else
+      since_midnight = since_midnight % _24H;
+
+    return since_midnight;
+  }
+
 public:
   TimeSinceMidnight() noexcept = default;
 
@@ -39,22 +56,12 @@ public:
   }
 
   static constexpr TimeSinceMidnight FromMinuteOfDayChecked(int mod) noexcept {
-    constexpr auto MAX_MINUTES = std::chrono::duration_cast<std::chrono::minutes>(MAX).count();
-    while (mod < 0)
-      mod += MAX_MINUTES;
-
-    return TimeSinceMidnight(std::chrono::minutes{mod % MAX_MINUTES});
+    return TimeSinceMidnight( NormalizedDuration(std::chrono::minutes(mod)) );
   }
 
-  explicit constexpr TimeSinceMidnight(TimeStamp t) noexcept {
-    constexpr auto MAX_FLOAT = std::chrono::duration_cast<FloatDuration>(MAX);
-    
-    FloatDuration since_midnight = t.ToDuration();
-    while (since_midnight < FloatDuration(0))
-      since_midnight += MAX_FLOAT;
-    since_midnight = FloatDuration(std::fmod(since_midnight.count(), MAX_FLOAT.count()));
-
-    value = std::chrono::duration_cast<Duration>(since_midnight);
+  explicit constexpr TimeSinceMidnight(TimeStamp t) noexcept 
+    :value( std::chrono::duration_cast<Duration>(NormalizedDuration(t.ToDuration())) )
+  { 
   }
 
   static constexpr TimeSinceMidnight Invalid() noexcept {
