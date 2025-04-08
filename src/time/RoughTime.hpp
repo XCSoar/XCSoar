@@ -41,23 +41,19 @@ public:
     while (mod < 0)
       mod += MAX.count();
 
-    return FromMinuteOfDayChecked(unsigned(mod));
+    return RoughTime(std::chrono::minutes{(unsigned)mod % MAX.count()});
   }
 
-  /**
-   * Allows values bigger than one day.
-   */
-  template<class Rep, class Period>
-  static constexpr RoughTime FromSinceMidnightChecked(const std::chrono::duration<Rep,Period> &since_midnight) noexcept {
-    return FromMinuteOfDayChecked((int)std::chrono::duration_cast<std::chrono::minutes>(since_midnight).count());
-  }
+  explicit constexpr RoughTime(TimeStamp t) noexcept {
+    constexpr auto MAX_FLOAT = std::chrono::duration_cast<FloatDuration>(MAX);
+    
+    FloatDuration since_midnight = t.ToDuration();
+    while (since_midnight < FloatDuration(0))
+      since_midnight += MAX_FLOAT;
+    since_midnight = FloatDuration(std::fmod(since_midnight.count(), MAX_FLOAT.count()));
 
-  static constexpr RoughTime FromMinuteOfDayChecked(unsigned mod) noexcept {
-    return RoughTime(std::chrono::minutes{mod % MAX.count()});
+    value = std::chrono::duration_cast<Duration>(since_midnight);
   }
-
-  explicit constexpr RoughTime(TimeStamp t) noexcept
-    :RoughTime(FromSinceMidnightChecked(t.ToDuration())) {}
 
   static constexpr RoughTime Invalid() noexcept {
     return RoughTime(INVALID);
