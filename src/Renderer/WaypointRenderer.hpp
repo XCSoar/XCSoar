@@ -7,6 +7,7 @@
 
 struct WaypointRendererSettings;
 struct WaypointLook;
+struct ComputerSettings;
 class Canvas;
 class LabelBlock;
 class MapWindowProjection;
@@ -40,11 +41,12 @@ public:
   }
 
   void Render(Canvas &canvas, LabelBlock &label_block,
-              const MapWindowProjection &projection,
-              const WaypointRendererSettings &settings,
-              const PolarSettings &polar_settings,
-              const TaskBehaviour &task_behaviour,
-              const MoreData &basic, const DerivedInfo &calculated,
-              const ProtectedTaskManager *task,
-              const ProtectedRoutePlanner *route_planner) noexcept;
+               const MapWindowProjection &projection,
+               const WaypointRendererSettings &settings,
+               const PolarSettings &polar_settings,
+               const TaskBehaviour &task_behaviour,
+               const MoreData &basic, const DerivedInfo &calculated,
+               const ProtectedTaskManager *task,
+               const ProtectedRoutePlanner *route_planner,
+               const ComputerSettings &computer_settings) noexcept;
 };

@@ -7,6 +7,7 @@
 #include "AirspaceConfig.hpp"
 #include "Map.hpp"
 #include "Keys.hpp"
+#include "RoughTimeProfile.hpp"
 #include "MapSettings.hpp"
 
 #include <algorithm> // for std::clamp()
