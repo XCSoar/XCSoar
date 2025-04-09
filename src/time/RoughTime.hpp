@@ -135,12 +135,11 @@ public:
 };
 
 /**
- * A data type that stores a time span: start end end time of day with
- * minute granularity.  This object may be "undefined", i.e. no time
- * span was specified.  Either start or end may be "invalid",
- * i.e. there is no limitation on that side.
+ * A data type that stores a time span: start and end time of day.
+ * This object may be "undefined", i.e. no time span was specified.
+ * Either start or end may be "invalid", i.e. there is no limitation on that side.
  */
-class RoughTimeSpan {
+class TimeSpan {
   RoughTime start;
 
   /**
@@ -149,21 +148,25 @@ class RoughTimeSpan {
    */
   RoughTime end;
 
-public:
-  RoughTimeSpan() noexcept = default;
-
-  constexpr RoughTimeSpan(RoughTime _start, RoughTime _end) noexcept
+  constexpr TimeSpan(RoughTime _start, RoughTime _end) noexcept
     :start(_start), end(_end) {}
 
-  static constexpr RoughTimeSpan Invalid() noexcept {
-    return RoughTimeSpan(RoughTime::Invalid(), RoughTime::Invalid());
+public:
+  TimeSpan() noexcept = default;
+
+  static constexpr TimeSpan FromRoughTimes(RoughTime _start, RoughTime _end) noexcept {
+    return TimeSpan(_start, _end);
   }
 
-  constexpr const RoughTime &GetStart() const noexcept {
+  static constexpr TimeSpan Invalid() noexcept {
+    return TimeSpan(RoughTime::Invalid(), RoughTime::Invalid());
+  }
+
+  constexpr const RoughTime &GetRoughStart() const noexcept {
     return start;
   }
 
-  constexpr const RoughTime &GetEnd() const noexcept {
+  constexpr const RoughTime &GetRoughEnd() const noexcept {
     return end;
   }
 

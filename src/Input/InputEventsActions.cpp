@@ -211,7 +211,7 @@ try {
   if (start.pev_start_window.count() > 0) {
     new_end = new_start + RoughTimeDelta::FromDuration(start.pev_start_window);
   }
-  const RoughTimeSpan ts = RoughTimeSpan(new_start, new_end);
+  const TimeSpan ts = TimeSpan::FromRoughTimes(new_start, new_end);
 
   backend_components->protected_task_manager->SetStartTimeSpan(ts);
 
