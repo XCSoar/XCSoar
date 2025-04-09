@@ -836,7 +836,7 @@ UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
-  const RoughTimeSpan &open = common_stats.start_open_time_span;
+  const TimeSpan &open = common_stats.start_open_time_span;
 
   /* reset color that may have been set by a previous call */
   data.SetValueColor(0);
@@ -855,8 +855,8 @@ UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
     data.SetValueInvalid();
     data.SetComment(_("Closed"));
   } else if (open.HasBegun(now)) {
-    if (open.GetEnd().IsValid()) {
-      unsigned seconds = SecondsUntil(now_s, open.GetEnd());
+    if (open.GetRoughEnd().IsValid()) {
+      unsigned seconds = SecondsUntil(now_s, open.GetRoughEnd());
       data.FmtValue(_T("{:02}:{:02}"), seconds / 60, seconds % 60);
       data.SetValueColor(3);
     } else
@@ -864,7 +864,7 @@ UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
 
     data.SetComment(_("Open"));
   } else {
-    unsigned seconds = SecondsUntil(now_s, open.GetStart());
+    unsigned seconds = SecondsUntil(now_s, open.GetRoughStart());
     data.FmtValue(_T("{:02}:{:02}"), seconds / 60, seconds % 60);
     data.SetValueColor(2);
     data.SetComment(_("Waiting"));
@@ -880,7 +880,7 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
   const GlideResult &current_remaining =
     task_stats.current_leg.solution_remaining;
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
-  const RoughTimeSpan &open = common_stats.start_open_time_span;
+  const TimeSpan &open = common_stats.start_open_time_span;
 
   /* reset color that may have been set by a previous call */
   data.SetValueColor(0);
@@ -900,8 +900,8 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
     data.SetValueInvalid();
     data.SetComment(_("Closed"));
   } else if (open.HasBegun(arrival)) {
-    if (open.GetEnd().IsValid()) {
-      unsigned seconds = SecondsUntil(arrival_s, open.GetEnd());
+    if (open.GetRoughEnd().IsValid()) {
+      unsigned seconds = SecondsUntil(arrival_s, open.GetRoughEnd());
       data.FmtValue(_T("{:02}:{:02}"), seconds / 60, seconds % 60);
       data.SetValueColor(3);
     } else
@@ -909,7 +909,7 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
 
     data.SetComment(_("Open"));
   } else {
-    unsigned seconds = SecondsUntil(arrival_s, open.GetStart());
+    unsigned seconds = SecondsUntil(arrival_s, open.GetRoughStart());
     data.FmtValue(_T("{:02}:{:02}"), seconds / 60, seconds % 60);
     data.SetValueColor(2);
     data.SetComment(_("Waiting"));
