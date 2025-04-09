@@ -252,9 +252,9 @@ Serialise(WritableDataNode &node, const OrderedTaskSettings &data)
   node.SetAttribute("start_max_height_ref",
                     GetHeightRef(data.start_constraints.max_height_ref));
   node.SetAttribute("start_open_time",
-                    data.start_constraints.open_time_span.GetStart());
+                    data.start_constraints.open_time_span.GetRoughStart());
   node.SetAttribute("start_close_time",
-                    data.start_constraints.open_time_span.GetEnd());
+                    data.start_constraints.open_time_span.GetRoughEnd());
   node.SetAttribute("finish_min_height",
                     data.finish_constraints.min_height);
   node.SetAttribute("finish_min_height_ref",

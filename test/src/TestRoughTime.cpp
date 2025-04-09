@@ -71,33 +71,33 @@ static void test_time()
   ok1(!(b > a));
 }
 
-static void test_rough_time_span()
+static void test_time_span()
 {
   RoughTime a(12, 1);
   RoughTime b(11, 59);
 
-  /* test RoughTimeSpan::IsInside() */
-  RoughTimeSpan s = RoughTimeSpan::Invalid();
+  /* test TimeSpan::IsInside() */
+  TimeSpan s = TimeSpan::Invalid();
   ok1(!s.IsDefined());
   ok1(s.IsInside(a));
   ok1(s.IsInside(b));
 
-  s = RoughTimeSpan(RoughTime(12, 0), RoughTime::Invalid());
+  s = TimeSpan::FromRoughTimes(RoughTime(12, 0), RoughTime::Invalid());
   ok1(s.IsDefined());
   ok1(s.IsInside(a));
   ok1(!s.IsInside(b));
 
-  s = RoughTimeSpan(RoughTime::Invalid(), RoughTime(12, 0));
+  s = TimeSpan::FromRoughTimes(RoughTime::Invalid(), RoughTime(12, 0));
   ok1(s.IsDefined());
   ok1(!s.IsInside(a));
   ok1(s.IsInside(b));
 
-  s = RoughTimeSpan(RoughTime(12, 0), RoughTime(12, 1));
+  s = TimeSpan::FromRoughTimes(RoughTime(12, 0), RoughTime(12, 1));
   ok1(s.IsDefined());
   ok1(!s.IsInside(a));
   ok1(!s.IsInside(b));
 
-  s = RoughTimeSpan(RoughTime(12, 0), RoughTime(12, 30));
+  s = TimeSpan::FromRoughTimes(RoughTime(12, 0), RoughTime(12, 30));
   ok1(s.IsDefined());
   ok1(s.IsInside(a));
   ok1(!s.IsInside(b));
@@ -107,21 +107,21 @@ static void test_rough_time_span()
   b = RoughTime(23, 59);
   RoughTime c(22, 0);
   RoughTime d(2, 0);
-  s = RoughTimeSpan(RoughTime(23, 0), RoughTime::Invalid());
+  s = TimeSpan::FromRoughTimes(RoughTime(23, 0), RoughTime::Invalid());
   ok1(s.IsDefined());
   ok1(s.IsInside(a));
   ok1(s.IsInside(b));
   ok1(!s.IsInside(c));
   ok1(s.IsInside(d));
 
-  s = RoughTimeSpan(RoughTime::Invalid(), RoughTime(1, 0));
+  s = TimeSpan::FromRoughTimes(RoughTime::Invalid(), RoughTime(1, 0));
   ok1(s.IsDefined());
   ok1(s.IsInside(a));
   ok1(s.IsInside(b));
   ok1(s.IsInside(c));
   ok1(!s.IsInside(d));
 
-  s = RoughTimeSpan(RoughTime(23, 1), RoughTime(0, 30));
+  s = TimeSpan::FromRoughTimes(RoughTime(23, 1), RoughTime(0, 30));
   ok1(s.IsDefined());
   ok1(s.IsInside(a));
   ok1(s.IsInside(b));
@@ -150,7 +150,7 @@ int main()
   plan_tests(85);
 
   test_time<RoughTime>();
-  test_rough_time_span();
+  test_time_span();
   test_rough_time_delta();
 
   return exit_status();

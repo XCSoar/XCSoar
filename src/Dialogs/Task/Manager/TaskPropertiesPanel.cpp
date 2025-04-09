@@ -55,8 +55,8 @@ TaskPropertiesPanel::RefreshView()
   LoadValue(START_REQUIRES_ARM, p.start_constraints.require_arm);
   LoadValue(START_SCORE_EXIT, p.start_constraints.score_exit);
 
-  LoadValue(START_OPEN_TIME, p.start_constraints.open_time_span.GetStart());
-  LoadValue(START_CLOSE_TIME, p.start_constraints.open_time_span.GetEnd());
+  LoadValue(START_OPEN_TIME, p.start_constraints.open_time_span.GetRoughStart());
+  LoadValue(START_CLOSE_TIME, p.start_constraints.open_time_span.GetRoughEnd());
 
   SetRowVisible(START_MAX_SPEED, !fai_start_finish);
   LoadValue(START_MAX_SPEED, p.start_constraints.max_speed,
@@ -110,12 +110,12 @@ TaskPropertiesPanel::ReadValues()
 
   changed |= SaveValue(START_SCORE_EXIT, p.start_constraints.score_exit);
 
-  RoughTime new_open = p.start_constraints.open_time_span.GetStart();
-  RoughTime new_close = p.start_constraints.open_time_span.GetEnd();
+  RoughTime new_open = p.start_constraints.open_time_span.GetRoughStart();
+  RoughTime new_close = p.start_constraints.open_time_span.GetRoughEnd();
   const bool start_open_modified = SaveValue(START_OPEN_TIME, new_open);
   const bool start_close_modified = SaveValue(START_CLOSE_TIME, new_close);
   if (start_open_modified || start_close_modified) {
-    p.start_constraints.open_time_span = RoughTimeSpan(new_open, new_close);
+    p.start_constraints.open_time_span = TimeSpan::FromRoughTimes(new_open, new_close);
     changed = true;
   }
 
