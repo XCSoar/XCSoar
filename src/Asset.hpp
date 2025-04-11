@@ -152,7 +152,11 @@ constexpr
 static inline bool
 HasTouchScreen() noexcept
 {
+#if defined(RASPBERRY_PI)
+  return true;
+#else
   return IsAndroid() || IsKobo() || IsIOS();
+#endif
 }
 #endif
 
