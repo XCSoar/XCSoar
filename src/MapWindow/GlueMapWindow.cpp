@@ -18,6 +18,7 @@ GlueMapWindow::GlueMapWindow(const Look &look) noexcept
    thermal_band_renderer(look.thermal_band, look.chart),
    final_glide_bar_renderer(look.final_glide_bar, look.map.task),
    vario_bar_renderer(look.vario_bar),
+   turn_back_point_renderer(look.map),
    gesture_look(look.gesture)
 {
 }

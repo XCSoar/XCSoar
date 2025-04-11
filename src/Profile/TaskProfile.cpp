@@ -90,5 +90,7 @@ Profile::Load(const ProfileMap &map, TaskBehaviour &settings)
 
   map.GetEnum(ProfileKeys::AbortTaskMode, settings.abort_task_mode);
 
+  map.Get(ProfileKeys::TurnBackMarkerEnabled, settings.turn_back_marker_enabled);
+
   Load(map, settings.route_planner);
 }

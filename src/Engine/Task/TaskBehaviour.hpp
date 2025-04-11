@@ -123,6 +123,9 @@ struct TaskBehaviour {
   /** Route and reach planning */
   RoutePlannerConfig route_planner;
 
+  /** Show a marker indicating the point of no return */
+  bool turn_back_marker_enabled;
+
   void SetDefaults();
 
   /**
