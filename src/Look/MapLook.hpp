@@ -59,6 +59,10 @@ struct MapLook {
   Pen reach_working_pen_thick;
 
   Pen track_line_pen;
+  
+  /** Pen and brush for the Turn Back Point (TBP) */
+  Pen tbp_pen;
+  Brush tbp_brush;
 
   Pen contest_pens[3];
 

@@ -361,6 +361,14 @@ private:
    * @param canvas The drawing canvas
    */
   void RenderFinalGlideShading(Canvas &canvas) noexcept;
+  
+  /**
+   * Draw the Turn Back Point (TBP) on the track line
+   * @param canvas The drawing canvas
+   * @param aircraft_pos The aircraft position on screen
+   */
+  virtual void DrawTurnBackPoint([[maybe_unused]] Canvas &canvas,
+                                [[maybe_unused]] const PixelPoint aircraft_pos) const noexcept {}
 
   /**
    * Renders the airspace

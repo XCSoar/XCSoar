@@ -10,6 +10,7 @@
 #include "Renderer/ThermalBandRenderer.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"
 #include "Renderer/VarioBarRenderer.hpp"
+#include "Renderer/TurnBackPointRenderer.hpp"
 #include "ui/event/Timer.hpp"
 #include "ui/event/Notify.hpp"
 #include "ui/window/Features.hpp"
@@ -118,6 +119,7 @@ class GlueMapWindow : public MapWindow {
   ThermalBandRenderer thermal_band_renderer;
   FinalGlideBarRenderer final_glide_bar_renderer;
   VarioBarRenderer vario_bar_renderer;
+  TurnBackPointRenderer turn_back_point_renderer;
 
   const GestureLook &gesture_look;
 
@@ -250,6 +252,7 @@ private:
   void DrawThermalBand(Canvas &canvas, const PixelRect &rc) const noexcept;
   void DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const noexcept;
   void DrawVario(Canvas &canvas, const PixelRect &rc) const noexcept;
+  void DrawTurnBackPoint(Canvas &canvas, const PixelPoint aircraft_pos) const noexcept override;
   void DrawStallRatio(Canvas &canvas, const PixelRect &rc) const noexcept;
 
   void SwitchZoomClimb() noexcept;

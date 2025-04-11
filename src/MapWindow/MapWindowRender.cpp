@@ -251,6 +251,10 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
   // Render track bearing (projected track ground/air relative)
   draw_sw.Mark("DrawTrackBearing");
   RenderTrackBearing(canvas, aircraft_pos);
+  
+  // Draw the Turn Back Point (TBP) on the track line
+  if (IsNearSelf() && !Calculated().circling)
+    DrawTurnBackPoint(canvas, aircraft_pos);
 
   draw_sw.Mark("RenderMisc2");
   DrawBestCruiseTrack(canvas, aircraft_pos);
