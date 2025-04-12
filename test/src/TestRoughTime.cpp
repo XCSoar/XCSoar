@@ -43,13 +43,12 @@ static void test_time()
   ok1(!(b > a));
 
   /* test factory functions */
-  ok1(TimeType::FromMinuteOfDayChecked((int)(12*60+1)) == TimeType(12,1) );
+  ok1(TimeType::FromMinuteOfDayChecked((int)(12*60+1))       == TimeType(12,1) );
   ok1(TimeType::FromMinuteOfDayChecked((int)(12*60+1+24*60)) == TimeType(12,1) );
   ok1(TimeType::FromMinuteOfDayChecked((int)(12*60+1-24*60)) == TimeType(12,1) );
 
-  ok1(TimeType( TimeStamp(12h) ) == TimeType(12,0) );
-  ok1(TimeType( TimeStamp(12h+1min) ) == TimeType(12,1) );
-  ok1(TimeType( TimeStamp(12h+1s) ) == TimeType(12,0) );
+  ok1(TimeType( TimeStamp(12h) )          == TimeType(12,0) );
+  ok1(TimeType( TimeStamp(12h+1min) )     == TimeType(12,1) );
   ok1(TimeType( TimeStamp(12h+1min+24h) ) == TimeType(12,1) );
   ok1(TimeType( TimeStamp(12h+1min-24h) ) == TimeType(12,1) );
 
@@ -69,6 +68,15 @@ static void test_time()
   ok1(!(b >= a));
   ok1(b < a);
   ok1(!(b > a));
+}
+
+static void test_conversions()
+{
+  ok1( ToFineTime( RoughTime::Invalid() ) == FineTime::Invalid() );
+  ok1( ToFineTime( RoughTime(12,1) )      == FineTime(12,1) );
+
+  ok1( ToRoughTime( FineTime::Invalid() ) == RoughTime::Invalid() );
+  ok1( ToRoughTime( FineTime(12,1) )      == RoughTime(12,1) );
 }
 
 static void test_time_span()
@@ -147,9 +155,11 @@ static void test_rough_time_delta()
 
 int main()
 {
-  plan_tests(85);
+  plan_tests(132);
 
   test_time<RoughTime>();
+  test_time<FineTime>();
+  test_conversions();
   test_time_span();
   test_rough_time_delta();
 
