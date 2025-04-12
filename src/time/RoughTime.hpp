@@ -161,11 +161,11 @@ class TimeSpan {
    */
   FineTime end;
 
-  constexpr TimeSpan(FineTime _start, FineTime _end) noexcept
-    :start(_start), end(_end) {}
-
 public:
   TimeSpan() noexcept = default;
+
+  constexpr TimeSpan(FineTime _start, FineTime _end) noexcept
+    :start(_start), end(_end) {}
 
   static constexpr TimeSpan FromRoughTimes(RoughTime _start, RoughTime _end) noexcept {
     return TimeSpan( ToFineTime(_start), ToFineTime(_end) );
@@ -188,18 +188,27 @@ public:
   }
 
   constexpr bool HasBegun(RoughTime now) const noexcept {
+    return HasBegun( ToFineTime(now) );
+  }
+
+  constexpr bool HasBegun(FineTime now) const noexcept {
     /* if start is invalid, we assume the time span has always already
        begun */
-    return !start.IsValid() || ToFineTime(now) >= start;
+    return !start.IsValid() || now >= start;
   }
 
   constexpr bool HasEnded(RoughTime now) const noexcept {
-    /* if end is invalid, the time span is open-ended, i.e. it will
-       never end */
-    return end.IsValid() && ToFineTime(now) >= end;
+    return HasEnded( ToFineTime(now) );
   }
 
-  constexpr bool IsInside(RoughTime now) const noexcept {
+  constexpr bool HasEnded(FineTime now) const noexcept {
+    /* if end is invalid, the time span is open-ended, i.e. it will
+       never end */
+    return end.IsValid() && now >= end;
+  }
+
+  template <typename Time>
+  constexpr bool IsInside(Time now) const noexcept {
     return HasBegun(now) && !HasEnded(now);
   }
 };

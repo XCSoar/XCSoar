@@ -84,8 +84,16 @@ static void test_time_span()
   RoughTime a(12, 1);
   RoughTime b(11, 59);
 
+  TimeSpan s = TimeSpan::FromRoughTimes(a,b);
+  ok1( s.GetRoughStart() == a );
+  ok1( s.GetRoughEnd() == b );
+
+  s = TimeSpan(ToFineTime(a), ToFineTime(b));
+  ok1( s.GetRoughStart() == a );
+  ok1( s.GetRoughEnd() == b );
+
   /* test TimeSpan::IsInside() */
-  TimeSpan s = TimeSpan::Invalid();
+  s = TimeSpan::Invalid();
   ok1(!s.IsDefined());
   ok1(s.IsInside(a));
   ok1(s.IsInside(b));
@@ -155,7 +163,7 @@ static void test_rough_time_delta()
 
 int main()
 {
-  plan_tests(132);
+  plan_tests(136);
 
   test_time<RoughTime>();
   test_time<FineTime>();
