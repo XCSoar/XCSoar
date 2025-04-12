@@ -193,25 +193,19 @@ try {
   // Configure start window
   const OrderedTaskSettings &ots =
     backend_components->protected_task_manager->GetOrderedTaskSettings();
-  const StartConstraints &start = ots.start_constraints;
+  const StartConstraints &constraints = ots.start_constraints;
 
-  const BrokenTime bt = BrokenDateTime::NowUTC();
-  RoughTime new_start = RoughTime(bt.hour, bt.minute);
-  RoughTime new_end = RoughTime::Invalid();
+  const auto now = CommonInterface::Basic().time;
 
-  if (start.pev_start_wait_time.count() > 0) {
-    auto t = std::chrono::duration_cast<std::chrono::minutes>(start.pev_start_wait_time);
-    // Set start time to the next full minute after wait time.
-    // This way we make sure wait time is passed before xcsoar opens the start.
-    if (bt.second > 0)
-      t += std::chrono::minutes{1};
-    new_start = new_start + RoughTimeDelta::FromDuration(t);
-  }
+  // Note: pev_start_wait_time == 0 means window starts right away
+  TimeStamp new_start_ts( now.ToDuration() + constraints.pev_start_wait_time );
+  FineTime new_start(new_start_ts);
 
-  if (start.pev_start_window.count() > 0) {
-    new_end = new_start + RoughTimeDelta::FromDuration(start.pev_start_window);
-  }
-  const TimeSpan ts = TimeSpan::FromRoughTimes(new_start, new_end);
+  FineTime new_end = (constraints.pev_start_window.count() > 0) ?
+                     FineTime(new_start_ts + constraints.pev_start_window) :
+                     FineTime::Invalid();
+
+  const TimeSpan ts = TimeSpan(new_start, new_end);
 
   backend_components->protected_task_manager->SetStartTimeSpan(ts);
 
