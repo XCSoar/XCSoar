@@ -132,7 +132,20 @@ public:
   constexpr operator TimeStamp() const noexcept {
     return TimeStamp{value};
   }
+
+  // Conversions
+  friend constexpr inline FineTime ToFineTime(const RoughTime &t) noexcept;
+  friend constexpr inline RoughTime ToRoughTime(const FineTime &t) noexcept;
 };
+
+constexpr inline FineTime ToFineTime(const RoughTime &t) noexcept {
+  return t.IsValid() ? FineTime( t.value ) : FineTime::Invalid();
+}
+
+constexpr inline RoughTime ToRoughTime(const FineTime &t) noexcept {
+  return t.IsValid() ? RoughTime( std::chrono::duration_cast<UnsignedMinutes>(t.value) ) :
+                       RoughTime::Invalid();
+}
 
 /**
  * A data type that stores a time span: start and end time of day.
@@ -140,34 +153,34 @@ public:
  * Either start or end may be "invalid", i.e. there is no limitation on that side.
  */
 class TimeSpan {
-  RoughTime start;
+  FineTime start;
 
   /**
    * The end of the span (excluding).  This may be bigger than #start
    * if there's a midnight wraparound.
    */
-  RoughTime end;
+  FineTime end;
 
-  constexpr TimeSpan(RoughTime _start, RoughTime _end) noexcept
+  constexpr TimeSpan(FineTime _start, FineTime _end) noexcept
     :start(_start), end(_end) {}
 
 public:
   TimeSpan() noexcept = default;
 
   static constexpr TimeSpan FromRoughTimes(RoughTime _start, RoughTime _end) noexcept {
-    return TimeSpan(_start, _end);
+    return TimeSpan( ToFineTime(_start), ToFineTime(_end) );
   }
 
   static constexpr TimeSpan Invalid() noexcept {
-    return TimeSpan(RoughTime::Invalid(), RoughTime::Invalid());
+    return TimeSpan(FineTime::Invalid(), FineTime::Invalid());
   }
 
-  constexpr const RoughTime &GetRoughStart() const noexcept {
-    return start;
+  constexpr RoughTime GetRoughStart() const noexcept {
+    return ToRoughTime(start);
   }
 
-  constexpr const RoughTime &GetRoughEnd() const noexcept {
-    return end;
+  constexpr RoughTime GetRoughEnd() const noexcept {
+    return ToRoughTime(end);
   }
 
   constexpr bool IsDefined() const noexcept {
@@ -177,13 +190,13 @@ public:
   constexpr bool HasBegun(RoughTime now) const noexcept {
     /* if start is invalid, we assume the time span has always already
        begun */
-    return !start.IsValid() || now >= start;
+    return !start.IsValid() || ToFineTime(now) >= start;
   }
 
   constexpr bool HasEnded(RoughTime now) const noexcept {
     /* if end is invalid, the time span is open-ended, i.e. it will
        never end */
-    return end.IsValid() && now >= end;
+    return end.IsValid() && ToFineTime(now) >= end;
   }
 
   constexpr bool IsInside(RoughTime now) const noexcept {
@@ -271,3 +284,4 @@ operator-(RoughTime t, RoughTimeDelta delta) noexcept
 {
   return t + (-delta);
 }
+
