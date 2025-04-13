@@ -53,7 +53,7 @@ MapLook::Initialise(const MapSettings &settings,
   reach_working_pen.Create(Pen::DASH1, Layout::ScalePenWidth(1), clrBlupia);
   reach_working_pen_thick.Create(Pen::DASH1, Layout::ScalePenWidth(2), clrBlupia);
 
-  track_line_pen.Create(3, COLOR_GRAY);
+  track_line_pen.Create(Layout::ScalePenWidth(3), COLOR_GRAY);
 
   contest_pens[0].Create(Layout::ScalePenWidth(1) + 2, COLOR_RED);
   contest_pens[1].Create(Layout::ScalePenWidth(1) + 1, COLOR_ORANGE);
