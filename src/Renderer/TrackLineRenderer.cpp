@@ -10,6 +10,7 @@
 #include "MapSettings.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Geo/Math.hpp"
+#include "Screen/Layout.hpp"
 
 static constexpr unsigned ARC_STEPS = 10;
 static constexpr Angle ARC_SWEEP = Angle::Degrees(135.0);
@@ -23,8 +24,9 @@ TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   const auto x = sc.first, y = sc.second;
 
   PixelPoint end;
-  end.x = pos.x + iround(x * 400);
-  end.y = pos.y - iround(y * 400);
+  const int scaled_length = Layout::Scale(400);
+  end.x = pos.x + iround(x * scaled_length);
+  end.y = pos.y - iround(y * scaled_length);
 
   canvas.Select(look.track_line_pen);
   canvas.DrawLine(pos, end);
