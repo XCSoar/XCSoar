@@ -460,3 +460,19 @@ GlueMapWindow::DrawStallRatio(Canvas &canvas,
     canvas.DrawLine(p.At(-1, -m), p.At(-11, -m));
   }
 }
+
+void
+GlueMapWindow::DrawTurnBackPoint(Canvas &canvas,
+                                const PixelPoint aircraft_pos) const noexcept
+{
+  if (!Basic().location_available || !Basic().track_available)
+    return;
+
+  // Only draw when we're not circling
+  if (Calculated().circling)
+    return;
+
+ turn_back_point_renderer.Draw(canvas, render_projection,
+                              aircraft_pos, Basic(), Calculated(),
+                              GetComputerSettings()); // Pass ComputerSettings
+}

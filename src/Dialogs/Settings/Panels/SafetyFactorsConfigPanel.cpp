@@ -24,6 +24,7 @@ enum ControlIndex {
   AutoBugs,
   SafetyMC,
   RiskFactor,
+  TurnBackMarker,
 };
 
 class SafetyFactorsConfigPanel final : public RowFormWidget {
@@ -98,7 +99,11 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent,
            _T("%.1f %s"), _T("%.1f"),
            0, 1, 0.1, false,
            task_behaviour.risk_gamma);
-  SetExpertRow(RiskFactor);
+ SetExpertRow(RiskFactor);
+
+ AddBoolean(_("Turn back marker"),
+            _("Show a marker indicating the point of no return based on current conditions."),
+            task_behaviour.turn_back_marker_enabled);
 }
 
 bool
@@ -143,6 +148,11 @@ SafetyFactorsConfigPanel::Save(bool &_changed) noexcept
   if (SaveValue(RiskFactor, task_behaviour.risk_gamma)) {
     Profile::Set(ProfileKeys::RiskGamma,
                  iround(task_behaviour.risk_gamma * 10));
+    changed = true;
+  }
+
+  if (SaveValue(TurnBackMarker, task_behaviour.turn_back_marker_enabled)) {
+    Profile::Set(ProfileKeys::TurnBackMarkerEnabled, task_behaviour.turn_back_marker_enabled);
     changed = true;
   }
 
