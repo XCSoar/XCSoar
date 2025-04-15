@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-28 05:34+0000\n"
+"POT-Creation-Date: 2025-04-15 23:49+0000\n"
 "PO-Revision-Date: 2023-05-14 20:52+0000\n"
 "Last-Translator: Péter Gyetvai <gyetpet@mailbox.org>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/xcsoar/"
@@ -447,8 +447,7 @@ msgstr "Dátum"
 msgid "Username"
 msgstr "Felhasználónév"
 
-#: src/net/client/WeGlide/UploadIGCFile.cpp:93
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:122 Data/Input/default.xci:580
+#: src/net/client/WeGlide/UploadIGCFile.cpp:93 Data/Input/default.xci:580
 msgid "Plane"
 msgstr "Repülőgép"
 
@@ -472,7 +471,7 @@ msgstr "Repülés feltöltése"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:132 src/Dialogs/FileManager.cpp:448
 #: src/Dialogs/FileManager.cpp:735 src/Dialogs/Device/DeviceListDialog.cpp:475
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:103
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:117
 #: src/Dialogs/Plane/PlaneListDialog.cpp:198
 #: src/Dialogs/Plane/PlaneListDialog.cpp:223
 #: src/Dialogs/Plane/PlaneListDialog.cpp:268
@@ -787,7 +786,7 @@ msgstr "Nem körözünk"
 #: src/Dialogs/Device/DeviceListDialog.cpp:770
 #: src/Dialogs/Device/PortMonitor.cpp:166
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:139
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:116
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:130
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:125
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:87
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:75
@@ -803,12 +802,12 @@ msgstr "Nem körözünk"
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:356
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:254
 #: src/Dialogs/Traffic/TrafficList.cpp:347
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:329
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:335
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:209 src/Dialogs/dlgAnalysis.cpp:290
 #: src/Dialogs/ProfileListDialog.cpp:318
 #: src/Dialogs/Plane/PlaneListDialog.cpp:361 src/Dialogs/HelpDialog.cpp:30
 #: src/Dialogs/dlgInfoBoxAccess.cpp:95 src/Dialogs/ReplayDialog.cpp:97
-#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:433
+#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:471
 #: src/Dialogs/Waypoint/Manager.cpp:289
 #: src/Dialogs/Waypoint/WaypointList.cpp:215
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:117
@@ -2364,7 +2363,7 @@ msgid "Do you really want to delete all flights from the device?"
 msgstr "Valóban letöröl az eszközről minden repülést?"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:120
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:97
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:111
 msgid "Reboot"
 msgstr "Újraindítás"
 
@@ -2403,30 +2402,35 @@ msgstr "Baud átváltás nem sikerült."
 msgid "Failed to write waypoint."
 msgstr "Fordulópont kiírása nem sikerült."
 
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:65
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:72
 #, fuzzy
 msgid "Hardware type"
 msgstr "Hardver verzió"
 
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:75
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:79
+#, fuzzy
+msgid "Flarm ID"
+msgstr "Flarm kontaktus"
+
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:89
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:52
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:51
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:44
 msgid "Hardware version"
 msgstr "Hardver verzió"
 
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:81
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:95
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:58
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:57
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:49
 msgid "Firmware version"
 msgstr "Firmware verzió"
 
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:87
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:101
 msgid "Obstacle database"
 msgstr "Tereptárgy adatbázis"
 
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:91
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:105
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:61
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:60
 #: src/Dialogs/Settings/dlgConfiguration.cpp:148
@@ -3317,7 +3321,6 @@ msgid "Invalid"
 msgstr "Érvénytelen"
 
 #: src/Dialogs/Traffic/TrafficList.cpp:327
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:301
 msgid "Competition ID"
 msgstr "Farokjel"
 
@@ -3337,6 +3340,7 @@ msgid "Team"
 msgstr "Csapat"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:112
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:307
 msgid "Callsign"
 msgstr "Hívójel"
 
@@ -3360,8 +3364,13 @@ msgstr "Repülőtér"
 msgid "Radio frequency"
 msgstr "Rádiófrekvencia"
 
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:122
+#, fuzzy
+msgid "Plane type"
+msgstr "Fájl típusa"
+
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:210
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:324
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:330
 msgid "FLARM Traffic Details"
 msgstr "FLARM forgalom részletei"
 
@@ -4120,16 +4129,16 @@ msgstr "Legyen ez a bázis"
 msgid "Pan to Waypoint"
 msgstr "Nézet mozgatása a ponthoz"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:406 Data/Input/default.xci:1056
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:444 Data/Input/default.xci:1056
 msgid "GoTo"
 msgstr "Menj"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:409
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:447
 #, fuzzy
 msgid "Pan To"
 msgstr "Mozgatás mód"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:624
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:791
 #: src/Dialogs/Task/TaskPointDialog.cpp:511
 #: src/InfoBoxes/Panel/ATCReference.cpp:64
 msgid "Waypoint"
@@ -8098,11 +8107,12 @@ msgid "V GND"
 msgstr "Seb ff"
 
 #: src/InfoBoxes/Content/Factory.cpp:169
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Ground speed measured by the GPS. If this InfoBox is active in simulation "
-"mode, pressing the up and down arrows adjusts the speed, and left and right "
-"turn the glider."
+"Ground speed measured by the GPS. The small value shows the head or tail "
+"wind difference to TAS for the current vector. If this InfoBox is active in "
+"simulation mode, pressing the up and down arrows adjusts the speed, and left "
+"and right turn the glider."
 msgstr ""
 "Talaj feletti sebesség GPS szerint mérve. Szimuláció alatt a fel-le nyilak a "
 "vitorlázógép sebességét, a jobbra-balra nyilak pedig az irányát állítják, ha "
@@ -9864,7 +9874,7 @@ msgstr ""
 "képest."
 
 #: src/InfoBoxes/Content/Factory.cpp:1009
-#: src/InfoBoxes/Content/Factory.cpp:1010 src/InfoBoxes/Content/Task.cpp:929
+#: src/InfoBoxes/Content/Factory.cpp:1010 src/InfoBoxes/Content/Task.cpp:940
 #, fuzzy, no-c-format
 msgid "Next arrow"
 msgstr "Másik start"
@@ -10185,11 +10195,11 @@ msgstr "TÁP BE"
 msgid "No GPS"
 msgstr "Mgsg TF"
 
-#: src/InfoBoxes/Content/Speed.cpp:98
+#: src/InfoBoxes/Content/Speed.cpp:110
 msgid "BLOCK"
 msgstr "BLOKK"
 
-#: src/InfoBoxes/Content/Speed.cpp:100
+#: src/InfoBoxes/Content/Speed.cpp:112
 msgid "DOLPHIN"
 msgstr "DELFIN"
 
@@ -10197,19 +10207,19 @@ msgstr "DELFIN"
 msgid "Next"
 msgstr "Következő"
 
-#: src/InfoBoxes/Content/Task.cpp:717
+#: src/InfoBoxes/Content/Task.cpp:725
 msgid "Time Below"
 msgstr "Idő alacsonyabban"
 
-#: src/InfoBoxes/Content/Task.cpp:845 src/InfoBoxes/Content/Task.cpp:890
+#: src/InfoBoxes/Content/Task.cpp:856 src/InfoBoxes/Content/Task.cpp:901
 msgid "Closed"
 msgstr "Zárva"
 
-#: src/InfoBoxes/Content/Task.cpp:854 src/InfoBoxes/Content/Task.cpp:899
+#: src/InfoBoxes/Content/Task.cpp:865 src/InfoBoxes/Content/Task.cpp:910
 msgid "Open"
 msgstr "Nyitva"
 
-#: src/InfoBoxes/Content/Task.cpp:859 src/InfoBoxes/Content/Task.cpp:904
+#: src/InfoBoxes/Content/Task.cpp:870 src/InfoBoxes/Content/Task.cpp:915
 msgid "Waiting"
 msgstr "Várakozik"
 
@@ -13070,9 +13080,6 @@ msgstr "XCSoar"
 
 #~ msgid "Specifies the file defining the topological features."
 #~ msgstr "A térképjeleket tartalmazó fájl neve."
-
-#~ msgid "File type"
-#~ msgstr "Fájl típusa"
 
 #~ msgid ""
 #~ "Defines the amount of phong shading in the terrain rendering.  Use large "

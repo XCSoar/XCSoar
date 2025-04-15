@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-28 05:34+0000\n"
+"POT-Creation-Date: 2025-04-15 23:49+0000\n"
 "PO-Revision-Date: 2021-07-20 10:35+0000\n"
 "Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -424,8 +424,7 @@ msgstr ""
 msgid "Username"
 msgstr "用戶名"
 
-#: src/net/client/WeGlide/UploadIGCFile.cpp:93
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:122 Data/Input/default.xci:580
+#: src/net/client/WeGlide/UploadIGCFile.cpp:93 Data/Input/default.xci:580
 msgid "Plane"
 msgstr "飛機"
 
@@ -451,7 +450,7 @@ msgstr "下載飛行"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:132 src/Dialogs/FileManager.cpp:448
 #: src/Dialogs/FileManager.cpp:735 src/Dialogs/Device/DeviceListDialog.cpp:475
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:103
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:117
 #: src/Dialogs/Plane/PlaneListDialog.cpp:198
 #: src/Dialogs/Plane/PlaneListDialog.cpp:223
 #: src/Dialogs/Plane/PlaneListDialog.cpp:268
@@ -768,7 +767,7 @@ msgstr "不盤轉"
 #: src/Dialogs/Device/DeviceListDialog.cpp:770
 #: src/Dialogs/Device/PortMonitor.cpp:166
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:139
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:116
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:130
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:125
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:87
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:75
@@ -784,12 +783,12 @@ msgstr "不盤轉"
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:356
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:254
 #: src/Dialogs/Traffic/TrafficList.cpp:347
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:329
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:335
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:209 src/Dialogs/dlgAnalysis.cpp:290
 #: src/Dialogs/ProfileListDialog.cpp:318
 #: src/Dialogs/Plane/PlaneListDialog.cpp:361 src/Dialogs/HelpDialog.cpp:30
 #: src/Dialogs/dlgInfoBoxAccess.cpp:95 src/Dialogs/ReplayDialog.cpp:97
-#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:433
+#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:471
 #: src/Dialogs/Waypoint/Manager.cpp:289
 #: src/Dialogs/Waypoint/WaypointList.cpp:215
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:117
@@ -2325,7 +2324,7 @@ msgid "Do you really want to delete all flights from the device?"
 msgstr "您真的想刪除設備中的所有飛行嗎？"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:120
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:97
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:111
 msgid "Reboot"
 msgstr "重啟"
 
@@ -2364,30 +2363,35 @@ msgstr "轉換串列傳輸速率失敗。"
 msgid "Failed to write waypoint."
 msgstr "寫入航點失敗。"
 
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:65
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:72
 #, fuzzy
 msgid "Hardware type"
 msgstr "硬體版本"
 
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:75
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:79
+#, fuzzy
+msgid "Flarm ID"
+msgstr "Flarm鎖定"
+
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:89
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:52
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:51
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:44
 msgid "Hardware version"
 msgstr "硬體版本"
 
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:81
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:95
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:58
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:57
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:49
 msgid "Firmware version"
 msgstr "固件版本"
 
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:87
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:101
 msgid "Obstacle database"
 msgstr "障礙資料庫"
 
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:91
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:105
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:61
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:60
 #: src/Dialogs/Settings/dlgConfiguration.cpp:148
@@ -3265,7 +3269,6 @@ msgid "Invalid"
 msgstr "無效"
 
 #: src/Dialogs/Traffic/TrafficList.cpp:327
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:301
 msgid "Competition ID"
 msgstr "競賽ID"
 
@@ -3285,6 +3288,7 @@ msgid "Team"
 msgstr "團隊"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:112
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:307
 msgid "Callsign"
 msgstr "呼號"
 
@@ -3308,8 +3312,13 @@ msgstr "機場"
 msgid "Radio frequency"
 msgstr "無線電頻率"
 
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:122
+#, fuzzy
+msgid "Plane type"
+msgstr "飛機"
+
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:210
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:324
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:330
 msgid "FLARM Traffic Details"
 msgstr "FLARM交通細節"
 
@@ -4060,15 +4069,15 @@ msgstr "設置為新家"
 msgid "Pan to Waypoint"
 msgstr "Pan to 航點"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:406 Data/Input/default.xci:1056
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:444 Data/Input/default.xci:1056
 msgid "GoTo"
 msgstr "GoTo轉到"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:409
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:447
 msgid "Pan To"
 msgstr ""
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:624
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:791
 #: src/Dialogs/Task/TaskPointDialog.cpp:511
 #: src/InfoBoxes/Panel/ATCReference.cpp:64
 msgid "Waypoint"
@@ -7881,11 +7890,12 @@ msgid "V GND"
 msgstr "地速"
 
 #: src/InfoBoxes/Content/Factory.cpp:169
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Ground speed measured by the GPS. If this InfoBox is active in simulation "
-"mode, pressing the up and down arrows adjusts the speed, and left and right "
-"turn the glider."
+"Ground speed measured by the GPS. The small value shows the head or tail "
+"wind difference to TAS for the current vector. If this InfoBox is active in "
+"simulation mode, pressing the up and down arrows adjusts the speed, and left "
+"and right turn the glider."
 msgstr ""
 "地速由GPS測量。如果這個資訊框在類比中是活躍的模式，按上下箭頭調整速度，左右移"
 "動轉動滑翔機。"
@@ -9548,7 +9558,7 @@ msgid ""
 msgstr "到達終點的到達高度與MC設置為0的相對安全到達高度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:1009
-#: src/InfoBoxes/Content/Factory.cpp:1010 src/InfoBoxes/Content/Task.cpp:929
+#: src/InfoBoxes/Content/Factory.cpp:1010 src/InfoBoxes/Content/Task.cpp:940
 #, no-c-format
 msgid "Next arrow"
 msgstr "下一箭頭"
@@ -9860,11 +9870,11 @@ msgstr "接通交流電"
 msgid "No GPS"
 msgstr "無GPS"
 
-#: src/InfoBoxes/Content/Speed.cpp:98
+#: src/InfoBoxes/Content/Speed.cpp:110
 msgid "BLOCK"
 msgstr "阻擋"
 
-#: src/InfoBoxes/Content/Speed.cpp:100
+#: src/InfoBoxes/Content/Speed.cpp:112
 msgid "DOLPHIN"
 msgstr "海豚飛行"
 
@@ -9872,19 +9882,19 @@ msgstr "海豚飛行"
 msgid "Next"
 msgstr "下一個"
 
-#: src/InfoBoxes/Content/Task.cpp:717
+#: src/InfoBoxes/Content/Task.cpp:725
 msgid "Time Below"
 msgstr "以下時間"
 
-#: src/InfoBoxes/Content/Task.cpp:845 src/InfoBoxes/Content/Task.cpp:890
+#: src/InfoBoxes/Content/Task.cpp:856 src/InfoBoxes/Content/Task.cpp:901
 msgid "Closed"
 msgstr "關閉"
 
-#: src/InfoBoxes/Content/Task.cpp:854 src/InfoBoxes/Content/Task.cpp:899
+#: src/InfoBoxes/Content/Task.cpp:865 src/InfoBoxes/Content/Task.cpp:910
 msgid "Open"
 msgstr "打開"
 
-#: src/InfoBoxes/Content/Task.cpp:859 src/InfoBoxes/Content/Task.cpp:904
+#: src/InfoBoxes/Content/Task.cpp:870 src/InfoBoxes/Content/Task.cpp:915
 msgid "Waiting"
 msgstr "等待"
 
