@@ -810,7 +810,7 @@ UpdateInfoBoxCruiseEfficiency(InfoBoxData &data) noexcept
 }
 
 static constexpr unsigned
-SecondsUntil(TimeStamp now, RoughTime until) noexcept
+SecondsUntil(TimeStamp now, FineTime until) noexcept
 {
   auto d = TimeStamp{until} - now;
   if (d.count() < 0)
@@ -838,14 +838,14 @@ UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
   }
 
   const auto now_s = basic.time;
-  const RoughTime now{now_s};
+  const FineTime now{now_s};
 
   if (open.HasEnded(now)) {
     data.SetValueInvalid();
     data.SetComment(_("Closed"));
   } else if (open.HasBegun(now)) {
-    if (open.GetRoughEnd().IsValid()) {
-      unsigned seconds = SecondsUntil(now_s, open.GetRoughEnd());
+    if (open.GetEnd().IsValid()) {
+      unsigned seconds = SecondsUntil(now_s, open.GetEnd());
       data.FmtValue(_T("{:02}:{:02}"), seconds / 60, seconds % 60);
       data.SetValueColor(3);
     } else
@@ -853,7 +853,7 @@ UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
 
     data.SetComment(_("Open"));
   } else {
-    unsigned seconds = SecondsUntil(now_s, open.GetRoughStart());
+    unsigned seconds = SecondsUntil(now_s, open.GetStart());
     data.FmtValue(_T("{:02}:{:02}"), seconds / 60, seconds % 60);
     data.SetValueColor(2);
     data.SetComment(_("Waiting"));
@@ -883,14 +883,14 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
   }
 
   const auto arrival_s = basic.time + current_remaining.time_elapsed;
-  const RoughTime arrival{arrival_s};
+  const FineTime arrival{arrival_s};
 
   if (open.HasEnded(arrival)) {
     data.SetValueInvalid();
     data.SetComment(_("Closed"));
   } else if (open.HasBegun(arrival)) {
-    if (open.GetRoughEnd().IsValid()) {
-      unsigned seconds = SecondsUntil(arrival_s, open.GetRoughEnd());
+    if (open.GetEnd().IsValid()) {
+      unsigned seconds = SecondsUntil(arrival_s, open.GetEnd());
       data.FmtValue(_T("{:02}:{:02}"), seconds / 60, seconds % 60);
       data.SetValueColor(3);
     } else
@@ -898,7 +898,7 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
 
     data.SetComment(_("Open"));
   } else {
-    unsigned seconds = SecondsUntil(arrival_s, open.GetRoughStart());
+    unsigned seconds = SecondsUntil(arrival_s, open.GetStart());
     data.FmtValue(_T("{:02}:{:02}"), seconds / 60, seconds % 60);
     data.SetValueColor(2);
     data.SetComment(_("Waiting"));

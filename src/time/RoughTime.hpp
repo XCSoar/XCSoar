@@ -175,6 +175,14 @@ public:
     return TimeSpan(FineTime::Invalid(), FineTime::Invalid());
   }
 
+  constexpr FineTime GetStart() const noexcept {
+    return start;
+  }
+
+  constexpr FineTime GetEnd() const noexcept {
+    return end;
+  }
+
   constexpr RoughTime GetRoughStart() const noexcept {
     return ToRoughTime(start);
   }
