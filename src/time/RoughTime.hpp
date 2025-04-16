@@ -195,18 +195,10 @@ public:
     return start.IsValid() || end.IsValid();
   }
 
-  constexpr bool HasBegun(RoughTime now) const noexcept {
-    return HasBegun( ToFineTime(now) );
-  }
-
   constexpr bool HasBegun(FineTime now) const noexcept {
     /* if start is invalid, we assume the time span has always already
        begun */
     return !start.IsValid() || now >= start;
-  }
-
-  constexpr bool HasEnded(RoughTime now) const noexcept {
-    return HasEnded( ToFineTime(now) );
   }
 
   constexpr bool HasEnded(FineTime now) const noexcept {
@@ -215,8 +207,7 @@ public:
     return end.IsValid() && now >= end;
   }
 
-  template <typename Time>
-  constexpr bool IsInside(Time now) const noexcept {
+  constexpr bool IsInside(FineTime now) const noexcept {
     return HasBegun(now) && !HasEnded(now);
   }
 };
