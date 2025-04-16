@@ -81,63 +81,66 @@ static void test_conversions()
 
 static void test_time_span()
 {
-  RoughTime a(12, 1);
-  RoughTime b(11, 59);
+  RoughTime r_a(12, 1);
+  RoughTime r_b(11, 59);
 
-  TimeSpan s = TimeSpan::FromRoughTimes(a,b);
-  ok1( s.GetRoughStart() == a );
-  ok1( s.GetRoughEnd() == b );
+  TimeSpan s = TimeSpan::FromRoughTimes(r_a,r_b);
+  ok1( s.GetRoughStart() == r_a );
+  ok1( s.GetRoughEnd() == r_b );
 
-  s = TimeSpan(ToFineTime(a), ToFineTime(b));
-  ok1( s.GetRoughStart() == a );
-  ok1( s.GetRoughEnd() == b );
+  s = TimeSpan(ToFineTime(r_a), ToFineTime(r_b));
+  ok1( s.GetRoughStart() == r_a );
+  ok1( s.GetRoughEnd() == r_b );
 
   /* test TimeSpan::IsInside() */
+  FineTime a(12, 1);
+  FineTime b(11, 59);
+
   s = TimeSpan::Invalid();
   ok1(!s.IsDefined());
   ok1(s.IsInside(a));
   ok1(s.IsInside(b));
 
-  s = TimeSpan::FromRoughTimes(RoughTime(12, 0), RoughTime::Invalid());
+  s = TimeSpan(FineTime(12, 0), FineTime::Invalid());
   ok1(s.IsDefined());
   ok1(s.IsInside(a));
   ok1(!s.IsInside(b));
 
-  s = TimeSpan::FromRoughTimes(RoughTime::Invalid(), RoughTime(12, 0));
+  s = TimeSpan(FineTime::Invalid(), FineTime(12, 0));
   ok1(s.IsDefined());
   ok1(!s.IsInside(a));
   ok1(s.IsInside(b));
 
-  s = TimeSpan::FromRoughTimes(RoughTime(12, 0), RoughTime(12, 1));
+  s = TimeSpan(FineTime(12, 0), FineTime(12, 1));
   ok1(s.IsDefined());
   ok1(!s.IsInside(a));
   ok1(!s.IsInside(b));
 
-  s = TimeSpan::FromRoughTimes(RoughTime(12, 0), RoughTime(12, 30));
+  s = TimeSpan(FineTime(12, 0), FineTime(12, 30));
   ok1(s.IsDefined());
   ok1(s.IsInside(a));
   ok1(!s.IsInside(b));
 
   /* test midnight wraparound */
-  a = RoughTime(0, 0);
-  b = RoughTime(23, 59);
-  RoughTime c(22, 0);
-  RoughTime d(2, 0);
-  s = TimeSpan::FromRoughTimes(RoughTime(23, 0), RoughTime::Invalid());
+  a = FineTime(0, 0);
+  b = FineTime(23, 59);
+  FineTime c(22, 0);
+  FineTime d(2, 0);
+  s = TimeSpan(FineTime(23, 0), FineTime::Invalid());
   ok1(s.IsDefined());
   ok1(s.IsInside(a));
   ok1(s.IsInside(b));
   ok1(!s.IsInside(c));
   ok1(s.IsInside(d));
 
-  s = TimeSpan::FromRoughTimes(RoughTime::Invalid(), RoughTime(1, 0));
+  s = TimeSpan(FineTime::Invalid(), FineTime(1, 0));
   ok1(s.IsDefined());
   ok1(s.IsInside(a));
   ok1(s.IsInside(b));
   ok1(s.IsInside(c));
   ok1(!s.IsInside(d));
 
-  s = TimeSpan::FromRoughTimes(RoughTime(23, 1), RoughTime(0, 30));
+  s = TimeSpan(FineTime(23, 1), FineTime(0, 30));
   ok1(s.IsDefined());
   ok1(s.IsInside(a));
   ok1(s.IsInside(b));
