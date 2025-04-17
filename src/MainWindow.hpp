@@ -15,6 +15,10 @@
 
 #include "Menu/ShowButton.hpp"
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 struct ComputerSettings;
 struct MapSettings;
 struct UIState;

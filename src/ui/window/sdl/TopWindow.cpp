@@ -20,6 +20,10 @@
 #include <alloca.h>
 #endif
 
+#ifdef __APPLE__ && TARGET_OS_IPHONE
+#include "apple/Helpers.hpp"
+#endif
+
 namespace UI {
 
 static constexpr Uint32
@@ -43,7 +47,7 @@ MakeSDLFlags([[maybe_unused]] bool full_screen, bool resizable) noexcept
 
 #if defined(__IPHONEOS__) && __IPHONEOS__
   /* Hide status bar on iOS devices */
-  flags |= SDL_WINDOW_BORDERLESS;
+// flags |= SDL_WINDOW_BORDERLESS;
 #endif
 
 #ifdef HAVE_HIGHDPI_SUPPORT
@@ -220,7 +224,12 @@ TopWindow::OnEvent(const SDL_Event &event)
 #endif
 #ifdef ENABLE_OPENGL
 #if defined __APPLE__
-            Resize(screen->GetSize());
+            PixelSize size = screen->GetSize();
+            w, h = size.width, size.height;
+            SafeAreaInsets insets = getSafeAreaInsets();
+            w -= insets.left + insets.right;
+            h -= insets.top + insets.bottom;
+            Resize({w, h});
 #else
           if (screen->CheckResize(PixelSize(w, h)))
             Resize(screen->GetSize());
