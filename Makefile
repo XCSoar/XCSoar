@@ -195,6 +195,7 @@ include $(topdir)/build/libtopo.mk
 include $(topdir)/build/libterrain.mk
 include $(topdir)/build/lua.mk
 include $(topdir)/build/harness.mk
+include $(topdir)/build/flarm.mk
 endif # FAT_BINARY=n
 
 ifeq ($(FUZZER),y)
