@@ -1,0 +1,11 @@
+#include "resource.h"
+
+#define BITMAP(name, path) name BITMAP DISCARDABLE path
+
+#define BITMAP_BITMAP(name, file) BITMAP(name, "bitmaps/" file ".bmp")
+#define BITMAP_ICON(name, file) BITMAP(name, "icons/" file ".bmp")
+#define BITMAP_GRAPHIC(name, file) BITMAP(name, "graphics/" file ".bmp")
+
+#define HATCH_BITMAP(name, file) BITMAP_BITMAP(name, file)
+
+#define SOUND(name, file) name WAVE DISCARDABLE "sound/" file ".wav"

@@ -1,0 +1,119 @@
+key=DEFAULT
+sound=IDR_WAV_DRIP
+delay=2500
+
+key=Pan mode ON
+sound=IDR_INSERT
+delay=2500
+
+key=Pan mode OFF
+sound=IDR_REMOVE
+delay=2500
+
+key=AutoZoom ON
+sound=IDR_INSERT
+delay=2500
+
+key=AutoZoom OFF
+sound=IDR_REMOVE
+delay=2500
+
+key=Calibrate ON
+sound=IDR_INSERT
+delay=2500
+
+key=Calibrate OFF
+sound=IDR_REMOVE
+delay=2500
+
+key=Closest Airfield Changed!
+sound=IDR_REMOVE
+delay=2500
+
+key=SnailTrail OFF
+sound=IDR_REMOVE
+delay=2500
+
+key=SnailTrail ON Long
+sound=IDR_INSERT
+delay=2500
+
+key=SnailTrail ON Short
+sound=IDR_INSERT
+delay=2500
+
+key=Vario Sounds ON
+sound=IDR_INSERT
+delay=2500
+
+key=Vario Sounds OFF
+sound=IDR_REMOVE
+delay=2500
+
+key=Dropped marker
+sound=IDR_WAV_BEEPBWEEP
+delay=2500
+
+key=Waiting for GPS connection
+delay=2500
+
+key=Restarting comm. ports
+delay=2500
+
+key=Waiting for GPS fix
+delay=2500
+
+key=XCI Error
+delay=30000
+sound=IDR_FAIL
+
+key=MacCready Value
+delay=5000
+
+key=Auto MacCready ON
+sound=IDR_INSERT
+delay=2500
+
+key=Auto MacCready OFF
+sound=IDR_REMOVE
+delay=2500
+
+key=Task start
+sound=IDR_INSERT
+delay=5000
+
+key=Task aborted
+sound=IDR_REMOVE
+delay=2500
+
+key=Task Resume
+sound=IDR_REMOVE
+delay=2500
+
+key=Bugs performance
+delay=5000
+
+key=Ballast %
+delay=5000
+
+key=Logger ok
+sound=IDR_INSERT
+delay=2500
+
+key=Logger off
+sound=IDR_REMOVE
+delay=2500
+
+key=Status
+delay=60000
+
+key=Battery low
+delay=5000
+sound=IDR_FAIL
+
+key=Screen Mode Full
+delay=1000
+
+# Always leave dummy entry for now (work around issue in parser)
+key=Dummy
+delay=2500

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+ <g transform="scale(.73684)" fill-rule="evenodd" stroke-width="1.3571">
+  <path d="m19 9.5a9.5 9.5 0 1 1-19 0 9.5 9.5 0 1 1 19 0z" opacity=".99"/>
+  <path d="m18 9.5a8.5 8.5 0 1 1-17 0 8.5 8.5 0 1 1 17 0z" fill="#e04040" opacity=".99"/>
+  <path d="m15 9.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 1 1 11 0z" opacity=".99"/>
+  <path d="m14 9.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 1 1 9 0z" fill="#f0f" opacity=".99"/>
+ </g>
+</svg>

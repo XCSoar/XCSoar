@@ -1,0 +1,467 @@
+% !TeX encoding = utf8
+% !TeX spellcheck = en_US
+
+\chapter{Airspace, Traffic and Team Flying}\label{cha:airspace}
+A database of Special Use Airspace (SUA) can be loaded into XCSoar and
+used for both display of the airspace regions as well as detecting
+when the glider enters and leaves the regions.
+
+Two airspace files can be set in the configuration settings.  The
+first of these is intended for use as the primary SUA database, the
+second is intended for use with short-term or changing airspace such
+as the airspace defined in NOTAMs.
+
+It is the user's responsibility to ensure that the SUA database
+(air\-space file) is up-to-date.
+
+Through a connected FLARM device, the glide computer can also
+display information relating to FLARM-equipped nearby traffic
+and obstacle threats.
+
+A team code function allows teams of pilots to exchange their
+positions via radio in a short code, encoded and decoded by the
+computer.
+
+
+\section{Airspace display}
+
+Local special use airspace regions are drawn on the map as shaded
+areas with thick borders.  The colour and pattern of the areas are
+specific to different airspace categories and may be configured by the
+user.  Depending on the settings, the user may choose to display all
+airspaces, only airspaces below a certain altitude, only airspace within a
+particular height separation, or only airspace below the glider.
+\sketch{figures/airspace.png}
+
+The patterns used to display airspace areas include opaque,
+transparent (hollow) and several hatched and stippled patterns.  The
+non-opaque patterns are partially transparent with respect to terrain
+and topography but are \emph{not} transparent with respect to overlapping
+airspace.  However, where overlapping airspace occurs, all borders are
+visible.  That is, even though airspace patterns are not mutually
+transparent, all airspace borders are drawn on top of the airspace
+areas.
+
+Both the display and warning of airspace classes can be individually
+enabled or disabled by the user as described in
+Section~\ref{sec:airspace-filter}.
+
+The default colouring of Class C, D, E and F airspace is consistent
+with ICAO charts.
+
+
+\subsection*{Incursion events}
+
+Three types of events are detected by XCSoar in relation to SUA:
+\begin{description}
+\item[Predicted incursion] This event is detected when the glider is estimated
+to be on a track that will result in entering the airspace at a set
+time in the future.  The time is the airspace `warning time'
+configuration setting.
+
+The use of a long term average track in these calculations means that
+the system can still predict incursion even when drifting in the wind
+when circling.
+
+%{\it DIAGRAM SHOWING DETECTION OF PREDICTED INCUSION WHEN CIRCLING AND
+%  CRUISING}
+
+\item[Entering] This event occurs when the glider enters an airspace region.
+\item[Leaving] This event occurs when the glider leaves an airspace region.
+\end{description}
+In all cases, the boundary of the region is defined by maximum and
+minimum altitudes or flight levels, as specified in the airspace file.
+
+Airspace warnings are still issued even if the incursion region is
+off-screen.
+
+Where a barometric altitude source is available, it is used
+preferentially to GPS altitude in detecting airspace incursions.  This
+makes the system conform to normal conventions of having airspace
+violations based on QNH-adjusted altitude.
+
+
+\section{Airspace warnings}
+
+The concept of airspace warnings in gradual levels is introduced:
+\begin{description}
+\item[None] Aircraft is outside and distant from airspace.
+\item[\colorbox{AirspaceYellow}{Near}] Aircraft is predicted to penetrate the airspace and 
+  is close to doing so.
+\item[\colorbox{AirspaceRed}{Inside}] Aircraft is inside airspace.
+\end{description}
+
+At all times XCSoar monitors the aircraft relative to all airspace and
+maintains warning levels for each.  The airspace warnings are still
+filtered according to the airspace filter preferences; such that
+certain categories of airspace may be effectively disabled.
+\sketch{figures/airspacewarning.png}
+The sequence of events when entering an airspace results typically
+in two warnings: when near (level 1), and when inside (level 2).
+
+Whenever the warning level increases (above level 0) for any airspace,
+the airspace warning dialogue appears, accompanied by a system beep.
+When there are no more airspace regions at warning levels above
+0, the dialogue disappears automatically.
+
+
+\subsection*{Airspace warning dialogue}
+
+The airspace warning dialogue contains a list of up to 4 individual
+warnings.  The list items status background is coloured red if the glider is
+inside, and yellow if near.  If the warning is acknowledged, the
+text is greyed out.
+
+Each list item occupies two rows, and includes the following details:\\
+\verb+<NAME and Class>               <TOP>   <Position>+\\
+\verb+<Time and distance if outside> <BASE>+
+
+The values in the list are continuously updated. 
+An example follows:\\
+\verb+Bern TMA Class D                FL100     +\colorbox{AirspaceYellow}{near}\\
+\verb+35 sec horizontal dist 1300     1750m+
+
+This means that the aircraft is 1300~m horizontally separated from the Class D airspace
+`Bern TMA', with a base of 1750~m and ceiling at FL100.
+
+Another example:\\
+\verb+Bern CTRgld Class C             1350m     +\colorbox{AirspaceRed}{inside}\\
+\verb+                                SFC+
+
+This means that the aircraft is inside the Class C airspace `Bern
+CTRgld', with base of terrain surface and ceiling at 1350~m.
+
+If there are airspace warnings any time the airspace warning dialogue is shown 
+you get the details to an airspace by touching it.
+
+
+\subsection*{Airspace warning acknowledgement}
+
+When the warning dialogue is visible and an airspace warning is
+active, it is possible to close the warning dialogue without acknowledging the warning.
+Depending on the hardware used you may press ESC (on PC) or the Close button.
+
+When one or more warnings are visible in the airspace warning dialogue,
+a warning can be acknowledged by pressing one of the buttons along the bottom
+of the dialogue.
+
+The meanings of the acknowledgement buttons are as follows:
+\begin{description}
+\item[ACK Warn]  Acknowledge the current warning level.  A new warning will appear
+only if the warning level increases.
+\item[ACK Space]  Acknowledge all current and future warning levels from this 
+particular airspace region while the aircraft is within 2.5~km horizontal separation
+and 500~m vertical separation.
+\item[ACK Day]  Acknowledge all current and future warning levels from this particular
+airspace region for the rest of the flight (specifically, until XCSoar
+is restarted).
+\item[Enable]  Cancels an acknowledgement of the airspace, to reactivate all warnings
+from this space.
+\item[Close] Closes the airspace warning dialogue, without acknowledging airspace.
+  The dialogue will re-open automatically if the airspace warning level increases.
+\end{description}
+
+Note that not all acknowledgement buttons may be visible for all
+warning levels.  In particular, if inside SUA, you do not have the
+option to Acknowledge the Warning (ACK Warn), since it is at this
+point no longer warning of an impending airspace incursion, but in
+fact stating that you are currently inside the airspace.
+
+The general guidelines for using the dialogue are:
+\begin{itemize}
+\item  Don't acknowledge a warning if you intend to or must avoid the airspace
+\item  The warning system beep only occurs when the warning level increases.
+\item  The warning system is designed to allow circling near an airspace without
+  over-stressing the pilot with extraneous warnings.
+\end{itemize}
+
+When an airspace region is acknowledged, the region is drawn on the
+screen without a pattern.
+
+When the aircraft is predicted to enter an SUA region, or it actually
+enters an SUA region, a warning is raised, presented as an audio alert
+and a status message describing the type of airspace warning, and some SUA
+details (including class of airspace, base and ceiling altitude or
+flight level).
+
+Acknowledged warnings will repeat after a certain time specified as
+the `Acknowledge time' in the configuration settings.
+
+Airspace warning acknowledgements apply to individual SUA regions.
+If, for example, a glider enters airspace A and the pilot acknowledges
+the warning, and shortly thereafter is predicted to enter airspace B,
+an airspace warning for SUA region B will be raised.
+
+\tip If you want acknowledged airspace warnings to not be repeated,
+set a very large value for the configuration setting `Acknowledge
+time'.
+
+Airspace warnings are automatically cleared when both the current
+glider's position as well as the estimated future track are clear
+of the airspace.
+
+Simultaneous airspace warnings can occur if the aircraft (or its
+estimated future track) penetrates multiple airspace regions.
+
+
+\section{Airspace query and details}
+
+For touchscreen/mouse devices, when an airspace region is visible on
+the map area, it may be queried by touching the region on the map.  
+The map item list will appear and give you an overview of the waypoints, 
+airspaces, etc.\ below your finger tip, or mouse pointer.  SUAs are listed with
+similar details as provided when an actual warning is raised.  
+The query returns all airspace regions when overlapping airspace is visible at 
+the query location.
+\sketch{figures/airspace_mapelements.png}
+Selecting the SUA on the list and pressing \button{Details} or the enter key 
+displays all airspace details. 
+
+%% To put at another place
+%Through the button menus is the same map query available.
+%The `What's here?' query brings up a map element list including the nearest
+%airspace region. 
+%\begin{quote}
+%\bmenu{Info}\blink\bmenu{What's here?}
+%\end{quote}
+
+%% Probably wrong and outdated
+%If the glider is outside the airspace, it also describes the distance
+%and bearing to the nearest point on the airspace perimeter to the
+%glider.  If the glider is inside the airspace, it also describes the
+%distance and bearing to the nearest exit.
+
+\subsection*{Airspace filter dialogue}\label{sec:airspace-filter}
+
+The Airspace Filter dialogue allows warnings and display to be enabled
+or disabled for each class of airspace.  
+
+This may be accessed several ways:
+\begin{itemize}
+\item From the main menu \bmenug{Info. 3}\blink\bmenug{Airspace}.
+\item Or at the system configuration page for airspaces, press the \button{Filter} button.
+\end{itemize}
+
+\sketch{figures/airspacefilter.png}
+To use the dialogue, move up or down the list and the enter key will
+cycle between the various warning and display options.
+
+\subsection*{Airspace selection dialogue}
+
+Pressing the \button{Lookup} button brings up the airspace select dialogue.
+This functions similarly to the waypoint lookup dialogue, and allows
+search based on name, distance, direction, and type (class).  
+\sketch{figures/airspacelookup.png}
+
+Once an airspace item has been located, you have the chance to acknowledge it
+for the day.  From the
+airspace management dialogue it is possible to re-enable it again.
+
+
+\section{Analysis dialogue}
+
+The analysis dialogue contains a page showing a cross-section of the
+airspace. 
+\menulabel{\bmenug{Info 1}\blink\bmenug{Analysis}}
+
+The display shows along the horizontal direction, the
+distance from the glider out to 50~km in the direction of the glider's
+track; along the vertical direction is altitude.  The altitude of the
+glider is indicated by a white arrow.  This page is useful to help
+visualise complex layering of airspace.
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-airspace.png}
+\end{center}
+
+The ``Warnings'' button opens the airspace warning dialogue if close to
+airspace.
+
+
+\section{FLARM traffic}
+
+If connected to a FLARM device, FLARM traffic is displayed on the map
+area.  Each FLARM aircraft received is drawn as a dashed red disk.
+
+\warning Do not use XCSoar for collision avoidance, as
+FLARM audio devices are much more suitable in assisting the pilot to be
+aware of traffic.
+
+Note that unless one is circling, the usual zoom level is such that
+FLARM traffic will not be easily distinguished. When one is circling,
+the zoom level might be appropriate, but continuous direction change and
+the typical latency of a PDA makes the map display a poor aid at helping
+to locate the traffic.
+
+
+\subsection*{FLARM map display}
+
+The FLARM targets on the map are drawn as red coloured 
+arrow heads to indicate the direction the FLARM target is
+heading, as well as the collision risk\config{flarm-on-map}.  Note that these
+arrow heads are oriented according to the display orientation.  For example, if 
+the orientation is track-up, then the arrows show the relative track bearing of
+the target to the aircraft.  If the orientation is north-up, then the arrows show the
+absolute track bearing of the target.
+\sketch{figures/flarmmap.png}
+
+Display on the map FLARM of aircraft registration or pilot name is
+made possible via a look-up of the ICAO aircraft ID of FLARM traffic
+in a file.  See Section~\ref{sec:flarm-ident-file} for details on this
+file format.  Aircraft with the FLARM privacy flag set will not have
+any identification displayed.
+
+
+\subsection*{FLARM radar}
+
+To remedy this situation, when FLARM traffic is received, XCSoar shows a 
+small radar-style view of the FLARM
+traffic from the perspective of the aircraft.  The FLARM traffic is
+displayed in identical style, except that the threatening traffic is emphasized 
+with one or two red circles around the arrow head icon.  The display corner used 
+for the small radar view can be configured\config{flarmradar-place}.
+
+This FLARM display is oriented track-up and a small glider icon
+clearly shows that the display is oriented as such.  The scale of the
+display is linear up to maximum distance of 2000~m.  On the
+background there are two rings; the first is a 1000~m radius and the second
+is 2000~m.  Traffic farther away than 2000~m is drawn at the 2000~m ring.
+When traffic is farther than 4000~m away, the small radar view disappears.
+\sketch{figures/flarmrose.png}
+
+All the FLARM displays shows FLARM traffic in colours according to
+the threat level, or team and dialogue status.  The traffic is coloured:
+\begin{itemize}
+\definecolor{warning}{rgb}{1,0.64,0}
+\definecolor{teammate}{rgb}{0.45,1,0}
+\item \textcolor{black} {No color for level 0, no threat.} 
+\item \textcolor{warning} { Yellow for level 1, warning.}
+\item \textcolor{red} {Red for level 2 and 3, alert.}
+\item \textcolor{teammate} {Green for the team mate.}
+\item \textcolor{blue} {Blue is the selected target.}
+\end{itemize}
+
+For every target above threat level 1 the rough relative height is shown. The
+supplied figure is the absolute height difference rounded by 100.  A small
+triangle indicates that the target is higher or lower than you.  The example
+radar shows a target approximately 100~m (for metric altitude) higher.
+
+The FLARM radar-like display, when enabled, can be suppressed when
+visible by pressing the enter button.  If the
+FLARM radar is suppressed, pressing the enter button again cancels the
+suppression and the radar is shown again.  When new traffic appears in
+the radar, or if the FLARM issues a collision warning, the suppression
+is canceled.
+
+
+\subsection*{FLARM Traffic dialogue}\label{sec:flarm-traffic}
+
+Once FLARM has reported traffic and the small radar-style view of the FLARM
+traffic gets activated  \config{flarmdisplay} you can tap on the FLARM radar to
+enlarge the view to fullscreen size.  
+The fullscreen FLARM display offers all available information
+\menulabel{\bmenug{Info 1}\blink\bmenut{FLARM}{Radar}}
+about the FLARM traffic and depending on the setup it closes by itself, when all
+traffic has gone.
+
+\begin{center}
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/dialog-flarm1.png}
+\end{center}
+
+Only a few controls are on the dialogue, from top down:
+\begin{description}
+\item[North up]  If checked the radar screen is oriented North up, if not the
+orientation is Track up.
+\item[A. Zoom]  \gesture{Up - Down} Automatic zoom scales the radar screen so
+that the targets are perfectly visible. If not checked, the screen must be
+zoomed manually. The Up-Down gesture activates the automatic zoom. 
+\item[Avg/Alt]  \gesture{Right - Left} The button toggles in-between average
+vario and altitude displayed next to the target.
+\item[Details]  \gesture{Down - Right} Through the button a separate dialogue with
+all details to the selected target is accessed. 
+\item[+/-]  \gesture{Up/Down} Manually change the zoom from 500~m to
+10~km radar range. The zoom gestures also apply here.
+\item[$\triangleleft$/$\triangleright$]  \gesture{Left/Right} Select the
+previous or next target on the radar, gestures work in the same manner.
+\end{description}
+
+\begin{center}
+\begin{tabular}{c c}
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/cut-flarm2.png}&
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/cut-flarm3.png}\\
+\end{tabular}
+\end{center}
+The three screenshots are taken in a sequence and demonstrate a typical near
+pass of e.g.\ two FLARM equipped gliders. The extra information is colour-coded
+in the already mentioned way. In the four corners of the radar screen is
+additional info to the selected target displayed:
+
+\begin{description}
+\item[Top left]  If available the FLARM ID of the selected target.
+\item[Top right]  Vario of the target, derived from the consecutive altitude
+messages.
+\item[Bottom left]  The distance to the target.
+\item[Bottom right]  The relative height of the target.
+\end{description}
+
+From the first to the second FLARM snapshot about 15~seconds elapsed. The
+selected blue target was climbing at 3.4~m/s and did not have a relative course
+recognised as a threat.  Then in the meantime the `DC' has turned more to
+the left, became an alerting threat and is now displayed red.  The FLARM
+radar switched the zoom from 1000~m to 500~m. In snapshot three the
+continuously climbing target becomes classified to threat level~1, gets
+coloured yellow and seems to no longer be a threat.
+
+
+\section{Team flying}\label{sec:team-flying}
+
+Team code is a system to allow pilots flying within a team to 
+communicate their position to each other in a concise and accurate 
+manner.  The principle of the system is that each pilot uses their 
+computer to determine a 5 digit code which describes their position 
+relative to a common waypoint.  The pilots call each other reporting 
+these codes, and entering the codes into the computer allows their 
+mates to be located accurately by the computer. 
+
+To use the team code, all pilots in the team should select a waypoint to 
+be used as the reference.  This is all done on the team code dialogue. 
+\menulabel{\bmenug{Info 2}\blink\bmenut{Team}{Code}}
+The reference waypoint is set 
+via the \button{Set WP} button. Select a waypoint from the lookup dialogue 
+and it will be the team reference.
+
+During flight, the pilot can read out his `Own code' from the team 
+code dialogue to his team mate, in order to report his position.  When 
+the pilot hears a code report from a team mate, he presses the \button{Set Code} 
+button to open the text entry dialogue to allow entry of the mate's code.
+\sketch{figures/dialog-teamcode.png}
+
+After entering the mate's code, the relative distance and 
+bearing to the mate is calculated and updated in the dialogue.
+
+
+\subsection*{FLARM ID lookup}
+
+XCSoar also supports the encrypted team codes from the FlarmNet initiative.
+The \button{Flarm Lock} button allows you to access the FlarmNet database as well
+as XCSoar's database for FLARM to find a team mate. A simple
+lookup for a competition ID delivers potentially the desired 
+FLARM identity. Selecting the desired data base entry from the found items allows you 
+to `lock' your buddy from afar. See Section~\ref{sec:flarm-ident-file} for
+where to find the FlarmNet database etc.\ explained in detail.
+
+\menulabel{\bmenug{Info 2}\blink\bmenut{FLARM}{Details}}
+Similar functionality provides the FLARM details dialogue. It also lets
+you search through the competition ID's in the data base and shows the details on it.  
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-flarmdetails.png}
+\end{center}
+
+
+\subsection*{Click your buddy}
+Even if XCSoar can `lock' only one team mate by reference waypoint, 
+it handles any number of `friends' with a known FLARM ID. Chances are high your buddy is not
+registered in any database. But in any case you get closer to 
+your flying colleague, just pick the details from the FLARM radar screen, choose
+a colour and XCSoar will identify this FLARM response in the future as your buddy.

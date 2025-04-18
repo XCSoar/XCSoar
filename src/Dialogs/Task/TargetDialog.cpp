@@ -1,0 +1,727 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "TaskDialogs.hpp"
+#include "Dialogs/Waypoint/WaypointDialogs.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Widget/Widget.hpp"
+#include "Form/Edit.hpp"
+#include "Form/CheckBox.hpp"
+#include "Form/DataField/Float.hpp"
+#include "Form/DataField/Listener.hpp"
+#include "Renderer/SymbolButtonRenderer.hpp"
+#include "UIGlobals.hpp"
+#include "Look/Look.hpp"
+#include "Screen/Layout.hpp"
+#include "ui/event/KeyCode.hpp"
+#include "Formatter/TimeFormatter.hpp"
+#include "Formatter/UserUnits.hpp"
+#include "Language/Language.hpp"
+#include "MapWindow/TargetMapWindow.hpp"
+#include "Components.hpp"
+#include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/TaskManager.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Ordered/Points/AATPoint.hpp"
+#include "Units/Units.hpp"
+#include "Blackboard/RateLimitedBlackboardListener.hpp"
+#include "Interface.hpp"
+#include "BackendComponents.hpp"
+#include "DataComponents.hpp"
+
+#include <algorithm> // for std::clamp()
+
+class TargetWidget;
+
+class TargetDialogMapWindow : public TargetMapWindow {
+  TargetWidget &widget;
+
+public:
+  TargetDialogMapWindow(TargetWidget &_widget,
+                        const WaypointLook &waypoint_look,
+                        const AirspaceLook &airspace_look,
+                        const TrailLook &trail_look,
+                        const TaskLook &task_look,
+                        const AircraftLook &aircraft_look,
+                        const TopographyLook &topography_look,
+                        const OverlayLook &overlay_look) noexcept
+    :TargetMapWindow(waypoint_look, airspace_look, trail_look,
+                     task_look, aircraft_look, topography_look, overlay_look),
+     widget(_widget) {}
+
+protected:
+  void OnTaskModified() noexcept override;
+};
+
+class TargetWidget
+  : public NullWidget,
+    DataFieldListener,
+    NullBlackboardListener {
+  enum Buttons {
+    PREVIOUS,
+    NEXT,
+    NAME,
+    OPTIMIZED,
+  };
+
+  struct Layout {
+    PixelRect map;
+
+    PixelRect name_button;
+    PixelRect previous_button, next_button;
+    PixelRect range, radial, ete, delta_t, speed_remaining, speed_achieved;
+    PixelRect optimized;
+    PixelRect close_button;
+
+    explicit Layout(PixelRect rc);
+  };
+
+  WndForm &dialog;
+
+  RateLimitedBlackboardListener rate_limited_bl;
+
+  TargetDialogMapWindow map;
+
+  Button name_button;
+  Button previous_button;
+  Button next_button;
+
+  WndProperty range, radial, ete, delta_t, speed_remaining, speed_achieved;
+
+  CheckBoxControl optimized;
+
+  Button close_button;
+
+  unsigned initial_active_task_point;
+  unsigned task_size;
+
+  RangeAndRadial range_and_radial;
+  unsigned target_point;
+  bool is_locked;
+
+public:
+  TargetWidget(WndForm &_dialog,
+               const DialogLook &dialog_look, const MapLook &map_look)
+    :dialog(_dialog),
+     rate_limited_bl(*this, std::chrono::milliseconds(1800),
+                     std::chrono::milliseconds(300)),
+     map(*this,
+         map_look.waypoint, map_look.airspace,
+         map_look.trail, map_look.task, map_look.aircraft,
+         map_look.topography,
+         map_look.overlay),
+     range(dialog_look),
+     radial(dialog_look),
+     ete(dialog_look),
+     delta_t(dialog_look),
+     speed_remaining(dialog_look),
+     speed_achieved(dialog_look) {
+    map.SetTerrain(data_components->terrain.get());
+    map.SetTopograpgy(data_components->topography.get());
+    map.SetAirspaces(data_components->airspaces.get());
+    map.SetWaypoints(data_components->waypoints.get());
+    map.SetTask(backend_components->protected_task_manager.get());
+    map.SetGlideComputer(backend_components->glide_computer.get());
+  }
+
+  bool GetTaskData();
+
+  /**
+   * Reads task points from the protected task manager and loads the
+   * Task Point UI and initializes the pan mode on the map
+   */
+  bool InitTargetPoints(int _target_point);
+
+  void SetTarget();
+
+  /**
+   * Resets the target point and reads its polar coordinates from the
+   * AATPoint's target.
+ */
+  void RefreshTargetPoint();
+
+  /**
+   * Locks target fields if turnpoint does not have adjustable target
+   */
+  void LockCalculatorUI();
+  void LoadRange();
+  void LoadRadial();
+
+  /**
+   * Loads the #range_and_radial variable into the range/radial form
+   * controls.
+   */
+  void LoadRangeAndRadial() {
+    LoadRange();
+    LoadRadial();
+  }
+
+  /**
+   * Refreshes UI based on location of target and current task stats
+   */
+  void RefreshCalculator();
+
+  void UpdateNameButton();
+
+  void OnPrevClicked();
+  void OnNextClicked();
+  void OnNameClicked();
+  void OnOptimized(bool value) noexcept;
+
+  void OnRangeModified(double new_value);
+  void OnRadialModified(double new_value);
+
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+
+  void Show(const PixelRect &rc) noexcept override {
+    const Layout layout(rc);
+
+    map.MoveAndShow(layout.map);
+    name_button.MoveAndShow(layout.name_button);
+    previous_button.MoveAndShow(layout.previous_button);
+    next_button.MoveAndShow(layout.next_button);
+    range.MoveAndShow(layout.range);
+    radial.MoveAndShow(layout.radial);
+    ete.MoveAndShow(layout.ete);
+    delta_t.MoveAndShow(layout.delta_t);
+    speed_remaining.MoveAndShow(layout.speed_remaining);
+    speed_achieved.MoveAndShow(layout.speed_achieved);
+    optimized.MoveAndShow(layout.optimized);
+    close_button.MoveAndShow(layout.close_button);
+
+    SetTarget();
+    UpdateNameButton();
+
+    CommonInterface::GetLiveBlackboard().AddListener(rate_limited_bl);
+  }
+
+  void Hide() noexcept override {
+    CommonInterface::GetLiveBlackboard().RemoveListener(rate_limited_bl);
+
+    map.Hide();
+    name_button.Hide();
+    previous_button.Hide();
+    next_button.Hide();
+    range.Hide();
+    radial.Hide();
+    ete.Hide();
+    delta_t.Hide();
+    speed_remaining.Hide();
+    speed_achieved.Hide();
+    optimized.Hide();
+    close_button.Hide();
+  }
+
+  void Move(const PixelRect &rc) noexcept override {
+    const Layout layout(rc);
+
+    map.Move(layout.map);
+    name_button.Move(layout.name_button);
+    previous_button.Move(layout.previous_button);
+    next_button.Move(layout.next_button);
+    range.Move(layout.range);
+    radial.Move(layout.radial);
+    ete.Move(layout.ete);
+    delta_t.Move(layout.delta_t);
+    speed_remaining.Move(layout.speed_remaining);
+    speed_achieved.Move(layout.speed_achieved);
+    optimized.Move(layout.optimized);
+    close_button.Move(layout.close_button);
+  }
+
+  bool SetFocus() noexcept override {
+    name_button.SetFocus();
+    return true;
+  }
+
+  bool KeyPress(unsigned key_code) noexcept override;
+
+  bool HasFocus() const noexcept override {
+    return map.HasFocus() || name_button.HasFocus() ||
+      previous_button.HasFocus() || next_button.HasFocus() ||
+      range.HasFocus() || radial.HasFocus() ||
+      ete.HasFocus() || delta_t.HasFocus() ||
+      speed_remaining.HasFocus() || speed_achieved.HasFocus() ||
+      optimized.HasFocus() || close_button.HasFocus();
+  }
+
+private:
+  /* virtual methods from class DataFieldListener */
+  void OnModified(DataField &df) noexcept override {
+    if (&df == range.GetDataField())
+      OnRangeModified(((DataFieldFloat &)df).GetValue());
+    else if (&df == radial.GetDataField())
+      OnRadialModified(((DataFieldFloat &)df).GetValue());
+  }
+
+  /* virtual methods from class BlackboardListener */
+  void OnCalculatedUpdate([[maybe_unused]] const MoreData &basic,
+                          [[maybe_unused]] const DerivedInfo &calculated) override {
+    map.Invalidate();
+    RefreshCalculator();
+  }
+};
+
+TargetWidget::Layout::Layout(PixelRect rc)
+{
+  const unsigned width = rc.GetWidth(), height = rc.GetHeight();
+  const unsigned min_control_height = ::Layout::GetMinimumControlHeight();
+  const unsigned max_control_height = ::Layout::GetMaximumControlHeight();
+
+  map = rc;
+
+  if (width > height) {
+    /* landscape: form on the right */
+
+    auto form = map.CutRightSafe(::Layout::Scale(120));
+
+    constexpr unsigned n_static = 4;
+    constexpr unsigned n_elastic = 6;
+    constexpr unsigned n_rows = n_static + n_elastic;
+
+    const unsigned control_height = n_rows * min_control_height >= height
+      ? min_control_height
+      : std::min(max_control_height,
+                 (height - n_static * min_control_height) / n_elastic);
+
+    name_button = form.CutTopSafe(control_height);
+
+    std::tie(previous_button, next_button) = form.CutTopSafe(control_height).VerticalSplit();
+
+    range = form.CutTopSafe(control_height);
+    radial = form.CutTopSafe(control_height);
+    ete = form.CutTopSafe(min_control_height);
+    delta_t = form.CutTopSafe(min_control_height);
+    speed_remaining = form.CutTopSafe(min_control_height);
+    speed_achieved = form.CutTopSafe(min_control_height);
+    optimized = form.CutTopSafe(control_height);
+    close_button = form.CutBottomSafe(control_height);
+  } else {
+    /* portrait: form on the top */
+
+    const unsigned control_height = min_control_height;
+
+    name_button = map.CutTopSafe(control_height);
+    previous_button = name_button.CutLeftSafe(control_height);
+    next_button = name_button.CutRightSafe(control_height);
+
+    std::tie(range, radial) = map.CutTopSafe(control_height).VerticalSplit();
+    std::tie(ete, delta_t) = map.CutTopSafe(control_height).VerticalSplit();
+    std::tie(speed_remaining, speed_achieved) = map.CutTopSafe(control_height).VerticalSplit();
+    std::tie(optimized, close_button) = map.CutBottomSafe(control_height).VerticalSplit();
+  }
+}
+
+template<typename... Args>
+static void
+UseRecommendedCaptionWidths(Args&&... args)
+{
+  WndProperty *controls[] = { &args... };
+
+  unsigned width = 0;
+  for (const auto *i : controls)
+    width = std::max(width, i->GetRecommendedCaptionWidth());
+
+  for (auto *i : controls)
+    i->SetCaptionWidth(width);
+}
+
+void
+TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
+{
+  const Layout layout(rc);
+
+  WindowStyle style;
+  style.Hide();
+
+  WindowStyle control_style;
+  control_style.Hide();
+  control_style.TabStop();
+
+  map.Create(parent, layout.map, style);
+
+  const auto &button_look = UIGlobals::GetDialogLook().button;
+
+  name_button.Create(parent, button_look, _T(""), layout.name_button,
+                     control_style, [this](){ OnNameClicked(); });
+
+  previous_button.Create(parent, layout.previous_button, control_style,
+                         std::make_unique<SymbolButtonRenderer>(button_look, _T("<")),
+                         [this](){ OnPrevClicked(); });
+  next_button.Create(parent, layout.next_button, control_style,
+                     std::make_unique<SymbolButtonRenderer>(button_look, _T(">")),
+                     [this](){ OnNextClicked(); });
+
+  const unsigned caption_width = ::Layout::Scale(50);
+
+  range.Create(parent, layout.range, _("Distance"),
+               caption_width, control_style);
+  range.SetHelpText(_("For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances."));
+  range.SetDataField(new DataFieldFloat(_T("%.0f"), _T("%.0f %%"),
+                                        -100, 100, 0,
+                                        5, false, this));
+
+  radial.Create(parent, layout.radial, _("Radial"),
+                caption_width, control_style);
+  radial.SetHelpText(_("For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise."));
+  radial.SetDataField(new DataFieldFloat(_T("%.0f"), _T("%.0f" DEG),
+                                         -90, 90, 0,
+                                         5, false, this));
+
+  ete.Create(parent, layout.ete, _("ETE"), caption_width, style);
+  ete.SetReadOnly();
+  ete.SetHelpText(_("Estimated time en-route to the next AAT target."));
+
+  delta_t.Create(parent, layout.delta_t, _("Delta T"), caption_width, style);
+  delta_t.SetReadOnly();
+  delta_t.SetHelpText(_("AAT Delta Time - Difference between estimated task time and AAT minimum time. Colored red if negative (expected arrival too early), or blue if in sector and can turn now with estimated arrival time greater than AAT time plus 5 minutes."));
+
+  speed_remaining.Create(parent, layout.speed_remaining, _("V rem."), caption_width, style);
+  speed_remaining.SetReadOnly();
+  speed_remaining.SetHelpText(_("Speed remaining"));
+
+  speed_achieved.Create(parent, layout.speed_achieved, _("V ach"), caption_width, style);
+  speed_achieved.SetReadOnly();
+  speed_achieved.SetHelpText(_("AA Speed - Assigned Area Task average speed achievable around target points remaining in minimum AAT time."));
+
+  UseRecommendedCaptionWidths(range, radial, ete, delta_t,
+                              speed_remaining, speed_achieved);
+
+  optimized.Create(parent, UIGlobals::GetDialogLook(), _("Optimized"),
+                   layout.optimized, control_style,
+                   [this](bool value){ OnOptimized(value); });
+
+  close_button.Create(parent, button_look, _("Close"),
+                      layout.close_button,
+                      control_style, dialog.MakeModalResultCallback(mrOK));
+}
+
+void
+TargetWidget::LockCalculatorUI()
+{
+  range.SetEnabled(is_locked);
+  radial.SetEnabled(is_locked);
+}
+
+void
+TargetWidget::LoadRange()
+{
+  DataFieldFloat &df = *(DataFieldFloat *)range.GetDataField();
+  assert(df.GetType() == DataField::Type::REAL);
+  df.SetValue(range_and_radial.range * 100);
+  range.RefreshDisplay();
+}
+
+void
+TargetWidget::LoadRadial()
+{
+  DataFieldFloat &df = *(DataFieldFloat *)radial.GetDataField();
+  assert(df.GetType() == DataField::Type::REAL);
+  df.SetValue(range_and_radial.radial.Degrees());
+  radial.RefreshDisplay();
+}
+
+void
+TargetWidget::RefreshCalculator()
+{
+  bool nodisplay = false;
+  bool is_aat;
+  FloatDuration aat_time;
+
+  {
+    ProtectedTaskManager::Lease lease(*backend_components->protected_task_manager);
+    const OrderedTask &task = lease->GetOrderedTask();
+    const AATPoint *ap = task.GetAATTaskPoint(target_point);
+
+    is_aat = ap != nullptr;
+
+    if (!is_aat || target_point < initial_active_task_point) {
+      nodisplay = true;
+      is_locked = false;
+    } else {
+      range_and_radial = ap->GetTargetRangeRadial(range_and_radial.range);
+      is_locked = ap->IsTargetLocked();
+    }
+
+    aat_time = task.GetOrderedTaskSettings().aat_min_time;
+  }
+
+  optimized.SetVisible(is_aat);
+  optimized.SetState(!is_locked);
+
+  LockCalculatorUI();
+
+  range.SetVisible(!nodisplay);
+  radial.SetVisible(!nodisplay);
+
+  if (!nodisplay)
+    LoadRangeAndRadial();
+
+  // update outputs
+  const auto &calculated = CommonInterface::Calculated();
+  const TaskStats &task_stats = calculated.ordered_task_stats;
+  const auto aat_time_estimated = task_stats.GetEstimatedTotalTime();
+
+  ete.SetVisible(!nodisplay);
+
+  delta_t.SetVisible(!nodisplay);
+
+  if (!nodisplay) {
+    ete.SetText(FormatTimespanSmart(aat_time_estimated, 2));
+    delta_t.SetText(FormatTimespanSmart(aat_time_estimated - aat_time, 2));
+  }
+
+  const ElementStat &total = task_stats.total;
+  if (total.remaining_effective.IsDefined())
+    speed_remaining.SetText(FormatUserTaskSpeed(total.remaining_effective.GetSpeed()));
+
+  if (total.travelled.IsDefined())
+    speed_achieved.SetText(FormatUserTaskSpeed(total.travelled.GetSpeed()));
+}
+
+void
+TargetWidget::UpdateNameButton()
+{
+  StaticString<80u> buffer;
+
+  {
+    ProtectedTaskManager::Lease lease(*backend_components->protected_task_manager);
+    const OrderedTask &task = lease->GetOrderedTask();
+    if (target_point < task.TaskSize()) {
+      const OrderedTaskPoint &tp = task.GetTaskPoint(target_point);
+      buffer.Format(_T("%u: %s"), target_point,
+                    tp.GetWaypoint().name.c_str());
+    } else
+      buffer.clear();
+  }
+
+  name_button.SetCaption(buffer);
+}
+
+void
+TargetDialogMapWindow::OnTaskModified() noexcept
+{
+  TargetMapWindow::OnTaskModified();
+  widget.RefreshCalculator();
+}
+
+void
+TargetWidget::OnOptimized(bool value) noexcept
+{
+  is_locked = !value;
+  backend_components->protected_task_manager->TargetLock(target_point, is_locked);
+  RefreshCalculator();
+}
+
+void
+TargetWidget::OnNextClicked()
+{
+  if (target_point < (task_size - 1))
+    target_point++;
+  else
+    target_point = 0;
+
+  UpdateNameButton();
+  RefreshTargetPoint();
+}
+
+void
+TargetWidget::OnPrevClicked()
+{
+  if (target_point > 0)
+    target_point--;
+  else
+    target_point = task_size - 1;
+
+  UpdateNameButton();
+  RefreshTargetPoint();
+}
+
+void
+TargetWidget::OnRangeModified(double new_value)
+{
+  if (target_point < initial_active_task_point)
+    return;
+
+  const auto new_range = new_value / 100.;
+  if (new_range == range_and_radial.range)
+    return;
+
+  if ((new_range < 0) != (range_and_radial.range < 0)) {
+    /* when the range gets flipped, flip the radial as well */
+    if (range_and_radial.radial.IsNegative())
+      range_and_radial.radial += Angle::HalfCircle();
+    else
+      range_and_radial.radial -= Angle::HalfCircle();
+    LoadRadial();
+  }
+
+  range_and_radial.range = new_range;
+
+  {
+    ProtectedTaskManager::ExclusiveLease lease(*backend_components->protected_task_manager);
+    const OrderedTask &task = lease->GetOrderedTask();
+    AATPoint *ap = task.GetAATTaskPoint(target_point);
+    if (ap == nullptr)
+      return;
+
+    ap->SetTarget(range_and_radial,
+                  lease->GetOrderedTask().GetTaskProjection());
+  }
+
+  map.Invalidate();
+}
+
+void
+TargetWidget::OnRadialModified(double new_value)
+{
+  if (target_point < initial_active_task_point)
+    return;
+
+  Angle new_radial = Angle::Degrees(new_value);
+  if (new_radial == range_and_radial.radial)
+    return;
+
+  bool must_reload_radial = false;
+  if (new_radial >= Angle::HalfCircle()) {
+    new_radial -= Angle::FullCircle();
+    must_reload_radial = true;
+  } else if (new_radial <= -Angle::HalfCircle()) {
+    new_radial += Angle::FullCircle();
+    must_reload_radial = true;
+  }
+
+  if ((new_radial.Absolute() > Angle::QuarterCircle()) !=
+      (range_and_radial.radial.Absolute() > Angle::QuarterCircle())) {
+    /* when the radial crosses the +/-90 degrees threshold, flip the
+       range */
+    range_and_radial.range = -range_and_radial.range;
+    LoadRange();
+  }
+
+  range_and_radial.radial = new_radial;
+
+  {
+    ProtectedTaskManager::ExclusiveLease lease(*backend_components->protected_task_manager);
+    const OrderedTask &task = lease->GetOrderedTask();
+    AATPoint *ap = task.GetAATTaskPoint(target_point);
+    if (ap == nullptr)
+      return;
+
+    ap->SetTarget(range_and_radial,
+                  lease->GetOrderedTask().GetTaskProjection());
+  }
+
+  if (must_reload_radial)
+    LoadRadial();
+
+  map.Invalidate();
+}
+
+void
+TargetWidget::SetTarget()
+{
+  if (target_point >= task_size)
+    return;
+
+  map.SetTarget(target_point);
+}
+
+/**
+ * resets the target point and reads its polar coordinates
+ * from the AATPoint's target
+ */
+void
+TargetWidget::RefreshTargetPoint()
+{
+  if (target_point < task_size && target_point >= initial_active_task_point)
+    RefreshCalculator();
+  else
+    range_and_radial = RangeAndRadial::Zero();
+  SetTarget();
+}
+
+inline void
+TargetWidget::OnNameClicked()
+{
+  WaypointPtr waypoint;
+
+  {
+    ProtectedTaskManager::Lease lease(*backend_components->protected_task_manager);
+    const OrderedTask &task = lease->GetOrderedTask();
+    if (target_point >= task.TaskSize())
+      return;
+
+    const OrderedTaskPoint &tp = task.GetTaskPoint(target_point);
+    waypoint = tp.GetWaypointPtr();
+  }
+
+  dlgWaypointDetailsShowModal(data_components->waypoints.get(),
+                              waypoint, false);
+}
+
+bool
+TargetWidget::GetTaskData()
+{
+  ProtectedTaskManager::Lease task_manager(*backend_components->protected_task_manager);
+  if (task_manager->GetMode() != TaskType::ORDERED)
+    return false;
+
+  const OrderedTask &task = task_manager->GetOrderedTask();
+
+  initial_active_task_point = task.GetActiveIndex();
+  task_size = task.TaskSize();
+  return true;
+}
+
+bool
+TargetWidget::InitTargetPoints(int _target_point)
+{
+  if (!GetTaskData())
+    return false;
+
+  if (_target_point >= 0) {
+    // Explicitly requested target point (e.g. via map item list)
+    target_point = _target_point;
+  } else if (target_point < initial_active_task_point ||
+             task_size <= target_point) {
+    // Use active task point if previous selected one already achieved or invalid
+    target_point = initial_active_task_point;
+  }
+
+  target_point = std::clamp(int(target_point), 0, (int)task_size - 1);
+  return true;
+}
+
+bool
+TargetWidget::KeyPress(unsigned key_code) noexcept
+{
+  switch (key_code) {
+  case KEY_LEFT:
+    OnPrevClicked();
+    return true;
+
+  case KEY_RIGHT:
+    OnNextClicked();
+    return true;
+  }
+
+  return false;
+}
+
+void
+dlgTargetShowModal(int _target_point)
+{
+  if (!backend_components->protected_task_manager)
+    return;
+
+  const Look &look = UIGlobals::GetLook();
+  TWidgetDialog<TargetWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           look.dialog, _("Target"));
+  dialog.SetWidget(dialog, look.dialog, look.map);
+
+  if (dialog.GetWidget().InitTargetPoints(_target_point))
+    dialog.ShowModal();
+}

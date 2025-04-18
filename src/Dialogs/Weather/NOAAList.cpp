@@ -1,0 +1,253 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "NOAAList.hpp"
+#include "NOAADetails.hpp"
+#include "Dialogs/Message.hpp"
+#include "Language/Language.hpp"
+#include "Weather/Features.hpp"
+
+#ifdef HAVE_NOAA
+
+#include "UIGlobals.hpp"
+#include "Look/DialogLook.hpp"
+#include "Dialogs/CoDialog.hpp"
+#include "Dialogs/TextEntry.hpp"
+#include "Form/Button.hpp"
+#include "Form/ButtonPanel.hpp"
+#include "Widget/ListWidget.hpp"
+#include "Widget/ButtonPanelWidget.hpp"
+#include "Weather/NOAAGlue.hpp"
+#include "Weather/NOAAStore.hpp"
+#include "Weather/NOAAUpdater.hpp"
+#include "Operation/PluggableOperationEnvironment.hpp"
+#include "co/InvokeTask.hxx"
+#include "co/Task.hxx"
+#include "net/http/Init.hpp"
+#include "util/TrivialArray.hxx"
+#include "util/StringAPI.hxx"
+#include "util/Compiler.h"
+#include "Renderer/NOAAListRenderer.hpp"
+#include "Renderer/TwoTextRowsRenderer.hpp"
+
+class NOAAListWidget final
+  : public ListWidget {
+  enum Buttons {
+    DETAILS,
+    ADD,
+    UPDATE,
+    REMOVE,
+  };
+
+  ButtonPanelWidget *buttons_widget;
+
+  Button *details_button, *add_button, *update_button, *remove_button;
+
+  struct ListItem {
+    StaticString<5> code;
+    NOAAStore::iterator iterator;
+
+    [[gnu::pure]]
+    bool operator<(const ListItem &i2) const {
+      return StringCollate(code, i2.code) < 0;
+    }
+  };
+
+  TrivialArray<ListItem, 20> stations;
+
+  TwoTextRowsRenderer row_renderer;
+
+public:
+  void SetButtonPanel(ButtonPanelWidget &_buttons) {
+    buttons_widget = &_buttons;
+  }
+
+  void CreateButtons(ButtonPanel &buttons);
+
+private:
+  void UpdateList();
+
+  void OpenDetails(unsigned index);
+  void DetailsClicked();
+  void AddClicked();
+  void UpdateClicked();
+  void RemoveClicked();
+
+public:
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+
+protected:
+  /* virtual methods from ListItemRenderer */
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override;
+
+  /* virtual methods from ListCursorHandler */
+  bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
+    return true;
+  }
+
+  void OnActivateItem([[maybe_unused]] unsigned index) noexcept override;
+};
+
+void
+NOAAListWidget::CreateButtons(ButtonPanel &buttons)
+{
+  details_button = buttons.Add(_("Details"), [this](){ DetailsClicked(); });
+  add_button = buttons.Add(_("Add"), [this](){ AddClicked(); });
+  update_button = buttons.Add(_("Update"), [this](){ UpdateClicked(); });
+  remove_button = buttons.Add(_("Remove"), [this](){ RemoveClicked(); });
+
+  buttons.EnableCursorSelection();
+}
+
+void
+NOAAListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
+{
+  CreateButtons(buttons_widget->GetButtonPanel());
+
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  CreateList(parent, look, rc,
+             row_renderer.CalculateLayout(*look.list.font_bold,
+                                          look.small_font));
+  UpdateList();
+}
+
+void
+NOAAListWidget::UpdateList()
+{
+  stations.clear();
+
+  for (auto i = noaa_store->begin(), end = noaa_store->end(); i != end; ++i) {
+    ListItem item;
+    item.code = i->GetCodeT();
+    item.iterator = i;
+    stations.push_back(item);
+  }
+
+  std::sort(stations.begin(), stations.end());
+
+  ListControl &list = GetList();
+  list.SetLength(stations.size());
+  list.Invalidate();
+
+  const bool empty = stations.empty(), full = stations.full();
+  add_button->SetEnabled(!full);
+  update_button->SetEnabled(!empty);
+  remove_button->SetEnabled(!empty);
+  details_button->SetEnabled(!empty);
+}
+
+void
+NOAAListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                            unsigned index) noexcept
+{
+  assert(index < stations.size());
+
+  NOAAListRenderer::Draw(canvas, rc, *stations[index].iterator,
+                         row_renderer);
+}
+
+static Co::InvokeTask
+UpdateTask(NOAAStore::Item &item, ProgressListener &progress) noexcept
+{
+  co_await NOAAUpdater::Update(item, *Net::curl, progress);
+}
+
+inline void
+NOAAListWidget::AddClicked()
+{
+  TCHAR code[5] = _T("");
+  if (!TextEntryDialog(code, 5, _("Airport ICAO code")))
+    return;
+
+  if (_tcslen(code) != 4) {
+    ShowMessageBox(_("Please enter the FOUR letter code of the desired station."),
+                _("Error"), MB_OK);
+    return;
+  }
+
+  if (!NOAAStore::IsValidCode(code)) {
+    ShowMessageBox(_("Please don't use special characters in the four letter code of the desired station."),
+                  _("Error"), MB_OK);
+    return;
+  }
+
+  NOAAStore::iterator i = noaa_store->AddStation(code);
+  noaa_store->SaveToProfile();
+
+  PluggableOperationEnvironment env;
+  if (ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+                   _("Download"), UpdateTask(*i, env),
+                   &env))
+    UpdateList();
+}
+
+static Co::InvokeTask
+UpdateTask(NOAAStore &store, ProgressListener &progress) noexcept
+{
+  co_await NOAAUpdater::Update(store, *Net::curl, progress);
+}
+
+inline void
+NOAAListWidget::UpdateClicked()
+{
+  PluggableOperationEnvironment env;
+  if (ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+                   _("Download"), UpdateTask(*noaa_store, env),
+                   &env))
+    UpdateList();
+}
+
+inline void
+NOAAListWidget::RemoveClicked()
+{
+  unsigned index = GetList().GetCursorIndex();
+  assert(index < stations.size());
+
+  StaticString<256> tmp;
+  tmp.Format(_("Do you want to remove station %s?"),
+             stations[index].code.c_str());
+
+  if (ShowMessageBox(tmp, _("Remove"), MB_YESNO) == IDNO)
+    return;
+
+  noaa_store->erase(stations[index].iterator);
+  noaa_store->SaveToProfile();
+
+  UpdateList();
+}
+
+void
+NOAAListWidget::OpenDetails(unsigned index)
+{
+  assert(index < stations.size());
+  dlgNOAADetailsShowModal(stations[index].iterator);
+  UpdateList();
+}
+
+inline void
+NOAAListWidget::DetailsClicked()
+{
+  if (!stations.empty())
+    OpenDetails(GetList().GetCursorIndex());
+}
+
+void
+NOAAListWidget::OnActivateItem(unsigned index) noexcept
+{
+  OpenDetails(index);
+}
+
+std::unique_ptr<Widget>
+CreateNOAAListWidget()
+{
+  auto buttons =
+    std::make_unique<ButtonPanelWidget>(std::make_unique<NOAAListWidget>(),
+                                        ButtonPanelWidget::Alignment::BOTTOM);
+  ((NOAAListWidget &)buttons->GetWidget()).SetButtonPanel(*buttons);
+  return buttons;
+}
+
+#endif

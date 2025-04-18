@@ -1,0 +1,145 @@
+image: docker:18.09
+
+stages:
+ - prepare-image
+ - build
+ - deploy
+
+variables:
+  CONTAINER_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH
+
+services:
+  - docker:dind
+before_script:
+  - apk --update add make cmake py-pip git
+  - pip install docker-compose~=1.23.0
+
+nightly-prepare-image:
+  stage: prepare-image
+  script:
+   - docker login --username gitlab-ci-token --password $CI_JOB_TOKEN $CI_REGISTRY
+   - docker pull $CONTAINTER_IMAGE:latest || true
+   - docker build
+       --cache-from $CONTAINER_IMAGE:latest
+       --tag $CONTAINER_IMAGE:$CI_COMMIT_SHA
+       --tag $CONTAINER_IMAGE:latest
+       --file ide/docker/Dockerfile ./ide/
+   - docker push $CONTAINER_IMAGE:$CI_COMMIT_SHA
+   - docker push $CONTAINER_IMAGE:latest
+  except:
+   - tags
+
+nightly-unix:
+  stage: build
+  script:
+    - git submodule init
+    - git submodule update -f
+    - docker run
+        --mount type=bind,source="$(pwd)",target=/opt/xcsoar
+        $CONTAINER_IMAGE:$CI_COMMIT_SHA xcsoar-compile UNIX
+    - docker run
+        --mount type=bind,source="$(pwd)",target=/opt/xcsoar
+        $CONTAINER_IMAGE:$CI_COMMIT_SHA xcsoar-test
+  except:
+    - tags
+  artifacts:
+    expire_in: 4 weeks
+    when: always
+    paths:
+      - output/UNIX
+
+nightly-android:
+  stage: build
+  script:
+    - git submodule init
+    - git submodule update -f
+    - docker run
+        --mount type=bind,source="$(pwd)",target=/opt/xcsoar
+        $CONTAINER_IMAGE:$CI_COMMIT_SHA xcsoar-compile ANDROID
+  except:
+    - tags
+  artifacts:
+    expire_in: 4 weeks
+    when: always
+    paths:
+      - output/ANDROID
+
+nightly-pc:
+  stage: build
+  script:
+    - git submodule init
+    - git submodule update -f
+    - docker run
+        --mount type=bind,source="$(pwd)",target=/opt/xcsoar
+        $CONTAINER_IMAGE:$CI_COMMIT_SHA xcsoar-compile PC
+  except:
+    - tags
+  artifacts:
+    expire_in: 4 weeks
+    when: always
+    paths:
+      - output/PC
+
+nightly-win64:
+  stage: build
+  script:
+    - git submodule init
+    - git submodule update -f
+    - docker run
+        --mount type=bind,source="$(pwd)",target=/opt/xcsoar
+        $CONTAINER_IMAGE:$CI_COMMIT_SHA xcsoar-compile WIN64
+  except:
+    - tags
+  artifacts:
+    expire_in: 4 weeks
+    when: always
+    paths:
+      - output/WIN64
+
+nightly-kobo:
+  stage: build
+  script:
+    - git submodule init
+    - git submodule update -f
+    - docker run
+        --mount type=bind,source="$(pwd)",target=/opt/xcsoar
+        $CONTAINER_IMAGE:$CI_COMMIT_SHA xcsoar-compile KOBO
+  except:
+    - tags
+  artifacts:
+    expire_in: 4 weeks
+    when: always
+    paths:
+      - output/KOBO
+
+nightly-docs:
+  stage: build
+  script:
+    - git submodule init
+    - git submodule update -f
+    - docker run
+        --mount type=bind,source="$(pwd)",target=/opt/xcsoar
+        $CONTAINER_IMAGE:$CI_COMMIT_SHA xcsoar-compile DOCS
+  except:
+    - tags
+  artifacts:
+    expire_in: 4 weeks
+    when: always
+    paths:
+      - output
+
+deploy_nightlies:
+  stage: deploy
+  before_script:
+    - apk update && apk add openssh-client rsync
+  script:
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - export DIRECTORY="$(cat VERSION.txt)~git#$CI_COMMIT_SHORT_SHA"
+    - rsync -e "ssh -o StrictHostKeyChecking=no -p ${DEPLOY_PORT}" -r ./output/* ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/${DIRECTORY}/
+  only:
+    - master
+  except:
+    - tags

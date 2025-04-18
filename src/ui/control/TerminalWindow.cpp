@@ -1,0 +1,140 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "TerminalWindow.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "Look/TerminalLook.hpp"
+#include "util/CharUtil.hxx"
+
+void
+TerminalWindow::Write(const char *p, size_t length)
+{
+  const char *end = p + length;
+  while (p < end) {
+    char ch = *p++;
+
+    if (ch == '\n')
+      NewLine();
+    else if (ch == '\r')
+      continue;
+    else {
+      if (!IsASCII(ch) || !IsPrintableASCII(ch))
+        ch = '.';
+      data.Get(cursor_x, cursor_y) = ch;
+      Advance();
+    }
+  }
+
+  Invalidate();
+}
+
+void
+TerminalWindow::Clear()
+{
+  cursor_x = cursor_y = 0;
+  std::fill(data.begin(), data.end(), ' ');
+  Invalidate();
+}
+
+void
+TerminalWindow::Scroll()
+{
+#ifdef ANDROID
+  std::copy(data.GetPointerAt(0, 1), data.end(), data.begin());
+#else
+  std::move(data.GetPointerAt(0, 1), data.end(), data.begin());
+#endif
+
+  auto end = data.end();
+  std::fill(end - data.GetWidth(), end, ' ');
+
+  Invalidate();
+}
+
+void
+TerminalWindow::NewLine()
+{
+  cursor_x = 0;
+  ++cursor_y;
+
+  if (cursor_y >= data.GetHeight()) {
+    cursor_y = data.GetHeight() - 1;
+    Scroll();
+  }
+}
+
+void
+TerminalWindow::Advance()
+{
+  ++cursor_x;
+
+  if (cursor_x >= data.GetWidth())
+    NewLine();
+}
+
+void
+TerminalWindow::OnCreate()
+{
+  PaintWindow::OnCreate();
+  cell_size = look.font.TextSize(_T("W"));
+  cursor_x = 0;
+  cursor_y = 0;
+  data.Reset();
+}
+
+void
+TerminalWindow::OnResize(PixelSize new_size) noexcept
+{
+  PaintWindow::OnResize(new_size);
+
+  data.GrowPreserveFill(std::max(1u, new_size.width / cell_size.width),
+                        std::max(1u, new_size.height / cell_size.height),
+                        ' ');
+  if (cursor_x >= data.GetWidth())
+    cursor_x = data.GetWidth() - 1;
+  if (cursor_y >= data.GetHeight())
+    cursor_y = data.GetHeight() - 1;
+
+  Invalidate();
+}
+
+void
+TerminalWindow::OnPaint(Canvas &canvas) noexcept
+{
+  OnPaint(canvas, GetClientRect());
+}
+
+void
+TerminalWindow::OnPaint(Canvas &canvas, const PixelRect &p_dirty) noexcept
+{
+  canvas.SetBackgroundTransparent();
+  canvas.SetTextColor(look.text_color);
+  canvas.Select(look.font);
+
+  const PixelRect cell_dirty = {
+    p_dirty.left / (int)cell_size.width,
+    p_dirty.top / (int)cell_size.height,
+    std::min(p_dirty.right / (int)cell_size.width + 1,
+             (int)data.GetWidth()),
+    std::min(p_dirty.bottom / (int)cell_size.height + 1,
+             (int)data.GetHeight()),
+  };
+
+  const int x(cell_dirty.left * cell_size.width);
+  const size_t length = cell_dirty.GetWidth();
+
+  auto text = data.GetPointerAt(cell_dirty.left, cell_dirty.top);
+  for (int cell_y = cell_dirty.top, p_y = cell_y * cell_size.height;
+       cell_y < cell_dirty.bottom;
+       ++cell_y, p_y += cell_size.height, text += data.GetWidth()) {
+    canvas.DrawFilledRectangle({p_dirty.left, p_y,
+        p_dirty.right, p_y + (int)cell_size.height},
+                          look.background_color);
+    canvas.DrawText({x, p_y}, {text, length});
+  }
+
+  int cell_bottom_y(cell_dirty.bottom * cell_size.height);
+  if (cell_bottom_y < p_dirty.bottom)
+    canvas.DrawFilledRectangle({p_dirty.left, cell_bottom_y, p_dirty.right, p_dirty.bottom},
+                               look.background_color);
+}

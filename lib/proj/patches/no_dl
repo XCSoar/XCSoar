@@ -1,0 +1,15 @@
+Index: proj-9.2.1/src/lib_proj.cmake
+===================================================================
+--- proj-9.2.1.orig/src/lib_proj.cmake
++++ proj-9.2.1/src/lib_proj.cmake
+@@ -425,10 +425,6 @@ if(UNIX)
+   if(M_LIB)
+     target_link_libraries(proj PRIVATE -lm)
+   endif()
+-  find_library(DL_LIB dl)
+-  if(DL_LIB)
+-    target_link_libraries(proj PRIVATE -ldl)
+-  endif()
+ endif()
+ if(Threads_FOUND AND CMAKE_USE_PTHREADS_INIT)
+   target_link_libraries(proj PRIVATE ${CMAKE_THREAD_LIBS_INIT})

@@ -1,0 +1,211 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "WaypointIconRenderer.hpp"
+#include "Look/WaypointLook.hpp"
+#include "ui/canvas/Icon.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "Screen/Layout.hpp"
+#include "WaypointRendererSettings.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
+#include "util/Macros.hpp"
+
+#include <algorithm>
+
+[[gnu::pure]]
+static const MaskedIcon &
+GetWaypointIcon(const WaypointLook &look, const Waypoint &wp,
+                bool small_icons, const bool in_task) noexcept
+{
+  if (small_icons && !in_task)
+    return look.small_icon;
+
+  switch (wp.type) {
+  case Waypoint::Type::MOUNTAIN_TOP:
+    return look.mountain_top_icon;
+  case Waypoint::Type::MOUNTAIN_PASS:
+    return look.mountain_pass_icon;
+  case Waypoint::Type::BRIDGE:
+    return look.bridge_icon;
+  case Waypoint::Type::TUNNEL:
+    return look.tunnel_icon;
+  case Waypoint::Type::TOWER:
+    return look.tower_icon;
+  case Waypoint::Type::OBSTACLE:
+    return look.obstacle_icon;
+  case Waypoint::Type::POWERPLANT:
+    return look.power_plant_icon;
+  case Waypoint::Type::THERMAL_HOTSPOT:
+    return look.thermal_hotspot_icon;
+  case Waypoint::Type::MARKER:
+    return look.marker_icon;
+  case Waypoint::Type::VOR:
+    return look.vor_icon;
+  case Waypoint::Type::NDB:
+    return look.ndb_icon;
+  case Waypoint::Type::DAM:
+    return look.dam_icon;
+  case Waypoint::Type::CASTLE:
+    return look.castle_icon;
+  case Waypoint::Type::INTERSECTION:
+    return look.intersection_icon;
+  case Waypoint::Type::REPORTING_POINT:
+    return look.reporting_point_icon;
+  case Waypoint::Type::PGTAKEOFF:
+    return look.pgtakeoff_icon;
+  case Waypoint::Type::PGLANDING:
+    return look.pglanding_icon;
+  default:
+    if (in_task) {
+      return look.task_turn_point_icon;
+    } else {
+      return look.turn_point_icon;
+    }
+  }
+}
+
+static void
+DrawLandableBase(Canvas &canvas, const PixelPoint &pt, bool airport,
+                 const double radius) noexcept
+{
+  int iradius = iround(radius);
+  if (airport)
+    canvas.DrawCircle(pt, iradius);
+  else {
+    BulkPixelPoint diamond[4];
+    diamond[0].x = pt.x + 0;
+    diamond[0].y = pt.y - iradius;
+    diamond[1].x = pt.x + iradius;
+    diamond[1].y = pt.y + 0;
+    diamond[2].x = pt.x + 0;
+    diamond[2].y = pt.y + iradius;
+    diamond[3].x = pt.x - iradius;
+    diamond[3].y = pt.y - 0;
+    canvas.DrawTriangleFan(diamond, ARRAY_SIZE(diamond));
+  }
+}
+
+static void
+DrawLandableRunway(Canvas &canvas, const PixelPoint &pt,
+                   const Angle angle, double radius, double width) noexcept
+{
+  if (radius <= 0)
+    return;
+
+  const auto sc = angle.SinCos();
+  const auto x = sc.first, y = sc.second;
+  int lx = iround(2 * x * radius) & ~0x1;  // make it a even number
+  int ly = iround(2 * y * radius) & ~0x1;
+  int wx = iround(-y * width);
+  int wy = iround(x * width);
+
+  BulkPixelPoint runway[4];
+  runway[0].x = pt.x        - (lx / 2) + (wx / 2);
+  runway[0].y = pt.y        + (ly / 2) - (wy / 2);
+  runway[1].x = runway[0].x            - wx;
+  runway[1].y = runway[0].y            + wy;
+  runway[2].x = runway[1].x + lx;
+  runway[2].y = runway[1].y - ly;
+  runway[3].x = runway[2].x            + wx;
+  runway[3].y = runway[2].y            - wy;
+  canvas.DrawTriangleFan(runway, ARRAY_SIZE(runway));
+}
+
+
+void
+WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
+                                   const PixelPoint &point,
+                                   WaypointReachability reachable) noexcept
+{
+
+  if (!settings.vector_landable_rendering) {
+    const MaskedIcon *icon;
+
+    if (reachable == WaypointReachability::TERRAIN)
+      icon = waypoint.IsAirport()
+        ? &look.airport_reachable_icon
+        : &look.field_reachable_icon;
+    else if (reachable == WaypointReachability::STRAIGHT)
+      icon = waypoint.IsAirport()
+        ? &look.airport_marginal_icon
+        : &look.field_marginal_icon;
+    else
+      icon = waypoint.IsAirport()
+        ? &look.airport_unreachable_icon
+        : &look.field_unreachable_icon;
+
+    icon->Draw(canvas, point);
+    return;
+  }
+
+  // SW rendering of landables
+  double scale = std::max(Layout::VptScale(settings.landable_rendering_scale),
+                          110u) / 177.;
+  double radius = 10 * scale;
+
+  canvas.SelectBlackPen();
+
+  const bool is_reachable = reachable != WaypointReachability::INVALID &&
+    reachable != WaypointReachability::UNREACHABLE;
+
+  switch (settings.landable_style) {
+  case WaypointRendererSettings::LandableStyle::PURPLE_CIRCLE:
+    // Render landable with reachable state
+    if (is_reachable) {
+      canvas.Select(reachable == WaypointReachability::TERRAIN
+                    ? look.reachable_brush
+                    : look.terrain_unreachable_brush);
+      DrawLandableBase(canvas, point, waypoint.IsAirport(), 1.5 * radius);
+    }
+    canvas.Select(look.magenta_brush);
+    break;
+
+  case WaypointRendererSettings::LandableStyle::BW:
+    if (is_reachable)
+      canvas.Select(reachable == WaypointReachability::TERRAIN
+                    ? look.reachable_brush
+                    : look.terrain_unreachable_brush);
+    else if (waypoint.IsAirport())
+      canvas.Select(look.white_brush);
+    else
+      canvas.Select(look.light_gray_brush);
+    break;
+
+  case WaypointRendererSettings::LandableStyle::TRAFFIC_LIGHTS:
+    if (is_reachable)
+      canvas.Select(reachable == WaypointReachability::TERRAIN
+                    ? look.reachable_brush
+                    : look.orange_brush);
+    else
+      canvas.Select(look.unreachable_brush);
+    break;
+  }
+
+  DrawLandableBase(canvas, point, waypoint.IsAirport(), radius);
+
+  // Render runway indication
+  const Runway &runway = waypoint.runway;
+  if (runway.IsDirectionDefined()) {
+    double len;
+    if (settings.scale_runway_length && runway.IsLengthDefined())
+      len = radius / 2. +
+        (((int) runway.GetLength() - 500) / 500) * radius / 4.;
+    else
+      len = radius;
+    len += 2 * scale;
+    Angle runwayDrawingAngle = runway.GetDirection() - screen_rotation;
+    canvas.Select(look.white_brush);
+    DrawLandableRunway(canvas, point, runwayDrawingAngle, len, 5 * scale);
+  }
+}
+
+void
+WaypointIconRenderer::Draw(const Waypoint &waypoint, const PixelPoint &point,
+                           WaypointReachability reachable, bool in_task) noexcept
+{
+  if (waypoint.IsLandable())
+    DrawLandable(waypoint, point, reachable);
+  else
+    // non landable turnpoint
+    GetWaypointIcon(look, waypoint, small_icons, in_task).Draw(canvas, point);
+}

@@ -1,0 +1,93 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#pragma once
+
+#include "TaskMacCreadyRemaining.hpp"
+#include "Task/Ordered/AATIsolineSegment.hpp"
+#include "Math/ZeroFinder.hpp"
+
+class StartPoint;
+
+/**
+ * Adjust target lateral offset for active task point to minimise
+ * elapsed time.
+ *
+ * \todo
+ * - Merge with TaskMinTarget?
+ * - Refactor, since passing in AATPoint is a hack
+ */
+class TaskOptTarget final : public ZeroFinder
+{
+  static constexpr double TOLERANCE = 0.01;
+
+  /** Object to calculate remaining task statistics */
+  TaskMacCreadyRemaining tm;
+  /** Glide solution used in search */
+  GlideResult res;
+  /** Observer */
+  const AircraftState &aircraft;
+  /** Start of task */
+  StartPoint &tp_start;
+  /** Active AATPoint */
+  AATPoint &tp_current;
+  /** Isoline for active AATPoint target */
+  AATIsolineSegment iso;
+
+public:
+  /**
+   * Constructor for ordered task points
+   *
+   * @param tps Vector of ordered task points comprising the task
+   * @param activeTaskPoint Current active task point in sequence
+   * @param _aircraft Current aircraft state
+   * @param _gp Glide polar to copy for calculations
+   * @param _tp_current Active AATPoint
+   * @param _ts StartPoint of task (to initiate scans)
+   */
+  template<typename T>
+  TaskOptTarget(T &tps,
+                const unsigned activeTaskPoint,
+                const AircraftState &_aircraft,
+                const GlideSettings &settings, const GlidePolar &_gp,
+                AATPoint& _tp_current,
+                const FlatProjection &projection,
+                StartPoint &_ts) noexcept
+    :ZeroFinder(0.02, 0.98, TOLERANCE),
+     tm(tps.begin(), tps.end(), activeTaskPoint, settings, _gp,
+        /* ignore the travel to the start point */
+        false),
+     aircraft(_aircraft),
+     tp_start(_ts),
+     tp_current(_tp_current),
+     iso(_tp_current, projection)
+  {
+  }
+
+  double f(double p) noexcept override;
+
+  /**
+   * Test validity of a solution given search parameter
+   *
+   * @param p Search parameter (isoline parameter [0,1])
+   *
+   * @return True if solution is valid
+   */
+  bool valid(double p) noexcept;
+
+  /**
+   * Search for active task point's target isoline to minimise elapsed time
+   * to finish.
+   *
+   * Running this adjusts the target values for the active task point.
+   *
+   * @param p Default isoline value (0-1)
+   *
+   * @return Isoline value for solution
+   */
+  double search(double p) noexcept;
+
+private:
+  /** Sets target location along isoline */
+  void SetTarget(double p) noexcept;
+};

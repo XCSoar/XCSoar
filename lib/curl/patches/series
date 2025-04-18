@@ -1,0 +1,4 @@
+SSL_OP_LEGACY_SERVER_CONNECT.patch
+no_CMAKE_C_IMPLICIT_LINK_LIBRARIES.patch
+no_netrc
+cares_pkg_config

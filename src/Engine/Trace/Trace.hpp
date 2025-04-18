@@ -1,0 +1,520 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#pragma once
+
+#include "Point.hpp"
+#include "util/NonCopyable.hpp"
+#include "util/Sanitizer.hxx"
+#include "util/SliceAllocator.hxx"
+#include "util/Serial.hpp"
+#include "Geo/Flat/TaskProjection.hpp"
+#include "time/Stamp.hpp"
+
+#include <boost/intrusive/list.hpp>
+#include <boost/intrusive/set.hpp>
+#include <algorithm>
+#include <cassert>
+#include <type_traits>
+#include <stdlib.h>
+
+class TracePointVector;
+class TracePointerVector;
+
+/**
+ * This class uses a smart thinning algorithm to limit the number of items
+ * in the store.  The thinning algorithm is an online type of Douglas-Peuker
+ * algorithm such that candidates are removed by ranking based on the
+ * loss of precision caused by removing that point.  The loss is measured
+ * by the difference between the distances between neighbours with and without
+ * the candidate point removed.  In this version, time differences is also a
+ * secondary factor, such that thinning attempts to remove points such that,
+ * for equal distance ranking, smaller time step details are removed first.
+ */
+class Trace : private NonCopyable
+{
+  using Time = TracePoint::Time;
+
+  struct TraceDelta
+    : boost::intrusive::set_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>>,
+      boost::intrusive::list_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>> {
+
+    /**
+     * Function used to points for sorting by deltas.
+     * Ranking is primarily by distance delta; for equal distances, rank by
+     * time delta.
+     * This is like a modified Douglas-Peuker algorithm
+     */
+    [[gnu::pure]]
+    static constexpr bool DeltaRank(const TraceDelta &x,
+                                    const TraceDelta &y) noexcept {
+      // distance is king
+      if (x.elim_distance < y.elim_distance)
+        return true;
+
+      if (x.elim_distance > y.elim_distance)
+        return false;
+
+      // distance is equal, so go by time error
+      if (x.elim_time < y.elim_time)
+        return true;
+
+      if (x.elim_time > y.elim_time)
+        return false;
+
+      // all else fails, go by age
+      if (x.point.IsOlderThan(y.point))
+        return true;
+
+      if (x.point.IsNewerThan(y.point))
+        return false;
+
+      return false;
+    }
+
+    struct DeltaRankOp {
+      constexpr bool operator()(const TraceDelta &s1,
+                                const TraceDelta &s2) const noexcept {
+        return DeltaRank(s1, s2);
+      }
+    };
+
+    TracePoint point;
+
+    Time elim_time;
+    unsigned elim_distance;
+    unsigned delta_distance;
+
+    explicit TraceDelta(const TracePoint &p) noexcept
+      :point(p),
+       elim_time(null_time), elim_distance(null_delta),
+       delta_distance(0) {}
+
+    TraceDelta(const TracePoint &p_last, const TracePoint &p,
+               const TracePoint &p_next) noexcept
+      :point(p),
+       elim_time(TimeMetric(p_last, p, p_next)),
+       elim_distance(DistanceMetric(p_last, p, p_next)),
+       delta_distance(p.FlatDistanceTo(p_last))
+    {
+      assert(elim_distance != null_delta);
+    }
+
+    /**
+     * Is this the first or the last point?
+     */
+    constexpr bool IsEdge() const noexcept {
+      return elim_time == null_time;
+    }
+
+    void Update(const TracePoint &p_last, const TracePoint &p_next) noexcept {
+      elim_time = TimeMetric(p_last, point, p_next);
+      elim_distance = DistanceMetric(p_last, point, p_next);
+      delta_distance = point.FlatDistanceTo(p_last);
+    }
+
+    /**
+     * Calculate error distance, between last through this to next,
+     * if this node is removed.  This metric provides for Douglas-Peuker
+     * thinning.
+     *
+     * @param last Point previous in time to this node
+     * @param node This node
+     * @param next Point succeeding this node
+     *
+     * @return Distance error if this node is thinned
+     */
+    [[gnu::pure]]
+    static unsigned DistanceMetric(const TracePoint &last,
+                                   const TracePoint &node,
+                                   const TracePoint &next) noexcept {
+      const int d_this = last.FlatDistanceTo(node) + node.FlatDistanceTo(next);
+      const int d_rem = last.FlatDistanceTo(next);
+      return abs(d_this - d_rem);
+    }
+
+    /**
+     * Calculate error time, between last through this to next,
+     * if this node is removed.  This metric provides for fair thinning
+     * (tendency to to result in equal time steps)
+     *
+     * @param last Point previous in time to this node
+     * @param node This node
+     * @param next Point succeeding this node
+     *
+     * @return Time delta if this node is thinned
+     */
+    static constexpr Time TimeMetric(const TracePoint &last,
+                                     const TracePoint &node,
+                                     const TracePoint &next) noexcept {
+      return next.DeltaTime(last)
+        - std::min(next.DeltaTime(node), node.DeltaTime(last));
+    }
+  };
+
+  /* using multiset, not because we need multiple values (we don't),
+     but to avoid set's overhead for duplicate elimination */
+  typedef boost::intrusive::multiset<TraceDelta,
+                                     boost::intrusive::compare<TraceDelta::DeltaRankOp>,
+                                     boost::intrusive::constant_time_size<false>> DeltaList;
+
+  typedef boost::intrusive::list<TraceDelta,
+                                 boost::intrusive::constant_time_size<false>> ChronologicalList;
+
+  /**
+   * Use a SliceAllocator for allocating TraceDelta instances.  This
+   * reduces a lot of allocation overhead (both CPU and memory),
+   * because there will be lots of these objects.  Fall back to
+   * std::allocator when compiled with AddressSanitizer, because that
+   * avoids hiding memory errors.
+   */
+  using Allocator = std::conditional_t<HaveAddressSanitizer(),
+                                       std::allocator<TraceDelta>,
+                                       SliceAllocator<TraceDelta, 128u>>;
+
+  Allocator allocator;
+
+  DeltaList delta_list;
+  ChronologicalList chronological_list;
+  unsigned cached_size;
+
+  TaskProjection task_projection;
+
+  const Time max_time;
+  const Time no_thin_time;
+  const unsigned max_size;
+  const unsigned opt_size;
+
+  Time average_delta_time;
+  unsigned average_delta_distance;
+
+  Serial append_serial, modify_serial;
+
+  template<typename Alloc>
+  struct Disposer {
+    Alloc &alloc;
+
+    void operator()(typename std::allocator_traits<Alloc>::pointer td) {
+      std::allocator_traits<Alloc>::destroy(alloc, td);
+      alloc.deallocate(td, 1);
+    }
+  };
+
+  template<typename Alloc>
+  static Disposer<Alloc> MakeDisposer(Alloc &alloc) {
+    return {alloc};
+  }
+
+  Disposer<decltype(allocator)> MakeDisposer() {
+    return MakeDisposer(allocator);
+  }
+
+public:
+  /**
+   * Constructor.  Task projection is updated after first call to append().
+   *
+   * @param no_thin_time Time window in seconds in which points most recent
+   * wont be trimmed
+   * @param max_time Time window size (seconds), null_time for unlimited
+   * @param max_size Maximum number of points that can be stored
+   */
+  explicit Trace(const Time no_thin_time = {},
+                 const Time max_time = null_time,
+                 const unsigned max_size = 1000) noexcept;
+
+  ~Trace() noexcept {
+    clear();
+  }
+
+protected:
+  /**
+   * Find recent time after which points should not be culled
+   * (this is set to n seconds before the latest time)
+   *
+   * @param t Time window
+   *
+   * @return Recent time
+   */
+  [[gnu::pure]]
+  Time GetRecentTime(Time t) const noexcept;
+
+  /**
+   * Update delta values for specified item in the delta list and the
+   * tree.  This repositions the item after into its sorted position.
+   *
+   * @param it Item to update
+   * @param tree Tree containing leaf
+   *
+   * @return Iterator to updated item
+   */
+  void UpdateDelta(TraceDelta &td) noexcept;
+
+  /**
+   * Erase a non-edge item from delta list and tree, updating
+   * deltas in the process.  This Invalidates the calling iterator.
+   *
+   * @param it Item to erase
+   * @param tree Tree to remove from
+   *
+   */
+  void EraseInside(DeltaList::iterator it) noexcept;
+
+  /**
+   * Erase elements based on delta metric until the size is
+   * equal to the target size.  Wont remove elements more recent than
+   * specified time from the last point.
+   *
+   * Note that the recent time is obeyed even if the results will
+   * fail to set the target size.
+   *
+   * @param target_size Size of desired list.
+   * @param tree Tree to remove from
+   * @param recent Time window for which to not remove points
+   *
+   * @return True if items were erased
+   */
+  bool EraseDelta(const unsigned target_size,
+                  Time recent = {}) noexcept;
+
+  /**
+   * Erase elements older than specified time from delta and tree,
+   * and update earliest item to become the new start
+   *
+   * @param p_time Time to remove
+   * @param tree Tree to remove from
+   *
+   * @return True if items were erased
+   */
+  bool EraseEarlierThan(Time p_time) noexcept;
+
+  /**
+   * Erase elements more recent than specified time.  This is used to
+   * work around slight time warps.
+   */
+  void EraseLaterThan(Time min_time) noexcept;
+
+  /**
+   * Update start node (and neighbour) after min time pruning
+   */
+  void EraseStart(TraceDelta &td_start) noexcept;
+
+public:
+  /**
+   * Add trace to internal store.  Call optimise() periodically
+   * to balance tree for faster queries
+   *
+   * @param a new point; its "flat" (projected) location is ignored
+   */
+  void push_back(const TracePoint &point) noexcept;
+
+  /**
+   * Clear the trace store
+   */
+  void clear() noexcept;
+
+  void EraseEarlierThan(TimeStamp time) noexcept {
+    EraseEarlierThan(time.Cast<Time>());
+  }
+
+  void EraseLaterThan(TimeStamp time) noexcept {
+    EraseLaterThan(time.Cast<Time>());
+  }
+
+  unsigned GetMaxSize() const noexcept {
+    return max_size;
+  }
+
+  /**
+   * Size of traces (in tree, not in temporary store) ---
+   * must call optimise() before this for it to be accurate.
+   *
+   * @return Number of traces in tree
+   */
+  unsigned size() const noexcept {
+    return cached_size;
+  }
+
+  /**
+   * Whether traces store is empty
+   *
+   * @return True if no traces stored
+   */
+  bool empty() const noexcept {
+    return cached_size == 0;
+  }
+
+  /**
+   * Returns a #Serial that gets incremented when data gets appended
+   * to the #Trace.
+   *
+   * It also gets incremented on any other change, which makes this
+   * method useful for checking whether the object is unmodified since
+   * the last call.
+   */
+  const Serial &GetAppendSerial() const noexcept {
+    return append_serial;
+  }
+
+  /**
+   * Returns a #Serial that gets incremented when iterators get
+   * Invalidated (e.g. when the #Trace gets cleared or optimised).
+   */
+  const Serial &GetModifySerial() const noexcept {
+    return modify_serial;
+  }
+
+  /** 
+   * Retrieve a vector of trace points sorted by time
+   * 
+   * @param iov Vector of trace points (output)
+   *
+   */
+  void GetPoints(TracePointVector& iov) const noexcept;
+
+  /**
+   * Retrieve a vector of trace points sorted by time
+   */
+  void GetPoints(TracePointerVector &v) const noexcept;
+
+  /**
+   * Update the given #TracePointVector after points were appended to
+   * this object.  This must not be called after thinning has
+   * occurred, see GetModifySerial().
+   *
+   * @return true if new points were added
+   */
+  bool SyncPoints(TracePointerVector &v) const noexcept;
+
+  /**
+   * Fill the vector with trace points, not before #min_time, minimum
+   * resolution #min_distance.
+   */
+  void GetPoints(TracePointVector &v, Time min_time,
+                 const GeoPoint &location, double resolution) const noexcept;
+
+  const TracePoint &front() const noexcept {
+    assert(!empty());
+
+    return chronological_list.front().point;
+  }
+
+  const TracePoint &back() const noexcept {
+    assert(!empty());
+
+    return chronological_list.back().point;
+  }
+
+private:
+  /**
+   * Enforce the maximum duration, i.e. remove points that are too
+   * old.  This will be called before a new point is added, therefore
+   * the time stamp of the new point is passed to this method.
+   *
+   * This method is a no-op if no time window was configured.
+   *
+   * @param latest_time the latest time stamp which is/will be stored
+   * in this trace
+   */
+  void EnforceTimeWindow(Time latest_time) noexcept;
+
+  /**
+   * Helper function for Thin().
+   */
+  void Thin2() noexcept;
+
+  /**
+   * Thin the trace: remove old and irrelevant points to make room for
+   * more points.
+   */
+  void Thin() noexcept;
+
+  TraceDelta &GetFront() noexcept {
+    assert(!empty());
+
+    return chronological_list.front();
+  }
+
+  TraceDelta &GetBack() noexcept {
+    assert(!empty());
+
+    return chronological_list.back();
+  }
+
+  [[gnu::pure]]
+  unsigned CalcAverageDeltaDistance(Time no_thin) const noexcept;
+
+  [[gnu::pure]]
+  Time CalcAverageDeltaTime(Time no_thin) const noexcept;
+
+  static constexpr unsigned null_delta = 0 - 1;
+
+public:
+  static constexpr auto null_time = TracePoint::INVALID_TIME;
+
+  unsigned GetAverageDeltaDistance() const noexcept {
+    return average_delta_distance;
+  }
+
+  Time GetAverageDeltaTime() const noexcept {
+    return average_delta_time;
+  }
+
+public:
+  class const_iterator : public ChronologicalList::const_iterator {
+    friend class Trace;
+
+    const_iterator(ChronologicalList::const_iterator &&_iterator) noexcept
+      :ChronologicalList::const_iterator(std::move(_iterator)) {}
+
+  public:
+    using ChronologicalList::const_iterator::iterator_category;
+    using ChronologicalList::const_iterator::difference_type;
+    typedef const TracePoint value_type;
+    typedef const TracePoint *pointer;
+    typedef const TracePoint &reference;
+
+    const_iterator() = default;
+
+    const TracePoint &operator*() const noexcept {
+      const TraceDelta &td = ChronologicalList::const_iterator::operator*();
+      return td.point;
+    }
+
+    const TracePoint *operator->() const noexcept {
+      const TraceDelta &td = ChronologicalList::const_iterator::operator*();
+      return &td.point;
+    }
+
+    const_iterator &NextSquareRange(unsigned sq_resolution,
+                                    const const_iterator &end) noexcept {
+      const TracePoint &previous = **this;
+      while (true) {
+        ++*this;
+
+        if (*this == end)
+          return *this;
+
+        const TraceDelta &td = ChronologicalList::const_iterator::operator*();
+        if (td.point.FlatSquareDistanceTo(previous) >= sq_resolution)
+          return *this;
+      }
+    }
+  };
+
+  const_iterator begin() const noexcept {
+    return chronological_list.begin();
+  }
+
+  const_iterator end() const noexcept {
+    return chronological_list.end();
+  }
+
+  const TaskProjection &GetProjection() const noexcept {
+    return task_projection;
+  }
+
+  [[gnu::pure]]
+  unsigned ProjectRange(const GeoPoint &location, double distance) const noexcept {
+    return task_projection.ProjectRangeInteger(location, distance);
+  }
+};

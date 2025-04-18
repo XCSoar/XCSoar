@@ -1,0 +1,395 @@
+% !TeX encoding = utf8
+% !TeX spellcheck = fr
+
+\chapter{Installation}\label{cha:installation}
+
+Pour lancer XCSoar il vous faut~:
+\begin{itemize}
+\item un appareil sur lequel faire tourner XCSoar
+\item le logiciel XCSoar
+\item un récepteur GPS (peut être dans l'appareil)
+\item un fichier de points de virage
+\item un fichier d'espaces aériens (optionnel)
+\item un fichier de terrain, pour la carte (optionnel)
+\end{itemize}
+
+\section{!~Avant de faire votre premier vol avec XCSoar~!}
+
+Après avoir installé XCSoar avec succès, vous pourriez l'utiliser directement. XCSoar
+démarrera avec une pré-configuration prête à être utilisée. Mais attention qu'à 
+ce moment-là votre nouveau jouet ne vous affichera qu'une carte mobile.
+\warning \emph{Ne faites pas confiance aux calculs.} Il faut dire à l'avance à XCsoar sur quel
+aéronef vous volez. Ceci est fait en précisant les données sur votre aéronef
+telles que la polaire, sa masse et d'autres données. Cependant, il est toujours bon
+d'étudier le manuel et de se familiariser avec XCSoar à la maison.
+
+\section{Comment tirer le maximum d'XCSoar}
+
+Afin de bénéficier au maximum d'XCSoar, il vous est demandé de
+faire des choses supplémentaires après l'installation du logiciel et de télécharger quelques fichiers
+de données. ``Des choses supplémentaires'' incluent des données personnelles et sur l'aéronef, ainsi que la configuration
+de quelques fonctionnalités. A moins que vous souhaitiez peaufiner tout ce que XCSoar
+fournit, cela peut se faire assez rapidement. Les étapes nécessaires sont
+résumées dans une \emph{Checklist d'XCSoar}, fournit dans le paragraphe suivant.
+
+Si vous comptez utiliser un appareil avec plusieurs composants connectés,
+ce manuel vous donnera des conseils utiles à la fois sur la configuration des choses et sur
+leur utilisation.
+
+Si vous êtes un pilote pressé, les auteurs vous suggère d'aller voir la version courte
+du manuel \texttt{XCSoar-Prise-en-main} et de parcourir la \emph{Checklist d'XCSoar}
+étape par étape. La version courte du manuel est disponible sur \xcsoarwebsite{/discover/manual.html}.
+
+\section{Checklist d'XCSoar}
+
+\subsection*{{Mise en piste d'XCSoar}}
+\begin{itemize}
+\item acquérir un appareil et y installer XCSoar
+\item récupérer les fichiers de données adapté à votre secteur de vol
+\item dire à XCSoar quels fichiers utiliser
+\item dire à XCSoar la polaire et la masse de votre planeur
+\item éventuellement, se connecter aux instruments
+\item terminer la configuration et se familiariser
+\item monter l'appareil
+\item ajouter les points listés ci-dessous dans vos checklists
+\item définir le point de départ
+\end{itemize}
+
+\subsection*{Faire les vérifications pré-vols, incluant~:}
+\begin{itemize}
+\item configurer la polaire et la masse
+\item configurer le vent et les paramètres de vol (MC, moucherons, QNH)
+\item éventuellement, configurer un circuit.
+\end{itemize}
+
+\subsection*{Faire les vérifications avant le décollage, incluant~:}
+\begin{itemize}
+\item vérifier le vent et la configuration de vol une fois de plus
+\end{itemize}
+\vspace{2em}
+
+\subsection*{Voler, prendre du plaisir}
+\vspace{4em}
+
+\subsection*{Faire les vérification post-vol}
+\begin{itemize}
+\item Télécharger les logs du vol depuis l'enregistreur, les mettre sur skylines, la netcoupe et l'OLC
+\item Récupérer les données statistiques sur le vol.
+\end{itemize}
+\newpage
+
+\section{Compatibilité}
+
+\subsection*{Appareils faisant tourner XCSoar}
+
+XCSoar tourne sur les plateformes suivantes~:
+\begin{itemize}
+\item téléphones portables et tablettes sous Android 1.6 ou plus récent \\
+ Exemples~: Dell Streak, Samsung Galaxy S II, HTC Desire HD,
+ Motorola Xoom
+\item eReader Kobo
+\item Windows 2000 ou plus récent
+\item Linux
+\item Mac OS X (obsolète)
+\end{itemize}
+
+\subsection*{GPS, Enregistreur de Vol, Vario}
+
+XCSoar est compatible avec tous les GPS fournissant des données NMEA. La plupart
+des appareils Android intègre un GPS, mais, pour diverses raisons, il est désirable de
+se connecter à un ou plusieurs appareils externes~:
+\begin{itemize}
+\item un récepteur GPS spécialisé possède une bien meilleure réception, fournissant de bien
+meilleures données pour les mesures et les calculs
+\item un indicateur de vitesse fournit de manière exacte et rapide des estimations du vent
+ sans nécessiter de spiraler
+\item un variomètre améliore l'assistant en thermique
+\item un circuit peut être déclaré dans un enregistreur de vol IGC et, après l'atterrissage, l'enregistrement
+du vol peut être téléchargé
+\item certains variomètres permettent la synchronisation de la configuration du MacCready avec
+ XCSoar
+\item un FLARM (voire une entrée ADS-B) fournit des informations et des états sur les autres
+autour de vous (et bien sûr, un FLARM détecte des risques de collision)
+\end{itemize}
+
+\subsection*{Appareils externes compatibles et fonctionnalités}
+\label{sec:supported-varios}
+
+\newcommand{\y}[0]{{ $\surd$ }}
+%{0.8\textwidth}
+\noindent\makebox[\textwidth]{%
+\begin{tabular}{l|ccc|cc|cc|c}
+    \multicolumn{1}{c}{Compatibles} & \multicolumn{3}{c|}{Fonctionnalités} & \multicolumn{5}{c}{Flux de données} \\
+NMEA Device & 
+ \begin{sideways} Déclaration\end{sideways} & 
+ \begin{sideways} Télécommande\end{sideways} & 
+ \begin{sideways} Téléchargement\end{sideways} &
+ \begin{sideways} Vitesse air\end{sideways} & 
+ \begin{sideways} Vario\end{sideways} & 
+ \begin{sideways} Baro.\ altitude\end{sideways} &
+ \begin{sideways} Vent\end{sideways} &
+ \begin{sideways} Accéléromètre\end{sideways} \\
+\hline
+\input{supported_devices_table.tex}
+\end{tabular}}
+
+Alors que la majorité des appareils sous Windows CD ont un port série, des matériels
+aussi anciens ne sont pas présent sur les appareils Android modernes. Ces derniers peuvent soit
+utiliser le Bluetooth ou une carte Android IOIO. Pour utiliser le Bluetooth, vous devez
+connecter le périphérique externes à un adaptateur Bluetooth-vers-Série, tels
+que le K6-Bt et le SoarTronic-BT1/2.
+
+\section{Installation du logiciel}
+
+Le logiciel est téléchargeable gratuitement sur le site internet d'XCSoar ~\xcsoarwebsite{}. Ce paragraphe décrit quel fichier doit être téléchargé, et comment l'installer.
+
+\subsection*{Sous Android}
+
+Récupérez XCSoar sur Google Play depuis votre appareil, ou installez le fichier \verb|apk|
+manuellement. Copiez les fichiers de données sur la carte SD dans le répertoire \verb|XCSoarData|.
+
+\subsection*{Sur un Kobo Mini}
+
+Le Kobo Mini est un lecteur d'e-book pas cher. Il a un affichage
+e-paper noir et blanc qui possède une excellente lisibilité en plein soleil.
+
+Avant de commencer, faites une sauvegarde de la carte SD interne. L'installateur d'XCSoar
+pourrait casser votre Kobo, quoi que ce soit improbable. Vous pouvez toujours récupérer le Kobo
+d'une défaillance logicielle, mais uniquement si vous avez accès à une sauvegarde.
+
+Pour installer XCSoar, connecter par USB le Kobo à votre PC. Le Kobo 
+apparaît comme un périphérique de stockage sur votre PC~; ouvrez-le et créer un
+répertoire nommé \texttt{.kobo} (noter le point initial). Téléchargez le 
+fichier \texttt{KoboRoot.tgz} depuis le site internet d'XCSoar vers ce
+répertoire (\xcsoarwebsite{/hardware/}). Débrancher le Kobo et le redémarrer (arrêter le complètement
+puis allumer le à nouveau). Vous verrez le message ``Updating'' (``mise à jour'') et
+après quelques minutes, le Kobo affichera un menu qui vous permet de lancer
+XCSoar ou le logiciel de lecteur d'\mbox{e-book} du Kobo.
+
+Pour copier les fichiers de données (cartes, points de virage...) sur le Kobo, lancer le 
+logiciel original du Kobo (``Nickel'') et connecter de nouveau le Kobo à votre PC.
+Copier les fichiers dans un répertoire nommé \texttt{XCSoarData} à la racine.
+
+Autrement, des fichiers de données peuvent être téléchargés depuis le gestionnaire de fichiers d'XCSoar,
+en ayant démarré une connexion réseau avant le lancement d'XCSoar.
+
+\subsubsection{Bidouiller le Kobo}
+
+Suite à l'installation d'XCSoar sur le Kobo, le nouveau script de démarrage vérifie qu'un
+script nommé \texttt{XCSoarData/kobo/init.sh} existe et le lance. Si
+vous vous y connaissez, vous pouvez utiliser ce script pour effectuer des choses au
+moment du démarrage, comme lancer \texttt{inetd} (pour un accès \texttt{telnet}).
+
+Quand vous lancer \texttt{Nickel} (le système original de l'e-book), le nouveau
+script de démarrage cherche aussi un script nommé \texttt{init\_nickel.sh}
+dans \texttt{XCSoarData/kobo/} et le lance. Là aussi, si 
+vous vous y connaissez vous pouvez utiliser ce script pour effectuer des choses
+avant que \texttt{Nickel} n'est complètement démarré, comme envoyer des instructions
+à votre vario apparié (pour l'éteindre, pour baisser le volume, etc.).
+
+\subsection*{Sur un PC sous Windows}
+
+Téléchargez le fichier programme \verb|XCSoar.exe| (cible ``PC'') sur votre disque dur.
+
+\subsection*{Sous Unix/Linux}
+
+Téléchargez \verb|xcsoar_XXX.deb|, où \verb|XXX| contient les numéros de version et la plateforme, par~ex.\ \verb|xcsoar_6.0.4_i386.deb|.
+Il s'agit d'un paquet Debian et peut être installé ainsi 
+\begin{center}
+\verb|sudo dpkg -i xcsoar_XXX.deb|.
+\end{center}
+Utilisez \verb|dpkg-query -L xcsoar| pour voir où l'exécutable et les autres fichiers sont installés.
+Les fichiers additionnels doivent être placés dans le répertoire
+\verb|~/.xcsoar/|.
+Si \verb|~/.xcsoar| n'existe pas, il sera créé la première fois que \verb|xcsoar| sera exécuté.
+
+\subsection*{Sur une Raspberry Pi et une Cubieboard}
+
+Installer le paquetage Debian tel que décrit ci-dessous. Toutefois, contrairement à 
+Linux ``normal'', XCSoar n'utilisera pas X11. À la place, il tournera
+en mode plein écran dans une console Linux.
+
+XCSoar a besoin d'accéder à vos périphériques d'entrée
+(\texttt{/dev/input/event*}). Par défaut, seul \texttt{root} y
+a accès. Pour passer outre, créez un fichier de configuration
+\texttt{udev}, par ex. \texttt{/etc/udev/rules.d/99-input.rules}~:
+
+\begin{verbatim*}
+KERNEL=="event*", NAME="input/%k", MODE="660", GROUP="input"
+\end{verbatim*}
+
+Créez le groupe \texttt{input} et en rendre membre votre utilisateur~:
+
+\begin{verbatim*}
+groupadd input
+adduser pi input
+\end{verbatim*}
+
+\section{Fichiers de données}\label{sec:data files}
+
+Pour être capable d'utiliser les fonctionnalités avancées d'XCsoar, des fichiers de données supplémentaires, tels que
+le relief, la topographie, des espaces aériens à usage particulier, des points de virage, etc.\, sont nécessaires. Les fichiers
+qui peuvent être utilisés avec XCSoar sont décrits dans le chapitre~\ref{cha:data-files}.
+
+Tous les fichiers de données doivent être copiés dans le répertoire 
+\texttt{XCSoarData}. Ce répertoire doit être dans un endroit spécifique
+de telle façon qu'XCSoar sache où rechercher des fichiers de données~:
+\begin{description}
+\item[PC sous Windows]
+\texttt{XCSoarData} est dans votre répertoire personnel (``\texttt{Mes
+Documents}'')
+\item[Windows Mobile PDA/PNA]
+S'il y a un répertoire nommé \texttt{XCSoarData} dans le même
+répertoire que \texttt{XCSoar.exe}, alors celui-ci sera utilisé.
+\texttt{XCSoarData} est sur une carte SD. Si il n'y a pas de carte SD, alors
+XCSoar le cherchera dans \texttt{Mes Documents}.
+\item[Unix/Linux]
+Le répertoire s'appelle \verb|.xcsoar| dans le répertoire principal de l'utilisateur.
+\item[Appareil Android]
+\texttt{XCSoarData} est sur la carte SD.
+\end{description}
+
+XCSoar générera un certain nombre de fichiers supplémentaires lors de l'exécution. Ils
+seront placés dans le répertoire \texttt{XCSoarData} (PS sous Windows, 
+appareils mobiles sous Windows et Android), ou dans le répertoire \texttt{.xcsoar} (PC sous
+Unix/Linux). Au moment du premier démarrage, XCSoar va créer et mettre à jour les fichiers
+\texttt{user.cup} (points de virage édités par l'utilisateur),
+\texttt{Default.tsk} (circuit par défaut), 
+\texttt{default.prf} 
+(paramètres de configuration),
+\texttt{xcsoar.log}, 
+ainsi que trois répertoires~: \texttt{cache},
+\texttt{config} et \texttt{logs}. Des fichiers supplémentaires peuvent être 
+créés/modifiés pendant que XCSoar tourne, tels que des fichiers de circuit
+(\texttt{*.tsk}) et les enregistrements du vol.
+
+
+\section{Faire tourner XCSoar}
+%\subsection*{Fly and simulator modes}
+
+Le logiciel XCSoar peut fonctionner selon deux modes~:
+\begin{description}
+\item[VOL] Ce mode est utilisé lorsque vous êtes vraiment en vol. Le simulateur est
+ désactivé et les communications séries sont actives. 
+\item[SIM] Cela lance XCSoar en mode simulateur, sans tenter de démarrer
+ les communications séries.
+\end{description}
+
+\subsection*{Version PC de XCSoar}
+Le logiciel peut être lancé en ouvrant la fenêtre de l'explorateur, en trouvant le répertoire
+qui contient l'exécutable XCSoar.exe, et en double-cliquant sur le fichier du logiciel.
+
+Les options en ligne de commande du logiciel permettent de définir
+l'orientation de l'affichage~:
+\begin{description}
+\item[-portrait] L'écran fait 480~pixels de large, 640~pixels de haut.
+\item[-square] L'écran fait 480~pixels de large, 480~pixels de haut.
+\item[-landscape] L'écran fait 640~pixels de large, 480~pixels de haut. C'est la 
+configuration par défaut. Si vous ne spécifier ce paramètre, la version paysage sera
+chargé automatiquement.
+\item[-small] Diminue la taille de l'écran de moitié. C'est utile pour se servir d'XCSoar en
+même temps que de simulateurs de vol comme Condor.
+\end{description}
+Pour changer l'orientation de l'écran, il est pratique de créer un raccourci vers le
+logiciel et, en faisant un clic droit sur l'icône du raccourci puis sur ``Propriétés''.
+Dans le champ ``Cible'' ajouter l'option désirées parmi celles listées ci-dessus.
+
+\subsection*{Version Unix/Linux de XCSoar}
+Lancer \verb|xcsoar| à partir de la ligne de commande, ou créer un raccourci sur le 
+bureau. La localisation du fichier exécutable peut être trouvé en utilisant
+\verb|which xcsoar|. Pour le moment, seul le mode paysage est disponible.
+
+\subsection*{Charger les fichiers de données}\label{sec:loaddatafiles}
+La première fois qu'XCSoar est lancé, il ne charge pas automatiquement les
+fichiers de données que vous avez placés dans le répertoire \verb|XCSoarData|. 
+Pour dire à XCSoar quels fichiers charger double cliquer/tapoter la carte (la grande
+surface blanche avec un symbole de planeur au centre),
+Choisissez le menu \bmenug{Config 2} (cliquer/tapoter-le deux fois), puis sélectionne l'élément
+\mbox{\bmenug{Système}.} L'écran de configuration devrait s'afficher~:
+\sketch{figures/config-basic.png}
+La première page vous permet de choisir les fichiers de carte,
+de points de virage et d'espace aérien en cliquant/tapotant sur les zones de texte.
+De nombreuses autres fonctionnalités d'XCSoar peuvent être ici configurées. Elles sont décrites en détails dans le
+chapitre~\ref{cha:configuration}.
+Une fois fait, XCSoar rechargera ces fichiers~: à partir de maintenant les fichiers de données
+seront chargés automatiquement au démarrage. 
+
+\subsection*{Démarrage et profils utilisateur}\label{sec:profiles}
+Quand XCSoar démarre, il vérifiera les profils existants. Si plusieurs
+profils sont détectés il affichera une petite fenêtre vous demandant quel profil
+charger. Pour continuer, choisissez le profil désiré et appuyés sur Entrée. Si aucun
+profil n'est choisi les paramètres de la session précédente seront chargés à nouveau. Des profils
+peuvent être utiles dans les cas suivants~:
+\begin{itemize}
+\item différents pilotes
+\item compétition ou vol de d'agrément
+\item voler depuis différents endroits
+\item différents aéronefs (avec différentes polaires)
+\end{itemize}
+Des profils peuvent aussi servir à conserver la sauvegarde d'une
+configuration particulière. Presque tous les paramètres sont enregistrés dans un fichier
+de profil avec l'extension \texttt{.prf}. Une fois que vous êtes satisfait de votre paramétrage,
+faites deux copies de votre fichier de profil. Une première ayant l'extension \texttt{.prf}, 
+une seconde avec l'extension \texttt{.bak}.
+Alors que le fichier \texttt{.prf} se lancera au démarrage et contiendra tous 
+vos changements depuis que XCSoar tourne jusqu'au prochain démarrage, le fichier
+\texttt{.bak} préservera vos paramètres, tant que vous jugerez utile de le faire.
+A titre d'exemple, vous pourriez créer une série de fichiers tels que~:
+\begin{itemize}
+\item \texttt{CopainsEnArcus.prf}
+\item \texttt{CopainsEnArcus.bak}
+\item \texttt{JohnEnKa6auPaysDesMerveilles.prf}
+\item \texttt{JohnEnKa6auPaysDesMerveilles.bak}
+\end{itemize}
+
+\subsection*{Mode SIM}
+XCSoar possède une interface simple permettant de faire un vol
+simulé. Selon l'appareil utilisé, il y a différentes
+méthodes pour modifier les valeurs de cap, de vitesse et de hauteur. La simulation est
+prévue pour une première familiarisation avec XCSoar en action. Si vous appréciez
+l'idée d'une simulation plus réaliste à la maison, vous devriez acquérir un ``vrai''
+simulateur de vol plané, à connecter à XCSoar.
+
+Sur l'écran de la carte, cliquer/toucher le symbole du planeur
+et le déplacer crée un déplacement du planeur dans cette direction, la
+vitesse étant proportionnelle à la longueur du déplacement.
+
+Avec des boutons, la vitesse, l'altitude et le cap de l'aéronef
+peuvent être changés en utilisant les Infoboxes.
+Ce qui suit pourrait ne pas être complètement disponible sur tous les appareils, mais sur
+tout appareil faisant tourner XCSoar, toutes les entrées nécessaires pour
+réaliser une simulation existent.
+
+En appuyant sur une Infoboxe vous sélectionnez une valeur à modifier avec des boutons
+réels ou du menu.
+L'altitude de l'aéronef peut être modifiées en sélectionnant l'Infoboxe
+d'altitude GPS \bmenuw{Alt GPS}, puis en utilisant les touches haut et bas ou les boutons
+de l'écran tactile.
+La vitesse par rapport à l'air peut être modifiée en sélectionnant l'Infoboxe de vitesse sol
+\bmenuw{V Sol}, puis en utilisant les touches haut et bas ou les boutons du menu.
+La trace du planeur peut être modifiée en sélectionnant l'InfoBoxe de trace 
+\bmenuw{Trace}, puis en utilisant les touches haut et bas ou les boutons du menu.
+
+En ayant sélectionné soit \bmenuw{Alt GPS} soit \bmenuw{V Sol},
+le cap du planeur peut être modifié en utilisant les touches gauche/droite.
+
+Les autres commandes, boutons et menus fonctionnent de la même façon qu'en mode VOL.
+
+
+\subsection*{Écran d'accueil}
+Quand XCSoar démarre, s'éteint ou charge de gros fichiers tels que les espaces aériens,
+les points de virage, le relief, etc., un écran de progression est affiché pendant que les données sont
+en train d'être chargée. Cet écran a une barre de progression qui indique l'activité
+de chargement des données, et une courte ligne de texte décrivant l'action en cours.
+
+Cet écran affiche aussi les information sur la version du logiciel.
+
+\subsection*{Quitter le logiciel}
+Sur les versions PDA ou PC, XCSoar est éteint en utilisant le menu. Ce menu peut être
+ouvert en double-cliquant sur la carte ou sur l'\InfoBox 
+\begin{quote}
+\bmenug{QUIT}
+\end{quote}
+
+Sur les versions PC, XCSoar peut aussi être fermé en cliquant sur l'icône de fermeture
+de la fenêtre XCSoar.

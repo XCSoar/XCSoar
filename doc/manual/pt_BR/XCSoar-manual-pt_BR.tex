@@ -1,0 +1,135 @@
+\documentclass[a4paper,11pt]{refrep}
+\input{xcsoar.sty}
+
+\usepackage[portuguese]{babel}
+
+% Set the title
+\title{Manual do Usuário}
+
+% Set the page title
+\input{xcsoar-headers.sty}
+\xcsoarheader{XCSoar User Manual}
+
+% Define some xc doc styles
+\input{title-xcsoar.sty}
+\usepackage{makeidx}\makeindex
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Front page
+\maketitle
+
+ 
+%%%%%%%%%%%%%%%%%%%%%%
+% Table of contents
+\input{toc.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\chapter*{Preface}
+
+\section*{Cuidado e Precauções}
+
+\warning É DE RESPONSABILIDADE DO USUÁRIO QUE FAÇA A
+UTILI\-ZAÇÃO DESTE SOFTWARE COM PRUDÊNCIA. ESTE
+SOFTWARE TEM O OBJETIVO DE SER UTILIZADO SOMENTE
+COMO AUXÍLIO À NAVEGAÇÃO E NÃO DEVE SER UTILIZADO
+PARA NENHUM PROPÓSITO QUE NECESSITE MEDIÇÕES
+PRECISAS DE DIREÇÃO, DISTÂNCIA, LOCALIZAÇÃO OU
+TOPOGRAFIA. ESTE SOFTWARE NÃO DEVE SER UTILIZADO
+COMO AUXÍLIO PARA DETERMINAR A PROXIMIDADE COM O
+SOLO PARA NAVE\-GAÇÃO AÉREA. ESTE SOFTWARE NÃO DEVE
+SER UTILIZADO COMO UM SISTEMA ANTI-COLISÃO AÉREA.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+\section*{Notas Legais}
+
+\subsection*{Acordo de licença de Software}
+
+Este software é lançado de acordo com a GNU - General Public License
+Versão~2. Veja Anexo~\ref{cha:gnu-general-public} para o texto completo do acordo e notas de
+garantia.
+
+\subsection*{Responsabilidade Limitada}
+
+Em nenhuma circunstância o XCSoar, ou seus responsáveis, acionistas,
+diretores, empregados, afiliados, contratados, subsidiários ou
+organizações proprietárias, serão imputados por qualquer incidente,
+danos punitivos ou qualquer outro dano relativo ao uso deste produto.
+
+\subsection*{Reivindicações}
+Este produto e todos os arquivos que o acompanham, dados e materiais,
+são distribuídos “no estado” em que se encontram, sem qualquer
+garantia alguma, exceto o que está impresso ou escrito. Este produto
+deve ser utilizado sob risco total do usuário. Todavia, foi tomado os
+devidos cuidados durante seu desenvolvimento para eliminar defeitos
+para ser um produto sem falhas. Nenhuma reivindicação pode ser legal
+a respeito da confiabilidade ou aptidão do produto por nenhum
+propósito particular. Os projetistas do XCSoar e seus contribuidores não
+devem ser responsabilizados por erros internos ou danos, perda de dados
+ou injúria pessoal com a conexão com o dispositivo, desempenho ou uso
+deste material.
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch01_introduction.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{installation.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch02_user_interface.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch03_navigation.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch04_xc_tasks.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch05_glide_computer.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch06_atmosphere_and_instruments.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch07_airspace_and_flarm.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{integration.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch08_avionics_and_airframe.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch09_quickstart.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch10_infobox_reference.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch11_configuration.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch12_data_files.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch13_history.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{empty}
+\printindex
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+
+%%%%%%%%%%%%%%%%%%%%%%
+\chapter{LICENÇA PÚBLICA GERAL – GNU}\label{cha:gnu-general-public}
+\input{gpl.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\listoftodos
+
+\end{document}

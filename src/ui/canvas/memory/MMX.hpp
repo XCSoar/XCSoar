@@ -1,0 +1,143 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#pragma once
+
+#include "PixelTraits.hpp"
+#include "ui/canvas/PortableColor.hpp"
+
+#ifndef __MMX__
+#error MMX required
+#endif
+
+#include <mmintrin.h>
+
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-align"
+#endif
+
+/**
+ * Implementation of AlphaPixelOperations using Intel MMX
+ * instructions.
+ */
+class MMXAlphaPixelOperations {
+protected:
+  uint8_t alpha;
+
+public:
+  constexpr MMXAlphaPixelOperations(uint8_t _alpha):alpha(_alpha) {}
+
+  [[gnu::hot]] [[gnu::always_inline]]
+  static __m64 FillPixel(__m64 x, __m64 v_alpha, __m64 v_color) {
+    x = _mm_mullo_pi16(x, v_alpha);
+    x = _mm_add_pi16(x, v_color);
+    return _mm_srli_pi16(x, 8);
+  }
+
+  [[gnu::hot]] [[gnu::flatten]] [[gnu::nonnull]]
+  void _FillPixels(__m64 *p, unsigned n, __m64 v_color) const {
+    const __m64 v_alpha = _mm_set1_pi16(alpha ^ 0xff);
+    const __m64 zero = _mm_setzero_si64();
+
+    for (unsigned i = 0; i < n; ++i) {
+      __m64 x = p[i];
+
+      __m64 lo = FillPixel(_mm_unpacklo_pi8(x, zero), v_alpha, v_color);
+      __m64 hi = FillPixel(_mm_unpackhi_pi8(x, zero), v_alpha, v_color);
+
+      p[i] = _mm_packs_pu16(lo, hi);
+    }
+  }
+
+  [[gnu::hot]] [[gnu::always_inline]]
+  static __m64 AlphaBlend4(__m64 p, __m64 q,
+                           __m64 alpha, __m64 inverse_alpha) {
+    p = _mm_mullo_pi16(p, inverse_alpha);
+    q = _mm_mullo_pi16(q, alpha);
+    return _mm_srli_pi16(_mm_add_pi16(p, q), 8);
+  }
+
+  [[gnu::flatten]]
+  void _CopyPixels(uint8_t *gcc_restrict p,
+                   const uint8_t *gcc_restrict q, unsigned n) const {
+    _mm_empty();
+
+    const __m64 v_alpha = _mm_set1_pi16(alpha);
+    const __m64 inverse_alpha = _mm_set1_pi16(alpha ^ 0xff);
+    const __m64 zero = _mm_setzero_si64();
+
+    __m64 *p2 = (__m64 *)p;
+    const __m64 *q2 = (const __m64 *)q;
+
+    for (unsigned i = 0; i < n / 8; ++i) {
+      __m64 pv = p2[i], qv = q2[i];
+
+      __m64 lo = AlphaBlend4(_mm_unpacklo_pi8(pv, zero),
+                             _mm_unpacklo_pi8(qv, zero),
+                             v_alpha, inverse_alpha);
+
+      __m64 hi = AlphaBlend4(_mm_unpackhi_pi8(pv, zero),
+                             _mm_unpackhi_pi8(qv, zero),
+                             v_alpha, inverse_alpha);
+
+      p2[i] = _mm_packs_pu16(lo, hi);
+    }
+
+    _mm_empty();
+  }
+};
+
+class MMXAlpha8PixelOperations : MMXAlphaPixelOperations {
+public:
+  using PixelTraits = GreyscalePixelTraits;
+  using SourcePixelTraits = GreyscalePixelTraits;
+
+  using MMXAlphaPixelOperations::MMXAlphaPixelOperations;
+
+  [[gnu::hot]] [[gnu::flatten]] [[gnu::nonnull]]
+  void FillPixels(Luminosity8 *p, unsigned n, Luminosity8 c) const {
+    _mm_empty();
+
+    _FillPixels((__m64 *)p, n / 8,
+                _mm_set1_pi16(c.GetLuminosity() * alpha));
+
+    _mm_empty();
+  }
+
+  void CopyPixels(Luminosity8 *p, const Luminosity8 *q, unsigned n) const {
+    _CopyPixels((uint8_t *)p, (const uint8_t *)q, n);
+  }
+};
+
+#ifndef GREYSCALE
+
+class MMXAlpha32PixelOperations : MMXAlphaPixelOperations {
+public:
+  using PixelTraits = BGRAPixelTraits;
+  using SourcePixelTraits = BGRAPixelTraits;
+
+  using MMXAlphaPixelOperations::MMXAlphaPixelOperations;
+
+  [[gnu::hot]]
+  void FillPixels(BGRA8Color *p, unsigned n, BGRA8Color c) const {
+    _mm_empty();
+
+    __m64 v_alpha = _mm_set1_pi16(alpha);
+    __m64 v_color = _mm_setr_pi16(c.Blue(), c.Green(), c.Red(), c.Alpha());
+
+    _FillPixels((__m64 *)p, n / 2, _mm_mullo_pi16(v_color, v_alpha));
+
+    _mm_empty();
+  }
+
+  void CopyPixels(BGRA8Color *p, const BGRA8Color *q, unsigned n) const {
+    _CopyPixels((uint8_t *)p, (const uint8_t *)q, n * 4);
+  }
+};
+
+#endif /* !GREYSCALE */
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif

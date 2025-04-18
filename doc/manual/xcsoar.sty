@@ -1,0 +1,72 @@
+\usepackage[utf8]{luainputenc}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{rotating}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage[disable]{todonotes}
+\usepackage{tocloft}
+\usepackage{hyperref}
+\usepackage{gensymb}
+\makeatletter
+
+% Font selection
+\renewcommand{\familydefault}{\sfdefault}
+\fontfamily{phv}\selectfont
+
+% Reference colors
+\hypersetup{
+  unicode=true,
+  linkcolor=blue, % internal links
+  linktocpage=true, % only page numbers
+  urlcolor=blue, % external links
+  citecolor=green,
+  filecolor=magenta,
+  bookmarks=true,
+  bookmarksnumbered=true,
+  breaklinks=true, % wrap links is Ok
+  colorlinks=true,
+  pdftoolbar=true,
+  pdfmenubar=true,
+  pdfnewwindow=true
+}
+
+% Some shortcuts
+\newcommand\xc{\textsf{XCSoar}}
+\newcommand\fl{\textsf{Flarm}}
+\newcommand\al{\textsf{Altair}}
+
+% Define command to insert XCSoar website
+\newcommand{\xcsoarwebsite}[1]{\url{https://xcsoar.org#1}}
+\newcommand{\xcsoarforum}[1]{\url{https://forum.xcsoar.org#1}}
+
+\input{figures.tex}
+
+% Potentially overdue ``InfoBox'' style macro
+\newcommand{\InfoBox}[0]{{InfoBox}}
+
+% Enumerated todo's for the todonotes package
+\newcounter{todocounter}
+\newcommand{\todonum}[2][]{\stepcounter{todocounter}\todo[#1]{\thetodocounter: #2}}
+
+\maxipagerulefalse
+
+% Include XCSoar header and footer settings
+\input{buttons.sty}
+\widowpenalty=1000
+\clubpenalty=1000
+
+% the command \version prints the XCSoar version number
+\newcommand{\version}{\begingroup\catcode`\_=\active\input{VERSION.txt}\endgroup}
+
+% Define command to put a menu label on the margin
+% aligned left
+\newcommand{\menulabel}[1]{\marginpar{\parbox{5.0cm}{\raggedright #1}}}
+% aligned right
+\newcommand{\menulabelr}[1]{\marginpar{\parbox{4.05cm}{\raggedleft #1}}}
+
+% Define some colors
+\definecolor{AirspaceYellow}{rgb}{.99,.99,.19}
+\definecolor{AirspaceRed}{rgb}{.99,.19,.19}

@@ -1,0 +1,83 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#pragma once
+
+#include <type_traits>
+
+#include <cstdint>
+
+enum class TerrainType : uint8_t {
+  UNKNOWN, GROUND, WATER
+};
+
+/**
+ * A height value loaded from a GeoJPEG2000 / GeoTIFF image.  It is a
+ * signed 16 bit integer with some special values.
+ */
+class TerrainHeight {
+  /** invalid value for terrain */
+  static constexpr int16_t INVALID = -32768;
+  static constexpr int16_t WATER_THRESHOLD = -30000;
+
+  int16_t value;
+
+public:
+  TerrainHeight() noexcept = default;
+  explicit constexpr TerrainHeight(int16_t _value) noexcept
+    :value(_value) {}
+
+  static constexpr TerrainHeight Invalid() noexcept {
+    return TerrainHeight(INVALID);
+  }
+
+  constexpr bool IsInvalid() const noexcept {
+    return value == INVALID;
+  }
+
+  constexpr bool IsWater() const noexcept {
+    return value <= WATER_THRESHOLD && !IsInvalid();
+  }
+
+  constexpr bool IsSpecial() const noexcept {
+    return value <= WATER_THRESHOLD;
+  }
+
+  constexpr TerrainType GetType() const noexcept {
+    return !IsSpecial()
+      ? TerrainType::GROUND
+      : (IsWater()
+         ? TerrainType::WATER
+         : TerrainType::UNKNOWN);
+  }
+
+  constexpr int16_t GetValue() const noexcept {
+    return value;
+  }
+
+  /**
+   * Return the value, but replace "special" values with 0.  This is
+   * used when we need some "valid" value (and not some "magic"
+   * special value).  Sometimes, 0 is the best we can do.
+   *
+   * Use this function with care.  "0" is just a random value like any
+   * other.  Don't use it for calculations where the altitude matters
+   * (e.g. glide path calculations).
+   */
+  constexpr int16_t GetValueOr0() const noexcept {
+    return !IsSpecial() ? value : 0;
+  }
+
+  /**
+   * Convert this value to "double".  Water and invalid values are
+   * converted to the given fallback values.
+   */
+  constexpr double ToDouble(double invalid_value,
+                            double water_value=0.) const noexcept {
+    return !IsSpecial()
+      ? double(value)
+      : (IsInvalid() ? invalid_value : water_value);
+  }
+};
+
+static_assert(std::is_trivial<TerrainHeight>::value, "type is not trivial");

@@ -1,0 +1,57 @@
+---
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'po/**'
+      - 'data/**'
+
+jobs:
+  autocommit-pot-files:
+    runs-on: ubuntu-22.04
+    container: debian:bookworm-slim
+    permissions:
+      contents: write
+    steps:
+      - name: Install checkout dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends git \
+          ca-certificates rsync openssh-client
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          ./ide/provisioning/install-debian-packages.sh UPDATE
+          ./ide/provisioning/install-debian-packages.sh BASE
+      - name: make working directory a safe commit dir
+        run: git config --global --add safe.directory /__w/XCSoar/XCSoar
+      - name: Copy xcsoar.pot
+        run: cp po/xcsoar.pot po/xcsoar.old
+      - name: Update pot and po files
+        run: make update-po
+      - name: remove timestamps
+        run: |
+          cp po/xcsoar.pot po/xcsoar.ref # keep xcsoar.pot to push
+          sed -i '/^"POT-Creation-Date:/d' po/xcsoar.ref # updated file
+          sed -i '/^"POT-Creation-Date:/d' po/xcsoar.old # old file
+      - name: Check for differences
+        id: check_test
+        run: |
+          if ! diff --normal po/xcsoar.ref po/xcsoar.old; then
+            echo "do_update=true" >> $GITHUB_OUTPUT
+          else
+            echo "do_update=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Push Local Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Autocommit translation sources"
+          file_pattern: "*.pot *.po"
+          create_branch: true
+          branch: translationupdates
+          push_options: '--force'
+        if: steps.check_test.outputs.do_update == 'true'

@@ -1,0 +1,194 @@
+commit 6879d82954bbd8dcf65699921f91faa441c7862b
+Author: Felix Hädicke <felixhaedicke@web.de>
+Date:   Wed Jul 12 22:01:40 2017 +0200
+
+    Include <poll.h> instead of <sys/poll.h>
+    
+    According to POSIX.1-2001, the correct include path is <poll.h>. And
+    when compiling against musl, it generates "deprecated" warnings, if
+    <sys/poll.h> is included.
+    
+    Signed-off-by: Felix Hädicke <felixhaedicke@web.de>
+
+diff --git a/src/asoundlib-head.h b/src/asoundlib-head.h
+index a852fbe..cc7b154 100644
+--- a/src/asoundlib-head.h
++++ b/src/asoundlib-head.h
+@@ -29,7 +29,7 @@
+ #include <fcntl.h>
+ #include <assert.h>
+ #include <endian.h>
+-#include <sys/poll.h>
++#include <poll.h>
+ #include <errno.h>
+ #include <stdarg.h>
+ 
+diff --git a/src/control.c b/src/control.c
+index 17398ba..c9eab72 100644
+--- a/src/control.c
++++ b/src/control.c
+@@ -26,7 +26,7 @@
+ #include <string.h>
+ #include <fcntl.h>
+ #include <signal.h>
+-#include <sys/poll.h>
++#include <poll.h>
+ #include "control.h"
+ #include "local.h"
+ #if SALSA_SUPPORT_FLOAT
+diff --git a/src/ctl_macros.h b/src/ctl_macros.h
+index 9ed3357..ce86a8f 100644
+--- a/src/ctl_macros.h
++++ b/src/ctl_macros.h
+@@ -12,7 +12,7 @@
+ #include <string.h>
+ #include <errno.h>
+ #include <sys/ioctl.h>
+-#include <sys/poll.h>
++#include <poll.h>
+ 
+ struct _snd_ctl {
+ 	char *name;
+diff --git a/src/hcontrol.c b/src/hcontrol.c
+index fce1b13..14dfeb1 100644
+--- a/src/hcontrol.c
++++ b/src/hcontrol.c
+@@ -26,7 +26,7 @@
+ #include <string.h>
+ #include <fcntl.h>
+ #include <signal.h>
+-#include <sys/poll.h>
++#include <poll.h>
+ #include "hcontrol.h"
+ #include "local.h"
+ 
+diff --git a/src/hctl_macros.h b/src/hctl_macros.h
+index fc1348b..613237b 100644
+--- a/src/hctl_macros.h
++++ b/src/hctl_macros.h
+@@ -12,7 +12,7 @@
+ #include <string.h>
+ #include <errno.h>
+ #include <sys/ioctl.h>
+-#include <sys/poll.h>
++#include <poll.h>
+ 
+ struct _snd_hctl {
+ 	snd_ctl_t *ctl;
+diff --git a/src/hwdep.c b/src/hwdep.c
+index 3b5ee6d..b4c23f9 100644
+--- a/src/hwdep.c
++++ b/src/hwdep.c
+@@ -26,7 +26,7 @@
+ #include <string.h>
+ #include <fcntl.h>
+ #include <signal.h>
+-#include <sys/poll.h>
++#include <poll.h>
+ #include "hwdep.h"
+ #include "local.h"
+ 
+diff --git a/src/hwdep_macros.h b/src/hwdep_macros.h
+index 6a52c68..3d2ea13 100644
+--- a/src/hwdep_macros.h
++++ b/src/hwdep_macros.h
+@@ -11,7 +11,7 @@
+ #include <errno.h>
+ #include <unistd.h>
+ #include <sys/ioctl.h>
+-#include <sys/poll.h>
++#include <poll.h>
+ 
+ struct _snd_hwdep {
+ 	const char *name;
+diff --git a/src/mixer.c b/src/mixer.c
+index c0ccc3d..15fcc30 100644
+--- a/src/mixer.c
++++ b/src/mixer.c
+@@ -26,7 +26,7 @@
+ #include <string.h>
+ #include <fcntl.h>
+ #include <signal.h>
+-#include <sys/poll.h>
++#include <poll.h>
+ #include "mixer.h"
+ #include "local.h"
+ 
+diff --git a/src/mixer_macros.h b/src/mixer_macros.h
+index c0e8c8a..7355046 100644
+--- a/src/mixer_macros.h
++++ b/src/mixer_macros.h
+@@ -10,7 +10,7 @@
+ #include <string.h>
+ #include <errno.h>
+ #include <sys/ioctl.h>
+-#include <sys/poll.h>
++#include <poll.h>
+ 
+ struct _snd_mixer {
+ 	snd_hctl_t *hctl;
+diff --git a/src/pcm_macros.h b/src/pcm_macros.h
+index a35c794..f252014 100644
+--- a/src/pcm_macros.h
++++ b/src/pcm_macros.h
+@@ -12,7 +12,7 @@
+ #include <string.h>
+ #include <errno.h>
+ #include <sys/ioctl.h>
+-#include <sys/poll.h>
++#include <poll.h>
+ 
+ typedef struct {
+ 	struct sndrv_pcm_channel_info info;
+diff --git a/src/rawmidi.c b/src/rawmidi.c
+index 79f9b21..ca96f5d 100644
+--- a/src/rawmidi.c
++++ b/src/rawmidi.c
+@@ -26,7 +26,7 @@
+ #include <string.h>
+ #include <fcntl.h>
+ #include <signal.h>
+-#include <sys/poll.h>
++#include <poll.h>
+ #include "rawmidi.h"
+ #include "control.h"
+ #include "local.h"
+diff --git a/src/rawmidi_macros.h b/src/rawmidi_macros.h
+index c32b440..c3146cc 100644
+--- a/src/rawmidi_macros.h
++++ b/src/rawmidi_macros.h
+@@ -13,7 +13,7 @@
+ #include <errno.h>
+ #include <unistd.h>
+ #include <sys/ioctl.h>
+-#include <sys/poll.h>
++#include <poll.h>
+ 
+ typedef struct _snd_rawmidi_hw {
+ 	char *name;
+diff --git a/src/timer.c b/src/timer.c
+index 00a8534..b9fbb00 100644
+--- a/src/timer.c
++++ b/src/timer.c
+@@ -26,7 +26,7 @@
+ #include <string.h>
+ #include <fcntl.h>
+ #include <signal.h>
+-#include <sys/poll.h>
++#include <poll.h>
+ #include "timer.h"
+ #include "local.h"
+ 
+diff --git a/src/timer_macros.h b/src/timer_macros.h
+index a1837e7..1cd37be 100644
+--- a/src/timer_macros.h
++++ b/src/timer_macros.h
+@@ -11,7 +11,7 @@
+ #include <errno.h>
+ #include <unistd.h>
+ #include <sys/ioctl.h>
+-#include <sys/poll.h>
++#include <poll.h>
+ 
+ struct _snd_timer {
+ 	char *name;

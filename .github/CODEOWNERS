@@ -1,0 +1,10 @@
+# Automatically requests reviews from the code owners when a pull request
+# changes any owned files.
+* @XCSoar/code-reviewers
+
+# Kobo Team
+kobo/* @XCSoar/kobo-team
+src/Kobo/* @XCSoar/kobo-team
+
+# LX Navigation Devices
+src/Device/Driver/LX_EOS/* @XCSoar/lxeos-team

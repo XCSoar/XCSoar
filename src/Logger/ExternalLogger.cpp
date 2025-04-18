@@ -1,0 +1,347 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "Logger/ExternalLogger.hpp"
+#include "Form/DataField/ComboList.hpp"
+#include "Dialogs/Error.hpp"
+#include "Dialogs/Message.hpp"
+#include "Dialogs/ComboPicker.hpp"
+#include "Language/Language.hpp"
+#include "Device/Descriptor.hpp"
+#include "Device/MultipleDevices.hpp"
+#include "Device/RecordedFlight.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
+#include "LocalPath.hpp"
+#include "UIGlobals.hpp"
+#include "Operation/Cancelled.hpp"
+#include "Operation/MessageOperationEnvironment.hpp"
+#include "Dialogs/JobDialog.hpp"
+#include "Job/TriStateJob.hpp"
+#include "system/Path.hpp"
+#include "io/FileLineReader.hpp"
+#include "io/FileTransaction.hpp"
+#include "IGC/IGCParser.hpp"
+#include "IGC/IGCHeader.hpp"
+#include "Formatter/IGCFilenameFormatter.hpp"
+#include "time/BrokenDate.hpp"
+#include "Interface.hpp"
+#include "net/client/WeGlide/UploadIGCFile.hpp"
+
+
+class DeclareJob {
+  DeviceDescriptor &device;
+  const struct Declaration &declaration;
+  const Waypoint *home;
+
+public:
+  DeclareJob(DeviceDescriptor &_device, const struct Declaration &_declaration,
+             const Waypoint *_home)
+    :device(_device), declaration(_declaration), home(_home) {}
+
+  bool Run(OperationEnvironment &env) {
+    bool result = device.Declare(declaration, home, env);
+    device.EnableNMEA(env);
+    return result;
+  }
+};
+
+static TriStateJobResult
+DoDeviceDeclare(DeviceDescriptor &device, const Declaration &declaration,
+                const Waypoint *home)
+{
+  TriStateJob<DeclareJob> job(device, declaration, home);
+  JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+            _T(""), job, true);
+  return job.GetResult();
+}
+
+static bool
+DeviceDeclare(DeviceDescriptor &dev, const Declaration &declaration,
+              const Waypoint *home)
+try {
+  if (dev.IsOccupied())
+    return false;
+
+  if (ShowMessageBox(_("Declare task?"), dev.GetDisplayName(),
+                  MB_YESNO | MB_ICONQUESTION) != IDYES)
+    return false;
+
+  if (!dev.Borrow())
+    return false;
+
+  MessageOperationEnvironment env;
+  const ScopeReturnDevice return_device{dev, env};
+
+  const TCHAR *caption = dev.GetDisplayName();
+  if (caption == nullptr)
+    caption = _("Declare task");
+
+  auto result = DoDeviceDeclare(dev, declaration, home);
+
+  switch (result) {
+  case TriStateJobResult::SUCCESS:
+    ShowMessageBox(_("Task declared!"),
+                   caption, MB_OK | MB_ICONINFORMATION);
+    return true;
+
+  case TriStateJobResult::ERROR:
+    ShowMessageBox(_("Error occured,\nTask NOT declared!"),
+                   caption, MB_OK | MB_ICONERROR);
+    return false;
+
+  case TriStateJobResult::CANCELLED:
+    return false;
+  }
+
+  gcc_unreachable();
+} catch (OperationCancelled) {
+  return false;
+} catch (...) {
+  ShowError(_("Error occured,\nTask NOT declared!"),
+            std::current_exception(),
+            dev.GetDisplayName());
+  return false;
+}
+
+void
+ExternalLogger::Declare(const Declaration &decl, const Waypoint *home)
+{
+  bool found_logger = false;
+
+  for (DeviceDescriptor *i : *backend_components->devices) {
+    DeviceDescriptor &device = *i;
+
+    if (device.CanDeclare() && device.GetState() == PortState::READY) {
+      found_logger = true;
+      DeviceDeclare(device, decl, home);
+    }
+  }
+
+  if (!found_logger)
+    ShowMessageBox(_("No logger connected"),
+                _("Declare task"), MB_OK | MB_ICONINFORMATION);
+}
+
+class ReadFlightListJob {
+  DeviceDescriptor &device;
+  RecordedFlightList &flight_list;
+
+public:
+  ReadFlightListJob(DeviceDescriptor &_device,
+                    RecordedFlightList &_flight_list)
+    :device(_device), flight_list(_flight_list) {}
+
+  bool Run(OperationEnvironment &env) {
+    return device.ReadFlightList(flight_list, env);
+  }
+};
+
+static TriStateJobResult
+DoReadFlightList(DeviceDescriptor &device, RecordedFlightList &flight_list)
+{
+  TriStateJob<ReadFlightListJob> job(device, flight_list);
+  JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+            _T(""), job, true);
+  return job.GetResult();
+}
+
+class DownloadFlightJob {
+  DeviceDescriptor &device;
+  const RecordedFlightInfo &flight;
+  const Path path;
+
+public:
+  DownloadFlightJob(DeviceDescriptor &_device,
+                    const RecordedFlightInfo &_flight, const Path _path)
+    :device(_device), flight(_flight), path(_path) {}
+
+  bool Run(OperationEnvironment &env) {
+    return device.DownloadFlight(flight, path, env);
+  }
+};
+
+static TriStateJobResult
+DoDownloadFlight(DeviceDescriptor &device,
+                 const RecordedFlightInfo &flight, Path path)
+{
+  TriStateJob<DownloadFlightJob> job(device, flight, path);
+  JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+            _T(""), job, true);
+  return job.GetResult();
+}
+
+static void
+ReadIGCMetaData(Path path, IGCHeader &header, BrokenDate &date)
+try {
+  strcpy(header.manufacturer, "XXX");
+  strcpy(header.id, "000");
+  header.flight = 0;
+
+  FileLineReaderA reader(path);
+
+  char *line = reader.ReadLine();
+  if (line != nullptr)
+    IGCParseHeader(line, header);
+
+  line = reader.ReadLine();
+  if (line == nullptr || !IGCParseDateRecord(line, date))
+    date = BrokenDate::TodayUTC();
+} catch (...) {
+  date = BrokenDate::TodayUTC();
+}
+
+/**
+ *
+ * @param list list of flights from the logger
+ * @param flight the flight
+ * @return 1-99 Flight number of the day per section 2.5 of the
+ * FAI IGC tech gnss spec Appendix 1
+ * (spec says 35 flights - this handles up to 99 flights per day)
+ */
+static unsigned
+GetFlightNumber(const RecordedFlightList &flight_list,
+                const RecordedFlightInfo &flight)
+{
+  unsigned flight_number = 1;
+  for (auto it = flight_list.begin(), end = flight_list.end(); it != end; ++it) {
+    const RecordedFlightInfo &_flight = *it;
+    if (flight.date == _flight.date &&
+        flight.start_time > _flight.start_time)
+      flight_number++;
+  }
+  return flight_number;
+}
+
+static const RecordedFlightInfo *
+ShowFlightList(const RecordedFlightList &flight_list)
+{
+  // Prepare list of the flights for displaying
+  ComboList combo;
+  for (unsigned i = 0; i < flight_list.size(); ++i) {
+    const RecordedFlightInfo &flight = flight_list[i];
+
+    StaticString<64> buffer;
+    buffer.UnsafeFormat(_T("%04u/%02u/%02u %02u:%02u-%02u:%02u"),
+                        flight.date.year, flight.date.month, flight.date.day,
+                        flight.start_time.hour, flight.start_time.minute,
+                        flight.end_time.hour, flight.end_time.minute);
+
+    combo.Append(i, buffer);
+  }
+
+  // Show list of the flights
+  int i = ComboPicker(_T("Choose a flight"),
+                      combo, nullptr, false);
+
+  return i < 0 ? nullptr : &flight_list[i];
+}
+
+void
+ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
+{
+  MessageOperationEnvironment env;
+
+  // Download the list of flights that the logger contains
+  RecordedFlightList flight_list;
+
+  try {
+    switch (DoReadFlightList(device, flight_list)) {
+    case TriStateJobResult::SUCCESS:
+      break;
+
+    case TriStateJobResult::ERROR:
+      ShowMessageBox(_("Failed to download flight list."),
+                     _("Download flight"), MB_OK | MB_ICONERROR);
+      return;
+
+    case TriStateJobResult::CANCELLED:
+      return;
+    }
+  } catch (OperationCancelled) {
+    return;
+  } catch (...) {
+    ShowError(_("Failed to download flight list."),
+              std::current_exception(),
+              _("Download flight"));
+    return;
+  }
+
+  // The logger seems to be empty -> cancel
+  if (flight_list.empty()) {
+    ShowMessageBox(_("Logger is empty."),
+                _("Download flight"), MB_OK | MB_ICONINFORMATION);
+    return;
+  }
+
+  const auto logs_path = MakeLocalPath(_T("logs"));
+
+  while (true) {
+    // Show list of the flights
+    const RecordedFlightInfo *flight = ShowFlightList(flight_list);
+    if (!flight)
+      break;
+
+    // Download chosen IGC file into temporary file
+    FileTransaction transaction(AllocatedPath::Build(logs_path,
+                                                     _T("temp.igc")));
+
+    try {
+      switch (DoDownloadFlight(device, *flight, transaction.GetTemporaryPath())) {
+      case TriStateJobResult::SUCCESS:
+        break;
+
+      case TriStateJobResult::ERROR:
+        ShowMessageBox(_("Failed to download flight."),
+                       _("Download flight"), MB_OK | MB_ICONERROR);
+        continue;
+
+      case TriStateJobResult::CANCELLED:
+        continue;
+      }
+    } catch (OperationCancelled) {
+      continue;
+    } catch (...) {
+      ShowError(_("Failed to download flight."),
+                std::current_exception(),
+                _("Download flight"));
+      continue;
+    }
+
+    /* read the IGC header and build the final IGC file name with it */
+
+    IGCHeader header;
+    BrokenDate date;
+    ReadIGCMetaData(transaction.GetTemporaryPath(), header, date);
+    if (header.flight == 0)
+      header.flight = GetFlightNumber(flight_list, *flight);
+
+    TCHAR name[64];
+    FormatIGCFilenameLong(name, date, header.manufacturer, header.id,
+                          header.flight);
+
+    const auto igc_path = AllocatedPath::Build(logs_path, name);
+    transaction.SetPath((Path)igc_path);
+    
+    try {
+      transaction.Commit();
+    } catch (...) {
+      ShowError(std::current_exception(), _("Download flight"));
+    }
+
+    WeGlideSettings weglide_settings =
+      CommonInterface::GetComputerSettings().weglide;
+    if (weglide_settings.enabled && weglide_settings.automatic_upload &&
+      weglide_settings.pilot_id > 0) {
+      // ask whether this IGC should be uploaded to WeGlide
+      if (ShowMessageBox(_("Do you want to upload this flight to WeGlide?"),
+        _("Upload flight"), MB_YESNO | MB_ICONQUESTION) == IDYES) {
+        WeGlide::UploadIGCFile(igc_path);
+      }
+    }
+
+    if (ShowMessageBox(_("Do you want to download another flight?"),
+                    _("Download flight"), MB_YESNO | MB_ICONQUESTION) != IDYES)
+      break;
+  }
+}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+ <g transform="matrix(1.4,0,0,1.4,0,-12.6)" fill-rule="evenodd" stroke-width=".22321">
+  <path d="m10 14a5 5 0 0 1-10 0 5 5 0 1 1 10 0z" opacity=".99"/>
+  <path d="m5 18c2.0944 0 4-1.9056 4-4h-4m-4 0c5e-7 -2.0944 1.9056-4 4-4l0.035337 4.0074" fill="#fff" opacity=".99"/>
+ </g>
+</svg>

@@ -1,0 +1,196 @@
+* Airspace to test radio frequency
+AC C
+AN Radio-Test
+AR 130.125 MHz
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test circle parsing
+* and coordinate format 1
+AC C
+AN Circle-Test
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test polygon point parsing
+* and coordinate format 2
+AC C
+AN Polygon-Test
+AL 1000 ft
+AH 2000 ft
+DP 01:30:30 N 001:30:30 W
+DP 01:30:30 N 001:30:30 E
+DP 01:30:30 S 001:30:30 E
+DP 01:30:30 S 001:30:30 W
+
+* Airspace to test airspace class A
+AC A
+AN Class-A-Test
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace class B
+AC B
+AN Class-B-Test
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace class C
+AC C
+AN Class-C-Test
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace class D
+AC D
+AN Class-D-Test
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace class E
+AC E
+AN Class-E-Test
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace class F
+AC F
+AN Class-F-Test
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace class G
+AC G
+AN Class-G-Test
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace class CTR
+AC CTR
+AN Class-CTR-Test
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace class R
+AC R
+AN Class-R-Test
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace class Q
+AC Q
+AN Class-Q-Test
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace class P
+AC P
+AN Class-P-Test
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace class GP
+AC GP
+AN Class-GP-Test
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace class W
+AC W
+AN Class-W-Test
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace class TMZ
+AC TMZ
+AN Class-TMZ-Test
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace class RMZ
+AC RMZ
+AN Class-RMZ-Test
+AL 1000 ft
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace heights
+AC C
+AN Height-Test-1
+AL SFC
+AH 2000 ft
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace heights
+AC C
+AN Height-Test-2
+AL 0
+AH FL 65
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace heights
+AC C
+AN Height-Test-3
+AL 100 Agl
+AH UNLIM
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace heights
+AC C
+AN Height-Test-4
+AL 100m 
+AH UNLIMITED
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace heights
+AC C
+AN Height-Test-5
+AL 100m GND
+AH 450m
+V X=01:05.5 N 000:05.5 E
+DC 5
+
+* Airspace to test airspace heights
+AC C
+AN Height-Test-6
+AL 50 GND
+AH 5000 STD
+V X=01:05.5 N 000:05.5 E
+DC 5

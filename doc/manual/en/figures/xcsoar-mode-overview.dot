@@ -1,0 +1,179 @@
+digraph XCSoar {
+//  rankdir=LR;
+//  layout=circo;
+//  layout=neato;
+//  layout=twopi;
+//  layout=fdp;
+//  ordering=out;
+  node [ fontname="Helvetica-Bold", fontsize=11, shape=ellipse, style=filled, color=gray90];
+  edge [ fontname="Helvetica" fontsize=9];
+
+//  rotate=90
+//  size="11.2,7.5";
+//  ratio=0.6;
+//  nodesep=1.2;
+  ranksep=1.2;
+  nslimit=40.0;
+  mclimit=40.0;
+//  mindist=1.2;
+//  compound=true;
+
+  subgraph cluster_Nav_Modes {
+    Nav_Mode_Cluster [label="Navigation\nMode" shape=box];
+    Nav_Goto [label="Goto\nTarget" color=PeachPuff];
+    Nav_Task [label="Fly\nplanned Task" color=PeachPuff];
+    Nav_Abort [label="Fly to\nreachable Targets" color=PeachPuff];
+    Nav_None [label="No target\nselected" color=PeachPuff];
+
+    Nav_None -> Nav_Task[label="Edit\nTask"];
+    Nav_None -> Nav_Goto[label="Goto\nWaypoint"];
+    Nav_None -> Nav_Goto[label="Start detected?\nGoto Home/Nearest"]
+    Nav_None -> Nav_Abort[label="Abort\nTask"];
+    Nav_Task -> Nav_Abort[label="Abort\nTask"];
+    Nav_Task -> Nav_Goto[label="Goto\nWaypoint"];
+    Nav_Task -> Nav_Task[label="Edit\nTask"];
+    Nav_Task -> Nav_None[label="Clear\nTask"];
+    Nav_Abort -> Nav_Task[label="Resume\nTask"];
+    Nav_Abort -> Nav_Goto[label="Goto\nWaypoint"];
+    Nav_Abort -> Nav_Task[label="Edit\nTask"];
+    Nav_Goto -> Nav_Task[label="Resume\nTask"];
+    Nav_Goto -> Nav_Task[label="Edit\nTask"];
+    Nav_Goto -> Nav_Abort[label="Abort\nTask"];
+    Nav_Goto -> Nav_Goto[label="Goto\nWaypoint"];
+  }
+
+
+
+  subgraph cluster_MC_Modes {
+    MC_Mode_Cluster [label="MC" shape=box];
+
+    subgraph cluster_MC_Auto {
+      MC_Auto_Cluster [label="Auto\nAdjustment" shape=box]
+      MC_Auto_Cruise [label="Cruise\nMC" color=DarkSlateGray2];
+      MC_Auto_Final [label="Final\nMC" color=DarkSlateGray2];
+
+      MC_Auto_Cruise -> MC_Auto_Final [label="Above\nfinal glide" color=red];
+      MC_Auto_Cruise -> MC_Auto_Final [label="Force\nfinal"];
+      MC_Auto_Final -> MC_Auto_Cruise [label="Below\nfinal glide" color=red];
+      MC_Auto_Cruise -> MC_Auto_Cruise [label="Adjustments\nfor lift encountered" color=orange];
+      MC_Auto_Final -> MC_Auto_Final [label="Adjustments for\nreachability" color=orange];
+    }
+
+    subgraph cluster_MC_Manual {
+      MC_Manual_Cluster[label="Manual\nAdjustment" shape=box];
+      MC_Manual [label="Manual\nMC" color=DarkSlateGray2];
+      MC_Abort [label="Abort\nMC" color=DarkSlateGray2];
+
+      MC_Manual->MC_Manual [label="MC+/MC-"];
+      MC_Manual->MC_Abort [label="Abort\nTask"];
+      MC_Abort->MC_Manual [label="Resume Task\n(Manual MC)"];
+    }
+    MC_Manual -> MC_Auto_Cluster [minlen=2 label="Button\nMC Auto"];
+    MC_Auto_Cluster -> MC_Manual [label="Button\nMC-/MC+"];
+    MC_Auto_Cluster -> MC_Abort [label="Abort\nTask"];
+
+    MC_Abort->MC_Auto_Cluster [label="Resume Task\n(Auto MC)"]
+  }
+
+
+
+  subgraph cluster_Flight_Modes {
+    Flight_Phase_Cluster [label="Flight\nPhase" shape=box];
+    Flight_Cruise[label="Flight phase\nCruise" color=salmon];
+    Flight_Circling[label="Flight phase\nCircling" color=salmon];
+    Flight_Final[label="Flight phase\nFinal" color=salmon];
+
+    Flight_Cruise -> Flight_Circling [color=orangered3 label="Thermal\nentry"];
+    Flight_Cruise -> Flight_Final[color=orangered3 label="Above\nfinal glide"];
+    Flight_Circling -> Flight_Cruise[color=orangered3 label="Thermal exit\n(below final glide)"];
+    Flight_Circling -> Flight_Final[color=orangered3 label="Thermal exit\n(above final glide)"];
+    Flight_Final -> Flight_Cruise[color=orangered3 label="Below\nfinal glide"];
+    Flight_Final -> Flight_Circling[color=orangered3 label="Thermal\nentry"];
+  }
+
+
+
+  subgraph cluster_InfoBox_Modes {
+    InfoBox_Display_Cluster [label="InfoBox\nDisplay" shape=box];
+    subgraph cluster_InfoBox_AutoModes {
+      InfoBox_Auto_Display_Cluster [label="Auto\nSelection" shape=box];
+      InfoBox_Cruise[label="Cruise\nInfo" color=SteelBlue1];
+      InfoBox_Circling[label="Circling\nInfo" color=SteelBlue1];
+      InfoBox_Final[label="Final\nInfo" color=SteelBlue1];
+    }
+    subgraph cluster_InfoBox_ManualModes {
+      InfoBox_Manual_Display_Cluster [label="Manual\nSelection" shape=box];
+      InfoBox_Aux [label="Auxiliary\nInfo" color=SteelBlue3];
+      InfoBox_None[label="No\nInfo" color=SteelBlue3];
+    }
+    InfoBox_Auto_Display_Cluster -> InfoBox_Aux [label="Key\nright"];
+    InfoBox_Auto_Display_Cluster -> InfoBox_Aux [label="Button"];
+    InfoBox_Aux -> InfoBox_None [label="Key\nright"];
+    InfoBox_Aux -> InfoBox_Auto_Display_Cluster [label="Button"];
+    InfoBox_None -> InfoBox_Auto_Display_Cluster [label="Key\nright"];
+  }
+
+
+
+//  subgraph cluster_Map_Display {
+//    Map_Display_Cluster [label="Map\nDisplay" shape=box];
+    subgraph cluster_Map_Zoom_Mode {
+      Map_Zoom_Mode_Cluster [label="Map\nZoom Level" shape=box];
+      Map_Circling[label="Map Zoom\nCircling" color=SeaGreen2];
+      Map_Cruise[label="Map Zoom\nCruise & Final" color=SeaGreen2];
+    }
+    subgraph cluster_Map_Nav_Mode{
+      Map_Navigation_Cluster [label="Map Navigation\nDisplay" shape=box];
+      Map_Nav_None [label="No\nTarget" color=SeaGreen2];
+      Map_Nav_Goto[label="Goto\nTarget" color=SeaGreen2];
+      Map_Nav_Task[label="Next Task\nTarget" color=SeaGreen2];
+      Map_Nav_Abort[label="All reachable\nTargets" color=SeaGreen2];
+    }
+//  }
+
+//  subgraph cluster_Reachability {
+    Reachability_Cluster [label="Reachability\nCalculation" shape=octagon color=OliveDrab2];
+//    Reachability_Cluster -> Reachability_Cluster[color=orange];
+//  }
+
+  Config [label="Config\nSettings" shape=tab];
+  Config -> Reachability_Cluster[color=blue];
+
+  Wind [label="Wind" shape=tab];
+  Wind -> Reachability_Cluster[color=blue];
+
+  Terrain [label="Terrain\nheight" shape=tab];
+  Terrain -> Reachability_Cluster[color=blue];
+
+  WPData [label="Waypoint\nData" shape=tab];
+  WPData -> Reachability_Cluster[color=blue];
+
+  Height [label="Height" shape=tab];
+  Height -> Reachability_Cluster[color=blue];
+
+  MC_Mode_Cluster -> Reachability_Cluster [label="provide\nMC" color=blue];
+
+  Flight_Cruise -> Map_Cruise[label="set" color=red];
+  Flight_Circling -> Map_Circling[label="set" color=red];
+  Flight_Final -> Map_Cruise[label="set" color=red];
+
+  Flight_Cruise -> InfoBox_Cruise[label="show" color=red];
+  Flight_Circling -> InfoBox_Circling[label="show" color=red];
+  Flight_Final -> InfoBox_Final[label="show" color=red];
+
+  Nav_Goto -> Map_Nav_Goto [label="show" color=red];
+  Nav_None -> Map_Nav_None [label="show" color=red];
+  Nav_Task -> Map_Nav_Task [label="show" color=red];
+  Nav_Abort -> Map_Nav_Abort [label="show" color=red];
+
+//  Nav_Mode_Cluster -> MC_Auto_Cluster [label="provide\ntarget" color=blue];
+  Nav_Mode_Cluster -> Reachability_Cluster [label="provide\ntarget" color=blue];
+
+  Reachability_Cluster -> MC_Auto_Cluster [label="provide" color=blue];
+  Reachability_Cluster -> Flight_Phase_Cluster [label="provide" color=blue];
+  Reachability_Cluster -> Nav_Abort[label=provide color=blue];
+  
+// The following edges are only here to give strong hints to layout calculation
+//      Flight_Final->InfoBox_Display [weight=5 style=invis];
+//  Map_Navigation_Mode -> Nav_Abort [weight=10 style=invis];
+}

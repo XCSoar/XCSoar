@@ -1,0 +1,10 @@
+[Unit]
+Description=XCSoar Cloud Server
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/xcsoar-cloud-server /var/lib/xcsoar-cloud/db
+User=xcsoar-cloud
+
+[Install]
+WantedBy=multi-user.target

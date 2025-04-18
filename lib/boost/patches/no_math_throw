@@ -1,0 +1,154 @@
+Index: boost_1_87_0/boost/math/policies/error_handling.hpp
+===================================================================
+--- boost_1_87_0.orig/boost/math/policies/error_handling.hpp
++++ boost_1_87_0/boost/math/policies/error_handling.hpp
+@@ -18,7 +18,7 @@
+ 
+ #ifndef BOOST_MATH_HAS_NVRTC
+ 
+-#include <iomanip>
++//#include <iomanip>
+ #include <string>
+ #include <cstring>
+ #ifndef BOOST_MATH_NO_RTTI
+@@ -43,7 +43,7 @@
+ // Note that this only occurs when the compiler can deduce code is unreachable,
+ // for example when policy macros are used to ignore errors rather than throw.
+ #endif
+-#include <sstream>
++//#include <sstream>
+ 
+ namespace boost{ namespace math{
+ 
+@@ -88,6 +88,7 @@ T user_indeterminate_result_error(const char* function, const char* message, con
+ namespace detail
+ {
+ 
++#if 0
+ template <class T>
+ inline std::string prec_format(const T& val)
+ {
+@@ -101,6 +102,7 @@ inline std::string prec_format(const T& val)
+    ss << val;
+    return ss.str();
+ }
++#endif
+ 
+ #ifdef BOOST_MATH_USE_CHARCONV_FOR_CONVERSION
+ 
+@@ -174,6 +176,7 @@ void raise_error(const char* pfunction, const char* message)
+   BOOST_MATH_THROW_EXCEPTION(E(msg))
+ }
+ 
++#if 0
+ template <class E, class T>
+ void raise_error(const char* pfunction, const char* pmessage, const T& val)
+ {
+@@ -219,6 +222,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_domain_error(
+    // we never get here:
+    return boost::math::numeric_limits<T>::quiet_NaN();
+ #endif
++#endif
+ }
+ 
+ template <class T>
+@@ -233,6 +237,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_domain_error(
+    return boost::math::numeric_limits<T>::quiet_NaN();
+ }
+ 
++#if 0
+ template <class T>
+ BOOST_MATH_GPU_ENABLED inline T raise_domain_error(
+            const char* ,
+@@ -269,6 +274,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_pole_error(
+    return boost::math::policies::detail::raise_domain_error(function, message, val,  ::boost::math::policies::domain_error< ::boost::math::policies::throw_on_error>());
+ #endif
+ }
++#endif
+ 
+ template <class T>
+ BOOST_MATH_GPU_ENABLED constexpr T raise_pole_error(
+@@ -300,6 +306,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_pole_error(
+    return user_pole_error(function, message, val);
+ }
+ 
++#if 0
+ template <class T>
+ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
+            const char* function,
+@@ -314,7 +321,9 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
+    return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+ #endif
+ }
++#endif
+ 
++#if 0
+ template <class T>
+ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
+            const char* function,
+@@ -330,7 +339,9 @@ BOOST_MATH_GPU_ENABLED inline T raise_overflow_error(
+    return boost::math::numeric_limits<T>::has_infinity ? boost::math::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+ #endif
+ }
++#endif
+ 
++#if 0
+ template <class T>
+ BOOST_MATH_GPU_ENABLED constexpr T raise_overflow_error(
+            const char* ,
+@@ -427,6 +438,7 @@ BOOST_MATH_GPU_ENABLED constexpr T raise_underflow_error(
+    // to be ignored so here we go anyway:
+    return T(0);
+ }
++#endif
+ 
+ template <class T>
+ BOOST_MATH_GPU_ENABLED inline T raise_underflow_error(
+@@ -500,6 +512,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_denorm_error(
+    return user_denorm_error(function, message, val);
+ }
+ 
++#if 0
+ template <class T>
+ BOOST_MATH_GPU_ENABLED inline T raise_evaluation_error(
+            const char* function,
+@@ -515,6 +528,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_evaluation_error(
+    return T(0);
+ #endif
+ }
++#endif
+ 
+ template <class T>
+ BOOST_MATH_GPU_ENABLED constexpr T raise_evaluation_error(
+@@ -551,6 +565,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_evaluation_error(
+    return user_evaluation_error(function, message, val);
+ }
+ 
++#if 0
+ template <class T, class TargetType>
+ BOOST_MATH_GPU_ENABLED inline TargetType raise_rounding_error(
+            const char* function,
+@@ -567,6 +582,7 @@ BOOST_MATH_GPU_ENABLED inline TargetType raise_rounding_error(
+    return TargetType(0);
+ #endif
+ }
++#endif
+ 
+ template <class T, class TargetType>
+ BOOST_MATH_GPU_ENABLED constexpr TargetType raise_rounding_error(
+@@ -607,6 +623,7 @@ BOOST_MATH_GPU_ENABLED inline TargetType raise_rounding_error(
+    return user_rounding_error(function, message, val, t);
+ }
+ 
++#if 0
+ template <class T, class R>
+ BOOST_MATH_GPU_ENABLED inline T raise_indeterminate_result_error(
+            const char* function,
+@@ -623,6 +640,7 @@ BOOST_MATH_GPU_ENABLED inline T raise_indeterminate_result_error(
+    return boost::math::numeric_limits<T>::quiet_NaN();
+ #endif
+ }
++#endif
+ 
+ template <class T, class R>
+ BOOST_MATH_GPU_ENABLED inline constexpr T raise_indeterminate_result_error(

@@ -1,0 +1,511 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "RowFormWidget.hpp"
+#include "Form/Panel.hpp"
+#include "Form/Button.hpp"
+#include "Form/HLine.hpp"
+#include "Look/DialogLook.hpp"
+#include "Dialogs/DialogSettings.hpp"
+#include "UIGlobals.hpp"
+#include "Screen/Layout.hpp"
+#include "ui/control/LargeTextWindow.hpp"
+#include "ui/canvas/Font.hpp"
+
+#include <algorithm>
+#include <cassert>
+
+[[gnu::pure]]
+static unsigned
+GetMinimumHeight(const WndProperty &control, const DialogLook &look,
+                 bool vertical) noexcept
+{
+  const unsigned padding = Layout::GetTextPadding();
+  unsigned height = look.text_font.GetHeight();
+  if (vertical && control.HasCaption())
+    height *= 2;
+  height += padding * 2;
+
+  if (!control.IsReadOnly() && height < Layout::GetMinimumControlHeight())
+    height = Layout::GetMinimumControlHeight();
+
+  return height;
+}
+
+[[gnu::pure]]
+static unsigned
+GetMaximumHeight(const WndProperty &control, const DialogLook &look,
+                 bool vertical) noexcept
+{
+  unsigned height = GetMinimumHeight(control, look, vertical);
+  if (!control.IsReadOnly() && height < Layout::GetMaximumControlHeight())
+    height = Layout::GetMaximumControlHeight();
+
+  return height;
+}
+
+unsigned
+RowFormWidget::Row::GetMinimumHeight(const DialogLook &look,
+                                     bool vertical) const noexcept
+{
+  switch (type) {
+  case Type::DUMMY:
+    return 0;
+
+  case Type::WIDGET:
+    return widget->GetMinimumSize().height;
+
+  case Type::GENERIC:
+    break;
+
+  case Type::EDIT:
+    return ::GetMinimumHeight(GetControl(), look, vertical);
+
+  case Type::BUTTON:
+    return Layout::GetMinimumControlHeight();
+
+  case Type::MULTI_LINE:
+    return Layout::GetMinimumControlHeight();
+
+  case Type::REMAINING:
+    return Layout::GetMinimumControlHeight();
+  }
+
+  return window->GetSize().height;
+}
+
+unsigned
+RowFormWidget::Row::GetMaximumHeight(const DialogLook &look,
+                                     bool vertical) const noexcept
+{
+  switch (type) {
+  case Type::DUMMY:
+    return 0;
+
+  case Type::WIDGET:
+    return widget->GetMaximumSize().height;
+
+  case Type::GENERIC:
+    break;
+
+  case Type::EDIT:
+    return ::GetMaximumHeight(GetControl(), look, vertical);
+
+  case Type::BUTTON:
+    return Layout::GetMaximumControlHeight();
+
+  case Type::MULTI_LINE:
+    return Layout::GetMinimumControlHeight() * 3;
+
+  case Type::REMAINING:
+    return 4096;
+  }
+
+  return window->GetSize().height;
+}
+
+inline void
+RowFormWidget::Row::UpdateLayout(ContainerWindow &parent,
+                                 const PixelRect &_position,
+                                 int caption_width) noexcept
+{
+  assert(type != Type::DUMMY);
+
+  position = _position;
+
+  if (type == Type::WIDGET) {
+    Widget &widget = GetWidget();
+
+    if (shown)
+      widget.Move(position);
+  } else {
+    Window &window = GetWindow();
+
+    if (type == Type::EDIT && GetControl().HasCaption())
+      GetControl().SetCaptionWidth(caption_width);
+
+    /* finally move and resize */
+    window.Move(position);
+  }
+
+  if (visible)
+    Show(parent);
+}
+
+inline void
+RowFormWidget::Row::SetVisible(ContainerWindow &parent, bool _visible) noexcept
+{
+  if (_visible == visible)
+    return;
+
+  visible = _visible;
+  if (!visible)
+    Hide();
+  else if (IsAvailable(UIGlobals::GetDialogSettings().expert))
+    Show(parent);
+}
+
+void
+RowFormWidget::Row::Show(ContainerWindow &parent) noexcept
+{
+  if (type == Type::WIDGET) {
+    if (!initialised) {
+      initialised = true;
+      widget->Initialise(parent, position);
+    }
+
+    if (!prepared) {
+      prepared = true;
+      widget->Prepare(parent, position);
+    }
+
+    if (!shown) {
+      shown = true;
+      widget->Show(position);
+    }
+  } else if (type != Type::DUMMY)
+    window->Show();
+}
+
+void
+RowFormWidget::Row::Hide() noexcept
+{
+  if (type == Type::WIDGET) {
+    if (shown) {
+      shown = false;
+      widget->Hide();
+    }
+  } else if (type != Type::DUMMY)
+    window->Hide();
+}
+
+bool
+RowFormWidget::Row::HasFocus() const noexcept
+{
+  switch (type) {
+  case Type::DUMMY:
+    break;
+
+  case Type::WIDGET:
+    return widget->HasFocus();
+
+  case Type::GENERIC:
+  case Type::EDIT:
+  case Type::MULTI_LINE:
+  case Type::BUTTON:
+  case Type::REMAINING:
+    return window->HasFocus();
+  }
+
+  return false;
+}
+
+RowFormWidget::RowFormWidget(const DialogLook &_look, bool _vertical) noexcept
+  :look(_look), vertical(_vertical)
+{
+}
+
+RowFormWidget::~RowFormWidget() noexcept
+{
+  rows.clear();
+
+  if (IsDefined())
+    DeleteWindow();
+}
+
+void
+RowFormWidget::SetRowAvailable(unsigned i, bool available) noexcept
+{
+  Row &row = rows[i];
+  if (available == row.available)
+    return;
+
+  row.available = available;
+  UpdateLayout();
+}
+
+void
+RowFormWidget::SetRowVisible(unsigned i, bool visible) noexcept
+{
+  rows[i].SetVisible((ContainerWindow &)GetWindow(), visible);
+}
+
+void
+RowFormWidget::SetExpertRow(unsigned i) noexcept
+{
+  Row &row = rows[i];
+  assert(!row.expert);
+  row.expert = true;
+}
+
+Window &
+RowFormWidget::Add(Row::Type type, std::unique_ptr<Window> window) noexcept
+{
+  assert(IsDefined());
+#ifndef USE_WINUSER
+  assert(window->GetParent() == &GetWindow());
+#endif
+  assert(window->IsVisible());
+  /* cannot append rows after a REMAINING row */
+  assert(rows.empty() || rows.back().type != Row::Type::REMAINING);
+
+  rows.emplace_back(type, std::move(window));
+  return *rows.back().window;
+}
+
+void
+RowFormWidget::AddSpacer() noexcept
+{
+  assert(IsDefined());
+
+  auto window = std::make_unique<HLine>(GetLook());
+  ContainerWindow &panel = (ContainerWindow &)GetWindow();
+  const PixelRect rc = InitialControlRect(Layout::Scale(3));
+  window->Create(panel, rc);
+  Add(std::move(window));
+}
+
+void
+RowFormWidget::AddMultiLine(const TCHAR *text) noexcept
+{
+  assert(IsDefined());
+
+  const PixelRect rc =
+    InitialControlRect(Layout::GetMinimumControlHeight());
+
+  LargeTextWindowStyle style;
+  style.SunkenEdge();
+
+  ContainerWindow &panel = (ContainerWindow &)GetWindow();
+  auto ltw = std::make_unique<LargeTextWindow>();
+  ltw->Create(panel, rc, style);
+  ltw->SetFont(look.text_font);
+
+  if (text != nullptr)
+    ltw->SetText(text);
+
+  Add(Row::Type::MULTI_LINE, std::move(ltw));
+}
+
+Button *
+RowFormWidget::AddButton(const TCHAR *label,
+                         std::function<void()> callback) noexcept
+{
+  assert(IsDefined());
+
+  const PixelRect button_rc =
+    InitialControlRect(Layout::GetMinimumControlHeight());
+
+  WindowStyle button_style;
+  button_style.TabStop();
+
+  ContainerWindow &panel = (ContainerWindow &)GetWindow();
+
+  return (Button *)&Add(Row::Type::BUTTON,
+                        std::make_unique<Button>(panel, look.button, label,
+                                                 button_rc, button_style,
+                                                 std::move(callback)));
+}
+
+void
+RowFormWidget::SetMultiLineText(unsigned i, const TCHAR *text) noexcept
+{
+  assert(text != nullptr);
+  assert(rows[i].type == Row::Type::MULTI_LINE);
+
+  auto &ltw = (LargeTextWindow &)*rows[i].window;
+  ltw.SetText(text);
+}
+
+unsigned
+RowFormWidget::GetRecommendedCaptionWidth() const noexcept
+{
+  const bool expert = UIGlobals::GetDialogSettings().expert;
+
+  unsigned w = 0;
+  for (const auto &i : rows) {
+    if (!i.IsAvailable(expert))
+      continue;
+
+    if (i.type == Row::Type::EDIT) {
+      unsigned x = i.GetControl().GetRecommendedCaptionWidth();
+      if (x > w)
+        w = x;
+    }
+  }
+
+  return w;
+}
+
+void
+RowFormWidget::UpdateLayout() noexcept
+{
+  PixelRect current_rect = GetWindow().GetClientRect();
+  const unsigned total_width = current_rect.GetWidth();
+  const unsigned total_height = current_rect.GetHeight();
+  current_rect.bottom = current_rect.top;
+
+  const bool expert = UIGlobals::GetDialogSettings().expert;
+
+  /* first row traversal: count the number of "elastic" rows and
+     determine the minimum total height */
+  unsigned min_height = 0;
+  unsigned n_elastic = 0;
+  int caption_width = -1;
+
+  for (const auto &i : rows) {
+    if (!i.IsAvailable(expert))
+      continue;
+
+    min_height += i.GetMinimumHeight(look, vertical);
+    if (i.IsElastic(look, vertical))
+      ++n_elastic;
+
+    if (!vertical && i.type == Row::Type::EDIT) {
+      int cw = i.GetControl().GetRecommendedCaptionWidth();
+      if (cw > caption_width)
+        caption_width = cw;
+    }
+  }
+
+  if (caption_width * 3 > int(total_width * 2))
+    caption_width = total_width * 2 / 3;
+
+  /* how much excess height in addition to the minimum height? */
+  unsigned excess_height = min_height < total_height
+    ? total_height - min_height
+    : 0;
+
+  /* second row traversal: now move and resize the rows */
+  for (auto &i : rows) {
+    if (!i.IsAvailable(expert)) {
+      i.Hide();
+      continue;
+    }
+
+    /* determine this row's height */
+    unsigned height = i.GetMinimumHeight(look, vertical);
+    if (excess_height > 0 && i.IsElastic(look, vertical)) {
+      assert(n_elastic > 0);
+
+      /* distribute excess height among all elastic rows */
+      unsigned grow_height = excess_height / n_elastic;
+      if (grow_height > 0) {
+        height += grow_height;
+        const unsigned max_height = i.GetMaximumHeight(look, vertical);
+        if (height > max_height) {
+          /* never grow beyond declared maximum height */
+          grow_height = max_height - height + grow_height;
+          height = max_height;
+        }
+
+        excess_height -= grow_height;
+      }
+
+      --n_elastic;
+    }
+
+    NextControlRect(current_rect, height);
+    i.UpdateLayout((ContainerWindow &)GetWindow(), current_rect,
+                   caption_width);
+  }
+
+  assert(excess_height == 0 || n_elastic == 0);
+}
+
+PixelSize
+RowFormWidget::GetMinimumSize() const noexcept
+{
+  const unsigned value_width =
+    look.text_font.TextSize(_T("Foo Bar Foo Bar")).width;
+
+  const bool expert = UIGlobals::GetDialogSettings().expert;
+
+  const unsigned edit_width = vertical
+    ? std::max(GetRecommendedCaptionWidth(), value_width)
+    : (GetRecommendedCaptionWidth() + value_width);
+
+  PixelSize size(edit_width, 0u);
+  for (const auto &i : rows)
+    if (i.IsAvailable(expert))
+      size.height += i.GetMinimumHeight(look, vertical);
+
+  return size;
+}
+
+PixelSize
+RowFormWidget::GetMaximumSize() const noexcept
+{
+  const unsigned value_width =
+    look.text_font.TextSize(_T("Foo Bar Foo Bar")).width * 2;
+
+  const unsigned edit_width = vertical
+    ? std::max(GetRecommendedCaptionWidth(), value_width)
+    : (GetRecommendedCaptionWidth() + value_width);
+
+  PixelSize size(edit_width, 0u);
+  for (const auto &i : rows)
+    size.height += i.GetMaximumHeight(look, vertical);
+
+  return size;
+}
+
+void
+RowFormWidget::Initialise(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
+{
+  assert(!IsDefined());
+  assert(rows.empty());
+
+  WindowStyle style;
+  style.Hide();
+  style.ControlParent();
+
+  SetWindow(std::make_unique<PanelControl>(parent, look, rc, style));
+}
+
+void
+RowFormWidget::Unprepare() noexcept
+{
+  for (auto &i : rows)
+    i.Unprepare();
+
+  WindowWidget::Unprepare();
+}
+
+void
+RowFormWidget::Show(const PixelRect &rc) noexcept
+{
+  Window &panel = GetWindow();
+  panel.Move(rc);
+
+  UpdateLayout();
+
+  panel.Show();
+}
+
+void
+RowFormWidget::Move(const PixelRect &rc) noexcept
+{
+  WindowWidget::Move(rc);
+
+  UpdateLayout();
+}
+
+bool
+RowFormWidget::SetFocus() noexcept
+{
+  if (rows.empty())
+    return false;
+
+  ContainerWindow &panel = (ContainerWindow &)GetWindow();
+  return panel.FocusFirstControl();
+}
+
+bool
+RowFormWidget::HasFocus() const noexcept
+{
+  return std::any_of(rows.begin(), rows.end(), [](const auto &r){
+    return r.HasFocus();
+  });
+}

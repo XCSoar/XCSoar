@@ -1,0 +1,2045 @@
+commit 01950e7aa06e93a0b886398d7725bb3a9f630cc5
+Author: Max Kellermann <max.kellermann@gmail.com>
+Date:   Wed Aug 10 14:55:55 2022 +0200
+
+    disable JSON support and the WKT exporter
+
+diff --git a/include/proj/coordinateoperation.hpp b/include/proj/coordinateoperation.hpp
+index 130c2b5b..0e28264d 100644
+--- a/include/proj/coordinateoperation.hpp
++++ b/include/proj/coordinateoperation.hpp
+@@ -298,9 +298,11 @@ class PROJ_GCC_DLL OperationParameter final : public GeneralOperationParameter {
+     PROJ_OPAQUE_PRIVATE_DATA
+     OperationParameter &operator=(const OperationParameter &other) = delete;
+ 
++#ifdef ENABLE_JSON
+     // cppcheck-suppress functionStatic
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
++#endif // ENABLE_JSON
+ };
+ 
+ // ---------------------------------------------------------------------------
+@@ -322,11 +324,13 @@ class PROJ_GCC_DLL GeneralParameterValue : public util::BaseObject,
+     //! @cond Doxygen_Suppress
+     PROJ_DLL ~GeneralParameterValue() override;
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override = 0; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override = 0; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL bool _isEquivalentTo(
+         const util::IComparable *other,
+@@ -342,10 +346,12 @@ class PROJ_GCC_DLL GeneralParameterValue : public util::BaseObject,
+ 
+     friend class Conversion;
+     friend class SingleOperation;
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL virtual void _exportToWKT(io::WKTFormatter *formatter,
+                                             const MethodMapping *mapping)
+         const = 0; // throw(io::FormattingException)
+                    //! @endcond
++#endif // ENABLE_JSON
+ 
+   private:
+     PROJ_OPAQUE_PRIVATE_DATA
+@@ -393,9 +399,11 @@ class PROJ_GCC_DLL ParameterValue final : public util::BaseObject,
+     //! @cond Doxygen_Suppress
+     PROJ_DLL ~ParameterValue() override;
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+     //! @endcond
++#endif // ENABLE_JSON
+ 
+     PROJ_DLL static ParameterValueNNPtr
+     create(const common::Measure &measureIn);
+@@ -470,11 +478,13 @@ class PROJ_GCC_DLL OperationParameterValue final
+                             const common::UnitOfMeasure *&unit,
+                             int &paramEPSGCode);
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL bool _isEquivalentTo(
+         const util::IComparable *other,
+@@ -490,9 +500,11 @@ class PROJ_GCC_DLL OperationParameterValue final
+     PROJ_INTERNAL OperationParameterValue(const OperationParameterValue &other);
+     INLINED_MAKE_SHARED
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter,
+                                     const MethodMapping *mapping)
+         const override; // throw(io::FormattingException)
++#endif // ENABLE_JSON
+ 
+   private:
+     PROJ_OPAQUE_PRIVATE_DATA
+@@ -539,12 +551,14 @@ class PROJ_GCC_DLL OperationMethod : public common::IdentifiedObject,
+ 
+     PROJ_DLL int getEPSGCode() PROJ_PURE_DECL;
+ 
++#ifdef ENABLE_JSON
+     //! @cond Doxygen_Suppress
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL bool _isEquivalentTo(
+         const util::IComparable *other,
+@@ -899,10 +913,12 @@ class PROJ_GCC_DLL Conversion : public SingleOperation {
+ 
+     PROJ_DLL CoordinateOperationNNPtr inverse() const override;
+ 
++#ifdef ENABLE_JSON
+     //! @cond Doxygen_Suppress
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+     //! @endcond
++#endif // ENABLE_JSON
+ 
+     PROJ_DLL bool isUTM(int &zone, bool &north) const;
+ 
+@@ -1417,8 +1433,10 @@ class PROJ_GCC_DLL Conversion : public SingleOperation {
+         _exportToPROJString(io::PROJStringFormatter *formatter)
+             const override; // throw(FormattingException)
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL const char *getESRIMethodName() const;
+ 
+@@ -1634,11 +1652,13 @@ class PROJ_GCC_DLL Transformation : public SingleOperation {
+ 
+     PROJ_INTERNAL const std::string &getHeightToGeographic3DFilename() const;
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL TransformationNNPtr shallowClone() const;
+ 
+@@ -1749,10 +1769,12 @@ class PROJ_GCC_DLL ConcatenatedOperation final : public CoordinateOperation {
+ 
+     PROJ_PRIVATE :
+ 
++#ifdef ENABLE_JSON
+         //! @cond Doxygen_Suppress
+         PROJ_INTERNAL void
+         _exportToWKT(io::WKTFormatter *formatter)
+             const override; // throw(io::FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL bool _isEquivalentTo(
+         const util::IComparable *other,
+@@ -1760,8 +1782,10 @@ class PROJ_GCC_DLL ConcatenatedOperation final : public CoordinateOperation {
+             util::IComparable::Criterion::STRICT,
+         const io::DatabaseContextPtr &dbContext = nullptr) const override;
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL static void
+     fixStepsDirection(const crs::CRSNNPtr &concatOpSourceCRS,
+diff --git a/include/proj/coordinates.hpp b/include/proj/coordinates.hpp
+index 87ca479e..0097e930 100644
+--- a/include/proj/coordinates.hpp
++++ b/include/proj/coordinates.hpp
+@@ -78,12 +78,14 @@ class PROJ_GCC_DLL CoordinateMetadata : public util::BaseObject,
+     PROJ_PRIVATE :
+         //! @cond Doxygen_Suppress
+ 
++#ifdef ENABLE_JSON
+         PROJ_INTERNAL void
+         _exportToWKT(io::WKTFormatter *formatter)
+             const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     //! @endcond
+ 
+diff --git a/include/proj/coordinatesystem.hpp b/include/proj/coordinatesystem.hpp
+index 0dc0702e..511412b7 100644
+--- a/include/proj/coordinatesystem.hpp
++++ b/include/proj/coordinatesystem.hpp
+@@ -163,6 +163,7 @@ class PROJ_GCC_DLL Meridian : public common::IdentifiedObject,
+     // non-standard
+     PROJ_DLL static MeridianNNPtr create(const common::Angle &longitudeIn);
+ 
++#ifdef ENABLE_JSON
+     //! @cond Doxygen_Suppress
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+@@ -170,6 +171,7 @@ class PROJ_GCC_DLL Meridian : public common::IdentifiedObject,
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
+                         //! @endcond
++#endif // ENABLE_JSON
+ 
+   protected:
+ #ifdef DOXYGEN_ENABLED
+@@ -238,6 +240,7 @@ class PROJ_GCC_DLL CoordinateSystemAxis final : public common::IdentifiedObject,
+                 util::IComparable::Criterion::STRICT,
+             const io::DatabaseContextPtr &dbContext = nullptr) const override;
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter, int order,
+                                     bool disableAbbrev) const;
+ 
+@@ -246,6 +249,7 @@ class PROJ_GCC_DLL CoordinateSystemAxis final : public common::IdentifiedObject,
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL static std::string normalizeAxisName(const std::string &str);
+ 
+@@ -293,6 +297,7 @@ class PROJ_GCC_DLL CoordinateSystem : public common::IdentifiedObject,
+ 
+     PROJ_PRIVATE :
+ 
++#ifdef ENABLE_JSON
+         //! @cond Doxygen_Suppress
+         PROJ_INTERNAL void
+         _exportToWKT(io::WKTFormatter *formatter)
+@@ -300,6 +305,7 @@ class PROJ_GCC_DLL CoordinateSystem : public common::IdentifiedObject,
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL virtual std::string getWKT2Type(bool) const = 0;
+ 
+diff --git a/include/proj/crs.hpp b/include/proj/crs.hpp
+index d9c38465..8030d494 100644
+--- a/include/proj/crs.hpp
++++ b/include/proj/crs.hpp
+@@ -318,14 +318,18 @@ class PROJ_GCC_DLL GeodeticCRS : virtual public SingleCRS,
+     PROJ_INTERNAL void
+     addAngularUnitConvertAndAxisSwap(io::PROJStringFormatter *formatter) const;
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL void _exportToPROJString(io::PROJStringFormatter *formatter)
+         const override; // throw(FormattingException)
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL bool _isEquivalentTo(
+         const util::IComparable *other,
+@@ -419,8 +423,10 @@ class PROJ_GCC_DLL GeographicCRS : public GeodeticCRS {
+         _exportToPROJString(io::PROJStringFormatter *formatter)
+             const override; // throw(FormattingException)
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_DLL bool is2DPartOf3D(
+         util::nn<const GeographicCRS *> other,
+@@ -511,14 +517,18 @@ class PROJ_GCC_DLL VerticalCRS : virtual public SingleCRS,
+     PROJ_INTERNAL const datum::VerticalReferenceFrameNNPtr
+     datumNonNull(const io::DatabaseContextPtr &dbContext) const;
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL void _exportToPROJString(io::PROJStringFormatter *formatter)
+         const override; // throw(FormattingException)
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL bool _isEquivalentTo(
+         const util::IComparable *other,
+@@ -577,8 +587,10 @@ class PROJ_GCC_DLL DerivedCRS : virtual public SingleCRS {
+         PROJ_INTERNAL const operation::ConversionNNPtr &
+         derivingConversionRef() PROJ_PURE_DECL;
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     //! @endcond
+ 
+@@ -591,9 +603,11 @@ class PROJ_GCC_DLL DerivedCRS : virtual public SingleCRS {
+ 
+     PROJ_INTERNAL void setDerivingConversionCRS();
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void baseExportToWKT(
+         io::WKTFormatter *formatter, const std::string &keyword,
+         const std::string &baseKeyword) const; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL bool _isEquivalentTo(
+         const util::IComparable *other,
+@@ -666,11 +680,13 @@ class PROJ_GCC_DLL ProjectedCRS final : public DerivedCRS,
+         const std::vector<cs::CoordinateSystemAxisNNPtr> &axisListIn,
+         io::PROJStringFormatter *formatter, bool axisSpecFound);
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_FOR_TEST ProjectedCRSNNPtr alterParametersLinearUnit(
+         const common::UnitOfMeasure &unit, bool convertToNewUnit) const;
+@@ -737,12 +753,14 @@ class PROJ_GCC_DLL TemporalCRS : virtual public SingleCRS {
+            const datum::TemporalDatumNNPtr &datumIn,
+            const cs::TemporalCSNNPtr &csIn);
+ 
++#ifdef ENABLE_JSON
+     //! @cond Doxygen_Suppress
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     //! @endcond
+ 
+@@ -799,12 +817,14 @@ class PROJ_GCC_DLL EngineeringCRS : virtual public SingleCRS {
+            const datum::EngineeringDatumNNPtr &datumIn,
+            const cs::CoordinateSystemNNPtr &csIn);
+ 
++#ifdef ENABLE_JSON
+     //! @cond Doxygen_Suppress
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     //! @endcond
+ 
+@@ -860,12 +880,14 @@ class PROJ_GCC_DLL ParametricCRS : virtual public SingleCRS {
+            const datum::ParametricDatumNNPtr &datumIn,
+            const cs::ParametricCSNNPtr &csIn);
+ 
++#ifdef ENABLE_JSON
+     //! @cond Doxygen_Suppress
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     //! @endcond
+ 
+@@ -933,10 +955,12 @@ class PROJ_GCC_DLL CompoundCRS final : public CRS,
+     PROJ_DLL std::list<std::pair<CompoundCRSNNPtr, int>>
+     identify(const io::AuthorityFactoryPtr &authorityFactory) const;
+ 
++#ifdef ENABLE_JSON
+     //! @cond Doxygen_Suppress
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+     //! @endcond
++#endif // ENABLE_JSON
+ 
+     PROJ_DLL static CompoundCRSNNPtr
+     create(const util::PropertyMap &properties,
+@@ -959,8 +983,10 @@ class PROJ_GCC_DLL CompoundCRS final : public CRS,
+     PROJ_INTERNAL void _exportToPROJString(io::PROJStringFormatter *formatter)
+         const override; // throw(FormattingException)
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL CRSNNPtr _shallowClone() const override;
+ 
+@@ -1021,10 +1047,12 @@ class PROJ_GCC_DLL BoundCRS final : public CRS,
+     PROJ_DLL const operation::TransformationNNPtr &
+     transformation() PROJ_PURE_DECL;
+ 
++#ifdef ENABLE_JSON
+     //! @cond Doxygen_Suppress
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+     //! @endcond
++#endif // ENABLE_JSON
+ 
+     PROJ_DLL static BoundCRSNNPtr
+     create(const util::PropertyMap &properties, const CRSNNPtr &baseCRSIn,
+@@ -1053,8 +1081,10 @@ class PROJ_GCC_DLL BoundCRS final : public CRS,
+     PROJ_INTERNAL void _exportToPROJString(io::PROJStringFormatter *formatter)
+         const override; // throw(FormattingException)
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL bool _isEquivalentTo(
+         const util::IComparable *other,
+@@ -1115,6 +1145,7 @@ class PROJ_GCC_DLL DerivedGeodeticCRS final : public GeodeticCRS,
+            const operation::ConversionNNPtr &derivingConversionIn,
+            const cs::SphericalCSNNPtr &csIn);
+ 
++#ifdef ENABLE_JSON
+     //! @cond Doxygen_Suppress
+     void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+@@ -1123,6 +1154,7 @@ class PROJ_GCC_DLL DerivedGeodeticCRS final : public GeodeticCRS,
+     _exportToJSON(io::JSONFormatter *formatter) const override {
+         return DerivedCRS::_exportToJSON(formatter);
+     }
++#endif // ENABLE_JSON
+ 
+     //! @endcond
+ 
+@@ -1199,6 +1231,7 @@ class PROJ_GCC_DLL DerivedGeographicCRS final : public GeographicCRS,
+     demoteTo2D(const std::string &newName,
+                const io::DatabaseContextPtr &dbContext) const;
+ 
++#ifdef ENABLE_JSON
+     //! @cond Doxygen_Suppress
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+@@ -1207,6 +1240,7 @@ class PROJ_GCC_DLL DerivedGeographicCRS final : public GeographicCRS,
+     _exportToJSON(io::JSONFormatter *formatter) const override {
+         return DerivedCRS::_exportToJSON(formatter);
+     }
++#endif // ENABLE_JSON
+ 
+     //! @endcond
+ 
+@@ -1278,9 +1312,11 @@ class PROJ_GCC_DLL DerivedProjectedCRS final : public DerivedCRS {
+     demoteTo2D(const std::string &newName,
+                const io::DatabaseContextPtr &dbContext) const;
+ 
++#ifdef ENABLE_JSON
+     //! @cond Doxygen_Suppress
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL void
+     addUnitConvertAndAxisSwap(io::PROJStringFormatter *formatter) const;
+@@ -1341,6 +1377,7 @@ class PROJ_GCC_DLL DerivedVerticalCRS final : public VerticalCRS,
+            const operation::ConversionNNPtr &derivingConversionIn,
+            const cs::VerticalCSNNPtr &csIn);
+ 
++#ifdef ENABLE_JSON
+     //! @cond Doxygen_Suppress
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+@@ -1349,6 +1386,7 @@ class PROJ_GCC_DLL DerivedVerticalCRS final : public VerticalCRS,
+     _exportToJSON(io::JSONFormatter *formatter) const override {
+         return DerivedCRS::_exportToJSON(formatter);
+     }
++#endif // ENABLE_JSON
+ 
+     //! @endcond
+ 
+@@ -1433,6 +1471,7 @@ class PROJ_GCC_DLL DerivedCRSTemplate final : public DerivedCRSTraits::BaseType,
+            const operation::ConversionNNPtr &derivingConversionIn,
+            const CSNNPtr &csIn);
+ 
++#ifdef ENABLE_JSON
+     //! @cond Doxygen_Suppress
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+@@ -1442,6 +1481,7 @@ class PROJ_GCC_DLL DerivedCRSTemplate final : public DerivedCRSTraits::BaseType,
+         return DerivedCRS::_exportToJSON(formatter);
+     }
+     //! @endcond
++#endif // ENABLE_JSON
+ 
+   protected:
+     PROJ_INTERNAL
+diff --git a/include/proj/datum.hpp b/include/proj/datum.hpp
+index 5e81330f..4f6b9f13 100644
+--- a/include/proj/datum.hpp
++++ b/include/proj/datum.hpp
+@@ -144,12 +144,14 @@ class PROJ_GCC_DLL DatumEnsemble final : public common::ObjectUsage,
+         const std::vector<DatumNNPtr> &datumsIn,
+         const metadata::PositionalAccuracyNNPtr &accuracy); // throw(Exception)
+ 
++#ifdef ENABLE_JSON
+     //! @cond Doxygen_Suppress
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(io::FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_FOR_TEST DatumNNPtr
+     asDatum(const io::DatabaseContextPtr &dbContext) const;
+@@ -214,11 +216,13 @@ class PROJ_GCC_DLL PrimeMeridian final : public common::IdentifiedObject,
+         _exportToPROJString(io::PROJStringFormatter *formatter)
+             const override; // throw(FormattingException)
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(io::FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL bool _isEquivalentTo(
+         const util::IComparable *other,
+@@ -319,6 +323,7 @@ class PROJ_GCC_DLL Ellipsoid final : public common::IdentifiedObject,
+     PROJ_DLL static const EllipsoidNNPtr GRS1980;
+ 
+     PROJ_PRIVATE :
++#ifdef ENABLE_JSON
+         //! @cond Doxygen_Suppress
+         PROJ_INTERNAL void
+         _exportToWKT(io::WKTFormatter *formatter)
+@@ -326,6 +331,7 @@ class PROJ_GCC_DLL Ellipsoid final : public common::IdentifiedObject,
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(io::FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL bool _isEquivalentTo(
+         const util::IComparable *other,
+@@ -430,11 +436,13 @@ class PROJ_GCC_DLL GeodeticReferenceFrame : public Datum {
+     PROJ_DLL static const GeodeticReferenceFrameNNPtr EPSG_6326; // WGS 84
+ 
+     //! @cond Doxygen_Suppress
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL bool _isEquivalentTo(
+         const util::IComparable *other,
+@@ -516,9 +524,11 @@ class PROJ_GCC_DLL DynamicGeodeticReferenceFrame final
+             util::IComparable::Criterion::STRICT,
+         const io::DatabaseContextPtr &dbContext = nullptr) const override;
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+                         //! @endcond
++#endif // ENABLE_JSON
+ 
+   protected:
+ #ifdef DOXYGEN_ENABLED
+@@ -611,11 +621,13 @@ class PROJ_GCC_DLL VerticalReferenceFrame : public Datum {
+         const util::IComparable *other, util::IComparable::Criterion criterion,
+         const io::DatabaseContextPtr &dbContext) const;
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL const std::string &getWKT1DatumType() const;
+ 
+@@ -677,9 +689,11 @@ class PROJ_GCC_DLL DynamicVerticalReferenceFrame final
+             util::IComparable::Criterion::STRICT,
+         const io::DatabaseContextPtr &dbContext = nullptr) const override;
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+                         //! @endcond
++#endif // ENABLE_JSON
+ 
+   protected:
+ #ifdef DOXYGEN_ENABLED
+@@ -731,11 +745,13 @@ class PROJ_GCC_DLL TemporalDatum final : public Datum {
+            const std::string &calendarIn);
+ 
+     //! @cond Doxygen_Suppress
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL bool _isEquivalentTo(
+         const util::IComparable *other,
+@@ -783,11 +799,13 @@ class PROJ_GCC_DLL EngineeringDatum final : public Datum {
+                util::optional<std::string>());
+ 
+     //! @cond Doxygen_Suppress
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL bool _isEquivalentTo(
+         const util::IComparable *other,
+@@ -831,11 +849,13 @@ class PROJ_GCC_DLL ParametricDatum final : public Datum {
+                util::optional<std::string>());
+ 
+     //! @cond Doxygen_Suppress
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL bool _isEquivalentTo(
+         const util::IComparable *other,
+diff --git a/include/proj/io.hpp b/include/proj/io.hpp
+index cfe1aab5..b460d4d9 100644
+--- a/include/proj/io.hpp
++++ b/include/proj/io.hpp
+@@ -583,6 +583,7 @@ class PROJ_GCC_DLL JSONFormatter {
+ /** \brief Interface for an object that can be exported to JSON. */
+ class PROJ_GCC_DLL IJSONExportable {
+   public:
++#ifdef ENABLE_JSON
+     //! @cond Doxygen_Suppress
+     PROJ_DLL virtual ~IJSONExportable();
+     //! @endcond
+@@ -598,6 +599,7 @@ class PROJ_GCC_DLL IJSONExportable {
+         _exportToJSON(
+             JSONFormatter *formatter) const = 0; // throw(FormattingException)
+                                                  //! @endcond
++#endif // ENABLE_JSON
+ };
+ 
+ // ---------------------------------------------------------------------------
+@@ -636,6 +638,7 @@ class PROJ_GCC_DLL ParsingException : public util::Exception {
+ /** \brief Interface for an object that can be exported to WKT. */
+ class PROJ_GCC_DLL IWKTExportable {
+   public:
++#ifdef ENABLE_JSON
+     //! @cond Doxygen_Suppress
+     PROJ_DLL virtual ~IWKTExportable();
+     //! @endcond
+@@ -651,6 +654,7 @@ class PROJ_GCC_DLL IWKTExportable {
+         _exportToWKT(
+             WKTFormatter *formatter) const = 0; // throw(FormattingException)
+                                                 //! @endcond
++#endif // ENABLE_JSON
+ };
+ 
+ // ---------------------------------------------------------------------------
+diff --git a/include/proj/metadata.hpp b/include/proj/metadata.hpp
+index c8d0bcbd..636cb91c 100644
+--- a/include/proj/metadata.hpp
++++ b/include/proj/metadata.hpp
+@@ -403,11 +403,13 @@ class PROJ_GCC_DLL Identifier : public util::BaseObject,
+         PROJ_INTERNAL static std::string
+         canonicalizeName(const std::string &str);
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(io::FormattingException)
++#endif
+ 
+     //! @endcond
+ 
+diff --git a/src/iso19111/c_api.cpp b/src/iso19111/c_api.cpp
+index abfd9895..0e1f8be5 100644
+--- a/src/iso19111/c_api.cpp
++++ b/src/iso19111/c_api.cpp
+@@ -468,6 +468,8 @@ proj_context_get_database_structure(PJ_CONTEXT *ctx,
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ /** \brief Guess the "dialect" of the WKT string.
+  *
+  * @param ctx PROJ context, or NULL for default context
+@@ -496,6 +498,8 @@ PJ_GUESSED_WKT_DIALECT proj_context_guess_wkt_dialect(PJ_CONTEXT *ctx,
+     return PJ_GUESSED_NOT_WKT;
+ }
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -608,6 +612,8 @@ PJ *proj_create(PJ_CONTEXT *ctx, const char *text) {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ /** \brief Instantiate an object from a WKT string.
+  *
+  * This function calls osgeo::proj::io::WKTParser::createFromWKT()
+@@ -733,6 +739,8 @@ PJ *proj_create_from_wkt(PJ_CONTEXT *ctx, const char *wkt,
+     return nullptr;
+ }
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ /** \brief Instantiate an object from a database lookup.
+@@ -1557,6 +1565,8 @@ const char *proj_get_id_code(const PJ *obj, int index) {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ /** \brief Get a WKT representation of an object.
+  *
+  * The returned string is valid while the input obj parameter is valid,
+@@ -1664,6 +1674,8 @@ const char *proj_as_wkt(PJ_CONTEXT *ctx, const PJ *obj, PJ_WKT_TYPE type,
+     }
+ }
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ /** \brief Get a PROJ string representation of an object.
+@@ -1760,6 +1772,8 @@ const char *proj_as_proj_string(PJ_CONTEXT *ctx, const PJ *obj,
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ /** \brief Get a PROJJSON string representation of an object.
+  *
+  * The returned string is valid while the input obj parameter is valid,
+@@ -1828,6 +1842,8 @@ const char *proj_as_projjson(PJ_CONTEXT *ctx, const PJ *obj,
+     }
+ }
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ /** \brief Get the number of domains/usages for a given object.
+diff --git a/src/iso19111/common.cpp b/src/iso19111/common.cpp
+index 91724986..1bf2256d 100644
+--- a/src/iso19111/common.cpp
++++ b/src/iso19111/common.cpp
+@@ -177,6 +177,8 @@ const std::string &UnitOfMeasure::codeSpace() PROJ_PURE_DEFN {
+  */
+ const std::string &UnitOfMeasure::code() PROJ_PURE_DEFN { return d->code_; }
+ 
++#ifdef ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -299,6 +301,8 @@ void UnitOfMeasure::_exportToJSON(
+     }
+ }
+ 
++#endif // ENABLE_JSON
++
+ //! @endcond
+ 
+ // ---------------------------------------------------------------------------
+@@ -868,6 +872,8 @@ void IdentifiedObject::setProperties(
+     }
+ }
+ 
++#ifdef ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -918,6 +924,8 @@ void IdentifiedObject::formatRemarks(JSONFormatter *formatter) const {
+     }
+ }
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ bool IdentifiedObject::_isEquivalentTo(
+@@ -1017,6 +1025,8 @@ ObjectDomainNNPtr ObjectDomain::create(const optional<std::string> &scopeIn,
+     return ObjectDomain::nn_make_shared<ObjectDomain>(scopeIn, extent);
+ }
+ 
++#ifdef ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -1134,6 +1144,8 @@ void ObjectDomain::_exportToJSON(JSONFormatter *formatter) const {
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -1242,6 +1254,8 @@ void ObjectUsage::setProperties(
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ void ObjectUsage::baseExportToWKT(WKTFormatter *formatter) const {
+     const bool isWKT2 = formatter->version() == WKTFormatter::Version::WKT2;
+     if (isWKT2 && formatter->outputUsage()) {
+@@ -1291,6 +1305,8 @@ void ObjectUsage::baseExportToJSON(JSONFormatter *formatter) const {
+     formatRemarks(formatter);
+ }
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+diff --git a/src/iso19111/coordinates.cpp b/src/iso19111/coordinates.cpp
+index 1986cd16..253641ed 100644
+--- a/src/iso19111/coordinates.cpp
++++ b/src/iso19111/coordinates.cpp
+@@ -178,6 +178,8 @@ double CoordinateMetadata::coordinateEpochAsDecimalYear() PROJ_PURE_DEFN {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void CoordinateMetadata::_exportToWKT(io::WKTFormatter *formatter) const {
+     if (formatter->version() != io::WKTFormatter::Version::WKT2 ||
+@@ -219,6 +221,8 @@ void CoordinateMetadata::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ } // namespace coordinates
+ 
+ NS_PROJ_END
+diff --git a/src/iso19111/coordinatesystem.cpp b/src/iso19111/coordinatesystem.cpp
+index d7cdcb64..0bd1ff2d 100644
+--- a/src/iso19111/coordinatesystem.cpp
++++ b/src/iso19111/coordinatesystem.cpp
+@@ -124,6 +124,8 @@ MeridianNNPtr Meridian::create(const common::Angle &longitudeIn) {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void Meridian::_exportToWKT(
+     io::WKTFormatter *formatter) const // throw(FormattingException)
+@@ -166,6 +168,8 @@ void Meridian::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -361,6 +365,8 @@ CoordinateSystemAxisNNPtr CoordinateSystemAxis::create(
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void CoordinateSystemAxis::_exportToWKT(
+     // cppcheck-suppress passedByValue
+@@ -370,6 +376,8 @@ void CoordinateSystemAxis::_exportToWKT(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -385,6 +393,8 @@ std::string CoordinateSystemAxis::normalizeAxisName(const std::string &str) {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void CoordinateSystemAxis::_exportToWKT(io::WKTFormatter *formatter, int order,
+                                         bool disableAbbrev) const {
+@@ -545,6 +555,8 @@ void CoordinateSystemAxis::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -627,6 +639,8 @@ CoordinateSystem::axisList() PROJ_PURE_DEFN {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void CoordinateSystem::_exportToWKT(
+     io::WKTFormatter *formatter) const // throw(FormattingException)
+@@ -715,6 +729,8 @@ void CoordinateSystem::_exportToJSON(
+     }
+ }
+ 
++#endif // ENABLE_JSON
++
+ //! @endcond
+ 
+ // ---------------------------------------------------------------------------
+diff --git a/src/iso19111/crs.cpp b/src/iso19111/crs.cpp
+index c29ae581..88104a18 100644
+--- a/src/iso19111/crs.cpp
++++ b/src/iso19111/crs.cpp
+@@ -1682,6 +1682,8 @@ bool SingleCRS::baseIsEquivalentTo(
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void SingleCRS::exportDatumOrDatumEnsembleToWkt(
+     io::WKTFormatter *formatter) const // throw(io::FormattingException)
+@@ -1697,6 +1699,8 @@ void SingleCRS::exportDatumOrDatumEnsembleToWkt(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -1994,6 +1998,8 @@ GeodeticCRS::create(const util::PropertyMap &properties,
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ 
+ // Try to format a Geographic/ProjectedCRS 3D CRS as a
+@@ -2272,6 +2278,8 @@ void GeodeticCRS::_exportToWKT(io::WKTFormatter *formatter) const {
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -2469,6 +2477,8 @@ void GeodeticCRS::addDatumInfoToPROJString(
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ 
+ void GeodeticCRS::_exportToJSONInternal(
+@@ -2524,6 +2534,8 @@ void GeodeticCRS::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -3352,6 +3364,8 @@ void GeographicCRS::_exportToPROJString(
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void GeographicCRS::_exportToJSON(
+     io::JSONFormatter *formatter) const // throw(io::FormattingException)
+@@ -3360,6 +3374,8 @@ void GeographicCRS::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -3485,6 +3501,8 @@ VerticalCRS::datumNonNull(const io::DatabaseContextPtr &dbContext) const {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void VerticalCRS::_exportToWKT(io::WKTFormatter *formatter) const {
+     const bool isWKT2 = formatter->version() == io::WKTFormatter::Version::WKT2;
+@@ -3595,6 +3613,8 @@ void VerticalCRS::_exportToWKT(io::WKTFormatter *formatter) const {
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -3625,6 +3645,8 @@ void VerticalCRS::_exportToPROJString(
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void VerticalCRS::_exportToJSON(
+     io::JSONFormatter *formatter) const // throw(io::FormattingException)
+@@ -3700,6 +3722,8 @@ void VerticalCRS::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -4065,6 +4089,8 @@ void DerivedCRS::setDerivingConversionCRS() {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ void DerivedCRS::baseExportToWKT(io::WKTFormatter *formatter,
+                                  const std::string &keyword,
+                                  const std::string &baseKeyword) const {
+@@ -4124,6 +4150,8 @@ void DerivedCRS::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -4194,6 +4222,8 @@ const cs::CartesianCSNNPtr &ProjectedCRS::coordinateSystem() PROJ_PURE_DEFN {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void ProjectedCRS::_exportToWKT(io::WKTFormatter *formatter) const {
+     const bool isWKT2 = formatter->version() == io::WKTFormatter::Version::WKT2;
+@@ -4513,6 +4543,8 @@ void ProjectedCRS::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ void ProjectedCRS::_exportToPROJString(
+@@ -5328,6 +5360,8 @@ CRSNNPtr CompoundCRS::createLax(const util::PropertyMap &properties,
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void CompoundCRS::_exportToWKT(io::WKTFormatter *formatter) const {
+     const bool isWKT2 = formatter->version() == io::WKTFormatter::Version::WKT2;
+@@ -5384,6 +5418,8 @@ void CompoundCRS::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ void CompoundCRS::_exportToPROJString(
+@@ -5929,6 +5965,8 @@ BoundCRS::getVDatumPROJ4GRIDS(const crs::GeographicCRS *geogCRSOfCompoundCRS,
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void BoundCRS::_exportToWKT(io::WKTFormatter *formatter) const {
+     const bool isWKT2 = formatter->version() == io::WKTFormatter::Version::WKT2;
+@@ -6030,6 +6068,8 @@ void BoundCRS::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ void BoundCRS::_exportToPROJString(
+@@ -6311,6 +6351,8 @@ DerivedGeodeticCRSNNPtr DerivedGeodeticCRS::create(
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void DerivedGeodeticCRS::_exportToWKT(io::WKTFormatter *formatter) const {
+     const bool isWKT2 = formatter->version() == io::WKTFormatter::Version::WKT2;
+@@ -6349,6 +6391,8 @@ void DerivedGeodeticCRS::_exportToWKT(io::WKTFormatter *formatter) const {
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ void DerivedGeodeticCRS::_exportToPROJString(
+@@ -6453,6 +6497,8 @@ DerivedGeographicCRSNNPtr DerivedGeographicCRS::create(
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void DerivedGeographicCRS::_exportToWKT(io::WKTFormatter *formatter) const {
+     const bool isWKT2 = formatter->version() == io::WKTFormatter::Version::WKT2;
+@@ -6487,6 +6533,8 @@ void DerivedGeographicCRS::_exportToWKT(io::WKTFormatter *formatter) const {
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ void DerivedGeographicCRS::_exportToPROJString(
+@@ -6675,6 +6723,8 @@ DerivedProjectedCRS::demoteTo2D(const std::string &newName,
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void DerivedProjectedCRS::_exportToWKT(io::WKTFormatter *formatter) const {
+     const bool isWKT2 = formatter->version() == io::WKTFormatter::Version::WKT2;
+@@ -6728,6 +6778,8 @@ void DerivedProjectedCRS::_exportToWKT(io::WKTFormatter *formatter) const {
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ bool DerivedProjectedCRS::_isEquivalentTo(
+@@ -6822,6 +6874,8 @@ TemporalCRSNNPtr TemporalCRS::create(const util::PropertyMap &properties,
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void TemporalCRS::_exportToWKT(io::WKTFormatter *formatter) const {
+     const bool isWKT2 = formatter->version() == io::WKTFormatter::Version::WKT2;
+@@ -6868,6 +6922,8 @@ void TemporalCRS::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ bool TemporalCRS::_isEquivalentTo(
+@@ -6944,6 +7000,8 @@ EngineeringCRS::create(const util::PropertyMap &properties,
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void EngineeringCRS::_exportToWKT(io::WKTFormatter *formatter) const {
+     const bool isWKT2 = formatter->version() == io::WKTFormatter::Version::WKT2;
+@@ -7000,6 +7058,8 @@ void EngineeringCRS::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ bool EngineeringCRS::_isEquivalentTo(
+@@ -7085,6 +7145,8 @@ ParametricCRS::create(const util::PropertyMap &properties,
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void ParametricCRS::_exportToWKT(io::WKTFormatter *formatter) const {
+     const bool isWKT2 = formatter->version() == io::WKTFormatter::Version::WKT2;
+@@ -7132,6 +7194,8 @@ void ParametricCRS::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ bool ParametricCRS::_isEquivalentTo(
+@@ -7216,6 +7280,8 @@ DerivedVerticalCRSNNPtr DerivedVerticalCRS::create(
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void DerivedVerticalCRS::_exportToWKT(io::WKTFormatter *formatter) const {
+     const bool isWKT2 = formatter->version() == io::WKTFormatter::Version::WKT2;
+@@ -7255,6 +7321,8 @@ void DerivedVerticalCRS::_exportToWKT(io::WKTFormatter *formatter) const {
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ void DerivedVerticalCRS::_exportToPROJString(
+@@ -7362,6 +7430,8 @@ const char *DerivedCRSTemplate<DerivedCRSTraits>::className() const {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ static void DerivedCRSTemplateCheckExportToWKT(io::WKTFormatter *formatter,
+                                                const std::string &crsName,
+                                                bool wkt2_2019_only) {
+@@ -7384,6 +7454,8 @@ void DerivedCRSTemplate<DerivedCRSTraits>::_exportToWKT(
+                     DerivedCRSTraits::WKTBaseKeyword());
+ }
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ template <class DerivedCRSTraits>
+diff --git a/src/iso19111/datum.cpp b/src/iso19111/datum.cpp
+index 191ccfb8..ddad4df1 100644
+--- a/src/iso19111/datum.cpp
++++ b/src/iso19111/datum.cpp
+@@ -109,6 +109,8 @@ struct Datum::Private {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ void Datum::Private::exportAnchorDefinition(io::WKTFormatter *formatter) const {
+     if (anchorDefinition) {
+         formatter->startNode(io::WKTConstants::ANCHOR, false);
+@@ -163,6 +165,8 @@ void Datum::Private::exportAnchorEpoch(io::JSONFormatter *formatter) const {
+     }
+ }
+ 
++#endif // ENABLE_JSON
++
+ //! @endcond
+ 
+ // ---------------------------------------------------------------------------
+@@ -410,6 +414,8 @@ const PrimeMeridianNNPtr PrimeMeridian::createPARIS() {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void PrimeMeridian::_exportToWKT(
+     io::WKTFormatter *formatter) const // throw(FormattingException)
+@@ -508,6 +514,8 @@ void PrimeMeridian::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -874,6 +882,8 @@ const EllipsoidNNPtr Ellipsoid::createGRS1980() {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void Ellipsoid::_exportToWKT(
+     io::WKTFormatter *formatter) const // throw(FormattingException)
+@@ -1000,6 +1010,8 @@ void Ellipsoid::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ bool Ellipsoid::lookForProjWellKnownEllps(std::string &projEllpsName,
+@@ -1337,6 +1349,8 @@ const GeodeticReferenceFrameNNPtr GeodeticReferenceFrame::createEPSG_6326() {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void GeodeticReferenceFrame::_exportToWKT(
+     io::WKTFormatter *formatter) const // throw(FormattingException)
+@@ -1509,6 +1523,8 @@ void GeodeticReferenceFrame::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -1694,6 +1710,8 @@ bool DynamicGeodeticReferenceFrame::_isEquivalentTo(
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void DynamicGeodeticReferenceFrame::_exportToWKT(
+     io::WKTFormatter *formatter) const // throw(FormattingException)
+@@ -1717,6 +1735,8 @@ void DynamicGeodeticReferenceFrame::_exportToWKT(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ /** \brief Instantiate a DynamicGeodeticReferenceFrame
+@@ -1875,6 +1895,8 @@ DatumEnsemble::asDatum(const io::DatabaseContextPtr &dbContext) const {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void DatumEnsemble::_exportToWKT(
+     io::WKTFormatter *formatter) const // throw(FormattingException)
+@@ -1981,6 +2003,8 @@ void DatumEnsemble::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ /** \brief Instantiate a DatumEnsemble.
+@@ -2145,6 +2169,8 @@ const std::string &VerticalReferenceFrame::getWKT1DatumType() const {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void VerticalReferenceFrame::_exportToWKT(
+     io::WKTFormatter *formatter) const // throw(FormattingException)
+@@ -2243,6 +2269,8 @@ void VerticalReferenceFrame::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -2377,6 +2405,8 @@ bool DynamicVerticalReferenceFrame::_isEquivalentTo(
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void DynamicVerticalReferenceFrame::_exportToWKT(
+     io::WKTFormatter *formatter) const // throw(FormattingException)
+@@ -2399,6 +2429,8 @@ void DynamicVerticalReferenceFrame::_exportToWKT(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ /** \brief Instantiate a DynamicVerticalReferenceFrame
+@@ -2497,6 +2529,8 @@ TemporalDatum::create(const util::PropertyMap &properties,
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void TemporalDatum::_exportToWKT(
+     io::WKTFormatter *formatter) const // throw(FormattingException)
+@@ -2555,6 +2589,8 @@ void TemporalDatum::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -2608,6 +2644,8 @@ EngineeringDatum::create(const util::PropertyMap &properties,
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void EngineeringDatum::_exportToWKT(
+     io::WKTFormatter *formatter) const // throw(FormattingException)
+@@ -2648,6 +2686,8 @@ void EngineeringDatum::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -2699,6 +2739,8 @@ ParametricDatum::create(const util::PropertyMap &properties,
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void ParametricDatum::_exportToWKT(
+     io::WKTFormatter *formatter) const // throw(FormattingException)
+@@ -2734,6 +2776,8 @@ void ParametricDatum::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+diff --git a/src/iso19111/io.cpp b/src/iso19111/io.cpp
+index d192ac78..7fc5dc0e 100644
+--- a/src/iso19111/io.cpp
++++ b/src/iso19111/io.cpp
+@@ -64,7 +64,9 @@
+ #include "proj/internal/internal.hpp"
+ #include "proj/internal/io_internal.hpp"
+ 
++#ifdef ENABLE_JSON
+ #include "proj/internal/include_nlohmann_json.hpp"
++#endif // ENABLE_JSON
+ 
+ #include "proj_constants.h"
+ 
+@@ -88,7 +90,9 @@ using namespace NS_PROJ::metadata;
+ using namespace NS_PROJ::operation;
+ using namespace NS_PROJ::util;
+ 
++#ifdef ENABLE_JSON
+ using json = nlohmann::json;
++#endif // ENABLE_JSON
+ 
+ //! @cond Doxygen_Suppress
+ static const std::string emptyString{};
+@@ -118,6 +122,8 @@ const char *JSONFormatter::PROJJSON_v0_6 =
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ IWKTExportable::~IWKTExportable() = default;
+ 
+@@ -128,6 +134,8 @@ std::string IWKTExportable::exportToWKT(WKTFormatter *formatter) const {
+     return formatter->toString();
+ }
+ 
++#endif // ENABLE_JSON
++
+ //! @endcond
+ 
+ // ---------------------------------------------------------------------------
+@@ -5580,6 +5588,8 @@ BaseObjectNNPtr WKTParser::Private::build(const WKTNodeNNPtr &node) {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ class JSONParser {
+     DatabaseContextPtr dbContext_{};
+     std::string deformationModelName_{};
+@@ -6891,6 +6901,8 @@ EllipsoidNNPtr JSONParser::buildEllipsoid(const json &j) {
+     throw ParsingException("Missing semi_major_axis or radius");
+ }
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ // import a CRS encoded as OGC Best Practice document 11-135.
+@@ -7166,6 +7178,7 @@ static BaseObjectNNPtr createFromUserInput(const std::string &text,
+                                    usePROJ4InitRules, ctx);
+     }
+ 
++#ifdef ENABLE_JSON
+     if (!text.empty() && text[0] == '{') {
+         json j;
+         try {
+@@ -7175,6 +7188,7 @@ static BaseObjectNNPtr createFromUserInput(const std::string &text,
+         }
+         return JSONParser().attachDatabaseContext(dbContext).create(j);
+     }
++#endif // ENABLE_JSON
+ 
+     if (!ci_starts_with(text, "step proj=") &&
+         !ci_starts_with(text, "step +proj=")) {
+@@ -11949,6 +11963,8 @@ PROJStringParser::createFromPROJString(const std::string &projString) {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ struct JSONFormatter::Private {
+     CPLJSonStreamingWriter writer_{nullptr, nullptr};
+@@ -12144,5 +12160,7 @@ std::string IJSONExportable::exportToJSON(JSONFormatter *formatter) const {
+ 
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ } // namespace io
+ NS_PROJ_END
+diff --git a/src/iso19111/metadata.cpp b/src/iso19111/metadata.cpp
+index d648f83e..036c33c0 100644
+--- a/src/iso19111/metadata.cpp
++++ b/src/iso19111/metadata.cpp
+@@ -38,7 +38,9 @@
+ #include "proj/internal/internal.hpp"
+ #include "proj/internal/io_internal.hpp"
+ 
++#ifdef ENABLE_JSON
+ #include "proj_json_streaming_writer.hpp"
++#endif
+ 
+ #include <algorithm>
+ #include <cmath>
+@@ -1058,6 +1060,8 @@ const optional<std::string> &Identifier::uri() PROJ_PURE_DEFN {
+     return d->uri_;
+ }
+ 
++#ifdef ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -1160,6 +1164,8 @@ void Identifier::_exportToJSON(JSONFormatter *formatter) const {
+ 
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+diff --git a/src/iso19111/operation/concatenatedoperation.cpp b/src/iso19111/operation/concatenatedoperation.cpp
+index 33c3b5f4..767eb1f6 100644
+--- a/src/iso19111/operation/concatenatedoperation.cpp
++++ b/src/iso19111/operation/concatenatedoperation.cpp
+@@ -669,6 +669,8 @@ CoordinateOperationNNPtr ConcatenatedOperation::inverse() const {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void ConcatenatedOperation::_exportToWKT(io::WKTFormatter *formatter) const {
+     const bool isWKT2 = formatter->version() == io::WKTFormatter::Version::WKT2;
+@@ -763,6 +765,8 @@ void ConcatenatedOperation::_exportToJSON(
+ 
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+diff --git a/src/iso19111/operation/conversion.cpp b/src/iso19111/operation/conversion.cpp
+index f6ecbf13..db55c5a0 100644
+--- a/src/iso19111/operation/conversion.cpp
++++ b/src/iso19111/operation/conversion.cpp
+@@ -3132,6 +3132,8 @@ const char *Conversion::getWKT1GDALMethodName() const {
+ 
+ //! @cond Doxygen_Suppress
+ 
++#ifdef ENABLE_JSON
++
+ void Conversion::_exportToWKT(io::WKTFormatter *formatter) const {
+     const auto &l_method = method();
+     const auto &methodName = l_method->nameStr();
+@@ -3387,6 +3389,8 @@ void Conversion::_exportToJSON(
+ 
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+diff --git a/src/iso19111/operation/coordinateoperation_internal.hpp b/src/iso19111/operation/coordinateoperation_internal.hpp
+index d890f710..8e111f2a 100644
+--- a/src/iso19111/operation/coordinateoperation_internal.hpp
++++ b/src/iso19111/operation/coordinateoperation_internal.hpp
+@@ -100,6 +100,7 @@ class InverseConversion : public Conversion, public InverseCoordinateOperation {
+ 
+     ~InverseConversion() override;
+ 
++#ifdef ENABLE_JSON
+     void _exportToWKT(io::WKTFormatter *formatter) const override {
+         Conversion::_exportToWKT(formatter);
+     }
+@@ -107,6 +108,7 @@ class InverseConversion : public Conversion, public InverseCoordinateOperation {
+     void _exportToJSON(io::JSONFormatter *formatter) const override {
+         Conversion::_exportToJSON(formatter);
+     }
++#endif // ENABLE_JSON
+ 
+     void
+     _exportToPROJString(io::PROJStringFormatter *formatter) const override {
+@@ -156,16 +158,20 @@ class InverseTransformation : public Transformation,
+ 
+     ~InverseTransformation() override;
+ 
++#ifdef ENABLE_JSON
+     void _exportToWKT(io::WKTFormatter *formatter) const override;
++#endif // ENABLE_JSON
+ 
+     void
+     _exportToPROJString(io::PROJStringFormatter *formatter) const override {
+         return InverseCoordinateOperation::_exportToPROJString(formatter);
+     }
+ 
++#ifdef ENABLE_JSON
+     void _exportToJSON(io::JSONFormatter *formatter) const override {
+         Transformation::_exportToJSON(formatter);
+     }
++#endif // ENABLE_JSON
+ 
+     bool _isEquivalentTo(
+         const util::IComparable *other,
+@@ -214,8 +220,10 @@ class PROJBasedOperation : public SingleOperation {
+   public:
+     ~PROJBasedOperation() override;
+ 
++#ifdef ENABLE_JSON
+     void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
++#endif // ENABLE_JSON
+ 
+     CoordinateOperationNNPtr inverse() const override;
+ 
+@@ -243,8 +251,10 @@ class PROJBasedOperation : public SingleOperation {
+     void _exportToPROJString(io::PROJStringFormatter *formatter)
+         const override; // throw(FormattingException)
+ 
++#ifdef ENABLE_JSON
+     void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     CoordinateOperationNNPtr _shallowClone() const override;
+ 
+diff --git a/src/iso19111/operation/oputils.cpp b/src/iso19111/operation/oputils.cpp
+index 5efbf07f..9456fd30 100644
+--- a/src/iso19111/operation/oputils.cpp
++++ b/src/iso19111/operation/oputils.cpp
+@@ -590,6 +590,8 @@ double getAccuracy(const std::vector<CoordinateOperationNNPtr> &ops) {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ void exportSourceCRSAndTargetCRSToWKT(const CoordinateOperation *co,
+                                       io::WKTFormatter *formatter) {
+     auto l_sourceCRS = co->sourceCRS();
+@@ -635,6 +637,8 @@ void exportSourceCRSAndTargetCRSToWKT(const CoordinateOperation *co,
+     }
+ }
+ 
++#endif // ENABLE_JSON
++
+ //! @endcond
+ 
+ // ---------------------------------------------------------------------------
+diff --git a/src/iso19111/operation/projbasedoperation.cpp b/src/iso19111/operation/projbasedoperation.cpp
+index fd03fc09..862e660d 100644
+--- a/src/iso19111/operation/projbasedoperation.cpp
++++ b/src/iso19111/operation/projbasedoperation.cpp
+@@ -175,6 +175,8 @@ CoordinateOperationNNPtr PROJBasedOperation::inverse() const {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ void PROJBasedOperation::_exportToWKT(io::WKTFormatter *formatter) const {
+ 
+     if (sourceCRS() && targetCRS()) {
+@@ -243,6 +245,8 @@ void PROJBasedOperation::_exportToJSON(
+     }
+ }
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ void PROJBasedOperation::_exportToPROJString(
+diff --git a/src/iso19111/operation/singleoperation.cpp b/src/iso19111/operation/singleoperation.cpp
+index 43be4532..35939273 100644
+--- a/src/iso19111/operation/singleoperation.cpp
++++ b/src/iso19111/operation/singleoperation.cpp
+@@ -507,6 +507,8 @@ int OperationMethod::getEPSGCode() PROJ_PURE_DEFN {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void OperationMethod::_exportToWKT(io::WKTFormatter *formatter) const {
+     const bool isWKT2 = formatter->version() == io::WKTFormatter::Version::WKT2;
+@@ -559,6 +561,8 @@ void OperationMethod::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -702,6 +706,8 @@ OperationParameterValue::parameterValue() PROJ_PURE_DEFN {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void OperationParameterValue::_exportToWKT(
+     // cppcheck-suppress passedByValue
+@@ -773,6 +779,8 @@ void OperationParameterValue::_exportToJSON(
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -961,8 +969,12 @@ bool OperationParameter::_isEquivalentTo(
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ void OperationParameter::_exportToWKT(io::WKTFormatter *) const {}
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ /** \brief Return the name of a parameter designed by its EPSG code
+@@ -2527,6 +2539,8 @@ bool ParameterValue::booleanValue() PROJ_PURE_DEFN { return d->booleanValue_; }
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void ParameterValue::_exportToWKT(io::WKTFormatter *formatter) const {
+     const bool isWKT2 = formatter->version() == io::WKTFormatter::Version::WKT2;
+@@ -2593,6 +2607,8 @@ void ParameterValue::_exportToWKT(io::WKTFormatter *formatter) const {
+ }
+ //! @endcond
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -2654,6 +2670,8 @@ InvalidOperation::~InvalidOperation() = default;
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ void SingleOperation::exportTransformationToWKT(
+     io::WKTFormatter *formatter) const {
+     const bool isWKT2 = formatter->version() == io::WKTFormatter::Version::WKT2;
+@@ -2728,6 +2746,8 @@ void SingleOperation::exportTransformationToWKT(
+     formatter->endNode();
+ }
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+diff --git a/src/iso19111/operation/transformation.cpp b/src/iso19111/operation/transformation.cpp
+index d660e269..d5afd969 100644
+--- a/src/iso19111/operation/transformation.cpp
++++ b/src/iso19111/operation/transformation.cpp
+@@ -1344,6 +1344,8 @@ static double negate(double val) {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ static CoordinateOperationPtr
+ createApproximateInverseIfPossible(const Transformation *op) {
+     bool sevenParamsTransform = false;
+@@ -1480,6 +1482,8 @@ createApproximateInverseIfPossible(const Transformation *op) {
+     return nullptr;
+ }
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ //! @cond Doxygen_Suppress
+@@ -1729,6 +1733,8 @@ TransformationNNPtr InverseTransformation::inverseAsTransformation() const {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ void InverseTransformation::_exportToWKT(io::WKTFormatter *formatter) const {
+ 
+     auto approxInverse = createApproximateInverseIfPossible(
+@@ -1740,6 +1746,8 @@ void InverseTransformation::_exportToWKT(io::WKTFormatter *formatter) const {
+     }
+ }
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ CoordinateOperationNNPtr InverseTransformation::_shallowClone() const {
+@@ -1754,6 +1762,8 @@ CoordinateOperationNNPtr InverseTransformation::_shallowClone() const {
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ //! @cond Doxygen_Suppress
+ void Transformation::_exportToWKT(io::WKTFormatter *formatter) const {
+     exportTransformationToWKT(formatter);
+@@ -1834,6 +1844,8 @@ void Transformation::_exportToJSON(
+     }
+ }
+ 
++#endif // ENABLE_JSON
++
+ //! @endcond
+ 
+ // ---------------------------------------------------------------------------
+diff --git a/src/lib_proj.cmake b/src/lib_proj.cmake
+index c49310f1..0c767b23 100644
+--- a/src/lib_proj.cmake
++++ b/src/lib_proj.cmake
+@@ -163,8 +163,6 @@ set(SRC_LIBPROJ_TRANSFORMATIONS
+   transformations/molodensky.cpp
+   transformations/vgridshift.cpp
+   transformations/xyzgridshift.cpp
+-  transformations/defmodel.cpp
+-  transformations/tinshift.cpp
+   transformations/vertoffset.cpp
+ )
+ 
+@@ -245,8 +243,6 @@ set(SRC_LIBPROJ_CORE
+   wkt_parser.cpp
+   wkt_parser.hpp
+   zpoly1.cpp
+-  proj_json_streaming_writer.hpp
+-  proj_json_streaming_writer.cpp
+   tracing.cpp
+   grids.hpp
+   grids.cpp
+diff --git a/src/pj_list.h b/src/pj_list.h
+index a71e49a2..512bb6fa 100644
+--- a/src/pj_list.h
++++ b/src/pj_list.h
+@@ -34,7 +34,9 @@ PROJ_HEAD(collg, "Collignon")
+ PROJ_HEAD(col_urban, "Colombia Urban")
+ PROJ_HEAD(comill, "Compact Miller")
+ PROJ_HEAD(crast, "Craster Parabolic (Putnins P4)")
++#ifdef ENABLE_JSON
+ PROJ_HEAD(defmodel, "Deformation model")
++#endif // ENABLE_JSON
+ PROJ_HEAD(deformation, "Kinematic grid shift")
+ PROJ_HEAD(denoy, "Denoyer Semi-Elliptical")
+ PROJ_HEAD(eck1, "Eckert I")
+@@ -159,7 +161,9 @@ PROJ_HEAD(gstmerc,
+ PROJ_HEAD(tcc, "Transverse Central Cylindrical")
+ PROJ_HEAD(tcea, "Transverse Cylindrical Equal Area")
+ PROJ_HEAD(times, "Times Projection")
++#ifdef ENABLE_JSON
+ PROJ_HEAD(tinshift, "Triangulation based transformation")
++#endif // ENABLE_JSON
+ PROJ_HEAD(tissot, "Tissot Conic")
+ PROJ_HEAD(tmerc, "Transverse Mercator")
+ PROJ_HEAD(tobmerc, "Tobler-Mercator")
+diff --git a/src/transformations/defmodel.cpp b/src/transformations/defmodel.cpp
+index 7fa2931e..6bb03f52 100644
+--- a/src/transformations/defmodel.cpp
++++ b/src/transformations/defmodel.cpp
+@@ -374,6 +374,8 @@ static void reassign_context(PJ *P, PJ_CONTEXT *ctx) {
+     }
+ }
+ 
++#ifdef ENABLE_JSON
++
+ PJ *TRANSFORMATION(defmodel, 1) {
+     // Pass a dummy ellipsoid definition that will be overridden just afterwards
+     auto cart = proj_create(P->ctx, "+proj=cart +a=1");
+@@ -437,3 +439,5 @@ PJ *TRANSFORMATION(defmodel, 1) {
+ 
+     return P;
+ }
++
++#endif // ENABLE_JSON
+diff --git a/src/transformations/defmodel.hpp b/src/transformations/defmodel.hpp
+index 398be209..87da4887 100644
+--- a/src/transformations/defmodel.hpp
++++ b/src/transformations/defmodel.hpp
+@@ -36,11 +36,13 @@
+ #ifndef DEFMODEL_HPP
+ #define DEFMODEL_HPP
+ 
++#ifdef ENABLE_JSON
+ #ifdef PROJ_COMPILATION
+ #include "proj/internal/include_nlohmann_json.hpp"
+ #else
+ #include "nlohmann/json.hpp"
+ #endif
++#endif // ENABLE_JSON
+ 
+ #include <algorithm>
+ #include <cmath>
+@@ -58,18 +60,22 @@
+ 
+ namespace DEFORMATON_MODEL_NAMESPACE {
+ 
++#ifdef ENABLE_JSON
+ using json = nlohmann::json;
++#endif // ENABLE_JSON
+ 
+ // ---------------------------------------------------------------------------
+ 
+ /** Spatial extent as a bounding box. */
+ class SpatialExtent {
+   public:
++#ifdef ENABLE_JSON
+     /** Parse the provided object as an extent.
+      *
+      * @throws ParsingException
+      */
+     static SpatialExtent parse(const json &j);
++#endif // ENABLE_JSON
+ 
+     double minx() const { return mMinx; }
+     double miny() const { return mMiny; }
+@@ -129,11 +135,13 @@ class Epoch {
+ /** Component of a deformation model. */
+ class Component {
+   public:
++#ifdef ENABLE_JSON
+     /** Parse the provided object as a component.
+      *
+      * @throws ParsingException
+      */
+     static Component parse(const json &j);
++#endif // ENABLE_JSON
+ 
+     /** Get a text description of the component. */
+     const std::string &description() const { return mDescription; }
+diff --git a/src/transformations/defmodel_impl.hpp b/src/transformations/defmodel_impl.hpp
+index 1e9fbab6..7e4c7ae6 100644
+--- a/src/transformations/defmodel_impl.hpp
++++ b/src/transformations/defmodel_impl.hpp
+@@ -29,6 +29,8 @@
+ #error "Should be included only by defmodel.hpp"
+ #endif
+ 
++#include <map>
++
+ namespace DEFORMATON_MODEL_NAMESPACE {
+ 
+ // ---------------------------------------------------------------------------
+@@ -264,6 +266,8 @@ double Epoch::toDecimalYear() const { return mDecimalYear; }
+ 
+ // ---------------------------------------------------------------------------
+ 
++#ifdef ENABLE_JSON
++
+ static std::string getString(const json &j, const char *key, bool optional) {
+     if (!j.contains(key)) {
+         if (optional) {
+@@ -616,6 +620,8 @@ Component Component::parse(const json &j) {
+     return comp;
+ }
+ 
++#endif // ENABLE_JSON
++
+ // ---------------------------------------------------------------------------
+ 
+ double Component::ConstantTimeFunction::evaluateAt(double) const { return 1.0; }

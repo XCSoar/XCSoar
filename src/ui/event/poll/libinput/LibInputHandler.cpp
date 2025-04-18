@@ -1,0 +1,268 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "LibInputHandler.hpp"
+#include "UdevContext.hpp"
+#include "ui/event/Queue.hpp"
+#include "ui/event/shared/Event.hpp"
+#include "ui/event/poll/linux/Translate.hpp"
+
+#include <libinput.h>
+
+#include <algorithm> // for std::clamp()
+
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <termios.h>
+
+namespace UI {
+
+LibInputHandler::LibInputHandler(EventQueue &_queue) noexcept
+  :queue(_queue),
+   fd(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady)) {}
+
+bool
+LibInputHandler::Open() noexcept
+{
+  if ((nullptr != udev_context)
+      || (nullptr != li_if)
+      || (nullptr != li)
+      || fd.IsDefined())
+    return false;
+
+  if (nullptr == udev_context) {
+    udev_context = new UdevContext(UdevContext::NewRef());
+    if ((nullptr == udev_context) || (nullptr == udev_context->Get())) {
+      return false;
+    }
+  }
+
+  li_if = new libinput_interface;
+  assert(li_if);
+  li_if->open_restricted = [](const char *path, int flags, void* user_data)
+      -> int {
+    return reinterpret_cast<LibInputHandler*>(user_data)->OpenDevice(path,
+                                                                     flags);
+  };
+  li_if->close_restricted = [](int fd, void* user_data) {
+    reinterpret_cast<LibInputHandler*>(user_data)->CloseDevice(fd);
+  };
+
+  li = libinput_udev_create_context(li_if, this, udev_context->Get());
+  if (nullptr == li)
+    return false;
+
+  int assign_seat_ret = libinput_udev_assign_seat(li, UDEV_DEFAULT_SEAT);
+  if (0 != assign_seat_ret)
+    return false;
+
+  int _fd = libinput_get_fd(li);
+  if (_fd < 0)
+    return false;
+
+  fd.Open(FileDescriptor{_fd});
+  fd.ScheduleRead();
+  return true;
+}
+
+void
+LibInputHandler::Close() noexcept
+{
+  fd.ReleaseFileDescriptor();
+
+  if (nullptr != li)
+    libinput_unref(li);
+  li = nullptr;
+
+  if (nullptr != li_if)
+    delete li_if;
+  li_if = nullptr;
+
+  delete udev_context;
+  udev_context = nullptr;
+}
+
+int
+LibInputHandler::OpenDevice(const char *path, int flags) noexcept
+{
+  int fd = open(path, flags);
+  if (fd < 0)
+    return -errno;
+
+  return fd;
+}
+
+void
+LibInputHandler::CloseDevice(int fd) noexcept
+{
+  close(fd);
+}
+
+void
+LibInputHandler::Suspend() noexcept
+{
+  libinput_suspend(li);
+}
+
+void
+LibInputHandler::Resume() noexcept
+{
+  libinput_resume(li);
+}
+
+inline void
+LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
+{
+  int type = libinput_event_get_type(li_event);
+  switch (type) {
+  case LIBINPUT_EVENT_DEVICE_ADDED:
+  case LIBINPUT_EVENT_DEVICE_REMOVED:
+    {
+      libinput_device *event_device = libinput_event_get_device(li_event);
+      assert(nullptr != event_device);
+      if (libinput_device_has_capability(event_device,
+                                         LIBINPUT_DEVICE_CAP_POINTER)) {
+        n_pointers += (LIBINPUT_EVENT_DEVICE_ADDED == type) ? 1 : -1;
+      }
+      if (libinput_device_has_capability(event_device,
+                                         LIBINPUT_DEVICE_CAP_TOUCH)) {
+        n_touch_screens += (LIBINPUT_EVENT_DEVICE_ADDED == type) ? 1 : -1;
+      }
+      if (libinput_device_has_capability(event_device,
+                                         LIBINPUT_DEVICE_CAP_KEYBOARD)) {
+        n_keyboards += (LIBINPUT_EVENT_DEVICE_ADDED == type) ? 1 : -1;
+      }
+    }
+    break;
+
+  case LIBINPUT_EVENT_KEYBOARD_KEY:
+    {
+      /* Discard all data on stdin to avoid that keyboard input data is read
+       * on the executing shell. */
+      tcflush(STDIN_FILENO, TCIFLUSH);
+
+      libinput_event_keyboard *kb_li_event =
+        libinput_event_get_keyboard_event(li_event);
+      uint32_t key_code = libinput_event_keyboard_get_key(kb_li_event);
+      libinput_key_state key_state =
+        libinput_event_keyboard_get_key_state(kb_li_event);
+
+      const auto [translated_key_code, is_char] = TranslateKeyCode(key_code);
+      Event e(key_state == LIBINPUT_KEY_STATE_PRESSED
+                  ? Event::KEY_DOWN : Event::KEY_UP,
+              translated_key_code);
+      e.is_char = is_char;
+      queue.Push(e);
+    }
+    break;
+  case LIBINPUT_EVENT_POINTER_MOTION:
+    {
+      libinput_event_pointer *ptr_li_event =
+        libinput_event_get_pointer_event(li_event);
+      if (-1.0 == x)
+        x = 0.0;
+      if (-1.0 == y)
+        y = 0.0;
+      x += libinput_event_pointer_get_dx(ptr_li_event);
+      x = std::clamp<double>(x, 0, screen_size.width);
+      y += libinput_event_pointer_get_dy(ptr_li_event);
+      y = std::clamp<double>(y, 0, screen_size.height);
+      queue.Push(Event(Event::MOUSE_MOTION,
+                       PixelPoint((unsigned)x, (unsigned)y)));
+    }
+    break;
+  case LIBINPUT_EVENT_POINTER_MOTION_ABSOLUTE:
+    {
+      libinput_event_pointer *ptr_li_event =
+        libinput_event_get_pointer_event(li_event);
+      x = libinput_event_pointer_get_absolute_x_transformed(ptr_li_event,
+                                                            screen_size.width);
+      y = libinput_event_pointer_get_absolute_y_transformed(ptr_li_event,
+                                                            screen_size.height);
+      queue.Push(Event(Event::MOUSE_MOTION,
+                       PixelPoint((unsigned)x, (unsigned)y)));
+    }
+    break;
+  case LIBINPUT_EVENT_POINTER_BUTTON:
+    {
+      libinput_event_pointer *ptr_li_event =
+        libinput_event_get_pointer_event(li_event);
+      libinput_button_state btn_state =
+        libinput_event_pointer_get_button_state(ptr_li_event);
+      queue.Push(Event(btn_state == LIBINPUT_BUTTON_STATE_PRESSED
+                       ? Event::MOUSE_DOWN
+                       : Event::MOUSE_UP,
+                       PixelPoint((unsigned)x, (unsigned)y)));
+    }
+    break;
+  case LIBINPUT_EVENT_POINTER_AXIS:
+    {
+      libinput_event_pointer *ptr_li_event =
+        libinput_event_get_pointer_event(li_event);
+#ifdef LIBINPUT_LEGACY_API
+      double axis_value = libinput_event_pointer_get_axis_value(ptr_li_event);
+#else
+      double axis_value =
+        libinput_event_pointer_get_axis_value(
+          ptr_li_event, LIBINPUT_POINTER_AXIS_SCROLL_VERTICAL);
+#endif
+      if (0 != axis_value) {
+        Event event(Event::MOUSE_WHEEL,
+                    PixelPoint((unsigned)x, (unsigned)y));
+        event.param = unsigned((int) axis_value);
+        queue.Push(event);
+      }
+    }
+    break;
+  case LIBINPUT_EVENT_TOUCH_DOWN:
+    {
+      libinput_event_touch *touch_li_event =
+        libinput_event_get_touch_event(li_event);
+      x = libinput_event_touch_get_x_transformed(touch_li_event,
+                                                 screen_size.width);
+      y = libinput_event_touch_get_y_transformed(touch_li_event,
+                                                 screen_size.height);
+      queue.Push(Event(Event::MOUSE_DOWN,
+                       PixelPoint((unsigned)x, (unsigned)y)));
+    }
+    break;
+  case LIBINPUT_EVENT_TOUCH_UP:
+    {
+      queue.Push(Event(Event::MOUSE_UP,
+                       PixelPoint((unsigned)x, (unsigned)y)));
+    }
+    break;
+  case LIBINPUT_EVENT_TOUCH_MOTION:
+    {
+      libinput_event_touch *touch_li_event =
+        libinput_event_get_touch_event(li_event);
+      x = libinput_event_touch_get_x_transformed(touch_li_event,
+                                                 screen_size.width);
+      y = libinput_event_touch_get_y_transformed(touch_li_event,
+                                                 screen_size.height);
+      queue.Push(Event(Event::MOUSE_MOTION,
+                       PixelPoint((unsigned)x, (unsigned)y)));
+    }
+    break;
+  }
+}
+
+inline void
+LibInputHandler::HandlePendingEvents() noexcept
+{
+  libinput_dispatch(li);
+  for (libinput_event *li_event = libinput_get_event(li);
+       nullptr != li_event;
+       li_event = libinput_get_event(li))
+    HandleEvent(li_event);
+}
+
+void
+LibInputHandler::OnSocketReady(unsigned) noexcept
+{
+  HandlePendingEvents();
+}
+
+} // namespace UI

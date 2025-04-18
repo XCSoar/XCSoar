@@ -1,0 +1,11 @@
+---
+version: 2
+
+build:
+  os: ubuntu-lts-latest
+  tools:
+    python: "latest"
+
+python:
+  install:
+    - requirements: doc/requirements.txt

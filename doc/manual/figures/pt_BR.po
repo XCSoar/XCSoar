@@ -1,0 +1,186 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: xcsoar-figures\n"
+"PO-Revision-Date: 2013-06-01 23:08+0000\n"
+"Last-Translator: Mauro H. M. Tamburini <maurotamburini@hotmail.com>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Language: pt_BR\n"
+"X-Source-Language: C\n"
+
+#: doc/manual/figures/figure_auto_maccready.svg:1
+msgid "Safety height"
+msgstr "Altura de segurança"
+
+#: doc/manual/figures/figure_auto_maccready.svg:12
+msgid "Mc = 4"
+msgstr "Mc = 4"
+
+#: doc/manual/figures/figure_terrain.svg:19
+msgid "(b) Terrain clearance"
+msgstr "(b) Abertura do terreno"
+
+#: doc/manual/figures/figure_auto_maccready.svg:10
+msgid "Mc = 3"
+msgstr "Mc = 3"
+
+#: doc/manual/figures/figure_auto_maccready.svg:9
+msgid "VOpt = 70"
+msgstr "VOpt = 130"
+
+#: doc/manual/figures/figure_terrain.svg:13
+msgid "(b)"
+msgstr ""
+
+#: doc/manual/figures/figure_optimal_cruise.svg:3
+#, fuzzy
+msgid "Glider track during cruise"
+msgstr "Trilha de vôo durante cruzeiro"
+
+#: doc/manual/figures/figure_speed_to_fly.svg:5
+msgid "Airmass Vertical Motion"
+msgstr "Movimento vertical da massa de ar"
+
+#: doc/manual/figures/figure_optimal_cruise.svg:1
+#, fuzzy
+msgid "Optimal cruise track to reach target"
+msgstr "Melhor caminho para alcançar o alvo"
+
+#: doc/manual/figures/figure_auto_maccready.svg:3
+msgid "Below final glide"
+msgstr "Abaixo do planeio final"
+
+#: doc/manual/figures/figure_speed_to_fly.svg:1
+msgid "A constant airspeed is maintained regardless of lift/sink."
+msgstr ""
+"Velocidade do ar é mantida constante independente da subida ou descida."
+
+#: doc/manual/figures/figure_auto_maccready.svg:11
+msgid "VOpt = 80"
+msgstr "VOpt = 148"
+
+#: doc/manual/figures/figure_optimal_cruise.svg:7
+#, fuzzy
+msgid "Target"
+msgstr "Alvo"
+
+#: doc/manual/figures/figure_terrain.svg:8
+#: doc/manual/figures/figure_terrain.svg:15
+msgid "Arrival above safety height"
+msgstr "Chegada acima da altura de segurança"
+
+#: doc/manual/figures/figure_optimal_cruise.svg:2
+#, fuzzy
+msgid "maintaining altitude"
+msgstr "mantendo altitude"
+
+#: doc/manual/figures/figure_terrain.svg:6
+#: doc/manual/figures/figure_terrain.svg:16
+msgid "Glideslope below terrain safety height"
+msgstr "Declive abaixo da altura de segurança do terreno"
+
+#: doc/manual/figures/figure_speed_to_fly.svg:4
+msgid "Dolphin Speed to Fly"
+msgstr "Velocidade de vôo Golfinho"
+
+#: doc/manual/figures/figure_auto_maccready.svg:5
+msgid "VOpt = 50"
+msgstr "VOpt = 92"
+
+#: doc/manual/figures/figure_terrain.svg:7
+#: doc/manual/figures/figure_terrain.svg:17
+msgid "Landpoint unreachable"
+msgstr "Pouso inalcançável"
+
+#: doc/manual/figures/figure_auto_maccready.svg:7
+msgid "VOpt = 60"
+msgstr "VOpt = 111"
+
+#: doc/manual/figures/figure_auto_maccready.svg:13
+msgid "VOpt = 90"
+msgstr "VOpt = 130"
+
+#: doc/manual/figures/figure_terrain.svg:4
+msgid "Best glide angle in wind"
+msgstr "Melhor ângulo de planeio no vento"
+
+#: doc/manual/figures/figure_auto_maccready.svg:6
+msgid "Mc = 1"
+msgstr "Mc = 1"
+
+#: doc/manual/figures/figure_optimal_cruise.svg:8
+#, fuzzy
+msgid "Wind vector"
+msgstr "Vetor de vento"
+
+#: doc/manual/figures/figure_terrain.svg:10
+msgid "Landpoint reachable"
+msgstr "Pouso alcançável"
+
+#: doc/manual/figures/figure_terrain.svg:2
+msgid "terrain safety height"
+msgstr "de segurança do terreno"
+
+#: doc/manual/figures/figure_speed_to_fly.svg:2
+msgid "Airspeed is reduced in lift and increased in sink."
+msgstr "Velocidade do ar é reduzida na subida e aumentada na descida."
+
+#: doc/manual/figures/figure_optimal_cruise.svg:5
+#, fuzzy
+msgid "Drift during cruise"
+msgstr "Deriva durante cruzeiro"
+
+#: doc/manual/figures/figure_terrain.svg:5
+msgid "Arrival below safety height"
+msgstr "Chegada baixo da altura de segurança"
+
+#: doc/manual/figures/figure_terrain.svg:9
+msgid "Glideslope above terrain safety height"
+msgstr "Declive acima da altura do terreno"
+
+#: doc/manual/figures/figure_speed_to_fly.svg:3
+msgid "Block Speed to Fly"
+msgstr "Velocidade travada de vôo"
+
+#: doc/manual/figures/figure_terrain.svg:1
+msgid "unreachable due to"
+msgstr "Inalcançável devido à altura"
+
+#: doc/manual/figures/figure_auto_maccready.svg:8
+msgid "Mc = 2"
+msgstr "Mc = 2"
+
+#: doc/manual/figures/figure_terrain.svg:3
+msgid "terrain warning marker"
+msgstr "marcador de alerta do terreno"
+
+#: doc/manual/figures/figure_optimal_cruise.svg:4
+#, fuzzy
+msgid "Glider heading during cruise"
+msgstr "Planador direcionado durante cruzeiro"
+
+#: doc/manual/figures/figure_terrain.svg:11
+#: doc/manual/figures/figure_terrain.svg:12
+#: doc/manual/figures/figure_terrain.svg:14
+msgid "(a)"
+msgstr ""
+
+#: doc/manual/figures/figure_optimal_cruise.svg:6
+#, fuzzy
+msgid "Drift during climb"
+msgstr "Deriva durante subida"
+
+#: doc/manual/figures/figure_terrain.svg:18
+msgid "(a) Arrival height"
+msgstr "(a) Altura de chegada"
+
+#: doc/manual/figures/figure_auto_maccready.svg:2
+msgid "Above final glide"
+msgstr "Acima do planeio final"
+
+#: doc/manual/figures/figure_auto_maccready.svg:4
+msgid "Mc = 0"
+msgstr "Mc = 0"

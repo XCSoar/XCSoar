@@ -1,0 +1,187 @@
+\chapter{Referência da InfoBox}\label{cha:infobox}
+Os tipos de infobox estão agrupados em categorias lógicas.
+
+Todas as visualizações das infoboxes mudam seus dados e unidades especificadas pelo usuário.  Toda vez que um conteúdo é inválido, aparecerá no mostrador ‘—’ e o texto ficará acinzentado.  Isto acontece, por exemplo, quando não há elevação do terreno encontrada na infobox ‘Terr Elev’ ou da mesma forma para a infobox ‘A AGL’.
+
+Algumas das infoboxes tem seus valores de modificação complexa, como ‘Ajuste MC’ ou ‘Vento’.  A maioria destes valores são acessíveis através da janela Infobox.  É um atalho mudar rapidamente a maioria dos itens.  A janela de Infobox é aberta por um toque longo na Infobox (dispositivos com tela de toque) ou ‘SELEC’ e ENTER (PC, Altair).
+
+Nas descrições seguintes dos tipos de infoboxes, o primeiro título é como aparece na configuração da infobox, o segundo título é o rótulo usado no título da infobox.
+
+
+\newcommand{\ibi}[3]{%
+\jindent{
+\begin{tabular}{r}
+{\bf #1} \\
+\infobox{{#2}} \\
+\end{tabular}}{#3}
+}
+\newcommand{\ibig}[4]{%
+\jindent{
+\begin{tabular}{r}
+{\bf #1} \\
+\infobox{{#2}} \\
+\includegraphics[width=3.5cm,keepaspectratio='true']{#4} \\
+\end{tabular}}{#3}
+}
+
+
+%%%%%%%%%%%
+\section{Altitude}
+
+\ibig{Altitude GPS}{Alt GPS}{Esta é a altitude acima do nível médio do mar mostrado pelo GPS.  No modo de simulação, este valor é ajustável com as teclar acima/abaixo.  As teclas direita/esquerda também fazem o planador girar.\footnotemark[1]}
+{figures/simulator-keys.png}
+\ibi{Altitude barométrica}{Alt Baro}{Esta é a altitude barométrica obtida por um dispositivo equipado com sensor de pressão.\footnotemark}
+\ibi{Altitude (Auto)}{Alt $<$auto$>$}{Esta é altitude barométrica obtida por um dispositivo equipado com sensor de pressão ou altitude do GPS se a altitude barométrica não está disponível.}
+\ibi{Altura AGL}{A AGL}{Esta é a altitude de navegação menos a elevação do terreno, obtida através do arquivo do terreno.  O valor é colorido em vermelho quando a aeronave está abaixo da altura de abertura de segurança do terreno.\footnotemark[1]}  
+\ibi{Elevação do terreno}{Terr Elev}{Esta é a elevação do terreno acima do nível médio do mar obtida através do arquivo de terreno e a localização por GPS.}
+\ibi{Altura acima da decolagem}{H T/O}{Altura baseada em referência automática de elevação (como a referência QFE).\footnotemark[1]}
+\ibi{Nível de vôo}{FL}{Pressão em altitude é fornecida como nível de vôo.  Só estará disponível se houver um sensor barométrico e ajuste correto da QNH.\footnotemark[1]}
+\ibi{Barograma}{Barograma}{Traça a altitude durante o vôo.}
+
+\footnotetext[1]{No modo simulação, uma janela adicional pode alterar o valor da Infobox.}
+
+
+%%%%%%%%%%%
+\section{Estado da Aeronave}
+
+\ibi{Velocidade no solo}{V GND}{Velocidade de solo medida pelo GPS.  Se esta infobox estiver ativa no modo de simulação, teclando as setas acima/abaixo ajustam a velocidade, direita e esquerda viram o planador.}
+\ibi{Caminho}{Caminho}{Trilha magnética reportada pelo GPS.  Se esta infobox estiver ativa no modo de simulação, teclando as setas acima/abaixo ajusta a trilha.}
+\ibi{Velocidade do ar indicada}{V IAS}{Velocidade do ar indicada reportada por um variômetro inteligente externo.}
+\ibi{Carga G}{G}{Magnitude da carga G reportada por um variômetro inteligente externo.  Este valor é negativo em manobras de inclinações negativas.}
+\ibi{Diferença de Proa}{Proa D}{Diferença entre a direção do rastro do planador à direção do próximo waypoint, ou quando em provas AAT, para o pilão dentro do setor AAT.  A navegação por GPS é baseada na direção da trilha no chão e esta direção de trilha pode divergir da direção aponta pela aeronave se houve vento presente.  As barras apontam a direção que a aeronave necessita para alterar seu curso para corrigir a diferença de direção.  Se a aeronave estiver no curso correto, será apontado diretamente ao próximo waypoint.  Esta direção leva em consideração a curvatura da terra.}
+\ibi{Velocidade verdadeira do ar}{V TAS}{Velocidade verdadeira do ar fornecida por um variômetro inteligente externo.}
+\ibi{Indicador de Altitude}{Horizonte}{Indicador de altitude (horizonte artificial) calculado através do caminho de vôo, suplementado com dados de aceleração e variômetro, se disponível.}
+
+
+%%%%%%%%%%%
+\section{Taxa de planeio}
+
+\ibi{GR instantaneous}{GR Inst}{Taxa de planeio instantânea sobre o solo, fornecida pela velocidade de solo dividida pela velocidade vertical (velocidade GPS) nos últimos 20 segundos.  Valores negativos indicam subida.  Se a velocidade vertical estiver próxima de zero, será mostrado '---'.}
+\ibi{Planeio de cruzeiro}{GR Cruise}{Distância do topo da última termal, divida pela altitude perdida desde o topo da última termal.  Valores negativos indicam subida (valor ganho desde que saiu da última termal).  Se a velocidade vertical é próxima de zero, o valor mostrado será '---'.}
+\ibi{Grad Final}{Grad Fin}{TPlaneio final necessário acima do solo para finalizar a prova, fornecido pela distância dividida pela altura necessária para chegar com a altura de segurança.  Não é possível ajustar a energia total.} 
+\ibi{Próximo RP}{WP RP}{A taxa de planeio necessária acima do solo para atingir o próximo wp, fornecido pela distância ao próximo waypoint dividida pela altura necessária para se chegar com a altura de chegada de segurança.  Valores negativos indicam que é necessário subir para alcançar o waypoint.  Se a altura necessária for próxima de zero, será mostrado '---'.}
+\ibi{L/D vario}{L/D Vario}{A taxa de planeio necessária acima do solo para atingir o próximo wp, fornecido pela distância ao próximo waypoint dividida pela altura necessária para se chegar com a altura de chegada de segurança.  Valores negativos indicam que é necessário subir para alcançar o waypoint.  Se a altura necessária for próxima de zero, será mostrado '---'.}
+\ibi{Planeio médio}{GR Avg}{A distância configura em um período de tempo, dividida pela altitude perdida neste mesmo período de tempo.  Valores negativos são mostrados como \^{ }\^{ }\^{ } e indicam subida (ganho de altura).  Acima de 200 de GR o valor é indicado +++.  Você pode configurar o período da média.  Valores sugeridos de 60, 90 ou 120.  Valores mais baixos irão ficar próximos de GR Inst e valores mais altos serão próximos de GR Cruize.  Observe que a distância não é uma linha reta entre sua posição anterior e atual, é exatamente a distância que voou mesmo que seja em zigzag.  Este valor não é calculado quando se gira.}
+
+%%%%%%%%%%%
+\section{Variômetro}
+
+\ibi{Média última térmica}{TL Avg}{Altitude total ganha/perdida na última termal, dividida pelo tempo gasto circulando.} 
+\ibi{Último ganho térmico}{TL Ganho}{Altitude total ganha/perdida na última térmica.}
+\ibi{Hora da última térmica}{TL Tempo}{Tempo gasto circulando na última térmica.}
+\ibi{Subida térmica, últimos 30s}{TC 30s}{Média de subida térmica nos últimos 30 segundos baseada na altitude GPS ou variômetro, se disponível.}
+\ibi{Média térmica}{TC Avg}{Altitude ganha/perdida na termal atual, dividida pelo tempo gasto na termal.}
+\ibi{Ganho Térmico}{TC Ganho}{Altitude ganha/perdida na térmica atual..}
+\ibi{Vario }{Vario}{Velocidade vertical instantânea, fornecida pelo GPS ou se conectado a um variômetro inteligente, a energia total.}
+\ibi{Vario Netto}{Netto}{Velocidade vertical instantânea da massa de ar, igual ao valor do variômetro menos a taxa estimada de afundamento da aeronave.  Melhor se utilizados acelerômetros e variômetros, caso contrário os cálculos são baseados nas medições de GPS e estimativas de vento.}
+\ibi{Traço Vario}{Vario Trace}{Traço da taxa média de subida em cada volta, baseado na altitude do GPS ou variômetro, se disponível.}
+\ibi{Traço vario Netto}{Netto Trace}{Traço da velocidade vertical da massa de ar, igual ao valor do variômetro menos a taxa estimada de afundamento do planador.}
+\ibi{Traço de subida termal}{TC Trace}{Traço da taxa média de subida em cada volta, baseado na altitude do GPS ou variômetro, se disponível.}
+\ibi{Térmica média total}{T Avg}{Média de tempo de subida em todas as térmicas.}
+\ibi{Faixa de ganho}{Climb Band}{Gráfico da taxa média de subida circulando (eixo horizontal) em função da altitude (eixo vertical).}
+
+%%%%%%%%%%%
+\section{Atmosfera}
+
+\ibig{Seta de vento}{Vento}{O vetor de vento estimado pelo XCSoar. O ajuste manual é possível e está conectado com a janela e a infobox.  Apertando o cursor acima/abaixo irá através dos ajustes e para ajustar os valores, tecle direita/esquerda.}
+{figures/infobox-dialog-wind1.png}
+\ibi{Direção do vento}{Wind Brng}{Direção do vento estimada pelo XCSoar.  Ajustável da mesma maneira que a seta do vento.}
+\ibi{Velocidade do vento}{V Vento}{Velocidade do vento estimada pelo XCSoar. Ajustável da mesma maneira que a seta de vento.}
+\ibi{Componente de vento de cabeça}{Head Wind}{Componente de vento de proa atual.  É calculado pelo TAS e velocidade solo do GPS se a velocidade do vento for disponível por dispositivo externo.  Caso contrário, o vento estimado será usado para o cálculo.}
+\ibi{Head wind component (simplified)}{Head Wind*}{Componente de vento de proa atual.  É calculado pela subtração da velocidade de solo do GPS pelo TAS, se houver velocidade do ar fornecida por dispositivo externo.}
+\ibi{Temperatura do ar externo}{OAT}{Temperatura do ar externo medido por sensor se conectado a um variômetro inteligente.}
+\ibi{Umidade relativa}{Hum Rel}{Umidade relativa do ar em percentual.  Medida se houver um sensor conectado a um variômetro inteligente.}
+\ibi{Temperatura prevista}{Temp Max}{Temperatura prevista no chão no aeródromo, usada na estimativa da altura convectiva e base da nuvem em conjunto com os sensores de temperatura e umidade relativa. (Somente tela de toque/PC) Apertando as teclas acima/abaixo, ajusta a temperatura prevista.}
+
+%%%%%%%%%%%
+\section{MacCready}
+
+\ibi{Configuração MacCready }{MC $<$modo$>$}{O ajuste atual de MacCready, o modo do MacCready (manual ou auto) e a velocidade ideal recomendada.  (Somente tela de toque/PC).  Também usado para ajustar o MacCready se a infobox estiver ativa, usando as teclas acima/abaixo.  Apertando a tecla alterna para ‘Auto MacCready’.  Abrirá uma janela}
+\ibi{Velocidade de MacCready}{V MC}{A velocidade ideal de MacCready para vôo otimizado para o próximo waypoint.  Em modo de vôo de cruzeiro, esta velocidade ideal é calculada mantendo altitude.  No modo de planeio final, esta velocidade ideal é calculada para descendente.}
+\ibi{Percentual de subida}{\% Subida}{Percentual de tempo gasto em modo de subida.  Estas estatísticas são zeradas no início da prova.}
+\ibi{Velocidade de golfinho}{Vopt}{Velocidade ideal instantânea de MacCready, fazendo uso dos cálculos do vario netto para determinar a velocidade golfinho de cruzeiro na direção atual do planador.  Em modo de cruzeiro a velocidade ideal é calculada mantendo-se altitude.  No modo de planeio final, esta velocidade ideal é calculada para descendente.  Em modo de subida, alterna para a velocidade de mínimo afundamento com o mesmo fator de carga (se usado um acelerômetro).  Quando o modo ‘Block’ é usado na velocidade ideal, a infobox mostra a velocidade MacCready.}
+\ibi{Thermal next leg equivalent}{T Next Leg}{A taxa de subida da termal na próxima perna que é equivalente a termal igual ao ajuste de MacCready na perna atual.}
+\ibi{Task cruise efficiency}{Cruise Eff}{Eficiência do cruzeiro.  100\% indica desempenho perfeito de MacCready.  Este valor estima a sua eficiência de cruzeiro de acordo com o histórico atual de vôo com o ajuste de MacCready.  Os cálculos são feitos após a prova ter sido iniciada.}
+
+%%%%%%%%%%%
+\section{Navegação}
+
+\ibi{Next Bearing}{Proa}{Direção verdadeira do próximo waypoint.  Para provas AAT, esta é a direção verdadeira ao alvo dentro do setor AAT.}
+\ibi{Next radial}{Radial}{Direção verdadeira do próximo waypoint até a sua posição.}
+\ibi{Próxima distância}{WP Dist}{A distância do waypoint atualmente selecionado.  Para provas AAT, esta é a distância ao alvo dentro da área AAT.}
+\ibi{Diferença na próxima altitude}{WP AltD}{Altitude de chegada ao próximo waypoint relativo à altura de chegada de segurança.  Para provas AAT, os alvos dentro do setor AAT são usados.}
+\ibi{Próximo MC0 diferença de altitude}{WP MC0 AltD}{Altitude de chegada ao próximo waypoint com ajuste zero de MacCready relativo à altitude de chegada de segurança.  Para provas AAT, o alvo dentro do setor AAT é usado.}   
+\ibi{Altitude de chegada próximo ponto}{WP AltA}{Altitude absoluta de chegada no próximo waypoint no planeio final.  Para provas AAT, o alvor dentro do setor AAT é usado.}
+\ibi{Próxima altitude necessária}{WP AltR}{Altitude necessária para alcançar o próximo pilão.  Para provas AAT, o alvo dentro do setor AAT é usado.}
+\ibi{Diferença de altitude final}{Fin AltD}{Altitude de chegada ao final da prova relativa à altura de segurança de chegada.}
+\ibi{Altitude final necessária}{Fin AltR}{Altitude final necessária para finalizar a prova.}
+\ibi{Distância final}{Final Dist}{Distância para finalizar a prova passando pelos pilões.}
+\ibi{Distância para casa}{Home Dist}{Distância para o waypoint casa (se definido).}
+
+
+%%%%%%%%%%%
+\section{Competições e provas de áreas atribuídas}
+\ibi{Velocidade média na prova}{V Task Avg}{Média de velocidade de cross-country enquanto está na prova atual, não compensada pela altitude.}
+\ibi{Velocidade Instantânea da Prova}{V Task Inst}{Velocidade instantânea de cross-country enquanto está na prova atual, compensada pela altitude.  Equivalente à velocidade de cross-country Pirker.}
+\ibi{Velocidade na Prova}{V Task Ach}{Velocidade de cross-country enquanto está na prova atual, compensada pela altitude.  Equipamento a velocidade de cross-country restante Pirker.}
+\ibi{Tempo AA}{AAT Time}{Tempo restante de prova AAT.  Fica vermelho quando o tempo restante expirou.}
+\ibi{Delta Tempo AA}{AAT dT}{Diferença entre o tempo estimado da prova e o tempo mínimo AAT.  Se for vermelho está negativo (chegará muito cedo no final) ou azul se está no setor e pode virar com tempo de chegada estimado maior que o tempo AAT mais 5 minutos.}
+\ibi{Max. Distância AAT}{AAT Dmax}{Distância máxima possível restante para prova AAT.}
+\ibi{Mín. Distância AAT}{AA Dmin}{ Distância mínima possível para restante da prova AAT.}
+\ibi{Velocidade máx. de distância AAT}{AAT Vmax}{Velocidade média alcançável se voar na máxima distância possível em tempo mínimo restante AAT.}
+\ibi{Velocidade mínima de distância AA}{AAT Vmin}{Velocidade média alcançável se voando na mínima distância possível em tempo mínimo restante AAT.}
+\ibi{Distância AAT contornando o objetivo}{AAT DistPts}{Distância AAT ao redor dos alvos restante da prova.}
+\ibi{Velocidade AAT contornando os pontos}{AAT VelPts}{Velocidade média alcançada AAT ao redor dos pontos restantes no mínimo tempo AAT.}
+\ibi{Distância OLC}{OLC Dist}{Avaliação instantânea da distância voada de acordo com as regras da prova OLC configuradas.}
+\ibi{Andamento da prova}{Andamento}{Relógio para mostrar a distância mínima ao longo aprova, mostrando os pontos alcançados da prova.}
+\ibi{Start open/close countdown}{Start open}{Mostra o tempo restante até o início o fim do start.}
+\ibi{Start open/close countdown at reaching}{Start reach}{Mostra o tempo restante até que o start abra ou feche, comparado com o tempo calculado para alcançá-lo.}
+    
+    
+%%%%%%%%%%%
+\section{Waypoint}
+
+\ibi{Próximo ponto de virada}{Próximo}{O nome do pilão atualmente selecionado.  Quando esta infobox está ativa, use as teclas acima/abaixo para selecionar o prévio/próximo waypoint da prova.  (Somente toque de tela/PC) Teclando ENTER o cursor mostra os detalhes do waypoint.}
+\ibi{Duração do vôo}{Dur. Voo}{Tempo transcorrido desde que a decolagem foi detectada.}
+\ibi{Hora local}{Hora loc}{Hora do GPS expressa em hora local.}
+\ibi{Hora UTC}{Hora UTC}{Hora expressa em horário UTC.}
+\ibi{Tempo restante da prova}{Fin ETE}{Tempo estimado para completar a prova, assumindo a performance ideal de MacCready em ciclos de subida e cruzeiro.}
+\ibi{Tempo p fim prova (vel. solo)}{Fin ETE VMS}{Tempo estimado para completar a prova, assumindo que a velocidade solo é mantida.}
+\ibi{Tempo até próx. ponto}{WP ETE}{Tempo até próx. ponto.}
+\ibi{Tempo p próx. ponto (vel. solo)}{ETE PV VMS}{Tempo estimado para o próximo ponto, assumindo que a velocidade no solo é mantida.}
+\ibi{Hora ao término da prova}{Fin ETA}{Hora estimada local para completar a prova, assumindo desempenho ideal de MacCready em modo de subida e cruzeiro.}
+\ibi{Hora no próx. ponto}{WP ETA}{Hora local estimada no próximo waypoint, assumindo desempenho ideal de MacCready em modo de subida/cruzeiro.}
+\ibi{Tend alt req compl prova}{Tendência RH}{Tendência da altura total necessária para completar a prova.}
+\ibi{Tempo sobre altura máx. de largada}{Altura Largada}{Tempo em que o planador esteve abaixo da altura máxima de largada.}
+
+
+%%%%%%%%%%%
+\section{Código do time}
+
+\ibi{Código do time}{Código time}{Código de equipe para esta aeronave.  Use o código para informar aos outros colegas.  O último código da aeronave é informado logo abaixo.}
+\ibi{Proa de equipe}{Team Brng}{Direção para a localização da aeronave na última informação de código.}
+\ibi{Diferença de proa p/ time}{Team BrngD}{Direção relativa à localização da aeronave do último código reportado.}
+\ibi{Distância até a equipe}{Team Dist}{Distância para a localização da aeronave informado no último código.}
+
+%%%%%%%%%%%
+\section{Estado do dispositivo}
+
+\ibi{Porcentagem da bateria}{Battery}{Mostra o percentual restante da bateria (quando aplicável) e estado/voltagem da fonte de energia externa.}
+\ibi{Utilização CPU}{CPU}{Uso médio da CPU pelo XCSoar nos últimos 5 segundos.}
+\ibi{RAM Livre}{RAM Livre}{Mémória RAM livre mostrada pelo sistema.}
+
+%%%%%%%%%%%
+\section{Alternativos}
+
+\ibi{Alternate 1}{Altn 1}{Mostra o nome e direção do melhor ponto de pouso alternativo.}
+\ibi{Alternate 2}{Altn 2}{Mostra o nome e proa para o segundo melhor ponto de pouso alternativo.}
+\ibi{Grad Alternativo 1}{Altn1 GR}{Gradiente geométrico para a altura de chegada acima do melhor ponto alternativo.  Não é ajustado para a energia total.}
+
+%%%%%%%%%%%
+\section{Obstáculos}
+
+\ibi{Horizontal próximo do espaço aéreo}{Próximo AS H}{Distância horizontal ao mais próximo espaço aéreo.}
+\ibi{Vertical próximo ao espaço aéreo}{Próximo AS V}{Distância vertical do próximo espaço aéreo.  O valor positivo significa que o espaço aéreo está acima de você e negativo significa que o espaço aéreo está abaixo.}
+\ibi{Colisão de terreno}{Terr Col}{Distância até a colisão com o terreno mais próximo ao longo da perna atual da prova.  Neste local, a altitude será abaixo da altitude configurada de abertura do terreno.}
+
+

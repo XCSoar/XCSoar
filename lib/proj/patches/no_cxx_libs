@@ -1,0 +1,29 @@
+commit 4508d379d721ea0b0e2c81c0cfd04c5f05ab71d2
+Author: Max Kellermann <max.kellermann@gmail.com>
+Date:   Tue May 30 16:19:24 2023 +0200
+
+    disable CMAKE_CXX_IMPLICIT_LINK_LIBRARIES evaluation
+    
+    The libproj build script uses CMAKE_CXX_IMPLICIT_LINK_LIBRARIES to
+    determine the linker flags in the pkg-config file, and unfortunately,
+    it decided that "-lc++" is a good idea; this forces linking the
+    Android build with libc++_shared.so, adding a runtime dependency,
+    undoing the effect of -static-libstdc++ and breaking the whole app.
+
+diff --git a/cmake/ProjUtilities.cmake b/cmake/ProjUtilities.cmake
+index 2103d3d3..ea4da2a5 100644
+--- a/cmake/ProjUtilities.cmake
++++ b/cmake/ProjUtilities.cmake
+@@ -103,12 +103,6 @@ function(configure_proj_pc)
+   endif()
+   if(WIN32 AND NOT MINGW)
+     list(APPEND EXTRA_LIBS -lole32 -lshell32)
+-  else()
+-    set(cxx_libs "${CMAKE_CXX_IMPLICIT_LINK_LIBRARIES}")
+-    list(REMOVE_ITEM cxx_libs ${CMAKE_C_IMPLICIT_LINK_LIBRARIES} nonempty)
+-    foreach(lib IN LISTS cxx_libs)
+-      list(APPEND EXTRA_LIBS "-l${lib}")
+-    endforeach()
+   endif()
+   if(HAVE_LIBM AND NOT "-lm" IN_LIST EXTRA_LIBS)
+     list(APPEND EXTRA_LIBS -lm)

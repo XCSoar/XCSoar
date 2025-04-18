@@ -1,0 +1,1290 @@
+# -------------------
+# GlideComputerEvents
+# -------------------
+
+mode=default
+type=gce
+data=TASK_START
+event=Beep 1
+event=TaskTransition start
+
+mode=default
+type=gce
+data=TASK_FINISH
+event=Beep 1
+event=TaskTransition finish
+
+mode=default
+type=gce
+data=TASK_NEXTWAYPOINT
+event=Beep 1
+event=TaskTransition next
+
+mode=default
+type=gce
+data=GPS_CONNECTION_WAIT
+
+mode=default
+type=gce
+data=COMMPORT_RESTART
+
+mode=default
+type=gce
+data=GPS_FIX_WAIT
+
+mode=default
+type=gce
+data=STARTUP_SIMULATOR
+
+mode=default
+type=gce
+data=STARTUP_REAL
+
+mode=default
+type=gce
+data=TAKEOFF
+event=AutoLogger start
+event=AddWaypoint takeoff
+event=StatusMessage Takeoff
+
+mode=default
+type=gce
+data=LANDING
+event=StatusMessage Landing
+event=AutoLogger stop
+
+mode=default
+type=gce
+data=FLIGHTMODE_FINALGLIDE_ABOVE
+event=StatusMessage Above final glide
+
+mode=default
+type=gce
+data=FLIGHTMODE_FINALGLIDE_BELOW
+event=StatusMessage Below final glide
+
+mode=default
+type=gce
+data=FLIGHTMODE_FINALGLIDE_TERRAIN
+event=StatusMessage Final glide through terrain
+
+mode=default
+type=gce
+data=LANDABLE_UNREACHABLE
+event=Beep 1
+
+# ------------
+# mode=default
+# ------------
+
+mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Config3 Info1 Info2 Menu Vario1 Vario2
+type=key
+data=ESCAPE
+event=Mode default
+
+mode=default pan
+type=key
+data=ESCAPE
+event=Page restore
+
+mode=default.Traffic
+type=key
+data=RETURN
+event=Traffic details
+
+###### pan mode
+
+mode=pan
+type=key
+data=DOWN
+event=Pan down
+
+mode=pan
+type=key
+data=UP
+event=Pan up
+
+mode=pan
+type=key
+data=LEFT
+event=Pan left
+
+mode=pan
+type=key
+data=RIGHT
+event=Pan right
+
+mode=pan
+type=key
+data=APP1
+event=Pan off
+label=Cancel
+location=1
+
+mode=pan
+type=key
+data=APP2
+event=Zoom in
+label=Zoom\n+
+location=2
+
+mode=pan
+type=key
+data=APP3
+event=Zoom out
+label=Zoom\n-
+location=3
+
+mode=pan
+type=key
+data=APP4
+event=NearestMapItems
+label=What's here?
+location=4
+
+mode=pan
+type=key
+data=F1
+event=Zoom in
+location=5
+
+mode=pan
+type=key
+data=F3
+event=Zoom out
+location=6
+
+mode=pan
+type=key
+data=RETURN
+event=NearestMapItems
+location=7
+
+###### main entry buttons
+
+mode=default
+type=key
+data=F1
+event=QuickMenu
+
+mode=default
+type=key
+data=F2
+event=Analysis
+event=Mode default
+
+mode=default
+type=key
+data=F3
+event=Checklist
+event=Mode default
+
+mode=default
+type=key
+data=F4
+event=FlarmTraffic
+event=Mode default
+
+mode=default
+type=key
+data=F5
+event=GotoLookup
+event=Mode default
+
+mode=default
+type=key
+data=F6
+event=Setup Alternates
+event=Mode default
+
+mode=default
+type=key
+data=F7
+event=Setup Task
+event=Mode default
+
+mode=default
+type=key
+data=F8
+event=Setup Basic
+event=Mode default
+
+mode=default
+type=key
+data=MENU
+event=Mode Menu
+
+mode=default
+type=key
+data=APP1
+event=Mode Nav1
+
+mode=default
+type=key
+data=APP2
+event=Mode Display1
+
+mode=default
+type=key
+data=APP3
+event=Mode Config1
+
+mode=default
+type=key
+data=APP4
+event=Mode Info1
+
+# Always active buttons. (unless over-written)
+
+mode=default
+type=key
+data=DOWN
+event=Zoom out
+
+mode=default
+type=key
+data=UP
+event=Zoom in
+
+mode=default
+type=key
+data=RETURN
+event=FLARMRadar toggle
+event=ClearAirspaceWarnings
+event=ClearStatusMessages
+
+mode=default
+type=key
+data=LEFT
+event=ScreenModes previous
+
+mode=default
+type=key
+data=RIGHT
+event=ScreenModes next
+
+# Gestures
+
+mode=default
+type=gesture
+data=U
+event=Zoom in
+
+mode=default
+type=gesture
+data=D
+event=Zoom out
+
+mode=default
+type=gesture
+data=UD
+event=Zoom auto show
+event=Zoom auto on
+
+mode=default
+type=gesture
+data=R
+event=ScreenModes previous
+
+mode=default
+type=gesture
+data=L
+event=ScreenModes next
+
+mode=default
+type=gesture
+data=DR
+event=WaypointDetails select
+
+mode=default
+type=gesture
+data=DL
+event=Setup Alternates
+
+mode=default
+type=gesture
+data=DU
+event=Mode Menu
+
+mode=default
+type=gesture
+data=RD
+event=Calculator
+
+mode=default
+type=gesture
+data=URD
+event=Analysis
+
+mode=default
+type=gesture
+data=LDR
+event=Checklist
+
+mode=default
+type=gesture
+data=URDL
+event=Pan on
+
+mode=default
+type=gesture
+data=LDRDL
+event=Status all
+
+###
+
+mode=default
+type=key
+data=6
+event=Setup Basic
+event=Mode default
+
+mode=default
+type=key
+data=7
+event=Calculator
+
+#mode=default
+#type=key
+#data=8
+#event=Setup Task
+#event=Mode default
+
+mode=default
+type=key
+data=9
+event=Setup Target
+
+#mode=default
+#type=key
+#data=0
+#event=ArmAdvance show
+#event=ArmAdvance toggle
+
+
+# -------------
+# mode=Nav1
+# -------------
+
+mode=Nav1
+type=key
+data=APP1
+event=Mode Nav2
+label=Nav\nPage 2/2
+location=1
+
+mode=Nav1
+type=key
+data=6
+event=Calculator
+event=Mode default
+label=Task Manager
+location=5
+
+mode=Nav1
+type=key
+data=7
+event=AdjustWaypoint previousarm
+label=$(WaypointPreviousArm)
+location=6
+
+mode=Nav1
+type=key
+data=8
+event=AdjustWaypoint nextarm
+label=$(WaypointNextArm)
+location=7
+
+mode=Nav1
+type=key
+data=9
+event=WaypointDetails select
+event=Mode default
+label=Waypoint List$(CheckWaypointFile)
+location=8
+
+mode=Nav1
+type=key
+data=0
+event=Setup Alternates
+event=Mode default
+label=Alternates$(CheckWaypointFile)
+location=9
+
+# -------------
+# mode=Nav2
+# -------------
+
+mode=Nav2
+type=key
+data=APP1
+event=Mode default
+label=Cancel
+location=1
+
+mode=Nav2
+type=key
+data=6
+event=Mode default
+event=AbortTask toggle
+label=Task\n$(TaskAbortToggleActionName)$(CheckWaypointFile)
+location=5
+
+mode=Nav2
+type=key
+data=7
+event=Mode default
+event=StatusMessage Dropped marker
+event=Logger note Mark
+event=MarkLocation
+label=Marker Drop
+location=6
+
+mode=Nav2
+type=key
+data=8
+event=Mode default
+event=StatusMessage Pilot event announced
+event=Logger note PEV
+event=PilotEvent
+label=Pilot Event Announce
+location=7
+
+mode=Nav2
+type=key
+data=9
+event=Setup Target
+event=Mode default
+label=Target Show$(CheckTask)$(CheckTaskResumed)
+location=8
+
+# -------------
+# mode=Display1
+# -------------
+
+mode=Display1
+type=key
+data=APP2
+event=Mode Display2
+label=Display\nPage 2/2
+location=2
+
+
+mode=Display1
+type=key
+data=6
+event=Zoom in
+label=Zoom\n+
+location=5
+
+mode=Display1
+type=key
+data=7
+event=Zoom out
+label=Zoom\n-
+location=6
+
+mode=Display1
+type=key
+data=8
+event=Zoom auto show
+event=Zoom auto toggle
+label=Zoom\n$(ZoomAutoToggleActionName)
+location=7
+
+mode=Display1
+type=key
+data=9
+event=ScreenModes cycle
+label=Page Show\n$(NextPageName)
+location=8
+
+mode=Display1
+type=key
+data=0
+event=Pan on
+label=Pan Mode
+location=9
+
+# -------------
+# mode=Display2
+# -------------
+
+mode=Display2
+type=key
+data=APP2
+event=Mode default
+label=Cancel
+location=2
+
+mode=Display2
+type=key
+data=6
+event=DeclutterLabels show
+event=DeclutterLabels toggle
+label=Labels\n$(MapLabelsToggleActionName)
+location=5
+
+mode=Display2
+type=key
+data=7
+event=SnailTrail show
+event=SnailTrail toggle
+label=Trail\n$(SnailTrailToggleName)
+location=6
+
+mode=Display2
+type=key
+data=8
+event=TerrainTopography terrain toggle
+label=Terrain\n$(TerrainToggleActionName)
+location=7
+
+mode=Display2
+type=key
+data=9
+event=TerrainTopography topography toggle
+label=Topo.\n$(TopographyToggleActionName)
+location=8
+
+mode=Display2
+type=key
+data=0
+event=AirSpace toggle
+label=Airspace\n$(AirspaceToggleActionName)
+location=9
+
+# -------------
+# mode=Config1
+# -------------
+mode=Config1
+type=key
+data=APP3
+event=Mode Config2
+label=Config\nPage 2/3
+location=3
+
+mode=Config1
+type=key
+data=6
+event=Setup System
+event=Mode default
+label=System
+location=5
+
+mode=Config1
+type=key
+data=7
+event=Setup Plane
+event=Mode default
+label=Plane
+location=6
+
+mode=Config1
+type=key
+data=8
+event=Device list
+event=Mode default
+label=Devices
+location=7
+
+mode=Config1
+type=key
+data=9
+event=Setup Basic
+event=Mode default
+label=Flight
+location=8
+
+mode=Config1
+type=key
+data=0
+event=Setup Wind
+event=Mode default
+label=Wind
+location=9
+
+# -------------
+# mode=Config2
+# -------------
+mode=Config2
+type=key
+data=APP3
+event=Mode Config3
+label=Config\nPage 3/3
+location=3
+
+mode=Config2
+type=key
+data=6
+event=Setup Profile
+event=Mode default
+label=Profiles
+location=5
+
+mode=Config2
+type=key
+data=8
+event=WaypointEditor
+event=Mode default
+label=Waypoint Editor
+location=7
+
+mode=Config2
+type=key
+data=9
+event=FileManager
+event=Mode default
+label=File Manager
+location=8
+
+mode=Config2
+type=key
+data=0
+event=Setup Replay
+event=Mode default
+label=Replay$(CheckReplay)
+location=9
+
+# -------------
+# mode=Config3
+# -------------
+mode=Config3
+type=key
+data=APP3
+event=Mode default
+label=Cancel
+location=3
+
+mode=Config3
+type=key
+data=6
+event=Logger show
+event=Logger toggle ask
+label=Logger\n$(LoggerActive)$(CheckLogger)
+location=5
+
+mode=Config3
+type=key
+data=8
+event=Logger nmea
+label=Raw Logger$(CheckLogger)
+location=6
+
+mode=Config3
+type=key
+data=7
+event=RunLuaFile
+event=Mode default
+label=Lua
+location=7
+
+mode=Config3
+type=key
+data=9
+event=Mode Vario1
+label=Vega$(CheckVega)
+location=8
+
+# -------------
+# mode=Vario1
+# -------------
+
+mode=Vario1
+type=key
+data=APP3
+event=Mode Vario2
+label=Vega\nPage 2/2
+location=3
+
+mode=Vario1
+type=key
+data=6
+event=Setup Switches
+event=Mode default
+label=Airframe Switches
+location=5
+
+mode=Vario1
+type=key
+data=8
+event=AdjustVarioFilter xdemo
+label=Manual Demo
+location=7
+
+mode=Vario1
+type=key
+data=9
+event=AdjustVarioFilter zero
+label=Setup Stall
+location=8
+
+mode=Vario1
+type=key
+data=0
+event=AdjustVarioFilter accel
+label=Accel
+location=9
+
+# -------------
+# mode=Vario2
+# -------------
+
+mode=Vario2
+type=key
+data=APP3
+event=Mode default
+label=Vega\n2/2
+location=3
+
+mode=Vario2
+type=key
+data=6
+event=AdjustVarioFilter zero
+event=StatusMessage Vario ASI zeroed
+label=ASI Zero
+location=5
+
+mode=Vario2
+type=key
+data=7
+event=StatusMessage Accelerometer leveled
+label=Accel Zero
+location=6
+
+mode=Vario2
+type=key
+data=8
+event=AdjustVarioFilter save
+event=StatusMessage Stored to EEPROM
+label=Store
+location=7
+
+mode=Vario2
+type=key
+data=9
+event=AdjustVarioFilter demostf
+label=Cruise Demo
+location=8
+
+mode=Vario2
+type=key
+data=0
+event=AdjustVarioFilter democlimb
+label=Climb Demo
+location=9
+
+# -------------
+# mode=Info1
+# -------------
+mode=Info1
+type=key
+data=APP4
+event=Mode Info2
+label=Info\nPage 2/3
+location=4
+
+mode=Info1
+type=key
+data=6
+event=FlarmTraffic
+event=Mode default
+label=FLARM Radar$(CheckFLARM)
+location=5
+
+mode=Info1
+type=key
+data=7
+event=Weather
+event=Mode default
+label=Weather
+location=6
+
+mode=Info1
+type=key
+data=8
+event=NearestMapItems
+event=Mode default
+label=What's here?
+location=7
+
+mode=Info1
+type=key
+data=9
+event=Checklist
+event=Mode default
+label=Checklist
+location=8
+
+mode=Info1
+type=key
+data=0
+event=Analysis
+event=Mode default
+label=Analysis
+location=9
+
+# -------------
+# mode=Info2
+# -------------
+mode=Info2
+type=key
+data=APP4
+event=Mode Info3
+label=Info\nPage 3/3
+location=4
+
+mode=Info2
+type=key
+data=6
+event=Status all
+event=Mode default
+label=Status
+location=5
+
+mode=Info2
+type=key
+data=8
+event=Setup Teamcode
+event=Mode default
+label=Team Code
+location=7
+
+mode=Info2
+type=key
+data=9
+event=FlarmDetails
+event=Mode default
+label=Traffic List
+location=8
+
+mode=Info2
+type=key
+data=0
+event=ThermalAssistant
+event=Mode default
+label=Thermal Assistant
+location=9
+
+# -------------
+# mode=Info3
+# -------------
+mode=Info3
+type=key
+data=APP4
+event=Mode default
+label=Cancel
+location=4
+
+
+mode=Info3
+type=key
+data=6
+event=Credits
+event=Mode default
+label=Credits
+location=5
+
+mode=Info3
+type=key
+data=7
+event=AirSpace list
+event=Mode default
+label=Airspaces
+location=6
+
+mode=Info3
+type=key
+data=8
+event=RepeatStatusMessage
+label=Message Repeat
+location=7
+
+# -------------
+# mode=Menu
+# -------------
+
+mode=Menu
+type=key
+data=APP1
+event=Mode Nav1
+label=Nav
+location=1
+
+mode=Menu
+type=key
+data=APP2
+event=Mode Display1
+label=Display
+location=2
+
+mode=Menu
+type=key
+data=APP3
+event=Mode Config1
+label=Config
+location=3
+
+mode=Menu
+type=key
+data=APP4
+event=Mode Info1
+label=Info
+location=4
+
+mode=Menu
+type=key
+data=9
+event=LockScreen
+event=Mode default
+label=Lock Screen
+location=7
+
+mode=Menu
+type=key
+data=9
+event=Mode default
+label=Cancel
+location=8
+
+mode=Menu
+type=key
+data=0
+event=Exit system
+event=Mode default
+label=Quit
+location=9
+
+# ----------------------------------
+# mode=default.TA (ThermalAssistant)
+# ----------------------------------
+
+# ---------------------
+# mode=Display1.Traffic
+# ---------------------
+
+mode=Display1.Traffic
+type=key
+data=6
+event=Traffic zoom in
+label=Zoom\n+
+location=5
+
+mode=Display1.Traffic
+type=key
+data=7
+event=Traffic zoom out
+label=Zoom\n-
+location=6
+
+mode=Display1.Traffic
+type=key
+data=8
+event=Traffic zoom auto toggle
+label=Zoom\n$(TrafficZoomAutoToggleActionName)
+location=7
+
+mode=Display1.Traffic
+type=key
+data=0
+event=Traffic northup toggle
+label=$(TrafficNorthUpToggleActionName)
+location=9
+
+mode=Display2.Traffic
+type=key
+data=6
+event=Traffic label toggle
+label=AVG/ALT
+location=5
+
+# -------------
+# mode=RemoteStick
+# -------------
+
+mode=RemoteStick
+type=key
+data=0
+event=Calculator
+event=Mode default
+label=Task
+location=0
+
+mode=RemoteStick
+type=key
+data=0
+event=AdjustWaypoint previousarm
+label=$(WaypointPreviousArm)
+location=1
+
+mode=RemoteStick
+type=key
+data=0
+event=AdjustWaypoint nextarm
+label=$(WaypointNextArm)
+location=2
+
+mode=RemoteStick
+type=key
+data=0
+event=WaypointDetails select
+event=Mode default
+label=Waypoint List$(CheckWaypointFile)
+location=3
+
+mode=RemoteStick
+type=key
+data=0
+event=Setup Alternates
+event=Mode default
+label=Alternates$(CheckWaypointFile)
+location=4
+
+mode=RemoteStick
+type=key
+data=0
+event=Mode default
+event=AbortTask toggle
+label=Task\n$(TaskAbortToggleActionName)$(CheckWaypointFile)
+location=5
+
+mode=RemoteStick
+type=key
+data=0
+event=GotoLookup
+event=Mode default
+label=GoTo$(CheckWaypointFile)
+location=6
+
+mode=RemoteStick
+type=key
+data=0
+event=Setup Target
+event=Mode default
+label=Target Show$(CheckTask)$(CheckTaskResumed)
+location=7
+
+
+mode=RemoteStick
+type=key
+data=0
+event=Zoom auto show
+event=Zoom auto toggle
+label=Zoom\n$(ZoomAutoToggleActionName)
+location=9
+
+mode=RemoteStick
+type=key
+data=0
+event=Mode default
+event=StatusMessage Dropped marker
+event=Logger note Mark
+event=MarkLocation
+label=Marker Drop
+location=10
+
+mode=RemoteStick
+type=key
+data=0
+event=Pan on
+label=Pan Mode
+location=11
+
+mode=RemoteStick
+type=key
+data=0
+event=DeclutterLabels show
+event=DeclutterLabels toggle
+label=Labels\n$(MapLabelsToggleActionName)
+location=12
+
+mode=RemoteStick
+type=key
+data=0
+event=SnailTrail show
+event=SnailTrail toggle
+label=Trail\n$(SnailTrailToggleName)
+location=13
+
+mode=RemoteStick
+type=key
+data=0
+event=TerrainTopography terrain toggle
+label=Terrain\n$(TerrainToggleActionName)
+location=14
+
+mode=RemoteStick
+type=key
+data=0
+event=TerrainTopography topography toggle
+label=Topo.\n$(TopographyToggleActionName)
+location=15
+
+
+mode=RemoteStick
+type=key
+data=0
+event=MacCready auto show
+event=MacCready auto toggle
+label=$(CheckAutoMc)MC\n$(MacCreadyToggleActionName)
+location=16
+
+mode=RemoteStick
+type=key
+data=0
+event=Setup Basic
+event=Mode default
+label=Flight Setup
+location=17
+
+mode=RemoteStick
+type=key
+data=0
+event=Setup Wind
+event=Mode default
+label=Setup Wind
+location=18
+
+mode=RemoteStick
+type=key
+data=0
+event=Setup System
+event=Mode default
+label=Setup System
+location=19
+
+mode=RemoteStick
+type=key
+data=0
+event=Setup Airspace
+event=Mode default
+label=Settings Airspace$(CheckAirspace)
+location=20
+
+mode=RemoteStick
+type=key
+data=0
+event=Logger show
+event=Logger toggle ask
+label=Logger\n$(LoggerActive)$(CheckLogger)
+location=21
+
+mode=RemoteStick
+type=key
+data=0
+event=Logger nmea
+label=Raw Logger$(CheckLogger)
+location=22
+
+mode=RemoteStick
+type=key
+data=0
+event=Device list
+event=Mode default
+label=Devices
+location=23
+
+mode=RemoteStick
+type=key
+data=0
+event=Setup Plane
+event=Mode default
+label=Setup Plane
+location=24
+
+mode=RemoteStick
+type=key
+data=0
+event=FlarmTraffic
+label=FLARM Radar$(CheckFLARM)
+location=25
+
+mode=RemoteStick
+type=key
+data=0
+event=Weather
+event=Mode default
+label=Weather
+location=26
+
+mode=RemoteStick
+type=key
+data=0
+event=NearestAirspaceDetails
+event=Mode default
+label=Nearest Airspace$(CheckAirspace)
+location=27
+
+mode=RemoteStick
+type=key
+data=0
+event=Checklist
+event=Mode default
+label=Checklist
+location=28
+
+mode=RemoteStick
+type=key
+data=0
+event=Analysis
+event=Mode default
+label=Analysis
+location=29
+
+mode=RemoteStick
+type=key
+data=0
+event=Status all
+event=Mode default
+label=Status
+location=30
+
+mode=RemoteStick
+type=key
+data=0
+event=ThermalAssistant
+event=Mode default
+label=Thermal Assistant$(CheckCircling)
+location=31
+
+mode=RemoteStick
+type=key
+data=0
+event=FileManager
+event=Mode default
+label=File Manager
+location=32
+
+mode=RemoteStick
+type=key
+data=0
+event=Mode default
+event=StatusMessage Pilot event announced
+event=Logger note PEV
+event=PilotEvent
+label=Pilot Event Announce
+location=33
+
+mode=RemoteStick
+type=key
+data=0
+event=AirSpace toggle
+label=Airspace\n$(AirspaceToggleActionName)
+location=34
+
+mode=RemoteStick
+type=key
+data=0
+event=Exit
+label=Quit XCSoar
+location=35
+
+# -------------
+# Define gesture to open Quickmenu without keyboard or remote
+# ("Draw a button on the screen")
+# -------------
+
+mode=default
+type=gesture
+data=ULDR
+event=QuickMenu

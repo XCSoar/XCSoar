@@ -1,0 +1,129 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#pragma once
+
+#include "Blackboard/BaseBlackboard.hpp"
+#include "TerrainXSRenderer.hpp"
+#include "AirspaceXSRenderer.hpp"
+#include "Engine/GlideSolvers/GlideSettings.hpp"
+#include "Engine/GlideSolvers/GlidePolar.hpp"
+
+struct PixelRect;
+struct MoreData;
+struct CrossSectionLook;
+struct AirspaceLook;
+struct ChartLook;
+struct MapSettings;
+class Airspaces;
+class RasterTerrain;
+class ChartRenderer;
+class Canvas;
+
+/**
+ * A Window which renders a terrain and airspace cross-section
+ */
+class CrossSectionRenderer :
+  public BaseBlackboard
+{
+public:
+  static constexpr unsigned NUM_SLICES = 64;
+  const bool inverse;
+
+protected:
+  const CrossSectionLook &look;
+  const ChartLook &chart_look;
+
+  GlideSettings glide_settings;
+  GlidePolar glide_polar;
+
+  AirspaceXSRenderer airspace_renderer;
+  TerrainXSRenderer terrain_renderer;
+
+  /** Pointer to a RasterTerrain instance or NULL */
+  const RasterTerrain *terrain = nullptr;
+
+  /** Pointer to an airspace database instance or NULL */
+  const Airspaces *airspace_database = nullptr;
+
+  /** Left side of the CrossSectionWindow */
+  GeoPoint start = GeoPoint::Invalid();
+  /** Range and direction of the CrossSection */
+  GeoVector vec{50000, Angle::Zero()};
+
+public:
+  /**
+   * Constructor. Initializes most class members.
+   */
+  CrossSectionRenderer(const CrossSectionLook &look,
+                       const AirspaceLook &airspace_look,
+                       const ChartLook &chart_look,
+                       bool _inverse) noexcept;
+
+  void ReadBlackboard(const MoreData &_gps_info,
+                      const DerivedInfo &_calculated_info,
+                      const GlideSettings &glide_settings,
+                      const GlidePolar &glide_polar,
+                      const MapSettings &map_settings);
+
+  /**
+   * Renders the CrossSection to the given canvas in the given PixelRect
+   * @param canvas Canvas to draw on
+   * @param rc PixelRect to draw in
+   */
+  void Paint(Canvas &canvas, const PixelRect rc) const;
+
+  /**
+   * Set airspace database to use
+   * @param _airspace_database Pointer to the airspace database or NULL
+   */
+  void SetAirspaces(const Airspaces *_airspace_database) {
+    airspace_database = _airspace_database;
+  }
+
+  /**
+   * Set RasterTerrain to use
+   * @param _terrain Pointer to the RasterTerrain or NULL
+   */
+  void SetTerrain(const RasterTerrain *_terrain) {
+    terrain = _terrain;
+  }
+
+  /**
+   * Set CrossSection range
+   * @param range Range to draw [m]
+   */
+  void SetRange(double range) {
+    vec.distance = range;
+  }
+
+  /**
+   * Set CrossSection direction
+   * @param bearing Direction to draw
+   */
+  void SetDirection(Angle bearing) {
+    vec.bearing = bearing;
+  }
+
+  /**
+   * Set CrossSection start point
+   * @param _start Start GeoPoint to use for drawing
+   */
+  void SetStart(GeoPoint _start) {
+    start = _start;
+  }
+
+  void SetInvalid() {
+    vec.SetInvalid();
+    start.SetInvalid();
+  }
+
+protected:
+  void UpdateTerrain(TerrainHeight *elevations) const;
+
+  void PaintGlide(ChartRenderer &chart) const;
+  void PaintAircraft(Canvas &canvas, const ChartRenderer &chart,
+                     const PixelRect rc) const;
+  void PaintGrid(Canvas &canvas, ChartRenderer &chart) const;
+  void PaintWorking(ChartRenderer &chart) const;
+};

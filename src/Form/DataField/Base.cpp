@@ -1,0 +1,54 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "Base.hpp"
+#include "Listener.hpp"
+#include "ComboList.hpp"
+
+#include <math.h>
+
+DataField::DataField(Type _type, bool _supports_combolist,
+                     DataFieldListener *_listener) noexcept
+  :listener(_listener),
+   supports_combolist(_supports_combolist), type(_type),
+   item_help_enabled(false)
+{
+}
+
+void
+DataField::Modified() noexcept
+{
+  if (on_modified)
+    on_modified();
+
+  if (listener != nullptr)
+    listener->OnModified(*this);
+}
+
+void
+DataField::Inc() noexcept
+{
+}
+
+void
+DataField::Dec() noexcept
+{
+}
+
+const TCHAR *
+DataField::GetAsString() const noexcept
+{
+  return nullptr;
+}
+
+const TCHAR *
+DataField::GetAsDisplayString() const noexcept
+{
+  return GetAsString();
+}
+
+ComboList
+DataField::CreateComboList([[maybe_unused]] const TCHAR *reference) const noexcept
+{
+  return ComboList();
+}

@@ -1,0 +1,38 @@
+\def\maketitle{%
+  \null
+  \thispagestyle{empty}%
+  \begin{maxipage}
+    \begin{center}
+    \includegraphics[angle=0,width=0.5\textwidth,keepaspectratio='true']{graphics/logo.png}
+    \vskip 0.5cm
+    \includegraphics[angle=0,width=0.66\textwidth,keepaspectratio='true']{graphics/title.pdf}
+    \end{center}
+    \begin{center}
+      \normalfont\huge\textsf{O computador de vôo de código aberto}\par
+    \end{center}
+    \vskip 1cm
+    \begin{center}
+      \normalfont\huge\textsf{\@title}\par
+    \end{center}
+    \vskip 1cm
+  \end{maxipage}
+
+  \vfill
+  \todo[nolist,size=\Large,inline]{Draft state, better you wait printing the
+  whole manual}
+
+  \begin{flushright}
+    \large \strut {
+      \sf
+      \today \\
+      For XCSoar version \version \\
+      \xcsoarwebsite{} \\
+    } 
+    \par
+  \end{flushright}
+  \par
+  \vfil
+  \vfil
+  \null
+  \cleardoublepage
+}

@@ -1,0 +1,7 @@
+name,code,country,lat,lon,elev,style,rwdir,rwlen,freq,desc
+"Aconcagua","Aconcagua",,3239.200S,07000.700W,6962.0m,7,0,0.0m,"","Highest mountain in south-america"
+"Bergneustadt","",,5103.117N  ,00742.367E,  488.0m,  5  ,040,590m,"123.650" , "Rabbit holes, 20" ditch south end of rwy"
+"Golden Gate Bridge","GGB",,3749.050N,12228.700W,227.0m,14,0,0.005NM,"",""
+"Red Square","RedSqr",,5545.250N,03737.200E,123.0m,3,90,0.01ml,"",""
+"Sydney Opera","Opera",,3351.417S,15112.916E,5.0m,1,0,0.0m,"",""
+-----Related Tasks-----

@@ -1,0 +1,49 @@
+#!/usr/bin/make -f
+# -*- mode: makefile; coding: utf-8 -*-
+
+OPTIONS =
+
+TARGET = UNIX
+OPTIONS += TARGET=$(TARGET)
+
+# allow Debian builds in the same repository as normal builds
+TARGET_OUTPUT_DIR = output/DEBIAN-$(TARGET)
+OPTIONS += TARGET_OUTPUT_DIR=$(TARGET_OUTPUT_DIR)
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+  OPTIONS += DEBUG=y
+else
+  OPTIONS += DEBUG=n
+endif
+
+ifneq (,$(findstring clang,$(DEB_BUILD_OPTIONS)))
+  OPTIONS += CLANG=y
+endif
+
+ifneq (,$(findstring ccache,$(DEB_BUILD_OPTIONS)))
+  OPTIONS += USE_CCACHE=y
+endif
+
+ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+  NUMJOBS = $(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+  OPTIONS += -j$(NUMJOBS)
+endif
+
+%:
+	dh $@
+
+.PHONY: override_dh_auto_build
+override_dh_auto_build:
+	$(MAKE) $(OPTIONS) all mo
+
+.PHONY: override_dh_auto_test
+override_dh_auto_test:
+	$(MAKE) $(OPTIONS) check
+
+.PHONY: override_dh_auto_clean
+override_dh_auto_clean:
+	rm -rf $(TARGET_OUTPUT_DIR) output/data output/host output/include output/po output/test
+
+.PHONY: override_dh_auto_install
+override_dh_auto_install:
+	$(MAKE) $(OPTIONS) install-bin install-mo DESTDIR=`pwd`/debian/tmp

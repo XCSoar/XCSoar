@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+ <g transform="matrix(.67214 0 0 .66982 -28.376 -21.143)" stroke-width="1.4904">
+  <path d="m58.018 34.749a30.5 30.157 0 0 1 15.814 26.439l-30.5-8e-3z" fill="#fff" stroke-miterlimit="3" stroke-width="0" style="paint-order:stroke markers fill"/>
+  <g fill="none" stroke-miterlimit="3">
+   <path d="m57.309 37.052a26.138 26.435 0 0 1 13.697 23.631" stroke="#5f8dd3" stroke-width="6.1104" style="paint-order:stroke markers fill"/>
+   <path d="m53.144 44.205a17.866 17.926 0 0 1 9.6461 16.451" stroke="#5f8dd3" stroke-linejoin="round" stroke-width="4.024" style="paint-order:stroke markers fill"/>
+   <path d="m58.022 34.75a30.5 30.157 0 0 1 15.811 26.475l-30.5-0.0445z" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2355" style="paint-order:stroke markers fill"/>
+  </g>
+  <path d="m57.442 59.722-11.627-4e-3 5.8169-10.011z" fill="#5f8dd3" fill-rule="evenodd" stroke="#5f8dd3" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="2" stroke-width=".89422"/>
+ </g>
+</svg>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+ <g transform="matrix(1.2727 0 0 1.2727 -9.5451 -19.727)">
+  <g stroke-width=".7143">
+   <path d="m17.725 21a4.725 4.725 0 0 1-9.45 0 4.725 4.725 0 1 1 9.45 0z" fill="#ff0" fill-rule="evenodd" opacity=".99"/>
+   <path d="m13.039 15.5a5.5 5.5 0 0 0-5.5391 5.5 5.5 5.5 0 0 0 11 0 5.5 5.5 0 0 0-5.4609-5.5zm-0.15039 1.002a4.5 4.5 0 0 1 4.6113 4.498 4.5 4.5 0 0 1-9 0 4.5 4.5 0 0 1 4.3887-4.498z" fill-rule="evenodd" opacity=".99"/>
+   <path d="m10.44 22.95-0.27344 0.76758c1.993 0.70686 3.8227 0.74278 5.6836-6e-3l-0.30274-0.75586c-1.6864 0.67842-3.2494 0.65313-5.1074-6e-3z" color="#000000" color-rendering="auto" dominant-baseline="auto" image-rendering="auto" shape-rendering="auto" solid-color="#000000" stop-color="#000000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
+  </g>
+  <path d="m12.998 18.75-3.3418 0.043c-1.0148 0.48385-0.4417 2.7825 0.80078 2.7832 1.2278 7.2e-4 1.8467-2.0776 2.5664-2.0293 0.71972-0.0483 1.3386 2.03 2.5664 2.0293 1.2425-7.4e-4 1.8155-2.2994 0.80078-2.7832l-3.3418-0.043z" stroke-width=".78572"/>
+ </g>
+</svg>

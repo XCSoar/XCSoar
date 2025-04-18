@@ -1,0 +1,14 @@
+Index: SDL2-2.0.22/include/SDL_config_iphoneos.h
+===================================================================
+--- SDL2-2.0.22.orig/include/SDL_config_iphoneos.h
++++ SDL2-2.0.22/include/SDL_config_iphoneos.h
+@@ -182,7 +182,8 @@
+ /* Metal supported on 64-bit devices running iOS 8.0 and tvOS 9.0 and newer
+    Also supported in simulator from iOS 13.0 and tvOS 13.0
+  */
+-#if (TARGET_OS_SIMULATOR && ((__IPHONE_OS_VERSION_MIN_REQUIRED >= 130000) || (__TV_OS_VERSION_MIN_REQUIRED >= 130000))) || (!TARGET_CPU_ARM && ((__IPHONE_OS_VERSION_MIN_REQUIRED >= 80000) || (__TV_OS_VERSION_MIN_REQUIRED >= 90000)))
++//#if (TARGET_OS_SIMULATOR && ((__IPHONE_OS_VERSION_MIN_REQUIRED >= 130000) || (__TV_OS_VERSION_MIN_REQUIRED >= 130000))) || (!TARGET_CPU_ARM && ((__IPHONE_OS_VERSION_MIN_REQUIRED >= 80000) || (__TV_OS_VERSION_MIN_REQUIRED >= 90000)))
++#if 0
+ #define SDL_PLATFORM_SUPPORTS_METAL	1
+ #else
+ #define SDL_PLATFORM_SUPPORTS_METAL	0

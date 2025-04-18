@@ -1,0 +1,20 @@
+You can use following spec file for fedora linux distribution.
+
+Requirements:
+- Fedora 20 or newer
+- installed correct packaging tools (using e.g. "yum groupinstall RPM Development Tools" )
+
+$ cp xcsoar-0.6.7.tar.bz2 ~/rpmbuild/SOURCES/
+$ rpmbuild -bs xscoar.spec
+
+  # for mock build (in chroot)
+$ mock --rebuild ~/rpmbuild/SRPMS/xcsoar-6.7.5-1.fc20.src.rpm
+
+  # for rpmbuild
+$ rpmbuild -ba xcsoar.spec
+
+  # rebuild using COPR
+submit srpm using http://copr.fedoraproject.org/
+
+  # To create local reposity use
+$ createrepo .

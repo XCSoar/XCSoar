@@ -1,0 +1,91 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "PlaneGlue.hpp"
+#include "PlaneFileGlue.hpp"
+#include "Plane.hpp"
+#include "Profile/Keys.hpp"
+#include "Profile/Map.hpp"
+#include "Polar/Polar.hpp"
+#include "Polar/PolarGlue.hpp"
+#include "Computer/Settings.hpp"
+#include "system/Path.hpp"
+
+#include <algorithm> // for std::clamp()
+
+void
+PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile) noexcept
+{
+  {
+    auto plane_path = profile.GetPath("PlanePath");
+    if (plane_path != nullptr &&
+        PlaneGlue::ReadFile(plane, plane_path))
+      return;
+  }
+
+  /* the following is just here to load a pre-6.7 profile */
+
+  plane.registration.SetUTF8(profile.Get(ProfileKeys::AircraftReg, ""));
+  plane.competition_id.SetUTF8(profile.Get(ProfileKeys::CompetitionId, ""));
+  plane.type.SetUTF8(profile.Get(ProfileKeys::AircraftType, ""));
+  plane.polar_name.SetUTF8(profile.Get(ProfileKeys::PolarName, ""));
+
+  PolarInfo polar = PolarGlue::LoadFromProfile();
+  plane.polar_shape = polar.shape;
+  plane.max_ballast = polar.max_ballast;
+  plane.wing_area = polar.wing_area;
+
+  if (polar.v_no > 0)
+    plane.max_speed = polar.v_no;
+  else if (!profile.Get(ProfileKeys::SafteySpeed, plane.max_speed))
+    plane.max_speed = 0;
+
+  double crew_mass; // for compatibility reasons, to be removed later
+  if (profile.Get(ProfileKeys::CrewWeightTemplate, crew_mass))
+    plane.dry_mass_obsolete = plane.empty_mass + crew_mass;
+
+  if (!profile.Get(ProfileKeys::BallastSecsToEmpty, plane.dump_time))
+    plane.dump_time = 120;
+
+  if (!profile.Get(ProfileKeys::Handicap, plane.handicap))
+    plane.handicap = 100;
+
+  if (!profile.Get(ProfileKeys::WeGlideAircraftType, plane.weglide_glider_type))
+    plane.weglide_glider_type = 0;
+}
+
+void
+PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
+                       GlidePolar &gp) noexcept
+{
+  settings.contest.handicap = plane.handicap;
+
+  PolarCoefficients pc = plane.polar_shape.CalculateCoefficients();
+  if (!pc.IsValid())
+    return;
+
+  gp.SetCoefficients(pc, false);
+
+  // Glider empty weight
+  gp.SetReferenceMass(plane.polar_shape.reference_mass, false);
+  gp.SetEmptyMass(plane.empty_mass, false);
+
+  // Ballast weight
+  gp.SetBallastRatio(plane.max_ballast / plane.polar_shape.reference_mass);
+
+  gp.SetWingArea(plane.wing_area);
+
+  // assure the polar is not invalid (because of VMin > VMax)
+  gp.SetVMax(75, false);
+
+  gp.Update();
+
+  // set VMax from settings but assure the range [VMin, VMax] is reasonable
+  if (plane.max_speed > 0)
+    gp.SetVMax(std::clamp(plane.max_speed, gp.GetVMin() + 10, 75.));
+
+  settings.plane.competition_id = plane.competition_id;
+  settings.plane.registration = plane.registration;
+  settings.plane.type = plane.type;
+  settings.plane.weglide_glider_type = plane.weglide_glider_type;
+}

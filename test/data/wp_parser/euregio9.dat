@@ -1,0 +1,128 @@
+** ------------ Aachen-Merzbrueck        27Mar09 ------------
+**++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+**                Control Points for Aachen-Merzbrueck, Germany                +
+**                                                                             +
+**                              Euregio Cup 2009                               +
+**                                                                             +
+**                        Contributed by Hajo Machetanz                        +
+**            Airport information courtesy of Michael-Lorenz Meier             +
+**                                                                             +
+**                     Contribution date was 26 May, 2008                      +
+**               File created Friday, 27 March 2009 at 13:29 GMT               +
+**         Available from the Worldwide Soaring Turnpoint Exchange at          +
+**                 http://soaringweb.org/TP     [ North America ]              +
+**              or http://soaring.gahsys.com/TP [ North America ]              +
+**              or http://soaring.xinqu.net/TP  [ New Zealand ]                +
+**                                                                             +
+**            Comment is control point description where available             +
+**                                                                             +
+**                      UNOFFICIAL, USE AT YOUR OWN RISK                       +
+**                                                                             +
+**          Do not use for navigation, for flight verification only.           +
+**                                                                             +
+**      Always consult the relevant publications for current and correct       +
+**  information. This service is provided free of charge with no warrantees,   +
+**                            expressed or implied.                            +
+**                        User assumes all risk of use.                        +
+**                                                                             +
+**++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+1,50:48:51N,006:11:29E,189M,T,Aachen      ,PmpsttnGfr=3
+2,50:46:48N,006:06:28E,153M,T,Aachenrppltz,KreislGfr=34
+3,50:35:36N,007:56:42E,471M,TA,Ailertchen  ,FLP Gafor=39
+4,50:53:56N,006:16:36E,116M,T,Aldenhoven  ,BB-ffhrtGfr=
+5,51:02:06N,008:40:42E,356M,TA,AllendorfEdr,FLP Gafor=43
+6,51:16:34N,007:42:20E,173M,T,AltenHgnschd,KhlkrftwrkGf
+7,50:47:28N,008:54:25E,240M,TA,Amoeneburg  ,Sglflggl.Gfr
+8,51:08:48N,007:56:12E,317M,TA,AttndrnFnnnt,FLP Gafor=36
+9,50:33:37N,006:45:49E,276M,T,BMuensterefl,Bhf Gafor=37
+10,50:33:29N,007:08:10E,205M,TA,BNeunhrhrwlr,FLP Gafor=37
+11,50:58:43N,006:36:31E,70M,TA,Bergheim    ,FLP Gafor=34
+12,51:03:11N,007:42:26E,490M,TA,BrgnstdtfdmD,FLP Gafor=35
+13,50:49:05N,007:49:52E,343M,TA,BetzdrfKrchn,FLP Gafor=35
+14,50:40:38N,008:10:09E,559M,TA,Breitscheid ,FLP Gafor=39
+15,51:24:08N,008:38:27E,460M,TA,Brilon      ,FLP Gafor=36
+16,50:26:21N,008:37:33E,330M,TA,BtzbchPfngst,Sglflggl.Gfr
+17,50:24:20N,006:31:45E,578M,TA,DahlemerBinz,FLP Gafor=37
+18,50:10:45N,006:51:53E,525M,TA,Daun Senheld,FLP Gafor=37
+19,50:27:36N,007:46:00E,310M,T,Dernbach    ,BB-DrckGfr=3
+20,51:22:42N,008:43:40E,349M,T,Diemelsee   ,StmrMttGfr=3
+21,50:46:10N,006:16:50E,260M,TA,Diepenlinchn,FLP Gafor=34
+22,50:34:00N,007:39:12E,290M,TA,DierdorfWien,FpTWRGafr=39
+23,49:23:16N,006:44:58E,245M,TA,Dillingen   ,Sglflggl.Gfr
+24,49:37:32N,007:55:28E,688M,T,Donnersberg ,TVSndr28Gfr=
+25,51:04:37N,006:50:16E,44M,T,Dormagen    ,IndstrbhnhfG
+26,50:41:31N,006:25:05E,345M,TA,DurnHrtgnwld,FLP Gafor=37
+27,51:11:00N,009:03:30E,243M,T,Edersee     ,StaumrGfr=43
+28,50:31:29N,006:53:00E,327M,T,Effelsberg  ,RdtlskpGfr=3
+29,50:25:41N,008:00:43E,207M,T,Elz         ,FLP Gafor=45
+30,50:38:53N,006:43:20E,208M,T,Euskirchen  ,BB-bfhrtSgfr
+31,51:12:24N,008:22:38E,783M,T,Fredeburg   ,SenderGfr=36
+32,50:13:27N,006:39:38E,368M,T,Gerolstein  ,Bhf Gafor=37
+33,50:32:42N,008:35:30E,230M,TA,GssnLtzllndn,FLP Gafor=42
+34,50:34:05N,008:52:15E,214M,TA,GissnRskrchn,EDGRGafor=43
+35,50:38:10N,006:28:24E,205M,T,Heimbach    ,Bhf Gafor=34
+36,49:39:30N,006:55:23E,543M,T,Hermeskeil  ,BB-ffhrtGfr=
+37,50:47:24N,008:23:42E,520M,TA,Hirzenhain  ,FLP Gafor=39
+38,51:48:24N,009:22:42E,285M,TA,HoxtrHlzmndn,FLP Gafor=10
+39,50:55:49N,007:54:00E,398M,TA,Huensborn   ,EDKHGafor=36
+40,50:44:13N,006:24:12E,383M,T,Huertgenwald,Sndr1652FTGf
+41,49:44:02N,007:20:20E,480M,TA,IdarObersten,EDRGGafor=44
+42,49:35:54N,006:49:31E,695M,T,Kell        ,SndrTflskpfG
+43,49:47:00N,007:30:50E,435M,TA,Kirn        ,Sglflggl.Gfr
+44,50:19:30N,007:31:42E,195M,TA,KoblnzWnnngn,FLP Gafor=38
+45,51:15:18N,008:52:36E,390M,TA,Korbach     ,FLP Gafor=43
+46,50:50:22N,006:10:51E,184M,T,Kronenbrot  ,WssrFbrktrmG
+47,50:02:30N,006:35:50E,297M,T,Kyllburg    ,FLP Gafor=37
+48,51:08:28N,006:59:07E,86M,TA,LngnfldWschd,FLP Gafor=34
+49,50:43:18N,006:07:38E,274M,T,Lichtenbusch,BB-sfhrtGfr=
+50,51:15:42N,007:36:14E,405M,T,Luedenscheid,BB-sfhrtNrdG
+51,50:52:24N,008:48:48E,254M,TA,MrbrgSchnstd,FLP Gafor=43
+52,50:24:09N,007:15:08E,292M,T,Maria Laach ,AbteiGafr=37
+53,49:27:11N,007:02:21E,360M,TA,Marpingen   ,FLP Gafor=44
+54,50:19:39N,007:12:42E,343M,T,Mayen       ,Bhf Gafor=37
+55,50:34:24N,006:41:08E,340M,T,Mechernich  ,BB-bfhrtGfr=
+56,51:30:23N,008:57:11E,234M,T,MeerhofDieml,BBXsnbhnGfr=
+57,51:06:00N,007:35:59E,471M,TA,Meinerzhagen,FLP Gafor=35
+58,49:26:17N,006:38:05E,173M,T,Merzig      ,Bhf Gafor=44
+59,51:20:59N,008:16:47E,261M,T,Meschede    ,Bhf Gafor=36
+60,51:18:10N,008:14:22E,427M,TA,MeschedSchrn,FLP Gafor=36
+61,49:29:44N,006:35:54E,166M,T,Mettlach    ,Bhf Gafor=41
+62,50:30:33N,007:15:25E,205M,TA,Moenchsheide,FLP Gafor=37
+63,50:25:30N,007:49:40E,261M,TA,Montabaur   ,FLP Gafor=39
+64,49:50:38N,006:55:01E,268M,TA,NeumagenDhrn,FLP Gafor=41
+65,50:41:19N,006:28:36E,314M,T,Nideggen    ,BurgGafor=37
+66,50:59:32N,006:40:08E,243M,T,Niederaussem,KrftwrkGfr=3
+67,50:20:05N,006:56:48E,617M,T,Nuerburgring,StrtZlGfr=37
+68,50:59:17N,007:50:09E,358M,T,Olpe BAB    ,BB-sf.SdGfr=
+69,51:01:42N,007:50:28E,309M,T,OlpeBHF     ,Bhf Gafor=35
+70,50:12:24N,006:25:32E,441M,T,Pruem       ,PrmBslkGfr=3
+71,51:12:59N,007:22:57E,389M,TA,Radevormwald,FLP Gafor=35
+72,51:10:54N,007:14:14E,319M,T,Remscheid   ,BB-sfhrtGfr=
+73,50:38:56N,006:11:08E,413M,T,Roetgen     ,Bhf Gafor=37
+74,50:38:19N,006:26:32E,280M,T,Rursee      ,StaumrGfr=37
+75,49:18:49N,006:40:29E,341M,TA,SaarlouisDrn,FLP Gafor=44
+76,51:00:05N,008:18:28E,545M,TA,Schameder   ,EDGQGafor=36
+77,51:09:42N,008:15:36E,466M,TA,SchmllnbrgRn,FLP Gafor=36
+78,50:25:53N,007:04:13E,659M,T,SchonbrgFrnm,FrnmldtrmGfr
+79,50:50:19N,008:00:50E,388M,TA,SiegenEisern,Sglflggl.Gfr
+80,49:47:31N,007:40:00E,247M,TA,SbrnhmDlmbrg,EDRSGafor=44
+81,51:21:02N,007:58:05E,284M,T,SorpeTalsprr,StaumrGfr=36
+82,50:08:52N,007:42:55E,151M,T,St Goar     ,Bhf Gafor=41
+83,50:45:01N,006:12:00E,232M,T,Stolberg    ,SenderGfr=34
+84,49:51:53N,006:47:20E,203M,TA,TrierFoehren,EDRTGafor=37
+85,49:59:56N,006:20:35E,424M,TA,Utscheid    ,Sglflggl.Gfr
+86,50:48:53N,006:02:31E,180M,T,Vetschau    ,DorfGafor=34
+87,50:29:56N,009:57:56E,920M,TA,Wasserkuppe ,FLP Gafor=47
+88,50:50:22N,006:19:22E,130M,T,Weisweiler  ,KrftwrkGfr=3
+89,51:17:52N,007:49:05E,316M,TA,WerdohlKntrp,FLP Gafor=36
+90,50:27:06N,006:47:12E,470M,TA,WershofenEfl,FLP Gafor=37
+91,50:48:59N,006:12:57E,212M,T,Windrad     ,MrkrF.ZlflgG
+92,51:11:50N,008:31:57E,656M,T,Winterberg  ,Bhf Gafor=36
+93,51:07:27N,007:22:15E,263M,TA,WipperfurthN,FLP Gafor=35
+94,51:07:07N,007:05:59E,230M,T,Witzhelden  ,SenderGfr=35
+95,50:41:56N,006:39:46E,158M,T,Zuelpich    ,Bhf Gafor=34
+100,50:49:25N,006:11:10E,190M,SA,Ap1 Twr EDKA,Abflgpnkt1DK
+101,50:51:14N,006:16:29E,114M,S,Ap2BlstnsMtt,Abflgpnkt2Bl
+102,50:45:17N,006:20:24E,249M,S,Ap3Whbchtlsp,Abflgpnkt3Wh
+103,50:49:23N,006:11:11E,190M,HFA,ZL RWY EDKA ,ZllnDKGfr=34
+

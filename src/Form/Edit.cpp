@@ -1,0 +1,374 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "Form/Edit.hpp"
+#include "Look/DialogLook.hpp"
+#include "DataField/Base.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Features.hpp"
+#include "Screen/Layout.hpp"
+#include "ui/event/KeyCode.hpp"
+#include "Dialogs/DataField.hpp"
+#include "Asset.hpp"
+
+#include <cassert>
+
+bool
+WndProperty::OnKeyCheck(unsigned key_code) const noexcept
+{
+  switch (key_code) {
+  case KEY_RETURN:
+    return true;
+
+  case KEY_LEFT:
+  case KEY_RIGHT:
+    return !IsReadOnly();
+
+  default:
+    return WindowControl::OnKeyCheck(key_code);
+  }
+}
+
+bool
+WndProperty::OnKeyDown(unsigned key_code) noexcept
+{
+  // If return key pressed (Compaq uses VKF23)
+  if (key_code == KEY_RETURN) {
+    BeginEditing();
+    return true;
+  }
+
+  switch (key_code) {
+  case KEY_RIGHT:
+    if (IsReadOnly())
+      break;
+
+    IncValue();
+    return true;
+  case KEY_LEFT:
+    if (IsReadOnly())
+      break;
+
+    DecValue();
+    return true;
+  }
+
+  return WindowControl::OnKeyDown(key_code);
+}
+
+void
+WndProperty::OnSetFocus() noexcept
+{
+  WindowControl::OnSetFocus();
+
+  Invalidate();
+
+  ScrollParentTo();
+}
+
+void
+WndProperty::OnKillFocus() noexcept
+{
+  WindowControl::OnKillFocus();
+
+  Invalidate();
+}
+
+WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
+                         const TCHAR *Caption,
+                         const PixelRect &rc,
+                         int CaptionWidth,
+                         const WindowStyle style) noexcept
+  :look(_look),
+   edit_callback(EditDataFieldDialog)
+{
+  Create(parent, rc, Caption, CaptionWidth, style);
+
+#if defined(USE_WINUSER) && !defined(NDEBUG)
+  ::SetWindowText(hWnd, Caption);
+#endif
+}
+
+WndProperty::WndProperty(const DialogLook &_look) noexcept
+  :look(_look),
+   edit_callback(EditDataFieldDialog)
+{
+}
+
+void
+WndProperty::Create(ContainerWindow &parent, const PixelRect &rc,
+                    const TCHAR *_caption,
+                    unsigned _caption_width,
+                    const WindowStyle style=WindowStyle()) noexcept
+{
+  caption = _caption;
+  caption_width = _caption_width;
+
+  WindowControl::Create(parent, rc, style);
+}
+
+WndProperty::~WndProperty() noexcept
+{
+  delete data_field;
+}
+
+unsigned
+WndProperty::GetRecommendedCaptionWidth() const noexcept
+{
+  return look.text_font.TextSize(caption).width + Layout::GetTextPadding() * 2;
+}
+
+void
+WndProperty::SetCaptionWidth(int _caption_width) noexcept
+{
+  if (caption_width == _caption_width)
+    return;
+
+  caption_width = _caption_width;
+  UpdateLayout();
+}
+
+bool
+WndProperty::BeginEditing() noexcept
+{
+  if (IsReadOnly() || data_field == nullptr || edit_callback == nullptr) {
+    OnHelp();
+    return false;
+  } else {
+    if (!edit_callback(GetCaption(), *data_field, GetHelpText()))
+      return false;
+
+    RefreshDisplay();
+    return true;
+  }
+}
+
+void
+WndProperty::UpdateLayout() noexcept
+{
+  edit_rc = GetClientRect();
+
+  const unsigned margin = Layout::VptScale(1u);
+
+  if (caption_width >= 0) {
+    edit_rc.left += caption_width + margin;
+    edit_rc.top += margin;
+    edit_rc.right -= margin;
+    edit_rc.bottom -= margin;
+  } else {
+    const unsigned caption_height = look.text_font.GetHeight();
+
+    edit_rc.left += margin;
+    edit_rc.top = margin + caption_height;
+    edit_rc.right -= margin;
+    edit_rc.bottom -= margin;
+  }
+
+  Invalidate();
+}
+
+void
+WndProperty::OnResize(PixelSize new_size) noexcept
+{
+  WindowControl::OnResize(new_size);
+  UpdateLayout();
+}
+
+bool
+WndProperty::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
+{
+  if (!IsReadOnly() || HasHelp()) {
+    dragging = true;
+    pressed = true;
+    Invalidate();
+    SetCapture();
+    return true;
+  }
+
+  return false;
+}
+
+bool
+WndProperty::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
+{
+  if (dragging) {
+    dragging = false;
+    ReleaseCapture();
+
+    if (pressed) {
+      pressed = false;
+      Invalidate();
+      BeginEditing();
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
+bool
+WndProperty::OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned keys) noexcept
+{
+  if (dragging) {
+    const bool inside = IsInside(p);
+    if (inside != pressed) {
+      pressed = inside;
+      Invalidate();
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
+void
+WndProperty::OnCancelMode() noexcept
+{
+  if (dragging) {
+    dragging = false;
+    pressed = false;
+    Invalidate();
+    ReleaseCapture();
+  }
+
+  WindowControl::OnCancelMode();
+}
+
+int
+WndProperty::IncValue() noexcept
+{
+  if (data_field != nullptr) {
+    data_field->Inc();
+    RefreshDisplay();
+  }
+  return 0;
+}
+
+int
+WndProperty::DecValue() noexcept
+{
+  if (data_field != nullptr) {
+    data_field->Dec();
+    RefreshDisplay();
+  }
+  return 0;
+}
+
+void
+WndProperty::OnPaint(Canvas &canvas) noexcept
+{
+  const bool focused = HasCursorKeys() && HasFocus();
+
+  /* background and selector */
+  if (pressed) {
+    canvas.Clear(look.list.pressed.background_color);
+  } else if (focused) {
+    canvas.Clear(look.focused.background_color);
+  } else {
+    /* don't need to erase the background when it has been done by the
+       parent window already */
+    if (HaveClipping())
+      canvas.Clear(look.background_color);
+  }
+
+  if (!caption.empty()) {
+    canvas.SetTextColor(focused && !pressed
+                          ? look.focused.text_color
+                          : look.text_color);
+    canvas.SetBackgroundTransparent();
+    canvas.Select(look.text_font);
+
+    PixelSize tsize = canvas.CalcTextSize(caption.c_str());
+
+    PixelPoint org;
+    unsigned clip_width;
+    if (caption_width < 0) {
+      org.x = edit_rc.left;
+      org.y = edit_rc.top - tsize.height;
+      clip_width = canvas.GetWidth();
+    } else {
+      org.x = Layout::GetTextPadding();
+      org.y = (canvas.GetHeight() - tsize.height) / 2;
+      clip_width = caption_width;
+    }
+
+    if (org.x < 1)
+      org.x = 1;
+
+    if (HaveClipping())
+      canvas.DrawText(org, caption.c_str());
+    else
+      canvas.DrawClippedText(org, clip_width - org.x,
+                             caption.c_str());
+  }
+
+  Color background_color, text_color;
+  if (pressed) {
+    background_color = COLOR_BLACK;
+    text_color = COLOR_WHITE;
+  } else if (IsEnabled()) {
+    if (IsReadOnly())
+      background_color = Color(0xf0, 0xf0, 0xf0);
+    else
+      background_color = COLOR_WHITE;
+    text_color = COLOR_BLACK;
+  } else {
+    background_color = COLOR_LIGHT_GRAY;
+    text_color = COLOR_DARK_GRAY;
+  }
+
+  canvas.DrawFilledRectangle(edit_rc, background_color);
+
+  canvas.SelectHollowBrush();
+  canvas.SelectBlackPen();
+  canvas.DrawRectangle(edit_rc);
+
+  if (!value.empty()) {
+    canvas.SetTextColor(text_color);
+    canvas.SetBackgroundTransparent();
+    canvas.Select(look.text_font);
+
+    const int x = edit_rc.left + Layout::GetTextPadding() * 2;
+    const int canvas_height = edit_rc.GetHeight();
+    const int text_height = canvas.GetFontHeight();
+    const int y = edit_rc.top + (canvas_height - text_height) / 2;
+
+    canvas.TextAutoClipped({x, y}, value.c_str());
+  }
+}
+
+void
+WndProperty::SetText(const TCHAR *_value) noexcept
+{
+  assert(_value != nullptr);
+
+  if (value.compare(_value) == 0)
+    return;
+
+  value = _value;
+  Invalidate();
+}
+
+void
+WndProperty::RefreshDisplay() noexcept
+{
+  if (!data_field)
+    return;
+
+  SetText(data_field->GetAsDisplayString());
+}
+
+void
+WndProperty::SetDataField(DataField *Value) noexcept
+{
+  assert(data_field == nullptr || data_field != Value);
+
+  delete data_field;
+  data_field = Value;
+
+  UpdateLayout();
+
+  RefreshDisplay();
+}

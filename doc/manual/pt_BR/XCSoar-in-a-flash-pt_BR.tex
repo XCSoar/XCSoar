@@ -1,0 +1,576 @@
+\documentclass[a4paper,12pt]{refrep}
+\settextfraction{1}
+\input{xcsoar.sty}
+\usepackage[portuguese]{babel}
+\usepackage{wasysym}
+\usepackage{graphicx}        % -> includegraphics
+\usepackage{paralist}
+\hypersetup{
+    pdftitle={XCSoar in a Flash},
+    pdfauthor={WZ},
+    pdfsubject={Quickstart},
+    pdfproducer={xcsoar.org},
+    pdfkeywords={XCSoar}{Quickstart}{Soaring}{Final Glide},
+}
+\parindent0mm                %no indent
+\textwidth=170mm             %match print and screen
+\setlength{\baselineskip}{1em}
+
+% Set the page title
+\input{xcsoar-headers.sty}
+\xcsoarheader{XCSoar em um flash}
+
+%
+%##############  Colour, Background, Border ##############
+%
+\fboxrule0.4mm               % width Fbox-border
+\definecolor{flashyellow}{rgb}{.9,.85,0}
+\definecolor{flashblue}{rgb}{0,0,1}
+%
+%##############  advanced Makros and Menus ..##############
+%
+\newcommand{\nav}[3]{\bmenut{Nav}{#1/2}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%NavMenu
+\newcommand{\display}[3]{\bmenut{Mostrar}{#1/2}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%DisplayMenu
+\renewcommand{\config}[3]{\bmenut{Config}{#1/3}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%ConfigNavMenu
+\newcommand{\info}[3]{\bmenut{Info}{#1/3}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%InfoMenu
+%
+%
+%##############  Document start of flash ##############
+%
+\setcounter{secnumdepth}{1}
+\renewcommand*{\thesection}{\textsf{\arabic{section}}}
+\begin{document}
+%
+%print-testchart 
+%\tiny
+%    \definecolor{mauve}{RGB}{224 176 255}
+%    \begin{testcolors}[rgb,RGB,cmyk,hsb,HSB,HTML,gray,Gray]
+%    \testcolor{black}
+%    \testcolor{white}
+%    \testcolor{darkgray}
+%    \testcolor{gray}
+%    \testcolor{lightgray}
+%    \testcolor{red}
+%    \testcolor{green}
+%    \testcolor{blue}
+%    \testcolor{cyan}
+%    \testcolor{magenta}
+%    \testcolor{yellow}
+%    \testcolor{brown}
+%    \testcolor{lime}
+%    \testcolor{olive}
+%    \testcolor{orange}
+%    \testcolor{pink}
+%    \testcolor{purple}
+%    \testcolor{teal}
+%    \testcolor{violet}
+%    \testcolor{mauve}
+%    \testcolor[cmyk]{0 0.5 1 0.42}
+%    \testcolor{flashblue}
+%    \testcolor{flashyellow}
+%    \end{testcolors}
+%\newpage
+%
+%
+%##############  Titlepage of flash ##############
+\thispagestyle{empty}
+\begin{center}
+\fontsize{34}{0}
+\selectfont\textbf{XCSoar em um flash}
+\fontsize{12}{12}
+\vspace{0.1em}
+\includegraphics[angle=0,width=0.58\linewidth,keepaspectratio='true']{figures/blitzlogo.png}
+
+\vspace{1em}
+{\Huge Como ter\\}
+\vspace{0.2em}
+{\tiny o seu\\}
+{Assistente Tático de Planeio\\}
+\vspace{0.2em}
+{\tiny pronto para operação }
+\end{center}
+
+%##############  XCSoar Checklist of flash ##############
+\newpage
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\begin{center}
+{\Huge\textbf{Checklist do XCSoar }}
+\end{center}
+\section*{Flash \textcolor{flashyellow}{Ligado}}\label{ch:flashon}
+%%%%%--------------------------------------------------------------------%%%%%
+
+\subsection{\textcolor{flashblue}{Traga o XCSoar para rodar}}
+\begin{compactitem}
+\item tenha o hardware e instale o XCSoar
+\item tenha os arquivos de dados apropriados do seu local de vôo
+\item configure o XCSoar para os arquivos de dados úteis
+\item indique para o XCSoar sobre a curva polar e peso
+\item possibilite conectar à instrumentos
+\item finalize as configurações e se familiarize
+\item monte o hardware
+\item adicione os itens listados à sua checklist
+\item faça ``Casa''
+\end{compactitem}
+
+\subsection*{\textcolor{flashblue}{O procedimento de verificação pré-vôo inclui}}
+\begin{compactitem}
+\item ajuste a polar e peso
+\item ajuste os parâmetros de vento e vôo (MC, bugs,  QNH)
+\item se possível, execute uma prova válida
+\end{compactitem}
+
+\subsection*{\textcolor{flashblue}{Faça a conduta de início, incluindo}}
+\begin{compactitem}
+\item Verifique o vento e ajustes de vôo mais uma vez
+\end{compactitem}
+
+\subsection*{\textcolor{flashblue}{Voe, Aprecie}}
+
+\subsection*{\textcolor{flashblue}{Faça o procedimento de verificação pós-vôo}}
+\begin{compactitem}
+\item Faça download dos logs de vôo, verificando distâncias.
+\item Guarde os dados estatísticos do vôo.
+\end{compactitem}
+
+\section*{{\color[rgb]{.9,.85,0}Flash} Desligado}
+
+\vspace{2em}
+\hspace*{1cm} O tempo de flash está curto?\\
+\hspace*{4cm} Só um segundo...\\
+\hspace*{6cm} ajustando o tempo do flash,\\
+\hspace*{10cm} agora proceda: 
+
+
+%##############  Start of main body of flash ##############
+\setlength{\parskip}{0.3\baselineskip}
+\newpage
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\section{Instalação do XCSoar }\label{ch:XCSinstall}
+%%%%%--------------------------------------------------------------------%%%%%
+
+%\begin{wrapfigure}[10]{R}{0.23\textwidth}
+%\vspace{-5.5em}
+%  \begin{flushright}
+%    \includegraphics[width=0.17\textwidth]{figures/xy01.jpg}
+%    XY, ready for installation
+%  \end{flushright}
+%\end{wrapfigure}
+
+Identifique a versão apropriada do XCSoar para seu hardware e sistema operacional \textsf{(Android, PC, Linux)}
+em \xcsoarwebsite{}.
+No caso de escolher um diretório de instalação diferente do padrão, tenha certeza que os direitos de acesso estão ajustados para completo/todos.  Crie um subdiretório \texttt{XCSoarData} e coloque todos os arquivos de dados nele, que são as configurações, espaço aéreo, waypoints e os arquivos XCM de terreno.
+
+Usando o padrão da instalação para Android, Windows Mobile, o PC irá fazer o trabalho suavemente.  Para deixar as coisas fáceis, permaneça com o padrão.  A instalação no cartão SD é possível.
+
+\begin{compactitem}
+\item[1.] Baixe a última versão do XCSoar na página 
+{\xcsoarwebsite{}} ou via Google Play app para Android.
+\item[2.] Baixe o arquivo de terreno \texttt{name.xcm} de 
+{\xcsoarwebsite{/download/maps/}}
+correspondente ao seu local de vôo.  Se o arquivo \texttt{.xcm}- aparentar corrompido, use outro navegador. (É uma falha com as diversas versões do Internet Explorer, que desintegra os arquivos \texttt{.xcm}.)
+\item[3.] Baixe os waypoints em vários formatos suportados pelo XCSoar, sendo \texttt{.dat, .cup, .wpz, .wpt}. Todavia, inicie com {\xcsoarwebsite{/download/data.html}}.
+\item[4.] Baixe o arquivo \texttt{.txt and/or .sua} de espaço aéreo.  Siga novamente o link mencionado.
+\end{compactitem}
+
+\subsection{\textcolor{flashblue}{Rodando o XCSoar pela primeira vez}}
+Rode o XCSoar.  No início, o XCSoar irá solicitar o modo de operação em vôo (FLY) ou modo simulação (SIM).  No modo SIM, você pode entrar manualmente com dados de velocidade, direção, altura para fazer alguns testes em solo.  No modo FLY, a entrada de instrumentos externos alimentará o XCSoar.  Lembre-se disto quando for conectar o XCSoar aos instrumentos externos.  No modo SIM, todas as conexões externas são desligadas.
+
+Inicie o modo FLY.  Indique para o XCSoar quais arquivos utilizar.  Acione a configuração do sistema através dos botões abaixo
+
+\begin{flushleft}\hspace*{1cm}\config{2}{Sistema}{}\blink\bmenuw{Arquivos}
+\blink\bmenuw{Arquivos}\\\end{flushleft}
+\index{Map database}\index{Waypoints}\index{Airspaces}
+
+Escolha os arquivos apropriados na janela.  Se não houver arquivos disponíveis, tenha certeza que estes arquivos estão no diretório \texttt{/XCSoarData}.
+
+\subsection{\textcolor{flashblue}{Gerenciador de Arquivos}}\index{Filemanager}
+\textbf{Observe:} O gerenciador de arquivos do XCSoar para Android opera somente na versão 2.2 e acima!!
+
+Se o seu dispositivo tem acesso à internet, você pode baixar facilmente e gerenciar os arquivos de dados diretamente.  Clique:
+
+\begin{flushleft}\hspace*{1cm}\config{2}{File}{Manager}\\\end{flushleft}
+Aparecerá uma lista de arquivos baixados.  Se fizer isso pela primeira vez, poderá resultar em uma lista vazia.  Clique em  \blink Adicionar.
+
+Aparecerá uma grande lista.  Caso não apareça, verifique a conexão com a internet.  O time do XCSoar gerencia esta lista de arquivos e endereços correspondentes.  Clique em  \blink Adicionar para lhe mostrar a lista completa de todos os downloads possíveis.   Selecione o arquivo e o download irá começar imediatamente.  Para adicionar mais arquivos, repita o procedimento com a tecla \blink Adicionar.
+A atualização dos arquivos é feita através da tecla \blink Baixar no mesmo menu.  Baixe o arquivo de terreno, espaço aéreo e waypoints um de cada vez.  Com alguns mapas como o mapa termal, será necessário ter um tempo de sobra para entender os ajustes.  Para mais informações, por gentileza veja o manual do usuário ou \url{http://www.glidinghotspots.eu/} 
+
+\subsection{\textcolor{flashblue}{Idioma (Fontes, Sons)}}
+Geralmente, o XCSoar segue o ajuste do idioma do sistema.  Se você prefere outro, há 28 idiomas disponíveis desde Dezembro de 2013 (desculpem-nos os Bavarianos, usuários de Boston e outros usuários, mas os dialetos não serão incluídos):
+
+\begin{flushleft}\hspace*{1cm}\config{2}{Sistema}{}\blink\bmenuw{Aparência}\blink
+\bmenuw{Idioma, Entrada}\\\end{flushleft}
+
+Esta página do menu também permite alterar as fontes e, depois de preparado um arquivo de dados especial, também é possível incluir eventos.  Todavia, não é a intenção do escopo do manual rápido, somente uma perspectiva. 
+
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\newpage
+\section{Finalizando os Ajustes das Configurações}
+%%%%%--------------------------------------------------------------------%%%%%
+
+\subsection{\textcolor{flashblue}{Ajuste da Curva Polar}}
+
+%\begin{wrapfigure}[7]{R}{0.22\textwidth}
+%\vspace{-9em}
+%  \begin{flushright}
+%    \includegraphics[width=0.27\textwidth]{figures/xy02.png}
+%    xy figuring out the missing colours of life without configuration.
+%  \end{flushright}
+%\end{wrapfigure}
+
+O XCSoar vem com uma extensa lista de polares pré-definidas.  Para escolher, editar ou salvar sua polar personalizada, acione a configuração do planador por: 
+\begin{flushleft}\hspace*{1cm}\config{2}{Planador}{}\\\end{flushleft}
+A compilação dos planadores nesta lista foi retirada da lista oficial DAEC de 2012.
+
+\subsection{\textcolor{flashblue}{Conectar Registrador, Flarm, Vario etc. . . ajuste do NMEA}}
+Para rodar, o XCSoar precisa de dados de pelo menos um receptor de GPS.  Indique ao XCSoar qual usar, mesmo o interno do hardware.  Para conectar ao GPS, use:  
+\begin{flushleft}\hspace*{1cm}\config{2}{Dispositivos}{}\blink\bmenuw{Editar}\\\end{flushleft}
+Muitos dispositivos portáteis são equipados com este hardware.  Porém, é sempre uma boa idéia conectar um ou mais dispositivos:
+
+\begin{compactitem}
+\item Um receptor específico de GPS tem recepção melhor e fornece dados mais confiáveis para medições e cálculos.
+\item Um indicador de velocidade do ar permite uma estimativa rápida e exata enquanto gira.
+\item Um vario melhora o assistente de termal.
+\item A prova pode ser declarada para um registrador IGC e após pousar, o registro do vôo pode ser baixado.
+\item Alguns vários permitem sincronização com o XCSoar para ajuste de MacCready.
+\item O FLARM (e também a entrada ADS-B) fornece informação da posição de outros ao redor de você – porém o XCSoar NÃO fornece detector de colisão.
+\end{compactitem}
+
+\subsection{\textcolor{flashblue}{NMEA}}
+Pensando? NMEA é Associação Nacional de Eletrônicos Marítimos (‘National Marine Electronics Association’), sendo considerado o padrão mundial.  O padrão define as interfaces elétricas bem como os protocolos usados para transmitir dados de navegação e muito mais.  Assim como as milhas náuticas, os aviadores adaptaram várias coisas marítimas e também seus instrumentos.
+
+\subsection{\textcolor{flashblue}{GPS Interno}}
+O receptor de GPS do seu dispositivo móvel pode ser bom.  Por várias razões, verifique com muita cautela se os itens abaixo são observados em vôo:
+
+\begin{compactitem}
+\item A orientação tridimensional de seu dispositivo e a antena interna do GPS podem causar má recepção de sinal.  Quando se perde a posição do GPS, muitos dispositivos móveis são dependentes de aGPS – GPS assistido.  Você tem que esperar minutos para uma nova posição no ar.  
+\item O aGPS é baseado em informação transmitida por rede de telefonia celular.  A recepção pode ser ruim, bem como a precisão de posicionamento do GPS e ajustes baratos ou ruins do hardware para fixar o posicionamento.  Os chamados interpolados podem fornecer valores não confiáveis e confundir os algoritmos do XCSoar.
+
+\end{compactitem}
+
+Se a recepção de GPS de seu dispositivo for estável: parabéns!  Você adquiriu um bom hardware.  Não há necessidade de outro hardware extra, você já terá o sistema XCSoar ‘básico’.  Caso não tenha, o método de escolha é conectar um receptor de GPS extra.  Melhor se conectar um registrador IGC e ótimo se tiver um FLARM.  Com o registrador IGC, você pode declarar as provas e baixar os registros certificados IGC para participar da liga OLC.  Conectando o FLARM lhe fornecerá o posicionamento e estado de seus colegas de time, informações de tráfego e leitura de altura barométrica, bem como registros de vôo certificados IGC.  Com o FLARM conectado, você tem um sistema XCSoar ‘clássico’.  Integrando mais dispositivos é uma tarefa própria sua e não está inclusa no escopo do guia de início rápido.
+
+\subsection{\textcolor{flashblue}{Agrupando coisas}}
+Até o momento, há três formas de conectar a outros instrumentos.  Usando um cabo serial, um cabo serial-USB ou conexão via bluetooth.  A última opção é a mais usada para Android, mas um perfil bluetooth de porta serial (spp) é necessário.  Com a versão 4 ou acima do Android, o Google introduziu problemas sérios decorrentes do perfil da porta serial bluetooth.  Sendo o XCSoar sem custo, não há riscos em testar a capacidade de seu hardware.  Se tudo estiver bem ;-).......
+Observação: antes de conectar os instrumentos via bluetooth você deve ter que parear os dispositivos.  Os passos necessários podem divergir dependendo do hardware usado.  Use as ferramentas do seu sistema operacional.
+
+Para usar o hardware equipado com USB, você terá que possuir um conversor serial-USB.  Consulte o site do XCSoar para mais detalhes: {\xcsoarwebsite{/hardware/}}
+
+Se estiver usando uma conexão serial com algum PDA, fique atento, pois há três formas físicas de diferentes tipos de conexão usadas.  Trata-se de usar níveis de sinais diferentes:
+
+\begin{compactitem}
+\item RS232 usa níveis de +/- 12Volts
+\item TTL usa oscilação de sinal de 5Volts
+\item Lógica de baixo nível usa oscilação de 3Volts
+\end{compactitem}
+Sempre, logicamente falando, estas três conexões fazem exatamente o mesmo. 
+
+Tenha certeza que as oscilações dos sinais da porta serial são correspondentes.  Caso contrário, necessitará de um conversor.  Consulte o site do XCSoar para mais detalhes.
+Tudo fica mais fácil se usar os ajustes de hardware já aprovados.  Um dispositivo Android muito usado para rodar o XCSoar é o Dell Streak 5.  Na página de hardware do XCSoar você achará uma lista com diversos adaptadores de bluetooth, já conhecido como sendo estáveis em termos de conexões.
+
+\subsection{\textcolor{flashblue}{Nome do Piloto }}
+\begin{flushleft}\hspace*{1cm}\config{2}{Sistema}{}\blink\bmenuw{Config}\blink\bmenuw{Registrador}\\\end{flushleft}
+
+\subsection{\textcolor{flashblue}{Ajuste de hora}}
+\begin{flushleft}\hspace*{1cm}\config{2}{Sistema}{}\blink\bmenuw{Config}\blink\bmenuw{Tempo}\\\end{flushleft}
+
+\subsection{\textcolor{flashblue}{Movendo o Mapa (móvel) manualmente}}
+Tempo para se ocupar com o mapa. Navegue através dele entrando em modo panorâmico.
+\begin{flushleft}\hspace*{1cm}\display{1}{Pan}{On} \\\end{flushleft}
+Faça uso dos tipos de botões de seu hardware para navegar ou mesmo usar seus dedos para arrastar o mapa.
+
+\subsection{\textcolor{flashblue}{Faça ``Casa''}}\index{home waypoint}
+Quando o XCSoar inicia, a visualização do mapa é centrada no seu waypoint “casa”.  A menos que você configure sua prova “real”, a função de rota do XCSoar irá lhe mostrar seu caminho para o ponto de origem.  Se você não definir “casa”, o XCSoar irá criar um waypoint automaticamente na posição que detectar sua decolagem e mostrar seu caminho de volta.
+\begin{compactitem}
+\item Navegue até o waypoint desejado.
+\item Clique/aperte (ou toque) na tela próximo ao waypoint desejado.
+\item Abrirá a janela de “Elementos de mapa nesta localização”.
+\item Escolha o waypoint.
+\item Tecle \bmenuw{Detalhes}.
+\item Vire para a próxima página teclando: \blink
+\item Tecle \bmenuw{Selec como nova Casa}.
+\end{compactitem}
+
+Quando terminar a configuração básica, estará quase pronto para dar o próximo passo com o check pré-vôo.  Caso contrário, deverá mostrar um profundo interesse em se familiarizar com todos os botões e acionamentos que o XCSoar fornece ou...
+
+Possivelmente todas as características de início poderão ser muito estranhas?  Há duas estratégias para lidar:
+
+
+\begin{compactitem}
+\item Alterne para o Manual do Usuário do XCSoar e tenha um tempo pra isso.
+\item Faça os últimos passos abaixo e faça um replay de um vôo arquivado, somente observando a tela do XCSoar para se familiarizar com as leituras e ações ocorridas – ou ative o modo de simulação do XCSoar.
+\end{compactitem}
+
+...a melhor estratégia é utilizar ambas acima.
+
+\subsection{\textcolor{flashblue}{Ação – observe o XCSoar repetir um vôo}}
+Escolha um registro de vôo e deixe o XCSoar repetí-lo.  Coloque o arquivo no subdiretório \verb+/XCSoarData+ \verb+/logs+ e inicie o replay.
+
+\begin{flushleft}\hspace*{1cm}\config{2}{Replay}{}\blink\bmenuw{Arquivo\dots Iniciar}\\\end{flushleft}
+
+Agora você é capaz de estudar o comportamento do XCSoar no solo.  Enquanto examina, provavelmente irá desenvolver uma necessidade de alterar o layout da tela e infoboxes.  Você está convidado a proceder com os passos seguintes, se tiver desenvolvido uma demanda para isso.  O XCSoar vem com uma pré-configuração muito útil.
+
+\subsection*{\textcolor{flashblue}{Layout da tela (Retrato, paisagem, etc.. . . )}} 
+Para alterar o layout básico da tela:
+\begin{flushleft}\hspace*{1cm}\config{2}{Sistema}{}\blink\bmenuw{Aparência}\blink
+\bmenuw{Layout da tela}\\\end{flushleft}
+
+\subsection*{\textcolor{flashblue}{Alterar o conteúdo da Infobox}}
+To change Infobox sets and boxes' content:
+\begin{flushleft}\hspace*{1cm}\config{2}{Sistema}{}\blink\bmenuw{Aparência}\blink
+\bmenuw{InfoBox Sets}\\\end{flushleft}
+
+\subsection{\textcolor{flashblue}{Alterar o conteúdo da Infobox}}
+Para usar o XCSoar em diversas situações, ambientes e planadores diferentes, você pode usar perfis.  Se o XCSoar encontrar mais do que um perfil no início, você será perguntado sobre qual deve utilizar.  Poderá escolher entre os perfis existentes somente clicando em um botão.  Porém, uma vez satisfeito com quase todas as configurações realizadas, faça uma cópia de segurança do se arquivo de perfil.  Outras razões são retratadas abaixo:
+\begin{compactitem}
+\item Você não possui um planador, voando com todos os existentes no clube.  Não se canse alterando todas as polares e peso cada vez que mudar de planador, mas o hardware do XCSoar através da janela de configuração, ajuste vários arquivos de configurações.
+\item Você está em uma prova.  Com localizações e planadores diferentes, e tendo configurado várias telas para diferentes propósitos, você deseja voltar para as configurações do dia-a-dia.
+\item Você é um instrutor de vôo, levando seu computador de vôo toda vez para mostrar aos alunos sobre o funcionamento do mesmo.  Porém, você deve necessitar de uma configuração menos complexa do que geralmente usa.
+\end{compactitem}
+Para fazer o backup das configurações, faça duas cópias do seu perfil.  Uma mantendo a extensão \verb+.prf+, e outra, alterando a extensão para \verb+.bak+. Como no último exemplo, deve ter algo parecido com:
+\begin{compactitem}
+\item\verb+aulaemOzoneDelta2.prf+
+\item\verb+aulaemOzoneDelta2.bak+
+\item\verb+edsoncaetanoemLS8atwonderland.prf+
+\item\verb+edsoncaetanoemLS8atwonderland.bak+
+\end{compactitem}
+Toda vez que o XCSoar carrega um perfil específico .prf, este arquivo irá incluir todos os ajustes das configurações que você indicou com este arquivo ativo.  Por este motivo o arquivo de backup .bak é necessário, para preservar os padrões que julga importante.
+
+
+\subsection{\textcolor{flashblue}{Montar o Hardware}}
+Montar o hardware de sua escolha lhe tomará algum nível de esforço.  Em todos os casos, a montagem do hardware deve resistir às condições severas, não importando se você usa suportes especiais, suporte de sucção ou um suporte “segura tudo a qualquer momento”.  Neste caso você talvez não queira experimentar segurar seu telefone em mãos, talvez seja uma má idéia.  Para este caso, você deve colocar velcro.  Algumas idéias de fixação provisória:
+\begin{compactitem}
+\item Tenha uma capa de silicone para o telefone e aplique fita adesiva na parta traseira.
+\item Tenha uma fita de velcro, fixando ao redor de sua perna, pouco acima do joelho.
+\item Colocar a capa do telefone inclui deixar seu telefone na perna logo após embarque para conseguir operar dessa forma.
+\end{compactitem}
+Nunca usa máquinas complexas na mão enquanto voa. 
+
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\newpage
+\section{Check Pré-vôo}
+%%%%%--------------------------------------------------------------------%%%%%
+
+%\begin{wrapfigure}[4]{R}{0.5\textwidth}
+%\vspace{-4.5em}
+%  \begin{flushright}
+%    \includegraphics[width=0.48\textwidth]{figures/xy03.jpg}
+%    xy preflight check
+%  \end{flushright}
+%\end{wrapfigure}
+
+Para ser incluso em sua Checklist.
+
+Se você é um usuário único do hardware do XCSoar com diversos planadores, primeiramente configure as curvas polares de seus planadores.  Depois proceda com o ajuste de vôo.
+
+
+\subsection*{\textcolor{flashblue}{Ajuste da Polar}}
+Acione ambos
+\begin{flushleft}\hspace*{1cm}\config{2}{Planador}{}\hspace{1em} ou\\
+\end{flushleft}
+
+\subsection*{\textcolor{flashblue}{Recuperar Ajuste}}
+Reinicie o XCSoar e escolha uma configuração diferente, incluindo corretamente o ajuste da polar e peso.
+
+\subsection*{\textcolor{flashblue}{Setup Flight}}
+\begin{flushleft}\hspace*{1cm}\config{1}{Flight}{}\blink\bmenuw{Carga alar / 
+Bugs / QNH / Max temp}\\\end{flushleft}
+
+\subsection*{\textcolor{flashblue}{Ajuste de Vento}}
+\begin{flushleft}\hspace*{1cm}\config{1}{Vento}{}\blink\bmenuw{Vento auto\dots / 
+Velocidade / Rumo}\\\end{flushleft}
+
+\subsection*{\textcolor{flashblue}{Ajuste de Prova?}}
+Após ter feito “Casa”, o XCSoar irá sempre lhe dar suporte de como seguir para casa, a menos que uma prova seja realizada.  Como você deve esperar, o XCSoar irá lhe guiar através da prova e casa daqui em diante.  Para criar e usar provas, é mostrada uma breve introdução ao final deste manual.  Pode ser escolhida uma prova “Simples” ou “Verdadeira”.
+
+
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\newpage
+\section{Check Inicial}
+%%%%%--------------------------------------------------------------------%%%%%
+
+%\begin{wrapfigure}[4]{R}{0.5\textwidth}
+%\vspace{-4.5em}
+%  \begin{flushright}
+%    \includegraphics[width=0.48\textwidth]{figures/xy04.jpg}
+%    xy checking wind
+%  \end{flushright}
+%\end{wrapfigure}
+
+Para ser incluso na sua Checklist.
+
+\subsection{\textcolor{flashblue}{Check Vôo}}
+\begin{flushleft}\hspace*{1cm}\config{1}{Flight}{}
+%\blink\bmenuw{Carga Alar / Bugs / QNH / Max temp}
+\\\end{flushleft}
+
+\subsection{\textcolor{flashblue}{Check Vento}}
+\begin{flushleft}\hspace*{1cm}\config{1}{Vento}{}
+%\blink\bmenuw{Vento auto\dots / Velocidade / Rumo}
+\\\end{flushleft}
+
+\vspace{5em}
+\section*{Vôo}
+Durante o vôo, há dois ajustes particulares de telas de informações que pode lhe fornecer informações importantes.
+
+\subsection*{\textcolor{flashblue}{Estado do Vôo}}
+\begin{flushleft}\hspace*{1cm}\info{2}{Estado}{}\blink\bmenuw{Times\dots}\\\end{flushleft}
+
+\subsection*{\textcolor{flashblue}{Análise do Vôo}}
+\begin{flushleft}\hspace*{1cm}\info{1}{Análise}{}\bmenuw{\blink}\dots\\\end{flushleft}
+
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\newpage
+\section{Check Pós Vôo}
+%%%%%--------------------------------------------------------------------%%%%%
+
+\subsection{\textcolor{flashblue}{Baixe o Registro de Vôo}}
+Baixe o registro de vôo de seu registrador preferido.
+\begin{flushleft}\hspace*{1cm}\config{2}{Dispositivos}{}\\\end{flushleft}
+\begin{compactitem}
+\item selecione a porta de comunicação
+\item Tecle \bmenuw{Baixar voo}
+\item Aparecerá uma lista de registros de vôo arquivados em seu registrador externo.  Escolha um. 
+\item Tecle \bmenuw{Seleciona}
+\item aguarde.... esta é uma linha serial antiga trabalhando
+\item escolha outra ou tecle  \bmenuw{Não} para finalizar
+\item dependendo do seu registrador, haverá uma demora.  O registrador irá reiniciar e levará tempo para retornar à operação normal.
+\end{compactitem}
+
+%\begin{wrapfigure}[8]{R}{0.4\textwidth}
+%\vspace{-3em}
+%  \begin{flushright}
+%    \includegraphics[width=0.39\textwidth]{figures/xy05.jpg}
+%    xy analyzing
+%  \end{flushright}
+%\end{wrapfigure}
+
+\vspace{2em}
+\textbf{Observação:} caso encontre dificuldades, tenha certeza que o driver que utiliza suporta baixar os arquivos do registrador.  Neste caso você pode estar usando um sistema em cascata, por exemplo um FLARM-Vario-XCSoar.  Pode ser necessário ativar um link direto no vário e escolher outro driver no XCSoar para ter acesso direto do FLARM para o XCSoar.
+
+\subsection{\textcolor{flashblue}{Análise do Vôo}}
+\begin{flushleft}\hspace*{1cm}\info{1}{Análise}{}\\\end{flushleft}
+Use \bmenuw{\blink} para navegar através das várias telas de dados estatísticos adquiridos durante o vôo, como resultado estimado de distância OLC, barógrafo e mesmo uma análise de curva polar se você tiver conexão com um instrumento que forneça medição da velocidade do ar.
+
+\subsection{\textcolor{flashblue}{Estado de Vôo}}
+\begin{flushleft}\hspace*{1cm}\info{2}{Estado}{}\blink\bmenuw{Times\dots}\\\end{flushleft}
+para ter mais informações estatísticas.
+ 
+
+
+\subsection{\textcolor{flashblue}{Subindo o vôo}}
+Existem dois portais aguardando pelos seus registros de vôos. Skylines \url{http://www.skylines-project.org} e
+OLC \url{http://www.onlinecontest.org} .  Se você quiser subir o arquivo, faça isso após o vôo.  O OLC dá 24 horas de prazo para subir os registros.  Usar o Skylines é mais fácil e pode ser seu portal para rastreamento ao vivo e arquivos de vôo arquivados no subdiretório \texttt{logs}.
+
+\subsection*{\textcolor{flashblue}{Desligando tudo}}
+Salve os atuais.  Tenha certeza que incluiu tudo antes de salvar.
+
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\section{Provas}
+%%%%%--------------------------------------------------------------------%%%%%
+
+\subsection{\textcolor{flashblue}{Recupere a função “casa” e provas “Ir para”}}
+Desde que já tenha sido definida uma prova “real” pela primeira vez, a função básica de navegação para “casa” é desligada permanentemente.  Use a função “Ir Para”, para fornecer a prova mais simples possível. \textbf{Observação:} há várias funções nas Infoboxes relativas aos waypoints da “Casa”.  Neste caso, não serão afetados.  A única função que será desligada é a substituição que o XCSoar usa para localizar uma prova real ou até que o usuário defina a primeira prova.
+
+\subsection{\textcolor{flashblue}{Prova simples: Prova Ir Para}}
+Há várias maneiras de criar uma prova simples.  Em todos os casos, escolha um waypoint e tecle \bmenuw{Ir Para}.
+
+Caso mais comum:
+\begin{flushleft}\hspace*{1cm}\nav{1}{Lista}{Waypoint}\\\end{flushleft}
+\begin{compactitem}
+\item Use o filtro para identificar um waypoint.  Tenha cuidado para não configurar filtros múltiplos.  Caso configure dessa forma, não haverá waypoints mostrados.  A condição de múltiplos filtros pode evitar a localização de um alvo.
+\item Tecle \bmenuw{OK}.
+\item (selecione um) Tecle \bmenuw{Seleciona}, então \bmenuw{IR}.
+\end{compactitem}
+Ou use a função panorâmica do mapa, e proceda da mesma forma de definir “Casa”.
+\begin{compactitem}
+\item Navegue até o waypoint desejado
+\item Clique/toque na tela próximo ao waypoint desejado.
+\item A janela de “Elementos de mapa neste local” aparecerá.
+\item Escolha o waypoint.
+\item Tecle \bmenuw{Vá Para}.
+\end{compactitem}
+ 
+\subsection{\textcolor{flashblue}{Prova: criar, salvar, carregar, declarar}}
+Criando uma nova prova:
+\begin{flushleft}\hspace*{1cm}\nav{1}{Prova}{}\blink\bmenuw{Gerenciar}\blink\bmenuw{Nova Prova}\\\end{flushleft}
+\begin{compactitem}
+\item na mesma tela de menu você achará  \bmenuw{Procurar}, \bmenuw{Salvar}, or 
+\bmenuw{Declarar} (para o registrador). Após teclar \bmenuw{Nova Prova} você será questionado à reconhecer e a janela de menu para \bmenuw{Regras} comes up. Defina o primeiro \bmenuw{Tipo de Prova}.
+\item Clicando em \bmenuw{Pilões} and \bmenuw{Adicionar Pilão} abrirá uma janela de filtro \bmenuw{Selecionar Ponto}. Edite seus wayponts. Clicando 
+\bmenuw{Editar Pontos} lhe permitirá alterar os parâmetros.
+\item •	Não feche a janela!! Por último, use \bmenuw{Gerenciar} e \bmenuw{Salavar} e posteriormente \bmenuw{Fechar}.
+\end{compactitem}
+
+\subsection*{\textcolor{flashblue}{Prova: Tempo de abertura e fechamento de Start}}
+Agora, o tempo de flash inicialmente configurado irá se fechar.  Tempo de fechamento atingido.  Tempo de visualizar o Manual do Usuário do XCSoar. 
+Obrigado pelo seu tempo e
+
+%\begin{wrapfigure}[4]{l}{0.5\textwidth}
+%\vspace{-1.3em}
+%  \begin{centering}
+%    \includegraphics[width=0.48\textwidth]{figures/xy06.jpg}
+%  \end{centering}
+%\end{wrapfigure}
+
+\section*{Sempre tenha bons pousos}%no section at all, formatting reasons
+
+%##############  Indexes of flash ##############
+\input{toc.tex}
+
+%##############  Closing page of flash ##############
+\newpage
+\pagestyle{empty}
+
+\normalsize{para mais informações veja:\\}
+\vspace{0.5em}
+
+\begin{center}
+    \includegraphics[angle=0,width=0.5\textwidth,keepaspectratio='true']{graphics/logo.png}
+    \vskip 0.5cm
+%   option 1: web release 
+%    \includegraphics[angle=0,width=0.66\textwidth,keepaspectratio='true']{graphics/title.pdf}\\
+%   option 2: print release
+    \fontsize{50}{0}
+    \selectfont\textbf{XCSoar}\\
+    \fontsize{12}{12}
+    \vspace{0.2em}
+    \LARGE{O computador de vôo de código aberto}\\
+    \vspace{1.2em}
+    \LARGE{Manual do Usuário}\\
+    
+\vspace{9em}
+
+\end{center}
+\begin{flushright}
+\normalsize Disponível em: \xcsoarwebsite{/discover/manual.html}\\
+\end{flushright}
+
+\end{document}

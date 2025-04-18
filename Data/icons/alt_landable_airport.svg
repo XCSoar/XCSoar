@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+ <g transform="matrix(.4375 0 0 .4375 0 -3.5013)">
+  <path d="m32 24.003a16 16 0 0 1-32 0 16 16 0 1 1 32 0z" fill="#fff" fill-rule="evenodd" opacity=".99" stroke-width="3.3216"/>
+  <rect transform="rotate(-45)" x="-21.659" y="21.014" width="32" height="14.545" rx="2.8176" ry="2.7705" stroke-width="2.2857"/>
+  <path d="m26.252 11.629-22.627 22.627 2.1211 2.1211 22.627-22.627z" color="#000000" fill="#ccc" stroke-width="2.2857" style="-inkscape-stroke:none"/>
+ </g>
+</svg>

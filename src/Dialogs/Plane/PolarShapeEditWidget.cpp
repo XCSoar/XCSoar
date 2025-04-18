@@ -1,0 +1,192 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "PolarShapeEditWidget.hpp"
+#include "Form/Frame.hpp"
+#include "Form/Edit.hpp"
+#include "Form/DataField/Float.hpp"
+#include "Look/DialogLook.hpp"
+#include "Screen/Layout.hpp"
+#include "ui/canvas/Font.hpp"
+#include "UIGlobals.hpp"
+#include "util/Macros.hpp"
+#include "Language/Language.hpp"
+#include "Units/Units.hpp"
+#include "Units/Descriptor.hpp"
+
+#include <algorithm>
+
+#include <cassert>
+
+PolarShapeEditWidget::PolarShapeEditWidget(const PolarShape &_shape,
+                                           DataFieldListener *_listener) noexcept
+  :shape(_shape), listener(_listener) {}
+
+PolarShapeEditWidget::~PolarShapeEditWidget() noexcept = default;
+
+static void
+LoadValue(WndProperty &e, double value, UnitGroup unit_group) noexcept
+{
+  const Unit unit = Units::GetUserUnitByGroup(unit_group);
+
+  DataFieldFloat &df = *(DataFieldFloat *)e.GetDataField();
+  assert(df.GetType() == DataField::Type::REAL);
+  df.SetUnits(Units::GetUnitName(unit));
+  df.SetValue(Units::ToUserUnit(value, unit));
+
+  e.RefreshDisplay();
+}
+
+static void
+LoadPoint(PolarShapeEditWidget::PointEditor &pe,
+          const PolarPoint &point) noexcept
+{
+  LoadValue(*pe.v, point.v, UnitGroup::HORIZONTAL_SPEED);
+  LoadValue(*pe.w, point.w, UnitGroup::VERTICAL_SPEED);
+}
+
+static double
+GetValue(WndProperty &e) noexcept
+{
+  return ((DataFieldFloat *)e.GetDataField())->GetValue();
+}
+
+static bool
+SaveValue(WndProperty &e, double &value_r, UnitGroup unit_group) noexcept
+{
+  const Unit unit = Units::GetUserUnitByGroup(unit_group);
+
+  auto new_value = Units::ToSysUnit(GetValue(e), unit);
+  if (new_value == value_r)
+    return false;
+
+  value_r = new_value;
+  return true;
+}
+
+static bool
+SavePoint(const PolarShapeEditWidget::PointEditor &pe,
+          PolarPoint &point) noexcept
+{
+  bool changed = false;
+  changed |= SaveValue(*pe.v, point.v, UnitGroup::HORIZONTAL_SPEED);
+  changed |= SaveValue(*pe.w, point.w, UnitGroup::VERTICAL_SPEED);
+  return changed;
+}
+
+void
+PolarShapeEditWidget::SetPolarShape(const PolarShape &_shape) noexcept
+{
+  shape = _shape;
+
+  for (unsigned i = 0; i < ARRAY_SIZE(points); ++i)
+    LoadPoint(points[i], shape[i]);
+}
+
+PixelSize
+PolarShapeEditWidget::GetMinimumSize() const noexcept
+{
+  return { Layout::Scale(200u),
+      2 * Layout::GetMinimumControlHeight() };
+}
+
+PixelSize
+PolarShapeEditWidget::GetMaximumSize() const noexcept
+{
+  return { Layout::Scale(400u),
+      2 * Layout::GetMaximumControlHeight() };
+}
+
+void
+PolarShapeEditWidget::Prepare(ContainerWindow &parent,
+                              const PixelRect &_rc) noexcept
+{
+  PanelWidget::Prepare(parent, _rc);
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  ContainerWindow &panel = (ContainerWindow &)GetWindow();
+
+  const unsigned width = _rc.GetWidth(), height = _rc.GetHeight();
+
+  const TCHAR *v_text = _("Polar V");
+  const TCHAR *w_text = _("Polar W");
+
+  const unsigned row_height = height / 2;
+  const unsigned label_width = 2 * Layout::GetTextPadding() +
+    std::max(look.text_font.TextSize(v_text).width,
+             look.text_font.TextSize(w_text).width);
+  const unsigned edit_width = (width - label_width) / ARRAY_SIZE(points);
+
+  WindowStyle style;
+  style.TabStop();
+
+  PixelRect label_rc(0, 0, label_width, row_height);
+  v_label = std::make_unique<WndFrame>(panel, look, label_rc);
+  v_label->SetText(v_text);
+
+  PixelRect rc;
+  rc.left = label_width;
+  rc.top = 0;
+  rc.right = rc.left + edit_width;
+  rc.bottom = row_height;
+  for (unsigned i = 0; i < ARRAY_SIZE(points);
+       ++i, rc.left += edit_width, rc.right += edit_width) {
+    points[i].v = std::make_unique<WndProperty>(panel, look, _T(""),
+                                                rc, 0, style);
+    DataFieldFloat *df = new DataFieldFloat(_T("%.0f"), _T("%.0f %s"),
+                                            0, 300, 0, 1, false,
+                                            listener);
+    points[i].v->SetDataField(df);
+  }
+
+  label_rc.top += row_height;
+  label_rc.bottom += row_height;
+  w_label = std::make_unique<WndFrame>(panel, look, label_rc);
+  w_label->SetText(w_text);
+
+  rc.left = label_width;
+  rc.top = row_height;
+  rc.right = rc.left + edit_width;
+  rc.bottom = height;
+
+  double step = 0.01, min = -10;
+  switch (Units::current.vertical_speed_unit) {
+  case Unit::FEET_PER_MINUTE:
+    step = 2;
+    min = -2000;
+    break;
+
+  case Unit::KNOTS:
+    step = 0.02;
+    min = -20;
+    break;
+
+  default:
+    break;
+  }
+
+  for (unsigned i = 0; i < ARRAY_SIZE(points);
+       ++i, rc.left += edit_width, rc.right += edit_width) {
+    points[i].w = std::make_unique<WndProperty>(panel, look, _T(""),
+                                                rc, 0, style);
+    DataFieldFloat *df = new DataFieldFloat(_T("%.2f"), _T("%.2f %s"),
+                                            min, 0, 0, step, false,
+                                            listener);
+
+    points[i].w->SetDataField(df);
+  }
+
+  for (unsigned i = 0; i < ARRAY_SIZE(points); ++i)
+    LoadPoint(points[i], shape[i]);
+}
+
+bool
+PolarShapeEditWidget::Save(bool &_changed) noexcept
+{
+  bool changed = false;
+
+  for (unsigned i = 0; i < ARRAY_SIZE(points); ++i)
+    changed |= SavePoint(points[i], shape[i]);
+
+  _changed |= changed;
+  return true;
+}

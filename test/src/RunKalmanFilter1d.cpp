@@ -1,0 +1,66 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "system/Args.hpp"
+#include "io/FileLineReader.hpp"
+#include "Math/KalmanFilter1d.hpp"
+#include "util/PrintException.hxx"
+
+#include <stdio.h>
+
+#if defined(__GNUC__) && !defined(__clang__)
+/* this warning is bogus because GCC is not clever enough to
+   understand that the "last_value" variable only gets evaluated after
+   it has been initialised */
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
+
+int main(int argc, char **argv)
+try {
+  Args args(argc, argv, "FILE");
+  const auto path = args.ExpectNextPath();
+  args.ExpectEnd();
+
+  FileLineReaderA reader(path);
+
+  KalmanFilter1d kalman_filter(0.0075);
+
+  unsigned last_t = 0;
+  double last_value;
+
+  const char *line;
+  while ((line = reader.ReadLine()) != nullptr) {
+    const char *p = line;
+    char *endptr;
+    unsigned t = strtoul(p, &endptr, 10);
+    if (endptr == line) {
+      fprintf(stderr, "Malformed line: %s\n", line);
+      return EXIT_FAILURE;
+    }
+
+    p = endptr;
+    double value = strtod(p, &endptr);
+    if (endptr == line) {
+      fprintf(stderr, "Malformed line: %s\n", line);
+      return EXIT_FAILURE;
+    }
+
+    if (last_t > 0 && t > last_t) {
+      auto dt = (t - last_t) / 1000.;
+
+      kalman_filter.Update(value, 0.05, dt);
+
+      printf("%u %f %f %f %f\n", t,
+             value, (value - last_value) / dt,
+             kalman_filter.GetXAbs(), kalman_filter.GetXVel());
+    }
+
+    last_t = t;
+    last_value = value;
+  }
+
+  return EXIT_SUCCESS;
+} catch (...) {
+  PrintException(std::current_exception());
+  return EXIT_FAILURE;
+}

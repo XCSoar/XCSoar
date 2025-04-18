@@ -1,0 +1,80 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "Flight.hpp"
+#include "IGCFixEnhanced.hpp"
+#include "DebugReplay.hpp"
+#include "DebugReplayIGC.hpp"
+#include "DouglasPeuckerMod.hpp"
+
+#include <vector>
+
+Flight::Flight(const char* _flight_file, bool _keep_flight)
+  : fixes(nullptr), keep_flight(_keep_flight), flight_file(_flight_file) {
+  if (keep_flight)
+    ReadFlight();
+
+  qnh = AtmosphericPressure::Standard();
+  qnh_available.Clear();
+}
+
+void Flight::ReadFlight() {
+  fixes = new std::vector<IGCFixEnhanced>;
+
+  DebugReplay *replay = DebugReplayIGC::Create(Path(flight_file));
+
+  if (replay) {
+    if (qnh_available)
+      replay->SetQNH(qnh);
+
+    while (replay->Next()) {
+      IGCFixEnhanced fix;
+      fix.Clear();
+      if (fix.Apply(replay->Basic(), replay->Calculated())) {
+        fixes->push_back(fix);
+      }
+    }
+
+    delete replay;
+  }
+}
+
+void Flight::Reduce(const BrokenDateTime start, const BrokenDateTime end,
+                    const unsigned num_levels, const unsigned zoom_factor,
+                    const double threshold, const bool force_endpoints,
+                    const unsigned max_delta_time, const unsigned max_points) {
+  // we need the whole flight, so read it now...
+  if (!keep_flight) {
+    ReadFlight();
+    keep_flight = true;
+  }
+
+  DouglasPeuckerMod dp(num_levels, zoom_factor, threshold,
+    force_endpoints, max_delta_time, max_points);
+
+  unsigned start_index = 0,
+           end_index = 0;
+
+  for (auto fix : *fixes) {
+    const BrokenDateTime date_time{fix.date, fix.time};
+
+    if (date_time < start)
+      start_index++;
+
+    if (date_time < end)
+      end_index++;
+    else
+      break;
+  }
+
+  end_index = std::min(end_index, unsigned(fixes->size()));
+  start_index = std::min(start_index, end_index);
+
+  dp.Encode(*fixes, start_index, end_index);
+}
+
+Flight::~Flight() {
+  if (keep_flight)
+    delete fixes;
+}
+

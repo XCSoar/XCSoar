@@ -1,0 +1,235 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "AbstractAirspace.hpp"
+#include "Navigation/Aircraft.hpp"
+#include "AirspaceAircraftPerformance.hpp"
+#include "AirspaceInterceptSolution.hpp"
+#include "Geo/Flat/FlatBoundingBox.hpp"
+#include "Geo/Flat/FlatRay.hpp"
+#include "Geo/Flat/FlatProjection.hpp"
+#include "Geo/GeoBounds.hpp"
+#include "AirspaceIntersectionVector.hpp"
+#include "Atmosphere/Pressure.hpp"
+#include "util/StringAPI.hxx"
+
+#include <cassert>
+
+AbstractAirspace::~AbstractAirspace() noexcept = default;
+
+bool
+AbstractAirspace::Inside(const AltitudeState &state) const noexcept
+{
+  return altitude_base.IsBelow(state) && altitude_top.IsAbove(state);
+}
+
+bool
+AbstractAirspace::Inside(const AircraftState &state) const noexcept
+{
+  return altitude_base.IsBelow(state) &&
+         altitude_top.IsAbove(state) &&
+         Inside(state.location);
+}
+
+void
+AbstractAirspace::SetGroundLevel(const double alt) noexcept
+{
+  altitude_base.SetGroundLevel(alt);
+  altitude_top.SetGroundLevel(alt);
+}
+
+void
+AbstractAirspace::SetFlightLevel(const AtmosphericPressure press) noexcept
+{
+  altitude_base.SetFlightLevel(press);
+  altitude_top.SetFlightLevel(press);
+}
+
+AirspaceInterceptSolution
+AbstractAirspace::InterceptVertical(const AircraftState &state,
+                                    const AirspaceAircraftPerformance &perf,
+                                    double distance) const noexcept
+{
+  AirspaceInterceptSolution solution;
+  solution.distance = distance;
+  solution.elapsed_time = perf.SolutionVertical(solution.distance,
+                                                state.altitude,
+                                                altitude_base.GetAltitude(state),
+                                                altitude_top.GetAltitude(state),
+                                                solution.altitude);
+  return solution;
+}
+
+AirspaceInterceptSolution
+AbstractAirspace::InterceptHorizontal(const AircraftState &state,
+                                      const AirspaceAircraftPerformance &perf,
+                                      double distance_start,
+                                      double distance_end,
+                                      const bool lower) const noexcept
+{
+  if (lower && altitude_base.IsTerrain())
+    // impossible to be lower than terrain
+    return AirspaceInterceptSolution::Invalid();
+
+  AirspaceInterceptSolution solution;
+  solution.altitude = lower
+    ? altitude_base.GetAltitude(state)
+    : altitude_top.GetAltitude(state);
+  solution.elapsed_time = perf.SolutionHorizontal(distance_start,
+                                                  distance_end,
+                                                  state.altitude,
+                                                  solution.altitude,
+                                                  solution.distance);
+  return solution;
+}
+
+AirspaceInterceptSolution
+AbstractAirspace::Intercept(const AircraftState &state,
+                            const AirspaceAircraftPerformance &perf,
+                            const GeoPoint &loc_start,
+                            const GeoPoint &loc_end) const noexcept
+{
+  const bool only_vertical = (loc_start == loc_end) &&
+    (loc_start == state.location);
+
+  const auto distance_start = only_vertical
+    ? double(0)
+    : state.location.Distance(loc_start);
+
+  const auto distance_end = loc_start == loc_end
+    ? distance_start
+    : (only_vertical ? double(0) : state.location.Distance(loc_end));
+
+  AirspaceInterceptSolution solution =
+    AirspaceInterceptSolution::Invalid();
+
+  // need to scan at least three sides, top, far, bottom (if not terrain)
+
+  AirspaceInterceptSolution solution_candidate =
+    AirspaceInterceptSolution::Invalid();
+
+  if (!only_vertical) {
+    solution_candidate = InterceptVertical(state, perf, distance_start);
+    // search near wall
+    if (solution_candidate.IsEarlierThan(solution))
+      solution = solution_candidate;
+
+    if (distance_end != distance_start) {
+      // need to search far wall also
+      solution_candidate = InterceptVertical(state, perf, distance_end);
+      if (solution_candidate.IsEarlierThan(solution))
+        solution = solution_candidate;
+    }
+  }
+
+  solution_candidate = InterceptHorizontal(state, perf, distance_start,
+                                           distance_end, false);
+  // search top wall
+  if (solution_candidate.IsEarlierThan(solution))
+    solution = solution_candidate;
+
+  // search bottom wall
+  if (!altitude_base.IsTerrain()) {
+    solution_candidate = InterceptHorizontal(state, perf, distance_start,
+                                             distance_end, true);
+    if (solution_candidate.IsEarlierThan(solution))
+      solution = solution_candidate;
+  }
+
+  if (solution.IsValid()) {
+    if (solution.distance == distance_start)
+      solution.location = loc_start;
+    else if (solution.distance == distance_end)
+      solution.location = loc_end;
+    else if (distance_end > 0)
+      solution.location =
+        state.location.Interpolate(loc_end, solution.distance / distance_end);
+    else
+      solution.location = loc_start;
+
+    assert(solution.distance >= 0);
+  }
+
+  return solution;
+}
+
+AirspaceInterceptSolution
+AbstractAirspace::Intercept(const AircraftState &state,
+                            const GeoPoint &end,
+                            const FlatProjection &projection,
+                            const AirspaceAircraftPerformance &perf) const noexcept
+{
+  AirspaceInterceptSolution solution = AirspaceInterceptSolution::Invalid();
+  for (const auto &i : Intersects(state.location, end, projection)) {
+    auto new_solution = Intercept(state, perf, i.first, i.second);
+    if (new_solution.IsEarlierThan(solution))
+      solution = new_solution;
+  }
+
+  return solution;
+}
+
+bool
+AbstractAirspace::MatchNamePrefix(const TCHAR *prefix) const noexcept
+{
+  size_t prefix_length = _tcslen(prefix);
+  return StringIsEqualIgnoreCase(name.c_str(), prefix, prefix_length);
+}
+
+void
+AbstractAirspace::Project(const FlatProjection &projection) noexcept
+{
+  m_border.Project(projection);
+}
+
+const FlatBoundingBox
+AbstractAirspace::GetBoundingBox(const FlatProjection &projection) noexcept
+{
+  Project(projection);
+  return m_border.CalculateBoundingbox();
+}
+
+GeoBounds
+AbstractAirspace::GetGeoBounds() const noexcept
+{
+  return m_border.CalculateGeoBounds();
+}
+
+const SearchPointVector&
+AbstractAirspace::GetClearance(const FlatProjection &projection) const noexcept
+{
+  static constexpr unsigned RADIUS = 5;
+
+  if (!m_clearance.empty())
+    return m_clearance;
+
+  m_clearance = m_border;
+  if (is_convex != TriState::FALSE)
+    is_convex = m_clearance.PruneInterior() ? TriState::FALSE : TriState::TRUE;
+
+  FlatBoundingBox bb = m_clearance.CalculateBoundingbox();
+  FlatGeoPoint center = bb.GetCenter();
+
+  for (SearchPoint &i : m_clearance) {
+    FlatGeoPoint p = i.GetFlatLocation();
+    FlatRay r(center, p);
+    int mag = r.Magnitude();
+    int mag_new = mag + RADIUS;
+    p = r.Parametric((double)mag_new / mag);
+    i = SearchPoint(projection.Unproject(p), p);
+  }
+
+  return m_clearance;
+}
+
+void
+AbstractAirspace::ClearClearance() const noexcept
+{
+  m_clearance.clear();
+}
+
+void
+AbstractAirspace::SetActivity(const AirspaceActivity mask) const noexcept
+{
+  active = days_of_operation.Matches(mask);
+}

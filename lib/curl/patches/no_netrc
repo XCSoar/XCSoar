@@ -1,0 +1,20 @@
+Index: curl-8.5.0/lib/url.c
+===================================================================
+--- curl-8.5.0.orig/lib/url.c
++++ curl-8.5.0/lib/url.c
+@@ -2734,6 +2734,7 @@ static CURLcode override_login(struct Cu
+     Curl_safefree(*passwdp);
+   }
+   conn->bits.netrc = FALSE;
++#ifndef __BIONIC__
+   if(data->set.use_netrc && !data->set.str[STRING_USERNAME]) {
+     int ret;
+     bool url_provided = FALSE;
+@@ -2815,6 +2816,7 @@ static CURLcode override_login(struct Cu
+         return CURLE_OUT_OF_MEMORY;
+     }
+   }
++#endif
+ 
+   return CURLE_OK;
+ }
