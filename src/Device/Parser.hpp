@@ -10,6 +10,7 @@ class NMEAInputLine;
 struct GeoPoint;
 struct BrokenDate;
 struct BrokenTime;
+struct RangeFilter;
 
 class NMEAParser
 {

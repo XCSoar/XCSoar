@@ -2,8 +2,9 @@
 // Copyright The XCSoar Project
 
 #pragma once
+#include <cstdint>
 
-/** \file 
+/** \file
  * Specific parsers for Flarm NMEA records.
  * @see https://flarm.com/wp-content/uploads/man/FTD-012-Data-Port-Interface-Control-Document-ICD.pdf
  */
@@ -14,6 +15,11 @@ struct FlarmError;
 struct FlarmVersion;
 struct FlarmStatus;
 struct TrafficList;
+
+struct RangeFilter {
+  uint16_t horizontal;
+  uint16_t vertical;
+};
 
 /**
  * Parses a PFLAE sentence (self-test results).
@@ -59,4 +65,4 @@ ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, TimeStamp clock) noexcept;
  * @param clock The time now.
  */
 void
-ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock) noexcept;
+ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock, RangeFilter &range) noexcept;
