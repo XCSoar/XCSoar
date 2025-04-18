@@ -3,7 +3,7 @@
 void
 CommonStats::ResetTask() noexcept
 {
-  start_open_time_span = RoughTimeSpan::Invalid();
+  start_open_time_span = TimeSpan::Invalid();
   landable_reachable = false;
   TimeUnderStartMaxHeight = TimeStamp::Undefined();
   aat_time_remaining = {};

@@ -4,13 +4,13 @@
 #pragma once
 
 #include "time/FloatDuration.hxx"
+#include "time/RoughTimeDecl.hpp"
 
 #include <list>
 #include <memory>
 
 class Angle;
-class RoughTime;
-class RoughTimeSpan;
+class TimeSpan;
 
 /**
  * Class used as generic node for tree-structured data.
@@ -115,8 +115,8 @@ public:
   RoughTime GetAttributeRoughTime(const char *name) const noexcept;
 
   [[gnu::pure]]
-  RoughTimeSpan GetAttributeRoughTimeSpan(const char *start_name,
-                                          const char *end_name) const noexcept;
+  TimeSpan GetAttributeRoughTimeSpan(const char *start_name,
+                                     const char *end_name) const noexcept;
 };
 
 /**
