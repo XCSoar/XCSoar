@@ -18,9 +18,16 @@ enum ControlIndex {
   NavigatorWidgetLite2LHeight,
   NavigatorWidgetHeight,
   NavigatorWidgetDetailedHeight,
-  NavigatorWidgetReverseSwipeWaypoint
+  NavigatorWidgetReverseSwipeWaypoint,
+  NavigatorWidgetAltitude
 };
 
+static constexpr StaticEnumChoice navigator_altitude_type_list[] = {
+  { NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltReq, N_("WP_AltReq"), N_("Additional altitude required to reach the next turn point.") },
+  { NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltDiff, N_("WP_AltDiff"), N_("Next Altitude Difference - Arrival altitude at the next waypoint relative to the safety arrival height.") },
+  { NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltArrival, N_("WP_AltArrival"), N_("Absolute arrival altitude at the next waypoint in final glide.") },
+  nullptr
+};
 
 class NavigatorConfigPanel final : public RowFormWidget {
 public:
@@ -88,6 +95,10 @@ NavigatorConfigPanel::Prepare(ContainerWindow &parent,
              "swipe/move the window over the waypoints strip.\n"
              "\"The waypoints strip\" is a representation of all waypoints disposed horizontally one after the other."),
              ui_settings.navigator.navigator_swipe);
+
+  AddEnum(_("Navigator Altitude type"), _("Choose an altitude type to be displayed beside the Waypoint name."),
+          navigator_altitude_type_list,
+          (unsigned)ui_settings.navigator.navigator_altitude_type);
 }
 
 bool
@@ -115,6 +126,11 @@ NavigatorConfigPanel::Save(bool &_changed) noexcept
                             ui_settings.navigator.navigator_swipe)))
     CommonInterface::main_window->ReinitialiseLayout();
 
+  if ((changed |= SaveValueEnum(NavigatorWidgetAltitude,
+                           ProfileKeys::NavigatorAltitudeType,
+                           ui_settings.navigator.navigator_altitude_type)))
+    CommonInterface::main_window->ReinitialiseLayout();
+    
   _changed |= changed;
 
   return true;

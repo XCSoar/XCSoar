@@ -12,4 +12,5 @@ NavigatorSettings::SetDefaults() noexcept
   navigator_detailed_height = 11;
 
   navigator_swipe = false;
+  navigator_altitude_type = NavigatorWidgetAltitudeType::WP_AltArrival;
 }

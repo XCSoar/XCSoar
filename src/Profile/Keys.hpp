@@ -232,6 +232,7 @@ constexpr std::string_view NavigatorLite1LHeight = "NavigatorLite1LHeight";
 constexpr std::string_view NavigatorLite2LHeight = "NavigatorLite2LHeight";
 constexpr std::string_view NavigatorDetailedHeight = "NavigatorDetailedHeight";
 constexpr std::string_view NavigatorReverseSwipeWaypointMovement = "NavigatorReverseSwipeWaypointMovement";
+constexpr std::string_view NavigatorAltitudeType = "NavigatorAltitudeType";
 
 constexpr std::string_view IgnoreNMEAChecksum = "IgnoreNMEAChecksum";
 constexpr std::string_view MapOrientation = "DisplayOrientation";
