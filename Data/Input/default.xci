@@ -459,6 +459,140 @@ label=Target Show$(CheckTask)$(CheckTaskResumed)
 location=8
 
 # -------------
+# mode=Navigator1
+# -------------
+
+mode=Navigator1
+type=key
+data=APP1
+event=Mode Navigator2
+label=Navigator\nPage 2/2
+location=1
+
+mode=Navigator1
+type=key
+data=0
+event=Status all
+event=Mode default
+label=Status
+location=2
+
+mode=Navigator1
+type=key
+data=0
+event=Analysis
+event=Mode default
+label=Analysis
+location=3
+
+mode=Navigator1
+type=key
+data=0
+event=Setup Target
+event=Mode default
+label=Target Show$(CheckTask)$(CheckTaskResumed)
+location=4
+
+mode=Navigator1
+type=key
+data=APP1
+event=Mode Navigator2
+label=Navigator\nPage 2/2
+location=5
+
+mode=Navigator1
+type=key
+data=0
+event=AdjustWaypoint previousarm
+label=$(WaypointPreviousArm)
+location=6
+
+mode=Navigator1
+type=key
+data=0
+event=AdjustWaypoint nextarm
+label=$(WaypointNextArm)
+location=7
+
+mode=Navigator1
+type=key
+data=0
+event=Setup Alternates
+event=Mode default
+label=Alternates$(CheckWaypointFile)
+location=8
+
+mode=Navigator1
+type=key
+data=0
+event=Mode default
+event=AbortTask toggle
+label=Task\n$(TaskAbortToggleActionName)$(CheckWaypointFile)
+location=9
+
+# -------------
+# mode=Navigator2
+# -------------
+
+mode=Navigator2
+type=key
+data=APP1
+event=Mode default
+label=Cancel
+location=1
+
+mode=Navigator2
+type=key
+data=7
+event=Mode default
+event=StatusMessage Dropped marker
+event=Logger note Mark
+event=MarkLocation
+label=Marker Drop
+location=3
+
+mode=Navigator2
+type=key
+data=8
+event=Mode default
+event=StatusMessage Pilot event announced
+event=Logger note PEV
+event=PilotEvent
+label=Pilot Event Announce
+location=4
+
+mode=Navigator2
+type=key
+data=APP1
+event=Mode default
+label=Cancel
+location=5
+
+mode=Navigator2
+type=key
+data=6
+event=Setup System
+event=Mode default
+label=Setup System
+location=6
+
+mode=Navigator2
+type=key
+data=0
+event=Calculator
+event=Mode default
+label=Task Manager
+location=7
+
+mode=Navigator2
+type=key
+data=0
+event=WaypointDetails select
+event=Mode default
+label=Waypoint List$(CheckWaypointFile)
+location=8
+
+# -------------
 # mode=Display1
 # -------------
 
