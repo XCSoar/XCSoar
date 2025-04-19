@@ -218,6 +218,10 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
   static constexpr StaticEnumChoice bottom_list[] = {
     { PageLayout::Bottom::NOTHING, N_("Nothing") },
     { PageLayout::Bottom::CROSS_SECTION, N_("Cross section") },
+    { PageLayout::Bottom::NAVIGATOR, N_("B.Navigator") },
+    { PageLayout::Bottom::NAVIGATOR_LITE_ONE_LINE, N_("B.Navigator lite 1 line") },
+    { PageLayout::Bottom::NAVIGATOR_LITE_TWO_LINES, N_("B.Navigator lite 2 lines") },
+    { PageLayout::Bottom::NAVIGATOR_DETAILED, N_("B.Navigator detailed") },
     nullptr
   };
   AddEnum(_("Bottom area"),
@@ -227,6 +231,10 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
 
   static constexpr StaticEnumChoice top_list[] = {
     { PageLayout::Top::NOTHING, N_("Nothing") },
+    { PageLayout::Top::NAVIGATOR, N_("T.Navigator") },
+    { PageLayout::Top::NAVIGATOR_LITE_ONE_LINE, N_("T.Navigator lite 1 line") },
+    { PageLayout::Top::NAVIGATOR_LITE_TWO_LINES, N_("T.Navigator lite 2 lines") },
+    { PageLayout::Top::NAVIGATOR_DETAILED, N_("T.Navigator detailed") },
     nullptr
   };
   AddEnum(_("Top area"),
@@ -397,6 +405,19 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     buffer.AppendFormat(_T(", %s"), _("Cross section"));
     break;
 
+  case PageLayout::Bottom::NAVIGATOR:
+    buffer.AppendFormat(_T(", %s"), _("B.Navigator"));
+    break;
+  case PageLayout::Bottom::NAVIGATOR_LITE_ONE_LINE:
+    buffer.AppendFormat(_T(", %s"), _("B.Navigator lite 1 line"));
+    break;
+  case PageLayout::Bottom::NAVIGATOR_LITE_TWO_LINES:
+    buffer.AppendFormat(_T(", %s"), _("B.Navigator lite 2 lines"));
+    break;
+  case PageLayout::Bottom::NAVIGATOR_DETAILED:
+    buffer.AppendFormat(_T(", %s"), _("B.Navigator detailed"));
+    break;
+
   case PageLayout::Bottom::MAX:
     gcc_unreachable();
   }
@@ -404,6 +425,19 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   switch (value.top) {
   case PageLayout::Top::NOTHING:
   case PageLayout::Top::CUSTOM:
+    break;
+
+  case PageLayout::Top::NAVIGATOR:
+    buffer.AppendFormat(_T(", %s"), _("T.Navigator"));
+    break;
+  case PageLayout::Top::NAVIGATOR_LITE_ONE_LINE:
+    buffer.AppendFormat(_T(", %s"), _("T.Navigator lite 1 line"));
+    break;
+  case PageLayout::Top::NAVIGATOR_LITE_TWO_LINES:
+    buffer.AppendFormat(_T(", %s"), _("T.Navigator lite 2 lines"));
+    break;
+  case PageLayout::Top::NAVIGATOR_DETAILED:
+    buffer.AppendFormat(_T(", %s"), _("T.Navigator detailed"));
     break;
 
   case PageLayout::Top::MAX:

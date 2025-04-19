@@ -71,6 +71,19 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
       builder.Append(_T(", XS"));
       break;
 
+    case Bottom::NAVIGATOR:
+      builder.Append(_T(", NAV_B"));
+      break;
+    case Bottom::NAVIGATOR_LITE_ONE_LINE:
+      builder.Append(_T(", NAV_Lite_1L_B"));
+      break;
+    case Bottom::NAVIGATOR_LITE_TWO_LINES:
+      builder.Append(_T(", NAV_Lite_2L_B"));
+      break;
+    case Bottom::NAVIGATOR_DETAILED:
+      builder.Append(_T(", NAV_Detailed_B"));
+      break;
+      
     case Bottom::MAX:
       gcc_unreachable();
     }
@@ -78,6 +91,18 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
     switch (top) {
     case Top::NOTHING:
     case Top::CUSTOM:
+      break;
+    case Top::NAVIGATOR:
+      builder.Append(_T(", NAV"));
+      break;
+    case Top::NAVIGATOR_LITE_ONE_LINE:
+      builder.Append(_T(", NAV_Lite_1L"));
+      break;
+    case Top::NAVIGATOR_LITE_TWO_LINES:
+      builder.Append(_T(", NAV_Lite_2L"));
+      break;
+    case Top::NAVIGATOR_DETAILED:
+      builder.Append(_T(", NAV_Detailled"));
       break;
     case Top::MAX:
       gcc_unreachable();

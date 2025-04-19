@@ -9,6 +9,7 @@
 #include "MainWindow.hpp"
 #include "CrossSection/CrossSectionWidget.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
+#include "Gauge/NavigatorWidget.hpp"
 #include "Pan.hpp"
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
@@ -209,6 +210,19 @@ LoadBottom(PageLayout::Bottom bottom)
     CommonInterface::main_window->SetBottomWidget(new CrossSectionWidget(*data_components));
     break;
 
+  case PageLayout::Bottom::NAVIGATOR:
+    CommonInterface::main_window->SetBottomWidget(new NavigatorWidget(navType::NAVIGATOR, false));
+    break;
+  case PageLayout::Bottom::NAVIGATOR_LITE_ONE_LINE:
+    CommonInterface::main_window->SetBottomWidget(new NavigatorWidget(navType::NAVIGATOR_LITE_ONE_LINE, false));
+    break;
+  case PageLayout::Bottom::NAVIGATOR_LITE_TWO_LINES:
+    CommonInterface::main_window->SetBottomWidget(new NavigatorWidget(navType::NAVIGATOR_LITE_TWO_LINES, false));
+    break;
+  case PageLayout::Bottom::NAVIGATOR_DETAILED:
+    CommonInterface::main_window->SetBottomWidget(new NavigatorWidget(navType::NAVIGATOR_DETAILED, false));
+    break;
+
   case PageLayout::Bottom::CUSTOM:
     /* don't touch */
     break;
@@ -224,6 +238,23 @@ LoadTop(PageLayout::Top top)
   switch (top) {
   case PageLayout::Top::NOTHING:
     CommonInterface::main_window->SetTopWidget(nullptr);
+    break;
+
+  case PageLayout::Top::NAVIGATOR:
+    CommonInterface::main_window->SetTopWidget(
+        new NavigatorWidget(navType::NAVIGATOR, true));
+    break;
+  case PageLayout::Top::NAVIGATOR_LITE_ONE_LINE:
+    CommonInterface::main_window->SetTopWidget(
+        new NavigatorWidget(navType::NAVIGATOR_LITE_ONE_LINE, true));
+    break;
+  case PageLayout::Top::NAVIGATOR_LITE_TWO_LINES:
+    CommonInterface::main_window->SetTopWidget(
+        new NavigatorWidget(navType::NAVIGATOR_LITE_TWO_LINES, true));
+    break;
+  case PageLayout::Top::NAVIGATOR_DETAILED:
+    CommonInterface::main_window->SetTopWidget(
+        new NavigatorWidget(navType::NAVIGATOR_DETAILED, true));
     break;
 
   case PageLayout::Top::CUSTOM:

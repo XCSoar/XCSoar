@@ -70,6 +70,14 @@ struct PageLayout
     CROSS_SECTION,
 
     /**
+     * Show a Navigator menu below the map.
+     */
+    NAVIGATOR,
+    NAVIGATOR_LITE_ONE_LINE,
+    NAVIGATOR_LITE_TWO_LINES,
+    NAVIGATOR_DETAILED,
+
+    /**
      * A custom #Widget is being displayed.  This is not a
      * user-accessible option, it's only used for runtime state.
      */
@@ -86,6 +94,14 @@ struct PageLayout
    */
   enum class Top : uint8_t {
     NOTHING,
+
+    /**
+     * Show a Navigator menu above the map.
+     */
+    NAVIGATOR,
+    NAVIGATOR_LITE_ONE_LINE,
+    NAVIGATOR_LITE_TWO_LINES,
+    NAVIGATOR_DETAILED,
 
     /**
      * A custom #Widget is being displayed.  This is not a
