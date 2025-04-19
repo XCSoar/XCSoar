@@ -119,6 +119,9 @@ NavigatorWindow::OnPaint(Canvas &canvas) noexcept
   if (tp == TaskType::ORDERED)
     renderer.DrawProgressTask(task_summary, canvas, canvas.GetRect(), look_nav,
                               look_task);
+
+  renderer.DrawWaypointsIconsTitle(canvas, wp_before, wp_current, task_size,
+                                   look_nav, nav_type);
 }
 
 void

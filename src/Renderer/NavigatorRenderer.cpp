@@ -200,3 +200,49 @@ NavigatorRenderer::DrawProgressTask(const TaskSummary &summary, Canvas &canvas,
     canvas.DrawRectangle(PixelRect{position_waypoint}.WithMargin(w));
   }
 }
+
+void
+NavigatorRenderer::DrawWaypointsIconsTitle(
+    Canvas &canvas, WaypointPtr waypoint_before, WaypointPtr waypoint_current,
+    unsigned task_size, [[maybe_unused]] const NavigatorLook &look,
+    const enum navType nav_type) noexcept
+{
+  const int rc_height = canvas_height;
+
+  const WaypointRendererSettings &waypoint_settings =
+      CommonInterface::GetMapSettings().waypoint;
+  const WaypointLook &waypoint_look = UIGlobals::GetMapLook().waypoint;
+
+  WaypointIconRenderer waypoint_icon_renderer{waypoint_settings, waypoint_look,
+                                              canvas};
+  const PixelPoint position_waypoint_left{
+      static_cast<int>(canvas_width * 7 / 200), rc_height * 1 / 2};
+
+  static PixelPoint position_waypoint_right{};
+
+  if (nav_type == navType::NAVIGATOR_DETAILED) {
+    position_waypoint_right = {
+        static_cast<int>(canvas_width * 98 / 100 - rc_height * 15 / 100),
+        rc_height * 38 / 100};
+  } else {
+    position_waypoint_right = {static_cast<int>(canvas_width * 193 / 200),
+                               rc_height * 1 / 2};
+  }
+
+  // CALCULATE REACHABILITY
+  /// TODO: implement waypoint reachability
+  /// without using costing calculation inside renderer
+  WaypointReachability wr_before{WaypointReachability::UNREACHABLE};
+  WaypointReachability wr_current{WaypointReachability::UNREACHABLE};
+
+  auto *protected_task_manager =
+      backend_components->protected_task_manager.get();
+  if (protected_task_manager != nullptr && task_size > 1) {
+    if (waypoint_before != nullptr)
+      waypoint_icon_renderer.Draw(*waypoint_before, position_waypoint_left,
+                                  wr_before, true);
+    if (waypoint_current != nullptr)
+      waypoint_icon_renderer.Draw(*waypoint_current, position_waypoint_right,
+                                  wr_current, true);
+  }
+}
