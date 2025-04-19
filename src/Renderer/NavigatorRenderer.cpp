@@ -281,6 +281,24 @@ NavigatorRenderer::GenerateStringsWaypointInfos(const enum navType nav_type,
         waypoint_altitude_s.c_str(), waypoint_GR_s.c_str());
   }
 }
+
+void
+NavigatorRenderer::GenerateStringsCurrentFlightInfo(const TaskType tp) noexcept
+{
+  // current_speed_s; // e_Speed_GPS
+  FormatUserSpeed(basic->ground_speed, current_speed_s.data(), false, 0);
+
+  // current_altitude_s; // e_HeightGPS
+  FormatUserAltitude(basic->gps_altitude, current_altitude_s.data(), false);
+
+  // waypoint_average_speed_s; // e_SpeedTaskAvg
+  if (tp == TaskType::ORDERED && has_started) {
+    FormatUserSpeed(calculated->task_stats.total.travelled.GetSpeed(),
+                    waypoint_average_speed_s.data(), false, 0);
+  } else {
+    waypoint_average_speed_s.Format(_T("%s"), _T("---"));
+  }
+}
 void
 NavigatorRenderer::SetTextColor(Canvas &canvas,
                                 const NavigatorLook &look_nav) noexcept
@@ -407,6 +425,119 @@ NavigatorRenderer::DrawWaypointInfos(Canvas &canvas,
 }
 
 void
+NavigatorRenderer::DrawCurrentFlightInfos(
+    Canvas &canvas, const enum navType nav_type,
+    const InfoBoxLook &look_infobox) noexcept
+{
+  int pos_y_current_altitude{};
+  int pos_y_current_speed{};
+
+  if (canvas_width > canvas_height * 3.2) {
+    nav_type == navType::NAVIGATOR ? font_height = canvas_height * 55 / 200
+                                   : font_height = canvas_height * 40 / 200;
+  } else {
+    nav_type == navType::NAVIGATOR ? font_height = canvas_height * 55 / 200
+                                   : font_height = canvas_height * 30 / 200;
+  }
+
+  font.Load(FontDescription(Layout::VptScale(font_height * ratio_dpi)));
+  // grow artificially the current_speed_s string ('format tricks')
+  StaticString<7> sz_tmp_current_speed_s;
+  sz_tmp_current_speed_s.clear();
+  sz_tmp_current_speed_s.append(_T("0"));
+  sz_tmp_current_speed_s.append(current_speed_s);
+  const auto text_size_current_speed_s =
+      canvas.CalcTextSize(sz_tmp_current_speed_s.c_str());
+  const auto text_size_current_altitude_s =
+      canvas.CalcTextSize(current_altitude_s.c_str());
+
+  switch (nav_type) {
+  case navType::NAVIGATOR_LITE_ONE_LINE:
+    size_text = canvas.CalcTextSize(infos_waypoint_s.c_str());
+    pos_x_speed_altitude =
+        canvas_width * 96 / 100 - size_text.width - canvas_height * 16 / 100;
+    pos_y_current_speed = static_cast<int>(canvas_height * 10 / 100);
+    pos_y_current_altitude = static_cast<int>(canvas_height * 35 / 100);
+    break;
+
+  case navType::NAVIGATOR:
+  case navType::NAVIGATOR_LITE_TWO_LINES:
+    size_text.width = std::max(text_size_current_speed_s.width,
+                               text_size_current_altitude_s.width);
+    pos_x_speed_altitude =
+        canvas_width * 96 / 100 - size_text.width - canvas_height * 16 / 100;
+    pos_y_current_speed = static_cast<int>(canvas_height * 5 / 100);
+    pos_y_current_altitude = static_cast<int>(canvas_height * 45 / 100);
+    break;
+
+  case navType::NAVIGATOR_DETAILED:
+  default:
+    size_text.width = std::max(text_size_current_speed_s.width,
+                               text_size_current_altitude_s.width);
+    if (canvas_width > canvas_height * 3.2) {
+      pos_x_speed_altitude =
+          canvas_width * 96 / 100 - size_text.width - canvas_height * 16 / 100;
+      pos_y_current_speed = static_cast<int>(canvas_height * 10 / 100);
+      pos_y_current_altitude = static_cast<int>(canvas_height * 35 / 100);
+    } else {
+      pos_x_speed_altitude = canvas_width * 103 / 100 - size_text.width -
+                             canvas_height * 29 / 100;
+      pos_y_current_speed = static_cast<int>(canvas_height * 13 / 100);
+      pos_y_current_altitude = static_cast<int>(canvas_height * 42 / 100);
+    }
+    break;
+  }
+
+  if ((nav_type == navType::NAVIGATOR_DETAILED ||
+       nav_type == navType::NAVIGATOR) &&
+      canvas_width > canvas_height * 2.3) {
+
+    // Current speed ------------------------------------------------
+    const PixelPoint pxpt_pos_current_speed{pos_x_speed_altitude,
+                                            pos_y_current_speed};
+    canvas.Select(font);
+    pp_drawed_text_origin = {0, 0};
+    ps_drawed_text_size = {static_cast<int>(canvas_width),
+                           static_cast<int>(canvas_height)};
+    pr_drawed_text_rect = {pp_drawed_text_origin, ps_drawed_text_size};
+    canvas.DrawClippedText(pxpt_pos_current_speed, pr_drawed_text_rect,
+                           current_speed_s);
+
+    // Draw speed units ---------------------------------------------
+    unit = Units::GetUserSpeedUnit();
+    unit_height = static_cast<unsigned int>(font_height * 38 / 100);
+    font.Load(FontDescription(Layout::VptScale(unit_height * ratio_dpi)));
+    size_text = canvas.CalcTextSize(current_speed_s.c_str());
+    pp_pos_unit =
+        pxpt_pos_current_speed.At(size_text.width, size_text.height / 10);
+    canvas.Select(font);
+    UnitSymbolRenderer::Draw(canvas, pp_pos_unit, unit,
+                             look_infobox.unit_fraction_pen);
+
+    // Current Altitude --------------------------------------------
+    font.Load(FontDescription(Layout::VptScale(font_height * ratio_dpi)));
+    const PixelPoint pxpt_pos_altitude{pos_x_speed_altitude,
+                                       pos_y_current_altitude};
+    canvas.Select(font);
+    ps_drawed_text_size = {static_cast<int>(canvas_width),
+                           static_cast<int>(canvas_height)};
+    pr_drawed_text_rect = {pp_drawed_text_origin, ps_drawed_text_size};
+    canvas.DrawClippedText(pxpt_pos_altitude, pr_drawed_text_rect,
+                           current_altitude_s);
+
+    // Draw Altitude unit -------------------------------------------
+    unit = Units::GetUserAltitudeUnit();
+    unit_height = static_cast<unsigned int>(font_height * 0.5);
+    font.Load(FontDescription(Layout::VptScale(unit_height * ratio_dpi)));
+    size_text = canvas.CalcTextSize(current_altitude_s.c_str());
+    pp_pos_unit =
+        pxpt_pos_altitude.At(size_text.width, size_text.height * 53 / 100);
+    UnitSymbolRenderer::Draw(canvas, pp_pos_unit, unit,
+                             look_infobox.unit_fraction_pen);
+  }
+}
+
+void
 NavigatorRenderer::DrawTaskTextsArrow(
     Canvas &canvas, TaskType tp, [[maybe_unused]] const Waypoint &wp_current,
     [[maybe_unused]] const PixelRect &rc, const enum navType nav_type,
@@ -417,10 +548,14 @@ NavigatorRenderer::DrawTaskTextsArrow(
   // Generate all strings -------------------------------------------
   GenerateStringsWaypointInfos(nav_type, tp);
 
+  GenerateStringsCurrentFlightInfo(tp);
+
   // Draw all Strings -----------------------------------------------
   SetTextColor(canvas, look_nav);
 
   DrawWaypointInfos(canvas, nav_type, look_infobox);
+
+  DrawCurrentFlightInfos(canvas, nav_type, look_infobox);
 }
 
 void
