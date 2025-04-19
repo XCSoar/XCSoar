@@ -54,6 +54,7 @@ NavigatorRenderer::Update(const Canvas &canvas) noexcept
   calculated = &CommonInterface::Calculated();
 
   has_started = calculated->ordered_task_stats.start.HasStarted();
+  utc_offset = CommonInterface::GetComputerSettings().utc_offset;
 
   ratio_dpi = 1.0 / Layout::vdpi * 100;
 }
@@ -307,6 +308,85 @@ NavigatorRenderer::GenerateStringWaypointName(
   // waypoint_name_s; // e_WP_Name
   waypoint_name_s.Format(_T("%s"), wp_current.name.c_str());
 }
+
+void
+NavigatorRenderer::GenerateStringsTimesInfo(const TaskType tp) noexcept
+{
+  // time_elapsed_s;
+  if (tp == TaskType::ORDERED && has_started && basic->time_available) {
+    const auto time_elapsed = TimeStamp{
+        FloatDuration{calculated->ordered_task_stats.total.time_elapsed}};
+    const BasicStringBuffer<TCHAR, 8> time_elapsed_s_tmp =
+        FormatLocalTimeHHMM(time_elapsed, utc_no_offset);
+    time_elapsed_s.Format(_T("%s"), time_elapsed_s_tmp.c_str());
+  } else {
+    time_elapsed_s.Format(_T("%s"), _T("--:--"));
+  }
+
+  // time_start_s;
+  const auto time_start = calculated->ordered_task_stats.start.time;
+  if (tp == TaskType::ORDERED && has_started && basic->time_available)
+    time_start_s.Format(_T("%s"),
+                        FormatLocalTimeHHMM(time_start, utc_offset).c_str());
+  else {
+    time_start_s.Format(_T("%s"), _T("--:--"));
+  }
+
+  // time_local_s;
+  time_local_s.clear();
+  if (basic->time_available) {
+    const BasicStringBuffer<TCHAR, 8> time =
+        FormatLocalTimeHHMM(basic->time, utc_offset);
+    time_local_s.AppendFormat(_T("%s"), time.c_str());
+  } else {
+    time_local_s.Format(_T("%s"), _T("--:--"));
+  }
+
+  // time_planned_s;
+  TimeStamp time_planned{};
+  if (tp == TaskType::ORDERED && has_started && basic->time_available) {
+    time_planned = TimeStamp{
+        FloatDuration{calculated->ordered_task_stats.total.time_planned}};
+    time_planned_s.Format(
+        _T("%s"), FormatLocalTimeHHMM(time_planned, utc_no_offset).c_str());
+  } else if (tp != TaskType::ORDERED && basic->time_available) {
+    time_planned =
+        TimeStamp{FloatDuration{calculated->task_stats.total.time_planned}};
+    time_planned_s.Format(
+        _T("%s"), FormatLocalTimeHHMM(time_planned, utc_no_offset).c_str());
+  } else {
+    time_planned_s.Format(_T("%s"), _T("--:--"));
+  }
+
+  // arrival_planned_s;
+  TimeStamp arrival_planned{};
+  if ((tp == TaskType::ORDERED && has_started) && basic->time_available) {
+    arrival_planned = TimeStamp{
+        FloatDuration{time_start.ToDuration() + time_planned.ToDuration()}};
+    arrival_planned_s.Format(
+        _T("%s"), FormatLocalTimeHHMM(arrival_planned, utc_offset).c_str());
+  } else if (tp != TaskType::ORDERED && basic->time_available) {
+    arrival_planned = TimeStamp{
+        FloatDuration{basic->time.ToDuration() + time_planned.ToDuration()}};
+    arrival_planned_s.Format(
+        _T("%s"), FormatLocalTimeHHMM(arrival_planned, utc_offset).c_str());
+  } else {
+    arrival_planned_s.Format(_T("%s"), _T("--:--"));
+  }
+
+  // times_local_elapsed_s;
+  times_local_elapsed_s.Format(_T("%s (%s)"), time_local_s.c_str(),
+                               time_elapsed_s.c_str());
+
+  // times_arrival_planned_s;
+  if (canvas_width > canvas_height * 2.8) {
+    times_arrival_planned_s.Format(_T("%s (%s)"), arrival_planned_s.c_str(),
+                                   time_planned_s.c_str());
+  } else {
+    times_arrival_planned_s.Format(_T("%s"), arrival_planned_s.c_str());
+  }
+}
+
 void
 NavigatorRenderer::SetTextColor(Canvas &canvas,
                                 const NavigatorLook &look_nav) noexcept
@@ -634,6 +714,58 @@ NavigatorRenderer::DrawWaypointName(Canvas &canvas,
 }
 
 void
+NavigatorRenderer::DrawTimesInfo(Canvas &canvas, const PixelRect &rc,
+                                 const enum navType nav_type) noexcept
+{
+  if (nav_type == navType::NAVIGATOR_DETAILED) {
+    if (canvas_width > canvas_height * 3.6) {
+      font.Load(FontDescription(
+          Layout::VptScale(canvas_height * ratio_dpi * 32 / 200)));
+    } else {
+      font.Load(FontDescription(
+          Layout::VptScale(canvas_height * ratio_dpi * 24 / 200)));
+    }
+
+    size_text = canvas.CalcTextSize(times_local_elapsed_s.c_str());
+    const int pos_y_text_times{
+        static_cast<int>(canvas_height * 183 / 200 - size_text.height)};
+    const PixelRect pxrect_sz_time_start_s{rc.BottomAligned(canvas_width)};
+
+    // Draw text start time -----------------------------------------
+    const PixelPoint pxpt_pos_time_start_s{
+        static_cast<int>(canvas_width * 5 / 200 + 8), pos_y_text_times};
+    canvas.DrawClippedText(pxpt_pos_time_start_s, pxrect_sz_time_start_s,
+                           time_start_s);
+
+    // Draw text current time / elapsed time ------------------------
+    const PixelRect pxlrect_sz_time_elapsed_s{rc.BottomAligned(canvas_width)};
+    int size_text_tmp{};
+    if (canvas_width > canvas_height * 2.8) {
+      size_text_tmp = size_text.width * 3 / 4;
+    } else {
+      size_text_tmp = size_text.width / 2;
+    }
+    const PixelPoint pxpt_pos_time_elapsed_s{
+        static_cast<int>(canvas_width * 100 / 200 - size_text_tmp),
+        pos_y_text_times};
+    canvas.DrawClippedText(pxpt_pos_time_elapsed_s, pxlrect_sz_time_elapsed_s,
+                           times_local_elapsed_s);
+
+    // Draw text planned time ---------------------------------------
+    size_text = canvas.CalcTextSize(times_arrival_planned_s.c_str());
+    const PixelRect pxlrect_sz_arrival_planned_s{
+        rc.BottomAligned(canvas_width)};
+    const PixelPoint pxpt_times_pos_arrival_planned_s{
+        static_cast<int>(canvas_width - (canvas_width * 5 / 200 + 8) -
+                         size_text.width),
+        pos_y_text_times};
+    canvas.DrawClippedText(pxpt_times_pos_arrival_planned_s,
+                           pxlrect_sz_arrival_planned_s,
+                           times_arrival_planned_s);
+  }
+}
+
+void
 NavigatorRenderer::DrawDirectionArrowNorthAnnulus(
     Canvas &canvas, const enum navType nav_type,
     const TaskLook &look_task) noexcept
@@ -751,6 +883,8 @@ NavigatorRenderer::DrawTaskTextsArrow(
 
   GenerateStringWaypointName(wp_current);
 
+  GenerateStringsTimesInfo(tp);
+
   // Draw all Strings -----------------------------------------------
   SetTextColor(canvas, look_nav);
 
@@ -759,6 +893,8 @@ NavigatorRenderer::DrawTaskTextsArrow(
   DrawCurrentFlightInfos(canvas, nav_type, look_infobox);
 
   DrawWaypointName(canvas, nav_type);
+
+  DrawTimesInfo(canvas, rc, nav_type);
 
   DrawDirectionArrowNorthAnnulus(canvas, nav_type, look_task);
 }

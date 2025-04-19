@@ -63,6 +63,17 @@ class NavigatorRenderer {
   // GenerateStringWaypointName() members ---------------------------
   StaticString<50> waypoint_name_s; // e_WP_Name
 
+  // GenerateStringsTimesInfo() members -----------------------------
+  const RoughTimeDelta utc_no_offset{};
+  RoughTimeDelta utc_offset{};
+  StaticString<8> time_elapsed_s;
+  StaticString<8> time_start_s;
+  StaticString<8> time_local_s;
+  StaticString<8> time_planned_s;
+  StaticString<8> arrival_planned_s;
+  StaticString<20> times_local_elapsed_s;
+  StaticString<20> times_arrival_planned_s;
+
   // DrawWaypointInfos() members ------------------------------------
   Font font;
   unsigned int font_height{};
@@ -115,6 +126,13 @@ class NavigatorRenderer {
    */
   void GenerateStringWaypointName(const Waypoint &wp_current) noexcept;
 
+  /**
+   * Generate texts:
+   * start task time, local current time and estimated task time ;   
+   * current task duration and estimated task duration
+   */
+  void GenerateStringsTimesInfo(const TaskType tp) noexcept;
+
   ///////////////////////////////////////////////////////////////////
   // draw -----------------------------------------------------------
   /**
@@ -135,6 +153,14 @@ class NavigatorRenderer {
                               const InfoBoxLook &look_infobox) noexcept;
 
   void DrawWaypointName(Canvas &canvas, const enum navType nav_type) noexcept;
+
+  /**
+   * Draw texts:
+   * start task time, local current time and estimated task time ;
+   * current task duration and estimated task duration
+   */
+  void DrawTimesInfo(Canvas &canvas, const PixelRect &rc,
+                     const enum navType nav_type) noexcept;
 
   void DrawDirectionArrowNorthAnnulus(Canvas &canvas,
                                       const enum navType nav_type,const TaskLook &look_task) noexcept;
