@@ -112,6 +112,13 @@ NavigatorWindow::OnPaint(Canvas &canvas) noexcept
     renderer.DrawFrame(canvas, frame_navigator, look_nav, true);
     break;
   }
+
+  const auto task_summary =
+      CommonInterface::Calculated().common_stats.ordered_summary;
+
+  if (tp == TaskType::ORDERED)
+    renderer.DrawProgressTask(task_summary, canvas, canvas.GetRect(), look_nav,
+                              look_task);
 }
 
 void
