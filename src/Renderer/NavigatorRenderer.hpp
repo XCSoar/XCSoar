@@ -45,11 +45,60 @@ class NavigatorRenderer {
   const DerivedInfo *calculated{};
   bool has_started{};
 
+  // GenerateStringsWaypointInfos() members -------------------------
+  StaticString<20> waypoint_distance_s; // e_WP_Distance
+  StaticString<20> waypoint_altitude_s; // WP_AltReq WP_AltDiff or WP_AltArrival
+  StaticString<20> waypoint_GR_s; // e_WP_GR glide ratio
+  Angle bearing_diff{};
+  StaticString<20> waypoint_direction_s; // e_WP_BearingDiff
+  StaticString<100> infos_waypoint_s; // dist + alt + GR
+  StaticString<60> infos_waypoint_units_dist_alt_s;
+  StaticString<60> infos_waypoint_units_dist_alt_GR_s;
+
+  // DrawWaypointInfos() members ------------------------------------
+  Font font;
+  unsigned int font_height{};
+  double ratio_dpi{};
+  PixelPoint pxpt_pos_infos_waypoint{}; // also used in Waypoint_name /
+                                        // Arrow placement
+  unsigned int text_size_infos_waypoint{};
+  PixelSize size_text{};
+  unsigned int unit_height{};
+  unsigned int ascent_height{};
+  PixelPoint pp_pos_unit{};
+  Unit unit{Unit::KILOMETER};
+  PixelPoint pp_drawed_text_origin{};
+  PixelSize ps_drawed_text_size{};
+  PixelRect pr_drawed_text_rect{};
+
+  ///////////////////////////////////////////////////////////////////
+  // generate text --------------------------------------------------
+  
   /**
    * Generate the frame(s) of the Navigator and the waypoint.
    */
   void GenerateFrame(const PixelRect &rc, const bool is_frame_main) noexcept;
 
+  /**
+   * Generate texts:
+   * distance, altitude, (glide ratio, bearing)
+   */
+  void GenerateStringsWaypointInfos(const enum navType nav_type,
+                                 const TaskType tp) noexcept;
+
+
+  ///////////////////////////////////////////////////////////////////
+  // draw -----------------------------------------------------------
+  /**
+   * Set the text colour of all strings in the navigator widget 
+   */
+  void SetTextColor(Canvas &canvas, const NavigatorLook &look_nav) noexcept;
+
+  /**
+   * Draw infos_waypoint_s: distance, altitude, (glide ratio, bearing)
+   */
+  void DrawWaypointInfos(Canvas &canvas, const enum navType nav_type,
+                         const InfoBoxLook &look_infobox) noexcept;
 public:
   /**
    * Update all data for generating frame, text and
@@ -62,6 +111,19 @@ public:
    */
   void DrawFrame(Canvas &canvas, const PixelRect &rc,
                  const NavigatorLook &look_nav, const bool is_frame_main) noexcept;
+
+  /**
+   * Draw information texts about the current task (ordered task) or
+   * the current target (unordered task) + flight infos
+   * e.g. waypoint distance, start time, planned duration, current speed...
+   */
+  void DrawTaskTextsArrow(Canvas &canvas, TaskType tp,
+                          const Waypoint &wp_current, const PixelRect &rc,
+                          const enum navType nav_type,
+                          [[maybe_unused]] const bool isNavTopPosition,
+                          const NavigatorLook &look_nav,
+                          const TaskLook &look_task,
+                          const InfoBoxLook &look_infobox) noexcept;
 
   /**
    * Draw the progress of the current task with presntation of each taskpoint

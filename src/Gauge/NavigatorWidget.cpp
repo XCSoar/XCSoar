@@ -122,6 +122,11 @@ NavigatorWindow::OnPaint(Canvas &canvas) noexcept
 
   renderer.DrawWaypointsIconsTitle(canvas, wp_before, wp_current, task_size,
                                    look_nav, nav_type);
+
+  if (wp_current != nullptr)
+    renderer.DrawTaskTextsArrow(canvas, tp, *wp_current, canvas.GetRect(),
+                                nav_type, isNavigatorTopPosition, look_nav,
+                                look_task, look_infobox);
 }
 
 void
