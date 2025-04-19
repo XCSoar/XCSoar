@@ -60,6 +60,9 @@ class NavigatorRenderer {
   StaticString<20> current_altitude_s; // e_HeightGPS
   StaticString<20> waypoint_average_speed_s; // e_SpeedTaskAvg
 
+  // GenerateStringWaypointName() members ---------------------------
+  StaticString<50> waypoint_name_s; // e_WP_Name
+
   // DrawWaypointInfos() members ------------------------------------
   Font font;
   unsigned int font_height{};
@@ -79,6 +82,12 @@ class NavigatorRenderer {
   // DrawCurrentFlightInfos() members -------------------------------
   int pos_x_speed_altitude{}; // also used in DrawWaypointName() /
                               // Arrow placement
+
+  // DrawWaypointName() members -------------------------------------
+  unsigned pos_x_waypoint_name{};
+  unsigned pos_y_waypoint_name{};
+  unsigned pos_x_end_waypoint_name{}; // also used Arrow placement
+  unsigned sz_waypoint_name{}; // also used Arrow placement
 
   ///////////////////////////////////////////////////////////////////
   // generate text --------------------------------------------------
@@ -101,6 +110,11 @@ class NavigatorRenderer {
    */
   void GenerateStringsCurrentFlightInfo(const TaskType tp) noexcept;
 
+  /**
+   * Generate text: waypoint's name
+   */
+  void GenerateStringWaypointName(const Waypoint &wp_current) noexcept;
+
   ///////////////////////////////////////////////////////////////////
   // draw -----------------------------------------------------------
   /**
@@ -119,6 +133,8 @@ class NavigatorRenderer {
    */
   void DrawCurrentFlightInfos(Canvas &canvas, const enum navType nav_type,
                               const InfoBoxLook &look_infobox) noexcept;
+
+  void DrawWaypointName(Canvas &canvas, const enum navType nav_type) noexcept;
 public:
   /**
    * Update all data for generating frame, text and

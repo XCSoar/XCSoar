@@ -299,6 +299,14 @@ NavigatorRenderer::GenerateStringsCurrentFlightInfo(const TaskType tp) noexcept
     waypoint_average_speed_s.Format(_T("%s"), _T("---"));
   }
 }
+
+void
+NavigatorRenderer::GenerateStringWaypointName(
+    const Waypoint &wp_current) noexcept
+{
+  // waypoint_name_s; // e_WP_Name
+  waypoint_name_s.Format(_T("%s"), wp_current.name.c_str());
+}
 void
 NavigatorRenderer::SetTextColor(Canvas &canvas,
                                 const NavigatorLook &look_nav) noexcept
@@ -538,6 +546,94 @@ NavigatorRenderer::DrawCurrentFlightInfos(
 }
 
 void
+NavigatorRenderer::DrawWaypointName(Canvas &canvas,
+                                    const enum navType nav_type) noexcept
+{
+  switch (nav_type) {
+  case navType::NAVIGATOR_LITE_ONE_LINE:
+    font_height = canvas_height * 85 / 200;
+    break;
+
+  case navType::NAVIGATOR_LITE_TWO_LINES:
+  case navType::NAVIGATOR:
+    font_height = canvas_height * 75 / 200;
+    break;
+
+  case navType::NAVIGATOR_DETAILED:
+  default:
+    if (canvas_width > canvas_height * 3.7) {
+      font_height = canvas_height * 42 / 200;
+    } else {
+      font_height = canvas_height * 30 / 200;
+    }
+    break;
+  }
+
+  font.Load(FontDescription(Layout::VptScale(font_height * ratio_dpi)));
+  canvas.Select(font);
+
+  sz_waypoint_name = canvas.CalcTextSize(waypoint_name_s).width;
+
+  switch (nav_type) {
+  case navType::NAVIGATOR_LITE_ONE_LINE:
+    pos_x_waypoint_name = static_cast<int>(canvas_width * 13 / 200);
+    pos_y_waypoint_name = static_cast<int>(canvas_height * 15 / 100);
+
+    pos_x_end_waypoint_name = pos_x_waypoint_name + sz_waypoint_name;
+    ps_drawed_text_size = {pxpt_pos_infos_waypoint.x -
+                               static_cast<int>(canvas_height * 95 / 100),
+                           static_cast<int>(canvas_height)};
+    break;
+
+  case navType::NAVIGATOR_LITE_TWO_LINES:
+    pos_x_waypoint_name = canvas_width * 13 / 200;
+    pos_y_waypoint_name = canvas_height * 38 / 100;
+
+    sz_waypoint_name =
+        std::min(sz_waypoint_name, canvas_width - 2 * pos_x_waypoint_name);
+
+    pos_x_waypoint_name =
+        (canvas_width - 2 * pos_x_waypoint_name - sz_waypoint_name) / 2 +
+        canvas_width * 13 / 200;
+
+    ps_drawed_text_size = {
+        static_cast<unsigned int>(pos_x_waypoint_name + sz_waypoint_name),
+        static_cast<unsigned>(font_height)};
+    break;
+
+  case navType::NAVIGATOR:
+    pos_x_waypoint_name = static_cast<int>(canvas_width * 13 / 200);
+    pos_y_waypoint_name = static_cast<int>(canvas_height * 38 / 100);
+
+    pos_x_end_waypoint_name = pos_x_waypoint_name + sz_waypoint_name;
+    ps_drawed_text_size = {static_cast<int>(canvas_height / 2 +
+                                            pos_x_speed_altitude -
+                                            canvas_height * 130 / 100),
+                           static_cast<int>(canvas_height)};
+    break;
+
+  case navType::NAVIGATOR_DETAILED:
+  default:
+    pos_x_waypoint_name = pxpt_pos_infos_waypoint.x;
+    pos_y_waypoint_name = static_cast<int>(canvas_height * 31 / 100);
+
+    pos_x_end_waypoint_name = pos_x_waypoint_name + sz_waypoint_name;
+    ps_drawed_text_size = {static_cast<int>(canvas_height) / 2 +
+                               pos_x_speed_altitude -
+                               static_cast<int>(canvas_height),
+                           static_cast<int>(canvas_height)};
+    break;
+  }
+
+  pp_drawed_text_origin = {0, 0};
+  pr_drawed_text_rect = {pp_drawed_text_origin, ps_drawed_text_size};
+
+  canvas.DrawClippedText({static_cast<int>(pos_x_waypoint_name),
+                          static_cast<int>(pos_y_waypoint_name)},
+                         pr_drawed_text_rect, waypoint_name_s);
+}
+
+void
 NavigatorRenderer::DrawTaskTextsArrow(
     Canvas &canvas, TaskType tp, [[maybe_unused]] const Waypoint &wp_current,
     [[maybe_unused]] const PixelRect &rc, const enum navType nav_type,
@@ -550,12 +646,16 @@ NavigatorRenderer::DrawTaskTextsArrow(
 
   GenerateStringsCurrentFlightInfo(tp);
 
+  GenerateStringWaypointName(wp_current);
+
   // Draw all Strings -----------------------------------------------
   SetTextColor(canvas, look_nav);
 
   DrawWaypointInfos(canvas, nav_type, look_infobox);
 
   DrawCurrentFlightInfos(canvas, nav_type, look_infobox);
+
+  DrawWaypointName(canvas, nav_type);
 }
 
 void
