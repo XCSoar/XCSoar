@@ -766,6 +766,42 @@ NavigatorRenderer::DrawTimesInfo(Canvas &canvas, const PixelRect &rc,
 }
 
 void
+NavigatorRenderer::DrawAverageSpeed(Canvas &canvas,
+                                    const enum navType nav_type,
+                                    const InfoBoxLook &look_infobox) noexcept
+{
+  if (nav_type == navType::NAVIGATOR_DETAILED) {
+    // Task informations: average speed -----------------------------
+    if (canvas_width > canvas_height * 3.4) {
+      font_height = canvas_height * 35 / 200;
+    } else {
+      font_height = canvas_height * 24 / 200;
+    }
+    font.Load(FontDescription(Layout::VptScale(font_height * ratio_dpi)));
+    size_text = canvas.CalcTextSize(waypoint_average_speed_s.c_str());
+    PixelPoint pxpt_pos_average_speed{
+        static_cast<int>(canvas_width * 5 / 200 + 6),
+        static_cast<int>(canvas_height * 8 / 100)};
+    canvas.Select(font);
+    pp_drawed_text_origin = {0, 0};
+    ps_drawed_text_size = {static_cast<int>(canvas_width),
+                           static_cast<int>(canvas_height)};
+    pr_drawed_text_rect = {pp_drawed_text_origin, ps_drawed_text_size};
+    canvas.DrawClippedText(pxpt_pos_average_speed, pr_drawed_text_rect,
+                           waypoint_average_speed_s);
+
+    // Draw average speed unit --------------------------------------
+    unit = Units::GetUserTaskSpeedUnit();
+    unit_height = static_cast<unsigned int>(font_height * 0.5);
+    font.Load(FontDescription(Layout::VptScale(unit_height * ratio_dpi)));
+    pp_pos_unit =
+        pxpt_pos_average_speed.At(size_text.width, size_text.height / 10);
+    UnitSymbolRenderer::Draw(canvas, pp_pos_unit, unit,
+                             look_infobox.unit_fraction_pen);
+  }
+}
+
+void
 NavigatorRenderer::DrawDirectionArrowNorthAnnulus(
     Canvas &canvas, const enum navType nav_type,
     const TaskLook &look_task) noexcept
@@ -895,6 +931,8 @@ NavigatorRenderer::DrawTaskTextsArrow(
   DrawWaypointName(canvas, nav_type);
 
   DrawTimesInfo(canvas, rc, nav_type);
+
+  DrawAverageSpeed(canvas, nav_type, look_infobox);
 
   DrawDirectionArrowNorthAnnulus(canvas, nav_type, look_task);
 }

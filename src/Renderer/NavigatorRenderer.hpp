@@ -162,6 +162,12 @@ class NavigatorRenderer {
   void DrawTimesInfo(Canvas &canvas, const PixelRect &rc,
                      const enum navType nav_type) noexcept;
 
+  /**
+   * Draw task average speed
+   */
+  void DrawAverageSpeed(Canvas &canvas, const enum navType nav_type, const InfoBoxLook &look_infobox) noexcept;
+
+
   void DrawDirectionArrowNorthAnnulus(Canvas &canvas,
                                       const enum navType nav_type,const TaskLook &look_task) noexcept;
 
