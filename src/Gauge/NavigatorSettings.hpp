@@ -13,5 +13,7 @@ struct NavigatorSettings {
   unsigned navigator_lite_2_lines_height;
   unsigned navigator_detailed_height;
 
+  bool navigator_swipe;
+
   void SetDefaults() noexcept;
 };

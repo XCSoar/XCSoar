@@ -58,6 +58,7 @@ Profile::Load(const ProfileMap &map, NavigatorSettings &settings)
   map.Get(ProfileKeys::NavigatorHeight, settings.navigator_height);
   map.Get(ProfileKeys::NavigatorDetailedHeight, settings.navigator_detailed_height);
 
+  map.Get(ProfileKeys::NavigatorReverseSwipeWaypointMovement, settings.navigator_swipe);
 }
 
 void

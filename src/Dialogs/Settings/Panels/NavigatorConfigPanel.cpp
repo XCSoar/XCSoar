@@ -17,7 +17,8 @@ enum ControlIndex {
   NavigatorWidgetLite1LHeight,
   NavigatorWidgetLite2LHeight,
   NavigatorWidgetHeight,
-  NavigatorWidgetDetailedHeight
+  NavigatorWidgetDetailedHeight,
+  NavigatorWidgetReverseSwipeWaypoint
 };
 
 
@@ -80,6 +81,13 @@ NavigatorConfigPanel::Prepare(ContainerWindow &parent,
     _T("%u %%"), _T("%u"), 1, 40, 1,
     (unsigned)ui_settings.navigator.navigator_detailed_height);
 
+  AddBoolean(_("Reverse swipe movement"),
+             _("Swipe \"On\":\n"
+             "swipe/move the waypoints strip under the window.\n"
+             "Swipe \"Off\":\n"
+             "swipe/move the window over the waypoints strip.\n"
+             "\"The waypoints strip\" is a representation of all waypoints disposed horizontally one after the other."),
+             ui_settings.navigator.navigator_swipe);
 }
 
 bool
@@ -100,6 +108,11 @@ NavigatorConfigPanel::Save(bool &_changed) noexcept
     CommonInterface::main_window->ReinitialiseLayout();
   if ((changed |= SaveValueInteger(NavigatorWidgetDetailedHeight, ProfileKeys::NavigatorDetailedHeight,
                                    ui_settings.navigator.navigator_detailed_height)))
+    CommonInterface::main_window->ReinitialiseLayout();
+
+  if ((changed |= SaveValue(NavigatorWidgetReverseSwipeWaypoint,
+                            ProfileKeys::NavigatorReverseSwipeWaypointMovement,
+                            ui_settings.navigator.navigator_swipe)))
     CommonInterface::main_window->ReinitialiseLayout();
 
   _changed |= changed;

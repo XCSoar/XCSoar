@@ -10,4 +10,6 @@ NavigatorSettings::SetDefaults() noexcept
   navigator_lite_2_lines_height = 8;
   navigator_height = 9;
   navigator_detailed_height = 11;
+
+  navigator_swipe = false;
 }
