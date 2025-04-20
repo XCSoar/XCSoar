@@ -23,6 +23,8 @@ class NavigatorWindow : public PaintWindow {
   const enum navType nav_type { navType::NAVIGATOR };
   const bool isNavigatorTopPosition{};
 
+  NavigatorRenderer renderer;
+
   AttitudeState attitude;
 
   GestureManager gestures;

@@ -43,6 +43,8 @@ NavigatorWindow::ReadBlackboard(const AttitudeState &_attitude) noexcept
 void
 NavigatorWindow::OnPaint(Canvas &canvas) noexcept
 {
+  renderer.Update(canvas);
+
   if (look_nav.inverse) {
     canvas.Clear(COLOR_BLACK);
   } else {
@@ -84,6 +86,31 @@ NavigatorWindow::OnPaint(Canvas &canvas) noexcept
       wp_current = nullptr;
       wp_before = nullptr;
     }
+  }
+
+  const PixelRect frame_navigator =
+      canvas.GetRect().WithPadding(Layout::Scale(1));
+
+  const int canvas_height = canvas.GetHeight();
+  const int canvas_width = canvas.GetWidth();
+
+  PixelPoint pt_origin{canvas_width * 18 / 100, canvas_height * 1 / 10};
+  PixelSize frame_size{canvas_width * 8 / 10, canvas_height * 55 / 100};
+  PixelRect frame_navigator_waypoint{pt_origin, frame_size};
+
+  switch (nav_type) {
+  case navType::NAVIGATOR_LITE_ONE_LINE:
+  case navType::NAVIGATOR_LITE_TWO_LINES:
+  case navType::NAVIGATOR:
+    renderer.DrawFrame(canvas, frame_navigator, look_nav, true);
+    break;
+  case navType::NAVIGATOR_DETAILED:
+    renderer.DrawFrame(canvas, frame_navigator, look_nav, true);
+    renderer.DrawFrame(canvas, frame_navigator_waypoint, look_nav, false);
+    break;
+  default:
+    renderer.DrawFrame(canvas, frame_navigator, look_nav, true);
+    break;
   }
 }
 
