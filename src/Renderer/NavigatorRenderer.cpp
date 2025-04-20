@@ -634,6 +634,109 @@ NavigatorRenderer::DrawWaypointName(Canvas &canvas,
 }
 
 void
+NavigatorRenderer::DrawDirectionArrowNorthAnnulus(
+    Canvas &canvas, const enum navType nav_type,
+    const TaskLook &look_task) noexcept
+{
+  // Draw direction arrow / North direction -------------------------
+  if (nav_type == navType::NAVIGATOR_LITE_ONE_LINE ||
+      nav_type == navType::NAVIGATOR_DETAILED ||
+      nav_type == navType::NAVIGATOR) {
+
+    int pos_x_arrow{};
+    int pos_y_arrow_offset{};
+    int scale__arrow{};
+    int pos_y_annulus{};
+    int small_radius_annulus{};
+    int big_radius_annulus{};
+    int sz_max_waypoint_text{};
+
+    const auto has_finished = calculated->ordered_task_stats.task_finished;
+    if (!has_started) {
+      canvas.Select(look_task.hbLightGray);
+    } else {
+      if (!has_finished) {
+        canvas.Select(look_task.hbOrange);
+      } else {
+        canvas.Select(look_task.hbGreen);
+      }
+    }
+
+    switch (nav_type) {
+    case navType::NAVIGATOR_LITE_ONE_LINE:
+      pos_x_arrow = pxpt_pos_infos_waypoint.x -
+                    static_cast<int>(canvas_height * 95 / 100);
+      pos_y_arrow_offset = canvas_height * 43 / 200;
+      pos_y_annulus = static_cast<int>(canvas_height * 48 / 100);
+      small_radius_annulus = static_cast<int>(canvas_height) * 26 / 100;
+      big_radius_annulus = static_cast<int>(canvas_height * 40 / 100);
+      scale__arrow = 14;
+
+      if (static_cast<int>(sz_waypoint_name) <
+          pos_x_arrow - static_cast<int>(canvas_height * 60 / 100) / 2) {
+        pos_x_arrow = (pxpt_pos_infos_waypoint.x + sz_waypoint_name) / 2 -
+                      static_cast<int>(canvas_height * 50 / 100) / 2;
+      }
+      break;
+
+    case navType::NAVIGATOR:
+      pos_x_arrow =
+          pos_x_speed_altitude - static_cast<int>(canvas_height * 90 / 100);
+      pos_y_arrow_offset = canvas_height * 43 / 200;
+      pos_y_annulus = static_cast<int>(canvas_height * 48 / 100);
+      small_radius_annulus = static_cast<int>(canvas_height) * 28 / 100;
+      big_radius_annulus = static_cast<int>(canvas_height) * 36 / 100;
+      scale__arrow = 14;
+      sz_max_waypoint_text = static_cast<int>(
+          std::max(pos_x_end_waypoint_name,
+                   text_size_infos_waypoint + pxpt_pos_infos_waypoint.x));
+      break;
+
+    default:
+      pos_x_arrow =
+          pos_x_speed_altitude - static_cast<int>(canvas_height * 77 / 100);
+      pos_y_arrow_offset = canvas_height * 13 / 100;
+      pos_y_annulus = static_cast<int>(canvas_height * 75 / 200);
+      small_radius_annulus = static_cast<int>(canvas_height) * 18 / 100;
+      big_radius_annulus = static_cast<int>(canvas_height) * 26 / 100;
+      scale__arrow = 21;
+      sz_max_waypoint_text = static_cast<int>(
+          std::max(pos_x_end_waypoint_name,
+                   text_size_infos_waypoint + pxpt_pos_infos_waypoint.x));
+
+      if (sz_max_waypoint_text <
+              pos_x_speed_altitude - big_radius_annulus * 2 &&
+          canvas_width > canvas_height * 4.2) {
+        pos_x_arrow = (pos_x_speed_altitude + sz_max_waypoint_text) / 2 -
+                      2 * big_radius_annulus;
+      }
+      break;
+    }
+
+    canvas.DrawAnnulus(
+        {static_cast<int>(canvas_height) / 2 + pos_x_arrow, pos_y_annulus},
+        small_radius_annulus, big_radius_annulus,
+        -basic->track + Angle::Degrees(50),
+        -basic->track + Angle::Degrees(310));
+
+    canvas.DrawAnnulus(
+        {static_cast<int>(canvas_height) / 2 + pos_x_arrow, pos_y_annulus},
+        small_radius_annulus, big_radius_annulus,
+        -basic->track - Angle::Degrees(8), -basic->track + Angle::Degrees(8));
+
+    NextArrowRenderer next_arrow{UIGlobals::GetLook().next_arrow_info_box};
+    pp_drawed_text_origin = {0, -static_cast<int>(canvas_height / 4)};
+    ps_drawed_text_size = {static_cast<int>(canvas_height),
+                           static_cast<int>(canvas_height)};
+    PixelRect pixelrect_next_arrow{pp_drawed_text_origin, ps_drawed_text_size};
+    pixelrect_next_arrow.Offset(pos_x_arrow, pos_y_arrow_offset);
+
+    next_arrow.DrawArrowScale(canvas, pixelrect_next_arrow, bearing_diff,
+                              scale__arrow);
+  }
+}
+
+void
 NavigatorRenderer::DrawTaskTextsArrow(
     Canvas &canvas, TaskType tp, [[maybe_unused]] const Waypoint &wp_current,
     [[maybe_unused]] const PixelRect &rc, const enum navType nav_type,
@@ -656,6 +759,8 @@ NavigatorRenderer::DrawTaskTextsArrow(
   DrawCurrentFlightInfos(canvas, nav_type, look_infobox);
 
   DrawWaypointName(canvas, nav_type);
+
+  DrawDirectionArrowNorthAnnulus(canvas, nav_type, look_task);
 }
 
 void

@@ -135,6 +135,10 @@ class NavigatorRenderer {
                               const InfoBoxLook &look_infobox) noexcept;
 
   void DrawWaypointName(Canvas &canvas, const enum navType nav_type) noexcept;
+
+  void DrawDirectionArrowNorthAnnulus(Canvas &canvas,
+                                      const enum navType nav_type,const TaskLook &look_task) noexcept;
+
 public:
   /**
    * Update all data for generating frame, text and
