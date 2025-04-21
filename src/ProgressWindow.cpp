@@ -32,11 +32,10 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent) noexcept
 #else
   {
     AnyCanvas canvas;
-    text_height = canvas.GetFontHeight();
-  }
+    text_height = canvas.GetFontHeight();  }
 #endif
 
-  UpdateLayout(rc);
+  UpdateLayout(GetClientRect());
 
   // Initialize progress bar
   progress_bar.Create(*this, progress_bar_position);
