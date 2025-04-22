@@ -673,7 +673,7 @@ public:
   }
 
   [[gnu::pure]]
-  const PixelRect GetClientRect() const noexcept
+  virtual const PixelRect GetClientRect() const noexcept
   {
     assert(IsDefined());
 
