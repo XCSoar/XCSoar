@@ -398,10 +398,10 @@ libtiff = CmakeProject(
 
 libgeotiff = CmakeProject(
     (
-        "http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.7.1.tar.gz",
-        "https://fossies.org/linux/privat/libgeotiff-1.7.1.tar.gz",
+        "http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.7.4.tar.gz",
+        "https://fossies.org/linux/privat/libgeotiff-1.7.4.tar.gz",
     ),
-    "05ab1347aaa471fc97347d8d4269ff0c00f30fa666d956baba37948ec87e55d6",
+    "c598d04fdf2ba25c4352844dafa81dde3f7fd968daa7ad131228cd91e9d3dc47",
     "lib/libgeotiff.a",
     [
         "-DWITH_UTILITIES=OFF",
