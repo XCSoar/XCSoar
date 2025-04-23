@@ -8,7 +8,7 @@ diff --git a/include/proj/coordinateoperation.hpp b/include/proj/coordinateopera
 index 130c2b5b..0e28264d 100644
 --- a/include/proj/coordinateoperation.hpp
 +++ b/include/proj/coordinateoperation.hpp
-@@ -298,9 +298,11 @@ class PROJ_GCC_DLL OperationParameter final : public GeneralOperationParameter {
+@@ -345,9 +345,11 @@ class PROJ_GCC_DLL OperationParameter final : public GeneralOperationParameter {
      PROJ_OPAQUE_PRIVATE_DATA
      OperationParameter &operator=(const OperationParameter &other) = delete;
  
@@ -20,7 +20,7 @@ index 130c2b5b..0e28264d 100644
  };
  
  // ---------------------------------------------------------------------------
-@@ -322,11 +324,13 @@ class PROJ_GCC_DLL GeneralParameterValue : public util::BaseObject,
+@@ -369,11 +371,13 @@ class PROJ_GCC_DLL GeneralParameterValue : public util::BaseObject,
      //! @cond Doxygen_Suppress
      PROJ_DLL ~GeneralParameterValue() override;
  
@@ -34,10 +34,11 @@ index 130c2b5b..0e28264d 100644
  
      PROJ_INTERNAL bool _isEquivalentTo(
          const util::IComparable *other,
-@@ -342,10 +346,12 @@ class PROJ_GCC_DLL GeneralParameterValue : public util::BaseObject,
+@@ -389,10 +393,12 @@ class PROJ_GCC_DLL GeneralParameterValue : public util::BaseObject,
  
      friend class Conversion;
      friend class SingleOperation;
+     friend class PointMotionOperation;
 +#ifdef ENABLE_JSON
      PROJ_INTERNAL virtual void _exportToWKT(io::WKTFormatter *formatter,
                                              const MethodMapping *mapping)
@@ -47,7 +48,7 @@ index 130c2b5b..0e28264d 100644
  
    private:
      PROJ_OPAQUE_PRIVATE_DATA
-@@ -393,9 +399,11 @@ class PROJ_GCC_DLL ParameterValue final : public util::BaseObject,
+@@ -441,9 +447,11 @@ class PROJ_GCC_DLL ParameterValue final : public util::BaseObject,
      //! @cond Doxygen_Suppress
      PROJ_DLL ~ParameterValue() override;
  
@@ -59,7 +60,7 @@ index 130c2b5b..0e28264d 100644
  
      PROJ_DLL static ParameterValueNNPtr
      create(const common::Measure &measureIn);
-@@ -470,11 +478,13 @@ class PROJ_GCC_DLL OperationParameterValue final
+@@ -518,11 +426,13 @@ class PROJ_GCC_DLL OperationParameterValue final
                              const common::UnitOfMeasure *&unit,
                              int &paramEPSGCode);
  
@@ -73,7 +74,7 @@ index 130c2b5b..0e28264d 100644
  
      PROJ_INTERNAL bool _isEquivalentTo(
          const util::IComparable *other,
-@@ -490,9 +500,11 @@ class PROJ_GCC_DLL OperationParameterValue final
+@@ -538,9 +548,11 @@ class PROJ_GCC_DLL OperationParameterValue final
      PROJ_INTERNAL OperationParameterValue(const OperationParameterValue &other);
      INLINED_MAKE_SHARED
  
@@ -85,7 +86,7 @@ index 130c2b5b..0e28264d 100644
  
    private:
      PROJ_OPAQUE_PRIVATE_DATA
-@@ -539,12 +551,14 @@ class PROJ_GCC_DLL OperationMethod : public common::IdentifiedObject,
+@@ -587,12 +599,14 @@ class PROJ_GCC_DLL OperationMethod : public common::IdentifiedObject,
  
      PROJ_DLL int getEPSGCode() PROJ_PURE_DECL;
  
@@ -100,7 +101,7 @@ index 130c2b5b..0e28264d 100644
  
      PROJ_INTERNAL bool _isEquivalentTo(
          const util::IComparable *other,
-@@ -899,10 +913,12 @@ class PROJ_GCC_DLL Conversion : public SingleOperation {
+@@ -955,10 +949,12 @@ class PROJ_GCC_DLL Conversion : public SingleOperation {
  
      PROJ_DLL CoordinateOperationNNPtr inverse() const override;
  
@@ -113,7 +114,7 @@ index 130c2b5b..0e28264d 100644
  
      PROJ_DLL bool isUTM(int &zone, bool &north) const;
  
-@@ -1417,8 +1433,10 @@ class PROJ_GCC_DLL Conversion : public SingleOperation {
+@@ -1486,8 +1402,10 @@ class PROJ_GCC_DLL Conversion : public SingleOperation {
          _exportToPROJString(io::PROJStringFormatter *formatter)
              const override; // throw(FormattingException)
  
@@ -124,7 +125,7 @@ index 130c2b5b..0e28264d 100644
  
      PROJ_INTERNAL const char *getESRIMethodName() const;
  
-@@ -1634,11 +1652,13 @@ class PROJ_GCC_DLL Transformation : public SingleOperation {
+@@ -1703,11 +1721,13 @@ class PROJ_GCC_DLL Transformation : public SingleOperation {
  
      PROJ_INTERNAL const std::string &getHeightToGeographic3DFilename() const;
  
@@ -138,7 +139,7 @@ index 130c2b5b..0e28264d 100644
  
      PROJ_INTERNAL TransformationNNPtr shallowClone() const;
  
-@@ -1749,10 +1769,12 @@ class PROJ_GCC_DLL ConcatenatedOperation final : public CoordinateOperation {
+@@ -1871,10 +1891,12 @@ class PROJ_GCC_DLL ConcatenatedOperation final : public CoordinateOperation {
  
      PROJ_PRIVATE :
  
@@ -151,7 +152,7 @@ index 130c2b5b..0e28264d 100644
  
      PROJ_INTERNAL bool _isEquivalentTo(
          const util::IComparable *other,
-@@ -1760,8 +1782,10 @@ class PROJ_GCC_DLL ConcatenatedOperation final : public CoordinateOperation {
+@@ -1882,8 +1906,10 @@ class PROJ_GCC_DLL ConcatenatedOperation final : public CoordinateOperation {
              util::IComparable::Criterion::STRICT,
          const io::DatabaseContextPtr &dbContext = nullptr) const override;
  
@@ -1942,16 +1943,16 @@ diff --git a/src/transformations/defmodel.cpp b/src/transformations/defmodel.cpp
 index 7fa2931e..6bb03f52 100644
 --- a/src/transformations/defmodel.cpp
 +++ b/src/transformations/defmodel.cpp
-@@ -374,6 +374,8 @@ static void reassign_context(PJ *P, PJ_CONTEXT *ctx) {
+@@ -373,6 +373,8 @@ static void reassign_context(PJ *P, PJ_CONTEXT *ctx) {
      }
  }
  
 +#ifdef ENABLE_JSON
 +
- PJ *TRANSFORMATION(defmodel, 1) {
+ PJ *PJ_TRANSFORMATION(defmodel, 1) {
      // Pass a dummy ellipsoid definition that will be overridden just afterwards
      auto cart = proj_create(P->ctx, "+proj=cart +a=1");
-@@ -437,3 +439,5 @@ PJ *TRANSFORMATION(defmodel, 1) {
+@@ -435,3 +437,5 @@ PJ *PJ_TRANSFORMATION(defmodel, 1) {
  
      return P;
  }
@@ -2025,7 +2026,7 @@ index 1e9fbab6..7e4c7ae6 100644
  namespace DEFORMATON_MODEL_NAMESPACE {
  
  // ---------------------------------------------------------------------------
-@@ -264,6 +266,8 @@ double Epoch::toDecimalYear() const { return mDecimalYear; }
+@@ -263,6 +265,8 @@ double Epoch::toDecimalYear() const { return mDecimalYear; }
  
  // ---------------------------------------------------------------------------
  
@@ -2034,7 +2035,7 @@ index 1e9fbab6..7e4c7ae6 100644
  static std::string getString(const json &j, const char *key, bool optional) {
      if (!j.contains(key)) {
          if (optional) {
-@@ -616,6 +620,8 @@ Component Component::parse(const json &j) {
+@@ -511,6 +515,8 @@ Component Component::parse(const json &j) {
      return comp;
  }
  
@@ -2043,3 +2044,196 @@ index 1e9fbab6..7e4c7ae6 100644
  // ---------------------------------------------------------------------------
  
  double Component::ConstantTimeFunction::evaluateAt(double) const { return 1.0; }
+
+From bf3138f497f3ac6beacfef8c278f1086c49e06d5 Mon Sep 17 00:00:00 2001
+From: Yorick Reum <git@yorickreum.de>
+Date: Wed, 23 Apr 2025 04:00:33 -0500
+Subject: [PATCH] More JSON disabled
+
+---
+ coordinateoperation.hpp | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/include/proj/coordinateoperation.hpp b/include/proj/coordinateoperation.hpp
+index 0cd8778..6412445 100644
+--- a/include/proj/coordinateoperation.hpp
++++ b/include/proj/coordinateoperation.hpp
+@@ -447,9 +447,11 @@ class PROJ_GCC_DLL ParameterValue final : public util::BaseObject,
+     //! @cond Doxygen_Suppress
+     PROJ_DLL ~ParameterValue() override;
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+     //! @endcond
++#endif // ENABLE_JSON
+ 
+     PROJ_DLL static ParameterValueNNPtr
+     create(const common::Measure &measureIn);
+@@ -524,11 +526,13 @@ class PROJ_GCC_DLL OperationParameterValue final
+                             const common::UnitOfMeasure *&unit,
+                             int &paramEPSGCode);
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL bool _isEquivalentTo(
+         const util::IComparable *other,
+@@ -544,9 +548,11 @@ class PROJ_GCC_DLL OperationParameterValue final
+     PROJ_INTERNAL OperationParameterValue(const OperationParameterValue &other);
+     INLINED_MAKE_SHARED
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter,
+                                     const MethodMapping *mapping)
+         const override; // throw(io::FormattingException)
++#endif // ENABLE_JSON
+ 
+   private:
+     PROJ_OPAQUE_PRIVATE_DATA
+@@ -593,12 +599,14 @@ class PROJ_GCC_DLL OperationMethod : public common::IdentifiedObject,
+ 
+     PROJ_DLL int getEPSGCode() PROJ_PURE_DECL;
+ 
++#ifdef ENABLE_JSON
+     //! @cond Doxygen_Suppress
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL bool _isEquivalentTo(
+         const util::IComparable *other,
+@@ -961,10 +969,12 @@ class PROJ_GCC_DLL Conversion : public SingleOperation {
+ 
+     PROJ_DLL CoordinateOperationNNPtr inverse() const override;
+ 
++#ifdef ENABLE_JSON
+     //! @cond Doxygen_Suppress
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+     //! @endcond
++#endif // ENABLE_JSON
+ 
+     PROJ_DLL bool isUTM(int &zone, bool &north) const;
+ 
+@@ -1492,8 +1502,10 @@ class PROJ_GCC_DLL Conversion : public SingleOperation {
+         _exportToPROJString(io::PROJStringFormatter *formatter)
+             const override; // throw(FormattingException)
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL const char *getESRIMethodName() const;
+ 
+@@ -1709,11 +1721,13 @@ class PROJ_GCC_DLL Transformation : public SingleOperation {
+ 
+     PROJ_INTERNAL const std::string &getHeightToGeographic3DFilename() const;
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL TransformationNNPtr shallowClone() const;
+ 
+@@ -1811,11 +1825,13 @@ class PROJ_GCC_DLL PointMotionOperation : public SingleOperation {
+     PROJ_INTERNAL void _exportToPROJString(io::PROJStringFormatter *formatter)
+         const override; // throw(FormattingException)
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToWKT(io::WKTFormatter *formatter)
+         const override; // throw(io::FormattingException)
+ 
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     //! @endcond
+ 
+@@ -1877,10 +1893,12 @@ class PROJ_GCC_DLL ConcatenatedOperation final : public CoordinateOperation {
+ 
+     PROJ_PRIVATE :
+ 
++#ifdef ENABLE_JSON
+         //! @cond Doxygen_Suppress
+         PROJ_INTERNAL void
+         _exportToWKT(io::WKTFormatter *formatter)
+             const override; // throw(io::FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL bool _isEquivalentTo(
+         const util::IComparable *other,
+@@ -1888,8 +1906,10 @@ class PROJ_GCC_DLL ConcatenatedOperation final : public CoordinateOperation {
+             util::IComparable::Criterion::STRICT,
+         const io::DatabaseContextPtr &dbContext = nullptr) const override;
+ 
++#ifdef ENABLE_JSON
+     PROJ_INTERNAL void _exportToJSON(io::JSONFormatter *formatter)
+         const override; // throw(FormattingException)
++#endif // ENABLE_JSON
+ 
+     PROJ_INTERNAL static void
+     fixStepsDirection(const crs::CRSNNPtr &concatOpSourceCRS,
+-- 
+2.39.5 (Apple Git-154)
+
+From 604918a0a571fec8e4da579f0763609c7582bb33 Mon Sep 17 00:00:00 2001
+From: Yorick Reum <git@yorickreum.de>
+Date: Wed, 23 Apr 2025 04:10:55 -0500
+Subject: [PATCH] patched
+
+---
+ src/iso19111/operation/singleoperation.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/iso19111/operation/singleoperation.cpp b/src/iso19111/operation/singleoperation.cpp
+index 3d58e04..eff55fc 100644
+--- a/src/iso19111/operation/singleoperation.cpp
++++ b/src/iso19111/operation/singleoperation.cpp
+@@ -4793,6 +4793,7 @@ PointMotionOperationNNPtr PointMotionOperation::cloneWithEpochs(
+     return pmo;
+ }
+ 
++#ifdef ENABLE_JSON
+ // ---------------------------------------------------------------------------
+ 
+ void PointMotionOperation::_exportToWKT(io::WKTFormatter *formatter) const {
+@@ -4856,6 +4857,7 @@ void PointMotionOperation::_exportToWKT(io::WKTFormatter *formatter) const {
+     formatter->endNode();
+ }
+ 
++#endif // ENABLE_JSON
+ // ---------------------------------------------------------------------------
+ 
+ void PointMotionOperation::_exportToPROJString(
+@@ -4949,6 +4951,7 @@ void PointMotionOperation::_exportToPROJString(
+     }
+ }
+ 
++#ifdef ENABLE_JSON
+ // ---------------------------------------------------------------------------
+ 
+ void PointMotionOperation::_exportToJSON(
+@@ -4995,6 +4998,7 @@ void PointMotionOperation::_exportToJSON(
+ 
+ //! @endcond
+ 
++#endif // ENABLE_JSON
+ // ---------------------------------------------------------------------------
+ 
+ } // namespace operation
+-- 
+2.39.5 (Apple Git-154)

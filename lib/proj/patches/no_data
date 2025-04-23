@@ -5,10 +5,10 @@ Date:   Thu Aug 11 09:10:26 2022 +0200
     CMakeLists.txt: don't generate and install data
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index ed7e5bc8..b38e482d 100644
+index 3fa3ec6..fd9147c 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -171,11 +171,6 @@ message(STATUS "nlohmann/json: ${NLOHMANN_JSON}")
+@@ -197,11 +197,6 @@ message(STATUS "nlohmann/json: ${NLOHMANN_JSON}")
  # Check for sqlite3
  ################################################################################
  
@@ -17,10 +17,10 @@ index ed7e5bc8..b38e482d 100644
 -  message(SEND_ERROR "sqlite3 binary not found!")
 -endif()
 -
- find_package(Sqlite3 REQUIRED)
- if(NOT SQLITE3_FOUND)
-   message(SEND_ERROR "sqlite3 dependency not found!")
-@@ -320,7 +315,6 @@ endif()
+ # Deprecated variables since PROJ 9.4.0
+ if(DEFINED SQLITE3_INCLUDE_DIR)
+   message(DEPRECATION "Use SQLite3_INCLUDE_DIR instead of SQLITE3_INCLUDE_DIR")
+@@ -350,7 +345,6 @@ endif()
  ################################################################################
  include_directories(${PROJ_SOURCE_DIR}/src)
  
