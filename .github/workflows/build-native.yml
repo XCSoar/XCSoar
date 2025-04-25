@@ -223,6 +223,7 @@ jobs:
               ./ide/provisioning/install-debian-packages.sh ANDROID
               ./ide/provisioning/install-android-tools.sh NDK
               ./ide/provisioning/install-android-tools.sh SDK
+              ./ide/provisioning/install-android-tools.sh BUNDLETOOL
             fi
             ./ide/provisioning/install-debian-packages.sh CLEAN
           elif [ ${{ matrix.os }} = 'macos-12' ] ; then
