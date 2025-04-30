@@ -51,37 +51,37 @@ IOS_GRAPHICS = \
 	$(IOS_GRAPHICS_DIR)/AppIcon76x76@2x~ipad.png
 
 $(IOS_GRAPHICS_DIR)/Default.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 320x480 $@
+	$(Q)$(IM_CONVERT) $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 320x480 $@
 
 $(IOS_GRAPHICS_DIR)/Default@2x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 640x960 $@
+	$(Q)$(IM_CONVERT) $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 640x960 $@
 
 $(IOS_GRAPHICS_DIR)/Default-568h@2x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 640x1136 $@
+	$(Q)$(IM_CONVERT) $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 640x1136 $@
 
 $(IOS_GRAPHICS_DIR)/Default-667h@2x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 750x1334 $@
+	$(Q)$(IM_CONVERT) $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 750x1334 $@
 
 $(IOS_GRAPHICS_DIR)/Default-736h@3x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 1242x2208 $@
+	$(Q)$(IM_CONVERT) $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 1242x2208 $@
 
 $(IOS_GRAPHICS_DIR)/Default-Portrait.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 768x1004 $@
+	$(Q)$(IM_CONVERT) $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 768x1004 $@
 
 $(IOS_GRAPHICS_DIR)/Default-Landscape.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 1024x748 $@
+	$(Q)$(IM_CONVERT) $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 1024x748 $@
 
 $(IOS_GRAPHICS_DIR)/Default-Portrait@2x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 1536x2008 $@
+	$(Q)$(IM_CONVERT) $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 1536x2008 $@
 
 $(IOS_GRAPHICS_DIR)/Default-Landscape@2x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 2048x1496 $@
+	$(Q)$(IM_CONVERT) $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 2048x1496 $@
 
 $(IOS_GRAPHICS_DIR)/Default-Landscape-667h@2x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 1334x750 $@
+	$(Q)$(IM_CONVERT) $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 1334x750 $@
 
 $(IOS_GRAPHICS_DIR)/Default-Landscape-736h@3x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 2208x1242 $@
+	$(Q)$(IM_CONVERT) $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 2208x1242 $@
 
 $(IOS_GRAPHICS_DIR)/Icon.png: $(IOS_ICON_SVG) | $(IOS_GRAPHICS_DIR)/dirstamp
 	$(Q)rsvg-convert $< -w 57 -h 57 -a -o $@
