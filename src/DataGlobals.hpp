@@ -7,6 +7,7 @@
 
 class RaspStore;
 class RasterTerrain;
+class Skysight;
 
 /**
  * This namespace provides helper functions to access generic global
@@ -46,4 +47,6 @@ SetRasp(std::shared_ptr<RaspStore> rasp) noexcept;
 void
 UpdateHome(bool reset) noexcept;
 
+std::shared_ptr<Skysight> GetSkysight();
+void SetSkysight(std::shared_ptr<Skysight> skysight);
 };
