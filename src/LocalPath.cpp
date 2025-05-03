@@ -212,11 +212,35 @@ FindDataPaths() noexcept
 #ifdef ANDROID
     const auto env = Java::GetEnv();
 
-    for (auto &path : context->GetExternalMediaDirs(env)) {
+    bool external_files_dirs_path_added = false;
+    for (auto &path : context->GetExternalFilesDirs(env)) {
       __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
-                          "Context.getExternalMediaDirs()='%s'",
+                          "Context.getExternalFilesDirs()='%s'",
                           path.c_str());
-      result.emplace_back(std::move(path));
+      auto xcsoarlog_path = AllocatedPath::Build(Path(path), Path("xcsoar.log"));
+      if(File::Exists(xcsoarlog_path)) {
+        /*
+         * Old Android user will keep using getExternalFilesDirs() if they already have data in it
+         * Otherwise we should default them to the new getExternalMediaDirs
+         * 
+         * This is for backward compatibility so user won't surprise when
+         * all their config suddenly gone after upgrade the app
+         */
+        __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
+          "Found xcsoar.log in '%s', keep using Android private storage.",
+          xcsoarlog_path.c_str());
+        result.emplace_back(std::move(path));
+        external_files_dirs_path_added = true;
+      }
+    }
+
+    if(!external_files_dirs_path_added) {
+      for (auto &path : context->GetExternalMediaDirs(env)) {
+        __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
+                            "Context.getExternalMediaDirs()='%s'",
+                            path.c_str());
+        result.emplace_back(std::move(path));
+      }
     }
 
     if (auto path = Environment::GetExternalStoragePublicDirectory(env,
