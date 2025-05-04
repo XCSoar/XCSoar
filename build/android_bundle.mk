@@ -389,9 +389,10 @@ $(ANDROID_BUILD)/unsigned.aab: $(ANDROID_BUILD)/base.zip
 
 # Generate ~/.android/debug.keystore, if it does not exists, as the official
 # Android build tools do it:
-$(HOME)/.android/debug.keystore:
+DEBUG_KEYSTORE=$(HOME)/.android/debug.keystore
+$(DEBUG_KEYSTORE):
 	@$(NQ)echo "  KEYTOOL $@"
-	$(Q)-$(MKDIR) -p $(HOME)/.android
+	$(Q)-$(MKDIR) -p $(dir $@)
 	$(Q)$(KEYTOOL) -genkey -noprompt \
 		-keystore $@ \
 		-storepass android \
@@ -400,15 +401,20 @@ $(HOME)/.android/debug.keystore:
 		-dname "CN=Android Debug" \
 		-keyalg RSA -keysize 2048 -validity 10000
 
+# Bundle & fat APK signed for Debug
 .DELETE_ON_ERROR: $(ANDROID_BIN)/XCSoar-debug.aab
-$(ANDROID_BIN)/XCSoar-debug.aab: $(ANDROID_BUILD)/unsigned.aab $(HOME)/.android/debug.keystore | $(ANDROID_BIN)/dirstamp
+$(ANDROID_BIN)/XCSoar-debug.aab: $(ANDROID_BUILD)/unsigned.aab $(DEBUG_KEYSTORE) | $(ANDROID_BIN)/dirstamp
 	@$(NQ)echo "  SIGN    $@"
 	$(Q)cp $< $@
-	$(Q)$(JARSIGNER) -keystore $(HOME)/.android/debug.keystore -storepass android $@ androiddebugkey 
+	$(Q)$(JARSIGNER) -keystore $(DEBUG_KEYSTORE) -storepass android $@ androiddebugkey
 
-# $(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_BUILD)/aligned.apk $(HOME)/.android/debug.keystore | $(ANDROID_BIN)/dirstamp
-# 	@$(NQ)echo "  SIGN    $@"
-# 	$(Q)$(APKSIGN) --in $< --out $@ --debuggable-apk-permitted -ks $(HOME)/.android/debug.keystore --ks-key-alias androiddebugkey --ks-pass pass:android
+$(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_BIN)/XCSoar-debug.aab $(DEBUG_KEYSTORE)
+	@$(NQ)echo "  APK     $@"
+	$(Q)$(BUNDLETOOL) build-apks --overwrite --mode=universal \
+		--ks=$(DEBUG_KEYSTORE) --ks-pass=pass:android --ks-key-alias=androiddebugkey \
+		--bundle=$< \
+		--output=$(ANDROID_BUILD)/apkset-debug.apks
+	$(Q)$(UNZIP) -p $(ANDROID_BUILD)/apkset-debug.apks universal.apk > $@
 
 # $(ANDROID_BIN)/XCSoar.apk: $(ANDROID_BUILD)/aligned.apk | $(ANDROID_BIN)/dirstamp
 # 	@$(NQ)echo "  SIGN    $@"
