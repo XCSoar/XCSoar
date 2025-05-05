@@ -128,7 +128,7 @@ AirspaceIntersectionVisitorSlice::Render(const AbstractAirspace &as) const
   if (intersections.empty())
     return;
 
-  if (!IsAirspaceTypeVisible(as, settings))
+  if (!IsAirspaceTypeOrClassVisible(as, settings))
     return;
 
   PixelRect rcd;

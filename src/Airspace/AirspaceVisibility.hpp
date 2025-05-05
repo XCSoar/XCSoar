@@ -14,7 +14,7 @@ struct AltitudeState;
  */
 [[gnu::pure]]
 bool
-IsAirspaceTypeVisible(const AbstractAirspace &airspace,
+IsAirspaceTypeOrClassVisible(const AbstractAirspace &airspace,
                       const AirspaceRendererSettings &renderer_settings);
 
 /**
