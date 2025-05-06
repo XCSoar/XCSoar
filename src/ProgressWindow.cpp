@@ -29,11 +29,12 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent) noexcept
 #ifndef USE_WINUSER
   font.Load(FontDescription(Layout::FontScale(10)));
   text_height = font.GetHeight();
+#elif defined(__APPLE__) && TARGET_OS_IPHONE
+  text_height = 3 * text_height;
 #else
   {
     AnyCanvas canvas;
-    text_height = canvas.GetFontHeight();
-  }
+    text_height = canvas.GetFontHeight();  }
 #endif
 
   UpdateLayout(rc);
@@ -68,6 +69,20 @@ ProgressWindow::UpdateLayout(PixelRect rc) noexcept
 
   bottom_position = rc;
   bottom_position.top = bottom_position.bottom - progress_border_height;
+  // For some reason (inconsistency with points and native pixels?)
+  // progress bar would be drawn below the window on iOS without correcting here
+  // ToDo: find real issue and fix there
+#if defined(__APPLE__)
+  if (rc.GetHeight() > rc.GetWidth()) {
+    bottom_position.top -= 3 * progress_height;
+    bottom_position.bottom -= 3 * progress_height;
+  } else {
+    message_position.left -= 3 * progress_height;
+    message_position.right -= 3 * progress_height;
+    bottom_position.left -= 3 * progress_height;
+    bottom_position.right -= 3 * progress_height;
+  }
+#endif
 
   progress_bar_position.left = bottom_position.left + progress_horizontal_border;
   progress_bar_position.right = bottom_position.right - progress_horizontal_border;
