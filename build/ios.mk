@@ -4,6 +4,9 @@ TARGET_LDLIBS += -framework UIKit
 
 IPA_TMPDIR = $(TARGET_OUTPUT_DIR)/ipa
 
+IOS_APP_VERSION ?= 1.0.0
+IOS_APP_BUILD_NUMBER ?= 1
+
 ifeq ($(TESTING),y)
 IPA_NAME = xcsoar-testing.ipa
 IOS_APP_DIR_NAME = XCSoar.testing.app
