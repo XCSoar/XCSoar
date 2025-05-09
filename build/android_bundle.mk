@@ -4,9 +4,6 @@
 
 ifeq ($(TARGET),ANDROID)
 
-ANDROID_KEYSTORE ?= $(HOME)/.android/mk.keystore
-ANDROID_KEY_ALIAS ?= mk
-
 ANDROID_OUTPUT_DIR = $(TARGET_OUTPUT_DIR)/android
 
 ANDROID_BUILD = $(TARGET_OUTPUT_DIR)/$(XCSOAR_ABI)/build
@@ -25,27 +22,12 @@ ANDROID_ABI_DIR = $(ANDROID_BUNDLE_BASE)/lib/$(ANDROID_APK_LIB_ABI)
 JAVA_CLASSFILES_DIR = $(ANDROID_OUTPUT_DIR)/classes
 
 ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/33.0.2
-APKSIGNER = $(ANDROID_BUILD_TOOLS_DIR)/apksigner
 ZIPALIGN = $(ANDROID_BUILD_TOOLS_DIR)/zipalign
 AAPT2 = $(ANDROID_BUILD_TOOLS_DIR)/aapt2
 D8 = $(ANDROID_BUILD_TOOLS_DIR)/d8
 BUNDLETOOL = $(HOME)/opt/bundletool/bin/bundletool
 
 ANDROID_LIB_NAMES = xcsoar
-
-APKSIGN = $(APKSIGNER) sign
-ifeq ($(V),2)
-APKSIGN += --verbose
-endif
-
-APKSIGN_RELEASE = $(APKSIGN)
-
-# The environment variable ANDROID_KEYSTORE_PASS may be used to
-# specify the keystore password; if you don't set it, you will be
-# asked interactively
-ifeq ($(origin ANDROID_KEYSTORE_PASS),environment)
-APKSIGN_RELEASE += --ks-pass env:ANDROID_KEYSTORE_PASS
-endif
 
 JAVA_PACKAGE = org.xcsoar
 
@@ -416,8 +398,28 @@ $(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_BIN)/XCSoar-debug.aab $(DEBUG_KEYSTOR
 		--output=$(ANDROID_BUILD)/apkset-debug.apks
 	$(Q)$(UNZIP) -p $(ANDROID_BUILD)/apkset-debug.apks universal.apk > $@
 
-# $(ANDROID_BIN)/XCSoar.apk: $(ANDROID_BUILD)/aligned.apk | $(ANDROID_BIN)/dirstamp
-# 	@$(NQ)echo "  SIGN    $@"
-# 	$(Q)$(APKSIGN_RELEASE) --in $< --out $@ -ks $(ANDROID_KEYSTORE) --ks-key-alias $(ANDROID_KEY_ALIAS)
+# Bundle & fat APK signed for Release 
+ANDROID_KEYSTORE ?= $(HOME)/.android/mk.keystore
+ANDROID_KEY_ALIAS ?= mk
+# The environment variable ANDROID_KEYSTORE_PASS may be used to specify the
+# keystore password; if you don't set it, you will be asked interactively
+ifeq ($(origin ANDROID_KEYSTORE_PASS),environment)
+JARSIGNER_DEPLOY_PASSWD = -storepass:env ANDROID_KEYSTORE_PASS
+BUNDLETOOL_DEPLOY_PASSWD = "--ks-pass=pass:$(ANDROID_KEYSTORE_PASS)"
+endif
+
+.DELETE_ON_ERROR: $(ANDROID_BIN)/XCSoar.aab
+$(ANDROID_BIN)/XCSoar.aab: $(ANDROID_BUILD)/unsigned.aab | $(ANDROID_BIN)/dirstamp
+	@$(NQ)echo "  SIGN    $@"
+	$(Q)cp $< $@
+	$(Q)$(JARSIGNER) -keystore $(ANDROID_KEYSTORE) $(JARSIGNER_DEPLOY_PASSWD) $@ $(ANDROID_KEY_ALIAS)
+
+$(ANDROID_BIN)/XCSoar.apk: $(ANDROID_BIN)/XCSoar.aab
+	@$(NQ)echo "  APK     $@"
+	$(Q)$(BUNDLETOOL) build-apks --overwrite --mode=universal \
+		--ks=$(ANDROID_KEYSTORE) --ks-key-alias=$(ANDROID_KEY_ALIAS) $(BUNDLETOOL_DEPLOY_PASSWD) \
+		--bundle=$< \
+		--output=$(ANDROID_BUILD)/apkset-release.apks
+	$(Q)$(UNZIP) -p $(ANDROID_BUILD)/apkset-release.apks universal.apk > $@
 
 endif
