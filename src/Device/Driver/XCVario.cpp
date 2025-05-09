@@ -115,11 +115,10 @@ XVCDevice::PXCV(NMEAInputLine &line, NMEAInfo &info)
 
   // inclimb/incruise 1=cruise,0=climb
   switch (line.Read(-1)) {
-  case 0:
+  case 1:
     info.switch_state.flight_mode = SwitchState::FlightMode::CRUISE;
     break;
-
-  case 1:
+  case 0:
     info.switch_state.flight_mode = SwitchState::FlightMode::CIRCLING;
     break;
   }
@@ -229,7 +228,7 @@ XVCDevice::OnSysTicker()
 }
 
 // For documentation refer to chapter 10.1.3 Device Driver/XCVario in multilingual handbook: https://xcvario.de/handbuch
-bool 
+bool
 XVCDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
 {
   /* the XCVario understands "!g,q<NNNN>" command for QNH updates */
@@ -304,5 +303,3 @@ const struct DeviceRegister xcv_driver = {
   DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,
   XVCCreateOnPort,
 };
-
-
