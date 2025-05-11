@@ -69,6 +69,8 @@ struct TaskBehaviour {
   std::chrono::duration<unsigned> optimise_targets_margin;
   /** Option to enable calculation and setting of auto MacCready */
   bool auto_mc;
+  /** Option to enable drawing the AAT arrival time ring */
+  bool arrival_ring_aat_enabled;
 
   /** Enumeration of auto MC modes */
   enum class AutoMCMode: uint8_t {
