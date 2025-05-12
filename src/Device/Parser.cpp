@@ -86,7 +86,10 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
     }
 
     if (type2 == "PFLAA"sv) {
-      ParsePFLAA(line, info.flarm.traffic, info.clock);
+      RangeFilter range;
+      range.horizontal=0;
+      range.vertical=0;
+      ParsePFLAA(line, info.flarm.traffic, info.clock, range);
       return true;
     }
 
