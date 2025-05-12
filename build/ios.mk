@@ -31,82 +31,17 @@ $(error Could not determine correct architecture identifier for Info.plist)
 endif
 
 IOS_GRAPHICS = \
-	$(IOS_GRAPHICS_DIR)/Default.png \
-	$(IOS_GRAPHICS_DIR)/Default@2x.png \
-	$(IOS_GRAPHICS_DIR)/Default-568h@2x.png \
-	$(IOS_GRAPHICS_DIR)/Default-667h@2x.png \
-	$(IOS_GRAPHICS_DIR)/Default-736h@3x.png \
-	$(IOS_GRAPHICS_DIR)/Default-Portrait.png \
-	$(IOS_GRAPHICS_DIR)/Default-Landscape.png \
-	$(IOS_GRAPHICS_DIR)/Default-Portrait@2x.png \
-	$(IOS_GRAPHICS_DIR)/Default-Landscape@2x.png \
-	$(IOS_GRAPHICS_DIR)/Default-Landscape-667h@2x.png \
-	$(IOS_GRAPHICS_DIR)/Default-Landscape-736h@3x.png \
-	$(IOS_GRAPHICS_DIR)/Icon.png \
-	$(IOS_GRAPHICS_DIR)/Icon-72.png \
-	$(IOS_GRAPHICS_DIR)/Icon-1024.png \
-	$(IOS_GRAPHICS_DIR)/Icon@2x.png \
 	$(IOS_GRAPHICS_DIR)/Assets.car \
-	$(IOS_GRAPHICS_DIR)/AppIcon60x60@2x.png \
-	$(IOS_GRAPHICS_DIR)/AppIcon76x76@2x~ipad.png
-
-$(IOS_GRAPHICS_DIR)/Default.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 320x480 $@
-
-$(IOS_GRAPHICS_DIR)/Default@2x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 640x960 $@
-
-$(IOS_GRAPHICS_DIR)/Default-568h@2x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 640x1136 $@
-
-$(IOS_GRAPHICS_DIR)/Default-667h@2x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 750x1334 $@
-
-$(IOS_GRAPHICS_DIR)/Default-736h@3x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 1242x2208 $@
-
-$(IOS_GRAPHICS_DIR)/Default-Portrait.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 768x1004 $@
-
-$(IOS_GRAPHICS_DIR)/Default-Landscape.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 1024x748 $@
-
-$(IOS_GRAPHICS_DIR)/Default-Portrait@2x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 1536x2008 $@
-
-$(IOS_GRAPHICS_DIR)/Default-Landscape@2x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 2048x1496 $@
-
-$(IOS_GRAPHICS_DIR)/Default-Landscape-667h@2x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 1334x750 $@
-
-$(IOS_GRAPHICS_DIR)/Default-Landscape-736h@3x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 2208x1242 $@
-
-$(IOS_GRAPHICS_DIR)/Icon.png: $(IOS_ICON_SVG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)rsvg-convert $< -w 57 -h 57 -a -o $@
-
-$(IOS_GRAPHICS_DIR)/Icon-72.png: $(IOS_ICON_SVG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)rsvg-convert $< -w 72 -h 72 -a -o $@
-
-$(IOS_GRAPHICS_DIR)/Icon-76.png: $(IOS_ICON_SVG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)rsvg-convert $< -w 76 -h 76 -a -o $@
-
-$(IOS_GRAPHICS_DIR)/Icon@2x.png: $(IOS_ICON_SVG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)rsvg-convert $< -w 114 -h 114 -a -o $@
-
-$(IOS_GRAPHICS_DIR)/Icon-120.png: $(IOS_ICON_SVG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)rsvg-convert $< -w 120 -h 120 -a -o $@
-
-$(IOS_GRAPHICS_DIR)/Icon-152.png: $(IOS_ICON_SVG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)rsvg-convert $< -w 152 -h 152 -a -o $@
-
-$(IOS_GRAPHICS_DIR)/Icon-1024.png: $(IOS_ICON_SVG) | $(IOS_GRAPHICS_DIR)/dirstamp
-	$(Q)rsvg-convert $< -w 1024 -h 1024 -a -b white -o $@
+	$(IOS_GRAPHICS_DIR)/LaunchScreen.storyboardc
 
 $(IOS_GRAPHICS_DIR)/Assets.car: $(topdir)/Data/iOS/Assets.xcassets
 # will also generate $(IOS_GRAPHICS_DIR)/AppIcon%.png, but can't combine implicit and explicit rules
+	mkdir -p $(IOS_GRAPHICS_DIR)
 	xcrun actool $< --compile $(dir $@) --platform iphoneos --minimum-deployment-target 8.0 --app-icon AppIcon --output-partial-info-plist $(IOS_GRAPHICS_DIR)/assets-partial.plist
+
+$(IOS_GRAPHICS_DIR)/LaunchScreen.storyboardc: $(topdir)/Data/iOS/LaunchScreen.storyboard
+	mkdir -p $(IOS_GRAPHICS_DIR)
+	ibtool $< --compile $@
 
 HOST_MACOS_VERSION = $(shell sw_vers -buildVersion)
 TARGET_SDK_NAME = $(shell /usr/libexec/PlistBuddy -c 'print CanonicalName' $(DARWIN_SDK)/SDKSettings.plist)
@@ -148,7 +83,7 @@ $(TARGET_OUTPUT_DIR)/$(IPA_NAME): $(TARGET_BIN_DIR)/xcsoar $(TARGET_OUTPUT_DIR)/
 	$(Q)$(MKDIR) -p $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
 	$(Q)cp $(TARGET_BIN_DIR)/xcsoar $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)/XCSoar
 	$(Q)cp $(TARGET_OUTPUT_DIR)/Info.plist $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
-	$(Q)cp $(IOS_GRAPHICS) $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
+	$(Q)cp -r $(IOS_GRAPHICS_DIR)/. $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
 	$(Q)cd $(IPA_TMPDIR) && $(ZIP) -r ../$(IPA_NAME) ./*
 
 ipa: $(TARGET_OUTPUT_DIR)/$(IPA_NAME)
