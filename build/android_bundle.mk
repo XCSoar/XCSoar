@@ -22,20 +22,22 @@ BUNDLETOOL = $(HOME)/opt/bundletool/bin/bundletool
 
 ### Generated directory structure
 
-ANDROID_OUTPUT_DIR = $(TARGET_OUTPUT_DIR)/android
-JAVA_CLASSFILES_DIR = $(ANDROID_OUTPUT_DIR)/classes
+# For arch-independent objects
+NO_ARCH_OUTPUT_DIR = $(TARGET_OUTPUT_DIR)/noarch
 
-RES_DIR = $(ANDROID_OUTPUT_DIR)/res
+JAVA_CLASSFILES_DIR = $(NO_ARCH_OUTPUT_DIR)/classes
+
+RES_DIR = $(NO_ARCH_OUTPUT_DIR)/res
 DRAWABLE_DIR = $(RES_DIR)/drawable
 RAW_DIR = $(RES_DIR)/raw
-COMPILED_RES_DIR = $(ANDROID_OUTPUT_DIR)/compiled_resources
-GEN_DIR = $(ANDROID_OUTPUT_DIR)/gen
-PROTOBUF_OUT_DIR = $(GEN_DIR)/proto_out
+COMPILED_RES_DIR = $(NO_ARCH_OUTPUT_DIR)/compiled_resources
+GEN_DIR = $(NO_ARCH_OUTPUT_DIR)/gen
+PROTOBUF_OUT_DIR = $(NO_ARCH_OUTPUT_DIR)/proto_out
 
-NATIVE_INCLUDE = $(TARGET_OUTPUT_DIR)/include
+NATIVE_INCLUDE_DIR = $(TARGET_OUTPUT_DIR)/include
 
-ANDROID_BUILD = $(TARGET_OUTPUT_DIR)/$(XCSOAR_ABI)/build
-ANDROID_BUNDLE_BASE = $(ANDROID_BUILD)/base_module
+BUNDLE_BUILD_DIR = $(TARGET_OUTPUT_DIR)/$(XCSOAR_ABI)/build
+ANDROID_BUNDLE_BASE = $(BUNDLE_BUILD_DIR)/base_module
 ANDROID_ABI_DIR = $(ANDROID_BUNDLE_BASE)/lib/$(ANDROID_APK_LIB_ABI)
 
 ANDROID_BIN = $(TARGET_BIN_DIR)
@@ -60,8 +62,8 @@ NATIVE_CLASSES := \
 	BatteryReceiver \
 	NativePortListener \
 	NativeDetectDeviceListener
-NATIVE_SOURCES = $(patsubst %,android/src/%.java,$(NATIVE_CLASSES))
-NATIVE_PREFIX = $(NATIVE_INCLUDE)/$(subst .,_,$(JAVA_PACKAGE))_
+
+NATIVE_PREFIX = $(NATIVE_INCLUDE_DIR)/$(subst .,_,$(JAVA_PACKAGE))_
 NATIVE_HEADERS = $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES))
 
 JAVA_SOURCES := \
@@ -264,8 +266,8 @@ $(PROTOBUF_OUT_DIR)/dirstamp: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPI
 		-R $(COMPILED_RES_DIR)/*.flat \
 		--java $(GEN_DIR) \
 		-I $(ANDROID_SDK_PLATFORM_DIR)/android.jar \
-		-o $(ANDROID_OUTPUT_DIR)/resources.apk
-	$(Q)$(UNZIP) -o $(ANDROID_OUTPUT_DIR)/resources.apk \
+		-o $(NO_ARCH_OUTPUT_DIR)/resources.apk
+	$(Q)$(UNZIP) -o $(NO_ARCH_OUTPUT_DIR)/resources.apk \
 		-d $(PROTOBUF_OUT_DIR)
 	$(Q)touch $@
 
@@ -275,7 +277,7 @@ $(GEN_DIR)/org/xcsoar/R.java: $(PROTOBUF_OUT_DIR)/dirstamp
 
 ### Java build
 
-$(ANDROID_OUTPUT_DIR)/classes.zip: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
+$(NO_ARCH_OUTPUT_DIR)/classes.zip: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
 	@$(NQ)echo "  JAVAC   $(JAVA_CLASSFILES_DIR)"
 	$(Q)$(JAVAC) \
 		-source 1.7 -target 1.7 \
@@ -285,21 +287,21 @@ $(ANDROID_OUTPUT_DIR)/classes.zip: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java 
 		-Xlint:-static \
 		-cp $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) \
 		-d $(JAVA_CLASSFILES_DIR) $(GEN_DIR)/org/xcsoar/R.java \
-		-h $(NATIVE_INCLUDE) \
+		-h $(NATIVE_INCLUDE_DIR) \
 		$(JAVA_SOURCES)
-	$(Q)$(ZIP) -0 -r $(ANDROID_OUTPUT_DIR)/classes.zip $(JAVA_CLASSFILES_DIR)
+	$(Q)$(ZIP) -0 -r $(NO_ARCH_OUTPUT_DIR)/classes.zip $(JAVA_CLASSFILES_DIR)
 
 # Note: desugaring causes crashes on Android 13 (Pixel 6); as a
 # workaround, it's disabled for now.
-$(ANDROID_OUTPUT_DIR)/classes.dex: $(ANDROID_OUTPUT_DIR)/classes.zip
+$(NO_ARCH_OUTPUT_DIR)/classes.dex: $(NO_ARCH_OUTPUT_DIR)/classes.zip
 	@$(NQ)echo "  D8      $@"
 	$(Q)$(D8) \
 		--no-desugaring \
 		--min-api 21 \
-		--output $(ANDROID_OUTPUT_DIR) $(ANDROID_OUTPUT_DIR)/classes.zip
+		--output $(NO_ARCH_OUTPUT_DIR) $(NO_ARCH_OUTPUT_DIR)/classes.zip
 
 # Native headers generated at Java compile step
-$(NATIVE_HEADERS): $(ANDROID_OUTPUT_DIR)/classes.dex
+$(NATIVE_HEADERS): $(NO_ARCH_OUTPUT_DIR)/classes.dex
 
 
 ### Native libraries build
@@ -329,8 +331,8 @@ $$(TARGET_OUTPUT_DIR)/$(2)/$$(XCSOAR_ABI)/bin/lib$(1).so: $(NATIVE_HEADERS) gene
 	$$(Q)$$(MAKE) TARGET_OUTPUT_DIR=$$(TARGET_OUTPUT_DIR) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) $$@
 
 # extract symbolication files for Google Play
-ANDROID_SYMBOLICATION_BUILD += $$(ANDROID_BUILD)/symbols/$(2)/lib$(1).so
-$$(ANDROID_BUILD)/symbols/$(2)/lib$(1).so: $$(TARGET_OUTPUT_DIR)/$(2)/$$(XCSOAR_ABI)/bin/lib$(1)-ns.so | $$(ANDROID_BUILD)/symbols/$(2)/dirstamp
+ANDROID_SYMBOLICATION_BUILD += $$(BUNDLE_BUILD_DIR)/symbols/$(2)/lib$(1).so
+$$(BUNDLE_BUILD_DIR)/symbols/$(2)/lib$(1).so: $$(TARGET_OUTPUT_DIR)/$(2)/$$(XCSOAR_ABI)/bin/lib$(1)-ns.so | $$(BUNDLE_BUILD_DIR)/symbols/$(2)/dirstamp
 	$$(Q)$$(TCPREFIX)objcopy$$(EXE) --strip-debug $$< $$@
 
 endef
@@ -352,11 +354,12 @@ compile: $(ANDROID_LIB_BUILD)
 # Generate symbols.zip (symbolication file) for Google Play, which
 # allows Google Play to show symbol names in stack traces.
 $(TARGET_OUTPUT_DIR)/symbols.zip: $(ANDROID_SYMBOLICATION_BUILD)
-	cd $(ANDROID_BUILD)/symbols && $(ZIP) $(abspath $@) */*.so
+	cd $(BUNDLE_BUILD_DIR)/symbols && $(ZIP) $(abspath $@) */*.so
 
 else # !FAT_BINARY
 
-# add dependency to this source file
+# Explicitly add dependencies on these cpp sources to generated headers
+# Required to avoid race condition on 1st build, when compiler .d files are not yet available
 $(call SRC_TO_OBJ,$(SRC)/Android/Main.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/EventBridge.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/NativeSensorListener.cpp): $(NATIVE_HEADERS)
@@ -379,15 +382,17 @@ endif # !FAT_BINARY
 
 # Generate ~/.android/debug.keystore, if it does not exists, as the official
 # Android build tools do it:
-DEBUG_KEYSTORE=$(HOME)/.android/debug.keystore
+DEBUG_KEYSTORE = $(HOME)/.android/debug.keystore
+DEBUG_KEY_ALIAS = androiddebugkey
+DEBUG_KEY_PASSWORD = android
 $(DEBUG_KEYSTORE):
 	@$(NQ)echo "  KEYTOOL $@"
 	$(Q)-$(MKDIR) -p $(dir $@)
 	$(Q)$(KEYTOOL) -genkey -noprompt \
 		-keystore $@ \
-		-storepass android \
-		-alias androiddebugkey \
-		-keypass android \
+		-storepass $(DEBUG_KEY_PASSWORD) \
+		-alias $(DEBUG_KEY_ALIAS) \
+		-keypass $(DEBUG_KEY_PASSWORD) \
 		-dname "CN=Android Debug" \
 		-keyalg RSA -keysize 2048 -validity 10000
 
@@ -398,55 +403,55 @@ ANDROID_KEY_ALIAS ?= mk
 # The environment variable ANDROID_KEYSTORE_PASS may be used to specify the
 # keystore password; if you don't set it, you will be asked interactively
 ifeq ($(origin ANDROID_KEYSTORE_PASS),environment)
-JARSIGNER_DEPLOY_PASSWD = -storepass:env ANDROID_KEYSTORE_PASS
-BUNDLETOOL_DEPLOY_PASSWD = "--ks-pass=pass:$(ANDROID_KEYSTORE_PASS)"
+JARSIGNER_RELEASE_PASSWD = -storepass:env ANDROID_KEYSTORE_PASS
+BUNDLETOOL_RELEASE_PASSWD = "--ks-pass=pass:$(ANDROID_KEYSTORE_PASS)"
 endif
 
 
 ### Bundle and final APK build
 
-$(ANDROID_BUILD)/base.zip: $(PROTOBUF_OUT_DIR)/dirstamp $(ANDROID_OUTPUT_DIR)/classes.dex $(ANDROID_LIB_BUILD) | $(ANDROID_BUILD)/dirstamp
+$(BUNDLE_BUILD_DIR)/base.zip: $(PROTOBUF_OUT_DIR)/dirstamp $(NO_ARCH_OUTPUT_DIR)/classes.dex $(ANDROID_LIB_BUILD) | $(BUNDLE_BUILD_DIR)/dirstamp
 	@$(NQ)echo "  ZIP     $(notdir $@)"
 	$(Q)mkdir -p $(ANDROID_BUNDLE_BASE) && \
 		cp -r $(PROTOBUF_OUT_DIR)/res $(PROTOBUF_OUT_DIR)/resources.pb $(ANDROID_BUNDLE_BASE)
 	$(Q)mkdir -p $(ANDROID_BUNDLE_BASE)/manifest && \
 		cp $(PROTOBUF_OUT_DIR)/AndroidManifest.xml $(ANDROID_BUNDLE_BASE)/manifest/
 	$(Q)mkdir -p $(ANDROID_BUNDLE_BASE)/dex && \
-		cp $(ANDROID_OUTPUT_DIR)/classes.dex $(ANDROID_BUNDLE_BASE)/dex/
+		cp $(NO_ARCH_OUTPUT_DIR)/classes.dex $(ANDROID_BUNDLE_BASE)/dex/
 	$(Q)cd $(ANDROID_BUNDLE_BASE) && $(ZIP) -r $(abspath $@) . --exclude "*/dirstamp"
 
-$(ANDROID_BUILD)/unsigned.aab: $(ANDROID_BUILD)/base.zip
+$(BUNDLE_BUILD_DIR)/unsigned.aab: $(BUNDLE_BUILD_DIR)/base.zip
 	@$(NQ)echo "  BUNDLE  $(notdir $@)"
 	$(Q)$(BUNDLETOOL) build-bundle --overwrite --modules $< --output $@
 
 # Debug targets
 .DELETE_ON_ERROR: $(ANDROID_BIN)/XCSoar-debug.aab
-$(ANDROID_BIN)/XCSoar-debug.aab: $(ANDROID_BUILD)/unsigned.aab $(DEBUG_KEYSTORE) | $(ANDROID_BIN)/dirstamp
+$(ANDROID_BIN)/XCSoar-debug.aab: $(BUNDLE_BUILD_DIR)/unsigned.aab $(DEBUG_KEYSTORE) | $(ANDROID_BIN)/dirstamp
 	@$(NQ)echo "  SIGN    $@"
 	$(Q)cp $< $@
-	$(Q)$(JARSIGNER) -keystore $(DEBUG_KEYSTORE) -storepass android $@ androiddebugkey
+	$(Q)$(JARSIGNER) -keystore $(DEBUG_KEYSTORE) -storepass $(DEBUG_KEY_PASSWORD) $@ $(DEBUG_KEY_ALIAS)
 
 $(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_BIN)/XCSoar-debug.aab $(DEBUG_KEYSTORE)
 	@$(NQ)echo "  APK     $@"
 	$(Q)$(BUNDLETOOL) build-apks --overwrite --mode=universal \
-		--ks=$(DEBUG_KEYSTORE) --ks-pass=pass:android --ks-key-alias=androiddebugkey \
+		--ks=$(DEBUG_KEYSTORE) --ks-pass=pass:$(DEBUG_KEY_PASSWORD) --ks-key-alias=$(DEBUG_KEY_ALIAS) \
 		--bundle=$< \
-		--output=$(ANDROID_BUILD)/apkset-debug.apks
-	$(Q)$(UNZIP) -p $(ANDROID_BUILD)/apkset-debug.apks universal.apk > $@
+		--output=$(BUNDLE_BUILD_DIR)/apkset-debug.apks
+	$(Q)$(UNZIP) -p $(BUNDLE_BUILD_DIR)/apkset-debug.apks universal.apk > $@
 
 # Release targets (signed)
 .DELETE_ON_ERROR: $(ANDROID_BIN)/XCSoar.aab
-$(ANDROID_BIN)/XCSoar.aab: $(ANDROID_BUILD)/unsigned.aab | $(ANDROID_BIN)/dirstamp
+$(ANDROID_BIN)/XCSoar.aab: $(BUNDLE_BUILD_DIR)/unsigned.aab | $(ANDROID_BIN)/dirstamp
 	@$(NQ)echo "  SIGN    $@"
 	$(Q)cp $< $@
-	$(Q)$(JARSIGNER) -keystore $(ANDROID_KEYSTORE) $(JARSIGNER_DEPLOY_PASSWD) $@ $(ANDROID_KEY_ALIAS)
+	$(Q)$(JARSIGNER) -keystore $(ANDROID_KEYSTORE) $(JARSIGNER_RELEASE_PASSWD) $@ $(ANDROID_KEY_ALIAS)
 
 $(ANDROID_BIN)/XCSoar.apk: $(ANDROID_BIN)/XCSoar.aab
 	@$(NQ)echo "  APK     $@"
 	$(Q)$(BUNDLETOOL) build-apks --overwrite --mode=universal \
-		--ks=$(ANDROID_KEYSTORE) --ks-key-alias=$(ANDROID_KEY_ALIAS) $(BUNDLETOOL_DEPLOY_PASSWD) \
+		--ks=$(ANDROID_KEYSTORE) --ks-key-alias=$(ANDROID_KEY_ALIAS) $(BUNDLETOOL_RELEASE_PASSWD) \
 		--bundle=$< \
-		--output=$(ANDROID_BUILD)/apkset-release.apks
-	$(Q)$(UNZIP) -p $(ANDROID_BUILD)/apkset-release.apks universal.apk > $@
+		--output=$(BUNDLE_BUILD_DIR)/apkset-release.apks
+	$(Q)$(UNZIP) -p $(BUNDLE_BUILD_DIR)/apkset-release.apks universal.apk > $@
 
 endif
