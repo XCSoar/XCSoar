@@ -30,7 +30,7 @@ ProtectedTaskManager::SetGlidePolar(const GlidePolar &glide_polar) noexcept
 }
 
 void
-ProtectedTaskManager::SetStartTimeSpan(const RoughTimeSpan &open_time_span) noexcept
+ProtectedTaskManager::SetStartTimeSpan(const TimeSpan &open_time_span) noexcept
 {
   ExclusiveLease lease(*this);
   OrderedTaskSettings otb = lease->GetOrderedTask().GetOrderedTaskSettings();

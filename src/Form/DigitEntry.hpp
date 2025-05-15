@@ -5,13 +5,13 @@
 
 #include "ui/window/PaintWindow.hpp"
 #include "Renderer/ButtonRenderer.hpp"
+#include "time/RoughTimeDecl.hpp"
 
 #include <cassert>
 #include <cstdint>
 #include <functional>
 
 enum class CoordinateFormat : uint8_t;
-class RoughTime;
 class Angle;
 struct BrokenDate;
 class ContainerWindow;
