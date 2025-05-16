@@ -95,8 +95,6 @@ ScoringConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
     { Contest::SIS_AT, ContestToString(Contest::SIS_AT),
       N_("Austrian online glider contest. Tracks around max. six waypoints are scored. The "
           "bounding box part with 1 km = 1.0 point and the additional zick-zack part with 1 km = 0.5 p.") },
-    { Contest::NET_COUPE, ContestToString(Contest::NET_COUPE),
-      N_("The FFVV NetCoupe \"libre\" competiton.") },
     { Contest::WEGLIDE_FREE, ContestToString(Contest::WEGLIDE_FREE),
       N_("WeGlide combines multiple scoring systems in the WeGlide Free contest. The free score is a combination "
           "of the free distance score and the area bonus. For the area bonus, the scoring program determines the "

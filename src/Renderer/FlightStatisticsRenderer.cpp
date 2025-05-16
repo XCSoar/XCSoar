@@ -142,7 +142,6 @@ FlightStatisticsRenderer::RenderContest(Canvas &canvas, const PixelRect rc,
   case Contest::OLC_SPRINT:
   case Contest::OLC_CLASSIC:
   case Contest::SIS_AT:
-  case Contest::NET_COUPE:
   case Contest::DMST:
     DrawContestSolution(canvas, proj, contest, 0);
     break;
