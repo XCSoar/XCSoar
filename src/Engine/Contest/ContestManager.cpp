@@ -19,7 +19,6 @@ ContestManager::ContestManager(const Contest _contest,
    dhv_xc_free(trace_full, true),
    dhv_xc_triangle(trace_triangle, predict_triangle, true),
    sis_at(trace_full),
-   net_coupe(trace_full),
    weglide_distance(trace_full),
    weglide_fai(trace_triangle, predict_triangle),
    weglide_or(trace_full),
@@ -41,7 +40,6 @@ ContestManager::SetIncremental(bool incremental) noexcept
   dhv_xc_free.SetIncremental(incremental);
   dhv_xc_triangle.SetIncremental(incremental);
   sis_at.SetIncremental(incremental);
-  net_coupe.SetIncremental(incremental);
   weglide_distance.SetIncremental(incremental);
   weglide_fai.SetIncremental(incremental);
   weglide_or.SetIncremental(incremental);
@@ -64,10 +62,7 @@ ContestManager::SetPredicted(const TracePoint &predicted) noexcept
   if (dmst_quad.SetPredicted(predicted) &&
       contest == Contest::DMST)
     stats.Reset();
-
-  if (net_coupe.SetPredicted(predicted) && contest == Contest::NET_COUPE)
-    stats.Reset();
-
+  
   if (weglide_distance.SetPredicted(predicted)) {
     weglide_fai.Reset();
     weglide_or.Reset();
@@ -108,7 +103,6 @@ ContestManager::SetHandicap(unsigned handicap) noexcept
   dhv_xc_free.SetHandicap(handicap);
   dhv_xc_triangle.SetHandicap(handicap);
   sis_at.SetHandicap(handicap);
-  net_coupe.SetHandicap(handicap);
   weglide_free.SetHandicap(handicap);
   weglide_distance.SetHandicap(handicap);
   weglide_fai.SetHandicap(handicap);
@@ -215,11 +209,6 @@ ContestManager::UpdateIdle(bool exhaustive) noexcept
                         stats.solution[0], exhaustive);
     break;
 
-  case Contest::NET_COUPE:
-    retval = RunContest(net_coupe, stats.result[0],
-                        stats.solution[0], exhaustive);
-    break;
-
   case Contest::WEGLIDE_FREE:
     retval = RunContest(weglide_distance, stats.result[0],
                         stats.solution[0], exhaustive);
@@ -285,7 +274,6 @@ ContestManager::Reset() noexcept
   dhv_xc_free.Reset();
   dhv_xc_triangle.Reset();
   sis_at.Reset();
-  net_coupe.Reset();
   weglide_free.Reset();
   weglide_distance.Reset();
   weglide_fai.Reset();
