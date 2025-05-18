@@ -37,6 +37,7 @@ Version 7.44 - not yet released
   - BigTrafficWidget: zoom range to 5km when opening big radar via the FlarmGauge
   - terrain: added 2 new terrain ramps for use in very flat countries
   - add head wind component to V GND Infobox #1439
+  - add V task leg Infobox #1767
   - PEV start wait/window times now have second accuraccy #1099
   - show station names in airspace details dialog
   - show squawk code in airspace details dialog
