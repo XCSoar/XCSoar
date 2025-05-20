@@ -40,17 +40,15 @@ public:
 
 class AirspaceAtPointPredicate
 {
-  const AirspaceVisibility visible_predicate;
+  const AirspaceRendererSettings &renderer_settings;
   const AirspaceWarningList &warnings;
   const GeoPoint location;
 
 public:
-  AirspaceAtPointPredicate(const AirspaceComputerSettings &_computer_settings,
-                           const AirspaceRendererSettings &_renderer_settings,
-                           const AircraftState& _state,
+  AirspaceAtPointPredicate(const AirspaceRendererSettings &_renderer_settings,
                            const AirspaceWarningList &_warnings,
                            const GeoPoint _location)
-    :visible_predicate(_computer_settings, _renderer_settings, _state),
+    :renderer_settings(_renderer_settings),
      warnings(_warnings),
      location(_location) {}
 
@@ -58,7 +56,7 @@ public:
     // Airspace should be visible or have a warning/inside status
     // and airspace needs to be at specified location
 
-    return (visible_predicate(airspace) || warnings.Contains(airspace)) &&
+    return (IsAirspaceTypeOrClassVisible(airspace, renderer_settings) || warnings.Contains(airspace)) &&
       airspace.Inside(location);
   }
 };
@@ -67,17 +65,13 @@ void
 MapItemListBuilder::AddVisibleAirspace(
     const Airspaces &airspaces,
     const ProtectedAirspaceWarningManager *warning_manager,
-    const AirspaceComputerSettings &computer_settings,
-    const AirspaceRendererSettings &renderer_settings,
-    const MoreData &basic, const DerivedInfo &calculated)
+    const AirspaceRendererSettings &renderer_settings)
 {
   AirspaceWarningList warnings;
   if (warning_manager != nullptr)
     warnings.Fill(*warning_manager);
 
-  const AircraftState aircraft = ToAircraftState(basic, calculated);
-  AirspaceAtPointPredicate predicate(computer_settings, renderer_settings,
-                                     aircraft,
+  AirspaceAtPointPredicate predicate(renderer_settings,
                                      warnings, location);
 
   for (const auto &i : airspaces.QueryWithinRange(location, 100)) {
