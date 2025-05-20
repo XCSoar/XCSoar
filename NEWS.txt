@@ -2,6 +2,7 @@ Version 7.44 - not yet released
 * WaypointDetails
   - Add pan capability to the waypoint details image
 * calculations
+  - remove FFVV NetCoupe
   - update sprint/league time window to 2 hours (as per OLC and DMSt rules)
   - update OLC League calculation to latest ruleset
 * tracking
