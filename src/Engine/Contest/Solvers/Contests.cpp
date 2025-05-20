@@ -13,7 +13,6 @@ static const TCHAR *const contest_to_string[] = {
   _T("XContest"),
   _T("DHV-XC"),
   _T("SIS-AT"),
-  _T("FFVV NetCoupe"),
   _T("DMSt"),
   _T("WeGlide FREE"),
   _T("WeGlide Distance"),

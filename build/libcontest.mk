@@ -18,7 +18,6 @@ CONTEST_SOURCES = \
 	$(CONTEST_SRC_DIR)/Solvers/XContestFree.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/XContestTriangle.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/OLCSISAT.cpp \
-	$(CONTEST_SRC_DIR)/Solvers/NetCoupe.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/Retrospective.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/WeglideFree.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/WeglideDistance.cpp \

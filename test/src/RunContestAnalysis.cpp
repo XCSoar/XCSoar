@@ -41,8 +41,6 @@ static ContestManager xcontest(Contest::XCONTEST,
                                full_trace, triangle_trace, sprint_trace);
 static ContestManager sis_at(Contest::SIS_AT,
                              full_trace, triangle_trace, sprint_trace);
-static ContestManager olc_netcoupe(Contest::NET_COUPE,
-                                   full_trace, triangle_trace, sprint_trace);
 static ContestManager weglide_free(Contest::WEGLIDE_FREE,
                                full_trace, triangle_trace, sprint_trace);
 static ContestManager charron(Contest::CHARRON,
@@ -88,7 +86,6 @@ TestContest(DebugReplay &replay)
   dmst.SolveExhaustive();
   xcontest.SolveExhaustive();
   sis_at.SolveExhaustive();
-  olc_netcoupe.SolveExhaustive();
   weglide_free.SolveExhaustive();
   charron.SolveExhaustive();
 
@@ -125,8 +122,6 @@ TestContest(DebugReplay &replay)
   std::cout << "sis_at\n";
   PrintHelper::print(sis_at.GetStats().GetResult(0));
 
-  std::cout << "netcoupe\n";
-  PrintHelper::print(olc_netcoupe.GetStats().GetResult());
 
   std::cout << "weglide\n";
   std::cout << "# distance\n";
@@ -148,7 +143,6 @@ TestContest(DebugReplay &replay)
   olc_league.Reset();
   olc_plus.Reset();
   dmst.Reset();
-  olc_netcoupe.Reset();
   weglide_free.Reset();
   charron.Reset();
   full_trace.clear();
