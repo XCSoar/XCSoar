@@ -13,7 +13,7 @@ struct StartConstraints {
   /**
    * The time span during which the start gate is open.
    */
-  RoughTimeSpan open_time_span;
+  TimeSpan open_time_span;
 
   /** Maximum ground speed (m/s) allowed in start sector */
   double max_speed;
