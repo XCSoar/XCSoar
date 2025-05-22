@@ -102,6 +102,10 @@ ifeq ($(TARGET),ANDROIDFAT)
   override TARGET_FLAVOR = ANDROID
 endif
 
+ifeq ($(ANDROID_BUNDLE_BUILD),y)
+  override TARGET_FLAVOR = ANDROID_BUNDLE
+endif
+
 # real targets
 
 ifeq ($(TARGET),PC)
