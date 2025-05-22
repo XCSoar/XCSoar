@@ -1,29 +1,32 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "Device/Driver/Generic.hpp"
-#include "Device/Driver/AltairPro.hpp"
+#include "Device/Config.hpp"
+#include "Device/Declaration.hpp"
+#include "Device/Driver.hpp"
 #include "Device/Driver/AirControlDisplay.hpp"
+#include "Device/Driver/AltairPro.hpp"
 #include "Device/Driver/BlueFlyVario.hpp"
 #include "Device/Driver/BorgeltB50.hpp"
 #include "Device/Driver/CAI302.hpp"
-#include "Device/Driver/Condor.hpp"
 #include "Device/Driver/CProbe.hpp"
+#include "Device/Driver/Condor.hpp"
 #include "Device/Driver/EW.hpp"
 #include "Device/Driver/EWMicroRecorder.hpp"
 #include "Device/Driver/Eye.hpp"
 #include "Device/Driver/FLARM.hpp"
-#include "Device/Driver/FlymasterF1.hpp"
 #include "Device/Driver/FlyNet.hpp"
+#include "Device/Driver/FlymasterF1.hpp"
 #include "Device/Driver/Flytec.hpp"
-#include "Device/Driver/Larus.hpp"
-#include "Device/Driver/LevilAHRS_G.hpp"
-#include "Device/Driver/Leonardo.hpp"
-#include "Device/Driver/LX.hpp"
-#include "Device/Driver/LX_Eos.hpp"
-#include "Device/Driver/LX/Internal.hpp"
+#include "Device/Driver/Generic.hpp"
 #include "Device/Driver/ILEC.hpp"
 #include "Device/Driver/IMI.hpp"
+#include "Device/Driver/LX.hpp"
+#include "Device/Driver/LX/Internal.hpp"
+#include "Device/Driver/LX_Eos.hpp"
+#include "Device/Driver/Larus.hpp"
+#include "Device/Driver/Leonardo.hpp"
+#include "Device/Driver/LevilAHRS_G.hpp"
 #include "Device/Driver/OpenVario.hpp"
 #include "Device/Driver/PosiGraph.hpp"
 #include "Device/Driver/Vaulter.hpp"
@@ -31,22 +34,20 @@
 #include "Device/Driver/Volkslogger.hpp"
 #include "Device/Driver/Westerboer.hpp"
 #include "Device/Driver/XCTracer.hpp"
+#include "Device/Driver/XCVario.hpp"
 #include "Device/Driver/Zander.hpp"
-#include "Device/Driver.hpp"
-#include "Device/RecordedFlight.hpp"
 #include "Device/Parser.hpp"
-#include "Device/device.hpp"
 #include "Device/Port/NullPort.hpp"
-#include "Device/Declaration.hpp"
-#include "Device/Config.hpp"
-#include "Logger/Settings.hpp"
-#include "Plane/Plane.hpp"
-#include "NMEA/Info.hpp"
-#include "Protection.hpp"
-#include "Input/InputEvents.hpp"
+#include "Device/RecordedFlight.hpp"
+#include "Device/device.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
-#include "Operation/Operation.hpp"
 #include "FaultInjectionPort.hpp"
+#include "Input/InputEvents.hpp"
+#include "Logger/Settings.hpp"
+#include "NMEA/Info.hpp"
+#include "Operation/Operation.hpp"
+#include "Plane/Plane.hpp"
+#include "Protection.hpp"
 #include "TestUtil.hpp"
 #include "Units/System.hpp"
 #include "io/NullDataHandler.hpp"
@@ -1122,6 +1123,72 @@ TestLX(const struct DeviceRegister &driver, bool condor=false, bool reciprocal_w
 }
 
 static void
+TestXCVario()
+{
+  NullPort null;
+  Device *device = xcv_driver.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+
+  // $PXCV protocol version 1 (with ballast)
+  ok1(device->ParseNMEA("!xcv,version,1*26", nmea_info));
+
+  ok1(device->ParseNMEA(
+      "$PXCV,1.23,2.5,05,1.20,0,15.3,1013.2,1012.8,3.4,-1.2,0.98,0.02,1.01*08",
+      nmea_info));
+  ok1(nmea_info.total_energy_vario_available);
+  ok1(equals(nmea_info.total_energy_vario, 1.23));
+  ok1(nmea_info.settings.mac_cready_available);
+  ok1(equals(nmea_info.settings.mac_cready, 2.5));
+  ok1(nmea_info.settings.bugs_available);
+  ok1(equals(nmea_info.settings.bugs, 0.95)); // 5% degradation
+  ok1(nmea_info.settings.ballast_fraction_available);
+  ok1(equals(nmea_info.settings.ballast_fraction, 1.20));
+  ok1(nmea_info.switch_state.flight_mode == SwitchState::FlightMode::CIRCLING);
+  ok1(nmea_info.temperature_available);
+  ok1(equals(nmea_info.temperature.ToCelsius(), 15.3));
+  ok1(nmea_info.settings.qnh_available);
+  ok1(equals(nmea_info.settings.qnh.GetHectoPascal(), 1013.2));
+  ok1(nmea_info.static_pressure_available);
+  ok1(equals(nmea_info.static_pressure.GetHectoPascal(), 1012.8));
+  ok1(nmea_info.attitude.bank_angle_available);
+  ok1(equals(nmea_info.attitude.bank_angle, 3.4));
+  ok1(nmea_info.attitude.pitch_angle_available);
+  ok1(equals(nmea_info.attitude.pitch_angle, -1.2));
+  ok1(nmea_info.acceleration.available);
+
+  // $PXCV protocol version 2 (no ballast)
+  ok1(device->ParseNMEA("!xcv,version,2*25", nmea_info));
+
+  ok1(device->ParseNMEA(
+      "$PXCV,-0.1,0.50,0,,1,27.4,1023.7,956.0,0.0,0.5,31.9,0.70,0.01,1.13*2C",
+      nmea_info));
+  ok1(nmea_info.total_energy_vario_available);
+  ok1(equals(nmea_info.total_energy_vario, -0.1));
+  ok1(nmea_info.settings.mac_cready_available);
+  ok1(equals(nmea_info.settings.mac_cready, 0.5));
+  ok1(nmea_info.settings.bugs_available);
+  ok1(equals(nmea_info.settings.bugs, 1.0)); // 0% degradation
+  ok1(!nmea_info.settings
+           .ballast_fraction_available); // Not available in protocol v2
+  ok1(nmea_info.switch_state.flight_mode == SwitchState::FlightMode::CRUISE);
+  ok1(nmea_info.temperature_available);
+  ok1(equals(nmea_info.temperature.ToCelsius(), 27.4));
+  ok1(nmea_info.settings.qnh_available);
+  ok1(equals(nmea_info.settings.qnh.GetHectoPascal(), 1023.7));
+  ok1(nmea_info.static_pressure_available);
+  ok1(equals(nmea_info.static_pressure.GetHectoPascal(), 956.0));
+  ok1(nmea_info.attitude.bank_angle_available);
+  ok1(equals(nmea_info.attitude.bank_angle, 0.0));
+  ok1(nmea_info.attitude.pitch_angle_available);
+  ok1(equals(nmea_info.attitude.pitch_angle, 0.5));
+  ok1(nmea_info.acceleration.available);
+}
+
+static void
 TestLXEos()
 {
   NullPort null;
@@ -1134,7 +1201,7 @@ TestLXEos()
 
   ok1(device->ParseNMEA("$LXWP0,N,0.0,262.6,0.01,0.01,0.01,0.01,0.01,0.01,,,259,2.7*54",
                         nmea_info));
-  
+
   // alt_offset is not yet known, baro altitude should be provided
   ok1(!nmea_info.pressure_altitude_available);
   ok1(nmea_info.baro_altitude_available);
@@ -1146,8 +1213,8 @@ TestLXEos()
   ok1(equals(nmea_info.total_energy_vario, 0.01));
   ok1(nmea_info.external_wind_available);
   ok1(equals(nmea_info.external_wind.norm, 2.7 / 3.6));
-  ok1(equals(nmea_info.external_wind.bearing, 259));  
-  
+  ok1(equals(nmea_info.external_wind.bearing, 259));
+
   ok1(device->ParseNMEA("$LXWP1,LX Eos,34949,1.7,1.4*7f", nmea_info));
   ok1(nmea_info.device.product == "LX Eos");
   ok1(nmea_info.device.serial == "34949");
@@ -1645,10 +1712,10 @@ TestACD()
   ok1(device->ParseNMEA("$PAAVS,XPDR,7000,1,0,1697,0,0*68",nmea_info));
   ok1(nmea_info.settings.has_transponder_code);
   ok1(nmea_info.settings.has_transponder_mode);
-  ok1(equals(nmea_info.settings.transponder_code.GetCode(), 
+  ok1(equals(nmea_info.settings.transponder_code.GetCode(),
              TransponderCode{07000}.GetCode()));
-  ok1(StringIsEqual(nmea_info.settings.transponder_mode.GetModeString(), 
-             _T("ALT")));
+  ok1(StringIsEqual(nmea_info.settings.transponder_mode.GetModeString(),
+                    _T("ALT")));
   ok1(equals(nmea_info.settings.transponder_mode.mode, TransponderMode::Mode::ALT));
 
   ok1(device->ParseNMEA("$PAAVS,XPDR,7260,1,0,1762,1,0*66",nmea_info));
@@ -1777,7 +1844,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main()
 {
-  plan_tests(972);
+  plan_tests(1016);
   TestGeneric();
   TestTasman();
   TestFLARM();
@@ -1806,6 +1873,7 @@ int main()
   TestVaulter();
   TestXCTracer();
   TestACD();
+  TestXCVario();
 
   /* XXX the Triadis drivers have too many dependencies, not enabling
      for now */
