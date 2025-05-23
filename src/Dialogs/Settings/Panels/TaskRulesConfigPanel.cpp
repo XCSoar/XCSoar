@@ -24,6 +24,8 @@ enum ControlIndex {
   spacer_3,
   PEVStartWaitTime,
   PEVStartWindow,
+  spacer_4,
+  ArmStartManually,
 };
 
 class TaskRulesConfigPanel final : public RowFormWidget {
@@ -119,6 +121,13 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent,
               task_behaviour.ordered_defaults.start_constraints.pev_start_window);
   SetExpertRow(PEVStartWindow);
 
+  AddSpacer();
+  SetExpertRow(spacer_4);
+
+  AddBoolean(_("Arm start manually"),
+             _("Configure whether the start must be armed manually or automatically."),
+             task_behaviour.ordered_defaults.start_constraints.require_arm);
+  SetExpertRow(ArmStartManually);
 }
 
 
@@ -162,6 +171,10 @@ TaskRulesConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValue(PEVStartWindow,
                        ProfileKeys::PEVStartWindow,
                        otb.start_constraints.pev_start_window);
+
+  changed |= SaveValue(ArmStartManually,
+                       ProfileKeys::ArmStartManually,
+                       otb.start_constraints.require_arm);
 
   _changed |= changed;
 

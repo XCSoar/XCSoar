@@ -52,6 +52,7 @@ TaskPropertiesPanel::RefreshView()
   SetRowVisible(MIN_TIME, aat_types);
   LoadValueDuration(MIN_TIME, p.aat_min_time);
 
+  SetRowVisible(START_REQUIRES_ARM, !fai_start_finish);
   LoadValue(START_REQUIRES_ARM, p.start_constraints.require_arm);
   LoadValue(START_SCORE_EXIT, p.start_constraints.score_exit);
 
@@ -105,8 +106,7 @@ TaskPropertiesPanel::ReadValues()
 
   changed |= SaveValue(MIN_TIME, p.aat_min_time);
 
-  if (SaveValue(START_REQUIRES_ARM, p.start_constraints.require_arm))
-    changed = true;
+  changed |= SaveValue(START_REQUIRES_ARM, p.start_constraints.require_arm);
 
   changed |= SaveValue(START_SCORE_EXIT, p.start_constraints.score_exit);
 

@@ -170,6 +170,7 @@ constexpr std::string_view AATMinTime = "AATMinTime";
 constexpr std::string_view AATTimeMargin = "AATTimeMargin";
 constexpr std::string_view PEVStartWaitTime = "PEVStartWaitTime";
 constexpr std::string_view PEVStartWindow = "PEVStartWindow";
+constexpr std::string_view ArmStartManually = "ArmStartManually";
 
 constexpr std::string_view EnableNavBaroAltitude = "EnableNavBaroAltitude";
 

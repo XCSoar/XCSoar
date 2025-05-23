@@ -48,6 +48,7 @@ Profile::Load(const ProfileMap &map, StartConstraints &constraints)
   map.Get(ProfileKeys::StartMaxSpeed, constraints.max_speed);
   map.Get(ProfileKeys::PEVStartWaitTime, constraints.pev_start_wait_time);
   map.Get(ProfileKeys::PEVStartWindow, constraints.pev_start_window);
+  map.Get(ProfileKeys::ArmStartManually, constraints.require_arm);
 }
 
 void

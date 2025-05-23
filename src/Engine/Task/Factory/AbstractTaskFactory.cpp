@@ -586,7 +586,6 @@ AbstractTaskFactory::GetOrderedTaskSettings() const noexcept
 void
 AbstractTaskFactory::UpdateOrderedTaskSettings(OrderedTaskSettings &to) noexcept
 {
-  to.start_constraints.require_arm = constraints.start_requires_arm;
   to.finish_constraints.fai_finish = constraints.fai_finish;
 }
 
