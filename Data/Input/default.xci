@@ -624,6 +624,14 @@ location=5
 
 mode=Config2
 type=key
+data=7
+event=UploadIGCFile
+event=Mode default
+label=Weglide Upload
+location=6
+
+mode=Config2
+type=key
 data=8
 event=WaypointEditor
 event=Mode default
