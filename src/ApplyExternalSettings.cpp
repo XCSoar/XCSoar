@@ -120,7 +120,7 @@ MacCreadyProcessTimer() noexcept
   }
 
   if (basic.settings.mac_cready_available.Modified(last_external_settings.mac_cready_available)) {
-    ActionInterface::SetManualMacCready(basic.settings.mac_cready, false);
+    ActionInterface::SetMacCready(basic.settings.mac_cready, false);
     modified = true;
   } else if (calculated.auto_mac_cready_available.Modified(last_auto_mac_cready)) {
     last_auto_mac_cready = calculated.auto_mac_cready_available;
