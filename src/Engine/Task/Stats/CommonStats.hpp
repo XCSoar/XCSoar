@@ -23,7 +23,7 @@ public:
   /**
    * A copy of #StartConstraints::open_time_span.
    */
-  RoughTimeSpan start_open_time_span;
+  TimeSpan start_open_time_span;
 
   /** Whether the task found landable reachable waypoints (aliases abort) */
   bool landable_reachable;
