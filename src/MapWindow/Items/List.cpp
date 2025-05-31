@@ -76,6 +76,7 @@ CompareMapItems(const MapItem *a, const MapItem *b)
   case MapItem::Type::SKYLINES_TRAFFIC:
   case MapItem::Type::OVERLAY:
   case MapItem::Type::RASP:
+  case MapItem::Type::ARRIVAL_TIME_RING:
     break;
   }
 

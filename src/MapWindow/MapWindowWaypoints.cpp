@@ -11,5 +11,6 @@ MapWindow::DrawWaypoints(Canvas &canvas) noexcept
                            GetComputerSettings().polar,
                            GetComputerSettings().task,
                            Basic(), Calculated(),
-                           task, route_planner);
+                           task, route_planner,
+                           GetComputerSettings());
 }

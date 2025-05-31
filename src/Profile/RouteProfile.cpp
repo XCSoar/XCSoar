@@ -16,3 +16,14 @@ Profile::Load(const ProfileMap &map, RoutePlannerConfig &settings)
   map.GetEnum(ProfileKeys::TurningReach, settings.reach_calc_mode);
   map.GetEnum(ProfileKeys::ReachPolarMode, settings.reach_polar_mode);
 }
+
+void
+Profile::Save(ProfileMap &map, const RoutePlannerConfig &settings)
+{
+  map.Set(ProfileKeys::SafetyAltitudeTerrain, settings.safety_height_terrain);
+  map.SetEnum(ProfileKeys::RoutePlannerMode, settings.mode);
+  map.Set(ProfileKeys::RoutePlannerAllowClimb, settings.allow_climb);
+  map.Set(ProfileKeys::RoutePlannerUseCeiling, settings.use_ceiling);
+  map.SetEnum(ProfileKeys::TurningReach, settings.reach_calc_mode);
+  map.SetEnum(ProfileKeys::ReachPolarMode, settings.reach_polar_mode);
+}

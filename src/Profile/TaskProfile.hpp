@@ -8,4 +8,5 @@ class ProfileMap;
 
 namespace Profile {
   void Load(const ProfileMap &map, TaskBehaviour &settings);
+  void Save(ProfileMap &map, const TaskBehaviour &settings);
 };
