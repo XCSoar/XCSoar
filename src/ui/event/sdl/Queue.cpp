@@ -50,29 +50,19 @@ EventQueue::Pop(Event &event) noexcept
 bool
 EventQueue::Wait(Event &event) noexcept
 {
-  /* this busy loop is ugly, and I wish we could do better than that,
-     but SDL_WaitEvent() is just as bad; however copying this busy
-     loop allows us to plug in more event sources */
-
   if (quit)
     return false;
+  
+  FlushClockCaches();
 
   while (true) {
     if (Generate(event))
       return true;
-
-    ::SDL_PumpEvents();
-
-    const auto timeout = timers.GetTimeout(SteadyNow());
-
-    int result = timeout.count() >= 0
-      ? SDL_WaitEventTimeout(&event.event,
-                             std::chrono::duration_cast<std::chrono::milliseconds>(timeout).count())
-      : SDL_WaitEvent(&event.event);
+    
+    int result = SDL_WaitEvent(&event.event);
+    
     if (result != 0)
       return result > 0;
-
-    FlushClockCaches();
   }
 }
 
