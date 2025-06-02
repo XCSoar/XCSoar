@@ -78,9 +78,26 @@ static constexpr StaticEnumChoice thermal_assistant_position_list[] = {
   { UISettings::ThermalAssistantPosition::BOTTOM_RIGHT_AVOID_IB,
     N_("Bottom right (avoid infoboxes)"),
     N_("Show thermal assistant in bottom right above/to left of infoboxes (if there).") },
+  { UISettings::ThermalAssistantPosition::TOP_LEFT,
+    N_("Top left"),
+    N_("Show thermal assistant in top left") },
+  { UISettings::ThermalAssistantPosition::TOP_RIGHT,
+    N_("Top right"),
+    N_("Show thermal assistant in top right") },
+  { UISettings::ThermalAssistantPosition::CENTER_TOP,
+    N_("Center top"),
+    N_("Show thermal assistant in center top") },
+  { UISettings::ThermalAssistantPosition::TOP_LEFT_AVOID_IB,
+    N_("Top left (avoid infoboxes)"),
+    N_("Show thermal assistant in top left (avoid infoboxes)") },
+  { UISettings::ThermalAssistantPosition::TOP_RIGHT_AVOID_IB,
+    N_("Top right (avoid infoboxes)"),
+    N_("Show thermal assistant in top right (avoid infoboxes)") },
+  { UISettings::ThermalAssistantPosition::CENTER_TOP_AVOID_IB,
+    N_("Center top (avoid infoboxes)"),
+    N_("Show thermal assistant in center top (avoid infoboxes)") },
   nullptr
 };
-
 
 class GaugesConfigPanel final : public RowFormWidget, DataFieldListener {
 public:
