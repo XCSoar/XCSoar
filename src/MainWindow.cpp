@@ -338,6 +338,37 @@ MainWindow::ReinitialiseLayoutTA(PixelRect rc,
     rc.right = GetMainRect().right;
     rc.left = rc.right - dia;
     break;
+  case (UISettings::ThermalAssistantPosition::TOP_LEFT):
+    rc.right = rc.left + dia;
+    rc.bottom = rc.top + dia;
+    break;
+  case (UISettings::ThermalAssistantPosition::TOP_RIGHT):
+    rc.left = rc.right - dia;
+    rc.bottom = rc.top + dia;
+    break;
+  case (UISettings::ThermalAssistantPosition::CENTER_TOP):
+    rc.left = (rc.left + rc.right - dia) / 2 - 1;
+    rc.right = rc.left + dia;
+    rc.bottom = rc.top + dia;
+    break;
+  case (UISettings::ThermalAssistantPosition::TOP_LEFT_AVOID_IB):
+    rc.top = GetMainRect().top;
+    rc.left = GetMainRect().left;
+    rc.right = rc.left + dia;
+    rc.bottom = rc.top + dia;
+    break;
+  case (UISettings::ThermalAssistantPosition::TOP_RIGHT_AVOID_IB):
+    rc.top = GetMainRect().top;
+    rc.right = GetMainRect().right;
+    rc.left = rc.right - dia;
+    rc.bottom = rc.top + dia;
+    break;
+  case (UISettings::ThermalAssistantPosition::CENTER_TOP_AVOID_IB):
+    rc.top = GetMainRect().top;
+    rc.left = (GetMainRect().left + GetMainRect().right - dia) / 2 - 1;
+    rc.right = rc.left + dia;
+    rc.bottom = rc.top + dia;
+    break; 
   default: // BOTTOM_LEFT
     rc.left = GetMainRect().left;
     rc.right = rc.left + dia;
