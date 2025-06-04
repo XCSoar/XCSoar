@@ -112,8 +112,12 @@ public:
 		return value;
 	}
 
-	bool empty() const noexcept {
-		return *value == SENTINEL;
+	constexpr bool empty() const noexcept {
+		return (value == nullptr) || (*value == SENTINEL);
+	}
+
+	constexpr bool is_null() const noexcept {
+		return value == nullptr;
 	}
 
 	constexpr pointer data() const noexcept {
