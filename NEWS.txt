@@ -24,6 +24,7 @@ Version 7.44 - not yet released
   - add quit button to quick menu
   - infoboxen: new setting, allow scaling of title/comment font
   - Radar / Thermalassistant Gauges: Placement to avoid InfoBoxen and Overlap
+  - Thermal assistant: New positions on top of map to avoid hiding airspace warnings
   - Add new Infobox “Home altitude difference” (Home AltD)
   - Show transponder mode (if available) in transponder code InfoBox
   - add helpers on infoboxes for Argentinean contests 95% distance rule
