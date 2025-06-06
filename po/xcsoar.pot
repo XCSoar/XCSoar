@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-28 05:34+0000\n"
+"POT-Creation-Date: 2025-06-06 06:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,8 +25,8 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:128
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:62
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:160
-#: Data/Input/default.xci:430 Data/Input/default.xci:1010
-#: Data/Input/default.xci:1048
+#: Data/Input/default.xci:430 Data/Input/default.xci:1018
+#: Data/Input/default.xci:1056
 #, no-c-format
 msgid "Task"
 msgstr ""
@@ -417,8 +417,7 @@ msgstr ""
 msgid "Username"
 msgstr ""
 
-#: src/net/client/WeGlide/UploadIGCFile.cpp:93
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:122 Data/Input/default.xci:580
+#: src/net/client/WeGlide/UploadIGCFile.cpp:93 Data/Input/default.xci:580
 msgid "Plane"
 msgstr ""
 
@@ -442,7 +441,7 @@ msgstr ""
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:132 src/Dialogs/FileManager.cpp:448
 #: src/Dialogs/FileManager.cpp:735 src/Dialogs/Device/DeviceListDialog.cpp:475
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:103
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:117
 #: src/Dialogs/Plane/PlaneListDialog.cpp:198
 #: src/Dialogs/Plane/PlaneListDialog.cpp:223
 #: src/Dialogs/Plane/PlaneListDialog.cpp:268
@@ -755,7 +754,7 @@ msgstr ""
 #: src/Dialogs/Device/DeviceListDialog.cpp:770
 #: src/Dialogs/Device/PortMonitor.cpp:166
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:139
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:116
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:130
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:125
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:87
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:75
@@ -771,12 +770,12 @@ msgstr ""
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:356
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:254
 #: src/Dialogs/Traffic/TrafficList.cpp:347
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:329
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:335
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:209 src/Dialogs/dlgAnalysis.cpp:290
 #: src/Dialogs/ProfileListDialog.cpp:318
 #: src/Dialogs/Plane/PlaneListDialog.cpp:361 src/Dialogs/HelpDialog.cpp:30
 #: src/Dialogs/dlgInfoBoxAccess.cpp:95 src/Dialogs/ReplayDialog.cpp:97
-#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:433
+#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:471
 #: src/Dialogs/Waypoint/Manager.cpp:289
 #: src/Dialogs/Waypoint/WaypointList.cpp:215
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:117
@@ -809,9 +808,9 @@ msgstr ""
 #: src/Gauge/BigTrafficWidget.cpp:394 src/Renderer/MapItemListRenderer.cpp:59
 #: src/Renderer/MapItemListRenderer.cpp:65
 #: src/Renderer/WaypointListRenderer.cpp:134
-#: src/Renderer/FlightStatisticsRenderer.cpp:208
-#: src/Renderer/FlightStatisticsRenderer.cpp:227
-#: src/Renderer/FlightStatisticsRenderer.cpp:254
+#: src/Renderer/FlightStatisticsRenderer.cpp:207
+#: src/Renderer/FlightStatisticsRenderer.cpp:226
+#: src/Renderer/FlightStatisticsRenderer.cpp:253
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:51
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:81
 #: src/Dialogs/Airspace/AirspaceList.cpp:442
@@ -1099,39 +1098,39 @@ msgstr ""
 msgid "Failed to save waypoints"
 msgstr ""
 
-#: src/Input/InputEventsActions.cpp:228 src/Input/InputEventsActions.cpp:490
+#: src/Input/InputEventsActions.cpp:222 src/Input/InputEventsActions.cpp:484
 msgid "Logger Error"
 msgstr ""
 
-#: src/Input/InputEventsActions.cpp:257
+#: src/Input/InputEventsActions.cpp:251
 msgid "Screen Mode Full"
 msgstr ""
 
-#: src/Input/InputEventsActions.cpp:259
+#: src/Input/InputEventsActions.cpp:253
 msgid "Auxiliary InfoBoxes"
 msgstr ""
 
-#: src/Input/InputEventsActions.cpp:261
+#: src/Input/InputEventsActions.cpp:255
 msgid "Default InfoBoxes"
 msgstr ""
 
-#: src/Input/InputEventsActions.cpp:368
+#: src/Input/InputEventsActions.cpp:362
 msgid "No active waypoint!"
 msgstr ""
 
-#: src/Input/InputEventsActions.cpp:476
+#: src/Input/InputEventsActions.cpp:470
 msgid "NMEA log on"
 msgstr ""
 
-#: src/Input/InputEventsActions.cpp:478
+#: src/Input/InputEventsActions.cpp:472
 msgid "NMEA log off"
 msgstr ""
 
-#: src/Input/InputEventsActions.cpp:482
+#: src/Input/InputEventsActions.cpp:476
 msgid "Logger on"
 msgstr ""
 
-#: src/Input/InputEventsActions.cpp:484
+#: src/Input/InputEventsActions.cpp:478
 msgid "Logger off"
 msgstr ""
 
@@ -1208,7 +1207,7 @@ msgid "Ordered task"
 msgstr ""
 
 #: src/Input/InputEventsTask.cpp:219
-#: src/Renderer/FlightStatisticsRenderer.cpp:346
+#: src/Renderer/FlightStatisticsRenderer.cpp:345
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:110
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:210
 msgid "No task"
@@ -1227,9 +1226,9 @@ msgid "Altitude"
 msgstr ""
 
 #: src/Input/InputEventsTask.cpp:305
-#: src/Renderer/FlightStatisticsRenderer.cpp:214
-#: src/Renderer/FlightStatisticsRenderer.cpp:233
-#: src/Renderer/FlightStatisticsRenderer.cpp:259
+#: src/Renderer/FlightStatisticsRenderer.cpp:213
+#: src/Renderer/FlightStatisticsRenderer.cpp:232
+#: src/Renderer/FlightStatisticsRenderer.cpp:258
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:60
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:67
 msgid "Speed"
@@ -1239,9 +1238,9 @@ msgstr ""
 #. unit-dependent because they will be saved after their units may have changed.
 #. ToDo: implement API that controls order in which pages are saved
 #: src/Input/InputEventsTask.cpp:306
-#: src/Renderer/FlightStatisticsRenderer.cpp:212
-#: src/Renderer/FlightStatisticsRenderer.cpp:231
-#: src/Renderer/FlightStatisticsRenderer.cpp:257
+#: src/Renderer/FlightStatisticsRenderer.cpp:211
+#: src/Renderer/FlightStatisticsRenderer.cpp:230
+#: src/Renderer/FlightStatisticsRenderer.cpp:256
 #: src/Dialogs/Settings/dlgConfiguration.cpp:126
 #: src/Dialogs/Weather/RASPDialog.cpp:129
 #, no-c-format
@@ -1357,7 +1356,7 @@ msgid "Horizon"
 msgstr ""
 
 #: src/PageSettings.cpp:40 src/InfoBoxes/Content/Altitude.cpp:27
-#: Data/Input/default.xci:932
+#: Data/Input/default.xci:940
 #, no-c-format
 msgid "Info"
 msgstr ""
@@ -1587,39 +1586,39 @@ msgstr ""
 msgid "blcwbase"
 msgstr ""
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:211
-#: src/Renderer/FlightStatisticsRenderer.cpp:230
-#: src/Renderer/FlightStatisticsRenderer.cpp:256
+#: src/Renderer/FlightStatisticsRenderer.cpp:210
+#: src/Renderer/FlightStatisticsRenderer.cpp:229
+#: src/Renderer/FlightStatisticsRenderer.cpp:255
 msgid "Score"
 msgstr ""
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:211
-#: src/Renderer/FlightStatisticsRenderer.cpp:230
-#: src/Renderer/FlightStatisticsRenderer.cpp:256
+#: src/Renderer/FlightStatisticsRenderer.cpp:210
+#: src/Renderer/FlightStatisticsRenderer.cpp:229
+#: src/Renderer/FlightStatisticsRenderer.cpp:255
 msgid "pts"
+msgstr ""
+
+#: src/Renderer/FlightStatisticsRenderer.cpp:355
+#: src/Renderer/FlightStatisticsRenderer.cpp:365
+#: src/Renderer/FlightStatisticsRenderer.cpp:376
+msgid "Task to go"
 msgstr ""
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:356
 #: src/Renderer/FlightStatisticsRenderer.cpp:366
-#: src/Renderer/FlightStatisticsRenderer.cpp:377
-msgid "Task to go"
-msgstr ""
-
-#: src/Renderer/FlightStatisticsRenderer.cpp:357
-#: src/Renderer/FlightStatisticsRenderer.cpp:367
 msgid "AAT to go"
 msgstr ""
 
 #. landscape: info above buttons
-#: src/Renderer/FlightStatisticsRenderer.cpp:358
-#: src/Renderer/FlightStatisticsRenderer.cpp:368
-#: src/Renderer/FlightStatisticsRenderer.cpp:379
+#: src/Renderer/FlightStatisticsRenderer.cpp:357
+#: src/Renderer/FlightStatisticsRenderer.cpp:367
+#: src/Renderer/FlightStatisticsRenderer.cpp:378
 #: src/Dialogs/dlgAnalysis.cpp:225
 msgid "Distance to go"
 msgstr ""
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:360
-#: src/Renderer/FlightStatisticsRenderer.cpp:371
+#: src/Renderer/FlightStatisticsRenderer.cpp:359
+#: src/Renderer/FlightStatisticsRenderer.cpp:370
 msgid "Target speed"
 msgstr ""
 
@@ -1867,8 +1866,8 @@ msgstr ""
 #: src/Dialogs/DateEntry.cpp:42 src/Dialogs/GeoPointEntry.cpp:57
 #: src/Dialogs/DownloadFilePicker.cpp:387 Data/Input/default.xci:121
 #: Data/Input/default.xci:422 Data/Input/default.xci:517
-#: Data/Input/default.xci:656 Data/Input/default.xci:876
-#: Data/Input/default.xci:947
+#: Data/Input/default.xci:664 Data/Input/default.xci:884
+#: Data/Input/default.xci:955
 msgid "Cancel"
 msgstr ""
 
@@ -1920,8 +1919,8 @@ msgid "Failed to download the repository index."
 msgstr ""
 
 #: src/Dialogs/FileManager.cpp:744 src/Dialogs/FileManager.cpp:769
-#: src/Dialogs/DownloadFilePicker.cpp:380 Data/Input/default.xci:638
-#: Data/Input/default.xci:1255
+#: src/Dialogs/DownloadFilePicker.cpp:380 Data/Input/default.xci:646
+#: Data/Input/default.xci:1263
 msgid "File Manager"
 msgstr ""
 
@@ -2201,7 +2200,7 @@ msgid "Communication with this device will be logged for the next %u minutes."
 msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:766 Data/Input/default.xci:588
-#: Data/Input/default.xci:1184
+#: Data/Input/default.xci:1192
 msgid "Devices"
 msgstr ""
 
@@ -2251,7 +2250,7 @@ msgid "Do you really want to delete all flights from the device?"
 msgstr ""
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:120
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:97
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:111
 msgid "Reboot"
 msgstr ""
 
@@ -2290,29 +2289,33 @@ msgstr ""
 msgid "Failed to write waypoint."
 msgstr ""
 
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:65
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:72
 msgid "Hardware type"
 msgstr ""
 
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:75
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:79
+msgid "Flarm ID"
+msgstr ""
+
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:89
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:52
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:51
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:44
 msgid "Hardware version"
 msgstr ""
 
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:81
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:95
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:58
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:57
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:49
 msgid "Firmware version"
 msgstr ""
 
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:87
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:101
 msgid "Obstacle database"
 msgstr ""
 
-#: src/Dialogs/Device/ManageFlarmDialog.cpp:91
+#: src/Dialogs/Device/ManageFlarmDialog.cpp:105
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:61
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:60
 #: src/Dialogs/Settings/dlgConfiguration.cpp:148
@@ -2707,7 +2710,7 @@ msgid "Select Color"
 msgstr ""
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:91
-#: src/Dialogs/Airspace/dlgAirspace.cpp:92 Data/Input/default.xci:918
+#: src/Dialogs/Airspace/dlgAirspace.cpp:92 Data/Input/default.xci:926
 msgid "Display"
 msgstr ""
 
@@ -2719,7 +2722,7 @@ msgstr ""
 #: src/Dialogs/Airspace/dlgAirspace.cpp:143
 #: src/Dialogs/Settings/dlgConfiguration.cpp:84 src/Dialogs/dlgAnalysis.cpp:554
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:87
-#: Data/Input/default.xci:554 Data/Input/default.xci:1272
+#: Data/Input/default.xci:554 Data/Input/default.xci:1280
 #, no-c-format
 msgid "Airspace"
 msgstr ""
@@ -2977,7 +2980,7 @@ msgid ""
 "(temperature trace page of Analysis dialog)"
 msgstr ""
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:345 Data/Input/default.xci:1137
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:345 Data/Input/default.xci:1145
 msgid "Flight Setup"
 msgstr ""
 
@@ -3000,7 +3003,7 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfiguration.cpp:83
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:85
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:68 Data/Input/default.xci:540
-#: Data/Input/default.xci:1113
+#: Data/Input/default.xci:1121
 #, no-c-format
 msgid "Terrain"
 msgstr ""
@@ -3077,7 +3080,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:121
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:122
-#: Data/Input/default.xci:664 Data/Input/default.xci:1169
+#: Data/Input/default.xci:672 Data/Input/default.xci:1177
 #, no-c-format
 msgid "Logger"
 msgstr ""
@@ -3090,8 +3093,8 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfiguration.cpp:132
 #: src/Dialogs/Weather/WeatherDialog.cpp:26
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:320
-#: src/Weather/NOAAFormatter.cpp:175 Data/Input/default.xci:800
-#: Data/Input/default.xci:1207
+#: src/Weather/NOAAFormatter.cpp:175 Data/Input/default.xci:808
+#: Data/Input/default.xci:1215
 #, no-c-format
 msgid "Weather"
 msgstr ""
@@ -3166,7 +3169,6 @@ msgid "Invalid"
 msgstr ""
 
 #: src/Dialogs/Traffic/TrafficList.cpp:327
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:301
 msgid "Competition ID"
 msgstr ""
 
@@ -3186,6 +3188,7 @@ msgid "Team"
 msgstr ""
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:112
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:307
 msgid "Callsign"
 msgstr ""
 
@@ -3209,8 +3212,12 @@ msgstr ""
 msgid "Radio frequency"
 msgstr ""
 
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:122
+msgid "Plane type"
+msgstr ""
+
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:210
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:324
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:330
 msgid "FLARM Traffic Details"
 msgstr ""
 
@@ -3272,7 +3279,7 @@ msgstr ""
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:206
 #: src/InfoBoxes/Content/Factory.cpp:569 src/InfoBoxes/Content/Team.cpp:30
-#: Data/Input/default.xci:850
+#: Data/Input/default.xci:858
 #, no-c-format
 msgid "Team Code"
 msgstr ""
@@ -3289,8 +3296,8 @@ msgstr ""
 #: src/Dialogs/dlgAnalysis.cpp:524 src/Dialogs/dlgAnalysis.cpp:534
 #: src/Dialogs/dlgAnalysis.cpp:543 src/Dialogs/dlgAnalysis.cpp:553
 #: src/Dialogs/dlgAnalysis.cpp:702 src/InfoBoxes/Content/Contest.cpp:38
-#: src/InfoBoxes/Content/Trace.cpp:166 Data/Input/default.xci:824
-#: Data/Input/default.xci:1231
+#: src/InfoBoxes/Content/Trace.cpp:166 Data/Input/default.xci:832
+#: Data/Input/default.xci:1239
 #, no-c-format
 msgid "Analysis"
 msgstr ""
@@ -3341,7 +3348,7 @@ msgid "Warnings"
 msgstr ""
 
 #: src/Dialogs/dlgChecklist.cpp:38 src/Dialogs/dlgChecklist.cpp:104
-#: Data/Input/default.xci:816 Data/Input/default.xci:1223
+#: Data/Input/default.xci:824 Data/Input/default.xci:1231
 msgid "Checklist"
 msgstr ""
 
@@ -3568,12 +3575,12 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ReplayDialog.cpp:79 src/Dialogs/ReplayDialog.cpp:95
-#: Data/Input/default.xci:646
+#: Data/Input/default.xci:654
 msgid "Replay"
 msgstr ""
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:38 src/Dialogs/StartupDialog.cpp:73
-#: Data/Input/default.xci:955
+#: Data/Input/default.xci:963
 msgid "Quit"
 msgstr ""
 
@@ -3602,8 +3609,8 @@ msgid "Enter a new password"
 msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:28 src/Dialogs/dlgStatus.cpp:39
-#: src/Dialogs/Weather/WeatherDialog.cpp:38 Data/Input/default.xci:842
-#: Data/Input/default.xci:1239
+#: src/Dialogs/Weather/WeatherDialog.cpp:38 Data/Input/default.xci:850
+#: Data/Input/default.xci:1247
 msgid "Status"
 msgstr ""
 
@@ -3947,15 +3954,15 @@ msgstr ""
 msgid "Pan to Waypoint"
 msgstr ""
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:406 Data/Input/default.xci:1056
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:444 Data/Input/default.xci:1064
 msgid "GoTo"
 msgstr ""
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:409
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:447
 msgid "Pan To"
 msgstr ""
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:624
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:791
 #: src/Dialogs/Task/TaskPointDialog.cpp:511
 #: src/InfoBoxes/Panel/ATCReference.cpp:64
 msgid "Waypoint"
@@ -3967,7 +3974,7 @@ msgstr ""
 
 #: src/Dialogs/Waypoint/Manager.cpp:286
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:122
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:129 Data/Input/default.xci:630
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:129 Data/Input/default.xci:638
 msgid "Waypoint Editor"
 msgstr ""
 
@@ -5663,7 +5670,7 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:74
-#: Data/Input/default.xci:893
+#: Data/Input/default.xci:901
 msgid "Airspaces"
 msgstr ""
 
@@ -6207,11 +6214,6 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:99
 #, no-c-format
-msgid "The FFVV NetCoupe \"libre\" competiton."
-msgstr ""
-
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:101
-#, no-c-format
 msgid ""
 "WeGlide combines multiple scoring systems in the WeGlide Free contest. The "
 "free score is a combination of the free distance score and the area bonus. "
@@ -6220,7 +6222,7 @@ msgid ""
 "route."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:105
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:103
 #, no-c-format
 msgid ""
 "A start point, one turn point and a finish point are chosen from the flight "
@@ -6228,53 +6230,53 @@ msgid ""
 "maximized"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:108
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:106
 #, no-c-format
 msgid ""
 "LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance "
 "is 20km, 5 points per km."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:111
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:109
 msgid "Contest"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:112
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:110
 msgid "Select the rules used for calculating optimal points for a contest."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:115
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:113
 msgid "Predict Contest"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:116
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:114
 msgid ""
 "If enabled, then the next task point is included in the score calculation, "
 "assuming that you will reach it."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:123
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:121
 msgid "FAI triangle areas"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:124
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:122
 msgid "Show FAI triangle areas on the map."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:128
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:126
 msgid "FAI triangle threshold"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:129
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:127
 msgid "Specifies which threshold is used for \"large\" FAI triangles."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:135
 #, c-format
 msgid "95% dist. rule helpers"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:138
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:136
 msgid ""
 "Show helpers for Argentinean Federation \"95% distance\" rule.The AAT "
 "Distance Around Target infobox will show projected distance vs max. and "
@@ -7329,7 +7331,7 @@ msgstr ""
 
 #: src/Dialogs/Task/AlternatesListDialog.cpp:157
 #: src/InfoBoxes/Content/Alternate.cpp:33 Data/Input/default.xci:411
-#: Data/Input/default.xci:1040
+#: Data/Input/default.xci:1048
 #, no-c-format
 msgid "Alternates"
 msgstr ""
@@ -7362,7 +7364,7 @@ msgstr ""
 msgid "Field"
 msgstr ""
 
-#: src/Dialogs/dlgCredits.cpp:145 Data/Input/default.xci:885
+#: src/Dialogs/dlgCredits.cpp:145 Data/Input/default.xci:893
 msgid "Credits"
 msgstr ""
 
@@ -7640,9 +7642,10 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:169
 #, no-c-format
 msgid ""
-"Ground speed measured by the GPS. If this InfoBox is active in simulation "
-"mode, pressing the up and down arrows adjusts the speed, and left and right "
-"turn the glider."
+"Ground speed measured by the GPS. The small value shows the head or tail "
+"wind difference to TAS for the current vector. If this InfoBox is active in "
+"simulation mode, pressing the up and down arrows adjusts the speed, and left "
+"and right turn the glider."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:175
@@ -9560,11 +9563,11 @@ msgstr ""
 msgid "No GPS"
 msgstr ""
 
-#: src/InfoBoxes/Content/Speed.cpp:98
+#: src/InfoBoxes/Content/Speed.cpp:110
 msgid "BLOCK"
 msgstr ""
 
-#: src/InfoBoxes/Content/Speed.cpp:100
+#: src/InfoBoxes/Content/Speed.cpp:112
 msgid "DOLPHIN"
 msgstr ""
 
@@ -10178,13 +10181,13 @@ msgstr ""
 
 #: Data/Input/default.xci:128 Data/Input/default.xci:135
 #: Data/Input/default.xci:477 Data/Input/default.xci:484
-#: Data/Input/default.xci:492 Data/Input/default.xci:970
-#: Data/Input/default.xci:977 Data/Input/default.xci:984
-#: Data/Input/default.xci:1073
+#: Data/Input/default.xci:492 Data/Input/default.xci:978
+#: Data/Input/default.xci:985 Data/Input/default.xci:992
+#: Data/Input/default.xci:1081
 msgid "Zoom"
 msgstr ""
 
-#: Data/Input/default.xci:142 Data/Input/default.xci:808
+#: Data/Input/default.xci:142 Data/Input/default.xci:816
 msgid "What's here?"
 msgstr ""
 
@@ -10194,27 +10197,27 @@ msgid ""
 "Page 2/2"
 msgstr ""
 
-#: Data/Input/default.xci:403 Data/Input/default.xci:1032
+#: Data/Input/default.xci:403 Data/Input/default.xci:1040
 msgid "Waypoint List"
 msgstr ""
 
-#: Data/Input/default.xci:437 Data/Input/default.xci:1080
+#: Data/Input/default.xci:437 Data/Input/default.xci:1088
 msgid "Dropped marker"
 msgstr ""
 
-#: Data/Input/default.xci:440 Data/Input/default.xci:1083
+#: Data/Input/default.xci:440 Data/Input/default.xci:1091
 msgid "Marker Drop"
 msgstr ""
 
-#: Data/Input/default.xci:447 Data/Input/default.xci:1262
+#: Data/Input/default.xci:447 Data/Input/default.xci:1270
 msgid "Pilot event announced"
 msgstr ""
 
-#: Data/Input/default.xci:450 Data/Input/default.xci:1265
+#: Data/Input/default.xci:450 Data/Input/default.xci:1273
 msgid "Pilot Event Announce"
 msgstr ""
 
-#: Data/Input/default.xci:458 Data/Input/default.xci:1064
+#: Data/Input/default.xci:458 Data/Input/default.xci:1072
 msgid "Target Show"
 msgstr ""
 
@@ -10228,19 +10231,19 @@ msgstr ""
 msgid "Page Show"
 msgstr ""
 
-#: Data/Input/default.xci:506 Data/Input/default.xci:1090
+#: Data/Input/default.xci:506 Data/Input/default.xci:1098
 msgid "Pan Mode"
 msgstr ""
 
-#: Data/Input/default.xci:525 Data/Input/default.xci:1098
+#: Data/Input/default.xci:525 Data/Input/default.xci:1106
 msgid "Labels"
 msgstr ""
 
-#: Data/Input/default.xci:533 Data/Input/default.xci:1106
+#: Data/Input/default.xci:533 Data/Input/default.xci:1114
 msgid "Trail"
 msgstr ""
 
-#: Data/Input/default.xci:547 Data/Input/default.xci:1120
+#: Data/Input/default.xci:547 Data/Input/default.xci:1128
 msgid "Topo."
 msgstr ""
 
@@ -10256,136 +10259,140 @@ msgid ""
 "Page 3/3"
 msgstr ""
 
-#: Data/Input/default.xci:671 Data/Input/default.xci:1176
+#: Data/Input/default.xci:630
+msgid "Weglide Upload"
+msgstr ""
+
+#: Data/Input/default.xci:679 Data/Input/default.xci:1184
 msgid "Raw Logger"
 msgstr ""
 
-#: Data/Input/default.xci:679
+#: Data/Input/default.xci:687
 msgid "Lua"
 msgstr ""
 
-#: Data/Input/default.xci:686 Data/Input/default.xci:737
+#: Data/Input/default.xci:694 Data/Input/default.xci:745
 msgid "Vega"
 msgstr ""
 
-#: Data/Input/default.xci:697
+#: Data/Input/default.xci:705
 msgid ""
 "Vega\n"
 "Page 2/2"
 msgstr ""
 
-#: Data/Input/default.xci:705
+#: Data/Input/default.xci:713
 msgid "Airframe Switches"
 msgstr ""
 
-#: Data/Input/default.xci:712
+#: Data/Input/default.xci:720
 msgid "Manual Demo"
 msgstr ""
 
-#: Data/Input/default.xci:719
+#: Data/Input/default.xci:727
 msgid "Setup Stall"
 msgstr ""
 
-#: Data/Input/default.xci:726
+#: Data/Input/default.xci:734
 msgid "Accel"
 msgstr ""
 
-#: Data/Input/default.xci:744
+#: Data/Input/default.xci:752
 msgid "Vario ASI zeroed"
 msgstr ""
 
-#: Data/Input/default.xci:745
+#: Data/Input/default.xci:753
 msgid "ASI Zero"
 msgstr ""
 
-#: Data/Input/default.xci:751
+#: Data/Input/default.xci:759
 msgid "Accelerometer leveled"
 msgstr ""
 
-#: Data/Input/default.xci:752
+#: Data/Input/default.xci:760
 msgid "Accel Zero"
 msgstr ""
 
-#: Data/Input/default.xci:759
+#: Data/Input/default.xci:767
 msgid "Stored to EEPROM"
 msgstr ""
 
-#: Data/Input/default.xci:760
+#: Data/Input/default.xci:768
 msgid "Store"
 msgstr ""
 
-#: Data/Input/default.xci:767
+#: Data/Input/default.xci:775
 msgid "Cruise Demo"
 msgstr ""
 
-#: Data/Input/default.xci:774
+#: Data/Input/default.xci:782
 msgid "Climb Demo"
 msgstr ""
 
-#: Data/Input/default.xci:784
+#: Data/Input/default.xci:792
 msgid ""
 "Info\n"
 "Page 2/3"
 msgstr ""
 
-#: Data/Input/default.xci:792 Data/Input/default.xci:1199
+#: Data/Input/default.xci:800 Data/Input/default.xci:1207
 msgid "FLARM Radar"
 msgstr ""
 
-#: Data/Input/default.xci:834
+#: Data/Input/default.xci:842
 msgid ""
 "Info\n"
 "Page 3/3"
 msgstr ""
 
-#: Data/Input/default.xci:858
+#: Data/Input/default.xci:866
 msgid "Traffic List"
 msgstr ""
 
-#: Data/Input/default.xci:866 Data/Input/default.xci:1247
+#: Data/Input/default.xci:874 Data/Input/default.xci:1255
 msgid "Thermal Assistant"
 msgstr ""
 
-#: Data/Input/default.xci:900
+#: Data/Input/default.xci:908
 msgid "Message Repeat"
 msgstr ""
 
-#: Data/Input/default.xci:911
+#: Data/Input/default.xci:919
 msgid "Nav"
 msgstr ""
 
-#: Data/Input/default.xci:925
+#: Data/Input/default.xci:933
 msgid "Config"
 msgstr ""
 
-#: Data/Input/default.xci:940
+#: Data/Input/default.xci:948
 msgid "Lock Screen"
 msgstr ""
 
-#: Data/Input/default.xci:998
+#: Data/Input/default.xci:1006
 msgid "AVG/ALT"
 msgstr ""
 
-#: Data/Input/default.xci:1145
+#: Data/Input/default.xci:1153
 msgid "Setup Wind"
 msgstr ""
 
-#: Data/Input/default.xci:1153
+#: Data/Input/default.xci:1161
 msgid "Setup System"
 msgstr ""
 
-#: Data/Input/default.xci:1161
+#: Data/Input/default.xci:1169
 msgid "Settings Airspace"
 msgstr ""
 
-#: Data/Input/default.xci:1192
+#: Data/Input/default.xci:1200
 msgid "Setup Plane"
 msgstr ""
 
-#: Data/Input/default.xci:1215
+#: Data/Input/default.xci:1223
 msgid "Nearest Airspace"
 msgstr ""
 
-#: Data/Input/default.xci:1279
+#: Data/Input/default.xci:1287
 msgid "Quit XCSoar"
 msgstr ""
