@@ -14,10 +14,18 @@
 #include <SDL_video.h>
 #include <SDL_events.h>
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 #if defined(__MACOSX__) && __MACOSX__
 #include <SDL_syswm.h>
 #import <AppKit/AppKit.h>
 #include <alloca.h>
+#endif
+
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+#include "UtilsSystem.hpp"
 #endif
 
 namespace UI {
@@ -43,7 +51,7 @@ MakeSDLFlags([[maybe_unused]] bool full_screen, bool resizable) noexcept
 
 #if defined(__IPHONEOS__) && __IPHONEOS__
   /* Hide status bar on iOS devices */
-  flags |= SDL_WINDOW_BORDERLESS;
+// flags |= SDL_WINDOW_BORDERLESS;
 #endif
 
 #ifdef HAVE_HIGHDPI_SUPPORT
@@ -219,8 +227,10 @@ TopWindow::OnEvent(const SDL_Event &event)
           h = real_h;
 #endif
 #ifdef ENABLE_OPENGL
-#if defined __APPLE__
-            Resize(screen->GetSize());
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+          PixelSize size = SystemWindowSize();
+          if (screen->CheckResize(size))
+            Resize(size);
 #else
           if (screen->CheckResize(PixelSize(w, h)))
             Resize(screen->GetSize());
