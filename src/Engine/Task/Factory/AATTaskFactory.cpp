@@ -10,7 +10,7 @@ static constexpr TaskFactoryConstraints aat_constraints = {
   false,
   false,
   false,
-  true,
+  false,  // Arm start manually
   2, 13,
 };
 

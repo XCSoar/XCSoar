@@ -92,11 +92,11 @@ bool
 StartPoint::CheckExitTransition(const AircraftState &ref_now,
                                 const AircraftState &ref_last) const noexcept
 {
-  if (!constraints.open_time_span.HasBegun(RoughTime{ref_last.time}))
+  if (!constraints.open_time_span.HasBegun(FineTime{ref_last.time}))
     /* the start gate is not yet open when we left the OZ */
     return false;
 
-  if (constraints.open_time_span.HasEnded(RoughTime{ref_now.time}))
+  if (constraints.open_time_span.HasEnded(FineTime{ref_now.time}))
     /* the start gate was already closed when we left the OZ */
     return false;
 

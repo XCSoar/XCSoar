@@ -19,7 +19,6 @@ enum class Contest : uint8_t {
   XCONTEST,
   DHV_XC,
   SIS_AT,
-  NET_COUPE,
 
   /**
    * Deutsche Meisterschaft im Streckensegelflug (Germany).

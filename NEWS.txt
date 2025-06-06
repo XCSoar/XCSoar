@@ -2,6 +2,7 @@ Version 7.44 - not yet released
 * WaypointDetails
   - Add pan capability to the waypoint details image
 * calculations
+  - remove FFVV NetCoupe
   - update sprint/league time window to 2 hours (as per OLC and DMSt rules)
   - update OLC League calculation to latest ruleset
 * tracking
@@ -32,6 +33,7 @@ Version 7.44 - not yet released
   - BigTrafficWidget: zoom range to 5km when opening big radar via the FlarmGauge
   - terrain: added 2 new terrain ramps for use in very flat countries
   - add head wind component to V GND Infobox #1439
+  - PEV start wait/window times now have second accuraccy #1099
 * Android
   - fix crash on startup when loading icons on ldpi screens
   - update 'white list' of USB devices with one more VID/PID pair for SoftRF Academy
@@ -57,6 +59,8 @@ Version 7.44 - not yet released
   - SerialPorts: add 230400 baud support
 * Polar:
   - LS8-15m: default polar, set to values according to flight manual
+* Weglide:
+  - add button under config menu to tigger IGC upload
 
 Version 7.43 - 2024-08-12
 * calculations

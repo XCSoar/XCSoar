@@ -229,6 +229,9 @@ Nano::ReadFlightList(Port &port, RecordedFlightList &flight_list,
     requested_tail += nrequest;
     env.SetProgressPosition(requested_tail - 1);
   }
+  if (flight_list.size() > 1) {
+    std::reverse(flight_list.begin(), flight_list.end());
+  }
 
   return true;
 }

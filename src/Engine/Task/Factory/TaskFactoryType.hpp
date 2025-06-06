@@ -43,5 +43,6 @@ IsFai(TaskFactoryType ftype)
   return ftype == TaskFactoryType::FAI_GENERAL ||
     ftype == TaskFactoryType::FAI_GOAL ||
     ftype == TaskFactoryType::FAI_OR ||
-    ftype == TaskFactoryType::FAI_TRIANGLE;
+    ftype == TaskFactoryType::FAI_TRIANGLE ||
+    ftype == TaskFactoryType::RACING;
 }
