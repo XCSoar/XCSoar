@@ -11,8 +11,13 @@ ANDROID_REPO_URL=https://dl.google.com/android/repository
 ANDROID_SDK_DIR=~/opt/android-sdk-linux
 ANDROID_NDK_DIR=~/opt/android-ndk-${ANDROID_NDK_VERSION}
 
+BUNDLETOOL_VERSION=1.18.1
+BUNDLETOOL_JAR_FILENAME=bundletool-all-${BUNDLETOOL_VERSION}.jar
+BUNDLETOOL_REPO_URL=https://github.com/google/bundletool/releases/download/${BUNDLETOOL_VERSION}/
+BUNDLETOOL_DIR=~/opt/bundletool
+
 if [ "$#" -eq 0 ]; then
-  sections_to_install=("SDK" "NDK")
+  sections_to_install=("SDK" "NDK" "BUNDLETOOL")
 else
   for arg in "$@"
   do
@@ -73,6 +78,30 @@ fi
 echo
 }
 
+install_bundletool() {
+if [ -f "${BUNDLETOOL_DIR}"/"${BUNDLETOOL_JAR_FILENAME}" ]
+then
+  echo Not installing bundletool, because "${BUNDLETOOL_DIR}"/"${BUNDLETOOL_JAR_FILENAME}" exists already
+else
+  echo Installing bundletool to "${BUNDLETOOL_DIR}"/"${BUNDLETOOL_JAR_FILENAME}"...
+
+  mkdir -p "${BUNDLETOOL_DIR}"
+  cd "${BUNDLETOOL_DIR}"
+  wget --progress=bar:force:noscroll \
+      ${BUNDLETOOL_REPO_URL}/${BUNDLETOOL_JAR_FILENAME} \
+      -O "${BUNDLETOOL_JAR_FILENAME}"
+
+  echo "Creating executable wrapper"
+  mkdir -p bin
+  tee bin/bundletool <<EOF
+#!/bin/bash
+exec java -jar "${BUNDLETOOL_DIR}"/"${BUNDLETOOL_JAR_FILENAME}" "\$@"
+EOF
+  chmod +x bin/bundletool
+fi
+echo
+}
+
 for section in "${sections_to_install[@]}"; do
   case $section in
     SDK)
@@ -80,6 +109,9 @@ for section in "${sections_to_install[@]}"; do
      ;;
     NDK)
      install_ndk
+    ;;
+    BUNDLETOOL)
+      install_bundletool
     ;;
     *)
     echo "Unkown section: $section"
