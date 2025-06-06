@@ -8,7 +8,7 @@
 void
 StartConstraints::SetDefaults()
 {
-  open_time_span = RoughTimeSpan::Invalid();
+  open_time_span = TimeSpan::Invalid();
   max_speed = 0;
   max_height = 0;
   max_height_ref = AltitudeReference::AGL;

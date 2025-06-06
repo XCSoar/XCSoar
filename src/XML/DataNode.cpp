@@ -111,12 +111,12 @@ ConstDataNode::GetAttributeRoughTime(const char *name) const noexcept
   return RoughTime(hours, minutes);
 }
 
-RoughTimeSpan
+TimeSpan
 ConstDataNode::GetAttributeRoughTimeSpan(const char *start_name,
                                          const char *end_name) const noexcept
 {
-  return RoughTimeSpan(GetAttributeRoughTime(start_name),
-                       GetAttributeRoughTime(end_name));
+  return TimeSpan::FromRoughTimes(GetAttributeRoughTime(start_name),
+                                  GetAttributeRoughTime(end_name));
 }
 
 WritableDataNode::~WritableDataNode() noexcept
