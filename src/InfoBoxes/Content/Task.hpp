@@ -75,6 +75,9 @@ void
 UpdateInfoBoxTaskSpeed(InfoBoxData &data) noexcept;
 
 void
+UpdateInfoBoxTaskSpeedLeg(InfoBoxData &data) noexcept;
+
+void
 UpdateInfoBoxTaskSpeedAchieved(InfoBoxData &data) noexcept;
 
 void
