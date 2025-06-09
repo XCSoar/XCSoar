@@ -19,4 +19,5 @@ AirspaceWarningConfig::SetDefaults()
   class_warnings[CLASSG] = false;
   class_warnings[AATASK] = false;
   class_warnings[FIS_SECTOR] = false;
+  class_warnings[FIR] = false;
 }
