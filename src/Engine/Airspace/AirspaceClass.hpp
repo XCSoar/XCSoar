@@ -81,5 +81,11 @@ enum AirspaceClass : uint8_t
   FIS_SECTOR,
   LTA,
   UTA,
+  ASRA,
+  NOTAM,
+  NONE,
+  TRAFR,
+  TRZ,
+  VFR_ROUTE,
   AIRSPACECLASSCOUNT
 };

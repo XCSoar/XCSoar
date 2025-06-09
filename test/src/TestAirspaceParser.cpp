@@ -266,7 +266,7 @@ static void
 TestOpenAirExtended()
 {
   Airspaces airspaces;
-  if (!ParseFile(Path(_T("test/data/airspace/openair_extended.txt")), airspaces)) {
+  if (!ParseFile(Path(_T("test/data/airspace/openair_2.txt")), airspaces)) {
     skip(3, 0, "Failed to parse input file");
     return;
   }

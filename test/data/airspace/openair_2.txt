@@ -13,9 +13,9 @@ DP 47:24:44 N 007:22:28 E
 DP 47:22:60 N 007:39:30 E
 DP 47:25:52 N 007:46:41 E
 
-* Airspace to test 2 airspace type GLIDING_SECTOR
-AC UNCLASSIFIED
-AY GLIDING_SECTOR
+* Airspace to test 2 airspace type GSEC
+AC UNC
+AY GSEC
 AN Type-GLIDING_SECTOR-Test
 AI 62e10d62d0d055fccf50f3ba
 AL GND
