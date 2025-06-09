@@ -53,6 +53,11 @@ AirspaceDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     buffer += _T(" MHz");
     AddReadOnly(_("Radio"), nullptr, buffer);
 
+    const TCHAR *stationName = airspace->GetStationName();
+    if (stationName != nullptr && stationName[0] != '\0') {
+          AddReadOnly(_("Station"), nullptr, stationName);
+    }
+
     AddButton(_("Set Active Frequency"), [this](){
       ActionInterface::SetActiveFrequency(airspace->GetRadioFrequency(),
                                           airspace->GetName());

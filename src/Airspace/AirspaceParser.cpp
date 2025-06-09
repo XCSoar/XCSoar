@@ -22,7 +22,6 @@
 #include "util/StaticString.hxx"
 #include "util/StringCompare.hxx"
 #include "util/StringSplit.hxx"
-
 #include <stdexcept>
 
 using std::string_view_literals::operator""sv;
@@ -158,6 +157,7 @@ struct TempAirspace
 
   // General
   tstring name;
+  tstring station_name;
   RadioFrequency radio_frequency;
   AirspaceClass asclass;
   AirspaceClass astype;
@@ -186,6 +186,7 @@ struct TempAirspace
     days_of_operation.SetAll();
     name.clear();
     radio_frequency = RadioFrequency::Null();
+    station_name.clear();
     asclass = OTHER;
     astype = OTHER; // the default if no AY tag parsed (i.e. AC tag is not a ICAO or not UNCLASSIFIED)
     base.reset();
@@ -246,7 +247,7 @@ struct TempAirspace
       throw CommitError{"No top altitude"};
 
     auto as = std::make_shared<AirspacePolygon>(points);
-    as->SetProperties(std::move(name), asclass, astype, *base, *top);
+    as->SetProperties(std::move(name), std::move(station_name), asclass, astype, *base, *top);
     as->SetRadioFrequency(radio_frequency);
     as->SetDays(days_of_operation);
     airspace_database.Add(std::move(as));
@@ -280,7 +281,7 @@ struct TempAirspace
 
     auto as = std::make_shared<AirspaceCircle>(RequireCenter(),
                                                RequireRadius());
-    as->SetProperties(std::move(name), asclass, std::move(astype), *base, *top);
+    as->SetProperties(std::move(name), std::move(station_name), asclass, std::move(astype), *base, *top);
     as->SetRadioFrequency(radio_frequency);
     as->SetDays(days_of_operation);
     airspace_database.Add(std::move(as));
@@ -739,6 +740,12 @@ ParseLine(Airspaces &airspace_database, unsigned line_number,
     case 'f':
       if (input.SkipWhitespace())
         temp_area.radio_frequency = RadioFrequency::Parse(ReadRadioFrequency(input.c_str()));
+      break;
+
+    case 'G':
+    case 'g':
+      if (input.SkipWhitespace())
+        temp_area.station_name = string_converter.Convert(input.c_str());
       break;
     }
 
