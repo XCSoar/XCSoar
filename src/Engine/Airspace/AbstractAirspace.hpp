@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
- 
+
 #pragma once
 
 #include "util/TriState.hpp"
@@ -56,6 +56,9 @@ protected:
 
   /** Airspace type */
   AirspaceClass astype;
+
+  /** Airspace Station name */
+  tstring station_name;
 
   /** Radio frequency (optional) */
   RadioFrequency radio_frequency = RadioFrequency::Null();
@@ -197,11 +200,12 @@ public:
    * @param _base Lower limit
    * @param _top Upper limit
    */
-  void SetProperties(tstring &&_name, const AirspaceClass _class,
+  void SetProperties(tstring &&_name, tstring &&_station_name, const AirspaceClass _class,
                      const AirspaceClass _type,
                      const AirspaceAltitude &_base,
                      const AirspaceAltitude &_top) noexcept {
     name = std::move(_name);
+    station_name = std::move(_station_name);
     asclass = _class;
     astype = _type;
     altitude_base = _base;
@@ -343,7 +347,12 @@ public:
     return name.c_str();
   }
 
-  /**
+  [[gnu::pure]]
+  const TCHAR *GetStationName() const noexcept {
+    return station_name.c_str();
+  }
+
+   /**
    * Returns true if the name begins with the specified string.
    */
   [[gnu::pure]]
