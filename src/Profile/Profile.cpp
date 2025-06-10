@@ -2,21 +2,21 @@
 // Copyright The XCSoar Project
 
 #include "Profile.hpp"
-#include "Map.hpp"
-#include "File.hpp"
-#include "Current.hpp"
-#include "LogFile.hpp"
 #include "Asset.hpp"
+#include "Current.hpp"
+#include "File.hpp"
 #include "LocalPath.hpp"
-#include "util/StringUtil.hpp"
-#include "util/StringCompare.hxx"
-#include "util/StringAPI.hxx"
-#include "util/tstring.hpp"
+#include "LogFile.hpp"
+#include "Map.hpp"
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
+#include "util/StringAPI.hxx"
+#include "util/StringCompare.hxx"
+#include "util/StringUtil.hpp"
+#include "util/tstring.hpp"
 
-#include <windef.h> /* for MAX_PATH */
 #include <cassert>
+#include <windef.h> /* for MAX_PATH */
 
 #define XCSPROFILE "default.prf"
 #define OLDXCSPROFILE "xcsoar-registry.prf"
@@ -53,12 +53,10 @@ Profile::LoadFile(Path path) noexcept
 void
 Profile::Save() noexcept
 {
-  if (!IsModified())
-    return;
+  if (!IsModified()) return;
 
   LogString("Saving profiles");
-  if (startProfileFile == nullptr)
-    SetFiles(nullptr);
+  if (startProfileFile == nullptr) SetFiles(nullptr);
 
   assert(startProfileFile != nullptr);
 
@@ -92,8 +90,7 @@ Profile::SetFiles(Path override_path) noexcept
         t += _T(".prf");
         startProfileFile = LocalPath(t.c_str());
       }
-    } else
-      startProfileFile = Path(override_path);
+    } else startProfileFile = Path(override_path);
     return;
   }
 

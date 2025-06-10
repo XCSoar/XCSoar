@@ -26,7 +26,8 @@ constexpr std::string_view CircleZoom = "CircleZoom";
 constexpr std::string_view MaxAutoZoomDistance = "MaxAutoZoomDistance";
 constexpr std::string_view ClipAlt = "ClipAlt";
 constexpr std::string_view DisplayText = "DisplayText";
-constexpr std::string_view WaypointArrivalHeightDisplay = "WaypointArrivalHeightDisplay";
+constexpr std::string_view WaypointArrivalHeightDisplay =
+    "WaypointArrivalHeightDisplay";
 constexpr std::string_view WaypointLabelSelection = "WayPointLabelSelection";
 constexpr std::string_view WaypointLabelStyle = "WayPointLabelStyle";
 constexpr std::string_view WeatherStations = "WeatherStations";
@@ -71,14 +72,15 @@ constexpr std::string_view RepetitiveSound = "RepetitiveSound";
 constexpr std::string_view AcknowledgementTime = "AcknowledgementTime";
 constexpr std::string_view AirfieldFile = "AirfieldFile"; // pL
 constexpr std::string_view AirspaceFile = "AirspaceFile"; // pL
-constexpr std::string_view AdditionalAirspaceFile = "AdditionalAirspaceFile"; // pL
+constexpr std::string_view AdditionalAirspaceFile =
+    "AdditionalAirspaceFile"; // pL
 constexpr std::string_view FlarmFile = "FlarmFile";
-constexpr std::string_view PolarFile = "PolarFile"; // pL
-constexpr std::string_view WaypointFile = "WPFile"; // pL
+constexpr std::string_view PolarFile = "PolarFile";                     // pL
+constexpr std::string_view WaypointFile = "WPFile";                     // pL
 constexpr std::string_view AdditionalWaypointFile = "AdditionalWPFile"; // pL
-constexpr std::string_view WatchedWaypointFile = "WatchedWPFile"; // pL
-constexpr std::string_view LanguageFile = "LanguageFile"; // pL
-constexpr std::string_view InputFile = "InputFile"; // pL
+constexpr std::string_view WatchedWaypointFile = "WatchedWPFile";       // pL
+constexpr std::string_view LanguageFile = "LanguageFile";               // pL
+constexpr std::string_view InputFile = "InputFile";                     // pL
 constexpr std::string_view PilotName = "PilotName";
 constexpr std::string_view WeGlideEnabled = "WeGlideEnabled";
 constexpr std::string_view WeGlidePilotID = "WeGlidePilotID";
@@ -104,8 +106,10 @@ constexpr std::string_view AverEffTime = "AverEffTime";
 constexpr std::string_view VarioGauge = "VarioGauge";
 
 constexpr std::string_view AppIndLandable = "AppIndLandable";
-constexpr std::string_view AppUseSWLandablesRendering = "AppUseSWLandablesRendering";
-constexpr std::string_view AppLandableRenderingScale = "AppLandableRenderingScale";
+constexpr std::string_view AppUseSWLandablesRendering =
+    "AppUseSWLandablesRendering";
+constexpr std::string_view AppLandableRenderingScale =
+    "AppLandableRenderingScale";
 constexpr std::string_view AppScaleRunwayLength = "AppScaleRunwayLength";
 
 /** deprecated, use #DarkMode */
@@ -117,7 +121,8 @@ constexpr std::string_view AppGaugeVarioMc = "AppGaugeVarioMc";
 constexpr std::string_view AppGaugeVarioBugs = "AppGaugeVarioBugs";
 constexpr std::string_view AppGaugeVarioBallast = "AppGaugeVarioBallast";
 constexpr std::string_view AppGaugeVarioGross = "AppGaugeVarioGross";
-constexpr std::string_view AppStatusMessageAlignment = "AppStatusMessageAlignment";
+constexpr std::string_view AppStatusMessageAlignment =
+    "AppStatusMessageAlignment";
 constexpr std::string_view AppTextInputStyle = "AppTextInputStyle";
 constexpr std::string_view HapticFeedback = "HapticFeedback";
 constexpr std::string_view AppDialogTabStyle = "AppDialogTabStyle";
@@ -180,10 +185,14 @@ constexpr std::string_view SafetyMacCready = "SafetyMacCready";
 constexpr std::string_view AbortTaskMode = "AbortTaskMode";
 constexpr std::string_view AutoMcMode = "AutoMcMode";
 constexpr std::string_view AutoMc = "AutoMc";
-constexpr std::string_view EnableExternalTriggerCruise = "EnableExternalTriggerCruise";
-constexpr std::string_view CruiseToCirclingModeSwitchThreshold = "CruiseToCirclingModeSwitchThreshold";
-constexpr std::string_view CirclingToCruiseModeSwitchThreshold = "CirclingToCruiseModeSwitchThreshold";
-constexpr std::string_view OLCRules = "OLCRules"; // legacy name, key contains contest rules
+constexpr std::string_view EnableExternalTriggerCruise =
+    "EnableExternalTriggerCruise";
+constexpr std::string_view CruiseToCirclingModeSwitchThreshold =
+    "CruiseToCirclingModeSwitchThreshold";
+constexpr std::string_view CirclingToCruiseModeSwitchThreshold =
+    "CirclingToCruiseModeSwitchThreshold";
+constexpr std::string_view OLCRules =
+    "OLCRules"; // legacy name, key contains contest rules
 constexpr std::string_view PredictContest = "PredictContest";
 constexpr std::string_view Handicap = "Handicap";
 constexpr std::string_view SnailWidthScale = "SnailWidthScale";
@@ -193,7 +202,8 @@ constexpr std::string_view RiskGamma = "RiskGamma";
 constexpr std::string_view PredictWindDrift = "PredictWindDrift";
 constexpr std::string_view WindArrowStyle = "WindArrowStyle";
 constexpr std::string_view EnableFinalGlideBarMC0 = "EnableFinalGlideBarMC0";
-constexpr std::string_view FinalGlideBarDisplayMode = "FinalGlideBarDisplayMode";
+constexpr std::string_view FinalGlideBarDisplayMode =
+    "FinalGlideBarDisplayMode";
 constexpr std::string_view EnableVarioBar = "EnableVarioBar";
 constexpr std::string_view ShowFAITriangleAreas = "ShowFAITriangleAreas";
 constexpr std::string_view FAITriangleThreshold = "FAITriangleThreshold";
@@ -216,9 +226,11 @@ constexpr std::string_view FontBugsBallastFont = "BugsBallastFont";
 constexpr std::string_view FontAirspacePressFont = "AirspacePressFont";
 constexpr std::string_view FontAirspaceColourDlgFont = "AirspaceColourDlgFont";
 constexpr std::string_view FontTeamCodeFont = "TeamCodeFont";
-constexpr std::string_view Show95PercentRuleHelpers = "Show95PercentRuleHelpers";
+constexpr std::string_view Show95PercentRuleHelpers =
+    "Show95PercentRuleHelpers";
 
-constexpr std::string_view UseFinalGlideDisplayMode = "UseFinalGlideDisplayMode";
+constexpr std::string_view UseFinalGlideDisplayMode =
+    "UseFinalGlideDisplayMode";
 constexpr std::string_view InfoBoxGeometry = "InfoBoxGeometry";
 constexpr std::string_view InfoBoxTitleScale = "InfoBoxTitleScale";
 
@@ -245,9 +257,11 @@ constexpr std::string_view FlarmLocation = "FlarmLocation";
 
 constexpr std::string_view SkyLinesTrackingEnabled = "SkyLinesTrackingEnabled";
 constexpr std::string_view SkyLinesRoaming = "SkyLinesRoaming";
-constexpr std::string_view SkyLinesTrackingInterval = "SkyLinesTrackingInterval";
+constexpr std::string_view SkyLinesTrackingInterval =
+    "SkyLinesTrackingInterval";
 constexpr std::string_view SkyLinesTrafficEnabled = "SkyLinesTrafficEnabled";
-constexpr std::string_view SkyLinesNearTrafficEnabled = "SkyLinesNearTrafficEnabled";
+constexpr std::string_view SkyLinesNearTrafficEnabled =
+    "SkyLinesNearTrafficEnabled";
 constexpr std::string_view SkyLinesTrafficMapMode = "SkyLinesTrafficMapMode";
 constexpr std::string_view SkyLinesTrackingKey = "SkyLinesTrackingKey";
 
@@ -260,18 +274,22 @@ constexpr std::string_view LiveTrack24Server = "LiveTrack24Server";
 constexpr std::string_view LiveTrack24Username = "LiveTrack24Username";
 constexpr std::string_view LiveTrack24Password = "LiveTrack24Password";
 constexpr std::string_view LiveTrack24TrackingInterval = "TrackingInterval";
-constexpr std::string_view LiveTrack24TrackingVehicleType = "TrackingVehicleType";
-constexpr std::string_view LiveTrack24TrackingVehicleName = "TrackingVehicleName";
+constexpr std::string_view LiveTrack24TrackingVehicleType =
+    "TrackingVehicleType";
+constexpr std::string_view LiveTrack24TrackingVehicleName =
+    "TrackingVehicleName";
 
 constexpr std::string_view PCMetUsername = "PCMetUsername";
 constexpr std::string_view PCMetPassword = "PCMetPassword";
 constexpr std::string_view PCMetFtpUsername = "PCMetFtpUsername";
 constexpr std::string_view PCMetFtpPassword = "PCMetFtpPassword";
 
-constexpr std::string_view EnableThermalInformationMap = "EnableThermalInformationMap";
+constexpr std::string_view EnableThermalInformationMap =
+    "EnableThermalInformationMap";
 
 constexpr std::string_view EnableLocationMapItem = "EnableLocationMapItem";
-constexpr std::string_view EnableArrivalAltitudeMapItem = "EnableArrivalAltitudeMapItem";
+constexpr std::string_view EnableArrivalAltitudeMapItem =
+    "EnableArrivalAltitudeMapItem";
 
 constexpr std::string_view VarioMinFrequency = "VarioMinFrequency";
 constexpr std::string_view VarioZeroFrequency = "VarioZeroFrequency";
@@ -289,4 +307,4 @@ constexpr std::string_view WaveAssistant = "WaveAssistant";
 constexpr std::string_view MasterAudioVolume = "MasterAudioVolume";
 
 constexpr std::string_view RaspFile = "RaspFile";
-}
+} // namespace ProfileKeys

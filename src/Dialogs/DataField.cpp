@@ -2,23 +2,23 @@
 // Copyright The XCSoar Project
 
 #include "DataField.hpp"
-#include "FilePicker.hpp"
-#include "Form/DataField/GeoPoint.hpp"
-#include "Form/DataField/RoughTime.hpp"
-#include "Form/DataField/Prefix.hpp"
-#include "Form/DataField/Date.hpp"
-#include "Form/DataField/Integer.hpp"
 #include "ComboPicker.hpp"
+#include "Dialogs/DateEntry.hpp"
+#include "Dialogs/GeoPointEntry.hpp"
+#include "Dialogs/NumberEntry.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/TimeEntry.hpp"
-#include "Dialogs/GeoPointEntry.hpp"
-#include "Dialogs/DateEntry.hpp"
-#include "Dialogs/NumberEntry.hpp"
+#include "FilePicker.hpp"
+#include "Form/DataField/Date.hpp"
+#include "Form/DataField/GeoPoint.hpp"
+#include "Form/DataField/Integer.hpp"
+#include "Form/DataField/Prefix.hpp"
+#include "Form/DataField/RoughTime.hpp"
 
 #ifdef ANDROID
-#include "java/Global.hxx"
 #include "Android/Main.hpp"
 #include "Android/TextEntryDialog.hpp"
+#include "java/Global.hxx"
 #endif
 
 #include <algorithm>
@@ -43,9 +43,7 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
   } else if (type == DataField::Type::GEOPOINT) {
     GeoPointDataField &gdf = (GeoPointDataField &)df;
     GeoPoint value = gdf.GetValue();
-    if (!GeoPointEntryDialog(caption, value,
-                             gdf.GetFormat(),
-                             false))
+    if (!GeoPointEntryDialog(caption, value, gdf.GetFormat(), false))
       return false;
 
     gdf.ModifyValue(value);
@@ -53,8 +51,7 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
   } else if (type == DataField::Type::DATE) {
     auto &dfd = static_cast<DataFieldDate &>(df);
     BrokenDate date = dfd.GetValue();
-    if (!DateEntryDialog(caption, date, true))
-      return false;
+    if (!DateEntryDialog(caption, date, true)) return false;
 
     dfd.SetValue(date);
     return true;
@@ -64,21 +61,19 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
     // signed or unsigned depends on min if value >= 0 or < 0...
     if (dfi.GetMin() >= 0) {
       unsigned value = dfi.GetValue(); // min is >= 0!
-      if (!NumberEntryDialog(caption, value,
-          log10(dfi.GetMax()) + 1))
+      if (!NumberEntryDialog(caption, value, log10(dfi.GetMax()) + 1))
         return false;
 
       dfi.ModifyValue(value); // SetAsInteger with unsigned!
       return true;
     } else {
       /* with signed range has to avoid the length of negative AND
-      * positiv numbers */
-      int value = dfi.GetValue();  // min is < 0!
+       * positiv numbers */
+      int value = dfi.GetValue(); // min is < 0!
       unsigned max = std::max(abs(dfi.GetMax()), abs(dfi.GetMin()));
-      if (!NumberEntryDialog(caption, value, log10(max) + 1))
-        return false;
+      if (!NumberEntryDialog(caption, value, log10(max) + 1)) return false;
 
-      dfi.ModifyValue(value);  // SetAsInteger with signed!
+      dfi.ModifyValue(value); // SetAsInteger with signed!
       return true;
     }
   } else if (type == DataField::Type::STRING ||
@@ -102,18 +97,16 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
       auto type = AndroidTextEntryDialog::Type::TEXT;
 
       AndroidTextEntryDialog dlg;
-      auto new_value = dlg.ShowModal(Java::GetEnv(), *context,
-                                     caption, value, type);
-      if (!new_value)
-        return false;
+      auto new_value =
+          dlg.ShowModal(Java::GetEnv(), *context, caption, value, type);
+      if (!new_value) return false;
 
       sdf.ModifyValue(new_value->c_str());
       return true;
     }
 #endif
 
-    if (!TextEntryDialog(buffer, caption, acf))
-      return false;
+    if (!TextEntryDialog(buffer, caption, acf)) return false;
 
     sdf.ModifyValue(buffer);
     return true;

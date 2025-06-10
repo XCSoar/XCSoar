@@ -3,22 +3,22 @@
 
 #include "Airspace/AirspaceGlue.hpp"
 #include "Airspace/AirspaceParser.hpp"
-#include "Engine/Airspace/Airspaces.hpp"
 #include "Atmosphere/Pressure.hpp"
-#include "Profile/Keys.hpp"
-#include "Operation/Operation.hpp"
+#include "Engine/Airspace/Airspaces.hpp"
 #include "Language/Language.hpp"
 #include "LogFile.hpp"
+#include "Operation/Operation.hpp"
+#include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
+#include "io/BufferedReader.hxx"
+#include "io/FileReader.hxx"
+#include "io/MapFile.hpp"
+#include "io/ProgressReader.hpp"
+#include "io/ZipArchive.hpp"
+#include "io/ZipLineReader.hpp"
 #include "lib/fmt/PathFormatter.hpp"
 #include "lib/fmt/RuntimeError.hxx"
 #include "system/Path.hpp"
-#include "io/FileReader.hxx"
-#include "io/ProgressReader.hpp"
-#include "io/BufferedReader.hxx"
-#include "io/ZipArchive.hpp"
-#include "io/ZipLineReader.hpp"
-#include "io/MapFile.hpp"
-#include "Profile/Profile.hpp"
 
 #include <string.h>
 
@@ -27,7 +27,8 @@ ParseAirspaceFile(Airspaces &airspaces, Path path,
                   OperationEnvironment &operation) noexcept
 try {
   FileReader file_reader{path};
-  ProgressReader progress_reader{file_reader, file_reader.GetSize(), operation};
+  ProgressReader progress_reader{file_reader, file_reader.GetSize(),
+                                 operation};
   BufferedReader buffered_reader{progress_reader};
 
   try {
@@ -45,8 +46,7 @@ try {
 }
 
 static bool
-ParseAirspaceFile(Airspaces &airspaces,
-                  struct zzip_dir *dir, const char *path,
+ParseAirspaceFile(Airspaces &airspaces, struct zzip_dir *dir, const char *path,
                   OperationEnvironment &operation)
 try {
   ZipReader zip_reader{dir, path};
@@ -68,8 +68,7 @@ try {
 }
 
 void
-ReadAirspace(Airspaces &airspaces,
-             AtmosphericPressure press,
+ReadAirspace(Airspaces &airspaces, AtmosphericPressure press,
              OperationEnvironment &operation)
 {
   LogString("ReadAirspace");

@@ -17,11 +17,11 @@ struct GeoPoint;
 class RGB8Color;
 class Path;
 class AllocatedPath;
-template<typename T> class StringPointer;
-template<typename T> class BasicAllocatedString;
+template <typename T> class StringPointer;
+template <typename T> class BasicAllocatedString;
 
 class ProfileMap {
-  std::map<std::string, std::string, std::less<>> map;
+  std::map<std::string, std::string, std::less<> > map;
 
   bool modified = false;
 
@@ -30,38 +30,35 @@ public:
    * Has the profile been modified since the last SetModified(false)
    * call?
    */
-  bool IsModified() const noexcept {
-    return modified;
-  }
+  bool IsModified() const noexcept { return modified; }
 
   /**
    * Set the "modified" flag.
    */
-  void SetModified(bool _modified=true) noexcept {
-    modified = _modified;
-  }
+  void SetModified(bool _modified = true) noexcept { modified = _modified; }
 
-  void Clear() noexcept {
-    map.clear();
-  }
+  void Clear() noexcept { map.clear(); }
 
   [[gnu::pure]]
-  bool Exists(std::string_view key) const noexcept {
+  bool Exists(std::string_view key) const noexcept
+  {
     return map.find(key) != map.end();
   }
 
-  void Remove(std::string_view key) noexcept {
-    if (auto i = map.find(key); i != map.end())
-      map.erase(i);
+  void Remove(std::string_view key) noexcept
+  {
+    if (auto i = map.find(key); i != map.end()) map.erase(i);
   }
 
   [[gnu::pure]]
-  auto begin() const noexcept {
+  auto begin() const noexcept
+  {
     return map.begin();
   }
 
   [[gnu::pure]]
-  auto end() const noexcept {
+  auto end() const noexcept
+  {
     return map.end();
   }
 
@@ -77,10 +74,10 @@ public:
    */
   [[gnu::pure]]
   const char *Get(const std::string_view key,
-                  const char *default_value=nullptr) const noexcept {
+                  const char *default_value = nullptr) const noexcept
+  {
     const auto i = map.find(key);
-    if (i == map.end())
-      return default_value;
+    if (i == map.end()) return default_value;
 
     return i->second.c_str();
   }
@@ -97,9 +94,10 @@ public:
    */
   bool Get(std::string_view key, std::span<TCHAR> value) const noexcept;
 
-  template<size_t max>
+  template <size_t max>
   bool Get(std::string_view key,
-           BasicStringBuffer<TCHAR, max> &value) const noexcept {
+           BasicStringBuffer<TCHAR, max> &value) const noexcept
+  {
     return Get(key, std::span{value.data(), value.capacity()});
   }
 
@@ -117,24 +115,25 @@ public:
   bool Get(std::string_view key, uint8_t &value) const noexcept;
   bool Get(std::string_view key, double &value) const noexcept;
 
-  bool Get(std::string_view key, FloatDuration &value) const noexcept {
+  bool Get(std::string_view key, FloatDuration &value) const noexcept
+  {
     double _value;
     bool result = Get(key, _value);
-    if (result)
-      value = FloatDuration{_value};
+    if (result) value = FloatDuration{_value};
     return result;
   }
 
   bool Get(std::string_view key,
-           std::chrono::duration<unsigned> &value) const noexcept {
+           std::chrono::duration<unsigned> &value) const noexcept
+  {
     unsigned _value;
     bool result = Get(key, _value);
-    if (result)
-      value = std::chrono::duration<unsigned>{_value};
+    if (result) value = std::chrono::duration<unsigned>{_value};
     return result;
   }
 
-  void Set(std::string_view key, bool value) noexcept {
+  void Set(std::string_view key, bool value) noexcept
+  {
     Set(key, value ? "1" : "0");
   }
 
@@ -143,27 +142,30 @@ public:
   void Set(std::string_view key, unsigned value) noexcept;
   void Set(std::string_view key, double value) noexcept;
 
-  void Set(std::string_view key, FloatDuration value) noexcept {
+  void Set(std::string_view key, FloatDuration value) noexcept
+  {
     Set(key, value.count());
   }
 
-  void Set(std::string_view key, std::chrono::duration<unsigned> value) noexcept {
+  void Set(std::string_view key,
+           std::chrono::duration<unsigned> value) noexcept
+  {
     Set(key, value.count());
   }
 
   // enum values
 
-  template<typename T>
-  bool GetEnum(std::string_view key, T &value) const noexcept {
+  template <typename T>
+  bool GetEnum(std::string_view key, T &value) const noexcept
+  {
     int i;
     bool success = Get(key, i);
-    if (success)
-      value = T(i);
+    if (success) value = T(i);
     return success;
   }
 
-  template<typename T>
-  void SetEnum(std::string_view key, T value) noexcept {
+  template <typename T> void SetEnum(std::string_view key, T value) noexcept
+  {
     Set(key, (int)value);
   }
 
