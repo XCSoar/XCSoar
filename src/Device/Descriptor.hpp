@@ -26,7 +26,11 @@
 #include "SensorListener.hpp"
 #endif
 
-#ifdef ANDROID
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
+#if defined(ANDROID) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
 #include "Math/SelfTimingKalmanFilter1d.hpp"
 #include "Math/WindowFilter.hpp"
 #endif
@@ -159,12 +163,9 @@ class DeviceDescriptor final
    */
   InternalSensors *internal_sensors = nullptr;
 #endif
-
-#ifdef ANDROID
-  Java::GlobalCloseable *java_sensor = nullptr;
-  Java::GlobalCloseable *second_java_sensor = nullptr;
-
-  /* We use a Kalman filter to smooth Android device pressure sensor
+      
+#if defined(ANDROID) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
+  /* We use a Kalman filter to smooth (Android/iPhone) device pressure sensor
      noise.  The filter requires two parameters: the first is the
      variance of the distribution of second derivatives of pressure
      values that we expect to see in flight, and the second is the
@@ -185,6 +186,11 @@ class DeviceDescriptor final
   static constexpr double KF_I2C_VAR_ACCEL_85 = KF_VAR_ACCEL;
 
   SelfTimingKalmanFilter1d kalman_filter{KF_MAX_DT, KF_VAR_ACCEL};
+#endif
+
+#ifdef ANDROID
+  Java::GlobalCloseable *java_sensor = nullptr;
+  Java::GlobalCloseable *second_java_sensor = nullptr;
 
   double voltage_offset;
   double voltage_factor;
@@ -618,8 +624,6 @@ private:
   void OnRotationSensor(float dtheta_x, float dtheta_y,
                         float dtheta_z) noexcept override;
   void OnMagneticFieldSensor(float h_x, float h_y, float h_z) noexcept override;
-  void OnBarometricPressureSensor(float pressure,
-                                  float sensor_noise_variance) noexcept override;
   void OnPressureAltitudeSensor(float altitude) noexcept override;
   void OnI2CbaroSensor(int index, int sensorType,
                        AtmosphericPressure pressure) noexcept override;
@@ -646,6 +650,11 @@ private:
   void OnSensorError(const char *msg) noexcept override;
 #endif // ANDROID
 #endif // HAVE_INTERNAL_GPS
+        
+#if defined(ANDROID) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
+  void OnBarometricPressureSensor(float pressure,
+                                  float sensor_noise_variance) noexcept override;
+#endif
 };
 
 /**
