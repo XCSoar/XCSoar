@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#ifdef __APPLE__
+
 #include "Apple/InternalSensors.hpp"
 #include "Device/SensorListener.hpp"
 #include "Geo/GeoPoint.hpp"
@@ -211,6 +213,85 @@ void InternalSensors::Init()
   } else {
     [location_manager startUpdatingLocation];
   }
+    
+  // Check if the device supports barometric pressure sensing
+  if ([CMAltimeter isRelativeAltitudeAvailable]) {
+    // Check for authorization status (iOS 8+)
+    if ([CMAltimeter respondsToSelector:@selector(authorizationStatus)]) {
+      CMAuthorizationStatus status = [CMAltimeter authorizationStatus];
+      
+      // Exit if user denied permission
+      if (status == CMAuthorizationStatusDenied) {
+        return;
+      }
+      // Handle case where permission hasn't been determined yet
+      else if (status == CMAuthorizationStatusNotDetermined &&
+              [CMMotionActivityManager respondsToSelector:@selector(isActivityAvailable)]) {
+        // Create manager to check permissions
+        CMMotionActivityManager *manager = [[CMMotionActivityManager alloc] init];
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        
+        // Query motion activity to trigger permission dialog
+        [manager queryActivityStartingFromDate:[NSDate date]
+                                        toDate:[NSDate date]
+                                       toQueue:queue
+                                   withHandler:^(NSArray<CMMotionActivity *> * _Nullable activities, NSError * _Nullable error) {
+         (void) activities;
+            if (error) {
+                NSLog(@"Error querying motion activities: %@", error);
+                return;
+            }
+            
+            // Only initialize altimeter if permission query succeeded
+            dispatch_async(dispatch_get_main_queue(), ^{
+              // Initialize altimeter for pressure readings
+              altimeter = [[CMAltimeter alloc] init];
+              NSOperationQueue *altimeterQueue = [[NSOperationQueue alloc] init];
+              
+              // Start receiving altimeter updates
+              [altimeter startRelativeAltitudeUpdatesToQueue:altimeterQueue
+                                                 withHandler:^(CMAltitudeData * _Nullable altitudeData, NSError * _Nullable error) {
+              if (error) {
+                NSLog(@"Error: %@", [error localizedDescription]);
+                return;
+              }
+
+              // Convert pressure readings (from kPa to hPa/mbar) and notify listener
+              listener.OnBarometricPressureSensor(
+                static_cast<float>(altitudeData.pressure.floatValue * 10.0f),
+                0.0f
+              );
+              }];
+            });
+        }];
+        
+        return; // Exit early since altimeter initialization is handled in the completion block
+      }
+    }
+    
+    // Initialize altimeter for pressure readings (for authorized status)
+    altimeter = [[CMAltimeter alloc] init];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    
+    // Start receiving altimeter updates
+    [altimeter startRelativeAltitudeUpdatesToQueue:queue
+                                       withHandler:^(CMAltitudeData * _Nullable altitudeData, NSError * _Nullable error) {
+    if (error) {
+      NSLog(@"Error: %@", [error localizedDescription]);
+      return;
+    }
+
+    // Convert pressure readings (from kPa to hPa/mbar) and notify listener
+    listener.OnBarometricPressureSensor(
+      static_cast<float>(altitudeData.pressure.floatValue * 10.0f),
+      0.0f
+    );
+    }];
+    } else {
+      // Device doesn't support barometric pressure sensing
+      altimeter = nullptr;
+    }
+    
 #else
   [location_manager startUpdatingLocation];
 #endif
@@ -219,4 +300,11 @@ void InternalSensors::Init()
 void InternalSensors::Deinit()
 {
   [location_manager stopUpdatingLocation];
+  #if TARGET_OS_IPHONE
+  if (altimeter != nullptr) {
+    [altimeter stopRelativeAltitudeUpdates];
+  }
+  #endif
 }
+
+#endif // __APPLE__
