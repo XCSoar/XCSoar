@@ -13,7 +13,7 @@ ANDROID_BUILD = $(TARGET_OUTPUT_DIR)/$(XCSOAR_ABI)/build
 ANDROID_BIN = $(TARGET_BIN_DIR)
 
 ifeq ($(HOST_IS_DARWIN),y)
-  ANDROID_SDK ?= $(HOME)/opt/android-sdk-macosx
+  ANDROID_SDK ?= $(HOME)/Library/Android/sdk
 else
   ANDROID_SDK ?= $(HOME)/opt/android-sdk-linux
 endif
