@@ -11,6 +11,7 @@
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SearchPointVector.hpp"
 #include "RadioFrequency.hpp"
+#include "TransponderCode.hpp"
 
 #ifdef DO_PRINT
 #include <iosfwd>
@@ -62,6 +63,9 @@ protected:
 
   /** Radio frequency (optional) */
   RadioFrequency radio_frequency = RadioFrequency::Null();
+
+  /** Transponder code (optional) */
+  TransponderCode transponder_code = TransponderCode::Null();
 
   /** Actual border */
   SearchPointVector m_border;
@@ -200,12 +204,16 @@ public:
    * @param _base Lower limit
    * @param _top Upper limit
    */
-  void SetProperties(tstring &&_name, tstring &&_station_name, const AirspaceClass _class,
-                     const AirspaceClass _type,
+
+  void SetProperties(tstring &&_name, tstring &&_station_name,
+                     TransponderCode &&_transponder_code,
+                     const AirspaceClass _class, const AirspaceClass _type,
                      const AirspaceAltitude &_base,
-                     const AirspaceAltitude &_top) noexcept {
+                     const AirspaceAltitude &_top) noexcept
+  {
     name = std::move(_name);
     station_name = std::move(_station_name);
+    transponder_code = std::move(_transponder_code);
     asclass = _class;
     astype = _type;
     altitude_base = _base;
@@ -219,6 +227,16 @@ public:
    */
   void SetRadioFrequency(RadioFrequency _radio) noexcept {
     radio_frequency = _radio;
+  }
+
+  /**
+   * Set transponder code of airspace
+   *
+   * @param _code Radio frequency of airspace
+   */
+  void SetTransponderCode(TransponderCode _code) noexcept
+  {
+    transponder_code = _code;
   }
 
   /**
@@ -361,6 +379,11 @@ public:
   [[gnu::pure]]
   RadioFrequency GetRadioFrequency() const noexcept {
     return radio_frequency;
+  }
+
+  [[gnu::pure]] TransponderCode GetTransponderCode() const noexcept
+  {
+    return transponder_code;
   }
 
   /**

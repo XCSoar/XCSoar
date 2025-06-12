@@ -12,6 +12,7 @@
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
 #include "Language/Language.hpp"
+#include "TransponderMode.hpp"
 #include "util/StaticString.hxx"
 
 #include <cassert>
@@ -48,24 +49,40 @@ AirspaceDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 
   AddMultiLine(airspace->GetName());
 
-  if (airspace->GetRadioFrequency().Format(buffer.data(),
-                                           buffer.capacity()) != nullptr) {
+  const TransponderCode transponderCode = airspace->GetTransponderCode();
+  TCHAR buffer2[5];
+
+  transponderCode.Format(buffer2, sizeof(buffer2));
+
+  if (transponderCode.IsDefined()) {
+    AddReadOnly(_("Squawk code"), nullptr, buffer2);
+    AddButton(_("Set Squawk Code"), [transponderCode]() {
+      ActionInterface::SetTransponderCode(
+          transponderCode, TransponderMode(TransponderMode::ALT));
+    });
+  }
+
+  if (airspace->GetRadioFrequency().Format(buffer.data(), buffer.capacity()) !=
+      nullptr) {
     buffer += _T(" MHz");
     AddReadOnly(_("Radio"), nullptr, buffer);
 
+    const TCHAR *frequencyName = airspace->GetName();
     const TCHAR *stationName = airspace->GetStationName();
+
     if (stationName != nullptr && stationName[0] != '\0') {
-          AddReadOnly(_("Station"), nullptr, stationName);
+      AddReadOnly(_("Station"), nullptr, stationName);
+      frequencyName = stationName;
     }
 
-    AddButton(_("Set Active Frequency"), [this](){
+    AddButton(_("Set Active Frequency"), [this, frequencyName]() {
       ActionInterface::SetActiveFrequency(airspace->GetRadioFrequency(),
-                                          airspace->GetName());
+                                          frequencyName);
     });
 
-    AddButton(_("Set Standby Frequency"), [this](){
+    AddButton(_("Set Standby Frequency"), [this, frequencyName]() {
       ActionInterface::SetStandbyFrequency(airspace->GetRadioFrequency(),
-                                           airspace->GetName());
+                                           frequencyName);
     });
   }
 
