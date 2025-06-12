@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+
 #include "AirspaceParser.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Operation/ProgressListener.hpp"
+#include "TransponderCode.hpp"
 #include "Units/System.hpp"
 #include "Language/Language.hpp"
 #include "util/CharUtil.hxx"
@@ -22,6 +24,7 @@
 #include "util/StaticString.hxx"
 #include "util/StringCompare.hxx"
 #include "util/StringSplit.hxx"
+
 #include <stdexcept>
 
 using std::string_view_literals::operator""sv;
@@ -159,6 +162,7 @@ struct TempAirspace
   tstring name;
   tstring station_name;
   RadioFrequency radio_frequency;
+  TransponderCode transponder_code;
   AirspaceClass asclass;
   AirspaceClass astype;
   std::optional<AirspaceAltitude> base;
@@ -186,6 +190,7 @@ struct TempAirspace
     days_of_operation.SetAll();
     name.clear();
     radio_frequency = RadioFrequency::Null();
+    transponder_code = TransponderCode::Null();
     station_name.clear();
     asclass = OTHER;
     astype = OTHER; // the default if no AY tag parsed (i.e. AC tag is not a ICAO or not UNCLASSIFIED)
@@ -247,8 +252,11 @@ struct TempAirspace
       throw CommitError{"No top altitude"};
 
     auto as = std::make_shared<AirspacePolygon>(points);
-    as->SetProperties(std::move(name), std::move(station_name), asclass, astype, *base, *top);
+    as->SetProperties(std::move(name), std::move(station_name),
+                      std::move(transponder_code), asclass, astype, *base,
+                      *top);
     as->SetRadioFrequency(radio_frequency);
+    as->SetTransponderCode(transponder_code);
     as->SetDays(days_of_operation);
     airspace_database.Add(std::move(as));
   }
@@ -281,8 +289,11 @@ struct TempAirspace
 
     auto as = std::make_shared<AirspaceCircle>(RequireCenter(),
                                                RequireRadius());
-    as->SetProperties(std::move(name), std::move(station_name), asclass, std::move(astype), *base, *top);
+    as->SetProperties(std::move(name), std::move(station_name),
+                      std::move(transponder_code), asclass, std::move(astype),
+                      *base, *top);
     as->SetRadioFrequency(radio_frequency);
+    as->SetTransponderCode(transponder_code);
     as->SetDays(days_of_operation);
     airspace_database.Add(std::move(as));
   }
@@ -746,6 +757,16 @@ ParseLine(Airspaces &airspace_database, unsigned line_number,
     case 'g':
       if (input.SkipWhitespace())
         temp_area.station_name = string_converter.Convert(input.c_str());
+      break;
+
+    case 'X':
+    case 'x':
+      if (input.SkipWhitespace()) {
+        tstring tempString = tstring(
+            string_converter.Convert(input.c_str())); // Convert to tstring
+        temp_area.transponder_code =
+            TransponderCode::Parse(tempString.c_str());
+      }
       break;
     }
 
