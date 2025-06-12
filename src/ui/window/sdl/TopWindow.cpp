@@ -49,11 +49,6 @@ MakeSDLFlags([[maybe_unused]] bool full_screen, bool resizable) noexcept
   if (resizable)
     flags |= SDL_WINDOW_RESIZABLE;
 
-#if defined(__IPHONEOS__) && __IPHONEOS__
-  /* Hide status bar on iOS devices */
-  flags |= SDL_WINDOW_BORDERLESS;
-#endif
-
 #ifdef HAVE_HIGHDPI_SUPPORT
   flags |= SDL_WINDOW_ALLOW_HIGHDPI;
 #endif
