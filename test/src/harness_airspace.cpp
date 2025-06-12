@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "TransponderCode.hpp"
 #include "AirspacePrinting.hpp"
 #include "Printing.hpp"
 #include "harness_airspace.hpp"
@@ -25,7 +26,8 @@ airspace_random_properties(AbstractAirspace& as)
   AirspaceAltitude top;
   base.altitude = rand()%4000;
   top.altitude = base.altitude+rand()%3000;
-  as.SetProperties(_T("hello"), asclass, AirspaceClass::CLASSE, base, top);
+  TransponderCode code = TransponderCode::Parse(_T("1234"));
+  as.SetProperties(_T("hello"), _T("Hello2"),std::move(code), asclass, AirspaceClass::CLASSE, base, top);
 }
 
 
@@ -232,11 +234,11 @@ public:
   }
 };
 
-void scan_airspaces(const AircraftState state, 
+void scan_airspaces(const AircraftState state,
                     const Airspaces& airspaces,
                     const AirspaceAircraftPerformance& perf,
                     bool do_report,
-                    const GeoPoint &target) 
+                    const GeoPoint &target)
 {
   const double range(20000.0);
 
@@ -266,7 +268,7 @@ void scan_airspaces(const AircraftState state,
     for (const auto &a : airspaces.QueryInside(state))
       pvi.Visit(a.GetAirspace());
   }
-  
+
   {
     AirspaceIntersectionVisitorPrint ivisitor("output/results/res-bb-intersects.txt",
                                               "output/results/res-bb-intersected.txt",
