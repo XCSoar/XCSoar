@@ -35,7 +35,6 @@ public:
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned i) noexcept override
   {
-
     if (active_files.empty()) {
       row_renderer.DrawTextRow(canvas, rc, _(""));
       return;
@@ -49,7 +48,7 @@ MultiFilePickerAdd(const TCHAR *caption, MultiFileDataField &df,
                    const TCHAR *help_text)
 {
 
-  if (FilePicker(caption, df.GetFileDataField(), help_text)) {
+  if (FilePicker(caption, df.GetFileDataField(), help_text, false)) {
     df.AddValue(df.GetFileDataField().GetValue());
     return true;
   }
@@ -81,7 +80,6 @@ MultiFilePickerMain(const TCHAR *caption, MultiFileDataField &df,
   dialog.AddButton(_("Remove"), mrRemove);
   dialog.AddButton(_("Ok"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
-
   dialog.EnableCursorSelection();
 
   dialog.FinishPreliminary(widget);
@@ -89,7 +87,6 @@ MultiFilePickerMain(const TCHAR *caption, MultiFileDataField &df,
   int result = dialog.ShowModal();
 
   if (result == mrRemove) {
-
     unsigned int i = (int)file_widget->GetList().GetCursorIndex();
     if (!active_files.empty() && i < active_files.size())
       df.UnSet(active_files[i]);

@@ -127,12 +127,12 @@ MultiFileDataField::GetAsString() const noexcept
 void
 MultiFileDataField::UpdateDisplayString()
 {
-  display_string = _("");
+  display_string = _T("");
 
   bool first = true;
   for (const auto &path : current_selection) {
     if (!first) {
-      display_string += _(" ");
+      display_string += _T(" ");
     }
     first = false;
 

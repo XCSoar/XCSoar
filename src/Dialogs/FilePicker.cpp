@@ -3,28 +3,28 @@
 
 #include "FilePicker.hpp"
 #include "ComboPicker.hpp"
-#include "Form/DataField/File.hpp"
 #include "Form/DataField/ComboList.hpp"
+#include "Form/DataField/File.hpp"
 #include "Language/Language.hpp"
 #include "net/http/Features.hpp"
 
 #ifdef HAVE_DOWNLOAD_MANAGER
-#include "net/http/DownloadManager.hpp"
 #include "DownloadFilePicker.hpp"
+#include "net/http/DownloadManager.hpp"
 #endif
 
 bool
-FilePicker(const TCHAR *caption, FileDataField &df,
-           const TCHAR *help_text)
+FilePicker(const TCHAR *caption, FileDataField &df, const TCHAR *help_text,
+           bool nullable)
 {
   ComboList combo_list = df.CreateComboList(nullptr);
-  if (combo_list.size() == 0)
-    return false;
+  // if nullable it's mean that combo_list must have at least a null element
+  if (combo_list.size() == 0 && nullable) return false;
 
   const TCHAR *extra_caption = nullptr;
 #ifdef HAVE_DOWNLOAD_MANAGER
   // with FileType::IGC don't show the 'Download'-Button!
-  if (df.GetFileType() != FileType::IGC && 
+  if (df.GetFileType() != FileType::IGC &&
     df.GetFileType() != FileType::UNKNOWN &&
     Net::DownloadManager::IsAvailable())
       extra_caption = _("Download");
