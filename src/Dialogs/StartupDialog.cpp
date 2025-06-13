@@ -205,7 +205,7 @@ dlgStartupShowModal() noexcept
   unsigned length = dff->size();
 
   for (unsigned i = 0; i < length; ++i) {
-    const auto path = dff->GetItem(i).filename;
+    const auto path = Path(dff->GetItem(i).path);
     const auto timestamp = File::GetLastModification(path);
     if (timestamp > best_timestamp) {
       best_timestamp = timestamp;
