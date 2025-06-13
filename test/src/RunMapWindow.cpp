@@ -7,26 +7,26 @@
 #define ENABLE_MAIN_WINDOW
 #define ENABLE_CLOSE_BUTTON
 #define ENABLE_LOOK
+#include "Airspace/AirspaceGlue.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
+#include "Engine/Airspace/Airspaces.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
+#include "LogFile.hpp"
 #include "Main.hpp"
 #include "MapWindow/MapWindow.hpp"
-#include "Terrain/RasterTerrain.hpp"
-#include "Terrain/Loader.hpp"
-#include "Profile/Keys.hpp"
+#include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Profile/ComputerProfile.hpp"
-#include "Profile/MapProfile.hpp"
 #include "Profile/Current.hpp"
-#include "Waypoint/WaypointGlue.hpp"
-#include "Topography/TopographyStore.hpp"
+#include "Profile/Keys.hpp"
+#include "Profile/MapProfile.hpp"
+#include "Terrain/Loader.hpp"
+#include "Terrain/RasterTerrain.hpp"
 #include "Topography/TopographyGlue.hpp"
-#include "Blackboard/DeviceBlackboard.hpp"
-#include "Airspace/AirspaceParser.hpp"
-#include "Engine/Waypoint/Waypoints.hpp"
-#include "Engine/Airspace/Airspaces.hpp"
-#include "LogFile.hpp"
+#include "Topography/TopographyStore.hpp"
+#include "Waypoint/WaypointGlue.hpp"
+#include "io/BufferedReader.hxx"
 #include "io/ConfiguredFile.hpp"
 #include "io/FileReader.hxx"
-#include "io/BufferedReader.hxx"
-#include "Operation/ConsoleOperationEnvironment.hpp"
 #include "thread/Debug.hpp"
 
 void
@@ -108,12 +108,12 @@ LoadFiles(PlacesOfInterestSettings &poi_settings,
   WaypointGlue::SetHome(way_points, terrain, poi_settings, team_code_settings,
                         NULL, false);
 
-  auto reader = OpenConfiguredFile(ProfileKeys::AirspaceFile);
-  if (reader) {
-    BufferedReader buffered_reader{*reader};
-    ParseAirspaceFile(airspace_database, buffered_reader);
-    airspace_database.Optimise();
+  const auto paths = Profile::GetMultiplePaths(ProfileKeys::AirspaceFileList);
+  for (auto it = paths.begin(); it < paths.end(); it++) {
+    ParseAirspaceFile(airspace_database, *it, operation);
   }
+
+  airspace_database.Optimise();
 }
 
 static void

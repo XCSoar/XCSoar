@@ -4,28 +4,29 @@
 #define ENABLE_DIALOG
 #define ENABLE_MAIN_WINDOW
 
-#include "Main.hpp"
-#include "Interface.hpp"
 #include "ActionInterface.hpp"
+#include "Airspace/AirspaceGlue.hpp"
+#include "Airspace/AirspaceWarningManager.hpp"
+#include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Components.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "Dialogs/DialogSettings.hpp"
-#include "UIGlobals.hpp"
-#include "Profile/Profile.hpp"
-#include "Airspace/ProtectedAirspaceWarningManager.hpp"
-#include "Airspace/AirspaceParser.hpp"
-#include "Airspace/AirspaceWarningManager.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
+#include "Interface.hpp"
+#include "LocalPath.hpp"
+#include "Main.hpp"
+#include "Operation/Operation.hpp"
+#include "Profile/Profile.hpp"
 #include "ResourceLoader.hpp"
-#include "io/FileReader.hxx"
+#include "UIGlobals.hpp"
 #include "io/BufferedReader.hxx"
 #include "io/ConfiguredFile.hpp"
-#include "LocalPath.hpp"
-#include "Components.hpp"
+#include "io/FileReader.hxx"
 
 #include <memory>
-#include <tchar.h>
 #include <stdio.h>
+#include <tchar.h>
 
 void VisitDataFiles([[maybe_unused]] const TCHAR* filter,
                     [[maybe_unused]] File::Visitor &visitor) {}
@@ -50,12 +51,12 @@ ActionInterface::SetActiveFrequency([[maybe_unused]] const RadioFrequency freq,
 static void
 LoadFiles(Airspaces &airspace_database)
 {
-  auto reader = OpenConfiguredFile(ProfileKeys::AirspaceFile);
-  if (reader) {
-    BufferedReader buffered_reader{*reader};
-    ParseAirspaceFile(airspace_database, buffered_reader);
-    airspace_database.Optimise();
+  NullOperationEnvironment test_operation_environment;
+  const auto paths = Profile::GetMultiplePaths(ProfileKeys::AirspaceFileList);
+  for (auto it = paths.begin(); it < paths.end(); it++) {
+    ParseAirspaceFile(airspace_database, *it, test_operation_environment);
   }
+  airspace_database.Optimise();
 }
 
 static void

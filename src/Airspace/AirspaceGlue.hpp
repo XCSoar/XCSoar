@@ -7,6 +7,7 @@ class RasterTerrain;
 class AtmosphericPressure;
 class Airspaces;
 class OperationEnvironment;
+class Path;
 
 /**
  * Reads the airspace files into the memory
@@ -19,3 +20,9 @@ ReadAirspace(Airspaces &airspaces,
 void
 SetAirspaceGroundLevels(Airspaces &airspaces,
                         const RasterTerrain &terrain) noexcept;
+
+/**
+ * Reads the airspace files from path.
+ */
+bool ParseAirspaceFile(Airspaces &airspaces, Path path,
+                       OperationEnvironment &operation) noexcept;
