@@ -41,6 +41,8 @@ if toolchain.is_windows:
     thirdparty_libs = [
         zlib,
         libfmt,
+        netcdf,
+        netcdfcxx,
         libsodium,
         cares,
         curl,
@@ -58,6 +60,8 @@ elif toolchain.is_darwin:
     thirdparty_libs = [
         zlib,
         libfmt,
+        netcdf,
+        netcdfcxx,
         libsodium,
         openssl,
         cares,
@@ -72,6 +76,8 @@ elif toolchain.is_darwin:
 elif toolchain.is_android:
     thirdparty_libs = [
         libfmt,
+        netcdf,
+        netcdfcxx,
         libsodium,
         openssl,
         cares,
@@ -91,6 +97,8 @@ elif '-kobo-linux-' in host_triplet:
         gcc,
         zlib,
         libfmt,
+        netcdf,
+        netcdfcxx,
         libsodium,
         freetype,
         openssl,
