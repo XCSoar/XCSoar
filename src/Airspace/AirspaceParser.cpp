@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+
 #include "AirspaceParser.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Operation/ProgressListener.hpp"
+#include "TransponderCode.hpp"
 #include "Units/System.hpp"
 #include "Language/Language.hpp"
 #include "util/CharUtil.hxx"
@@ -62,8 +64,8 @@ static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
   { "G", CLASSG },
   { "RMZ", RMZ },
   { "MATZ", MATZ },
-  { "GSEC", WAVE },
-  { "UNCLASSIFIED", UNCLASSIFIED },
+  { "GSEC", GLIDING_SECTOR },
+  { "UNC", UNCLASSIFIED },
   { "RESTRICTED", RESTRICTED },
   { "TMA", TMA },
   { "TRA", TRA },
@@ -80,19 +82,18 @@ static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
   { "PROHIBITED", PROHIBITED },
   { "PROTECTED", PROTECTED },
   { "HTZ", HTZ },
-  { "GLIDING_SECTOR", GLIDING_SECTOR },
   { "TRP", TRP },
   { "TIZ", TIZ },
   { "TIA", TIA },
   { "MTA", MTA },
   { "CTA", CTA },
-  { "ACC_SECTOR", ACC_SECTOR },
+  { "ACCSEC", ACC_SECTOR },
   { "AERIAL_SPORTING_RECREATIONAL", AERIAL_SPORTING_RECREATIONAL },
-  { "OVERFLIGHT_RESTRICTION", OVERFLIGHT_RESTRICTION },
+  { "OFR", OVERFLIGHT_RESTRICTION },
   { "MRT", MRT },
   { "TFR", TFR },
-  { "VFR_SECTOR", VFR_SECTOR },
-  { "FIS_SECTOR", FIS_SECTOR },
+  { "VFRSEC", VFR_SECTOR },
+  { "FIS", FIS_SECTOR },
   { "LTA", LTA },
   { "UTA", UTA },
   { "AIRSPACECLASSCOUNT", AIRSPACECLASSCOUNT }
@@ -159,7 +160,9 @@ struct TempAirspace
 
   // General
   tstring name;
+  tstring station_name;
   RadioFrequency radio_frequency;
+  TransponderCode transponder_code;
   AirspaceClass asclass;
   AirspaceClass astype;
   std::optional<AirspaceAltitude> base;
@@ -187,6 +190,8 @@ struct TempAirspace
     days_of_operation.SetAll();
     name.clear();
     radio_frequency = RadioFrequency::Null();
+    transponder_code = TransponderCode::Null();
+    station_name.clear();
     asclass = OTHER;
     astype = OTHER; // the default if no AY tag parsed (i.e. AC tag is not a ICAO or not UNCLASSIFIED)
     base.reset();
@@ -247,8 +252,11 @@ struct TempAirspace
       throw CommitError{"No top altitude"};
 
     auto as = std::make_shared<AirspacePolygon>(points);
-    as->SetProperties(std::move(name), asclass, astype, *base, *top);
+    as->SetProperties(std::move(name), std::move(station_name),
+                      std::move(transponder_code), asclass, astype, *base,
+                      *top);
     as->SetRadioFrequency(radio_frequency);
+    as->SetTransponderCode(transponder_code);
     as->SetDays(days_of_operation);
     airspace_database.Add(std::move(as));
   }
@@ -281,8 +289,11 @@ struct TempAirspace
 
     auto as = std::make_shared<AirspaceCircle>(RequireCenter(),
                                                RequireRadius());
-    as->SetProperties(std::move(name), asclass, std::move(astype), *base, *top);
+    as->SetProperties(std::move(name), std::move(station_name),
+                      std::move(transponder_code), asclass, std::move(astype),
+                      *base, *top);
     as->SetRadioFrequency(radio_frequency);
+    as->SetTransponderCode(transponder_code);
     as->SetDays(days_of_operation);
     airspace_database.Add(std::move(as));
   }
@@ -740,6 +751,22 @@ ParseLine(Airspaces &airspace_database, unsigned line_number,
     case 'f':
       if (input.SkipWhitespace())
         temp_area.radio_frequency = RadioFrequency::Parse(ReadRadioFrequency(input.c_str()));
+      break;
+
+    case 'G':
+    case 'g':
+      if (input.SkipWhitespace())
+        temp_area.station_name = string_converter.Convert(input.c_str());
+      break;
+
+    case 'X':
+    case 'x':
+      if (input.SkipWhitespace()) {
+        tstring tempString = tstring(
+            string_converter.Convert(input.c_str())); // Convert to tstring
+        temp_area.transponder_code =
+            TransponderCode::Parse(tempString.c_str());
+      }
       break;
     }
 
