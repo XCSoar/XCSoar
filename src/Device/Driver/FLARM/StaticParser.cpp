@@ -72,7 +72,7 @@ ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, TimeStamp clock) noexcept
 }
 
 void
-ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock) noexcept
+ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock, RangeFilter &range) noexcept
 {
   flarm.modified.Update(clock);
 
@@ -99,6 +99,13 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock) noexcept
     // Relative Altitude is required !
     return;
   traffic.relative_altitude = value;
+
+  if (range.horizontal && range.vertical) {
+    // object outside cylinder; non filtered data only !
+    if ((hypot(traffic.relative_north, traffic.relative_east) > (RoughDistance)range.horizontal) ||
+    (abs((int)traffic.relative_altitude) > range.vertical))
+      return;
+  }
 
   line.Skip(); /* id type */
 
