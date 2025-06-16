@@ -47,7 +47,7 @@ jobs:
             echo "do_update=false" >> $GITHUB_OUTPUT
           fi
       - name: Push Local Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "Autocommit translation sources"
           file_pattern: "*.pot *.po"
