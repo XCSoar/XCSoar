@@ -161,6 +161,9 @@ struct MapSettings {
    */
   bool fade_traffic;
 
+  /** Show FLARM according to climb rate and relative altitude */
+  bool use_detailed_flarm_colours;
+
   /** Display climb band on map */
   bool show_thermal_profile;
 

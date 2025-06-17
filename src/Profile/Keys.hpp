@@ -144,6 +144,7 @@ constexpr std::string_view TerrainBrightness = "TerrainBrightness";
 constexpr std::string_view TerrainRamp = "TerrainRamp";
 constexpr std::string_view EnableFLARMMap = "EnableFLARMDisplay";
 constexpr std::string_view FadeTraffic = "FadeTraffic";
+constexpr std::string_view ColorfulTraffic = "ColorfulTraffic";
 constexpr std::string_view EnableFLARMGauge = "EnableFLARMGauge";
 constexpr std::string_view AutoCloseFlarmDialog = "AutoCloseFlarmDialog";
 constexpr std::string_view EnableTAGauge = "EnableTAGauge";
