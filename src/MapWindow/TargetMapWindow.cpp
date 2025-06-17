@@ -156,7 +156,8 @@ TargetMapWindow::DrawWaypoints(Canvas &canvas) noexcept
                             GetComputerSettings().polar,
                             GetComputerSettings().task,
                             Basic(), Calculated(),
-                            task, nullptr);
+                            task, nullptr,
+                            GetComputerSettings());
 }
 
 inline void
