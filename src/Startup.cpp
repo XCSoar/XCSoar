@@ -125,8 +125,10 @@ static bool
 LoadProfile()
 {
   if (Profile::GetPath() == nullptr &&
-      !dlgStartupShowModal())
+      !dlgStartupShowModal()) {
+    LogString("LoadProfile: no profile path and startup dialog was cancelled");
     return false;
+  }
 
   Profile::Load();
   Profile::Use(Profile::map);
