@@ -60,6 +60,7 @@ Version 7.44 - not yet released
   - add head wind component to V GND Infobox #1439
   - add V task leg Infobox #1767
   - PEV start wait/window times now have second accuraccy #1099
+  - PEV start procedure now allows computing a start outside of the window
   - show station names in airspace details dialog
   - show squawk code in airspace details dialog
   - ability to send squawk code from airspace details dialog to transponder
