@@ -21,6 +21,9 @@
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 
+static void
+UpdateStartOpenInfobox(InfoBoxData &data, const TimeStamp &projected_start_time_s) noexcept;
+
 /**
  * Return the active waypoint, or nullptr if unavailable.
  */
@@ -830,13 +833,20 @@ SecondsUntil(TimeStamp now, FineTime until) noexcept
 void
 UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
 {
+  const auto now_s = CommonInterface::Basic().time;
+  UpdateStartOpenInfobox(data, now_s);
+}
+
+static void
+UpdateStartOpenInfobox(InfoBoxData &data, const TimeStamp &projected_start_time_s) noexcept
+{
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().ordered_task_stats;
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
-  
+
   const TimeSpan &task_open_span = common_stats.start_open_time_span;
   const TimeSpan &pev_open_span = common_stats.pev_start_time_span;
-  
+
   // give priority to PEV window
   const bool have_pev_start = pev_open_span.IsDefined();
   const TimeSpan &eff_start_window = have_pev_start ? pev_open_span : task_open_span;
@@ -846,20 +856,19 @@ UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
 
   if (!basic.time_available || !task_stats.task_valid ||
       common_stats.ordered_summary.active != 0 ||
-      !eff_start_window.IsDefined() ) {
+      !eff_start_window.IsDefined()) {
     data.SetInvalid();
     return;
   }
 
-  const auto now_s = basic.time;
-  const FineTime now{now_s};
+  const FineTime projected_start_time{projected_start_time_s};
 
-  if (eff_start_window.HasEnded(now)) {
+  if (eff_start_window.HasEnded(projected_start_time)) {
     data.SetValueInvalid();
     data.SetComment(_("Closed"));
-  } else if (eff_start_window.HasBegun(now)) {
+  } else if (eff_start_window.HasBegun(projected_start_time)) {
     if (eff_start_window.GetEnd().IsValid()) {
-      unsigned seconds = SecondsUntil(now_s, eff_start_window.GetEnd());
+      unsigned seconds = SecondsUntil(projected_start_time_s, eff_start_window.GetEnd());
       data.FmtValue("{:02}:{:02}", seconds / 60, seconds % 60);
       data.SetValueColor(3);
     } else
@@ -867,7 +876,7 @@ UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
 
     data.SetComment(_("Open"));
   } else {
-    unsigned seconds = SecondsUntil(now_s, eff_start_window.GetStart());
+    unsigned seconds = SecondsUntil(projected_start_time_s, eff_start_window.GetStart());
     data.FmtValue("{:02}:{:02}", seconds / 60, seconds % 60);
     data.SetValueColor(2);
     data.SetComment(_("Waiting"));
@@ -877,51 +886,18 @@ UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
 void
 UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
 {
-  const NMEAInfo &basic = CommonInterface::Basic();
-  const TaskStats &task_stats = CommonInterface::Calculated().ordered_task_stats;
   const GlideResult &current_remaining =
-    task_stats.current_leg.solution_remaining;
-  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
-
-  const TimeSpan &task_open_span = common_stats.start_open_time_span;
-  const TimeSpan &pev_open_span = common_stats.pev_start_time_span;
-  
-  // give priority to PEV window
-  const bool have_pev_start = pev_open_span.IsDefined();
-  const TimeSpan &eff_start_window = have_pev_start ? pev_open_span : task_open_span;
+    CommonInterface::Calculated().ordered_task_stats.current_leg.solution_remaining;
 
   /* reset color that may have been set by a previous call */
-  data.SetValueColor(0);
-
-  if (!basic.time_available || !task_stats.task_valid ||
-      common_stats.ordered_summary.active != 0 ||
-      !eff_start_window.IsDefined() ||
-      !current_remaining.IsOk()) {
+  if (!current_remaining.IsOk()) {
+    data.SetValueColor(0);
     data.SetInvalid();
     return;
   }
 
-  const auto arrival_s = basic.time + current_remaining.time_elapsed;
-  const FineTime arrival{arrival_s};
-
-  if (eff_start_window.HasEnded(arrival)) {
-    data.SetValueInvalid();
-    data.SetComment(_("Closed"));
-  } else if (eff_start_window.HasBegun(arrival)) {
-    if (eff_start_window.GetEnd().IsValid()) {
-      unsigned seconds = SecondsUntil(arrival_s, eff_start_window.GetEnd());
-      data.FmtValue("{:02}:{:02}", seconds / 60, seconds % 60);
-      data.SetValueColor(3);
-    } else
-      data.SetValueInvalid();
-
-    data.SetComment(_("Open"));
-  } else {
-    unsigned seconds = SecondsUntil(arrival_s, eff_start_window.GetStart());
-    data.FmtValue("{:02}:{:02}", seconds / 60, seconds % 60);
-    data.SetValueColor(2);
-    data.SetComment(_("Waiting"));
-  }
+  const auto arrival_s = CommonInterface::Basic().time + current_remaining.time_elapsed;
+  UpdateStartOpenInfobox(data, arrival_s);
 }
 
 /*

@@ -454,14 +454,18 @@ mass starts, gaggles and following.}.
 
 \menulabel{\bmenug{Nav 2}\blink\bmenut{Pilot}{Event}}
 
-When pressed, the task start window will be automatically set according to
-configuration defined in Task Rules (See \ref{sec:task-type-racing}): start
+When pressed, XCSoar will internally track the window open and close times, according 
+to configuration defined in Task Rules (See \ref{sec:task-type-racing}): start
 window will open after \emph{PEV start wait time} \config{taskrules} minutes
-and will be open for \emph{PEV start window} minutes.  Also, \emph
-{Pilot Event} will be announced to connected devices, allowing loggers to
+and will be open for \emph{PEV start window} minutes. The start open/close
+countdown will be displayed in the \emph{Start open} and \emph{Start reach} 
+infoboxes. Make sure to have one/both visible to effectively calculate your start.
+
+Also, \emph{Pilot Event} will be announced to connected devices, allowing loggers to
 register it without pilot pressing the physical button on the logger device
 itself. This might be useful when logger is located outside of pilot reach
-(e.g. behind the panel).
+(e.g. behind the panel). It is recommended to check on your device's manual 
+whether it supports external PEV declaration -some older loggers may not-.
 
 In order to start a task when \emph{Pilot Event Start} is used, press the \emph
 {Pilot Event} button, wait for \emph{PEV start wait time} and then cross the
@@ -469,6 +473,13 @@ start line within \emph{PEV start window} minutes.
 
 \tip It may be useful to have \emph{Start open} and/or \emph{Start reach}
  InfoBoxes visible to effectively use the \emph{PEV Start} procedure.
+
+\tip Note that the start window created by pressing the \emph{Pilot Event}
+is ``soft'', as it is only informative to the pilot via the infoboxes mentioned above.
+XCSoar will still compute a valid start if one is performed outside of 
+the PEV window -just like it would be scored in a competition-. In contrast,
+the task settings \emph{Start open/close time} in \ref{sec:task-type-racing} define
+a ``hard'' window, outside of which a start will not be computed.
 
 
 \section{Thermals}
