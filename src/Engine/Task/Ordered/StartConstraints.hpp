@@ -11,7 +11,8 @@ struct TaskStartMargins;
 
 struct StartConstraints {
   /**
-   * The time span during which the start gate is open.
+   * The time span during which a hard start gate is open.
+   * If defined, a valid start can only be made within this window.
    */
   TimeSpan open_time_span;
 
