@@ -831,17 +831,22 @@ void
 UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
-  const auto &calculated = CommonInterface::Calculated();
-  const TaskStats &task_stats = calculated.ordered_task_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().ordered_task_stats;
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
-  const TimeSpan &open = common_stats.start_open_time_span;
+  
+  const TimeSpan &task_open_span = common_stats.start_open_time_span;
+  const TimeSpan &pev_open_span = common_stats.pev_start_time_span;
+  
+  // give priority to PEV window
+  const bool have_pev_start = pev_open_span.IsDefined();
+  const TimeSpan &eff_start_window = have_pev_start ? pev_open_span : task_open_span;
 
   /* reset color that may have been set by a previous call */
   data.SetValueColor(0);
 
   if (!basic.time_available || !task_stats.task_valid ||
       common_stats.ordered_summary.active != 0 ||
-      !open.IsDefined()) {
+      !eff_start_window.IsDefined() ) {
     data.SetInvalid();
     return;
   }
@@ -849,12 +854,12 @@ UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
   const auto now_s = basic.time;
   const FineTime now{now_s};
 
-  if (open.HasEnded(now)) {
+  if (eff_start_window.HasEnded(now)) {
     data.SetValueInvalid();
     data.SetComment(_("Closed"));
-  } else if (open.HasBegun(now)) {
-    if (open.GetEnd().IsValid()) {
-      unsigned seconds = SecondsUntil(now_s, open.GetEnd());
+  } else if (eff_start_window.HasBegun(now)) {
+    if (eff_start_window.GetEnd().IsValid()) {
+      unsigned seconds = SecondsUntil(now_s, eff_start_window.GetEnd());
       data.FmtValue("{:02}:{:02}", seconds / 60, seconds % 60);
       data.SetValueColor(3);
     } else
@@ -862,7 +867,7 @@ UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
 
     data.SetComment(_("Open"));
   } else {
-    unsigned seconds = SecondsUntil(now_s, open.GetStart());
+    unsigned seconds = SecondsUntil(now_s, eff_start_window.GetStart());
     data.FmtValue("{:02}:{:02}", seconds / 60, seconds % 60);
     data.SetValueColor(2);
     data.SetComment(_("Waiting"));
@@ -873,19 +878,24 @@ void
 UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
-  const auto &calculated = CommonInterface::Calculated();
-  const TaskStats &task_stats = calculated.ordered_task_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().ordered_task_stats;
   const GlideResult &current_remaining =
     task_stats.current_leg.solution_remaining;
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
-  const TimeSpan &open = common_stats.start_open_time_span;
+
+  const TimeSpan &task_open_span = common_stats.start_open_time_span;
+  const TimeSpan &pev_open_span = common_stats.pev_start_time_span;
+  
+  // give priority to PEV window
+  const bool have_pev_start = pev_open_span.IsDefined();
+  const TimeSpan &eff_start_window = have_pev_start ? pev_open_span : task_open_span;
 
   /* reset color that may have been set by a previous call */
   data.SetValueColor(0);
 
   if (!basic.time_available || !task_stats.task_valid ||
       common_stats.ordered_summary.active != 0 ||
-      !open.IsDefined() ||
+      !eff_start_window.IsDefined() ||
       !current_remaining.IsOk()) {
     data.SetInvalid();
     return;
@@ -894,12 +904,12 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
   const auto arrival_s = basic.time + current_remaining.time_elapsed;
   const FineTime arrival{arrival_s};
 
-  if (open.HasEnded(arrival)) {
+  if (eff_start_window.HasEnded(arrival)) {
     data.SetValueInvalid();
     data.SetComment(_("Closed"));
-  } else if (open.HasBegun(arrival)) {
-    if (open.GetEnd().IsValid()) {
-      unsigned seconds = SecondsUntil(arrival_s, open.GetEnd());
+  } else if (eff_start_window.HasBegun(arrival)) {
+    if (eff_start_window.GetEnd().IsValid()) {
+      unsigned seconds = SecondsUntil(arrival_s, eff_start_window.GetEnd());
       data.FmtValue("{:02}:{:02}", seconds / 60, seconds % 60);
       data.SetValueColor(3);
     } else
@@ -907,7 +917,7 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
 
     data.SetComment(_("Open"));
   } else {
-    unsigned seconds = SecondsUntil(arrival_s, open.GetStart());
+    unsigned seconds = SecondsUntil(arrival_s, eff_start_window.GetStart());
     data.FmtValue("{:02}:{:02}", seconds / 60, seconds % 60);
     data.SetValueColor(2);
     data.SetComment(_("Waiting"));

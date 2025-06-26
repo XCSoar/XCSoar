@@ -420,6 +420,12 @@ public:
 
   void ResetTask() noexcept;
 
+  /**
+   * Sets the PEV start time span.
+   * To be called when PEV has been pressed.
+   */
+  void SetPevStartTimeSpan(const TimeSpan &open_time_span) noexcept;
+
 private:
   TaskType SetMode(const TaskType mode) noexcept;
 

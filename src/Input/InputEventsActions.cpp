@@ -209,7 +209,7 @@ try {
 
   const TimeSpan ts = TimeSpan(new_start, new_end);
 
-  backend_components->protected_task_manager->SetStartTimeSpan(ts);
+  backend_components->protected_task_manager->SetPevStartTimeSpan(ts);
 
   // Log pilot event
   if (backend_components->igc_logger)

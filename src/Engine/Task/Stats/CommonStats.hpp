@@ -22,8 +22,18 @@ class CommonStats
 public:
   /**
    * A copy of #StartConstraints::open_time_span.
+   * If defined, a valid start can only be made within this window.
    */
   TimeSpan start_open_time_span;
+
+  /**
+   * The start window resulting from the last Pilot Event declared, based on
+   * the task settings #StartConstraints::pev_start_wait_time and
+   * #StartConstraints::pev_start_window.
+   * If defined, it defines a soft start window, which is informative
+   * to the pilot only and will not be enforced in any way.
+   */
+  TimeSpan pev_start_time_span;
 
   /** Whether the task found landable reachable waypoints (aliases abort) */
   bool landable_reachable;
