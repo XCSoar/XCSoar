@@ -542,3 +542,9 @@ TaskManager::ResetTask() noexcept
     UpdateCommonStatsTask();
   }
 }
+
+void 
+TaskManager::SetPevStartWindow(const TimeSpan &open_time_span) noexcept
+{
+  common_stats.pev_start_time_span = open_time_span;
+}

@@ -419,6 +419,12 @@ public:
 
   void ResetTask() noexcept;
 
+  /**
+   * Updates the start window based on the task StartConstraints.
+   * To be called when PEV has been pressed.
+   */
+  void SetPevStartWindow(const TimeSpan &open_time_span) noexcept;
+
 private:
   TaskType SetMode(const TaskType mode) noexcept;
 
