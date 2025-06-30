@@ -18,6 +18,8 @@ struct TrafficSettings {
 
   unsigned radar_zoom;
 
+  bool no_position_target_distance_ring;
+
   /** Location of Flarm radar */
   enum class GaugeLocation : uint8_t {
     AUTO,
