@@ -19,7 +19,8 @@ enum ControlIndex {
   EnableThermalProfile,
   FinalGlideBarDisplayModeControl,
   EnableFinalGlideBarMC0,
-  EnableVarioBar
+  EnableVarioBar,
+  NoPositionTargetDistanceRing
 };
 
 static constexpr StaticEnumChoice final_glide_bar_display_mode_list[] = {
@@ -139,7 +140,7 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent,
              _("Setting this to \"On\" will automatically close the FLARM dialog if there is no traffic. \"Off\" will keep the dialog open even without current traffic."),
              ui_settings.traffic.auto_close_dialog);
   SetExpertRow(AutoCloseFlarmDialog);
-  
+
   AddEnum(_("FLARM display"), _("Choose a location for the FLARM display."),
           flarm_display_location_list,
           (unsigned)ui_settings.traffic.gauge_location);
@@ -176,6 +177,10 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent,
              _("If set to ON the vario bar will be shown"),
              map_settings.vario_bar_enabled);
 
+  AddBoolean(_("No Position Target Distance Ring"),
+             _("This parameter enables or disables the No Position Target Distance Ring in Flarm Radar"),
+             ui_settings.traffic.no_position_target_distance_ring);
+
   SetExpertRow(EnableVarioBar);
 }
 
@@ -194,7 +199,7 @@ GaugesConfigPanel::Save(bool &_changed) noexcept
                        ui_settings.traffic.auto_close_dialog);
 
   if (SaveValueEnum(TAPosition, ProfileKeys::TAPosition,
-                    ui_settings.thermal_assistant_position) || 
+                    ui_settings.thermal_assistant_position) ||
       SaveValueEnum(AppFlarmLocation, ProfileKeys::FlarmLocation,
                     ui_settings.traffic.gauge_location))
     CommonInterface::main_window->ReinitialiseLayout();
@@ -211,6 +216,10 @@ GaugesConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValue(EnableVarioBar, ProfileKeys::EnableVarioBar,
                        map_settings.vario_bar_enabled);
+
+  changed |= SaveValue(NoPositionTargetDistanceRing, ProfileKeys::NoPositionTargetDistanceRing,
+                       ui_settings.traffic.no_position_target_distance_ring);
+
   _changed |= changed;
 
   return true;
