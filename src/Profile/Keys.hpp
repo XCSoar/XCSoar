@@ -128,6 +128,7 @@ constexpr std::string_view ShowMenuButton = "ShowMenuButton";
 constexpr std::string_view ShowZoomButton = "ShowZoomButton";
 constexpr std::string_view CursorSize = "CursorSize";
 constexpr std::string_view CursorColorsInverted = "CursorColorsInverted";
+constexpr std::string_view NoPositionTargetDistanceRing = "NoPositionTargetDistanceRing";
 
 constexpr std::string_view AppAveNeedle = "AppAveNeedle";
 constexpr std::string_view AppAveThermalNeedle = "AppAveThermalNeedle";

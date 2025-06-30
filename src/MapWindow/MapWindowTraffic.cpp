@@ -100,16 +100,20 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     if (!traffic.location_available)
       continue;
 
-    DrawFlarmTraffic(canvas, projection, traffic_look, false,
-                     aircraft_pos, traffic);
+  // No position traffic (relative_east=0) does not make sense in map display
+    if (traffic.relative_east)
+      DrawFlarmTraffic(canvas, projection, traffic_look, false,
+                       aircraft_pos, traffic);
   }
 
   if (const auto &fading = GetFadingFlarmTraffic(); !fading.empty()) {
     for (const auto &[id, traffic] : fading) {
       assert(traffic.location_available);
 
-      DrawFlarmTraffic(canvas, projection, traffic_look, true,
-                       aircraft_pos, traffic);
+  // No position traffic (relative_east=0) does not make sense in map display
+      if (traffic.relative_east)
+        DrawFlarmTraffic(canvas, projection, traffic_look, true,
+                         aircraft_pos, traffic);
     }
   }
 }
