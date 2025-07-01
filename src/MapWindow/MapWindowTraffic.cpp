@@ -100,8 +100,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     if (!traffic.location_available)
       continue;
 
-  // No position traffic does not make sense in map display
-      if (traffic.relative_east)
+  // No position traffic (relative_east=0) does not make sense in map display
+    if (traffic.relative_east)
       DrawFlarmTraffic(canvas, projection, traffic_look, false,
                        aircraft_pos, traffic);
   }
@@ -110,7 +110,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     for (const auto &[id, traffic] : fading) {
       assert(traffic.location_available);
 
-  // No position traffic does not make sense in map display
+  // No position traffic (relative_east=0) does not make sense in map display
       if (traffic.relative_east)
         DrawFlarmTraffic(canvas, projection, traffic_look, true,
                          aircraft_pos, traffic);
