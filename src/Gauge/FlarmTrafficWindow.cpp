@@ -19,6 +19,7 @@
 
 #include <cassert>
 #include <stdio.h>
+#include <tchar.h>
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
@@ -392,7 +393,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   canvas.SetBackgroundTransparent();
   canvas.Select(look.label_font);
   TCHAR tx[2];
-  sprintf(tx,"%s","X");
+  _stprintf(tx, _T("%s"), _T("X"));
   PixelSize sx = canvas.CalcTextSize(tx);
 
   if (!traffic.relative_east) {
@@ -417,7 +418,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
     // No position target - print exclamation mark in the middle over the dot
     TCHAR em[2];
-    sprintf(em,"%s","!");
+    _stprintf(em, _T("%s"), _T("!"));
     PixelSize se = canvas.CalcTextSize(em);
     const PixelPoint te {
       sc[i].x - int(se.width / 2),
