@@ -183,6 +183,7 @@ RowFormWidget::SaveValueMultiFileReader(unsigned i,
     new_output += value_to_add;
     new_output += "|";
   }
+  new_output.pop_back();  // Removes the last "|"
 
   std::string old_value = Profile::Get(registry_key, "");
   if (old_value == new_output) return false;

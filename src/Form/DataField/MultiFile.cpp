@@ -138,8 +138,11 @@ MultiFileDataField::UpdateDisplayString()
     }
     first = false;
 
-    display_string +=
-        file_datafield.GetItem(file_datafield.Find(path)).filename.c_str();
+    auto index = file_datafield.Find(path);
+    if (index > 0)
+      display_string+= file_datafield.GetItem(index).filename.c_str();
+    else
+      display_string+= path.c_str();
   }
 }
 
