@@ -28,7 +28,8 @@ ParsePFLAE(NMEAInputLine &line, FlarmError &error, TimeStamp clock) noexcept
   StringFormatUnsafe(buffer, _T("%s - %s"),
                      FlarmError::ToString(error.severity),
                      FlarmError::ToString(error.code));
-  Message::AddMessage(_T("FLARM: "), buffer);
+  if (error.severity != FlarmError::Severity::NO_ERROR)
+    Message::AddMessage(_T("FLARM: "), buffer);
 
   error.available.Update(clock);
 }
@@ -89,10 +90,12 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock, RangeFilter
     return;
   traffic.relative_north = value;
 
-  if (!line.ReadChecked(value))
-    // Relative East is required !
-    return;
-  traffic.relative_east = value;
+  if (line.ReadChecked(value))
+    // Relative East
+    traffic.relative_east = value;
+  else
+    // No position target
+    traffic.relative_east = 0;
 
   if (!line.ReadChecked(value))
     // Relative Altitude is required !
