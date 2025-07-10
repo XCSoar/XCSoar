@@ -18,6 +18,7 @@ struct TrafficSettings {
 
   unsigned radar_zoom;
 
+  /** Show distance ring for FLARM targets without position data? */
   bool no_position_target_distance_ring;
 
   /** Location of Flarm radar */
