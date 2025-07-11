@@ -309,10 +309,10 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
         request_retry_count++;
       }
 
-      TimeoutClock timeout(std::chrono::seconds(2));
+      TimeoutClock timeout(std::chrono::seconds(2*request_retry_count));
       const char *line = reader.ExpectLine("PLXVC,FLIGHT,A,", timeout);
       if (line == nullptr || !HandleFlightLine(line, os, i, row_count)) {
-        if (request_retry_count > 5)
+        if (request_retry_count > 20)
           return false;
 
         /* Discard data which might still be in-transit, e.g. buffered
