@@ -283,8 +283,8 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
   unsigned row_count = 0, i = 1;
 
   while (true) {
-    /* read up to 32 lines at a time */
-    unsigned nrequest = row_count == 0 ? 1 : 32;
+    /* read up to 50 lines at a time */
+    unsigned nrequest = row_count == 0 ? 1 : 50;
     if (row_count > 0) {
       assert(i <= row_count);
       const unsigned remaining = row_count - i + 1;
