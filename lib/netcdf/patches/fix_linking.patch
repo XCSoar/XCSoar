@@ -1,0 +1,40 @@
+diff --git a/libsrc/ncx.c b/libsrc/ncx.c
+index b057a3d..82d8f07 100644
+--- a/libsrc/ncx.c
++++ b/libsrc/ncx.c
+@@ -3411,7 +3411,7 @@ ncx_get_float_longlong(const void *xp, longlong *ip)
+ #endif
+             return NC_ERANGE;
+         }
+-	else *ip = (longlong)xx;
++//	else *ip = (longlong)xx;
+ 	return NC_NOERR;
+ }
+
+@@ -3472,7 +3472,7 @@ ncx_get_float_ulonglong(const void *xp, ulonglong *ip)
+ #endif
+             return NC_ERANGE;
+         }
+-	else *ip = (ulonglong)xx;
++//	else *ip = (ulonglong)xx;
+ 	return NC_NOERR;
+ }
+
+@@ -4822,7 +4822,7 @@ ncx_put_longlong_float(void *xp, const float *ip, void *fillp)
+ #ifdef ERANGE_FILL
+     else
+ #endif
+-        xx = (ix_int64)*ip;
++//        xx = (ix_int64)*ip;
+
+     put_ix_int64(xp, &xx);
+     return err;
+@@ -5445,7 +5445,7 @@ ncx_put_ulonglong_float(void *xp, const float *ip, void *fillp)
+ #ifdef ERANGE_FILL
+     else
+ #endif
+-        xx = (ix_uint64)*ip;
++//        xx = (ix_uint64)*ip;
+
+     put_ix_uint64(xp, &xx);
+     return err;
