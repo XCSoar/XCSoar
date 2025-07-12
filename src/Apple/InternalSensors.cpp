@@ -130,6 +130,69 @@ void InternalSensors::Init()
   } else {
     [location_manager startUpdatingLocation];
   }
+    
+  // Check if the device supports barometric pressure sensing
+  if ([CMAltimeter isRelativeAltitudeAvailable]) {
+    // Check for authorization status (iOS 8+)
+    if ([CMAltimeter respondsToSelector:@selector(authorizationStatus)]) {
+      CMAuthorizationStatus status = [CMAltimeter authorizationStatus];
+      
+      // Exit if user denied permission
+      if (status == CMAuthorizationStatusDenied) {
+        return;
+      }
+      // Handle case where permission hasn't been determined yet
+      else if (status == CMAuthorizationStatusNotDetermined &&
+              [CMMotionActivityManager respondsToSelector:@selector(isActivityAvailable)]) {
+        // Create manager to check permissions
+        CMMotionActivityManager *manager = [[CMMotionActivityManager alloc] init];
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        
+        __block bool query_error = false;
+        
+        // Query motion activity to trigger permission dialog
+        [manager queryActivityStartingFromDate:[NSDate date]
+                                        toDate:[NSDate date]
+                                       toQueue:queue
+                                   withHandler:^(NSArray<CMMotionActivity *> * _Nullable activities, NSError * _Nullable error) {
+         (void) activities;
+            if (error) {
+                NSLog(@"Error querying motion activities: %@", error);
+                query_error = YES;
+                return;
+            }
+        }];
+        
+        // Exit if there was an error during the permission check
+        if (query_error) {
+          return;
+        }
+      }
+    }
+    
+    // Initialize altimeter for pressure readings
+    altimeter = [[CMAltimeter alloc] init];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    
+    // Start receiving altimeter updates
+    [altimeter startRelativeAltitudeUpdatesToQueue:queue
+                                       withHandler:^(CMAltitudeData * _Nullable altitudeData, NSError * _Nullable error) {
+    if (error) {
+      NSLog(@"Error: %@", [error localizedDescription]);
+      return;
+    }
+
+    // Convert pressure readings (from kPa to hPa/mbar) and notify listener
+    listener.OnBarometricPressureSensor(
+      static_cast<float>(altitudeData.pressure.floatValue * 10.0f),
+      0.0f
+    );
+    }];
+    } else {
+      // Device doesn't support barometric pressure sensing
+      altimeter = nullptr;
+    }
+    
 #else
   [location_manager startUpdatingLocation];
 #endif
@@ -138,4 +201,9 @@ void InternalSensors::Init()
 void InternalSensors::Deinit()
 {
   [location_manager stopUpdatingLocation];
+  #if defined(TARGET_OS_IOS) && TARGET_OS_IOS
+  if (altimeter != nullptr) {
+    [altimeter stopRelativeAltitudeUpdates];
+  }
+  #endif
 }
