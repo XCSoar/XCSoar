@@ -22,8 +22,8 @@ case "$TARGET_PLATFORM_NAME" in
   iphoneos)
     export TARGET="IOS64"
     rm -rf "$(pwd)"/output/IOS64/ipa "$(pwd)"/output/IOS64/xcsoar.ipa "$(pwd)"/output/IOS64/Info.plist*
-    rm "$(pwd)"/darwin/XCSoarExecutable
-    ln -s "$(pwd)"/output/IOS64/ipa/Payload/XCSoar.app "$(pwd)"/darwin/XCSoarExecutable
+    rm -f "$(pwd)"/darwin/XCSoarExecutable
+    ln -s "$(pwd)"/output/IOS64/xcsoar.ipa "$(pwd)"/darwin/XCSoarExecutable
     ;;
   macosx)
     export TARGET="MACOS"
