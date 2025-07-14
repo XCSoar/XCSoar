@@ -28,7 +28,8 @@ ParsePFLAE(NMEAInputLine &line, FlarmError &error, TimeStamp clock) noexcept
   StringFormatUnsafe(buffer, _T("%s - %s"),
                      FlarmError::ToString(error.severity),
                      FlarmError::ToString(error.code));
-  Message::AddMessage(_T("FLARM: "), buffer);
+  if (error.severity != FlarmError::Severity::NO_ERROR)
+    Message::AddMessage(_T("FLARM: "), buffer);
 
   error.available.Update(clock);
 }
