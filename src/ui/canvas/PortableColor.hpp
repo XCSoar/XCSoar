@@ -66,6 +66,7 @@ static constexpr RGB8Color RGB8_MAGENTA = RGB8Color(0xff, 0x00, 0xff);
 static constexpr RGB8Color RGB8_ORANGE = RGB8Color(0xff, 0xa2, 0x00);
 static constexpr RGB8Color RGB8_BROWN = RGB8Color(0xb7, 0x64, 0x1e);
 static constexpr RGB8Color RGB8_GRAYISH_VIOLET = RGB8Color(0xb3, 0xa8, 0xd0);
+static constexpr RGB8Color RGB8_STEEL_BLUE = RGB8Color(0x17, 0x49, 0x87);
 
 /**
  * Represents a device-independent color class that stores 8 bits for
