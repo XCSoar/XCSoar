@@ -6,6 +6,8 @@
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
+#include "Weather/Skysight/Skysight.hpp"
+#include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "UIGlobals.hpp"
@@ -62,6 +64,15 @@ DataGlobals::GetRasp() noexcept
     : nullptr;
 }
 
+std::shared_ptr<Skysight>
+DataGlobals::GetSkysight()
+{
+  auto *map = UIGlobals::GetMap();
+  return map != nullptr
+    ? map->GetSkysight()
+    : nullptr;
+}
+
 void
 DataGlobals::SetRasp(std::shared_ptr<RaspStore> rasp) noexcept
 {
@@ -86,4 +97,12 @@ DataGlobals::UpdateHome(bool reset) noexcept
   WaypointGlue::SaveHome(Profile::map,
                          CommonInterface::GetComputerSettings().poi,
                          CommonInterface::GetComputerSettings().team_code);
+}
+
+void
+DataGlobals::SetSkysight(std::shared_ptr<Skysight> skysight)
+{
+  auto *map = UIGlobals::GetMap();
+  if (map != nullptr)
+    map->SetSkysight(std::move(skysight));
 }
