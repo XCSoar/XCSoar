@@ -101,10 +101,10 @@ AirspaceRendererSettings::SetDefaults()
   classes[AATASK].SetColors(HasColors() ? RGB8_YELLOW : RGB8_MAGENTA);
   classes[CLASSE].SetColors(RGB8_BLUE);
   classes[CLASSF].SetColors(RGB8_BLUE);
-  classes[TMZ].SetColors(RGB8_GRAYISH_VIOLET);
+  classes[TMZ].SetColors(RGB8_STEEL_BLUE);
   classes[CLASSG].SetColors(RGB8_GRAYISH_VIOLET);
   classes[MATZ].SetColors(RGB8_GRAYISH_VIOLET);
-  classes[RMZ].SetColors(RGB8_GRAYISH_VIOLET);
+  classes[RMZ].SetColors(RGB8_STEEL_BLUE);
   classes[UNCLASSIFIED].SetColors(RGB8_MAGENTA.Darken());
   classes[TMA].SetColors(RGB8_BLUE);
   classes[TRA].SetColors(RGB8_RED);
