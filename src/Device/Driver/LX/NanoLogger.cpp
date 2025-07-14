@@ -347,6 +347,7 @@ Nano::DownloadFlight(Port &port, const RecordedFlightInfo &flight,
                      Path path, OperationEnvironment &env)
 {
   port.StopRxThread();
+  port.FullFlush(env, std::chrono::milliseconds(200), std::chrono::seconds(2));
 
   FileOutputStream fos(path);
   BufferedOutputStream bos(fos);
