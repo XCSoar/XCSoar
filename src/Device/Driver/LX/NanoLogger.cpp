@@ -310,7 +310,11 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
       }
 
       TimeoutClock timeout(std::chrono::seconds(row_count == 0 ? 20 : 2)); // using row_count to detect first request
-      const char *line = reader.ExpectLine("PLXVC,FLIGHT,A,", timeout);
+      const char *line = nullptr;
+      try {
+        line = reader.ExpectLine("PLXVC,FLIGHT,A,", timeout);
+      } catch (...) {
+      }
       if (line == nullptr || !HandleFlightLine(line, os, i, row_count)) {
         if (request_retry_count > 5)
           return false;
