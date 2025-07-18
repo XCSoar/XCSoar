@@ -36,19 +36,19 @@ second title is the label used in the InfoBox title.
 %%%%%%%%%%%
 \section{Altitude}
 
-\ibig{Altitude GPS}{Alt GPS}{This is the altitude above mean sea level reported by the
+\ibig{Altitude GPS}{Alt GPS}{Altitude above mean sea level reported by the
 GPS. (Touch-screen/PC only) In simulation mode this value is adjustable with the
 up/down arrow keys. The right/left arrow keys also cause the glider to turn.\footnotemark[1]}
 {figures/simulator-keys.png}
-\ibi{Barometric altitude}{Alt Baro}{This is the barometric altitude obtained from a
+\ibi{Barometric altitude}{Alt Baro}{Barometric altitude obtained from a
 device equipped with pressure sensor.\footnotemark[1]}
-\ibi{Altitude (Auto)}{Alt $<$auto$>$}{This is the barometric altitude obtained from a 
+\ibi{Altitude (Auto)}{Alt $<$auto$>$}{Barometric altitude obtained from a 
 device equipped with a pressure sensor or the GPS altitude if the barometric altitude 
 is not available.}
-\ibi{Height AGL}{H AGL}{This is the navigation altitude minus the terrain elevation 
+\ibi{Height AGL}{H AGL}{Navigation altitude minus the terrain elevation 
 obtained from the terrain file. The value is coloured red when the glider is
 below the terrain safety clearance height.\footnotemark[1]}  
-\ibi{Terrain elevation}{Terr Elev}{This is the elevation of the terrain above mean
+\ibi{Terrain elevation}{Terr Elev}{Elevation of the terrain above mean
 sea level obtained from the terrain file at the current GPS location.}
 \ibi{Height above take-off}{H T/O}{Height based on an automatic take-off reference 
 elevation (like a QFE reference).\footnotemark[1]}
@@ -73,7 +73,7 @@ adjusts the track.}
 intelligent vario.}
 \ibi{G load}{G}{Magnitude of G loading reported by a supported external
 intelligent vario. This value is negative for pitch-down manoeuvres.}
-\ibi{Bearing Difference}{Brng. D}{The difference between the glider's track
+\ibi{Bearing Difference}{Brng. D}{Difference between the glider's track
 bearing, to the bearing of the next waypoint, or for AAT tasks, to the bearing
 to the target within the AAT sector. GPS navigation is based on the track
 bearing across the ground, and this track bearing may differ from the glider's
@@ -96,14 +96,14 @@ by the ground
 speed divided by the vertical speed (GPS speed) over the last 20 seconds. 
 Negative values indicate climbing cruise. If the vertical speed is close to
 zero, the displayed value is `- - -'.}
-\ibi{GR cruise}{GR Cruise}{The distance from the top of the last thermal,
+\ibi{GR cruise}{GR Cruise}{Distance from the top of the last thermal,
 divided by the altitude lost since the top of the last thermal. Negative values
 indicate climbing cruise (height gain since leaving the last thermal). If the
 vertical speed is close to zero, the displayed value is `- - -'.}
-\ibi{Final GR}{Fin GR}{The required glide ratio over ground to finish the task, given 
+\ibi{Final GR}{Fin GR}{Required glide ratio over ground to finish the task, given 
 by the distance to go divided by the height required to arrive at the safety 
 arrival height. This is no adjusted total energy possible.} 
-\ibi{Next GR}{WP GR}{The required glide ratio over ground to reach the next waypoint,
+\ibi{Next GR}{WP GR}{Required glide ratio over ground to reach the next waypoint,
 given by the distance to next waypoint divided by the height required to arrive
 at the safety arrival height.  Negative values indicate a climb is necessary
 to reach the waypoint.  If the height required is close to zero, the displayed
@@ -112,7 +112,7 @@ value is `- - -'.}
 airspeed divided by the total energy vertical speed, when connected to an
 intelligent variometer.  Negative values indicate climbing cruise. If the total
 energy vario speed is close to zero, the displayed value is `- - -'.}
-\ibi{GR average}{GR Avg}{The distance made in the configured period of time ,
+\ibi{GR average}{GR Avg}{Distance made in the configured period of time,
 divided by the altitude lost since then. Negative values are shown as 
 `\^{ }\^{ }\^{ }' and indicate climbing cruise (height gain). Over 200 of GR the
 value is shown as `+++'. You can configure the period of averaging.
@@ -129,11 +129,11 @@ circling.}
 divided by the time spent circling.} 
 \ibi{Last thermal gain}{TL Gain}{Total altitude gain/loss in the last thermal.}
 \ibi{Last thermal time}{TL Time}{Time spent circling in the last thermal.}
-\ibi{Thermal climb, last 30 s}{TC 30s}{A 30 second rolling average climb rate based
+\ibi{Thermal climb, last 30 s}{TC 30s}{30 second rolling average climb rate based
 of the reported GPS altitude, or vario if available.}
 \ibi{Thermal average}{TC Avg}{Altitude gained/lost in the current thermal,
 divided by time spent thermalling.}
-\ibi{Thermal gain}{TC Gain}{The altitude gained/lost in the current thermal.}
+\ibi{Thermal gain}{TC Gain}{Altitude gained/lost in the current thermal.}
 \ibi{Vario }{Vario}{Instantaneous vertical speed, as reported by the GPS, or the
 intelligent vario total energy vario value if connected to one.}
 \ibi{Netto vario}{Netto}{Instantaneous vertical speed of air-mass, equal to
@@ -149,7 +149,7 @@ circling, based of the reported GPS altitude, or vario if available.}
 \ibi{Thermal average over all}{T Avg}{Time-average climb rate in all thermals.}
 \ibi{Climb band}{Climb Band}{Graph of average circling climb rate (horizontal 
 axis) as a function of altitude (vertical axis).}
-\ibi{Thermal assistant}{Thermal}{A circular thermal assistant that shows the 
+\ibi{Thermal assistant}{Thermal}{Circular thermal assistant that shows the 
 lift distribution over each part of the circle.}
 
 %%%%%%%%%%%
@@ -163,10 +163,10 @@ settings, adjust the values with left/right cursor keys.}
 manner as Wind arrow.}
 \ibi{Wind speed}{Wind}{Wind speed incl. wind direction, estimated by XCSoar. Adjustable in the same 
 manner as Wind arrow.}
-\ibi{Wind, head component}{Head Wind}{The current head wind component. Head wind 
+\ibi{Wind, head component}{Head Wind}{Current head wind component. Head wind 
 is calculated from TAS and GPS ground speed if airspeed is available from 
 external device. Otherwise the estimated wind is used for the calculation.}
-\ibi{Wind, head component (simplified)}{Head Wind *}{The current head wind component. 
+\ibi{Wind, head component (simplified)}{Head Wind *}{Current head wind component. 
 The simplified head wind is calculated by subtracting GPS ground speed from the TAS if 
 airspeed is available from external device.}
 \ibi{Outside air temperature}{OAT}{Outside air temperature measured by a probe
@@ -182,26 +182,26 @@ temperature.}
 %%%%%%%%%%%
 \section{MacCready}
 
-\ibi{MacCready Setting}{MC $<$mode$>$}{The current MacCready setting, the current 
-MacCready mode (manual or auto), and the recommended speed-to-fly. 
+\ibi{MacCready Setting}{MC $<$mode$>$}{Current MacCready setting, current 
+MacCready mode (manual or auto), and recommended speed-to-fly. 
 (Touch-screen/PC only) Also used
 to adjust the MacCready setting if the InfoBox is active, by using the up/down
 cursor keys. Pressing the enter cursor key toggles `Auto MacCready' mode. 
 An InfoBox dialogue is available}
-\ibi{Speed MacCready}{V MC}{The MacCready speed-to-fly for optimal flight to the
+\ibi{Speed MacCready}{V MC}{MacCready speed-to-fly for optimal flight to the
 next waypoint. In cruise flight mode, this speed-to-fly is calculated for
 maintaining altitude. In final glide mode, this speed-to-fly is calculated for
 descent.}
 \ibi{Percentage climb}{\% Climb}{Percentage of time spent in climb mode. These
 statistics are reset upon starting the task.}
-\ibi{Speed dolphin}{V opt.}{The instantaneous MacCready speed-to-fly, making use
+\ibi{Speed dolphin}{V opt.}{Instantaneous MacCready speed-to-fly, making use
 of netto vario calculations to determine dolphin cruise speed on the glider's
 current bearing. In cruise flight mode, this speed-to-fly is calculated for
 maintaining altitude. In final glide mode, this speed-to-fly is calculated for
 descent. In climb mode, this switches to the speed for minimum sink at the
 current load factor (if an accelerometer is connected). When `Block' mode speed to
 fly is selected, this InfoBox displays the MacCready speed.}
-\ibi{Thermal next leg equivalent}{T Next Leg}{The thermal rate of climb on next 
+\ibi{Thermal next leg equivalent}{T Next Leg}{Thermal rate of climb on next 
 leg which is equivalent to a thermal equal to the MacCready setting on current leg.}
 \ibi{Task cruise efficiency}{Cruise Eff}{Efficiency of cruise. 100 indicates perfect 
 MacCready performance. This value estimates your cruise efficiency according to the 
@@ -213,7 +213,7 @@ current flight history with the set MC value.  Calculation begins after task is 
 \ibi{Next Bearing}{Bearing}{True bearing of the next waypoint. For AAT tasks, this
 is the true bearing to the target within the AAT sector.}
 \ibi{Next radial}{Radial}{True bearing from the next waypoint to your position.}
-\ibi{Next distance}{WP Dist}{The distance to the currently selected waypoint.
+\ibi{Next distance}{WP Dist}{Distance to the currently selected waypoint.
 For AAT tasks, this is the distance to the target within the AAT sector.}
 \ibi{Next altitude difference}{WP AltD}{Arrival altitude at the next waypoint
 relative to the safety arrival height. For AAT tasks, the target within the AAT 
@@ -266,16 +266,16 @@ target points remaining in minimum AAT time.}
 distance according to the configured contest rule set.}
 \ibi{Task progress}{Progress}{Clock-like display of distance remaining along 
 task, showing achieved task points.}
-\ibi{Start open/close countdown}{Start open}{Shows the time left until the start point 
+\ibi{Start open/close countdown}{Start open}{Time left until the start point 
 opens or closes.}
-\ibi{Start open/close countdown at reaching}{Start reach}{Shows the time left until the 
+\ibi{Start open/close countdown at reaching}{Start reach}{Time left until the 
 start point opens or closes, compared to the calculated time to reach it.}
     
     
 %%%%%%%%%%%
 \section{Waypoint}
 
-\ibi{Next waypoint}{Next WP}{The name of the currently selected turn point. When
+\ibi{Next waypoint}{Next WP}{Name of the currently selected turn point. When
 this InfoBox is active, using the up/down cursor keys selects the next/previous
 waypoint in the task. (Touch-screen/PC only) Pressing the enter cursor key brings
 up the waypoint details.}
@@ -296,27 +296,27 @@ completion, assuming performance of ideal MacCready cruise/climb cycle.}
 assuming performance of ideal MacCready cruise/climb cycle.}
 \ibi{Task req.\ total height trend}{RH Trend}{Trend (or neg.\ of the variation) of
 the total required height to complete the task.}
-\ibi{Time under max.\ start height}{Start Height}{The contiguous period the ship
+\ibi{Time under max.\ start height}{Start Height}{Contiguous period the ship
 has been below the task start max.\ height.}
 
 
 %%%%%%%%%%%
 \section{Team code}
 
-\ibi{Team code}{Team Code}{The current Team code for this aircraft. Use this
+\ibi{Team code}{Team Code}{Current Team code for this aircraft. Use this
 to report to other team members.  The last team aircraft code entered is 
 displayed underneath.}
-\ibi{Team bearing}{Team Brng}{The bearing to the team aircraft location at the
+\ibi{Team bearing}{Team Brng}{Bearing to the team aircraft location at the
 last team code report.}
-\ibi{Team bearing difference}{Team BrngD}{The relative bearing to the team aircraft
+\ibi{Team bearing difference}{Team BrngD}{Relative bearing to the team aircraft
 location at the last reported team code.}
-\ibi{Team range}{Team Dist}{The range to the team aircraft location at the last
+\ibi{Team range}{Team Dist}{Range to the team aircraft location at the last
 reported team code.}
 
 %%%%%%%%%%%
 \section{Device status}
 
-\ibi{Battery voltage/percent}{Battery}{Displays percentage of device battery remaining
+\ibi{Battery voltage/percent}{Battery}{Percentage of device battery remaining
 (where applicable) and status/voltage of external power supply.}
 \ibi{CPU load}{CPU}{CPU load consumed by XCSoar averaged over 5 seconds.}
 \ibi{Free RAM}{Free RAM}{Free RAM as reported by the operating system.}
@@ -324,9 +324,9 @@ reported team code.}
 %%%%%%%%%%%
 \section{Alternates}
 
-\ibi{Alternate 1}{Altn 1}{Displays name and bearing to the best alternate
+\ibi{Alternate 1}{Altn 1}{Name and bearing to the best alternate
 landing location.}
-\ibi{Alternate 2}{Altn 2}{Displays name and bearing to the second alternate
+\ibi{Alternate 2}{Altn 2}{Name and bearing to the second alternate
 landing location.}
 \ibi{Alternate 1 GR}{Altn1 GR}{Geometric gradient to the arrival height above
 the best alternate. This is not adjusted for total energy.}
@@ -336,18 +336,18 @@ the second alternate. This is not adjusted for total energy.}
 %%%%%%%%%%%
 \section{Obstacles}
 
-\ibi{Nearest airspace horizontal}{Near AS H}{The horizontal distance to the 
+\ibi{Nearest airspace horizontal}{Near AS H}{Horizontal distance to the 
 nearest airspace.}
-\ibi{Nearest airspace vertical}{Near AS V}{The vertical distance to the nearest 
+\ibi{Nearest airspace vertical}{Near AS V}{Vertical distance to the nearest 
 airspace.  A positive value means the airspace is above you, and negative means 
 the airspace is below you.}
-\ibi{Terrain collision}{Terr Coll}{The distance to the next terrain collision 
+\ibi{Terrain collision}{Terr Coll}{Distance to the next terrain collision 
 along the current task leg. At this location, the altitude will be below the 
 configured terrain clearance altitude.}
 
 %%%%%%%%%%%
 \section{Radio}
 
-\ibi{Active radio frequency}{Act Freq}{The currently active radio frequency.}
-\ibi{Standby radio frequency}{Stby Freq}{The currently standby radio frequency.}
+\ibi{Active radio frequency}{Act Freq}{Currently active radio frequency.}
+\ibi{Standby radio frequency}{Stby Freq}{Currently standby radio frequency.}
 
