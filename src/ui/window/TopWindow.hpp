@@ -55,6 +55,14 @@ class TopCanvas;
 struct wl_egl_window;
 #endif
 
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+#import <UIKit/UIKit.h>
+#endif
+
 namespace UI {
 
 class Display;
@@ -297,6 +305,30 @@ public:
        Window::GetClientRect() (method is not virtual) */
     PixelRect rc = GetClientRect();
     return {rc.right, rc.bottom};
+  }
+#endif
+    
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+  [[gnu::pure]]
+  const PixelRect GetClientRect() const noexcept override {
+    assert(IsDefined());
+    // Get safe area insets in points
+    UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
+    UIEdgeInsets insets = window.safeAreaInsets;
+    // Get screen scale factor (e.g. 2.0 or 3.0 depending on resolution)
+    CGFloat scale = [UIScreen mainScreen].scale;
+    insets.top *= scale;
+    insets.left *= scale;
+    insets.bottom *= scale;
+    insets.right *= scale;
+
+    PixelSize size = GetSize();
+    return PixelRect(
+        insets.left,
+        insets.top,
+        size.width - insets.left,
+        size.height - insets.top
+    );
   }
 #endif
 
