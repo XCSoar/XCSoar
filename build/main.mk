@@ -67,6 +67,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/DataField.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/FilePicker.cpp \
+	$(SRC)/Dialogs/MultiFilePicker.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
 	$(SRC)/Dialogs/dlgInfoBoxAccess.cpp \
 	$(SRC)/Dialogs/ReplayDialog.cpp \

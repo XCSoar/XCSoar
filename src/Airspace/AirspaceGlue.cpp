@@ -3,26 +3,26 @@
 
 #include "Airspace/AirspaceGlue.hpp"
 #include "Airspace/AirspaceParser.hpp"
-#include "Engine/Airspace/Airspaces.hpp"
 #include "Atmosphere/Pressure.hpp"
-#include "Profile/Keys.hpp"
-#include "Operation/Operation.hpp"
+#include "Engine/Airspace/Airspaces.hpp"
 #include "Language/Language.hpp"
 #include "LogFile.hpp"
+#include "Operation/Operation.hpp"
+#include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
+#include "io/BufferedReader.hxx"
+#include "io/FileReader.hxx"
+#include "io/MapFile.hpp"
+#include "io/ProgressReader.hpp"
+#include "io/ZipArchive.hpp"
+#include "io/ZipLineReader.hpp"
 #include "lib/fmt/PathFormatter.hpp"
 #include "lib/fmt/RuntimeError.hxx"
 #include "system/Path.hpp"
-#include "io/FileReader.hxx"
-#include "io/ProgressReader.hpp"
-#include "io/BufferedReader.hxx"
-#include "io/ZipArchive.hpp"
-#include "io/ZipLineReader.hpp"
-#include "io/MapFile.hpp"
-#include "Profile/Profile.hpp"
 
 #include <string.h>
 
-static bool
+bool
 ParseAirspaceFile(Airspaces &airspaces, Path path,
                   OperationEnvironment &operation) noexcept
 try {
@@ -78,13 +78,10 @@ ReadAirspace(Airspaces &airspaces,
   bool airspace_ok = false;
 
   // Read the airspace filenames from the registry
-  if (const auto path = Profile::GetPath(ProfileKeys::AirspaceFile);
-      path != nullptr)
-    airspace_ok |= ParseAirspaceFile(airspaces, path, operation);
-
-  if (const auto path = Profile::GetPath(ProfileKeys::AdditionalAirspaceFile);
-      path != nullptr)
-    airspace_ok |= ParseAirspaceFile(airspaces, path, operation);
+  const auto paths = Profile::GetMultiplePaths(ProfileKeys::AirspaceFileList);
+  for (const auto& path : paths) {
+  airspace_ok |= ParseAirspaceFile(airspaces, path, operation);
+  }
 
   try {
     if (auto archive = OpenMapFile();
