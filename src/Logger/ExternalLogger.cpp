@@ -27,6 +27,7 @@
 #include "time/BrokenDate.hpp"
 #include "Interface.hpp"
 #include "net/client/WeGlide/UploadIGCFile.hpp"
+#include "LogFile.hpp"
 
 
 class DeclareJob {
@@ -302,6 +303,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     } catch (OperationCancelled) {
       continue;
     } catch (...) {
+      LogError(std::current_exception(), "Download failed");
       ShowError(_("Failed to download flight."),
                 std::current_exception(),
                 _("Download flight"));
