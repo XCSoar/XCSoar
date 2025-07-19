@@ -13,6 +13,7 @@
 #include "util/Macros.hpp"
 #include "Look/FlarmTrafficLook.hpp"
 #include "Renderer/TextInBox.hpp"
+#include "Interface.hpp"
 
 #include <algorithm>
 
@@ -274,7 +275,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     p.y = 0;
   }
 
-  if (!enable_north_up) {
+  if ((!enable_north_up) && traffic.relative_east && traffic.relative_north) {
     // Rotate x and y to have a track up display
     p = fr.Rotate(p);
   }
@@ -387,8 +388,48 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   else
     canvas.Select(*target_brush);
 
-  // Draw the polygon
-  canvas.DrawPolygon(Arrow, 4);
+  // Select font; prepare object sizes and distances by text height as reference
+  canvas.SetBackgroundTransparent();
+  canvas.Select(look.label_font);
+  TCHAR tx[2];
+  _stprintf(tx, _T("%s"), _T("X"));
+  PixelSize sx = canvas.CalcTextSize(tx);
+
+  if (!traffic.relative_east) {
+
+    const bool show_ring = CommonInterface::GetUISettings().traffic.no_position_target_distance_ring;
+    if (show_ring) {
+      // No position target - Paint a distance ring
+      const int radius = hypot(iround(p.x * scale),iround(p.y * scale));
+      canvas.Select(look.radar_pen);
+      int arc;
+      for (arc = 0 ; arc <=360; arc += 20) {
+        canvas.DrawArc(radar_mid,radius,Angle::Degrees(arc),Angle::Degrees(arc+10));
+      }
+      canvas.Select(*target_pen);
+    }
+
+    // No position target - Paint a dot
+    if (small)
+      canvas.DrawCircle(sc[i],int(sx.height / 4));
+    else
+      canvas.DrawCircle(sc[i],int(sx.height / 2));
+
+    // No position target - print exclamation mark in the middle over the dot
+    TCHAR em[2];
+    _stprintf(em, _T("%s"), _T("!"));
+    PixelSize se = canvas.CalcTextSize(em);
+    const PixelPoint te {
+      sc[i].x - int(se.width / 2),
+      sc[i].y - int(se.height / 2)
+    };
+    canvas.SetTextColor(*text_color);
+    if (!small)
+      canvas.DrawText(te,em);
+
+  } else
+    // All other targets - Draw the polygon
+    canvas.DrawPolygon(Arrow, 4);
 
   if (small) {
     if (!WarningMode() || traffic.HasAlarm())
@@ -601,17 +642,14 @@ FlarmTrafficWindow::PaintNorth(Canvas &canvas) const noexcept
     p = fr.Rotate(p);
   }
 
-  canvas.SetTextColor(look.background_color);
   canvas.Select(look.radar_pen);
   canvas.Select(look.radar_brush);
   canvas.SetBackgroundTransparent();
   canvas.Select(look.label_font);
 
-  const auto radar_mid = radar_renderer.GetCenter();
-  const PixelPoint q = radar_mid + iround(p * radar_renderer.GetRadius());
-
   PixelSize s = canvas.CalcTextSize(_T("N"));
-  canvas.DrawCircle(q, s.height * 0.65);
+  const auto radar_mid = radar_renderer.GetCenter();
+  const PixelPoint q = radar_mid + iround(p * (radar_renderer.GetRadius()+(s.height*2/3)));
   canvas.DrawText(q - s / 2u, _T("N"));
 }
 
