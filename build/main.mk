@@ -547,7 +547,7 @@ endif
 
 ifeq ($(TARGET_IS_DARWIN),y)
 XCSOAR_SOURCES += \
-	$(SRC)/Device/AndroidSensors.cpp \
+	$(SRC)/Device/MobileSensors.cpp \
 	$(SRC)/Apple/InternalSensors.cpp
 endif
 
@@ -562,6 +562,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/java/InputStream.cxx \
 	$(SRC)/java/URL.cxx \
 	$(SRC)/java/Closeable.cxx \
+	$(SRC)/Device/MobileSensors.cpp \
 	$(SRC)/Device/AndroidSensors.cpp \
 	$(SRC)/Device/Port/AndroidPort.cpp \
 	$(SRC)/Device/Port/AndroidBluetoothPort.cpp \
