@@ -19,6 +19,7 @@
 #include "Gauge/GaugeFLARM.hpp"
 #include "Gauge/GaugeThermalAssistant.hpp"
 #include "Gauge/GlueGaugeVario.hpp"
+#include "Gauge/NavigatorWidget.hpp"
 #include "Form/Form.hpp"
 #include "Widget/Widget.hpp"
 #include "Look/GlobalFonts.hpp"
@@ -104,56 +105,65 @@ MainWindow::GetShowZoomInButtonRect(const PixelRect rc) noexcept
   return PixelRect(left, top, right, bottom);
 }
 
-[[gnu::pure]]
-static PixelRect
-GetTopWidgetRect(const PixelRect &rc, const Widget *top_widget) noexcept
+[[gnu::pure]] static PixelRect
+GetTopWidgetRect(const PixelRect &rc_main, const PixelRect &rc_remaining,
+                 const Widget *top_widget) noexcept
 {
   if (top_widget == nullptr) {
     /* no top widget: return empty rectangle, map uses the whole main
        area */
-    PixelRect result = rc;
+    PixelRect result = rc_remaining;
     result.bottom = result.top;
     return result;
   }
 
-  const unsigned requested_height = top_widget->GetMinimumSize().height;
+  const unsigned requested_height =
+      rc_main.GetHeight() * top_widget->GetMinimumSize().height / 100;
   unsigned height;
   if (requested_height > 0) {
-    const unsigned max_height = rc.GetHeight() / 2;
+    const unsigned max_height = rc_remaining.GetHeight() * 40 / 100;
     height = std::min(max_height, requested_height);
   } else {
-    const unsigned recommended_height = rc.GetHeight() / 4;
+    const unsigned recommended_height = rc_remaining.GetHeight() * 17 / 100;
     height = recommended_height;
   }
 
-  PixelRect result = rc;
+  PixelRect result = rc_remaining;
   result.bottom = result.top + height;
   return result;
 }
 
-[[gnu::pure]]
-static PixelRect
-GetBottomWidgetRect(const PixelRect &rc, const Widget *bottom_widget) noexcept
+[[gnu::pure]] static PixelRect
+GetBottomWidgetRect(const PixelRect &rc_main, const PixelRect &rc_remaining,
+                    const Widget *bottom_widget) noexcept
 {
   if (bottom_widget == nullptr) {
     /* no bottom widget: return empty rectangle, map uses the whole
        main area */
-    PixelRect result = rc;
+    PixelRect result = rc_remaining;
     result.top = result.bottom;
     return result;
   }
 
-  const unsigned requested_height = bottom_widget->GetMinimumSize().height;
+  unsigned requested_height{};
+  auto nav = dynamic_cast<const NavigatorWidget *>(bottom_widget);
+  if (nav != nullptr) {
+    requested_height =
+        rc_main.GetHeight() * bottom_widget->GetMinimumSize().height / 100;
+  } else {
+    requested_height = bottom_widget->GetMinimumSize().height;
+  }
+
   unsigned height;
   if (requested_height > 0) {
-    const unsigned max_height = rc.GetHeight() / 2;
+    const unsigned max_height = rc_main.GetHeight() / 2;
     height = std::min(max_height, requested_height);
   } else {
-    const unsigned recommended_height = rc.GetHeight() / 3;
+    const unsigned recommended_height = rc_main.GetHeight() / 3;
     height = recommended_height;
   }
 
-  PixelRect result = rc;
+  PixelRect result = rc_remaining;
   result.top = result.bottom - height;
   return result;
 }
@@ -408,8 +418,6 @@ MainWindow::ReinitialiseLayout() noexcept
   InfoBoxManager::ProcessTimer();
   map_rect = ib_layout.remaining;
 
-  popup->UpdateLayout(map_rect);
-
   ReinitialiseLayout_vario(ib_layout);
 
   ReinitialiseLayout_flarm(rc, ib_layout);
@@ -422,21 +430,28 @@ MainWindow::ReinitialiseLayout() noexcept
     else
       InfoBoxManager::Show();
 
-    PixelRect main_rect = GetMainRect();
-    const PixelRect top_rect = GetTopWidgetRect(main_rect,
-                                                top_widget);
-    main_rect = GetMapRectBelow(main_rect, top_rect);
+    PixelRect rc_main = GetClientRect();
+    PixelRect rc_remaining = GetMainRect();
 
-    if (HaveTopWidget())
+    if (HaveTopWidget()) {
+      const PixelRect top_rect =
+          GetTopWidgetRect(rc_main, rc_remaining, top_widget);
+      rc_remaining = GetMapRectBelow(rc_remaining, top_rect);
+
       top_widget->Move(top_rect);
+    }
 
-    const PixelRect bottom_rect = GetBottomWidgetRect(main_rect,
-                                                      bottom_widget);
+    if (HaveBottomWidget()) {
+      const PixelRect bottom_rect =
+          GetBottomWidgetRect(rc_main, rc_remaining, bottom_widget);
+      rc_remaining = GetMapRectAbove(rc_remaining, bottom_rect);
 
-    if (HaveBottomWidget())
       bottom_widget->Move(bottom_rect);
+    }
 
-    map->Move(GetMapRectAbove(main_rect, bottom_rect));
+    popup->UpdateLayout(rc_remaining);
+
+    map->Move(rc_remaining);
     map->FullRedraw();
   }
 
@@ -724,6 +739,18 @@ MainWindow::StopDragging() noexcept
 void
 MainWindow::OnCancelMode() noexcept
 {
+  if (HaveTopWidget()) {
+    auto nav = dynamic_cast<const NavigatorWidget *>(top_widget);
+    if (nav != nullptr)
+      nav->GetWindow()->OnCancelMode();
+  }
+
+  if (HaveBottomWidget()) {
+    auto nav = dynamic_cast<const NavigatorWidget *>(bottom_widget);
+    if (nav != nullptr)
+      nav->GetWindow()->OnCancelMode();
+  }
+
   SingleWindow::OnCancelMode();
   StopDragging();
 }
@@ -731,6 +758,29 @@ MainWindow::OnCancelMode() noexcept
 bool
 MainWindow::OnMouseDown(PixelPoint p) noexcept
 {
+  const PixelRect rc_main = GetClientRect();
+  PixelRect rc_remaining = GetMainRect();
+  const PixelRect top_rect = GetTopWidgetRect(rc_main, rc_remaining, top_widget);
+  const PixelRect bottom_rect = GetBottomWidgetRect(rc_main, rc_remaining, bottom_widget);
+  
+  if (HaveTopWidget() && top_rect.Contains(p) && !HasDialog() &&
+      InputEvents::IsDefault()) {
+    auto nav = dynamic_cast<const NavigatorWidget *>(top_widget);
+    if (nav != nullptr) {
+      nav->GetWindow()->OnMouseDown(p);
+      return true;
+    }
+  }
+
+  if (HaveBottomWidget() && bottom_rect.Contains(p) && !HasDialog() &&
+      InputEvents::IsDefault()) {
+    auto nav = dynamic_cast<const NavigatorWidget *>(bottom_widget);
+    if (nav != nullptr) {
+      nav->GetWindow()->OnMouseDown(p);
+      return true;
+    }
+  }
+
   if (SingleWindow::OnMouseDown(p))
     return true;
 
@@ -746,6 +796,30 @@ MainWindow::OnMouseDown(PixelPoint p) noexcept
 bool
 MainWindow::OnMouseUp(PixelPoint p) noexcept
 {
+
+  const PixelRect rc_main = GetClientRect();
+  PixelRect rc_remaining = GetMainRect();
+  const PixelRect top_rect = GetTopWidgetRect(rc_main, rc_remaining, top_widget);
+  const PixelRect bottom_rect = GetBottomWidgetRect(rc_main, rc_remaining, bottom_widget);
+
+  if (HaveTopWidget() && top_rect.Contains(p) && !HasDialog() &&
+      InputEvents::IsDefault()) {
+    auto nav = dynamic_cast<const NavigatorWidget *>(top_widget);
+    if (nav != nullptr) {
+      nav->GetWindow()->OnMouseUp(p);
+      return true;
+    }
+  }
+
+  if (HaveBottomWidget() && bottom_rect.Contains(p) && !HasDialog() &&
+      InputEvents::IsDefault()) {
+    auto nav = dynamic_cast<const NavigatorWidget *>(bottom_widget);
+    if (nav != nullptr) {
+      nav->GetWindow()->OnMouseUp(p);
+      return true;
+    }
+  }
+
   if (SingleWindow::OnMouseUp(p))
     return true;
 
@@ -763,6 +837,29 @@ MainWindow::OnMouseUp(PixelPoint p) noexcept
 bool
 MainWindow::OnMouseDouble(PixelPoint p) noexcept
 {
+  const PixelRect rc_main = GetClientRect();
+  PixelRect rc_remaining = GetMainRect();
+  const PixelRect top_rect = GetTopWidgetRect(rc_main, rc_remaining, top_widget);
+  const PixelRect bottom_rect = GetBottomWidgetRect(rc_main, rc_remaining, bottom_widget);
+
+  if (HaveTopWidget() && top_rect.Contains(p) && !HasDialog() &&
+      InputEvents::IsDefault()) {
+    auto nav = dynamic_cast<const NavigatorWidget *>(top_widget);
+    if (nav != nullptr) {
+      nav->GetWindow()->OnMouseDouble(p);
+      return true;
+    }
+  }
+
+  if (HaveBottomWidget() && bottom_rect.Contains(p) && !HasDialog() &&
+      InputEvents::IsDefault()) {
+    auto nav = dynamic_cast<const NavigatorWidget *>(bottom_widget);
+    if (nav != nullptr) {
+      nav->GetWindow()->OnMouseDouble(p);
+      return true;
+    }
+  }
+
   if (SingleWindow::OnMouseDouble(p))
     return true;
 
@@ -776,6 +873,29 @@ MainWindow::OnMouseDouble(PixelPoint p) noexcept
 bool
 MainWindow::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
+  const PixelRect rc_main = GetClientRect();
+  PixelRect rc_remaining = GetMainRect();
+  const PixelRect top_rect = GetTopWidgetRect(rc_main, rc_remaining, top_widget);
+  const PixelRect bottom_rect = GetBottomWidgetRect(rc_main, rc_remaining, bottom_widget);
+
+  if (HaveTopWidget() && top_rect.Contains(p) && !HasDialog() &&
+      InputEvents::IsDefault()) {
+    auto nav = dynamic_cast<const NavigatorWidget *>(top_widget);
+    if (nav != nullptr) {
+      nav->GetWindow()->OnMouseMove(p, keys);
+      return true;
+    }
+  }
+
+  if (HaveBottomWidget() && bottom_rect.Contains(p) && !HasDialog() &&
+      InputEvents::IsDefault()) {
+    auto nav = dynamic_cast<const NavigatorWidget *>(bottom_widget);
+    if (nav != nullptr) {
+      nav->GetWindow()->OnMouseMove(p, keys);
+      return true;
+    }
+  }
+
   if (SingleWindow::OnMouseMove(p, keys))
     return true;
 
@@ -906,12 +1026,27 @@ MainWindow::OnClose() noexcept
 void
 MainWindow::OnPaint(Canvas &canvas) noexcept
 {
+  bool inversed{false};
+  Color color_separator_top;
+
+  if (look != nullptr)
+    inversed = look->info_box.inverse;
+  color_separator_top = inversed ? COLOR_WHITE : COLOR_BLACK;
+
   if (HaveBottomWidget() && map != nullptr) {
     /* draw a separator between main area and bottom area */
     PixelRect rc = map->GetPosition();
     rc.top = rc.bottom;
     rc.bottom += separator_height;
     canvas.DrawFilledRectangle(rc, COLOR_BLACK);
+  }
+
+  if (HaveTopWidget() && map != nullptr) {
+    /* draw a separator between main area and top area */
+    PixelRect rc = map->GetPosition();
+    rc.bottom = rc.top;
+    rc.top -= separator_height;
+    canvas.DrawFilledRectangle(rc, color_separator_top);
   }
 
   SingleWindow::OnPaint(canvas);
@@ -997,12 +1132,26 @@ MainWindow::ActivateMap() noexcept
     map->Show();
     map->SetFocus();
 
-    if (bottom_widget != nullptr) {
-      assert(HaveBottomWidget());
-      bottom_widget->Show(GetBottomWidgetRect(GetMainRect(),
-                                              bottom_widget));
+    PixelRect rc_main = GetClientRect();
+    PixelRect rc_remaining = GetMainRect();
+
+    const PixelRect bottom_rect =
+        GetBottomWidgetRect(rc_main, rc_remaining, bottom_widget);
+    if (HaveBottomWidget()) {
+      bottom_widget->Show(bottom_rect);
+      bottom_widget->Move(bottom_rect);
     }
 
+    rc_remaining = GetMapRectAbove(rc_remaining, bottom_rect);
+    const PixelRect top_rect =
+        GetTopWidgetRect(rc_main, rc_remaining, top_widget);
+
+    if (HaveTopWidget()) {
+      top_widget->Show(top_rect);
+      top_widget->Move(top_rect);
+    }
+
+    map->Move(GetMapRectBelow(rc_remaining, top_rect));
 #ifndef ENABLE_OPENGL
     if (draw_suspended) {
       draw_suspended = false;
@@ -1045,7 +1194,11 @@ MainWindow::KillTopWidget() noexcept
   if (top_widget == nullptr)
     return;
 
-  top_widget->Hide();
+  if (widget == nullptr)
+    /* the top widget is only visible above the map, but not above
+       a custom main widget; see HaveTopWidget() */
+    top_widget->Hide();
+
   top_widget->Unprepare();
   delete top_widget;
   top_widget = nullptr;
@@ -1054,31 +1207,55 @@ MainWindow::KillTopWidget() noexcept
 void
 MainWindow::SetTopWidget(Widget *_widget) noexcept
 {
+  const UISettings &ui_settings = CommonInterface::GetUISettings();
+
+  if (ui_settings.scale != 100)
+    /* call Initialise() again to reload fonts with the new scale */
+    Initialise();
+
+  PixelRect rc = GetClientRect();
+
+  const InfoBoxLayout::Layout ib_layout =
+    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
+
+  assert(look != nullptr);
+  look->InitialiseConfigured(CommonInterface::GetUISettings(), Fonts::map,
+                             Fonts::map_bold, ib_layout.control_size.width);
   if (top_widget == nullptr && _widget == nullptr)
     return;
 
-  KillTopWidget();
+  if (map == nullptr) {
+    /* this doesn't work without a map */
+    delete _widget;
+    return;
+  }
 
+  KillTopWidget();
+  
   top_widget = _widget;
 
-  PixelRect main_rect = GetMainRect();
-  const PixelRect top_rect = GetTopWidgetRect(main_rect,
-                                              top_widget);
+  PixelRect rc_main = GetClientRect();
+  PixelRect rc_remaining = GetMainRect();
+  const PixelRect bottom_rect =
+      GetBottomWidgetRect(rc_main, rc_remaining, bottom_widget);
+  rc_remaining = GetMapRectAbove(rc_remaining, bottom_rect);
+  if (HaveBottomWidget()) 
+    bottom_widget->Move(bottom_rect);
+
+  const PixelRect top_rect =
+      GetTopWidgetRect(rc_main, rc_remaining, top_widget);
+
   if (top_widget != nullptr) {
     top_widget->Initialise(*this, top_rect);
     top_widget->Prepare(*this, top_rect);
-    top_widget->Show(top_rect);
+
+    if (widget == nullptr)
+      /* the top widget is only visible above the map, but not
+         above a custom main widget; see HaveBottomWidget() */
+      top_widget->Show(top_rect);
   }
 
-  main_rect = GetMapRectBelow(main_rect, top_rect);
-
-  const PixelRect bottom_rect = GetBottomWidgetRect(main_rect,
-                                                    bottom_widget);
-
-  if (HaveBottomWidget())
-    bottom_widget->Move(bottom_rect);
-
-  map->Move(GetMapRectAbove(main_rect, bottom_rect));
+  map->Move(GetMapRectBelow(rc_remaining, top_rect));
   map->FullRedraw();
 }
 
@@ -1114,15 +1291,10 @@ MainWindow::SetBottomWidget(Widget *_widget) noexcept
 
   bottom_widget = _widget;
 
-  PixelRect main_rect = GetMainRect();
-  const PixelRect top_rect = GetTopWidgetRect(main_rect,
-                                              top_widget);
-  main_rect = GetMapRectBelow(main_rect, top_rect);
-  if (HaveTopWidget())
-    top_widget->Move(top_rect);
+  PixelRect rc_main = GetClientRect();
+  PixelRect rc_remaining = GetMainRect();
 
-  const PixelRect bottom_rect = GetBottomWidgetRect(main_rect,
-                                                    bottom_widget);
+  const PixelRect bottom_rect = GetBottomWidgetRect(rc_main, rc_remaining, bottom_widget);
 
   if (bottom_widget != nullptr) {
     bottom_widget->Initialise(*this, bottom_rect);
@@ -1134,7 +1306,7 @@ MainWindow::SetBottomWidget(Widget *_widget) noexcept
       bottom_widget->Show(bottom_rect);
   }
 
-  map->Move(GetMapRectAbove(main_rect, bottom_rect));
+  map->Move(GetMapRectAbove(rc_remaining, bottom_rect));
   map->FullRedraw();
 }
 
@@ -1146,6 +1318,7 @@ MainWindow::SetWidget(Widget *_widget) noexcept
   restore_page_pending = false;
 
   const bool have_bottom_widget = HaveBottomWidget();
+  const bool have_top_widget = HaveTopWidget();
 
   /* delete the old widget */
   KillWidget();
@@ -1164,6 +1337,8 @@ MainWindow::SetWidget(Widget *_widget) noexcept
 
   if (have_bottom_widget)
     bottom_widget->Hide();
+  if (have_top_widget)
+    top_widget->Hide();
 
   widget = _widget;
 
