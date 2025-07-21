@@ -13,6 +13,7 @@
 #include "util/Macros.hpp"
 #include "Look/FlarmTrafficLook.hpp"
 #include "Renderer/TextInBox.hpp"
+#include "Interface.hpp"
 
 #include <algorithm>
 
@@ -246,6 +247,47 @@ FlarmColorPen(const FlarmTrafficLook &look, FlarmColor color) noexcept
   return nullptr;
 }
 
+void
+FlarmTrafficWindow::PaintNoPositionTarget(Canvas &canvas,
+                                        const PixelPoint &target_point,
+                                        const PixelPoint &radar_center,
+                                        const DoublePoint2D &relative_position,
+                                        double scale,
+                                        bool small,
+                                        const PixelSize &sx,
+                                        const Pen *target_pen,
+                                        const Color *text_color) noexcept
+{
+  const bool show_ring = CommonInterface::GetUISettings().traffic.no_position_target_distance_ring;
+  if (show_ring) {
+    // No position target - Paint a distance ring
+    const int radius = hypot(iround(relative_position.x * scale),
+                           iround(relative_position.y * scale));
+    canvas.Select(look.radar_pen);
+    for (int arc = 0; arc <= 360; arc += 20) {
+      canvas.DrawArc(radar_center, radius,
+                    Angle::Degrees(arc), Angle::Degrees(arc + 10));
+    }
+    canvas.Select(*target_pen);
+  }
+
+  // No position target - Paint a dot
+  const int dot_radius = small ? int(sx.height / 4) : int(sx.height / 2);
+  canvas.DrawCircle(target_point, dot_radius);
+
+  // No position target - print exclamation mark in the middle over the dot
+  if (!small) {
+    const TCHAR em[] = _T("!");
+    const PixelSize text_size = canvas.CalcTextSize(em);
+    const PixelPoint text_position {
+      target_point.x - int(text_size.width / 2),
+      target_point.y - int(text_size.height / 2)
+    };
+    canvas.SetTextColor(*text_color);
+    canvas.DrawText(text_position, em);
+  }
+}
+
 /**
  * Paints the traffic symbols on the given canvas
  * @param canvas The canvas to paint on
@@ -274,7 +316,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     p.y = 0;
   }
 
-  if (!enable_north_up) {
+  if ((!enable_north_up) && traffic.relative_east && traffic.relative_north) {
     // Rotate x and y to have a track up display
     p = fr.Rotate(p);
   }
@@ -387,8 +429,19 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   else
     canvas.Select(*target_brush);
 
-  // Draw the polygon
-  canvas.DrawPolygon(Arrow, 4);
+  // Select font; prepare object sizes and distances by text height as reference
+  canvas.SetBackgroundTransparent();
+  canvas.Select(look.label_font);
+  TCHAR tx[2];
+  _stprintf(tx, _T("%s"), _T("X"));
+  PixelSize sx = canvas.CalcTextSize(tx);
+
+  if (!traffic.relative_east) {
+    // No position targets - Paint the dot
+    PaintNoPositionTarget(canvas, sc[i], radar_mid, p, scale, small, sx, target_pen, text_color);
+  } else
+    // All other targets - Draw the polygon
+    canvas.DrawPolygon(Arrow, 4);
 
   if (small) {
     if (!WarningMode() || traffic.HasAlarm())
@@ -601,17 +654,14 @@ FlarmTrafficWindow::PaintNorth(Canvas &canvas) const noexcept
     p = fr.Rotate(p);
   }
 
-  canvas.SetTextColor(look.background_color);
   canvas.Select(look.radar_pen);
   canvas.Select(look.radar_brush);
   canvas.SetBackgroundTransparent();
   canvas.Select(look.label_font);
 
-  const auto radar_mid = radar_renderer.GetCenter();
-  const PixelPoint q = radar_mid + iround(p * radar_renderer.GetRadius());
-
   PixelSize s = canvas.CalcTextSize(_T("N"));
-  canvas.DrawCircle(q, s.height * 0.65);
+  const auto radar_mid = radar_renderer.GetCenter();
+  const PixelPoint q = radar_mid + iround(p * (radar_renderer.GetRadius()+(s.height*2/3)));
   canvas.DrawText(q - s / 2u, _T("N"));
 }
 
