@@ -5,9 +5,7 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <Foundation/Foundation.h>
 
-@implementation IOSBluetoothManager {
-  CBCentralManager *centralManager;
-}
+@implementation IOSBluetoothManager
 
 - (instancetype)init
 {
