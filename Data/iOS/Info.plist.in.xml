@@ -123,5 +123,9 @@
         <string>XCODE_BUILD_PLACEHOLDER</string>
         <key>DTPlatformBuild</key>
         <string>SDK_BUILD_PLACEHOLDER</string>
+        <key>NSBluetoothAlwaysUsageDescription</key>
+        <string>We use Bluetooth to connect to external sensors.</string>
+        <key>NSBluetoothPeripheralUsageDescription</key>
+        <string>This app uses Bluetooth LE to connect to devices.</string>
     </dict>
 </plist>
