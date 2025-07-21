@@ -247,6 +247,47 @@ FlarmColorPen(const FlarmTrafficLook &look, FlarmColor color) noexcept
   return nullptr;
 }
 
+void
+FlarmTrafficWindow::PaintNoPositionTarget(Canvas &canvas,
+                                        const PixelPoint &target_point,
+                                        const PixelPoint &radar_center,
+                                        const DoublePoint2D &relative_position,
+                                        double scale,
+                                        bool small,
+                                        const PixelSize &sx,
+                                        const Pen *target_pen,
+                                        const Color *text_color) noexcept
+{
+  const bool show_ring = CommonInterface::GetUISettings().traffic.no_position_target_distance_ring;
+  if (show_ring) {
+    // No position target - Paint a distance ring
+    const int radius = hypot(iround(relative_position.x * scale),
+                           iround(relative_position.y * scale));
+    canvas.Select(look.radar_pen);
+    for (int arc = 0; arc <= 360; arc += 20) {
+      canvas.DrawArc(radar_center, radius,
+                    Angle::Degrees(arc), Angle::Degrees(arc + 10));
+    }
+    canvas.Select(*target_pen);
+  }
+
+  // No position target - Paint a dot
+  const int dot_radius = small ? int(sx.height / 4) : int(sx.height / 2);
+  canvas.DrawCircle(target_point, dot_radius);
+
+  // No position target - print exclamation mark in the middle over the dot
+  if (!small) {
+    const TCHAR em[] = _T("!");
+    const PixelSize text_size = canvas.CalcTextSize(em);
+    const PixelPoint text_position {
+      target_point.x - int(text_size.width / 2),
+      target_point.y - int(text_size.height / 2)
+    };
+    canvas.SetTextColor(*text_color);
+    canvas.DrawText(text_position, em);
+  }
+}
+
 /**
  * Paints the traffic symbols on the given canvas
  * @param canvas The canvas to paint on
@@ -396,37 +437,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   PixelSize sx = canvas.CalcTextSize(tx);
 
   if (!traffic.relative_east) {
-
-    const bool show_ring = CommonInterface::GetUISettings().traffic.no_position_target_distance_ring;
-    if (show_ring) {
-      // No position target - Paint a distance ring
-      const int radius = hypot(iround(p.x * scale),iround(p.y * scale));
-      canvas.Select(look.radar_pen);
-      int arc;
-      for (arc = 0 ; arc <=360; arc += 20) {
-        canvas.DrawArc(radar_mid,radius,Angle::Degrees(arc),Angle::Degrees(arc+10));
-      }
-      canvas.Select(*target_pen);
-    }
-
-    // No position target - Paint a dot
-    if (small)
-      canvas.DrawCircle(sc[i],int(sx.height / 4));
-    else
-      canvas.DrawCircle(sc[i],int(sx.height / 2));
-
-    // No position target - print exclamation mark in the middle over the dot
-    TCHAR em[2];
-    _stprintf(em, _T("%s"), _T("!"));
-    PixelSize se = canvas.CalcTextSize(em);
-    const PixelPoint te {
-      sc[i].x - int(se.width / 2),
-      sc[i].y - int(se.height / 2)
-    };
-    canvas.SetTextColor(*text_color);
-    if (!small)
-      canvas.DrawText(te,em);
-
+    // No position targets - Paint the dot
+    PaintNoPositionTarget(canvas, sc[i], radar_mid, p, scale, small, sx, target_pen, text_color);
   } else
     // All other targets - Draw the polygon
     canvas.DrawPolygon(Arrow, 4);
