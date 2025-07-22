@@ -195,8 +195,8 @@ BluetoothHelperIOS::createServer()
 {
   // TODO
   return nullptr;
-  PortBridge *bridge = [manager createBluetoothServer];
-  return bridge;
+  // PortBridge *bridge = [manager createBluetoothServer];
+  // return bridge;
 }
 
 extern "C" BluetoothHelper *
