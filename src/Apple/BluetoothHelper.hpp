@@ -4,8 +4,8 @@
 #pragma once
 
 #include "BluetoothHelperBase.hpp"
-#include "IOSBluetoothManager.h"
 #include "DetectDeviceListener.hpp"
+#include "IOSBluetoothManager.h"
 #include "PortBridge.hpp"
 
 @class IOSBluetoothManager;
@@ -15,17 +15,19 @@ public:
   BluetoothHelperIOS();
   virtual ~BluetoothHelperIOS();
 
-    [[gnu::pure]] bool HasBluetoothSupport() const noexcept override;;
-    [[gnu::pure]] bool IsEnabled() const noexcept override;
-	[[gnu::pure]] const char *GetNameFromAddress(const char *address) const noexcept override;
+  [[gnu::pure]] bool HasBluetoothSupport() const noexcept override;
+  [[gnu::pure]] bool IsEnabled() const noexcept override;
+  [[gnu::pure]] const char *
+  GetNameFromAddress(const char *address) const noexcept override;
 
-	void AddDetectDeviceListener(DetectDeviceListener &l) noexcept override;
-	void RemoveDetectDeviceListener(DetectDeviceListener &l) noexcept override;
+  void AddDetectDeviceListener(DetectDeviceListener &l) noexcept override;
+  void RemoveDetectDeviceListener(DetectDeviceListener &l) noexcept override;
 
-	// Java::LocalObject connectSensor(const char *address, SensorListener &listener) override;
-	PortBridge *connect(const char *address) override;
-	// PortBridge *connectHM10(const char *address) override;
-	PortBridge *createServer() override;
+  // Java::LocalObject connectSensor(const char *address, SensorListener
+  // &listener) override;
+  PortBridge *connect(const char *address) override;
+  // PortBridge *connectHM10(const char *address) override;
+  PortBridge *createServer() override;
 
 private:
   IOSBluetoothManager *manager;
