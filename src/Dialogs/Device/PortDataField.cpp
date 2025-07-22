@@ -26,7 +26,7 @@
 #endif
 
 #ifdef __APPLE__
-#include "Apple/BluetoothManager.hpp"
+#include "Apple/BluetoothHelper.hpp"
 #endif
 
 static constexpr struct {
@@ -263,6 +263,7 @@ FillAndroidIOIOPorts([[maybe_unused]] DataFieldEnum &df, [[maybe_unused]] const 
 static void
 FillIosBluetoothPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept
 {
+  (void)config;
   // TODO
 }
 
