@@ -6,10 +6,14 @@
 #include "DetectDeviceListener.hpp"
 #include "PortBridge.hpp"
 
-using namespace UI;
+BluetoothHelper *bluetooth_helper;
 
-BluetoothHelper *bluetooth_helper = new BluetoothHelper();
+int
+main(int argc, char **argv)
+{
+  bluetooth_helper = CreateBluetoothHelper();
 
-if (!bluetooth_helper->HasBluetoothSupport()) {
-  bluetooth_helper = nullptr;
+  if (!bluetooth_helper->HasBluetoothSupport()) {
+    bluetooth_helper = nullptr;
+  }
 }
