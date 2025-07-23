@@ -26,8 +26,10 @@
 
 #ifdef __APPLE__
 #include "Apple/Main.hpp"
-#include "Apple/BluetoothHelper.mm"
-#include "Apple/DetectDeviceListener.hpp"
+#include "Apple/BluetoothHelper.hpp"
+#include "Apple/NativeDetectDeviceListener.h"
+#include "thread/Mutex.hxx"
+#include <list>
 #endif
 
 #include <cassert>
@@ -85,7 +87,17 @@ class PortPickerWidget
   ComboList combo_list;
 
 #ifdef __APPLE__
-	DetectDeviceListener detect_listener;
+	NativeDetectDeviceListener* detect_listener;
+
+	struct DetectedPort {
+      DeviceConfig::PortType type;
+      tstring address, name;
+  	};
+
+	Mutex detected_mutex;
+	std::list<DetectedPort> detected_list;
+
+	UI::Notify detected_notify{[this]{ OnDetectedNotification(); }};
 #endif
 #ifdef ANDROID
   Java::LocalObject detect_listener;
@@ -149,8 +161,7 @@ public:
 #ifdef __APPLE__
     if (bluetooth_helper != nullptr) {
       if (bluetooth_helper->HasLe())
-        detect_listener =
-          bluetooth_helper->AddDetectDeviceListener(*this);
+		detect_listener = bluetooth_helper->AddDetectDeviceListener(*this);
     }
 #endif
 
@@ -172,10 +183,10 @@ public:
 
   void Hide() noexcept override {
 #ifdef __APPLE__
-    if (detect_listener) {
-      bluetooth_helper->RemoveDetectDeviceListener(detect_listener);
-      detect_listener = {};
-    }
+  if (detect_listener) {
+    bluetooth_helper->RemoveDetectDeviceListener(detect_listener);
+    detect_listener = nullptr;
+  }
 #endif
 #ifdef ANDROID
     if (detect_listener) {
