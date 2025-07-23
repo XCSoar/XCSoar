@@ -2,6 +2,8 @@
 // Copyright The XCSoar Project
 
 #import "BluetoothHelper.hpp"
+#import "NativeDetectDeviceListener.h"
+#import "PortBridge.hpp"
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <Foundation/Foundation.h>
 
@@ -71,23 +73,25 @@
   NSString *identifier = peripheral.identifier.UUIDString;
   self.discoveredPeripherals[identifier] = peripheral;
   for (id listener in self.listeners) {
-    auto *cppListener = (__bridge DetectDeviceListener *)listener;
-    cppListener->OnDeviceDetected(
-        DetectDeviceListener::Type::BLUETOOTH_LE, identifier.UTF8String,
-        [self nameForDeviceAddress:identifier].UTF8String, 0);
+    int type = static_cast<int>(DetectDeviceListener::Type::BLUETOOTH_LE);
+    [listener onDeviceDetected:type
+                       address:identifier
+                          name:[self nameForDeviceAddress:identifier]
+                      features:0];
   }
 }
 
-- (void)addListener:(DetectDeviceListener *)listener
+- (void)addListener:(NativeDetectDeviceListener *)listener
 {
   if (!listener) return;
-  [self.listeners addObject:[NSValue valueWithPointer:listener]];
+  [self.listeners addObject:[NSValue valueWithPointer:(const void *)listener]];
 }
 
-- (void)removeListener:(DetectDeviceListener *)listener
+- (void)removeListener:(NativeDetectDeviceListener *)listener
 {
   if (!listener) return;
-  [self.listeners removeObject:[NSValue valueWithPointer:listener]];
+  [self.listeners
+      removeObject:[NSValue valueWithPointer:(const void *)listener]];
 }
 
 - (PortBridge *)connectToDevice:(NSString *)deviceAddress
@@ -122,8 +126,6 @@
         error.localizedDescription);
 }
 @end
-
-
 
 BluetoothHelperIOS::BluetoothHelperIOS()
 {
@@ -166,18 +168,22 @@ BluetoothHelperIOS::GetNameFromAddress(const char *address) const noexcept
   return buffer;
 }
 
-void
+NativeDetectDeviceListener *
 BluetoothHelperIOS::AddDetectDeviceListener(
     DetectDeviceListener &listener) noexcept
 {
-  [manager addListener:&listener];
+  NativeDetectDeviceListener *nativeListener =
+      [[NativeDetectDeviceListener alloc] initWithCppListener:&listener];
+  [manager addListener:nativeListener];
+  return nativeListener;
 }
 
 void
 BluetoothHelperIOS::RemoveDetectDeviceListener(
-    DetectDeviceListener &listener) noexcept
+    NativeDetectDeviceListener *listener) noexcept
 {
-  [manager removeListener:&listener];
+  // TODO
+  (void)listener;
 }
 
 PortBridge *

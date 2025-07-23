@@ -6,6 +6,7 @@
 #include "BluetoothHelperBase.hpp"
 #include "DetectDeviceListener.hpp"
 #include "IOSBluetoothManager.h"
+#include "NativeDetectDeviceListener.h"
 #include "PortBridge.hpp"
 
 @class IOSBluetoothManager;
@@ -20,8 +21,10 @@ public:
   [[gnu::pure]] const char *
   GetNameFromAddress(const char *address) const noexcept override;
 
-  void AddDetectDeviceListener(DetectDeviceListener &l) noexcept override;
-  void RemoveDetectDeviceListener(DetectDeviceListener &l) noexcept override;
+  NativeDetectDeviceListener *
+  AddDetectDeviceListener(DetectDeviceListener &l) noexcept override;
+  void
+  RemoveDetectDeviceListener(NativeDetectDeviceListener *l) noexcept override;
 
   // Java::LocalObject connectSensor(const char *address, SensorListener
   // &listener) override;

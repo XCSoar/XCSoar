@@ -4,6 +4,7 @@
 #pragma once
 
 #include "DetectDeviceListener.hpp"
+#include "NativeDetectDeviceListener.h"
 #include "PortBridge.hpp"
 
 class BluetoothHelper {
@@ -15,9 +16,10 @@ public:
   [[gnu::pure]] virtual const char *
   GetNameFromAddress(const char *address) const noexcept = 0;
   [[gnu::const]] bool HasLe() const noexcept { return true; }
-  virtual void AddDetectDeviceListener(DetectDeviceListener &l) noexcept = 0;
+  virtual NativeDetectDeviceListener *
+  AddDetectDeviceListener(DetectDeviceListener &l) noexcept = 0;
   virtual void
-  RemoveDetectDeviceListener(DetectDeviceListener &l) noexcept = 0;
+  RemoveDetectDeviceListener(NativeDetectDeviceListener *l) noexcept = 0;
   // virtual Java::LocalObject connectSensor(const char *address,
   // SensorListener &listener) = 0;
   virtual PortBridge *connect(const char *address) = 0;
