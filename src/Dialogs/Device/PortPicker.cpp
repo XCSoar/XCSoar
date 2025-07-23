@@ -72,7 +72,7 @@ private:
 
 class PortPickerWidget
   : public ListWidget
-#if defined(ANDROID) || defined(__APPLE)
+#if defined(ANDROID) || defined(__APPLE__)
   , DetectDeviceListener
 #endif
 {
@@ -209,7 +209,7 @@ public:
     dialog.SetModalResult(mrOK);
   }
 
-#if defined(ANDROID) || defined(__APPLE)
+#if defined(ANDROID) || defined(__APPLE__)
 private:
   /* virtual methods from class DetectDeviceListener */
   void OnDeviceDetected(Type type, const char *address,
@@ -240,7 +240,7 @@ PortPickerWidget::ReloadComboList() noexcept
   list.Invalidate();
 }
 
-#if defined(ANDROID) || defined(__APPLE)
+#if defined(ANDROID) || defined(__APPLE__)
 
 void
 PortPickerWidget::OnDeviceDetected(Type type, const char *address,
