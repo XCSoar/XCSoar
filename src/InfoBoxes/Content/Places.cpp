@@ -65,7 +65,8 @@ UpdateInfoBoxHomeAltitudeDiff(InfoBoxData &data) noexcept
                      glide_state);
 
   // Display altitude difference and distance.
-  data.SetValueFromArrival(result.pure_glide_altitude_difference);
+  data.SetValueFromArrival(result.
+                           SelectAltitudeDifference(settings.task.glide));
   data.SetCommentFromDistance(common_stats.vector_home.distance);
 }
 
