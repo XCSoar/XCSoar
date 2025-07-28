@@ -6,3 +6,9 @@
 class BluetoothHelper;
 
 extern BluetoothHelper *bluetooth_helper;
+
+// Initialize Apple-specific services (bluetooth, etc.)
+void InitializeAppleServices();
+
+// Cleanup Apple-specific services
+void DeinitializeAppleServices();

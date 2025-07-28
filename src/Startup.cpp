@@ -28,6 +28,10 @@
 #include "Protection.hpp"
 #include "LogFile.hpp"
 #include "UtilsSystem.hpp"
+
+#ifdef __APPLE__
+#include "Apple/Main.hpp"
+#endif
 #include "FLARM/Glue.hpp"
 #include "Logger/Logger.hpp"
 #include "Logger/NMEALogger.hpp"
@@ -237,6 +241,10 @@ Startup(UI::Display &display)
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   Net::DownloadManager::Initialise();
+#endif
+
+#ifdef __APPLE__
+  InitializeAppleServices();
 #endif
 
   // Creates the main window
@@ -769,6 +777,10 @@ Shutdown()
   CloseLanguageFile();
 
   Display::RestoreOrientation();
+
+#ifdef __APPLE__
+  DeinitializeAppleServices();
+#endif
 
   LogString("Finished shutdown");
 }
