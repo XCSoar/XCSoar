@@ -17,7 +17,7 @@
     _centralManager = [[CBCentralManager alloc] initWithDelegate:self
                                                            queue:nil];
     _discoveredPeripherals = [NSMutableDictionary dictionary];
-    _listeners = [NSMutableSet set];
+    _listeners = [NSHashTable weakObjectsHashTable];
   }
   return self;
 }
@@ -72,7 +72,7 @@
   // Simulate it using the identifier (UUID) instead.
   NSString *identifier = peripheral.identifier.UUIDString;
   self.discoveredPeripherals[identifier] = peripheral;
-  for (id listener in self.listeners) {
+  for (NativeDetectDeviceListener *listener in self.listeners) {
     int type = static_cast<int>(DetectDeviceListener::Type::BLUETOOTH_LE);
     [listener onDeviceDetected:type
                        address:identifier
@@ -84,14 +84,13 @@
 - (void)addListener:(NativeDetectDeviceListener *)listener
 {
   if (!listener) return;
-  [self.listeners addObject:[NSValue valueWithPointer:(const void *)listener]];
+  [self.listeners addObject:listener];
 }
 
 - (void)removeListener:(NativeDetectDeviceListener *)listener
 {
   if (!listener) return;
-  [self.listeners
-      removeObject:[NSValue valueWithPointer:(const void *)listener]];
+  [self.listeners removeObject:listener];
 }
 
 - (PortBridge *)connectToDevice:(NSString *)deviceAddress

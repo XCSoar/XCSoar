@@ -9,7 +9,7 @@
 @property(nonatomic, strong) CBCentralManager *centralManager;
 @property(nonatomic, strong)
     NSMutableDictionary<NSString *, CBPeripheral *> *discoveredPeripherals;
-@property(nonatomic, strong) NSMutableSet<NSValue *> *listeners;
+@property(nonatomic) NSHashTable<NativeDetectDeviceListener *> *listeners;
 @property(nonatomic, strong)
     NSMutableDictionary<CBPeripheral *, NSValue *> *activeConnections;
 @end
