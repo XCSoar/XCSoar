@@ -81,14 +81,26 @@
   }
 }
 
+- (void)startScan
+{
+  [self.centralManager scanForPeripheralsWithServices:nil options:nil];
+}
+
+- (void)stopScan
+{
+  [self.centralManager stopScan];
+}
+
 - (void)addListener:(NativeDetectDeviceListener *)listener
 {
+  [self startScan];
   if (!listener) return;
   [self.listeners addObject:listener];
 }
 
 - (void)removeListener:(NativeDetectDeviceListener *)listener
 {
+  [self stopScan];
   if (!listener) return;
   [self.listeners removeObject:listener];
 }
