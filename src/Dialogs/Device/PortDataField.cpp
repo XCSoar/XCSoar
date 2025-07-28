@@ -264,6 +264,7 @@ static void
 FillIosBluetoothPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept
 {
   (void)config;
+  (void)df;
   // TODO
 }
 
