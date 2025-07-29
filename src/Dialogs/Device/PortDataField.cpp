@@ -26,6 +26,7 @@
 #endif
 
 #ifdef __APPLE__
+#include "Apple/Main.hpp"
 #include "Apple/BluetoothHelper.hpp"
 #endif
 
@@ -214,6 +215,9 @@ SetBluetoothPort(DataFieldEnum &df, DeviceConfig::PortType type,
     if (bluetooth_helper != nullptr)
       name = bluetooth_helper->GetNameFromAddress(Java::GetEnv(),
                                                   bluetooth_mac);
+#elif defined(__APPLE__)
+    if (bluetooth_helper != nullptr)
+      name = bluetooth_helper->GetNameFromAddress(bluetooth_mac);
 #endif
     df.SetValue(AddPort(df, type, bluetooth_mac, name));
   }

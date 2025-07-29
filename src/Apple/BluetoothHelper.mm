@@ -6,6 +6,7 @@
 #import "PortBridge.hpp"
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <Foundation/Foundation.h>
+#include "LogFile.hpp"
 
 @implementation IOSBluetoothManager {
 }
@@ -105,6 +106,20 @@
   [self.listeners removeObject:listener];
 }
 
+- (void)connectSensor:(NSString *)deviceAddress listener:(SensorListener &)listener
+{
+  CBPeripheral *peripheral = self.discoveredPeripherals[deviceAddress];
+  if (!peripheral) {
+	LogFormat("[iOS] Device %s not found", [deviceAddress UTF8String]);
+    return;
+  }
+
+  LogFormat("[iOS] Connecting to %s with SensorListener", [peripheral.name UTF8String]);
+
+  peripheral.delegate = self;
+  [self.centralManager connectPeripheral:peripheral options:nil];
+}
+
 - (PortBridge *)connectToDevice:(NSString *)deviceAddress
 {
   CBPeripheral *peripheral = self.discoveredPeripherals[deviceAddress];
@@ -195,6 +210,15 @@ BluetoothHelperIOS::RemoveDetectDeviceListener(
 {
   // TODO
   (void)listener;
+}
+
+void
+BluetoothHelperIOS::connectSensor(const char *address, SensorListener &listener)
+{
+	if (!address) return;
+
+	NSString *addrStr = [NSString stringWithUTF8String:address];
+	[manager connectSensor:addrStr listener:listener];
 }
 
 PortBridge *

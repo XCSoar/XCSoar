@@ -341,6 +341,12 @@ DeviceDescriptor::OpenBluetoothSensor()
 
   java_sensor = new Java::GlobalCloseable(factory.OpenBluetoothSensor(config, *this));
   return true;
+#elif defined(__APPLE__)
+  if (is_simulator())
+    return true;
+
+  factory.OpenBluetoothSensor(config, *this);
+  return true;
 #else
   return false;
 #endif

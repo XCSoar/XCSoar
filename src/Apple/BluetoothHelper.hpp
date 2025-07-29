@@ -11,6 +11,8 @@
 
 @class IOSBluetoothManager;
 
+class SensorListener;
+
 class BluetoothHelperIOS : public BluetoothHelper {
 public:
   BluetoothHelperIOS();
@@ -26,8 +28,7 @@ public:
   void
   RemoveDetectDeviceListener(NativeDetectDeviceListener *l) noexcept override;
 
-  // Java::LocalObject connectSensor(const char *address, SensorListener
-  // &listener) override;
+  void connectSensor(const char *address, SensorListener &listener) override;
   PortBridge *connect(const char *address) override;
   // PortBridge *connectHM10(const char *address) override;
   PortBridge *createServer() override;

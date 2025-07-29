@@ -76,4 +76,8 @@ public:
   Java::LocalCloseable OpenGliderLink(SensorListener &listener);
   Java::LocalCloseable OpenBluetoothSensor(const DeviceConfig &config, SensorListener &listener);
 #endif
+
+#ifdef __APPLE__
+  void OpenBluetoothSensor(const DeviceConfig &config, SensorListener &listener);
+#endif
 };
