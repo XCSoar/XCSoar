@@ -3,8 +3,6 @@
 
 #include "Main.hpp"
 #include "BluetoothHelper.hpp"
-#include "DetectDeviceListener.hpp"
-#include "PortBridge.hpp"
 
 BluetoothHelper *bluetooth_helper;
 
