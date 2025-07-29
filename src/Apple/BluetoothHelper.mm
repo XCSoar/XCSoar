@@ -19,6 +19,7 @@
                                                            queue:nil];
     _discoveredPeripherals = [NSMutableDictionary dictionary];
     _listeners = [NSHashTable weakObjectsHashTable];
+    _activeConnections = [NSMutableDictionary dictionary];
   }
   return self;
 }
