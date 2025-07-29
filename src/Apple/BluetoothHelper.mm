@@ -25,27 +25,26 @@
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central
 {
-  // Beispielhafte einfache Implementierung:
   switch (central.state) {
-  case CBManagerStatePoweredOn:
-    NSLog(@"Bluetooth is ON");
-    break;
-  case CBManagerStatePoweredOff:
-    NSLog(@"Bluetooth is OFF");
-    break;
-  case CBManagerStateUnsupported:
-    NSLog(@"Bluetooth unsupported");
-    break;
-  case CBManagerStateUnauthorized:
-    NSLog(@"Bluetooth unauthorized");
-    break;
-  case CBManagerStateResetting:
-    NSLog(@"Bluetooth resetting");
-    break;
-  case CBManagerStateUnknown:
-  default:
-    NSLog(@"Bluetooth state unknown");
-    break;
+    case CBManagerStatePoweredOn:
+      LogFormat("Bluetooth is ON");
+      break;
+    case CBManagerStatePoweredOff:
+      LogFormat("Bluetooth is OFF");
+      break;
+    case CBManagerStateUnsupported:
+      LogFormat("Bluetooth unsupported");
+      break;
+    case CBManagerStateUnauthorized:
+      LogFormat("Bluetooth unauthorized");
+      break;
+    case CBManagerStateResetting:
+      LogFormat("Bluetooth resetting");
+      break;
+    case CBManagerStateUnknown:
+    default:
+      LogFormat("Bluetooth state unknown");
+      break;
   }
 }
 
@@ -68,9 +67,6 @@
         advertisementData:(NSDictionary<NSString *, id> *)advertisementData
                      RSSI:(NSNumber *)RSSI
 {
-
-  // TODO: Using address as a key does not work directly on iOS!
-  // Simulate it using the identifier (UUID) instead.
   NSString *identifier = peripheral.identifier.UUIDString;
   self.discoveredPeripherals[identifier] = peripheral;
   for (NativeDetectDeviceListener *listener in self.listeners) {
@@ -110,12 +106,11 @@
 {
   CBPeripheral *peripheral = self.discoveredPeripherals[deviceAddress];
   if (!peripheral) {
-	LogFormat("[iOS] Device %s not found", [deviceAddress UTF8String]);
+    LogFormat("[iOS] Device %s not found", [deviceAddress UTF8String]);
     return;
   }
 
   LogFormat("[iOS] Connecting to %s with SensorListener", [peripheral.name UTF8String]);
-
   peripheral.delegate = self;
   [self.centralManager connectPeripheral:peripheral options:nil];
 }
@@ -124,7 +119,7 @@
 {
   CBPeripheral *peripheral = self.discoveredPeripherals[deviceAddress];
   if (!peripheral) {
-    NSLog(@"Device not found: %@", deviceAddress);
+    LogFormat("Device not found: %s", [deviceAddress UTF8String]);
     return nullptr;
   }
 
@@ -138,8 +133,8 @@
 - (void)centralManager:(CBCentralManager *)central
     didConnectPeripheral:(CBPeripheral *)peripheral
 {
-  NSLog(@"Verbunden mit %@", peripheral.name);
-  // TODO
+  LogFormat("Connected with %s", [peripheral.name UTF8String]);
+
   PortBridge *bridge = new PortBridge();
   _activeConnections[peripheral] = [NSValue valueWithPointer:bridge];
 }
@@ -148,8 +143,9 @@
     didFailToConnectPeripheral:(CBPeripheral *)peripheral
                          error:(NSError *)error
 {
-  NSLog(@"Verbindung zu %@ fehlgeschlagen: %@", peripheral.name,
-        error.localizedDescription);
+  LogFormat("Connection to %s failed: %s",
+            [peripheral.name UTF8String],
+            [error.localizedDescription UTF8String]);
 }
 @end
 
