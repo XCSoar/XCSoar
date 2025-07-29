@@ -119,6 +119,10 @@ DeviceDescriptor::GetState() const noexcept
     return internal_sensors->GetState(Java::GetEnv());
 #endif
 
+#ifdef __APPLE__
+    return PortState::READY;
+#endif
+
   return PortState::FAILED;
 }
 
