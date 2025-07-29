@@ -211,10 +211,10 @@ BluetoothHelperIOS::RemoveDetectDeviceListener(
 void
 BluetoothHelperIOS::connectSensor(const char *address, SensorListener &listener)
 {
-	if (!address) return;
+  if (!address) return;
 
-	NSString *addrStr = [NSString stringWithUTF8String:address];
-	[manager connectSensor:addrStr listener:listener];
+  NSString *addrStr = [NSString stringWithUTF8String:address];
+  [manager connectSensor:addrStr listener:listener];
 }
 
 PortBridge *
@@ -223,8 +223,7 @@ BluetoothHelperIOS::connect(const char *address)
   if (!address) return nullptr;
 
   NSString *addrStr = [NSString stringWithUTF8String:address];
-  PortBridge *bridge = [manager connectToDevice:addrStr];
-  return bridge;
+  return [manager connectToDevice:addrStr];
 }
 
 PortBridge *
