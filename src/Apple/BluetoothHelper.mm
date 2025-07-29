@@ -107,11 +107,11 @@
 {
   CBPeripheral *peripheral = self.discoveredPeripherals[deviceAddress];
   if (!peripheral) {
-    LogFormat("[iOS] Device %s not found", [deviceAddress UTF8String]);
+    LogFormat("Device %s not found", [deviceAddress UTF8String]);
     return;
   }
 
-  LogFormat("[iOS] Connecting to %s with SensorListener", [peripheral.name UTF8String]);
+  LogFormat("Connecting to %s", [peripheral.name UTF8String]);
   peripheral.delegate = self;
   [self.centralManager connectPeripheral:peripheral options:nil];
 }
