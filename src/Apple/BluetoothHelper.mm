@@ -208,8 +208,7 @@ void
 BluetoothHelperIOS::RemoveDetectDeviceListener(
     NativeDetectDeviceListener *listener) noexcept
 {
-  // TODO
-  (void)listener;
+  [manager removeListener:listener];
 }
 
 void
