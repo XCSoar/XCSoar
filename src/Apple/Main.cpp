@@ -6,21 +6,24 @@
 
 BluetoothHelper *bluetooth_helper;
 
-// Initialize bluetooth helper - this will be called from the main XCSoar startup
-void InitializeAppleServices()
+// Initialize bluetooth helper - this will be called from the main XCSoar
+// startup
+void
+InitializeAppleServices()
 {
-    bluetooth_helper = CreateBluetoothHelper();
+  bluetooth_helper = CreateBluetoothHelper();
 
-    if (!bluetooth_helper->HasBluetoothSupport()) {
-        bluetooth_helper = nullptr;
-    }
+  if (!bluetooth_helper->HasBluetoothSupport()) {
+    bluetooth_helper = nullptr;
+  }
 }
 
 // Cleanup bluetooth helper - this will be called from XCSoar shutdown
-void DeinitializeAppleServices()
+void
+DeinitializeAppleServices()
 {
-    if (bluetooth_helper) {
-        delete bluetooth_helper;
-        bluetooth_helper = nullptr;
-    }
+  if (bluetooth_helper) {
+    delete bluetooth_helper;
+    bluetooth_helper = nullptr;
+  }
 }
