@@ -29,9 +29,6 @@
 #include "LogFile.hpp"
 #include "UtilsSystem.hpp"
 
-#ifdef __APPLE__
-#include "Apple/Main.hpp"
-#endif
 #include "FLARM/Glue.hpp"
 #include "Logger/Logger.hpp"
 #include "Logger/NMEALogger.hpp"
@@ -110,6 +107,10 @@
 #ifdef ANDROID
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
+#endif
+
+#ifdef __APPLE__
+#include "Apple/Main.hpp"
 #endif
 
 static TaskManager *task_manager;
