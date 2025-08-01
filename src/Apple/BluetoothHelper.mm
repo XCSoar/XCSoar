@@ -2,11 +2,12 @@
 // Copyright The XCSoar Project
 
 #import "BluetoothHelper.hpp"
+#import "BluetoothUuids.hpp"
+#include "LogFile.hpp"
 #import "NativeDetectDeviceListener.h"
 #import "PortBridge.hpp"
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <Foundation/Foundation.h>
-#include "LogFile.hpp"
 
 @implementation IOSBluetoothManager {
 }
@@ -193,8 +194,7 @@
     didFailToConnectPeripheral:(CBPeripheral *)peripheral
                          error:(NSError *)error
 {
-  LogFormat("Connection to %s failed: %s",
-            [peripheral.name UTF8String],
+  LogFormat("Connection to %s failed: %s", [peripheral.name UTF8String],
             [error.localizedDescription UTF8String]);
 }
 @end
