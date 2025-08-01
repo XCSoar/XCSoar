@@ -30,7 +30,7 @@ public:
 
   void connectSensor(const char *address, SensorListener &listener) override;
   PortBridge *connect(const char *address) override;
-  // PortBridge *connectHM10(const char *address) override;
+  PortBridge *connectHM10(const char *address) override;
   PortBridge *createServer() override;
 
 private:

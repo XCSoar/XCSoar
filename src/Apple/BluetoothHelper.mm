@@ -276,6 +276,15 @@ BluetoothHelperIOS::connect(const char *address)
 }
 
 PortBridge *
+BluetoothHelperIOS::connectHM10(const char *address)
+{
+  if (!address) return nullptr;
+
+  NSString *addrStr = [NSString stringWithUTF8String:address];
+  return [manager connectToDevice:addrStr];
+}
+
+PortBridge *
 BluetoothHelperIOS::createServer()
 {
   // TODO
