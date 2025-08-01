@@ -4,17 +4,15 @@ TARGET_LDLIBS += -framework UIKit
 
 IPA_TMPDIR = $(TARGET_OUTPUT_DIR)/ipa
 
+IPA_NAME = xcsoar.ipa
+IOS_APP_DIR_NAME = XCSoar.app
 ifeq ($(TESTING),y)
-IPA_NAME = xcsoar-testing.ipa
-IOS_APP_DIR_NAME = XCSoar.testing.app
 IOS_APP_BUNDLE_IDENTIFIER ?= XCSoar-testing
 IOS_APP_DISPLAY_NAME = XCSoar Testing
 IOS_ICON_SVG = $(topdir)/Data/iOS/iOS-Icon_red.svg
 IOS_SPLASH_BASE_IMG=$(DATA)/graphics/logo_red_320.png
 IOS_GRAPHICS_DIR=$(DATA)/ios-graphics-testing
 else
-IPA_NAME = xcsoar.ipa
-IOS_APP_DIR_NAME = XCSoar.app
 IOS_APP_BUNDLE_IDENTIFIER ?= XCSoar
 IOS_APP_DISPLAY_NAME = XCSoar
 IOS_ICON_SVG = $(topdir)/Data/iOS/iOS-Icon.svg
@@ -34,9 +32,11 @@ IOS_GRAPHICS = \
 	$(IOS_GRAPHICS_DIR)/Assets.car \
 	$(IOS_GRAPHICS_DIR)/LaunchScreen.storyboardc
 
-$(IOS_GRAPHICS_DIR)/Assets.car: $(topdir)/Data/iOS/Assets.xcassets
-# will also generate $(IOS_GRAPHICS_DIR)/AppIcon%.png, but can't combine implicit and explicit rules
-	mkdir -p $(IOS_GRAPHICS_DIR)
+$(IOS_GRAPHICS_DIR)/Assets.xcassets: $(topdir)/Data/iOS/Assets.xcassets $(IOS_ICON_SVG) | $(IOS_GRAPHICS_DIR)/dirstamp
+	$(Q)cp -r $< $@
+	$(Q)rsvg-convert $(IOS_ICON_SVG) -w 1024 -h 1024 -a -b white -o $@/AppIcon.appiconset/Icon-1024.png
+
+$(IOS_GRAPHICS_DIR)/Assets.car $(IOS_GRAPHICS_DIR)/AppIcon*.png: $(IOS_GRAPHICS_DIR)/Assets.xcassets
 	xcrun actool $< --compile $(dir $@) --platform iphoneos --minimum-deployment-target 8.0 --app-icon AppIcon --output-partial-info-plist $(IOS_GRAPHICS_DIR)/assets-partial.plist
 
 $(IOS_GRAPHICS_DIR)/LaunchScreen.storyboardc: $(topdir)/Data/iOS/LaunchScreen.storyboard
