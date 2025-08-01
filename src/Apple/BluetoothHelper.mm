@@ -95,6 +95,29 @@
   if (peripheralWillBeDetected) {
     uint64_t features = 0;
 
+    for (CBUUID *uuid in serviceUUIDs) {
+      NSString *uuidString = uuid.UUIDString;
+
+      NSString *hm10NSString =
+          [NSString stringWithUTF8String:BluetoothUuids::HM10_SERVICE.data()];
+      NSString *heartRateNSString = [NSString
+          stringWithUTF8String:BluetoothUuids::HEART_RATE_SERVICE.data()];
+      NSString *flytecNSString = [NSString
+          stringWithUTF8String:BluetoothUuids::FLYTEC_SENSBOX_SERVICE.data()];
+
+      if ([uuidString caseInsensitiveCompare:hm10NSString] == NSOrderedSame) {
+        features |= DetectDeviceListener::FEATURE_HM10;
+      } else if ([uuidString caseInsensitiveCompare:heartRateNSString] ==
+                 NSOrderedSame) {
+        features |= DetectDeviceListener::FEATURE_HEART_RATE;
+      } else if ([uuidString caseInsensitiveCompare:flytecNSString] ==
+                 NSOrderedSame) {
+        features |= DetectDeviceListener::FEATURE_FLYTEC_SENSBOX;
+      }
+    }
+
+    LogFormat("=====> DEBUG FEATURES %llu", features);
+
     for (NativeDetectDeviceListener *listener in self.listeners) {
       int type = static_cast<int>(DetectDeviceListener::Type::BLUETOOTH_LE);
       [listener onDeviceDetected:type
