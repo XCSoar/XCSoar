@@ -68,14 +68,40 @@
         advertisementData:(NSDictionary<NSString *, id> *)advertisementData
                      RSSI:(NSNumber *)RSSI
 {
+  bool peripheralWillBeDetected = true; // TODO
+
   NSString *identifier = peripheral.identifier.UUIDString;
   self.discoveredPeripherals[identifier] = peripheral;
-  for (NativeDetectDeviceListener *listener in self.listeners) {
-    int type = static_cast<int>(DetectDeviceListener::Type::BLUETOOTH_LE);
-    [listener onDeviceDetected:type
-                       address:identifier
-                          name:[self nameForDeviceAddress:identifier]
-                      features:0];
+
+  NSArray<CBUUID *> *serviceUUIDs =
+      advertisementData[CBAdvertisementDataServiceUUIDsKey];
+  if (serviceUUIDs) {
+    auto allServiceUuids = BluetoothUuids::getAllServiceUuids();
+    for (CBUUID *uuid in serviceUUIDs) {
+      NSString *uuidString = uuid.UUIDString;
+      for (auto uuid_sv : allServiceUuids) {
+        NSString *serviceUuidString =
+            [NSString stringWithUTF8String:uuid_sv.data()];
+        if ([serviceUuidString caseInsensitiveCompare:uuidString] ==
+            NSOrderedSame) {
+          peripheralWillBeDetected = true;
+          LogFormat("===> DEBUG Service UUID found in advertisement: %s",
+                    uuidString.UTF8String);
+        }
+      }
+    }
+  }
+
+  if (peripheralWillBeDetected) {
+    uint64_t features = 0;
+
+    for (NativeDetectDeviceListener *listener in self.listeners) {
+      int type = static_cast<int>(DetectDeviceListener::Type::BLUETOOTH_LE);
+      [listener onDeviceDetected:type
+                         address:identifier
+                            name:[self nameForDeviceAddress:identifier]
+                        features:features];
+    }
   }
 }
 
