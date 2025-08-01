@@ -96,6 +96,17 @@
         <true/>
         <key>UILaunchStoryboardName</key>
         <string>LaunchScreen</string>
+        <key>UIBackgroundModes</key>
+        <array>
+            <string>processing</string>
+            <string>audio</string>
+            <string>location</string>
+            <string>fetch</string>
+        </array>
+        <key>BGTaskSchedulerPermittedIdentifiers</key>
+        <array>
+            <string>de.xcsoar.background-processing</string>
+        </array>
         <key>NSAppTransportSecurity</key>
         <dict>
             <key>NSAllowsArbitraryLoads</key>
