@@ -5,6 +5,8 @@
 
 #include "Features.hpp"
 #include "ui/dim/Rect.hpp"
+#include "ui/dim/Point.hpp"
+#include "ui/dim/Size.hpp"
 
 #include <cassert>
 
@@ -304,9 +306,11 @@ public:
 
   void MoveToCenter() noexcept {
     const PixelSize window_size = GetSize();
-    const PixelSize parent_size = GetParentClientRect().GetSize();
-    int dialog_x = (int(parent_size.width) - int(window_size.width)) / 2;
-    int dialog_y = (int(parent_size.height) - int(window_size.height)) / 2;
+    const PixelRect parent_rect = GetParentClientRect();
+    const PixelSize parent_size = parent_rect.GetSize();
+    int dialog_x = parent_rect.left + (int(parent_size.width) - int(window_size.width)) / 2;
+    int dialog_y = parent_rect.top + (int(parent_size.height) - int(window_size.height)) / 2;
+    
     Move({dialog_x, dialog_y});
   }
 
