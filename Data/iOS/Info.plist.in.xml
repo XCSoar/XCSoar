@@ -86,6 +86,8 @@
         </array>
         <key>NSLocationAlwaysUsageDescription</key>
         <string>Navigation and flight logging with the in-built GPS sensor.</string>
+        <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+        <string>Navigation and flight logging require access to your location even when the app is in the background.</string>
         <key>NSLocationWhenInUseUsageDescription</key>
         <string>Navigation and flight logging with the in-built GPS sensor.</string>
         <key>UIFileSharingEnabled</key>

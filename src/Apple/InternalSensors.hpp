@@ -6,11 +6,17 @@
 class SensorListener;
 
 #import <CoreLocation/CoreLocation.h>
+#if TARGET_OS_IPHONE
+#import <UIKit/UIKit.h>
+#endif
 
 @interface LocationDelegate : NSObject <CLLocationManagerDelegate>
 {
   @private SensorListener *listener;
   @private NSCalendar *gregorian_calendar;
+#if TARGET_OS_IPHONE
+  @private UIBackgroundTaskIdentifier background_task;
+#endif
 }
 
 -(instancetype) init __attribute__((unavailable()));
