@@ -25,11 +25,10 @@ PortBridge::setListener(PortListener *listener)
 }
 
 void
-PortBridge::setInputListener(DataHandler *listener)
+PortBridge::setInputListener(DataHandler *handler)
 {
-  (void)handler;
-  inputListener = listener;
-  // TODO
+	// TODO
+  inputListener = handler;
 }
 
 std::size_t
@@ -45,7 +44,8 @@ PortBridge::write(std::span<const std::byte> src)
 		// const std::string address = getAddress();  // PortBridge::getAddress()
 		// NSString *addrStr = [NSString stringWithUTF8String:address.c_str()];
 		// BOOL success = [manager writeData:data toDeviceAddress:addrStr];
-	
+		BOOL success = NO;
+
 		if (!success)
 			throw std::runtime_error{"Port write failed"};
 		LogFormat("=====> PortBridge::write size %zu", src.size());
