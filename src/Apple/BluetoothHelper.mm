@@ -230,6 +230,11 @@
   LogFormat("Connection to %s failed: %s", [peripheral.name UTF8String],
             [error.localizedDescription UTF8String]);
 }
+
+- (BOOL)writeData:(NSData *)data {
+	return NO;
+}
+
 @end
 
 BluetoothHelperIOS::BluetoothHelperIOS()
