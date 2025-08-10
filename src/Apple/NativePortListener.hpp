@@ -3,17 +3,18 @@
 
 #pragma once
 
-class PortListener;
+#include "Device/Port/Listener.hpp"
+#include "LogFile.hpp"
 
-namespace NativePortListener {
+class NativePortListener : public PortListener {
+public:
+	NativePortListener();
 
-void Initialise();
-void Deinitialise();
+	void PortStateChanged() noexcept override {
+		LogFormat("MyNativePortListener: Port state changed");
+	}
 
-/**
- * Returns a pointer to the provided listener.
- * Does not take ownership.
- */
-PortListener *Create(PortListener &listener);
-
-} // namespace NativePortListener
+	void PortError(const char *msg) noexcept override {
+		LogFormat("MyNativePortListener: Port error: %s", msg ? msg : "(null)");
+	}
+}; // namespace NativePortListener

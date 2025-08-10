@@ -33,6 +33,9 @@ DeviceFactory::OpenPort(const DeviceConfig &config, PortListener *listener,
                     ioio_helper,
                     usb_serial_helper,
 #endif
+#ifdef __APPLE__
+					bluetooth_helper,
+#endif
                     config, listener, handler);
 }
 

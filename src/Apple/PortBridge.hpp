@@ -3,16 +3,15 @@
 
 #pragma once
 
+#include "NativeInputListener.hpp"
+#include "NativePortListener.hpp"
+#include "Device/Port/State.hpp"
+#include "LogFile.hpp"
 #include <cstddef>
 #include <span>
 
-class PortListener;
-class DataHandler;
-
 class PortBridge {
 public:
-  static void Initialise();
-
   PortBridge();
 
   void setListener(PortListener *listener);
@@ -20,28 +19,34 @@ public:
 
   int getState()
   {
-    // TODO
-    return -1;
+    return static_cast<int>(PortState::READY);
   }
 
   bool drain()
   {
-    // TODO
-    return false;
+    return true;
   }
 
   int getBaudRate() const
   {
-    // TODO
     return -1;
   }
 
   bool setBaudRate(int baud_rate)
   {
-    // TODO
     (void)baud_rate;
     return false;
   }
 
-  std::size_t write(std::span<const std::byte> src);
+  virtual std::size_t write(std::span<const std::byte> src);
+
+private:
+  const PortListener *portListener;
+  const DataHandler *inputListener;
+};
+
+
+class iOSPortBridge : public PortBridge {
+public:
+	std::size_t write(std::span<const std::byte> src) override;
 };

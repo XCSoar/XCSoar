@@ -4,24 +4,4 @@
 #include "NativePortListener.hpp"
 #include "Device/Port/Listener.hpp"
 
-namespace NativePortListener {
-
-void
-Initialise()
-{
-  // No-op
-}
-
-void
-Deinitialise()
-{
-  // No-op
-}
-
-PortListener *
-Create(PortListener &listener)
-{
-  return &listener;
-}
-
-} // namespace NativePortListener
+NativePortListener::NativePortListener() = default;

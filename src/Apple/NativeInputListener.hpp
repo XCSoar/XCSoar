@@ -3,17 +3,21 @@
 
 #pragma once
 
-class DataHandler;
+#include "io/DataHandler.hpp"
+#include <vector>
+#include <cstddef>
+#include <span>
 
-namespace NativeInputListener {
+class NativeInputListener : public DataHandler {
+public:
+	NativeInputListener();
 
-void Initialise();
-void Deinitialise();
+	/**
+	 * Verarbeitet eingehende Daten.
+	 * @param s die empfangenen Daten als Byte-Span
+	 * @return false, wenn keine weiteren Daten empfangen werden sollen
+	 */
+	bool DataReceived(std::span<const std::byte> s) noexcept override;
 
-/**
- * Create a Java NativeInputListener instance.  It is not bound to a
- * handler yet; call Set() to do this.
- */
-DataHandler *Create(DataHandler &handler);
 
-} // namespace NativeInputListener
+};

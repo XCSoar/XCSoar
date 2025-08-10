@@ -4,23 +4,13 @@
 #include "NativeInputListener.hpp"
 #include "io/DataHandler.hpp"
 
-#include <cstddef>
+NativeInputListener::NativeInputListener() = default;
 
-namespace NativeInputListener {
-} // namespace NativeInputListener
+bool NativeInputListener::DataReceived(std::span<const std::byte> s) noexcept {
 
-void
-NativeInputListener::Initialise()
-{
+
+	LogFormat("[DEBUG] NativeInputListener::DataReceived");
+	(void)s;
+	return true;
 }
 
-void
-NativeInputListener::Deinitialise()
-{
-}
-
-DataHandler *
-NativeInputListener::Create(DataHandler &handler)
-{
-  return &handler;
-}

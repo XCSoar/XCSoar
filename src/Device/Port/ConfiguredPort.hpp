@@ -16,6 +16,8 @@ struct DeviceConfig;
 class BluetoothHelper;
 class IOIOHelper;
 class UsbSerialHelper;
+#elif defined(__APPLE__)
+class BluetoothHelper;
 #endif
 
 /**
@@ -28,6 +30,8 @@ OpenPort(EventLoop &event_loop, Cares::Channel &cares,
          BluetoothHelper *bluetooth_helper,
          IOIOHelper *ioio_helper,
          UsbSerialHelper *usb_serial_helper,
+#elif defined(__APPLE__)
+         BluetoothHelper *bluetooth_helper,
 #endif
          const DeviceConfig &config, PortListener *listener,
          DataHandler &handler);
