@@ -120,7 +120,10 @@
     LogFormat("=====> DEBUG FEATURES %llu", features);
 
     for (NativeDetectDeviceListener *listener in self.listeners) {
-      int type = static_cast<int>(DetectDeviceListener::Type::BLUETOOTH_LE);
+      // All devices detected via CoreBluetooth are iOS BLE devices. However,
+      // BLUETOOTH_CLASSIC is used here because XCSoar requires it for the
+      // interface and driver selection.
+      int type = static_cast<int>(DetectDeviceListener::Type::BLUETOOTH_CLASSIC);
       [listener onDeviceDetected:type
                          address:identifier
                             name:[self nameForDeviceAddress:identifier]
