@@ -4,20 +4,18 @@
 #pragma once
 
 #include "io/DataHandler.hpp"
-#include <vector>
 #include <cstddef>
 #include <span>
+#include <vector>
 
 class NativeInputListener : public DataHandler {
 public:
-	NativeInputListener();
+  NativeInputListener();
 
-	/**
-	 * Verarbeitet eingehende Daten.
-	 * @param s die empfangenen Daten als Byte-Span
-	 * @return false, wenn keine weiteren Daten empfangen werden sollen
-	 */
-	bool DataReceived(std::span<const std::byte> s) noexcept override;
-
-
+  /**
+   * Verarbeitet eingehende Daten.
+   * @param s die empfangenen Daten als Byte-Span
+   * @return false, wenn keine weiteren Daten empfangen werden sollen
+   */
+  bool DataReceived(std::span<const std::byte> s) noexcept override;
 };

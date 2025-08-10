@@ -3,10 +3,10 @@
 
 #pragma once
 
-#include "NativeInputListener.hpp"
-#include "NativePortListener.hpp"
 #include "Device/Port/State.hpp"
 #include "LogFile.hpp"
+#include "NativeInputListener.hpp"
+#include "NativePortListener.hpp"
 #include <cstddef>
 #include <span>
 
@@ -17,20 +17,11 @@ public:
   void setListener(PortListener *listener);
   void setInputListener(DataHandler *handler);
 
-  int getState()
-  {
-    return static_cast<int>(PortState::READY);
-  }
+  int getState() { return static_cast<int>(PortState::READY); }
 
-  bool drain()
-  {
-    return true;
-  }
+  bool drain() { return true; }
 
-  int getBaudRate() const
-  {
-    return -1;
-  }
+  int getBaudRate() const { return -1; }
 
   bool setBaudRate(int baud_rate)
   {
@@ -45,8 +36,7 @@ private:
   const DataHandler *inputListener;
 };
 
-
 class iOSPortBridge : public PortBridge {
 public:
-	std::size_t write(std::span<const std::byte> src) override;
+  std::size_t write(std::span<const std::byte> src) override;
 };

@@ -8,13 +8,15 @@
 
 class NativePortListener : public PortListener {
 public:
-	NativePortListener();
+  NativePortListener();
 
-	void PortStateChanged() noexcept override {
-		LogFormat("MyNativePortListener: Port state changed");
-	}
+  void PortStateChanged() noexcept override
+  {
+    LogFormat("MyNativePortListener: Port state changed");
+  }
 
-	void PortError(const char *msg) noexcept override {
-		LogFormat("MyNativePortListener: Port error: %s", msg ? msg : "(null)");
-	}
+  void PortError(const char *msg) noexcept override
+  {
+    LogFormat("MyNativePortListener: Port error: %s", msg ? msg : "(null)");
+  }
 }; // namespace NativePortListener

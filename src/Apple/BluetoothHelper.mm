@@ -28,25 +28,25 @@
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central
 {
   switch (central.state) {
-    case CBManagerStatePoweredOn:
-      LogFormat("Bluetooth is ON");
-      break;
-    case CBManagerStatePoweredOff:
-      LogFormat("Bluetooth is OFF");
-      break;
-    case CBManagerStateUnsupported:
-      LogFormat("Bluetooth unsupported");
-      break;
-    case CBManagerStateUnauthorized:
-      LogFormat("Bluetooth unauthorized");
-      break;
-    case CBManagerStateResetting:
-      LogFormat("Bluetooth resetting");
-      break;
-    case CBManagerStateUnknown:
-    default:
-      LogFormat("Bluetooth state unknown");
-      break;
+  case CBManagerStatePoweredOn:
+    LogFormat("Bluetooth is ON");
+    break;
+  case CBManagerStatePoweredOff:
+    LogFormat("Bluetooth is OFF");
+    break;
+  case CBManagerStateUnsupported:
+    LogFormat("Bluetooth unsupported");
+    break;
+  case CBManagerStateUnauthorized:
+    LogFormat("Bluetooth unauthorized");
+    break;
+  case CBManagerStateResetting:
+    LogFormat("Bluetooth resetting");
+    break;
+  case CBManagerStateUnknown:
+  default:
+    LogFormat("Bluetooth state unknown");
+    break;
   }
 }
 
@@ -74,20 +74,20 @@
   NSString *identifier = peripheral.identifier.UUIDString;
   self.discoveredPeripherals[identifier] = peripheral;
 
-	// // Falls Pending-Connect → sofort verbinden
-	// if (self.pendingConnectionAddress &&
-	// 	[identifier isEqualToString:self.pendingConnectionAddress])
-	// {
-	// 	LogFormat("Pending device %s found, connecting...", [peripheral.name UTF8String]);
-	// 	self.pendingConnectionAddress = nil;
-	// 	[self.centralManager stopScan];
+  // // Falls Pending-Connect → sofort verbinden
+  // if (self.pendingConnectionAddress &&
+  // 	[identifier isEqualToString:self.pendingConnectionAddress])
+  // {
+  // 	LogFormat("Pending device %s found, connecting...", [peripheral.name
+  // UTF8String]); 	self.pendingConnectionAddress = nil; 	[self.centralManager
+  // stopScan];
 
-	// 	PortBridge *bridge = new PortBridge();
-	// 	_activeConnections[peripheral] = [NSValue valueWithPointer:bridge];
-	// 	peripheral.delegate = self;
-	// 	[self.centralManager connectPeripheral:peripheral options:nil];
-	// 	return;
-	// }
+  // 	PortBridge *bridge = new PortBridge();
+  // 	_activeConnections[peripheral] = [NSValue valueWithPointer:bridge];
+  // 	peripheral.delegate = self;
+  // 	[self.centralManager connectPeripheral:peripheral options:nil];
+  // 	return;
+  // }
 
   NSArray<CBUUID *> *serviceUUIDs =
       advertisementData[CBAdvertisementDataServiceUUIDsKey];
@@ -138,7 +138,8 @@
       // All devices detected via CoreBluetooth are iOS BLE devices. However,
       // BLUETOOTH_CLASSIC is used here because XCSoar requires it for the
       // interface and driver selection.
-      int type = static_cast<int>(DetectDeviceListener::Type::BLUETOOTH_CLASSIC);
+      int type =
+          static_cast<int>(DetectDeviceListener::Type::BLUETOOTH_CLASSIC);
       [listener onDeviceDetected:type
                          address:identifier
                             name:[self nameForDeviceAddress:identifier]
@@ -171,7 +172,8 @@
   [self.listeners removeObject:listener];
 }
 
-- (void)connectSensor:(NSString *)deviceAddress listener:(SensorListener &)listener
+- (void)connectSensor:(NSString *)deviceAddress
+             listener:(SensorListener &)listener
 {
   CBPeripheral *peripheral = self.discoveredPeripherals[deviceAddress];
   if (!peripheral) {
@@ -188,30 +190,30 @@
 {
   CBPeripheral *peripheral = self.discoveredPeripherals[deviceAddress];
 
-    if (!peripheral) {
-		NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:deviceAddress];
-		NSArray *peripherals = [self.centralManager retrievePeripheralsWithIdentifiers:@[uuid]];
-		if (peripherals.count > 0) {
-			peripheral = peripherals.firstObject;
-			self.discoveredPeripherals[deviceAddress] = peripheral;
-		}
-	}
+  if (!peripheral) {
+    NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:deviceAddress];
+    NSArray *peripherals =
+        [self.centralManager retrievePeripheralsWithIdentifiers:@[ uuid ]];
+    if (peripherals.count > 0) {
+      peripheral = peripherals.firstObject;
+      self.discoveredPeripherals[deviceAddress] = peripheral;
+    }
+  }
 
-    if (!peripheral) {
-		LogFormat("Device %s not found, scanning...", [deviceAddress UTF8String]);
-		self.pendingConnectionAddress = deviceAddress;
-		[self.centralManager scanForPeripheralsWithServices:nil options:nil];
-		return nullptr; // Erst verbinden, wenn gefunden
-	}
+  if (!peripheral) {
+    LogFormat("Device %s not found, scanning...", [deviceAddress UTF8String]);
+    self.pendingConnectionAddress = deviceAddress;
+    [self.centralManager scanForPeripheralsWithServices:nil options:nil];
+    return nullptr; // Erst verbinden, wenn gefunden
+  }
 
   PortBridge *bridge = new PortBridge();
-	_activeConnections[peripheral] = [NSValue valueWithPointer:bridge];
-	peripheral.delegate = self;
-
+  _activeConnections[peripheral] = [NSValue valueWithPointer:bridge];
+  peripheral.delegate = self;
 
   // Do not create the PortBridge here yet, as the connection is asynchronous.
   [self.centralManager connectPeripheral:peripheral options:nil];
-	return bridge;
+  return bridge;
 }
 
 - (void)centralManager:(CBCentralManager *)central
@@ -219,8 +221,8 @@
 {
   LogFormat("Connected with %s", [peripheral.name UTF8String]);
 
-//   PortBridge *bridge = new PortBridge();
-//   _activeConnections[peripheral] = [NSValue valueWithPointer:bridge];
+  //   PortBridge *bridge = new PortBridge();
+  //   _activeConnections[peripheral] = [NSValue valueWithPointer:bridge];
 }
 
 - (void)centralManager:(CBCentralManager *)central
@@ -231,8 +233,9 @@
             [error.localizedDescription UTF8String]);
 }
 
-- (BOOL)writeData:(NSData *)data {
-	return NO;
+- (BOOL)writeData:(NSData *)data
+{
+  return NO;
 }
 
 @end
@@ -296,7 +299,8 @@ BluetoothHelperIOS::RemoveDetectDeviceListener(
 }
 
 void
-BluetoothHelperIOS::connectSensor(const char *address, SensorListener &listener)
+BluetoothHelperIOS::connectSensor(const char *address,
+                                  SensorListener &listener)
 {
   if (!address) return;
 

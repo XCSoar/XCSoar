@@ -22,7 +22,8 @@ public:
   AddDetectDeviceListener(DetectDeviceListener &l) noexcept = 0;
   virtual void
   RemoveDetectDeviceListener(NativeDetectDeviceListener *l) noexcept = 0;
-  virtual void connectSensor(const char *address, SensorListener &listener) = 0;
+  virtual void connectSensor(const char *address,
+                             SensorListener &listener) = 0;
   virtual PortBridge *connect(const char *address) = 0;
   virtual PortBridge *connectHM10(const char *address) = 0;
   virtual PortBridge *createServer() = 0;
