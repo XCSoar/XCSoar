@@ -74,6 +74,21 @@
   NSString *identifier = peripheral.identifier.UUIDString;
   self.discoveredPeripherals[identifier] = peripheral;
 
+	// // Falls Pending-Connect → sofort verbinden
+	// if (self.pendingConnectionAddress &&
+	// 	[identifier isEqualToString:self.pendingConnectionAddress])
+	// {
+	// 	LogFormat("Pending device %s found, connecting...", [peripheral.name UTF8String]);
+	// 	self.pendingConnectionAddress = nil;
+	// 	[self.centralManager stopScan];
+
+	// 	PortBridge *bridge = new PortBridge();
+	// 	_activeConnections[peripheral] = [NSValue valueWithPointer:bridge];
+	// 	peripheral.delegate = self;
+	// 	[self.centralManager connectPeripheral:peripheral options:nil];
+	// 	return;
+	// }
+
   NSArray<CBUUID *> *serviceUUIDs =
       advertisementData[CBAdvertisementDataServiceUUIDsKey];
   if (serviceUUIDs) {
