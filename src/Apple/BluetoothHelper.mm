@@ -187,16 +187,31 @@
 - (PortBridge *)connectToDevice:(NSString *)deviceAddress
 {
   CBPeripheral *peripheral = self.discoveredPeripherals[deviceAddress];
-  if (!peripheral) {
-    LogFormat("Device not found: %s", [deviceAddress UTF8String]);
-    return nullptr;
-  }
 
-  peripheral.delegate = self;
-  [_centralManager connectPeripheral:peripheral options:nil];
+    if (!peripheral) {
+		NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:deviceAddress];
+		NSArray *peripherals = [self.centralManager retrievePeripheralsWithIdentifiers:@[uuid]];
+		if (peripherals.count > 0) {
+			peripheral = peripherals.firstObject;
+			self.discoveredPeripherals[deviceAddress] = peripheral;
+		}
+	}
+
+    if (!peripheral) {
+		LogFormat("Device %s not found, scanning...", [deviceAddress UTF8String]);
+		self.pendingConnectionAddress = deviceAddress;
+		[self.centralManager scanForPeripheralsWithServices:nil options:nil];
+		return nullptr; // Erst verbinden, wenn gefunden
+	}
+
+  PortBridge *bridge = new PortBridge();
+	_activeConnections[peripheral] = [NSValue valueWithPointer:bridge];
+	peripheral.delegate = self;
+
 
   // Do not create the PortBridge here yet, as the connection is asynchronous.
-  return nullptr;
+  [self.centralManager connectPeripheral:peripheral options:nil];
+	return bridge;
 }
 
 - (void)centralManager:(CBCentralManager *)central
@@ -204,8 +219,8 @@
 {
   LogFormat("Connected with %s", [peripheral.name UTF8String]);
 
-  PortBridge *bridge = new PortBridge();
-  _activeConnections[peripheral] = [NSValue valueWithPointer:bridge];
+//   PortBridge *bridge = new PortBridge();
+//   _activeConnections[peripheral] = [NSValue valueWithPointer:bridge];
 }
 
 - (void)centralManager:(CBCentralManager *)central
