@@ -3,6 +3,7 @@
 
 #include "NativeInputListener.hpp"
 #include "io/DataHandler.hpp"
+#include "LogFile.hpp"
 
 NativeInputListener::NativeInputListener() = default;
 
