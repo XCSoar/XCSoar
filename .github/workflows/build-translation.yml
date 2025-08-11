@@ -22,7 +22,7 @@ jobs:
           apt-get install -y --no-install-recommends git \
           ca-certificates rsync openssh-client
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install dependencies
         run: |
           ./ide/provisioning/install-debian-packages.sh UPDATE
