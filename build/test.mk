@@ -731,6 +731,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/TransponderCode.cpp \
 	$(SRC)/TransponderMode.cpp \
 	$(SRC)/Formatter/NMEAFormatter.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
@@ -932,6 +933,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Engine/Task/Stats/TaskStats.cpp \
 	$(SRC)/Engine/Task/Stats/CommonStats.cpp \
 	$(SRC)/Engine/Task/Stats/ElementStat.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
@@ -1319,6 +1321,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/TransponderCode.cpp \
 	$(SRC)/Formatter/NMEAFormatter.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
@@ -1340,6 +1343,7 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/TransponderCode.cpp \
 	$(SRC)/Formatter/NMEAFormatter.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
