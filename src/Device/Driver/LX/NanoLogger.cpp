@@ -14,10 +14,17 @@
 #include "NMEA/InputLine.hpp"
 #include "util/SpanCast.hxx"
 #include "util/StringCompare.hxx"
+#include "system/FileUtil.hpp"
+#include "util/TextFile.hxx"
+#include "io/FileLineReader.hpp"
+#include "util/StaticString.hxx"
+#include "LogFile.hpp"
 
 #include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
+#include <fstream>
+#include <exception>
 
 using std::string_view_literals::operator""sv;
 
@@ -314,6 +321,8 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
       try {
         line = reader.ExpectLine("PLXVC,FLIGHT,A,", timeout);
       } catch (...) {
+        LogFormat("Communication with logger timed out, tries: %u, line: %u", request_retry_count, i);
+        LogError(std::current_exception(), "Download failing");
       }
       if (line == nullptr || !HandleFlightLine(line, os, i, row_count)) {
         if (request_retry_count > 5)
