@@ -59,13 +59,13 @@ SystemWindowSize() noexcept
   if (!window) {
     // Fallback to main screen dimensions if no window is available
     CGRect screenBounds = [UIScreen mainScreen].bounds;
-    CGFloat scale = [UIScreen mainScreen].scale;
+    CGFloat scale = [UIScreen mainScreen].nativeScale;
     return PixelSize{(int)(screenBounds.size.width * scale), (int)(screenBounds.size.height * scale)};
   }
   
   
   CGRect bounds = window.bounds;
-  CGFloat scale = window.screen.scale;
+  CGFloat scale = window.screen.nativeScale;
 
   CGFloat width = bounds.size.width;
   CGFloat height = bounds.size.height;
