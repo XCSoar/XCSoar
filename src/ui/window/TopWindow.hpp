@@ -312,28 +312,29 @@ public:
 #if defined(__APPLE__) && TARGET_OS_IPHONE
   [[gnu::pure]]
   const PixelSize GetSize() const noexcept {
-    /* Get the full screen size for iOS - avoid circular dependency with GetClientRect */
-    PixelRect rc = ContainerWindow::GetClientRect();
-    return {rc.right, rc.bottom};
+    PixelRect rc = GetClientRect();
+    return {rc.right-rc.left, rc.bottom-rc.top};
   }
 
   [[gnu::pure]]
   const PixelRect GetClientRect() const noexcept override {
     assert(IsDefined());
     
-    PixelSize size = GetSize();
+    // Get screen bounds
+    CGRect screenBounds = [UIScreen mainScreen].bounds;
+    // Get screen scale factor. We need to use nativeScale instead of scale
+    // to correctly account for downsampling on mini and Plus devices.
+    CGFloat scale = [UIScreen mainScreen].nativeScale;
+    int width = (int)(screenBounds.size.width * scale);
+    int height = (int)(screenBounds.size.height * scale);
     
-    // Get safe area insets in points
     UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
     if (window == nullptr) {
       // Fallback to full screen if window is not available
-      return PixelRect(0, 0, size.width, size.height);
+      return PixelRect(0, 0, width, height);
     }
     
     UIEdgeInsets insets = window.safeAreaInsets;
-    // Get screen scale factor (e.g. 2.0 or 3.0 depending on resolution)
-    CGFloat scale = [UIScreen mainScreen].scale;
-
     insets.top *= scale;
     insets.left *= scale;
     insets.bottom *= scale;
@@ -342,8 +343,8 @@ public:
     PixelRect result(
         static_cast<int>(insets.left),
         static_cast<int>(insets.top),
-        static_cast<int>(size.width - insets.right),
-        static_cast<int>(size.height - insets.bottom)
+        static_cast<int>(width - insets.right),
+        static_cast<int>(height - insets.bottom)
     );
 
     return result;
