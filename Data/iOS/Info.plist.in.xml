@@ -88,6 +88,8 @@
         <string>Navigation and flight logging with the in-built GPS sensor.</string>
         <key>NSLocationWhenInUseUsageDescription</key>
         <string>Navigation and flight logging with the in-built GPS sensor.</string>
+        <key>NSMotionUsageDescription</key>
+        <string>Navigation and flight logging with the in-built barometric altitude sensor.</string>
         <key>UIFileSharingEnabled</key>
         <true/>
         <key>LSSupportsOpeningDocumentsInPlace</key>
