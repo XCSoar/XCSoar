@@ -55,7 +55,7 @@ CGImageToUncompressedImage(CGImageRef image) noexcept
     }
   }
 
-  std::unique_ptr<uint8_t[]> uncompressed(new uint8_t[height * row_size]);
+  std::unique_ptr<uint8_t[]> uncompressed(new uint8_t[height * row_size]());
 
   CGContextRef bitmap = CGBitmapContextCreate(uncompressed.get(), width, height,
                                               8, row_size, bitmap_colorspace,
