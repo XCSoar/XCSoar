@@ -428,8 +428,15 @@ This page allows glide computer algorithms to be configured.
   15 seconds. Lower values will give as a result pretty much the same as GR Instant, 
   while higher values will look like GR Cruise. Other commercial instruments and 
   software use 2 minutes.
-\item[Predict wind drift*]  \label{conf:predict-drift}Account for wind drift for the predicted circling 
-  duration. This reduces the arrival height for legs with head wind (on by default).
+\item[Predict wind drift*]  \label{conf:predict-drift} Accounts for drifting with
+  the wind while circling to gain any altitude needed to reach final glide path
+  altitude. On by default. This affects any displayed altitude difference (e.g.,
+  the final glide bar and altitude difference InfoBoxes). For upwind destinations,
+  it makes the displayed altitude difference more negative; for downwind
+  destinations, it makes it less negative (less climbing needed). The assumed
+  circling climb rate equals the current MacCready setting (MC). If the current MC
+  is zero, no circling is assumed, and the value shown is the same as if 'Predict
+  wind drift' were 'Off'.
 \end{description}
 
 
