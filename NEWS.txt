@@ -70,6 +70,9 @@ Version 7.44 - not yet released
   - LS8-15m: default polar, set to values according to flight manual
 * Weglide:
   - add button under config menu to tigger IGC upload
+* Task:
+  - Reachable abort task landable waypoints are now sorted by arrival altitude
+    instead of arrival time.
 
 Version 7.43 - 2024-08-12
 * calculations
