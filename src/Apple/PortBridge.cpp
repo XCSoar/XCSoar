@@ -31,6 +31,12 @@ PortBridge::setInputListener(DataHandler *handler)
   inputListener = handler;
 }
 
+DataHandler *
+PortBridge::getInputListener()
+{
+  return inputListener;
+}
+
 std::size_t
 PortBridge::write(std::span<const std::byte> src)
 {

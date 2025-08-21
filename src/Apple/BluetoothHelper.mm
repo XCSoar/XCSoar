@@ -132,7 +132,7 @@
       }
     }
 
-    LogFormat("=====> DEBUG FEATURES %llu", features);
+    // LogFormat("=====> DEBUG FEATURES %llu", features);
 
     for (NativeDetectDeviceListener *listener in self.listeners) {
       // All devices detected via CoreBluetooth are iOS BLE devices. However,
@@ -220,9 +220,68 @@
     didConnectPeripheral:(CBPeripheral *)peripheral
 {
   LogFormat("Connected with %s", [peripheral.name UTF8String]);
-
+  [peripheral discoverServices:nil];
   //   PortBridge *bridge = new PortBridge();
   //   _activeConnections[peripheral] = [NSValue valueWithPointer:bridge];
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral
+    didDiscoverServices:(NSError *)error
+{
+  if (error) {
+    LogFormat("Error discovering services: %s", [[error localizedDescription] UTF8String]);
+    return;
+  }
+
+  for (CBService *service in peripheral.services) {
+    [peripheral discoverCharacteristics:nil forService:service];
+  }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral
+    didDiscoverCharacteristicsForService:(CBService *)service
+                                   error:(NSError *)error
+{
+  if (error) {
+    LogFormat("Error discovering characteristics: %s", [[error localizedDescription] UTF8String]);
+    return;
+  }
+
+  for (CBCharacteristic *characteristic in service.characteristics) {
+    if (characteristic.properties & CBCharacteristicPropertyNotify ||
+        characteristic.properties & CBCharacteristicPropertyIndicate) {
+      [peripheral setNotifyValue:YES forCharacteristic:characteristic];
+      [peripheral readValueForCharacteristic:characteristic]; // TODO remove?
+    }
+  }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral
+    didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
+                              error:(NSError *)error
+{
+  if (error != nil) {
+    LogFormat("Error updating value for characteristic: %s", [error.localizedDescription UTF8String]);
+    return;
+  }
+
+  NSValue *bridgeValue = _activeConnections[peripheral];
+  if (bridgeValue == nil) {
+    LogFormat("No active bridge for peripheral %s", [peripheral.name UTF8String]);
+    return;
+  }
+
+  PortBridge *bridge = (PortBridge *)[bridgeValue pointerValue];
+  NSData *value = characteristic.value;
+  if (value == nil || value.length == 0) {
+    return;
+  }
+
+  const void *bytes = [value bytes];
+  size_t length = [value length];
+
+  bridge->getInputListener()->DataReceived({(const std::byte *)bytes, length});
+  LogFormat("===> [DEBUG] bridge->getInputListener().DataReceived");
 }
 
 - (void)centralManager:(CBCentralManager *)central

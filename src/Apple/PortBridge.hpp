@@ -16,6 +16,7 @@ public:
 
   void setListener(PortListener *listener);
   void setInputListener(DataHandler *handler);
+  DataHandler *getInputListener();
 
   int getState() { return static_cast<int>(PortState::READY); }
 
@@ -33,7 +34,7 @@ public:
 
 private:
   const PortListener *portListener;
-  const DataHandler *inputListener;
+  DataHandler *inputListener;
 };
 
 class iOSPortBridge : public PortBridge {
