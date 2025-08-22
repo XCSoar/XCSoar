@@ -12,6 +12,10 @@
 
 #endif
 
+#ifdef HAVE_SKYSIGHT
+#include "Skysight/Settings.hpp"
+#endif
+
 struct WeatherSettings {
 #ifdef HAVE_PCMET
   PCMetSettings pcmet;
@@ -22,6 +26,10 @@ struct WeatherSettings {
    * Enable Thermal Information Map?
    */
   bool enable_tim;
+#endif
+
+#ifdef HAVE_SKYSIGHT
+  SkysightSettings skysight;
 #endif
 
   void SetDefaults() {
