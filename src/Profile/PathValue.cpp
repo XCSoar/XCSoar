@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "Map.hpp"
-#include "LocalPath.hpp"
-#include "system/Path.hpp"
 #include "Compatibility/path.h"
+#include "LocalPath.hpp"
+#include "Map.hpp"
+#include "system/Path.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
 #include "util/StringPointer.hxx"
@@ -12,6 +12,10 @@
 #ifdef _UNICODE
 #include "util/AllocatedString.hxx"
 #endif
+
+#include "Language/Language.hpp"
+#include "util/IterableSplitString.hxx"
+#include "util/tstring.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -26,6 +30,36 @@ ProfileMap::GetPath(std::string_view key) const noexcept
     return nullptr;
 
   return ExpandLocalPath(Path(buffer));
+}
+
+std::vector<AllocatedPath>
+ProfileMap::GetMultiplePaths(std::string_view key) const
+{
+
+  std::vector<AllocatedPath> paths;
+  BasicStringBuffer<TCHAR, MAX_PATH> buffer;
+
+  if (!Get(key, buffer)) return paths;
+
+  if (buffer.empty()) return paths;
+
+  for (auto i : TIterableSplitString(buffer.c_str(), '|')) {
+
+    if (i.empty()) continue;
+
+    tstring file_string(i);
+
+    Path path(file_string.c_str());
+
+    if (!(path.EndsWithIgnoreCase(_T(".txt")) ||
+          path.EndsWithIgnoreCase(_T(".air")) ||
+          path.EndsWithIgnoreCase(_T(".sua"))))
+      continue;
+
+    paths.push_back(ExpandLocalPath(AllocatedPath(path)));
+  }
+
+  return paths;
 }
 
 bool

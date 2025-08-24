@@ -249,6 +249,9 @@ ifeq ($(TARGET),MACOS)
   OSX_MIN_SUPPORTED_VERSION = 12.0
   HOST_TRIPLET = aarch64-apple-darwin
   LLVM_TARGET = $(HOST_TRIPLET)
+  ifeq ($(HOST_IS_DARWIN),y)
+    DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
+  endif
   CLANG = y
   TARGET_ARCH += -mmacosx-version-min=$(OSX_MIN_SUPPORTED_VERSION)
   TARGET_IS_ARM = y
@@ -272,7 +275,7 @@ ifeq ($(TARGET),IOS64)
   override TARGET = UNIX
   TARGET_IS_DARWIN = y
   TARGET_IS_IOS = y
-  IOS_MIN_SUPPORTED_VERSION = 10.0
+  IOS_MIN_SUPPORTED_VERSION = 11.0
   HOST_TRIPLET = aarch64-apple-darwin
   LLVM_TARGET = $(HOST_TRIPLET)
   ifeq ($(HOST_IS_DARWIN),y)
@@ -287,7 +290,7 @@ ifeq ($(TARGET),IOS64SIM)
   override TARGET = UNIX
   TARGET_IS_DARWIN = y
   TARGET_IS_IOS = y
-  IOS_MIN_SUPPORTED_VERSION = 10.0
+  IOS_MIN_SUPPORTED_VERSION = 11.0
   HOST_TRIPLET = aarch64-apple-darwin
   LLVM_TARGET = $(HOST_TRIPLET)
   ifeq ($(HOST_IS_DARWIN),y)

@@ -14,6 +14,8 @@
 #include "Dialogs/GeoPointEntry.hpp"
 #include "Dialogs/DateEntry.hpp"
 #include "Dialogs/NumberEntry.hpp"
+#include "MultiFilePicker.hpp"
+#include "Form/DataField/MultiFile.hpp"
 
 #ifdef ANDROID
 #include "java/Global.hxx"
@@ -30,6 +32,9 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
   const auto type = df.GetType();
   if (type == DataField::Type::FILE) {
     return FilePicker(caption, (FileDataField &)df, help_text);
+  } else if (df.GetType() == DataField::Type::MULTI_FILE) {
+    return MultiFilePicker(caption, static_cast<MultiFileDataField &>(df),
+                           help_text);
   } else if (df.SupportsCombolist()) {
     return ComboPicker(caption, df, help_text);
   } else if (type == DataField::Type::ROUGH_TIME) {

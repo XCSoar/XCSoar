@@ -33,6 +33,10 @@
 #include <alloca.h>
 #endif
 
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+#import <UIKit/UIKit.h>
+#endif
+
 #include <cassert>
 
 #ifdef ENABLE_OPENGL
@@ -289,3 +293,33 @@ TopCanvas::Flip()
 
 #endif
 }
+
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+
+bool
+TopCanvas::IsIOSAppActive() const noexcept
+{
+  // Check if the iOS app is in an active state where rendering is appropriate
+  // Attempting to render while the app is in the background will crash the app
+  UIApplicationState appState = [[UIApplication sharedApplication] applicationState];
+  
+  switch (appState) {
+    case UIApplicationStateActive:
+      // App is active and in foreground - safe to render
+      return true;
+      
+    case UIApplicationStateInactive:
+      // App is transitioning between states - avoid rendering
+      return false;
+      
+    case UIApplicationStateBackground:
+      // App is in background - definitely don't render
+      return false;
+      
+    default:
+      // Unknown state - we are conservative and don't render
+      return false;
+  }
+}
+
+#endif

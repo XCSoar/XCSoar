@@ -364,12 +364,12 @@ FileDataField::size() const noexcept
   return files.size();
 }
 
-Path
+const FileDataField::Item &
 FileDataField::GetItem(unsigned index) const noexcept
 {
   EnsureLoadedDeconst();
 
-  return files[index].path;
+  return files[index];
 }
 
 void
