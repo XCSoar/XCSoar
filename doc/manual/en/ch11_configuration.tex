@@ -76,7 +76,7 @@ all of the parameters marked with an asterisk are only visible in
 expert user level. 
 
 %%%%%%%%%%%%%%%%%%
-\section{Site Files / Site Files}
+\section{Site Files / Site Files}\label{sec:site-files}
 The dialogue specifies most of the important files that must be
 configured when flying at a new site.
 
@@ -90,11 +90,12 @@ configured when flying at a new site.
   from the map file (if available).
 \item[More waypoints*]  Secondary waypoints file.  This may be used to add 
   waypoints for a competition.
-\item[Watched waypoints*]  Waypoint file containing special waypoints for 
-  which additional computations   like calculation of arrival height in map 
-  display always takes place. Useful for waypoints   like known reliable 
-  thermal sources (e.g.\ powerplants) or mountain passes.
-\item[Airspaces]  List of active airspace files that can be selected and used simultaneously.  If left blank,
+\item[Watched waypoints*]  \label{conf:watched-wps} Waypoint file containing
+  waypoints for which arrival height is always displayed in map labels, even
+  when unreachable.  Useful for waypoints like known reliable thermal sources
+  (e.g., powerplants) or mountain passes.
+\item[Airspaces]  List of active airspace files that can be selected and used
+  simultaneously.  If left blank,
   airspaces are loaded from the map file (if available).
 \item[Waypoint details*]  The airfields file may contain extracts from
   Enroute Supplements or other contributed information about individual airfields.
@@ -212,7 +213,7 @@ This page provides options relating to screen elements overlayed to the map disp
 %%%%%%%%%%%%%%%%%%
 \section{Map Display / Waypoints}\label{sec:waypoint-display}
 
-This page provides options relating to the map display.
+This page provides options for how waypoints are displayed on the map.
 
 \begin{description}
 \item[Label format]  This setting \label{conf:labels} determines the label format 
@@ -224,15 +225,47 @@ This page provides options relating to the map display.
   {\bf First 3 letters}: The first 3 letters of the waypoint name are displayed. \\
   {\bf First 5 letters}: The first 5 letters of the waypoint name are displayed. \\
   {\bf None}: No name is displayed with the waypoint.
-\item[Arrival height*] \label{conf:arrivalheight} This enables the arrival height info shown additionally 
-  for landables. \\
-  {\bf None}: No arrival height is displayed. \\
-  {\bf Straight glide}: Straight glide arrival height (no terrain is considered). \\
-  {\bf Terrain avoidance glide}: Arrival height considering terrain avoidance. \\
-  {\bf Straight \& terrain glide}: Both arrival heights are
-  displayed. \\
-  {\bf Required glide ratio}: Show the glide ratio over ground that is
-  required to reach the waypoint.
+
+\item[Arrival height*] \label{conf:arrivalheight} This setting allows arrival height
+and/or required glide ratio to also be shown in labels for landable waypoints. See Section~\ref{sec:waypoint-schemes} for more information.\\
+  {\bf None}: Neither arrival height nor required glide ratio is displayed. \\
+  {\bf Straight glide}: Straight glide arrival height (no terrain is considered). (default option) \\
+  {\bf Terrain avoidance glide}: Arrival height considering any detour needed to avoid terrain. \\
+  {\bf Straight \& terrain glide}: Both arrival heights. \\
+  {\bf Required glide ratio}: Glide ratio over the ground required to reach the waypoint. \\
+  {\bf Required GR \& terrain glide}: Both required glide ratio and terrain avoidance glide arrival height.
+
+  For any option including terrain avoidance glide arrival height, the 'Reach
+  mode' setting (on the 'Glide Computer / Route' configuration page,
+  ~\ref{sec:glide-comp-route}) must be set to 'Turning'.
+
+  Glide ratio will be shown whenever the aircraft is higher than the waypoint
+  regardless of how shallow the glide is and
+  regardless of which configured waypoint file contains the waypoint. Negative
+  straight glide arrival heights, however, will only be shown for
+  waypoints in the 'Watched waypoints' file (selected on the
+  'Site Files / Site Files' configuration page, \ref{sec:site-files}). Negative
+  \emph{terrain avoidance} arrival heights will never be shown for any waypoints.
+
+  \warning
+  Also, if the 'Straight \& terrain glide' option is selected and only one
+  arrival height (a positive one) is shown for a waypoint (e.g.,
+  'Moontown:100m'), either no detour around terrain is needed or there's
+  interfering terrain and no possible detour will get you to the waypoint at
+  an acceptable height (the configured safety 'Arrival height'
+  (\ref{sec:safety-factors}) above the ground at the waypoint). These are two
+  \emph{very different situations} safety-wise!
+  Use other clues, like the reach line or the waypoint
+  appearance (e.g., color), to determine which is the case in this scenario.
+  Both arrival altitudes will be shown only if there's a detour that
+  will get you there at an acceptable height but a direct route is blocked
+  by terrain.
+  For example, 'Moontown:200/50m' means (1) you could reach Moontown 200m above the
+  minimum acceptable height if not for terrain that's in your way but (2) there's a detour
+  that will get you there 50m above the minimum acceptable height. So in this case,
+  you must detour, and the detour will cost you 150m (compared to if there were
+  no terrain in your way).
+
 \item[Label style*]  Labels for landables can be shown on a rounded rectangle with 
   white background, or with outlined letters.
 \item[Waypoint label visibility*]  \label{conf:labelvisibility} Controls which waypoints 
@@ -351,12 +384,12 @@ The filter function is described in Section~\ref{sec:airspace-filter}.
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Glide Computer / Safety Factors}
+\section{Glide Computer / Safety Factors}\label{sec:safety-factors}
 
 This page allows the safety heights and behaviour for the alternates mode to be defined.
 
 \begin{description}
-\item[Arrival height]  The height above terrain that the glider
+\item[Arrival height]  \label{conf:safetyarrival} The height above terrain that the glider
   should arrive at for a safe landing.
 \item[Terrain height]  \label{conf:safetyterrain} The height above terrain that 
   the glider must clear during final glide. \\
@@ -456,7 +489,7 @@ This page sets the base for wind computations.
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Glide Computer / Route}
+\section{Glide Computer / Route}\label{sec:glide-comp-route}
 
 This page allows control over glide reach calculations and route
 optimisations.
