@@ -70,8 +70,7 @@ constexpr std::string_view WarningTime = "WarnTime";
 constexpr std::string_view RepetitiveSound = "RepetitiveSound";
 constexpr std::string_view AcknowledgementTime = "AcknowledgementTime";
 constexpr std::string_view AirfieldFile = "AirfieldFile"; // pL
-constexpr std::string_view AirspaceFile = "AirspaceFile"; // pL
-constexpr std::string_view AdditionalAirspaceFile = "AdditionalAirspaceFile"; // pL
+constexpr std::string_view AirspaceFileList = "AirspaceFileList";
 constexpr std::string_view FlarmFile = "FlarmFile";
 constexpr std::string_view PolarFile = "PolarFile"; // pL
 constexpr std::string_view WaypointFile = "WPFile"; // pL
@@ -129,6 +128,7 @@ constexpr std::string_view ShowMenuButton = "ShowMenuButton";
 constexpr std::string_view ShowZoomButton = "ShowZoomButton";
 constexpr std::string_view CursorSize = "CursorSize";
 constexpr std::string_view CursorColorsInverted = "CursorColorsInverted";
+constexpr std::string_view NoPositionTargetDistanceRing = "NoPositionTargetDistanceRing";
 
 constexpr std::string_view AppAveNeedle = "AppAveNeedle";
 constexpr std::string_view AppAveThermalNeedle = "AppAveThermalNeedle";

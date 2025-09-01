@@ -8,6 +8,8 @@
 #include "FLARM/List.hpp"
 #include "TeamCode/Settings.hpp"
 #include "Math/FastRotation.hpp"
+#include "Renderer/TextInBox.hpp"
+#include "ui/canvas/Pen.hpp"
 
 #include <cstdint>
 
@@ -113,4 +115,18 @@ protected:
 
   /* virtual methods from class PaintWindow */
   void OnPaint(Canvas &canvas) noexcept override;
+
+private:
+  /**
+   * Renders a FLARM target that has no position data.
+   * Draws an optional distance ring, a dot, and an exclamation mark.
+   */
+  void PaintNoPositionTarget(Canvas &canvas,
+                           const PixelPoint &target_point,
+                           const PixelPoint &radar_center,
+                           double scale,
+                           bool small,
+                           const PixelSize &sx,
+                           const Pen *target_pen,
+                           const Color *text_color) const noexcept;
 };

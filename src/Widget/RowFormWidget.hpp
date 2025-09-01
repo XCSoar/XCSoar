@@ -3,14 +3,14 @@
 
 #pragma once
 
-#include "WindowWidget.hpp"
-#include "Form/Edit.hpp"
 #include "Form/DataField/Base.hpp"
+#include "Form/Edit.hpp"
+#include "Repository/FileType.hpp"
+#include "Units/Group.hpp"
+#include "WindowWidget.hpp"
 #include "time/BrokenDate.hpp"
 #include "time/FloatDuration.hxx"
 #include "time/RoughTimeDecl.hpp"
-#include "Repository/FileType.hpp"
-#include "Units/Group.hpp"
 
 #include <boost/container/static_vector.hpp>
 
@@ -438,7 +438,9 @@ public:
     return AddFile(label, help, profile_key, filters, FileType::UNKNOWN,
                    nullable);
   }
-
+  WndProperty *AddMultipleFiles(const TCHAR *label, const TCHAR *help,
+                                std::string_view profile_key,
+                                const TCHAR *filters, FileType file_type);
   /**
    * Add a read-only multi-line control.  You can use
    * SetMultiLineText() to update its text.
@@ -703,6 +705,8 @@ public:
   bool SaveValue(unsigned i, std::string_view profile_key, BrokenDate &value) const noexcept;
   bool SaveValue(unsigned i, std::string_view profile_key,
                  std::chrono::seconds &value) const noexcept;
+  bool SaveValueMultiFileReader(unsigned i,
+                                std::string_view registry_key) noexcept;
 
   template<class Rep, class Period>
   bool SaveValue(unsigned i, std::string_view profile_key,

@@ -14,20 +14,18 @@ class AbortIntersectionTest;
 class AlternateList;
 
 /**
- * Abort task provides automatic management of a sorted list of task points
- * that are reachable or close to reachable, and landable (with airfields preferred).
+ * AbortTask continuously automatically maintains a prioritized list of
+ * landable points.
  *
  * @todo
  *  - should prefer landable points that are non-intersecting with terrain
  *
  * Sorting order is as follows:
- * - airfields reachable from final glide (sorted by arrival time) at safety mc
- * - landpoints reachable from final glide (sorted by arrival time) at safety mc
- * - airfields reachable with climb (sorted by arrival time including climb time) 
- *   at current mc
- * - landpoints reachable with climb (sorted by arrival time including climb time) 
- *   at current mc
- * 
+ * - airfields reachable at safety MC (sorted by arrival altitude)
+ * - outlanding sites reachable at safety MC (sorted by arrival altitude)
+ * - airfields and outlanding sites unreachable at safety MC (sorted by
+ *   arrival time, including climb time, assuming climbing at a rate equal
+ *   to current MC and drifting with the wind while climbing).
  */
 class AbortTask: public UnorderedTask
 {
@@ -45,7 +43,7 @@ protected:
   AlternateTaskVector task_points;
 
 private:
-  /** max number of items in list */
+  /** max number of items in abort task waypoint list */
   static constexpr AlternateTaskVector::size_type max_abort = 10;
 
   /** whether the AbortTask is the master or running in background */
@@ -138,7 +136,7 @@ protected:
   /**
    * Fill abort task list with candidate waypoints given a list of
    * waypoints satisfying approximate range queries.  Can be used
-   * to add airfields only, or landpoints.
+   * to add airfields only, or outlanding sites, too.
    *
    * @param state Aircraft state
    * @param approx_waypoints List of candidate waypoints
@@ -147,7 +145,7 @@ protected:
    * @param final_glide Whether solution must be glide only or climb allowed
    * @param safety Whether solution uses safety polar
    *
-   * @return True if a landpoint within final glide was found
+   * @return True if a landable point within final glide was found
    */
   bool FillReachable(const AircraftState &state,
                      AlternateList &approx_waypoints,
@@ -156,10 +154,11 @@ protected:
 
 protected:
   /**
-   * This is called by update_sample after the turnpoint list has 
-   * been filled with landpoints.
-   * It's first called after the reachable scan, then may be called again after scanning
-   * for unreachable.
+   * This is called by UpdateSample after landable waypoints might have
+   * been added to task_points. It's first called after the reachable
+   * airfield and outlanding site scans and is then called again after the
+   * unreachable landable waypoint scan (which includes both airfields and
+   * outlanding sites).
    */
   virtual void ClientUpdate(const AircraftState &state_now,
                             bool reachable) noexcept;

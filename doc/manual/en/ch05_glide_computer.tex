@@ -121,7 +121,7 @@ attention to it, because the flight mode concept is one of XCSoar's
 fundamental basics. Another very basic scheme deals with how to structure 
 information to be displayed together. This information is grouped in
 \emph{screen pages}. Further details are given in Section~\ref{sec:infoboxandpages}
-``Infoboxes and screen pages''.\config{screenpages}
+``InfoBoxes and screen pages''.\config{screenpages}
 
 
 \section{MacCready setting}
@@ -289,7 +289,7 @@ according to the continuously changing Dolphin speed value.
 
 A configuration option `Block speed to fly' (see
 Section~\ref{sec:final-glide}) can be used to specify whether dolphin
-or block speed to fly is used.  The infobox `V Opt' shows the optimum
+or block speed to fly is used.  The InfoBox `V Opt' shows the optimum
 speed according to whichever mode is selected.  When connected to the
 Vega intelligent variometer, the speed command sounds are based on
 this optimum speed value.
@@ -480,15 +480,8 @@ bar is coloured amber.
 \multicolumn{2}{l}{A bar beyond this scale is indicated by a chopped-off tip.}
 \end{tabular}
 \end{center}
-\tip{}
-At this point it must also be mentioned, that the indicated height below the glide
-path is not just a plain difference of glide path and current altitude. Depending 
-on the setting `predict wind drift' (On) the `Below' indicator 
-shows the required height to gain by thermalling. \config{predict-drift}
-The required height might be quite a bit more with headwind, as well as a bit less
-with tailwind. 
-Otherwise (`predict wind drift' set to Off), it is just the plain
-altitude difference.
+The meaning of the height shown is affected by
+the 'Predict wind drift' setting (see Section~\ref{conf:predict-drift}).
 
 
 
@@ -679,7 +672,7 @@ glide it adjusts the setting to give minimum time to arrival.
 The method that is used is defined in the configuration settings dialogue as the
 field ``Auto MC Mode''.  The default setting is ``Both''.
 
-When Auto MacCready is enabled, the MacCready infobox displays `MC auto'
+When Auto MacCready is enabled, the MacCready InfoBox displays `MC auto'
 instead of `MC manual'; and the MacCready indicator in the variometer
 gauge displays `AutoMC' instead of `MC'.
 To benefit the most from the automatic MC adjustment XCSoar propagates the MC

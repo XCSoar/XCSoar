@@ -86,6 +86,8 @@
         </array>
         <key>NSLocationAlwaysUsageDescription</key>
         <string>Navigation and flight logging with the in-built GPS sensor.</string>
+        <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+        <string>Navigation and flight logging require access to your location even when the app is in the background.</string>
         <key>NSLocationWhenInUseUsageDescription</key>
         <string>Navigation and flight logging with the in-built GPS sensor.</string>
         <key>UIFileSharingEnabled</key>
@@ -96,6 +98,17 @@
         <true/>
         <key>UILaunchStoryboardName</key>
         <string>LaunchScreen</string>
+        <key>UIBackgroundModes</key>
+        <array>
+            <string>processing</string>
+            <string>audio</string>
+            <string>location</string>
+            <string>fetch</string>
+        </array>
+        <key>BGTaskSchedulerPermittedIdentifiers</key>
+        <array>
+            <string>de.xcsoar.background-processing</string>
+        </array>
         <key>NSAppTransportSecurity</key>
         <dict>
             <key>NSAllowsArbitraryLoads</key>

@@ -3,24 +3,24 @@
 
 #include "StartupDialog.hpp"
 #include "Error.hpp"
-#include "ProfilePasswordDialog.hpp"
-#include "ProfileListDialog.hpp"
-#include "WidgetDialog.hpp"
-#include "Widget/TwoWidgets.hpp"
-#include "Widget/RowFormWidget.hpp"
-#include "UIGlobals.hpp"
-#include "Profile/Profile.hpp"
-#include "ui/canvas/Canvas.hpp"
-#include "Screen/Layout.hpp"
-#include "Look/DialogLook.hpp"
-#include "Form/Form.hpp"
 #include "Form/Button.hpp"
 #include "Form/DataField/File.hpp"
-#include "Language/Language.hpp"
+#include "Form/Form.hpp"
 #include "Gauge/LogoView.hpp"
-#include "LogFile.hpp"
+#include "Language/Language.hpp"
 #include "LocalPath.hpp"
+#include "LogFile.hpp"
+#include "Look/DialogLook.hpp"
+#include "Profile/Profile.hpp"
+#include "ProfileListDialog.hpp"
+#include "ProfilePasswordDialog.hpp"
+#include "Screen/Layout.hpp"
+#include "UIGlobals.hpp"
+#include "Widget/RowFormWidget.hpp"
+#include "Widget/TwoWidgets.hpp"
+#include "WidgetDialog.hpp"
 #include "system/FileUtil.hpp"
+#include "ui/canvas/Canvas.hpp"
 
 class LogoWindow final : public PaintWindow {
   LogoView logo;
@@ -205,7 +205,7 @@ dlgStartupShowModal() noexcept
   unsigned length = dff->size();
 
   for (unsigned i = 0; i < length; ++i) {
-    const auto path = dff->GetItem(i);
+    const auto path = Path(dff->GetItem(i).path);
     const auto timestamp = File::GetLastModification(path);
     if (timestamp > best_timestamp) {
       best_timestamp = timestamp;

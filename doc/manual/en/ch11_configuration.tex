@@ -94,17 +94,14 @@ configured when flying at a new site.
   which additional computations   like calculation of arrival height in map 
   display always takes place. Useful for waypoints   like known reliable 
   thermal sources (e.g.\ powerplants) or mountain passes.
-\item[Airspaces]  The file name of the primary airspace file.  If left blank,
+\item[Airspaces]  List of active airspace files that can be selected and used simultaneously.  If left blank,
   airspaces are loaded from the map file (if available).
-\item[More airspaces*]  The file name of the secondary airspace file.
-\item[Waypoint details*]  The airfields file may contain extracts from 
+\item[Waypoint details*]  The airfields file may contain extracts from
   Enroute Supplements or other contributed information about individual airfields.
 \end{description}
 
-Airspace files define Special Use Airspace.  Up to two files may be
-specified, the first for the main SUA file, and the second is intended
-for use with NOTAM airspace, and is referred to as the additional
-airspace file.
+
+Multiple files can be selected to be used simultaneously.
 \sketch{figures/config-site.png}
 
 The XCM map database concept is the current way to setup a site to fly.
@@ -428,8 +425,15 @@ This page allows glide computer algorithms to be configured.
   15 seconds. Lower values will give as a result pretty much the same as GR Instant, 
   while higher values will look like GR Cruise. Other commercial instruments and 
   software use 2 minutes.
-\item[Predict wind drift*]  \label{conf:predict-drift}Account for wind drift for the predicted circling 
-  duration. This reduces the arrival height for legs with head wind (on by default).
+\item[Predict wind drift*]  \label{conf:predict-drift} Accounts for drifting with
+  the wind while circling to gain any altitude needed to reach final glide path
+  altitude. On by default. This affects any displayed altitude difference (e.g.,
+  the final glide bar and altitude difference InfoBoxes). For upwind destinations,
+  it makes the displayed altitude difference more negative; for downwind
+  destinations, it makes it less negative (less climbing needed). The assumed
+  circling climb rate equals the current MacCready setting (MC). If the current MC
+  is zero, no circling is assumed, and the value shown is the same as if 'Predict
+  wind drift' were 'Off'.
 \end{description}
 
 

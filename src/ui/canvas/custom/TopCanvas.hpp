@@ -3,6 +3,10 @@
 
 #pragma once
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 #ifdef USE_MEMORY_CANVAS
 #include "ui/canvas/memory/PixelTraits.hpp"
 #include "ui/canvas/memory/ActivePixelTraits.hpp"
@@ -153,6 +157,9 @@ public:
     /* can't draw if there is no EGL surface (e.g. if the Android app
        is paused) */
     return surface != EGL_NO_SURFACE;
+#elif defined(__APPLE__) && TARGET_OS_IPHONE
+    /* on iOS, check if the app is active and in foreground */
+    return IsIOSAppActive();
 #else
     return true;
 #endif
@@ -244,6 +251,13 @@ public:
 #endif
 
 private:
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+  /**
+   * Check if the iOS app is active and ready for rendering
+   */
+  bool IsIOSAppActive() const noexcept;
+#endif
+
 #ifdef ENABLE_OPENGL
   PixelSize SetupViewport(PixelSize native_size) noexcept;
 #endif

@@ -12,4 +12,5 @@ TrafficSettings::SetDefaults() noexcept
   north_up = false;
   radar_zoom = 4;
   gauge_location = GaugeLocation::BOTTOM_RIGHT_AVOID_IB;
+  no_position_target_distance_ring = true;
 }
