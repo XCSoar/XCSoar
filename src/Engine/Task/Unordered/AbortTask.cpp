@@ -227,6 +227,12 @@ AbortTask::UpdateSample(const AircraftState &state,
                                        true, true, true);
 
   /**
+   * Add to the "alternates" list the reachable airfield waypoints just added
+   * to task_points, sorted according to the "Alternates mode" setting.
+   */
+  ClientUpdate(state, true);
+
+  /**
    * Now add to task_points reachable outlanding sites, sorted by arrival
    * altitude.
    */
@@ -234,9 +240,8 @@ AbortTask::UpdateSample(const AircraftState &state,
                                        false, true, true);
 
   /**
-   * Add to the "alternates" list the reachable airfield and outlanding site
-   * waypoints just added to task_points, sorted according to the "Alternates
-   * mode" setting.
+   * Add to the "alternates" list the reachable outlanding site waypoints just
+   * added to task_points, sorted according to the "Alternates mode" setting.
    */
   ClientUpdate(state, true);
 
