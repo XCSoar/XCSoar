@@ -10,6 +10,8 @@
 #include <span>
 #include <type_traits>
 
+#include "InfoBoxes/InfoBoxSettings.hpp"
+
 struct InfoBoxSettings;
 
 class RaspStore;
@@ -24,6 +26,8 @@ struct PageLayout
 
     bool auto_switch;
     unsigned panel;
+
+    InfoBoxSettings::Geometry geometry;
 
     constexpr InfoBoxConfig() noexcept = default;
 
