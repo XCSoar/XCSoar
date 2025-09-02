@@ -21,10 +21,22 @@
 #include "Language/Language.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StaticArray.hxx"
+#include "Panels/LayoutConfigPanel.hpp"
+#include "Form/DataField/Enum.hpp"
 
 #include <cassert>
 
 using namespace UI;
+
+std::vector<StaticEnumChoice> CreateInfoBoxGeometryListWithInherit() {
+  std::vector<StaticEnumChoice> list;
+  list.push_back({ InfoBoxSettings::Geometry::INHERIT, _("Inherit from global settings"), nullptr });
+  for (const StaticEnumChoice* e = info_box_geometry_list; e && e->display_string != nullptr; ++e) {
+    list.push_back(*e);
+  }
+//   list.push_back({ 0, nullptr, nullptr });
+  return list;
+}
 
 static InfoBoxSettings::Panel clipboard;
 static unsigned clipboard_size;
@@ -54,7 +66,7 @@ class InfoBoxesConfigWidget final
   : public RowFormWidget, DataFieldListener {
 
   enum Controls {
-    NAME, INFOBOX, CONTENT, DESCRIPTION
+    NAME, PAGE_GEOMETRY, INFOBOX, CONTENT, DESCRIPTION
   };
 
   struct Layout {
@@ -220,6 +232,14 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
           allow_name_change ? (const char *)data.name : gettext(data.name));
   SetReadOnly(NAME, !allow_name_change);
 
+  auto list = CreateInfoBoxGeometryListWithInherit();
+  std::vector<StaticEnumChoice> storage = list;
+//   auto info_box_geometry_list_with_inherit = CreateInfoBoxGeometryListWithInherit();
+  AddEnum(_("Page geometry"),
+          _("Override InfoBox geometry only for this page. If unset, global setting is used."),
+          storage.data(),
+          (unsigned)data.geometry);
+
   DataFieldEnum *dfe = new DataFieldEnum(this);
   for (unsigned i = 0; i < layout.info_boxes.count; ++i) {
     char label[32];
@@ -282,6 +302,12 @@ InfoBoxesConfigWidget::Save(bool &changed_r) noexcept
       data.name = new_name;
       changed = true;
     }
+  }
+
+  auto new_geom = (InfoBoxSettings::Geometry)GetValueEnum(PAGE_GEOMETRY);
+  if (new_geom != data.geometry) {
+    data.geometry = new_geom;
+    changed = true;
   }
 
   changed_r = changed;
