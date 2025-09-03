@@ -23,6 +23,7 @@
 #include "Input/InputQueue.hpp"
 #include "Dialogs/StartupDialog.hpp"
 #include "Dialogs/dlgSimulatorPrompt.hpp"
+#include "Dialogs/Onboarding.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Language/Language.hpp"
 #include "Protection.hpp"
@@ -387,6 +388,11 @@ Startup(UI::Display &display)
 
   // Read the terrain file
   main_window->LoadTerrain();
+
+  // Show onboarding dialog
+  if (true || Profile::GetPath(ProfileKeys::MapFile) == nullptr) {
+    dlgOnboardingShowModal();
+  }
 
   backend_components->glide_computer =
     std::make_unique<GlideComputer>(computer_settings,

@@ -220,6 +220,23 @@ else
 RESOURCE_FILES += $(PNG_BITMAPS)
 endif
 
+
+
+GESTURES = du.png up.png down.png left.png right.png urdl.png dr.png rd.png dl.png ud.png ldr.png urd.png ldrdl.png
+GESTURES_DST = $(addprefix $(DATA)/graphics2/gesture_,$(GESTURES))
+
+# sicherstellen, dass das Zielverzeichnis existiert
+$(DATA)/graphics2/dirstamp:
+	@$(NQ)echo "  MKDIR   $(DATA)/graphics2/"
+	$(Q)mkdir -p $(DATA)/graphics2
+	@touch $@
+
+# Kopiere PNGs aus doc/manual/en/figures nach graphics2/ mit Prefix "gesture_"
+$(GESTURES_DST): $(DATA)/graphics2/gesture_%.png: doc/manual/en/figures/%.png | $(DATA)/graphics2/dirstamp
+	$(Q)cp $< $@
+
+RESOURCE_FILES += $(GESTURES_DST)
+
 RESOURCE_FILES += $(BMP_ICONS_ALL)
 RESOURCE_FILES += $(BMP_SPLASH_320) $(BMP_SPLASH_160) $(BMP_SPLASH_80)
 RESOURCE_FILES += $(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER)
