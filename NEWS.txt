@@ -66,6 +66,7 @@ Version 7.44 - not yet released
   - AirControlDisplay: Read-out transponder mode
   - Larus: Protocol 0.1.4 add OAT,GLoad,Circling/Cruise
   - SerialPorts: add 230400 baud support
+  - Add port 4000 to tcp-client
 * Polar:
   - LS8-15m: default polar, set to values according to flight manual
 * Weglide:
