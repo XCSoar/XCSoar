@@ -12,7 +12,7 @@
 
 class PortBridge {
 public:
-  PortBridge();
+  PortBridge(const char *deviceAddress);
 
   void setListener(PortListener *listener);
   void setInputListener(DataHandler *handler);
@@ -35,6 +35,7 @@ public:
 private:
   const PortListener *portListener;
   DataHandler *inputListener;
+  std::string deviceAddress;
 };
 
 class iOSPortBridge : public PortBridge {

@@ -10,8 +10,7 @@ NativeInputListener::NativeInputListener() = default;
 bool
 NativeInputListener::DataReceived(std::span<const std::byte> s) noexcept
 {
-
-  LogFormat("[DEBUG] NativeInputListener::DataReceived");
+  // TODO?
   (void)s;
   return true;
 }

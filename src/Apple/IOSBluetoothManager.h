@@ -16,4 +16,7 @@
 @property(nonatomic, strong, nonnull)
     NSMutableDictionary<CBPeripheral *, NSValue *> *activeConnections;
 @property(nonatomic, strong, nullable) NSString *pendingConnectionAddress;
+
+- (BOOL)writeData:(nonnull NSData *)data toDeviceAddress:(nonnull NSString *)address;
+
 @end

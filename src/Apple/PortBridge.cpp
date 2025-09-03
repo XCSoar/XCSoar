@@ -12,7 +12,7 @@
 #include <span>
 #include <string.h>
 
-PortBridge::PortBridge()
+PortBridge::PortBridge(const char *address): deviceAddress(address)
 {
   setListener(new NativePortListener());
   setInputListener(new NativeInputListener());
@@ -40,22 +40,19 @@ PortBridge::getInputListener()
 std::size_t
 PortBridge::write(std::span<const std::byte> src)
 {
-  (void)src;
-  // TODO
-  return -1;
   if (bluetooth_helper != nullptr) {
-    // NSData *data = [NSData dataWithBytes:src.data() length:src.size()];
-    // IOSBluetoothManager *manager = [IOSBluetoothManager sharedInstance];
-    // // BOOL success = [manager writeData:data];
-    // const std::string address = getAddress();  // PortBridge::getAddress()
-    // NSString *addrStr = [NSString stringWithUTF8String:address.c_str()];
-    // BOOL success = [manager writeData:data toDeviceAddress:addrStr];
-    BOOL success = NO;
+    auto *helper = dynamic_cast<BluetoothHelperIOS *>(bluetooth_helper);
+    if (!helper) return -1;
+
+    IOSBluetoothManager *manager = helper->getManager();
+    NSData *data = [NSData dataWithBytes:src.data() length:src.size()];
+    NSString *addrStr = [NSString stringWithUTF8String:deviceAddress.c_str()];
+    BOOL success = [manager writeData:data toDeviceAddress:addrStr];
 
     if (!success) throw std::runtime_error{"Port write failed"};
-    LogFormat("=====> PortBridge::write size %zu", src.size());
+    // LogFormat("=====> PortBridge::write size %zu", src.size());
 
-    return src.size(); // oder tatsächliche Anzahl gesendeter Bytes
+    return src.size();
   }
 
   return -1;

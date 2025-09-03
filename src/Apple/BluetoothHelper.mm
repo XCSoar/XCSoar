@@ -69,7 +69,7 @@
         advertisementData:(NSDictionary<NSString *, id> *)advertisementData
                      RSSI:(NSNumber *)RSSI
 {
-  bool peripheralWillBeDetected = true; // TODO
+  bool peripheralWillBeDetected = true; // TODO (debug=true; prod=false)
 
   NSString *identifier = peripheral.identifier.UUIDString;
   self.discoveredPeripherals[identifier] = peripheral;
@@ -89,6 +89,7 @@
   // 	return;
   // }
 
+  // TODO this does not work yet. For debugging set peripheralWillBeDetected = true
   NSArray<CBUUID *> *serviceUUIDs =
       advertisementData[CBAdvertisementDataServiceUUIDsKey];
   if (serviceUUIDs) {
@@ -207,7 +208,7 @@
     return nullptr; // Erst verbinden, wenn gefunden
   }
 
-  PortBridge *bridge = new PortBridge();
+  PortBridge *bridge = new PortBridge([deviceAddress UTF8String]);
   _activeConnections[peripheral] = [NSValue valueWithPointer:bridge];
   peripheral.delegate = self;
 
@@ -251,7 +252,7 @@
     if (characteristic.properties & CBCharacteristicPropertyNotify ||
         characteristic.properties & CBCharacteristicPropertyIndicate) {
       [peripheral setNotifyValue:YES forCharacteristic:characteristic];
-      [peripheral readValueForCharacteristic:characteristic]; // TODO remove?
+    //   [peripheral readValueForCharacteristic:characteristic]; // TODO remove?
     }
   }
 }
@@ -281,7 +282,6 @@
   size_t length = [value length];
 
   bridge->getInputListener()->DataReceived({(const std::byte *)bytes, length});
-  LogFormat("===> [DEBUG] bridge->getInputListener().DataReceived");
 }
 
 - (void)centralManager:(CBCentralManager *)central
@@ -292,8 +292,38 @@
             [error.localizedDescription UTF8String]);
 }
 
-- (BOOL)writeData:(NSData *)data
+- (BOOL)writeData:(NSData *)data toDeviceAddress:(NSString *)address
 {
+  CBPeripheral *peripheral = self.discoveredPeripherals[address];
+  if (!peripheral) {
+    LogFormat("Peripheral %s not found", [address UTF8String]);
+    return NO;
+  }
+
+  for (CBService *service in peripheral.services) {
+    for (CBCharacteristic *characteristic in service.characteristics) {
+      if (characteristic.properties & CBCharacteristicPropertyWrite ||
+          characteristic.properties & CBCharacteristicPropertyWriteWithoutResponse) {
+
+        CBCharacteristicWriteType type =
+            (characteristic.properties & CBCharacteristicPropertyWriteWithoutResponse)
+              ? CBCharacteristicWriteWithoutResponse
+              : CBCharacteristicWriteWithResponse;
+
+        [peripheral writeValue:data forCharacteristic:characteristic type:type];
+
+        // LogFormat("Wrote %lu bytes to %@ (service %@, characteristic %@)",
+        //     (unsigned long)data.length,
+        //     peripheral.name,
+        //     service.UUID.UUIDString,
+        //     characteristic.UUID.UUIDString);
+
+        return YES;
+      }
+    }
+  }
+
+  LogFormat("No writable characteristic found for %s", [peripheral.name UTF8String]);
   return NO;
 }
 

@@ -32,6 +32,8 @@ public:
   PortBridge *connect(const char *address) override;
   PortBridge *connectHM10(const char *address) override;
   PortBridge *createServer() override;
+  
+  IOSBluetoothManager *getManager() const { return manager; }
 
 private:
   IOSBluetoothManager *manager;
