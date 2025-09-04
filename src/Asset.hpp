@@ -11,6 +11,10 @@
 #include <TargetConditionals.h>
 #endif
 
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+#include "Apple/KeyboardDetection.hpp"
+#endif
+
 /**
  * Returns whether this is a debug build.
  */
@@ -165,6 +169,12 @@ HasTouchScreen() noexcept
 [[gnu::pure]]
 bool
 HasKeyboard() noexcept;
+#elif defined(__APPLE__) && TARGET_OS_IPHONE
+static inline bool
+HasKeyboard() noexcept
+{
+  return IsHardwareKeyboardConnected();
+}
 #else
 constexpr
 static inline bool
@@ -179,7 +189,7 @@ HasKeyboard() noexcept
  * in modal dialogs.  Without cursor keys, focused controls do not
  * need to be highlighted.
  */
-#ifndef ANDROID
+#if !defined(ANDROID) && !(defined(__APPLE__) && TARGET_OS_IPHONE)
 constexpr
 #endif
 static inline bool
@@ -188,10 +198,12 @@ HasCursorKeys() noexcept
   /* we assume that all Windows (CE) devices have cursor keys; some do
      not, but that's hard to detect */
 
-#ifdef ANDROID
+#if defined(ANDROID)
   return has_cursor_keys;
+#elif defined(__APPLE__) && TARGET_OS_IPHONE
+  return HasKeyboard();
 #else
-  return !IsKobo() && !IsIOS();
+  return !IsKobo();
 #endif
 }
 

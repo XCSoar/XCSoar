@@ -554,6 +554,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Apple/Services.cpp \
 	$(SRC)/Apple/SoundUtil.cpp \
 	$(SRC)/Apple/InternalSensors.cpp \
+	$(SRC)/Apple/KeyboardDetection.cpp \
 	$(SRC)/Device/SmartDeviceSensors.cpp
 endif
 
