@@ -45,7 +45,8 @@ GestureHelpWindow::OnPaint(Canvas &canvas) noexcept
   
   int margin = Layout::FastScale(10);
   int x_img = rc.left + Layout::FastScale(10);
-  int x_text = x_img + img_size.width + margin;
+  int x_letter = x_img + img_size.width + margin;
+  int x_text = x_img + img_size.width + 30 + 2 * margin;
   int y = rc.top + Layout::FastScale(10);
 
   Font font;
@@ -68,6 +69,12 @@ GestureHelpWindow::OnPaint(Canvas &canvas) noexcept
   const TCHAR *du_text = _T("Show main menu");
   PixelSize du_ps = canvas.CalcTextSize(du_text);
   canvas.DrawText({x_text, y + int(img_size.height / 2) - int(du_ps.height / 2)}, du_text);
+
+  font.Load(FontDescription(Layout::VptScale(12), true, false, true));
+  const TCHAR *du_letter = _T("✓");
+  PixelSize du_letter_ps = canvas.CalcTextSize(du_letter);
+  canvas.DrawText({x_letter, y + int(img_size.height / 2) - int(du_letter_ps.height / 2)}, du_letter);
+  font.Load(FontDescription(Layout::VptScale(12), false));
 
   y += int(img_size.height) + margin;
 
@@ -104,6 +111,12 @@ GestureHelpWindow::OnPaint(Canvas &canvas) noexcept
   PixelSize urdl_ps = canvas.CalcTextSize(urdl_text);
   canvas.DrawText({x_text, y + int(img_size.height / 2) - int(urdl_ps.height / 2)}, urdl_text);
 
+  font.Load(FontDescription(Layout::VptScale(12), true, false, true));
+  const TCHAR *urdl__letter = _T("P");
+  PixelSize urdl_letter_ps = canvas.CalcTextSize(urdl__letter);
+  canvas.DrawText({x_letter, y + int(img_size.height / 2) - int(urdl_letter_ps.height / 2)}, urdl__letter);
+  font.Load(FontDescription(Layout::VptScale(12), false));
+
   y += int(img_size.height) + 2 * margin;
 
 
@@ -119,9 +132,15 @@ GestureHelpWindow::OnPaint(Canvas &canvas) noexcept
   font.Load(FontDescription(Layout::VptScale(12), false));
 
   canvas.Copy({x_img, y}, img_size, dr_img, {0, 0});
-  const TCHAR *dr_text = _T("Show Select Waypoint dialogue");
+  const TCHAR *dr_text = _T("Show Select Waypoint list");
   PixelSize dr_ps = canvas.CalcTextSize(dr_text);
   canvas.DrawText({x_text, y + int(img_size.height / 2) - int(dr_ps.height / 2)}, dr_text);
+
+  font.Load(FontDescription(Layout::VptScale(12), true, false, true));
+  const TCHAR *dr_letter = _T("L");
+  PixelSize dr_letter_ps = canvas.CalcTextSize(dr_letter);
+  canvas.DrawText({x_letter, y + int(img_size.height / 2) - int(dr_letter_ps.height / 2)}, dr_letter);
+  font.Load(FontDescription(Layout::VptScale(12), false));
 
   y += int(img_size.height) + margin;
 
@@ -130,12 +149,18 @@ GestureHelpWindow::OnPaint(Canvas &canvas) noexcept
   PixelSize rd_ps = canvas.CalcTextSize(rd_text);
   canvas.DrawText({x_text, y + int(img_size.height / 2) - int(rd_ps.height / 2)}, rd_text);
 
+  font.Load(FontDescription(Layout::VptScale(12), true, false, true));
+  const TCHAR *rd_letter = _T("T");
+  PixelSize rd_letter_ps = canvas.CalcTextSize(rd_letter);
+  canvas.DrawText({x_letter, y + int(img_size.height / 2) - int(rd_letter_ps.height / 2)}, rd_letter);
+  font.Load(FontDescription(Layout::VptScale(12), false));
+
   y += int(img_size.height) + margin;
 
   canvas.Copy({x_img, y}, img_size, dl_img, {0, 0});
   const TCHAR *dl_text = _T("Show Alternates List");
-  PixelSize dl_ps = canvas.CalcTextSize(dl_text);
-  canvas.DrawText({x_text, y + int(img_size.height / 2) - int(dl_ps.height / 2)}, dl_text);
+  PixelSize d_letter_ps = canvas.CalcTextSize(dl_text);
+  canvas.DrawText({x_text, y + int(img_size.height / 2) - int(d_letter_ps.height / 2)}, dl_text);
 
   y += int(img_size.height) + margin;
 
@@ -151,6 +176,12 @@ GestureHelpWindow::OnPaint(Canvas &canvas) noexcept
   PixelSize ldr_ps = canvas.CalcTextSize(ldr_text);
   canvas.DrawText({x_text, y + int(img_size.height / 2) - int(ldr_ps.height / 2)}, ldr_text);
 
+  font.Load(FontDescription(Layout::VptScale(12), true, false, true));
+  const TCHAR *ldr_letter = _T("C");
+  PixelSize ldr_letter_ps = canvas.CalcTextSize(ldr_letter);
+  canvas.DrawText({x_letter, y + int(img_size.height / 2) - int(ldr_letter_ps.height / 2)}, ldr_letter);
+  font.Load(FontDescription(Layout::VptScale(12), false));
+
   y += int(img_size.height) + margin;
 
   canvas.Copy({x_img, y}, img_size, urd_img, {0, 0});
@@ -158,12 +189,24 @@ GestureHelpWindow::OnPaint(Canvas &canvas) noexcept
   PixelSize urd_ps = canvas.CalcTextSize(urd_text);
   canvas.DrawText({x_text, y + int(img_size.height / 2) - int(urd_ps.height / 2)}, urd_text);
 
+  font.Load(FontDescription(Layout::VptScale(12), true, false, true));
+  const TCHAR *urd_letter = _T("A");
+  PixelSize urd_letter_ps = canvas.CalcTextSize(urd_letter);
+  canvas.DrawText({x_letter, y + int(img_size.height / 2) - int(urd_letter_ps.height / 2)}, urd_letter);
+  font.Load(FontDescription(Layout::VptScale(12), false));
+
   y += int(img_size.height) + margin;
 
   canvas.Copy({x_img, y}, img_size, ldrdl_img, {0, 0});
-  const TCHAR *ldrdl_text = _T("Open the Status dialogue");
-  PixelSize ldrdl_ps = canvas.CalcTextSize(ldrdl_text);
-  canvas.DrawText({x_text, y + int(img_size.height / 2) - int(ldrdl_ps.height / 2)}, ldrdl_text);
+  const TCHAR *ldrdl_text = _T("Open Status dialogue");
+  PixelSize ldrd_letter_ps = canvas.CalcTextSize(ldrdl_text);
+  canvas.DrawText({x_text, y + int(img_size.height / 2) - int(ldrd_letter_ps.height / 2)}, ldrdl_text);
+
+  font.Load(FontDescription(Layout::VptScale(12), true, false, true));
+  const TCHAR *ldrdl_letter = _T("S");
+  PixelSize ldrdl_letter_ps = canvas.CalcTextSize(ldrdl_letter);
+  canvas.DrawText({x_letter, y + int(img_size.height / 2) - int(ldrdl_letter_ps.height / 2)}, ldrdl_letter);
+  font.Load(FontDescription(Layout::VptScale(12), false));
 
   y += int(img_size.height) + margin;
 
