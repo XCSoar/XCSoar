@@ -10,6 +10,9 @@
 		5C263B8C2D7456D30031179E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		5C263B8D2D7456D30031179E /* build.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = "<group>"; };
 		5C263B8E2D7456D30031179E /* clean.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = clean.sh; sourceTree = "<group>"; };
+		5C72EF752E801F210015A594 /* sign.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = sign.sh; sourceTree = "<group>"; };
+		5C72EF762E8024580015A594 /* KeyboardDetection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KeyboardDetection.hpp; sourceTree = "<group>"; };
+		5C72EF772E8024580015A594 /* KeyboardDetection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KeyboardDetection.cpp; sourceTree = "<group>"; };
 		5C72EF782E80785B0015A594 /* Services.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Services.hpp; sourceTree = "<group>"; };
 		5C72EF792E80785B0015A594 /* Services.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Services.cpp; sourceTree = "<group>"; };
 		5C72EF7A2E80785B0015A594 /* SoundUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SoundUtil.hpp; sourceTree = "<group>"; };
@@ -7048,6 +7051,7 @@
 		5C263B902D7456D30031179E /* darwin */ = {
 			isa = PBXGroup;
 			children = (
+				5C72EF752E801F210015A594 /* sign.sh */,
 				5C263B8C2D7456D30031179E /* .gitignore */,
 				5C263B8D2D7456D30031179E /* build.sh */,
 				5C263B8E2D7456D30031179E /* clean.sh */,
@@ -14916,6 +14920,8 @@
 		5CBFDFE62D742FA600F05795 /* Apple */ = {
 			isa = PBXGroup;
 			children = (
+				5C72EF762E8024580015A594 /* KeyboardDetection.hpp */,
+				5C72EF772E8024580015A594 /* KeyboardDetection.cpp */,
 				5C72EF782E80785B0015A594 /* Services.hpp */,
 				5C72EF792E80785B0015A594 /* Services.cpp */,
 				5C72EF7A2E80785B0015A594 /* SoundUtil.hpp */,
