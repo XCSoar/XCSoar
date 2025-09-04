@@ -23,6 +23,7 @@
 #include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+#include "MainWindow.hpp"
 
 #ifdef HAVE_NOAA
 #include "Dialogs/Weather/NOAADetails.hpp"
@@ -51,6 +52,10 @@ HasDetails(const MapItem &item)
   case MapItem::Type::OVERLAY:
   case MapItem::Type::RASP:
     return true;
+
+  case MapItem::Type::ARRIVAL_TIME_RING:
+    // This item type has no details view.
+    return false;
   }
 
   return false;
@@ -214,6 +219,7 @@ MapItemListWidget::OnGotoClicked()
   auto waypoint = ((const WaypointMapItem &)item).waypoint;
   backend_components->protected_task_manager->DoGoto(std::move(waypoint));
   cancel_button->Click();
+  CommonInterface::main_window->FullRedraw();
 }
 
 inline void
@@ -290,7 +296,11 @@ ShowMapItemDialog(const MapItem &item,
   case MapItem::Type::RASP:
     ShowWeatherDialog(_T("rasp"));
     break;
-  }
+
+ case MapItem::Type::ARRIVAL_TIME_RING:
+   // This item type has no details view.
+   break;
+ }
 }
 
 void
