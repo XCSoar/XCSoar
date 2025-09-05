@@ -970,6 +970,13 @@ event=RepeatStatusMessage
 label=Message Repeat
 location=7
 
+mode=Info3
+type=key
+data=9
+event=Onboarding
+label=Gesture Help
+location=8
+
 # -------------
 # mode=Menu
 # -------------
