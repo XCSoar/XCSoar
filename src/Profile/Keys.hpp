@@ -291,4 +291,6 @@ constexpr std::string_view RaspFile = "RaspFile";
 
 constexpr std::string_view StratuxHorizontalRange = "StratuxHorizontalRange";
 constexpr std::string_view StratuxVerticalRange = "StratuxVerticalRange";
+
+constexpr std::string_view OnboardingShown = "OnboardingShown";
 }
