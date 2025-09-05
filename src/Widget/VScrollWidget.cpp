@@ -11,7 +11,7 @@ VScrollWidget::CalcVirtualHeight(const PixelRect &rc) const noexcept
 {
   const unsigned height = rc.GetHeight();
   const unsigned max_height = widget->GetMaximumSize().height;
-  if (max_height <= height)
+  if (max_height > height)
     return max_height;
 
   const unsigned min_height = widget->GetMinimumSize().height;
@@ -141,7 +141,6 @@ void
 VScrollWidget::OnVScrollPanelChange() noexcept
 {
   if (visible) {
-    UpdateVirtualHeight(GetWindow().GetClientRect());
     widget->Move(GetWindow().GetVirtualRect());
   }
 }
