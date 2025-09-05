@@ -4,6 +4,7 @@
 #include "Dialogs/Onboarding.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Widget/VScrollWidget.hpp"
 #include "Widget/LargeTextWidget.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
@@ -24,6 +25,33 @@ class GestureHelpWindow final : public PaintWindow {
          ldrdl_img{IDB_GESTURE_LDRDL};
 protected:
   void OnPaint(Canvas &canvas) noexcept override;
+};
+
+class GestureHelpWidget final : public WindowWidget {
+  std::unique_ptr<GestureHelpWindow> window;
+
+public:
+  PixelSize GetMinimumSize() const noexcept override {
+    return { Layout::FastScale(200), Layout::FastScale(200) };
+  }
+  
+  PixelSize GetMaximumSize() const noexcept override {
+    return { Layout::FastScale(300), Layout::FastScale(450) };
+  }
+
+  void Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept override {
+    WindowStyle style;
+    window = std::make_unique<GestureHelpWindow>();
+    window->Create(parent, rc, style);
+	SetWindow(std::move(window));
+  }
+
+  void Show(const PixelRect &rc) noexcept override {
+    (void)rc;
+    if (window) {
+      window->Show();
+    }
+  }
 };
 
 void
@@ -218,15 +246,6 @@ GestureHelpWindow::OnPaint(Canvas &canvas) noexcept
   canvas.DrawText({x_img, y}, dot_info_text);
 }
 
-static std::unique_ptr<Window>
-CreateGestureHelpWidget(ContainerWindow &parent, const PixelRect &rc,
-               WindowStyle style)
-{
-  auto window = std::make_unique<GestureHelpWindow>();
-  window->Create(parent, rc, style);
-  return window;
-}
-
 void
 dlgOnboardingShowModal()
 {
@@ -235,11 +254,10 @@ dlgOnboardingShowModal()
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Onboarding"));
 
-  auto widget = std::make_unique<CreateWindowWidget>(
-    CreateGestureHelpWidget
-  );
+  auto inner = std::make_unique<GestureHelpWidget>();
+  auto scroll = std::make_unique<VScrollWidget>(std::move(inner), look);
 
-  dialog.FinishPreliminary(std::move(widget));
+  dialog.FinishPreliminary(std::move(scroll));
   dialog.AddButton(_("Close"), mrCancel);
   dialog.ShowModal();
 }
