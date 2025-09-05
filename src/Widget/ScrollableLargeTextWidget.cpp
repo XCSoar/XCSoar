@@ -26,6 +26,8 @@ ScrollableLargeTextWidget::GetMaximumSize() const noexcept
 
   unsigned line_height = look.text_font.GetHeight();
   unsigned total_height = lines * line_height + Layout::FastScale(10);
+  
+  const unsigned max_height = Layout::FastScale(6500);
 
-  return {static_cast<unsigned>(Layout::FastScale(300)), total_height};
+  return {static_cast<unsigned>(Layout::FastScale(300)), std::min(total_height, max_height)};
 }
