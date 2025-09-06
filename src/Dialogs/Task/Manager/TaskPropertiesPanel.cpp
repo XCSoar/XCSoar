@@ -232,7 +232,7 @@ TaskPropertiesPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
            0, 300, 5, false, 0);
 
   AddFloat(_("Start max. height"),
-           _("Maximum height based on start height reference (AGL or MSL) while starting the task.  Set to 0 for no limit."),
+           _("Maximum height based on start height reference (AGL or MSL) while starting the task. Set to 0 for no limit."),
            _T("%.0f %s"), _T("%.0f"),
            0, 10000, 25, false, 0);
 
@@ -249,7 +249,7 @@ TaskPropertiesPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
           altitude_reference_list);
 
   AddFloat(_("Finish min. height"),
-           _("Minimum height based on finish height reference (AGL or MSL) while finishing the task.  Set to 0 for no limit."),
+           _("Minimum height based on finish height reference (AGL or MSL) while finishing the task. Set to 0 for no limit."),
            _T("%.0f %s"), _T("%.0f"),
            0, 10000, 25, false, 0);
 
@@ -262,7 +262,7 @@ TaskPropertiesPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
                 "0 means start opens immediately."),
               {}, minutes{30}, minutes{1}, {});
   AddDuration(_("PEV start window"),
-              _("Number of minutes start remains open after Pilot Event and PEV wait time."
+              _("Number of minutes start remains open after Pilot Event and PEV wait time. "
                 "0 means start will never close after it opens."),
               {}, minutes{30}, minutes{1}, {});
 

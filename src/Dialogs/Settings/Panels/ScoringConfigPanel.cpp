@@ -101,7 +101,7 @@ ScoringConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
           "largest FAI triangle and the largest Out & Return distance that can be fitted into the flight route.") },
     { Contest::WEGLIDE_OR, ContestToString(Contest::WEGLIDE_OR),
       N_("A start point, one turn point and a finish point are chosen from the flight path such that "
-          "the distance between the start point and the turn point is maximized") },
+          "the distance between the start point and the turn point is maximized.") },
     { Contest::CHARRON, ContestToString(Contest::CHARRON),
       N_("LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance is 20km, 5 points per km.") },
     nullptr
@@ -134,7 +134,7 @@ ScoringConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
 
   AddBoolean(_("95% dist. rule helpers"),
              _("Show helpers for Argentinean Federation \"95% distance\" rule."
-               "The AAT Distance Around Target infobox will show projected "
+               "The AAT Distance Around Target InfoBox will show projected "
                "distance vs max. and change colors as you approach 95%."),
              map_settings.show_95_percent_rule_helpers);
   SetExpertRow(SHOW_95_PERCENT_RULE_HELPERS);
