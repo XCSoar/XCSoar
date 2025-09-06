@@ -228,14 +228,14 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(TerrainSlopeShading);
 
   AddInteger(_("Terrain contrast"),
-             _("Defines the amount of Phong shading in the terrain rendering.  Use large values to emphasise terrain slope, smaller values if flying in steep mountains."),
+             _("Defines the amount of Phong shading in the terrain rendering. Use large values to emphasise terrain slope, smaller values if flying in steep mountains."),
              _T("%d %%"), _T("%d %%"), 0, 100, 5,
              ByteToPercent(terrain.contrast));
   GetDataField(TerrainContrast).SetListener(this);
   SetExpertRow(TerrainContrast);
 
   AddInteger(_("Terrain brightness"),
-             _("Defines the brightness (whiteness) of the terrain rendering.  This controls the average illumination of the terrain."),
+             _("Defines the brightness (whiteness) of the terrain rendering. This controls the average illumination of the terrain."),
              _T("%d %%"), _T("%d %%"), 0, 100, 5,
              ByteToPercent(terrain.brightness));
   GetDataField(TerrainBrightness).SetListener(this);

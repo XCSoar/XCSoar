@@ -357,14 +357,14 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 
   range.Create(parent, layout.range, _("Distance"),
                caption_width, control_style);
-  range.SetHelpText(_("For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances."));
+  range.SetHelpText(_("For AAT tasks, this setting can be used to adjust the target points within the AAT sectors. Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances."));
   range.SetDataField(new DataFieldFloat(_T("%.0f"), _T("%.0f %%"),
                                         -100, 100, 0,
                                         5, false, this));
 
   radial.Create(parent, layout.radial, _("Radial"),
                 caption_width, control_style);
-  radial.SetHelpText(_("For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise."));
+  radial.SetHelpText(_("For AAT tasks, this setting can be used to adjust the target points within the AAT sectors. Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise."));
   radial.SetDataField(new DataFieldFloat(_T("%.0f"), _T("%.0f" DEG),
                                          -90, 90, 0,
                                          5, false, this));

@@ -51,13 +51,13 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
           ProfileKeys::MapFile, _T("*.xcm\0*.lkm\0"), FileType::MAP);
 
   AddFile(_("Waypoints"),
-          _("Primary waypoints file.  Supported file types are Cambridge/WinPilot files (.dat), "
+          _("Primary waypoints file. Supported file types are Cambridge/WinPilot files (.dat), "
             "Zander files (.wpz) or SeeYou files (.cup)."),
           ProfileKeys::WaypointFile, WAYPOINT_FILE_PATTERNS,
           FileType::WAYPOINT);
 
   AddFile(_("More waypoints"),
-          _("Secondary waypoints file.  This may be used to add waypoints for a competition."),
+          _("Secondary waypoints file. This may be used to add waypoints for a competition."),
           ProfileKeys::AdditionalWaypointFile, WAYPOINT_FILE_PATTERNS,
           FileType::WAYPOINT);
   SetExpertRow(AdditionalWaypointFile);

@@ -198,7 +198,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
 
   if (HasColors()) {
     AddBoolean(_("Colored InfoBoxes"),
-               _("If true, certain InfoBoxes will have coloured text.  For example, the active waypoint "
+               _("If true, certain InfoBoxes will have coloured text. For example, the active waypoint "
                  "InfoBox will be blue when the glider is above final glide."),
                ui_settings.info_boxes.use_colors);
     SetExpertRow(AppInfoBoxColors);

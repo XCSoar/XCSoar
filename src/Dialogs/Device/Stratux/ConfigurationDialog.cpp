@@ -48,7 +48,7 @@ public:
     SaveToProfile(settings);
 
     _changed |= changed;
-    if (_changed) ShowMessageBox(_("Changes to configuration saved.  Restart XCSoar to apply changes."),
+    if (_changed) ShowMessageBox(_("Changes to configuration saved. Restart XCSoar to apply changes."),
                     _T(""), MB_OK);
     return true;
   }

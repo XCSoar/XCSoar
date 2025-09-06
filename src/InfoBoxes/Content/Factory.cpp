@@ -305,7 +305,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Track"),
     N_("Track"),
-    N_("Magnetic track reported by the GPS. (Touch-screen/PC only) If this InfoBox is active in simulation mode, pressing the up and down  arrows adjusts the track."),
+    N_("Magnetic track reported by the GPS. (Touch-screen/PC only) If this InfoBox is active in simulation mode, pressing the up and down arrows adjusts the track."),
     IBFHelper<InfoBoxContentTrack>::Create,
   },
 
@@ -615,7 +615,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Speed task achieved"),
     N_("V Task Ach"),
-    N_("Achieved cross-country speed while on current task, compensated for altitude.  Equivalent to Pirker cross-country speed remaining."),
+    N_("Achieved cross-country speed while on current task, compensated for altitude. Equivalent to Pirker cross-country speed remaining."),
     UpdateInfoBoxTaskSpeedAchieved,
   },
 
@@ -736,7 +736,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Next altitude arrival"),
     N_("WP AltA"),
-    N_("Absolute arrival altitude at the next waypoint in final glide.  For AAT tasks, the target within the AAT sector is used."),
+    N_("Absolute arrival altitude at the next waypoint in final glide. For AAT tasks, the target within the AAT sector is used."),
     UpdateInfoBoxNextAltitudeArrival,
     next_waypoint_infobox_panels,
   },
@@ -851,7 +851,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Nearest airspace vertical"),
     N_("Near AS V"),
-    N_("The vertical distance to the nearest airspace.  A positive value means the airspace is above you, and negative means the airspace is below you."),
+    N_("The vertical distance to the nearest airspace. A positive value means the airspace is above you, and negative means the airspace is below you."),
     UpdateInfoBoxNearestAirspaceVertical,
   },
 
@@ -859,7 +859,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Next MC0 altitude difference"),
     N_("WP MC0 AltD"),
-    N_("Arrival altitude at the next waypoint with MC 0 setting relative to the safety arrival height.  For AAT tasks, the target within the AAT sector is used."),
+    N_("Arrival altitude at the next waypoint with MC 0 setting relative to the safety arrival height. For AAT tasks, the target within the AAT sector is used."),
     UpdateInfoBoxNextMC0AltitudeDiff,
     next_waypoint_infobox_panels,
   },
@@ -909,9 +909,9 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Task cruise efficiency"),
     N_("Cruise Eff"),
-    N_("Efficiency of cruise.  100 indicates perfect MacCready performance. "
+    N_("Efficiency of cruise. 100 indicates perfect MacCready performance. "
        "This value estimates your cruise efficiency according to the current "
-       "flight history with the set MC value.  Calculation begins after task is started."),
+       "flight history with the set MC value. Calculation begins after task is started."),
     UpdateInfoBoxCruiseEfficiency,
   },
 
@@ -993,7 +993,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Contest speed"),
     N_("Cont Speed"),
-    N_("Instantaneous evaluation of the flown speed according to the configured Contest rule set."),
+    N_("Instantaneous evaluation of the flown speed according to the configured contest rule set."),
     IBFHelper<InfoBoxContentContestSpeed>::Create,
   },
 
@@ -1124,7 +1124,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("AAT dT and task ETA"),
     N_("AATdeltaOrETA"),
-    N_("Shows AAT delta time and estimated time of arrival in case of AAT task, and estimated time of arrival in case of racing task"),
+    N_("Shows AAT delta time and estimated time of arrival in case of AAT task, and estimated time of arrival in case of racing task."),
     UpdateInfoTaskETAorAATdT,
   },
 

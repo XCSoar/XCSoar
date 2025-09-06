@@ -47,7 +47,7 @@ ReplayControlWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                              [[maybe_unused]] const PixelRect &rc) noexcept
 {
   AddFile(_("File"),
-          _("Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (.nmea), or if blank, runs the demo."),
+          _("Name of file to replay. Can be an IGC file (.igc), a raw NMEA log file (.nmea), or if blank, runs the demo."),
           {},
           _T("*.nmea\0*.igc\0"),
           true);
