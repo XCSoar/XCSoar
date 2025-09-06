@@ -184,7 +184,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
           (unsigned)PageLayout::Main::MAP, this);
 
   static constexpr StaticEnumChoice ib_list[] = {
-    { IBP_AUTO, N_("Auto"), N_("Displays either the Circling, Cruise or Final glide infoxboxes") },
+    { IBP_AUTO, N_("Auto"), N_("Displays either the Circling, Cruise or Final glide InfoBoxes.") },
     { IBP_NONE, N_("None"), N_("Show fullscreen (no InfoBoxes)") },
     nullptr
   };
@@ -194,9 +194,9 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
                             ib_list, IBP_AUTO, this);
   DataFieldEnum &ib = *(DataFieldEnum *)wp->GetDataField();
   for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; ++i) {
-    const TCHAR cruise_help[] = N_("For cruise mode.  Displayed when 'Auto' is selected and ship is below final glide altitude");
-    const TCHAR circling_help[] = N_("For circling mode.  Displayed when 'Auto' is selected and ship is circling");
-    const TCHAR final_glide_help[] = N_("For final glide mode.  Displayed when 'Auto' is selected and ship is above final glide altitude");
+    const TCHAR cruise_help[] = N_("For cruise mode. Displayed when 'Auto' is selected and ship is below final glide altitude.");
+    const TCHAR circling_help[] = N_("For circling mode. Displayed when 'Auto' is selected and ship is circling.");
+    const TCHAR final_glide_help[] = N_("For final glide mode. Displayed when 'Auto' is selected and ship is above final glide altitude.");
     const TCHAR *display_text = gettext(info_box_settings.panels[i].name);
     const TCHAR *help_text = N_("A custom InfoBox set");
     switch (i) {

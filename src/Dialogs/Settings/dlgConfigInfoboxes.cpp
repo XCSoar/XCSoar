@@ -315,7 +315,7 @@ InfoBoxesConfigWidget::OnPaste()
   if (clipboard_size == 0)
     return;
 
-  if(ShowMessageBox(_("Overwrite all infoboxes in this set?"), _("InfoBox paste set"),
+  if(ShowMessageBox(_("Overwrite all InfoBoxes in this set?"), _("InfoBox paste set"),
                  MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
