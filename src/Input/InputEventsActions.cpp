@@ -42,6 +42,7 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Dialogs/FileManager.hpp"
 #include "Dialogs/ReplayDialog.hpp"
+#include "Dialogs/Onboarding.hpp"
 #include "Message.hpp"
 #include "Markers/Markers.hpp"
 #include "MainWindow.hpp"
@@ -494,6 +495,14 @@ InputEvents::eventRepeatStatusMessage([[maybe_unused]] const TCHAR *misc)
   // TODO enhancement: display only by type specified in misc field
   if (CommonInterface::main_window->popup != nullptr)
     CommonInterface::main_window->popup->Repeat();
+}
+
+// Onboarding
+// Open the Onboarding dialog
+void
+InputEvents::eventOnboarding([[maybe_unused]] const TCHAR *misc)
+{
+  dlgOnboardingShowModal();
 }
 
 // NearestWaypointDetails
