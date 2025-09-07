@@ -147,7 +147,7 @@ TaskStatusPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
 
   AddReadOnly(_("AAT range"),
               /* xgettext:no-c-format */
-              _("For AAT tasks, this value tells you how far based on the targets of your task you will fly relative to the minimum and maximum possible tasks. -100% indicates the minimum AAT distance. 0% is the nominal AAT distance. +100% is maximum AAT distance."),
+              _("For AAT tasks, this value tells you how far based on the targets of your task you will fly relative to the minimum and maximum possible tasks. -100% indicates the minimum AAT distance. 0% is the nominal AAT distance. +100% is the maximum AAT distance."),
               _T("%.0f %%"), 0);
 
   AddReadOnly(_("Speed remaining"), nullptr, _T("%.0f %s"),
@@ -162,7 +162,7 @@ TaskStatusPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
               UnitGroup::TASK_SPEED, 0);
 
   AddReadOnly(_("Cruise efficiency"),
-              _("Efficiency of cruise. 100 indicates perfect MacCready performance, greater than 100 indicates better than MacCready performance is achieved through flying in streets. Less than 100 is appropriate if you fly considerably off-track. This value estimates your cruise efficiency according to the current flight history with the set MC value. Calculation begins after task is started."),
+              _("Efficiency of cruise. 100 indicates perfect MacCready performance; greater than 100 indicates better than MacCready performance is achieved through flying in streets. Less than 100 is appropriate if you fly considerably off-track. This value estimates your cruise efficiency according to the current flight history with the set MC value. Calculation begins after task is started."),
               _T("%.0f %%"),
               0);
 }
