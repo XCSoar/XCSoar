@@ -60,7 +60,7 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(spacer_1);
 
   AddFloat(_("Start max. height"),
-           _("Maximum height based on start height reference (AGL or MSL) while starting the task.  "
+           _("Maximum height based on start height reference (AGL or MSL) while starting the task. "
                "Set to 0 for no limit."),
            _T("%.0f %s"), _T("%.0f"), 0, 10000, 50, false, UnitGroup::ALTITUDE,
            task_behaviour.ordered_defaults.start_constraints.max_height);

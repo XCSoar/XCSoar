@@ -72,13 +72,13 @@ static constexpr StaticEnumChoice thermal_assistant_position_list[] = {
     N_("Show thermal assistant in bottom left.") },
   { UISettings::ThermalAssistantPosition::BOTTOM_LEFT_AVOID_IB,
     N_("Bottom left (avoid InfoBoxes)"),
-    N_("Show thermal assistant in bottom left, above/to right of InfoBoxes (if there).") },
+    N_("Show thermal assistant in bottom left, above or to the right of InfoBoxes (if present).") },
   { UISettings::ThermalAssistantPosition::BOTTOM_RIGHT,
     N_("Bottom right"),
     N_("Show thermal assistant in bottom right.") },
   { UISettings::ThermalAssistantPosition::BOTTOM_RIGHT_AVOID_IB,
     N_("Bottom right (avoid InfoBoxes)"),
-    N_("Show thermal assistant in bottom right above/to left of InfoBoxes (if there).") },
+    N_("Show thermal assistant in bottom right, above or to the left of InfoBoxes (if present).") },
   { UISettings::ThermalAssistantPosition::TOP_LEFT,
     N_("Top left"),
     N_("Show thermal assistant in top left.") },
@@ -164,7 +164,7 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(FinalGlideBarDisplayModeControl);
 
   AddBoolean(_("Final glide bar MC0"),
-             _("If set to ON the final glide bar will show a second arrow indicating the required height "
+             _("If set to \"On\" the final glide bar will show a second arrow indicating the required height "
                  "to reach the final waypoint at MC zero."),
              map_settings.final_glide_bar_mc0_enabled);
   SetExpertRow(EnableFinalGlideBarMC0);
@@ -174,7 +174,7 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent,
                   FinalGlideBarDisplayMode::OFF);
 
   AddBoolean(_("Vario bar"),
-             _("If set to ON the vario bar will be shown."),
+             _("If set to \"On\" the vario bar will be shown."),
              map_settings.vario_bar_enabled);
 
   AddBoolean(_("No Position Target Distance Ring"),

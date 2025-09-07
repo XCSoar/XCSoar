@@ -141,7 +141,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Next bearing"),
     N_("Bearing"),
-    N_("True bearing of the next waypoint.  For AAT tasks, this is the true bearing to the target within the AAT sector."),
+    N_("True bearing of the next waypoint. For AAT tasks, this is the true bearing to the target within the AAT sector."),
     UpdateInfoBoxBearing,
     next_waypoint_infobox_panels,
   },
@@ -305,7 +305,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Track"),
     N_("Track"),
-    N_("Magnetic track reported by the GPS. (Touch-screen/PC only) If this InfoBox is active in simulation mode, pressing the up and down arrows adjusts the track."),
+    N_("Magnetic track reported by the GPS. (Touch-screen/PC only) If this InfoBox is active in simulation mode, pressing the up/down arrows adjusts the track."),
     IBFHelper<InfoBoxContentTrack>::Create,
   },
 
@@ -696,7 +696,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("GR average"),
     N_("GR Avg"),
-    N_("The distance made in the configured period of time , divided by the altitude lost since then. Negative values are shown as ^^^ and indicate climbing cruise (height gain). Over 200 of GR the value is shown as +++ . You can configure the period of averaging in the system setup. Suggested values are 60, 90 or 120. Lower values will be closed to GR Inst, and higher values will be closed to GR Cruise. Notice that the distance is NOT the straight line between your old and current position, it's exactly the distance you have made even in a zigzag glide. This value is not calculated while circling."),
+    N_("The distance flown in the configured period of time, divided by the altitude lost since then. Negative values are shown as ^^^ and indicate climbing cruise (height gain). Over 200 of GR the value is shown as +++. You can configure the period of averaging in the system setup. Suggested values are 60, 90 or 120. Lower values will be closer to GR Inst, and higher values will be closer to GR Cruise. Notice that the distance is NOT the straight line between your old and current position, it's exactly the distance you have made even in a zigzag glide. This value is not calculated while circling."),
     UpdateInfoBoxGRAvg,
   },
 
@@ -762,7 +762,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Barogram"),
     N_("Barogram"),
-    N_("Trace of altitude during flight"),
+    N_("Trace of altitude during flight."),
     IBFHelper<InfoBoxContentBarogram>::Create,
   },
 
@@ -851,7 +851,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Nearest airspace vertical"),
     N_("Near AS V"),
-    N_("The vertical distance to the nearest airspace. A positive value means the airspace is above you, and negative means the airspace is below you."),
+    N_("The vertical distance to the nearest airspace. A positive value means the airspace is above you, and a negative means the airspace is below you."),
     UpdateInfoBoxNearestAirspaceVertical,
   },
 
@@ -1053,14 +1053,14 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Active Radio Frequency"),
     N_("Act Freq"),
-    N_("The currently active Radio Frequency"),
+    N_("The current active radio frequency."),
     IBFHelper<InfoBoxContentActiveRadioFrequency>::Create,
   },
 
   {
     N_("Standby Radio Frequency"),
     N_("Stby Freq"),
-    N_("The currently standby Radio Frequency"),
+    N_("The current standby radio frequency."),
     IBFHelper<InfoBoxContentStandbyRadioFrequency>::Create,
   },
 
@@ -1068,7 +1068,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Thermal time"),
     N_("TC Time"),
-    N_("The time spend in the current thermal."),
+    N_("The time spent in the current thermal."),
     UpdateInfoBoxThermalTime,
   },
 
@@ -1092,7 +1092,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Transponder Code"),
     N_("XPDR Code"),
-    N_("The currently set Transponder code"),
+    N_("The currently set transponder code."),
     IBFHelper<InfoBoxContentTransponderCode>::Create,
   },
 
@@ -1100,7 +1100,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Engine CHT"),
     N_("CHT"),
-    N_("Engine Cylinder Head Temperature"),
+    N_("Engine cylinder head temperature."),
     UpdateInfoBoxContentCHT,
   },
 
@@ -1108,7 +1108,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Engine EGT"),
     N_("EGT"),
-    N_("Engine Exhaust Gas Temperature"),
+    N_("Engine exhaust gas temperature."),
     UpdateInfoBoxContentEGT,
   },
 
@@ -1116,7 +1116,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Engine Revolutions Per Minute"),
     N_("RPM"),
-    N_("Engine Revolutions Per Minute."),
+    N_("Engine revolutions per minute."),
     UpdateInfoBoxContentRPM,
   },
 
@@ -1124,7 +1124,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("AAT dT and task ETA"),
     N_("AATdeltaOrETA"),
-    N_("Shows AAT delta time and estimated time of arrival in case of AAT task, and estimated time of arrival in case of racing task."),
+    N_("For AAT tasks, shows AAT delta time and ETA; for racing tasks, shows ETA."),
     UpdateInfoTaskETAorAATdT,
   },
 
@@ -1148,7 +1148,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Speed task leg"),
     N_("V Task Leg"),
-    N_("Average cross country speed while on current task leg, not compensated for altitude."),
+    N_("Average cross-country speed while on current task leg, not compensated for altitude."),
     UpdateInfoBoxTaskSpeedLeg,
   },
 
