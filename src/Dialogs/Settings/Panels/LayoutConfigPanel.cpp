@@ -119,8 +119,8 @@ static constexpr StaticEnumChoice tabdialog_style_list[] = {
 static constexpr StaticEnumChoice popup_msg_position_list[] = {
   { UISettings::PopupMessagePosition::CENTER, N_("Center"),
     N_("Center the status message boxes.") },
-  { UISettings::PopupMessagePosition::TOP_LEFT, N_("Topleft"),
-    N_("Show status message boxes ina the top left corner.") },
+  { UISettings::PopupMessagePosition::TOP_LEFT, N_("Top left"),
+    N_("Show status message boxes in the top left corner.") },
   nullptr
 };
 
@@ -209,10 +209,10 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
           unsigned(ui_settings.info_boxes.border_style));
   SetExpertRow(AppInfoBoxBorder);
 
-  AddBoolean(_("Show Menubutton"), _("Show the Menubutton"),
+  AddBoolean(_("Show Menu button"), _("Show the Menu button"),
              ui_settings.show_menu_button);
   SetExpertRow(ShowMenuButton);
-  AddBoolean(_("Show Zoombutton"), _("Show the Zoombutton"),
+  AddBoolean(_("Show Zoom button"), _("Show the Zoom button"),
              ui_settings.show_zoom_button);
   SetExpertRow(ShowZoomButton);
 

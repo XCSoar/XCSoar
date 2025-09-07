@@ -262,7 +262,7 @@ TaskPropertiesPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
                 "0 means start opens immediately."),
               {}, minutes{30}, minutes{1}, {});
   AddDuration(_("PEV start window"),
-              _("Number of minutes start remains open after Pilot Event and PEV wait time. "
+              _("Number of minutes the start remains open after Pilot Event and PEV wait time. "
                 "0 means start will never close after it opens."),
               {}, minutes{30}, minutes{1}, {});
 

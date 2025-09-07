@@ -88,7 +88,7 @@ ScoringConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
       _T("Deutsche Meisterschaft im Streckensegelflug.") },
     { Contest::XCONTEST, ContestToString(Contest::XCONTEST),
       N_("PG online contest with different track values: Free flight - 1 km = 1.0 point; "
-          "flat trianlge - 1 km = 1.2 p; FAI triangle - 1 km = 1.4 p.") },
+          "flat triangle - 1 km = 1.2 p; FAI triangle - 1 km = 1.4 p.") },
     { Contest::DHV_XC, ContestToString(Contest::DHV_XC),
       N_("European PG online contest of the DHV organization. Pretty much the same as the XContest rules, "
           "but with different track values: 1 km = 1.5 points, 1.75 p and 2.0 p for FAI triangles respectively.") },
@@ -133,9 +133,9 @@ ScoringConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   SetExpertRow(SPACER2);
 
   AddBoolean(_("95% dist. rule helpers"),
-             _("Show helpers for Argentinean Federation \"95% distance\" rule."
+             _("Show helpers for Argentinean Federation \"95% distance\" rule. "
                "The AAT Distance Around Target InfoBox will show projected "
-               "distance vs max. and change colors as you approach 95%."),
+               "distance vs. maximum and change colors as you approach 95%."),
              map_settings.show_95_percent_rule_helpers);
   SetExpertRow(SHOW_95_PERCENT_RULE_HELPERS);
 
