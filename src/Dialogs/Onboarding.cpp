@@ -78,12 +78,22 @@ GestureHelpWindow::OnPaint(Canvas &canvas) noexcept
   Font fontSmall;
   fontSmall.Load(FontDescription(Layout::VptScale(10)));
 
-  canvas.Select(fontTitle);
+  canvas.Select(fontDefault);
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(COLOR_BLACK);
-
-
-
+  
+  const TCHAR *info_text = _("The following gestures can be drawn on the map view.");
+  PixelRect info_text_rc{
+    margin,
+    margin,
+    int(canvas.GetWidth()) - margin,
+    int(canvas.GetHeight())
+  };
+  unsigned info_text_height = canvas.DrawFormattedText(info_text_rc, info_text, DT_LEFT);
+  
+  y += int(info_text_height) + margin;
+  
+  canvas.Select(fontTitle);
   const TCHAR *basic_title_text = _("Basic gestures");
   PixelSize basic_title_ps = canvas.CalcTextSize(basic_title_text);
   canvas.DrawText({x_img, y}, basic_title_text);
