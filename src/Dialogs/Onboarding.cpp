@@ -289,6 +289,7 @@ public:
     MakeCheckboxRect(rc), style,
     [](bool value) {
       Profile::Set(ProfileKeys::HideOnboardingDialogOnStartup, value);
+	  Profile::Save();
     }
   );
   
@@ -297,8 +298,9 @@ public:
   }
 
   void Show(const PixelRect &rc) noexcept override {
-    bool default_value = false;
-    checkbox.SetState(Profile::Get(ProfileKeys::HideOnboardingDialogOnStartup, default_value));
+    bool hide_onboarding_dialog_on_startup = false;
+	Profile::Get(ProfileKeys::HideOnboardingDialogOnStartup, hide_onboarding_dialog_on_startup);
+    checkbox.SetState(hide_onboarding_dialog_on_startup);
     auto cb_rect = MakeCheckboxRect(rc);
     checkbox.MoveAndShow(cb_rect);
   
@@ -330,12 +332,7 @@ dlgOnboardingShowModal()
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Getting started"));
 
-  auto modal_callback = dialog.MakeModalResultCallback(mrOK);
-  auto save_callback = [modal_callback]() {
-    modal_callback();
-    Profile::Save();
-  };
-  auto pager = std::make_unique<ArrowPagerWidget>(look.button, save_callback);
+  auto pager = std::make_unique<ArrowPagerWidget>(look.button, dialog.MakeModalResultCallback(mrOK));
 
   pager->Add(std::make_unique<VScrollWidget>(std::make_unique<GestureHelpWidget>(), look));
   pager->Add(std::make_unique<DontShowAgainWidget>(look));
