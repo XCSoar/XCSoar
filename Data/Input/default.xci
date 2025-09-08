@@ -912,7 +912,7 @@ mode=Info3
 type=key
 data=9
 event=Onboarding
-label=Gesture Help
+label=Getting started
 location=8
 
 # -------------
