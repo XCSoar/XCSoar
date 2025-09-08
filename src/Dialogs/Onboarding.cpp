@@ -9,13 +9,18 @@
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
-
 #include "Screen/Layout.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Widget/CreateWindowWidget.hpp"
 #include "ui/canvas/Bitmap.hpp"
 #include "Resources.hpp"
 #include "Look/FontDescription.hpp"
+#include "Widget/ArrowPagerWidget.hpp"
+#include "Widget/VScrollWidget.hpp"
+#include "Profile/Profile.hpp"
+#include "Form/CheckBox.hpp"
+
+#include <winuser.h>
 
 class GestureHelpWindow final : public PaintWindow {
   Bitmap du_img{IDB_GESTURE_DU}, up_img{IDB_GESTURE_UP}, down_img{IDB_GESTURE_DOWN},
@@ -28,29 +33,21 @@ protected:
 };
 
 class GestureHelpWidget final : public WindowWidget {
-  std::unique_ptr<GestureHelpWindow> window;
-
 public:
   PixelSize GetMinimumSize() const noexcept override {
     return { Layout::FastScale(200), Layout::FastScale(200) };
   }
   
   PixelSize GetMaximumSize() const noexcept override {
-    return { Layout::FastScale(300), Layout::FastScale(450) };
+    return { Layout::FastScale(300), Layout::FastScale(480) };
   }
 
   void Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept override {
     WindowStyle style;
-    window = std::make_unique<GestureHelpWindow>();
-    window->Create(parent, rc, style);
-	SetWindow(std::move(window));
-  }
-
-  void Show(const PixelRect &rc) noexcept override {
-    (void)rc;
-    if (window) {
-      window->Show();
-    }
+    style.Hide();
+    auto w = std::make_unique<GestureHelpWindow>();
+    w->Create(parent, rc, style);
+    SetWindow(std::move(w));
   }
 };
 
@@ -64,10 +61,10 @@ GestureHelpWindow::OnPaint(Canvas &canvas) noexcept
   PixelSize img_size = du_img.GetSize();
   
   int margin = Layout::FastScale(10);
-  int x_img = rc.left + Layout::FastScale(10);
+  int x_img = rc.left + margin;
   int x_letter = x_img + img_size.width + margin;
   int x_text = x_img + img_size.width + Layout::FastScale(5) + 2 * margin;
-  int y = rc.top + Layout::FastScale(10);
+  int y = rc.top + margin;
 
   Font fontDefault;
   fontDefault.Load(FontDescription(Layout::VptScale(12), false));
@@ -137,7 +134,7 @@ GestureHelpWindow::OnPaint(Canvas &canvas) noexcept
   y += int(img_size.height) + margin;
 
   canvas.Copy({x_img, y}, img_size, urdl_img, {0, 0});
-  const TCHAR *urdl_text = _("Pan-mode, also via two-finger pinch gesture.");
+  const TCHAR *urdl_text = _("Pan-mode, also via two-finger pinch gesture");
   PixelSize urdl_ps = canvas.CalcTextSize(urdl_text);
   canvas.DrawText({x_text, y + int(img_size.height / 2) - int(urdl_ps.height / 2)}, urdl_text);
 
@@ -246,18 +243,99 @@ GestureHelpWindow::OnPaint(Canvas &canvas) noexcept
   canvas.DrawText({x_img, y}, dot_info_text);
 }
 
+class DontShowAgainWidget : public NullWidget {
+  CheckBoxControl checkbox;
+  LargeTextWidget info_text;
+  const DialogLook &look;
+  const TCHAR *fixed_text = _("This popup can be accessed anytime from the menu under Info → Getting Started.");
+
+public:
+  explicit DontShowAgainWidget(const DialogLook &_look) : info_text(_look), look(_look) {}
+
+  PixelRect MakeCheckboxRect(const PixelRect &rc) const noexcept {
+    const unsigned cb_height = ::Layout::GetMinimumControlHeight();
+
+    PixelRect rect;
+    rect.left   = rc.left;
+    rect.top    = rc.top;
+    rect.right  = rc.right;
+    rect.bottom = rect.top + cb_height;
+    return rect;
+  }
+
+  PixelRect MakeTextRect(const PixelRect &rc, const PixelRect &cb_rect) const noexcept {
+    PixelRect rect = rc;
+    const unsigned spacing = 5;
+    rect.top = cb_rect.bottom + spacing;
+    return rect;
+  }
+
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
+  WindowStyle style;
+  style.Hide();
+  style.TabStop();
+  
+  checkbox.Create(parent, look, _("Don't show onboarding dialog on startup"),
+    MakeCheckboxRect(rc), style,
+    [](bool value) {
+      Profile::Set(ProfileKeys::HideOnboardingDialogOnStartup, value);
+    }
+  );
+  
+  info_text.Prepare(parent, MakeTextRect(rc, MakeCheckboxRect(rc)));
+  info_text.SetText(fixed_text);
+  }
+
+  void Show(const PixelRect &rc) noexcept override {
+    bool default_value = false;
+    checkbox.SetState(Profile::Get(ProfileKeys::HideOnboardingDialogOnStartup, default_value));
+    auto cb_rect = MakeCheckboxRect(rc);
+    checkbox.MoveAndShow(cb_rect);
+  
+    info_text.Show(MakeTextRect(rc, cb_rect));
+  }
+  
+  void Hide() noexcept override {
+    checkbox.FastHide();
+    info_text.Hide();
+  }
+  
+  void Move(const PixelRect &rc) noexcept override {
+    auto cb_rect = MakeCheckboxRect(rc);
+    checkbox.Move(cb_rect);
+    info_text.Move(MakeTextRect(rc, cb_rect));
+  }
+};
+
 void
 dlgOnboardingShowModal()
 {
+  std::vector titles = {
+    _("Getting started: Gestures"),
+    _("Getting started: Configure"),
+  };
+
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, _("Onboarding"));
+                      look, _("Getting started"));
 
-  auto inner = std::make_unique<GestureHelpWidget>();
-  auto scroll = std::make_unique<VScrollWidget>(std::move(inner), look);
+  auto modal_callback = dialog.MakeModalResultCallback(mrOK);
+  auto save_callback = [modal_callback]() {
+    modal_callback();
+    Profile::Save();
+  };
+  auto pager = std::make_unique<ArrowPagerWidget>(look.button, save_callback);
 
-  dialog.FinishPreliminary(std::move(scroll));
-  dialog.AddButton(_("Close"), mrCancel);
+  pager->Add(std::make_unique<VScrollWidget>(std::make_unique<GestureHelpWidget>(), look));
+  pager->Add(std::make_unique<DontShowAgainWidget>(look));
+
+  pager->SetPageFlippedCallback([&dialog, &titles, &pager=*pager](){
+    dialog.SetCaption(titles[pager.GetCurrentIndex()]);
+  });
+
+  dialog.SetCaption(titles[pager->GetCurrentIndex()]);
+
+  dialog.FinishPreliminary(std::move(pager));
   dialog.ShowModal();
 }

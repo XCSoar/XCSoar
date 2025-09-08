@@ -390,9 +390,9 @@ Startup(UI::Display &display)
   main_window->LoadTerrain();
 
   // Show onboarding dialog
-  bool onboarding_shown = false;
-  Profile::Get(ProfileKeys::OnboardingShown, onboarding_shown);
-  if (HasTouchScreen() && !onboarding_shown) {
+  bool hide_onboarding_dialog_on_startup = false;
+  Profile::Get(ProfileKeys::HideOnboardingDialogOnStartup, hide_onboarding_dialog_on_startup);
+  if (HasTouchScreen() && !hide_onboarding_dialog_on_startup) {
     dlgOnboardingShowModal();
   }
 
