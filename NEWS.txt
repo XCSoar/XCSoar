@@ -56,7 +56,7 @@ Version 7.44 - not yet released
   - Add support for multiple  airfields or details waypoint in UI
   - QuickMenu: revamped look
   - QuickMenu: sane cursor control
-
+  - Add new “Getting started” dialog
 * Android
   - fix crash on startup when loading icons on ldpi screens
   - update 'white list' of USB devices with one more VID/PID pair for SoftRF Academy
