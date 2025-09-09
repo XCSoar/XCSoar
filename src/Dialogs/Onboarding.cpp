@@ -23,11 +23,11 @@
 #include <winuser.h>
 
 class GestureHelpWindow final : public PaintWindow {
-  Bitmap du_img{IDB_GESTURE_DU}, up_img{IDB_GESTURE_UP}, down_img{IDB_GESTURE_DOWN},
-         left_img{IDB_GESTURE_LEFT}, right_img{IDB_GESTURE_RIGHT}, urdl_img{IDB_GESTURE_URDL},
-         dr_img{IDB_GESTURE_DR}, rd_img{IDB_GESTURE_RD}, dl_img{IDB_GESTURE_DL},
-         ud_img{IDB_GESTURE_UD}, ldr_img{IDB_GESTURE_LDR}, urd_img{IDB_GESTURE_URD},
-         ldrdl_img{IDB_GESTURE_LDRDL};
+  Bitmap down_img{IDB_GESTURE_DOWN}, dl_img{IDB_GESTURE_DL}, dr_img{IDB_GESTURE_DR},
+         du_img{IDB_GESTURE_DU}, left_img{IDB_GESTURE_LEFT}, ldr_img{IDB_GESTURE_LDR},
+         ldrdl_img{IDB_GESTURE_LDRDL}, right_img{IDB_GESTURE_RIGHT}, rd_img{IDB_GESTURE_RD},
+         rl_img{IDB_GESTURE_RL}, up_img{IDB_GESTURE_UP}, ud_img{IDB_GESTURE_UD},
+         uldr_img{IDB_GESTURE_ULDR}, urd_img{IDB_GESTURE_URD}, urdl_img{IDB_GESTURE_URDL};
 protected:
   void OnPaint(Canvas &canvas) noexcept override;
 };
@@ -39,7 +39,7 @@ public:
   }
   
   PixelSize GetMaximumSize() const noexcept override {
-    return { Layout::FastScale(300), Layout::FastScale(480) };
+    return { Layout::FastScale(300), Layout::FastScale(540) };
   }
 
   void Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept override {
@@ -196,8 +196,8 @@ GestureHelpWindow::OnPaint(Canvas &canvas) noexcept
 
   canvas.Copy({x_img, y}, img_size, dl_img, {0, 0});
   const TCHAR *dl_text = _("Show Alternates List");
-  PixelSize dl_letter_ps = canvas.CalcTextSize(dl_text);
-  canvas.DrawText({x_text, y + int(img_size.height / 2) - int(dl_letter_ps.height / 2)}, dl_text);
+  PixelSize dl_ps = canvas.CalcTextSize(dl_text);
+  canvas.DrawText({x_text, y + int(img_size.height / 2) - int(dl_ps.height / 2)}, dl_text);
 
   y += int(img_size.height) + margin;
 
@@ -236,8 +236,8 @@ GestureHelpWindow::OnPaint(Canvas &canvas) noexcept
 
   canvas.Copy({x_img, y}, img_size, ldrdl_img, {0, 0});
   const TCHAR *ldrdl_text = _("Open Status dialogue");
-  PixelSize ldrd_letter_ps = canvas.CalcTextSize(ldrdl_text);
-  canvas.DrawText({x_text, y + int(img_size.height / 2) - int(ldrd_letter_ps.height / 2)}, ldrdl_text);
+  PixelSize ldrd_ps = canvas.CalcTextSize(ldrdl_text);
+  canvas.DrawText({x_text, y + int(img_size.height / 2) - int(ldrd_ps.height / 2)}, ldrdl_text);
 
   canvas.Select(fontMono);
   const TCHAR *ldrdl_letter = _("S");
@@ -247,6 +247,25 @@ GestureHelpWindow::OnPaint(Canvas &canvas) noexcept
 
   y += int(img_size.height) + margin;
 
+  canvas.Copy({x_img, y}, img_size, uldr_img, {0, 0});
+  const TCHAR *uldr_text = _("Access quick menu");
+  PixelSize uldr_ps = canvas.CalcTextSize(uldr_text);
+  canvas.DrawText({x_text, y + int(img_size.height / 2) - int(uldr_ps.height / 2)}, uldr_text);
+
+  canvas.Select(fontMono);
+  const TCHAR *uldr_letter = _("Q");
+  PixelSize uldr_letter_ps = canvas.CalcTextSize(uldr_letter);
+  canvas.DrawText({x_letter, y + int(img_size.height / 2) - int(uldr_letter_ps.height / 2)}, uldr_letter);
+  canvas.Select(fontDefault);
+
+  y += int(img_size.height) + margin;
+
+  canvas.Copy({x_img, y}, img_size, rl_img, {0, 0});
+  const TCHAR *rl_text = _("FLARM: Switches selected aircraft displaying values such as climb rate relative altitude, etc.");
+  PixelSize rl_ps = canvas.CalcTextSize(rl_text);
+  canvas.DrawText({x_text, y + int(img_size.height / 2) - int(rl_ps.height / 2)}, rl_text);
+
+  y += int(img_size.height) + margin;
 
   canvas.Select(fontSmall);
   const TCHAR *dot_info_text = _("The dot is the end of the line.");

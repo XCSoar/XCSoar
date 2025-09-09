@@ -222,16 +222,15 @@ endif
 
 ####### add gesture icons from docs
 
-GESTURES = du.png up.png down.png left.png right.png urdl.png dr.png rd.png dl.png ud.png ldr.png urd.png ldrdl.png
-GESTURES_DST = $(addprefix $(DATA)/graphics2/gesture_,$(GESTURES))
+GESTURES = d dl dr du l ldr ldrdl r rd rl u ud uldr urd urdl
+GESTURES_DST = $(addprefix $(DATA)/graphics2/gesture_,$(addsuffix .png,$(GESTURES)))
 
 $(DATA)/graphics2/dirstamp:
 	@$(NQ)echo "  MKDIR   $(DATA)/graphics2/"
 	$(Q)mkdir -p $(DATA)/graphics2
 	@touch $@
 
-$(GESTURES_DST): $(DATA)/graphics2/gesture_%.png: doc/manual/en/figures/%.png | $(DATA)/graphics2/dirstamp
-	$(Q)cp $< $@
+$(eval $(call rsvg-convert,$(GESTURES_DST),$(DATA)/graphics2/gesture_%.png,doc/manual/figures/gesture_%.svg,--width=82 --height=82))
 
 RESOURCE_FILES += $(GESTURES_DST)
 RESOURCE_FILES += $(BMP_ICONS_ALL)
