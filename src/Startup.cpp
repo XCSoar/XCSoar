@@ -23,7 +23,7 @@
 #include "Input/InputQueue.hpp"
 #include "Dialogs/StartupDialog.hpp"
 #include "Dialogs/dlgSimulatorPrompt.hpp"
-#include "Dialogs/Onboarding.hpp"
+#include "Dialogs/Onboarding/dlgOnboarding.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Language/Language.hpp"
 #include "Protection.hpp"
