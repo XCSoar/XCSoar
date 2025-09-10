@@ -553,7 +553,7 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
   y += int(t98_height) + margin;
 
   canvas.Select(fontSmall);
-  const TCHAR *t99 = _("Files are stored in the operating system of the mobile device and can also be replaced and supplemented there, e.g., to add custom waypoints for a competition. On iOS, these files are located here: Files app → On my iPhone → XCSoar → XCSoarData");
+  const TCHAR *t99 = _("Files are stored in the operating system of the mobile device and can also be replaced and supplemented there, e.g., to add custom waypoints for a competition. On iOS, these files are located here: Files app → On my iPhone → XCSoar → XCSoarData. On Android, these files are located here: Android → media → org.xcsoar.");
   PixelRect t99_rc{x, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
   canvas.DrawFormattedText(t99_rc, t99, DT_LEFT);
   y += margin;
