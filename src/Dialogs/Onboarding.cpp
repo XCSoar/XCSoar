@@ -105,7 +105,7 @@ GestureHelpWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontDefault);
 
   canvas.Copy({x_img, y}, img_size, du_img, {0, 0});
-  const TCHAR *du_text = _("Show main menu");
+  const TCHAR *du_text = _("Show main menu, also via double tap");
   PixelSize du_ps = canvas.CalcTextSize(du_text);
   canvas.DrawText({x_text, y + int(img_size.height / 2) - int(du_ps.height / 2)}, du_text);
 
