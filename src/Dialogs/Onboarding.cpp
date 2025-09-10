@@ -270,8 +270,9 @@ GestureHelpWindow::OnPaint(Canvas &canvas) noexcept
   y += int(img_size.height) + margin;
 
   canvas.Select(fontSmall);
-  const TCHAR *dot_info_text = _("The dot is the end of the line.");
-  canvas.DrawText({x_img, y}, dot_info_text);
+  const TCHAR *aresti_info_text = _("Gestures are displayed in Aresti notation, where the circle indicates the start and the dash indicates the end.");
+  PixelRect aresti_rc{x_img, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
+  canvas.DrawFormattedText(aresti_rc, aresti_info_text, DT_LEFT);
 }
 
 class DontShowAgainWidget : public NullWidget {
