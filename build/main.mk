@@ -247,6 +247,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/IGC/IGCString.cpp \
 	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/util/MD5.cpp \
+	$(SRC)/util/OpenLink.cpp \
 	$(SRC)/Logger/NMEALogger.cpp \
 	$(SRC)/Logger/ExternalLogger.cpp \
 	$(SRC)/Logger/FlightLogger.cpp \

@@ -10,6 +10,7 @@
 #include "Profile/Profile.hpp"
 #include "system/Path.hpp"
 #include "util/StringCompare.hxx"
+#include "util/OpenLink.hpp"
 
 #include <winuser.h>
 
@@ -28,6 +29,8 @@ void ConfigurationWidget::Initialise(ContainerWindow &parent, const PixelRect &r
   w->Create(parent, rc, style);
   SetWindow(std::move(w));
 }
+
+PixelRect youtube_link_rect;
 
 void
 ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
@@ -191,9 +194,12 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
   PixelRect l9b_rc{x_text, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
   unsigned l9b_height = canvas.DrawFormattedText(l9b_rc, l9b, DT_LEFT);
   y += int(l9b_height) + margin / 2;
+  canvas.SetTextColor(COLOR_BLUE);
   const TCHAR *l9c = _("https://youtube.com/user/M24Tom/playlists"); // https://youtube.com/playlist?list=PLb36zVafnfctzNG7yJoNXc2x8HnX5J9j7
   PixelRect l9c_rc{x_text, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l9c_height = canvas.DrawFormattedText(l9c_rc, l9c, DT_LEFT);
+  unsigned l9c_height = canvas.DrawFormattedText(l9c_rc, l9c, DT_LEFT | DT_UNDERLINE);
+  youtube_link_rect = {x_text, y, int(canvas.GetWidth()) - margin, y + int(l9c_height)};
+  canvas.SetTextColor(COLOR_BLACK);
   y += int(l9c_height) + margin;
   
   // NMEA devices
@@ -220,4 +226,11 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
   const TCHAR *t99 = _("Files are stored in the operating system of the mobile device and can also be replaced and supplemented there, e.g., to add custom waypoints for a competition. On iOS, these files are located here: Files app → On my iPhone → XCSoar → XCSoarData. On Android, these files are located here: Android → media → org.xcsoar.");
   PixelRect t99_rc{x, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
   canvas.DrawFormattedText(t99_rc, t99, DT_LEFT);
+}
+
+bool ConfigurationWindow::OnMouseUp(PixelPoint p) noexcept {
+  if (youtube_link_rect.Contains(p)) {
+    return OpenLink("https://youtube.com/playlist?list=PLb36zVafnfctzNG7yJoNXc2x8HnX5J9j7");
+  }
+  return false;
 }

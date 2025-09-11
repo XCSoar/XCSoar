@@ -9,6 +9,7 @@
 #include "Resources.hpp"
 #include "Language/Language.hpp"
 #include "util/ConvertString.hpp"
+#include "util/OpenLink.hpp"
 
 #include <winuser.h>
 #include <fmt/format.h>
@@ -30,6 +31,9 @@ WelcomeWidget::Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept
   w->Create(parent, rc, style);
   SetWindow(std::move(w));
 }
+
+PixelRect xcsoar_link_rect;
+PixelRect github_link_rect;
 
 void
 WelcomeWindow::OnPaint(Canvas &canvas) noexcept
@@ -90,9 +94,12 @@ WelcomeWindow::OnPaint(Canvas &canvas) noexcept
   unsigned t2_height = canvas.DrawFormattedText(t2_rc, (const TCHAR *)t2, DT_LEFT);
   y += int(t2_height) + margin;
 
+  canvas.SetTextColor(COLOR_BLUE);
   const TCHAR *t3 = _("https://xcsoar.org/discover/manual.html");
   PixelRect t3_rc{x, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t3_height = canvas.DrawFormattedText(t3_rc, t3, DT_LEFT);
+  unsigned t3_height = canvas.DrawFormattedText(t3_rc, t3, DT_LEFT | DT_UNDERLINE);
+  xcsoar_link_rect = {x, y, int(canvas.GetWidth()) - margin, y + int(t3_height)};
+  canvas.SetTextColor(COLOR_BLACK);
   y += int(t3_height) + margin;
 
   std::string s4 = fmt::format("{} {}",
@@ -103,8 +110,23 @@ WelcomeWindow::OnPaint(Canvas &canvas) noexcept
   unsigned t4_height = canvas.DrawFormattedText(t4_rc, (const TCHAR *)t4, DT_LEFT);
   y += int(t4_height) + margin;
 
+  canvas.SetTextColor(COLOR_BLUE);
   const TCHAR *t5 = _("https://github.com/XCSoar/XCSoar");
   PixelRect t5_rc{x, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t5_height = canvas.DrawFormattedText(t5_rc, t5, DT_LEFT);
+  unsigned t5_height = canvas.DrawFormattedText(t5_rc, t5, DT_LEFT | DT_UNDERLINE);
+  github_link_rect = {x, y, int(canvas.GetWidth()) - margin, y + int(t5_height)};
+  canvas.SetTextColor(COLOR_BLACK);
   y += int(t5_height) + margin;
+}
+
+bool WelcomeWindow::OnMouseUp(PixelPoint p) noexcept {
+  if (xcsoar_link_rect.Contains(p)) {
+    OpenLink("https://xcsoar.org/discover/manual.html");
+    return true;
+  }
+  if (github_link_rect.Contains(p)) {
+    OpenLink("https://github.com/XCSoar/XCSoar");
+    return true;
+  }
+  return false;
 }
