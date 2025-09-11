@@ -11,15 +11,17 @@
 #include "system/Path.hpp"
 #include "util/StringCompare.hxx"
 #include "util/OpenLink.hpp"
+#include "util/ConvertString.hpp"
 
 #include <winuser.h>
+#include <fmt/format.h>
 
 PixelSize ConfigurationWidget::GetMinimumSize() const noexcept {
   return { Layout::FastScale(200), Layout::FastScale(200) };
 }
 
 PixelSize ConfigurationWidget::GetMaximumSize() const noexcept {
-  return { Layout::FastScale(300), Layout::FastScale(1000) };
+  return { Layout::FastScale(300), Layout::FastScale(800) };
 }
 
 void ConfigurationWidget::Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept {
@@ -215,6 +217,17 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
   y += int(l10_height) + margin;
 
   y += margin;
+
+  // Replay
+  canvas.Select(fontDefault);
+  std::string t97s = fmt::format("{} {} {}",
+    _("The easiest way to get familiar with XCSoar is to load an existing flight and use the replay feature to explore its functions."),
+    _("To do this, copy an IGC file into the XCSoarData/logs folder."),
+    _("Then you can select this file under Config → Config → Replay and start the flight simulation."));
+  UTF8ToWideConverter t97w(t97s.c_str());
+  PixelRect t97_rc{x, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
+  unsigned t97_height = canvas.DrawFormattedText(t97_rc, (const TCHAR *)t97w, DT_LEFT);
+  y += int(t97_height) + margin;
 
   canvas.Select(fontSmall);
   const TCHAR *t98 = _("Maps, waypoints, etc. downloaded using the download feature can be updated in the file manager (Config → Config → File manager).");
