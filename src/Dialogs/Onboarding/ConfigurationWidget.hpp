@@ -11,6 +11,7 @@ class Canvas;
 class ConfigurationWindow final : public PaintWindow {
 protected:
   void OnPaint(Canvas &canvas) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
 };
 
 class ConfigurationWidget final : public WindowWidget {
