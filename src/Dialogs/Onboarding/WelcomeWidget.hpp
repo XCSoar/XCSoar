@@ -9,6 +9,9 @@
 class Canvas;
 
 class WelcomeWindow final : public PaintWindow {
+private:
+  PixelRect xcsoar_link_rect;
+  PixelRect github_link_rect;
 protected:
   void OnPaint(Canvas &canvas) noexcept override;
   bool OnMouseUp(PixelPoint p) noexcept override;

@@ -8,6 +8,8 @@
 #include "Look/FontDescription.hpp"
 #include "Language/Language.hpp"
 #include "util/ConvertString.hpp"
+#include "Look/DialogLook.hpp"
+#include "UIGlobals.hpp"
 
 #include <winuser.h>
 #include <fmt/format.h>
@@ -40,8 +42,9 @@ PreflightWindow::OnPaint(Canvas &canvas) noexcept
   int x_indent = x + Layout::FastScale(17);
   int y = rc.top + margin;
 
-  Font fontDefault;
-  fontDefault.Load(FontDescription(Layout::VptScale(12), false));
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
+  const Font &fontDefault = look.text_font;
   
   Font fontMono;
   fontMono.Load(FontDescription(Layout::VptScale(10), false, false, true));
@@ -62,7 +65,7 @@ PreflightWindow::OnPaint(Canvas &canvas) noexcept
     _("To do this, an xcsoar-checklist.txt file must be added to the XCSoarData folder."));
   UTF8ToWideConverter t1(s1.c_str());
   PixelRect t1_rc{x_indent, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t1_height = canvas.DrawFormattedText(t1_rc, (const TCHAR *)t1, DT_LEFT);
+  unsigned t1_height = canvas.DrawFormattedText(t1_rc, static_cast<const TCHAR *>(t1), DT_LEFT);
   y += int(t1_height) + margin / 2;
   canvas.Select(fontMono);
   const TCHAR *l1 = _("Info → Checklist");
@@ -78,7 +81,7 @@ PreflightWindow::OnPaint(Canvas &canvas) noexcept
     _("Select and activate the correct aircraft and polar configuration, so that weight and performance are accurate."));
   UTF8ToWideConverter t2(s2.c_str());
   PixelRect t2_rc{x_indent, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t2_height = canvas.DrawFormattedText(t2_rc, (const TCHAR *)t2, DT_LEFT);
+  unsigned t2_height = canvas.DrawFormattedText(t2_rc, static_cast<const TCHAR *>(t2), DT_LEFT);
   y += int(t2_height) + margin / 2;
   canvas.Select(fontMono);
   const TCHAR *l2 = _("Config → Plane");
@@ -93,7 +96,7 @@ PreflightWindow::OnPaint(Canvas &canvas) noexcept
     _("Set flight parameters such as wing loading, bugs, QNH and maximum temperature."));
   UTF8ToWideConverter t3(s3.c_str());
   PixelRect t3_rc{x_indent, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t3_height = canvas.DrawFormattedText(t3_rc, (const TCHAR *)t3, DT_LEFT);
+  unsigned t3_height = canvas.DrawFormattedText(t3_rc, static_cast<const TCHAR *>(t3), DT_LEFT);
   y += int(t3_height) + margin / 2;
   canvas.Select(fontMono);
   const TCHAR *l3 = _("Info → Flight");
@@ -108,7 +111,7 @@ PreflightWindow::OnPaint(Canvas &canvas) noexcept
     _("Configure wind data manually or enable auto wind to set speed and direction."));
   UTF8ToWideConverter t4(s4.c_str());
   PixelRect t4_rc{x_indent, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t4_height = canvas.DrawFormattedText(t4_rc, (const TCHAR *)t4, DT_LEFT);
+  unsigned t4_height = canvas.DrawFormattedText(t4_rc, static_cast<const TCHAR *>(t4), DT_LEFT);
   y += int(t4_height) + margin / 2;
   canvas.Select(fontMono);
   const TCHAR *l4 = _("Info → Wind");
@@ -123,7 +126,7 @@ PreflightWindow::OnPaint(Canvas &canvas) noexcept
     _("Create a task so XCSoar can guide navigation and provide return support."));
   UTF8ToWideConverter t5(s5.c_str());
   PixelRect t5_rc{x_indent, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t5_height = canvas.DrawFormattedText(t5_rc, (const TCHAR *)t5, DT_LEFT);
+  unsigned t5_height = canvas.DrawFormattedText(t5_rc, static_cast<const TCHAR *>(t5), DT_LEFT);
   y += int(t5_height) + margin / 2;
   canvas.Select(fontMono);
   const TCHAR *l5 = _("Nav → Task Manager");

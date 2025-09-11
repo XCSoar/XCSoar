@@ -10,6 +10,8 @@
 #include "Language/Language.hpp"
 #include "util/ConvertString.hpp"
 #include "util/OpenLink.hpp"
+#include "Look/DialogLook.hpp"
+#include "UIGlobals.hpp"
 
 #include <winuser.h>
 #include <fmt/format.h>
@@ -32,9 +34,6 @@ WelcomeWidget::Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept
   SetWindow(std::move(w));
 }
 
-PixelRect xcsoar_link_rect;
-PixelRect github_link_rect;
-
 void
 WelcomeWindow::OnPaint(Canvas &canvas) noexcept
 {
@@ -46,11 +45,10 @@ WelcomeWindow::OnPaint(Canvas &canvas) noexcept
   int x = rc.left + margin;
   int y = rc.top + margin;
 
-  Font fontDefault;
-  fontDefault.Load(FontDescription(Layout::VptScale(12), false));
+  const DialogLook &look = UIGlobals::GetDialogLook();
 
-  Font fontTitle;
-  fontTitle.Load(FontDescription(Layout::VptScale(12), true));
+  const Font &fontDefault = look.text_font;
+  const Font &fontTitle = look.bold_font;
 
   canvas.Select(fontDefault);
   canvas.SetBackgroundTransparent();
@@ -83,7 +81,7 @@ WelcomeWindow::OnPaint(Canvas &canvas) noexcept
       "and cover both basic and advanced features."));
   UTF8ToWideConverter t1(s1.c_str());
   PixelRect t1_rc{x, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t1_height = canvas.DrawFormattedText(t1_rc, (const TCHAR *)t1, DT_LEFT);
+  unsigned t1_height = canvas.DrawFormattedText(t1_rc, static_cast<const TCHAR *>(t1), DT_LEFT);
   y += int(t1_height) + margin;
 
   std::string s2 = fmt::format("{} {}",
@@ -91,7 +89,7 @@ WelcomeWindow::OnPaint(Canvas &canvas) noexcept
     _("You can always access the latest versions online:"));
   UTF8ToWideConverter t2(s2.c_str());
   PixelRect t2_rc{x, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t2_height = canvas.DrawFormattedText(t2_rc, (const TCHAR *)t2, DT_LEFT);
+  unsigned t2_height = canvas.DrawFormattedText(t2_rc, static_cast<const TCHAR *>(t2), DT_LEFT);
   y += int(t2_height) + margin;
 
   canvas.SetTextColor(COLOR_BLUE);
@@ -107,7 +105,7 @@ WelcomeWindow::OnPaint(Canvas &canvas) noexcept
     _("If you find mistakes or have ideas for improvement, please contribute — XCSoar is open source and thrives on community input:"));
   UTF8ToWideConverter t4(s4.c_str());
   PixelRect t4_rc{x, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t4_height = canvas.DrawFormattedText(t4_rc, (const TCHAR *)t4, DT_LEFT);
+  unsigned t4_height = canvas.DrawFormattedText(t4_rc, static_cast<const TCHAR *>(t4), DT_LEFT);
   y += int(t4_height) + margin;
 
   canvas.SetTextColor(COLOR_BLUE);

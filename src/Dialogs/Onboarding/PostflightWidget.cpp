@@ -8,6 +8,8 @@
 #include "Look/FontDescription.hpp"
 #include "Language/Language.hpp"
 #include "util/ConvertString.hpp"
+#include "Look/DialogLook.hpp"
+#include "UIGlobals.hpp"
 
 #include <winuser.h>
 #include <fmt/format.h>
@@ -40,8 +42,9 @@ PostflightWindow::OnPaint(Canvas &canvas) noexcept
   int x_indent = x + Layout::FastScale(17);
   int y = rc.top + margin;
 
-  Font fontDefault;
-  fontDefault.Load(FontDescription(Layout::VptScale(12), false));
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
+  const Font &fontDefault = look.text_font;
   
   Font fontMono;
   fontMono.Load(FontDescription(Layout::VptScale(10), false, false, true));
@@ -62,7 +65,7 @@ PostflightWindow::OnPaint(Canvas &canvas) noexcept
     _("List available logs and save them in XCSoarData/logs, from where they can be manually uploaded to other devices or platforms such as WeGlide."));
   UTF8ToWideConverter t1(s1.c_str());
   PixelRect t1_rc{x_indent, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t1_height = canvas.DrawFormattedText(t1_rc, (const TCHAR *)t1, DT_LEFT);
+  unsigned t1_height = canvas.DrawFormattedText(t1_rc, static_cast<const TCHAR *>(t1), DT_LEFT);
   y += int(t1_height) + margin / 2;
   canvas.Select(fontMono);
   const TCHAR *l1 = _("Config → Devices → Flight download");
@@ -77,7 +80,7 @@ PostflightWindow::OnPaint(Canvas &canvas) noexcept
     _("Review statistical data from your flight such as your flight score, barograph, and glide polar analysis."));
   UTF8ToWideConverter t2(s2.c_str());
   PixelRect t2_rc{x_indent, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t2_height = canvas.DrawFormattedText(t2_rc, (const TCHAR *)t2, DT_LEFT);
+  unsigned t2_height = canvas.DrawFormattedText(t2_rc, static_cast<const TCHAR *>(t2), DT_LEFT);
   y += int(t2_height) + margin / 2;
   canvas.Select(fontMono);
   const TCHAR *l2 = _("Info → Analysis");
@@ -92,7 +95,7 @@ PostflightWindow::OnPaint(Canvas &canvas) noexcept
     _("Check detailed statistics and timing information of your flight."));
   UTF8ToWideConverter t3(s3.c_str());
   PixelRect t3_rc{x_indent, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t3_height = canvas.DrawFormattedText(t3_rc, (const TCHAR *)t3, DT_LEFT);
+  unsigned t3_height = canvas.DrawFormattedText(t3_rc, static_cast<const TCHAR *>(t3), DT_LEFT);
   y += int(t3_height) + margin / 2;
   canvas.Select(fontMono);
   const TCHAR *l3 = _("Info → Info → Status");
@@ -109,7 +112,7 @@ PostflightWindow::OnPaint(Canvas &canvas) noexcept
     _("You can find your User ID on weglide.org under 'My profile' by copying the numbers from the URL."));
   UTF8ToWideConverter t4(s4.c_str());
   PixelRect t4_rc{x_indent, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t4_height = canvas.DrawFormattedText(t4_rc, (const TCHAR *)t4, DT_LEFT);
+  unsigned t4_height = canvas.DrawFormattedText(t4_rc, static_cast<const TCHAR *>(t4), DT_LEFT);
   y += int(t4_height) + margin / 2;
   canvas.Select(fontMono);
   const TCHAR *l4 = _("Config → System → Setup → WeGlide");

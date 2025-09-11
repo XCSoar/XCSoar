@@ -9,6 +9,8 @@
 class Canvas;
 
 class ConfigurationWindow final : public PaintWindow {
+private:
+  PixelRect youtube_link_rect;
 protected:
   void OnPaint(Canvas &canvas) noexcept override;
   bool OnMouseUp(PixelPoint p) noexcept override;
