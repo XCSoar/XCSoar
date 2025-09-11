@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "dlgOnboarding.hpp"
+#include "WelcomeWidget.hpp"
 #include "GestureHelpWidget.hpp"
 #include "ConfigurationWidget.hpp"
 #include "DontShowAgainWidget.hpp"
@@ -16,6 +17,7 @@ void
 dlgOnboardingShowModal()
 {
   std::vector titles = {
+    _("Getting started: Welcome"),
     _("Getting started: Gestures"),
     _("Getting started: Configuration"),
     _("Getting started: Show again"),
@@ -28,6 +30,7 @@ dlgOnboardingShowModal()
 
   auto pager = std::make_unique<ArrowPagerWidget>(look.button, dialog.MakeModalResultCallback(mrOK));
 
+  pager->Add(std::make_unique<VScrollWidget>(std::make_unique<WelcomeWidget>(), look));
   pager->Add(std::make_unique<VScrollWidget>(std::make_unique<GestureHelpWidget>(), look));
   pager->Add(std::make_unique<VScrollWidget>(std::make_unique<ConfigurationWidget>(), look));
   pager->Add(std::make_unique<DontShowAgainWidget>(look));
