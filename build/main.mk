@@ -159,6 +159,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Onboarding/GestureHelpWidget.cpp \
 	$(SRC)/Dialogs/Onboarding/ConfigurationWidget.cpp \
 	$(SRC)/Dialogs/Onboarding/PreflightWidget.cpp \
+	$(SRC)/Dialogs/Onboarding/PostflightWidget.cpp \
 	$(SRC)/Dialogs/Onboarding/DontShowAgainWidget.cpp
 
 ifeq ($(HAVE_PCM_PLAYER),y)
