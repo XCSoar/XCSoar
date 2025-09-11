@@ -15,10 +15,12 @@
 #include "Widget/VScrollWidget.hpp"
 #include "Language/Language.hpp"
 
+#include <array>
+
 void
 dlgOnboardingShowModal()
 {
-  std::vector titles = {
+  const std::array<const TCHAR*, 6> titles = {
     _("Getting started: Welcome"),
     _("Getting started: Gestures"),
     _("Getting started: Configuration"),
@@ -41,12 +43,12 @@ dlgOnboardingShowModal()
   pager->Add(std::make_unique<VScrollWidget>(std::make_unique<PostflightWidget>(), look));
   pager->Add(std::make_unique<DontShowAgainWidget>(look));
 
-  pager->SetPageFlippedCallback([&dialog, &titles, &pager=*pager](){
-    dialog.SetCaption(titles[pager.GetCurrentIndex()]);
+  ArrowPagerWidget *p = pager.get();
+  pager->SetPageFlippedCallback([&dialog, &titles, p](){
+    dialog.SetCaption(titles[p->GetCurrentIndex()]);
   });
 
   dialog.SetCaption(titles[pager->GetCurrentIndex()]);
-
   dialog.FinishPreliminary(std::move(pager));
   dialog.ShowModal();
 }

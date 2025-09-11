@@ -34,7 +34,7 @@ void DontShowAgainWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) 
     MakeCheckboxRect(rc), style,
     [](bool value) {
       Profile::Set(ProfileKeys::HideOnboardingDialogOnStartup, value);
-	  Profile::Save();
+      Profile::Save();
     }
   );
 

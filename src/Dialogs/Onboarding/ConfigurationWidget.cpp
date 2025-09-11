@@ -12,6 +12,8 @@
 #include "util/StringCompare.hxx"
 #include "util/OpenLink.hpp"
 #include "util/ConvertString.hpp"
+#include "Look/DialogLook.hpp"
+#include "UIGlobals.hpp"
 
 #include <winuser.h>
 #include <fmt/format.h>
@@ -32,8 +34,6 @@ void ConfigurationWidget::Initialise(ContainerWindow &parent, const PixelRect &r
   SetWindow(std::move(w));
 }
 
-PixelRect youtube_link_rect;
-
 void
 ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
 {
@@ -49,14 +49,13 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
   constexpr const char* undone = "[ ]";
   constexpr const char* done   = "[X]";
 
-  Font fontDefault;
-  fontDefault.Load(FontDescription(Layout::VptScale(12), false));
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
+  const Font &fontDefault = look.text_font;
+  const Font &fontSmall = look.small_font;
 
   Font fontMono;
   fontMono.Load(FontDescription(Layout::VptScale(10), false, false, true));
-
-  Font fontSmall;
-  fontSmall.Load(FontDescription(Layout::VptScale(10), false));
 
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(COLOR_BLACK);
@@ -226,7 +225,7 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
     _("Then you can select this file under Config → Config → Replay and start the flight simulation."));
   UTF8ToWideConverter t97w(t97s.c_str());
   PixelRect t97_rc{x, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t97_height = canvas.DrawFormattedText(t97_rc, (const TCHAR *)t97w, DT_LEFT);
+  unsigned t97_height = canvas.DrawFormattedText(t97_rc, static_cast<const TCHAR *>(t97w), DT_LEFT);
   y += int(t97_height) + margin;
 
   canvas.Select(fontSmall);

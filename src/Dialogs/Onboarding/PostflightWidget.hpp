@@ -6,8 +6,6 @@
 #include "ui/window/PaintWindow.hpp"
 #include "Widget/WindowWidget.hpp"
 
-class Canvas;
-
 class PostflightWindow final : public PaintWindow {
 protected:
   void OnPaint(Canvas &canvas) noexcept override;
