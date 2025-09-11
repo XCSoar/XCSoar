@@ -121,12 +121,10 @@ WelcomeWindow::OnPaint(Canvas &canvas) noexcept
 
 bool WelcomeWindow::OnMouseUp(PixelPoint p) noexcept {
   if (xcsoar_link_rect.Contains(p)) {
-    OpenLink("https://xcsoar.org/discover/manual.html");
-    return true;
+    return OpenLink("https://xcsoar.org/discover/manual.html");
   }
   if (github_link_rect.Contains(p)) {
-    OpenLink("https://github.com/XCSoar/XCSoar");
-    return true;
+    return OpenLink("https://github.com/XCSoar/XCSoar");
   }
   return false;
 }
