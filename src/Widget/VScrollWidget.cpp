@@ -128,6 +128,7 @@ void
 VScrollWidget::OnVScrollPanelChange() noexcept
 {
   if (visible) {
+    UpdateVirtualHeight(GetWindow().GetClientRect());
     widget->Move(GetWindow().GetVirtualRect());
   }
 }
