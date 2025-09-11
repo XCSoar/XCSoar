@@ -5,6 +5,7 @@
 #include "WelcomeWidget.hpp"
 #include "GestureHelpWidget.hpp"
 #include "ConfigurationWidget.hpp"
+#include "PreflightWidget.hpp"
 #include "DontShowAgainWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Dialogs/WidgetDialog.hpp"
@@ -20,6 +21,7 @@ dlgOnboardingShowModal()
     _("Getting started: Welcome"),
     _("Getting started: Gestures"),
     _("Getting started: Configuration"),
+    _("Getting started: Preflight"),
     _("Getting started: Show again"),
   };
 
@@ -33,6 +35,7 @@ dlgOnboardingShowModal()
   pager->Add(std::make_unique<VScrollWidget>(std::make_unique<WelcomeWidget>(), look));
   pager->Add(std::make_unique<VScrollWidget>(std::make_unique<GestureHelpWidget>(), look));
   pager->Add(std::make_unique<VScrollWidget>(std::make_unique<ConfigurationWidget>(), look));
+  pager->Add(std::make_unique<VScrollWidget>(std::make_unique<PreflightWidget>(), look));
   pager->Add(std::make_unique<DontShowAgainWidget>(look));
 
   pager->SetPageFlippedCallback([&dialog, &titles, &pager=*pager](){
