@@ -196,7 +196,7 @@ private:
 
   void OnModified(DataField &df) noexcept override {
     if (IsDataField(PAGE_GEOMETRY, df)) {
-      const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+      const DataFieldEnum &dfe = static_cast<const DataFieldEnum &>(df);
       InfoBoxSettings::Geometry new_geometry =
           dfe.GetValue() == GEOMETRY_INHERIT_ID
               ? CommonInterface::GetUISettings().info_boxes.geometry
@@ -208,10 +208,10 @@ private:
       geometry = new_geometry;
       UpdateLayout();
     } else if (IsDataField(INFOBOX, df)) {
-      const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+      const DataFieldEnum &dfe = static_cast<const DataFieldEnum &>(df);
       SetCurrentInfoBox(dfe.GetValue());
     } else if (IsDataField(CONTENT, df)) {
-      const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+      const DataFieldEnum &dfe = static_cast<const DataFieldEnum &>(df);
 
       auto new_value = (InfoBoxFactory::Type)dfe.GetValue();
       if (new_value == data.contents[current_preview])
@@ -325,7 +325,7 @@ InfoBoxesConfigWidget::UpdateLayout() noexcept
   const Layout layout(rc, geometry);
 
   // Update InfoBox selector to match new count
-  auto &ib_selector = (DataFieldEnum &)GetDataField(INFOBOX);
+  auto &ib_selector = static_cast<DataFieldEnum &>(GetDataField(INFOBOX));
   const unsigned new_count = layout.info_boxes.count;
   if (ib_selector.Count() != new_count) {
     ib_selector.ClearChoices();
@@ -398,7 +398,7 @@ InfoBoxesConfigWidget::Save(bool &changed_r) noexcept
 void
 InfoBoxesConfigWidget::RefreshEditContentDescription()
 {
-  DataFieldEnum &df = (DataFieldEnum &)GetDataField(CONTENT);
+  DataFieldEnum &df = static_cast<DataFieldEnum &>(GetDataField(CONTENT));
   WndFrame &description = (WndFrame &)GetRow(DESCRIPTION);
   description.SetText(df.GetHelp() != nullptr ? df.GetHelp() : _T(""));
 }
