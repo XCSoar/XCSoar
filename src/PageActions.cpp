@@ -221,9 +221,6 @@ static void
 LoadInfoBoxes(const PageLayout::InfoBoxConfig &config)
 {
   UIState &ui_state = CommonInterface::SetUIState();
-  InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
-  settings.geometry = config.geometry;
-
   if (!config.enabled) {
     CommonInterface::main_window->SetFullScreen(true);
     ui_state.auxiliary_enabled = false;
@@ -238,7 +235,6 @@ LoadInfoBoxes(const PageLayout::InfoBoxConfig &config)
       ui_state.auxiliary_enabled = false;
     }
   }
-   CommonInterface::main_window->ReinitialiseLayout();
 }
 
 void
@@ -254,6 +250,7 @@ PageActions::LoadLayout(const PageLayout &layout)
   LoadMain(layout.main);
 
   ActionInterface::UpdateDisplayMode();
+  CommonInterface::main_window->ReinitialiseLayout();
   ActionInterface::SendUIState();
 }
 
