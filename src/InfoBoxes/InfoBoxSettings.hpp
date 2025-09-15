@@ -95,9 +95,6 @@ struct InfoBoxSettings {
     /** 18 infoboxes 3X6 split bottom/top or left/right */
     SPLIT_3X6 = 26,
 
-    /** inherit gemetry from global settings */
-    INHERIT = 0xff,
-
   } geometry;
 
   struct Panel {
@@ -107,10 +104,11 @@ struct InfoBoxSettings {
     InfoBoxFactory::Type contents[MAX_CONTENTS];
 
     /**
-     * If set, this geometry overrides the global setting.
-     * If set to INHERIT, the global InfoBoxSettings::geometry is used.
+     * Geometry override for this panel. The value
+     * INHERIT_GEOMETRY falls back to the global setting.
      */
-    InfoBoxSettings::Geometry geometry;
+    static constexpr uint8_t INHERIT_GEOMETRY = 0xff;
+    uint8_t geometry;
 
     void Clear() noexcept;
 
@@ -133,6 +131,14 @@ struct InfoBoxSettings {
   } border_style;
 
   Panel panels[MAX_PANELS];
+
+  [[nodiscard]]
+  constexpr Geometry ResolveGeometry(const Panel &panel) const noexcept
+  {
+    return panel.geometry == Panel::INHERIT_GEOMETRY
+               ? geometry
+               : static_cast<Geometry>(panel.geometry);
+  }
 
   void SetDefaults() noexcept;
 };

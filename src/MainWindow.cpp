@@ -228,7 +228,7 @@ MainWindow::InitialiseConfigured()
   const InfoBoxSettings &ib_settings = CommonInterface::SetUISettings().info_boxes;
   const unsigned panel_index = CommonInterface::GetUIState().panel_index;
   const InfoBoxSettings::Panel &panel = ib_settings.panels[panel_index];
-  const InfoBoxSettings::Geometry &page_geometry = panel.geometry;
+  const InfoBoxSettings::Geometry page_geometry = ib_settings.ResolveGeometry(panel);
 
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, page_geometry);
@@ -407,7 +407,7 @@ MainWindow::ReinitialiseLayout() noexcept
   const InfoBoxSettings &ib_settings = CommonInterface::SetUISettings().info_boxes;
   const unsigned panel_index = CommonInterface::GetUIState().panel_index;
   const InfoBoxSettings::Panel &panel = ib_settings.panels[panel_index];
-  const InfoBoxSettings::Geometry &page_geometry = panel.geometry;
+  const InfoBoxSettings::Geometry page_geometry = ib_settings.ResolveGeometry(panel);
 
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, page_geometry);
@@ -581,7 +581,7 @@ MainWindow::ReinitialiseLook() noexcept
   const InfoBoxSettings &ib_settings = CommonInterface::SetUISettings().info_boxes;
   const unsigned panel_index = CommonInterface::GetUIState().panel_index;
   const InfoBoxSettings::Panel &panel = ib_settings.panels[panel_index];
-  const InfoBoxSettings::Geometry &page_geometry = panel.geometry;
+  const InfoBoxSettings::Geometry page_geometry = ib_settings.ResolveGeometry(panel);
 
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(GetClientRect(),

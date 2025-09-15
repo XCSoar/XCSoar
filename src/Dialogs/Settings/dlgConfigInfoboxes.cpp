@@ -21,18 +21,22 @@
 #include "util/StaticArray.hxx"
 #include "Panels/LayoutConfigPanel.hpp"
 #include "Form/DataField/Enum.hpp"
+#include "Interface.hpp"
 
 #include <cassert>
 
 using namespace UI;
 
+static constexpr unsigned GEOMETRY_INHERIT_ID =
+    InfoBoxSettings::Panel::INHERIT_GEOMETRY;
+
 std::vector<StaticEnumChoice> CreateInfoBoxGeometryListWithInherit() {
   std::vector<StaticEnumChoice> list;
-  list.push_back({ InfoBoxSettings::Geometry::INHERIT, _("Inherit from global settings"), nullptr });
+  list.push_back({ GEOMETRY_INHERIT_ID, _("Inherit from global settings"), nullptr });
   for (const StaticEnumChoice* e = info_box_geometry_list; e && e->display_string != nullptr; ++e) {
     list.push_back(*e);
   }
-//   list.push_back({ 0, nullptr, nullptr });
+  list.emplace_back(nullptr);
   return list;
 }
 
@@ -84,12 +88,16 @@ class InfoBoxesConfigWidget final
   const bool allow_name_change;
   bool changed;
 
-  const InfoBoxSettings::Geometry geometry;
+  InfoBoxSettings::Geometry geometry;
 
   StaticArray<InfoBoxPreview, InfoBoxSettings::Panel::MAX_CONTENTS> previews;
   unsigned current_preview;
 
   Button copy_button, paste_button, close_button;
+
+  // Cached for re-layout when geometry changes
+  ContainerWindow *parent_container = nullptr;
+  WindowStyle preview_style;
 
 public:
   InfoBoxesConfigWidget(WndForm &_dialog,
@@ -183,10 +191,23 @@ public:
   }
 
 private:
+  void UpdateLayout() noexcept;
   /* virtual methods from class DataFieldListener */
 
   void OnModified(DataField &df) noexcept override {
-    if (IsDataField(INFOBOX, df)) {
+    if (IsDataField(PAGE_GEOMETRY, df)) {
+      const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+      InfoBoxSettings::Geometry new_geometry =
+          dfe.GetValue() == GEOMETRY_INHERIT_ID
+              ? CommonInterface::GetUISettings().info_boxes.geometry
+              : (InfoBoxSettings::Geometry)dfe.GetValue();
+
+      if (new_geometry == geometry)
+        return;
+
+      geometry = new_geometry;
+      UpdateLayout();
+    } else if (IsDataField(INFOBOX, df)) {
       const DataFieldEnum &dfe = (const DataFieldEnum &)df;
       SetCurrentInfoBox(dfe.GetValue());
     } else if (IsDataField(CONTENT, df)) {
@@ -224,18 +245,22 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
                                const PixelRect &rc) noexcept
 {
   const Layout layout(rc, geometry);
+  parent_container = &parent;
 
   AddText(_("Name"), nullptr,
           allow_name_change ? (const TCHAR *)data.name : gettext(data.name));
   SetReadOnly(NAME, !allow_name_change);
 
-  auto list = CreateInfoBoxGeometryListWithInherit();
-  std::vector<StaticEnumChoice> storage = list;
-//   auto info_box_geometry_list_with_inherit = CreateInfoBoxGeometryListWithInherit();
-  AddEnum(_("Page geometry"),
-          _("Override InfoBox geometry only for this page. If unset, global setting is used."),
-          storage.data(),
-          (unsigned)data.geometry);
+  const unsigned geom_id = (data.geometry == InfoBoxSettings::Panel::INHERIT_GEOMETRY)
+    ? GEOMETRY_INHERIT_ID
+    : static_cast<unsigned>(static_cast<InfoBoxSettings::Geometry>(data.geometry));
+  DataFieldEnum *geom_dfe = new DataFieldEnum(this);
+  geom_dfe->AddChoice(GEOMETRY_INHERIT_ID, _("Inherit from global settings"));
+  geom_dfe->AddChoices(info_box_geometry_list);
+  geom_dfe->SetValue(geom_id);
+  Add(_("Page geometry"),
+      _("Override InfoBox geometry only for this page. If unset, global setting is used."),
+      geom_dfe);
 
   DataFieldEnum *dfe = new DataFieldEnum(this);
   for (unsigned i = 0; i < layout.info_boxes.count; ++i) {
@@ -274,7 +299,6 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
   close_button.Create(parent, button_look, _("Close"), layout.close_button,
                       button_style, dialog.MakeModalResultCallback(mrOK));
 
-  WindowStyle preview_style;
   preview_style.Hide();
 
   previews.resize(layout.info_boxes.count);
@@ -290,6 +314,58 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
   RefreshPasteButton();
 }
 
+void
+InfoBoxesConfigWidget::UpdateLayout() noexcept
+{
+  // Determine available rect from parent container if available
+  const PixelRect rc = parent_container != nullptr
+    ? parent_container->GetClientRect()
+    : GetWindow().GetClientRect();
+
+  const Layout layout(rc, geometry);
+
+  // Update InfoBox selector to match new count
+  auto &ib_selector = (DataFieldEnum &)GetDataField(INFOBOX);
+  const unsigned new_count = layout.info_boxes.count;
+  if (ib_selector.Count() != new_count) {
+    ib_selector.ClearChoices();
+    for (unsigned i = 0; i < new_count; ++i) {
+      TCHAR label[32];
+      _stprintf(label, _T("%u"), i + 1);
+      ib_selector.addEnumText(label, i);
+    }
+    if (current_preview >= new_count)
+      current_preview = 0;
+    LoadValueEnum(INFOBOX, current_preview);
+  }
+
+  // Ensure enough preview windows exist
+  if (previews.size() < new_count) {
+    const unsigned before = previews.size();
+    previews.resize(new_count);
+    for (unsigned i = before; i < new_count; ++i) {
+      previews[i].SetParent(*this, i);
+      // Create missing preview windows (create style locally for simplicity)
+      WindowStyle style; style.Hide();
+      previews[i].Create(*parent_container, layout.info_boxes.positions[i], style);
+    }
+  }
+
+  // Move/show previews for new layout
+  for (unsigned i = 0; i < new_count; ++i)
+    previews[i].MoveAndShow(layout.info_boxes.positions[i]);
+
+  // Hide any surplus previews
+  for (unsigned i = new_count; i < previews.size(); ++i)
+    previews[i].Hide();
+
+  // Reposition the form and buttons
+  RowFormWidget::Move(layout.form);
+  copy_button.Move(layout.copy_button);
+  paste_button.Move(layout.paste_button);
+  close_button.Move(layout.close_button);
+}
+
 bool
 InfoBoxesConfigWidget::Save(bool &changed_r) noexcept
 {
@@ -301,10 +377,18 @@ InfoBoxesConfigWidget::Save(bool &changed_r) noexcept
     }
   }
 
-  auto new_geom = (InfoBoxSettings::Geometry)GetValueEnum(PAGE_GEOMETRY);
-  if (new_geom != data.geometry) {
-    data.geometry = new_geom;
-    changed = true;
+  unsigned id = GetValueEnum(PAGE_GEOMETRY);
+  if (id == GEOMETRY_INHERIT_ID) {
+    if (data.geometry != InfoBoxSettings::Panel::INHERIT_GEOMETRY) {
+      data.geometry = InfoBoxSettings::Panel::INHERIT_GEOMETRY;
+      changed = true;
+    }
+  } else {
+    auto new_geom = static_cast<InfoBoxSettings::Geometry>(id);
+    if (data.geometry != static_cast<uint8_t>(new_geom)) {
+      data.geometry = static_cast<uint8_t>(new_geom);
+      changed = true;
+    }
   }
 
   changed_r = changed;
