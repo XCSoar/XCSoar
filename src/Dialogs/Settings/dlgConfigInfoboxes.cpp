@@ -176,13 +176,12 @@ public:
   }
 
   void Move(const PixelRect &rc) noexcept override {
-    const Layout layout(rc, geometry);
+    if (parent_container == nullptr) {
+      RowFormWidget::Move(rc);
+      return;
+    }
 
-    RowFormWidget::Move(layout.form);
-
-    copy_button.Move(layout.copy_button);
-    paste_button.Move(layout.paste_button);
-    close_button.Move(layout.close_button);
+    UpdateLayout(rc);
   }
 
   bool SetFocus() noexcept override {
@@ -191,7 +190,11 @@ public:
   }
 
 private:
-  void UpdateLayout() noexcept;
+  void UpdateLayout(const PixelRect &rc) noexcept;
+  void UpdateLayout() noexcept {
+    UpdateLayout(GetCurrentClientRect());
+  }
+  PixelRect GetCurrentClientRect() const noexcept;
   /* virtual methods from class DataFieldListener */
 
   void OnModified(DataField &df) noexcept override {
@@ -314,13 +317,19 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
   RefreshPasteButton();
 }
 
-void
-InfoBoxesConfigWidget::UpdateLayout() noexcept
+PixelRect
+InfoBoxesConfigWidget::GetCurrentClientRect() const noexcept
 {
-  // Determine available rect from parent container if available
-  const PixelRect rc = parent_container != nullptr
+  return parent_container != nullptr
     ? parent_container->GetClientRect()
     : GetWindow().GetClientRect();
+}
+
+void
+InfoBoxesConfigWidget::UpdateLayout(const PixelRect &rc) noexcept
+{
+  if (parent_container == nullptr)
+    return;
 
   const Layout layout(rc, geometry);
 
