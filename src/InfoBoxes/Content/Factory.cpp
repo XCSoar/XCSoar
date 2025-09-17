@@ -116,7 +116,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Altitude GPS"),
     N_("Alt GPS"),
-    N_("This is the altitude above mean sea level reported by the GPS. Touch-screen/PC only: In simulation mode, this value is adjustable with the up/down arrow keys and the right/left arrow keys also cause the glider to turn."),
+    N_("Altitude above mean sea level reported by the GPS. Touch-screen/PC only: In simulation mode, this value is adjustable with the up/down arrow keys and the right/left arrow keys also cause the glider to turn."),
     IBFHelper<InfoBoxContentAltitudeGPS>::Create,
   },
 
@@ -124,7 +124,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Height AGL"),
     N_("H AGL"),
-    N_("This is the navigation altitude minus the terrain elevation obtained from the terrain file. The value is coloured red when the glider is below the terrain safety clearance height."),
+    N_("Navigation altitude minus the terrain elevation obtained from the terrain file. The value is coloured red when the glider is below the terrain safety clearance height."),
     UpdateInfoBoxAltitudeAGL,
     altitude_infobox_panels,
   },
@@ -133,7 +133,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Thermal climb, last 30 s"),
     N_("TC 30s"),
-    N_("A 30 second rolling average climb rate based of the reported GPS altitude, or vario if available. The number in smaller font reflects the climb rate for the current thermal since circling started."),
+    N_("30-second rolling average climb rate based on reported GPS altitude, or vario if available. The number in smaller font reflects the climb rate for the current thermal since circling started."),
     UpdateInfoBoxThermal30s,
   },
 
@@ -158,7 +158,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("GR cruise"),
     N_("GR Cruise"),
-    N_("The distance from the top of the last thermal, divided by the altitude lost since the top of the last thermal. Negative values indicate climbing cruise (height gain since leaving the last thermal). If the vertical speed is close to zero, the displayed value is '---'."),
+    N_("Distance from the top of the last thermal, divided by the altitude lost since the top of the last thermal. Negative values indicate climbing cruise (height gain since leaving the last thermal). If the vertical speed is close to zero, the displayed value is '---'."),
     UpdateInfoBoxGRCruise,
   },
 
@@ -198,7 +198,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("MacCready setting"),
     N_("MC"),
-    N_("The current MacCready setting and the current MacCready mode (manual or auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if the InfoBox is active, by using the up/down cursor keys."),
+    N_("Current MacCready setting and current MacCready mode (manual or auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if the InfoBox is active, by using the up/down cursor keys."),
     IBFHelper<InfoBoxContentMacCready>::Create,
   },
 
@@ -206,7 +206,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Next distance"),
     N_("WP Dist"),
-    N_("The distance to the currently selected waypoint. For AAT tasks, this is the distance to the target within the AAT sector."),
+    N_("Distance to the currently selected waypoint. For AAT tasks, this is the distance to the target within the AAT sector."),
     UpdateInfoBoxNextDistance,
     next_waypoint_infobox_panels,
   },
@@ -233,7 +233,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Next waypoint"),
     N_("Next WP"),
-    N_("The name of the currently selected turn point. When this InfoBox is active, using the up/down cursor keys selects the next/previous waypoint in the task. (Touch-screen/PC only) Pressing the enter cursor key brings up the waypoint details."),
+    N_("Name of the currently selected turn point. When this InfoBox is active, using the up/down cursor keys selects the next/previous waypoint in the task. (Touch-screen/PC only) Pressing the enter cursor key brings up the waypoint details."),
     IBFHelper<InfoBoxContentNextWaypoint>::Create,
   },
 
@@ -281,7 +281,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Terrain elevation"),
     N_("Terr Elev"),
-    N_("This is the elevation of the terrain above mean sea level, obtained from the terrain file at the current GPS location."),
+    N_("Elevation of the terrain above mean sea level, obtained from the terrain file at the current GPS location."),
     UpdateInfoBoxTerrainHeight,
   },
 
@@ -297,7 +297,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Thermal gain"),
     N_("TC Gain"),
-    N_("The altitude gained/lost in the current thermal."),
+    N_("Altitude gained/lost in the current thermal."),
     UpdateInfoBoxThermalGain,
   },
 
@@ -387,7 +387,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Barometric altitude"),
     N_("Alt Baro"),
-    N_("This is the barometric altitude obtained from a device equipped with a pressure sensor."),
+    N_("Barometric altitude obtained from a device equipped with a pressure sensor."),
     UpdateInfoBoxAltitudeBaro,
     altitude_infobox_panels,
   },
@@ -396,7 +396,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Speed MacCready"),
     N_("V MC"),
-    N_("The MacCready speed-to-fly for optimal flight to the next waypoint. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude. In final glide mode, this speed-to-fly is calculated for descent."),
+    N_("MacCready speed-to-fly for optimal flight to the next waypoint. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude. In final glide mode, this speed-to-fly is calculated for descent."),
     UpdateInfoBoxSpeedMacCready,
   },
 
@@ -428,7 +428,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Next GR"),
     N_("WP GR"),
-    N_("The required glide ratio over ground to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival height."),
+    N_("Required glide ratio over ground to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival height."),
     UpdateInfoBoxNextGR,
     next_waypoint_infobox_panels,
   },
@@ -470,7 +470,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Speed dolphin"),
     N_("Vopt"),
-    N_("The instantaneous MacCready speed-to-fly, making use of netto vario calculations to determine dolphin cruise speed in the glider's current bearing. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude. In final glide mode, this speed-to-fly is calculated for descent. In climb mode, this switches to the speed for minimum sink at the current load factor (if an accelerometer is connected). When Block mode speed to fly is selected, this InfoBox displays the MacCready speed."),
+    N_("Instantaneous MacCready speed-to-fly, making use of netto vario calculations to determine dolphin cruise speed in the glider's current bearing. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude. In final glide mode, this speed-to-fly is calculated for descent. In climb mode, this switches to the speed for minimum sink at the current load factor (if an accelerometer is connected). When Block mode speed to fly is selected, this InfoBox displays the MacCready speed."),
     UpdateInfoBoxSpeedDolphin,
   },
 
@@ -503,7 +503,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Bearing difference"),
     N_("Brng D"),
-    N_("The difference between the glider's track bearing, to the bearing of the next waypoint, or for AAT tasks, to the bearing to the target within the AAT sector. GPS navigation is based on the track bearing across the ground, and this track bearing may differ from the glider's heading when there is wind present. Chevrons point to the direction the glider needs to alter course to correct the bearing difference, that is, so that the glider's course made good is pointing directly at the next waypoint. This bearing takes into account the curvature of the Earth."),
+    N_("Difference between the glider's track bearing, to the bearing of the next waypoint, or for AAT tasks, to the bearing to the target within the AAT sector. GPS navigation is based on the track bearing across the ground, and this track bearing may differ from the glider's heading when there is wind present. Chevrons point to the direction the glider needs to alter course to correct the bearing difference, that is, so that the glider's course made good is pointing directly at the next waypoint. This bearing takes into account the curvature of the Earth."),
     UpdateInfoBoxBearingDiff,
   },
 
@@ -567,7 +567,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Team code"),
     N_("Team Code"),
-    N_("The current Team code for this aircraft. Use this to report to other team members. The last team aircraft code entered is displayed underneath."),
+    N_("Current Team code for this aircraft. Use this to report to other team members. The last team aircraft code entered is displayed underneath."),
     IBFHelper<InfoBoxContentTeamCode>::Create,
   },
 
@@ -575,7 +575,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Team bearing"),
     N_("Team Brng"),
-    N_("The bearing to the team aircraft location at the last team code report."),
+    N_("Bearing to the team aircraft location at the last team code report."),
     UpdateInfoBoxTeamBearing,
   },
 
@@ -583,7 +583,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Team bearing difference"),
     N_("Team BrngD"),
-    N_("The relative bearing to the team aircraft location at the last reported team code."),
+    N_("Relative bearing to the team aircraft location at the last reported team code."),
     UpdateInfoBoxTeamBearingDiff,
   },
 
@@ -591,7 +591,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Team range"),
     N_("Team Dist"),
-    N_("The range to the team aircraft location at the last reported team code."),
+    N_("Range to the team aircraft location at the last reported team code."),
     UpdateInfoBoxTeamDistance,
   },
 
@@ -647,7 +647,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Battery percent"),
     N_("Battery"),
-    N_("Displays percentage of device battery remaining (where applicable) and status/voltage of external power supply."),
+    N_("Percentage of device battery remaining (where applicable) and status/voltage of external power supply."),
     UpdateInfoBoxBattery,
   },
 
@@ -655,7 +655,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Final GR"),
     N_("Fin GR"),
-    N_("The required glide ratio over ground to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival height."),
+    N_("Required glide ratio over ground to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival height."),
     UpdateInfoBoxFinalGR,
   },
 
@@ -696,7 +696,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("GR average"),
     N_("GR Avg"),
-    N_("The distance flown in the configured period of time, divided by the altitude lost since then. Negative values are shown as ^^^ and indicate climbing cruise (height gain). Over 200 of GR the value is shown as +++. You can configure the period of averaging in the system setup. Suggested values are 60, 90 or 120. Lower values will be closer to GR Inst, and higher values will be closer to GR Cruise. Notice that the distance is NOT the straight line between your old and current position, it's exactly the distance you have made even in a zigzag glide. This value is not calculated while circling."),
+    N_("Distance flown in the configured period of time, divided by the altitude lost since then. Negative values are shown as ^^^ and indicate climbing cruise (height gain). Over 200 of GR the value is shown as +++. You can configure the period of averaging in the system setup. Suggested values are 60, 90 or 120. Lower values will be closer to GR Inst, and higher values will be closer to GR Cruise. Notice that the distance is NOT the straight line between your old and current position, it's exactly the distance you have made even in a zigzag glide. This value is not calculated while circling."),
     UpdateInfoBoxGRAvg,
   },
 
@@ -810,7 +810,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Time under max. start height"),
     N_("Start Height"),
-    N_("The contiguous period the ship has been below the task start max. height."),
+    N_("Contiguous period the ship has been below the task start max. height."),
     UpdateInfoBoxTaskTimeUnderMaxHeight,
   },
 
@@ -843,7 +843,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Nearest airspace horizontal"),
     N_("Near AS H"),
-    N_("The horizontal distance to the nearest airspace."),
+    N_("Horizontal distance to the nearest airspace."),
     UpdateInfoBoxNearestAirspaceHorizontal,
   },
 
@@ -851,7 +851,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Nearest airspace vertical"),
     N_("Near AS V"),
-    N_("The vertical distance to the nearest airspace. A positive value means the airspace is above you, and a negative means the airspace is below you."),
+    N_("Vertical distance to the nearest airspace. A positive value means the airspace is above you, and a negative means the airspace is below you."),
     UpdateInfoBoxNearestAirspaceVertical,
   },
 
@@ -868,7 +868,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Wind, head component"),
     N_("Head Wind"),
-    N_("The current head wind component. Head wind is calculated from TAS and GPS ground speed if airspeed is available from external device. Otherwise the estimated wind is used for the calculation."),
+    N_("Current head wind component. Head wind is calculated from TAS and GPS ground speed if airspeed is available from external device. Otherwise the estimated wind is used for the calculation."),
     UpdateInfoBoxHeadWind,
     wind_infobox_panels,
   },
@@ -877,14 +877,14 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Terrain collision"),
     N_("Terr Coll"),
-    N_("The distance to the next terrain collision along the current task leg. At this location, the altitude will be below the configured terrain clearance altitude."),
+    N_("Distance to the next terrain collision along the current task leg. At this location, the altitude will be below the configured terrain clearance altitude."),
     UpdateInfoBoxTerrainCollision,
   },
 
   {
     N_("Altitude (Auto)"),
     N_("Alt Auto"),
-    N_("This is the barometric altitude obtained from a device equipped with a pressure sensor or the GPS altitude if the barometric altitude is not available."),
+    N_("Barometric altitude obtained from a device equipped with a pressure sensor or the GPS altitude if the barometric altitude is not available."),
     UpdateInfoBoxAltitudeNav,
     altitude_infobox_panels,
   },
@@ -893,7 +893,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Thermal next leg equivalent"),
     N_("T Next Leg"),
-    N_("The thermal rate of climb on next leg which is equivalent to a thermal equal to the MacCready setting on current leg."),
+    N_("Thermal rate of climb on next leg which is equivalent to a thermal equal to the MacCready setting on current leg."),
     UpdateInfoBoxNextLegEqThermal,
   },
 
@@ -901,7 +901,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Wind, head component (simplified)"),
     N_("Head Wind *"),
-    N_("The current head wind component. The simplified head wind is calculated by subtracting GPS ground speed from the TAS if airspeed is available from external device."),
+    N_("Current head wind component. The simplified head wind is calculated by subtracting GPS ground speed from the TAS if airspeed is available from external device."),
     UpdateInfoBoxHeadWindSimplified,
     wind_infobox_panels,
   },
@@ -925,21 +925,21 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Thermal assistant"),
     N_("Thermal"),
-    N_("A circular thermal assistant that shows the lift distribution over each part of the circle."),
+    N_("Circular thermal assistant that shows the lift distribution over each part of the circle."),
     IBFHelper<InfoBoxContentThermalAssistant>::Create,
   },
 
   {
     N_("Start open/close countdown"),
     N_("Start open"),
-    N_("Shows the time left until the start point opens or closes."),
+    N_("Time left until the start point opens or closes."),
     UpdateInfoBoxStartOpen,
   },
 
   {
     N_("Start open/close countdown at reaching"),
     N_("Start reach"),
-    N_("Shows the time left until the start point opens or closes, compared to the calculated time to reach it."),
+    N_("Time left until the start point opens or closes, compared to the calculated time to reach it."),
     UpdateInfoBoxStartOpenArrival,
   },
 
@@ -970,7 +970,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Next distance (nominal)"),
     N_("WP Dist-N"),
-    N_("The distance to the currently selected waypoint. For AAT tasks, this is the distance to the origin of the AAT sector."),
+    N_("Distance to the currently selected waypoint. For AAT tasks, this is the distance to the origin of the AAT sector."),
     UpdateInfoBoxNextDistanceNominal,
     next_waypoint_infobox_panels,
   },
@@ -1045,7 +1045,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Number of used satellites"),
     N_("Satellites"),
-    N_("The number of actually used (seen) satellites by GPS module. If this information is unavailable, the displayed value is '---'."),
+    N_("Number of actually used (seen) satellites by GPS module. If this information is unavailable, the displayed value is '---'."),
     UpdateInfoBoxNbrSat,
   },
 
@@ -1053,14 +1053,14 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Active Radio Frequency"),
     N_("Act Freq"),
-    N_("The current active radio frequency."),
+    N_("Current active radio frequency."),
     IBFHelper<InfoBoxContentActiveRadioFrequency>::Create,
   },
 
   {
     N_("Standby Radio Frequency"),
     N_("Stby Freq"),
-    N_("The current standby radio frequency."),
+    N_("Current standby radio frequency."),
     IBFHelper<InfoBoxContentStandbyRadioFrequency>::Create,
   },
 
@@ -1068,7 +1068,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Thermal time"),
     N_("TC Time"),
-    N_("The time spent in the current thermal."),
+    N_("Time spent in the current thermal."),
     UpdateInfoBoxThermalTime,
   },
 
@@ -1092,7 +1092,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Transponder Code"),
     N_("XPDR Code"),
-    N_("The currently set transponder code."),
+    N_("Currently set transponder code."),
     IBFHelper<InfoBoxContentTransponderCode>::Create,
   },
 
@@ -1124,7 +1124,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("AAT dT and task ETA"),
     N_("AATdeltaOrETA"),
-    N_("For AAT tasks, shows AAT delta time and ETA; for racing tasks, shows ETA."),
+    N_("For AAT tasks, AAT delta time and ETA; for racing tasks, ETA."),
     UpdateInfoTaskETAorAATdT,
   },
 
