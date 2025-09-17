@@ -196,6 +196,19 @@ else
 RESOURCE_FILES += $(PNG_BITMAPS)
 endif
 
+####### add gesture icons from docs
+
+GESTURES = d dl dr du l ldr ldrdl r rd rl u ud uldr urd urdl
+GESTURES_DST = $(addprefix $(DATA)/graphics2/gesture_,$(addsuffix .png,$(GESTURES)))
+
+$(DATA)/graphics2/dirstamp:
+	@$(NQ)echo "  MKDIR   $(DATA)/graphics2/"
+	$(Q)mkdir -p $(DATA)/graphics2
+	@touch $@
+
+$(eval $(call rsvg-convert,$(GESTURES_DST),$(DATA)/graphics2/gesture_%.png,doc/manual/figures/gesture_%.svg,--width=82 --height=82))
+
+RESOURCE_FILES += $(GESTURES_DST)
 RESOURCE_FILES += $(BMP_ICONS_ALL)
 RESOURCE_FILES += $(BMP_SPLASH_160) $(BMP_SPLASH_80)
 RESOURCE_FILES += $(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER)

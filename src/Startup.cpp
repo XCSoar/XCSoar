@@ -23,6 +23,7 @@
 #include "Input/InputQueue.hpp"
 #include "Dialogs/StartupDialog.hpp"
 #include "Dialogs/dlgSimulatorPrompt.hpp"
+#include "Dialogs/Onboarding/dlgOnboarding.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Language/Language.hpp"
 #include "Protection.hpp"
@@ -376,6 +377,13 @@ Startup(UI::Display &display)
 
   // Read the terrain file
   main_window->LoadTerrain();
+
+  // Show onboarding dialog
+  bool hide_onboarding_dialog_on_startup = false;
+  Profile::Get(ProfileKeys::HideOnboardingDialogOnStartup, hide_onboarding_dialog_on_startup);
+  if (HasTouchScreen() && !hide_onboarding_dialog_on_startup) {
+    dlgOnboardingShowModal();
+  }
 
   backend_components->glide_computer =
     std::make_unique<GlideComputer>(computer_settings,

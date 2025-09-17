@@ -152,7 +152,14 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Weather/WeatherDialog.cpp \
 	$(SRC)/Dialogs/Weather/RASPDialog.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
-	$(SRC)/Dialogs/dlgQuickMenu.cpp
+	$(SRC)/Dialogs/dlgQuickMenu.cpp \
+	$(SRC)/Dialogs/Onboarding/dlgOnboarding.cpp \
+	$(SRC)/Dialogs/Onboarding/WelcomeWidget.cpp \
+	$(SRC)/Dialogs/Onboarding/GestureHelpWidget.cpp \
+	$(SRC)/Dialogs/Onboarding/ConfigurationWidget.cpp \
+	$(SRC)/Dialogs/Onboarding/PreflightWidget.cpp \
+	$(SRC)/Dialogs/Onboarding/PostflightWidget.cpp \
+	$(SRC)/Dialogs/Onboarding/DontShowAgainWidget.cpp
 
 ifeq ($(HAVE_PCM_PLAYER),y)
 DIALOG_SOURCES += \
@@ -241,6 +248,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/IGC/IGCString.cpp \
 	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/util/MD5.cpp \
+	$(SRC)/util/OpenLink.cpp \
 	$(SRC)/Logger/NMEALogger.cpp \
 	$(SRC)/Logger/ExternalLogger.cpp \
 	$(SRC)/Logger/FlightLogger.cpp \
