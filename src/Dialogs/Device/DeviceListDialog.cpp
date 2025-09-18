@@ -46,6 +46,11 @@
 #include "Android/BluetoothHelper.hpp"
 #endif
 
+#ifdef __APPLE__
+#include "Apple/Main.hpp"
+#include "Apple/BluetoothHelper.hpp"
+#endif
+
 using namespace UI;
 
 class DeviceListWidget final
@@ -68,7 +73,7 @@ class DeviceListWidget final
     bool engine:1;
     bool debug:1;
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(__APPLE__)
     bool bluetooth_disabled:1;
 #else
     static constexpr bool bluetooth_disabled = false;
@@ -122,6 +127,10 @@ class DeviceListWidget final
       bluetooth_disabled = config.IsAndroidBluetooth() &&
         bluetooth_helper != nullptr &&
         !bluetooth_helper->IsEnabled(Java::GetEnv());
+#elif defined(__APPLE__)
+      bluetooth_disabled = config.IsAndroidBluetooth() &&
+        bluetooth_helper != nullptr &&
+        !bluetooth_helper->IsEnabled();
 #endif
 
       battery_percent = basic.battery_level_available
@@ -544,6 +553,18 @@ DeviceListWidget::ReconnectCurrent()
        config.port_type == DeviceConfig::PortType::RFCOMM_SERVER) &&
       bluetooth_helper != nullptr &&
       !bluetooth_helper->IsEnabled(Java::GetEnv())) {
+    ShowMessageBox(_("Bluetooth is disabled"), _("Reconnect"),
+                   MB_OK | MB_ICONERROR);
+    return;
+  }
+#elif defined(__APPLE__)
+  const DeviceConfig &config =
+    CommonInterface::SetSystemSettings().devices[current];
+  if ((config.port_type == DeviceConfig::PortType::RFCOMM ||
+       config.port_type == DeviceConfig::PortType::BLE_HM10 ||
+       config.port_type == DeviceConfig::PortType::RFCOMM_SERVER) &&
+      bluetooth_helper != nullptr &&
+      !bluetooth_helper->IsEnabled()) {
     ShowMessageBox(_("Bluetooth is disabled"), _("Reconnect"),
                    MB_OK | MB_ICONERROR);
     return;
