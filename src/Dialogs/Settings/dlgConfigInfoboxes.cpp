@@ -297,6 +297,7 @@ void
 InfoBoxesConfigWidget::RefreshEditContent()
 {
   LoadValueEnum(CONTENT, data.contents[current_preview]);
+  RefreshEditContentDescription();
 }
 
 void

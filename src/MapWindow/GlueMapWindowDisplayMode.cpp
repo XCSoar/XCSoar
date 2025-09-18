@@ -8,6 +8,7 @@
 #include "Interface.hpp"
 #include "Profile/Profile.hpp"
 #include "Screen/Layout.hpp"
+#include "PageActions.hpp"
 
 #include <algorithm> // for std::clamp()
 
@@ -185,6 +186,15 @@ GlueMapWindow::UpdateScreenAngle() noexcept
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const MapSettings &settings = CommonInterface::GetMapSettings();
   const UIState &ui_state = CommonInterface::GetUIState();
+
+  // force north-up if the current page is MAP_NORTH_UP
+  const PageLayout &layout = PageActions::GetConfiguredLayout();
+  if (layout.main == PageLayout::Main::MAP_NORTH_UP) {
+    visible_projection.SetScreenAngle(Angle::Zero());
+    OnProjectionModified();
+    compass_visible = false;
+    return;
+  }
 
   MapOrientation orientation =
     ui_state.display_mode == DisplayMode::CIRCLING

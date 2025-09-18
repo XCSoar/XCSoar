@@ -172,6 +172,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
 
   static constexpr StaticEnumChoice main_list[] = {
     { PageLayout::Main::MAP, N_("Map") },
+    { PageLayout::Main::MAP_NORTH_UP, N_("Map (north-up)") },
     { PageLayout::Main::FLARM_RADAR, N_("FLARM radar") },
     { PageLayout::Main::THERMAL_ASSISTANT, N_("Thermal assistant") },
     { PageLayout::Main::HORIZON, N_("Horizon") },
@@ -345,6 +346,10 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   switch (value.main) {
   case PageLayout::Main::MAP:
     buffer = _("Map");
+    break;
+
+  case PageLayout::Main::MAP_NORTH_UP:
+    buffer = _("Map (north-up)");
     break;
 
   case PageLayout::Main::FLARM_RADAR:

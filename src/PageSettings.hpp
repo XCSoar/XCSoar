@@ -50,6 +50,8 @@ struct PageLayout
 
     HORIZON,
 
+    MAP_NORTH_UP,
+
     /**
      * A dummy entry that is used for validating profile values.
      */

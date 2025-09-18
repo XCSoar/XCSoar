@@ -18,6 +18,7 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
 
   switch (main) {
   case PageLayout::Main::MAP:
+  case PageLayout::Main::MAP_NORTH_UP:
     break;
 
   case PageLayout::Main::FLARM_RADAR:
