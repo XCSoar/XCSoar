@@ -108,6 +108,10 @@
 #include "Android/NativeView.hpp"
 #endif
 
+#ifdef __APPLE__
+#include "Apple/Main.hpp"
+#endif
+
 static TaskManager *task_manager;
 static GlideComputerEvents *glide_computer_events;
 static AllMonitors *all_monitors;
@@ -237,6 +241,10 @@ Startup(UI::Display &display)
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   Net::DownloadManager::Initialise();
+#endif
+
+#ifdef __APPLE__
+  InitializeAppleServices();
 #endif
 
   // Creates the main window
@@ -769,6 +777,10 @@ Shutdown()
   CloseLanguageFile();
 
   Display::RestoreOrientation();
+
+#ifdef __APPLE__
+  DeinitializeAppleServices();
+#endif
 
   LogString("Finished shutdown");
 }
