@@ -133,3 +133,45 @@ InfoBoxContentAlternateGR::GetDialogContent() noexcept
 {
   return alternate_infobox_panels;
 }
+
+void
+InfoBoxContentAlternateAltDiff::Update(InfoBoxData &data) noexcept
+{
+  if (!backend_components->protected_task_manager) {
+    data.SetInvalid();
+    return;
+  }
+
+  ProtectedTaskManager::Lease lease{*backend_components->protected_task_manager};
+  const AlternateList &alternates = lease->GetAlternates();
+
+  const AlternatePoint *alternate;
+  if (!alternates.empty()) {
+    if (index >= alternates.size())
+      index = alternates.size() - 1;
+
+    alternate = &alternates[index];
+  } else {
+    alternate = NULL;
+  }
+
+  data.FmtTitle(_T("Altn {} AltD"), index + 1);
+
+  if (alternate == NULL) {
+    data.SetInvalid();
+    return;
+  }
+
+  data.SetComment(alternate->waypoint->name.c_str());
+
+  const auto &settings = CommonInterface::GetComputerSettings();
+  auto altitude_difference =
+    alternate->solution.SelectAltitudeDifference(settings.task.glide);
+  data.SetValueFromArrival(altitude_difference);
+}
+
+const InfoBoxPanel *
+InfoBoxContentAlternateAltDiff::GetDialogContent() noexcept
+{
+  return alternate_infobox_panels;
+}

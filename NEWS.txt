@@ -28,7 +28,9 @@ Version 7.44 - not yet released
   - infoboxen: new setting, allow scaling of title/comment font
   - Radar / Thermalassistant Gauges: Placement to avoid InfoBoxen and Overlap
   - Thermal assistant: New positions on top of map to avoid hiding airspace warnings
-  - Add new Infobox “Home altitude difference” (Home AltD)
+  - Add new InfoBox 'Home altitude difference' (Home AltD)
+  - Add new InfoBox 'Alternate 1 altitude difference' (Altn 1 AltD)
+  - Add new InfoBox 'Alternate 2 altitude difference' (Altn 2 AltD)
   - Show transponder mode (if available) in transponder code InfoBox
   - add helpers on infoboxes for Argentinean contests 95% distance rule
   - Popup messages now appear at the top of the map
