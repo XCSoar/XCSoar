@@ -179,7 +179,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent,
               task_behaviour.ordered_defaults.aat_min_time);
 
   AddDuration(_("Optimisation margin"),
-              _("Safety margin for AAT task optimisation.  Optimisation "
+              _("Safety margin for AAT task optimisation. Optimisation "
                 "seeks to complete the task at the minimum time plus this margin time."),
               {}, minutes{30}, minutes{1},
               task_behaviour.optimise_targets_margin);
