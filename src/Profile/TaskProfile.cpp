@@ -2,10 +2,10 @@
 // Copyright The XCSoar Project
 
 #include "TaskProfile.hpp"
-#include "RouteProfile.hpp"
+#include "RouteProfile.hpp" // Ensure this is included for Save(..., RoutePlannerConfig)
 #include "Map.hpp"
 #include "Keys.hpp"
-#include "Task/TaskBehaviour.hpp"
+#include "Task/TaskBehaviour.hpp" // Correct include path
 
 namespace Profile {
   static void Load(const ProfileMap &map, GlideSettings &settings);
@@ -72,6 +72,7 @@ Profile::Load(const ProfileMap &map, TaskBehaviour &settings)
 
   map.Get(ProfileKeys::AATTimeMargin, settings.optimise_targets_margin);
   map.Get(ProfileKeys::AutoMc, settings.auto_mc);
+  map.Get(ProfileKeys::ArrivalRingAATEnabled, settings.arrival_ring_aat_enabled); // Remove default value argument
   map.GetEnum(ProfileKeys::AutoMcMode, settings.auto_mc_mode);
 
   unsigned Temp;
@@ -92,3 +93,4 @@ Profile::Load(const ProfileMap &map, TaskBehaviour &settings)
 
   Load(map, settings.route_planner);
 }
+
