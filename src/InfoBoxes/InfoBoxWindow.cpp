@@ -394,7 +394,9 @@ InfoBoxWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
     if (was_pressed) {
       SetFocus();
 
-      if (GetDialogContent() != nullptr)
+      const bool click_handled = content != nullptr && content->HandleClick();
+
+      if (!click_handled && GetDialogContent() != nullptr)
         /* delay the dialog, so double click detection works */
         dialog_timer.Schedule(std::chrono::milliseconds(300));
     }
