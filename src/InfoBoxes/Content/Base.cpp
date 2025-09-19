@@ -11,6 +11,12 @@ InfoBoxContent::HandleKey([[maybe_unused]] const InfoBoxKeyCodes keycode) noexce
   return false;
 }
 
+bool
+InfoBoxContent::HandleClick() noexcept
+{
+  return false;
+}
+
 void
 InfoBoxContent::OnCustomPaint([[maybe_unused]] Canvas &canvas, [[maybe_unused]] const PixelRect &rc) noexcept
 {
