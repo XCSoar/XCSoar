@@ -4,14 +4,21 @@
 #include "SoundUtil.hpp"
 #include "LogFile.hpp"
 
+#include <TargetConditionals.h>
+
+#if TARGET_OS_IPHONE
 #import <AVFoundation/AVFoundation.h>
+#endif
 #import <Foundation/Foundation.h>
 
+#if TARGET_OS_IPHONE
 static AVAudioPlayer *player = nil;
+#endif
 
 bool
 SoundUtil::Play(const TCHAR *resource_name)
 {
+#if TARGET_OS_IPHONE
   // Map resource names to actual file names
   // ToDo: Avoid duplication of static information with android/src/SoundUtil.java ?
   const char *filename = nullptr;
@@ -57,4 +64,8 @@ SoundUtil::Play(const TCHAR *resource_name)
   [player play];
 
   return true;
+#else
+  (void)resource_name;
+  return false;
+#endif
 }
