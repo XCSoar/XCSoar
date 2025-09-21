@@ -191,6 +191,7 @@ $(TARGET_OUTPUT_DIR)/include/MakeResource.hpp: $(TARGET_OUTPUT_DIR)/resources.tx
 	$(Q)mv $@.$(RANDOM_NUMBER).tmp $@
 
 ifeq ($(TARGET_IS_ANDROID),n)
+ifneq ($(TARGET),IOS)
 
 ifeq ($(USE_WIN32_RESOURCES),y)
 RESOURCE_FILES += $(BMP_BITMAPS)
@@ -217,9 +218,10 @@ $(patsubst $(DATA)/graphics/%.bmp,$(DATA)/graphics2/%.png,$(filter $(DATA)/graph
 RESOURCE_FILES := $(patsubst $(DATA)/graphics/%.bmp,$(DATA)/graphics2/%.png,$(RESOURCE_FILES))
 RESOURCE_FILES := $(patsubst $(DATA)/icons/%.bmp,$(DATA)/icons2/%.png,$(RESOURCE_FILES))
 RESOURCE_FILES := $(patsubst %.bmp,%.png,$(RESOURCE_FILES))
-endif
+endif #!USE_WIN32_RESOURCES
 
-endif
+endif #TARGET!=IOS
+endif #!TARGET_IS_ANDROID
 
 ifeq ($(TARGET_IS_ANDROID),n)
 
