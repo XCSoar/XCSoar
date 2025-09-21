@@ -3,8 +3,5 @@
 
 #pragma once
 
-// Initialize Apple-specific services (bluetooth, etc.)
 void InitializeAppleServices();
-
-// Cleanup Apple-specific services
 void DeinitializeAppleServices();

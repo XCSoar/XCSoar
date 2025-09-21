@@ -11,7 +11,10 @@
 #endif
 
 #ifdef __APPLE__
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #include "Apple/SoundUtil.hpp"
+#endif
 #endif
 
 #if defined(_WIN32)
@@ -31,7 +34,7 @@ PlayResource(const TCHAR *resource_name)
     return SoundUtil::PlayExternal(Java::GetEnv(), context->Get(), resource_name);
   return SoundUtil::Play(Java::GetEnv(), context->Get(), resource_name);
 
-#elif defined(__APPLE__)
+#elif defined(__APPLE__) && TARGET_OS_IPHONE
 
   return SoundUtil::Play(resource_name);
 
