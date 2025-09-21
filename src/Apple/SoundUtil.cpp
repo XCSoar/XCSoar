@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+// Implementation of SoundUtil using the AVFoundation framework 
+// Currently for iOS only, not macOS (AVAudioSession is iOS only)
+
 #include "SoundUtil.hpp"
 #include "LogFile.hpp"
 
@@ -20,7 +23,7 @@ SoundUtil::Play(const TCHAR *resource_name)
 {
 #if TARGET_OS_IPHONE
   // Map resource names to actual file names
-  // ToDo: Avoid duplication of static information with android/src/SoundUtil.java ?
+  // ToDo: Avoid duplication of static mapping information with android/src/SoundUtil.java ?
   const char *filename = nullptr;
   if (strcmp(resource_name, "IDR_FAIL") == 0) {
     filename = "fail";
