@@ -1,14 +1,12 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "Services.hpp"
-#include "LogFile.hpp"
+#ifdef __APPLE__
 
 #include <TargetConditionals.h>
-
-#if TARGET_OS_IPHONE
+#include "LogFile.hpp"
+#include "Services.hpp"
 #import <AVFoundation/AVFoundation.h>
-#endif
 
 // Initialize apple services - this will be called from the main XCSoar startup
 void
@@ -41,3 +39,5 @@ DeinitializeAppleServices()
   }
 #endif
 }
+
+#endif

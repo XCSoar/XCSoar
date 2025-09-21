@@ -36,6 +36,13 @@ IOS_GRAPHICS = \
 	$(IOS_GRAPHICS_DIR)/Assets.car \
 	$(IOS_GRAPHICS_DIR)/LaunchScreen.storyboardc
 
+# Copy WAV files directly (no conversion needed)
+WAV_SOUNDS = $(wildcard Data/sound/*.wav)
+IOS_SOUNDS = $(patsubst Data/sound/%.wav,$(DATA)/sound/%.wav,$(WAV_SOUNDS))
+$(DATA)/sound/%.wav: Data/sound/%.wav | $(DATA)/sound/dirstamp
+	@$(NQ)echo "  CP      $@"
+	$(Q)cp $< $@
+
 $(IOS_GRAPHICS_DIR)/Assets.xcassets: $(topdir)/Data/iOS/Assets.xcassets $(IOS_ICON_SVG) | $(IOS_GRAPHICS_DIR)/dirstamp
 	$(Q)cp -r $< $@
 	$(Q)rsvg-convert $(IOS_ICON_SVG) -w 1024 -h 1024 -a -b white -o $@/AppIcon.appiconset/Icon-1024.png
