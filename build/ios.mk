@@ -81,13 +81,14 @@ else
 endif
 
 
-$(TARGET_OUTPUT_DIR)/$(IPA_NAME): $(TARGET_BIN_DIR)/xcsoar $(TARGET_OUTPUT_DIR)/Info.plist  $(IOS_GRAPHICS)
+$(TARGET_OUTPUT_DIR)/$(IPA_NAME): $(TARGET_BIN_DIR)/xcsoar $(TARGET_OUTPUT_DIR)/Info.plist $(IOS_GRAPHICS) $(IOS_SOUNDS)
 	@$(NQ)echo "  IPA     $@"
 	$(Q)rm -rf $(IPA_TMPDIR)
 	$(Q)$(MKDIR) -p $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
 	$(Q)cp $(TARGET_BIN_DIR)/xcsoar $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)/XCSoar
 	$(Q)cp $(TARGET_OUTPUT_DIR)/Info.plist $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
 	$(Q)cp -r $(IOS_GRAPHICS_DIR)/. $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
+	$(Q)cp -r $(DATA)/sound/. $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
 	$(Q)cd $(IPA_TMPDIR) && $(ZIP) -r ../$(IPA_NAME) ./*
 
 ipa: $(TARGET_OUTPUT_DIR)/$(IPA_NAME)

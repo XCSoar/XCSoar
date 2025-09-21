@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "Main.hpp"
+#include "Services.hpp"
 #include "LogFile.hpp"
 #import <AVFoundation/AVFoundation.h>
 
