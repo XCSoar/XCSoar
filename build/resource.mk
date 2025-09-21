@@ -152,16 +152,29 @@ $(PNG_LAUNCH_ALL): %.png: %.bmp
 
 ####### sounds
 
+WAV_SOUNDS = $(wildcard Data/sound/*.wav)
+
+ifeq ($(TARGET_IS_IOS),y)
+# iOS: Copy WAV files directly (no conversion needed)
+IOS_SOUNDS = $(patsubst Data/sound/%.wav,$(DATA)/sound/%.wav,$(WAV_SOUNDS))
+
+$(IOS_SOUNDS): $(DATA)/sound/%.wav: Data/sound/%.wav | $(DATA)/sound/dirstamp
+	@$(NQ)echo "  CP      $@"
+	$(Q)cp $< $@
+
+RESOURCE_FILES += $(IOS_SOUNDS)
+
+else
 ifneq ($(TARGET),ANDROID)
 ifneq ($(HAVE_WIN32),y)
 
-WAV_SOUNDS = $(wildcard Data/sound/*.wav)
 RAW_SOUNDS = $(patsubst Data/sound/%.wav,$(DATA)/sound/%.raw,$(WAV_SOUNDS))
 
 $(RAW_SOUNDS): $(DATA)/sound/%.raw: Data/sound/%.wav | $(DATA)/sound/dirstamp
 	@$(NQ)echo "  SOX     $@"
 	$(Q)sox -V1 $< --bits 16 --rate 44100 --channels 1 $@
 
+endif
 endif
 endif
 
