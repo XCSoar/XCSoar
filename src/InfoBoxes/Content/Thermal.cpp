@@ -11,6 +11,8 @@
 #include "Look/Look.hpp"
 #include "Renderer/ClimbPercentRenderer.hpp"
 #include "Input/InputEvents.hpp"
+#include "PageActions.hpp"
+#include "UIState.hpp"
 
 #include <tchar.h>
 
@@ -258,7 +260,13 @@ InfoBoxContentThermalAssistant::OnCustomPaint(Canvas &canvas,
 bool
 InfoBoxContentThermalAssistant::HandleClick() noexcept
 {
-  InputEvents::eventThermalAssistant(_T(""));
+  const auto &pages = CommonInterface::GetUIState().pages;
+  if (pages.special_page.IsDefined() && pages.special_page.main == PageLayout::Main::THERMAL_ASSISTANT) {
+    PageActions::Restore();
+  } else {
+	InputEvents::eventThermalAssistant(_T(""));
+  }
+
   return true;
 }
 
