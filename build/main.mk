@@ -677,6 +677,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Apple/InternalSensors.cpp \
 	$(SRC)/Apple/KeyboardDetection.cpp \
 	$(SRC)/Apple/Vibrator.cpp \
+	$(SRC)/Apple/Share.cpp \
 	$(SRC)/Device/SmartDeviceSensors.cpp
 endif
 

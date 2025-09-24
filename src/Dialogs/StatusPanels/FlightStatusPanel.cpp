@@ -12,6 +12,18 @@
 
 #include <fmt/format.h>
 
+#ifdef ANDROID
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
+#endif
+
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
+#include "Apple/Share.hpp"
+#endif
+#endif
+
 enum Controls {
   Location,
   Altitude,
@@ -19,8 +31,24 @@ enum Controls {
   Near,
   Bearing,
   Distance,
-  ShareButton,
+  ShareLocationButton,
 };
+
+static void
+ShareLocation(const GeoPoint &location) noexcept
+{
+  const auto uri = fmt::format("geo:{:.6f},{:.6f}",
+                               location.latitude.Degrees(),
+                               location.longitude.Degrees());
+#ifdef ANDROID
+  if (native_view != nullptr)
+    native_view->ShareText(Java::GetEnv(), uri.c_str());
+#elif defined(__APPLE__) && TARGET_OS_IPHONE
+  ShareTextIOS(uri.c_str());
+#else
+  OpenLink(uri.c_str());
+#endif
+}
 
 void
 FlightStatusPanel::Refresh() noexcept
@@ -32,7 +60,7 @@ FlightStatusPanel::Refresh() noexcept
     SetText(Location, FormatGeoPoint(basic.location));
   else
     ClearText(Location);
-  SetRowEnabled(ShareButton, basic.location_available);
+  SetRowEnabled(ShareLocationButton, basic.location_available);
 
   if (basic.gps_altitude_available)
     SetText(Altitude, FormatUserAltitude(basic.gps_altitude));
@@ -68,15 +96,13 @@ FlightStatusPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddReadOnly(_("Bearing"));
   AddReadOnly(_("Distance"));
 
-  AddButton(_("Share"), [](){
+  AddButton(_("Share location"), [](){
     const auto &basic = CommonInterface::Basic();
-    if (basic.location_available) {
-      const auto uri = fmt::format("geo:{:.6f},{:.6f}",
-                                   basic.location.latitude.Degrees(),
-                                   basic.location.longitude.Degrees());
-      OpenLink(uri.c_str());
-    }
+    if (!basic.location_available)
+      return;
+
+    ShareLocation(basic.location);
   });
 
-  SetRowEnabled(ShareButton, false);
+  SetRowEnabled(ShareLocationButton, false);
 }
