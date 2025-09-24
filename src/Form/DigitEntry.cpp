@@ -145,6 +145,10 @@ DigitEntry::CreateLatitude(ContainerWindow &parent, const PixelRect &rc,
     columns[7].type = Column::Type::DIGIT6;
     columns[9].type = Column::Type::QUOTE;
     break;
+
+  case CoordinateFormat::PLAIN_DECIMAL:
+    // not supported in DigitEntry
+    break;
   }
 
   cursor = 0;
@@ -198,6 +202,10 @@ DigitEntry::CreateLongitude(ContainerWindow &parent, const PixelRect &rc,
     columns[6].type = Column::Type::APOSTROPHE;
     columns[7].type = Column::Type::DIGIT6;
     columns[9].type = Column::Type::QUOTE;
+    break;
+
+  case CoordinateFormat::PLAIN_DECIMAL:
+    // not supported in DigitEntry
     break;
   }
 
@@ -544,6 +552,10 @@ DigitEntry::SetDigits(double degrees, CoordinateFormat format, bool isLatitude)
     roundingAdjustment = 0.5 * ( (1.0/3600) / 1);
     break;
 
+  case CoordinateFormat::PLAIN_DECIMAL:
+    // not supported in DigitEntry
+    break;
+
   default:
   case CoordinateFormat::UTM:
     /// \todo support UTM format
@@ -634,6 +646,11 @@ DigitEntry::SetDigits(double degrees, CoordinateFormat format, bool isLatitude)
     unsigned remainder = full_hunseconds % 6000u;
     columns[7].value = remainder / 1000;  remainder %= 1000;
     columns[8].value = remainder / 100;   remainder %= 100;
+    break;
+  }
+
+  case CoordinateFormat::PLAIN_DECIMAL: {
+    // not supported in DigitEntry
     break;
   }
   }
@@ -752,6 +769,10 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
     // Read minute and second columns
     degrees += (columns[4].value * 10 + columns[5].value) / 60.
       +  (columns[7].value * 10 + columns[8].value) / 3600.;
+    break;
+
+  case CoordinateFormat::PLAIN_DECIMAL:
+    // not supported in DigitEntry
     break;
   }
 

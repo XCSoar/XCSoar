@@ -85,6 +85,10 @@ FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
     StringFormat(buffer, size, _T("%09.5f" DEG " %c"), mlong, sign);
     break;
 
+  case CoordinateFormat::PLAIN_DECIMAL:
+    StringFormat(buffer, size, _T("%.8f"), longitude.Degrees());
+    break;
+
   case CoordinateFormat::UTM:
     return false;
   }
@@ -152,6 +156,10 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
   case CoordinateFormat::DD_DDDDD:
     // Save the string to the buffer
     StringFormat(buffer, size, _T("%08.5f" DEG " %c"), mlat, sign);
+    break;
+
+  case CoordinateFormat::PLAIN_DECIMAL:
+    StringFormat(buffer, size, _T("%.8f"), latitude.Degrees());
     break;
 
   case CoordinateFormat::UTM:
