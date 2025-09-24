@@ -116,7 +116,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Altitude GPS"),
     N_("Alt GPS"),
-    N_("Altitude above mean sea level reported by the GPS. Touch-screen/PC only: In simulation mode, this value is adjustable with the up/down arrow keys and the right/left arrow keys also cause the glider to turn."),
+    N_("Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In simulation mode, this value is adjustable with the up/down arrow keys; the right/left arrow keys cause the glider to turn."),
     IBFHelper<InfoBoxContentAltitudeGPS>::Create,
   },
 
@@ -198,7 +198,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("MacCready setting"),
     N_("MC"),
-    N_("Current MacCready setting and current MacCready mode (manual or auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if the InfoBox is active, by using the up/down cursor keys."),
+    N_("Current MacCready setting and mode (manual or auto). (Touch-screen/PC only) When this InfoBox is active, use the up/down cursor keys to adjust the MacCready setting."),
     IBFHelper<InfoBoxContentMacCready>::Create,
   },
 
@@ -428,7 +428,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Next GR"),
     N_("WP GR"),
-    N_("Required glide ratio over ground to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival height."),
+    N_("Required glide ratio over ground to reach the next waypoint, given by the distance to the next waypoint divided by the height required to arrive at the safety arrival height."),
     UpdateInfoBoxNextGR,
     next_waypoint_infobox_panels,
   },
@@ -470,7 +470,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Speed dolphin"),
     N_("Vopt"),
-    N_("Instantaneous MacCready speed-to-fly, making use of netto vario calculations to determine dolphin cruise speed in the glider's current bearing. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude. In final glide mode, this speed-to-fly is calculated for descent. In climb mode, this switches to the speed for minimum sink at the current load factor (if an accelerometer is connected). When Block mode speed to fly is selected, this InfoBox displays the MacCready speed."),
+    N_("Instantaneous MacCready speed-to-fly, making use of netto vario calculations to determine dolphin cruise speed on the glider's current track. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude. In final glide mode, this speed-to-fly is calculated for descent. In climb mode, this switches to the speed for minimum sink at the current load factor (if an accelerometer is connected). When Block mode speed-to-fly is selected, this InfoBox displays the MacCready speed."),
     UpdateInfoBoxSpeedDolphin,
   },
 
@@ -503,7 +503,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Bearing difference"),
     N_("Brng D"),
-    N_("Difference between the glider's track bearing, to the bearing of the next waypoint, or for AAT tasks, to the bearing to the target within the AAT sector. GPS navigation is based on the track bearing across the ground, and this track bearing may differ from the glider's heading when there is wind present. Chevrons point to the direction the glider needs to alter course to correct the bearing difference, that is, so that the glider's course made good is pointing directly at the next waypoint. This bearing takes into account the curvature of the Earth."),
+    N_("Difference between the glider's track (direction of motion across the ground) and the bearing to the next waypoint, or for AAT tasks, the bearing to the target within the AAT sector. GPS navigation is based on the track, and the track may differ from the glider's heading when there is wind. Chevrons point to the direction the glider needs to alter course to correct the bearing difference, that is, to make it so that the glider is tracking directly toward the next waypoint. This calculation accounts for the curvature of the Earth."),
     UpdateInfoBoxBearingDiff,
   },
 
@@ -696,7 +696,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("GR average"),
     N_("GR Avg"),
-    N_("Distance flown in the configured period of time, divided by the altitude lost since then. Negative values are shown as ^^^ and indicate climbing cruise (height gain). Over 200 of GR the value is shown as +++. You can configure the period of averaging in the system setup. Suggested values are 60, 90 or 120. Lower values will be closer to GR Inst, and higher values will be closer to GR Cruise. Notice that the distance is NOT the straight line between your old and current position, it's exactly the distance you have made even in a zigzag glide. This value is not calculated while circling."),
+    N_("Distance flown during the configured averaging period divided by the altitude lost during that period. Negative values are shown as ^^^ and indicate climbing cruise (height gain). For GR >200, the value is shown as +++. You can configure the averaging period in the system setup (suggested: 60, 90 or 120s). Lower values will be closer to GR Inst, and higher values will be closer to GR Cruise. Note: The distance is not the straight line between your previous and current positions; it is the actual path distance flown (including zigzags). This value is not calculated while circling."),
     UpdateInfoBoxGRAvg,
   },
 
@@ -810,7 +810,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Time under max. start height"),
     N_("Start Height"),
-    N_("Contiguous period the ship has been below the task start max. height."),
+    N_("Contiguous period during which the aircraft has been below the task start maximum height."),
     UpdateInfoBoxTaskTimeUnderMaxHeight,
   },
 
@@ -851,7 +851,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Nearest airspace vertical"),
     N_("Near AS V"),
-    N_("Vertical distance to the nearest airspace. A positive value means the airspace is above you, and a negative means the airspace is below you."),
+    N_("Vertical distance to the nearest airspace. A positive value means the airspace is above you; a negative value means the airspace is below you."),
     UpdateInfoBoxNearestAirspaceVertical,
   },
 
@@ -868,7 +868,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Wind, head component"),
     N_("Head Wind"),
-    N_("Current head wind component. Head wind is calculated from TAS and GPS ground speed if airspeed is available from external device. Otherwise the estimated wind is used for the calculation."),
+    N_("Current head wind component. Head wind is calculated from TAS and GPS ground speed if airspeed is available from an external device; otherwise, the estimated wind is used."),
     UpdateInfoBoxHeadWind,
     wind_infobox_panels,
   },
@@ -884,7 +884,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Altitude (Auto)"),
     N_("Alt Auto"),
-    N_("Barometric altitude obtained from a device equipped with a pressure sensor or the GPS altitude if the barometric altitude is not available."),
+    N_("Barometric altitude obtained from a device equipped with a pressure sensor, or GPS altitude if barometric altitude is not available."),
     UpdateInfoBoxAltitudeNav,
     altitude_infobox_panels,
   },
@@ -893,7 +893,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Thermal next leg equivalent"),
     N_("T Next Leg"),
-    N_("Thermal rate of climb on next leg which is equivalent to a thermal equal to the MacCready setting on current leg."),
+    N_("Thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg."),
     UpdateInfoBoxNextLegEqThermal,
   },
 
@@ -901,7 +901,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Wind, head component (simplified)"),
     N_("Head Wind *"),
-    N_("Current head wind component. The simplified head wind is calculated by subtracting GPS ground speed from the TAS if airspeed is available from external device."),
+    N_("Current head wind component. The simplified head wind is calculated by subtracting GPS ground speed from TAS if airspeed is available from an external device."),
     UpdateInfoBoxHeadWindSimplified,
     wind_infobox_panels,
   },
@@ -939,7 +939,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Start open/close countdown at reaching"),
     N_("Start reach"),
-    N_("Time left until the start point opens or closes, compared to the calculated time to reach it."),
+    N_("Time left until the start point opens or closes, minus the calculated time to reach the start point."),
     UpdateInfoBoxStartOpenArrival,
   },
 
@@ -1045,7 +1045,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Number of used satellites"),
     N_("Satellites"),
-    N_("Number of actually used (seen) satellites by GPS module. If this information is unavailable, the displayed value is '---'."),
+    N_("Number of satellites currently used by the GPS module. If this information is unavailable, the displayed value is '---'."),
     UpdateInfoBoxNbrSat,
   },
 
@@ -1053,14 +1053,14 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Active Radio Frequency"),
     N_("Act Freq"),
-    N_("Current active radio frequency."),
+    N_("Active radio frequency."),
     IBFHelper<InfoBoxContentActiveRadioFrequency>::Create,
   },
 
   {
     N_("Standby Radio Frequency"),
     N_("Stby Freq"),
-    N_("Current standby radio frequency."),
+    N_("Standby radio frequency."),
     IBFHelper<InfoBoxContentStandbyRadioFrequency>::Create,
   },
 
@@ -1124,7 +1124,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("AAT dT and task ETA"),
     N_("AATdeltaOrETA"),
-    N_("For AAT tasks, AAT delta time and ETA; for racing tasks, ETA."),
+    N_("For AAT tasks: AAT delta time and estimated time of arrival; for racing tasks: estimated time of arrival."),
     UpdateInfoTaskETAorAATdT,
   },
 
