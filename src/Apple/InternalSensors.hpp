@@ -3,11 +3,16 @@
 
 #pragma once
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+
 class SensorListener;
 
 #import <CoreLocation/CoreLocation.h>
+
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+#import <CoreMotion/CoreMotion.h>
 #endif
 
 @interface LocationDelegate : NSObject <CLLocationManagerDelegate>
@@ -29,6 +34,9 @@ class InternalSensors {
   SensorListener &listener;
   CLLocationManager *location_manager;
   LocationDelegate *location_delegate;
+#if TARGET_OS_IPHONE
+  CMAltimeter *altimeter;
+#endif
 
   void Init();
   void Deinit();
@@ -37,3 +45,5 @@ public:
   explicit InternalSensors(SensorListener &_listener);
   ~InternalSensors();
 };
+
+#endif // __APPLE__
