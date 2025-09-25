@@ -273,8 +273,11 @@ NMEAInfo::Complement(const NMEAInfo &add) noexcept
     airspeed_real = add.airspeed_real;
   }
 
-  if (gps_altitude_available.Complement(add.gps_altitude_available))
+  if (gps_altitude_available.Complement(add.gps_altitude_available)) {
     gps_altitude = add.gps_altitude;
+    if (add.gps_ellipsoid_altitude != 0)
+      gps_ellipsoid_altitude = add.gps_ellipsoid_altitude;
+  }
 
   if (static_pressure_available.Complement(add.static_pressure_available))
     static_pressure = add.static_pressure;
