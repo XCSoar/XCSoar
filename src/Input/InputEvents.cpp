@@ -46,6 +46,13 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "ui/event/KeyCode.hpp"
 #endif
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#ifdef TARGET_OS_IPHONE
+#include "Apple/KeyboardDetection.hpp"
+#endif
+#endif
+
 #include "lua/InputEvent.hpp"
 
 #include <cassert>
@@ -334,6 +341,11 @@ InputEvents::ProcessKey(Mode mode, unsigned key_code) noexcept
 #else
   // TODO: check the console key code
 #endif
+#endif
+
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+  // Detect cursor keys on iOS for dynamic keyboard detection
+  DetectCursorKeysiOS(key_code);
 #endif
 
   if (Lua::FireKey(key_code)) {
