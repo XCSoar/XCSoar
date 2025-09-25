@@ -82,6 +82,43 @@ public:
 	auto &GetEasy() noexcept {
 		return easy;
 	}
+	
+	template<typename T>
+	void SetOption(CURLoption option, T value) {
+		easy.SetOption(option, value);
+	}
+
+	void SetUrl(const char *url) {
+		easy.SetURL(url);
+	}
+
+	void SetRequestHeaders(struct curl_slist *request_headers) {
+		easy.SetRequestHeaders(request_headers);
+	}
+
+	void SetFailOnError(bool value=true) {
+		SetOption(CURLOPT_FAILONERROR, (long)value);
+	}
+
+	void SetVerifyHost(bool value) {
+		easy.SetVerifyHost(value);
+	}
+
+	void SetVerifyPeer(bool value) {
+		easy.SetVerifyPeer(value);
+	}
+
+	void SetNoBody(bool value=true) {
+		easy.SetNoBody(value);
+	}
+
+	void SetPost(bool value=true) {
+		easy.SetPost(value);
+	}
+
+	void SetRequestBody(const void *data, std::size_t size) {
+		easy.SetRequestBody(data, size);
+	}
 
 	void Resume() noexcept;
 
