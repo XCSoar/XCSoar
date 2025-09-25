@@ -42,9 +42,7 @@ public:
   void AddWaypoints(const Waypoints &waypoints);
   void AddVisibleAirspace(const Airspaces &airspaces,
                           const ProtectedAirspaceWarningManager *warning_manager,
-                          const AirspaceComputerSettings &computer_settings,
-                          const AirspaceRendererSettings &renderer_settings,
-                          const MoreData &basic, const DerivedInfo &calculated);
+                          const AirspaceRendererSettings &renderer_settings);
   void AddTaskOZs(const ProtectedTaskManager &task);
   void AddTraffic(const TrafficList &flarm);
   void AddSkyLinesTraffic();
