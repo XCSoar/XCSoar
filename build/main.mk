@@ -155,6 +155,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgCredits.cpp \
 	$(SRC)/Dialogs/dlgQuickMenu.cpp \
 	$(SRC)/Dialogs/Onboarding/dlgOnboarding.cpp \
+    $(SRC)/Dialogs/Onboarding/OnboardingLinkWindow.cpp \
 	$(SRC)/Dialogs/Onboarding/WelcomeWidget.cpp \
 	$(SRC)/Dialogs/Onboarding/GestureHelpWidget.cpp \
 	$(SRC)/Dialogs/Onboarding/ConfigurationWidget.cpp \

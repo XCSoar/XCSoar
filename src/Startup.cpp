@@ -389,13 +389,6 @@ Startup(UI::Display &display)
   // Read the terrain file
   main_window->LoadTerrain();
 
-  // Show onboarding dialog
-  bool hide_onboarding_dialog_on_startup = false;
-  Profile::Get(ProfileKeys::HideOnboardingDialogOnStartup, hide_onboarding_dialog_on_startup);
-  if (HasTouchScreen() && !hide_onboarding_dialog_on_startup) {
-    dlgOnboardingShowModal();
-  }
-
   backend_components->glide_computer =
     std::make_unique<GlideComputer>(computer_settings,
                                     *data_components->waypoints,
@@ -421,6 +414,12 @@ Startup(UI::Display &display)
   }
 #endif
 
+  // Show onboarding dialog
+  bool hide_onboarding_dialog_on_startup = false;
+  Profile::Get(ProfileKeys::HideOnboardingDialogOnStartup, hide_onboarding_dialog_on_startup);
+  if (HasTouchScreen() && !hide_onboarding_dialog_on_startup) {
+    dlgOnboardingShowModal();
+  }
 
   GlidePolar &gp = CommonInterface::SetComputerSettings().polar.glide_polar_task;
   gp = GlidePolar(0);

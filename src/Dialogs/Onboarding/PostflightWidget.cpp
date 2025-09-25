@@ -10,6 +10,17 @@
 #include "util/ConvertString.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
+#include "Dialogs/Dialogs.h"
+#include "Dialogs/Device/DeviceListDialog.hpp"
+#include "Dialogs/dlgAnalysis.hpp"
+#include "Interface.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
+#include "DataComponents.hpp"
+#include "MainWindow.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/Settings/Panels/WeGlideConfigPanel.hpp"
+#include "Profile/Profile.hpp"
 
 #include <winuser.h>
 #include <fmt/format.h>
@@ -36,7 +47,7 @@ PostflightWindow::OnPaint(Canvas &canvas) noexcept
   const PixelRect rc = GetClientRect();
 
   canvas.Clear();
-  
+
   int margin = Layout::FastScale(10);
   int x = rc.left + margin;
   int x_indent = x + Layout::FastScale(17);
@@ -70,7 +81,7 @@ PostflightWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontMono);
   const TCHAR *l1 = _("Config → Devices → Flight download");
   PixelRect l1_rc{x_indent, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l1_height = canvas.DrawFormattedText(l1_rc, l1, DT_LEFT);
+  unsigned l1_height = DrawLink(canvas, LinkAction::FLIGHT_DOWNLOAD, l1_rc, l1);
   canvas.Select(fontDefault);
   y += int(l1_height) + margin;
 
@@ -85,7 +96,7 @@ PostflightWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontMono);
   const TCHAR *l2 = _("Info → Analysis");
   PixelRect l2_rc{x_indent, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l2_height = canvas.DrawFormattedText(l2_rc, l2, DT_LEFT);
+  unsigned l2_height = DrawLink(canvas, LinkAction::ANALYSIS, l2_rc, l2);
   canvas.Select(fontDefault);
   y += int(l2_height) + margin;
 
@@ -100,7 +111,7 @@ PostflightWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontMono);
   const TCHAR *l3 = _("Info → Info → Status");
   PixelRect l3_rc{x_indent, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l3_height = canvas.DrawFormattedText(l3_rc, l3, DT_LEFT);
+  unsigned l3_height = DrawLink(canvas, LinkAction::STATUS, l3_rc, l3);
   canvas.Select(fontDefault);
   y += int(l3_height) + margin;
 
@@ -117,7 +128,73 @@ PostflightWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontMono);
   const TCHAR *l4 = _("Config → System → Setup → WeGlide");
   PixelRect l4_rc{x_indent, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l4_height = canvas.DrawFormattedText(l4_rc, l4, DT_LEFT);
+  unsigned l4_height = DrawLink(canvas, LinkAction::WEGLIDE, l4_rc, l4);
   canvas.Select(fontDefault);
   y += int(l4_height) + margin;
+}
+
+PostflightWindow::PostflightWindow() noexcept
+  : OnboardingLinkWindow()
+{
+  const auto count = static_cast<std::size_t>(LinkAction::COUNT);
+  link_rects.resize(count);
+}
+
+bool
+PostflightWindow::HandleLink(LinkAction link) noexcept
+{
+  switch (link) {
+  case LinkAction::FLIGHT_DOWNLOAD:
+    if (backend_components != nullptr &&
+        backend_components->device_blackboard != nullptr) {
+      ShowDeviceList(*backend_components->device_blackboard,
+                     backend_components->devices.get());
+      return true;
+    }
+    break;
+
+  case LinkAction::ANALYSIS:
+    dlgAnalysisShowModal(*CommonInterface::main_window,
+                         CommonInterface::main_window->GetLook(),
+                         CommonInterface::Full(),
+                         *backend_components->glide_computer,
+                         data_components->airspaces.get(),
+                         data_components->terrain.get());
+    return true;
+
+  case LinkAction::STATUS:
+    dlgStatusShowModal(-1);
+    return true;
+
+  case LinkAction::WEGLIDE: {
+    const DialogLook &look = UIGlobals::GetDialogLook();
+    WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(), look, _("WeGlide"));
+    auto panel = CreateWeGlideConfigPanel();
+    dialog.FinishPreliminary(std::move(panel));
+    dialog.AddButton(_("Close"), mrOK);
+    dialog.ShowModal();
+    if (dialog.GetChanged()) {
+      Profile::Save();
+    }
+    return true;
+  }
+
+  case LinkAction::COUNT:
+	break;
+  }
+
+  return false;
+}
+
+unsigned
+PostflightWindow::DrawLink(Canvas &canvas, LinkAction link_action, PixelRect rc,
+                           const TCHAR *text) noexcept
+{
+  return OnboardingLinkWindow::DrawLink(canvas, static_cast<std::size_t>(link_action), rc, text);
+}
+
+bool
+PostflightWindow::OnLinkActivated(std::size_t link_action) noexcept
+{
+  return HandleLink(static_cast<LinkAction>(link_action));
 }

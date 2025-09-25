@@ -14,6 +14,19 @@
 #include "util/ConvertString.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
+#include "Dialogs/Dialogs.h"
+#include "Dialogs/Device/DeviceListDialog.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/Settings/Panels/SiteConfigPanel.hpp"
+#include "Dialogs/Settings/Panels/LoggerConfigPanel.hpp"
+#include "Dialogs/Settings/Panels/TimeConfigPanel.hpp"
+#include "Dialogs/Settings/Panels/InfoBoxesConfigPanel.hpp"
+#include "Dialogs/Settings/Panels/PagesConfigPanel.hpp"
+#include "Dialogs/Plane/PlaneDialogs.hpp"
+#include "Dialogs/Plane/PlaneDialogs.hpp"
+#include "UtilsSettings.hpp"
+#include "BackendComponents.hpp"
+#include "Components.hpp"
 
 #include <winuser.h>
 #include <fmt/format.h>
@@ -40,7 +53,7 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
   const PixelRect rc = GetClientRect();
 
   canvas.Clear();
-  
+
   int margin = Layout::FastScale(10);
   int x = rc.left + margin;
   int x_text = x + Layout::FastScale(20);
@@ -72,7 +85,7 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontMono);
   const TCHAR *l1 = _("Config → System → Site Files");
   PixelRect l1_rc{x_text, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l1_height = canvas.DrawFormattedText(l1_rc, l1, DT_LEFT);
+  unsigned l1_height = DrawLink(canvas, LinkAction::SITE_FILES_1, l1_rc, l1);
   y += int(l1_height) + margin;
   
   // Waypoints
@@ -87,7 +100,7 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontMono);
   const TCHAR *l2 = _("Config → System → Site Files");
   PixelRect l2_rc{x_text, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l2_height = canvas.DrawFormattedText(l2_rc, l2, DT_LEFT);
+  unsigned l2_height = DrawLink(canvas, LinkAction::SITE_FILES_2, l2_rc, l2);
   y += int(l2_height) + margin;
 
   // Airspace
@@ -102,7 +115,7 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontMono);
   const TCHAR *l3 = _("Config → System → Site Files");
   PixelRect l3_rc{x_text, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l3_height = canvas.DrawFormattedText(l3_rc, l3, DT_LEFT);
+  unsigned l3_height = DrawLink(canvas, LinkAction::SITE_FILES_3, l3_rc, l3);
   y += int(l3_height) + margin;
 
   // Aircraft polar
@@ -117,7 +130,7 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontMono);
   const TCHAR *l4 = _("Config → Setup Plane → New → Polar → List");
   PixelRect l4_rc{x_text, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l4_height = canvas.DrawFormattedText(l4_rc, l4, DT_LEFT);
+  unsigned l4_height = DrawLink(canvas, LinkAction::PLANE_POLAR, l4_rc, l4);
   y += int(l4_height) + margin;
 
   // Pilot name
@@ -132,13 +145,13 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontMono);
   const TCHAR *l5 = _("Config → System → Setup → Logger");
   PixelRect l5_rc{x_text, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l5_height = canvas.DrawFormattedText(l5_rc, l5, DT_LEFT);
+  unsigned l5_height = DrawLink(canvas, LinkAction::SETUP_LOGGER_1, l5_rc, l5);
   y += int(l5_height) + margin;
 
   // Pilot weight
   canvas.Select(fontMono);
   const char *c6 = Profile::Get(ProfileKeys::CrewWeightTemplate);
-	canvas.DrawText({x, y + icon_offset}, (c6 == nullptr || StringIsEmpty(c6) || (intptr_t)c6 <= 0) ? undone : done);
+  canvas.DrawText({x, y + icon_offset}, (c6 == nullptr || StringIsEmpty(c6) || (intptr_t)c6 <= 0) ? undone : done);
   canvas.Select(fontDefault);
   const TCHAR *t6 = _("Set your default weight.");
   PixelRect t6_rc{x_text, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
@@ -147,7 +160,7 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontMono);
   const TCHAR *l6 = _("Config → System → Setup → Logger");
   PixelRect l6_rc{x_text, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l6_height = canvas.DrawFormattedText(l6_rc, l6, DT_LEFT);
+  unsigned l6_height = DrawLink(canvas, LinkAction::SETUP_LOGGER_2, l6_rc, l6);
   y += int(l6_height) + margin;
 
   // Timezone (UTC offset)
@@ -162,7 +175,7 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontMono);
   const TCHAR *l7 = _("Config → System → Setup → Time");
   PixelRect l7_rc{x_text, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l7_height = canvas.DrawFormattedText(l7_rc, l7, DT_LEFT);
+  unsigned l7_height = DrawLink(canvas, LinkAction::SETUP_TIME, l7_rc, l7);
   y += int(l7_height) + margin;
 
   // Home waypoint
@@ -189,17 +202,16 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontMono);
   const TCHAR *l9 = _("Config → System → Look → InfoBox Sets");
   PixelRect l9_rc{x_text, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l9_height = canvas.DrawFormattedText(l9_rc, l9, DT_LEFT);
+  unsigned l9_height = DrawLink(canvas, LinkAction::LOOK_INFO_BOX_SETS, l9_rc, l9);
   y += int(l9_height) + margin / 2;
   const TCHAR *l9b = _("Config → System → Look → Pages");
   PixelRect l9b_rc{x_text, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l9b_height = canvas.DrawFormattedText(l9b_rc, l9b, DT_LEFT);
+  unsigned l9b_height = DrawLink(canvas, LinkAction::LOOK_PAGES, l9b_rc, l9b);
   y += int(l9b_height) + margin / 2;
   canvas.SetTextColor(COLOR_BLUE);
   const TCHAR *l9c = _("https://youtube.com/user/M24Tom/playlists"); // https://youtube.com/playlist?list=PLb36zVafnfctzNG7yJoNXc2x8HnX5J9j7
   PixelRect l9c_rc{x_text, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l9c_height = canvas.DrawFormattedText(l9c_rc, l9c, DT_LEFT | DT_UNDERLINE);
-  youtube_link_rect = {x_text, y, int(canvas.GetWidth()) - margin, y + int(l9c_height)};
+  unsigned l9c_height = DrawLink(canvas, LinkAction::YOUTUBE_TUTORIAL, l9c_rc, l9c);
   canvas.SetTextColor(COLOR_BLACK);
   y += int(l9c_height) + margin;
   
@@ -212,7 +224,7 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontMono);
   const TCHAR *l10 = _("Config → Devices");
   PixelRect l10_rc{x_text, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l10_height = canvas.DrawFormattedText(l10_rc, l10, DT_LEFT);
+  unsigned l10_height = DrawLink(canvas, LinkAction::DEVICES, l10_rc, l10);
   y += int(l10_height) + margin;
 
   y += margin;
@@ -240,9 +252,118 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
   canvas.DrawFormattedText(t99_rc, t99, DT_LEFT);
 }
 
-bool ConfigurationWindow::OnMouseUp(PixelPoint p) noexcept {
-  if (youtube_link_rect.Contains(p)) {
-    return OpenLink("https://youtube.com/playlist?list=PLb36zVafnfctzNG7yJoNXc2x8HnX5J9j7");
+ConfigurationWindow::ConfigurationWindow() noexcept
+  : OnboardingLinkWindow()
+{
+  const auto count = static_cast<std::size_t>(LinkAction::COUNT);
+  link_rects.resize(count);
+}
+
+bool
+ConfigurationWindow::HandleLink(LinkAction link) noexcept
+{
+  switch (link) {
+  case LinkAction::SITE_FILES_1:
+  case LinkAction::SITE_FILES_2:
+  case LinkAction::SITE_FILES_3:{
+    const DialogLook &look = UIGlobals::GetDialogLook();
+    WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                        look, _("Site Files"));
+    auto panel = CreateSiteConfigPanel();
+    dialog.FinishPreliminary(std::move(panel));
+    dialog.AddButton(_("Close"), mrOK);
+    dialog.ShowModal();
+    if (dialog.GetChanged())
+      Profile::Save();
+    return true;
   }
+
+  case LinkAction::PLANE_POLAR:
+    dlgPlanesShowModal();
+    return true;
+
+  case LinkAction::SETUP_LOGGER_1:
+  case LinkAction::SETUP_LOGGER_2: {
+    const DialogLook &look = UIGlobals::GetDialogLook();
+    WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                        look, _("Logger"));
+    auto panel = CreateLoggerConfigPanel();
+    dialog.FinishPreliminary(std::move(panel));
+    dialog.AddButton(_("Close"), mrOK);
+    dialog.ShowModal();
+    if (dialog.GetChanged())
+      Profile::Save();
+    return true;
+  }
+
+  case LinkAction::SETUP_TIME: {
+    const DialogLook &look = UIGlobals::GetDialogLook();
+    WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                        look, _("Time"));
+    auto panel = CreateTimeConfigPanel();
+    dialog.FinishPreliminary(std::move(panel));
+    dialog.AddButton(_("Close"), mrOK);
+    dialog.ShowModal();
+    if (dialog.GetChanged())
+      Profile::Save();
+    return true;
+  }
+
+  case LinkAction::LOOK_INFO_BOX_SETS: {
+    const DialogLook &look = UIGlobals::GetDialogLook();
+    WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                        look, _("InfoBox Sets"));
+    auto panel = CreateInfoBoxesConfigPanel();
+    dialog.FinishPreliminary(std::move(panel));
+    dialog.AddButton(_("Close"), mrOK);
+    dialog.ShowModal();
+    if (dialog.GetChanged())
+      Profile::Save();
+    return true;
+  }
+
+  case LinkAction::LOOK_PAGES: {
+    const DialogLook &look = UIGlobals::GetDialogLook();
+    WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                        look, _("Pages"));
+    auto panel = CreatePagesConfigPanel();
+    dialog.FinishPreliminary(std::move(panel));
+    dialog.AddButton(_("Close"), mrOK);
+    dialog.ShowModal();
+    if (dialog.GetChanged())
+      Profile::Save();
+    return true;
+  }
+
+  case LinkAction::YOUTUBE_TUTORIAL:
+    OpenLink("https://youtube.com/playlist?list=PLb36zVafnfctzNG7yJoNXc2x8HnX5J9j7");
+    return true;
+
+  case LinkAction::DEVICES:
+    if (backend_components != nullptr &&
+        backend_components->device_blackboard != nullptr) {
+      ShowDeviceList(*backend_components->device_blackboard,
+                     backend_components->devices.get());
+      return true;
+    }
+    return true;
+
+  case LinkAction::COUNT:
+    break;
+  }
+
   return false;
+}
+
+unsigned
+ConfigurationWindow::DrawLink(Canvas &canvas, LinkAction link, PixelRect rc,
+                              const TCHAR *text) noexcept
+{
+  return OnboardingLinkWindow::DrawLink(canvas, static_cast<std::size_t>(link), rc, text);
+}
+
+bool
+ConfigurationWindow::OnLinkActivated(std::size_t index) noexcept
+{
+  return HandleLink(static_cast<LinkAction>(index));
 }
