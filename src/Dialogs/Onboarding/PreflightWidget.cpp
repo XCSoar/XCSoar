@@ -10,6 +10,9 @@
 #include "util/ConvertString.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
+#include "Dialogs/Dialogs.h"
+#include "Dialogs/Plane/PlaneDialogs.hpp"
+#include "Dialogs/Task/TaskDialogs.hpp"
 
 #include <winuser.h>
 #include <fmt/format.h>
@@ -36,7 +39,7 @@ PreflightWindow::OnPaint(Canvas &canvas) noexcept
   const PixelRect rc = GetClientRect();
 
   canvas.Clear();
-  
+
   int margin = Layout::FastScale(10);
   int x = rc.left + margin;
   int x_indent = x + Layout::FastScale(17);
@@ -70,7 +73,7 @@ PreflightWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontMono);
   const TCHAR *l1 = _("Info → Checklist");
   PixelRect l1_rc{x_indent, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l1_height = canvas.DrawFormattedText(l1_rc, l1, DT_LEFT);
+  unsigned l1_height = DrawLink(canvas, LinkAction::CHECKLIST, l1_rc, l1);
   canvas.Select(fontDefault);
   y += int(l1_height) + margin;
 
@@ -86,7 +89,7 @@ PreflightWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontMono);
   const TCHAR *l2 = _("Config → Plane");
   PixelRect l2_rc{x_indent, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l2_height = canvas.DrawFormattedText(l2_rc, l2, DT_LEFT);
+  unsigned l2_height = DrawLink(canvas, LinkAction::PLANE, l2_rc, l2);
   canvas.Select(fontDefault);
   y += int(l2_height) + margin;
 
@@ -101,7 +104,7 @@ PreflightWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontMono);
   const TCHAR *l3 = _("Info → Flight");
   PixelRect l3_rc{x_indent, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l3_height = canvas.DrawFormattedText(l3_rc, l3, DT_LEFT);
+  unsigned l3_height = DrawLink(canvas, LinkAction::FLIGHT, l3_rc, l3);
   canvas.Select(fontDefault);
   y += int(l3_height) + margin;
 
@@ -116,7 +119,7 @@ PreflightWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontMono);
   const TCHAR *l4 = _("Info → Wind");
   PixelRect l4_rc{x_indent, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l4_height = canvas.DrawFormattedText(l4_rc, l4, DT_LEFT);
+  unsigned l4_height = DrawLink(canvas, LinkAction::WIND, l4_rc, l4);
   canvas.Select(fontDefault);
   y += int(l4_height) + margin;
 
@@ -131,7 +134,53 @@ PreflightWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(fontMono);
   const TCHAR *l5 = _("Nav → Task Manager");
   PixelRect l5_rc{x_indent, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned l5_height = canvas.DrawFormattedText(l5_rc, l5, DT_LEFT);
+  unsigned l5_height = DrawLink(canvas, LinkAction::TASK_MANAGER, l5_rc, l5);
   canvas.Select(fontDefault);
   y += int(l5_height) + margin;
+}
+
+PreflightWindow::PreflightWindow() noexcept
+  : OnboardingLinkWindow()
+{
+  const auto count = static_cast<std::size_t>(LinkAction::COUNT);
+  link_rects.resize(count);
+}
+
+bool
+PreflightWindow::HandleLink(LinkAction link) noexcept
+{
+  switch (link) {
+  case LinkAction::CHECKLIST:
+    dlgChecklistShowModal();
+    return true;
+  case LinkAction::PLANE:
+    dlgPlanesShowModal();
+    return true;
+  case LinkAction::FLIGHT:
+    dlgBasicSettingsShowModal();
+    return true;
+  case LinkAction::WIND:
+    ShowWindSettingsDialog();
+    return true;
+  case LinkAction::TASK_MANAGER:
+    dlgTaskManagerShowModal();
+    return true;
+  case LinkAction::COUNT:
+    break;
+  }
+
+  return false;
+}
+
+unsigned
+PreflightWindow::DrawLink(Canvas &canvas, LinkAction link_action, PixelRect rc,
+                          const TCHAR *text) noexcept
+{
+  return OnboardingLinkWindow::DrawLink(canvas, static_cast<std::size_t>(link_action), rc, text);
+}
+
+bool
+PreflightWindow::OnLinkActivated(std::size_t link_action) noexcept
+{
+  return HandleLink(static_cast<LinkAction>(link_action));
 }
