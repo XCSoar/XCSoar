@@ -15,8 +15,7 @@
 enum ControlIndex {
   DataPath,
   MapFile,
-  WaypointFile,
-  AdditionalWaypointFile,
+  WaypointFileList,
   WatchedWaypointFile,
   AirfieldFile,
   AirspaceFileList,
@@ -50,17 +49,12 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
             "waypoints, their details and airspaces."),
           ProfileKeys::MapFile, _T("*.xcm\0*.lkm\0"), FileType::MAP);
 
-  AddFile(_("Waypoints"),
-          _("Primary waypoints file. Supported file types are Cambridge/WinPilot files (.dat), "
-            "Zander files (.wpz) or SeeYou files (.cup)."),
-          ProfileKeys::WaypointFile, WAYPOINT_FILE_PATTERNS,
-          FileType::WAYPOINT);
-
-  AddFile(_("More waypoints"),
-          _("Secondary waypoints file. This may be used to add waypoints for a competition."),
-          ProfileKeys::AdditionalWaypointFile, WAYPOINT_FILE_PATTERNS,
-          FileType::WAYPOINT);
-  SetExpertRow(AdditionalWaypointFile);
+  AddMultipleFiles(_("Waypoints"),
+                   _("Primary waypoint files. Supported formats include "
+                     "Cambridge/WinPilot (.dat), "
+                     "Zander (.wpz), and SeeYou files (.cup)."),
+                   ProfileKeys::WaypointFileList, WAYPOINT_FILE_PATTERNS,
+                   FileType::WAYPOINT);
 
   AddFile(_("Watched waypoints"),
           _("Waypoint file containing special waypoints for which additional computations like "
@@ -103,8 +97,8 @@ SiteConfigPanel::Save(bool &_changed) noexcept
   MapFileChanged = SaveValueFileReader(MapFile, ProfileKeys::MapFile);
 
   // WaypointFileChanged has already a meaningful value
-  WaypointFileChanged |= SaveValueFileReader(WaypointFile, ProfileKeys::WaypointFile);
-  WaypointFileChanged |= SaveValueFileReader(AdditionalWaypointFile, ProfileKeys::AdditionalWaypointFile);
+  WaypointFileChanged |=
+      SaveValueFileReader(WaypointFileList, ProfileKeys::WaypointFileList);
   WaypointFileChanged |= SaveValueFileReader(WatchedWaypointFile, ProfileKeys::WatchedWaypointFile);
 
   AirspaceFileChanged |= SaveValueMultiFileReader(

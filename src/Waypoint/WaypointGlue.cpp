@@ -77,19 +77,14 @@ LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
   way_points.Clear();
 
   // ### FIRST FILE ###
-  auto path = Profile::GetPath(ProfileKeys::WaypointFile);
-  if (path != nullptr)
+  auto paths = Profile::GetMultiplePaths(ProfileKeys::WaypointFileList);
+  for (const auto &path : paths) {
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::PRIMARY,
                               terrain, progress);
-
-  // ### SECOND FILE ###
-  path = Profile::GetPath(ProfileKeys::AdditionalWaypointFile);
-  if (path != nullptr)
-    found |= LoadWaypointFile(way_points, path, WaypointOrigin::ADDITIONAL,
-                              terrain, progress);
+  }
 
   // ### WATCHED WAYPOINT/THIRD FILE ###
-  path = Profile::GetPath(ProfileKeys::WatchedWaypointFile);
+  auto path = Profile::GetPath(ProfileKeys::WatchedWaypointFile);
   if (path != nullptr)
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::WATCHED,
                               terrain, progress);

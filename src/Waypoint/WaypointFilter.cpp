@@ -38,11 +38,8 @@ WaypointFilter::CompareType(const Waypoint &waypoint, TypeFilter type,
   case TypeFilter::USER:
     return waypoint.origin == WaypointOrigin::USER;
 
-  case TypeFilter::FILE_1:
+  case TypeFilter::FILE:
     return waypoint.origin == WaypointOrigin::PRIMARY;
-
-  case TypeFilter::FILE_2:
-    return waypoint.origin == WaypointOrigin::ADDITIONAL;
 
   case TypeFilter::MAP:
     return waypoint.origin == WaypointOrigin::MAP;
