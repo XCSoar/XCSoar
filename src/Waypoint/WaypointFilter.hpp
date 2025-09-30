@@ -13,7 +13,7 @@ struct Waypoint;
 struct GeoPoint;
 class FAITrianglePointValidator;
 
-enum class TypeFilter: uint8_t {
+enum class TypeFilter : uint8_t {
   ALL = 0,
   AIRPORT,
   LANDABLE,
@@ -23,8 +23,7 @@ enum class TypeFilter: uint8_t {
   FAI_TRIANGLE_LEFT,
   FAI_TRIANGLE_RIGHT,
   USER,
-  FILE_1,
-  FILE_2,
+  FILE,
   MAP,
   LAST_USED,
 };
