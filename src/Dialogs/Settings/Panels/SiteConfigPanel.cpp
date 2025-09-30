@@ -16,7 +16,7 @@ enum ControlIndex {
   DataPath,
   MapFile,
   WaypointFileList,
-  WatchedWaypointFile,
+  WatchedWaypointFileList,
   AirfieldFile,
   AirspaceFileList,
   FlarmFile,
@@ -50,19 +50,22 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
           ProfileKeys::MapFile, _T("*.xcm\0*.lkm\0"), FileType::MAP);
 
   AddMultipleFiles(_("Waypoints"),
-                   _("Primary waypoint files. Supported formats include "
-                     "Cambridge/WinPilot (.dat), "
-                     "Zander (.wpz), and SeeYou files (.cup)."),
+                   _("Primary waypoints files.  Supported file types are "
+                     "Cambridge/WinPilot files (.dat), "
+                     "Zander files (.wpz) or SeeYou files (.cup)."),
                    ProfileKeys::WaypointFileList, WAYPOINT_FILE_PATTERNS,
                    FileType::WAYPOINT);
 
-  AddFile(_("Watched waypoints"),
-          _("Waypoint file containing special waypoints for which additional computations like "
-            "calculation of arrival height in map display always takes place. Useful for "
-            "waypoints like known reliable thermal sources (e.g. powerplants) or mountain passes."),
-          ProfileKeys::WatchedWaypointFile, WAYPOINT_FILE_PATTERNS,
-          FileType::WAYPOINT);
-  SetExpertRow(WatchedWaypointFile);
+  AddMultipleFiles(_("Watched waypoints"),
+                   _("Waypoint files containing special waypoints for which "
+                     "additional computations like "
+                     "calculation of arrival height in map display always "
+                     "takes place. Useful for "
+                     "waypoints like known reliable thermal sources (e.g. "
+                     "powerplants) or mountain passes."),
+                   ProfileKeys::WatchedWaypointFileList,
+                   WAYPOINT_FILE_PATTERNS, FileType::WAYPOINT);
+  SetExpertRow(WatchedWaypointFileList);
 
   AddFile(_("Waypoint details"),
           _("The file may contain extracts from enroute supplements or other contributed "
@@ -97,9 +100,10 @@ SiteConfigPanel::Save(bool &_changed) noexcept
   MapFileChanged = SaveValueFileReader(MapFile, ProfileKeys::MapFile);
 
   // WaypointFileChanged has already a meaningful value
-  WaypointFileChanged |=
-      SaveValueFileReader(WaypointFileList, ProfileKeys::WaypointFileList);
-  WaypointFileChanged |= SaveValueFileReader(WatchedWaypointFile, ProfileKeys::WatchedWaypointFile);
+  WaypointFileChanged |= SaveValueMultiFileReader(
+      WaypointFileList, ProfileKeys::WaypointFileList);
+  WaypointFileChanged |= SaveValueMultiFileReader(
+      WatchedWaypointFileList, ProfileKeys::WatchedWaypointFileList);
 
   AirspaceFileChanged |= SaveValueMultiFileReader(
       AirspaceFileList, ProfileKeys::AirspaceFileList);

@@ -84,10 +84,11 @@ LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
   }
 
   // ### WATCHED WAYPOINT/THIRD FILE ###
-  auto path = Profile::GetPath(ProfileKeys::WatchedWaypointFile);
-  if (path != nullptr)
+  paths = Profile::GetMultiplePaths(ProfileKeys::WatchedWaypointFileList);
+  for (const auto &path : paths) {
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::WATCHED,
                               terrain, progress);
+  }
 
   // ### MAP/FOURTH FILE ###
 
