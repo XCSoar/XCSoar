@@ -51,11 +51,6 @@ ProfileMap::GetMultiplePaths(std::string_view key) const
 
     Path path(file_string.c_str());
 
-    if (!(path.EndsWithIgnoreCase(_T(".txt")) ||
-          path.EndsWithIgnoreCase(_T(".air")) ||
-          path.EndsWithIgnoreCase(_T(".sua"))))
-      continue;
-
     paths.push_back(ExpandLocalPath(AllocatedPath(path)));
   }
 

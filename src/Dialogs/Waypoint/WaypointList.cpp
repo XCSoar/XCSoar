@@ -369,7 +369,6 @@ CreateTypeDataField(DataFieldListener *listener)
 
   ReplaceProfilePathBase(*df, (unsigned)TypeFilter::FILE,
                          ProfileKeys::WaypointFileList);
-
   ReplaceProfilePathBase(*df, (unsigned)TypeFilter::MAP,
                          ProfileKeys::MapFile);
 
