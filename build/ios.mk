@@ -36,6 +36,13 @@ IOS_GRAPHICS = \
 	$(IOS_GRAPHICS_DIR)/Assets.car \
 	$(IOS_GRAPHICS_DIR)/LaunchScreen.storyboardc
 
+# Copy WAV files directly (no conversion needed)
+WAV_SOUNDS = $(wildcard Data/sound/*.wav)
+IOS_SOUNDS = $(patsubst Data/sound/%.wav,$(DATA)/sound/%.wav,$(WAV_SOUNDS))
+$(DATA)/sound/%.wav: Data/sound/%.wav | $(DATA)/sound/dirstamp
+	@$(NQ)echo "  CP      $@"
+	$(Q)cp $< $@
+
 $(IOS_GRAPHICS_DIR)/Assets.xcassets: $(topdir)/Data/iOS/Assets.xcassets $(IOS_ICON_SVG) | $(IOS_GRAPHICS_DIR)/dirstamp
 	$(Q)cp -r $< $@
 	$(Q)rsvg-convert $(IOS_ICON_SVG) -w 1024 -h 1024 -a -b white -o $@/AppIcon.appiconset/Icon-1024.png
@@ -81,13 +88,14 @@ else
 endif
 
 
-$(TARGET_OUTPUT_DIR)/$(IPA_NAME): $(TARGET_BIN_DIR)/xcsoar $(TARGET_OUTPUT_DIR)/Info.plist  $(IOS_GRAPHICS)
+$(TARGET_OUTPUT_DIR)/$(IPA_NAME): $(TARGET_BIN_DIR)/xcsoar $(TARGET_OUTPUT_DIR)/Info.plist $(IOS_GRAPHICS) $(IOS_SOUNDS)
 	@$(NQ)echo "  IPA     $@"
 	$(Q)rm -rf $(IPA_TMPDIR)
 	$(Q)$(MKDIR) -p $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
 	$(Q)cp $(TARGET_BIN_DIR)/xcsoar $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)/XCSoar
 	$(Q)cp $(TARGET_OUTPUT_DIR)/Info.plist $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
 	$(Q)cp -r $(IOS_GRAPHICS_DIR)/. $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
+	$(Q)cp -r $(DATA)/sound/. $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
 	$(Q)cd $(IPA_TMPDIR) && $(ZIP) -r ../$(IPA_NAME) ./*
 
 ipa: $(TARGET_OUTPUT_DIR)/$(IPA_NAME)

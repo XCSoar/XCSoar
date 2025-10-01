@@ -10,6 +10,10 @@
 		5C263B8C2D7456D30031179E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		5C263B8D2D7456D30031179E /* build.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = "<group>"; };
 		5C263B8E2D7456D30031179E /* clean.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = clean.sh; sourceTree = "<group>"; };
+		5C72EF782E80785B0015A594 /* Services.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Services.hpp; sourceTree = "<group>"; };
+		5C72EF792E80785B0015A594 /* Services.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Services.cpp; sourceTree = "<group>"; };
+		5C72EF7A2E80785B0015A594 /* SoundUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SoundUtil.hpp; sourceTree = "<group>"; };
+		5C72EF7B2E80785B0015A594 /* SoundUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SoundUtil.cpp; sourceTree = "<group>"; };
 		5CBFD0A62D742FA600F05795 /* Android-CI.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "Android-CI.yml"; sourceTree = "<group>"; };
 		5CBFD0A72D742FA600F05795 /* Android-CI-release.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "Android-CI-release.yml"; sourceTree = "<group>"; };
 		5CBFD0A82D742FA600F05795 /* gradle-wrapper-validation.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "gradle-wrapper-validation.yml"; sourceTree = "<group>"; };
@@ -14912,6 +14916,10 @@
 		5CBFDFE62D742FA600F05795 /* Apple */ = {
 			isa = PBXGroup;
 			children = (
+				5C72EF782E80785B0015A594 /* Services.hpp */,
+				5C72EF792E80785B0015A594 /* Services.cpp */,
+				5C72EF7A2E80785B0015A594 /* SoundUtil.hpp */,
+				5C72EF7B2E80785B0015A594 /* SoundUtil.cpp */,
 				5CBFDFE42D742FA600F05795 /* InternalSensors.hpp */,
 				5CBFDFE52D742FA600F05795 /* InternalSensors.cpp */,
 			);

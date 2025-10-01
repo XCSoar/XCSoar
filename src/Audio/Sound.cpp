@@ -10,6 +10,13 @@
 #include "Android/Context.hpp"
 #endif
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
+#include "Apple/SoundUtil.hpp"
+#endif
+#endif
+
 #if defined(_WIN32)
 #include "ResourceLoader.hpp"
 #include <mmsystem.h>
@@ -26,6 +33,10 @@ PlayResource(const TCHAR *resource_name)
   if (_tcsstr(resource_name, _T(".wav")))
     return SoundUtil::PlayExternal(Java::GetEnv(), context->Get(), resource_name);
   return SoundUtil::Play(Java::GetEnv(), context->Get(), resource_name);
+
+#elif defined(__APPLE__) && TARGET_OS_IPHONE
+
+  return SoundUtil::Play(resource_name);
 
 #elif defined(_WIN32)
 

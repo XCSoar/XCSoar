@@ -153,6 +153,7 @@ $(PNG_LAUNCH_ALL): %.png: %.bmp
 ####### sounds
 
 ifneq ($(TARGET),ANDROID)
+ifneq ($(TARGET),IOS)
 ifneq ($(HAVE_WIN32),y)
 
 WAV_SOUNDS = $(wildcard Data/sound/*.wav)
@@ -162,6 +163,7 @@ $(RAW_SOUNDS): $(DATA)/sound/%.raw: Data/sound/%.wav | $(DATA)/sound/dirstamp
 	@$(NQ)echo "  SOX     $@"
 	$(Q)sox -V1 $< --bits 16 --rate 44100 --channels 1 $@
 
+endif
 endif
 endif
 
@@ -189,6 +191,7 @@ $(TARGET_OUTPUT_DIR)/include/MakeResource.hpp: $(TARGET_OUTPUT_DIR)/resources.tx
 	$(Q)mv $@.$(RANDOM_NUMBER).tmp $@
 
 ifeq ($(TARGET_IS_ANDROID),n)
+ifneq ($(TARGET),IOS)
 
 ifeq ($(USE_WIN32_RESOURCES),y)
 RESOURCE_FILES += $(BMP_BITMAPS)
@@ -215,9 +218,10 @@ $(patsubst $(DATA)/graphics/%.bmp,$(DATA)/graphics2/%.png,$(filter $(DATA)/graph
 RESOURCE_FILES := $(patsubst $(DATA)/graphics/%.bmp,$(DATA)/graphics2/%.png,$(RESOURCE_FILES))
 RESOURCE_FILES := $(patsubst $(DATA)/icons/%.bmp,$(DATA)/icons2/%.png,$(RESOURCE_FILES))
 RESOURCE_FILES := $(patsubst %.bmp,%.png,$(RESOURCE_FILES))
-endif
+endif #!USE_WIN32_RESOURCES
 
-endif
+endif #TARGET!=IOS
+endif #!TARGET_IS_ANDROID
 
 ifeq ($(TARGET_IS_ANDROID),n)
 
