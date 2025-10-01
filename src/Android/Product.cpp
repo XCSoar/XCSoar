@@ -3,4 +3,4 @@
 
 #include "Product.hpp"
 
-bool has_cursor_keys;
+std::atomic<bool> has_cursor_keys{false};
