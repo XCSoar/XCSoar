@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-17 22:14+0000\n"
+"POT-Creation-Date: 2025-11-07 05:19+0100\n"
 "PO-Revision-Date: 2022-10-02 06:15+0000\n"
 "Last-Translator: 山岭野兔 <bd8bin@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Weblate 4.14.1\n"
 "X-Launchpad-Export-Date: 2016-03-01 23:01+0000\n"
 
-#. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
+#. #-#-#-#-#  cpp.pot (xcsoar)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
 #: src/Task/TaskStore.cpp:49 src/Menu/ExpandMacros.cpp:355
 #: src/Input/InputEventsSettings.cpp:296 src/Dialogs/dlgAnalysis.cpp:535
@@ -82,7 +82,7 @@ msgstr "巡航"
 #, no-c-format
 msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
-"and records.  Enables FAI finish height for final glide calculation."
+"and records. Enables FAI finish height for final glide calculation."
 msgstr ""
 "FAI规则，只允许FAI的开始、结束和转弯类型作为标记和记录。使FAI能完成最终滑翔的"
 "高度计算。"
@@ -105,24 +105,24 @@ msgstr "FAI规则，从开始到目的地的路径。"
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid ""
-"Racing task around turn points.  Can also be used for FAI badge and record "
-"tasks.  Allows all shapes of observation zones."
+"Racing task around turn points. Can also be used for FAI badge and record "
+"tasks. Allows all shapes of observation zones."
 msgstr ""
 "竞速任务围绕转弯点。也可用于FAI标记和记录的任务。允许所有形状的观察区域。"
 
 #: src/Task/TypeStrings.cpp:39
 #, no-c-format
 msgid ""
-"Task through assigned areas, minimum task time applies.  Restricted to "
+"Task through assigned areas, minimum task time applies. Restricted to "
 "cylinder and sector observation zones."
 msgstr "通过指定区域完成任务，适用最小任务时间。限于圆柱和扇区观察区。"
 
 #: src/Task/TypeStrings.cpp:41
 #, no-c-format
 msgid ""
-"Modified area task.  Task with start, finish and at least one predefined 1-"
-"mile cylinder.  Pilot can add additional points as needed.  Minimum task "
-"time applies."
+"Modified area task. Task with start, finish and at least one predefined 1 "
+"mile cylinder. Pilot can add additional points as needed. Minimum task time "
+"applies."
 msgstr ""
 "修改区域任务。任务有开始、结束和至少一个预定义的1-英里圆柱。飞行员可以根据需"
 "要增加额外的积分。适用最小任务时间。"
@@ -144,79 +144,78 @@ msgstr "非正式巡回任务，使用开始和完成圆柱和FAI扇区转弯点
 #: src/Task/TypeStrings.cpp:56
 #, no-c-format
 msgid ""
-"A 90 degree sector with 1km radius. Cross corner edge from inside area to "
+"A 90-degree sector with 1 km radius. Cross corner edge from inside area to "
 "start."
 msgstr "半径1公里的90度扇区。从内部区域跨越角边缘开始。"
 
 #: src/Task/TypeStrings.cpp:57
 #, no-c-format
-msgid ""
-"A straight line start gate.  Cross start gate from inside area to start."
+msgid "A straight line start gate. Cross start gate from inside area to start."
 msgstr "直线开始门。从内部区域跨越开始门开始。"
 
 #: src/Task/TypeStrings.cpp:58
 #, no-c-format
-msgid "A cylinder.  Exit area to start."
+msgid "A cylinder. Exit area to start."
 msgstr "圆柱，离开区域开始。"
 
 #: src/Task/TypeStrings.cpp:59
 #, no-c-format
 msgid ""
-"A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
-"from corner point."
+"A 90-degree sector with 'infinite' length sides. Cross any edge, scored from "
+"corner point."
 msgstr "90度扇区，长度无限。跨越任何边缘拐角点得分。"
 
 #: src/Task/TypeStrings.cpp:61
 #, no-c-format
-msgid "A keyhole.  Scored from center."
+msgid "A keyhole. Scored from center."
 msgstr "关键眼，到达到该区域最远点得分。"
 
 #: src/Task/TypeStrings.cpp:62
 #, no-c-format
 msgid ""
-"(German rules) Any point within 1/2 km of center or 10km of a 90 degree "
-"sector.  Scored from center."
+"(German rules) Any point within 1/2 km of center or 10 km of a 90-degree "
+"sector. Scored from center."
 msgstr "（德国规则）从中心1/2公里或10公里90度扇区以内的任何点得分。"
 
 #: src/Task/TypeStrings.cpp:64
 #, no-c-format
 msgid ""
-"(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
-"sector.  Scored from center."
+"(British rules) Any point within 1/2 km of center or 20 km of a 90-degree "
+"sector. Scored from center."
 msgstr "（英国规则）从中心1/2公里或20公里90度扇区以内的任何点得分。"
 
 #: src/Task/TypeStrings.cpp:66
 #, no-c-format
 msgid ""
-"(British rules) Any point within 1/2 km of center or 10km of a 180 degree "
-"sector.  Scored from center."
+"(British rules) Any point within 1/2 km of center or 10 km of a 180-degree "
+"sector. Scored from center."
 msgstr "（英国规则）从中心1/2公里或10公里180度扇区以内的任何点得分。"
 
 #: src/Task/TypeStrings.cpp:68
 #, no-c-format
-msgid "A cylinder.  Any point within area scored from center."
+msgid "A cylinder. Any point within area scored from center."
 msgstr "一个圆柱，从中心的任何点得分。"
 
 #: src/Task/TypeStrings.cpp:69
 #, no-c-format
-msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
+msgid "A 1 mile cylinder. Scored by farthest point reached in area."
 msgstr "一个1英里的圆柱。到达区域最远点得分。"
 
 #: src/Task/TypeStrings.cpp:70
 #, no-c-format
-msgid "A cylinder.  Scored by farthest point reached in area."
+msgid "A cylinder. Scored by farthest point reached in area."
 msgstr "一个圆柱。到达区域最远点得分。"
 
 #: src/Task/TypeStrings.cpp:71
 #, no-c-format
 msgid ""
-"A sector that can vary in angle and radius.  Scored by farthest point "
-"reached inside area."
+"A sector that can vary in angle and radius. Scored by farthest point reached "
+"inside area."
 msgstr "可以在角度和半径上变化的扇区。到达内部区域最远点得分。"
 
 #: src/Task/TypeStrings.cpp:73
 #, no-c-format
-msgid "A 90 degree sector with 1km radius.  Cross edge to finish."
+msgid "A 90-degree sector with 1 km radius. Cross edge to finish."
 msgstr "一个半径1公里的90度扇区。跨越边界完成任务。"
 
 #: src/Task/TypeStrings.cpp:74
@@ -232,13 +231,13 @@ msgstr "进入圆柱结束任务。"
 #: src/Task/TypeStrings.cpp:76
 #, no-c-format
 msgid ""
-"A 180 degree sector with 5km radius.  Exit area in any direction to start."
+"A 180-degree sector with 5 km radius. Exit area in any direction to start."
 msgstr "半径5公里180度的扇区。在任何方向离开该区域开始。"
 
 #: src/Task/TypeStrings.cpp:77
 #, no-c-format
 msgid ""
-"A sector that can vary in angle, inner and outer radius.  Scored by farthest "
+"A sector that can vary in angle, inner and outer radius. Scored by farthest "
 "point reached inside area."
 msgstr "在角度、内半径和外半径变化的扇区。到达区域内最远点得分。"
 
@@ -249,7 +248,7 @@ msgstr "具有自定义半径的对称象限。"
 
 #: src/Task/TypeStrings.cpp:80
 #, no-c-format
-msgid "A keyhole.  Scored by farthest point reached in area."
+msgid "A keyhole. Scored by farthest point reached in area."
 msgstr "锁眼，到达到该区域最远点得分。"
 
 #: src/Task/TypeStrings.cpp:93
@@ -407,7 +406,7 @@ msgstr "非MAT转弯点"
 msgid "Wrong shape"
 msgstr "错误形状"
 
-#: src/Airspace/AirspaceGlue.cpp:76
+#: src/Airspace/AirspaceGlue.cpp:77
 msgid "Loading Airspace File..."
 msgstr "加载空域文件。。。"
 
@@ -585,7 +584,7 @@ msgstr "不盘转"
 msgid "Close"
 msgstr "关闭"
 
-#: src/Gauge/FlarmTrafficWindow.cpp:210
+#: src/Gauge/FlarmTrafficWindow.cpp:211
 msgid "No Traffic"
 msgstr "没有交通"
 
@@ -611,7 +610,7 @@ msgstr "高度计"
 #: src/Dialogs/Airspace/AirspaceList.cpp:448
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:115
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:75
-#: src/Dialogs/Waypoint/WaypointList.cpp:386
+#: src/Dialogs/Waypoint/WaypointList.cpp:384
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:143
 #: src/Dialogs/Task/TargetDialog.cpp:358
 msgid "Distance"
@@ -752,12 +751,12 @@ msgstr "手册"
 
 #: src/Menu/ExpandMacros.cpp:209 src/Menu/ExpandMacros.cpp:343
 #: src/Menu/ExpandMacros.cpp:364 src/Menu/ExpandMacros.cpp:414
-#: src/PageSettings.cpp:50 src/PageSettings.cpp:53
+#: src/PageSettings.cpp:51 src/PageSettings.cpp:54
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:42
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:30
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:31
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:140
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:186
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:374
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:379
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:67
 #: src/InfoBoxes/Panel/MacCreadySetup.cpp:35
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:13
@@ -809,8 +808,8 @@ msgstr "完全"
 #: src/Menu/ExpandMacros.cpp:412 src/Input/InputEventsSettings.cpp:450
 #: src/Input/InputEventsSettings.cpp:453
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:95
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:26
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:67
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:27
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:172
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:142
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:45
@@ -831,7 +830,7 @@ msgstr "关"
 #: src/Menu/ExpandMacros.cpp:366 src/Menu/ExpandMacros.cpp:412
 #: src/Input/InputEventsSettings.cpp:449 src/Input/InputEventsSettings.cpp:453
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:94
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:28
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:29
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:173
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:144
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:43
@@ -884,7 +883,7 @@ msgstr "任务和可着陆区"
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:172
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:63
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:38
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:83
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:79
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:90
@@ -1138,45 +1137,45 @@ msgstr "未发现"
 msgid "Select a file"
 msgstr "选择一个文件"
 
-#: src/PageSettings.cpp:24
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:134
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:175
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:351
+#: src/PageSettings.cpp:25
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:135
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:176
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:356
 #, no-c-format
 msgid "FLARM radar"
 msgstr "FLARM雷达"
 
-#: src/PageSettings.cpp:27
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:148
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:176
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:355
+#: src/PageSettings.cpp:28
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:149
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:360
 #: src/InfoBoxes/Content/Factory.cpp:926
 #, no-c-format
 msgid "Thermal assistant"
 msgstr "热气流辅助"
 
-#: src/PageSettings.cpp:30 src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:359
+#: src/PageSettings.cpp:31 src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:178
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:364
 #: src/InfoBoxes/Content/Factory.cpp:837
 #, no-c-format
 msgid "Horizon"
 msgstr "水平线"
 
-#: src/PageSettings.cpp:40 src/InfoBoxes/Content/Altitude.cpp:27
+#: src/PageSettings.cpp:41 src/InfoBoxes/Content/Altitude.cpp:27
 #: Data/Input/default.xci:940
 #, no-c-format
 msgid "Info"
 msgstr "信息"
 
-#: src/PageSettings.cpp:40
+#: src/PageSettings.cpp:41
 msgid "Map and InfoBoxes"
 msgstr "地图和信息框"
 
-#: src/PageSettings.cpp:59
+#: src/PageSettings.cpp:60
 msgid "Info Hide"
 msgstr "隐藏信息"
 
-#: src/PageSettings.cpp:61
+#: src/PageSettings.cpp:62
 msgid "Map (Full screen)"
 msgstr "地图（全屏）"
 
@@ -1189,7 +1188,7 @@ msgstr "无数据"
 #: src/Renderer/MapItemListRenderer.cpp:65
 #: src/Dialogs/Airspace/AirspaceList.cpp:449
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:79
-#: src/Dialogs/Waypoint/WaypointList.cpp:387
+#: src/Dialogs/Waypoint/WaypointList.cpp:385
 msgid "Direction"
 msgstr "方向"
 
@@ -1282,11 +1281,11 @@ msgstr "W*"
 #: src/Weather/Rasp/RaspStore.cpp:29 src/Weather/Rasp/RaspStore.cpp:34
 #, no-c-format
 msgid ""
-"Average dry thermal updraft strength near mid-BL height.  Subtract glider "
-"descent rate to get average vario reading for cloudless thermals.  Updraft "
+"Average dry thermal updraft strength near mid-BL height. Subtract glider "
+"descent rate to get average vario reading for cloudless thermals. Updraft "
 "strengths will be stronger than this forecast if convective clouds are "
 "present, since cloud condensation adds buoyancy aloft (i.e. this neglects "
-"\"cloudsuck\").  W* depends upon both the surface heating and the BL depth."
+"\"cloudsuck\"). W* depends upon both the surface heating and the BL depth."
 msgstr ""
 "干热气流平均上升强度接近中等BL高度。减去滑翔机下降率以获得无云热气流高度计平"
 "均读数。如果对流云存在，则上升气流强度将强于此预测，因为云凝结增加高空浮力"
@@ -1300,7 +1299,7 @@ msgstr "BL风速"
 #: src/Weather/Rasp/RaspStore.cpp:39
 #, no-c-format
 msgid ""
-"The speed and direction of the vector-averaged wind in the BL.  This "
+"The speed and direction of the vector-averaged wind in the BL. This "
 "prediction can be misleading if there is a large change in wind direction "
 "through the BL."
 msgstr ""
@@ -1316,13 +1315,13 @@ msgstr "bl高度"
 #, no-c-format
 msgid ""
 "Height of the top of the mixing layer, which for thermal convection is the "
-"average top of a dry thermal.  Over flat terrain, maximum thermalling "
-"heights will be lower due to the glider descent rate and other factors.  In "
-"the presence of clouds (which release additional buoyancy aloft, creating "
+"average top of a dry thermal. Over flat terrain, maximum thermalling heights "
+"will be lower due to the glider descent rate and other factors. In the "
+"presence of clouds (which release additional buoyancy aloft, creating "
 "\"cloudsuck\") the updraft top will be above this forecast, but the maximum "
-"thermalling height will then be limited by the cloud base.  Further, when "
-"the mixing results from shear turbulence rather than thermal mixing this "
-"parameter is not useful for glider flying. "
+"thermalling height will then be limited by the cloud base. Further, when the "
+"mixing results from shear turbulence rather than thermal mixing this "
+"parameter is not useful for glider flying."
 msgstr ""
 "混合层顶部的高度，用于热对流是干燥热气流的平均顶部高度。在平坦的地形上，由于"
 "滑翔机下降速率和其他因素，最大的热气流高度将较低。在云层的存在下（在高空释放"
@@ -1342,9 +1341,9 @@ msgid ""
 "updraft strength drops below 225 fpm and is expected to give better "
 "quantitative numbers for the maximum cloudless thermalling height than the "
 "BL Top height, especially when mixing results from vertical wind shear "
-"rather than thermals.  (Note: the present assumptions tend to underpredict "
-"the max. thermalling height for dry consitions.) In the presence of clouds "
-"the maximum thermalling height may instead be limited by the cloud base.  "
+"rather than thermals. (Note: the present assumptions tend to underpredict "
+"the max. thermalling height for dry conditions.) In the presence of clouds "
+"the maximum thermalling height may instead be limited by the cloud base. "
 "Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
 "这个参数估计地面上的平均干式上升气流强度下降到低于225英尺的高度，并期望比BL顶"
@@ -1363,9 +1362,9 @@ msgstr "bl云"
 msgid ""
 "This parameter provides an additional means of evaluating the formation of "
 "clouds within the BL and might be used either in conjunction with or instead "
-"of the other cloud prediction parameters.  It assumes a very simple "
+"of the other cloud prediction parameters. It assumes a very simple "
 "relationship between cloud cover percentage and the maximum relative "
-"humidity within the BL.  The cloud base height is not predicted, but is "
+"humidity within the BL. The cloud base height is not predicted, but is "
 "expected to be below the BL Top height."
 msgstr ""
 "该参数提供了一种评估BL内云的形成的附加手段，并且可以与其它云的预测参数结合使"
@@ -1380,7 +1379,7 @@ msgstr "Sfc温度"
 #: src/Weather/Rasp/RaspStore.cpp:59
 #, no-c-format
 msgid ""
-"The temperature at a height of 2m above ground level.  This can be compared "
+"The temperature at a height of 2m above ground level. This can be compared "
 "to observed surface temperatures as an indication of model simulation "
 "accuracy; e.g. if observed surface temperatures are significantly below "
 "those forecast, then soaring conditions will be poorer than forecast."
@@ -1400,9 +1399,9 @@ msgid ""
 "strength drops below 225 fpm and is expected to give better quantitative "
 "numbers for the maximum cloudless thermalling height than the BL Top height, "
 "especially when mixing results from vertical wind shear rather than "
-"thermals.  (Note: the present assumptions tend to underpredict the max. "
-"thermalling height for dry consitions.) In the presence of clouds the "
-"maximum thermalling height may instead be limited by the cloud base.  Being "
+"thermals. (Note: the present assumptions tend to underpredict the max. "
+"thermalling height for dry conditions.) In the presence of clouds the "
+"maximum thermalling height may instead be limited by the cloud base. Being "
 "for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
 "这个参数估计平均干式上升气流强度低于225fpm的高度，并预期比BL顶部高度给出最大"
@@ -1420,7 +1419,7 @@ msgstr "wbl最大最小参数"
 msgid ""
 "Maximum grid-area-averaged extensive upward or downward motion within the BL "
 "as created by horizontal wind convergence. Positive convergence is "
-"associated with local small-scale convergence lines.  Negative convergence "
+"associated with local small-scale convergence lines. Negative convergence "
 "(divergence) produces subsiding vertical motion, creating low-level "
 "inversions which limit thermalling heights."
 msgstr ""
@@ -1566,27 +1565,27 @@ msgstr "告警"
 msgid "Battery low"
 msgstr "电池电量低"
 
-#: src/Startup.cpp:185
+#: src/Startup.cpp:189
 msgid "Loading Terrain File..."
 msgstr "加载地形文件。。。"
 
-#: src/Startup.cpp:319
+#: src/Startup.cpp:327
 msgid "Initialising"
 msgstr "初始化"
 
-#: src/Startup.cpp:421
+#: src/Startup.cpp:429
 msgid "Loading Topography File..."
 msgstr "加载地貌文件。。。"
 
-#: src/Startup.cpp:430 src/Dialogs/Device/CAI302/WaypointUploader.cpp:17
+#: src/Startup.cpp:438 src/Dialogs/Device/CAI302/WaypointUploader.cpp:17
 msgid "Loading Waypoints..."
 msgstr "加载航点..."
 
-#: src/Startup.cpp:439
+#: src/Startup.cpp:447
 msgid "Loading Airfield Details File..."
 msgstr "加载空域详细文件..."
 
-#: src/Startup.cpp:495
+#: src/Startup.cpp:503
 msgid "Starting devices"
 msgstr "设备启动中"
 
@@ -1596,25 +1595,25 @@ msgstr "设备启动中"
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Startup.cpp:507
+#: src/Startup.cpp:515
 msgid "Initialising display"
 msgstr "初始化显示中"
 
 #. Show progress dialog
-#: src/Startup.cpp:602 src/Startup.cpp:640 src/Startup.cpp:708
+#: src/Startup.cpp:610 src/Startup.cpp:648 src/Startup.cpp:716
 msgid "Shutdown, please wait..."
 msgstr "关机，请等待。。。"
 
-#: src/Startup.cpp:616
+#: src/Startup.cpp:624
 msgid "Shutdown, saving logs..."
 msgstr "关机，保存记录。。。"
 
 #. Save settings to profile
-#: src/Startup.cpp:637
+#: src/Startup.cpp:645
 msgid "Shutdown, saving profile..."
 msgstr "关机，保存配置文件。。。"
 
-#: src/Startup.cpp:698
+#: src/Startup.cpp:706
 msgid "Shutdown, saving task..."
 msgstr "关机，保存任务。。。"
 
@@ -1678,6 +1677,7 @@ msgstr "USB串口"
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:17
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:182
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:227
+#: src/Dialogs/MultiFilePicker.cpp:81
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:130 src/Dialogs/NumberEntry.cpp:40
 #: src/Dialogs/NumberEntry.cpp:83 src/Dialogs/NumberEntry.cpp:124
 #: src/Dialogs/TouchTextEntry.cpp:183 src/Dialogs/TimeEntry.cpp:45
@@ -1698,7 +1698,7 @@ msgstr "不"
 msgid "Retry"
 msgstr "重试"
 
-#: src/Dialogs/Message.cpp:96 src/Dialogs/ListPicker.cpp:163
+#: src/Dialogs/Message.cpp:96 src/Dialogs/ListPicker.cpp:59
 #: src/Dialogs/ProgressDialog.cpp:37 src/Dialogs/WidgetDialog.cpp:245
 #: src/Dialogs/WidgetDialog.cpp:261 src/Dialogs/Device/PortPicker.cpp:294
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:114
@@ -1708,6 +1708,7 @@ msgstr "重试"
 #: src/Dialogs/ProfileListDialog.cpp:333
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:183
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:228
+#: src/Dialogs/MultiFilePicker.cpp:82
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:131 src/Dialogs/NumberEntry.cpp:41
 #: src/Dialogs/NumberEntry.cpp:84 src/Dialogs/NumberEntry.cpp:125
 #: src/Dialogs/TouchTextEntry.cpp:187 src/Dialogs/TimeEntry.cpp:46
@@ -1723,13 +1724,14 @@ msgstr "取消"
 msgid "Ignore"
 msgstr "忽略"
 
-#: src/Dialogs/ListPicker.cpp:153 src/Dialogs/Device/PortPicker.cpp:293
+#: src/Dialogs/ListPicker.cpp:49 src/Dialogs/Device/PortPicker.cpp:293
 #: src/Dialogs/Traffic/TrafficList.cpp:779
 #: src/Dialogs/ProfileListDialog.cpp:331
 msgid "Select"
 msgstr "选择"
 
-#: src/Dialogs/ListPicker.cpp:159 src/Dialogs/HelpDialog.cpp:18
+#: src/Dialogs/ListPicker.cpp:55 src/Dialogs/MultiFilePicker.cpp:78
+#: src/Dialogs/HelpDialog.cpp:18
 msgid "Help"
 msgstr "帮助"
 
@@ -1739,7 +1741,7 @@ msgstr "帮助"
 msgid "Update"
 msgstr "更新"
 
-#: src/Dialogs/FileManager.cpp:400
+#: src/Dialogs/FileManager.cpp:400 src/Dialogs/MultiFilePicker.cpp:79
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:92
 #: src/Dialogs/Weather/NOAAList.cpp:98 src/Monitor/MatTaskMonitor.cpp:40
 msgid "Add"
@@ -1799,7 +1801,7 @@ msgstr "TCP客户端"
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
 #: src/Dialogs/Device/PortDataField.cpp:51
-#: src/Dialogs/Device/DeviceEditWidget.cpp:275
+#: src/Dialogs/Device/DeviceEditWidget.cpp:276
 #, no-c-format
 msgid "TCP port"
 msgstr "TCP端口"
@@ -1809,48 +1811,47 @@ msgstr "TCP端口"
 msgid "UDP port"
 msgstr "UDP端口"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:247
+#: src/Dialogs/Device/DeviceEditWidget.cpp:248
 msgid "Port"
 msgstr "端口"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:253
-#, fuzzy
+#: src/Dialogs/Device/DeviceEditWidget.cpp:254
 msgid "Engine Type"
 msgstr "更改类型"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:258
+#: src/Dialogs/Device/DeviceEditWidget.cpp:259
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:77
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:84
 msgid "Baud rate"
 msgstr "波特率"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:264
+#: src/Dialogs/Device/DeviceEditWidget.cpp:265
 msgid "Bulk baud rate"
 msgstr "批量波特率"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:265
+#: src/Dialogs/Device/DeviceEditWidget.cpp:266
 msgid ""
 "The baud rate used for bulk transfers, such as task declaration or flight "
 "download."
 msgstr "用于批量传输的波特率，如任务申报或下载飞行。"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:270
+#: src/Dialogs/Device/DeviceEditWidget.cpp:271
 msgid "IP address"
 msgstr "IP地址"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:280
+#: src/Dialogs/Device/DeviceEditWidget.cpp:281
 msgid "I²C bus"
 msgstr "I²C总线"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:280
+#: src/Dialogs/Device/DeviceEditWidget.cpp:281
 msgid "Select the description or bus number that matches your configuration."
 msgstr "选择与您的配置相匹配的说明或总线号。"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:286
+#: src/Dialogs/Device/DeviceEditWidget.cpp:287
 msgid "I²C addr"
 msgstr "I²C地址"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:286
+#: src/Dialogs/Device/DeviceEditWidget.cpp:287
 msgid ""
 "The I²C address that matches your configuration. This field is not used when "
 "your selection in the \"I²C bus\" field is not an I²C bus number. Assume "
@@ -1859,11 +1860,11 @@ msgstr ""
 "I2C地址要匹配您的配置。当您选择的I2C总线字段不是I2C总线号是不能被使用。万一你"
 "不理解前面的句子这样做,你可以假设这个字段没被用过。"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:294
+#: src/Dialogs/Device/DeviceEditWidget.cpp:295
 msgid "Pressure use"
 msgstr "使用压力"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:294
+#: src/Dialogs/Device/DeviceEditWidget.cpp:295
 msgid ""
 "Select the purpose of this pressure sensor. This sensor measures some "
 "pressure. Here you tell the system what pressure this is and what it should "
@@ -1872,46 +1873,46 @@ msgstr ""
 "选择此气压传感器的用途。这个传感器测量一些气压。这里告诉系统这是什么气压以及"
 "它应该被怎么使用。"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:308
+#: src/Dialogs/Device/DeviceEditWidget.cpp:309
 msgid "Driver"
 msgstr "驱动程序"
 
 #. for a passthrough device, offer additional driver
-#: src/Dialogs/Device/DeviceEditWidget.cpp:311
+#: src/Dialogs/Device/DeviceEditWidget.cpp:312
 msgid "Passthrough device"
 msgstr "设备通过"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:312
+#: src/Dialogs/Device/DeviceEditWidget.cpp:313
 msgid "Whether the device has a passed-through device connected."
 msgstr "此选项允许您配置此设备是否通过此设备连接。"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:323
+#: src/Dialogs/Device/DeviceEditWidget.cpp:324
 msgid "Second Driver"
 msgstr "第二个驱动程序"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:325
+#: src/Dialogs/Device/DeviceEditWidget.cpp:326
 msgid "Sync. from device"
 msgstr "从设备同步"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:326
+#: src/Dialogs/Device/DeviceEditWidget.cpp:327
 msgid ""
 "Tells XCSoar to use settings like the MacCready value, bugs and ballast from "
 "the device."
 msgstr ""
 "此选项允许您配置XCSoar是否应该从设备使用类似MacCready值、虫子、配重的设置。"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:331
+#: src/Dialogs/Device/DeviceEditWidget.cpp:332
 msgid "Sync. to device"
 msgstr "同步到设备"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:332
+#: src/Dialogs/Device/DeviceEditWidget.cpp:333
 msgid ""
 "Tells XCSoar to send settings like the MacCready value, bugs and ballast to "
 "the device."
 msgstr ""
 "此选项允许您配置XCSoar是否应该发送类似MacCready值、虫子、配重的设置到设备。"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:338
+#: src/Dialogs/Device/DeviceEditWidget.cpp:339
 msgid "Whether you use a K6Bt to connect the device."
 msgstr "如果您使用K6BT连接该设备，请启用此操作。"
 
@@ -2091,7 +2092,7 @@ msgstr "单位"
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:77
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:82
 #: src/Dialogs/Settings/dlgConfiguration.cpp:82
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:54
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:53
 #, no-c-format
 msgid "Waypoints"
 msgstr "航点"
@@ -2145,12 +2146,10 @@ msgid "Failed to write waypoint."
 msgstr "写入航点失败。"
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:72
-#, fuzzy
 msgid "Hardware type"
 msgstr "硬件版本"
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:79
-#, fuzzy
 msgid "Flarm ID"
 msgstr "Flarm锁定"
 
@@ -2177,7 +2176,7 @@ msgstr "障碍数据库"
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:60
 #: src/Dialogs/Settings/dlgConfiguration.cpp:148
 #: src/InfoBoxes/Content/Altitude.cpp:28 src/InfoBoxes/Content/MacCready.cpp:31
-#: src/InfoBoxes/Content/Places.cpp:99
+#: src/InfoBoxes/Content/Places.cpp:100
 #, no-c-format
 msgid "Setup"
 msgstr "设置"
@@ -2201,18 +2200,15 @@ msgid "Save"
 msgstr "保存"
 
 #: src/Dialogs/Device/Stratux/ConfigurationDialog.cpp:37
-#, fuzzy
 msgid "Horizontal Range"
 msgstr "水平线"
 
 #: src/Dialogs/Device/Stratux/ConfigurationDialog.cpp:38
-#, fuzzy
 msgid "Vertical Range"
 msgstr "团队范围"
 
 #: src/Dialogs/Device/Stratux/ConfigurationDialog.cpp:51
-#: src/Dialogs/Settings/dlgConfiguration.cpp:353
-msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
+msgid "Changes to configuration saved. Restart XCSoar to apply changes."
 msgstr "保存更改配置。重新启动XCSOAR以应用更改。"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:38
@@ -2272,7 +2268,7 @@ msgid "Demo"
 msgstr "演示"
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:132
-msgid "Set new audio scheme?  Old values will be lost."
+msgid "Set new audio scheme? Old values will be lost."
 msgstr "设置新的音频方案？旧值将会丢失。"
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:253
@@ -2285,8 +2281,8 @@ msgstr "高度表总能量"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:82
 msgid ""
-"This produces a fake TE vario gross vertical velocity.  It can be used when "
-"in circling mode to demonstrate the lift tones.  When not in circling mode, "
+"This produces a fake TE vario gross vertical velocity. It can be used when "
+"in circling mode to demonstrate the lift tones. When not in circling mode, "
 "set this to a realistic negative value so speed command tones are produced."
 msgstr ""
 "这产生了一个假的高度表总能量的总垂直速度。它可以用于在循环模式中演示提升音"
@@ -2295,7 +2291,7 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:89
 msgid ""
-"This produces a fake airspeed.  It can be used when not in circling mode to "
+"This produces a fake airspeed. It can be used when not in circling mode to "
 "demonstrate the speed command tones."
 msgstr "这会产生伪造的空速。不在循环模式下能被使用演示速度命令音调。"
 
@@ -2396,12 +2392,10 @@ msgid "Switches"
 msgstr "开关"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:81
-#, fuzzy
 msgid "Baud rate port 1"
 msgstr "波特率"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:82
-#, fuzzy
 msgid "Baud rate port 2"
 msgstr "波特率"
 
@@ -2410,7 +2404,6 @@ msgid "Threshold"
 msgstr "阈值"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:89
-#, fuzzy
 msgid "Select a speed threshold."
 msgstr "扬声器阈值"
 
@@ -2491,7 +2484,7 @@ msgstr "静态对象"
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:90
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:95
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:86
-#: src/Dialogs/Waypoint/WaypointList.cpp:388
+#: src/Dialogs/Waypoint/WaypointList.cpp:386
 msgid "Type"
 msgstr "类型"
 
@@ -2510,7 +2503,6 @@ msgid "No tracking mode"
 msgstr "无跟踪模式"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:129
-#, fuzzy
 msgid "Range setup"
 msgstr "范围"
 
@@ -2520,12 +2512,10 @@ msgid "Range"
 msgstr "范围"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:67
-#, fuzzy
 msgid "Vertical range"
 msgstr "团队范围"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:75
-#, fuzzy
 msgid "PCAS range"
 msgstr "AAT区域"
 
@@ -2534,7 +2524,6 @@ msgid "PCAS vertical range"
 msgstr ""
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:77
-#, fuzzy
 msgid "ADSB range"
 msgstr "AAT区域"
 
@@ -2614,12 +2603,10 @@ msgid "Select Pattern"
 msgstr "选择模式"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:58
-#, fuzzy
 msgid "Squawk code"
 msgstr "设置代码"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:59
-#, fuzzy
 msgid "Set Squawk Code"
 msgstr "设置代码"
 
@@ -2629,7 +2616,6 @@ msgid "Radio"
 msgstr "无线电"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:74
-#, fuzzy
 msgid "Station"
 msgstr "定位"
 
@@ -2646,7 +2632,6 @@ msgid "Set Standby Frequency"
 msgstr "设置待机频率"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:89
-#, fuzzy
 msgid "Class"
 msgstr "玻璃"
 
@@ -2663,7 +2648,7 @@ msgid "Airspace Details"
 msgstr "详细空域"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:330
-#: src/Dialogs/Waypoint/WaypointList.cpp:428
+#: src/Dialogs/Waypoint/WaypointList.cpp:426
 msgid "No Match!"
 msgstr "不匹配！"
 
@@ -2675,12 +2660,11 @@ msgstr "航向"
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:216
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:106
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
-#: src/Dialogs/Waypoint/WaypointList.cpp:385
+#: src/Dialogs/Waypoint/WaypointList.cpp:383
 msgid "Name"
 msgstr "名字"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:450
-#, fuzzy
 msgid "Class/Type"
 msgstr "玻璃"
 
@@ -2764,7 +2748,7 @@ msgid "Circling wind"
 msgstr "盘转测风"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:41
-msgid "Estimate the wind vector while circling.  Requires only a GPS."
+msgid "Estimate the wind vector while circling. Requires only a GPS."
 msgstr "估算盘旋时的风向矢量。仅使用GNSS。"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:44
@@ -2772,7 +2756,7 @@ msgid "ZigZag wind"
 msgstr "之字测风"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:45
-msgid "Estimate the wind vector during glides.  Requires an airspeed sensor."
+msgid "Estimate the wind vector during glides. Requires an airspeed sensor."
 msgstr "估计滑翔期间的风向矢量。使用空速传感器。"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:48
@@ -2857,7 +2841,7 @@ msgstr "虫子"
 #, no-c-format
 msgid ""
 "How clean the glider is. Set to 0% for clean, larger numbers as the wings "
-"pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."
+"pick up bugs or get wet. 50% indicates the glider's sink rate is doubled."
 msgstr ""
 "滑翔机干净程度！设置0%为清洁，机翼有虫子货淋湿设置更大数字。50%表示滑翔机的下"
 "沉率增加了一倍。"
@@ -2868,10 +2852,9 @@ msgid "QNH"
 msgstr "绝对高度"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:296
-#: src/InfoBoxes/Panel/AltitudeSetup.cpp:56
 msgid ""
-"Area pressure for barometric altimeter calibration.  This is set "
-"automatically if Vega connected."
+"Area pressure for barometric altimeter calibration. This is set "
+"automatically if Vega is connected."
 msgstr "气压高度表校准的面积压力。如果Vega连接，这将自动设置。"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:311
@@ -2880,8 +2863,8 @@ msgstr "最高温度。"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:312
 msgid ""
-"Set to forecast ground temperature.  Used by convection estimator "
-"(temperature trace page of Analysis dialog)"
+"Set to forecast ground temperature. Used by convection estimator "
+"(temperature trace page of Analysis dialog)."
 msgstr "设定为预报地温。对流估算器使用(温度跟踪页的分析对话框）"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:345 Data/Input/default.xci:1145
@@ -3038,6 +3021,10 @@ msgstr "专家"
 msgid "Configuration"
 msgstr "配置"
 
+#: src/Dialogs/Settings/dlgConfiguration.cpp:353
+msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
+msgstr "保存更改配置。重新启动XCSOAR以应用更改。"
+
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:227
 #: src/InfoBoxes/InfoBoxManager.cpp:201
 msgid "InfoBox"
@@ -3048,25 +3035,22 @@ msgid "Content"
 msgstr "内容"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:250
-#, fuzzy
 msgid "Copy Set"
 msgstr "复制"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:252
-#, fuzzy
 msgid "Paste Set"
 msgstr "粘贴"
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:317
-msgid "Overwrite all infoboxes in this set?"
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:318
+msgid "Overwrite all InfoBoxes in this set?"
 msgstr ""
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:317
-#, fuzzy
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:318
 msgid "InfoBox paste set"
 msgstr "信息框粘贴"
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:386
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:387
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:88
 msgid "Invalid"
 msgstr "无效"
@@ -3077,7 +3061,7 @@ msgstr "竞赛ID"
 
 #: src/Dialogs/Traffic/TrafficList.cpp:346
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:174
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:347
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:348
 #, no-c-format
 msgid "Map"
 msgstr "地图"
@@ -3116,7 +3100,6 @@ msgid "Radio frequency"
 msgstr "无线电频率"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:122
-#, fuzzy
 msgid "Plane type"
 msgstr "飞机"
 
@@ -3454,6 +3437,23 @@ msgstr "极曲线 W"
 msgid "Download"
 msgstr "下载"
 
+#: src/Dialogs/MultiFilePicker.cpp:80
+#: src/Dialogs/Task/OptionalStartsDialog.cpp:38
+#: src/Dialogs/Task/TaskPointDialog.cpp:223
+#: src/Dialogs/Weather/NOAAList.cpp:100 src/Dialogs/Weather/NOAAList.cpp:213
+#: src/Dialogs/Weather/NOAADetails.cpp:49
+#: src/Dialogs/Weather/NOAADetails.cpp:100
+msgid "Remove"
+msgstr "移除"
+
+#: src/Dialogs/MultiFilePicker.cpp:107
+msgid "Add File"
+msgstr "文件"
+
+#: src/Dialogs/MultiFilePicker.cpp:108
+msgid "Select a file to add or download a new one."
+msgstr ""
+
 #: src/Dialogs/dlgInfoBoxAccess.cpp:75 src/Dialogs/dlgInfoBoxAccess.cpp:91
 msgid "Switch InfoBox"
 msgstr "变换信息框"
@@ -3464,8 +3464,8 @@ msgstr "文件"
 
 #: src/Dialogs/ReplayDialog.cpp:50
 msgid ""
-"Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (."
-"nmea), or if blank, runs the demo."
+"Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file "
+"(.nmea). Leave blank to run the demo."
 msgstr ""
 "要重放的文件名。可以是一个IGC文件（.IGC），一个原始NMEA日志文件（.NMEA），或"
 "者如果是空白的，运行演示。"
@@ -3642,10 +3642,9 @@ msgstr "设置MacCready"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:138
 msgid ""
-"Adjusts MC value used in the calculator.  Use this to determine the effect "
-"on estimated task time due to changes in conditions.  This value will not "
-"affect the main computer's setting if the dialog is exited with the Cancel "
-"button."
+"Adjusts MC value used in the calculator. Use this to determine the effect on "
+"estimated task time due to changes in conditions. This value will not affect "
+"the main computer's setting if the dialog is exited with the Cancel button."
 msgstr ""
 "调整计算机中使用的MC值。使用此来确定由于条件的变化对估计任务时间的影响。如果"
 "对话框用取消按钮退出，这个值不会影响主计算机的设置。"
@@ -3659,8 +3658,8 @@ msgstr "AAT区域"
 msgid ""
 "For AAT tasks, this value tells you how far based on the targets of your "
 "task you will fly relative to the minimum and maximum possible tasks. -100% "
-"indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% "
-"is maximum AAT distance."
+"indicates the minimum AAT distance. 0% is the nominal AAT distance. +100% is "
+"the maximum AAT distance."
 msgstr ""
 "对于AAT任务，这个值告诉你如何根据任务的目标，相对于最小和最大可能的任务，飞行"
 "的距离有多远。-100%表示最小的AAT距离。0%是标称AAT距离。+ 100%是最大的AAT距"
@@ -3685,11 +3684,11 @@ msgstr "巡航效率"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:165
 msgid ""
-"Efficiency of cruise.  100 indicates perfect MacCready performance, greater "
+"Efficiency of cruise. 100 indicates perfect MacCready performance; greater "
 "than 100 indicates better than MacCready performance is achieved through "
-"flying in streets.  Less than 100 is appropriate if you fly considerably off-"
-"track.  This value estimates your cruise efficiency according to the current "
-"flight history with the set MC value.  Calculation begins after task is "
+"flying in streets. Less than 100 is appropriate if you fly considerably off-"
+"track. This value estimates your cruise efficiency according to the current "
+"flight history with the set MC value. Calculation begins after task is "
 "started."
 msgstr ""
 "巡航效率100表示完美的MacCready性能，大于100指示优于MacCready的性能是通过在云"
@@ -3873,7 +3872,6 @@ msgid "GoTo"
 msgstr "GoTo转到"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:447
-#, fuzzy
 msgid "Pan To"
 msgstr "平移模式"
 
@@ -3967,27 +3965,27 @@ msgid "Castle"
 msgstr ""
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:64
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Intersection"
 msgstr "告警；间隔"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:65
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Marker"
 msgstr "拖放标记"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:66
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Control Point"
 msgstr "比赛距离"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:67
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "PG Take Off"
 msgstr "起飞"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:68
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "PG Landing Zone"
 msgstr "降落时间"
 
@@ -4001,11 +3999,11 @@ msgid ""
 "format."
 msgstr "对不起，航点编辑器还不能提供UTM坐标格式。"
 
-#: src/Dialogs/Waypoint/WaypointList.cpp:429
+#: src/Dialogs/Waypoint/WaypointList.cpp:427
 msgid "Choose a filter or click here"
 msgstr "选择一个过滤器或点击这里"
 
-#: src/Dialogs/Waypoint/WaypointList.cpp:486
+#: src/Dialogs/Waypoint/WaypointList.cpp:484
 msgid "Select Waypoint"
 msgstr "选择航点"
 
@@ -4117,9 +4115,9 @@ msgstr "显示空域"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:159
 msgid ""
-"Controls filtering of airspace for display and warnings.  The airspace "
-"filter button also allows filtering of display and warnings independently "
-"for each airspace class."
+"Controls filtering of airspace for display and warnings. The airspace filter "
+"button also allows filtering of display and warnings independently for each "
+"airspace class."
 msgstr ""
 "控制空域用于显示和警告的过滤。空域过滤器按钮还允许对每个空域类独立地显示和警"
 "告。"
@@ -4221,155 +4219,157 @@ msgstr "透明空域"
 msgid "If enabled, then airspaces are filled transparently."
 msgstr "如果启用，则空域被透明填充。"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:27
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:28
 #, no-c-format
 msgid "Disable final glide bar."
 msgstr "禁用最终滑翔条。"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:29
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:30
 #, no-c-format
 msgid "Always show final glide bar."
 msgstr "总是显示最终滑翔条。"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:31
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:32
 #, no-c-format
 msgid "Show final glide bar if approaching final glide range."
 msgstr "总是显示滑翔条。"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:37
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:38
 #, no-c-format
-msgid "Auto (follow infoboxes)"
+msgid "Auto (follow InfoBoxes)"
 msgstr "自动（跟随信息框）"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:39
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:82
-#, fuzzy, no-c-format
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:40
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:83
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:122
+#, no-c-format
 msgid "Top left"
 msgstr "顶部左边"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:41
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:85
-#, fuzzy, no-c-format
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:42
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:86
+#, no-c-format
 msgid "Top right"
 msgstr "顶部右边"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:43
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:70
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:44
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:71
 #, no-c-format
 msgid "Bottom left"
 msgstr "左下角"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:45
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:76
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:46
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:77
 #, no-c-format
 msgid "Bottom right"
 msgstr "右下角"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:47
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:88
-#, fuzzy, no-c-format
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:48
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:89
+#, no-c-format
 msgid "Center top"
 msgstr "顶部中间"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:49
-#, fuzzy, no-c-format
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:50
+#, no-c-format
 msgid "Center bottom"
 msgstr "底部中间"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:51
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:91
-#, fuzzy, no-c-format
-msgid "Top left (avoid infoboxes)"
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:52
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:92
+#, no-c-format
+msgid "Top left (avoid InfoBoxes)"
 msgstr "左下角（跟随信息框）"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:53
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:94
-#, fuzzy, no-c-format
-msgid "Top right (avoid infoboxes)"
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:54
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:95
+#, no-c-format
+msgid "Top right (avoid InfoBoxes)"
 msgstr "右下角（跟随信息框）"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:55
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:73
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:56
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:74
 #, no-c-format
-msgid "Bottom left (avoid infoboxes)"
+msgid "Bottom left (avoid InfoBoxes)"
 msgstr "左下角（跟随信息框）"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:57
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:79
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:58
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:80
 #, no-c-format
-msgid "Bottom right (avoid infoboxes)"
+msgid "Bottom right (avoid InfoBoxes)"
 msgstr "右下角（跟随信息框）"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:59
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:97
-#, fuzzy, no-c-format
-msgid "Center top (avoid infoboxes)"
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:60
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:98
+#, no-c-format
+msgid "Center top (avoid InfoBoxes)"
 msgstr "左下角（跟随信息框）"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:61
-#, fuzzy, no-c-format
-msgid "Center bottom (avoid infoboxes)"
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:62
+#, no-c-format
+msgid "Center bottom (avoid InfoBoxes)"
 msgstr "左下角（跟随信息框）"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:69
 #, no-c-format
 msgid "Disable thermal assistant."
 msgstr "禁用热气流辅助。"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:71
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:72
 #, no-c-format
 msgid "Show thermal assistant in bottom left."
 msgstr "在左下角显示热气流辅助."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:74
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:75
 #, no-c-format
 msgid ""
-"Show thermal assistant in bottom left, above/to right of infoboxes (if "
-"there)."
+"Show thermal assistant in bottom left, above or to the right of InfoBoxes "
+"(if present)."
 msgstr "在信息框的左下角，右上角显示热气流辅助（如果有）."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:77
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:78
 #, no-c-format
 msgid "Show thermal assistant in bottom right."
 msgstr "在右下角显示热气流辅助."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:80
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:81
 #, no-c-format
 msgid ""
-"Show thermal assistant in bottom right above/to left of infoboxes (if there)."
+"Show thermal assistant in bottom right, above or to the left of InfoBoxes "
+"(if present)."
 msgstr "在左边信息框右下角显示热气流辅助（如果有）."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:83
-#, fuzzy, no-c-format
-msgid "Show thermal assistant in top left"
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:84
+#, no-c-format
+msgid "Show thermal assistant in top left."
 msgstr "在左下角显示热气流辅助."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:86
-#, fuzzy, no-c-format
-msgid "Show thermal assistant in top right"
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:87
+#, no-c-format
+msgid "Show thermal assistant in top right."
 msgstr "在右下角显示热气流辅助."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:89
-#, fuzzy, no-c-format
-msgid "Show thermal assistant in center top"
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:90
+#, no-c-format
+msgid "Show thermal assistant in center top."
 msgstr "在左下角显示热气流辅助."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:92
-#, fuzzy, no-c-format
-msgid "Show thermal assistant in top left (avoid infoboxes)"
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:93
+#, no-c-format
+msgid "Show thermal assistant in top left (avoid InfoBoxes)."
 msgstr "在信息框的左下角，右上角显示热气流辅助（如果有）."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:95
-#, fuzzy, no-c-format
-msgid "Show thermal assistant in top right (avoid infoboxes)"
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:96
+#, no-c-format
+msgid "Show thermal assistant in top right (avoid InfoBoxes)."
 msgstr "在左边信息框右下角显示热气流辅助（如果有）."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:98
-#, fuzzy, no-c-format
-msgid "Show thermal assistant in center top (avoid infoboxes)"
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:99
+#, no-c-format
+msgid "Show thermal assistant in center top (avoid InfoBoxes)."
 msgstr "在信息框的左下角，右上角显示热气流辅助（如果有）."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:135
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:136
 msgid ""
 "This enables the display of the FLARM radar gauge. The track bearing of the "
 "target relative to the track bearing of the aircraft is displayed as an "
@@ -4381,11 +4381,11 @@ msgstr ""
 "向上或向下显示目标相对于目标的相对高度。在所有模式中，目标的颜色指示威胁级"
 "别。"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:138
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:139
 msgid "Auto close FLARM"
 msgstr "自动关闭FLARM"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:139
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:140
 msgid ""
 "Setting this to \"On\" will automatically close the FLARM dialog if there is "
 "no traffic. \"Off\" will keep the dialog open even without current traffic."
@@ -4393,35 +4393,35 @@ msgstr ""
 "如果没有流量，将此设置为“on”将自动关闭FLAM对话框。“关闭”将保持对话框打开，即"
 "使没有当前的流量。"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:143
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:144
 msgid "FLARM display"
 msgstr "显示FLARM"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:143
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:144
 msgid "Choose a location for the FLARM display."
 msgstr "选择FLARM显示的位置。"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:149
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:150
 msgid ""
 "Enable and select the position of the thermal assistant when overlayed on "
 "the main screen."
 msgstr "叠加在主屏幕上时，启用并选择热气流辅助的位置."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:154
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:155
 msgid "Thermal band"
 msgstr "热气流带"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:155
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:156
 msgid ""
 "This enables the display of the thermal profile (climb band) display on the "
 "map."
 msgstr "在地图上打开显示热气流剖面（爬升带）。"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:158
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:159
 msgid "Final glide bar"
 msgstr "最终滑翔条"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:159
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:160
 msgid ""
 "If set to \"On\" the final glide will always be shown, if set to \"Auto\" it "
 "will be shown when approaching the final glide possibility."
@@ -4429,25 +4429,35 @@ msgstr ""
 "如果设置为On，则最终滑翔将始终显示，如果设置为Auto，则将在可能接近最终滑翔时"
 "显示。"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:165
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:166
 msgid "Final glide bar MC0"
 msgstr "MC设置为0最终滑翔条"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:166
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:167
 msgid ""
-"If set to ON the final glide bar will show a second arrow indicating the "
+"If set to \"On\" the final glide bar will show a second arrow indicating the "
 "required height to reach the final waypoint at MC zero."
 msgstr ""
 "如果设置ON最终滑翔条将显示第二个箭头，指示在MC设置为0时到达最终航路点所需的高"
 "度。"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:175
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:176
 msgid "Vario bar"
 msgstr "高度条"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:176
-msgid "If set to ON the vario bar will be shown"
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:177
+msgid "If set to \"On\" the vario bar will be shown."
 msgstr "如果设置ON将打开高度条"
+
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:180
+msgid "No Position Target Distance Ring"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:181
+msgid ""
+"This parameter enables or disables the No Position Target Distance Ring in "
+"Flarm Radar"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:41
 msgid "Speed arrows"
@@ -4455,9 +4465,8 @@ msgstr "速度箭头"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:42
 msgid ""
-"Whether to show speed command arrows on the vario gauge.  When shown, in "
-"cruise mode, arrows point up to command slow down; arrows point down to "
-"command speed up."
+"Whether to show speed command arrows on the vario gauge. In cruise mode, "
+"arrows pointing up command slow down; arrows pointing down command speed up."
 msgstr ""
 "是否在高度表上显示速度命令箭头。当显示时，在巡航模式下，箭头指向上命令减速，"
 "箭头指向下命令加速。"
@@ -4468,7 +4477,7 @@ msgstr "显示平均值"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:48
 msgid ""
-"Whether to show the average climb rate.  In cruise mode, this switches to "
+"Whether to show the average climb rate. In cruise mode, this switches to "
 "showing the average netto airmass rate."
 msgstr "是否显示平均爬升率。在巡航模式下，切换到显示平均NETTO气团率。"
 
@@ -4510,8 +4519,8 @@ msgstr "平均指针"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:66
 msgid ""
-"If true, the vario gauge will display a hollow averager needle.  During "
-"cruise, this needle displays the average netto value.  During circling, this "
+"If true, the vario gauge will display a hollow averager needle. During "
+"cruise, this needle displays the average netto value. During circling, this "
 "needle displays the average gross value."
 msgstr ""
 "如果是正值，高度表将显示空心平均指针。在巡航期间，该指针显示平均NETTO值。在盘"
@@ -4524,8 +4533,8 @@ msgstr "平均热气流指针"
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:73
 msgid ""
 "If true, the vario gauge will display a thermal averager needle instead of "
-"current climb rate needle.  During cruise, this needle displays the last "
-"thermal average netto value.  During circling, this needle displays the "
+"the current climb-rate needle. During cruise, this needle displays the last "
+"thermal average netto value. During circling, this needle displays the "
 "average net value."
 msgstr ""
 "如果为是，则升降仪表将显示热平均指针，而不是当前的爬升率指针。 在巡航过程中，"
@@ -4539,9 +4548,9 @@ msgstr "最终滑翔"
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:48
 #, no-c-format
 msgid ""
-"Adjusts MC for fastest arrival.  For contest sprint tasks, the MacCready is "
-"adjusted in order to cover the greatest distance in the remaining time and "
-"reach the finish height."
+"Adjusts MC for the fastest arrival. For contest sprint tasks, the MacCready "
+"is adjusted in order to cover the greatest distance in the remaining time "
+"and reach the finish height."
 msgstr ""
 "调整 MC 以实现最快到达。 对于竞赛冲刺任务，MacCready 进行了调整，以便在剩余时"
 "间内完成最大距离并到达终点高度。"
@@ -4928,14 +4937,9 @@ msgstr "中间"
 msgid "Center the status message boxes."
 msgstr "以状态消息框为中心。"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:122
-#, no-c-format
-msgid "Topleft"
-msgstr "顶部左边"
-
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:123
 #, no-c-format
-msgid "Show status message boxes ina the top left corner."
+msgid "Show status message boxes in the top left corner."
 msgstr "在左上角显示状态消息框。"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:129
@@ -5000,7 +5004,6 @@ msgid "Rotate the display on devices that support it."
 msgstr "在支持它的设备上循环显示。"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:178
-#, fuzzy
 msgid "Dark mode"
 msgstr "到达模式"
 
@@ -5015,7 +5018,6 @@ msgid ""
 msgstr "信息框布局可能的列表。做一些试验，以找到最佳的屏幕大小。"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:186
-#, fuzzy
 msgid "InfoBox title size"
 msgstr "信息框设置"
 
@@ -5037,7 +5039,7 @@ msgstr "彩色信息框"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:201
 msgid ""
-"If true, certain InfoBoxes will have coloured text.  For example, the active "
+"If true, certain InfoBoxes will have coloured text. For example, the active "
 "waypoint InfoBox will be blue when the glider is above final glide."
 msgstr ""
 "如果为真，某些信息框将有彩色文本。例如，当滑翔机超过最终滑翔时，激活航点信息"
@@ -5048,21 +5050,19 @@ msgid "InfoBox border"
 msgstr "信息框边框"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:212
-msgid "Show Menubutton"
+msgid "Show Menu button"
 msgstr "显示菜单按钮"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:212
-msgid "Show the Menubutton"
+msgid "Show the Menu button"
 msgstr "显示菜单按钮"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:215
-#, fuzzy
-msgid "Show Zoombutton"
+msgid "Show Zoom button"
 msgstr "显示菜单按钮"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:215
-#, fuzzy
-msgid "Show the Zoombutton"
+msgid "Show the Zoom button"
 msgstr "显示菜单按钮"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:220
@@ -5289,74 +5289,80 @@ msgstr "不同页面缩放"
 msgid "Maintain one map zoom level on each page."
 msgstr "在每个页面上保持一个地图缩放级别。"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:180
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:175
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:352
+#, no-c-format
+msgid "Map (north-up)"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 msgid "Main area"
 msgstr "主区域"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:182
 msgid "Specifies what should be displayed in the main area."
 msgstr "指定在主区域中应该显示的内容。"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:186
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
 #, no-c-format
-msgid "Displays either the Circling, Cruise or Final glide infoxboxes"
+msgid "Displays either the Circling, Cruise, or Final glide InfoBoxes."
 msgstr "显示盘转、巡航或最终滑翔任一信息框"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #, no-c-format
 msgid "Show fullscreen (no InfoBoxes)"
 msgstr "全屏显示（无信息框）"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:191
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:367
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:192
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:372
 msgid "InfoBoxes"
 msgstr "信息框"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:192
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:193
 msgid "Specifies which InfoBoxes should be displayed on this page."
 msgstr "指定应该在这个页面上显示哪些信息框。"
-
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:196
-#, no-c-format
-msgid ""
-"For cruise mode.  Displayed when 'Auto' is selected and ship is below final "
-"glide altitude"
-msgstr "巡航模式。 当自动被选中并且在最终滑翔高度以下时显示"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:197
 #, no-c-format
 msgid ""
-"For circling mode.  Displayed when 'Auto' is selected and ship is circling"
-msgstr "用于盘转模式。当自动被选中并且正在盘转时显示"
+"For cruise mode. Displayed when 'Auto' is selected and glider is below final "
+"glide altitude."
+msgstr "巡航模式。 当自动被选中并且在最终滑翔高度以下时显示"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:198
 #, no-c-format
 msgid ""
-"For final glide mode.  Displayed when 'Auto' is selected and ship is above "
-"final glide altitude"
+"For circling mode. Displayed when 'Auto' is selected and glider is circling."
+msgstr "用于盘转模式。当自动被选中并且正在盘转时显示"
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:199
+#, no-c-format
+msgid ""
+"For final glide mode. Displayed when 'Auto' is selected and glider is above "
+"final glide altitude."
 msgstr "用于最终滑翔模式。当自动被选中并且正在最终滑翔高度以上时显示"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:200
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:201
 #, no-c-format
 msgid "A custom InfoBox set"
 msgstr "自定义信息框设置"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:218
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:219
 #, no-c-format
 msgid "Nothing"
 msgstr "无"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:219
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:383
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:220
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:388
 #, no-c-format
 msgid "Cross section"
 msgstr "横断面"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:222
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:223
 msgid "Bottom area"
 msgstr "底部区域"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:223
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:224
 msgid "Specifies what should be displayed below the main area."
 msgstr "指定应该在主区域下面显示什么。"
 
@@ -5401,7 +5407,7 @@ msgstr "航线限高"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:104
 msgid ""
 "When enabled, route planning climbs are limited to ceiling defined by "
-"greater of current aircraft altitude plus 500 m and the thermal ceiling.  If "
+"greater of current aircraft altitude plus 500 m and the thermal ceiling. If "
 "disabled, climbs are unlimited."
 msgstr ""
 "当启用时，航线规划爬升仅限于由当前定义的飞行器高度上限加上500米和热气流上限。"
@@ -5456,7 +5462,7 @@ msgstr "MC安全值"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:131
 #, no-c-format
-msgid "Uses safety MacCready value"
+msgid "Uses safety MacCready value."
 msgstr "使用MacCready安全值"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:135
@@ -5630,80 +5636,66 @@ msgstr ""
 "置，以补偿风险。设置为0，不补偿，1个刻度MC与高度线性（参照最大爬升高度）。如"
 "果慎重考虑，建议0.3。"
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:49
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:48
 msgid "Map database"
 msgstr "地图数据库"
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:50
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:49
 msgid ""
 "The name of the file (.xcm) containing terrain, topography, and optionally "
 "waypoints, their details and airspaces."
 msgstr "文件的名称（.xcm）包含地形、地貌和可选的航点、及它们的细节和空域。"
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:55
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:54
 msgid ""
-"Primary waypoints file.  Supported file types are Cambridge/WinPilot files (."
-"dat), Zander files (.wpz) or SeeYou files (.cup)."
+"Primary waypoints files.  Supported file types are Cambridge/WinPilot files "
+"(.dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
-"主航点文件。支持的文件类型是Cambridge/WinPilot文件（.dat）、Zander文件（."
-"wpz）或SeeYou文件（.CUP）。"
+"主航点文件。支持的文件类型是Cambridge/WinPilot文件（.dat）、Zander文件"
+"（.wpz）或SeeYou文件（.CUP）。"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:60
-msgid "More waypoints"
-msgstr "更多航点"
-
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:61
-msgid ""
-"Secondary waypoints file.  This may be used to add waypoints for a "
-"competition."
-msgstr "次要航点文件。这可以用来增加比赛的航点。"
-
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:66
 msgid "Watched waypoints"
 msgstr "注意航点"
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:67
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:61
 msgid ""
-"Waypoint file containing special waypoints for which additional computations "
-"like calculation of arrival height in map display always takes place. Useful "
-"for waypoints like known reliable thermal sources (e.g. powerplants) or "
-"mountain passes."
+"Waypoint files containing special waypoints for which additional "
+"computations like calculation of arrival height in map display always takes "
+"place. Useful for waypoints like known reliable thermal sources (e.g. "
+"powerplants) or mountain passes."
 msgstr ""
 "航点文件包含特殊的航点用于额外的计算，例如在总是在地图显示到达高度的计算。有"
 "用的航点，如已知可靠的热气流源（例如动力装置）或山路。"
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:74
-#: Data/Input/default.xci:901
-msgid "Airspaces"
-msgstr "空域"
-
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:74
-msgid "The file name of the primary airspace file."
-msgstr "主空域文件文件名。"
-
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:78
-msgid "More airspaces"
-msgstr "更多空域"
-
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:78
-msgid "The file name of the secondary airspace file."
-msgstr "次要空域文件文件名。"
-
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:83
-msgid "Waypoint details"
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:71
+#, fuzzy
+msgid "Airfields or Waypoint details"
 msgstr "航点详情"
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:84
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:72
+#, fuzzy
 msgid ""
-"The file may contain extracts from enroute supplements or other contributed "
+"The files may contain extracts from enroute supplements or other contributed "
 "information about individual waypoints and airfields."
 msgstr "该文件可包含来自航路补给物或其他有关航点和机场的其他信息摘录。"
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:90
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:79
+msgid "Selected Airspace Files"
+msgstr "选择空域"
+
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:80
+msgid ""
+"List of active airspace files. Use the Add and Remove buttons to activate or "
+"deactivate airspace files respectively. Supported file types are: Openair "
+"(.txt /.air), and Tim Newport-Pearce (.sua)."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:87
 msgid "FLARM Device Database"
 msgstr "FLARM设备数据"
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:91
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:88
 msgid ""
 "The name of the file containing information about registered FLARM devices."
 msgstr "包含有关已注册的FLARM设备的信息的文件名。"
@@ -5782,7 +5774,7 @@ msgstr ""
 "高度计刻度线条的点。橙色到红色=爬升。浅蓝色到深蓝色=下沉。零升力呈现为黄线。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:95
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Vario E-ink"
 msgstr "高度表静音中"
 
@@ -5910,7 +5902,6 @@ msgid "This enables the display of FLARM traffic on the map window."
 msgstr "这使得能够在地图窗口上显示FLARM交通。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
-#, fuzzy
 msgid "Fade traffic"
 msgstr "FLARM交通"
 
@@ -5998,7 +5989,7 @@ msgstr "开始最大边际速度"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:54
 msgid ""
-"Maximum speed above maximum start speed to tolerate.  Set to 0 for no "
+"Maximum speed above maximum start speed to tolerate. Set to 0 for no "
 "tolerance."
 msgstr "最大速度大于最大容许开始速度。设置为0，没有公差。"
 
@@ -6011,7 +6002,7 @@ msgstr "最大开始高度"
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:235
 msgid ""
 "Maximum height based on start height reference (AGL or MSL) while starting "
-"the task.  Set to 0 for no limit."
+"the task. Set to 0 for no limit."
 msgstr "在任务开始时基于起始高度基准（AGL或MSL）的最大高度。设置为0，无限制。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:69
@@ -6020,7 +6011,7 @@ msgstr "最大边际高度"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:70
 msgid ""
-"Maximum height above maximum start height to tolerate.  Set to 0 for no "
+"Maximum height above maximum start height to tolerate. Set to 0 for no "
 "tolerance."
 msgstr "最大高度以上最大允许高度。设置为0，没有公差。"
 
@@ -6055,7 +6046,7 @@ msgstr "最终滑翔最小高度"
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:252
 msgid ""
 "Minimum height based on finish height reference (AGL or MSL) while finishing "
-"the task.  Set to 0 for no limit."
+"the task. Set to 0 for no limit."
 msgstr "完成任务时基于完成高度参考（AGL或MSL）的最小高度。设置为0，无限制。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:99
@@ -6088,7 +6079,6 @@ msgid "PEV start window"
 msgstr "PEV窗口开启"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:116
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:265
 msgid ""
 "Number of minutes start remains open after Pilot Event and PEV wait time.0 "
 "means start will never close after it opens."
@@ -6166,7 +6156,7 @@ msgstr "优化边际"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:182
 msgid ""
-"Safety margin for AAT task optimisation.  Optimisation seeks to complete the "
+"Safety margin for AAT task optimisation. Optimisation seeks to complete the "
 "task at the minimum time plus this margin time."
 msgstr "AAT任务优化的安全余量。优化试图完成任务在最小时间加上这个边际时间。"
 
@@ -6208,7 +6198,7 @@ msgstr "传统和FAI规则的结合。30%的FAI得分被添加到传统得分。
 #, no-c-format
 msgid ""
 "PG online contest with different track values: Free flight - 1 km = 1.0 "
-"point; flat trianlge - 1 km = 1.2 p; FAI triangle - 1 km = 1.4 p."
+"point; flat triangle - 1 km = 1.2 p; FAI triangle - 1 km = 1.4 p."
 msgstr ""
 "滑翔伞在线比赛有不同的轨迹值：自由飞行- 1公里＝1点；平坦的三角形- 1公里＝1.2 "
 "点；FAI三角形- 1公里＝1.4 点。"
@@ -6251,7 +6241,7 @@ msgstr ""
 msgid ""
 "A start point, one turn point and a finish point are chosen from the flight "
 "path such that the distance between the start point and the turn point is "
-"maximized"
+"maximized."
 msgstr ""
 "从飞行路径中选择一个起点、一个转折点和一个终点，使得起点和转折点之间的距离最"
 "大化"
@@ -6306,8 +6296,8 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:136
 msgid ""
-"Show helpers for Argentinean Federation \"95% distance\" rule.The AAT "
-"Distance Around Target infobox will show projected distance vs max. and "
+"Show helpers for Argentinean Federation \"95% distance\" rule. The AAT "
+"Distance Around Target InfoBox will show projected distance vs. maximum and "
 "change colors as you approach 95%."
 msgstr ""
 
@@ -6403,17 +6393,17 @@ msgid "French SIA VFR Chart"
 msgstr "法国SIA VFR图"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:205
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "High Contrast"
 msgstr "地形对比度"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:206
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "High Contrast low lands"
 msgstr "地形对比度"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:207
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Very low lands"
 msgstr "低地"
 
@@ -6451,7 +6441,7 @@ msgstr "地形对比度"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:231
 msgid ""
-"Defines the amount of Phong shading in the terrain rendering.  Use large "
+"Defines the amount of Phong shading in the terrain rendering. Use large "
 "values to emphasise terrain slope, smaller values if flying in steep "
 "mountains."
 msgstr ""
@@ -6464,7 +6454,7 @@ msgstr "地形亮度"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:238
 msgid ""
-"Defines the brightness (whiteness) of the terrain rendering.  This controls "
+"Defines the brightness (whiteness) of the terrain rendering. This controls "
 "the average illumination of the terrain."
 msgstr "定义地形渲染的亮度（白度）。这控制了地形的平均照明。"
 
@@ -6505,7 +6495,7 @@ msgstr "飞机/风速"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:131
 msgid ""
-"Units used for airspeed and ground speed.  A separate unit is available for "
+"Units used for airspeed and ground speed. A separate unit is available for "
 "task speeds."
 msgstr "用于空速和地速的单位。一个单独的单位可用于任务速度。"
 
@@ -6569,12 +6559,10 @@ msgid "Units used for latitude and longitude."
 msgstr "用于经度和经度的单位。"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:245
-#, fuzzy
 msgid "Rotation"
 msgstr "定位"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:245
-#, fuzzy
 msgid "Unit used for rotation."
 msgstr "用于翼载荷的单位。"
 
@@ -6586,7 +6574,7 @@ msgstr "UTC偏移量"
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:66
 msgid ""
-"The UTC offset field allows the UTC local time offset to be specified.  The "
+"The UTC offset field allows the UTC local time offset to be specified. The "
 "local time is displayed below in order to make it easier to verify the "
 "correct offset has been entered."
 msgstr ""
@@ -6914,11 +6902,15 @@ msgstr "服务器"
 
 #: src/Dialogs/Settings/Panels/CloudConfigPanel.cpp:64
 msgid ""
-"Participate in the XCSoar Cloud field test?  This transmits your location, "
-"thermal/wave locations and other weather data to our test server."
+"Participate in the XCSoar Cloud field test? This transmits your location, "
+"thermal and wave locations and other weather data to our test server."
 msgstr ""
 "参与XCSOAR云测试？这将您的位置、热气流/波位置和其他天气数据发送给我们的测试服"
 "务器。"
+
+#: src/Dialogs/Settings/Panels/CloudConfigPanel.cpp:68
+msgid "Show thermals"
+msgstr "显示平均值"
 
 #: src/Dialogs/Settings/Panels/CloudConfigPanel.cpp:69
 msgid "Obtain and show thermal locations reported by others."
@@ -6926,8 +6918,8 @@ msgstr "获取并显示其他人报告的热气流位置。"
 
 #: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:67
 msgid ""
-"Show thermal locations downloaded from Thermal Information Map (thermalmap."
-"info)."
+"Show thermal locations downloaded from Thermal Information Map "
+"(thermalmap.info)."
 msgstr "显示从热气流网站（thermalmap.info）下载的热气流位置。"
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:70
@@ -7091,6 +7083,14 @@ msgstr "开始开放时间"
 msgid "Start close time"
 msgstr "开始关闭时间"
 
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:265
+msgid ""
+"Number of minutes the start remains open after Pilot Event and PEV wait "
+"time. 0 means start will never close after it opens."
+msgstr ""
+"前一任务完成后 和 PEV 等待时间后门保持打开的分钟数。0 表示 start 在打开后永远"
+"不会关闭。"
+
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:269
 msgid "FAI start / finish rules"
 msgstr "FAI开始/结束规则"
@@ -7133,12 +7133,10 @@ msgid "Download WeGlide task"
 msgstr "从WeGlide下载飞行任务"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:144
-#, fuzzy
 msgid "My WeGlide tasks"
 msgstr "从WeGlide下载飞行任务"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:148
-#, fuzzy
 msgid "Public WeGlide tasks"
 msgstr "从WeGlide下载飞行任务"
 
@@ -7195,14 +7193,6 @@ msgstr ""
 #: src/InfoBoxes/Panel/ATCReference.cpp:67
 msgid "Relocate"
 msgstr "重定位"
-
-#: src/Dialogs/Task/OptionalStartsDialog.cpp:38
-#: src/Dialogs/Task/TaskPointDialog.cpp:223
-#: src/Dialogs/Weather/NOAAList.cpp:100 src/Dialogs/Weather/NOAAList.cpp:213
-#: src/Dialogs/Weather/NOAADetails.cpp:49
-#: src/Dialogs/Weather/NOAADetails.cpp:100
-msgid "Remove"
-msgstr "移除"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:117
 msgid "(Add Alternate Start)"
@@ -7332,9 +7322,9 @@ msgstr "输入任务名称"
 #: src/Dialogs/Task/TargetDialog.cpp:360
 msgid ""
 "For AAT tasks, this setting can be used to adjust the target points within "
-"the AAT sectors.  Larger values move the target points to produce larger "
-"task distances, smaller values move the target points to produce smaller "
-"task distances."
+"the AAT sectors. Larger values move the target points to produce larger task "
+"distances, smaller values move the target points to produce smaller task "
+"distances."
 msgstr ""
 "对于AAT任务，此设置可用于调整AAT扇区内的目标点。较大的值移动目标点以产生较大"
 "的任务距离，较小的值移动目标点以产生较小的任务距离。"
@@ -7347,7 +7337,7 @@ msgstr "径向"
 #: src/Dialogs/Task/TargetDialog.cpp:367
 msgid ""
 "For AAT tasks, this setting can be used to adjust the target points within "
-"the AAT sectors.  Positive values rotate the range line clockwise, negative "
+"the AAT sectors. Positive values rotate the range line clockwise, negative "
 "values rotate the range line counterclockwise."
 msgstr ""
 "对于AAT任务，此设置可用于调整AAT扇区内的目标点。正值顺时针旋转范围线，负值逆"
@@ -7606,9 +7596,9 @@ msgstr "GPS高度"
 #: src/InfoBoxes/Content/Factory.cpp:119
 #, no-c-format
 msgid ""
-"This is the altitude above mean sea level reported by the GPS. Touch-screen/"
-"PC only: In simulation mode, this value is adjustable with the up/down arrow "
-"keys and the right/left arrow keys also cause the glider to turn."
+"Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In "
+"simulation mode, this value is adjustable with the up/down arrow keys; the "
+"right/left arrow keys cause the glider to turn."
 msgstr ""
 "这是GPS报告的平均海平面以上的高度。触摸屏/只有PC：在模拟模式下，这个值可以用"
 "上下箭头进行调整。左/右箭头键也会导致滑翔机转向。"
@@ -7627,9 +7617,9 @@ msgstr "离地高度"
 #: src/InfoBoxes/Content/Factory.cpp:127
 #, no-c-format
 msgid ""
-"This is the navigation altitude minus the terrain elevation obtained from "
-"the terrain file. The value is coloured red when the glider is below the "
-"terrain safety clearance height."
+"Navigation altitude minus the terrain elevation obtained from the terrain "
+"file. The value is coloured red when the glider is below the terrain safety "
+"clearance height."
 msgstr ""
 "这是导航高度减去从文件获得地形高度。当滑翔机低于地形安全净空高度其值为红色。"
 
@@ -7644,11 +7634,11 @@ msgid "TC 30s"
 msgstr "过去30秒热气流爬升"
 
 #: src/InfoBoxes/Content/Factory.cpp:136
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
-"A 30 second rolling average climb rate based of the reported GPS altitude, "
-"or vario if available. The number in smaller font reflects the climb rate "
-"for the current thermal since circling started."
+"30-second rolling average climb rate based on reported GPS altitude, or "
+"vario if available. The number in smaller font reflects the climb rate for "
+"the current thermal since circling started."
 msgstr "30秒滚动的平均爬升率基于GPS报告的高度，或如果有高度计可用。"
 
 #: src/InfoBoxes/Content/Factory.cpp:142
@@ -7659,7 +7649,7 @@ msgstr "下一方位"
 #: src/InfoBoxes/Content/Factory.cpp:144
 #, no-c-format
 msgid ""
-"True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
+"True bearing of the next waypoint. For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr "下一个航点的真实方位。对于AAT任务，这是AAT扇区内目标的真正方位。"
 
@@ -7697,7 +7687,7 @@ msgstr "巡航滑翔比"
 #: src/InfoBoxes/Content/Factory.cpp:161
 #, no-c-format
 msgid ""
-"The distance from the top of the last thermal, divided by the altitude lost "
+"Distance from the top of the last thermal, divided by the altitude lost "
 "since the top of the last thermal. Negative values indicate climbing cruise "
 "(height gain since leaving the last thermal). If the vertical speed is close "
 "to zero, the displayed value is '---'."
@@ -7717,7 +7707,7 @@ msgid "V GND"
 msgstr "地速"
 
 #: src/InfoBoxes/Content/Factory.cpp:169
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Ground speed measured by the GPS. The small value shows the head or tail "
 "wind difference to TAS for the current vector. If this InfoBox is active in "
@@ -7755,7 +7745,7 @@ msgid "TL Gain"
 msgstr "上一热气流获取高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:185
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Total altitude gain/loss in the last thermal. The number in smaller font "
 "reflects the overall climb rate for the last thermal."
@@ -7789,9 +7779,9 @@ msgstr "MacCready"
 #: src/InfoBoxes/Content/Factory.cpp:201
 #, no-c-format
 msgid ""
-"The current MacCready setting and the current MacCready mode (manual or "
-"auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
-"the InfoBox is active, by using the up/down cursor keys."
+"Current MacCready setting and mode (manual or auto). (Touch-screen/PC only) "
+"When this InfoBox is active, use the up/down cursor keys to adjust the "
+"MacCready setting."
 msgstr ""
 "当前MacCready设置和当前MacCready模式（手动或自动)。如果信息框是活跃的，使用"
 "上/下光标键（触摸屏/仅PC）也用于调整MacCready设置。"
@@ -7809,7 +7799,7 @@ msgstr "航点距离"
 #: src/InfoBoxes/Content/Factory.cpp:209
 #, no-c-format
 msgid ""
-"The distance to the currently selected waypoint. For AAT tasks, this is the "
+"Distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr "与当前选定航点的距离。对于AAT任务，这是AAT扇区内目标的距离。"
 
@@ -7859,12 +7849,12 @@ msgid "Next WP"
 msgstr "下一航点"
 
 #: src/InfoBoxes/Content/Factory.cpp:236
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The name of the currently selected turn point. When this InfoBox is active, "
+"Name of the currently selected turn point. When this InfoBox is active, "
 "using the up/down cursor keys selects the next/previous waypoint in the "
 "task. (Touch-screen/PC only) Pressing the enter cursor key brings up the "
-"waypoint details."
+"Airfields/waypoint details."
 msgstr ""
 "当前选定的转弯点的名称。当这个信息框活跃时，使用上/下游标键选择任务的下一个/"
 "上一个的航点。（触摸屏/仅PC）按下输入光标键提出航点详情。"
@@ -7912,7 +7902,7 @@ msgid "V Task Avg"
 msgstr "任务平均速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:260
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Average cross-country speed while on current task, not compensated for "
 "altitude."
@@ -7946,8 +7936,8 @@ msgstr "地形高程"
 #: src/InfoBoxes/Content/Factory.cpp:284
 #, no-c-format
 msgid ""
-"This is the elevation of the terrain above mean sea level, obtained from the "
-"terrain file at the current GPS location."
+"Elevation of the terrain above mean sea level, obtained from the terrain "
+"file at the current GPS location."
 msgstr "这是高于平均海面的地形高程，从当前GPS位置处地形文件中获得。"
 
 #: src/InfoBoxes/Content/Factory.cpp:290
@@ -7979,15 +7969,14 @@ msgstr "热气流获得高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:300
 #, no-c-format
-msgid "The altitude gained/lost in the current thermal."
+msgid "Altitude gained/lost in the current thermal."
 msgstr "在当前热气流中获得/损失的高度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:308
 #, no-c-format
 msgid ""
 "Magnetic track reported by the GPS. (Touch-screen/PC only) If this InfoBox "
-"is active in simulation mode, pressing the up and down  arrows adjusts the "
-"track."
+"is active in simulation mode, pressing the up/down arrows adjusts the track."
 msgstr ""
 "由GPS生成的轨迹。（触摸屏/仅PC）如果这个信息框在模拟模式下激活，按上下箭头调"
 "整轨迹。"
@@ -8138,8 +8127,7 @@ msgstr "气压高度"
 #: src/InfoBoxes/Content/Factory.cpp:390
 #, no-c-format
 msgid ""
-"This is the barometric altitude obtained from a device equipped with a "
-"pressure sensor."
+"Barometric altitude obtained from a device equipped with a pressure sensor."
 msgstr "这是由一个装备有压力传感器的装置获得的气压高度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:397
@@ -8155,9 +8143,9 @@ msgstr "MacCready速度"
 #: src/InfoBoxes/Content/Factory.cpp:399
 #, no-c-format
 msgid ""
-"The MacCready speed-to-fly for optimal flight to the next waypoint. In "
-"cruise flight mode, this speed-to-fly is calculated for maintaining "
-"altitude. In final glide mode, this speed-to-fly is calculated for descent."
+"MacCready speed-to-fly for optimal flight to the next waypoint. In cruise "
+"flight mode, this speed-to-fly is calculated for maintaining altitude. In "
+"final glide mode, this speed-to-fly is calculated for descent."
 msgstr ""
 "MacCready是到下一个航点的最佳飞行速度。在巡航飞行模式，这个计算出来的飞行速度"
 "是为了维持高度。在最后的滑翔模式中，这个飞行速度是为下降而计算的。"
@@ -8224,8 +8212,8 @@ msgstr "航点所需滑翔比"
 #: src/InfoBoxes/Content/Factory.cpp:431
 #, no-c-format
 msgid ""
-"The required glide ratio over ground to reach the next waypoint, given by "
-"the distance to next waypoint divided by the height required to arrive at "
+"Required glide ratio over ground to reach the next waypoint, given by the "
+"distance to the next waypoint divided by the height required to arrive at "
 "the safety arrival height."
 msgstr ""
 "到达下一个航点所需的比，由到下一个航点的距离除以到达所需的安全到达高度。"
@@ -8297,13 +8285,13 @@ msgstr "海豚模式飞行速度"
 #: src/InfoBoxes/Content/Factory.cpp:473
 #, no-c-format
 msgid ""
-"The instantaneous MacCready speed-to-fly, making use of netto vario "
-"calculations to determine dolphin cruise speed in the glider's current "
-"bearing. In cruise flight mode, this speed-to-fly is calculated for "
-"maintaining altitude. In final glide mode, this speed-to-fly is calculated "
-"for descent. In climb mode, this switches to the speed for minimum sink at "
-"the current load factor (if an accelerometer is connected). When Block mode "
-"speed to fly is selected, this InfoBox displays the MacCready speed."
+"Instantaneous MacCready speed-to-fly, making use of netto vario calculations "
+"to determine dolphin cruise speed on the glider's current track. In cruise "
+"flight mode, this speed-to-fly is calculated for maintaining altitude. In "
+"final glide mode, this speed-to-fly is calculated for descent. In climb "
+"mode, this switches to the speed for minimum sink at the current load factor "
+"(if an accelerometer is connected). When Block mode speed-to-fly is "
+"selected, this InfoBox displays the MacCready speed."
 msgstr ""
 "瞬时MacCready速度飞行，利用netto高度表计算确定滑翔机当前航向的海豚模式巡航速"
 "度。在巡航飞行模式中，这个飞行速度被计算为保持高度。在最后的滑翔模式中，这个"
@@ -8379,14 +8367,14 @@ msgstr "方位差"
 #: src/InfoBoxes/Content/Factory.cpp:506
 #, no-c-format
 msgid ""
-"The difference between the glider's track bearing, to the bearing of the "
-"next waypoint, or for AAT tasks, to the bearing to the target within the AAT "
-"sector. GPS navigation is based on the track bearing across the ground, and "
-"this track bearing may differ from the glider's heading when there is wind "
-"present. Chevrons point to the direction the glider needs to alter course to "
-"correct the bearing difference, that is, so that the glider's course made "
-"good is pointing directly at the next waypoint. This bearing takes into "
-"account the curvature of the Earth."
+"Difference between the glider's track (direction of motion across the "
+"ground) and the bearing to the next waypoint, or for AAT tasks, the bearing "
+"to the target within the AAT sector. GPS navigation is based on the track, "
+"and the track may differ from the glider's heading when there is wind. "
+"Chevrons point to the direction the glider needs to alter course to correct "
+"the bearing difference, that is, to make it so that the glider is tracking "
+"directly toward the next waypoint. This calculation accounts for the "
+"curvature of the Earth."
 msgstr ""
 "滑翔伞轨迹和下一个航点方位的、或者在AAT科目中，到AAT扇区内目标的方位之间的差"
 "别。GPS导航是基于横跨地面的轨迹方位，并且当有风时，该轨迹方位可能不同于滑翔伞"
@@ -8519,7 +8507,7 @@ msgstr "团队代码"
 #: src/InfoBoxes/Content/Factory.cpp:570
 #, no-c-format
 msgid ""
-"The current Team code for this aircraft. Use this to report to other team "
+"Current Team code for this aircraft. Use this to report to other team "
 "members. The last team aircraft code entered is displayed underneath."
 msgstr ""
 "这架飞机目前的团队代码。使用此报告向其他团队成员报告。输入的最后一队飞机代码"
@@ -8537,7 +8525,7 @@ msgstr "团队方位"
 
 #: src/InfoBoxes/Content/Factory.cpp:578
 #, no-c-format
-msgid "The bearing to the team aircraft location at the last team code report."
+msgid "Bearing to the team aircraft location at the last team code report."
 msgstr "在最后一次团队代码报告位置到机队的方位。"
 
 #: src/InfoBoxes/Content/Factory.cpp:584
@@ -8553,7 +8541,7 @@ msgstr "团队方位差"
 #: src/InfoBoxes/Content/Factory.cpp:586
 #, no-c-format
 msgid ""
-"The relative bearing to the team aircraft location at the last reported team "
+"Relative bearing to the team aircraft location at the last reported team "
 "code."
 msgstr "最后报告团队代码的团队飞机位置的相对方位。"
 
@@ -8569,7 +8557,7 @@ msgstr "团队距离"
 
 #: src/InfoBoxes/Content/Factory.cpp:594
 #, no-c-format
-msgid "The range to the team aircraft location at the last reported team code."
+msgid "Range to the team aircraft location at the last reported team code."
 msgstr "最后报告团队代码范围内的团队飞机位置。"
 
 #: src/InfoBoxes/Content/Factory.cpp:600
@@ -8583,7 +8571,7 @@ msgid "V Task Inst"
 msgstr "任务瞬时速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:602
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous cross-country speed while on current task, compensated for "
 "altitude. Equivalent to instantaneous Pirker cross-country speed."
@@ -8615,10 +8603,10 @@ msgid "V Task Ach"
 msgstr "完成任务速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:618
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Achieved cross-country speed while on current task, compensated for "
-"altitude.  Equivalent to Pirker cross-country speed remaining."
+"altitude. Equivalent to Pirker cross-country speed remaining."
 msgstr "在当前任务中实现越野飞行的速度，补偿高度。相当于Pirker的越野飞行速度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:624
@@ -8681,8 +8669,8 @@ msgstr "电量百分比"
 #: src/InfoBoxes/Content/Factory.cpp:650
 #, no-c-format
 msgid ""
-"Displays percentage of device battery remaining (where applicable) and "
-"status/voltage of external power supply."
+"Percentage of device battery remaining (where applicable) and status/voltage "
+"of external power supply."
 msgstr "显示设备电池的剩余百分比（在适用的情况下）和外部电源的状态/电压。"
 
 #: src/InfoBoxes/Content/Factory.cpp:656
@@ -8698,9 +8686,8 @@ msgstr "终点所需滑翔比"
 #: src/InfoBoxes/Content/Factory.cpp:658
 #, no-c-format
 msgid ""
-"The required glide ratio over ground to finish the task, given by the "
-"distance to go divided by the height required to arrive at the safety "
-"arrival height."
+"Required glide ratio over ground to finish the task, given by the distance "
+"to go divided by the height required to arrive at the safety arrival height."
 msgstr "完成任务所需的滑翔比，给定的距离除以安全到达所需的高度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:664
@@ -8715,7 +8702,7 @@ msgstr "备用1"
 
 #: src/InfoBoxes/Content/Factory.cpp:666
 #, no-c-format
-msgid "Displays name and bearing to the best alternate landing location."
+msgid "Name and bearing to the best alternate landing location."
 msgstr "显示最佳备用着陆位置的名称和方位。"
 
 #: src/InfoBoxes/Content/Factory.cpp:672
@@ -8730,7 +8717,7 @@ msgstr "备用2"
 
 #: src/InfoBoxes/Content/Factory.cpp:674
 #, no-c-format
-msgid "Displays name and bearing to the second alternate landing location."
+msgid "Name and bearing to the second-best alternate landing location."
 msgstr "显示第二备用着陆位置的名称和方位。"
 
 #: src/InfoBoxes/Content/Factory.cpp:680
@@ -8740,14 +8727,14 @@ msgstr "到达备用1所需滑翔比"
 
 #: src/InfoBoxes/Content/Factory.cpp:681
 #, no-c-format
-msgid "Altn1 GR"
+msgid "Altn 1 GR"
 msgstr "到达备用1所需滑翔比"
 
 #: src/InfoBoxes/Content/Factory.cpp:682
 #, no-c-format
 msgid ""
-"Geometric gradient to the arrival height above the best alternate. This is "
-"not adjusted for total energy."
+"Geometric gradient to the arrival height above the best alternate landing "
+"location. This is not adjusted for total energy."
 msgstr "几何梯度到到达高度以上的最佳备用地。这不是为总能量调整。"
 
 #: src/InfoBoxes/Content/Factory.cpp:688
@@ -8780,15 +8767,14 @@ msgstr "所需平均滑翔比"
 #: src/InfoBoxes/Content/Factory.cpp:699
 #, no-c-format
 msgid ""
-"The distance made in the configured period of time , divided by the altitude "
-"lost since then. Negative values are shown as ^^^ and indicate climbing "
-"cruise (height gain). Over 200 of GR the value is shown as +++ . You can "
-"configure the period of averaging in the system setup. Suggested values are "
-"60, 90 or 120. Lower values will be closed to GR Inst, and higher values "
-"will be closed to GR Cruise. Notice that the distance is NOT the straight "
-"line between your old and current position, it's exactly the distance you "
-"have made even in a zigzag glide. This value is not calculated while "
-"circling."
+"Distance flown during the configured averaging period divided by the "
+"altitude lost during that period. Negative values are shown as ^^^ and "
+"indicate climbing cruise (height gain). For GR >200, the value is shown as ++"
+"+. You can configure the averaging period in the system setup (suggested: "
+"60, 90 or 120s). Lower values will be closer to GR Inst, and higher values "
+"will be closer to GR Cruise. Note: The distance is not the straight line "
+"between your previous and current positions; it is the actual path distance "
+"flown (including zigzags). This value is not calculated while circling."
 msgstr ""
 "在配置时间段内的距离，除以此后失去的高度。负值显示为^^^并表示爬升巡航（高度增"
 "益）。超过200的滑翔比显示为+++。可以在系统设置中配置平均周期。建议值是60, 90"
@@ -8860,7 +8846,7 @@ msgstr "到达下一航点高度"
 #: src/InfoBoxes/Content/Factory.cpp:739
 #, no-c-format
 msgid ""
-"Absolute arrival altitude at the next waypoint in final glide.  For AAT "
+"Absolute arrival altitude at the next waypoint in final glide. For AAT "
 "tasks, the target within the AAT sector is used."
 msgstr "最终滑翔的下一个航点绝对到达高度。对于AAT任务，使用AAT扇区内的目标。"
 
@@ -8902,7 +8888,7 @@ msgstr "气压图"
 
 #: src/InfoBoxes/Content/Factory.cpp:765
 #, no-c-format
-msgid "Trace of altitude during flight"
+msgid "Trace of altitude during flight."
 msgstr "飞行高度轨迹"
 
 #: src/InfoBoxes/Content/Factory.cpp:771
@@ -9003,7 +8989,8 @@ msgstr "开始高度"
 #: src/InfoBoxes/Content/Factory.cpp:813
 #, no-c-format
 msgid ""
-"The contiguous period the ship has been below the task start max. height."
+"Contiguous period during which the aircraft has been below the task start "
+"maximum height."
 msgstr "飞船在任务下方的连续周期开始最大高度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:819
@@ -9066,7 +9053,7 @@ msgstr "最近水平空域"
 
 #: src/InfoBoxes/Content/Factory.cpp:846
 #, no-c-format
-msgid "The horizontal distance to the nearest airspace."
+msgid "Horizontal distance to the nearest airspace."
 msgstr "到最近空域的水平距离。"
 
 #: src/InfoBoxes/Content/Factory.cpp:852
@@ -9082,8 +9069,8 @@ msgstr "最近垂直空域"
 #: src/InfoBoxes/Content/Factory.cpp:854
 #, no-c-format
 msgid ""
-"The vertical distance to the nearest airspace.  A positive value means the "
-"airspace is above you, and negative means the airspace is below you."
+"Vertical distance to the nearest airspace. A positive value means the "
+"airspace is above you; a negative value means the airspace is below you."
 msgstr "到最近空域的垂直距离。正值意味着空域高于你，而负值则意味着空域低于你。"
 
 #: src/InfoBoxes/Content/Factory.cpp:860
@@ -9100,7 +9087,7 @@ msgstr "到达下一航点高度同MC设置为0的安全到达高度的相对高
 #, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint with MC 0 setting relative to the "
-"safety arrival height.  For AAT tasks, the target within the AAT sector is "
+"safety arrival height. For AAT tasks, the target within the AAT sector is "
 "used."
 msgstr ""
 "到达下一航点高度同MC设置为0的安全到达高度的相对高差。对于AAT任务，使用AAT扇区"
@@ -9119,9 +9106,9 @@ msgstr "迎风"
 #: src/InfoBoxes/Content/Factory.cpp:871
 #, no-c-format
 msgid ""
-"The current head wind component. Head wind is calculated from TAS and GPS "
-"ground speed if airspeed is available from external device. Otherwise the "
-"estimated wind is used for the calculation."
+"Current head wind component. Head wind is calculated from TAS and GPS ground "
+"speed if airspeed is available from an external device; otherwise, the "
+"estimated wind is used."
 msgstr ""
 "当前的迎风分量。如果从外部设备获得空速，则从TAS和GPS地速计算迎风。否则，估算"
 "的风用于计算。"
@@ -9139,8 +9126,8 @@ msgstr "地形碰撞"
 #: src/InfoBoxes/Content/Factory.cpp:880
 #, no-c-format
 msgid ""
-"The distance to the next terrain collision along the current task leg. At "
-"this location, the altitude will be below the configured terrain clearance "
+"Distance to the next terrain collision along the current task leg. At this "
+"location, the altitude will be below the configured terrain clearance "
 "altitude."
 msgstr ""
 "沿着当前任务进程的下一地形碰撞的距离。这个位置高度将低于配置的地形净空高度。"
@@ -9158,9 +9145,8 @@ msgstr "高度(自动)"
 #: src/InfoBoxes/Content/Factory.cpp:887
 #, no-c-format
 msgid ""
-"This is the barometric altitude obtained from a device equipped with a "
-"pressure sensor or the GPS altitude if the barometric altitude is not "
-"available."
+"Barometric altitude obtained from a device equipped with a pressure sensor, "
+"or GPS altitude if barometric altitude is not available."
 msgstr "如果气压高度不可用从一个装备有压力传感器或GPS得到的一个气压高度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:894
@@ -9176,8 +9162,8 @@ msgstr "下一赛程等量热气流"
 #: src/InfoBoxes/Content/Factory.cpp:896
 #, no-c-format
 msgid ""
-"The thermal rate of climb on next leg which is equivalent to a thermal equal "
-"to the MacCready setting on current leg."
+"Thermal climb rate on the next leg that is equivalent to a thermal climb "
+"rate equal to the MacCready setting on the current leg."
 msgstr "在下一赛程上爬升的热气流速率等于当前赛程上的MacCready设置。"
 
 #: src/InfoBoxes/Content/Factory.cpp:902
@@ -9193,8 +9179,8 @@ msgstr "迎风 *"
 #: src/InfoBoxes/Content/Factory.cpp:904
 #, no-c-format
 msgid ""
-"The current head wind component. The simplified head wind is calculated by "
-"subtracting GPS ground speed from the TAS if airspeed is available from "
+"Current head wind component. The simplified head wind is calculated by "
+"subtracting GPS ground speed from TAS if airspeed is available from an "
 "external device."
 msgstr ""
 "当前的迎风分量。如果空速可从外部设备获得简化的迎风是通过从TAS减去GPS地速来计"
@@ -9213,9 +9199,9 @@ msgstr "任务巡航效率"
 #: src/InfoBoxes/Content/Factory.cpp:912
 #, no-c-format
 msgid ""
-"Efficiency of cruise.  100 indicates perfect MacCready performance. This "
+"Efficiency of cruise. 100 indicates perfect MacCready performance. This "
 "value estimates your cruise efficiency according to the current flight "
-"history with the set MC value.  Calculation begins after task is started."
+"history with the set MC value. Calculation begins after task is started."
 msgstr ""
 "巡航效率100表示完美的MacCready性能。此值根据当前飞行历史与设定的MC值估计巡航"
 "效率。计算在任务启动后开始。"
@@ -9223,7 +9209,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:928
 #, no-c-format
 msgid ""
-"A circular thermal assistant that shows the lift distribution over each part "
+"Circular thermal assistant that shows the lift distribution over each part "
 "of the circle."
 msgstr "一个圆形的气流助手装置显示了圆圈各部分的升力分布。"
 
@@ -9239,7 +9225,7 @@ msgstr "开始打开"
 
 #: src/InfoBoxes/Content/Factory.cpp:935
 #, no-c-format
-msgid "Shows the time left until the start point opens or closes."
+msgid "Time left until the start point opens or closes."
 msgstr "显示离开时间知道开始点打开或关闭。"
 
 #: src/InfoBoxes/Content/Factory.cpp:940
@@ -9255,8 +9241,8 @@ msgstr "到达开始"
 #: src/InfoBoxes/Content/Factory.cpp:942
 #, no-c-format
 msgid ""
-"Shows the time left until the start point opens or closes, compared to the "
-"calculated time to reach it."
+"Time left until the start point opens or closes, minus the calculated time "
+"to reach the start point."
 msgstr "显示与开始计算的时间相比，直到开始点或关闭为止的时间。"
 
 #: src/InfoBoxes/Content/Factory.cpp:947
@@ -9275,7 +9261,7 @@ msgid "ATC radial"
 msgstr "ATC径向"
 
 #: src/InfoBoxes/Content/Factory.cpp:957
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Bearing from the selected reference location to your position. The distance "
 "is displayed in nautical miles for communication with ATC. If declination is "
@@ -9294,7 +9280,7 @@ msgid "V Task H"
 msgstr "上一小时任务速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:965
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Average cross-country speed while on current task over the last hour, not "
 "compensated for altitude."
@@ -9313,7 +9299,7 @@ msgstr "下一航点距离（标称）"
 #: src/InfoBoxes/Content/Factory.cpp:973
 #, no-c-format
 msgid ""
-"The distance to the currently selected waypoint. For AAT tasks, this is the "
+"Distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the origin of the AAT sector."
 msgstr "到当前选择航点的距离。对于AAT任务，这是AAT扇区起点的距离。"
 
@@ -9366,7 +9352,7 @@ msgstr "比赛速度"
 #, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown speed according to the configured "
-"Contest rule set."
+"contest rule set."
 msgstr "根据配置的比赛规则集即时评估飞行速度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:1001
@@ -9467,8 +9453,8 @@ msgstr "卫星"
 #: src/InfoBoxes/Content/Factory.cpp:1048
 #, no-c-format
 msgid ""
-"The number of actually used (seen) satellites by GPS module. If this "
-"information is unavailable, the displayed value is '---'."
+"Number of satellites currently used by the GPS module. If this information "
+"is unavailable, the displayed value is '---'."
 msgstr "GPS模块实际使用的（可见）卫星数。如果此信息不可用，则显示的值为“---”。"
 
 #: src/InfoBoxes/Content/Factory.cpp:1054
@@ -9483,7 +9469,7 @@ msgstr "当前频率"
 
 #: src/InfoBoxes/Content/Factory.cpp:1056
 #, no-c-format
-msgid "The currently active Radio Frequency"
+msgid "Active radio frequency."
 msgstr "当前有效频率"
 
 #: src/InfoBoxes/Content/Factory.cpp:1061
@@ -9498,8 +9484,8 @@ msgstr "待机频率"
 
 #: src/InfoBoxes/Content/Factory.cpp:1063
 #, no-c-format
-msgid "The currently standby Radio Frequency"
-msgstr "当前待机频率"
+msgid "Standby radio frequency."
+msgstr "待机频率"
 
 #: src/InfoBoxes/Content/Factory.cpp:1069
 #, no-c-format
@@ -9513,7 +9499,7 @@ msgstr "TC时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:1071
 #, no-c-format
-msgid "The time spend in the current thermal."
+msgid "Time spent in the current thermal."
 msgstr "在当前热气流中飞行时间。"
 
 #: src/InfoBoxes/Content/Factory.cpp:1077
@@ -9523,14 +9509,14 @@ msgstr "到达备用2所需滑翔比"
 
 #: src/InfoBoxes/Content/Factory.cpp:1078
 #, no-c-format
-msgid "Altn2 GR"
+msgid "Altn 2 GR"
 msgstr "到达备用1所需滑翔比"
 
 #: src/InfoBoxes/Content/Factory.cpp:1079
 #, no-c-format
 msgid ""
-"Geometric gradient to the arrival height above the second alternate. This is "
-"not adjusted for total energy."
+"Geometric gradient to the arrival height above the second-best alternate "
+"landing location. This is not adjusted for total energy."
 msgstr ""
 "到第二个备用位置上方的到达高度的几何梯度。 这不是针对总能量进行调整的。"
 
@@ -9550,7 +9536,7 @@ msgid "Heart rate in beats per minute."
 msgstr "每分钟心跳次数。"
 
 #: src/InfoBoxes/Content/Factory.cpp:1093
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Transponder Code"
 msgstr "应答器接收机"
 
@@ -9560,8 +9546,8 @@ msgid "XPDR Code"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1095
-#, fuzzy, no-c-format
-msgid "The currently set Transponder code"
+#, no-c-format
+msgid "Currently set transponder code."
 msgstr "当前待机频率"
 
 #: src/InfoBoxes/Content/Factory.cpp:1101
@@ -9576,8 +9562,8 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1103
 #, no-c-format
-msgid "Engine Cylinder Head Temperature"
-msgstr ""
+msgid "Engine cylinder head temperature."
+msgstr "预报温度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1109
 #, no-c-format
@@ -9585,13 +9571,13 @@ msgid "Engine EGT"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1110
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "EGT"
 msgstr "估计在途时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:1111
-#, fuzzy, no-c-format
-msgid "Engine Exhaust Gas Temperature"
+#, no-c-format
+msgid "Engine exhaust gas temperature."
 msgstr "预报温度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1117
@@ -9606,8 +9592,8 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1119
 #, no-c-format
-msgid "Engine Revolutions Per Minute."
-msgstr ""
+msgid "Engine revolutions per minute."
+msgstr "每分钟心跳次数。"
 
 #: src/InfoBoxes/Content/Factory.cpp:1125
 #, no-c-format
@@ -9622,62 +9608,96 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1127
 #, no-c-format
 msgid ""
-"Shows AAT delta time and estimated time of arrival in case of AAT task, and "
-"estimated time of arrival in case of racing task"
+"For AAT tasks: AAT delta time and estimated time of arrival; for racing "
+"tasks: estimated time of arrival."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1133
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Speed task estimated"
 msgstr "估算速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1134
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V Task Est"
 msgstr "任务瞬时速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1135
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Estimated average cross-country speed for current task as of task "
 "completion, assuming performance of ideal MacCready cruise/climb cycle."
 msgstr "预计到达任务完成时的本地时间，假设理想状态下MacCready巡航/爬升盘旋。"
 
 #: src/InfoBoxes/Content/Factory.cpp:1141
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Home altitude difference"
 msgstr "下一目标高度差"
 
 #: src/InfoBoxes/Content/Factory.cpp:1142
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Home AltD"
 msgstr "终点距离"
 
 #: src/InfoBoxes/Content/Factory.cpp:1143
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the home waypoint relative to the safety arrival height."
 msgstr "相对于安全到达的高度到达任务的最后转弯点的高度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:1149
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Speed task leg"
 msgstr "任务平均速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1150
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V Task Leg"
 msgstr "任务平均速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1151
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
-"Average cross country speed while on current task leg, not compensated for "
+"Average cross-country speed while on current task leg, not compensated for "
 "altitude."
 msgstr "当前任务的平均越野速度，未补偿高度。"
 
+#: src/InfoBoxes/Content/Factory.cpp:1157
+#, no-c-format
+msgid "Alternate 1 altitude difference"
+msgstr "下一目标高度差"
+
+#: src/InfoBoxes/Content/Factory.cpp:1158
+#, no-c-format
+msgid "Altn 1 AltD"
+msgstr "备用1"
+
+#: src/InfoBoxes/Content/Factory.cpp:1159
+#, no-c-format
+msgid ""
+"Arrival altitude at the best alternate landing location relative to the "
+"safety arrival height."
+msgstr "相对于安全到达的高度到达任务的最后转弯点的高度。"
+
+#: src/InfoBoxes/Content/Factory.cpp:1165
+#, no-c-format
+msgid "Alternate 2 altitude difference"
+msgstr "下一目标高度差"
+
+#: src/InfoBoxes/Content/Factory.cpp:1166
+#, no-c-format
+msgid "Altn 2 AltD"
+msgstr "备用2"
+
+#: src/InfoBoxes/Content/Factory.cpp:1167
+#, no-c-format
+msgid ""
+"Arrival altitude at the second-best alternate landing location relative to "
+"the safety arrival height."
+msgstr "相对于安全到达的高度到达任务的最后转弯点的高度。"
+
 #: src/InfoBoxes/Content/Alternate.cpp:58
-#, fuzzy
+#, fuzzy, c++-format
 msgid "Altn {}"
 msgstr "备用1"
 
@@ -9744,7 +9764,7 @@ msgstr "打开"
 msgid "Waiting"
 msgstr "等待"
 
-#: src/InfoBoxes/Content/Places.cpp:98
+#: src/InfoBoxes/Content/Places.cpp:99
 #, no-c-format
 msgid "Reference"
 msgstr "引用"
@@ -9759,8 +9779,13 @@ msgstr "巡航"
 msgid "FinalGlide"
 msgstr "最终滑翔"
 
+#: src/InfoBoxes/Panel/AltitudeSetup.cpp:56
+msgid ""
+"Area pressure for barometric altimeter calibration.  This is set "
+"automatically if Vega connected."
+msgstr "气压高度表校准的面积压力。如果Vega连接，这将自动设置。"
+
 #: src/InfoBoxes/Panel/ATCSetup.cpp:35
-#, fuzzy
 msgid "Mag declination"
 msgstr "发送申报中"
 
@@ -9983,7 +10008,7 @@ msgstr "巡航音量"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:76
 #, no-c-format
 msgid ""
-"Mean volume level in cruise modes.  If set to zero, scales with airspeed."
+"Mean volume level in cruise modes. If set to zero, scales with airspeed."
 msgstr "巡航模式下的平均音量水平。如果设置为零，用空速刻度。"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:80
@@ -10206,7 +10231,7 @@ msgstr "加速计"
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:44
 #, no-c-format
 msgid ""
-"Whether the internal accelerometer is used.  Only change this if the "
+"Whether the internal accelerometer is used. Only change this if the "
 "accelerometer has malfunctioned or the instrument cannot be installed with "
 "correct alignment."
 msgstr ""
@@ -10216,9 +10241,8 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:48
 #, no-c-format
 msgid ""
-"Whether a temperature and humidity sensor is installed.  Set to 0 to "
-"disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be "
-"specified."
+"Whether a temperature and humidity sensor is installed. Set to 0 to disable, "
+"255 to enable auto-detect; otherwise the 1-Wire device ID can be specified."
 msgstr ""
 "是否安装了温湿度传感器。设置为0禁用，255启用自动检测；否则，指定1Wire设备ID。"
 
@@ -10230,10 +10254,9 @@ msgstr "Vega波特率"
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:53
 #, no-c-format
 msgid ""
-"Baud rate of serial device connected to Vega port X1.  Use this as necessary "
-"when using a third party GPS or data-logger instead of FLARM.  If FLARM is "
-"connected the baud rate will be fixed at 38400.  For OzFLARM, the value can "
-"be set to 19200."
+"Baud rate of serial device connected to Vega port X1. Use this when using a "
+"third party GPS or data-logger instead of FLARM. If FLARM is connected the "
+"baud rate will be fixed at 38400. For OzFLARM, the value can be set to 19200."
 msgstr ""
 "连接到Vega端口X1的串行设备波特率。当使用第三方GPS或数据记录器而不是FLARM时，"
 "使用这一点是必要的。如果连接FLARM，波特率将固定在38400。对于OzFLARM，该值可以"
@@ -10247,8 +10270,7 @@ msgstr "FLAM已连接"
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
 msgid ""
-"Enable detection of FLARM.  Disable only if FLARM is not used or "
-"disconnected."
+"Enable detection of FLARM. Disable only if FLARM is not used or disconnected."
 msgstr "启用对FLARM的检测。仅在不使用FLARM或断开连接时禁用。"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
@@ -10259,8 +10281,8 @@ msgstr "PDA电源"
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:62
 #, no-c-format
 msgid ""
-"Enable output of +5V power supply for PDA etc. at Vega connector~X2.  If "
-"Vega is connected to Altair, this should be set to False."
+"Enable output of the +5 V power supply for a PDA or similar device at Vega "
+"connector X2. If Vega is connected to Altair, set this to Off."
 msgstr ""
 "在Vega连接器~X2上可为PDA等提供+5V电源输出。如果Vega连接到Altair，这应该设置为"
 "False。"
@@ -10440,13 +10462,12 @@ msgstr ""
 "页3/3"
 
 #: Data/Input/default.xci:630
-#, fuzzy
 msgid "Weglide Upload"
 msgstr "WeGlide 上传"
 
 #: Data/Input/default.xci:679 Data/Input/default.xci:1184
-msgid "Raw Logger"
-msgstr "原始记录器"
+msgid "NMEA Logger"
+msgstr "NMEA记录器"
 
 #: Data/Input/default.xci:687
 msgid "Lua"
@@ -10540,6 +10561,10 @@ msgstr "交通列表"
 msgid "Thermal Assistant"
 msgstr "热气流助手"
 
+#: Data/Input/default.xci:901
+msgid "Airspaces"
+msgstr "空域"
+
 #: Data/Input/default.xci:908
 msgid "Message Repeat"
 msgstr "信息转发"
@@ -10584,6 +10609,38 @@ msgstr "阾近空域"
 msgid "Quit XCSoar"
 msgstr ""
 
+#~ msgid "More waypoints"
+#~ msgstr "更多航点"
+
+#~ msgid ""
+#~ "Secondary waypoints file. This may be used to add waypoints for a "
+#~ "competition."
+#~ msgstr "次要航点文件。这可以用来增加比赛的航点。"
+
+#~ msgid "Raw Logger"
+#~ msgstr "原始记录器"
+
+#, no-c-format
+#~ msgid "Topleft"
+#~ msgstr "顶部左边"
+
+#~ msgid "The file name of the primary airspace file."
+#~ msgstr "主空域文件文件名。"
+
+#~ msgid "More airspaces"
+#~ msgstr "更多空域"
+
+#~ msgid "The file name of the secondary airspace file."
+#~ msgstr "次要空域文件文件名。"
+
+#, no-c-format
+#~ msgid "The currently active Radio Frequency"
+#~ msgstr "当前有效频率"
+
+#, no-c-format
+#~ msgid "The currently standby Radio Frequency"
+#~ msgstr "当前待机频率"
+
 #, no-c-format
 #~ msgid "No error"
 #~ msgstr "无错误"
@@ -10600,43 +10657,33 @@ msgstr ""
 #~ msgid "Fatal problem"
 #~ msgstr "致命问题"
 
-#, fuzzy, no-c-format
 #~ msgid "Firmware expired"
 #~ msgstr "固件超时"
 
-#, fuzzy, no-c-format
 #~ msgid "Firmware update error"
 #~ msgstr "固件超时"
 
-#, fuzzy, no-c-format
 #~ msgid "Voltage Low"
 #~ msgstr "显示页"
 
-#, fuzzy, no-c-format
 #~ msgid "UI error"
 #~ msgstr "无错误"
 
-#, fuzzy, no-c-format
 #~ msgid "Audio error"
 #~ msgstr "无错误"
 
-#, fuzzy, no-c-format
 #~ msgid "ADC error"
 #~ msgstr "无错误"
 
-#, fuzzy, no-c-format
 #~ msgid "SDCARD error"
 #~ msgstr "无错误"
 
-#, fuzzy, no-c-format
 #~ msgid "LED error"
 #~ msgstr "错误"
 
-#, fuzzy, no-c-format
 #~ msgid "EEPROM error"
 #~ msgstr "无错误"
 
-#, fuzzy, no-c-format
 #~ msgid "GPIO error"
 #~ msgstr "无错误"
 
@@ -10644,7 +10691,6 @@ msgstr ""
 #~ msgid "GPS communication"
 #~ msgstr "GPS通讯"
 
-#, fuzzy, no-c-format
 #~ msgid "Configuration of GPS module"
 #~ msgstr "配置"
 
@@ -10664,7 +10710,6 @@ msgstr ""
 #~ msgid "Pressure sensor"
 #~ msgstr "压力传感器"
 
-#, fuzzy, no-c-format
 #~ msgid "Obstacle database expired"
 #~ msgstr "障碍数据库"
 
@@ -10672,11 +10717,9 @@ msgstr ""
 #~ msgid "Flight recorder"
 #~ msgstr "飞行记录器"
 
-#, fuzzy, no-c-format
 #~ msgid "Invalid obstacle database license"
 #~ msgstr "障碍数据库"
 
-#, fuzzy, no-c-format
 #~ msgid "Generic error"
 #~ msgstr "重命名错误"
 
