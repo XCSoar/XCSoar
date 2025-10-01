@@ -198,7 +198,7 @@ HasCursorKeys() noexcept
   /* we assume that all Windows (CE) devices have cursor keys; some do
      not, but that's hard to detect */
 
-#if defined(ANDROID)
+#ifdef ANDROID
   return has_cursor_keys;
 #elif defined(__APPLE__) && TARGET_OS_IPHONE
   return HasKeyboard();
