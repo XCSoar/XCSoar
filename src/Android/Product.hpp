@@ -3,4 +3,6 @@
 
 #pragma once
 
-extern bool has_cursor_keys;
+#include <atomic>
+
+extern std::atomic<bool> has_cursor_keys;
