@@ -46,6 +46,8 @@ Version 7.44 - not yet released
   - ability to send squawk code from airspace details dialog to transponder
   - add support for a dedicated north-up map page layout
   - the thermal assistant InfoBox is now clickable
+  - Add support for multiple airspace files in UI
+  - Add support for multiple waypoint files in UI
 * Android
   - fix crash on startup when loading icons on ldpi screens
   - update 'white list' of USB devices with one more VID/PID pair for SoftRF Academy
