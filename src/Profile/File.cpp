@@ -39,7 +39,35 @@ Profile::LoadFile(ProfileMap &map, Path path)
       map.Set(ProfileKeys::AirspaceFileList, airspace.c_str());
       continue;
     }
+    // migrate old WPFile and AdditionalWPFile field
+    if (StringIsEqual(pair.key, "WPFile") || StringIsEqual(
+            pair.key, "AdditionalWPFile")) {
+      auto buffer = map.Get(ProfileKeys::WaypointFileList);
+      std::string waypoint;
+      if (buffer != nullptr) {
+        waypoint = std::string(buffer);
+      }
 
+      if (waypoint.size() > 0)
+        waypoint += "|";
+      waypoint += pair.value;
+      map.Set(ProfileKeys::WaypointFileList, waypoint.c_str());
+      continue;
+            }
+
+    if (StringIsEqual(pair.key, "WatchedWPFile")) {
+      auto buffer = map.Get(ProfileKeys::WatchedWaypointFileList);
+      std::string waypoint;
+      if (buffer != nullptr) {
+        waypoint = std::string(buffer);
+      }
+
+      if (waypoint.size() > 0)
+        waypoint += "|";
+      waypoint += pair.value;
+      map.Set(ProfileKeys::WatchedWaypointFileList, waypoint.c_str());
+      continue;
+        }
     /* ignore the "Vega*" values; the Vega driver used to abuse the
        profile to pass messages between the driver and the user
        interface */

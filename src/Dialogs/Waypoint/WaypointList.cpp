@@ -367,10 +367,8 @@ CreateTypeDataField(DataFieldListener *listener)
   DataFieldEnum *df = new DataFieldEnum(listener);
   df->addEnumTexts(type_filter_items);
 
-  ReplaceProfilePathBase(*df, (unsigned)TypeFilter::FILE_1,
-                         ProfileKeys::WaypointFile);
-  ReplaceProfilePathBase(*df, (unsigned)TypeFilter::FILE_2,
-                         ProfileKeys::AdditionalWaypointFile);
+  ReplaceProfilePathBase(*df, (unsigned)TypeFilter::FILE,
+                         ProfileKeys::WaypointFileList);
   ReplaceProfilePathBase(*df, (unsigned)TypeFilter::MAP,
                          ProfileKeys::MapFile);
 
