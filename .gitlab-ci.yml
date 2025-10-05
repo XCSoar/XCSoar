@@ -1,4 +1,4 @@
-image: docker:18.09
+image: docker:28.5
 
 stages:
  - prepare-image
