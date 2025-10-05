@@ -9,12 +9,12 @@ from build.openssl import OpenSSLProject
 from build.gcc import BinutilsProject, GccProject, GccBootstrapProject
 from build.linux import SabotageLinuxHeadersProject
 from build.lua import LuaProject
-from .musl import MuslProject
+from build.musl import MuslProject
 
 binutils = BinutilsProject(
     (
-        "https://ftp.gnu.org/gnu/binutils/binutils-2.42.tar.xz",
-        "https://fossies.org/linux/misc/binutils-2.42.tar.xz",
+        "https://ftpmirror.gnu.org/binutils/binutils-2.42.tar.xz",
+        "https://sourceware.org/pub/binutils/releases/binutils-2.42.tar.xz",
     ),
     "f6e4d41fd5fc778b06b7891457b3620da5ecea1006c6a4a41ae998109f85a800",
     "bin/as",
@@ -30,7 +30,7 @@ binutils = BinutilsProject(
 linux_headers = SabotageLinuxHeadersProject(
     (
         "http://ftp.barfooze.de/pub/sabotage/tarballs/linux-headers-4.19.88.tar.xz",
-        "http://foss.aueb.gr/mirrors/linux/sabotage/tarballs/linux-headers-4.19.88.tar.xz",
+        "https://mirrors.2f30.org/sabotage/tarballs/linux-headers-4.19.88.tar.xz",
     ),
     "5a975ba49b577869f2338aa80f44efd4e94f76e5b4bda11a6a1761a6d646848fdeaad7c820339b2c1c20d55f9bbf0e686121d621ac1cfa1dfc6cd71a166ade3a",
     "include/linux/input.h",
@@ -38,8 +38,8 @@ linux_headers = SabotageLinuxHeadersProject(
 
 gcc = GccProject(
     (
-        "https://ftp.gnu.org/gnu/gcc/gcc-13.2.0/gcc-13.2.0.tar.xz",
-        "https://fossies.org/linux/misc/gcc-13.2.0.tar.xz",
+        "https://ftpmirror.gnu.org/gcc/gcc-13.2.0/gcc-13.2.0.tar.xz",
+        "https://sourceware.org/ftp/gcc/releases/gcc-13.2.0/gcc-13.2.0.tar.xz",
     ),
     "e275e76442a6067341a27f04c5c6b83d8613144004c0413528863dc6b5c743da",
     "lib/libstdc++.a",
@@ -88,7 +88,8 @@ gcc_bootstrap = GccBootstrapProject(
 musl = MuslProject(
     (
         "https://www.musl-libc.org/releases/musl-1.1.18.tar.gz",
-        "https://fossies.org/linux/misc/musl-1.1.18.tar.gz",
+        # Ubuntu distfiles mirror as fallback
+        "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/musl/1.1.18-1/musl_1.1.18.orig.tar.gz",
     ),
     "d017ee5d01aec0c522a1330fdff06b1e428cb409e1db819cc4935d5da4a5a118",
     "include/unistd.h",
@@ -101,7 +102,7 @@ musl = MuslProject(
 openssl = OpenSSLProject(
     (
         "https://www.openssl.org/source/openssl-3.1.7.tar.gz",
-        "https://artfiles.org/openssl.org/source/openssl-3.1.7.tar.gz",
+        "https://github.com/openssl/openssl/releases/download/openssl-3.1.7/openssl-3.1.7.tar.gz",
     ),
     "053a31fa80cf4aebe1068c987d2ef1e44ce418881427c4464751ae800c31d06c",
     "include/openssl/ossl_typ.h",
@@ -251,7 +252,8 @@ curl = CmakeProject(
 sqlite3 = AutotoolsProject(
     (
         "https://www.sqlite.org/2023/sqlite-autoconf-3420000.tar.gz",
-        "https://fossies.org/linux/misc/sqlite-autoconf-3420000.tar.gz",
+        # MacPorts distfiles mirror
+        "https://distfiles.macports.org/sqlite3/sqlite-autoconf-3420000.tar.gz",
     ),
     "7abcfd161c6e2742ca5c6c0895d1f853c940f203304a0b49da4e1eca5d088ca6",
     "lib/libsqlite3.a",
@@ -267,7 +269,8 @@ sqlite3 = AutotoolsProject(
 proj = CmakeProject(
     (
         "http://download.osgeo.org/proj/proj-9.4.0.tar.gz",
-        "https://fossies.org/linux/privat/proj-9.4.0.tar.gz",
+        # HTTPS mirror (same infra, different scheme)
+        "https://download.osgeo.org/proj/proj-9.4.0.tar.gz",
     ),
     "3643b19b1622fe6b2e3113bdb623969f5117984b39f173b4e3fb19a8833bd216",
     "lib/libproj.a",
@@ -295,7 +298,7 @@ proj = CmakeProject(
 
 libpng = CmakeProject(
     (
-        "ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.43.tar.xz",
+        "https://pub.sortix.org/mirror/libpng/libpng-1.6.43.tar.xz",
         "http://downloads.sourceforge.net/project/libpng/libpng16/1.6.43/libpng-1.6.43.tar.xz",
     ),
     "6a5ca0652392a2d7c9db2ae5b40210843c0bbc081cbd410825ab00cc59f14a6c",
@@ -356,7 +359,7 @@ simple_usbmodeswitch = AutotoolsProject(
 libtiff = CmakeProject(
     (
         "http://download.osgeo.org/libtiff/tiff-4.6.0.tar.xz",
-        "https://fossies.org/linux/misc/tiff-4.6.0.tar.xz",
+        "https://download.osgeo.org/libtiff/tiff-4.6.0.tar.xz",
     ),
     "e178649607d1e22b51cf361dd20a3753f244f022eefab1f2f218fc62ebaf87d2",
     "lib/libtiff.a",
@@ -399,7 +402,7 @@ libtiff = CmakeProject(
 libgeotiff = CmakeProject(
     (
         "http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.7.4.tar.gz",
-        "https://fossies.org/linux/privat/libgeotiff-1.7.4.tar.gz",
+        "https://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.7.4.tar.gz",
     ),
     "c598d04fdf2ba25c4352844dafa81dde3f7fd968daa7ad131228cd91e9d3dc47",
     "lib/libgeotiff.a",
@@ -413,7 +416,8 @@ libgeotiff = CmakeProject(
 sdl2 = CmakeProject(
     (
         "http://www.libsdl.org/release/SDL2-2.30.0.tar.gz",
-        "https://fossies.org/linux/misc/SDL2-2.3.0.tar.gz",
+        # GitHub release tarball mirror
+        "https://github.com/libsdl-org/SDL/releases/download/release-2.30.0/SDL2-2.30.0.tar.gz",
     ),
     "36e2e41557e0fa4a1519315c0f5958a87ccb27e25c51776beb6f1239526447b0",
     "lib/libSDL2.a",
@@ -455,7 +459,7 @@ sdl2 = CmakeProject(
 lua = LuaProject(
     (
         "http://www.lua.org/ftp/lua-5.4.6.tar.gz",
-        "https://fossies.org/linux/misc/lua-5.4.6.tar.gz",
+        "https://github.com/mesonbuild/wrapdb/releases/download/lua_5.4.6-4/lua-5.4.6.tar.gz",
     ),
     "7d5ea1b9cb6aa0b59ca3dde1c6adcb57ef83a1ba8e5432c0ecd06bf439b3ad88",
     "lib/liblua.a",
