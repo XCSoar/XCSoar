@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "SiteConfigPanel.hpp"
+#include "Airspace/Patterns.hpp"
 #include "ConfigPanel.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
@@ -79,7 +80,7 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
                      "buttons to activate or deactivate"
                      " airspace files respectively. Supported file types are: "
                      "Openair (.txt /.air), and Tim Newport-Pearce (.sua)."),
-                   ProfileKeys::AirspaceFileList, _T("*.txt\0*.air\0*.sua\0"),
+                   ProfileKeys::AirspaceFileList, AIRSPACE_FILE_PATTERNS,
                    FileType::AIRSPACE);
 
   AddFile(_("FLARM Device Database"),
