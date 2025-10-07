@@ -108,9 +108,9 @@ Profile::GetPath(std::string_view key) noexcept
 }
 
 std::vector<AllocatedPath>
-Profile::GetMultiplePaths(std::string_view key)
+Profile::GetMultiplePaths(std::string_view key, const TCHAR *patterns)
 {
-  return map.GetMultiplePaths(key);
+  return map.GetMultiplePaths(key, patterns);
 }
 
 bool
