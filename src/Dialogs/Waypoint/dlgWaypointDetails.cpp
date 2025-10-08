@@ -802,15 +802,11 @@ UpdateCaption(WndForm *form, const Waypoint &waypoint)
     break;
 
   case WaypointOrigin::PRIMARY:
-    key = ProfileKeys::WaypointFile;
-    break;
-
-  case WaypointOrigin::ADDITIONAL:
-    key = ProfileKeys::AdditionalWaypointFile;
+    key = ProfileKeys::WaypointFileList;
     break;
 
   case WaypointOrigin::WATCHED:
-    key = ProfileKeys::WatchedWaypointFile;
+    key = ProfileKeys::WatchedWaypointFileList;
     break;
 
   case WaypointOrigin::MAP:

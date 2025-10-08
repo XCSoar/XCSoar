@@ -8,6 +8,7 @@
 #define ENABLE_CLOSE_BUTTON
 #define ENABLE_LOOK
 #include "Airspace/AirspaceGlue.hpp"
+#include "Airspace/Patterns.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
@@ -108,7 +109,8 @@ LoadFiles(PlacesOfInterestSettings &poi_settings,
   WaypointGlue::SetHome(way_points, terrain, poi_settings, team_code_settings,
                         NULL, false);
 
-  const auto paths = Profile::GetMultiplePaths(ProfileKeys::AirspaceFileList);
+  const auto paths = Profile::GetMultiplePaths(ProfileKeys::AirspaceFileList,
+                                               AIRSPACE_FILE_PATTERNS);
   for (auto it = paths.begin(); it < paths.end(); it++) {
     ParseAirspaceFile(airspace_database, *it, operation);
   }

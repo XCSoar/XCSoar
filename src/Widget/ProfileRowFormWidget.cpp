@@ -52,7 +52,7 @@ RowFormWidget::AddMultipleFiles(const TCHAR *label, const TCHAR *help,
   df->ScanMultiplePatterns(filters);
 
   if (registry_key.data() != nullptr) {
-    auto paths = Profile::GetMultiplePaths(registry_key);
+    auto paths = Profile::GetMultiplePaths(registry_key, filters);
 
     if (!paths.empty()) {
       for (auto const &p : paths) {
