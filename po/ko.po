@@ -3,11 +3,12 @@
 # This file is distributed under the same license as the xcsoar package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
 #
+#: src/Dialogs/MultiFilePicker.cpp:39
 msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-17 22:14+0000\n"
+"POT-Creation-Date: 2025-09-29 13:27+0200\n"
 "PO-Revision-Date: 2023-01-13 12:50+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
@@ -80,10 +81,10 @@ msgid "Touring"
 msgstr "투어링"
 
 #: src/Task/TypeStrings.cpp:32
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
-"and records.  Enables FAI finish height for final glide calculation."
+"and records. Enables FAI finish height for final glide calculation."
 msgstr ""
 "FAI 룰, FAI스타트에서, 턴포인트와 최종골만 기록된다. \n"
 "FAI 결승점에서는 화면을 골 러시(Final Glide)로 설정한다."
@@ -108,27 +109,27 @@ msgid "FAI rules, path from start to a goal destination."
 msgstr "FAI 규칙: 스타트포인트를 통과해서 골 포인트까지 경로."
 
 #: src/Task/TypeStrings.cpp:37
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Racing task around turn points.  Can also be used for FAI badge and record "
-"tasks.  Allows all shapes of observation zones."
+"Racing task around turn points. Can also be used for FAI badge and record "
+"tasks. Allows all shapes of observation zones."
 msgstr ""
 "레이스(경기)타스크: 턴포인트를 주회하는 경기이며, FAI기록경기에 사용할 수 있"
 "다."
 
 #: src/Task/TypeStrings.cpp:39
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Task through assigned areas, minimum task time applies.  Restricted to "
+"Task through assigned areas, minimum task time applies. Restricted to "
 "cylinder and sector observation zones."
 msgstr "AAT 타스크: 실린더나 섹터간의 통과는 최소시간이 적용된다."
 
 #: src/Task/TypeStrings.cpp:41
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Modified area task.  Task with start, finish and at least one predefined 1-"
-"mile cylinder.  Pilot can add additional points as needed.  Minimum task "
-"time applies."
+"Modified area task. Task with start, finish and at least one predefined 1 "
+"mile cylinder. Pilot can add additional points as needed. Minimum task time "
+"applies."
 msgstr ""
 "변형된 지역타스크(MAT): 시작과 종료에 최소 1개의 실린더(1마일)을 포함해 설정"
 "할 수 있다. 파일럿의 필요에 따라 추가로 포인트를 추가할 수 있으며, 최소비행시"
@@ -149,90 +150,89 @@ msgid ""
 msgstr "투어링 타스크: 스타트와 최종골로 FAI 섹터 턴포인트를 사용한다."
 
 #: src/Task/TypeStrings.cpp:56
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"A 90 degree sector with 1km radius. Cross corner edge from inside area to "
+"A 90-degree sector with 1 km radius. Cross corner edge from inside area to "
 "start."
 msgstr "타스크포인트의 코스 바깥을 기점으로 삼은 반경 1km 90도의 선형 섹터."
 
 #: src/Task/TypeStrings.cpp:57
-#, no-c-format
-msgid ""
-"A straight line start gate.  Cross start gate from inside area to start."
+#, fuzzy, no-c-format
+msgid "A straight line start gate. Cross start gate from inside area to start."
 msgstr "직선출발게이트. \r코스 안에서 밖을 향해 스타트 라인을 가로질러 출발."
 
 #: src/Task/TypeStrings.cpp:58
-#, no-c-format
-msgid "A cylinder.  Exit area to start."
+#, fuzzy, no-c-format
+msgid "A cylinder. Exit area to start."
 msgstr "실린더. 실린더 밖으로 나갈때 스타트 한다."
 
 #: src/Task/TypeStrings.cpp:59
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
-"from corner point."
+"A 90-degree sector with 'infinite' length sides. Cross any edge, scored from "
+"corner point."
 msgstr "반경 무제한의 90도 부채꼴 섹터: 경계를 안에서 밖으로 통과하는 경우."
 
 #: src/Task/TypeStrings.cpp:61
-#, no-c-format
-msgid "A keyhole.  Scored from center."
+#, fuzzy, no-c-format
+msgid "A keyhole. Scored from center."
 msgstr "키홀 섹터.   영역내 가장 먼 점에서 득점한다."
 
 #: src/Task/TypeStrings.cpp:62
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"(German rules) Any point within 1/2 km of center or 10km of a 90 degree "
-"sector.  Scored from center."
+"(German rules) Any point within 1/2 km of center or 10 km of a 90-degree "
+"sector. Scored from center."
 msgstr ""
 "(독일식 룰) 반경 10km 90 도 섹터의 경우 중심에서 반경 1/2km 내의 임의의 포인"
 "트에서 득점한다."
 
 #: src/Task/TypeStrings.cpp:64
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
-"sector.  Scored from center."
+"(British rules) Any point within 1/2 km of center or 20 km of a 90-degree "
+"sector. Scored from center."
 msgstr ""
 "(영국식 룰)\n"
 "포인트에서 1/2km의 원 혹은 반경 20km의 90도 섹터를 안에서 밖으로 통과할때 득"
 "점한다."
 
 #: src/Task/TypeStrings.cpp:66
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"(British rules) Any point within 1/2 km of center or 10km of a 180 degree "
-"sector.  Scored from center."
+"(British rules) Any point within 1/2 km of center or 10 km of a 180-degree "
+"sector. Scored from center."
 msgstr ""
 "(영국식 룰) \r포인트에서 1/2km의 원혹은 반경 10km의 180도 섹터를 안에서 밖으"
 "로 통과할때 득점한다."
 
 #: src/Task/TypeStrings.cpp:68
-#, no-c-format
-msgid "A cylinder.  Any point within area scored from center."
+#, fuzzy, no-c-format
+msgid "A cylinder. Any point within area scored from center."
 msgstr "실린더: 내부의 아무지점이나 통과하면 득점한다."
 
 #: src/Task/TypeStrings.cpp:69
-#, no-c-format
-msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
+#, fuzzy, no-c-format
+msgid "A 1 mile cylinder. Scored by farthest point reached in area."
 msgstr "1마일 실린더. 영역내 가장 먼 점에서 득점한다."
 
 #: src/Task/TypeStrings.cpp:70
-#, no-c-format
-msgid "A cylinder.  Scored by farthest point reached in area."
+#, fuzzy, no-c-format
+msgid "A cylinder. Scored by farthest point reached in area."
 msgstr "실린더. 가장 먼 포인트에 도착했을때 득점한다."
 
 #: src/Task/TypeStrings.cpp:71
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"A sector that can vary in angle and radius.  Scored by farthest point "
-"reached inside area."
+"A sector that can vary in angle and radius. Scored by farthest point reached "
+"inside area."
 msgstr ""
 "반경과 각도로 정해진 섹터경계에 도달했을때, 내부 영역에서 가장 먼 곳에 도달"
 "한 사람이 득점한다."
 
 #: src/Task/TypeStrings.cpp:73
-#, no-c-format
-msgid "A 90 degree sector with 1km radius.  Cross edge to finish."
+#, fuzzy, no-c-format
+msgid "A 90-degree sector with 1 km radius. Cross edge to finish."
 msgstr "최종골포인트에 닿은 반경 1km/90도 섹터의 영역."
 
 #: src/Task/TypeStrings.cpp:74
@@ -246,15 +246,15 @@ msgid "Enter cylinder to finish."
 msgstr "골 실린더 내에 들어간 경우."
 
 #: src/Task/TypeStrings.cpp:76
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"A 180 degree sector with 5km radius.  Exit area in any direction to start."
+"A 180-degree sector with 5 km radius. Exit area in any direction to start."
 msgstr "반경 5km/180도 섹터 내에서 밖을 향해 임의의 방향으로 나갈 경우 스타트."
 
 #: src/Task/TypeStrings.cpp:77
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"A sector that can vary in angle, inner and outer radius.  Scored by farthest "
+"A sector that can vary in angle, inner and outer radius. Scored by farthest "
 "point reached inside area."
 msgstr ""
 "내,외 이중으로 둘러싸인 섹터의 경우, 내부에서 가장 멀리 떨어진 포인트에 도달"
@@ -266,8 +266,8 @@ msgid "A symmetric quadrant with a custom radius."
 msgstr "임의의 방향으로 좌우 대칭인 사각형."
 
 #: src/Task/TypeStrings.cpp:80
-#, no-c-format
-msgid "A keyhole.  Scored by farthest point reached in area."
+#, fuzzy, no-c-format
+msgid "A keyhole. Scored by farthest point reached in area."
 msgstr "키홀 섹터. 영역내 가장 먼 점에서 득점한다."
 
 #: src/Task/TypeStrings.cpp:93
@@ -605,7 +605,7 @@ msgstr "써클링 아님"
 msgid "Close"
 msgstr "닫기"
 
-#: src/Gauge/FlarmTrafficWindow.cpp:210
+#: src/Gauge/FlarmTrafficWindow.cpp:211
 msgid "No Traffic"
 msgstr "트래픽 없음"
 
@@ -778,12 +778,12 @@ msgstr "수동"
 
 #: src/Menu/ExpandMacros.cpp:209 src/Menu/ExpandMacros.cpp:343
 #: src/Menu/ExpandMacros.cpp:364 src/Menu/ExpandMacros.cpp:414
-#: src/PageSettings.cpp:50 src/PageSettings.cpp:53
+#: src/PageSettings.cpp:51 src/PageSettings.cpp:54
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:42
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:30
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:31
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:140
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:186
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:374
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:379
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:67
 #: src/InfoBoxes/Panel/MacCreadySetup.cpp:35
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:13
@@ -835,8 +835,8 @@ msgstr "모든 항적"
 #: src/Menu/ExpandMacros.cpp:412 src/Input/InputEventsSettings.cpp:450
 #: src/Input/InputEventsSettings.cpp:453
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:95
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:26
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:67
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:27
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:172
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:142
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:45
@@ -857,7 +857,7 @@ msgstr "끄기"
 #: src/Menu/ExpandMacros.cpp:366 src/Menu/ExpandMacros.cpp:412
 #: src/Input/InputEventsSettings.cpp:449 src/Input/InputEventsSettings.cpp:453
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:94
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:28
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:29
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:173
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:144
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:43
@@ -910,7 +910,7 @@ msgstr "타스크 & 지명"
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:172
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:63
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:38
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:83
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:79
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:90
@@ -1164,45 +1164,45 @@ msgstr "찾을 수 없음"
 msgid "Select a file"
 msgstr "파일 선택"
 
-#: src/PageSettings.cpp:24
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:134
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:175
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:351
+#: src/PageSettings.cpp:25
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:135
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:176
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:356
 #, no-c-format
 msgid "FLARM radar"
 msgstr "FLARM레이더"
 
-#: src/PageSettings.cpp:27
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:148
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:176
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:355
+#: src/PageSettings.cpp:28
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:149
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:360
 #: src/InfoBoxes/Content/Factory.cpp:926
 #, no-c-format
 msgid "Thermal assistant"
 msgstr "써멀레이더"
 
-#: src/PageSettings.cpp:30 src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:359
+#: src/PageSettings.cpp:31 src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:178
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:364
 #: src/InfoBoxes/Content/Factory.cpp:837
 #, no-c-format
 msgid "Horizon"
 msgstr "자세계"
 
-#: src/PageSettings.cpp:40 src/InfoBoxes/Content/Altitude.cpp:27
+#: src/PageSettings.cpp:41 src/InfoBoxes/Content/Altitude.cpp:27
 #: Data/Input/default.xci:940
 #, no-c-format
 msgid "Info"
 msgstr "정보"
 
-#: src/PageSettings.cpp:40
+#: src/PageSettings.cpp:41
 msgid "Map and InfoBoxes"
 msgstr "지도 및 정보창"
 
-#: src/PageSettings.cpp:59
+#: src/PageSettings.cpp:60
 msgid "Info Hide"
 msgstr "박스 감추기"
 
-#: src/PageSettings.cpp:61
+#: src/PageSettings.cpp:62
 msgid "Map (Full screen)"
 msgstr "지도 (풀 스크린)"
 
@@ -1306,13 +1306,13 @@ msgid "W*"
 msgstr "기단상승속도"
 
 #: src/Weather/Rasp/RaspStore.cpp:29 src/Weather/Rasp/RaspStore.cpp:34
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Average dry thermal updraft strength near mid-BL height.  Subtract glider "
-"descent rate to get average vario reading for cloudless thermals.  Updraft "
+"Average dry thermal updraft strength near mid-BL height. Subtract glider "
+"descent rate to get average vario reading for cloudless thermals. Updraft "
 "strengths will be stronger than this forecast if convective clouds are "
 "present, since cloud condensation adds buoyancy aloft (i.e. this neglects "
-"\"cloudsuck\").  W* depends upon both the surface heating and the BL depth."
+"\"cloudsuck\"). W* depends upon both the surface heating and the BL depth."
 msgstr ""
 "써멀 예상 평균 상승률, 상승기류가 없을 때를 기준으로 계산되어, 예측값보다 더 "
 "상승할 수도 있다."
@@ -1323,9 +1323,9 @@ msgid "BL Wind spd"
 msgstr "BL풍속"
 
 #: src/Weather/Rasp/RaspStore.cpp:39
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The speed and direction of the vector-averaged wind in the BL.  This "
+"The speed and direction of the vector-averaged wind in the BL. This "
 "prediction can be misleading if there is a large change in wind direction "
 "through the BL."
 msgstr ""
@@ -1338,16 +1338,16 @@ msgid "H bl"
 msgstr "구름높이"
 
 #: src/Weather/Rasp/RaspStore.cpp:44
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "Height of the top of the mixing layer, which for thermal convection is the "
-"average top of a dry thermal.  Over flat terrain, maximum thermalling "
-"heights will be lower due to the glider descent rate and other factors.  In "
-"the presence of clouds (which release additional buoyancy aloft, creating "
+"average top of a dry thermal. Over flat terrain, maximum thermalling heights "
+"will be lower due to the glider descent rate and other factors. In the "
+"presence of clouds (which release additional buoyancy aloft, creating "
 "\"cloudsuck\") the updraft top will be above this forecast, but the maximum "
-"thermalling height will then be limited by the cloud base.  Further, when "
-"the mixing results from shear turbulence rather than thermal mixing this "
-"parameter is not useful for glider flying. "
+"thermalling height will then be limited by the cloud base. Further, when the "
+"mixing results from shear turbulence rather than thermal mixing this "
+"parameter is not useful for glider flying."
 msgstr ""
 "써멀최대예상고도, 건조한 열의 최대 예상고도(이슬점). 예상치 않은 열의 혼합등"
 "으로 오차가 있을 수 있다. "
@@ -1358,15 +1358,15 @@ msgid "dwcrit"
 msgstr "대류상한고도(대지고도)"
 
 #: src/Weather/Rasp/RaspStore.cpp:49
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "This parameter estimates the height above ground at which the average dry "
 "updraft strength drops below 225 fpm and is expected to give better "
 "quantitative numbers for the maximum cloudless thermalling height than the "
 "BL Top height, especially when mixing results from vertical wind shear "
-"rather than thermals.  (Note: the present assumptions tend to underpredict "
-"the max. thermalling height for dry consitions.) In the presence of clouds "
-"the maximum thermalling height may instead be limited by the cloud base.  "
+"rather than thermals. (Note: the present assumptions tend to underpredict "
+"the max. thermalling height for dry conditions.) In the presence of clouds "
+"the maximum thermalling height may instead be limited by the cloud base. "
 "Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
 "평균 상승률이 225fpm이하가 될 것으로 예상되는 고도, 건조상태의 써멀 상승 한"
@@ -1378,13 +1378,13 @@ msgid "bl cloud"
 msgstr "구름량"
 
 #: src/Weather/Rasp/RaspStore.cpp:54
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "This parameter provides an additional means of evaluating the formation of "
 "clouds within the BL and might be used either in conjunction with or instead "
-"of the other cloud prediction parameters.  It assumes a very simple "
+"of the other cloud prediction parameters. It assumes a very simple "
 "relationship between cloud cover percentage and the maximum relative "
-"humidity within the BL.  The cloud base height is not predicted, but is "
+"humidity within the BL. The cloud base height is not predicted, but is "
 "expected to be below the BL Top height."
 msgstr ""
 "이 값은 BL 내에서 구름의 생성을 계산하는 추가정보를 제공하며 다른 예측 매개 "
@@ -1398,9 +1398,9 @@ msgid "Sfc temp"
 msgstr "지표기온"
 
 #: src/Weather/Rasp/RaspStore.cpp:59
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The temperature at a height of 2m above ground level.  This can be compared "
+"The temperature at a height of 2m above ground level. This can be compared "
 "to observed surface temperatures as an indication of model simulation "
 "accuracy; e.g. if observed surface temperatures are significantly below "
 "those forecast, then soaring conditions will be poorer than forecast."
@@ -1414,15 +1414,15 @@ msgid "hwcrit"
 msgstr "대류상한고도(해면고도)"
 
 #: src/Weather/Rasp/RaspStore.cpp:64
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "This parameter estimates the height at which the average dry updraft "
 "strength drops below 225 fpm and is expected to give better quantitative "
 "numbers for the maximum cloudless thermalling height than the BL Top height, "
 "especially when mixing results from vertical wind shear rather than "
-"thermals.  (Note: the present assumptions tend to underpredict the max. "
-"thermalling height for dry consitions.) In the presence of clouds the "
-"maximum thermalling height may instead be limited by the cloud base.  Being "
+"thermals. (Note: the present assumptions tend to underpredict the max. "
+"thermalling height for dry conditions.) In the presence of clouds the "
+"maximum thermalling height may instead be limited by the cloud base. Being "
 "for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
 "평균 상승률이 225fpm이하가 될 것으로 예상되는 해면 고도, 건조상태의 써멀 상"
@@ -1434,11 +1434,11 @@ msgid "wblmaxmin"
 msgstr "기단최고최저"
 
 #: src/Weather/Rasp/RaspStore.cpp:69
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "Maximum grid-area-averaged extensive upward or downward motion within the BL "
 "as created by horizontal wind convergence. Positive convergence is "
-"associated with local small-scale convergence lines.  Negative convergence "
+"associated with local small-scale convergence lines. Negative convergence "
 "(divergence) produces subsiding vertical motion, creating low-level "
 "inversions which limit thermalling heights."
 msgstr "기단내에서 예상되는 평균적인 상승/하강풍의 세기를 나타낸다."
@@ -1714,7 +1714,7 @@ msgstr "아니요"
 msgid "Retry"
 msgstr "재시도"
 
-#: src/Dialogs/Message.cpp:96 src/Dialogs/ListPicker.cpp:163
+#: src/Dialogs/Message.cpp:96 src/Dialogs/ListPicker.cpp:59
 #: src/Dialogs/ProgressDialog.cpp:37 src/Dialogs/WidgetDialog.cpp:245
 #: src/Dialogs/WidgetDialog.cpp:261 src/Dialogs/Device/PortPicker.cpp:294
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:114
@@ -1724,6 +1724,7 @@ msgstr "재시도"
 #: src/Dialogs/ProfileListDialog.cpp:333
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:183
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:228
+#: src/Dialogs/MultiFilePicker.cpp:82
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:131 src/Dialogs/NumberEntry.cpp:41
 #: src/Dialogs/NumberEntry.cpp:84 src/Dialogs/NumberEntry.cpp:125
 #: src/Dialogs/TouchTextEntry.cpp:187 src/Dialogs/TimeEntry.cpp:46
@@ -1739,13 +1740,14 @@ msgstr "취소"
 msgid "Ignore"
 msgstr "무시"
 
-#: src/Dialogs/ListPicker.cpp:153 src/Dialogs/Device/PortPicker.cpp:293
+#: src/Dialogs/ListPicker.cpp:49 src/Dialogs/Device/PortPicker.cpp:293
 #: src/Dialogs/Traffic/TrafficList.cpp:779
 #: src/Dialogs/ProfileListDialog.cpp:331
 msgid "Select"
 msgstr "선택"
 
-#: src/Dialogs/ListPicker.cpp:159 src/Dialogs/HelpDialog.cpp:18
+#: src/Dialogs/ListPicker.cpp:55 src/Dialogs/MultiFilePicker.cpp:78
+#: src/Dialogs/HelpDialog.cpp:18
 msgid "Help"
 msgstr "도움말"
 
@@ -1755,7 +1757,7 @@ msgstr "도움말"
 msgid "Update"
 msgstr "업데이트"
 
-#: src/Dialogs/FileManager.cpp:400
+#: src/Dialogs/FileManager.cpp:400 src/Dialogs/MultiFilePicker.cpp:79
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:92
 #: src/Dialogs/Weather/NOAAList.cpp:98 src/Monitor/MatTaskMonitor.cpp:40
 msgid "Add"
@@ -1815,7 +1817,7 @@ msgstr "TCP 클라이언트"
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
 #: src/Dialogs/Device/PortDataField.cpp:51
-#: src/Dialogs/Device/DeviceEditWidget.cpp:275
+#: src/Dialogs/Device/DeviceEditWidget.cpp:276
 #, no-c-format
 msgid "TCP port"
 msgstr "TCP포트"
@@ -1825,87 +1827,87 @@ msgstr "TCP포트"
 msgid "UDP port"
 msgstr "UDP포트"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:247
+#: src/Dialogs/Device/DeviceEditWidget.cpp:248
 msgid "Port"
 msgstr "포트"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:253
+#: src/Dialogs/Device/DeviceEditWidget.cpp:254
 #, fuzzy
 msgid "Engine Type"
 msgstr "타입변경"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:258
+#: src/Dialogs/Device/DeviceEditWidget.cpp:259
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:77
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:84
 msgid "Baud rate"
 msgstr "통신 속도"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:264
+#: src/Dialogs/Device/DeviceEditWidget.cpp:265
 msgid "Bulk baud rate"
 msgstr "최대 통신 속도"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:265
+#: src/Dialogs/Device/DeviceEditWidget.cpp:266
 msgid ""
 "The baud rate used for bulk transfers, such as task declaration or flight "
 "download."
 msgstr "데이터 전송에 사용하는 포트의 통신속도, 타스크 선언 데이터에 사용한다."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:270
+#: src/Dialogs/Device/DeviceEditWidget.cpp:271
 msgid "IP address"
 msgstr "IP 주소"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:280
+#: src/Dialogs/Device/DeviceEditWidget.cpp:281
 msgid "I²C bus"
 msgstr "I²C 버스"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:280
+#: src/Dialogs/Device/DeviceEditWidget.cpp:281
 msgid "Select the description or bus number that matches your configuration."
 msgstr "설정에 적합한 포트를 선택하시오."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:286
+#: src/Dialogs/Device/DeviceEditWidget.cpp:287
 msgid "I²C addr"
 msgstr "I²C 주소"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:286
+#: src/Dialogs/Device/DeviceEditWidget.cpp:287
 msgid ""
 "The I²C address that matches your configuration. This field is not used when "
 "your selection in the \"I²C bus\" field is not an I²C bus number. Assume "
 "this field is not in use if that doesn't make sense to you."
 msgstr "I2C 주소설정, I2C에 할당된 포트 번호가 아닌 경우 사용불가."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:294
+#: src/Dialogs/Device/DeviceEditWidget.cpp:295
 msgid "Pressure use"
 msgstr "압력계용도"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:294
+#: src/Dialogs/Device/DeviceEditWidget.cpp:295
 msgid ""
 "Select the purpose of this pressure sensor. This sensor measures some "
 "pressure. Here you tell the system what pressure this is and what it should "
 "be used for."
 msgstr "기압센서의 용도를 선택하시오, 어떤 수치에 적용할지 설정한다."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:308
+#: src/Dialogs/Device/DeviceEditWidget.cpp:309
 msgid "Driver"
 msgstr "드라이버"
 
 #. for a passthrough device, offer additional driver
-#: src/Dialogs/Device/DeviceEditWidget.cpp:311
+#: src/Dialogs/Device/DeviceEditWidget.cpp:312
 msgid "Passthrough device"
 msgstr "장치 무시"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:312
+#: src/Dialogs/Device/DeviceEditWidget.cpp:313
 msgid "Whether the device has a passed-through device connected."
 msgstr "장치가 연결되어도, 기기에서 연결무시."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:323
+#: src/Dialogs/Device/DeviceEditWidget.cpp:324
 msgid "Second Driver"
 msgstr "두번째 드라이버"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:325
+#: src/Dialogs/Device/DeviceEditWidget.cpp:326
 msgid "Sync. from device"
 msgstr "장치로 싱크 (데이터취득)"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:326
+#: src/Dialogs/Device/DeviceEditWidget.cpp:327
 msgid ""
 "Tells XCSoar to use settings like the MacCready value, bugs and ballast from "
 "the device."
@@ -1913,11 +1915,11 @@ msgstr ""
 "이 옵션은 XCSoar가 기기의 MacCready값, 노후도 및 밸러스트와 같은 설정을 장비"
 "에서 받을수 있도록 설정한다."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:331
+#: src/Dialogs/Device/DeviceEditWidget.cpp:332
 msgid "Sync. to device"
 msgstr "장치에 싱크 (데이터저장)"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:332
+#: src/Dialogs/Device/DeviceEditWidget.cpp:333
 msgid ""
 "Tells XCSoar to send settings like the MacCready value, bugs and ballast to "
 "the device."
@@ -1925,7 +1927,7 @@ msgstr ""
 "이 옵션은 XCSoar가 기기의 MacCready값, 노후도 및 밸러스트와 같은 설정을 장비"
 "로 보낼 수 있도록 설정한다."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:338
+#: src/Dialogs/Device/DeviceEditWidget.cpp:339
 msgid "Whether you use a K6Bt to connect the device."
 msgstr "K6Bt로 연결하는 경우 설정을 켠다."
 
@@ -2105,7 +2107,7 @@ msgstr "단위"
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:77
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:82
 #: src/Dialogs/Settings/dlgConfiguration.cpp:82
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:54
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:53
 #, no-c-format
 msgid "Waypoints"
 msgstr "웨이포인트"
@@ -2191,7 +2193,7 @@ msgstr "장애물 데이터베이스"
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:60
 #: src/Dialogs/Settings/dlgConfiguration.cpp:148
 #: src/InfoBoxes/Content/Altitude.cpp:28 src/InfoBoxes/Content/MacCready.cpp:31
-#: src/InfoBoxes/Content/Places.cpp:99
+#: src/InfoBoxes/Content/Places.cpp:100
 #, no-c-format
 msgid "Setup"
 msgstr "기타"
@@ -2225,8 +2227,8 @@ msgid "Vertical Range"
 msgstr "팀(팀거리)"
 
 #: src/Dialogs/Device/Stratux/ConfigurationDialog.cpp:51
-#: src/Dialogs/Settings/dlgConfiguration.cpp:353
-msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
+#, fuzzy
+msgid "Changes to configuration saved. Restart XCSoar to apply changes."
 msgstr "설정저장: XCSoar를 재시작하세요."
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:38
@@ -2286,7 +2288,8 @@ msgid "Demo"
 msgstr "데모"
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:132
-msgid "Set new audio scheme?  Old values will be lost."
+#, fuzzy
+msgid "Set new audio scheme? Old values will be lost."
 msgstr "새로운 오디오로 설정? 기존값은 지워진다."
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:253
@@ -2298,15 +2301,17 @@ msgid "TE vario"
 msgstr "TE 바리오"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:82
+#, fuzzy
 msgid ""
-"This produces a fake TE vario gross vertical velocity.  It can be used when "
-"in circling mode to demonstrate the lift tones.  When not in circling mode, "
+"This produces a fake TE vario gross vertical velocity. It can be used when "
+"in circling mode to demonstrate the lift tones. When not in circling mode, "
 "set this to a realistic negative value so speed command tones are produced."
 msgstr "가상의 TE 바리오 값: 임의의 상승음과 싱크경고음을 확인할 수 있다."
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:89
+#, fuzzy
 msgid ""
-"This produces a fake airspeed.  It can be used when not in circling mode to "
+"This produces a fake airspeed. It can be used when not in circling mode to "
 "demonstrate the speed command tones."
 msgstr "가상의 대기속도: 속도 시뮬레이션을 할 수 있다."
 
@@ -2779,7 +2784,8 @@ msgid "Circling wind"
 msgstr "써클링 바람"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:41
-msgid "Estimate the wind vector while circling.  Requires only a GPS."
+#, fuzzy
+msgid "Estimate the wind vector while circling. Requires only a GPS."
 msgstr "써클링하는 동안 바람 방향을 계산한다.   GPS만 사용해도 계산가능하다."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:44
@@ -2787,7 +2793,8 @@ msgid "ZigZag wind"
 msgstr "지그재그 바람측정"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:45
-msgid "Estimate the wind vector during glides.  Requires an airspeed sensor."
+#, fuzzy
+msgid "Estimate the wind vector during glides. Requires an airspeed sensor."
 msgstr "활공하는 동안 바람 방향을 계산한다.   대기속도센서가 필요하다."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:48
@@ -2873,10 +2880,10 @@ msgid "Bugs"
 msgstr "노후도"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:287
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "How clean the glider is. Set to 0% for clean, larger numbers as the wings "
-"pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."
+"pick up bugs or get wet. 50% indicates the glider's sink rate is doubled."
 msgstr ""
 "기체의 노후도: (0% ~ 50%), 0%는 신품이며 50%로 설정하면, 하강(sink)은 두배로 "
 "증가해서 계산한다."
@@ -2887,10 +2894,10 @@ msgid "QNH"
 msgstr "현재해면기압"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:296
-#: src/InfoBoxes/Panel/AltitudeSetup.cpp:56
+#, fuzzy
 msgid ""
-"Area pressure for barometric altimeter calibration.  This is set "
-"automatically if Vega connected."
+"Area pressure for barometric altimeter calibration. This is set "
+"automatically if Vega is connected."
 msgstr "기압보정(고도계), Vega가 연결되어 있으면 자동으로 설정된다."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:311
@@ -2898,9 +2905,10 @@ msgid "Max. temp."
 msgstr "최고온도"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:312
+#, fuzzy
 msgid ""
-"Set to forecast ground temperature.  Used by convection estimator "
-"(temperature trace page of Analysis dialog)"
+"Set to forecast ground temperature. Used by convection estimator "
+"(temperature trace page of Analysis dialog)."
 msgstr ""
 "지상예보기온: 입력하면, 고도에 따른 온도변화를 계산해서 보여준다. (정보창-예"
 "상온도)"
@@ -3059,6 +3067,10 @@ msgstr "고급설정"
 msgid "Configuration"
 msgstr "설정"
 
+#: src/Dialogs/Settings/dlgConfiguration.cpp:353
+msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
+msgstr "설정저장: XCSoar를 재시작하세요."
+
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:227
 #: src/InfoBoxes/InfoBoxManager.cpp:201
 msgid "InfoBox"
@@ -3078,16 +3090,16 @@ msgstr "복사"
 msgid "Paste Set"
 msgstr "붙여넣기"
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:317
-msgid "Overwrite all infoboxes in this set?"
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:318
+msgid "Overwrite all InfoBoxes in this set?"
 msgstr ""
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:317
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:318
 #, fuzzy
 msgid "InfoBox paste set"
 msgstr "정보창 붙이기"
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:386
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:387
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:88
 msgid "Invalid"
 msgstr "유효하지 않음"
@@ -3098,7 +3110,7 @@ msgstr "선수 ID"
 
 #: src/Dialogs/Traffic/TrafficList.cpp:346
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:174
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:347
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:348
 #, no-c-format
 msgid "Map"
 msgstr "지도"
@@ -3477,6 +3489,28 @@ msgstr "하강율(폴라W)"
 msgid "Download"
 msgstr "내려받기"
 
+#: src/Dialogs/MultiFilePicker.cpp:80
+#: src/Dialogs/Task/OptionalStartsDialog.cpp:38
+#: src/Dialogs/Task/TaskPointDialog.cpp:223
+#: src/Dialogs/Weather/NOAAList.cpp:100 src/Dialogs/Weather/NOAAList.cpp:213
+#: src/Dialogs/Weather/NOAADetails.cpp:49
+#: src/Dialogs/Weather/NOAADetails.cpp:100
+msgid "Remove"
+msgstr "제거"
+
+#: src/Dialogs/MultiFilePicker.cpp:81
+msgid "Ok"
+msgstr ""
+
+#: src/Dialogs/MultiFilePicker.cpp:107
+#, fuzzy
+msgid "Add File"
+msgstr "파일"
+
+#: src/Dialogs/MultiFilePicker.cpp:108
+msgid "Select a file to add or download a new one."
+msgstr ""
+
 #: src/Dialogs/dlgInfoBoxAccess.cpp:75 src/Dialogs/dlgInfoBoxAccess.cpp:91
 msgid "Switch InfoBox"
 msgstr "정보창 변경"
@@ -3486,9 +3520,10 @@ msgid "File"
 msgstr "파일"
 
 #: src/Dialogs/ReplayDialog.cpp:50
+#, fuzzy
 msgid ""
-"Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (."
-"nmea), or if blank, runs the demo."
+"Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file "
+"(.nmea). Leave blank to run the demo."
 msgstr ""
 "다시보기 파일을 선택: 지원파일은 (.igc), (.nmea), 데이터가 없으면 데모를 실행"
 "한다."
@@ -3666,11 +3701,11 @@ msgid "Set MacCready"
 msgstr "맥크레디(설정)"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:138
+#, fuzzy
 msgid ""
-"Adjusts MC value used in the calculator.  Use this to determine the effect "
-"on estimated task time due to changes in conditions.  This value will not "
-"affect the main computer's setting if the dialog is exited with the Cancel "
-"button."
+"Adjusts MC value used in the calculator. Use this to determine the effect on "
+"estimated task time due to changes in conditions. This value will not affect "
+"the main computer's setting if the dialog is exited with the Cancel button."
 msgstr ""
 "계산할때 사용하는 맥크레디값을 조정: 조건의 변화가 타스크 시간에 미치는 영향"
 "을 조절해주기 위해 사용한다. 취소버튼으로 종료할 경우, 글라이더 컴퓨터에 영향"
@@ -3681,12 +3716,12 @@ msgid "AAT range"
 msgstr "AAT레인지"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:150
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "For AAT tasks, this value tells you how far based on the targets of your "
 "task you will fly relative to the minimum and maximum possible tasks. -100% "
-"indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% "
-"is maximum AAT distance."
+"indicates the minimum AAT distance. 0% is the nominal AAT distance. +100% is "
+"the maximum AAT distance."
 msgstr ""
 "AAT 타스크는, 가능한 최소 및 최대 비행 거리 예상이 중요하다. -100%는 최소거"
 "리, 0%는 일반거리, +100%는 최대 거리로 설정한다."
@@ -3709,12 +3744,13 @@ msgid "Cruise efficiency"
 msgstr "순항효율"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:165
+#, fuzzy
 msgid ""
-"Efficiency of cruise.  100 indicates perfect MacCready performance, greater "
+"Efficiency of cruise. 100 indicates perfect MacCready performance; greater "
 "than 100 indicates better than MacCready performance is achieved through "
-"flying in streets.  Less than 100 is appropriate if you fly considerably off-"
-"track.  This value estimates your cruise efficiency according to the current "
-"flight history with the set MC value.  Calculation begins after task is "
+"flying in streets. Less than 100 is appropriate if you fly considerably off-"
+"track. This value estimates your cruise efficiency according to the current "
+"flight history with the set MC value. Calculation begins after task is "
 "started."
 msgstr ""
 "순항효율: 수치 100 은 계산된 맥크레디 값으로 완벽하게 낭비없이 진행 한 것이"
@@ -4144,10 +4180,11 @@ msgid "Airspace display"
 msgstr "공역표시"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:159
+#, fuzzy
 msgid ""
-"Controls filtering of airspace for display and warnings.  The airspace "
-"filter button also allows filtering of display and warnings independently "
-"for each airspace class."
+"Controls filtering of airspace for display and warnings. The airspace filter "
+"button also allows filtering of display and warnings independently for each "
+"airspace class."
 msgstr ""
 "공역이나, 위험지역을 표시하는 것을 선택한다. 공역의 종류별로 보이기/숨기기의 "
 "설정이 가능하다."
@@ -4250,165 +4287,167 @@ msgstr "공역투명도"
 msgid "If enabled, then airspaces are filled transparently."
 msgstr "선택하면 공역을 투명하게 채움."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:27
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:28
 #, no-c-format
 msgid "Disable final glide bar."
 msgstr "골러시(FinalGlide)바를 표시하지 않음."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:29
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:30
 #, no-c-format
 msgid "Always show final glide bar."
 msgstr "골 러시 바를 항상 표시."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:31
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:32
 #, no-c-format
 msgid "Show final glide bar if approaching final glide range."
 msgstr "결승점(Goal)이 목표가 되면 골 러시 바를 표시."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:37
-#, no-c-format
-msgid "Auto (follow infoboxes)"
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:38
+#, fuzzy, no-c-format
+msgid "Auto (follow InfoBoxes)"
 msgstr "자동"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:39
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:82
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:40
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:83
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:122
 #, fuzzy, no-c-format
 msgid "Top left"
 msgstr "왼쪽 위"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:41
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:85
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:42
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:86
 #, fuzzy, no-c-format
 msgid "Top right"
 msgstr "오른쪽 위"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:43
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:70
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:44
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:71
 #, no-c-format
 msgid "Bottom left"
 msgstr "좌측 하단"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:45
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:76
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:46
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:77
 #, no-c-format
 msgid "Bottom right"
 msgstr "우측 하단"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:47
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:88
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:48
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:89
 #, fuzzy, no-c-format
 msgid "Center top"
 msgstr "가운데 위"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:49
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:50
 #, fuzzy, no-c-format
 msgid "Center bottom"
 msgstr "가운데 아래"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:51
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:91
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:52
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:92
 #, fuzzy, no-c-format
-msgid "Top left (avoid infoboxes)"
+msgid "Top left (avoid InfoBoxes)"
 msgstr "좌측 하단 (정보창 옆)"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:53
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:94
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:54
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:95
 #, fuzzy, no-c-format
-msgid "Top right (avoid infoboxes)"
+msgid "Top right (avoid InfoBoxes)"
 msgstr "우측 하단 (정보창 옆)"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:55
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:73
-#, no-c-format
-msgid "Bottom left (avoid infoboxes)"
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:56
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:74
+#, fuzzy, no-c-format
+msgid "Bottom left (avoid InfoBoxes)"
 msgstr "좌측 하단 (정보창 옆)"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:57
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:79
-#, no-c-format
-msgid "Bottom right (avoid infoboxes)"
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:58
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:80
+#, fuzzy, no-c-format
+msgid "Bottom right (avoid InfoBoxes)"
 msgstr "우측 하단 (정보창 옆)"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:59
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:97
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:60
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:98
 #, fuzzy, no-c-format
-msgid "Center top (avoid infoboxes)"
+msgid "Center top (avoid InfoBoxes)"
 msgstr "좌측 하단 (정보창 옆)"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:61
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:62
 #, fuzzy, no-c-format
-msgid "Center bottom (avoid infoboxes)"
+msgid "Center bottom (avoid InfoBoxes)"
 msgstr "좌측 하단 (정보창 옆)"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:69
 #, no-c-format
 msgid "Disable thermal assistant."
 msgstr "써멀레이더 끄기."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:71
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:72
 #, no-c-format
 msgid "Show thermal assistant in bottom left."
 msgstr "왼쪽 아래에 써멀레이더 표시."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:74
-#, no-c-format
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:75
+#, fuzzy, no-c-format
 msgid ""
-"Show thermal assistant in bottom left, above/to right of infoboxes (if "
-"there)."
+"Show thermal assistant in bottom left, above or to the right of InfoBoxes "
+"(if present)."
 msgstr ""
 "써멀 레이더를 왼쪽 하단에 표시, 정보창이 있는 경우 옆에 써멀레이더를 표시한"
 "다."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:77
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:78
 #, no-c-format
 msgid "Show thermal assistant in bottom right."
 msgstr "오른쪽 아래에 써멀레이더 표시."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:80
-#, no-c-format
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:81
+#, fuzzy, no-c-format
 msgid ""
-"Show thermal assistant in bottom right above/to left of infoboxes (if there)."
+"Show thermal assistant in bottom right, above or to the left of InfoBoxes "
+"(if present)."
 msgstr ""
 "써멀 레이더를 오른쪽 하단에 표시, 정보창이 있는 경우 옆에 써멀레이더를 표시한"
 "다."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:83
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:84
 #, fuzzy, no-c-format
-msgid "Show thermal assistant in top left"
+msgid "Show thermal assistant in top left."
 msgstr "왼쪽 아래에 써멀레이더 표시."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:86
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:87
 #, fuzzy, no-c-format
-msgid "Show thermal assistant in top right"
+msgid "Show thermal assistant in top right."
 msgstr "오른쪽 아래에 써멀레이더 표시."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:89
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:90
 #, fuzzy, no-c-format
-msgid "Show thermal assistant in center top"
+msgid "Show thermal assistant in center top."
 msgstr "왼쪽 아래에 써멀레이더 표시."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:92
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:93
 #, fuzzy, no-c-format
-msgid "Show thermal assistant in top left (avoid infoboxes)"
+msgid "Show thermal assistant in top left (avoid InfoBoxes)."
 msgstr ""
 "써멀 레이더를 왼쪽 하단에 표시, 정보창이 있는 경우 옆에 써멀레이더를 표시한"
 "다."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:95
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:96
 #, fuzzy, no-c-format
-msgid "Show thermal assistant in top right (avoid infoboxes)"
+msgid "Show thermal assistant in top right (avoid InfoBoxes)."
 msgstr ""
 "써멀 레이더를 오른쪽 하단에 표시, 정보창이 있는 경우 옆에 써멀레이더를 표시한"
 "다."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:98
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:99
 #, fuzzy, no-c-format
-msgid "Show thermal assistant in center top (avoid infoboxes)"
+msgid "Show thermal assistant in center top (avoid InfoBoxes)."
 msgstr ""
 "써멀 레이더를 왼쪽 하단에 표시, 정보창이 있는 경우 옆에 써멀레이더를 표시한"
 "다."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:135
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:136
 msgid ""
 "This enables the display of the FLARM radar gauge. The track bearing of the "
 "target relative to the track bearing of the aircraft is displayed as an "
@@ -4419,11 +4458,11 @@ msgstr ""
 "FLARM표시: 다른 기체가 화살표로 표시되며, 위 또는 아래를 가리키는 삼각형은 대"
 "상의 상대적 고도를 나타낸다. 대상의 색상은 근접위협 수준을 보여준다."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:138
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:139
 msgid "Auto close FLARM"
 msgstr "FLARM 자동종료"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:139
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:140
 msgid ""
 "Setting this to \"On\" will automatically close the FLARM dialog if there is "
 "no traffic. \"Off\" will keep the dialog open even without current traffic."
@@ -4431,36 +4470,36 @@ msgstr ""
 "설정을 켜면 근처에 트래픽이 없을경우 FLARM알림은 자동으로 사라지며, 끄기로 선"
 "택하면 항상 표시된다."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:143
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:144
 msgid "FLARM display"
 msgstr "FLARM 보기"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:143
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:144
 msgid "Choose a location for the FLARM display."
 msgstr "FLARM정보의 위치를 선택."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:149
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:150
 msgid ""
 "Enable and select the position of the thermal assistant when overlayed on "
 "the main screen."
 msgstr ""
 "메인 화면에 써멀 레이더가 겹쳐진 경우, 써멀레이더의 화면겹침을 허용한다."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:154
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:155
 msgid "Thermal band"
 msgstr "써멀 밴드"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:155
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:156
 msgid ""
 "This enables the display of the thermal profile (climb band) display on the "
 "map."
 msgstr "화면에 써멀 상승 밴드를 지도상에 표시한다."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:158
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:159
 msgid "Final glide bar"
 msgstr "골러시바(Final Glide)"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:159
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:160
 msgid ""
 "If set to \"On\" the final glide will always be shown, if set to \"Auto\" it "
 "will be shown when approaching the final glide possibility."
@@ -4468,35 +4507,47 @@ msgstr ""
 "골러시(마지막 목표가 Goal 일때, 골에 최대한 빠르게 도착하기 위한 안내막대를 "
 "표시), 자동으로 설정하면, 골 러시가 가능한 위치에서 부터 표시한다."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:165
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:166
 msgid "Final glide bar MC0"
 msgstr "골러시바(MC0)"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:166
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:167
+#, fuzzy
 msgid ""
-"If set to ON the final glide bar will show a second arrow indicating the "
+"If set to \"On\" the final glide bar will show a second arrow indicating the "
 "required height to reach the final waypoint at MC zero."
 msgstr ""
 "골러시바: 두번째 고도보조막대를 화면에 표시. 골에 도착하는데 필요한 고도보조"
 "막대이며, 맥크레디0으로 계산한다."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:175
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:176
 msgid "Vario bar"
 msgstr "바리오바"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:176
-msgid "If set to ON the vario bar will be shown"
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:177
+#, fuzzy
+msgid "If set to \"On\" the vario bar will be shown."
 msgstr "바리오바 표시"
+
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:180
+msgid "No Position Target Distance Ring"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:181
+msgid ""
+"This parameter enables or disables the No Position Target Distance Ring in "
+"Flarm Radar"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:41
 msgid "Speed arrows"
 msgstr "속도 화살표"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:42
+#, fuzzy
 msgid ""
-"Whether to show speed command arrows on the vario gauge.  When shown, in "
-"cruise mode, arrows point up to command slow down; arrows point down to "
-"command speed up."
+"Whether to show speed command arrows on the vario gauge. In cruise mode, "
+"arrows pointing up command slow down; arrows pointing down command speed up."
 msgstr ""
 "아날로그 바리오에 표시되는 속도보조화살표: 순항중에 아래쪽 화살표의 경우 속도"
 "를 줄이고, 위쪽으로 표시될 경우 속도를 올리면 적절한 활공값으로 비행한다."
@@ -4506,8 +4557,9 @@ msgid "Show average"
 msgstr "평균상승 보기"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:48
+#, fuzzy
 msgid ""
-"Whether to show the average climb rate.  In cruise mode, this switches to "
+"Whether to show the average climb rate. In cruise mode, this switches to "
 "showing the average netto airmass rate."
 msgstr "평균상승: 순항모드에서 기단의 평균상승률을 보여준다."
 
@@ -4548,9 +4600,10 @@ msgid "Averager needle"
 msgstr "평균 표시 화살표"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:66
+#, fuzzy
 msgid ""
-"If true, the vario gauge will display a hollow averager needle.  During "
-"cruise, this needle displays the average netto value.  During circling, this "
+"If true, the vario gauge will display a hollow averager needle. During "
+"cruise, this needle displays the average netto value. During circling, this "
 "needle displays the average gross value."
 msgstr ""
 "바리오 평균 표시 화살표: 아날로그바리오에 < 마크로 표시 - 순항중일 경우 활공"
@@ -4561,10 +4614,11 @@ msgid "Thermal Averager needle"
 msgstr "평균 표시 막대"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:73
+#, fuzzy
 msgid ""
 "If true, the vario gauge will display a thermal averager needle instead of "
-"current climb rate needle.  During cruise, this needle displays the last "
-"thermal average netto value.  During circling, this needle displays the "
+"the current climb-rate needle. During cruise, this needle displays the last "
+"thermal average netto value. During circling, this needle displays the "
 "average net value."
 msgstr ""
 "바리오 평균 표시 막대: 아날로그바리오에 < 마크로 표시 - 순항중일 경우 활공중"
@@ -4576,11 +4630,11 @@ msgid "Final glide"
 msgstr "골 러시(FinalGlide)"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:48
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Adjusts MC for fastest arrival.  For contest sprint tasks, the MacCready is "
-"adjusted in order to cover the greatest distance in the remaining time and "
-"reach the finish height."
+"Adjusts MC for the fastest arrival. For contest sprint tasks, the MacCready "
+"is adjusted in order to cover the greatest distance in the remaining time "
+"and reach the finish height."
 msgstr ""
 "빠른 도착을 위한 맥크레디. 남은 시간 대비 골에 가장 빨리 도착 할 수 있게 조절"
 "한다."
@@ -4965,14 +5019,9 @@ msgstr "중앙"
 msgid "Center the status message boxes."
 msgstr "알림 메세지 위치가 가운데."
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:122
-#, no-c-format
-msgid "Topleft"
-msgstr "왼쪽 위"
-
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:123
-#, no-c-format
-msgid "Show status message boxes ina the top left corner."
+#, fuzzy, no-c-format
+msgid "Show status message boxes in the top left corner."
 msgstr "알림메세지 위치가 왼쪽위."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:129
@@ -5074,8 +5123,9 @@ msgid "Colored InfoBoxes"
 msgstr "컬러 정보창"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:201
+#, fuzzy
 msgid ""
-"If true, certain InfoBoxes will have coloured text.  For example, the active "
+"If true, certain InfoBoxes will have coloured text. For example, the active "
 "waypoint InfoBox will be blue when the glider is above final glide."
 msgstr ""
 "정보창이 특수상황에서 컬러로 표시: 예를 들어 기본 웨이포인트의 색상은 파란색"
@@ -5086,21 +5136,23 @@ msgid "InfoBox border"
 msgstr "정보창 경계"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:212
-msgid "Show Menubutton"
+#, fuzzy
+msgid "Show Menu button"
 msgstr "메뉴버튼 보기"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:212
-msgid "Show the Menubutton"
+#, fuzzy
+msgid "Show the Menu button"
 msgstr "메뉴버튼보기: 나침반이 가려질 수 있음"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:215
 #, fuzzy
-msgid "Show Zoombutton"
+msgid "Show Zoom button"
 msgstr "메뉴버튼 보기"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:215
 #, fuzzy
-msgid "Show the Zoombutton"
+msgid "Show the Zoom button"
 msgstr "메뉴버튼보기: 나침반이 가려질 수 있음"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:220
@@ -5331,75 +5383,81 @@ msgstr "페이지별 고정줌"
 msgid "Maintain one map zoom level on each page."
 msgstr "각 페이지별로 지도 확대/축소 범위를 고정한다."
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:180
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:175
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:352
+#, no-c-format
+msgid "Map (north-up)"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 msgid "Main area"
 msgstr "메인화면"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:182
 msgid "Specifies what should be displayed in the main area."
 msgstr "주 정보창에 보이는 정보를 선택한다."
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:186
-#, no-c-format
-msgid "Displays either the Circling, Cruise or Final glide infoxboxes"
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
+#, fuzzy, no-c-format
+msgid "Displays either the Circling, Cruise, or Final glide InfoBoxes."
 msgstr "써클링, 순항모드 혹은 골러시정보창을 상황에 맞게 자동변경한다"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #, no-c-format
 msgid "Show fullscreen (no InfoBoxes)"
 msgstr "전체화면 보기 (정보창 없음)"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:191
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:367
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:192
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:372
 msgid "InfoBoxes"
 msgstr "정보창 구성"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:192
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:193
 msgid "Specifies which InfoBoxes should be displayed on this page."
 msgstr "이 페이지의 정보창을 설정한다."
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:196
-#, no-c-format
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:197
+#, fuzzy, no-c-format
 msgid ""
-"For cruise mode.  Displayed when 'Auto' is selected and ship is below final "
-"glide altitude"
+"For cruise mode. Displayed when 'Auto' is selected and glider is below final "
+"glide altitude."
 msgstr "순항 모드: 자동일때, 골러시 모드 고도보다 낮으면 보이는 설정이다"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:197
-#, no-c-format
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:198
+#, fuzzy, no-c-format
 msgid ""
-"For circling mode.  Displayed when 'Auto' is selected and ship is circling"
+"For circling mode. Displayed when 'Auto' is selected and glider is circling."
 msgstr "써클링 모드, 자동변경일 때,  써클링 할 때의 설정이다"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:198
-#, no-c-format
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:199
+#, fuzzy, no-c-format
 msgid ""
-"For final glide mode.  Displayed when 'Auto' is selected and ship is above "
-"final glide altitude"
+"For final glide mode. Displayed when 'Auto' is selected and glider is above "
+"final glide altitude."
 msgstr ""
 "골러시 모드(FinalGlide): 자동설정에서 골러시 고도 보다 위일때 보이는 설정이다"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:200
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:201
 #, no-c-format
 msgid "A custom InfoBox set"
 msgstr "사용자 설정 정보창"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:218
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:219
 #, no-c-format
 msgid "Nothing"
 msgstr "없음"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:219
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:383
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:220
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:388
 #, no-c-format
 msgid "Cross section"
 msgstr "그래프"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:222
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:223
 msgid "Bottom area"
 msgstr "하부창"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:223
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:224
 msgid "Specifies what should be displayed below the main area."
 msgstr "화면 아래에 표시되는 정보를 선택한다."
 
@@ -5442,9 +5500,10 @@ msgid "Route ceiling"
 msgstr "경로 상승한계"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:104
+#, fuzzy
 msgid ""
 "When enabled, route planning climbs are limited to ceiling defined by "
-"greater of current aircraft altitude plus 500 m and the thermal ceiling.  If "
+"greater of current aircraft altitude plus 500 m and the thermal ceiling. If "
 "disabled, climbs are unlimited."
 msgstr ""
 "상승한계치 설정: 경로를 계산할때, 현재의 기체고도에서 500m만 더 상승할수 있"
@@ -5498,8 +5557,8 @@ msgid "Safety MC"
 msgstr "안전 맥크레디"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:131
-#, no-c-format
-msgid "Uses safety MacCready value"
+#, fuzzy, no-c-format
+msgid "Uses safety MacCready value."
 msgstr "안전 맥크레디값을 사용하여 계산한다"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:135
@@ -5681,42 +5740,44 @@ msgstr ""
 "면 무보정, 1.0으로 설정하면 현재 고도(최대 상승고도를 포함)에 따라 MC를 선형"
 "으로 조정한다. 특별히 고려하지 않는다면 0.3을 권장한다."
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:49
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:48
 msgid "Map database"
 msgstr "지도파일"
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:50
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:49
 msgid ""
 "The name of the file (.xcm) containing terrain, topography, and optionally "
 "waypoints, their details and airspaces."
 msgstr ""
 "지도파일(.xcm)을 선택하시오. 지형도와 지역이름에 대한 정보가 포함되어 있음."
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:55
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:54
+#, fuzzy
 msgid ""
-"Primary waypoints file.  Supported file types are Cambridge/WinPilot files (."
-"dat), Zander files (.wpz) or SeeYou files (.cup)."
+"Primary waypoints file. Supported file types are Cambridge/WinPilot files "
+"(.dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
-"주 웨이포인트 파일을 선택하시오. 지원 파일은 Cambridge/WinPilot files (."
-"dat), Zander files (.wpz), SeeYou files (.cup)."
+"주 웨이포인트 파일을 선택하시오. 지원 파일은 Cambridge/WinPilot files "
+"(.dat), Zander files (.wpz), SeeYou files (.cup)."
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:60
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:59
 msgid "More waypoints"
 msgstr "추가웨이포인트"
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:61
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:60
+#, fuzzy
 msgid ""
-"Secondary waypoints file.  This may be used to add waypoints for a "
+"Secondary waypoints file. This may be used to add waypoints for a "
 "competition."
 msgstr ""
 "추가 웨이포인트파일: (대회를 참가하거나 할때)기본 웨이포인트 위에 덧씌울 수 "
 "있다."
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:66
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:65
 msgid "Watched waypoints"
 msgstr "특별웨이포인트"
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:67
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:66
 msgid ""
 "Waypoint file containing special waypoints for which additional computations "
 "like calculation of arrival height in map display always takes place. Useful "
@@ -5726,28 +5787,11 @@ msgstr ""
 "높이의 계산이나, 특별한 표지에 활용되는 웨이포인트 파일: 알려진 써멀, 상승포"
 "인트, 유의할 곳 등을 넣는데 유용하다."
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:74
-#: Data/Input/default.xci:901
-msgid "Airspaces"
-msgstr "공역파일"
-
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:74
-msgid "The file name of the primary airspace file."
-msgstr "공역 정보가 담긴 파일을 추가하시오."
-
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:78
-msgid "More airspaces"
-msgstr "추가공역파일"
-
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:78
-msgid "The file name of the secondary airspace file."
-msgstr "추가 공역파일을 선택하시오."
-
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:83
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:73
 msgid "Waypoint details"
 msgstr "웨이포인트(개요)"
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:84
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:74
 msgid ""
 "The file may contain extracts from enroute supplements or other contributed "
 "information about individual waypoints and airfields."
@@ -5755,11 +5799,23 @@ msgstr ""
 "이 파일에는 개별 웨이포인트 및 비행장에 대한 보충설명 또는 기타정보를 추가할 "
 "수 있다."
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:90
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:80
+#, fuzzy
+msgid "Selected Airspace Files"
+msgstr "공역선택"
+
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:81
+msgid ""
+"List of active airspace files. Use the Add and Remove buttons to activate or "
+"deactivate airspace files respectively. Supported file types are: Openair "
+"(.txt /.air), and Tim Newport-Pearce (.sua)."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:88
 msgid "FLARM Device Database"
 msgstr "FLARM 장비 데이터베이스"
 
-#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:91
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:89
 msgid ""
 "The name of the file containing information about registered FLARM devices."
 msgstr "등록 된 FLARM 장치에 대한 정보가 포함 된 파일의 이름."
@@ -6060,8 +6116,9 @@ msgid "Start max. speed margin"
 msgstr "스타트 최대속도 마진"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:54
+#, fuzzy
 msgid ""
-"Maximum speed above maximum start speed to tolerate.  Set to 0 for no "
+"Maximum speed above maximum start speed to tolerate. Set to 0 for no "
 "tolerance."
 msgstr ""
 "스타트 최대 속도에 추가되는 여유 속도를 설정한다. 0으로 설정하면 여유속도가 "
@@ -6074,21 +6131,23 @@ msgstr "스타트 최고고도"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:63
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:235
+#, fuzzy
 msgid ""
 "Maximum height based on start height reference (AGL or MSL) while starting "
-"the task.  Set to 0 for no limit."
+"the task. Set to 0 for no limit."
 msgstr ""
-"스타트 지점의 최고고도(AGL:Altitude Above Ground Level:대지고도 혹은 MSL:"
-"Mean Sea Level 평균해발고도)를 설정한다. 제한이 없는 경우 0 로 설정한다(시작"
-"포인트 고도가 특정고도 이하로 규정되었을 때 필요하다)."
+"스타트 지점의 최고고도(AGL:Altitude Above Ground Level:대지고도 혹은 "
+"MSL:Mean Sea Level 평균해발고도)를 설정한다. 제한이 없는 경우 0 로 설정한다"
+"(시작포인트 고도가 특정고도 이하로 규정되었을 때 필요하다)."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:69
 msgid "Start max. height margin"
 msgstr "스타트 최고고도 마진"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:70
+#, fuzzy
 msgid ""
-"Maximum height above maximum start height to tolerate.  Set to 0 for no "
+"Maximum height above maximum start height to tolerate. Set to 0 for no "
 "tolerance."
 msgstr ""
 "스타트 최대 고도에 추가되는 여유 고도를 설정한다. 여유고도가 없으면 0으로 설"
@@ -6125,9 +6184,10 @@ msgstr "최종골 최저고도"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:93
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:252
+#, fuzzy
 msgid ""
 "Minimum height based on finish height reference (AGL or MSL) while finishing "
-"the task.  Set to 0 for no limit."
+"the task. Set to 0 for no limit."
 msgstr ""
 "골포인트의 최고고도(AGL:Altitude Above Ground Level:대지고도 혹은 MSL:Mean "
 "Sea Level 평균해발고도)를 설정한다. 제한이 없는 경우 0 로 설정하면 된다(골포"
@@ -6163,7 +6223,6 @@ msgid "PEV start window"
 msgstr "PEV 스타트 윈도우"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:116
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:265
 msgid ""
 "Number of minutes start remains open after Pilot Event and PEV wait time.0 "
 "means start will never close after it opens."
@@ -6240,8 +6299,9 @@ msgid "Optimisation margin"
 msgstr "최적 마진"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:182
+#, fuzzy
 msgid ""
-"Safety margin for AAT task optimisation.  Optimisation seeks to complete the "
+"Safety margin for AAT task optimisation. Optimisation seeks to complete the "
 "task at the minimum time plus this margin time."
 msgstr ""
 "AAT 타스크 최적화를 위한 안전 마진. 안전한 타스크 종료를 위해 주어진 최소 시"
@@ -6285,10 +6345,10 @@ msgid ""
 msgstr "OLC Classic과 OLC FAI의 조합, Classic 점수는 FAI 점수에 30% 가산된다."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:90
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "PG online contest with different track values: Free flight - 1 km = 1.0 "
-"point; flat trianlge - 1 km = 1.2 p; FAI triangle - 1 km = 1.4 p."
+"point; flat triangle - 1 km = 1.2 p; FAI triangle - 1 km = 1.4 p."
 msgstr ""
 "패러글라이딩 온라인콘테스트(PG online contest)채점 규칙: 자유비행 1km = 1.0"
 "점, 얇은트라이앵글 1km = 1.2점, FAI트라이앵글 1km = \n"
@@ -6330,11 +6390,11 @@ msgstr ""
 "한다."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:103
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "A start point, one turn point and a finish point are chosen from the flight "
 "path such that the distance between the start point and the turn point is "
-"maximized"
+"maximized."
 msgstr ""
 "스타트 포인트와 턴포인트 사이의 거리가 최대가 되도록 타스크 경로에서 스타트포"
 "인트, 첫번째 턴포인트, 피니시포인트를 설정한다"
@@ -6390,8 +6450,8 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:136
 msgid ""
-"Show helpers for Argentinean Federation \"95% distance\" rule.The AAT "
-"Distance Around Target infobox will show projected distance vs max. and "
+"Show helpers for Argentinean Federation \"95% distance\" rule. The AAT "
+"Distance Around Target InfoBox will show projected distance vs. maximum and "
 "change colors as you approach 95%."
 msgstr ""
 
@@ -6536,8 +6596,9 @@ msgid "Terrain contrast"
 msgstr "지면 선명도"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:231
+#, fuzzy
 msgid ""
-"Defines the amount of Phong shading in the terrain rendering.  Use large "
+"Defines the amount of Phong shading in the terrain rendering. Use large "
 "values to emphasise terrain slope, smaller values if flying in steep "
 "mountains."
 msgstr ""
@@ -6549,8 +6610,9 @@ msgid "Terrain brightness"
 msgstr "지면 밝기"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:238
+#, fuzzy
 msgid ""
-"Defines the brightness (whiteness) of the terrain rendering.  This controls "
+"Defines the brightness (whiteness) of the terrain rendering. This controls "
 "the average illumination of the terrain."
 msgstr "지면 밝기: 평균적인 지형의 휘도를 설정."
 
@@ -6590,8 +6652,9 @@ msgid "Aircraft/Wind speed"
 msgstr "기체/바람 속도"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:131
+#, fuzzy
 msgid ""
-"Units used for airspeed and ground speed.  A separate unit is available for "
+"Units used for airspeed and ground speed. A separate unit is available for "
 "task speeds."
 msgstr "속도 단위: 타스크 속도는 별도로 설정가능."
 
@@ -6671,8 +6734,9 @@ msgid "UTC offset"
 msgstr "UTC 오프셋"
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:66
+#, fuzzy
 msgid ""
-"The UTC offset field allows the UTC local time offset to be specified.  The "
+"The UTC offset field allows the UTC local time offset to be specified. The "
 "local time is displayed below in order to make it easier to verify the "
 "correct offset has been entered."
 msgstr "UTC에 대한 현지시간 보정값을 입력한다. 한국은 UTC + 9h이다."
@@ -7003,9 +7067,10 @@ msgid "Server"
 msgstr "서버"
 
 #: src/Dialogs/Settings/Panels/CloudConfigPanel.cpp:64
+#, fuzzy
 msgid ""
-"Participate in the XCSoar Cloud field test?  This transmits your location, "
-"thermal/wave locations and other weather data to our test server."
+"Participate in the XCSoar Cloud field test? This transmits your location, "
+"thermal and wave locations and other weather data to our test server."
 msgstr ""
 "XCSoar의 클라우드 필드테스트에 참여하시겠습니까? 이 테스트는 비행중에 얻어진 "
 "날씨와 바람, 열에 대한 정보를 테스트 서버로 전송합니다."
@@ -7016,8 +7081,8 @@ msgstr "서버에 저장된 열의 위치를 확인하고 표시한다."
 
 #: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:67
 msgid ""
-"Show thermal locations downloaded from Thermal Information Map (thermalmap."
-"info)."
+"Show thermal locations downloaded from Thermal Information Map "
+"(thermalmap.info)."
 msgstr ""
 "Thermal Information Map(thermalmap.info)에서 다운로드한 써멀의 위치를 표시한"
 "다."
@@ -7189,6 +7254,15 @@ msgstr "스타트오픈 시각"
 msgid "Start close time"
 msgstr "스타트클로즈 시각"
 
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:265
+#, fuzzy
+msgid ""
+"Number of minutes the start remains open after Pilot Event and PEV wait "
+"time. 0 means start will never close after it opens."
+msgstr ""
+"PEV 대기시간, 스타트 종료 시간까지 까지 몇분 남았는지 표시. 0 으로 표시되면 "
+"스타트 오픈이후 스타트마감시각이 없음."
+
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:269
 msgid "FAI start / finish rules"
 msgstr "FAI 시작 / 종료 규칙"
@@ -7294,14 +7368,6 @@ msgstr "새로 고침"
 #: src/InfoBoxes/Panel/ATCReference.cpp:67
 msgid "Relocate"
 msgstr "포인트변경"
-
-#: src/Dialogs/Task/OptionalStartsDialog.cpp:38
-#: src/Dialogs/Task/TaskPointDialog.cpp:223
-#: src/Dialogs/Weather/NOAAList.cpp:100 src/Dialogs/Weather/NOAAList.cpp:213
-#: src/Dialogs/Weather/NOAADetails.cpp:49
-#: src/Dialogs/Weather/NOAADetails.cpp:100
-msgid "Remove"
-msgstr "제거"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:117
 msgid "(Add Alternate Start)"
@@ -7431,11 +7497,12 @@ msgid "Enter a task name"
 msgstr "타스크 이름입력"
 
 #: src/Dialogs/Task/TargetDialog.cpp:360
+#, fuzzy
 msgid ""
 "For AAT tasks, this setting can be used to adjust the target points within "
-"the AAT sectors.  Larger values move the target points to produce larger "
-"task distances, smaller values move the target points to produce smaller "
-"task distances."
+"the AAT sectors. Larger values move the target points to produce larger task "
+"distances, smaller values move the target points to produce smaller task "
+"distances."
 msgstr ""
 "AAT 타스크, 이 설정은 AAT 섹터 내의 목표지점을 조절하기 위해 사용한다. 값이 "
 "클수록 더 큰 타스크 를 만드는 목표로 이동하며, 값이 작을 수록 더 작은 타스크"
@@ -7447,9 +7514,10 @@ msgid "Radial"
 msgstr "방사각도"
 
 #: src/Dialogs/Task/TargetDialog.cpp:367
+#, fuzzy
 msgid ""
 "For AAT tasks, this setting can be used to adjust the target points within "
-"the AAT sectors.  Positive values rotate the range line clockwise, negative "
+"the AAT sectors. Positive values rotate the range line clockwise, negative "
 "values rotate the range line counterclockwise."
 msgstr ""
 "AAT 타스크 내용이 설정 AAT 섹터내의 목표지점을 조절하기 위해 사용될 수 있다. "
@@ -7713,11 +7781,11 @@ msgid "Alt GPS"
 msgstr "GPS고도"
 
 #: src/InfoBoxes/Content/Factory.cpp:119
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"This is the altitude above mean sea level reported by the GPS. Touch-screen/"
-"PC only: In simulation mode, this value is adjustable with the up/down arrow "
-"keys and the right/left arrow keys also cause the glider to turn."
+"Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In "
+"simulation mode, this value is adjustable with the up/down arrow keys; the "
+"right/left arrow keys cause the glider to turn."
 msgstr ""
 "해수면부터 기체위치의 GPS 고도를 표시한다. \n"
 "시뮬레이션 모드에서는 위 아래로 고도 설정, 좌우로 기체회전을 설정 할 수 있다."
@@ -7734,11 +7802,11 @@ msgid "H AGL"
 msgstr "실고도"
 
 #: src/InfoBoxes/Content/Factory.cpp:127
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"This is the navigation altitude minus the terrain elevation obtained from "
-"the terrain file. The value is coloured red when the glider is below the "
-"terrain safety clearance height."
+"Navigation altitude minus the terrain elevation obtained from the terrain "
+"file. The value is coloured red when the glider is below the terrain safety "
+"clearance height."
 msgstr ""
 "실고도: 대지에서 기체의 높이까지 고도, 붉은색 글씨로 표시되면 지면안전고도보"
 "다 기체고도가 낮다는 경고이다."
@@ -7756,9 +7824,9 @@ msgstr "바리오(30초)"
 #: src/InfoBoxes/Content/Factory.cpp:136
 #, fuzzy, no-c-format
 msgid ""
-"A 30 second rolling average climb rate based of the reported GPS altitude, "
-"or vario if available. The number in smaller font reflects the climb rate "
-"for the current thermal since circling started."
+"30-second rolling average climb rate based on reported GPS altitude, or "
+"vario if available. The number in smaller font reflects the climb rate for "
+"the current thermal since circling started."
 msgstr "최근 30초 동안의 평균고도변화량을 보여준다. GPS나 외부바리오의 값이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:142
@@ -7767,9 +7835,9 @@ msgid "Next bearing"
 msgstr "타스크(다음포인트 방위각도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:144
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
+"True bearing of the next waypoint. For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
 "방위각도: 다음포인트의 현재위치에서 절대방향, AAT타스크의 경우 다음 AAT섹터"
@@ -7807,9 +7875,9 @@ msgid "GR Cruise"
 msgstr "순항활공비"
 
 #: src/InfoBoxes/Content/Factory.cpp:161
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The distance from the top of the last thermal, divided by the altitude lost "
+"Distance from the top of the last thermal, divided by the altitude lost "
 "since the top of the last thermal. Negative values indicate climbing cruise "
 "(height gain since leaving the last thermal). If the vertical speed is close "
 "to zero, the displayed value is '---'."
@@ -7903,11 +7971,11 @@ msgid "MC"
 msgstr "맥크레디"
 
 #: src/InfoBoxes/Content/Factory.cpp:201
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The current MacCready setting and the current MacCready mode (manual or "
-"auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
-"the InfoBox is active, by using the up/down cursor keys."
+"Current MacCready setting and mode (manual or auto). (Touch-screen/PC only) "
+"When this InfoBox is active, use the up/down cursor keys to adjust the "
+"MacCready setting."
 msgstr ""
 "현재 설정된 맥크레디 모드(자동이나 수동): 정보창을 누르면 수치변경이 가능하"
 "다."
@@ -7923,9 +7991,9 @@ msgid "WP Dist"
 msgstr "WP거리"
 
 #: src/InfoBoxes/Content/Factory.cpp:209
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The distance to the currently selected waypoint. For AAT tasks, this is the "
+"Distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
 "WP거리: 다음 포인트의 실린더까지 거리, AAT타스크의 경우 다음 AAT 섹터까지의 "
@@ -7981,9 +8049,9 @@ msgid "Next WP"
 msgstr "웨이포인트"
 
 #: src/InfoBoxes/Content/Factory.cpp:236
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The name of the currently selected turn point. When this InfoBox is active, "
+"Name of the currently selected turn point. When this InfoBox is active, "
 "using the up/down cursor keys selects the next/previous waypoint in the "
 "task. (Touch-screen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
@@ -8068,10 +8136,10 @@ msgid "Terr Elev"
 msgstr "표고"
 
 #: src/InfoBoxes/Content/Factory.cpp:284
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"This is the elevation of the terrain above mean sea level, obtained from the "
-"terrain file at the current GPS location."
+"Elevation of the terrain above mean sea level, obtained from the terrain "
+"file at the current GPS location."
 msgstr "표고: 기체아래의 지면고도, GPS위치를 지형데이터에 비교하여 표시한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:290
@@ -8102,16 +8170,15 @@ msgid "TC Gain"
 msgstr "상승(현재열)"
 
 #: src/InfoBoxes/Content/Factory.cpp:300
-#, no-c-format
-msgid "The altitude gained/lost in the current thermal."
+#, fuzzy, no-c-format
+msgid "Altitude gained/lost in the current thermal."
 msgstr "현재 써멀에서 획득/손실된 고도를 보여준다."
 
 #: src/InfoBoxes/Content/Factory.cpp:308
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "Magnetic track reported by the GPS. (Touch-screen/PC only) If this InfoBox "
-"is active in simulation mode, pressing the up and down  arrows adjusts the "
-"track."
+"is active in simulation mode, pressing the up/down arrows adjusts the track."
 msgstr "GPS로 측정한 나침반(방위각)기록."
 
 #: src/InfoBoxes/Content/Factory.cpp:316
@@ -8261,10 +8328,9 @@ msgid "Alt Baro"
 msgstr "기압고도"
 
 #: src/InfoBoxes/Content/Factory.cpp:390
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"This is the barometric altitude obtained from a device equipped with a "
-"pressure sensor."
+"Barometric altitude obtained from a device equipped with a pressure sensor."
 msgstr "기압고도계로 측정된 현재 고도."
 
 #: src/InfoBoxes/Content/Factory.cpp:397
@@ -8278,11 +8344,11 @@ msgid "V MC"
 msgstr "V MC"
 
 #: src/InfoBoxes/Content/Factory.cpp:399
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The MacCready speed-to-fly for optimal flight to the next waypoint. In "
-"cruise flight mode, this speed-to-fly is calculated for maintaining "
-"altitude. In final glide mode, this speed-to-fly is calculated for descent."
+"MacCready speed-to-fly for optimal flight to the next waypoint. In cruise "
+"flight mode, this speed-to-fly is calculated for maintaining altitude. In "
+"final glide mode, this speed-to-fly is calculated for descent."
 msgstr ""
 "V MC: 다음포인트까지 최적의 비행을 계산하기 위한 MacCready비행 속도, 순항모드"
 "에서는 적절한 고도를 유지하기 위한 계산값, 최종골러시모드에서는 적절한 하강"
@@ -8350,10 +8416,10 @@ msgid "WP GR"
 msgstr "WP활공비"
 
 #: src/InfoBoxes/Content/Factory.cpp:431
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The required glide ratio over ground to reach the next waypoint, given by "
-"the distance to next waypoint divided by the height required to arrive at "
+"Required glide ratio over ground to reach the next waypoint, given by the "
+"distance to the next waypoint divided by the height required to arrive at "
 "the safety arrival height."
 msgstr ""
 "WP활공비: 다음포인트까지 필요한 활공비, 안전고도를 포함하여 남은 거리에 필요"
@@ -8424,15 +8490,15 @@ msgid "Speed dolphin"
 msgstr "속도(돌핀속도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:473
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The instantaneous MacCready speed-to-fly, making use of netto vario "
-"calculations to determine dolphin cruise speed in the glider's current "
-"bearing. In cruise flight mode, this speed-to-fly is calculated for "
-"maintaining altitude. In final glide mode, this speed-to-fly is calculated "
-"for descent. In climb mode, this switches to the speed for minimum sink at "
-"the current load factor (if an accelerometer is connected). When Block mode "
-"speed to fly is selected, this InfoBox displays the MacCready speed."
+"Instantaneous MacCready speed-to-fly, making use of netto vario calculations "
+"to determine dolphin cruise speed on the glider's current track. In cruise "
+"flight mode, this speed-to-fly is calculated for maintaining altitude. In "
+"final glide mode, this speed-to-fly is calculated for descent. In climb "
+"mode, this switches to the speed for minimum sink at the current load factor "
+"(if an accelerometer is connected). When Block mode speed-to-fly is "
+"selected, this InfoBox displays the MacCready speed."
 msgstr ""
 "최적속도: 돌핀 속도의 경우 Netto 바리오 값과 현재의 맥크레디속도로 계산한 "
 "값, 순항모드에서는 적절한 고도를 유지하기 위한 계산값, 최종골모드에서는 적절"
@@ -8507,16 +8573,16 @@ msgid "Brng D"
 msgstr "적절진입각"
 
 #: src/InfoBoxes/Content/Factory.cpp:506
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The difference between the glider's track bearing, to the bearing of the "
-"next waypoint, or for AAT tasks, to the bearing to the target within the AAT "
-"sector. GPS navigation is based on the track bearing across the ground, and "
-"this track bearing may differ from the glider's heading when there is wind "
-"present. Chevrons point to the direction the glider needs to alter course to "
-"correct the bearing difference, that is, so that the glider's course made "
-"good is pointing directly at the next waypoint. This bearing takes into "
-"account the curvature of the Earth."
+"Difference between the glider's track (direction of motion across the "
+"ground) and the bearing to the next waypoint, or for AAT tasks, the bearing "
+"to the target within the AAT sector. GPS navigation is based on the track, "
+"and the track may differ from the glider's heading when there is wind. "
+"Chevrons point to the direction the glider needs to alter course to correct "
+"the bearing difference, that is, to make it so that the glider is tracking "
+"directly toward the next waypoint. This calculation accounts for the "
+"curvature of the Earth."
 msgstr ""
 "적절진입각: 다음 포인트까지 라인과 GPS 항적의 차이, AAT타스크의 경우 다음 섹"
 "터까지의 경로와의 차이, GPS 내비게이션은 지표에서 계산하므로 실제 기체의 기수"
@@ -8651,9 +8717,9 @@ msgid "Team code"
 msgstr "팀(팀코드)"
 
 #: src/InfoBoxes/Content/Factory.cpp:570
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The current Team code for this aircraft. Use this to report to other team "
+"Current Team code for this aircraft. Use this to report to other team "
 "members. The last team aircraft code entered is displayed underneath."
 msgstr "이 기체가 사용하는 팀코드: 이 팀코드를 다른 동료들에게 알려준다."
 
@@ -8668,8 +8734,8 @@ msgid "Team Brng"
 msgstr "팀방위각"
 
 #: src/InfoBoxes/Content/Factory.cpp:578
-#, no-c-format
-msgid "The bearing to the team aircraft location at the last team code report."
+#, fuzzy, no-c-format
+msgid "Bearing to the team aircraft location at the last team code report."
 msgstr "팀 방위각: 동료 기체의 위치를 각도로 표시한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:584
@@ -8683,9 +8749,9 @@ msgid "Team BrngD"
 msgstr "팀방위차"
 
 #: src/InfoBoxes/Content/Factory.cpp:586
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The relative bearing to the team aircraft location at the last reported team "
+"Relative bearing to the team aircraft location at the last reported team "
 "code."
 msgstr "팀경로차이: 동료 기체와 내 기체의 현재 비행 진로예상치를 표시한다."
 
@@ -8700,8 +8766,8 @@ msgid "Team Dist"
 msgstr "팀거리"
 
 #: src/InfoBoxes/Content/Factory.cpp:594
-#, no-c-format
-msgid "The range to the team aircraft location at the last reported team code."
+#, fuzzy, no-c-format
+msgid "Range to the team aircraft location at the last reported team code."
 msgstr "팀거리: 동료 기체의 위치간 거리를 나타낸다."
 
 #: src/InfoBoxes/Content/Factory.cpp:600
@@ -8752,7 +8818,7 @@ msgstr "Task달성속도"
 #, fuzzy, no-c-format
 msgid ""
 "Achieved cross-country speed while on current task, compensated for "
-"altitude.  Equivalent to Pirker cross-country speed remaining."
+"altitude. Equivalent to Pirker cross-country speed remaining."
 msgstr ""
 "Task달성속도: 고도가 보정된, 타스크진행의 평균속도이다. 남은 Pirker 크로스컨"
 "트리속도(Pirker Cross-country speed)와 동일하다."
@@ -8815,10 +8881,10 @@ msgid "Battery percent"
 msgstr "배터리 잔량(%)"
 
 #: src/InfoBoxes/Content/Factory.cpp:650
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Displays percentage of device battery remaining (where applicable) and "
-"status/voltage of external power supply."
+"Percentage of device battery remaining (where applicable) and status/voltage "
+"of external power supply."
 msgstr "배터리: 남아있는 기기배터리, 외부센서의 배터리상태도 보여준다."
 
 #: src/InfoBoxes/Content/Factory.cpp:656
@@ -8832,11 +8898,10 @@ msgid "Fin GR"
 msgstr "최종활공비"
 
 #: src/InfoBoxes/Content/Factory.cpp:658
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The required glide ratio over ground to finish the task, given by the "
-"distance to go divided by the height required to arrive at the safety "
-"arrival height."
+"Required glide ratio over ground to finish the task, given by the distance "
+"to go divided by the height required to arrive at the safety arrival height."
 msgstr ""
 "최종활공비: 결승점까지 필요한 활공비 - 남은거리에서 골인하는데 필요한 고도로 "
 "나눈 값이며, 안전고도를 포함한다."
@@ -8852,8 +8917,8 @@ msgid "Altn 1"
 msgstr "예비1"
 
 #: src/InfoBoxes/Content/Factory.cpp:666
-#, no-c-format
-msgid "Displays name and bearing to the best alternate landing location."
+#, fuzzy, no-c-format
+msgid "Name and bearing to the best alternate landing location."
 msgstr "예비 1착륙장까지의 거리와 방향."
 
 #: src/InfoBoxes/Content/Factory.cpp:672
@@ -8867,8 +8932,8 @@ msgid "Altn 2"
 msgstr "예비2"
 
 #: src/InfoBoxes/Content/Factory.cpp:674
-#, no-c-format
-msgid "Displays name and bearing to the second alternate landing location."
+#, fuzzy, no-c-format
+msgid "Name and bearing to the second-best alternate landing location."
 msgstr "예비 2착륙장의 거리와 방향."
 
 #: src/InfoBoxes/Content/Factory.cpp:680
@@ -8877,15 +8942,15 @@ msgid "Alternate 1 GR"
 msgstr "활공비(예비착륙장1 활공비)"
 
 #: src/InfoBoxes/Content/Factory.cpp:681
-#, no-c-format
-msgid "Altn1 GR"
+#, fuzzy, no-c-format
+msgid "Altn 1 GR"
 msgstr "예비1활공비"
 
 #: src/InfoBoxes/Content/Factory.cpp:682
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Geometric gradient to the arrival height above the best alternate. This is "
-"not adjusted for total energy."
+"Geometric gradient to the arrival height above the best alternate landing "
+"location. This is not adjusted for total energy."
 msgstr "예비착륙장까지 필요한 활공비. 고도상승을 고려하지 않음."
 
 #: src/InfoBoxes/Content/Factory.cpp:688
@@ -8916,17 +8981,16 @@ msgid "GR Avg"
 msgstr "평균활공비"
 
 #: src/InfoBoxes/Content/Factory.cpp:699
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The distance made in the configured period of time , divided by the altitude "
-"lost since then. Negative values are shown as ^^^ and indicate climbing "
-"cruise (height gain). Over 200 of GR the value is shown as +++ . You can "
-"configure the period of averaging in the system setup. Suggested values are "
-"60, 90 or 120. Lower values will be closed to GR Inst, and higher values "
-"will be closed to GR Cruise. Notice that the distance is NOT the straight "
-"line between your old and current position, it's exactly the distance you "
-"have made even in a zigzag glide. This value is not calculated while "
-"circling."
+"Distance flown during the configured averaging period divided by the "
+"altitude lost during that period. Negative values are shown as ^^^ and "
+"indicate climbing cruise (height gain). For GR >200, the value is shown as ++"
+"+. You can configure the averaging period in the system setup (suggested: "
+"60, 90 or 120s). Lower values will be closer to GR Inst, and higher values "
+"will be closer to GR Cruise. Note: The distance is not the straight line "
+"between your previous and current positions; it is the actual path distance "
+"flown (including zigzags). This value is not calculated while circling."
 msgstr ""
 "평균 활공비. 일정 시간 내로 비행한 거리를 잃은 고도에서 나눈 값.마이너스 값"
 "의 경우\"^^^\"으로, 순항중 획득한 고도를 보여주며, 200이상의 값의 경우\"+++"
@@ -8998,9 +9062,9 @@ msgid "WP AltA"
 msgstr "WP표고"
 
 #: src/InfoBoxes/Content/Factory.cpp:739
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Absolute arrival altitude at the next waypoint in final glide.  For AAT "
+"Absolute arrival altitude at the next waypoint in final glide. For AAT "
 "tasks, the target within the AAT sector is used."
 msgstr ""
 "WP표고: 다음 포인트에 도착할 위치의 표고, AAT 타스크의 경우 다음 AAT섹터의 표"
@@ -9043,8 +9107,8 @@ msgid "Barogram"
 msgstr "그래프(기압)"
 
 #: src/InfoBoxes/Content/Factory.cpp:765
-#, no-c-format
-msgid "Trace of altitude during flight"
+#, fuzzy, no-c-format
+msgid "Trace of altitude during flight."
 msgstr "그래프(기압): 비행중의 기압변화 그래프"
 
 #: src/InfoBoxes/Content/Factory.cpp:771
@@ -9145,9 +9209,10 @@ msgid "Start Height"
 msgstr "시작고도"
 
 #: src/InfoBoxes/Content/Factory.cpp:813
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The contiguous period the ship has been below the task start max. height."
+"Contiguous period during which the aircraft has been below the task start "
+"maximum height."
 msgstr "스타트 최대 고도보다 낮은 고도에 있을때 최대고도까지 예상상승시간."
 
 #: src/InfoBoxes/Content/Factory.cpp:819
@@ -9208,8 +9273,8 @@ msgid "Near AS H"
 msgstr "공역경계수평"
 
 #: src/InfoBoxes/Content/Factory.cpp:846
-#, no-c-format
-msgid "The horizontal distance to the nearest airspace."
+#, fuzzy, no-c-format
+msgid "Horizontal distance to the nearest airspace."
 msgstr "최근 공역까지 수평거리."
 
 #: src/InfoBoxes/Content/Factory.cpp:852
@@ -9223,10 +9288,10 @@ msgid "Near AS V"
 msgstr "공역경계수직"
 
 #: src/InfoBoxes/Content/Factory.cpp:854
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The vertical distance to the nearest airspace.  A positive value means the "
-"airspace is above you, and negative means the airspace is below you."
+"Vertical distance to the nearest airspace. A positive value means the "
+"airspace is above you; a negative value means the airspace is below you."
 msgstr "근처의 공역 경계선까지의 고도, +값이면 공역위 , -값이면 공역아래이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:860
@@ -9240,10 +9305,10 @@ msgid "WP MC0 AltD"
 msgstr "WP고도차MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:862
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint with MC 0 setting relative to the "
-"safety arrival height.  For AAT tasks, the target within the AAT sector is "
+"safety arrival height. For AAT tasks, the target within the AAT sector is "
 "used."
 msgstr ""
 "WP고도차MC0: 다음 포인트 도착고도를 현재고도에서 이상적인 맥크레디 값으로 계"
@@ -9260,11 +9325,11 @@ msgid "Head Wind"
 msgstr "정풍"
 
 #: src/InfoBoxes/Content/Factory.cpp:871
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The current head wind component. Head wind is calculated from TAS and GPS "
-"ground speed if airspeed is available from external device. Otherwise the "
-"estimated wind is used for the calculation."
+"Current head wind component. Head wind is calculated from TAS and GPS ground "
+"speed if airspeed is available from an external device; otherwise, the "
+"estimated wind is used."
 msgstr ""
 "정풍: 현재의 정풍(맞바람)정보, 외부 피토관에서 GPS속도를 뺀 정풍정보이며, 다"
 "른방법으로 측정한 바람도 계산에 사용한다."
@@ -9280,10 +9345,10 @@ msgid "Terr Coll"
 msgstr "충돌경고거리"
 
 #: src/InfoBoxes/Content/Factory.cpp:880
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The distance to the next terrain collision along the current task leg. At "
-"this location, the altitude will be below the configured terrain clearance "
+"Distance to the next terrain collision along the current task leg. At this "
+"location, the altitude will be below the configured terrain clearance "
 "altitude."
 msgstr ""
 "현재 진로상의 지상 충돌예상지점과의 거리: 현재 기체위치에서 충돌지점과의 거리"
@@ -9300,11 +9365,10 @@ msgid "Alt Auto"
 msgstr "고도계(자동)"
 
 #: src/InfoBoxes/Content/Factory.cpp:887
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"This is the barometric altitude obtained from a device equipped with a "
-"pressure sensor or the GPS altitude if the barometric altitude is not "
-"available."
+"Barometric altitude obtained from a device equipped with a pressure sensor, "
+"or GPS altitude if barometric altitude is not available."
 msgstr "고도계(자동): 기압고도계가 없을 경우 GPS 고도를 표시한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:894
@@ -9318,10 +9382,10 @@ msgid "T Next Leg"
 msgstr "필요상승(다음)"
 
 #: src/InfoBoxes/Content/Factory.cpp:896
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The thermal rate of climb on next leg which is equivalent to a thermal equal "
-"to the MacCready setting on current leg."
+"Thermal climb rate on the next leg that is equivalent to a thermal climb "
+"rate equal to the MacCready setting on the current leg."
 msgstr ""
 "필요상승(다음): 다음포인트(leg)까지 필요한 상승률, 현재의 맥크레디 설정으로 "
 "예측한다."
@@ -9337,10 +9401,10 @@ msgid "Head Wind *"
 msgstr "정풍(심플)"
 
 #: src/InfoBoxes/Content/Factory.cpp:904
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The current head wind component. The simplified head wind is calculated by "
-"subtracting GPS ground speed from the TAS if airspeed is available from "
+"Current head wind component. The simplified head wind is calculated by "
+"subtracting GPS ground speed from TAS if airspeed is available from an "
 "external device."
 msgstr ""
 "정풍(심플): 현재의 정풍(맞바람)정보, 외부 피토관에서 GPS속도를 뺀 단순화한 정"
@@ -9357,19 +9421,19 @@ msgid "Cruise Eff"
 msgstr "Task순항효율"
 
 #: src/InfoBoxes/Content/Factory.cpp:912
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Efficiency of cruise.  100 indicates perfect MacCready performance. This "
+"Efficiency of cruise. 100 indicates perfect MacCready performance. This "
 "value estimates your cruise efficiency according to the current flight "
-"history with the set MC value.  Calculation begins after task is started."
+"history with the set MC value. Calculation begins after task is started."
 msgstr ""
 "순항 효율: 지시값 100의 경우 이상적인 맥크레디값을 달성한 것이다. 맥크레디 값"
 "과 현재까지의 비행데이터 값을 비교하여 타스크 시작 후에 계산한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:928
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"A circular thermal assistant that shows the lift distribution over each part "
+"Circular thermal assistant that shows the lift distribution over each part "
 "of the circle."
 msgstr "써멀어시스턴트, 열의 세기와 모양을 표시한다."
 
@@ -9384,8 +9448,8 @@ msgid "Start open"
 msgstr "게임시작시간"
 
 #: src/InfoBoxes/Content/Factory.cpp:935
-#, no-c-format
-msgid "Shows the time left until the start point opens or closes."
+#, fuzzy, no-c-format
+msgid "Time left until the start point opens or closes."
 msgstr "스타트포인트의 남은 시작 시간."
 
 #: src/InfoBoxes/Content/Factory.cpp:940
@@ -9399,10 +9463,10 @@ msgid "Start reach"
 msgstr "시작까지"
 
 #: src/InfoBoxes/Content/Factory.cpp:942
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Shows the time left until the start point opens or closes, compared to the "
-"calculated time to reach it."
+"Time left until the start point opens or closes, minus the calculated time "
+"to reach the start point."
 msgstr "스타트포인트까지 현재위치에서 출발할때 소요되는 시간."
 
 #: src/InfoBoxes/Content/Factory.cpp:947
@@ -9459,9 +9523,9 @@ msgid "WP Dist-N"
 msgstr "WP중심거리"
 
 #: src/InfoBoxes/Content/Factory.cpp:973
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The distance to the currently selected waypoint. For AAT tasks, this is the "
+"Distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the origin of the AAT sector."
 msgstr ""
 "WP중심거리: 다음 포인트의 중심까지 거리, AAT 타스크의 경우 AAT 섹터의 원점의 "
@@ -9513,10 +9577,10 @@ msgid "Cont Speed"
 msgstr "컨테스트속도"
 
 #: src/InfoBoxes/Content/Factory.cpp:996
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown speed according to the configured "
-"Contest rule set."
+"contest rule set."
 msgstr "컨테스트 대회 규칙에 의해 규정된 비행 속도의 즉각적인 평가."
 
 #: src/InfoBoxes/Content/Factory.cpp:1001
@@ -9615,10 +9679,10 @@ msgid "Satellites"
 msgstr "위성"
 
 #: src/InfoBoxes/Content/Factory.cpp:1048
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"The number of actually used (seen) satellites by GPS module. If this "
-"information is unavailable, the displayed value is '---'."
+"Number of satellites currently used by the GPS module. If this information "
+"is unavailable, the displayed value is '---'."
 msgstr "접속한 GPS위성수. 없으면 '---'로 표시된다."
 
 #: src/InfoBoxes/Content/Factory.cpp:1054
@@ -9632,8 +9696,8 @@ msgid "Act Freq"
 msgstr "활동주파수"
 
 #: src/InfoBoxes/Content/Factory.cpp:1056
-#, no-c-format
-msgid "The currently active Radio Frequency"
+#, fuzzy, no-c-format
+msgid "Active radio frequency."
 msgstr "활동주파수 설정"
 
 #: src/InfoBoxes/Content/Factory.cpp:1061
@@ -9647,8 +9711,8 @@ msgid "Stby Freq"
 msgstr "대기주파수"
 
 #: src/InfoBoxes/Content/Factory.cpp:1063
-#, no-c-format
-msgid "The currently standby Radio Frequency"
+#, fuzzy, no-c-format
+msgid "Standby radio frequency."
 msgstr "대기주파수 설정"
 
 #: src/InfoBoxes/Content/Factory.cpp:1069
@@ -9662,8 +9726,8 @@ msgid "TC Time"
 msgstr "최근써멀시간"
 
 #: src/InfoBoxes/Content/Factory.cpp:1071
-#, no-c-format
-msgid "The time spend in the current thermal."
+#, fuzzy, no-c-format
+msgid "Time spent in the current thermal."
 msgstr "현재 써멀에서의 시간을 보여준다."
 
 #: src/InfoBoxes/Content/Factory.cpp:1077
@@ -9672,15 +9736,15 @@ msgid "Alternate 2 GR"
 msgstr "활공비(예비착륙장2 활공비)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1078
-#, no-c-format
-msgid "Altn2 GR"
+#, fuzzy, no-c-format
+msgid "Altn 2 GR"
 msgstr "예비2활공비"
 
 #: src/InfoBoxes/Content/Factory.cpp:1079
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Geometric gradient to the arrival height above the second alternate. This is "
-"not adjusted for total energy."
+"Geometric gradient to the arrival height above the second-best alternate "
+"landing location. This is not adjusted for total energy."
 msgstr "예비착륙장까지 필요한 활공비. 고도상승을 고려하지 않음."
 
 #: src/InfoBoxes/Content/Factory.cpp:1085
@@ -9710,7 +9774,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1095
 #, fuzzy, no-c-format
-msgid "The currently set Transponder code"
+msgid "Currently set transponder code."
 msgstr "대기주파수 설정"
 
 #: src/InfoBoxes/Content/Factory.cpp:1101
@@ -9724,9 +9788,9 @@ msgid "CHT"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1103
-#, no-c-format
-msgid "Engine Cylinder Head Temperature"
-msgstr ""
+#, fuzzy, no-c-format
+msgid "Engine cylinder head temperature."
+msgstr "온도(예보온도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1109
 #, no-c-format
@@ -9740,7 +9804,7 @@ msgstr "도착예정시각"
 
 #: src/InfoBoxes/Content/Factory.cpp:1111
 #, fuzzy, no-c-format
-msgid "Engine Exhaust Gas Temperature"
+msgid "Engine exhaust gas temperature."
 msgstr "온도(예보온도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1117
@@ -9754,9 +9818,9 @@ msgid "RPM"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1119
-#, no-c-format
-msgid "Engine Revolutions Per Minute."
-msgstr ""
+#, fuzzy, no-c-format
+msgid "Engine revolutions per minute."
+msgstr "분당 심박수."
 
 #: src/InfoBoxes/Content/Factory.cpp:1125
 #, no-c-format
@@ -9771,8 +9835,8 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1127
 #, no-c-format
 msgid ""
-"Shows AAT delta time and estimated time of arrival in case of AAT task, and "
-"estimated time of arrival in case of racing task"
+"For AAT tasks: AAT delta time and estimated time of arrival; for racing "
+"tasks: estimated time of arrival."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1133
@@ -9821,14 +9885,48 @@ msgstr "Task평균속도"
 #: src/InfoBoxes/Content/Factory.cpp:1151
 #, fuzzy, no-c-format
 msgid ""
-"Average cross country speed while on current task leg, not compensated for "
+"Average cross-country speed while on current task leg, not compensated for "
 "altitude."
 msgstr ""
 "Task평균속도: 타스크 진행의 평균속도, 고도변화를 보정되지 않은 대지속도로 계"
 "산한다."
 
+#: src/InfoBoxes/Content/Factory.cpp:1157
+#, fuzzy, no-c-format
+msgid "Alternate 1 altitude difference"
+msgstr "타스크(고도 - 다음포인트 도착고도)"
+
+#: src/InfoBoxes/Content/Factory.cpp:1158
+#, fuzzy, no-c-format
+msgid "Altn 1 AltD"
+msgstr "예비1"
+
+#: src/InfoBoxes/Content/Factory.cpp:1159
+#, fuzzy, no-c-format
+msgid ""
+"Arrival altitude at the best alternate landing location relative to the "
+"safety arrival height."
+msgstr "최종고도차: 최종골 포인트 도착고도를 현재고도에서 계산한 고도차이."
+
+#: src/InfoBoxes/Content/Factory.cpp:1165
+#, fuzzy, no-c-format
+msgid "Alternate 2 altitude difference"
+msgstr "타스크(고도 - 다음포인트 도착고도)"
+
+#: src/InfoBoxes/Content/Factory.cpp:1166
+#, fuzzy, no-c-format
+msgid "Altn 2 AltD"
+msgstr "예비2"
+
+#: src/InfoBoxes/Content/Factory.cpp:1167
+#, fuzzy, no-c-format
+msgid ""
+"Arrival altitude at the second-best alternate landing location relative to "
+"the safety arrival height."
+msgstr "최종고도차: 최종골 포인트 도착고도를 현재고도에서 계산한 고도차이."
+
 #: src/InfoBoxes/Content/Alternate.cpp:58
-#, fuzzy
+#, fuzzy, c++-format
 msgid "Altn {}"
 msgstr "예비1"
 
@@ -9895,7 +9993,7 @@ msgstr "오픈"
 msgid "Waiting"
 msgstr "대기"
 
-#: src/InfoBoxes/Content/Places.cpp:98
+#: src/InfoBoxes/Content/Places.cpp:99
 #, no-c-format
 msgid "Reference"
 msgstr "참조"
@@ -9909,6 +10007,12 @@ msgstr "순항"
 #, no-c-format
 msgid "FinalGlide"
 msgstr "골러시(FinalGlide)"
+
+#: src/InfoBoxes/Panel/AltitudeSetup.cpp:56
+msgid ""
+"Area pressure for barometric altimeter calibration.  This is set "
+"automatically if Vega connected."
+msgstr "기압보정(고도계), Vega가 연결되어 있으면 자동으로 설정된다."
 
 #: src/InfoBoxes/Panel/ATCSetup.cpp:35
 #, fuzzy
@@ -10129,9 +10233,9 @@ msgid "Cruise volume"
 msgstr "순항 음량"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:76
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Mean volume level in cruise modes.  If set to zero, scales with airspeed."
+"Mean volume level in cruise modes. If set to zero, scales with airspeed."
 msgstr "순항모드의 음량: 0으로 설정하면 비행속도에 따라 바뀜."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:80
@@ -10352,19 +10456,18 @@ msgid "Accelerometer"
 msgstr "가속도계"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:44
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Whether the internal accelerometer is used.  Only change this if the "
+"Whether the internal accelerometer is used. Only change this if the "
 "accelerometer has malfunctioned or the instrument cannot be installed with "
 "correct alignment."
 msgstr "내장 가속도계사용: 가속도 센서에 문제가 있을 때 이 설정을 변경하시오."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:48
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Whether a temperature and humidity sensor is installed.  Set to 0 to "
-"disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be "
-"specified."
+"Whether a temperature and humidity sensor is installed. Set to 0 to disable, "
+"255 to enable auto-detect; otherwise the 1-Wire device ID can be specified."
 msgstr ""
 "온도, 습도센서가 별도로 장착되어 있습니까?  0으로 설정하면 사용하지 않음, 255"
 "로 설정하면 자동검색한다. 유선연결의 경우 장치  ID를 지정한다."
@@ -10375,12 +10478,11 @@ msgid "Baud rate Vega"
 msgstr "Vega 통신속도"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:53
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Baud rate of serial device connected to Vega port X1.  Use this as necessary "
-"when using a third party GPS or data-logger instead of FLARM.  If FLARM is "
-"connected the baud rate will be fixed at 38400.  For OzFLARM, the value can "
-"be set to 19200."
+"Baud rate of serial device connected to Vega port X1. Use this when using a "
+"third party GPS or data-logger instead of FLARM. If FLARM is connected the "
+"baud rate will be fixed at 38400. For OzFLARM, the value can be set to 19200."
 msgstr ""
 "Vega 포트 X1에 연결하는 기기의 통신속도: 외부 GPS 혹은 FLARM 데이터 로거를 연"
 "결하는 경우 사용한다. FLARM은 38400고정, OzFLARM은 19200도 가능하다."
@@ -10391,10 +10493,9 @@ msgid "FLARM connected"
 msgstr "FLARM이 연결됨"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Enable detection of FLARM.  Disable only if FLARM is not used or "
-"disconnected."
+"Enable detection of FLARM. Disable only if FLARM is not used or disconnected."
 msgstr "FLARM 자동검색: FLARM이 없거나, 연결이 끊어질 때는 사용하지 마시오."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
@@ -10403,10 +10504,10 @@ msgid "PDA power"
 msgstr "PDA전원"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:62
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"Enable output of +5V power supply for PDA etc. at Vega connector~X2.  If "
-"Vega is connected to Altair, this should be set to False."
+"Enable output of the +5 V power supply for a PDA or similar device at Vega "
+"connector X2. If Vega is connected to Altair, set this to Off."
 msgstr "+5V 외부전원 연결: Vega X2에 Altair를 연결한다면 이 설정이 필요하다."
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:11
@@ -10719,6 +10820,10 @@ msgstr ""
 msgid "Thermal Assistant"
 msgstr "써멀레이더"
 
+#: Data/Input/default.xci:901
+msgid "Airspaces"
+msgstr "공역파일"
+
 #: Data/Input/default.xci:908
 #, fuzzy
 msgid "Message Repeat"
@@ -10776,6 +10881,27 @@ msgstr ""
 #: Data/Input/default.xci:1287
 msgid "Quit XCSoar"
 msgstr ""
+
+#, no-c-format
+#~ msgid "Topleft"
+#~ msgstr "왼쪽 위"
+
+#~ msgid "The file name of the primary airspace file."
+#~ msgstr "공역 정보가 담긴 파일을 추가하시오."
+
+#~ msgid "More airspaces"
+#~ msgstr "추가공역파일"
+
+#~ msgid "The file name of the secondary airspace file."
+#~ msgstr "추가 공역파일을 선택하시오."
+
+#, no-c-format
+#~ msgid "The currently active Radio Frequency"
+#~ msgstr "활동주파수 설정"
+
+#, no-c-format
+#~ msgid "The currently standby Radio Frequency"
+#~ msgstr "대기주파수 설정"
 
 #, no-c-format
 #~ msgid "No error"
