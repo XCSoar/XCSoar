@@ -70,6 +70,8 @@ install_linux() {
     imagemagick gettext \
     mesa-common-dev libgl1-mesa-dev libegl1-mesa-dev \
     fonts-dejavu \
+    ttf-bitstream-vera \
+    fonts-roboto-unhinted \
     xz-utils
   echo
 }
