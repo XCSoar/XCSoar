@@ -10,34 +10,28 @@ unset "ARGS[0]"
 
 case "${TARGET}" in
       ANDROID)
-        make TARGET=ANDROIDFAT -j "${CPUS}" ${ARGS[@]}
+        make TARGET=ANDROIDFAT -j "${CPUS}" "${ARGS[@]}"
       ;;
       "DOCS")
-        make manual -j "${CPUS}" ${ARGS[@]}
+        make manual -j "${CPUS}" "${ARGS[@]}"
       ;;
       "KOBO")
         make TARGET="${TARGET}" -j"${CPUS}" libs
-        make TARGET="${TARGET}" -j"${CPUS}"  ${ARGS[@]}
+        make TARGET="${TARGET}" -j"${CPUS}" "${ARGS[@]}"
         make TARGET="${TARGET}" -j"${CPUS}" output/KOBO/KoboRoot.tgz
       ;;
-      "UNIX")
-        make TARGET="${TARGET}" -j"${CPUS}" ${ARGS[@]}
+      "WAYLAND" | "UNIX" | "PC" | "WIN64")
+        make TARGET="${TARGET}" -j"${CPUS}" "${ARGS[@]}"
       ;;
       "UNIX-SDL")
-        make TARGET="UNIX" -j"${CPUS}" OPENGL=n ENABLE_SDL=y USE_SDL2=y ${ARGS[@]}
-      ;;
-      "PC")
-        make TARGET="${TARGET}" -j"${CPUS}" ${ARGS[@]}
-      ;;
-      "WIN64")
-        make TARGET="${TARGET}" -j"${CPUS}" ${ARGS[@]}
+        make TARGET="UNIX" -j"${CPUS}" OPENGL=n ENABLE_SDL=y USE_SDL2=y "${ARGS[@]}"
       ;;
       "UNIX-DEBIAN")
-        dpkg-buildpackage -uc -us -j"${CPUS}" ${ARGS[@]}
+        dpkg-buildpackage -uc -us -j"${CPUS}" "${ARGS[@]}"
         ls ../
       ;;
       *)
-        echo "No target specified. Valid targets: ANDROID DOCS KOBO UNIX UNIX-SDL PC WIN64"
+        echo "No target specified. Valid targets: ANDROID DOCS KOBO WAYLAND UNIX UNIX-SDL PC WIN64"
         exit 1
       ;;
 esac
