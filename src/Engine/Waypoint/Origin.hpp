@@ -20,7 +20,6 @@ enum class WaypointOrigin : uint8_t {
   USER,
 
   PRIMARY,
-  ADDITIONAL,
   WATCHED,
 
   /**

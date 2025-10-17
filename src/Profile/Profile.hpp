@@ -67,7 +67,8 @@ SetFiles(Path override_path) noexcept;
 AllocatedPath
 GetPath(std::string_view key) noexcept;
 
-std::vector<AllocatedPath> GetMultiplePaths(std::string_view key);
+std::vector<AllocatedPath> GetMultiplePaths(std::string_view key,
+                                            const TCHAR *patterns);
 
 void
 SetPath(std::string_view key, Path value) noexcept;
