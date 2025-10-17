@@ -1,4 +1,4 @@
-FROM debian:trixie
+FROM debian:bookworm
 
 ENV DEBIAN_FRONTEND=noninteractive
 
