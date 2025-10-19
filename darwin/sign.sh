@@ -2,34 +2,34 @@
 set -euo pipefail
 
 # Input configuration
-IPA_PATH="$(pwd)/output/IOS64/xcsoar.ipa"
-PROFILE_PATH="$(pwd)/your_provisioning_profile.mobileprovision"
-CERTIFICATE_NAME="Apple Development: Your Name (XXXXXXXXXX)"
+IPA_DIR="${IPA_DIR:-$(pwd)/output/IOS64/ipa}"
+PROFILE_PATH="${PROFILE_PATH:-}"
+CERTIFICATE_NAME="${CERTIFICATE_NAME:-}"
+
+# Validate required configuration
+if [ -z "$PROFILE_PATH" ] || [ ! -f "$PROFILE_PATH" ]; then
+  echo "Error: PROFILE_PATH must be set to a valid provisioning profile" >&2
+  echo "Usage: PROFILE_PATH=/path/to/profile.mobileprovision CERTIFICATE_NAME='Apple Development: Your Name (XXXXXXXXX)' $0" >&2
+  exit 1
+fi
+
+if [ -z "$CERTIFICATE_NAME" ]; then
+  echo "Error: CERTIFICATE_NAME must be set" >&2
+  echo "Usage: PROFILE_PATH=/path/to/profile.mobileprovision CERTIFICATE_NAME='Apple Development: Your Name (XXXXXXXXX)' $0" >&2
+  exit 1
+fi
+if [ ! -d "$IPA_DIR" ]; then
+  echo "❌ IPA_DIR '$IPA_DIR' does not exist. Did you build the app with TARGET=IOS64?" >&2
+  exit 2
+fi
 
 # Output configuration
 IPA_SIGNED_PATH="$(pwd)/output/IOS64/xcsoar-signed.ipa"
 
-# Guard against missing build artefact
-if [[ ! -f "$IPA_PATH" ]]; then
-  echo "❌ IPA not found: $IPA_PATH"
-  exit 1
-fi
-
-# Create temporary directories
-TMP_DIR=$(mktemp -d)
-trap 'rm -rf "$TMP_DIR"' EXIT
-APP_PAYLOAD_DIR="$TMP_DIR/Payload"
-SIGNED_IPA="$TMP_DIR/signed.ipa"
-ENTITLEMENTS_TMP="$TMP_DIR/entitlements.plist"
-
-# Unzip IPA
-unzip -q "$IPA_PATH" -d "$TMP_DIR"
-
-# Locate .app inside Payload
-APP_PATH=$(find "$APP_PAYLOAD_DIR" -name "*.app" -type d | head -n 1)
-
+# Sign app in output/IOS64/Payload directly
+APP_PATH=$(find "$IPA_DIR/Payload" -name "*.app" -type d | head -n 1)
 if [ ! -d "$APP_PATH" ]; then
-  echo "❌ .app not found in IPA"
+  echo "❌ .app not found in Payload in $IPA_DIR" >&2
   exit 1
 fi
 
@@ -37,9 +37,10 @@ fi
 cp "$PROFILE_PATH" "$APP_PATH/embedded.mobileprovision"
 
 # Extract entitlements from provisioning profile
-security cms -D -i "$PROFILE_PATH" > "$TMP_DIR/profile.plist"
-if ! /usr/libexec/PlistBuddy -x -c "Print :Entitlements" "$TMP_DIR/profile.plist" > "$ENTITLEMENTS_TMP"; then
-  echo "❌ Failed to extract entitlements from provisioning profile"
+ENTITLEMENTS_TMP="$(pwd)/output/IOS64/entitlements.plist"
+security cms -D -i "$PROFILE_PATH" > "$(pwd)/output/IOS64/profile.plist"
+if ! /usr/libexec/PlistBuddy -x -c "Print :Entitlements" "$(pwd)/output/IOS64/profile.plist" > "$ENTITLEMENTS_TMP"; then
+  echo "❌ Failed to extract entitlements from provisioning profile" >&2
   exit 1
 fi
 
@@ -49,17 +50,12 @@ codesign -f -s "$CERTIFICATE_NAME" --entitlements "$ENTITLEMENTS_TMP" "$APP_PATH
 
 # Verify signature
 if ! codesign --verify --deep --strict "$APP_PATH"; then
-  echo "❌ Code signing verification failed"
+  echo "❌ Code signing verification failed" >&2
   exit 1
 fi
 
-# Repackage IPA (without changing working directory)
-(
-  cd "$TMP_DIR"
-  zip -qr "$SIGNED_IPA" Payload
-)
-
-# Move signed IPA to output
-mv "$SIGNED_IPA" "$IPA_SIGNED_PATH"
+# Repackage IPA
+cd "$IPA_DIR"
+zip -qr "$IPA_SIGNED_PATH" Payload
 
 echo "✅ Signed IPA created at: $IPA_SIGNED_PATH"

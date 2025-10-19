@@ -52,7 +52,7 @@
       <PathRunnable
          runnableDebuggingMode = "0"
          Location = "workspace"
-         FilePath = "XCSoarExecutable">
+         FilePath = "../output/IOS64SIM/ipa/Payload/XCSoar.app">
       </PathRunnable>
    </LaunchAction>
    <ProfileAction
@@ -64,7 +64,7 @@
       <PathRunnable
          runnableDebuggingMode = "0"
          Location = "workspace"
-         FilePath = "XCSoarExecutable">
+         FilePath = "../output/IOS64SIM/ipa/Payload/XCSoar.app">
       </PathRunnable>
       <MacroExpansion>
          <BuildableReference

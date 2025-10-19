@@ -23,31 +23,18 @@ if [ "${CONFIGURATION}" = "Debug" ]; then
 fi
 export DEBUG
 
-# Function to safely remove and create symlink
-create_symlink() {
-    local target="$1"
-    local link_name="$2"
-    rm -f "$link_name"
-    ln -s "$target" "$link_name"
-}
-
 # Set the make TARGET based on selected device
-# and linking all executables to the same path, so we can use one build scheme
-EXECUTABLE_PATH="$(pwd)/darwin/XCSoarExecutable"
 case "$TARGET_PLATFORM_NAME" in
     iphonesimulator)
         TARGET="IOS64SIM"
-        create_symlink "$(pwd)/output/IOS64SIM/ipa/Payload/XCSoar.app" "$EXECUTABLE_PATH"
         ;;
     iphoneos)
         TARGET="IOS64"
         # Clean up previous build artifacts to ensure .ipa is fresh
         rm -rf "$(pwd)/output/IOS64/ipa" "$(pwd)/output/IOS64/xcsoar.ipa" "$(pwd)/output/IOS64/xcsoar-signed.ipa" "$(pwd)"/output/IOS64/Info.plist*
-        create_symlink "$(pwd)/output/IOS64/xcsoar-signed.ipa" "$EXECUTABLE_PATH"
         ;;
     macosx)
         TARGET="MACOS"
-        create_symlink "$(pwd)/output/MACOS/bin/xcsoar" "$EXECUTABLE_PATH"
         ;;
     *)
         echo "Error: Unsupported platform: $TARGET_PLATFORM_NAME" >&2
@@ -75,7 +62,7 @@ NUM_CPUS=$(getconf _NPROCESSORS_ONLN 2>/dev/null || sysctl -n hw.ncpu 2>/dev/nul
 echo "Building with $NUM_CPUS parallel jobs..."
 
 # Execute make with error checking
-if ! gmake -j"${NUM_CPUS}" USE_CCACHE=y V=2 OPTIMIZE="-O0" DEBUG="$DEBUG" TARGET="$TARGET" $IPA_TARGET; then
+if ! gmake -j"${NUM_CPUS}" USE_CCACHE=y V=2 OPTIMIZE="-O0" DEBUG="$DEBUG" TARGET="$TARGET" TESTING="y" $IPA_TARGET; then
     echo "Error: Build failed" >&2
     exit 1
 fi
@@ -83,6 +70,12 @@ fi
 # Sign the iOS build if needed
 if [ "$TARGET" = "IOS64" ]; then
     echo "Signing iOS build..."
+    if [ -f ".env" ]; then
+        echo "Sourcing environment variables from $(pwd)/.env..."
+        source .env
+    else
+        echo "No .env file found at $(pwd)/.env, skipping environment variable sourcing."
+    fi
     if [ -f "$(pwd)/darwin/sign.sh" ]; then
         if ! "$(pwd)/darwin/sign.sh"; then
             echo "Warning: Signing failed" >&2

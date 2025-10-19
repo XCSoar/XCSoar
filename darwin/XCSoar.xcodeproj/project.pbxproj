@@ -7042,12 +7042,14 @@
 		5CBFEF2B2D742FA600F05795 /* xci2po.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = xci2po.pl; sourceTree = "<group>"; };
 		5CBFEF2C2D742FA600F05795 /* xcs2cpp.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = xcs2cpp.pl; sourceTree = "<group>"; };
 		5CBFEF2E2D742FA600F05795 /* VERSION.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = VERSION.txt; path = ../VERSION.txt; sourceTree = SOURCE_ROOT; };
+		5CD39CC52EA67484003C7BA6 /* sign.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = sign.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		5C263B902D7456D30031179E /* darwin */ = {
 			isa = PBXGroup;
 			children = (
+				5CD39CC52EA67484003C7BA6 /* sign.sh */,
 				5C263B8C2D7456D30031179E /* .gitignore */,
 				5C263B8D2D7456D30031179E /* build.sh */,
 				5C263B8E2D7456D30031179E /* clean.sh */,
