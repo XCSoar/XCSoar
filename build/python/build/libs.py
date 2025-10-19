@@ -245,6 +245,12 @@ curl = CmakeProject(
     windows_configure_args=[
         "-DCURL_USE_SCHANNEL=ON",
     ],
+    # Darwin/iOS: use SecureTransport for SSL
+    darwin_configure_args=[
+        "-DCMAKE_USE_OPENSSL=OFF",
+        "-DCURL_USE_OPENSSL=OFF",
+        "-DCURL_USE_SECTRANSP=ON",
+    ],
     patches=abspath("lib/curl/patches"),
 )
 
