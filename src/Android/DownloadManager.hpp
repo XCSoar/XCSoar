@@ -7,6 +7,10 @@
 #include "thread/Mutex.hxx"
 
 #include <list>
+#include <initializer_list>
+#include <map>
+#include <vector>
+#include <string>
 
 class Path;
 class Context;
@@ -16,11 +20,23 @@ class AndroidDownloadManager {
   Java::GlobalCloseable util;
 
   /**
-   * Protects the #listeners attribute.
+   * Protects the #listeners attribute and fallback state.
    */
   Mutex mutex;
 
   std::list<Net::DownloadListener *> listeners;
+
+  /**
+   * Map from relative path to list of fallback URLs.
+   * Protected by #mutex.
+   */
+  std::map<std::string, std::vector<std::string>> fallback_urls;
+
+  /**
+   * Map from relative path to current URL index.
+   * Protected by #mutex.
+   */
+  std::map<std::string, size_t> current_url_index;
 
 public:
   /**
@@ -40,5 +56,7 @@ public:
 
   void Enumerate(JNIEnv *env, Net::DownloadListener &listener) noexcept;
   void Enqueue(JNIEnv *env, const char *uri, Path path_relative) noexcept;
+  void EnqueueWithFallback(JNIEnv *env, std::initializer_list<const char*> urls, 
+                          Path path_relative) noexcept;
   void Cancel(JNIEnv *env, Path path_relative) noexcept;
 };

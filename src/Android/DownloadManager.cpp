@@ -16,6 +16,9 @@
 #include "org_xcsoar_DownloadUtil.h"
 
 #include <algorithm>
+#include <string>
+#include <map>
+#include <vector>
 
 static Java::TrivialClass util_class;
 
@@ -101,15 +104,48 @@ void
 AndroidDownloadManager::OnDownloadComplete(Path path_relative,
                                            bool success) noexcept
 {
-  const std::lock_guard lock{mutex};
+  const std::string path_key(path_relative.c_str());
 
-  if (success)
+  const std::lock_guard lock_success{mutex};
+
+  if (success) {
+    // Success - clean up fallback state and notify listeners
+    fallback_urls.erase(path_key);
+    current_url_index.erase(path_key);
     for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
       (*i)->OnDownloadComplete(path_relative);
-  else
+  } else {
+    // Failure - decide next action under lock
+    std::string next_url;
+    bool should_retry = false;
+    {
+      auto url_it = fallback_urls.find(path_key);
+      auto index_it = current_url_index.find(path_key);
+      if (url_it != fallback_urls.end() && index_it != current_url_index.end()) {
+        size_t& current_index = index_it->second;
+        const auto& urls = url_it->second;
+        ++current_index;
+        if (current_index < urls.size()) {
+          next_url = urls[current_index];
+          should_retry = true;
+        } else {
+          // All URLs failed - clean up
+          fallback_urls.erase(url_it);
+          current_url_index.erase(index_it);
+        }
+      }
+    }
+
+    if (should_retry) {
+      // Call into Java without holding mutex
+      Enqueue(Java::GetEnv(), next_url.c_str(), path_relative);
+      return;
+    }
+
+    // Report error (either no fallbacks or all failed)
     for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
-      // TODO obtain error details
       (*i)->OnDownloadError(path_relative, {});
+  }
 }
 
 JNIEXPORT void JNICALL
@@ -192,10 +228,41 @@ AndroidDownloadManager::Enqueue(JNIEnv *env, const char *uri,
 }
 
 void
+AndroidDownloadManager::EnqueueWithFallback(JNIEnv *env, 
+                                           std::initializer_list<const char*> urls,
+                                           Path path_relative) noexcept
+{
+  assert(env != nullptr);
+  assert(path_relative != nullptr);
+  assert(urls.size() > 0);
+
+  const std::string path_key(path_relative.c_str());
+
+  std::string first_url;
+  {
+    const std::lock_guard lock{mutex};
+    fallback_urls[path_key] = std::vector<std::string>(urls.begin(), urls.end());
+    current_url_index[path_key] = 0;
+    first_url = fallback_urls[path_key][0];
+  }
+  // Start with first URL (outside lock)
+  Enqueue(env, first_url.c_str(), path_relative);
+}
+
+void
 AndroidDownloadManager::Cancel(JNIEnv *env, Path path_relative) noexcept
 {
   assert(env != nullptr);
   assert(path_relative != nullptr);
+
+  const std::string path_key(path_relative.c_str());
+  
+  // Clean up fallback state
+  {
+    const std::lock_guard lock{mutex};
+    fallback_urls.erase(path_key);
+    current_url_index.erase(path_key);
+  }
 
   Java::String j_path(env, path_relative.c_str());
   env->CallVoidMethod(util, cancel_method, j_path.Get());
