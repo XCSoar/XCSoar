@@ -248,6 +248,11 @@ curl = CmakeProject(
     android_configure_args=[
         "-DENABLE_ARES=OFF",  # Disable c-ares on Android - use system getaddrinfo() instead
     ],
+    # Darwin/iOS: use SecureTransport for SSL
+    darwin_configure_args=[
+        "-DCURL_USE_OPENSSL=OFF",
+        "-DCURL_USE_SECTRANSP=ON",
+    ],
     patches=abspath("lib/curl/patches"),
 )
 
