@@ -59,7 +59,6 @@ elif toolchain.is_darwin:
         zlib,
         libfmt,
         libsodium,
-        openssl,
         cares,
         curl,
         lua,

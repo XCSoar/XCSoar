@@ -18,7 +18,7 @@ ifeq ($(TARGET_IS_OSX)$(USE_HOMEBREW),yn)
 # We use the libcurl which is included in macOS.
 # macOS SDKs contain the required headers / library stubs,
 # but no pkg-config file.
-LIBHTTP_LDLIBS = -lcurl -lssl -lcrypto -lz
+LIBHTTP_LDLIBS = -lcurl -lz
 else
 $(eval $(call pkg-config-library,CURL,libcurl))
 

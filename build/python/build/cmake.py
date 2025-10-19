@@ -131,15 +131,17 @@ def configure(toolchain: AnyToolchain, src: str, build: str, args: list[str]=[],
 
 class CmakeProject(Project):
     def __init__(self, url: Union[str, Sequence[str]], md5: str, installed: str,
-                 configure_args: list[str]=[],
-                 windows_configure_args: list[str]=[],
+                 configure_args: Optional[list[str]]=None,
+                 windows_configure_args: Optional[list[str]]=None,
                  android_configure_args: Optional[list[str]]=None,
+                 darwin_configure_args: Optional[list[str]]=None,
                  env: Optional[Mapping[str, str]]=None,
                  **kwargs):
         Project.__init__(self, url, md5, installed, **kwargs)
-        self.configure_args = configure_args
-        self.windows_configure_args = windows_configure_args
-        self.android_configure_args = android_configure_args if android_configure_args is not None else []
+        self.configure_args = configure_args or []
+        self.windows_configure_args = windows_configure_args or []
+        self.android_configure_args = android_configure_args or []
+        self.darwin_configure_args = darwin_configure_args or []
         self.env = env
 
     def configure(self, toolchain: AnyToolchain) -> str:
@@ -150,6 +152,8 @@ class CmakeProject(Project):
             configure_args = configure_args + self.windows_configure_args
         if toolchain.is_android:
             configure_args = configure_args + self.android_configure_args
+        if toolchain.is_darwin:
+            configure_args = configure_args + self.darwin_configure_args
         configure(toolchain, src, build, configure_args, self.env)
         return build
 
