@@ -143,15 +143,18 @@ private:
     assert(handler != nullptr);
     assert(pending > 0);
     handler = nullptr;
-    if (--pending == 0) self.reset();
+    // Do not decrement pending here; let HostCallback handle it
   }
 
   void HostCallback(int status, struct ares_addrinfo *addressinfo) noexcept {
-    std::unique_ptr<ares_addrinfo, decltype(&ares_freeaddrinfo)>
-        info(addressinfo, ares_freeaddrinfo);
+    std::unique_ptr<ares_addrinfo, decltype(&ares_freeaddrinfo)> info(addressinfo, ares_freeaddrinfo);
 
-    if (!handler) {
-      if (pending == 0) self.reset();
+    const bool was_cancelled = !handler;
+
+    // Always decrement pending when a callback fires
+    if (was_cancelled) {
+      if (--pending == 0)
+        self.reset();
       return;
     }
 
@@ -159,17 +162,31 @@ private:
       if (!success && --pending == 0) {
         handler->OnCaresError(std::make_exception_ptr(Error(status, "ares_getaddrinfo() failed")));
         self.reset();
+      } else if (success && --pending == 0) {
+        handler->OnCaresSuccess();
+        self.reset();
+      } else {
+        // Had error but still waiting for other callback
+        // pending already decremented above
       }
       return;
     }
 
     if (addressinfo) {
-      success = true;
       for (auto node = addressinfo->nodes; node; node = node->ai_next)
         AsSocketAddress(node, [handler = handler](SocketAddress addr) { handler->OnCaresAddress(addr); });
-    } else if (--pending == 0) {
-      handler->OnCaresError(std::make_exception_ptr(std::runtime_error("ares_getaddrinfo() failed")));
-      self.reset();
+      if (--pending == 0) {
+        handler->OnCaresSuccess();
+        self.reset();
+      }
+      return;
+    } else {
+      // Treat null addressinfo as DNS error, even if status == ARES_SUCCESS
+      if (--pending == 0) {
+        handler->OnCaresError(std::make_exception_ptr(Error(status, "ares_getaddrinfo() returned no addresses")));
+        self.reset();
+      }
+      return;
     }
   }
 
