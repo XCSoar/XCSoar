@@ -6,7 +6,10 @@
 #include <TargetConditionals.h>
 #include "LogFile.hpp"
 #include "Services.hpp"
+#include "BluetoothHelper.hpp"
 #import <AVFoundation/AVFoundation.h>
+
+BluetoothHelper *bluetooth_helper;
 
 // Initialize apple services - this will be called from the main XCSoar startup
 void
@@ -23,6 +26,12 @@ InitializeAppleServices()
   if (error) {
     LogFormat("AVAudioSession initialize error: %s", [[error localizedDescription] UTF8String]);
   }
+
+  // Setup bluetooth helper
+  bluetooth_helper = CreateBluetoothHelper();
+  if (!bluetooth_helper->HasBluetoothSupport()) {
+    bluetooth_helper = nullptr;
+  }
 #endif
 }
 
@@ -36,6 +45,12 @@ DeinitializeAppleServices()
   [[AVAudioSession sharedInstance] setActive:NO error:&error];
   if (error) {
     LogFormat("AVAudioSession deinitialize error: %s", [[error localizedDescription] UTF8String]);
+  }
+
+  // Deinitialize bluetooth helper
+  if (bluetooth_helper) {
+    delete bluetooth_helper;
+    bluetooth_helper = nullptr;
   }
 #endif
 }

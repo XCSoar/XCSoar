@@ -556,7 +556,6 @@ XCSOAR_SOURCES += \
 	$(SRC)/Apple/NativePortListener.cpp \
 	$(SRC)/Apple/NativeInputListener.cpp \
 	$(SRC)/Apple/PortBridge.cpp \
-	$(SRC)/Apple/Main.cpp \
 	$(SRC)/Apple/Services.cpp \
 	$(SRC)/Apple/SoundUtil.cpp \
 	$(SRC)/Apple/InternalSensors.cpp \

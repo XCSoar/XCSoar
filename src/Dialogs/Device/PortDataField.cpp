@@ -26,7 +26,7 @@
 #endif
 
 #ifdef __APPLE__
-#include "Apple/Main.hpp"
+#include "Apple/Services.hpp"
 #include "Apple/BluetoothHelper.hpp"
 #endif
 

@@ -17,7 +17,7 @@
 #endif
 
 #ifdef __APPLE__
-#include "Apple/Main.hpp"
+#include "Apple/Services.hpp"
 #include "AppleBluetoothPort.hpp"
 #endif
 
