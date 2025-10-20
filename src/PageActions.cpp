@@ -175,6 +175,7 @@ LoadMain(PageLayout::Main main)
 {
   switch (main) {
   case PageLayout::Main::MAP:
+  case PageLayout::Main::MAP_NORTH_UP:
     CommonInterface::main_window->ActivateMap();
     break;
 
@@ -305,10 +306,10 @@ GlueMapWindow *
 PageActions::ShowMap()
 {
   PageLayout layout = GetCurrentLayout();
-  if (layout.main != PageLayout::Main::MAP) {
+  if (layout.main != PageLayout::Main::MAP && layout.main != PageLayout::Main::MAP_NORTH_UP) {
     /* not showing map currently: activate it */
 
-    if (GetConfiguredLayout().main == PageLayout::Main::MAP)
+    if (GetConfiguredLayout().main == PageLayout::Main::MAP || GetConfiguredLayout().main == PageLayout::Main::MAP_NORTH_UP)
       /* the configured page is a map page: restore it */
       Restore();
     else {

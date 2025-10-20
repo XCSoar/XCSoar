@@ -111,6 +111,7 @@
 
 #ifdef __APPLE__
 #include "Apple/Main.hpp"
+#include "Apple/Services.hpp"
 #endif
 
 static TaskManager *task_manager;

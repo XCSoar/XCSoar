@@ -3,17 +3,18 @@
 
 #include "WaypointGlue.hpp"
 #include "Factory.hpp"
-#include "WaypointFileType.hpp"
-#include "Profile/Profile.hpp"
-#include "LogFile.hpp"
-#include "Waypoint/Waypoints.hpp"
-#include "WaypointReader.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
+#include "LogFile.hpp"
 #include "Operation/Operation.hpp"
-#include "system/Path.hpp"
+#include "Patterns.hpp"
+#include "Profile/Profile.hpp"
+#include "Waypoint/Waypoints.hpp"
+#include "WaypointFileType.hpp"
+#include "WaypointReader.hpp"
 #include "io/MapFile.hpp"
 #include "io/ZipArchive.hpp"
+#include "system/Path.hpp"
 
 namespace WaypointGlue {
 
@@ -77,22 +78,20 @@ LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
   way_points.Clear();
 
   // ### FIRST FILE ###
-  auto path = Profile::GetPath(ProfileKeys::WaypointFile);
-  if (path != nullptr)
+  auto paths = Profile::GetMultiplePaths(ProfileKeys::WaypointFileList,
+                                         WAYPOINT_FILE_PATTERNS);
+  for (const auto &path : paths) {
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::PRIMARY,
                               terrain, progress);
-
-  // ### SECOND FILE ###
-  path = Profile::GetPath(ProfileKeys::AdditionalWaypointFile);
-  if (path != nullptr)
-    found |= LoadWaypointFile(way_points, path, WaypointOrigin::ADDITIONAL,
-                              terrain, progress);
+  }
 
   // ### WATCHED WAYPOINT/THIRD FILE ###
-  path = Profile::GetPath(ProfileKeys::WatchedWaypointFile);
-  if (path != nullptr)
+  paths = Profile::GetMultiplePaths(ProfileKeys::WatchedWaypointFileList,
+                                    WAYPOINT_FILE_PATTERNS);
+  for (const auto &path : paths) {
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::WATCHED,
                               terrain, progress);
+  }
 
   // ### MAP/FOURTH FILE ###
 

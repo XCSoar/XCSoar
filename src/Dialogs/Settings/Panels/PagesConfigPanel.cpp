@@ -172,6 +172,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
 
   static constexpr StaticEnumChoice main_list[] = {
     { PageLayout::Main::MAP, N_("Map") },
+    { PageLayout::Main::MAP_NORTH_UP, N_("Map (north-up)") },
     { PageLayout::Main::FLARM_RADAR, N_("FLARM radar") },
     { PageLayout::Main::THERMAL_ASSISTANT, N_("Thermal assistant") },
     { PageLayout::Main::HORIZON, N_("Horizon") },
@@ -183,7 +184,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
           (unsigned)PageLayout::Main::MAP, this);
 
   static constexpr StaticEnumChoice ib_list[] = {
-    { IBP_AUTO, N_("Auto"), N_("Displays either the Circling, Cruise or Final glide infoxboxes") },
+    { IBP_AUTO, N_("Auto"), N_("Displays either the Circling, Cruise, or Final glide InfoBoxes.") },
     { IBP_NONE, N_("None"), N_("Show fullscreen (no InfoBoxes)") },
     nullptr
   };
@@ -193,9 +194,9 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
                             ib_list, IBP_AUTO, this);
   DataFieldEnum &ib = *(DataFieldEnum *)wp->GetDataField();
   for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; ++i) {
-    const TCHAR cruise_help[] = N_("For cruise mode.  Displayed when 'Auto' is selected and ship is below final glide altitude");
-    const TCHAR circling_help[] = N_("For circling mode.  Displayed when 'Auto' is selected and ship is circling");
-    const TCHAR final_glide_help[] = N_("For final glide mode.  Displayed when 'Auto' is selected and ship is above final glide altitude");
+    const TCHAR cruise_help[] = N_("For cruise mode. Displayed when 'Auto' is selected and glider is below final glide altitude.");
+    const TCHAR circling_help[] = N_("For circling mode. Displayed when 'Auto' is selected and glider is circling.");
+    const TCHAR final_glide_help[] = N_("For final glide mode. Displayed when 'Auto' is selected and glider is above final glide altitude.");
     const TCHAR *display_text = gettext(info_box_settings.panels[i].name);
     const TCHAR *help_text = N_("A custom InfoBox set");
     switch (i) {
@@ -345,6 +346,10 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   switch (value.main) {
   case PageLayout::Main::MAP:
     buffer = _("Map");
+    break;
+
+  case PageLayout::Main::MAP_NORTH_UP:
+    buffer = _("Map (north-up)");
     break;
 
   case PageLayout::Main::FLARM_RADAR:

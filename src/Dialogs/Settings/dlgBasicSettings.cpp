@@ -285,7 +285,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent,
 
   AddFloat(_("Bugs"), /* xgettext:no-c-format */
            _("How clean the glider is. Set to 0% for clean, larger numbers as the wings "
-               "pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."),
+               "pick up bugs or get wet. 50% indicates the glider's sink rate is doubled."),
            _T("%.0f %%"), _T("%.0f"),
            0, 50, 1, false,
            (1 - polar_settings.bugs) * 100,
@@ -293,7 +293,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent,
 
   WndProperty *wp;
   wp = AddFloat(_("QNH"),
-                _("Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected."),
+                _("Area pressure for barometric altimeter calibration. This is set automatically if Vega is connected."),
                 GetUserPressureFormat(true), GetUserPressureFormat(),
                 Units::ToUserPressure(Units::ToSysUnit(850, Unit::HECTOPASCAL)),
                 Units::ToUserPressure(Units::ToSysUnit(1300, Unit::HECTOPASCAL)),
@@ -309,7 +309,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent,
               UnitGroup::ALTITUDE, 0);
 
   wp = AddFloat(_("Max. temp."),
-                _("Set to forecast ground temperature.  Used by convection estimator (temperature trace page of Analysis dialog)"),
+                _("Set to forecast ground temperature. Used by convection estimator (temperature trace page of Analysis dialog)."),
                 _T("%.0f %s"), _T("%.0f"),
                 Temperature::FromCelsius(-50).ToUser(),
                 Temperature::FromCelsius(60).ToUser(),

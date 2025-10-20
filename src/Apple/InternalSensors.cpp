@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#ifdef __APPLE__
+
 #include "Apple/InternalSensors.hpp"
 #include "Device/SensorListener.hpp"
 #include "Geo/GeoPoint.hpp"
@@ -148,6 +150,11 @@
 
 InternalSensors::InternalSensors(SensorListener &_listener)
   :listener(_listener)
+#if TARGET_OS_IPHONE
+  , altimeter(nullptr)
+  , motion_activity_manager(nullptr)
+  , motion_activity_queue(nullptr)
+#endif
 {
   if ([NSThread isMainThread]) {
     Init();
@@ -169,6 +176,17 @@ InternalSensors::~InternalSensors()
   }
 }
 
+/**
+ * Initialize all available sensors and request necessary permissions.
+ * 
+ * Sets up:
+ * - CoreLocation manager with high accuracy GPS
+ * - Permission requests for location services  
+ * - iOS barometric pressure sensing (when available)
+ * - Proper authorization flow handling
+ * 
+ * Must be called on the main thread due to Apple API requirements.
+ */
 void InternalSensors::Init()
 {
   location_manager = [[CLLocationManager alloc] init];
@@ -211,12 +229,130 @@ void InternalSensors::Init()
   } else {
     [location_manager startUpdatingLocation];
   }
+    
+  // Initialize altimeter to nullptr before any barometer checks
+  altimeter = nullptr;
+  
+  // Check if the device supports barometric pressure sensing
+  if ([CMAltimeter isRelativeAltitudeAvailable]) {
+    // Check for authorization status (iOS 8+)
+    if ([CMAltimeter respondsToSelector:@selector(authorizationStatus)]) {
+      CMAuthorizationStatus status = [CMAltimeter authorizationStatus];
+      
+      // Exit if user denied permission
+      if (status == CMAuthorizationStatusDenied) {
+        altimeter = nullptr;
+        return;
+      }
+      // Handle case where permission hasn't been determined yet
+      else if (status == CMAuthorizationStatusNotDetermined &&
+              [CMMotionActivityManager respondsToSelector:@selector(isActivityAvailable)]) {
+        // Create persistent manager and queue to check permissions
+        motion_activity_manager = [[CMMotionActivityManager alloc] init];
+        motion_activity_queue = [[NSOperationQueue alloc] init];
+        
+        // Query motion activity to trigger permission dialog
+        [motion_activity_manager queryActivityStartingFromDate:[NSDate date]
+                                        toDate:[NSDate date]
+                                       toQueue:motion_activity_queue
+                                   withHandler:^(NSArray<CMMotionActivity *> * _Nullable activities, NSError * _Nullable error) {
+         (void) activities;
+            if (error) {
+                NSLog(@"Error querying motion activities: %@", error);
+                // Schedule main-thread work for error handling
+                dispatch_async(dispatch_get_main_queue(), ^{
+                  // Ensure altimeter remains nullptr on error
+                  altimeter = nullptr;
+                  // Clear the persistent references since we're done
+                  motion_activity_manager = nullptr;
+                  motion_activity_queue = nullptr;
+                });
+                return;
+            }
+            
+            // Schedule main-thread work for successful permission grant
+            dispatch_async(dispatch_get_main_queue(), ^{
+              // Clear the persistent references since we're done with permission check
+              motion_activity_manager = nullptr;
+              motion_activity_queue = nullptr;
+              
+              // Only initialize altimeter if permission query succeeded
+              StartAltimeterUpdates();
+            });
+        }];
+        
+        return; // Exit early since altimeter initialization is handled in the completion block
+      }
+    }
+    
+    // Initialize altimeter for pressure readings (for authorized status)
+    StartAltimeterUpdates();
+    } else {
+      // Device doesn't support barometric pressure sensing
+      altimeter = nullptr;
+    }
+    
 #else
   [location_manager startUpdatingLocation];
 #endif
 }
 
+/**
+ * Clean up and stop all sensor operations.
+ * 
+ * Stops:
+ * - Location updates from CoreLocation
+ * - Barometric pressure updates from CoreMotion (iOS)
+ * 
+ * Safe to call multiple times. Must be called on main thread.
+ */
 void InternalSensors::Deinit()
 {
   [location_manager stopUpdatingLocation];
+  #if TARGET_OS_IPHONE
+  if (altimeter != nullptr) {
+    [altimeter stopRelativeAltitudeUpdates];
+  }
+  
+  // Clean up persistent motion activity manager and queue
+  motion_activity_manager = nullptr;
+  motion_activity_queue = nullptr;
+  #endif
 }
+
+#if TARGET_OS_IPHONE
+/**
+ * Initialize barometric pressure sensing using iOS CoreMotion framework.
+ * 
+ * Creates CMAltimeter instance and starts relative altitude updates on a background queue.
+ * Converts pressure readings from kilopascals (kPa) to hectopascals (hPa/mbar) 
+ * and forwards to the SensorListener interface.
+ * 
+ * @note Only available on iOS devices with barometric sensors
+ * @note Requires Motion & Fitness permission if not already granted
+ * @note Pressure values are converted: kPa * 10.0 = hPa/mbar
+ */
+void InternalSensors::StartAltimeterUpdates()
+{
+  // Initialize altimeter for pressure readings
+  altimeter = [[CMAltimeter alloc] init];
+  NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+  
+  // Start receiving altimeter updates
+  [altimeter startRelativeAltitudeUpdatesToQueue:queue
+                                     withHandler:^(CMAltitudeData * _Nullable altitudeData, NSError * _Nullable error) {
+    if (error) {
+      NSLog(@"Error: %@", [error localizedDescription]);
+      return;
+    }
+
+    // Convert pressure readings (from kPa to hPa/mbar) and notify listener
+    listener.OnBarometricPressureSensor(
+      static_cast<float>(altitudeData.pressure.floatValue * 10.0f),
+      0.0f
+    );
+  }];
+}
+#endif
+
+#endif // __APPLE__

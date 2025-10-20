@@ -129,13 +129,14 @@ position on the map (presuming a touch-screen).
 
 
 \section{Waypoints}\label{sec:waypoint-schemes}
-Waypoints are displayed with different symbols depending on the
+Waypoints are displayed with different symbols and different options for
+waypoint label content depending on the
 waypoint type; the major distinction being landable and non-landable
 waypoints.
 
 \subsection*{Landables}
-The waypoint symbols are drawn as shown below. There are three icon sets for
-landable waypoints. \config{waypointicons}
+Landable waypoint symbols are drawn as shown below. There are three icon sets
+available for landable waypoints. \config{waypointicons}
 
 \begin{tabular}{c|ccc|ccc|}
 Icon set 
@@ -178,9 +179,9 @@ reach, but it is not possible to approach them directly. E.g.\ a mountain prohib
 Waypoints are optionally labelled according to one of several
 abbreviation schemes \config{labels} and visibility.
 
-On top of this landable waypoints can be displayed in more detail. If
-`\emph{Detailed landables}' is switched on you get additional information
-encoded in the appearance of it's icon. 
+On top of this, landable waypoints can be displayed in more detail. If
+`\emph{Detailed landables}' is switched on, you get additional information
+encoded in the appearance of its icon.
 \begin{enumerate}
 \item  Landable fields get a square-shaped icon despite what is shown in the table.
   The square is drawn like a diamond standing on one corner. Airfields stay with the 
@@ -191,38 +192,72 @@ encoded in the appearance of it's icon.
   include this information.  
 \end{enumerate}
 
-\subsection*{Landables in Reach}
-Next to landables an estimated arrival height
-\emph{above the arrival safety height of reachable landable} points is
-displayed next to the waypoint. This feature is one of the most powerful out 
-of XCSoar's capabilities. The arrival height is calculated highly 
-configurable by XCSoar's \emph{glide computer} with parameters taken into 
-account being glider performance (polar), MacCready setting, wind, terrain 
-clearance, and --- obviously --- safety heights' values.
-With all of it being 
-configurable, there is enough room for failure, so please:
-Unless you will have fully understood the glide computer's concepts, you 
+\subsection*{Extra Data in Landables Labels}
+In XCSoar's default configuration, estimated arrival height is shown in the labels
+next to symbols for reachable landable waypoints.
+This is one of XCSoar's most powerful features.
+The displayed arrival height is the arrival height above the
+configured safety 'Arrival height' \config{safetyarrival} (a user setting on
+the 'Glide Computer / Safety Factors' configuration page).
+The arrival height calculation takes several things into account, including
+glider performance (polar), MacCready setting (MC), and wind.
+Given all the user-configurable options that go into this calculation, unless you fully
+understand the glide computer's concepts, it's recommended that you
 \warning
-better stay with XCSoar's pre-configuration (and in no way judge readings as 
-heavenly approved).
-It is up to the pilot to always interpret readings and watch values trending 
+use XCSoar's default configuration. Even then, don't assume
+these calculations are perfect!
+The pilot should always interpret and understand the values shown and watch their trends
 over time.
 
-However, having set up the glide computer following
-Chapter~\ref{cha:glide} the \emph{display} of estimated reach heights, drawn beside 
-landables in reach may take into account terrain or not or display both.
 \config{arrivalheight}
+The 'Arrival height' setting on the 'Map Display / Waypoints' configuration page
+controls the display of this arrival height and gives other options (e.g., none,
+arrival height that accounts for any needed detours around terrain, required glide ratio,
+and certain combinations of these options).
 
-Another option is to display the required glide ratio next to a landable in 
-reach. This calculation is simply derived by the glider's actual distance to 
-landables divided by the height difference between actual altitude and 
-landable's altitude.  Again, the safety height is added to the landable's 
-height, but nothing else taken into account: no wind, no polar, no MacCready 
-settings, just geometry. The concept of required glide ratios is a widely 
-discussed concept, said as to be a very robust one.
+The displayed glide ratio to a waypoint is simply the glider's distance
+from the waypoint divided by how high the glider is above the minimum desired
+arrival height, which is the waypoint elevation plus the
+the configured safety 'Arrival height'.
+Nothing else is taken into account - no polar, no MacCready
+setting, no wind - just simple geometry.
 
-\tip Keep in mind a strong relationship of displays of \emph{reach} and 
-settings in the glide computer.
+In the default configuration, XCSoar only shows this extra data (arrival
+height, in the default configuration) for \emph{reachable} waypoints;
+but if a glide ratio option is chosen,
+glide ratio will be shown even for \emph{un}reachable waypoints. Also, if a waypoint
+file is configured as the 'Watched waypoints' file (selected on the
+\config{watched-wps}
+'Site Files / Site Files' configuration page),
+even arrival height
+will be displayed for unreachable waypoints
+(if an 'Arrival height' option including arrival height is selected).
+
+Which is better, arrival height or glide ratio? This is a common topic of
+discussion among glider pilots. Glide ratio is a more trustworthy value, since
+it's calculated based on simpler, more trustworthy values; but arrival height
+more precisely tells you what you really want to know: how high you'll be
+when you get there. Also, you don't have to watch arrival height as much to
+look for a trend. With glide ratio, you often need to watch for the trend to see
+whether you'll make it. Since wind causes your achieved glide ratio relative to the
+ground to vary with wind speed, wind direction, and flight direction; it's tough
+to know at any given time what glide ratio relative to the ground you can
+expect to \emph{achieve}. Maybe you're
+headed to a landing place where you'd really
+like to arrive higher than your configured safety 'Arrival height'. If all you see is
+glide ratio, the most you can know is simply whether you'll arrive \emph{above} or
+\emph{below}
+your configured safety 'Arrival height' - but not \emph{by how much}. In another
+scenario, maybe all you see is arrival
+height and it's positive but decreasing slowly as you fly toward the landing
+place. It would be difficult to
+figure out whether it's trending downward too quickly for a safe arrival.
+With glide ratio, though, you could much more easily answer this question.
+If glide ratio is holding steady or trending down (i.e., to a steeper glide),
+it looks like you'll make it. More could be said on this subject, but since
+there are cases when glide ratio is better
+and cases when arrival height is better, maybe showing \emph{both} is the best
+option... and is an option XCSoar offers!
 
 \subsection*{Non-Landables}
 As far as your waypoint file contains information on the nature of the 

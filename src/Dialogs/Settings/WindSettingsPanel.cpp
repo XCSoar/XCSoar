@@ -38,11 +38,11 @@ WindSettingsPanel::Prepare(ContainerWindow &parent,
   const MapSettings &map_settings = CommonInterface::GetMapSettings();
 
   AddBoolean(_("Circling wind"),
-             _("Estimate the wind vector while circling.  Requires only a GPS."),
+             _("Estimate the wind vector while circling. Requires only a GPS."),
              settings.circling_wind);
 
   AddBoolean(_("ZigZag wind"),
-             _("Estimate the wind vector during glides.  Requires an airspeed sensor."),
+             _("Estimate the wind vector during glides. Requires an airspeed sensor."),
              settings.zig_zag_wind);
 
   AddBoolean(_("External wind"),

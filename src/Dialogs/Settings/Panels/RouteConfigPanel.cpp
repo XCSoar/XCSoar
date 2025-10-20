@@ -102,7 +102,7 @@ RouteConfigPanel::Prepare(ContainerWindow &parent,
 
   AddBoolean(_("Route ceiling"),
              _("When enabled, route planning climbs are limited to ceiling defined by greater of "
-                 "current aircraft altitude plus 500 m and the thermal ceiling.  If disabled, "
+                 "current aircraft altitude plus 500 m and the thermal ceiling. If disabled, "
                  "climbs are unlimited."),
              route_planner.use_ceiling);
   SetExpertRow(RoutePlannerUseCeiling);
@@ -128,7 +128,7 @@ RouteConfigPanel::Prepare(ContainerWindow &parent,
     { RoutePlannerConfig::Polar::TASK, N_("Task"),
       N_("Uses task glide polar.") },
     { RoutePlannerConfig::Polar::SAFETY, N_("Safety MC"),
-      N_("Uses safety MacCready value") },
+      N_("Uses safety MacCready value.") },
     nullptr
   };
 

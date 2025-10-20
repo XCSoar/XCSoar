@@ -128,7 +128,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent,
     nullptr
   };
   AddEnum(_("Aircraft/Wind speed"),
-          _("Units used for airspeed and ground speed.  "
+          _("Units used for airspeed and ground speed. "
             "A separate unit is available for task speeds."),
           units_speed_list,
           (unsigned int)config.speed_unit, this);

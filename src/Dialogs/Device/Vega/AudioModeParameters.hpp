@@ -73,7 +73,7 @@ VegaParametersWidget::StaticParameter audio_mode_parameters[] = {
   },
   { DataField::Type::INTEGER, "ToneMeanVolumeCruise",
     N_("Cruise volume"),
-    N_("Mean volume level in cruise modes.  If set to zero, scales with airspeed."),
+    N_("Mean volume level in cruise modes. If set to zero, scales with airspeed."),
     NULL, 0, 8, 1, _T("%d/8"),
   },
   { DataField::Type::INTEGER, "ToneBaseFrequencyOffset",

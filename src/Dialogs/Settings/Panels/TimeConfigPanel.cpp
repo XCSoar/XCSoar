@@ -63,7 +63,7 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 
   const RoughTimeDelta utc_offset = settings_computer.utc_offset;
   AddDuration(_("UTC offset"),
-          _("The UTC offset field allows the UTC local time offset to be specified.  The local "
+          _("The UTC offset field allows the UTC local time offset to be specified. The local "
             "time is displayed below in order to make it easier to verify the correct offset "
             "has been entered."),
               hours{-13},

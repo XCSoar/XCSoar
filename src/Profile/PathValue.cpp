@@ -9,6 +9,10 @@
 #include "util/StringCompare.hxx"
 #include "util/StringPointer.hxx"
 
+#ifdef HAVE_POSIX
+#include <fnmatch.h>
+#endif
+
 #ifdef _UNICODE
 #include "util/AllocatedString.hxx"
 #endif
@@ -33,7 +37,7 @@ ProfileMap::GetPath(std::string_view key) const noexcept
 }
 
 std::vector<AllocatedPath>
-ProfileMap::GetMultiplePaths(std::string_view key) const
+ProfileMap::GetMultiplePaths(std::string_view key, const TCHAR *patterns) const
 {
 
   std::vector<AllocatedPath> paths;
@@ -51,12 +55,24 @@ ProfileMap::GetMultiplePaths(std::string_view key) const
 
     Path path(file_string.c_str());
 
-    if (!(path.EndsWithIgnoreCase(_T(".txt")) ||
-          path.EndsWithIgnoreCase(_T(".air")) ||
-          path.EndsWithIgnoreCase(_T(".sua"))))
+    size_t length;
+    const TCHAR *patterns_iterator = patterns;
+    if (patterns == nullptr) {
+      paths.push_back(ExpandLocalPath(AllocatedPath(path)));
       continue;
-
-    paths.push_back(ExpandLocalPath(AllocatedPath(path)));
+    }
+    while ((length = _tcslen(patterns_iterator)) > 0) {
+#ifdef HAVE_POSIX
+      if (!fnmatch(patterns_iterator, path.c_str(), 0))
+#else
+      if (StringEndsWithIgnoreCase(path.c_str(), patterns_iterator + 1))
+#endif
+      {
+        paths.push_back(ExpandLocalPath(AllocatedPath(path)));
+        break;
+      }
+      patterns_iterator += length + 1;
+    }
   }
 
   return paths;

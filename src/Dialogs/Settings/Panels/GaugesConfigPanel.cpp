@@ -35,7 +35,7 @@ static constexpr StaticEnumChoice final_glide_bar_display_mode_list[] = {
 
 static constexpr StaticEnumChoice flarm_display_location_list[] = {
   { TrafficSettings::GaugeLocation::AUTO,
-    N_("Auto (follow infoboxes)") },
+    N_("Auto (follow InfoBoxes)") },
   { TrafficSettings::GaugeLocation::TOP_LEFT,
     N_("Top left") },
   { TrafficSettings::GaugeLocation::TOP_RIGHT,
@@ -49,17 +49,17 @@ static constexpr StaticEnumChoice flarm_display_location_list[] = {
   { TrafficSettings::GaugeLocation::CENTER_BOTTOM,
     N_("Center bottom") },
   { TrafficSettings::GaugeLocation::TOP_LEFT_AVOID_IB,
-    N_("Top left (avoid infoboxes)") },
+    N_("Top left (avoid InfoBoxes)") },
   { TrafficSettings::GaugeLocation::TOP_RIGHT_AVOID_IB,
-    N_("Top right (avoid infoboxes)") },
+    N_("Top right (avoid InfoBoxes)") },
   { TrafficSettings::GaugeLocation::BOTTOM_LEFT_AVOID_IB,
-    N_("Bottom left (avoid infoboxes)") },
+    N_("Bottom left (avoid InfoBoxes)") },
   { TrafficSettings::GaugeLocation::BOTTOM_RIGHT_AVOID_IB,
-    N_("Bottom right (avoid infoboxes)") },
+    N_("Bottom right (avoid InfoBoxes)") },
   { TrafficSettings::GaugeLocation::CENTER_TOP_AVOID_IB,
-    N_("Center top (avoid infoboxes)") },
+    N_("Center top (avoid InfoBoxes)") },
   { TrafficSettings::GaugeLocation::CENTER_BOTTOM_AVOID_IB,
-    N_("Center bottom (avoid infoboxes)") },
+    N_("Center bottom (avoid InfoBoxes)") },
   nullptr
 };
 
@@ -71,32 +71,32 @@ static constexpr StaticEnumChoice thermal_assistant_position_list[] = {
     N_("Bottom left"),
     N_("Show thermal assistant in bottom left.") },
   { UISettings::ThermalAssistantPosition::BOTTOM_LEFT_AVOID_IB,
-    N_("Bottom left (avoid infoboxes)"),
-    N_("Show thermal assistant in bottom left, above/to right of infoboxes (if there).") },
+    N_("Bottom left (avoid InfoBoxes)"),
+    N_("Show thermal assistant in bottom left, above or to the right of InfoBoxes (if present).") },
   { UISettings::ThermalAssistantPosition::BOTTOM_RIGHT,
     N_("Bottom right"),
     N_("Show thermal assistant in bottom right.") },
   { UISettings::ThermalAssistantPosition::BOTTOM_RIGHT_AVOID_IB,
-    N_("Bottom right (avoid infoboxes)"),
-    N_("Show thermal assistant in bottom right above/to left of infoboxes (if there).") },
+    N_("Bottom right (avoid InfoBoxes)"),
+    N_("Show thermal assistant in bottom right, above or to the left of InfoBoxes (if present).") },
   { UISettings::ThermalAssistantPosition::TOP_LEFT,
     N_("Top left"),
-    N_("Show thermal assistant in top left") },
+    N_("Show thermal assistant in top left.") },
   { UISettings::ThermalAssistantPosition::TOP_RIGHT,
     N_("Top right"),
-    N_("Show thermal assistant in top right") },
+    N_("Show thermal assistant in top right.") },
   { UISettings::ThermalAssistantPosition::CENTER_TOP,
     N_("Center top"),
-    N_("Show thermal assistant in center top") },
+    N_("Show thermal assistant in center top.") },
   { UISettings::ThermalAssistantPosition::TOP_LEFT_AVOID_IB,
-    N_("Top left (avoid infoboxes)"),
-    N_("Show thermal assistant in top left (avoid infoboxes)") },
+    N_("Top left (avoid InfoBoxes)"),
+    N_("Show thermal assistant in top left (avoid InfoBoxes).") },
   { UISettings::ThermalAssistantPosition::TOP_RIGHT_AVOID_IB,
-    N_("Top right (avoid infoboxes)"),
-    N_("Show thermal assistant in top right (avoid infoboxes)") },
+    N_("Top right (avoid InfoBoxes)"),
+    N_("Show thermal assistant in top right (avoid InfoBoxes).") },
   { UISettings::ThermalAssistantPosition::CENTER_TOP_AVOID_IB,
-    N_("Center top (avoid infoboxes)"),
-    N_("Show thermal assistant in center top (avoid infoboxes)") },
+    N_("Center top (avoid InfoBoxes)"),
+    N_("Show thermal assistant in center top (avoid InfoBoxes).") },
   nullptr
 };
 
@@ -164,7 +164,7 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(FinalGlideBarDisplayModeControl);
 
   AddBoolean(_("Final glide bar MC0"),
-             _("If set to ON the final glide bar will show a second arrow indicating the required height "
+             _("If set to \"On\" the final glide bar will show a second arrow indicating the required height "
                  "to reach the final waypoint at MC zero."),
              map_settings.final_glide_bar_mc0_enabled);
   SetExpertRow(EnableFinalGlideBarMC0);
@@ -174,7 +174,7 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent,
                   FinalGlideBarDisplayMode::OFF);
 
   AddBoolean(_("Vario bar"),
-             _("If set to ON the vario bar will be shown"),
+             _("If set to \"On\" the vario bar will be shown."),
              map_settings.vario_bar_enabled);
 
   AddBoolean(_("No Position Target Distance Ring"),

@@ -4,7 +4,20 @@ PERL = perl
 
 $(OUT)/include/MathTables.h: $(HOST_OUTPUT_DIR)/tools/GenerateSineTables$(HOST_EXEEXT) | $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
-	$(Q)$(HOST_OUTPUT_DIR)/tools/GenerateSineTables$(HOST_EXEEXT) >$@
+	# Generate into a temporary file to avoid leaving a truncated/empty header on interruption
+	$(Q)$(HOST_OUTPUT_DIR)/tools/GenerateSineTables$(HOST_EXEEXT) >$@.tmp
+	# Basic validation: file must be non-empty and contain an expected token.
+	@if [ ! -s "$@.tmp" ]; then \
+	  echo "Generation failed: $@.tmp is empty" >&2; \
+	  rm -f "$@.tmp"; \
+	  exit 1; \
+	fi
+	@if ! grep -q 'THERMALRECENCY{' "$@.tmp"; then \
+	  echo "Generation failed: expected token THERMALRECENCY{ not found in $@.tmp" >&2; \
+	  rm -f "$@.tmp"; \
+	  exit 1; \
+	fi
+	@mv $@.tmp $@
 
 $(call SRC_TO_OBJ,$(SRC)/Math/FastMath.cpp): $(OUT)/include/MathTables.h
 $(call SRC_TO_OBJ,$(SRC)/Math/FastTrig.cpp): $(OUT)/include/MathTables.h

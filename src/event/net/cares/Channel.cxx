@@ -3,8 +3,8 @@
 // author: Max Kellermann <mk@cm4all.com>
 
 #include "Channel.hxx"
-#include "Handler.hxx"
 #include "Error.hxx"
+#include "Handler.hxx"
 #include "event/SocketEvent.hxx"
 #include "net/SocketAddress.hxx"
 #include "time/Convert.hxx"
@@ -16,8 +16,8 @@
 #ifdef _WIN32
 #include <winsock2.h>
 #else
-#include <netinet/in.h>
 #include <netdb.h>
+#include <netinet/in.h>
 #endif
 
 namespace Cares {
@@ -34,20 +34,62 @@ public:
     event.Schedule(events);
   }
 
+  SocketDescriptor GetSocket() const noexcept { return event.GetSocket(); }
+  void Reschedule(unsigned events) noexcept { event.Schedule(events); }
+
 private:
   void OnSocket(unsigned events) noexcept
   {
-    event.Cancel();
     channel.OnSocket(event.GetSocket(), events);
   }
 };
+
+void
+Channel::sock_state_cb(void *data, ares_socket_t socket_fd, int readable,
+                       int writable)
+{
+  auto &channel = *static_cast<Channel *>(data);
+  unsigned new_events = 0;
+  if (readable) new_events |= SocketEvent::READ;
+  if (writable) new_events |= SocketEvent::WRITE;
+
+  // Find existing watcher for this fd
+  auto prev = channel.sockets.before_begin();
+  for (auto it = channel.sockets.begin(); it != channel.sockets.end();) {
+    if (it->GetSocket().Get() == socket_fd) {
+      if (new_events == 0) {
+        // Socket closed by c-ares, remove the watcher
+        channel.sockets.erase_after(prev);
+      } else {
+        // Update existing watcher with new events
+        it->Reschedule(new_events);
+      }
+      return;
+    } else {
+      prev = it++;
+    }
+  }
+
+  // No existing watcher found, create new one if needed
+  if (new_events != 0)
+    channel.sockets.emplace_front(channel, SocketDescriptor{socket_fd},
+                                  new_events);
+}
 
 Channel::Channel(EventLoop &event_loop)
     : defer_update_sockets(event_loop, BIND_THIS_METHOD(UpdateSockets)),
       timeout_event(event_loop, BIND_THIS_METHOD(OnTimeout))
 {
-  int code = ares_init(&channel);
-  if (code != 0) throw Error(code, "ares_init() failed");
+  struct ares_options options;
+
+  options.sock_state_cb = &Channel::sock_state_cb;
+  options.sock_state_cb_data = this;
+
+  int optmask = 0;
+  optmask |= ARES_OPT_SOCK_STATE_CB;
+
+  int code = ares_init_options(&channel, &options, optmask);
+  if (code != 0) throw Error(code, "ares_init_options() failed");
 }
 
 Channel::~Channel() noexcept { ares_destroy(channel); }
@@ -56,22 +98,6 @@ void
 Channel::UpdateSockets() noexcept
 {
   timeout_event.Cancel();
-  sockets.clear();
-
-  ares_socket_t socks[ARES_GETSOCK_MAXNUM];
-  const auto s = ares_getsock(channel, socks, ARES_GETSOCK_MAXNUM);
-
-  for (unsigned i = 0; i < ARES_GETSOCK_MAXNUM; ++i)
-  {
-    unsigned events = 0;
-
-    if (ARES_GETSOCK_READABLE(s, i)) events |= SocketEvent::READ;
-
-    if (ARES_GETSOCK_WRITABLE(s, i)) events |= SocketEvent::WRITE;
-
-    if (events != 0)
-      sockets.emplace_front(*this, SocketDescriptor{socks[i]}, events);
-  }
 
   struct timeval timeout_buffer;
   const auto *t = ares_timeout(channel, nullptr, &timeout_buffer);
@@ -97,51 +123,28 @@ Channel::OnSocket(SocketDescriptor fd, unsigned events) noexcept
 void
 Channel::OnTimeout() noexcept
 {
-  sockets.clear();
-
   ares_process_fd(channel, ARES_SOCKET_BAD, ARES_SOCKET_BAD);
-
   ScheduleUpdateSockets();
 }
 
-template<typename F>
+template <typename F>
 static void
-AsSocketAddress(const struct hostent &he, const void *src, F &&f)
+AsSocketAddress(const ares_addrinfo_node *node, F &&f)
 {
-  switch (he.h_addrtype)
-  {
+  switch (node->ai_family) {
   case AF_INET:
-  {
-    struct sockaddr_in sin
-    {
-    };
-    memcpy(&sin.sin_addr, src, he.h_length);
-    sin.sin_family = AF_INET;
-
-    f(SocketAddress((const struct sockaddr *)&sin, sizeof(sin)));
-  }
-  break;
-
   case AF_INET6:
-  {
-    struct sockaddr_in6 sin
-    {
-    };
-    memcpy(&sin.sin6_addr, src, he.h_length);
-    sin.sin6_family = AF_INET6;
-
-    f(SocketAddress((const struct sockaddr *)&sin, sizeof(sin)));
-  }
-  break;
+    f(SocketAddress(node->ai_addr, node->ai_addrlen));
+    break;
 
   default:
-    throw std::runtime_error("Unsupported address type");
+    // Ignore unsupported families
+    break;
   }
 }
 
 class Channel::Request final : Cancellable {
   Handler *handler;
-
   unsigned pending;
 
   bool success = false;
@@ -151,15 +154,13 @@ public:
       : handler(&_handler), pending(_pending)
   {
     assert(pending > 0);
-
     cancel_ptr = *this;
   }
 
   void Start(ares_channel _channel, const char *name, int family) noexcept
   {
-    assert(handler != nullptr);
-
-    ares_gethostbyname(_channel, name, family, HostCallback, this);
+    const struct ares_addrinfo_hints hints = {ARES_AI_NOSORT, family, 0, 0};
+    ares_getaddrinfo(_channel, name, nullptr, &hints, HostCallback, this);
   }
 
 private:
@@ -171,54 +172,59 @@ private:
     /* c-ares doesn't support cancellation, so we emulate
        it here */
     handler = nullptr;
+    --pending;
   }
 
-  void HostCallback(int status, struct hostent *he) noexcept;
+  void HostCallback(int status, struct ares_addrinfo *addressinfo) noexcept;
 
   static void HostCallback(void *arg, int status, int,
-                           struct hostent *hostent) noexcept
+                           struct ares_addrinfo *result) noexcept
   {
     auto &request = *(Request *)arg;
-    request.HostCallback(status, hostent);
+    request.HostCallback(status, result);
   }
 };
 
 inline void
-Channel::Request::HostCallback(int status, struct hostent *he) noexcept
+Channel::Request::HostCallback(int status,
+                               struct ares_addrinfo *addressinfo) noexcept
 {
   assert(pending > 0);
 
-  if (handler == nullptr) /* cancelled */
-    return;
-
   --pending;
 
-  try
-  {
-    if (status != ARES_SUCCESS)
-      throw Error(status, "ares_gethostbyname() failed");
-    else if (he != nullptr)
-    {
-      success = true;
-
-      for (auto i = he->h_addr_list; *i != nullptr; ++i)
-        AsSocketAddress(*he, *i,
-                        [&_handler = *handler](SocketAddress address)
-                        { _handler.OnCaresAddress(address); });
-
-      if (pending == 0) handler->OnCaresSuccess();
-    }
-    else throw std::runtime_error("ares_gethostbyname() failed");
-  }
-  catch (...)
-  {
-    if (pending == 0)
-    {
-      if (success) handler->OnCaresSuccess();
-      else handler->OnCaresError(std::current_exception());
-    }
+  if (handler == nullptr) {
+    ares_freeaddrinfo(addressinfo);
+    if (pending == 0) delete this;
+    return;
   }
 
+  if (status != ARES_SUCCESS) {
+    if (!success && pending == 0) {
+      handler->OnCaresError(
+          std::make_exception_ptr(Error(status, "ares_getaddrinfo() failed")));
+    }
+    ares_freeaddrinfo(addressinfo);
+    if (pending == 0) delete this;
+    return;
+  }
+
+  if (addressinfo != nullptr) {
+    success = true;
+    for (auto node = addressinfo->nodes; node != nullptr;
+         node = node->ai_next) {
+      AsSocketAddress(node, [&_handler = *handler](SocketAddress address) {
+        _handler.OnCaresAddress(address);
+      });
+    }
+  } else {
+    if (pending == 0) {
+      handler->OnCaresError(std::make_exception_ptr(
+          std::runtime_error("ares_getaddrinfo() failed")));
+    }
+  }
+
+  ares_freeaddrinfo(addressinfo);
   if (pending == 0) delete this;
 }
 

@@ -43,7 +43,8 @@ Profile::GetPath([[maybe_unused]] std::string_view key) noexcept
 }
 
 std::vector<AllocatedPath>
-Profile::GetMultiplePaths([[maybe_unused]] std::string_view key)
+Profile::GetMultiplePaths([[maybe_unused]] std::string_view key,
+                          [[maybe_unused]] const TCHAR *patterns)
 {
   return std::vector<AllocatedPath>();
 }

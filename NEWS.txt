@@ -28,7 +28,9 @@ Version 7.44 - not yet released
   - infoboxen: new setting, allow scaling of title/comment font
   - Radar / Thermalassistant Gauges: Placement to avoid InfoBoxen and Overlap
   - Thermal assistant: New positions on top of map to avoid hiding airspace warnings
-  - Add new Infobox “Home altitude difference” (Home AltD)
+  - Add new InfoBox 'Home altitude difference' (Home AltD)
+  - Add new InfoBox 'Alternate 1 altitude difference' (Altn 1 AltD)
+  - Add new InfoBox 'Alternate 2 altitude difference' (Altn 2 AltD)
   - Show transponder mode (if available) in transponder code InfoBox
   - add helpers on infoboxes for Argentinean contests 95% distance rule
   - Popup messages now appear at the top of the map
@@ -42,6 +44,10 @@ Version 7.44 - not yet released
   - show station names in airspace details dialog
   - show squawk code in airspace details dialog
   - ability to send squawk code from airspace details dialog to transponder
+  - add support for a dedicated north-up map page layout
+  - the thermal assistant InfoBox is now clickable
+  - Add support for multiple airspace files in UI
+  - Add support for multiple waypoint files in UI
 * Android
   - fix crash on startup when loading icons on ldpi screens
   - update 'white list' of USB devices with one more VID/PID pair for SoftRF Academy
@@ -50,6 +56,8 @@ Version 7.44 - not yet released
   - battery: prevent shutdown on devices without battery
 * Windows
   - Popupmessages are now shown with full text again
+* iOS
+  - Improve audio support: prevent ducking and enable sound playback even when the phone is muted
 * devices
   - Add driver for Condor 3
   - Add driver for LX Navigation Eos / Era variometers
