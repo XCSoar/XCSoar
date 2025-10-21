@@ -54,6 +54,13 @@ InputConfig::GetKeyEvent(unsigned mode, unsigned key_code) const noexcept
   }
 #endif
 
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+  // On iOS, map lowercase letters to uppercase
+  if (key_code_idx >= 'a' && key_code_idx <= 'z') {
+    key_code_idx -= ('a' - 'A');
+  }
+#endif
+
 #ifdef USE_X11
   if (key_code_idx >= 0xff00) {
     key_code_idx -= 0xff00;
