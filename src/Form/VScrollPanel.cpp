@@ -4,6 +4,9 @@
 #include "VScrollPanel.hpp"
 #include "Look/DialogLook.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "Asset.hpp"
+
+#include <algorithm>
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scissor.hpp"
@@ -42,12 +45,41 @@ VScrollPanel::SetupScrollBar() noexcept
   }
 }
 
+static bool UsePixelPan() noexcept
+{
+  return !HasEPaper();
+}
+
+void
+VScrollPanel::SetOriginClamped(int new_origin) noexcept
+{
+  const int max_origin = std::max(0, int(virtual_height) - int(GetSize().height));
+  if (new_origin < 0)
+    new_origin = 0;
+  else if (new_origin > max_origin)
+    new_origin = max_origin;
+
+  if ((unsigned)new_origin == origin)
+    return;
+
+  origin = (unsigned)new_origin;
+  listener.OnVScrollPanelChange();
+  Invalidate();
+}
+
 void
 VScrollPanel::OnResize(PixelSize new_size) noexcept
 {
   PanelControl::OnResize(new_size);
   SetupScrollBar();
   listener.OnVScrollPanelChange();
+}
+
+void
+VScrollPanel::OnDestroy() noexcept
+{
+  kinetic_timer.Cancel();
+  PanelControl::OnDestroy();
 }
 
 bool
@@ -66,6 +98,19 @@ VScrollPanel::OnMouseUp(PixelPoint p) noexcept
     return true;
   }
 
+  if (dragging) {
+    const bool enable_kinetic = UsePixelPan();
+
+    dragging = false;
+    ReleaseCapture();
+
+    if (enable_kinetic) {
+      kinetic.MouseUp(origin);
+      kinetic_timer.Schedule(std::chrono::milliseconds(30));
+    }
+    return true;
+  }
+
   return PanelControl::OnMouseUp(p);
 }
 
@@ -78,6 +123,14 @@ VScrollPanel::OnMouseMove(PixelPoint p, unsigned keys) noexcept
     return true;
   }
 
+  if (dragging) {
+    int new_origin = drag_y - p.y;
+    SetOriginClamped(new_origin);
+    if (UsePixelPan())
+      kinetic.MouseMove(origin);
+    return true;
+  }
+
   return PanelControl::OnMouseMove(p, keys);
 }
 
@@ -86,8 +139,18 @@ VScrollPanel::OnMouseDown(PixelPoint p) noexcept
 {
   scroll_bar.DragEnd(this);
 
+  kinetic_timer.Cancel();
+
   if (scroll_bar.IsInsideSlider(p)) {
     scroll_bar.DragBegin(this, p.y);
+    return true;
+  } else if (!scroll_bar.IsInside(p)) {
+    // Start dragging the content area itself instead of the scroll bar
+    dragging = true;
+    drag_y = (int)origin + p.y;
+    if (UsePixelPan())
+      kinetic.MouseDown(origin);
+    SetCapture();
     return true;
   } else
     return PanelControl::OnMouseDown(p);
@@ -111,6 +174,11 @@ VScrollPanel::OnCancelMode() noexcept
   PanelControl::OnCancelMode();
 
   scroll_bar.DragEnd(this);
+  if (dragging) {
+    dragging = false;
+    ReleaseCapture();
+  }
+  kinetic_timer.Cancel();
 }
 
 void
@@ -152,4 +220,17 @@ VScrollPanel::ScrollTo(const PixelRect &rc) noexcept
   }
 
   PanelControl::ScrollTo(rc);
+}
+
+void
+VScrollPanel::OnKineticTimer() noexcept
+{
+  assert(UsePixelPan());
+
+  if (kinetic.IsSteady()) {
+    kinetic_timer.Cancel();
+    return;
+  }
+
+  SetOriginClamped(kinetic.GetPosition());
 }
