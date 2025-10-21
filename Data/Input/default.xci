@@ -1283,9 +1283,17 @@ location=34
 mode=RemoteStick
 type=key
 data=0
+event=NOTAMList
+event=Mode default
+label=NOTAMs
+location=35
+
+mode=RemoteStick
+type=key
+data=0
 event=Exit
 label=Quit XCSoar
-location=35
+location=36
 
 # -------------
 # Define gesture to open Quickmenu without keyboard or remote

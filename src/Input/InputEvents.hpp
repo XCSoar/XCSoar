@@ -140,6 +140,7 @@ void eventMarkLocation(const TCHAR *misc);
 void eventPilotEvent(const TCHAR *misc);
 void eventMode(const TCHAR *misc);
 void eventNearestAirspaceDetails(const TCHAR *misc);
+void eventNOTAMList(const TCHAR *misc);
 void eventNearestWaypointDetails(const TCHAR *misc);
 void eventNearestMapItems(const TCHAR *misc);
 void eventNull(const TCHAR *misc);

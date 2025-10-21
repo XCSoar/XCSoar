@@ -13,6 +13,10 @@
 #include "PopupMessage.hpp"
 #include "Simulator.hpp"
 #include "Replay/Replay.hpp"
+
+#ifdef HAVE_HTTP
+#include "NOTAM/Glue.hpp"
+#endif
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "BallastDumpManager.hpp"
@@ -257,6 +261,10 @@ ProcessTimer() noexcept
     if (net_components->tim != nullptr &&
         CommonInterface::GetComputerSettings().weather.enable_tim)
       net_components->tim->OnTimer(CommonInterface::Basic());
+    
+    if (net_components->notam != nullptr &&
+        CommonInterface::GetComputerSettings().airspace.notam.enabled)
+      net_components->notam->UpdateLocation(CommonInterface::Basic().location);
 #endif
   }
 }

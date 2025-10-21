@@ -249,5 +249,4 @@ struct ComputerSettings {
   void SetDefaults();
 };
 
-static_assert(std::is_trivial<ComputerSettings>::value,
-              "type is not trivial");
+// Note: ComputerSettings is no longer trivial due to AirspaceComputerSettings containing NOTAMSettings

@@ -16,7 +16,9 @@
 #include "Engine/Airspace/SoonestAirspace.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
+#include "Dialogs/Airspace/NOTAMList.hpp"
 #include "NMEA/Aircraft.hpp"
+#include "UIGlobals.hpp"
 
 /*
  * This even currently toggles DrawAirSpace() and does nothing else.
@@ -105,4 +107,13 @@ InputEvents::eventNearestAirspaceDetails([[maybe_unused]] const TCHAR *misc)
   } 
 
   dlgAirspaceDetails(std::move(as), airspace_warnings);
+}
+
+// Shows the NOTAM list dialog
+void
+InputEvents::eventNOTAMList([[maybe_unused]] const TCHAR *misc)
+{
+#ifdef HAVE_HTTP
+  ShowNOTAMListDialog(UIGlobals::GetMainWindow());
+#endif
 }
