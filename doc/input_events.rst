@@ -207,7 +207,7 @@ Event list
  * - ``Analysis``
    - Displays the analysis/statistics dialog
  * - ``WaypointDetails W``
-   - Displays waypoint details
+   - Displays airfields/waypoint details
      
      ``current``: the current active waypoint
      
@@ -239,7 +239,7 @@ Event list
  * - ``RepeatStatusMessage``
    - Repeats the last status message.  If pressed repeatedly, will repeat previous status messages
  * - ``NearestWaypointDetails``
-   - Displays the waypoint details dialog
+   - Displays the airfields/waypoint details dialog
  * - ``NearestMapItems``
    - Displays the map item list dialog
  * - ``Null``
