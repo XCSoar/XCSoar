@@ -233,7 +233,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Next waypoint"),
     N_("Next WP"),
-    N_("Name of the currently selected turn point. When this InfoBox is active, using the up/down cursor keys selects the next/previous waypoint in the task. (Touch-screen/PC only) Pressing the enter cursor key brings up the waypoint details."),
+    N_("Name of the currently selected turn point. When this InfoBox is active, using the up/down cursor keys selects the next/previous waypoint in the task. (Touch-screen/PC only) Pressing the enter cursor key brings up the Airfields/waypoint details."),
     IBFHelper<InfoBoxContentNextWaypoint>::Create,
   },
 
