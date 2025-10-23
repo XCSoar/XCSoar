@@ -67,7 +67,23 @@ Profile::LoadFile(ProfileMap &map, Path path)
       waypoint += pair.value;
       map.Set(ProfileKeys::WatchedWaypointFileList, waypoint.c_str());
       continue;
-        }
+    }
+
+    // migrate old AirfieldFile field
+    if (StringIsEqual(pair.key, "AirfieldFile")) {
+      auto buffer = map.Get(ProfileKeys::AirfieldFileList);
+      std::string airfield;
+      if (buffer != nullptr) {
+        airfield = std::string(buffer);
+      }
+      if (airfield.size() > 0)
+        airfield += "|";
+      airfield += pair.value;
+
+      map.Set(ProfileKeys::AirfieldFileList, airfield.c_str());
+      continue;
+    }
+
     /* ignore the "Vega*" values; the Vega driver used to abuse the
        profile to pass messages between the driver and the user
        interface */
