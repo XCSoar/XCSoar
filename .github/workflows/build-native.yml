@@ -330,13 +330,13 @@ jobs:
           fi
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}${{ matrix.target_ext }}
           path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
 
       - name: Upload artifact (Bundle)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: ${{ matrix.target == 'ANDROID_BUNDLE' }}
         with:
           name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}.aab
