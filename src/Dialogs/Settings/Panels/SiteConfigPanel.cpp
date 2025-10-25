@@ -18,7 +18,7 @@ enum ControlIndex {
   MapFile,
   WaypointFileList,
   WatchedWaypointFileList,
-  AirfieldFile,
+  AirfieldFileList,
   AirspaceFileList,
   FlarmFile,
   RaspFile,
@@ -68,12 +68,13 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
                    WAYPOINT_FILE_PATTERNS, FileType::WAYPOINT);
   SetExpertRow(WatchedWaypointFileList);
 
-  AddFile(_("Waypoint details"),
-          _("The file may contain extracts from enroute supplements or other contributed "
-            "information about individual waypoints and airfields."),
-          ProfileKeys::AirfieldFile, _T("*.txt\0"),
-          FileType::WAYPOINTDETAILS);
-  SetExpertRow(AirfieldFile);
+  AddMultipleFiles(_("Airfields or Waypoint details"),
+                   _("The files may contain extracts from enroute supplements "
+                     "or other contributed "
+                     "information about individual waypoints and airfields."),
+                   ProfileKeys::AirfieldFileList, _T("*.txt\0"),
+                   FileType::WAYPOINTDETAILS);
+  SetExpertRow(AirfieldFileList);
 
   AddMultipleFiles(_("Selected Airspace Files"),
                    _("List of active airspace files. Use the Add and Remove "
@@ -111,7 +112,8 @@ SiteConfigPanel::Save(bool &_changed) noexcept
 
   FlarmFileChanged = SaveValueFileReader(FlarmFile, ProfileKeys::FlarmFile);
 
-  AirfieldFileChanged = SaveValueFileReader(AirfieldFile, ProfileKeys::AirfieldFile);
+  AirfieldFileChanged = SaveValueMultiFileReader(
+      AirfieldFileList, ProfileKeys::AirfieldFileList);
 
   RaspFileChanged = SaveValueFileReader(RaspFile, ProfileKeys::RaspFile);
 

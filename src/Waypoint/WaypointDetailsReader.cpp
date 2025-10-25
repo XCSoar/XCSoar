@@ -2,18 +2,22 @@
 // Copyright The XCSoar Project
 
 #include "WaypointDetailsReader.hpp"
-#include "Language/Language.hpp"
-#include "Profile/Keys.hpp"
+
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "io/ConfiguredFile.hpp"
-#include "io/MapFile.hpp"
+#include "Language/Language.hpp"
+#include "LogFile.hpp"
+#include "Operation/ProgressListener.hpp"
+#include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
 #include "io/BufferedReader.hxx"
+#include "io/ConfiguredFile.hpp"
 #include "io/FileReader.hxx"
-#include "io/ZipReader.hpp"
+#include "io/MapFile.hpp"
 #include "io/ProgressReader.hpp"
 #include "io/StringConverter.hpp"
-#include "Operation/ProgressListener.hpp"
+#include "io/ZipReader.hpp"
+#include "system/Path.hpp"
 
 namespace WaypointDetails {
 
@@ -115,18 +119,23 @@ void
 ReadFileFromProfile(Waypoints &way_points,
                     ProgressListener &progress)
 {
-  if (auto reader = OpenConfiguredFile(ProfileKeys::AirfieldFile)) {
-    ProgressReader progress_reader{*reader, reader->GetSize(), progress};
-    BufferedReader buffered_reader{progress_reader};
-    ReadFile(buffered_reader, way_points);
-    return;
+  auto paths =
+      Profile::GetMultiplePaths(ProfileKeys::AirfieldFileList, _T("*.txt\0"));
+  for (const auto &path : paths) {
+    try {
+      auto reader = std::make_unique<FileReader>(Path(path));
+      ProgressReader progress_reader{*reader, reader->GetSize(), progress};
+      BufferedReader buffered_reader{progress_reader};
+      ReadFile(buffered_reader, way_points);
+    } catch (...) {
+      LogError(std::current_exception());
+    }
   }
 
   if (auto reader = OpenInMapFile("airfields.txt")) {
     ProgressReader progress_reader{*reader, reader->GetSize(), progress};
     BufferedReader buffered_reader{progress_reader};
     ReadFile(buffered_reader, way_points);
-    return;
   }
 }
 
