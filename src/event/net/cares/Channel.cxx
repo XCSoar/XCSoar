@@ -173,6 +173,7 @@ private:
     }
 
     if (addressinfo) {
+      success = true;
       for (auto node = addressinfo->nodes; node; node = node->ai_next)
         AsSocketAddress(node, [handler = handler](SocketAddress addr) { handler->OnCaresAddress(addr); });
       if (--pending == 0) {
@@ -183,7 +184,11 @@ private:
     } else {
       // Treat null addressinfo as DNS error, even if status == ARES_SUCCESS
       if (--pending == 0) {
-        handler->OnCaresError(std::make_exception_ptr(Error(status, "ares_getaddrinfo() returned no addresses")));
+        if (!success) {
+          handler->OnCaresError(std::make_exception_ptr(Error(status, "ares_getaddrinfo() returned no addresses")));
+        } else {
+          handler->OnCaresSuccess();
+        }
         self.reset();
       }
       return;
