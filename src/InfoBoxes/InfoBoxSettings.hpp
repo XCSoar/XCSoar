@@ -17,18 +17,6 @@ struct InfoBoxSettings {
     PANEL_AUXILIARY,
   };
 
-  struct Panel {
-    static constexpr unsigned MAX_CONTENTS = 24;
-
-    StaticString<32u> name;
-    InfoBoxFactory::Type contents[MAX_CONTENTS];
-
-    void Clear() noexcept;
-
-    [[gnu::pure]]
-    bool IsEmpty() const noexcept;
-  };
-
   static constexpr unsigned MAX_PANELS = 8;
   static constexpr unsigned PREASSIGNED_PANELS = 3;
 
@@ -109,6 +97,24 @@ struct InfoBoxSettings {
 
   } geometry;
 
+  struct Panel {
+    static constexpr unsigned MAX_CONTENTS = 24;
+
+    StaticString<32u> name;
+    InfoBoxFactory::Type contents[MAX_CONTENTS];
+
+    /**
+     * Geometry override for this panel. The value
+     * INHERIT_GEOMETRY falls back to the global setting.
+     */
+    static constexpr uint8_t INHERIT_GEOMETRY = 0xff;
+    uint8_t geometry;
+
+    void Clear() noexcept;
+
+    [[gnu::pure]]
+    bool IsEmpty() const noexcept;
+  };
 /*
  * scales the font for InfoBox titles and comments between 50% and 150%
  * the value of scale_title_font ranges from 50 to 150 accordingly.
@@ -125,6 +131,14 @@ struct InfoBoxSettings {
   } border_style;
 
   Panel panels[MAX_PANELS];
+
+  [[nodiscard]]
+  constexpr Geometry ResolveGeometry(const Panel &panel) const noexcept
+  {
+    return panel.geometry == Panel::INHERIT_GEOMETRY
+               ? geometry
+               : static_cast<Geometry>(panel.geometry);
+  }
 
   void SetDefaults() noexcept;
 };
