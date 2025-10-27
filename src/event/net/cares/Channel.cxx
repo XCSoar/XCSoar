@@ -146,6 +146,15 @@ private:
     // Do not decrement pending here; let HostCallback handle it
   }
 
+  /**
+   * @brief Handle ares_getaddrinfo completion for this Request.
+   *
+   * Processes the DNS callback result, delivers zero or more resolved addresses to the
+   * associated Handler, and signals final success or error when all pending lookups complete.
+   *
+   * @param status ARES status code for the completed lookup.
+   * @param addressinfo Pointer to resolved address information (may be null).
+   */
   void HostCallback(int status, struct ares_addrinfo *addressinfo) noexcept {
     std::unique_ptr<ares_addrinfo, decltype(&ares_freeaddrinfo)> info(addressinfo, ares_freeaddrinfo);
 
@@ -214,4 +223,3 @@ void Channel::Lookup(const char *name, Handler &handler,
 }
 
 } // namespace Cares
-
