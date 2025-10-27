@@ -100,7 +100,7 @@ jobs:
             ARCH=arm uImage
 
       - name: "upload uImage"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{matrix.uimage}}
           path: output/src/linux/arch/arm/boot/uImage
@@ -117,7 +117,7 @@ jobs:
             ARCH=arm uImage
 
       - name: "upload OTG uImage"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{matrix.otg_uimage}}
           path: output/src/linux/arch/arm/boot/uImage
