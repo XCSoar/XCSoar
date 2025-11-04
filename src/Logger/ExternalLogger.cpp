@@ -86,7 +86,7 @@ try {
     return true;
 
   case TriStateJobResult::ERROR:
-    ShowMessageBox(_("Error occured,\nTask NOT declared!"),
+    ShowMessageBox(_("Error occurred,\nTask NOT declared!"),
                    caption, MB_OK | MB_ICONERROR);
     return false;
 
@@ -98,7 +98,7 @@ try {
 } catch (OperationCancelled) {
   return false;
 } catch (...) {
-  ShowError(_("Error occured,\nTask NOT declared!"),
+  ShowError(_("Error occurred,\nTask NOT declared!"),
             std::current_exception(),
             dev.GetDisplayName());
   return false;

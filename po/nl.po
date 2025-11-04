@@ -525,7 +525,7 @@ msgstr "Opdracht gedeclareerd!"
 
 #: src/Logger/ExternalLogger.cpp:89 src/Logger/ExternalLogger.cpp:101
 msgid ""
-"Error occured,\n"
+"Error occurred,\n"
 "Task NOT declared!"
 msgstr ""
 "Foutmelding,\n"
