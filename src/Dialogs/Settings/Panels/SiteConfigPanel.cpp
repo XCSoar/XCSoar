@@ -117,9 +117,9 @@ SiteConfigPanel::Save(bool &_changed) noexcept
 
   RaspFileChanged = SaveValueFileReader(RaspFile, ProfileKeys::RaspFile);
 
-  changed = WaypointFileChanged || AirfieldFileChanged || MapFileChanged ||
-    FlarmFileChanged ||
-    RaspFileChanged;
+  changed = WaypointFileChanged || AirfieldFileChanged ||
+            AirspaceFileChanged || MapFileChanged || FlarmFileChanged ||
+            RaspFileChanged;
 
   _changed |= changed;
 
