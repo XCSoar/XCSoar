@@ -18,6 +18,7 @@ GETTEXT_EVENTS = Data/Input/default.xci
 $(OUT)/po/cpp.pot: $(GETTEXT_SOURCES) | $(OUT)/po/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(XGETTEXT) --default-domain=$(GETTEXT_PACKAGE) \
+	  --package-name=$(GETTEXT_PACKAGE) \
 	  --add-comments --keyword=_ --keyword=N_ \
 	  --from-code=utf-8 \
 	  --keyword=C_:1c,2 \
