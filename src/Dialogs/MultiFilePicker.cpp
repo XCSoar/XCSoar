@@ -36,7 +36,7 @@ public:
                            unsigned i) noexcept override
   {
     if (active_files.empty()) {
-      row_renderer.DrawTextRow(canvas, rc, _(""));
+      row_renderer.DrawTextRow(canvas, rc, _T(""));
       return;
     }
     row_renderer.DrawTextRow(canvas, rc, active_files[i].GetBase().c_str());
@@ -78,7 +78,7 @@ MultiFilePickerMain(const TCHAR *caption, MultiFileDataField &df,
   dialog.AddButton(_("Help"), [file_widget]() { file_widget->ShowHelp(); });
   dialog.AddButton(_("Add"), mrAdd);
   dialog.AddButton(_("Remove"), mrRemove);
-  dialog.AddButton(_("Ok"), mrOK);
+  dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
   dialog.EnableCursorSelection();
 
