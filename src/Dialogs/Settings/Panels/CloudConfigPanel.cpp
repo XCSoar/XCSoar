@@ -65,7 +65,7 @@ CloudConfigPanel::Prepare(ContainerWindow &parent,
              settings.enabled == TriState::TRUE,
              this);
 
-  AddBoolean(_T("Show thermals"),
+  AddBoolean(_("Show thermals"),
              _("Obtain and show thermal locations reported by others."),
              settings.show_thermals);
 
