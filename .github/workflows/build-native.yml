@@ -213,6 +213,18 @@ jobs:
             apt
           path: /var/cache/apt
 
+      - name: "Cache Homebrew packages"
+        if: ${{ matrix.os == 'macos-14' || matrix.os == 'macos-12' }}
+        uses: actions/cache@v4
+        with:
+          key: brew-${{ matrix.os }}-${{ hashFiles('ide/provisioning/install-darwin-packages.sh') }}
+          restore-keys: |
+            brew-${{ matrix.os }}
+            brew
+          path: |
+            /opt/homebrew/var/cache
+            /usr/local/var/cache
+
       - name: "Cache Boost"
         uses: actions/cache@v4
         with:
