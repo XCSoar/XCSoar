@@ -201,9 +201,17 @@ jobs:
         uses: actions/cache@v4
         with:
           key: downloads-${{ runner.os }}
-          restore-keys: |
-            downloads-
           path: ${{ github.workspace }}/output/download
+
+      - name: "Cache apt packages"
+        if: ${{ matrix.os == 'ubuntu-22.04' }}
+        uses: actions/cache@v4
+        with:
+          key: apt-${{ matrix.target_container }}-${{ hashFiles('ide/provisioning/install-debian-packages.sh') }}
+          restore-keys: |
+            apt-${{ matrix.target_container }}
+            apt
+          path: /var/cache/apt
 
       - name: "Cache Boost"
         uses: actions/cache@v4
