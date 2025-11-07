@@ -197,6 +197,14 @@ jobs:
         with:
           key: ${{ matrix.target }}-ccache
 
+      - name: "Cache downloads"
+        uses: actions/cache@v4
+        with:
+          key: downloads-${{ runner.os }}
+          restore-keys: |
+            downloads-
+          path: ${{ github.workspace }}/output/download
+
       - name: "Cache Boost"
         uses: actions/cache@v4
         with:
