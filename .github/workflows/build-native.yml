@@ -13,6 +13,7 @@ on:
       - '.github/workflows/build-unix.yml'
       - '.github/workflows/build-translation.yml'
       - '.readthedocs.yaml'
+      - 'renovate.json'
     branches:
       - master
     tags:
@@ -30,6 +31,7 @@ on:
       - '.github/workflows/build-unix.yml'
       - '.github/workflows/build-translation.yml'
       - '.readthedocs.yaml'
+      - 'renovate.json'
     branches:
       - master
 

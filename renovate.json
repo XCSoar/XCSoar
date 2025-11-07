@@ -1,0 +1,150 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":semanticCommits"
+  ],
+  "_comment": "Checksums for GitHub-hosted libraries are automatically updated via github-release-attachments datasource.",
+  "dependencyDashboard": true,
+  "minimumReleaseAge": "3 days",
+  "packageRules": [
+    {
+      "description": "Group GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "groupSlug": "github-actions"
+    },
+    {
+      "description": "Group Python dependencies",
+      "matchManagers": ["pip_requirements"],
+      "groupName": "Python dependencies",
+      "groupSlug": "python-deps"
+    },
+    {
+      "description": "Group Rust dependencies",
+      "matchManagers": ["cargo"],
+      "groupName": "Rust dependencies",
+      "groupSlug": "rust-deps"
+    },
+    {
+      "description": "Separate PRs for major version updates",
+      "matchUpdateTypes": ["major"],
+      "groupName": null,
+      "separateMajorMinor": true
+    },
+    {
+      "description": "Security updates should be created immediately",
+      "matchUpdateTypes": ["patch"],
+      "matchPackageNames": ["*"],
+      "schedule": ["at any time"],
+      "minimumReleaseAge": null
+    }
+  ],
+  "regexManagers": [
+    {
+      "description": "Parse fmt library version and checksum from libs.py",
+      "fileMatch": [
+        "^build/python/build/libs\\.py$"
+      ],
+      "matchStrings": [
+        "(?s)https://github\\.com/fmtlib/fmt/archive/(?<currentValue>\\d+[\\d.]+)\\.tar\\.gz[^\\n]*\\n[^\\n]*\"(?<currentDigest>[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "depNameTemplate": "fmtlib/fmt",
+      "packageNameTemplate": "fmt-{{version}}.tar.gz",
+      "versioningTemplate": "semver"
+    },
+    {
+      "description": "Parse libsodium library version and checksum from libs.py",
+      "fileMatch": [
+        "^build/python/build/libs\\.py$"
+      ],
+      "matchStrings": [
+        "(?s)https://github\\.com/jedisct1/libsodium/releases/download/(?<currentValue>\\d+[\\d.]+)-RELEASE/libsodium-(?<currentValue2>\\d+[\\d.]+)\\.tar\\.gz[^\\n]*\\n[^\\n]*\"(?<currentDigest>[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "depNameTemplate": "jedisct1/libsodium",
+      "packageNameTemplate": "libsodium-{{version}}-RELEASE.tar.gz",
+      "versioningTemplate": "semver"
+    },
+    {
+      "description": "Parse zlib library version and checksum from libs.py",
+      "fileMatch": [
+        "^build/python/build/libs\\.py$"
+      ],
+      "matchStrings": [
+        "(?s)https://github\\.com/madler/zlib/releases/download/v(?<currentValue>\\d+[\\d.]+)/zlib-(?<currentValue2>\\d+[\\d.]+)\\.tar\\.xz[^\\n]*\\n[^\\n]*\"(?<currentDigest>[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "depNameTemplate": "madler/zlib",
+      "packageNameTemplate": "zlib-{{version}}.tar.xz",
+      "versioningTemplate": "semver"
+    },
+    {
+      "description": "Parse curl library version and checksum from libs.py (GitHub)",
+      "fileMatch": [
+        "^build/python/build/libs\\.py$"
+      ],
+      "matchStrings": [
+        "(?s)https://github\\.com/curl/curl/releases/download/curl-(?<currentValue>\\d+)_(?<currentValue2>\\d+)_(?<currentValue3>\\d+)/curl-(?<currentValue4>\\d+[\\d.]+)\\.tar\\.xz[^\\n]*\\n[^\\n]*\"(?<currentDigest>[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "depNameTemplate": "curl/curl",
+      "packageNameTemplate": "curl-{{version}}.tar.xz",
+      "versioningTemplate": "semver"
+    },
+    {
+      "description": "Parse openssl library version and checksum from libs.py (GitHub)",
+      "fileMatch": [
+        "^build/python/build/libs\\.py$"
+      ],
+      "matchStrings": [
+        "(?s)https://github\\.com/openssl/openssl/releases/download/openssl-(?<currentValue>\\d+[\\d.]+)/openssl-(?<currentValue2>\\d+[\\d.]+)\\.tar\\.gz[^\\n]*\\n[^\\n]*\"(?<currentDigest>[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "depNameTemplate": "openssl/openssl",
+      "packageNameTemplate": "openssl-{{version}}.tar.gz",
+      "versioningTemplate": "semver"
+    },
+    {
+      "description": "Parse c-ares library version and checksum from libs.py",
+      "fileMatch": [
+        "^build/python/build/libs\\.py$"
+      ],
+      "matchStrings": [
+        "(?s)https://github\\.com/c-ares/c-ares/releases/download/cares-(?<currentValue>\\d+)_(?<currentValue2>\\d+)_(?<currentValue3>\\d+)/c-ares-(?<currentValue4>\\d+[\\d.]+)\\.tar\\.gz[^\\n]*\\n[^\\n]*\"(?<currentDigest>[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "depNameTemplate": "c-ares/c-ares",
+      "packageNameTemplate": "c-ares-{{version}}.tar.gz",
+      "versioningTemplate": "semver"
+    },
+    {
+      "description": "Parse libusb library version and checksum from libs.py",
+      "fileMatch": [
+        "^build/python/build/libs\\.py$"
+      ],
+      "matchStrings": [
+        "(?s)https://github\\.com/libusb/libusb/releases/download/v(?<currentValue>\\d+[\\d.]+)/libusb-(?<currentValue2>\\d+[\\d.]+)\\.tar\\.bz2[^\\n]*\\n[^\\n]*\"(?<currentDigest>[a-f0-9]{32,64})\""
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "depNameTemplate": "libusb/libusb",
+      "packageNameTemplate": "libusb-{{version}}.tar.bz2",
+      "versioningTemplate": "semver"
+    },
+    {
+      "description": "Parse SDL2 library version and checksum from libs.py",
+      "fileMatch": [
+        "^build/python/build/libs\\.py$"
+      ],
+      "matchStrings": [
+        "(?s)https://github\\.com/libsdl-org/SDL/releases/download/release-(?<currentValue>\\d+[\\d.]+)/SDL2-(?<currentValue2>\\d+[\\d.]+)\\.tar\\.gz[^\\n]*\\n[^\\n]*\"(?<currentDigest>[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "depNameTemplate": "libsdl-org/SDL",
+      "packageNameTemplate": "SDL2-{{version}}.tar.gz",
+      "versioningTemplate": "semver"
+    }
+  ]
+}
+
