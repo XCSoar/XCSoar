@@ -2258,7 +2258,7 @@ msgstr "Einstellungen"
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:55
 #, no-c-format
 msgid "Volume"
-msgstr "Volumen"
+msgstr "Lautstärke"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:48
 #, no-c-format
@@ -2592,11 +2592,11 @@ msgstr "Reichweite"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:67
 msgid "Vertical range"
-msgstr "Team - Distanz"
+msgstr "Vertikale Reichweite"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:75
 msgid "PCAS range"
-msgstr "AAT Bereich"
+msgstr "PCAS Reichweite"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:76
 msgid "PCAS vertical range"
@@ -2604,7 +2604,7 @@ msgstr "PCAS vertikale Reichweite"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:77
 msgid "ADSB range"
-msgstr "AAT Bereich"
+msgstr "ADSB Bereich"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:78
 msgid "ADSB vertical range"
@@ -2749,7 +2749,7 @@ msgstr "Name"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:450
 msgid "Class/Type"
-msgstr "Klasse"
+msgstr "Klasse/Typ"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:464
 msgid "Select Airspace"
@@ -4295,7 +4295,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:191
 msgid "Repetitive sound"
-msgstr "wiederholter Sound"
+msgstr "wiederholter Warnton"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:192
 msgid ""
@@ -4902,7 +4902,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:145
 msgid "Menu timeout"
-msgstr "Menü Zeitabschaltung"
+msgstr "Menü Zeitlimit"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:146
 msgid ""
@@ -5218,7 +5218,7 @@ msgstr "InfoBox Rahmen"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:212
 msgid "Show Menu button"
-msgstr "Zeige Menübutton"
+msgstr "Zeige Menütaste"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:212
 msgid "Show the Menu button"
@@ -5226,7 +5226,7 @@ msgstr "Menütaste zeigen"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:215
 msgid "Show Zoom button"
-msgstr "Zeige Menübutton"
+msgstr "Zeige Zoomtaste"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:215
 msgid "Show the Zoom button"
@@ -6325,7 +6325,7 @@ msgstr "Bezug für die Regel über die min. Ankunftshöhe."
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:108
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:260
 msgid "PEV start wait time"
-msgstr "PEV Start wartezeit"
+msgstr "PEV Start Wartezeit"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:109
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:261
@@ -7223,11 +7223,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/CloudConfigPanel.cpp:68
 msgid "Show thermals"
-msgstr "Zeige Details:"
+msgstr "Zeige Thermik-Standorte"
 
 #: src/Dialogs/Settings/Panels/CloudConfigPanel.cpp:69
 msgid "Obtain and show thermal locations reported by others."
-msgstr "Thermikstandorte von anderen Nutzern beziehen und anzeigen."
+msgstr "Thermik-Standorte von anderen Nutzern beziehen und anzeigen."
 
 #: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:67
 msgid ""
@@ -10503,7 +10503,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:70
 #, no-c-format
 msgid "Circling volume"
-msgstr "Kreisen Volumen"
+msgstr "Kreisen Lautstärke"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:71
 #, no-c-format
