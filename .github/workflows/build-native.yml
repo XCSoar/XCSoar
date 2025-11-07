@@ -197,6 +197,18 @@ jobs:
         with:
           key: ${{ matrix.target }}-ccache
 
+      - name: Configure ccache for cross-compilation
+        if: ${{ matrix.target == 'KOBO' || matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
+        run: |
+          # Configure ccache to ignore compiler path for cross-compilation
+          # This is important because cross-compilers have different paths
+          # but produce the same output, so we want to cache based on content
+          ccache --set-config compiler_check=content
+          ccache --set-config hard_link=false
+
+      - name: Show ccache stats
+        run: ccache --show-stats || true
+
       - name: "Cache downloads"
         uses: actions/cache@v4
         with:
