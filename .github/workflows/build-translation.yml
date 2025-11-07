@@ -8,13 +8,59 @@ on:
       - 'src/**'
       - 'po/**'
       - 'data/**'
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'po/**'
+      - 'data/**'
 
 jobs:
+  check-pot-update:
+    name: Check if .pot file is up-to-date
+    runs-on: ubuntu-24.04
+    container: debian:bookworm-slim
+    permissions:
+      contents: read
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Install checkout dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends git ca-certificates rsync openssh-client
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Install dependencies
+        run: |
+          ./ide/provisioning/install-debian-packages.sh UPDATE
+          ./ide/provisioning/install-debian-packages.sh BASE
+      - name: Generate fresh .pot file
+        run: |
+          cp po/xcsoar.pot po/xcsoar.original
+          make po/xcsoar.pot
+      - name: Normalize and remove timestamps for comparison
+        run: |
+          cp po/xcsoar.pot po/xcsoar.new
+          # Normalize line wrapping using msgcat
+          msgcat po/xcsoar.new -o po/xcsoar.new.normalized
+          msgcat po/xcsoar.original -o po/xcsoar.original.normalized
+          # Remove timestamps
+          sed -i '/^"POT-Creation-Date:/d' po/xcsoar.new.normalized
+          sed -i '/^"POT-Creation-Date:/d' po/xcsoar.original.normalized
+      - name: Check if .pot file needs updating
+        run: |
+          if ! diff po/xcsoar.original.normalized po/xcsoar.new.normalized; then
+            echo "::error::The po/xcsoar.pot file is out of date. Please run 'make update-po' and commit the updated .pot file."
+            exit 1
+          else
+            echo "✓ po/xcsoar.pot is up-to-date"
+          fi
+
   autocommit-pot-files:
     runs-on: ubuntu-24.04
     container: debian:bookworm-slim
     permissions:
       contents: write
+    if: github.event_name != 'pull_request'
     steps:
       - name: Install checkout dependencies
         run: |
@@ -33,15 +79,19 @@ jobs:
         run: cp po/xcsoar.pot po/xcsoar.old
       - name: Update pot and po files
         run: make update-po
-      - name: remove timestamps
+      - name: Normalize and remove timestamps
         run: |
           cp po/xcsoar.pot po/xcsoar.ref # keep xcsoar.pot to push
-          sed -i '/^"POT-Creation-Date:/d' po/xcsoar.ref # updated file
-          sed -i '/^"POT-Creation-Date:/d' po/xcsoar.old # old file
+          # Normalize line wrapping using msgcat
+          msgcat po/xcsoar.ref -o po/xcsoar.ref.normalized
+          msgcat po/xcsoar.old -o po/xcsoar.old.normalized
+          # Remove timestamps
+          sed -i '/^"POT-Creation-Date:/d' po/xcsoar.ref.normalized
+          sed -i '/^"POT-Creation-Date:/d' po/xcsoar.old.normalized
       - name: Check for differences
         id: check_test
         run: |
-          if ! diff --normal po/xcsoar.ref po/xcsoar.old; then
+          if ! diff --normal po/xcsoar.ref.normalized po/xcsoar.old.normalized; then
             echo "do_update=true" >> $GITHUB_OUTPUT
           else
             echo "do_update=false" >> $GITHUB_OUTPUT
