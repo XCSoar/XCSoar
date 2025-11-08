@@ -1,37 +1,38 @@
----
 on:
   workflow_dispatch:
   push:
     paths-ignore:
-      - 'cloud/**'
-      - 'doc/**'
-      - 'fuzzer/**'
-      - 'ide/**'
-      - 'kobo/**'
-      - 'python/**'
-      - '.github/workflows/build-container.yml'
-      - '.github/workflows/build-unix.yml'
-      - '.github/workflows/build-translation.yml'
-      - '.readthedocs.yaml'
+    - cloud/**
+    - doc/**
+    - fuzzer/**
+    - ide/**
+    - kobo/**
+    - python/**
+    - .github/workflows/build-container.yml
+    - .github/workflows/build-unix.yml
+    - .github/workflows/build-translation.yml
+    - .readthedocs.yaml
+    - .pre-commit-config.yaml
     branches:
-      - master
+    - master
     tags:
-      - 'v*'
+    - v*
 
   pull_request:
     paths-ignore:
-      - 'cloud/**'
-      - 'doc/**'
-      - 'fuzzer/**'
-      - 'ide/**'
-      - 'kobo/**'
-      - 'python/**'
-      - '.github/workflows/build-container.yml'
-      - '.github/workflows/build-unix.yml'
-      - '.github/workflows/build-translation.yml'
-      - '.readthedocs.yaml'
+    - cloud/**
+    - doc/**
+    - fuzzer/**
+    - ide/**
+    - kobo/**
+    - python/**
+    - .github/workflows/build-container.yml
+    - .github/workflows/build-unix.yml
+    - .github/workflows/build-translation.yml
+    - .readthedocs.yaml
+    - .pre-commit-config.yaml
     branches:
-      - master
+    - master
 
 env:
   DEBUG: y
@@ -39,7 +40,7 @@ env:
 
 jobs:
   release:
-    name: "Create Release"
+    name: Create Release
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -47,49 +48,49 @@ jobs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
       version: ${{ steps.get_version.outputs.VERSION }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-        with:
-          submodules: true
+    - name: Checkout code
+      uses: actions/checkout@v5
+      with:
+        submodules: true
 
-      - name: Parse changelog
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: |
-          TAG=$(echo "${{ github.ref }}" | cut -f3 -d '/')
-          echo "TAG=$TAG" >> $GITHUB_ENV
-          echo "::set-output name=TAG::$TAG"
-          echo 'CHANGELOGENTRY<<EOF' >> $GITHUB_ENV
-          ./tools/changelog.sh "$TAG" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-          case "$TAG" in
-            *-rc*)
-              echo "PRERELEASE=true" >> $GITHUB_ENV
-              ;;
-            *)
-              echo "PRERELEASE=false" >> $GITHUB_ENV
-              ;;
-          esac
-        id: changelogentry
+    - name: Parse changelog
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: |
+        TAG=$(echo "${{ github.ref }}" | cut -f3 -d '/')
+        echo "TAG=$TAG" >> $GITHUB_ENV
+        echo "::set-output name=TAG::$TAG"
+        echo 'CHANGELOGENTRY<<EOF' >> $GITHUB_ENV
+        ./tools/changelog.sh "$TAG" >> $GITHUB_ENV
+        echo 'EOF' >> $GITHUB_ENV
+        case "$TAG" in
+          *-rc*)
+            echo "PRERELEASE=true" >> $GITHUB_ENV
+            ;;
+          *)
+            echo "PRERELEASE=false" >> $GITHUB_ENV
+            ;;
+        esac
+      id: changelogentry
 
-      - name: get XCSoar Version
-        id: get_version
-        run: |
-          VERSION=$(cat VERSION.txt)
-          echo "$VERSION"
-          echo "VERSION=${VERSION}" >> $GITHUB_ENV
-          echo "::set-output name=VERSION::${VERSION}"
+    - name: get XCSoar Version
+      id: get_version
+      run: |
+        VERSION=$(cat VERSION.txt)
+        echo "$VERSION"
+        echo "VERSION=${VERSION}" >> $GITHUB_ENV
+        echo "::set-output name=VERSION::${VERSION}"
 
-      - name: Create release
-        id: create_release
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: ncipollo/release-action@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          allowUpdates: true
-          name: Version ${{ github.ref_name }}
-          body: ${{ env.CHANGELOGENTRY }}
-          prerelease: ${{ env.PRERELEASE }}
+    - name: Create release
+      id: create_release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: ncipollo/release-action@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        allowUpdates: true
+        name: Version ${{ github.ref_name }}
+        body: ${{ env.CHANGELOGENTRY }}
+        prerelease: ${{ env.PRERELEASE }}
 
   build:
     runs-on: ${{ matrix.os }}
@@ -99,281 +100,281 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-22.04
-            target: UNIX
-            target_bin: xcsoar_${{ needs.release.outputs.version }}_amd64
-            target_bin_path: ''
-            target_final: xcsoar_
-            target_ext: .deb
-            target_upload: true
-            target_container: debian:bookworm-slim
-          - os: ubuntu-22.04
-            target: KOBO
-            target_bin: KoboRoot
-            target_bin_path: ''
-            target_final: KoboRoot
-            target_ext: .tgz
-            target_upload: true
-            target_container: debian:bookworm-slim
-          - os: ubuntu-22.04
-            target: ANDROID
-            target_bin: XCSoar
-            target_bin_path: bin
-            target_final: XCSoar
-            target_ext: .apk
-            target_upload: true
-            ndk: r26d
-            target_container: debian:bookworm-slim
-          - os: ubuntu-22.04
-            target: ANDROID_BUNDLE
-            target_bin: XCSoar
-            target_bin_path: bin
-            target_final: XCSoar
-            target_ext: .apk
-            target_upload: false
-            ndk: r26d
-            target_container: debian:bookworm-slim
-          - os: ubuntu-22.04
-            target: WIN64
-            target_bin: XCSoar
-            target_bin_path: bin
-            target_final: XCSoar
-            target_ext: .exe
-            target_upload: true
-            target_container: debian:bookworm-slim
-          - os: ubuntu-22.04
-            target: PC
-            target_bin: XCSoar
-            target_bin_path: bin
-            target_final: XCSoar
-            target_ext: .exe
-            target_upload: true
-            target_container: debian:bookworm-slim
-          - os: macos-14
-            target: MACOS
-            target_bin: XCSoar
-            target_bin_path: bin
-            target_final: XCSoar
-            target_ext: ''
-            target_upload: false
-            target_container: ''
-          - os: macos-14
-            target: IOS64
-            target_bin: XCSoar
-            target_bin_path: bin
-            target_final: XCSoar
-            target_ext: ''
-            target_upload: false
-            target_container: ''
+        - os: ubuntu-22.04
+          target: UNIX
+          target_bin: xcsoar_${{ needs.release.outputs.version }}_amd64
+          target_bin_path: ''
+          target_final: xcsoar_
+          target_ext: .deb
+          target_upload: true
+          target_container: debian:bookworm-slim
+        - os: ubuntu-22.04
+          target: KOBO
+          target_bin: KoboRoot
+          target_bin_path: ''
+          target_final: KoboRoot
+          target_ext: .tgz
+          target_upload: true
+          target_container: debian:bookworm-slim
+        - os: ubuntu-22.04
+          target: ANDROID
+          target_bin: XCSoar
+          target_bin_path: bin
+          target_final: XCSoar
+          target_ext: .apk
+          target_upload: true
+          ndk: r26d
+          target_container: debian:bookworm-slim
+        - os: ubuntu-22.04
+          target: ANDROID_BUNDLE
+          target_bin: XCSoar
+          target_bin_path: bin
+          target_final: XCSoar
+          target_ext: .apk
+          target_upload: false
+          ndk: r26d
+          target_container: debian:bookworm-slim
+        - os: ubuntu-22.04
+          target: WIN64
+          target_bin: XCSoar
+          target_bin_path: bin
+          target_final: XCSoar
+          target_ext: .exe
+          target_upload: true
+          target_container: debian:bookworm-slim
+        - os: ubuntu-22.04
+          target: PC
+          target_bin: XCSoar
+          target_bin_path: bin
+          target_final: XCSoar
+          target_ext: .exe
+          target_upload: true
+          target_container: debian:bookworm-slim
+        - os: macos-14
+          target: MACOS
+          target_bin: XCSoar
+          target_bin_path: bin
+          target_final: XCSoar
+          target_ext: ''
+          target_upload: false
+          target_container: ''
+        - os: macos-14
+          target: IOS64
+          target_bin: XCSoar
+          target_bin_path: bin
+          target_final: XCSoar
+          target_ext: ''
+          target_upload: false
+          target_container: ''
 
     steps:
-      - name: Install checkout dependencies
-        run: |
-          if [ "${{ matrix.os }}" = 'ubuntu-22.04' ]; then
-            apt-get update
-            apt-get install -y --no-install-recommends git \
-            ca-certificates rsync openssh-client
+    - name: Install checkout dependencies
+      run: |
+        if [ "${{ matrix.os }}" = 'ubuntu-22.04' ]; then
+          apt-get update
+          apt-get install -y --no-install-recommends git \
+          ca-certificates rsync openssh-client
+        fi
+
+    - name: Set vars for release
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: |
+        echo "DEBUG=n" >> $GITHUB_ENV
+        if [ ${{ matrix.target }} = "xcsoar" ]; then
+          echo "TARGET_FINAL=xcsoar" >> $GITHUB_ENV
+        fi
+
+    - name: Checkout code
+      uses: actions/checkout@v5
+      with:
+        submodules: true
+
+    - name: Cache ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: ${{ matrix.target }}-ccache
+
+    - name: Cache Boost
+      uses: actions/cache@v4
+      with:
+        key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
+        path: |
+          ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
+          ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
+          ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
+
+    - name: Install dependencies
+      run: |
+        if [ ${{ matrix.os }} = 'ubuntu-22.04' ]; then
+          ./ide/provisioning/install-debian-packages.sh UPDATE
+          ./ide/provisioning/install-debian-packages.sh BASE
+          if [ ${{ matrix.target }} = 'UNIX' ]; then
+            ./ide/provisioning/install-debian-packages.sh LINUX
+            ./ide/provisioning/install-debian-packages.sh LIBINPUT_GBM
+            ./ide/provisioning/install-debian-packages.sh DEBIAN
           fi
-
-      - name: Set vars for release
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: |
-          echo "DEBUG=n" >> $GITHUB_ENV
-          if [ ${{ matrix.target }} = "xcsoar" ]; then
-            echo "TARGET_FINAL=xcsoar" >> $GITHUB_ENV
+          if [ ${{ matrix.target }} = 'KOBO' ]; then
+            ./ide/provisioning/install-debian-packages.sh LINUX
+            ./ide/provisioning/install-debian-packages.sh ARM
+            ./ide/provisioning/install-debian-packages.sh KOBO
           fi
-
-      - name: Checkout code
-        uses: actions/checkout@v5
-        with:
-          submodules: true
-
-      - name: Cache ccache
-        uses: hendrikmuhs/ccache-action@v1.2
-        with:
-          key: ${{ matrix.target }}-ccache
-
-      - name: "Cache Boost"
-        uses: actions/cache@v4
-        with:
-          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
-          path: |
-            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
-            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
-            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
-
-      - name: Install dependencies
-        run: |
-          if [ ${{ matrix.os }} = 'ubuntu-22.04' ]; then
-            ./ide/provisioning/install-debian-packages.sh UPDATE
-            ./ide/provisioning/install-debian-packages.sh BASE
-            if [ ${{ matrix.target }} = 'UNIX' ]; then
-              ./ide/provisioning/install-debian-packages.sh LINUX
-              ./ide/provisioning/install-debian-packages.sh LIBINPUT_GBM
-              ./ide/provisioning/install-debian-packages.sh DEBIAN
-            fi
-            if [ ${{ matrix.target }} = 'KOBO' ]; then
-              ./ide/provisioning/install-debian-packages.sh LINUX
-              ./ide/provisioning/install-debian-packages.sh ARM
-              ./ide/provisioning/install-debian-packages.sh KOBO
-            fi
-            if [ ${{ matrix.target }} = 'WIN64' ]; then
-              ./ide/provisioning/install-debian-packages.sh LINUX
-              ./ide/provisioning/install-debian-packages.sh WIN
-            fi
-            if [ ${{ matrix.target }} = 'PC' ]; then
-              ./ide/provisioning/install-debian-packages.sh LINUX
-              ./ide/provisioning/install-debian-packages.sh WIN
-            fi
-            if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target}} = 'ANDROID_BUNDLE' ]; then
-              ./ide/provisioning/install-debian-packages.sh LINUX
-              ./ide/provisioning/install-debian-packages.sh ARM
-              ./ide/provisioning/install-debian-packages.sh LLVM
-              ./ide/provisioning/install-debian-packages.sh ANDROID
-              ./ide/provisioning/install-android-tools.sh NDK
-              ./ide/provisioning/install-android-tools.sh SDK
-              ./ide/provisioning/install-android-tools.sh BUNDLETOOL
-            fi
-            ./ide/provisioning/install-debian-packages.sh CLEAN
-          elif [ ${{ matrix.os }} = 'macos-12' ] ; then
-            ./ide/provisioning/install-darwin-packages.sh BASE
-            if [ ${{ matrix.target }} = 'OSX64' ]; then
-              ./ide/provisioning/install-darwin-packages.sh OSX64
-            fi
-          elif [ ${{ matrix.os }} = 'macos-14' ] ; then
-            ./ide/provisioning/install-darwin-packages.sh BASE
-            if [ ${{ matrix.target }} = 'MACOS' ]; then
-              ./ide/provisioning/install-darwin-packages.sh MACOS
-            elif [ ${{ matrix.target }} = 'IOS64' ]; then
-              ./ide/provisioning/install-darwin-packages.sh IOS
-            fi
+          if [ ${{ matrix.target }} = 'WIN64' ]; then
+            ./ide/provisioning/install-debian-packages.sh LINUX
+            ./ide/provisioning/install-debian-packages.sh WIN
           fi
-          echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
-
-      - name: Prepare signing key
-        shell: bash
-        if: ${{ (matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE') && startsWith(github.ref, 'refs/tags/v') }}
-        run: |
-          if [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_BASE64 }}" ]; then
-            mkdir -p ~/.android/
-            echo "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_BASE64 }}" | base64 -d > ~/.android/signing-key.jks
-            md5sum ~/.android/signing-key.jks
+          if [ ${{ matrix.target }} = 'PC' ]; then
+            ./ide/provisioning/install-debian-packages.sh LINUX
+            ./ide/provisioning/install-debian-packages.sh WIN
           fi
+          if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target}} = 'ANDROID_BUNDLE' ]; then
+            ./ide/provisioning/install-debian-packages.sh LINUX
+            ./ide/provisioning/install-debian-packages.sh ARM
+            ./ide/provisioning/install-debian-packages.sh LLVM
+            ./ide/provisioning/install-debian-packages.sh ANDROID
+            ./ide/provisioning/install-android-tools.sh NDK
+            ./ide/provisioning/install-android-tools.sh SDK
+            ./ide/provisioning/install-android-tools.sh BUNDLETOOL
+          fi
+          ./ide/provisioning/install-debian-packages.sh CLEAN
+        elif [ ${{ matrix.os }} = 'macos-12' ] ; then
+          ./ide/provisioning/install-darwin-packages.sh BASE
+          if [ ${{ matrix.target }} = 'OSX64' ]; then
+            ./ide/provisioning/install-darwin-packages.sh OSX64
+          fi
+        elif [ ${{ matrix.os }} = 'macos-14' ] ; then
+          ./ide/provisioning/install-darwin-packages.sh BASE
+          if [ ${{ matrix.target }} = 'MACOS' ]; then
+            ./ide/provisioning/install-darwin-packages.sh MACOS
+          elif [ ${{ matrix.target }} = 'IOS64' ]; then
+            ./ide/provisioning/install-darwin-packages.sh IOS
+          fi
+        fi
+        echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
 
-      - name: Compile XCSoar - PR
-        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
-        run: |
-          if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target }} = "ANDROID_BUNDLE" ]; then
-            if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then BUNDLE=y ; fi
+    - name: Prepare signing key
+      shell: bash
+      if: ${{ (matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE') && startsWith(github.ref, 'refs/tags/v') }}
+      run: |
+        if [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_BASE64 }}" ]; then
+          mkdir -p ~/.android/
+          echo "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_BASE64 }}" | base64 -d > ~/.android/signing-key.jks
+          md5sum ~/.android/signing-key.jks
+        fi
+
+    - name: Compile XCSoar - PR
+      if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+      run: |
+        if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target }} = "ANDROID_BUNDLE" ]; then
+          if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then BUNDLE=y ; fi
+          make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
+          output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }}
+          mv output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }} \
+          output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
+          if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then
+            mv output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug.aab \
+            output/${{ matrix.target }}/bin/${{ matrix.target_bin }}.aab
+          fi
+        elif [ ${{ matrix.target }} = "WIN64" ]; then
+          make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
+        elif [ ${{ matrix.target }} = "PC" ]; then
+          make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
+        elif [ ${{ matrix.target }} = "KOBO" ]; then
+          make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
+        elif [ ${{ matrix.target }} = "OSX64" ]; then
+          gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
+        elif [ ${{ matrix.target }} = "MACOS" ]; then
+          gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
+        elif [ ${{ matrix.target }} = "IOS64" ]; then
+          gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
+        elif [ ${{ matrix.target }} = "UNIX" ]; then
+          mkdir -p output/UNIX/DPKG
+          rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
+          cd output/UNIX/DPKG
+          DEB_BUILD_OPTIONS=ccache,noopt dpkg-buildpackage --jobs-force=$(nproc) --no-sign
+        fi
+
+    - name: Compile XCSoar - Sanitizer Check
+      if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+      run: |
+        if [ ${{ matrix.target }} = "UNIX" ]; then
+          make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything check VFB=y SANITIZE=y DEBUG_GLIBCXX=y
+        fi
+
+    - name: Compile XCSoar - Release
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: |
+        if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target }} = "ANDROID_BUNDLE" ]; then
+          if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then BUNDLE=y ; fi
+          if [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }}" ] && [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}" ]; then
+            ANDROID_KEYSTORE_PASS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }} \
             make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
-            output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }}
-            mv output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }} \
+            output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }} \
+            ANDROID_KEYSTORE=$(eval echo ~)/.android/signing-key.jks ANDROID_KEY_ALIAS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}
+          else
+            make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
             output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
-            if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then
-              mv output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug.aab \
-              output/${{ matrix.target }}/bin/${{ matrix.target_bin }}.aab
-            fi
-          elif [ ${{ matrix.target }} = "WIN64" ]; then
-            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
-          elif [ ${{ matrix.target }} = "PC" ]; then
-            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
-          elif [ ${{ matrix.target }} = "KOBO" ]; then
-            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
-          elif [ ${{ matrix.target }} = "OSX64" ]; then
-            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
-          elif [ ${{ matrix.target }} = "MACOS" ]; then
-            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
-          elif [ ${{ matrix.target }} = "IOS64" ]; then
-            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
-          elif [ ${{ matrix.target }} = "UNIX" ]; then
-            mkdir -p output/UNIX/DPKG
-            rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
-            cd output/UNIX/DPKG
-            DEB_BUILD_OPTIONS=ccache,noopt dpkg-buildpackage --jobs-force=$(nproc) --no-sign
           fi
+        elif [ ${{ matrix.target }} = "WIN64" ]; then
+          make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
+        elif [ ${{ matrix.target }} = "PC" ]; then
+          make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
+        elif [ ${{ matrix.target }} = "KOBO" ]; then
+          make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
+        elif [ ${{ matrix.target }} = "OSX64" ]; then
+          gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
+        elif [ ${{ matrix.target }} = "UNIX" ]; then
+          mkdir -p output/UNIX/DPKG
+          rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
+          cd output/UNIX/DPKG
+          DEB_BUILD_OPTIONS=ccache dpkg-buildpackage --jobs-force=$(nproc) --no-sign
+          cp *.deb ../
+        fi
 
-      - name: Compile XCSoar - Sanitizer Check
-        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
-        run: |
-          if [ ${{ matrix.target }} = "UNIX" ]; then
-            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything check VFB=y SANITIZE=y DEBUG_GLIBCXX=y
-          fi
+    - name: Upload artifact
+      uses: actions/upload-artifact@v5
+      with:
+        name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}${{ matrix.target_ext }}
+        path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
 
-      - name: Compile XCSoar - Release
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: |
-          if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target }} = "ANDROID_BUNDLE" ]; then
-            if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then BUNDLE=y ; fi
-            if [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }}" ] && [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}" ]; then
-              ANDROID_KEYSTORE_PASS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }} \
-              make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
-              output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }} \
-              ANDROID_KEYSTORE=$(eval echo ~)/.android/signing-key.jks ANDROID_KEY_ALIAS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}
-            else
-              make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
-              output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
-            fi
-          elif [ ${{ matrix.target }} = "WIN64" ]; then
-            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
-          elif [ ${{ matrix.target }} = "PC" ]; then
-            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
-          elif [ ${{ matrix.target }} = "KOBO" ]; then
-            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
-          elif [ ${{ matrix.target }} = "OSX64" ]; then
-            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
-          elif [ ${{ matrix.target }} = "UNIX" ]; then
-            mkdir -p output/UNIX/DPKG
-            rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
-            cd output/UNIX/DPKG
-            DEB_BUILD_OPTIONS=ccache dpkg-buildpackage --jobs-force=$(nproc) --no-sign
-            cp *.deb ../
-          fi
+    - name: Upload artifact (Bundle)
+      uses: actions/upload-artifact@v5
+      if: ${{ matrix.target == 'ANDROID_BUNDLE' }}
+      with:
+        name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}.aab
+        path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}.aab
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v5
-        with:
-          name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}${{ matrix.target_ext }}
-          path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      if: ${{ startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == true && needs.release.outputs.upload_url != '' }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.release.outputs.upload_url }}
+        asset_path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
+        asset_name: ${{ matrix.target_final }}-${{ matrix.target }}${{ matrix.target_ext }}
+        asset_content_type: application/zip
 
-      - name: Upload artifact (Bundle)
-        uses: actions/upload-artifact@v5
-        if: ${{ matrix.target == 'ANDROID_BUNDLE' }}
-        with:
-          name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}.aab
-          path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}.aab
+    - name: Deploy to Download server - testing
+      if: ${{ github.repository == 'XCSoar/XCSoar' && github.ref == 'refs/heads/master' }}
+      uses: easingthemes/ssh-deploy@main
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
+        ARGS: -rltgoDzvO
+        SOURCE: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
+        REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
+        REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
+        TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}/
+        SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}
 
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        if: ${{ startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == true && needs.release.outputs.upload_url != '' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
-          asset_name: ${{ matrix.target_final }}-${{ matrix.target }}${{ matrix.target_ext }}
-          asset_content_type: application/zip
-
-      - name: Deploy to Download server - testing
-        if: ${{ github.repository == 'XCSoar/XCSoar' && github.ref == 'refs/heads/master' }}
-        uses: easingthemes/ssh-deploy@main
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
-          ARGS: "-rltgoDzvO"
-          SOURCE: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
-          REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
-          REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
-          TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}/
-          SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}
-
-      - name: Deploy to Download server - release
-        if: ${{ github.repository == 'XCSoar/XCSoar' && startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == true }}
-        uses: easingthemes/ssh-deploy@main
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
-          ARGS: "-rltgoDzvO"
-          SOURCE: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
-          REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
-          REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
-          TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
-          SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
+    - name: Deploy to Download server - release
+      if: ${{ github.repository == 'XCSoar/XCSoar' && startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == true }}
+      uses: easingthemes/ssh-deploy@main
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
+        ARGS: -rltgoDzvO
+        SOURCE: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
+        REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
+        REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
+        TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
+        SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
