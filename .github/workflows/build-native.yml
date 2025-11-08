@@ -58,7 +58,7 @@ jobs:
       run: |
         TAG=$(echo "${{ github.ref }}" | cut -f3 -d '/')
         echo "TAG=$TAG" >> $GITHUB_ENV
-        echo "::set-output name=TAG::$TAG"
+        echo "TAG=$TAG" >> $GITHUB_OUTPUT
         echo 'CHANGELOGENTRY<<EOF' >> $GITHUB_ENV
         ./tools/changelog.sh "$TAG" >> $GITHUB_ENV
         echo 'EOF' >> $GITHUB_ENV
@@ -78,7 +78,7 @@ jobs:
         VERSION=$(cat VERSION.txt)
         echo "$VERSION"
         echo "VERSION=${VERSION}" >> $GITHUB_ENV
-        echo "::set-output name=VERSION::${VERSION}"
+        echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
 
     - name: Create release
       id: create_release
