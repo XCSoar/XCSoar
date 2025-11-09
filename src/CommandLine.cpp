@@ -12,6 +12,11 @@
 #include "util/StringAPI.hxx"
 #include "util/NumberParser.hpp"
 #include "Asset.hpp"
+#include "Version.hpp"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <tchar.h>
 
 #ifdef _WIN32
 #include <windows.h> /* for AllocConsole() */
@@ -48,7 +53,10 @@ CommandLine::Parse(Args &args)
     if (s[1] == '-')
       s++;
 
-    if (StringIsEqual(s, "-profile=", 9)) {
+    if (StringIsEqual(s, "-version")) {
+      _tprintf(_T("%s\n"), XCSoar_ProductToken);
+      exit(EXIT_SUCCESS);
+    } else if (StringIsEqual(s, "-profile=", 9)) {
       s += 9;
 
       if (StringIsEmpty(s))

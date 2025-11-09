@@ -342,9 +342,13 @@ MakeCacheDirectory(const TCHAR *name) noexcept
 void
 InitialiseDataPath()
 {
-  data_paths = FindDataPaths();
-  if (data_paths.empty())
-    throw std::runtime_error("No data path found");
+  // If data_paths is already set (e.g., by -datapath= command line option),
+  // don't overwrite it with default paths
+  if (data_paths.empty()) {
+    data_paths = FindDataPaths();
+    if (data_paths.empty())
+      throw std::runtime_error("No data path found");
+  }
 
 #ifdef ANDROID
   cache_path = context->GetExternalCacheDir(Java::GetEnv());
