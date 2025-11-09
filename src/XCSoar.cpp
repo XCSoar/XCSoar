@@ -44,6 +44,7 @@
 #include <cassert>
 
 static const char *const Usage = "\n"
+  "  -version       display version information and exit\n"
   "  -datapath=      path to XCSoar data can be defined\n"
 #ifdef SIMULATOR_AVAILABLE
   "  -simulator      bypass startup-screen, use simulator mode directly\n"
@@ -126,11 +127,6 @@ try {
   ResourceLoader::Init(hInstance);
 #endif
 
-  InitialiseDataPath();
-
-  // Write startup note + version to logfile
-  LogFormat(_T("Starting %s"), XCSoar_ProductToken);
-
   // Read options from the command line
   {
 #ifdef _WIN32
@@ -140,6 +136,11 @@ try {
 #endif
     CommandLine::Parse(args);
   }
+
+  InitialiseDataPath();
+
+  // Write startup note + version to logfile
+  LogFormat(_T("Starting %s"), XCSoar_ProductToken);
 
   int ret = Main();
 
