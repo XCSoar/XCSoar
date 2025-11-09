@@ -126,7 +126,14 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   wp->GetDataField()->EnableItemHelp(true);
   FillItemControl();
 
-  AddEnum(_("Time"), nullptr);
+  wp = AddEnum(_("Time"), nullptr);
+  // Initialize TIME field with at least "Now" to prevent assertion failures
+  // when GetValue() is called before UpdateTimeControl() completes
+  {
+    DataFieldEnum &time_df = (DataFieldEnum &)GetDataField(TIME);
+    time_df.ClearChoices();
+    time_df.addEnumText(_("Now"));
+  }
   wp->GetDataField()->SetOnModified([this]{
     const unsigned value = GetValueEnum(TIME);
     time = value > 0
