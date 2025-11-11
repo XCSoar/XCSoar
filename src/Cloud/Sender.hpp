@@ -7,6 +7,7 @@
 #include "Tracking/SkyLines/Protocol.hpp"
 #include "util/ByteOrder.hxx"
 #include "net/StaticSocketAddress.hxx"
+#include "FLARM/Traffic.hpp"
 
 #include <array>
 
@@ -41,7 +42,10 @@ public:
   }
 
   void Add(uint32_t pilot_id, uint32_t time,
-           GeoPoint location, int altitude);
+           GeoPoint location, int altitude, uint32_t flarm_id = 0,
+           unsigned track = 0,
+           double turn_rate = 0,
+           FlarmTraffic::AircraftType aircraft_type = FlarmTraffic::AircraftType::UNKNOWN);
   void Flush();
 };
 
