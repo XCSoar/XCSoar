@@ -10,6 +10,12 @@ constexpr Color TrafficLook::team_color_magenta;
 constexpr Color TrafficLook::team_color_blue;
 constexpr Color TrafficLook::team_color_yellow;
 
+constexpr Color TrafficLook::source_color_flarm;
+constexpr Color TrafficLook::source_color_gliderlink;
+constexpr Color TrafficLook::source_color_ogn;
+constexpr Color TrafficLook::source_color_skylines;
+constexpr Color TrafficLook::source_color_stratux;
+
 void
 TrafficLook::Initialise(const Font &_font)
 {
@@ -30,6 +36,14 @@ TrafficLook::Initialise(const Font &_font)
   team_pen_blue.Create(width, team_color_blue);
   team_pen_yellow.Create(width, team_color_yellow);
   team_pen_magenta.Create(width, team_color_magenta);
+
+  // Create traffic source outline pens
+  unsigned source_outline_width = Layout::ScalePenWidth(2);
+  source_pen_flarm.Create(source_outline_width, source_color_flarm);
+  source_pen_gliderlink.Create(source_outline_width, source_color_gliderlink);
+  source_pen_ogn.Create(source_outline_width, source_color_ogn);
+  source_pen_skylines.Create(source_outline_width, source_color_skylines);
+  source_pen_stratux.Create(source_outline_width, source_color_stratux);
 
   teammate_icon.LoadResource(IDB_TEAMMATE_POS_ALL);
 

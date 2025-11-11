@@ -4,6 +4,7 @@
 #pragma once
 
 #include "FLARM/Color.hpp"
+#include "Traffic/UnifiedTraffic.hpp"
 
 struct PixelPoint;
 class Canvas;
@@ -18,7 +19,8 @@ void
 Draw(Canvas &canvas, const TrafficLook &traffic_look,
      bool fading,
      const FlarmTraffic &traffic, Angle angle,
-     FlarmColor color, PixelPoint pt) noexcept;
+     FlarmColor color, PixelPoint pt,
+     UnifiedTraffic::Source source = UnifiedTraffic::Source::FLARM_DIRECT) noexcept;
 
 void
 Draw(Canvas &canvas, const TrafficLook &traffic_look,
