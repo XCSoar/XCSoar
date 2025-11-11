@@ -28,6 +28,15 @@ public:
     return FlarmId(UNDEFINED_VALUE);
   }
 
+  /**
+   * Create a FlarmId from a raw uint32_t value.
+   * Use this when you have a FlarmId/ICAO ID from external sources
+   * (e.g., OGN traffic).
+   */
+  static constexpr FlarmId FromValue(uint32_t value) noexcept {
+    return FlarmId(value);
+  }
+
   constexpr bool IsDefined() const noexcept {
     return value != UNDEFINED_VALUE;
   }

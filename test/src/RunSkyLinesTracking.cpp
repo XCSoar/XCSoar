@@ -3,6 +3,7 @@
 
 #include "Tracking/SkyLines/Client.hpp"
 #include "Tracking/SkyLines/Handler.hpp"
+#include "FLARM/Traffic.hpp"
 #include "NMEA/Info.hpp"
 #include "net/Resolver.hxx"
 #include "net/AddressInfo.hxx"
@@ -47,14 +48,26 @@ public:
   }
 
   virtual void OnTraffic(unsigned pilot_id, unsigned time_of_day_ms,
-                         const GeoPoint &location, int altitude) override {
+                         const GeoPoint &location, int altitude,
+                         unsigned flarm_id = 0,
+                         unsigned track = 0,
+                         double turn_rate = 0,
+                         FlarmTraffic::AircraftType aircraft_type = FlarmTraffic::AircraftType::UNKNOWN) override {
     auto time = BrokenTime::FromSinceMidnight(milliseconds(time_of_day_ms));
 
-    printf("received traffic pilot=%u time=%02u:%02u:%02u location=%f/%f altitude=%d\n",
-           pilot_id, time.hour, time.minute, time.second,
-           (double)location.longitude.Degrees(),
-           (double)location.latitude.Degrees(),
-           altitude);
+    if (flarm_id != 0) {
+      printf("received traffic pilot=%u flarm_id=%u time=%02u:%02u:%02u location=%f/%f altitude=%d track=%u° turn_rate=%.1f type=%u\n",
+             pilot_id, flarm_id, time.hour, time.minute, time.second,
+             (double)location.longitude.Degrees(),
+             (double)location.latitude.Degrees(),
+             altitude, track, turn_rate, (unsigned)aircraft_type);
+    } else {
+      printf("received traffic pilot=%u time=%02u:%02u:%02u location=%f/%f altitude=%d track=%u° turn_rate=%.1f type=%u\n",
+             pilot_id, time.hour, time.minute, time.second,
+             (double)location.longitude.Degrees(),
+             (double)location.latitude.Degrees(),
+             altitude, track, turn_rate, (unsigned)aircraft_type);
+    }
 
     stop_timer.Schedule(std::chrono::seconds(1));
   }

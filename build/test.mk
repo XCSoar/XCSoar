@@ -103,6 +103,7 @@ TEST_NAMES = \
 	TestAirspaceParser \
 	TestMETARParser \
 	TestIGCParser \
+	TestOGNAPRSParser \
 	TestStrings TestUTF8 \
 	TestCRC16 TestCRC8 \
 	TestUnitsFormatter \
@@ -194,6 +195,14 @@ TEST_AIRSPACE_PARSER_SOURCES = \
 TEST_AIRSPACE_PARSER_LDADD = $(FAKE_LIBS)
 TEST_AIRSPACE_PARSER_DEPENDS = IO OS AIRSPACE UNITS ZZIP GEO MATH UTIL UNITS
 $(eval $(call link-program,TestAirspaceParser,TEST_AIRSPACE_PARSER))
+
+TEST_OGN_APRS_PARSER_SOURCES = \
+	$(SRC)/Cloud/OGNClient.cpp \
+	$(SRC)/Cloud/OGNTraffic.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestOGNAPRSParser.cpp
+TEST_OGN_APRS_PARSER_DEPENDS = ASYNC LIBNET IO OS GEO MATH UTIL TIME EVENT FLARM
+$(eval $(call link-program,TestOGNAPRSParser,TEST_OGN_APRS_PARSER))
 
 TEST_DATE_TIME_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
