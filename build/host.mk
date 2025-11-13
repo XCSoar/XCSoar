@@ -16,11 +16,13 @@ host-ld-libs = -lm -lstdc++
 WRAPPED_HOST_CC = $(CCACHE) $(HOSTCC)
 WRAPPED_HOST_CXX = $(CCACHE) $(HOSTCXX)
 
-$(HOST_OUTPUT_DIR)/%.o: %.c | $(HOST_OUTPUT_DIR)/%/../dirstamp
+.SECONDEXPANSION:
+
+$(HOST_OUTPUT_DIR)/%.o: %.c | $$(patsubst %/,%,$$(@D))/dirstamp
 	@$(NQ)echo "  HOSTCC  $@"
 	$(Q)$(WRAPPED_HOST_CC) -c $(host-cc-flags) -o $@ $^
 
-$(HOST_OUTPUT_DIR)/%.o: %.cpp | $(HOST_OUTPUT_DIR)/%/../dirstamp
+$(HOST_OUTPUT_DIR)/%.o: %.cpp | $$(patsubst %/,%,$$(@D))/dirstamp
 	@$(NQ)echo "  HOSTCXX $@"
 	$(Q)$(WRAPPED_HOST_CXX) -c $(host-cxx-flags) -o $@ $^
 
