@@ -16,6 +16,7 @@
 #include "Renderer/WaypointListRenderer.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Language/Language.hpp"
+#include "MainWindow.hpp"
 #include "ActionInterface.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
@@ -103,6 +104,7 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog)
   goto_button = dialog.AddButton(_("Goto"), [this](){
     backend_components->protected_task_manager->DoGoto(GetSelectedWaypointPtr());
     cancel_button->Click();
+    CommonInterface::main_window->FullRedraw();
   });
 
   details_button = dialog.AddButton(_("Details"), mrOK);
