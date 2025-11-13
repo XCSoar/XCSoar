@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 05:19+0100\n"
+"POT-Creation-Date: 2025-11-13 09:55+0000\n"
 "PO-Revision-Date: 2022-08-27 08:15+0000\n"
 "Last-Translator: Kobe De Geest <kobedegeest@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/xcsoar/"
@@ -3558,8 +3558,8 @@ msgstr "Bestand"
 
 #: src/Dialogs/ReplayDialog.cpp:50
 msgid ""
-"Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file "
-"(.nmea). Leave blank to run the demo."
+"Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file (."
+"nmea). Leave blank to run the demo."
 msgstr ""
 "Naam van het afspeel bestand. Kan een IGC bestand (.igc), een raw NMEA log "
 "bestand (.nmea) zijn. Indien blank wordt een demo afgespeeld."
@@ -5879,8 +5879,8 @@ msgid ""
 "(.dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
 "Primair keerpunten bestand. Ondersteunde bestandstypen zijn Cambridge/"
-"Winpilot-bestanden (.dat), Zander-bestanden (.wpz) of SeeYou-bestanden "
-"(.cup)."
+"Winpilot-bestanden (.dat), Zander-bestanden (.wpz) of SeeYou-bestanden (."
+"cup)."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:60
 msgid "Watched waypoints"
@@ -5920,8 +5920,8 @@ msgstr "Selecteer Luchtruim"
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:80
 msgid ""
 "List of active airspace files. Use the Add and Remove buttons to activate or "
-"deactivate airspace files respectively. Supported file types are: Openair "
-"(.txt /.air), and Tim Newport-Pearce (.sua)."
+"deactivate airspace files respectively. Supported file types are: Openair (."
+"txt /.air), and Tim Newport-Pearce (.sua)."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:87
@@ -7224,8 +7224,8 @@ msgstr "Ophalen en tonen thermieklocaties door anderen gemeld."
 
 #: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:67
 msgid ""
-"Show thermal locations downloaded from Thermal Information Map "
-"(thermalmap.info)."
+"Show thermal locations downloaded from Thermal Information Map (thermalmap."
+"info)."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:70
@@ -7724,6 +7724,7 @@ msgstr ""
 "Help ons met het verbeteren van XCSoar!"
 
 #: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
+#: src/Dialogs/Weather/RASPDialog.cpp:135
 msgid "Now"
 msgstr "Nu"
 
@@ -10199,7 +10200,7 @@ msgid ""
 msgstr "Aankomsthoogte bij het laatste keerpunt t.o.v. de veiligheidshoogte."
 
 #: src/InfoBoxes/Content/Alternate.cpp:58
-#, fuzzy, c++-format
+#, fuzzy
 msgid "Altn {}"
 msgstr "Altn 1"
 
@@ -11886,8 +11887,8 @@ msgstr "XCSoar"
 #~ "(2008-01-18-XXX-ABC-01.IGC)."
 #~ msgstr ""
 #~ "Dit bepaalt of de logger de korte of de lange IGC bestandsnaam gebruikt. "
-#~ "Voorbeeld korte naam (81HXABC1.IGC), lange naam (2008-01-18-​​XXX-"
-#~ "ABC-01.IGC)."
+#~ "Voorbeeld korte naam (81HXABC1.IGC), lange naam (2008-01-18-​​XXX-ABC-01."
+#~ "IGC)."
 
 #~ msgid "Determines the information displayed on different screen pages."
 #~ msgstr ""
