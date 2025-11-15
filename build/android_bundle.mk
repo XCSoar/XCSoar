@@ -13,7 +13,7 @@ else
 endif
 ANDROID_SDK_PLATFORM_DIR = $(ANDROID_SDK)/platforms/$(ANDROID_SDK_PLATFORM)
 
-ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/33.0.2
+ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/35.0.0
 ZIPALIGN = $(ANDROID_BUILD_TOOLS_DIR)/zipalign
 AAPT2 = $(ANDROID_BUILD_TOOLS_DIR)/aapt2
 D8 = $(ANDROID_BUILD_TOOLS_DIR)/d8
@@ -46,7 +46,15 @@ ANDROID_BIN = $(TARGET_BIN_DIR)
 ### Outputs
 
 ANDROID_LIB_NAMES = xcsoar
-JAVA_PACKAGE = org.xcsoar
+# Allow override of package name for different release channels
+# Default to org.xcsoar (or org.xcsoar.testing if TESTING=y), but can be overridden:
+#   make JAVA_PACKAGE=org.xcsoar.play ...
+#   make JAVA_PACKAGE=org.xcsoar.foss ...
+ifeq ($(TESTING),y)
+JAVA_PACKAGE ?= org.xcsoar.testing
+else
+JAVA_PACKAGE ?= org.xcsoar
+endif
 
 
 ### Sources
@@ -147,6 +155,7 @@ JAVA_SOURCES := \
 	android/ioio/IOIOLibAndroid/src/main/java/ioio/lib/spi/LogImpl.java \
 	android/ioio/IOIOLibAndroid/src/main/java/ioio/lib/util/android/ContextWrapperDependent.java \
 	android/ioio/IOIOLibAndroidAccessory/src/main/java/ioio/lib/android/accessory/AccessoryConnectionBootstrap.java \
+	android/ioio/IOIOLibAndroidAccessory/src/main/java/ioio/lib/android/accessory/Adapter.java \
 	android/ioio/IOIOLibAndroidBluetooth/src/main/java/ioio/lib/android/bluetooth/BluetoothIOIOConnectionBootstrap.java \
 	android/ioio/IOIOLibAndroidBluetooth/src/main/java/ioio/lib/android/bluetooth/BluetoothIOIOConnection.java \
 	android/ioio/IOIOLibAndroidDevice/src/main/java/ioio/lib/android/device/DeviceConnectionBootstrap.java \
@@ -253,16 +262,27 @@ else
 MANIFEST = android/AndroidManifest.xml
 endif
 
+# Generate a processed manifest with the custom package name
+MANIFEST_PROCESSED = $(NO_ARCH_OUTPUT_DIR)/AndroidManifest.xml
+
+$(MANIFEST_PROCESSED): $(MANIFEST) | $(NO_ARCH_OUTPUT_DIR)/dirstamp
+	@$(NQ)echo "  PROCESS $@"
+	$(Q)sed -e 's/package="org\.xcsoar\(\.testing\)\?"/package="$(JAVA_PACKAGE)"/g' \
+		-e 's/android:name="\.\([^"]*\)"/android:name="org.xcsoar.\1"/g' \
+		-e 's/android:authorities="org\.xcsoar\(\.testing\)\?"/android:authorities="$(JAVA_PACKAGE)"/g' \
+		-e 's/android:authorities="org\.xcsoar\(\.testing\)\?\.allfiles"/android:authorities="$(JAVA_PACKAGE).allfiles"/g' \
+		$< > $@
+
 # Convert resources to protobuf format with AAPT2 (build and unzip an apk)
-$(PROTOBUF_OUT_DIR)/dirstamp: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) $(MANIFEST) | $(GEN_DIR)/dirstamp $(COMPILED_RES_DIR)/dirstamp
+$(PROTOBUF_OUT_DIR)/dirstamp: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) $(MANIFEST_PROCESSED) | $(GEN_DIR)/dirstamp $(COMPILED_RES_DIR)/dirstamp
 	@$(NQ)echo "  AAPT2"
 	$(Q)$(AAPT2) compile \
 		-o $(COMPILED_RES_DIR) \
 		--dir $(RES_DIR)
 	$(Q)rm $(COMPILED_RES_DIR)/*dirstamp.flat
 	$(Q)$(AAPT2) link --proto-format --auto-add-overlay \
-		--custom-package $(JAVA_PACKAGE) \
-		--manifest $(MANIFEST) \
+		--custom-package org.xcsoar \
+		--manifest $(MANIFEST_PROCESSED) \
 		-R $(COMPILED_RES_DIR)/*.flat \
 		--java $(GEN_DIR) \
 		-I $(ANDROID_SDK_PLATFORM_DIR)/android.jar \
@@ -279,12 +299,14 @@ $(GEN_DIR)/org/xcsoar/R.java: $(PROTOBUF_OUT_DIR)/dirstamp
 
 $(NO_ARCH_OUTPUT_DIR)/classes.zip: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
 	@$(NQ)echo "  JAVAC   $(JAVA_CLASSFILES_DIR)"
-	$(Q)$(JAVAC) \
-		-source 1.7 -target 1.7 \
+	$(Q)$(filter-out -Werror,$(JAVAC)) \
+		-source 1.8 -target 1.8 \
 		-Xlint:all \
 		-Xlint:-deprecation \
 		-Xlint:-options \
 		-Xlint:-static \
+		-Xlint:-removal \
+		-Xlint:-processing \
 		-cp $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) \
 		-d $(JAVA_CLASSFILES_DIR) $(GEN_DIR)/org/xcsoar/R.java \
 		-h $(NATIVE_INCLUDE_DIR) \

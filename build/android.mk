@@ -22,7 +22,7 @@ ANDROID_ABI_DIR = $(ANDROID_BUILD)/lib/$(ANDROID_APK_LIB_ABI)
 
 JAVA_CLASSFILES_DIR = $(ANDROID_OUTPUT_DIR)/classes
 
-ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/33.0.2
+ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/35.0.0
 APKSIGNER = $(ANDROID_BUILD_TOOLS_DIR)/apksigner
 ZIPALIGN = $(ANDROID_BUILD_TOOLS_DIR)/zipalign
 AAPT = $(ANDROID_BUILD_TOOLS_DIR)/aapt
@@ -44,7 +44,15 @@ ifeq ($(origin ANDROID_KEYSTORE_PASS),environment)
 APKSIGN_RELEASE += --ks-pass env:ANDROID_KEYSTORE_PASS
 endif
 
-JAVA_PACKAGE = org.xcsoar
+# Allow override of package name for different release channels
+# Default to org.xcsoar (or org.xcsoar.testing if TESTING=y), but can be overridden:
+#   make JAVA_PACKAGE=org.xcsoar.play ...
+#   make JAVA_PACKAGE=org.xcsoar.foss ...
+ifeq ($(TESTING),y)
+JAVA_PACKAGE ?= org.xcsoar.testing
+else
+JAVA_PACKAGE ?= org.xcsoar
+endif
 
 NATIVE_CLASSES := \
 	FileProvider \
@@ -251,11 +259,22 @@ $(ANDROID_XML_RES_COPIES): $(RES_DIR)/%: android/res/%
 	$(Q)-$(MKDIR) -p $(dir $@)
 	$(Q)cp $< $@
 
-$(ANDROID_OUTPUT_DIR)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) $(MANIFEST) | $(GEN_DIR)/dirstamp
+# Generate a processed manifest with the custom package name
+MANIFEST_PROCESSED = $(ANDROID_OUTPUT_DIR)/AndroidManifest.xml
+
+$(MANIFEST_PROCESSED): $(MANIFEST) | $(ANDROID_OUTPUT_DIR)/dirstamp
+	@$(NQ)echo "  PROCESS $@"
+	$(Q)sed -e 's/package="org\.xcsoar\(\.testing\)\?"/package="$(JAVA_PACKAGE)"/g' \
+		-e 's/android:name="\.\([^"]*\)"/android:name="org.xcsoar.\1"/g' \
+		-e 's/android:authorities="org\.xcsoar\(\.testing\)\?"/android:authorities="$(JAVA_PACKAGE)"/g' \
+		-e 's/android:authorities="org\.xcsoar\(\.testing\)\?\.allfiles"/android:authorities="$(JAVA_PACKAGE).allfiles"/g' \
+		$< > $@
+
+$(ANDROID_OUTPUT_DIR)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) $(MANIFEST_PROCESSED) | $(GEN_DIR)/dirstamp
 	@$(NQ)echo "  AAPT"
 	$(Q)$(AAPT) package -f -m --auto-add-overlay \
-		--custom-package $(JAVA_PACKAGE) \
-		-M $(MANIFEST) \
+		--custom-package org.xcsoar \
+		-M $(MANIFEST_PROCESSED) \
 		-S $(RES_DIR) \
 		-J $(GEN_DIR) \
 		-I $(ANDROID_SDK_PLATFORM_DIR)/android.jar \
@@ -267,7 +286,7 @@ $(GEN_DIR)/org/xcsoar/R.java: $(ANDROID_OUTPUT_DIR)/resources.apk
 $(ANDROID_OUTPUT_DIR)/classes.zip: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
 	@$(NQ)echo "  JAVAC   $(JAVA_CLASSFILES_DIR)"
 	$(Q)$(JAVAC) \
-		-source 1.7 -target 1.7 \
+		-source 1.8 -target 1.8 \
 		-Xlint:all \
 		-Xlint:-deprecation \
 		-Xlint:-options \

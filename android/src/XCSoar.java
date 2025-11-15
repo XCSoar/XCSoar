@@ -414,10 +414,11 @@ public class XCSoar extends Activity implements PermissionManager {
       return false;
 
     mainHandler.post(new Runnable() {
-        @Override public void run() {
-          showRequestPermissionRationale(permission, rationale, handler);
-        }
-      });
+      @Override
+      public void run() {
+        showRequestPermissionRationale(permission, rationale, handler);
+      }
+    });
 
     return true;
   }
