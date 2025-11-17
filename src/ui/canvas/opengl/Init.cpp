@@ -106,8 +106,19 @@ OpenGL::SetupContext()
   if (auto s = (const char *)glGetString(GL_VERSION))
     LogFormat("GL version: %s", s);
 
-  if (auto s = (const char *)glGetString(GL_RENDERER))
+  if (auto s = (const char *)glGetString(GL_RENDERER)) {
     LogFormat("GL renderer: %s", s);
+    
+    // Detect MediaTek drivers - they have bugs with MultiDrawElements
+    const char *renderer_lower = s;
+    // Simple case-insensitive check for "mediatek" or "mtk"
+    is_mediatek = (strstr(renderer_lower, "mediatek") != nullptr ||
+                   strstr(renderer_lower, "MediaTek") != nullptr ||
+                   strstr(renderer_lower, "mtk") != nullptr ||
+                   strstr(renderer_lower, "MTK") != nullptr);
+    if (is_mediatek)
+      LogFormat("MediaTek driver detected - disabling MultiDrawElements workaround");
+  }
 
   if (auto s = (const char *)glGetString(GL_EXTENSIONS))
     LogFormat("GL extensions: %s", s);

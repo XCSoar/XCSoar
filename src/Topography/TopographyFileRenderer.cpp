@@ -15,6 +15,9 @@
 #include "util/tstring.hpp"
 #include "Geo/GeoClip.hpp"
 #include "Geo/FAISphere.hpp"
+#include "LogFile.hpp"
+
+#include <cstddef>
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/VertexPointer.hpp"
@@ -100,15 +103,22 @@ TopographyFileRenderer::UpdateArrayBuffer() noexcept
   else if (file.GetSerial() == array_buffer_serial)
     return;
 
+  // Unbind any currently bound buffer before rebuilding to prevent
+  // the OpenGL driver from accessing invalid buffer data during the update
+  GLArrayBuffer::Unbind();
+
   array_buffer_serial = file.GetSerial();
 
   unsigned n = 0;
   for (auto &shape : file) {
     shape.SetOffset(n);
-
     const auto lines = shape.GetLines();
-    n = std::accumulate(lines.begin(), lines.end(), n);
+    const unsigned shape_points = std::accumulate(lines.begin(), lines.end(), 0u);
+    n += shape_points;
   }
+
+  if (n == 0)
+    return;
 
   ShapePoint *p = (ShapePoint *)
     array_buffer->BeginWrite(n * sizeof(*p));
@@ -124,6 +134,19 @@ TopographyFileRenderer::UpdateArrayBuffer() noexcept
   }
 
   array_buffer->CommitWrite(n * sizeof(*p), p - n);
+  
+  // Ensure the buffer update is fully committed before any rendering can use it.
+  // This prevents race conditions where rendering might access the buffer
+  // while it's still being updated. The CommitWrite already unbinds, but we
+  // need to ensure the GPU has finished processing the update.
+  // Note: glFinish() is expensive but necessary to prevent crashes on some
+  // OpenGL drivers (particularly MediaTek) that have race conditions.
+  if (n > 0 && array_buffer != nullptr) {
+    glFinish();
+    // Re-bind the buffer after glFinish() to ensure it's ready for rendering
+    array_buffer->Bind();
+    GLArrayBuffer::Unbind();
+  }
 }
 
 #endif
@@ -148,6 +171,16 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   if (!file.IsVisible(map_scale))
     return;
 
+#ifdef ENABLE_OPENGL
+  // Skip all processing if scale is too extreme to prevent performance issues.
+  // When zoomed out very far, UpdateVisibleShapes() would process too many
+  // shapes because the visible bounds become huge, causing severe slowdowns.
+  const auto scale_r = projection.GetScale() * FAISphere::REARTH;
+  constexpr double MAX_SAFE_SCALE_R = 1000000.0;  // Match ToGLM() limit
+  if (scale_r > MAX_SAFE_SCALE_R)
+    return;  // Skip all processing when zoomed out too far
+#endif
+
   UpdateVisibleShapes(projection);
   PaintPoints(canvas, projection);
 
@@ -155,11 +188,40 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     return;
 
 #ifdef ENABLE_OPENGL
-  OpenGL::solid_shader->Use();
-
   UpdateArrayBuffer();
+  
+  if (array_buffer == nullptr) {
+    LogFormat("Topography: ERROR - array_buffer is null after UpdateArrayBuffer");
+    return;
+  }
+  
+  // Ensure shader is valid before use
+  if (OpenGL::solid_shader == nullptr) {
+    LogFormat("Topography: ERROR - solid_shader is null");
+    return;
+  }
+  
+  // Ensure clean OpenGL state before rendering. Terrain rendering (DrawGeoBitmap)
+  // uses texture_shader and sets up vertex attributes that might interfere with
+  // topography's VBO-based rendering. Explicitly switch to solid_shader and
+  // ensure vertex attribute arrays are in a clean state.
+  OpenGL::solid_shader->Use();
+  
+  // Disable any vertex attribute arrays that might have been left enabled
+  // by previous rendering (e.g., TEXCOORD from terrain texture rendering)
+  glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
+  
+  // Unbind any previously bound VBO to ensure clean state
+  GLArrayBuffer::Unbind();
+  
+  // Re-bind buffer to ensure it's valid after potential updates
   array_buffer->Bind();
-  const ShapePoint *const buffer = nullptr;
+  
+  // Verify buffer is still valid after binding
+  if (array_buffer == nullptr) {
+    LogFormat("Topography: ERROR - array_buffer became null after Bind");
+    return;
+  }
 
   pen.Bind();
 
@@ -190,6 +252,9 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
 #ifdef ENABLE_OPENGL
   ScopeVertexPointer vp;
+  // When using VBOs, glVertexAttribPointer interprets the pointer as a byte offset
+  // So we use nullptr as base and add the byte offset
+  const ShapePoint *const buffer = nullptr;
 
 #ifdef GL_EXT_multi_draw_arrays
   std::vector<GLsizei> polygon_counts;
@@ -202,7 +267,11 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
     const auto lines = shape.GetLines();
 #ifdef ENABLE_OPENGL
-    const ShapePoint *points = buffer + shape.GetOffset();
+    // When using VBOs, glVertexAttribPointer interprets the pointer as a byte offset
+    // Calculate the byte offset: shape.GetOffset() is in ShapePoint units
+    const unsigned offset = shape.GetOffset();
+    const std::size_t byte_offset = offset * sizeof(ShapePoint);
+    const ShapePoint *points = (const ShapePoint *)(std::size_t)byte_offset;
 #else // !ENABLE_OPENGL
     const GeoPoint *points = shape.GetPoints();
 #endif
@@ -220,13 +289,50 @@ TopographyFileRenderer::Paint(Canvas &canvas,
         XShape::Indices indices;
         if (level == 0 ||
             (indices = shape.GetIndices(level, min_distance)).indices == nullptr) {
-          unsigned offset = 0;
+          // Validate VBO bounds for glDrawArrays
+          unsigned total_vbo_points = 0;
+          for (const auto &s : file) {
+            const auto ls = s.GetLines();
+            total_vbo_points += std::accumulate(ls.begin(), ls.end(), 0u);
+          }
+          unsigned draw_offset = 0;
           for (unsigned n : lines) {
-            glDrawArrays(GL_LINE_STRIP, offset, n);
-            offset += n;
+            if (draw_offset + n > total_vbo_points) {
+              LogFormat("Topography: Invalid LINE draw offset %u + %u > %u", 
+                        draw_offset, n, total_vbo_points);
+              break;
+            }
+            // Ensure buffer is ready before drawing
+            glFlush();
+            glDrawArrays(GL_LINE_STRIP, draw_offset, n);
+            draw_offset += n;
           }
         } else {
+          if (indices.indices == nullptr) {
+            LogFormat("Topography: null indices.indices for LINE");
+            break;
+          }
+          // Validate VBO bounds for glDrawElements
+          unsigned total_vbo_points = 0;
+          for (const auto &s : file) {
+            const auto ls = s.GetLines();
+            total_vbo_points += std::accumulate(ls.begin(), ls.end(), 0u);
+          }
           for (unsigned n : std::span<const GLushort>{indices.count, lines.size()}) {
+            // Check if any index in this draw call is out of bounds
+            bool valid = true;
+            for (unsigned i = 0; i < n; ++i) {
+              if (indices.indices[i] >= total_vbo_points) {
+                LogFormat("Topography: Invalid LINE index %u: %u >= %u", 
+                          i, indices.indices[i], total_vbo_points);
+                valid = false;
+                break;
+              }
+            }
+            if (!valid)
+              break;
+            // Ensure buffer is ready before drawing
+            glFlush();
             glDrawElements(GL_LINE_STRIP, n, GL_UNSIGNED_SHORT,
                            indices.indices);
             indices.indices += n;
@@ -253,23 +359,69 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #ifdef ENABLE_OPENGL
       {
         const auto triangles = shape.GetIndices(level, min_distance);
+        if (triangles.count == nullptr)
+          break;
+        if (triangles.indices == nullptr) {
+          LogFormat("Topography: null triangles.indices");
+          break;
+        }
         const unsigned n = *triangles.count;
 
 #ifdef GL_EXT_multi_draw_arrays
         const unsigned offset = shape.GetOffset();
-        if (GLExt::HaveMultiDrawElements() && offset + n < 0x10000) {
+        // Use MultiDrawElements optimization on non-MediaTek drivers for best performance.
+        // MediaTek drivers crash with MultiDrawElements, so we batch indices and use
+        // individual glDrawElements calls instead.
+        if (!OpenGL::is_mediatek && GLExt::HaveMultiDrawElements() && offset + n < 0x10000) {
           /* postpone, draw many polygons with a single
              glMultiDrawElements() call */
           polygon_counts.push_back(n);
           const size_t size = polygon_indices.size();
           polygon_indices.resize(size + n, offset);
+          if (triangles.indices == nullptr) {
+            LogFormat("Topography: null triangles.indices in multi-draw path");
+            break;
+          }
+          for (unsigned i = 0; i < n; ++i)
+            polygon_indices[size + i] += triangles.indices[i];
+          break;
+        } else if (OpenGL::is_mediatek && offset + n < 0x10000) {
+          // MediaTek workaround: batch indices but use EBO instead of MultiDrawElements
+          /* postpone, batch many polygons together */
+          polygon_counts.push_back(n);
+          const size_t size = polygon_indices.size();
+          polygon_indices.resize(size + n, offset);
+          if (triangles.indices == nullptr) {
+            LogFormat("Topography: null triangles.indices in batch path");
+            break;
+          }
           for (unsigned i = 0; i < n; ++i)
             polygon_indices[size + i] += triangles.indices[i];
           break;
         }
 #endif
 
+        // Validate indices before drawing
+        if (triangles.indices == nullptr) {
+          LogFormat("Topography: null triangles.indices in immediate draw path");
+          break;
+        }
+        unsigned total_vbo_points = 0;
+        for (const auto &s : file) {
+          const auto ls = s.GetLines();
+          total_vbo_points += std::accumulate(ls.begin(), ls.end(), 0u);
+        }
+        for (unsigned i = 0; i < n; ++i) {
+          if (triangles.indices[i] >= total_vbo_points) {
+            LogFormat("Topography: Invalid polygon index %u: %u >= %u", 
+                      i, triangles.indices[i], total_vbo_points);
+            break;
+          }
+        }
+
         vp.Update(GL_FLOAT, points);
+        // Ensure buffer is ready before drawing
+        glFlush();
         glDrawElements(GL_TRIANGLE_STRIP, n, GL_UNSIGNED_SHORT,
                        triangles.indices);
       }
@@ -312,21 +464,97 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
 #ifdef GL_EXT_multi_draw_arrays
   if (!polygon_indices.empty()) {
-    assert(GLExt::HaveMultiDrawElements());
+    // Calculate total VBO size for validation
+    unsigned total_vbo_points = 0;
+    for (const auto &shape : file) {
+      const auto lines = shape.GetLines();
+      total_vbo_points += std::accumulate(lines.begin(), lines.end(), 0u);
+    }
 
-    std::vector<const GLushort *> polygon_pointers;
-    unsigned i = 0;
-    for (auto count : polygon_counts) {
-      polygon_pointers.push_back(polygon_indices.data() + i);
-      i += count;
+    // Validate all indices are within VBO bounds
+    for (size_t idx = 0; idx < polygon_indices.size(); ++idx) {
+      if (polygon_indices[idx] >= total_vbo_points) {
+        LogFormat("Topography: Invalid index %zu: %u >= %u", 
+                  idx, polygon_indices[idx], total_vbo_points);
+        return;  // Skip rendering to prevent crash
+      }
     }
 
     vp.Update(GL_FLOAT, buffer);
 
-    GLExt::MultiDrawElements(GL_TRIANGLE_STRIP, polygon_counts.data(),
-                             GL_UNSIGNED_SHORT,
-                             (const GLvoid **)polygon_pointers.data(),
-                             polygon_counts.size());
+    if (OpenGL::is_mediatek) {
+      // MediaTek workaround: Use Element Array Buffer (EBO) instead of MultiDrawElements.
+      // This uploads all indices to GPU memory and uses byte offsets,
+      // which avoids the MediaTek MultiDrawElements crash.
+      const size_t indices_size = polygon_indices.size() * sizeof(GLushort);
+      
+      // Create or resize element buffer if needed
+      if (element_buffer == nullptr || element_buffer_size < indices_size) {
+        if (element_buffer == nullptr)
+          element_buffer = std::make_unique<GLBuffer<GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW>>();
+        
+        element_buffer->Load(indices_size, polygon_indices.data());
+        element_buffer_size = indices_size;
+      } else {
+        // Update existing buffer
+        element_buffer->Load(indices_size, polygon_indices.data());
+      }
+      
+      // Bind the element buffer
+      element_buffer->Bind();
+      
+      // Draw each polygon using byte offsets into the EBO
+      size_t byte_offset = 0;
+      for (auto count : polygon_counts) {
+        const size_t required_size = (byte_offset / sizeof(GLushort)) + count;
+        if (required_size > polygon_indices.size()) {
+          LogFormat("Topography: Batch bounds error offset=%zu count=%u size=%zu", 
+                    byte_offset / sizeof(GLushort), count, polygon_indices.size());
+          break;
+        }
+        
+        // Ensure buffer is ready before drawing
+        glFlush();
+        
+        // Draw using byte offset into the bound EBO
+        glDrawElements(GL_TRIANGLE_STRIP, count, GL_UNSIGNED_SHORT,
+                       (const GLvoid *)byte_offset);
+        
+        byte_offset += count * sizeof(GLushort);
+      }
+      
+      // Unbind element buffer
+      GLBuffer<GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW>::Unbind();
+    } else {
+      // Non-MediaTek: Use MultiDrawElements for best performance
+      assert(GLExt::HaveMultiDrawElements());
+
+      std::vector<const GLushort *> polygon_pointers;
+      unsigned i = 0;
+      for (auto count : polygon_counts) {
+        if (i + count > polygon_indices.size()) {
+          LogFormat("Topography: Multi-draw bounds error i=%u count=%u size=%zu", 
+                    i, count, polygon_indices.size());
+          return;
+        }
+        polygon_pointers.push_back(polygon_indices.data() + i);
+        i += count;
+      }
+
+      if (i != polygon_indices.size()) {
+        LogFormat("Topography: Multi-draw size mismatch i=%u size=%zu", 
+                  i, polygon_indices.size());
+        return;
+      }
+
+      // Ensure buffer is ready before multi-draw
+      glFlush();
+
+      GLExt::MultiDrawElements(GL_TRIANGLE_STRIP, polygon_counts.data(),
+                               GL_UNSIGNED_SHORT,
+                               (const GLvoid **)polygon_pointers.data(),
+                               polygon_counts.size());
+    }
   }
 #endif
 

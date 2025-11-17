@@ -38,6 +38,12 @@ extern bool texture_non_power_of_two;
 extern bool mapbuffer;
 
 /**
+ * Is the OpenGL driver from MediaTek?  MediaTek drivers have bugs
+ * with MultiDrawElements that cause crashes.
+ */
+extern bool is_mediatek;
+
+/**
  * Which depth+stencil internalFormat is supported by the
  * Renderbuffer?
  */

@@ -9,6 +9,7 @@
 #include "Geo/GeoBounds.hpp"
 
 #ifdef ENABLE_OPENGL
+#include "ui/opengl/System.hpp"
 #else
 #include "ui/canvas/Brush.hpp"
 #include "Topography/ShapeRenderer.hpp"
@@ -20,6 +21,7 @@
 class TopographyFile;
 class Canvas;
 class GLArrayBuffer;
+template<GLenum target, GLenum usage> class GLBuffer;
 class WindowProjection;
 class LabelBlock;
 class XShape;
@@ -57,6 +59,11 @@ class TopographyFileRenderer final
 #ifdef ENABLE_OPENGL
   std::unique_ptr<GLArrayBuffer> array_buffer;
   Serial array_buffer_serial;
+  
+  // Element Array Buffer for batched polygon indices
+  // This allows efficient rendering without MultiDrawElements
+  std::unique_ptr<GLBuffer<GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW>> element_buffer;
+  size_t element_buffer_size = 0;
 #endif
 
 public:
