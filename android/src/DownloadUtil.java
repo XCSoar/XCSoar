@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 
 /**
@@ -38,8 +39,13 @@ final class DownloadUtil extends BroadcastReceiver implements Closeable {
       /* can this really happen? */
       throw new IllegalStateException("No DownloadManager");
 
+    int flags = 0;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      flags = Context.RECEIVER_NOT_EXPORTED;
+    }
     context.registerReceiver(this,
-                             new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+                             new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
+                             flags);
 
     /* let the DownloadManager save to the app-specific directory,
        which requires no special permissions; later, we can use
