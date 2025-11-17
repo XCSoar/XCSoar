@@ -93,9 +93,14 @@ else
 
   echo "Creating executable wrapper"
   mkdir -p bin
+  # Use script location to find the jar file, making the wrapper work regardless of where it was installed
   tee bin/bundletool <<EOF
 #!/bin/bash
-exec java -jar "${BUNDLETOOL_DIR}"/"${BUNDLETOOL_JAR_FILENAME}" "\$@"
+# Get the directory where this script is located
+SCRIPT_DIR="\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" && pwd)"
+# Get the parent directory (bundletool directory)
+BUNDLETOOL_DIR="\$(dirname "\$SCRIPT_DIR")"
+exec java -jar "\${BUNDLETOOL_DIR}"/"${BUNDLETOOL_JAR_FILENAME}" "\$@"
 EOF
   chmod +x bin/bundletool
 fi
@@ -114,7 +119,7 @@ for section in "${sections_to_install[@]}"; do
       install_bundletool
     ;;
     *)
-    echo "Unkown section: $section"
+    echo "Unknown section: $section"
     ;;
   esac
 done
