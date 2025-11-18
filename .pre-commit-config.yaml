@@ -1,0 +1,74 @@
+# Pre-commit configuration for XCSoar project
+# Install with: pip install pre-commit && pre-commit install
+# Update hooks: pre-commit autoupdate
+
+exclude: ^lib/.*
+repos:
+  # General file checks
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v6.0.0
+  hooks:
+  - id: trailing-whitespace
+  - id: end-of-file-fixer
+  - id: mixed-line-ending
+    args: [--fix=lf]
+  - id: check-case-conflict
+  - id: check-executables-have-shebangs
+  - id: check-json
+  - id: check-xml
+  - id: check-yaml
+  - id: check-toml
+  - id: check-added-large-files
+    args: [--maxkb=10000]
+  - id: check-symlinks
+  - id: check-merge-conflict
+  - id: fix-byte-order-marker
+  - id: pretty-format-json
+    args: [--autofix]
+  - id: sort-simple-yaml
+
+  # C++ formatting with clang-format
+- repo: https://github.com/pre-commit/mirrors-clang-format
+  rev: v21.1.5
+  hooks:
+  - id: clang-format
+    args: [--style=file]
+    exclude: |
+      (?x)^(
+        src/zzip/.*|
+        src/Terrain/jasper/.*|
+        src/ui/canvas/fb/mxcfb\.h
+      )$
+
+  # Python formatting and linting
+- repo: https://github.com/psf/black
+  rev: 25.9.0
+  hooks:
+  - id: black
+    language_version: python3
+
+- repo: https://github.com/asottile/pyupgrade
+  rev: v3.21.0
+  hooks:
+  - id: pyupgrade
+    args: [--py39-plus]
+
+  # Python linting
+- repo: https://github.com/PyCQA/flake8
+  rev: 7.3.0
+  hooks:
+  - id: flake8
+    args: [--max-line-length=88, '--extend-ignore=E203,W503']
+
+  # Shell script linting
+- repo: https://github.com/shellcheck-py/shellcheck-py
+  rev: v0.11.0.1
+  hooks:
+  - id: shellcheck
+
+  # YAML formatting
+- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+  rev: v2.15.0
+  hooks:
+  - id: pretty-format-yaml
+    args: [--autofix, --indent, '2']
