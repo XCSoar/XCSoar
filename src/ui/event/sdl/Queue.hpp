@@ -11,6 +11,7 @@
 #include <SDL_events.h>
 
 #include <chrono>
+#include <atomic>
 
 namespace UI {
 
@@ -20,7 +21,7 @@ class EventQueue {
   Mutex mutex;
   TimerQueue timers;
 
-  bool quit;
+  std::atomic<bool> quit;
 
 public:
   EventQueue() noexcept;
@@ -40,12 +41,10 @@ public:
   }
 
   bool IsQuit() const noexcept {
-    return quit;
+    return quit.load();
   }
 
-  void Quit() noexcept {
-    quit = true;
-  }
+  void Quit() noexcept;
 
   void InjectCall(EventLoop::Callback callback, void *ctx) noexcept;
 
