@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 05:19+0100\n"
+"POT-Creation-Date: 2025-11-19 00:43+0100\n"
 "PO-Revision-Date: 2022-09-25 17:58+0000\n"
 "Last-Translator: ulipo <uli.peru@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/xcsoar/"
@@ -1795,7 +1795,6 @@ msgstr "Aiuto"
 
 #: src/Dialogs/FileManager.cpp:399 src/Dialogs/Weather/NOAAList.cpp:99
 #: src/Dialogs/Weather/NOAADetails.cpp:48
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:211
 msgid "Update"
 msgstr "Aggiornamento"
 
@@ -2023,7 +2022,6 @@ msgstr "Riconnetti"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:316
 #: src/Dialogs/Device/DeviceListDialog.cpp:335
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:210
 msgid "Disable"
 msgstr "Disabilita"
 
@@ -3073,10 +3071,8 @@ msgid "Tracking"
 msgstr "Live Tracking"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:132
-#: src/Dialogs/Weather/WeatherDialog.cpp:26
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:320
-#: src/Weather/NOAAFormatter.cpp:175 Data/Input/default.xci:808
-#: Data/Input/default.xci:1215
+#: src/Dialogs/Weather/WeatherDialog.cpp:26 src/Weather/NOAAFormatter.cpp:175
+#: Data/Input/default.xci:808 Data/Input/default.xci:1215
 #, no-c-format
 msgid "Weather"
 msgstr "Meteo"
@@ -3524,8 +3520,6 @@ msgstr "Polare W"
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:220
 #: src/Dialogs/Weather/PCMetDialog.cpp:51 src/Dialogs/Weather/NOAAList.cpp:182
 #: src/Dialogs/Weather/NOAAList.cpp:198 src/Dialogs/Weather/NOAADetails.cpp:88
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:355
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:390
 #: src/Dialogs/DownloadFilePicker.cpp:118
 #: src/Dialogs/DownloadFilePicker.cpp:277
 #: src/Dialogs/DownloadFilePicker.cpp:386
@@ -6584,7 +6578,6 @@ msgstr ""
 "Specifica quale soglia viene utilizzata per i \"grandi\" triangoli FAI."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:135
-#, c-format
 msgid "95% dist. rule helpers"
 msgstr ""
 
@@ -7752,6 +7745,7 @@ msgstr ""
 "Per favore aiutaci a migliorare XCSoar!"
 
 #: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
+#: src/Dialogs/Weather/RASPDialog.cpp:135
 msgid "Now"
 msgstr "Adesso"
 
@@ -7897,10 +7891,6 @@ msgstr "Chiudi"
 #: src/Monitor/MatTaskMonitor.cpp:32
 msgid "Add this turn point?"
 msgstr "Aggiungere questa boa?"
-
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:206
-msgid "Use"
-msgstr "Usa"
 
 #: src/Renderer/NOAAListRenderer.cpp:26
 msgid "No METAR available"
@@ -11208,6 +11198,9 @@ msgstr ""
 #: Data/Input/default.xci:1287
 msgid "Quit XCSoar"
 msgstr ""
+
+#~ msgid "Use"
+#~ msgstr "Usa"
 
 #~ msgid "More waypoints"
 #~ msgstr "Boe aggiuntive"
