@@ -41,10 +41,10 @@ jobs:
 
     steps:
       - id: checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - id: checkout-kernel
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: XCSoar/linux
           path: output/src/linux
