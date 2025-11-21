@@ -117,7 +117,11 @@ NeedsUpdate(const AvailableFile *remote_file)
   if (remote_file == nullptr)
     return false;
 
-  const auto path = LocalPath(Path(remote_file->GetName()));
+  const UTF8ToWideConverter name(remote_file->GetName());
+  if (!name.IsValid())
+    return false;
+
+  const auto path = LocalPath(Path(name));
   if (!File::Exists(path))
     return true;
 
@@ -125,7 +129,7 @@ NeedsUpdate(const AvailableFile *remote_file)
     /* No update date available, assume it needs updating */
     return true;
 
-  BrokenDate local_changed = BrokenDateTime{File::GetLastModification(path)};
+  BrokenDate local_changed = BrokenDateTime(File::GetLastModification(path));
   return local_changed < remote_file->update_date;
 }
 
