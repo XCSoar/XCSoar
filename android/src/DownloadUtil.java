@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 
 /**
@@ -39,13 +38,8 @@ final class DownloadUtil extends BroadcastReceiver implements Closeable {
       /* can this really happen? */
       throw new IllegalStateException("No DownloadManager");
 
-    int flags = 0;
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      flags = Context.RECEIVER_NOT_EXPORTED;
-    }
-    context.registerReceiver(this,
-                             new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
-                             flags);
+    BroadcastUtil.registerReceiver(context, this,
+                                    new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
     /* let the DownloadManager save to the app-specific directory,
        which requires no special permissions; later, we can use
@@ -187,8 +181,7 @@ final class DownloadUtil extends BroadcastReceiver implements Closeable {
            paths are the same (e.g., "repository" doesn't need encoding), the move
            is a no-op and the file is still in DownloadManager's control, so we
            shouldn't remove it (which would delete the file). */
-        final String finalPathAbsolute = toTmpPath(finalPathName);
-        if (!success || !path.equals(finalPathAbsolute)) {
+        if (!success || !path.equals(finalPathName)) {
           dm.remove(id);
         }
         continue;
@@ -319,8 +312,7 @@ final class DownloadUtil extends BroadcastReceiver implements Closeable {
          paths are the same (e.g., "repository" doesn't need encoding), the move
          is a no-op and the file is still in DownloadManager's control, so we
          shouldn't remove it (which would delete the file). */
-      final String finalPathAbsolute = toTmpPath(finalPathName);
-      if (!success || !tmpPath.equals(finalPathAbsolute)) {
+      if (!success || !tmpPath.equals(finalPathName)) {
         dm.remove(id);
       }
     } while (c.moveToNext());
