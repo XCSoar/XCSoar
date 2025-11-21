@@ -181,7 +181,7 @@ final class DownloadUtil extends BroadcastReceiver implements Closeable {
            paths are the same (e.g., "repository" doesn't need encoding), the move
            is a no-op and the file is still in DownloadManager's control, so we
            shouldn't remove it (which would delete the file). */
-        if (!success || !path.equals(finalPathName)) {
+        if (!success || !path.equals(toTmpPath(finalPathName))) {
           dm.remove(id);
         }
         continue;
@@ -312,7 +312,7 @@ final class DownloadUtil extends BroadcastReceiver implements Closeable {
          paths are the same (e.g., "repository" doesn't need encoding), the move
          is a no-op and the file is still in DownloadManager's control, so we
          shouldn't remove it (which would delete the file). */
-      if (!success || !tmpPath.equals(finalPathName)) {
+      if (!success || !tmpPath.equals(toTmpPath(finalPathName))) {
         dm.remove(id);
       }
     } while (c.moveToNext());
