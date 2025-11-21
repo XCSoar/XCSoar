@@ -14,10 +14,12 @@
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "system/Path.hpp"
+#include "system/FileUtil.hpp"
 #include "io/FileLineReader.hpp"
 #include "Repository/Glue.hpp"
 #include "Repository/FileRepository.hpp"
 #include "Repository/Parser.hpp"
+#include "Repository/AvailableFile.hpp"
 #include "net/http/Features.hpp"
 #include "net/http/DownloadManager.hpp"
 #include "ui/event/Notify.hpp"
@@ -25,6 +27,8 @@
 #include "thread/Mutex.hxx"
 #include "Operation/ThreadedOperationEnvironment.hpp"
 #include "util/ConvertString.hpp"
+#include "util/StringAPI.hxx"
+#include "time/BrokenDateTime.hpp"
 
 #include <vector>
 
@@ -103,16 +107,47 @@ private:
 };
 
 /**
+ * Check if a file needs to be updated based on its modification date.
+ * Returns true if file doesn't exist or is older than remote update_date.
+ */
+[[gnu::pure]]
+static bool
+NeedsUpdate(const AvailableFile *remote_file)
+{
+  if (remote_file == nullptr)
+    return false;
+
+  const auto path = LocalPath(Path(remote_file->GetName()));
+  if (!File::Exists(path))
+    return true;
+
+  if (!remote_file->update_date.IsPlausible())
+    /* No update date available, assume it needs updating */
+    return true;
+
+  BrokenDate local_changed = BrokenDateTime{File::GetLastModification(path)};
+  return local_changed < remote_file->update_date;
+}
+
+/**
  * Throws on error.
+ * @param remote_file optional metadata for currency checking
  */
 static AllocatedPath
-DownloadFile(const char *uri, const char *_base)
+DownloadFile(const char *uri, const char *_base,
+             const AvailableFile *remote_file = nullptr)
 {
   assert(Net::DownloadManager::IsAvailable());
 
   const UTF8ToWideConverter base(_base);
   if (!base.IsValid())
     return nullptr;
+
+  auto final_path = LocalPath(base);
+
+  /* Check if file exists and is current */
+  if (remote_file != nullptr && !NeedsUpdate(remote_file))
+    return final_path;
 
   ProgressDialog dialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
                         _("Download"));
@@ -131,7 +166,7 @@ DownloadFile(const char *uri, const char *_base)
     return nullptr;
   }
 
-  return LocalPath(base);
+  return final_path;
 }
 
 class DownloadFilePickerWidget final
@@ -139,8 +174,6 @@ class DownloadFilePickerWidget final
     Net::DownloadListener {
 
   WidgetDialog &dialog;
-
-  UI::Notify download_complete_notify{[this]{ OnDownloadCompleteNotification(); }};
 
   const FileType file_type;
 
@@ -151,24 +184,6 @@ class DownloadFilePickerWidget final
   std::vector<AvailableFile> items;
 
   TextRowRenderer row_renderer;
-
-  /**
-   * This mutex protects the attribute "repository_modified".
-   */
-  mutable Mutex mutex;
-
-  /**
-   * Was the repository file modified, and needs to be reloaded by
-   * RefreshList()?
-   */
-  bool repository_modified;
-
-  /**
-   * Has the repository file download failed?
-   */
-  bool repository_failed;
-
-  std::exception_ptr repository_error;
 
   AllocatedPath path;
 
@@ -183,7 +198,7 @@ public:
   void CreateButtons();
 
 protected:
-  void RefreshList();
+  void RefreshList(const FileRepository *repository = nullptr);
 
   void UpdateButtons() {
       download_button->SetEnabled(!items.empty());
@@ -216,8 +231,6 @@ public:
   void OnDownloadComplete(Path path_relative) noexcept override;
   void OnDownloadError(Path path_relative,
                        std::exception_ptr error) noexcept override;
-
-  void OnDownloadCompleteNotification() noexcept;
 };
 
 void
@@ -228,12 +241,48 @@ DownloadFilePickerWidget::Prepare(ContainerWindow &parent,
 
   CreateList(parent, look, rc,
              row_renderer.CalculateLayout(*look.list.font));
-  RefreshList();
+
+  /* Try to load repository first */
+  FileRepository repository;
+  const auto repository_path = LocalPath(_T("repository"));
+  bool repository_loaded = false;
+  
+  if (File::Exists(repository_path)) {
+    try {
+      FileLineReaderA reader(repository_path);
+      ParseFileRepository(repository, reader);
+      repository_loaded = true;
+    } catch (const std::runtime_error &e) {
+    }
+  }
+
+  /* Download repository if it doesn't exist.
+     Note: The repository file itself is not an entry in the repository,
+     so we can't check currency. Always download if missing. */
+  if (!repository_loaded) {
+    try {
+      /* Download repository using unified DownloadFile() */
+      const auto downloaded_path = DownloadFile("http://download.xcsoar.org/repository",
+                                                 "repository", nullptr);
+      if (downloaded_path != nullptr) {
+        /* Reload repository after download */
+        FileLineReaderA reader(repository_path);
+        ParseFileRepository(repository, reader);
+        repository_loaded = true;
+      }
+    } catch (...) {
+      /* Continue anyway, will show empty list */
+    }
+  }
+
+  /* Refresh list with loaded repository */
+  if (repository_loaded) {
+    RefreshList(&repository);
+  } else {
+    RefreshList();
+  }
 
   Net::DownloadManager::AddListener(*this);
-  Net::DownloadManager::Enumerate(*this);
-
-  EnqueueRepositoryDownload();
 }
 
 void
@@ -243,20 +292,17 @@ DownloadFilePickerWidget::Unprepare() noexcept
 }
 
 void
-DownloadFilePickerWidget::RefreshList()
+DownloadFilePickerWidget::RefreshList(const FileRepository *repository_param)
 try {
-  {
-    const std::lock_guard lock{mutex};
-    repository_modified = false;
-    repository_failed = false;
-  }
-
   FileRepository repository;
 
-  const auto path = LocalPath(_T("repository"));
-  FileLineReaderA reader(path);
-
-  ParseFileRepository(repository, reader);
+  if (repository_param != nullptr) {
+    repository = *repository_param;
+  } else {
+    const auto path = LocalPath(_T("repository"));
+    FileLineReaderA reader(path);
+    ParseFileRepository(repository, reader);
+  }
 
   items.clear();
   for (auto &i : repository)
@@ -300,7 +346,7 @@ DownloadFilePickerWidget::Download()
   const auto &file = items[current];
 
   try {
-    path = DownloadFile(file.GetURI(), file.GetName());
+    path = DownloadFile(file.GetURI(), file.GetName(), &file);
     if (path != nullptr)
       dialog.SetModalResult(mrOK);
   } catch (...) {
@@ -316,59 +362,18 @@ DownloadFilePickerWidget::OnDownloadAdded([[maybe_unused]] Path path_relative,
 }
 
 void
-DownloadFilePickerWidget::OnDownloadComplete(Path path_relative) noexcept
+DownloadFilePickerWidget::OnDownloadComplete([[maybe_unused]] Path path_relative) noexcept
 {
-  const auto name = path_relative.GetBase();
-  if (name == nullptr)
-    return;
-
-  if (name == Path(_T("repository"))) {
-    const std::lock_guard lock{mutex};
-    repository_failed = false;
-    repository_modified = true;
-  }
-
-  download_complete_notify.SendNotification();
+  /* Repository is now downloaded synchronously in Prepare(), so we don't
+     need special handling here. Other downloads are handled by DownloadProgress. */
 }
 
 void
-DownloadFilePickerWidget::OnDownloadError(Path path_relative,
-                                          std::exception_ptr error) noexcept
+DownloadFilePickerWidget::OnDownloadError([[maybe_unused]] Path path_relative,
+                                          [[maybe_unused]] std::exception_ptr error) noexcept
 {
-  const auto name = path_relative.GetBase();
-  if (name == nullptr)
-    return;
-
-  if (name == Path(_T("repository"))) {
-    const std::lock_guard lock{mutex};
-    repository_failed = true;
-    repository_error = std::move(error);
-  }
-
-  download_complete_notify.SendNotification();
-}
-
-void
-DownloadFilePickerWidget::OnDownloadCompleteNotification() noexcept
-{
-  bool repository_modified2, repository_failed2;
-  std::exception_ptr repository_error2;
-
-  {
-    const std::lock_guard lock{mutex};
-    repository_modified2 = std::exchange(repository_modified, false);
-    repository_failed2 = std::exchange(repository_failed, false);
-    repository_error2 = std::move(repository_error);
-  }
-
-  if (repository_error2)
-    ShowError(std::move(repository_error2),
-              _("Failed to download the repository index."));
-  else if (repository_failed2)
-    ShowMessageBox(_("Failed to download the repository index."),
-                   _("Error"), MB_OK);
-  else if (repository_modified2)
-    RefreshList();
+  /* Repository is now downloaded synchronously in Prepare(), so we don't
+     need special handling here. Other downloads are handled by DownloadProgress. */
 }
 
 AllocatedPath
