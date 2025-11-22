@@ -8,6 +8,7 @@
 #include "Blackboard/MapSettingsBlackboard.hpp"
 #include "thread/Debug.hpp"
 #include "UIState.hpp"
+#include "FLARM/List.hpp"
 
 #include <map>
 
@@ -30,6 +31,18 @@ class MapWindowBlackboard:
   std::map<FlarmId, FlarmTraffic> fading_flarm_traffic;
 
 protected:
+  /**
+   * Unified traffic that has disappeared, but will remain on the map
+   * (greyed out) for some time.
+   * Mutable because it's updated during drawing (which is logically const)
+   */
+  mutable std::map<FlarmId, FlarmTraffic> fading_unified_traffic;
+
+  /**
+   * Previous unified traffic list for fading comparison
+   * Mutable because it's updated during drawing (which is logically const)
+   */
+  mutable TrafficList previous_unified_traffic;
   MapWindowBlackboard() noexcept {
     /* this needs to be initialised because ReadBlackboard() uses the
        previous FLARM traffic list */
@@ -53,6 +66,11 @@ protected:
   [[gnu::const]]
   const auto &GetFadingFlarmTraffic() const noexcept {
     return fading_flarm_traffic;
+  }
+
+  [[gnu::const]]
+  const auto &GetFadingUnifiedTraffic() const noexcept {
+    return fading_unified_traffic;
   }
 
   [[gnu::const]]

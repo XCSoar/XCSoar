@@ -7,16 +7,17 @@
 #include "thread/Mutex.hxx"
 #include "util/tstring.hpp"
 
-#include <map>
-#include <list>
 #include <chrono>
+#include <list>
+#include <map>
 
 #include <cstdint>
 
 namespace SkyLinesTracking {
 
 struct Data {
-  using Time = std::chrono::duration<uint_least32_t, std::chrono::milliseconds::period>;
+  using Time =
+      std::chrono::duration<uint_least32_t, std::chrono::milliseconds::period>;
 
   struct Traffic {
     /**
@@ -29,11 +30,20 @@ struct Data {
     GeoPoint location;
     int altitude;
 
+    /**
+     * FlarmId/ICAO ID extracted from reserved2 field (0 if not available).
+     * This allows matching SkyLines traffic to FLARM databases.
+     */
+    uint32_t flarm_id;
+
     Traffic() = default;
-    constexpr Traffic(Time _time, GeoPoint _location,
-                      int _altitude) noexcept
-      :time_of_day(_time),
-       location(_location), altitude(_altitude) {}
+    constexpr Traffic(Time _time, GeoPoint _location, int _altitude,
+                      uint32_t _flarm_id = 0) noexcept : time_of_day(_time),
+                                                         location(_location),
+                                                         altitude(_altitude),
+                                                         flarm_id(_flarm_id)
+    {
+    }
   };
 
   struct Wave {
@@ -52,7 +62,11 @@ struct Data {
 
     Wave() = default;
     constexpr Wave(Time _time, GeoPoint _a, GeoPoint _b) noexcept
-      :time_of_day(_time), a(_a), b(_b) {}
+        : time_of_day(_time),
+          a(_a),
+          b(_b)
+    {
+    }
   };
 
   struct Thermal {
@@ -64,8 +78,10 @@ struct Data {
 
     Thermal() = default;
     Thermal(const AGeoPoint &_bottom, const AGeoPoint &_top, double _lift)
-      :received_time(std::chrono::steady_clock::now()),
-       bottom_location(_bottom), top_location(_top), lift(_lift) {}
+        : received_time(std::chrono::steady_clock::now()),
+          bottom_location(_bottom), top_location(_top), lift(_lift)
+    {
+    }
   };
 
   mutable Mutex mutex;
@@ -83,7 +99,8 @@ struct Data {
   std::list<Thermal> thermals;
 
   [[gnu::pure]]
-  bool IsUserKnown(uint32_t id) const {
+  bool IsUserKnown(uint32_t id) const
+  {
     return user_names.find(id) != user_names.end();
   }
 };
