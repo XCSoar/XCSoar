@@ -129,6 +129,17 @@ Profile::Load(const ProfileMap &map, AirspaceComputerSettings &settings)
         settings.warnings.class_warnings[i] = (value & 0x2) != 0;
     }
   }
+
+  // Load NOTAM settings
+  map.Get(ProfileKeys::NOTAMEnabled, settings.notam.enabled);
+  map.Get(ProfileKeys::NOTAMRadius, settings.notam.radius_km);
+  map.Get(ProfileKeys::NOTAMMaxCount, settings.notam.max_notams);
+  
+  // Load refresh interval as unsigned int and convert to chrono::minutes
+  unsigned refresh_minutes = 30; // default value
+  if (map.Get(ProfileKeys::NOTAMRefreshInterval, refresh_minutes)) {
+    settings.notam.refresh_interval_min = std::chrono::minutes{refresh_minutes};
+  }
 }
 
 void
