@@ -7,8 +7,6 @@
 
 #include <tchar.h>
 
-#define REPOSITORY_URI "http://download.xcsoar.org/repository"
-
 static bool repository_downloaded = false;
 
 void
@@ -18,5 +16,11 @@ EnqueueRepositoryDownload(bool force)
     return;
 
   repository_downloaded = true;
-  Net::DownloadManager::Enqueue(REPOSITORY_URI, Path(_T("repository")));
+  
+  // Use new fallback API with multiple repository URLs
+  Net::DownloadManager::EnqueueWithFallback({
+    "http://download.xcsoar.org/repository", // Primary, managed by @scottp
+    "http://download.xcsoar.net/repository", // Fallback, managed by @lordfolken
+    "http://download.xcsoar.de/repository" // Fallback, managed by @yorickreum
+  }, Path(_T("repository")));
 }
