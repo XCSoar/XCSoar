@@ -5,10 +5,32 @@
 #include "Event.hpp"
 #include "../Timer.hpp"
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 namespace UI {
 
 EventQueue::EventQueue() noexcept
   :quit(false) {}
+
+void
+EventQueue::Quit() noexcept
+{
+  quit.store(true);
+  
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+  /* On iOS, SDL_WaitEvent() may not return when the app is being terminated.
+   * Push a dummy user event to wake up the event loop so it can detect the
+   * quit flag and exit cleanly. */
+  SDL_Event event;
+  event.type = SDL_USEREVENT;
+  event.user.code = 0;
+  event.user.data1 = nullptr;
+  event.user.data2 = nullptr;
+  ::SDL_PushEvent(&event);
+#endif
+}
 
 void
 EventQueue::InjectCall(EventLoop::Callback callback, void *ctx) noexcept
@@ -44,7 +66,7 @@ EventQueue::Generate(Event &event) noexcept
 bool
 EventQueue::Pop(Event &event) noexcept
 {
-  return !quit && (Generate(event) || ::SDL_PollEvent(&event.event));
+  return !quit.load() && (Generate(event) || ::SDL_PollEvent(&event.event));
 }
 
 bool
@@ -54,7 +76,7 @@ EventQueue::Wait(Event &event) noexcept
      but SDL_WaitEvent() is just as bad; however copying this busy
      loop allows us to plug in more event sources */
 
-  if (quit)
+  if (quit.load())
     return false;
 
   while (true) {
@@ -62,6 +84,10 @@ EventQueue::Wait(Event &event) noexcept
       return true;
 
     ::SDL_PumpEvents();
+
+    // Check quit again after pumping events, as it may have been set
+    if (quit.load())
+      return false;
 
     const auto timeout = timers.GetTimeout(SteadyNow());
 
