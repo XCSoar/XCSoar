@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 05:19+0100\n"
+"POT-Creation-Date: 2025-11-13 09:55+0000\n"
 "PO-Revision-Date: 2024-09-09 08:09+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
@@ -3535,11 +3535,11 @@ msgstr "Soubor"
 
 #: src/Dialogs/ReplayDialog.cpp:50
 msgid ""
-"Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file "
-"(.nmea). Leave blank to run the demo."
+"Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file (."
+"nmea). Leave blank to run the demo."
 msgstr ""
-"Název souboru k přehrání. Může být IGC soubor (.igc), raw NMEA log soubor "
-"(.nmea), nebo pokud necháte prázdné, spustí demo."
+"Název souboru k přehrání. Může být IGC soubor (.igc), raw NMEA log soubor (."
+"nmea), nebo pokud necháte prázdné, spustí demo."
 
 #: src/Dialogs/ReplayDialog.cpp:56
 msgid "Rate"
@@ -5865,8 +5865,8 @@ msgstr "Vyber prostor"
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:80
 msgid ""
 "List of active airspace files. Use the Add and Remove buttons to activate or "
-"deactivate airspace files respectively. Supported file types are: Openair "
-"(.txt /.air), and Tim Newport-Pearce (.sua)."
+"deactivate airspace files respectively. Supported file types are: Openair (."
+"txt /.air), and Tim Newport-Pearce (.sua)."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:87
@@ -7159,8 +7159,8 @@ msgstr "Získává a zobrazuje pozici st. proudů od dalších uživatelů."
 
 #: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:67
 msgid ""
-"Show thermal locations downloaded from Thermal Information Map "
-"(thermalmap.info)."
+"Show thermal locations downloaded from Thermal Information Map (thermalmap."
+"info)."
 msgstr ""
 "Zobrazí pozice stoupavých proudů, stažených z Thermal Information Map "
 "(thermalmap.info)."
@@ -7661,6 +7661,7 @@ msgstr ""
 "Prosím, pomozte nám zlepšovat XCSoar!"
 
 #: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
+#: src/Dialogs/Weather/RASPDialog.cpp:135
 msgid "Now"
 msgstr "Nyní"
 
@@ -10086,7 +10087,6 @@ msgid ""
 msgstr "Výška příletu nad cílový bod trati relativně k bezpečné výšce příletu."
 
 #: src/InfoBoxes/Content/Alternate.cpp:58
-#, c++-format
 msgid "Altn {}"
 msgstr "Altn {}"
 

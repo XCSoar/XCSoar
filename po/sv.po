@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 05:19+0100\n"
+"POT-Creation-Date: 2025-11-13 09:55+0000\n"
 "PO-Revision-Date: 2023-07-24 22:05+0000\n"
 "Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
@@ -3532,11 +3532,11 @@ msgstr "Fil"
 
 #: src/Dialogs/ReplayDialog.cpp:50
 msgid ""
-"Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file "
-"(.nmea). Leave blank to run the demo."
+"Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file (."
+"nmea). Leave blank to run the demo."
 msgstr ""
-"Filnamn att spela upp. Kan vara en IGC fil (.igc), en rå NMEA logfil "
-"(.nmea), eller om blankt, kör en demo."
+"Filnamn att spela upp. Kan vara en IGC fil (.igc), en rå NMEA logfil (."
+"nmea), eller om blankt, kör en demo."
 
 #: src/Dialogs/ReplayDialog.cpp:56
 msgid "Rate"
@@ -5786,8 +5786,8 @@ msgid ""
 "Primary waypoints files.  Supported file types are Cambridge/WinPilot files "
 "(.dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
-"Primär vägpunktsfil. Supporterade filtyper är Cambridge/WinPilot filer "
-"(.dat), Zander files (.wpz) eller SeeYou files (.cup)."
+"Primär vägpunktsfil. Supporterade filtyper är Cambridge/WinPilot filer (."
+"dat), Zander files (.wpz) eller SeeYou files (.cup)."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:60
 msgid "Watched waypoints"
@@ -5825,8 +5825,8 @@ msgstr "Välj Luftrum"
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:80
 msgid ""
 "List of active airspace files. Use the Add and Remove buttons to activate or "
-"deactivate airspace files respectively. Supported file types are: Openair "
-"(.txt /.air), and Tim Newport-Pearce (.sua)."
+"deactivate airspace files respectively. Supported file types are: Openair (."
+"txt /.air), and Tim Newport-Pearce (.sua)."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:87
@@ -7099,8 +7099,8 @@ msgstr "Erhåll och visa termik inrapporterad av andra."
 
 #: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:67
 msgid ""
-"Show thermal locations downloaded from Thermal Information Map "
-"(thermalmap.info)."
+"Show thermal locations downloaded from Thermal Information Map (thermalmap."
+"info)."
 msgstr ""
 "Visa termikområden nedladdade från Thermal Information Map (thermalmap.info)."
 
@@ -7594,6 +7594,7 @@ msgstr ""
 "Hjälp oss gärna förbättra XCSoar!"
 
 #: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
+#: src/Dialogs/Weather/RASPDialog.cpp:135
 msgid "Now"
 msgstr "Nu"
 
@@ -8482,8 +8483,8 @@ msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
-"Estimerad tid för att slutföra banan, förutsatt ideal MacCready glid/stig "
-"-cykel."
+"Estimerad tid för att slutföra banan, förutsatt ideal MacCready glid/stig -"
+"cykel."
 
 #: src/InfoBoxes/Content/Factory.cpp:462
 #, no-c-format
@@ -9147,8 +9148,8 @@ msgid ""
 "set. In case the FL is calculated from the GPS altitude, the FL label is "
 "coloured red."
 msgstr ""
-"Tryckhöjd som FL. Om barometrisk höjd ej finns tillgänglig beräknas FL "
-"m.h.a. GPS-höjd och under antagandet att QNH är korrekt angiven. Om GPS-höjd "
+"Tryckhöjd som FL. Om barometrisk höjd ej finns tillgänglig beräknas FL m.h."
+"a. GPS-höjd och under antagandet att QNH är korrekt angiven. Om GPS-höjd "
 "används färgas FL-etiketten röd."
 
 #: src/InfoBoxes/Content/Factory.cpp:763 src/InfoBoxes/Content/Factory.cpp:764
@@ -10016,7 +10017,7 @@ msgid ""
 msgstr "Ankomsthöjd vid uppgiftens sista vägpunkt relativt säkerhetshöjden."
 
 #: src/InfoBoxes/Content/Alternate.cpp:58
-#, fuzzy, c++-format
+#, fuzzy
 msgid "Altn {}"
 msgstr "Alt 1"
 
