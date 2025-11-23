@@ -27,7 +27,8 @@ enum ControlIndex {
   spacer_3,
   TaskType,
   AATMinTime,
-  AATTimeMargin
+  AATTimeMargin,
+  ArrivalRingAAT
 };
 
 class TaskDefaultsConfigPanel final
@@ -185,6 +186,10 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent,
               task_behaviour.optimise_targets_margin);
   SetExpertRow(AATTimeMargin);
 
+  AddBoolean(_("Arrival ring AAT"),
+             _("Show the arrival time ring based on AAT time remaining."),
+             task_behaviour.arrival_ring_aat_enabled);
+
   SetStartLabel();
   SetFinishLabel();
 }
@@ -220,7 +225,10 @@ TaskDefaultsConfigPanel::Save(bool &_changed) noexcept
                        task_behaviour.ordered_defaults.aat_min_time);
 
   changed |= SaveValue(AATTimeMargin, ProfileKeys::AATTimeMargin,
-                       task_behaviour.optimise_targets_margin);
+                        task_behaviour.optimise_targets_margin);
+
+  changed |= SaveValue(ArrivalRingAAT, ProfileKeys::ArrivalRingAATEnabled,
+                       task_behaviour.arrival_ring_aat_enabled);
 
   _changed |= changed;
   return true;
