@@ -5,6 +5,14 @@
 #include "Queue.hpp"
 #include "../shared/Event.hpp"
 #include "ui/display/Display.hpp"
+#include "DisplayOrientation.hpp"
+#include "ui/dim/Size.hpp"
+#include "ui/opengl/Features.hpp"
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+#include "ui/canvas/opengl/Globals.hpp"
+#include "DisplayOrientation.hpp"
+#endif
 
 /* kludges to work around namespace collisions with X11 headers */
 
@@ -22,6 +30,39 @@
 #include <stdexcept>
 
 namespace UI {
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+/**
+ * Transform physical coordinates to logical coordinates for SOFTWARE_ROTATE_DISPLAY.
+ * This handles the case where only the rendering is rotated, not the physical screen.
+ */
+static PixelPoint
+TransformCoordinates(PixelPoint p, PixelSize physical_size) noexcept
+{
+  const auto orientation = OpenGL::display_orientation;
+  
+  switch (TranslateDefaultDisplayOrientation(orientation)) {
+  case DisplayOrientation::DEFAULT:
+  case DisplayOrientation::LANDSCAPE:
+    // No rotation
+    return p;
+    
+  case DisplayOrientation::PORTRAIT:
+    // 90° clockwise: (x, y) -> (y, width - x)
+    return PixelPoint(p.y, physical_size.width - p.x);
+    
+  case DisplayOrientation::REVERSE_LANDSCAPE:
+    // 180°: (x, y) -> (width - x, height - y)
+    return PixelPoint(physical_size.width - p.x, physical_size.height - p.y);
+    
+  case DisplayOrientation::REVERSE_PORTRAIT:
+    // 270° clockwise (90° counter-clockwise): (x, y) -> (height - y, x)
+    return PixelPoint(physical_size.height - p.y, p.x);
+  }
+  
+  return p;
+}
+#endif
 
 X11EventQueue::X11EventQueue(Display &_display, EventQueue &_queue)
   :queue(_queue),
@@ -76,16 +117,24 @@ X11EventQueue::HandleEvent(_XEvent &event)
     case Button2:
     case Button3:
       ctrl_click = event.xbutton.state & ControlMask;
-      queue.Push(Event(Event::MOUSE_DOWN,
-                       PixelPoint(event.xbutton.x, event.xbutton.y)));
+      {
+        PixelPoint p(event.xbutton.x, event.xbutton.y);
+#ifdef SOFTWARE_ROTATE_DISPLAY
+        p = TransformCoordinates(p, physical_screen_size);
+#endif
+        queue.Push(Event(Event::MOUSE_DOWN, p));
+      }
       break;
 
     case Button4:
     case Button5:
       /* mouse wheel */
       {
-        Event e(Event::MOUSE_WHEEL,
-                PixelPoint(event.xbutton.x, event.xbutton.y));
+        PixelPoint p(event.xbutton.x, event.xbutton.y);
+#ifdef SOFTWARE_ROTATE_DISPLAY
+        p = TransformCoordinates(p, physical_screen_size);
+#endif
+        Event e(Event::MOUSE_WHEEL, p);
         e.param = event.xbutton.button == Button4 ? 1u : unsigned(-1);
         queue.Push(e);
       }
@@ -98,14 +147,24 @@ X11EventQueue::HandleEvent(_XEvent &event)
     case Button1:
     case Button2:
     case Button3:
-      queue.Push(Event(Event::MOUSE_UP,
-                       PixelPoint(event.xbutton.x, event.xbutton.y)));
+      {
+        PixelPoint p(event.xbutton.x, event.xbutton.y);
+#ifdef SOFTWARE_ROTATE_DISPLAY
+        p = TransformCoordinates(p, physical_screen_size);
+#endif
+        queue.Push(Event(Event::MOUSE_UP, p));
+      }
     }
     break;
 
   case MotionNotify:
-    queue.Push(Event(Event::MOUSE_MOTION,
-                     PixelPoint(event.xmotion.x, event.xmotion.y)));
+    {
+      PixelPoint p(event.xmotion.x, event.xmotion.y);
+#ifdef SOFTWARE_ROTATE_DISPLAY
+      p = TransformCoordinates(p, physical_screen_size);
+#endif
+      queue.Push(Event(Event::MOUSE_MOTION, p));
+    }
     break;
 
   case ClientMessage:
@@ -118,9 +177,13 @@ X11EventQueue::HandleEvent(_XEvent &event)
       break;
 
   case ConfigureNotify:
-    queue.Push(Event(Event::RESIZE,
-                     PixelPoint(event.xconfigure.width,
-                                event.xconfigure.height)));
+    {
+      PixelSize physical_size(event.xconfigure.width, event.xconfigure.height);
+#ifdef SOFTWARE_ROTATE_DISPLAY
+      physical_screen_size = physical_size;
+#endif
+      queue.Push(Event(Event::RESIZE, PixelPoint(physical_size.width, physical_size.height)));
+    }
     break;
 
   case VisibilityNotify:
@@ -146,5 +209,24 @@ X11EventQueue::OnSocketReady(unsigned) noexcept
     HandleEvent(event);
   }
 }
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+
+void
+X11EventQueue::SetScreenSize([[maybe_unused]] PixelSize screen_size) noexcept
+{
+  // screen_size is the logical (rotated) size from viewport
+  // We use physical_screen_size for coordinate transformation
+  // No action needed here as physical size is set from ConfigureNotify
+}
+
+void
+X11EventQueue::SetDisplayOrientation([[maybe_unused]] DisplayOrientation orientation) noexcept
+{
+  // Orientation is tracked in OpenGL::display_orientation
+  // TransformCoordinates uses it directly
+}
+
+#endif
 
 } // namespace UI

@@ -5,6 +5,14 @@
 
 #include "event/SocketEvent.hxx"
 
+#ifdef USE_X11
+#include "ui/opengl/Features.hpp"
+#endif
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+#include "../shared/RotatePointer.hpp"
+#endif
+
 /* kludges to work around namespace collisions with X11 headers */
 
 #define Font X11Font
@@ -19,6 +27,9 @@
 
 struct _XDisplay;
 union _XEvent;
+
+enum class DisplayOrientation : uint8_t;
+struct PixelSize;
 
 namespace UI {
 
@@ -43,6 +54,11 @@ class X11EventQueue {
 
   bool ctrl_click;
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  RotatePointer rotate_pointer;
+  PixelSize physical_screen_size{0, 0};
+#endif
+
 public:
   /**
    * @param queue the #EventQueue that shall receive X11 events
@@ -62,6 +78,11 @@ public:
   bool WasCtrlClick() const {
     return ctrl_click;
   }
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  void SetScreenSize(PixelSize screen_size) noexcept;
+  void SetDisplayOrientation(DisplayOrientation orientation) noexcept;
+#endif
 
   bool Generate([[maybe_unused]] Event &event) {
     return false;

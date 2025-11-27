@@ -5,8 +5,15 @@
 #include "Queue.hpp"
 #include "../shared/Event.hpp"
 #include "ui/display/Display.hpp"
+#include "DisplayOrientation.hpp"
+#include "ui/opengl/Features.hpp"
 #include "util/StringAPI.hxx"
 #include "xdg-shell-client-protocol.h"
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+#include "ui/canvas/opengl/Globals.hpp"
+#include "ui/dim/Size.hpp"
+#endif
 
 #include <wayland-client.h>
 
@@ -17,6 +24,42 @@
 #include <stdexcept>
 
 namespace UI {
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+/**
+ * Transform physical coordinates to logical coordinates for SOFTWARE_ROTATE_DISPLAY.
+ * This handles the case where only the rendering is rotated, not the physical screen.
+ */
+static PixelPoint
+TransformCoordinates(PixelPoint p, PixelSize physical_size) noexcept
+{
+  const auto orientation = OpenGL::display_orientation;
+  
+  switch (TranslateDefaultDisplayOrientation(orientation)) {
+  case DisplayOrientation::DEFAULT:
+  case DisplayOrientation::LANDSCAPE:
+    // No rotation
+    return p;
+    
+  case DisplayOrientation::PORTRAIT:
+    // 90° clockwise rotation in OpenGL means we need to transform
+    // physical (x, y) to logical coordinates
+    // For Wayland, the transformation appears to need inversion
+    // Try: (x, y) -> (height - y, x) which is 90° counter-clockwise
+    return PixelPoint(physical_size.height - p.y, p.x);
+    
+  case DisplayOrientation::REVERSE_LANDSCAPE:
+    // 180°: (x, y) -> (width - x, height - y)
+    return PixelPoint(physical_size.width - p.x, physical_size.height - p.y);
+    
+  case DisplayOrientation::REVERSE_PORTRAIT:
+    // 270° clockwise: inverse would be (x, y) -> (y, width - x)
+    return PixelPoint(p.y, physical_size.width - p.x);
+  }
+  
+  return p;
+}
+#endif
 
 static void
 WaylandRegistryGlobal(void *data, struct wl_registry *registry, uint32_t id,
@@ -109,8 +152,17 @@ WaylandPointerAxis(void *data,
 {
   auto &queue = *(WaylandEventQueue *)data;
 
-  if (axis == WL_POINTER_AXIS_VERTICAL_SCROLL)
-    queue.Push(Event(Event::MOUSE_WHEEL, wl_fixed_to_int(value)));
+  if (axis == WL_POINTER_AXIS_VERTICAL_SCROLL) {
+    auto &q = *(WaylandEventQueue *)data;
+#ifdef SOFTWARE_ROTATE_DISPLAY
+    PixelPoint p = q.GetTransformedPointerPosition();
+#else
+    PixelPoint p(q.pointer_position.x, q.pointer_position.y);
+#endif
+    Event e(Event::MOUSE_WHEEL, p);
+    e.param = wl_fixed_to_int(value);
+    queue.Push(e);
+  }
 }
 
 static constexpr struct wl_pointer_listener pointer_listener = {
@@ -318,15 +370,21 @@ WaylandEventQueue::PointerMotion(IntPoint2D new_pointer_position) noexcept
     return;
 
   pointer_position = new_pointer_position;
-  Push(Event(Event::MOUSE_MOTION,
-             PixelPoint(pointer_position.x, pointer_position.y)));
+  PixelPoint p(pointer_position.x, pointer_position.y);
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  p = TransformCoordinates(p, physical_screen_size);
+#endif
+  Push(Event(Event::MOUSE_MOTION, p));
 }
 
 inline void
 WaylandEventQueue::PointerButton(bool pressed) noexcept
 {
-  Push(Event(pressed ? Event::MOUSE_DOWN : Event::MOUSE_UP,
-             PixelPoint(pointer_position.x, pointer_position.y)));
+  PixelPoint p(pointer_position.x, pointer_position.y);
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  p = TransformCoordinates(p, physical_screen_size);
+#endif
+  Push(Event(pressed ? Event::MOUSE_DOWN : Event::MOUSE_UP, p));
 }
 
 void
@@ -342,5 +400,40 @@ WaylandEventQueue::KeyboardKey(uint32_t key, uint32_t state) noexcept
     break;
   }
 }
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+
+PixelPoint
+WaylandEventQueue::GetTransformedPointerPosition() const noexcept
+{
+  PixelPoint p(pointer_position.x, pointer_position.y);
+  return TransformCoordinates(p, physical_screen_size);
+}
+
+void
+WaylandEventQueue::SetScreenSize(PixelSize screen_size) noexcept
+{
+  // screen_size is the logical (rotated) size from viewport
+  // For Wayland, we need to track the physical size
+  // Since Wayland doesn't have ConfigureNotify, we use the logical size
+  // and derive physical size based on orientation
+  if (AreAxesSwapped(OpenGL::display_orientation)) {
+    // If axes are swapped, logical size is (height, width) of physical
+    physical_screen_size = PixelSize(screen_size.height, screen_size.width);
+  } else {
+    physical_screen_size = screen_size;
+  }
+}
+
+void
+WaylandEventQueue::SetDisplayOrientation([[maybe_unused]] DisplayOrientation orientation) noexcept
+{
+  // Orientation is tracked in OpenGL::display_orientation
+  // TransformCoordinates uses it directly
+  // Update physical screen size if needed
+  // (This would require knowing the current logical size, which we don't have here)
+}
+
+#endif
 
 } // namespace UI
