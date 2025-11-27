@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "LogFile.hpp"
 #include "NOTAMConfigPanel.hpp"
 #include "ConfigPanel.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -17,6 +18,7 @@
 #include "Components.hpp"
 #include "NOTAM/Glue.hpp"
 #include "Formatter/UserUnits.hpp"
+#include "ui/event/PeriodicTimer.hpp"
 
 #include <ctime>
 
@@ -43,6 +45,8 @@ enum ControlIndex {
 };
 
 class NOTAMConfigPanel : public RowFormWidget, DataFieldListener {
+  UI::PeriodicTimer timer{[this]{ OnTimer(); }};
+
 public:
   NOTAMConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
@@ -55,6 +59,8 @@ public:
 private:
   void OnUpdateButton() noexcept;
   void UpdateVisibility() noexcept;
+  void RefreshDisplayFields() noexcept;
+  void OnTimer() noexcept;
   
   /* methods from DataFieldListener */
   void OnModified(DataField &df) noexcept override;
@@ -177,6 +183,9 @@ NOTAMConfigPanel::Show(const PixelRect &rc) noexcept
   ConfigPanel::BorrowExtraButton(1, _("Update Now"), [this](){
     OnUpdateButton();
   });
+  
+  // Start periodic timer to refresh display fields (every 2 seconds)
+  timer.Schedule(std::chrono::seconds(2));
 #endif
 
   RowFormWidget::Show(rc);
@@ -185,9 +194,20 @@ NOTAMConfigPanel::Show(const PixelRect &rc) noexcept
 void
 NOTAMConfigPanel::OnUpdateButton() noexcept
 {
-  // TODO: Trigger NOTAM refresh via NetComponents
-  // This will be connected to the actual NOTAM update mechanism
-  // For now, just a placeholder for the button action
+  LogFormat("NOTAM: Manual update triggered from settings panel");
+#ifdef HAVE_HTTP
+  if (net_components && net_components->notam) {
+    // Invalidate cache to force fresh fetch
+    net_components->notam->InvalidateCache();
+    
+    const auto &basic = CommonInterface::Basic();
+    if (basic.location.IsValid()) {
+      // Trigger NOTAM update for current location
+      net_components->notam->UpdateLocation(basic.location);
+      // Display fields will be refreshed by the periodic timer
+    }
+  }
+#endif
 }
 
 void
@@ -214,6 +234,53 @@ NOTAMConfigPanel::UpdateVisibility() noexcept
   SetRowAvailable(ShowNavaid, enabled);
   SetRowAvailable(ShowOther, enabled);
 #endif
+}
+
+void
+NOTAMConfigPanel::RefreshDisplayFields() noexcept
+{
+#ifdef HAVE_HTTP
+  if (!net_components || !net_components->notam)
+    return;
+
+  // Refresh last update time
+  std::time_t last_update = net_components->notam->GetLastUpdateTime();
+  if (last_update > 0) {
+    char time_buffer[32];
+    std::strftime(time_buffer, sizeof(time_buffer), "%Y-%m-%d %H:%M", std::localtime(&last_update));
+    SetText(LastUpdate, time_buffer);
+  } else {
+    SetText(LastUpdate, _("Never"));
+  }
+
+  // Refresh distance from last update location
+  const auto &basic = CommonInterface::Basic();
+  GeoPoint last_loc = net_components->notam->GetLastUpdateLocation();
+  
+  // Debug logging
+  LogFormat("NOTAM Panel: current_loc=%.6f,%.6f (available=%d, valid=%d), last_loc=%.6f,%.6f (valid=%d)",
+            basic.location.latitude.Degrees(), basic.location.longitude.Degrees(),
+            (int)basic.location_available.IsValid(), (int)basic.location.IsValid(),
+            last_loc.latitude.Degrees(), last_loc.longitude.Degrees(),
+            (int)last_loc.IsValid());
+  
+  // Check both that location is valid AND that it's actually available (has GPS fix)
+  if (basic.location_available && basic.location.IsValid() && last_loc.IsValid()) {
+    double dist_m = basic.location.Distance(last_loc);
+    LogFormat("NOTAM Panel: distance = %.2f m (%.2f km)", dist_m, dist_m / 1000.0);
+    TCHAR dist_buffer[32];
+    FormatUserDistanceSmart(dist_m, dist_buffer, true, 1000.0, 9.999);
+    SetText(DistanceFromLastUpdate, dist_buffer);
+  } else {
+    SetText(DistanceFromLastUpdate, _("Unknown"));
+  }
+#endif
+}
+
+void
+NOTAMConfigPanel::OnTimer() noexcept
+{
+  RefreshDisplayFields();
 }
 
 void

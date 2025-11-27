@@ -106,6 +106,12 @@ public:
    */
   GeoPoint GetLastUpdateLocation() const;
 
+  /**
+   * Invalidate the NOTAM cache by deleting the cache file
+   * This will force a fresh fetch on the next update
+   */
+  void InvalidateCache();
+
 private:
   Co::InvokeTask LoadNOTAMsInternal(GeoPoint location);
   void OnLoadComplete(std::exception_ptr error) noexcept;

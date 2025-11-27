@@ -17,6 +17,7 @@ using NOTAMStruct = struct NOTAM;
 #include "LocalPath.hpp"
 #include "io/FileOutputStream.hxx"
 #include "io/FileReader.hxx"
+#include "system/FileUtil.hpp"
 #include "util/SpanCast.hxx"
 #include "time/Convert.hxx"
 #include "LogFile.hpp"
@@ -60,26 +61,30 @@ NOTAMGlue::~NOTAMGlue() {
 void
 NOTAMGlue::UpdateLocation(const GeoPoint &location)
 {
-  const std::lock_guard<Mutex> lock(mutex);
-  
-  // Check if location changed significantly (more than 10km)
-  if (current_location.IsValid() && location.IsValid()) {
-    const auto distance_m = current_location.Distance(location);
-    constexpr double RELOAD_THRESHOLD_M = 10000.0; // 10km threshold
-    if (distance_m < RELOAD_THRESHOLD_M) {
-      return; // No significant change
+  if (!location.IsValid()) {
+    return;
+  }
+
+  // Check if settings are enabled
+  if (!settings.enabled) {
+    return;
+  }
+
+  // Check if already loading
+  {
+    const std::lock_guard<Mutex> lock(mutex);
+    if (loading) {
+      return; // Already loading, skip this request
     }
+    loading = true;
+    current_location = location;
   }
-  
-  current_location = location;
-  
-  // Trigger reload if not already loading and settings are enabled
-  if (!loading && settings.enabled && location.IsValid()) {
-    // @TODO
-    // We can't directly call LoadNOTAMs from here as we don't have OperationEnvironment
-    // Could be handled by a timer / the main application loop
-    // For now, we just update the location and let external code trigger the reload
-  }
+
+  LogFormat("NOTAM: Manual update triggered from settings panel");
+
+  // Start async loading
+  load_task.Start(LoadNOTAMsInternal(location), 
+                  BIND_THIS_METHOD(OnLoadComplete));
 }
 
 void
@@ -156,22 +161,37 @@ NOTAMGlue::Clear()
 Co::InvokeTask
 NOTAMGlue::LoadNOTAMsInternal(GeoPoint location)
 {
+  LogFormat("NOTAM: Starting LoadNOTAMsInternal for location %.6f,%.6f", 
+            location.latitude.Degrees(), location.longitude.Degrees());
+
   try {
     // First, try to load from cache if not expired
+    LogFormat("NOTAM: Checking cache expiration status");
     if (!IsCacheExpired()) {
+      LogFormat("NOTAM: Cache is still valid, attempting to load from cache");
       std::vector<NOTAMStruct> cached_notams;
       if (LoadNOTAMsFromFile(cached_notams)) {
+        const unsigned count = static_cast<unsigned>(cached_notams.size());
+        LogFormat("NOTAM: Successfully loaded %u NOTAMs from cache", count);
+        
         // Store cached results
         {
           const std::lock_guard<Mutex> lock(mutex);
           auto *impl = static_cast<NOTAMImpl*>(current_notams_impl);
           impl->current_notams = std::move(cached_notams);
         }
+        LogFormat("NOTAM: Using cached data, fetch complete");
         co_return; // Use cached data, no need to fetch
+      } else {
+        LogFormat("NOTAM: Failed to load from cache file, will fetch fresh data");
       }
+    } else {
+      LogFormat("NOTAM: Cache is expired or doesn't exist, fetching fresh data");
     }
     
     // Cache is expired or doesn't exist, fetch fresh data from API
+    LogFormat("NOTAM: Starting API fetch for radius %.1u km", settings.radius_km);
+    
     // Use a simple progress listener (we could make this more sophisticated)
     class SimpleProgressListener : public ProgressListener {
     public:
@@ -180,13 +200,20 @@ NOTAMGlue::LoadNOTAMsInternal(GeoPoint location)
     } progress;
     
     // Fetch raw GeoJSON using the client
+    LogFormat("NOTAM: Calling FetchNOTAMsRaw...");
     auto raw_geojson = co_await NOTAMClient::FetchNOTAMsRaw(curl, settings, location, progress);
+    LogFormat("NOTAM: Received GeoJSON response (%zu bytes)", raw_geojson.size());
     
     // Save raw GeoJSON to file for caching
+    LogFormat("NOTAM: Saving GeoJSON to cache file");
     SaveNOTAMsToFile(raw_geojson, location);
+    LogFormat("NOTAM: Cache file saved successfully");
     
     // Parse GeoJSON to get NOTAMs for in-memory storage
+    LogFormat("NOTAM: Parsing GeoJSON to extract NOTAMs");
     auto notams = NOTAMClient::ParseNOTAMGeoJSON(raw_geojson);
+    const unsigned count = static_cast<unsigned>(notams.size());
+    LogFormat("NOTAM: Parsed %u NOTAMs from GeoJSON", count);
     
     // Store the results
     {
@@ -195,16 +222,18 @@ NOTAMGlue::LoadNOTAMsInternal(GeoPoint location)
       impl->current_notams = std::move(notams);
     }
     
-
+    LogFormat("NOTAM: Successfully completed fetch with %u NOTAMs", count);
     
   } catch (const std::exception &e) {
+    LogFormat("NOTAM: Error during fetch: %s", e.what());
+    
     // Log error and clear any existing NOTAMs
     {
       const std::lock_guard<Mutex> lock(mutex);
       auto *impl = static_cast<NOTAMImpl*>(current_notams_impl);
       impl->current_notams.clear();
     }
-    // Could log the error: e.what()
+    LogFormat("NOTAM: Cleared NOTAMs due to error");
   }
 }
 
@@ -247,6 +276,20 @@ NOTAMGlue::LoadCachedNOTAMs()
   
   LogFormat("NOTAM: No cached NOTAMs found at: %s", file_path.c_str());
   return 0;
+}
+
+void
+NOTAMGlue::InvalidateCache()
+{
+  auto file_path = GetNOTAMCacheFilePath();
+  
+  if (File::Exists(file_path)) {
+    LogFormat("NOTAM: Invalidating cache file: %s", file_path.c_str());
+    File::Delete(file_path);
+    LogFormat("NOTAM: Cache invalidated successfully");
+  } else {
+    LogFormat("NOTAM: No cache file to invalidate at: %s", file_path.c_str());
+  }
 }
 
 int
@@ -619,7 +662,7 @@ NOTAMGlue::GetLastUpdateLocation() const
     try {
       double lat = std::stod(lat_str);
       double lon = std::stod(lon_str);
-      return GeoPoint(Angle::Degrees(lat), Angle::Degrees(lon));
+      return GeoPoint(Angle::Degrees(lon), Angle::Degrees(lat));
     } catch (const std::exception &) {
       return GeoPoint::Invalid();
     }
