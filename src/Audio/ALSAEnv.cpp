@@ -43,12 +43,12 @@ static unsigned InitALSALatency()
     char *p;
     latency = ParseUnsigned(latency_env_value, &p);
     if (*p != '\0') {
-      LogFormat("Invalid %s value \"%s\"", ALSA_LATENCY_ENV, latency_env_value);
+      LogFormat("Invalid %s value: %s", ALSA_LATENCY_ENV, latency_env_value);
       return false;
     }
   }
-  LogFormat("Using ALSA PCM latency %u μs (use environment variable "
-                "%s to override)", latency, ALSA_LATENCY_ENV);
+  LogFormat("Using ALSA PCM latency: %u μs (use environment variable %s to override)",
+            latency, ALSA_LATENCY_ENV);
   return latency;
 }
 
