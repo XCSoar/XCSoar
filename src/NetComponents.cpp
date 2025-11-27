@@ -4,7 +4,7 @@
 #include "NetComponents.hpp"
 #include "Tracking/TrackingGlue.hpp"
 #include "net/client/tim/Glue.hpp"
-#include "NOTAM/Glue.hpp"
+#include "NOTAM/NOTAMGlue.hpp"
 #include "Interface.hpp"
 
 NetComponents::NetComponents(EventLoop &event_loop, CurlGlobal &curl,

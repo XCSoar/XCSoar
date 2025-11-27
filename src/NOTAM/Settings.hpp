@@ -51,4 +51,16 @@ struct NOTAMSettings {
   
   /** Show other/unclassified NOTAMs (AD, RWY, NAV, COM, procedures, etc.) */
   bool show_other = false;
+  
+  /** Show TRIGGER NOTAMs (NOTAMs containing "TRIGGER NOTAM" text) */
+  bool show_trigger = false;
+  
+  /** Show IFR-only NOTAMs (traffic=I) */
+  bool show_traffic_ifr = false;
+  
+  /** Show VFR-only NOTAMs (traffic=V) */
+  bool show_traffic_vfr = true;
+  
+  /** Show IFR and VFR NOTAMs (traffic=IV) */
+  bool show_traffic_both = true;
 };

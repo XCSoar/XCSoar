@@ -19,7 +19,7 @@
 #include "Components.hpp"
 #include "DataComponents.hpp"
 #include "NOTAM/NOTAM.hpp"
-#include "NOTAM/Glue.hpp"
+#include "NOTAM/NOTAMGlue.hpp"
 #include "Interface.hpp"
 #include "util/StringFormat.hpp"
 #include "Operation/Operation.hpp"

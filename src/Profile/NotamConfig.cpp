@@ -26,4 +26,8 @@ Profile::LoadNotamSettings(const ProfileMap &map, NOTAMSettings &settings)
   map.Get(ProfileKeys::NOTAMShowObst, settings.show_obst);
   map.Get(ProfileKeys::NOTAMShowMilitary, settings.show_military);
   map.Get(ProfileKeys::NOTAMShowOther, settings.show_other);
+  map.Get(ProfileKeys::NOTAMShowTrigger, settings.show_trigger);
+  map.Get(ProfileKeys::NOTAMShowTrafficIFR, settings.show_traffic_ifr);
+  map.Get(ProfileKeys::NOTAMShowTrafficVFR, settings.show_traffic_vfr);
+  map.Get(ProfileKeys::NOTAMShowTrafficBoth, settings.show_traffic_both);
 }

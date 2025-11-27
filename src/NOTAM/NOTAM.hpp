@@ -77,6 +77,9 @@ struct NOTAM {
   /** ICAO location code (e.g., EDGG) */
   std::string location;
   
+  /** Traffic type: I=IFR only, V=VFR only, IV=IFR and VFR */
+  std::string traffic;
+  
   /**
    * Check if this NOTAM is currently active
    */

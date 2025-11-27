@@ -254,6 +254,11 @@ ParseNOTAMFeature(const boost::json::object &feature)
     notam.location = boost::json::value_to<std::string>(it->value());
   }
   
+  // Parse traffic type (I=IFR, V=VFR, IV=both)
+  if (auto it = notam_obj.find("traffic"); it != notam_obj.end()) {
+    notam.traffic = boost::json::value_to<std::string>(it->value());
+  }
+  
   // Use icaoLocation as source
   if (auto it = notam_obj.find("icaoLocation"); it != notam_obj.end()) {
     notam.source = boost::json::value_to<std::string>(it->value());

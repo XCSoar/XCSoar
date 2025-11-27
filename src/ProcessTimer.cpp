@@ -15,7 +15,7 @@
 #include "Replay/Replay.hpp"
 
 #ifdef HAVE_HTTP
-#include "NOTAM/Glue.hpp"
+#include "NOTAM/NOTAMGlue.hpp"
 #endif
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"

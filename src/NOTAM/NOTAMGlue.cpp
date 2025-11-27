@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "Glue.hpp"
+#include "NOTAMGlue.hpp"
 #include "NOTAM.hpp"
 #include "Client.hpp"
 #include "Components.hpp"
@@ -357,10 +357,6 @@ NOTAMGlue::TestNOTAMFetch(const GeoPoint &location)
 static bool
 ShouldDisplayNOTAM(const NOTAMStruct &notam, const NOTAMSettings &settings)
 {
-  LogFormat("NOTAM Filter: Checking %s - traffic='%s', text_preview='%.30s...', show_trigger=%d, show_traffic_ifr=%d",
-            notam.number.c_str(), notam.traffic.c_str(), notam.text.c_str(),
-            (int)settings.show_trigger, (int)settings.show_traffic_ifr);
-  
   // Check traffic type filter (I=IFR, V=VFR, IV=both)
   if (!notam.traffic.empty()) {
     if (notam.traffic == "I" && !settings.show_traffic_ifr) {

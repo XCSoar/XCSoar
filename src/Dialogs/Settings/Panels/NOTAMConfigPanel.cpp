@@ -16,7 +16,7 @@
 #include "net/http/Features.hpp"
 #include "NetComponents.hpp"
 #include "Components.hpp"
-#include "NOTAM/Glue.hpp"
+#include "NOTAM/NOTAMGlue.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 
@@ -33,7 +33,12 @@ enum ControlIndex {
   ShowAirspace,
   ShowObst,
   ShowMilitary,
-  ShowOther
+  ShowOther,
+  ShowTrigger,
+  TrafficFilterSpacer,
+  ShowTrafficIFR,
+  ShowTrafficVFR,
+  ShowTrafficBoth
 #endif
 };
 
@@ -130,6 +135,27 @@ NOTAMConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
                _("All other NOTAM types including airports, navigation aids, procedures, etc."),
                computer.notam.show_other);
     SetExpertRow(ShowOther);
+
+    AddBoolean(_("Show TRIGGER NOTAMs"),
+               _("NOTAMs containing 'TRIGGER NOTAM' text (informational only, not active restrictions)."),
+               computer.notam.show_trigger);
+    SetExpertRow(ShowTrigger);
+
+    AddSpacer();
+    SetExpertRow(TrafficFilterSpacer);
+
+    AddBoolean(_("Show IFR-only NOTAMs"),
+               _("NOTAMs applicable only to IFR traffic (typically less relevant for VFR gliders)."),
+               computer.notam.show_traffic_ifr);
+    SetExpertRow(ShowTrafficIFR);
+
+    AddBoolean(_("Show VFR-only NOTAMs"),
+               _("NOTAMs applicable only to VFR traffic."),
+               computer.notam.show_traffic_vfr);
+
+    AddBoolean(_("Show IFR+VFR NOTAMs"),
+               _("NOTAMs applicable to both IFR and VFR traffic."),
+               computer.notam.show_traffic_both);
 
   // Set initial visibility based on enabled state
   UpdateVisibility();
@@ -264,6 +290,10 @@ NOTAMConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValue(ShowObst, ProfileKeys::NOTAMShowObst, computer.notam.show_obst);
   changed |= SaveValue(ShowMilitary, ProfileKeys::NOTAMShowMilitary, computer.notam.show_military);
   changed |= SaveValue(ShowOther, ProfileKeys::NOTAMShowOther, computer.notam.show_other);
+  changed |= SaveValue(ShowTrigger, ProfileKeys::NOTAMShowTrigger, computer.notam.show_trigger);
+  changed |= SaveValue(ShowTrafficIFR, ProfileKeys::NOTAMShowTrafficIFR, computer.notam.show_traffic_ifr);
+  changed |= SaveValue(ShowTrafficVFR, ProfileKeys::NOTAMShowTrafficVFR, computer.notam.show_traffic_vfr);
+  changed |= SaveValue(ShowTrafficBoth, ProfileKeys::NOTAMShowTrafficBoth, computer.notam.show_traffic_both);
 #endif
 
   _changed |= changed;
