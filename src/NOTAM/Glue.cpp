@@ -6,6 +6,8 @@
 #include "Client.hpp"
 #include "Components.hpp"
 #include "DataComponents.hpp"
+#include "Message.hpp"
+#include "util/StringFormat.hpp"
 
 // Use full struct name to avoid collision with AirspaceClass::NOTAM enum
 using NOTAMStruct = struct NOTAM;
@@ -253,6 +255,11 @@ NOTAMGlue::LoadNOTAMsInternal(GeoPoint location)
     
     LogFormat("NOTAM: Successfully completed fetch with %u NOTAMs", count);
     
+    // Notify user of successful load
+    TCHAR msg[100];
+    StringFormat(msg, 100, _T("Loaded %u NOTAMs"), count);
+    Message::AddMessage(msg);
+    
   } catch (const std::exception &e) {
     LogFormat("NOTAM: Error during fetch: %s", e.what());
     
@@ -263,6 +270,9 @@ NOTAMGlue::LoadNOTAMsInternal(GeoPoint location)
       impl->current_notams.clear();
     }
     LogFormat("NOTAM: Cleared NOTAMs due to error");
+    
+    // Notify user of error
+    Message::AddMessage(_T("Failed to load NOTAMs"));
   }
 }
 
