@@ -48,6 +48,13 @@ public:
   void UpdateLocation(const GeoPoint &location);
   
   /**
+   * Periodic timer callback - checks if NOTAMs need to be refreshed
+   * based on time interval and location change.
+   * Called from ProcessTimer.
+   */
+  void OnTimer(const GeoPoint &current_location);
+  
+  /**
    * Load NOTAMs for the given location
    */
   void LoadNOTAMs(const GeoPoint &location, OperationEnvironment &operation);

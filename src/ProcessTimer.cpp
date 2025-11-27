@@ -264,7 +264,7 @@ ProcessTimer() noexcept
     
     if (net_components->notam != nullptr &&
         CommonInterface::GetComputerSettings().airspace.notam.enabled)
-      net_components->notam->UpdateLocation(CommonInterface::Basic().location);
+      net_components->notam->OnTimer(CommonInterface::Basic().location);
 #endif
   }
 }

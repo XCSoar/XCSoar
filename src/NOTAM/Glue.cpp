@@ -59,6 +59,35 @@ NOTAMGlue::~NOTAMGlue() {
 }
 
 void
+NOTAMGlue::OnTimer(const GeoPoint &current_location)
+{
+  if (!settings.enabled || !current_location.IsValid())
+    return;
+
+  // Check if manual-only mode (interval = 0)
+  if (settings.refresh_interval_min == 0)
+    return;
+
+  GeoPoint last_loc = GetLastUpdateLocation();
+  std::time_t last_time = GetLastUpdateTime();
+  std::time_t now = std::time(nullptr);
+  
+  // Check if time interval has elapsed
+  bool time_expired = (last_time == 0) || 
+                      (now - last_time >= settings.refresh_interval_min * 60);
+  
+  // Check if location moved outside half the radius
+  bool location_changed = last_loc.IsValid() && 
+                          current_location.Distance(last_loc) > (settings.radius_km * 1000.0 / 2.0);
+  
+  if (time_expired || location_changed) {
+    LogFormat("NOTAM: Auto-refresh triggered (time_expired=%d, location_changed=%d)",
+              (int)time_expired, (int)location_changed);
+    UpdateLocation(current_location);
+  }
+}
+
+void
 NOTAMGlue::UpdateLocation(const GeoPoint &location)
 {
   if (!location.IsValid()) {
@@ -79,8 +108,6 @@ NOTAMGlue::UpdateLocation(const GeoPoint &location)
     loading = true;
     current_location = location;
   }
-
-  LogFormat("NOTAM: Manual update triggered from settings panel");
 
   // Start async loading
   load_task.Start(LoadNOTAMsInternal(location), 
