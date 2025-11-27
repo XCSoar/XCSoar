@@ -71,9 +71,9 @@ struct Event {
     TASK_RECEIVED,
 #endif
 
-#ifdef USE_X11
+#if defined(USE_X11) || defined(USE_WAYLAND)
     /**
-     * The X11 window was resized.
+     * The window was resized.
      */
     RESIZE,
 #endif

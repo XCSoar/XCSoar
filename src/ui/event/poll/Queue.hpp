@@ -95,6 +95,10 @@ public:
   auto GetWmBase() noexcept {
     return input_queue.GetWmBase();
   }
+
+  auto GetDecorationManager() noexcept {
+    return input_queue.GetDecorationManager();
+  }
 #endif
 
 #if defined(USE_X11) || defined(USE_WAYLAND)

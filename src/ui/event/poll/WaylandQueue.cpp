@@ -10,6 +10,7 @@
 #include "ui/display/Display.hpp"
 #include "util/StringAPI.hxx"
 #include "xdg-shell-client-protocol.h"
+#include "xdg-decoration-unstable-v1-client-protocol.h"
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
 #include "../shared/TransformCoordinates.hpp"
@@ -116,8 +117,6 @@ WaylandPointerAxis(void *data,
                    [[maybe_unused]] uint32_t time,
                    uint32_t axis, wl_fixed_t value)
 {
-  auto &queue = *(WaylandEventQueue *)data;
-
   if (axis == WL_POINTER_AXIS_VERTICAL_SCROLL) {
     auto &q = *(WaylandEventQueue *)data;
 #ifdef SOFTWARE_ROTATE_DISPLAY
@@ -290,6 +289,9 @@ WaylandEventQueue::RegistryHandler(struct wl_registry *registry, uint32_t id,
   else if (StringIsEqual(interface, "xdg_wm_base"))
     wm_base = (xdg_wm_base *)wl_registry_bind(registry, id,
                                               &xdg_wm_base_interface, 1);
+  else if (StringIsEqual(interface, "zxdg_decoration_manager_v1"))
+    decoration_manager = (zxdg_decoration_manager_v1 *)
+      wl_registry_bind(registry, id, &zxdg_decoration_manager_v1_interface, 1);
 }
 
 inline void

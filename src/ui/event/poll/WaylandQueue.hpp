@@ -21,6 +21,7 @@ struct wl_keyboard;
 struct wl_shell;
 struct wl_registry;
 struct xdg_wm_base;
+struct zxdg_decoration_manager_v1;
 
 enum class DisplayOrientation : uint8_t;
 struct PixelSize;
@@ -45,6 +46,7 @@ class WaylandEventQueue final {
   struct wl_keyboard *keyboard = nullptr;
   struct wl_shell *shell = nullptr;
   struct xdg_wm_base *wm_base = nullptr;
+  struct zxdg_decoration_manager_v1 *decoration_manager = nullptr;
 
   bool has_touchscreen = false;
 
@@ -74,6 +76,10 @@ public:
 
   struct xdg_wm_base *GetWmBase() const noexcept {
     return wm_base;
+  }
+
+  struct zxdg_decoration_manager_v1 *GetDecorationManager() const noexcept {
+    return decoration_manager;
   }
 
   bool IsVisible() const noexcept {

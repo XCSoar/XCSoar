@@ -13,6 +13,7 @@
 #ifdef SOFTWARE_ROTATE_DISPLAY
 #include "../shared/TransformCoordinates.hpp"
 #include "ui/canvas/opengl/Globals.hpp"
+#include "DisplayOrientation.hpp"
 #endif
 
 /* kludges to work around namespace collisions with X11 headers */
