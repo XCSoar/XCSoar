@@ -8,16 +8,16 @@
 #include "event/InjectEvent.hxx"
 #include "event/Loop.hxx"
 
+#ifdef ENABLE_OPENGL
+#include "ui/opengl/Features.hpp"
+#endif
+
 #ifdef USE_X11
 #include "X11Queue.hpp"
 #elif defined(USE_WAYLAND)
 #include "WaylandQueue.hpp"
 #elif !defined(NON_INTERACTIVE)
 #include "InputQueue.hpp"
-#endif
-
-#ifdef SOFTWARE_ROTATE_DISPLAY
-#include "ui/opengl/Features.hpp"
 #endif
 
 #include <cstdint>
@@ -106,7 +106,7 @@ public:
   void SetScreenSize([[maybe_unused]] const PixelSize &screen_size) noexcept {
 #if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND)
     input_queue.SetScreenSize(screen_size);
-#elif defined(SOFTWARE_ROTATE_DISPLAY) && (defined(USE_X11) || defined(USE_WAYLAND))
+#elif defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY) && (defined(USE_X11) || defined(USE_WAYLAND))
     input_queue.SetScreenSize(screen_size);
 #endif
   }
@@ -114,7 +114,7 @@ public:
   void SetDisplayOrientation([[maybe_unused]] DisplayOrientation orientation) noexcept {
 #if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND) && !defined(USE_LIBINPUT)
     input_queue.SetDisplayOrientation(orientation);
-#elif defined(SOFTWARE_ROTATE_DISPLAY) && (defined(USE_X11) || defined(USE_WAYLAND))
+#elif defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY) && (defined(USE_X11) || defined(USE_WAYLAND))
     input_queue.SetDisplayOrientation(orientation);
 #endif
   }

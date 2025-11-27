@@ -7,12 +7,7 @@
 #include "event/IdleEvent.hxx"
 #include "Math/Point2D.hpp"
 
-#ifdef USE_WAYLAND
-#include "ui/opengl/Features.hpp"
-#endif
-
 #ifdef SOFTWARE_ROTATE_DISPLAY
-#include "ui/opengl/Features.hpp"
 #include "ui/dim/Size.hpp"
 #endif
 

@@ -5,12 +5,8 @@
 
 #include "event/SocketEvent.hxx"
 
-#ifdef USE_X11
-#include "ui/opengl/Features.hpp"
-#endif
-
 #ifdef SOFTWARE_ROTATE_DISPLAY
-#include "../shared/RotatePointer.hpp"
+#include "ui/dim/Size.hpp"
 #endif
 
 /* kludges to work around namespace collisions with X11 headers */
@@ -55,7 +51,6 @@ class X11EventQueue {
   bool ctrl_click;
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
-  RotatePointer rotate_pointer;
   PixelSize physical_screen_size{0, 0};
 #endif
 
