@@ -263,8 +263,8 @@ NOTAMListWidget::LoadCachedNOTAMs()
               location.latitude.Degrees(), location.longitude.Degrees());
   }
   
-  // Load cached NOTAMs synchronously
-  const unsigned cached_count = net_components->notam->LoadCachedNOTAMs(location);
+  // Load cached NOTAMs synchronously (location is only used for logging context)
+  const unsigned cached_count = net_components->notam->LoadCachedNOTAMs();
   
   if (cached_count > 0) {
     LogFormat("NOTAM: Successfully loaded %u cached NOTAMs", cached_count);
@@ -311,7 +311,7 @@ NOTAMListWidget::ClearNOTAMs()
   
   // Try to delete the cache file
   try {
-    auto cache_path = net_components->notam->GetNOTAMCacheFilePath(location);
+    auto cache_path = net_components->notam->GetNOTAMCacheFilePath();
     if (File::Delete(cache_path)) {
       LogFormat("NOTAM: Cache file deleted: %s", cache_path.c_str());
     } else {

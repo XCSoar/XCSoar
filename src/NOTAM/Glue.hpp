@@ -78,15 +78,14 @@ public:
    */
   int TestNOTAMFetch(const GeoPoint &location);
 
-  /** Generate cache file path for NOTAMs at a specific location */
-  AllocatedPath GetNOTAMCacheFilePath(const GeoPoint &location) const;
+  /** Generate cache file path for NOTAMs */
+  AllocatedPath GetNOTAMCacheFilePath() const;
 
   /**
    * Load NOTAMs from cache and return count
-   * @param location The location to load NOTAMs for
    * @return Number of NOTAMs loaded from cache
    */
-  unsigned LoadCachedNOTAMs(const GeoPoint &location);
+  unsigned LoadCachedNOTAMs();
 
   /**
    * Update the airspace database with NOTAM data
@@ -94,16 +93,29 @@ public:
    */
   void UpdateAirspaces(Airspaces &airspaces);
 
+  /**
+   * Get the timestamp of the last NOTAM update from cache file
+   * @return Timestamp in seconds since epoch, or 0 if no cache exists
+   */
+  std::time_t GetLastUpdateTime() const;
+
+  /**
+   * Get the location (latitude/longitude) that was used for the last NOTAM
+   * fetch as stored in the cache file metadata.
+   * @return GeoPoint of last update, or Invalid() if not available
+   */
+  GeoPoint GetLastUpdateLocation() const;
+
 private:
   Co::InvokeTask LoadNOTAMsInternal(GeoPoint location);
   void OnLoadComplete(std::exception_ptr error) noexcept;
   
   /** Save raw GeoJSON response to file */
-  void SaveNOTAMsToFile(const GeoPoint &location, const std::string &geojson_response) const;
+  void SaveNOTAMsToFile(const std::string &geojson_response, const GeoPoint &location) const;
   
   /** Load NOTAMs from cache file if available */
-  bool LoadNOTAMsFromFile(const GeoPoint &location, std::vector<struct NOTAM> &notams) const;
+  bool LoadNOTAMsFromFile(std::vector<struct NOTAM> &notams) const;
   
   /** Check if cached data is expired based on settings */
-  bool IsCacheExpired(const GeoPoint &location) const;
+  bool IsCacheExpired() const;
 };

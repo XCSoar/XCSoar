@@ -13,12 +13,7 @@ Profile::LoadNotamSettings(const ProfileMap &map, NOTAMSettings &settings)
   map.Get(ProfileKeys::NOTAMEnabled, settings.enabled);
   map.Get(ProfileKeys::NOTAMRadius, settings.radius_km);
   map.Get(ProfileKeys::NOTAMMaxCount, settings.max_notams);
-  
-  // Load refresh interval as unsigned int and convert to chrono::minutes
-  unsigned refresh_minutes = 30; // default value
-  if (map.Get(ProfileKeys::NOTAMRefreshInterval, refresh_minutes)) {
-    settings.refresh_interval_min = std::chrono::minutes{refresh_minutes};
-  }
+  map.Get(ProfileKeys::NOTAMRefreshInterval, settings.refresh_interval_min);
 
   // Time-based filtering
   map.Get(ProfileKeys::NOTAMFilterDaylightOnly, settings.filter_daylight_only);

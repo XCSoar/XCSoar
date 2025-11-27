@@ -158,9 +158,9 @@ NOTAMGlue::LoadNOTAMsInternal(GeoPoint location)
 {
   try {
     // First, try to load from cache if not expired
-    if (!IsCacheExpired(location)) {
+    if (!IsCacheExpired()) {
       std::vector<NOTAMStruct> cached_notams;
-      if (LoadNOTAMsFromFile(location, cached_notams)) {
+      if (LoadNOTAMsFromFile(cached_notams)) {
         // Store cached results
         {
           const std::lock_guard<Mutex> lock(mutex);
@@ -183,7 +183,7 @@ NOTAMGlue::LoadNOTAMsInternal(GeoPoint location)
     auto raw_geojson = co_await NOTAMClient::FetchNOTAMsRaw(curl, settings, location, progress);
     
     // Save raw GeoJSON to file for caching
-    SaveNOTAMsToFile(location, raw_geojson);
+    SaveNOTAMsToFile(raw_geojson, location);
     
     // Parse GeoJSON to get NOTAMs for in-memory storage
     auto notams = NOTAMClient::ParseNOTAMGeoJSON(raw_geojson);
@@ -222,16 +222,16 @@ NOTAMGlue::OnLoadComplete(std::exception_ptr error) noexcept
 }
 
 unsigned
-NOTAMGlue::LoadCachedNOTAMs(const GeoPoint &location)
+NOTAMGlue::LoadCachedNOTAMs()
 {
   std::vector<NOTAMStruct> cached_notams;
   
   // Log the cache file path for debugging
-  auto file_path = GetNOTAMCacheFilePath(location);
+  auto file_path = GetNOTAMCacheFilePath();
   LogFormat("NOTAM: Attempting to load cache from: %s", file_path.c_str());
   
   // Try to load from cache file
-  if (LoadNOTAMsFromFile(location, cached_notams)) {
+  if (LoadNOTAMsFromFile(cached_notams)) {
     const unsigned count = static_cast<unsigned>(cached_notams.size());
     
     // Store cached results in memory
@@ -380,19 +380,18 @@ NOTAMGlue::UpdateAirspaces(Airspaces &airspaces)
 }
 
 AllocatedPath
-NOTAMGlue::GetNOTAMCacheFilePath(const GeoPoint &location) const
+NOTAMGlue::GetNOTAMCacheFilePath() const
 {
   // Use fixed filename in main XCSoarData directory
   // We only have one cache file to KISS, no merging, no modifications
-  (void)location; // Suppress unused parameter warning @TODO
   return LocalPath(_T("notams.json"));
 }
 
 void
-NOTAMGlue::SaveNOTAMsToFile(const GeoPoint &location, const std::string &geojson_response) const
+NOTAMGlue::SaveNOTAMsToFile(const std::string &geojson_response, const GeoPoint &location) const
 {
   try {
-    auto file_path = GetNOTAMCacheFilePath(location);
+    auto file_path = GetNOTAMCacheFilePath();
     LogFormat("NOTAM: Saving GeoJSON to cache: %s", file_path.c_str());
     
     // Create a wrapper object with metadata and the raw GeoJSON
@@ -401,7 +400,7 @@ NOTAMGlue::SaveNOTAMsToFile(const GeoPoint &location, const std::string &geojson
     json_with_metadata += "\"xcsoar_location_lat\":" + std::to_string(location.latitude.Degrees()) + ",";
     json_with_metadata += "\"xcsoar_location_lon\":" + std::to_string(location.longitude.Degrees()) + ",";
     json_with_metadata += "\"xcsoar_radius_km\":" + std::to_string(settings.radius_km) + ",";
-    json_with_metadata += "\"xcsoar_refresh_interval_min\":" + std::to_string(settings.refresh_interval_min.count()) + ",";
+    json_with_metadata += "\"xcsoar_refresh_interval_min\":" + std::to_string(settings.refresh_interval_min) + ",";
     json_with_metadata += "\"geojson\":" + geojson_response + "}";
     
     // Write to file (using XCSoar IO system) 
@@ -416,10 +415,10 @@ NOTAMGlue::SaveNOTAMsToFile(const GeoPoint &location, const std::string &geojson
 }
 
 bool
-NOTAMGlue::LoadNOTAMsFromFile(const GeoPoint &location, std::vector<NOTAMStruct> &notams) const
+NOTAMGlue::LoadNOTAMsFromFile(std::vector<NOTAMStruct> &notams) const
 {
   try {
-    auto file_path = GetNOTAMCacheFilePath(location);
+    auto file_path = GetNOTAMCacheFilePath();
     LogFormat("NOTAM: LoadNOTAMsFromFile attempting to load: %s", file_path.c_str());
     
     std::string json_content;
@@ -527,11 +526,113 @@ NOTAMGlue::LoadNOTAMsFromFile(const GeoPoint &location, std::vector<NOTAMStruct>
   }
 }
 
-bool
-NOTAMGlue::IsCacheExpired(const GeoPoint &location) const
+std::time_t
+NOTAMGlue::GetLastUpdateTime() const
 {
   try {
-    auto file_path = GetNOTAMCacheFilePath(location);
+    auto file_path = GetNOTAMCacheFilePath();
+    
+    FileReader file(Path(file_path.c_str()));
+    
+    // Read the entire file to get the JSON data
+    std::string json_content;
+    char buffer[4096];
+    while (true) {
+      size_t bytes_read = file.Read(std::as_writable_bytes(std::span{buffer}));
+      if (bytes_read == 0) break;
+      json_content.append(buffer, bytes_read);
+    }
+    
+    // Look for XCSoar timestamp in the content
+    size_t timestamp_pos = json_content.find("\"xcsoar_timestamp\":");
+    if (timestamp_pos != std::string::npos) {
+      // Extract timestamp value
+      size_t value_start = json_content.find(':', timestamp_pos) + 1;
+      size_t value_end = json_content.find(',', value_start);
+      if (value_end == std::string::npos) {
+        value_end = json_content.find('}', value_start);
+      }
+      
+      if (value_start != std::string::npos && value_end != std::string::npos) {
+        std::string timestamp_str = json_content.substr(value_start, value_end - value_start);
+        // Remove whitespace
+        timestamp_str.erase(0, timestamp_str.find_first_not_of(" \t"));
+        timestamp_str.erase(timestamp_str.find_last_not_of(" \t") + 1);
+        
+        try {
+          return std::stoll(timestamp_str);
+        } catch (const std::exception &) {
+          return 0; // Invalid timestamp
+        }
+      }
+    }
+    
+    return 0; // No timestamp found
+  } catch (const std::exception &) {
+    return 0; // Error reading file
+  }
+}
+
+GeoPoint
+NOTAMGlue::GetLastUpdateLocation() const
+{
+  try {
+    auto file_path = GetNOTAMCacheFilePath();
+    FileReader file(Path(file_path.c_str()));
+
+    std::string json_content;
+    char buffer[4096];
+    while (true) {
+      size_t bytes_read = file.Read(std::as_writable_bytes(std::span{buffer}));
+      if (bytes_read == 0) break;
+      json_content.append(buffer, bytes_read);
+    }
+
+    // Find latitude and longitude metadata stored during SaveNOTAMsToFile()
+    size_t lat_pos = json_content.find("\"xcsoar_location_lat\":");
+    size_t lon_pos = json_content.find("\"xcsoar_location_lon\":");
+    if (lat_pos == std::string::npos || lon_pos == std::string::npos)
+      return GeoPoint::Invalid();
+
+    // Extract latitude
+    size_t lat_value_start = json_content.find(':', lat_pos) + 1;
+    size_t lat_value_end = json_content.find(',', lat_value_start);
+    if (lat_value_end == std::string::npos)
+      lat_value_end = json_content.find('}', lat_value_start);
+    if (lat_value_start == std::string::npos || lat_value_end == std::string::npos)
+      return GeoPoint::Invalid();
+    std::string lat_str = json_content.substr(lat_value_start, lat_value_end - lat_value_start);
+    lat_str.erase(0, lat_str.find_first_not_of(" \t"));
+    lat_str.erase(lat_str.find_last_not_of(" \t") + 1);
+
+    // Extract longitude
+    size_t lon_value_start = json_content.find(':', lon_pos) + 1;
+    size_t lon_value_end = json_content.find(',', lon_value_start);
+    if (lon_value_end == std::string::npos)
+      lon_value_end = json_content.find('}', lon_value_start);
+    if (lon_value_start == std::string::npos || lon_value_end == std::string::npos)
+      return GeoPoint::Invalid();
+    std::string lon_str = json_content.substr(lon_value_start, lon_value_end - lon_value_start);
+    lon_str.erase(0, lon_str.find_first_not_of(" \t"));
+    lon_str.erase(lon_str.find_last_not_of(" \t") + 1);
+
+    try {
+      double lat = std::stod(lat_str);
+      double lon = std::stod(lon_str);
+      return GeoPoint(Angle::Degrees(lat), Angle::Degrees(lon));
+    } catch (const std::exception &) {
+      return GeoPoint::Invalid();
+    }
+  } catch (const std::exception &) {
+    return GeoPoint::Invalid();
+  }
+}
+
+bool
+NOTAMGlue::IsCacheExpired() const
+{
+  try {
+    auto file_path = GetNOTAMCacheFilePath();
     
     try {
       FileReader file(Path(file_path.c_str()));
@@ -545,37 +646,85 @@ NOTAMGlue::IsCacheExpired(const GeoPoint &location) const
         json_content.append(buffer, bytes_read);
       }
       
-      // Look for XCSoar timestamp in the content
+      // Extract metadata from cache file
+      std::time_t cached_time = 0;
+      double cached_lat = 0.0;
+      double cached_lon = 0.0;
+      
+      // Look for XCSoar timestamp
       size_t timestamp_pos = json_content.find("\"xcsoar_timestamp\":");
       if (timestamp_pos != std::string::npos) {
-        // Extract timestamp value
         size_t value_start = json_content.find(':', timestamp_pos) + 1;
         size_t value_end = json_content.find(',', value_start);
-        if (value_end == std::string::npos) {
-          value_end = json_content.find('}', value_start);
-        }
-        
-        if (value_start != std::string::npos && value_end != std::string::npos) {
+        if (value_end != std::string::npos) {
           std::string timestamp_str = json_content.substr(value_start, value_end - value_start);
-          // Remove whitespace
           timestamp_str.erase(0, timestamp_str.find_first_not_of(" \t"));
           timestamp_str.erase(timestamp_str.find_last_not_of(" \t") + 1);
-          
           try {
-            std::time_t cached_time = std::stoll(timestamp_str);
-            std::time_t current_time = std::time(nullptr);
-            
-            // Convert refresh interval from minutes to seconds
-            std::time_t max_age_seconds = settings.refresh_interval_min.count() * 60;
-            
-            return (current_time - cached_time) > max_age_seconds;
+            cached_time = std::stoll(timestamp_str);
           } catch (const std::exception &) {
             return true; // Invalid timestamp means expired
           }
         }
+      } else {
+        return true; // No timestamp found means expired
       }
       
-      return true; // No timestamp found means expired
+      // Look for cached location latitude
+      size_t lat_pos = json_content.find("\"xcsoar_location_lat\":");
+      if (lat_pos != std::string::npos) {
+        size_t value_start = json_content.find(':', lat_pos) + 1;
+        size_t value_end = json_content.find(',', value_start);
+        if (value_end != std::string::npos) {
+          std::string lat_str = json_content.substr(value_start, value_end - value_start);
+          lat_str.erase(0, lat_str.find_first_not_of(" \t"));
+          lat_str.erase(lat_str.find_last_not_of(" \t") + 1);
+          try {
+            cached_lat = std::stod(lat_str);
+          } catch (const std::exception &) {
+            return true; // Invalid location means expired
+          }
+        }
+      }
+      
+      // Look for cached location longitude
+      size_t lon_pos = json_content.find("\"xcsoar_location_lon\":");
+      if (lon_pos != std::string::npos) {
+        size_t value_start = json_content.find(':', lon_pos) + 1;
+        size_t value_end = json_content.find(',', value_start);
+        if (value_end != std::string::npos) {
+          std::string lon_str = json_content.substr(value_start, value_end - value_start);
+          lon_str.erase(0, lon_str.find_first_not_of(" \t"));
+          lon_str.erase(lon_str.find_last_not_of(" \t") + 1);
+          try {
+            cached_lon = std::stod(lon_str);
+          } catch (const std::exception &) {
+            return true; // Invalid location means expired
+          }
+        }
+      }
+      
+      // Check if cache is expired by time
+      std::time_t current_time = std::time(nullptr);
+      std::time_t max_age_seconds = settings.refresh_interval_min * 60;
+      
+      if ((current_time - cached_time) > max_age_seconds) {
+        return true; // Expired by time
+      }
+      
+      // Check if current location is too far from cached location
+      if (current_location.IsValid()) {
+        GeoPoint cached_location{Angle::Degrees(cached_lon), Angle::Degrees(cached_lat)};
+        double distance_m = current_location.Distance(cached_location);
+        double radius_m = settings.radius_km * 1000.0;
+        
+        // Cache is expired if we've moved more than the radius away
+        if (distance_m > radius_m) {
+          return true; // Expired by location
+        }
+      }
+      
+      return false; // Cache is still valid
     } catch (const std::exception &e) {
       return true; // Error means treat as expired
     }
