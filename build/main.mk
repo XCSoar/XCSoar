@@ -94,6 +94,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Waypoint/NearestWaypoint.cpp \
 	\
 	$(SRC)/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/GaugesConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/VarioConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp \
@@ -473,6 +474,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Profile/DeviceConfig.cpp \
 	$(SRC)/Profile/InfoBoxConfig.cpp \
 	$(SRC)/Profile/AirspaceConfig.cpp \
+	$(SRC)/Profile/NotamConfig.cpp \
 	$(SRC)/Profile/TerrainConfig.cpp \
 	$(SRC)/Profile/FlarmProfile.cpp \
 	\

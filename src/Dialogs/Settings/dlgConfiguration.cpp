@@ -21,6 +21,7 @@
 #include "Panels/TimeConfigPanel.hpp"
 #include "Panels/LoggerConfigPanel.hpp"
 #include "Panels/AirspaceConfigPanel.hpp"
+#include "Panels/NOTAMConfigPanel.hpp"
 #include "Panels/SiteConfigPanel.hpp"
 #include "Panels/MapDisplayConfigPanel.hpp"
 #include "Panels/WaypointDisplayConfigPanel.hpp"
@@ -82,6 +83,7 @@ static constexpr TabMenuPage map_pages[] = {
   { N_("Waypoints"), CreateWaypointDisplayConfigPanel },
   { N_("Terrain"), CreateTerrainDisplayConfigPanel },
   { N_("Airspace"), CreateAirspaceConfigPanel },
+  { N_("NOTAM"), CreateNOTAMConfigPanel },
   { nullptr, nullptr }
 };
 

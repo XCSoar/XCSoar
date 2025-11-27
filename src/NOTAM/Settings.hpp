@@ -13,14 +13,47 @@ struct NOTAMSettings {
   bool enabled = false;
   
   /** Radius around current location to search for NOTAMs (in kilometers) */
-  unsigned radius_km = 99;
+  unsigned radius_km = 50;
   
   /** Maximum number of NOTAMs to fetch */
-  unsigned max_notams = 1000;
+  unsigned max_notams = 500;
   
-  /** Refresh interval (in minutes) */
-  std::chrono::minutes refresh_interval_min{30};
+  /** Refresh interval (in minutes) - 0 = manual only */
+  unsigned refresh_interval_min = 60;
   
   /** Base URL for the NOTAM API */
   const char *api_base_url = "https://enroute-data.akaflieg-freiburg.de/enrouteProxy/notam.php";
+  
+  /** Filter NOTAMs that are only active during daylight (sunrise to sunset) */
+  bool filter_daylight_only = false;
+  
+  /** Filter NOTAMs that are only active during night (sunset to sunrise) */
+  bool filter_night_only = false;
+  
+  /** Hours before sunrise to include NOTAMs (-1 = disabled) */
+  int hours_before_sunrise = -1;
+  
+  /** Hours after sunset to include NOTAMs (-1 = disabled) */
+  int hours_after_sunset = -1;
+  
+  /** Filter by NOTAM series (empty = show all) */
+  std::string filter_series = "";
+  
+  /** Show airspace-related NOTAMs (most relevant for glider pilots) */
+  bool show_airspace = true;
+  
+  /** Show airport/runway NOTAMs (usually not relevant for cross-country) */
+  bool show_airport = false;
+  
+  /** Show navigation aid NOTAMs (not critical for gliders using GPS) */
+  bool show_navaid = false;
+  
+  /** Show obstacle NOTAMs (important for low-level flying) */
+  bool show_obstacle = true;
+  
+  /** Show military exercise NOTAMs (important - can create temporary airspace) */
+  bool show_military = true;
+  
+  /** Show other/miscellaneous NOTAMs */
+  bool show_other = false;
 };

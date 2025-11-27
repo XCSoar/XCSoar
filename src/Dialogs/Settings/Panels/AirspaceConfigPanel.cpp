@@ -35,10 +35,6 @@ enum ControlIndex {
 #if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
   AirspaceTransparency,
 #endif
-#ifdef HAVE_HTTP
-  EnableNOTAM,
-  NOTAMRadius
-#endif
 };
 
 static constexpr StaticEnumChoice as_display_list[] = {
@@ -222,21 +218,6 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(AirspaceTransparency);
 #endif
 
-#ifdef HAVE_HTTP
-  // NOTAM settings section
-  AddBoolean(_("NOTAM Support"),
-             _("Enable downloading and display of NOTAMs (Notice to Airmen) from aviation authorities. "
-               "NOTAMs provide temporary airspace restrictions and operational information."),
-             computer.notam.enabled);
-
-  AddInteger(_("NOTAM Radius (km)"),
-             _("Search radius around current location for NOTAMs in kilometers. "
-               "Larger values download more NOTAMs but may affect performance."),
-             _T("%d km"), _T("%d"), 1, 500, 10,
-             computer.notam.radius_km);
-  SetExpertRow(NOTAMRadius);
-#endif
-
   ShowDisplayControls(renderer.altitude_mode); // TODO make this work the first time
   ShowWarningControls(computer.enable_warnings);
 }
@@ -287,12 +268,6 @@ AirspaceConfigPanel::Save(bool &_changed) noexcept
 #if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
   changed |= SaveValue(AirspaceTransparency, ProfileKeys::AirspaceTransparency,
                        renderer.transparency);
-#endif
-
-#ifdef HAVE_HTTP
-  // Save NOTAM settings
-  changed |= SaveValue(EnableNOTAM, ProfileKeys::NOTAMEnabled, computer.notam.enabled);
-  changed |= SaveValueInteger(NOTAMRadius, ProfileKeys::NOTAMRadius, computer.notam.radius_km);
 #endif
 
   _changed |= changed;

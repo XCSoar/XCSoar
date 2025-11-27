@@ -273,6 +273,17 @@ constexpr std::string_view NOTAMEnabled = "NOTAMEnabled";
 constexpr std::string_view NOTAMRadius = "NOTAMRadius";
 constexpr std::string_view NOTAMMaxCount = "NOTAMMaxCount";
 constexpr std::string_view NOTAMRefreshInterval = "NOTAMRefreshInterval";
+constexpr std::string_view NOTAMFilterDaylightOnly = "NOTAMFilterDaylightOnly";
+constexpr std::string_view NOTAMFilterNightOnly = "NOTAMFilterNightOnly";
+constexpr std::string_view NOTAMHoursBeforeSunrise = "NOTAMHoursBeforeSunrise";
+constexpr std::string_view NOTAMHoursAfterSunset = "NOTAMHoursAfterSunset";
+constexpr std::string_view NOTAMFilterSeries = "NOTAMFilterSeries";
+constexpr std::string_view NOTAMShowAirspace = "NOTAMShowAirspace";
+constexpr std::string_view NOTAMShowAirport = "NOTAMShowAirport";
+constexpr std::string_view NOTAMShowNavaid = "NOTAMShowNavaid";
+constexpr std::string_view NOTAMShowObstacle = "NOTAMShowObstacle";
+constexpr std::string_view NOTAMShowMilitary = "NOTAMShowMilitary";
+constexpr std::string_view NOTAMShowOther = "NOTAMShowOther";
 
 constexpr std::string_view EnableLocationMapItem = "EnableLocationMapItem";
 constexpr std::string_view EnableArrivalAltitudeMapItem = "EnableArrivalAltitudeMapItem";
