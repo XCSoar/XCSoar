@@ -181,7 +181,7 @@ MainWindow::LoadTerrain() noexcept
 
   if (const auto path = Profile::GetPath(ProfileKeys::MapFile);
       path != nullptr) {
-    LogString("LoadTerrain");
+    LogFormat(_T("Loading terrain: %s"), path.c_str());
     terrain_loader = new AsyncTerrainOverviewLoader();
 
     terrain_loader_env = std::make_unique<PluggableOperationEnvironment>();
@@ -425,14 +425,14 @@ Startup(UI::Display &display)
   // Read the topography file(s)
   data_components->topography = std::make_unique<TopographyStore>();
   {
-    LogString("Loading Topography File...");
+    LogFormat(_T("Loading topography"));
     operation.SetText(_("Loading Topography File..."));
     LoadConfiguredTopography(*data_components->topography);
     operation.SetProgressPosition(256);
   }
 
   // Read the waypoint files
-  LogString("ReadWaypoints");
+  LogFormat(_T("Loading waypoints"));
   {
     SubOperationEnvironment sub_env(operation, 256, 512);
     sub_env.SetText(_("Loading Waypoints..."));
