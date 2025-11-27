@@ -1,9 +1,12 @@
+
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
 #include "NOTAMConfigPanel.hpp"
 #include "ConfigPanel.hpp"
 #include "Widget/RowFormWidget.hpp"
+#include "Form/DataField/Listener.hpp"
+#include "Form/DataField/Boolean.hpp"
 #include "Profile/Keys.hpp"
 #include "Language/Language.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
@@ -14,6 +17,7 @@
 #include "Components.hpp"
 #include "NOTAM/Glue.hpp"
 #include "Formatter/UserUnits.hpp"
+
 #include <ctime>
 
 enum ControlIndex {
@@ -22,21 +26,23 @@ enum ControlIndex {
   NOTAMRadius,
   RefreshInterval,
   LastUpdate,
+  DistanceFromLastUpdate,
+  TimeFilterSpacer,
   FilterDaylightOnly,
   FilterNightOnly,
   HoursBeforeSunrise,
   HoursAfterSunset,
-  FilterSeries,
+  TypeFilterSpacer,
   ShowAirspace,
+  ShowMilitary,
+  ShowObstacle,
   ShowAirport,
   ShowNavaid,
-  ShowObstacle,
-  ShowMilitary,
   ShowOther
 #endif
 };
 
-class NOTAMConfigPanel final : public RowFormWidget {
+class NOTAMConfigPanel : public RowFormWidget, DataFieldListener {
 public:
   NOTAMConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
@@ -48,6 +54,10 @@ public:
 
 private:
   void OnUpdateButton() noexcept;
+  void UpdateVisibility() noexcept;
+  
+  /* methods from DataFieldListener */
+  void OnModified(DataField &df) noexcept override;
 };
 
 void
@@ -61,98 +71,102 @@ NOTAMConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddBoolean(_("NOTAM Support"),
              _("Enable downloading and display of NOTAMs (Notice to Airmen) from aviation authorities. "
                "NOTAMs provide temporary airspace restrictions and operational information."),
-             computer.notam.enabled);
+             computer.notam.enabled, this);
 
-  AddInteger(_("NOTAM Radius (km)"),
-             _("Search radius around current location for NOTAMs in kilometers. "
-               "Larger values download more NOTAMs but may affect performance."),
-             _T("%d km"), _T("%d"), 1, 500, 10,
-             computer.notam.radius_km);
+  // Add all rows but control visibility based on enabled state
+    AddInteger(_("NOTAM Radius (km)"),
+               _("Search radius around current location for NOTAMs in kilometers. "
+                 "Larger values download more NOTAMs but may affect performance."),
+               _T("%d km"), _T("%d"), 1, 500, 10,
+               computer.notam.radius_km);
 
-  AddInteger(_("Auto-Refresh Interval"),
-             _("Automatically refresh NOTAMs every X minutes during flight. Set to 0 to disable automatic updates."),
-             _T("%d min"), _T("%d"), 0, 240, 15,
-             computer.notam.refresh_interval_min);
+    AddInteger(_("Auto-Refresh Interval"),
+               _("Automatically refresh NOTAMs every X minutes during flight. Set to 0 to disable automatic updates."),
+               _T("%d min"), _T("%d"), 0, 240, 15,
+               computer.notam.refresh_interval_min);
 
-  // Display last update time & distance from update location
-  std::time_t last_update = 0;
-  GeoPoint last_loc = GeoPoint::Invalid();
-  if (net_components && net_components->notam) {
-    last_update = net_components->notam->GetLastUpdateTime();
-    last_loc = net_components->notam->GetLastUpdateLocation();
-  }
+    // Display last update time & distance from update location
+    std::time_t last_update = 0;
+    GeoPoint last_loc = GeoPoint::Invalid();
+    if (net_components && net_components->notam) {
+      last_update = net_components->notam->GetLastUpdateTime();
+      last_loc = net_components->notam->GetLastUpdateLocation();
+    }
 
-  if (last_update > 0) {
-    char time_buffer[32];
-    std::strftime(time_buffer, sizeof(time_buffer), "%Y-%m-%d %H:%M", std::localtime(&last_update));
-    AddReadOnly(_("Last Update"), nullptr, time_buffer);
-  } else {
-    AddReadOnly(_("Last Update"), nullptr, _("Never"));
-  }
+    if (last_update > 0) {
+      char time_buffer[32];
+      std::strftime(time_buffer, sizeof(time_buffer), "%Y-%m-%d %H:%M", std::localtime(&last_update));
+      AddReadOnly(_("Last Update"), nullptr, time_buffer);
+    } else {
+      AddReadOnly(_("Last Update"), nullptr, _("Never"));
+    }
 
-  // Distance from last update location (if both valid)
-  const auto &basic = CommonInterface::Basic();
-  if (basic.location.IsValid() && last_loc.IsValid()) {
-    double dist_m = basic.location.Distance(last_loc);
-    TCHAR dist_buffer[32];
-    // Use smart formatting (switching to small units when appropriate)
-    FormatUserDistanceSmart(dist_m, dist_buffer, true, 1000.0, 9.999);
-    AddReadOnly(_("Distance From Last Update"), nullptr, dist_buffer);
-  } else {
-    AddReadOnly(_("Distance From Last Update"), nullptr, _("Unknown"));
-  }
+    // Distance from last update location (if both valid)
+    const auto &basic = CommonInterface::Basic();
+    if (basic.location.IsValid() && last_loc.IsValid()) {
+      double dist_m = basic.location.Distance(last_loc);
+      TCHAR dist_buffer[32];
+      // Use smart formatting (switching to small units when appropriate)
+      FormatUserDistanceSmart(dist_m, dist_buffer, true, 1000.0, 9.999);
+      AddReadOnly(_("Distance From Last Update"), nullptr, dist_buffer);
+    } else {
+      AddReadOnly(_("Distance From Last Update"), nullptr, _("Unknown"));
+    }
 
-  // Time-based filtering
-  AddSpacer();
-  AddBoolean(_("Daylight Only"),
-             _("Show only NOTAMs that are active during daylight hours (sunrise to sunset)."),
-             computer.notam.filter_daylight_only);
+    // Time-based filtering
+    AddSpacer();
+    AddBoolean(_("Daylight Only"),
+               _("Show only NOTAMs that are active during daylight hours (sunrise to sunset)."),
+               computer.notam.filter_daylight_only);
 
-  AddBoolean(_("Night Only"),
-             _("Show only NOTAMs that are active during night hours (sunset to sunrise)."),
-             computer.notam.filter_night_only);
-  SetExpertRow(FilterNightOnly);
+    AddBoolean(_("Night Only"),
+               _("Show only NOTAMs that are active during night hours (sunset to sunrise)."),
+               computer.notam.filter_night_only);
+    SetExpertRow(FilterNightOnly);
 
-  AddInteger(_("Hours Before Sunrise"),
-             _("Include NOTAMs this many hours before sunrise (-1 to disable filtering)."),
-             _T("%d h"), _T("%d"), -1, 12, 1,
-             computer.notam.hours_before_sunrise);
-  SetExpertRow(HoursBeforeSunrise);
+    AddInteger(_("Hours Before Sunrise"),
+               _("Include NOTAMs this many hours before sunrise (-1 to disable filtering)."),
+               _T("%d h"), _T("%d"), -1, 12, 1,
+               computer.notam.hours_before_sunrise);
+    SetExpertRow(HoursBeforeSunrise);
 
-  AddInteger(_("Hours After Sunset"),
-             _("Include NOTAMs this many hours after sunset (-1 to disable filtering)."),
-             _T("%d h"), _T("%d"), -1, 12, 1,
-             computer.notam.hours_after_sunset);
-  SetExpertRow(HoursAfterSunset);
+    AddInteger(_("Hours After Sunset"),
+               _("Include NOTAMs this many hours after sunset (-1 to disable filtering)."),
+               _T("%d h"), _T("%d"), -1, 12, 1,
+               computer.notam.hours_after_sunset);
+    SetExpertRow(HoursAfterSunset);
 
-  // Type-based filtering
-  AddSpacer();
-  AddBoolean(_("Show Airspace NOTAMs"),
-             _("Airspace restrictions and changes (recommended for glider pilots)."),
-             computer.notam.show_airspace);
+    // Type-based filtering
+    AddSpacer();
+    AddBoolean(_("Show Airspace NOTAMs"),
+               _("Airspace restrictions and changes (recommended for glider pilots)."),
+               computer.notam.show_airspace);
 
-  AddBoolean(_("Show Military NOTAMs"),
-             _("Military exercises creating temporary airspace (important for cross-country)."),
-             computer.notam.show_military);
+    AddBoolean(_("Show Military NOTAMs"),
+               _("Military exercises creating temporary airspace (important for cross-country)."),
+               computer.notam.show_military);
 
-  AddBoolean(_("Show Obstacle NOTAMs"),
-             _("New obstacles, towers, and construction (important for low-level flying)."),
-             computer.notam.show_obstacle);
+    AddBoolean(_("Show Obstacle NOTAMs"),
+               _("New obstacles, towers, and construction (important for low-level flying)."),
+               computer.notam.show_obstacle);
 
-  AddBoolean(_("Show Airport NOTAMs"),
-             _("Airport and runway information (usually not relevant for cross-country gliding)."),
-             computer.notam.show_airport);
-  SetExpertRow(ShowAirport);
+    AddBoolean(_("Show Airport NOTAMs"),
+               _("Airport and runway information (usually not relevant for cross-country gliding)."),
+               computer.notam.show_airport);
+    SetExpertRow(ShowAirport);
 
-  AddBoolean(_("Show Navigation Aid NOTAMs"),
-             _("VOR, NDB, ILS status (not critical for GPS navigation)."),
-             computer.notam.show_navaid);
-  SetExpertRow(ShowNavaid);
+    AddBoolean(_("Show Navigation Aid NOTAMs"),
+               _("VOR, NDB, ILS status (not critical for GPS navigation)."),
+               computer.notam.show_navaid);
+    SetExpertRow(ShowNavaid);
 
-  AddBoolean(_("Show Other NOTAMs"),
-             _("Miscellaneous NOTAMs not covered by other categories."),
-             computer.notam.show_other);
-  SetExpertRow(ShowOther);
+    AddBoolean(_("Show Other NOTAMs"),
+               _("Miscellaneous NOTAMs not covered by other categories."),
+               computer.notam.show_other);
+    SetExpertRow(ShowOther);
+
+  // Set initial visibility based on enabled state
+  UpdateVisibility();
 #endif
 }
 
@@ -174,6 +188,42 @@ NOTAMConfigPanel::OnUpdateButton() noexcept
   // TODO: Trigger NOTAM refresh via NetComponents
   // This will be connected to the actual NOTAM update mechanism
   // For now, just a placeholder for the button action
+}
+
+void
+NOTAMConfigPanel::UpdateVisibility() noexcept
+{
+#ifdef HAVE_HTTP
+  const DataFieldBoolean &df = (const DataFieldBoolean &)GetDataField(EnableNOTAM);
+  const bool enabled = df.GetValue();
+  
+  SetRowAvailable(NOTAMRadius, enabled);
+  SetRowAvailable(RefreshInterval, enabled);
+  SetRowAvailable(LastUpdate, enabled);
+  SetRowAvailable(DistanceFromLastUpdate, enabled);
+  SetRowAvailable(TimeFilterSpacer, enabled);
+  SetRowAvailable(FilterDaylightOnly, enabled);
+  SetRowAvailable(FilterNightOnly, enabled);
+  SetRowAvailable(HoursBeforeSunrise, enabled);
+  SetRowAvailable(HoursAfterSunset, enabled);
+  SetRowAvailable(TypeFilterSpacer, enabled);
+  SetRowAvailable(ShowAirspace, enabled);
+  SetRowAvailable(ShowMilitary, enabled);
+  SetRowAvailable(ShowObstacle, enabled);
+  SetRowAvailable(ShowAirport, enabled);
+  SetRowAvailable(ShowNavaid, enabled);
+  SetRowAvailable(ShowOther, enabled);
+#endif
+}
+
+void
+NOTAMConfigPanel::OnModified(DataField &df) noexcept
+{
+#ifdef HAVE_HTTP
+  if (IsDataField(EnableNOTAM, df)) {
+    UpdateVisibility();
+  }
+#endif
 }
 
 bool
