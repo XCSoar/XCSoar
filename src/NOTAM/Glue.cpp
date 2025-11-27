@@ -4,6 +4,8 @@
 #include "Glue.hpp"
 #include "NOTAM.hpp"
 #include "Client.hpp"
+#include "Components.hpp"
+#include "DataComponents.hpp"
 
 // Use full struct name to avoid collision with AirspaceClass::NOTAM enum
 using NOTAMStruct = struct NOTAM;
@@ -273,8 +275,16 @@ NOTAMGlue::OnLoadComplete(std::exception_ptr error) noexcept
     loading = false;
   }
   
-  // TODO: Handle error if needed
-  (void)error;
+  // If load was successful, update the airspace database
+  if (!error && data_components && data_components->airspaces) {
+    try {
+      LogFormat("NOTAM: Updating airspace database with loaded NOTAMs");
+      UpdateAirspaces(*data_components->airspaces);
+      LogFormat("NOTAM: Airspace database updated successfully");
+    } catch (const std::exception &e) {
+      LogFormat("NOTAM: Error updating airspace database: %s", e.what());
+    }
+  }
 }
 
 unsigned
@@ -331,6 +341,43 @@ NOTAMGlue::TestNOTAMFetch(const GeoPoint &location)
   return static_cast<int>(impl->current_notams.size());
 }
 
+/**
+ * Check if a NOTAM should be displayed based on filter settings
+ */
+static bool
+ShouldDisplayNOTAM(const NOTAMStruct &notam, const NOTAMSettings &settings)
+{
+  // feature_type actually contains the selectionCode (ICAO Q-code)
+  const auto &qcode = notam.feature_type;
+  
+  if (qcode.empty()) {
+    LogFormat("NOTAM Filter: %s has NO Q-code, treating as 'other' (show_other=%d)",
+              notam.number.c_str(), (int)settings.show_other);
+    return settings.show_other;
+  }
+  
+  LogFormat("NOTAM Filter: %s Q-code='%s'", notam.number.c_str(), qcode.c_str());
+  
+  // Q-codes starting with QR = Restricted/Danger areas (airspace)
+  // Q-codes starting with QD = Danger areas (airspace)
+  if (qcode.length() >= 2 && (qcode.substr(0, 2) == "QR" || qcode.substr(0, 2) == "QD")) {
+    return settings.show_airspace;
+  }
+  
+  // Q-codes starting with QO = Obstacles
+  if (qcode.length() >= 2 && qcode.substr(0, 2) == "QO") {
+    return settings.show_obst;
+  }
+  
+  // Q-codes starting with QW = Warnings (includes military exercises, UAS ops)
+  if (qcode.length() >= 2 && qcode.substr(0, 2) == "QW") {
+    return settings.show_military;
+  }
+  
+  // Everything else (aerodromes, navaids, procedures, etc.)
+  return settings.show_other;
+}
+
 void
 NOTAMGlue::UpdateAirspaces(Airspaces &airspaces)
 {
@@ -340,12 +387,43 @@ NOTAMGlue::UpdateAirspaces(Airspaces &airspaces)
   LogFormat("NOTAM: UpdateAirspaces - converting %u NOTAMs to airspaces", 
             static_cast<unsigned>(impl->current_notams.size()));
 
-  // The caller is responsible for ensuring the airspace database
-  // is in the correct state before calling this method (e.g., cleared or fresh).
-  // This method only ADDS airspaces, it does not remove existing ones.
+  // Save all non-NOTAM airspaces
+  // ToDo: Optimize by removing only existing NOTAM airspaces
+  std::vector<AirspacePtr> saved_airspaces;
+  for (const auto &airspace : airspaces.QueryAll()) {
+    tstring name = airspace.GetAirspace().GetName();
+    // Skip airspaces with names starting with "NOTAM "
+    if (name.find(_T("NOTAM ")) != 0) {
+      saved_airspaces.push_back(airspace.GetAirspacePtr());
+    }
+  }
+  
+  LogFormat("NOTAM: Saved %u non-NOTAM airspaces", 
+            static_cast<unsigned>(saved_airspaces.size()));
+  
+  // Clear all airspaces
+  airspaces.Clear();
+  
+  // Restore non-NOTAM airspaces
+  for (const auto &airspace : saved_airspaces) {
+    airspaces.Add(airspace);
+  }
+  
+  LogFormat("NOTAM: Restored %u non-NOTAM airspaces", 
+            static_cast<unsigned>(saved_airspaces.size()));
+  
+  // Add filtered NOTAM airspaces
+  unsigned added_count = 0;
+  unsigned filtered_count = 0;
   
   for (const auto &notam : impl->current_notams) {
     try {
+      // Apply filtering
+      if (!ShouldDisplayNOTAM(notam, settings)) {
+        filtered_count++;
+        continue;
+      }
+      
       // Create airspace based on NOTAM geometry
       AirspacePtr airspace_ptr;
       
@@ -355,12 +433,6 @@ NOTAMGlue::UpdateAirspaces(Airspaces &airspaces)
             GeoPoint{Angle::Degrees(notam.geometry.center.longitude), 
                      Angle::Degrees(notam.geometry.center.latitude)},
             notam.geometry.radius_meters);
-          // For debugging, drop all NOTAMs with radius > 50 km to avoid cluttering @TODO
-          if (notam.geometry.radius_meters > 50000.0) {
-            LogFormat("NOTAM: Skipping NOTAM '%s' with large radius %.0fm to avoid cluttering TODO FIX ME with proper filtering", 
-                      notam.number.c_str(), notam.geometry.radius_meters);
-            continue;
-          }
           airspace_ptr = circle;
           break;
         }
@@ -432,6 +504,7 @@ NOTAMGlue::UpdateAirspaces(Airspaces &airspaces)
         
         // Add to airspace database
         airspaces.Add(airspace_ptr);
+        added_count++;
         
         LogFormat("NOTAM: Added airspace for NOTAM '%s' (type=%d, radius=%.0fm)", 
                   notam.number.c_str(), static_cast<int>(notam.geometry.type), 
@@ -446,7 +519,8 @@ NOTAMGlue::UpdateAirspaces(Airspaces &airspaces)
   // Optimize the airspace tree after adding NOTAMs
   airspaces.Optimise();
   
-  LogFormat("NOTAM: UpdateAirspaces completed");
+  LogFormat("NOTAM: UpdateAirspaces completed - added %u NOTAMs, filtered %u NOTAMs",
+            added_count, filtered_count);
 }
 
 AllocatedPath

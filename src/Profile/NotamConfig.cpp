@@ -21,11 +21,9 @@ Profile::LoadNotamSettings(const ProfileMap &map, NOTAMSettings &settings)
   map.Get(ProfileKeys::NOTAMHoursBeforeSunrise, settings.hours_before_sunrise);
   map.Get(ProfileKeys::NOTAMHoursAfterSunset, settings.hours_after_sunset);
 
-  // Type-based filtering
+  // Feature type filters (simplified)
   map.Get(ProfileKeys::NOTAMShowAirspace, settings.show_airspace);
-  map.Get(ProfileKeys::NOTAMShowAirport, settings.show_airport);
-  map.Get(ProfileKeys::NOTAMShowNavaid, settings.show_navaid);
-  map.Get(ProfileKeys::NOTAMShowObstacle, settings.show_obstacle);
+  map.Get(ProfileKeys::NOTAMShowObst, settings.show_obst);
   map.Get(ProfileKeys::NOTAMShowMilitary, settings.show_military);
   map.Get(ProfileKeys::NOTAMShowOther, settings.show_other);
 }

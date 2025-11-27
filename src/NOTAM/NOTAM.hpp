@@ -62,6 +62,15 @@ struct NOTAM {
   /** NOTAM classification/type */
   std::string classification;
   
+  /** Feature type (e.g., AIRSPACE, OBST, NAV, COM, MILITARY) */
+  std::string feature_type;
+  
+  /** Minimum flight level (000-999) */
+  std::string minimum_fl;
+  
+  /** Maximum flight level (000-999) */
+  std::string maximum_fl;
+  
   /** Source of the NOTAM */
   std::string source;
   

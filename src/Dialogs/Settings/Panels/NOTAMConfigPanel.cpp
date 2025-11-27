@@ -29,17 +29,10 @@ enum ControlIndex {
   RefreshInterval,
   LastUpdate,
   DistanceFromLastUpdate,
-  TimeFilterSpacer,
-  FilterDaylightOnly,
-  FilterNightOnly,
-  HoursBeforeSunrise,
-  HoursAfterSunset,
-  TypeFilterSpacer,
+  FeatureTypeFilterSpacer,
   ShowAirspace,
+  ShowObst,
   ShowMilitary,
-  ShowObstacle,
-  ShowAirport,
-  ShowNavaid,
   ShowOther
 #endif
 };
@@ -119,55 +112,22 @@ NOTAMConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
       AddReadOnly(_("Distance From Last Update"), nullptr, _("Unknown"));
     }
 
-    // Time-based filtering
+    // Feature type filtering (simplified for glider pilots)
     AddSpacer();
-    AddBoolean(_("Daylight Only"),
-               _("Show only NOTAMs that are active during daylight hours (sunrise to sunset)."),
-               computer.notam.filter_daylight_only);
-
-    AddBoolean(_("Night Only"),
-               _("Show only NOTAMs that are active during night hours (sunset to sunrise)."),
-               computer.notam.filter_night_only);
-    SetExpertRow(FilterNightOnly);
-
-    AddInteger(_("Hours Before Sunrise"),
-               _("Include NOTAMs this many hours before sunrise (-1 to disable filtering)."),
-               _T("%d h"), _T("%d"), -1, 12, 1,
-               computer.notam.hours_before_sunrise);
-    SetExpertRow(HoursBeforeSunrise);
-
-    AddInteger(_("Hours After Sunset"),
-               _("Include NOTAMs this many hours after sunset (-1 to disable filtering)."),
-               _T("%d h"), _T("%d"), -1, 12, 1,
-               computer.notam.hours_after_sunset);
-    SetExpertRow(HoursAfterSunset);
-
-    // Type-based filtering
-    AddSpacer();
-    AddBoolean(_("Show Airspace NOTAMs"),
-               _("Airspace restrictions and changes (recommended for glider pilots)."),
+    AddBoolean(_("Show AIRSPACE NOTAMs"),
+               _("Airspace restrictions and changes (essential for flight planning)."),
                computer.notam.show_airspace);
 
-    AddBoolean(_("Show Military NOTAMs"),
-               _("Military exercises creating temporary airspace (important for cross-country)."),
+    AddBoolean(_("Show OBST (Obstacle) NOTAMs"),
+               _("Obstacles, towers, cranes, construction (important for low-level flying)."),
+               computer.notam.show_obst);
+
+    AddBoolean(_("Show MILITARY NOTAMs"),
+               _("Military exercises and operations (can create temporary restricted airspace)."),
                computer.notam.show_military);
 
-    AddBoolean(_("Show Obstacle NOTAMs"),
-               _("New obstacles, towers, and construction (important for low-level flying)."),
-               computer.notam.show_obstacle);
-
-    AddBoolean(_("Show Airport NOTAMs"),
-               _("Airport and runway information (usually not relevant for cross-country gliding)."),
-               computer.notam.show_airport);
-    SetExpertRow(ShowAirport);
-
-    AddBoolean(_("Show Navigation Aid NOTAMs"),
-               _("VOR, NDB, ILS status (not critical for GPS navigation)."),
-               computer.notam.show_navaid);
-    SetExpertRow(ShowNavaid);
-
     AddBoolean(_("Show Other NOTAMs"),
-               _("Miscellaneous NOTAMs not covered by other categories."),
+               _("All other NOTAM types including airports, navigation aids, procedures, etc."),
                computer.notam.show_other);
     SetExpertRow(ShowOther);
 
@@ -221,17 +181,10 @@ NOTAMConfigPanel::UpdateVisibility() noexcept
   SetRowAvailable(RefreshInterval, enabled);
   SetRowAvailable(LastUpdate, enabled);
   SetRowAvailable(DistanceFromLastUpdate, enabled);
-  SetRowAvailable(TimeFilterSpacer, enabled);
-  SetRowAvailable(FilterDaylightOnly, enabled);
-  SetRowAvailable(FilterNightOnly, enabled);
-  SetRowAvailable(HoursBeforeSunrise, enabled);
-  SetRowAvailable(HoursAfterSunset, enabled);
-  SetRowAvailable(TypeFilterSpacer, enabled);
+  SetRowAvailable(FeatureTypeFilterSpacer, enabled);
   SetRowAvailable(ShowAirspace, enabled);
+  SetRowAvailable(ShowObst, enabled);
   SetRowAvailable(ShowMilitary, enabled);
-  SetRowAvailable(ShowObstacle, enabled);
-  SetRowAvailable(ShowAirport, enabled);
-  SetRowAvailable(ShowNavaid, enabled);
   SetRowAvailable(ShowOther, enabled);
 #endif
 }
@@ -306,17 +259,9 @@ NOTAMConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValueInteger(NOTAMRadius, ProfileKeys::NOTAMRadius, computer.notam.radius_km);
   changed |= SaveValueInteger(RefreshInterval, ProfileKeys::NOTAMRefreshInterval, computer.notam.refresh_interval_min);
 
-  // Time-based filtering
-  changed |= SaveValue(FilterDaylightOnly, ProfileKeys::NOTAMFilterDaylightOnly, computer.notam.filter_daylight_only);
-  changed |= SaveValue(FilterNightOnly, ProfileKeys::NOTAMFilterNightOnly, computer.notam.filter_night_only);
-  changed |= SaveValueInteger(HoursBeforeSunrise, ProfileKeys::NOTAMHoursBeforeSunrise, computer.notam.hours_before_sunrise);
-  changed |= SaveValueInteger(HoursAfterSunset, ProfileKeys::NOTAMHoursAfterSunset, computer.notam.hours_after_sunset);
-
-  // Type-based filtering
+  // Feature type filtering (simplified)
   changed |= SaveValue(ShowAirspace, ProfileKeys::NOTAMShowAirspace, computer.notam.show_airspace);
-  changed |= SaveValue(ShowAirport, ProfileKeys::NOTAMShowAirport, computer.notam.show_airport);
-  changed |= SaveValue(ShowNavaid, ProfileKeys::NOTAMShowNavaid, computer.notam.show_navaid);
-  changed |= SaveValue(ShowObstacle, ProfileKeys::NOTAMShowObstacle, computer.notam.show_obstacle);
+  changed |= SaveValue(ShowObst, ProfileKeys::NOTAMShowObst, computer.notam.show_obst);
   changed |= SaveValue(ShowMilitary, ProfileKeys::NOTAMShowMilitary, computer.notam.show_military);
   changed |= SaveValue(ShowOther, ProfileKeys::NOTAMShowOther, computer.notam.show_other);
 #endif

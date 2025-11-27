@@ -39,21 +39,16 @@ struct NOTAMSettings {
   /** Filter by NOTAM series (empty = show all) */
   std::string filter_series = "";
   
-  /** Show airspace-related NOTAMs (most relevant for glider pilots) */
+  // Feature type filters (simplified for glider pilots - based on official NOTAM API)
+  /** Show AIRSPACE-related NOTAMs (airspace restrictions) */
   bool show_airspace = true;
   
-  /** Show airport/runway NOTAMs (usually not relevant for cross-country) */
-  bool show_airport = false;
+  /** Show OBST (obstacle) NOTAMs (towers, cranes, construction) */
+  bool show_obst = true;
   
-  /** Show navigation aid NOTAMs (not critical for gliders using GPS) */
-  bool show_navaid = false;
-  
-  /** Show obstacle NOTAMs (important for low-level flying) */
-  bool show_obstacle = true;
-  
-  /** Show military exercise NOTAMs (important - can create temporary airspace) */
+  /** Show MILITARY NOTAMs (military exercises, operations) */
   bool show_military = true;
   
-  /** Show other/miscellaneous NOTAMs */
+  /** Show other/unclassified NOTAMs (AD, RWY, NAV, COM, procedures, etc.) */
   bool show_other = false;
 };

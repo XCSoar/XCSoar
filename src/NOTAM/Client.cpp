@@ -235,6 +235,20 @@ ParseNOTAMFeature(const boost::json::object &feature)
     notam.classification = boost::json::value_to<std::string>(it->value());
   }
   
+  // Parse selection code (ICAO Q-code that indicates NOTAM type)
+  if (auto it = notam_obj.find("selectionCode"); it != notam_obj.end()) {
+    notam.feature_type = boost::json::value_to<std::string>(it->value());
+  }
+  
+  // Parse flight level limits
+  if (auto it = notam_obj.find("minimumFL"); it != notam_obj.end()) {
+    notam.minimum_fl = boost::json::value_to<std::string>(it->value());
+  }
+  
+  if (auto it = notam_obj.find("maximumFL"); it != notam_obj.end()) {
+    notam.maximum_fl = boost::json::value_to<std::string>(it->value());
+  }
+  
   // Parse location field (e.g., related airport ICAO code)
   if (auto it = notam_obj.find("location"); it != notam_obj.end()) {
     notam.location = boost::json::value_to<std::string>(it->value());
