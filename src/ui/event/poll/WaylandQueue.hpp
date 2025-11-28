@@ -24,6 +24,12 @@ struct wl_keyboard;
 struct wl_shell;
 struct wl_registry;
 struct xdg_wm_base;
+struct zxdg_decoration_manager_v1;
+struct wl_shm;
+struct wl_cursor_theme;
+struct wl_cursor;
+struct wl_cursor_image;
+struct wl_surface;
 
 namespace UI {
 
@@ -45,6 +51,12 @@ class WaylandEventQueue final {
   struct wl_keyboard *keyboard = nullptr;
   struct wl_shell *shell = nullptr;
   struct xdg_wm_base *wm_base = nullptr;
+  struct zxdg_decoration_manager_v1 *decoration_manager = nullptr;
+  struct wl_shm *shm = nullptr;
+
+  struct wl_cursor_theme *cursor_theme = nullptr;
+  struct wl_cursor *cursor_pointer = nullptr;
+  struct wl_surface *cursor_surface = nullptr;
 
   bool has_touchscreen = false;
 
@@ -117,6 +129,8 @@ public:
   void KeyboardKeymap(uint32_t format, int32_t fd, uint32_t size) noexcept;
   void KeyboardModifiers(uint32_t mods_depressed, uint32_t mods_latched,
                          uint32_t mods_locked, uint32_t group) noexcept;
+
+  void SetCursor(struct wl_pointer *wl_pointer, uint32_t serial) noexcept;
 
 private:
   void OnSocketReady(unsigned events) noexcept;
