@@ -43,6 +43,7 @@ using NOTAMStruct = struct NOTAM;
 #include "TransponderCode.hpp"
 #include "util/tstring.hpp"
 #include "Geo/AltitudeReference.hpp"
+#include "util/UTF8.hpp"
 
 #ifdef HAVE_HTTP
 
@@ -574,7 +575,14 @@ NOTAMGlue::SaveNOTAMsToFile(const std::string &geojson_response, const GeoPoint 
     auto file_path = GetNOTAMCacheFilePath();
     LogFormat("NOTAM: Saving GeoJSON to cache: %s", file_path.c_str());
     
-    // Create a wrapper object with metadata and the raw GeoJSON
+    // Validate UTF-8 before saving - boost::json will validate during parse anyway,
+    // but we check here to avoid saving potentially corrupted data
+    if (!ValidateUTF8(geojson_response)) {
+      LogFormat("NOTAM: Warning - GeoJSON contains invalid UTF-8, skipping cache save");
+      return;
+    }
+    
+    // Create a wrapper object with metadata and the GeoJSON
     std::string json_with_metadata = "{";
     json_with_metadata += "\"xcsoar_timestamp\":" + std::to_string(std::time(nullptr)) + ",";
     json_with_metadata += "\"xcsoar_location_lat\":" + std::to_string(location.latitude.Degrees()) + ",";
