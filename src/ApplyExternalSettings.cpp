@@ -27,12 +27,22 @@ BallastProcessTimer() noexcept
   last_fraction = settings.ballast_fraction_available;
 
   if (settings.ballast_overload_available.Modified(last_overload) &&
-      settings.ballast_overload >= 0.8 && plane.max_ballast > 0) {
-    auto overload =
-        ((settings.ballast_overload * plane.polar_shape.reference_mass) -
-         polar.GetCrewMass() - plane.empty_mass) /
-        plane.max_ballast;
-    ActionInterface::SetBallast(overload, false);
+      plane.max_ballast > 0) {
+    /* Calculate ballast fraction from overload:
+     * overload = (dry_mass + ballast_litres) / reference_mass
+     * ballast_litres = overload * reference_mass - dry_mass
+     * ballast_fraction = ballast_litres / max_ballast
+     */
+    const double total_mass_at_overload = 
+        settings.ballast_overload * plane.polar_shape.reference_mass;
+    const double dry_mass = polar.GetCrewMass() + plane.empty_mass;
+    const double ballast_litres = total_mass_at_overload - dry_mass;
+    const double ballast_fraction = ballast_litres / plane.max_ballast;
+    
+    /* Ballast fraction must be >= 0 (can't have negative water ballast).
+     * If overload results in negative ballast, set to 0. */
+    const double clamped_ballast = ballast_fraction >= 0 ? ballast_fraction : 0;
+    ActionInterface::SetBallast(clamped_ballast, false);
     modified = true;
   }
 
