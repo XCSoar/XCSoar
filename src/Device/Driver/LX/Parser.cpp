@@ -308,6 +308,26 @@ PLXVS(NMEAInputLine &line, NMEAInfo &info)
     info.voltage_available.Update(info.clock);
   }
 
+  /* IGC press altitude field - pressure altitude used by device for IGC recording */
+  double igc_press_altitude;
+  if (line.ReadChecked(igc_press_altitude)) {
+    info.igc_pressure_altitude = igc_press_altitude;
+    info.igc_pressure_altitude_available.Update(info.clock);
+  }
+
+  /* Parse FlapPosition field (added in protocol v1.03) */
+  const auto flap_str = line.ReadView();
+  if (!flap_str.empty()) {
+    if (flap_str == "L"sv)
+      info.switch_state.flap_position = SwitchState::FlapPosition::LANDING;
+    else
+      /* Other flap position values not yet defined in protocol documentation */
+      info.switch_state.flap_position = SwitchState::FlapPosition::UNKNOWN;
+  }
+
+  /* VP (Vario Priority) flag is available but not currently used */
+  line.Skip();
+
   return true;
 }
 
