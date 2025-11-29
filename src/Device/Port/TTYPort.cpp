@@ -1,6 +1,12 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#ifdef __linux__
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+#endif
+
 #include "TTYPort.hpp"
 #include "Device/Error.hpp"
 #include "Asset.hpp"
@@ -17,6 +23,44 @@
 
 #include <sys/stat.h>
 #include <termios.h>
+#ifdef __linux__
+#include <sys/ioctl.h>
+/* For TIOCSSERIAL method (works on USB-to-serial drivers like FTDI) */
+/* TIOCSSERIAL has been available since kernel 2.2 */
+#ifndef TIOCGSERIAL
+#define TIOCGSERIAL 0x541E
+#endif
+#ifndef TIOCSSERIAL
+#define TIOCSSERIAL 0x541F
+#endif
+/* ASYNC_SPD flags may not be defined in very old kernel headers (pre-2.4) */
+#ifndef ASYNC_SPD_CUST
+#define ASYNC_SPD_CUST 0x0030
+#endif
+#ifndef ASYNC_SPD_MASK
+#define ASYNC_SPD_MASK 0x0070
+#endif
+struct serial_struct {
+  int type;
+  int line;
+  unsigned int port;
+  int irq;
+  int flags;
+  int xmit_fifo_size;
+  int custom_divisor;
+  int baud_base;
+  unsigned short close_delay;
+  char io_type;
+  char reserved_char[1];
+  int hub6;
+  unsigned short closing_wait;
+  unsigned short closing_wait2;
+  unsigned char *iomem_base;
+  unsigned short iomem_reg_shift;
+  unsigned int port_high;
+  unsigned long iomap_base;
+};
+#endif
 
 #include <cassert>
 #include <stdio.h>
@@ -106,6 +150,51 @@ SetBaudrate(TTYDescriptor tty, unsigned BaudRate)
   assert(tty.IsDefined());
 
   speed_t speed = baud_rate_to_speed_t(BaudRate);
+
+  /* For baud rates above 230400, use TIOCSSERIAL with custom divisor (Linux only) */
+  /* Note: Windows uses SerialPort which natively supports arbitrary baud rates */
+  /* macOS/iOS don't support TIOCSSERIAL and may not support custom baud rates */
+  /* Android uses platform-specific implementations (AndroidUsbSerialPort, etc.) */
+  if (speed == B0 && BaudRate > 230400) {
+#ifdef __linux__
+    struct serial_struct serinfo;
+    if (ioctl(tty.Get(), TIOCGSERIAL, &serinfo) < 0)
+      throw MakeErrno("TIOCGSERIAL failed");
+
+    /* Set standard termios attributes first */
+    struct termios attr;
+    if (!tty.GetAttr(attr))
+      throw MakeErrno("tcgetattr() failed");
+
+    attr.c_iflag &= ~(BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
+    attr.c_iflag |= (IGNPAR | IGNBRK);
+    attr.c_oflag &= ~OPOST;
+    attr.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+    attr.c_cflag &= ~(CSIZE | PARENB | CRTSCTS);
+    attr.c_cflag |= (CS8 | CLOCAL);
+    attr.c_cc[VMIN] = 0;
+    attr.c_cc[VTIME] = 1;
+    cfsetospeed(&attr, B38400); /* Use a standard speed as base */
+    cfsetispeed(&attr, B38400);
+    if (!tty.SetAttr(TCSANOW, attr))
+      throw MakeErrno("tcsetattr() failed");
+
+    /* Set custom baud rate using TIOCSSERIAL */
+    if (serinfo.baud_base <= 0)
+      throw std::runtime_error("Serial port does not report baud_base");
+
+    serinfo.flags = (serinfo.flags & ~ASYNC_SPD_MASK) | ASYNC_SPD_CUST;
+    serinfo.custom_divisor = (serinfo.baud_base + (BaudRate / 2)) / BaudRate;
+    if (serinfo.custom_divisor < 1)
+      serinfo.custom_divisor = 1;
+    if (ioctl(tty.Get(), TIOCSSERIAL, &serinfo) < 0)
+      throw MakeErrno("TIOCSSERIAL failed");
+    return;
+#else
+    throw std::runtime_error("Custom baud rates above 230400 not supported on this platform");
+#endif
+  }
+
   if (speed == B0)
     throw std::runtime_error("Unsupported baud rate");
 
@@ -271,6 +360,19 @@ TTYPort::GetBaudrate() const noexcept
   assert(socket.IsDefined());
 
   const TTYDescriptor tty(socket.GetFileDescriptor());
+#ifdef __linux__
+  /* Check if using custom baud rate via TIOCSSERIAL */
+  struct serial_struct serinfo;
+  if (ioctl(tty.Get(), TIOCGSERIAL, &serinfo) == 0) {
+    if ((serinfo.flags & ASYNC_SPD_MASK) == ASYNC_SPD_CUST &&
+        serinfo.baud_base > 0 && serinfo.custom_divisor > 0) {
+      unsigned custom_baud = serinfo.baud_base / serinfo.custom_divisor;
+      if (custom_baud > 230400)
+        return custom_baud;
+    }
+  }
+#endif
+
   struct termios attr;
   if (!tty.GetAttr(attr))
     return 0;
