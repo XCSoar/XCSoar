@@ -16,6 +16,7 @@
 #include "NMEA/Info.hpp"
 #include "thread/Mutex.hxx"
 #include "util/StringAPI.hxx"
+#include "util/StringCompare.hxx"
 #include "util/Exception.hxx"
 #include "Logger/NMEALogger.hpp"
 #include "Language/Language.hpp"
@@ -1385,8 +1386,11 @@ DeviceDescriptor::DataReceived(std::span<const std::byte> s) noexcept
 bool
 DeviceDescriptor::LineReceived(const char *line) noexcept
 {
-  if (nmea_logger != nullptr)
-    nmea_logger->Log(line);
+  if (nmea_logger != nullptr) {
+    /* Skip logging high-frequency LXWP2 sentences */
+    if (!StringStartsWith(line, "$LXWP2"))
+      nmea_logger->Log(line);
+  }
 
   if (dispatcher != nullptr)
     dispatcher->LineReceived(line);

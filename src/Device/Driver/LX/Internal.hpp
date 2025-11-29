@@ -166,11 +166,10 @@ public:
 
     if ((new_v7 && !is_v7) || (new_sVario && !is_sVario)) {
       const char *device_type = new_v7 ? "V7" : "S series vario";
-      LogFmt("LXNAV: {} detected via PLXVC (product: {}, firmware: {}, hardware: {})",
+      LogFmt("LXNAV: {} detected via PLXVC (product: {}, firmware: {})",
              device_type,
              productName.c_str(),
-             device_info.software_version.empty() ? "unknown" : device_info.software_version.c_str(),
-             device_info.hardware_version.empty() ? "unknown" : device_info.hardware_version.c_str());
+             device_info.software_version.empty() ? "unknown" : device_info.software_version.c_str());
       if (!device_info.software_version.empty())
         firmware_version_logged = true;
     }
