@@ -76,6 +76,7 @@ LXDevice::LXWP1(NMEAInputLine &line, DeviceInfo &device)
   device.serial = line.ReadView();
   device.software_version = line.ReadView();
   device.hardware_version = line.ReadView();
+  device.license = line.ReadView();
 }
 
 static bool
@@ -357,16 +358,6 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
     if (saw_v7 || saw_sVario || saw_nano || saw_lx16xx)
       is_colibri = false;
-
-    /* Log firmware version if device was already detected but firmware wasn't logged yet */
-    if (!firmware_version_logged && !device_info.software_version.empty()) {
-      if (is_v7 || is_sVario) {
-        LogFmt("LXNAV: firmware version {} (hardware: {})",
-               device_info.software_version.c_str(),
-               device_info.hardware_version.empty() ? "unknown" : device_info.hardware_version.c_str());
-        firmware_version_logged = true;
-      }
-    }
 
     return true;
 

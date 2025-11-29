@@ -58,6 +58,12 @@ ManageLXNAVVarioWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[mayb
     AddReadOnly(_("Firmware version"), NULL, buffer.c_str());
   }
 
+  if (!info.license.empty()) {
+    buffer.clear();
+    buffer.UnsafeAppendASCII(info.license.c_str());
+    AddReadOnly(_("License"), NULL, buffer.c_str());
+  }
+
   AddButton(_("Setup"), [this](){
     LXNAVVarioConfigWidget widget(GetLook(), device);
     DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
