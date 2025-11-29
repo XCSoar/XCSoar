@@ -14,7 +14,7 @@ class LXNAVVarioConfigWidget final : public RowFormWidget {
     VOL,
     ALTOFF_ERROR,
     ALTOFF_QNH,
-    ALTOFF_TAKEOFF
+    ALTOFF_TAKEOFF,
   };
 
   LXDevice &device;

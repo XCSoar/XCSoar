@@ -75,6 +75,11 @@ class LXDevice: public AbstractDevice
   bool is_forwarded_nano = false;
 
   /**
+   * Has the firmware version been logged?
+   */
+  bool firmware_version_logged = false;
+
+  /**
    * Settings that were received in PLXV0 (LXNAV Vario) sentences.
    */
   DeviceSettingsMap<std::string> lxnav_vario_settings;
@@ -152,17 +157,23 @@ public:
     is_v7 = is_sVario = is_nano = is_lx16xx = is_forwarded_nano = false;
   }
 
-  void IdDeviceByName(StaticString<16> productName) noexcept
+  void IdDeviceByName(StaticString<16> productName, const DeviceInfo &device_info) noexcept
   {
     const bool new_v7 = productName.equals("V7");
     const bool new_sVario = productName.equals("NINC") || productName.equals("S8x");
     const bool new_nano = productName.equals("NANO") || productName.equals("NANO3") || productName.equals("NANO4");
     const bool new_lx16xx = productName.equals("1606") || productName.equals("1600");
 
-    if (new_v7 && !is_v7)
-      LogFmt("LXNAV: V7 detected via PLXVC (product: {})", productName.c_str());
-    if (new_sVario && !is_sVario)
-      LogFmt("LXNAV: S series vario detected via PLXVC (product: {})", productName.c_str());
+    if ((new_v7 && !is_v7) || (new_sVario && !is_sVario)) {
+      const char *device_type = new_v7 ? "V7" : "S series vario";
+      LogFmt("LXNAV: {} detected via PLXVC (product: {}, firmware: {}, hardware: {})",
+             device_type,
+             productName.c_str(),
+             device_info.software_version.empty() ? "unknown" : device_info.software_version.c_str(),
+             device_info.hardware_version.empty() ? "unknown" : device_info.hardware_version.c_str());
+      if (!device_info.software_version.empty())
+        firmware_version_logged = true;
+    }
 
     is_v7 = new_v7;
     is_sVario = new_sVario;
@@ -269,6 +280,9 @@ public:
   bool PutMacCready(double mc, OperationEnvironment &env) override;
   bool PutQNH(const AtmosphericPressure &pres,
               OperationEnvironment &env) override;
+
+  bool PutElevation(int elevation, OperationEnvironment &env) override;
+  bool RequestElevation(OperationEnvironment &env) override;
 
   bool PutVolume(unsigned volume, OperationEnvironment &env) override;
   bool PutPilotEvent(OperationEnvironment &env) override;

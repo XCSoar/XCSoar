@@ -63,6 +63,11 @@ struct ExternalSettings {
   /** the volume of the device [0-100%] */
   unsigned volume;
 
+  Validity elevation_available;
+
+  /** the elevation setting [meters] */
+  int elevation;
+
   /** the radio frequencies of the device */
   Validity has_active_frequency;
   RadioFrequency active_frequency;
@@ -182,6 +187,16 @@ struct ExternalSettings {
   }
 
   /**
+   * Compare the elevation setting with the specified value.
+   *
+   * @return true if the current setting is the same, false if the
+   * value is different or if there is no value
+   */
+  bool CompareElevation(int value) const {
+    return elevation_available && abs(elevation - value) <= 1;
+  }
+
+  /**
    * Sets a new MacCready value, but updates the time stamp only if
    * the value has changed.
    *
@@ -195,4 +210,5 @@ struct ExternalSettings {
   bool ProvideBugs(double value, TimeStamp time) noexcept;
   bool ProvideQNH(AtmosphericPressure value, TimeStamp time) noexcept;
   bool ProvideVolume(unsigned value, TimeStamp time) noexcept;
+  bool ProvideElevation(int value, TimeStamp time) noexcept;
 };

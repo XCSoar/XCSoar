@@ -13,6 +13,7 @@ ExternalSettings::Clear()
   bugs_available.Clear();
   qnh_available.Clear();
   volume_available.Clear();
+  elevation_available.Clear();
   has_active_frequency.Clear();
   active_frequency.Clear();
   active_freq_name.clear();
@@ -74,6 +75,11 @@ ExternalSettings::Complement(const ExternalSettings &add)
   if (add.volume_available.Modified(volume_available)) {
     volume = add.volume;
     volume_available = add.volume_available;
+  }
+
+  if (add.elevation_available.Modified(elevation_available)) {
+    elevation = add.elevation;
+    elevation_available = add.elevation_available;
   }
 
   if (add.has_active_frequency.Modified(has_active_frequency) &&
@@ -144,6 +150,10 @@ ExternalSettings::EliminateRedundant(const ExternalSettings &other,
   if (volume_available && other.CompareVolume(volume) &&
       !last.CompareVolume(volume))
     volume_available.Clear();
+
+  if (elevation_available && other.CompareElevation(elevation) &&
+      !last.CompareElevation(elevation))
+    elevation_available.Clear();
 }
 
 bool
@@ -265,5 +275,20 @@ ExternalSettings::ProvideVolume(unsigned value, TimeStamp time) noexcept
 
   volume = value;
   volume_available.Update(time);
+  return true;
+}
+
+bool
+ExternalSettings::ProvideElevation(int value, TimeStamp time) noexcept
+{
+  if (value < -500 || value > 9000)
+    /* failed sanity check */
+    return false;
+
+  if (CompareElevation(value))
+    return false;
+
+  elevation = value;
+  elevation_available.Update(time);
   return true;
 }

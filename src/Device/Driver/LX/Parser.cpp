@@ -9,6 +9,8 @@
 #include "Units/System.hpp"
 #include "util/Macros.hpp"
 #include "util/StringCompare.hxx"
+#include "Math/Util.hpp"
+#include "util/NumberParser.hpp"
 
 using std::string_view_literals::operator""sv;
 
@@ -154,7 +156,8 @@ LXWP3(NMEAInputLine &line, NMEAInfo &info)
  * Parse the $PLXV0 sentence (LXNAV sVarios (including V7)).
  */
 static bool
-PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings)
+PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings,
+      NMEAInfo &info)
 {
   const auto name = line.ReadView();
   if (name.empty())
@@ -168,6 +171,17 @@ PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings)
 
   const std::lock_guard<Mutex> lock(settings);
   settings.Set(std::string{name}, value);
+
+  /* Provide elevation to ExternalSettings when received from device */
+  if (name == "ELEVATION"sv) {
+    const std::string value_str{value};
+    char *endptr;
+    double d = ParseDouble(value_str.c_str(), &endptr);
+    if (endptr > value_str.c_str()) {
+      int elevation = iround(d);
+      info.settings.ProvideElevation(elevation, info.clock);
+    }
+  }
 
   return true;
 }
@@ -344,6 +358,13 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
     if (saw_v7 || saw_sVario || saw_nano || saw_lx16xx)
       is_colibri = false;
 
+    /* Log firmware version if device was already detected but firmware wasn't logged yet */
+    if (!firmware_version_logged && !device_info.software_version.empty()) {
+      if (is_v7 || is_sVario) {
+        firmware_version_logged = true;
+      }
+    }
+
     return true;
 
   } else if (type == "$LXWP2"sv)
@@ -354,7 +375,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   else if (type == "$PLXV0"sv) {
     is_colibri = false;
-    return PLXV0(line, lxnav_vario_settings);
+    return PLXV0(line, lxnav_vario_settings, info);
 
   } else if (type == "$PLXVC"sv) {
     is_colibri = false;
@@ -363,7 +384,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
                           info.secondary_device.product.equals("NANO3") ||
                           info.secondary_device.product.equals("NANO4");
 
-    LXDevice::IdDeviceByName(info.device.product);
+    LXDevice::IdDeviceByName(info.device.product, info.device);
 
     return true;
 

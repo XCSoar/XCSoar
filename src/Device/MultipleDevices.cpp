@@ -161,6 +161,20 @@ MultipleDevices::PutQNH(AtmosphericPressure pres,
 }
 
 void
+MultipleDevices::PutElevation(int elevation, OperationEnvironment &env) noexcept
+{
+  for (DeviceDescriptor *i : devices)
+    i->PutElevation(elevation, env);
+}
+
+void
+MultipleDevices::RequestElevation(OperationEnvironment &env) noexcept
+{
+  for (DeviceDescriptor *i : devices)
+    i->RequestElevation(env);
+}
+
+void
 MultipleDevices::NotifySensorUpdate(const MoreData &basic) noexcept
 {
   for (DeviceDescriptor *i : devices)

@@ -7,6 +7,7 @@
 #include "BackendComponents.hpp"
 #include "ActionInterface.hpp"
 #include "Device/MultipleDevices.hpp"
+#include "Math/Util.hpp"
 
 static bool
 BallastProcessTimer() noexcept
@@ -93,8 +94,14 @@ QNHProcessTimer(OperationEnvironment &env) noexcept
     settings_computer.pressure = calculated.pressure;
     settings_computer.pressure_available = calculated.pressure_available;
 
-    if (backend_components->devices)
+    if (backend_components->devices) {
       backend_components->devices->PutQNH(settings_computer.pressure, env);
+
+      if (calculated.pressure_elevation_available.IsValid()) {
+        int elevation = iround(calculated.pressure_elevation);
+        backend_components->devices->PutElevation(elevation, env);
+      }
+    }
 
     modified = true;
   }
