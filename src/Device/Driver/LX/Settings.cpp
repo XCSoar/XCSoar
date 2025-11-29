@@ -157,6 +157,13 @@ LXDevice::PutBallast([[maybe_unused]] double fraction, double overload,
     LXNAVVario::SetBallast(port, env, overload);
   else
     LX1600::SetBallast(port, env, overload);
+  
+  /* Track what we sent for feedback loop detection */
+  {
+    const std::lock_guard lock{mutex};
+    last_sent_ballast_overload = overload;
+  }
+  
   return true;
 }
 
@@ -172,6 +179,13 @@ LXDevice::PutBugs(double bugs, OperationEnvironment &env)
     LXNAVVario::SetBugs(port, env, transformed_bugs_value);
   else
     LX1600::SetBugs(port, env, transformed_bugs_value);
+  
+  /* Track what we sent for feedback loop detection */
+  {
+    const std::lock_guard lock{mutex};
+    last_sent_bugs = bugs;
+  }
+  
   return true;
 }
 
@@ -185,6 +199,13 @@ LXDevice::PutMacCready(double mac_cready, OperationEnvironment &env)
     LXNAVVario::SetMacCready(port, env, mac_cready);
   else
     LX1600::SetMacCready(port, env, mac_cready);
+  
+  /* Track what we sent for feedback loop detection */
+  {
+    const std::lock_guard lock{mutex};
+    last_sent_mc = mac_cready;
+  }
+  
   return true;
 }
 

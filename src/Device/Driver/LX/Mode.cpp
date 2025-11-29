@@ -7,6 +7,9 @@
 #include "NanoProtocol.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
+#include "NMEA/Derived.hpp"
+#include "NMEA/MoreData.hpp"
+#include "util/NumberParser.hpp"
 
 void
 LXDevice::LinkTimeout()
@@ -26,6 +29,17 @@ LXDevice::LinkTimeout()
     const std::lock_guard<Mutex> lock(nano_settings);
     nano_settings.clear();
   }
+
+  mc_sent = false;
+  mc_requested = false;
+  last_sent_mc.reset();
+  ballast_sent = false;
+  ballast_requested = false;
+  last_sent_ballast_overload.reset();
+  bugs_sent = false;
+  bugs_requested = false;
+  last_sent_bugs.reset();
+  vario_just_detected = false;
 
   mode = Mode::UNKNOWN;
   old_baud_rate = 0;
@@ -165,4 +179,155 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
   const std::lock_guard lock{mutex};
   mode = Mode::COMMAND;
   return true;
+}
+
+void
+LXDevice::OnCalculatedUpdate(const MoreData &basic,
+                             const DerivedInfo &calculated)
+{
+  /* Only handle settings sync for LXNAV varios */
+  if (!IsLXNAVVario())
+    return;
+
+  NullOperationEnvironment env;
+
+  /* Check if vario was just detected and request settings */
+  bool should_request_settings = false;
+  {
+    const std::lock_guard lock{mutex};
+    if (vario_just_detected) {
+      should_request_settings = true;
+      vario_just_detected = false;
+    }
+  }
+
+  if (should_request_settings) {
+    /* Request all settings on detection */
+    {
+      const std::lock_guard lock{mutex};
+      if (!mc_requested) {
+        mc_requested = true;
+      }
+      ballast_requested = true;
+      bugs_requested = true;
+    }
+    RequestLXNAVVarioSetting("MC", env);
+    
+    /* Ballast and bugs come via LXWP2, no need to request separately */
+    /* Wait for settings to be received before proceeding with sync */
+    return;
+  }
+
+  /* Sync all settings */
+  SyncMacCready(basic, calculated, env);
+  SyncBallast(basic, calculated, env);
+  SyncBugs(basic, calculated, env);
+}
+
+void
+LXDevice::SyncMacCready(const MoreData &basic,
+                        const DerivedInfo &calculated,
+                        OperationEnvironment &env) noexcept
+{
+  {
+    const std::lock_guard lock{mutex};
+    if (mc_sent)
+      return;
+  }
+
+  if (!basic.settings.mac_cready_available.IsValid())
+    return;
+
+  const double device_mc = basic.settings.mac_cready;
+  const bool is_echo = IsMCEcho(basic.settings);
+  
+  if (!is_echo && device_mc > 0) {
+    /* Device has non-zero MC that we didn't send, don't override it */
+    const std::lock_guard lock{mutex};
+    mc_sent = true;
+    return;
+  }
+
+  /* Device MC is 0, not set, or is echoing our value - send XCSoar's MC */
+  const double mc = calculated.glide_polar_safety.GetMC();
+  if (PutMacCready(mc, env)) {
+    const std::lock_guard lock{mutex};
+    mc_sent = true;
+    last_sent_mc = mc;
+  }
+}
+
+void
+LXDevice::SyncBallast(const MoreData &basic,
+                      const DerivedInfo &calculated,
+                      OperationEnvironment &env) noexcept
+{
+  {
+    const std::lock_guard lock{mutex};
+    if (ballast_sent)
+      return;
+  }
+
+  if (!basic.settings.ballast_overload_available.IsValid())
+    return;
+
+  const double device_ballast_overload = basic.settings.ballast_overload;
+  const bool is_echo = IsBallastEcho(basic.settings);
+  
+  if (!is_echo && device_ballast_overload > 1.0) {
+    /* Device has ballast that we didn't send, don't override it */
+    const std::lock_guard lock{mutex};
+    ballast_sent = true;
+    return;
+  }
+
+  /* Device has no ballast or is echoing our value - send XCSoar's ballast */
+  const GlidePolar &polar = calculated.glide_polar_safety;
+  if (!polar.IsValid())
+    return;
+
+  const double ballast_litres = polar.GetBallastLitres();
+  const double dry_mass = polar.GetDryMass();
+  const double reference_mass = polar.GetReferenceMass();
+  const double overload = (dry_mass + ballast_litres) / reference_mass;
+  const double ballast_fraction = polar.GetBallast();
+  
+  if (PutBallast(ballast_fraction, overload, env)) {
+    const std::lock_guard lock{mutex};
+    ballast_sent = true;
+    last_sent_ballast_overload = overload;
+  }
+}
+
+void
+LXDevice::SyncBugs(const MoreData &basic,
+                   const DerivedInfo &calculated,
+                   OperationEnvironment &env) noexcept
+{
+  {
+    const std::lock_guard lock{mutex};
+    if (bugs_sent)
+      return;
+  }
+
+  if (!basic.settings.bugs_available.IsValid())
+    return;
+
+  const double device_bugs = basic.settings.bugs;
+  const bool is_echo = IsBugsEcho(basic.settings);
+  
+  if (!is_echo && device_bugs < 1.0) {
+    /* Device has bugs that we didn't send, don't override it */
+    const std::lock_guard lock{mutex};
+    bugs_sent = true;
+    return;
+  }
+
+  /* Device has no bugs or is echoing our value - send XCSoar's bugs */
+  const double bugs = calculated.glide_polar_safety.GetBugs();
+  if (PutBugs(bugs, env)) {
+    const std::lock_guard lock{mutex};
+    bugs_sent = true;
+    last_sent_bugs = bugs;
+  }
 }

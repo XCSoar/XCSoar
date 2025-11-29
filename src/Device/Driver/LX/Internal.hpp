@@ -14,6 +14,10 @@
 
 #include <atomic>
 #include <cstdint>
+#include <optional>
+
+struct MoreData;
+struct DerivedInfo;
 
 class LXDevice: public AbstractDevice
 {
@@ -88,6 +92,56 @@ class LXDevice: public AbstractDevice
    * Settings that were received in PLXVC (LXNAV Nano) sentences.
    */
   DeviceSettingsMap<std::string> nano_settings;
+
+  /**
+   * Has MC been requested from the device?
+   */
+  bool mc_requested = false;
+
+  /**
+   * Has MC been sent to the device on startup?
+   */
+  bool mc_sent = false;
+
+  /**
+   * Last MC value sent to the device. Used to detect feedback loops.
+   */
+  std::optional<double> last_sent_mc;
+
+  /**
+   * Has ballast been requested from the device?
+   */
+  bool ballast_requested = false;
+
+  /**
+   * Has ballast been sent to the device on startup?
+   */
+  bool ballast_sent = false;
+
+  /**
+   * Last ballast overload value sent to the device. Used to detect feedback loops.
+   */
+  std::optional<double> last_sent_ballast_overload;
+
+  /**
+   * Has bugs been requested from the device?
+   */
+  bool bugs_requested = false;
+
+  /**
+   * Has bugs been sent to the device on startup?
+   */
+  bool bugs_sent = false;
+
+  /**
+   * Last bugs value sent to the device. Used to detect feedback loops.
+   */
+  std::optional<double> last_sent_bugs;
+
+  /**
+   * Was a vario just detected? Used to trigger settings request on detection.
+   */
+  bool vario_just_detected = false;
 
   Mutex mutex;
   Mode mode = Mode::UNKNOWN;
@@ -292,6 +346,61 @@ public:
                OperationEnvironment &env) override;
 
   void OnSysTicker() override;
+
+  void OnCalculatedUpdate(const MoreData &basic,
+                          const DerivedInfo &calculated) override;
+
+private:
+  /**
+   * Check if MC value from device is an echo of what we sent.
+   */
+  [[gnu::pure]]
+  bool IsMCEcho(const ExternalSettings &settings) const noexcept {
+    if (!last_sent_mc.has_value())
+      return false;
+    return settings.CompareMacCready(*last_sent_mc);
+  }
+
+  /**
+   * Check if ballast value from device is an echo of what we sent.
+   */
+  [[gnu::pure]]
+  bool IsBallastEcho(const ExternalSettings &settings) const noexcept {
+    if (!last_sent_ballast_overload.has_value())
+      return false;
+    return settings.CompareBallastOverload(*last_sent_ballast_overload);
+  }
+
+  /**
+   * Check if bugs value from device is an echo of what we sent.
+   */
+  [[gnu::pure]]
+  bool IsBugsEcho(const ExternalSettings &settings) const noexcept {
+    if (!last_sent_bugs.has_value())
+      return false;
+    return settings.CompareBugs(*last_sent_bugs);
+  }
+
+  /**
+   * Handle MC synchronization with the device.
+   */
+  void SyncMacCready(const MoreData &basic,
+                     const DerivedInfo &calculated,
+                     OperationEnvironment &env) noexcept;
+
+  /**
+   * Handle Ballast synchronization with the device.
+   */
+  void SyncBallast(const MoreData &basic,
+                   const DerivedInfo &calculated,
+                   OperationEnvironment &env) noexcept;
+
+  /**
+   * Handle Bugs synchronization with the device.
+   */
+  void SyncBugs(const MoreData &basic,
+                const DerivedInfo &calculated,
+                OperationEnvironment &env) noexcept;
 
   bool ReadFlightList(RecordedFlightList &flight_list,
                       OperationEnvironment &env) override;
