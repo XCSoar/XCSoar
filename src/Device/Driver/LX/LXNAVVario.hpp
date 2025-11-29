@@ -99,6 +99,18 @@ namespace LXNAVVario {
   }
 
   /**
+   * Set the volume setting of the vario
+   * @param volume 0 - 100 %
+   */
+  static inline void
+  SetVolume(Port &port, OperationEnvironment &env, unsigned volume)
+  {
+    char buffer[32];
+    sprintf(buffer, "PLXV0,VOL,W,%.1f", (double)volume);
+    PortWriteNMEA(port, buffer, env);
+  }
+
+  /**
    * Send pilotevent to vario 
    * (needs S10x/S8x firmware 8.01 or newer)
    */

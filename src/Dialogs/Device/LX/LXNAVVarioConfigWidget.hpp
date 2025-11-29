@@ -10,16 +10,19 @@ class LXDevice;
 class LXNAVVarioConfigWidget final : public RowFormWidget {
   enum Controls {
     BRGPS,
-    BRPDA
+    BRPDA,
+    VOL
   };
 
   LXDevice &device;
 
-  unsigned brgps, brpda;
+  unsigned brgps, brpda, volume;
 
 public:
   LXNAVVarioConfigWidget(const DialogLook &look, LXDevice &_device)
-    :RowFormWidget(look), device(_device) {}
+      : RowFormWidget(look), device(_device)
+  {
+  }
 
   /* virtual methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;

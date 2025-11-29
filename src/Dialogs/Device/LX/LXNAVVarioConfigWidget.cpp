@@ -8,10 +8,13 @@
 #include "Language/Language.hpp"
 #include "Operation/Cancelled.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
+#include "util/NumberParser.hpp"
+#include "Math/Util.hpp"
 
 static const char *const lxnav_vario_setting_names[] = {
   "BRGPS",
   "BRPDA",
+  "VOL",
   NULL
 };
 
@@ -35,9 +38,10 @@ WaitUnsignedValue(LXDevice &device, const char *name,
   const auto x = device.WaitLXNAVVarioSetting(name, env, 500);
   if (!x.empty()) {
     char *endptr;
-    unsigned long y = strtoul(x.c_str(), &endptr, 10);
-    if (endptr > x.c_str() && *endptr == 0)
-      return (unsigned)y;
+    /* VOL is a float (e.g., "70.5"), so parse as double first */
+    double d = ParseDouble(x.c_str(), &endptr);
+    if (endptr > x.c_str())
+      return uround(d);
   }
 
   return default_value;
@@ -68,6 +72,9 @@ LXNAVVarioConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[mayb
 
   AddEnum(_("GPS baud rate"), NULL, baud_list, brgps);
   AddEnum(_("PDA baud rate"), NULL, baud_list, brpda);
+
+  volume = WaitUnsignedValue(device, "VOL", 50);
+  AddInteger(_("Volume"), NULL, "%u %%", "%u", 0, 100, 1, volume);
 }
 
 bool
@@ -86,6 +93,12 @@ try {
   if (SaveValueEnum(BRPDA, brpda)) {
     buffer.UnsafeFormat("%u", brpda);
     device.SendLXNAVVarioSetting("BRPDA", buffer, env);
+    changed = true;
+  }
+
+  if (SaveValueInteger(VOL, volume)) {
+    buffer.UnsafeFormat("%u", volume);
+    device.SendLXNAVVarioSetting("VOL", buffer, env);
     changed = true;
   }
 

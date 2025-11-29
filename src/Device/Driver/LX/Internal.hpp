@@ -10,6 +10,7 @@
 #include "util/StaticString.hxx"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Info.hpp"
+#include "LogFile.hpp"
 
 #include <atomic>
 #include <cstdint>
@@ -153,10 +154,20 @@ public:
 
   void IdDeviceByName(StaticString<16> productName) noexcept
   {
-    is_v7 = productName.equals("V7");
-    is_sVario = productName.equals("NINC") || productName.equals("S8x");
-    is_nano = productName.equals("NANO") || productName.equals("NANO3") || productName.equals("NANO4");
-    is_lx16xx = productName.equals("1606") || productName.equals("1600");
+    const bool new_v7 = productName.equals("V7");
+    const bool new_sVario = productName.equals("NINC") || productName.equals("S8x");
+    const bool new_nano = productName.equals("NANO") || productName.equals("NANO3") || productName.equals("NANO4");
+    const bool new_lx16xx = productName.equals("1606") || productName.equals("1600");
+
+    if (new_v7 && !is_v7)
+      LogFmt("LXNAV: V7 detected via PLXVC (product: {})", productName.c_str());
+    if (new_sVario && !is_sVario)
+      LogFmt("LXNAV: S series vario detected via PLXVC (product: {})", productName.c_str());
+
+    is_v7 = new_v7;
+    is_sVario = new_sVario;
+    is_nano = new_nano;
+    is_lx16xx = new_lx16xx;
   }
 
   /**

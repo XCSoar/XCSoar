@@ -204,10 +204,16 @@ LXDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
 bool
 LXDevice::PutVolume(unsigned volume, OperationEnvironment &env)
 {
-  if (!IsLX16xx() || !EnableNMEA(env))
+  if (!EnableNMEA(env))
     return false;
 
-  LX1600::SetVolume(port, env, volume);
+  if (IsLXNAVVario())
+    LXNAVVario::SetVolume(port, env, volume);
+  else if (IsLX16xx())
+    LX1600::SetVolume(port, env, volume);
+  else
+    return false;
+
   return true;
 }
 
