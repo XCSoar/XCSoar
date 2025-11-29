@@ -11,12 +11,16 @@ class LXNAVVarioConfigWidget final : public RowFormWidget {
   enum Controls {
     BRGPS,
     BRPDA,
-    VOL
+    VOL,
+    ALTOFF_ERROR,
+    ALTOFF_QNH,
+    ALTOFF_TAKEOFF
   };
 
   LXDevice &device;
 
   unsigned brgps, brpda, volume;
+  int altoff_error, altoff_qnh, altoff_takeoff;
 
 public:
   LXNAVVarioConfigWidget(const DialogLook &look, LXDevice &_device)
