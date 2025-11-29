@@ -270,6 +270,9 @@ public:
   bool PutQNH(const AtmosphericPressure &pres,
               OperationEnvironment &env) override;
 
+  bool PutElevation(int elevation, OperationEnvironment &env) override;
+  bool RequestElevation(OperationEnvironment &env) override;
+
   bool PutVolume(unsigned volume, OperationEnvironment &env) override;
   bool PutPilotEvent(OperationEnvironment &env) override;
 

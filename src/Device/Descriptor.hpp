@@ -555,6 +555,8 @@ public:
   bool PutTransponderCode(TransponderCode code, OperationEnvironment &env) noexcept;
   bool PutQNH(AtmosphericPressure pres,
               OperationEnvironment &env) noexcept;
+  bool PutElevation(int elevation, OperationEnvironment &env) noexcept;
+  bool RequestElevation(OperationEnvironment &env) noexcept;
 
   /**
    * Caller is responsible for calling Borrow() and Return().

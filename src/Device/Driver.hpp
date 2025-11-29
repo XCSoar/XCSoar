@@ -93,6 +93,22 @@ public:
                       OperationEnvironment &env) = 0;
 
   /**
+   * Send the elevation value to the device.
+   *
+   * @param elevation elevation in meters
+   * @return true on success
+   */
+  virtual bool PutElevation(int elevation, OperationEnvironment &env) = 0;
+
+  /**
+   * Request the elevation value from the device.
+   * The device should respond by providing the elevation via ExternalSettings.
+   *
+   * @return true on success
+   */
+  virtual bool RequestElevation(OperationEnvironment &env) = 0;
+
+  /**
    * Set the radio volume.
    *
    * @param volume the new volume (0 - 100%)
@@ -246,6 +262,8 @@ public:
                   OperationEnvironment &env) override;
   bool PutQNH(const AtmosphericPressure &pres,
               OperationEnvironment &env) override;
+  bool PutElevation(int elevation, OperationEnvironment &env) override;
+  bool RequestElevation(OperationEnvironment &env) override;
   bool PutVolume(unsigned volume, OperationEnvironment &env) override;
   bool PutPilotEvent(OperationEnvironment &env) override;
   bool PutActiveFrequency(RadioFrequency frequency,

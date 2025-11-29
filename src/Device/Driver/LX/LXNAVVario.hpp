@@ -111,6 +111,18 @@ namespace LXNAVVario {
   }
 
   /**
+   * Set the elevation setting of the vario
+   * @param elevation elevation in meters
+   */
+  static inline void
+  SetElevation(Port &port, OperationEnvironment &env, int elevation)
+  {
+    char buffer[32];
+    sprintf(buffer, "PLXV0,ELEVATION,W,%d", elevation);
+    PortWriteNMEA(port, buffer, env);
+  }
+
+  /**
    * Send pilotevent to vario 
    * (needs S10x/S8x firmware 8.01 or newer)
    */

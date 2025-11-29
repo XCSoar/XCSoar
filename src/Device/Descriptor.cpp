@@ -1037,6 +1037,58 @@ DeviceDescriptor::PutQNH(const AtmosphericPressure value,
   return true;
 }
 
+bool
+DeviceDescriptor::PutElevation(int elevation, OperationEnvironment &env) noexcept
+{
+  assert(InMainThread());
+
+  if (device == nullptr || !config.sync_to_device)
+    return true;
+
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  try {
+    ScopeReturnDevice restore(*this, env);
+    if (!device->PutElevation(elevation, env))
+      return false;
+  } catch (OperationCancelled) {
+    return false;
+  } catch (...) {
+    LogError(std::current_exception(), "PutElevation() failed");
+    return false;
+  }
+
+  return true;
+}
+
+bool
+DeviceDescriptor::RequestElevation(OperationEnvironment &env) noexcept
+{
+  assert(InMainThread());
+
+  if (device == nullptr)
+    return true;
+
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  try {
+    ScopeReturnDevice restore(*this, env);
+    if (!device->RequestElevation(env))
+      return false;
+  } catch (OperationCancelled) {
+    return false;
+  } catch (...) {
+    LogError(std::current_exception(), "RequestElevation() failed");
+    return false;
+  }
+
+  return true;
+}
+
 static bool
 DeclareToFLARM(const struct Declaration &declaration, Port &port,
                const Waypoint *home, OperationEnvironment &env)

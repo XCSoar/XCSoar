@@ -202,6 +202,32 @@ LXDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
 }
 
 bool
+LXDevice::PutElevation(int elevation, OperationEnvironment &env)
+{
+  if (!EnableNMEA(env))
+    return false;
+
+  if (IsLXNAVVario())
+    LXNAVVario::SetElevation(port, env, elevation);
+  else
+    return false;
+
+  return true;
+}
+
+bool
+LXDevice::RequestElevation(OperationEnvironment &env)
+{
+  if (!EnableNMEA(env))
+    return false;
+
+  if (IsLXNAVVario())
+    return RequestLXNAVVarioSetting("ELEVATION", env);
+
+  return false;
+}
+
+bool
 LXDevice::PutVolume(unsigned volume, OperationEnvironment &env)
 {
   if (!EnableNMEA(env))

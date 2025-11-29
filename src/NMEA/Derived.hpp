@@ -137,6 +137,10 @@ struct DerivedInfo:
   AtmosphericPressure pressure;
   Validity pressure_available;
 
+  /** Elevation used for auto QNH calculation (meters). */
+  double pressure_elevation;
+  Validity pressure_elevation_available;
+
   ClimbHistory climb_history;
 
   WaveResult wave;

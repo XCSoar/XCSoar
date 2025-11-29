@@ -84,6 +84,8 @@ public:
                            OperationEnvironment &env) noexcept;
   void PutTransponderCode(TransponderCode code, OperationEnvironment &env) noexcept;
   void PutQNH(AtmosphericPressure pres, OperationEnvironment &env) noexcept;
+  void PutElevation(int elevation, OperationEnvironment &env) noexcept;
+  void RequestElevation(OperationEnvironment &env) noexcept;
   void NotifySensorUpdate(const MoreData &basic) noexcept;
   void NotifyCalculatedUpdate(const MoreData &basic,
                               const DerivedInfo &calculated) noexcept;

@@ -52,6 +52,18 @@ AbstractDevice::PutQNH([[maybe_unused]] const AtmosphericPressure &pres,
 }
 
 bool
+AbstractDevice::PutElevation([[maybe_unused]] int elevation, [[maybe_unused]] OperationEnvironment &env)
+{
+  return true;
+}
+
+bool
+AbstractDevice::RequestElevation([[maybe_unused]] OperationEnvironment &env)
+{
+  return true;
+}
+
+bool
 AbstractDevice::PutVolume([[maybe_unused]] unsigned volume, [[maybe_unused]] OperationEnvironment &env)
 {
   return true;
