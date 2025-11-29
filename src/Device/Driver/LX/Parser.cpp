@@ -95,8 +95,9 @@ LXWP2(NMEAInputLine &line, NMEAInfo &info)
 
   double value;
   // MacCready value
-  if (line.ReadChecked(value))
+  if (line.ReadChecked(value)) {
     info.settings.ProvideMacCready(value, info.clock);
+  }
 
   // Ballast
   if (line.ReadChecked(value))
@@ -181,6 +182,16 @@ PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings,
     if (endptr > value_str.c_str()) {
       int elevation = iround(d);
       info.settings.ProvideElevation(elevation, info.clock);
+    }
+  }
+
+  /* Provide MC to ExternalSettings when received from device */
+  if (name == "MC"sv) {
+    const std::string value_str{value};
+    char *endptr;
+    double d = ParseDouble(value_str.c_str(), &endptr);
+    if (endptr > value_str.c_str()) {
+      info.settings.ProvideMacCready(d, info.clock);
     }
   }
 
@@ -360,6 +371,9 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
     const bool saw_lx16xx = device_info.product.equals("1606") ||
                              device_info.product.equals("1600");
 
+    const bool was_vario = IsLXNAVVario();
+    const bool is_vario_now = saw_v7 || saw_sVario;
+
     if (mode == Mode::PASS_THROUGH) {
       /* in pass-through mode, we should never clear the V7 flag,
          because the V7 is still there, even though it's "hidden"
@@ -378,6 +392,12 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
     if (saw_v7 || saw_sVario || saw_nano || saw_lx16xx)
       is_colibri = false;
+
+    /* Mark vario as just detected if it wasn't detected before */
+    if (!was_vario && is_vario_now) {
+      const std::lock_guard lock{mutex};
+      vario_just_detected = true;
+    }
 
     return true;
 
@@ -398,7 +418,15 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
                           info.secondary_device.product.equals("NANO3") ||
                           info.secondary_device.product.equals("NANO4");
 
+    const bool was_vario = IsLXNAVVario();
     LXDevice::IdDeviceByName(info.device.product, info.device);
+    const bool is_vario_now = IsLXNAVVario();
+
+    /* Mark vario as just detected if it wasn't detected before */
+    if (!was_vario && is_vario_now) {
+      const std::lock_guard lock{mutex};
+      vario_just_detected = true;
+    }
 
     return true;
 
