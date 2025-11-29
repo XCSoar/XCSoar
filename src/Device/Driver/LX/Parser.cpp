@@ -358,6 +358,16 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
     if (saw_v7 || saw_sVario || saw_nano || saw_lx16xx)
       is_colibri = false;
 
+    /* Log firmware version if device was already detected but firmware wasn't logged yet */
+    if (!firmware_version_logged && !device_info.software_version.empty()) {
+      if (is_v7 || is_sVario) {
+        LogFmt("LXNAV: firmware version {} (hardware: {})",
+               device_info.software_version.c_str(),
+               device_info.hardware_version.empty() ? "unknown" : device_info.hardware_version.c_str());
+        firmware_version_logged = true;
+      }
+    }
+
     return true;
 
   } else if (type == "$LXWP2"sv)
@@ -377,7 +387,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
                           info.secondary_device.product.equals("NANO3") ||
                           info.secondary_device.product.equals("NANO4");
 
-    LXDevice::IdDeviceByName(info.device.product);
+    LXDevice::IdDeviceByName(info.device.product, info.device);
 
     return true;
 

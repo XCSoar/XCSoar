@@ -74,7 +74,6 @@ AltitudeSetupPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
 {
   const ComputerSettings &settings =
     CommonInterface::GetComputerSettings();
-  const DerivedInfo &calculated = CommonInterface::Calculated();
 
   qnh_control = AddFloat(_("QNH"),
                          _("Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected."),
