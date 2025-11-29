@@ -15,6 +15,9 @@
 #include <atomic>
 #include <cstdint>
 
+struct MoreData;
+struct DerivedInfo;
+
 class LXDevice: public AbstractDevice
 {
   enum class Mode : uint8_t {
@@ -88,6 +91,11 @@ class LXDevice: public AbstractDevice
    * Settings that were received in PLXVC (LXNAV Nano) sentences.
    */
   DeviceSettingsMap<std::string> nano_settings;
+
+  /**
+   * Has MC been sent to the device on startup?
+   */
+  bool mc_sent = false;
 
   Mutex mutex;
   Mode mode = Mode::UNKNOWN;
@@ -292,6 +300,9 @@ public:
                OperationEnvironment &env) override;
 
   void OnSysTicker() override;
+
+  void OnCalculatedUpdate(const MoreData &basic,
+                          const DerivedInfo &calculated) override;
 
   bool ReadFlightList(RecordedFlightList &flight_list,
                       OperationEnvironment &env) override;

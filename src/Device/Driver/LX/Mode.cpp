@@ -7,6 +7,7 @@
 #include "NanoProtocol.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
+#include "NMEA/Derived.hpp"
 
 void
 LXDevice::LinkTimeout()
@@ -26,6 +27,8 @@ LXDevice::LinkTimeout()
     const std::lock_guard<Mutex> lock(nano_settings);
     nano_settings.clear();
   }
+
+  mc_sent = false;
 
   mode = Mode::UNKNOWN;
   old_baud_rate = 0;
@@ -165,4 +168,23 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
   const std::lock_guard lock{mutex};
   mode = Mode::COMMAND;
   return true;
+}
+
+void
+LXDevice::OnCalculatedUpdate([[maybe_unused]] const MoreData &basic,
+                             const DerivedInfo &calculated)
+{
+  /* Send MC to device on startup if not already sent */
+  {
+    const std::lock_guard lock{mutex};
+    if (mc_sent)
+      return;
+  }
+
+  const double mc = calculated.glide_polar_safety.GetMC();
+  NullOperationEnvironment env;
+  if (PutMacCready(mc, env)) {
+    const std::lock_guard lock{mutex};
+    mc_sent = true;
+  }
 }
