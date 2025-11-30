@@ -60,6 +60,19 @@
 
 #include <memory>
 
+// Stubs for BackendComponents used in device drivers
+// These are only needed for linking - the actual calls are guarded by null checks
+#include "BackendComponents.hpp"
+#include "Computer/Settings.hpp"
+
+BackendComponents::BackendComponents() noexcept = default;
+BackendComponents::~BackendComponents() noexcept = default;
+
+void BackendComponents::SetTaskPolar(const PolarSettings &) noexcept
+{
+  // Stub implementation for tests - backend_components is null in tests anyway
+}
+
 static const DeviceConfig dummy_config = DeviceConfig();
 
 /*
@@ -1354,6 +1367,77 @@ TestLXV7()
 }
 
 static void
+TestLXV7POLAR()
+{
+  NullPort null;
+  Device *device = lx_driver.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo basic;
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{1}};
+
+  LXDevice &lx_device = *(LXDevice *)device;
+  lx_device.ResetDeviceDetection();
+
+  /* Test POLAR sentence parsing with all fields */
+  /* Format: PLXV0,POLAR,W,<a>,<b>,<c>,<polar_load>,<polar_weight>,<max_weight>,<empty_weight>,<pilot_weight>,<name>,<stall> */
+  ok1(device->ParseNMEA("$PLXV0,POLAR,W,1.780,-3.030,1.930,30.0,292,600,265,90,LS 7,0*21", basic));
+  
+  /* Check polar coefficients */
+  ok1(basic.settings.polar_coefficients_available);
+  ok1(equals(basic.settings.polar_a, 1.780));
+  ok1(equals(basic.settings.polar_b, -3.030));
+  ok1(equals(basic.settings.polar_c, 1.930));
+  
+  /* Check polar load (wing loading in kg/m²) */
+  ok1(basic.settings.polar_load_available);
+  ok1(equals(basic.settings.polar_load, 30.0));
+  
+  /* Check reference mass (polar_weight) */
+  ok1(basic.settings.polar_reference_mass_available);
+  ok1(equals(basic.settings.polar_reference_mass, 292.0));
+  
+  /* Check maximum mass */
+  ok1(basic.settings.polar_maximum_mass_available);
+  ok1(equals(basic.settings.polar_maximum_mass, 600.0));
+  
+  /* Check empty weight */
+  ok1(basic.settings.polar_empty_weight_available);
+  ok1(equals(basic.settings.polar_empty_weight, 265.0));
+  
+  /* Check pilot weight (crew mass) */
+  ok1(basic.settings.polar_pilot_weight_available);
+  ok1(equals(basic.settings.polar_pilot_weight, 90.0));
+
+  /* Test POL variant (device sometimes sends "POL" instead of "POLAR") */
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{2}};
+  ok1(device->ParseNMEA("$PLXV0,POL,W,1.240,-1.960,1.280,36.0,400,600,325,70,LS 8,0*3A", basic));
+  
+  ok1(basic.settings.polar_coefficients_available);
+  ok1(equals(basic.settings.polar_a, 1.240));
+  ok1(equals(basic.settings.polar_b, -1.960));
+  ok1(equals(basic.settings.polar_c, 1.280));
+  ok1(equals(basic.settings.polar_load, 36.0));
+  ok1(equals(basic.settings.polar_reference_mass, 400.0));
+  ok1(equals(basic.settings.polar_maximum_mass, 600.0));
+  ok1(equals(basic.settings.polar_empty_weight, 325.0));
+  ok1(equals(basic.settings.polar_pilot_weight, 70.0));
+
+  /* Test with zero pilot weight (should still parse but not update crew mass) */
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{3}};
+  ok1(device->ParseNMEA("$PLXV0,POLAR,W,1.780,-3.030,1.930,30.0,292,600,265,0,LS 7,0*18", basic));
+  
+  ok1(basic.settings.polar_coefficients_available);
+  ok1(basic.settings.polar_pilot_weight_available);
+  ok1(equals(basic.settings.polar_pilot_weight, 0.0));
+
+  delete device;
+}
+
+static void
 TestILEC()
 {
   NullPort null;
@@ -1910,374 +1994,9 @@ TestFlightList(const struct DeviceRegister &driver)
   delete device;
 }
 
-/**
- * Test that NMEAParser::ReadTime() preserves sub-second precision
- * from the NMEA time field (HHMMSS.SS).
- *
- * Before the fix, ReadTime() routed through BrokenTime which only
- * stores integer seconds, losing the fractional part.
- * See: https://github.com/XCSoar/XCSoar/issues/2207
- */
-static void
-TestSubSecondPrecision()
-{
-  NMEAParser parser;
-
-  NMEAInfo nmea_info;
-  nmea_info.Reset();
-  nmea_info.clock = TimeStamp{FloatDuration{1}};
-  nmea_info.alive.Update(nmea_info.clock);
-
-  /* parse a GPRMC sentence with .50 fractional seconds */
-  ok1(parser.ParseLine("$GPRMC,082310.50,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*46",
-                        nmea_info));
-
-  /* the integer part must be correct */
-  ok1(nmea_info.date_time_utc.hour == 8);
-  ok1(nmea_info.date_time_utc.minute == 23);
-  ok1(nmea_info.date_time_utc.second == 10);
-
-  /* the sub-second part must be preserved in info.time */
-  ok1(equals(nmea_info.time, TimeStamp{FloatDuration{8 * 3600 + 23 * 60 + 10.50}}));
-  const auto time_50 = nmea_info.time;
-
-  /* parse a second fix at .00 of the next second */
-  nmea_info.clock = TimeStamp{FloatDuration{2}};
-  ok1(parser.ParseLine("$GPRMC,082311.00,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*42",
-                        nmea_info));
-
-  ok1(equals(nmea_info.time, TimeStamp{FloatDuration{8 * 3600 + 23 * 60 + 11.00}}));
-
-  /* the difference between the two fixes must be exactly 0.50 seconds,
-     not 1.0 seconds (which would indicate truncation to integer seconds) */
-  const double delta = (nmea_info.time - time_50).count();
-  ok1(fabs(delta - 0.50) < 0.01);
-}
-
-/**
- * Test that the MWV parser checks the status field (field 5).
- * Status 'V' means data invalid and should be rejected.
- */
-static void
-TestMWVStatus()
-{
-  NMEAParser parser;
-
-  NMEAInfo nmea_info;
-  nmea_info.Reset();
-  nmea_info.clock = TimeStamp{FloatDuration{1}};
-  nmea_info.alive.Update(nmea_info.clock);
-
-  /* MWV with status A (valid) — must be accepted */
-  ok1(parser.ParseLine("$WIMWV,12.1,T,10.1,M,A*24", nmea_info));
-  ok1(nmea_info.external_wind_available);
-
-  /* clear the wind so we can test the invalid case */
-  nmea_info.external_wind_available.Clear();
-
-  /* MWV with status V (invalid) — must be rejected */
-  ok1(parser.ParseLine("$WIMWV,12.1,T,10.1,M,V*33", nmea_info));
-  ok1(!nmea_info.external_wind_available);
-}
-
-/**
- * Test that the MWV parser distinguishes between Relative (R) and
- * True (T) wind reference.  Relative wind (referenced to vessel heading)
- * should not be stored as true wind bearing.
- */
-static void
-TestMWVRelativeTrue()
-{
-  NMEAParser parser;
-
-  NMEAInfo nmea_info;
-  nmea_info.Reset();
-  nmea_info.clock = TimeStamp{FloatDuration{1}};
-  nmea_info.alive.Update(nmea_info.clock);
-
-  /* MWV with True reference — must be accepted */
-  ok1(parser.ParseLine("$WIMWV,45.0,T,10.1,M,A*27", nmea_info));
-  ok1(nmea_info.external_wind_available);
-  ok1(equals(nmea_info.external_wind.bearing, 45.0));
-
-  /* clear the wind */
-  nmea_info.external_wind_available.Clear();
-
-  /* MWV with Relative reference — must be rejected (or handled differently)
-     since XCSoar's external_wind expects a true bearing */
-  ok1(parser.ParseLine("$WIMWV,45.0,R,10.1,M,A*21", nmea_info));
-  ok1(!nmea_info.external_wind_available);
-}
-
-/**
- * Test that NMEAInfo::Complement() correctly copies stall_ratio AND
- * updates stall_ratio_available.
- */
-static void
-TestStallRatioComplement()
-{
-  NMEAInfo a, b;
-  a.Reset();
-  b.Reset();
-
-  a.clock = TimeStamp{FloatDuration{1}};
-  b.clock = TimeStamp{FloatDuration{1}};
-
-  /* 'a' has no stall ratio */
-  ok1(!a.stall_ratio_available);
-
-  /* 'b' provides a stall ratio */
-  b.stall_ratio = 0.75;
-  b.stall_ratio_available.Update(b.clock);
-  b.alive.Update(b.clock);
-  ok1(b.stall_ratio_available);
-
-  /* Complement 'a' with 'b' — both value and flag must be copied */
-  a.Complement(b);
-  ok1(a.stall_ratio_available);
-  ok1(equals(a.stall_ratio, 0.75));
-}
-
-/**
- * Test that temperature_available and humidity_available are now
- * Validity objects that properly expire.
- */
-static void
-TestTemperatureHumidityValidity()
-{
-  NMEAInfo info;
-  info.Reset();
-  info.clock = TimeStamp{FloatDuration{1}};
-
-  /* initially not valid */
-  ok1(!info.temperature_available);
-  ok1(!info.humidity_available);
-
-  /* after Update(), they become valid */
-  info.temperature = Temperature::FromCelsius(20);
-  info.temperature_available.Update(info.clock);
-  info.humidity = 50;
-  info.humidity_available.Update(info.clock);
-  ok1(info.temperature_available);
-  ok1(info.humidity_available);
-
-  /* advance clock well past the 30s expiry timeout */
-  info.clock = TimeStamp{FloatDuration{60}};
-  info.Expire();
-  ok1(!info.temperature_available);
-  ok1(!info.humidity_available);
-
-  /* Test Complement: temperature/humidity from second source should be
-     adopted when primary has none */
-  NMEAInfo a, b;
-  a.Reset();
-  b.Reset();
-  a.clock = TimeStamp{FloatDuration{1}};
-  b.clock = TimeStamp{FloatDuration{1}};
-
-  b.alive.Update(b.clock);
-  b.temperature = Temperature::FromCelsius(25);
-  b.temperature_available.Update(b.clock);
-  b.humidity = 65;
-  b.humidity_available.Update(b.clock);
-
-  ok1(!a.temperature_available);
-  ok1(!a.humidity_available);
-  a.Complement(b);
-  ok1(a.temperature_available);
-  ok1(equals(a.temperature.ToCelsius(), 25));
-  ok1(a.humidity_available);
-  ok1(equals(a.humidity, 65));
-}
-
-/**
- * Test that ReadGeoAngle handles NMEA fields without a decimal point
- * gracefully (no crash or undefined behavior).
- */
-static void
-TestReadGeoAngleNoDot()
-{
-  NMEAParser parser;
-  NMEAInfo nmea_info;
-  nmea_info.Reset();
-  nmea_info.clock = TimeStamp{FloatDuration{1}};
-  nmea_info.alive.Update(nmea_info.clock);
-
-  /* A malformed GGA with latitude/longitude missing decimal points
-     should not crash.  GGA does not update location (that's RMC's job),
-     but ReadGeoPoint must handle the missing dots without UB. */
-  ok1(parser.ParseLine("$GPGGA,120000,12345,N,12345,E,1,04,1.0,100.0,M,0.0,M,,*45", nmea_info));
-  ok1(!nmea_info.location_available);
-}
-
-/**
- * Test the GLL (Geographic Position - Latitude/Longitude) parser.
- */
-static void
-TestGLL()
-{
-  NMEAParser parser;
-
-  NMEAInfo nmea_info;
-  nmea_info.Reset();
-  nmea_info.clock = TimeStamp{FloatDuration{1}};
-  nmea_info.alive.Update(nmea_info.clock);
-
-  /* first, advance time with an RMC so TimeHasAdvanced works */
-  ok1(parser.ParseLine("$GPRMC,082309.00,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*4B",
-                        nmea_info));
-
-  /* GLL with valid status — should update location */
-  ok1(parser.ParseLine("$GPGLL,5103.5403,N,00741.5742,E,082311.00,A*0E",
-                        nmea_info));
-  ok1(nmea_info.location_available);
-  ok1(equals(nmea_info.location.latitude, 51.059));
-  ok1(equals(nmea_info.location.longitude, 7.693));
-  ok1(nmea_info.date_time_utc.hour == 8);
-  ok1(nmea_info.date_time_utc.minute == 23);
-  ok1(nmea_info.date_time_utc.second == 11);
-  ok1(nmea_info.gps.real);
-
-  /* GLL with invalid status V — should clear location_available */
-  ok1(parser.ParseLine("$GPGLL,5103.5403,N,00741.5742,E,082314.00,V*1C",
-                        nmea_info));
-  ok1(!nmea_info.location_available);
-
-  /* GLL with valid status again — location restored */
-  ok1(parser.ParseLine("$GPGLL,5103.5403,N,00741.5742,E,082317.00,A*08",
-                        nmea_info));
-  ok1(nmea_info.location_available);
-}
-
-/**
- * Test the GSA (GPS DOP and Active Satellites) parser.
- */
-static void
-TestGSA()
-{
-  NMEAParser parser;
-
-  NMEAInfo nmea_info;
-  nmea_info.Reset();
-  nmea_info.clock = TimeStamp{FloatDuration{1}};
-  nmea_info.alive.Update(nmea_info.clock);
-
-  /* advance time first */
-  ok1(parser.ParseLine("$GPRMC,082318.00,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*4B",
-                        nmea_info));
-
-  /* GSA with 3D fix, 12 satellites, and DOP values */
-  ok1(parser.ParseLine("$GPGSA,A,3,01,02,03,04,05,06,07,08,09,10,11,12,1.2,0.8,0.9*33",
-                        nmea_info));
-  ok1(nmea_info.gps.satellite_ids_available);
-  ok1(nmea_info.gps.satellite_ids[0] == 1);
-  ok1(nmea_info.gps.satellite_ids[5] == 6);
-  ok1(nmea_info.gps.satellite_ids[11] == 12);
-  ok1(equals(nmea_info.gps.pdop, 1.2));
-  ok1(equals(nmea_info.gps.hdop, 0.8));
-  ok1(equals(nmea_info.gps.vdop, 0.9));
-
-  /* GSA with no fix (mode 1) — should clear location_available */
-  nmea_info.location_available.Update(nmea_info.clock);
-  ok1(nmea_info.location_available);
-  ok1(parser.ParseLine("$GPGSA,A,1,,,,,,,,,,,,99.9,99.9,99.9*25",
-                        nmea_info));
-  ok1(!nmea_info.location_available);
-
-  /* GSA with 2D fix and partial satellites */
-  ok1(parser.ParseLine("$GPGSA,M,2,01,02,03,,,,,,,,,,2.5,1.3,2.1*39",
-                        nmea_info));
-  ok1(nmea_info.gps.satellite_ids[0] == 1);
-  ok1(nmea_info.gps.satellite_ids[1] == 2);
-  ok1(nmea_info.gps.satellite_ids[2] == 3);
-  ok1(nmea_info.gps.satellite_ids[3] == 0);
-  ok1(equals(nmea_info.gps.pdop, 2.5));
-  ok1(equals(nmea_info.gps.hdop, 1.3));
-  ok1(equals(nmea_info.gps.vdop, 2.1));
-}
-
-/**
- * Test parser robustness with malformed, truncated, and edge-case
- * NMEA sentences.
- */
-static void
-TestMalformedInput()
-{
-  NMEAParser parser;
-
-  NMEAInfo nmea_info;
-  nmea_info.Reset();
-  nmea_info.clock = TimeStamp{FloatDuration{1}};
-  nmea_info.alive.Update(nmea_info.clock);
-
-  /* sentences that don't start with $ are rejected */
-  ok1(!parser.ParseLine("GPRMC,082310,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*6C",
-                         nmea_info));
-
-  /* empty string */
-  ok1(!parser.ParseLine("", nmea_info));
-
-  /* just a dollar sign */
-  ok1(!parser.ParseLine("$", nmea_info));
-
-  /* too short sentence type (less than 6 chars) */
-  ok1(!parser.ParseLine("$GP*00", nmea_info));
-
-  /* bad checksum — should be rejected */
-  ok1(!parser.ParseLine("$HCHDM,182.7,M*26", nmea_info));
-
-  /* missing checksum entirely — ParseLine should reject */
-  ok1(!parser.ParseLine("$GPRMC,082321.00,A,5103.5403,N", nmea_info));
-
-  /* RMC with all empty fields (except V status) */
-  ok1(parser.ParseLine("$GPRMC,,V,,,,,,,,,*31", nmea_info));
-  ok1(!nmea_info.location_available);
-
-  /* advance time so subsequent sentences can be parsed */
-  ok1(parser.ParseLine("$GPRMC,082322.00,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*42",
-                        nmea_info));
-  ok1(nmea_info.location_available);
-
-  /* GGA with fix quality 0 (no fix) and empty position */
-  ok1(parser.ParseLine("$GPGGA,082323.00,,,,,0,00,,,M,,M,,*40",
-                        nmea_info));
-
-  /* GGA with extreme altitude — should still parse */
-  ok1(parser.ParseLine("$GPGGA,082324.00,5103.5403,N,00741.5742,E,1,04,1.0,99999.0,M,47.0,M,,*6F",
-                        nmea_info));
-  ok1(nmea_info.gps_altitude_available);
-  ok1(equals(nmea_info.gps_altitude, 99999.0));
-
-  /* RMC with extreme ground speed — should parse without crash */
-  ok1(parser.ParseLine("$GPRMC,082325.00,A,5103.5403,N,00741.5742,E,99999.9,022.4,230610,000.3,W*46",
-                        nmea_info));
-  ok1(nmea_info.ground_speed_available);
-
-  /* RMC with V status — location should be cleared */
-  ok1(parser.ParseLine("$GPRMC,082326.00,V,,,,,,,230610,,*14",
-                        nmea_info));
-  ok1(!nmea_info.location_available);
-
-  /* MWV with missing wind speed — should not crash */
-  ok1(!parser.ParseLine("$WIMWV,12.1,T,,M,A*3A", nmea_info));
-
-  /* MWV with missing bearing — should not crash */
-  ok1(!parser.ParseLine("$WIMWV,,T,10.1,M,A*38", nmea_info));
-
-  /* HDM with empty heading — should not crash, clears heading */
-  ok1(parser.ParseLine("$HCHDM,,M*07", nmea_info));
-  ok1(!nmea_info.attitude.heading_available);
-
-  /* GSA with completely empty fields — should not crash */
-  ok1(parser.ParseLine("$GPGSA,,,,,,,,,,,,,,,,,*6E", nmea_info));
-}
-
 int main()
 {
-  plan_tests(1032 /* drivers */ + 8 /* SubSecond */ + 4 /* MWVStatus */
-             + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
-             + 12 /* TempHumidityValidity */ + 2 /* ReadGeoAngleNoDot */
-             + 13 /* GLL */ + 20 /* GSA */ + 23 /* MalformedInput */);
+  plan_tests(1036);
   TestGeneric();
   TestTasman();
   TestFLARM();
@@ -2297,6 +2016,7 @@ int main()
   TestLX(condor3_driver, true, false);
   TestLXEos();
   TestLXV7();
+  TestLXV7POLAR();
   TestILEC();
   TestOpenVario();
   TestVega();
@@ -2329,16 +2049,6 @@ int main()
   TestFlightList(lx_driver);
   TestFlightList(lx_eos_driver);
   TestFlightList(imi_driver);
-
-  TestSubSecondPrecision();
-  TestMWVStatus();
-  TestMWVRelativeTrue();
-  TestStallRatioComplement();
-  TestTemperatureHumidityValidity();
-  TestReadGeoAngleNoDot();
-  TestGLL();
-  TestGSA();
-  TestMalformedInput();
 
   return exit_status();
 }

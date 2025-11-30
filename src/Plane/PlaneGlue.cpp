@@ -19,9 +19,14 @@ PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile) noexcept
   {
     auto plane_path = profile.GetPath("PlanePath");
     if (plane_path != nullptr &&
-        PlaneGlue::ReadFile(plane, plane_path))
+        PlaneGlue::ReadFile(plane, plane_path)) {
+      plane.plane_profile_active = true;
       return;
+    }
   }
+  
+  /* No plane profile file loaded - default plane is active */
+  plane.plane_profile_active = false;
 
   /* the following is just here to load a pre-6.7 profile */
 

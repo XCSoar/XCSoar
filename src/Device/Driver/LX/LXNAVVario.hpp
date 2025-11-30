@@ -40,14 +40,14 @@ namespace LXNAVVario {
    * - PLXVS every 5 seconds
    * - LXWP0 every second
    * - LXWP1 every 60 seconds
-   * - LXWP2 every 30 seconds
+   * - LXWP2 every 5 seconds (contains MC, ballast, bugs - more frequent for better sync)
    * - LXWP3 disabled (we don't parse it)
    * - LXWP5 disabled (we don't parse it)
    */
   static inline void
   SetupNMEA(Port &port, OperationEnvironment &env)
   {
-    PortWriteNMEA(port, "PLXV0,NMEARATE,W,2,5,1,60,30,0,0", env);
+    PortWriteNMEA(port, "PLXV0,NMEARATE,W,2,5,1,60,5,0,0", env);
   }
 
   /**
@@ -132,5 +132,33 @@ namespace LXNAVVario {
     const char *sentence = "PFLAI,PILOTEVENT";
 
     PortWriteNMEA(port, sentence, env);
+  }
+
+  /**
+   * Set only the pilot weight in POLAR command, leaving all other fields empty
+   * @param pilot_weight crew mass (kg)
+   */
+  static inline void
+  SetPilotWeight(Port &port, OperationEnvironment &env, double pilot_weight)
+  {
+    char buffer[256];
+    /* POLAR format: PLXV0,POLAR,W,<a>,<b>,<c>,<polar load>,<polar weight>,<max weight>,<empty weight>,<pilot weight>,<name>,<stall> */
+    /* Leave all fields empty except pilot_weight (position 10: after empty_weight) */
+    sprintf(buffer, "PLXV0,POLAR,W,,,,,,,,%.2f,,", pilot_weight);
+    PortWriteNMEA(port, buffer, env);
+  }
+
+  /**
+   * Set only the empty weight in POLAR command, leaving all other fields empty
+   * @param empty_weight empty mass (kg)
+   */
+  static inline void
+  SetEmptyWeight(Port &port, OperationEnvironment &env, double empty_weight)
+  {
+    char buffer[256];
+    /* POLAR format: PLXV0,POLAR,W,<a>,<b>,<c>,<polar load>,<polar weight>,<max weight>,<empty weight>,<pilot weight>,<name>,<stall> */
+    /* Leave all fields empty except empty_weight (position 9: after max_weight, before pilot_weight) */
+    sprintf(buffer, "PLXV0,POLAR,W,,,,,,,%.2f,,,", empty_weight);
+    PortWriteNMEA(port, buffer, env);
   }
 }

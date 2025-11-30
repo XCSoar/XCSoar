@@ -45,6 +45,18 @@ AbstractDevice::PutBallast([[maybe_unused]] double fraction, [[maybe_unused]] do
 }
 
 bool
+AbstractDevice::PutCrewMass([[maybe_unused]] double crew_mass, [[maybe_unused]] OperationEnvironment &env)
+{
+  return true;
+}
+
+bool
+AbstractDevice::PutEmptyMass([[maybe_unused]] double empty_mass, [[maybe_unused]] OperationEnvironment &env)
+{
+  return true;
+}
+
+bool
 AbstractDevice::PutQNH([[maybe_unused]] const AtmosphericPressure &pres,
                        [[maybe_unused]] OperationEnvironment &env)
 {

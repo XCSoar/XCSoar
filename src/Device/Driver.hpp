@@ -81,6 +81,22 @@ public:
                           OperationEnvironment &env) = 0;
 
   /**
+   * Send the new crew mass (pilot weight) to the device.
+   *
+   * @param crew_mass the new crew mass value [kg]
+   * @return true on success
+   */
+  virtual bool PutCrewMass(double crew_mass, OperationEnvironment &env) = 0;
+
+  /**
+   * Send the new empty mass (empty weight) to the device.
+   *
+   * @param empty_mass the new empty mass value [kg]
+   * @return true on success
+   */
+  virtual bool PutEmptyMass(double empty_mass, OperationEnvironment &env) = 0;
+
+  /**
    * Send the new QNH value to the device.
    *
    * @param pressure the new QNH
@@ -266,6 +282,8 @@ public:
   bool PutBugs(double bugs, OperationEnvironment &env) override;
   bool PutBallast(double fraction, double overload,
                   OperationEnvironment &env) override;
+  bool PutCrewMass(double crew_mass, OperationEnvironment &env) override;
+  bool PutEmptyMass(double empty_mass, OperationEnvironment &env) override;
   bool PutQNH(const AtmosphericPressure &pres,
               OperationEnvironment &env) override;
   bool PutElevation(int elevation, OperationEnvironment &env) override;

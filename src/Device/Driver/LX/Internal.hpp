@@ -11,6 +11,7 @@
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Info.hpp"
 #include "LogFile.hpp"
+#include "time/PeriodClock.hpp"
 
 #include <atomic>
 #include <cstdint>
@@ -99,12 +100,8 @@ class LXDevice: public AbstractDevice
   bool mc_requested = false;
 
   /**
-   * Has MC been sent to the device on startup?
-   */
-  bool mc_sent = false;
-
-  /**
-   * Last MC value sent to the device. Used to detect feedback loops.
+   * Last MC value sent to the device. Used to avoid re-sending unchanged values
+   * and to detect echoes from the device.
    */
   std::optional<double> last_sent_mc;
 
@@ -114,24 +111,60 @@ class LXDevice: public AbstractDevice
   bool ballast_requested = false;
 
   /**
-   * Has ballast been sent to the device on startup?
-   */
-  bool ballast_sent = false;
-
-  /**
    * Last ballast overload value sent to the device. Used to detect feedback loops.
    */
   std::optional<double> last_sent_ballast_overload;
 
   /**
+   * Last crew mass value when ballast was sent. Used to detect crew weight changes.
+   */
+  std::optional<double> last_sent_crew_mass;
+
+  /**
+   * Last empty mass value sent to the device. Used to detect feedback loops.
+   */
+  std::optional<double> last_sent_empty_mass;
+
+  /**
+   * Tracked polar values to detect when plane profile changes.
+   */
+  struct TrackedPolar {
+    double a = 0, b = 0, c = 0;
+    double reference_mass = 0;
+    double empty_mass = 0;
+    double crew_mass = 0;
+    bool valid = false;
+  } tracked_polar;
+
+
+  /**
+   * Full polar data received from device via POLAR command.
+   * Used when no plane profile is active.
+   */
+  struct DevicePolar {
+    double a = 0, b = 0, c = 0;
+    double polar_load = 0;
+    double polar_weight = 0;
+    double max_weight = 0;
+    double empty_weight = 0;
+    double pilot_weight = 0;
+    bool valid = false;
+  } device_polar;
+
+  /**
+   * Has POLAR been requested from the device?
+   */
+  bool polar_requested = false;
+
+  /**
+   * Clock to track when POLAR was last requested for periodic polling.
+   */
+  PeriodClock last_polar_request;
+
+  /**
    * Has bugs been requested from the device?
    */
   bool bugs_requested = false;
-
-  /**
-   * Has bugs been sent to the device on startup?
-   */
-  bool bugs_sent = false;
 
   /**
    * Last bugs value sent to the device. Used to detect feedback loops.
@@ -331,6 +364,8 @@ public:
                   OperationEnvironment &env) override;
   bool PutBugs(double bugs, OperationEnvironment &env) override;
   bool PutMacCready(double mc, OperationEnvironment &env) override;
+  bool PutCrewMass(double crew_mass, OperationEnvironment &env) override;
+  bool PutEmptyMass(double empty_mass, OperationEnvironment &env) override;
   bool PutQNH(const AtmosphericPressure &pres,
               OperationEnvironment &env) override;
 
@@ -382,25 +417,56 @@ private:
   }
 
   /**
+   * Check if pilot weight from device is an echo of what we sent.
+   */
+  [[gnu::pure]]
+  bool IsCrewWeightEcho(const ExternalSettings &settings) const noexcept {
+    if (!last_sent_crew_mass.has_value())
+      return false;
+    return settings.ComparePolarPilotWeight(*last_sent_crew_mass);
+  }
+
+  /**
+   * Check if empty weight from device is an echo of what we sent.
+   */
+  [[gnu::pure]]
+  bool IsEmptyWeightEcho(const ExternalSettings &settings) const noexcept {
+    if (!last_sent_empty_mass.has_value())
+      return false;
+    return settings.ComparePolarEmptyWeight(*last_sent_empty_mass);
+  }
+
+  /**
    * Handle MC synchronization with the device.
    */
   void SyncMacCready(const MoreData &basic,
                      const DerivedInfo &calculated,
-                     OperationEnvironment &env) noexcept;
+                     OperationEnvironment &env,
+                     bool plane_profile_active) noexcept;
 
   /**
    * Handle Ballast synchronization with the device.
    */
   void SyncBallast(const MoreData &basic,
                    const DerivedInfo &calculated,
-                   OperationEnvironment &env) noexcept;
+                   OperationEnvironment &env,
+                   bool plane_profile_active) noexcept;
 
   /**
    * Handle Bugs synchronization with the device.
    */
   void SyncBugs(const MoreData &basic,
                 const DerivedInfo &calculated,
-                OperationEnvironment &env) noexcept;
+                OperationEnvironment &env,
+                bool plane_profile_active) noexcept;
+  void SyncCrewWeight(const MoreData &basic,
+                     const DerivedInfo &calculated,
+                     OperationEnvironment &env,
+                     bool plane_profile_active);
+  void SyncEmptyWeight(const MoreData &basic,
+                       const DerivedInfo &calculated,
+                       OperationEnvironment &env,
+                       bool plane_profile_active);
 
   bool ReadFlightList(RecordedFlightList &flight_list,
                       OperationEnvironment &env) override;

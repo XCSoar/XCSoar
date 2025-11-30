@@ -11,6 +11,7 @@
 #include "util/StringCompare.hxx"
 #include "Math/Util.hpp"
 #include "util/NumberParser.hpp"
+#include "LogFile.hpp"
 
 using std::string_view_literals::operator""sv;
 
@@ -100,17 +101,21 @@ LXWP2(NMEAInputLine &line, NMEAInfo &info)
   }
 
   // Ballast
-  if (line.ReadChecked(value))
+  if (line.ReadChecked(value)) {
     info.settings.ProvideBallastOverload(value, info.clock);
+  }
 
   // Bugs
   if (line.ReadChecked(value)) {
-    if (value <= 1.5 && value >= 1.0)
+    double bugs;
+    if (value <= 1.5 && value >= 1.0) {
       // LX160 (sw 3.04) reports bugs as 1.00, 1.05 or 1.10 (#2167)
-      info.settings.ProvideBugs(2 - value, info.clock);
-    else
+      bugs = 2 - value;
+    } else {
       // All other known LX devices report bugs as 0, 5, 10, 15, ...
-      info.settings.ProvideBugs((100 - value) / 100., info.clock);
+      bugs = (100 - value) / 100.;
+    }
+    info.settings.ProvideBugs(bugs, info.clock);
   }
 
   line.Skip(3);
@@ -166,10 +171,11 @@ PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings,
     return true;
 
   const auto type = line.ReadView();
+  
+  const auto value = line.Rest();
+
   if (!type.starts_with('W'))
     return true;
-
-  const auto value = line.Rest();
 
   const std::lock_guard<Mutex> lock(settings);
   settings.Set(std::string{name}, value);
@@ -192,6 +198,36 @@ PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings,
     double d = ParseDouble(value_str.c_str(), &endptr);
     if (endptr > value_str.c_str()) {
       info.settings.ProvideMacCready(d, info.clock);
+    }
+  }
+
+  /* Parse POLAR response to extract pilot weight and empty weight */
+  /* Note: Device sends "POL" not "POLAR" in the response */
+  if (name == "POLAR"sv || name == "POL"sv) {
+    /* POLAR format: PLXV0,POL,W,<a>,<b>,<c>,<polar load>,<polar weight>,<max weight>,<empty weight>,<pilot weight>,<name>,<stall> */
+    const std::string value_str{value};
+    NMEAInputLine polar_line{value_str.c_str()};
+    double a, b, c, polar_load, polar_weight, max_weight, empty_weight, pilot_weight;
+    if (polar_line.ReadChecked(a) &&
+        polar_line.ReadChecked(b) &&
+        polar_line.ReadChecked(c) &&
+        polar_line.ReadChecked(polar_load) &&
+        polar_line.ReadChecked(polar_weight) &&
+        polar_line.ReadChecked(max_weight) &&
+        polar_line.ReadChecked(empty_weight) &&
+        polar_line.ReadChecked(pilot_weight)) {
+      
+      /* Store POLAR values in blackboard (ExternalSettings) */
+      info.settings.ProvidePolarCoefficients(a, b, c, info.clock);
+      info.settings.ProvidePolarLoad(polar_load, info.clock);
+      info.settings.ProvidePolarReferenceMass(polar_weight, info.clock);
+      info.settings.ProvidePolarMaximumMass(max_weight, info.clock);
+      info.settings.ProvidePolarPilotWeight(pilot_weight, info.clock);
+      info.settings.ProvidePolarEmptyWeight(empty_weight, info.clock);
+      
+      /* Do not calculate or store max_ballast in LXNAV driver */
+    } else {
+      LogFmt("LXNAV: Failed to parse POLAR values from: {}", value);
     }
   }
 
