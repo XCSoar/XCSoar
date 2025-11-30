@@ -76,6 +76,8 @@ public:
   void PutBugs(double bugs, OperationEnvironment &env) noexcept;
   void PutBallast(double fraction, double overload,
                   OperationEnvironment &env) noexcept;
+  void PutCrewMass(double crew_mass, OperationEnvironment &env) noexcept;
+  void PutEmptyMass(double empty_mass, OperationEnvironment &env) noexcept;
   void PutVolume(unsigned volume, OperationEnvironment &env) noexcept;
   void PutPilotEvent(OperationEnvironment &env) noexcept;
   void PutActiveFrequency(RadioFrequency frequency, const TCHAR *name,

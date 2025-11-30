@@ -93,7 +93,7 @@ test_replay()
   TaskEventsPrint default_events(verbose);
   task_manager.SetTaskEvents(default_events);
 
-  glide_polar.SetBallast(1.0);
+  glide_polar.SetBallastFraction(1.0);
 
   task_manager.SetGlidePolar(glide_polar);
 

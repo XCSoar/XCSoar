@@ -544,6 +544,8 @@ public:
   bool PutBugs(double bugs, OperationEnvironment &env) noexcept;
   bool PutBallast(double fraction, double overload,
                   OperationEnvironment &env) noexcept;
+  bool PutCrewMass(double crew_mass, OperationEnvironment &env) noexcept;
+  bool PutEmptyMass(double empty_mass, OperationEnvironment &env) noexcept;
   bool PutVolume(unsigned volume, OperationEnvironment &env) noexcept;
   bool PutPilotEvent(OperationEnvironment &env) noexcept;
   bool PutActiveFrequency(RadioFrequency frequency,

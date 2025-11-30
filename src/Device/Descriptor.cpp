@@ -884,6 +884,58 @@ DeviceDescriptor::PutBallast(double fraction, double overload,
 }
 
 bool
+DeviceDescriptor::PutCrewMass(double crew_mass, OperationEnvironment &env) noexcept
+{
+  assert(InMainThread());
+
+  if (device == nullptr || !config.sync_to_device)
+    return true;
+
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  try {
+    const ScopeReturnDevice restore(*this, env);
+    if (!device->PutCrewMass(crew_mass, env))
+      return false;
+  } catch (OperationCancelled) {
+    return false;
+  } catch (...) {
+    LogError(std::current_exception(), "PutCrewMass() failed");
+    return false;
+  }
+
+  return true;
+}
+
+bool
+DeviceDescriptor::PutEmptyMass(double empty_mass, OperationEnvironment &env) noexcept
+{
+  assert(InMainThread());
+
+  if (device == nullptr || !config.sync_to_device)
+    return true;
+
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  try {
+    const ScopeReturnDevice restore(*this, env);
+    if (!device->PutEmptyMass(empty_mass, env))
+      return false;
+  } catch (OperationCancelled) {
+    return false;
+  } catch (...) {
+    LogError(std::current_exception(), "PutEmptyMass() failed");
+    return false;
+  }
+
+  return true;
+}
+
+bool
 DeviceDescriptor::PutVolume(unsigned volume,
                             OperationEnvironment &env) noexcept
 {
