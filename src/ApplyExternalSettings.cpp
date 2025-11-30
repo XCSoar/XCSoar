@@ -8,6 +8,7 @@
 #include "ActionInterface.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Math/Util.hpp"
+#include "LogFile.hpp"
 
 static bool
 BallastProcessTimer() noexcept
@@ -16,33 +17,22 @@ BallastProcessTimer() noexcept
 
   static Validity last_fraction, last_overload;
   const ExternalSettings &settings = CommonInterface::Basic().settings;
-  const Plane &plane = CommonInterface::GetComputerSettings().plane;
-  const GlidePolar &polar = CommonInterface::GetComputerSettings().polar.glide_polar_task;
 
   if (settings.ballast_fraction_available.Modified(last_fraction)) {
-    ActionInterface::SetBallast(settings.ballast_fraction, false);
+    using namespace CommonInterface;
+    GlidePolar &polar_mutable = SetComputerSettings().polar.glide_polar_task;
+    polar_mutable.SetBallastFraction(settings.ballast_fraction);
+    backend_components->SetTaskPolar(GetComputerSettings().polar);
     modified = true;
   }
 
   last_fraction = settings.ballast_fraction_available;
 
-  if (settings.ballast_overload_available.Modified(last_overload) &&
-      plane.max_ballast > 0) {
-    /* Calculate ballast fraction from overload:
-     * overload = (dry_mass + ballast_litres) / reference_mass
-     * ballast_litres = overload * reference_mass - dry_mass
-     * ballast_fraction = ballast_litres / max_ballast
-     */
-    const double total_mass_at_overload = 
-        settings.ballast_overload * plane.polar_shape.reference_mass;
-    const double dry_mass = polar.GetCrewMass() + plane.empty_mass;
-    const double ballast_litres = total_mass_at_overload - dry_mass;
-    const double ballast_fraction = ballast_litres / plane.max_ballast;
-    
-    /* Ballast fraction must be >= 0 (can't have negative water ballast).
-     * If overload results in negative ballast, set to 0. */
-    const double clamped_ballast = ballast_fraction >= 0 ? ballast_fraction : 0;
-    ActionInterface::SetBallast(clamped_ballast, false);
+  if (settings.ballast_overload_available.Modified(last_overload)) {
+    using namespace CommonInterface;
+    GlidePolar &polar_mutable = SetComputerSettings().polar.glide_polar_task;
+    polar_mutable.SetBallastOverload(settings.ballast_overload);
+    backend_components->SetTaskPolar(GetComputerSettings().polar);
     modified = true;
   }
 

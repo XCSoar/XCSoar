@@ -17,12 +17,13 @@ GlidePolar::GlidePolar(const double _mc, const double _bugs,
                        const double _ballast) noexcept
   :mc(_mc),
    bugs(_bugs),
-   ballast(_ballast),
+   ballast_litres(_ballast),
    cruise_efficiency(1),
    VbestLD(0),
    Vmax(75),
    Vmin(0),
    reference_polar(0.00157, -0.0734, 1.48),
+   max_ballast(0),
    ballast_ratio(0.3),
    reference_mass(300),
    empty_mass(reference_mass),
@@ -75,18 +76,48 @@ GlidePolar::SetBugs(const double clean) noexcept
 }
 
 void
-GlidePolar::SetBallast(const double bal) noexcept
-{
-  assert(bal >= 0);
-  SetBallastLitres(bal * ballast_ratio * reference_mass);
-}
-
-void
 GlidePolar::SetBallastLitres(const double litres) noexcept
 {
   assert(litres >= 0);
-  ballast = litres;
+  ballast_litres = litres;
   Update();
+}
+
+void
+GlidePolar::SetBallastFraction(const double fraction) noexcept
+{
+  assert(fraction >= 0 && fraction <= 1);
+  ballast_litres = fraction * max_ballast;
+  Update();
+}
+
+void
+GlidePolar::SetBallastOverload(const double overload) noexcept
+{
+  assert(overload > 0);
+  const double total_mass = overload * GetReferenceMass();
+  ballast_litres = total_mass - GetDryMass();
+  if (ballast_litres < 0)
+    ballast_litres = 0;
+  Update();
+}
+
+double
+GlidePolar::GetBallastFraction() const noexcept
+{
+  if (max_ballast <= 0)
+    return 0;
+  const double fraction = GetBallastLitres() / max_ballast;
+  return fraction > 1.0 ? 1.0 : fraction;
+}
+
+double
+GlidePolar::GetBallastOverload() const noexcept
+{
+  const auto ref = GetReferenceMass();
+  if (ref <= 0)
+    return 1.0;
+  return GetTotalMass() / ref;
 }
 
 void

@@ -30,12 +30,25 @@ PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile) noexcept
   plane.type.SetUTF8(profile.Get(ProfileKeys::AircraftType, ""));
   plane.polar_name.SetUTF8(profile.Get(ProfileKeys::PolarName, ""));
 
-  PolarInfo polar = PolarGlue::LoadFromProfile();
-  plane.polar_shape = polar.shape;
-  plane.max_ballast = polar.max_ballast;
-  plane.wing_area = polar.wing_area;
+  /* Don't load default polar when no plane file is found - wait for device POLAR data instead */
+  /* Only load polar from profile if explicitly configured (for backward compatibility) */
+  PolarInfo polar;
+  bool polar_loaded = false;
+  if (PolarGlue::LoadFromProfile(polar) && polar.IsValid()) {
+    /* User has explicitly configured a polar in profile, use it */
+    plane.polar_shape = polar.shape;
+    plane.max_ballast = polar.max_ballast;
+    plane.wing_area = polar.wing_area;
+    polar_loaded = true;
+  } else {
+    /* No plane file and no valid polar in profile - leave plane structure empty
+     * so device POLAR data can be applied instead of default polar */
+    plane.polar_shape.reference_mass = 0;
+    plane.max_ballast = 0;
+    plane.wing_area = 0;
+  }
 
-  if (polar.v_no > 0)
+  if (polar_loaded && polar.v_no > 0)
     plane.max_speed = polar.v_no;
   else if (!profile.Get(ProfileKeys::SafteySpeed, plane.max_speed))
     plane.max_speed = 0;
@@ -60,6 +73,11 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
 {
   settings.contest.handicap = plane.handicap;
 
+  /* Don't apply polar if no plane profile is loaded (reference_mass == 0)
+   * - wait for device POLAR data instead */
+  if (plane.polar_shape.reference_mass <= 0)
+    return;
+
   PolarCoefficients pc = plane.polar_shape.CalculateCoefficients();
   if (!pc.IsValid())
     return;
@@ -70,8 +88,8 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
   gp.SetReferenceMass(plane.polar_shape.reference_mass, false);
   gp.SetEmptyMass(plane.empty_mass, false);
 
-  // Ballast weight
-  gp.SetBallastRatio(plane.max_ballast / plane.polar_shape.reference_mass);
+  // Ballast weight - set max_ballast directly (configured value)
+  gp.SetMaxBallast(plane.max_ballast, false);
 
   gp.SetWingArea(plane.wing_area);
 

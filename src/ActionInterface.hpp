@@ -20,7 +20,7 @@ using namespace CommonInterface;
  * @param to_devices send the new settings to all devices?
  */
 void
-SetBallast(double ballast, bool to_devices=true) noexcept;
+SetBallast(double ballast_litres, bool to_devices=true) noexcept;
 
 /**
  * Configure a new Bugs setting in #ComputerSettings, and
@@ -39,6 +39,25 @@ SetBugs(double mc, bool to_devices=true) noexcept;
  */
 void
 SetMacCready(double mc, bool to_devices=true) noexcept;
+
+/**
+ * Configure a new Crew Mass setting in #ComputerSettings, and
+ * forward it to all XCSoar modules that want it.
+ *
+ * @param crew_mass the new crew mass value [kg]
+ * @param to_devices send the new settings to all devices?
+ */
+void
+SetCrewMass(double crew_mass, bool to_devices=true) noexcept;
+
+/**
+ * Set the empty mass (empty weight) of the glider.
+ *
+ * @param empty_mass the new empty mass value [kg]
+ * @param to_devices send the new settings to all devices?
+ */
+void
+SetEmptyMass(double empty_mass, bool to_devices=true) noexcept;
 
 /**
  * Configure a new MacCready setting in #ComputerSettings, and
