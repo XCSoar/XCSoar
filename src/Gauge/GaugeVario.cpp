@@ -675,7 +675,9 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
 inline void
 GaugeVario::RenderBallast(Canvas &canvas) noexcept
 {
-  int ballast = iround(GetGlidePolar().GetBallast() * 100);
+  const GlidePolar &polar = GetGlidePolar();
+  const double ballast_fraction = polar.GetBallastFraction();
+  int ballast = iround(ballast_fraction * 100);
 
   if (!IsPersistent() || ballast != last_ballast) {
     // ballast hase been changed
