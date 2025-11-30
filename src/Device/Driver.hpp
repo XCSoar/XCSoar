@@ -83,6 +83,22 @@ public:
                           OperationEnvironment &env) = 0;
 
   /**
+   * Send the new crew mass (pilot weight) to the device.
+   *
+   * @param crew_mass the new crew mass value [kg]
+   * @return true on success
+   */
+  virtual bool PutCrewMass(double crew_mass, OperationEnvironment &env) = 0;
+
+  /**
+   * Send the new empty mass (empty weight) to the device.
+   *
+   * @param empty_mass the new empty mass value [kg]
+   * @return true on success
+   */
+  virtual bool PutEmptyMass(double empty_mass, OperationEnvironment &env) = 0;
+
+  /**
    * Send the new QNH value to the device.
    *
    * @param pressure the new QNH
@@ -91,6 +107,22 @@ public:
    */
   virtual bool PutQNH(const AtmosphericPressure &pressure,
                       OperationEnvironment &env) = 0;
+
+  /**
+   * Send the elevation value to the device.
+   *
+   * @param elevation elevation in meters
+   * @return true on success
+   */
+  virtual bool PutElevation(int elevation, OperationEnvironment &env) = 0;
+
+  /**
+   * Request the elevation value from the device.
+   * The device should respond by providing the elevation via ExternalSettings.
+   *
+   * @return true on success
+   */
+  virtual bool RequestElevation(OperationEnvironment &env) = 0;
 
   /**
    * Set the radio volume.
@@ -244,8 +276,12 @@ public:
   bool PutBugs(double bugs, OperationEnvironment &env) override;
   bool PutBallast(double fraction, double overload,
                   OperationEnvironment &env) override;
+  bool PutCrewMass(double crew_mass, OperationEnvironment &env) override;
+  bool PutEmptyMass(double empty_mass, OperationEnvironment &env) override;
   bool PutQNH(const AtmosphericPressure &pres,
               OperationEnvironment &env) override;
+  bool PutElevation(int elevation, OperationEnvironment &env) override;
+  bool RequestElevation(OperationEnvironment &env) override;
   bool PutVolume(unsigned volume, OperationEnvironment &env) override;
   bool PutPilotEvent(OperationEnvironment &env) override;
   bool PutActiveFrequency(RadioFrequency frequency,

@@ -9,6 +9,9 @@
 #include "Units/System.hpp"
 #include "util/Macros.hpp"
 #include "util/StringCompare.hxx"
+#include "Math/Util.hpp"
+#include "util/NumberParser.hpp"
+#include "LogFile.hpp"
 
 using std::string_view_literals::operator""sv;
 
@@ -74,6 +77,7 @@ LXDevice::LXWP1(NMEAInputLine &line, DeviceInfo &device)
   device.serial = line.ReadView();
   device.software_version = line.ReadView();
   device.hardware_version = line.ReadView();
+  device.license = line.ReadView();
 }
 
 static bool
@@ -92,21 +96,29 @@ LXWP2(NMEAInputLine &line, NMEAInfo &info)
 
   double value;
   // MacCready value
-  if (line.ReadChecked(value))
+  if (line.ReadChecked(value)) {
+    LogFmt("LXNAV: MC received from device via LXWP2: {:.2f} m/s", value);
     info.settings.ProvideMacCready(value, info.clock);
+  }
 
   // Ballast
-  if (line.ReadChecked(value))
+  if (line.ReadChecked(value)) {
+    LogFmt("LXNAV: Ballast overload received from device via LXWP2: {:.3f}", value);
     info.settings.ProvideBallastOverload(value, info.clock);
+  }
 
   // Bugs
   if (line.ReadChecked(value)) {
-    if (value <= 1.5 && value >= 1.0)
+    double bugs;
+    if (value <= 1.5 && value >= 1.0) {
       // LX160 (sw 3.04) reports bugs as 1.00, 1.05 or 1.10 (#2167)
-      info.settings.ProvideBugs(2 - value, info.clock);
-    else
+      bugs = 2 - value;
+    } else {
       // All other known LX devices report bugs as 0, 5, 10, 15, ...
-      info.settings.ProvideBugs((100 - value) / 100., info.clock);
+      bugs = (100 - value) / 100.;
+    }
+    LogFmt("LXNAV: Bugs received from device via LXWP2: raw={:.2f}, converted={:.3f}", value, bugs);
+    info.settings.ProvideBugs(bugs, info.clock);
   }
 
   line.Skip(3);
@@ -154,20 +166,89 @@ LXWP3(NMEAInputLine &line, NMEAInfo &info)
  * Parse the $PLXV0 sentence (LXNAV sVarios (including V7)).
  */
 static bool
-PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings)
+PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings,
+      NMEAInfo &info)
 {
   const auto name = line.ReadView();
   if (name.empty())
     return true;
 
   const auto type = line.ReadView();
-  if (!type.starts_with('W'))
-    return true;
-
+  
+  /* Log all PLXV0 sentences for debugging */
   const auto value = line.Rest();
+  if (name == "POLAR"sv || name == "MC"sv || name == "ELEVATION"sv) {
+    LogFmt("LXNAV: PLXV0 received - name='{}', type='{}', value='{}'", name, type, value);
+  }
+  
+  if (!type.starts_with('W')) {
+    /* Log non-W type PLXV0 sentences for debugging */
+    if (name == "POLAR"sv) {
+      LogFmt("LXNAV: POLAR received with type '{}' (expected 'W'), ignoring", type);
+    }
+    return true;
+  }
 
   const std::lock_guard<Mutex> lock(settings);
   settings.Set(std::string{name}, value);
+
+  /* Provide elevation to ExternalSettings when received from device */
+  if (name == "ELEVATION"sv) {
+    const std::string value_str{value};
+    char *endptr;
+    double d = ParseDouble(value_str.c_str(), &endptr);
+    if (endptr > value_str.c_str()) {
+      int elevation = iround(d);
+      info.settings.ProvideElevation(elevation, info.clock);
+    }
+  }
+
+  /* Provide MC to ExternalSettings when received from device */
+  if (name == "MC"sv) {
+    const std::string value_str{value};
+    char *endptr;
+    double d = ParseDouble(value_str.c_str(), &endptr);
+    if (endptr > value_str.c_str()) {
+      LogFmt("LXNAV: MC received from device via PLXV0: {:.2f} m/s", d);
+      info.settings.ProvideMacCready(d, info.clock);
+    }
+  }
+
+  /* Parse POLAR response to extract pilot weight and empty weight */
+  /* Note: Device sends "POL" not "POLAR" in the response */
+  if (name == "POLAR"sv || name == "POL"sv) {
+    /* POLAR format: PLXV0,POL,W,<a>,<b>,<c>,<polar load>,<polar weight>,<max weight>,<empty weight>,<pilot weight>,<name>,<stall> */
+    LogFmt("LXNAV: POLAR received from device (name='{}'): {}", name, value);
+    const std::string value_str{value};
+    NMEAInputLine polar_line{value_str.c_str()};
+    double a, b, c, polar_load, polar_weight, max_weight, empty_weight, pilot_weight;
+    if (polar_line.ReadChecked(a) &&
+        polar_line.ReadChecked(b) &&
+        polar_line.ReadChecked(c) &&
+        polar_line.ReadChecked(polar_load) &&
+        polar_line.ReadChecked(polar_weight) &&
+        polar_line.ReadChecked(max_weight) &&
+        polar_line.ReadChecked(empty_weight) &&
+        polar_line.ReadChecked(pilot_weight)) {
+      LogFmt("LXNAV: POLAR parsed - a={:.3f}, b={:.3f}, c={:.3f}, polar_load={:.2f}, polar_weight={:.2f}, max_weight={:.2f}, empty_weight={:.2f}, pilot_weight={:.2f}",
+             a, b, c, polar_load, polar_weight, max_weight, empty_weight, pilot_weight);
+      
+      /* Store POLAR values in blackboard (ExternalSettings) */
+      info.settings.ProvidePolarCoefficients(a, b, c, info.clock);
+      info.settings.ProvidePolarLoad(polar_load, info.clock);
+      info.settings.ProvidePolarReferenceMass(polar_weight, info.clock);
+      info.settings.ProvidePolarMaximumMass(max_weight, info.clock);
+      info.settings.ProvidePolarPilotWeight(pilot_weight, info.clock);
+      info.settings.ProvidePolarEmptyWeight(empty_weight, info.clock);
+      
+      LogFmt("LXNAV: Pilot weight received from device via POLAR: {:.2f} kg", pilot_weight);
+      LogFmt("LXNAV: Empty weight received from device via POLAR: {:.2f} kg", empty_weight);
+      
+      /* Do not calculate or store max_ballast in LXNAV driver */
+    } else {
+      LogFmt("LXNAV: Failed to parse POLAR values from: {}", value);
+    }
+  }
 
   return true;
 }
@@ -293,6 +374,26 @@ PLXVS(NMEAInputLine &line, NMEAInfo &info)
     info.voltage_available.Update(info.clock);
   }
 
+  /* IGC press altitude field - pressure altitude used by device for IGC recording */
+  double igc_press_altitude;
+  if (line.ReadChecked(igc_press_altitude)) {
+    info.igc_pressure_altitude = igc_press_altitude;
+    info.igc_pressure_altitude_available.Update(info.clock);
+  }
+
+  /* Parse FlapPosition field (added in protocol v1.03) */
+  const auto flap_str = line.ReadView();
+  if (!flap_str.empty()) {
+    if (flap_str == "L"sv)
+      info.switch_state.flap_position = SwitchState::FlapPosition::LANDING;
+    else
+      /* Other flap position values not yet defined in protocol documentation */
+      info.switch_state.flap_position = SwitchState::FlapPosition::UNKNOWN;
+  }
+
+  /* VP (Vario Priority) flag is available but not currently used */
+  line.Skip();
+
   return true;
 }
 
@@ -325,16 +426,21 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
     const bool saw_lx16xx = device_info.product.equals("1606") ||
                              device_info.product.equals("1600");
 
+    const bool was_vario = IsLXNAVVario();
+    const bool is_vario_now = saw_v7 || saw_sVario;
+
     if (mode == Mode::PASS_THROUGH) {
       /* in pass-through mode, we should never clear the V7 flag,
          because the V7 is still there, even though it's "hidden"
          currently */
+      const std::lock_guard lock{mutex};
       is_v7 |= saw_v7;
       is_sVario |= saw_sVario;
       is_nano |= saw_nano;
       is_lx16xx |= saw_lx16xx;
       is_forwarded_nano = saw_nano;
     } else {
+      const std::lock_guard lock{mutex};
       is_v7 = saw_v7;
       is_sVario = saw_sVario;
       is_nano = saw_nano;
@@ -343,6 +449,12 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
     if (saw_v7 || saw_sVario || saw_nano || saw_lx16xx)
       is_colibri = false;
+
+    /* Mark vario as just detected if it wasn't detected before */
+    if (!was_vario && is_vario_now) {
+      const std::lock_guard lock{mutex};
+      vario_just_detected = true;
+    }
 
     return true;
 
@@ -354,7 +466,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   else if (type == "$PLXV0"sv) {
     is_colibri = false;
-    return PLXV0(line, lxnav_vario_settings);
+    return PLXV0(line, lxnav_vario_settings, info);
 
   } else if (type == "$PLXVC"sv) {
     is_colibri = false;
@@ -363,7 +475,15 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
                           info.secondary_device.product.equals("NANO3") ||
                           info.secondary_device.product.equals("NANO4");
 
-    LXDevice::IdDeviceByName(info.device.product);
+    const bool was_vario = IsLXNAVVario();
+    LXDevice::IdDeviceByName(info.device.product, info.device);
+    const bool is_vario_now = IsLXNAVVario();
+
+    /* Mark vario as just detected if it wasn't detected before */
+    if (!was_vario && is_vario_now) {
+      const std::lock_guard lock{mutex};
+      vario_just_detected = true;
+    }
 
     return true;
 

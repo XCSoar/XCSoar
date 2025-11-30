@@ -16,6 +16,7 @@
 #include "NMEA/Info.hpp"
 #include "thread/Mutex.hxx"
 #include "util/StringAPI.hxx"
+#include "util/StringCompare.hxx"
 #include "util/ConvertString.hpp"
 #include "util/Exception.hxx"
 #include "Logger/NMEALogger.hpp"
@@ -883,6 +884,58 @@ DeviceDescriptor::PutBallast(double fraction, double overload,
 }
 
 bool
+DeviceDescriptor::PutCrewMass(double crew_mass, OperationEnvironment &env) noexcept
+{
+  assert(InMainThread());
+
+  if (device == nullptr || !config.sync_to_device)
+    return true;
+
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  try {
+    const ScopeReturnDevice restore(*this, env);
+    if (!device->PutCrewMass(crew_mass, env))
+      return false;
+  } catch (OperationCancelled) {
+    return false;
+  } catch (...) {
+    LogError(std::current_exception(), "PutCrewMass() failed");
+    return false;
+  }
+
+  return true;
+}
+
+bool
+DeviceDescriptor::PutEmptyMass(double empty_mass, OperationEnvironment &env) noexcept
+{
+  assert(InMainThread());
+
+  if (device == nullptr || !config.sync_to_device)
+    return true;
+
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  try {
+    const ScopeReturnDevice restore(*this, env);
+    if (!device->PutEmptyMass(empty_mass, env))
+      return false;
+  } catch (OperationCancelled) {
+    return false;
+  } catch (...) {
+    LogError(std::current_exception(), "PutEmptyMass() failed");
+    return false;
+  }
+
+  return true;
+}
+
+bool
 DeviceDescriptor::PutVolume(unsigned volume,
                             OperationEnvironment &env) noexcept
 {
@@ -1033,6 +1086,58 @@ DeviceDescriptor::PutQNH(const AtmosphericPressure value,
 
   settings_sent.qnh = value;
   settings_sent.qnh_available.Update(GetClock());
+
+  return true;
+}
+
+bool
+DeviceDescriptor::PutElevation(int elevation, OperationEnvironment &env) noexcept
+{
+  assert(InMainThread());
+
+  if (device == nullptr || !config.sync_to_device)
+    return true;
+
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  try {
+    ScopeReturnDevice restore(*this, env);
+    if (!device->PutElevation(elevation, env))
+      return false;
+  } catch (OperationCancelled) {
+    return false;
+  } catch (...) {
+    LogError(std::current_exception(), "PutElevation() failed");
+    return false;
+  }
+
+  return true;
+}
+
+bool
+DeviceDescriptor::RequestElevation(OperationEnvironment &env) noexcept
+{
+  assert(InMainThread());
+
+  if (device == nullptr)
+    return true;
+
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  try {
+    ScopeReturnDevice restore(*this, env);
+    if (!device->RequestElevation(env))
+      return false;
+  } catch (OperationCancelled) {
+    return false;
+  } catch (...) {
+    LogError(std::current_exception(), "RequestElevation() failed");
+    return false;
+  }
 
   return true;
 }
@@ -1337,8 +1442,11 @@ DeviceDescriptor::DataReceived(std::span<const std::byte> s) noexcept
 bool
 DeviceDescriptor::LineReceived(const char *line) noexcept
 {
-  if (nmea_logger != nullptr)
-    nmea_logger->Log(line);
+  if (nmea_logger != nullptr) {
+    /* Skip logging high-frequency LXWP2 sentences */
+    if (!StringStartsWith(line, "$LXWP2"))
+      nmea_logger->Log(line);
+  }
 
   if (dispatcher != nullptr)
     dispatcher->LineReceived(line);

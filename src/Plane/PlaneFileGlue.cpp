@@ -136,9 +136,15 @@ PlaneGlue::ReadFile(Plane &plane, Path path) noexcept
 try {
   FileLineReaderA reader(path);
   KeyValueFileReader kvreader(reader);
-  return Read(plane, kvreader);
+  if (Read(plane, kvreader)) {
+    plane.plane_profile_active = true;
+    return true;
+  }
+  plane.plane_profile_active = false;
+  return false;
 } catch (...) {
   LogError(std::current_exception());
+  plane.plane_profile_active = false;
   return false;
 }
 

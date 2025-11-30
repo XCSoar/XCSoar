@@ -63,6 +63,37 @@ struct ExternalSettings {
   /** the volume of the device [0-100%] */
   unsigned volume;
 
+  Validity elevation_available;
+
+  /** the elevation setting [meters] */
+  int elevation;
+
+  /** POLAR data from device */
+  Validity polar_coefficients_available;
+  double polar_a;
+  double polar_b;
+  double polar_c;
+
+  Validity polar_load_available;
+  /** Polar load (overload) from device POLAR sentence */
+  double polar_load;
+
+  Validity polar_reference_mass_available;
+  /** Reference mass (polar weight) from device POLAR sentence [kg] */
+  double polar_reference_mass;
+
+  Validity polar_maximum_mass_available;
+  /** Maximum mass (max weight) from device POLAR sentence [kg] */
+  double polar_maximum_mass;
+
+  Validity polar_pilot_weight_available;
+  /** Pilot weight from device POLAR sentence [kg] */
+  double polar_pilot_weight;
+
+  Validity polar_empty_weight_available;
+  /** Empty weight from device POLAR sentence [kg] */
+  double polar_empty_weight;
+
   /** the radio frequencies of the device */
   Validity has_active_frequency;
   RadioFrequency active_frequency;
@@ -182,6 +213,16 @@ struct ExternalSettings {
   }
 
   /**
+   * Compare the elevation setting with the specified value.
+   *
+   * @return true if the current setting is the same, false if the
+   * value is different or if there is no value
+   */
+  bool CompareElevation(int value) const {
+    return elevation_available && abs(elevation - value) <= 1;
+  }
+
+  /**
    * Sets a new MacCready value, but updates the time stamp only if
    * the value has changed.
    *
@@ -195,4 +236,31 @@ struct ExternalSettings {
   bool ProvideBugs(double value, TimeStamp time) noexcept;
   bool ProvideQNH(AtmosphericPressure value, TimeStamp time) noexcept;
   bool ProvideVolume(unsigned value, TimeStamp time) noexcept;
+  bool ProvideElevation(int value, TimeStamp time) noexcept;
+  bool ProvidePolarCoefficients(double a, double b, double c, TimeStamp time) noexcept;
+  bool ProvidePolarLoad(double value, TimeStamp time) noexcept;
+  bool ProvidePolarReferenceMass(double value, TimeStamp time) noexcept;
+  bool ProvidePolarMaximumMass(double value, TimeStamp time) noexcept;
+  bool ProvidePolarPilotWeight(double value, TimeStamp time) noexcept;
+  bool ProvidePolarEmptyWeight(double value, TimeStamp time) noexcept;
+
+  /**
+   * Compare the polar pilot weight with the specified value.
+   *
+   * @return true if the current setting is the same, false if the
+   * value is different or if there is no value
+   */
+  bool ComparePolarPilotWeight(double value) const {
+    return polar_pilot_weight_available && fabs(polar_pilot_weight - value) <= 0.1;
+  }
+
+  /**
+   * Compare the polar empty weight with the specified value.
+   *
+   * @return true if the current setting is the same, false if the
+   * value is different or if there is no value
+   */
+  bool ComparePolarEmptyWeight(double value) const {
+    return polar_empty_weight_available && fabs(polar_empty_weight - value) <= 0.1;
+  }
 };

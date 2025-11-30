@@ -41,11 +41,17 @@ struct DeviceInfo {
    */
   NarrowString<16> software_version;
 
+  /**
+   * The license string.
+   */
+  NarrowString<32> license;
+
   void Clear() {
     product.clear();
     serial.clear();
     hardware_version.clear();
     software_version.clear();
+    license.clear();
   }
 };
 

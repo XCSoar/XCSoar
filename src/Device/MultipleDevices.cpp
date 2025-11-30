@@ -99,6 +99,20 @@ MultipleDevices::PutBallast(double fraction, double overload,
 }
 
 void
+MultipleDevices::PutCrewMass(double crew_mass, OperationEnvironment &env) noexcept
+{
+  for (DeviceDescriptor *i : devices)
+    i->PutCrewMass(crew_mass, env);
+}
+
+void
+MultipleDevices::PutEmptyMass(double empty_mass, OperationEnvironment &env) noexcept
+{
+  for (DeviceDescriptor *i : devices)
+    i->PutEmptyMass(empty_mass, env);
+}
+
+void
 MultipleDevices::PutVolume(unsigned volume, OperationEnvironment &env) noexcept
 {
   for (DeviceDescriptor *i : devices)
@@ -144,6 +158,20 @@ MultipleDevices::PutQNH(AtmosphericPressure pres,
 {
   for (DeviceDescriptor *i : devices)
     i->PutQNH(pres, env);
+}
+
+void
+MultipleDevices::PutElevation(int elevation, OperationEnvironment &env) noexcept
+{
+  for (DeviceDescriptor *i : devices)
+    i->PutElevation(elevation, env);
+}
+
+void
+MultipleDevices::RequestElevation(OperationEnvironment &env) noexcept
+{
+  for (DeviceDescriptor *i : devices)
+    i->RequestElevation(env);
 }
 
 void
