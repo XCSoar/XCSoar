@@ -251,20 +251,23 @@ public:
     const bool new_nano = productName.equals("NANO") || productName.equals("NANO3") || productName.equals("NANO4");
     const bool new_lx16xx = productName.equals("1606") || productName.equals("1600");
 
-    if ((new_v7 && !is_v7) || (new_sVario && !is_sVario)) {
-      const char *device_type = new_v7 ? "V7" : "S series vario";
-      LogFmt("LXNAV: {} detected via PLXVC (product: {}, firmware: {})",
-             device_type,
-             productName.c_str(),
-             device_info.software_version.empty() ? "unknown" : device_info.software_version.c_str());
-      if (!device_info.software_version.empty())
-        firmware_version_logged = true;
-    }
+    {
+      const std::lock_guard lock{mutex};
+      if ((new_v7 && !is_v7) || (new_sVario && !is_sVario)) {
+        const char *device_type = new_v7 ? "V7" : "S series vario";
+        LogFmt("LXNAV: {} detected via PLXVC (product: {}, firmware: {})",
+               device_type,
+               productName.c_str(),
+               device_info.software_version.empty() ? "unknown" : device_info.software_version.c_str());
+        if (!device_info.software_version.empty())
+          firmware_version_logged = true;
+      }
 
-    is_v7 = new_v7;
-    is_sVario = new_sVario;
-    is_nano = new_nano;
-    is_lx16xx = new_lx16xx;
+      is_v7 = new_v7;
+      is_sVario = new_sVario;
+      is_nano = new_nano;
+      is_lx16xx = new_lx16xx;
+    }
   }
 
   /**

@@ -109,20 +109,42 @@ LXDevice::OnSysTicker()
 bool
 LXDevice::EnablePassThrough(OperationEnvironment &env)
 {
-  if (mode == Mode::PASS_THROUGH)
-    return true;
+  bool should_enable_direct = false;
+  {
+    const std::lock_guard lock{mutex};
+    should_enable_direct = IsLXNAVVario() || use_pass_through;
+    
+    /* If already in pass-through mode and we don't need to enable direct,
+       we can return early. Otherwise, we need to ensure the device is in
+       the correct mode. */
+    if (mode == Mode::PASS_THROUGH && !should_enable_direct)
+      return true;
+  }
 
-  if (is_v7 || use_pass_through)
+  if (should_enable_direct) {
     LXNAVVario::ModeDirect(port, env);
+    
+    /* make sure the direct mode command has been sent to the device
+       before we continue. The vario needs time to switch modes before
+       it can forward commands to the FLARM. */
+    port.Drain();
+    
+    /* Additional delay to allow the vario to complete the mode switch.
+       Similar to the delay in EnableCommandMode() for baud rate changes. */
+    env.Sleep(std::chrono::milliseconds(100));
+  }
 
-  mode = Mode::PASS_THROUGH;
+  {
+    const std::lock_guard lock{mutex};
+    mode = Mode::PASS_THROUGH;
+  }
   return true;
 }
 
 bool
 LXDevice::EnableLoggerNMEA(OperationEnvironment &env)
 {
-  return IsV7() || UsePassThrough()
+  return IsLXNAVVario() || UsePassThrough()
     ? EnablePassThrough(env)
     : (LXNAVVario::ModeNormal(port, env), true);
 }

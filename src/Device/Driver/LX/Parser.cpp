@@ -414,12 +414,14 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
       /* in pass-through mode, we should never clear the V7 flag,
          because the V7 is still there, even though it's "hidden"
          currently */
+      const std::lock_guard lock{mutex};
       is_v7 |= saw_v7;
       is_sVario |= saw_sVario;
       is_nano |= saw_nano;
       is_lx16xx |= saw_lx16xx;
       is_forwarded_nano = saw_nano;
     } else {
+      const std::lock_guard lock{mutex};
       is_v7 = saw_v7;
       is_sVario = saw_sVario;
       is_nano = saw_nano;
