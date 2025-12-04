@@ -11,6 +11,9 @@
 #include "Renderer/WaveRenderer.hpp"
 #include "Operation/Operation.hpp"
 #include "Tracking/SkyLines/Data.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
+#include "Engine/Airspace/Airspaces.hpp"
 
 #ifdef HAVE_NOAA
 #include "Weather/NOAAStore.hpp"
@@ -118,6 +121,24 @@ MapWindow::RenderAirspace(Canvas &canvas) noexcept
                                  Basic(), Calculated(),
                                  GetComputerSettings().airspace,
                                  GetMapSettings().airspace);
+
+    /* Render FLARM alert zones as airspaces */
+    if (backend_components != nullptr &&
+        backend_components->flarm_alert_zone_airspaces != nullptr &&
+        !backend_components->flarm_alert_zone_airspaces->IsEmpty()) {
+      const Airspaces *saved_airspaces = airspace_renderer.GetAirspaces();
+      airspace_renderer.SetAirspaces(
+        backend_components->flarm_alert_zone_airspaces.get());
+      airspace_renderer.Draw(canvas,
+#ifndef ENABLE_OPENGL
+                             buffer_canvas,
+#endif
+                             render_projection,
+                             Basic(), Calculated(),
+                             GetComputerSettings().airspace,
+                             GetMapSettings().airspace);
+      airspace_renderer.SetAirspaces(saved_airspaces);
+    }
   }
 }
 
@@ -247,7 +268,7 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
   // Render track bearing (projected track ground/air relative)
   draw_sw.Mark("DrawTrackBearing");
   RenderTrackBearing(canvas, aircraft_pos);
-  
+
   // Render Detour cost markers
   draw_sw.Mark("RenderMisc1");
   DrawTaskOffTrackIndicator(canvas);
