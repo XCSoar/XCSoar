@@ -21,6 +21,7 @@ class TransponderCode;
 class OperationEnvironment;
 struct RecordedFlightInfo;
 class RecordedFlightList;
+class DeviceBlackboard;
 
 /**
  * This is the interface for a device driver.
@@ -227,6 +228,38 @@ public:
    */
   virtual void OnCalculatedUpdate(const MoreData &basic,
                                   const DerivedInfo &calculated) = 0;
+
+  /**
+   * Show the device management dialog.  This method is called when
+   * the user wants to manage/configure the device.
+   *
+   * @param device_index the index of this device in the device list
+   * @param device_blackboard access to device state data
+   * @return true if the dialog was shown, false if this device
+   * doesn't support management
+   */
+  virtual bool Manage(unsigned device_index,
+                      DeviceBlackboard &device_blackboard);
+
+  /**
+   * Manage a passthrough device.  This method is called when the user
+   * wants to manage/configure a secondary device connected through
+   * this primary device.
+   *
+   * The default implementation simply calls Manage() on the passthrough
+   * device.  Drivers that need to enable passthrough mode first (e.g.,
+   * LXNAV) should override this method.
+   *
+   * @param passthrough_device the secondary device to manage
+   * @param device_index the index of this device in the device list
+   * @param device_blackboard access to device state data
+   * @return true if the dialog was shown, false if this device
+   * doesn't support passthrough management
+   */
+  virtual bool ManagePassthroughDevice(Device *passthrough_device,
+                                        unsigned device_index,
+                                        DeviceBlackboard &device_blackboard,
+                                        OperationEnvironment &env);
 };
 
 /**
