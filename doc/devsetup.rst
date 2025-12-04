@@ -540,14 +540,7 @@ Then, re-start the SSH service::
 
    sudo systemctl restart ssh
 
-Now you can close the SSH session.
-In Windows, set the environment variable ``DISPLAY=localhost:0.0``, for
-example with::
-
-   set DISPLAY=localhost:0.0
-
-(Or set it globally in your Windows setup).
-Finally, you can start the SSH session into the VM again, with::
+Now you can close the SSH session, and restart with::
 
    vagrant ssh -- -X 
 
@@ -570,10 +563,23 @@ official builds.
 For this, you need to make sure that WSL2 is installed in your Windows setup 
 (requires Windows 11 or a recent enough version of Windows 10).
 In addition, you have to download and install *Docker Desktop for Windows*.
+After that, open a Windows shell and enter the source directory of XCSoar and
+make sure that the Docker Desktop is running.
 
-Enter the directory ``ide/docker`` and start a container, which gets configured 
-by the Dockerfile.
+To build the container from scratch on your machine, you need to run
+a build command with the provided Dockerfile, which you can also modify to
+suit your needs::
+   
+   docker build --file ide/docker/Dockerfile -t xcsoar/xcsoar-build:latest ./ide/
 
+Alternatively, you can also download and start the prebuilt image directly. 
+This is the command in Powershell::
+
+   docker run --mount type=bind,source="$(pwd)",target=/opt/xcsoar \
+       -it ghcr.io/xcsoar/xcsoar/xcsoar-build:latest /bin/bash
+
+Also see ``ide/docker/README.md`` for additional flags (e.g., X11) and for directly 
+building targets or running XCSoar in the container.
 
 Which method should I use?
 ==========================
