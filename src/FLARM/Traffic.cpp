@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "FLARM/Traffic.hpp"
+#include "Language/Language.hpp"
 
 static constexpr const TCHAR *acTypes[] = {
   _T("Unknown"),
@@ -19,7 +20,7 @@ static constexpr const TCHAR *acTypes[] = {
   _T("Airship"),
   _T("UAV"),
   _T("Unknown"),
-  _T("StaticObject") 
+  _T("StaticObject")
 };
 
 const TCHAR *
@@ -30,6 +31,34 @@ FlarmTraffic::GetTypeString(AircraftType type) noexcept
     return acTypes[index];
 
   return NULL;
+}
+
+const TCHAR *
+FlarmTraffic::GetSourceString(Source source) noexcept
+{
+  switch (source) {
+  case Source::FLARM:
+    return _("FLARM");
+  case Source::ADS_B:
+    return _T("ADS-B");
+  case Source::ADS_R:
+    return _T("ADS-R");
+  case Source::TIS_B:
+    return _T("TIS-B");
+  case Source::MODE_S:
+    return _T("Mode-S");
+  default:
+    return _("Unknown");
+  }
+}
+
+const TCHAR *
+FlarmTraffic::GetTrafficSourceTitle(const FlarmTraffic *traffic) noexcept
+{
+  if (traffic == nullptr || traffic->source == Source::UNKNOWN)
+    return _("FLARM");
+
+  return GetSourceString(traffic->source);
 }
 
 void
@@ -49,4 +78,5 @@ FlarmTraffic::Update(const FlarmTraffic &other) noexcept
   climb_rate_received = other.climb_rate_received;
   stealth = other.stealth;
   type = other.type;
+  source = other.source;
 }
