@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Widget/RowFormWidget.hpp"
+#include "util/StaticString.hxx"
 
 class FlarmDevice;
 struct FlarmHardware;
@@ -23,8 +24,15 @@ class FLARMConfigWidget final : public RowFormWidget {
   FlarmHardware &hardware;
 
   unsigned baud, baud1, baud2, thre, acft, log_int;
+  unsigned nmeaout, nmeaout1, nmeaout2;
+  unsigned nmeaout_raw, nmeaout1_raw, nmeaout2_raw;
+  unsigned transponder_type;
 
   bool priv, notrack;
+  bool nmeaout_available, nmeaout1_available, nmeaout2_available;
+  bool icaoid_available, transponder_available;
+
+  StaticString<32> icaoid;
 
 public:
   FLARMConfigWidget(const DialogLook &look, FlarmDevice &_device, FlarmHardware &_hardware)
