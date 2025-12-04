@@ -49,9 +49,8 @@ FlarmDevice::ParseNMEA(const char *_line, [[maybe_unused]] NMEAInfo &info)
 
   const auto type = line.ReadView();
   if (type == "$PFLAC"sv) {
-  return false;
     return ParsePFLAC(line);
   }
 
-    return false;
+  return false;
 }
