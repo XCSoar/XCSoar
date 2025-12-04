@@ -163,7 +163,7 @@ class DeviceDescriptor final
    */
   InternalSensors *internal_sensors = nullptr;
 #endif
-      
+
 #if defined(ANDROID) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
   /* We use a Kalman filter to smooth (Android/iPhone) device pressure sensor
      noise.  The filter requires two parameters: the first is the
@@ -357,6 +357,10 @@ public:
    */
   Device *GetDevice() noexcept {
     return device;
+  }
+
+  Device *GetSecondDevice() noexcept {
+    return second_device;
   }
 
 private:
@@ -650,7 +654,7 @@ private:
   void OnSensorError(const char *msg) noexcept override;
 #endif // ANDROID
 #endif // HAVE_INTERNAL_GPS
-        
+
 #if defined(ANDROID) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
   void OnBarometricPressureSensor(float pressure,
                                   float sensor_noise_variance) noexcept override;

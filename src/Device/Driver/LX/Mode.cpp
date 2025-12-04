@@ -8,6 +8,7 @@
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
+#include "time/TimeoutClock.hpp"
 // Forward declarations - avoid pulling in UI dependencies
 class Device;
 struct DeviceInfo;
@@ -227,7 +228,9 @@ LXDevice::ManagePassthroughDevice(Device *passthrough_device,
      secondary device is responding. We wait for the alive flag to be
      updated (modified) after passthrough was enabled, indicating the
      secondary device has sent data. */
-  while (!env.IsCancelled()) {
+  const TimeoutClock timeout(std::chrono::seconds(10));
+
+  while (!env.IsCancelled() && !timeout.HasExpired()) {
     {
       const std::lock_guard lock{device_blackboard.mutex};
       const NMEAInfo &basic = device_blackboard.RealState(device_index);
@@ -236,6 +239,13 @@ LXDevice::ManagePassthroughDevice(Device *passthrough_device,
     }
 
     env.Sleep(std::chrono::milliseconds(50));
+  }
+
+  /* Check if operation was cancelled or timed out */
+  if (env.IsCancelled() || timeout.HasExpired()) {
+    /* Restore NMEA mode before returning */
+    EnableNMEA(env);
+    return false;
   }
 
   /* Manage the passthrough device */

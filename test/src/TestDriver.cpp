@@ -238,6 +238,469 @@ TestFLARM()
   } else {
     skip(15, 0, "traffic == NULL");
   }
+
+  // Test PFLAE with message field (protocol version >= 7)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{2}};
+  nmea_info.flarm.version.protocol_version = 7;
+  ok1(parser.ParseLine("$PFLAE,A,2,29,Test error message*03", nmea_info));
+  ok1(nmea_info.flarm.error.available);
+  ok1(nmea_info.flarm.error.severity == FlarmError::Severity::REDUCED_FUNCTIONALITY);
+  ok1(nmea_info.flarm.error.code == FlarmError::Code::GENERAL);
+  ok1(nmea_info.flarm.error.message == "Test error message");
+
+  // Test PFLAE without message field (protocol version < 7)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{3}};
+  nmea_info.flarm.version.protocol_version = 4;
+  ok1(parser.ParseLine("$PFLAE,A,2,29*0A", nmea_info));
+  ok1(nmea_info.flarm.error.available);
+  ok1(nmea_info.flarm.error.severity == FlarmError::Severity::REDUCED_FUNCTIONALITY);
+  ok1(nmea_info.flarm.error.code == FlarmError::Code::GENERAL);
+  ok1(nmea_info.flarm.error.message.empty());
+
+  // Test protocol version auto-detection from PFLAE message field
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{4}};
+  nmea_info.flarm.version.protocol_version = 4;
+  ok1(parser.ParseLine("$PFLAE,A,0,0,Version 7 message*19", nmea_info));
+  ok1(nmea_info.flarm.version.protocol_version == 7);
+  ok1(nmea_info.flarm.error.message == "Version 7 message");
+  ok1(nmea_info.flarm.error.severity == FlarmError::Severity::NO_ERROR);
+  ok1(nmea_info.flarm.error.code == (FlarmError::Code)0);
+
+  // Test NoTrack field - target should be skipped (protocol version >= 8)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{5}};
+  nmea_info.flarm.version.protocol_version = 8;
+  unsigned count_before = nmea_info.flarm.traffic.GetActiveTrafficCount();
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,DDA85C,123,13,24,1.4,2,1*62",
+                       nmea_info));
+  // Target with NoTrack=1 should be skipped
+  ok1(nmea_info.flarm.traffic.GetActiveTrafficCount() == count_before);
+
+  // Test NoTrack field - target should be parsed (NoTrack=0)
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,DDA85C,123,13,24,1.4,2,0*63",
+                       nmea_info));
+  ok1(nmea_info.flarm.traffic.GetActiveTrafficCount() == count_before + 1);
+
+  // Test PFLAA with Source and RSSI fields (protocol version >= 9)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{6}};
+  nmea_info.flarm.version.protocol_version = 9;
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,ABCDEF,123,13,24,1.4,2,0,1,-71.2*6D",
+                       nmea_info));
+  ok1(nmea_info.flarm.traffic.GetActiveTrafficCount() == 1);
+  id = FlarmId::Parse("ABCDEF", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->valid);
+  ok1(traffic->source == FlarmTraffic::Source::ADS_B);
+
+  // Test Source field values: FLARM (0)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{7}};
+  nmea_info.flarm.version.protocol_version = 9;
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,FLARM0,123,13,24,1.4,2,0,0,-71.2*0F",
+                       nmea_info));
+  id = FlarmId::Parse("FLARM0", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->source == FlarmTraffic::Source::FLARM);
+
+  // Test Source field values: ADS-R (3)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{8}};
+  nmea_info.flarm.version.protocol_version = 9;
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,ADSR01,123,13,24,1.4,2,0,3,-71.2*6D",
+                       nmea_info));
+  id = FlarmId::Parse("ADSR01", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->source == FlarmTraffic::Source::ADS_R);
+
+  // Test Source field values: TIS-B (4)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{9}};
+  nmea_info.flarm.version.protocol_version = 9;
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,TISB01,123,13,24,1.4,2,0,4,-71.2*62",
+                       nmea_info));
+  id = FlarmId::Parse("TISB01", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->source == FlarmTraffic::Source::TIS_B);
+
+  // Test Source field values: Mode-S (6)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{10}};
+  nmea_info.flarm.version.protocol_version = 9;
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,MODES1,123,13,24,1.4,2,0,6,-71.2*0C",
+                       nmea_info));
+  id = FlarmId::Parse("MODES1", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->source == FlarmTraffic::Source::MODE_S);
+
+  // Test Source field with unknown value (defaults to UNKNOWN)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{11}};
+  nmea_info.flarm.version.protocol_version = 9;
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,UNKN01,123,13,24,1.4,2,0,99,-71.2*44",
+                       nmea_info));
+  id = FlarmId::Parse("UNKN01", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->source == FlarmTraffic::Source::UNKNOWN);
+
+  // Test PFLAA without Source/RSSI fields (protocol version < 9)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{12}};
+  nmea_info.flarm.version.protocol_version = 8;
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,ABCDEF,123,13,24,1.4,2,0*6B",
+                       nmea_info));
+  ok1(nmea_info.flarm.traffic.GetActiveTrafficCount() == 1);
+  id = FlarmId::Parse("ABCDEF", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->valid);
+  ok1(traffic->source == FlarmTraffic::Source::FLARM);
+
+  // Test PFLAU - all GPS statuses
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{13}};
+  ok1(parser.ParseLine("$PFLAU,0,1,0,1,0,,0,,,*4E", nmea_info));
+  ok1(nmea_info.flarm.status.gps == FlarmStatus::GPSStatus::NONE);
+  ok1(parser.ParseLine("$PFLAU,0,1,1,1,0,,0,,,*4F", nmea_info));
+  ok1(nmea_info.flarm.status.gps == FlarmStatus::GPSStatus::GPS_2D);
+  ok1(parser.ParseLine("$PFLAU,0,1,2,1,0,,0,,,*4C", nmea_info));
+  ok1(nmea_info.flarm.status.gps == FlarmStatus::GPSStatus::GPS_3D);
+
+  // Test PFLAU - all alarm levels
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{14}};
+  ok1(parser.ParseLine("$PFLAU,0,1,2,1,0,,0,,,*4C", nmea_info));
+  ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::NONE);
+  ok1(parser.ParseLine("$PFLAU,0,1,2,1,1,,2,,,*4F", nmea_info));
+  ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::LOW);
+  ok1(parser.ParseLine("$PFLAU,0,1,2,1,2,,2,,,*4C", nmea_info));
+  ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::IMPORTANT);
+  ok1(parser.ParseLine("$PFLAU,0,1,2,1,3,,2,,,*4D", nmea_info));
+  ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::URGENT);
+
+  // Test PFLAU - traffic advisory (AlarmLevel=1, AlarmType=4)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{15}};
+  ok1(parser.ParseLine("$PFLAU,1,1,2,1,1,,4,,,*48", nmea_info));
+  ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::INFO_ALERT);
+
+  // Test PFLAU - Alert Zone alarm (AlarmType >= 10)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{16}};
+  ok1(parser.ParseLine("$PFLAU,0,1,2,1,1,0,41,0,0*64", nmea_info));
+  ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::LOW);
+
+  // Test PFLAU - with ID field (protocol version >= 4)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{17}};
+  nmea_info.flarm.version.protocol_version = 4;
+  ok1(parser.ParseLine("$PFLAU,1,1,2,1,2,-30,2,-32,755,1A304C*7C", nmea_info));
+  ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::IMPORTANT);
+
+  // Test PFLAU - without ID field (protocol version < 4)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{18}};
+  nmea_info.flarm.version.protocol_version = 3;
+  ok1(parser.ParseLine("$PFLAU,1,1,2,1,2,-30,2,-32,755*54", nmea_info));
+  ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::IMPORTANT);
+
+  // Test PFLAA - all aircraft types
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{19}};
+  // Type 0 (reserved) -> UNKNOWN
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,TYPE00,123,13,24,1.4,0*6A", nmea_info));
+  id = FlarmId::Parse("TYPE00", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->type == FlarmTraffic::AircraftType::UNKNOWN);
+  // Type 1 = GLIDER
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,TYPE01,123,13,24,1.4,1*6A", nmea_info));
+  id = FlarmId::Parse("TYPE01", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->type == FlarmTraffic::AircraftType::GLIDER);
+  // Type 3 = HELICOPTER
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,TYPE03,123,13,24,1.4,3*6A", nmea_info));
+  id = FlarmId::Parse("TYPE03", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->type == FlarmTraffic::AircraftType::HELICOPTER);
+  // Type 4 = PARACHUTE
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,TYPE04,123,13,24,1.4,4*6A", nmea_info));
+  id = FlarmId::Parse("TYPE04", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->type == FlarmTraffic::AircraftType::PARACHUTE);
+  // Type 5 = DROP_PLANE
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,TYPE05,123,13,24,1.4,5*6A", nmea_info));
+  id = FlarmId::Parse("TYPE05", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->type == FlarmTraffic::AircraftType::DROP_PLANE);
+  // Type 6 = HANG_GLIDER
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,TYPE06,123,13,24,1.4,6*6A", nmea_info));
+  id = FlarmId::Parse("TYPE06", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->type == FlarmTraffic::AircraftType::HANG_GLIDER);
+  // Type 7 = PARA_GLIDER
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,TYPE07,123,13,24,1.4,7*6A", nmea_info));
+  id = FlarmId::Parse("TYPE07", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->type == FlarmTraffic::AircraftType::PARA_GLIDER);
+  // Type 8 = POWERED_AIRCRAFT
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,TYPE08,123,13,24,1.4,8*6A", nmea_info));
+  id = FlarmId::Parse("TYPE08", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->type == FlarmTraffic::AircraftType::POWERED_AIRCRAFT);
+  // Type 9 = JET_AIRCRAFT
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,TYPE09,123,13,24,1.4,9*6A", nmea_info));
+  id = FlarmId::Parse("TYPE09", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->type == FlarmTraffic::AircraftType::JET_AIRCRAFT);
+  // Type A (10) = FLYING_SAUCER (XCSoar maps this, FTD-012 says UNKNOWN)
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,TYPE0A,123,13,24,1.4,A*6A", nmea_info));
+  id = FlarmId::Parse("TYPE0A", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->type == FlarmTraffic::AircraftType::FLYING_SAUCER);
+  // Type B (11) = BALLOON
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,TYPE0B,123,13,24,1.4,B*6A", nmea_info));
+  id = FlarmId::Parse("TYPE0B", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->type == FlarmTraffic::AircraftType::BALLOON);
+  // Type C (12) = AIRSHIP
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,TYPE0C,123,13,24,1.4,C*6A", nmea_info));
+  id = FlarmId::Parse("TYPE0C", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->type == FlarmTraffic::AircraftType::AIRSHIP);
+  // Type D (13) = UAV
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,TYPE0D,123,13,24,1.4,D*6A", nmea_info));
+  id = FlarmId::Parse("TYPE0D", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->type == FlarmTraffic::AircraftType::UAV);
+  // Type F (15) = STATIC_OBJECT
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,TYPE0F,123,13,24,1.4,F*6A", nmea_info));
+  id = FlarmId::Parse("TYPE0F", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->type == FlarmTraffic::AircraftType::STATIC_OBJECT);
+
+  // Test PFLAA - invalid aircraft types (14, >15)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{20}};
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,INV14,123,13,24,1.4,E*53", nmea_info));
+  id = FlarmId::Parse("INV14", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->type == FlarmTraffic::AircraftType::UNKNOWN);
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,INV16,123,13,24,1.4,10*15", nmea_info));
+  id = FlarmId::Parse("INV16", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->type == FlarmTraffic::AircraftType::UNKNOWN);
+
+  // Test PFLAA - non-directional target (empty RelativeEast)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{21}};
+  ok1(parser.ParseLine("$PFLAA,0,1000,,10,2,NONDIR,123,13,24,1.4,1*4A", nmea_info));
+  id = FlarmId::Parse("NONDIR", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(equals(traffic->relative_north, 1000));
+  ok1(equals(traffic->relative_east, 0));
+
+  // Test PFLAA - all alarm levels
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{22}};
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,ALM00,123,13,24,1.4,1*33", nmea_info));
+  id = FlarmId::Parse("ALM00", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->alarm_level == FlarmTraffic::AlarmType::NONE);
+  ok1(parser.ParseLine("$PFLAA,1,100,-150,10,2,ALM01,123,13,24,1.4,1*33", nmea_info));
+  id = FlarmId::Parse("ALM01", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->alarm_level == FlarmTraffic::AlarmType::LOW);
+  ok1(parser.ParseLine("$PFLAA,2,100,-150,10,2,ALM02,123,13,24,1.4,1*33", nmea_info));
+  id = FlarmId::Parse("ALM02", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->alarm_level == FlarmTraffic::AlarmType::IMPORTANT);
+  ok1(parser.ParseLine("$PFLAA,3,100,-150,10,2,ALM03,123,13,24,1.4,1*33", nmea_info));
+  id = FlarmId::Parse("ALM03", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  ok1(traffic != NULL);
+  ok1(traffic->alarm_level == FlarmTraffic::AlarmType::URGENT);
+
+  // Test PFLAE - all severities
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{23}};
+  nmea_info.flarm.version.protocol_version = 7;
+  ok1(parser.ParseLine("$PFLAE,A,0,0,No error*66", nmea_info));
+  ok1(nmea_info.flarm.error.severity == FlarmError::Severity::NO_ERROR);
+  ok1(parser.ParseLine("$PFLAE,A,1,29,Information*69", nmea_info));
+  ok1(nmea_info.flarm.error.severity == FlarmError::Severity::INFORMATION_ONLY);
+  ok1(parser.ParseLine("$PFLAE,A,2,29,Reduced functionality*29", nmea_info));
+  ok1(nmea_info.flarm.error.severity == FlarmError::Severity::REDUCED_FUNCTIONALITY);
+  ok1(parser.ParseLine("$PFLAE,A,3,29,Fatal problem*32", nmea_info));
+  ok1(nmea_info.flarm.error.severity == FlarmError::Severity::FATAL_PROBLEM);
+
+  // Test PFLAE - various error codes
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{24}};
+  nmea_info.flarm.version.protocol_version = 7;
+  ok1(parser.ParseLine("$PFLAE,A,2,11,Firmware timeout*47", nmea_info));
+  ok1(nmea_info.flarm.error.code == FlarmError::Code::FIRMWARE_TIMEOUT);
+  ok1(parser.ParseLine("$PFLAE,A,2,21,Power error*29", nmea_info));
+  ok1(nmea_info.flarm.error.code == FlarmError::Code::POWER);
+  ok1(parser.ParseLine("$PFLAE,A,2,31,GPS communication error*73", nmea_info));
+  ok1(nmea_info.flarm.error.code == FlarmError::Code::GPS_COMMUNICATION);
+  ok1(parser.ParseLine("$PFLAE,A,2,41,RF communication error*24", nmea_info));
+  ok1(nmea_info.flarm.error.code == FlarmError::Code::RF_COMMUNICATION);
+
+  // Test PFLAV - version parsing
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{25}};
+  ok1(parser.ParseLine("$PFLAV,A,6.01,8.01,190101*0A", nmea_info));
+  ok1(nmea_info.flarm.version.available);
+  ok1(nmea_info.flarm.version.hardware_version == "6.01");
+  ok1(nmea_info.flarm.version.software_version == "8.01");
+  ok1(nmea_info.flarm.version.obstacle_version == "190101");
+
+  // Test PFLAA - missing required fields (should return early, parsing succeeds but no traffic added)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{26}};
+  unsigned count_before_invalid = nmea_info.flarm.traffic.GetActiveTrafficCount();
+  ok1(parser.ParseLine("$PFLAA,0,,,10,2,INVALID*08", nmea_info));
+  ok1(nmea_info.flarm.traffic.GetActiveTrafficCount() == count_before_invalid);
+  ok1(parser.ParseLine("$PFLAA,0,100,,,2,INVALID*38", nmea_info));
+  ok1(nmea_info.flarm.traffic.GetActiveTrafficCount() == count_before_invalid);
+
+  // Test PFLAO - Alert Zone parsing (protocol version >= 7)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{27}};
+  nmea_info.flarm.version.protocol_version = 6;
+  // PFLAO sentence should upgrade protocol version to 7
+  ok1(parser.ParseLine("$PFLAO,1,1,471234567,-123456789,500,0,3000,0,123456,0,41*53", nmea_info));
+  ok1(nmea_info.flarm.version.protocol_version == 7);
+  ok1(nmea_info.flarm.alert_zones.GetActiveZoneCount() == 1);
+
+  FlarmId zone_id = FlarmId::Parse("123456", NULL);
+  FlarmAlertZone *zone = nmea_info.flarm.alert_zones.FindZone(zone_id);
+  if (ok1(zone != NULL)) {
+    ok1(zone->IsDefined());
+    ok1(zone->alarm_level == FlarmAlertZone::AlarmType::LOW);
+    ok1(zone->inside == true);
+    ok1(zone->zone_type == FlarmAlertZone::ZoneType::SKYDIVER_DROP_ZONE);
+    ok1(equals(zone->radius, 500));
+    ok1(equals(zone->bottom, 0));
+    ok1(equals(zone->top, 3000));
+    ok1(zone->activity_limit == 0);
+  } else {
+    skip(8, 0, "zone == NULL");
+  }
+
+  // Test PFLAO - different zone types
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{28}};
+  nmea_info.flarm.version.protocol_version = 7;
+  // Military Firing Area (0x43)
+  ok1(parser.ParseLine("$PFLAO,2,0,471234567,-123456789,1000,-100,2000,1735689600,ABCDEF,0,43*7B", nmea_info));
+  ok1(nmea_info.flarm.alert_zones.GetActiveZoneCount() == 1);
+  zone_id = FlarmId::Parse("ABCDEF", NULL);
+  zone = nmea_info.flarm.alert_zones.FindZone(zone_id);
+  if (ok1(zone != NULL)) {
+    ok1(zone->zone_type == FlarmAlertZone::ZoneType::MILITARY_FIRING_AREA);
+    ok1(zone->alarm_level == FlarmAlertZone::AlarmType::IMPORTANT);
+    ok1(zone->inside == false);
+    ok1(equals(zone->radius, 1000));
+    ok1(equals(zone->bottom, -100));
+    ok1(equals(zone->top, 2000));
+    ok1(zone->activity_limit == 1735689600);
+  } else {
+    skip(7, 0, "zone == NULL");
+  }
+
+  // Test PFLAO - update existing zone
+  nmea_info.clock = TimeStamp{FloatDuration{29}};
+  ok1(parser.ParseLine("$PFLAO,3,1,471234567,-123456789,1000,-100,2000,1735689600,ABCDEF,0,43*7B", nmea_info));
+  ok1(nmea_info.flarm.alert_zones.GetActiveZoneCount() == 1);
+  zone = nmea_info.flarm.alert_zones.FindZone(zone_id);
+  if (ok1(zone != NULL)) {
+    ok1(zone->alarm_level == FlarmAlertZone::AlarmType::URGENT);
+    ok1(zone->inside == true);
+  } else {
+    skip(2, 0, "zone == NULL");
+  }
+
+  // Test PFLAO - invalid coordinates (should be rejected)
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{30}};
+  nmea_info.flarm.version.protocol_version = 7;
+  unsigned count_before_invalid_zone = nmea_info.flarm.alert_zones.GetActiveZoneCount();
+  ok1(parser.ParseLine("$PFLAO,1,0,999999999,999999999,500,0,3000,0,INVALID,0,41*2B", nmea_info));
+  ok1(nmea_info.flarm.alert_zones.GetActiveZoneCount() == count_before_invalid_zone);
+
+  // Test PFLAO - invalid radius (should be rejected)
+  ok1(parser.ParseLine("$PFLAO,1,0,471234567,-123456789,3000,0,3000,0,INVRAD,0,41*65", nmea_info));
+  ok1(nmea_info.flarm.alert_zones.GetActiveZoneCount() == count_before_invalid_zone);
+
+  // Test PFLAO - invalid zone type (should be rejected)
+  ok1(parser.ParseLine("$PFLAO,1,0,471234567,-123456789,500,0,3000,0,INVTYP,0,0F*2A", nmea_info));
+  ok1(nmea_info.flarm.alert_zones.GetActiveZoneCount() == count_before_invalid_zone);
+
+  // Test PFLAO - multiple zones
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{31}};
+  nmea_info.flarm.version.protocol_version = 7;
+  ok1(parser.ParseLine("$PFLAO,1,0,471234567,-123456789,500,0,3000,0,ZONE01,0,41*4A", nmea_info));
+  ok1(nmea_info.flarm.alert_zones.GetActiveZoneCount() >= 1);
+  nmea_info.clock = TimeStamp{FloatDuration{32}};
+  ok1(parser.ParseLine("$PFLAO,1,0,481234567,-124456789,600,100,2500,0,ZONE02,0,42*44", nmea_info));
+  ok1(nmea_info.flarm.alert_zones.GetActiveZoneCount() >= 1);
+  nmea_info.clock = TimeStamp{FloatDuration{33}};
+  ok1(parser.ParseLine("$PFLAO,2,1,491234567,-125456789,700,200,2000,0,ZONE03,0,43*41", nmea_info));
+  ok1(nmea_info.flarm.alert_zones.GetActiveZoneCount() >= 1);
+
+  // Test PFLAO - real-world example from rl-traffic.nmea style data
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{34}};
+  nmea_info.flarm.version.protocol_version = 7;
+  ok1(parser.ParseLine("$PFLAO,1,1,471122335,85577812,2000,100,4550,1432832400,DF4738,2,41*4E", nmea_info));
+  ok1(nmea_info.flarm.alert_zones.GetActiveZoneCount() == 1);
+  zone_id = FlarmId::Parse("DF4738", NULL);
+  zone = nmea_info.flarm.alert_zones.FindZone(zone_id);
+  if (ok1(zone != NULL)) {
+    ok1(zone->IsDefined());
+    ok1(zone->alarm_level == FlarmAlertZone::AlarmType::LOW);
+    ok1(zone->inside == true);
+    ok1(zone->zone_type == FlarmAlertZone::ZoneType::SKYDIVER_DROP_ZONE);
+    ok1(equals(zone->radius, 2000));
+    ok1(equals(zone->bottom, 100));
+    ok1(equals(zone->top, 4550));
+    ok1(zone->activity_limit == 1432832400);
+    // Verify coordinates: lat=47.1122335, lon=8.5577812
+    ok1(zone->center.IsValid());
+  } else {
+    skip(9, 0, "zone == NULL");
+  }
 }
 
 static void
@@ -1836,7 +2299,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main()
 {
-  plan_tests(1006);
+  plan_tests(1212);
   TestGeneric();
   TestTasman();
   TestFLARM();

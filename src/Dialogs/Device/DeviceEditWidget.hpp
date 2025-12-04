@@ -24,10 +24,12 @@ public:
   DeviceEditWidget(const DeviceConfig &_config) noexcept;
 
   void SetListener(Listener *_listener) noexcept {
-    assert(listener == nullptr);
-    assert(_listener != nullptr);
-
-    listener = _listener;
+    if (_listener != nullptr) {
+      assert(listener == nullptr);
+      listener = _listener;
+    } else {
+      listener = nullptr;
+    }
   }
 
   const DeviceConfig &GetConfig() const noexcept {

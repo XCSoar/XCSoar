@@ -18,6 +18,13 @@ FlarmDevice::EnableNMEA(OperationEnvironment &env)
     /* request self-test results and version information from FLARM */
     Send("PFLAE,R", env);
     Send("PFLAV,R", env);
+    /* request NMEAOUT to determine protocol version */
+    /* Request both NMEAOUT (Classic FLARM) and NMEAOUT1 (PowerFLARM port 1) */
+    Send("PFLAC,R,NMEAOUT", env);
+    Send("PFLAC,R,NMEAOUT1", env);
+    /* request flight and IGC recording state (available on protocol >= 8,
+     * PowerFLARM) */
+    Send("PFLAJ,R", env);
     return true;
 
   case Mode::NMEA:

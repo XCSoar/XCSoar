@@ -38,6 +38,8 @@
 #include "Profile/DeviceConfig.hpp"
 #include "Interface.hpp"
 
+#include <memory>
+
 #ifdef ANDROID
 #include "java/Global.hxx"
 #include "Android/Main.hpp"
@@ -615,6 +617,33 @@ DeviceListWidget::EditCurrent()
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
 
+  /* Listener to update button state when driver selection changes.
+     Must be declared at function scope to ensure it lives until after ShowModal(). */
+  struct ManagePassthroughButtonListener : public DeviceEditWidget::Listener {
+    DeviceEditWidget &widget;
+    Button *button;
+    std::function<void()> update_state;
+
+    ManagePassthroughButtonListener(DeviceEditWidget &_widget, Button *_button,
+                                    std::function<void()> _update_state) noexcept
+      :widget(_widget), button(_button), update_state(_update_state) {}
+
+    void OnModified(DeviceEditWidget &w) noexcept override {
+      /* Update button state when passthrough-related fields change */
+      const auto &config = w.GetConfig();
+      const bool use_second = config.use_second_device;
+      button->SetVisible(use_second);
+      if (use_second) {
+        /* Update enabled state based on current driver selection */
+        update_state();
+      } else {
+        button->SetEnabled(false);
+      }
+    }
+  };
+
+  std::unique_ptr<ManagePassthroughButtonListener> listener;
+
   /* Add "Manage Passthrough" button if passthrough is enabled */
   Button *manage_passthrough_button = nullptr;
   if (devices != nullptr) {
@@ -708,32 +737,9 @@ DeviceListWidget::EditCurrent()
         manage_passthrough_button->SetEnabled(manageable);
       };
 
-      /* Create a listener to update button state when driver selection changes */
-      struct ManagePassthroughButtonListener : public DeviceEditWidget::Listener {
-        DeviceEditWidget &widget;
-        Button *button;
-        std::function<void()> update_state;
-
-        ManagePassthroughButtonListener(DeviceEditWidget &_widget, Button *_button,
-                                        std::function<void()> _update_state) noexcept
-          :widget(_widget), button(_button), update_state(_update_state) {}
-
-        void OnModified(DeviceEditWidget &w) noexcept override {
-          /* Update button state when passthrough-related fields change */
-          const auto &config = w.GetConfig();
-          const bool use_second = config.use_second_device;
-          button->SetVisible(use_second);
-          if (use_second) {
-            /* Update enabled state based on current driver selection */
-            update_state();
-          } else {
-            button->SetEnabled(false);
-          }
-        }
-      };
-
-      ManagePassthroughButtonListener listener(widget, manage_passthrough_button, update_button_state);
-      widget.SetListener(&listener);
+      /* Create listener instance - must live until after ShowModal() */
+      listener = std::make_unique<ManagePassthroughButtonListener>(widget, manage_passthrough_button, update_button_state);
+      widget.SetListener(listener.get());
 
       /* Set initial state based on config - don't access fields directly */
       const auto &config = widget.GetConfig();
@@ -750,6 +756,10 @@ DeviceListWidget::EditCurrent()
   }
 
   const bool changed = dialog.ShowModal() == mrOK;
+
+  /* Clear listener before it goes out of scope */
+  if (listener != nullptr)
+    widget.SetListener(nullptr);
 
   /* Steal widget back to prevent double deletion (widget is stack-allocated) */
   dialog.StealWidget();
