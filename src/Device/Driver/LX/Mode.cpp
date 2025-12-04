@@ -7,6 +7,15 @@
 #include "NanoProtocol.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
+// Forward declarations - avoid pulling in UI dependencies
+class Device;
+struct DeviceInfo;
+void ManageLXNAVVarioDialog(Device &device, const DeviceInfo &info,
+                            const DeviceInfo &secondary_info);
+void ManageNanoDialog(Device &device, const DeviceInfo &info);
+void ManageLX16xxDialog(Device &device, const DeviceInfo &info);
+#include "NMEA/Info.hpp"
 
 void
 LXDevice::LinkTimeout()
@@ -165,4 +174,76 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
   const std::lock_guard lock{mutex};
   mode = Mode::COMMAND;
   return true;
+}
+
+bool
+LXDevice::Manage(unsigned device_index,
+                 DeviceBlackboard &device_blackboard)
+{
+  DeviceInfo info, secondary_info;
+
+  {
+    const std::lock_guard lock{device_blackboard.mutex};
+    const NMEAInfo &basic = device_blackboard.RealState(device_index);
+    info = basic.device;
+    secondary_info = basic.secondary_device;
+  }
+
+  if (IsLXNAVVario())
+    ManageLXNAVVarioDialog(*this, info, secondary_info);
+  else if (IsNano())
+    ManageNanoDialog(*this, info);
+  else if (IsLX16xx())
+    ManageLX16xxDialog(*this, info);
+  else
+    return false;
+
+  return true;
+}
+
+bool
+LXDevice::ManagePassthroughDevice(Device *passthrough_device,
+                                   unsigned device_index,
+                                   DeviceBlackboard &device_blackboard,
+                                   OperationEnvironment &env)
+{
+  if (passthrough_device == nullptr)
+    return false;
+
+  /* Capture the current alive timestamp before enabling passthrough */
+  Validity alive_before;
+  {
+    const std::lock_guard lock{device_blackboard.mutex};
+    const NMEAInfo &basic = device_blackboard.RealState(device_index);
+    alive_before = basic.alive;
+  }
+
+  /* Enable passthrough mode */
+  if (!EnablePassThrough(env))
+    return false;
+
+  /* Wait for the secondary device to become alive before calling Manage().
+     This ensures that passthrough mode is fully established and the
+     secondary device is responding. We wait for the alive flag to be
+     updated (modified) after passthrough was enabled, indicating the
+     secondary device has sent data. */
+  while (!env.IsCancelled()) {
+    {
+      const std::lock_guard lock{device_blackboard.mutex};
+      const NMEAInfo &basic = device_blackboard.RealState(device_index);
+      if (basic.alive.IsValid() && basic.alive.Modified(alive_before))
+        break;
+    }
+
+    env.Sleep(std::chrono::milliseconds(50));
+  }
+
+  /* Manage the passthrough device */
+  const bool result = passthrough_device->Manage(device_index,
+                                                 device_blackboard);
+
+  /* Restore NMEA mode */
+  EnableNMEA(env);
+
+  return result;
 }

@@ -147,6 +147,9 @@ public:
     return use_pass_through;
   }
 
+  bool Manage(unsigned device_index,
+              class DeviceBlackboard &device_blackboard) override;
+
   void ResetDeviceDetection() noexcept {
     is_v7 = is_sVario = is_nano = is_lx16xx = is_forwarded_nano = false;
   }
@@ -274,4 +277,9 @@ public:
   bool DownloadFlight(const RecordedFlightInfo &flight,
                       Path path,
                       OperationEnvironment &env) override;
+
+  bool ManagePassthroughDevice(Device *passthrough_device,
+                                unsigned device_index,
+                                DeviceBlackboard &device_blackboard,
+                                OperationEnvironment &env) override;
 };

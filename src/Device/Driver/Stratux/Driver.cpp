@@ -7,6 +7,11 @@
 #include "Profile/Keys.hpp"
 #include "Profile/ProfileMap.hpp"
 #include "Device/Driver/FLARM/StaticParser.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
+
+// Forward declaration - avoid pulling in UI dependencies
+class Device;
+void ManageStratuxDialog(Device &device);
 
 StratuxDevice::StratuxSettings settings;
 
@@ -43,7 +48,7 @@ StratuxDevice::ParseNMEA(const char *line, NMEAInfo &info)
     RangeFilter range;
     range.horizontal = settings.hrange;
     range.vertical = settings.vrange;
-    ParsePFLAA(input_line, info.flarm.traffic, info.clock, range);
+    ParsePFLAA(input_line, info.flarm.traffic, info.flarm.version, info.clock, range);
     return true;
   } else
     return false;
@@ -55,6 +60,14 @@ StratuxCreateOnPort([[maybe_unused]] const DeviceConfig &config, [[maybe_unused]
   LoadFromProfile(settings);
 
   return new StratuxDevice();
+}
+
+bool
+StratuxDevice::Manage([[maybe_unused]] unsigned device_index,
+                      [[maybe_unused]] DeviceBlackboard &device_blackboard)
+{
+  ManageStratuxDialog(*this);
+  return true;
 }
 
 const struct DeviceRegister stratux_driver = {

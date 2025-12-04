@@ -4,6 +4,11 @@
 #include "Device/Driver/Vega.hpp"
 #include "Internal.hpp"
 #include "Operation/Operation.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
+
+// Forward declaration - avoid pulling in UI dependencies
+class Device;
+bool dlgConfigurationVarioShowModal(Device &device);
 
 void
 VegaDevice::LinkTimeout()
@@ -40,4 +45,12 @@ VegaDevice::OnCalculatedUpdate([[maybe_unused]] const MoreData &basic,
 
   PortWriteNMEA(port, tbuf);
 #endif
+}
+
+bool
+VegaDevice::Manage([[maybe_unused]] unsigned device_index,
+                   [[maybe_unused]] DeviceBlackboard &device_blackboard)
+{
+  dlgConfigurationVarioShowModal(*this);
+  return true;
 }

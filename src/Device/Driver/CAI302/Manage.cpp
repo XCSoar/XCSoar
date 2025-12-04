@@ -6,6 +6,10 @@
 #include "util/Macros.hpp"
 #include "util/CharUtil.hxx"
 #include "Engine/Waypoint/Waypoint.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
+// Forward declaration - avoid pulling in UI dependencies
+class Device;
+void ManageCAI302Dialog(Device &device);
 
 bool
 CAI302Device::ReadGeneralInfo(CAI302::GeneralInfo &data,
@@ -242,4 +246,12 @@ void
 CAI302Device::CloseNavpoints(OperationEnvironment &env)
 {
   CAI302::CloseNavpoints(port, env);
+}
+
+bool
+CAI302Device::Manage([[maybe_unused]] unsigned device_index,
+                     [[maybe_unused]] DeviceBlackboard &device_blackboard)
+{
+  ManageCAI302Dialog(*this);
+  return true;
 }
