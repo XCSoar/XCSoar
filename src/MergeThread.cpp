@@ -7,6 +7,9 @@
 #include "NMEA/MoreData.hpp"
 #include "Audio/VarioGlue.hpp"
 #include "Device/MultipleDevices.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
+#include "FLARM/AlertZoneList.hpp"
 
 MergeThread::MergeThread(DeviceBlackboard &_device_blackboard,
                          MultipleDevices *_devices) noexcept
@@ -45,6 +48,17 @@ MergeThread::Process() noexcept
 
   flarm_computer.Process(device_blackboard.SetBasic().flarm,
                          last_fix.flarm, basic);
+
+  /* Update alert zone airspaces if zones have changed */
+  if (backend_components != nullptr &&
+      backend_components->flarm_alert_zone_airspaces != nullptr) {
+    const auto &flarm = basic.flarm;
+    static Validity last_zones_modified;
+    if (flarm.alert_zones.modified.Modified(last_zones_modified)) {
+      flarm.alert_zones.UpdateAirspaces(
+        *backend_components->flarm_alert_zone_airspaces);
+    }
+  }
 }
 
 void
