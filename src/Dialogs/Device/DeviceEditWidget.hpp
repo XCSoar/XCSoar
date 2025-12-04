@@ -47,6 +47,15 @@ public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
 
+  enum ControlIndex {
+    Port, EngineTypes, BaudRate, BulkBaudRate,
+    IP_ADDRESS,
+    TCPPort,
+    I2CBus, I2CAddr, PressureUsage, Driver, UseSecondDriver, SecondDriver,
+    SyncFromDevice, SyncToDevice,
+    K6Bt,
+  };
+
 private:
   /* virtual methods from DataFieldListener */
   void OnModified(DataField &df) noexcept override;
