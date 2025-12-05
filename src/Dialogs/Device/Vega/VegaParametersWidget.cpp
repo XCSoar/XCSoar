@@ -233,7 +233,27 @@ VegaParametersWidget::Save(bool &changed_r) noexcept
   PopupOperationEnvironment env;
   for (unsigned i = 0, end = parameters.size(); i != end; ++i) {
     Parameter &parameter = parameters[i];
-    const int ui_value = GetValueInteger(i);
+    int ui_value;
+
+    switch (GetDataField(i).GetType()) {
+    case DataField::Type::BOOLEAN:
+      ui_value = GetValueBoolean(i);
+      break;
+
+    case DataField::Type::INTEGER:
+      ui_value = GetValueInteger(i);
+      break;
+
+    case DataField::Type::ENUM:
+      ui_value = GetValueEnum(i);
+      break;
+
+    default:
+      gcc_unreachable();
+      assert(false);
+      continue;
+    }
+
     if (ui_value == parameter.value)
       /* not modified */
       continue;

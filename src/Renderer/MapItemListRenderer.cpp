@@ -30,6 +30,7 @@
 #include "Renderer/TrafficRenderer.hpp"
 #include "FLARM/Details.hpp"
 #include "FLARM/FlarmNetRecord.hpp"
+#include "FLARM/Traffic.hpp"
 #include "Weather/Features.hpp"
 #include "FLARM/List.hpp"
 #include "time/RoughTime.hpp"
@@ -326,8 +327,11 @@ Draw(Canvas &canvas, PixelRect rc,
   StaticString<256> title_string;
   if (record && !StringIsEmpty(record->pilot))
     title_string = record->pilot.c_str();
-  else
-    title_string = _("FLARM Traffic");
+  else {
+    // Use source type if available
+    const TCHAR* source = FlarmTraffic::GetTrafficSourceTitle(traffic);
+    title_string.Format(_T("%s %s"), source, _("Traffic"));
+  }
 
   // Append name to the title, if it exists
   const TCHAR *callsign = FlarmDetails::LookupCallsign(item.id);
@@ -424,6 +428,7 @@ Draw(Canvas &canvas, PixelRect rc,
 {
   row_renderer.DrawFirstRow(canvas, rc, item.label.c_str());
 }
+
 
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,

@@ -76,7 +76,7 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
 
     // FLARM sentences
     if (type2 == "PFLAE"sv) {
-      ParsePFLAE(line, info.flarm.error, info.clock);
+      ParsePFLAE(line, info.flarm.error, info.flarm.version, info.clock);
       return true;
     }
 
@@ -89,12 +89,27 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
       RangeFilter range;
       range.horizontal=0;
       range.vertical=0;
-      ParsePFLAA(line, info.flarm.traffic, info.clock, range);
+      ParsePFLAA(line, info.flarm.traffic, info.flarm.version, info.clock, range);
       return true;
     }
 
     if (type2 == "PFLAU"sv) {
-      ParsePFLAU(line, info.flarm.status, info.clock);
+      ParsePFLAU(line, info.flarm.status, info.flarm.version, info.clock);
+      return true;
+    }
+
+    if (type2 == "PFLAO"sv) {
+      ParsePFLAO(line, info.flarm.alert_zones, info.flarm.version, info.clock);
+      return true;
+    }
+
+    if (type2 == "PFLAF"sv) {
+      ParsePFLAF(line);
+      return true;
+    }
+
+    if (type2 == "PFLAJ"sv) {
+      ParsePFLAJ(line, info.flarm.flight_state, info.flarm.version, info.clock);
       return true;
     }
 

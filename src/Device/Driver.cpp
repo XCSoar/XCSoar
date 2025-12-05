@@ -124,3 +124,22 @@ AbstractDevice::DataReceived(std::span<const std::byte>, NMEAInfo &) noexcept
 {
   return false;
 }
+
+bool
+Device::Manage([[maybe_unused]] unsigned device_index,
+               [[maybe_unused]] DeviceBlackboard &device_blackboard)
+{
+  return false;
+}
+
+bool
+Device::ManagePassthroughDevice(Device *passthrough_device,
+                                  unsigned device_index,
+                                  DeviceBlackboard &device_blackboard,
+                                  [[maybe_unused]] OperationEnvironment &env)
+{
+  if (passthrough_device == nullptr)
+    return false;
+
+  return passthrough_device->Manage(device_index, device_blackboard);
+}

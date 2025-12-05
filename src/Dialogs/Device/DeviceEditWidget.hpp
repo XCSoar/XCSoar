@@ -24,10 +24,12 @@ public:
   DeviceEditWidget(const DeviceConfig &_config) noexcept;
 
   void SetListener(Listener *_listener) noexcept {
-    assert(listener == nullptr);
-    assert(_listener != nullptr);
-
-    listener = _listener;
+    if (_listener != nullptr) {
+      assert(listener == nullptr);
+      listener = _listener;
+    } else {
+      listener = nullptr;
+    }
   }
 
   const DeviceConfig &GetConfig() const noexcept {
@@ -44,6 +46,15 @@ public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
+
+  enum ControlIndex {
+    Port, EngineTypes, BaudRate, BulkBaudRate,
+    IP_ADDRESS,
+    TCPPort,
+    I2CBus, I2CAddr, PressureUsage, Driver, UseSecondDriver, SecondDriver,
+    SyncFromDevice, SyncToDevice,
+    K6Bt,
+  };
 
 private:
   /* virtual methods from DataFieldListener */

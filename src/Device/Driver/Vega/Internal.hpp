@@ -58,4 +58,6 @@ public:
               OperationEnvironment &env) override;
   void OnCalculatedUpdate(const MoreData &basic,
                           const DerivedInfo &calculated) override;
+  bool Manage(unsigned device_index,
+              class DeviceBlackboard &device_blackboard) override;
 };

@@ -9,8 +9,8 @@
 #include <vector>
 #include <cstdint>
 
-/** 
- * Device driver for Cambridge Aero Instruments 302 
+/**
+ * Device driver for Cambridge Aero Instruments 302
  */
 class CAI302Device : public AbstractDevice {
   enum class Mode : uint8_t {
@@ -56,6 +56,8 @@ public:
   virtual bool DownloadFlight(const RecordedFlightInfo &flight,
                               Path path,
                               OperationEnvironment &env) override;
+  bool Manage(unsigned device_index,
+              class DeviceBlackboard &device_blackboard) override;
 
 public:
   bool EnableBulkMode(OperationEnvironment &env);

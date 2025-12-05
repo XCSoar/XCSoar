@@ -33,7 +33,7 @@ public:
 };
 
 static void
-EditUnits(const DialogLook &look, CAI302Device &device)
+EditUnits(CAI302Device &device)
 {
   CAI302::Pilot data;
 
@@ -41,7 +41,7 @@ EditUnits(const DialogLook &look, CAI302Device &device)
   if (!device.ReadActivePilot(data, env))
     return;
 
-  CAI302UnitsEditor widget(look, data);
+  CAI302UnitsEditor widget(UIGlobals::GetDialogLook(), data);
   if (!DefaultWidgetDialog(UIGlobals::GetMainWindow(),
                            UIGlobals::GetDialogLook(),
                            _("Units"), widget))
@@ -51,14 +51,16 @@ EditUnits(const DialogLook &look, CAI302Device &device)
 }
 
 static void
-UploadWaypoints(const DialogLook &look, CAI302Device &device)
+UploadWaypoints(CAI302Device &device)
 {
   const auto path = FilePicker(_("Waypoints"), WAYPOINT_FILE_PATTERNS);
   if (path == nullptr)
     return;
 
   CAI302WaypointUploader job(path, device);
-  JobDialog(UIGlobals::GetMainWindow(), look, _("Waypoints"), job, true);
+  JobDialog(UIGlobals::GetMainWindow(),
+            UIGlobals::GetDialogLook(),
+            _("Waypoints"), job, true);
 }
 
 void
@@ -67,7 +69,7 @@ ManageCAI302Widget::Prepare([[maybe_unused]] ContainerWindow &parent,
 {
   AddButton(_("Units"), [this](){
     try {
-      EditUnits(GetLook(), device);
+      EditUnits(device);
     } catch (OperationCancelled) {
     } catch (...) {
       ShowError(std::current_exception(), _("Units"));
@@ -76,7 +78,7 @@ ManageCAI302Widget::Prepare([[maybe_unused]] ContainerWindow &parent,
 
   AddButton(_("Waypoints"), [this](){
     try {
-      UploadWaypoints(GetLook(), device);
+      UploadWaypoints(device);
     } catch (OperationCancelled) {
     } catch (...) {
       ShowError(std::current_exception(), _("Waypoints"));
@@ -129,13 +131,13 @@ ManageCAI302Widget::Prepare([[maybe_unused]] ContainerWindow &parent,
 }
 
 void
-ManageCAI302Dialog([[maybe_unused]] SingleWindow &parent, const DialogLook &look,
-                   Device &device)
+ManageCAI302Dialog(Device &device)
 {
   WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
                       UIGlobals::GetDialogLook(),
                       _T("CAI 302"),
-                      new ManageCAI302Widget(look, (CAI302Device &)device));
+                      new ManageCAI302Widget(UIGlobals::GetDialogLook(),
+                                             (CAI302Device &)device));
   dialog.AddButton(_("Close"), mrCancel);
   dialog.ShowModal();
 }

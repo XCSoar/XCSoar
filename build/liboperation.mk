@@ -6,6 +6,10 @@ OPERATION_SOURCES := \
 	$(SRC)/Operation/SubOperationEnvironment.cpp \
 	$(SRC)/Operation/ThreadedOperationEnvironment.cpp
 
+ifndef XCSOAR_TESTING
+OPERATION_SOURCES += $(SRC)/Operation/MessageOperationEnvironment.cpp
+endif
+
 # This is necessary because ThreadedOperationEnvironment depends on
 # class UI::DelayedNotify, which embeds a UI::Timer, which has a
 # different implementation based on macro USE_POLL_EVENT; and class

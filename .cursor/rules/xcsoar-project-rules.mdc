@@ -1,0 +1,350 @@
+---
+alwaysApply: true
+---
+
+# XCSoar Project Rules
+
+## Code Style
+
+### Formatting
+- 79 columns maximum (reasonable exceptions allowed)
+- Indent 2 spaces, no tabs
+- No indent for `namespace` blocks
+- Use `.clang-format` for new code; do not reformat old code unless touched
+
+### File Headers
+- All source files must start with license header:
+  ```cpp
+  // SPDX-License-Identifier: GPL-2.0-or-later
+  // Copyright The XCSoar Project
+  ```
+- Header files should use `#pragma once` (not `#ifndef`/`#define` guards)
+- Include ordering:
+  1. License header
+  2. `#pragma once` (for headers)
+  3. Local includes (quoted, e.g., `#include "Local.hpp"`)
+  4. System includes (angled, e.g., `#include <array>`)
+  5. Conditional includes (`#ifdef` blocks)
+- `.clang-format` handles include sorting automatically
+
+### Naming Conventions
+- Classes/functions: `CamelCase` (not `camelCase`)
+- Variables/attributes: `lowercase_with_underscores` (e.g., `foo_bar`)
+- Constants/enums: `UPPER_CASE` (e.g., `FOO_BAR`)
+- Files: `*.cpp` and `*.hpp` for C++, named after the main class
+- Each class should have separate `.cpp` and `.hpp` files
+
+### C++ Standards
+- C++20 standard
+- Compilers: gcc 10+ or clang 12+
+- Be `const`-correct; use `constexpr` instead of `const` whenever possible
+- Use `static` whenever possible
+- Make methods `virtual` only after careful consideration
+- All overrides must use `override` keyword; use `final` often
+- Compile with `WERROR=y` and fix all warnings
+- Use `noexcept` for functions that don't throw exceptions
+- Use GCC attributes when appropriate: `[[gnu::pure]]`, `[[gnu::const]]`, `[[noreturn]]`, `[[nodiscard]]`
+
+### Code Organization
+- In class declaration: attributes first, then constructor/destructor, then methods
+- Don't write large functions; split them up when they become too large
+- Avoid dynamic allocation; use `StaticArray` and `StaticString` if possible
+- Asterisks belong to variable name: `Foo *a, *b` not `Foo* a, b`
+- Avoid preprocessor macros; use `inline` functions and `constexpr` variables
+- Avoid expensive STL containers; prefer `StaticArray`/`StaticString` if size is predictable
+- Avoid template hell; keep templates readable
+
+### Enums with Count Values
+- Enums that are used in multiple places (backend and UI) should include a `COUNT` sentinel value as the last enum member
+- Arrays, lookup tables, or other data structures that correspond to enum values must be guarded with `static_assert` to ensure they match the enum `COUNT`
+- This provides compile-time checking to catch mismatches when enum values are added or removed
+- Example:
+  ```cpp
+  enum class MyEnum {
+    VALUE1,
+    VALUE2,
+    COUNT  // sentinel
+  };
+
+  static const TCHAR *const names[] = {
+    _T("Value 1"),
+    _T("Value 2"),
+  };
+
+  static_assert(ARRAY_SIZE(names) == unsigned(MyEnum::COUNT),
+                "Array size must match enum COUNT");
+  ```
+
+### Comments & Documentation
+- Write comments in English
+- Comments should be used reasonably:
+  - When the code below is complex and not easily human readable
+  - When there are things that must be known outside the codebase (e.g., device behavior, protocol specifications, hardware quirks)
+  - Avoid obvious comments that just restate what the code does
+- Document all workarounds
+- Non-trivial functions should have doxygen comments
+- Don't abuse multiple `//` comments for multi-line comments
+
+### String Translation
+- All strings displayed to the user must be marked as translatable
+- Use `_()` macro for strings that are translated immediately: `_("Text")`
+- Use `N_()` macro for strings in static arrays/initializers that are translated later via `gettext()`: `N_("Text")`
+- Example with `N_()`:
+  ```cpp
+  static constexpr const TCHAR *const names[] = {
+    N_("Value 1"),
+    N_("Value 2"),
+  };
+  // Later, when displaying: gettext(names[i])
+  ```
+- `N_()` is commonly used with `StaticEnumChoice` arrays for enum dropdowns; `AddChoices()` automatically calls `gettext()` on these strings
+- **Logging is exempt**: Do not use translation macros (`_()` or `N_()`) in logging functions (e.g., `LogFormat()`, `LogDebug()`, `LogInfo()`, `LogError()`)
+- Log messages should remain in English for consistency and debugging
+
+### Utilities
+- Use utility functions in `src/util` when available
+
+### Error Handling
+- Exceptions are used for error handling (std::exception, std::runtime_error, etc.)
+- Use `std::exception_ptr` for exception propagation across threads
+- Use utility functions from `util/Exception.hxx` for exception handling
+- For unreachable code, use `gcc_unreachable()` or `assert(false)`
+- Use `assert()` for runtime checks in debug builds
+
+## Git Workflow
+
+### Branches
+- `master`: development branch for next minor release
+- `v<major>.<minor>.x`: current minor version branch (for bug fixes)
+- Commits for next minor release → `master`
+- Bug fixes for current minor release → current minor branch
+
+### Patches
+- Must be self-explanatory with good description
+- Subject line: subsystem/library name + brief description
+- Must compile and not introduce regressions
+- Must be self-contained; only change one thing
+- Split larger patches into smaller pieces
+- Don't refactor and add/modify/remove features in the same patch
+- Don't rewrite code unless needed; migrate incrementally
+
+### Pull Requests
+- All description should be in the commit messages (no text in the PR)
+- PR should be rebased on the current HEAD
+- One commit per atomic feature (every commit should build)
+- No fixup commits
+- Pass all the compile and CI targets
+
+## Architecture
+
+### Multi-Platform Considerations
+- XCSoar is a multi-platform project supporting: Windows (PC, WIN64), Linux/UNIX, Android, iOS, macOS, Kobo e-readers, Raspberry Pi, and other embedded platforms
+- **Unicode/Non-Unicode handling:**
+  - Use `TCHAR` for character types (maps to `char` on Unix/Android/iOS, `wchar_t` on Windows with `_UNICODE`)
+  - Use `_T()` macro for string literals (e.g., `_T("Hello")`)
+  - Use `tstring` (maps to `std::string` or `std::wstring` depending on build)
+  - On Windows: can be built with or without `_UNICODE` (Unicode vs ANSI)
+  - On Unix/Android/iOS: always uses UTF-8 (`char`, non-Unicode build)
+  - Use conversion utilities (`WideToUTF8Converter`, `UTF8ToWideConverter`) when interfacing between different string types
+- **Platform detection:**
+  - Use `#ifdef ANDROID`, `#ifdef __APPLE__`, `#ifdef WIN32`, `#ifdef KOBO`, etc. for platform-specific code
+  - Use helper functions from `Asset.hpp`: `IsAndroid()`, `IsIOS()`, `IsKobo()`, `IsEmbedded()`, etc.
+  - Use `HAVE_*` defines for optional features (e.g., `HAVE_NOAA`, `HAVE_SKYLINES_TRACKING`)
+- **Platform-specific implementations:**
+  - Different implementations may be needed for the same functionality (e.g., audio players, file I/O, threading)
+  - Use factory patterns or conditional compilation to select appropriate implementation
+  - Test changes on multiple platforms when possible
+- **E-paper renderer (Kobo e-readers):**
+  - Kobo e-readers use e-paper (E-Ink) displays which are non-color and have special rendering requirements
+  - Use `IsKobo()` or `HasEPaper()` from `Asset.hpp` to detect e-paper displays
+  - E-paper displays are slow to refresh and show ghosting; animations should be disabled
+  - The renderer uses greyscale mode with optional dithering for better visual quality
+  - Use `IsDithered()` to check if dithering is enabled for conditional styling
+  - Consider display refresh limitations when implementing UI updates on Kobo
+
+### Architectural Layers
+
+XCSoar follows a layered architecture with clear separation of concerns:
+
+**1. Foundation Layer** (`util/`, `Math/`, `Geo/`)
+- Low-level utilities with no dependencies on higher layers
+- Pure data structures and algorithms
+- Can be used by any layer above
+
+**2. Engine Layer** (`Engine/`)
+- Business logic: task calculations, airspace, waypoints, route planning
+- Independent of UI and platform-specific code
+- Minimal dependencies; should not depend on UI or backend layers
+- Provides abstract interfaces (e.g., `TaskInterface`) for flexibility
+
+**3. Backend Layer** (`Computer/`, `Device/`, `Blackboard/`, `CalculationThread/`)
+- Sensor data processing and merging
+- Expensive calculations (task engine, airspace warnings)
+- Thread management and data synchronization
+- Uses `BackendComponents` to manage backend resources
+
+**4. Interface/UI Layer** (`Interface.hpp`, `Dialogs/`, `Form/`, `Renderer/`, `MapWindow/`)
+- User interface and presentation
+- Reads data through `Interface.hpp` (read-only access)
+- Sends actions through `ActionInterface` (UI → Backend communication)
+- Uses `Components` to access backend resources when needed
+
+**5. Platform Abstraction Layer** (`ui/`, `thread/`, `net/`, platform-specific directories)
+- OS-specific implementations
+- Abstracts platform differences
+- Higher layers depend on abstractions, not implementations
+
+### Clean Interface Principles
+
+**Blackboard Pattern for Data Sharing:**
+- `DeviceBlackboard`: shared between device threads and calculation threads
+- `InterfaceBlackboard`: read-only copy for UI thread (via `CommonInterface::Basic()`)
+- `MapWindowBlackboard`: for map rendering thread
+- Each thread has its own blackboard copy to avoid locking overhead
+- Use `BlackboardListener` for UI components that need change notifications
+
+**Component Separation:**
+- `BackendComponents`: manages backend resources (devices, computers, threads)
+- `DataComponents`: manages data stores (waypoints, airspaces, terrain)
+- `NetComponents`: manages network resources
+- Components are accessed through global pointers, not direct dependencies
+
+**Interface Access Patterns:**
+- **UI reading data**: Use `CommonInterface::Basic()` or `CommonInterface::Calculated()` (read-only, thread-safe for UI thread)
+- **UI modifying settings**: Use `ActionInterface` functions (e.g., `ActionInterface::SetMacCready()`)
+- **Backend accessing data**: Lock and read from `DeviceBlackboard` or use appropriate blackboard
+- **Engine layer**: Should not depend on UI or backend; accessed through abstract interfaces
+
+**Dependency Rules:**
+- Foundation → no dependencies
+- Engine → only Foundation (util, Math, Geo)
+- Backend → Foundation + Engine (not UI)
+- UI → Foundation + Engine + Backend (through interfaces)
+- Platform → Foundation only (or minimal dependencies)
+
+**Thread Safety:**
+- UI thread: use `InterfaceBlackboard` via `CommonInterface::*()` functions
+- Calculation thread: use `GlideComputerBlackboard` or lock `DeviceBlackboard`
+- Map rendering thread: use `MapWindowBlackboard`
+- Device threads: write to `DeviceBlackboard` (per-device slots), then notify merge thread
+- Never access `InterfaceBlackboard` from non-UI threads
+
+### Source Organization
+- Code in `src/` directory with specific subdirectories (util/, Math/, Geo/, etc.)
+
+### Threading
+- UI thread: main thread, no other thread may manipulate windows
+- Access sensor data from `CommonInterface::Basic()` in UI thread only
+- Other threads must not use `Interface.hpp` library
+- Use appropriate blackboards for different threads:
+  - UI thread: `InterfaceBlackboard` via `CommonInterface::Basic()`
+  - MapWindow (DrawThread): `MapWindowBlackboard`
+  - Device drivers: implement `OnSensorUpdate` or `OnCalculatedUpdate`
+  - Others: lock `DeviceBlackboard` when accessing
+
+## Privacy
+
+### Network Activity and Tracking
+- XCSoar operates offline by default; no network activity unless explicitly enabled by the user
+- Network features (e.g., tracking services, weather downloads) must be opt-in and clearly documented
+- No automatic tracking, telemetry, or analytics
+- All network features should be clearly visible in settings and require user consent
+- When implementing network features, respect user privacy settings and provide clear opt-out mechanisms
+
+### Data Logging
+- Avoid logging identifying or sensitive information:
+  - Usernames, passwords, or authentication tokens
+  - Device serial numbers or unique identifiers
+  - Personal information that could identify users
+- Log files (IGC, NMEA) contain flight data only; no personal identifiers should be embedded
+- Debug logs should not contain sensitive data; sanitize or exclude passwords, tokens, and personal information
+- When logging is necessary for debugging, use sanitized or anonymized data
+
+### User Data Protection
+- All user data is stored locally on the device
+- No automatic transmission of user data to external servers
+- User must explicitly choose to share data (e.g., upload IGC files, enable tracking)
+- Respect user privacy preferences and settings
+
+## GUI Guidelines
+
+### UI Scaling and DPI Support
+- UI must scale from low-DPI devices (e.g., CGA resolution ~96 DPI) to very high-DPI devices (e.g., modern phones with 400+ DPI)
+- Use `Layout::Scale()` for general UI element scaling (based on 240x320 base resolution)
+- Use `Layout::PtScale()` for physical dimensions in points (1/72th inch)
+- Use `Layout::VptScale()` for virtual points (accounts for viewing distance on small screens)
+- Use `Layout::FontScale()` for font sizes (accounts for DPI, screen size, and user preference)
+- Use `Layout::ScalePenWidth()` or `Layout::ScaleFinePenWidth()` for line widths
+- Never use hardcoded pixel values; always use scaling functions from `Layout` namespace
+- Base resolution: 240 pixels (320 for square displays) on the shortest dimension
+- Small screens (< 5 inch) automatically get adjusted scaling for viewing distance
+- Touch screens get larger hit areas and control heights
+- Test UI changes on both low-DPI and high-DPI devices when possible
+
+### UI Operability
+- UI must be operable via multiple input methods: touch, keyboard, and gestures
+- All user actions should be accessible through different input modalities
+- Expose functionality that makes sense via `ActionInterface` namespace (e.g., `ActionInterface::SetMacCready()`, `ActionInterface::SetBallast()`)
+- `ActionInterface` provides a clean API for UI actions that can be triggered by various input methods (touch, keyboard shortcuts, gestures, InputEvents)
+- This allows the same functionality to be accessible regardless of input method
+- Consider exposing commonly used actions through `ActionInterface` for consistency and accessibility
+- **Navigation depth**: All actions used in-flight should be maximum 3 steps away from the main operation mode
+- This ensures critical functions remain quickly accessible during flight operations
+- Prioritize frequently used in-flight actions to be accessible with fewer steps
+- **State change notifications**: Announce internal state changes to the user
+- Use appropriate notification mechanisms (e.g., `StatusMessage`, `PopupMessage`, `OperationEnvironment::SetText()`) to inform users of important state changes
+- Examples: GPS connection status, device connection/disconnection, task state changes, airspace warnings, system errors
+- Ensure users are aware of changes that affect system behavior or require their attention
+
+### Letter Cases
+- Captions: Capitalization (e.g., "Pan On", "The Display Of...")
+- Abbreviations: Upper case (e.g., "MC", "ETA", "V") or CamelCase (e.g., "GoTo", "InfoBox")
+- Plain text: Write like prose
+- Labels: Generally like prose, with exceptions where meaningful
+
+### Colors
+- Red: warning
+- Orange: caution
+- Green: positive safety indicator
+- Blue: neutral safety indicator
+- Grey: buttons
+- Yellow: clicked items
+- Light blue: key focused item
+- Medium blue: dialogue title bar
+
+### Safety
+- Avoid elements that encourage continuous screen staring
+- Avoid controls with significant risk if misconfigured
+- Check for color blindness compatibility
+- Follow aviation conventions (ICAO standards, IGC standards, NASA color usage, FAA guidelines)
+
+## Look System
+
+### Look Class Structure
+- Look classes are `struct` types (not `class`), named with `*Look` suffix (e.g., `ButtonLook`, `DialogLook`, `MapLook`)
+- The main `Look` struct in `src/Look/Look.hpp` aggregates all individual Look structs as members
+- Each Look struct contains visual elements: `Pen`, `Brush`, `Color`, `Icon`, `Bitmap`, `Font` pointers, etc.
+- Look structs are organized by UI component (e.g., `MapLook`, `InfoBoxLook`, `TaskLook`)
+
+### Look Initialization
+- Use `Initialise()` method (British spelling) for initial setup
+- Use `Reinitialise()` or `ReinitialiseLayout()` for updates when settings change
+- `Initialise()` methods typically take:
+  - Settings structs (e.g., `UISettings`, `MapSettings`, `AirspaceRendererSettings`)
+  - Font references (e.g., `const Font &font`, `const Font &bold_font`)
+  - Layout parameters (e.g., `unsigned infobox_width`)
+  - Dark mode flag (`bool dark_mode`)
+- The main `Look::InitialiseConfigured()` method initializes all Look structs based on user settings
+- Platform-aware initialization: use `IsDithered()`, `HasColors()`, etc. from `Asset.hpp` for conditional styling
+
+### Look Naming and Organization
+- Each Look struct should have its own `.hpp` and `.cpp` files in `src/Look/`
+- Look structs should be included in the main `Look.hpp` file
+- Member variables in Look structs use descriptive names (e.g., `standard`, `selected`, `focused` for button states)
+- Use nested structs for related groups (e.g., `StateLook` within `ButtonLook`)
+
+### Colors and Styling
+- Use colors from `src/Look/Colors.hpp` for consistency
+- Follow color conventions (red=warning, orange=caution, green=safety, blue=neutral)
+- Support dark mode when applicable (pass `dark_mode` parameter to `Initialise()`)
+- Use platform detection for conditional styling (dithered displays, color vs monochrome)

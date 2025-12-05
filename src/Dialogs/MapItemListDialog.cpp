@@ -276,7 +276,6 @@ ShowMapItemDialog(const MapItem &item,
   case MapItem::Type::TRAFFIC:
     dlgFlarmTrafficDetailsShowModal(((const TrafficMapItem &)item).id);
     break;
-
 #ifdef HAVE_NOAA
   case MapItem::Type::WEATHER:
     dlgNOAADetailsShowModal(((const WeatherStationMapItem &)item).station);

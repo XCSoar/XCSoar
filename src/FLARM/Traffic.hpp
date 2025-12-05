@@ -94,6 +94,18 @@ struct FlarmTraffic {
   /** Type of the aircraft */
   AircraftType type;
 
+  enum class Source: uint8_t {
+    FLARM = 0,
+    ADS_B = 1,
+    ADS_R = 3,
+    TIS_B = 4,
+    MODE_S = 6,
+    UNKNOWN = 255,
+  };
+
+  /** Data source: FLARM, ADS-B, ADS-R, TIS-B, or Mode-S (protocol version >= 9) */
+  Source source;
+
   /** Is the target in stealth mode */
   bool stealth;
 
@@ -137,6 +149,7 @@ struct FlarmTraffic {
   void Clear() noexcept {
     valid.Clear();
     name.clear();
+    source = Source::UNKNOWN;
   }
 
   Angle Bearing() const noexcept {
@@ -165,6 +178,11 @@ struct FlarmTraffic {
 
   [[gnu::const]]
   static const TCHAR *GetTypeString(AircraftType type) noexcept;
+
+  [[gnu::const]]
+  static const TCHAR *GetSourceString(Source source) noexcept;
+
+  static const TCHAR *GetTrafficSourceTitle(const FlarmTraffic *traffic) noexcept;
 
   void Update(const FlarmTraffic &other) noexcept;
 };

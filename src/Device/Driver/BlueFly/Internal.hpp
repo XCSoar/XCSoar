@@ -109,4 +109,6 @@ public:
   /* virtual methods from class Device */
   void LinkTimeout() override;
   bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
+  bool Manage(unsigned device_index,
+              class DeviceBlackboard &device_blackboard) override;
 };

@@ -709,6 +709,17 @@ DeviceDescriptor::ParseNMEA(const char *line, NMEAInfo &info) noexcept
   const ExternalSettings old_settings = info.settings;
   info.settings = settings_received;
 
+  /* In passthrough mode, the passthrough device should be the first to
+     interpret sentences, as the primary device is just forwarding data. */
+  if (driver != nullptr && driver->HasPassThrough() &&
+      config.use_second_device && second_device != nullptr) {
+    if (second_device->ParseNMEA(line, info)) {
+      info.alive.Update(info.clock);
+      return true;
+    }
+  }
+
+  /* Try the primary device if passthrough device didn't handle it */
   if (device != nullptr && device->ParseNMEA(line, info)) {
     info.alive.Update(info.clock);
 

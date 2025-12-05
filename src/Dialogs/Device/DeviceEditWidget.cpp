@@ -472,8 +472,26 @@ DeviceEditWidget::Save(bool &_changed) noexcept
 void
 DeviceEditWidget::OnModified(DataField &df) noexcept
 {
-  if (IsDataField(Port, df) || IsDataField(Driver, df) ||
-      IsDataField(UseSecondDriver, df) || IsDataField(K6Bt, df))
+  bool update_visibilities = false;
+
+  /* Check fields that always exist */
+  if (IsDataField(Port, df) || IsDataField(Driver, df) || IsDataField(K6Bt, df)) {
+    update_visibilities = true;
+  }
+
+  /* Check passthrough fields - these are always added in Prepare(),
+     but may not be visible */
+  if (IsDataField(UseSecondDriver, df)) {
+    config.use_second_device = GetValueBoolean(UseSecondDriver);
+    update_visibilities = true;
+  }
+  if (IsDataField(SecondDriver, df)) {
+    SaveValue(SecondDriver, config.driver2_name.buffer(),
+              config.driver2_name.capacity());
+    update_visibilities = true;
+  }
+
+  if (update_visibilities)
     UpdateVisibilities();
 
   if (listener != nullptr)

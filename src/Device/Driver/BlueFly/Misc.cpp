@@ -3,6 +3,11 @@
 
 #include "Device/Driver/BlueFlyVario.hpp"
 #include "Internal.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
+
+// Forward declaration - avoid pulling in UI dependencies
+class Device;
+void dlgConfigurationBlueFlyVarioShowModal(Device &device);
 
 void
 BlueFlyDevice::LinkTimeout()
@@ -21,4 +26,12 @@ BlueFlyDevice::BlueFlyDevice(Port &_port)
 BlueFlyDevice::~BlueFlyDevice()
 {
   free(settings_keys);
+}
+
+bool
+BlueFlyDevice::Manage([[maybe_unused]] unsigned device_index,
+                      [[maybe_unused]] DeviceBlackboard &device_blackboard)
+{
+  dlgConfigurationBlueFlyVarioShowModal(*this);
+  return true;
 }

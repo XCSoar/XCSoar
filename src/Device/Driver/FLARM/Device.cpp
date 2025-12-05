@@ -10,8 +10,22 @@
 #include "util/NumberParser.hpp"
 #include "util/StringCompare.hxx"
 #include "NMEA/Checksum.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
+#include "Operation/Operation.hpp"
+
+// Forward declarations - avoid pulling in UI dependencies
+class Device;
+struct FlarmVersion;
+struct FlarmHardware;
+struct FlarmFlightState;
+void ManageFlarmDialog(Device &device,
+                       const FlarmVersion &version,
+                       FlarmHardware &hardware,
+                       const FlarmFlightState &flight_state);
+#include "time/TimeoutClock.hpp"
 
 #include <fmt/format.h>
+#include <chrono>
 
 void
 FlarmDevice::LinkTimeout()
@@ -261,4 +275,65 @@ void
 FlarmDevice::Restart(OperationEnvironment &env)
 {
   Send("PFLAR,0", env);
+}
+
+void
+FlarmDevice::SendResetCARP(OperationEnvironment &env)
+{
+  SendSetting("CARP", "0", env);
+}
+
+void
+FlarmDevice::SendDemoScenario(unsigned scenario_number,
+                              OperationEnvironment &env)
+{
+  NarrowString<32> buffer;
+  buffer.Format("PFLAF,S,%u", scenario_number);
+  Send(buffer, env);
+}
+
+bool
+FlarmDevice::Manage(unsigned device_index,
+                    DeviceBlackboard &device_blackboard)
+{
+  /* Wait for the device to be alive before opening the manage dialog.
+     This ensures that queries sent by the dialog (e.g., PFLVC) will be
+     received and processed by the device. */
+  QuietOperationEnvironment env;
+  const TimeoutClock timeout(std::chrono::seconds(5));
+
+  while (!env.IsCancelled() && !timeout.HasExpired()) {
+    {
+      const std::lock_guard lock{device_blackboard.mutex};
+      const NMEAInfo &basic = device_blackboard.RealState(device_index);
+      if (basic.alive)
+        break;
+    }
+
+    env.Sleep(std::chrono::milliseconds(50));
+  }
+
+  /* Re-read device state after wait and verify device is alive.
+     Only open dialog if device is responsive. */
+  FlarmVersion version;
+  FlarmHardware hardware;
+  FlarmFlightState flight_state;
+  bool device_alive = false;
+
+  {
+    const std::lock_guard lock{device_blackboard.mutex};
+    const NMEAInfo &basic = device_blackboard.RealState(device_index);
+    device_alive = basic.alive;
+    if (device_alive) {
+      version = basic.flarm.version;
+      hardware = basic.flarm.hardware;
+      flight_state = basic.flarm.flight_state;
+    }
+  }
+
+  if (env.IsCancelled() || !device_alive)
+    return false;
+
+  ManageFlarmDialog(*this, version, hardware, flight_state);
+  return true;
 }

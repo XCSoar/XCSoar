@@ -18,8 +18,17 @@ struct FlarmVersion {
   NarrowString<7> hardware_version, software_version;
   NarrowString<19> obstacle_version;
 
+  /**
+   * Protocol version (data port version).
+   * Initialized to 4 in Clear() (minimum for traffic advisory).
+   * Automatically upgraded when features requiring higher versions are
+   * detected (e.g., PFLAE message field indicates version >= 7).
+   */
+  unsigned protocol_version;
+
   constexpr void Clear() noexcept {
     available.Clear();
+    protocol_version = 4;
   }
 
   constexpr void Complement(const FlarmVersion &add) noexcept {
@@ -27,6 +36,7 @@ struct FlarmVersion {
       hardware_version = add.hardware_version;
       software_version = add.software_version;
       obstacle_version = add.obstacle_version;
+      protocol_version = add.protocol_version;
     }
   }
 

@@ -52,7 +52,7 @@ public:
 
   /**
    * Request an array of settings from FLARM.
-   * 
+   *
    * @return true if successful.
    */
   bool RequestAllSettings(const char* const* settings, OperationEnvironment &env);
@@ -76,7 +76,7 @@ public:
 
   /**
    * Check if setting exists
-   * 
+   *
    * @return true if setting exists
    */
   bool SettingExists(const char *name) noexcept;
@@ -109,6 +109,8 @@ public:
   bool Declare(const Declaration &declaration, const Waypoint *home,
                OperationEnvironment &env) override;
   bool PutPilotEvent(OperationEnvironment &env) override;
+  bool Manage(unsigned device_index,
+              class DeviceBlackboard &device_blackboard) override;
 
   bool GetPilot(TCHAR *buffer, size_t length, OperationEnvironment &env);
   bool SetPilot(const TCHAR *pilot_name, OperationEnvironment &env);
@@ -137,6 +139,17 @@ public:
   bool SetBaudRate(unsigned baud_id, OperationEnvironment &env);
 
   void Restart(OperationEnvironment &env);
+
+  /**
+   * Reset CARP (Collision Avoidance and Range Protocol) on PowerFLARM devices.
+   */
+  void SendResetCARP(OperationEnvironment &env);
+
+  /**
+   * Start a demo scenario on PowerFLARM devices.
+   * @param scenario_number The scenario number (1-6)
+   */
+  void SendDemoScenario(unsigned scenario_number, OperationEnvironment &env);
 
 private:
   /**

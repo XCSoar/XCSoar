@@ -4,6 +4,7 @@
 #pragma once
 
 #include "NMEA/Validity.hpp"
+#include "util/StaticString.hxx"
 
 #include <type_traits>
 #include <cstdint>
@@ -71,6 +72,9 @@ struct FlarmError {
   Severity severity;
   Code code;
 
+  /** Error message text from FLARM (protocol version >= 7, max 40 ASCII chars) */
+  NarrowString<41> message;
+
   constexpr bool IsWarning() const noexcept {
     return severity >= REDUCED_FUNCTIONALITY;
   }
@@ -81,12 +85,14 @@ struct FlarmError {
 
   constexpr void Clear() noexcept {
     available.Clear();
+    message.clear();
   }
 
   constexpr void Complement(const FlarmError &add) noexcept {
     if (available.Complement(add.available)) {
       severity = add.severity;
       code = add.code;
+      message = add.message;
     }
   }
 

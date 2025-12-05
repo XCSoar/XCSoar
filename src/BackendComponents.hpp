@@ -17,6 +17,7 @@ class ProtectedAirspaceWarningManager;
 class GlideComputer;
 class CalculationThread;
 class Replay;
+class Airspaces;
 
 /**
  * This singleton manages components that are part of XCSoar's backend
@@ -37,6 +38,9 @@ struct BackendComponents {
   std::unique_ptr<CalculationThread> calculation_thread;
 
   std::unique_ptr<Replay> replay;
+
+  /** Airspaces container for FLARM alert zones */
+  std::unique_ptr<Airspaces> flarm_alert_zone_airspaces;
 
   BackendComponents() noexcept;
   ~BackendComponents() noexcept;

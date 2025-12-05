@@ -12,9 +12,11 @@
 #include "Replay/Replay.hpp"
 #include "MergeThread.hpp"
 #include "CalculationThread.hpp"
+#include "Engine/Airspace/Airspaces.hpp"
 
 BackendComponents::BackendComponents() noexcept
-  :device_blackboard(new DeviceBlackboard())
+  :device_blackboard(new DeviceBlackboard()),
+   flarm_alert_zone_airspaces(std::make_unique<Airspaces>())
 {
 }
 

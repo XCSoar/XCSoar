@@ -9,20 +9,18 @@
 #include "ManageI2CPitotDialog.hpp"
 #include "ManageCAI302Dialog.hpp"
 #include "ManageFlarmDialog.hpp"
-#include "LX/ManageLXNAVVarioDialog.hpp"
-#include "LX/ManageNanoDialog.hpp"
-#include "LX/ManageLX16xxDialog.hpp"
 #include "PortMonitor.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "UIGlobals.hpp"
+#include "Form/Button.hpp"
 #include "util/StaticString.hxx"
 #include "util/Macros.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/Register.hpp"
+#include "Device/Driver.hpp"
 #include "Device/Port/Listener.hpp"
-#include "Device/Driver/LX/Internal.hpp"
 #include "ui/event/Notify.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Blackboard/BlackboardListener.hpp"
@@ -39,6 +37,8 @@
 #include "Profile/Profile.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "Interface.hpp"
+
+#include <memory>
 
 #ifdef ANDROID
 #include "java/Global.hxx"
@@ -422,8 +422,13 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       buffer.append(_("Vario"));
     }
 
-    if (flags.traffic)
+    if (flags.traffic) {
       buffer.append(_T("; FLARM"));
+      const NMEAInfo &basic = device_blackboard.RealState(idx);
+      if (basic.flarm.version.available && basic.flarm.version.protocol_version > 0) {
+        buffer.AppendFormat(_T(" v%u"), basic.flarm.version.protocol_version);
+      }
+    }
 
     if (flags.temperature || flags.humidity) {
       buffer.append(_T("; "));
@@ -605,8 +610,161 @@ DeviceListWidget::EditCurrent()
   DeviceConfig &config = CommonInterface::SetSystemSettings().devices[index];
   DeviceEditWidget widget(config);
 
-  if (!DefaultWidgetDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-                           _("Edit device"), widget))
+  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(),
+                      _("Edit device"), &widget);
+
+  dialog.AddButton(_("OK"), mrOK);
+  dialog.AddButton(_("Cancel"), mrCancel);
+
+  /* Listener to update button state when driver selection changes.
+     Must be declared at function scope to ensure it lives until after ShowModal(). */
+  struct ManagePassthroughButtonListener : public DeviceEditWidget::Listener {
+    DeviceEditWidget &widget;
+    Button *button;
+    std::function<void()> update_state;
+
+    ManagePassthroughButtonListener(DeviceEditWidget &_widget, Button *_button,
+                                    std::function<void()> _update_state) noexcept
+      :widget(_widget), button(_button), update_state(_update_state) {}
+
+    void OnModified(DeviceEditWidget &w) noexcept override {
+      /* Update button state when passthrough-related fields change */
+      const auto &config = w.GetConfig();
+      const bool use_second = config.use_second_device;
+      button->SetVisible(use_second);
+      if (use_second) {
+        /* Update enabled state based on current driver selection */
+        update_state();
+      } else {
+        button->SetEnabled(false);
+      }
+    }
+  };
+
+  std::unique_ptr<ManagePassthroughButtonListener> listener;
+
+  /* Add "Manage Passthrough" button if passthrough is enabled */
+  Button *manage_passthrough_button = nullptr;
+  if (devices != nullptr) {
+    DeviceDescriptor &descriptor = (*devices)[index];
+    const auto &device_config = descriptor.GetConfig();
+
+    if (device_config.use_second_device) {
+      manage_passthrough_button = dialog.AddButton(_("Manage Passthrough"), [this, index, &widget](){
+        if (devices == nullptr)
+          return;
+
+        DeviceDescriptor &desc = (*devices)[index];
+        if (desc.GetState() != PortState::READY) {
+          ShowMessageBox(_("Device is not connected"), _("Manage passthrough device"),
+                         MB_OK | MB_ICONERROR);
+          return;
+        }
+
+        if (!desc.Borrow()) {
+          ShowMessageBox(_("Device is occupied"), _("Manage passthrough device"),
+                         MB_OK | MB_ICONERROR);
+          return;
+        }
+
+        MessageOperationEnvironment env;
+        const ScopeReturnDevice return_device{desc, env};
+
+        Device *primary_device = desc.GetDevice();
+        if (primary_device == nullptr)
+          return;
+
+        /* Read current form value for passthrough driver from dropdown */
+        const TCHAR *driver2_name = widget.GetDataField(DeviceEditWidget::SecondDriver).GetAsString();
+        if (driver2_name == nullptr || *driver2_name == _T('\0'))
+          return;
+
+        /* Check if the passthrough driver has MANAGE flag */
+        const struct DeviceRegister *passthrough_driver = FindDriverByName(driver2_name);
+        if (passthrough_driver == nullptr || !passthrough_driver->IsManageable())
+          return;
+
+        /* Get the device descriptor's current second device */
+        Device *passthrough_device = desc.GetSecondDevice();
+
+        /* Check if the selected driver matches the device descriptor's second driver */
+        const auto &desc_config = desc.GetConfig();
+        const bool driver_matches = passthrough_device != nullptr &&
+          StringIsEqual(driver2_name, desc_config.driver2_name.c_str());
+
+        if (!driver_matches) {
+          /* The selected driver doesn't match the device descriptor's second device.
+             This means the user changed the dropdown but hasn't saved yet.
+             Show a message that changes need to be saved first. */
+          ShowMessageBox(_("Please save the device configuration first to apply the passthrough driver change."),
+                         _("Manage passthrough device"),
+                         MB_OK | MB_ICONINFORMATION);
+          return;
+        }
+
+        if (passthrough_device == nullptr)
+          return;
+
+        /* Use the generic ManagePassthroughDevice() method.
+           This will handle driver-specific passthrough mode setup
+           (e.g., LXNAV) and restore NMEA mode afterwards. */
+        if (!primary_device->ManagePassthroughDevice(passthrough_device,
+                                                     index,
+                                                     device_blackboard,
+                                                     env)) {
+          ShowMessageBox(_("Failed to manage passthrough device"),
+                         _("Manage passthrough device"),
+                         MB_OK | MB_ICONERROR);
+        }
+      });
+
+      /* Update button state based on current driver selection */
+      auto update_button_state = [&widget, manage_passthrough_button](){
+        /* Read current value from form field, not from saved config */
+        const auto &config = widget.GetConfig();
+        if (!config.use_second_device) {
+          manage_passthrough_button->SetEnabled(false);
+          return;
+        }
+        const TCHAR *driver2_name = widget.GetDataField(DeviceEditWidget::SecondDriver).GetAsString();
+        if (driver2_name == nullptr || *driver2_name == _T('\0')) {
+          manage_passthrough_button->SetEnabled(false);
+          return;
+        }
+        const struct DeviceRegister *driver = FindDriverByName(driver2_name);
+        const bool manageable = driver != nullptr && driver->IsManageable();
+        manage_passthrough_button->SetEnabled(manageable);
+      };
+
+      /* Create listener instance - must live until after ShowModal() */
+      listener = std::make_unique<ManagePassthroughButtonListener>(widget, manage_passthrough_button, update_button_state);
+      widget.SetListener(listener.get());
+
+      /* Set initial state based on config - don't access fields directly */
+      const auto &config = widget.GetConfig();
+      const bool use_second = config.use_second_device;
+      manage_passthrough_button->SetVisible(use_second);
+      if (use_second && !config.driver2_name.empty()) {
+        /* Check if driver is manageable using config value */
+        const struct DeviceRegister *driver = FindDriverByName(config.driver2_name.c_str());
+        manage_passthrough_button->SetEnabled(driver != nullptr && driver->IsManageable());
+      } else {
+        manage_passthrough_button->SetEnabled(false);
+      }
+    }
+  }
+
+  const bool changed = dialog.ShowModal() == mrOK;
+
+  /* Clear listener before it goes out of scope */
+  if (listener != nullptr)
+    widget.SetListener(nullptr);
+
+  /* Steal widget back to prevent double deletion (widget is stack-allocated) */
+  dialog.StealWidget();
+
+  if (!changed)
     /* not modified */
     return;
 
@@ -673,46 +831,12 @@ DeviceListWidget::ManageCurrent()
   const ScopeReturnDevice return_device{descriptor, env};
 
   Device *device = descriptor.GetDevice();
-  if (device == NULL) {
+  if (device == nullptr) {
     return;
   }
 
-  if (descriptor.IsDriver(_T("CAI 302")))
-    ManageCAI302Dialog(UIGlobals::GetMainWindow(), look, *device);
-  else if (descriptor.IsDriver(_T("Stratux")))
-    ManageStratuxDialog(*device);
-  else if (descriptor.IsDriver(_T("FLARM"))) {
-    FlarmVersion version;
-    FlarmHardware hardware;
-
-    {
-      const std::lock_guard lock{device_blackboard.mutex};
-      const NMEAInfo &basic = device_blackboard.RealState(current);
-      version = basic.flarm.version;
-    }
-
-    ManageFlarmDialog(*device, version, hardware);
-  } else if (descriptor.IsDriver(_T("LX"))) {
-    DeviceInfo info, secondary_info;
-
-    {
-      const std::lock_guard lock{device_blackboard.mutex};
-      const NMEAInfo &basic = device_blackboard.RealState(current);
-      info = basic.device;
-      secondary_info = basic.secondary_device;
-    }
-
-    LXDevice &lx_device = *(LXDevice *)device;
-    if (lx_device.IsLXNAVVario())
-      ManageLXNAVVarioDialog(lx_device, info, secondary_info);
-    else if (lx_device.IsNano())
-      ManageNanoDialog(lx_device, info);
-    else if (lx_device.IsLX16xx())
-      ManageLX16xxDialog(lx_device, info);
-  } else if (descriptor.IsDriver(_T("Vega")))
-    dlgConfigurationVarioShowModal(*device);
-  else if (descriptor.IsDriver(_T("BlueFly")))
-    dlgConfigurationBlueFlyVarioShowModal(*device);
+  /* Use the generic Manage() method from the Device interface */
+  device->Manage(current, device_blackboard);
 }
 
 inline void

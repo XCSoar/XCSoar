@@ -205,9 +205,12 @@ FlarmTrafficDetailsWidget::Update()
   TCHAR tmp[200], tmp_id[7];
   const TCHAR *value;
 
-  // Set the dialog caption
-  StringFormatUnsafe(tmp, _T("%s (%s)"),
-                     _("FLARM Traffic Details"), target_id.Format(tmp_id));
+  // Set the dialog caption with source type
+  const FlarmTraffic* target =
+    CommonInterface::Basic().flarm.traffic.FindTraffic(target_id);
+  const TCHAR* source_string = FlarmTraffic::GetTrafficSourceTitle(target);
+  StringFormatUnsafe(tmp, _T("%s %s (%s)"),
+                     source_string, _("Traffic Details"), target_id.Format(tmp_id));
   dialog.SetCaption(tmp);
 
   // Try to find the target in the FLARMnet database

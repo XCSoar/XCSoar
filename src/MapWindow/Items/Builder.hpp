@@ -18,6 +18,7 @@ struct MoreData;
 struct DerivedInfo;
 class ProtectedTaskManager;
 struct TrafficList;
+struct AlertZoneList;
 struct ThermalLocatorInfo;
 struct NMEAInfo;
 class RasterTerrain;

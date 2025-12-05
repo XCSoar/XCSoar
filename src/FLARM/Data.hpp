@@ -4,10 +4,12 @@
 #pragma once
 
 #include "FLARM/Error.hpp"
-#include "FLARM/Version.hpp"
+#include "FLARM/FlightState.hpp"
 #include "FLARM/Hardware.hpp"
-#include "FLARM/Status.hpp"
 #include "FLARM/List.hpp"
+#include "FLARM/Status.hpp"
+#include "FLARM/Version.hpp"
+#include "FLARM/AlertZoneList.hpp"
 
 #include <type_traits>
 
@@ -25,6 +27,10 @@ struct FlarmData {
 
   TrafficList traffic;
 
+  AlertZoneList alert_zones;
+
+  FlarmFlightState flight_state;
+
   constexpr bool IsDetected() const noexcept {
     return status.available || !traffic.IsEmpty();
   }
@@ -35,6 +41,8 @@ struct FlarmData {
     hardware.Clear();
     status.Clear();
     traffic.Clear();
+    alert_zones.Clear();
+    flight_state.Clear();
   }
 
   constexpr void Complement(const FlarmData &add) noexcept {
@@ -43,6 +51,7 @@ struct FlarmData {
     hardware.Complement(add.hardware);
     status.Complement(add.status);
     traffic.Complement(add.traffic);
+    flight_state.Complement(add.flight_state);
   }
 
   constexpr void Expire(TimeStamp clock) noexcept {
@@ -51,6 +60,8 @@ struct FlarmData {
     hardware.Expire(clock);
     status.Expire(clock);
     traffic.Expire(clock);
+    alert_zones.Expire(clock);
+    flight_state.Expire(clock);
   }
 };
 

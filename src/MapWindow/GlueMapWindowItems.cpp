@@ -18,6 +18,8 @@
 #include "net/client/tim/Thermal.hpp"
 #include "Interface.hpp"
 #include "Overlay.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 bool
 GlueMapWindow::ShowMapItems(const GeoPoint &location,
@@ -59,6 +61,16 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   if (airspace_database)
     builder.AddVisibleAirspace(*airspace_database,
                                airspace_renderer.GetWarningManager(),
+                               computer_settings.airspace,
+                               settings.airspace, basic,
+                               calculated);
+
+  /* Add FLARM alert zones as airspaces */
+  if (backend_components != nullptr &&
+      backend_components->flarm_alert_zone_airspaces != nullptr &&
+      !backend_components->flarm_alert_zone_airspaces->IsEmpty())
+    builder.AddVisibleAirspace(*backend_components->flarm_alert_zone_airspaces,
+                               nullptr,
                                computer_settings.airspace,
                                settings.airspace, basic,
                                calculated);
