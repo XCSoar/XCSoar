@@ -2,13 +2,15 @@
 // Copyright The XCSoar Project
 
 #include "UnitSymbolRenderer.hpp"
+#include "Renderer/TextInBox.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Color.hpp"
 #include "util/Macros.hpp"
 
 #include <algorithm>
+#include <cstdio>
 
 #include <tchar.h>
-#include <cstdio>
 
 struct UnitSymbolStrings {
   const TCHAR *line1;
@@ -152,5 +154,56 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
 
     canvas.DrawText(pos.At((size2.width - size1.width) / 2, 0), strings.line1);
     canvas.DrawText(pos.At(0, size1.height), strings.line2);
+  }
+}
+
+void
+UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
+                         const Unit unit,
+                         const Pen &unit_fraction_pen,
+                         Color text_color, Color outline_color) noexcept
+{
+  assert((size_t)unit < ARRAY_SIZE(symbol_strings));
+
+  const UnitSymbolStrings &strings = symbol_strings[(unsigned)unit];
+
+  if (!strings.line1 && !strings.line2)
+    return;
+
+  assert(strings.line2 != nullptr);
+
+  if (!strings.line1) {
+    // Single-line unit with outline
+    RenderShadowedText(canvas, strings.line2, pos, text_color, outline_color);
+    return;
+  }
+
+  // Two-line unit with outline
+  PixelSize size1 = canvas.CalcTextSize(strings.line1);
+  PixelSize size2 = canvas.CalcTextSize(strings.line2);
+
+  if (size1.width > size2.width) {
+    if (strings.is_fraction) {
+      canvas.Select(unit_fraction_pen);
+      canvas.DrawLine(pos.At(0, size1.height),
+                      pos.At(size1.width, size1.height));
+    }
+
+    RenderShadowedText(canvas, strings.line1, pos, text_color, outline_color);
+    RenderShadowedText(canvas, strings.line2,
+                      pos.At((size1.width - size2.width) / 2, size1.height),
+                      text_color, outline_color);
+  } else {
+    if (strings.is_fraction) {
+      canvas.Select(unit_fraction_pen);
+      canvas.DrawLine(pos.At(0, size1.height),
+                      pos.At(size2.width, size1.height));
+    }
+
+    RenderShadowedText(canvas, strings.line1,
+                      pos.At((size2.width - size1.width) / 2, 0),
+                      text_color, outline_color);
+    RenderShadowedText(canvas, strings.line2, pos.At(0, size1.height),
+                      text_color, outline_color);
   }
 }
