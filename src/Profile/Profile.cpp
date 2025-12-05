@@ -44,7 +44,7 @@ Profile::LoadFile(Path path) noexcept
 {
   try {
     LoadFile(map, path);
-    LogFormat(_T("Loaded profile from %s"), path.c_str());
+    LogFormat(_T("Loaded profile: %s"), path.c_str());
   } catch (...) {
     LogError(std::current_exception(), "Failed to load profile");
   }
@@ -72,7 +72,7 @@ Profile::Save() noexcept
 void
 Profile::SaveFile(Path path)
 {
-  LogFormat(_T("Saving profile to %s"), path.c_str());
+  LogFormat(_T("Saved profile: %s"), path.c_str());
   SaveFile(map, path);
 }
 

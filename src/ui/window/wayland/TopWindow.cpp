@@ -3,12 +3,17 @@
 
 #include "../TopWindow.hpp"
 #include "ui/canvas/custom/TopCanvas.hpp"
+#include "ui/canvas/Features.hpp" // for DRAW_MOUSE_CURSOR
 #include "ui/event/Globals.hpp"
 #include "ui/event/poll/Queue.hpp"
+#include "ui/event/shared/Event.hpp"
 #include "ui/display/Display.hpp"
+#include "ui/egl/System.hpp"
 #include "xdg-shell-client-protocol.h"
+#include "xdg-decoration-unstable-v1-client-protocol.h"
 
 #include <stdexcept>
+#include <chrono>
 
 namespace UI {
 
@@ -24,9 +29,13 @@ static void
 handle_configure([[maybe_unused]] void *data,
                  [[maybe_unused]] struct wl_shell_surface *shell_surface,
                  [[maybe_unused]] uint32_t edges,
-                 [[maybe_unused]] int32_t width,
-                 [[maybe_unused]] int32_t height) noexcept
+                 int32_t width,
+                 int32_t height) noexcept
 {
+  if (width > 0 && height > 0 && UI::event_queue != nullptr) {
+    UI::event_queue->Inject(Event(Event::RESIZE,
+                                  PixelPoint(width, height)));
+  }
 }
 
 static void
@@ -68,10 +77,14 @@ static constexpr struct xdg_surface_listener surface_listener = {
 static void
 handle_toplevel_configure([[maybe_unused]] void *data,
                           [[maybe_unused]] struct xdg_toplevel *xdg_toplevel,
-                          [[maybe_unused]] int32_t width,
-                          [[maybe_unused]] int32_t height,
+                          int32_t width,
+                          int32_t height,
                           [[maybe_unused]] struct wl_array *states) noexcept
 {
+  if (width > 0 && height > 0 && UI::event_queue != nullptr) {
+    UI::event_queue->Inject(Event(Event::RESIZE,
+                                  PixelPoint(width, height)));
+  }
 }
 
 static void
@@ -113,6 +126,24 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
 
     /* this roundtrip invokes handle_surface_configure() */
     wl_display_roundtrip(display.GetWaylandDisplay());
+
+    // Request server-side decorations (window decorations with resize handles)
+    // This must be done after the surface is committed and the window is mapped.
+    // Note: Some compositors like Sway don't show traditional resize handles
+    // even when server-side decorations are requested (by design).
+    auto *decoration_mgr = event_queue->GetDecorationManager();
+    if (decoration_mgr != nullptr) {
+      auto *toplevel_decoration = zxdg_decoration_manager_v1_get_toplevel_decoration(
+        decoration_mgr, toplevel);
+      if (toplevel_decoration != nullptr) {
+        // Request server-side decorations (SSD) which include resize handles
+        zxdg_toplevel_decoration_v1_set_mode(toplevel_decoration,
+                                             ZXDG_TOPLEVEL_DECORATION_V1_MODE_SERVER_SIDE);
+        // Keep the decoration object alive - it will be destroyed when the toplevel is destroyed
+        // Note: We could destroy it immediately after set_mode, but keeping it alive
+        // allows the compositor to send mode change events if needed
+      }
+    }
   } else if (auto shell = event_queue->GetShell()) {
     auto shell_surface = wl_shell_get_shell_surface(shell, surface);
     wl_shell_surface_add_listener(shell_surface,
@@ -148,6 +179,89 @@ void
 TopWindow::DisableCapture() noexcept
 {
   // TODO: implement
+}
+
+void
+TopWindow::OnResize(PixelSize new_size) noexcept
+{
+  if (native_window != nullptr) {
+    // Resize the EGL window to match the new size
+    wl_egl_window_resize(native_window, new_size.width, new_size.height, 0, 0);
+
+    // Update the opaque region
+    auto compositor = event_queue->GetCompositor();
+    if (compositor != nullptr) {
+      const auto region = wl_compositor_create_region(compositor);
+      wl_region_add(region, 0, 0, new_size.width, new_size.height);
+      // Note: We can't update the surface's opaque region here because we
+      // don't store the surface. The region will be updated on the next
+      // commit, but this should be fine for most cases.
+      wl_region_destroy(region);
+    }
+  }
+
+  event_queue->SetScreenSize(new_size);
+  ContainerWindow::OnResize(new_size);
+}
+
+bool
+TopWindow::OnEvent(const Event &event)
+{
+  switch (event.type) {
+    Window *w;
+
+  case Event::NOP:
+  case Event::CALLBACK:
+    break;
+
+  case Event::CLOSE:
+    OnClose();
+    break;
+
+  case Event::KEY_DOWN:
+    w = GetFocusedWindow();
+    if (w == nullptr)
+      w = this;
+
+    return w->OnKeyDown(event.param);
+
+  case Event::KEY_UP:
+    w = GetFocusedWindow();
+    if (w == nullptr)
+      w = this;
+
+    return w->OnKeyUp(event.param);
+
+  case Event::MOUSE_MOTION:
+#ifdef DRAW_MOUSE_CURSOR
+    cursor_visible_until = std::chrono::steady_clock::now() + std::chrono::seconds(10);
+    /* redraw to update the mouse cursor position */
+    Invalidate();
+#endif
+
+    // XXX keys
+    return OnMouseMove(event.point, 0);
+
+  case Event::MOUSE_DOWN:
+    return double_click.Check(event.point)
+      ? OnMouseDouble(event.point)
+      : OnMouseDown(event.point);
+
+  case Event::MOUSE_UP:
+    double_click.Moved(event.point);
+
+    return OnMouseUp(event.point);
+
+  case Event::MOUSE_WHEEL:
+    return OnMouseWheel(event.point, (int)event.param);
+
+  case Event::RESIZE:
+    if (screen->CheckResize(PixelSize(event.point.x, event.point.y)))
+      Resize(screen->GetSize());
+    return true;
+  }
+
+  return false;
 }
 
 } // namespace UI

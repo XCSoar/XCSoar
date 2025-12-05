@@ -7,6 +7,10 @@
 #include "event/IdleEvent.hxx"
 #include "Math/Point2D.hpp"
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+#include "ui/dim/Size.hpp"
+#endif
+
 #include <cstdint>
 
 struct wl_display;
@@ -17,6 +21,10 @@ struct wl_keyboard;
 struct wl_shell;
 struct wl_registry;
 struct xdg_wm_base;
+struct zxdg_decoration_manager_v1;
+
+enum class DisplayOrientation : uint8_t;
+struct PixelSize;
 
 namespace UI {
 
@@ -38,6 +46,7 @@ class WaylandEventQueue final {
   struct wl_keyboard *keyboard = nullptr;
   struct wl_shell *shell = nullptr;
   struct xdg_wm_base *wm_base = nullptr;
+  struct zxdg_decoration_manager_v1 *decoration_manager = nullptr;
 
   bool has_touchscreen = false;
 
@@ -45,6 +54,10 @@ class WaylandEventQueue final {
 
   SocketEvent socket_event;
   IdleEvent flush_event;
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  PixelSize physical_screen_size{0, 0};
+#endif
 
 public:
   /**
@@ -65,6 +78,10 @@ public:
     return wm_base;
   }
 
+  struct zxdg_decoration_manager_v1 *GetDecorationManager() const noexcept {
+    return decoration_manager;
+  }
+
   bool IsVisible() const noexcept {
     // TODO: implement
     return true;
@@ -82,6 +99,11 @@ public:
     return keyboard != nullptr;
   }
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  void SetScreenSize(PixelSize screen_size) noexcept;
+  void SetDisplayOrientation(DisplayOrientation orientation) noexcept;
+#endif
+
   bool Generate(Event &event) noexcept;
 
   void RegistryHandler(struct wl_registry *registry, uint32_t id,
@@ -92,6 +114,10 @@ public:
   void Push(const Event &event) noexcept;
   void PointerMotion(IntPoint2D new_pointer_position) noexcept;
   void PointerButton(bool pressed) noexcept;
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  PixelPoint GetTransformedPointerPosition() const noexcept;
+#endif
 
   void KeyboardKey(uint32_t key, uint32_t state) noexcept;
 

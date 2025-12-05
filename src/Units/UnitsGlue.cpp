@@ -87,7 +87,7 @@ AutoDetect()
 
   // Retrieve the default user language identifier from the OS
   LANGID lang_id = GetUserDefaultUILanguage();
-  LogFormat("Units: GetUserDefaultUILanguage() = 0x%x", (int)lang_id);
+  LogFormat("GetUserDefaultUILanguage() = 0x%x", (int)lang_id);
   if (lang_id == 0)
     return 0;
 

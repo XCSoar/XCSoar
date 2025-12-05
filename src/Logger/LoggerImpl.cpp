@@ -72,7 +72,7 @@ LoggerImpl::StopLogger([[maybe_unused]] const NMEAInfo &gps_info)
 
   writer->Flush();
 
-  LogFormat(_T("Logger stopped: %s"), filename.c_str());
+  LogFormat(_T("Stopped logger: %s"), filename.c_str());
 
   // Logger off
   writer.reset();
@@ -226,7 +226,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
     return false;
   }
 
-  LogFormat(_T("Logger Started: %s"), filename.c_str());
+  LogFormat(_T("Started logger: %s"), filename.c_str());
   return true;
 }
 
