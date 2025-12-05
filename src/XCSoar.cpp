@@ -145,8 +145,10 @@ try {
   int ret = Main();
 
 #if defined(__APPLE__) && TARGET_OS_IPHONE
-  /* For some reason, the app process does not exit on iOS, but a black
-   * screen remains, if the process is not explicitly terminated */
+  /* On iOS, after all cleanup is complete, we must explicitly call exit() to
+   * terminate the process. Simply returning from main() doesn't work on iOS
+   * because SDL wraps our main() and continues running UIApplicationMain's
+   * event loop. */
   exit(ret);
 #endif
 
