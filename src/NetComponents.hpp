@@ -13,6 +13,7 @@ class EventLoop;
 class CurlGlobal;
 class TrackingGlue;
 namespace TIM { class Glue; }
+class NOTAMGlue;
 
 /**
  * This singleton manages global networking-related objects.
@@ -24,6 +25,7 @@ struct NetComponents {
 
 #ifdef HAVE_HTTP
   const std::unique_ptr<TIM::Glue> tim;
+  const std::unique_ptr<NOTAMGlue> notam;
 #endif
 
   NetComponents(EventLoop &event_loop, CurlGlobal &curl,

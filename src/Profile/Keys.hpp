@@ -269,6 +269,34 @@ constexpr std::string_view PCMetFtpPassword = "PCMetFtpPassword";
 
 constexpr std::string_view EnableThermalInformationMap = "EnableThermalInformationMap";
 
+constexpr std::string_view NOTAMEnabled = "NOTAMEnabled";
+constexpr std::string_view NOTAMRadius = "NOTAMRadius";
+constexpr std::string_view NOTAMMaxCount = "NOTAMMaxCount";
+constexpr std::string_view NOTAMRefreshInterval = "NOTAMRefreshInterval";
+constexpr std::string_view NOTAMFilterDaylightOnly = "NOTAMFilterDaylightOnly";
+constexpr std::string_view NOTAMFilterNightOnly = "NOTAMFilterNightOnly";
+constexpr std::string_view NOTAMHoursBeforeSunrise = "NOTAMHoursBeforeSunrise";
+constexpr std::string_view NOTAMHoursAfterSunset = "NOTAMHoursAfterSunset";
+constexpr std::string_view NOTAMFilterSeries = "NOTAMFilterSeries";
+constexpr std::string_view NOTAMShowAirspace = "NOTAMShowAirspace";
+constexpr std::string_view NOTAMShowObst = "NOTAMShowObst";
+constexpr std::string_view NOTAMShowMilitary = "NOTAMShowMilitary";
+constexpr std::string_view NOTAMShowAD = "NOTAMShowAD";
+constexpr std::string_view NOTAMShowRwyTwy = "NOTAMShowRwyTwy";
+constexpr std::string_view NOTAMShowNav = "NOTAMShowNav";
+constexpr std::string_view NOTAMShowComSvc = "NOTAMShowComSvc";
+constexpr std::string_view NOTAMShowProcedures = "NOTAMShowProcedures";
+constexpr std::string_view NOTAMShowOther = "NOTAMShowOther";
+constexpr std::string_view NOTAMShowTrigger = "NOTAMShowTrigger";
+constexpr std::string_view NOTAMShowTrafficIFR = "NOTAMShowTrafficIFR";
+constexpr std::string_view NOTAMShowTrafficVFR = "NOTAMShowTrafficVFR";
+constexpr std::string_view NOTAMShowTrafficBoth = "NOTAMShowTrafficBoth";
+constexpr std::string_view NOTAMShowINTL = "NOTAMShowINTL";
+constexpr std::string_view NOTAMShowMIL = "NOTAMShowMIL";
+constexpr std::string_view NOTAMShowDOM = "NOTAMShowDOM";
+constexpr std::string_view NOTAMShowFDC = "NOTAMShowFDC";
+constexpr std::string_view NOTAMMinFlightLevel = "NOTAMMinFlightLevel";
+
 constexpr std::string_view EnableLocationMapItem = "EnableLocationMapItem";
 constexpr std::string_view EnableArrivalAltitudeMapItem = "EnableArrivalAltitudeMapItem";
 
