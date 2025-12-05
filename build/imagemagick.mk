@@ -7,7 +7,7 @@ IM_MONTAGE_BIN := $(shell command -v montage 2>/dev/null)
 IM_CONVERT := $(if $(IM_BIN),$(IM_BIN),$(IM_CONVERT_BIN))
 IM_MONTAGE := $(if $(IM_BIN),$(IM_BIN) montage,$(IM_MONTAGE_BIN))
 # Use -alpha Off for IM7, +matte for IM6
-IM_DISABLE_ALPHA := $(if $(MAGICK_BIN),-alpha Off,+matte)
+IM_DISABLE_ALPHA := $(if $(IM_BIN),-alpha Off,+matte)
 
 # extract alpha channel
 %_alpha.png: %.png
