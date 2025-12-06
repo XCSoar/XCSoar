@@ -24,7 +24,7 @@ ErrorMessage([[maybe_unused]] unsigned code)
   Message::AddMessage(_T("Levil AHRS: hardware error !"));
 }
 
-static bool
+bool
 ParseRPYL(NMEAInputLine &line, NMEAInfo &info)
 {
   // $RPYL,Roll,Pitch,MagnHeading,SideSlip,YawRate,G,errorcode,
@@ -51,12 +51,12 @@ ParseRPYL(NMEAInputLine &line, NMEAInfo &info)
   if (!line.ReadChecked(errorcode)) return false;
 
   /* Error bits:
-   *   0: Roll gyro test failed  
-   *   1: Roll gyro test failed 
-   *   2: Roll gyro test failed 
-   *   3: Acc X test failed 
-   *   4: Acc Y test failed 
-   *   5: Acc Z test failed 
+   *   0: Roll gyro test failed
+   *   1: Roll gyro test failed
+   *   2: Roll gyro test failed
+   *   3: Acc X test failed
+   *   4: Acc Y test failed
+   *   5: Acc Z test failed
    *   6: Watchdog test failed
    *   7: Ram test failed
    *   8: EEPROM access test failed
@@ -87,7 +87,7 @@ ParseRPYL(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
-static bool
+bool
 ParseAPENV1(NMEAInputLine &line, NMEAInfo &info)
 {
   // $APENV1,IAS,Altitude,0,0,0,VerticalSpeed,
