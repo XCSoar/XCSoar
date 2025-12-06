@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 05:19+0100\n"
+"POT-Creation-Date: 2025-11-13 09:55+0000\n"
 "PO-Revision-Date: 2021-03-01 14:50+0000\n"
 "Last-Translator: Tayfur Yünlü <dandikunited@yandex.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/xcsoar/"
@@ -217,7 +217,8 @@ msgstr "Bir silindir. Alan içindeki herhangi bir nokta merkezden puanlanır."
 #: src/Task/TypeStrings.cpp:69
 #, no-c-format
 msgid "A 1 mile cylinder. Scored by farthest point reached in area."
-msgstr "1 mil yarıçaplı silindir. Alanda ulaşılan en uzak noktaya göre puanlanır."
+msgstr ""
+"1 mil yarıçaplı silindir. Alanda ulaşılan en uzak noktaya göre puanlanır."
 
 #: src/Task/TypeStrings.cpp:70
 #, no-c-format
@@ -252,7 +253,8 @@ msgstr "Bitirmek için silindire girin."
 #, no-c-format
 msgid ""
 "A 180-degree sector with 5 km radius. Exit area in any direction to start."
-msgstr "5 km yarıçaplı 180° sektör. Başlamak için herhangi bir yönde bölgeden çıkın."
+msgstr ""
+"5 km yarıçaplı 180° sektör. Başlamak için herhangi bir yönde bölgeden çıkın."
 
 #: src/Task/TypeStrings.cpp:77
 #, no-c-format
@@ -260,8 +262,8 @@ msgid ""
 "A sector that can vary in angle, inner and outer radius. Scored by farthest "
 "point reached inside area."
 msgstr ""
-"Açısı, iç ve dış yarıçapı değişebilen bir sektör. Alan içinde ulaşılan en uzak "
-"noktaya göre puanlanır."
+"Açısı, iç ve dış yarıçapı değişebilen bir sektör. Alan içinde ulaşılan en "
+"uzak noktaya göre puanlanır."
 
 #: src/Task/TypeStrings.cpp:79
 #, no-c-format
@@ -3432,8 +3434,8 @@ msgstr ""
 
 #: src/Dialogs/ReplayDialog.cpp:50
 msgid ""
-"Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file "
-"(.nmea). Leave blank to run the demo."
+"Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file (."
+"nmea). Leave blank to run the demo."
 msgstr ""
 
 #: src/Dialogs/ReplayDialog.cpp:56
@@ -5595,8 +5597,8 @@ msgstr "Seçili Hava Sahası Dosyaları"
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:80
 msgid ""
 "List of active airspace files. Use the Add and Remove buttons to activate or "
-"deactivate airspace files respectively. Supported file types are: Openair "
-"(.txt /.air), and Tim Newport-Pearce (.sua)."
+"deactivate airspace files respectively. Supported file types are: Openair (."
+"txt /.air), and Tim Newport-Pearce (.sua)."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:87
@@ -6780,8 +6782,8 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:67
 msgid ""
-"Show thermal locations downloaded from Thermal Information Map "
-"(thermalmap.info)."
+"Show thermal locations downloaded from Thermal Information Map (thermalmap."
+"info)."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:70
@@ -7251,6 +7253,7 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
+#: src/Dialogs/Weather/RASPDialog.cpp:135
 msgid "Now"
 msgstr ""
 
@@ -9476,7 +9479,6 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Alternate.cpp:58
-#, c++-format
 msgid "Altn {}"
 msgstr ""
 

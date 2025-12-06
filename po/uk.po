@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 05:19+0100\n"
+"POT-Creation-Date: 2025-11-13 09:55+0000\n"
 "PO-Revision-Date: 2022-06-24 07:20+0000\n"
 "Last-Translator: Artem <artem@molotov.work>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/xcsoar/"
@@ -3515,8 +3515,8 @@ msgstr "Файл"
 
 #: src/Dialogs/ReplayDialog.cpp:50
 msgid ""
-"Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file "
-"(.nmea). Leave blank to run the demo."
+"Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file (."
+"nmea). Leave blank to run the demo."
 msgstr ""
 "Назва файлу для відтворення. Може бути файл IGC file (.igc), NMEA (.nmea), "
 "або, якщо поле порожнє, - запуск демо."
@@ -5828,8 +5828,8 @@ msgstr "Вибір повітряного простору"
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:80
 msgid ""
 "List of active airspace files. Use the Add and Remove buttons to activate or "
-"deactivate airspace files respectively. Supported file types are: Openair "
-"(.txt /.air), and Tim Newport-Pearce (.sua)."
+"deactivate airspace files respectively. Supported file types are: Openair (."
+"txt /.air), and Tim Newport-Pearce (.sua)."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:87
@@ -7113,8 +7113,8 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:67
 msgid ""
-"Show thermal locations downloaded from Thermal Information Map "
-"(thermalmap.info)."
+"Show thermal locations downloaded from Thermal Information Map (thermalmap."
+"info)."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:70
@@ -7597,6 +7597,7 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
+#: src/Dialogs/Weather/RASPDialog.cpp:135
 msgid "Now"
 msgstr "Тепер"
 
@@ -10043,7 +10044,7 @@ msgid ""
 msgstr "Висота прибуття на фінішний ППМ відносно безпечної висоти прибуття."
 
 #: src/InfoBoxes/Content/Alternate.cpp:58
-#, fuzzy, c++-format
+#, fuzzy
 msgid "Altn {}"
 msgstr "Запас 1"
 

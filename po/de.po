@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 05:19+0100\n"
+"POT-Creation-Date: 2025-11-13 09:55+0000\n"
 "PO-Revision-Date: 2024-09-25 08:15+0000\n"
 "Last-Translator: Jörg Schuon <schuongf@hotmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/xcsoar/"
@@ -3564,8 +3564,8 @@ msgstr "Datei"
 
 #: src/Dialogs/ReplayDialog.cpp:50
 msgid ""
-"Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file "
-"(.nmea). Leave blank to run the demo."
+"Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file (."
+"nmea). Leave blank to run the demo."
 msgstr ""
 "Angabe der Datei zur Wiedergabe. Es kann eine IGC Datei (.igc), oder ein Roh-"
 "NMEA Logschrieb (.nmea) sein. Ohne Angabe wird das Demo abgespielt."
@@ -5879,8 +5879,8 @@ msgid ""
 "Primary waypoints files.  Supported file types are Cambridge/WinPilot files "
 "(.dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
-"Primäre Wegpunktdatei. Unterstützte Dateiformate sind Cambridge/WinPilot "
-"(.dat), Zander (.wpz), oder SeeYou Dateien (.cup)."
+"Primäre Wegpunktdatei. Unterstützte Dateiformate sind Cambridge/WinPilot (."
+"dat), Zander (.wpz), oder SeeYou Dateien (.cup)."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:60
 msgid "Watched waypoints"
@@ -5918,13 +5918,13 @@ msgstr "Wähle Luftraum"
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:80
 msgid ""
 "List of active airspace files. Use the Add and Remove buttons to activate or "
-"deactivate airspace files respectively. Supported file types are: Openair "
-"(.txt /.air), and Tim Newport-Pearce (.sua)."
+"deactivate airspace files respectively. Supported file types are: Openair (."
+"txt /.air), and Tim Newport-Pearce (.sua)."
 msgstr ""
 "Liste aktiver Luftraumdateien. Verwende die Hinzufügen- und Entfernen-"
 "Schaltflächen, um Luftraumdateien zu aktivieren bzw. zu deaktivieren. "
-"Unterstützte Dateitypen sind: Openair (.txt /.air) und Tim Newport-Pearce "
-"(.sua)."
+"Unterstützte Dateitypen sind: Openair (.txt /.air) und Tim Newport-Pearce (."
+"sua)."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:87
 msgid "FLARM Device Database"
@@ -7231,11 +7231,11 @@ msgstr "Thermik-Standorte von anderen Nutzern beziehen und anzeigen."
 
 #: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:67
 msgid ""
-"Show thermal locations downloaded from Thermal Information Map "
-"(thermalmap.info)."
+"Show thermal locations downloaded from Thermal Information Map (thermalmap."
+"info)."
 msgstr ""
-"Zeige Thermik-Standorte, die von der Thermal Information Map "
-"(thermalmap.info) heruntergeladen wurden."
+"Zeige Thermik-Standorte, die von der Thermal Information Map (thermalmap."
+"info) heruntergeladen wurden."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:70
 msgid "Allow download of declared tasks from Weglide in the Task Manager."
@@ -7736,6 +7736,7 @@ msgstr ""
 "Bitte hilf uns, XCSoar zu verbessern!"
 
 #: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
+#: src/Dialogs/Weather/RASPDialog.cpp:135
 msgid "Now"
 msgstr "Sofort"
 
@@ -10196,7 +10197,6 @@ msgstr ""
 "Sicherheitshöhe."
 
 #: src/InfoBoxes/Content/Alternate.cpp:58
-#, c++-format
 msgid "Altn {}"
 msgstr "Altn {}"
 
