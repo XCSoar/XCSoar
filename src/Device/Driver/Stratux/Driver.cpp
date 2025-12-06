@@ -7,6 +7,7 @@
 #include "Profile/Keys.hpp"
 #include "Profile/ProfileMap.hpp"
 #include "Device/Driver/FLARM/StaticParser.hpp"
+#include "Device/Driver/LevilAHRS_G.hpp"
 
 StratuxDevice::StratuxSettings settings;
 
@@ -39,7 +40,11 @@ StratuxDevice::ParseNMEA(const char *line, NMEAInfo &info)
   NMEAInputLine input_line(line);
 
   const auto type = input_line.ReadView();
-  if (type == "$PFLAA"sv) {
+  if (type == "$RPYL"sv)
+    return ParseRPYL(input_line, info);
+  else if (type == "$APENV1"sv)
+    return ParseAPENV1(input_line, info);
+  else if (type == "$PFLAA"sv) {
     RangeFilter range;
     range.horizontal = settings.hrange;
     range.vertical = settings.vrange;
