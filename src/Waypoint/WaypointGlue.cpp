@@ -13,6 +13,7 @@
 #include "WaypointFileType.hpp"
 #include "WaypointReader.hpp"
 #include "io/MapFile.hpp"
+#include "io/WaypointDataFile.hpp"
 #include "io/ZipArchive.hpp"
 #include "system/Path.hpp"
 
@@ -91,6 +92,33 @@ LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
   for (const auto &path : paths) {
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::WATCHED,
                               terrain, progress);
+  }
+
+  // ### WAYPOINT DATA ARCHIVES ###
+  paths = Profile::GetMultiplePaths(ProfileKeys::WaypointDataFileList,
+                                    _T("*.xcd\0"));
+  for (const auto &path : paths) {
+    try {
+      if (auto archive = OpenWaypointDataFile(path)) {
+        found |= LoadWaypointFile(way_points, archive->get(), "waypoints.cup",
+                                  WaypointFileType::SEEYOU,
+                                  WaypointOrigin::PRIMARY,
+                                  terrain, progress);
+
+        found |= LoadWaypointFile(way_points, archive->get(), "waypoints.dat",
+                                  WaypointFileType::WINPILOT,
+                                  WaypointOrigin::PRIMARY,
+                                  terrain, progress);
+
+        found |= LoadWaypointFile(way_points, archive->get(), "waypoints.wpz",
+                                  WaypointFileType::ZANDER,
+                                  WaypointOrigin::PRIMARY,
+                                  terrain, progress);
+      }
+    } catch (...) {
+      LogError(std::current_exception(),
+               "Failed to load waypoints from waypoint data file");
+    }
   }
 
   // ### MAP/FOURTH FILE ###
