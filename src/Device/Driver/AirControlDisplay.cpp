@@ -163,7 +163,8 @@ public:
                            const TCHAR *name,
                            OperationEnvironment &env) override;
   bool PutTransponderCode(TransponderCode code, OperationEnvironment &env) override;
-  void OnSensorUpdate(const MoreData &basic) override;
+  void OnCalculatedUpdate(const MoreData &basic,
+                          [[maybe_unused]] const DerivedInfo &calculated) override;
 };
 
 bool
@@ -221,7 +222,8 @@ ACDDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 }
 
 void
-ACDDevice::OnSensorUpdate(const MoreData &basic)
+ACDDevice::OnCalculatedUpdate(const MoreData &basic, 
+                              [[maybe_unused]] const DerivedInfo &calculated)
 {
   NullOperationEnvironment env;
 
