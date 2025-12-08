@@ -3,6 +3,8 @@ on:
   workflow_dispatch:
   push:
     paths-ignore:
+      - '.clang-format'
+      - '.cursor/**'
       - 'cloud/**'
       - 'doc/**'
       - 'fuzzer/**'
@@ -20,6 +22,8 @@ on:
 
   pull_request:
     paths-ignore:
+      - '.clang-format'
+      - '.cursor/**'
       - 'cloud/**'
       - 'doc/**'
       - 'fuzzer/**'
