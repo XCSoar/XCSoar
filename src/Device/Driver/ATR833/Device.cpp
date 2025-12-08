@@ -160,6 +160,15 @@ ATR833Device::PutStandbyFrequency(RadioFrequency frequency,
   return true;
 }
 
+bool
+ATR833Device::ExchangeRadioFrequencies(OperationEnvironment &env,
+                                       [[maybe_unused]] NMEAInfo &info)
+{
+  ATRBuffer buffer(EXCHANGE);
+  port.FullWrite(buffer.Finish(), env, std::chrono::seconds{2});
+  return true;
+} 
+
 void
 ATR833Device::LinkTimeout()
 {
