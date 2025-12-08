@@ -26,18 +26,18 @@ PCMMixer::Start(PCMDataSource &source)
 
   if (src_sample_rate != mixer_sample_rate) {
     /* Resampling is not supported yet */
-    LogFormat(_T("Cannot playback PCM data source with sample rate of %u Hz, ")
-                 _T("because the mixer sample rate is %u Hz"),
-              src_sample_rate,
-              mixer_sample_rate);
+    LogFmt("Cannot playback PCM data source with sample rate of {} Hz, "
+           "because the mixer sample rate is {} Hz",
+           src_sample_rate,
+           mixer_sample_rate);
     return false;
   }
 
   const std::lock_guard protect{lock};
 
   if (!mixer_data_source.AddSource(source)) {
-    LogFormat(_T("Cannot handle PCM data source to mixer, because the mixer ")
-                  _T("capacity is exceeded"));
+    LogFmt("Cannot handle PCM data source to mixer, because the mixer "
+           "capacity is exceeded");
     return false;
   }
 

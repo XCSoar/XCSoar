@@ -144,7 +144,7 @@ TopCanvas::Flip()
 
   if (!display.SwapBuffers(surface)) {
 #ifdef ANDROID
-    LogFormat("eglSwapBuffers() failed: 0x%x", eglGetError());
+    LogFmt("eglSwapBuffers() failed: 0x{:x}", eglGetError());
 #else
     fprintf(stderr, "eglSwapBuffers() failed: 0x%x\n", eglGetError());
     exit(EXIT_FAILURE);

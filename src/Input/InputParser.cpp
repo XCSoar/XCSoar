@@ -18,6 +18,7 @@
 
 #include <tchar.h>
 #include <stdio.h>
+#include <string_view>
 
 static bool
 parse_assignment(char *buffer, const char *&key, const char *&value)
@@ -69,8 +70,11 @@ struct EventBuilder {
       // All modes are valid at this point
       int mode_id = config.MakeMode(token);
       if (mode_id < 0) {
-        LogFormat(_T("Too many modes: %.*s at %u"),
-                  int(token.size()), token.data(), line);
+        // Convert string_view to null-terminated string for LogFmt
+        // LogFmt will handle wchar_t* to UTF-8 conversion on Windows automatically
+        StaticString<256> temp_token;
+        temp_token.assign(token);
+        LogFmt("Too many modes: {} at {}", temp_token.c_str(), line);
         continue;
       }
 
@@ -93,7 +97,7 @@ struct EventBuilder {
         if (key > 0)
           config.SetKeyEvent(mode_id, key, event_id);
         else
-          LogFormat(_T("Invalid key data: %s at %u"), data.c_str(), line);
+          LogFmt("Invalid key data: {} at {}", data.c_str(), line);
 
         // Make gce (Glide Computer Event)
         // GCE - Glide Computer Event
@@ -103,7 +107,7 @@ struct EventBuilder {
         if (key >= 0)
           config.GC2Event[key] = event_id;
         else
-          LogFormat(_T("Invalid GCE data: %s at %u"), data.c_str(), line);
+          LogFmt("Invalid GCE data: {} at {}", data.c_str(), line);
 
         // Make gesture (Gesture Event)
         // Key - Key Event
@@ -122,7 +126,7 @@ struct EventBuilder {
           config.Gesture2Event.Remove(data.c_str());
           config.Gesture2Event.Add(data.c_str(), event_id);
         } else
-          LogFormat(_T("Invalid gesture data: %s at %u"), data.c_str(), line);
+          LogFmt("Invalid gesture data: {} at {}", data.c_str(), line);
 
         // Make ne (NMEA Event)
         // NE - NMEA Event
@@ -132,14 +136,14 @@ struct EventBuilder {
         if (key >= 0)
           config.N2Event[key] = event_id;
         else
-          LogFormat(_T("Invalid GCE data: %s at %u"), data.c_str(), line);
+          LogFmt("Invalid GCE data: {} at {}", data.c_str(), line);
 
         // label only - no key associated (label can still be touch screen)
       } else if (type.equals(_T("label"))) {
         // Nothing to do here...
 
       } else {
-        LogFormat(_T("Invalid type: %s at %u"), type.c_str(), line);
+        LogFmt("Invalid type: {} at {}", type.c_str(), line);
       }
     }
   }
@@ -193,7 +197,7 @@ ParseInputFile(InputConfig &config, BufferedReader &reader)
         const auto [d_event, d_misc] = Split(v, ' ');
 
         if (d_event.empty()) {
-          LogFormat("Invalid event type at %i", line);
+          LogFmt("Invalid event type at {}", line);
           continue;
         }
 
@@ -227,7 +231,7 @@ ParseInputFile(InputConfig &config, BufferedReader &reader)
         LogFmt("Invalid key/value pair {}={} at {}", key, value, line);
       }
     } else  {
-      LogFormat("Invalid line at %i", line);
+      LogFmt("Invalid line at {}", line);
     }
 
   }

@@ -33,12 +33,12 @@ ALSAPCMPlayer::TryRecoverFromError(snd_pcm_t &alsa_handle, int error)
   if (-EPIPE == error)
     LogString("ALSA PCM buffer underrun");
   else if ((-EINTR == error) || (-ESTRPIPE == error))
-    LogFormat("ALSA PCM error: %s - trying to recover",
-              snd_strerror(error));
+    LogFmt("ALSA PCM error: {} - trying to recover",
+           snd_strerror(error));
   else {
     // snd_pcm_recover() can only handle EPIPE, EINTR and ESTRPIPE
-    LogFormat("Unrecoverable ALSA PCM error: %s",
-              snd_strerror(error));
+    LogFmt("Unrecoverable ALSA PCM error: {}",
+           snd_strerror(error));
     return false;
   }
 
@@ -47,11 +47,11 @@ ALSAPCMPlayer::TryRecoverFromError(snd_pcm_t &alsa_handle, int error)
     LogString("ALSA PCM successfully recovered");
     return true;
   } else {
-    LogFormat("snd_pcm_recover(0x%p, %d, 1) failed: %d - %s",
-              &alsa_handle,
-              error,
-              recover_error,
-              snd_strerror(recover_error));
+    LogFmt("snd_pcm_recover({}, {}, 1) failed: {} - {}",
+           static_cast<const void*>(&alsa_handle),
+           error,
+           recover_error,
+           snd_strerror(recover_error));
     return false;
   }
 }
@@ -70,19 +70,19 @@ ALSAPCMPlayer::WriteFrames(snd_pcm_t &alsa_handle, int16_t *buffer,
       if (try_recover_on_error) {
         return TryRecoverFromError(alsa_handle, static_cast<int>(write_ret));
       } else {
-        LogFormat("snd_pcm_writei(0x%p, 0x%p, %u) failed: %d - %s",
-                  &alsa_handle,
-                  buffer,
-                  static_cast<unsigned>(n),
-                  static_cast<int>(write_ret),
-                  snd_strerror(static_cast<int>(write_ret)));
+        LogFmt("snd_pcm_writei({}, {}, {}) failed: {} - {}",
+               static_cast<const void*>(&alsa_handle),
+               static_cast<const void*>(buffer),
+               static_cast<unsigned>(n),
+               static_cast<int>(write_ret),
+               snd_strerror(static_cast<int>(write_ret)));
         return false;
       }
     } else {
       // Never observed this case. Should not happen? Cannot happen?
-      LogFormat("Only %u of %u ALSA PCM frames written",
-                static_cast<unsigned>(write_ret),
-                static_cast<unsigned>(n));
+      LogFmt("Only {} of {} ALSA PCM frames written",
+             static_cast<unsigned>(write_ret),
+             static_cast<unsigned>(n));
     }
     return false;
   }
@@ -141,11 +141,11 @@ ALSAPCMPlayer::SetParameters(snd_pcm_t &alsa_handle, unsigned sample_rate,
 
   int alsa_error = snd_pcm_hw_params_any(&alsa_handle, hw_params);
   if (alsa_error < 0) {
-    LogFormat("snd_pcm_hw_params_any(0x%p, 0x%p) failed: %d - %s",
-              &alsa_handle,
-              hw_params,
-              alsa_error,
-              snd_strerror(alsa_error));
+    LogFmt("snd_pcm_hw_params_any({}, {}) failed: {} - {}",
+           static_cast<const void*>(&alsa_handle),
+           static_cast<const void*>(hw_params),
+           alsa_error,
+           snd_strerror(alsa_error));
     return false;
   }
 
@@ -157,12 +157,12 @@ ALSAPCMPlayer::SetParameters(snd_pcm_t &alsa_handle, unsigned sample_rate,
                                             hw_params,
                                             SND_PCM_ACCESS_RW_INTERLEAVED);
   if (0 != alsa_error) {
-    LogFormat("snd_pcm_hw_params_set_access(0x%p, 0x%p, "
-                  "SND_PCM_ACCESS_RW_INTERLEAVED) failed: %d - %s",
-              &alsa_handle,
-              hw_params,
-              alsa_error,
-              snd_strerror(alsa_error));
+    LogFmt("snd_pcm_hw_params_set_access({}, {}, "
+           "SND_PCM_ACCESS_RW_INTERLEAVED) failed: {} - {}",
+           static_cast<const void*>(&alsa_handle),
+           static_cast<const void*>(hw_params),
+           alsa_error,
+           snd_strerror(alsa_error));
     return false;
   }
 
@@ -172,15 +172,15 @@ ALSAPCMPlayer::SetParameters(snd_pcm_t &alsa_handle, unsigned sample_rate,
                                                 ? SND_PCM_FORMAT_S16_BE
                                                 : SND_PCM_FORMAT_S16_LE);
   if (0 != alsa_error) {
-    LogFormat("snd_pcm_hw_params_set_format(0x%p, 0x%p, "
-                  "%s) failed: %d - %s",
-              &alsa_handle,
-              hw_params,
-              big_endian_source
-                  ? "SND_PCM_FORMAT_S16_BE"
-                  : "SND_PCM_FORMAT_S16_LE",
-              alsa_error,
-              snd_strerror(alsa_error));
+    LogFmt("snd_pcm_hw_params_set_format({}, {}, "
+           "{}) failed: {} - {}",
+           static_cast<const void*>(&alsa_handle),
+           static_cast<const void*>(hw_params),
+           big_endian_source
+               ? "SND_PCM_FORMAT_S16_BE"
+               : "SND_PCM_FORMAT_S16_LE",
+           alsa_error,
+           snd_strerror(alsa_error));
     return false;
   }
 
@@ -189,13 +189,13 @@ ALSAPCMPlayer::SetParameters(snd_pcm_t &alsa_handle, unsigned sample_rate,
                                                    hw_params,
                                                    &channels);
   if (0 != alsa_error) {
-    LogFormat("snd_pcm_hw_params_set_channels_near(0x%p, 0x%p, 0x%p) "
-                  "failed: %d - %s",
-              &alsa_handle,
-              hw_params,
-              &channels,
-              alsa_error,
-              snd_strerror(alsa_error));
+    LogFmt("snd_pcm_hw_params_set_channels_near({}, {}, {}) "
+           "failed: {} - {}",
+           static_cast<const void*>(&alsa_handle),
+           static_cast<const void*>(hw_params),
+           static_cast<const void*>(&channels),
+           alsa_error,
+           snd_strerror(alsa_error));
     return false;
   }
 
@@ -204,13 +204,13 @@ ALSAPCMPlayer::SetParameters(snd_pcm_t &alsa_handle, unsigned sample_rate,
                                           sample_rate,
                                           0);
   if (0 != alsa_error) {
-    LogFormat("snd_pcm_hw_params_set_rate(0x%p, 0x%p, %u, 0) "
-                  "failed: %d - %s",
-              &alsa_handle,
-              hw_params,
-              sample_rate,
-              alsa_error,
-              snd_strerror(alsa_error));
+    LogFmt("snd_pcm_hw_params_set_rate({}, {}, {}, 0) "
+           "failed: {} - {}",
+           static_cast<const void*>(&alsa_handle),
+           static_cast<const void*>(hw_params),
+           sample_rate,
+           alsa_error,
+           snd_strerror(alsa_error));
     return false;
   }
 
@@ -227,13 +227,13 @@ ALSAPCMPlayer::SetParameters(snd_pcm_t &alsa_handle, unsigned sample_rate,
                                                         &period_time,
                                                         nullptr);
     if (0 != alsa_error) {
-      LogFormat("snd_pcm_hw_params_set_period_time_near(0x%p, 0x%p, 0x%p, "
-                    "nullptr) failed: %d - %s",
-                &alsa_handle,
-                hw_params,
-                &period_time,
-                alsa_error,
-                snd_strerror(alsa_error));
+      LogFmt("snd_pcm_hw_params_set_period_time_near({}, {}, {}, "
+             "nullptr) failed: {} - {}",
+             static_cast<const void*>(&alsa_handle),
+             static_cast<const void*>(hw_params),
+             static_cast<const void*>(&period_time),
+             alsa_error,
+             snd_strerror(alsa_error));
       return false;
     }
 
@@ -241,12 +241,12 @@ ALSAPCMPlayer::SetParameters(snd_pcm_t &alsa_handle, unsigned sample_rate,
                                                    &period_size,
                                                    nullptr);
     if (0 != alsa_error) {
-      LogFormat("snd_pcm_hw_params_get_period_size(0x%p, 0x%p, nullptr) "
-                    "failed: %d - %s",
-                hw_params,
-                &period_size,
-                alsa_error,
-                snd_strerror(alsa_error));
+      LogFmt("snd_pcm_hw_params_get_period_size({}, {}, nullptr) "
+             "failed: {} - {}",
+             static_cast<const void*>(hw_params),
+             static_cast<const void*>(&period_size),
+             alsa_error,
+             snd_strerror(alsa_error));
       return false;
     }
 
@@ -255,35 +255,35 @@ ALSAPCMPlayer::SetParameters(snd_pcm_t &alsa_handle, unsigned sample_rate,
                                                         hw_params,
                                                         &buffer_size);
     if (0 != alsa_error) {
-      LogFormat("snd_pcm_hw_params_set_buffer_size_near(0x%p, 0x%p, 0x%p) "
-                    "failed: %d - %s",
-                &alsa_handle,
-                hw_params,
-                &buffer_size,
-                alsa_error,
-                snd_strerror(alsa_error));
+      LogFmt("snd_pcm_hw_params_set_buffer_size_near({}, {}, {}) "
+             "failed: {} - {}",
+             static_cast<const void*>(&alsa_handle),
+             static_cast<const void*>(hw_params),
+             static_cast<const void*>(&buffer_size),
+             alsa_error,
+             snd_strerror(alsa_error));
       return false;
     }
 
     alsa_error = snd_pcm_hw_params_get_buffer_size(hw_params, &buffer_size);
     if (0 != alsa_error) {
-      LogFormat("snd_pcm_hw_params_get_buffer_size(0x%p, 0x%p) "
-                    "failed: %d - %s",
-                hw_params,
-                &buffer_size,
-                alsa_error,
-                snd_strerror(alsa_error));
+      LogFmt("snd_pcm_hw_params_get_buffer_size({}, {}) "
+             "failed: {} - {}",
+             static_cast<const void*>(hw_params),
+             static_cast<const void*>(&buffer_size),
+             alsa_error,
+             snd_strerror(alsa_error));
       return false;
     }
   } else {
     alsa_error = snd_pcm_hw_params_get_buffer_size(hw_params, &buffer_size);
     if (0 != alsa_error) {
-      LogFormat("snd_pcm_hw_params_get_buffer_size(0x%p, 0x%p) "
-                    "failed: %d - %s",
-                hw_params,
-                &buffer_size,
-                alsa_error,
-                snd_strerror(alsa_error));
+      LogFmt("snd_pcm_hw_params_get_buffer_size({}, {}) "
+             "failed: {} - {}",
+             static_cast<const void*>(hw_params),
+             static_cast<const void*>(&buffer_size),
+             alsa_error,
+             snd_strerror(alsa_error));
       return false;
     }
 
@@ -291,12 +291,12 @@ ALSAPCMPlayer::SetParameters(snd_pcm_t &alsa_handle, unsigned sample_rate,
                                                    &latency,
                                                    nullptr);
     if (0 != alsa_error) {
-      LogFormat("snd_pcm_hw_params_get_buffer_time(0x%p, 0x%p, nullptr) "
-                    "failed: %d - %s",
-                hw_params,
-                &latency,
-                alsa_error,
-                snd_strerror(alsa_error));
+      LogFmt("snd_pcm_hw_params_get_buffer_time({}, {}, nullptr) "
+             "failed: {} - {}",
+             static_cast<const void*>(hw_params),
+             static_cast<const void*>(&latency),
+             alsa_error,
+             snd_strerror(alsa_error));
       return false;
     }
 
@@ -306,13 +306,13 @@ ALSAPCMPlayer::SetParameters(snd_pcm_t &alsa_handle, unsigned sample_rate,
                                                         &period_time,
                                                         nullptr);
     if (0 != alsa_error) {
-      LogFormat("snd_pcm_hw_params_set_period_time_near(0x%p, 0x%p, 0x%p, "
-                    "nullptr) failed: %d - %s",
-                &alsa_handle,
-                hw_params,
-                &period_time,
-                alsa_error,
-                snd_strerror(alsa_error));
+      LogFmt("snd_pcm_hw_params_set_period_time_near({}, {}, {}, "
+             "nullptr) failed: {} - {}",
+             static_cast<const void*>(&alsa_handle),
+             static_cast<const void*>(hw_params),
+             static_cast<const void*>(&period_time),
+             alsa_error,
+             snd_strerror(alsa_error));
       return false;
     }
 
@@ -320,23 +320,23 @@ ALSAPCMPlayer::SetParameters(snd_pcm_t &alsa_handle, unsigned sample_rate,
                                                    &period_size,
                                                    nullptr);
     if (0 != alsa_error) {
-      LogFormat("snd_pcm_hw_params_get_period_size(0x%p, 0x%p, nullptr) "
-                    "failed: %d - %s",
-                hw_params,
-                &period_size,
-                alsa_error,
-                snd_strerror(alsa_error));
+      LogFmt("snd_pcm_hw_params_get_period_size({}, {}, nullptr) "
+             "failed: {} - {}",
+             static_cast<const void*>(hw_params),
+             static_cast<const void*>(&period_size),
+             alsa_error,
+             snd_strerror(alsa_error));
       return false;
     }
   }
 
   alsa_error = snd_pcm_hw_params(&alsa_handle, hw_params);
   if (0 != alsa_error) {
-    LogFormat("snd_pcm_hw_params(0x%p, 0x%p) failed: %d - %s",
-              &alsa_handle,
-              hw_params,
-              alsa_error,
-              snd_strerror(alsa_error));
+    LogFmt("snd_pcm_hw_params({}, {}) failed: {} - {}",
+           static_cast<const void*>(&alsa_handle),
+           static_cast<const void*>(hw_params),
+           alsa_error,
+           snd_strerror(alsa_error));
     return false;
   }
 
@@ -345,11 +345,11 @@ ALSAPCMPlayer::SetParameters(snd_pcm_t &alsa_handle, unsigned sample_rate,
 
   alsa_error = snd_pcm_sw_params_current(&alsa_handle, sw_params);
   if (0 != alsa_error) {
-    LogFormat("snd_pcm_sw_params_current(0x%p, 0x%p) failed: %d - %s",
-              &alsa_handle,
-              sw_params,
-              alsa_error,
-              snd_strerror(alsa_error));
+    LogFmt("snd_pcm_sw_params_current({}, {}) failed: {} - {}",
+           static_cast<const void*>(&alsa_handle),
+           static_cast<const void*>(sw_params),
+           alsa_error,
+           snd_strerror(alsa_error));
     return false;
   }
 
@@ -359,13 +359,13 @@ ALSAPCMPlayer::SetParameters(snd_pcm_t &alsa_handle, unsigned sample_rate,
                                                      sw_params,
                                                      start_threshold);
   if (0 != alsa_error) {
-    LogFormat("snd_pcm_sw_params_set_start_threshold(0x%p, 0x%p, %u) "
-                  "failed: %d - %s",
-              &alsa_handle,
-              sw_params,
-              static_cast<unsigned>(start_threshold),
-              alsa_error,
-              snd_strerror(alsa_error));
+    LogFmt("snd_pcm_sw_params_set_start_threshold({}, {}, {}) "
+           "failed: {} - {}",
+           static_cast<const void*>(&alsa_handle),
+           static_cast<const void*>(sw_params),
+           static_cast<unsigned>(start_threshold),
+           alsa_error,
+           snd_strerror(alsa_error));
     return false;
   }
 
@@ -373,22 +373,22 @@ ALSAPCMPlayer::SetParameters(snd_pcm_t &alsa_handle, unsigned sample_rate,
                                                sw_params,
                                                period_size);
   if (0 != alsa_error) {
-    LogFormat("snd_pcm_sw_params_set_avail_min(0x%p, 0x%p, %u) failed: %d - %s",
-              &alsa_handle,
-              sw_params,
-              static_cast<unsigned>(period_size),
-              alsa_error,
-              snd_strerror(alsa_error));
+    LogFmt("snd_pcm_sw_params_set_avail_min({}, {}, {}) failed: {} - {}",
+           static_cast<const void*>(&alsa_handle),
+           static_cast<const void*>(sw_params),
+           static_cast<unsigned>(period_size),
+           alsa_error,
+           snd_strerror(alsa_error));
     return false;
   }
 
   alsa_error = snd_pcm_sw_params(&alsa_handle, sw_params);
   if (0 != alsa_error) {
-    LogFormat("snd_pcm_sw_params(0x%p, 0x%p) failed: %d - %s",
-              &alsa_handle,
-              sw_params,
-              alsa_error,
-              snd_strerror(alsa_error));
+    LogFmt("snd_pcm_sw_params({}, {}) failed: {} - {}",
+           static_cast<const void*>(&alsa_handle),
+           static_cast<const void*>(sw_params),
+           alsa_error,
+           snd_strerror(alsa_error));
     return false;
   }
 
@@ -455,9 +455,9 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
     int alsa_error = snd_pcm_open(&raw_alsa_handle, alsa_device,
                                   SND_PCM_STREAM_PLAYBACK, 0);
     if (alsa_error < 0) {
-      LogFormat("snd_pcm_open(0x%p, \"%s\", SND_PCM_STREAM_PLAYBACK, 0) "
-                    "failed: %s",
-                &alsa_handle, alsa_device, snd_strerror(alsa_error));
+      LogFmt("snd_pcm_open({}, \"{}\", SND_PCM_STREAM_PLAYBACK, 0) "
+             "failed: {}",
+             static_cast<const void*>(&alsa_handle), alsa_device, snd_strerror(alsa_error));
       return false;
     }
     new_alsa_handle = MakeAlsaHandleUniquePtr(raw_alsa_handle);
@@ -474,10 +474,10 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
 
   snd_pcm_sframes_t n_available = snd_pcm_avail(new_alsa_handle.get());
   if (n_available <= 0) {
-    LogFormat("snd_pcm_avail(0x%p) failed: %ld - %s",
-              new_alsa_handle.get(),
-              static_cast<long>(n_available),
-              snd_strerror(static_cast<int>(n_available)));
+    LogFmt("snd_pcm_avail({}) failed: {} - {}",
+           static_cast<const void*>(new_alsa_handle.get()),
+           static_cast<long>(n_available),
+           snd_strerror(static_cast<int>(n_available)));
     return false;
   }
 
@@ -486,9 +486,9 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
 
   int poll_fds_count = snd_pcm_poll_descriptors_count(new_alsa_handle.get());
   if (poll_fds_count < 1) {
-    LogFormat("snd_pcm_poll_descriptors_count(0x%p) returned %d",
-              new_alsa_handle.get(),
-              poll_fds_count);
+    LogFmt("snd_pcm_poll_descriptors_count({}) returned {}",
+           static_cast<const void*>(new_alsa_handle.get()),
+           poll_fds_count);
     return false;
   }
 
@@ -502,8 +502,8 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
   size_t n_read = FillPCMBuffer(buffer.get(), static_cast<size_t>(n_available));
 
   if (0 == n_read) {
-    LogFormat("ALSA PCMPlayer started with data source which "
-                  "does not deliver any data");
+    LogFmt("ALSA PCMPlayer started with data source which "
+           "does not deliver any data");
     return false;
   }
 

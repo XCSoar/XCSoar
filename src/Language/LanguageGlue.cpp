@@ -130,7 +130,7 @@ DetectLanguage() noexcept
 
   // Retrieve the default user language identifier from the OS
   LANGID lang_id = GetUserDefaultUILanguage();
-  LogFormat("Language: GetUserDefaultUILanguage()=0x%x", (int)lang_id);
+  LogFmt("Language: GetUserDefaultUILanguage()=0x{:x}", (int)lang_id);
   if (lang_id == 0)
     return nullptr;
 
@@ -192,20 +192,20 @@ InitNativeGettext(const char *locale) noexcept
 static bool
 ReadBuiltinLanguage(const BuiltinLanguage &language) noexcept
 {
-  LogFormat(_T("Language: loading resource '%s'"), language.resource);
+  LogFmt("Language: loading resource '{}'", language.resource);
 
 #ifdef HAVE_BUILTIN_LANGUAGES
   // Load MO file from resource
   delete mo_loader;
   mo_loader = new MOLoader({language.begin, (size_t)language.size});
   if (mo_loader->error()) {
-    LogFormat(_T("Language: could not load resource '%s'"), language.resource);
+    LogFmt("Language: could not load resource '{}'", language.resource);
     delete mo_loader;
     mo_loader = nullptr;
     return false;
   }
 
-  LogFormat(_T("Loaded translations from resource '%s'"), language.resource);
+  LogFmt("Loaded translations from resource '{}'", language.resource);
 
   mo_file = &mo_loader->get();
 #else
@@ -241,7 +241,7 @@ static bool
 LoadLanguageFile([[maybe_unused]] Path path) noexcept
 {
 #ifdef HAVE_BUILTIN_LANGUAGES
-  LogFormat(_T("Language: loading file '%s'"), path.c_str());
+  LogFmt("Language: loading file '{}'", path.ToUTF8());
 
   delete mo_loader;
   mo_loader = nullptr;
@@ -249,7 +249,7 @@ LoadLanguageFile([[maybe_unused]] Path path) noexcept
   try {
     mo_loader = new MOLoader(path);
     if (mo_loader->error()) {
-      LogFormat(_T("Language: could not load file '%s'"), path.c_str());
+      LogFmt("Language: could not load file '{}'", path.c_str());
       delete mo_loader;
       mo_loader = nullptr;
       return false;
@@ -259,7 +259,7 @@ LoadLanguageFile([[maybe_unused]] Path path) noexcept
     return false;
   }
 
-  LogFormat(_T("Loaded translations from file '%s'"), path.c_str());
+  LogFmt("Loaded translations from file '{}'", path.c_str());
 
   mo_file = &mo_loader->get();
   return true;

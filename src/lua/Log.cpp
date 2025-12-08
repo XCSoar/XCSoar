@@ -35,7 +35,7 @@ l_print(lua_State *L)
 
   std::replace_if(message.begin(), message.end(),
                   [](unsigned char ch){ return ch < ' '; }, ' ');
-  LogFormat("%s", message.c_str());
+  LogFmt("{}", message.c_str());
   return 0;
 }
 

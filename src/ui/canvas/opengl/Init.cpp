@@ -101,16 +101,16 @@ void
 OpenGL::SetupContext()
 {
   if (auto s = (const char *)glGetString(GL_VENDOR))
-    LogFormat("GL vendor: %s", s);
+    LogFmt("GL vendor: {}", s);
 
   if (auto s = (const char *)glGetString(GL_VERSION))
-    LogFormat("GL version: %s", s);
+    LogFmt("GL version: {}", s);
 
   if (auto s = (const char *)glGetString(GL_RENDERER))
-    LogFormat("GL renderer: %s", s);
+    LogFmt("GL renderer: {}", s);
 
   if (auto s = (const char *)glGetString(GL_EXTENSIONS))
-    LogFormat("GL extensions: %s", s);
+    LogFmt("GL extensions: {}", s);
 
   texture_non_power_of_two = SupportsNonPowerOfTwoTextures();
 

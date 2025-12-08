@@ -21,7 +21,7 @@ InitializeAppleServices()
                  error:&error];
   [session setActive:YES error:&error];
   if (error) {
-    LogFormat("AVAudioSession initialize error: %s", [[error localizedDescription] UTF8String]);
+    LogFmt("AVAudioSession initialize error: {}", [[error localizedDescription] UTF8String]);
   }
 #endif
 }
@@ -35,7 +35,7 @@ DeinitializeAppleServices()
   NSError *error = nil;
   [[AVAudioSession sharedInstance] setActive:NO error:&error];
   if (error) {
-    LogFormat("AVAudioSession deinitialize error: %s", [[error localizedDescription] UTF8String]);
+    LogFmt("AVAudioSession deinitialize error: {}", [[error localizedDescription] UTF8String]);
   }
 #endif
 }

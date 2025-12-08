@@ -466,7 +466,7 @@ DeviceDescriptor::Open(OperationEnvironment &env)
   assert(open_job == nullptr);
 
   TCHAR buffer[64];
-  LogFormat(_T("Opening device %s"), config.GetPortName(buffer, 64));
+  LogFmt("Opening device {}", config.GetPortName(buffer, 64));
 
 #ifdef ANDROID
   /* reset the Kalman filter */
@@ -555,7 +555,7 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
     return;
 
   TCHAR buffer[64];
-  LogFormat(_T("Reconnecting to device %s"), config.GetPortName(buffer, 64));
+  LogFmt("Reconnecting to device {}", config.GetPortName(buffer, 64));
 
   InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
   Reopen(env);
@@ -1292,8 +1292,8 @@ DeviceDescriptor::PortError(const char *msg) noexcept
 {
   {
     TCHAR buffer[64];
-    LogFormat(_T("Error on device %s: %s"),
-              config.GetPortName(buffer, 64), msg);
+    LogFmt("Error on device {}: {}",
+           config.GetPortName(buffer, 64), msg);
   }
 
   LockSetErrorMessage(msg);
