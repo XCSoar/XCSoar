@@ -1,0 +1,607 @@
+---
+alwaysApply: true
+---
+
+# XCSoar Project Rules
+
+## Code Style
+
+### Formatting
+- 79 columns maximum (reasonable exceptions allowed)
+- Indent 2 spaces, no tabs
+- No indent for `namespace` blocks
+- Use `.clang-format` for new code; do not reformat old code unless touched
+
+### File Headers
+- All source files must start with license header:
+  ```cpp
+  // SPDX-License-Identifier: GPL-2.0-or-later
+  // Copyright The XCSoar Project
+  ```
+- Header files should use `#pragma once` (not `#ifndef`/`#define` guards)
+- Include ordering:
+  1. License header
+  2. `#pragma once` (for headers)
+  3. Local includes (quoted, e.g., `#include "Local.hpp"`)
+  4. System includes (angled, e.g., `#include <array>`)
+  5. Conditional includes (`#ifdef` blocks)
+- `.clang-format` handles include sorting automatically
+
+### Naming Conventions
+- Classes/functions: `CamelCase` (not `camelCase`)
+- Variables/attributes: `lowercase_with_underscores` (e.g., `foo_bar`)
+- Constants/enums: `UPPER_CASE` (e.g., `FOO_BAR`)
+- Files: `*.cpp` and `*.hpp` for C++, named after the main class
+- Each class should have separate `.cpp` and `.hpp` files
+
+### C++ Standards
+- C++20 standard
+- Compilers: gcc 10+ or clang 12+
+- Be `const`-correct; use `constexpr` instead of `const` whenever possible
+- Use `static` whenever possible
+- Make methods `virtual` only after careful consideration
+- All overrides must use `override` keyword; use `final` often
+- Compile with `WERROR=y` and fix all warnings
+- Use `noexcept` for functions that don't throw exceptions
+- Use GCC attributes when appropriate: `[[gnu::pure]]`, `[[gnu::const]]`, `[[noreturn]]`, `[[nodiscard]]`
+
+### Code Organization
+- In class declaration: attributes first, then constructor/destructor, then methods
+- Don't write large functions; split them up when they become too large
+- Avoid dynamic allocation; use `StaticArray` and `StaticString` if possible
+- Asterisks belong to variable name: `Foo *a, *b` not `Foo* a, b`
+- Avoid preprocessor macros; use `inline` functions and `constexpr` variables
+- Avoid expensive STL containers; prefer `StaticArray`/`StaticString` if size is predictable
+- Avoid template hell; keep templates readable
+
+### Enums with Count Values
+- Enums that are used in multiple places (backend and UI) should include a `COUNT` sentinel value as the last enum member
+- Arrays, lookup tables, or other data structures that correspond to enum values must be guarded with `static_assert` to ensure they match the enum `COUNT`
+- This provides compile-time checking to catch mismatches when enum values are added or removed
+- Example:
+  ```cpp
+  enum class MyEnum {
+    VALUE1,
+    VALUE2,
+    COUNT  // sentinel
+  };
+  
+  static const TCHAR *const names[] = {
+    _T("Value 1"),
+    _T("Value 2"),
+  };
+  
+  static_assert(ARRAY_SIZE(names) == unsigned(MyEnum::COUNT),
+                "Array size must match enum COUNT");
+  ```
+
+### Comments & Documentation
+- Write comments in English
+- Comments should be used reasonably:
+  - When the code below is complex and not easily human readable
+  - When there are things that must be known outside the codebase (e.g., device behavior, protocol specifications, hardware quirks)
+  - Avoid obvious comments that just restate what the code does
+- Document all workarounds
+- Non-trivial functions should have doxygen comments
+- Don't abuse multiple `//` comments for multi-line comments
+
+### String Translation
+- All strings displayed to the user must be marked as translatable
+- Use `_()` macro for strings that are translated immediately: `_("Text")`
+- Use `N_()` macro for strings in static arrays/initializers that are translated later via `gettext()`: `N_("Text")`
+- Example with `N_()`:
+  ```cpp
+  static constexpr const TCHAR *const names[] = {
+    N_("Value 1"),
+    N_("Value 2"),
+  };
+  // Later, when displaying: gettext(names[i])
+  ```
+- `N_()` is commonly used with `StaticEnumChoice` arrays for enum dropdowns; `AddChoices()` automatically calls `gettext()` on these strings
+- **Logging is exempt**: Do not use translation macros (`_()` or `N_()`) in logging functions (e.g., `LogFormat()`, `LogDebug()`, `LogInfo()`, `LogError()`)
+- Log messages should remain in English for consistency and debugging
+
+### Utilities
+- Use utility functions in `src/util` when available
+
+### Error Handling
+- Exceptions are used for error handling (std::exception, std::runtime_error, etc.)
+- Use `std::exception_ptr` for exception propagation across threads
+- Use utility functions from `util/Exception.hxx` for exception handling
+- For unreachable code, use `gcc_unreachable()` or `assert(false)`
+- Use `assert()` for runtime checks in debug builds
+
+## Git Workflow
+
+### Branches
+- `master`: development branch for next minor release
+- `v<major>.<minor>.x`: current minor version branch (for bug fixes)
+- Commits for next minor release → `master`
+- Bug fixes for current minor release → current minor branch
+
+### Patches
+- Must be self-explanatory with good description
+- Subject line: subsystem/library name + brief description
+- Must compile and not introduce regressions
+- Must be self-contained; only change one thing
+- Split larger patches into smaller pieces
+- Don't refactor and add/modify/remove features in the same patch
+- Don't rewrite code unless needed; migrate incrementally
+
+### Commit Messages
+- Format: `<File Path>:` or `<Component>:` `<commit message summary>`
+- **Priority Rules:**
+  1. **Single File Change:** Use the file path as the prefix (e.g., `src/Device/Driver/Flarm/Logger.cpp: Fix buffer overflow`)
+  2. **Component Change:** If multiple files in a component are changed, use the component name (e.g., `Device/Driver/Flarm: Update protocol parser`)
+- The first line is the summary
+- Following lines should provide detailed reasoning and context
+- Explain *why* the change is being made, not just *what* changed
+- Example:
+  ```
+  Path: Fix TCHAR to UTF-8 conversion in file I/O
+
+  The file I/O layer was incorrectly handling TCHAR strings on Windows,
+  leading to potential buffer overflows. This change uses the Path
+  abstraction to ensure safe conversion at the API boundary.
+  ```
+
+## Architecture
+
+### Multi-Platform Considerations
+- XCSoar is a multi-platform project supporting: Windows (PC, WIN64), Linux/UNIX, Android, iOS, macOS, Kobo e-readers, Raspberry Pi, and other embedded platforms
+- **Unicode/Non-Unicode handling:**
+  - Use `TCHAR` for character types (maps to `char` on Unix/Android/iOS, `wchar_t` on Windows with `_UNICODE`)
+  - Use `_T()` macro for string literals (e.g., `_T("Hello")`)
+  - Use `tstring` (maps to `std::string` or `std::wstring` depending on build)
+  - On Windows: can be built with or without `_UNICODE` (Unicode vs ANSI)
+  - On Unix/Android/iOS: always uses UTF-8 (`char`, non-Unicode build)
+  - Use conversion utilities (`WideToUTF8Converter`, `UTF8ToWideConverter`) when interfacing between different string types
+- **File Path Handling:**
+  - **Use `Path` class for all file paths** - This is the primary abstraction for file paths across the codebase
+  - `Path` class automatically handles TCHAR differences:
+    - On Windows (Unicode build): `Path::char_type` = `wchar_t` (UTF-16)
+    - On Unix/Android/iOS: `Path::char_type` = `char` (UTF-8)
+  - **File I/O conversion boundary**: File I/O operations (`FileOutputStream`, `FileReader`, `FileUtil`) are the single conversion point
+    - On Windows: Convert `Path` to UTF-16 for Windows APIs (`CreateFileW()`, `FindFirstFileW()`, etc.)
+    - On Unix: Use `Path::c_str()` directly (already UTF-8)
+  - Use `Path::ToUTF8()` when you need UTF-8 string representation
+  - **Best practice**: Always use `Path` or `AllocatedPath` for file paths, never raw `TCHAR*` or `char*` strings
+  - Example:
+    ```cpp
+    // Good: Use Path class
+    AllocatedPath file_path = LocalPath(_T("config.prf"));
+    FileOutputStream fos(file_path, FileOutputStream::Mode::CREATE);
+    
+    // Avoid: Raw TCHAR* for file paths
+    // TCHAR *file_path = _T("config.prf");  // Don't do this
+    ```
+- **Platform detection:**
+  - Use `#ifdef ANDROID`, `#ifdef __APPLE__`, `#ifdef WIN32`, `#ifdef KOBO`, etc. for platform-specific code
+  - Use helper functions from `Asset.hpp`: `IsAndroid()`, `IsIOS()`, `IsKobo()`, `IsEmbedded()`, etc.
+  - Use `HAVE_*` defines for optional features (e.g., `HAVE_NOAA`, `HAVE_SKYLINES_TRACKING`)
+- **Platform-specific implementations:**
+  - Different implementations may be needed for the same functionality (e.g., audio players, file I/O, threading)
+  - Use factory patterns or conditional compilation to select appropriate implementation
+  - Test changes on multiple platforms when possible
+- **E-paper renderer (Kobo e-readers):**
+  - Kobo e-readers use e-paper (E-Ink) displays which are non-color and have special rendering requirements
+  - Use `IsKobo()` or `HasEPaper()` from `Asset.hpp` to detect e-paper displays
+  - E-paper displays are slow to refresh and show ghosting; animations should be disabled
+  - The renderer uses greyscale mode with optional dithering for better visual quality
+  - Use `IsDithered()` to check if dithering is enabled for conditional styling
+  - Consider display refresh limitations when implementing UI updates on Kobo
+
+### Architectural Layers
+
+XCSoar follows a layered architecture with clear separation of concerns:
+
+**1. Foundation Layer** (`util/`, `Math/`, `Geo/`)
+- Low-level utilities with no dependencies on higher layers
+- Pure data structures and algorithms
+- Can be used by any layer above
+- **MUST NOT** include or depend on `Engine/`, `Computer/`, `Device/`, `Blackboard/`, or UI headers
+
+**2. Engine Layer** (`Engine/`)
+- Business logic: task calculations, airspace, waypoints, route planning
+- Independent of UI and platform-specific code
+- Minimal dependencies; should not depend on UI or backend layers
+- Provides abstract interfaces (e.g., `TaskInterface`) for flexibility
+
+**3. Backend Layer** (`Computer/`, `Device/`, `Blackboard/`, `CalculationThread/`)
+- Sensor data processing and merging
+- Expensive calculations (task engine, airspace warnings)
+- Thread management and data synchronization
+- Uses `BackendComponents` to manage backend resources
+- **MUST NOT** directly access UI components (`Dialogs/`, `Form/`, `Widget/`)
+- **MUST NOT** call `CommonInterface` or `ActionInterface` (these are UI-thread only)
+- Device drivers **MUST NOT** include UI headers or show dialogs
+- CalculationThread **MUST NOT** access UI components
+- For Backend→UI communication, use `InputEvents::processGlideComputer()` event queue (see below)
+
+**4. Interface/UI Layer** (`Interface.hpp`, `Dialogs/`, `Form/`, `Renderer/`, `MapWindow/`)
+- User interface and presentation
+- Reads data through `Interface.hpp` (read-only access)
+- Sends actions through `ActionInterface` (UI → Backend communication)
+- Uses `Components` to access backend resources when needed
+
+**5. Platform Abstraction Layer** (`ui/`, `thread/`, `net/`, platform-specific directories)
+- OS-specific implementations
+- Abstracts platform differences
+- Higher layers depend on abstractions, not implementations
+- **MUST NOT** include or depend on `Engine/`, `Computer/`, `Device/`, or `Blackboard/` headers
+- Platform layer should only provide OS abstractions, not business logic
+
+### Clean Interface Principles
+
+**Blackboard Pattern for Data Sharing:**
+- `DeviceBlackboard`: shared between device threads and calculation threads
+- `InterfaceBlackboard`: read-only copy for UI thread (via `CommonInterface::Basic()`)
+- `MapWindowBlackboard`: for map rendering thread
+- Each thread has its own blackboard copy to avoid locking overhead
+- Use `BlackboardListener` for UI components that need change notifications
+
+**Component Separation:**
+- `BackendComponents`: manages backend resources (devices, computers, threads)
+- `DataComponents`: manages data stores (waypoints, airspaces, terrain)
+- `NetComponents`: manages network resources
+- Components are accessed through global pointers, not direct dependencies
+
+**Interface Access Patterns:**
+- **UI reading data**: Use `CommonInterface::Basic()` or `CommonInterface::Calculated()` (read-only, thread-safe for UI thread)
+- **UI modifying settings**: Use `ActionInterface` functions (e.g., `ActionInterface::SetMacCready()`)
+- **Backend accessing data**: Lock and read from `DeviceBlackboard` or use appropriate blackboard
+- **Engine layer**: Should not depend on UI or backend; accessed through abstract interfaces
+
+**Dependency Rules:**
+- Foundation → no dependencies (MUST NOT depend on higher layers)
+- Engine → only Foundation (util, Math, Geo) (MUST NOT depend on Backend or UI)
+- Backend → Foundation + Engine (MUST NOT depend on UI directly)
+- UI → Foundation + Engine + Backend (through interfaces)
+- Platform → Foundation only (MUST NOT depend on business logic layers)
+
+**Layer-Specific Restrictions:**
+- **Device drivers**: MUST NOT access UI (`Dialogs/`, `Form/`, `CommonInterface`, `ActionInterface`)
+- **Device drivers**: MUST NOT directly call `GlideComputer`, `BasicComputer`, or `CalculationThread`
+- **CalculationThread**: MUST NOT access UI components
+- **Foundation layer**: MUST NOT include headers from `Engine/`, `Computer/`, `Device/`, `Blackboard/`, or UI
+- **Platform layer**: MUST NOT include headers from `Engine/`, `Computer/`, `Device/`, or `Blackboard/`
+
+**Thread Safety:**
+- UI thread: use `InterfaceBlackboard` via `CommonInterface::*()` functions
+- Calculation thread: use `GlideComputerBlackboard` or lock `DeviceBlackboard`
+- Map rendering thread: use `MapWindowBlackboard`
+- Device threads: write to `DeviceBlackboard` (per-device slots), then notify merge thread
+- Never access `InterfaceBlackboard` from non-UI threads
+
+### Blackboard Usage Guide
+
+**DeviceBlackboard** (Backend, Device threads):
+- Ground truth state with single mutex for fast access
+- Device threads write to `per_device_data[i]` via `LockSetDeviceDataScheduleMerge()`
+- MergeThread reads and merges data
+- Use `LockGetDeviceDataUpdateClock(i)` to read device data with clock update
+- Never access from UI thread directly - use `CommonInterface` instead
+- Always lock with `const std::lock_guard lock{device_blackboard.mutex}` when accessing from device/calculation threads
+- Device drivers can implement two callbacks:
+  - `OnSensorUpdate()`: Called from MergeThread (mutex locked), for forwarding sensor data quickly
+  - `OnCalculatedUpdate()`: Called from UI thread, for sending calculated data (task info, glide polar) to device
+
+**InterfaceBlackboard** (UI thread only):
+- Read-only copy accessed via `CommonInterface::Basic()` and `CommonInterface::Calculated()`
+- Automatically updated by `XCSoarInterface::ReceiveGPS()` and `ReceiveCalculated()`
+- Use `BlackboardListener` to get notified of changes
+- Assert `InMainThread()` - never access from other threads
+- This is the primary interface for all UI code (InfoBoxes, dialogs, widgets)
+
+**MapWindowBlackboard** (Draw thread only):
+- Read-only copy for map rendering
+- Assert `InDrawThread()` - never access from other threads
+- Contains `fading_flarm_traffic` map for disappearing traffic
+- Updated by `MapWindow::ReadBlackboard()` from `InterfaceBlackboard`
+
+**GlideComputerBlackboard** (CalculationThread):
+- Used by CalculationThread for expensive calculations
+- Receives data from DeviceBlackboard
+- Writes calculated results back to DeviceBlackboard
+
+### Data Flow Architecture
+
+**Sensor Data Flow:**
+1. Device threads parse NMEA → write to `DeviceBlackboard::per_device_data[i]`
+2. Call `LockSetDeviceDataScheduleMerge()` to trigger merge
+3. MergeThread (50ms interval) merges data and runs BasicComputer
+4. CalculationThread (max 2x/sec) reads from DeviceBlackboard, runs GlideComputer
+5. UI thread calls `XCSoarInterface::ReceiveGPS()` / `ReceiveCalculated()`
+6. Data copied to InterfaceBlackboard, BlackboardListeners notified
+7. Draw thread reads from MapWindowBlackboard
+
+**Settings Flow:**
+- UI modifies settings via `ActionInterface::*()` functions
+- Settings propagate to DeviceBlackboard and then to devices
+- Use `to_devices=true` parameter to send to hardware devices
+- Settings are also saved to profile via `Profile::Set()` when appropriate
+
+**Thread Flow:**
+```
+Device Threads → MergeThread → CalculationThread → UI Thread → Draw Thread
+```
+
+### Backend→UI Event Queue
+
+**Pattern**: Backend code should NOT directly access UI components. Instead, use the event queue pattern for Backend→UI communication.
+
+**Mechanism**: `InputEvents::processGlideComputer()`
+- Backend code (e.g., `GlideComputer`, `ConditionMonitor`) calls `InputEvents::processGlideComputer(gce_id)` to queue events
+- Events are queued and processed later by `InputEvents::DoQueuedEvents()` in the UI thread
+- This is an **asynchronous event queue pattern** that maintains proper layer separation
+- Events are defined in `Input/InputQueue.hpp` (e.g., `GCE_TASK_START`, `GCE_AIRSPACE_ENTER`)
+
+**Example**:
+```cpp
+// In Backend code (e.g., GlideComputer, ConditionMonitor)
+void TaskFinish() noexcept {
+  InputEvents::processGlideComputer(GCE_TASK_FINISH);
+  // Event is queued, will be processed in UI thread
+}
+
+// UI thread processes events via InputEvents::DoQueuedEvents()
+// which calls processGlideComputer_real() to handle the event
+```
+
+**When to use**:
+- Backend needs to notify UI of state changes (task start/finish, airspace warnings, etc.)
+- Backend should NOT directly show dialogs or access UI components
+- This pattern maintains proper layer separation while allowing Backend→UI communication
+
+### Thread-Specific Code Patterns
+
+**Device Driver Thread:**
+```cpp
+// In device driver's data handler (parsing incoming NMEA)
+auto basic = blackboard.LockGetDeviceDataUpdateClock(index);
+// Parse NMEA and update basic
+// Update basic with parsed data (e.g., basic.location = ...)
+blackboard.LockSetDeviceDataScheduleMerge(index, basic);
+```
+
+**Device Driver Callbacks:**
+```cpp
+// OnSensorUpdate: Called from MergeThread (with DeviceBlackboard mutex locked)
+// Use for drivers that need to forward sensor data quickly (e.g., analog vario needle)
+void OnSensorUpdate(const MoreData &basic) override {
+  // Must not block, mutex is already locked
+  // Forward sensor data to device quickly
+}
+
+// OnCalculatedUpdate: Called from UI thread (main thread) after CalculationThread run
+// Use for drivers that need calculated data (task info, glide polar, etc.) to send to device
+void OnCalculatedUpdate(const MoreData &basic,
+                        const DerivedInfo &calculated) override {
+  // Send calculated data to device (e.g., task information, glide polar)
+  // Examples: VegaDevice, LXEosDevice, OpenVarioDevice
+}
+```
+
+**UI Thread (InfoBox, Dialog, Widget):**
+```cpp
+// Read data (always use CommonInterface, never DeviceBlackboard)
+const MoreData &basic = CommonInterface::Basic();
+const DerivedInfo &calculated = CommonInterface::Calculated();
+
+// Modify settings
+ActionInterface::SetMacCready(mc, to_devices);
+
+// Listen for changes
+class MyWidget : public BlackboardListener {
+  void OnGPSUpdate() override { /* refresh display */ }
+  void OnCalculatedUpdate() override { /* update calculations */ }
+};
+// Register: blackboard.AddListener(*this);
+// Unregister: blackboard.RemoveListener(*this);
+```
+
+**CalculationThread:**
+```cpp
+// Read from DeviceBlackboard (with lock)
+const std::lock_guard lock{device_blackboard.mutex};
+const MoreData &basic = device_blackboard.Basic();
+// Perform calculations, write to GlideComputerBlackboard
+```
+
+**Map Rendering Thread:**
+```cpp
+// Read from MapWindowBlackboard (no lock needed, local copy)
+const MoreData &basic = map_blackboard.Basic();
+const DerivedInfo &calculated = map_blackboard.Calculated();
+// Render map using this data
+```
+
+### Component Access Patterns
+
+**Accessing Backend Components:**
+```cpp
+// Use global pointer (defined in Components.hpp)
+if (backend_components != nullptr) {
+  auto &device_blackboard = *backend_components->device_blackboard;
+  // Access with lock
+  const std::lock_guard lock{device_blackboard.mutex};
+  // ...
+}
+```
+
+**Accessing Data Components:**
+```cpp
+if (data_components != nullptr) {
+  auto *waypoints = data_components->waypoints.get();
+  auto *airspaces = data_components->airspaces.get();
+  // ...
+}
+```
+
+**Always check for nullptr** - components may not be initialized in all contexts (e.g., during startup/shutdown, in unit tests)
+
+### Common Architectural Pitfalls
+
+**DO NOT:**
+- Access `InterfaceBlackboard` or `CommonInterface::*()` from non-UI threads
+- Access `DeviceBlackboard` directly from UI thread (use `CommonInterface` instead)
+- Add UI dependencies to Engine layer code
+- Add Backend dependencies to Engine layer code
+- Access components without checking for nullptr
+- Forget to lock DeviceBlackboard when reading from device/calculation threads
+- Use `DeviceBlackboard` in MapWindow rendering (use `MapWindowBlackboard`)
+- Call `CommonInterface::*()` from device drivers or calculation threads
+- Include UI headers (`Dialogs/`, `Form/`, `Widget/`) in device drivers or Backend code
+- Call `ActionInterface` from device drivers or calculation threads
+- Include `Engine/`, `Computer/`, `Device/`, or `Blackboard/` headers in Foundation or Platform layers
+- Directly show dialogs or message boxes from Backend code (use event queue instead)
+
+**DO:**
+- Use `CommonInterface::*()` in UI code
+- Use `ActionInterface::*()` for UI actions
+- Lock DeviceBlackboard when accessing from device/calculation threads
+- Use appropriate blackboard for each thread
+- Register/unregister BlackboardListeners properly
+- Check component pointers for nullptr
+- Use `InMainThread()`, `InDrawThread()` assertions to verify thread context
+
+### Adding a New Device Driver
+
+1. Create driver class in `Device/Driver/YourDevice/`
+2. Implement `Device` interface methods
+3. Parse incoming data into `NMEAInfo` structure
+4. Write to DeviceBlackboard:
+   ```cpp
+   auto basic = blackboard.LockGetDeviceDataUpdateClock(index);
+   // Update basic with parsed data
+   basic.location = parsed_location;
+   basic.gps.fix_quality = FixQuality::GPS;
+   // ... update other fields
+   blackboard.LockSetDeviceDataScheduleMerge(index, basic);
+   ```
+5. Handle outgoing commands via `WriteNMEA()` or binary protocol
+6. Implement callbacks if needed:
+   - `OnSensorUpdate()`: For drivers that forward sensor data quickly (called from MergeThread)
+   - `OnCalculatedUpdate()`: For drivers that send calculated data to device (called from UI thread)
+7. Register driver in `Device/Driver/Register.cpp`
+8. Add device configuration widget in `Dialogs/Device/YourDevice/` if needed
+
+### Source Organization
+- Code in `src/` directory with specific subdirectories (util/, Math/, Geo/, etc.)
+
+### Threading
+- UI thread: main thread, no other thread may manipulate windows
+- Access sensor data from `CommonInterface::Basic()` in UI thread only
+- Other threads must not use `Interface.hpp` library
+- Use appropriate blackboards for different threads:
+  - UI thread: `InterfaceBlackboard` via `CommonInterface::Basic()`
+  - MapWindow (DrawThread): `MapWindowBlackboard`
+  - Device drivers: write to `DeviceBlackboard::per_device_data[i]`, can implement `OnSensorUpdate()` (called from MergeThread) or `OnCalculatedUpdate()` (called from UI thread)
+  - CalculationThread: lock `DeviceBlackboard` or use `GlideComputerBlackboard`
+
+## Privacy
+
+### Network Activity and Tracking
+- XCSoar operates offline by default; no network activity unless explicitly enabled by the user
+- Network features (e.g., tracking services, weather downloads) must be opt-in and clearly documented
+- No automatic tracking, telemetry, or analytics
+- All network features should be clearly visible in settings and require user consent
+- When implementing network features, respect user privacy settings and provide clear opt-out mechanisms
+
+### Data Logging
+- Avoid logging identifying or sensitive information:
+  - Usernames, passwords, or authentication tokens
+  - Device serial numbers or unique identifiers
+  - Personal information that could identify users
+- Log files (IGC, NMEA) contain flight data only; no personal identifiers should be embedded
+- Debug logs should not contain sensitive data; sanitize or exclude passwords, tokens, and personal information
+- When logging is necessary for debugging, use sanitized or anonymized data
+
+### User Data Protection
+- All user data is stored locally on the device
+- No automatic transmission of user data to external servers
+- User must explicitly choose to share data (e.g., upload IGC files, enable tracking)
+- Respect user privacy preferences and settings
+
+## GUI Guidelines
+
+### UI Scaling and DPI Support
+- UI must scale from low-DPI devices (e.g., CGA resolution ~96 DPI) to very high-DPI devices (e.g., modern phones with 400+ DPI)
+- Use `Layout::Scale()` for general UI element scaling (based on 240x320 base resolution)
+- Use `Layout::PtScale()` for physical dimensions in points (1/72th inch)
+- Use `Layout::VptScale()` for virtual points (accounts for viewing distance on small screens)
+- Use `Layout::FontScale()` for font sizes (accounts for DPI, screen size, and user preference)
+- Use `Layout::ScalePenWidth()` or `Layout::ScaleFinePenWidth()` for line widths
+- Never use hardcoded pixel values; always use scaling functions from `Layout` namespace
+- Base resolution: 240 pixels (320 for square displays) on the shortest dimension
+- Small screens (< 5 inch) automatically get adjusted scaling for viewing distance
+- Touch screens get larger hit areas and control heights
+- Test UI changes on both low-DPI and high-DPI devices when possible
+
+### UI Operability
+- UI must be operable via multiple input methods: touch, keyboard, and gestures
+- All user actions should be accessible through different input modalities
+- Expose functionality that makes sense via `ActionInterface` namespace (e.g., `ActionInterface::SetMacCready()`, `ActionInterface::SetBallast()`)
+- `ActionInterface` provides a clean API for UI actions that can be triggered by various input methods (touch, keyboard shortcuts, gestures, InputEvents)
+- This allows the same functionality to be accessible regardless of input method
+- Consider exposing commonly used actions through `ActionInterface` for consistency and accessibility
+- **Navigation depth**: All actions used in-flight should be maximum 3 steps away from the main operation mode
+- This ensures critical functions remain quickly accessible during flight operations
+- Prioritize frequently used in-flight actions to be accessible with fewer steps
+- **State change notifications**: Announce internal state changes to the user
+- Use appropriate notification mechanisms (e.g., `StatusMessage`, `PopupMessage`, `OperationEnvironment::SetText()`) to inform users of important state changes
+- Examples: GPS connection status, device connection/disconnection, task state changes, airspace warnings, system errors
+- Ensure users are aware of changes that affect system behavior or require their attention
+
+### Letter Cases
+- Captions: Capitalization (e.g., "Pan On", "The Display Of...")
+- Abbreviations: Upper case (e.g., "MC", "ETA", "V") or CamelCase (e.g., "GoTo", "InfoBox")
+- Plain text: Write like prose
+- Labels: Generally like prose, with exceptions where meaningful
+
+### Colors
+- Red: warning
+- Orange: caution
+- Green: positive safety indicator
+- Blue: neutral safety indicator
+- Grey: buttons
+- Yellow: clicked items
+- Light blue: key focused item
+- Medium blue: dialogue title bar
+
+### Safety
+- Avoid elements that encourage continuous screen staring
+- Avoid controls with significant risk if misconfigured
+- Check for color blindness compatibility
+- Follow aviation conventions (ICAO standards, IGC standards, NASA color usage, FAA guidelines)
+
+## Look System
+
+### Look Class Structure
+- Look classes are `struct` types (not `class`), named with `*Look` suffix (e.g., `ButtonLook`, `DialogLook`, `MapLook`)
+- The main `Look` struct in `src/Look/Look.hpp` aggregates all individual Look structs as members
+- Each Look struct contains visual elements: `Pen`, `Brush`, `Color`, `Icon`, `Bitmap`, `Font` pointers, etc.
+- Look structs are organized by UI component (e.g., `MapLook`, `InfoBoxLook`, `TaskLook`)
+
+### Look Initialization
+- Use `Initialise()` method (British spelling) for initial setup
+- Use `Reinitialise()` or `ReinitialiseLayout()` for updates when settings change
+- `Initialise()` methods typically take:
+  - Settings structs (e.g., `UISettings`, `MapSettings`, `AirspaceRendererSettings`)
+  - Font references (e.g., `const Font &font`, `const Font &bold_font`)
+  - Layout parameters (e.g., `unsigned infobox_width`)
+  - Dark mode flag (`bool dark_mode`)
+- The main `Look::InitialiseConfigured()` method initializes all Look structs based on user settings
+- Platform-aware initialization: use `IsDithered()`, `HasColors()`, etc. from `Asset.hpp` for conditional styling
+
+### Look Naming and Organization
+- Each Look struct should have its own `.hpp` and `.cpp` files in `src/Look/`
+- Look structs should be included in the main `Look.hpp` file
+- Member variables in Look structs use descriptive names (e.g., `standard`, `selected`, `focused` for button states)
+- Use nested structs for related groups (e.g., `StateLook` within `ButtonLook`)
+
+### Colors and Styling
+- Use colors from `src/Look/Colors.hpp` for consistency
+- Follow color conventions (red=warning, orange=caution, green=safety, blue=neutral)
+- Support dark mode when applicable (pass `dark_mode` parameter to `Initialise()`)
+- Use platform detection for conditional styling (dithered displays, color vs monochrome)
