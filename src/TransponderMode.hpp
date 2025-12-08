@@ -61,8 +61,6 @@ struct TransponderMode {
 
   [[gnu::pure]]
   const TCHAR *GetModeString() const noexcept {
-    assert(IsDefined());
-
     return ToString(mode);
   }
 };

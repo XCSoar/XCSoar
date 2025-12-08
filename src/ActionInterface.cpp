@@ -363,7 +363,6 @@ ActionInterface::SetTransponderCode(TransponderCode code,
                                     bool to_devices) noexcept
 {
   assert(code.IsDefined());
-  assert(mode.IsDefined());
 
   /* update interface settings */
   SetComputerSettings().transponder.transponder_code = code;
