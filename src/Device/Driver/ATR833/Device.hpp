@@ -27,6 +27,7 @@ public:
   bool PutStandbyFrequency(RadioFrequency frequency,
                            const TCHAR *name,
                            OperationEnvironment &env) override;
+  bool ExchangeRadioFrequencies(OperationEnvironment &env, NMEAInfo &info) override;
   bool EnableNMEA(OperationEnvironment &env) override;
   void OnSysTicker() override;
   void LinkTimeout() override;
