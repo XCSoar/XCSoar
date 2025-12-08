@@ -42,7 +42,7 @@ po/$(GETTEXT_PACKAGE).pot: $(OUT)/po/cpp.pot $(OUT)/po/event.pot
 mo: $(MO_FILES)
 
 update-po: po/$(GETTEXT_PACKAGE).pot
-	$(Q)for i in $(PO_FILES); do $(MSGMERGE) -o $$i $$i po/$(GETTEXT_PACKAGE).pot; done
+	$(Q)for i in $(PO_FILES); do $(MSGMERGE) --previous -o $$i $$i po/$(GETTEXT_PACKAGE).pot; done
 
 $(MO_FILES): $(OUT)/po/%.mo: po/%.po | $(OUT)/po/dirstamp
 	@$(NQ)echo "  GEN     $@"
