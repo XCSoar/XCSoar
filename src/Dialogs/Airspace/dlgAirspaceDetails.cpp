@@ -57,8 +57,7 @@ AirspaceDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   if (transponderCode.IsDefined()) {
     AddReadOnly(_("Squawk code"), nullptr, buffer2);
     AddButton(_("Set Squawk Code"), [transponderCode]() {
-      ActionInterface::SetTransponderCode(
-          transponderCode, TransponderMode(TransponderMode::ALT));
+      ActionInterface::SetTransponderCode(transponderCode);
     });
   }
 

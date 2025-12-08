@@ -359,14 +359,12 @@ ActionInterface::ExchangeRadioFrequencies(bool to_devices) noexcept
 
 void
 ActionInterface::SetTransponderCode(TransponderCode code,
-                                    TransponderMode mode,
                                     bool to_devices) noexcept
 {
   assert(code.IsDefined());
 
   /* update interface settings */
   SetComputerSettings().transponder.transponder_code = code;
-  SetComputerSettings().transponder.transponder_mode = mode;
 
   /* update InfoBoxes (that might show the code setting) */
   InfoBoxManager::SetDirty();
@@ -376,4 +374,16 @@ ActionInterface::SetTransponderCode(TransponderCode code,
     MessageOperationEnvironment env;
     backend_components->devices->PutTransponderCode(code, env);
   }
+}
+
+void
+ActionInterface::SetTransponderMode(TransponderMode mode) noexcept
+{
+  /* update interface settings */
+  SetComputerSettings().transponder.transponder_mode = mode;
+
+  /* update InfoBoxes (that might show the mode setting) */
+  InfoBoxManager::SetDirty();
+
+  /* Note: no device API currently exists to send only the mode. */
 }
