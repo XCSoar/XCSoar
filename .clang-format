@@ -10,14 +10,44 @@ NamespaceIndentation: None
 # CamelCase for class/function names
 # Lower case with underscores for attributes/variables
 # All upper case for constants/enums
-Standard: Cpp03
-AlignConsecutiveAssignments: false
+Standard: Cpp20
+AlignConsecutiveAssignments: true
 AlignConsecutiveDeclarations: false
+AlignConsecutiveMacros: true
 AlignAfterOpenBracket: Align
+AlignOperands: Align
+AlignTrailingComments: true
 AlwaysBreakAfterReturnType: TopLevelDefinitions
-AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortEnumsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: false
 BraceWrapping:
-  BeforeElse: false
+  AfterClass: true
   AfterControlStatement: false
+  AfterEnum: false
   AfterFunction: true
+  AfterNamespace: false
+  AfterStruct: true
+  AfterUnion: true
+  BeforeElse: false
+  BeforeCatch: false
+  BeforeWhile: false
 BreakBeforeBraces: Custom
+BinPackArguments: false
+BinPackParameters: false
+ContinuationIndentWidth: 2
+FixNamespaceComments: true
+IncludeBlocks: Regroup
+SortIncludes: true
+SpaceAfterCStyleCast: false
+SpaceAfterTemplateKeyword: true
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeParens: ControlStatements
+SpacesBeforeTrailingComments: 1
+SpacesInAngles: Never
+SpacesInCStyleCastParentheses: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+ReflowComments: true
