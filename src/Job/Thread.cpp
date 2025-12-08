@@ -45,7 +45,9 @@ JobThread::OnNotification()
 void
 JobThread::Join()
 {
-  Thread::Join();
+  // Only join if the thread was successfully started
+  if (IsDefined())
+    Thread::Join();
 
   if (exception)
     /* rethrow the exception that was thrown by Job::Run() in the

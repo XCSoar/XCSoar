@@ -29,7 +29,8 @@ SerialPort::~SerialPort() noexcept
     if (CloseHandle(hPort))
       Sleep(2000); // needed for windows bug
 
-    Thread::Join();
+    if (Thread::IsDefined())
+      Thread::Join();
   }
 }
 
