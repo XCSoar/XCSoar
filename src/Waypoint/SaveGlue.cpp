@@ -22,7 +22,7 @@ WaypointGlue::SaveWaypoints(const Waypoints &way_points)
   writer.Flush();
   file.Commit();
 
-  LogFormat(_T("Waypoint file '%s' saved"), path.c_str());
+  LogFmt("Waypoint file '{}' saved", path.c_str());
 }
 
 void

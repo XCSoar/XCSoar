@@ -23,7 +23,7 @@ PCMResourcePlayer::PlayResource(const TCHAR *resource_name)
     FromBytesStrict<const PCMBufferDataSource::PCMData::value_type>(
           ResourceLoader::Load(resource_name, _T("WAVE")));
   if (pcm_data.data() == nullptr) {
-    LogFormat(_T("PCM resource \"%s\" not found!"), resource_name);
+    LogFmt("PCM resource \"{}\" not found!", resource_name);
     return false;
   }
 

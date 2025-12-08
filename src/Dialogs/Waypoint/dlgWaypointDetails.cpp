@@ -419,9 +419,9 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
       if (!images.append().LoadFile(LocalPath(i.c_str())))
         images.shrink(images.size() - 1);
     } catch (const std::exception &e) {
-      LogFormat("Failed to load %s: %s",
-                (const char *)NarrowPathName(Path(i.c_str())),
-                e.what());
+      LogFmt("Failed to load {}: {}",
+             (const char *)NarrowPathName(Path(i.c_str())),
+             e.what());
       images.shrink(images.size() - 1);
     }
   }

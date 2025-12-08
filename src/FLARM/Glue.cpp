@@ -35,7 +35,7 @@ try {
 
   unsigned num_records = FlarmNetReader::LoadFile(path, db);
   if (num_records > 0)
-    LogFormat("%u FLARMnet ids found", num_records);
+    LogFmt("{} FLARMnet ids found", num_records);
 } catch (...) {
   LogError(std::current_exception());
 }

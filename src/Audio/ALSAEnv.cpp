@@ -27,9 +27,9 @@ static const char *InitALSADeviceName()
   const char *alsa_device = getenv(ALSA_DEVICE_ENV);
   if ((nullptr == alsa_device) || ('\0' == *alsa_device))
     alsa_device = DEFAULT_ALSA_DEVICE;
-  LogFormat("Using ALSA PCM device \"%s\" (use environment variable "
-                "%s to override)",
-            alsa_device, ALSA_DEVICE_ENV);
+  LogFmt("Using ALSA PCM device \"{}\" (use environment variable "
+         "{} to override)",
+         alsa_device, ALSA_DEVICE_ENV);
   return alsa_device;
 }
 
@@ -43,12 +43,12 @@ static unsigned InitALSALatency()
     char *p;
     latency = ParseUnsigned(latency_env_value, &p);
     if (*p != '\0') {
-      LogFormat("Invalid %s value \"%s\"", ALSA_LATENCY_ENV, latency_env_value);
+      LogFmt("Invalid {} value \"{}\"", ALSA_LATENCY_ENV, latency_env_value);
       return false;
     }
   }
-  LogFormat("Using ALSA PCM latency %u μs (use environment variable "
-                "%s to override)", latency, ALSA_LATENCY_ENV);
+  LogFmt("Using ALSA PCM latency {} μs (use environment variable "
+         "{} to override)", latency, ALSA_LATENCY_ENV);
   return latency;
 }
 

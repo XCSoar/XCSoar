@@ -29,7 +29,7 @@ AndroidPCMPlayer::Start(PCMSynthesiser &_source)
   SLresult result = SLES::CreateEngine(&_object, 0, nullptr,
                                        0, nullptr, nullptr);
   if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: slCreateEngine() result=%#x", (int)result);
+    LogFmt("PCMPlayer: slCreateEngine() result={:#x}", (int)result);
     return false;
   }
 
@@ -37,7 +37,7 @@ AndroidPCMPlayer::Start(PCMSynthesiser &_source)
 
   result = engine_object.Realize(false);
   if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: Engine.Realize() result=%#x", (int)result);
+    LogFmt("PCMPlayer: Engine.Realize() result={:#x}", (int)result);
     engine_object.Destroy();
     return false;
   }
@@ -45,8 +45,8 @@ AndroidPCMPlayer::Start(PCMSynthesiser &_source)
   SLEngineItf _engine;
   result = engine_object.GetInterface(*SLES::IID_ENGINE, &_engine);
   if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: Engine.GetInterface(IID_ENGINE) result=%#x",
-               (int)result);
+    LogFmt("PCMPlayer: Engine.GetInterface(IID_ENGINE) result={:#x}",
+           (int)result);
     engine_object.Destroy();
     return false;
   }
@@ -55,7 +55,7 @@ AndroidPCMPlayer::Start(PCMSynthesiser &_source)
 
   result = engine.CreateOutputMix(&_object, 0, nullptr, nullptr);
   if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: CreateOutputMix() result=%#x", (int)result);
+    LogFmt("PCMPlayer: CreateOutputMix() result={:#x}", (int)result);
     engine_object.Destroy();
     return false;
   }
@@ -64,7 +64,7 @@ AndroidPCMPlayer::Start(PCMSynthesiser &_source)
 
   result = mix_object.Realize(false);
   if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: Mix.Realize() result=%#x", (int)result);
+    LogFmt("PCMPlayer: Mix.Realize() result={:#x}", (int)result);
     mix_object.Destroy();
     engine_object.Destroy();
     return false;
@@ -110,7 +110,7 @@ AndroidPCMPlayer::Start(PCMSynthesiser &_source)
   result = engine.CreateAudioPlayer(&_object, &audioSrc, &audioSnk,
                                     ARRAY_SIZE(ids2), ids2, req2);
   if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: CreateAudioPlayer() result=%#x", (int)result);
+    LogFmt("PCMPlayer: CreateAudioPlayer() result={:#x}", (int)result);
     mix_object.Destroy();
     engine_object.Destroy();
     return false;
@@ -121,7 +121,7 @@ AndroidPCMPlayer::Start(PCMSynthesiser &_source)
   result = play_object.Realize(false);
 
   if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: Play.Realize() result=%#x", (int)result);
+    LogFmt("PCMPlayer: Play.Realize() result={:#x}", (int)result);
     play_object.Destroy();
     mix_object.Destroy();
     engine_object.Destroy();
@@ -131,8 +131,8 @@ AndroidPCMPlayer::Start(PCMSynthesiser &_source)
   SLPlayItf _play;
   result = play_object.GetInterface(*SLES::IID_PLAY, &_play);
   if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: Play.GetInterface(IID_PLAY) result=%#x",
-               (int)result);
+    LogFmt("PCMPlayer: Play.GetInterface(IID_PLAY) result={:#x}",
+           (int)result);
     play_object.Destroy();
     mix_object.Destroy();
     engine_object.Destroy();
@@ -145,8 +145,8 @@ AndroidPCMPlayer::Start(PCMSynthesiser &_source)
   result = play_object.GetInterface(*SLES::IID_ANDROIDSIMPLEBUFFERQUEUE,
                                     &_queue);
   if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: Play.GetInterface(IID_ANDROIDSIMPLEBUFFERQUEUE) result=%#x",
-               (int)result);
+    LogFmt("PCMPlayer: Play.GetInterface(IID_ANDROIDSIMPLEBUFFERQUEUE) result={:#x}",
+           (int)result);
     play_object.Destroy();
     mix_object.Destroy();
     engine_object.Destroy();
@@ -163,7 +163,7 @@ AndroidPCMPlayer::Start(PCMSynthesiser &_source)
       reinterpret_cast<AndroidPCMPlayer *>(pContext)->Enqueue();
   }, this);
   if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: Play.RegisterCallback() result=%#x", (int)result);
+    LogFmt("PCMPlayer: Play.RegisterCallback() result={:#x}", (int)result);
     play_object.Destroy();
     mix_object.Destroy();
     engine_object.Destroy();
@@ -174,8 +174,8 @@ AndroidPCMPlayer::Start(PCMSynthesiser &_source)
 
   result = play.SetPlayState(SL_PLAYSTATE_PLAYING);
   if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: Play.SetPlayState(PLAYING) result=%#x",
-               (int)result);
+    LogFmt("PCMPlayer: Play.SetPlayState(PLAYING) result={:#x}",
+           (int)result);
     play_object.Destroy();
     mix_object.Destroy();
     engine_object.Destroy();
@@ -224,5 +224,5 @@ AndroidPCMPlayer::Enqueue()
   }
 
   if (result != SL_RESULT_SUCCESS)
-    LogFormat("PCMPlayer: Enqueue() result=%#x", (int)result);
+    LogFmt("PCMPlayer: Enqueue() result={:#x}", (int)result);
 }

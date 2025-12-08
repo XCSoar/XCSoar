@@ -108,10 +108,10 @@ VolumeController::InitExternalVolumeControl(unsigned initial_vol_percent)
 
   int alsa_error = snd_mixer_open(&alsa_mixer_handle, 0);
   if (0 != alsa_error) {
-    LogFormat("snd_mixer_open(0x%p, 0) failed: %d - %s",
-              &alsa_mixer_handle,
-              alsa_error,
-              snd_strerror(alsa_error));
+    LogFmt("snd_mixer_open({}, 0) failed: {} - {}",
+           static_cast<const void*>(&alsa_mixer_handle),
+           alsa_error,
+           snd_strerror(alsa_error));
     return false;
   }
   assert(nullptr != alsa_mixer_handle);
@@ -119,30 +119,29 @@ VolumeController::InitExternalVolumeControl(unsigned initial_vol_percent)
   const char *alsa_device_name = ALSAEnv::GetALSADeviceName();
   alsa_error = snd_mixer_attach(alsa_mixer_handle, alsa_device_name);
   if (0 != alsa_error) {
-    LogFormat("snd_mixer_attach(0x%p, \"%s\") failed: %d - %s",
-              alsa_mixer_handle,
-              alsa_device_name,
-              alsa_error,
-              snd_strerror(alsa_error));
+    LogFmt("snd_mixer_attach({}, \"{}\") failed: {} - {}",
+           static_cast<const void*>(alsa_mixer_handle),
+           alsa_device_name,
+           alsa_error,
+           snd_strerror(alsa_error));
     return false;
   }
 
   alsa_error = snd_mixer_selem_register(alsa_mixer_handle, nullptr, nullptr);
   if (0 != alsa_error) {
-    LogFormat("snd_mixer_selem_register(0x%p, nullptr, nullptr) failed: "
-                  "%d - %s",
-              alsa_mixer_handle,
-              alsa_error,
-              snd_strerror(alsa_error));
+    LogFmt("snd_mixer_selem_register({}, nullptr, nullptr) failed: {} - {}",
+           static_cast<const void*>(alsa_mixer_handle),
+           alsa_error,
+           snd_strerror(alsa_error));
     return false;
   }
 
   alsa_error = snd_mixer_load(alsa_mixer_handle);
   if (0 != alsa_error) {
-    LogFormat("snd_mixer_load(0x%p) failed: %d - %s",
-              alsa_mixer_handle,
-              alsa_error,
-              snd_strerror(alsa_error));
+    LogFmt("snd_mixer_load({}) failed: {} - {}",
+           static_cast<const void*>(alsa_mixer_handle),
+           alsa_error,
+           snd_strerror(alsa_error));
     return false;
   }
 
@@ -170,8 +169,8 @@ VolumeController::InitExternalVolumeControl(unsigned initial_vol_percent)
   }
 
   if (0 == elements.size()) {
-    LogFormat("No usable master volume control found for ALSA device \"%s\"",
-              alsa_device_name);
+    LogFmt("No usable master volume control found for ALSA device \"{}\"",
+           alsa_device_name);
     return false;
   }
 
@@ -227,14 +226,14 @@ VolumeController::InitExternalVolumeControl(unsigned initial_vol_percent)
       snd_mixer_selem_get_name(ext_master_volume_ctl);
   assert(nullptr != master_ctl_name);
   if (ext_master_ctl_has_vol) {
-    LogFormat("Using mixer element \"%s\" to control master volume control "
-                  "on ALSA device \"%s\"",
-              master_ctl_name, alsa_device_name);
+    LogFmt("Using mixer element \"{}\" to control master volume control "
+           "on ALSA device \"{}\"",
+           master_ctl_name, alsa_device_name);
   } else {
     assert(ext_master_ctl_has_switch);
-    LogFormat("No usable mixer element for volume control found on ALSA "
-                  "device \"%s\", but using on/off switch \"%s\"",
-              alsa_device_name, master_ctl_name);
+    LogFmt("No usable mixer element for volume control found on ALSA "
+           "device \"{}\", but using on/off switch \"{}\"",
+           alsa_device_name, master_ctl_name);
   }
 
   bool success = SetExternalVolumeNoLock(initial_vol_percent);
@@ -254,17 +253,17 @@ VolumeController::InitExternalVolumeControl(unsigned initial_vol_percent)
                                                   &pcm_value);
       }
 
-      LogFormat("Ensuring that PCM mixer element on ALSA device \"%s\" is "
-                    "set to 100%%",
-                alsa_device_name);
+      LogFmt("Ensuring that PCM mixer element on ALSA device \"{}\" is "
+             "set to 100%",
+             alsa_device_name);
 
       snd_mixer_selem_set_playback_volume_all(pcm_volume_ctl, pcm_value);
     }
 
     if (snd_mixer_selem_has_playback_switch(pcm_volume_ctl)) {
-      LogFormat("Ensuring that PCM mixer element on ALSA device \"%s\" is "
-                    "not muted",
-                alsa_device_name);
+      LogFmt("Ensuring that PCM mixer element on ALSA device \"{}\" is "
+             "not muted",
+             alsa_device_name);
       snd_mixer_selem_set_playback_switch_all(pcm_volume_ctl, 1);
     }
   }

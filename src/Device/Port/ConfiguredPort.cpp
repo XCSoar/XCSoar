@@ -145,7 +145,7 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
     if (!DetectGPS(buffer, sizeof(buffer)))
       throw std::runtime_error("No GPS detected");
 
-    LogFormat(_T("GPS detected: %s"), buffer);
+    LogFmt("GPS detected: {}", buffer);
 
     path = buffer;
     break;

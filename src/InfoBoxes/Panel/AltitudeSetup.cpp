@@ -3,6 +3,7 @@
 
 #include "AltitudeSetup.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "Device/MultipleDevices.hpp"
@@ -32,16 +33,11 @@ void
 AltitudeSetupPanel::OnModified(DataField &_df) noexcept
 {
   DataFieldFloat &df = (DataFieldFloat &)_df;
-  ComputerSettings &settings =
-    CommonInterface::SetComputerSettings();
+  const auto qnh = Units::FromUserPressure(df.GetValue());
 
-  settings.pressure = Units::FromUserPressure(df.GetValue());
-  settings.pressure_available.Update(CommonInterface::Basic().clock);
-
-  if (backend_components->devices) {
-    MessageOperationEnvironment env;
-    backend_components->devices->PutQNH(settings.pressure, env);
-  }
+  // Use ActionInterface to send QNH to devices, which handles
+  // settings propagation properly
+  ActionInterface::SetQNH(qnh, true);
 }
 
 void

@@ -673,12 +673,12 @@ Shutdown()
     // Wait for the calculations thread to finish
     LogString("Waiting for calculation thread");
 
-    if (backend_components->merge_thread) {
+    if (backend_components->merge_thread && backend_components->merge_thread->IsDefined()) {
       backend_components->merge_thread->Join();
       backend_components->merge_thread.reset();
     }
 
-    if (backend_components->calculation_thread) {
+    if (backend_components->calculation_thread && backend_components->calculation_thread->IsDefined()) {
       backend_components->calculation_thread->Join();
       backend_components->calculation_thread.reset();
     }
@@ -688,7 +688,7 @@ Shutdown()
 #ifndef ENABLE_OPENGL
   LogString("Waiting for draw thread");
 
-  if (draw_thread != nullptr) {
+  if (draw_thread != nullptr && draw_thread->IsDefined()) {
     draw_thread->Join();
     delete draw_thread;
     draw_thread = nullptr;

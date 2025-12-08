@@ -38,7 +38,7 @@ SoundUtil::Play(const TCHAR *resource_name)
   } else if (strcmp(resource_name, "IDR_WAV_DRIP") == 0) {
     filename = "beep_drip";
   } else {
-    LogFormat("Unknown sound resource: %s", resource_name);
+    LogFmt("Unknown sound resource: {}", resource_name);
     return false;
   }
   
@@ -55,10 +55,12 @@ SoundUtil::Play(const TCHAR *resource_name)
 
   if (!player) {
     if (error) {
-      LogFormat("Failed to create AVAudioPlayer for %s (%s): %s", resource_name, filename,
-                [[error localizedDescription] UTF8String]);
+      LogFmt("Failed to create AVAudioPlayer for {} ({}): {}",
+             resource_name, filename,
+             [[error localizedDescription] UTF8String]);
     } else {
-      LogFormat("Failed to create AVAudioPlayer for %s (%s): unknown reason", resource_name, filename);
+      LogFmt("Failed to create AVAudioPlayer for {} ({}): unknown reason",
+             resource_name, filename);
     }
     return false;
   }

@@ -117,7 +117,8 @@ TEST_NAMES = \
 	TestHexString \
 	TestThermalBand \
 	TestPackedFloat \
-	TestVersionNumber
+	TestVersionNumber \
+	TestCares
 
 ifeq ($(TARGET_IS_ANDROID),n)
 # These programs are broken on Android because they require Java code
@@ -2432,3 +2433,20 @@ TEST_VERSION_NUMBER_SOURCES = \
 	$(TEST_SRC_DIR)/TestVersionNumber.cpp
 TEST_VERSION_NUMBER_DEPENDS = MATH UTILS
 $(eval $(call link-program,TestVersionNumber,TEST_VERSION_NUMBER))
+
+TEST_CARES_SOURCES = \
+	$(SRC)/event/net/cares/Channel.cxx \
+	$(SRC)/event/net/cares/SimpleResolver.cxx \
+	$(SRC)/event/net/cares/Error.cxx \
+	$(SRC)/event/net/cares/Init.cxx \
+	$(SRC)/event/Loop.cxx \
+	$(SRC)/event/DeferEvent.cxx \
+	$(SRC)/event/CoarseTimerEvent.cxx \
+	$(SRC)/event/SocketEvent.cxx \
+	$(SRC)/net/SocketAddress.cxx \
+	$(SRC)/net/AllocatedSocketAddress.cxx \
+	$(SRC)/time/Convert.cxx \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestCares.cpp
+TEST_CARES_DEPENDS = ASYNC LIBNET EVENT IO OS THREAD UTIL
+$(eval $(call link-program,TestCares,TEST_CARES))

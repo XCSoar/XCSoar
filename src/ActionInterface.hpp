@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Interface.hpp"
+#include "Atmosphere/Pressure.hpp"
 
 /** 
  * Class to hold data/methods accessible by interface subsystems
@@ -145,6 +146,16 @@ void
 SetTransponderCode(TransponderCode code,
                    TransponderMode mode,
                    bool to_devices=true) noexcept;
+
+/**
+ * Configure a new QNH (atmospheric pressure) setting in #ComputerSettings, and
+ * forward it to all XCSoar modules that want it.
+ *
+ * @param qnh the atmospheric pressure (QNH)
+ * @param to_devices send the new setting to all devices?
+ */
+void
+SetQNH(AtmosphericPressure qnh, bool to_devices=true) noexcept;
 
 } // namespace ActionInterface
 

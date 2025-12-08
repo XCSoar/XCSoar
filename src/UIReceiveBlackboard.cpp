@@ -49,7 +49,7 @@ UIReceiveSensorData(OperationEnvironment &env)
       auto connection = ODBus::Connection::GetSystem();
       if (!TimeDate::IsNTPSynchronized(connection))
         TimeDate::SetTime(connection, CommonInterface::Basic().date_time_utc.ToTimePoint());
-      LogFormat("Set system clock from GPS");
+      LogFmt("Set system clock from GPS");
     } catch (...) {
       LogError(std::current_exception(), "Failed to set the system clock from GPS");
     }

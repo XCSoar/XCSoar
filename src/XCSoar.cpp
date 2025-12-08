@@ -140,7 +140,7 @@ try {
   InitialiseDataPath();
 
   // Write startup note + version to logfile
-  LogFormat(_T("Starting %s"), XCSoar_ProductToken);
+  LogFmt("Starting {}", XCSoar_ProductToken);
 
   int ret = Main();
 

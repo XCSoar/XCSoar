@@ -51,26 +51,26 @@ Display::InitDisplay(EGLNativeDisplayType native_display)
     throw std::runtime_error("eglInitialize() failed");
 
   if (const char *s = eglQueryString(display, EGL_VENDOR))
-    LogFormat("EGL vendor: %s", s);
+    LogFmt("EGL vendor: {}", s);
 
   if (const char *s = eglQueryString(display, EGL_VERSION))
-    LogFormat("EGL version: %s", s);
+    LogFmt("EGL version: {}", s);
 
   if (const char *s = eglQueryString(display, EGL_EXTENSIONS))
-    LogFormat("EGL extensions: %s", s);
+    LogFmt("EGL extensions: {}", s);
 
   if (!eglBindAPI(EGL_OPENGL_ES_API))
     throw std::runtime_error("eglBindAPI() failed");
 
   chosen_config = EGL::ChooseConfig(display);
 
-  LogFormat("EGL config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d",
-            GetConfigAttrib(display, chosen_config, EGL_RED_SIZE, 0),
-            GetConfigAttrib(display, chosen_config, EGL_GREEN_SIZE, 0),
-            GetConfigAttrib(display, chosen_config, EGL_BLUE_SIZE, 0),
-            GetConfigAttrib(display, chosen_config, EGL_ALPHA_SIZE, 0),
-            GetConfigAttrib(display, chosen_config, EGL_DEPTH_SIZE, 0),
-            GetConfigAttrib(display, chosen_config, EGL_STENCIL_SIZE, 0));
+  LogFmt("EGL config: RGB={}/{}/{} alpha={} depth={} stencil={}",
+         GetConfigAttrib(display, chosen_config, EGL_RED_SIZE, 0),
+         GetConfigAttrib(display, chosen_config, EGL_GREEN_SIZE, 0),
+         GetConfigAttrib(display, chosen_config, EGL_BLUE_SIZE, 0),
+         GetConfigAttrib(display, chosen_config, EGL_ALPHA_SIZE, 0),
+         GetConfigAttrib(display, chosen_config, EGL_DEPTH_SIZE, 0),
+         GetConfigAttrib(display, chosen_config, EGL_STENCIL_SIZE, 0));
 }
 
 inline void

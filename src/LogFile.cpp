@@ -166,5 +166,5 @@ LogError(std::exception_ptr e) noexcept
 void
 LogError(std::exception_ptr e, const char *msg) noexcept
 {
-  LogFormat("%s: %s", msg, GetFullMessage(e).c_str());
+  LogFmt("{}: {}", msg, GetFullMessage(e).c_str());
 }
