@@ -13,6 +13,7 @@
 #include "Form/DataField/Listener.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -133,18 +134,9 @@ FlightSetupPanel::SetBallast()
   if (wl > 0)
     LoadValue(WingLoading, wl, UnitGroup::WING_LOADING);
 
-  if (backend_components->devices != nullptr) {
-    const Plane &plane = CommonInterface::GetComputerSettings().plane;
-    if (plane.empty_mass > 0) {
-      auto dry_mass = polar_settings.glide_polar_task.GetDryMass();
-      auto fraction = polar_settings.glide_polar_task.GetBallast();
-      auto overload = (dry_mass + fraction * plane.max_ballast) /
-                      plane.polar_shape.reference_mass;
-
-      MessageOperationEnvironment env;
-      backend_components->devices->PutBallast(fraction, overload, env);
-    }
-  }
+  // Use ActionInterface to send ballast to devices, which handles
+  // overload calculation and settings propagation properly
+  ActionInterface::SetBallast(polar_settings.glide_polar_task.GetBallast(), true);
 }
 
 void
@@ -199,10 +191,9 @@ FlightSetupPanel::SetBugs(double bugs) {
   polar_settings.SetBugs(bugs);
   PublishPolarSettings();
 
-  if (backend_components->devices != nullptr) {
-    MessageOperationEnvironment env;
-    backend_components->devices->PutBugs(bugs, env);
-  }
+  // Use ActionInterface to send bugs to devices, which handles
+  // settings propagation properly
+  ActionInterface::SetBugs(bugs, true);
 }
 
 void
@@ -214,6 +205,8 @@ FlightSetupPanel::SetQNH(AtmosphericPressure qnh)
   settings_computer.pressure = qnh;
   settings_computer.pressure_available.Update(basic.clock);
 
+  // TODO: QNH should go through ActionInterface when SetQNH() is added
+  // For now, direct access is needed as there's no ActionInterface method
   if (backend_components->devices != nullptr) {
     MessageOperationEnvironment env;
     backend_components->devices->PutQNH(qnh, env);
