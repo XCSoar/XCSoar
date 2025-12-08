@@ -199,18 +199,9 @@ FlightSetupPanel::SetBugs(double bugs) {
 void
 FlightSetupPanel::SetQNH(AtmosphericPressure qnh)
 {
-  const NMEAInfo &basic = CommonInterface::Basic();
-  ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
-
-  settings_computer.pressure = qnh;
-  settings_computer.pressure_available.Update(basic.clock);
-
-  // TODO: QNH should go through ActionInterface when SetQNH() is added
-  // For now, direct access is needed as there's no ActionInterface method
-  if (backend_components->devices != nullptr) {
-    MessageOperationEnvironment env;
-    backend_components->devices->PutQNH(qnh, env);
-  }
+  // Use ActionInterface to send QNH to devices, which handles
+  // settings propagation properly
+  ActionInterface::SetQNH(qnh, true);
 
   RefreshAltitudeControl();
 }

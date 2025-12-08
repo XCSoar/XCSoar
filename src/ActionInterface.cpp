@@ -378,3 +378,23 @@ ActionInterface::SetTransponderCode(TransponderCode code,
     backend_components->devices->PutTransponderCode(code, env);
   }
 }
+
+void
+ActionInterface::SetQNH(AtmosphericPressure qnh, bool to_devices) noexcept
+{
+  const NMEAInfo &basic = Basic();
+  ComputerSettings &settings_computer = SetComputerSettings();
+
+  /* update interface settings */
+  settings_computer.pressure = qnh;
+  settings_computer.pressure_available.Update(basic.clock);
+
+  /* send to calculation thread */
+  SendGetComputerSettings();
+
+  /* send to external devices */
+  if (to_devices && backend_components->devices) {
+    MessageOperationEnvironment env;
+    backend_components->devices->PutQNH(qnh, env);
+  }
+}
