@@ -6,6 +6,7 @@
 #include "../shared/Event.hpp"
 #include "ui/display/Display.hpp"
 #include "util/StringAPI.hxx"
+#include "ui/event/poll/linux/Translate.hpp"
 #include "xdg-shell-client-protocol.h"
 
 #include <wayland-client.h>
@@ -332,13 +333,23 @@ WaylandEventQueue::PointerButton(bool pressed) noexcept
 void
 WaylandEventQueue::KeyboardKey(uint32_t key, uint32_t state) noexcept
 {
+  const auto [translated_key_code, is_char] = TranslateKeyCode(key);
+  
   switch (state) {
   case WL_KEYBOARD_KEY_STATE_RELEASED:
-    queue.Push(Event{Event::KEY_UP, key});
+    {
+      Event e(Event::KEY_UP, translated_key_code);
+      e.is_char = is_char;
+      queue.Push(e);
+    }
     break;
 
   case WL_KEYBOARD_KEY_STATE_PRESSED:
-    queue.Push(Event{Event::KEY_DOWN, key});
+    {
+      Event e(Event::KEY_DOWN, translated_key_code);
+      e.is_char = is_char;
+      queue.Push(e);
+    }
     break;
   }
 }
