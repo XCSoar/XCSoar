@@ -93,10 +93,12 @@ PlaneEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
   AddText(_("Comp. ID"), nullptr, plane.competition_id);
   AddButton(_("Polar"), [this](){ PolarButtonClicked(); });
   AddText(_("Type"), nullptr, plane.type);
+  // Default handicap to 100 if not set (0)
+  const unsigned handicap = plane.handicap != 0 ? plane.handicap : 100;
   AddInteger(_("Handicap"), nullptr,
              _T("%u %%"), _T("%u"),
              50, 150, 1,
-             plane.handicap);
+             handicap);
   AddFloat(_("Wing Area"), nullptr,
            _T("%.1f m²"), _T("%.1f"),
            0, 40, 0.1,

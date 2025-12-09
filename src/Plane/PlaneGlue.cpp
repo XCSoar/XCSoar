@@ -58,7 +58,8 @@ void
 PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
                        GlidePolar &gp) noexcept
 {
-  settings.contest.handicap = plane.handicap;
+  // Ensure handicap is never 0 (default to 100 if unset)
+  settings.contest.handicap = plane.handicap != 0 ? plane.handicap : 100;
 
   PolarCoefficients pc = plane.polar_shape.CalculateCoefficients();
   if (!pc.IsValid())

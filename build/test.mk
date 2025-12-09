@@ -96,6 +96,7 @@ TEST_NAMES = \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
 	TestMacCready TestOrderedTask TestAATPoint TestTaskSave\
 	TestPlanes \
+	TestContestHandicap \
 	TestTaskPoint \
 	TestTaskWaypoint \
 	TestTeamCode \
@@ -281,6 +282,13 @@ TEST_PLANES_SOURCES = \
 	$(TEST_SRC_DIR)/TestPlanes.cpp
 TEST_PLANES_DEPENDS = UNITS IO OS MATH UTIL
 $(eval $(call link-program,TestPlanes,TEST_PLANES))
+
+TEST_CONTEST_HANDICAP_SOURCES = \
+	$(SRC)/Engine/Contest/Solvers/AbstractContest.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestContestHandicap.cpp
+TEST_CONTEST_HANDICAP_DEPENDS = UNITS IO OS MATH UTIL ENGINE
+$(eval $(call link-program,TestContestHandicap,TEST_CONTEST_HANDICAP))
 
 TEST_ZEROFINDER_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \

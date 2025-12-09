@@ -33,7 +33,8 @@ public:
   AbstractContest(const unsigned _finish_alt_diff = 1000) noexcept;
 
   void SetHandicap(unsigned _handicap) noexcept {
-    handicap = _handicap;
+    // Ensure handicap is never 0 (default to 100 if unset)
+    handicap = _handicap != 0 ? _handicap : 100;
   }
 
   /**
@@ -114,7 +115,6 @@ protected:
   [[gnu::pure]]
   double ApplyHandicap(double unhandicapped_score) const noexcept {
     assert(handicap != 0);
-
     return 100 * unhandicapped_score / handicap;
   }
 
@@ -125,7 +125,6 @@ protected:
   [[gnu::pure]]
   double ApplyShiftedHandicap(const double unhandicapped_score) const noexcept {
     assert(handicap != 0);
-
     return 400 * unhandicapped_score / (3 * handicap + 100);
   }
 };
