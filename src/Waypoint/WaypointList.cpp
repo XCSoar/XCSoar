@@ -15,6 +15,13 @@ WaypointListItem::ResetVector() noexcept
 const GeoVector &
 WaypointListItem::GetVector(const GeoPoint &location) const noexcept
 {
+  if (waypoint == nullptr) {
+    // Return invalid vector if waypoint is null
+    if (vec.IsValid())
+      vec.SetInvalid();
+    return vec;
+  }
+
   if (!vec.IsValid())
     vec = GeoVector(location, waypoint->location);
 

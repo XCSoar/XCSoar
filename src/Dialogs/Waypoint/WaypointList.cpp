@@ -135,9 +135,14 @@ public:
   void OnWaypointListEnter();
 
   WaypointPtr GetCursorObject() const {
-    return items.empty()
-      ? nullptr
-      : items[GetList().GetCursorIndex()].waypoint;
+    if (items.empty())
+      return nullptr;
+    
+    const unsigned idx = GetList().GetCursorIndex();
+    if (idx >= items.size())
+      return nullptr;
+    
+    return items[idx].waypoint;
   }
 
   /* virtual methods from class Widget */
@@ -298,6 +303,10 @@ WaypointListWidget::UpdateList()
              dialog_state,
              ordered_task, ordered_task_index);
 
+  // Only update the list if it's been created (widget is prepared)
+  if (!IsDefined())
+    return;
+
   auto &list = GetList();
   list.SetLength(std::max(1u, (unsigned)items.size()));
   list.SetOrigin(0);
@@ -409,7 +418,29 @@ WaypointListWidget::OnModified(DataField &df) noexcept
     dialog_state.direction_index = dfe.GetValue();
   } else if (filter_widget.IsDataField(TYPE, df)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
-    dialog_state.type_index = (TypeFilter)dfe.GetValue();
+    const unsigned value = dfe.GetValue();
+    // Map array indices to enum values
+    // Array indices: 0=ALL, 1=AIRPORT, 2=LANDABLE, 3=TURNPOINT, 4=START, 5=FINISH,
+    // 6=FAI_TRIANGLE_LEFT, 7=FAI_TRIANGLE_RIGHT, 8=USER, 9=FILE, 10=FILE (File 2),
+    // 11=MAP, 12=LAST_USED
+    // Enum values: ALL=0, AIRPORT=1, LANDABLE=2, TURNPOINT=3, START=4, FINISH=5,
+    // FAI_TRIANGLE_LEFT=6, FAI_TRIANGLE_RIGHT=7, USER=8, FILE=9, MAP=10, LAST_USED=11
+    if (value <= 8) {
+      // Indices 0-8 map directly to enum values 0-8
+      dialog_state.type_index = (TypeFilter)value;
+    } else if (value == 9 || value == 10) {
+      // "File 1" (9) and "File 2" (10) both map to FILE (9)
+      dialog_state.type_index = TypeFilter::FILE;
+    } else if (value == 11) {
+      // "Map file" (11) maps to MAP (10)
+      dialog_state.type_index = TypeFilter::MAP;
+    } else if (value == 12) {
+      // "Recently Used" (12) maps to LAST_USED (11)
+      dialog_state.type_index = TypeFilter::LAST_USED;
+    } else {
+      // Fallback to ALL for invalid values
+      dialog_state.type_index = TypeFilter::ALL;
+    }
   }
 
   UpdateList();
@@ -432,6 +463,11 @@ WaypointListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   assert(i < items.size());
 
   const struct WaypointListItem &info = items[i];
+
+  if (info.waypoint == nullptr) {
+    row_renderer.DrawFirstRow(canvas, rc, _("Invalid waypoint"));
+    return;
+  }
 
   WaypointListRenderer::Draw(canvas, rc, *info.waypoint,
                              info.GetVector(location),

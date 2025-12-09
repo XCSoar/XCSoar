@@ -39,7 +39,10 @@ WaypointFilter::CompareType(const Waypoint &waypoint, TypeFilter type,
     return waypoint.origin == WaypointOrigin::USER;
 
   case TypeFilter::FILE:
-    return waypoint.origin == WaypointOrigin::PRIMARY;
+    // Include waypoints from both primary and watched waypoint files
+    // (both are configured waypoint files, not user-created or map-based)
+    return waypoint.origin == WaypointOrigin::PRIMARY ||
+           waypoint.origin == WaypointOrigin::WATCHED;
 
   case TypeFilter::MAP:
     return waypoint.origin == WaypointOrigin::MAP;
