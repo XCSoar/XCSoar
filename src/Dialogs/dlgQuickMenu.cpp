@@ -6,7 +6,9 @@
 #include "Form/Button.hpp"
 #include "Form/GridView.hpp"
 #include "Input/InputEvents.hpp"
+#include "Language/Language.hpp"
 #include "Look/DialogLook.hpp"
+#include "Math/Util.hpp"
 #include "Menu/ButtonLabel.hpp"
 #include "Menu/MenuData.hpp"
 #include "Renderer/ButtonRenderer.hpp"
@@ -20,8 +22,8 @@
 #include "util/StaticString.hxx"
 
 #include <boost/container/static_vector.hpp>
-
-#include <stdio.h>
+#include <cstdlib>
+#include <memory>
 
 class QuickMenuButtonRenderer final : public ButtonRenderer {
   const DialogLook &look;
@@ -94,6 +96,20 @@ class QuickMenu final : public WindowWidget {
 
   boost::container::static_vector<Button, GridView::MAX_ITEMS> buttons;
 
+  unsigned row_height = 0;
+  unsigned titlebar_height = 0;
+  unsigned column_width = 0;
+
+  Button *previous_button = nullptr;
+  Button *next_button = nullptr;
+
+  static constexpr unsigned MIN_COLUMNS = 3;
+  static constexpr unsigned DESIRED_COLUMNS = 3;
+  static const unsigned DESIRED_COLUMN_WIDTH;
+
+  void CalculateColumnWidth(unsigned available_width) noexcept;
+  PixelRect CalculateConstrainedGridRect(const PixelRect &rc) const noexcept;
+
 public:
   unsigned clicked_event;
 
@@ -104,19 +120,31 @@ public:
     return (GridView &)WindowWidget::GetWindow();
   }
 
+  void NavigatePage(GridView::Direction direction) noexcept;
   void UpdateCaption() noexcept;
+  void SetNavigationButtons(Button *prev, Button *next) noexcept {
+    previous_button = prev;
+    next_button = next;
+  }
+
+  bool Focus() noexcept {
+    return SetFocus();
+  }
+
+  bool IsWindowReady() const noexcept {
+    return IsDefined();
+  }
 
 protected:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
-  void AddNavigationButtons(GridView *grid_view,
-                            const WindowStyle &buttonStyle,
-                            const DialogLook &);
+  void Show(const PixelRect &rc) noexcept override;
+  void Move(const PixelRect &rc) noexcept override;
   bool SetFocus() noexcept override;
   bool KeyPress(unsigned key_code) noexcept override;
 };
 void
-QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
+QuickMenu::Prepare(ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept
 {
   WindowStyle grid_view_style;
   grid_view_style.ControlParent();
@@ -126,30 +154,34 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 
   const auto &font = *dialog_look.button.font;
 
-  const unsigned min_column_width = 2 * Layout::GetMaximumControlHeight();
-  const unsigned min_columns = 3;
-  const unsigned max_column_width = rc.GetWidth() / min_columns;
-  const unsigned desired_column_width = Layout::PtScale(160);
-  const unsigned column_width = std::clamp(desired_column_width,
-                                           min_column_width, max_column_width);
+  titlebar_height = dialog_look.caption.font->GetHeight();
 
-  const unsigned row_height =
+  PixelRect client_rc = dialog.GetClientAreaWindow().GetClientRect();
+  const unsigned original_height = client_rc.GetHeight();
+  if (original_height > titlebar_height) {
+    client_rc.bottom = client_rc.top + (original_height - titlebar_height);
+  }
+
+  const unsigned available_width = client_rc.GetWidth();
+  unsigned num_cols = std::max(MIN_COLUMNS,
+                                std::min(DESIRED_COLUMNS,
+                                        available_width / DESIRED_COLUMN_WIDTH));
+  if (num_cols == 0) num_cols = 1;
+  column_width = available_width / num_cols;
+
+  row_height =
     std::max(2 * (Layout::GetTextPadding() + font.GetHeight()),
              Layout::GetMaximumControlHeight());
 
+  const PixelRect constrained_grid_rc = CalculateConstrainedGridRect(client_rc);
   auto grid_view = std::make_unique<GridView>();
-  grid_view->Create(parent, dialog_look, rc, grid_view_style,
+  grid_view->Create(parent, dialog_look, constrained_grid_rc, grid_view_style,
                     column_width, row_height);
 
   WindowStyle buttonStyle;
   buttonStyle.TabStop();
 
-  // Calculate the number of buttons that fit on a single page
-  unsigned num_columns = rc.GetWidth() / column_width;
-  unsigned num_rows = rc.GetHeight() / row_height;
-  unsigned page_size = num_columns * num_rows - 3;
-
-  unsigned buttons_added = 0;
+  grid_view->RefreshLayout();
 
   for (unsigned i = 0; i < menu.MAX_ITEMS; ++i) {
     if (buttons.size() >= buttons.max_size())
@@ -168,8 +200,8 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
     PixelRect button_rc;
     button_rc.left = 0;
     button_rc.top = 0;
-    button_rc.right = 80;
-    button_rc.bottom = 30;
+    button_rc.right = Layout::Scale(80);
+    button_rc.bottom = Layout::Scale(30);
 
     auto &button = buttons.emplace_back(*grid_view, button_rc, buttonStyle,
                                         std::make_unique<QuickMenuButtonRenderer>(dialog_look,
@@ -181,85 +213,106 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
     button.SetEnabled(expanded.enabled);
 
     grid_view->AddItem(button);
-    buttons_added++;
-
-    if (buttons_added % page_size == 0 && HasTouchScreen())
-    {
-      AddNavigationButtons(grid_view.get(), buttonStyle, dialog_look);
-    }
-  }
-
-  /* if the last page wasn't completley filled,
-     still add the navigation buttons */
-  if (buttons_added % page_size != 0 && HasTouchScreen())
-  {
-    AddNavigationButtons(grid_view.get(), buttonStyle, dialog_look);
   }
 
   grid_view->RefreshLayout();
+
   SetWindow(std::move(grid_view));
   UpdateCaption();
 }
 
+const unsigned QuickMenu::DESIRED_COLUMN_WIDTH = Layout::PtScale(160);
 
 void
-QuickMenu::AddNavigationButtons(GridView *grid_view,
-                                const WindowStyle &buttonStyle,
-                                const DialogLook &dialog_look)
+QuickMenu::CalculateColumnWidth(unsigned available_width) noexcept
 {
-  PixelRect button_rc;
-  button_rc.left = 0;
-  button_rc.top = 0;
-  button_rc.right = 80;
-  button_rc.bottom = 30;
-
-  // Add "Previous Page" button
-  auto &previous_button =
-      buttons.emplace_back(*grid_view, button_rc, buttonStyle,
-                           std::make_unique<QuickMenuButtonRenderer>(
-                               dialog_look, _T("Previous Page")),
-                           [this]()
-                           {
-                             auto &grid_view = GetWindow();
-                             grid_view.ShowNextPage(GridView::Direction::LEFT);
-                             SetFocus();
-                             UpdateCaption();
-                           });
-  previous_button.SetEnabled(true);
-  grid_view->AddItem(previous_button);
-  // Add "Next Page" button
-  auto &next_button = buttons.emplace_back(
-      *grid_view, button_rc, buttonStyle,
-      std::make_unique<QuickMenuButtonRenderer>(dialog_look, _T("Next Page")),
-      [this]()
-      {
-        auto &grid_view = GetWindow();
-        grid_view.ShowNextPage();
-        SetFocus();
-        UpdateCaption();
-      });
-  next_button.SetEnabled(true);
-  grid_view->AddItem(next_button);
-
-  // Add "Cancel" button
-  auto &cancel_button = buttons.emplace_back(
-      *grid_view, button_rc, buttonStyle,
-      std::make_unique<QuickMenuButtonRenderer>(dialog_look, _T("Cancel")),
-      [this]() { dialog.SetModalResult(mrCancel); });
-  cancel_button.SetEnabled(true);
-  grid_view->AddItem(cancel_button);
+  unsigned num_cols = std::max(MIN_COLUMNS,
+                               std::min(DESIRED_COLUMNS,
+                                       available_width / DESIRED_COLUMN_WIDTH));
+  if (num_cols == 0) num_cols = 1;
+  column_width = available_width / num_cols;
 }
+
+void
+QuickMenu::NavigatePage(GridView::Direction direction) noexcept
+{
+  if (!IsWindowReady())
+    return;
+  auto &grid_view = GetWindow();
+  grid_view.RefreshLayout();
+  grid_view.ShowNextPage(direction);
+  Focus();
+  UpdateCaption();
+}
+
+PixelRect
+QuickMenu::CalculateConstrainedGridRect(const PixelRect &rc) const noexcept
+{
+  if (row_height == 0)
+    return rc;
+
+  const unsigned available_height = rc.GetHeight();
+  const unsigned constrained_height = available_height > row_height / 2
+    ? available_height - row_height / 2
+    : available_height;
+  return PixelRect(0, 0, rc.GetWidth(), constrained_height);
+}
+
+void
+QuickMenu::Show(const PixelRect &rc) noexcept
+{
+  CalculateColumnWidth(rc.GetWidth());
+
+  const PixelRect constrained_rc = CalculateConstrainedGridRect(rc);
+  WindowWidget::Show(constrained_rc);
+
+  auto &grid_view = GetWindow();
+  grid_view.SetColumnWidth(column_width);
+  grid_view.RefreshLayout();
+
+  UpdateCaption();
+}
+
+void
+QuickMenu::Move(const PixelRect &rc) noexcept
+{
+  CalculateColumnWidth(rc.GetWidth());
+
+  const PixelRect constrained_rc = CalculateConstrainedGridRect(rc);
+  WindowWidget::Move(constrained_rc);
+
+  auto &grid_view = GetWindow();
+  grid_view.SetColumnWidth(column_width);
+  grid_view.RefreshLayout();
+
+  UpdateCaption();
+}
+
+
 
 void
 QuickMenu::UpdateCaption() noexcept
 {
   auto &grid_view = GetWindow();
   StaticString<32> buffer;
-  unsigned pageSize = GetWindow().GetNumColumns() * grid_view.GetNumRows();
-  unsigned lastPage = buttons.size() / pageSize;
-  buffer.Format(_T("Quick Menu  %d/%d"),
-                grid_view.GetCurrentPage() + 1, lastPage + 1);
+  unsigned pageSize = grid_view.GetNumColumns() * grid_view.GetNumRows();
+  unsigned lastPage = std::max<unsigned>(1, DivideRoundUp(buttons.size(), pageSize));
+  unsigned currentPage = std::min(grid_view.GetCurrentPage(), lastPage - 1u);
+
+  if (lastPage > 1) {
+    buffer.Format(_T("Quick Menu  %d/%d"),
+                  currentPage + 1, lastPage);
+  } else {
+    buffer = _T("Quick Menu");
+  }
   dialog.SetCaption(buffer);
+
+  if (previous_button != nullptr) {
+    previous_button->SetEnabled(lastPage > 1);
+  }
+  if (next_button != nullptr) {
+    next_button->SetEnabled(lastPage > 1);
+  }
 }
 
 bool
@@ -270,21 +323,22 @@ QuickMenu::SetFocus() noexcept
   grid_view.RefreshLayout();
 
   unsigned numColumns = grid_view.GetNumColumns();
-  unsigned pageSize = numColumns * grid_view.GetNumRows();
-  unsigned lastPage = buttons.size() / pageSize;
-  unsigned currentPage = grid_view.GetCurrentPage();
+  unsigned numRows = grid_view.GetNumRows();
+  unsigned pageSize = numColumns * numRows;
+  unsigned lastPage = buttons.size() > 0
+    ? DivideRoundUp(buttons.size(), pageSize) - 1
+    : 0;
+  unsigned currentPage = std::min(grid_view.GetCurrentPage(), lastPage);
   unsigned currentPageSize = currentPage == lastPage
     ? buttons.size() % pageSize
     : pageSize;
-  unsigned centerCol = currentPageSize < numColumns
-    ? currentPageSize / 2
-    : numColumns / 2;
-  unsigned centerRow = currentPageSize / numColumns / 2;
+  if (currentPageSize == 0 && buttons.size() > 0)
+    currentPageSize = pageSize;
+  
+  unsigned maxRowsOnPage = DivideRoundUp(currentPageSize, numColumns);
+  unsigned centerCol = numColumns / 2;
+  unsigned centerRow = maxRowsOnPage / 2;
 
-  /* Find the focusable button closest to the computed center (Manhattan
-     distance). Only consider visible, enabled, tab-stop buttons on the
-     current page. This avoids trying to focus disabled buttons
-     (SetFocus() aborts when disabled) */
   const unsigned pageStart = currentPage * pageSize;
   const unsigned pageEnd = std::min(pageStart + currentPageSize, (unsigned)buttons.size());
   unsigned focusIndex = buttons.size(); // not found
@@ -297,9 +351,7 @@ QuickMenu::SetFocus() noexcept
     unsigned pagePos = idx % pageSize;
     unsigned col = pagePos % numColumns;
     unsigned row = pagePos / numColumns;
-    int dcol = (int)col - (int)cCol;
-    int drow = (int)row - (int)cRow;
-    return (dcol < 0 ? -dcol : dcol) + (drow < 0 ? -drow : drow);
+    return std::abs((int)col - (int)cCol) + std::abs((int)row - (int)cRow);
   };
 
   int bestDist = INT_MAX;
@@ -314,8 +366,28 @@ QuickMenu::SetFocus() noexcept
     }
   }
 
-  if (focusIndex >= buttons.size())
+  if (focusIndex >= buttons.size()) {
+    for (unsigned page = 0; page <= lastPage; ++page) {
+      unsigned pStart = page * pageSize;
+      unsigned pSize = page == lastPage ? buttons.size() % pageSize : pageSize;
+      if (pSize == 0 && buttons.size() > 0)
+        pSize = pageSize;
+      unsigned pEnd = std::min(pStart + pSize, (unsigned)buttons.size());
+      for (unsigned i = pStart; i < pEnd; ++i) {
+        if (is_focusable(buttons[i])) {
+          while (grid_view.GetCurrentPage() != page) {
+            if (grid_view.GetCurrentPage() < page)
+              grid_view.ShowNextPage(GridView::Direction::RIGHT);
+            else
+              grid_view.ShowNextPage(GridView::Direction::LEFT);
+          }
+          buttons[i].SetFocus();
+          return true;
+        }
+      }
+    }
     return false;
+  }
 
   buttons[focusIndex].SetFocus();
   return true;
@@ -356,16 +428,80 @@ QuickMenu::KeyPress(unsigned key_code) noexcept
   return true;
 }
 
+class QuickMenuDialog final : public WidgetDialog {
+  QuickMenu *quick_menu_widget = nullptr;
+
+public:
+  QuickMenuDialog(Full, UI::SingleWindow &parent, const DialogLook &look,
+                  const TCHAR *caption) noexcept
+    :WidgetDialog(Full{}, parent, look, caption) {}
+
+  template<typename... Args>
+  void SetWidget(Args&&... args) {
+    auto widget = std::make_unique<QuickMenu>(std::forward<Args>(args)...);
+    quick_menu_widget = widget.get();
+    FinishPreliminary(std::move(widget));
+  }
+
+  // Intentionally hides WidgetDialog::GetWidget() to return QuickMenu&
+  // instead of Widget& for type-specific behavior
+  QuickMenu &GetWidget() noexcept {
+    return *quick_menu_widget;
+  }
+
+  // Intentionally hides WndForm::ShowModal() to provide custom modal
+  // behavior with auto-sizing and button layout
+  int ShowModal() {
+    if (IsAutoSize())
+      AutoSize();
+    else
+      widget.Move(buttons.BottomLayout());
+
+    widget.Show();
+    int result = WndForm::ShowModal();
+    widget.Hide();
+    return result;
+  }
+
+protected:
+  void OnResize(PixelSize new_size) noexcept override {
+    WndForm::OnResize(new_size);
+
+    if (IsAutoSize())
+      return;
+
+    widget.Move(buttons.BottomLayout());
+  }
+};
+
 static int
 ShowQuickMenu(UI::SingleWindow &parent, const Menu &menu) noexcept
 {
   const auto &dialog_look = UIGlobals::GetDialogLook();
 
-  TWidgetDialog<QuickMenu> dialog(WidgetDialog::Full{},
-                                  parent,
-                                  dialog_look, nullptr);
+  QuickMenuDialog dialog(WidgetDialog::Full{},
+                         parent,
+                         dialog_look, nullptr);
 
   dialog.SetWidget(dialog, menu);
+
+  dialog.PrepareWidget();
+
+  auto &quick_menu = dialog.GetWidget();
+  Button *prev_button = dialog.AddSymbolButton(_T("<"), [&quick_menu]() {
+    quick_menu.NavigatePage(GridView::Direction::LEFT);
+  });
+
+  Button *next_button = dialog.AddSymbolButton(_T(">"), [&quick_menu]() {
+    quick_menu.NavigatePage(GridView::Direction::RIGHT);
+  });
+
+  dialog.AddButton(_("Cancel"), mrCancel);
+
+  quick_menu.SetNavigationButtons(prev_button, next_button);
+
+  quick_menu.UpdateCaption();
+  
   if (dialog.ShowModal() != mrOK)
     return -1;
 
