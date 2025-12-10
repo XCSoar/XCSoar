@@ -71,3 +71,18 @@ Sigmoid(double x) noexcept
 {
   return 2.0 / (1.0 + exp(-x)) - 1.0;
 }
+
+/**
+ * Integer division with rounding up (ceiling division).
+ * Computes ceil(numerator / denominator) for unsigned integers.
+ *
+ * @param numerator the number to divide
+ * @param denominator the divisor (must be > 0)
+ * @return the ceiling of the division result
+ */
+template<typename T, typename U>
+constexpr T
+DivideRoundUp(T numerator, U denominator) noexcept
+{
+  return (numerator + denominator - 1) / denominator;
+}
