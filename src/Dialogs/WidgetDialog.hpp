@@ -14,15 +14,20 @@
 class Widget;
 
 class WidgetDialog : public WndForm {
+protected:
   ButtonPanel buttons;
-
   ManagedWidget widget;
 
+private:
   bool full;
-
   bool auto_size;
-
   bool changed = false;
+
+protected:
+  // Expose auto_size to derived classes
+  bool IsAutoSize() const noexcept {
+    return auto_size;
+  }
 
 public:
   explicit WidgetDialog(const DialogLook &look);
@@ -128,7 +133,7 @@ public:
   /* virtual methods from class WndForm */
   void SetModalResult(int id) noexcept override;
 
-private:
+protected:
   void AutoSize();
 
 protected:
