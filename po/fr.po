@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-11 18:55+0100\n"
+"POT-Creation-Date: 2025-12-11 22:17+0100\n"
 "PO-Revision-Date: 2024-06-02 21:16+0000\n"
 "Last-Translator: Philipp Wollschlegel <folken@kabelsalat.ch>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
@@ -1777,10 +1777,10 @@ msgstr "Réessayer"
 #: src/Dialogs/NumberEntry.cpp:84 src/Dialogs/NumberEntry.cpp:125
 #: src/Dialogs/TouchTextEntry.cpp:187 src/Dialogs/TimeEntry.cpp:46
 #: src/Dialogs/DateEntry.cpp:42 src/Dialogs/GeoPointEntry.cpp:57
-#: src/Dialogs/DownloadFilePicker.cpp:387 Data/Input/default.xci:121
-#: Data/Input/default.xci:422 Data/Input/default.xci:517
-#: Data/Input/default.xci:664 Data/Input/default.xci:884
-#: Data/Input/default.xci:955
+#: src/Dialogs/dlgQuickMenu.cpp:499 src/Dialogs/DownloadFilePicker.cpp:387
+#: Data/Input/default.xci:121 Data/Input/default.xci:422
+#: Data/Input/default.xci:517 Data/Input/default.xci:664
+#: Data/Input/default.xci:884 Data/Input/default.xci:955
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -2701,7 +2701,7 @@ msgstr "Radio"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:73
 msgid "Station"
-msgstr "Rotation"
+msgstr "Station"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:77
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:260
@@ -2729,7 +2729,7 @@ msgstr "Base"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:125
 msgid "Airspace Details"
-msgstr "Détails Airspace"
+msgstr "Détails espace aérien"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:330
 #: src/Dialogs/Waypoint/WaypointList.cpp:426

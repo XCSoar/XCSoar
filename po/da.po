@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-11 18:55+0100\n"
+"POT-Creation-Date: 2025-12-11 22:17+0100\n"
 "PO-Revision-Date: 2016-09-18 08:36+0000\n"
 "Last-Translator: Bo Gamba <Unknown>\n"
 "Language-Team: Danish <da@li.org>\n"
@@ -1685,10 +1685,10 @@ msgstr "Prøv igen"
 #: src/Dialogs/NumberEntry.cpp:84 src/Dialogs/NumberEntry.cpp:125
 #: src/Dialogs/TouchTextEntry.cpp:187 src/Dialogs/TimeEntry.cpp:46
 #: src/Dialogs/DateEntry.cpp:42 src/Dialogs/GeoPointEntry.cpp:57
-#: src/Dialogs/DownloadFilePicker.cpp:387 Data/Input/default.xci:121
-#: Data/Input/default.xci:422 Data/Input/default.xci:517
-#: Data/Input/default.xci:664 Data/Input/default.xci:884
-#: Data/Input/default.xci:955
+#: src/Dialogs/dlgQuickMenu.cpp:499 src/Dialogs/DownloadFilePicker.cpp:387
+#: Data/Input/default.xci:121 Data/Input/default.xci:422
+#: Data/Input/default.xci:517 Data/Input/default.xci:664
+#: Data/Input/default.xci:884 Data/Input/default.xci:955
 msgid "Cancel"
 msgstr "Annuller"
 
