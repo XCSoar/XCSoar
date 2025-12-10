@@ -9,6 +9,10 @@
 
 #include <cstdint>
 
+struct xkb_context;
+struct xkb_keymap;
+struct xkb_state;
+
 struct wl_display;
 struct wl_compositor;
 struct wl_seat;
@@ -25,8 +29,8 @@ class EventQueue;
 struct Event;
 
 /**
- * This class opens a connection to the X11 server using Xlib and
- * listens for events.
+ * This class opens a connection to a Wayland compositor and
+ * listens for input events.
  */
 class WaylandEventQueue final {
   EventQueue &queue;
@@ -43,6 +47,10 @@ class WaylandEventQueue final {
 
   IntPoint2D pointer_position = {0, 0};
 
+  struct xkb_context *xkb_context = nullptr;
+  struct xkb_keymap *xkb_keymap = nullptr;
+  struct xkb_state *xkb_state = nullptr;
+
   SocketEvent socket_event;
   IdleEvent flush_event;
 
@@ -52,6 +60,7 @@ public:
    * events
    */
   WaylandEventQueue(UI::Display &display, EventQueue &queue);
+  ~WaylandEventQueue() noexcept;
 
   struct wl_compositor *GetCompositor() const noexcept {
     return compositor;
@@ -94,6 +103,9 @@ public:
   void PointerButton(bool pressed) noexcept;
 
   void KeyboardKey(uint32_t key, uint32_t state) noexcept;
+  void KeyboardKeymap(uint32_t format, int32_t fd, uint32_t size) noexcept;
+  void KeyboardModifiers(uint32_t mods_depressed, uint32_t mods_latched,
+                         uint32_t mods_locked, uint32_t group) noexcept;
 
 private:
   void OnSocketReady(unsigned events) noexcept;

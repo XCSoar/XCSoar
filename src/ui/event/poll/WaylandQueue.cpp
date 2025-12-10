@@ -7,9 +7,13 @@
 #include "ui/display/Display.hpp"
 #include "util/StringAPI.hxx"
 #include "ui/event/poll/linux/Translate.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "xdg-shell-client-protocol.h"
 
 #include <wayland-client.h>
+#include <xkbcommon/xkbcommon.h>
+#include <sys/mman.h>
+#include <unistd.h>
 
 #include <cerrno>
 #include <cstdio> // for fprintf()
@@ -123,12 +127,14 @@ static constexpr struct wl_pointer_listener pointer_listener = {
 };
 
 static void
-WaylandKeyboardKeymap([[maybe_unused]] void *data,
+WaylandKeyboardKeymap(void *data,
                       [[maybe_unused]] struct wl_keyboard *wl_keyboard,
-                      [[maybe_unused]] uint32_t format,
-                      [[maybe_unused]] int32_t fd,
-                      [[maybe_unused]] uint32_t size) noexcept
+                      uint32_t format,
+                      int32_t fd,
+                      uint32_t size) noexcept
 {
+  auto &queue = *(WaylandEventQueue *)data;
+  queue.KeyboardKeymap(format, fd, size);
 }
 
 static void
@@ -162,14 +168,16 @@ WaylandKeyboardKey(void *data,
 }
 
 static void
-WaylandKeyboardModifiers([[maybe_unused]] void *data,
+WaylandKeyboardModifiers(void *data,
                          [[maybe_unused]] struct wl_keyboard *wl_keyboard,
                          [[maybe_unused]] uint32_t serial,
-                         [[maybe_unused]] uint32_t mods_depressed,
-                         [[maybe_unused]] uint32_t mods_latched,
-                         [[maybe_unused]] uint32_t mods_locked,
-                         [[maybe_unused]] uint32_t group) noexcept
+                         uint32_t mods_depressed,
+                         uint32_t mods_latched,
+                         uint32_t mods_locked,
+                         uint32_t group) noexcept
 {
+  auto &queue = *(WaylandEventQueue *)data;
+  queue.KeyboardModifiers(mods_depressed, mods_latched, mods_locked, group);
 }
 
 static void
@@ -198,6 +206,10 @@ WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
   if (display == nullptr)
     throw std::runtime_error("wl_display_connect() failed");
 
+  xkb_context = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
+  if (xkb_context == nullptr)
+    throw std::runtime_error("xkb_context_new() failed");
+
   auto registry = wl_display_get_registry(display);
   wl_registry_add_listener(registry, &registry_listener, this);
 
@@ -216,6 +228,22 @@ WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
   socket_event.Open(SocketDescriptor(wl_display_get_fd(display)));
   socket_event.ScheduleRead();
   flush_event.Schedule();
+}
+
+WaylandEventQueue::~WaylandEventQueue() noexcept
+{
+  if (xkb_state != nullptr) {
+    xkb_state_unref(xkb_state);
+    xkb_state = nullptr;
+  }
+  if (xkb_keymap != nullptr) {
+    xkb_keymap_unref(xkb_keymap);
+    xkb_keymap = nullptr;
+  }
+  if (xkb_context != nullptr) {
+    xkb_context_unref(xkb_context);
+    xkb_context = nullptr;
+  }
 }
 
 bool
@@ -279,8 +307,6 @@ inline void
 WaylandEventQueue::SeatHandleCapabilities(bool has_pointer, bool has_keyboard,
                                           bool has_touch) noexcept
 {
-  /* TODO: collect flags for HasCursorKeys() */
-
   if (has_pointer) {
     if (pointer == nullptr) {
       pointer = wl_seat_get_pointer(seat);
@@ -331,14 +357,106 @@ WaylandEventQueue::PointerButton(bool pressed) noexcept
 }
 
 void
+WaylandEventQueue::KeyboardKeymap(uint32_t format, int32_t fd, uint32_t size) noexcept
+{
+  if (format != WL_KEYBOARD_KEYMAP_FORMAT_XKB_V1) {
+    close(fd);
+    return;
+  }
+
+  char *map_shm = static_cast<char *>(mmap(nullptr, size, PROT_READ, MAP_PRIVATE, fd, 0));
+  if (map_shm == MAP_FAILED) {
+    close(fd);
+    return;
+  }
+
+  if (xkb_keymap != nullptr)
+    xkb_keymap_unref(xkb_keymap);
+  if (xkb_state != nullptr)
+    xkb_state_unref(xkb_state);
+
+  xkb_keymap = xkb_keymap_new_from_string(xkb_context, map_shm,
+                                           XKB_KEYMAP_FORMAT_TEXT_V1,
+                                           XKB_KEYMAP_COMPILE_NO_FLAGS);
+  munmap(map_shm, size);
+  close(fd);
+
+  if (xkb_keymap != nullptr)
+    xkb_state = xkb_state_new(xkb_keymap);
+}
+
+void
+WaylandEventQueue::KeyboardModifiers(uint32_t mods_depressed, uint32_t mods_latched,
+                                     uint32_t mods_locked, uint32_t group) noexcept
+{
+  if (xkb_state != nullptr)
+    xkb_state_update_mask(xkb_state, mods_depressed, mods_latched,
+                          mods_locked, 0, 0, group);
+}
+
+void
 WaylandEventQueue::KeyboardKey(uint32_t key, uint32_t state) noexcept
 {
-  const auto [translated_key_code, is_char] = TranslateKeyCode(key);
-  
+  unsigned key_code = 0;
+  bool is_char = false;
+
+  /* Linux evdev key codes for arrow keys (from linux/input-event-codes.h) */
+  constexpr uint32_t EVDEV_KEY_UP = 103;
+  constexpr uint32_t EVDEV_KEY_DOWN = 108;
+  constexpr uint32_t EVDEV_KEY_LEFT = 105;
+  constexpr uint32_t EVDEV_KEY_RIGHT = 106;
+
+  /* Check if this is an arrow key BEFORE translation. Linux input event
+     codes KEY_UP=103, KEY_DOWN=108, KEY_LEFT=105, KEY_RIGHT=106 conflict
+     with ASCII 'g', 'l', 'i', 'j', so we must check the raw key code
+     first to distinguish arrow keys from letters */
+  if (key == EVDEV_KEY_UP) {
+    key_code = KEY_UP;
+    is_char = false;
+  } else if (key == EVDEV_KEY_DOWN) {
+    key_code = KEY_DOWN;
+    is_char = false;
+  } else if (key == EVDEV_KEY_LEFT) {
+    key_code = KEY_LEFT;
+    is_char = false;
+  } else if (key == EVDEV_KEY_RIGHT) {
+    key_code = KEY_RIGHT;
+    is_char = false;
+  } else {
+    /* Normal key - use XKB to get the actual character for text input.
+       XKB keycode = Linux evdev keycode + 8 (historical X11 offset) */
+    uint32_t xkb_keycode = key + 8;
+
+    if (xkb_state != nullptr && xkb_keymap != nullptr) {
+      uint32_t utf32 = xkb_state_key_get_utf32(xkb_state, xkb_keycode);
+
+      /* Check if it's a printable character: not control characters
+         (>= 0x20, except DEL 0x7F), valid Unicode scalar value
+         (<= 0x10FFFF, excluding surrogates 0xD800-0xDFFF) */
+      bool is_printable = (utf32 >= 0x20) &&
+                          (utf32 != 0x7F) &&
+                          (utf32 < 0xD800 || utf32 > 0xDFFF) &&
+                          (utf32 <= 0x10FFFF);
+
+      if (is_printable) {
+        key_code = utf32;
+        is_char = true;
+      } else {
+        const auto [translated_key_code, is_char_result] = TranslateKeyCode(key);
+        key_code = translated_key_code;
+        is_char = is_char_result;
+      }
+    } else {
+      const auto [translated_key_code, is_char_result] = TranslateKeyCode(key);
+      key_code = translated_key_code;
+      is_char = is_char_result;
+    }
+  }
+
   switch (state) {
   case WL_KEYBOARD_KEY_STATE_RELEASED:
     {
-      Event e(Event::KEY_UP, translated_key_code);
+      Event e(Event::KEY_UP, key_code);
       e.is_char = is_char;
       queue.Push(e);
     }
@@ -346,7 +464,7 @@ WaylandEventQueue::KeyboardKey(uint32_t key, uint32_t state) noexcept
 
   case WL_KEYBOARD_KEY_STATE_PRESSED:
     {
-      Event e(Event::KEY_DOWN, translated_key_code);
+      Event e(Event::KEY_DOWN, key_code);
       e.is_char = is_char;
       queue.Push(e);
     }
