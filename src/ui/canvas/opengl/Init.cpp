@@ -163,6 +163,9 @@ OpenGL::SetupContext()
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_DITHER);
 
+  /* Enable MSAA (configured at context creation) */
+  glEnable(GL_MULTISAMPLE);
+
   InitShaders();
 }
 

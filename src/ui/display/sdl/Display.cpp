@@ -34,6 +34,8 @@ Display::Display()
 #if defined(ENABLE_OPENGL)
   ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   ::SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
+  ::SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);  // for MSAA
+  ::SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);  // 4x MSAA
 #endif
 }
 
