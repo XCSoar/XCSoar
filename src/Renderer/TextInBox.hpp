@@ -11,7 +11,14 @@ struct PixelPoint;
 struct PixelSize;
 struct PixelRect;
 class Canvas;
+class Color;
 class LabelBlock;
+
+void
+RenderShadowedText(Canvas &canvas, const TCHAR *text,
+                   PixelPoint p,
+                   Color text_color, Color outline_color) noexcept;
+
 void
 RenderShadowedText(Canvas &canvas, const TCHAR *text,
                    PixelPoint p,
