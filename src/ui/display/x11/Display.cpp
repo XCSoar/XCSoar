@@ -51,6 +51,8 @@ Display::Display()
     GLX_BLUE_SIZE, 1,
     GLX_ALPHA_SIZE, 1,
     GLX_STENCIL_SIZE, 1,
+    GLX_SAMPLE_BUFFERS, 1, // for MSAA
+    GLX_SAMPLES, 4,        // 4x MSAA
     0
   };
 
@@ -60,13 +62,14 @@ Display::Display()
   if (fb_cfg == nullptr || fb_cfg_count == 0)
     throw std::runtime_error("Failed to retrieve framebuffer configuration for GLX");
 
-  LogFormat("GLX config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d",
+  LogFormat("GLX config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d samples=%d",
             GetConfigAttrib(display, *fb_cfg, GLX_RED_SIZE, 0),
             GetConfigAttrib(display, *fb_cfg, GLX_GREEN_SIZE, 0),
             GetConfigAttrib(display, *fb_cfg, GLX_BLUE_SIZE, 0),
             GetConfigAttrib(display, *fb_cfg, GLX_ALPHA_SIZE, 0),
             GetConfigAttrib(display, *fb_cfg, GLX_DEPTH_SIZE, 0),
-            GetConfigAttrib(display, *fb_cfg, GLX_STENCIL_SIZE, 0));
+            GetConfigAttrib(display, *fb_cfg, GLX_STENCIL_SIZE, 0),
+            GetConfigAttrib(display, *fb_cfg, GLX_SAMPLES, 0));
 
   glx_context = glXCreateNewContext(display, *fb_cfg,
                                     GLX_RGBA_TYPE,
