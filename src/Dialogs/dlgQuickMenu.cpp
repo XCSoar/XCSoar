@@ -201,6 +201,7 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   UpdateCaption();
 }
 
+
 void
 QuickMenu::AddNavigationButtons(GridView *grid_view,
                                 const WindowStyle &buttonStyle,
@@ -265,6 +266,9 @@ bool
 QuickMenu::SetFocus() noexcept
 {
   auto &grid_view = GetWindow();
+
+  grid_view.RefreshLayout();
+
   unsigned numColumns = grid_view.GetNumColumns();
   unsigned pageSize = numColumns * grid_view.GetNumRows();
   unsigned lastPage = buttons.size() / pageSize;
@@ -276,14 +280,44 @@ QuickMenu::SetFocus() noexcept
     ? currentPageSize / 2
     : numColumns / 2;
   unsigned centerRow = currentPageSize / numColumns / 2;
-  unsigned centerPos = currentPage
-    * pageSize + centerCol + centerRow * numColumns;
 
-  if (centerPos >= buttons.size())
+  /* Find the focusable button closest to the computed center (Manhattan
+     distance). Only consider visible, enabled, tab-stop buttons on the
+     current page. This avoids trying to focus disabled buttons
+     (SetFocus() aborts when disabled) */
+  const unsigned pageStart = currentPage * pageSize;
+  const unsigned pageEnd = std::min(pageStart + currentPageSize, (unsigned)buttons.size());
+  unsigned focusIndex = buttons.size(); // not found
+
+  auto is_focusable = [](const Button &b) noexcept {
+    return b.IsVisible() && b.IsEnabled() && b.IsTabStop();
+  };
+
+  auto manhattan = [numColumns, pageSize](unsigned idx, unsigned cCol, unsigned cRow) noexcept {
+    unsigned pagePos = idx % pageSize;
+    unsigned col = pagePos % numColumns;
+    unsigned row = pagePos / numColumns;
+    int dcol = (int)col - (int)cCol;
+    int drow = (int)row - (int)cRow;
+    return (dcol < 0 ? -dcol : dcol) + (drow < 0 ? -drow : drow);
+  };
+
+  int bestDist = INT_MAX;
+  for (unsigned i = pageStart; i < pageEnd; ++i) {
+    if (!is_focusable(buttons[i]))
+      continue;
+    int dist = manhattan(i, centerCol, centerRow);
+    if (dist < bestDist) {
+      bestDist = dist;
+      focusIndex = i;
+      if (dist == 0) break; // perfect center, stop searching
+    }
+  }
+
+  if (focusIndex >= buttons.size())
     return false;
 
-  buttons[centerPos].SetFocus();
-  grid_view.RefreshLayout();
+  buttons[focusIndex].SetFocus();
   return true;
 }
 
