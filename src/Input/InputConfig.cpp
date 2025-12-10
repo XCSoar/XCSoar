@@ -98,10 +98,18 @@ InputConfig::SetKeyEvent(unsigned mode, unsigned key_code,
 {
   assert(mode < MAX_MODE);
 
+  /* Check if this is an arrow key BEFORE normalization. Arrow keys
+     (KEY_UP=103, KEY_DOWN=108, KEY_LEFT=105, KEY_RIGHT=106) conflict
+     with ASCII 'g', 'l', 'i', 'j', so we must check for arrow keys
+     first */
+  bool is_arrow_key = (key_code == KEY_UP || key_code == KEY_DOWN ||
+                       key_code == KEY_LEFT || key_code == KEY_RIGHT);
+
   /* Normalize lowercase letters to uppercase for consistency with
      GetKeyEvent. This ensures that key bindings stored via SetKeyEvent
-     match lookups performed by GetKeyEvent */
-  if (key_code >= 'a' && key_code <= 'z') {
+     match lookups performed by GetKeyEvent. Skip normalization for
+     arrow keys - they should be used as-is */
+  if (!is_arrow_key && key_code >= 'a' && key_code <= 'z') {
     key_code = ToUpperASCII(static_cast<char>(key_code));
   }
 

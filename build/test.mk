@@ -104,6 +104,7 @@ TEST_NAMES = \
 	TestMETARParser \
 	TestIGCParser \
 	TestStrings TestUTF8 \
+	TestInputConfig \
 	TestCRC16 TestCRC8 \
 	TestUnitsFormatter \
 	TestGeoPointFormatter \
@@ -511,6 +512,16 @@ TEST_UTF8_SOURCES = \
 	$(TEST_SRC_DIR)/TestUTF8.cpp
 TEST_UTF8_DEPENDS = UTIL
 $(eval $(call link-program,TestUTF8,TEST_UTF8))
+
+TEST_INPUT_CONFIG_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(SRC)/Input/InputConfig.cpp \
+	$(SRC)/Menu/MenuData.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/TestInputConfig.cpp
+TEST_INPUT_CONFIG_CPPFLAGS = $(SCREEN_CPPFLAGS)
+TEST_INPUT_CONFIG_DEPENDS = IO OS UTIL
+$(eval $(call link-program,TestInputConfig,TEST_INPUT_CONFIG))
 
 TEST_POLARS_SOURCES = \
 	$(SRC)/Polar/Shape.cpp \
