@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 05:19+0100\n"
+"POT-Creation-Date: 2025-11-19 00:43+0100\n"
 "PO-Revision-Date: 2023-05-14 20:52+0000\n"
 "Last-Translator: Péter Gyetvai <gyetpet@mailbox.org>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/xcsoar/"
@@ -1778,7 +1778,6 @@ msgstr "Súgó"
 
 #: src/Dialogs/FileManager.cpp:399 src/Dialogs/Weather/NOAAList.cpp:99
 #: src/Dialogs/Weather/NOAADetails.cpp:48
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:211
 msgid "Update"
 msgstr "Frissítés"
 
@@ -2000,7 +1999,6 @@ msgstr "Újrakapcsolódás"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:316
 #: src/Dialogs/Device/DeviceListDialog.cpp:335
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:210
 msgid "Disable"
 msgstr "Kikapcsolás"
 
@@ -3041,10 +3039,8 @@ msgid "Tracking"
 msgstr "Nyomkövetés"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:132
-#: src/Dialogs/Weather/WeatherDialog.cpp:26
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:320
-#: src/Weather/NOAAFormatter.cpp:175 Data/Input/default.xci:808
-#: Data/Input/default.xci:1215
+#: src/Dialogs/Weather/WeatherDialog.cpp:26 src/Weather/NOAAFormatter.cpp:175
+#: Data/Input/default.xci:808 Data/Input/default.xci:1215
 #, no-c-format
 msgid "Weather"
 msgstr "Időjárás"
@@ -3492,8 +3488,6 @@ msgstr "Poláris W"
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:220
 #: src/Dialogs/Weather/PCMetDialog.cpp:51 src/Dialogs/Weather/NOAAList.cpp:182
 #: src/Dialogs/Weather/NOAAList.cpp:198 src/Dialogs/Weather/NOAADetails.cpp:88
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:355
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:390
 #: src/Dialogs/DownloadFilePicker.cpp:118
 #: src/Dialogs/DownloadFilePicker.cpp:277
 #: src/Dialogs/DownloadFilePicker.cpp:386
@@ -6458,7 +6452,6 @@ msgid "Specifies which threshold is used for \"large\" FAI triangles."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:135
-#, c-format
 msgid "95% dist. rule helpers"
 msgstr ""
 
@@ -7592,6 +7585,7 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
+#: src/Dialogs/Weather/RASPDialog.cpp:135
 msgid "Now"
 msgstr "Most"
 
@@ -7737,10 +7731,6 @@ msgstr ""
 #: src/Monitor/MatTaskMonitor.cpp:32
 msgid "Add this turn point?"
 msgstr "Ennek a fordulópontnak a hozzáadása?"
-
-#: src/Dialogs/Weather/MapOverlayWidget.cpp:206
-msgid "Use"
-msgstr "Fel"
 
 #: src/Renderer/NOAAListRenderer.cpp:26
 msgid "No METAR available"
@@ -10953,6 +10943,9 @@ msgstr "Legközelebbi légtér"
 #: Data/Input/default.xci:1287
 msgid "Quit XCSoar"
 msgstr "XCSoar"
+
+#~ msgid "Use"
+#~ msgstr "Fel"
 
 #~ msgid "Ok"
 #~ msgstr "Rendben"
