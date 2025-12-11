@@ -2667,7 +2667,7 @@ msgstr "Standby частота"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:88
 msgid "Class"
-msgstr "Скло"
+msgstr "Клас"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:92
 msgid "Top"
@@ -2700,7 +2700,7 @@ msgstr "Назва"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:450
 msgid "Class/Type"
-msgstr "Скло"
+msgstr "Клас/тип"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:464
 msgid "Select Airspace"
