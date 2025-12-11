@@ -2617,7 +2617,7 @@ msgstr "無線電"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:73
 msgid "Station"
-msgstr "定位"
+msgstr "電台"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:77
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:260
@@ -2633,7 +2633,7 @@ msgstr "設置待機頻率"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:88
 msgid "Class"
-msgstr "玻璃"
+msgstr "等級"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:92
 msgid "Top"
@@ -2645,7 +2645,7 @@ msgstr "底部"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:125
 msgid "Airspace Details"
-msgstr "詳細空域"
+msgstr "空域詳細資料"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:330
 #: src/Dialogs/Waypoint/WaypointList.cpp:426
