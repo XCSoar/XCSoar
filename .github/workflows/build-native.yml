@@ -261,6 +261,30 @@ jobs:
             ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
             ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
 
+      - name: "Cache Android SDK/NDK"
+        if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
+        uses: actions/cache@v4
+        with:
+          key: android-tools-${{ matrix.ndk }}-${{ hashFiles('ide/provisioning/install-android-tools.sh') }}
+          restore-keys: |
+            android-tools-${{ matrix.ndk }}-
+            android-tools-
+          path: |
+            ~/opt/android-sdk-linux
+            ~/opt/android-ndk-${{ matrix.ndk }}
+            ~/opt/bundletool
+
+      - name: "Cache third-party libraries"
+        if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' || matrix.target == 'KOBO' }}
+        uses: actions/cache@v4
+        with:
+          key: thirdparty-${{ matrix.target }}-${{ hashFiles('build/thirdparty.py', 'build/python/build/libs.py', 'build/python/build/project.py', 'build/thirdparty.mk') }}
+          restore-keys: |
+            thirdparty-${{ matrix.target }}-
+          path: |
+            ${{ github.workspace }}/output/${{ matrix.target }}/**/lib
+            ${{ github.workspace }}/output/${{ matrix.target }}/lib
+
       - name: Install dependencies
         run: |
           if [ ${{ matrix.os }} = 'ubuntu-22.04' ]; then
