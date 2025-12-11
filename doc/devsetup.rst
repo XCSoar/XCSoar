@@ -3,36 +3,139 @@ Setting up a development environment
 ************************************
 
 This describes the setup of a development environment suitable to
-compile XCSoar for most supported platforms (such as Android, KOBO, 
-UNIX, etc.), on computers running GNU/Linux, Windows or MacOS as the
-main operating system.
+build XCSoar for the various target platforms (such as Android, KOBO, 
+UNIX, Windows, ...). 
 
-When linux environments are used in this manual, recent
+When Linux operating systems (OS) are mentioned in this manual, recent
 releases of Debian-based flavors of GNU/Linux (including Ubuntu) are
-assumed. In the following instructions, ``sudo`` is used to execute commands with
+assumed. ``sudo`` is used to execute commands with
 root privileges. This is not enabled by default in Debian (but on some
-Debian based distributions, like Ubuntu).
+Debian-based distributions, like Ubuntu).
 
 
-There are many different ways to achieve a working development setup for each
-platform / operating system (OS). If you are an experienced developer, just
-do what you like best. if you are less experienced, then you find a setup guide
-in the following which describes several methods which are particularly
-supported by setup tools within the repository. If you do not
-know what is best for you, just go with the recommended way. Also, see 
-"which method should I choose" below.
+In the following there is a short overview of how to set up a standard 
+environment with the tools provided in the repository. There are more detailed,
+step-by-step instructions provided for typical scenarios in the appendix.
 
-Setup guide for Linux systems
-=============================
+Build on Linux, Standard setup
+==============================
+
+Clone the git repository to your machine (for example from the official repository, with
+ ``git clone --recursive https://github.com/XCSoar/XCSoar``). 
+On a fresh install (default: Debian), you can then run the provisioning scripts provided
+in the repository in ``ide/provisioning/`` to install all necessary tools and libraries
+for building XCSoar for all supported platforms.
+
+For more detailed step-by-step instructions, see section "`Detailed Setup guides: Linux systems`_"
+
+Build on a Windows computer (WSL2)
+==================================
+
+Windows Subsystem for Linux 2 (WSL2) works well as a tool to run the linux build
+environment without booting the enitire machine into Linux. 
+For this, set up a WSL2 instance with Debian as guest OS. Once it is running,
+you can follow the instructions for Linux inside the WSL2 instance to
+install all the tools and libraries.
+
+For best native Windows user experience, you can use a Windows IDE or Code editor 
+with remote editing capabilities 
+(VSCodium, Visual Studio Code, CLion...). In this way, you can edit the code that 
+is located inside the WSL instance with an editor that runs directly in Windows.
+You can also use an IDE with remote building capabilities (CLion, ...) to edit 
+the code that is located in the Windows host, but is automatically 
+sent to the linux instance for building.
+
+It is highly recommended to use the WSL / virtual machine file system for building the code.
+While it is also possible to run the build on the automatically mounted Windows drives directly,
+(such as in ``/mnt/c/Users/Username/Documents/XCSoar-Code/``), 
+this is much slower, ten times or more, depending on your configuration and circumstances.
+
+You should therefore clone or copy the modified code into the WSL virtual machine, 
+or use a remote editing tool as outlined above.
+
+For more details and step-by-step instructions, see section "`Detailed Setup guides: Windows systems`_"
+
+Vagrant build system setup 
+==========================
+
+Vagrant is a tool to set up and manage virtual machines (VMs) that can be used 
+for bulding the code. In the repository, a Vagrantfile is provided which sets up a VM
+with all necessary tools and libraries.
+This is a very convenient way to create and destroy build environments, particularly 
+if you need to create new "fresh" virtual machines regularly. It is available for
+Linux, Windows and MacOS.
+
+To use it, install Vagrant on your machine. A Vagrantfile is provided in the 
+``ide/vagrant`` directory. Running the ``vagrant up`` command in this directory
+will create a VM with all necessary tools and libraries.
+
+The Vagrantfile also mounts the XCSoar source directory on the host into 
+the VM at ``/xcsoar-host-src`` and then uses git internally to clone that 
+repository into the VM at ``$HOME/xcsoar-src``
+
+Building with the default commands will then build the code in that directory, 
+within the VM file system, and you need to extract the result of the built afterwards
+if needed. If you remote edit the code inside the VM, you need to push the changes
+back to the host (or to another remote) or copy the files befire destroying the instance.
+
+*Note for Windows users*: This works very well in Windows, but Vagrant will use VirtualBox as the 
+default VM manager in the current configuration which can interfere with Hyper-V.
+Oracle (maintainer of VirtualBox) actually recommends to
+disable Hyper-V in the Windows features. However, Hyper-V is required for WSL2, so you might have to
+choose between using Vagrant with VirtualBox or using WSL2 for development, or to edit the Vagrantfile 
+to use Hyper-V as the VM manager.
+
+Currently (Oct 2024) testing shows that WSL2 is much faster for building XCSoar than 
+VirtualBox on Windows.
+
+For more details and step-by-step instructions on using Vagrant, see "`Vagrant for automatic virtual machine setup`_",
+and particularly on Windows, see section "`Windows: automatic build system setup with Vagrant`_"
+
+Build in Docker container
+=========================
+
+Within the repository are also tools to set up a docker container for building XCSoar.
+This is the way that is used for the official builds, so this will get you the most
+exact replication of the building and runtime environment.
+
+With docker installed (here: assuming Linux as main OS), there are two ways to
+set up an environment for builing and running XCSoar in a docker container. You
+can use the container prepared on ``ghcr.io``, or you can build the container yourself,
+using the provided Dockerfile.
+
+With docker installed in Linux, you can run the contaicreate the container by 
+entering the directory ``ide/docker`` and run the command::
+
+To download and start the prepared container::
+
+   docker run --mount type=bind,source="$(pwd)",target=/opt/xcsoar \
+    -it ghcr.io/xcsoar/xcsoar/xcsoar-build:latest /bin/bash
+
+You can then start a build process inside the container, or run XCSoar directly.
+(For running XCSoar, you need to set up X11 forwarding. This is described in 
+``ide/docker/README.md``).
+
+For building the container locally, use ``docker build`` with the dockerfile
+in the ``ide/docker`` directory::
+
+   docker build --file ide/docker/Dockerfile -t xcsoar/xcsoar-build:latest ./ide/
+
+You can find more details in the ``README.md`` file in the ``ide/docker`` directory.
+For more information on how to use the container on Windows, see 
+section `Windows with docker: use docker containers in WSL`_.
+
+
+Detailed Setup guides: Linux systems
+====================================
 
 In the following, we are assuming that your Linux distributions
 is a Debian-like setup, such as Debian 12 or Ubuntu.
 
-First: Install git and get source code
---------------------------------------
+Install git and get source code
+-------------------------------
 
 To download the XCSoar source code, make sure you have ``git`` installed. 
-In Debian, you typically do::
+In Debian, for this you typically do::
 
  sudo apt-get update
  sudo apt-get install git
@@ -67,18 +170,21 @@ you can now also change it locally (only for this new repository), with::
    git config core.autocrlf input
    git config core.filemode false
 
-Method 1: set up development environment directly
--------------------------------------------------
+Set up standard build environment in Linux
+-----------------------------------------
 
-This is only recommended if you know what you are doing with respect to 
-setting up your own environments and maintaining it yourself.
+This will set up the environment for building XCSoar in a typical Linux
+environment. This can either be the computer directly running Linux as the OS
+or a virtual machine (VM) running Linux.
 
-You can use the provisioning scripts to set up the environment, which
-are designed to be run on a *freshly installed* Debian-style Linux.
+Inthe repository, provisioning scripts are provided to set up 
+all tools and libraries needed for the environment. They are designed
+to install everything necessary, from a freshly installed Debian-style Linux.
 
-For this, run all the scripts from the
+For this, simply run all the scripts from the
 ``ide/provisioning`` subfolder of the XCSoar source to install the build
-dependencies for various XCSoar target platforms.
+dependencies for various XCSoar target platforms (you can omit the Android 
+script if you do not plan to build for Android).
 
 ::
 
@@ -87,28 +193,28 @@ dependencies for various XCSoar target platforms.
    ./install-android-tools.sh
 
 If all went well and there was no conflict with any other libraries or tools 
-already existing on the system, you can now try to build the source
-with::
+already existing on the system, you can now try to build the source, for example for Android::
 
    make TARGET=ANDROID
 
-If your code does not build, you might have to check the existence and versions of 
-various components of your Linux installation, such as the C++ compiler version etc.
-
-
-Method 2: use Vagrant to create a virtual machine (recommended)
----------------------------------------------------------------
+Vagrant for automatic virtual machine setup
+-------------------------------------------
 
 To avoid any compatibility or version issues, you can set up a virtual machine with
-exactly the correct configuration for building XCSoar. To achieve this very easily,
-you can use the tool ``Vagrant``, which makes the process run entirely automatic.
+exactly the correct configuration for building XCSoar, even if your main OS is not Linux,
+or you can not install the tools necessary on your main Linux OS due to 
+compatibility issues.
+
+The tool *Vagrant* together with the ''Vagrantfile'' provided in the XCSoar repository
+makes the process run entirely automatic.
 
 For this, you need to
+
 - Install ``VirtualBox`` on your machine
 - Install ``Vagrant``
 - Enter the directory ``ide/vagrant`` and execute::
   
-  vagrant up
+   vagrant up
 
 - Vagrant will now create a VM, install all required tools, and start the VM
   to run in the background
@@ -116,10 +222,10 @@ For this, you need to
 
    vagrant ssh
 
-- you can now build the source, for example the unix version:
+- you can now build the source, for example the unix version::
 
    cd xcsoar-src/
-   make TARGET=ANDROID
+   make TARGET=UNIX
 
 Importantly, *with this method a separate code directory and code git 
 repository (the "VM repository") exists within the virtual machine.* This is in addition to
@@ -145,8 +251,8 @@ configuration that is provided with xcsoar. In that configuration,
 the build inside the docker container directly accesses the host
 source directory, so only one copy of the code exists.
 
-Method 3: use docker containers
--------------------------------
+Docker containers for building XCSoar, Step-by-step
+---------------------------------------------------
 
 Instead of running a full virtual machine, you can also run your build 
 process and execute XCSoar in a Docker container. To help you set this
@@ -175,18 +281,48 @@ After this, you can start a build process inside the container, or
 open a shell inside the container. All of this is descirbed in the 
 ``README.md`` file in the ``ide/docker`` directory
 
-Setup guide for Windows systems
-===============================
+Detailed setup guides: Windows systems
+======================================
 
-Unless you want to work entirely in a virtual machine (method 3),
-you will want to have ``git`` installed in Windows in order to
-obtain (and keep updated) the source code on your machine in an efficient
-way.
+Since XCSoar can only be built with Liux tools, it is necessary to set up
+some type of Linux environment on a Windows machine. There are several ways
+to do this. The typical one is to use a VM manager software 
+(such as *VMware*, *VirtualBox* or *Hyper-V*)
+to create a virtual machine into which a Linux variant is installed.
+This system can then be booted like a regular computer, with the screen output
+in a window on the Windows desktop (or full screen of course). You can
+then use the Linux interface directly, and all the installation 
+guides for Linux, described above, apply.
 
+The small downside of using the virtual Linux machine is that 
+you have to switch between Windows and Linux usage, 
+and that you have to 
+maintain a complete Linux including the graphical user interface componenents. 
+It also requires using tools with different look-and-feel compared to
+your Windows programs. But if you are happy with 
+the Unix environment, and the user interface (UI) on the Linux desktop works well 
+for you, this is a good and robust way to do it.
 
-If you do not have it, download and install ``git`` from https://git-scm.com/download/win.
-Some graphical git clients such as ``Sourcetree`` already include a version of git.
+While that is basically the same as using a Linux machine, and therefore described by 
+the Linux part of this manual, it is also possible stay completely within the Windows
+uer interface, and use the Linux tools only for the build process.
 
+The following methods instead describe how to set up such "headless" build environments
+in Windows, which are more lightweight and do not require a full Linux desktop.
+These VMs are only used for the building process itself (and potentially for running 
+the build result in case of a UNIX build), and not for editing the code.
+
+In those cases, a ``git`` client is also needed (or at least highly recommended) 
+in the Windows OS,
+to be able to easily download and manage the source code files in the Windows 
+filesystem. The code can then be forwarded to, or accessed from, the Linux VM or container.
+
+Install git and get source code
+-------------------------------
+
+Download and install ``git`` from https://git-scm.com/download/win.
+Some graphical git clients such as ``Sourcetree`` already include a version of git,
+which is also fine.
 
 Also, at this point, in Windows, if this is your only use of git, you should consider 
 setting the option ``autocrlf`` to "input", and the option ``filemode`` to "false"::
@@ -234,13 +370,70 @@ you can now also change it locally (only for this new repository), with::
    git config core.filemode false
 
 
+Set up build environment in WSL2 (recommended)
+----------------------------------------------
 
-Windows method 1: virtual machine setup with Vagrant (recommended)
----------------------------------------------------------------------------
+The Windows Subsystem for Linux 2 (WSL2) is a very good way to run the linux build. It is
+basically a simpler way to run a Linux VM based on the Hyper-V platform that comes 
+with Windows, with a particularly good integration into Windows. WSL version 2 is necessary,
+which is available for Windows from Win 10 build number 18917 or later.
 
-Here we use the Vagrant tool, to automatically set up and configure a 
-virtual machine (VM) in VirtualBox (Other VM managers are also possible,
-but require more configuration of Vagrant). 
+Note: Hyper-V is required for WSL2, but not compatible with VirtualBox. According to Oracle 
+(maker of VirtualBox), you should not enable Hyper-V if you want to use VirtualBox.
+
+To set up the system for building XCSoar, you can follow these steps:
+
+- Enable Hyper-V and WSL 2 in "Windows Features"
+- In the Windows command shell, update WSL2 with ``wsl --update``, reboot computer if a WSL update was necessary
+- Create a Debian machine in WSL2 with ``wsl --install -d Debian``
+- Check if Debian is running properly: start ``wsl`` (or ``wsl -d Debian`` to select the Debian machine if you have more than one in your WSL)
+  You shold see a Debian command prompt, the linux command ``lsbrelease -a`` should show the Debian version
+
+Now install the necessary tools and libraries for building XCSoar, using the scripts provided::
+
+   sudo ide/provisioning/install_debian_packages.shared
+   
+- Now create a directory for the source code inside the WSL filesystem, do not use the mounted windows drives 
+(this will create problems, and also will be extremely slow).
+
+Now you can add the source code. You can either clone the repository fromn the source again, particularly if 
+you do not plan to make any changes, or you can clone it from the existing repository on your Windows host.
+Using the your local version is recommended if you plan to make changes to the code, as you can then push
+the changes back to the Windows host repository, where they will be safe in case you decide to re-create the Debian
+virtual machine. This can often be useful if you want to try out different configurations or setups, or simply
+if the XCSoar needs to be updated substantially.
+   
+To clone from the Windows host, you can use the following command::
+   
+         git clone --recursive /mnt/c/path/to/your/XCSoar/Code
+
+Assuming that your XCSOar code is located in the directory ``C:\path\to\your\XCSoar\Code`` on your Windows host machine.
+
+To clone the repository from XCSOar directly, use the same command as before, just inside the WSL2 instance::
+
+      git clone --recursive https://github.com/XCSoar/XCSoar
+
+Do not forget to set ''user.name''' and ''user.email'' in the WSL2 instance, as described above, if you want to
+contribute your changes back to the main XCSoar code base.
+
+Now you can build the code, for example for UNIX, with the following command::
+
+      make TARGET=UNIX
+
+This will build the UNIX version of XCSoar, which you should then be able to run inside the WSL2 instance directly, with::
+
+      ./output/UNIX/bin/xcsoar
+
+
+Windows: automatic build system setup with Vagrant
+--------------------------------------------------
+
+For a basically fully automatic setup of a virtual machine in Linux, MacOS or Windows,
+the Vagrant tool can be used very easily, as the necessary ''Vagrantfile'' for XCSoar is provided in the
+XCSoar repository.
+This uses the free Vagranbt tool and the free VirtualBox VM
+software from Oracle (Other VM managers are also possible, but require 
+manual configuration of Vagrant and the Vagrantfile). 
 
 Prerequisites
 ^^^^^^^^^^^^^
@@ -280,34 +473,33 @@ that requires more configuration, see below).
 To build the code e.g. for Android, run:
 
    cd xcsoar-src/
-   make -j 8 TARGET=ANDROID
+   make TARGET=ANDROID
 
-Here, the ``-j 8`` option tells ``make`` to run eight processes in parallel
-to speed up building the code.
 
-Do not lose your work!
-^^^^^^^^^^^^^^^^^^^^^^
+Transfer your code changes out of the VM
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Importantly, *with this method a separate code directory and code git 
-repository (the "VM repository") exists within the virtual machine.* This is in addition to
+Importantly, *with this method a separate code directory / repository 
+(the "VM repository") exists within the virtual machine.* This is in addition to
 the first repository (the "host repository") on the host machine,
 which you created in the beginning. The host repository is configured as 
 the upstream repository for the VM repository.
 
-Therefore, if you edit the code that is stored in the **host**
-machine native file system, you will first have to *push your changes into
-the host repository, and use git pull inside the
-VM to pull the changes* from the host repository to the VM repository. Only 
+You therefore need to to make sure that you transfer your code changes between
+these two locations as necessary. You can copy the files manually, or use git.
+
+If you edit the code that is stored in the **host**
+machine native file system, you can transfer using git by commiting your changes into
+the host repository, and then use ``git pull`` inside the
+VM to pull the changes from the host repository to the VM repository. Only 
 after this can you build the modified source inside the VM.
 
 Conversely, if you change the source code inside the **VM file system** (including
-via remote editing from a host IDE connecting into the VM), then you will need
-to *git commit and git push inside the VM* in order to commit the changes
-into the VM repository and then push the changes out of
-the virtual machine into the host repository. Otherwise you will lose the 
-changes once the VM is deleted or re-created for some reason.
+via a remote editing tool on the host but acting on the code inside the VM), you will need
+to *git commit* your code and then *git push* it there in order to push the changes out of
+the virtual machine into the host repository.
 
-This is different from the approach taken in the docker container 
+This is different from the approach taken in the *docker container* 
 configuration that is provided with xcsoar. In that configuration,
 the build inside the docker container directly accesses the host
 source directory, so only one copy of the code exists.
@@ -319,10 +511,11 @@ In order to run the UNIX version of xcsoar inside the container,
 you need to configure X11 forwarding from the VM to the host computer,
 and have an X11 server running.
 
-For this, install and run the ``VcXsrv`` X11-Server (or another X11-Server of your choice). It should show an 
+In the particular case of Windows, first install and run the ``VcXsrv`` X11-Server 
+(or another X11-Server of your choice). It should show an 
 "X"-Symbol in the taskbar.
 Next, inside your VM, make sure that X11 forwarding is configured correctly.
-Open the configuration file with::
+Open the SSHd configuration file with::
 
    sudo nano /etc/ssh/sshd_config
 
@@ -356,34 +549,16 @@ Build and start xcsoar (after successful build)::
 (Here, the ``-j 8`` option tells ``make`` to run eight processes in parallel).
 
 
+Windows with docker: use docker containers in WSL
+-------------------------------------------------
 
-Windows method 2: use a VM directly
------------------------------------
+The docker container solution provided for xcsoar can also be used in Windows
+in order to create an exact replica of the build environemtn used for the
+official builds.
 
-In this concept, simply use any VM manger such as VMware, VirtualBox
-or Hyper-V in order to create a virtual machine into which you install
-a Linux variant of your choice - preferably Debian or one of its many
-variants such as Ubuntu. In this case, you do not even need git or
-any other tool on the Windows host, only inside the VM.
-
-Once the OS is installed, start it and clone the xcsoar repository inside the VM.
-Then proceed as described before with the "direct installation" for Linux.
-
-After this, you use the Linux user interface as displayed by the VM software directly, 
-working on your code using Linux tools and commands.
-
-
-Windows method 3: use docker containers in WSL
-------------------------------------------------
-
-In principle, Windows provides the Windows Subsystem for Linux (WSL & WSL2),
-but it is not very straightforward to directly build XCSoar inside WSL.
-
-However, the docker container solution provided for xcsoar can be used using
-Docker Desktop for Windows in connection with WSL.
-
-For this, you need to make sure that WSL in installed in your Windows setup. 
-In addition you have to download and install Docker Desktop for Windows.
+For this, you need to make sure that WSL2 in installed in your Windows setup 
+(required Windows 11 or a recent enough version of Windows 10).
+In addition you have to download and install *Docker Desktop for Windows*.
 
 Enter the directory ide/docker and start a container, which gets configured 
 by the dockerfile.
@@ -392,28 +567,33 @@ by the dockerfile.
 Which method should I use?
 ==========================
 
-**If you use Linux as OS on your computer:** Consider still using Vagrant to
-create a dedicated VM for building XCSoar, to ensure all 
-library versions, Android tools and dependencies are set up to matche
-the current version of the source code (method 3), 
-or, alternatively, to use the preconfigured container for the same reason 
-(method 2).
+**If you use Linux as OS on your computer:** For highest performance 
+when building, directly configure your OS with the tools needed to 
+build XCSoar. 
 
-To obtain maximum performance in building the code and when working on the 
-code, you should use Linux directly (method 1). 
+You can  still consider using Vagrant to
+create a dedicated VM for building XCSoar, to make it easier to ensure all 
+library versions, Android tools and dependencies are set up to match
+the current version of the source code, without worrying about what
+else is installed on your computer.
 
 
-**If you use Windows as fundamental OS:** Unless you have special
-requirements or an unusual setup, using a virtual machine with
-Vagrant is probably the fastest and easiest to set up (Windows method 1).
+Alternatively, you can use the preconfigured container for this purpose, 
+particularly if you are already running a docker engine for other purposes. 
+This is the closest to the build environments used in the official builds, 
+and probably also the quickest to get running *if* you have a lot of disk space and 
+a fast internet connection.
 
-For maximum comptibility with additional (Linux-based) tools, or if you have 
-a lot of Linux knowledge, consider creating and using a VM 
-directly (method 2).
 
-If you are already using docker for other purposes, then using the docker 
-method might be most straightforward for you (method 3)
+**If you use Windows as fundamental OS:** The default way to build XCSoar is to
+use WSL2 for the Linux build environment, and then use a Windows IDE or Code editor
+with remote editing capabilities to edit the code that is located inside the WSL instance.
 
+Using Vagrant is the simplest and most convenient way to create (and manage)
+build environments, at the cost of the actual build being substantially slower.
+
+For maximum compatibility with the official version and to really be sure to have
+a correctly configured runtime environment, you can use the docker container method.
 
 Optional: Eclipse IDE
 =====================
