@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 05:19+0100\n"
+"POT-Creation-Date: 2025-12-11 18:55+0100\n"
 "PO-Revision-Date: 2022-10-02 06:15+0000\n"
 "Last-Translator: 山岭野兔 <bd8bin@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -557,7 +557,7 @@ msgstr "不盘转"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:136
 #: src/Dialogs/MapItemListDialog.cpp:158
 #: src/Dialogs/Airspace/dlgAirspace.cpp:144
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:134
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:133
 #: src/Dialogs/Airspace/AirspaceList.cpp:134
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:469
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:21
@@ -606,7 +606,7 @@ msgstr "高度计"
 #: src/Renderer/FlightStatisticsRenderer.cpp:226
 #: src/Renderer/FlightStatisticsRenderer.cpp:253
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:51
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:103
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:102
 #: src/Dialogs/Airspace/AirspaceList.cpp:448
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:115
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:75
@@ -1621,15 +1621,15 @@ msgstr "关机，保存任务。。。"
 msgid "Unable to open port"
 msgstr "端口不能打开"
 
-#: src/Device/Descriptor.cpp:1068 src/Device/Descriptor.cpp:1074
+#: src/Device/Descriptor.cpp:1092 src/Device/Descriptor.cpp:1098
 msgid "Sending declaration"
 msgstr "发送申报中"
 
-#: src/Device/Descriptor.cpp:1121 src/Device/Descriptor.cpp:1128
+#: src/Device/Descriptor.cpp:1145 src/Device/Descriptor.cpp:1152
 msgid "Reading flight list"
 msgstr "读取飞行列表中"
 
-#: src/Device/Descriptor.cpp:1152 src/Device/Descriptor.cpp:1159
+#: src/Device/Descriptor.cpp:1176 src/Device/Descriptor.cpp:1183
 msgid "Downloading flight log"
 msgstr "下载飞行记录中"
 
@@ -1965,7 +1965,7 @@ msgid "Debug"
 msgstr "调试"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:335
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:131
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:68
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:69
 msgid "Enable"
@@ -2481,7 +2481,7 @@ msgid "Static object"
 msgstr "静态对象"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:123
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:90
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:89
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:95
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:86
 #: src/Dialogs/Waypoint/WaypointList.cpp:386
@@ -2537,7 +2537,7 @@ msgid "Goto"
 msgstr "转到"
 
 #: src/Dialogs/MapItemListDialog.cpp:150
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:131
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
 msgid "Ack Day"
 msgstr "确认日"
 
@@ -2610,40 +2610,40 @@ msgstr "设置代码"
 msgid "Set Squawk Code"
 msgstr "设置代码"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:68
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:67
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:69
 msgid "Radio"
 msgstr "无线电"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:74
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:73
 msgid "Station"
 msgstr "定位"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:78
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:77
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:260
 #: src/Dialogs/Task/AlternatesListDialog.cpp:110
 msgid "Set Active Frequency"
 msgstr "设置有效频率"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:83
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:82
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:265
 #: src/Dialogs/Task/AlternatesListDialog.cpp:116
 msgid "Set Standby Frequency"
 msgstr "设置待机频率"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:89
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:88
 msgid "Class"
 msgstr "玻璃"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:93
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:92
 msgid "Top"
 msgstr "顶部"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:96
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:95
 msgid "Base"
 msgstr "底部"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:126
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:125
 msgid "Airspace Details"
 msgstr "详细空域"
 
@@ -7406,6 +7406,7 @@ msgstr ""
 "请帮助我们改善XCSoar！"
 
 #: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
+#: src/Dialogs/Weather/RASPDialog.cpp:135
 msgid "Now"
 msgstr "现在"
 
