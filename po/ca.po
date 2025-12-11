@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 05:19+0100\n"
+"POT-Creation-Date: 2025-12-11 18:55+0100\n"
 "PO-Revision-Date: 2023-09-14 19:50+0000\n"
 "Last-Translator: Jaume Prats <prats.jaume@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/xcsoar/"
@@ -588,7 +588,7 @@ msgstr "Sense girar en cercles"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:136
 #: src/Dialogs/MapItemListDialog.cpp:158
 #: src/Dialogs/Airspace/dlgAirspace.cpp:144
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:134
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:133
 #: src/Dialogs/Airspace/AirspaceList.cpp:134
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:469
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:21
@@ -637,7 +637,7 @@ msgstr "Vàrio"
 #: src/Renderer/FlightStatisticsRenderer.cpp:226
 #: src/Renderer/FlightStatisticsRenderer.cpp:253
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:51
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:103
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:102
 #: src/Dialogs/Airspace/AirspaceList.cpp:448
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:115
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:75
@@ -1680,15 +1680,15 @@ msgstr "Apagant, guardant tasca..."
 msgid "Unable to open port"
 msgstr "Impossible obrir port"
 
-#: src/Device/Descriptor.cpp:1068 src/Device/Descriptor.cpp:1074
+#: src/Device/Descriptor.cpp:1092 src/Device/Descriptor.cpp:1098
 msgid "Sending declaration"
 msgstr "Enviant declaració"
 
-#: src/Device/Descriptor.cpp:1121 src/Device/Descriptor.cpp:1128
+#: src/Device/Descriptor.cpp:1145 src/Device/Descriptor.cpp:1152
 msgid "Reading flight list"
 msgstr "Llegint llista de vols"
 
-#: src/Device/Descriptor.cpp:1152 src/Device/Descriptor.cpp:1159
+#: src/Device/Descriptor.cpp:1176 src/Device/Descriptor.cpp:1183
 msgid "Downloading flight log"
 msgstr "Descarregant registre de vols"
 
@@ -2031,7 +2031,7 @@ msgid "Debug"
 msgstr "Depurar"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:335
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:131
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:68
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:69
 msgid "Enable"
@@ -2547,7 +2547,7 @@ msgid "Static object"
 msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:123
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:90
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:89
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:95
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:86
 #: src/Dialogs/Waypoint/WaypointList.cpp:386
@@ -2603,7 +2603,7 @@ msgid "Goto"
 msgstr ""
 
 #: src/Dialogs/MapItemListDialog.cpp:150
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:131
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
 msgid "Ack Day"
 msgstr ""
 
@@ -2676,40 +2676,40 @@ msgstr ""
 msgid "Set Squawk Code"
 msgstr ""
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:68
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:67
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:69
 msgid "Radio"
 msgstr ""
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:74
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:73
 msgid "Station"
 msgstr "Registre"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:78
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:77
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:260
 #: src/Dialogs/Task/AlternatesListDialog.cpp:110
 msgid "Set Active Frequency"
 msgstr ""
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:83
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:82
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:265
 #: src/Dialogs/Task/AlternatesListDialog.cpp:116
 msgid "Set Standby Frequency"
 msgstr ""
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:89
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:88
 msgid "Class"
 msgstr ""
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:93
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:92
 msgid "Top"
 msgstr ""
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:96
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:95
 msgid "Base"
 msgstr ""
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:126
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:125
 msgid "Airspace Details"
 msgstr ""
 
@@ -7344,6 +7344,7 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
+#: src/Dialogs/Weather/RASPDialog.cpp:135
 msgid "Now"
 msgstr ""
 
