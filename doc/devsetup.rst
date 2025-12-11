@@ -335,6 +335,14 @@ following way in your project directory::
 
  git clone --recursive https://github.com/XCSoar/XCSoar
 
+If you did not configure ``autocrlf`` globally as suggested above, you should use
+the ``-c`` / ``--config`` options to set it for this repository specifically,
+already during initialization, as follows::
+   git -c core.autocrlf=input -c core.filemode=false clone --recursive https://github.com/XCSoar/XCSoar
+
+In this way you make sure that the line endings are correct already
+in the initial checkout, during the clone operation.
+
 Next, consider making sure that your name and contact are 
 set up correctly if you are considering to later provide your 
 work as contributions to the community by pushing to ``github``
@@ -362,12 +370,16 @@ This example will change the setting only for this repository.
 By adding the ``--global`` flag, you can set it for your
 global git installation.
 
-Also, if you did not change the global ``autocrlf`` setting,
+Also, if you did not change the global ``autocrlf`` and ``filemode`` settings,
 you can now also change it locally (only for this new repository), with::
 
    git config core.autocrlf input
    git config core.filemode false
 
+In that case you might have to re-checkout the files to get the correct
+line endings. For this, you can use::
+   git rm --cached -r .
+   git reset --hard
 
 Set up build environment in WSL2 (recommended)
 ----------------------------------------------
@@ -540,14 +552,7 @@ Then, re-start the SSH service::
 
    sudo systemctl restart ssh
 
-Now you can close the SSH session.
-In Windows, set the environment variable ``DISPLAY=localhost:0.0``, for
-example with::
-
-   set DISPLAY=localhost:0.0
-
-(Or set it globally in your Windows setup).
-Finally, you can start the SSH session into the VM again, with::
+Now you can close the SSH session, and restart with::
 
    vagrant ssh -- -X 
 
@@ -570,10 +575,26 @@ official builds.
 For this, you need to make sure that WSL2 is installed in your Windows setup 
 (requires Windows 11 or a recent enough version of Windows 10).
 In addition, you have to download and install *Docker Desktop for Windows*.
+After that, open a Windows shell and enter the source directory of XCSoar and
+make sure that the Docker Desktop is running.
 
-Enter the directory ``ide/docker`` and start a container, which gets configured 
-by the Dockerfile.
+To build the container from scratch on your machine, you need to run
+a build command with the provided Dockerfile, which you can also modify to
+suit your needs (execute from the ``XCSoar`` directory created by git)::
+   
+   docker build --file ide/docker/Dockerfile -t xcsoar/xcsoar-build:latest ./ide/
 
+You can then start a shell inside the container with the Powershell command::
+
+   docker run --mount type=bind,source=${pwd},target=/opt/xcsoar -it xcsoar/xcsoar-build:latest /bin/bash
+
+Alternatively, you can also download and start a pre-built image directly, which might
+be faster on a fast network. This is the command in Powershell::
+
+   docker run --mount type=bind,source=${pwd},target=/opt/xcsoar -it ghcr.io/xcsoar/xcsoar/xcsoar-build:latest /bin/bash
+
+Also see ``ide/docker/README.md`` for additional flags (e.g., X11) and for directly 
+building targets or running XCSoar in the container.
 
 Which method should I use?
 ==========================
@@ -597,11 +618,17 @@ a fast internet connection.
 
 
 **If you use Windows as fundamental OS:** The default way to build XCSoar is to
-use WSL2 for the Linux build environment, and then use a Windows IDE or Code editor
-with remote editing capabilities to edit the code that is located inside the WSL instance.
+use WSL2 for the Linux build environment, with the build performed inside the WSL2 instance.
 
-Using Vagrant is the simplest and most convenient way to create (and manage)
-build environments, at the cost of the actual build being substantially slower.
+The only downside of this is that for building inside WSL2, the code has to be
+located inside the WSL2 filesystem as described above. 
+But with using a Windows IDE or Code editor
+with remote editing capabilities you can then still conveniently edit and manage
+the code inside the WSL instance.
+
+Using Vagrant is an alternative and more convenient way to create (and manage)
+build environments and by default builds directly in the regular Windows filesystem,
+but at the cost of setting up Vagrant and of the actual build being substantially slower.
 
 For maximum compatibility with the official version and to really be sure to have
 a correctly configured runtime environment, you can use the docker container method.
@@ -609,7 +636,7 @@ a correctly configured runtime environment, you can use the docker container met
 Optional: Eclipse IDE
 =====================
 
-Another very widespread IDEs is eclipse. It is not limited to
+Another very widespread IDE is eclipse. It is not limited to
 Android, can be used for all targets, and will support C++ and Java 
 simultaneously. It is not required for XCSoar, but
 its installation is described here as an example. Eclipse is quite
