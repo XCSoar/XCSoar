@@ -247,7 +247,10 @@ jobs:
             brew
           path: |
             /opt/homebrew/var/cache
+            /opt/homebrew/var/homebrew/cache
             /usr/local/var/cache
+            /usr/local/var/homebrew/cache
+            /Users/runner/Library/Caches/Homebrew
 
       - name: "Cache Boost"
         uses: actions/cache@v4
