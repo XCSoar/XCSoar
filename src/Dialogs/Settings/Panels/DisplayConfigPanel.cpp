@@ -43,6 +43,7 @@
 enum ControlIndex {
   AppDisplayType,
   CustomDPI,
+  AntiAliasing,
   Orientation,
 #if defined(HAVE_DISPLAY_BRIGHTNESS_CONTROL)
   ScreenBrightness,
@@ -279,6 +280,23 @@ DisplayConfigPanel::Prepare(ContainerWindow &parent,
   wp_dpi->RefreshDisplay();
   SetExpertRow(CustomDPI);
 
+  WndProperty *wp_antialiasing =
+    AddEnum(_("Anti-aliasing"),
+            _("Multi-sample anti-aliasing for smoother graphics. "
+              "Higher values improve quality but may reduce "
+              "performance. Takes effect after restarting XCSoar."));
+  if (wp_antialiasing != nullptr) {
+    DataFieldEnum &df = *(DataFieldEnum *)wp_antialiasing->GetDataField();
+    df.AddChoice(0, _("Off"));
+    df.AddChoice(2, _("2x"));
+    df.AddChoice(4, _("4x"));
+    df.AddChoice(8, _("8x"));
+    df.AddChoice(16, _("16x"));
+    df.SetValue(ui_settings.antialiasing);
+    wp_antialiasing->RefreshDisplay();
+  }
+  SetExpertRow(AntiAliasing);
+
   if (Display::RotateSupported())
     AddEnum(_("Display orientation"),
             _("Rotate the display on devices that support it."),
@@ -362,6 +380,10 @@ DisplayConfigPanel::Save(bool &_changed) noexcept
       CommonInterface::main_window->ReinitialiseLayout();
     }
   }
+
+  if (SaveValueEnum(AntiAliasing, ProfileKeys::AntiAliasing,
+                    ui_settings.antialiasing))
+    changed = true;
 
   if (Display::RotateSupported() &&
       SaveValueEnum(Orientation, ProfileKeys::MapOrientation,
