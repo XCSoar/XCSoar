@@ -31,6 +31,9 @@ struct UISettings {
   /** Override OS dpi settings */
   unsigned custom_dpi;
 
+  /** Anti-aliasing (MSAA) samples: 0=off, 2, 4, 8, 16 */
+  unsigned antialiasing;
+
   /** Position ThermalAssistant */
   enum class ThermalAssistantPosition: uint8_t {
     OFF,

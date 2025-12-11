@@ -23,6 +23,7 @@ using namespace std::chrono;
 enum ControlIndex {
   UIScale,
   CustomDPI,
+  AntiAliasing,
   InputFile,
 #ifdef HAVE_NLS
   LanguageFile,
@@ -94,6 +95,21 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
     wp_dpi->RefreshDisplay();
   }
   SetExpertRow(CustomDPI);
+
+  WndProperty *wp_antialiasing = AddEnum(_("Anti-aliasing"),
+                                 _("Multi-sample anti-aliasing for smoother graphics. "
+                                   "Higher values improve quality but may reduce performance."));
+  if (wp_antialiasing != nullptr) {
+    DataFieldEnum &df = *(DataFieldEnum *)wp_antialiasing->GetDataField();
+    df.AddChoice(0, _("Off"));
+    df.AddChoice(2, _T("2x"));
+    df.AddChoice(4, _T("4x"));
+    df.AddChoice(8, _T("8x"));
+    df.AddChoice(16, _T("16x"));
+    df.SetValue(settings.antialiasing);
+    wp_antialiasing->RefreshDisplay();
+  }
+  SetExpertRow(AntiAliasing);
 
   AddFile(_("Events"),
           _("The Input Events file defines the menu system and how XCSoar responds to "
@@ -193,6 +209,10 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
 
   if (SaveValueEnum(CustomDPI, ProfileKeys::CustomDPI,
                     settings.custom_dpi))
+    require_restart = changed = true;
+
+  if (SaveValueEnum(AntiAliasing, ProfileKeys::AntiAliasing,
+                    settings.antialiasing))
     require_restart = changed = true;
 
   if (SaveValueFileReader(InputFile, ProfileKeys::InputFile))

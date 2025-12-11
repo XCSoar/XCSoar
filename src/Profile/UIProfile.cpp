@@ -114,6 +114,12 @@ Profile::Load(const ProfileMap &map, UISettings &settings)
   if (settings.custom_dpi < 120 || settings.custom_dpi > 520)
     settings.custom_dpi = 0;
 
+  map.Get(ProfileKeys::AntiAliasing, settings.antialiasing);
+  if (settings.antialiasing != 0 && settings.antialiasing != 2 &&
+      settings.antialiasing != 4 && settings.antialiasing != 8 &&
+      settings.antialiasing != 16)
+    settings.antialiasing = 0;
+
   /* Migrate old data if TA enabled */
   if (!map.GetEnum(ProfileKeys::TAPosition, settings.thermal_assistant_position)) {
     bool enable_thermal_assistant_gauge_obsolete;
