@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 05:19+0100\n"
+"POT-Creation-Date: 2025-12-11 14:46+0000\n"
 "PO-Revision-Date: 2021-07-20 10:35+0000\n"
 "Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/xcsoar/"
@@ -181,8 +181,8 @@ msgid ""
 "A 90-degree sector with 'infinite' length sides. Cross any edge, scored from "
 "corner point."
 msgstr ""
-"90stopniowy sektor z nieskończonymi bokami. Przekrocz dowolną "
-"krawędź,punktowane od narożnika."
+"90stopniowy sektor z nieskończonymi bokami. Przekrocz dowolną krawędź,"
+"punktowane od narożnika."
 
 #: src/Task/TypeStrings.cpp:61
 #, no-c-format
@@ -590,7 +590,7 @@ msgstr "Nie krążysz"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:136
 #: src/Dialogs/MapItemListDialog.cpp:158
 #: src/Dialogs/Airspace/dlgAirspace.cpp:144
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:134
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:133
 #: src/Dialogs/Airspace/AirspaceList.cpp:134
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:469
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:21
@@ -639,7 +639,7 @@ msgstr "Wariometr"
 #: src/Renderer/FlightStatisticsRenderer.cpp:226
 #: src/Renderer/FlightStatisticsRenderer.cpp:253
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:51
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:103
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:102
 #: src/Dialogs/Airspace/AirspaceList.cpp:448
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:115
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:75
@@ -1680,15 +1680,15 @@ msgstr "Kończenie, zapisywanie trasy..."
 msgid "Unable to open port"
 msgstr "Nie można otworzyć portu."
 
-#: src/Device/Descriptor.cpp:1068 src/Device/Descriptor.cpp:1074
+#: src/Device/Descriptor.cpp:1092 src/Device/Descriptor.cpp:1098
 msgid "Sending declaration"
 msgstr "Wysyłanie deklaracji"
 
-#: src/Device/Descriptor.cpp:1121 src/Device/Descriptor.cpp:1128
+#: src/Device/Descriptor.cpp:1145 src/Device/Descriptor.cpp:1152
 msgid "Reading flight list"
 msgstr "Odczyt listy plików"
 
-#: src/Device/Descriptor.cpp:1152 src/Device/Descriptor.cpp:1159
+#: src/Device/Descriptor.cpp:1176 src/Device/Descriptor.cpp:1183
 msgid "Downloading flight log"
 msgstr "Ściąganie \"log'a\" lotu."
 
@@ -2034,7 +2034,7 @@ msgid "Debug"
 msgstr "Diagnostyka"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:335
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:131
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:68
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:69
 msgid "Enable"
@@ -2556,7 +2556,7 @@ msgid "Static object"
 msgstr "Obiekt statyczny"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:123
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:90
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:89
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:95
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:86
 #: src/Dialogs/Waypoint/WaypointList.cpp:386
@@ -2612,7 +2612,7 @@ msgid "Goto"
 msgstr "Leć do"
 
 #: src/Dialogs/MapItemListDialog.cpp:150
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:131
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
 msgid "Ack Day"
 msgstr "Dziś OK"
 
@@ -2689,40 +2689,40 @@ msgstr "Ustaw kod"
 msgid "Set Squawk Code"
 msgstr "Ustaw kod"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:68
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:67
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:69
 msgid "Radio"
 msgstr "Radio"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:74
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:73
 msgid "Station"
 msgstr "Lokalizacja"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:78
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:77
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:260
 #: src/Dialogs/Task/AlternatesListDialog.cpp:110
 msgid "Set Active Frequency"
 msgstr "Ustaw używaną częstotliwość"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:83
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:82
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:265
 #: src/Dialogs/Task/AlternatesListDialog.cpp:116
 msgid "Set Standby Frequency"
 msgstr "Ustaw częstotliwość oczekującą"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:89
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:88
 msgid "Class"
 msgstr "Szkło"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:93
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:92
 msgid "Top"
 msgstr "Wys.maks."
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:96
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:95
 msgid "Base"
 msgstr "Wys.min."
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:126
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:125
 msgid "Airspace Details"
 msgstr "Informacje o Strefie Przestrzeni Pow."
 
@@ -3557,8 +3557,8 @@ msgstr "Plik"
 
 #: src/Dialogs/ReplayDialog.cpp:50
 msgid ""
-"Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file "
-"(.nmea). Leave blank to run the demo."
+"Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file (."
+"nmea). Leave blank to run the demo."
 msgstr ""
 "Nazwa pliku do odtworzenia. Może to być plik w formacie IGC(.igc), dane "
 "NMEA(.nmea), a jeśli pozostawisz puste, zostanie uruchomiony tryb demo."
@@ -5848,8 +5848,8 @@ msgid ""
 "Primary waypoints files.  Supported file types are Cambridge/WinPilot files "
 "(.dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
-"Główny plik punktów tras. Wspierane typy plików to: Cambridge/WinPilot "
-"(.dat), pliki Zander(.wpz) lub SeeYou(.cup)"
+"Główny plik punktów tras. Wspierane typy plików to: Cambridge/WinPilot (."
+"dat), pliki Zander(.wpz) lub SeeYou(.cup)"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:60
 msgid "Watched waypoints"
@@ -5864,8 +5864,8 @@ msgid ""
 msgstr ""
 "Plik punktów tras zawierający specjalne punkty dla których zawsze mają "
 "miejsce dodatkowe obliczenia takie jak  wysokość przybycia na wyświetlaczu "
-"mapy. Użyteczne dla punktów trasy takich jak znane pewne źródła termiki "
-"(np.elektrownie) lub przełęcze górskie."
+"mapy. Użyteczne dla punktów trasy takich jak znane pewne źródła termiki (np."
+"elektrownie) lub przełęcze górskie."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:71
 #, fuzzy
@@ -5888,8 +5888,8 @@ msgstr "Wybierz Strefę"
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:80
 msgid ""
 "List of active airspace files. Use the Add and Remove buttons to activate or "
-"deactivate airspace files respectively. Supported file types are: Openair "
-"(.txt /.air), and Tim Newport-Pearce (.sua)."
+"deactivate airspace files respectively. Supported file types are: Openair (."
+"txt /.air), and Tim Newport-Pearce (.sua)."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:87
@@ -7162,8 +7162,8 @@ msgstr "Pobierz i wyświetlaj pozycje kominów zarejestrowanych przez innych."
 
 #: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:67
 msgid ""
-"Show thermal locations downloaded from Thermal Information Map "
-"(thermalmap.info)."
+"Show thermal locations downloaded from Thermal Information Map (thermalmap."
+"info)."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:70
@@ -7586,8 +7586,8 @@ msgid ""
 "values rotate the range line counterclockwise."
 msgstr ""
 "W zadaniu AAT tę wartość można użyć do wskazania puntów docelowych w "
-"sektorze AAT. Wartości dodatnie obracają linię zasięgu w kierunku "
-"wsk.zegara, ujemne w kierunku przeciwnym do kierunku ruchu wskazówek zegara."
+"sektorze AAT. Wartości dodatnie obracają linię zasięgu w kierunku wsk."
+"zegara, ujemne w kierunku przeciwnym do kierunku ruchu wskazówek zegara."
 
 #: src/Dialogs/Task/TargetDialog.cpp:372
 msgid "ETE"
@@ -7658,6 +7658,7 @@ msgstr ""
 "Pomóż nam proszę udoskonalać XCSoar!"
 
 #: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
+#: src/Dialogs/Weather/RASPDialog.cpp:135
 msgid "Now"
 msgstr "Teraz"
 
@@ -10156,7 +10157,7 @@ msgstr ""
 "uwzgl. zapasu bezpieczeństwa dHbezp przy nastawie MacCready'ego MC Ustaw."
 
 #: src/InfoBoxes/Content/Alternate.cpp:58
-#, fuzzy, c++-format
+#, fuzzy
 msgid "Altn {}"
 msgstr "Lądow.1"
 
@@ -11510,8 +11511,8 @@ msgstr "XCSoar"
 #~ "Select your PNA model to make full use of its hardware capabilities. If "
 #~ "it is not included, use Generic type."
 #~ msgstr ""
-#~ "Określ model swojego PNA aby w pełni wykorzystać możliwości "
-#~ "hardware.Jeśli nie jest wymieniony użyj GENERIC TYPE."
+#~ "Określ model swojego PNA aby w pełni wykorzystać możliwości hardware."
+#~ "Jeśli nie jest wymieniony użyj GENERIC TYPE."
 
 #~ msgid "Auto. blank"
 #~ msgstr "Wymazanie automatyczne"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 05:19+0100\n"
+"POT-Creation-Date: 2025-12-11 14:46+0000\n"
 "PO-Revision-Date: 2021-07-20 10:35+0000\n"
 "Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/xcsoar/"
@@ -589,7 +589,7 @@ msgstr "Nekrúži sa"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:136
 #: src/Dialogs/MapItemListDialog.cpp:158
 #: src/Dialogs/Airspace/dlgAirspace.cpp:144
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:134
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:133
 #: src/Dialogs/Airspace/AirspaceList.cpp:134
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:469
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:21
@@ -638,7 +638,7 @@ msgstr "Vário"
 #: src/Renderer/FlightStatisticsRenderer.cpp:226
 #: src/Renderer/FlightStatisticsRenderer.cpp:253
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:51
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:103
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:102
 #: src/Dialogs/Airspace/AirspaceList.cpp:448
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:115
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:75
@@ -1676,15 +1676,15 @@ msgstr "Vypínanie, ukladanie úlohy..."
 msgid "Unable to open port"
 msgstr "Nemôžem otvoriť port"
 
-#: src/Device/Descriptor.cpp:1068 src/Device/Descriptor.cpp:1074
+#: src/Device/Descriptor.cpp:1092 src/Device/Descriptor.cpp:1098
 msgid "Sending declaration"
 msgstr "Posielam deklaráciu"
 
-#: src/Device/Descriptor.cpp:1121 src/Device/Descriptor.cpp:1128
+#: src/Device/Descriptor.cpp:1145 src/Device/Descriptor.cpp:1152
 msgid "Reading flight list"
 msgstr "Načítavam zoznam letov"
 
-#: src/Device/Descriptor.cpp:1152 src/Device/Descriptor.cpp:1159
+#: src/Device/Descriptor.cpp:1176 src/Device/Descriptor.cpp:1183
 msgid "Downloading flight log"
 msgstr "Sťahujem záznam letu"
 
@@ -2027,7 +2027,7 @@ msgid "Debug"
 msgstr "Ladiť"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:335
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:131
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:68
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:69
 msgid "Enable"
@@ -2546,7 +2546,7 @@ msgid "Static object"
 msgstr "Statický objekt"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:123
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:90
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:89
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:95
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:86
 #: src/Dialogs/Waypoint/WaypointList.cpp:386
@@ -2602,7 +2602,7 @@ msgid "Goto"
 msgstr "Navig. na"
 
 #: src/Dialogs/MapItemListDialog.cpp:150
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:131
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
 msgid "Ack Day"
 msgstr "Potvrď dnes"
 
@@ -2678,40 +2678,40 @@ msgstr "Nastavenie kódu"
 msgid "Set Squawk Code"
 msgstr "Nastav kód kolegu"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:68
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:67
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:69
 msgid "Radio"
 msgstr "Vysielačka"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:74
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:73
 msgid "Station"
 msgstr "Poloha"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:78
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:77
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:260
 #: src/Dialogs/Task/AlternatesListDialog.cpp:110
 msgid "Set Active Frequency"
 msgstr "Nastav aktívnu frekvenciu"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:83
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:82
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:265
 #: src/Dialogs/Task/AlternatesListDialog.cpp:116
 msgid "Set Standby Frequency"
 msgstr "Nastav pohotovostnú frekvenciu"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:89
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:88
 msgid "Class"
 msgstr "Sklo"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:93
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:92
 msgid "Top"
 msgstr "Hore"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:96
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:95
 msgid "Base"
 msgstr "Základňa"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:126
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:125
 msgid "Airspace Details"
 msgstr "Podrobnosti vzdušného priestoru"
 
@@ -3541,8 +3541,8 @@ msgstr "Súbor"
 
 #: src/Dialogs/ReplayDialog.cpp:50
 msgid ""
-"Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file "
-"(.nmea). Leave blank to run the demo."
+"Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file (."
+"nmea). Leave blank to run the demo."
 msgstr ""
 "Názov súboru na prehranie. Môže to byť IGS súbor (.igc), raw NMEA záznamový "
 "súbor (.nmea), alebo ak ostane prázdne spustí demo."
@@ -5854,8 +5854,8 @@ msgstr "Zvoľte vzdušný priestor"
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:80
 msgid ""
 "List of active airspace files. Use the Add and Remove buttons to activate or "
-"deactivate airspace files respectively. Supported file types are: Openair "
-"(.txt /.air), and Tim Newport-Pearce (.sua)."
+"deactivate airspace files respectively. Supported file types are: Openair (."
+"txt /.air), and Tim Newport-Pearce (.sua)."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:87
@@ -7129,8 +7129,8 @@ msgstr "Získaj a ukáž polohu stupákov hlásených inými."
 
 #: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:67
 msgid ""
-"Show thermal locations downloaded from Thermal Information Map "
-"(thermalmap.info)."
+"Show thermal locations downloaded from Thermal Information Map (thermalmap."
+"info)."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:70
@@ -7623,6 +7623,7 @@ msgstr ""
 "Pomôž nám zlepšiť XCSoar, prosím!"
 
 #: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
+#: src/Dialogs/Weather/RASPDialog.cpp:135
 msgid "Now"
 msgstr "Teraz"
 
@@ -10055,7 +10056,7 @@ msgstr ""
 "výške."
 
 #: src/InfoBoxes/Content/Alternate.cpp:58
-#, fuzzy, c++-format
+#, fuzzy
 msgid "Altn {}"
 msgstr "Alt. 1"
 
@@ -10665,8 +10666,8 @@ msgid ""
 "connector X2. If Vega is connected to Altair, set this to Off."
 msgstr ""
 "Povolí výstup napätia +5V pre PDA a pod. na Vega konektore~X2. Ak je Vega "
-"pripojená k Altair-u, mala by byť táto voľba nastavená na \"NEPLATÍ\" "
-"(FALSE)."
+"pripojená k Altair-u, mala by byť táto voľba nastavená na "
+"\"NEPLATÍ\" (FALSE)."
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:11
 #, no-c-format
@@ -11578,8 +11579,8 @@ msgstr ""
 #~ "long IGC file name. Example short name (81HXABC1.IGC), long name "
 #~ "(2008-01-18-XXX-ABC-01.IGC)."
 #~ msgstr ""
-#~ "Toto určuje dĺžku pomenovania IGC súboru. Vzor krátkeho názvu "
-#~ "(81HXABC1.IGC), dlhý názov (2008-01-18-XXX-ABC-01.IGC)."
+#~ "Toto určuje dĺžku pomenovania IGC súboru. Vzor krátkeho názvu (81HXABC1."
+#~ "IGC), dlhý názov (2008-01-18-XXX-ABC-01.IGC)."
 
 #~ msgid ""
 #~ "Sample Text\n"
@@ -13128,8 +13129,8 @@ msgstr ""
 #~ "Vega is connected to Altair, this should be set to FALSE."
 #~ msgstr ""
 #~ "Povolí výstup napätia +5V pre PDA a pod. na Vega konektore~X2. Ak je Vega "
-#~ "pripojená k Altair-u, mala by byť táto voľba nastavená na \"NEPLATÍ\" "
-#~ "(FALSE)"
+#~ "pripojená k Altair-u, mala by byť táto voľba nastavená na "
+#~ "\"NEPLATÍ\" (FALSE)"
 
 #~ msgid ""
 #~ "This is the minimum interval between the system recognising key presses. "
