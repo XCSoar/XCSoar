@@ -384,17 +384,27 @@ To set up the system for building XCSoar, you can follow these steps:
 
 - Enable Hyper-V and WSL 2 in "Windows Features".
 - In the Windows command shell, update WSL2 with ``wsl --update``. Reboot your computer if a WSL update was necessary.
-- Create a Debian machine in WSL2 with ``wsl --install -d Debian``.
+- Create a Debian machine in WSL2 with ``wsl --install -d Debian``. After install, Debian will be started automatically.
 - Check if Debian is running properly: start ``wsl`` (or ``wsl -d Debian`` to select the Debian machine if you have more than one in your WSL).
-  You should see a Debian command prompt; the Linux command ``lsb_release -a`` should show the Debian version.
+  You should see a Debian command prompt; the Linux command ``cat /etc/*-release`` should show the Debian version.
 
-Now install the necessary tools and libraries for building XCSoar, using the scripts provided::
+- Install the necessary tools and libraries for building XCSoar, using the scripts provided::
 
-   sudo ide/provisioning/install-debian-packages.sh
+   sudo /mnt/c/path/to/your/XCSoar/Code/ide/provisioning/install-debian-packages.sh
 
-- Now create a directory for the source code inside the WSL filesystem. Do not use the mounted Windows drives (this will create problems and will be extremely slow).
+- To also be able to build for Android, run (without ``sudo``!)::
 
-Now you can add the source code. You can either clone the repository from the source again, particularly if 
+   /mnt/c/path/to/your/XCSoar/Code/ide/provisioning/install-android-tools.sh
+
+- Next, create a directory for the source code inside the WSL filesystem. For this, first change into your 
+  user directory by executing ``cd`` and create the directory there, do not use a path in the mounted
+  Windows drives such as ``/mnt/c/...``, which is the default (this would create problems and would be extremely slow)::
+
+   cd
+   mkdir XCSoar
+   cd XCSoar
+
+Now you can add the source code here. You can either clone the repository from the source again, particularly if 
 you do not plan to make any changes, or you can clone it from the existing repository on your Windows host.
 Using your local version is recommended if you plan to make changes to the code, as you can then push
 the changes back to the Windows host repository, where they will be safe in case you decide to re-create the Debian
@@ -406,12 +416,17 @@ To clone from the Windows host, you can use the following command::
    git clone --recursive /mnt/c/path/to/your/XCSoar/Code
 
 (Assuming that your XCSoar code is located in the directory ``C:\path\to\your\XCSoar\Code`` on your Windows host machine.)
+It is likely that, on the first attempt an error of the sort "dubious ownership detected" will occur. In this case, you first
+have to run the command that will be suggested by git which should look similar to this::
+   git config --global --add safe.directory /mnt/c/path/to/your/XCSoar/Code
 
-To clone the repository from XCSoar directly, use the same command as before, just inside the WSL2 instance::
+After this, re-run the ``git clone`` command above.
+
+To instead clone the repository from XCSoar directly, use the same command as before, just inside the WSL2 instance::
 
    git clone --recursive https://github.com/XCSoar/XCSoar
 
-Do not forget to set ``user.name`` and ``user.email`` in the WSL2 instance, as described above, if you want to
+Do not forget to set ``user.name`` and ``user.email`` in the WSL2 instance, as described above, especially if you want to
 contribute your changes back to the main XCSoar code base.
 
 Now you can build the code, for example for UNIX, with the following command::
