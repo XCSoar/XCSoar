@@ -14,6 +14,8 @@ UISettings::SetDefaults() noexcept
 
   custom_dpi = 0;  // automatic
 
+  antialiasing = 0;  // off
+
   thermal_assistant_position = ThermalAssistantPosition::BOTTOM_LEFT_AVOID_IB;
 
   enable_airspace_warning_dialog = true;
