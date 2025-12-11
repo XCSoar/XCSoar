@@ -32,7 +32,7 @@ Build on a Windows computer (WSL2)
 ==================================
 
 Windows Subsystem for Linux 2 (WSL2) works well as a tool to run the linux build
-environment without booting the enitire machine into Linux. 
+environment without booting the entire machine into Linux. 
 For this, set up a WSL2 instance with Debian as guest OS. Once it is running,
 you can follow the instructions for Linux inside the WSL2 instance to
 install all the tools and libraries.
@@ -59,7 +59,7 @@ Vagrant build system setup
 ==========================
 
 Vagrant is a tool to set up and manage virtual machines (VMs) that can be used 
-for bulding the code. In the repository, a Vagrantfile is provided which sets up a VM
+for building the code. In the repository, a Vagrantfile is provided which sets up a VM
 with all necessary tools and libraries.
 This is a very convenient way to create and destroy build environments, particularly 
 if you need to create new "fresh" virtual machines regularly. It is available for
@@ -85,7 +85,7 @@ disable Hyper-V in the Windows features. However, Hyper-V is required for WSL2, 
 choose between using Vagrant with VirtualBox or using WSL2 for development, or to edit the Vagrantfile 
 to use Hyper-V as the VM manager.
 
-Currently (Oct 2024) testing shows that WSL2 is much faster for building XCSoar than 
+Currently (Oct 2024) testing shows that WSL2 builds much faster than 
 VirtualBox on Windows.
 
 For more details and step-by-step instructions on using Vagrant, see "`Vagrant for automatic virtual machine setup`_",
@@ -171,7 +171,7 @@ you can now also change it locally (only for this new repository), with::
    git config core.filemode false
 
 Set up standard build environment in Linux
------------------------------------------
+------------------------------------------
 
 This will set up the environment for building XCSoar in a typical Linux
 environment. This can either be the computer directly running Linux as the OS
@@ -391,12 +391,11 @@ To set up the system for building XCSoar, you can follow these steps:
 
 Now install the necessary tools and libraries for building XCSoar, using the scripts provided::
 
-   sudo ide/provisioning/install_debian_packages.shared
+   sudo ide/provisioning/install-debian-packages.sh
    
-- Now create a directory for the source code inside the WSL filesystem, do not use the mounted windows drives 
-(this will create problems, and also will be extremely slow).
+- Now create a directory for the source code inside the WSL filesystem, do not use the mounted windows drives (this will create problems, and also will be extremely slow).
 
-Now you can add the source code. You can either clone the repository fromn the source again, particularly if 
+Now you can add the source code. You can either clone the repository from the source again, particularly if 
 you do not plan to make any changes, or you can clone it from the existing repository on your Windows host.
 Using the your local version is recommended if you plan to make changes to the code, as you can then push
 the changes back to the Windows host repository, where they will be safe in case you decide to re-create the Debian
@@ -407,9 +406,9 @@ To clone from the Windows host, you can use the following command::
    
          git clone --recursive /mnt/c/path/to/your/XCSoar/Code
 
-Assuming that your XCSOar code is located in the directory ``C:\path\to\your\XCSoar\Code`` on your Windows host machine.
+Assuming that your XCSoar code is located in the directory ``C:\path\to\your\XCSoar\Code`` on your Windows host machine.
 
-To clone the repository from XCSOar directly, use the same command as before, just inside the WSL2 instance::
+To clone the repository from XCSoar directly, use the same command as before, just inside the WSL2 instance::
 
       git clone --recursive https://github.com/XCSoar/XCSoar
 
@@ -431,7 +430,7 @@ Windows: automatic build system setup with Vagrant
 For a basically fully automatic setup of a virtual machine in Linux, MacOS or Windows,
 the Vagrant tool can be used very easily, as the necessary ''Vagrantfile'' for XCSoar is provided in the
 XCSoar repository.
-This uses the free Vagranbt tool and the free VirtualBox VM
+This uses the free Vagrant tool and the free VirtualBox VM
 software from Oracle (Other VM managers are also possible, but require 
 manual configuration of Vagrant and the Vagrantfile). 
 
@@ -557,7 +556,7 @@ in order to create an exact replica of the build environemtn used for the
 official builds.
 
 For this, you need to make sure that WSL2 in installed in your Windows setup 
-(required Windows 11 or a recent enough version of Windows 10).
+(requires Windows 11 or a recent enough version of Windows 10).
 In addition you have to download and install *Docker Desktop for Windows*.
 
 Enter the directory ide/docker and start a container, which gets configured 
