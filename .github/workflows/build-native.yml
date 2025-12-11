@@ -209,10 +209,22 @@ jobs:
       - name: Show ccache stats
         run: ccache --show-stats || true
 
-      - name: "Cache downloads"
+      - name: "Cache common downloads"
         uses: actions/cache@v4
         with:
-          key: downloads-${{ runner.os }}
+          key: downloads-common-${{ runner.os }}-${{ hashFiles('build/libboost.mk') }}
+          restore-keys: |
+            downloads-common-${{ runner.os }}-
+          path: ${{ github.workspace }}/output/download
+
+      - name: "Cache target-specific downloads"
+        uses: actions/cache@v4
+        with:
+          key: downloads-${{ runner.os }}-${{ matrix.target }}-${{ hashFiles('build/kobo.mk', 'build/thirdparty.py', 'build/python/build/libs.py') }}
+          restore-keys: |
+            downloads-${{ runner.os }}-${{ matrix.target }}-
+            downloads-${{ runner.os }}-
+            downloads-common-${{ runner.os }}-
           path: ${{ github.workspace }}/output/download
 
       - name: "Cache apt packages"
