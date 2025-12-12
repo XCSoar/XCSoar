@@ -52,10 +52,17 @@ InputEvents::eventArmAdvance(const TCHAR *misc)
 
   if (StringIsEqual(misc, _T("on"))) {
     advance.SetArmed(true);
+    Message::AddMessage(_("Armed start activated"));
   } else if (StringIsEqual(misc, _T("off"))) {
     advance.SetArmed(false);
   } else if (StringIsEqual(misc, _T("toggle"))) {
+    const bool was_armed = advance.GetState() == TaskAdvance::START_ARMED ||
+                           advance.GetState() == TaskAdvance::TURN_ARMED;
     advance.ToggleArmed();
+    const bool is_armed = advance.GetState() == TaskAdvance::START_ARMED ||
+                          advance.GetState() == TaskAdvance::TURN_ARMED;
+    if (is_armed && !was_armed)
+      Message::AddMessage(_("Armed start activated"));
   } else if (StringIsEqual(misc, _T("show"))) {
     switch (advance.GetState()) {
     case TaskAdvance::MANUAL:
@@ -200,11 +207,13 @@ InputEvents::eventAbortTask(const TCHAR *misc)
 
   ProtectedTaskManager::ExclusiveLease task_manager{*backend_components->protected_task_manager};
 
-  if (StringIsEqual(misc, _T("abort")))
+  if (StringIsEqual(misc, _T("abort"))) {
     task_manager->Abort();
-  else if (StringIsEqual(misc, _T("resume")))
+    Message::AddMessage(_("Task aborted"));
+  } else if (StringIsEqual(misc, _T("resume"))) {
     task_manager->Resume();
-  else if (StringIsEqual(misc, _T("show"))) {
+    Message::AddMessage(_("Task resumed"));
+  } else if (StringIsEqual(misc, _T("show"))) {
     switch (task_manager->GetMode()) {
     case TaskType::ABORT:
       Message::AddMessage(_("Task aborted"));
@@ -224,16 +233,20 @@ InputEvents::eventAbortTask(const TCHAR *misc)
     case TaskType::NONE:
     case TaskType::ORDERED:
       task_manager->Abort();
+      Message::AddMessage(_("Task aborted"));
       break;
     case TaskType::GOTO:
       if (task_manager->CheckOrderedTask()) {
         task_manager->Resume();
+        Message::AddMessage(_("Task resumed"));
       } else {
         task_manager->Abort();
+        Message::AddMessage(_("Task aborted"));
       }
       break;
     case TaskType::ABORT:
       task_manager->Resume();
+      Message::AddMessage(_("Task resumed"));
       break;
     }
   }

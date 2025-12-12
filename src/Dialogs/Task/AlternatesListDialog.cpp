@@ -17,6 +17,7 @@
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Language/Language.hpp"
 #include "ActionInterface.hpp"
+#include "Message.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 
@@ -148,9 +149,11 @@ dlgAlternatesListShowModal(Waypoints *waypoints) noexcept
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
 
   auto widget = std::make_unique<AlternatesListWidget>(dialog_look);
-  if (!widget->Update())
+  if (!widget->Update()) {
     /* no alternates: don't show the dialog */
+    Message::AddMessage(_("No alternates available"));
     return;
+  }
 
   TWidgetDialog<AlternatesListWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),

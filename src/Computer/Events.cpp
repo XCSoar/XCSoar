@@ -6,6 +6,8 @@
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Settings.hpp"
+#include "Message.hpp"
+#include "Language/Language.hpp"
 
 void
 GlideComputerEvents::Reset()
@@ -83,6 +85,9 @@ GlideComputerEvents::OnCalculatedUpdate(const MoreData &basic,
   const bool final_glide = calculated.task_stats.flight_mode_final_glide;
   if (final_glide != last_final_glide) {
     last_final_glide = final_glide;
+
+    if (final_glide)
+      Message::AddMessage(_("Final Glide mode activated"));
 
     InputEvents::processGlideComputer(final_glide
                                       ? GCE_FLIGHTMODE_FINALGLIDE
