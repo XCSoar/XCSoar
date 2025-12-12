@@ -14,6 +14,7 @@
 #include "WaypointReader.hpp"
 #include "io/MapFile.hpp"
 #include "io/ZipArchive.hpp"
+#include "lib/fmt/PathFormatter.hpp"
 #include "system/Path.hpp"
 
 namespace WaypointGlue {
@@ -30,7 +31,7 @@ try {
                    progress);
   return true;
 } catch (...) {
-  LogFormat(_T("Failed to read waypoint file: %s"), path.c_str());
+  LogFmt("Failed to read waypoint file: {}", path);
   LogError(std::current_exception());
   return false;
 }
@@ -46,7 +47,7 @@ try {
                    progress);
   return true;
 } catch (...) {
-  LogFormat(_T("Failed to read waypoint file: %s"), path.c_str());
+  LogFmt("Failed to read waypoint file: {}", path);
   LogError(std::current_exception());
   return false;
 }
@@ -63,7 +64,7 @@ try {
                    progressg);
   return true;
 } catch (...) {
-  LogFormat(_T("Failed to read waypoint file: %s"), path);
+  LogFmt("Failed to read waypoint file: {}", path);
   LogError(std::current_exception());
   return false;
 }
