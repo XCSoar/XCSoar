@@ -20,6 +20,7 @@
 #include "Audio/VarioGlue.hpp"
 #include "system/Path.hpp"
 #include "util/StringCompare.hxx"
+#include "util/StaticString.hxx"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 
@@ -422,25 +423,43 @@ InputEvents::sub_TerrainTopography(int vswitch)
 
     settings_map.topography_enabled = ((val & 0x01) == 0x01);
     settings_map.terrain.enable = ((val & 0x02) == 0x02);
-  } else if (vswitch == -2)
+
+    // Show current state after cycling
+    StaticString<128> buf;
+    buf.AppendFormat(_("%s / %s"),
+                     settings_map.topography_enabled ? _("On") : _("Off"),
+                     settings_map.terrain.enable ? _("On") : _("Off"));
+
+    Message::AddMessage(_("Topography/Terrain"), buf.c_str());
+  } else if (vswitch == -2) {
     // toggle terrain
     settings_map.terrain.enable = !settings_map.terrain.enable;
-  else if (vswitch == -3)
+    Message::AddMessage(settings_map.terrain.enable
+                        ? _("Terrain shown")
+                        : _("Terrain hidden"));
+  } else if (vswitch == -3) {
     // toggle topography
     settings_map.topography_enabled = !settings_map.topography_enabled;
-  else if (vswitch == 1)
+    Message::AddMessage(settings_map.topography_enabled
+                        ? _("Topography shown")
+                        : _("Topography hidden"));
+  } else if (vswitch == 1) {
     // Turn on topography
     settings_map.topography_enabled = true;
-  else if (vswitch == 2)
+    Message::AddMessage(_("Topography shown"));
+  } else if (vswitch == 2) {
     // Turn off topography
     settings_map.topography_enabled = false;
-  else if (vswitch == 3)
+    Message::AddMessage(_("Topography hidden"));
+  } else if (vswitch == 3) {
     // Turn on terrain
     settings_map.terrain.enable = true;
-  else if (vswitch == 4)
+    Message::AddMessage(_("Terrain shown"));
+  } else if (vswitch == 4) {
     // Turn off terrain
     settings_map.terrain.enable = false;
-  else if (vswitch == 0) {
+    Message::AddMessage(_("Terrain hidden"));
+  } else if (vswitch == 0) {
     // Show terrain/topography
     // ARH Let user know what's happening
     TCHAR buf[128];
