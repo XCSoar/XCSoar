@@ -52,15 +52,17 @@ class Display
   : public X11::Display, public EGL::Display,
     public OpenGL::Display {
 public:
-  Display()
-    :EGL::Display(X11::Display::GetXDisplay()) {}
+  explicit Display(unsigned antialiasing_samples = 0)
+    :X11::Display(antialiasing_samples),
+     EGL::Display(X11::Display::GetXDisplay()) {}
 };
 
 #elif defined(USE_GLX) && defined(USE_X11)
 
 class Display : public X11::Display, public OpenGL::Display {
 public:
-  using X11::Display::Display;
+  explicit Display(unsigned antialiasing_samples = 0)
+    :X11::Display(antialiasing_samples) {}
 };
 
 #elif defined(MESA_KMS)
