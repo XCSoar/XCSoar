@@ -103,7 +103,22 @@ public:
 
 private:
   void UpdateButtons() noexcept {
+    if (set_active_freq_button == nullptr || set_standby_freq_button == nullptr)
+      return;
+
     if (alternates.empty()) {
+      set_active_freq_button->SetEnabled(false);
+      set_standby_freq_button->SetEnabled(false);
+      return;
+    }
+
+    // Check if window is initialized (widget is prepared)
+    if (!IsDefined())
+      return;
+
+    // Check if we have a valid cursor index
+    const unsigned cursor_index = GetCursorIndex();
+    if (cursor_index >= alternates.size()) {
       set_active_freq_button->SetEnabled(false);
       set_standby_freq_button->SetEnabled(false);
       return;
@@ -139,6 +154,9 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog)
   });
 
   cancel_button = dialog.AddButton(_("Close"), mrCancel);
+  
+  // Update button states now that buttons are created
+  UpdateButtons();
 }
 
 void
