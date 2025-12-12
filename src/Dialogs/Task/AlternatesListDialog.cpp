@@ -104,6 +104,9 @@ public:
 
 private:
   void UpdateButtons() noexcept {
+    if (set_active_freq_button == nullptr || set_standby_freq_button == nullptr)
+      return;
+
     if (alternates.empty()) {
       set_active_freq_button->SetEnabled(false);
       set_standby_freq_button->SetEnabled(false);
@@ -140,6 +143,9 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog)
   });
 
   cancel_button = dialog.AddButton(_("Close"), mrCancel);
+  
+  // Update button states now that buttons are created
+  UpdateButtons();
 }
 
 void
