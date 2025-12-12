@@ -46,12 +46,13 @@ GlideComputerEvents::OnCalculatedUpdate(const MoreData &basic,
 
   const FlarmData &flarm = basic.flarm;
   if (flarm.status.available) {
-    if (flarm.status.rx > 0 && last_traffic == 0)
+    if (flarm.status.rx > 0 && last_traffic == 0) {
       // traffic has appeared..
       InputEvents::processGlideComputer(GCE_FLARM_TRAFFIC);
-    else if (flarm.status.rx == 0 && last_traffic > 0)
+    } else if (flarm.status.rx == 0 && last_traffic > 0) {
       // traffic has disappeared..
       InputEvents::processGlideComputer(GCE_FLARM_NOTRAFFIC);
+    }
     last_traffic = flarm.status.rx;
 
     if (flarm.traffic.new_traffic.Modified(last_new_traffic)) {

@@ -8,6 +8,7 @@
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Map.hpp"
+#include "lib/fmt/PathFormatter.hpp"
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
 #include "util/StringAPI.hxx"
@@ -44,7 +45,7 @@ Profile::LoadFile(Path path) noexcept
 {
   try {
     LoadFile(map, path);
-    LogFormat(_T("Loaded profile from %s"), path.c_str());
+    LogFmt("Loaded profile from {}", path);
   } catch (...) {
     LogError(std::current_exception(), "Failed to load profile");
   }
@@ -72,7 +73,7 @@ Profile::Save() noexcept
 void
 Profile::SaveFile(Path path)
 {
-  LogFormat(_T("Saving profile to %s"), path.c_str());
+  LogFmt("Saving profile to {}", path);
   SaveFile(map, path);
 }
 
