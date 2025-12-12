@@ -5,9 +5,11 @@
 #include "Language.hpp"
 #include "Table.hpp"
 #include "LocalPath.hpp"
+#include "lib/fmt/PathFormatter.hpp"
 #include "system/Path.hpp"
 #include "LogFile.hpp"
 #include "Profile/Profile.hpp"
+#include "util/ConvertString.hpp"
 #include "util/ScopeExit.hxx"
 #include "util/StringCompare.hxx"
 #include "util/StringAPI.hxx"
@@ -192,20 +194,21 @@ InitNativeGettext(const char *locale) noexcept
 static bool
 ReadBuiltinLanguage(const BuiltinLanguage &language) noexcept
 {
-  LogFormat(_T("Language: loading resource '%s'"), language.resource);
+  const WideToUTF8Converter resource_utf8(language.resource);
+  LogFmt("Language: loading resource '{}'", resource_utf8.IsValid() ? resource_utf8.c_str() : "(invalid)");
 
 #ifdef HAVE_BUILTIN_LANGUAGES
   // Load MO file from resource
   delete mo_loader;
   mo_loader = new MOLoader({language.begin, (size_t)language.size});
   if (mo_loader->error()) {
-    LogFormat(_T("Language: could not load resource '%s'"), language.resource);
+    LogFmt("Language: could not load resource '{}'", resource_utf8.IsValid() ? resource_utf8.c_str() : "(invalid)");
     delete mo_loader;
     mo_loader = nullptr;
     return false;
   }
 
-  LogFormat(_T("Loaded translations from resource '%s'"), language.resource);
+  LogFmt("Loaded translations from resource '{}'", resource_utf8.IsValid() ? resource_utf8.c_str() : "(invalid)");
 
   mo_file = &mo_loader->get();
 #else
@@ -241,7 +244,7 @@ static bool
 LoadLanguageFile([[maybe_unused]] Path path) noexcept
 {
 #ifdef HAVE_BUILTIN_LANGUAGES
-  LogFormat(_T("Language: loading file '%s'"), path.c_str());
+  LogFmt("Language: loading file '{}'", path);
 
   delete mo_loader;
   mo_loader = nullptr;
@@ -249,7 +252,7 @@ LoadLanguageFile([[maybe_unused]] Path path) noexcept
   try {
     mo_loader = new MOLoader(path);
     if (mo_loader->error()) {
-      LogFormat(_T("Language: could not load file '%s'"), path.c_str());
+      LogFmt("Language: could not load file '{}'", path);
       delete mo_loader;
       mo_loader = nullptr;
       return false;
@@ -259,7 +262,7 @@ LoadLanguageFile([[maybe_unused]] Path path) noexcept
     return false;
   }
 
-  LogFormat(_T("Loaded translations from file '%s'"), path.c_str());
+  LogFmt("Loaded translations from file '{}'", path);
 
   mo_file = &mo_loader->get();
   return true;
