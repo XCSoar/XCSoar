@@ -16,7 +16,7 @@ class ScreenGlobalInit {
 #endif
 
 public:
-  ScreenGlobalInit();
+  explicit ScreenGlobalInit(unsigned antialiasing_samples = 0);
   ~ScreenGlobalInit();
 
   auto &GetDisplay() noexcept {

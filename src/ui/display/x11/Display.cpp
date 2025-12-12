@@ -32,7 +32,7 @@ GetConfigAttrib(_XDisplay *display, GLXFBConfig config,
 
 #endif
 
-Display::Display()
+Display::Display(unsigned antialiasing_samples)
   :display(XOpenDisplay(nullptr))
 {
   if (display == nullptr)
@@ -41,20 +41,22 @@ Display::Display()
 #ifdef USE_GLX
   const auto screen = DefaultScreen(display);
 
-  static constexpr int attributes[] = {
-    GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
-    GLX_RENDER_TYPE, GLX_RGBA_BIT,
-    GLX_X_RENDERABLE, true,
-    GLX_DOUBLEBUFFER, true,
-    GLX_RED_SIZE, 1,
-    GLX_GREEN_SIZE, 1,
-    GLX_BLUE_SIZE, 1,
-    GLX_ALPHA_SIZE, 1,
-    GLX_STENCIL_SIZE, 1,
-    GLX_SAMPLE_BUFFERS, 1, // for MSAA
-    GLX_SAMPLES, 4,        // 4x MSAA
-    0
-  };
+  int attributes[32];
+  int i = 0;
+  attributes[i++] = GLX_DRAWABLE_TYPE; attributes[i++] = GLX_WINDOW_BIT;
+  attributes[i++] = GLX_RENDER_TYPE; attributes[i++] = GLX_RGBA_BIT;
+  attributes[i++] = GLX_X_RENDERABLE; attributes[i++] = true;
+  attributes[i++] = GLX_DOUBLEBUFFER; attributes[i++] = true;
+  attributes[i++] = GLX_RED_SIZE; attributes[i++] = 1;
+  attributes[i++] = GLX_GREEN_SIZE; attributes[i++] = 1;
+  attributes[i++] = GLX_BLUE_SIZE; attributes[i++] = 1;
+  attributes[i++] = GLX_ALPHA_SIZE; attributes[i++] = 1;
+  attributes[i++] = GLX_STENCIL_SIZE; attributes[i++] = 1;
+  if (antialiasing_samples > 0) {
+    attributes[i++] = GLX_SAMPLE_BUFFERS; attributes[i++] = 1;
+    attributes[i++] = GLX_SAMPLES; attributes[i++] = antialiasing_samples;
+  }
+  attributes[i++] = 0;
 
   int fb_cfg_count;
   fb_cfg = glXChooseFBConfig(display, screen,
