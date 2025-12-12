@@ -117,6 +117,14 @@ private:
     if (!IsDefined())
       return;
 
+    // Check if we have a valid cursor index
+    const unsigned cursor_index = GetCursorIndex();
+    if (cursor_index >= alternates.size()) {
+      set_active_freq_button->SetEnabled(false);
+      set_standby_freq_button->SetEnabled(false);
+      return;
+    }
+
     const auto &waypoint = GetSelectedWaypoint();
     const bool has_freq = waypoint.radio_frequency.IsDefined();
     set_active_freq_button->SetEnabled(has_freq);
