@@ -110,7 +110,7 @@ jobs:
             target_final: xcsoar_
             target_ext: .deb
             target_upload: true
-            target_container: debian:bookworm-slim
+            target_container: debian:trixie-slim
           - os: ubuntu-22.04
             target: KOBO
             target_bin: KoboRoot
@@ -118,7 +118,7 @@ jobs:
             target_final: KoboRoot
             target_ext: .tgz
             target_upload: true
-            target_container: debian:bookworm-slim
+            target_container: debian:trixie-slim
           - os: ubuntu-22.04
             target: ANDROID
             target_bin: XCSoar
@@ -127,7 +127,7 @@ jobs:
             target_ext: .apk
             target_upload: true
             ndk: r26d
-            target_container: debian:bookworm-slim
+            target_container: debian:trixie-slim
           - os: ubuntu-22.04
             target: ANDROID_BUNDLE
             target_bin: XCSoar
@@ -136,7 +136,7 @@ jobs:
             target_ext: .apk
             target_upload: false
             ndk: r26d
-            target_container: debian:bookworm-slim
+            target_container: debian:trixie-slim
           - os: ubuntu-22.04
             target: WIN64
             target_bin: XCSoar
@@ -144,7 +144,7 @@ jobs:
             target_final: XCSoar
             target_ext: .exe
             target_upload: true
-            target_container: debian:bookworm-slim
+            target_container: debian:trixie-slim
           - os: ubuntu-22.04
             target: PC
             target_bin: XCSoar
@@ -152,7 +152,7 @@ jobs:
             target_final: XCSoar
             target_ext: .exe
             target_upload: true
-            target_container: debian:bookworm-slim
+            target_container: debian:trixie-slim
           - os: macos-14
             target: MACOS
             target_bin: XCSoar

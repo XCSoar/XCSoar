@@ -4,8 +4,8 @@ set -e
 
 # set ANDROID variables
 ANDROID_SDK_TOOLS_VERSION=9477386_latest
-ANDROID_BUILD_TOOLS_VERSION=33.0.2
-ANDROID_PLATFORM_VERSION=33
+ANDROID_BUILD_TOOLS_VERSION=35.0.0
+ANDROID_PLATFORM_VERSION=35
 ANDROID_NDK_VERSION=r26d
 ANDROID_REPO_URL=https://dl.google.com/android/repository
 ANDROID_SDK_DIR=~/opt/android-sdk-linux
@@ -93,9 +93,14 @@ else
 
   echo "Creating executable wrapper"
   mkdir -p bin
+  # Use script location to find the jar file, making the wrapper work regardless of where it was installed
   tee bin/bundletool <<EOF
 #!/bin/bash
-exec java -jar "${BUNDLETOOL_DIR}"/"${BUNDLETOOL_JAR_FILENAME}" "\$@"
+# Get the directory where this script is located
+SCRIPT_DIR="\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" && pwd)"
+# Get the parent directory (bundletool directory)
+BUNDLETOOL_DIR="\$(dirname "\$SCRIPT_DIR")"
+exec java -jar "\${BUNDLETOOL_DIR}"/"${BUNDLETOOL_JAR_FILENAME}" "\$@"
 EOF
   chmod +x bin/bundletool
 fi
@@ -114,7 +119,7 @@ for section in "${sections_to_install[@]}"; do
       install_bundletool
     ;;
     *)
-    echo "Unkown section: $section"
+    echo "Unknown section: $section"
     ;;
   esac
 done
