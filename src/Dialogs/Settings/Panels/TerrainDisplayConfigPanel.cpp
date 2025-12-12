@@ -127,10 +127,13 @@ TerrainDisplayConfigPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(EnableTerrain, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
-    terrain_settings.enable = dfb.GetValue();
-    Message::AddMessage(terrain_settings.enable
+    const bool terrain_enabled = dfb.GetValue();
+    terrain_settings.enable = terrain_enabled;
+    CommonInterface::SetMapSettings().terrain.enable = terrain_enabled;
+    Message::AddMessage(terrain_enabled
                         ? _("Terrain shown")
                         : _("Terrain hidden"));
+    ActionInterface::SendMapSettings(true);
     ShowTerrainControls();
   } else if (IsDataField(EnableTopography, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;

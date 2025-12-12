@@ -422,6 +422,18 @@ InputEvents::sub_TerrainTopography(int vswitch)
 
     settings_map.topography_enabled = ((val & 0x01) == 0x01);
     settings_map.terrain.enable = ((val & 0x02) == 0x02);
+
+    // Show current state after cycling
+    TCHAR buf[128];
+    if (settings_map.topography_enabled)
+      StringFormatUnsafe(buf, _T("%s / "), _("On"));
+    else
+      StringFormatUnsafe(buf, _T("%s / "), _("Off"));
+
+    _tcscat(buf, settings_map.terrain.enable
+            ? _("On") : _("Off"));
+
+    Message::AddMessage(_("Topography/Terrain"), buf);
   } else if (vswitch == -2) {
     // toggle terrain
     settings_map.terrain.enable = !settings_map.terrain.enable;

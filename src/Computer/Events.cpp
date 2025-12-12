@@ -6,8 +6,6 @@
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Settings.hpp"
-#include "Message.hpp"
-#include "Language/Language.hpp"
 
 void
 GlideComputerEvents::Reset()
@@ -48,12 +46,13 @@ GlideComputerEvents::OnCalculatedUpdate(const MoreData &basic,
 
   const FlarmData &flarm = basic.flarm;
   if (flarm.status.available) {
-    if (flarm.status.rx > 0 && last_traffic == 0)
+    if (flarm.status.rx > 0 && last_traffic == 0) {
       // traffic has appeared..
       InputEvents::processGlideComputer(GCE_FLARM_TRAFFIC);
-    else if (flarm.status.rx == 0 && last_traffic > 0)
+    } else if (flarm.status.rx == 0 && last_traffic > 0) {
       // traffic has disappeared..
       InputEvents::processGlideComputer(GCE_FLARM_NOTRAFFIC);
+    }
     last_traffic = flarm.status.rx;
 
     if (flarm.traffic.new_traffic.Modified(last_new_traffic)) {
@@ -85,9 +84,6 @@ GlideComputerEvents::OnCalculatedUpdate(const MoreData &basic,
   const bool final_glide = calculated.task_stats.flight_mode_final_glide;
   if (final_glide != last_final_glide) {
     last_final_glide = final_glide;
-
-    if (final_glide)
-      Message::AddMessage(_("Final Glide mode activated"));
 
     InputEvents::processGlideComputer(final_glide
                                       ? GCE_FLIGHTMODE_FINALGLIDE
