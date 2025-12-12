@@ -35,6 +35,7 @@ class AlternatesListWidget final
   TwoTextRowsRenderer row_renderer;
 
   Button *details_button, *cancel_button, *goto_button;
+  Button *set_active_freq_button, *set_standby_freq_button;
 
 public:
   AlternateList alternates;
@@ -95,7 +96,25 @@ public:
     return true;
   }
 
+  void OnCursorMoved([[maybe_unused]] unsigned index) noexcept override {
+    UpdateButtons();
+  }
+
   void OnActivateItem([[maybe_unused]] unsigned index) noexcept override;
+
+private:
+  void UpdateButtons() noexcept {
+    if (alternates.empty()) {
+      set_active_freq_button->SetEnabled(false);
+      set_standby_freq_button->SetEnabled(false);
+      return;
+    }
+
+    const auto &waypoint = GetSelectedWaypoint();
+    const bool has_freq = waypoint.radio_frequency.IsDefined();
+    set_active_freq_button->SetEnabled(has_freq);
+    set_standby_freq_button->SetEnabled(has_freq);
+  }
 };
 
 void
@@ -108,13 +127,13 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog)
 
   details_button = dialog.AddButton(_("Details"), mrOK);
 
-  dialog.AddButton(_("Set Active Frequency"), [this](){
+  set_active_freq_button = dialog.AddButton(_("Set Active Frequency"), [this](){
     auto const &waypoint = GetSelectedWaypoint();
     ActionInterface::SetActiveFrequency(waypoint.radio_frequency,
                                         waypoint.name.c_str());
   });
 
-  dialog.AddButton(_("Set Standby Frequency"), [this](){
+  set_standby_freq_button = dialog.AddButton(_("Set Standby Frequency"), [this](){
     auto const &waypoint = GetSelectedWaypoint();
     ActionInterface::SetStandbyFrequency(waypoint.radio_frequency,
                                          waypoint.name.c_str());
@@ -132,6 +151,7 @@ AlternatesListWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                                           dialog_look.small_font));
 
   GetList().SetLength(alternates.size());
+  UpdateButtons();
 }
 
 void
