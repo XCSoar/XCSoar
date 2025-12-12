@@ -11,7 +11,7 @@
 
 namespace SDL {
 
-Display::Display()
+Display::Display([[maybe_unused]] unsigned antialiasing_samples)
 {
 #ifdef _WIN32
   /* Matches the PE application manifest (PerMonitorV2).  Keep the
@@ -51,8 +51,10 @@ Display::Display()
 #if defined(ENABLE_OPENGL)
   ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   ::SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
-  ::SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);  // for MSAA
-  ::SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);  // 4x MSAA
+  if (antialiasing_samples > 0) {
+    ::SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    ::SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, antialiasing_samples);
+  }
 #endif
 }
 

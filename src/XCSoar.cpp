@@ -34,6 +34,9 @@
 #include "util/PrintException.hxx"
 #include "UIActions.hpp"
 #include "Hardware/SystemPower.hpp"
+#include "Profile/Profile.hpp"
+#include "Profile/Map.hpp"
+#include "Profile/Current.hpp"
 
 #include <cstdio>
 
@@ -66,7 +69,23 @@ Main()
      UI::BlockSignals() */
   UI::BlockSignals();
 
-  ScreenGlobalInit screen_init;
+  // Load anti-aliasing setting early before initializing the display
+  unsigned antialiasing_samples = 0;
+  try {
+    if (Profile::GetPath() == nullptr)
+      Profile::SetFiles(nullptr);
+    
+    Profile::LoadFile(Profile::GetPath());
+    Profile::map.Get(ProfileKeys::AntiAliasing, antialiasing_samples);
+    if (antialiasing_samples != 0 && antialiasing_samples != 2 &&
+        antialiasing_samples != 4 && antialiasing_samples != 8 &&
+        antialiasing_samples != 16)
+      antialiasing_samples = 0;
+  } catch (...) {
+    // Ignore errors loading profile at this stage
+  }
+
+  ScreenGlobalInit screen_init(antialiasing_samples);
 
 #ifdef _WIN32
   /* try to make the UI most responsive */

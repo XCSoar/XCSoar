@@ -14,9 +14,11 @@
 #include "DisplayOrientation.hpp"
 #endif
 
-ScreenGlobalInit::ScreenGlobalInit()
+ScreenGlobalInit::ScreenGlobalInit([[maybe_unused]] unsigned antialiasing_samples)
 #ifdef ANDROID
   :display(EGL_DEFAULT_DISPLAY)
+#elif defined(ENABLE_SDL) || defined(USE_GLX) || (defined(USE_EGL) && defined(USE_X11))
+  :display(antialiasing_samples)
 #endif
 {
 #ifdef USE_FREETYPE

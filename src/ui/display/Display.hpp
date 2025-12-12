@@ -48,8 +48,9 @@ class Display
   : public X11::Display, public EGL::Display,
     public OpenGL::Display {
 public:
-  Display()
-    :EGL::Display(X11::Display::GetXDisplay()) {}
+  explicit Display(unsigned antialiasing_samples = 0)
+    :X11::Display(antialiasing_samples),
+     EGL::Display(X11::Display::GetXDisplay()) {}
 };
 
 #elif defined(MESA_KMS)
