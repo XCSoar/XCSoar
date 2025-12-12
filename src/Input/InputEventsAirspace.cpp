@@ -34,12 +34,18 @@ InputEvents::eventAirSpace(const TCHAR *misc)
   AirspaceRendererSettings &settings =
     CommonInterface::SetMapSettings().airspace;
 
-  if (StringIsEqual(misc, _T("toggle")))
+  if (StringIsEqual(misc, _T("toggle"))) {
     settings.enable = !settings.enable;
-  else if (StringIsEqual(misc, _T("off")))
+    Message::AddMessage(settings.enable
+                        ? _("Airspace shown")
+                        : _("Airspace hidden"));
+  } else if (StringIsEqual(misc, _T("off"))) {
     settings.enable = false;
-  else if (StringIsEqual(misc, _T("on")))
+    Message::AddMessage(_("Airspace hidden"));
+  } else if (StringIsEqual(misc, _T("on"))) {
     settings.enable = true;
+    Message::AddMessage(_("Airspace shown"));
+  }
   else if (StringIsEqual(misc, _T("show"))) {
     if (!settings.enable)
       Message::AddMessage(_("Show airspace off"));

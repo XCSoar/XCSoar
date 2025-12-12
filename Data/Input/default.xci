@@ -55,6 +55,11 @@ event=AutoLogger stop
 
 mode=default
 type=gce
+data=FLIGHTMODE_FINALGLIDE
+event=StatusMessage Final Glide mode activated
+
+mode=default
+type=gce
 data=FLIGHTMODE_FINALGLIDE_ABOVE
 event=StatusMessage Above final glide
 
