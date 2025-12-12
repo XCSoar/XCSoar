@@ -113,6 +113,10 @@ private:
       return;
     }
 
+    // Check if window is initialized (widget is prepared)
+    if (!IsDefined())
+      return;
+
     const auto &waypoint = GetSelectedWaypoint();
     const bool has_freq = waypoint.radio_frequency.IsDefined();
     set_active_freq_button->SetEnabled(has_freq);
