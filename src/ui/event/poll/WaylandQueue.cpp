@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#ifdef ENABLE_OPENGL
+#include "ui/opengl/Features.hpp"
+#endif
 #include "WaylandQueue.hpp"
 #include "Queue.hpp"
 #include "../shared/Event.hpp"
@@ -9,6 +12,13 @@
 #include "ui/event/poll/linux/Translate.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "xdg-shell-client-protocol.h"
+#include "xdg-decoration-unstable-v1-client-protocol.h"
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+#include "../shared/TransformCoordinates.hpp"
+#include "ui/canvas/opengl/Globals.hpp"
+#include "ui/dim/Size.hpp"
+#endif
 
 #include <wayland-client.h>
 #include <xkbcommon/xkbcommon.h>
@@ -112,10 +122,17 @@ WaylandPointerAxis(void *data,
                    [[maybe_unused]] uint32_t time,
                    uint32_t axis, wl_fixed_t value)
 {
-  auto &queue = *(WaylandEventQueue *)data;
-
-  if (axis == WL_POINTER_AXIS_VERTICAL_SCROLL)
-    queue.Push(Event(Event::MOUSE_WHEEL, wl_fixed_to_int(value)));
+  if (axis == WL_POINTER_AXIS_VERTICAL_SCROLL) {
+    auto &q = *(WaylandEventQueue *)data;
+#ifdef SOFTWARE_ROTATE_DISPLAY
+    PixelPoint p = q.GetTransformedPointerPosition();
+#else
+    PixelPoint p(q.pointer_position.x, q.pointer_position.y);
+#endif
+    Event e(Event::MOUSE_WHEEL, p);
+    e.param = wl_fixed_to_int(value);
+    q.Push(e);
+  }
 }
 
 static constexpr struct wl_pointer_listener pointer_listener = {
@@ -301,6 +318,9 @@ WaylandEventQueue::RegistryHandler(struct wl_registry *registry, uint32_t id,
   else if (StringIsEqual(interface, "xdg_wm_base"))
     wm_base = (xdg_wm_base *)wl_registry_bind(registry, id,
                                               &xdg_wm_base_interface, 1);
+  else if (StringIsEqual(interface, "zxdg_decoration_manager_v1"))
+    decoration_manager = (zxdg_decoration_manager_v1 *)
+      wl_registry_bind(registry, id, &zxdg_decoration_manager_v1_interface, 1);
 }
 
 inline void
@@ -345,15 +365,21 @@ WaylandEventQueue::PointerMotion(IntPoint2D new_pointer_position) noexcept
     return;
 
   pointer_position = new_pointer_position;
-  Push(Event(Event::MOUSE_MOTION,
-             PixelPoint(pointer_position.x, pointer_position.y)));
+  PixelPoint p(pointer_position.x, pointer_position.y);
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  p = TransformCoordinates(p, physical_screen_size);
+#endif
+  Push(Event(Event::MOUSE_MOTION, p));
 }
 
 inline void
 WaylandEventQueue::PointerButton(bool pressed) noexcept
 {
-  Push(Event(pressed ? Event::MOUSE_DOWN : Event::MOUSE_UP,
-             PixelPoint(pointer_position.x, pointer_position.y)));
+  PixelPoint p(pointer_position.x, pointer_position.y);
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  p = TransformCoordinates(p, physical_screen_size);
+#endif
+  Push(Event(pressed ? Event::MOUSE_DOWN : Event::MOUSE_UP, p));
 }
 
 void
@@ -471,5 +497,31 @@ WaylandEventQueue::KeyboardKey(uint32_t key, uint32_t state) noexcept
     break;
   }
 }
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+
+PixelPoint
+WaylandEventQueue::GetTransformedPointerPosition() const noexcept
+{
+  PixelPoint p(pointer_position.x, pointer_position.y);
+  return TransformCoordinates(p, physical_screen_size);
+}
+
+void
+WaylandEventQueue::SetScreenSize(PixelSize screen_size) noexcept
+{
+  if (AreAxesSwapped(OpenGL::display_orientation)) {
+    physical_screen_size = PixelSize(screen_size.height, screen_size.width);
+  } else {
+    physical_screen_size = screen_size;
+  }
+}
+
+void
+WaylandEventQueue::SetDisplayOrientation([[maybe_unused]] DisplayOrientation orientation) noexcept
+{
+}
+
+#endif
 
 } // namespace UI

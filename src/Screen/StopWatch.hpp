@@ -119,7 +119,7 @@ public:
       const Marker &start = markers[i];
       const Marker &end = markers[i + 1];
 
-      LogFormat("StopWatch '%s': clock=%lu cpu=%lu", start.text,
+      LogFormat("StopWatch %s: clock=%lu cpu=%lu", start.text,
                 (unsigned long)(end.clock - start.clock),
                 (unsigned long)(end.cpu - start.cpu));
     }

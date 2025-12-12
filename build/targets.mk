@@ -138,6 +138,7 @@ ifeq ($(TARGET),WAYLAND)
   # experimental target for the Wayland display server
   override TARGET = UNIX
   USE_WAYLAND = y
+  USE_POLL_EVENT = y
 endif
 
 ifeq ($(TARGET),FUZZER)

@@ -30,7 +30,7 @@ try {
                    progress);
   return true;
 } catch (...) {
-  LogFormat(_T("Failed to read waypoint file: %s"), path.c_str());
+  LogFormat(_T("Failed to load waypoint file: %s"), path.c_str());
   LogError(std::current_exception());
   return false;
 }
@@ -46,7 +46,7 @@ try {
                    progress);
   return true;
 } catch (...) {
-  LogFormat(_T("Failed to read waypoint file: %s"), path.c_str());
+  LogFormat(_T("Failed to load waypoint file: %s"), path.c_str());
   LogError(std::current_exception());
   return false;
 }
@@ -63,7 +63,7 @@ try {
                    progressg);
   return true;
 } catch (...) {
-  LogFormat(_T("Failed to read waypoint file: %s"), path);
+  LogFormat(_T("Failed to load waypoint file: %s"), path);
   LogError(std::current_exception());
   return false;
 }

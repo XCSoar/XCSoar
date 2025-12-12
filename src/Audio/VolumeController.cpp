@@ -119,7 +119,7 @@ VolumeController::InitExternalVolumeControl(unsigned initial_vol_percent)
   const char *alsa_device_name = ALSAEnv::GetALSADeviceName();
   alsa_error = snd_mixer_attach(alsa_mixer_handle, alsa_device_name);
   if (0 != alsa_error) {
-    LogFormat("snd_mixer_attach(0x%p, \"%s\") failed: %d - %s",
+    LogFormat("snd_mixer_attach(0x%p, %s) failed: %d - %s",
               alsa_mixer_handle,
               alsa_device_name,
               alsa_error,
@@ -170,7 +170,7 @@ VolumeController::InitExternalVolumeControl(unsigned initial_vol_percent)
   }
 
   if (0 == elements.size()) {
-    LogFormat("No usable master volume control found for ALSA device \"%s\"",
+    LogFormat("No usable master volume control found for ALSA device: %s",
               alsa_device_name);
     return false;
   }
@@ -227,13 +227,11 @@ VolumeController::InitExternalVolumeControl(unsigned initial_vol_percent)
       snd_mixer_selem_get_name(ext_master_volume_ctl);
   assert(nullptr != master_ctl_name);
   if (ext_master_ctl_has_vol) {
-    LogFormat("Using mixer element \"%s\" to control master volume control "
-                  "on ALSA device \"%s\"",
+    LogFormat("Using mixer element %s to control master volume on ALSA device: %s",
               master_ctl_name, alsa_device_name);
   } else {
     assert(ext_master_ctl_has_switch);
-    LogFormat("No usable mixer element for volume control found on ALSA "
-                  "device \"%s\", but using on/off switch \"%s\"",
+    LogFormat("No usable mixer element for volume control found on ALSA device: %s, but using on/off switch: %s",
               alsa_device_name, master_ctl_name);
   }
 
@@ -254,16 +252,14 @@ VolumeController::InitExternalVolumeControl(unsigned initial_vol_percent)
                                                   &pcm_value);
       }
 
-      LogFormat("Ensuring that PCM mixer element on ALSA device \"%s\" is "
-                    "set to 100%%",
+      LogFormat("Ensuring that PCM mixer element on ALSA device %s is set to 100%%",
                 alsa_device_name);
 
       snd_mixer_selem_set_playback_volume_all(pcm_volume_ctl, pcm_value);
     }
 
     if (snd_mixer_selem_has_playback_switch(pcm_volume_ctl)) {
-      LogFormat("Ensuring that PCM mixer element on ALSA device \"%s\" is "
-                    "not muted",
+      LogFormat("Ensuring that PCM mixer element on ALSA device %s is not muted",
                 alsa_device_name);
       snd_mixer_selem_set_playback_switch_all(pcm_volume_ctl, 1);
     }

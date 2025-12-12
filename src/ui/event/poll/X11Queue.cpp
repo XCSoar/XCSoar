@@ -1,10 +1,20 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#ifdef ENABLE_OPENGL
+#include "ui/opengl/Features.hpp"
+#endif
 #include "X11Queue.hpp"
 #include "Queue.hpp"
 #include "../shared/Event.hpp"
 #include "ui/display/Display.hpp"
+#include "ui/dim/Size.hpp"
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+#include "../shared/TransformCoordinates.hpp"
+#include "ui/canvas/opengl/Globals.hpp"
+#include "DisplayOrientation.hpp"
+#endif
 
 /* kludges to work around namespace collisions with X11 headers */
 
@@ -76,16 +86,24 @@ X11EventQueue::HandleEvent(_XEvent &event)
     case Button2:
     case Button3:
       ctrl_click = event.xbutton.state & ControlMask;
-      queue.Push(Event(Event::MOUSE_DOWN,
-                       PixelPoint(event.xbutton.x, event.xbutton.y)));
+      {
+        PixelPoint p(event.xbutton.x, event.xbutton.y);
+#ifdef SOFTWARE_ROTATE_DISPLAY
+        p = TransformCoordinates(p, physical_screen_size);
+#endif
+        queue.Push(Event(Event::MOUSE_DOWN, p));
+      }
       break;
 
     case Button4:
     case Button5:
       /* mouse wheel */
       {
-        Event e(Event::MOUSE_WHEEL,
-                PixelPoint(event.xbutton.x, event.xbutton.y));
+        PixelPoint p(event.xbutton.x, event.xbutton.y);
+#ifdef SOFTWARE_ROTATE_DISPLAY
+        p = TransformCoordinates(p, physical_screen_size);
+#endif
+        Event e(Event::MOUSE_WHEEL, p);
         e.param = event.xbutton.button == Button4 ? 1u : unsigned(-1);
         queue.Push(e);
       }
@@ -98,14 +116,24 @@ X11EventQueue::HandleEvent(_XEvent &event)
     case Button1:
     case Button2:
     case Button3:
-      queue.Push(Event(Event::MOUSE_UP,
-                       PixelPoint(event.xbutton.x, event.xbutton.y)));
+      {
+        PixelPoint p(event.xbutton.x, event.xbutton.y);
+#ifdef SOFTWARE_ROTATE_DISPLAY
+        p = TransformCoordinates(p, physical_screen_size);
+#endif
+        queue.Push(Event(Event::MOUSE_UP, p));
+      }
     }
     break;
 
   case MotionNotify:
-    queue.Push(Event(Event::MOUSE_MOTION,
-                     PixelPoint(event.xmotion.x, event.xmotion.y)));
+    {
+      PixelPoint p(event.xmotion.x, event.xmotion.y);
+#ifdef SOFTWARE_ROTATE_DISPLAY
+      p = TransformCoordinates(p, physical_screen_size);
+#endif
+      queue.Push(Event(Event::MOUSE_MOTION, p));
+    }
     break;
 
   case ClientMessage:
@@ -118,9 +146,16 @@ X11EventQueue::HandleEvent(_XEvent &event)
       break;
 
   case ConfigureNotify:
-    queue.Push(Event(Event::RESIZE,
-                     PixelPoint(event.xconfigure.width,
-                                event.xconfigure.height)));
+    {
+      PixelSize physical_size(event.xconfigure.width,
+                              event.xconfigure.height);
+#ifdef SOFTWARE_ROTATE_DISPLAY
+      physical_screen_size = physical_size;
+#endif
+      queue.Push(Event(Event::RESIZE,
+                       PixelPoint(physical_size.width,
+                                  physical_size.height)));
+    }
     break;
 
   case VisibilityNotify:
@@ -140,11 +175,25 @@ X11EventQueue::HandleEvent(_XEvent &event)
 void
 X11EventQueue::OnSocketReady(unsigned) noexcept
 {
-  while(XPending(display)) {
+  while (XPending(display)) {
     XEvent event;
     XNextEvent(display, &event);
     HandleEvent(event);
   }
 }
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+
+void
+X11EventQueue::SetScreenSize([[maybe_unused]] PixelSize screen_size) noexcept
+{
+}
+
+void
+X11EventQueue::SetDisplayOrientation([[maybe_unused]] DisplayOrientation orientation) noexcept
+{
+}
+
+#endif
 
 } // namespace UI
