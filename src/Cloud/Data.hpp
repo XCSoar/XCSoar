@@ -5,6 +5,7 @@
 
 #include "Client.hpp"
 #include "Thermal.hpp"
+#include "OGNTraffic.hpp"
 
 class Serialiser;
 class Deserialiser;
@@ -12,6 +13,7 @@ class Deserialiser;
 struct CloudData {
   CloudClientContainer clients;
   CloudThermalContainer thermals;
+  OGNTrafficContainer ogn_traffic;
 
   void DumpClients();
 
