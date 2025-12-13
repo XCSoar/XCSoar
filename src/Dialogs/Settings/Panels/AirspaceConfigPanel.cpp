@@ -13,6 +13,7 @@
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "ui/canvas/Features.hpp"
+#include "net/http/Features.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"
@@ -31,7 +32,9 @@ enum ControlIndex {
   AcknowledgeTime,
   UseBlackOutline,
   AirspaceFillMode,
-  AirspaceTransparency
+#if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
+  AirspaceTransparency,
+#endif
 };
 
 static constexpr StaticEnumChoice as_display_list[] = {

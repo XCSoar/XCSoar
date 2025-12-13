@@ -60,6 +60,7 @@
 #include "net/http/Init.hpp"
 #include "net/http/DownloadManager.hpp"
 #include "net/client/tim/Glue.hpp"
+#include "NOTAM/NOTAMGlue.hpp"
 #include "Hardware/DisplayDPI.hpp"
 #include "Hardware/DisplayGlue.hpp"
 #include "util/Compiler.h"

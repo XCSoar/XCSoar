@@ -1741,6 +1741,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Profile/RouteProfile.cpp \
 	$(SRC)/Profile/ContestProfile.cpp \
 	$(SRC)/Profile/AirspaceConfig.cpp \
+	$(SRC)/Profile/NotamConfig.cpp \
 	$(SRC)/Profile/TrackingProfile.cpp \
 	$(SRC)/Profile/WeatherProfile.cpp \
 	$(SRC)/Profile/MapProfile.cpp \
