@@ -49,7 +49,7 @@ protected:
 #error No font renderer
 #endif
 
-  unsigned height, ascent_height, capital_height;
+  unsigned height, ascent_height, descent_height, capital_height;
 
   void CalculateHeights() noexcept;
 
@@ -127,6 +127,10 @@ public:
 
   unsigned GetAscentHeight() const noexcept {
     return ascent_height;
+  }
+
+  unsigned GetDescentHeight() const noexcept {
+    return descent_height;
   }
 
   unsigned GetCapitalHeight() const noexcept {
