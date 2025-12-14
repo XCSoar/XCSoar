@@ -49,6 +49,7 @@ Font::CalculateHeights() noexcept
 
   height = tm.tmHeight;
   ascent_height = tm.tmAscent;
+  descent_height = tm.tmDescent;
   capital_height = tm.tmAscent - 1 - tm.tmHeight / 10;
 }
 
