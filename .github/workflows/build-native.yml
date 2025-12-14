@@ -17,6 +17,7 @@ on:
       - '.readthedocs.yaml'
     branches:
       - master
+      - ios-testing
     tags:
       - 'v*'
 
@@ -153,7 +154,7 @@ jobs:
             target_ext: .exe
             target_upload: true
             target_container: debian:bookworm-slim
-          - os: macos-14
+          - os: macos-15
             target: MACOS
             target_bin: XCSoar
             target_bin_path: bin
@@ -161,13 +162,13 @@ jobs:
             target_ext: ''
             target_upload: true
             target_container: ''
-          - os: macos-14
+          - os: macos-15
             target: IOS64
-            target_bin: XCSoar
-            target_bin_path: bin
+            target_bin: xcsoar-signed
+            target_bin_path: ''
             target_final: XCSoar
-            target_ext: ''
-            target_upload: false
+            target_ext: .ipa
+            target_upload: true
             target_container: ''
 
     steps:
@@ -191,6 +192,11 @@ jobs:
         uses: actions/checkout@v6
         with:
           submodules: true
+
+      - name: Verify Xcode version
+        if: ${{ matrix.target == 'IOS64' }}
+        run: |
+          xcodebuild -version
 
       - name: Cache ccache
         uses: hendrikmuhs/ccache-action@v1.2
@@ -238,7 +244,7 @@ jobs:
           path: /var/cache/apt
 
       - name: "Cache Homebrew packages"
-        if: ${{ matrix.os == 'macos-14' || matrix.os == 'macos-12' }}
+        if: ${{ matrix.os == 'macos-15' || matrix.os == 'macos-14' || matrix.os == 'macos-12' }}
         uses: actions/cache@v5
         with:
           key: brew-${{ matrix.os }}-${{ hashFiles('ide/provisioning/install-darwin-packages.sh') }}
@@ -331,7 +337,7 @@ jobs:
             if [ ${{ matrix.target }} = 'OSX64' ]; then
               ./ide/provisioning/install-darwin-packages.sh OSX64
             fi
-          elif [ ${{ matrix.os }} = 'macos-14' ] ; then
+          elif [ ${{ matrix.os }} = 'macos-14' ] || [ ${{ matrix.os }} = 'macos-15' ] ; then
             ./ide/provisioning/install-darwin-packages.sh BASE
             if [ ${{ matrix.target }} = 'MACOS' ]; then
               ./ide/provisioning/install-darwin-packages.sh MACOS
@@ -351,9 +357,47 @@ jobs:
             md5sum ~/.android/signing-key.jks
           fi
 
+      - name: Prepare iOS signing certificate and provisioning profile
+        shell: bash
+        if: ${{ matrix.target == 'IOS64' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/ios-testing' || startsWith(github.ref, 'refs/tags/v')) }}
+        run: |
+          if [ -n "${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}" ] && [ -n "${{ secrets.IOS_CERTIFICATE_PASSWORD }}" ]; then
+            # Decode and import the certificate
+            echo "${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}" | base64 -d > ios-cert.p12
+            
+            # Create temporary keychain
+            security create-keychain -p actions ios-build.keychain
+            security default-keychain -s ios-build.keychain
+            security unlock-keychain -p actions ios-build.keychain
+            security set-keychain-settings -t 3600 -u ios-build.keychain
+            
+            # Import certificate to keychain
+            security import ios-cert.p12 -k ios-build.keychain -P "${{ secrets.IOS_CERTIFICATE_PASSWORD }}" -T /usr/bin/codesign -T /usr/bin/security
+            security set-key-partition-list -S apple-tool:,apple: -s -k actions ios-build.keychain
+            
+            # Clean up certificate file
+            rm ios-cert.p12
+            
+            echo "✅ iOS certificate imported successfully"
+          fi
+          
+          if [ -n "${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}" ]; then
+            # Decode and install provisioning profile
+            mkdir -p darwin
+            echo "${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}" | base64 -d > darwin/xcsoar.mobileprovision
+            echo "✅ iOS provisioning profile installed successfully"
+          fi
+
       - name: Compile XCSoar - PR
         if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
         run: |
+          # Set iOS app configuration if building iOS
+          if [ ${{ matrix.target }} = "IOS64" ]; then
+            export IOS_APP_BUNDLE_IDENTIFIER="${{ vars.IOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
+            export IOS_APP_VERSION="${{ vars.IOS_APP_VERSION || needs.release.outputs.version }}"
+            export IOS_APP_BUILD_NUMBER="${{ vars.IOS_APP_BUILD_NUMBER || github.run_number }}"
+          fi
+          
           if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target }} = "ANDROID_BUNDLE" ]; then
             if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then BUNDLE=y ; fi
             make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
@@ -375,7 +419,7 @@ jobs:
           elif [ ${{ matrix.target }} = "MACOS" ]; then
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
           elif [ ${{ matrix.target }} = "IOS64" ]; then
-            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=y OPTIMIZE="-O0" ipa
           elif [ ${{ matrix.target }} = "UNIX" ]; then
             mkdir -p output/UNIX/DPKG
             rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
@@ -412,6 +456,16 @@ jobs:
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           elif [ ${{ matrix.target }} = "OSX64" ]; then
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
+          elif [ ${{ matrix.target }} = "IOS64" ]; then
+            # Set iOS app configuration for production release builds
+            export IOS_APP_BUNDLE_IDENTIFIER="${{ vars.IOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
+            export IOS_APP_VERSION="${{ vars.IOS_APP_VERSION || needs.release.outputs.version }}"
+            export IOS_APP_BUILD_NUMBER="${{ vars.IOS_APP_BUILD_NUMBER || github.run_number }}"
+            
+            echo "Building production release version with TESTING=n"
+            
+            # Build the IPA without TESTING (production release)
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=n ipa
           elif [ ${{ matrix.target }} = "UNIX" ]; then
             mkdir -p output/UNIX/DPKG
             rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
@@ -419,6 +473,65 @@ jobs:
             DEB_BUILD_OPTIONS=ccache dpkg-buildpackage --jobs-force=$(nproc) --no-sign
             cp *.deb ../
           fi
+
+      - name: Sign iOS IPA
+        if: ${{ matrix.target == 'IOS64' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/ios-testing' || startsWith(github.ref, 'refs/tags/v')) }}
+        run: |
+          if [ -f "darwin/xcsoar.mobileprovision" ]; then
+            export IOS_CERTIFICATE_NAME="${{ secrets.IOS_CERTIFICATE_NAME || 'Apple Distribution' }}"
+            export PROFILE_PATH="darwin/xcsoar.mobileprovision"
+            
+            echo "📝 Signing iOS IPA..."
+            bash darwin/sign.sh
+            echo "✅ iOS IPA signed successfully"
+          else
+            echo "⚠️ No provisioning profile found, creating unsigned copy"
+            cp output/IOS64/xcsoar.ipa output/IOS64/xcsoar-signed.ipa || true
+          fi
+
+      - name: Upload to TestFlight
+        if: ${{ matrix.target == 'IOS64' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/ios-testing' || startsWith(github.ref, 'refs/tags/v')) }}
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APP_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
+          ASC_PROVIDER: ${{ secrets.ASC_PROVIDER }}
+        run: |
+          IPA_PATH="output/IOS64/xcsoar-signed.ipa"
+          
+          if [ ! -f "$IPA_PATH" ]; then
+            echo "❌ Signed IPA not found: $IPA_PATH"
+            exit 1
+          fi
+          
+          if [ -z "$APPLE_ID" ] || [ -z "$APP_SPECIFIC_PASSWORD" ]; then
+            echo "⚠️ TestFlight credentials not configured, skipping upload"
+            exit 0
+          fi
+          
+          echo "📱 Uploading to App Store Connect / TestFlight..."
+          
+          # Use altool to upload (matches build-release.sh)
+          if [ -n "$ASC_PROVIDER" ]; then
+            xcrun altool --upload-app \
+              -f "$IPA_PATH" \
+              -t ios \
+              -u "$APPLE_ID" \
+              -p "$APP_SPECIFIC_PASSWORD" \
+              --asc-provider "$ASC_PROVIDER"
+          else
+            xcrun altool --upload-app \
+              -f "$IPA_PATH" \
+              -t ios \
+              -u "$APPLE_ID" \
+              -p "$APP_SPECIFIC_PASSWORD"
+          fi
+          
+          echo "✅ Upload completed successfully"
+
+      - name: Cleanup iOS keychain
+        if: ${{ always() && matrix.target == 'IOS64' }}
+        run: |
+          security delete-keychain ios-build.keychain || true
 
       - name: Upload artifact
         uses: actions/upload-artifact@v6
