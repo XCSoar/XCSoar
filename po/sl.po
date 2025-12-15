@@ -430,7 +430,7 @@ msgstr "točke niso po MAT pravilih"
 #: src/Task/ValidationErrorStrings.cpp:23
 #, no-c-format
 msgid "Wrong shape"
-msgstr ""
+msgstr "Napačna oblika"
 
 #: src/Airspace/AirspaceGlue.cpp:77
 msgid "Loading Airspace File..."
@@ -442,30 +442,30 @@ msgstr "Neznan tip datoteke zračnega prostora"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:91
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:92
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:230
 msgid "Username"
-msgstr ""
+msgstr "Uporabniško ime"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:93 Data/Input/default.xci:585
 msgid "Plane"
-msgstr ""
+msgstr "Letalo"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:94
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:92
 msgid "Registration"
-msgstr ""
+msgstr "Registracija"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:95
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:93
 msgid "Comp. ID"
-msgstr ""
+msgstr "ID tekmovanja"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:97
 msgid "WeGlide Upload"
-msgstr ""
+msgstr "Nalaganje WeGlide"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:110
 msgid "Upload Flight"
@@ -493,7 +493,7 @@ msgstr "Prenos letov"
 #: src/Dialogs/DownloadFilePicker.cpp:307
 #: src/Dialogs/DownloadFilePicker.cpp:369
 msgid "Error"
-msgstr ""
+msgstr "Napaka"
 
 #: src/Logger/Logger.cpp:83 src/Dialogs/Device/ManageCAI302Dialog.cpp:86
 msgid "Start Logger"
@@ -888,12 +888,12 @@ msgstr "Izključi teren"
 #: src/Menu/ExpandMacros.cpp:346 src/Menu/ExpandMacros.cpp:348
 #: src/Menu/ExpandMacros.cpp:350
 msgid "Hide"
-msgstr ""
+msgstr "Skrij"
 
 #: src/Menu/ExpandMacros.cpp:346 src/Menu/ExpandMacros.cpp:348
 #: src/Menu/ExpandMacros.cpp:350
 msgid "Show"
-msgstr ""
+msgstr "Prikaži"
 
 #: src/Menu/ExpandMacros.cpp:353 src/Input/InputEventsSettings.cpp:295
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:65
@@ -938,7 +938,7 @@ msgstr "Napaka zapisovalca"
 
 #: src/Input/InputEventsActions.cpp:251
 msgid "Screen Mode Full"
-msgstr ""
+msgstr "Način zaslona: Polno"
 
 #: src/Input/InputEventsActions.cpp:253
 msgid "Auxiliary InfoBoxes"
@@ -946,7 +946,7 @@ msgstr ""
 
 #: src/Input/InputEventsActions.cpp:255
 msgid "Default InfoBoxes"
-msgstr ""
+msgstr "Privzete InfoBox"
 
 #: src/Input/InputEventsActions.cpp:362
 msgid "No active waypoint!"
@@ -954,19 +954,19 @@ msgstr ""
 
 #: src/Input/InputEventsActions.cpp:470
 msgid "NMEA log on"
-msgstr ""
+msgstr "NMEA dnevnik vklopljen"
 
 #: src/Input/InputEventsActions.cpp:472
 msgid "NMEA log off"
-msgstr ""
+msgstr "NMEA dnevnik izklopljen"
 
 #: src/Input/InputEventsActions.cpp:476
 msgid "Logger on"
-msgstr ""
+msgstr "Dnevnik vklopljen"
 
 #: src/Input/InputEventsActions.cpp:478
 msgid "Logger off"
-msgstr ""
+msgstr "Dnevnik izklopljen"
 
 #: src/Input/InputEventsMap.cpp:53
 msgid "Auto. zoom on"
@@ -974,45 +974,43 @@ msgstr ""
 
 #: src/Input/InputEventsMap.cpp:55 src/Input/InputEventsMap.cpp:189
 msgid "Auto. zoom off"
-msgstr ""
+msgstr "Samodejno povečanje izklopljeno"
 
 #: src/Input/InputEventsMap.cpp:80
 msgid "Circling zoom on"
-msgstr ""
+msgstr "Povečanje pri kroženju vklopljeno"
 
 #: src/Input/InputEventsMap.cpp:82
 msgid "Circling zoom off"
-msgstr ""
+msgstr "Povečanje pri kroženju izklopljeno"
 
 #: src/Input/InputEventsAirspace.cpp:40 src/Input/InputEventsAirspace.cpp:47
 msgid "Airspace shown"
-msgstr ""
+msgstr "Zračni prostor prikazan"
 
 #: src/Input/InputEventsAirspace.cpp:41 src/Input/InputEventsAirspace.cpp:44
 msgid "Airspace hidden"
-msgstr ""
+msgstr "Zračni prostor skrit"
 
 #: src/Input/InputEventsAirspace.cpp:51
 msgid "Show airspace off"
-msgstr ""
+msgstr "Prikaz zračnih prostorov izklopljen"
 
 #: src/Input/InputEventsAirspace.cpp:53
 msgid "Show airspace on"
-msgstr ""
+msgstr "Prikaz zračnih prostorov vklopljen"
 
 #: src/Input/InputEventsTask.cpp:55 src/Input/InputEventsTask.cpp:65
-#, fuzzy
-#| msgid "Arm start"
 msgid "Armed start activated"
-msgstr "Omogoči start"
+msgstr "Aktiviran oborožen start"
 
 #: src/Input/InputEventsTask.cpp:69
 msgid "Advance manually"
-msgstr ""
+msgstr "Naprej ročno"
 
 #: src/Input/InputEventsTask.cpp:72
 msgid "Advance automatically"
-msgstr ""
+msgstr "Naprej samodejno"
 
 #: src/Input/InputEventsTask.cpp:75
 msgid "Ready to start"
@@ -1020,54 +1018,52 @@ msgstr ""
 
 #: src/Input/InputEventsTask.cpp:78
 msgid "Hold start"
-msgstr ""
+msgstr "Zadrži start"
 
 #: src/Input/InputEventsTask.cpp:81
 msgid "Ready to turn"
-msgstr ""
+msgstr "Pripravljen za obrat"
 
 #: src/Input/InputEventsTask.cpp:84
 msgid "Hold turn"
-msgstr ""
+msgstr "Zadrži obrat"
 
 #: src/Input/InputEventsTask.cpp:150
 msgid "Auto. MacCready on"
-msgstr ""
+msgstr "Samodejni MacCready vklopljen"
 
 #: src/Input/InputEventsTask.cpp:152
 msgid "Auto. MacCready off"
-msgstr ""
+msgstr "Samodejni MacCready izklopljen"
 
 #: src/Input/InputEventsTask.cpp:155
 msgid "MacCready "
-msgstr ""
+msgstr "MacCready "
 
 #: src/Input/InputEventsTask.cpp:212 src/Input/InputEventsTask.cpp:219
 #: src/Input/InputEventsTask.cpp:236 src/Input/InputEventsTask.cpp:244
 msgid "Task aborted"
-msgstr ""
+msgstr "Naloga prekinjena"
 
 #: src/Input/InputEventsTask.cpp:215 src/Input/InputEventsTask.cpp:241
 #: src/Input/InputEventsTask.cpp:249
-#, fuzzy
-#| msgid "Task declared!"
 msgid "Task resumed"
-msgstr "Naloga najavljena"
+msgstr "Naloga nadaljevana"
 
 #: src/Input/InputEventsTask.cpp:222
 msgid "Go to target"
-msgstr ""
+msgstr "Pojdi na cilj"
 
 #: src/Input/InputEventsTask.cpp:225
 msgid "Ordered task"
-msgstr ""
+msgstr "Urejena naloga"
 
 #: src/Input/InputEventsTask.cpp:228
 #: src/Renderer/FlightStatisticsRenderer.cpp:345
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:110
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:210
 msgid "No task"
-msgstr ""
+msgstr "Ni naloge"
 
 #: src/Input/InputEventsTask.cpp:317 src/Renderer/MapItemListRenderer.cpp:352
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:26
@@ -1079,7 +1075,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:166
 #, no-c-format
 msgid "Altitude"
-msgstr ""
+msgstr "Višina"
 
 #: src/Input/InputEventsTask.cpp:318
 #: src/Renderer/FlightStatisticsRenderer.cpp:213
@@ -1088,7 +1084,7 @@ msgstr ""
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:60
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:67
 msgid "Speed"
-msgstr ""
+msgstr "Hitrost"
 
 #. Important: all pages after Units in this list must not have data fields that are
 #. unit-dependent because they will be saved after their units may have changed.
@@ -1101,52 +1097,52 @@ msgstr ""
 #: src/Dialogs/Weather/RASPDialog.cpp:129
 #, no-c-format
 msgid "Time"
-msgstr ""
+msgstr "Čas"
 
 #: src/Input/InputEventsTask.cpp:323
 msgid "Task start"
-msgstr ""
+msgstr "Začetek naloge"
 
 #: src/Input/InputEventsTask.cpp:325
 msgid "Next turnpoint"
-msgstr ""
+msgstr "Naslednja točka obrata"
 
 #: src/Input/InputEventsTask.cpp:327
 msgid "Task finished"
-msgstr ""
+msgstr "Naloga končana"
 
 #: src/Input/InputEventsSettings.cpp:41
 msgid "Vario sounds on"
-msgstr ""
+msgstr "Zvoki variometra vklopljeni"
 
 #: src/Input/InputEventsSettings.cpp:43
 msgid "Vario sounds off"
-msgstr ""
+msgstr "Zvoki variometra izklopljeni"
 
 #: src/Input/InputEventsSettings.cpp:71
 msgid "Snail trail off"
-msgstr ""
+msgstr "Sled izklopljena"
 
 #: src/Input/InputEventsSettings.cpp:75
 msgid "Long snail trail"
-msgstr ""
+msgstr "Dolga sled"
 
 #: src/Input/InputEventsSettings.cpp:79
 msgid "Short snail trail"
-msgstr ""
+msgstr "Kratka sled"
 
 #: src/Input/InputEventsSettings.cpp:83
 msgid "Full snail trail"
-msgstr ""
+msgstr "Polna sled"
 
 #: src/Input/InputEventsSettings.cpp:185
 msgid "Bugs performance"
-msgstr ""
+msgstr "Učinkovitost hroščev"
 
 #: src/Input/InputEventsSettings.cpp:228
 #, no-c-format
 msgid "Ballast %"
-msgstr ""
+msgstr "Balast %"
 
 #: src/Input/InputEventsSettings.cpp:264 src/Dialogs/ProfileListDialog.cpp:211
 #: src/Dialogs/ProfileListDialog.cpp:256
@@ -1164,7 +1160,7 @@ msgstr "Napaka pri prenosu leta"
 #: src/Input/InputEventsSettings.cpp:287 src/InfoBoxes/Content/Factory.cpp:528
 #, no-c-format
 msgid "Forecast temperature"
-msgstr ""
+msgstr "Napovedana temperatura"
 
 #: src/Input/InputEventsSettings.cpp:318
 #, c-format
@@ -1182,43 +1178,35 @@ msgstr ""
 
 #: src/Input/InputEventsSettings.cpp:433 src/Input/InputEventsSettings.cpp:474
 msgid "Topography/Terrain"
-msgstr ""
+msgstr "Topografija/Teren"
 
 #: src/Input/InputEventsSettings.cpp:438 src/Input/InputEventsSettings.cpp:457
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:134
-#, fuzzy
-#| msgid "Terrain On"
 msgid "Terrain shown"
-msgstr "Vključi teren"
+msgstr "Teren prikazan"
 
 #: src/Input/InputEventsSettings.cpp:439 src/Input/InputEventsSettings.cpp:461
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:135
-#, fuzzy
-#| msgid "Terrain shade"
 msgid "Terrain hidden"
-msgstr "Vključi teren"
+msgstr "Teren skrit"
 
 #: src/Input/InputEventsSettings.cpp:444 src/Input/InputEventsSettings.cpp:449
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:143
-#, fuzzy
-#| msgid "Topography On"
 msgid "Topography shown"
-msgstr "Vključi topografijo"
+msgstr "Topografija prikazana"
 
 #: src/Input/InputEventsSettings.cpp:445 src/Input/InputEventsSettings.cpp:453
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:144
-#, fuzzy
-#| msgid "Topography On"
 msgid "Topography hidden"
-msgstr "Vključi topografijo"
+msgstr "Topografija skrita"
 
 #: src/Input/InputEventsLua.cpp:40
 msgid "Not found"
-msgstr ""
+msgstr "Ni najdeno"
 
 #: src/Input/InputEventsLua.cpp:45 src/Dialogs/FileManager.cpp:561
 msgid "Select a file"
-msgstr ""
+msgstr "Izberi datoteko"
 
 #: src/PageSettings.cpp:25
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:135
@@ -1226,7 +1214,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:356
 #, no-c-format
 msgid "FLARM radar"
-msgstr ""
+msgstr "FLARM radar"
 
 #: src/PageSettings.cpp:28
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:149
@@ -1242,17 +1230,17 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:837
 #, no-c-format
 msgid "Horizon"
-msgstr ""
+msgstr "Obzorje"
 
 #: src/PageSettings.cpp:41 src/InfoBoxes/Content/Altitude.cpp:27
 #: Data/Input/default.xci:945
 #, no-c-format
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: src/PageSettings.cpp:41
 msgid "Map and InfoBoxes"
-msgstr ""
+msgstr "Zemljevid in InfoBox"
 
 #: src/PageSettings.cpp:60
 msgid "Info Hide"
@@ -1260,12 +1248,12 @@ msgstr ""
 
 #: src/PageSettings.cpp:62
 msgid "Map (Full screen)"
-msgstr ""
+msgstr "Zemljevid (celoten zaslon)"
 
 #: src/Renderer/ChartRenderer.cpp:228
 #: src/Dialogs/Device/DeviceListDialog.cpp:462
 msgid "No data"
-msgstr ""
+msgstr "Ni podatkov"
 
 #: src/Renderer/MapItemListRenderer.cpp:61
 #: src/Renderer/MapItemListRenderer.cpp:65
@@ -1281,7 +1269,7 @@ msgstr ""
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:122
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:124
 msgid "Elevation"
-msgstr ""
+msgstr "Nadmorska višina"
 
 #: src/Renderer/MapItemListRenderer.cpp:133
 #: src/Renderer/MapItemListRenderer.cpp:156
@@ -1289,7 +1277,7 @@ msgstr ""
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:240
 #, no-c-format
 msgid "AGL"
-msgstr ""
+msgstr "AGL"
 
 #: src/Renderer/MapItemListRenderer.cpp:138
 #: src/Renderer/MapItemListRenderer.cpp:161
@@ -1301,33 +1289,33 @@ msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:147
 msgid "around terrain"
-msgstr ""
+msgstr "okoli terena"
 
 #: src/Renderer/MapItemListRenderer.cpp:165
 msgid "Unreachable due to terrain."
-msgstr ""
+msgstr "Nedosegljivo zaradi terena."
 
 #: src/Renderer/MapItemListRenderer.cpp:170
 msgid "Arrival altitude"
-msgstr ""
+msgstr "Višina prihoda"
 
 #: src/Renderer/MapItemListRenderer.cpp:192
 msgid "Your Position"
-msgstr ""
+msgstr "Vaša pozicija"
 
 #: src/Renderer/MapItemListRenderer.cpp:249
 #: src/InfoBoxes/Content/Factory.cpp:927
 #, no-c-format
 msgid "Thermal"
-msgstr ""
+msgstr "Termika"
 
 #: src/Renderer/MapItemListRenderer.cpp:258
 msgid "Avg. lift"
-msgstr ""
+msgstr "Povpr. nosilec"
 
 #: src/Renderer/MapItemListRenderer.cpp:330
 msgid "FLARM Traffic"
-msgstr ""
+msgstr "FLARM promet"
 
 #. valid but unknown number of sats
 #: src/Renderer/MapItemListRenderer.cpp:347
@@ -1350,7 +1338,7 @@ msgstr ""
 
 #: src/Renderer/WaypointListRenderer.cpp:136
 msgid "Arrival Alt"
-msgstr ""
+msgstr "Višina prihoda"
 
 #: src/Renderer/WaypointListRenderer.cpp:148
 msgid " ("
@@ -1359,7 +1347,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:28 src/Weather/Rasp/RaspStore.cpp:33
 #, no-c-format
 msgid "W*"
-msgstr ""
+msgstr "W*"
 
 #: src/Weather/Rasp/RaspStore.cpp:29 src/Weather/Rasp/RaspStore.cpp:34
 #, no-c-format
@@ -1374,7 +1362,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:38
 #, no-c-format
 msgid "BL Wind spd"
-msgstr ""
+msgstr "Hitrost vetra BL"
 
 #: src/Weather/Rasp/RaspStore.cpp:39
 #, no-c-format
@@ -1387,7 +1375,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:43
 #, no-c-format
 msgid "H bl"
-msgstr ""
+msgstr "H bl"
 
 #: src/Weather/Rasp/RaspStore.cpp:44
 #, no-c-format
@@ -1405,7 +1393,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:48
 #, no-c-format
 msgid "dwcrit"
-msgstr ""
+msgstr "dwcrit"
 
 #: src/Weather/Rasp/RaspStore.cpp:49
 #, no-c-format
@@ -1423,7 +1411,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:53
 #, no-c-format
 msgid "bl cloud"
-msgstr ""
+msgstr "bl oblak"
 
 #: src/Weather/Rasp/RaspStore.cpp:54
 #, no-c-format
@@ -1439,7 +1427,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:58
 #, no-c-format
 msgid "Sfc temp"
-msgstr ""
+msgstr "Temp. površine"
 
 #: src/Weather/Rasp/RaspStore.cpp:59
 #, no-c-format
@@ -1453,7 +1441,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:63
 #, no-c-format
 msgid "hwcrit"
-msgstr ""
+msgstr "hwcrit"
 
 #: src/Weather/Rasp/RaspStore.cpp:64
 #, no-c-format
@@ -1471,7 +1459,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:68
 #, no-c-format
 msgid "wblmaxmin"
-msgstr ""
+msgstr "wblmaxmin"
 
 #: src/Weather/Rasp/RaspStore.cpp:69
 #, no-c-format
@@ -1486,30 +1474,30 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:73
 #, no-c-format
 msgid "blcwbase"
-msgstr ""
+msgstr "blcwbase"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:210
 #: src/Renderer/FlightStatisticsRenderer.cpp:229
 #: src/Renderer/FlightStatisticsRenderer.cpp:255
 msgid "Score"
-msgstr ""
+msgstr "Točke"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:210
 #: src/Renderer/FlightStatisticsRenderer.cpp:229
 #: src/Renderer/FlightStatisticsRenderer.cpp:255
 msgid "pts"
-msgstr ""
+msgstr "točk"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:355
 #: src/Renderer/FlightStatisticsRenderer.cpp:365
 #: src/Renderer/FlightStatisticsRenderer.cpp:376
 msgid "Task to go"
-msgstr ""
+msgstr "Naloga do cilja"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:356
 #: src/Renderer/FlightStatisticsRenderer.cpp:366
 msgid "AAT to go"
-msgstr ""
+msgstr "AAT do cilja"
 
 #. landscape: info above buttons
 #: src/Renderer/FlightStatisticsRenderer.cpp:357
@@ -1522,43 +1510,43 @@ msgstr ""
 #: src/Renderer/FlightStatisticsRenderer.cpp:359
 #: src/Renderer/FlightStatisticsRenderer.cpp:370
 msgid "Target speed"
-msgstr ""
+msgstr "Ciljna hitrost"
 
 #: src/Renderer/BarographRenderer.cpp:27 src/Renderer/BarographRenderer.cpp:33
 msgid "Working band"
-msgstr ""
+msgstr "Delovni pas"
 
 #: src/Renderer/BarographRenderer.cpp:37
 msgid "Ceiling trend"
-msgstr ""
+msgstr "Trend višine stropa"
 
 #: src/Renderer/ClimbChartRenderer.cpp:27
 #: src/Renderer/ClimbChartRenderer.cpp:32
 msgid "Avg. climb"
-msgstr ""
+msgstr "Povp. vzpon"
 
 #: src/Renderer/ClimbChartRenderer.cpp:35
 msgid "Climb trend"
-msgstr ""
+msgstr "Trend vzpona"
 
 #: src/Renderer/GlidePolarRenderer.cpp:29
 msgid "L/D"
-msgstr ""
+msgstr "L/D"
 
 #: src/Renderer/GlidePolarRenderer.cpp:33
 msgid "Min. sink"
-msgstr ""
+msgstr "Min. padanje"
 
 #: src/Renderer/GlidePolarInfoRenderer.cpp:30 src/Dialogs/dlgAnalysis.cpp:497
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:209
 msgid "Mass"
-msgstr ""
+msgstr "Masa"
 
 #: src/Renderer/GlidePolarInfoRenderer.cpp:37
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:279
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:219
 msgid "Wing loading"
-msgstr ""
+msgstr "Obremenitev krila"
 
 #: src/Renderer/CuRenderer.cpp:127
 msgid "Thermal height"
@@ -1566,20 +1554,20 @@ msgstr ""
 
 #: src/Renderer/CuRenderer.cpp:130
 msgid "Cloud base"
-msgstr ""
+msgstr "Osnova oblakov"
 
 #: src/Renderer/MacCreadyRenderer.cpp:28 src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
 msgid "Vopt"
-msgstr ""
+msgstr "Vopt"
 
 #: src/Renderer/MacCreadyRenderer.cpp:31 src/Renderer/TaskSpeedRenderer.cpp:29
 msgid "Vave"
-msgstr ""
+msgstr "Vave"
 
 #: src/Renderer/TaskSpeedRenderer.cpp:32
 msgid "Vest"
-msgstr ""
+msgstr "Vest"
 
 #: src/UIActions.cpp:32
 msgid "Quit program?"
@@ -1588,12 +1576,12 @@ msgstr ""
 #: src/Units/UnitsStore.cpp:19
 #, no-c-format
 msgid "European"
-msgstr ""
+msgstr "Evropski"
 
 #: src/Units/UnitsStore.cpp:32
 #, no-c-format
 msgid "British"
-msgstr ""
+msgstr "Britanski"
 
 #: src/Units/UnitsStore.cpp:45
 #, no-c-format
@@ -1603,7 +1591,7 @@ msgstr ""
 #: src/Units/UnitsStore.cpp:58
 #, no-c-format
 msgid "Australian"
-msgstr ""
+msgstr "Avstralski"
 
 #: src/Polar/PolarGlue.cpp:43
 msgid ""
@@ -1613,20 +1601,20 @@ msgstr ""
 
 #: src/Polar/PolarGlue.cpp:44
 msgid "Warning"
-msgstr ""
+msgstr "Opozorilo"
 
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:53
 msgid "Battery low"
-msgstr ""
+msgstr "Baterija nizka"
 
 #: src/Startup.cpp:189
 msgid "Loading Terrain File..."
-msgstr ""
+msgstr "Nalaganje datoteke terena..."
 
 #: src/Startup.cpp:327
 msgid "Initialising"
-msgstr ""
+msgstr "Inicializiranje"
 
 #: src/Startup.cpp:429
 msgid "Loading Topography File..."
@@ -1642,7 +1630,7 @@ msgstr "Nalagam datoteko s podrobnostmi letališča"
 
 #: src/Startup.cpp:503
 msgid "Starting devices"
-msgstr ""
+msgstr "Zaganjanje naprav"
 
 #.
 #. -- Reset polar in case devices need the data
@@ -1652,7 +1640,7 @@ msgstr ""
 #.
 #: src/Startup.cpp:515
 msgid "Initialising display"
-msgstr ""
+msgstr "Inicializiranje zaslona"
 
 #. Show progress dialog
 #: src/Startup.cpp:610 src/Startup.cpp:648 src/Startup.cpp:716
@@ -1670,52 +1658,52 @@ msgstr ""
 
 #: src/Startup.cpp:706
 msgid "Shutdown, saving task..."
-msgstr ""
+msgstr "Zaustavljanje, shranjevanje naloge..."
 
 #: src/Device/Descriptor.cpp:400 src/Device/Descriptor.cpp:413
 msgid "Unable to open port"
-msgstr ""
+msgstr "Ni mogoče odpreti vrat"
 
 #: src/Device/Descriptor.cpp:1092 src/Device/Descriptor.cpp:1098
 msgid "Sending declaration"
-msgstr ""
+msgstr "Pošiljanje deklaracije"
 
 #: src/Device/Descriptor.cpp:1145 src/Device/Descriptor.cpp:1152
 msgid "Reading flight list"
-msgstr ""
+msgstr "Branje seznama letov"
 
 #: src/Device/Descriptor.cpp:1176 src/Device/Descriptor.cpp:1183
 msgid "Downloading flight log"
-msgstr ""
+msgstr "Prenos dnevnika leta"
 
 #: src/Device/Config.cpp:197 src/Dialogs/Device/PortDataField.cpp:32
 #: src/Dialogs/Device/DeviceListDialog.cpp:458
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:19
 #, no-c-format
 msgid "Disabled"
-msgstr ""
+msgstr "Onemogočeno"
 
 #: src/Device/Config.cpp:214 src/Dialogs/Device/PortPicker.cpp:56
 msgid "BLE sensor"
-msgstr ""
+msgstr "BLE senzor"
 
 #: src/Device/Config.cpp:230 src/Dialogs/Device/PortPicker.cpp:53
 msgid "BLE port"
-msgstr ""
+msgstr "BLE vrata"
 
 #: src/Device/Config.cpp:250 src/Dialogs/Device/PortDataField.cpp:37
 #, no-c-format
 msgid "Bluetooth server"
-msgstr ""
+msgstr "Bluetooth strežnik"
 
 #: src/Device/Config.cpp:269
 msgid "GPS Intermediate Driver"
-msgstr ""
+msgstr "Vmesni gonilnik GPS"
 
 #: src/Device/Config.cpp:272 src/Dialogs/Device/PortDataField.cpp:34
 #, no-c-format
 msgid "Built-in GPS & sensors"
-msgstr ""
+msgstr "Vgrajeni GPS in senzorji"
 
 #: src/Device/Config.cpp:275
 msgid "GliderLink traffic receiver"
@@ -1723,7 +1711,7 @@ msgstr ""
 
 #: src/Device/Config.cpp:296 src/Dialogs/Device/PortPicker.cpp:59
 msgid "USB serial"
-msgstr ""
+msgstr "USB serijski"
 
 #. create buttons
 #: src/Dialogs/Message.cpp:76 src/Dialogs/WidgetDialog.cpp:244
@@ -1738,16 +1726,16 @@ msgstr ""
 #: src/Dialogs/TouchTextEntry.cpp:183 src/Dialogs/TimeEntry.cpp:45
 #: src/Dialogs/DateEntry.cpp:41 src/Dialogs/GeoPointEntry.cpp:56
 msgid "OK"
-msgstr ""
+msgstr "V redu"
 
 #: src/Dialogs/Message.cpp:82 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:40
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:43
 msgid "Yes"
-msgstr ""
+msgstr "Da"
 
 #: src/Dialogs/Message.cpp:84
 msgid "No"
-msgstr ""
+msgstr "Ne"
 
 #: src/Dialogs/Message.cpp:90
 msgid "Retry"
@@ -1769,50 +1757,50 @@ msgstr ""
 #: src/Dialogs/TouchTextEntry.cpp:187 src/Dialogs/TimeEntry.cpp:46
 #: src/Dialogs/DateEntry.cpp:42 src/Dialogs/GeoPointEntry.cpp:57
 msgid "Cancel"
-msgstr ""
+msgstr "Prekliči"
 
 #: src/Dialogs/Message.cpp:103
 msgid "Ignore"
-msgstr ""
+msgstr "Prezri"
 
 #: src/Dialogs/ListPicker.cpp:49 src/Dialogs/Device/PortPicker.cpp:293
 #: src/Dialogs/Traffic/TrafficList.cpp:779
 #: src/Dialogs/ProfileListDialog.cpp:331
 msgid "Select"
-msgstr ""
+msgstr "Izberi"
 
 #: src/Dialogs/ListPicker.cpp:55 src/Dialogs/MultiFilePicker.cpp:78
 #: src/Dialogs/HelpDialog.cpp:18
 msgid "Help"
-msgstr ""
+msgstr "Pomoč"
 
 #: src/Dialogs/FileManager.cpp:399 src/Dialogs/Weather/NOAAList.cpp:99
 #: src/Dialogs/Weather/NOAADetails.cpp:48
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:211
 msgid "Update"
-msgstr ""
+msgstr "Posodobi"
 
 #: src/Dialogs/FileManager.cpp:400 src/Dialogs/MultiFilePicker.cpp:79
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:92
 #: src/Dialogs/Weather/NOAAList.cpp:98 src/Monitor/MatTaskMonitor.cpp:40
 msgid "Add"
-msgstr ""
+msgstr "Dodaj"
 
 #: src/Dialogs/FileManager.cpp:402
 msgid "Update all"
-msgstr ""
+msgstr "Posodobi vse"
 
 #: src/Dialogs/FileManager.cpp:435
 msgid "Queued"
-msgstr ""
+msgstr "V čakalni vrsti"
 
 #: src/Dialogs/FileManager.cpp:437 src/Dialogs/FileManager.cpp:443
 msgid "Downloading"
-msgstr ""
+msgstr "Prenašanje"
 
 #: src/Dialogs/FileManager.cpp:455
 msgid "Update available"
-msgstr ""
+msgstr "Posodobitev na voljo"
 
 #: src/Dialogs/FileManager.cpp:734 src/Dialogs/DownloadFilePicker.cpp:366
 #: src/Dialogs/DownloadFilePicker.cpp:368
@@ -1823,7 +1811,7 @@ msgstr ""
 #: src/Dialogs/DownloadFilePicker.cpp:380 Data/Input/default.xci:651
 #: Data/Input/default.xci:1268
 msgid "File Manager"
-msgstr ""
+msgstr "Upravljalnik datotek"
 
 #: src/Dialogs/FileManager.cpp:767 src/Dialogs/DownloadFilePicker.cpp:379
 msgid "The file manager is not available on this device."
@@ -1832,7 +1820,7 @@ msgstr ""
 #: src/Dialogs/Device/PortDataField.cpp:41
 #, no-c-format
 msgid "IOIO switches and Nunchuk"
-msgstr ""
+msgstr "IOIO stikala in Nunchuk"
 
 #: src/Dialogs/Device/PortDataField.cpp:43
 #, no-c-format
@@ -1842,12 +1830,12 @@ msgstr "Tlačni senzor"
 #: src/Dialogs/Device/PortDataField.cpp:44
 #, no-c-format
 msgid "IOIO voltage sensor"
-msgstr ""
+msgstr "IOIO senzor napetosti"
 
 #: src/Dialogs/Device/PortDataField.cpp:47
 #, no-c-format
 msgid "TCP client"
-msgstr ""
+msgstr "TCP odjemalec"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -1855,52 +1843,54 @@ msgstr ""
 #: src/Dialogs/Device/DeviceEditWidget.cpp:276
 #, no-c-format
 msgid "TCP port"
-msgstr ""
+msgstr "TCP vrata"
 
 #: src/Dialogs/Device/PortDataField.cpp:52
 #, no-c-format
 msgid "UDP port"
-msgstr ""
+msgstr "UDP vrata"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:248
 msgid "Port"
-msgstr ""
+msgstr "Vrata"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:254
 msgid "Engine Type"
-msgstr ""
+msgstr "Tip motorja"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:259
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:77
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:84
 msgid "Baud rate"
-msgstr ""
+msgstr "Hitrost prenosa"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:265
 msgid "Bulk baud rate"
-msgstr ""
+msgstr "Hitrost prenosa za množične prenose"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:266
 msgid ""
 "The baud rate used for bulk transfers, such as task declaration or flight "
 "download."
 msgstr ""
+"Hitrost prenosa, ki se uporablja za množične prenose, kot so deklaracija "
+"naloge ali prenos leta."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:271
 msgid "IP address"
-msgstr ""
+msgstr "IP naslov"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:281
 msgid "I²C bus"
-msgstr ""
+msgstr "I²C vodilo"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:281
 msgid "Select the description or bus number that matches your configuration."
-msgstr ""
+msgstr "Izberite opis ali številko vodila, ki se ujema z vašo konfiguracijo."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:287
 msgid "I²C addr"
-msgstr ""
+msgstr "I²C naslov"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:287
 msgid ""
@@ -1911,7 +1901,7 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:295
 msgid "Pressure use"
-msgstr ""
+msgstr "Uporaba tlaka"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:295
 msgid ""
@@ -1919,27 +1909,29 @@ msgid ""
 "pressure. Here you tell the system what pressure this is and what it should "
 "be used for."
 msgstr ""
+"Izberite namen tega senzorja tlaka. Ta senzor meri nekaj tlaka. Tu sistemu "
+"poveste, kakšen tlak je to in za kaj naj se uporablja."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:309
 msgid "Driver"
-msgstr ""
+msgstr "Voznik"
 
 #. for a passthrough device, offer additional driver
 #: src/Dialogs/Device/DeviceEditWidget.cpp:312
 msgid "Passthrough device"
-msgstr ""
+msgstr "Naprava za prehod"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:313
 msgid "Whether the device has a passed-through device connected."
-msgstr ""
+msgstr "Ali ima naprava priključeno napravo za prehod."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:324
 msgid "Second Driver"
-msgstr ""
+msgstr "Drugi voznik"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:326
 msgid "Sync. from device"
-msgstr ""
+msgstr "Sinhroniziraj z naprave"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:327
 msgid ""
@@ -1949,7 +1941,7 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:332
 msgid "Sync. to device"
-msgstr ""
+msgstr "Sinhroniziraj z napravo"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:333
 msgid ""
@@ -1969,11 +1961,11 @@ msgstr ""
 #: src/InfoBoxes/Content/Radio.cpp:75
 #, no-c-format
 msgid "Edit"
-msgstr ""
+msgstr "Uredi"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:300
 msgid "Flight download"
-msgstr ""
+msgstr "Prenos leta"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:304
 #: src/Dialogs/Device/DeviceListDialog.cpp:581
@@ -1982,11 +1974,11 @@ msgstr ""
 #: src/Dialogs/Device/DeviceListDialog.cpp:668
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:111
 msgid "Manage"
-msgstr ""
+msgstr "Upravljaj"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:308
 msgid "Monitor"
-msgstr ""
+msgstr "Spremljaj"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:312
 #: src/Dialogs/Device/DeviceListDialog.cpp:547
@@ -1994,27 +1986,27 @@ msgstr ""
 #: src/Dialogs/Device/PortMonitor.cpp:120
 #: src/Dialogs/Device/PortMonitor.cpp:128
 msgid "Reconnect"
-msgstr ""
+msgstr "Ponovno poveži"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:316
 #: src/Dialogs/Device/DeviceListDialog.cpp:335
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:210
 msgid "Disable"
-msgstr ""
+msgstr "Onemogoči"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:320
 #: src/Dialogs/Device/DeviceListDialog.cpp:447
 #: src/Dialogs/Device/DeviceListDialog.cpp:466
 #: src/Dialogs/Device/DeviceListDialog.cpp:754
 msgid "Debug"
-msgstr ""
+msgstr "Razhroščevanje"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:335
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:132
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:68
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:69
 msgid "Enable"
-msgstr ""
+msgstr "Omogoči"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:383
 #, c-format
@@ -2023,12 +2015,12 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:397
 msgid "GPS fix"
-msgstr ""
+msgstr "GPS določitev"
 
 #. device sends GPGGA, but no valid location
 #: src/Dialogs/Device/DeviceListDialog.cpp:400
 msgid "Bad GPS"
-msgstr ""
+msgstr "Slab GPS"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:402
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:44
@@ -2036,27 +2028,27 @@ msgstr ""
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:79
 #, no-c-format
 msgid "Connected"
-msgstr ""
+msgstr "Povezano"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:407
 msgid "Baro"
-msgstr ""
+msgstr "Baro"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:412
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:108
 msgid "Pitot"
-msgstr ""
+msgstr "Pitot"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:417
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:88
 msgid "Airspeed"
-msgstr ""
+msgstr "Hitrost gibanja"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:452
 #: src/InfoBoxes/Content/Factory.cpp:649
 #, no-c-format
 msgid "Battery"
-msgstr ""
+msgstr "Baterija"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:460
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:41
@@ -2064,36 +2056,36 @@ msgstr ""
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:49
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:53
 msgid "N/A"
-msgstr ""
+msgstr "N/D"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:471
 #: src/Dialogs/Device/DeviceListDialog.cpp:547
 msgid "Bluetooth is disabled"
-msgstr ""
+msgstr "Bluetooth je onemogočen"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:473
 msgid "Duplicate"
-msgstr ""
+msgstr "Podvoji"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:480
 msgid "Not connected"
-msgstr ""
+msgstr "Ni povezano"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:555
 #: src/Dialogs/Device/DeviceListDialog.cpp:587
 #: src/Dialogs/Device/DeviceListDialog.cpp:668
 #: src/Dialogs/Device/PortMonitor.cpp:128
 msgid "Device is occupied"
-msgstr ""
+msgstr "Naprava je zasedena"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:581
 #: src/Dialogs/Device/DeviceListDialog.cpp:662
 msgid "Device is not connected"
-msgstr ""
+msgstr "Naprava ni povezana"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:609
 msgid "Edit device"
-msgstr ""
+msgstr "Uredi napravo"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:752
 #, c-format
@@ -2103,7 +2095,7 @@ msgstr ""
 #: src/Dialogs/Device/DeviceListDialog.cpp:769 Data/Input/default.xci:593
 #: Data/Input/default.xci:1197
 msgid "Devices"
-msgstr ""
+msgstr "Naprave"
 
 #: src/Dialogs/Device/PortMonitor.cpp:119
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:87
@@ -2113,16 +2105,16 @@ msgstr ""
 #: src/Dialogs/DateEntry.cpp:49 src/Dialogs/GeoPointEntry.cpp:60
 #: src/InfoBoxes/Panel/ATCReference.cpp:77
 msgid "Clear"
-msgstr ""
+msgstr "Počisti"
 
 #: src/Dialogs/Device/PortMonitor.cpp:121
 #: src/Dialogs/Device/PortMonitor.cpp:148
 msgid "Pause"
-msgstr ""
+msgstr "Premor"
 
 #: src/Dialogs/Device/PortMonitor.cpp:160
 msgid "Port monitor"
-msgstr ""
+msgstr "Spremljalnik vrat"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:47
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:68
@@ -2140,20 +2132,20 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:53
 #, no-c-format
 msgid "Waypoints"
-msgstr ""
+msgstr "Točke"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:106
 msgid "Delete all flights"
-msgstr ""
+msgstr "Izbriši vse lete"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:107
 msgid "Do you really want to delete all flights from the device?"
-msgstr ""
+msgstr "Ali res želite izbrisati vse lete z naprave?"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:120
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:111
 msgid "Reboot"
-msgstr ""
+msgstr "Ponovni zagon"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:34
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:176
@@ -2161,56 +2153,56 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:47
 #, no-c-format
 msgid "Temperature"
-msgstr ""
+msgstr "Temperatura"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:42
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:109
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:199
 #: src/Weather/NOAAFormatter.cpp:128 src/Weather/NOAAFormatter.cpp:134
 msgid "Pressure"
-msgstr ""
+msgstr "Tlak"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:68
 msgid "Sink tone"
-msgstr ""
+msgstr "Ton padanja"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:23
 msgid "Too many waypoints."
-msgstr ""
+msgstr "Preveč točk."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:27
 msgid "Uploading Waypoints"
-msgstr ""
+msgstr "Nalaganje točk"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:34
 msgid "Failed to switch baud rate."
-msgstr ""
+msgstr "Preklapljanje hitrosti prenosa ni uspelo."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:43
 msgid "Failed to write waypoint."
-msgstr ""
+msgstr "Zapisovanje točke ni uspelo."
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:72
 msgid "Hardware type"
-msgstr ""
+msgstr "Vrsta strojne opreme"
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:79
 msgid "Flarm ID"
-msgstr ""
+msgstr "FLARM ID"
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:89
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:52
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:51
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:44
 msgid "Hardware version"
-msgstr ""
+msgstr "Različica strojne opreme"
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:95
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:58
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:57
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:49
 msgid "Firmware version"
-msgstr ""
+msgstr "Različica vdelane programske opreme"
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:101
 msgid "Obstacle database"
@@ -2224,33 +2216,33 @@ msgstr "Baza ovir"
 #: src/InfoBoxes/Content/Places.cpp:100
 #, no-c-format
 msgid "Setup"
-msgstr ""
+msgstr "Nastavitve"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:35
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:55
 #, no-c-format
 msgid "Volume"
-msgstr ""
+msgstr "Glasnost"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:48
 #, no-c-format
 msgid "Output mode"
-msgstr ""
+msgstr "Način izhoda"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:50
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:102
 #: src/Dialogs/Waypoint/Manager.cpp:105
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:138
 msgid "Save"
-msgstr ""
+msgstr "Shrani"
 
 #: src/Dialogs/Device/Stratux/ConfigurationDialog.cpp:37
 msgid "Horizontal Range"
-msgstr ""
+msgstr "Vodoravni doseg"
 
 #: src/Dialogs/Device/Stratux/ConfigurationDialog.cpp:38
 msgid "Vertical Range"
-msgstr ""
+msgstr "Doseg višine"
 
 #: src/Dialogs/Device/Stratux/ConfigurationDialog.cpp:51
 msgid "Changes to configuration saved. Restart XCSoar to apply changes."
@@ -2258,11 +2250,11 @@ msgstr ""
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:38
 msgid "Calibrate"
-msgstr ""
+msgstr "Kalibriraj"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:110
 msgid "Offset"
-msgstr ""
+msgstr "Odmik"
 
 #: src/Dialogs/Device/ManageI2CPitotDialog.cpp:124
 msgid "Pitot sensor calibration"
@@ -2272,17 +2264,17 @@ msgstr ""
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:39
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:34
 msgid "Product"
-msgstr ""
+msgstr "Izdelek"
 
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:46
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:45
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:39
 msgid "Serial"
-msgstr ""
+msgstr "Serijska"
 
 #: src/Dialogs/Device/LX/LXNAVVarioConfigWidget.cpp:69
 msgid "GPS baud rate"
-msgstr ""
+msgstr "Hitrost prenosa GPS"
 
 #: src/Dialogs/Device/LX/LXNAVVarioConfigWidget.cpp:70
 msgid "PDA baud rate"
@@ -2290,39 +2282,39 @@ msgstr ""
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:80
 msgid "Auto off"
-msgstr ""
+msgstr "Samodejno izklopi"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:83
 msgid "Auto finish flight"
-msgstr ""
+msgstr "Samodejno zaključi let"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:86
 msgid "Always run"
-msgstr ""
+msgstr "Vedno zaženi"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:89
 msgid "Enable NMEA"
-msgstr ""
+msgstr "Omogoči NMEA"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:92
 msgid "Recording interval"
-msgstr ""
+msgstr "Interval snemanja"
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:99
 msgid "Demo"
-msgstr ""
+msgstr "Demo"
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:132
 msgid "Set new audio scheme? Old values will be lost."
-msgstr ""
+msgstr "Nastaviti nov zvočni načrt? Stare vrednosti bodo izgubljene."
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:253
 msgid "Vario Configuration"
-msgstr ""
+msgstr "Konfiguracija variometra"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:81
 msgid "TE vario"
-msgstr ""
+msgstr "TE variometer"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:82
 msgid ""
@@ -2330,19 +2322,25 @@ msgid ""
 "in circling mode to demonstrate the lift tones. When not in circling mode, "
 "set this to a realistic negative value so speed command tones are produced."
 msgstr ""
+"To ustvari lažno bruto navpično hitrost TE variometra. Lahko se uporablja v "
+"načinu kroženja za predstavitev tonov nosilca. Ko niste v načinu kroženja, "
+"nastavite to na realistično negativno vrednost, da se proizvedejo toni "
+"ukazov hitrosti."
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:89
 msgid ""
 "This produces a fake airspeed. It can be used when not in circling mode to "
 "demonstrate the speed command tones."
 msgstr ""
+"To ustvari lažno zračno hitrost. Lahko se uporablja, ko niste v načinu "
+"kroženja, za predstavitev tonov ukazov hitrosti."
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:93
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:180
 #: src/InfoBoxes/InfoBoxSettings.cpp:58
 #, no-c-format
 msgid "Circling"
-msgstr ""
+msgstr "Kroženje"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:94
 msgid "This forces the variometer into circling or cruise mode"
@@ -2350,7 +2348,7 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:108
 msgid "Vario Demo"
-msgstr ""
+msgstr "Demo variometra"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:16
 #, no-c-format
@@ -2360,12 +2358,12 @@ msgstr ""
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:17
 #, no-c-format
 msgid "Neutral"
-msgstr ""
+msgstr "Nevtralno"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:18
 #, no-c-format
 msgid "Negative"
-msgstr ""
+msgstr "Negativno"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:19 Data/Input/default.xci:53
 #, no-c-format
@@ -2375,27 +2373,27 @@ msgstr ""
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:25
 #, no-c-format
 msgid "Up"
-msgstr ""
+msgstr "Gor"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:26
 #, no-c-format
 msgid "Middle"
-msgstr ""
+msgstr "Sredina"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:27
 #, no-c-format
 msgid "Down"
-msgstr ""
+msgstr "Dol"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:33
 #, no-c-format
 msgid "Locked"
-msgstr ""
+msgstr "Zaklenjeno"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:34
 #, no-c-format
 msgid "Not locked"
-msgstr ""
+msgstr "Ni zaklenjeno"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:52
 msgid "Airbrake locked"
@@ -2403,31 +2401,31 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:53
 msgid "Flaps"
-msgstr ""
+msgstr "Zakrilca"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:54
 msgid "Gear down"
-msgstr ""
+msgstr "Podvozje spuščeno"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:55
 msgid "Acknowledge"
-msgstr ""
+msgstr "Potrdi"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:56
 msgid "Repeat"
-msgstr ""
+msgstr "Ponovi"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:57
 msgid "Speed command"
-msgstr ""
+msgstr "Ukaz hitrosti"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:79
 msgid "Switch"
-msgstr ""
+msgstr "Preklopi"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:80
 msgid "Vario circling"
-msgstr ""
+msgstr "Variometer pri kroženju"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:134
 msgid "Switches"
@@ -2443,11 +2441,11 @@ msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:88
 msgid "Threshold"
-msgstr ""
+msgstr "Prag"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:89
 msgid "Select a speed threshold."
-msgstr ""
+msgstr "Izberi prag hitrosti."
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:106
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:168
@@ -2458,33 +2456,33 @@ msgstr ""
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:107
 #, no-c-format
 msgid "Tow plane"
-msgstr ""
+msgstr "Vlečno letalo"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:108
 #, no-c-format
 msgid "Helicopter"
-msgstr ""
+msgstr "Helikopter"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:109
 #, no-c-format
 msgid "Parachute"
-msgstr ""
+msgstr "Padalo"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:110
 #, no-c-format
 msgid "Drop plane"
-msgstr ""
+msgstr "Letalo za spuščanje"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:111
 #, no-c-format
 msgid "Hang glider"
-msgstr ""
+msgstr "Jadralno padalo"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:112
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:169
 #, no-c-format
 msgid "Paraglider"
-msgstr ""
+msgstr "Parajadralnik"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:113
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:170
@@ -2495,32 +2493,32 @@ msgstr ""
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:114
 #, no-c-format
 msgid "Jet aircraft"
-msgstr ""
+msgstr "Reaktivno letalo"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:115
 #, no-c-format
 msgid "Flying saucer"
-msgstr ""
+msgstr "Leteči krožnik"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:116
 #, no-c-format
 msgid "Balloon"
-msgstr ""
+msgstr "Balon"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:117
 #, no-c-format
 msgid "Airship"
-msgstr ""
+msgstr "Zračna ladja"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:118
 #, no-c-format
 msgid "Unmanned aerial vehicle"
-msgstr ""
+msgstr "Brezpilotno zrakoplovilo"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:119
 #, no-c-format
 msgid "Static object"
-msgstr ""
+msgstr "Statičen predmet"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:123
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:91
@@ -2528,38 +2526,38 @@ msgstr ""
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:86
 #: src/Dialogs/Waypoint/WaypointList.cpp:386
 msgid "Type"
-msgstr ""
+msgstr "Tip"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:124
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:19
 #, no-c-format
 msgid "Logger interval"
-msgstr ""
+msgstr "Interval zapisovalnika"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:126
 msgid "Stealth mode"
-msgstr ""
+msgstr "Način prikritosti"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:127
 msgid "No tracking mode"
-msgstr ""
+msgstr "Način brez sledenja"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:129
 msgid "Range setup"
-msgstr ""
+msgstr "Nastavitev dosega"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:63
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:77
 msgid "Range"
-msgstr ""
+msgstr "Doseg"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:67
 msgid "Vertical range"
-msgstr ""
+msgstr "Navpični doseg"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:75
 msgid "PCAS range"
-msgstr ""
+msgstr "Doseg PCAS"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:76
 msgid "PCAS vertical range"
@@ -2567,70 +2565,74 @@ msgstr ""
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:77
 msgid "ADSB range"
-msgstr ""
+msgstr "Doseg ADSB"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:78
 msgid "ADSB vertical range"
-msgstr ""
+msgstr "Navpični doseg ADSB"
 
 #: src/Dialogs/MapItemListDialog.cpp:146
 #: src/Dialogs/Task/AlternatesListDialog.cpp:138
 msgid "Goto"
-msgstr ""
+msgstr "Pojdi na"
 
 #: src/Dialogs/MapItemListDialog.cpp:150
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:132
 msgid "Ack Day"
-msgstr ""
+msgstr "Potrdi dan"
 
 #: src/Dialogs/MapItemListDialog.cpp:154 src/Dialogs/dlgAnalysis.cpp:458
 #: src/Dialogs/dlgAnalysis.cpp:502 src/Dialogs/dlgAnalysis.cpp:511
 #: src/Dialogs/dlgAnalysis.cpp:520
 msgid "Settings"
-msgstr ""
+msgstr "Nastavitve"
 
 #: src/Dialogs/MapItemListDialog.cpp:237
 #: src/MapWindow/GlueMapWindowItems.cpp:110
 msgid "Map elements at this location"
-msgstr ""
+msgstr "Elementi karte na tej lokaciji"
 
 #: src/Dialogs/MapItemListSettingsDialog.cpp:15
 msgid "Map Item List Settings"
-msgstr ""
+msgstr "Nastavitve seznama elementov karte"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:21
 msgid "Show Location row"
-msgstr ""
+msgstr "Prikaži vrstico lokacije"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:22
 msgid ""
 "If enabled a row at the top will be added showing you the distance and "
 "bearing to the location and the elevation."
 msgstr ""
+"Če je omogočeno, bo na vrhu dodana vrstica, ki prikazuje razdaljo in smer do "
+"lokacije ter višino."
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:26
 msgid "Show Arrival Altitude"
-msgstr ""
+msgstr "Prikaži višino prihoda"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:27
 msgid ""
 "If enabled a row at the top will be added showing you the arrival altitude "
 "at the location."
 msgstr ""
+"Če je omogočeno, bo na vrhu dodana vrstica, ki prikazuje višino prihoda na "
+"lokaciji."
 
 #: src/Dialogs/ColorListDialog.cpp:54
 msgid "Select Color"
-msgstr ""
+msgstr "Izberi barvo"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:91
 #: src/Dialogs/Airspace/dlgAirspace.cpp:92 Data/Input/default.xci:931
 msgid "Display"
-msgstr ""
+msgstr "Prikaz"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:95
 #: src/Dialogs/Airspace/dlgAirspace.cpp:96
 msgid "Warn"
-msgstr ""
+msgstr "Opozori"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:143
 #: src/Dialogs/Settings/dlgConfiguration.cpp:84 src/Dialogs/dlgAnalysis.cpp:554
@@ -2638,65 +2640,65 @@ msgstr ""
 #: Data/Input/default.xci:559 Data/Input/default.xci:1285
 #, no-c-format
 msgid "Airspace"
-msgstr ""
+msgstr "Zračni prostor"
 
 #: src/Dialogs/Airspace/dlgAirspacePatterns.cpp:44
 msgid "Select Pattern"
-msgstr ""
+msgstr "Izberi vzorec"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:58
 msgid "Squawk code"
-msgstr ""
+msgstr "Squawk koda"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:59
 msgid "Set Squawk Code"
-msgstr ""
+msgstr "Nastavi kodo squawk"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:68
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:69
 msgid "Radio"
-msgstr ""
+msgstr "Radio"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:75
 msgid "Station"
-msgstr "Informacija"
+msgstr "Postaja"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:79
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:260
 #: src/Dialogs/Task/AlternatesListDialog.cpp:145
 msgid "Set Active Frequency"
-msgstr ""
+msgstr "Nastavi aktivno frekvenco"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:84
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:265
 #: src/Dialogs/Task/AlternatesListDialog.cpp:151
 msgid "Set Standby Frequency"
-msgstr ""
+msgstr "Nastavi pripravljeno frekvenco"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:90
 msgid "Class"
-msgstr ""
+msgstr "Razred"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:94
 msgid "Top"
-msgstr ""
+msgstr "Vrh"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:97
 msgid "Base"
-msgstr ""
+msgstr "Osnova"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:127
 msgid "Airspace Details"
-msgstr ""
+msgstr "Podrobnosti zračnega prostora"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:330
 #: src/Dialogs/Waypoint/WaypointList.cpp:426
 msgid "No Match!"
-msgstr ""
+msgstr "Ni ujemanja!"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:353
 msgid "Heading"
-msgstr ""
+msgstr "Smer"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:447
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:216
@@ -2704,36 +2706,36 @@ msgstr ""
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
 #: src/Dialogs/Waypoint/WaypointList.cpp:383
 msgid "Name"
-msgstr ""
+msgstr "Ime"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:450
 msgid "Class/Type"
-msgstr ""
+msgstr "Razred/Tip"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:464
 msgid "Select Airspace"
-msgstr ""
+msgstr "Izberi zračni prostor"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:15
 msgid "Airspace Renderer Settings"
-msgstr ""
+msgstr "Nastavitve prikaza zračnega prostora"
 
 #. Add controls
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:35
 msgid "Change Border Color"
-msgstr ""
+msgstr "Spremeni barvo obrobe"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:39
 msgid "Change Fill Color"
-msgstr ""
+msgstr "Spremeni barvo polnila"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:48
 msgid "Change Fill Brush"
-msgstr ""
+msgstr "Spremeni čopič polnila"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:65
 msgid "Border Width"
-msgstr ""
+msgstr "Širina obrobe"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:66
 msgid ""
@@ -2744,17 +2746,17 @@ msgstr ""
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:71
 #, no-c-format
 msgid "Filled"
-msgstr ""
+msgstr "Zapolnjeno"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:72
 #, no-c-format
 msgid "Only padding"
-msgstr ""
+msgstr "Samo polnilo"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:73
 #, no-c-format
 msgid "Not filled"
-msgstr ""
+msgstr "Ni zapolnjeno"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:77
 msgid "Fill Mode"
@@ -2762,28 +2764,28 @@ msgstr ""
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:78
 msgid "Defines how the airspace is filled with the configured color."
-msgstr ""
+msgstr "Določa, kako se zračni prostor zapolni z nastavljeno barvo."
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:66
 #: src/Monitor/AirspaceWarningMonitor.cpp:55
 msgid "ACK"
-msgstr ""
+msgstr "Potrditev"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:67
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
 msgid "ACK Day"
-msgstr ""
+msgstr "Potrditev dan"
 
 #. the warnings were emptied between the opening of the dialog and
 #. this refresh, so only need to display "No Warnings" for top
 #. item, otherwise exit immediately
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:282
 msgid "No Warnings"
-msgstr ""
+msgstr "Brez opozoril"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:467
 msgid "Airspace Warnings"
-msgstr ""
+msgstr "Opozorila zračnih prostorov"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:40
 msgid "Circling wind"
@@ -2795,11 +2797,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:44
 msgid "ZigZag wind"
-msgstr ""
+msgstr "ZigZag veter"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:45
 msgid "Estimate the wind vector during glides. Requires an airspeed sensor."
-msgstr ""
+msgstr "Oceni vektor vetra med sletanjem. Zahteva senzor hitrosti gibanja."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:48
 msgid "External wind"
@@ -2812,7 +2814,7 @@ msgstr ""
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:53
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:150
 msgid "Trail drift"
-msgstr ""
+msgstr "Odnašanje sledi"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:54
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:151
@@ -2824,11 +2826,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
 msgid "Source"
-msgstr ""
+msgstr "Vir"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:67
 msgid "Manual adjustment of wind speed."
-msgstr ""
+msgstr "Ročna prilagoditev hitrosti vetra."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:79
 msgid "Manual adjustment of wind direction."
@@ -2836,7 +2838,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:184
 msgid "ZigZag"
-msgstr ""
+msgstr "ZigZag"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:188
 msgid "External"
@@ -2844,7 +2846,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:16
 msgid "Wind Settings"
-msgstr ""
+msgstr "Nastavitve vetra"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:120
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:352
@@ -2886,7 +2888,7 @@ msgstr ""
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:295
 #: src/InfoBoxes/Panel/AltitudeSetup.cpp:55
 msgid "QNH"
-msgstr ""
+msgstr "QNH"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:296
 msgid ""
@@ -2930,7 +2932,7 @@ msgstr ""
 #: Data/Input/default.xci:1126
 #, no-c-format
 msgid "Terrain"
-msgstr ""
+msgstr "Teren"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:89
 #, no-c-format
@@ -2950,12 +2952,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:920 Data/Input/default.xci:609
 #, no-c-format
 msgid "Wind"
-msgstr ""
+msgstr "Veter"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:92
 #, no-c-format
 msgid "Route"
-msgstr ""
+msgstr "Pot"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:93
 #, no-c-format
@@ -3007,7 +3009,7 @@ msgstr ""
 #: Data/Input/default.xci:677 Data/Input/default.xci:1182
 #, no-c-format
 msgid "Logger"
-msgstr ""
+msgstr "Zapisovalnik"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:128
 #, no-c-format
@@ -3021,7 +3023,7 @@ msgstr ""
 #: Data/Input/default.xci:1220
 #, no-c-format
 msgid "Weather"
-msgstr ""
+msgstr "Vreme"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:136
 #, no-c-format
@@ -3060,7 +3062,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:353
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
-msgstr ""
+msgstr "Spremembe konfiguracije shranjene. Za uporabo sprememb ponovno zaženite XCSoar."
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:227
 #: src/InfoBoxes/InfoBoxManager.cpp:201
@@ -3101,7 +3103,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:348
 #, no-c-format
 msgid "Map"
-msgstr ""
+msgstr "Zemljevid"
 
 #: src/Dialogs/Traffic/TrafficList.cpp:740
 msgid "Traffic"
@@ -3224,7 +3226,7 @@ msgstr ""
 #: Data/Input/default.xci:1244
 #, no-c-format
 msgid "Analysis"
-msgstr ""
+msgstr "Analiza"
 
 #: src/Dialogs/dlgAnalysis.cpp:454
 msgid "Barograph"
@@ -3288,7 +3290,7 @@ msgstr ""
 #: src/Dialogs/Plane/PlaneListDialog.cpp:132
 #: src/Dialogs/Waypoint/Manager.cpp:93
 msgid "New"
-msgstr ""
+msgstr "Novo"
 
 #: src/Dialogs/ProfileListDialog.cpp:153 src/Dialogs/ProfileListDialog.cpp:302
 #: src/Dialogs/StartupDialog.cpp:151 src/Dialogs/ProfilePasswordDialog.cpp:68
@@ -3308,7 +3310,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:102
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:81
 msgid "Delete"
-msgstr ""
+msgstr "Izbriši"
 
 #: src/Dialogs/ProfileListDialog.cpp:171 src/Dialogs/ProfileListDialog.cpp:238
 msgid "Profile name"
@@ -3341,7 +3343,7 @@ msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:157
 msgid "Active"
-msgstr ""
+msgstr "Aktivno"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:200
 #, c-format
@@ -3472,7 +3474,7 @@ msgstr ""
 #: src/Dialogs/DownloadFilePicker.cpp:277
 #: src/Dialogs/DownloadFilePicker.cpp:386
 msgid "Download"
-msgstr ""
+msgstr "Prenesi"
 
 #: src/Dialogs/MultiFilePicker.cpp:80
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:38
@@ -3481,7 +3483,7 @@ msgstr ""
 #: src/Dialogs/Weather/NOAADetails.cpp:49
 #: src/Dialogs/Weather/NOAADetails.cpp:100
 msgid "Remove"
-msgstr ""
+msgstr "Odstrani"
 
 #: src/Dialogs/MultiFilePicker.cpp:107
 msgid "Add File"
@@ -3497,7 +3499,7 @@ msgstr ""
 
 #: src/Dialogs/ReplayDialog.cpp:49 src/Dialogs/Weather/RASPDialog.cpp:109
 msgid "File"
-msgstr ""
+msgstr "Datoteka"
 
 #: src/Dialogs/ReplayDialog.cpp:50
 msgid ""
@@ -3553,11 +3555,11 @@ msgstr ""
 #: src/Dialogs/Weather/WeatherDialog.cpp:38 Data/Input/default.xci:855
 #: Data/Input/default.xci:1252
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: src/Dialogs/dlgStatus.cpp:71 Data/Input/default.xci:601
 msgid "Flight"
-msgstr ""
+msgstr "Let"
 
 #: src/Dialogs/dlgStatus.cpp:74 Data/Input/default.xci:577
 msgid "System"
@@ -3906,7 +3908,7 @@ msgstr ""
 #: src/Dialogs/Task/TaskPointDialog.cpp:511
 #: src/InfoBoxes/Panel/ATCReference.cpp:64
 msgid "Waypoint"
-msgstr ""
+msgstr "Točka trase"
 
 #: src/Dialogs/Waypoint/Manager.cpp:266
 msgid "Delete waypoint?"
@@ -3929,7 +3931,7 @@ msgstr ""
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:50
 #, no-c-format
 msgid "Turnpoint"
-msgstr ""
+msgstr "Točka obrata"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:52
 #, no-c-format
@@ -4575,7 +4577,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:89
 #, no-c-format
 msgid "Both"
-msgstr ""
+msgstr "Oboje"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:53
 #, no-c-format
@@ -4765,7 +4767,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:171
 #, no-c-format
 msgid "OS settings"
-msgstr ""
+msgstr "Nastavitve OS"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:177
 msgid "Haptic feedback"
@@ -4923,7 +4925,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:120
 #, no-c-format
 msgid "Center"
-msgstr ""
+msgstr "Sredina"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:121
 #, no-c-format
@@ -4968,7 +4970,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:141
 #, no-c-format
 msgid "Use the system-wide setting"
-msgstr ""
+msgstr "Uporabi sistemsko nastavitev"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:143
 #, no-c-format
@@ -6427,7 +6429,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:112
 msgid "Custom"
-msgstr ""
+msgstr "Po meri"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:112
 msgid "My individual set of units."
@@ -7068,7 +7070,7 @@ msgstr "Prenos letov"
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:79
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:83
 msgid "Load"
-msgstr ""
+msgstr "Naloži"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:80
 msgid "Rename"
@@ -7305,7 +7307,7 @@ msgstr ""
 #. no alternates: don't show the dialog
 #: src/Dialogs/Task/AlternatesListDialog.cpp:192
 msgid "No alternates available"
-msgstr ""
+msgstr "Ni na voljo alternativnih pristajališč"
 
 #: src/Dialogs/Task/AlternatesListDialog.cpp:198
 #: src/InfoBoxes/Content/Alternate.cpp:33 Data/Input/default.xci:416
@@ -7788,16 +7790,17 @@ msgid "Next WP"
 msgstr "T nas"
 
 #: src/InfoBoxes/Content/Factory.cpp:236
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Name of the currently selected turn point. When this InfoBox is active, "
 "using the up/down cursor keys selects the next/previous waypoint in the "
 "task. (Touch-screen/PC only) Pressing the enter cursor key brings up the "
 "Airfields/waypoint details."
 msgstr ""
-"Ime trenutno izbrane obratne točke. Ko je ta InfoŠkatla aktivna, lahko z "
-"uporabo puščic izberemo naslednjo/prejšnjo točko v nalogi. (Zaslon na dotik/"
-"PC, pritisk na enter gumb prikaže podatke o točki)"
+"Ime trenutno izbrane obratne točke. Ko je ta InfoBox aktivna, lahko z "
+"uporabo puščic gor/dol izberemo naslednjo/prejšnjo točko v nalogi. (Samo "
+"zaslon na dotik/PC) Pritisk na tipko Enter prikaže podrobnosti "
+"letališč/točk."
 
 #: src/InfoBoxes/Content/Factory.cpp:242
 #, no-c-format
@@ -9645,7 +9648,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Task.cpp:116
 msgid "Next"
-msgstr ""
+msgstr "Naprej"
 
 #: src/InfoBoxes/Content/Task.cpp:730
 msgid "Time Below"
@@ -9657,7 +9660,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Task.cpp:867 src/InfoBoxes/Content/Task.cpp:912
 msgid "Open"
-msgstr ""
+msgstr "Odpri"
 
 #: src/InfoBoxes/Content/Task.cpp:872 src/InfoBoxes/Content/Task.cpp:917
 msgid "Waiting"
@@ -10243,10 +10246,8 @@ msgid "Takeoff"
 msgstr ""
 
 #: Data/Input/default.xci:59
-#, fuzzy
-#| msgid "Final altitude required"
 msgid "Final Glide mode activated"
-msgstr "Končna potrebna višina"
+msgstr "Način končnega sletanja aktiviran"
 
 #: Data/Input/default.xci:64
 msgid "Above final glide"
@@ -10258,7 +10259,7 @@ msgstr ""
 
 #: Data/Input/default.xci:74
 msgid "Final glide through terrain"
-msgstr ""
+msgstr "Končno sletanje bi šlo skozi teren"
 
 #: Data/Input/default.xci:133 Data/Input/default.xci:140
 #: Data/Input/default.xci:482 Data/Input/default.xci:489
@@ -10468,7 +10469,7 @@ msgstr ""
 
 #: Data/Input/default.xci:1174
 msgid "Settings Airspace"
-msgstr ""
+msgstr "Nastavitve zračnih prostorov"
 
 #: Data/Input/default.xci:1205
 msgid "Setup Plane"
