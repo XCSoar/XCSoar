@@ -21,14 +21,20 @@
 #include "ui/canvas/opengl/Globals.hpp"
 #include "ui/dim/Size.hpp"
 #endif
+
+#include <wayland-client-protocol.h>
 #include <wayland-client.h>
 #include <wayland-cursor.h>
+<<<<<<< HEAD
+<<<<<<< Updated upstream
+=======
 #include <xkbcommon/xkbcommon.h>
 #include <sys/mman.h>
 #include <unistd.h>
+>>>>>>> Stashed changes
+=======
 #include <xkbcommon/xkbcommon.h>
-#include <sys/mman.h>
-#include <unistd.h>
+>>>>>>> d3588017b1 (ui/window/wayland: Implement close button handling)
 
 #include <cerrno>
 #include <cstdio>  // for fprintf()
