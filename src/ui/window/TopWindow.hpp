@@ -72,7 +72,7 @@ namespace UI {
 class Display;
 
 class TopWindowStyle : public WindowStyle {
-#if defined(ENABLE_SDL) || defined(USE_X11)
+#if defined(ENABLE_SDL) || defined(USE_X11) || defined(USE_WAYLAND)
   bool full_screen = false;
 #endif
 #ifdef ENABLE_SDL
@@ -95,13 +95,13 @@ public:
   }
 
   void FullScreen() {
-#if defined(ENABLE_SDL) || defined(USE_X11)
+#if defined(ENABLE_SDL) || defined(USE_X11) || defined(USE_WAYLAND)
     full_screen = true;
 #endif
   }
 
   bool GetFullScreen() const {
-#if defined(ENABLE_SDL) || defined(USE_X11)
+#if defined(ENABLE_SDL) || defined(USE_X11) || defined(USE_WAYLAND)
     return full_screen;
 #else
     return false;

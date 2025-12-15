@@ -7,7 +7,7 @@
 #include "ui/event/Globals.hpp"
 #include "ui/dim/Size.hpp"
 
-#ifdef USE_X11
+#if defined(USE_X11) || defined(USE_WAYLAND)
 #include "ui/canvas/custom/TopCanvas.hpp"
 #endif
 
@@ -72,7 +72,7 @@ TopWindow::OnEvent(const Event &event)
   case Event::MOUSE_WHEEL:
     return OnMouseWheel(event.point, (int)event.param);
 
-#ifdef USE_X11
+#if defined(USE_X11) || defined(USE_WAYLAND)
   case Event::RESIZE:
     if (screen->CheckResize(PixelSize(event.point.x, event.point.y)))
       Resize(screen->GetSize());
