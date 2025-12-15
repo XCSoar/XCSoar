@@ -70,6 +70,16 @@ InputEvents::eventClearAirspaceWarnings([[maybe_unused]] const TCHAR *misc)
     airspace_warnings->AcknowledgeAll();
 }
 
+// AirspaceWarnings
+// Shows the airspace warnings dialog
+void
+InputEvents::eventAirspaceWarnings([[maybe_unused]] const TCHAR *misc)
+{
+  auto *airspace_warnings = backend_components->GetAirspaceWarnings();
+  if (airspace_warnings != nullptr)
+    dlgAirspaceWarningsShowModal(*airspace_warnings);
+}
+
 // NearestAirspaceDetails
 // Displays details of the nearest airspace to the aircraft in a
 // status message.  This does nothing if there is no airspace within
