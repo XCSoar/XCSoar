@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-12 23:06+0100\n"
+"POT-Creation-Date: 2025-12-15 08:10+0100\n"
 "PO-Revision-Date: 2024-09-25 08:15+0000\n"
 "Last-Translator: Jörg Schuon <schuongf@hotmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/xcsoar/"
@@ -595,7 +595,7 @@ msgstr "Kein Kreisflug"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:136
 #: src/Dialogs/MapItemListDialog.cpp:158
 #: src/Dialogs/Airspace/dlgAirspace.cpp:144
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:133
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:135
 #: src/Dialogs/Airspace/AirspaceList.cpp:134
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:469
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:21
@@ -615,7 +615,7 @@ msgstr "Kein Kreisflug"
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:42
 #: src/Dialogs/Task/TaskPointDialog.cpp:515
 #: src/Dialogs/Task/TargetDialog.cpp:395
-#: src/Dialogs/Task/AlternatesListDialog.cpp:123
+#: src/Dialogs/Task/AlternatesListDialog.cpp:157
 #: src/Dialogs/KnobTextEntry.cpp:225 src/Dialogs/Weather/WeatherDialog.cpp:41
 #: src/Dialogs/Weather/PCMetDialog.cpp:36
 #: src/Dialogs/Weather/NOAADetails.cpp:125
@@ -644,7 +644,7 @@ msgstr "Vario"
 #: src/Renderer/FlightStatisticsRenderer.cpp:226
 #: src/Renderer/FlightStatisticsRenderer.cpp:253
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:51
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:102
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:104
 #: src/Dialogs/Airspace/AirspaceList.cpp:448
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:115
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:75
@@ -663,7 +663,7 @@ msgstr "rel. Höhe."
 #: src/Dialogs/Traffic/TrafficList.cpp:345
 #: src/Dialogs/Waypoint/WaypointList.cpp:211
 #: src/Dialogs/Task/TaskPointDialog.cpp:220
-#: src/Dialogs/Task/AlternatesListDialog.cpp:109
+#: src/Dialogs/Task/AlternatesListDialog.cpp:143
 #: src/Dialogs/Weather/NOAAList.cpp:97 src/InfoBoxes/Content/Task.cpp:51
 #, no-c-format
 msgid "Details"
@@ -997,16 +997,12 @@ msgid "Circling zoom off"
 msgstr "Steigflug Zoom aus"
 
 #: src/Input/InputEventsAirspace.cpp:40 src/Input/InputEventsAirspace.cpp:47
-#, fuzzy
-#| msgid "Airspaces"
 msgid "Airspace shown"
-msgstr "Lufträume"
+msgstr "Luftraum eingeblendet"
 
 #: src/Input/InputEventsAirspace.cpp:41 src/Input/InputEventsAirspace.cpp:44
-#, fuzzy
-#| msgid "Airspace fill mode"
 msgid "Airspace hidden"
-msgstr "Luftraum Füllmodus"
+msgstr "Luftraum ausgeblendet"
 
 #: src/Input/InputEventsAirspace.cpp:51
 msgid "Show airspace off"
@@ -1017,10 +1013,8 @@ msgid "Show airspace on"
 msgstr "Zeige Luftraum ein"
 
 #: src/Input/InputEventsTask.cpp:55 src/Input/InputEventsTask.cpp:65
-#, fuzzy
-#| msgid "Arm start manually"
 msgid "Armed start activated"
-msgstr "Abflug manuell auf Bereit"
+msgstr "Startarmierung aktiviert"
 
 #: src/Input/InputEventsTask.cpp:69
 msgid "Advance manually"
@@ -1065,10 +1059,8 @@ msgstr "Aufgabe abgebrochen"
 
 #: src/Input/InputEventsTask.cpp:215 src/Input/InputEventsTask.cpp:241
 #: src/Input/InputEventsTask.cpp:249
-#, fuzzy
-#| msgid "Task Speed"
 msgid "Task resumed"
-msgstr "Überland-Geschwindigkeit"
+msgstr "Aufgabe fortgesetzt"
 
 #: src/Input/InputEventsTask.cpp:222
 msgid "Go to target"
@@ -1191,37 +1183,34 @@ msgstr ""
 msgid "Waypoint labels"
 msgstr "Wegpunktbeschriftung"
 
+#: src/Input/InputEventsSettings.cpp:429
+#, c-format
+msgid "%s / %s"
+msgstr ""
+
 #: src/Input/InputEventsSettings.cpp:433 src/Input/InputEventsSettings.cpp:474
 msgid "Topography/Terrain"
 msgstr "Topographie/Gelände"
 
 #: src/Input/InputEventsSettings.cpp:438 src/Input/InputEventsSettings.cpp:457
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:134
-#, fuzzy
-#| msgid "Terrain On"
 msgid "Terrain shown"
-msgstr "Gelände ein"
+msgstr "Gelände eingeblendet"
 
 #: src/Input/InputEventsSettings.cpp:439 src/Input/InputEventsSettings.cpp:461
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:135
-#, fuzzy
-#| msgid "Terrain shade"
 msgid "Terrain hidden"
-msgstr "Geländeschattierung"
+msgstr "Gelände ausgeblendet"
 
 #: src/Input/InputEventsSettings.cpp:444 src/Input/InputEventsSettings.cpp:449
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:143
-#, fuzzy
-#| msgid "Topography On"
 msgid "Topography shown"
-msgstr "Topographie ein"
+msgstr "Topographie eingeblendet"
 
 #: src/Input/InputEventsSettings.cpp:445 src/Input/InputEventsSettings.cpp:453
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:144
-#, fuzzy
-#| msgid "Topography On"
 msgid "Topography hidden"
-msgstr "Topographie ein"
+msgstr "Topographie ausgeblendet"
 
 #: src/Input/InputEventsLua.cpp:40
 msgid "Not found"
@@ -2095,7 +2084,7 @@ msgid "Debug"
 msgstr "Fehlersuche"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:335
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:132
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:68
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:69
 msgid "Enable"
@@ -2619,7 +2608,7 @@ msgid "Static object"
 msgstr "Statisches Objekt"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:123
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:89
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:91
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:95
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:86
 #: src/Dialogs/Waypoint/WaypointList.cpp:386
@@ -2670,12 +2659,12 @@ msgid "ADSB vertical range"
 msgstr "ADSB vertikale Reichweite"
 
 #: src/Dialogs/MapItemListDialog.cpp:146
-#: src/Dialogs/Task/AlternatesListDialog.cpp:104
+#: src/Dialogs/Task/AlternatesListDialog.cpp:138
 msgid "Goto"
 msgstr "Ziele auf"
 
 #: src/Dialogs/MapItemListDialog.cpp:150
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:132
 msgid "Ack Day"
 msgstr "Best. Tag"
 
@@ -2752,40 +2741,40 @@ msgstr "Setze Kode"
 msgid "Set Squawk Code"
 msgstr "Code setzen"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:67
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:68
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:69
 msgid "Radio"
 msgstr "Funk"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:73
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:75
 msgid "Station"
 msgstr "Funkstelle"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:77
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:79
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:260
-#: src/Dialogs/Task/AlternatesListDialog.cpp:111
+#: src/Dialogs/Task/AlternatesListDialog.cpp:145
 msgid "Set Active Frequency"
 msgstr "als aktive Frequenz setzen"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:82
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:84
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:265
-#: src/Dialogs/Task/AlternatesListDialog.cpp:117
+#: src/Dialogs/Task/AlternatesListDialog.cpp:151
 msgid "Set Standby Frequency"
 msgstr "als Standby-Frequenz setzen"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:88
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:90
 msgid "Class"
 msgstr "Klasse"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:92
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:94
 msgid "Top"
 msgstr "Obergrenze"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:95
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:97
 msgid "Base"
 msgstr "Untergrenze"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:125
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:127
 msgid "Airspace Details"
 msgstr "Luftraum Details"
 
@@ -7770,11 +7759,11 @@ msgid "Optimized"
 msgstr "Optimiert"
 
 #. no alternates: don't show the dialog
-#: src/Dialogs/Task/AlternatesListDialog.cpp:154
+#: src/Dialogs/Task/AlternatesListDialog.cpp:192
 msgid "No alternates available"
 msgstr "Keine Ausweichlandeplätze verfügbar"
 
-#: src/Dialogs/Task/AlternatesListDialog.cpp:160
+#: src/Dialogs/Task/AlternatesListDialog.cpp:198
 #: src/InfoBoxes/Content/Alternate.cpp:33 Data/Input/default.xci:416
 #: Data/Input/default.xci:1053
 #, no-c-format
@@ -10949,10 +10938,8 @@ msgid "Takeoff"
 msgstr "Abgehoben"
 
 #: Data/Input/default.xci:59
-#, fuzzy
-#| msgid "Final altitude required"
 msgid "Final Glide mode activated"
-msgstr "Endanflug - benötigte Endanflughöhe"
+msgstr "Endanflug-Modus aktiviert"
 
 #: Data/Input/default.xci:64
 msgid "Above final glide"
