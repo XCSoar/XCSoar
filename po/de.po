@@ -5946,18 +5946,16 @@ msgstr ""
 "praktisch für verlässliche Thermikquellen (z.B. Kraftwerke) oder Bergpässe."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:71
-#, fuzzy
 msgid "Airfields or Waypoint details"
-msgstr "Wegpunktdetails"
+msgstr "Flugplatz- oder Wegpunktdetails"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:72
-#, fuzzy
 msgid ""
 "The files may contain extracts from enroute supplements or other contributed "
 "information about individual waypoints and airfields."
 msgstr ""
-"Die Datei kann auszugsweise Luftfahrthandbuch oder Luftrauminformation, oder "
-"andere zusätzliche Informationen über einzelne Flugplätze enthalten."
+"Die Dateien können Auszüge aus Enroute-Supplementen oder andere beigetragene "
+"Informationen über einzelne Wegpunkte und Flugplätze enthalten."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:79
 msgid "Selected Airspace Files"
@@ -6615,9 +6613,9 @@ msgid "Specifies which threshold is used for \"large\" FAI triangles."
 msgstr "Grenzwert für große FAI Dreiecke."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid "95% dist. rule helpers"
-msgstr "95% Distanz-Regel Helfer"
+msgstr "Hilfsmittel für die 95%-Distanz-Regel"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:136
 msgid ""
@@ -8260,7 +8258,7 @@ msgid "Next WP"
 msgstr "Nächster WP"
 
 #: src/InfoBoxes/Content/Factory.cpp:236
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Name of the currently selected turn point. When this InfoBox is active, "
 "using the up/down cursor keys selects the next/previous waypoint in the "

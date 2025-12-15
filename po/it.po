@@ -2644,7 +2644,7 @@ msgstr "Estensione AAT"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:76
 msgid "PCAS vertical range"
-msgstr ""
+msgstr "Portata verticale PCAS"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:77
 msgid "ADSB range"
@@ -2652,7 +2652,7 @@ msgstr "Estensione AAT"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:78
 msgid "ADSB vertical range"
-msgstr ""
+msgstr "Portata verticale ADSB"
 
 #: src/Dialogs/MapItemListDialog.cpp:146
 #: src/Dialogs/Task/AlternatesListDialog.cpp:138
@@ -3187,7 +3187,7 @@ msgstr "Incolla"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:318
 msgid "Overwrite all InfoBoxes in this set?"
-msgstr ""
+msgstr "Sovrascrivere tutte le InfoBox in questo set?"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:318
 msgid "InfoBox paste set"
@@ -3595,7 +3595,7 @@ msgstr "File"
 
 #: src/Dialogs/MultiFilePicker.cpp:108
 msgid "Select a file to add or download a new one."
-msgstr ""
+msgstr "Selezionare un file da aggiungere o scaricarne uno nuovo."
 
 #: src/Dialogs/dlgInfoBoxAccess.cpp:75 src/Dialogs/dlgInfoBoxAccess.cpp:91
 msgid "Switch InfoBox"
@@ -4099,22 +4099,22 @@ msgstr "Centrale Elettrica"
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:60
 #, no-c-format
 msgid "VOR"
-msgstr ""
+msgstr "VOR"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:61
 #, no-c-format
 msgid "NDB"
-msgstr ""
+msgstr "NDB"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:62
 #, no-c-format
 msgid "Dam"
-msgstr ""
+msgstr "Diga"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
 #, no-c-format
 msgid "Castle"
-msgstr ""
+msgstr "Castello"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:64
 #, no-c-format
@@ -4641,13 +4641,15 @@ msgstr "Se impostato su \"On\" verrà mostrata la barra del variometro"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:180
 msgid "No Position Target Distance Ring"
-msgstr ""
+msgstr "Nessun anello di distanza obiettivo posizione"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:181
 msgid ""
 "This parameter enables or disables the No Position Target Distance Ring in "
 "Flarm Radar"
 msgstr ""
+"Questo parametro abilita o disabilita l'anello di distanza obiettivo senza "
+"posizione nel radar FLARM"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:41
 msgid "Speed arrows"
@@ -5197,17 +5199,17 @@ msgstr "Vetro"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:141
 #, no-c-format
 msgid "Use the system-wide setting"
-msgstr ""
+msgstr "Usa l'impostazione di sistema"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:143
 #, no-c-format
 msgid "Black text on white background"
-msgstr ""
+msgstr "Testo nero su sfondo bianco"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:145
 #, no-c-format
 msgid "White text on black background"
-msgstr ""
+msgstr "Testo bianco su sfondo nero"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:168
 msgid "Full screen"
@@ -5247,7 +5249,7 @@ msgstr "Titoli InfoBox"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:186
 msgid "Zoom factor for InfoBox title and comment text"
-msgstr ""
+msgstr "Fattore di zoom per il titolo e il testo del commento delle InfoBox"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:191
 msgid "Tab dialog style"
@@ -5539,7 +5541,7 @@ msgstr "Mantiene il livello di zoom della mappa distinto per ogni pagina."
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:352
 #, no-c-format
 msgid "Map (north-up)"
-msgstr ""
+msgstr "Mappa (nord in alto)"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 msgid "Main area"
@@ -5978,6 +5980,9 @@ msgid ""
 "deactivate airspace files respectively. Supported file types are: Openair "
 "(.txt /.air), and Tim Newport-Pearce (.sua)."
 msgstr ""
+"Elenco dei file degli spazi aerei attivi. Usa i pulsanti Aggiungi e Rimuovi "
+"per attivare o disattivare rispettivamente i file degli spazi aerei. I tipi "
+"di file supportati sono: Openair (.txt /.air) e Tim Newport-Pearce (.sua)."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:87
 msgid "FLARM Device Database"
@@ -6085,6 +6090,8 @@ msgid ""
 "E-ink friendly color scheme, lighter and thicker dots means lift while "
 "darker and thinner means sink."
 msgstr ""
+"Schema di colori adatto per e-ink, punti più chiari e spessi indicano "
+"ascendenza mentre più scuri e sottili indicano discendenza."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:96
 #, no-c-format
@@ -6208,7 +6215,7 @@ msgstr "Traffico FLARM"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 msgid "Keep showing traffic for a while after it has disappeared."
-msgstr ""
+msgstr "Continua a mostrare il traffico per un po' dopo che è scomparso."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:144
 msgid "Trail length"
@@ -6632,7 +6639,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:135
 #, c-format
 msgid "95% dist. rule helpers"
-msgstr ""
+msgstr "Aiuti per la regola del 95% di distanza"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:136
 msgid ""
@@ -6640,6 +6647,9 @@ msgid ""
 "Distance Around Target InfoBox will show projected distance vs. maximum and "
 "change colors as you approach 95%."
 msgstr ""
+"Mostra gli aiuti per la regola \"95% distanza\" della Federazione Argentina. "
+"L'InfoBox Distanza AAT Intorno al Bersaglio mostrerà la distanza prevista "
+"rispetto al massimo e cambierà colore man mano che ti avvicini al 95%."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:196
 msgid "Terrain display"
@@ -7304,7 +7314,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:70
 msgid "Allow download of declared tasks from Weglide in the Task Manager."
-msgstr ""
+msgstr "Consenti il download delle attività dichiarate da Weglide nel Task Manager."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:73
 msgid "Automatic Upload"
@@ -7315,6 +7325,8 @@ msgid ""
 "Asks whether to upload flight to Weglide, after flight is downloaded from "
 "external logger."
 msgstr ""
+"Chiede se caricare il volo su Weglide, dopo che il volo è stato scaricato "
+"dal registratore esterno."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:79
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
@@ -8277,15 +8289,17 @@ msgid "Next WP"
 msgstr "Prossimo WP"
 
 #: src/InfoBoxes/Content/Factory.cpp:236
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Name of the currently selected turn point. When this InfoBox is active, "
 "using the up/down cursor keys selects the next/previous waypoint in the "
 "task. (Touch-screen/PC only) Pressing the enter cursor key brings up the "
 "Airfields/waypoint details."
 msgstr ""
-"Il nome della boaa attualmente selezionata. Quando la infoBox è attiva, "
-"l'utilizzo dei tasti cursore su/giù seleziona il punto prossimo/precedente "
+"Il nome del punto di virata attualmente selezionato. Quando questa InfoBox è "
+"attiva, l'utilizzo dei tasti cursore su/giù seleziona il punto di virata "
+"successivo/precedente nel compito. (Solo schermo touch/PC) Premendo il tasto "
+"Invio vengono visualizzati i dettagli degli aerodromi/punti di virata."
 "nel tema. (solo per Touch-screen/PC) Premendo il tasto cursore enter "
 "richiama i dettagli del punto."
 
@@ -10130,7 +10144,7 @@ msgstr "Ricevitore transponder"
 #: src/InfoBoxes/Content/Factory.cpp:1094
 #, no-c-format
 msgid "XPDR Code"
-msgstr ""
+msgstr "Codice XPDR"
 
 #: src/InfoBoxes/Content/Factory.cpp:1095
 #, no-c-format
@@ -10140,12 +10154,12 @@ msgstr "La corrente frequenza radio di standby"
 #: src/InfoBoxes/Content/Factory.cpp:1101
 #, no-c-format
 msgid "Engine CHT"
-msgstr ""
+msgstr "CHT motore"
 
 #: src/InfoBoxes/Content/Factory.cpp:1102
 #, no-c-format
 msgid "CHT"
-msgstr ""
+msgstr "CHT"
 
 #: src/InfoBoxes/Content/Factory.cpp:1103
 #, no-c-format
@@ -10155,7 +10169,7 @@ msgstr "Temperatura prevista"
 #: src/InfoBoxes/Content/Factory.cpp:1109
 #, no-c-format
 msgid "Engine EGT"
-msgstr ""
+msgstr "EGT motore"
 
 #: src/InfoBoxes/Content/Factory.cpp:1110
 #, no-c-format
@@ -10170,12 +10184,12 @@ msgstr "Temperatura prevista"
 #: src/InfoBoxes/Content/Factory.cpp:1117
 #, no-c-format
 msgid "Engine Revolutions Per Minute"
-msgstr ""
+msgstr "Giri motore al minuto"
 
 #: src/InfoBoxes/Content/Factory.cpp:1118
 #, no-c-format
 msgid "RPM"
-msgstr ""
+msgstr "RPM"
 
 #: src/InfoBoxes/Content/Factory.cpp:1119
 #, no-c-format
@@ -10185,12 +10199,12 @@ msgstr "Frequenza cardiaca in battiti al minuto."
 #: src/InfoBoxes/Content/Factory.cpp:1125
 #, no-c-format
 msgid "AAT dT and task ETA"
-msgstr ""
+msgstr "AAT dT e ETA attività"
 
 #: src/InfoBoxes/Content/Factory.cpp:1126
 #, no-c-format
 msgid "AATdeltaOrETA"
-msgstr ""
+msgstr "AATdeltaOETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:1127
 #, no-c-format
@@ -10198,6 +10212,8 @@ msgid ""
 "For AAT tasks: AAT delta time and estimated time of arrival; for racing "
 "tasks: estimated time of arrival."
 msgstr ""
+"Per compiti AAT: tempo delta AAT e tempo stimato di arrivo; per compiti di "
+"gara: tempo stimato di arrivo."
 
 #: src/InfoBoxes/Content/Factory.cpp:1133
 #, no-c-format
@@ -10294,9 +10310,9 @@ msgstr ""
 "sicurezza all'arrivo."
 
 #: src/InfoBoxes/Content/Alternate.cpp:58
-#, fuzzy, c++-format
+#, c++-format
 msgid "Altn {}"
-msgstr "Alt 1"
+msgstr "Alt {}"
 
 #: src/InfoBoxes/Content/Altitude.cpp:26
 #: src/MapWindow/GlueMapWindowOverlays.cpp:333
@@ -10393,6 +10409,8 @@ msgid ""
 "Magnetic declination used to calculate radial to reference. Negative values "
 "are W declination, positive is E."
 msgstr ""
+"Diclinazione magnetica utilizzata per calcolare il radiale di riferimento. "
+"Valori negativi sono declinazione O, positivi sono E."
 
 #: src/MapWindow/GlueMapWindowItems.cpp:109
 msgid "There is nothing interesting near this location."
@@ -11263,7 +11281,7 @@ msgstr ""
 
 #: Data/Input/default.xci:1292
 msgid "Quit XCSoar"
-msgstr ""
+msgstr "Esci da XCSoar"
 
 #~ msgid "More waypoints"
 #~ msgstr "Boe aggiuntive"
