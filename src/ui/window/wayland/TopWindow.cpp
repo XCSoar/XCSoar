@@ -3,16 +3,12 @@
 
 #include "../TopWindow.hpp"
 #include "ui/canvas/custom/TopCanvas.hpp"
-#include "ui/canvas/Features.hpp" // for DRAW_MOUSE_CURSOR
 #include "ui/event/Globals.hpp"
 #include "ui/event/poll/Queue.hpp"
-#include "ui/event/shared/Event.hpp"
 #include "ui/display/Display.hpp"
 #include "xdg-shell-client-protocol.h"
-#include "xdg-decoration-unstable-v1-client-protocol.h"
 
 #include <stdexcept>
-#include <chrono>
 
 namespace UI {
 
@@ -25,16 +21,12 @@ handle_ping([[maybe_unused]] void *data,
 }
 
 static void
-handle_configure(void *data,
+handle_configure([[maybe_unused]] void *data,
                  [[maybe_unused]] struct wl_shell_surface *shell_surface,
                  [[maybe_unused]] uint32_t edges,
-                 int32_t width,
-                 int32_t height) noexcept
+                 [[maybe_unused]] int32_t width,
+                 [[maybe_unused]] int32_t height) noexcept
 {
-  if (width > 0 && height > 0) {
-    auto *window = static_cast<TopWindow *>(data);
-    window->Resize(PixelSize(width, height));
-  }
 }
 
 static void
@@ -43,7 +35,7 @@ handle_popup_done([[maybe_unused]] void *data,
 {
 }
 
-static const struct wl_shell_surface_listener shell_surface_listener = {
+static constexpr struct wl_shell_surface_listener shell_surface_listener = {
   .ping = handle_ping,
   .configure = handle_configure,
   .popup_done = handle_popup_done
@@ -62,67 +54,35 @@ static constexpr struct xdg_wm_base_listener wm_base_listener = {
 };
 
 static void
-handle_surface_configure(void *data,
+handle_surface_configure([[maybe_unused]] void *data,
                          struct xdg_surface *xdg_surface,
                          uint32_t serial) noexcept
 {
-  auto *window = static_cast<TopWindow *>(data);
   xdg_surface_ack_configure(xdg_surface, serial);
 
   /* The actual size will be provided by handle_toplevel_configure.
-     This callback just acknowledges the configure event */
+       This callback just acknowledges the configure event */
   (void)window;
 }
 
-static const struct xdg_surface_listener surface_listener = {
+static constexpr struct xdg_surface_listener surface_listener = {
   .configure = handle_surface_configure,
 };
 
 static void
-handle_toplevel_configure(void *data,
+handle_toplevel_configure([[maybe_unused]] void *data,
                           [[maybe_unused]] struct xdg_toplevel *xdg_toplevel,
-                          int32_t width,
-                          int32_t height,
-                          struct wl_array *states) noexcept
+                          [[maybe_unused]] int32_t width,
+                          [[maybe_unused]] int32_t height,
+                          [[maybe_unused]] struct wl_array *states) noexcept
 {
-  auto *window = static_cast<TopWindow *>(data);
-
-  /* Parse states array to detect activation state.
-     The states array contains uint32_t values representing xdg_toplevel_state enum.
-     XDG_TOPLEVEL_STATE_ACTIVATED = 4
-     Only update activation state if we have a states array to parse.
-     During initial window creation, states may be empty, so we leave
-     the default activated state (true) unchanged. */
-  if (states != nullptr && states->size > 0) {
-    bool activated = false;
-    const uint32_t *state = static_cast<const uint32_t *>(states->data);
-    const size_t count = states->size / sizeof(uint32_t);
-    for (size_t i = 0; i < count; ++i) {
-      if (state[i] == 4) { /* XDG_TOPLEVEL_STATE_ACTIVATED */
-        activated = true;
-        break;
-      }
-    }
-
-    /* Update activation state in event queue only if we parsed states */
-    if (event_queue != nullptr) {
-      event_queue->SetActivated(activated);
-    }
-  }
-
-  if (width > 0 && height > 0) {
-    window->Resize(PixelSize(width, height));
-  }
 }
 
 static void
 handle_toplevel_close([[maybe_unused]] void *data,
-                      [[maybe_unused]] struct xdg_toplevel *xdg_toplevel) noexcept
+		      [[maybe_unused]] struct xdg_toplevel *xdg_toplevel) noexcept
 {
-  if (event_queue != nullptr) {
-    // Inject CLOSE event into the event queue
-    event_queue->Inject(Event::CLOSE);
-  }
+  // TODO
 }
 
 static const struct xdg_toplevel_listener toplevel_listener = {
@@ -132,68 +92,46 @@ static const struct xdg_toplevel_listener toplevel_listener = {
 
 void
 TopWindow::CreateNative(const TCHAR *text, PixelSize size,
-                        TopWindowStyle style)
+                        TopWindowStyle)
 {
   auto compositor = event_queue->GetCompositor();
 
-  wl_surface = wl_compositor_create_surface(compositor);
-  if (wl_surface == nullptr)
+  auto surface = wl_compositor_create_surface(compositor);
+  if (surface == nullptr)
     throw std::runtime_error("Failed to create Wayland surface");
 
   if (auto wm_base = event_queue->GetWmBase()) {
     xdg_wm_base_add_listener(wm_base, &wm_base_listener, nullptr);
 
-    xdg_surface = xdg_wm_base_get_xdg_surface(wm_base, wl_surface);
-    xdg_surface_add_listener(xdg_surface, &surface_listener, this);
+    const auto xdg_surface = xdg_wm_base_get_xdg_surface(wm_base, surface);
+    xdg_surface_add_listener(xdg_surface, &surface_listener, nullptr);
 
-    xdg_toplevel = xdg_surface_get_toplevel(xdg_surface);
-    xdg_toplevel_add_listener(xdg_toplevel, &toplevel_listener, this);
-    xdg_toplevel_set_title(xdg_toplevel, text);
-    xdg_toplevel_set_app_id(xdg_toplevel, "xcsoar");
+    const auto toplevel = xdg_surface_get_toplevel(xdg_surface);
+    xdg_toplevel_add_listener(toplevel, &toplevel_listener, nullptr);
+    xdg_toplevel_set_title(toplevel, text);
+    xdg_toplevel_set_app_id(toplevel, "xcsoar");
 
-    /* Request server-side decorations (titlebar) if available */
-    if (auto decoration_manager = event_queue->GetDecorationManager()) {
-      xdg_decoration = zxdg_decoration_manager_v1_get_toplevel_decoration(
-        decoration_manager, xdg_toplevel);
-      if (xdg_decoration != nullptr) {
-        /* Request server-side decorations (titlebar provided by
-           compositor) */
-        zxdg_toplevel_decoration_v1_set_mode(xdg_decoration,
-          ZXDG_TOPLEVEL_DECORATION_V1_MODE_SERVER_SIDE);
-      }
-    }
-
-    if (style.GetFullScreen()) {
-      /* Request fullscreen on default output (NULL = default) */
-      xdg_toplevel_set_fullscreen(xdg_toplevel, nullptr);
-    }
+    // TODO xdg_toplevel_set_fullscreen
 
     wl_surface_commit(wl_surface);
 
     /* this roundtrip invokes handle_surface_configure() */
     wl_display_roundtrip(display.GetWaylandDisplay());
   } else if (auto shell = event_queue->GetShell()) {
-    auto shell_surface = wl_shell_get_shell_surface(shell, wl_surface);
+    auto shell_surface = wl_shell_get_shell_surface(shell, surface);
     wl_shell_surface_add_listener(shell_surface,
-                                  &shell_surface_listener, this);
+                                  &shell_surface_listener, nullptr);
     wl_shell_surface_set_toplevel(shell_surface);
     wl_shell_surface_set_title(shell_surface, text);
 
-    if (style.GetFullScreen()) {
-      /* Request fullscreen on default output (NULL = default).
-         WL_SHELL_SURFACE_FULLSCREEN_METHOD_DEFAULT = 0 */
-      wl_shell_surface_set_fullscreen(shell_surface,
-                                      WL_SHELL_SURFACE_FULLSCREEN_METHOD_DEFAULT,
-                                      0, nullptr);
-    }
+    // TODO: wl_shell_surface_set_fullscreen(shell_surface);
   }
 
   const auto region = wl_compositor_create_region(compositor);
   wl_region_add(region, 0, 0, size.width, size.height);
-  wl_surface_set_opaque_region(wl_surface, region);
-  wl_region_destroy(region);
+  wl_surface_set_opaque_region(surface, region);
 
-  native_window = wl_egl_window_create(wl_surface, size.width, size.height);
+  native_window = wl_egl_window_create(surface, size.width, size.height);
   if (native_window == EGL_NO_SURFACE)
     throw std::runtime_error("Failed to create Wayland EGL window");
 }
@@ -207,28 +145,13 @@ TopWindow::IsVisible() const noexcept
 void
 TopWindow::EnableCapture() noexcept
 {
-  /* In Wayland, pointer events naturally go to the surface that has
-     focus. For full pointer locking/confining (equivalent to X11's
-     XGrabPointer), we would need the zwp_pointer_constraints_v1
-     extension protocol. For now, we ensure the pointer is available -
-     the compositor handles pointer focus to our surface automatically.
-
-     Note: Full pointer locking would require:
-     - Binding zwp_pointer_constraints_v1 from registry
-     - Creating zwp_locked_pointer_v1 or zwp_confined_pointer_v1
-     This is a placeholder for future enhancement with pointer
-     constraints. */
-  (void)event_queue;
-  (void)wl_surface;
+  // TODO: implement
 }
 
 void
 TopWindow::DisableCapture() noexcept
 {
-  /* In Wayland, pointer capture is automatically released when the
-     surface loses focus. If we implemented pointer constraints, we
-     would destroy the locked_pointer or confined_pointer object here. */
-  (void)this;
+  // TODO: implement
 }
 
 void
@@ -266,67 +189,6 @@ TopWindow::OnResize(PixelSize new_size) noexcept
 #ifdef USE_MEMORY_CANVAS
   screen->OnResize(new_size);
 #endif
-}
-
-bool
-TopWindow::OnEvent(const Event &event)
-{
-  switch (event.type) {
-    Window *w;
-
-  case Event::NOP:
-  case Event::CALLBACK:
-    break;
-
-  case Event::CLOSE:
-    OnClose();
-    break;
-
-  case Event::KEY_DOWN:
-    w = GetFocusedWindow();
-    if (w == nullptr)
-      w = this;
-
-    return w->OnKeyDown(event.param);
-
-  case Event::KEY_UP:
-    w = GetFocusedWindow();
-    if (w == nullptr)
-      w = this;
-
-    return w->OnKeyUp(event.param);
-
-  case Event::MOUSE_MOTION:
-#ifdef DRAW_MOUSE_CURSOR
-    cursor_visible_until = std::chrono::steady_clock::now() + std::chrono::seconds(10);
-    /* redraw to update the mouse cursor position */
-    Invalidate();
-#endif
-
-    // XXX keys
-    return OnMouseMove(event.point, 0);
-
-  case Event::MOUSE_DOWN:
-    return double_click.Check(event.point)
-      ? OnMouseDouble(event.point)
-      : OnMouseDown(event.point);
-
-  case Event::MOUSE_UP:
-    double_click.Moved(event.point);
-
-    return OnMouseUp(event.point);
-
-  case Event::MOUSE_WHEEL:
-    return OnMouseWheel(event.point, (int)event.param);
-
-#if defined(USE_X11) || defined(MESA_KMS)
-  case Event::EXPOSE:
-    Invalidate();
-    return true;
-#endif
-  }
-
-  return false;
 }
 
 } // namespace UI

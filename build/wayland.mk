@@ -17,6 +17,7 @@ INCLUDES += -isystem $(WAYLAND_GENERATED)
 
 # from Debian package "wayland-protocols"
 XDG_SHELL_XML = /usr/share/wayland-protocols/stable/xdg-shell/xdg-shell.xml
+XDG_DECORATION_XML = /usr/share/wayland-protocols/unstable/xdg-decoration/xdg-decoration-unstable-v1.xml
 
 # from Debian package "libwayland-bin"
 WAYLAND_SCANNER = wayland-scanner
@@ -36,7 +37,7 @@ $(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-client-protocol.h: $(XDG_DECORAT
 	$(Q)$(WAYLAND_SCANNER) client-header <$< >$@.tmp
 	@mv $@.tmp $@
 
-$(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-code.c: $(XDG_DECORATION_XML) | $(WAYLAND_GENERATED)/dirstamp
+$(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-public.c: $(XDG_DECORATION_XML) | $(WAYLAND_GENERATED)/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(WAYLAND_SCANNER) public-code <$< >$@.tmp
 	@mv $@.tmp $@

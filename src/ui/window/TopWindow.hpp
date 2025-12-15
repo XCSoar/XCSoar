@@ -53,6 +53,10 @@ class TopCanvas;
 
 #ifdef USE_WAYLAND
 struct wl_egl_window;
+struct wl_surface;
+struct xdg_surface;
+struct xdg_toplevel;
+struct zxdg_toplevel_decoration_v1;
 #endif
 
 #if defined(__APPLE__)
@@ -140,7 +144,11 @@ class TopWindow : public ContainerWindow {
 #ifdef USE_X11
   X11Window x_window;
 #elif defined(USE_WAYLAND)
+  struct wl_surface *wl_surface = nullptr;
   struct wl_egl_window *native_window;
+  struct xdg_surface *xdg_surface = nullptr;
+  struct xdg_toplevel *xdg_toplevel = nullptr;
+  struct zxdg_toplevel_decoration_v1 *xdg_decoration = nullptr;
 #elif defined(ENABLE_SDL)
   SDL_Window *window;
 #endif
