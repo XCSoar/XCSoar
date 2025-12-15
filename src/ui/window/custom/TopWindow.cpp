@@ -172,10 +172,10 @@ TopWindow::Refresh() noexcept
        OpenGL surface - ignore all drawing requests */
     return;
 
-#ifdef USE_X11
+#if defined(USE_X11) || defined(USE_WAYLAND)
   if (!IsVisible())
     /* don't bother to invoke the renderer if we're not visible on the
-       X11 display */
+       display */
     return;
 #endif
 
