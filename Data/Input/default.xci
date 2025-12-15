@@ -1353,17 +1353,40 @@ location=34
 mode=RemoteStick
 type=key
 data=0
+event=WaypointEditor
+event=Mode default
+label=Waypoint Editor
+location=35
+
+mode=RemoteStick
+type=key
+data=0
+event=AirSpace list
+event=Mode default
+label=Airspaces
+location=36
+
+mode=RemoteStick
+type=key
+data=0
+event=RepeatStatusMessage
+label=Message Repeat
+location=37
+
+mode=RemoteStick
+type=key
+data=0
 event=UploadIGCFile
 event=Mode default
 label=WeGlide Upload
-location=35
+location=38
 
 mode=RemoteStick
 type=key
 data=0
 event=Exit
 label=Quit XCSoar
-location=36
+location=39
 
 # -------------
 # Define gesture to open Quickmenu without keyboard or remote
