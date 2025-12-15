@@ -1353,55 +1353,17 @@ location=34
 mode=RemoteStick
 type=key
 data=0
-event=Logger nmea
-label=NMEA Logger$(CheckLogger)
-location=35
-
-mode=RemoteStick
-type=key
-data=0
-event=Device list
-event=Mode default
-label=Devices
-location=36
-
-mode=RemoteStick
-type=key
-data=0
-event=FileManager
-event=Mode default
-label=File Manager
-location=37
-
-mode=RemoteStick
-type=key
-data=0
-event=RepeatStatusMessage
-label=Message Repeat
-location=38
-
-mode=RemoteStick
-type=key
-data=0
-event=AirspaceWarnings
-event=Mode default
-label=Airspace Warnings
-location=38
-
-mode=RemoteStick
-type=key
-data=0
 event=UploadIGCFile
 event=Mode default
 label=WeGlide Upload
-location=39
+location=35
 
 mode=RemoteStick
 type=key
 data=0
 event=Exit
 label=Quit XCSoar
-location=40
+location=36
 
 # -------------
 # Define gesture to open Quickmenu without keyboard or remote
