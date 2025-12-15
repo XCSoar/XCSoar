@@ -606,6 +606,9 @@ Shutdown()
   MainWindow *const main_window = CommonInterface::main_window;
   auto &live_blackboard = CommonInterface::GetLiveBlackboard();
 
+  // Turn off all displays first to prevent UI operations from blocking
+  global_running = false;
+
   // Show progress dialog
   operation.SetText(_("Shutdown, please wait..."));
 
@@ -615,9 +618,6 @@ Shutdown()
   main_window->BeginShutdown();
 
   Lua::StopAllBackground();
-
-  // Turn off all displays
-  global_running = false;
 
   // Stop logger and save igc file
   if (backend_components != nullptr && backend_components->igc_logger != nullptr) {
