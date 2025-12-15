@@ -72,7 +72,7 @@ TopWindow::OnEvent(const Event &event)
   case Event::MOUSE_WHEEL:
     return OnMouseWheel(event.point, (int)event.param);
 
-#if defined(USE_X11) || defined(USE_WAYLAND)
+#ifdef USE_X11
   case Event::RESIZE:
     if (screen->CheckResize(PixelSize(event.point.x, event.point.y)))
       Resize(screen->GetSize());

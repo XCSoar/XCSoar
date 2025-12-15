@@ -3,6 +3,7 @@
 
 #include "../TopWindow.hpp"
 #include "ui/canvas/custom/TopCanvas.hpp"
+#include "ui/canvas/Features.hpp" // for DRAW_MOUSE_CURSOR
 #include "ui/event/Globals.hpp"
 #include "ui/event/poll/Queue.hpp"
 #include "ui/event/shared/Event.hpp"
@@ -11,6 +12,7 @@
 #include "xdg-decoration-unstable-v1-client-protocol.h"
 
 #include <stdexcept>
+#include <chrono>
 
 namespace UI {
 
@@ -23,16 +25,15 @@ handle_ping([[maybe_unused]] void *data,
 }
 
 static void
-handle_configure([[maybe_unused]] void *data,
+handle_configure(void *data,
                  [[maybe_unused]] struct wl_shell_surface *shell_surface,
                  [[maybe_unused]] uint32_t edges,
                  int32_t width,
                  int32_t height) noexcept
 {
-  if (width > 0 && height > 0 && event_queue != nullptr) {
-    /* Inject RESIZE event into the event queue */
-    event_queue->Inject(Event(Event::RESIZE,
-                              PixelPoint(width, height)));
+  if (width > 0 && height > 0) {
+    auto *window = static_cast<TopWindow *>(data);
+    window->Resize(PixelSize(width, height));
   }
 }
 
@@ -78,16 +79,15 @@ static const struct xdg_surface_listener surface_listener = {
 };
 
 static void
-handle_toplevel_configure([[maybe_unused]] void *data,
+handle_toplevel_configure(void *data,
                           [[maybe_unused]] struct xdg_toplevel *xdg_toplevel,
                           int32_t width,
                           int32_t height,
                           [[maybe_unused]] struct wl_array *states) noexcept
 {
-  if (width > 0 && height > 0 && event_queue != nullptr) {
-    /* Inject RESIZE event into the event queue */
-    event_queue->Inject(Event(Event::RESIZE,
-                              PixelPoint(width, height)));
+  if (width > 0 && height > 0) {
+    auto *window = static_cast<TopWindow *>(data);
+    window->Resize(PixelSize(width, height));
   }
 }
 
@@ -96,7 +96,7 @@ handle_toplevel_close([[maybe_unused]] void *data,
                       [[maybe_unused]] struct xdg_toplevel *xdg_toplevel) noexcept
 {
   if (event_queue != nullptr) {
-    /* Inject CLOSE event into the event queue */
+    // Inject CLOSE event into the event queue
     event_queue->Inject(Event::CLOSE);
   }
 }
@@ -210,34 +210,6 @@ TopWindow::DisableCapture() noexcept
 void
 TopWindow::OnResize(PixelSize new_size) noexcept
 {
-  if (native_window != nullptr) {
-    /* Update EGL window size */
-    wl_egl_window_resize(native_window, new_size.width, new_size.height, 0, 0);
-  }
-
-  /* Update opaque region for the new size */
-  if (wl_surface != nullptr && event_queue != nullptr) {
-    auto compositor = event_queue->GetCompositor();
-    if (compositor != nullptr) {
-      const auto region = wl_compositor_create_region(compositor);
-      wl_region_add(region, 0, 0, new_size.width, new_size.height);
-      wl_surface_set_opaque_region(wl_surface, region);
-      wl_region_destroy(region);
-      wl_surface_commit(wl_surface);
-    }
-  }
-
-  /* Call base implementation */
-  ContainerWindow::OnResize(new_size);
-
-#ifdef USE_MEMORY_CANVAS
-  screen->OnResize(new_size);
-#endif
-}
-
-void
-TopWindow::OnResize(PixelSize new_size) noexcept
-{
   /* Update event queue screen size (required for proper coordinate transformation) */
   event_queue->SetScreenSize(new_size);
 
@@ -270,6 +242,67 @@ TopWindow::OnResize(PixelSize new_size) noexcept
 #ifdef USE_MEMORY_CANVAS
   screen->OnResize(new_size);
 #endif
+}
+
+bool
+TopWindow::OnEvent(const Event &event)
+{
+  switch (event.type) {
+    Window *w;
+
+  case Event::NOP:
+  case Event::CALLBACK:
+    break;
+
+  case Event::CLOSE:
+    OnClose();
+    break;
+
+  case Event::KEY_DOWN:
+    w = GetFocusedWindow();
+    if (w == nullptr)
+      w = this;
+
+    return w->OnKeyDown(event.param);
+
+  case Event::KEY_UP:
+    w = GetFocusedWindow();
+    if (w == nullptr)
+      w = this;
+
+    return w->OnKeyUp(event.param);
+
+  case Event::MOUSE_MOTION:
+#ifdef DRAW_MOUSE_CURSOR
+    cursor_visible_until = std::chrono::steady_clock::now() + std::chrono::seconds(10);
+    /* redraw to update the mouse cursor position */
+    Invalidate();
+#endif
+
+    // XXX keys
+    return OnMouseMove(event.point, 0);
+
+  case Event::MOUSE_DOWN:
+    return double_click.Check(event.point)
+      ? OnMouseDouble(event.point)
+      : OnMouseDown(event.point);
+
+  case Event::MOUSE_UP:
+    double_click.Moved(event.point);
+
+    return OnMouseUp(event.point);
+
+  case Event::MOUSE_WHEEL:
+    return OnMouseWheel(event.point, (int)event.param);
+
+#if defined(USE_X11) || defined(MESA_KMS)
+  case Event::EXPOSE:
+    Invalidate();
+    return true;
+#endif
+  }
+
+  return false;
 }
 
 } // namespace UI

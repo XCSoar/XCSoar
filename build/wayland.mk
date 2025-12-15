@@ -4,9 +4,10 @@ OPENGL = y
 
 $(eval $(call pkg-config-library,WAYLAND,wayland-egl))
 $(eval $(call pkg-config-library,WAYLAND_CURSOR,wayland-cursor))
+$(eval $(call pkg-config-library,XKBCOMMON,xkbcommon))
 WAYLAND_FEATURE_CPPFLAGS = -DUSE_WAYLAND
-WAYLAND_CPPFLAGS += $(WAYLAND_CURSOR_CPPFLAGS)
-WAYLAND_LDLIBS += $(WAYLAND_CURSOR_LDLIBS)
+WAYLAND_CPPFLAGS += $(WAYLAND_CURSOR_CPPFLAGS) $(XKBCOMMON_CPPFLAGS)
+WAYLAND_LDLIBS += $(WAYLAND_CURSOR_LDLIBS) $(XKBCOMMON_LDLIBS)
 
 # Generate C sources and headers from the Wayland protocol
 # description; this is needed for interfaces which do not come
