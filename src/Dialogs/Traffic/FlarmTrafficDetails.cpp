@@ -218,10 +218,9 @@ FlarmTrafficDetailsWidget::Update()
     SetText(PILOT, record->pilot);
 
     // Fill the frequency field
-    if (!StringIsEmpty(record->frequency))
-      value = UnsafeBuildString(tmp, record->frequency.c_str(), _T(" MHz"));
-    else
-      value = _T("--");
+    TCHAR fbuf[16];
+    const TCHAR *freq = record->frequency.Format(fbuf, 16);
+    value = freq != nullptr ? UnsafeBuildString(tmp, freq, _T(" MHz")) : _T("--");
     SetText(RADIO, value);
 
     // Fill the home airfield field
