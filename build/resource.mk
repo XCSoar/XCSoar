@@ -63,6 +63,7 @@ PNG_SPLASH_160 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_160.png,$(SVG
 BMP_SPLASH_160 = $(PNG_SPLASH_160:.png=.bmp)
 PNG_SPLASH_80 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_80.png,$(SVG_SPLASH))
 BMP_SPLASH_80 = $(PNG_SPLASH_80:.png=.bmp)
+PNG_SPLASH_512 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_512.png,$(SVG_SPLASH))
 PNG_SPLASH_1024 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_1024.png,$(SVG_SPLASH))
 ICNS_SPLASH_1024 = $(PNG_SPLASH_1024:.png=.icns)
 
@@ -70,10 +71,11 @@ ICNS_SPLASH_1024 = $(PNG_SPLASH_1024:.png=.icns)
 $(eval $(call rsvg-convert,$(PNG_SPLASH_320),$(DATA)/graphics/%_320.png,Data/graphics/%.svg,--width=320))
 $(eval $(call rsvg-convert,$(PNG_SPLASH_160),$(DATA)/graphics/%_160.png,Data/graphics/%.svg,--width=160))
 $(eval $(call rsvg-convert,$(PNG_SPLASH_80),$(DATA)/graphics/%_80.png,Data/graphics/%.svg,--width=80))
+$(eval $(call rsvg-convert,$(PNG_SPLASH_512),$(DATA)/graphics/%_512.png,Data/graphics/%.svg,--width=512))
 $(eval $(call rsvg-convert,$(PNG_SPLASH_1024),$(DATA)/graphics/%_1024.png,Data/graphics/%.svg,--width=1024))
 
 # convert to uncompressed 8-bit BMP
-$(eval $(call convert-to-bmp-white,$(BMP_SPLASH_160) $(BMP_SPLASH_80),%.bmp,%.png))
+$(eval $(call convert-to-bmp-white,$(BMP_SPLASH_320) $(BMP_SPLASH_160) $(BMP_SPLASH_80),%.bmp,%.png))
 
 # convert to icns (macOS icon)
 $(ICNS_SPLASH_1024): %.icns: %.png
@@ -87,13 +89,16 @@ PNG_TITLE_110 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_110.png,$(SVG_
 BMP_TITLE_110 = $(PNG_TITLE_110:.png=.bmp)
 PNG_TITLE_320 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_320.png,$(SVG_TITLE))
 BMP_TITLE_320 = $(PNG_TITLE_320:.png=.bmp)
+PNG_TITLE_640 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_640.png,$(SVG_TITLE))
+BMP_TITLE_640 = $(PNG_TITLE_640:.png=.bmp)
 
 # render from SVG to PNG
 $(eval $(call rsvg-convert,$(PNG_TITLE_110),$(DATA)/graphics/%_110.png,Data/graphics/%.svg,--width=110))
 $(eval $(call rsvg-convert,$(PNG_TITLE_320),$(DATA)/graphics/%_320.png,Data/graphics/%.svg,--width=320))
+$(eval $(call rsvg-convert,$(PNG_TITLE_640),$(DATA)/graphics/%_640.png,Data/graphics/%.svg,--width=640))
 
 # convert to uncompressed 8-bit BMP
-$(eval $(call convert-to-bmp-white,$(BMP_TITLE_110) $(BMP_TITLE_320),%.bmp,%.png))
+$(eval $(call convert-to-bmp-white,$(BMP_TITLE_110) $(BMP_TITLE_320) $(BMP_TITLE_640),%.bmp,%.png))
 
 ####### dialog title
 
@@ -200,9 +205,9 @@ RESOURCE_FILES += $(PNG_BITMAPS)
 endif
 
 RESOURCE_FILES += $(BMP_ICONS_ALL)
-RESOURCE_FILES += $(BMP_SPLASH_160) $(BMP_SPLASH_80)
+RESOURCE_FILES += $(BMP_SPLASH_320) $(BMP_SPLASH_160) $(BMP_SPLASH_80)
 RESOURCE_FILES += $(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER)
-RESOURCE_FILES += $(BMP_TITLE_320) $(BMP_TITLE_110)
+RESOURCE_FILES += $(BMP_TITLE_640) $(BMP_TITLE_320) $(BMP_TITLE_110)
 RESOURCE_FILES += $(BMP_LAUNCH_ALL)
 
 RESOURCE_FILES += $(RAW_SOUNDS)

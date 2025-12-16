@@ -12,8 +12,8 @@
 #include <algorithm>
 
 LogoView::LogoView() noexcept try
-  :logo(IDB_LOGO), big_logo(IDB_LOGO_HD),
-   title(IDB_TITLE), big_title(IDB_TITLE_HD)
+  :logo(IDB_LOGO), big_logo(IDB_LOGO_HD), huge_logo(IDB_LOGO_UHD),
+   title(IDB_TITLE), big_title(IDB_TITLE_HD), huge_title(IDB_TITLE_UHD)
 {
 #ifndef USE_GDI
   font.Load(FontDescription(Layout::FontScale(10)));
@@ -63,7 +63,7 @@ EstimateLogoViewSize(LogoViewOrientation orientation,
 void
 LogoView::draw(Canvas &canvas, const PixelRect &rc) noexcept
 {
-  if (!big_logo.IsDefined() || !big_title.IsDefined())
+  if (!huge_logo.IsDefined() || !huge_title.IsDefined())
     return;
 
   const unsigned width = rc.GetWidth(), height = rc.GetHeight();
@@ -76,19 +76,32 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc) noexcept
   else
     orientation = LogoViewOrientation::PORTRAIT;
 
-  /* load bitmaps */
-  const bool use_big =
-    (orientation == LogoViewOrientation::LANDSCAPE && width >= 510 && height >= 170) ||
-    (orientation == LogoViewOrientation::PORTRAIT && width >= 330 && height >= 250) ||
-    (orientation == LogoViewOrientation::SQUARE && width >= 210 && height >= 210);
-  const Bitmap &bitmap_logo = use_big ? big_logo : logo;
-  const Bitmap &bitmap_title = use_big ? big_title : title;
+  /* Select appropriate bitmap size based on display dimensions */
+  const Bitmap *bitmap_logo, *bitmap_title;
+  
+  if ((orientation == LogoViewOrientation::LANDSCAPE && width >= 1024 && height >= 340) ||
+      (orientation == LogoViewOrientation::PORTRAIT && width >= 660 && height >= 500) ||
+      (orientation == LogoViewOrientation::SQUARE && width >= 420 && height >= 420)) {
+    /* Use huge (320px logo, 640px title) for very high resolution displays */
+    bitmap_logo = &huge_logo;
+    bitmap_title = &huge_title;
+  } else if ((orientation == LogoViewOrientation::LANDSCAPE && width >= 510 && height >= 170) ||
+             (orientation == LogoViewOrientation::PORTRAIT && width >= 330 && height >= 250) ||
+             (orientation == LogoViewOrientation::SQUARE && width >= 210 && height >= 210)) {
+    /* Use big (160px logo, 320px title) for HD displays */
+    bitmap_logo = &big_logo;
+    bitmap_title = &big_title;
+  } else {
+    /* Use standard (80px logo, 110px title) for low resolution displays */
+    bitmap_logo = &logo;
+    bitmap_title = &title;
+  }
 
   // Determine logo size
-  PixelSize logo_size = bitmap_logo.GetSize();
+  PixelSize logo_size = bitmap_logo->GetSize();
 
   // Determine title image size
-  PixelSize title_size = bitmap_title.GetSize();
+  PixelSize title_size = bitmap_title->GetSize();
 
   unsigned spacing = title_size.height / 2;
 
@@ -136,10 +149,10 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc) noexcept
 
   // Draw 'XCSoar N.N' title
   if (orientation != LogoViewOrientation::SQUARE)
-    canvas.Stretch(title_position, title_size, bitmap_title);
+    canvas.Stretch(title_position, title_size, *bitmap_title);
 
   // Draw XCSoar swift logo
-  canvas.Stretch(logo_position, logo_size, bitmap_logo);
+  canvas.Stretch(logo_position, logo_size, *bitmap_logo);
 
   // Draw full XCSoar version number
 
