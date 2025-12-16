@@ -13,6 +13,8 @@ bool texture_non_power_of_two;
 
 bool mapbuffer;
 
+bool is_mediatek = false;
+
 GLenum render_buffer_depth_stencil, render_buffer_stencil;
 
 UnsignedPoint2D window_size, viewport_size;
