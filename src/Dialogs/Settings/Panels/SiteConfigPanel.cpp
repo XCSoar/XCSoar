@@ -41,9 +41,9 @@ public:
 void
 SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept
 {
-  WndProperty *wp = Add(_T(""), 0, true);
+  WndProperty *wp = Add(_("XCSoar data path"), _("Click to view full path"), false);
   wp->SetText(GetPrimaryDataPath().c_str());
-  wp->SetEnabled(false);
+  wp->SetReadOnly(true);
 
   AddFile(_("Map database"),
           _("The name of the file (.xcm) containing terrain, topography, and optionally "

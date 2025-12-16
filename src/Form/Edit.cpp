@@ -9,7 +9,13 @@
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Dialogs/DataField.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Widget/LargeTextWidget.hpp"
+#include "UIGlobals.hpp"
+#include "Language/Language.hpp"
 #include "Asset.hpp"
+#include "system/Path.hpp"
+#include "system/RunFile.hpp"
 
 #include <cassert>
 
@@ -132,6 +138,12 @@ bool
 WndProperty::BeginEditing() noexcept
 {
   if (IsReadOnly() || data_field == nullptr || edit_callback == nullptr) {
+    /* If readonly and has content, show full content dialog */
+    if (IsReadOnly() && !value.empty()) {
+      ShowFullContent();
+      return false;
+    }
+    
     OnHelp();
     return false;
   } else {
@@ -141,6 +153,46 @@ WndProperty::BeginEditing() noexcept
     RefreshDisplay();
     return true;
   }
+}
+
+bool
+WndProperty::IsContentTruncated() const noexcept
+{
+  if (value.empty())
+    return false;
+
+  const Font &font = look.text_font;
+  const unsigned available_width = edit_rc.GetWidth();
+  const unsigned text_width = font.TextSize(value.c_str()).width;
+  
+  return text_width > available_width;
+}
+
+void
+WndProperty::ShowFullContent() noexcept
+{
+  if (value.empty())
+    return;
+
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(), GetCaption());
+  
+  auto *widget = new LargeTextWidget(UIGlobals::GetDialogLook(), value.c_str());
+  
+  dialog.FinishPreliminary(widget);
+  
+#if defined(HAVE_RUN_FILE) && !defined(ANDROID)
+  /* Only show "Open" button if the content is an absolute path
+   * Android handles external files via ContentProvider instead */
+  if (Path(value.c_str()).IsAbsolute()) {
+    dialog.AddButton(_("Open"), [this](){
+      RunFile(value.c_str());
+    });
+  }
+#endif
+  
+  dialog.AddButton(_("Close"), mrOK);
+  dialog.ShowModal();
 }
 
 void
