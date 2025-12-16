@@ -1215,9 +1215,8 @@ location=17
 mode=RemoteStick
 type=key
 data=0
-event=MacCready auto show
-event=MacCready auto toggle
-label=$(CheckAutoMc)MC\n$(MacCreadyToggleActionName)
+event=Mode mc
+label=MacCready
 location=18
 
 mode=RemoteStick
