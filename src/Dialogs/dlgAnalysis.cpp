@@ -18,6 +18,7 @@
 #include "Look/Look.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
+#include "Renderer/SymbolButtonRenderer.hpp"
 #include "Renderer/FlightStatisticsRenderer.hpp"
 #include "Renderer/GlidePolarRenderer.hpp"
 #include "Renderer/BarographRenderer.hpp"
@@ -39,6 +40,7 @@
 #include "ui/canvas/opengl/Scissor.hpp"
 #endif
 
+#include <algorithm>
 #include <stdio.h>
 
 using namespace UI;
@@ -217,6 +219,7 @@ AnalysisWidget::Layout::Layout(const DialogLook &look,
 {
   const unsigned width = rc.GetWidth(), height = rc.GetHeight();
   const unsigned button_height = ::Layout::GetMaximumControlHeight();
+  const unsigned padding = ::Layout::GetTextPadding();
 
   main = rc;
 
@@ -256,15 +259,21 @@ AnalysisWidget::Layout::Layout(const DialogLook &look,
     info.top = rc.top;
     info.bottom = details_button.top;
 
-    main.left = close_button.right;
+    main.left = close_button.right + padding;
   } else {
     /* there are at most 5 text lines in the "info" area */
     const unsigned info_height = 5 * look.text_font.GetLineSpacing();
+    
+    /* calculate total button stack height */
+    const unsigned button_stack_height = close_button.bottom - details_button.top;
+    
+    /* use the larger of info_height or button_stack_height to avoid overlap */
+    const unsigned bottom_area_height = std::max(info_height, button_stack_height);
 
-    main.bottom = rc.bottom - info_height;
-    info.left = close_button.right;
+    main.bottom = rc.bottom - bottom_area_height - padding;
+    info.left = close_button.right + padding;
     info.right = rc.right;
-    info.top = rc.bottom - info_height;
+    info.top = main.bottom + padding;
     info.bottom = rc.bottom;
   }
 }
@@ -283,10 +292,14 @@ AnalysisWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   const auto &button_look = dialog.GetLook().button;
   details_button.Create(parent, button_look, _T("Calc"), layout.details_button,
                         button_style, [this](){ OnCalcClicked(); });
-  previous_button.Create(parent, button_look, _T("<"), layout.previous_button,
-                         button_style, [this](){ NextPage(-1); });
-  next_button.Create(parent, button_look, _T(">"), layout.next_button,
-                     button_style, [this](){ NextPage(1); });
+  previous_button.Create(parent, layout.previous_button,
+                         button_style,
+                         std::make_unique<SymbolButtonRenderer>(button_look, _T("<")),
+                         [this](){ NextPage(-1); });
+  next_button.Create(parent, layout.next_button,
+                     button_style,
+                     std::make_unique<SymbolButtonRenderer>(button_look, _T(">")),
+                     [this](){ NextPage(1); });
   close_button.Create(parent, button_look, _("Close"), layout.close_button,
                       button_style, dialog.MakeModalResultCallback(mrOK));
 
