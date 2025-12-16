@@ -4,6 +4,7 @@
 #pragma once
 
 #include "util/StaticString.hxx"
+#include "RadioFrequency.hpp"
 
 class FlarmId;
 
@@ -43,8 +44,8 @@ struct FlarmNetRecord {
   /**< Callsign 3 bytes */
   StaticString<LatinBufferSize(4)> callsign;
 
-  /**< Radio frequency 6 bytes */
-  StaticString<LatinBufferSize(8)> frequency;
+  /**< Radio frequency value (parsed) */
+  RadioFrequency frequency = RadioFrequency::Null();
 
   [[gnu::pure]]
   FlarmId GetId() const noexcept;
