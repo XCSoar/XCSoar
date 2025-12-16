@@ -89,6 +89,12 @@ public:
    */
   bool BeginEditing() noexcept;
 
+private:
+  /**
+   * Show full content in a dialog (for readonly fields with truncated content).
+   */
+  void ShowFullContent() noexcept;
+
 protected:
   void OnResize(PixelSize new_size) noexcept override;
   void OnSetFocus() noexcept override;
