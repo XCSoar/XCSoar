@@ -165,6 +165,68 @@ data=RETURN
 event=NearestMapItems
 location=7
 
+# ------------
+# mode=mc (MacCready adjustment)
+# Stick: UP/DOWN adjust, RETURN toggle auto/manual, ESCAPE exit
+# Buttons: 1=Exit, 6=Auto/Man, 7=MC+, 8=MC-
+# ------------
+
+# Stick bindings
+mode=mc
+type=key
+data=UP
+event=MacCready up
+event=MacCready show
+
+mode=mc
+type=key
+data=DOWN
+event=MacCready down
+event=MacCready show
+
+mode=mc
+type=key
+data=RETURN
+event=MacCready auto toggle
+event=MacCready auto show
+
+mode=mc
+type=key
+data=ESCAPE
+event=Mode default
+
+# On-screen buttons
+mode=mc
+type=key
+data=0
+event=Mode default
+label=Exit\n(ESC)
+location=1
+
+mode=mc
+type=key
+data=0
+event=MacCready auto toggle
+event=MacCready auto show
+label=Auto/Man\n(RETURN)
+location=6
+
+mode=mc
+type=key
+data=0
+event=MacCready up
+event=MacCready show
+label=MC+\n(UP)
+location=7
+
+mode=mc
+type=key
+data=0
+event=MacCready down
+event=MacCready show
+label=MC-\n(DOWN)
+location=8
+
 ###### main entry buttons
 
 mode=default
@@ -1033,9 +1095,50 @@ location=1
 mode=RemoteStick
 type=key
 data=0
-event=AdjustWaypoint nextarm
-label=$(WaypointNextArm)
-location=2
+event=Mode default
+event=StatusMessage Pilot event announced
+event=Logger note PEV
+event=PilotEvent
+label=Pilot Event Announce
+location=15
+
+# Priority 1: Most important in-flight buttons (CENTER AREA)
+mode=RemoteStick
+type=key
+data=0
+event=Checklist
+event=Mode default
+label=Checklist
+location=16
+
+mode=RemoteStick
+type=key
+data=0
+event=Setup Target
+event=Mode default
+label=Target Show$(CheckTask)$(CheckTaskResumed)
+location=17
+
+mode=RemoteStick
+type=key
+data=0
+event=Mode mc
+label=MacCready
+location=18
+
+mode=RemoteStick
+type=key
+data=0
+event=AirSpace toggle
+label=Airspace\n$(AirspaceToggleActionName)
+location=19
+
+mode=RemoteStick
+type=key
+data=0
+event=Pan on
+label=Pan Mode
+location=20
 
 mode=RemoteStick
 type=key
