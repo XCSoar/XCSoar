@@ -69,4 +69,7 @@ public:
   bool SetFocus() noexcept override;
   bool HasFocus() const noexcept override;
   bool KeyPress(unsigned key_code) noexcept override;
+
+private:
+  void UpdateButtons() noexcept;
 };
