@@ -31,4 +31,14 @@ $(WAYLAND_GENERATED)/xdg-shell-public.c: $(XDG_SHELL_XML) | $(WAYLAND_GENERATED)
 	$(Q)$(WAYLAND_SCANNER) public-code <$< >$@.tmp
 	@mv $@.tmp $@
 
+$(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-client-protocol.h: $(XDG_DECORATION_XML) | $(WAYLAND_GENERATED)/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(WAYLAND_SCANNER) client-header <$< >$@.tmp
+	@mv $@.tmp $@
+
+$(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-public.c: $(XDG_DECORATION_XML) | $(WAYLAND_GENERATED)/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(WAYLAND_SCANNER) public-code <$< >$@.tmp
+	@mv $@.tmp $@
+
 endif
