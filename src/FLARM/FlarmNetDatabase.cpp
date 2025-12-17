@@ -9,12 +9,11 @@
 void
 FlarmNetDatabase::Insert(const FlarmNetRecord &record) noexcept
 {
-  FlarmId id = record.GetId();
-  if (!id.IsDefined())
+  if (!record.id.IsDefined())
     /* ignore malformed records */
     return;
 
-  map.insert(std::make_pair(id, record));
+  map.insert(std::make_pair(record.id, record));
 }
 
 const FlarmNetRecord *

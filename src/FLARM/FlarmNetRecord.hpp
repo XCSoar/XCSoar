@@ -5,8 +5,7 @@
 
 #include "util/StaticString.hxx"
 #include "RadioFrequency.hpp"
-
-class FlarmId;
+#include "Id.hpp"
 
 static constexpr std::size_t
 LatinBufferSize(std::size_t size) noexcept
@@ -26,8 +25,8 @@ LatinBufferSize(std::size_t size) noexcept
  * FlarmNet.org file entry
  */
 struct FlarmNetRecord {
-  /**< FLARM id 6 bytes */
-  StaticString<LatinBufferSize(7)> id;
+  /**< FLARM id */
+  FlarmId id;
 
   /**< Name 15 bytes */
   StaticString<LatinBufferSize(22)> pilot;
@@ -46,7 +45,4 @@ struct FlarmNetRecord {
 
   /**< Radio frequency value (parsed) */
   RadioFrequency frequency = RadioFrequency::Null();
-
-  [[gnu::pure]]
-  FlarmId GetId() const noexcept;
 };
