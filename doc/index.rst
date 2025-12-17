@@ -7,6 +7,7 @@ XCSoar
 
    build
    devsetup
+   rebranding
    policy
    architecture
    input_events
