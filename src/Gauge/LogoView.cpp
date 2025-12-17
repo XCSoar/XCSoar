@@ -17,6 +17,11 @@ LogoView::LogoView() noexcept try
 {
 #ifndef USE_GDI
   font.Load(FontDescription(Layout::FontScale(10)));
+#ifndef NDEBUG
+  FontDescription bold_desc(Layout::FontScale(16));
+  bold_desc.SetBold(true);
+  bold_font.Load(bold_desc);
+#endif
 #endif
 } catch (...) {
   /* ignore Bitmap/Font loader exceptions */
@@ -182,4 +187,55 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc) noexcept
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundTransparent();
   canvas.DrawText({2, 2}, XCSoar_ProductToken);
+
+#ifndef NDEBUG
+  /* Draw debug build warning banner below logo (like "Remove before flight") */
+#ifndef USE_GDI
+  if (bold_font.IsDefined())
+    canvas.Select(bold_font);
+#endif
+  
+  const TCHAR *warning_text = _T("DEBUG BUILD - DO NOT FLY!");
+  const auto text_size = canvas.CalcTextSize(warning_text);
+  
+  /* Half character padding (max) */
+  const int padding = text_size.height / 2;
+  const int banner_height = text_size.height + padding * 2;
+  const int banner_width = text_size.width + padding * 2;
+  
+  /* Position banner below the logo/title with some spacing */
+  int banner_y;
+  if (orientation == LogoViewOrientation::PORTRAIT) {
+    // Below title in portrait mode
+    banner_y = title_position.y + title_size.height + spacing / 2;
+  } else if (orientation == LogoViewOrientation::SQUARE) {
+    // Below logo in square mode
+    banner_y = logo_position.y + logo_size.height + spacing / 2;
+  } else {
+    // Below whichever is lower in landscape mode
+    banner_y = std::max(logo_position.y + logo_size.height,
+                       title_position.y + title_size.height) + spacing / 2;
+  }
+  
+  /* Only draw if banner fits within the visible area */
+  if (banner_y + banner_height <= int(height)) {
+    const PixelRect warning_rect{
+      Center(width, banner_width),
+      banner_y,
+      Center(width, banner_width) + banner_width,
+      banner_y + banner_height
+    };
+    
+    canvas.DrawFilledRectangle(warning_rect, COLOR_RED);
+    canvas.SetTextColor(COLOR_WHITE);
+    canvas.SetBackgroundTransparent();
+    
+    const PixelPoint text_pos{
+      warning_rect.left + padding,
+      warning_rect.top + padding
+    };
+    
+    canvas.DrawText(text_pos, warning_text);
+  }
+#endif
 }
