@@ -22,7 +22,7 @@ int main()
   const FlarmNetRecord *record = db.FindRecordById(id);
   ok1(record != NULL);
 
-  ok1(StringIsEqual(record->id, _T("DDA85C")));
+  ok1(record->id == id);
   ok1(StringIsEqual(record->pilot, _T("Tobias Bieniek")));
   ok1(StringIsEqual(record->airfield, _T("AACHEN")));
   ok1(StringIsEqual(record->plane_type, _T("Hornet")));
