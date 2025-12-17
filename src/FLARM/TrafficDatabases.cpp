@@ -33,7 +33,7 @@ TrafficDatabases::FindIdByName(const TCHAR *name) const noexcept
   // try to find flarm from FlarmNet.org File
   const FlarmNetRecord *record = flarm_net.FindFirstRecordByCallSign(name);
   if (record != NULL)
-    return record->GetId();
+    return record->id;
 
   return FlarmId::Undefined();
 }
