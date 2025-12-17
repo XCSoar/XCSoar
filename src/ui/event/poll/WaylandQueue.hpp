@@ -13,6 +13,9 @@ struct xkb_context;
 struct xkb_keymap;
 struct xkb_state;
 
+enum class DisplayOrientation : uint8_t;
+struct PixelSize;
+
 struct wl_display;
 struct wl_compositor;
 struct wl_seat;
@@ -53,6 +56,10 @@ class WaylandEventQueue final {
 
   SocketEvent socket_event;
   IdleEvent flush_event;
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  PixelSize physical_screen_size{0, 0};
+#endif
 
 public:
   /**
@@ -101,6 +108,10 @@ public:
   void Push(const Event &event) noexcept;
   void PointerMotion(IntPoint2D new_pointer_position) noexcept;
   void PointerButton(bool pressed) noexcept;
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  PixelPoint GetTransformedPointerPosition() const noexcept;
+#endif
 
   void KeyboardKey(uint32_t key, uint32_t state) noexcept;
   void KeyboardKeymap(uint32_t format, int32_t fd, uint32_t size) noexcept;

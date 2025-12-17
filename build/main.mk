@@ -1,7 +1,10 @@
+# Product name (default: XCSoar, can be overridden via PRODUCT_NAME variable)
+PRODUCT_NAME ?= XCSoar
+
 ifeq ($(HAVE_POSIX),y)
-PROGRAM_NAME = xcsoar
+PROGRAM_NAME = $(shell echo $(PRODUCT_NAME) | tr '[:upper:]' '[:lower:]')
 else
-PROGRAM_NAME = XCSoar
+PROGRAM_NAME = $(PRODUCT_NAME)
 endif
 
 DIALOG_SOURCES = \

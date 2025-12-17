@@ -112,10 +112,17 @@ WaylandPointerAxis(void *data,
                    [[maybe_unused]] uint32_t time,
                    uint32_t axis, wl_fixed_t value)
 {
-  auto &queue = *(WaylandEventQueue *)data;
-
-  if (axis == WL_POINTER_AXIS_VERTICAL_SCROLL)
-    queue.Push(Event(Event::MOUSE_WHEEL, wl_fixed_to_int(value)));
+  if (axis == WL_POINTER_AXIS_VERTICAL_SCROLL) {
+    auto &q = *(WaylandEventQueue *)data;
+#ifdef SOFTWARE_ROTATE_DISPLAY
+    PixelPoint p = q.GetTransformedPointerPosition();
+#else
+    PixelPoint p(q.pointer_position.x, q.pointer_position.y);
+#endif
+    Event e(Event::MOUSE_WHEEL, p);
+    e.param = wl_fixed_to_int(value);
+    q.Push(e);
+  }
 }
 
 static constexpr struct wl_pointer_listener pointer_listener = {
@@ -225,26 +232,51 @@ WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
   if (wm_base == nullptr && shell == nullptr)
     throw std::runtime_error{"No Wayland xdg_wm_base/shell found"};
 
+  if (shm == nullptr) throw std::runtime_error("No Wayland wl_shm found");
+
+  /* Load cursor theme. Use nullptr for theme name to use the default system
+     theme. Cursor size: read from XCURSOR_SIZE environment variable
+     (standard), or calculate from display DPI if available. Defaults to 24
+     pixels for 96 DPI displays, scaling proportionally for higher DPI. */
+  /* Allow up to 2048 pixels to support very high-DPI displays (e.g., 3000 DPI
+     -> ~750px). Cursor themes typically have sizes up to 256px, but we allow
+     larger requests; the theme will use the closest available size. */
+  int cursor_size = GetEnvInt("XCURSOR_SIZE", 0, /* min */ 0, /* max */ 2048);
+  if (cursor_size == 0) {
+    /* If XCURSOR_SIZE not set, scale default cursor size based on DPI
+       Default is 24px at 96 DPI (1/4 inch). Scale proportionally for
+       higher DPI displays (e.g., 650 DPI -> ~162px, 3000 DPI -> ~750px). */
+    const auto dpi = ::Display::GetDPI(_display, 0);
+    if (dpi.x > 0) {
+      /* Scale: cursor_size = 24 * (dpi / 96) */
+      const int scaled_size = (24 * dpi.x + 48) / 96; /* +48 for rounding */
+      if (scaled_size > 0 && scaled_size <= 2048) {
+        cursor_size = scaled_size;
+      } else {
+        cursor_size = 24; /* Fallback to default if scaling fails */
+      }
+    } else {
+      cursor_size = 24; /* Fallback to default if DPI unavailable */
+    }
+  }
+  cursor_theme = wl_cursor_theme_load(nullptr, cursor_size, shm);
+  if (cursor_theme != nullptr) {
+    cursor_pointer = wl_cursor_theme_get_cursor(cursor_theme, "left_ptr");
+    if (cursor_pointer == nullptr) {
+      /* Fallback to default cursor name */
+      cursor_pointer = wl_cursor_theme_get_cursor(cursor_theme, "default");
+    }
+    if (cursor_pointer != nullptr && compositor != nullptr) {
+      cursor_surface = wl_compositor_create_surface(compositor);
+    }
+  }
+
   socket_event.Open(SocketDescriptor(wl_display_get_fd(display)));
   socket_event.ScheduleRead();
   flush_event.Schedule();
 }
 
-WaylandEventQueue::~WaylandEventQueue() noexcept
-{
-  if (xkb_state != nullptr) {
-    xkb_state_unref(xkb_state);
-    xkb_state = nullptr;
-  }
-  if (xkb_keymap != nullptr) {
-    xkb_keymap_unref(xkb_keymap);
-    xkb_keymap = nullptr;
-  }
-  if (xkb_context != nullptr) {
-    xkb_context_unref(xkb_context);
-    xkb_context = nullptr;
-  }
-}
+WaylandEventQueue::~WaylandEventQueue() noexcept = default;
 
 bool
 WaylandEventQueue::Generate([[maybe_unused]] Event &event) noexcept

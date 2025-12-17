@@ -157,6 +157,10 @@ RAW_DIR = $(RES_DIR)/raw
 ANDROID_XML_RES := $(wildcard android/res/*/*.xml)
 ANDROID_XML_RES_COPIES := $(patsubst android/res/%,$(RES_DIR)/%,$(ANDROID_XML_RES))
 
+# Filter out strings.xml for special handling with product name replacement
+ANDROID_XML_RES_NO_STRINGS := $(filter-out android/res/values/strings.xml,$(ANDROID_XML_RES))
+ANDROID_XML_RES_COPIES_NO_STRINGS := $(patsubst android/res/%,$(RES_DIR)/%,$(ANDROID_XML_RES_NO_STRINGS))
+
 ifeq ($(TESTING),y)
 ICON_SVG = $(topdir)/Data/graphics/logo_red.svg
 else
@@ -247,11 +251,16 @@ else
 MANIFEST = android/AndroidManifest.xml
 endif
 
-$(ANDROID_XML_RES_COPIES): $(RES_DIR)/%: android/res/%
+$(ANDROID_XML_RES_COPIES_NO_STRINGS): $(RES_DIR)/%: android/res/%
 	$(Q)-$(MKDIR) -p $(dir $@)
 	$(Q)cp $< $@
 
-$(ANDROID_OUTPUT_DIR)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) $(MANIFEST) | $(GEN_DIR)/dirstamp
+# Special handling for strings.xml to replace product name
+$(RES_DIR)/values/strings.xml: android/res/values/strings.xml | $(RES_DIR)/values/dirstamp
+	$(Q)-$(MKDIR) -p $(dir $@)
+	$(Q)sed 's/XCSoar/$(PRODUCT_NAME)/g' $< > $@
+
+$(ANDROID_OUTPUT_DIR)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES_NO_STRINGS) $(RES_DIR)/values/strings.xml $(MANIFEST) | $(GEN_DIR)/dirstamp
 	@$(NQ)echo "  AAPT"
 	$(Q)$(AAPT) package -f -m --auto-add-overlay \
 		--custom-package $(JAVA_PACKAGE) \
