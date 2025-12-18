@@ -138,10 +138,15 @@ Java_org_xcsoar_DownloadUtil_onDownloadComplete(JNIEnv *env, [[maybe_unused]] jo
   const auto final_path = LocalPath(relative_path);
 
   if (success) {
-    try {
-      MoveOrCopyFile(tmp_path, final_path);
-    } catch (...) {
-      success = false;
+    /* If temp and final paths are the same, no move is needed.
+       This happens when the filename doesn't need URI encoding
+       (e.g., "repository"). */
+    if (tmp_path != final_path) {
+      try {
+        MoveOrCopyFile(tmp_path, final_path);
+      } catch (...) {
+        success = false;
+      }
     }
   }
 
