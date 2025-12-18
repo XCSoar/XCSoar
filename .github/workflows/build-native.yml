@@ -290,7 +290,6 @@ jobs:
           restore-keys: |
             thirdparty-${{ matrix.target }}-
           path: |
-            ${{ github.workspace }}/output/${{ matrix.target }}/**/lib
             ${{ github.workspace }}/output/${{ matrix.target }}/lib
 
       - name: Install dependencies
