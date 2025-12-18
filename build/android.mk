@@ -263,6 +263,7 @@ $(RES_DIR)/values/strings.xml: android/res/values/strings.xml | $(RES_DIR)/value
 
 $(ANDROID_OUTPUT_DIR)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES_NO_STRINGS) $(RES_DIR)/values/strings.xml $(MANIFEST) | $(GEN_DIR)/dirstamp
 	@$(NQ)echo "  AAPT"
+	$(Q)find $(RES_DIR) -name dirstamp -delete
 	$(Q)$(AAPT) package -f -m --auto-add-overlay \
 		--custom-package $(JAVA_PACKAGE) \
 		-M $(MANIFEST) \
@@ -277,12 +278,14 @@ $(GEN_DIR)/org/xcsoar/R.java: $(ANDROID_OUTPUT_DIR)/resources.apk
 $(ANDROID_OUTPUT_DIR)/classes.zip: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
 	@$(NQ)echo "  JAVAC   $(JAVA_CLASSFILES_DIR)"
 	$(Q)$(JAVAC) \
-		-source 1.7 -target 1.7 \
+		-source 1.8 -target 1.8 \
 		-Xlint:all \
 		-Xlint:-deprecation \
 		-Xlint:-options \
 		-Xlint:-serial \
 		-Xlint:-static \
+		-Xlint:-removal \
+		-Xlint:-this-escape \
 		-cp $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) \
 		-d $(JAVA_CLASSFILES_DIR) $(GEN_DIR)/org/xcsoar/R.java \
 		-h $(NATIVE_INCLUDE) \

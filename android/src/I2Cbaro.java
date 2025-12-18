@@ -222,7 +222,7 @@ final class I2Cbaro extends Thread {
     mc = readS16BE(response085Parameters, 18);
     md = readS16BE(response085Parameters, 20);
 
-    read085Pressure[1] += oversampling085 << 6;
+    read085Pressure[1] += (byte)(oversampling085 << 6);
 
     return true;
   }

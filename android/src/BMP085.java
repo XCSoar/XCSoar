@@ -81,7 +81,7 @@ final class BMP085 extends Thread {
     eoc = ioio.openDigitalInput(eocPin);
 
     oversampling = _oversampling;
-    readPressure[1] += oversampling << 6;
+    readPressure[1] += (byte)(oversampling << 6);
 
     listener = _listener;
 
