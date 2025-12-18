@@ -98,6 +98,11 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
       return true;
     }
 
+    if (type2 == "PFLAM"sv) {
+      ParsePFLAM(line);
+      return true;
+    }
+
     // Garmin altitude sentence
     if (type2 == "PGRMZ"sv)
       return RMZ(line, info);
