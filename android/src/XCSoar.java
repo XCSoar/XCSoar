@@ -98,6 +98,14 @@ public class XCSoar extends Activity implements PermissionManager {
        WindowUtil.leaveFullScreenMode() to avoid clearing those */
     initialWindowFlags = window.getAttributes().flags;
 
+    /* Apply fullscreen mode early (with default value = true) to avoid
+       visible layout changes when the native code loads the profile.
+       The default fullscreen setting is true (DisplaySettings::SetDefaults()).
+       If the user has disabled fullscreen in their profile, it will be
+       updated later by native code via setFullScreen(). */
+    fullScreen = true;
+    applyFullScreen();
+
     submitConfiguration(getResources().getConfiguration());
 
     batteryReceiver = new BatteryReceiver();
@@ -163,6 +171,9 @@ public class XCSoar extends Activity implements PermissionManager {
 
   final Handler fullScreenHandler = new Handler() {
       public void handleMessage(Message msg) {
+        /* Called by native code when the fullscreen setting is loaded from
+           the profile. This may override the initial default value that was
+           applied in onCreate(). */
         fullScreen = msg.what != 0;
         applyFullScreen();
       }
@@ -293,10 +304,10 @@ public class XCSoar extends Activity implements PermissionManager {
 
   @Override public void onWindowFocusChanged(boolean hasFocus) {
     if (hasFocus && wantFullScreen())
-      /* some Android don't restore immersive mode after returning to
-         this app, so unfortunately we need to reapply those settings
-         manually */
-      WindowUtil.enableImmersiveMode(getWindow());
+      /* some Android don't restore fullscreen settings after returning to
+         this app or after orientation changes, so we need to reapply all
+         fullscreen settings (immersive mode + display cutout mode) manually */
+      WindowUtil.enterFullScreenMode(getWindow());
 
     super.onWindowFocusChanged(hasFocus);
   }
@@ -322,6 +333,12 @@ public class XCSoar extends Activity implements PermissionManager {
   @Override public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
     submitConfiguration(newConfig);
+
+    /* Reapply fullscreen settings after orientation change.
+       The display cutout mode and window layout parameters can be reset
+       during orientation changes, so we need to reapply them. */
+    if (wantFullScreen())
+      WindowUtil.enterFullScreenMode(getWindow());
   }
 
   @Override
