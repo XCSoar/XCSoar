@@ -4,7 +4,6 @@
 package org.xcsoar;
 
 import android.os.Build;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.View;
@@ -89,20 +88,11 @@ class WindowUtil {
     
     enableImmersiveMode(window);
 
-    /* Enable display cutout mode (notch support) */
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      WindowManager.LayoutParams lp = window.getAttributes();
-      lp.layoutInDisplayCutoutMode =
-        WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
-      
-      /* Android 15+: Explicitly tell the window to not fit any insets */
-      if (Build.VERSION.SDK_INT >= 35) {
-        lp.setFitInsetsTypes(0);
-        lp.setFitInsetsSides(0);
-      }
-      
-      window.setAttributes(lp);
-    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+    /* Enable display cutout mode (notch support) for Android P (API 28) and above.
+       LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES allows content to extend into
+       the cutout area on the short edges of the screen (top/bottom in portrait,
+       left/right in landscape). This gives true edge-to-edge fullscreen. */
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
       WindowManager.LayoutParams lp = window.getAttributes();
       lp.layoutInDisplayCutoutMode =
         WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
@@ -120,11 +110,7 @@ class WindowUtil {
     
     window.clearFlags(FULL_SCREEN_WINDOW_FLAGS & ~preserveFlags);
 
-    /* Reset window layout on Android 11+ */
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      window.setDecorFitsSystemWindows(true);
-    }
-
+    /* Reset display cutout mode to default when leaving fullscreen */
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
       WindowManager.LayoutParams lp = window.getAttributes();
       lp.layoutInDisplayCutoutMode =
