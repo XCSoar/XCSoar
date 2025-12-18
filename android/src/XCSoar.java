@@ -88,6 +88,16 @@ public class XCSoar extends Activity implements PermissionManager {
 
     final Window window = getWindow();
     window.requestFeature(Window.FEATURE_NO_TITLE);
+    
+    /* On Android 15+, configure window BEFORE setContentView() to avoid
+       having window bounds calculated with wrong flags */
+    if (Build.VERSION.SDK_INT >= 35) {
+      window.setDecorFitsSystemWindows(false);
+      window.setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+                      WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS,
+                      WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+                      WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+    }
 
     TextView tv = new TextView(this);
     tv.setText("Loading XCSoar...");
@@ -207,6 +217,22 @@ public class XCSoar extends Activity implements PermissionManager {
                                 errorHandler,
                                 this);
     setContentView(nativeView);
+    
+    /* On Android 11+, prevent the content view from applying system insets as padding */
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      final android.view.View decorView = getWindow().getDecorView();
+      final android.view.View contentView = decorView.findViewById(android.R.id.content);
+      if (contentView != null) {
+        contentView.setOnApplyWindowInsetsListener(new android.view.View.OnApplyWindowInsetsListener() {
+          @Override
+          public android.view.WindowInsets onApplyWindowInsets(android.view.View v, android.view.WindowInsets insets) {
+            return android.view.WindowInsets.CONSUMED;
+          }
+        });
+        contentView.setPadding(0, 0, 0, 0);
+      }
+    }
+    
     // Receive keyboard events
     nativeView.setFocusableInTouchMode(true);
     nativeView.setFocusable(true);
@@ -293,10 +319,9 @@ public class XCSoar extends Activity implements PermissionManager {
 
   @Override public void onWindowFocusChanged(boolean hasFocus) {
     if (hasFocus && wantFullScreen())
-      /* some Android don't restore immersive mode after returning to
-         this app, so unfortunately we need to reapply those settings
-         manually */
-      WindowUtil.enableImmersiveMode(getWindow());
+      /* some Android don't restore fullscreen settings after returning to
+         this app, so reapply fullscreen settings manually */
+      WindowUtil.enterFullScreenMode(getWindow());
 
     super.onWindowFocusChanged(hasFocus);
   }
@@ -322,6 +347,10 @@ public class XCSoar extends Activity implements PermissionManager {
   @Override public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
     submitConfiguration(newConfig);
+
+    /* Reapply fullscreen settings after orientation change */
+    if (wantFullScreen())
+      WindowUtil.enterFullScreenMode(getWindow());
   }
 
   @Override

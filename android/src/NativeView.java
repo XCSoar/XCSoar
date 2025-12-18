@@ -3,7 +3,6 @@
 
 package org.xcsoar;
 
-import java.io.File;
 import android.util.Log;
 import android.util.DisplayMetrics;
 import android.app.Activity;
@@ -198,6 +197,10 @@ class NativeView extends SurfaceView
   protected native void setHapticFeedback(boolean on);
 
   /**
+   * Called when window insets change (e.g., system bars appear/disappear).
+   * Native code can use these insets to adjust the safe rendering area and
+   * avoid drawing important UI elements behind system bars or display cutouts.
+   *
    * Finds the next power of two.  Used to calculate texture sizes.
    */
   public static int nextPowerOfTwo(int i) {
