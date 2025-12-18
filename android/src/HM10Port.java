@@ -35,7 +35,7 @@ public class HM10Port
   private volatile InputListener listener;
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
-  private final BluetoothGatt gatt;
+  private BluetoothGatt gatt;
   private BluetoothGattCharacteristic dataCharacteristic;
   private BluetoothGattCharacteristic deviceNameCharacteristic;
   private volatile boolean shutdown = false;
@@ -49,16 +49,38 @@ public class HM10Port
 
   private boolean setupCharacteristicsPending = false;
 
-  public HM10Port(Context context, BluetoothDevice device)
+  /**
+   * Private constructor. All fields are initialized to their default values.
+   * Use create() factory method to instantiate.
+   */
+  private HM10Port() {
+    // All fields are initialized to their default values
+  }
+
+  /**
+   * Factory method to create and initialize HM10Port.
+   * This pattern avoids the this-escape warning by ensuring
+   * the object is fully constructed before passing it to connectGatt().
+   */
+  public static HM10Port create(Context context, BluetoothDevice device)
     throws IOException
   {
+    HM10Port port = new HM10Port();
+    
+    // Now that the object is fully constructed, we can safely pass it
+    BluetoothGatt connectedGatt;
     if (Build.VERSION.SDK_INT >= 23)
-      gatt = device.connectGatt(context, true, this, BluetoothDevice.TRANSPORT_LE);
+      connectedGatt = device.connectGatt(context, true, port, BluetoothDevice.TRANSPORT_LE);
     else
-      gatt = device.connectGatt(context, true, this);
+      connectedGatt = device.connectGatt(context, true, port);
 
-    if (gatt == null)
+    if (connectedGatt == null)
       throw new IOException("Bluetooth GATT connect failed");
+    
+    // Assign to field after successful connection
+    port.gatt = connectedGatt;
+    
+    return port;
   }
 
   private void findCharacteristics() throws Error {
