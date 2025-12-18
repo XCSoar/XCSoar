@@ -5,9 +5,15 @@
 #include "Id.hpp"
 #include "Global.hpp"
 #include "TrafficDatabases.hpp"
+#include "MessagingDatabase.hpp"
+#include "MessagingRecord.hpp"
 #include "util/StringCompare.hxx"
 
 #include <cassert>
+#include <utility>
+
+// Weak reference to SaveFlarmMessagingPeriodic to avoid requiring Glue.cpp in all tests
+extern void SaveFlarmMessagingPeriodic() noexcept __attribute__((weak));
 
 namespace FlarmDetails {
 
@@ -47,6 +53,18 @@ AddSecondaryItem(FlarmId id, const TCHAR *name) noexcept
   return traffic_databases->flarm_names.Set(id, name);
 }
 
+void
+StoreMessagingRecord(const MessagingRecord &record) noexcept
+{
+  if (traffic_databases == nullptr)
+    return;
+
+  traffic_databases->flarm_messages.Update(record);
+
+  if (SaveFlarmMessagingPeriodic != nullptr)
+    SaveFlarmMessagingPeriodic();
+}
+
 unsigned
 FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size) noexcept
 {
@@ -55,6 +73,43 @@ FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size) noexcept
   assert(traffic_databases != nullptr);
 
   return traffic_databases->FindIdsByName(cn, array, size);
+}
+
+ResolvedInfo
+ResolveInfo(FlarmId id) noexcept
+{
+  ResolvedInfo out;
+  if (traffic_databases == nullptr)
+    return out;
+
+  const auto msg = std::as_const(traffic_databases->flarm_messages).FindRecordById(id);
+  const auto *net = traffic_databases->flarm_net.FindRecordById(id);
+
+  out.callsign = traffic_databases->FindNameById(id);
+
+  static thread_local StaticString<256> pilot_buf, plane_buf, reg_buf, airfield_buf;
+
+  if (msg.has_value()) {
+    out.pilot = msg->Format(pilot_buf, msg->pilot);
+    out.plane_type = msg->Format(plane_buf, msg->plane_type);
+    out.registration = msg->Format(reg_buf, msg->registration);
+
+    if (msg->frequency.IsDefined())
+      out.frequency = msg->frequency;
+  } else if (net != nullptr) {
+    out.pilot = net->Format(pilot_buf, net->pilot.c_str());
+    out.plane_type = net->Format(plane_buf, net->plane_type.c_str());
+    out.registration = net->Format(reg_buf, net->registration.c_str());
+
+    const TCHAR *af = net->Format(airfield_buf, net->airfield.c_str());
+    if (af != nullptr && (out.registration == nullptr || !StringIsEqual(af, out.registration)))
+      out.airfield = af;
+
+    if (net->frequency.IsDefined())
+      out.frequency = net->frequency;
+  }
+
+  return out;
 }
 
 } // namespace FlarmDetails
