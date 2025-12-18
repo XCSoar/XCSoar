@@ -38,6 +38,9 @@
 #include "Device/Driver/Zander.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Port/NullPort.hpp"
+#include "FLARM/Global.hpp"
+#include "FLARM/TrafficDatabases.hpp"
+#include "FLARM/MessagingRecord.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Device/device.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
@@ -238,6 +241,38 @@ TestFLARM()
   } else {
     skip(15, 0, "traffic == NULL");
   }
+
+  // Ensure a database instance exists before PFLAM messages are parsed
+  if (traffic_databases == nullptr)
+    traffic_databases = new TrafficDatabases();
+
+  ok1(parser.ParseLine("$PFLAM,U,2,DDAED5,AREG,48422D534941*0B", 
+                        nmea_info));
+  ok1(parser.ParseLine("$PFLAM,U,2,DDAED5,ACALL,5A4D*2F", 
+                        nmea_info));
+  ok1(parser.ParseLine("$PFLAM,U,2,DDAED5,PNAME,4F7276696C6C6520577269676874*43", 
+                        nmea_info));
+  ok1(parser.ParseLine("$PFLAM,U,2,DDAED5,ATYPE,436573736E6120313732*44", 
+                        nmea_info));
+  ok1(parser.ParseLine("$PFLAM,U,2,DDAED5,VHF,118.455,121.500,,*17",
+                        nmea_info));
+
+  id = FlarmId::Parse("DDAED5", NULL);
+  auto mr = traffic_databases->flarm_messages.FindRecordById(id);
+  if (ok1(mr.has_value())) {
+    ok1(StringIsEqual(mr->registration.c_str(), "HB-SIA"));
+    ok1(StringIsEqual(mr->callsign.c_str(), "ZM"));
+    ok1(StringIsEqual(mr->pilot.c_str(), "Orville Wright"));
+    ok1(StringIsEqual(mr->plane_type.c_str(), "Cessna 172"));
+    ok1(mr->frequency.IsDefined());
+    ok1(mr->frequency.GetKiloHertz() == 118455);
+  } else {
+    skip(6, 0, "messaging record missing");
+  }
+
+  // Clean up to avoid side effects across tests
+  delete traffic_databases;
+  traffic_databases = nullptr;
 }
 
 static void
@@ -1836,7 +1871,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main()
 {
-  plan_tests(1006);
+  plan_tests(1018);
   TestGeneric();
   TestTasman();
   TestFLARM();

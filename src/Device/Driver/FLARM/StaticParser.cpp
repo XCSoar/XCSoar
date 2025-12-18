@@ -6,11 +6,16 @@
 #include "FLARM/List.hpp"
 #include "FLARM/Status.hpp"
 #include "FLARM/Version.hpp"
+#include "FLARM/Details.hpp"
+#include "FLARM/MessagingRecord.hpp"
 #include "Language/Language.hpp"
 #include "Message.hpp"
 #include "NMEA/InputLine.hpp"
 #include "util/Macros.hpp"
 #include "util/StringAPI.hxx"
+#include "util/HexString.hpp"
+
+#include <algorithm>
 
 using std::string_view_literals::operator""sv;
 
@@ -173,4 +178,67 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock, RangeFilter
   flarm_slot->valid.Update(clock);
 
   flarm_slot->Update(traffic);
+}
+
+void
+ParsePFLAM(NMEAInputLine &line) noexcept
+{
+  // PFLAM,<Type>,<IDType>,<ID>,<MsgType>,<Payload>
+  // Spec (FTD-109 v1.00, 2024-12): text payloads are hex-encoded, max 17 chars
+  // -> 34 hex digits. 
+  // VHF payload is plain ASCII, may be comma-separated; we parse only the first 
+  // token and cap it at 8 chars (e.g. 123.450).
+  const auto type = line.ReadView();
+
+  if (type == "U"sv) {
+    MessagingRecord record{};
+
+    line.Skip(); /* id type */
+
+    // 5 id, 6 digit hex
+    char id_string[16];
+    line.Read(id_string, 16);
+    record.id = FlarmId::Parse(id_string, nullptr);
+
+    const auto msg_type = line.ReadView();
+    const auto hex_value = line.ReadView();
+
+    constexpr std::size_t MAX_HEX_PAYLOAD = 34; // 17 chars payload encoded as hex pairs
+    constexpr std::size_t MAX_VHF_LENGTH = 8;   // e.g. "123.450"
+
+    const bool is_hex_payload = msg_type == "AREG"sv || msg_type == "PNAME"sv ||
+                                msg_type == "ATYPE"sv || msg_type == "ACALL"sv;
+    if (is_hex_payload && hex_value.size() > MAX_HEX_PAYLOAD)
+      return;
+
+    std::string_view first_freq;
+    if (msg_type == "VHF"sv) {
+      // VHF message contains comma-separated frequencies (not hex-encoded)
+      // Only parse the first frequency from the comma-separated list
+      const auto comma = std::find(hex_value.begin(), hex_value.end(), ',');
+      first_freq = std::string_view(hex_value.data(), comma - hex_value.begin());
+
+      if (first_freq.size() > MAX_VHF_LENGTH)
+        return;
+    }
+
+    try {
+      if (msg_type == "AREG"sv) {
+        record.registration = ParseHexString(hex_value);
+      } else if (msg_type == "PNAME"sv) {
+        record.pilot = ParseHexString(hex_value);
+      } else if (msg_type == "ATYPE"sv) {
+        record.plane_type = ParseHexString(hex_value);
+      } else if (msg_type == "ACALL"sv) {
+        record.callsign = ParseHexString(hex_value);
+      } else if (msg_type == "VHF"sv) {
+        record.frequency = RadioFrequency::Parse(first_freq);
+      }
+    } catch (...) {
+      // Silently ignore malformed hex data in NMEA stream
+      return;
+    }
+
+    FlarmDetails::StoreMessagingRecord(record);
+  }
 }
