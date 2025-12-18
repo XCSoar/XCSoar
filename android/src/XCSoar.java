@@ -108,6 +108,14 @@ public class XCSoar extends Activity implements PermissionManager {
        WindowUtil.leaveFullScreenMode() to avoid clearing those */
     initialWindowFlags = window.getAttributes().flags;
 
+    /* Apply fullscreen mode early (with default value = true) to avoid
+       visible layout changes when the native code loads the profile.
+       The default fullscreen setting is true (DisplaySettings::SetDefaults()).
+       If the user has disabled fullscreen in their profile, it will be
+       updated later by native code via setFullScreen(). */
+    fullScreen = true;
+    applyFullScreen();
+
     submitConfiguration(getResources().getConfiguration());
 
     batteryReceiver = new BatteryReceiver();
@@ -173,6 +181,9 @@ public class XCSoar extends Activity implements PermissionManager {
 
   final Handler fullScreenHandler = new Handler() {
       public void handleMessage(Message msg) {
+        /* Called by native code when the fullscreen setting is loaded from
+           the profile. This may override the initial default value that was
+           applied in onCreate(). */
         fullScreen = msg.what != 0;
         applyFullScreen();
       }
