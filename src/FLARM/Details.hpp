@@ -3,10 +3,32 @@
 
 #pragma once
 
+#include "RadioFrequency.hpp"
 #include <tchar.h>
 
 class FlarmId;
 struct FlarmNetRecord;
+struct MessagingRecord;
+
+struct ResolvedInfo {
+  const TCHAR *pilot = nullptr;
+  const TCHAR *plane_type = nullptr;
+  const TCHAR *registration = nullptr;
+  const TCHAR *callsign = nullptr;
+  const TCHAR *airfield = nullptr;  // FLARMnet-only
+  RadioFrequency frequency = RadioFrequency::Null();
+
+  /**
+   * Checks if any resolved information fields are available.
+   */
+  bool IsEmpty() const noexcept {
+    return pilot == nullptr &&
+           plane_type == nullptr &&
+           registration == nullptr &&
+           callsign == nullptr &&
+           airfield == nullptr;
+  }
+};
 
 namespace FlarmDetails {
 
@@ -50,7 +72,23 @@ LookupId(const TCHAR *cn) noexcept;
 bool
 AddSecondaryItem(FlarmId id, const TCHAR *name) noexcept;
 
+/**
+ * Stores a messaging record in the database and triggers periodic save.
+ * @param record The messaging record to store
+ */
+void
+StoreMessagingRecord(const MessagingRecord &record) noexcept;
+
 unsigned
 FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size) noexcept;
+
+/**
+ * Resolves human-readable fields with preference: messaging -> FLARMnet.
+ * Callsign uses existing FindNameById() priority (user -> messaging -> FLARMnet).
+ * Airfield is FLARMnet-only.
+ */
+[[gnu::pure]]
+ResolvedInfo
+ResolveInfo(FlarmId id) noexcept;
 
 } // namespace FlarmDetails
