@@ -10,9 +10,15 @@
 #include "util/StaticString.hxx"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Info.hpp"
+#include "LogFile.hpp"
+#include "time/PeriodClock.hpp"
 
 #include <atomic>
 #include <cstdint>
+#include <optional>
+
+struct MoreData;
+struct DerivedInfo;
 
 class LXDevice: public AbstractDevice
 {
@@ -74,6 +80,11 @@ class LXDevice: public AbstractDevice
   bool is_forwarded_nano = false;
 
   /**
+   * Has the firmware version been logged?
+   */
+  bool firmware_version_logged = false;
+
+  /**
    * Settings that were received in PLXV0 (LXNAV Vario) sentences.
    */
   DeviceSettingsMap<std::string> lxnav_vario_settings;
@@ -82,6 +93,88 @@ class LXDevice: public AbstractDevice
    * Settings that were received in PLXVC (LXNAV Nano) sentences.
    */
   DeviceSettingsMap<std::string> nano_settings;
+
+  /**
+   * Has MC been requested from the device?
+   */
+  bool mc_requested = false;
+
+  /**
+   * Last MC value sent to the device. Used to avoid re-sending unchanged values
+   * and to detect echoes from the device.
+   */
+  std::optional<double> last_sent_mc;
+
+  /**
+   * Has ballast been requested from the device?
+   */
+  bool ballast_requested = false;
+
+  /**
+   * Last ballast overload value sent to the device. Used to detect feedback loops.
+   */
+  std::optional<double> last_sent_ballast_overload;
+
+  /**
+   * Last crew mass value when ballast was sent. Used to detect crew weight changes.
+   */
+  std::optional<double> last_sent_crew_mass;
+
+  /**
+   * Last empty mass value sent to the device. Used to detect feedback loops.
+   */
+  std::optional<double> last_sent_empty_mass;
+
+  /**
+   * Tracked polar values to detect when plane profile changes.
+   */
+  struct TrackedPolar {
+    double a, b, c;
+    double reference_mass;
+    double empty_mass;
+    double crew_mass;
+    bool valid = false;
+  } tracked_polar;
+
+
+  /**
+   * Full polar data received from device via POLAR command.
+   * Used when no plane profile is active.
+   */
+  struct DevicePolar {
+    double a, b, c;
+    double polar_load;
+    double polar_weight;
+    double max_weight;
+    double empty_weight;
+    double pilot_weight;
+    bool valid = false;
+  } device_polar;
+
+  /**
+   * Has POLAR been requested from the device?
+   */
+  bool polar_requested = false;
+
+  /**
+   * Clock to track when POLAR was last requested for periodic polling.
+   */
+  PeriodClock last_polar_request;
+
+  /**
+   * Has bugs been requested from the device?
+   */
+  bool bugs_requested = false;
+
+  /**
+   * Last bugs value sent to the device. Used to detect feedback loops.
+   */
+  std::optional<double> last_sent_bugs;
+
+  /**
+   * Was a vario just detected? Used to trigger settings request on detection.
+   */
+  bool vario_just_detected = false;
 
   Mutex mutex;
   Mode mode = Mode::UNKNOWN;
@@ -151,12 +244,30 @@ public:
     is_v7 = is_sVario = is_nano = is_lx16xx = is_forwarded_nano = false;
   }
 
-  void IdDeviceByName(NarrowString<16> productName) noexcept
+  void IdDeviceByName(NarrowString<16> productName, const DeviceInfo &device_info) noexcept
   {
-    is_v7 = productName.equals("V7");
-    is_sVario = productName.equals("NINC") || productName.equals("S8x");
-    is_nano = productName.equals("NANO") || productName.equals("NANO3") || productName.equals("NANO4");
-    is_lx16xx = productName.equals("1606") || productName.equals("1600");
+    const bool new_v7 = productName.equals("V7");
+    const bool new_sVario = productName.equals("NINC") || productName.equals("S8x");
+    const bool new_nano = productName.equals("NANO") || productName.equals("NANO3") || productName.equals("NANO4");
+    const bool new_lx16xx = productName.equals("1606") || productName.equals("1600");
+
+    {
+      const std::lock_guard lock{mutex};
+      if ((new_v7 && !is_v7) || (new_sVario && !is_sVario)) {
+        const char *device_type = new_v7 ? "V7" : "S series vario";
+        LogFmt("LXNAV: {} detected via PLXVC (product: {}, firmware: {})",
+               device_type,
+               productName.c_str(),
+               device_info.software_version.empty() ? "unknown" : device_info.software_version.c_str());
+        if (!device_info.software_version.empty())
+          firmware_version_logged = true;
+      }
+
+      is_v7 = new_v7;
+      is_sVario = new_sVario;
+      is_nano = new_nano;
+      is_lx16xx = new_lx16xx;
+    }
   }
 
   /**
@@ -256,8 +367,13 @@ public:
                   OperationEnvironment &env) override;
   bool PutBugs(double bugs, OperationEnvironment &env) override;
   bool PutMacCready(double mc, OperationEnvironment &env) override;
+  bool PutCrewMass(double crew_mass, OperationEnvironment &env) override;
+  bool PutEmptyMass(double empty_mass, OperationEnvironment &env) override;
   bool PutQNH(const AtmosphericPressure &pres,
               OperationEnvironment &env) override;
+
+  bool PutElevation(int elevation, OperationEnvironment &env) override;
+  bool RequestElevation(OperationEnvironment &env) override;
 
   bool PutVolume(unsigned volume, OperationEnvironment &env) override;
   bool PutPilotEvent(OperationEnvironment &env) override;
@@ -268,6 +384,92 @@ public:
                OperationEnvironment &env) override;
 
   void OnSysTicker() override;
+
+  void OnCalculatedUpdate(const MoreData &basic,
+                          const DerivedInfo &calculated) override;
+
+private:
+  /**
+   * Check if MC value from device is an echo of what we sent.
+   */
+  [[gnu::pure]]
+  bool IsMCEcho(const ExternalSettings &settings) const noexcept {
+    if (!last_sent_mc.has_value())
+      return false;
+    return settings.CompareMacCready(*last_sent_mc);
+  }
+
+  /**
+   * Check if ballast value from device is an echo of what we sent.
+   */
+  [[gnu::pure]]
+  bool IsBallastEcho(const ExternalSettings &settings) const noexcept {
+    if (!last_sent_ballast_overload.has_value())
+      return false;
+    return settings.CompareBallastOverload(*last_sent_ballast_overload);
+  }
+
+  /**
+   * Check if bugs value from device is an echo of what we sent.
+   */
+  [[gnu::pure]]
+  bool IsBugsEcho(const ExternalSettings &settings) const noexcept {
+    if (!last_sent_bugs.has_value())
+      return false;
+    return settings.CompareBugs(*last_sent_bugs);
+  }
+
+  /**
+   * Check if pilot weight from device is an echo of what we sent.
+   */
+  [[gnu::pure]]
+  bool IsCrewWeightEcho(const ExternalSettings &settings) const noexcept {
+    if (!last_sent_crew_mass.has_value())
+      return false;
+    return settings.ComparePolarPilotWeight(*last_sent_crew_mass);
+  }
+
+  /**
+   * Check if empty weight from device is an echo of what we sent.
+   */
+  [[gnu::pure]]
+  bool IsEmptyWeightEcho(const ExternalSettings &settings) const noexcept {
+    if (!last_sent_empty_mass.has_value())
+      return false;
+    return settings.ComparePolarEmptyWeight(*last_sent_empty_mass);
+  }
+
+  /**
+   * Handle MC synchronization with the device.
+   */
+  void SyncMacCready(const MoreData &basic,
+                     const DerivedInfo &calculated,
+                     OperationEnvironment &env,
+                     bool plane_profile_active) noexcept;
+
+  /**
+   * Handle Ballast synchronization with the device.
+   */
+  void SyncBallast(const MoreData &basic,
+                   const DerivedInfo &calculated,
+                   OperationEnvironment &env,
+                   bool plane_profile_active) noexcept;
+
+  /**
+   * Handle Bugs synchronization with the device.
+   */
+  void SyncBugs(const MoreData &basic,
+                const DerivedInfo &calculated,
+                OperationEnvironment &env,
+                bool plane_profile_active) noexcept;
+  void SyncCrewWeight(const MoreData &basic,
+                     const DerivedInfo &calculated,
+                     OperationEnvironment &env,
+                     bool plane_profile_active) noexcept;
+  void SyncEmptyWeight(const MoreData &basic,
+                       const DerivedInfo &calculated,
+                       OperationEnvironment &env,
+                       bool plane_profile_active) noexcept;
 
   bool ReadFlightList(RecordedFlightList &flight_list,
                       OperationEnvironment &env) override;

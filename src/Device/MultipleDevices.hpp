@@ -79,6 +79,8 @@ public:
   void PutBugs(double bugs, OperationEnvironment &env) noexcept;
   void PutBallast(double fraction, double overload,
                   OperationEnvironment &env) noexcept;
+  void PutCrewMass(double crew_mass, OperationEnvironment &env) noexcept;
+  void PutEmptyMass(double empty_mass, OperationEnvironment &env) noexcept;
   void PutVolume(unsigned volume, OperationEnvironment &env) noexcept;
   void PutPilotEvent(OperationEnvironment &env) noexcept;
   void PutActiveFrequency(RadioFrequency frequency, const TCHAR *name,
@@ -88,6 +90,8 @@ public:
   void ExchangeRadioFrequencies(OperationEnvironment &env) noexcept;
   void PutTransponderCode(TransponderCode code, OperationEnvironment &env) noexcept;
   void PutQNH(AtmosphericPressure pres, OperationEnvironment &env) noexcept;
+  void PutElevation(int elevation, OperationEnvironment &env) noexcept;
+  void RequestElevation(OperationEnvironment &env) noexcept;
   void NotifySensorUpdate(const MoreData &basic) noexcept;
   void NotifyCalculatedUpdate(const MoreData &basic,
                               const DerivedInfo &calculated) noexcept;
