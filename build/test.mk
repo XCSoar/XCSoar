@@ -90,7 +90,7 @@ TEST_NAMES = \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestLogger TestGRecord TestClimbAvCalc \
 	TestWaypointReader TestThermalBase \
-	TestFlarmNet \
+	TestFlarmNet TestFlarmMessaging \
 	TestColorRamp TestGeoPoint TestDiffFilter \
 	TestFileUtil TestPolars TestCSVLine TestGlidePolar \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
@@ -429,6 +429,17 @@ TEST_FLARM_NET_SOURCES = \
 	$(TEST_SRC_DIR)/TestFlarmNet.cpp
 TEST_FLARM_NET_DEPENDS = IO OS MATH UTIL
 $(eval $(call link-program,TestFlarmNet,TEST_FLARM_NET))
+
+TEST_FLARM_MESSAGING_SOURCES = \
+	$(SRC)/FLARM/Id.cpp \
+	$(SRC)/FLARM/MessagingRecord.cpp \
+	$(SRC)/FLARM/MessagingDatabase.cpp \
+	$(SRC)/FLARM/MessagingFile.cpp \
+	$(SRC)/thread/Thread.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFlarmMessaging.cpp
+TEST_FLARM_MESSAGING_DEPENDS = IO OS MATH UTIL THREAD
+$(eval $(call link-program,TestFlarmMessaging,TEST_FLARM_MESSAGING))
 
 TEST_GEO_CLIP_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \

@@ -83,7 +83,7 @@ struct MessagingRecord {
   /**
    * Number of fields tracked in `kFields`.
    */
-  inline uint8_t GetFieldCount() const noexcept { return kFieldCount; }
+  static inline constexpr uint8_t GetFieldCount() noexcept { return kFieldCount; }
 
   /**
    * Format a UTF-8 value into the provided buffer; returns nullptr if empty/invalid. 
