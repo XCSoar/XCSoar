@@ -331,7 +331,8 @@ public class XCSoar extends Activity implements PermissionManager {
   @Override public void onWindowFocusChanged(boolean hasFocus) {
     if (hasFocus && wantFullScreen())
       /* some Android don't restore fullscreen settings after returning to
-         this app, so reapply fullscreen settings manually */
+         this app or after orientation changes, so we need to reapply all
+         fullscreen settings (immersive mode + display cutout mode) manually */
       WindowUtil.enterFullScreenMode(getWindow());
 
     super.onWindowFocusChanged(hasFocus);
@@ -359,7 +360,9 @@ public class XCSoar extends Activity implements PermissionManager {
     super.onConfigurationChanged(newConfig);
     submitConfiguration(newConfig);
 
-    /* Reapply fullscreen settings after orientation change */
+    /* Reapply fullscreen settings after orientation change.
+       The display cutout mode and window layout parameters can be reset
+       during orientation changes, so we need to reapply them. */
     if (wantFullScreen())
       WindowUtil.enterFullScreenMode(getWindow());
   }
