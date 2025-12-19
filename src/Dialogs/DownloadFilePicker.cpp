@@ -254,10 +254,37 @@ try {
   FileRepository repository;
 
   const auto path = LocalPath(_T("repository"));
-  FileLineReaderA reader(path);
-
-  ParseFileRepository(repository, reader);
-
+  
+  /* Retry logic: DownloadManager may report STATUS_SUCCESSFUL before the file
+     is fully flushed to disk, or may create an empty placeholder file before
+     writing content. Wait up to 500ms for the file to become accessible and
+     contain data. This happens in native code (not blocking Java/UI thread). */
+  std::exception_ptr last_exception;
+  for (int attempt = 0; attempt < 10; ++attempt) {
+    try {
+      FileLineReaderA reader(path);
+      ParseFileRepository(repository, reader);
+      
+      /* If repository is empty, the download may not be complete yet.
+         Treat as failure and retry (unless this is the last attempt). */
+      if (repository.files.empty() && attempt < 9) {
+        throw std::runtime_error("Repository file is empty");
+      }
+      
+      goto success;
+    } catch (...) {
+      last_exception = std::current_exception();
+      if (attempt < 9) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+      }
+    }
+  }
+  
+  /* All retries failed, rethrow last exception */
+  if (last_exception)
+    std::rethrow_exception(last_exception);
+  
+success:
   items.clear();
   for (auto &i : repository)
     if (i.type == file_type)
