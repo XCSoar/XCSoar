@@ -220,13 +220,12 @@ class NativeView extends SurfaceView
    * Loads the specified bitmap resource.
    */
   private Bitmap loadResourceBitmap(String name) {
-    /* find the resource */
-    int resourceId = resources.getIdentifier(name, "drawable", "org.xcsoar");
+    /* find the resource using the actual package name */
+    String packageName = getContext().getPackageName();
+    int resourceId = resources.getIdentifier(name, "drawable", packageName);
     if (resourceId == 0) {
-      resourceId = resources.getIdentifier(name, "drawable",
-                                           "org.xcsoar.testing");
-      if (resourceId == 0)
-        return null;
+      Log.e(TAG, "Resource not found: drawable/" + name + " in package " + packageName);
+      return null;
     }
 
     /* load the Bitmap from the resource */
