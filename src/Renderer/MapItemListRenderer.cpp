@@ -321,16 +321,16 @@ Draw(Canvas &canvas, PixelRect rc,
   rc.left += line_height + text_padding;
 
   // Now render the text information
-  const FlarmNetRecord *record = FlarmDetails::LookupRecord(item.id);
+  const ResolvedInfo info = FlarmDetails::ResolveInfo(item.id);
 
   StaticString<256> title_string;
-  if (record && !StringIsEmpty(record->pilot))
-    title_string = record->pilot.c_str();
+  if (info.pilot != nullptr)
+    title_string = info.pilot;
   else
     title_string = _("FLARM Traffic");
 
   // Append name to the title, if it exists
-  const TCHAR *callsign = FlarmDetails::LookupCallsign(item.id);
+  const TCHAR *callsign = info.callsign;
   if (callsign != nullptr && !StringIsEmpty(callsign)) {
     title_string.append(_T(", "));
     title_string.append(callsign);
@@ -339,8 +339,8 @@ Draw(Canvas &canvas, PixelRect rc,
   row_renderer.DrawFirstRow(canvas, rc, title_string);
 
   StaticString<256> info_string;
-  if (record && !StringIsEmpty(record->plane_type))
-    info_string = record->plane_type;
+  if (info.plane_type != nullptr)
+    info_string = info.plane_type;
   else if (traffic != nullptr)
     info_string = FlarmTraffic::GetTypeString(traffic->type);
   else
