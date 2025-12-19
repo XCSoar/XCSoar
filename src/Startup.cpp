@@ -640,6 +640,7 @@ Shutdown()
   }
 
   SaveFlarmColors();
+  SaveFlarmMessaging();
 
   // Save settings to profile
   operation.SetText(_("Shutdown, saving profile..."));
