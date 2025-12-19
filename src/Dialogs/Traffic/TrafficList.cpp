@@ -11,7 +11,6 @@
 #include "Screen/Layout.hpp"
 #include "Form/DataField/Prefix.hpp"
 #include "Form/DataField/Listener.hpp"
-#include "FLARM/FlarmNetRecord.hpp"
 #include "FLARM/Details.hpp"
 #include "FLARM/Id.hpp"
 #include "FLARM/Global.hpp"
@@ -77,8 +76,10 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
      */
     bool loaded = false;
 
-    const FlarmNetRecord *record;
-    const TCHAR *callsign;
+    /** 
+     * Resolved human-readable FLARM fields plus metadata about their origin. 
+     */
+    ResolvedInfo info;
 
     /**
      * This object's location.  Check GeoPoint::IsValid().
@@ -148,12 +149,12 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
 
     void Load() {
       if (IsFlarm()) {
-        record = traffic_databases->flarm_net.FindRecordById(id);
-        callsign = traffic_databases->FindNameById(id);
+        /* Load resolved info from multiple sources (messaging, FLARMnet,
+           user database) */
+        info = FlarmDetails::ResolveInfo(id);
 #ifdef HAVE_SKYLINES_TRACKING
       } else if (IsSkyLines()) {
-        record = nullptr;
-        callsign = nullptr;
+        /* SkyLines data doesn't have resolved info */
 #endif
       } else {
         gcc_unreachable();
@@ -569,8 +570,7 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
 
   item.AutoLoad();
 
-  const FlarmNetRecord *record = item.record;
-  const TCHAR *callsign = item.callsign;
+  const ResolvedInfo &info = item.info;
 
   const DialogLook &look = UIGlobals::GetDialogLook();
   const Font &name_font = *look.list.font_bold;
@@ -587,11 +587,11 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
   StaticString<256> tmp;
 
   if (item.IsFlarm()) {
-    if (record != nullptr)
+    if (info.callsign != nullptr && info.registration != nullptr)
       tmp.Format(_T("%s - %s - %s"),
-                 callsign, record->registration.c_str(), tmp_id);
-    else if (callsign != nullptr)
-      tmp.Format(_T("%s - %s"), callsign, tmp_id);
+                 info.callsign, info.registration, tmp_id);
+    else if (info.callsign != nullptr)
+      tmp.Format(_T("%s - %s"), info.callsign, tmp_id);
     else
       tmp.Format(_T("%s"), tmp_id);
 #ifdef HAVE_SKYLINES_TRACKING
@@ -647,24 +647,24 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
                                                FormatBearing(item.vector.bearing).c_str());
   }
 
-  if (record != nullptr) {
+  if (!info.IsEmpty()) {
     tmp.clear();
 
-    if (!record->pilot.empty())
-      tmp = record->pilot.c_str();
+    if (info.pilot != nullptr)
+      tmp = info.pilot;
 
-    if (!record->plane_type.empty()) {
+    if (info.plane_type != nullptr) {
       if (!tmp.empty())
         tmp.append(_T(" - "));
 
-      tmp.append(record->plane_type);
+      tmp.append(info.plane_type);
     }
 
-    if (!record->airfield.empty()) {
+    if (info.airfield != nullptr) {
       if (!tmp.empty())
         tmp.append(_T(" - "));
 
-      tmp.append(record->airfield);
+      tmp.append(info.airfield);
     }
 
     if (!tmp.empty())
