@@ -68,7 +68,8 @@ EstimateLogoViewSize(LogoViewOrientation orientation,
 void
 LogoView::draw(Canvas &canvas, const PixelRect &rc) noexcept
 {
-  if (!huge_logo.IsDefined() || !huge_title.IsDefined())
+  /* Require at least the standard logo/title to be loaded */
+  if (!logo.IsDefined() || !title.IsDefined())
     return;
 
   const unsigned width = rc.GetWidth(), height = rc.GetHeight();
@@ -84,15 +85,17 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc) noexcept
   /* Select appropriate bitmap size based on display dimensions */
   const Bitmap *bitmap_logo, *bitmap_title;
   
-  if ((orientation == LogoViewOrientation::LANDSCAPE && width >= 1024 && height >= 340) ||
-      (orientation == LogoViewOrientation::PORTRAIT && width >= 660 && height >= 500) ||
-      (orientation == LogoViewOrientation::SQUARE && width >= 420 && height >= 420)) {
+  if (huge_logo.IsDefined() && huge_title.IsDefined() &&
+      ((orientation == LogoViewOrientation::LANDSCAPE && width >= 1024 && height >= 340) ||
+       (orientation == LogoViewOrientation::PORTRAIT && width >= 660 && height >= 500) ||
+       (orientation == LogoViewOrientation::SQUARE && width >= 420 && height >= 420))) {
     /* Use huge (320px logo, 640px title) for very high resolution displays */
     bitmap_logo = &huge_logo;
     bitmap_title = &huge_title;
-  } else if ((orientation == LogoViewOrientation::LANDSCAPE && width >= 510 && height >= 170) ||
-             (orientation == LogoViewOrientation::PORTRAIT && width >= 330 && height >= 250) ||
-             (orientation == LogoViewOrientation::SQUARE && width >= 210 && height >= 210)) {
+  } else if (big_logo.IsDefined() && big_title.IsDefined() &&
+             ((orientation == LogoViewOrientation::LANDSCAPE && width >= 510 && height >= 170) ||
+              (orientation == LogoViewOrientation::PORTRAIT && width >= 330 && height >= 250) ||
+              (orientation == LogoViewOrientation::SQUARE && width >= 210 && height >= 210))) {
     /* Use big (160px logo, 320px title) for HD displays */
     bitmap_logo = &big_logo;
     bitmap_title = &big_title;
