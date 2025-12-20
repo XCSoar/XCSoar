@@ -10,6 +10,16 @@ class FlarmId;
 struct FlarmNetRecord;
 struct MessagingRecord;
 
+enum class ResolvedSource : unsigned char {
+  NONE,
+  MESSAGING,
+  FLARMNET,
+  COUNT, // Helper to report the number of tracked fields.
+};
+
+/**
+ * Resolved human-readable FLARM fields plus metadata about their origin.
+ */
 struct ResolvedInfo {
   const TCHAR *pilot = nullptr;
   const TCHAR *plane_type = nullptr;
@@ -17,6 +27,7 @@ struct ResolvedInfo {
   const TCHAR *callsign = nullptr;
   const TCHAR *airfield = nullptr;  // FLARMnet-only
   RadioFrequency frequency = RadioFrequency::Null();
+  ResolvedSource source = ResolvedSource::NONE;
 
   /**
    * Checks if any resolved information fields are available.
@@ -90,5 +101,11 @@ FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size) noexcept;
 [[gnu::pure]]
 ResolvedInfo
 ResolveInfo(FlarmId id) noexcept;
+
+/**
+ * Retrieves the localized string corresponding to the resolved source enum.
+ */
+[[gnu::const]]
+const TCHAR *ToString(ResolvedSource source) noexcept;
 
 } // namespace FlarmDetails
