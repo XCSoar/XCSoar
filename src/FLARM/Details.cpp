@@ -7,6 +7,8 @@
 #include "TrafficDatabases.hpp"
 #include "MessagingDatabase.hpp"
 #include "MessagingRecord.hpp"
+#include "Language/Language.hpp"
+#include "util/Macros.hpp"
 #include "util/StringCompare.hxx"
 
 #include <cassert>
@@ -90,6 +92,8 @@ ResolveInfo(FlarmId id) noexcept
   static thread_local StaticString<256> pilot_buf, plane_buf, reg_buf, airfield_buf;
 
   if (msg.has_value()) {
+    out.source = ResolvedSource::MESSAGING;
+
     out.pilot = msg->Format(pilot_buf, msg->pilot);
     out.plane_type = msg->Format(plane_buf, msg->plane_type);
     out.registration = msg->Format(reg_buf, msg->registration);
@@ -97,6 +101,8 @@ ResolveInfo(FlarmId id) noexcept
     if (msg->frequency.IsDefined())
       out.frequency = msg->frequency;
   } else if (net != nullptr) {
+    out.source = ResolvedSource::FLARMNET;
+
     out.pilot = net->Format(pilot_buf, net->pilot.c_str());
     out.plane_type = net->Format(plane_buf, net->plane_type.c_str());
     out.registration = net->Format(reg_buf, net->registration.c_str());
@@ -109,7 +115,29 @@ ResolveInfo(FlarmId id) noexcept
       out.frequency = net->frequency;
   }
 
+  const TCHAR *user_callsign = traffic_databases->flarm_names.Get(id);
+  if (user_callsign != nullptr)
+    out.callsign = user_callsign;
+
   return out;
 }
+
+static const TCHAR *const resolved_source_strings[] = {
+  N_("Unresolved"),
+  N_("Flarm Messaging"),
+  N_("FLARMnet"),
+};
+
+const TCHAR *ToString(ResolvedSource source) noexcept
+{
+  unsigned i = (unsigned)source;
+  const TCHAR *text = i < ARRAY_SIZE(resolved_source_strings)
+    ? resolved_source_strings[i]
+    : N_("Unknown");
+
+  return gettext(text);
+}
+
+static_assert(ARRAY_SIZE(resolved_source_strings) == static_cast<unsigned>(ResolvedSource::COUNT));
 
 } // namespace FlarmDetails

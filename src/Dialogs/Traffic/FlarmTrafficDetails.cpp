@@ -48,6 +48,7 @@ class FlarmTrafficDetailsWidget final
     AIRPORT,
     RADIO,
     PLANE,
+    SOURCE,
   };
 
   WndForm &dialog;
@@ -120,6 +121,7 @@ FlarmTrafficDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddReadOnly(_("Airport"));
   AddReadOnly(_("Radio frequency"));
   AddReadOnly(_("Plane type"));
+  AddReadOnly(_("Data source"));
 
   Update();
 }
@@ -247,6 +249,8 @@ FlarmTrafficDetailsWidget::Update()
   } else
     value = _T("--");
   SetText(CALLSIGN, value);
+
+  SetText(SOURCE, FlarmDetails::ToString(info.source));
 
   // Update the frequently changing fields too
   UpdateChanging(CommonInterface::Basic());
