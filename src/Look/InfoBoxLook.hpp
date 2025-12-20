@@ -37,6 +37,7 @@ struct InfoBoxLook {
   Pen unit_fraction_pen;
 
   Font title_font;
+  Font title_font_bold;
 
   Color colors[6];
 

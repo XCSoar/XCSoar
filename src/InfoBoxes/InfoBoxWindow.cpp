@@ -5,6 +5,7 @@
 #include "InfoBoxSettings.hpp"
 #include "Border.hpp"
 #include "Look/InfoBoxLook.hpp"
+#include "Look/Colors.hpp"
 #include "Input/InputEvents.hpp"
 #include "Renderer/GlassRenderer.hpp"
 #include "Renderer/UnitSymbolRenderer.hpp"
@@ -12,6 +13,7 @@
 #include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
 #include "Asset.hpp"
 
 #include <algorithm>
@@ -47,13 +49,16 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
   if (data.title.empty())
     return;
 
-  if (!pressed && !HasFocus() && !dragging && !force_draw_selector &&
-      settings.border_style == InfoBoxSettings::BorderStyle::SHADED)
+  if (settings.border_style == InfoBoxSettings::BorderStyle::SHADED)
     canvas.DrawFilledRectangle(title_rect, look.caption_background_color);
 
-  canvas.SetTextColor(look.GetTitleColor(data.title_color));
+  const bool is_selected = HasFocus() || dragging || force_draw_selector;
+  if (is_selected)
+    canvas.SetTextColor(COLOR_BLACK);
+  else
+    canvas.SetTextColor(look.GetTitleColor(data.title_color));
 
-  const Font &font = look.title_font;
+  const Font &font = is_selected ? look.title_font_bold : look.title_font;
   canvas.Select(font);
 
   PixelSize tsize = canvas.CalcTextSize(data.title);
@@ -155,15 +160,18 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
 void
 InfoBoxWindow::Paint(Canvas &canvas)
 {
+  const bool is_selected = HasFocus() || dragging || force_draw_selector;
   const Color background_color = pressed
     ? look.pressed_background_color
-    : (HasFocus() || dragging || force_draw_selector
+    : (is_selected
        ? look.focused_background_color
        : look.background_color);
+  
+  const PixelRect rc = GetClientRect();
   if (settings.border_style == InfoBoxSettings::BorderStyle::GLASS)
-    DrawGlassBackground(canvas, canvas.GetRect(), background_color);
+    DrawGlassBackground(canvas, rc, background_color);
   else
-    canvas.Clear(background_color);
+    canvas.DrawFilledRectangle(rc, background_color);
 
   if (data.GetCustom() && content) {
     /* if there's no comment, the content object may paint that area,
@@ -250,10 +258,14 @@ void
 InfoBoxWindow::ShowDialog()
 {
   force_draw_selector = true;
+  Invalidate();
 
   dlgInfoBoxAccessShowModeless(id, GetDialogContent());
 
   force_draw_selector = false;
+  Invalidate();
+  
+  FocusParent();
 }
 
 bool
@@ -370,7 +382,7 @@ InfoBoxWindow::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
     pressed = true;
     Invalidate();
 
-    /* start "long click" detection */
+    long_press_pending = true;
     dialog_timer.Schedule(std::chrono::seconds(1));
   }
 
@@ -392,13 +404,18 @@ InfoBoxWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
     ReleaseCapture();
 
     if (was_pressed) {
-      SetFocus();
+      if (long_press_pending) {
+        long_press_pending = false;
+        
+        InfoBoxManager::ClearFocusExcept(id);
+        SetFocus();
 
-      const bool click_handled = content != nullptr && content->HandleClick();
+        const bool click_handled = content != nullptr && content->HandleClick();
 
-      if (!click_handled && GetDialogContent() != nullptr)
-        /* delay the dialog, so double click detection works */
-        dialog_timer.Schedule(std::chrono::milliseconds(300));
+        if (!click_handled && GetDialogContent() != nullptr)
+          /* delay the dialog opening to prevent double click detection */
+          dialog_timer.Schedule(std::chrono::milliseconds(300));
+      }
     }
 
     return true;
@@ -445,6 +462,7 @@ InfoBoxWindow::OnCancelMode() noexcept
   }
 
   dialog_timer.Cancel();
+  long_press_pending = false;
 
   PaintWindow::OnCancelMode();
 }
@@ -452,36 +470,42 @@ InfoBoxWindow::OnCancelMode() noexcept
 void
 InfoBoxWindow::OnSetFocus() noexcept
 {
-  // Call the parent function
+  InfoBoxManager::ClearFocusExcept(id);
+  
   PaintWindow::OnSetFocus();
 
-  // Start the focus-auto-return timer
-  // to automatically return focus back to MapWindow if idle
   focus_timer.Schedule(HasCursorKeys() ? FOCUS_TIMEOUT_MAX : std::chrono::milliseconds(1100));
 
-  // Redraw fast to paint the selector
   Invalidate();
 }
 
 void
 InfoBoxWindow::OnKillFocus() noexcept
 {
-  // Call the parent function
   PaintWindow::OnKillFocus();
 
-  // Destroy the time if it exists
   focus_timer.Cancel();
 
-  // Redraw fast to remove the selector
   Invalidate();
 }
 
 void
 InfoBoxWindow::OnDialogTimer() noexcept
 {
-  dragging = pressed = false;
-  Invalidate();
-  ReleaseCapture();
-
-  ShowDialog();
+  if (long_press_pending) {
+    long_press_pending = false;
+    
+    dragging = pressed = false;
+    Invalidate();
+    ReleaseCapture();
+    
+    InfoBoxManager::ShowInfoBoxPicker(id);
+  } else {
+    dragging = pressed = false;
+    Invalidate();
+    ReleaseCapture();
+    
+    if (GetDialogContent() != nullptr)
+      ShowDialog();
+  }
 }

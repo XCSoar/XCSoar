@@ -216,3 +216,13 @@ InfoBoxManager::ShowInfoBoxPicker(const int i) noexcept
 
   Profile::Save(Profile::map, panel, panel_index);
 }
+
+void
+InfoBoxManager::ClearFocusExcept(unsigned except_id) noexcept
+{
+  for (unsigned i = 0; i < layout.count; i++) {
+    if (i != except_id && infoboxes[i] != nullptr && infoboxes[i]->HasFocus()) {
+      infoboxes[i]->FocusParent();
+    }
+  }
+}
