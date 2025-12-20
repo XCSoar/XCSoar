@@ -40,7 +40,7 @@ void
 dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
 {
   assert (id > -1);
-  
+
   /* Close any existing InfoBox dialog before opening a new one */
   dlgInfoBoxAccessClose();
 
@@ -121,18 +121,8 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
   dialog.SetModeless();
   int result = dialog.ShowModal();
   
-  /* Clear the dialog pointer and ID after it closes */
   current_dialog = nullptr;
   current_dialog_id = -1;
-  
-  /* If dialog was closed by clicking outside (result == 0),
-     check which InfoBox now has focus and open its dialog */
-  if (result == 0) {
-    /* The InfoBox that was clicked should now have focus
-       - trigger its dialog to open by calling ShowInfoBoxPicker with -1
-       which opens the picker for the focused InfoBox */
-    InfoBoxManager::ShowInfoBoxPicker(-1);
-  }
 
   if (result == SWITCH_INFO_BOX)
     InfoBoxManager::ShowInfoBoxPicker(id);
