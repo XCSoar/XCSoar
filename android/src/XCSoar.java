@@ -127,6 +127,14 @@ public class XCSoar extends Activity implements PermissionManager {
        can keep using /sdcard/XCSoarData */
     if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.R)
       requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, null);
+    
+    /* Android 13+ requires runtime permission for notifications */
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+          != PackageManager.PERMISSION_GRANTED) {
+        requestPermission(Manifest.permission.POST_NOTIFICATIONS, null);
+      }
+    }
   }
 
   private void quit() {
