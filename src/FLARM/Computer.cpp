@@ -84,7 +84,7 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
     // Check if the target has been seen before in the last seconds
     const FlarmTraffic *last_traffic =
       last_flarm.traffic.FindTraffic(traffic.id);
-    if (last_traffic == NULL || !last_traffic->valid)
+    if (last_traffic == nullptr || !last_traffic->valid)
       continue;
 
     // Calculate the time difference between now and the last contact
