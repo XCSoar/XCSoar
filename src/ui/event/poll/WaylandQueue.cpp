@@ -139,7 +139,8 @@ WaylandPointerAxis(void *data, [[maybe_unused]] struct wl_pointer *wl_pointer,
     PixelPoint p(q.pointer_position.x, q.pointer_position.y);
 #endif
     Event e(Event::MOUSE_WHEEL, p);
-    e.param = wl_fixed_to_int(value);
+    /* Invert scroll direction to match X11 convention (positive = scroll up) */
+    e.param = -wl_fixed_to_int(value);
     q.Push(e);
   }
 }
