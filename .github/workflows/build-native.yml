@@ -256,11 +256,18 @@ jobs:
             ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
             ${{ github.workspace }}/output/src/${{ env.BOOST }}
 
+      - name: "Hash Android installation script and build files"
+        if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
+        id: android_script_hash
+        run: |
+          cat ide/provisioning/install-android-tools.sh build/android.mk build/android_bundle.mk 2>/dev/null | sha256sum | cut -d' ' -f1 > /tmp/android_script_hash.txt
+          echo "script_hash=$(cat /tmp/android_script_hash.txt)" >> $GITHUB_OUTPUT
+
       - name: "Cache Android SDK/NDK"
         if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
         uses: actions/cache@v5
         with:
-          key: android-tools-${{ matrix.ndk }}-${{ hashFiles('ide/provisioning/install-android-tools.sh') }}
+          key: android-tools-${{ matrix.ndk }}-script${{ steps.android_script_hash.outputs.script_hash }}
           restore-keys: |
             android-tools-${{ matrix.ndk }}-
             android-tools-
@@ -303,7 +310,7 @@ jobs:
               ./ide/provisioning/install-debian-packages.sh LINUX
               ./ide/provisioning/install-debian-packages.sh WIN
             fi
-            if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target}} = 'ANDROID_BUNDLE' ]; then
+            if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target }} = 'ANDROID_BUNDLE' ]; then
               ./ide/provisioning/install-debian-packages.sh LINUX
               ./ide/provisioning/install-debian-packages.sh ARM
               ./ide/provisioning/install-debian-packages.sh LLVM
