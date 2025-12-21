@@ -320,6 +320,11 @@ public class XCSoar extends Activity implements PermissionManager {
   }
 
   @Override public boolean onKeyDown(int keyCode, final KeyEvent event) {
+    // Let Android handle volume keys normally
+    if (keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+        keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+      return super.onKeyDown(keyCode, event);
+
     // Overrides Back key to use in our app
     if (nativeView != null) {
       nativeView.onKeyDown(keyCode, event);
@@ -329,6 +334,11 @@ public class XCSoar extends Activity implements PermissionManager {
   }
 
   @Override public boolean onKeyUp(int keyCode, final KeyEvent event) {
+    // Let Android handle volume keys normally
+    if (keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+        keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+      return super.onKeyUp(keyCode, event);
+
     if (nativeView != null) {
       nativeView.onKeyUp(keyCode, event);
       return true;

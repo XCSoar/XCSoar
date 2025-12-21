@@ -378,11 +378,21 @@ class NativeView extends SurfaceView
   }
 
   @Override public boolean onKeyDown(int keyCode, final KeyEvent event) {
+    /* let Android handle volume keys normally */
+    if (keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+        keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+      return false;
+
     EventBridge.onKeyDown(translateKeyCode(keyCode));
     return true;
   }
 
   @Override public boolean onKeyUp(int keyCode, final KeyEvent event) {
+    /* let Android handle volume keys normally */
+    if (keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+        keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+      return false;
+
     EventBridge.onKeyUp(translateKeyCode(keyCode));
     return true;
   }
