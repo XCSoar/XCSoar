@@ -15,17 +15,20 @@ class RasterTerrain;
  */
 class WaypointFactory {
   WaypointOrigin origin;
+  uint8_t file_num;
   const RasterTerrain *terrain;
 
 public:
   explicit WaypointFactory(WaypointOrigin _origin,
+                           uint8_t _file_num=0,
                            const RasterTerrain *_terrain=nullptr) noexcept
-    :origin(_origin), terrain(_terrain) {}
+    :origin(_origin), file_num(_file_num), terrain(_terrain) {}
 
   [[gnu::pure]]
   Waypoint Create(const GeoPoint &location) const noexcept {
     Waypoint w(location);
     w.origin = origin;
+    w.file_num = file_num;
     w.original_id = 0;
     return w;
   }

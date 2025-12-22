@@ -163,7 +163,7 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
 
     MarkLocation(location, basic.date_time_utc);
 
-    const WaypointFactory factory(WaypointOrigin::USER,
+    const WaypointFactory factory(WaypointOrigin::USER, 0,
                                   data_components->terrain.get());
     Waypoint wp = factory.Create(location);
     factory.FallbackElevation(wp);
