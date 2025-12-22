@@ -259,7 +259,7 @@ jobs:
           path: |
             ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
             ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
-            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
+            ${{ github.workspace }}/output/src/${{ env.BOOST }}
 
       - name: "Cache Android SDK/NDK"
         if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
