@@ -26,10 +26,23 @@
  */
 static constexpr int SWITCH_INFO_BOX = 100;
 
+/**
+ * Pointer to the currently open InfoBox dialog, or nullptr if none is open.
+ */
+static WndForm *current_dialog = nullptr;
+
+/**
+ * ID of the InfoBox that owns the current dialog, or -1 if none.
+ */
+static int current_dialog_id = -1;
+
 void
 dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
 {
   assert (id > -1);
+  
+  /* Close any existing InfoBox dialog before opening a new one */
+  dlgInfoBoxAccessClose();
 
   const InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
   const unsigned panel_index = CommonInterface::GetUIState().panel_index;
@@ -47,6 +60,10 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
   dialog.SetWidget(TabWidget::Orientation::HORIZONTAL);
   dialog.PrepareWidget();
   auto &tab_widget = dialog.GetWidget();
+  
+  /* Track the current dialog and its owner */
+  current_dialog = &dialog;
+  current_dialog_id = id;
 
   bool found_setup = false;
 
@@ -103,7 +120,45 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
 
   dialog.SetModeless();
   int result = dialog.ShowModal();
+  
+  /* Clear the dialog pointer and ID after it closes */
+  current_dialog = nullptr;
+  current_dialog_id = -1;
+  
+  /* If dialog was closed by clicking outside (result == 0),
+     check which InfoBox now has focus and open its dialog */
+  if (result == 0) {
+    /* The InfoBox that was clicked should now have focus
+       - trigger its dialog to open by calling ShowInfoBoxPicker with -1
+       which opens the picker for the focused InfoBox */
+    InfoBoxManager::ShowInfoBoxPicker(-1);
+  }
 
   if (result == SWITCH_INFO_BOX)
     InfoBoxManager::ShowInfoBoxPicker(id);
+}
+
+void
+dlgInfoBoxAccessClose() noexcept
+{
+  if (current_dialog != nullptr) {
+    /* Prevent focus restoration to the InfoBox that owned this dialog
+       by signaling the dialog to close via SetModalResult(mrCancel) and
+       clearing current_dialog/current_dialog_id so ownership and focus
+       won't be restored. The dialog is destroyed later by the caller. */
+    current_dialog->SetModalResult(mrCancel);
+    current_dialog = nullptr;
+    current_dialog_id = -1;
+  }
+}
+
+bool
+dlgInfoBoxAccessCloseOthers(int id) noexcept
+{
+  /* Only close if a different InfoBox owns the dialog */
+  if (current_dialog != nullptr && current_dialog_id != id) {
+    dlgInfoBoxAccessClose();
+    return true;
+  }
+  return false;
 }
