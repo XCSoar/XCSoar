@@ -1,26 +1,19 @@
-Index: boost_1_87_0/boost/math/policies/error_handling.hpp
+Index: boost_1_90_0/boost/math/policies/error_handling.hpp
 ===================================================================
---- boost_1_87_0.orig/boost/math/policies/error_handling.hpp
-+++ boost_1_87_0/boost/math/policies/error_handling.hpp
-@@ -18,7 +18,7 @@
- 
- #ifndef BOOST_MATH_HAS_NVRTC
- 
--#include <iomanip>
-+//#include <iomanip>
- #include <string>
+--- boost_1_90_0.orig/boost/math/policies/error_handling.hpp
++++ boost_1_90_0/boost/math/policies/error_handling.hpp
+@@ -27,8 +27,8 @@
+ #include <complex>
+ #include <cstdint>
  #include <cstring>
- #ifndef BOOST_MATH_NO_RTTI
-@@ -43,7 +43,7 @@
- // Note that this only occurs when the compiler can deduce code is unreachable,
- // for example when policy macros are used to ignore errors rather than throw.
- #endif
+-#include <iomanip>
 -#include <sstream>
++//#include <iomanip>
 +//#include <sstream>
- 
- namespace boost{ namespace math{
- 
-@@ -88,6 +88,7 @@ T user_indeterminate_result_error(const char* function, const char* message, con
+ #ifndef BOOST_MATH_NO_EXCEPTIONS
+ #include <stdexcept>
+ #endif
+@@ -96,6 +96,7 @@ T user_indeterminate_result_error(const char* function, const char* message, con
  namespace detail
  {
  
