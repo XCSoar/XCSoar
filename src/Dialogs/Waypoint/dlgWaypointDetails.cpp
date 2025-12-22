@@ -30,6 +30,7 @@
 #include "Waypoint/LastUsed.hpp"
 #include "Profile/Current.hpp"
 #include "Profile/Map.hpp"
+#include "Profile/Profile.hpp"
 #include "Profile/Keys.hpp"
 #include "system/RunFile.hpp"
 #include "system/Path.hpp"
@@ -815,9 +816,14 @@ UpdateCaption(WndForm *form, const Waypoint &waypoint)
   }
 
   if (!key.empty()) {
-    const auto filename = Profile::map.GetPathBase(key);
-    if (filename != nullptr)
-      buffer.AppendFormat(_T(" (%s)"), filename.c_str());
+    // Get the list of files for this origin and extract the correct one
+    const auto paths = Profile::GetMultiplePaths(key, nullptr);
+    if (waypoint.file_num < paths.size()) {
+      const auto &path = paths[waypoint.file_num];
+      const auto filename = path.GetBase();
+      if (filename != nullptr)
+        buffer.AppendFormat(_T(" (%s)"), filename.c_str());
+    }
   } else if (name != nullptr)
     buffer.AppendFormat(_T(" (%s)"), name);
 
