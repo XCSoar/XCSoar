@@ -9,6 +9,8 @@ class Display {
 public:
   explicit Display(unsigned antialiasing_samples = 0);
   ~Display() noexcept;
+
+  static void DisableAntiAliasing() noexcept;
 };
 
 } // namespace SDL
