@@ -41,22 +41,65 @@ Display::Display(unsigned antialiasing_samples)
 #ifdef USE_GLX
   const auto screen = DefaultScreen(display);
 
-  int attributes[32];
-  int i = 0;
-  attributes[i++] = GLX_DRAWABLE_TYPE; attributes[i++] = GLX_WINDOW_BIT;
-  attributes[i++] = GLX_RENDER_TYPE; attributes[i++] = GLX_RGBA_BIT;
-  attributes[i++] = GLX_X_RENDERABLE; attributes[i++] = true;
-  attributes[i++] = GLX_DOUBLEBUFFER; attributes[i++] = true;
-  attributes[i++] = GLX_RED_SIZE; attributes[i++] = 1;
-  attributes[i++] = GLX_GREEN_SIZE; attributes[i++] = 1;
-  attributes[i++] = GLX_BLUE_SIZE; attributes[i++] = 1;
-  attributes[i++] = GLX_ALPHA_SIZE; attributes[i++] = 1;
-  attributes[i++] = GLX_STENCIL_SIZE; attributes[i++] = 1;
+  // Try with requested antialiasing first
   if (antialiasing_samples > 0) {
+    int attributes[32];
+    int i = 0;
+    attributes[i++] = GLX_DRAWABLE_TYPE; attributes[i++] = GLX_WINDOW_BIT;
+    attributes[i++] = GLX_RENDER_TYPE; attributes[i++] = GLX_RGBA_BIT;
+    attributes[i++] = GLX_X_RENDERABLE; attributes[i++] = true;
+    attributes[i++] = GLX_DOUBLEBUFFER; attributes[i++] = true;
+    attributes[i++] = GLX_RED_SIZE; attributes[i++] = 1;
+    attributes[i++] = GLX_GREEN_SIZE; attributes[i++] = 1;
+    attributes[i++] = GLX_BLUE_SIZE; attributes[i++] = 1;
+    attributes[i++] = GLX_ALPHA_SIZE; attributes[i++] = 1;
+    attributes[i++] = GLX_STENCIL_SIZE; attributes[i++] = 1;
     attributes[i++] = GLX_SAMPLE_BUFFERS; attributes[i++] = 1;
     attributes[i++] = GLX_SAMPLES; attributes[i++] = antialiasing_samples;
+    attributes[i++] = 0;
+
+    int fb_cfg_count;
+    fb_cfg = glXChooseFBConfig(display, screen, attributes, &fb_cfg_count);
+    
+    if (fb_cfg != nullptr && fb_cfg_count > 0) {
+      LogFormat("GLX config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d samples=%d",
+                GetConfigAttrib(display, *fb_cfg, GLX_RED_SIZE, 0),
+                GetConfigAttrib(display, *fb_cfg, GLX_GREEN_SIZE, 0),
+                GetConfigAttrib(display, *fb_cfg, GLX_BLUE_SIZE, 0),
+                GetConfigAttrib(display, *fb_cfg, GLX_ALPHA_SIZE, 0),
+                GetConfigAttrib(display, *fb_cfg, GLX_DEPTH_SIZE, 0),
+                GetConfigAttrib(display, *fb_cfg, GLX_STENCIL_SIZE, 0),
+                GetConfigAttrib(display, *fb_cfg, GLX_SAMPLES, 0));
+
+      glx_context = glXCreateNewContext(display, *fb_cfg,
+                                        GLX_RGBA_TYPE,
+                                        nullptr, true);
+      if (glx_context == nullptr)
+        throw std::runtime_error("Failed to create GLX context");
+
+      if (!glXMakeContextCurrent(display, 0, 0, glx_context))
+        throw std::runtime_error("Failed to enable GLX context");
+      
+      return;
+    }
+
+    LogFormat("Requested %ux anti-aliasing not available, disabling",
+              antialiasing_samples);
   }
-  attributes[i++] = 0;
+
+  // Fallback: no antialiasing
+  static constexpr int attributes[] = {
+    GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+    GLX_RENDER_TYPE, GLX_RGBA_BIT,
+    GLX_X_RENDERABLE, true,
+    GLX_DOUBLEBUFFER, true,
+    GLX_RED_SIZE, 1,
+    GLX_GREEN_SIZE, 1,
+    GLX_BLUE_SIZE, 1,
+    GLX_ALPHA_SIZE, 1,
+    GLX_STENCIL_SIZE, 1,
+    0
+  };
 
   int fb_cfg_count;
   fb_cfg = glXChooseFBConfig(display, screen,
@@ -64,14 +107,13 @@ Display::Display(unsigned antialiasing_samples)
   if (fb_cfg == nullptr || fb_cfg_count == 0)
     throw std::runtime_error("Failed to retrieve framebuffer configuration for GLX");
 
-  LogFormat("GLX config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d samples=%d",
+  LogFormat("GLX config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d",
             GetConfigAttrib(display, *fb_cfg, GLX_RED_SIZE, 0),
             GetConfigAttrib(display, *fb_cfg, GLX_GREEN_SIZE, 0),
             GetConfigAttrib(display, *fb_cfg, GLX_BLUE_SIZE, 0),
             GetConfigAttrib(display, *fb_cfg, GLX_ALPHA_SIZE, 0),
             GetConfigAttrib(display, *fb_cfg, GLX_DEPTH_SIZE, 0),
-            GetConfigAttrib(display, *fb_cfg, GLX_STENCIL_SIZE, 0),
-            GetConfigAttrib(display, *fb_cfg, GLX_SAMPLES, 0));
+            GetConfigAttrib(display, *fb_cfg, GLX_STENCIL_SIZE, 0));
 
   glx_context = glXCreateNewContext(display, *fb_cfg,
                                     GLX_RGBA_TYPE,
