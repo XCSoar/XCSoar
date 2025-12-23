@@ -166,6 +166,12 @@ OpenGL::SetupContext()
   /* Enable MSAA (configured at context creation) */
   glEnable(GL_MULTISAMPLE);
 
+  /* Query maximum MSAA samples */
+  GLint max_samples = 0;
+  glGetIntegerv(GL_MAX_SAMPLES, &max_samples);
+  max_antialiasing_samples = max_samples > 0 ? (unsigned)max_samples : 0;
+  LogFormat("GL max MSAA samples: %u", max_antialiasing_samples);
+
   InitShaders();
 }
 
