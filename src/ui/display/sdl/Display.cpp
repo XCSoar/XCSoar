@@ -74,4 +74,13 @@ Display::GetDPI() noexcept
   return {96, 96};
 }
 
+void
+Display::DisableAntiAliasing() noexcept
+{
+#if defined(ENABLE_OPENGL)
+  ::SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
+  ::SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
+#endif
+}
+
 } // namespace SDL
