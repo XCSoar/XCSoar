@@ -49,6 +49,11 @@ extern GLenum render_buffer_depth_stencil;
 extern GLenum render_buffer_stencil;
 
 /**
+ * Maximum number of MSAA samples supported (0 if not queried yet).
+ */
+extern unsigned max_antialiasing_samples;
+
+/**
  * The dimensions of the OpenGL window in pixels.
  */
 extern UnsignedPoint2D window_size;
