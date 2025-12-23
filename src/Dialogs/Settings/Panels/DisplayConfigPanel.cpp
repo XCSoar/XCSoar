@@ -33,6 +33,10 @@
 #include "ui/event/Queue.hpp"
 #endif
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Globals.hpp"
+#endif
+
 #include <memory>
 #include <string>
 
@@ -288,10 +292,33 @@ DisplayConfigPanel::Prepare(ContainerWindow &parent,
   if (wp_antialiasing != nullptr) {
     DataFieldEnum &df = *(DataFieldEnum *)wp_antialiasing->GetDataField();
     df.AddChoice(0, _("Off"));
-    df.AddChoice(2, _("2x"));
-    df.AddChoice(4, _("4x"));
-    df.AddChoice(8, _("8x"));
-    df.AddChoice(16, _("16x"));
+
+    // Display all options but mark currently unavailable ones as "Not available"
+#ifdef ENABLE_OPENGL
+    const unsigned max_samples = OpenGL::max_antialiasing_samples;
+#else
+    const unsigned max_samples = 0;
+#endif
+    if (max_samples >= 2)
+      df.AddChoice(2, _("2x"));
+    else
+      df.AddChoice(2, _("2x (Not available)"));
+
+    if (max_samples >= 4)
+      df.AddChoice(4, _("4x"));
+    else
+      df.AddChoice(4, _("4x (Not available)"));
+
+    if (max_samples >= 8)
+      df.AddChoice(8, _("8x"));
+    else
+      df.AddChoice(8, _("8x (Not available)"));
+
+    if (max_samples >= 16)
+      df.AddChoice(16, _("16x"));
+    else
+      df.AddChoice(16, _("16x (Not available)"));
+
     df.SetValue(ui_settings.antialiasing);
     wp_antialiasing->RefreshDisplay();
   }
