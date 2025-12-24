@@ -6,11 +6,16 @@
 #include "FLARM/List.hpp"
 #include "FLARM/Status.hpp"
 #include "FLARM/Version.hpp"
+#include "FLARM/Details.hpp"
+#include "FLARM/MessagingRecord.hpp"
 #include "Language/Language.hpp"
 #include "Message.hpp"
 #include "NMEA/InputLine.hpp"
 #include "util/Macros.hpp"
 #include "util/StringAPI.hxx"
+#include "util/HexString.hpp"
+
+#include <algorithm>
 
 using std::string_view_literals::operator""sv;
 
@@ -173,4 +178,47 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock, RangeFilter
   flarm_slot->valid.Update(clock);
 
   flarm_slot->Update(traffic);
+}
+
+void
+ParsePFLAM(NMEAInputLine &line) noexcept
+{
+  const auto type = line.ReadView();
+
+  if (type == "U"sv) {
+    MessagingRecord record{};
+
+    line.Skip(); /* id type */
+
+    // 5 id, 6 digit hex
+    char id_string[16];
+    line.Read(id_string, 16);
+    record.id = FlarmId::Parse(id_string, nullptr);
+
+    const auto msg_type = line.ReadView();
+    const auto hex_value = line.ReadView();
+
+    try {
+      if (msg_type == "AREG"sv) {
+        record.registration = ParseHexString(hex_value);
+      } else if (msg_type == "PNAME"sv) {
+        record.pilot = ParseHexString(hex_value);
+      } else if (msg_type == "ATYPE"sv) {
+        record.plane_type = ParseHexString(hex_value);
+      } else if (msg_type == "ACALL"sv) {
+        record.callsign = ParseHexString(hex_value);
+      } else if (msg_type == "VHF"sv) {
+        // VHF message contains comma-separated frequencies (not hex-encoded)
+        // Only parse the first frequency from the comma-separated list
+        const auto comma = std::find(hex_value.begin(), hex_value.end(), ',');
+        const std::string_view first_freq(hex_value.data(), comma - hex_value.begin());
+        record.frequency = RadioFrequency::Parse(first_freq);
+      }
+    } catch (...) {
+      // Silently ignore malformed hex data in NMEA stream
+      return;
+    }
+
+    FlarmDetails::StoreMessagingRecord(record);
+  }
 }

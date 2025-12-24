@@ -66,3 +66,11 @@ ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, TimeStamp clock) noexcept;
  */
 void
 ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock, RangeFilter &range) noexcept;
+
+/**
+ * Parses a PFLAM sentence (messaging data).
+ *
+ * @param line The Flarm NMEA record to parse.
+ */
+void
+ParsePFLAM(NMEAInputLine &line) noexcept;

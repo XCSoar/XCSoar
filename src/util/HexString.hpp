@@ -48,3 +48,31 @@ ParseHexString(const std::string_view hex_str)
 
   return raw_hash;
 }
+
+/**
+* Parses a hex string into a human readable string
+*
+* @param hex_str A string in hexadecimal form.
+* @return A human readable string.
+* @throws std::invalid_argument if parsing failed or the hex string has
+*         the wrong length.
+*/
+inline
+std::string
+ParseHexString(const std::string_view hex_str) {
+  std::string result;
+
+  if (hex_str.length() % 2 != 0)
+    throw std::invalid_argument("Hex string has wrong length.");
+
+  result.reserve(hex_str.length() / 2);
+
+  for (std::size_t i = 0; i < hex_str.length(); i += 2) {
+      const unsigned char upper = ParseHexDigit(hex_str[i]);
+      const unsigned char lower = ParseHexDigit(hex_str[i + 1]);
+      const unsigned char value = (upper << 4) | lower;
+      result.push_back(static_cast<char>(value));
+  }
+
+  return result;
+}

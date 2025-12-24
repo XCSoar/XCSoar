@@ -7,6 +7,8 @@ FLARM_SOURCES = \
 	$(SRC)/FLARM/FlarmNetRecord.cpp \
 	$(SRC)/FLARM/FlarmNetDatabase.cpp \
 	$(SRC)/FLARM/FlarmNetReader.cpp \
+	$(SRC)/FLARM/MessagingRecord.cpp \
+	$(SRC)/FLARM/MessagingDatabase.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/Calculations.cpp \
 	$(SRC)/FLARM/Friends.cpp \

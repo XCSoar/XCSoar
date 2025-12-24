@@ -19,8 +19,9 @@ int main(int argc, char **argv)
   for (auto i = database.begin(), end = database.end(); i != end; ++i) {
     const FlarmNetRecord &record = i->second;
 
+    char id_buf[16];
     _tprintf(_T("%s\t%s\t%s\t%s\n"),
-             record.id.c_str(), record.pilot.c_str(),
+             record.id.Format(id_buf), record.pilot.c_str(),
              record.registration.c_str(), record.callsign.c_str());
   }
 
