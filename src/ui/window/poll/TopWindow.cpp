@@ -7,7 +7,7 @@
 #include "ui/event/Globals.hpp"
 #include "ui/dim/Size.hpp"
 
-#ifdef USE_X11
+#if defined(USE_X11) || defined(USE_WAYLAND)
 #include "ui/canvas/custom/TopCanvas.hpp"
 #endif
 
