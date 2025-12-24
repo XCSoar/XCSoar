@@ -13,7 +13,7 @@ else
 endif
 ANDROID_SDK_PLATFORM_DIR = $(ANDROID_SDK)/platforms/$(ANDROID_SDK_PLATFORM)
 
-ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/33.0.2
+ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/35.0.0
 ZIPALIGN = $(ANDROID_BUILD_TOOLS_DIR)/zipalign
 AAPT2 = $(ANDROID_BUILD_TOOLS_DIR)/aapt2
 D8 = $(ANDROID_BUILD_TOOLS_DIR)/d8
@@ -279,26 +279,27 @@ $(GEN_DIR)/org/xcsoar/R.java: $(PROTOBUF_OUT_DIR)/dirstamp
 
 ### Java build
 
+# Note: Requires JDK 17 or later. JAVA_HOME should point to JDK 17 installation.
 $(NO_ARCH_OUTPUT_DIR)/classes.zip: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
 	@$(NQ)echo "  JAVAC   $(JAVA_CLASSFILES_DIR)"
-	$(Q)$(JAVAC) \
-		-source 1.7 -target 1.7 \
+	$(Q)$(filter-out -Werror,$(JAVAC)) \
+		--release 17 \
 		-Xlint:all \
 		-Xlint:-deprecation \
 		-Xlint:-options \
 		-Xlint:-static \
+		-Xlint:-this-escape \
 		-cp $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) \
 		-d $(JAVA_CLASSFILES_DIR) $(GEN_DIR)/org/xcsoar/R.java \
 		-h $(NATIVE_INCLUDE_DIR) \
 		$(JAVA_SOURCES)
 	$(Q)$(ZIP) -0 -r $(NO_ARCH_OUTPUT_DIR)/classes.zip $(JAVA_CLASSFILES_DIR)
 
-# Note: desugaring causes crashes on Android 13 (Pixel 6); as a
-# workaround, it's disabled for now.
+# Note: Using Java 17, but desugaring is still needed because Java 17
+# generates invoke-dynamic for lambdas/method references which D8 must convert.
 $(NO_ARCH_OUTPUT_DIR)/classes.dex: $(NO_ARCH_OUTPUT_DIR)/classes.zip
 	@$(NQ)echo "  D8      $@"
 	$(Q)$(D8) \
-		--no-desugaring \
 		--min-api 21 \
 		--output $(NO_ARCH_OUTPUT_DIR) $(NO_ARCH_OUTPUT_DIR)/classes.zip
 
