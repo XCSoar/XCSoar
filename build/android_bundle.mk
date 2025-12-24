@@ -278,10 +278,11 @@ $(GEN_DIR)/org/xcsoar/R.java: $(PROTOBUF_OUT_DIR)/dirstamp
 
 ### Java build
 
+# Note: Requires JDK 17 or later. JAVA_HOME should point to JDK 17 installation.
 $(NO_ARCH_OUTPUT_DIR)/classes.zip: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
 	@$(NQ)echo "  JAVAC   $(JAVA_CLASSFILES_DIR)"
 	$(Q)$(JAVAC) \
-		-source 1.8 -target 1.8 \
+		--release 17 \
 		-Xlint:all \
 		-Xlint:-deprecation \
 		-Xlint:-options \
