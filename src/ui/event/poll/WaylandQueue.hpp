@@ -7,6 +7,10 @@
 #include "event/IdleEvent.hxx"
 #include "Math/Point2D.hpp"
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+#include "ui/dim/Size.hpp"
+#endif
+
 #include <cstdint>
 
 struct xkb_context;
@@ -23,13 +27,12 @@ struct wl_pointer;
 struct wl_keyboard;
 struct wl_shell;
 struct wl_registry;
-struct xdg_wm_base;
-struct zxdg_decoration_manager_v1;
 struct wl_shm;
+struct wl_surface;
 struct wl_cursor_theme;
 struct wl_cursor;
-struct wl_cursor_image;
-struct wl_surface;
+struct xdg_wm_base;
+struct zxdg_decoration_manager_v1;
 
 namespace UI {
 
@@ -54,11 +57,13 @@ class WaylandEventQueue final {
   struct zxdg_decoration_manager_v1 *decoration_manager = nullptr;
   struct wl_shm *shm = nullptr;
 
+  bool has_touchscreen = false;
+  bool is_activated = true;
+
+  /* Cursor support */
   struct wl_cursor_theme *cursor_theme = nullptr;
   struct wl_cursor *cursor_pointer = nullptr;
   struct wl_surface *cursor_surface = nullptr;
-
-  bool has_touchscreen = false;
 
   IntPoint2D pointer_position = {0, 0};
 
@@ -93,9 +98,20 @@ public:
     return wm_base;
   }
 
+  struct zxdg_decoration_manager_v1 *GetDecorationManager() const noexcept {
+    return decoration_manager;
+  }
+
+  struct wl_pointer *GetPointer() const noexcept {
+    return pointer;
+  }
+
   bool IsVisible() const noexcept {
-    // TODO: implement
-    return true;
+    return is_activated;
+  }
+
+  void SetActivated(bool activated) noexcept {
+    is_activated = activated;
   }
 
   bool HasPointer() const noexcept {
@@ -111,6 +127,11 @@ public:
   }
 
   bool Generate(Event &event) noexcept;
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  void SetScreenSize(PixelSize new_size) noexcept;
+  void SetDisplayOrientation(DisplayOrientation orientation) noexcept;
+#endif
 
   void RegistryHandler(struct wl_registry *registry, uint32_t id,
                        const char *interface) noexcept;

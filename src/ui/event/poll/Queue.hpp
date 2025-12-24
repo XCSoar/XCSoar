@@ -99,6 +99,12 @@ public:
   }
 #endif
 
+#ifdef USE_WAYLAND
+  void SetActivated(bool activated) noexcept {
+    input_queue.SetActivated(activated);
+  }
+#endif
+
   void SetScreenSize([[maybe_unused]] const PixelSize &screen_size) noexcept {
 #if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND)
     input_queue.SetScreenSize(screen_size);
