@@ -256,10 +256,22 @@ jobs:
             ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
             ${{ github.workspace }}/output/src/${{ env.BOOST }}
 
-      - name: "Hash Android installation script and build files"
+      - name: "Extract Android version numbers for cache key"
         if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
-        id: android_script_hash
+        id: android_versions
         run: |
+          # Extract version numbers from install script
+          SDK_TOOLS=$(grep "^ANDROID_SDK_TOOLS_VERSION=" ide/provisioning/install-android-tools.sh | cut -d'=' -f2 | tr -d '"')
+          BUILD_TOOLS=$(grep "^ANDROID_BUILD_TOOLS_VERSION=" ide/provisioning/install-android-tools.sh | cut -d'=' -f2 | tr -d '"')
+          PLATFORM=$(grep "^ANDROID_PLATFORM_VERSION=" ide/provisioning/install-android-tools.sh | cut -d'=' -f2 | tr -d '"')
+          NDK=$(grep "^ANDROID_NDK_VERSION=" ide/provisioning/install-android-tools.sh | cut -d'=' -f2 | tr -d '"')
+          BUNDLETOOL=$(grep "^BUNDLETOOL_VERSION=" ide/provisioning/install-android-tools.sh | cut -d'=' -f2 | tr -d '"')
+          
+          # Create version string for cache key
+          VERSIONS="sdk${SDK_TOOLS}-build${BUILD_TOOLS}-platform${PLATFORM}-ndk${NDK}-bundle${BUNDLETOOL}"
+          echo "versions=${VERSIONS}" >> $GITHUB_OUTPUT
+          
+          # Also hash script files as backup (in case of other changes)
           cat ide/provisioning/install-android-tools.sh build/android.mk build/android_bundle.mk 2>/dev/null | sha256sum | cut -d' ' -f1 > /tmp/android_script_hash.txt
           echo "script_hash=$(cat /tmp/android_script_hash.txt)" >> $GITHUB_OUTPUT
 
@@ -267,7 +279,7 @@ jobs:
         if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
         uses: actions/cache@v5
         with:
-          key: android-tools-${{ matrix.ndk }}-script${{ steps.android_script_hash.outputs.script_hash }}
+          key: android-tools-${{ matrix.ndk }}-${{ steps.android_versions.outputs.versions }}-script${{ steps.android_versions.outputs.script_hash }}
           restore-keys: |
             android-tools-${{ matrix.ndk }}-
             android-tools-
