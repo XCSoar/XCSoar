@@ -1,13 +1,35 @@
 #!/bin/bash
 set -euo pipefail
 
-# Input configuration
-IPA_PATH="$(pwd)/output/IOS64/xcsoar.ipa"
-PROFILE_PATH="$(pwd)/your_provisioning_profile.mobileprovision"
-CERTIFICATE_NAME="Apple Development: Your Name (XXXXXXXXXX)"
+# Load environment variables from .env file if it exists
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -f "$SCRIPT_DIR/.env" ]]; then
+  # shellcheck disable=SC1091
+  source "$SCRIPT_DIR/.env"
+fi
+
+# Input configuration (with defaults)
+IPA_PATH="${IOS_IPA_PATH:-$(pwd)/output/IOS64/xcsoar.ipa}"
+PROFILE_PATH="${IOS_PROFILE_PATH:-}"
+CERTIFICATE_NAME="${IOS_CERTIFICATE_NAME:-}"
 
 # Output configuration
-IPA_SIGNED_PATH="$(pwd)/output/IOS64/xcsoar-signed.ipa"
+IPA_SIGNED_PATH="${IOS_SIGNED_IPA_PATH:-$(pwd)/output/IOS64/xcsoar-signed.ipa}"
+
+# Validate required environment variables
+if [[ -z "$PROFILE_PATH" ]]; then
+  echo "❌ IOS_PROFILE_PATH not set"
+  echo "Set it via: export IOS_PROFILE_PATH=/path/to/profile.mobileprovision"
+  echo "Or configure it in $SCRIPT_DIR/.env (see .env.example)"
+  exit 1
+fi
+
+if [[ -z "$CERTIFICATE_NAME" ]]; then
+  echo "❌ IOS_CERTIFICATE_NAME not set"
+  echo "Set it via: export IOS_CERTIFICATE_NAME='Apple Distribution: ...'"
+  echo "Or configure it in $SCRIPT_DIR/.env (see .env.example)"
+  exit 1
+fi
 
 # Guard against missing build artefact
 if [[ ! -f "$IPA_PATH" ]]; then
