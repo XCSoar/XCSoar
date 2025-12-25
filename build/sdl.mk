@@ -20,6 +20,8 @@ ifeq ($(TARGET_IS_IOS),y)
 UIKIT = y
 else
 APPKIT = y
+# On macOS, SDL can work with ANGLE/OpenGL
+# SDL will use the OpenGL context created with ANGLE
 endif
 else
 LIBPNG = y
