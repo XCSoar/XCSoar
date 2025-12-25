@@ -17,11 +17,19 @@
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
     <string>VERSION_PLACEHOLDER</string>
+    <key>CFBundleVersion</key>
+    <string>BUILD_NUMBER_PLACEHOLDER</string>
     <key>CFBundleIconFile</key>
     <string>logo_1024</string>
     <key>NSHighResolutionCapable</key>
     <true/>
     <key>LSMinimumSystemVersion</key>
-    <string>12.0</string>
+    <string>12.0.0</string>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.navigation</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>XCSoar uses your location for navigation and flight logging with GPS devices.</string>
+    <key>ITSAppUsesNonExemptEncryption</key>
+    <false/>
   </dict>
 </plist>
