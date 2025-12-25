@@ -33,18 +33,21 @@ then
 else
   echo "Installing Android SDK to ${ANDROID_SDK_DIR}..."
 
-  ANDROID_SDK_TMP_ZIP="$(mktemp)"
-  wget --progress=bar:force:noscroll \
-      ${ANDROID_REPO_URL}/commandlinetools-linux-${ANDROID_SDK_TOOLS_VERSION}.zip \
-      -O "${ANDROID_SDK_TMP_ZIP}"
+  if [ ! -f "${ANDROID_SDK_DIR}"/cmdline-tools/bin/sdkmanager ]
+  then
+    ANDROID_SDK_TMP_ZIP="$(mktemp)"
+    wget --progress=bar:force:noscroll \
+        ${ANDROID_REPO_URL}/commandlinetools-linux-${ANDROID_SDK_TOOLS_VERSION}.zip \
+        -O "${ANDROID_SDK_TMP_ZIP}"
 
-  mkdir -p "${ANDROID_SDK_DIR}"/licenses
-  cd "${ANDROID_SDK_DIR}"
-  unzip "${ANDROID_SDK_TMP_ZIP}"
+    mkdir -p "${ANDROID_SDK_DIR}"/licenses
+    cd "${ANDROID_SDK_DIR}"
+    unzip "${ANDROID_SDK_TMP_ZIP}"
 
-  rm "${ANDROID_SDK_TMP_ZIP}"
+    rm "${ANDROID_SDK_TMP_ZIP}"
+  fi
 
-  echo 24333f8a63b6825ea9c5514f83c2829b004d1fee > licenses/android-sdk-license
+  echo 24333f8a63b6825ea9c5514f83c2829b004d1fee > "${ANDROID_SDK_DIR}"/licenses/android-sdk-license
 
   cd "${ANDROID_SDK_DIR}"
   echo Installing Android SDK packages...
