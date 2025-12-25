@@ -110,7 +110,6 @@ jobs:
             target_final: xcsoar_
             target_ext: .deb
             target_upload: true
-            target_container: debian:trixie-slim
           - os: ubuntu-22.04
             target: KOBO
             target_bin: KoboRoot
@@ -118,7 +117,6 @@ jobs:
             target_final: KoboRoot
             target_ext: .tgz
             target_upload: true
-            target_container: debian:trixie-slim
           - os: ubuntu-22.04
             target: ANDROID
             target_bin: XCSoar
@@ -127,7 +125,6 @@ jobs:
             target_ext: .apk
             target_upload: true
             ndk: r26d
-            target_container: debian:trixie-slim
           - os: ubuntu-22.04
             target: ANDROID_BUNDLE
             target_bin: XCSoar
@@ -136,7 +133,6 @@ jobs:
             target_ext: .apk
             target_upload: false
             ndk: r26d
-            target_container: debian:trixie-slim
           - os: ubuntu-22.04
             target: WIN64
             target_bin: XCSoar
@@ -144,7 +140,6 @@ jobs:
             target_final: XCSoar
             target_ext: .exe
             target_upload: true
-            target_container: debian:trixie-slim
           - os: ubuntu-22.04
             target: PC
             target_bin: XCSoar
@@ -282,6 +277,7 @@ jobs:
           restore-keys: |
             thirdparty-${{ matrix.target }}-
           path: |
+            ${{ github.workspace }}/output/${{ matrix.target }}/**/lib
             ${{ github.workspace }}/output/${{ matrix.target }}/lib
 
       - name: Install dependencies
@@ -371,6 +367,7 @@ jobs:
             mkdir -p output/UNIX/DPKG
             rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
             cd output/UNIX/DPKG
+            ./ide/provisioning/install-debian-packages.sh DEBIAN
             DEB_BUILD_OPTIONS=ccache,noopt dpkg-buildpackage --jobs-force=$(nproc) --no-sign
           fi
 
@@ -407,6 +404,7 @@ jobs:
             mkdir -p output/UNIX/DPKG
             rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
             cd output/UNIX/DPKG
+            ./ide/provisioning/install-debian-packages.sh DEBIAN
             DEB_BUILD_OPTIONS=ccache dpkg-buildpackage --jobs-force=$(nproc) --no-sign
             cp *.deb ../
           fi

@@ -3,7 +3,7 @@
 
 OPTIONS =
 
-TARGET = UNIX
+TARGET ?= UNIX
 OPTIONS += TARGET=$(TARGET)
 
 # allow Debian builds in the same repository as normal builds
