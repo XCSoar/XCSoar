@@ -78,7 +78,19 @@ $(eval $(call convert-to-bmp-white,$(BMP_SPLASH_160) $(BMP_SPLASH_80),%.bmp,%.pn
 # convert to icns (macOS icon)
 $(ICNS_SPLASH_1024): %.icns: %.png
 	@$(NQ)echo "  ICNS    $@"
-	$(Q)png2icns $@ $<
+	$(Q)mkdir -p $@.iconset && \
+		sips -z 1024 1024 $< --out $@.iconset/icon_512x512@2x.png >/dev/null && \
+		sips -z 512 512 $< --out $@.iconset/icon_512x512.png >/dev/null && \
+		sips -z 512 512 $< --out $@.iconset/icon_256x256@2x.png >/dev/null && \
+		sips -z 256 256 $< --out $@.iconset/icon_256x256.png >/dev/null && \
+		sips -z 256 256 $< --out $@.iconset/icon_128x128@2x.png >/dev/null && \
+		sips -z 128 128 $< --out $@.iconset/icon_128x128.png >/dev/null && \
+		sips -z 64 64 $< --out $@.iconset/icon_32x32@2x.png >/dev/null && \
+		sips -z 32 32 $< --out $@.iconset/icon_32x32.png >/dev/null && \
+		sips -z 32 32 $< --out $@.iconset/icon_16x16@2x.png >/dev/null && \
+		sips -z 16 16 $< --out $@.iconset/icon_16x16.png >/dev/null && \
+		iconutil -c icns $@.iconset -o $@ && \
+		rm -rf $@.iconset
 
 ####### version
 
