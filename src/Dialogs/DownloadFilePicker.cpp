@@ -25,10 +25,7 @@
 #include "thread/Mutex.hxx"
 #include "Operation/ThreadedOperationEnvironment.hpp"
 #include "util/ConvertString.hpp"
-#include "LogFile.hpp"
 
-#include <chrono>
-#include <thread>
 #include <vector>
 
 #include <cassert>
@@ -231,20 +228,12 @@ DownloadFilePickerWidget::Prepare(ContainerWindow &parent,
 
   CreateList(parent, look, rc,
              row_renderer.CalculateLayout(*look.list.font));
+  RefreshList();
 
   Net::DownloadManager::AddListener(*this);
-  
-  /* Enqueue repository download before enumerate, so Enumerate() will see
-     it as pending rather than triggering a premature OnDownloadComplete() */
-  EnqueueRepositoryDownload();
-  
   Net::DownloadManager::Enumerate(*this);
 
-  /* Refresh list after download manager setup. If repository file already
-     exists, it will be loaded. If repository is still downloading or just
-     completed via Enumerate(), OnDownloadComplete() will trigger another
-     RefreshList() when the file is ready. */
-  RefreshList();
+  EnqueueRepositoryDownload();
 }
 
 void
@@ -267,13 +256,21 @@ try {
   const auto path = LocalPath(_T("repository"));
   
   /* Retry logic: DownloadManager may report STATUS_SUCCESSFUL before the file
-     is fully flushed to disk. Wait up to 500ms for the file to become accessible.
-     This happens in native code (not blocking Java/UI thread). */
+     is fully flushed to disk, or may create an empty placeholder file before
+     writing content. Wait up to 500ms for the file to become accessible and
+     contain data. This happens in native code (not blocking Java/UI thread). */
   std::exception_ptr last_exception;
   for (int attempt = 0; attempt < 10; ++attempt) {
     try {
       FileLineReaderA reader(path);
       ParseFileRepository(repository, reader);
+      
+      /* If repository is empty, the download may not be complete yet.
+         Treat as failure and retry (unless this is the last attempt). */
+      if (repository.files.empty() && attempt < 9) {
+        throw std::runtime_error("Repository file is empty");
+      }
+      
       goto success;
     } catch (...) {
       last_exception = std::current_exception();
