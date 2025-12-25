@@ -157,9 +157,9 @@ jobs:
           - os: macos-15
             target: MACOS
             target_bin: XCSoar
-            target_bin_path: bin
+            target_bin_path: ''
             target_final: XCSoar
-            target_ext: ''
+            target_ext: .dmg
             target_upload: true
             target_container: ''
           - os: macos-15
@@ -244,7 +244,7 @@ jobs:
           path: /var/cache/apt
 
       - name: "Cache Homebrew packages"
-        if: ${{ matrix.os == 'macos-15' || matrix.os == 'macos-14' || matrix.os == 'macos-12' }}
+        if: ${{ startsWith(matrix.os, 'macos-') }}
         uses: actions/cache@v5
         with:
           key: brew-${{ matrix.os }}-${{ hashFiles('ide/provisioning/install-darwin-packages.sh') }}
@@ -416,7 +416,7 @@ jobs:
           elif [ ${{ matrix.target }} = "OSX64" ]; then
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
           elif [ ${{ matrix.target }} = "MACOS" ]; then
-            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0" dmg pkg
           elif [ ${{ matrix.target }} = "IOS64" ]; then
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=y OPTIMIZE="-O0" ipa
           elif [ ${{ matrix.target }} = "UNIX" ]; then
@@ -454,7 +454,9 @@ jobs:
           elif [ ${{ matrix.target }} = "KOBO" ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           elif [ ${{ matrix.target }} = "OSX64" ]; then
-            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0" dmg pkg
+          elif [ ${{ matrix.target }} = "MACOS" ]; then
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 dmg pkg
           elif [ ${{ matrix.target }} = "IOS64" ]; then
             # Set iOS app configuration for production release builds
             export IOS_APP_BUNDLE_IDENTIFIER="${{ vars.IOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
@@ -482,6 +484,7 @@ jobs:
           gmake TARGET=MACOS check
 
       - name: Sign iOS IPA
+        id: sign_ios
         if: ${{ matrix.target == 'IOS64' && steps.tests.outcome == 'success' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/ios-testing' || startsWith(github.ref, 'refs/tags/v')) }}
         run: |
           if [ -f "darwin/xcsoar.mobileprovision" ]; then
@@ -492,12 +495,11 @@ jobs:
             bash darwin/sign.sh
             echo "✅ iOS IPA signed successfully"
           else
-            echo "⚠️ No provisioning profile found, creating unsigned copy"
-            cp output/IOS64/xcsoar.ipa output/IOS64/xcsoar-signed.ipa || true
+            echo "⚠️ No provisioning profile found, skipping signing"
           fi
 
       - name: Upload to TestFlight
-        if: ${{ matrix.target == 'IOS64' && steps.tests.outcome == 'success' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/ios-testing' || startsWith(github.ref, 'refs/tags/v')) }}
+        if: ${{ matrix.target == 'IOS64' && steps.tests.outcome == 'success' && steps.sign_ios.outcome == 'success' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/ios-testing' || startsWith(github.ref, 'refs/tags/v')) }}
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APP_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
@@ -552,6 +554,13 @@ jobs:
         with:
           name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}.aab
           path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}.aab
+
+      - name: Upload artifact (.pkg installer)
+        uses: actions/upload-artifact@v6
+        if: ${{ matrix.target == 'MACOS' }}
+        with:
+          name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}.pkg
+          path: output/${{ matrix.target }}/${{ matrix.target_bin }}.pkg
 
       - name: Upload Release Asset
         id: upload-release-asset
