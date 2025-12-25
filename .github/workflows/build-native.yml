@@ -151,8 +151,8 @@ jobs:
 
   build:
     runs-on: ${{ matrix.os }}
-    needs: [build-container, release]
-    if: always() && (needs.build-container.result == 'success' || needs.build-container.result == 'skipped')
+    needs: [release]
+    if: always()
     container: ${{ matrix.target_container }}
     strategy:
       fail-fast: false
@@ -544,3 +544,50 @@ jobs:
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
           TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
           SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
+
+  check-docs-changes:
+    name: "Check if docs need building"
+    runs-on: ubuntu-24.04
+    outputs:
+      docs-changed: ${{ steps.filter.outputs.docs }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            docs:
+              - 'doc/**'
+              - '.github/workflows/build-native.yml'
+
+  build-docs:
+    name: "Build Documentation"
+    uses: ./.github/workflows/build-docs.yml
+    needs: [build-container, check-docs-changes]
+    if: (needs.check-docs-changes.outputs.docs-changed == 'true' || github.event_name == 'workflow_dispatch') && (needs.build-container.result == 'success' || needs.build-container.result == 'skipped')
+    secrets: inherit
+
+  check-kernel-changes:
+    name: "Check if kernel needs building"
+    runs-on: ubuntu-24.04
+    outputs:
+      kernel-changed: ${{ steps.filter.outputs.kernel }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            kernel:
+              - 'kobo/kernel/**'
+              - '.github/workflows/build-native.yml'
+
+  build-kernel:
+    name: "Build Kobo Kernel"
+    uses: ./.github/workflows/build-kernel.yml
+    needs: check-kernel-changes
+    if: needs.check-kernel-changes.outputs.kernel-changed == 'true' || github.event_name == 'workflow_dispatch'
