@@ -45,15 +45,14 @@ else
   rm "${ANDROID_SDK_TMP_ZIP}"
 
   echo 24333f8a63b6825ea9c5514f83c2829b004d1fee > licenses/android-sdk-license
-fi
-echo
 
-cd "${ANDROID_SDK_DIR}"
-echo Installing Android SDK packages...
-echo cmdline-tools/bin/sdkmanager --sdk_root="${ANDROID_SDK_DIR}" \
-    "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" "platforms;android-${ANDROID_PLATFORM_VERSION}"
-cmdline-tools/bin/sdkmanager --sdk_root=${ANDROID_SDK_DIR} \
-    "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" "platforms;android-${ANDROID_PLATFORM_VERSION}"
+  cd "${ANDROID_SDK_DIR}"
+  echo Installing Android SDK packages...
+  echo cmdline-tools/bin/sdkmanager --sdk_root="${ANDROID_SDK_DIR}" \
+      "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" "platforms;android-${ANDROID_PLATFORM_VERSION}"
+  cmdline-tools/bin/sdkmanager --sdk_root=${ANDROID_SDK_DIR} \
+      "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" "platforms;android-${ANDROID_PLATFORM_VERSION}"
+fi
 echo
 }
 
