@@ -7,6 +7,8 @@
     <string>English</string>
     <key>CFBundleExecutable</key>
     <string>xcsoar</string>
+    <key>CFBundleIdentifier</key>
+    <string>OSX_BUNDLE_ID_PLACEHOLDER</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
@@ -19,5 +21,7 @@
     <string>logo_1024</string>
     <key>NSHighResolutionCapable</key>
     <true/>
+    <key>LSMinimumSystemVersion</key>
+    <string>12.0</string>
   </dict>
 </plist>
