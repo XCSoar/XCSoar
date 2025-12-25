@@ -72,6 +72,9 @@ TopWindow::Create([[maybe_unused]] const TCHAR *text, PixelSize size,
   size = screen->SetDisplayOrientation(style.GetInitialOrientation());
 #elif defined(USE_MEMORY_CANVAS)
   size = screen->GetSize();
+#elif defined(ENABLE_OPENGL)
+  // On HiDPI displays, the drawable size may differ from window size
+  size = screen->GetNativeSize();
 #endif
   ContainerWindow::Create(nullptr, PixelRect{size}, style);
 }

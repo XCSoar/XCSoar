@@ -25,7 +25,7 @@
 #import <UIKit/UIKit.h>
 #endif
 
-#if !defined(ANDROID) && !(defined(__APPLE__) && TARGET_OS_IPHONE)
+#if !defined(ANDROID) && !defined(__APPLE__)
 
 [[gnu::const]]
 static PixelSize
@@ -74,6 +74,9 @@ SystemWindowSize() noexcept
   int pixelHeight = (int)(height * scale);
 
   return PixelSize{ pixelWidth, pixelHeight };
+#elif defined(__APPLE__) && !TARGET_OS_IPHONE
+  // Use default window size (SDL handles HiDPI scaling automatically)
+  return PixelSize{ CommandLine::width, CommandLine::height };
 #else
   /// @todo implement this properly for SDL/UNIX
   return PixelSize{ CommandLine::width, CommandLine::height } + GetWindowDecorationOverhead();
