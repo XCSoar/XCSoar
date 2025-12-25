@@ -12,19 +12,22 @@ TARGET_CPPFLAGS += -D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0
 APP_BUNDLE_DIR = $(TARGET_OUTPUT_DIR)/app
 DMG_TMPDIR = $(TARGET_OUTPUT_DIR)/dmg
 
-ifeq ($(TESTING),y)
-APP_NAME = XCSoar-testing.app
-DMG_NAME = XCSoar-testing.dmg
-PKG_NAME = XCSoar-testing.pkg
-OSX_APP_LABEL = XCSoar Testing
-OSX_BUNDLE_ID = org.xcsoar.XCSoar-Testing
-OSX_LOGO = $(DATA)/graphics/logo_red_1024.icns
-else
+# App Store version (must be X.Y.Z format)
+MACOS_APP_VERSION ?= 7.44.0
+MACOS_APP_BUILD_NUMBER ?= 1
+
+# App name and package names are always the same
 APP_NAME = XCSoar.app
 DMG_NAME = XCSoar.dmg
 PKG_NAME = XCSoar.pkg
+OSX_BUNDLE_ID ?= org.xcsoar.XCSoar
+
+# Testing version uses red icon and "Testing" label
+ifeq ($(TESTING),y)
+OSX_APP_LABEL = XCSoar Testing
+OSX_LOGO = $(DATA)/graphics/logo_red_1024.icns
+else
 OSX_APP_LABEL = XCSoar
-OSX_BUNDLE_ID = org.xcsoar.XCSoar
 OSX_LOGO = $(DATA)/graphics/logo_1024.icns
 endif
 
@@ -43,7 +46,8 @@ $(APP_BUNDLE): $(TARGET_BIN_DIR)/xcsoar Data/OSX/Info.plist.in.xml $(OSX_LOGO) $
 	$(Q)$(MKDIR) -p $(APP_RESOURCES)
 	$(Q)$(MKDIR) -p $(APP_FRAMEWORKS)
 	@$(NQ)echo "  PLIST   $(APP_CONTENTS)/Info.plist"
-	$(Q)sed -e "s,VERSION_PLACEHOLDER,$(FULL_VERSION)," \
+	$(Q)sed -e "s,VERSION_PLACEHOLDER,$(MACOS_APP_VERSION)," \
+	    -e 's/BUILD_NUMBER_PLACEHOLDER/$(MACOS_APP_BUILD_NUMBER)/g' \
 	    -e 's/OSX_APP_LABEL_PLACEHOLDER/$(OSX_APP_LABEL)/g' \
 	    -e 's/OSX_BUNDLE_ID_PLACEHOLDER/$(OSX_BUNDLE_ID)/g' \
 	    < Data/OSX/Info.plist.in.xml > $(APP_CONTENTS)/Info.plist
@@ -122,7 +126,7 @@ $(TARGET_OUTPUT_DIR)/$(PKG_NAME): $(APP_BUNDLE)
 	$(Q)rm -f $@
 	$(Q)pkgbuild --root $(APP_BUNDLE_DIR) \
 	    --identifier $(OSX_BUNDLE_ID) \
-	    --version $(FULL_VERSION) \
+	    --version $(MACOS_APP_VERSION) \
 	    --install-location /Applications \
 	    $@
 
