@@ -19,7 +19,7 @@ env:
   TARGET_EXT: pdf
 jobs:
   xcsoar-compile:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
      - id: checkout
        uses: actions/checkout@v6

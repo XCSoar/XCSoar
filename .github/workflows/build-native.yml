@@ -8,10 +8,10 @@ on:
       - 'cloud/**'
       - 'doc/**'
       - 'fuzzer/**'
-      - 'ide/**'
+      - 'ide/eclipse/**'
+      - 'ide/vagrant/**'
       - 'kobo/**'
       - 'python/**'
-      - '.github/workflows/build-container.yml'
       - '.github/workflows/build-unix.yml'
       - '.github/workflows/build-translation.yml'
       - '.readthedocs.yaml'
@@ -27,10 +27,10 @@ on:
       - 'cloud/**'
       - 'doc/**'
       - 'fuzzer/**'
-      - 'ide/**'
+      - 'ide/eclipse/**'
+      - 'ide/vagrant/**'
       - 'kobo/**'
       - 'python/**'
-      - '.github/workflows/build-container.yml'
       - '.github/workflows/build-unix.yml'
       - '.github/workflows/build-translation.yml'
       - '.readthedocs.yaml'
@@ -42,6 +42,60 @@ env:
   BOOST: boost_1_90_0
 
 jobs:
+  check-container-changes:
+    name: "Check if container needs rebuilding"
+    runs-on: ubuntu-24.04
+    outputs:
+      container-changed: ${{ steps.filter.outputs.container }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            container:
+              - 'ide/docker/**'
+              - 'ide/provisioning/**'
+              - '.github/workflows/build-native.yml'
+
+  build-container:
+    name: "Build Container"
+    runs-on: ubuntu-24.04
+    needs: check-container-changes
+    if: needs.check-container-changes.outputs.container-changed == 'true' || github.event_name == 'workflow_dispatch'
+    env:
+      REGISTRY: ghcr.io
+      IMAGENAME: xcsoar-build
+    outputs:
+      image: ghcr.io/${{ steps.lc_repository_name.outputs.lowercase }}/xcsoar-build:latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: true
+      - name: Login to Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      - id: lc_repository_name
+        uses: ASzc/change-string-case-action@v6
+        with:
+          string: ${{ github.repository }}
+      - name: build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+          context: ./ide
+          file: ./ide/docker/Dockerfile
+          tags: ghcr.io/${{ steps.lc_repository_name.outputs.lowercase }}/xcsoar-build:latest
+          cache-from: type=registry,ref=ghcr.io/${{ steps.lc_repository_name.outputs.lowercase }}/xcsoar-build:latest
+          cache-to: type=inline
+          secrets: |
+            GIT_AUTH_TOKEN=${{ github.token }}
+
   release:
     name: "Create Release"
     runs-on: ubuntu-24.04
@@ -97,27 +151,30 @@ jobs:
 
   build:
     runs-on: ${{ matrix.os }}
-    needs: release
+    needs: [build-container, release]
+    if: always() && (needs.build-container.result == 'success' || needs.build-container.result == 'skipped')
     container: ${{ matrix.target_container }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             target: UNIX
             target_bin: xcsoar_${{ needs.release.outputs.version }}_amd64
             target_bin_path: ''
             target_final: xcsoar_
             target_ext: .deb
             target_upload: true
-          - os: ubuntu-22.04
+            target_container: debian:trixie-slim
+          - os: ubuntu-24.04
             target: KOBO
             target_bin: KoboRoot
             target_bin_path: ''
             target_final: KoboRoot
             target_ext: .tgz
             target_upload: true
-          - os: ubuntu-22.04
+            target_container: debian:trixie-slim
+          - os: ubuntu-24.04
             target: ANDROID
             target_bin: XCSoar
             target_bin_path: bin
@@ -125,7 +182,8 @@ jobs:
             target_ext: .apk
             target_upload: true
             ndk: r26d
-          - os: ubuntu-22.04
+            target_container: debian:trixie-slim
+          - os: ubuntu-24.04
             target: ANDROID_BUNDLE
             target_bin: XCSoar
             target_bin_path: bin
@@ -133,21 +191,24 @@ jobs:
             target_ext: .apk
             target_upload: false
             ndk: r26d
-          - os: ubuntu-22.04
+            target_container: debian:trixie-slim
+          - os: ubuntu-24.04
             target: WIN64
             target_bin: XCSoar
             target_bin_path: bin
             target_final: XCSoar
             target_ext: .exe
             target_upload: true
-          - os: ubuntu-22.04
+            target_container: debian:trixie-slim
+            target_container: debian:bookworm-slim
+          - os: ubuntu-24.04
             target: PC
             target_bin: XCSoar
             target_bin_path: bin
             target_final: XCSoar
             target_ext: .exe
             target_upload: true
-            target_container: debian:trixie-slim
+            target_container: debian:bookworm-slim
           - os: macos-14
             target: MACOS
             target_bin: XCSoar
@@ -168,16 +229,13 @@ jobs:
     steps:
       - name: Install checkout dependencies
         run: |
-          if [ "${{ matrix.os }}" = 'ubuntu-22.04' ]; then
+          if [ "${{ matrix.os }}" = 'ubuntu-24.04' ]; then
             apt-get update
             apt-get install -y --no-install-recommends git \
             ca-certificates rsync openssh-client
           fi
 
-      - name: Set vars for release
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: |
-          echo "DEBUG=n" >> $GITHUB_ENV
+            echo "DEBUG=n" >> $GITHUB_ENV
           if [ ${{ matrix.target }} = "xcsoar" ]; then
             echo "TARGET_FINAL=xcsoar" >> $GITHUB_ENV
           fi
@@ -188,7 +246,6 @@ jobs:
           submodules: true
 
       - name: Cache ccache
-        uses: hendrikmuhs/ccache-action@v1.2
         with:
           key: ${{ matrix.target }}-ccache
 
@@ -223,7 +280,7 @@ jobs:
           path: ${{ github.workspace }}/output/download
 
       - name: "Cache apt packages"
-        if: ${{ matrix.os == 'ubuntu-22.04' }}
+        if: ${{ matrix.os == 'ubuntu-24.04' }}
         uses: actions/cache@v5
         with:
           key: apt-${{ matrix.target_container }}-${{ hashFiles('ide/provisioning/install-debian-packages.sh') }}
@@ -312,7 +369,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          if [ ${{ matrix.os }} = 'ubuntu-22.04' ]; then
+          if [ ${{ matrix.os }} = 'ubuntu-24.04' ]; then
             ./ide/provisioning/install-debian-packages.sh UPDATE
             ./ide/provisioning/install-debian-packages.sh BASE
             if [ ${{ matrix.target }} = 'UNIX' ]; then

@@ -37,7 +37,7 @@ jobs:
             otg_config: aura2.otg.config
             otg_uimage: uImage.aura2.otg
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - id: checkout
