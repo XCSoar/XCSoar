@@ -20,7 +20,7 @@ ANGLE_FETCH_STAMP = $(ANGLE_PREFIX)/.stamp
 
 $(ANGLE_FETCH_STAMP):
 	@$(NQ)echo "  FETCH   ANGLE libraries"
-	$(Q)$(ANGLE_FETCH_SCRIPT) $(ANGLE_PREFIX) $(DOWNLOAD_DIR) && touch $@
+	$(Q)$(ANGLE_FETCH_SCRIPT) $(ANGLE_PREFIX) $(OUT)/angle-download && touch $@
 
 # Add ANGLE fetch to compile dependencies
 compile-depends += $(ANGLE_FETCH_STAMP)
