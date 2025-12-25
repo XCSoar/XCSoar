@@ -40,7 +40,7 @@ on:
 
 env:
   DEBUG: y
-  BOOST: boost_1_90_0
+  BOOST: boost_1_87_0
 
 jobs:
   release:
@@ -157,9 +157,21 @@ jobs:
           - os: macos-15
             target: MACOS
             target_bin: XCSoar
+<<<<<<< HEAD
             target_bin_path: ''
             target_final: XCSoar
             target_ext: .dmg
+            target_upload: true
+            target_container: ''
+          - os: macos-15
+            target: IOS64
+            target_bin: xcsoar-signed
+            target_bin_path: ''
+=======
+            target_bin_path: bin
+>>>>>>> 8f2f76e6cf (build,darwin: Signing for macOS, make App Store ready)
+            target_final: XCSoar
+            target_ext: .ipa
             target_upload: true
             target_container: ''
           - os: macos-15
@@ -273,7 +285,7 @@ jobs:
           path: |
             ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
             ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
-            ${{ github.workspace }}/output/src/${{ env.BOOST }}
+            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
 
       - name: "Cache Android SDK/NDK"
         if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
@@ -396,6 +408,12 @@ jobs:
             export IOS_APP_VERSION="${{ vars.IOS_APP_VERSION || needs.release.outputs.version }}"
             export IOS_APP_BUILD_NUMBER="${{ vars.IOS_APP_BUILD_NUMBER || github.run_number }}"
           fi
+          if [ ${{ matrix.target }} = "MACOS" ]; then
+            export MACOS_PATCH_VERSION="${{ vars.MACOS_PATCH_VERSION || 0 }}"
+            if [ -n "${{ vars.MACOS_APP_BUNDLE_IDENTIFIER }}" ]; then
+              export MACOS_APP_BUNDLE_IDENTIFIER="${{ vars.MACOS_APP_BUNDLE_IDENTIFIER }}"
+            fi
+          fi
           
           if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target }} = "ANDROID_BUNDLE" ]; then
             if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then BUNDLE=y ; fi
@@ -436,6 +454,12 @@ jobs:
       - name: Compile XCSoar - Release
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
+          if [ ${{ matrix.target }} = "MACOS" ]; then
+            export MACOS_PATCH_VERSION="${{ vars.MACOS_PATCH_VERSION || 0 }}"
+            if [ -n "${{ vars.MACOS_APP_BUNDLE_IDENTIFIER }}" ]; then
+              export MACOS_APP_BUNDLE_IDENTIFIER="${{ vars.MACOS_APP_BUNDLE_IDENTIFIER }}"
+            fi
+          fi
           if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target }} = "ANDROID_BUNDLE" ]; then
             if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then BUNDLE=y ; fi
             if [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }}" ] && [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}" ]; then
@@ -543,24 +567,17 @@ jobs:
           security delete-keychain ios-build.keychain || true
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}${{ matrix.target_ext }}
           path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
 
       - name: Upload artifact (Bundle)
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v5
         if: ${{ matrix.target == 'ANDROID_BUNDLE' }}
         with:
           name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}.aab
           path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}.aab
-
-      - name: Upload artifact (.pkg installer)
-        uses: actions/upload-artifact@v6
-        if: ${{ matrix.target == 'MACOS' }}
-        with:
-          name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}.pkg
-          path: output/${{ matrix.target }}/${{ matrix.target_bin }}.pkg
 
       - name: Upload Release Asset
         id: upload-release-asset

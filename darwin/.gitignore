@@ -1,6 +1,7 @@
 # Signing
 .env
-**.mobileprovision
+*.mobileprovision
+*.provisionprofile
 # Xcode
 xcuserdata
 DerivedData/
