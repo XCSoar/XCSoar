@@ -1,0 +1,12 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: xcsoar
+Source: https://xcsoar.org/
+
+Files: *
+Copyright: 2000-2025 The XCSoar Project
+License: GPL-2.0-or-later
+ SPDX-License-Identifier: GPL-2.0-or-later
+ .
+ On Debian systems, the complete text of the GNU General Public
+ License version 2 can be found in "/usr/share/common-licenses/GPL-2".
+
