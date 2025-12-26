@@ -51,7 +51,7 @@ class AirspaceWarningManager {
 public:
   using const_iterator = AirspaceWarningList::const_iterator;
 
-  /** 
+  /**
    * Default constructor
    * 
    * @param airspaces Store of airspaces

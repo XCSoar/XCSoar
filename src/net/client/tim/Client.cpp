@@ -10,11 +10,17 @@
 
 #include <stdexcept>
 
-static auto
-tag_invoke(boost::json::value_to_tag<GeoPoint>,
-           const boost::json::value &jv)
+namespace {
+
+/**
+ * thermalmap.info encodes locations as {"lon":..,"lat":..} objects.
+ * Do not register a global boost::json::value_to<GeoPoint> for this;
+ * json/Geo.hpp already provides GeoJSON [lon, lat] array conversion.
+ */
+[[gnu::pure]]
+GeoPoint
+ParseThermalMapLocation(const boost::json::object &json)
 {
-  const auto &json = jv.as_object();
   GeoPoint gp{
     Angle::Degrees(json.at("lon").to_number<double>()),
     Angle::Degrees(json.at("lat").to_number<double>()),
@@ -23,6 +29,8 @@ tag_invoke(boost::json::value_to_tag<GeoPoint>,
     throw std::runtime_error("Invalid location");
   return gp;
 }
+
+} // namespace
 
 namespace TIM {
 
@@ -33,7 +41,7 @@ tag_invoke(boost::json::value_to_tag<Thermal>,
   const auto &json = jv.as_object();
   Thermal thermal;
   thermal.time = std::chrono::system_clock::from_time_t(json.at("time").to_number<uint64_t>());
-  thermal.location = boost::json::value_to<GeoPoint>(jv);
+  thermal.location = ParseThermalMapLocation(json);
   thermal.climb_rate = json.at("climbRate").to_number<double>();
   return thermal;
 }

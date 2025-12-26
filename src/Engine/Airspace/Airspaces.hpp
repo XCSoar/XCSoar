@@ -49,6 +49,8 @@ public:
   Airspaces(const Airspaces &) = delete;
   Airspaces &operator=(const Airspaces &) = delete;
 
+  void Swap(Airspaces &other) noexcept;
+
   const Serial &GetSerial() const noexcept {
     return serial;
   }
