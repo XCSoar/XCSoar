@@ -63,6 +63,15 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 """)
+    elif cmake_system_name == 'Windows':
+        # For Windows cross-compilation, restrict cmake to only search in
+        # the sysroot to avoid picking up host libraries like Homebrew's c-ares
+        f.write(f"""
+set(CMAKE_FIND_ROOT_PATH "{toolchain.install_prefix}")
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+""")
 
 def configure(toolchain: AnyToolchain, src: str, build: str, args: list[str]=[], env: Optional[Mapping[str, str]]=None) -> None:
     cross_args: list[str] = []
