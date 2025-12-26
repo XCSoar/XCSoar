@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		5C1532E02E92F15E00168360 /* Client.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Client.hpp; sourceTree = "<group>"; };
+		5C1532E12E92F15E00168360 /* Client.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Client.cpp; sourceTree = "<group>"; };
+		5C1532E22E92F15E00168360 /* Converter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Converter.hpp; sourceTree = "<group>"; };
+		5C1532E32E92F15E00168360 /* Converter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Converter.cpp; sourceTree = "<group>"; };
+		5C1532E62E92F15E00168360 /* NOTAM.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NOTAM.hpp; sourceTree = "<group>"; };
+		5C1532E72E92F15E00168360 /* Settings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Settings.hpp; sourceTree = "<group>"; };
 		5C263B8C2D7456D30031179E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		5C263B8D2D7456D30031179E /* build.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = "<group>"; };
 		5C263B8E2D7456D30031179E /* clean.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = clean.sh; sourceTree = "<group>"; };
@@ -14,6 +20,8 @@
 		5C72EF792E80785B0015A594 /* Services.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Services.cpp; sourceTree = "<group>"; };
 		5C72EF7A2E80785B0015A594 /* SoundUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SoundUtil.hpp; sourceTree = "<group>"; };
 		5C72EF7B2E80785B0015A594 /* SoundUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SoundUtil.cpp; sourceTree = "<group>"; };
+		5C869E032EA459E80078FC69 /* NOTAMList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NOTAMList.hpp; sourceTree = "<group>"; };
+		5C869E042EA459E80078FC69 /* NOTAMList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NOTAMList.cpp; sourceTree = "<group>"; };
 		5CBFD0A62D742FA600F05795 /* Android-CI.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "Android-CI.yml"; sourceTree = "<group>"; };
 		5CBFD0A72D742FA600F05795 /* Android-CI-release.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "Android-CI-release.yml"; sourceTree = "<group>"; };
 		5CBFD0A82D742FA600F05795 /* gradle-wrapper-validation.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "gradle-wrapper-validation.yml"; sourceTree = "<group>"; };
@@ -7042,9 +7050,32 @@
 		5CBFEF2B2D742FA600F05795 /* xci2po.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = xci2po.pl; sourceTree = "<group>"; };
 		5CBFEF2C2D742FA600F05795 /* xcs2cpp.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = xcs2cpp.pl; sourceTree = "<group>"; };
 		5CBFEF2E2D742FA600F05795 /* VERSION.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = VERSION.txt; path = ../VERSION.txt; sourceTree = SOURCE_ROOT; };
+		5CC968942ED8DFE8003C90FD /* NOTAMConfigPanel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NOTAMConfigPanel.hpp; sourceTree = "<group>"; };
+		5CC968952ED8DFE8003C90FD /* NOTAMConfigPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NOTAMConfigPanel.cpp; sourceTree = "<group>"; };
+		5CE4B8E52F06E03200DC2994 /* Filter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Filter.hpp; sourceTree = "<group>"; };
+		5CE4B8E62F06E03200DC2994 /* Filter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Filter.cpp; sourceTree = "<group>"; };
+		5CE4B8E72F06E03200DC2994 /* NOTAMGlue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NOTAMGlue.hpp; sourceTree = "<group>"; };
+		5CE4B8E82F06E03200DC2994 /* NOTAMGlue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NOTAMGlue.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		5C1532E82E92F15E00168360 /* NOTAM */ = {
+			isa = PBXGroup;
+			children = (
+				5CE4B8E52F06E03200DC2994 /* Filter.hpp */,
+				5CE4B8E62F06E03200DC2994 /* Filter.cpp */,
+				5CE4B8E72F06E03200DC2994 /* NOTAMGlue.hpp */,
+				5CE4B8E82F06E03200DC2994 /* NOTAMGlue.cpp */,
+				5C1532E02E92F15E00168360 /* Client.hpp */,
+				5C1532E12E92F15E00168360 /* Client.cpp */,
+				5C1532E22E92F15E00168360 /* Converter.hpp */,
+				5C1532E32E92F15E00168360 /* Converter.cpp */,
+				5C1532E62E92F15E00168360 /* NOTAM.hpp */,
+				5C1532E72E92F15E00168360 /* Settings.hpp */,
+			);
+			path = NOTAM;
+			sourceTree = "<group>";
+		};
 		5C263B902D7456D30031179E /* darwin */ = {
 			isa = PBXGroup;
 			children = (
@@ -15606,6 +15637,8 @@
 		5CBFE1DB2D742FA600F05795 /* Airspace */ = {
 			isa = PBXGroup;
 			children = (
+				5C869E032EA459E80078FC69 /* NOTAMList.hpp */,
+				5C869E042EA459E80078FC69 /* NOTAMList.cpp */,
 				5CBFE1D12D742FA600F05795 /* Airspace.hpp */,
 				5CBFE1D22D742FA600F05795 /* AirspaceCRendererSettingsDialog.cpp */,
 				5CBFE1D32D742FA600F05795 /* AirspaceCRendererSettingsPanel.hpp */,
@@ -15739,6 +15772,8 @@
 		5CBFE25A2D742FA600F05795 /* Panels */ = {
 			isa = PBXGroup;
 			children = (
+				5CC968942ED8DFE8003C90FD /* NOTAMConfigPanel.hpp */,
+				5CC968952ED8DFE8003C90FD /* NOTAMConfigPanel.cpp */,
 				5CBFE2212D742FA600F05795 /* AirspaceConfigPanel.hpp */,
 				5CBFE2222D742FA600F05795 /* AirspaceConfigPanel.cpp */,
 				5CBFE2232D742FA600F05795 /* AudioConfigPanel.hpp */,
@@ -19730,6 +19765,7 @@
 		5CBFEDA72D742FA600F05795 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				5C1532E82E92F15E00168360 /* NOTAM */,
 				5CBFDFA82D742FA600F05795 /* Airspace */,
 				5CBFDFE32D742FA600F05795 /* Android */,
 				5CBFDFE62D742FA600F05795 /* Apple */,

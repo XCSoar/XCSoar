@@ -83,6 +83,7 @@ public:
   void AckDay();
   void Enable();
   void Radio() noexcept;
+  void Details() noexcept;
 
   /* virtual methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -262,6 +263,13 @@ AirspaceWarningListWidget::Radio() noexcept
       selected_airspace->GetRadioFrequency().IsDefined())
     ActionInterface::SetActiveFrequency(selected_airspace->GetRadioFrequency(),
                                         selected_airspace->GetName());
+}
+
+void
+AirspaceWarningListWidget::Details() noexcept
+{
+  if (selected_airspace != nullptr)
+    dlgAirspaceDetails(selected_airspace, &airspace_warnings);
 }
 
 void
