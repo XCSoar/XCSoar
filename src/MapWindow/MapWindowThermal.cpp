@@ -58,7 +58,7 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const noexcept
         look.thermal_source_icon.Draw(canvas, *p);
     }
   }
-
+  
   if (tim_glue != nullptr && GetComputerSettings().weather.enable_tim) {
     const auto lock = tim_glue->Lock();
     for (const auto &i : tim_glue->Get())

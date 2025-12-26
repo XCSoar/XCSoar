@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "AirspaceConfig.hpp"
+#include "NotamConfig.hpp"
 #include "Map.hpp"
 #include "Keys.hpp"
 #include "ui/canvas/Features.hpp"
@@ -129,6 +130,9 @@ Profile::Load(const ProfileMap &map, AirspaceComputerSettings &settings)
         settings.warnings.class_warnings[i] = (value & 0x2) != 0;
     }
   }
+
+  // Load NOTAM settings via NotamConfig
+  Profile::LoadNotamSettings(map, settings.notam);
 }
 
 void

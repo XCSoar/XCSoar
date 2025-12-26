@@ -9,4 +9,8 @@ AirspaceComputerSettings::SetDefaults()
   enable_warnings = true;
 
   warnings.SetDefaults();
+
+#ifdef HAVE_HTTP
+  notam = NOTAMSettings{};
+#endif
 }

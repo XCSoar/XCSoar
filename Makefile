@@ -166,6 +166,7 @@ include $(topdir)/build/libio.mk
 include $(topdir)/build/shapelib.mk
 include $(topdir)/build/libwaypoint.mk
 include $(topdir)/build/libairspace.mk
+include $(topdir)/build/libnotam.mk
 include $(topdir)/build/libtask.mk
 include $(topdir)/build/libxml.mk
 include $(topdir)/build/libcupfile.mk

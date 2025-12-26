@@ -16,7 +16,7 @@
 static void
 Draw(Canvas &canvas, PixelRect rc,
      const AbstractAirspace &airspace,
-     const TCHAR *comment,
+     const TCHAR *comment, const TCHAR *name,
      const TwoTextRowsRenderer &row_renderer,
      const AirspaceLook &look,
      const AirspaceRendererSettings &renderer_settings)
@@ -47,7 +47,7 @@ Draw(Canvas &canvas, PixelRect rc,
   row_renderer.DrawSecondRow(canvas, rc, comment);
 
   // Draw airspace name
-  row_renderer.DrawFirstRow(canvas, rc, airspace.GetName());
+  row_renderer.DrawFirstRow(canvas, rc, name);
 }
 
 void
@@ -57,8 +57,14 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const AirspaceLook &look,
                            const AirspaceRendererSettings &renderer_settings)
 {
-  ::Draw(canvas, rc, airspace, AirspaceFormatter::GetClassOrType(airspace),
-         row_renderer, look, renderer_settings);
+  const TCHAR *class_or_type = AirspaceFormatter::GetClassOrType(airspace);
+  if (airspace.GetClassOrType() == AirspaceClass::NOTAM) {
+    ::Draw(canvas, rc, airspace, airspace.GetName(), class_or_type,
+           row_renderer, look, renderer_settings);
+  } else {
+    ::Draw(canvas, rc, airspace, class_or_type, airspace.GetName(),
+           row_renderer, look, renderer_settings);
+  }
 }
 
 void
@@ -75,6 +81,6 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                        FormatUserDistanceSmart(vector.distance).c_str(),
                        FormatBearing(vector.bearing).c_str());
 
-  ::Draw(canvas, rc, airspace, comment,
+  ::Draw(canvas, rc, airspace, comment, airspace.GetName(),
          row_renderer, look, renderer_settings);
 }
