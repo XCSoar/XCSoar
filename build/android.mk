@@ -263,6 +263,7 @@ $(RES_DIR)/values/strings.xml: android/res/values/strings.xml | $(RES_DIR)/value
 
 $(ANDROID_OUTPUT_DIR)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES_NO_STRINGS) $(RES_DIR)/values/strings.xml $(MANIFEST) | $(GEN_DIR)/dirstamp
 	@$(NQ)echo "  AAPT"
+	$(Q)find $(RES_DIR) -name dirstamp -type f -delete
 	$(Q)$(AAPT) package -f -m --auto-add-overlay \
 		--custom-package $(JAVA_PACKAGE) \
 		-M $(MANIFEST) \

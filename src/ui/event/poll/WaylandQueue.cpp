@@ -125,8 +125,6 @@ WaylandPointerAxis(void *data,
                    [[maybe_unused]] uint32_t time,
                    uint32_t axis, wl_fixed_t value)
 {
-  auto &queue = *(WaylandEventQueue *)data;
-
   if (axis == WL_POINTER_AXIS_VERTICAL_SCROLL) {
     auto &q = *(WaylandEventQueue *)data;
 #ifdef SOFTWARE_ROTATE_DISPLAY
@@ -236,11 +234,11 @@ WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
   wl_registry_add_listener(registry, &registry_listener, this);
 
   wl_display_dispatch(display);
-  wl_display_roundtrip(display);
+  wl_display_roundtrip(display);build/wayland.mk:20: *** missing separator.  Stop.
 
   if (compositor == nullptr)
     throw std::runtime_error("No Wayland compositor found");
-
+    build/wayland.mk:20: *** missing separator.  Stop.
   if (seat == nullptr)
     throw std::runtime_error("No Wayland seat found");
 
