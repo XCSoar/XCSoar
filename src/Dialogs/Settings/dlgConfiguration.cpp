@@ -33,6 +33,7 @@
 #include "Panels/InterfaceConfigPanel.hpp"
 #include "Panels/LayoutConfigPanel.hpp"
 #include "Panels/GaugesConfigPanel.hpp"
+#include "Panels/NavigatorConfigPanel.hpp"
 #include "Panels/VarioConfigPanel.hpp"
 #include "Panels/TaskRulesConfigPanel.hpp"
 #include "Panels/TaskDefaultsConfigPanel.hpp"
@@ -110,11 +111,12 @@ static constexpr TabMenuPage task_pages[] = {
 };
 
 static constexpr TabMenuPage look_pages[] = {
-  { N_("Language, Input"), CreateInterfaceConfigPanel },
-  { N_("Screen Layout"), CreateLayoutConfigPanel },
-  { N_("Pages"), CreatePagesConfigPanel },
-  { N_("InfoBox Sets"), CreateInfoBoxesConfigPanel },
-  { nullptr, nullptr }
+    {N_("Language, Input"), CreateInterfaceConfigPanel},
+    {N_("Screen Layout"), CreateLayoutConfigPanel},
+    {N_("Pages"), CreatePagesConfigPanel},
+    {N_("InfoBox Sets"), CreateInfoBoxesConfigPanel},
+    {N_("Navigator"), CreateNavigatorConfigPanel},
+    {nullptr, nullptr}
 };
 
 static constexpr TabMenuPage setup_pages[] = {
