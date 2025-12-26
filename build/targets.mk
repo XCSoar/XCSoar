@@ -54,6 +54,7 @@ TARGET_IS_CUBIE := n
 HAVE_POSIX := n
 HAVE_WIN32 := y
 HAVE_MSVCRT := y
+HAVE_HTTP := y
 
 TARGET_ARCH :=
 
@@ -459,6 +460,10 @@ endif
 ifeq ($(HAVE_POSIX),y)
   TARGET_CPPFLAGS += -DHAVE_POSIX
   TARGET_CPPFLAGS += -DHAVE_VASPRINTF
+endif
+
+ifeq ($(HAVE_HTTP),y)
+  TARGET_CPPFLAGS += -DHAVE_HTTP
 endif
 
 ifeq ($(HAVE_MSVCRT),y)
