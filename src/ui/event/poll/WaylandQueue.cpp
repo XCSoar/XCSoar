@@ -234,11 +234,10 @@ WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
   wl_registry_add_listener(registry, &registry_listener, this);
 
   wl_display_dispatch(display);
-  wl_display_roundtrip(display);build/wayland.mk:20: *** missing separator.  Stop.
+  wl_display_roundtrip(display);
 
   if (compositor == nullptr)
     throw std::runtime_error("No Wayland compositor found");
-    build/wayland.mk:20: *** missing separator.  Stop.
   if (seat == nullptr)
     throw std::runtime_error("No Wayland seat found");
 
@@ -352,6 +351,9 @@ WaylandEventQueue::~WaylandEventQueue() noexcept
     wl_proxy_destroy((struct wl_proxy *)compositor);
     compositor = nullptr;
   }
+  if (display != nullptr) {
+    ::wl_display_disconnect(display);
+  }
 }
 
 bool
@@ -403,7 +405,10 @@ WaylandEventQueue::RegistryHandler(struct wl_registry *registry, uint32_t id,
     seat = (wl_seat *)wl_registry_bind(registry, id,
                                          &wl_seat_interface, 1);
     wl_seat_add_listener(seat, &seat_listener, this);
-  } else if (StringIsEqual(interface, "wl_shell"))
+  } else if (StringIsEqual(interface, "wl_shm"))
+    shm = (wl_shm *)wl_registry_bind(registry, id,
+                                      &wl_shm_interface, 1);
+  else if (StringIsEqual(interface, "wl_shell"))
     shell = (wl_shell *)wl_registry_bind(registry, id,
                                          &wl_shell_interface, 1);
   else if (StringIsEqual(interface, "xdg_wm_base"))
