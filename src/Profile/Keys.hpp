@@ -278,6 +278,16 @@ constexpr std::string_view PCMetFtpPassword = "PCMetFtpPassword";
 
 constexpr std::string_view EnableThermalInformationMap = "EnableThermalInformationMap";
 
+constexpr std::string_view NOTAMEnabled = "NOTAMEnabled";
+constexpr std::string_view NOTAMRadius = "NOTAMRadius";
+constexpr std::string_view NOTAMRefreshInterval = "NOTAMRefreshInterval";
+constexpr std::string_view NOTAMShowIFR = "NOTAMShowIFR";
+constexpr std::string_view NOTAMShowOnlyEffective = 
+  "NOTAMShowOnlyEffective";
+constexpr std::string_view NOTAMMaxRadius = "NOTAMMaxRadius";
+constexpr std::string_view NOTAMHiddenQCodes = "NOTAMHiddenQCodes";
+constexpr std::string_view NOTAMApiUrl = "NOTAMApiUrl";
+
 constexpr std::string_view EnableLocationMapItem = "EnableLocationMapItem";
 constexpr std::string_view EnableArrivalAltitudeMapItem = "EnableArrivalAltitudeMapItem";
 

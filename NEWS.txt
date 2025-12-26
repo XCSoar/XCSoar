@@ -32,6 +32,11 @@ Version 7.45 - not yet released
   - restore FFVV NetCoupe contest optimisation #2330
   - angle bearing/delta normalization uses O(1) wrap (avoids stalls when angles
     are extremely large; suspected Android freeze #1292)
+* NOTAM integration #2018
+  - add support for downloading, caching and displaying NOTAM airspaces
+  - add manual refresh and auto-refresh with location/time based updates
+  - add NOTAM settings and filters (IFR, effective time, max radius, hidden Q-codes)
+  - add NOTAM details integration in airspace dialogs
 * data files
   - openair: map AY ASRA to aerial sporting/recreational airspace type #1827
 * devices
