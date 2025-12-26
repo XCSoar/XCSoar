@@ -198,7 +198,7 @@ static constexpr StaticEnumChoice type_filter_list[] = {
   { LTA, "Lower Traffic Area" },
   { UTA, "Upper Traffic Area" },
   { ASRA, "Aerial Sporting Or Recreational Activity" },
-  { NOTAM, "NTOAM Affected Area" },
+  { NOTAM, "NOTAM Affected Area" },
   { NONE, "None" },
   { TRAFR, "TRA/TSA Feeding Route" },
   { TRZ, "Transponder Recommended Zone" },
