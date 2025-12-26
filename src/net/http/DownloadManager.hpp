@@ -7,6 +7,7 @@
 
 #include <cstdint>
 #include <exception>
+#include <initializer_list>
 
 class Path;
 
@@ -60,6 +61,16 @@ void RemoveListener(DownloadListener &listener) noexcept;
 void Enumerate(DownloadListener &listener) noexcept;
 
 void Enqueue(const char *uri, Path relative_path) noexcept;
+
+/**
+ * Enqueue a download with fallback URLs.  If the first URL fails,
+ * automatically try the next URL in the list.
+ *
+ * @param urls list of URLs to try in order
+ * @param relative_path the relative path where the file should be saved
+ */
+void EnqueueWithFallback(std::initializer_list<const char*> urls, 
+                        Path relative_path) noexcept;
 
 /**
  * Cancel the download.  The download may however be already

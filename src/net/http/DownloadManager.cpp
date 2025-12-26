@@ -82,6 +82,15 @@ Net::DownloadManager::Enqueue(const char *uri, Path relative_path) noexcept
 }
 
 void
+Net::DownloadManager::EnqueueWithFallback(std::initializer_list<const char*> urls,
+                                          Path relative_path) noexcept
+{
+  assert(download_manager != nullptr);
+
+  download_manager->EnqueueWithFallback(Java::GetEnv(), urls, relative_path);
+}
+
+void
 Net::DownloadManager::Cancel(Path relative_path) noexcept
 {
   assert(download_manager != nullptr);
@@ -102,6 +111,7 @@ Net::DownloadManager::Cancel(Path relative_path) noexcept
 
 #include <string>
 #include <list>
+#include <vector>
 #include <algorithm>
 
 #include <string.h>
@@ -109,7 +119,8 @@ Net::DownloadManager::Cancel(Path relative_path) noexcept
 class DownloadManagerThread final
   : ProgressListener {
   struct Item {
-    std::string uri;
+    std::vector<std::string> uris;
+    size_t current_uri_index = 0;
     AllocatedPath path_relative;
 
     Item(const Item &other) = delete;
@@ -117,9 +128,28 @@ class DownloadManagerThread final
     Item(Item &&other) noexcept = default;
 
     Item(const char *_uri, Path _path_relative) noexcept
-      :uri(_uri), path_relative(_path_relative) {}
+      :uris{_uri}, path_relative(_path_relative) {}
+
+    Item(std::initializer_list<const char*> _uris, Path _path_relative) noexcept
+      :uris(_uris.begin(), _uris.end()), path_relative(_path_relative) {}
 
     Item &operator=(const Item &other) = delete;
+
+    const std::string& GetCurrentURI() const noexcept {
+      return uris[current_uri_index];
+    }
+
+    bool HasNextURI() const noexcept {
+      return current_uri_index + 1 < uris.size();
+    }
+
+    bool TryNextURI() noexcept {
+      if (HasNextURI()) {
+        current_uri_index++;
+        return true;
+      }
+      return false;
+    }
 
     [[gnu::pure]]
     bool operator==(Path other) const noexcept {
@@ -170,6 +200,18 @@ public:
 
   void Enqueue(const char *uri, Path path_relative) noexcept {
     queue.emplace_back(uri, path_relative);
+
+    listeners.ForEach([path_relative](auto *listener){
+      listener->OnDownloadAdded(path_relative, -1, -1);
+    });
+
+    if (!task)
+      Start();
+  }
+
+  void EnqueueWithFallback(std::initializer_list<const char*> urls, 
+                          Path path_relative) noexcept {
+    queue.emplace_back(urls, path_relative);
 
     listeners.ForEach([path_relative](auto *listener){
       listener->OnDownloadAdded(path_relative, -1, -1);
@@ -242,7 +284,7 @@ DownloadManagerThread::Start() noexcept
   const Item &item = queue.front();
   current_position = 0;
 
-  task.Start(DownloadToFile(*Net::curl, item.uri.c_str(),
+  task.Start(DownloadToFile(*Net::curl, item.GetCurrentURI().c_str(),
                             LocalPath(item.path_relative.c_str()),
                             nullptr, *this),
              BIND_THIS_METHOD(OnCompletion));
@@ -253,17 +295,31 @@ DownloadManagerThread::OnCompletion(std::exception_ptr error) noexcept
 {
   assert(!queue.empty());
 
-  const AllocatedPath path_relative = std::move(queue.front().path_relative);
-  queue.pop_front();
-
   current_size = current_position = -1;
 
   if (error) {
-    LogError(error);
-    listeners.ForEach([path=Path{path_relative}, &error](auto *listener){
-      listener->OnDownloadError(path, error);
-    });
+    // Try next URL if available
+    Item &item = queue.front();
+    if (item.TryNextURI()) {
+      // Retry with next URL
+      LogError(error, "Download failed, trying next URL");
+      Start();
+      return;
+    } else {
+      // All URLs failed
+      LogError(error);
+      const AllocatedPath path_relative = std::move(item.path_relative);
+      queue.pop_front();
+      
+      listeners.ForEach([path=Path{path_relative}, &error](auto *listener){
+        listener->OnDownloadError(path, error);
+      });
+    }
   } else {
+    // Success
+    const AllocatedPath path_relative = std::move(queue.front().path_relative);
+    queue.pop_front();
+    
     listeners.ForEach([path=Path{path_relative}](auto *listener){
       listener->OnDownloadComplete(path);
     });
@@ -336,6 +392,15 @@ Net::DownloadManager::Enqueue(const char *uri, Path relative_path) noexcept
   assert(thread != nullptr);
 
   thread->Enqueue(uri, relative_path);
+}
+
+void
+Net::DownloadManager::EnqueueWithFallback(std::initializer_list<const char*> urls, 
+                                          Path relative_path) noexcept
+{
+  assert(thread != nullptr);
+
+  thread->EnqueueWithFallback(urls, relative_path);
 }
 
 void
