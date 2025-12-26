@@ -160,6 +160,13 @@ AirspaceFormatter::GetClassShort(const AbstractAirspace &airspace)
 const TCHAR *
 AirspaceFormatter::GetType(const AbstractAirspace &airspace)
 {
+  // For NOTAM airspaces, show the Q-code stored in station_name
+  if (airspace.GetType() == AirspaceClass::NOTAM) {
+    const TCHAR *station_name = airspace.GetStationName();
+    if (station_name != nullptr && station_name[0] != '\0') {
+      return station_name;
+    }
+  }
   return GetClass(airspace.GetType());
 }
 
