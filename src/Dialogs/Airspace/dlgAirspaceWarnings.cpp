@@ -21,6 +21,7 @@
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "util/Macros.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Language/Language.hpp"
 #include "Widget/ListWidget.hpp"
 #include "UIGlobals.hpp"
@@ -49,6 +50,7 @@ class AirspaceWarningListWidget final
   Button *ack_button;
   Button *ack_day_button;
   Button *enable_button;
+  Button *radio_button;
   Button *details_button;
 
   std::vector<AirspaceWarning> warning_list;
@@ -76,6 +78,7 @@ public:
     ack_button = dialog.AddButton(_("ACK"), [this](){ Ack(); });
     ack_day_button = dialog.AddButton(_("ACK Day"), [this](){ AckDay(); });
     enable_button = dialog.AddButton(_("Enable"), [this](){ Enable(); });
+    radio_button = dialog.AddButton(_("Radio"), [this](){ Radio(); });
     details_button = dialog.AddButton(_("Details"), [this](){ Details(); });
   }
 
@@ -92,6 +95,7 @@ public:
   void Ack();
   void AckDay();
   void Enable();
+  void Radio() noexcept;
   void Details() noexcept;
 
   /* virtual methods from Widget */
@@ -138,6 +142,7 @@ AirspaceWarningListWidget::UpdateButtons()
     ack_button->SetEnabled(false);
     ack_day_button->SetEnabled(false);
     enable_button->SetEnabled(false);
+    radio_button->SetEnabled(false);
     details_button->SetEnabled(false);
     return;
   }
@@ -154,6 +159,7 @@ AirspaceWarningListWidget::UpdateButtons()
   ack_button->SetEnabled(ack_expired);
   ack_day_button->SetEnabled(!ack_day);
   enable_button->SetEnabled(!ack_expired);
+  radio_button->SetEnabled(airspace->GetRadioFrequency().IsDefined());
   details_button->SetEnabled(true);
 
   /* #EnableCursorSelection(0) may leave #selected_index on a disabled
@@ -262,7 +268,20 @@ AirspaceWarningListWidget::AckDay()
 {
   const auto &airspace = selected_airspace;
   if (airspace != NULL) {
-    airspace_warnings.AcknowledgeDay(airspace, true);
+    try {
+      airspace_warnings.AcknowledgeDay(airspace, true);
+    } catch (const std::exception &e) {
+      LogFmt("Failed to acknowledge airspace warning for day: {}",
+             e.what());
+      Message::AddMessage(_("Failed to acknowledge airspace warning for day"));
+      return;
+    } catch (...) {
+      LogError(std::current_exception(),
+               "Failed to acknowledge airspace warning for day");
+      Message::AddMessage(_("Failed to acknowledge airspace warning for day"));
+      return;
+    }
+
     UpdateList();
     AutoHide();
   }
@@ -275,18 +294,44 @@ AirspaceWarningListWidget::Enable()
   if (airspace == NULL)
     return;
 
-  {
+  try {
     ProtectedAirspaceWarningManager::ExclusiveLease lease(airspace_warnings);
     AirspaceWarning *warning = lease->GetWarningPtr(*airspace);
     if (warning == NULL)
       return;
 
+    lease->AcknowledgeDay(airspace, false);
     warning->AcknowledgeInside(false);
     warning->AcknowledgeWarning(false);
-    warning->AcknowledgeDay(false);
+  } catch (const std::exception &e) {
+    LogFmt("Failed to re-enable airspace warning: {}", e.what());
+    Message::AddMessage(_("Failed to re-enable airspace warning"));
+    return;
+  } catch (...) {
+    LogError(std::current_exception(),
+             "Failed to re-enable airspace warning");
+    Message::AddMessage(_("Failed to re-enable airspace warning"));
+    return;
   }
 
   UpdateList();
+}
+
+void
+AirspaceWarningListWidget::Radio() noexcept
+{
+  if (selected_airspace == nullptr)
+    return;
+
+  const auto freq = selected_airspace->GetRadioFrequency();
+  if (!freq.IsDefined())
+    return;
+
+  const char *name = selected_airspace->GetName();
+  ActionInterface::SetActiveFrequency(freq,
+                                      name != nullptr && *name != '\0'
+                                      ? name
+                                      : nullptr);
 }
 
 void

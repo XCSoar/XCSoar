@@ -1883,6 +1883,7 @@ RUN_MAP_WINDOW_SOURCES = \
 
 ifeq ($(HAVE_HTTP),y)
 RUN_MAP_WINDOW_SOURCES += \
+	$(SRC)/Profile/NotamConfig.cpp \
 	$(SRC)/Weather/NOAAGlue.cpp \
 	$(SRC)/Weather/NOAAStore.cpp
 endif

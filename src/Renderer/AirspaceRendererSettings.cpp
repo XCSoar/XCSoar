@@ -84,7 +84,7 @@ AirspaceRendererSettings::SetDefaults()
   classes[FIS_SECTOR].brush = 2;
   classes[LTA].brush = 3;
   classes[UTA].brush = 3;
-  classes[AIRSPACECLASSCOUNT].brush = 3;
+  classes[NOTAM].brush = 3;
 #endif
 
   classes[OTHER].SetColors(RGB8_MAGENTA);
@@ -134,5 +134,5 @@ AirspaceRendererSettings::SetDefaults()
   classes[FIS_SECTOR].SetColors(RGB8_BLUE);
   classes[LTA].SetColors(RGB8_BLUE);
   classes[UTA].SetColors(RGB8_BLUE);
-  classes[AIRSPACECLASSCOUNT].SetColors(RGB8_MAGENTA);
+  classes[NOTAM].SetColors(RGB8_GRAYISH_VIOLET);
 }
