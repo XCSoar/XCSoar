@@ -167,6 +167,7 @@ constexpr std::string_view FinishRadius = "FinishRadius";
 constexpr std::string_view TaskType = "TaskType";
 constexpr std::string_view AATMinTime = "AATMinTime";
 constexpr std::string_view AATTimeMargin = "AATTimeMargin";
+constexpr std::string_view ArrivalRingAATEnabled = "ArrivalRingAATEnabled";
 constexpr std::string_view PEVStartWaitTime = "PEVStartWaitTime";
 constexpr std::string_view PEVStartWindow = "PEVStartWindow";
 
@@ -216,6 +217,7 @@ constexpr std::string_view FontAirspacePressFont = "AirspacePressFont";
 constexpr std::string_view FontAirspaceColourDlgFont = "AirspaceColourDlgFont";
 constexpr std::string_view FontTeamCodeFont = "TeamCodeFont";
 constexpr std::string_view Show95PercentRuleHelpers = "Show95PercentRuleHelpers";
+constexpr std::string_view ArrivalTimeRingTime = "ArrivalTimeRingTime";
 
 constexpr std::string_view UseFinalGlideDisplayMode = "UseFinalGlideDisplayMode";
 constexpr std::string_view InfoBoxGeometry = "InfoBoxGeometry";

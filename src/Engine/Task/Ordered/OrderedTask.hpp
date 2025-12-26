@@ -103,6 +103,16 @@ public:
   const TaskFactoryConstraints &GetFactoryConstraints() const noexcept;
 
   /**
+   * Accessor for the task-specific ordered task settings.
+   *
+   * @return Const reference to the OrderedTaskSettings for this task.
+   */
+  [[gnu::pure]]
+  const OrderedTaskSettings &GetOrderedTaskSettings() const noexcept {
+    return ordered_settings;
+  }
+
+  /**
    * Set type of task factory to be used for constructing tasks
    *
    * @param _factory Type of task
@@ -551,14 +561,6 @@ public:
     return factory_mode;
   }
 
-  /**
-   * Retrieve (const) the #OrderedTaskSettings used by this task
-   *
-   * @return Read-only #OrderedTaskSettings
-   */
-  const OrderedTaskSettings &GetOrderedTaskSettings() const noexcept {
-    return ordered_settings;
-  }
 
   /**
    * Copy #OrderedTaskSettings to this task

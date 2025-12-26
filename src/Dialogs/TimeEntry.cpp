@@ -21,10 +21,9 @@ TimeEntryDialog(const TCHAR *caption, RoughTime &value,
   /* create the dialog */
 
   const DialogLook &look = UIGlobals::GetDialogLook();
-
   TWidgetDialog<FixedWindowWidget> dialog(WidgetDialog::Auto{},
-                                          UIGlobals::GetMainWindow(),
-                                          look, caption);
+                                         UIGlobals::GetMainWindow(),
+                                         look, caption);
 
   ContainerWindow &client_area = dialog.GetClientAreaWindow();
 
@@ -45,11 +44,6 @@ TimeEntryDialog(const TCHAR *caption, RoughTime &value,
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
 
-  dialog.AddButton(_("Now"), [&entry = *entry, time_zone](){
-    const BrokenTime bt = BrokenDateTime::NowUTC();
-    RoughTime now_utc = RoughTime(bt.hour, bt.minute);
-    entry.SetValue(now_utc + time_zone);
-  });
 
   if (nullable)
     dialog.AddButton(_("Clear"), [&entry=*entry](){

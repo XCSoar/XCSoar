@@ -267,7 +267,7 @@ $(GEN_DIR)/org/xcsoar/R.java: $(ANDROID_OUTPUT_DIR)/resources.apk
 $(ANDROID_OUTPUT_DIR)/classes.zip: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
 	@$(NQ)echo "  JAVAC   $(JAVA_CLASSFILES_DIR)"
 	$(Q)$(JAVAC) \
-		-source 1.7 -target 1.7 \
+		-source 1.8 -target 1.8 \
 		-Xlint:all \
 		-Xlint:-deprecation \
 		-Xlint:-options \

@@ -46,6 +46,7 @@ struct MapItem
 #endif
     OVERLAY,
     RASP,
+    ARRIVAL_TIME_RING,
   } type;
 
 protected:
@@ -212,4 +213,14 @@ struct ThermalMapItem: public MapItem
 
   ThermalMapItem(const ThermalSource &_thermal)
     :MapItem(Type::THERMAL), thermal(_thermal) {}
+};
+
+
+// A ring drawn around a specific waypoint representing arrival time.
+struct ArrivalTimeRingMapItem: public MapItem
+{
+  GeoPoint center;
+
+  ArrivalTimeRingMapItem(const GeoPoint &_center)
+    :MapItem(Type::ARRIVAL_TIME_RING), center(_center) {}
 };

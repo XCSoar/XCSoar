@@ -3,6 +3,9 @@
 
 #include "SymbolsConfigPanel.hpp"
 #include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
+#include "Dialogs/TimeEntry.hpp"
+#include "Form/DataField/String.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Interface.hpp"
@@ -23,6 +26,7 @@ enum ControlIndex {
   AIRCRAFT_SYMBOL,
   WIND_ARROW_STYLE,
   SKYLINES_TRAFFIC_MAP_MODE,
+  ARRIVAL_TIME_RING,
 };
 
 class SymbolsConfigPanel final
@@ -59,6 +63,30 @@ SymbolsConfigPanel::OnModified(DataField &df) noexcept
     TrailSettings::Length trail_length = (TrailSettings::Length)dfe.GetValue();
     ShowTrailControls(trail_length != TrailSettings::Length::OFF);
   }
+}
+
+static bool
+ArrivalTimeRingEditCallback([[maybe_unused]] const TCHAR *caption, DataField &df,
+                           [[maybe_unused]] const TCHAR *help_text) noexcept
+{
+  unsigned minutes_of_day = 17 * 60 + 0; // Default to 5:00 PM (1700)
+  Profile::Get(ProfileKeys::ArrivalTimeRingTime, minutes_of_day);
+  RoughTime time = RoughTime::FromMinuteOfDay(minutes_of_day);
+  if (TimeEntryDialog(_("Arrival time ring"), time, RoughTimeDelta::FromMinutes(0))) {
+    unsigned new_minutes_of_day = time.GetMinuteOfDay();
+    Profile::Set(ProfileKeys::ArrivalTimeRingTime, new_minutes_of_day);
+    
+    // Update the displayed text
+    TCHAR time_text[16];
+    _stprintf(time_text, _T("%02u:%02u"), new_minutes_of_day / 60, new_minutes_of_day % 60);
+    
+    // Update the DataField
+    DataFieldString &dfs = (DataFieldString &)df;
+    dfs.ModifyValue(time_text);
+    
+    return true;
+  }
+  return false;
 }
 
 static constexpr StaticEnumChoice ground_track_mode_list[] = {
@@ -179,8 +207,24 @@ SymbolsConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   SetExpertRow(WIND_ARROW_STYLE);
 
   AddEnum(_("SkyLines traffic mode"),
-          _("Show the SkyLines traffic symbols/names on the map, downloaded from the SkyLines server."),
-          skylines_map_mode_list, (unsigned)settings_map.skylines_traffic_map_mode);
+           _("Show the SkyLines traffic symbols/names on the map, downloaded from the SkyLines server."),
+           skylines_map_mode_list, (unsigned)settings_map.skylines_traffic_map_mode);
+
+  // Get the current arrival time ring time
+  unsigned minutes_of_day = 17 * 60 + 0; // Default to 5:00 PM (1700)
+  Profile::Get(ProfileKeys::ArrivalTimeRingTime, minutes_of_day);
+  
+  // Format the time as a string
+  TCHAR time_text[16];
+  _stprintf(time_text, _T("%02u:%02u"), minutes_of_day / 60, minutes_of_day % 60);
+  
+  // Add a text field that shows the current time
+  WndProperty *wp = AddText(_("Arrival time ring"),
+                          _("Arrival time ring draws a ring at your final waypoint (goto or task) that determines if you will arrive before or after the specified time. If you are inside the ring you will arrive before the time, if you are outside of the ring you will arrive after the time. Ring radius is set by the time difference between now and then and your climb/cruise MacCready speed."),
+                          time_text);
+  
+  // Set a callback for when the field is clicked
+  wp->SetEditCallback(ArrivalTimeRingEditCallback);
 
   ShowTrailControls(settings_map.trail.length != TrailSettings::Length::OFF);
 }

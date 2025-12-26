@@ -31,6 +31,7 @@ TaskBehaviour::SetDefaults()
   optimise_targets_margin = std::chrono::minutes{5};
   auto_mc = false;
   auto_mc_mode = AutoMCMode::CLIMBAVERAGE;
+  arrival_ring_aat_enabled = true;
   calc_cruise_efficiency = true;
   calc_effective_mc = true;
   calc_glide_required = true;

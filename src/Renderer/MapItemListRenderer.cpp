@@ -456,7 +456,11 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     ::Draw(canvas, rc, (const TaskOZMapItem &)item,
            row_renderer, look.task, look.airspace,
            settings.airspace);
-    break;
+   break;
+
+ case MapItem::Type::ARRIVAL_TIME_RING:
+   // This item type is not displayed in lists, only on the map.
+   break;
 
 #ifdef HAVE_NOAA
   case MapItem::Type::WEATHER:
