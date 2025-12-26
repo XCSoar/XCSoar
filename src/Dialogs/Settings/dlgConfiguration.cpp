@@ -44,6 +44,10 @@
 #include "UtilsSettings.hpp"
 #include "net/http/Features.hpp"
 
+#ifdef HAVE_HTTP
+#include "Panels/NOTAMConfigPanel.hpp"
+#endif
+
 #ifdef HAVE_PCM_PLAYER
 #include "Panels/AudioVarioConfigPanel.hpp"
 #endif
@@ -81,6 +85,9 @@ static constexpr TabMenuPage map_pages[] = {
   { N_("Waypoints"), CreateWaypointDisplayConfigPanel },
   { N_("Terrain"), CreateTerrainDisplayConfigPanel },
   { N_("Airspace"), CreateAirspaceConfigPanel },
+#ifdef HAVE_HTTP
+  { N_("NOTAM"), CreateNOTAMConfigPanel },
+#endif
   { nullptr, nullptr }
 };
 

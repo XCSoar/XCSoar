@@ -76,7 +76,11 @@ AirspaceWarningManager::GetWarning(ConstAirspacePtr airspace) noexcept
   // not found, create new entry
   ++serial;
   warnings.emplace_back(std::move(airspace));
-  return warnings.back();
+  AirspaceWarning &created = warnings.back();
+  if (const char *key = NotamDayAckKey(created.GetAirspace());
+      key != nullptr && notam_day_ack_by_station.contains(key))
+    created.AcknowledgeDay(true);
+  return created;
 }
 
 
@@ -95,7 +99,11 @@ AirspaceWarningManager::GetNewWarningPtr(ConstAirspacePtr airspace) noexcept
 {
   ++serial;
   warnings.emplace_back(airspace);
-  return &warnings.back();
+  AirspaceWarning &created = warnings.back();
+  if (const char *key = NotamDayAckKey(created.GetAirspace());
+      key != nullptr && notam_day_ack_by_station.contains(key))
+    created.AcknowledgeDay(true);
+  return &created;
 }
 
 bool 
