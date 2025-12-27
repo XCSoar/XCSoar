@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-11 22:17+0100\n"
+"POT-Creation-Date: 2025-12-28 02:23+0100\n"
 "PO-Revision-Date: 2023-07-24 22:05+0000\n"
 "Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
@@ -583,9 +583,10 @@ msgstr "Kurvar inte"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:136
 #: src/Dialogs/MapItemListDialog.cpp:158
 #: src/Dialogs/Airspace/dlgAirspace.cpp:144
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:133
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:212
 #: src/Dialogs/Airspace/AirspaceList.cpp:134
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:469
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:481
+#: src/Dialogs/Airspace/NOTAMList.cpp:393
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:21
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:356
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:254
@@ -618,7 +619,7 @@ msgstr "Ingen trafik"
 #: src/Renderer/MapItemListRenderer.cpp:356
 #: src/Dialogs/Device/DeviceListDialog.cpp:422
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:18
-#: src/Dialogs/Settings/dlgConfiguration.cpp:99
+#: src/Dialogs/Settings/dlgConfiguration.cpp:101
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:117
 #: src/InfoBoxes/Content/Factory.cpp:314 src/InfoBoxes/Content/Factory.cpp:315
 #, no-c-format
@@ -632,8 +633,11 @@ msgstr "Vario"
 #: src/Renderer/FlightStatisticsRenderer.cpp:226
 #: src/Renderer/FlightStatisticsRenderer.cpp:253
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:51
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:102
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:152
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:370
 #: src/Dialogs/Airspace/AirspaceList.cpp:448
+#: src/Dialogs/Airspace/NOTAMList.cpp:292
+#: src/Dialogs/Airspace/NOTAMList.cpp:297
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:115
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:75
 #: src/Dialogs/Waypoint/WaypointList.cpp:384
@@ -648,6 +652,7 @@ msgstr "Rel. Alt."
 
 #: src/Gauge/BigTrafficWidget.cpp:611 src/Dialogs/MapItemListDialog.cpp:144
 #: src/Dialogs/Airspace/AirspaceList.cpp:130
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:71
 #: src/Dialogs/Traffic/TrafficList.cpp:345
 #: src/Dialogs/Waypoint/WaypointList.cpp:211
 #: src/Dialogs/Task/TaskPointDialog.cpp:220
@@ -778,7 +783,7 @@ msgstr "Manuell"
 #: src/Menu/ExpandMacros.cpp:209 src/Menu/ExpandMacros.cpp:343
 #: src/Menu/ExpandMacros.cpp:364 src/Menu/ExpandMacros.cpp:414
 #: src/PageSettings.cpp:51 src/PageSettings.cpp:54
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:42
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:44
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:31
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:140
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
@@ -894,7 +899,7 @@ msgid "Show"
 msgstr "Visa"
 
 #: src/Menu/ExpandMacros.cpp:353 src/Input/InputEventsSettings.cpp:294
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:65
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:67
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:128
 #, no-c-format
 msgid "All"
@@ -907,7 +912,7 @@ msgstr "Uppgift & Landningar"
 
 #: src/Menu/ExpandMacros.cpp:356 src/Input/InputEventsSettings.cpp:297
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:172
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:63
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:65
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:38
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:83
@@ -1073,7 +1078,7 @@ msgstr "Hast"
 #: src/Renderer/FlightStatisticsRenderer.cpp:211
 #: src/Renderer/FlightStatisticsRenderer.cpp:230
 #: src/Renderer/FlightStatisticsRenderer.cpp:256
-#: src/Dialogs/Settings/dlgConfiguration.cpp:126
+#: src/Dialogs/Settings/dlgConfiguration.cpp:128
 #: src/Dialogs/Weather/RASPDialog.cpp:129
 #, no-c-format
 msgid "Time"
@@ -1278,6 +1283,8 @@ msgstr "FLARM Trafik"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:24
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:32
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:105
+#: src/Dialogs/Airspace/NOTAMList.cpp:273
+#: src/Dialogs/Airspace/NOTAMList.cpp:298
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:42
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:73
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:40
@@ -1608,27 +1615,27 @@ msgstr "VARNING"
 msgid "Battery low"
 msgstr "Batterispänningen är låg"
 
-#: src/Startup.cpp:189
+#: src/Startup.cpp:199
 msgid "Loading Terrain File..."
 msgstr "Laddar Terrängfil.."
 
-#: src/Startup.cpp:327
+#: src/Startup.cpp:337
 msgid "Initialising"
 msgstr "Initsierar"
 
-#: src/Startup.cpp:429
+#: src/Startup.cpp:439
 msgid "Loading Topography File..."
 msgstr "Laddar topografin..."
 
-#: src/Startup.cpp:438 src/Dialogs/Device/CAI302/WaypointUploader.cpp:17
+#: src/Startup.cpp:448 src/Dialogs/Device/CAI302/WaypointUploader.cpp:17
 msgid "Loading Waypoints..."
 msgstr "Laddar vägpunkter..."
 
-#: src/Startup.cpp:447
+#: src/Startup.cpp:457
 msgid "Loading Airfield Details File..."
 msgstr "Laddar fil med flygfältsdata..."
 
-#: src/Startup.cpp:503
+#: src/Startup.cpp:513
 msgid "Starting devices"
 msgstr "Startar enheter"
 
@@ -1638,25 +1645,25 @@ msgstr "Startar enheter"
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Startup.cpp:515
+#: src/Startup.cpp:525
 msgid "Initialising display"
 msgstr "Initierar display"
 
 #. Show progress dialog
-#: src/Startup.cpp:610 src/Startup.cpp:648 src/Startup.cpp:716
+#: src/Startup.cpp:621 src/Startup.cpp:659 src/Startup.cpp:727
 msgid "Shutdown, please wait..."
 msgstr "Stänger av, vänta..."
 
-#: src/Startup.cpp:624
+#: src/Startup.cpp:635
 msgid "Shutdown, saving logs..."
 msgstr "Stänger av, sparar loggar..."
 
 #. Save settings to profile
-#: src/Startup.cpp:645
+#: src/Startup.cpp:656
 msgid "Shutdown, saving profile..."
 msgstr "Stänger av, sparar profil..."
 
-#: src/Startup.cpp:706
+#: src/Startup.cpp:717
 msgid "Shutdown, saving task..."
 msgstr "Stänger av, sparar bana..."
 
@@ -2013,8 +2020,8 @@ msgid "Debug"
 msgstr "Felsökning"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:335
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:68
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:209
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:69
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:69
 msgid "Enable"
 msgstr "Aktivera"
@@ -2132,7 +2139,7 @@ msgstr "Port monitor"
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:47
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:68
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:73
-#: src/Dialogs/Settings/dlgConfiguration.cpp:122
+#: src/Dialogs/Settings/dlgConfiguration.cpp:124
 #, no-c-format
 msgid "Units"
 msgstr "Enheter"
@@ -2141,7 +2148,7 @@ msgstr "Enheter"
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:61
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:77
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:82
-#: src/Dialogs/Settings/dlgConfiguration.cpp:82
+#: src/Dialogs/Settings/dlgConfiguration.cpp:83
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:53
 #, no-c-format
 msgid "Waypoints"
@@ -2224,7 +2231,7 @@ msgstr "Hinderdatabas"
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:105
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:61
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:60
-#: src/Dialogs/Settings/dlgConfiguration.cpp:148
+#: src/Dialogs/Settings/dlgConfiguration.cpp:150
 #: src/InfoBoxes/Content/Altitude.cpp:28 src/InfoBoxes/Content/MacCready.cpp:31
 #: src/InfoBoxes/Content/Places.cpp:100
 #, no-c-format
@@ -2535,7 +2542,8 @@ msgid "Static object"
 msgstr "Orörligt objekt"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:123
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:89
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:139
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:248
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:95
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:86
 #: src/Dialogs/Waypoint/WaypointList.cpp:386
@@ -2591,7 +2599,7 @@ msgid "Goto"
 msgstr "Gå Till"
 
 #: src/Dialogs/MapItemListDialog.cpp:150
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:209
 msgid "Ack Day"
 msgstr "Bekr. Dag"
 
@@ -2647,7 +2655,7 @@ msgid "Warn"
 msgstr "Varna"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:143
-#: src/Dialogs/Settings/dlgConfiguration.cpp:84 src/Dialogs/dlgAnalysis.cpp:554
+#: src/Dialogs/Settings/dlgConfiguration.cpp:85 src/Dialogs/dlgAnalysis.cpp:554
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:87
 #: Data/Input/default.xci:554 Data/Input/default.xci:1280
 #, no-c-format
@@ -2658,50 +2666,110 @@ msgstr "Luftrum"
 msgid "Select Pattern"
 msgstr "Välj Mönster"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:58
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:108
 msgid "Squawk code"
-msgstr "Ställ kod"
+msgstr "Transponderkod"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:59
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:109
 msgid "Set Squawk Code"
-msgstr "Ställ kod"
+msgstr "Ställ in transponderkod"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:67
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:69
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:117
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:70
 msgid "Radio"
 msgstr "Radio"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:73
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:123
 msgid "Station"
 msgstr "Plats"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:77
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:127
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:260
 #: src/Dialogs/Task/AlternatesListDialog.cpp:110
 msgid "Set Active Frequency"
 msgstr "Ange aktiv frekvens"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:82
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:132
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:265
 #: src/Dialogs/Task/AlternatesListDialog.cpp:116
 msgid "Set Standby Frequency"
 msgstr "Ange vänte-frekvens"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:88
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:138
 msgid "Class"
-msgstr "Glas"
+msgstr "Klass"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:92
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:142
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:329
 msgid "Top"
-msgstr "Högst upp"
+msgstr "Övre gräns"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:95
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:145
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:333
 msgid "Base"
-msgstr "Grund"
+msgstr "Nedre gräns"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:125
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:200
+msgid "NOTAM Details"
+msgstr "NOTAM-detaljer"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:200
 msgid "Airspace Details"
 msgstr "Luftrumsdetaljer"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:224
+#: src/Dialogs/Settings/dlgConfiguration.cpp:86
+#, no-c-format
+msgid "NOTAM"
+msgstr "NOTAM"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:231
+#: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:70
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:119
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:78
+#: src/InfoBoxes/Panel/ATCReference.cpp:65
+msgid "Location"
+msgstr "Plats"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:239
+msgid "Q-Code"
+msgstr "Q-kod"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:268
+msgid "Valid From"
+msgstr "Giltig från"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:276
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:281
+msgid "Valid Until"
+msgstr "Giltig till"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:297
+#: src/Dialogs/Airspace/NOTAMList.cpp:184
+#: src/Dialogs/Airspace/NOTAMList.cpp:186
+msgid "Starts in"
+msgstr "Börjar om"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:310
+#: src/Dialogs/Airspace/NOTAMList.cpp:190
+msgid "Expired"
+msgstr "Gick ut"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:314
+msgid "ago"
+msgstr ""
+
+#. Currently active
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:317
+#: src/Dialogs/Airspace/NOTAMList.cpp:193
+#: src/Dialogs/Plane/PlaneListDialog.cpp:157
+msgid "Active"
+msgstr "Aktivt"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:319 src/Dialogs/TimeEntry.cpp:48
+#: src/Dialogs/Weather/RASPDialog.cpp:86 src/Dialogs/Weather/RASPDialog.cpp:135
+msgid "Now"
+msgstr "Nu"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:330
 #: src/Dialogs/Waypoint/WaypointList.cpp:426
@@ -2780,12 +2848,12 @@ msgstr "Ifyllnadsläge"
 msgid "Defines how the airspace is filled with the configured color."
 msgstr "Definierar hur luftrum fylls i med konfigurerad färg."
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:66
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:67
 #: src/Monitor/AirspaceWarningMonitor.cpp:55
 msgid "ACK"
 msgstr "Bekr."
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:67
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:68
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
 msgid "ACK Day"
 msgstr "Bekr. Dag"
@@ -2793,13 +2861,57 @@ msgstr "Bekr. Dag"
 #. the warnings were emptied between the opening of the dialog and
 #. this refresh, so only need to display "No Warnings" for top
 #. item, otherwise exit immediately
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:282
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:294
 msgid "No Warnings"
 msgstr "Inga varingar"
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:467
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:479
 msgid "Airspace Warnings"
 msgstr "Luftrumsvarning"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:42
+msgid "[Invalid text]"
+msgstr "[Ogiltig text]"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:51
+msgid "[Conversion failed]"
+msgstr "[Konvertering misslyckades]"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:153
+msgid "No NOTAMs available"
+msgstr "Inga NOTAM tillgängliga"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:202
+msgid "Filtered"
+msgstr "Filtrerat"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:267
+#: src/Dialogs/Airspace/NOTAMList.cpp:272
+#: src/Dialogs/Airspace/NOTAMList.cpp:278
+msgid "Last Update"
+msgstr "Senaste uppdatering"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:279
+msgid "Never"
+msgstr "Aldrig"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:308
+#: src/Dialogs/Airspace/NOTAMList.cpp:390
+msgid "NOTAMs"
+msgstr "NOTAM"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:315
+msgid "After Filtering"
+msgstr "Efter filtrering"
+
+#. Convert translated strings from TCHAR to UTF-8 std::string
+#: src/Dialogs/Airspace/NOTAMList.cpp:355
+msgid "NOTAM System Disabled"
+msgstr "NOTAM-system inaktiverat"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:356
+msgid "Enable NOTAM support in Settings > Airspace"
+msgstr "Aktivera NOTAM-stöd i Inställningar > Luftrum"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:40
 msgid "Circling wind"
@@ -2937,23 +3049,23 @@ msgstr ""
 msgid "Flight Setup"
 msgstr "Flyginställning"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:75
-#: src/Dialogs/Settings/dlgConfiguration.cpp:142
+#: src/Dialogs/Settings/dlgConfiguration.cpp:76
+#: src/Dialogs/Settings/dlgConfiguration.cpp:144
 #, no-c-format
 msgid "Site Files"
 msgstr "Platsbundna filer"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:80
+#: src/Dialogs/Settings/dlgConfiguration.cpp:81
 #, no-c-format
 msgid "Orientation"
 msgstr "Orientering"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:81
+#: src/Dialogs/Settings/dlgConfiguration.cpp:82
 #, no-c-format
 msgid "Elements"
 msgstr "Element"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:83
+#: src/Dialogs/Settings/dlgConfiguration.cpp:84
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:85
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:68 Data/Input/default.xci:540
 #: Data/Input/default.xci:1121
@@ -2961,18 +3073,18 @@ msgstr "Element"
 msgid "Terrain"
 msgstr "Terräng"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:89
+#: src/Dialogs/Settings/dlgConfiguration.cpp:91
 #, no-c-format
 msgid "Safety Factors"
 msgstr "Säkerhetsparametrar"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:90
-#: src/Dialogs/Settings/dlgConfiguration.cpp:144
+#: src/Dialogs/Settings/dlgConfiguration.cpp:92
+#: src/Dialogs/Settings/dlgConfiguration.cpp:146
 #, no-c-format
 msgid "Glide Computer"
 msgstr "Segelflygdator"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:91
+#: src/Dialogs/Settings/dlgConfiguration.cpp:93
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:220
 #: src/Weather/NOAAFormatter.cpp:78 src/Weather/NOAAFormatter.cpp:81
 #: src/InfoBoxes/Content/Factory.cpp:323 src/InfoBoxes/Content/Factory.cpp:332
@@ -2981,69 +3093,69 @@ msgstr "Segelflygdator"
 msgid "Wind"
 msgstr "Vind"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:92
+#: src/Dialogs/Settings/dlgConfiguration.cpp:94
 #, no-c-format
 msgid "Route"
 msgstr "Färdväg"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:93
+#: src/Dialogs/Settings/dlgConfiguration.cpp:95
 #, no-c-format
 msgid "Scoring"
 msgstr "Poängsättning"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:98
+#: src/Dialogs/Settings/dlgConfiguration.cpp:100
 #, no-c-format
 msgid "FLARM, Other"
 msgstr "FLARM, övrigt"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:101
+#: src/Dialogs/Settings/dlgConfiguration.cpp:103
 #, no-c-format
 msgid "Audio Vario"
 msgstr "Ljudvario"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:107
+#: src/Dialogs/Settings/dlgConfiguration.cpp:109
 #, no-c-format
 msgid "Task Rules"
 msgstr "Regler"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:108
+#: src/Dialogs/Settings/dlgConfiguration.cpp:110
 #, no-c-format
 msgid "Turnpoint Types"
 msgstr "Vändpunktstyper"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:113
+#: src/Dialogs/Settings/dlgConfiguration.cpp:115
 #, no-c-format
 msgid "Language, Input"
 msgstr "Språk, inmatning"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:114
+#: src/Dialogs/Settings/dlgConfiguration.cpp:116
 #, no-c-format
 msgid "Screen Layout"
 msgstr "Skärmupplägg"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:115
+#: src/Dialogs/Settings/dlgConfiguration.cpp:117
 #, no-c-format
 msgid "Pages"
 msgstr "Sidor"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:116
+#: src/Dialogs/Settings/dlgConfiguration.cpp:118
 #, no-c-format
 msgid "InfoBox Sets"
 msgstr "Info-rutor uppsättning"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:121
+#: src/Dialogs/Settings/dlgConfiguration.cpp:123
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:122
 #: Data/Input/default.xci:672 Data/Input/default.xci:1177
 #, no-c-format
 msgid "Logger"
 msgstr "Logger"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:128
+#: src/Dialogs/Settings/dlgConfiguration.cpp:130
 #, no-c-format
 msgid "Tracking"
 msgstr "Spårning"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:132
+#: src/Dialogs/Settings/dlgConfiguration.cpp:134
 #: src/Dialogs/Weather/WeatherDialog.cpp:26
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:320
 #: src/Weather/NOAAFormatter.cpp:175 Data/Input/default.xci:808
@@ -3052,42 +3164,42 @@ msgstr "Spårning"
 msgid "Weather"
 msgstr "Väder"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:136
+#: src/Dialogs/Settings/dlgConfiguration.cpp:138
 #, no-c-format
 msgid "Audio"
 msgstr "Ljud"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:143
+#: src/Dialogs/Settings/dlgConfiguration.cpp:145
 #, no-c-format
 msgid "Map Display"
 msgstr "Kartvisning"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:145
+#: src/Dialogs/Settings/dlgConfiguration.cpp:147
 #, no-c-format
 msgid "Gauges"
 msgstr "Visare"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:146
+#: src/Dialogs/Settings/dlgConfiguration.cpp:148
 #, no-c-format
 msgid "Task Defaults"
 msgstr "Förval bana"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:147
+#: src/Dialogs/Settings/dlgConfiguration.cpp:149
 #, no-c-format
 msgid "Look"
 msgstr "Utseende"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:206
-#: src/Dialogs/Settings/dlgConfiguration.cpp:219
+#: src/Dialogs/Settings/dlgConfiguration.cpp:208
+#: src/Dialogs/Settings/dlgConfiguration.cpp:221
 msgid "Expert"
 msgstr "Expert"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:309
-#: src/Dialogs/Settings/dlgConfiguration.cpp:318
+#: src/Dialogs/Settings/dlgConfiguration.cpp:311
+#: src/Dialogs/Settings/dlgConfiguration.cpp:320
 msgid "Configuration"
 msgstr "Konfiguration"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:353
+#: src/Dialogs/Settings/dlgConfiguration.cpp:355
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr ""
 "Ändrad konfiguration sparad.  Starta om XCSoar för att verkställa "
@@ -3298,7 +3410,7 @@ msgid "Task Speed"
 msgstr "Banhastighet"
 
 #: src/Dialogs/dlgAnalysis.cpp:557
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:177
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:179
 msgid "Warnings"
 msgstr "Varningar"
 
@@ -3369,10 +3481,6 @@ msgstr "Välj profil"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:136
 msgid "Activate"
 msgstr "Aktivera"
-
-#: src/Dialogs/Plane/PlaneListDialog.cpp:157
-msgid "Active"
-msgstr "Aktivt"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:200
 #, c-format
@@ -3452,6 +3560,7 @@ msgid "WeGlide Type"
 msgstr "WeGlide typ"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:43
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:184
 msgid "List"
 msgstr "Lista"
 
@@ -3604,13 +3713,6 @@ msgstr "Regler"
 #: src/Dialogs/dlgStatus.cpp:83
 msgid "Times"
 msgstr "Tider"
-
-#: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:70
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:119
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:78
-#: src/InfoBoxes/Panel/ATCReference.cpp:65
-msgid "Location"
-msgstr "Plats"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:72
 msgid "Max. height gain"
@@ -4081,49 +4183,49 @@ msgstr "Välj filter eller tryck här"
 msgid "Select Waypoint"
 msgstr "Välj vägpunkt"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:38
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:40
 #, no-c-format
 msgid "All on"
 msgstr "Allt På"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:39
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:41
 #, no-c-format
 msgid "All airspaces are displayed."
 msgstr "Alla luftrum visas."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:40
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:42
 #, no-c-format
 msgid "Clip"
 msgstr "Tak"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:41
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:43
 #, no-c-format
 msgid "Display airspaces below the clip altitude."
 msgstr "Visa luftrum under clip-höjd."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:43
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:45
 #, no-c-format
 msgid "Display airspaces within a margin of the glider."
 msgstr "Visa luftrum inom en marginal från farkosten."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:44
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:46
 #, no-c-format
 msgid "All below"
 msgstr "Allt Under"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:45
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:47
 #, no-c-format
 msgid "Display airspaces below the glider or within a margin."
 msgstr "Visa luftrum under farkosten eller inom en marginal."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:50
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:52
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:153
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:53
 #, no-c-format
 msgid "Default"
 msgstr "Ursprunglig"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:51
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:53
 #, no-c-format
 msgid ""
 "This selects the best performing option for your hardware. In fact it "
@@ -4132,62 +4234,62 @@ msgstr ""
 "Väljer bästa val för prestanda för din hårdvara. 'Fill padding' föredras med "
 "undantag för PPC 2000 system."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:53
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:55
 #, no-c-format
 msgid "Fill all"
 msgstr "Fyll allt"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:54
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:56
 #, no-c-format
 msgid "Transparently fills the airspace colour over the whole area."
 msgstr "Fyller hela ytan med luftrumsfärgen med transparens."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:55
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:57
 #, no-c-format
 msgid "Fill padding"
 msgstr "Fyll marginal"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:56
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:58
 #, no-c-format
 msgid ""
 "Draws a solid outline with a half transparent border around the airspace."
 msgstr "Ritar ett halvtransparent solid linje runt luftrummet."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:57
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:59
 #, no-c-format
 msgid "No fill"
 msgstr "Ingen fyllning"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:58
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:60
 #, no-c-format
 msgid "Don't fill the airspace area."
 msgstr "Fyll inte luftrummets yta."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:64
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:66
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:139
 #, no-c-format
 msgid "No labels will be displayed."
 msgstr "Inga etiketter kommer visas."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:66
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:68
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:128
 #, no-c-format
 msgid "All labels will be displayed."
 msgstr "Alla etiketter kommer visas."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:113
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:115
 msgid "Colours"
 msgstr "Färger"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:117
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:119
 msgid "Filter"
 msgstr "Filter"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:158
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:160
 msgid "Airspace display"
 msgstr "Visa luftrum"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:159
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:161
 msgid ""
 "Controls filtering of airspace for display and warnings. The airspace filter "
 "button also allows filtering of display and warnings independently for each "
@@ -4196,65 +4298,65 @@ msgstr ""
 "Filtrerar vilka luftrum och varningar som visas. Tillåter även individuella "
 "urval för visning och varningar för varje luftrumsklass."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:162
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:164
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:143
 msgid "Label visibility"
 msgstr "Etikettvisning"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:163
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:165
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:144
 msgid "Determines what labels are displayed."
 msgstr "Bestämmer vilka etiketter som visas."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:167
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:169
 msgid "Clip altitude"
 msgstr "Luftrumstak"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:168
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:170
 msgid ""
 "For clip airspace mode, this is the altitude below which airspace is "
 "displayed."
 msgstr "Höjd under vilken luftrum visas i luftrumsläge klippt."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:172
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:174
 msgid "Margin"
 msgstr "Marginal"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:173
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:175
 msgid ""
 "For auto and all below airspace mode, this is the altitude above/below which "
 "airspace is included."
 msgstr ""
 "Höjd under/över vilken luftrum visas i luftrumsläge auto och allt under."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:177
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:179
 msgid "Enable/disable all airspace warnings."
 msgstr "Aktivera/avaktivera alla luftrumsvarningar."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:180
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:182
 msgid "Warnings dialog"
 msgstr "Varningsdialog"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:181
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:183
 msgid "Enable/disable displaying airspaces warnings dialog."
 msgstr "Aktivera/avaktivera visning av dialog för luftrumsvarningar."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:185
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:187
 msgid "Warning time"
 msgstr "Varningstid*"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:186
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:188
 msgid ""
 "This is the time before an airspace incursion is estimated at which the "
 "system will warn the pilot."
 msgstr ""
 "Tid innan en förväntad luftrumsöverträdelse när systemet varnar piloten."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:191
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:193
 msgid "Repetitive sound"
 msgstr "Repetitivt ljud"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:192
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:194
 msgid ""
 "Enable/disable repetitive warning sound when airspaces warnings dialog is "
 "displayed."
@@ -4262,41 +4364,137 @@ msgstr ""
 "Aktivera/inaktivera repetitiv ljudvarning när dialog för luftrumsvarning "
 "visas."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:196
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:198
 msgid "Acknowledge time"
 msgstr "Bekr. Tid*"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:197
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:199
 msgid ""
 "This is the time period in which an acknowledged airspace warning will not "
 "be repeated."
 msgstr ""
 "Tidsperiod varunder en bekräftad luftrumsvarning ej kommer att repeteras."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:202
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:204
 msgid "Use black outline"
 msgstr "Svart kontur*"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:203
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:205
 msgid ""
 "Draw a black outline around each airspace rather than the airspace color."
 msgstr "Rita en svart gräns runt varje luftrum istället för luftrummets färg."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:207
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:209
 msgid "Airspace fill mode"
 msgstr "Luftrum fylläge"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:208
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:210
 msgid "Specifies the mode for filling the airspace area."
 msgstr "Anger ifyllningsläge för luftrumsområde."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:215
 msgid "Airspace transparency"
 msgstr "Luftrummets transparens"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:215
 msgid "If enabled, then airspaces are filled transparently."
 msgstr "Om aktiverad, så fylls luftrummen transparent."
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:84
+msgid "NOTAM Support"
+msgstr "NOTAM-stöd"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:85
+msgid "Enable downloading and display of NOTAMs from aviation authorities."
+msgstr "Aktivera nedladdning och visning av NOTAM från luftfartsmyndigheter."
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:102
+#, fuzzy
+#| msgid "Search Radius (km)"
+msgid "Search Radius"
+msgstr "Sökradie (km)"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:103
+msgid "Radius around current location to fetch NOTAMs."
+msgstr "Radie runt nuvarande position för att hämta NOTAM."
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:108
+msgid "Auto-Refresh (minutes)"
+msgstr "Auto-uppdatering (minuter)"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:109
+msgid "Automatically refresh NOTAMs every X minutes. Set to 0 to disable."
+msgstr ""
+"Uppdatera NOTAM automatiskt var X:e minut. Sätt till 0 för att inaktivera."
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:113
+#, fuzzy
+#| msgid "Maximum NOTAM Radius"
+msgid "Maximum NOTAM Count"
+msgstr "Maximalt antal NOTAM"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:114
+msgid "Limit the total number of NOTAMs to fetch."
+msgstr "Begränsar det totala antalet NOTAM att hämta."
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:129
+msgid "Show IFR-Only NOTAMs"
+msgstr "Visa endast IFR-NOTAM"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:130
+msgid "Include NOTAMs for IFR traffic only."
+msgstr "Inkludera endast NOTAM för IFR-trafik."
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:133
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:140
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:157
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:164
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:250
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:254
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:258
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:262
+#, c-format
+msgid "%u filtered"
+msgstr "%u filtrerade"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:136
+msgid "Show Only Currently Effective"
+msgstr "Visa endast gällande NOTAM"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:137
+msgid "Filter out NOTAMs not currently in effect."
+msgstr "Filtrera bort NOTAM som inte är gällande för tillfället."
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:151
+msgid "Maximum NOTAM Radius"
+msgstr "Maximal NOTAM-radie"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:152
+msgid "Filter out NOTAMs with radius larger than this. Set to 0 to disable."
+msgstr ""
+"Filtrera bort NOTAM med radie större än detta. Sätt till 0 för att "
+"inaktivera."
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:160
+msgid "Hidden Q-Codes"
+msgstr "Dolda Q-koder"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:161
+msgid "Space-separated Q-code prefixes to hide (e.g., QA QK QN QOA QOL)."
+msgstr "Mellanslagsseparerade Q-kodsprefix att dölja (t.ex. QA QK QN QOA QOL)."
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:180
+#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:84
+msgid "Refresh"
+msgstr "Förnya"
+
+#. Show "Loading..." in all filter count displays
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:272
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:273
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:274
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:275
+msgid "Loading..."
+msgstr "Laddar..."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:28
 #, no-c-format
@@ -6453,7 +6651,6 @@ msgid "Specifies which threshold is used for \"large\" FAI triangles."
 msgstr "Anger vilket tröskelvärde som används för \"stora\" FAI trianglar."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:135
-#, c-format
 msgid "95% dist. rule helpers"
 msgstr ""
 
@@ -7366,10 +7563,6 @@ msgstr "Namnbytesfel"
 msgid "Less"
 msgstr "Mindre"
 
-#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:84
-msgid "Refresh"
-msgstr "Förnya"
-
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:34
 #: src/Dialogs/Task/TaskPointDialog.cpp:226
 #: src/InfoBoxes/Panel/ATCReference.cpp:67
@@ -7592,11 +7785,6 @@ msgstr ""
 "position och annan väderdata skickas till vår testserver. Du kan inaktivera "
 "detta när som helst under inställningar för \"Spårning\". \n"
 "Hjälp oss gärna förbättra XCSoar!"
-
-#: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
-#: src/Dialogs/Weather/RASPDialog.cpp:135
-msgid "Now"
-msgstr "Nu"
 
 #: src/Dialogs/DateEntry.cpp:44
 msgid "Reset"
@@ -10963,6 +11151,34 @@ msgstr ""
 msgid "Quit XCSoar"
 msgstr ""
 
+#~ msgid "Update Now"
+#~ msgstr "Uppdatera nu"
+
+#~ msgid "View NOTAMs"
+#~ msgstr "Visa NOTAM"
+
+#, c-format
+#~ msgid "Starts in %dh"
+#~ msgstr "Börjar om %dh"
+
+#, c-format
+#~ msgid "Starts in %dd"
+#~ msgstr "Börjar om %dd"
+
+#, c-format
+#~ msgid "Expired %dh ago"
+#~ msgstr "Gick ut för %dh sedan"
+
+#, c-format
+#~ msgid "Expired %dd ago"
+#~ msgstr "Gick ut för %dd sedan"
+
+#~ msgid "Loading NOTAMs..."
+#~ msgstr "Laddar NOTAM..."
+
+#~ msgid "Fetching from server. This may take a few seconds."
+#~ msgstr "Hämtar från server. Detta kan ta några sekunder."
+
 #~ msgid "More waypoints"
 #~ msgstr "Fler vägpunkter"
 
@@ -11354,9 +11570,6 @@ msgstr ""
 
 #~ msgid "Start rules violated"
 #~ msgstr "Startvillkor ej uppfyllda"
-
-#~ msgid "dropped %s ago"
-#~ msgstr "släppt %s sedan"
 
 #~ msgid "ACK Warn"
 #~ msgstr "Bekr. Varn"

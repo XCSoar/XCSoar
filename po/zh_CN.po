@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-11 22:17+0100\n"
+"POT-Creation-Date: 2025-12-28 02:23+0100\n"
 "PO-Revision-Date: 2022-10-02 06:15+0000\n"
 "Last-Translator: 山岭野兔 <bd8bin@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -557,9 +557,10 @@ msgstr "不盘转"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:136
 #: src/Dialogs/MapItemListDialog.cpp:158
 #: src/Dialogs/Airspace/dlgAirspace.cpp:144
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:133
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:212
 #: src/Dialogs/Airspace/AirspaceList.cpp:134
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:469
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:481
+#: src/Dialogs/Airspace/NOTAMList.cpp:393
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:21
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:356
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:254
@@ -592,7 +593,7 @@ msgstr "没有交通"
 #: src/Renderer/MapItemListRenderer.cpp:356
 #: src/Dialogs/Device/DeviceListDialog.cpp:422
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:18
-#: src/Dialogs/Settings/dlgConfiguration.cpp:99
+#: src/Dialogs/Settings/dlgConfiguration.cpp:101
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:117
 #: src/InfoBoxes/Content/Factory.cpp:314 src/InfoBoxes/Content/Factory.cpp:315
 #, no-c-format
@@ -606,8 +607,11 @@ msgstr "高度计"
 #: src/Renderer/FlightStatisticsRenderer.cpp:226
 #: src/Renderer/FlightStatisticsRenderer.cpp:253
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:51
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:102
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:152
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:370
 #: src/Dialogs/Airspace/AirspaceList.cpp:448
+#: src/Dialogs/Airspace/NOTAMList.cpp:292
+#: src/Dialogs/Airspace/NOTAMList.cpp:297
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:115
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:75
 #: src/Dialogs/Waypoint/WaypointList.cpp:384
@@ -622,6 +626,7 @@ msgstr "真实高度。"
 
 #: src/Gauge/BigTrafficWidget.cpp:611 src/Dialogs/MapItemListDialog.cpp:144
 #: src/Dialogs/Airspace/AirspaceList.cpp:130
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:71
 #: src/Dialogs/Traffic/TrafficList.cpp:345
 #: src/Dialogs/Waypoint/WaypointList.cpp:211
 #: src/Dialogs/Task/TaskPointDialog.cpp:220
@@ -752,7 +757,7 @@ msgstr "手册"
 #: src/Menu/ExpandMacros.cpp:209 src/Menu/ExpandMacros.cpp:343
 #: src/Menu/ExpandMacros.cpp:364 src/Menu/ExpandMacros.cpp:414
 #: src/PageSettings.cpp:51 src/PageSettings.cpp:54
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:42
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:44
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:31
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:140
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
@@ -868,7 +873,7 @@ msgid "Show"
 msgstr "显示"
 
 #: src/Menu/ExpandMacros.cpp:353 src/Input/InputEventsSettings.cpp:294
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:65
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:67
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:128
 #, no-c-format
 msgid "All"
@@ -881,7 +886,7 @@ msgstr "任务和可着陆区"
 
 #: src/Menu/ExpandMacros.cpp:356 src/Input/InputEventsSettings.cpp:297
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:172
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:63
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:65
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:38
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:83
@@ -1047,7 +1052,7 @@ msgstr "速度"
 #: src/Renderer/FlightStatisticsRenderer.cpp:211
 #: src/Renderer/FlightStatisticsRenderer.cpp:230
 #: src/Renderer/FlightStatisticsRenderer.cpp:256
-#: src/Dialogs/Settings/dlgConfiguration.cpp:126
+#: src/Dialogs/Settings/dlgConfiguration.cpp:128
 #: src/Dialogs/Weather/RASPDialog.cpp:129
 #, no-c-format
 msgid "Time"
@@ -1252,6 +1257,8 @@ msgstr "FLARM交通"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:24
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:32
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:105
+#: src/Dialogs/Airspace/NOTAMList.cpp:273
+#: src/Dialogs/Airspace/NOTAMList.cpp:298
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:42
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:73
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:40
@@ -1565,27 +1572,27 @@ msgstr "告警"
 msgid "Battery low"
 msgstr "电池电量低"
 
-#: src/Startup.cpp:189
+#: src/Startup.cpp:199
 msgid "Loading Terrain File..."
 msgstr "加载地形文件。。。"
 
-#: src/Startup.cpp:327
+#: src/Startup.cpp:337
 msgid "Initialising"
 msgstr "初始化"
 
-#: src/Startup.cpp:429
+#: src/Startup.cpp:439
 msgid "Loading Topography File..."
 msgstr "加载地貌文件。。。"
 
-#: src/Startup.cpp:438 src/Dialogs/Device/CAI302/WaypointUploader.cpp:17
+#: src/Startup.cpp:448 src/Dialogs/Device/CAI302/WaypointUploader.cpp:17
 msgid "Loading Waypoints..."
 msgstr "加载航点..."
 
-#: src/Startup.cpp:447
+#: src/Startup.cpp:457
 msgid "Loading Airfield Details File..."
 msgstr "加载空域详细文件..."
 
-#: src/Startup.cpp:503
+#: src/Startup.cpp:513
 msgid "Starting devices"
 msgstr "设备启动中"
 
@@ -1595,25 +1602,25 @@ msgstr "设备启动中"
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Startup.cpp:515
+#: src/Startup.cpp:525
 msgid "Initialising display"
 msgstr "初始化显示中"
 
 #. Show progress dialog
-#: src/Startup.cpp:610 src/Startup.cpp:648 src/Startup.cpp:716
+#: src/Startup.cpp:621 src/Startup.cpp:659 src/Startup.cpp:727
 msgid "Shutdown, please wait..."
 msgstr "关机，请等待。。。"
 
-#: src/Startup.cpp:624
+#: src/Startup.cpp:635
 msgid "Shutdown, saving logs..."
 msgstr "关机，保存记录。。。"
 
 #. Save settings to profile
-#: src/Startup.cpp:645
+#: src/Startup.cpp:656
 msgid "Shutdown, saving profile..."
 msgstr "关机，保存配置文件。。。"
 
-#: src/Startup.cpp:706
+#: src/Startup.cpp:717
 msgid "Shutdown, saving task..."
 msgstr "关机，保存任务。。。"
 
@@ -1965,8 +1972,8 @@ msgid "Debug"
 msgstr "调试"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:335
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:68
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:209
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:69
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:69
 msgid "Enable"
 msgstr "准许"
@@ -2082,7 +2089,7 @@ msgstr "端口监控"
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:47
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:68
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:73
-#: src/Dialogs/Settings/dlgConfiguration.cpp:122
+#: src/Dialogs/Settings/dlgConfiguration.cpp:124
 #, no-c-format
 msgid "Units"
 msgstr "单位"
@@ -2091,7 +2098,7 @@ msgstr "单位"
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:61
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:77
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:82
-#: src/Dialogs/Settings/dlgConfiguration.cpp:82
+#: src/Dialogs/Settings/dlgConfiguration.cpp:83
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:53
 #, no-c-format
 msgid "Waypoints"
@@ -2174,7 +2181,7 @@ msgstr "障碍数据库"
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:105
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:61
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:60
-#: src/Dialogs/Settings/dlgConfiguration.cpp:148
+#: src/Dialogs/Settings/dlgConfiguration.cpp:150
 #: src/InfoBoxes/Content/Altitude.cpp:28 src/InfoBoxes/Content/MacCready.cpp:31
 #: src/InfoBoxes/Content/Places.cpp:100
 #, no-c-format
@@ -2481,7 +2488,8 @@ msgid "Static object"
 msgstr "静态对象"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:123
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:89
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:139
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:248
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:95
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:86
 #: src/Dialogs/Waypoint/WaypointList.cpp:386
@@ -2537,7 +2545,7 @@ msgid "Goto"
 msgstr "转到"
 
 #: src/Dialogs/MapItemListDialog.cpp:150
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:209
 msgid "Ack Day"
 msgstr "确认日"
 
@@ -2591,7 +2599,7 @@ msgid "Warn"
 msgstr "警告"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:143
-#: src/Dialogs/Settings/dlgConfiguration.cpp:84 src/Dialogs/dlgAnalysis.cpp:554
+#: src/Dialogs/Settings/dlgConfiguration.cpp:85 src/Dialogs/dlgAnalysis.cpp:554
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:87
 #: Data/Input/default.xci:554 Data/Input/default.xci:1280
 #, no-c-format
@@ -2602,50 +2610,110 @@ msgstr "空域"
 msgid "Select Pattern"
 msgstr "选择模式"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:58
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:108
 msgid "Squawk code"
-msgstr "设置代码"
+msgstr "应答机代码"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:59
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:109
 msgid "Set Squawk Code"
-msgstr "设置代码"
+msgstr "设置应答机代码"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:67
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:69
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:117
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:70
 msgid "Radio"
 msgstr "无线电"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:73
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:123
 msgid "Station"
-msgstr "定位"
+msgstr "电台"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:77
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:127
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:260
 #: src/Dialogs/Task/AlternatesListDialog.cpp:110
 msgid "Set Active Frequency"
 msgstr "设置有效频率"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:82
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:132
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:265
 #: src/Dialogs/Task/AlternatesListDialog.cpp:116
 msgid "Set Standby Frequency"
 msgstr "设置待机频率"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:88
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:138
 msgid "Class"
-msgstr "玻璃"
+msgstr "类别"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:92
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:142
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:329
 msgid "Top"
 msgstr "顶部"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:95
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:145
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:333
 msgid "Base"
 msgstr "底部"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:125
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:200
+msgid "NOTAM Details"
+msgstr "NOTAM 详情"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:200
 msgid "Airspace Details"
 msgstr "详细空域"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:224
+#: src/Dialogs/Settings/dlgConfiguration.cpp:86
+#, no-c-format
+msgid "NOTAM"
+msgstr "NOTAM"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:231
+#: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:70
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:119
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:78
+#: src/InfoBoxes/Panel/ATCReference.cpp:65
+msgid "Location"
+msgstr "位置"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:239
+msgid "Q-Code"
+msgstr "Q 代码"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:268
+msgid "Valid From"
+msgstr "有效期自"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:276
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:281
+msgid "Valid Until"
+msgstr "有效期至"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:297
+#: src/Dialogs/Airspace/NOTAMList.cpp:184
+#: src/Dialogs/Airspace/NOTAMList.cpp:186
+msgid "Starts in"
+msgstr "开始于"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:310
+#: src/Dialogs/Airspace/NOTAMList.cpp:190
+msgid "Expired"
+msgstr "已过期"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:314
+msgid "ago"
+msgstr ""
+
+#. Currently active
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:317
+#: src/Dialogs/Airspace/NOTAMList.cpp:193
+#: src/Dialogs/Plane/PlaneListDialog.cpp:157
+msgid "Active"
+msgstr "激活"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:319 src/Dialogs/TimeEntry.cpp:48
+#: src/Dialogs/Weather/RASPDialog.cpp:86 src/Dialogs/Weather/RASPDialog.cpp:135
+msgid "Now"
+msgstr "现在"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:330
 #: src/Dialogs/Waypoint/WaypointList.cpp:426
@@ -2666,7 +2734,7 @@ msgstr "名字"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:450
 msgid "Class/Type"
-msgstr "玻璃"
+msgstr "类别/类型"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:464
 msgid "Select Airspace"
@@ -2722,12 +2790,12 @@ msgstr "填充模式"
 msgid "Defines how the airspace is filled with the configured color."
 msgstr "定义空域如何填充配置的颜色。"
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:66
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:67
 #: src/Monitor/AirspaceWarningMonitor.cpp:55
 msgid "ACK"
 msgstr "ACK"
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:67
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:68
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
 msgid "ACK Day"
 msgstr "确认日"
@@ -2735,13 +2803,57 @@ msgstr "确认日"
 #. the warnings were emptied between the opening of the dialog and
 #. this refresh, so only need to display "No Warnings" for top
 #. item, otherwise exit immediately
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:282
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:294
 msgid "No Warnings"
 msgstr "无告警"
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:467
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:479
 msgid "Airspace Warnings"
 msgstr "空域告警"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:42
+msgid "[Invalid text]"
+msgstr "[无效文本]"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:51
+msgid "[Conversion failed]"
+msgstr "[转换失败]"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:153
+msgid "No NOTAMs available"
+msgstr "无可用 NOTAM"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:202
+msgid "Filtered"
+msgstr "已过滤"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:267
+#: src/Dialogs/Airspace/NOTAMList.cpp:272
+#: src/Dialogs/Airspace/NOTAMList.cpp:278
+msgid "Last Update"
+msgstr "最后更新"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:279
+msgid "Never"
+msgstr "从未"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:308
+#: src/Dialogs/Airspace/NOTAMList.cpp:390
+msgid "NOTAMs"
+msgstr "NOTAM"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:315
+msgid "After Filtering"
+msgstr "过滤后"
+
+#. Convert translated strings from TCHAR to UTF-8 std::string
+#: src/Dialogs/Airspace/NOTAMList.cpp:355
+msgid "NOTAM System Disabled"
+msgstr "NOTAM 系统已禁用"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:356
+msgid "Enable NOTAM support in Settings > Airspace"
+msgstr "在 设置 > 空域 中启用 NOTAM 支持"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:40
 msgid "Circling wind"
@@ -2871,23 +2983,23 @@ msgstr "设定为预报地温。对流估算器使用(温度跟踪页的分析�
 msgid "Flight Setup"
 msgstr "飞行设置"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:75
-#: src/Dialogs/Settings/dlgConfiguration.cpp:142
+#: src/Dialogs/Settings/dlgConfiguration.cpp:76
+#: src/Dialogs/Settings/dlgConfiguration.cpp:144
 #, no-c-format
 msgid "Site Files"
 msgstr "场地文件"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:80
+#: src/Dialogs/Settings/dlgConfiguration.cpp:81
 #, no-c-format
 msgid "Orientation"
 msgstr "方向"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:81
+#: src/Dialogs/Settings/dlgConfiguration.cpp:82
 #, no-c-format
 msgid "Elements"
 msgstr "元素"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:83
+#: src/Dialogs/Settings/dlgConfiguration.cpp:84
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:85
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:68 Data/Input/default.xci:540
 #: Data/Input/default.xci:1121
@@ -2895,18 +3007,18 @@ msgstr "元素"
 msgid "Terrain"
 msgstr "地形"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:89
+#: src/Dialogs/Settings/dlgConfiguration.cpp:91
 #, no-c-format
 msgid "Safety Factors"
 msgstr "安全因素"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:90
-#: src/Dialogs/Settings/dlgConfiguration.cpp:144
+#: src/Dialogs/Settings/dlgConfiguration.cpp:92
+#: src/Dialogs/Settings/dlgConfiguration.cpp:146
 #, no-c-format
 msgid "Glide Computer"
 msgstr "滑翔计算机"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:91
+#: src/Dialogs/Settings/dlgConfiguration.cpp:93
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:220
 #: src/Weather/NOAAFormatter.cpp:78 src/Weather/NOAAFormatter.cpp:81
 #: src/InfoBoxes/Content/Factory.cpp:323 src/InfoBoxes/Content/Factory.cpp:332
@@ -2915,69 +3027,69 @@ msgstr "滑翔计算机"
 msgid "Wind"
 msgstr "风"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:92
+#: src/Dialogs/Settings/dlgConfiguration.cpp:94
 #, no-c-format
 msgid "Route"
 msgstr "路线"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:93
+#: src/Dialogs/Settings/dlgConfiguration.cpp:95
 #, no-c-format
 msgid "Scoring"
 msgstr "得分"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:98
+#: src/Dialogs/Settings/dlgConfiguration.cpp:100
 #, no-c-format
 msgid "FLARM, Other"
 msgstr "FLARM, 其它"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:101
+#: src/Dialogs/Settings/dlgConfiguration.cpp:103
 #, no-c-format
 msgid "Audio Vario"
 msgstr "高度表音频"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:107
+#: src/Dialogs/Settings/dlgConfiguration.cpp:109
 #, no-c-format
 msgid "Task Rules"
 msgstr "任务规则"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:108
+#: src/Dialogs/Settings/dlgConfiguration.cpp:110
 #, no-c-format
 msgid "Turnpoint Types"
 msgstr "转弯点类型"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:113
+#: src/Dialogs/Settings/dlgConfiguration.cpp:115
 #, no-c-format
 msgid "Language, Input"
 msgstr "语言，输入"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:114
+#: src/Dialogs/Settings/dlgConfiguration.cpp:116
 #, no-c-format
 msgid "Screen Layout"
 msgstr "屏幕布局"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:115
+#: src/Dialogs/Settings/dlgConfiguration.cpp:117
 #, no-c-format
 msgid "Pages"
 msgstr "页"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:116
+#: src/Dialogs/Settings/dlgConfiguration.cpp:118
 #, no-c-format
 msgid "InfoBox Sets"
 msgstr "信息框设置"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:121
+#: src/Dialogs/Settings/dlgConfiguration.cpp:123
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:122
 #: Data/Input/default.xci:672 Data/Input/default.xci:1177
 #, no-c-format
 msgid "Logger"
 msgstr "记录器"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:128
+#: src/Dialogs/Settings/dlgConfiguration.cpp:130
 #, no-c-format
 msgid "Tracking"
 msgstr "跟踪"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:132
+#: src/Dialogs/Settings/dlgConfiguration.cpp:134
 #: src/Dialogs/Weather/WeatherDialog.cpp:26
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:320
 #: src/Weather/NOAAFormatter.cpp:175 Data/Input/default.xci:808
@@ -2986,42 +3098,42 @@ msgstr "跟踪"
 msgid "Weather"
 msgstr "天气"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:136
+#: src/Dialogs/Settings/dlgConfiguration.cpp:138
 #, no-c-format
 msgid "Audio"
 msgstr "音频"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:143
+#: src/Dialogs/Settings/dlgConfiguration.cpp:145
 #, no-c-format
 msgid "Map Display"
 msgstr "地图显示"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:145
+#: src/Dialogs/Settings/dlgConfiguration.cpp:147
 #, no-c-format
 msgid "Gauges"
 msgstr "规格"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:146
+#: src/Dialogs/Settings/dlgConfiguration.cpp:148
 #, no-c-format
 msgid "Task Defaults"
 msgstr "缺省任务"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:147
+#: src/Dialogs/Settings/dlgConfiguration.cpp:149
 #, no-c-format
 msgid "Look"
 msgstr "看"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:206
-#: src/Dialogs/Settings/dlgConfiguration.cpp:219
+#: src/Dialogs/Settings/dlgConfiguration.cpp:208
+#: src/Dialogs/Settings/dlgConfiguration.cpp:221
 msgid "Expert"
 msgstr "专家"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:309
-#: src/Dialogs/Settings/dlgConfiguration.cpp:318
+#: src/Dialogs/Settings/dlgConfiguration.cpp:311
+#: src/Dialogs/Settings/dlgConfiguration.cpp:320
 msgid "Configuration"
 msgstr "配置"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:353
+#: src/Dialogs/Settings/dlgConfiguration.cpp:355
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr "保存更改配置。重新启动XCSOAR以应用更改。"
 
@@ -3230,7 +3342,7 @@ msgid "Task Speed"
 msgstr "任务速度"
 
 #: src/Dialogs/dlgAnalysis.cpp:557
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:177
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:179
 msgid "Warnings"
 msgstr "告警"
 
@@ -3300,10 +3412,6 @@ msgstr "选择配置文件"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:136
 msgid "Activate"
-msgstr "激活"
-
-#: src/Dialogs/Plane/PlaneListDialog.cpp:157
-msgid "Active"
 msgstr "激活"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:200
@@ -3384,6 +3492,7 @@ msgid "WeGlide Type"
 msgstr "WeGlide 类型"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:43
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:184
 msgid "List"
 msgstr "列表"
 
@@ -3536,13 +3645,6 @@ msgstr "规则"
 #: src/Dialogs/dlgStatus.cpp:83
 msgid "Times"
 msgstr "时间"
-
-#: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:70
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:119
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:78
-#: src/InfoBoxes/Panel/ATCReference.cpp:65
-msgid "Location"
-msgstr "定位"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:72
 msgid "Max. height gain"
@@ -4007,49 +4109,49 @@ msgstr "选择一个过滤器或点击这里"
 msgid "Select Waypoint"
 msgstr "选择航点"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:38
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:40
 #, no-c-format
 msgid "All on"
 msgstr "全部打开"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:39
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:41
 #, no-c-format
 msgid "All airspaces are displayed."
 msgstr "显示全部空域。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:40
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:42
 #, no-c-format
 msgid "Clip"
 msgstr "剪切"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:41
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:43
 #, no-c-format
 msgid "Display airspaces below the clip altitude."
 msgstr "显示剪辑高度以下的空域。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:43
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:45
 #, no-c-format
 msgid "Display airspaces within a margin of the glider."
 msgstr "显示滑翔机边缘内的空域。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:44
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:46
 #, no-c-format
 msgid "All below"
 msgstr "以下全部"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:45
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:47
 #, no-c-format
 msgid "Display airspaces below the glider or within a margin."
 msgstr "显示滑翔机下方或空隙内的空域。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:50
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:52
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:153
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:53
 #, no-c-format
 msgid "Default"
 msgstr "缺省"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:51
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:53
 #, no-c-format
 msgid ""
 "This selects the best performing option for your hardware. In fact it "
@@ -4058,62 +4160,62 @@ msgstr ""
 "这将为您的硬件选择最佳的执行选项。事实上，除了PPC 2000系统外，它有利于“填充衬"
 "垫”。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:53
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:55
 #, no-c-format
 msgid "Fill all"
 msgstr "填满所有"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:54
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:56
 #, no-c-format
 msgid "Transparently fills the airspace colour over the whole area."
 msgstr "透明地填充整个区域的领空颜色。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:55
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:57
 #, no-c-format
 msgid "Fill padding"
 msgstr "填充衬垫"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:56
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:58
 #, no-c-format
 msgid ""
 "Draws a solid outline with a half transparent border around the airspace."
 msgstr "在空域周围画一个半透明的边框。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:57
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:59
 #, no-c-format
 msgid "No fill"
 msgstr "无填充"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:58
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:60
 #, no-c-format
 msgid "Don't fill the airspace area."
 msgstr "不要填满领空区域。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:64
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:66
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:139
 #, no-c-format
 msgid "No labels will be displayed."
 msgstr "没有标签将被显示。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:66
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:68
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:128
 #, no-c-format
 msgid "All labels will be displayed."
 msgstr "所有标签将被显示。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:113
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:115
 msgid "Colours"
 msgstr "颜色"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:117
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:119
 msgid "Filter"
 msgstr "过滤器"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:158
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:160
 msgid "Airspace display"
 msgstr "显示空域"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:159
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:161
 msgid ""
 "Controls filtering of airspace for display and warnings. The airspace filter "
 "button also allows filtering of display and warnings independently for each "
@@ -4122,102 +4224,195 @@ msgstr ""
 "控制空域用于显示和警告的过滤。空域过滤器按钮还允许对每个空域类独立地显示和警"
 "告。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:162
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:164
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:143
 msgid "Label visibility"
 msgstr "标签可见度"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:163
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:165
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:144
 msgid "Determines what labels are displayed."
 msgstr "确定显示哪些标签。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:167
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:169
 msgid "Clip altitude"
 msgstr "剪辑高度"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:168
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:170
 msgid ""
 "For clip airspace mode, this is the altitude below which airspace is "
 "displayed."
 msgstr "对于剪辑空域模式，这个高度低于显示空域。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:172
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:174
 msgid "Margin"
 msgstr "边缘"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:173
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:175
 msgid ""
 "For auto and all below airspace mode, this is the altitude above/below which "
 "airspace is included."
 msgstr "对于自动和所有低于空域模式，这个高度包含高于或低于空域。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:177
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:179
 msgid "Enable/disable all airspace warnings."
 msgstr "启用/禁用所有空域警告。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:180
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:182
 msgid "Warnings dialog"
 msgstr "警告对话框"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:181
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:183
 msgid "Enable/disable displaying airspaces warnings dialog."
 msgstr "启用/禁用显示空域警告对话框。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:185
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:187
 msgid "Warning time"
 msgstr "警告时间"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:186
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:188
 msgid ""
 "This is the time before an airspace incursion is estimated at which the "
 "system will warn the pilot."
 msgstr "这是一个空域入侵之前估算系统将警告飞行员的时间。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:191
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:193
 msgid "Repetitive sound"
 msgstr "重复声音"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:192
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:194
 msgid ""
 "Enable/disable repetitive warning sound when airspaces warnings dialog is "
 "displayed."
 msgstr "在显示空域警告对话框时启用/禁用重复警告声音。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:196
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:198
 msgid "Acknowledge time"
 msgstr "确认时间"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:197
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:199
 msgid ""
 "This is the time period in which an acknowledged airspace warning will not "
 "be repeated."
 msgstr "这是一个不重复警告确认空域的时间段。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:202
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:204
 msgid "Use black outline"
 msgstr "使用黑色轮廓"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:203
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:205
 msgid ""
 "Draw a black outline around each airspace rather than the airspace color."
 msgstr "在每个空域周围画一个黑色轮廓，而不是空域颜色。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:207
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:209
 msgid "Airspace fill mode"
 msgstr "空域填充模式"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:208
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:210
 msgid "Specifies the mode for filling the airspace area."
 msgstr "填充空域区域的指定模式。"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:215
 msgid "Airspace transparency"
 msgstr "透明空域"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:215
 msgid "If enabled, then airspaces are filled transparently."
 msgstr "如果启用，则空域被透明填充。"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:84
+msgid "NOTAM Support"
+msgstr "NOTAM 支持"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:85
+msgid "Enable downloading and display of NOTAMs from aviation authorities."
+msgstr "启用从航空当局下载并显示 NOTAM。"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:102
+#, fuzzy
+#| msgid "Search Radius (km)"
+msgid "Search Radius"
+msgstr "搜索半径 (km)"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:103
+msgid "Radius around current location to fetch NOTAMs."
+msgstr "获取当前位置周围 NOTAM 的半径。"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:108
+msgid "Auto-Refresh (minutes)"
+msgstr "自动刷新 (分钟)"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:109
+msgid "Automatically refresh NOTAMs every X minutes. Set to 0 to disable."
+msgstr "每隔 X 分钟自动刷新 NOTAM。设置为 0 以禁用。"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:113
+#, fuzzy
+#| msgid "Maximum NOTAM Radius"
+msgid "Maximum NOTAM Count"
+msgstr "NOTAM 最大数量"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:114
+msgid "Limit the total number of NOTAMs to fetch."
+msgstr "限制要获取的 NOTAM 总数。"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:129
+msgid "Show IFR-Only NOTAMs"
+msgstr "仅显示 IFR NOTAM"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:130
+msgid "Include NOTAMs for IFR traffic only."
+msgstr "仅包含针对 IFR 流量的 NOTAM。"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:133
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:140
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:157
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:164
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:250
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:254
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:258
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:262
+#, c-format
+msgid "%u filtered"
+msgstr "%u 已过滤"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:136
+msgid "Show Only Currently Effective"
+msgstr "仅显示当前有效的"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:137
+msgid "Filter out NOTAMs not currently in effect."
+msgstr "过滤掉当前无效的 NOTAM。"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:151
+msgid "Maximum NOTAM Radius"
+msgstr "最大 NOTAM 半径"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:152
+msgid "Filter out NOTAMs with radius larger than this. Set to 0 to disable."
+msgstr "过滤掉半径大于此值的 NOTAM。设置为 0 以禁用。"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:160
+msgid "Hidden Q-Codes"
+msgstr "隐藏的 Q 代码"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:161
+msgid "Space-separated Q-code prefixes to hide (e.g., QA QK QN QOA QOL)."
+msgstr "要隐藏的空格分隔的 Q 代码前缀（例如：QA QK QN QOA QOL）。"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:180
+#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:84
+msgid "Refresh"
+msgstr "刷新"
+
+#. Show "Loading..." in all filter count displays
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:272
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:273
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:274
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:275
+msgid "Loading..."
+msgstr "正在加载..."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:28
 #, no-c-format
@@ -6290,7 +6485,6 @@ msgid "Specifies which threshold is used for \"large\" FAI triangles."
 msgstr "指定用于大FAI三角形的阈值。"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:135
-#, c-format
 msgid "95% dist. rule helpers"
 msgstr ""
 
@@ -7184,10 +7378,6 @@ msgstr "重命名错误"
 msgid "Less"
 msgstr "较少"
 
-#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:84
-msgid "Refresh"
-msgstr ""
-
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:34
 #: src/Dialogs/Task/TaskPointDialog.cpp:226
 #: src/InfoBoxes/Panel/ATCReference.cpp:67
@@ -7404,11 +7594,6 @@ msgstr ""
 "你想参加现场测试吗？这意味着您的位置、热/波状气流位置和其他天气数据将被发送到"
 "我们的测试服务器。您可以在'跟踪'设置中的任何时候禁用它。\n"
 "请帮助我们改善XCSoar！"
-
-#: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
-#: src/Dialogs/Weather/RASPDialog.cpp:135
-msgid "Now"
-msgstr "现在"
 
 #: src/Dialogs/DateEntry.cpp:44
 msgid "Reset"
@@ -10609,6 +10794,34 @@ msgstr "阾近空域"
 #: Data/Input/default.xci:1287
 msgid "Quit XCSoar"
 msgstr ""
+
+#~ msgid "Update Now"
+#~ msgstr "立即更新"
+
+#~ msgid "View NOTAMs"
+#~ msgstr "查看 NOTAM"
+
+#, c-format
+#~ msgid "Starts in %dh"
+#~ msgstr "%dh 后开始"
+
+#, c-format
+#~ msgid "Starts in %dd"
+#~ msgstr "%dd 后开始"
+
+#, c-format
+#~ msgid "Expired %dh ago"
+#~ msgstr "%dh 前已过期"
+
+#, c-format
+#~ msgid "Expired %dd ago"
+#~ msgstr "%dd 前已过期"
+
+#~ msgid "Loading NOTAMs..."
+#~ msgstr "正在加载 NOTAM..."
+
+#~ msgid "Fetching from server. This may take a few seconds."
+#~ msgstr "正在从服务器获取。这可能需要几秒钟。"
 
 #~ msgid "More waypoints"
 #~ msgstr "更多航点"

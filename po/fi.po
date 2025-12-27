@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-11 22:17+0100\n"
+"POT-Creation-Date: 2025-12-28 02:23+0100\n"
 "PO-Revision-Date: 2021-07-20 10:35+0000\n"
 "Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/xcsoar/"
@@ -565,9 +565,10 @@ msgstr "Ei kaarrossa"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:136
 #: src/Dialogs/MapItemListDialog.cpp:158
 #: src/Dialogs/Airspace/dlgAirspace.cpp:144
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:133
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:212
 #: src/Dialogs/Airspace/AirspaceList.cpp:134
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:469
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:481
+#: src/Dialogs/Airspace/NOTAMList.cpp:393
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:21
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:356
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:254
@@ -600,7 +601,7 @@ msgstr "Ei liikennettä"
 #: src/Renderer/MapItemListRenderer.cpp:356
 #: src/Dialogs/Device/DeviceListDialog.cpp:422
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:18
-#: src/Dialogs/Settings/dlgConfiguration.cpp:99
+#: src/Dialogs/Settings/dlgConfiguration.cpp:101
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:117
 #: src/InfoBoxes/Content/Factory.cpp:314 src/InfoBoxes/Content/Factory.cpp:315
 #, no-c-format
@@ -614,8 +615,11 @@ msgstr "Variometri"
 #: src/Renderer/FlightStatisticsRenderer.cpp:226
 #: src/Renderer/FlightStatisticsRenderer.cpp:253
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:51
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:102
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:152
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:370
 #: src/Dialogs/Airspace/AirspaceList.cpp:448
+#: src/Dialogs/Airspace/NOTAMList.cpp:292
+#: src/Dialogs/Airspace/NOTAMList.cpp:297
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:115
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:75
 #: src/Dialogs/Waypoint/WaypointList.cpp:384
@@ -630,6 +634,7 @@ msgstr ""
 
 #: src/Gauge/BigTrafficWidget.cpp:611 src/Dialogs/MapItemListDialog.cpp:144
 #: src/Dialogs/Airspace/AirspaceList.cpp:130
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:71
 #: src/Dialogs/Traffic/TrafficList.cpp:345
 #: src/Dialogs/Waypoint/WaypointList.cpp:211
 #: src/Dialogs/Task/TaskPointDialog.cpp:220
@@ -748,7 +753,7 @@ msgstr "Manuaalinen"
 #: src/Menu/ExpandMacros.cpp:209 src/Menu/ExpandMacros.cpp:343
 #: src/Menu/ExpandMacros.cpp:364 src/Menu/ExpandMacros.cpp:414
 #: src/PageSettings.cpp:51 src/PageSettings.cpp:54
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:42
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:44
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:31
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:140
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
@@ -758,7 +763,7 @@ msgstr "Manuaalinen"
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:13
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "Automaattinen"
 
 #: src/Menu/ExpandMacros.cpp:211
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:24
@@ -847,7 +852,7 @@ msgstr "Maasto On"
 
 #: src/Menu/ExpandMacros.cpp:333
 msgid "Terrain + Topography"
-msgstr ""
+msgstr "Maasto + pinnanmuodot"
 
 #: src/Menu/ExpandMacros.cpp:336
 msgid "Terrain Off"
@@ -861,10 +866,10 @@ msgstr "Info piilota"
 #: src/Menu/ExpandMacros.cpp:346 src/Menu/ExpandMacros.cpp:348
 #: src/Menu/ExpandMacros.cpp:350
 msgid "Show"
-msgstr ""
+msgstr "Näytä"
 
 #: src/Menu/ExpandMacros.cpp:353 src/Input/InputEventsSettings.cpp:294
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:65
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:67
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:128
 #, no-c-format
 msgid "All"
@@ -877,7 +882,7 @@ msgstr "Tehtävä & laskupaikat"
 
 #: src/Menu/ExpandMacros.cpp:356 src/Input/InputEventsSettings.cpp:297
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:172
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:63
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:65
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:38
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:83
@@ -1043,7 +1048,7 @@ msgstr "Nopeus"
 #: src/Renderer/FlightStatisticsRenderer.cpp:211
 #: src/Renderer/FlightStatisticsRenderer.cpp:230
 #: src/Renderer/FlightStatisticsRenderer.cpp:256
-#: src/Dialogs/Settings/dlgConfiguration.cpp:126
+#: src/Dialogs/Settings/dlgConfiguration.cpp:128
 #: src/Dialogs/Weather/RASPDialog.cpp:129
 #, no-c-format
 msgid "Time"
@@ -1248,6 +1253,8 @@ msgstr "FLARM-liikenne"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:24
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:32
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:105
+#: src/Dialogs/Airspace/NOTAMList.cpp:273
+#: src/Dialogs/Airspace/NOTAMList.cpp:298
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:42
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:73
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:40
@@ -1533,27 +1540,27 @@ msgstr "Varoitus"
 msgid "Battery low"
 msgstr "Akku lähes tyhjä"
 
-#: src/Startup.cpp:189
+#: src/Startup.cpp:199
 msgid "Loading Terrain File..."
 msgstr "Ladataan maastotiedostoa..."
 
-#: src/Startup.cpp:327
+#: src/Startup.cpp:337
 msgid "Initialising"
 msgstr ""
 
-#: src/Startup.cpp:429
+#: src/Startup.cpp:439
 msgid "Loading Topography File..."
 msgstr "Ladataan pinnanmuotoja..."
 
-#: src/Startup.cpp:438 src/Dialogs/Device/CAI302/WaypointUploader.cpp:17
+#: src/Startup.cpp:448 src/Dialogs/Device/CAI302/WaypointUploader.cpp:17
 msgid "Loading Waypoints..."
 msgstr "Ladataan reittipisteitä..."
 
-#: src/Startup.cpp:447
+#: src/Startup.cpp:457
 msgid "Loading Airfield Details File..."
 msgstr "Ladataan lentopaikkojen tietoja..."
 
-#: src/Startup.cpp:503
+#: src/Startup.cpp:513
 msgid "Starting devices"
 msgstr ""
 
@@ -1563,25 +1570,25 @@ msgstr ""
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Startup.cpp:515
+#: src/Startup.cpp:525
 msgid "Initialising display"
 msgstr ""
 
 #. Show progress dialog
-#: src/Startup.cpp:610 src/Startup.cpp:648 src/Startup.cpp:716
+#: src/Startup.cpp:621 src/Startup.cpp:659 src/Startup.cpp:727
 msgid "Shutdown, please wait..."
 msgstr "Sammutetaan, odota..."
 
-#: src/Startup.cpp:624
+#: src/Startup.cpp:635
 msgid "Shutdown, saving logs..."
 msgstr "Sammutetaan, tallennetaan lokeja..."
 
 #. Save settings to profile
-#: src/Startup.cpp:645
+#: src/Startup.cpp:656
 msgid "Shutdown, saving profile..."
 msgstr "Sammutetaan, tallennetaan profiilia..."
 
-#: src/Startup.cpp:706
+#: src/Startup.cpp:717
 msgid "Shutdown, saving task..."
 msgstr "Sammutetaan, tallennetaan tehtävää..."
 
@@ -1927,8 +1934,8 @@ msgid "Debug"
 msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:335
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:68
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:209
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:69
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:69
 msgid "Enable"
 msgstr ""
@@ -2044,7 +2051,7 @@ msgstr ""
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:47
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:68
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:73
-#: src/Dialogs/Settings/dlgConfiguration.cpp:122
+#: src/Dialogs/Settings/dlgConfiguration.cpp:124
 #, no-c-format
 msgid "Units"
 msgstr "Yksiköt"
@@ -2053,7 +2060,7 @@ msgstr "Yksiköt"
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:61
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:77
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:82
-#: src/Dialogs/Settings/dlgConfiguration.cpp:82
+#: src/Dialogs/Settings/dlgConfiguration.cpp:83
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:53
 #, no-c-format
 msgid "Waypoints"
@@ -2136,7 +2143,7 @@ msgstr "Estetietokanta"
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:105
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:61
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:60
-#: src/Dialogs/Settings/dlgConfiguration.cpp:148
+#: src/Dialogs/Settings/dlgConfiguration.cpp:150
 #: src/InfoBoxes/Content/Altitude.cpp:28 src/InfoBoxes/Content/MacCready.cpp:31
 #: src/InfoBoxes/Content/Places.cpp:100
 #, no-c-format
@@ -2442,7 +2449,8 @@ msgid "Static object"
 msgstr "Kiinteä kohde"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:123
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:89
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:139
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:248
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:95
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:86
 #: src/Dialogs/Waypoint/WaypointList.cpp:386
@@ -2498,7 +2506,7 @@ msgid "Goto"
 msgstr ""
 
 #: src/Dialogs/MapItemListDialog.cpp:150
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:209
 msgid "Ack Day"
 msgstr ""
 
@@ -2552,7 +2560,7 @@ msgid "Warn"
 msgstr "Varoita"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:143
-#: src/Dialogs/Settings/dlgConfiguration.cpp:84 src/Dialogs/dlgAnalysis.cpp:554
+#: src/Dialogs/Settings/dlgConfiguration.cpp:85 src/Dialogs/dlgAnalysis.cpp:554
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:87
 #: Data/Input/default.xci:554 Data/Input/default.xci:1280
 #, no-c-format
@@ -2563,50 +2571,110 @@ msgstr "Ilmatila"
 msgid "Select Pattern"
 msgstr ""
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:58
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:108
 msgid "Squawk code"
-msgstr "Aseta koodi"
+msgstr "Transponderikoodi"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:59
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:109
 msgid "Set Squawk Code"
-msgstr "Aseta koodi"
+msgstr "Aseta transponderikoodi"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:67
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:69
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:117
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:70
 msgid "Radio"
-msgstr ""
+msgstr "Radio"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:73
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:123
 msgid "Station"
-msgstr "Sijainti"
+msgstr "Radioasema"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:77
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:127
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:260
 #: src/Dialogs/Task/AlternatesListDialog.cpp:110
 msgid "Set Active Frequency"
-msgstr "Min. taajuus"
+msgstr "Aseta aktiivitaajuus"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:82
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:132
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:265
 #: src/Dialogs/Task/AlternatesListDialog.cpp:116
 msgid "Set Standby Frequency"
-msgstr "Min. taajuus"
+msgstr "Aseta valmiitaajuus"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:88
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:138
 msgid "Class"
-msgstr ""
+msgstr "Luokka"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:92
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:142
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:329
 msgid "Top"
 msgstr "Yläraja"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:95
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:145
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:333
 msgid "Base"
 msgstr "Alaraja"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:125
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:200
+msgid "NOTAM Details"
+msgstr "NOTAM-tiedot"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:200
 msgid "Airspace Details"
 msgstr "Ilmatilan tiedot"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:224
+#: src/Dialogs/Settings/dlgConfiguration.cpp:86
+#, no-c-format
+msgid "NOTAM"
+msgstr "NOTAM"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:231
+#: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:70
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:119
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:78
+#: src/InfoBoxes/Panel/ATCReference.cpp:65
+msgid "Location"
+msgstr "Sijainti"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:239
+msgid "Q-Code"
+msgstr "Q-koodi"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:268
+msgid "Valid From"
+msgstr "Voimassa alkaen"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:276
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:281
+msgid "Valid Until"
+msgstr "Voimassa asti"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:297
+#: src/Dialogs/Airspace/NOTAMList.cpp:184
+#: src/Dialogs/Airspace/NOTAMList.cpp:186
+msgid "Starts in"
+msgstr "Alkaa"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:310
+#: src/Dialogs/Airspace/NOTAMList.cpp:190
+msgid "Expired"
+msgstr "Vanhentunut"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:314
+msgid "ago"
+msgstr ""
+
+#. Currently active
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:317
+#: src/Dialogs/Airspace/NOTAMList.cpp:193
+#: src/Dialogs/Plane/PlaneListDialog.cpp:157
+msgid "Active"
+msgstr "Aktiivinen"
+
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:319 src/Dialogs/TimeEntry.cpp:48
+#: src/Dialogs/Weather/RASPDialog.cpp:86 src/Dialogs/Weather/RASPDialog.cpp:135
+msgid "Now"
+msgstr "Nyt"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:330
 #: src/Dialogs/Waypoint/WaypointList.cpp:426
@@ -2683,12 +2751,12 @@ msgstr ""
 msgid "Defines how the airspace is filled with the configured color."
 msgstr ""
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:66
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:67
 #: src/Monitor/AirspaceWarningMonitor.cpp:55
 msgid "ACK"
 msgstr ""
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:67
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:68
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
 msgid "ACK Day"
 msgstr ""
@@ -2696,13 +2764,57 @@ msgstr ""
 #. the warnings were emptied between the opening of the dialog and
 #. this refresh, so only need to display "No Warnings" for top
 #. item, otherwise exit immediately
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:282
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:294
 msgid "No Warnings"
 msgstr "Ei varoituksia"
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:467
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:479
 msgid "Airspace Warnings"
 msgstr "Ilmatilavaroitukset"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:42
+msgid "[Invalid text]"
+msgstr "[Virheellinen teksti]"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:51
+msgid "[Conversion failed]"
+msgstr "[Muunnos epäonnistui]"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:153
+msgid "No NOTAMs available"
+msgstr "Ei NOTAM-tiedotteita saatavilla"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:202
+msgid "Filtered"
+msgstr "Suodatettu"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:267
+#: src/Dialogs/Airspace/NOTAMList.cpp:272
+#: src/Dialogs/Airspace/NOTAMList.cpp:278
+msgid "Last Update"
+msgstr "Viimeisin päivitys"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:279
+msgid "Never"
+msgstr "Ei koskaan"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:308
+#: src/Dialogs/Airspace/NOTAMList.cpp:390
+msgid "NOTAMs"
+msgstr "NOTAM-tiedotteet"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:315
+msgid "After Filtering"
+msgstr "Suodatuksen jälkeen"
+
+#. Convert translated strings from TCHAR to UTF-8 std::string
+#: src/Dialogs/Airspace/NOTAMList.cpp:355
+msgid "NOTAM System Disabled"
+msgstr "NOTAM-järjestelmä poissa käytöstä"
+
+#: src/Dialogs/Airspace/NOTAMList.cpp:356
+msgid "Enable NOTAM support in Settings > Airspace"
+msgstr "Ota NOTAM-tuki käyttöön kohdassa Asetukset > Ilmatila"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:40
 msgid "Circling wind"
@@ -2829,23 +2941,23 @@ msgstr ""
 msgid "Flight Setup"
 msgstr ""
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:75
-#: src/Dialogs/Settings/dlgConfiguration.cpp:142
+#: src/Dialogs/Settings/dlgConfiguration.cpp:76
+#: src/Dialogs/Settings/dlgConfiguration.cpp:144
 #, no-c-format
 msgid "Site Files"
 msgstr "Tiedostot"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:80
+#: src/Dialogs/Settings/dlgConfiguration.cpp:81
 #, no-c-format
 msgid "Orientation"
 msgstr "Suunta"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:81
+#: src/Dialogs/Settings/dlgConfiguration.cpp:82
 #, no-c-format
 msgid "Elements"
 msgstr "Elementit"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:83
+#: src/Dialogs/Settings/dlgConfiguration.cpp:84
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:85
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:68 Data/Input/default.xci:540
 #: Data/Input/default.xci:1121
@@ -2853,18 +2965,18 @@ msgstr "Elementit"
 msgid "Terrain"
 msgstr "Maasto"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:89
+#: src/Dialogs/Settings/dlgConfiguration.cpp:91
 #, no-c-format
 msgid "Safety Factors"
 msgstr "Turvarajat"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:90
-#: src/Dialogs/Settings/dlgConfiguration.cpp:144
+#: src/Dialogs/Settings/dlgConfiguration.cpp:92
+#: src/Dialogs/Settings/dlgConfiguration.cpp:146
 #, no-c-format
 msgid "Glide Computer"
 msgstr "Liukulaskin"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:91
+#: src/Dialogs/Settings/dlgConfiguration.cpp:93
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:220
 #: src/Weather/NOAAFormatter.cpp:78 src/Weather/NOAAFormatter.cpp:81
 #: src/InfoBoxes/Content/Factory.cpp:323 src/InfoBoxes/Content/Factory.cpp:332
@@ -2873,69 +2985,69 @@ msgstr "Liukulaskin"
 msgid "Wind"
 msgstr "Tuuli"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:92
+#: src/Dialogs/Settings/dlgConfiguration.cpp:94
 #, no-c-format
 msgid "Route"
 msgstr "Reitti"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:93
+#: src/Dialogs/Settings/dlgConfiguration.cpp:95
 #, no-c-format
 msgid "Scoring"
 msgstr "Pistemäärä"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:98
+#: src/Dialogs/Settings/dlgConfiguration.cpp:100
 #, no-c-format
 msgid "FLARM, Other"
 msgstr ""
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:101
+#: src/Dialogs/Settings/dlgConfiguration.cpp:103
 #, no-c-format
 msgid "Audio Vario"
 msgstr "Variom. äänet"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:107
+#: src/Dialogs/Settings/dlgConfiguration.cpp:109
 #, no-c-format
 msgid "Task Rules"
 msgstr "Tehtävän säännöt"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:108
+#: src/Dialogs/Settings/dlgConfiguration.cpp:110
 #, no-c-format
 msgid "Turnpoint Types"
 msgstr "Käännepisteiden tyypit"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:113
+#: src/Dialogs/Settings/dlgConfiguration.cpp:115
 #, no-c-format
 msgid "Language, Input"
 msgstr "Kieli ja syöte"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:114
+#: src/Dialogs/Settings/dlgConfiguration.cpp:116
 #, no-c-format
 msgid "Screen Layout"
 msgstr "Näytön asettelu"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:115
+#: src/Dialogs/Settings/dlgConfiguration.cpp:117
 #, no-c-format
 msgid "Pages"
 msgstr "Sivut"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:116
+#: src/Dialogs/Settings/dlgConfiguration.cpp:118
 #, no-c-format
 msgid "InfoBox Sets"
 msgstr "Inforuudut"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:121
+#: src/Dialogs/Settings/dlgConfiguration.cpp:123
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:122
 #: Data/Input/default.xci:672 Data/Input/default.xci:1177
 #, no-c-format
 msgid "Logger"
 msgstr "Loggeri"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:128
+#: src/Dialogs/Settings/dlgConfiguration.cpp:130
 #, no-c-format
 msgid "Tracking"
 msgstr "Seuranta"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:132
+#: src/Dialogs/Settings/dlgConfiguration.cpp:134
 #: src/Dialogs/Weather/WeatherDialog.cpp:26
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:320
 #: src/Weather/NOAAFormatter.cpp:175 Data/Input/default.xci:808
@@ -2944,42 +3056,42 @@ msgstr "Seuranta"
 msgid "Weather"
 msgstr "Sää"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:136
+#: src/Dialogs/Settings/dlgConfiguration.cpp:138
 #, no-c-format
 msgid "Audio"
 msgstr "Variom. äänet"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:143
+#: src/Dialogs/Settings/dlgConfiguration.cpp:145
 #, no-c-format
 msgid "Map Display"
 msgstr "Karttanäkymä"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:145
+#: src/Dialogs/Settings/dlgConfiguration.cpp:147
 #, no-c-format
 msgid "Gauges"
 msgstr "Mittarit"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:146
+#: src/Dialogs/Settings/dlgConfiguration.cpp:148
 #, no-c-format
 msgid "Task Defaults"
 msgstr "Tehtävän oletusarvot"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:147
+#: src/Dialogs/Settings/dlgConfiguration.cpp:149
 #, no-c-format
 msgid "Look"
 msgstr "Ulkoasu"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:206
-#: src/Dialogs/Settings/dlgConfiguration.cpp:219
+#: src/Dialogs/Settings/dlgConfiguration.cpp:208
+#: src/Dialogs/Settings/dlgConfiguration.cpp:221
 msgid "Expert"
 msgstr "Kokenut"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:309
-#: src/Dialogs/Settings/dlgConfiguration.cpp:318
+#: src/Dialogs/Settings/dlgConfiguration.cpp:311
+#: src/Dialogs/Settings/dlgConfiguration.cpp:320
 msgid "Configuration"
 msgstr ""
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:353
+#: src/Dialogs/Settings/dlgConfiguration.cpp:355
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr ""
 "Muutokset asetuksiin on tallennettu. Käynnistä XCSoar uudelleen ottaaksesi "
@@ -3190,7 +3302,7 @@ msgid "Task Speed"
 msgstr "Tehtävän nopeus"
 
 #: src/Dialogs/dlgAnalysis.cpp:557
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:177
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:179
 msgid "Warnings"
 msgstr "Varoitukset"
 
@@ -3260,10 +3372,6 @@ msgstr "Valitse tiedosto"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:136
 msgid "Activate"
-msgstr "Aktiivinen"
-
-#: src/Dialogs/Plane/PlaneListDialog.cpp:157
-msgid "Active"
 msgstr "Aktiivinen"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:200
@@ -3344,6 +3452,7 @@ msgid "WeGlide Type"
 msgstr "Alusluokka"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:43
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:184
 msgid "List"
 msgstr "Listaus"
 
@@ -3494,13 +3603,6 @@ msgstr "Säännöt"
 #: src/Dialogs/dlgStatus.cpp:83
 msgid "Times"
 msgstr "Ajat"
-
-#: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:70
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:119
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:78
-#: src/InfoBoxes/Panel/ATCReference.cpp:65
-msgid "Location"
-msgstr "Sijainti"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:72
 msgid "Max. height gain"
@@ -3957,214 +4059,328 @@ msgstr ""
 msgid "Select Waypoint"
 msgstr "Valitse reittipiste"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:38
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:40
 #, no-c-format
 msgid "All on"
 msgstr "Näytä kaikki"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:39
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:41
 #, no-c-format
 msgid "All airspaces are displayed."
 msgstr "Kaikki ilmatilat näytetään."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:40
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:42
 #, no-c-format
 msgid "Clip"
 msgstr "Leikkaa"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:41
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:43
 #, no-c-format
 msgid "Display airspaces below the clip altitude."
 msgstr "Näytä kaikki ilmatilat leikkauskorkeuden alapuolelta."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:43
-#, no-c-format
-msgid "Display airspaces within a margin of the glider."
-msgstr ""
-
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:44
-#, no-c-format
-msgid "All below"
-msgstr ""
-
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:45
 #, no-c-format
-msgid "Display airspaces below the glider or within a margin."
-msgstr ""
+msgid "Display airspaces within a margin of the glider."
+msgstr "Näytä ilmatilat liitimen marginaalin sisällä."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:50
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:46
+#, no-c-format
+msgid "All below"
+msgstr "Kaikki alapuolella"
+
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:47
+#, no-c-format
+msgid "Display airspaces below the glider or within a margin."
+msgstr "Näytä ilmatilat liitimen alapuolella tai marginaalin sisällä."
+
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:52
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:153
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:53
 #, no-c-format
 msgid "Default"
 msgstr "Oletus"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:51
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:53
 #, no-c-format
 msgid ""
 "This selects the best performing option for your hardware. In fact it "
 "favours 'fill padding' except for PPC 2000 system."
 msgstr ""
-
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:53
-#, no-c-format
-msgid "Fill all"
-msgstr ""
-
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:54
-#, no-c-format
-msgid "Transparently fills the airspace colour over the whole area."
-msgstr ""
+"Tämä valitsee parhaiten suoriutuvan vaihtoehdon laitteistollesi. Käytännössä "
+"se suosii 'täytä reunus' -vaihtoehtoa, paitsi PPC 2000 -järjestelmissä."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:55
 #, no-c-format
-msgid "Fill padding"
-msgstr ""
+msgid "Fill all"
+msgstr "Täytä kaikki"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:56
+#, no-c-format
+msgid "Transparently fills the airspace colour over the whole area."
+msgstr "Täyttää ilmatilan värin läpikuultavasti koko alueelle."
+
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:57
+#, no-c-format
+msgid "Fill padding"
+msgstr "Täytä reunus"
+
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:58
 #, no-c-format
 msgid ""
 "Draws a solid outline with a half transparent border around the airspace."
 msgstr ""
+"Piirtää yhtenäisen ääriviivan ja puoliksi läpinäkyvän reunuksen ilmatilan "
+"ympärille."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:57
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:59
 #, no-c-format
 msgid "No fill"
-msgstr ""
+msgstr "Ei täyttöä"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:58
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:60
 #, no-c-format
 msgid "Don't fill the airspace area."
-msgstr "Reitti välttää maastoa ja ilmatiloja."
+msgstr "Älä täytä ilmatilan aluetta."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:64
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:66
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:139
 #, no-c-format
 msgid "No labels will be displayed."
-msgstr "Reittipisteen nimeä ei näytetä."
+msgstr "Nimiä ei näytetä."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:66
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:68
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:128
 #, no-c-format
 msgid "All labels will be displayed."
-msgstr "Kaikki ilmatilat näytetään."
+msgstr "Kaikki nimet näytetään."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:113
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:115
 msgid "Colours"
 msgstr "Värit"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:117
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:119
 msgid "Filter"
 msgstr "Suodata"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:158
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:160
 msgid "Airspace display"
 msgstr "Ilmatilojen näyttö"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:159
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:161
 msgid ""
 "Controls filtering of airspace for display and warnings. The airspace filter "
 "button also allows filtering of display and warnings independently for each "
 "airspace class."
 msgstr ""
+"Ohjaa ilmatilojen suodatusta näyttöä ja varoituksia varten. Ilmatilasuodatin-"
+"painike mahdollistaa myös näytön ja varoitusten suodattamisen itsenäisesti "
+"kullekin ilmatilaluokalle."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:162
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:164
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:143
 msgid "Label visibility"
-msgstr ""
+msgstr "Nimien näkyvyys"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:163
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:165
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:144
 msgid "Determines what labels are displayed."
-msgstr "Kaikki ilmatilat näytetään."
+msgstr "Määrittää, mitkä nimet näytetään."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:167
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:169
 msgid "Clip altitude"
 msgstr "Leikkauskorkeus"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:168
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:170
 msgid ""
 "For clip airspace mode, this is the altitude below which airspace is "
 "displayed."
 msgstr ""
 "Leikkaustilassa tämä on korkeus jonka alapuoleiset ilmatilat näytetään."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:172
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:174
 msgid "Margin"
-msgstr ""
+msgstr "Marginaali"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:173
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:175
 msgid ""
 "For auto and all below airspace mode, this is the altitude above/below which "
 "airspace is included."
 msgstr ""
+"Automaattisessa ja 'kaikki alapuolella' -tilassa tämä on korkeus, jonka ylä- "
+"tai alapuolella olevat ilmatilat sisällytetään."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:177
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:179
 msgid "Enable/disable all airspace warnings."
-msgstr ""
+msgstr "Ota käyttöön tai poista käytöstä kaikki ilmatilavaroitukset."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:180
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:182
 msgid "Warnings dialog"
 msgstr "Varoitukset"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:181
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:183
 msgid "Enable/disable displaying airspaces warnings dialog."
-msgstr ""
+msgstr "Ota käyttöön tai poista käytöstä ilmatilavaroitusten valintaikkuna."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:185
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:187
 msgid "Warning time"
 msgstr "Varoitusaika"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:186
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:188
 msgid ""
 "This is the time before an airspace incursion is estimated at which the "
 "system will warn the pilot."
 msgstr ""
+"Tämä on aika ennen arvioitua ilmatilaan loukkausta, jolloin järjestelmä "
+"varoittaa lentäjää."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:191
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:193
 msgid "Repetitive sound"
-msgstr ""
+msgstr "Toistuva ääni"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:192
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:194
 msgid ""
 "Enable/disable repetitive warning sound when airspaces warnings dialog is "
 "displayed."
 msgstr ""
+"Ota käyttöön tai poista käytöstä toistuva varoitusääni, kun "
+"ilmatilavaroitusten valintaikkuna on näkyvissä."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:196
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:198
 msgid "Acknowledge time"
 msgstr "Kuittausaika"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:197
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:199
 msgid ""
 "This is the time period in which an acknowledged airspace warning will not "
 "be repeated."
-msgstr ""
+msgstr "Tämä on aika, jonka kuluessa kuitattua ilmatilavaroitusta ei toisteta."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:202
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:204
 msgid "Use black outline"
-msgstr "Käytä mustia reinoja"
+msgstr "Käytä mustia reunoja"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:203
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:205
 msgid ""
 "Draw a black outline around each airspace rather than the airspace color."
 msgstr "Piirrä ilmatilojen rajat mustina värillisten sijaan."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:207
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:209
 msgid "Airspace fill mode"
 msgstr "Ilmatilojen täyttö"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:208
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:210
 msgid "Specifies the mode for filling the airspace area."
-msgstr ""
+msgstr "Määrittää ilmatilan alueen täyttötavan."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:215
 msgid "Airspace transparency"
 msgstr "Ilmatilan läpinäkyvyys"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:215
 msgid "If enabled, then airspaces are filled transparently."
 msgstr "Jos valittu, ilmatila väritetään läpikuultavasti."
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:84
+msgid "NOTAM Support"
+msgstr "NOTAM-tuki"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:85
+msgid "Enable downloading and display of NOTAMs from aviation authorities."
+msgstr ""
+"Ota käyttöön NOTAM-tiedotteiden lataus ja näyttö ilmailuviranomaisilta."
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:102
+#, fuzzy
+#| msgid "Search Radius (km)"
+msgid "Search Radius"
+msgstr "Hakusäde (km)"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:103
+msgid "Radius around current location to fetch NOTAMs."
+msgstr "Säde nykyisen sijainnin ympärillä, jolta NOTAM-tiedotteet haetaan."
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:108
+msgid "Auto-Refresh (minutes)"
+msgstr "Automaattinen päivitys (minuuttia)"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:109
+msgid "Automatically refresh NOTAMs every X minutes. Set to 0 to disable."
+msgstr ""
+"Päivitä NOTAM-tiedotteet automaattisesti X minuutin välein. Aseta 0 "
+"poistaaksesi käytöstä."
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:113
+#, fuzzy
+#| msgid "Maximum NOTAM Radius"
+msgid "Maximum NOTAM Count"
+msgstr "NOTAMien enimmäismäärä"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:114
+msgid "Limit the total number of NOTAMs to fetch."
+msgstr "Rajoittaa haettavien NOTAMien kokonaismäärää."
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:129
+msgid "Show IFR-Only NOTAMs"
+msgstr "Näytä vain IFR-NOTAMit"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:130
+msgid "Include NOTAMs for IFR traffic only."
+msgstr "Sisällytä vain IFR-liikenteen NOTAM-tiedotteet."
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:133
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:140
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:157
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:164
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:250
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:254
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:258
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:262
+#, c-format
+msgid "%u filtered"
+msgstr "%u suodatettu"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:136
+msgid "Show Only Currently Effective"
+msgstr "Näytä vain tällä hetkellä voimassa olevat"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:137
+msgid "Filter out NOTAMs not currently in effect."
+msgstr ""
+"Suodata pois NOTAM-tiedotteet, jotka eivät ole tällä hetkellä voimassa."
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:151
+msgid "Maximum NOTAM Radius"
+msgstr "NOTAM-tiedotteen enimmäissäde"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:152
+msgid "Filter out NOTAMs with radius larger than this. Set to 0 to disable."
+msgstr ""
+"Suodata pois NOTAM-tiedotteet, joiden säde on tätä suurempi. Aseta 0 "
+"poistaaksesi käytöstä."
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:160
+msgid "Hidden Q-Codes"
+msgstr "Piilotetut Q-koodit"
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:161
+msgid "Space-separated Q-code prefixes to hide (e.g., QA QK QN QOA QOL)."
+msgstr ""
+"Välilyönneillä erotetut piilotettavat Q-koodien etuliitteet (esim. QA QK QN "
+"QOA QOL)."
+
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:180
+#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:84
+msgid "Refresh"
+msgstr "Päivitä"
+
+#. Show "Loading..." in all filter count displays
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:272
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:273
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:274
+#: src/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp:275
+msgid "Loading..."
+msgstr "Ladataan..."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:28
 #, no-c-format
@@ -6179,7 +6395,6 @@ msgid "Specifies which threshold is used for \"large\" FAI triangles."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:135
-#, c-format
 msgid "95% dist. rule helpers"
 msgstr ""
 
@@ -7059,10 +7274,6 @@ msgstr ""
 msgid "Less"
 msgstr "Vähemmän"
 
-#: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:84
-msgid "Refresh"
-msgstr ""
-
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:34
 #: src/Dialogs/Task/TaskPointDialog.cpp:226
 #: src/InfoBoxes/Panel/ATCReference.cpp:67
@@ -7268,11 +7479,6 @@ msgid ""
 "test server. You can disable it at any time in the \"Tracking\" settings.\n"
 "Please help us improve XCSoar!"
 msgstr ""
-
-#: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
-#: src/Dialogs/Weather/RASPDialog.cpp:135
-msgid "Now"
-msgstr "Nyt"
 
 #: src/Dialogs/DateEntry.cpp:44
 msgid "Reset"
@@ -10425,6 +10631,34 @@ msgstr ""
 #: Data/Input/default.xci:1287
 msgid "Quit XCSoar"
 msgstr "XCSoar"
+
+#~ msgid "Update Now"
+#~ msgstr "Päivitä nyt"
+
+#~ msgid "View NOTAMs"
+#~ msgstr "Näytä NOTAM-tiedotteet"
+
+#, c-format
+#~ msgid "Starts in %dh"
+#~ msgstr "Alkaa %dh kuluttua"
+
+#, c-format
+#~ msgid "Starts in %dd"
+#~ msgstr "Alkaa %dd kuluttua"
+
+#, c-format
+#~ msgid "Expired %dh ago"
+#~ msgstr "Vanhentunut %dh sitten"
+
+#, c-format
+#~ msgid "Expired %dd ago"
+#~ msgstr "Vanhentunut %dd sitten"
+
+#~ msgid "Loading NOTAMs..."
+#~ msgstr "Ladataan NOTAM-tiedotteita..."
+
+#~ msgid "Fetching from server. This may take a few seconds."
+#~ msgstr "Haetaan palvelimelta. Tämä voi kestää muutaman sekunnin."
 
 #~ msgid "More waypoints"
 #~ msgstr "Lisäreittipisteet"
