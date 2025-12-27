@@ -26,10 +26,13 @@
 #include "Widget/ListWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Audio/Sound.hpp"
+#include "LogFile.hpp"
 #include "util/StringFormat.hpp"
+#include <Message.hpp>
 
 #include <algorithm>
 #include <cassert>
+#include <exception>
 #include <vector>
 
 #include <stdio.h>
@@ -225,8 +228,7 @@ AirspaceWarningListWidget::Hide() noexcept
 void
 AirspaceWarningListWidget::OnActivateItem([[maybe_unused]] unsigned i) noexcept
 {
-  if (selected_airspace != nullptr)
-    dlgAirspaceDetails(selected_airspace, &airspace_warnings);
+  Details();
 }
 
 bool
@@ -329,8 +331,15 @@ AirspaceWarningListWidget::Radio() noexcept
 void
 AirspaceWarningListWidget::Details() noexcept
 {
-  if (selected_airspace != nullptr)
+  if (selected_airspace == nullptr)
+    return;
+
+  try {
     dlgAirspaceDetails(selected_airspace, &airspace_warnings);
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to open airspace details");
+    Message::AddMessage(_("Failed to open airspace details"));
+  }
 }
 
 void
