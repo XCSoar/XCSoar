@@ -30,16 +30,16 @@ GetEnvInt(const char *env_name, int default_value, int min_value = 0,
   const int value = ParseInt(env_value, &end, 10);
   if (end == env_value || *end != '\0') return default_value;
 
-  if (min_value > 0 && value < min_value) return default_value;
-
-  if (max_value > 0 && value > max_value) return default_value;
+  // Enable range validation when max_value != 0
+  if (max_value != 0 && (value < min_value || value > max_value))
+    return default_value;
 
   return value;
 }
 
 /**
  * Parse an integer from an environment variable with validation, returning
- * whether the variable was set (even if invalid).
+ * whether the variable was set and valid.
  *
  * @param env_name the environment variable name
  * @param value output parameter for the parsed value
@@ -59,9 +59,9 @@ GetEnvInt(const char *env_name, int &value, int min_value = 0,
   const int parsed = ParseInt(env_value, &end, 10);
   if (end == env_value || *end != '\0') return false;
 
-  if (min_value > 0 && parsed < min_value) return false;
-
-  if (max_value > 0 && parsed > max_value) return false;
+  // Enable range validation when max_value != 0
+  if (max_value != 0 && (parsed < min_value || parsed > max_value))
+    return false;
 
   value = parsed;
   return true;
