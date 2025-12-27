@@ -45,10 +45,19 @@ WaylandRegistryGlobal(void *data, struct wl_registry *registry, uint32_t id,
 }
 
 static void
-WaylandRegistryGlobalRemove([[maybe_unused]] void *data,
+WaylandRegistryGlobalRemove(void *data,
                             [[maybe_unused]] struct wl_registry *registry,
-                            [[maybe_unused]] uint32_t id)
+                            uint32_t id)
 {
+  auto &queue = *(WaylandEventQueue *)data;
+  /* Handle removal of globals. The seat may be removed if the input
+   * device is disconnected. In that case, we should clean up pointer
+   * and keyboard objects. However, we don't track which id corresponds
+   * to which global, so we can't directly match. The compositor will
+   * send a capabilities event with no capabilities when the seat is
+   * removed, which will trigger cleanup via SeatHandleCapabilities. */
+  (void)queue;
+  (void)id;
 }
 
 static constexpr struct wl_registry_listener registry_listener = {
@@ -125,7 +134,8 @@ WaylandPointerAxis(void *data,
                    [[maybe_unused]] uint32_t time,
                    uint32_t axis, wl_fixed_t value)
 {
-  if (axis == WL_POINTER_AXIS_VERTICAL_SCROLL) {
+  if (axis == WL_POINTER_AXIS_VERTICAL_SCROLL ||
+      axis == WL_POINTER_AXIS_HORIZONTAL_SCROLL) {
     auto &q = *(WaylandEventQueue *)data;
 #ifdef SOFTWARE_ROTATE_DISPLAY
     PixelPoint p = q.GetTransformedPointerPosition();
@@ -133,6 +143,8 @@ WaylandPointerAxis(void *data,
     PixelPoint p(q.pointer_position.x, q.pointer_position.y);
 #endif
     Event e(Event::MOUSE_WHEEL, p);
+    /* Vertical scroll: positive = down, negative = up
+       Horizontal scroll: positive = right, negative = left */
     e.param = wl_fixed_to_int(value);
     q.Push(e);
   }
@@ -351,9 +363,9 @@ WaylandEventQueue::~WaylandEventQueue() noexcept
     wl_proxy_destroy((struct wl_proxy *)compositor);
     compositor = nullptr;
   }
-  if (display != nullptr) {
-    ::wl_display_disconnect(display);
-  }
+  /* Note: display is owned by UI::Display, not by WaylandEventQueue.
+   * The Display destructor will call wl_display_disconnect(), so we
+   * must not disconnect it here to avoid double-disconnect segfault. */
 }
 
 bool
@@ -414,6 +426,10 @@ WaylandEventQueue::RegistryHandler(struct wl_registry *registry, uint32_t id,
   else if (StringIsEqual(interface, "xdg_wm_base"))
     wm_base = (xdg_wm_base *)wl_registry_bind(registry, id,
                                               &xdg_wm_base_interface, 1);
+  else if (StringIsEqual(interface, "zxdg_decoration_manager_v1"))
+    decoration_manager = (zxdg_decoration_manager_v1 *)
+      wl_registry_bind(registry, id,
+                       &zxdg_decoration_manager_v1_interface, 1);
 }
 
 inline void
@@ -427,8 +443,10 @@ WaylandEventQueue::SeatHandleCapabilities(bool has_pointer, bool has_keyboard,
         wl_pointer_add_listener(pointer, &pointer_listener, this);
     }
   } else {
-    if (pointer != nullptr)
+    if (pointer != nullptr) {
       wl_pointer_destroy(pointer);
+      pointer = nullptr;
+    }
   }
 
   if (has_keyboard) {
@@ -438,8 +456,10 @@ WaylandEventQueue::SeatHandleCapabilities(bool has_pointer, bool has_keyboard,
         wl_keyboard_add_listener(keyboard, &keyboard_listener, this);
     }
   } else {
-    if (keyboard != nullptr)
+    if (keyboard != nullptr) {
       wl_keyboard_destroy(keyboard);
+      keyboard = nullptr;
+    }
   }
 
   has_touchscreen = has_touch;
@@ -610,5 +630,30 @@ WaylandEventQueue::SetDisplayOrientation([[maybe_unused]] DisplayOrientation ori
 }
 
 #endif
+
+void
+WaylandEventQueue::SetCursor(struct wl_pointer *wl_pointer, uint32_t serial) noexcept
+{
+  if (cursor_surface == nullptr || cursor_pointer == nullptr)
+    return;
+
+  /* wl_cursor contains an images array of wl_cursor_image structs */
+  if (cursor_pointer->image_count == 0)
+    return;
+
+  struct wl_cursor_image *image = cursor_pointer->images[0];
+  if (image == nullptr)
+    return;
+
+  wl_pointer_set_cursor(wl_pointer, serial, cursor_surface,
+                        image->hotspot_x, image->hotspot_y);
+
+  struct wl_buffer *buffer = wl_cursor_image_get_buffer(image);
+  if (buffer != nullptr) {
+    wl_surface_attach(cursor_surface, buffer, 0, 0);
+    wl_surface_damage(cursor_surface, 0, 0, image->width, image->height);
+    wl_surface_commit(cursor_surface);
+  }
+}
 
 } // namespace UI
