@@ -89,6 +89,18 @@ public:
    */
   bool BeginEditing() noexcept;
 
+private:
+  /**
+   * Check if the content is truncated (wider than available space).
+   */
+  [[gnu::pure]]
+  bool IsContentTruncated() const noexcept;
+
+  /**
+   * Show full content in a dialog (for readonly fields with truncated content).
+   */
+  void ShowFullContent() noexcept;
+
 protected:
   void OnResize(PixelSize new_size) noexcept override;
   void OnSetFocus() noexcept override;

@@ -132,6 +132,7 @@ void eventBugs(const TCHAR *misc);
 void eventCalculator(const TCHAR *misc);
 void eventChecklist(const TCHAR *misc);
 void eventClearAirspaceWarnings(const TCHAR *misc);
+void eventAirspaceWarnings(const TCHAR *misc);
 void eventClearStatusMessages(const TCHAR *misc);
 void eventLogger(const TCHAR *misc);
 void eventMacCready(const TCHAR *misc);

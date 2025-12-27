@@ -4,6 +4,7 @@ Priority: extra
 Maintainer: XCSoar Project <maintainer@xcsoar.org>
 Build-Depends: debhelper (>= 12~),
  g++ (>= 4:10),
+ binutils,
  libfmt-dev (>= 7),
  libdbus-1-dev,
  libraspberrypi-dev | libegl1-mesa-dev | libsdl2-dev,

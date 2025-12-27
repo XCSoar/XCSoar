@@ -5,6 +5,11 @@
 
 #include "event/SocketEvent.hxx"
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+#include "ui/dim/Size.hpp"
+enum class DisplayOrientation : uint8_t;
+#endif
+
 /* kludges to work around namespace collisions with X11 headers */
 
 #define Font X11Font
@@ -43,13 +48,17 @@ class X11EventQueue {
 
   bool ctrl_click;
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  PixelSize physical_screen_size{0, 0};
+#endif
+
 public:
   /**
    * @param queue the #EventQueue that shall receive X11 events
    */
   X11EventQueue(Display &display, EventQueue &queue);
 
-  bool IsVisible() const {
+  bool IsVisible() const noexcept {
     return mapped && visible;
   }
 
@@ -57,11 +66,16 @@ public:
    * Was the Ctrl key down during the last MOUSE_DOWN event?
    *
    * TODO: this is a kludge, and we should move this flag into an
-   * event struct passed to Window::OnMouseDown().q
+   * event struct passed to Window::OnMouseDown().
    */
-  bool WasCtrlClick() const {
+  bool WasCtrlClick() const noexcept {
     return ctrl_click;
   }
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  void SetScreenSize(PixelSize screen_size) noexcept;
+  void SetDisplayOrientation(DisplayOrientation orientation) noexcept;
+#endif
 
   bool Generate([[maybe_unused]] Event &event) {
     return false;

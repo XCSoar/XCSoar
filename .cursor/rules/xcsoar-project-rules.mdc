@@ -10,7 +10,11 @@ alwaysApply: true
 - 79 columns maximum (reasonable exceptions allowed)
 - Indent 2 spaces, no tabs
 - No indent for `namespace` blocks
-- Use `.clang-format` for new code; do not reformat old code unless touched
+- Use `.clang-format` for formatting new code
+- When modifying existing files, format only the lines you changed (not the entire file)
+- `.clang-format` handles include sorting automatically for new/modified code
+- Most IDEs can format on save; configure to format selection only
+- Avoid pure "formatting commits" that touch many files without functional changes
 
 ### File Headers
 - All source files must start with license header:
@@ -113,6 +117,12 @@ alwaysApply: true
 
 ## Git Workflow
 
+### General Rules
+- **DO NOT autocommit** - Never automatically commit changes without explicit user request
+- Always wait for explicit user instruction before creating commits
+- Stage changes with `git add` only when requested by the user
+- Create commits only when the user explicitly asks for them
+
 ### Branches
 - `master`: development branch for next minor release
 - `v<major>.<minor>.x`: current minor version branch (for bug fixes)
@@ -122,6 +132,7 @@ alwaysApply: true
 ### Patches
 - Must be self-explanatory with good description
 - Subject line: subsystem/library name + brief description
+- **Every commit must compile** - The codebase must be in a buildable state after each commit
 - Must compile and not introduce regressions
 - Must be self-contained; only change one thing
 - Split larger patches into smaller pieces
@@ -129,10 +140,22 @@ alwaysApply: true
 - Don't rewrite code unless needed; migrate incrementally
 
 ### Commit Messages
-- Format: `<File Path>:` or `<Component>:` `<commit message summary>`
+- Format: `<Component>:` or `<File Path>:` `<commit message summary>`
+- **Path Format Rules:**
+  - **DO NOT include `src/` prefix** (e.g., `InfoBoxes/InfoBoxWindow:` not `src/InfoBoxes/InfoBoxWindow:`)
+  - **Single file changes**: Use relative path from src/ without extension for .cpp/.hpp
+    - ✅ `Device/Driver/Flarm/Logger: Fix buffer overflow`
+    - ❌ `src/Device/Driver/Flarm/Logger.cpp: Fix buffer overflow`
+  - **Component changes**: Use component directory only
+    - ✅ `Device/Driver/Flarm: Update protocol parser`
+  - **Build system**: Use file name with extension
+    - ✅ `build/wayland.mk: Fix xdg-decoration filename`
+  - **Workflow files**: Include path with extension
+    - ✅ `.github/workflows/build-native.yml: Add caches`
 - **Priority Rules:**
-  1. **Single File Change:** Use the file path as the prefix (e.g., `src/Device/Driver/Flarm/Logger.cpp: Fix buffer overflow`)
-  2. **Component Change:** If multiple files in a component are changed, use the component name (e.g., `Device/Driver/Flarm: Update protocol parser`)
+  1. Single file → use component path (no .cpp/.hpp extension, no src/ prefix)
+  2. Multiple files in component → use component name
+  3. Build/config files → include extension (.mk, .py, .yml, etc.)
 - The first line is the summary
 - Following lines should provide detailed reasoning and context
 - Explain *why* the change is being made, not just *what* changed
@@ -144,6 +167,25 @@ alwaysApply: true
   leading to potential buffer overflows. This change uses the Path
   abstraction to ensure safe conversion at the API boundary.
   ```
+
+### Common Commit Message Patterns
+
+**Good examples:**
+- `InfoBoxes/InfoBoxWindow: Add visual selection indicator`
+- `Dialogs/dlgAnalysis: Fix layout overlap and improve navigation`
+- `Device/Driver/Flarm: Update protocol parser`
+- `build/wayland.mk: Fix xdg-decoration filename`
+- `po: Update translations and fix incorrect msgid associations`
+- `.github/workflows/build-native.yml: Add caches for Android builds`
+- `.cursor/rules: Add translation and git workflow guidelines`
+
+**Bad examples (and why):**
+- ❌ `Fix bug` - No component, no context
+- ❌ `Update code` - Too vague
+- ❌ `src/InfoBoxes/InfoBoxWindow.cpp: ...` - Don't include `src/` prefix
+- ❌ `Fixed the window sizing` - Use present tense ("Fix", not "Fixed")
+- ❌ `InfoBox updates` - Be specific about what was changed
+- ❌ `WIP: testing stuff` - Clean up before PR submission
 
 ## Architecture
 
@@ -605,3 +647,259 @@ if (data_components != nullptr) {
 - Follow color conventions (red=warning, orange=caution, green=safety, blue=neutral)
 - Support dark mode when applicable (pass `dark_mode` parameter to `Initialise()`)
 - Use platform detection for conditional styling (dithered displays, color vs monochrome)
+
+## Translation and Internationalization Workflow
+
+### Working with .po Files
+- Translation files are located in `po/` directory (33 language files + `xcsoar.pot` template)
+- Use `make update-po` to synchronize all `.po` files with source code changes
+- **CRITICAL**: Never add custom comments (e.g., `# FIXME:`, `# TODO:`) between `#, fuzzy` and `msgid`, or between `msgid` and `msgstr`
+- Valid comment placement: Before `#, fuzzy` or at the start of an entry block
+- Comments violating `.po` syntax will cause `msgmerge` to fail during `make update-po`
+
+### Translation Commit Organization
+- Translation updates should be committed as a single, comprehensive commit
+- Translation commits should generally be at the end of a feature branch
+- Commit message format: `po: <brief summary of what was translated/fixed>`
+- Include detailed description of what was fixed across which languages
+- Use `make update-po` before committing translations to ensure line numbers are current
+- Example commit structure:
+  ```
+  po: Update translations and fix incorrect msgid associations
+  
+  - Fix empty c-format translations for "%s: %s" across 30 languages
+  - Correct Hungarian translations for airspace and task messages
+  - Fix Croatian typo: "Iskjučen" → "Isključen"
+  - Translate new strings ("XCSoar data path", "Click to view...") into all 33 languages
+  - Update line number references via make update-po
+  ```
+
+### Translation Best Practices
+- When adding new translatable strings, translate them into all 33 languages if possible
+- Check for empty `msgstr` values in c-format strings (these cause blank UI text)
+- Verify translations are semantically correct, not just syntactically valid
+- Be aware of common translation confusion patterns (e.g., "No alternates available" vs "Update available")
+- Use native speaker review when possible for quality assurance
+- Test UI with translations enabled to catch display issues
+
+### Running make update-po
+- Run `make update-po` after any source code changes that add/modify translatable strings
+- This updates:
+  - Line number references in all `.po` files
+  - Adds new `msgid` entries from source code
+  - Marks changed strings as `#, fuzzy`
+  - Updates the `po/xcsoar.pot` template
+- Always commit `po/xcsoar.pot` along with `.po` file changes
+- Review the diff after `make update-po` to catch any unintended changes
+
+### What make update-po Actually Does
+
+Under the hood, `make update-po` runs these operations:
+1. Extracts all `_()` and `N_()` strings from source code → `po/xcsoar.pot`
+2. For each `.po` file, runs `msgmerge` to:
+   - Update line number references where strings are used
+   - Add new `msgid` entries from source
+   - Mark modified strings as `#, fuzzy` (needs review)
+   - Remove obsolete entries (moved to bottom with `#~`)
+3. Preserves existing translations (`msgstr` values)
+
+**Important:** This is why `.po` syntax must be perfect - `msgmerge` is a strict parser!
+
+### Debugging make update-po Failures
+
+If `make update-po` fails with syntax errors:
+1. Error will show which `.po` file and line number
+2. Common causes:
+   - Custom comments between `msgid` and `msgstr`
+   - Malformed multiline strings
+   - Missing quotes or escaped characters
+3. Fix the syntax error and re-run
+4. Use `msgfmt --check po/xx.po` to validate individual files
+5. If multiple files are affected, fix them all before re-running `make update-po`
+
+## Git History Management
+
+### Interactive Rebase Best Practices
+- Use `git rebase -i` for cleaning up commit history before submitting PRs
+- Common cleanup operations:
+  - **Squash**: Combine related commits (e.g., "Add feature" + "Fix feature" → single commit)
+  - **Fixup**: Silently merge fixes into parent commits (auto-discards commit message)
+  - **Reword**: Fix commit messages to follow project format
+  - **Drop**: Remove commits (e.g., duplicates, reverted changes)
+- Set `GIT_SEQUENCE_EDITOR` to automate rebase todo lists for scripted rebases
+- Use `GIT_EDITOR=true` or `GIT_EDITOR=cat` to skip interactive editor prompts when commit message is already prepared
+
+### Handling Rebase Conflicts
+- When rebasing causes conflicts:
+  1. Use `git status` to identify conflicted files
+  2. For simple cases, use `git checkout --ours` or `git checkout --theirs`
+  3. For translation files (`.po`), usually accept `--theirs` (the final translation commit)
+  4. Always use `git add <resolved-files>` before continuing
+  5. Use `git rebase --continue` to proceed
+- If rebase becomes too complex, use `git rebase --abort` and try a different approach
+- Consider breaking complex rebases into phases (e.g., reword → squash → cleanup)
+
+### Commit Cleanup Patterns
+- **Identify fixup candidates**: Look for sequential commits that modify the same component
+- **Check for duplicates**: Compare commit timestamps and diffs to find exact duplicates
+- **Find merge conflict fixes**: Look for commits with "merge conflict" or "fix conflict" that should be squashed into parent
+- **Verify commit message format**: Scan for commits missing component prefixes or using generic "Fix"/"Update" subjects
+- Use `git log --format="%H %s" --reverse` for scripting commit analysis
+- Use `git diff-tree` to compare commit contents when checking for duplicates
+
+### Cleanup Workflow Example
+```bash
+# Phase 1: Reword commit messages only (safest, no structural changes)
+# Phase 2: Squash related commits (e.g., 3 related fixes into 1)
+# Phase 3: Drop duplicates and fixup merge conflicts
+# Phase 4: Verify final history with git log --oneline
+```
+
+### Handling Translation Commit Conflicts
+- Translation commits often conflict during rebases (33+ files modified)
+- Strategy: Accept `--theirs` for all `.po` and `.pot` files (the final translation state)
+- Use: `git checkout --theirs po/*.po po/xcsoar.pot && git add po/`
+- This preserves the comprehensive translation commit at the end of the branch
+
+## Build System Debugging
+
+### Makefile Issues
+- Build system is in `build/` directory with modular `.mk` files
+- Each `.mk` file handles a specific library, feature, or platform (e.g., `build/wayland.mk`, `build/alsa.mk`)
+- Generated files are tracked via variables like `WAYLAND_GENERATED`, `SDL_GENERATED`
+- When debugging "No rule to make target" errors:
+  1. Check if the expected target file exists in the variable definition
+  2. Verify filenames match between generation rules and target rules
+  3. Look for typos in intermediate file names (e.g., `-code.c` vs `-public.c`)
+
+### Common Build Issues
+- **Missing dependencies**: Check `*_LDLIBS` variables for required libraries
+- **Protocol generation**: Wayland/SDL code generation must match expected output filenames
+- **Cross-compilation**: Different platforms have different `.mk` includes; check `build/detect.mk`
+- Use `make V=1` for verbose output to see actual command lines
+- Check `build/options.mk` for feature flags that might need to be enabled
+
+### Platform-Specific Builds
+- Each platform may have platform-specific files in subdirectories (e.g., `src/ui/window/wayland/`, `src/ui/window/gdi/`)
+- Use `#ifdef USE_WAYLAND`, `#ifdef USE_X11`, `#ifdef ANDROID` for conditional compilation
+- Test changes on multiple platforms when possible (at minimum: Linux, Windows, Android)
+- Pay attention to duplicate symbol definitions across platform implementations
+
+### Platform Code Organization Patterns
+
+XCSoar uses a consistent pattern for platform-specific implementations:
+
+**Directory Structure:**
+- `src/ui/window/custom/` - Shared base implementations (fallback/common code)
+- `src/ui/window/gdi/` - Windows GDI-specific implementations
+- `src/ui/window/wayland/` - Wayland-specific implementations  
+- `src/ui/window/x11/` - X11-specific implementations
+- `src/ui/window/sdl/` - SDL-specific implementations
+- Similar patterns exist in `src/ui/canvas/`, `src/ui/event/`, etc.
+
+**Implementation Pattern:**
+1. **Shared base** in `custom/` provides default/common implementation
+2. **Platform directories** override specific methods for that platform
+3. Build system conditionally compiles appropriate files based on `USE_*` defines
+4. Example: `TopWindow.cpp` exists in multiple directories, each compiled for its platform
+
+**When adding platform code:**
+- Check if platform-specific directory exists (e.g., `wayland/`, `gdi/`)
+- If yes, add implementation there (not in `custom/`)
+- If implementing cross-platform feature, add to `custom/` with platform overrides as needed
+- Use `#ifdef USE_WAYLAND`, `#ifdef USE_GDI`, etc. for conditional compilation in shared files
+- Don't duplicate code - extract common logic to base classes or utility functions
+
+**Common pattern:**
+```cpp
+// In custom/TopWindow.cpp - base implementation
+void TopWindow::SomeMethod() {
+  // Default implementation for platforms without specific override
+}
+
+// In wayland/TopWindow.cpp - Wayland-specific override
+void TopWindow::SomeMethod() {
+  // Wayland-specific implementation using Wayland APIs
+}
+```
+
+### Finding Platform-Specific Implementations
+
+When debugging or extending platform code:
+1. Use `find src/ -name "TopWindow.cpp"` to see all platform implementations
+2. Check `build/*.mk` files for which files are compiled per platform
+3. Look for `#ifdef USE_*` guards in `custom/` files for platform conditionals
+4. Grep for platform-specific functions to find where they're implemented:
+   ```bash
+   rg "CreateNative" src/ui/window/
+   ```
+5. Build system variables (in `build/detect.mk`) determine which platform is active
+
+**Common platform defines:**
+- `USE_GDI` - Windows GDI
+- `USE_WAYLAND` - Wayland compositor
+- `USE_X11` - X11 windowing
+- `USE_SDL` - SDL2 framework
+- `ANDROID` - Android platform
+- `KOBO` - Kobo e-reader
+- `USE_POLL_EVENT` - Poll-based event system (X11, Wayland)
+- `USE_FB` - Linux framebuffer
+
+## GitHub PR Review Workflow
+
+### Responding to PR Comments
+- Use `gh pr view <number> --comments` to retrieve all review comments programmatically
+- Address all comments systematically:
+  1. Read all comments first
+  2. Categorize: typos, bugs, design issues, questions
+  3. Fix issues in separate commits or squash into existing commits
+  4. Document fixes in commit messages
+- Use `gh pr comment <number>` to respond to specific review threads
+
+### Fixing PR Issues
+- **Small fixes** (typos, simple bugs): Either amend into existing commit or create fixup commit
+- **Larger issues**: Create properly formatted new commit, then consider squashing during final cleanup
+- **Translation issues**: Fix all languages, not just the one mentioned in review
+- Document what was changed in response to review (helps reviewers verify fixes)
+
+### Pre-PR Checklist
+- Run `make update-po` if any translatable strings were added/modified
+- Check that all `.po` files have valid syntax (no custom comments in wrong places)
+- Verify commit messages follow format: `<Component>: <Summary>`
+- Squash fixup commits and reword generic "Fix" messages
+- Ensure branch compiles on at least one platform
+- Check for accidentally committed debug code or temporary files
+
+## Common Mistakes and How to Avoid Them
+
+### Translation File Mistakes
+- ❌ Adding custom comments between `msgid` and `msgstr`
+- ✅ Place comments before `msgid` or at entry start
+- ❌ Forgetting to run `make update-po` after source changes
+- ✅ Always run `make update-po` before committing translations
+- ❌ Translating only one language when fixing an issue
+- ✅ Fix the issue across all affected languages
+
+### Git Workflow Mistakes
+- ❌ Creating many small fixup commits during development
+- ✅ Squash related commits before PR submission
+- ❌ Generic commit messages: "Fix bug", "Update code"
+- ✅ Use component prefix: "Device/Flarm: Fix buffer overflow"
+- ❌ Committing translation files in middle of feature branch
+- ✅ Move translation commit to end of branch
+
+### Build System Mistakes
+- ❌ Hardcoding filenames without checking generation output
+- ✅ Verify generated file names match target rules
+- ❌ Adding libraries to wrong `*_LDLIBS` variable
+- ✅ Add to correct feature's LDLIBS (e.g., `AUDIO_LDLIBS` for sound)
+- ❌ Platform-specific code without proper `#ifdef` guards
+- ✅ Use appropriate platform detection macros
+
+### Code Organization Mistakes
+- ❌ Including platform-specific headers in cross-platform code
+- ✅ Keep platform code in platform-specific directories
+- ❌ Implementing platform features in `custom/` when platform-specific files exist
+- ✅ Use existing platform directories (e.g., `wayland/TopWindow.cpp`)
+- ❌ Duplicating code across platform implementations
+- ✅ Extract common code to shared base classes or utilities

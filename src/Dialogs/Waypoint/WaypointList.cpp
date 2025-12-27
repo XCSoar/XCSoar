@@ -12,7 +12,9 @@
 #include "Form/DataField/Prefix.hpp"
 #include "Profile/Current.hpp"
 #include "Profile/Map.hpp"
+#include "Profile/Profile.hpp"
 #include "Profile/Keys.hpp"
+#include "system/Path.hpp"
 #include "Waypoint/LastUsed.hpp"
 #include "Waypoint/WaypointList.hpp"
 #include "Waypoint/WaypointListBuilder.hpp"
@@ -65,7 +67,7 @@ static const TCHAR *const type_filter_items[] = {
   _T("Left FAI Triangle"),
   _T("Right FAI Triangle"),
   _T("Custom"),
-  _T("File 1"), _T("File 2"),
+  // File entries are dynamically added in CreateTypeDataField
   _T("Map file"),
   _T("Recently Used"),
   nullptr
@@ -78,6 +80,7 @@ struct WaypointListDialogState
   int distance_index;
   int direction_index;
   TypeFilter type_index;
+  int file_num = -1;  // For FILE type: -1=all files, 0+=specific file
 
   bool IsDefined() const {
     return !name.empty() || distance_index > 0 ||
@@ -89,6 +92,7 @@ struct WaypointListDialogState
     filter.distance =
       Units::ToSysDistance(distance_filter_items[distance_index]);
     filter.type_index = type_index;
+    filter.file_num = file_num;
 
     if (direction_index != 1)
       filter.direction = Angle::Degrees(direction_filter_items[direction_index]);
@@ -352,27 +356,41 @@ CreateDirectionDataField(DataFieldListener *listener, Angle last_heading)
   return df;
 }
 
-static void
-ReplaceProfilePathBase(DataFieldEnum &df, unsigned i,
-                       std::string_view profile_key)
-{
-  const auto p = Profile::map.GetPathBase(profile_key);
-  if (p != nullptr)
-    df.replaceEnumText(i, p.c_str());
-}
-
 static DataField *
 CreateTypeDataField(DataFieldListener *listener)
 {
   DataFieldEnum *df = new DataFieldEnum(listener);
   df->addEnumTexts(type_filter_items);
 
-  ReplaceProfilePathBase(*df, (unsigned)TypeFilter::FILE,
-                         ProfileKeys::WaypointFileList);
-  ReplaceProfilePathBase(*df, (unsigned)TypeFilter::MAP,
-                         ProfileKeys::MapFile);
+  // Dynamically add file entries based on loaded waypoint files
+  // Use IDs >= _DYNAMIC_FILE_ID_START to encode file index
+  constexpr unsigned DYNAMIC_FILE_ID_START = (unsigned)TypeFilter::_DYNAMIC_FILE_ID_START;
+  
+  const auto paths = Profile::GetMultiplePaths(ProfileKeys::WaypointFileList,
+                                               nullptr);
+  for (size_t i = 0; i < paths.size(); ++i) {
+    const auto &path = paths[i];
+    const auto filename = path.GetBase();
+    if (filename != nullptr) {
+      // Insert before "Map file" entry with unique ID
+      df->addEnumText(filename.c_str(), DYNAMIC_FILE_ID_START + i);
+    }
+  }
 
-  df->SetValue(dialog_state.type_index);
+  // Replace "Map file" text with actual filename if available
+  const auto map_path = Profile::map.GetPathBase(ProfileKeys::MapFile);
+  if (map_path != nullptr)
+    df->replaceEnumText((unsigned)TypeFilter::MAP, map_path.c_str());
+
+  // Set current value based on type_index and file_num
+  unsigned value;
+  if (dialog_state.type_index == TypeFilter::FILE && dialog_state.file_num >= 0) {
+    value = DYNAMIC_FILE_ID_START + dialog_state.file_num;
+  } else {
+    value = (unsigned)dialog_state.type_index;
+  }
+  df->SetValue(value);
+
   return df;
 }
 
@@ -409,7 +427,17 @@ WaypointListWidget::OnModified(DataField &df) noexcept
     dialog_state.direction_index = dfe.GetValue();
   } else if (filter_widget.IsDataField(TYPE, df)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
-    dialog_state.type_index = (TypeFilter)dfe.GetValue();
+    unsigned value = dfe.GetValue();
+    
+    // Decode value: >= _DYNAMIC_FILE_ID_START means FILE filter with specific file index
+    constexpr unsigned DYNAMIC_FILE_ID_START = (unsigned)TypeFilter::_DYNAMIC_FILE_ID_START;
+    if (value >= DYNAMIC_FILE_ID_START) {
+      dialog_state.type_index = TypeFilter::FILE;
+      dialog_state.file_num = value - DYNAMIC_FILE_ID_START;
+    } else {
+      dialog_state.type_index = (TypeFilter)value;
+      dialog_state.file_num = -1;  // Reset file_num for non-FILE filters
+    }
   }
 
   UpdateList();

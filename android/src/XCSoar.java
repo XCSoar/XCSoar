@@ -88,6 +88,16 @@ public class XCSoar extends Activity implements PermissionManager {
 
     final Window window = getWindow();
     window.requestFeature(Window.FEATURE_NO_TITLE);
+    
+    /* On Android 15+, configure window BEFORE setContentView() to avoid
+       having window bounds calculated with wrong flags */
+    if (Build.VERSION.SDK_INT >= 35) {
+      window.setDecorFitsSystemWindows(false);
+      window.setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+                      WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS,
+                      WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+                      WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+    }
 
     TextView tv = new TextView(this);
     tv.setText("Loading XCSoar...");
@@ -97,6 +107,14 @@ public class XCSoar extends Activity implements PermissionManager {
        window flags, which we now remember for
        WindowUtil.leaveFullScreenMode() to avoid clearing those */
     initialWindowFlags = window.getAttributes().flags;
+
+    /* Apply fullscreen mode early (with default value = true) to avoid
+       visible layout changes when the native code loads the profile.
+       The default fullscreen setting is true (DisplaySettings::SetDefaults()).
+       If the user has disabled fullscreen in their profile, it will be
+       updated later by native code via setFullScreen(). */
+    fullScreen = true;
+    applyFullScreen();
 
     submitConfiguration(getResources().getConfiguration());
 
@@ -109,6 +127,14 @@ public class XCSoar extends Activity implements PermissionManager {
        can keep using /sdcard/XCSoarData */
     if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.R)
       requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, null);
+    
+    /* Android 13+ requires runtime permission for notifications */
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+          != PackageManager.PERMISSION_GRANTED) {
+        requestPermission(Manifest.permission.POST_NOTIFICATIONS, null);
+      }
+    }
   }
 
   private void quit() {
@@ -163,6 +189,9 @@ public class XCSoar extends Activity implements PermissionManager {
 
   final Handler fullScreenHandler = new Handler() {
       public void handleMessage(Message msg) {
+        /* Called by native code when the fullscreen setting is loaded from
+           the profile. This may override the initial default value that was
+           applied in onCreate(). */
         fullScreen = msg.what != 0;
         applyFullScreen();
       }
@@ -207,6 +236,22 @@ public class XCSoar extends Activity implements PermissionManager {
                                 errorHandler,
                                 this);
     setContentView(nativeView);
+    
+    /* On Android 11+, prevent the content view from applying system insets as padding */
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      final android.view.View decorView = getWindow().getDecorView();
+      final android.view.View contentView = decorView.findViewById(android.R.id.content);
+      if (contentView != null) {
+        contentView.setOnApplyWindowInsetsListener(new android.view.View.OnApplyWindowInsetsListener() {
+          @Override
+          public android.view.WindowInsets onApplyWindowInsets(android.view.View v, android.view.WindowInsets insets) {
+            return android.view.WindowInsets.CONSUMED;
+          }
+        });
+        contentView.setPadding(0, 0, 0, 0);
+      }
+    }
+    
     // Receive keyboard events
     nativeView.setFocusableInTouchMode(true);
     nativeView.setFocusable(true);
@@ -275,6 +320,11 @@ public class XCSoar extends Activity implements PermissionManager {
   }
 
   @Override public boolean onKeyDown(int keyCode, final KeyEvent event) {
+    // Let Android handle volume keys normally
+    if (keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+        keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+      return super.onKeyDown(keyCode, event);
+
     // Overrides Back key to use in our app
     if (nativeView != null) {
       nativeView.onKeyDown(keyCode, event);
@@ -284,6 +334,11 @@ public class XCSoar extends Activity implements PermissionManager {
   }
 
   @Override public boolean onKeyUp(int keyCode, final KeyEvent event) {
+    // Let Android handle volume keys normally
+    if (keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+        keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+      return super.onKeyUp(keyCode, event);
+
     if (nativeView != null) {
       nativeView.onKeyUp(keyCode, event);
       return true;
@@ -293,10 +348,10 @@ public class XCSoar extends Activity implements PermissionManager {
 
   @Override public void onWindowFocusChanged(boolean hasFocus) {
     if (hasFocus && wantFullScreen())
-      /* some Android don't restore immersive mode after returning to
-         this app, so unfortunately we need to reapply those settings
-         manually */
-      WindowUtil.enableImmersiveMode(getWindow());
+      /* some Android don't restore fullscreen settings after returning to
+         this app or after orientation changes, so we need to reapply all
+         fullscreen settings (immersive mode + display cutout mode) manually */
+      WindowUtil.enterFullScreenMode(getWindow());
 
     super.onWindowFocusChanged(hasFocus);
   }
@@ -322,6 +377,12 @@ public class XCSoar extends Activity implements PermissionManager {
   @Override public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
     submitConfiguration(newConfig);
+
+    /* Reapply fullscreen settings after orientation change.
+       The display cutout mode and window layout parameters can be reset
+       during orientation changes, so we need to reapply them. */
+    if (wantFullScreen())
+      WindowUtil.enterFullScreenMode(getWindow());
   }
 
   @Override

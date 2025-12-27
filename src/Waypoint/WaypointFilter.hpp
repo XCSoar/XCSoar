@@ -26,7 +26,17 @@ enum class TypeFilter : uint8_t {
   FILE,
   MAP,
   LAST_USED,
+
+  /**
+   * Reserved range for dynamic entries in UI:
+   * IDs 100+ are used for individual waypoint files in the filter dropdown.
+   * DO NOT add enum values >= 100 to avoid conflicts!
+   */
+  _DYNAMIC_FILE_ID_START = 100,
 };
+
+static_assert((unsigned)TypeFilter::LAST_USED < (unsigned)TypeFilter::_DYNAMIC_FILE_ID_START,
+              "TypeFilter enum values must be < 100 to avoid collision with dynamic file IDs");
 
 struct WaypointFilter
 {
@@ -38,11 +48,18 @@ struct WaypointFilter
   Angle direction;
   TypeFilter type_index;
 
+  /**
+   * When type_index is FILE, this specifies which file to filter by.
+   * -1 = all PRIMARY files, 0+ = specific file index
+   */
+  int file_num = -1;
+
   void Clear() {
     name.clear();
     distance = 0;
     direction = Angle::Native(-1);
     type_index = TypeFilter::ALL;
+    file_num = -1;
   }
 
   [[gnu::pure]]

@@ -106,6 +106,19 @@ VScrollWidget::Hide() noexcept
   widget->Hide();
 }
 
+void
+VScrollWidget::Move(const PixelRect &rc) noexcept
+{
+  WindowWidget::Move(rc);
+
+  /* Update virtual height when moved (e.g., when expert mode toggles
+     and child widget changes size) */
+  if (visible) {
+    UpdateVirtualHeight(rc);
+    widget->Move(GetWindow().GetVirtualRect());
+  }
+}
+
 bool
 VScrollWidget::SetFocus() noexcept
 {

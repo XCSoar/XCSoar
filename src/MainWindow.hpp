@@ -9,6 +9,7 @@
 #include "BatteryTimer.hpp"
 #include "Widget/ManagedWidget.hpp"
 #include "UIUtil/GestureManager.hpp"
+#include "ProductName.hpp"
 
 #include <cstdint>
 #include <cassert>
@@ -34,7 +35,7 @@ namespace InfoBoxLayout { struct Layout; }
  * The XCSoar main window.
  */
 class MainWindow : public UI::SingleWindow {
-  static constexpr const TCHAR *title = _T("XCSoar");
+  static constexpr const TCHAR *title = PRODUCT_NAME_T;
 
   Look *look = nullptr;
 

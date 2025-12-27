@@ -1,7 +1,17 @@
 VERSION = $(strip $(shell cat $(topdir)/VERSION.txt))
 FULL_VERSION = $(VERSION)
 
-VERSION_CPPFLAGS = -DXCSOAR_VERSION=\"$(VERSION)\"
+# Product name (default: XCSoar, can be overridden via PRODUCT_NAME variable)
+PRODUCT_NAME ?= XCSoar
+
+# Lowercase product name for Unix directory names (e.g., .xcsoar, /etc/xcsoar)
+PRODUCT_NAME_LOWER := $(shell echo $(PRODUCT_NAME) | tr '[:upper:]' '[:lower:]')
+
+# Product name defines for compilation (used in VERSION_CPPFLAGS below)
+# NOTE: These must match the #ifndef guards in src/ProductName.hpp
+PRODUCT_NAME_CPPFLAGS = -DPRODUCT_NAME=\"$(PRODUCT_NAME)\" -DPRODUCT_NAME_LC=\"$(PRODUCT_NAME_LOWER)\"
+
+VERSION_CPPFLAGS = -DXCSOAR_VERSION=\"$(VERSION)\" $(PRODUCT_NAME_CPPFLAGS)
 
 GIT_COMMIT_ID := $(shell git rev-parse --short --verify HEAD 2>$(NUL))
 RELEASE_COMMIT_ID := $(shell git rev-parse --short --verify "v$(VERSION)^{commit}" 2>$(NUL))

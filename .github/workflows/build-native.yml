@@ -8,10 +8,10 @@ on:
       - 'cloud/**'
       - 'doc/**'
       - 'fuzzer/**'
-      - 'ide/**'
+      - 'ide/eclipse/**'
+      - 'ide/vagrant/**'
       - 'kobo/**'
       - 'python/**'
-      - '.github/workflows/build-container.yml'
       - '.github/workflows/build-unix.yml'
       - '.github/workflows/build-translation.yml'
       - '.readthedocs.yaml'
@@ -27,10 +27,10 @@ on:
       - 'cloud/**'
       - 'doc/**'
       - 'fuzzer/**'
-      - 'ide/**'
+      - 'ide/eclipse/**'
+      - 'ide/vagrant/**'
       - 'kobo/**'
       - 'python/**'
-      - '.github/workflows/build-container.yml'
       - '.github/workflows/build-unix.yml'
       - '.github/workflows/build-translation.yml'
       - '.readthedocs.yaml'
@@ -42,6 +42,60 @@ env:
   BOOST: boost_1_90_0
 
 jobs:
+  check-container-changes:
+    name: "Check if container needs rebuilding"
+    runs-on: ubuntu-24.04
+    outputs:
+      container-changed: ${{ steps.filter.outputs.container }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            container:
+              - 'ide/docker/**'
+              - 'ide/provisioning/**'
+              - '.github/workflows/build-native.yml'
+
+  build-container:
+    name: "Build Container"
+    runs-on: ubuntu-24.04
+    needs: check-container-changes
+    if: needs.check-container-changes.outputs.container-changed == 'true' || github.event_name == 'workflow_dispatch'
+    env:
+      REGISTRY: ghcr.io
+      IMAGENAME: xcsoar-build
+    outputs:
+      image: ghcr.io/${{ steps.lc_repository_name.outputs.lowercase }}/xcsoar-build:latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: true
+      - name: Login to Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      - id: lc_repository_name
+        uses: ASzc/change-string-case-action@v6
+        with:
+          string: ${{ github.repository }}
+      - name: build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+          context: ./ide
+          file: ./ide/docker/Dockerfile
+          tags: ghcr.io/${{ steps.lc_repository_name.outputs.lowercase }}/xcsoar-build:latest
+          cache-from: type=registry,ref=ghcr.io/${{ steps.lc_repository_name.outputs.lowercase }}/xcsoar-build:latest
+          cache-to: type=inline
+          secrets: |
+            GIT_AUTH_TOKEN=${{ github.token }}
+
   release:
     name: "Create Release"
     runs-on: ubuntu-24.04
@@ -97,29 +151,30 @@ jobs:
 
   build:
     runs-on: ${{ matrix.os }}
-    needs: release
+    needs: [release]
+    if: always()
     container: ${{ matrix.target_container }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             target: UNIX
             target_bin: xcsoar_${{ needs.release.outputs.version }}_amd64
             target_bin_path: ''
             target_final: xcsoar_
             target_ext: .deb
             target_upload: true
-            target_container: debian:bookworm-slim
-          - os: ubuntu-22.04
+            target_container: debian:trixie-slim
+          - os: ubuntu-24.04
             target: KOBO
             target_bin: KoboRoot
             target_bin_path: ''
             target_final: KoboRoot
             target_ext: .tgz
             target_upload: true
-            target_container: debian:bookworm-slim
-          - os: ubuntu-22.04
+            target_container: debian:trixie-slim
+          - os: ubuntu-24.04
             target: ANDROID
             target_bin: XCSoar
             target_bin_path: bin
@@ -127,8 +182,8 @@ jobs:
             target_ext: .apk
             target_upload: true
             ndk: r26d
-            target_container: debian:bookworm-slim
-          - os: ubuntu-22.04
+            target_container: debian:trixie-slim
+          - os: ubuntu-24.04
             target: ANDROID_BUNDLE
             target_bin: XCSoar
             target_bin_path: bin
@@ -136,16 +191,17 @@ jobs:
             target_ext: .apk
             target_upload: false
             ndk: r26d
-            target_container: debian:bookworm-slim
-          - os: ubuntu-22.04
+            target_container: debian:trixie-slim
+          - os: ubuntu-24.04
             target: WIN64
             target_bin: XCSoar
             target_bin_path: bin
             target_final: XCSoar
             target_ext: .exe
             target_upload: true
+            target_container: debian:trixie-slim
             target_container: debian:bookworm-slim
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             target: PC
             target_bin: XCSoar
             target_bin_path: bin
@@ -173,16 +229,13 @@ jobs:
     steps:
       - name: Install checkout dependencies
         run: |
-          if [ "${{ matrix.os }}" = 'ubuntu-22.04' ]; then
+          if [ "${{ matrix.os }}" = 'ubuntu-24.04' ]; then
             apt-get update
             apt-get install -y --no-install-recommends git \
             ca-certificates rsync openssh-client
           fi
 
-      - name: Set vars for release
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: |
-          echo "DEBUG=n" >> $GITHUB_ENV
+            echo "DEBUG=n" >> $GITHUB_ENV
           if [ ${{ matrix.target }} = "xcsoar" ]; then
             echo "TARGET_FINAL=xcsoar" >> $GITHUB_ENV
           fi
@@ -193,7 +246,6 @@ jobs:
           submodules: true
 
       - name: Cache ccache
-        uses: hendrikmuhs/ccache-action@v1.2
         with:
           key: ${{ matrix.target }}-ccache
 
@@ -228,7 +280,7 @@ jobs:
           path: ${{ github.workspace }}/output/download
 
       - name: "Cache apt packages"
-        if: ${{ matrix.os == 'ubuntu-22.04' }}
+        if: ${{ matrix.os == 'ubuntu-24.04' }}
         uses: actions/cache@v5
         with:
           key: apt-${{ matrix.target_container }}-${{ hashFiles('ide/provisioning/install-debian-packages.sh') }}
@@ -269,11 +321,30 @@ jobs:
             ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
             ${{ github.workspace }}/output/src/${{ env.BOOST }}
 
+      - name: "Extract Android version numbers for cache key"
+        if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
+        id: android_versions
+        run: |
+          # Extract version numbers from install script
+          SDK_TOOLS=$(grep "^ANDROID_SDK_TOOLS_VERSION=" ide/provisioning/install-android-tools.sh | cut -d'=' -f2 | tr -d '"')
+          BUILD_TOOLS=$(grep "^ANDROID_BUILD_TOOLS_VERSION=" ide/provisioning/install-android-tools.sh | cut -d'=' -f2 | tr -d '"')
+          PLATFORM=$(grep "^ANDROID_PLATFORM_VERSION=" ide/provisioning/install-android-tools.sh | cut -d'=' -f2 | tr -d '"')
+          NDK=$(grep "^ANDROID_NDK_VERSION=" ide/provisioning/install-android-tools.sh | cut -d'=' -f2 | tr -d '"')
+          BUNDLETOOL=$(grep "^BUNDLETOOL_VERSION=" ide/provisioning/install-android-tools.sh | cut -d'=' -f2 | tr -d '"')
+          
+          # Create version string for cache key
+          VERSIONS="sdk${SDK_TOOLS}-build${BUILD_TOOLS}-platform${PLATFORM}-ndk${NDK}-bundle${BUNDLETOOL}"
+          echo "versions=${VERSIONS}" >> $GITHUB_OUTPUT
+          
+          # Also hash script files as backup (in case of other changes)
+          cat ide/provisioning/install-android-tools.sh build/android.mk build/android_bundle.mk 2>/dev/null | sha256sum | cut -d' ' -f1 > /tmp/android_script_hash.txt
+          echo "script_hash=$(cat /tmp/android_script_hash.txt)" >> $GITHUB_OUTPUT
+
       - name: "Cache Android SDK/NDK"
         if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
         uses: actions/cache@v5
         with:
-          key: android-tools-${{ matrix.ndk }}-${{ hashFiles('ide/provisioning/install-android-tools.sh') }}
+          key: android-tools-${{ matrix.ndk }}-${{ steps.android_versions.outputs.versions }}-script${{ steps.android_versions.outputs.script_hash }}
           restore-keys: |
             android-tools-${{ matrix.ndk }}-
             android-tools-
@@ -282,11 +353,22 @@ jobs:
             ~/opt/android-ndk-${{ matrix.ndk }}
             ~/opt/bundletool
 
+      - name: "Hash third-party patches"
+        if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' || matrix.target == 'KOBO' }}
+        id: thirdparty_patches
+        run: |
+          if [ -d lib ]; then
+            find lib -type f -path '*/patches/*' | sort | xargs sha256sum | sha256sum | cut -d' ' -f1 > /tmp/patches_hash.txt
+            echo "patches_hash=$(cat /tmp/patches_hash.txt)" >> $GITHUB_OUTPUT
+          else
+            echo "patches_hash=" >> $GITHUB_OUTPUT
+          fi
+
       - name: "Cache third-party libraries"
         if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' || matrix.target == 'KOBO' }}
         uses: actions/cache@v5
         with:
-          key: thirdparty-${{ matrix.target }}-${{ hashFiles('build/thirdparty.py', 'build/python/build/libs.py', 'build/python/build/project.py', 'build/thirdparty.mk') }}
+          key: thirdparty-${{ matrix.target }}-${{ hashFiles('build/thirdparty.py', 'build/python/build/libs.py', 'build/python/build/project.py', 'build/thirdparty.mk') }}-patches${{ steps.thirdparty_patches.outputs.patches_hash }}
           restore-keys: |
             thirdparty-${{ matrix.target }}-
           path: |
@@ -295,7 +377,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          if [ ${{ matrix.os }} = 'ubuntu-22.04' ]; then
+          if [ ${{ matrix.os }} = 'ubuntu-24.04' ]; then
             ./ide/provisioning/install-debian-packages.sh UPDATE
             ./ide/provisioning/install-debian-packages.sh BASE
             if [ ${{ matrix.target }} = 'UNIX' ]; then
@@ -316,7 +398,7 @@ jobs:
               ./ide/provisioning/install-debian-packages.sh LINUX
               ./ide/provisioning/install-debian-packages.sh WIN
             fi
-            if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target}} = 'ANDROID_BUNDLE' ]; then
+            if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target }} = 'ANDROID_BUNDLE' ]; then
               ./ide/provisioning/install-debian-packages.sh LINUX
               ./ide/provisioning/install-debian-packages.sh ARM
               ./ide/provisioning/install-debian-packages.sh LLVM
@@ -380,6 +462,7 @@ jobs:
             mkdir -p output/UNIX/DPKG
             rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
             cd output/UNIX/DPKG
+            ./ide/provisioning/install-debian-packages.sh DEBIAN
             DEB_BUILD_OPTIONS=ccache,noopt dpkg-buildpackage --jobs-force=$(nproc) --no-sign
           fi
 
@@ -416,6 +499,7 @@ jobs:
             mkdir -p output/UNIX/DPKG
             rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
             cd output/UNIX/DPKG
+            ./ide/provisioning/install-debian-packages.sh DEBIAN
             DEB_BUILD_OPTIONS=ccache dpkg-buildpackage --jobs-force=$(nproc) --no-sign
             cp *.deb ../
           fi
@@ -468,3 +552,50 @@ jobs:
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
           TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
           SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
+
+  check-docs-changes:
+    name: "Check if docs need building"
+    runs-on: ubuntu-24.04
+    outputs:
+      docs-changed: ${{ steps.filter.outputs.docs }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            docs:
+              - 'doc/**'
+              - '.github/workflows/build-native.yml'
+
+  build-docs:
+    name: "Build Documentation"
+    uses: ./.github/workflows/build-docs.yml
+    needs: [build-container, check-docs-changes]
+    if: (needs.check-docs-changes.outputs.docs-changed == 'true' || github.event_name == 'workflow_dispatch') && (needs.build-container.result == 'success' || needs.build-container.result == 'skipped')
+    secrets: inherit
+
+  check-kernel-changes:
+    name: "Check if kernel needs building"
+    runs-on: ubuntu-24.04
+    outputs:
+      kernel-changed: ${{ steps.filter.outputs.kernel }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            kernel:
+              - 'kobo/kernel/**'
+              - '.github/workflows/build-native.yml'
+
+  build-kernel:
+    name: "Build Kobo Kernel"
+    uses: ./.github/workflows/build-kernel.yml
+    needs: check-kernel-changes
+    if: needs.check-kernel-changes.outputs.kernel-changed == 'true' || github.event_name == 'workflow_dispatch'

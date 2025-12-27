@@ -211,7 +211,8 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
       if (0 != axis_value) {
         Event event(Event::MOUSE_WHEEL,
                     PixelPoint((unsigned)x, (unsigned)y));
-        event.param = unsigned((int) axis_value);
+        /* Invert scroll direction to match X11 convention (positive = scroll up) */
+        event.param = unsigned(-(int) axis_value);
         queue.Push(event);
       }
     }

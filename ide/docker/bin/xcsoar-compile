@@ -26,12 +26,21 @@ case "${TARGET}" in
       "UNIX-SDL")
         make TARGET="UNIX" -j"${CPUS}" OPENGL=n ENABLE_SDL=y USE_SDL2=y "${ARGS[@]}"
       ;;
-      "UNIX-DEBIAN")
-        dpkg-buildpackage -uc -us -j"${CPUS}" "${ARGS[@]}"
+      "DEBIAN" | "UNIX-DEBIAN")
+        TARGET=UNIX DEB_BUILD_OPTIONS=ccache dpkg-buildpackage --jobs-force="${CPUS}" --no-sign "${ARGS[@]}"
         ls ../
       ;;
+      "WAYLAND-DEBIAN")
+        TARGET=WAYLAND DEB_BUILD_OPTIONS=ccache dpkg-buildpackage --jobs-force="${CPUS}" --no-sign "${ARGS[@]}"
+        ls ../
+      ;;
+      "ALL")
+        for target in ANDROID DOCS KOBO WAYLAND UNIX PC WIN64 DEBIAN; do
+          "$0" "${target}" "${ARGS[@]}" || true
+        done
+      ;;
       *)
-        echo "No target specified. Valid targets: ANDROID DOCS KOBO WAYLAND UNIX UNIX-SDL PC WIN64"
+        echo "No target specified. Valid targets: ANDROID DOCS KOBO WAYLAND UNIX UNIX-SDL PC WIN64 DEBIAN WAYLAND-DEBIAN ALL"
         exit 1
       ;;
 esac

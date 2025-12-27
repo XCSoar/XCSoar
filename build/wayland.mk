@@ -3,10 +3,11 @@ EGL = y
 OPENGL = y
 
 $(eval $(call pkg-config-library,WAYLAND,wayland-egl))
+$(eval $(call pkg-config-library,WAYLAND_CURSOR,wayland-cursor))
 $(eval $(call pkg-config-library,XKBCOMMON,xkbcommon))
 WAYLAND_FEATURE_CPPFLAGS = -DUSE_WAYLAND
-WAYLAND_CPPFLAGS += $(XKBCOMMON_CPPFLAGS)
-WAYLAND_LDLIBS += $(XKBCOMMON_LDLIBS)
+WAYLAND_CPPFLAGS += $(WAYLAND_CURSOR_CPPFLAGS) $(XKBCOMMON_CPPFLAGS)
+WAYLAND_LDLIBS += $(WAYLAND_CURSOR_LDLIBS) $(XKBCOMMON_LDLIBS)
 
 # Generate C sources and headers from the Wayland protocol
 # description; this is needed for interfaces which do not come
@@ -17,6 +18,7 @@ INCLUDES += -isystem $(WAYLAND_GENERATED)
 
 # from Debian package "wayland-protocols"
 XDG_SHELL_XML = /usr/share/wayland-protocols/stable/xdg-shell/xdg-shell.xml
+XDG_DECORATION_XML = /usr/share/wayland-protocols/unstable/xdg-decoration/xdg-decoration-unstable-v1.xml
 
 # from Debian package "libwayland-bin"
 WAYLAND_SCANNER = wayland-scanner
@@ -27,6 +29,16 @@ $(WAYLAND_GENERATED)/xdg-shell-client-protocol.h: $(XDG_SHELL_XML) | $(WAYLAND_G
 	@mv $@.tmp $@
 
 $(WAYLAND_GENERATED)/xdg-shell-public.c: $(XDG_SHELL_XML) | $(WAYLAND_GENERATED)/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(WAYLAND_SCANNER) public-code <$< >$@.tmp
+	@mv $@.tmp $@
+
+$(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-client-protocol.h: $(XDG_DECORATION_XML) | $(WAYLAND_GENERATED)/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(WAYLAND_SCANNER) client-header <$< >$@.tmp
+	@mv $@.tmp $@
+
+$(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-public.c: $(XDG_DECORATION_XML) | $(WAYLAND_GENERATED)/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(WAYLAND_SCANNER) public-code <$< >$@.tmp
 	@mv $@.tmp $@

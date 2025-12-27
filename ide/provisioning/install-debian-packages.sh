@@ -52,13 +52,14 @@ install_manual() {
 install_linux() {
   echo Installing dependencies for the Linux target...
   apt-get install ${APTOPTS[*]} make g++ \
+    binutils-gold \
     zlib1g-dev \
     libfmt-dev \
     libdbus-1-dev \
     libsodium-dev \
     libfreetype-dev \
     libpng-dev libjpeg-dev \
-    libtiff5-dev libgeotiff-dev \
+    libtiff-dev libgeotiff-dev \
     libssl-dev \
     libcurl4-openssl-dev \
     libc-ares-dev \
@@ -79,7 +80,9 @@ install_linux() {
 install_wayland() {
   echo Installing dependencies for the Wayland target...
   apt-get install ${APTOPTS[*]} wayland-protocols \
-    libwayland-bin
+    libwayland-bin \
+    libwayland-dev \
+    libxkbcommon-dev
   echo
 }
 
@@ -91,6 +94,11 @@ install_debian() {
     libio-captureoutput-perl \
     build-essential
   echo
+  if [ -f debian/control ]; then
+    echo Installing build dependencies from debian/control
+    mk-build-deps -i -r -t 'apt-get -y --no-install-recommends' debian/control || true
+    echo
+  fi
 }
 
 install_llvm() {

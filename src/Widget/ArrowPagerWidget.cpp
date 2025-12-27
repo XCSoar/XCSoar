@@ -132,6 +132,8 @@ ArrowPagerWidget::Show(const PixelRect &rc) noexcept
 
   if (extra != nullptr)
     extra->Show(layout.extra);
+
+  UpdateButtons();
 }
 
 void
@@ -203,4 +205,12 @@ ArrowPagerWidget::KeyPress(unsigned key_code) noexcept
   default:
     return false;
   }
+}
+
+void
+ArrowPagerWidget::UpdateButtons() noexcept
+{
+  const bool enable = GetSize() >= 2;
+  previous_button.SetEnabled(enable);
+  next_button.SetEnabled(enable);
 }

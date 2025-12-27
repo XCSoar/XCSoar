@@ -69,8 +69,8 @@ struct EventBuilder {
       // All modes are valid at this point
       int mode_id = config.MakeMode(token);
       if (mode_id < 0) {
-        LogFormat(_T("Too many modes: %.*s at %u"),
-                  int(token.size()), token.data(), line);
+        LogFormat(_T("Too many modes at line %u: %.*s"),
+                  line, int(token.size()), token.data());
         continue;
       }
 
@@ -93,7 +93,7 @@ struct EventBuilder {
         if (key > 0)
           config.SetKeyEvent(mode_id, key, event_id);
         else
-          LogFormat(_T("Invalid key data: %s at %u"), data.c_str(), line);
+          LogFormat(_T("Invalid key data at line %u: %s"), line, data.c_str());
 
         // Make gce (Glide Computer Event)
         // GCE - Glide Computer Event
@@ -103,7 +103,7 @@ struct EventBuilder {
         if (key >= 0)
           config.GC2Event[key] = event_id;
         else
-          LogFormat(_T("Invalid GCE data: %s at %u"), data.c_str(), line);
+          LogFormat(_T("Invalid GCE data at line %u: %s"), line, data.c_str());
 
         // Make gesture (Gesture Event)
         // Key - Key Event
@@ -122,7 +122,7 @@ struct EventBuilder {
           config.Gesture2Event.Remove(data.c_str());
           config.Gesture2Event.Add(data.c_str(), event_id);
         } else
-          LogFormat(_T("Invalid gesture data: %s at %u"), data.c_str(), line);
+          LogFormat(_T("Invalid gesture data at line %u: %s"), line, data.c_str());
 
         // Make ne (NMEA Event)
         // NE - NMEA Event
@@ -132,14 +132,14 @@ struct EventBuilder {
         if (key >= 0)
           config.N2Event[key] = event_id;
         else
-          LogFormat(_T("Invalid GCE data: %s at %u"), data.c_str(), line);
+          LogFormat(_T("Invalid NE data at line %u: %s"), line, data.c_str());
 
         // label only - no key associated (label can still be touch screen)
       } else if (type.equals(_T("label"))) {
         // Nothing to do here...
 
       } else {
-        LogFormat(_T("Invalid type: %s at %u"), type.c_str(), line);
+        LogFormat(_T("Invalid type at line %u: %s"), line, type.c_str());
       }
     }
   }
@@ -193,7 +193,7 @@ ParseInputFile(InputConfig &config, BufferedReader &reader)
         const auto [d_event, d_misc] = Split(v, ' ');
 
         if (d_event.empty()) {
-          LogFormat("Invalid event type at %i", line);
+          LogFormat("Invalid event type at line %i", line);
           continue;
         }
 
@@ -227,7 +227,7 @@ ParseInputFile(InputConfig &config, BufferedReader &reader)
         LogFmt("Invalid key/value pair {}={} at {}", key, value, line);
       }
     } else  {
-      LogFormat("Invalid line at %i", line);
+      LogFormat("Invalid line at line %i", line);
     }
 
   }

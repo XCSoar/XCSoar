@@ -52,8 +52,15 @@ Font::Load(const FontDescription &d)
 
   if (d.IsMonospace())
     native_font = [NativeFontT fontWithName: @"Courier" size: d.GetHeight()];
-  else
-    native_font = [NativeFontT fontWithName: @"Helvetica" size: d.GetHeight()];
+  else {
+    /* Prefer OSP-DIN font (from fonts-opendin package) for aviation displays,
+       fallback to Helvetica */
+    native_font = [NativeFontT fontWithName: @"OSP-DIN" size: d.GetHeight()];
+    if (nil == native_font)
+      native_font = [NativeFontT fontWithName: @"OSP DIN" size: d.GetHeight()];
+    if (nil == native_font)
+      native_font = [NativeFontT fontWithName: @"Helvetica" size: d.GetHeight()];
+  }
 
   if (nil == native_font)
     throw std::runtime_error{"fontWithName named"};
@@ -84,6 +91,8 @@ Font::Load(const FontDescription &d)
 
   height = ceilf([@"ÄjX€µ" sizeWithAttributes: draw_attributes].height);
   ascent_height = static_cast<unsigned>(ceilf([native_font ascender]));
+  /* Apple descender is negative (extends below baseline) */
+  descent_height = static_cast<unsigned>(ceilf(-[native_font descender]));
   capital_height = static_cast<unsigned>(ceilf([native_font capHeight]));
 }
 

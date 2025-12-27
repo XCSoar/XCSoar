@@ -34,6 +34,7 @@ Version 7.44 - not yet released
   - Show transponder mode (if available) in transponder code InfoBox
   - add helpers on infoboxes for Argentinean contests 95% distance rule
   - Popup messages now appear at the top of the map
+  - add status messages for user actions and state changes (alternates, task abort, task armed, final glide mode, terrain/topography visibility, airspace visibility)
   - FlarmTrafficWindow: align colors of FlarmTraffic with map for consistency
   - BigTrafficWidget: Save/Restore FLARM radar zoom on page change
   - BigTrafficWidget: zoom range to 5km when opening big radar via the FlarmGauge
@@ -51,6 +52,15 @@ Version 7.44 - not yet released
   - Add support for multiple  airfields or details waypoint in UI
   - QuickMenu: revamped look
   - QuickMenu: sane cursor control
+  - QuickMenu: add WeGlide Upload, Waypoint Editor, Airspaces list, and Message Repeat
+  - QuickMenu: add AirspaceWarnings button and Airspace Show/Hide button
+  - QuickMenu: reorganize for in-flight priority access
+  - add AirspaceWarnings event for quick access to airspace warnings dialog
+  - MacCready InfoBox: add submenu with Edit and Setup options
+  - InfoBoxes: only one InfoBox can be selected at a time
+  - fix radio button visibility in dialogs
+  - configuration panels: automatic vertical scrolling when content doesn't fit
+  - configuration panels: fix expert mode toggle not updating scroll layout
 
 * Android
   - fix crash on startup when loading icons on ldpi screens
@@ -58,10 +68,23 @@ Version 7.44 - not yet released
   - make xcsoar accessible from lock screen
   - battery: use scale for charge percent calculation
   - battery: prevent shutdown on devices without battery
+  - add support for Android 15 (API 35)
+  - enable fullscreen mode with display cutout (notch) support
+  - fix screen jitter on startup
+  - reapply fullscreen settings after orientation changes
+  - add UHD logo/title resources for high-DPI displays
+  - restore normal volume button behavior
+  - fix DownloadManager for SDK 35 compatibility
 * Windows
   - Popupmessages are now shown with full text again
+  - fix thread Join() to be safe when called on undefined threads
 * iOS
   - Improve audio support: prevent ducking and enable sound playback even when the phone is muted
+* Linux
+  - Wayland: fix inverted mouse wheel scrolling
+  - Wayland: application continues running in background when window is not in foreground
+  - Wayland: fix shutdown hang when window is not visible
+  - Wayland: implement close button handling
 * devices
   - Add driver for Condor 3
   - Add driver for LX Navigation Eos / Era variometers
@@ -87,6 +110,11 @@ Version 7.44 - not yet released
 * Task:
   - Reachable abort task landable waypoints are now sorted by arrival altitude
     instead of arrival time.
+* development
+  - add PRODUCT_NAME build variable for easy rebranding of forks
+  - product name can be customized via build-time override or ProductName.hpp
+  - add PLAY=y and FOSS=y build flags for Android package name variants
+  - Android package name can be set at build time (org.xcsoar, org.xcsoar.foss, org.xcsoar.play, org.xcsoar.testing)
 
 Version 7.43 - 2024-08-12
 * calculations

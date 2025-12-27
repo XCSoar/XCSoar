@@ -32,7 +32,7 @@ RadioFrequency::Parse(std::string_view src) noexcept
   else
     return Null();
 
-  if (mhz < MIN_KHZ / 1000. && mhz > MAX_KHZ / 1000.)
+  if (mhz < MIN_KHZ / 1000. || mhz > MAX_KHZ / 1000.)
     return Null();
 
   return FromKiloHertz(uround(mhz * 1000));

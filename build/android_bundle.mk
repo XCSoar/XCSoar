@@ -13,7 +13,7 @@ else
 endif
 ANDROID_SDK_PLATFORM_DIR = $(ANDROID_SDK)/platforms/$(ANDROID_SDK_PLATFORM)
 
-ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/33.0.2
+ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/35.0.1
 ZIPALIGN = $(ANDROID_BUILD_TOOLS_DIR)/zipalign
 AAPT2 = $(ANDROID_BUILD_TOOLS_DIR)/aapt2
 D8 = $(ANDROID_BUILD_TOOLS_DIR)/d8
@@ -147,6 +147,7 @@ JAVA_SOURCES := \
 	android/ioio/IOIOLibAndroid/src/main/java/ioio/lib/spi/LogImpl.java \
 	android/ioio/IOIOLibAndroid/src/main/java/ioio/lib/util/android/ContextWrapperDependent.java \
 	android/ioio/IOIOLibAndroidAccessory/src/main/java/ioio/lib/android/accessory/AccessoryConnectionBootstrap.java \
+	android/ioio/IOIOLibAndroidAccessory/src/main/java/ioio/lib/android/accessory/Adapter.java \
 	android/ioio/IOIOLibAndroidBluetooth/src/main/java/ioio/lib/android/bluetooth/BluetoothIOIOConnectionBootstrap.java \
 	android/ioio/IOIOLibAndroidBluetooth/src/main/java/ioio/lib/android/bluetooth/BluetoothIOIOConnection.java \
 	android/ioio/IOIOLibAndroidDevice/src/main/java/ioio/lib/android/device/DeviceConnectionBootstrap.java \
@@ -247,11 +248,42 @@ $(ANDROID_XML_RES_COPIES): $(RES_DIR)/%: android/res/%
 	$(Q)-$(MKDIR) -p $(dir $@)
 	$(Q)cp $< $@
 
-ifeq ($(TESTING),y)
-MANIFEST = android/testing/AndroidManifest.xml
+# Use template manifest for all builds
+MANIFEST_TEMPLATE = android/AndroidManifest.xml.template
+
+# Determine package name for manifest based on build flags
+# Priority: FOSS > PLAY > TESTING > default
+ifeq ($(FOSS),y)
+MANIFEST_PACKAGE = org.xcsoar.foss
+MANIFEST_APP_LABEL = @string/app_name
+else ifeq ($(PLAY),y)
+MANIFEST_PACKAGE = org.xcsoar.play
+MANIFEST_APP_LABEL = @string/app_name
+else ifeq ($(TESTING),y)
+MANIFEST_PACKAGE = org.xcsoar.testing
+MANIFEST_APP_LABEL = @string/app_name_testing
 else
-MANIFEST = android/AndroidManifest.xml
+MANIFEST_PACKAGE = org.xcsoar
+MANIFEST_APP_LABEL = @string/app_name
 endif
+
+# Generate a processed manifest with the custom package name
+MANIFEST_PROCESSED = $(NO_ARCH_OUTPUT_DIR)/AndroidManifest.xml
+MANIFEST_PACKAGE_STAMP = $(NO_ARCH_OUTPUT_DIR)/.manifest_package.stamp
+MANIFEST = $(MANIFEST_PROCESSED)
+
+# Stamp file that tracks the current package name to ensure rebuild when flags change
+$(MANIFEST_PACKAGE_STAMP): FORCE | $(NO_ARCH_OUTPUT_DIR)/dirstamp
+	@if [ ! -f $@ ] || [ "$$(cat $@ 2>/dev/null)" != "$(MANIFEST_PACKAGE)" ]; then \
+		echo "$(MANIFEST_PACKAGE)" > $@.tmp && mv $@.tmp $@; \
+	fi
+
+$(MANIFEST_PROCESSED): $(MANIFEST_TEMPLATE) $(MANIFEST_PACKAGE_STAMP) | $(NO_ARCH_OUTPUT_DIR)/dirstamp
+	@$(NQ)echo "  PROCESS $@"
+	$(Q)sed -e 's/@PACKAGE_NAME@/$(MANIFEST_PACKAGE)/g' \
+		-e 's|@APP_LABEL@|$(MANIFEST_APP_LABEL)|g' \
+		$< > $@
+	$(Q)echo "$(MANIFEST_PACKAGE)" > $(MANIFEST_PACKAGE_STAMP)
 
 # Convert resources to protobuf format with AAPT2 (build and unzip an apk)
 $(PROTOBUF_OUT_DIR)/dirstamp: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) $(MANIFEST) | $(GEN_DIR)/dirstamp $(COMPILED_RES_DIR)/dirstamp
@@ -277,14 +309,17 @@ $(GEN_DIR)/org/xcsoar/R.java: $(PROTOBUF_OUT_DIR)/dirstamp
 
 ### Java build
 
+# Note: Requires JDK 17 or later. JAVA_HOME should point to JDK 17 installation.
 $(NO_ARCH_OUTPUT_DIR)/classes.zip: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
 	@$(NQ)echo "  JAVAC   $(JAVA_CLASSFILES_DIR)"
 	$(Q)$(JAVAC) \
-		-source 1.7 -target 1.7 \
+		--release 17 \
 		-Xlint:all \
 		-Xlint:-deprecation \
 		-Xlint:-options \
 		-Xlint:-static \
+		-Xlint:-removal \
+		-Xlint:-this-escape \
 		-cp $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) \
 		-d $(JAVA_CLASSFILES_DIR) $(GEN_DIR)/org/xcsoar/R.java \
 		-h $(NATIVE_INCLUDE_DIR) \

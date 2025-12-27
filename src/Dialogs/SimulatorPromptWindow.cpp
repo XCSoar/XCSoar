@@ -68,7 +68,13 @@ SimulatorPromptWindow::OnResize(PixelSize new_size) noexcept
   sim_button.Move(button_rc);
 
   logo_rect = rc;
+#ifndef NDEBUG
+  /* Reserve extra space for debug warning banner */
+  const int banner_extra_space = Layout::Scale(30);
+  logo_rect.bottom = button_rc.top - label_height - Layout::Scale(5) - banner_extra_space;
+#else
   logo_rect.bottom = button_rc.top - label_height - Layout::Scale(5);
+#endif
 
   if (have_quit_button) {
     button_rc = rc;

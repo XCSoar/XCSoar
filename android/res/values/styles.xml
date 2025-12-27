@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- XCSoar main theme with Android 15 edge-to-edge opt-out -->
+    <style name="XCSoarTheme" parent="android:Theme.NoTitleBar.Fullscreen">
+        <!-- Tell Android 15 we handle edge-to-edge ourselves, don't letterbox -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+    </style>
+</resources>

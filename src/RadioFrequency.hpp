@@ -28,7 +28,7 @@ class RadioFrequency {
 
 public:
   /**
-   * Uninitialized.
+   * Uninitialized.  Use Null() for a properly initialized undefined instance.
    */
   RadioFrequency() = default;
 
@@ -57,7 +57,15 @@ public:
                                     RadioFrequency) noexcept = default;
 
   constexpr bool IsDefined() const noexcept {
-    return value != 0;
+    if (value == 0)
+      return false;
+    
+    // Validate that the value represents a valid frequency
+    // Check if the frequency would be in valid range and meet validation criteria
+    const unsigned khz = BASE_KHZ + value;
+    return (khz >= MIN_KHZ && khz < MAX_KHZ) &&
+           (khz % 5 == 0) &&
+           (khz % 25 != 20);
   }
 
   /**

@@ -118,6 +118,12 @@ struct Waypoint {
   WaypointOrigin origin = WaypointOrigin::NONE;
 
   /**
+   * Index of the file in the list (for origins that support multiple files).
+   * 0 = first file, 1 = second file, etc.
+   */
+  uint8_t file_num = 0;
+
+  /**
    * Does the #elevation field contain a value?
    */
   bool has_elevation = false;

@@ -22,7 +22,7 @@ ANDROID_ABI_DIR = $(ANDROID_BUILD)/lib/$(ANDROID_APK_LIB_ABI)
 
 JAVA_CLASSFILES_DIR = $(ANDROID_OUTPUT_DIR)/classes
 
-ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/33.0.2
+ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/35.0.1
 APKSIGNER = $(ANDROID_BUILD_TOOLS_DIR)/apksigner
 ZIPALIGN = $(ANDROID_BUILD_TOOLS_DIR)/zipalign
 AAPT = $(ANDROID_BUILD_TOOLS_DIR)/aapt
@@ -143,6 +143,7 @@ JAVA_SOURCES := \
 	android/ioio/IOIOLibAndroid/src/main/java/ioio/lib/spi/LogImpl.java \
 	android/ioio/IOIOLibAndroid/src/main/java/ioio/lib/util/android/ContextWrapperDependent.java \
 	android/ioio/IOIOLibAndroidAccessory/src/main/java/ioio/lib/android/accessory/AccessoryConnectionBootstrap.java \
+	android/ioio/IOIOLibAndroidAccessory/src/main/java/ioio/lib/android/accessory/Adapter.java \
 	android/ioio/IOIOLibAndroidBluetooth/src/main/java/ioio/lib/android/bluetooth/BluetoothIOIOConnectionBootstrap.java \
 	android/ioio/IOIOLibAndroidBluetooth/src/main/java/ioio/lib/android/bluetooth/BluetoothIOIOConnection.java \
 	android/ioio/IOIOLibAndroidDevice/src/main/java/ioio/lib/android/device/DeviceConnectionBootstrap.java \
@@ -156,6 +157,10 @@ RAW_DIR = $(RES_DIR)/raw
 
 ANDROID_XML_RES := $(wildcard android/res/*/*.xml)
 ANDROID_XML_RES_COPIES := $(patsubst android/res/%,$(RES_DIR)/%,$(ANDROID_XML_RES))
+
+# Filter out strings.xml for special handling with product name replacement
+ANDROID_XML_RES_NO_STRINGS := $(filter-out android/res/values/strings.xml,$(ANDROID_XML_RES))
+ANDROID_XML_RES_COPIES_NO_STRINGS := $(patsubst android/res/%,$(RES_DIR)/%,$(ANDROID_XML_RES_NO_STRINGS))
 
 ifeq ($(TESTING),y)
 ICON_SVG = $(topdir)/Data/graphics/logo_red.svg
@@ -216,7 +221,7 @@ PNG2 := $(patsubst $(DATA)/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_LAUNCH_ALL
 $(PNG2): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics/%.bmp | $(DRAWABLE_DIR)/dirstamp
 	$(Q)$(IM_CONVERT) $< $@
 
-PNG3 := $(patsubst $(DATA)/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_SPLASH_80) $(BMP_SPLASH_160) $(BMP_TITLE_110) $(BMP_TITLE_320))
+PNG3 := $(patsubst $(DATA)/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_SPLASH_80) $(BMP_SPLASH_160) $(BMP_SPLASH_320) $(BMP_TITLE_110) $(BMP_TITLE_320) $(BMP_TITLE_640))
 $(PNG3): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics/%.bmp | $(DRAWABLE_DIR)/dirstamp
 	$(Q)$(IM_CONVERT) $< $@
 
@@ -241,18 +246,55 @@ PNG_FILES = $(PNG1) $(PNG1b) $(PNG2) $(PNG3) $(PNG4) $(PNG5) \
 	$(RES_DIR)/drawable-xxhdpi/notification_icon.png \
 	$(RES_DIR)/drawable-xxxhdpi/notification_icon.png
 
-ifeq ($(TESTING),y)
-MANIFEST = android/testing/AndroidManifest.xml
+# Use template manifest for all builds
+MANIFEST_TEMPLATE = android/AndroidManifest.xml.template
+
+# Determine package name for manifest based on build flags
+# Priority: FOSS > PLAY > TESTING > default
+ifeq ($(FOSS),y)
+MANIFEST_PACKAGE = org.xcsoar.foss
+MANIFEST_APP_LABEL = @string/app_name
+else ifeq ($(PLAY),y)
+MANIFEST_PACKAGE = org.xcsoar.play
+MANIFEST_APP_LABEL = @string/app_name
+else ifeq ($(TESTING),y)
+MANIFEST_PACKAGE = org.xcsoar.testing
+MANIFEST_APP_LABEL = @string/app_name_testing
 else
-MANIFEST = android/AndroidManifest.xml
+MANIFEST_PACKAGE = org.xcsoar
+MANIFEST_APP_LABEL = @string/app_name
 endif
 
-$(ANDROID_XML_RES_COPIES): $(RES_DIR)/%: android/res/%
+# Generate a processed manifest with the custom package name
+MANIFEST_PROCESSED = $(ANDROID_OUTPUT_DIR)/AndroidManifest.xml
+MANIFEST_PACKAGE_STAMP = $(ANDROID_OUTPUT_DIR)/.manifest_package.stamp
+MANIFEST = $(MANIFEST_PROCESSED)
+
+# Stamp file that tracks the current package name to ensure rebuild when flags change
+$(MANIFEST_PACKAGE_STAMP): FORCE | $(ANDROID_OUTPUT_DIR)/dirstamp
+	@if [ ! -f $@ ] || [ "$$(cat $@ 2>/dev/null)" != "$(MANIFEST_PACKAGE)" ]; then \
+		echo "$(MANIFEST_PACKAGE)" > $@.tmp && mv $@.tmp $@; \
+	fi
+
+$(MANIFEST_PROCESSED): $(MANIFEST_TEMPLATE) $(MANIFEST_PACKAGE_STAMP) | $(ANDROID_OUTPUT_DIR)/dirstamp
+	@$(NQ)echo "  PROCESS $@"
+	$(Q)sed -e 's/@PACKAGE_NAME@/$(MANIFEST_PACKAGE)/g' \
+		-e 's|@APP_LABEL@|$(MANIFEST_APP_LABEL)|g' \
+		$< > $@
+	$(Q)echo "$(MANIFEST_PACKAGE)" > $(MANIFEST_PACKAGE_STAMP)
+
+$(ANDROID_XML_RES_COPIES_NO_STRINGS): $(RES_DIR)/%: android/res/%
 	$(Q)-$(MKDIR) -p $(dir $@)
 	$(Q)cp $< $@
 
-$(ANDROID_OUTPUT_DIR)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) $(MANIFEST) | $(GEN_DIR)/dirstamp
+# Special handling for strings.xml to replace product name
+$(RES_DIR)/values/strings.xml: android/res/values/strings.xml | $(RES_DIR)/values/dirstamp
+	$(Q)-$(MKDIR) -p $(dir $@)
+	$(Q)sed 's/XCSoar/$(PRODUCT_NAME)/g' $< > $@
+
+$(ANDROID_OUTPUT_DIR)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES_NO_STRINGS) $(RES_DIR)/values/strings.xml $(MANIFEST) | $(GEN_DIR)/dirstamp
 	@$(NQ)echo "  AAPT"
+	$(Q)find $(RES_DIR) -name dirstamp -delete
 	$(Q)$(AAPT) package -f -m --auto-add-overlay \
 		--custom-package $(JAVA_PACKAGE) \
 		-M $(MANIFEST) \
@@ -264,29 +306,34 @@ $(ANDROID_OUTPUT_DIR)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_R
 # R.java is generated by aapt, when resources.apk is generated
 $(GEN_DIR)/org/xcsoar/R.java: $(ANDROID_OUTPUT_DIR)/resources.apk
 
-$(ANDROID_OUTPUT_DIR)/classes.zip: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
+# Note: Requires JDK 17 or later. JAVA_HOME should point to JDK 17 installation.
+$(ANDROID_OUTPUT_DIR)/classes.jar: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
 	@$(NQ)echo "  JAVAC   $(JAVA_CLASSFILES_DIR)"
-	$(Q)$(JAVAC) \
-		-source 1.7 -target 1.7 \
+	$(Q)$(filter-out -Werror,$(JAVAC)) \
+		--release 17 \
 		-Xlint:all \
 		-Xlint:-deprecation \
 		-Xlint:-options \
 		-Xlint:-serial \
 		-Xlint:-static \
+		-Xlint:-removal \
+		-Xlint:-this-escape \
+		-g:source,lines,vars \
 		-cp $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) \
 		-d $(JAVA_CLASSFILES_DIR) $(GEN_DIR)/org/xcsoar/R.java \
 		-h $(NATIVE_INCLUDE) \
 		$(JAVA_SOURCES)
-	$(Q)$(ZIP) -0 -r $(ANDROID_OUTPUT_DIR)/classes.zip $(JAVA_CLASSFILES_DIR)
+	$(Q)cd $(JAVA_CLASSFILES_DIR) && $(ZIP) -0 -r $(abspath $(ANDROID_OUTPUT_DIR)/classes.jar) .
 
 # Note: desugaring causes crashes on Android 13 (Pixel 6); as a
 # workaround, it's disabled for now.
-$(ANDROID_OUTPUT_DIR)/classes.dex: $(ANDROID_OUTPUT_DIR)/classes.zip
+$(ANDROID_OUTPUT_DIR)/classes.dex: $(ANDROID_OUTPUT_DIR)/classes.jar
 	@$(NQ)echo "  D8      $@"
 	$(Q)$(D8) \
 		--no-desugaring \
 		--min-api 21 \
-		--output $(ANDROID_OUTPUT_DIR) $(ANDROID_OUTPUT_DIR)/classes.zip
+		--lib $(ANDROID_SDK_PLATFORM_DIR)/android.jar \
+		--output $(ANDROID_OUTPUT_DIR) $(ANDROID_OUTPUT_DIR)/classes.jar
 
 ifeq ($(FAT_BINARY),y)
 

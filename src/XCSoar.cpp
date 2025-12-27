@@ -9,6 +9,7 @@
 #include "Startup.hpp"
 #include "LocalPath.hpp"
 #include "Version.hpp"
+#include "ProductName.hpp"
 #include "LogFile.hpp"
 #include "CommandLine.hpp"
 #include "MainWindow.hpp"
@@ -45,7 +46,7 @@
 
 static const char *const Usage = "\n"
   "  -version       display version information and exit\n"
-  "  -datapath=      path to XCSoar data can be defined\n"
+  "  -datapath=      path to " PRODUCT_NAME_A " data can be defined\n"
 #ifdef SIMULATOR_AVAILABLE
   "  -simulator      bypass startup-screen, use simulator mode directly\n"
   "  -fly            bypass startup-screen, use fly mode directly\n"

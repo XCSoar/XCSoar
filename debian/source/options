@@ -1,0 +1,8 @@
+tar-ignore='*.deb'
+tar-ignore='.git*'
+tar-ignore='output/*'
+tar-ignore='*.mo'
+extend-diff-ignore='.git*'
+extend-diff-ignore='output/*'
+extend-diff-ignore='*.mo'
+

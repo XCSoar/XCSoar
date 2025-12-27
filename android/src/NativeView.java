@@ -3,7 +3,6 @@
 
 package org.xcsoar;
 
-import java.io.File;
 import android.util.Log;
 import android.util.DisplayMetrics;
 import android.app.Activity;
@@ -198,6 +197,10 @@ class NativeView extends SurfaceView
   protected native void setHapticFeedback(boolean on);
 
   /**
+   * Called when window insets change (e.g., system bars appear/disappear).
+   * Native code can use these insets to adjust the safe rendering area and
+   * avoid drawing important UI elements behind system bars or display cutouts.
+   *
    * Finds the next power of two.  Used to calculate texture sizes.
    */
   public static int nextPowerOfTwo(int i) {
@@ -217,13 +220,12 @@ class NativeView extends SurfaceView
    * Loads the specified bitmap resource.
    */
   private Bitmap loadResourceBitmap(String name) {
-    /* find the resource */
-    int resourceId = resources.getIdentifier(name, "drawable", "org.xcsoar");
+    /* find the resource using the actual package name */
+    String packageName = getContext().getPackageName();
+    int resourceId = resources.getIdentifier(name, "drawable", packageName);
     if (resourceId == 0) {
-      resourceId = resources.getIdentifier(name, "drawable",
-                                           "org.xcsoar.testing");
-      if (resourceId == 0)
-        return null;
+      Log.e(TAG, "Resource not found: drawable/" + name + " in package " + packageName);
+      return null;
     }
 
     /* load the Bitmap from the resource */
@@ -376,11 +378,21 @@ class NativeView extends SurfaceView
   }
 
   @Override public boolean onKeyDown(int keyCode, final KeyEvent event) {
+    /* let Android handle volume keys normally */
+    if (keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+        keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+      return false;
+
     EventBridge.onKeyDown(translateKeyCode(keyCode));
     return true;
   }
 
   @Override public boolean onKeyUp(int keyCode, final KeyEvent event) {
+    /* let Android handle volume keys normally */
+    if (keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+        keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+      return false;
+
     EventBridge.onKeyUp(translateKeyCode(keyCode));
     return true;
   }
