@@ -48,11 +48,11 @@ $(IOS_GRAPHICS_DIR)/Assets.xcassets: $(topdir)/Data/iOS/Assets.xcassets $(IOS_IC
 	$(Q)rsvg-convert $(IOS_ICON_SVG) -w 1024 -h 1024 -a -b white -o $@/AppIcon.appiconset/Icon-1024.png
 
 $(IOS_GRAPHICS_DIR)/Assets.car $(IOS_GRAPHICS_DIR)/AppIcon*.png: $(IOS_GRAPHICS_DIR)/Assets.xcassets
-	xcrun actool $< --compile $(dir $@) --platform iphoneos --minimum-deployment-target 8.0 --app-icon AppIcon --output-partial-info-plist $(IOS_GRAPHICS_DIR)/assets-partial.plist
+	xcrun actool $< --compile $(dir $@) --platform iphoneos --minimum-deployment-target $(IOS_MIN_SUPPORTED_VERSION) --app-icon AppIcon --output-partial-info-plist $(IOS_GRAPHICS_DIR)/assets-partial.plist
 
 $(IOS_GRAPHICS_DIR)/LaunchScreen.storyboardc: $(topdir)/Data/iOS/LaunchScreen.storyboard
 	mkdir -p $(IOS_GRAPHICS_DIR)
-	ibtool $< --compile $@
+	xcrun -sdk iphoneos ibtool --minimum-deployment-target $(IOS_MIN_SUPPORTED_VERSION) --target-device iphone --target-device ipad $< --compile $@
 
 HOST_MACOS_VERSION = $(shell sw_vers -buildVersion)
 TARGET_SDK_NAME = $(shell /usr/libexec/PlistBuddy -c 'print CanonicalName' $(DARWIN_SDK)/SDKSettings.plist)

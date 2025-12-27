@@ -9,6 +9,7 @@
 #include <exception>
 #include <cstdarg>
 #include <cstdio>
+#include <iterator>
 
 void
 LogString(std::string_view s) noexcept
