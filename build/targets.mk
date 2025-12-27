@@ -11,7 +11,11 @@ TARGETS = PC WIN64 \
 ifeq ($(TARGET),)
   ifeq ($(HOST_IS_UNIX),y)
     ifeq ($(HOST_IS_DARWIN),y)
-      TARGET = OSX64
+      ifeq ($(HOST_IS_AARCH64),y)
+        TARGET = MACOS
+      else
+        TARGET = OSX64
+      endif
     else
       TARGET = UNIX
     endif
