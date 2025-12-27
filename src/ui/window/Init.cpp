@@ -25,7 +25,7 @@
 #include <libloaderapi.h>
 #endif
 
-ScreenGlobalInit::ScreenGlobalInit(unsigned antialiasing_samples)
+ScreenGlobalInit::ScreenGlobalInit([[maybe_unused]] unsigned antialiasing_samples)
 #ifdef ANDROID
   :display(EGL_DEFAULT_DISPLAY)
 #elif defined(ENABLE_SDL) || defined(USE_GLX) || (defined(USE_EGL) && defined(USE_X11))

@@ -110,7 +110,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
     // Display all options but mark currently unavailable ones as "Not available"
 #ifdef ENABLE_OPENGL
     const unsigned max_samples = OpenGL::max_antialiasing_samples;
-#elif
+#else
     const unsigned max_samples = 0;
 #endif
     if (max_samples >= 2)
