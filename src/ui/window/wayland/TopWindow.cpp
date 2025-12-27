@@ -8,6 +8,7 @@
 #include "ui/event/poll/Queue.hpp"
 #include "ui/event/shared/Event.hpp"
 #include "ui/display/Display.hpp"
+#include "Asset.hpp"
 #include "xdg-shell-client-protocol.h"
 #include "xdg-decoration-unstable-v1-client-protocol.h"
 
@@ -101,6 +102,7 @@ handle_toplevel_configure(void *data,
     /* Compositor provided explicit dimensions - resize immediately.
      * This handles both normal resizes and fullscreen transitions where
      * the compositor sends actual screen dimensions. */
+    window->MarkFirstConfigureReceived();
     window->Resize(PixelSize(width, height));
   }
   /* If width/height are 0, skip resize. The compositor will send another
@@ -126,6 +128,11 @@ void
 TopWindow::CreateNative(const TCHAR *text, PixelSize size,
                         TopWindowStyle style)
 {
+  /* Store initial requested size and reset configure flag */
+  initial_requested_size = size;
+  received_first_configure = false;
+  last_resize_flush_time = std::chrono::steady_clock::now();
+  
   auto compositor = event_queue->GetCompositor();
 
   wl_surface = wl_compositor_create_surface(compositor);
@@ -226,6 +233,15 @@ TopWindow::DisableCapture() noexcept
 void
 TopWindow::OnResize(PixelSize new_size) noexcept
 {
+  /* Skip initial resize from ContainerWindow::Create if we haven't received
+   * the first configure event yet. This prevents the window from being
+   * resized to the requested size before the compositor sends actual dimensions. */
+  if (!received_first_configure && 
+      new_size.width == initial_requested_size.width &&
+      new_size.height == initial_requested_size.height) {
+    return;
+  }
+  
   /* Update event queue screen size (required for proper coordinate transformation) */
   event_queue->SetScreenSize(new_size);
 
@@ -234,13 +250,8 @@ TopWindow::OnResize(PixelSize new_size) noexcept
     wl_egl_window_resize(native_window, new_size.width, new_size.height, 0, 0);
   }
 
-  /* Check if screen needs to be resized and update OpenGL viewport */
-  if (screen != nullptr && screen->CheckResize(new_size)) {
-    /* Screen was resized, trigger redraw */
-    Invalidate();
-  }
-
-  /* Update opaque region for the new size */
+  /* Update opaque region for the new size BEFORE drawing.
+   * This ensures the compositor knows the new size before we present a frame. */
   if (wl_surface != nullptr && event_queue != nullptr) {
     auto compositor = event_queue->GetCompositor();
     if (compositor != nullptr) {
@@ -248,7 +259,48 @@ TopWindow::OnResize(PixelSize new_size) noexcept
       wl_region_add(region, 0, 0, new_size.width, new_size.height);
       wl_surface_set_opaque_region(wl_surface, region);
       wl_region_destroy(region);
-      wl_surface_commit(wl_surface);
+      /* Don't commit yet - eglSwapBuffers() will commit automatically.
+       * Committing here might cause the compositor to process the new size
+       * before we've drawn the frame. */
+    }
+  }
+
+  /* Check if screen needs to be resized and update OpenGL viewport */
+  if (screen != nullptr) {
+    const bool did_resize = screen->CheckResize(new_size);
+    if (did_resize) {
+      /* Screen was resized, trigger redraw */
+      Invalidate();
+      /* Force immediate redraw for visual feedback during resize.
+       * However, throttle flush/dispatch during rapid resize drags to avoid
+       * performance issues. Use longer throttle interval for e-paper displays
+       * which have much lower refresh rates (1-2fps full, ~10-15fps partial). */
+      if (screen->IsReady() && IsVisible()) {
+        Expose();
+        const auto now = std::chrono::steady_clock::now();
+        const auto time_since_last_flush = 
+          std::chrono::duration_cast<std::chrono::milliseconds>(
+            now - last_resize_flush_time).count();
+        /* Use adaptive throttle based on display type:
+         * - E-paper: 100ms (~10fps max) to match slow refresh rate
+         * - Normal displays: 16ms (~60fps max) for smooth resizing */
+        const int throttle_ms = HasEPaper() ? 100 : 16;
+        if (time_since_last_flush >= throttle_ms) {
+          struct wl_display *wl_display = display.GetWaylandDisplay();
+          wl_display_flush(wl_display);
+          wl_display_dispatch_pending(wl_display);
+          last_resize_flush_time = now;
+        }
+      } else {
+        /* If we can't draw now, commit the surface configuration so the
+         * compositor knows about the new size. We'll draw later. */
+        if (wl_surface != nullptr) {
+          wl_surface_commit(wl_surface);
+        }
+      }
+    } else {
+      /* Size didn't change, but we still need to redraw to update content */
+      Invalidate();
     }
   }
 
@@ -259,6 +311,7 @@ TopWindow::OnResize(PixelSize new_size) noexcept
   screen->OnResize(new_size);
 #endif
 }
+
 
 bool
 TopWindow::OnEvent(const Event &event)
