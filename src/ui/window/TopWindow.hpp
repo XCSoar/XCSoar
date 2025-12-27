@@ -149,6 +149,16 @@ class TopWindow : public ContainerWindow {
   struct xdg_surface *xdg_surface = nullptr;
   struct xdg_toplevel *xdg_toplevel = nullptr;
   struct zxdg_toplevel_decoration_v1 *xdg_decoration = nullptr;
+  PixelSize initial_requested_size{0, 0};
+  std::chrono::steady_clock::time_point last_resize_flush_time;
+
+private:
+  bool received_first_configure = false;
+
+public:
+  void MarkFirstConfigureReceived() noexcept {
+    received_first_configure = true;
+  }
 #elif defined(ENABLE_SDL)
   SDL_Window *window;
 #endif
