@@ -85,10 +85,26 @@ handle_toplevel_configure(void *data,
                           int32_t height,
                           [[maybe_unused]] struct wl_array *states) noexcept
 {
+  auto *window = static_cast<TopWindow *>(data);
+  
+  /* In Wayland, width=0 or height=0 means "client decides" or "use current size".
+   * When going fullscreen, the compositor may send 0x0 first (state change),
+   * then send another configure with actual dimensions. We should always
+   * process configure events immediately, even during resize drags, to provide
+   * immediate visual feedback.
+   * 
+   * When dimensions are 0x0, the compositor will send another configure event
+   * with actual dimensions. We don't need to handle 0x0 - just wait for the
+   * next configure with real dimensions. The surface was already acked in
+   * handle_surface_configure, and will be committed when we resize. */
   if (width > 0 && height > 0) {
-    auto *window = static_cast<TopWindow *>(data);
+    /* Compositor provided explicit dimensions - resize immediately.
+     * This handles both normal resizes and fullscreen transitions where
+     * the compositor sends actual screen dimensions. */
     window->Resize(PixelSize(width, height));
   }
+  /* If width/height are 0, skip resize. The compositor will send another
+   * configure event with actual dimensions, which we'll handle above. */
 }
 
 static void
