@@ -17,13 +17,21 @@ ANGLE_PREFIX ?= $(OUT)/src/angle
 # Auto-fetch ANGLE if not present
 ANGLE_FETCH_SCRIPT = $(topdir)/darwin/fetch-angle-from-chrome.sh
 ANGLE_FETCH_STAMP = $(ANGLE_PREFIX)/.stamp
+ANGLE_FIX_STAMP = $(ANGLE_PREFIX)/.install_name_fixed
 
 $(ANGLE_FETCH_STAMP):
 	@$(NQ)echo "  FETCH   ANGLE libraries"
 	$(Q)$(ANGLE_FETCH_SCRIPT) $(ANGLE_PREFIX) $(OUT)/angle-download && touch $@
 
+# Fix install names so executables can use rpath lookup
+$(ANGLE_FIX_STAMP): $(ANGLE_FETCH_STAMP)
+	@$(NQ)echo "  FIX     ANGLE install names"
+	$(Q)install_name_tool -id @rpath/libEGL.dylib $(ANGLE_PREFIX)/lib/libEGL.dylib
+	$(Q)install_name_tool -id @rpath/libGLESv2.dylib $(ANGLE_PREFIX)/lib/libGLESv2.dylib
+	$(Q)touch $@
+
 # Add ANGLE fetch to compile dependencies
-compile-depends += $(ANGLE_FETCH_STAMP)
+compile-depends += $(ANGLE_FIX_STAMP)
 
 # Add ANGLE to compile dependencies
 # Include and library paths (standard layout with include/ and lib/ subdirectories)
