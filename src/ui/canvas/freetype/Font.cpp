@@ -154,6 +154,8 @@ Font::LoadFile(const char *file, unsigned ptsize, [[maybe_unused]] bool bold, [[
 
   height = FT_CEIL(FT_MulFix(new_face->height, y_scale));
   ascent_height = FT_CEIL(FT_MulFix(new_face->ascender, y_scale));
+  /* FreeType descender is negative (extends below baseline) */
+  descent_height = FT_CEIL(FT_MulFix(-new_face->descender, y_scale));
 
   capital_height = ::GetCapitalHeight(new_face);
   if (capital_height == 0)

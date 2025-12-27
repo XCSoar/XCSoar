@@ -23,6 +23,7 @@ Font::Load(const FontDescription &d)
 
   this->height = text_util_object->get_height();
   ascent_height = text_util_object->get_ascent_height();
+  descent_height = this->height - ascent_height;
   capital_height = text_util_object->get_capital_height();
   line_spacing = text_util_object->GetLineSpacing();
 }
