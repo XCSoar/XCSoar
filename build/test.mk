@@ -842,7 +842,10 @@ RUN_LUA_SOURCES = \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/RunLua.cpp
-RUN_LUA_DEPENDS = LUA LIBLUA LIBHTTP IO OS GEO MATH UTIL
+RUN_LUA_DEPENDS = LUA LIBLUA IO OS GEO MATH UTIL
+ifeq ($(HAVE_HTTP),y)
+RUN_LUA_DEPENDS += LIBHTTP
+endif
 $(eval $(call link-program,RunLua,RUN_LUA))
 endif
 

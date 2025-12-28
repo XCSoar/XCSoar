@@ -2,6 +2,10 @@
 // Copyright The XCSoar Project
 
 #include "WeGlideTasksPanel.hpp"
+#include "Widget/TextWidget.hpp"
+#include "Language/Language.hpp"
+
+#ifdef HAVE_HTTP
 #include "Internal.hpp"
 #include "Dialogs/CoFunctionDialog.hpp"
 #include "Dialogs/Message.hpp"
@@ -9,11 +13,9 @@
 #include "Form/Button.hpp"
 #include "Form/ButtonPanel.hpp"
 #include "Widget/ListWidget.hpp"
-#include "Widget/TextWidget.hpp"
 #include "Widget/ButtonPanelWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Task/ValidationErrorStrings.hpp"
-#include "Language/Language.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Look/DialogLook.hpp"
@@ -274,3 +276,19 @@ CreateWeGlideTasksPanel(TaskManagerDialog &dialog,
 
   return buttons;
 }
+
+#else
+
+std::unique_ptr<Widget>
+CreateWeGlideTasksPanel([[maybe_unused]] TaskManagerDialog &dialog,
+                        [[maybe_unused]] WeGlideTaskSelection selection,
+                        [[maybe_unused]]
+                         std::unique_ptr<OrderedTask> &active_task,
+                        [[maybe_unused]] bool *task_modified) noexcept
+{
+  auto widget = std::make_unique<TextWidget>();
+  widget->SetText(_("WeGlide is not available in this build."));
+  return widget;
+}
+
+#endif
