@@ -6,7 +6,9 @@
 #include "Util.hxx"
 #include "Log.hpp"
 #include "Persistent.hpp"
+#ifdef HAVE_HTTP
 #include "Http.hpp"
+#endif
 #include "Timer.hpp"
 #include "Geo.hpp"
 #include "Map.hpp"
@@ -22,7 +24,9 @@
 #include "Settings.hpp"
 #include "Wind.hpp"
 #include "Logger.hpp"
+#ifdef HAVE_HTTP
 #include "Tracking.hpp"
+#endif
 #include "Replay.hpp"
 #include "InputEvent.hpp"
 
@@ -33,7 +37,9 @@ Lua::NewFullState()
 
   InitLog(L);
   InitPersistent(L);
+#ifdef HAVE_HTTP
   InitHttp(L);
+#endif
   InitTimer(L);
   InitGeo(L);
   InitMap(L);
@@ -45,7 +51,9 @@ Lua::NewFullState()
   InitSettings(L);
   InitWind(L);
   InitLogger(L);
+#ifdef HAVE_HTTP
   InitTracking(L);
+#endif
   InitReplay(L);
   InitInputEvent(L);
 

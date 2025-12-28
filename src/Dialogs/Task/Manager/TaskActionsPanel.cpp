@@ -19,8 +19,10 @@
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
+#ifdef HAVE_HTTP
 #include "net/http/Init.hpp"
 #include "net/client/WeGlide/DownloadTask.hpp"
+#endif
 #include "Components.hpp"
 #include "DataComponents.hpp"
 
@@ -88,6 +90,7 @@ TaskActionsPanel::OnDeclareClicked()
   ExternalLogger::Declare(decl, data_components->waypoints->GetHome().get());
 }
 
+#ifdef HAVE_HTTP
 inline void
 TaskActionsPanel::OnDownloadClicked() noexcept
 try {
@@ -119,6 +122,12 @@ try {
 } catch (const std::runtime_error &e) {
   ShowError(std::current_exception(), _("Download"));
 }
+#else
+inline void
+TaskActionsPanel::OnDownloadClicked() noexcept
+{
+}
+#endif
 
 void
 TaskActionsPanel::ReClick() noexcept
@@ -130,13 +139,16 @@ void
 TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &_parent,
                           [[maybe_unused]] const PixelRect &rc) noexcept
 {
+#ifdef HAVE_HTTP
   const auto &settings = CommonInterface::GetComputerSettings();
+#endif
 
   AddButton(_("New Task"), [this](){ OnNewTaskClicked(); });
   AddButton(_("Declare"), [this](){ OnDeclareClicked(); });
   AddButton(_("Browse"), [this](){ OnBrowseClicked(); });
   AddButton(_("Save"), [this](){ SaveTask(); });
 
+#ifdef HAVE_HTTP
   if (settings.weglide.pilot_id != 0)
     AddButton(_("Download WeGlide task"),
               [this](){ OnDownloadClicked(); });
@@ -148,6 +160,7 @@ TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &_parent,
   AddButton(_("Public WeGlide tasks"), [this](){
     parent.SetCurrent(parent.PAGE_WEGLIDE_PUBLIC_DECLARED);
   });
+#endif
 
   if (is_simulator())
     /* cannot communicate with real devices in simulator mode */

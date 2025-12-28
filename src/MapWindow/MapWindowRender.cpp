@@ -132,6 +132,8 @@ MapWindow::RenderNOAAStations(Canvas &canvas) noexcept
     if (it->parsed_metar_available && it->parsed_metar.location_available)
       if (auto pt = render_projection.GeoToScreenIfVisible(it->parsed_metar.location))
         look.noaa.icon.Draw(canvas, *pt);
+#else
+  (void)canvas;
 #endif
 }
 

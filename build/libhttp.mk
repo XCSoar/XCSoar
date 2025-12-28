@@ -1,3 +1,4 @@
+ifeq ($(HAVE_HTTP),y)
 # Build rules for the HTTP client library
 
 LIBHTTP_SOURCES = \
@@ -30,6 +31,7 @@ LIBHTTP_CPPFLAGS += $(CURL_CPPFLAGS)
 LIBHTTP_DEPENDS += CURL ZLIB
 endif
 
-LIBHTTP_DEPENDS += LIBSODIUM FMT
+LIBHTTP_DEPENDS += LIBSODIUM FMT UTIL
 
 $(eval $(call link-library,libhttp,LIBHTTP))
+endif
