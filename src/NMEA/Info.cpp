@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "NMEA/Info.hpp"
+#include "Asset.hpp"
 #include "Atmosphere/AirDensity.hpp"
 #include "time/Cast.hxx"
 
@@ -170,11 +171,9 @@ NMEAInfo::ExpireWallClock() noexcept
 
   UpdateClock();
 
-#if defined(ANDROID) || defined(__APPLE__)
-  if (gps.nonexpiring_internal_gps)
+  if ((IsAndroid() || IsIOS()) && gps.nonexpiring_internal_gps)
     /* the internal GPS does not expire */
     return;
-#endif
 
   alive.Expire(clock, std::chrono::seconds(10));
   if (!alive) {
