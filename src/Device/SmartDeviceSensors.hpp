@@ -5,7 +5,6 @@
 
 #include <cmath>
 
-#if defined(ANDROID) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
 /**
  * Helper function for
  * Android Java_org_xcsoar_NonGPSSensors_setBarometricPressure
@@ -30,4 +29,3 @@ ComputeNoncompVario(const double pressure, const double d_pressure)
   static constexpr double EXPONENT(-0.8097374740609689);
   return FACTOR * std::pow(pressure, EXPONENT) * d_pressure;
 }
-#endif

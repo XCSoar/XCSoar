@@ -10,9 +10,7 @@ GPSState::Reset() noexcept
   fix_quality_available.Clear();
   real = false;
   simulator = false;
-#if defined(ANDROID) || defined(__APPLE__)
   nonexpiring_internal_gps = false;
-#endif
   satellites_used_available.Clear();
   satellite_ids_available.Clear();
   hdop = -1;
