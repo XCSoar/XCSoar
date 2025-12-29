@@ -46,10 +46,6 @@
 #include <unistd.h>
 #endif
 
-#ifdef __APPLE__
-#import <Foundation/Foundation.h>
-#endif
-
 /**
  * This is the partition that the Kobo software mounts on PCs
  */
@@ -295,9 +291,7 @@ FindDataPaths() noexcept
        "Documents" folder inside the application's sandbox.  This
        folder can also be accessed via iTunes, if
        UIFileSharingEnabled is set to YES in Info.plist */
-    const char *in_home = IsIOS()
-      ? "Documents/" PRODUCT_DATA_DIR
-      : PRODUCT_DATA_DIR;
+    const Path in_home = Apple::GetDataPathInHome();
 #else // !APPLE
     constexpr const char *in_home = PRODUCT_UNIX_HOME_DIR;
 #endif
@@ -319,11 +313,6 @@ FindDataPaths() noexcept
   /* Linux (and others): allow global configuration in /etc/<product_name> */
   if (Directory::Exists(Path{PRODUCT_UNIX_SYSCONF_DIR}))
     result.emplace_back(Path{PRODUCT_UNIX_SYSCONF_DIR});
-#else
-  if (!Directory::Exists(Path{result.back()})) {
-    id fileManager = [NSFileManager defaultManager];
-      [fileManager createDirectoryAtPath:[NSString stringWithCString:result.back().c_str()] withIntermediateDirectories:YES attributes:nil error:nil];
-  }
 #endif // !APPLE
 #endif // HAVE_POSIX
 
