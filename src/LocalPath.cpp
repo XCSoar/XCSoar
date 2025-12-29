@@ -289,11 +289,9 @@ FindDataPaths() noexcept
        "Documents" folder inside the application's sandbox.  This
        folder can also be accessed via iTunes, if
        UIFileSharingEnabled is set to YES in Info.plist */
-#if (TARGET_OS_IPHONE)
-    constexpr const char *in_home = "Documents/" PRODUCT_DATA_DIR;
-#else
-    constexpr const char *in_home = PRODUCT_DATA_DIR;
-#endif
+    const char *in_home = IsIOS()
+      ? "Documents/" PRODUCT_DATA_DIR
+      : PRODUCT_DATA_DIR;
 #else // !APPLE
     constexpr const char *in_home = PRODUCT_UNIX_HOME_DIR;
 #endif
