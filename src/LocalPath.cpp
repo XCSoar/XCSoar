@@ -9,6 +9,11 @@
 #include "util/StringFormat.hpp"
 #include "util/StringAPI.hxx"
 #include "Asset.hpp"
+#include "LogFile.hpp"
+
+#ifdef __APPLE__
+#include "Apple/PathProvider.hpp"
+#endif
 
 #include "system/FileUtil.hpp"
 
@@ -26,6 +31,7 @@
 
 #include <algorithm>
 #include <list>
+#include <string>
 
 #include <cassert>
 #include <stdlib.h>
@@ -297,6 +303,16 @@ FindDataPaths() noexcept
 #endif
 
     result.emplace_back(AllocatedPath::Build(Path(home), in_home));
+#ifdef __APPLE__
+    const Path data_path(result.back().c_str());
+    if (!Apple::EnsureDataPathExists(data_path)) {
+      const std::string utf8_path = data_path.ToUTF8();
+      if (!utf8_path.empty())
+        LogFormat("Failed to create data path '%s'", utf8_path.c_str());
+      else
+        LogFormat("Failed to create data path (unknown path)");
+    }
+#endif
   }
 
 #ifndef __APPLE__
