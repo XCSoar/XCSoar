@@ -20,6 +20,11 @@ HOST_OPTIMIZE := -g
 # the difference between -0 and +0.  This allows using non-conforming
 # vector units on some platforms, e.g. ARM NEON.
 OPTIMIZE += -ffast-math
+ifeq ($(CLANG),y)
+  # Clang 18+ warns that -ffast-math's -ffinite-math-only breaks isfinite/isnan/isinf.
+  # Override just that sub-flag to keep NaN/Inf checks working.
+  OPTIMIZE += -fno-finite-math-only
+endif
 
 ifeq ($(CLANG)$(DEBUG),nn)
   # Enable gcc auto-vectorisation on some architectures (e.g. ARM
