@@ -86,11 +86,14 @@ LoadFlarmDatabases() noexcept
 void
 ReloadFlarmDatabases() noexcept
 {
-  traffic_databases = new TrafficDatabases();
-
   /* the MergeThread must be suspended, because it reads the FLARM
      databases */
   backend_components->merge_thread->Suspend();
+
+  delete traffic_databases;
+  traffic_databases = nullptr;
+
+  traffic_databases = new TrafficDatabases();
 
   LoadSecondary(traffic_databases->flarm_names);
   LoadFlarmMessagingData(traffic_databases->flarm_messages);
