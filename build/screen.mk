@@ -6,6 +6,13 @@ SCREEN_SRC_DIR = $(SRC)/Screen
 CANVAS_SRC_DIR = $(SRC)/ui/canvas
 CONTROL_SRC_DIR = $(SRC)/ui/control
 WINDOW_SRC_DIR = $(SRC)/ui/window
+CANVAS_FILES_CPP = $(CANVAS_SRC_DIR)/custom/Files.cpp
+ifeq ($(TARGET_IS_DARWIN),y)
+CANVAS_FILES_CPP = $(CANVAS_SRC_DIR)/apple/Files.cpp
+endif
+ifeq ($(TARGET_IS_KOBO),y)
+CANVAS_FILES_CPP = $(CANVAS_SRC_DIR)/kobo/Files.cpp
+endif
 
 SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/Debug.cpp \
@@ -26,6 +33,7 @@ SCREEN_SOURCES = \
 
 SCREEN_CUSTOM_SOURCES = \
 	$(WINDOW_SRC_DIR)/custom/DoubleClick.cpp \
+	$(CANVAS_SRC_DIR)/FontSearch.cpp \
 	$(CANVAS_SRC_DIR)/custom/GeoBitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/Pen.cpp \
 	$(CONTROL_SRC_DIR)/custom/LargeTextWindow.cpp \
@@ -139,7 +147,7 @@ SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
 SCREEN_SOURCES += \
 	$(SRC)/ui/display/sdl/Display.cpp \
-	$(CANVAS_SRC_DIR)/custom/Files.cpp \
+	$(CANVAS_FILES_CPP) \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
 	$(CANVAS_SRC_DIR)/sdl/TopCanvas.cpp \
@@ -153,7 +161,7 @@ else ifeq ($(EGL)$(TARGET_IS_ANDROID),yn)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
-	$(CANVAS_SRC_DIR)/custom/Files.cpp \
+	$(CANVAS_FILES_CPP) \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
 	$(CANVAS_SRC_DIR)/egl/TopCanvas.cpp \
@@ -166,7 +174,7 @@ else ifeq ($(GLX),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
-	$(CANVAS_SRC_DIR)/custom/Files.cpp \
+	$(CANVAS_FILES_CPP) \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
 	$(CANVAS_SRC_DIR)/glx/TopCanvas.cpp \
@@ -177,7 +185,7 @@ else ifeq ($(VFB),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
-	$(CANVAS_SRC_DIR)/custom/Files.cpp \
+	$(CANVAS_FILES_CPP) \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
 	$(CANVAS_SRC_DIR)/fb/TopCanvas.cpp \
@@ -189,7 +197,7 @@ else ifeq ($(USE_FB),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
-	$(CANVAS_SRC_DIR)/custom/Files.cpp \
+	$(CANVAS_FILES_CPP) \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
 	$(CANVAS_SRC_DIR)/memory/Export.cpp \
