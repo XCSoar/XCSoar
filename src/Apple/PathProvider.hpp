@@ -14,6 +14,11 @@ namespace Apple {
 Path
 GetDataPathInHome() noexcept;
 
+/**
+ * Ensure the specified data path exists.
+ *
+ * @return true if the directory exists or was created successfully.
+ */
 bool
 EnsureDataPathExists(Path path) noexcept;
 
