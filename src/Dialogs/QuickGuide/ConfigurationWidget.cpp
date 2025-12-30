@@ -27,6 +27,8 @@
 #include "UtilsSettings.hpp"
 #include "BackendComponents.hpp"
 #include "Components.hpp"
+#include "Airspace/Patterns.hpp"
+#include "Waypoint/Patterns.hpp"
 
 #include <winuser.h>
 #include <fmt/format.h>
@@ -90,8 +92,8 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
   
   // Waypoints
   canvas.Select(fontMono);
-  const auto c2 = Profile::GetPath(ProfileKeys::WaypointFile);
-  canvas.DrawText({x, y + icon_offset}, c2 == nullptr ? undone : done);
+  const auto c2 = Profile::GetMultiplePaths(ProfileKeys::WaypointFileList, WAYPOINT_FILE_PATTERNS);
+  canvas.DrawText({x, y + icon_offset}, c2.size() == 0 ? undone : done);
   canvas.Select(fontDefault);
   const TCHAR *t2 = _("Download waypoints for your region");
   PixelRect t2_rc{x_text, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
@@ -105,7 +107,7 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
 
   // Airspace
   canvas.Select(fontMono);
-  const auto c3 = Profile::GetMultiplePaths(ProfileKeys::AirspaceFileList);
+  const auto c3 = Profile::GetMultiplePaths(ProfileKeys::AirspaceFileList, AIRSPACE_FILE_PATTERNS);
   canvas.DrawText({x, y + icon_offset}, c3.size() == 0 ? undone : done);
   canvas.Select(fontDefault);
   const TCHAR *t3 = _("Download airspaces for your region");
