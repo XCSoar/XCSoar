@@ -417,7 +417,7 @@ Startup(UI::Display &display)
   // Show Quick Guide dialog
   bool hide_quick_guide_dialog_on_startup = false;
   Profile::Get(ProfileKeys::HideQuickGuideDialogOnStartup, hide_quick_guide_dialog_on_startup);
-  if (HasTouchScreen() && !hide_quick_guide_dialog_on_startup) {
+  if (!hide_quick_guide_dialog_on_startup) {
     dlgQuickGuideShowModal();
   }
 
