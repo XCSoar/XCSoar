@@ -154,14 +154,14 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Weather/RASPDialog.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
 	$(SRC)/Dialogs/dlgQuickMenu.cpp \
-	$(SRC)/Dialogs/Onboarding/dlgOnboarding.cpp \
-    $(SRC)/Dialogs/Onboarding/OnboardingLinkWindow.cpp \
-	$(SRC)/Dialogs/Onboarding/WelcomeWidget.cpp \
-	$(SRC)/Dialogs/Onboarding/GestureHelpWidget.cpp \
-	$(SRC)/Dialogs/Onboarding/ConfigurationWidget.cpp \
-	$(SRC)/Dialogs/Onboarding/PreflightWidget.cpp \
-	$(SRC)/Dialogs/Onboarding/PostflightWidget.cpp \
-	$(SRC)/Dialogs/Onboarding/DontShowAgainWidget.cpp
+	$(SRC)/Dialogs/QuickGuide/dlgQuickGuide.cpp \
+    $(SRC)/Dialogs/QuickGuide/QuickGuideLinkWindow.cpp \
+	$(SRC)/Dialogs/QuickGuide/WelcomeWidget.cpp \
+	$(SRC)/Dialogs/QuickGuide/GestureHelpWidget.cpp \
+	$(SRC)/Dialogs/QuickGuide/ConfigurationWidget.cpp \
+	$(SRC)/Dialogs/QuickGuide/PreflightWidget.cpp \
+	$(SRC)/Dialogs/QuickGuide/PostflightWidget.cpp \
+	$(SRC)/Dialogs/QuickGuide/DontShowAgainWidget.cpp
 
 ifeq ($(HAVE_PCM_PLAYER),y)
 DIALOG_SOURCES += \

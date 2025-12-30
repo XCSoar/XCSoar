@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "dlgOnboarding.hpp"
+#include "dlgQuickGuide.hpp"
 #include "WelcomeWidget.hpp"
 #include "GestureHelpWidget.hpp"
 #include "ConfigurationWidget.hpp"
@@ -18,7 +18,7 @@
 #include <array>
 
 void
-dlgOnboardingShowModal()
+dlgQuickGuideShowModal()
 {
   const std::array<const TCHAR*, 6> titles = {
     _("Getting started: Welcome"),

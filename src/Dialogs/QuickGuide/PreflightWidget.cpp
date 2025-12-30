@@ -140,7 +140,7 @@ PreflightWindow::OnPaint(Canvas &canvas) noexcept
 }
 
 PreflightWindow::PreflightWindow() noexcept
-  : OnboardingLinkWindow()
+  : QuickGuideLinkWindow()
 {
   const auto count = static_cast<std::size_t>(LinkAction::COUNT);
   link_rects.resize(count);
@@ -176,7 +176,7 @@ unsigned
 PreflightWindow::DrawLink(Canvas &canvas, LinkAction link_action, PixelRect rc,
                           const TCHAR *text) noexcept
 {
-  return OnboardingLinkWindow::DrawLink(canvas, static_cast<std::size_t>(link_action), rc, text);
+  return QuickGuideLinkWindow::DrawLink(canvas, static_cast<std::size_t>(link_action), rc, text);
 }
 
 bool

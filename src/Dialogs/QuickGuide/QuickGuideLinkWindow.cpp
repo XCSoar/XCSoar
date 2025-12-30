@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "OnboardingLinkWindow.hpp"
+#include "QuickGuideLinkWindow.hpp"
 
 #include "ui/canvas/Canvas.hpp"
 
 #include <winuser.h>
 
-OnboardingLinkWindow::OnboardingLinkWindow() noexcept = default;
+QuickGuideLinkWindow::QuickGuideLinkWindow() noexcept = default;
 
 unsigned
-OnboardingLinkWindow::DrawLink(Canvas &canvas, std::size_t index, PixelRect rc,
+QuickGuideLinkWindow::DrawLink(Canvas &canvas, std::size_t index, PixelRect rc,
                                const TCHAR *text) noexcept
 {
   canvas.SetTextColor(COLOR_BLUE);
@@ -23,7 +23,7 @@ OnboardingLinkWindow::DrawLink(Canvas &canvas, std::size_t index, PixelRect rc,
 }
 
 bool
-OnboardingLinkWindow::OnMouseUp(PixelPoint p) noexcept
+QuickGuideLinkWindow::OnMouseUp(PixelPoint p) noexcept
 {
   for (std::size_t i = 0; i < link_rects.size(); ++i) {
     if (link_rects[i].Contains(p) && OnLinkActivated(i)) {

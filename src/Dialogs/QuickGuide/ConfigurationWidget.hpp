@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include "OnboardingLinkWindow.hpp"
+#include "QuickGuideLinkWindow.hpp"
 #include "Widget/WindowWidget.hpp"
 
 class Canvas;
 
-class ConfigurationWindow final : public OnboardingLinkWindow {
+class ConfigurationWindow final : public QuickGuideLinkWindow {
   enum class LinkAction : std::uint8_t {
     SITE_FILES_1,
     SITE_FILES_2,

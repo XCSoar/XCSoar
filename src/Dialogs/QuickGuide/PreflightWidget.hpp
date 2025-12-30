@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include "OnboardingLinkWindow.hpp"
+#include "QuickGuideLinkWindow.hpp"
 #include "Widget/WindowWidget.hpp"
 
 class Canvas;
 
-class PreflightWindow final : public OnboardingLinkWindow {
+class PreflightWindow final : public QuickGuideLinkWindow {
   enum class LinkAction : std::uint8_t {
     CHECKLIST,
     PLANE,

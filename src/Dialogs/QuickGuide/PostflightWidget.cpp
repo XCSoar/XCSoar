@@ -134,7 +134,7 @@ PostflightWindow::OnPaint(Canvas &canvas) noexcept
 }
 
 PostflightWindow::PostflightWindow() noexcept
-  : OnboardingLinkWindow()
+  : QuickGuideLinkWindow()
 {
   const auto count = static_cast<std::size_t>(LinkAction::COUNT);
   link_rects.resize(count);
@@ -190,7 +190,7 @@ unsigned
 PostflightWindow::DrawLink(Canvas &canvas, LinkAction link_action, PixelRect rc,
                            const TCHAR *text) noexcept
 {
-  return OnboardingLinkWindow::DrawLink(canvas, static_cast<std::size_t>(link_action), rc, text);
+  return QuickGuideLinkWindow::DrawLink(canvas, static_cast<std::size_t>(link_action), rc, text);
 }
 
 bool

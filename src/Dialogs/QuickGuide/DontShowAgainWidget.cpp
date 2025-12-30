@@ -30,10 +30,10 @@ void DontShowAgainWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) 
   style.Hide();
   style.TabStop();
 
-  checkbox.Create(parent, look, _("Don't show onboarding dialog on startup"),
+  checkbox.Create(parent, look, _("Don't show Quick Guide dialog on startup"),
     MakeCheckboxRect(rc), style,
     [](bool value) {
-      Profile::Set(ProfileKeys::HideOnboardingDialogOnStartup, value);
+      Profile::Set(ProfileKeys::HideQuickGuideDialogOnStartup, value);
       Profile::Save();
     }
   );
@@ -43,9 +43,9 @@ void DontShowAgainWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) 
 }
 
 void DontShowAgainWidget::Show(const PixelRect &rc) noexcept {
-  bool hide_onboarding_dialog_on_startup = false;
-  Profile::Get(ProfileKeys::HideOnboardingDialogOnStartup, hide_onboarding_dialog_on_startup);
-  checkbox.SetState(hide_onboarding_dialog_on_startup);
+  bool hide_quick_guide_dialog_on_startup = false;
+  Profile::Get(ProfileKeys::HideQuickGuideDialogOnStartup, hide_quick_guide_dialog_on_startup);
+  checkbox.SetState(hide_quick_guide_dialog_on_startup);
   auto cb_rect = MakeCheckboxRect(rc);
   checkbox.MoveAndShow(cb_rect);
   info_text.Show(MakeTextRect(rc, cb_rect));

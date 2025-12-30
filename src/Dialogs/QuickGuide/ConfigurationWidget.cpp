@@ -253,7 +253,7 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
 }
 
 ConfigurationWindow::ConfigurationWindow() noexcept
-  : OnboardingLinkWindow()
+  : QuickGuideLinkWindow()
 {
   const auto count = static_cast<std::size_t>(LinkAction::COUNT);
   link_rects.resize(count);
@@ -359,7 +359,7 @@ unsigned
 ConfigurationWindow::DrawLink(Canvas &canvas, LinkAction link, PixelRect rc,
                               const TCHAR *text) noexcept
 {
-  return OnboardingLinkWindow::DrawLink(canvas, static_cast<std::size_t>(link), rc, text);
+  return QuickGuideLinkWindow::DrawLink(canvas, static_cast<std::size_t>(link), rc, text);
 }
 
 bool

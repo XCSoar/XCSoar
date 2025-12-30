@@ -3,10 +3,10 @@
 
 #pragma once
 
-#include "OnboardingLinkWindow.hpp"
+#include "QuickGuideLinkWindow.hpp"
 #include "Widget/WindowWidget.hpp"
 
-class PostflightWindow final : public OnboardingLinkWindow {
+class PostflightWindow final : public QuickGuideLinkWindow {
   enum class LinkAction : std::uint8_t {
     FLIGHT_DOWNLOAD,
     ANALYSIS,

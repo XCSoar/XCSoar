@@ -23,7 +23,7 @@
 #include "Input/InputQueue.hpp"
 #include "Dialogs/StartupDialog.hpp"
 #include "Dialogs/dlgSimulatorPrompt.hpp"
-#include "Dialogs/Onboarding/dlgOnboarding.hpp"
+#include "Dialogs/QuickGuide/dlgQuickGuide.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Language/Language.hpp"
 #include "Protection.hpp"
@@ -414,11 +414,11 @@ Startup(UI::Display &display)
   }
 #endif
 
-  // Show onboarding dialog
-  bool hide_onboarding_dialog_on_startup = false;
-  Profile::Get(ProfileKeys::HideOnboardingDialogOnStartup, hide_onboarding_dialog_on_startup);
-  if (HasTouchScreen() && !hide_onboarding_dialog_on_startup) {
-    dlgOnboardingShowModal();
+  // Show Quick Guide dialog
+  bool hide_quick_guide_dialog_on_startup = false;
+  Profile::Get(ProfileKeys::HideQuickGuideDialogOnStartup, hide_quick_guide_dialog_on_startup);
+  if (HasTouchScreen() && !hide_quick_guide_dialog_on_startup) {
+    dlgQuickGuideShowModal();
   }
 
   GlidePolar &gp = CommonInterface::SetComputerSettings().polar.glide_polar_task;

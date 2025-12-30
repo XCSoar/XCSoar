@@ -11,9 +11,9 @@
 
 class Canvas;
 
-class OnboardingLinkWindow : public PaintWindow {
+class QuickGuideLinkWindow : public PaintWindow {
 public:
-  explicit OnboardingLinkWindow() noexcept;
+  explicit QuickGuideLinkWindow() noexcept;
 
 protected:
   unsigned DrawLink(Canvas &canvas, std::size_t index, PixelRect rc,

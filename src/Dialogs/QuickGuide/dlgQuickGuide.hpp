@@ -3,4 +3,4 @@
 
 #pragma once
 
-void dlgOnboardingShowModal();
+void dlgQuickGuideShowModal();

@@ -42,7 +42,7 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Dialogs/FileManager.hpp"
 #include "Dialogs/ReplayDialog.hpp"
-#include "Dialogs/Onboarding/dlgOnboarding.hpp"
+#include "Dialogs/QuickGuide/dlgQuickGuide.hpp"
 #include "Message.hpp"
 #include "Markers/Markers.hpp"
 #include "MainWindow.hpp"
@@ -497,12 +497,12 @@ InputEvents::eventRepeatStatusMessage([[maybe_unused]] const TCHAR *misc)
     CommonInterface::main_window->popup->Repeat();
 }
 
-// Onboarding
-// Open the Onboarding dialog
+// QuickGuide
+// Open the Quick Guide dialog
 void
-InputEvents::eventOnboarding([[maybe_unused]] const TCHAR *misc)
+InputEvents::eventQuickGuide([[maybe_unused]] const TCHAR *misc)
 {
-  dlgOnboardingShowModal();
+  dlgQuickGuideShowModal();
 }
 
 // NearestWaypointDetails
