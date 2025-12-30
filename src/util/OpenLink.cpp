@@ -12,7 +12,7 @@
 #endif
 
 bool OpenLink(const char *url) noexcept {
-#ifdef TARGET_OS_IPHONE
+#if defined(__APPLE__) && TARGET_OS_IPHONE
   NSString *ns_url = [NSString stringWithUTF8String:url];
   NSURL *nsu = [NSURL URLWithString:ns_url];
   if ([[UIApplication sharedApplication] canOpenURL:nsu]) {
@@ -20,5 +20,6 @@ bool OpenLink(const char *url) noexcept {
     return true;
   }
 #endif
+  (void)url;
   return false;
 }
