@@ -424,8 +424,11 @@ jobs:
           # Set iOS app configuration if building iOS
           if [ ${{ matrix.target }} = "IOS64" ]; then
             export IOS_APP_BUNDLE_IDENTIFIER="${{ vars.IOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
-            export IOS_APP_VERSION="${{ vars.IOS_APP_VERSION || needs.release.outputs.version }}"
             export IOS_APP_BUILD_NUMBER="${{ vars.IOS_APP_BUILD_NUMBER || github.run_number }}"
+            export IOS_PATCH_VERSION="${{ vars.IOS_PATCH_VERSION || 0 }}"
+            if [ -n "${{ vars.IOS_APP_VERSION }}" ]; then
+              export IOS_APP_VERSION="${{ vars.IOS_APP_VERSION }}"
+            fi
           fi
           if [ ${{ matrix.target }} = "MACOS" ]; then
             export MACOS_PATCH_VERSION="${{ vars.MACOS_PATCH_VERSION || 0 }}"
@@ -503,8 +506,11 @@ jobs:
           elif [ ${{ matrix.target }} = "IOS64" ]; then
             # Set iOS app configuration for production release builds
             export IOS_APP_BUNDLE_IDENTIFIER="${{ vars.IOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
-            export IOS_APP_VERSION="${{ vars.IOS_APP_VERSION || needs.release.outputs.version }}"
             export IOS_APP_BUILD_NUMBER="${{ vars.IOS_APP_BUILD_NUMBER || github.run_number }}"
+            export IOS_PATCH_VERSION="${{ vars.IOS_PATCH_VERSION || 0 }}"
+            if [ -n "${{ vars.IOS_APP_VERSION }}" ]; then
+              export IOS_APP_VERSION="${{ vars.IOS_APP_VERSION }}"
+            fi
             
             echo "Building production release version with TESTING=n"
             
