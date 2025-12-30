@@ -526,7 +526,7 @@ jobs:
 
       - name: Run tests before signing
         id: tests
-        if: ${{ (matrix.target == 'IOS64' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/ios-testing' || startsWith(github.ref, 'refs/tags/v'))) || (matrix.target == 'MACOS' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v'))) }}
+        if: ${{ (matrix.target == 'IOS64' || matrix.target == 'MACOS') && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
         continue-on-error: true
         run: |
           echo "🧪 Running unit tests..."
@@ -681,13 +681,24 @@ jobs:
           asset_name: ${{ matrix.target_final }}-${{ matrix.target }}${{ matrix.target_ext }}
           asset_content_type: application/zip
 
+      - name: Choose iOS deploy artifact
+        if: ${{ matrix.target == 'IOS64' }}
+        run: |
+          SIGNED_IPA="output/IOS64/xcsoar-signed.ipa"
+          UNSIGNED_IPA="output/IOS64/xcsoar.ipa"
+          if [ -f "$SIGNED_IPA" ]; then
+            echo "DEPLOY_SOURCE=$SIGNED_IPA" >> $GITHUB_ENV
+          else
+            echo "DEPLOY_SOURCE=$UNSIGNED_IPA" >> $GITHUB_ENV
+          fi
+
       - name: Deploy to Download server - testing
         if: ${{ github.repository == 'XCSoar/XCSoar' && github.ref == 'refs/heads/master' }}
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
           ARGS: "-rltgoDzvO"
-          SOURCE: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
+          SOURCE: ${{ env.DEPLOY_SOURCE || format('output/{0}/{1}/{2}{3}', matrix.target, matrix.target_bin_path, matrix.target_bin, matrix.target_ext) }}
           REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
           TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}/
@@ -699,7 +710,7 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
           ARGS: "-rltgoDzvO"
-          SOURCE: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
+          SOURCE: ${{ env.DEPLOY_SOURCE || format('output/{0}/{1}/{2}{3}', matrix.target, matrix.target_bin_path, matrix.target_bin, matrix.target_ext) }}
           REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
           TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
