@@ -424,22 +424,16 @@ jobs:
       - name: Compile XCSoar - PR
         if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
         run: |
-          # Set iOS app configuration if building iOS
           if [ ${{ matrix.target }} = "IOS64" ]; then
             export IOS_APP_BUNDLE_IDENTIFIER="${{ vars.IOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
             export IOS_APP_BUILD_NUMBER="${{ vars.IOS_APP_BUILD_NUMBER || github.run_number }}"
             export IOS_PATCH_VERSION="${{ vars.IOS_PATCH_VERSION || 0 }}"
-            if [ -n "${{ vars.IOS_APP_VERSION }}" ]; then
-              export IOS_APP_VERSION="${{ vars.IOS_APP_VERSION }}"
-            fi
           fi
           if [ ${{ matrix.target }} = "MACOS" ]; then
+            export MACOS_APP_BUNDLE_IDENTIFIER="${{ vars.MACOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
+            export MACOS_APP_BUILD_NUMBER="${{ vars.MACOS_APP_BUILD_NUMBER || github.run_number }}"
             export MACOS_PATCH_VERSION="${{ vars.MACOS_PATCH_VERSION || 0 }}"
-            if [ -n "${{ vars.MACOS_APP_BUNDLE_IDENTIFIER }}" ]; then
-              export MACOS_APP_BUNDLE_IDENTIFIER="${{ vars.MACOS_APP_BUNDLE_IDENTIFIER }}"
-            fi
           fi
-          
           if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target }} = "ANDROID_BUNDLE" ]; then
             if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then BUNDLE=y ; fi
             make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
@@ -479,11 +473,15 @@ jobs:
       - name: Compile XCSoar - Release
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
+          if [ ${{ matrix.target }} = "IOS64" ]; then
+            export IOS_APP_BUNDLE_IDENTIFIER="${{ vars.IOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
+            export IOS_APP_BUILD_NUMBER="${{ vars.IOS_APP_BUILD_NUMBER || github.run_number }}"
+            export IOS_PATCH_VERSION="${{ vars.IOS_PATCH_VERSION || 0 }}"
+          fi
           if [ ${{ matrix.target }} = "MACOS" ]; then
+            export MACOS_APP_BUNDLE_IDENTIFIER="${{ vars.MACOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
+            export MACOS_APP_BUILD_NUMBER="${{ vars.MACOS_APP_BUILD_NUMBER || github.run_number }}"
             export MACOS_PATCH_VERSION="${{ vars.MACOS_PATCH_VERSION || 0 }}"
-            if [ -n "${{ vars.MACOS_APP_BUNDLE_IDENTIFIER }}" ]; then
-              export MACOS_APP_BUNDLE_IDENTIFIER="${{ vars.MACOS_APP_BUNDLE_IDENTIFIER }}"
-            fi
           fi
           if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target }} = "ANDROID_BUNDLE" ]; then
             if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then BUNDLE=y ; fi
@@ -542,7 +540,7 @@ jobs:
         run: |
           if [ -f "darwin/xcsoar.mobileprovision" ]; then
             export IOS_CERTIFICATE_NAME="${{ secrets.IOS_CERTIFICATE_NAME || 'Apple Distribution' }}"
-            export PROFILE_PATH="darwin/xcsoar.mobileprovision"
+            export IOS_PROFILE_PATH="darwin/xcsoar.mobileprovision"
             
             echo "📝 Signing iOS IPA..."
             bash darwin/sign.sh
