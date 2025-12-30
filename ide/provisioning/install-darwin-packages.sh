@@ -16,7 +16,7 @@ fi
 
 install_base() {
   echo Installing base dependencies...
-  brew install quilt \
+  brew install pkg-config quilt \
     librsvg make \
     sox gettext \
     imagemagick
