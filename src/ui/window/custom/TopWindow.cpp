@@ -76,9 +76,14 @@ TopWindow::Create([[maybe_unused]] const TCHAR *text, PixelSize size,
   size = screen->SetDisplayOrientation(style.GetInitialOrientation());
 #elif defined(USE_MEMORY_CANVAS)
   size = screen->GetSize();
-#elif defined(ENABLE_OPENGL) && defined(__APPLE__) && TARGET_OS_OSX
-  // macOS HiDPI: drawable size may differ from window size; use native size.
-  size = screen->GetNativeSize();
+#elif defined(ENABLE_OPENGL)
+  // On HiDPI displays, the drawable size may differ from window size
+  PixelSize native_size = screen->GetNativeSize();
+  // On Android, surface might not be ready yet, so GetNativeSize() may return 0x0
+  // In that case, use the size passed to Create() (which should have a fallback)
+  if (native_size.width > 0 && native_size.height > 0)
+    size = native_size;
+  // else keep the original size (which should be from SystemWindowSize() with fallback)
 #endif
   ContainerWindow::Create(nullptr, PixelRect{size}, style);
 }
