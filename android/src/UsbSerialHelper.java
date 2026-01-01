@@ -359,7 +359,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
     filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
     filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
-    context.registerReceiver(this, filter);
+    BroadcastUtil.registerReceiver(context, this, filter);
   }
 
   private void unregisterReceiver() {
@@ -367,10 +367,13 @@ public final class UsbSerialHelper extends BroadcastReceiver {
   }
 
   private void requestPermission(UsbDevice device) {
+    int flags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+      ? PendingIntent.FLAG_IMMUTABLE
+      : 0;
     PendingIntent pi =
       PendingIntent.getBroadcast(context, 0,
                                  new Intent(UsbSerialHelper.ACTION_USB_PERMISSION),
-                                 PendingIntent.FLAG_IMMUTABLE);
+                                 flags);
 
     usbmanager.requestPermission(device, pi);
   }
