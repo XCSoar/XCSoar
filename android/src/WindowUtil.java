@@ -7,6 +7,8 @@ import android.os.Build;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.View;
+import android.view.WindowInsetsController;
+import android.view.WindowInsets;
 
 /**
  * A library of utility functions for class #Window.
@@ -55,6 +57,18 @@ class WindowUtil {
       lp.layoutInDisplayCutoutMode =
         WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
       window.setAttributes(lp);
+    }
+
+    /* Opt out of Android 15's edge-to-edge enforcement. This tells Android 15
+       that we handle edge-to-edge ourselves, preventing letterboxing in
+       horizontal mode. */
+    if (Build.VERSION.SDK_INT >= 35) {
+      try {
+        java.lang.reflect.Method method = Window.class.getMethod("setOptOutEdgeToEdgeEnforcement", boolean.class);
+        method.invoke(window, true);
+      } catch (Exception e) {
+        /* Method not available or reflection failed - ignore */
+      }
     }
   }
 
