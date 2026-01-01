@@ -6,6 +6,8 @@
 #include "QuickGuideLinkWindow.hpp"
 #include "Widget/WindowWidget.hpp"
 
+#include <cstdint>
+
 class Canvas;
 
 class ConfigurationWindow final : public QuickGuideLinkWindow {
