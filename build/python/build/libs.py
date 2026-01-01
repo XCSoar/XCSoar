@@ -245,6 +245,9 @@ curl = CmakeProject(
     windows_configure_args=[
         "-DCURL_USE_SCHANNEL=ON",
     ],
+    android_configure_args=[
+        "-DENABLE_ARES=OFF",  # Disable c-ares on Android - use system getaddrinfo() instead
+    ],
     patches=abspath("lib/curl/patches"),
 )
 

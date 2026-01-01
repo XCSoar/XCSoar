@@ -591,9 +591,9 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/NativeSensorListener.cpp \
 	$(SRC)/Android/Battery.cpp \
 	$(SRC)/Android/GliderLink.cpp \
-	$(SRC)/Android/DownloadManager.cpp \
 	$(SRC)/Android/Vibrator.cpp \
 	$(SRC)/Android/Context.cpp \
+	$(SRC)/Android/CertificateUtil.cpp \
 	$(SRC)/Android/BMP085Device.cpp \
 	$(SRC)/Android/I2CbaroDevice.cpp \
 	$(SRC)/Android/NunchuckDevice.cpp \
