@@ -8,13 +8,12 @@
 #include "ui/canvas/Bitmap.hpp"
 #include "Resources.hpp"
 #include "Language/Language.hpp"
-#include "util/ConvertString.hpp"
 #include "util/OpenLink.hpp"
+#include "util/StaticString.hxx"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
 
 #include <winuser.h>
-#include <fmt/format.h>
 
 PixelSize WelcomeWidget::GetMinimumSize() const noexcept {
   return { Layout::FastScale(200), Layout::FastScale(200) };
@@ -25,7 +24,8 @@ PixelSize WelcomeWidget::GetMaximumSize() const noexcept {
 }
 
 void
-WelcomeWidget::Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept
+WelcomeWidget::Initialise(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
 {
   WindowStyle style;
   style.Hide();
@@ -69,50 +69,65 @@ WelcomeWindow::OnPaint(Canvas &canvas) noexcept
 
   canvas.Select(fontTitle);
   const TCHAR *t0 = _("Welcome to XCSoar");
-  PixelRect t0_rc{x, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
+  PixelRect t0_rc{x, y, int(canvas.GetWidth()) - margin,
+                  int(canvas.GetHeight())};
   unsigned t0_height = canvas.DrawFormattedText(t0_rc, t0, DT_LEFT);
   y += int(t0_height) + margin;
   canvas.Select(fontDefault);
 
-  std::string s1 = fmt::format("{} {}",
-    _("To get the most out of XCSoar and to learn about its many functions in detail, "
-      "it is highly recommended to read the Quick Guide or the complete documentation."),
-    _("The manuals explain step by step how to use XCSoar efficiently "
-      "and cover both basic and advanced features."));
-  UTF8ToWideConverter t1(s1.c_str());
-  PixelRect t1_rc{x, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t1_height = canvas.DrawFormattedText(t1_rc, static_cast<const TCHAR *>(t1), DT_LEFT);
+  StaticString<1024> t1;
+  t1 = _("To get the most out of XCSoar and to learn about its many "
+         "functions in detail, it is highly recommended to read the "
+         "Quick Guide or the complete documentation.");
+  t1 += _T(" ");
+  t1 += _("The manuals explain step by step how to use XCSoar "
+          "efficiently and cover both basic and advanced features.");
+  PixelRect t1_rc{x, y, int(canvas.GetWidth()) - margin,
+                  int(canvas.GetHeight())};
+  unsigned t1_height = canvas.DrawFormattedText(t1_rc, t1.c_str(), DT_LEFT);
   y += int(t1_height) + margin;
 
-  std::string s2 = fmt::format("{} {}",
-    _("Documentation is available in several languages, including English, German, French, and Portuguese."),
-    _("You can always access the latest versions online:"));
-  UTF8ToWideConverter t2(s2.c_str());
-  PixelRect t2_rc{x, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t2_height = canvas.DrawFormattedText(t2_rc, static_cast<const TCHAR *>(t2), DT_LEFT);
+  StaticString<512> t2;
+  t2 = _("Documentation is available in several languages, including "
+         "English, German, French, and Portuguese.");
+  t2 += _T(" ");
+  t2 += _("You can always access the latest versions online:");
+  PixelRect t2_rc{x, y, int(canvas.GetWidth()) - margin,
+                  int(canvas.GetHeight())};
+  unsigned t2_height = canvas.DrawFormattedText(t2_rc, t2.c_str(), DT_LEFT);
   y += int(t2_height) + margin;
 
   canvas.SetTextColor(COLOR_BLUE);
   const TCHAR *t3 = _("https://xcsoar.org/discover/manual.html");
-  PixelRect t3_rc{x, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t3_height = canvas.DrawFormattedText(t3_rc, t3, DT_LEFT | DT_UNDERLINE);
-  xcsoar_link_rect = {x, y, int(canvas.GetWidth()) - margin, y + int(t3_height)};
+  PixelRect t3_rc{x, y, int(canvas.GetWidth()) - margin,
+                  int(canvas.GetHeight())};
+  unsigned t3_height =
+    canvas.DrawFormattedText(t3_rc, t3, DT_LEFT | DT_UNDERLINE);
+  xcsoar_link_rect = {x, y, int(canvas.GetWidth()) - margin,
+                      y + int(t3_height)};
   canvas.SetTextColor(COLOR_BLACK);
   y += int(t3_height) + margin;
 
-  std::string s4 = fmt::format("{} {}",
-    _("The XCSoar documentation is actively maintained, but some topics may still be missing or outdated."),
-    _("If you find mistakes or have ideas for improvement, please contribute — XCSoar is open source and thrives on community input:"));
-  UTF8ToWideConverter t4(s4.c_str());
-  PixelRect t4_rc{x, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t4_height = canvas.DrawFormattedText(t4_rc, static_cast<const TCHAR *>(t4), DT_LEFT);
+  StaticString<1024> t4;
+  t4 = _("The XCSoar documentation is actively maintained, but some "
+         "topics may still be missing or outdated.");
+  t4 += _T(" ");
+  t4 += _("If you find mistakes or have ideas for improvement, "
+          "please contribute — XCSoar is open source and thrives on "
+          "community input:");
+  PixelRect t4_rc{x, y, int(canvas.GetWidth()) - margin,
+                  int(canvas.GetHeight())};
+  unsigned t4_height = canvas.DrawFormattedText(t4_rc, t4.c_str(), DT_LEFT);
   y += int(t4_height) + margin;
 
   canvas.SetTextColor(COLOR_BLUE);
   const TCHAR *t5 = _("https://github.com/XCSoar/XCSoar");
-  PixelRect t5_rc{x, y, int(canvas.GetWidth()) - margin, int(canvas.GetHeight())};
-  unsigned t5_height = canvas.DrawFormattedText(t5_rc, t5, DT_LEFT | DT_UNDERLINE);
-  github_link_rect = {x, y, int(canvas.GetWidth()) - margin, y + int(t5_height)};
+  PixelRect t5_rc{x, y, int(canvas.GetWidth()) - margin,
+                  int(canvas.GetHeight())};
+  unsigned t5_height =
+    canvas.DrawFormattedText(t5_rc, t5, DT_LEFT | DT_UNDERLINE);
+  github_link_rect = {x, y, int(canvas.GetWidth()) - margin,
+                      y + int(t5_height)};
   canvas.SetTextColor(COLOR_BLACK);
   y += int(t5_height) + margin;
 }
