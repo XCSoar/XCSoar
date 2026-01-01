@@ -18,7 +18,7 @@ jobs:
   check-pot-update:
     name: Check if .pot file is up-to-date
     runs-on: ubuntu-24.04
-    container: debian:bookworm-slim
+    container: debian:trixie-slim
     permissions:
       contents: read
     if: github.event_name == 'pull_request'
@@ -57,7 +57,7 @@ jobs:
 
   autocommit-pot-files:
     runs-on: ubuntu-24.04
-    container: debian:bookworm-slim
+    container: debian:trixie-slim
     permissions:
       contents: write
     if: github.event_name != 'pull_request'
