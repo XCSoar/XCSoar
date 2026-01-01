@@ -212,9 +212,6 @@ jobs:
           ccache --set-config compiler_check=content
           ccache --set-config hard_link=false
 
-      - name: Show ccache stats
-        run: ccache --show-stats || true
-
       - name: "Cache common downloads"
         uses: actions/cache@v5
         with:
@@ -279,7 +276,7 @@ jobs:
         if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
         uses: actions/cache@v5
         with:
-          key: android-tools-${{ matrix.ndk }}-${{ hashFiles('ide/provisioning/install-android-tools.sh') }}
+          key: android-tools-${{ matrix.ndk }}-${{ hashFiles('ide/provisioning/install-android-tools.sh', 'build/android.mk', 'build/android_bundle.mk', 'build/targets.mk') }}
           restore-keys: |
             android-tools-${{ matrix.ndk }}-
             android-tools-
@@ -588,3 +585,6 @@ jobs:
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
           TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
           SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
+
+      - name: Show ccache stats
+        run: ccache --show-stats || true
