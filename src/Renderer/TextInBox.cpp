@@ -3,8 +3,9 @@
 
 #include "TextInBox.hpp"
 #include "LabelBlock.hpp"
-#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Color.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
@@ -52,35 +53,57 @@ TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc) noexcept
 }
 
 void
-RenderShadowedText(Canvas &canvas, const TCHAR *text,
-                   PixelPoint p,
-                   bool inverted) noexcept
+RenderShadowedText(Canvas &canvas, const TCHAR *text, PixelPoint p,
+                   Color text_color, Color outline_color) noexcept
 {
   canvas.SetBackgroundTransparent();
 
-  canvas.SetTextColor(inverted ? COLOR_BLACK : COLOR_WHITE);
-  const int offset = canvas.GetFontHeight() / 12u;
-  canvas.DrawText({p.x + offset, p.y + offset}, text);
-  canvas.DrawText({p.x - offset, p.y + offset}, text);
-  canvas.DrawText({p.x + offset, p.y - offset}, text);
-  canvas.DrawText({p.x - offset, p.y - offset}, text);
+  // Calculate offset based on current font size (font must be selected before calling)
+  // Use font height which is already DPI-aware
+  // For smaller fonts, use a relatively thicker outline for better visibility
+  // For larger fonts, use a proportionally thinner outline to avoid dominating the text
+  const unsigned font_height = canvas.GetFontHeight();
+  const int offset = font_height <= 16
+    ? std::max(1, int(font_height) / 20)  // Thicker for small fonts (≤16px)
+    : std::max(1, int(font_height) / 32); // Thinner for larger fonts
+  if (offset > 0) {
+    // Draw outline in all 8 directions to avoid gaps
+    // Note: Font is not changed - uses whatever font is currently selected on canvas
+    canvas.SetTextColor(outline_color);
+    canvas.DrawText({p.x + offset, p.y + offset}, text);  // SE
+    canvas.DrawText({p.x - offset, p.y + offset}, text);  // SW
+    canvas.DrawText({p.x + offset, p.y - offset}, text);  // NE
+    canvas.DrawText({p.x - offset, p.y - offset}, text);  // NW
+    canvas.DrawText({p.x + offset, p.y}, text);          // E
+    canvas.DrawText({p.x - offset, p.y}, text);          // W
+    canvas.DrawText({p.x, p.y + offset}, text);          // S
+    canvas.DrawText({p.x, p.y - offset}, text);          // N
+  }
 
-  canvas.SetTextColor(inverted ? COLOR_WHITE : COLOR_BLACK);
+  // Draw main text at exact position with exact font size (same as without outline)
+  canvas.SetTextColor(text_color);
   canvas.DrawText(p, text);
+}
+
+void
+RenderShadowedText(Canvas &canvas, const TCHAR *text, PixelPoint p,
+                   bool inverted) noexcept
+{
+  RenderShadowedText(canvas, text, p,
+                     inverted ? COLOR_WHITE : COLOR_BLACK,
+                     inverted ? COLOR_BLACK : COLOR_WHITE);
 }
 
 // returns true if really wrote something
 bool
-TextInBox(Canvas &canvas, const TCHAR *text, PixelPoint p,
-          TextInBoxMode mode, const PixelRect &map_rc,
-          LabelBlock *label_block) noexcept
+TextInBox(Canvas &canvas, const TCHAR *text, PixelPoint p, TextInBoxMode mode,
+          const PixelRect &map_rc, LabelBlock *label_block) noexcept
 {
   // landable waypoint label inside white box
 
   PixelSize tsize = canvas.CalcTextSize(text);
 
-  if (mode.align == TextInBoxMode::Alignment::RIGHT)
-    p.x -= tsize.width;
+  if (mode.align == TextInBoxMode::Alignment::RIGHT) p.x -= tsize.width;
   else if (mode.align == TextInBoxMode::Alignment::CENTER)
     p.x -= tsize.width / 2;
 
@@ -102,15 +125,12 @@ TextInBox(Canvas &canvas, const TCHAR *text, PixelPoint p,
     p.y += offset.y;
   }
 
-  if (label_block != nullptr && !label_block->check(rc))
-    return false;
+  if (label_block != nullptr && !label_block->check(rc)) return false;
 
   if (mode.shape == LabelShape::ROUNDED_BLACK ||
       mode.shape == LabelShape::ROUNDED_WHITE) {
-    if (mode.shape == LabelShape::ROUNDED_BLACK)
-      canvas.SelectBlackPen();
-    else
-      canvas.SelectWhitePen();
+    if (mode.shape == LabelShape::ROUNDED_BLACK) canvas.SelectBlackPen();
+    else canvas.SelectWhitePen();
 
     {
 #ifdef ENABLE_OPENGL
@@ -144,10 +164,8 @@ TextInBox(Canvas &canvas, const TCHAR *text, PixelPoint p,
 }
 
 bool
-TextInBox(Canvas &canvas, const TCHAR *text, PixelPoint p,
-          TextInBoxMode mode,
-          PixelSize screen_size,
-          LabelBlock *label_block) noexcept
+TextInBox(Canvas &canvas, const TCHAR *text, PixelPoint p, TextInBoxMode mode,
+          PixelSize screen_size, LabelBlock *label_block) noexcept
 {
   return TextInBox(canvas, text, p, mode, PixelRect{screen_size}, label_block);
 }
