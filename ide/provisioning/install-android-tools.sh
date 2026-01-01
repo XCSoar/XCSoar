@@ -33,16 +33,23 @@ then
 else
   echo "Installing Android SDK to ${ANDROID_SDK_DIR}..."
 
-  ANDROID_SDK_TMP_ZIP="$(mktemp)"
-  wget --progress=bar:force:noscroll \
-      ${ANDROID_REPO_URL}/commandlinetools-linux-${ANDROID_SDK_TOOLS_VERSION}.zip \
-      -O "${ANDROID_SDK_TMP_ZIP}"
+  # Check if cmdline-tools already exists (from cache)
+  if [ ! -d "${ANDROID_SDK_DIR}"/cmdline-tools ]; then
+    ANDROID_SDK_TMP_ZIP="$(mktemp)"
+    wget --progress=bar:force:noscroll \
+        ${ANDROID_REPO_URL}/commandlinetools-linux-${ANDROID_SDK_TOOLS_VERSION}.zip \
+        -O "${ANDROID_SDK_TMP_ZIP}"
 
-  mkdir -p "${ANDROID_SDK_DIR}"/licenses
-  cd "${ANDROID_SDK_DIR}"
-  unzip "${ANDROID_SDK_TMP_ZIP}"
+    mkdir -p "${ANDROID_SDK_DIR}"/licenses
+    cd "${ANDROID_SDK_DIR}"
+    unzip -o "${ANDROID_SDK_TMP_ZIP}"
 
-  rm "${ANDROID_SDK_TMP_ZIP}"
+    rm "${ANDROID_SDK_TMP_ZIP}"
+  else
+    echo "cmdline-tools already exists, skipping download"
+    mkdir -p "${ANDROID_SDK_DIR}"/licenses
+    cd "${ANDROID_SDK_DIR}"
+  fi
 
   echo 24333f8a63b6825ea9c5514f83c2829b004d1fee > licenses/android-sdk-license
 fi
@@ -71,7 +78,7 @@ else
 
   mkdir -p ~/opt
   cd ~/opt || exit 1
-  unzip "${ANDROID_NDK_TMP_ZIP}"
+  unzip -o "${ANDROID_NDK_TMP_ZIP}"
 
   rm "${ANDROID_NDK_TMP_ZIP}"
 fi
