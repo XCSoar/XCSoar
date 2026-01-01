@@ -200,7 +200,29 @@ $(TEXT_COMPRESSED): $(DATA)/%.gz: % | $(DATA)/dirstamp
 
 RESOURCE_FILES =
 
-$(TARGET_OUTPUT_DIR)/resources.txt: Data/resources.txt | $(TARGET_OUTPUT_DIR)/dirstamp $(BUILD_TOOLCHAIN_TARGET)
+# Stamp file to track XCSOAR_TESTING state (what actually affects resources.txt)
+# For Android: based on package name (org.xcsoar.testing)
+# For non-Android: based on TESTING flag
+RESOURCE_FLAGS_STAMP = $(TARGET_OUTPUT_DIR)/.resource_flags.stamp
+$(RESOURCE_FLAGS_STAMP): FORCE | $(TARGET_OUTPUT_DIR)/dirstamp
+	@if [ "$(TARGET_IS_ANDROID)" = "y" ]; then \
+		if [ "$(FOSS)" = "y" ]; then pkg=org.xcsoar.foss; \
+		elif [ "$(PLAY)" = "y" ]; then pkg=org.xcsoar.play; \
+		elif [ "$(TESTING)" = "y" ]; then pkg=org.xcsoar.testing; \
+		else pkg=org.xcsoar; fi; \
+		if [ "$$pkg" = "org.xcsoar.testing" ]; then \
+			value=y; \
+		else \
+			value=n; \
+		fi; \
+	else \
+		value=$(TESTING); \
+	fi; \
+	if [ ! -f $@ ] || [ "$$(cat $@ 2>/dev/null)" != "XCSOAR_TESTING=$$value" ]; then \
+		echo "XCSOAR_TESTING=$$value" > $@.tmp && mv $@.tmp $@; \
+	fi
+
+$(TARGET_OUTPUT_DIR)/resources.txt: Data/resources.txt $(RESOURCE_FLAGS_STAMP) | $(TARGET_OUTPUT_DIR)/dirstamp $(BUILD_TOOLCHAIN_TARGET)
 	@$(NQ)echo "  CPP     $@"
 	$(Q)cat $< |$(CC) -E -o $@ -I$(OUT)/include $(TARGET_CPPFLAGS) $(OPENGL_CPPFLAGS) $(GDI_CPPFLAGS) -
 

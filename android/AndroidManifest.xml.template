@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.xcsoar.testing"
+          package="@PACKAGE_NAME@"
           android:installLocation="auto"
-          android:versionCode="170"
+          android:versionCode="176"
           android:versionName="7.44">
+  <!-- requestLegacyExternalStorage: Deprecated but still needed for
+       compatibility with /sdcard/XCSoarData on Android 10 devices.
+       On Android 11+ (API 30+), scoped storage is used regardless.
+       This flag is ignored on Android 11+ but kept for Android 10 compatibility. -->
   <application
       android:requestLegacyExternalStorage="true"
       android:preserveLegacyExternalStorage="true"
@@ -18,7 +22,8 @@
               android:showOnLockScreen="true"
               android:showWhenLocked="true"
               android:exported="true"
-              android:label="@string/app_name_testing"
+              android:icon="@drawable/icon"
+              android:label="@APP_LABEL@"
               android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale"
               android:launchMode="singleInstance">
       <intent-filter>
@@ -66,13 +71,13 @@
     </activity>
 
     <provider android:name="org.xcsoar.FileProvider"
-              android:authorities="org.xcsoar.testing"
+              android:authorities="@PACKAGE_NAME@"
               android:exported="false"
               android:grantUriPermissions="true"/>
 
     <provider
         android:name="org.xcsoar.AllFilesDocumentsProvider"
-        android:authorities="org.xcsoar.testing.allfiles"
+        android:authorities="@PACKAGE_NAME@.allfiles"
         android:exported="true"
         android:grantUriPermissions="true"
         android:permission="android.permission.MANAGE_DOCUMENTS">
@@ -80,6 +85,7 @@
         <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
       </intent-filter>
     </provider>
+
   </application>
 
   <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="33"/>
@@ -123,4 +129,13 @@
 
   <!-- Allow installation on faked touchscreen -->
   <uses-feature android:name="android.hardware.faketouch" android:required="false"/>
+
+  <!-- Support all screen sizes for maximum device compatibility -->
+  <supports-screens
+      android:smallScreens="true"
+      android:normalScreens="true"
+      android:largeScreens="true"
+      android:xlargeScreens="true"
+      android:anyDensity="true" />
 </manifest>
+
