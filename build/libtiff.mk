@@ -1,5 +1,7 @@
 # Experimental feature - only enabled on Linux for now
-ifeq ($(TARGET)$(TARGET_IS_KOBO),UNIXn)
+ifeq ($(TARGET_IS_DARWIN),y)
+GEOTIFF = n
+else ifeq ($(TARGET)$(TARGET_IS_KOBO),UNIXn)
 GEOTIFF ?= y
 else ifeq ($(TARGET),ANDROID)
 GEOTIFF ?= y
@@ -8,6 +10,7 @@ GEOTIFF ?= n
 endif
 
 TIFF ?= $(GEOTIFF)
+
 
 ifeq ($(TIFF),y)
 
