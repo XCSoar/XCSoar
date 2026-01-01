@@ -11,6 +11,7 @@ fi
 # Configuration
 IPA_SIGNED_PATH="${IOS_SIGNED_IPA_PATH:-$(pwd)/output/IOS64/xcsoar-signed.ipa}"
 DEVICE_NAME="${IOS_DEVICE_NAME:-}"
+BUNDLE_ID="${IOS_BUNDLE_ID:-"XCSoar"}"
 
 # Validate required environment variables
 if [[ -z "$DEVICE_NAME" ]]; then
@@ -36,3 +37,12 @@ if ! xcrun devicectl device install app "$IPA_SIGNED_PATH" --device "$DEVICE_NAM
 fi
 
 echo "✅ App installed successfully"
+
+# Launch app with console attached to view logs (Ctrl+C to stop)
+if [[ "${IOS_SHOW_LOGS:-1}" != "0" ]]; then
+  echo "📄 Launching '$BUNDLE_ID' with console attached (Ctrl+C to stop)..."
+  if ! xcrun devicectl device process launch --console \
+      --terminate-existing --device "$DEVICE_NAME" "$BUNDLE_ID"; then
+    echo "⚠️  Failed to launch app with console (app may already be running or bundle ID may be incorrect)"
+  fi
+fi
