@@ -39,6 +39,7 @@ LXDevice::RequestLXNAVVarioSetting(const char *name, OperationEnvironment &env)
 
   char buffer[256];
   sprintf(buffer, "PLXV0,%s,R", name);
+  LogFmt("LXNAV: Sending request: {}", buffer);
   PortWriteNMEA(port, buffer, env);
   return true;
 }
@@ -157,6 +158,13 @@ LXDevice::PutBallast([[maybe_unused]] double fraction, double overload,
     LXNAVVario::SetBallast(port, env, overload);
   else
     LX1600::SetBallast(port, env, overload);
+  
+  /* Track what we sent for feedback loop detection */
+  {
+    const std::lock_guard lock{mutex};
+    last_sent_ballast_overload = overload;
+  }
+  
   return true;
 }
 
@@ -172,6 +180,13 @@ LXDevice::PutBugs(double bugs, OperationEnvironment &env)
     LXNAVVario::SetBugs(port, env, transformed_bugs_value);
   else
     LX1600::SetBugs(port, env, transformed_bugs_value);
+  
+  /* Track what we sent for feedback loop detection */
+  {
+    const std::lock_guard lock{mutex};
+    last_sent_bugs = bugs;
+  }
+  
   return true;
 }
 
@@ -185,6 +200,57 @@ LXDevice::PutMacCready(double mac_cready, OperationEnvironment &env)
     LXNAVVario::SetMacCready(port, env, mac_cready);
   else
     LX1600::SetMacCready(port, env, mac_cready);
+  
+  /* Track what we sent for feedback loop detection */
+  {
+    const std::lock_guard lock{mutex};
+    last_sent_mc = mac_cready;
+  }
+  
+  return true;
+}
+
+bool
+LXDevice::PutCrewMass(double crew_mass, OperationEnvironment &env)
+{
+  /* Only support crew mass sync for LXNAV varios */
+  if (!IsLXNAVVario())
+    return true;
+
+  if (!EnableNMEA(env))
+    return false;
+
+  /* Send only pilot weight, leaving all other POLAR fields empty */
+  LXNAVVario::SetPilotWeight(port, env, crew_mass);
+  
+  /* Track what we sent */
+  {
+    const std::lock_guard lock{mutex};
+    last_sent_crew_mass = crew_mass;
+  }
+  
+  return true;
+}
+
+bool
+LXDevice::PutEmptyMass(double empty_mass, OperationEnvironment &env)
+{
+  /* Only support empty mass sync for LXNAV varios */
+  if (!IsLXNAVVario())
+    return true;
+
+  if (!EnableNMEA(env))
+    return false;
+
+  /* Send only empty weight, leaving all other POLAR fields empty */
+  LXNAVVario::SetEmptyWeight(port, env, empty_mass);
+  
+  /* Track what we sent */
+  {
+    const std::lock_guard lock{mutex};
+    last_sent_empty_mass = empty_mass;
+  }
+  
   return true;
 }
 
@@ -202,12 +268,44 @@ LXDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
 }
 
 bool
-LXDevice::PutVolume(unsigned volume, OperationEnvironment &env)
+LXDevice::PutElevation(int elevation, OperationEnvironment &env)
 {
-  if (!IsLX16xx() || !EnableNMEA(env))
+  if (!EnableNMEA(env))
     return false;
 
-  LX1600::SetVolume(port, env, volume);
+  if (IsLXNAVVario())
+    LXNAVVario::SetElevation(port, env, elevation);
+  else
+    return false;
+
+  return true;
+}
+
+bool
+LXDevice::RequestElevation(OperationEnvironment &env)
+{
+  if (!EnableNMEA(env))
+    return false;
+
+  if (IsLXNAVVario())
+    return RequestLXNAVVarioSetting("ELEVATION", env);
+
+  return false;
+}
+
+bool
+LXDevice::PutVolume(unsigned volume, OperationEnvironment &env)
+{
+  if (!EnableNMEA(env))
+    return false;
+
+  if (IsLXNAVVario())
+    LXNAVVario::SetVolume(port, env, volume);
+  else if (IsLX16xx())
+    LX1600::SetVolume(port, env, volume);
+  else
+    return false;
+
   return true;
 }
 

@@ -56,6 +56,19 @@
 
 #include <memory>
 
+// Stubs for BackendComponents used in device drivers
+// These are only needed for linking - the actual calls are guarded by null checks
+#include "BackendComponents.hpp"
+#include "Computer/Settings.hpp"
+
+BackendComponents::BackendComponents() noexcept = default;
+BackendComponents::~BackendComponents() noexcept = default;
+
+void BackendComponents::SetTaskPolar(const PolarSettings &) noexcept
+{
+  // Stub implementation for tests - backend_components is null in tests anyway
+}
+
 static const DeviceConfig dummy_config = DeviceConfig();
 
 /*
@@ -1278,6 +1291,77 @@ TestLXV7()
 }
 
 static void
+TestLXV7POLAR()
+{
+  NullPort null;
+  Device *device = lx_driver.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo basic;
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{1}};
+
+  LXDevice &lx_device = *(LXDevice *)device;
+  lx_device.ResetDeviceDetection();
+
+  /* Test POLAR sentence parsing with all fields */
+  /* Format: PLXV0,POLAR,W,<a>,<b>,<c>,<polar_load>,<polar_weight>,<max_weight>,<empty_weight>,<pilot_weight>,<name>,<stall> */
+  ok1(device->ParseNMEA("$PLXV0,POLAR,W,1.780,-3.030,1.930,30.0,292,600,265,90,LS 7,0*21", basic));
+  
+  /* Check polar coefficients */
+  ok1(basic.settings.polar_coefficients_available);
+  ok1(equals(basic.settings.polar_a, 1.780));
+  ok1(equals(basic.settings.polar_b, -3.030));
+  ok1(equals(basic.settings.polar_c, 1.930));
+  
+  /* Check polar load (wing loading in kg/m²) */
+  ok1(basic.settings.polar_load_available);
+  ok1(equals(basic.settings.polar_load, 30.0));
+  
+  /* Check reference mass (polar_weight) */
+  ok1(basic.settings.polar_reference_mass_available);
+  ok1(equals(basic.settings.polar_reference_mass, 292.0));
+  
+  /* Check maximum mass */
+  ok1(basic.settings.polar_maximum_mass_available);
+  ok1(equals(basic.settings.polar_maximum_mass, 600.0));
+  
+  /* Check empty weight */
+  ok1(basic.settings.polar_empty_weight_available);
+  ok1(equals(basic.settings.polar_empty_weight, 265.0));
+  
+  /* Check pilot weight (crew mass) */
+  ok1(basic.settings.polar_pilot_weight_available);
+  ok1(equals(basic.settings.polar_pilot_weight, 90.0));
+
+  /* Test POL variant (device sometimes sends "POL" instead of "POLAR") */
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{2}};
+  ok1(device->ParseNMEA("$PLXV0,POL,W,1.240,-1.960,1.280,36.0,400,600,325,70,LS 8,0*3A", basic));
+  
+  ok1(basic.settings.polar_coefficients_available);
+  ok1(equals(basic.settings.polar_a, 1.240));
+  ok1(equals(basic.settings.polar_b, -1.960));
+  ok1(equals(basic.settings.polar_c, 1.280));
+  ok1(equals(basic.settings.polar_load, 36.0));
+  ok1(equals(basic.settings.polar_reference_mass, 400.0));
+  ok1(equals(basic.settings.polar_maximum_mass, 600.0));
+  ok1(equals(basic.settings.polar_empty_weight, 325.0));
+  ok1(equals(basic.settings.polar_pilot_weight, 70.0));
+
+  /* Test with zero pilot weight (should still parse but not update crew mass) */
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{3}};
+  ok1(device->ParseNMEA("$PLXV0,POLAR,W,1.780,-3.030,1.930,30.0,292,600,265,0,LS 7,0*18", basic));
+  
+  ok1(basic.settings.polar_coefficients_available);
+  ok1(basic.settings.polar_pilot_weight_available);
+  ok1(equals(basic.settings.polar_pilot_weight, 0.0));
+
+  delete device;
+}
+
+static void
 TestILEC()
 {
   NullPort null;
@@ -1836,7 +1920,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main()
 {
-  plan_tests(1006);
+  plan_tests(1036);
   TestGeneric();
   TestTasman();
   TestFLARM();
@@ -1856,6 +1940,7 @@ int main()
   TestLX(condor3_driver, true, false);
   TestLXEos();
   TestLXV7();
+  TestLXV7POLAR();
   TestILEC();
   TestOpenVario();
   TestVega();

@@ -45,6 +45,7 @@ DerivedInfo::Reset()
   TeamInfo::Clear();
 
   pressure_available.Clear();
+  pressure_elevation_available.Clear();
 
   climb_history.Clear();
 
