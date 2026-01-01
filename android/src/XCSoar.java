@@ -109,8 +109,8 @@ public class XCSoar extends Activity implements PermissionManager {
     submitConfiguration(getResources().getConfiguration());
 
     batteryReceiver = new BatteryReceiver();
-    registerReceiver(batteryReceiver,
-                     new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+    BroadcastUtil.registerReceiver(this, batteryReceiver,
+                                   new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
     /* WRITE_EXTERNAL_STORAGE has no effect on Build.VERSION_CODES.R
        (Android 11 or newer); we request it on older versions so users
